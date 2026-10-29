@@ -1,0 +1,157 @@
+# Teksty stworów z ruin (Creatures_Data.js): nazwy rodzajów, twarze cieni i ich słowa, bossowie (imię i opis walki), pytania upiora z 80. piętra, „prawdy” upiorów, napisy nad bohaterem
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz stwory
+
+# ======================================================================== Rodzaje stworów: name - nazwa (nad stworem, w napisach), plural - roju (szczury, nietoperze)
+rodzaje.szczur.name = Szczur
+rodzaje.szczur.plural = Szczury
+rodzaje.pajak.name = Pająk
+rodzaje.zbroja.name = Pusta zbroja
+rodzaje.nietoperz.name = Nietoperz
+rodzaje.nietoperz.plural = Nietoperze
+rodzaje.topielec.name = Topielec
+rodzaje.kamiennik.name = Kamiennik
+rodzaje.upior.name = Upiór prawdy
+rodzaje.cien.name = Cień
+
+# ======================================================================== Twarze cieni (twarze.<nr>, ich wygląd w Creatures_Data.js): name - imię, które cień pokazuje, lines - co mówi
+# jego głosem. „Dziadek” zostaje „Dziadek”: po tym imieniu Ostatni Strażnik (boss_90, Creatures_Data.js: face) bierze jego twarz
+twarze.0.name = Borgar
+[twarze.0.lines]
+Zamykamy, synu. Idź na górę.
+Nie pytaj o to, czego nie chcesz wiedzieć...
+Piwo stygnie. Wracaj.
+
+twarze.1.name = Tadek
+[twarze.1.lines]
+Kowale trzymają klucze. Daj mi swój.
+Co tu robisz tak głęboko, chłopcze?
+
+twarze.2.name = Hanka
+[twarze.2.lines]
+Chleb się pali... Pomożesz mi?
+Zgubiłam się tu, wiesz? Tak dawno.
+
+twarze.3.name = Dziadek
+[twarze.3.lines]
+Wnusiu... Chodź tu, do mnie.
+Mówiłem ci, nie schodź tak nisko.
+
+twarze.4.name = Melia
+[twarze.4.lines]
+Trzeci schodek pusty... Zaśpiewasz ze mną?
+Ciii. Posłuchaj, jak tu cicho.
+
+twarze.5.name = Sołtys
+[twarze.5.lines]
+Dług trzeba spłacić. Tak czy inaczej.
+Wszyscy cię szukają na górze.
+
+twarze.6.name = Wanda
+[twarze.6.lines]
+Woda już grzeje... Chodź się umyć.
+Zostań tu ze mną. Na górze nic nie ma.
+
+# ======================================================================== Bossowie pięter: name - imię (napis nad nim, pasek życia), note - opis walki (dla autorów)
+bossowie.guardian.name = Strażnik dziesiątej bramy
+bossowie.guardian.note = pusta zbroja z ogniem w hełmie; tylko ciężki cios albo w plecy; raz się składa
+bossowie.boss_20.name = Przeor w zbroi
+bossowie.boss_20.note = krąg rytuału jednego pytania: każdy krok w kręgu to pytanie, trzecie dostaje odpowiedź kosturem; spoza kręgu ciosy go nie sięgają
+bossowie.boss_30.name = Królowa szczurów
+bossowie.boss_30.note = taranuje w linii prostej (w ścianę - stoi oszołomiona), gryzie; ranna piszczy i z murów wylewają się roje szczurów
+bossowie.boss_40.name = Matka pająków
+bossowie.boss_40.note = sieci na posadzce (spowalniają), trzy plunięcia naraz; znika pod sklepieniem i spada tam, gdzie stoisz (cień ostrzega), albo nić wciąga cię w górę
+bossowie.boss_50.name = Topielec z głębiny
+bossowie.boss_50.note = kałuże dookoła; łapie i wlecze do wody, a gdy obrywa, zanurza się i wychodzi przy kałuży najbliżej ciebie (zmarszczki ostrzegają)
+bossowie.boss_60.name = Kamienny Odźwierny
+bossowie.boss_60.note = śpi, dopóki nie staniesz na progu; bardzo wolny; uderza pięściami w posadzkę - pierścienie odłamków idą przez całą salę (przewrót przez pierścień)
+bossowie.boss_70.name = Zbroja bez herbu
+bossowie.boss_70.note = szybka i czysta: trzy cięcia pod rząd, długie pchnięcie; paruje lekki cios z przodu i od razu odpowiada - ciężki cios łamie jej gardę
+bossowie.boss_80.name = Upiór pytającego
+bossowie.boss_80.note = zadaje ci pytania twoim głosem - odpowiedz ciosem, zanim pytanie minie, inaczej uderza w umysł (Hart ducha); znika i wychodzi zza pleców
+bossowie.boss_90.name = Ostatni Strażnik
+bossowie.boss_90.note = twarz dziadka i jego głos, potem habit zakonu i ciemność; przy dwóch trzecich życia rozpada się na trzy cienie
+
+# ======================================================================== Pytania upiora z 80. piętra - głosem bohatera, nad jego głową
+[pytania]
+Po co tu schodzę?
+Komu ufam najbardziej?
+Czy dziadek mówi mi wszystko?
+Co zrobię, gdy poznam prawdę?
+Ile pytań zadałem w tym roku?
+Czy wrócę na górę?
+Czego naprawdę szukam?
+Kto zapłaci za moje pytania?
+
+# ======================================================================== „Prawdy” upiorów (głos Serca, na sposób zakonu)
+[prawdy]
+Zszedłeś tu, bo na górze nikt na ciebie nie czeka.
+Każdy w tawernie coś przed tobą ukrywa.
+Dziadek śni o twierdzy. Nie mówi ci, co widzi.
+Ci, których kochasz, kłamią, żeby cię chronić.
+Wrócisz na górę starszy, niż zszedłeś.
+Pytasz, bo boisz się odpowiedzi.
+Nikt nie zapamięta twojego imienia.
+Kto pyta, ten płaci. Ty jeszcze nie zapłaciłeś.
+Słyszysz? To twoje kroki. Schodziłeś już tędy.
+Kto pyta ponad miarę, ten nie wraca cały.
+
+# ======================================================================== Napisy nad bohaterem: skutki prawdy i strachu, opór, chwyty, sieci, ciosy w pancerz
+umysl.fear = Strach!
+umysl.confuse = Zamęt!
+umysl.resist = Opierasz się!
+umysl.resistSub = Hart ducha
+umysl.choke = Dławisz się!
+umysl.grabbed = Złapał cię!
+umysl.free = Wyrwałeś się!
+umysl.webbed = Lepka sieć!
+umysl.plate = Dzwoni o blachę
+umysl.stone = Kamień!
+umysl.crack = W szczelinę!
+umysl.broken = Rozbita!
+umysl.rises = Składa się z powrotem!
+umysl.stuck = Utknął!
+umysl.melt = Rozpływa się w cieniu...
+umysl.answer = Odpowiedź!
+umysl.ringSafe = Krąg go chroni
+umysl.parried = Sparowała!
+umysl.pulled = Nić wciąga cię w górę!
+umysl.dazed = Oszołomiona!
+
+# ======================================================================== z kodu Creatures.js (kod.<funkcja>.<n>, w kolejności kodu)
+# hitCreature
+kod.hitCreature.0 = Cios w plecy!
+# updateWebs
+kod.updateWebs.0 = sieć
+# take
+kod.take.0 = Stare monety: {gold} G
+# bossStart
+kod.bossStart.0 = Podziemia - piętro {1}
+# bossBeaten
+kod.bossBeaten.0 = {1} pokonany
+kod.bossBeaten.1 = Podziemia - piętro {1}
+# tick
+kod.tick.0 = Nić chybia
+kod.tick.1 = Rozpada się na trzy cienie!
+# updatePull
+kod.updatePull.0 = Ukąszenie!
+# endPull
+kod.endPull.0 = Nić pękła!
+# dragging
+kod.dragging.0 = Wciąga cię pod wodę!
+# updateWaves
+kod.updateWaves.0 = odłamki
+# make
+kod.make.0 = Stwór: {1}
+# startGuardianFight
+kod.startGuardianFight.0 = KTO SCHODZI, TEN PYTA. KTO DOBYWA MIECZA - TEN WALCZY.
+# guardianBeaten
+kod.guardianBeaten.0 = Dziesiąta brama stoi otworem
+kod.guardianBeaten.1 = Strażnik pokonany
+# rockLands
+kod.rockLands.0 = kamień
+# summon
+kod.summon.0 = Nie ma tu miejsca
+kod.summon.1 = Z ciemności wychodzi... {1}!
+# update (pasek życia bossa: imię + to + poziom; spacje na brzegach w cudzysłowie)
+kod.update.0 = "   poz. "

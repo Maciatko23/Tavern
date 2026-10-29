@@ -1,0 +1,23 @@
+{
+ "obraz": {
+  "redraw": {
+   "0": "wybór",
+   "1": "wróć"
+  },
+  "dishFacts": {
+   "0": "Wytrzymałość +{stamina}",
+   "1": "Sytość +{fed}",
+   "2": "Nawodnienie +{water}",
+   "3": "Ugoszczony · {1}"
+  },
+  "detailRoom": {
+   "0": "Pokój {room} · {name}",
+   "1": "Pełny wypoczynek, bezpieczny sen",
+   "2": "Śniadanie: {1}",
+   "3": "Rano: Wypoczęty · {1} (odpoczynek +{2})",
+   "4": "Świeca i ciepła pościel",
+   "5": "Pokój twój do {CHECKOUT}:00 rano"
+  }
+ },
+ "_opis": "Napisy kodu TavernLife_Render.js sprzed przeniesienia do js/teksty/karczma.txt (obraz.*)"
+}

@@ -1,0 +1,250 @@
+# Teksty drzewek umiejętności (Skills_Data.js): dziedziny (zakładki ekranu Postaci) i umiejętności - nazwa i opis.
+# {klucz} w opisie (np. {melee.dmg}) wstawia gra: działanie umiejętności razy jej stopień (Skills_Data.js, FX) - zostaw je w tekście.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz umiejetnosci
+
+# ======================================================================== Dziedziny (nazwa zakładki i opis pod nią)
+dziedziny.melee.name = Walka wręcz
+dziedziny.melee.desc = Ciosy, kombo, ciężki cios i łamanie gardy wroga.
+dziedziny.defense.name = Obrona
+dziedziny.defense.desc = Życie, blok, parowanie, przewrót i odporność na ciosy.
+dziedziny.ranged.name = Strzelectwo
+dziedziny.ranged.desc = Proca i łuk: celowanie, obrażenia, pociski; polowanie z dystansu.
+dziedziny.survival.name = Przetrwanie
+dziedziny.survival.desc = Wytrzymałość, głód, pragnienie, zimno, sen, rany i udźwig.
+dziedziny.gather.name = Zbieractwo
+dziedziny.gather.desc = Rąbanie drzew i krzaków, kucie skał, zbieranie z ziemi.
+dziedziny.hunting.name = Łowiectwo
+dziedziny.hunting.desc = Skradanie, oprawianie zwierzyny, sidła, ryby i ptaki.
+dziedziny.farming.name = Rolnictwo
+dziedziny.farming.desc = Uprawy, podlewanie, nasiona, zwierzęta gospodarskie i ptaki na polu.
+dziedziny.craft.name = Rzemiosło
+dziedziny.craft.desc = Warsztaty i piece: szybsza praca, oszczędność materiałów, narzędzia, handel.
+dziedziny.build.name = Budownictwo
+dziedziny.build.desc = Place budowy, młotek, rozbiórka i odzysk materiałów.
+dziedziny.cooking.name = Kuchnia
+dziedziny.cooking.desc = Jedzenie, psucie się zapasów, ogień i gotowanie.
+
+# ======================================================================== Walka wręcz
+umiejetnosci.m_power.name = Mocna ręka
+umiejetnosci.m_power.text = Obrażenia wręcz +{melee.dmg}.
+umiejetnosci.combo4.name = Płynne kombo
+umiejetnosci.combo4.text = Czwarty cios w serii, najmocniejszy.
+umiejetnosci.charge.name = Rozpęd
+umiejetnosci.charge.text = Ciężki cios ładuje się o 40% szybciej.
+umiejetnosci.riposte.name = Kontra
+umiejetnosci.riposte.text = Każde idealne parowanie daje kontratak: następny cios w ciągu 1 sekundy jest o 30% mocniejszy. Z Kontrą masz na niego 2 sekundy i cios jest krytyczny (x1,6).
+umiejetnosci.m_breath.name = Oszczędny cios
+umiejetnosci.m_breath.text = Ciosy zużywają o {melee.breath} mniej oddechu.
+umiejetnosci.m_poise.name = Łamacz gardy
+umiejetnosci.m_poise.text = Zbijanie równowagi wroga +{melee.poise}.
+umiejetnosci.m_fear.name = Postrach
+umiejetnosci.m_fear.text = Ludzie poddają się chętniej: +{surrender} szans, że pobity błaga o litość, i już przy {surrender.at} więcej życia.
+umiejetnosci.m_crit.name = Oko rzeźnika
+umiejetnosci.m_crit.text = Szansa na trafienie krytyczne +{melee.crit}.
+umiejetnosci.sweep.name = Szeroki zamach
+umiejetnosci.sweep.text = Siekiera i kilof trafiają wszystkich wrogów w zasięgu zamachu, nie tylko najbliższego.
+umiejetnosci.execute.name = Dobicie
+umiejetnosci.execute.text = Cios w zataczającego się wroga zadaje 2,5 raza więcej obrażeń.
+umiejetnosci.m_power2.name = Ciężka ręka
+umiejetnosci.m_power2.text = Obrażenia wręcz +{melee.dmg}.
+umiejetnosci.m_master.name = Mistrz oręża
+umiejetnosci.m_master.text = Obrażenia wręcz +{melee.dmg} i szansa na krytyk +{melee.crit}.
+
+# ======================================================================== Obrona
+umiejetnosci.d_body.name = Hart ciała
+umiejetnosci.d_body.text = Życie +{hp.max}.
+umiejetnosci.guard.name = Twarda garda
+umiejetnosci.guard.text = Blok zużywa o 40% mniej oddechu.
+umiejetnosci.keen.name = Czujne oko
+umiejetnosci.keen.text = Okno parowania o połowę dłuższe.
+umiejetnosci.d_block.name = Mocny blok
+umiejetnosci.d_block.text = Blok zatrzymuje o {block.reduce} więcej obrażeń.
+umiejetnosci.d_breath.name = Głęboki oddech
+umiejetnosci.d_breath.text = Oddech wraca o {breath.regen} szybciej.
+umiejetnosci.d_disarm.name = Rozbrojenie
+umiejetnosci.d_disarm.text = Udane parowanie ciosu człowieka: {disarm} szans, że wytrąci mu broń z ręki (bije wtedy słabiej, a broń leży na ziemi).
+umiejetnosci.d_will.name = Spokojna głowa
+umiejetnosci.d_will.text = Opór przed „prawdą” upiorów i strachem +{mind.resist}; strach i zamęt trwają o {mind.short} krócej.
+umiejetnosci.d_truth.name = Prawda nie boli
+umiejetnosci.d_truth.text = Odparta „prawda” odbija się mocniej: upiór zatacza się o {mind.back} dłużej, a ukryte upiory widać jako mgiełkę.
+umiejetnosci.acrobat.name = Akrobata
+umiejetnosci.acrobat.text = Drugi przewrót od razu po pierwszym, o 40% tańszy.
+umiejetnosci.thickskin.name = Gruba skóra
+umiejetnosci.thickskin.text = Rany zdarzają się o połowę rzadziej.
+umiejetnosci.d_knock.name = Twarde nogi
+umiejetnosci.d_knock.text = Trudniej cię przewrócić: +{knock.resist} odporności.
+umiejetnosci.d_roll.name = Unik mistrza
+umiejetnosci.d_roll.text = Nietykalność w przewrocie dłuższa o {roll.iframes}.
+umiejetnosci.secondwind.name = Drugi oddech
+umiejetnosci.secondwind.text = Raz na walkę, gdy życie spadnie poniżej 30%, oddech wraca w całości.
+umiejetnosci.d_body2.name = Żelazne zdrowie
+umiejetnosci.d_body2.text = Życie +{hp.max}.
+umiejetnosci.d_stone.name = Niezłomny
+umiejetnosci.d_stone.text = Wszystkie przyjmowane obrażenia mniejsze o {hurt}.
+
+# ======================================================================== Strzelectwo
+umiejetnosci.r_aim.name = Pewna ręka
+umiejetnosci.r_aim.text = Kółko celowania zamyka się o {aim.speed} szybciej.
+umiejetnosci.r_dmg.name = Mocny naciąg
+umiejetnosci.r_dmg.text = Obrażenia z łuku i procy +{ranged.dmg}.
+umiejetnosci.r_ammo.name = Zbieracz pocisków
+umiejetnosci.r_ammo.text = {ammo.save} szans, że kamień albo strzała nie przepadnie.
+umiejetnosci.r_hunt.name = Łowca
+umiejetnosci.r_hunt.text = Obrażenia zadawane zwierzętom (każdą bronią) +{hunt.dmg}.
+umiejetnosci.r_crit.name = Słaby punkt
+umiejetnosci.r_crit.text = {ranged.crit} szans na podwójne obrażenia strzałem.
+umiejetnosci.r_fast.name = Szybki strzał
+umiejetnosci.r_fast.text = Następny strzał gotowy o {shot.cooldown} szybciej.
+umiejetnosci.r_silent.name = Cichy strzał
+umiejetnosci.r_silent.text = Strzał płoszy zwierzęta i ptaki w o połowę mniejszym promieniu.
+umiejetnosci.r_heart.name = Strzał w serce
+umiejetnosci.r_heart.text = Trafienie zwierzęcia, które cię jeszcze nie zauważyło: potrójne obrażenia.
+umiejetnosci.r_eagle.name = Sokole oko
+umiejetnosci.r_eagle.text = Celowanie o {aim.speed} szybsze i obrażenia strzałem +{ranged.dmg}.
+umiejetnosci.r_master.name = Mistrz łuku
+umiejetnosci.r_master.text = Obrażenia strzałem +{ranged.dmg} i szansa na podwójne +{ranged.crit}.
+
+# ======================================================================== Przetrwanie
+umiejetnosci.s_tough.name = Wytrwały
+umiejetnosci.s_tough.text = Każda praca kosztuje o {stamina.cost} mniej wytrzymałości.
+umiejetnosci.s_food.name = Mały żołądek
+umiejetnosci.s_food.text = Głód narasta o {hunger} wolniej.
+umiejetnosci.s_water.name = Wielbłąd
+umiejetnosci.s_water.text = Pragnienie narasta o {thirst} wolniej.
+umiejetnosci.s_sleep.name = Twardy sen
+umiejetnosci.s_sleep.text = Sen i odpoczynek dają o {sleep.rest} więcej sił.
+umiejetnosci.s_cold.name = Zahartowany
+umiejetnosci.s_cold.text = Zimno mniej przeszkadza: dopłata wytrzymałości za chłód o {cold} mniejsza.
+umiejetnosci.s_run.name = Długi bieg
+umiejetnosci.s_run.text = Bieg zużywa o {run.breath} mniej oddechu.
+umiejetnosci.s_band.name = Opatrunki
+umiejetnosci.s_band.text = Opatrunek leczy o {bandage.heal} więcej.
+umiejetnosci.s_heal.name = Szybkie gojenie
+umiejetnosci.s_heal.text = Życie wraca o {wound.heal} szybciej.
+umiejetnosci.s_carry.name = Juczny
+umiejetnosci.s_carry.text = Udźwig +{carry}.
+umiejetnosci.s_iron.name = Żelazny organizm
+umiejetnosci.s_iron.text = Głód i pragnienie mniej osłabiają: ich kary o {needs.penalty} mniejsze.
+umiejetnosci.s_master.name = Syn puszczy
+umiejetnosci.s_master.text = Praca o {stamina.cost} tańsza, głód i pragnienie o {hunger} wolniej.
+
+# ======================================================================== Zbieractwo
+umiejetnosci.g_chop.name = Drwal
+umiejetnosci.g_chop.text = Drzewa, pnie, kłody i krzaki: o {chop.hits} mniej uderzeń.
+umiejetnosci.g_mine.name = Kamieniarz
+umiejetnosci.g_mine.text = Skały i żyły rudy: o {mine.hits} mniej uderzeń kilofem.
+umiejetnosci.g_wood.name = Leśny urobek
+umiejetnosci.g_wood.text = {chop.yield} szans na dodatkową sztukę z drzewa, kłody, pnia i krzaka.
+umiejetnosci.g_cost.name = Oszczędny zamach
+umiejetnosci.g_cost.text = Rąbanie, kopanie pni i kucie skał kosztuje o {gather.cost} mniej wytrzymałości.
+umiejetnosci.g_stone.name = Dobra żyła
+umiejetnosci.g_stone.text = {mine.yield} szans na dodatkową sztukę ze skały (kamień albo ruda).
+umiejetnosci.g_forage.name = Zbieracz
+umiejetnosci.g_forage.text = {forage.yield} szans na dodatkową sztukę przy zbieraniu z ziemi i z krzaków.
+umiejetnosci.g_ore.name = Oko na kruszec
+umiejetnosci.g_ore.text = {ore} szans, że zwykła skała da też rudę żelaza.
+umiejetnosci.g_chop2.name = Mistrz topora
+umiejetnosci.g_chop2.text = Drzewa i krzaki: jeszcze o {chop.hits} mniej uderzeń.
+umiejetnosci.g_quick.name = Szybkie ręce
+umiejetnosci.g_quick.text = Podnoszenie z ziemi (kamyki, gałęzie, zioła, grzyby) nie kosztuje wytrzymałości.
+umiejetnosci.g_mine2.name = Mistrz kilofa
+umiejetnosci.g_mine2.text = Skały: jeszcze o {mine.hits} mniej uderzeń.
+umiejetnosci.g_master.name = Dziecko lasu
+umiejetnosci.g_master.text = +{chop.yield} szans na dodatkową sztukę z każdego drzewa, skały i zbioru z ziemi.
+
+# ======================================================================== Łowiectwo
+umiejetnosci.h_sneak.name = Ciche kroki
+umiejetnosci.h_sneak.text = Zwierzęta i ptaki zauważają cię o {sneak} wolniej.
+umiejetnosci.h_meat.name = Rzeźnik
+umiejetnosci.h_meat.text = {carcass.meat} szans na dodatkowy kawał mięsa przy oprawianiu.
+umiejetnosci.h_hide.name = Skórnik
+umiejetnosci.h_hide.text = {carcass.hide} szans na dodatkową skórę przy oprawianiu.
+umiejetnosci.h_fish.name = Wędkarz
+umiejetnosci.h_fish.text = Ryby biorą częściej: +{fish} szans.
+umiejetnosci.h_snare.name = Sidlarz
+umiejetnosci.h_snare.text = Przynęta w sidłach wabi zające o {snare.lure} skuteczniej.
+umiejetnosci.h_sinew.name = Ścięgna
+umiejetnosci.h_sinew.text = {carcass.sinew} szans na dodatkowe ścięgna przy oprawianiu.
+umiejetnosci.h_birds.name = Ptasznik
+umiejetnosci.h_birds.text = Z każdego ptaka +{feathers} pióro więcej.
+umiejetnosci.h_ambush.name = Zasadzka
+umiejetnosci.h_ambush.text = Atak z ukrycia (cios i strzał w zwierzę albo człowieka, który cię nie zauważył) zadaje o {sneak.dmg} więcej obrażeń.
+umiejetnosci.h_track.name = Tropiciel
+umiejetnosci.h_track.text = Zwierzęta zauważają cię o {sneak} wolniej, obrażenia zadawane im +{hunt.dmg}.
+umiejetnosci.h_beast.name = Pogromca zwierząt
+umiejetnosci.h_beast.text = Obrażenia zadawane zwierzętom +{hunt.dmg}.
+umiejetnosci.h_master.name = Król puszczy
+umiejetnosci.h_master.text = +{carcass.meat} szans na mięso i skórę, zwierzęta zauważają cię o {sneak} wolniej.
+
+# ======================================================================== Rolnictwo
+umiejetnosci.f_grow.name = Zielona ręka
+umiejetnosci.f_grow.text = Rośliny rosną o {crop.growth} szybciej.
+umiejetnosci.f_yield.name = Obfite zbiory
+umiejetnosci.f_yield.text = {crop.yield} szans na dodatkową sztukę plonu z grządki.
+umiejetnosci.f_can.name = Duża konewka
+umiejetnosci.f_can.text = Konewka mieści {can.charges} podlania więcej.
+umiejetnosci.f_seed.name = Nasiennik
+umiejetnosci.f_seed.text = {seed.chance} szans na dodatkowe nasiono przy zbiorze.
+umiejetnosci.f_cost.name = Ogrodnik
+umiejetnosci.f_cost.text = Grabienie, kopanie, sianie, podlewanie i zbiór kosztują o {farm.cost} mniej wytrzymałości.
+umiejetnosci.f_water.name = Wilgotna ziemia
+umiejetnosci.f_water.text = Podlana ziemia trzyma wodę o {water.days} dzień dłużej.
+umiejetnosci.f_birds.name = Strach na wróble
+umiejetnosci.f_birds.text = Ptaki o {birds.raid} rzadziej wyjadają plony.
+umiejetnosci.f_animals.name = Hodowca
+umiejetnosci.f_animals.text = {produce.more} szans na dodatkową sztukę z kurnika, ula, owczarni i obory.
+umiejetnosci.f_double.name = Złoty plon
+umiejetnosci.f_double.text = {crop.double} szans na podwójny plon z grządki.
+umiejetnosci.f_master.name = Gospodarz
+umiejetnosci.f_master.text = Rośliny rosną o {crop.growth} szybciej, zwierzęta dają więcej (+{produce.more} szans).
+
+# ======================================================================== Rzemiosło
+umiejetnosci.c_fast.name = Sprawne ręce
+umiejetnosci.c_fast.text = Praca w warsztatach, piecach i wytwarzanie trwa o {craft.speed} krócej.
+umiejetnosci.c_save.name = Oszczędny
+umiejetnosci.c_save.text = {craft.save} szans, że jeden materiał wróci do plecaka po wytworzeniu.
+umiejetnosci.c_smelt.name = Hutnik
+umiejetnosci.c_smelt.text = Piec ziemny, cegielnia, kuźnia i huta pracują o {smelt.speed} krócej.
+umiejetnosci.c_wear.name = Dbały
+umiejetnosci.c_wear.text = Narzędzia i broń zużywają się o {tool.wear} wolniej.
+umiejetnosci.c_double.name = Podwójna robota
+umiejetnosci.c_double.text = {craft.double} szans na podwójny wyrób (nie dotyczy narzędzi i rzeczy, które ma się raz).
+umiejetnosci.c_repair.name = Naprawiacz
+umiejetnosci.c_repair.text = Naprawa narzędzi kosztuje o połowę mniej materiałów.
+umiejetnosci.c_trade.name = Kupiecka żyłka
+umiejetnosci.c_trade.text = Sprzedajesz o {sell} drożej.
+umiejetnosci.c_master.name = Mistrz cechu
+umiejetnosci.c_master.text = Wytwarzanie o {craft.speed} krótsze, +{craft.save} szans na zwrot materiału.
+
+# ======================================================================== Budownictwo
+umiejetnosci.b_hits.name = Cieśla
+umiejetnosci.b_hits.text = Plac budowy: o {build.hits} mniej uderzeń młotkiem.
+umiejetnosci.b_cost.name = Lekki młot
+umiejetnosci.b_cost.text = Uderzenie młotkiem kosztuje o {build.cost} mniej wytrzymałości.
+umiejetnosci.b_refund.name = Rozbiórka
+umiejetnosci.b_refund.text = Z rozebranego budynku odzyskujesz o {build.refund} więcej materiałów.
+umiejetnosci.b_spare.name = Resztki
+umiejetnosci.b_spare.text = Po skończonej budowie {build.spare} szans na zwrot sztuki każdego materiału.
+umiejetnosci.b_hits2.name = Majster
+umiejetnosci.b_hits2.text = Plac budowy: jeszcze o {build.hits} mniej uderzeń.
+umiejetnosci.b_master.name = Architekt
+umiejetnosci.b_master.text = Budowa: o {build.hits} mniej uderzeń i o {build.cost} mniej wytrzymałości na uderzenie.
+
+# ======================================================================== Kuchnia
+umiejetnosci.k_value.name = Kucharz
+umiejetnosci.k_value.text = Jedzenie daje o {food.value} więcej sił, sytości i nawodnienia.
+umiejetnosci.k_spoil.name = Spiżarnik
+umiejetnosci.k_spoil.text = Jedzenie psuje się o {spoil} wolniej.
+umiejetnosci.k_fire.name = Palacz
+umiejetnosci.k_fire.text = Drewno i gałęzie palą się w ognisku o {fire.fuel} dłużej.
+umiejetnosci.k_buff.name = Smakosz
+umiejetnosci.k_buff.text = Premie z jedzenia trwają o {food.buff} dłużej.
+umiejetnosci.k_speed.name = Szybki ruszt
+umiejetnosci.k_speed.text = Pieczenie, gotowanie i wędzenie trwa o {cook.speed} krócej.
+umiejetnosci.k_portion.name = Większe porcje
+umiejetnosci.k_portion.text = {cook.double} szans na dodatkową porcję z ogniska, kociołka, wędzarni i piekarni.
+umiejetnosci.k_salt.name = Solarz
+umiejetnosci.k_salt.text = Jedzenie w spiżarni i w skrzyniach psuje się o {spoil.store} wolniej.
+umiejetnosci.k_master.name = Mistrz kuchni
+umiejetnosci.k_master.text = Jedzenie daje o {food.value} więcej, premie trwają o {food.buff} dłużej.

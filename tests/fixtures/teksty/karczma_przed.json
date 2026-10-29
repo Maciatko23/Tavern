@@ -1,0 +1,255 @@
+{
+ "postacie": {
+  "borgar": {
+   "name": "Borgar"
+  },
+  "melia": {
+   "name": "Melia"
+  },
+  "grum": {
+   "name": "Grum"
+  },
+  "ozzy": {
+   "name": "Dziadek Ozzy"
+  }
+ },
+ "dania": {
+  "gulasz": {
+   "name": "Gulasz",
+   "sub": "gorący · syci na długo · rozgrzewa",
+   "desc": "Gęsty gulasz z wołowiny, marchwi i kapusty, od rana pyrkający w żeliwnym garze. Łyżka w nim stoi.",
+   "order": "Gulasz! Siadaj, już nakładam - z samego dna, tam najlepszy.",
+   "bite": "Łyżka naprawdę w nim stoi... Borgar, ty stary czarodzieju."
+  },
+  "kapusniak": {
+   "name": "Kapuśniak",
+   "sub": "gorący · kwaśny · rozgrzewa",
+   "desc": "Kwaśny kapuśniak na wędzonce, z ziemniakami i koperkiem. Rozgrzewa aż po palce u stóp.",
+   "order": "Kapuśniak, jak u matki. No, prawie - matka sypała więcej pieprzu. Siadaj!",
+   "bite": "Kwaśny, gorący... jak u dziadka Stacha. Tylko bez gderania."
+  },
+  "pieczen": {
+   "name": "Pieczeń z kaszą",
+   "sub": "najbardziej sycące danie karczmy",
+   "desc": "Pieczeń wieprzowa z chrupiącą skórką, kasza gryczana i sos prosto z brytfanny. Po tym człowiek nie myśli o jedzeniu do wieczora.",
+   "order": "Pieczeń z kaszą? Ha, dziś świętujesz! Siadaj, zaraz podam.",
+   "bite": "Skórka chrupie, kasza pachnie... mogę tu zamieszkać?"
+  },
+  "placek": {
+   "name": "Placek z serem",
+   "sub": "słodki · na ząb",
+   "desc": "Ciepły placek drożdżowy z twarogiem i łyżką miodu z pasieki za młynem. Kruszy się na brodę.",
+   "order": "Placek z serem, na słodko! Siadaj, zaraz przyniosę.",
+   "bite": "Słodki jak... no, jak placek z serem. I tyle mi trzeba."
+  },
+  "chleb": {
+   "name": "Chleb ze smalcem",
+   "sub": "tanio · szybko · klasyka",
+   "desc": "Gruba pajda razowca, smalec ze skwarkami i ogórek kiszony. Klasyka za grosze.",
+   "order": "Chleb ze smalcem - jedzenie królów. Biednych królów. Siadaj!",
+   "bite": "Skwarki! Ogórek! Nic więcej do szczęścia."
+  },
+  "piwo": {
+   "name": "Kufel piwa",
+   "sub": "zimne · z beczki Borgara",
+   "desc": "Złociste, z własnej beczki Borgara. Piana na dwa palce, chłód prosto z piwnicy.",
+   "order": "Kufel już się napełnia. Siadaj, bo po piwie lepiej siedzieć.",
+   "bite": "Ach... piana na wąsach, spokój w duszy."
+  },
+  "miod": {
+   "name": "Miód pitny",
+   "sub": "słodki · mocny · rozgrzewa",
+   "desc": "Trójniak z pasieki za młynem. Słodki, mocny i zdradliwy - wchodzi jak woda, wychodzi nogami.",
+   "order": "Miód pitny? Tylko ostrożnie - wchodzi jak woda, wychodzi nogami.",
+   "bite": "Słodki... i zdradliwy. Już go czuję w kolanach."
+  }
+ },
+ "slawa": {
+  "nazwy": [
+   "Nowy w okolicy",
+   "Znajoma twarz",
+   "Swój chłop",
+   "Pewna ręka",
+   "Chluba tawerny"
+  ]
+ },
+ "pokoje": {
+  "nazwy": {
+   "1": "Izdebka przy schodach",
+   "2": "Pokój z oknem na dziedziniec",
+   "3": "Pokój narożny",
+   "komnata": "Komnata z kominkiem",
+   "zloty": "Apartament Złoty"
+  },
+  "opisy": {
+   "1": "Wąskie łóżko, gruby koc z owczej wełny i okienko na podwórze. Ciasno, ale czysto. Chrapanie zza ściany gratis.",
+   "2": "Szerokie łóżko z pierzyną, dzbanek wody i okno na dziedziniec. Rano budzą cię kosy, a nie Grum.",
+   "3": "Narożny pokój z dwoma oknami, dębowe łóżko i miednica z ciepłą wodą o poranku. Cicho jak w klasztorze.",
+   "komnata": "Łoże z baldachimem, ogień w kominku i skóra niedźwiedzia przy łóżku. Borgar mówi, że spał tu sam Lord. Borgar dużo mówi.",
+   "zloty": "Złocone łoże, jedwabna pościel, kotary z adamaszku. Rano pokojówka wnosi śniadanie do łóżka - na srebrnej tacy."
+  },
+  "dar_komu": {
+   "1": "pajdę chleba",
+   "2": "pajdę chleba i kubek mleka",
+   "3": "pajdę chleba i kawałek sera",
+   "komnata": "pajdę chleba i kawałek sera"
+  },
+  "dar": {
+   "1": "pajda chleba",
+   "2": "pajda chleba i kubek mleka",
+   "3": "pajda chleba i kawałek sera",
+   "komnata": "pajda chleba i kawałek sera",
+   "zloty": "do łóżka, na srebrnej tacy"
+  }
+ },
+ "laznia": {
+  "kwestie": [
+   "No, teraz przynajmniej konie się nie płoszą, jak przechodzisz.",
+   "Woda była gorąca, a teraz jest... brązowa. Ale ty lśnisz!",
+   "Takiego brudu nie widziałam od czasu, jak kąpał się tu Grum. A Grum kąpie się raz do roku. W porywach.",
+   "Pachniesz jak łąka po deszczu. No, jak łąka. Z tym deszczem to może przesadziłam.",
+   "Uważaj, żebyś się nie zakochał we własnym odbiciu w kuflu."
+  ]
+ },
+ "piesni": {
+  "kruk": {
+   "title": "Czarny kruku",
+   "intro": "Dziś „Czarny kruku”. Najstarsza, jaką znam - stara jak kamienie pod tą podłogą.",
+   "verses": {
+    "0": [
+     "Hej, kruku, czarny kruku,",
+     "co krążysz nad naszym dachem?"
+    ],
+    "1": [
+     "— Pamiętam mury ze skały",
+     "i straż, co nie znała strachu."
+    ],
+    "2": [
+     "Nie złota strzegli ni ziemi,",
+     "ni króla, ani korony —"
+    ],
+    "3": [
+     "lecz tego, co w sercu skały",
+     "śpi dotąd, niezbudzone."
+    ]
+   },
+   "after": "Skąd ją znam? Nie wiem. Czasem słowa przychodzą same, jak natchnienie... albo jak wspomnienie."
+  },
+  "pytanie": {
+   "title": "Jedno pytanie",
+   "intro": "„Jedno pytanie”. Niby kołysanka. Tylko komu by się przy niej dobrze zasypiało?",
+   "verses": {
+    "0": [
+     "Raz do roku, w zimną noc,",
+     "strażnik schodził, gdzie śpi moc."
+    ],
+    "1": [
+     "Jedno pytanie w dłoni niósł —",
+     "więcej żaden by nie zniósł."
+    ],
+    "2": [
+     "Wracał blady, cichy, siwy,",
+     "choć był młody, choć był żywy."
+    ],
+    "3": [
+     "Prawda, synku, to nie miód:",
+     "raz do roku — i to cud."
+    ]
+   },
+   "after": "Jedno pytanie na rok... Ciekawe, o co ty byś zapytał. Ja chyba wolę nie wiedzieć."
+  },
+  "straznik": {
+   "title": "Strażnik, co pytał za wiele",
+   "intro": "„Strażnik, co pytał za wiele”. Smutna. A ludzie i tak proszą o nią najczęściej.",
+   "verses": {
+    "0": [
+     "Był strażnik, co kochał żonę",
+     "i bał się — jak każdy z nas."
+    ],
+    "1": [
+     "Zszedł w dół, choć nie był to jego",
+     "ni rok, ani dzień, ni czas."
+    ],
+    "2": [
+     "Pytał o żonę, o brata,",
+     "o mury — czy przetrwają wiek?"
+    ],
+    "3": [
+     "A Skała mu odpowiedziała.",
+     "I nie wrócił ten sam człek."
+    ]
+   },
+   "after": "Brr. Po tej zawsze ktoś stawia kolejkę. Chyba żeby o niej nie myśleć."
+  },
+  "drzwi": {
+   "title": "Drzwi pod skałą",
+   "intro": "„Drzwi pod skałą”. Melodia wesoła, a słowa... sam posłuchaj.",
+   "verses": {
+    "0": [
+     "Pod kuflem deska, pod deską próg,",
+     "pod progiem schody — kto by to mógł?"
+    ],
+    "1": [
+     "A na dole drzwi z kamienia,",
+     "zamknięte na klucz milczenia."
+    ],
+    "2": [
+     "Kto tam zapuka, ten usłyszy",
+     "to, czego nie chciał — w wielkiej ciszy."
+    ],
+    "3": [
+     "Więc pij, wędrowcze, śpiewaj z nami",
+     "i nie pytaj, co pod kamieniami."
+    ]
+   },
+   "after": "Borgar nie lubi tej piosenki. Mówi, że goście potem zaglądają pod stoły."
+  },
+  "kasztelan": {
+   "title": "Ostatni kasztelan",
+   "intro": "„Ostatni kasztelan”. O Kruczych Skałach i o kimś, kto bardzo nie chciał, żeby je pamiętano.",
+   "verses": {
+    "0": [
+     "Gdy mury legły w pył i w proch,",
+     "ostatni kasztelan zamknął loch."
+    ],
+    "1": [
+     "Klucz zakopał, zatarł ślad",
+     "i puścił plotkę w cały świat:"
+    ],
+    "2": [
+     "„Przeklęte gruzy, zły to gród —",
+     "nie kop, bo zginiesz ty i twój ród!”"
+    ],
+    "3": [
+     "Wieki minęły. Kto dziś wie,",
+     "na czym ten Złoty Kufel śpi?"
+    ]
+   },
+   "after": "Kasztelan... Ciekawe, czy miał dzieci. I czy one wiedziały, co tatko zakopał."
+  },
+  "chlopiec": {
+   "title": "O chłopcu z piwnicy",
+   "intro": "A teraz coś wesołego! „O chłopcu z piwnicy”. Ozzy, nie patrz tak na mnie.",
+   "verses": {
+    "0": [
+     "Był raz chłopiec, psotnik mały,",
+     "co wpadł w piwnicę pod Kruczą Skałą."
+    ],
+    "1": [
+     "Wrócił nad ranem, brudny, chudy,",
+     "i gadał rzeczy — same cudy!"
+    ],
+    "2": [
+     "Wiedział, kto kłamie, kto kradnie z sadu,",
+     "i dzień, gdy spadnie deszcz pełen gradu."
+    ],
+    "3": [
+     "Dziś pije piwo, gada do ściany —",
+     "a wszyscy myślą, że jest pijany."
+    ]
+   },
+   "after": "Ozzy zawsze przy niej płacze. Mówi, że ze śmiechu. Ja myślę, że nie tylko."
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TavernLife.js: NPCS=postacie:/(^|\\.)name$/, DISHES=dania:id:/(^|\\.)(name|sub|desc|order|bite)$/, REP_NAMES=slawa.nazwy, ROOM_NAMES=pokoje.nazwy, ROOM_DESCS=pokoje.opisy, GIFT_TEXT=pokoje.dar_komu, GIFT_NAME=pokoje.dar, BATH_LINES=laznia.kwestie, SONGS=piesni:id:/(^|\\.)(title|intro|verses|after)$/)"
+}

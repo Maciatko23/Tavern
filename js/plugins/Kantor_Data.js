@@ -6,7 +6,9 @@
 // the kantor's cellar (the new Map171 "Piwnica kantoru"), the register on Baltazar's desk, who gets it (Wit / the reeve / the double
 // game / blackmail), the ferry night on Polna droga (Map022) with the ambush, and the kantor's fate in Act II. Kantor.js is the
 // engine. Registered in js/plugins.js under the island packages' data (Cysterna_Data), above TownLife and TownQuests:
-//   - window.TownQuestsPacks: the quest W5 (ten steps, chapters 1-7), its things (the register, the copy, the crate...), the remarks
+//   - the thread "kantor" (Watki.js, 2026-10-28): the state, the quest W5 (ten steps, chapters 1-7) with the talks and actions of its
+//     steps and the F9 jumps (into window.TownQuestsPacks with its things - the register, the copy, the crate... - and the remarks);
+//     the hooks they name: Kantor.js
 //   - TownLifeData: Baltazar's plan gets the night shift (he is in the cellar, not behind the counter - Kantor.js's own event), his
 //     move to the harbour in Act II when the town shut his kantor (alt: Map125, by the port's storehouse), the spots
 //   - window.KantorData: the maps, the event ids (730-759, the core's registry: owner "Kantor"), the places, the visitors of the
@@ -17,6 +19,7 @@
  * @plugindesc [W5] Dane wątku „Towary z kontynentu”: Baltazar Vey, tylne drzwi kantoru, piwnica (mapa 171), obóz przemytników, noc promu. v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
  * @orderAfter Cysterna_Data
  *
  * @help
@@ -121,25 +124,7 @@
     ];
     Watki.scal(REGISTER, "kantor", "rejestr");   // (its words: js/teksty/kantor.txt, rejestr)
 
-    // ------------------------------------------------------------------ the quest W5 (TownQuests)
-    const W5 = {
-        id: "W5", kind: "W", giver: null, icon: 0,
-        autoStart: "w5Auto",
-        steps: [
-            { ch: 1, type: "custom", check: "w5Poszlaki", vars: "w5Vars" },
-            { ch: 2, type: "custom", check: "w5Stuk", reward: { xp: 40 } },
-            { ch: 2, type: "custom", check: "w5Oboz", reward: { xp: 80 } },
-            { ch: 3, type: "custom", talk: "w5Najem" },
-            { ch: 3, type: "custom", check: "w5Zmiany", vars: "w5Vars" },
-            { ch: 4, type: "custom", check: "w5Rejestr", reward: { xp: 120 } },
-            { ch: 5, type: "custom", talk: "w5Komu", vars: "w5Vars" },
-            { ch: 5, type: "custom", talk: "w5Zebranie", vars: "w5Vars" },
-            { ch: 6, type: "custom", check: "w5Prom", vars: "w5Vars" },
-            { ch: 7, type: "custom", talk: "w5Akt2", vars: "w5Vars" }
-        ],
-        reward: { xp: 300 }
-    };
-    Watki.scal(W5, "kantor", "zadania.W5");   // (its words: js/teksty/kantor.txt, zadania.W5)
+    // ------------------------------------------------------------------ the thing carried, the remarks (they go with the quest's pack)
     const VITEMS = {
         rejestr: { icon: 189 },
         odpis_rejestru: { icon: 191 },
@@ -148,7 +133,8 @@
     };
     Watki.scal(VITEMS, "kantor", "rzeczy");   // (its words: js/teksty/kantor.txt, rzeczy)
     // the raven stones of the cargo: the same thing as the wreck's (Wrak_Data's v:kamien_kruk) - ours only when no pack has it yet
-    if (!(window.TownQuestsPacks || []).some(p => p && p.vitems && p.vitems.kamien_kruk)) VITEMS.kamien_kruk = { name: "Kamień z krukiem", icon: 319 };
+    // (its name: a getter of the words - kod.kamienZKrukiem; TownQuests_Data keeps this very object)
+    if (!(window.TownQuestsPacks || []).some(p => p && p.vitems && p.vitems.kamien_kruk)) VITEMS.kamien_kruk = Watki.zTekstu({ icon: 319 }, { name: "kod.kamienZKrukiem" }, "kantor");
     const REMARKS = [
         { id: "w5Roch", who: "przemytnik", flag: "w5Kamienie" },
         { id: "w5WitAlly", who: "kapral", flag: "w5WitAlly" },
@@ -158,7 +144,150 @@
         { id: "w5Ambrozy", who: "dzwonnik", flag: "w5Stuk" }
     ];
     Watki.scal(REMARKS, "kantor", "uwagi");   // (its words: js/teksty/kantor.txt, uwagi)
-    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Kantor", quests: [W5], vitems: VITEMS, remarks: REMARKS });
+
+    // ------------------------------------------------------------------ the thread (the engine Watki.js, docs/WATKI_DANE.md, 2026-10-28)
+    // the state "kantor", the quest W5 (ten steps, chapters 1-7 - its words: zadania.W5; the engine puts it into window.TownQuestsPacks
+    // with the things and the remarks), the talks of its steps (the hire, who gets the register, the town meeting, the kantor in Act
+    // II), their actions, the hero's thoughts, the F9 jumps (Kantor.debugJump - Debug.js's row "isleW5"). The nights themselves (the
+    // visitors, the camp, the cellar, the ferry night) and the hooks: Kantor.js
+    const MA_REJESTR = { lub: ["v:rejestr", "v:odpis_rejestru"] };   // (the register or its copy in the bag)
+    const w = Watki.watek({
+        id: "kantor", wtyczka: "Kantor", teksty: "kantor",
+        // (the fields once written on the fly - noted0-2, backRaidDone, camp.fled, shift.over, reg.lastCaught / alarm, ferry.stateDay /
+        // cleared - are in the defaults now; the version stays: an old save simply has them unset, as before)
+        stan: { klucz: "kantor", wersja: 1, domyslne: () => ({
+            clues: {},                                                     // own clues: klos, goscie, dzwon
+            knock: { seen: 0, night: -1, spooked: -1 }, guests: {},        // ch. 2: the knock seen (day), the guests witnessed
+            camp: { heard: 0, fought: 0, beaten: -1, night: -1, fled: -1 },  // ch. 2: the camp
+            hired: 0, mood: "", shifts: 0, noted0: 0, noted1: 0, noted2: 0, // ch. 3 (noted N: the night N's note written)
+            shift: { night: -1, n: 0, carrying: false, paid: false, seen: 0, over: false },   // tonight's shift: crates placed, carrying one, paid
+            reg: { night: -1, state: "", back: 0, caught: 0, done: 0, took: "", card: 0, lastCaught: -1, alarm: 0 },   // ch. 4
+            outcome: "", komu: "", zebranie: 0,                             // ch. 5: closed | double | enemy ; wit | witBurn | soltys | double | blackmail
+            ferry: { day: 0, state: "", ambush: 0, rafal: "", stateDay: 0, cleared: 0 },   // ch. 6
+            honest: "", weekPaid: 0, raid: { day: 0, done: 0 }, back: 0, backRaid: 0, backRaidDone: 0
+        }) },
+        // ("@key: ..." - that resident says it: Kantor.js finds him; a line is one paragraph - "\n" no new line, as the old wrap)
+        mowa: { kto: key => w.hak("mowca", null, key) },
+        // the hero's thoughts and the cellar's people's words outside a talk: one by one, 210 frames each, 220 apart, not waiting for a talk
+        mysli: { klatki: 210, odstep: 220, czekaj: false },
+        zadania: {
+            // W5 "Towary z kontynentu": from day 10 with the first clue; the rewards of the steps and the end as before
+            W5: { kind: "W", giver: null, icon: 0, autoStart: "w5Auto", start: [{ hak: "odDnia", args: [10] }, { hak: "poszlaki", args: [1] }],
+                kroki: [
+                    // 1 "Dziwny kupiec": two clues
+                    { nazwa: "w5Poszlaki", ch: 1, gotowe: { hak: "poszlaki", args: [2] }, zmienne: "w5Zmienne" },
+                    // 2 "Trzy stuknięcia": the knock seen; the camp heard or fought (Kantor.js)
+                    { nazwa: "w5Stuk", ch: 2, gotowe: "stan:knock.seen>0", reward: { xp: 40 } },
+                    { nazwa: "w5Oboz", ch: 2, gotowe: { lub: ["stan:camp.heard>0", "stan:camp.fought>0"] }, reward: { xp: 80 } },
+                    // 3 "Nocny tragarz": Baltazar hires him (8-18), two night shifts
+                    { nazwa: "w5Najem", ch: 3, rozmowy: [{ kto: "kupiec", gdy: { godziny: TIME.work }, tresc: [{ rozmowa: "najem" }] }] },
+                    { nazwa: "w5Zmiany", ch: 3, gotowe: "stan:shifts>=" + SHIFTS, zmienne: "w5Zmienne" },
+                    // 4 "Rejestr": taken or copied, Baltazar back and paid (Kantor.js)
+                    { nazwa: "w5Rejestr", ch: 4, gotowe: ["stan:reg.done>0", MA_REJESTR], reward: { xp: 120 } },
+                    // 5 "Komu to dać": Wit, the reeve (8-18), Baltazar (8-18); the town meeting the next day 12-16
+                    { nazwa: "w5Komu", ch: 5, zmienne: "w5Zmienne", rozmowy: [
+                        { kto: "kapral", gdy: MA_REJESTR, tresc: [{ rozmowa: "komuWit" }] },
+                        { kto: "soltys", gdy: [MA_REJESTR, { godziny: [8, 18] }], tresc: [{ rozmowa: "komuSoltys" }] },
+                        { kto: "kupiec", gdy: [MA_REJESTR, { godziny: TIME.work }], tresc: [{ rozmowa: "komuBaltazar" }] }
+                    ] },
+                    { nazwa: "w5Zebranie", ch: 5, zmienne: "w5Zmienne", rozmowy: [
+                        { kto: "soltys", gdy: "zebranieTrwa", tresc: ["zebranie.say", { zrob: "zebranie" }] },
+                        { kto: "soltys", gotowa: false, tresc: ["zebranie.notYet"] }
+                    ] },
+                    // 6 "Noc promu" (Kantor.js)
+                    { nazwa: "w5Prom", ch: 6, gotowe: "stan:ferry.state", zmienne: "w5Zmienne" },
+                    // 7 "Co dalej z Kantorem" (Act II, 8-18): the reeve (the kantor shut) or Baltazar (the double game, the enemy)
+                    { nazwa: "w5Akt2", ch: 7, zmienne: "w5Zmienne", rozmowy: [
+                        { kto: "soltys", gdy: ["aktDrugi", "stan:outcome=closed", { godziny: TIME.work }], tresc: [{ rozmowa: "akt2Soltys" }] },
+                        { kto: "kupiec", gdy: ["aktDrugi", "!stan:outcome=closed", { godziny: TIME.work }], tresc: [{ rozmowa: "akt2Kupiec" }] }
+                    ] }
+                ],
+                reward: { xp: 300 } }
+        },
+        paczka: { vitems: VITEMS, remarks: REMARKS },
+        rozmowy: {
+            // ch. 3: Baltazar hires him - a friend (he keeps his mouth shut / took his money), a fighter (the camp), or "the curious ones close by"
+            najem: [{ jesli: "zaufanie", to: ["najemTrust"], inaczej: [{ jesli: "stan:camp.fought", to: ["najemFight"], inaczej: ["najemCold"] }] },
+                { wybor: [
+                    { etykieta: "najemYes", tresc: ["najemOk", { zrob: "najem", args: [{ hak: "nastroj" }] }] },
+                    { etykieta: "najemNo", tresc: ["najemLater"] }
+                ], anuluj: 1 }],
+            // ch. 5: Wit (his trust - he confesses; else the register burnt), the reeve, Baltazar himself
+            komuWit: ["komuWit.ask", { jesli: "witUfa", to: ["komuWit.trust", { zrob: "komuWit" }], inaczej: ["komuWit.burn", { zrob: "komuWitSpalil" }] }],
+            komuSoltys: ["komuSoltys.ask", "komuSoltys.say", { zrob: "komuSoltys" }],
+            komuBaltazar: ["komuBaltazar.ask", "komuBaltazar.say", { wybor: [
+                { etykieta: "komuBaltazar.double", tresc: ["komuBaltazar.doubleSay", { zrob: "komuWspolnik" }] },
+                { etykieta: "komuBaltazar.blackmail", tresc: ["komuBaltazar.blackmailSay", { zrob: "komuSzantaz" }] },
+                { etykieta: "komuBaltazar.later", tresc: ["komuBaltazar.laterSay"] }
+            ], anuluj: 2 }],
+            // ch. 7: who runs the shut kantor (no cancelling); Baltazar's word to his partner / his enemy
+            akt2Soltys: ["akt2Soltys", { wybor: [
+                { etykieta: "akt2Ludmila", tresc: ["akt2LudmilaSay", { zrob: "akt2", args: ["ludmila"] }] },
+                { etykieta: "akt2Ratusz", tresc: ["akt2RatuszSay", { zrob: "akt2", args: ["ratusz"] }] }
+            ], anuluj: -1 }],
+            akt2Kupiec: [{ jesli: "stan:outcome=double", to: ["akt2Grip"], inaczej: ["akt2Enemy"] }, { zrob: "akt2", args: [{ stan: "outcome" }] }]
+        },
+        // (Kantor.act's old names - hire, komu, zebranie, akt2: a talk saved before 2026-10-28 - Kantor.js sends them here)
+        akcje: {
+            najem: [{ gdy: "!krok:w5Najem", koniec: true }, { stan: { hired: "dzis", mood: { arg: 0 } } }, { gdy: "!ctx:args.0=trust", zrob: [{ flaga: "w5NajetyZimno" }] },
+                { notatka: "noteNajem" }, { krok: "w5Najem" }],
+            // ch. 5: the register to Wit (the kantor shut, Wit with the hero), burnt by Wit (a night in the guardhouse, Baltazar the enemy),
+            // to the reeve (the meeting tomorrow), the double game with Baltazar (he takes the original back), the blackmail
+            komuWit: [{ gdy: "!krok:w5Komu", koniec: true }, { stan: { komu: "wit" } }, { hak: "oddajRejestr" }, { stan: { outcome: "closed" } },
+                { flagi: ["w5WitAlly", "witAlly", "w5Zamkniety", "w5BaltazarWrog"] }, { notatka: "noteWit" }, { hak: "zamknijKantor" },
+                { krok: "w5Komu", do: "w5Prom", nagroda: { opinion: 8, xp: 150 } }],
+            komuWitSpalil: [{ gdy: "!krok:w5Komu", koniec: true }, { stan: { komu: "witBurn" } }, { hak: "oddajRejestr" }, { stan: { outcome: "enemy" } },
+                { flagi: ["w5WitSpalil", "w5BaltazarWrog"] }, { notatka: "noteWitBurn" }, { hak: "napad" }, { hak: "nocWWartowni" },
+                { napis: "kod.wartownia", pod: "kod.wartowniaSub", gora: true, kolor: "#ff9f8f" }, { krok: "w5Komu", do: "w5Prom", nagroda: { opinion: -1, xp: 30 } }],
+            komuSoltys: [{ gdy: "!krok:w5Komu", koniec: true }, { stan: { komu: "soltys" } }, { hak: "oddajRejestr" }, { stan: { zebranie: { hak: "jutro" } } },
+                { notatka: "noteSoltys" }, { krok: "w5Komu", nagroda: { xp: 50 } }],
+            komuWspolnik: [{ gdy: "!krok:w5Komu", koniec: true }, { stan: { komu: "double" } }, { gdy: "v:rejestr", zrob: [{ hak: "zabierz", args: ["rejestr", 9] }] },
+                { stan: { outcome: "double", weekPaid: "dzis" } }, { flagi: ["w5Podwojna", "w5FactionWatches"] }, { notatka: "noteDouble" },
+                { krok: "w5Komu", do: "w5Prom", nagroda: { xp: 100 } }],
+            komuSzantaz: [{ gdy: "!krok:w5Komu", koniec: true }, { stan: { komu: "blackmail", outcome: "enemy" } }, { flagi: ["w5Szantaz", "w5BaltazarWrog"] },
+                { notatka: "noteBlackmail" }, { hak: "napad" }, { krok: "w5Komu", do: "w5Prom", nagroda: { gold: PAY.blackmail, xp: 50, opinion: -2 } }],
+            // the town meeting: the kantor shut, Baltazar off the island; the loose card of the chronicles from his strongbox (D23)
+            zebranie: [{ gdy: "!krok:w5Zebranie", koniec: true }, { stan: { outcome: "closed" } }, { flagi: ["w5Zamkniety", "w5Soltys", "w5BaltazarWrog"] },
+                { notatka: "noteZebranie" }, { gdy: "kartaWSzkatule", zrob: [{ stan: { "reg.card": "dzis" } }, { hak: "dajKarte", args: ["kod.kartaSoltys"] }] },
+                { hak: "zamknijKantor" }, { krok: "w5Zebranie", nagroda: { opinion: 12, xp: 150 } }],
+            // ch. 7 (args: ludmila | ratusz - the honest kantor; double - cheap; else - dear): W5 done
+            akt2: [{ gdy: "!krok:w5Akt2", koniec: true },
+                { gdy: { lub: ["ctx:args.0=ludmila", "ctx:args.0=ratusz"] }, zrob: [{ stan: { honest: { arg: 0 } } },
+                    { gdy: "ctx:args.0=ludmila", zrob: [{ flaga: "w5KantorLudmila" }] }, { gdy: "ctx:args.0=ratusz", zrob: [{ flaga: "w5KantorRatusz" }] },
+                    { flaga: "w5KantorUczciwy" }, { notatka: "noteHonest" }, { hak: "zakoncz" }, { koniec: true }] },
+                { gdy: "ctx:args.0=double", zrob: [{ flaga: "w5KantorTani" }, { notatka: "noteGrip" }, { hak: "zakoncz" }, { koniec: true }] },
+                { flaga: "w5KantorDrogi" }, { notatka: "noteEnemy" }, { hak: "zakoncz" }]
+        },
+        // F9 ("Wyspa i fabuła": the engine's section "Wątek W5", its row "isleW5" - ←→ the chapter, OK jumps; the words js/teksty/kantor.txt
+        // f9Naglowek, f9Etykieta, f9desc, f9Brak, f9Nazwy.N; Kantor.debugJump is the same jump): the chapters' flags so far (each jump:
+        // all of the earlier chapters'), the step, the hour, the place
+        f9: { rodzaj: "isleW5", ikona: 189, kolejnosc: 5, naglowek: "f9Naglowek", etykieta: "f9Etykieta", opis: "f9desc", brak: "f9Brak", nazwy: "f9Nazwy" },
+        skoki: {
+            przed: [
+                { hak: "dzienDziesiaty" },
+                { gdy: "ctx:skok>=2", zrob: [{ stan: { "clues.debug": "dzis" } }, { flaga: "k15Clean" }] },
+                { gdy: ["ctx:skok>=3", "!stan:knock.seen"], zrob: [{ stan: { "knock.seen": "dzis" } }] },
+                { gdy: ["ctx:skok>=3", "!stan:camp.heard"], zrob: [{ stan: { "camp.heard": "dzis" } }] },
+                { gdy: ["ctx:skok>=4", "!stan:hired"], zrob: [{ stan: { hired: "dzis" } }] },
+                { gdy: ["ctx:skok>=4", "!stan:mood"], zrob: [{ stan: { mood: "trust" } }] },
+                { gdy: ["ctx:skok>=4", "stan:shifts<" + SHIFTS], zrob: [{ stan: { shifts: SHIFTS } }] },
+                { gdy: ["ctx:skok>=5", "!stan:reg.done"], zrob: [{ stan: { "reg.done": "dzis" } }] },
+                { gdy: ["ctx:skok>=5", { nie: MA_REJESTR }], zrob: [{ v: ["odpis_rejestru", 1] }] },
+                { gdy: ["ctx:skok>=6", "!stan:outcome"], zrob: [{ stan: { outcome: "closed" } }, { flagi: ["w5Zamkniety", "w5BaltazarWrog"] }, { hak: "zamknijKantor" }, { hak: "oddajRejestr" }] },
+                { gdy: "ctx:skok=6", zrob: [{ stan: { ferry: { hak: "nowyProm" } } }] },
+                { gdy: ["ctx:skok>=7", "!stan:ferry.state"], zrob: [{ stan: { "ferry.state": "seized" } }] }
+            ],
+            lista: {
+                1: { ch: 1, krok: "w5Poszlaki", godzina: 10, idz: [MAP.town, 16, 49, 8] },
+                2: { ch: 2, krok: "w5Stuk", godzina: 23.85, idz: [MAP.town, 10, 49, 2] },
+                3: { ch: 3, krok: "w5Najem", godzina: 10, idz: [MAP.town, 16, 49, 8] },
+                4: { ch: 4, krok: "w5Rejestr", godzina: 22.05, idz: [MAP.town, 14, 49, 8], zrob: [{ hak: "nowaNoc" }] },   // (tonight's shift and the register's night afresh)
+                5: { ch: 5, krok: "w5Komu", godzina: 10, idz: [MAP.town, 16, 49, 8] },
+                6: { ch: 6, krok: "w5Prom", godzina: 21.5, idz: [MAP.droga, 12, 2, 2] },
+                7: { ch: 7, krok: "w5Akt2", godzina: 10, idz: [MAP.town, 16, 49, 8] }
+            }
+        }
+    });
 
     // ------------------------------------------------------------------ TownLife: Baltazar's night shift and his move to the harbour
     // (his plan: inside the kantor at night - at the counter of Map103; on a porter's night he is in the cellar instead, Kantor.js's
@@ -205,7 +334,7 @@
     }
 
     window.KantorData = {
-        MAP, IDS, OWNER: "Kantor", EV, ART, PLACES, TIME, PAY, CRATES, SHIFTS, STONES, RAID, GOODS, PRICE, TX, REGISTER, W5, VITEMS, REMARKS,
+        MAP, IDS, OWNER: "Kantor", EV, ART, PLACES, TIME, PAY, CRATES, SHIFTS, STONES, RAID, GOODS, PRICE, TX, REGISTER, W5: w.Q.W5, VITEMS, REMARKS,
         SPOTS_TOWN, SPOTS_HARBOUR, SPOTS_KANTOR, LADA_HOURS: [9, 15], STONE_ITEM: 64
     };
 })();

@@ -21,12 +21,7 @@ Pisklę się wykluło!
 {imie} jest dorosły - największy i najsilniejszy. Z tobą na grzbiecie nurkuje na wrogów.
 
 eggCold = Jajo stygnie. Ogrzej je: przy ogniu, w domu albo śpiąc z nim przy sobie.
-eggWarm = Jajo jest ciepłe ({h}/{n} godz.)
 eggKnock = Coś puka w skorupkę od środka...
-[hatch]
-(Skorupka pęka. Ze środka wypełza mokre, białe pisklę i od razu wpatruje się w ciebie.)
-Ma cię za matkę. Cóż - teraz jesteś.
-
 noEgg = Nie masz jaja
 noMeat = Nie masz mięsa ani ryby
 noWater = Nie masz wody: nabierz do wiadra albo bukłaka
@@ -46,8 +41,6 @@ stay = {imie} zostaje tutaj
 home = {imie} wraca do gniazda
 noNest = Najpierw postaw mu gniazdo
 cold = {imie} zmarzł w nocy - trzymaj go przy ogniu albo w domu
-hungry = {imie} jest głodny
-thirsty = {imie} chce pić
 [fled]
 {imie} krąży nad polem i krzyczy...
 ...i odlatuje w stronę gór.
@@ -72,8 +65,6 @@ tiredAway = {imie} jest zmęczony - odlatuje odpocząć
 tiredHop = {imie} jest zmęczony - odskakuje na bok odpocząć
 restedBack = {imie} odpoczął - wraca do walki!
 outside = {imie} czeka na zewnątrz
-tooBig = {imie} się tu nie zmieści
-noSneak = Orzeł jest za duży, żeby się skradać - {imie} czeka
 cannotFly = {imie} jeszcze nie uniesie człowieka
 bondLow = {imie} jeszcze ci nie ufa na tyle (więź {b}/{n})
 tooTired = {imie} jest za zmęczony na lot ({p}%)
@@ -89,14 +80,12 @@ landWhyWater = Pod tobą woda
 landWhyCrops = Nie siadaj na uprawach
 landWhyMap = Tu nie wolno lądować
 landWhyTown = W mieście lądujesz tylko na placu
-landWhyHigh = Zniż lot (Q), żeby wylądować
 tiredAir = {imie} słabnie - wyląduj!
 forced = {imie} musi wylądować
 stormLand = Burza! {imie} schodzi do lądowania
 edgeSea = Dalej tylko morze.
 edgeFog = Za gęsta mgła - {imie} zawraca.
 edgeMountain = Za wysokie góry - {imie} zawraca.
-noSaveAir = Najpierw wyląduj
 dive = Nurkuj!
 diveTired = {imie} jest za zmęczony na nurkowanie
 diveWait = {imie} łapie oddech
@@ -107,7 +96,6 @@ farNone = Nie znasz jeszcze żadnego lądowiska poza tym
 farHelp = Lecisz nad chmurami do miejsca, w którym już raz wylądowałeś ({c}% sił).
 panelTitle = Lot: {imie}
 panelStrength = Siła skrzydeł
-panelKeys = WASD / strzałki: lot   Shift: szybciej   Spacja: nurkuj   Q: wyżej / niżej   L: ląduj   M: lot daleki
 menuTitle = Orzeł: {imie}
 menuEgg = Orle jajo
 mPet = Pogłaszcz
@@ -130,7 +118,6 @@ hFly = Wsiadasz mu na grzbiet i lecisz nisko nad koronami drzew (Q - wyżej: kam
 hAttack = Rzuca się na wroga, którego masz na celu (F).
 status = Życie {hp}/{mhp} · Siła {st}/{mst} · Jedzenie {f} · Woda {w} · Więź {b} · {etap}{dni}
 statusEgg = Ciepło: {h}/{n} godz. · {gdzie}
-nestFood = Miska: jedzenie
 nestNote = Miska: jedzenie {f}, woda {w}/{max}
 basketEmpty = Kosz czeka na jajo.
 basketEgg = W koszu leży orle jajo ({h}/{n} godz. ciepła).
@@ -162,7 +149,6 @@ eggTaken = Masz orle jajo. Trzeba je ogrzać: przy ogniu, w domu albo śpiąc z 
 (Gniazdo jest całe, ale puste. Orły krążą wysoko nad granią i krzyczą.)
 > Lepiej ich nie płoszyć.
 
-wayUp = Ścieżka wspinaczy prowadzi na grań
 wayUpLocked = Ściana jest za stroma. Ktoś tu się kiedyś wspinał - stare kołki w skale.
 theftWarn = Ktoś kręci się nocą przy gnieździe...
 [theftDone]
@@ -410,3 +396,19 @@ Lodowy
 Wicher
 Perłowy
 
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+eggWarm = Jajo jest ciepłe ({h}/{n} godz.)
+[hatch]
+(Skorupka pęka. Ze środka wypełza mokre, białe pisklę i od razu wpatruje się w ciebie.)
+Ma cię za matkę. Cóż - teraz jesteś.
+
+hungry = {imie} jest głodny
+thirsty = {imie} chce pić
+tooBig = {imie} się tu nie zmieści
+noSneak = Orzeł jest za duży, żeby się skradać - {imie} czeka
+landWhyHigh = Zniż lot (Q), żeby wylądować
+noSaveAir = Najpierw wyląduj
+panelKeys = WASD / strzałki: lot   Shift: szybciej   Spacja: nurkuj   Q: wyżej / niżej   L: ląduj   M: lot daleki
+nestFood = Miska: jedzenie
+wayUp = Ścieżka wspinaczy prowadzi na grań

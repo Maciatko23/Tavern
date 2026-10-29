@@ -55,6 +55,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("zuzycie");   // (the words of this file: js/teksty/zuzycie.txt, kod.*)
 
     const T = window.Tawerna;
     if (!T) throw new Error("Durability.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
@@ -63,17 +64,11 @@
     const ENABLED = params.enabled !== "false";
     const FACTOR = Math.max(0.1, Number(params.lifeFactor || 100) / 100);
 
-    // id: { life: uses, unit: [1, 2-4, 5+ forms of the word], g: "f" | "m" | "p" (how "broke" ends), fix: [[item id, amount]] }
-    const UNIT = {
-        blow: ["uderzenie", "uderzenia", "uderzeń"],
-        use: ["użycie", "użycia", "użyć"],
-        cast: ["rzut", "rzuty", "rzutów"],
-        cut: ["cięcie", "cięcia", "cięć"],
-        shot: ["strzał", "strzały", "strzałów"],
-        jab: ["pchnięcie", "pchnięcia", "pchnięć"],
-        block: ["cios", "ciosy", "ciosów"],
-        wear: ["dzień pracy", "dni pracy", "dni pracy"]   // (the clothes, Ubior_Sklepy.js: 100 points of strength spent = one day)
-    };
+    // the units: blow, use, cast, cut, shot, jab, block, wear (the clothes, Ubior_Sklepy.js: 100 points of strength spent = one day) -
+    // [1, 2-4, 5+ forms of the word] each: js/teksty/zuzycie.txt, jednostki.<unit>
+    const UNIT = Watki.scal({}, "zuzycie", "jednostki");
+    // id: { life: uses, unit, g: "f" | "m" | "p" (how "broke" ends), fix: [[item id, amount]], broke: its own word (js/teksty/zuzycie.txt,
+    // narzedzia.<id>.broke - the jacket tears) }
     const TOOLS = {
         60: { life: 70, unit: "blow", g: "f", fix: [[77, 1], [92, 1]] },              // kamienna siekiera: gałąź + len
         115: { life: 220, unit: "blow", g: "f", fix: [[86, 1], [80, 1]] },            // żelazna siekiera: żelazo + deska
@@ -92,17 +87,21 @@
         154: { life: 50, unit: "jab", g: "m", fix: [[64, 1], [93, 1]] },              // oszczep: kamień (grot) + lina
         155: { life: 40, unit: "block", g: "f", fix: [[61, 1], [93, 1]] },            // drewniana tarcza: drewno + lina (zużywa ją każdy przyjęty cios)
         156: { life: 80, unit: "blow", g: "f", fix: [[92, 1]] },                       // pałka: len na uchwyt
-        171: { life: 60, unit: "block", g: "f", fix: [[97, 1], [163, 1]], broke: "się podarła" }           // skórzana kurtka: łata z wyprawionej skóry, ścięgna (zużywa ją każdy cios, który dojdzie)
+        171: { life: 60, unit: "block", g: "f", fix: [[97, 1], [163, 1]] }           // skórzana kurtka: łata z wyprawionej skóry, ścięgna (zużywa ją każdy cios, który dojdzie)
     };
+    Watki.scal(TOOLS, "zuzycie", "narzedzia");
     const WARN_FRACTION = 0.15;
 
     const dataItem = id => $dataItems[id] || null;
     const enabled = () => ENABLED;
     const lifeOf = id => (TOOLS[id] ? Math.max(1, Math.round(TOOLS[id].life * FACTOR)) : 0);
 
+    // Tawerna.state "wear" = { used: { itemId: uses }, warned: { itemId: true }, repaired: n }; an older save's $gameSystem._wear is
+    // adopted (the old name stays a hidden way there: Journal, the tests)
+    const wearState = T.state.define("wear", () => ({ used: {}, warned: {} }), { version: 1, adopt: "_wear", owner: "Durability" });
     function state() {
-        if (!$gameSystem._wear) $gameSystem._wear = { used: {}, warned: {} };
-        return $gameSystem._wear;
+        const r = $gameSystem._tw, s = r && r.wear;
+        return s && typeof s === "object" ? s : wearState();
     }
     const used = id => (state().used[id] || 0);
     // the hero's skills (Combat.js, Skills_Data.js): perk(key) = what the learnt skills add up to for an effect, perkRoll(key) = a
@@ -130,7 +129,7 @@
         delete state().used[id];
         delete state().warned[id];
         AudioManager.playSe({ name: "Crash", volume: 90, pitch: 105, pan: 0 });
-        popup(item.iconIndex, item.name + " " + (TOOLS[id].broke || "się złamał" + (g === "f" ? "a" : g === "p" ? "y" : "")), "#ff9f8f");   // (broke: its own word - the jacket tears)
+        popup(item.iconIndex, item.name + " " + (TOOLS[id].broke || Watki.wstaw(TK.kod.broke[0], { "1": g === "f" ? "a" : g === "p" ? "y" : "" })), "#ff9f8f");   // (broke: its own word - the jacket tears)
     }
 
     // One use of the tool. Returns true when it broke on this use.
@@ -141,7 +140,7 @@
         if (remaining <= 0) { broke(id); return true; }
         if (remaining <= Math.max(3, Math.ceil(lifeOf(id) * WARN_FRACTION)) && !state().warned[id]) {
             state().warned[id] = true;
-            popup(dataItem(id).iconIndex, dataItem(id).name + ": zostało " + remaining + " " + unitWord(id, remaining), "#ffd98f");
+            popup(dataItem(id).iconIndex, Watki.wstaw(TK.kod.use[0], { name: dataItem(id).name, remaining: remaining, "3": unitWord(id, remaining) }), "#ffd98f");
         }
         return false;
     }
@@ -158,10 +157,10 @@
         if (!ENABLED) return [];
         // (a thing with no materials of its own is not mended here - the clothes of cloth go to the seamstress, Ubior_Sklepy.js)
         return Object.keys(TOOLS).map(Number).filter(id => owns(id) && used(id) > 0 && TOOLS[id].fix && TOOLS[id].fix.length).map(id => ({
-            id: "repair_" + id, name: "Napraw: " + dataItem(id).name, output: [id, 1], repair: id, manual: true,
+            id: "repair_" + id, name: Watki.wstaw(TK.kod.repairRecipes[0], { name: dataItem(id).name }), output: [id, 1], repair: id, manual: true,
             inputs: knowsSkill("c_repair") ? TOOLS[id].fix.map(([i, n]) => [i, Math.max(1, Math.ceil(n / 2))]) : TOOLS[id].fix,   // (Naprawiacz)
             hours: 1, stamina: 2, startSe: "Hammer",
-            desc: "Wzmacniasz i sklejasz to, co się poluzowało. Wytrzymałość wraca do pełna (teraz " + left(id) + " z " + lifeOf(id) + ")."
+            desc: Watki.wstaw(TK.kod.repairRecipes[1], { "1": left(id), "2": lifeOf(id) })
         }));
     }
 
@@ -182,7 +181,7 @@
     const _Window_Help_setItem = Window_Help.prototype.setItem;
     Window_Help.prototype.setItem = function(item) {
         if (ENABLED && item && DataManager.isItem(item) && TOOLS[item.id] && $gameSystem) {
-            this.setText(item.description + "\nWytrzymałość: " + leftText(item.id) + " z " + lifeOf(item.id) + ".");
+            this.setText(Watki.wstaw(TK.kod.setItem[0], { description: item.description, "2": leftText(item.id), "3": lifeOf(item.id) }));
             return;
         }
         _Window_Help_setItem.call(this, item);

@@ -30,7 +30,7 @@ kit.test({ port: 9487 }, async t => {
         return { sheet: s._heroSheet || null, row: c.row, col: c.col, swing: !!(s._swingBody && s._swingBody.visible), swingSheet: s._swingBody && s._swingBody.visible && s._swingBody.bitmap ? s._swingBody.bitmap._url.split("/").pop() : null,
             hold: L._hold.visible, flame: L._flame.visible && L._hold.visible, behind: L._hold.y < s.y, front: L._hold.y > s.y,
             fx: L._hold.x + L._flame.x, fy: L._hold.y + L._flame.y, hx: s.x, hy: s.y, ground: L._ground.visible, gx: L._ground.x, gy: L._ground.y,
-            spot: Torch.lightSpot(), sparks: L._sparks.length, stick: L._stick.visible }; })()`);
+            spot: Torch.lightSpot(), sparks: L._sparks.length }; })()`);
     const useTorch = () => t.eval(`(function(){ const a = $gameParty.leader(), it = $dataItems[59]; a.useItem(it); const act = new Game_Action(a); act.setItemObject(it); act.applyGlobal(); return $gameParty.numItems(it); })()`);
 
     // ================= 1. the data: the item, its common events =================
@@ -280,7 +280,7 @@ kit.test({ port: 9487 }, async t => {
     const op = await t.popups({ clear: true });
     t.check("burnt down: out by itself, 'Pochodnia się wypaliła' in a popup, the hero without it (Hero_Walk)", !out.lit && !out.sw && out.sheet === "Hero_Walk" && op.some(p => /wypaliła/.test(p)), { out, op });
 
-    // ================= 7. the gauge, the night light, the old hero =================
+    // ================= 7. the gauge, the night light =================
     await useTorch();
     await t.frames(15);
     await t.eval("Torch.state().left = 1.5; 0");
@@ -295,12 +295,7 @@ kit.test({ port: 9487 }, async t => {
     const night = await t.json(`(function(){ const nl = SceneManager._scene._spriteset._nightLight; const l = nl && nl.visible ? nl.lights().find(x => x.id === 7000) : null; return l ? { x: l.x, y: l.y } : null; })()`);
     t.check("at night the light (campfire-like, Farming_Render) stands on the flame in his hand", !!night && !!L.spot && Math.abs(night.x - L.spot.x) < 3 && Math.abs(night.y - L.spot.y) < 3, { night, spot: L.spot });
     await shot("noc_stoi.png");
-    await t.eval("HeroLook.setActive(false); 0");
-    await t.frames(6);
-    L = await look();
-    t.check("the old hero (F9: Reid): a torch drawn beside him (the stick and the flame), no torch sheets", L.stick && L.flame && !L.sheet, L);
-    await t.eval("HeroLook.setActive(true); 0");
-    await t.frames(4);
+    // (2026-10-28: the old hero - Reid, F9 - and his torch drawn beside him are gone: HeroLook.js has only the hero's sheets)
     await t.setHour(12);
 
     // ================= 8. the save, sleep =================

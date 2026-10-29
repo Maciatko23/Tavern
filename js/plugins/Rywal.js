@@ -59,10 +59,12 @@
     if (!T) throw new Error("Rywal.js: brak TawernaCore.js");
     if (!D) { console.warn("Rywal.js: brak Rywal_Data.js - rozdział „Rywal w ruinach” wyłączony"); return; }
     const PLUGIN = "Rywal";
+    // the thread (Rywal_Data.js, the engine Watki.js): the state, W9's steps of chapter 3, the leader's talk, the thoughts, the flags
+    const w = Watki.get("rywal");
+    if (!w) { console.warn("Rywal.js: brak wątku „rywal” (Rywal_Data.js / Watki.js) - rozdział „Rywal w ruinach” wyłączony"); return; }
     const M = D.MAP, EV = D.EV, ART = D.ART, TX = D.TX, TM = D.TIME, TR = D.TRAIL;
     const TAG = "w9Rywal", TAG_LEAD = "w9RywalLead";
-    const HERO = { id: 0, name: "" };
-    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
+    const { C, linesTo } = Watki.mowa;
     const day = () => T.time.day(), hour = () => T.time.hour();
     const now = () => day() * 24 + hour();
     const has = () => !!window.$gameSystem && !!window.$gameMap;
@@ -77,26 +79,16 @@
     const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
     const onMap = id => !!(window.$gameMap && $gameMap.mapId() === id);
     const report = (where, e) => console.error("[Rywal] " + where + ":", e);
-    const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
+    const fill = Watki.mowa.fill;
     const cap = s => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
     const DIR4 = (dx, dy) => (Math.abs(dx) >= Math.abs(dy) ? (dx < 0 ? 4 : 6) : (dy < 0 ? 8 : 2));
     let auto = true;   // (tests of other systems: Rywal.auto(false) - the chapter does not begin by itself, the rival does not move)
 
     // ------------------------------------------------------------------
-    // The state (the save)
+    // The state (the save): the thread's (Rywal_Data.js)
     // ------------------------------------------------------------------
-    const defaults = () => ({
-        gateDay: 0, enter: 0,                       // the day the grate was first seen open; the hour (abs) they go in
-        party: "", why: "", forced: "",             // who (a key of D.PARTIES), why (a key of D.WHY), F9's choice
-        rf: 0, at: 0, gateSince: 0,                 // the floor they are on (0: not in yet), the hour they came onto it, at the tenth gate since
-        passed: {}, trail: {}, robbed: {}, robSeen: {}, torn: {},   // the floors they left (traces), the containers they emptied, the notes they took
-        seen: {}, first: 0, cellar: 0, w9: 0,       // the floors the hero saw traces on, the first sighting, the cellar's thought, W9 started by us
-        met: 0, talked: 0, fight: null,             // the meeting: the day it began, the first talk, a fight running { mapId, lead }
-        outcome: "", how: "", outDay: 0, outFloor: 0, learned: 0, deep: false, lead: "", gold: 0,
-        ropes: {}, traps: {}, notes: {}, toldUp: 0, recovered: 0
-    });
-    const store = T.state.define("rywal", defaults, { version: 1, owner: PLUGIN });
-    const S = () => store();
+    const defaults = w.def.stan.domyslne;
+    const S = () => w.S();
     function fresh(keep) {
         const s = S(), d = defaults();
         for (const k of Object.keys(s)) delete s[k];
@@ -105,12 +97,8 @@
         return s;
     }
 
-    // TownQuests' flags, things, records
-    const qstate = () => { const q = TQ(); return q && q.state ? q.state() : null; };
-    const flags = () => { const s = qstate(); return s ? s.flags : {}; };
-    const flag = k => !!flags()[k];
-    function setFlag(k) { const f = flags(); if (f && k && !f[k]) f[k] = day(); }
-    const rec = id => { const q = TQ(); return q && q.rec ? q.rec(id) : null; };
+    // TownQuests' flags, things, records (the thread's)
+    const { flags, flag, setFlag, rec } = w;
     const note = (title, text) => T.call("Journal", "addNote", title, text);
     const xp = (n, why) => T.call("Combat", "gainXp", n, why || TK.kod.xp[0]);
     const actTwo = () => { const q = TQ(); try { return !!(q && q.actTwo && q.actTwo()); } catch (e) { return false; } };
@@ -508,61 +496,8 @@
     const groupIds = () => [EV.lead, EV.man0, EV.man1, EV.man2];
     const say = (ch, text, frames) => { const sb = SB(); if (sb && sb.say && ch && text) sb.say(ch, text, frames || 200); };
 
-    // ------------------------------------------------------------------
-    // Talk helpers (event commands; "> " the hero)
-    // ------------------------------------------------------------------
-    const LINE = 46, PAGE = 3;
-    function wrap(text) {
-        const out = [];
-        let line = "";
-        for (const w of String(text).split(/\s+/)) {
-            if (!w) continue;
-            if (line && (line + " " + w).length > LINE) { out.push(line); line = w; } else line = line ? line + " " + w : w;
-        }
-        if (line) out.push(line);
-        return out;
-    }
-    function sayTo(out, spk, text, ind) {
-        const lines = wrap(text);
-        for (let i = 0; i < lines.length; i += PAGE) {
-            out.push(C(101, ["", 0, 0, 2, spk.name || ""], ind));
-            lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 ? "\\SPK[" + spk.id + "]" : "") + l], ind)));
-        }
-        return out;
-    }
-    function linesTo(out, spk, arr, vars, ind) {
-        for (const raw of [].concat(arr || [])) {
-            if (!raw) continue;
-            const s = fill(raw, vars);
-            if (s.startsWith("> ")) sayTo(out, HERO, s.slice(2), ind); else sayTo(out, spk, s, ind);
-        }
-        return out;
-    }
-    function choiceTo(out, labels, branches, cancel, ind) {
-        const i0 = ind || 0;
-        out.push(C(102, [labels, cancel === undefined ? labels.length - 1 : cancel, 0, 2, 0], i0));
-        labels.forEach((l, i) => {
-            out.push(C(402, [i, l], i0));
-            for (const c of branches[i] || []) out.push(Object.assign({}, c, { indent: (c.indent || 0) + i0 + 1 }));
-            out.push(C(0, [], i0 + 1));
-        });
-        out.push(C(404, [], i0));
-        return out;
-    }
-    const act = (out, args, ind) => (out.push(C(355, ["Rywal.act(this, " + JSON.stringify(args) + ")"], ind)), out);
-    // bubbles one after another outside a talk (over the hero "> ...", or over a character)
-    const thoughts = [];
-    let thoughtAt = 0;
-    function think(lines, whoCh) {
-        for (const l of [].concat(lines || [])) if (l) thoughts.push({ who: /^> /.test(l) ? null : whoCh || null, text: String(l).replace(/^> /, "") });
-    }
-    function updateThoughts() {
-        if (!thoughts.length || Graphics.frameCount < thoughtAt || !(SceneManager._scene instanceof Scene_Map)) return;
-        const t = thoughts.shift(), ch = t.who && $gameMap.event(t.who.eventId ? t.who.eventId() : -1) === t.who ? t.who : $gamePlayer;
-        const sb = SB();
-        if (sb && sb.say) sb.say(ch, t.text, 210); else T.popup(t.text, { color: "#eceef0" });
-        thoughtAt = Graphics.frameCount + 220;
-    }
+    // bubbles one after another outside a talk (over the hero "> ...", or over a character) - the thread's (Rywal_Data mysli)
+    const think = (lines, whoCh) => w.mysl(lines, whoCh);
     const calm = () => !$gameMessage.isBusy() && !$gameMap.isEventRunning() && !$gamePlayer.isTransferring() && SceneManager._scene instanceof Scene_Map && !SceneManager.isSceneChanging();
 
     // ------------------------------------------------------------------
@@ -605,27 +540,14 @@
         out.push(...(gate ? G.gate : G.road));
         return out;
     }
+    // the leader's talk: the data's (Rywal_Data rozmowy.przywodca)
     function talkLead(ev) {
         const s = S(), P = party();
         if (!P || s.outcome || s.fight) return null;
-        const spk = { id: ev.eventId(), name: P.lead.name }, vars = { ranny: P.wName };
         const first = !s.talked;
         s.talked = s.talked || day();
         if (!s.met) s.met = day();
-        const out = linesTo([], spk, (first ? greetLines(P) : TX.again[s.party]).concat([TX.ask[s.party]]), vars);
-        const gate = s.rf >= TM.cap;
-        const opts = [];
-        opts.push([TX.opt.fight[s.party], linesTo([], spk, [TX.fightStart[s.party]]).concat(act([], ["fight"]))]);
-        if (s.party === "baltazar" && knowsWords()) opts.push([TX.opt.sell, act(linesTo(linesTo([], spk, TX.sell.ask), spk, TX.sell.say), ["deal", "haslo"])]);
-        if (s.party === "kopacze" && knowsWords()) opts.push([TX.opt.guide, act(linesTo(linesTo([], spk, TX.guide.ask), spk, TX.guide.say), ["deal", "przewodnik"])]);
-        if (s.party === "lord") opts.push([TX.opt.report, act(linesTo(linesTo([], spk, TX.report.ask), spk, TX.report.say), ["deal", "raport"])]);
-        if (s.party === "grum") {
-            const rs = grumReasons(), ask = linesTo([], spk, TX.turn.ask, { powody: rs.join(" ") || TX.turn.powodyBrak });
-            opts.push([TX.opt.turn, grumCount() >= 2 ? act(linesTo(ask, spk, TX.turn.say), ["turn"]) : linesTo(ask, spk, TX.turn.need)]);
-        }
-        if ((s.party === "baltazar" || s.party === "lord") && !gate && knowsGuardian()) opts.push([TX.opt.warn, act(linesTo(linesTo([], spk, TX.warn.ask), spk, TX.warn[s.party]), ["warn"])]);
-        opts.push([TX.opt.leave, act(linesTo([], spk, TX.leave[s.party]), ["leave"])]);
-        return choiceTo(out, opts.map(o => o[0]), opts.map(o => o[1]), opts.length - 1);
+        return w.rozmowa("przywodca", { spk: { id: ev.eventId(), name: P.lead.name }, vars: { ranny: P.wName }, partia: s.party, pierwszy: first, brama: s.rf >= TM.cap });
     }
     // the men look at their leader
     const barkMan = ev => (say(ev, TX.bark[S().party] || "...", 160), null);
@@ -748,16 +670,8 @@
     // ------------------------------------------------------------------
     // W9 in the journal: two steps appended to TownQuests' W9 (ch. 3 - the rival; then "dalej w głąb" till the first truth)
     // ------------------------------------------------------------------
+    // (the steps: the thread's - Rywal_Data kroki, at W9's places 1 and 2)
     const autoChecks = () => { const q = TQ(); if (q && q.autoChecks) q.autoChecks(); };
-    function hookQuests() {
-        const q = TQ();
-        if (!q || !q.Q || !q.Q.W9 || !q.FX || hookQuests.done) return;
-        hookQuests.done = true;
-        const W9 = q.Q.W9;
-        if (!W9.steps.some(st => st.w9r)) for (const st of D.STEPS) W9.steps.push(Object.defineProperties({}, Object.getOwnPropertyDescriptors(st)));   // (the text: a getter of the words)
-        q.FX.w9Rywal = { vars: () => stepVars() };
-    }
-    hookQuests();
     const stepIdx = k => { const q = TQ(); return q && q.Q && q.Q.W9 ? q.Q.W9.steps.findIndex(st => st.w9r === k) : -1; };
     function ensureW9() {
         const q = TQ();
@@ -956,17 +870,33 @@
             if (out && out.length) interp.setupChild(out.concat([C(0, [])]), ev.eventId());
         } catch (e) { report("act", e); }
     }
-    function actArgs(args) {
-        const [what, a] = args, s = S();
-        if (what === "fight") startFight();
-        else if (what === "deal") {
-            if (a === "haslo") resolve("haslo", { gold: 150 });
-            else if (a === "przewodnik") resolve("przewodnik", { gold: 100 });
-            else if (a === "raport") resolve("raport");
-        } else if (what === "turn") { if (s.party === "grum" && grumCount() >= 2) resolve("sojusz"); }
-        else if (what === "warn") resolve("zawrocili");
-        else if (what === "leave") s.walkOn = day();
+    // the leader's talk's choices (the data's actions - Watki.act; the old script calls Rywal.act(this, [what, ...]) of a talk
+    // saved before 2026-10-28 go to the same actions)
+    function deal(a) {
+        if (a === "haslo") resolve("haslo", { gold: 150 });
+        else if (a === "przewodnik") resolve("przewodnik", { gold: 100 });
+        else if (a === "raport") resolve("raport");
     }
+    function actArgs(args, interp) {
+        const [what, a] = args;
+        const name = { fight: "walka", deal: "uklad", turn: "zawroc", warn: "ostrzez", leave: "odejdz" }[what];
+        if (name) w.akcja(name, what === "deal" ? [a] : [], interp);
+    }
+    w.haki({
+        // the talk: the greeting's lines, the conditions, the words
+        powitanie: () => greetLines(party()),
+        znaSlowa: () => knowsWords(),
+        znaStraznika: () => knowsGuardian(),
+        grumZawroci: () => grumCount() >= 2,
+        powody: () => grumReasons().join(" ") || TX.turn.powodyBrak,
+        // the actions
+        walka: () => startFight(),
+        uklad: (ctx, a) => deal(a),
+        zawroc: () => { if (S().party === "grum" && grumCount() >= 2) resolve("sojusz"); },
+        rozstrzygnij: (ctx, outcome) => resolve(outcome),
+        // W9's steps: the words of their text
+        krokZmienne: () => stepVars()
+    });
 
     // ------------------------------------------------------------------
     // The frame: the clock, the meeting's start, the tripwire, the walkers, the cellar, the Heart's witnesses
@@ -1007,7 +937,6 @@
     }
     T.onMapUpdate((scene, n) => {
         if (!has()) return;
-        updateThoughts();
         try { updateWalkers(); } catch (e) { report("walkers", e); walkers = null; }
         if (!auto) return;
         try { updateMeeting(); } catch (e) { report("meeting", e); }
@@ -1020,14 +949,13 @@
     T.on("mapReady", e => {
         if (!has()) return;
         pendingTalk = 0; walkers = null; heartSaid = false; cellarCheck = 0;
-        hookQuests();
         try { if (auto) tick(); onArrive(e && e.mapId !== undefined ? e.mapId : $gameMap.mapId()); } catch (er) { report("mapReady", er); }
     }, { owner: PLUGIN });
     T.on("load", () => {
-        thoughts.length = 0; thoughtAt = 0; layouts.clear();
+        layouts.clear();
         if (has() && S().fight) S().fight = null;   // (a fight saved half-way: the men of Humans.js are not in the save - they stand at their fire again)
     }, { owner: PLUGIN });
-    T.on("newGame", () => { thoughts.length = 0; thoughtAt = 0; layouts.clear(); }, { owner: PLUGIN });
+    T.on("newGame", () => { layouts.clear(); }, { owner: PLUGIN });
     // Act III armed: a word on who they are (the same Black Eyes as in the ruins - or the Lord's men were others)
     T.on("act3Armed", () => {
         if (!has() || !party()) return;
@@ -1111,6 +1039,25 @@
         if (to && window.$gameMap && to[0] === $gameMap.mapId()) $gamePlayer.requestMapReload();   // (the same floor again: its events made anew)
         return to;
     }
+    // the section's rows are the thread's data (Rywal_Data.js f9: "wariant", "spotkanie"); here their hooks - the words' {x}, ←→ (the party,
+    // the floor - kept between the menu's openings), OK (debugStart / debugMeet: there, or why not)
+    const F9_PARTIES = ["", "baltazar", "grum", "lord", "kopacze"];
+    const f9Pick = { party: 0, floor: 4 };
+    w.haki({
+        f9Zmienne: () => ({ name: TX.f9Names[F9_PARTIES[f9Pick.party] || "gra"], n: f9Pick.floor }),
+        f9Wybierz(ctx, delta) {
+            if (ctx.row.co === "wariant") f9Pick.party = (f9Pick.party + delta + F9_PARTIES.length * 10) % F9_PARTIES.length;
+            else if (ctx.row.co === "spotkanie") f9Pick.floor = ((f9Pick.floor - 1 + delta + TM.cap * 10) % TM.cap) + 1;
+            else return false;
+            return true;
+        },
+        f9Ok(ctx) {
+            const meet = ctx.row.co === "spotkanie", v = F9_PARTIES[f9Pick.party];
+            const g = meet ? debugMeet(f9Pick.floor, v) : debugStart(v);
+            if (!g) return { say: meet ? fill(TX.f9BrakPietra, { n: f9Pick.floor }) : TX.f9Brak, bad: true };
+            return { go: ["W9", g[0], g[1], g[2], g[3]] };
+        }
+    });
 
     window.Rywal = T.register(PLUGIN, {
         act: (interp, args) => actCall(interp, args), state: S, who, party, auto: v => { auto = v === undefined ? auto : !!v; return auto; },

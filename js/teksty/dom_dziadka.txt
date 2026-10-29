@@ -1,0 +1,81 @@
+# Teksty domu dziadka (HomeDecor.js - ozdoby i pamiątki, HomeLife.js - dziadek i kot Mruczek).
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz dom_dziadka
+
+# ======================================================================== Ozdoby i pamiątki: co bohater mówi, patrząc na nie (O / myszka)
+wspomnienia.rogi = Poroże mojego pierwszego jelenia. Młody widłak, ale mój.
+wspomnienia.kiel = Kieł mojego pierwszego dzika. Szarżował prosto na mnie...
+wspomnienia.skora = Skóra pierwszego wilka. Mało brakowało...
+wspomnienia.kufel = Cynowy kufel od Borgara - na pamiątkę pierwszej zmiany w tawernie.
+wspomnienia.kosci = Moje kości. Z nimi pierwszy raz kogoś ograłem w tawernie.
+wspomnienia.pokwitowanie = „Dług Stanisława spłacony co do grosza. Działka zostaje przy nim.” - L. Zaleski
+wspomnienia.pokwitowanieDziadek = Oprawiłem, jak Lord radził. Niech wisi - niech każdy widzi, że u nas długów nie ma.
+wspomnienia.gwozdz = Pusty gwóźdź. Dziadek mówi: „Tu zawiśnie pokwitowanie od Lorda”.
+wspomnienia.recznik = Haftowany ręcznik na obrazku Matki Boskiej. Krzyżyki wyszywała jeszcze babcia.
+wspomnienia.recznik_zima = Świerk nad obrazkiem, pod nim haftowany ręcznik. Zima w chacie.
+wspomnienia.gwiazda = Wycinanka z kolorowego papieru. Wycina się je nożycami do strzyżenia owiec.
+wspomnienia.leluja = Leluja z kolorowego papieru - każda warstwa naklejona osobno.
+wspomnienia.chodnik = Chodnik tkany ze starych szmat. W tym domu nic się nie marnuje.
+wspomnienia.skrzynia = Malowana skrzynia - wiano babci. Dziadek trzyma w niej odświętne ubranie.
+wspomnienia.ziola = Zioła suszą się przy ciepłym kominie: dziurawiec, rumianek i mięta.
+wspomnienia.wieniec = Wieniec dożynkowy z tegorocznych kłosów. Wisi do wiosny.
+wspomnienia.bazie = Bazie w dzbanku. Wiosna idzie.
+wspomnienia.kwiaty = Polne kwiaty: maki, chabry i rumianek.
+wspomnienia.pisanki = Koszyczek z pisankami na Wielkanoc. Dziadek maluje je woskiem.
+wspomnienia.jablka = Kosz jabłek. Pachną na całą izbę.
+wspomnienia.dynie = Dynie z działki - będzie zupa na zimę.
+wspomnienia.wigilia = Opłatek na stole, sianko pod obrusem - Wigilia w chacie.
+wspomnienia.snop = Snop zboża w kącie za skrzynią - na Wigilię, na dobry rok.
+
+# ======================================================================== Nowa pamiątka: dopisek pod „Nowa pamiątka w domu dziadka”
+pamiatki.receipt = Pokwitowanie od Lorda zawisło w ramce
+pamiatki.wolf = Skóra wilka leży przy twoim posłaniu
+pamiatki.deer = Poroże jelenia wisi nad twoim posłaniem
+pamiatki.boar = Kieł dzika wisi na rzemyku przy posłaniu
+pamiatki.tankard = Kufel od Borgara stoi na twojej półce
+pamiatki.dice = Twoje kości leżą na półce
+pamiatki.notice = Ogłoszenie z pierwszego zlecenia wisi przy posłaniu
+
+# ======================================================================== z kodu HomeDecor.js (ozdoby.<funkcja>.<n>, w kolejności kodu)
+# earn
+ozdoby.earn.0 = Nowa pamiątka w domu dziadka
+
+# ======================================================================== z kodu HomeLife.js (zycie.<funkcja>.<n>, w kolejności kodu)
+# noteBlocked
+zycie.noteBlocked.0 = Przepuścisz staruszka?
+zycie.noteBlocked.1 = Z drogi, młodzieży - stary idzie!
+zycie.noteBlocked.2 = Hop, hop, wnuku... ustąpisz miejsca?
+# pet
+zycie.pet.0 = Kot mruczy - odpoczywasz chwilę (+{PURR_STAMINA} wytrzymałości)
+# cauldron
+zycie.cauldron.0 = Wyjadłeś już wszystko, łakomczuchu! Jutro nagotuję nowego.
+zycie.cauldron.1 = Kocioł pusty. Jutro, wnuku, jutro.
+zycie.cauldron.2 = Dno widać! Kapusta nie rośnie tak szybko, jak ty jesz.
+zycie.cauldron.3 = Kocioł pusty - dziadek ugotuje jutro
+zycie.cauldron.4 = Jeszcze nie doszła! Dobry kapuśniak lubi czas.
+zycie.cauldron.5 = Cierpliwości, wnuku. Od ósmej, nie wcześniej!
+zycie.cauldron.6 = Kapuśniak jeszcze się nie ugotował
+zycie.cauldron.7 = Nie zmieści się w plecaku: {name}
+zycie.cauldron.8 = Nalej sobie, póki gorący!
+zycie.cauldron.9 = Nalej sobie, póki gorący! Z mojej kapusty, nie z jakiejś tam kupnej.
+zycie.cauldron.10 = Jedz, jedz. Na pustym brzuchu długu nie spłacisz.
+zycie.cauldron.11 = Tylko nie mów Borgarowi - jeszcze by mnie zatrudnił za kucharza.
+zycie.cauldron.12 = Nalewasz po cichu, żeby nie zbudzić dziadka
+zycie.cauldron.13 = (szeptem) Dzięki, dziadku...
+# arrivalLine
+zycie.arrivalLine.0 = Zamykaj drzwi, bo ciepło ucieka! Mruczek od rana nie odchodzi od pieca.
+zycie.arrivalLine.1 = Słyszysz, jak grzmi? Mruczek już siedzi pod piecem.
+zycie.arrivalLine.2 = Burza jak za starych czasów... Dobrze, że dach połatany.
+zycie.arrivalLine.3 = Zmokłeś? Siadaj bliżej ognia, bo mi się przeziębisz.
+zycie.arrivalLine.4 = Leje jak z cebra. Dobrze, że dach po burzy połatany... prawie.
+zycie.arrivalLine.5 = Działka znowu nasza - odkupiona! Czasem chodzę tam rano, tak tylko, popatrzeć.
+zycie.arrivalLine.6 = Siadaj, wnuku. O działce dziś nie gadamy - ziemia to tylko ziemia.
+zycie.arrivalLine.7 = Działka nasza! Jeszcze mi się w głowie nie mieści.
+zycie.arrivalLine.8 = Termin za pasem, wnuku... Trzymam kciuki. Oba.
+zycie.arrivalLine.9 = Lordowi już coś oddałeś? Dobry z ciebie wnuk. Brakuje jeszcze {left} G.
+zycie.arrivalLine.10 = Brakuje jeszcze {left} G dla Lorda. Liczę na ciebie... ale bez presji. Dużej.
+zycie.arrivalLine.11 = Mruczek znowu spał na twoim posłaniu. Wszędzie sierść!
+zycie.arrivalLine.12 = Ten kot ma lepsze życie niż my obaj razem wzięci.
+zycie.arrivalLine.13 = Pogłaszcz Mruczka, to się odwdzięczy. Mruczeniem, bo myszy nie łowi.
+zycie.arrivalLine.14 = Kapuśniak w kotle, nalej sobie, póki ciepły!
+zycie.arrivalLine.15 = Wróciłeś wreszcie. Siadaj, opowiadaj, co w świecie słychać.

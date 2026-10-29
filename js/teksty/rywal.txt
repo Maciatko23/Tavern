@@ -35,7 +35,6 @@ campCold = Wygasłe ognisko. Popiół zimny - spali tu i poszli w dół.
 campLeft = Ich ognisko. Jeszcze ciepłe.
 bed = Posłanie z wełnianego koca. Zostawili je.
 rope = Porzucona lina. Komuś się już nie przydała.
-ropeTaken = Lina ×1
 [noteCamp]
 Zimne ognisko w ruinach
 Na piętrze {f} wygasłe ognisko i posłanie. Spali tu - i poszli dalej w dół.
@@ -387,15 +386,7 @@ lordLine.wygrali = Moi ludzie wrócili z ruin z twoją sakiewką. Myślałem, ż
 lordLine.odeszli = Moi ludzie czekali przy dziesiątej bramie trzy dni. Ty przeszedłeś.
 
 # ======================================================================== F9 (zakładka „Wyspa i fabuła”)
-f9Names.gra = z gry
-f9Names.baltazar = ludzie Baltazara
-f9Names.grum = Grum z najemnikami
-f9Names.lord = ludzie Lorda
-f9Names.kopacze = kopacze Czarnych Oczu
 f9 = W9: rywal (wymuś wariant): {name}   ←→ zmień, OK zacznij
-f9desc = Rywal z zewnątrz w ruinach (piętra 1-10). OK: krata otwarta, rywal już w drodze (piętro 3), bohater w Ruinach Zamku przy jego śladach.
-f9Meet = W9: rywal - spotkanie na piętrze {n}   ←→ piętro, OK idź
-f9MeetDesc = Rywal (wariant z wiersza wyżej) czeka na tym piętrze (1-10) - bohater na jego schodach, kilka kroków do ich ogniska.
 
 # ======================================================================== dlaczego ta drużyna (notatka „Ktoś schodzi przede mną”)
 why.grumFaction = Grum przeszedł do frakcji (W8: praca dla Czarnych Oczu, zawał przebity).
@@ -477,3 +468,19 @@ kod.buildGate.1 = Proporczyk z czarnym koniem
 kod.buildGate.2 = Białe oko kredą
 # buildHeart
 kod.buildHeart.0 = Wygasłe ognisko
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+ropeTaken = Lina ×1
+f9Names.gra = z gry
+f9Names.baltazar = ludzie Baltazara
+f9Names.grum = Grum z najemnikami
+f9Names.lord = ludzie Lorda
+f9Names.kopacze = kopacze Czarnych Oczu
+f9desc = Rywal z zewnątrz w ruinach (piętra 1-10). OK: krata otwarta, rywal już w drodze (piętro 3), bohater w Ruinach Zamku przy jego śladach.
+f9Meet = W9: rywal - spotkanie na piętrze {n}   ←→ piętro, OK idź
+f9MeetDesc = Rywal (wariant z wiersza wyżej) czeka na tym piętrze (1-10) - bohater na jego schodach, kilka kroków do ich ogniska.
+
+# ======================================================================== F9 (zakładka „Wyspa i fabuła”): sekcja wątku „rywal” (2026-10-29: wiersze z silnika wątków - f9, f9desc, f9Meet, f9MeetDesc, f9Names.* wyżej)
+f9Naglowek = Wątek W9 (rywal w ruinach):
+f9Brak = Brak podziemi (Underground.js)
+f9BrakPietra = Brak piętra {n}

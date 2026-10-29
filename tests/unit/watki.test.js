@@ -85,7 +85,7 @@ unit.test(t => {
     });
     tw.haki({ plusJeden: () => tw.S().n + 1, kto: () => "Ala", ile: () => ({ n: tw.S().n }) });
     t.check("own record: Watki.watek gives the thread its state (Tawerna.state, its version) and the journal's source 'watki'",
-        tw.S().n === 0 && T.state.version("probny") === 1 && journal.sources.some(s => s.name === "watki") && journal.trackers.length === 1);
+        tw.S().n === 0 && T.state.version("probny") === 1 && journal.sources.some(s => s.name === "watki") && journal.trackers.length === 2);   // (a thread pinned; one that leads by itself - the fallback)
     const talk = tw.rozmowa("rozmowa", { spk });
     const talkCodes = talk.map(c => c.code), script = talk.find(c => c.code === 355);
     t.check("own record: a talk - the greeting, a choice of two (the hidden option left out, cancel = the last), the action's script call with the hook's value",
@@ -260,6 +260,127 @@ unit.test(t => {
     const r9 = Object.assign({}, row.rows[0]);
     W.f9.wybierz(r9, -1);
     t.check("pilot F9: ← from chapter 1 goes round to the 9th jump ('W4: rozdział 8 - Komnata Serca')", r9.pick === 9 && r9.label === "W4: rozdział 8 - Komnata Serca   ←→ zmień, OK idź", r9);
+
+    // ================================================================ stage 3 (2026-10-28): a thread with its own quests (a package's K / D)
+    W.wczytaj("paczka", [
+        "zadania.K90.title = Próbne zadanie", "zadania.K90.steps.0.text = Zbierz {n}/3.", "zadania.K90.steps.1.text = Pogadaj z kowalem.",
+        "zadania.D90.title = Drugie", "zadania.D90.steps.0.text = Czekaj.",
+        "[mowi]", "Słuchaj.", "> Słucham.", "", "pytanie = Iść?", "tak = Idę.", "nie = Nie."
+    ].join("\n"));
+    const packsBefore = (w.TownQuestsPacks || []).length;
+    const pw = W.watek({
+        id: "paczka", wtyczka: "Paczka", teksty: "paczka",
+        stan: { klucz: "paczka", wersja: 1, domyslne: () => ({ zebrane: {}, ile: 0, mapa: 0 }) },
+        zadania: {
+            K90: { kind: "K", giver: "kowal", icon: 5, offer: { cond: { hours: [6, 20] } }, oferta: "stan:ile>=1", start: ["zrobione:K1", { mapa: [1] }],
+                kroki: [
+                    { nazwa: "k90Zbierz", gotowe: "ile:zebrane>=3", zmienne: { n: { ile: "zebrane", najwyzej: 3 } }, haki: { tick: "liczTick" } },
+                    { nazwa: "k90Kowal", type: "talk", to: "kowal", need: [[61, 2]], rozmowy: [
+                        { kto: "kowal", gdy: "stan:ile>=5", tresc: ["mowi", { zrob: "dodaj", args: [2] }] },
+                        { kto: "kowal", gdy: "v:klucz>=2", gotowa: false, tresc: ["mowi"] },
+                        { kto: "piekarka", tresc: ["mowi"], znacznik: false }
+                    ] }
+                ],
+                reward: { xp: 10 } },
+            D90: { kind: "D", giver: null, icon: 6, autoStart: "d90Wlasny", start: "flaga:x", kroki: [{ nazwa: "d90Czekaj", gotowe: "stan:ile!=0" },
+                { nazwa: "d90Obcy", obcy: "inny", talk: "w4Obcy", vars: "w4Obcy" }] }
+        },
+        paczka: { remarks: [{ id: "r90" }] },
+        obce: [{ zadanie: "W4", nazwa: "w4Obcy", gotowe: "stan:ile>3", pola: { LISTA: [7, 8] } }],
+        rozmowy: { wybor: ["pytanie", { wybor: [{ etykieta: "tak", tresc: [{ polecenie: 230, parametry: [30] }] }, { etykieta: "nie", tresc: [] }], anuluj: 1 }] },
+        akcje: { dodaj: [{ stan: { ile: { arg: 0 } } }] }
+    });
+    pw.haki({ liczTick: (ctx, q, r) => { if (r) r.ticked = true; } });
+    const pack = (w.TownQuestsPacks || [])[packsBefore], K90 = pw.Q.K90;
+    t.check("stage 3: the thread's quests made from the data and put into window.TownQuestsPacks with the rest of the pack (the words merged: zadania.K90)",
+        !!pack && pack.owner === "Paczka" && pack.quests.map(q => q.id).join() === "K90,D90" && pack.remarks[0].id === "r90" && K90.title === "Próbne zadanie" &&
+        K90.steps[0].text === "Zbierz {n}/3." && K90.autoStart === "k90Start" && pw.Q.D90.autoStart === "d90Wlasny" && K90.offer.cond.fn === "k90Oferta" && K90.offer.cond.hours.join() === "6,20", { pack, K90 });
+    t.check("stage 3: the steps - TownQuests' fields as they were, the handlers named by the step (check / vars / talk / tick)",
+        K90.steps[0].check === "k90Zbierz" && K90.steps[0].vars === "k90Zbierz" && K90.steps[0].tick === "k90Zbierz" && K90.steps[0].type === "custom" &&
+        K90.steps[1].type === "talk" && K90.steps[1].to === "kowal" && K90.steps[1].need[0][1] === 2 && K90.steps[1].talk === "k90Kowal" && !K90.steps[1].rozmowy, K90.steps);
+    pw.bindQuest();
+    const FX = TQ.FX, ps = pw.S();
+    ps.zebrane = { a: 1, b: 0, c: 2 };
+    const v1 = FX.k90Zbierz.vars(K90, null), c1x = FX.k90Zbierz.check(K90, null, K90.steps[0]);
+    ps.zebrane.b = 5; ps.zebrane.d = 1;
+    const v2 = FX.k90Zbierz.vars(K90, null), c2x = FX.k90Zbierz.check(K90, null, K90.steps[0]);
+    const rr = {};
+    FX.k90Zbierz.tick(K90, rr, K90.steps[0]);
+    t.check("stage 3: 'ile:zebrane>=3' (how many truthy values) and { ile, najwyzej } words; a step's hook from haki (tick)",
+        v1.n === 2 && !c1x && v2.n === 3 && c2x && rr.ticked === true, { v1, v2, c1x, c2x });
+    const tq = TQ.st;
+    tq.q = tq.q || {};
+    const startOff = FX.k90Start(), offerOff = FX.k90Oferta.cond();
+    tq.q.K1 = { s: "done" };
+    TQ.isDone = id => !!(tq.q[id] && tq.q[id].s === "done");
+    ps.ile = 1;
+    const startOn = FX.k90Start(), offerOn = FX.k90Oferta.cond();
+    tq.flags.x = 1;
+    t.check("stage 3: the start ('zrobione:K1' and { mapa: [1] }) and the offer ('stan:ile>=1') as TownQuests' FX under their names; D90's own autoStart name",
+        !startOff && !offerOff && startOn && offerOn && FX.d90Wlasny() === true, { startOff, offerOff, startOn, offerOn });
+    ps.ile = 5;
+    const spk7 = { id: 7, name: "Kowal" };
+    const talkK = FX.k90Kowal.talk(K90, tq.q.K90 || {}, K90.steps[1], "kowal", spk7);
+    ps.ile = 0; tq.v.klucz = 2;
+    const talkK2 = FX.k90Kowal.talk(K90, {}, K90.steps[1], "kowal", spk7), readyK2 = FX.k90Kowal.ready(K90, {}, K90.steps[1], "kowal");
+    const readyP = FX.k90Kowal.ready(K90, {}, K90.steps[1], "piekarka"), readyX = FX.k90Kowal.ready(K90, {}, K90.steps[1], "soltys");
+    t.check("stage 3: the step's talks - the line, the action's script; 'v:klucz>=2' with gotowa: false (said, the step not ready); znacznik: false (no marker); nobody else: null",
+        talkK.ready === true && talkK.list.some(c => c.code === 355 && c.parameters[0] === 'Watki.act(this, ["paczka","dodaj",2])') && talkK.list[1].parameters[0] === "\\SPK[7]Słuchaj." &&
+        talkK2.ready === false && readyK2 === false && readyP === false && readyX === null, { talkK, talkK2, readyK2, readyP, readyX });
+    W.act({}, ["paczka", "dodaj", 4]);
+    ps.ile = 4;
+    t.check("stage 3: an action with { arg }; 'stan:ile!=0' and 'stan:ile>3' (numbers); obce - the handler of someone else's step (W4's w4Obcy)",
+        FX.d90Czekaj.check() === true && FX.w4Obcy.check() === true && (ps.ile = 3, FX.w4Obcy.check() === false), ps);
+    const D90s = pw.Q.D90.steps[1];
+    t.check("stage 4: a step with obcy (another thread's handlers, W2's rozdz. 7) - its fields as written, nothing bound under its name",
+        D90s.talk === "w4Obcy" && D90s.vars === "w4Obcy" && D90s.nazwa === "d90Obcy" && !("obcy" in D90s) && !FX.d90Obcy && typeof FX.w4Obcy.check === "function", D90s);
+    t.check("stage 5: pola - plain values on the handler's FX entry besides its hooks (K16's GOODS)", FX.w4Obcy.LISTA.join() === "7,8" && typeof FX.w4Obcy.check === "function", FX.w4Obcy);
+    TQ.Q.K90 = K90;
+    tq.q.K90 = { s: "active", step: 1, t: { done: {} } };
+    t.check("stage 3: at / where / rec of a thread with several quests (the step's quest found by its name)",
+        pw.at("k90Kowal") && !pw.at("k90Zbierz") && pw.where("k90Kowal").zid === "K90" && pw.where("k90Kowal").i === 1 && pw.rec("K90") === tq.q.K90 && pw.cur("K90") === "k90Kowal");
+    // ================================================================ an own record as a chapter (Story's chapter 1, 2026-10-28)
+    W.wczytaj("rozdzial", ["t = Rozdział próbny", "k.a = Pierwszy krok", "k.at = Zrób pierwszy. Potem drugi.", "k.b = Drugi krok", "k.c = Trzeci ({n})", "k.ct = Ostatni."].join("\n"));
+    const rs = { flags: {}, lost: 0, n: 0 };
+    const rw0 = W.watek({
+        id: "rozdzial", teksty: "rozdzial", stan: { klucz: "rozdzial", wersja: 1, domyslne: () => ({}) }, start: "trwa", cicho: { start: true },
+        dziennik: { tytul: "t", grupa: "story", prowadzi: true, dogon: true, dzienKroku: "dzien" },
+        kroki: [
+            { nazwa: "a", tytul: "k.a", tekst: "k.at", gotowe: "zrobA", gdzie: { person: "grandpa" }, nagroda: { xp: 50, za: { hak: "za" } } },
+            { nazwa: "b", tytul: "k.b", tekst: "k.at", gotowe: "zrobB", pomin: "zgubione", prowadzi: "prowadzi" },
+            { nazwa: "c", tytul: { klucz: "k.c", zmienne: { n: { hak: "ile" } } }, tekst: "k.ct", gotowe: "zrobC", licznik: "licznik" }
+        ]
+    });
+    rw0.haki({ trwa: () => true, zrobA: () => !!rs.flags.a, zrobB: () => !!rs.flags.b, zrobC: () => !!rs.flags.c, zgubione: () => !!rs.lost, prowadzi: () => !!rs.lead,
+        za: () => "cel: pierwszy", ile: () => rs.n, licznik: () => ({ have: rs.n, need: 3, unit: "G" }), dzien: (ctx, nazwa) => (nazwa === "a" ? 7 : undefined) });
+    rs.flags.a = 1;   // (an older save: the first step done already)
+    rw0.ownChecks();
+    const rr0 = W.rekordy().w.rozdzial;
+    t.check("chapter: begun quietly; dogon - what was done already caught up with the day the hook knows (7), no reward; the title of the step now",
+        rr0.s === "active" && rr0.krok === 1 && rr0.t.done[0] === 7 && rw0.stepTitle() === "Drugi krok" && !popups.some(x => /Rozdział próbny/.test(x[0])), { rr0, popups: popups.slice(-3) });
+    const src = journal.sources.find(s => s.name === "watki"), trk = journal.trackers[0], lead = journal.trackers[1];
+    const row1 = src.items().find(r => r.watek === "rozdzial");
+    rs.lead = false;
+    const tr0 = lead();
+    rs.lead = true;
+    const tr1 = lead(), tp = trk();
+    t.check("chapter: its row in FABUŁA; the goal window - only while the step leads (prowadzi) and nothing is pinned: its title and line",
+        !!row1 && row1.group === "story" && row1.mark === "todo" && tr0 === null && tp === null && !!tr1 && tr1.source === "watki" && tr1.title === "Rozdział próbny" && tr1.line === "Drugi krok", { row1, tr0, tr1 });
+    src.pin("watek:rozdzial");
+    const pinnedId = src.pinned(), row2 = src.items().find(r => r.watek === "rozdzial");
+    rs.lost = 1;
+    rw0.ownChecks();
+    const tr2 = trk(), det2 = src.detail(row2).map(o => o.k + ":" + (o.text || ""));
+    t.check("chapter: pinned with the row's own id (OK on it unpins); pomin - the step passed over, not done; the next step's title with its words, its bar, the list of what is done",
+        pinnedId === "watek:rozdzial" && row2.mark === "pin" && rr0.krok === 2 && rr0.t.done[1] === undefined && tr2 && tr2.line === "Trzeci (0)" && tr2.count && tr2.count.need === 3 &&
+        det2.includes("h:Trzeci (0)") && det2.some(x => /^bar:0 \/ 3 G$/.test(x)) && det2.some(x => /^muted:✓ Pierwszy krok/.test(x)), { rr0, tr2, det2 });
+    rs.flags.c = 1;
+    rw0.ownChecks();
+    t.check("chapter: the last step done - the thread done, unpinned", rr0.s === "done" && W.rekordy().track === null && src.items().find(r => r.watek === "rozdzial").group === "done", rr0);
+
+    const ch2 = pw.rozmowa("wybor", { spk: { id: 3, name: "", twarz: ["People1", 6] } });
+    t.check("stage 3: a raw command in a talk ({ polecenie: 230 }) and the speaker's face in the window (twarz - Story's plain window)",
+        ch2[0].parameters[0] === "People1" && ch2[0].parameters[1] === 6 && ch2.some(c => c.code === 230 && c.parameters[0] === 30 && c.indent === 1), ch2.map(c => c.code + ":" + c.indent));
 });
 
 // ==================================================================== the old Kasztelan.js's talks (before 2026-10-23), as they were

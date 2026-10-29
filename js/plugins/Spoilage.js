@@ -53,6 +53,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("psucie");   // (the words of this file: js/teksty/psucie.txt, kod.*)
 
     const T = window.Tawerna;
     if (!T) throw new Error("Spoilage.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
@@ -69,10 +70,15 @@
     const isPerishable = item => !!item && DataManager.isItem(item) && !!LIFE[item.id];
     const hoursNow = () => $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour();
 
-    // $gameSystem._fresh = { bag: { itemId: [{ age (hours), n, w? }, ...] oldest first }, last: hours of the last tick }
+    // Tawerna.state "fresh" = { bag: { itemId: [{ age (hours), n, w? }, ...] oldest first }, last: hours of the last tick (the clock
+    // when it is first asked for, as when it was made at that moment) }; an older save's $gameSystem._fresh is adopted (the old name
+    // stays a hidden way there)
+    const freshState = T.state.define("fresh", () => ({ bag: {} }), { version: 1, adopt: "_fresh", owner: "Spoilage" });
     function state() {
-        if (!$gameSystem._fresh) $gameSystem._fresh = { bag: {}, last: hoursNow() };
-        return $gameSystem._fresh;
+        const r = $gameSystem._tw, f = r && r.fresh;   // (the quick way: asked for every item counted)
+        const s = f && typeof f === "object" ? f : freshState();
+        if (s.last === undefined) s.last = hoursNow();
+        return s;
     }
     const batchesOf = id => state().bag[id] || (state().bag[id] = []);
     const total = list => list.reduce((s, b) => s + b.n, 0);
@@ -180,15 +186,15 @@
                 _gainItem.call($gameParty, item, -bad);
                 if (rotItem) _gainItem.call($gameParty, rotItem, bad);
                 AudioManager.playSe({ name: "Down1", volume: 70, pitch: 80, pan: 0 });
-                popup(item.iconIndex, "Zepsuło się: " + item.name + " ×" + bad, "#d9b26a");
+                popup(item.iconIndex, Watki.wstaw(TK.kod.spoilBag[0], { name: item.name, bad: bad }), "#d9b26a");
             } else if (warn) {
-                popup(item.iconIndex, item.name + ": zaraz się zepsuje", "#ffd98f");
+                popup(item.iconIndex, Watki.wstaw(TK.kod.spoilBag[1], { name: item.name }), "#ffd98f");
             }
         }
     }
     function ageChests(dt) {
         dt *= (1 - Math.min(0.8, perk("spoil"))) * (1 - Math.min(0.8, perk("spoil.store")));   // (Spiżarnik, Solarz)
-        const f = $gameSystem._farm, F = window.Farming;
+        const f = T.state("farm"), F = window.Farming;
         if (!f || !f.buildings) return;
         for (const list of Object.values(f.buildings)) {
             for (const b of list || []) {
@@ -223,11 +229,9 @@
         spoilBag(dt);
         ageChests(dt);
     }
-    const _Scene_Map_update = Scene_Map.prototype.update;
-    Scene_Map.prototype.update = function() {
-        _Scene_Map_update.call(this);
-        tick();
-    };
+    // every frame of the map (the core's clock of the map; before every other one - where its own hook on Scene_Map.update was:
+    // Journal's J above it in the chain, Needs' and the F9 menu's after it)
+    T.onMapUpdate(() => tick(), { owner: "Spoilage", name: "tick", priority: -300 });
 
     // ------------------------------------------------------------------
     // What the player sees
@@ -239,14 +243,14 @@
         return list.length ? Math.max(0, LIFE[id] - list[0].age) / SPEED : null;
     }
     function timeText(h) {
-        if (h >= 48) return Math.round(h / 24) + " dni";
-        if (h >= 24) return "około doby";
+        if (h >= 48) return Watki.wstaw(TK.kod.timeText[0], { "1": Math.round(h / 24) });
+        if (h >= 24) return TK.kod.timeText[1];
         const n = Math.max(1, Math.round(h));
-        return n + (n === 1 ? " godzinę" : n % 10 >= 2 && n % 10 <= 4 && (n < 10 || n > 20) ? " godziny" : " godzin");
+        return n + (n === 1 ? TK.kod.timeText[2] : n % 10 >= 2 && n % 10 <= 4 && (n < 10 || n > 20) ? TK.kod.timeText[3] : TK.kod.timeText[4]);
     }
     function freshnessText(id) {
         const h = hoursLeft(id);
-        return h === null ? "" : "Najstarsza sztuka zepsuje się za " + timeText(h) + ".";
+        return h === null ? "" : Watki.wstaw(TK.kod.freshnessText[0], { "1": timeText(h) });
     }
     const _drawItemNumber = Window_ItemList.prototype.drawItemNumber;
     Window_ItemList.prototype.drawItemNumber = function(item, x, y, width) {

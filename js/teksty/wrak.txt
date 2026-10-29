@@ -139,6 +139,8 @@ poszlaki.tatuaz.name = Tatuaż przy studni
 poszlaki.tatuaz.text = Nocą przy studni Eryk podwinął rękaw, żeby się umyć. Na lewym nadgarstku ma wytatuowane otwarte oko.
 poszlaki.list.name = Cudzy list
 poszlaki.list.text = Kruk przyniósł list, który nie był do mnie: szyfr, którego nie umiem przeczytać, i pieczęć z okiem. Zaczyna się od słów „Do A.W.”.
+poszlaki.kartograf.name = Ręka kreślarza
+poszlaki.kartograf.text = Teofil Cyrkiel, kartograf z lądu, obejrzał mapę z wraku: „Ta ręka... wojskowy kreślarz z lądu. Robi kropki jak oczy.” Ktoś na „Białej Źrenicy” rysował wybrzeże dla wojska.
 
 # ======================================================================== TX
 [janekOffer]
@@ -148,9 +150,6 @@ Poczekam dwie godziny, nie dłużej. Woda tam chodzi pod piachem jak kot pod koc
 janekTide = Odpływ dziś koło {t}. Wtedy łacha od garnizonu wychodzi z wody.
 [janekNoK47]
 Na wrak? Najpierw pokaż, że umiesz trzymać wędkę, a nie tylko wiosło. Złów ze mną pierwszą rybę, to cię zawiozę.
-
-[janekStorm]
-W taką pogodę? Morze by nas połknęło razem z łodzią. Nie dziś.
 
 [janekRow]
 Siadaj na dziobie i nie kołysz. (Janek odpycha łódź od pomostu.)
@@ -186,7 +185,6 @@ flooded = Łacha zniknęła pod wodą. Następny odpływ około {t}.
 
 skeletonEmpty = Kości bosmana. Nic więcej przy nim nie ma.
 skeletonWet = Szkielet leży pod wodą. Trzeba poczekać na niską wodę.
-doorLocked = Zamknięte. Mosiężny zamek, mocny.
 doorOpen = Klucz bosmana pasuje. Zamek puszcza ze zgrzytem.
 [desk]
 > (Na biurku kapitana skórzana tuba na mapy i gruba księga w czarnej oprawie.)
@@ -221,10 +219,6 @@ Masz. Nie ładniejszy, niż jesteś, ale prawdziwy.
 [erykWhere]
 Z lądu, mówiłem. Z miasta nad rzeką. Nazwa nic ci nie powie.
 Rodzina? (Eryk odkłada węgiel.) Była. Rysujmy.
-
-erykNoGold = Dwa grosze. Albo piwo. Nie masz ani tego, ani tego.
-[erykCold]
-(Eryk nie odpowiada. Rysuje dalej, jakby cię tu nie było.)
 
 [erykWell]
 Czego? (Eryk naciąga rękaw na nadgarstek.) Idź spać, chłopcze.
@@ -279,19 +273,11 @@ stonesAsk = > Znalazłem na wraku kamienie z krukiem. Pięć.
 [stonesCelnik]
 Kamienie z krukiem? (Celnik odkłada pióro.) Rozkaz dworu: do zgłoszenia. Pięć groszy za sztukę. Zapiszę uczciwie.
 
-[stonesCelnikOpt]
-Oddaj je celnikowi (25 G).
-Jeszcze nie.
-
 [stonesCelnikDone]
 Zapisane. (Celnik wrzuca kamienie do skrzyni z pieczęcią Lorda.) Dwór pamięta przysługi.
 
 [stonesKupiec]
 Kamienie z krukiem... (Baltazar ogląda jeden pod światło.) Piętnaście groszy za sztukę. Więcej nikt ci nie da. I nikomu ani słowa.
-
-[stonesKupiecOpt]
-Sprzedaj je Baltazarowi (75 G).
-Jeszcze nie.
 
 [stonesKupiecDone]
 Interes to interes. (Baltazar chowa kamienie do szuflady, którą zamyka na klucz.) Zapamiętam cię.
@@ -300,10 +286,6 @@ Interes to interes. (Baltazar chowa kamienie do szuflady, którą zamyka na kluc
 (Dziadek długo obraca kamień w palcach.) Skąd to masz? ...Z tego okrętu. Tak myślałem.
 Takie same leżały kiedyś na Urwisku. Schowaj je. Nie pokazuj nikomu, a już na pewno nie ludziom Lorda.
 
-[stonesGrandpaOpt]
-Zatrzymam je.
-Jeszcze pomyślę.
-
 [stonesKeep]
 Dobrze. (Dziadek oddaje ci kamień.) Kiedyś ci powiem więcej. Kiedyś.
 
@@ -311,9 +293,73 @@ Dobrze. (Dziadek oddaje ci kamień.) Kiedyś ci powiem więcej. Kiedyś.
 Kamienie posłańców. (Kleofas bierze jeden w chude palce.) Kruczarze nosili takie od Urwiska do każdej strażnicy. Znak, że list jest prawdziwy.
 Nie oddawaj ich nikomu. Czarne Oczy szukają ich, bo nie wiedzą, czym są. Myślą, że to mapa.
 
-[stonesPustelnikOpt]
-Zatrzymam je.
-Jeszcze pomyślę.
+# ======================================================================== wątek (Wrak_Data.js: rozmowy i akcje, Wrak.js: haki)
+# pierwsze spotkanie z rozbitkiem (mówi Eryk; „Narysuj mnie” - portret z kodu)
+eryk.rysujemy = Rysujemy?
+eryk.narysuj = Narysuj mnie (2 G).
+eryk.innymRazem = Może innym razem.
+eryk.jakChcesz = Jak chcesz. Twarz ci nie ucieknie.
+# D25: kamienie z krukiem - pytanie (celnik, Baltazar; dziadek i Kleofas: kamienie.pytanie), wybory, Kleofas po „Zatrzymam je.”
+kamienie.pytanie = Co z nimi zrobisz?
+kamienie.celnik.pytanie = Oddajesz?
+kamienie.celnik.oddaj = Oddaj je celnikowi (25 G).
+kamienie.celnik.nie = Jeszcze nie.
+kamienie.kupiec.pytanie = Sprzedajesz?
+kamienie.kupiec.sprzedaj = Sprzedaj je Baltazarowi (75 G).
+kamienie.kupiec.nie = Jeszcze nie.
+kamienie.dziadek.zatrzymam = Zatrzymam je.
+kamienie.dziadek.nie = Jeszcze pomyślę.
+kamienie.pustelnik.zatrzymam = Zatrzymam je.
+kamienie.pustelnik.nie = Jeszcze pomyślę.
+kamienie.pustelnik.madrze = Mądrze. Kruk wie, komu siada na ramieniu.
+# W12: rozmowa w cztery oczy - wybory (ucieczka kutrem tylko po D20)
+w12.opcja.wydam = Wydam cię garnizonowi.
+w12.opcja.zachowam = Zachowam to dla siebie.
+w12.opcja.ucieczka = Pomogę ci uciec kutrem Rocha.
+w12.opcja.mapa = Fałszywa mapa dla Baltazara.
+w12.opcja.nieWiem = Jeszcze nie wiem.
+# powód zmiany przychylności garnizonu (Garnizon.addFavor / szyna „wrakGarnizon”)
+powody.wydany = W12: rozbitek wydany
+# notatki w dzienniku (tytuł, tekst)
+[notatki.eryk]
+Eryk Sowa
+W tawernie siedzi Eryk Sowa, kupiec suknem z lądu, który rysuje portrety za piwo. Na mój wisiorek patrzył dłużej niż na twarz.
+
+[notatki.kamienieCelnik]
+Kamienie u celnika
+Oddałem celnikowi Samborowi pięć kamieni z krukiem z wraku. Zapisał je w księdze i zamknął w skrzyni z pieczęcią Lorda.
+
+[notatki.kamienieBaltazar]
+Kamienie u Baltazara
+Sprzedałem Baltazarowi pięć kamieni z krukiem. Zapłacił dobrze i schował je do szuflady zamykanej na klucz. Powiedział, że mnie zapamięta.
+
+[notatki.kamienieKleofas]
+Kamienie z krukiem zostają u mnie
+Brat Kleofas mówi, że to kamienie posłańców: kruczarze nosili je z Urwiska do każdej strażnicy jako znak prawdziwego listu. Czarne Oczy myślą, że to mapa.
+
+[notatki.kamienieDziadek]
+Kamienie z krukiem zostają u mnie
+Pokazałem kamienie dziadkowi. Kazał je schować i nie pokazywać ludziom Lorda. Takie same leżały kiedyś na Urwisku.
+
+[notatki.wydany]
+Wydałem Ansgara
+Powiedziałem garnizonowi, kim jest Eryk Sowa. Wieczorem żołnierze wyprowadzili go z tawerny skutego. Popłynie na ląd najbliższym promem. Dostałem osiemdziesiąt groszy.
+
+[notatki.zostaje]
+Ansgar zostaje
+Zachowałem tajemnicę Ansgara Wiela. Czyta szyfr Czarnych Oczu, a jeśli kiedyś przypłyną po nas, powie mi, którędy pójdą.
+
+[notatki.odplynal]
+Ansgar odpłynął
+Ansgar Wiel odpłynął nocą kutrem Rocha. Zostawił mi własną mapę wszystkich kamieni z krukiem na wyspie i powiedział, że Czarne Oczy szukają nie kamieni, tylko drogi do Serca.
+
+[notatki.falszywaMapa]
+Fałszywa mapa
+Ansgar narysował fałszywą mapę kamieni z krukiem. Mam ją sprzedać Baltazarowi. Jeśli Baltazar się zorientuje, nie przyjdzie sam.
+
+[notatki.mapaSprzedana]
+Mapa dla Baltazara
+Sprzedałem Baltazarowi fałszywą mapę Ansgara. Ludzie Czarnych Oczu będą kopać w złym miejscu. Byle Baltazar się nie zorientował.
 
 # ======================================================================== z kodu Wrak.js (kod.<funkcja>.<n>, w kolejności kodu)
 # rescueHero
@@ -328,9 +374,6 @@ kod.janekHarbourTalk.1 = Zawieź mnie na wrak.
 kod.janekHarbourTalk.2 = Nie, w innej sprawie.
 # erykTalk
 kod.erykTalk.0 = Eryk Sowa
-kod.erykTalk.1 = Narysuj mnie (2 G).
-kod.erykTalk.2 = Może innym razem.
-kod.erykTalk.3 = Jak chcesz. Twarz ci nie ucieknie.
 kod.erykTalk.4 = Narysujesz mnie? (2 G)
 kod.erykTalk.5 = Skąd jesteś?
 kod.erykTalk.6 = Co słychać?
@@ -356,38 +399,7 @@ kod.actCall.7 = W dzienniku okrętu leżała luźna, bardzo stara karta - nie ic
 kod.actCall.8 = Kamienie z krukiem
 kod.actCall.9 = W skrzyni kapitana: sakiewka obcych monet z okiem i pięć płaskich kamieni z wyrytym krukiem - takim jak na moim wisiorku. Celnik Lorda każe je zgłaszać, Baltazar skupuje, a Roch mówi, że Czarne Oczy ich szukają.
 kod.actCall.10 = Eryk Sowa
-kod.actCall.11 = W tawernie siedzi Eryk Sowa, kupiec suknem z lądu, który rysuje portrety za piwo. Na mój wisiorek patrzył dłużej niż na twarz.
 kod.actCall.12 = Potrzebujesz 2 G
-# stonesTalk
-kod.stonesTalk.0 = Co z nimi zrobisz?
-kod.stonesTalk.1 = Mądrze. Kruk wie, komu siada na ramieniu.
-# stonesAct
-kod.stonesAct.0 = Kamienie u celnika
-kod.stonesAct.1 = Oddałem celnikowi Samborowi pięć kamieni z krukiem z wraku. Zapisał je w księdze i zamknął w skrzyni z pieczęcią Lorda.
-kod.stonesAct.2 = Kamienie u Baltazara
-kod.stonesAct.3 = Sprzedałem Baltazarowi pięć kamieni z krukiem. Zapłacił dobrze i schował je do szuflady zamykanej na klucz. Powiedział, że mnie zapamięta.
-kod.stonesAct.4 = Kamienie z krukiem zostają u mnie
-kod.stonesAct.5 = Brat Kleofas mówi, że to kamienie posłańców: kruczarze nosili je z Urwiska do każdej strażnicy jako znak prawdziwego listu. Czarne Oczy myślą, że to mapa.
-kod.stonesAct.6 = Pokazałem kamienie dziadkowi. Kazał je schować i nie pokazywać ludziom Lorda. Takie same leżały kiedyś na Urwisku.
-# w12Talk
-kod.w12Talk.0 = Wydam cię garnizonowi.
-kod.w12Talk.1 = Zachowam to dla siebie.
-kod.w12Talk.2 = Pomogę ci uciec kutrem Rocha.
-kod.w12Talk.3 = Fałszywa mapa dla Baltazara.
-kod.w12Talk.4 = Jeszcze nie wiem.
-# w12Choose
-kod.w12Choose.0 = W12: rozbitek wydany
-kod.w12Choose.1 = Wydałem Ansgara
-kod.w12Choose.2 = Powiedziałem garnizonowi, kim jest Eryk Sowa. Wieczorem żołnierze wyprowadzili go z tawerny skutego. Popłynie na ląd najbliższym promem. Dostałem osiemdziesiąt groszy.
-kod.w12Choose.3 = Ansgar zostaje
-kod.w12Choose.4 = Zachowałem tajemnicę Ansgara Wiela. Czyta szyfr Czarnych Oczu, a jeśli kiedyś przypłyną po nas, powie mi, którędy pójdą.
-kod.w12Choose.5 = Ansgar odpłynął
-kod.w12Choose.6 = Ansgar Wiel odpłynął nocą kutrem Rocha. Zostawił mi własną mapę wszystkich kamieni z krukiem na wyspie i powiedział, że Czarne Oczy szukają nie kamieni, tylko drogi do Serca.
-kod.w12Choose.7 = Fałszywa mapa
-kod.w12Choose.8 = Ansgar narysował fałszywą mapę kamieni z krukiem. Mam ją sprzedać Baltazarowi. Jeśli Baltazar się zorientuje, nie przyjdzie sam.
-# w12Sell
-kod.w12Sell.0 = Mapa dla Baltazara
-kod.w12Sell.1 = Sprzedałem Baltazarowi fałszywą mapę Ansgara. Ludzie Czarnych Oczu będą kopać w złym miejscu. Byle Baltazar się nie zorientował.
 # build
 kod.build.0 = Łódź Janka (czeka przy wraku)
 kod.build.1 = Janek (czeka przy łodzi)
@@ -412,3 +424,58 @@ kod.tracker.1 = Mapa z wraku: {n} z {length} miejsc
 kod.raidWatch.0 = Baltazar przesyła pozdrowienia za mapę!
 kod.raidWatch.1 = Ludzie Baltazara
 kod.raidWatch.2 = Baltazar zorientował się, że mapa była fałszywa. Jego ludzie zaczaili się na mnie nocą.
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+[janekStorm]
+W taką pogodę? Morze by nas połknęło razem z łodzią. Nie dziś.
+
+doorLocked = Zamknięte. Mosiężny zamek, mocny.
+erykNoGold = Dwa grosze. Albo piwo. Nie masz ani tego, ani tego.
+[erykCold]
+(Eryk nie odpowiada. Rysuje dalej, jakby cię tu nie było.)
+
+[stonesCelnikOpt]
+Oddaj je celnikowi (25 G).
+Jeszcze nie.
+
+[stonesKupiecOpt]
+Sprzedaj je Baltazarowi (75 G).
+Jeszcze nie.
+
+[stonesGrandpaOpt]
+Zatrzymam je.
+Jeszcze pomyślę.
+
+[stonesPustelnikOpt]
+Zatrzymam je.
+Jeszcze pomyślę.
+
+kod.erykTalk.1 = Narysuj mnie (2 G).
+kod.erykTalk.2 = Może innym razem.
+kod.erykTalk.3 = Jak chcesz. Twarz ci nie ucieknie.
+kod.actCall.11 = W tawernie siedzi Eryk Sowa, kupiec suknem z lądu, który rysuje portrety za piwo. Na mój wisiorek patrzył dłużej niż na twarz.
+kod.stonesTalk.0 = Co z nimi zrobisz?
+kod.stonesTalk.1 = Mądrze. Kruk wie, komu siada na ramieniu.
+kod.stonesAct.0 = Kamienie u celnika
+kod.stonesAct.1 = Oddałem celnikowi Samborowi pięć kamieni z krukiem z wraku. Zapisał je w księdze i zamknął w skrzyni z pieczęcią Lorda.
+kod.stonesAct.2 = Kamienie u Baltazara
+kod.stonesAct.3 = Sprzedałem Baltazarowi pięć kamieni z krukiem. Zapłacił dobrze i schował je do szuflady zamykanej na klucz. Powiedział, że mnie zapamięta.
+kod.stonesAct.4 = Kamienie z krukiem zostają u mnie
+kod.stonesAct.5 = Brat Kleofas mówi, że to kamienie posłańców: kruczarze nosili je z Urwiska do każdej strażnicy jako znak prawdziwego listu. Czarne Oczy myślą, że to mapa.
+kod.stonesAct.6 = Pokazałem kamienie dziadkowi. Kazał je schować i nie pokazywać ludziom Lorda. Takie same leżały kiedyś na Urwisku.
+kod.w12Talk.0 = Wydam cię garnizonowi.
+kod.w12Talk.1 = Zachowam to dla siebie.
+kod.w12Talk.2 = Pomogę ci uciec kutrem Rocha.
+kod.w12Talk.3 = Fałszywa mapa dla Baltazara.
+kod.w12Talk.4 = Jeszcze nie wiem.
+kod.w12Choose.0 = W12: rozbitek wydany
+kod.w12Choose.1 = Wydałem Ansgara
+kod.w12Choose.2 = Powiedziałem garnizonowi, kim jest Eryk Sowa. Wieczorem żołnierze wyprowadzili go z tawerny skutego. Popłynie na ląd najbliższym promem. Dostałem osiemdziesiąt groszy.
+kod.w12Choose.3 = Ansgar zostaje
+kod.w12Choose.4 = Zachowałem tajemnicę Ansgara Wiela. Czyta szyfr Czarnych Oczu, a jeśli kiedyś przypłyną po nas, powie mi, którędy pójdą.
+kod.w12Choose.5 = Ansgar odpłynął
+kod.w12Choose.6 = Ansgar Wiel odpłynął nocą kutrem Rocha. Zostawił mi własną mapę wszystkich kamieni z krukiem na wyspie i powiedział, że Czarne Oczy szukają nie kamieni, tylko drogi do Serca.
+kod.w12Choose.7 = Fałszywa mapa
+kod.w12Choose.8 = Ansgar narysował fałszywą mapę kamieni z krukiem. Mam ją sprzedać Baltazarowi. Jeśli Baltazar się zorientuje, nie przyjdzie sam.
+kod.w12Sell.0 = Mapa dla Baltazara
+kod.w12Sell.1 = Sprzedałem Baltazarowi fałszywą mapę Ansgara. Ludzie Czarnych Oczu będą kopać w złym miejscu. Byle Baltazar się nie zorientował.

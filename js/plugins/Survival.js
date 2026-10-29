@@ -146,11 +146,24 @@
     }
 
     // ------------------------------------------------------------------
+    // The saved state: Tawerna.state "survival" - buffs (name -> the game hour it ends; made with the first one), healAcc (the HP
+    // healed slowly, its fraction not given yet), stormForce (F9: { day, start, end } a storm now / { day, off } no weather today),
+    // stormWarned (the day "Idzie burza..." was said), weatherOwn (the rain on the screen is this plugin's), rainDay (the day the rain
+    // watered the plots). They were $gameSystem._buffs, _healAcc, _stormForce, _stormWarned, _weatherOwn and _rainDay: those names
+    // lead to the fields (other plugins and the tests use them; `delete $gameSystem._stormForce` - set it to null now).
+    // ------------------------------------------------------------------
+    const survivalState = T.state.define("survival", () => ({}), { version: 1, owner: pluginName });
+    T.state.oldFields("survival", { _buffs: "buffs", _healAcc: "healAcc", _stormForce: "stormForce", _stormWarned: "stormWarned",
+        _weatherOwn: "weatherOwn", _rainDay: "rainDay" });
+    const survival = () => { const r = $gameSystem._tw, s = r && r.survival; return s && typeof s === "object" ? s : survivalState(); };   // (the quick way: read every frame)
+
+    // ------------------------------------------------------------------
     // Buffs (kept in the saved game: name -> the game hour they end)
     // ------------------------------------------------------------------
     Game_System.prototype.buffs = function() {
-        if (!this._buffs) this._buffs = {};
-        return this._buffs;
+        const s = survival();
+        if (!s.buffs) s.buffs = {};
+        return s.buffs;
     };
     Game_System.prototype.addBuff = function(name, hours) {
         if (!BUFFS[name] || !(hours > 0)) return;
@@ -186,7 +199,7 @@
     const _Game_System_stamina = Game_System.prototype.stamina;
     Game_System.prototype.stamina = function() {
         const s = _Game_System_stamina.call(this);
-        return this._buffs && this.isWounded() ? Math.min(s, Math.round(this.maxStamina() * WOUND_CAP)) : s;
+        return survival().buffs && this.isWounded() ? Math.min(s, Math.round(this.maxStamina() * WOUND_CAP)) : s;
     };
 
     // ------------------------------------------------------------------
@@ -211,15 +224,15 @@
         const a = hero();
         if (a && !a.isDead()) a.gainHp(Math.max(1, Math.round(a.mhp * fraction)));
     };
-    // the slow healing, with the clock (whole HP only: the fractions wait in _healAcc)
+    // the slow healing, with the clock (whole HP only: the fractions wait in healAcc)
     const _advanceDayNight = Game_System.prototype.advanceDayNight;
     Game_System.prototype.advanceDayNight = function(hours) {
         _advanceDayNight.call(this, hours);
-        const a = hero();
-        if (!a || a.isDead() || !(hours > 0) || a.hp >= a.mhp || this.isWounded()) { this._healAcc = 0; return; }
-        this._healAcc = (this._healAcc || 0) + a.mhp * HEAL_PER_HOUR * (1 + perk("wound.heal")) * hours;
-        const whole = Math.floor(this._healAcc);
-        if (whole > 0) { a.gainHp(whole); this._healAcc -= whole; }
+        const a = hero(), s = survival();
+        if (!a || a.isDead() || !(hours > 0) || a.hp >= a.mhp || this.isWounded()) { s.healAcc = 0; return; }
+        s.healAcc = (s.healAcc || 0) + a.mhp * HEAL_PER_HOUR * (1 + perk("wound.heal")) * hours;
+        const whole = Math.floor(s.healAcc);
+        if (whole > 0) { a.gainHp(whole); s.healAcc -= whole; }
     };
 
     // ------------------------------------------------------------------
@@ -350,7 +363,7 @@
         return weather !== null ? weather : T.mapFlag("Clouds", false);
     }
     function nearFire() {
-        const list = ($gameSystem._farm && $gameSystem._farm.buildings && $gameSystem._farm.buildings[$gameMap.mapId()]) || [];
+        const list = (T.state("farm").buildings || {})[$gameMap.mapId()] || [];
         return list.some(b => (b.type === "campfire" || b.type === "tripod" || b.type === "cauldron") && !b.site && (!(window.Farming && Farming.fireLit) || Farming.fireLit(b)) && (window.Farming && Farming.geoOf ?
             Farming.cellsOfGeo(Farming.geoOf(b), b.x, b.y).some(c => Math.abs(c.x - $gamePlayer.x) <= 4 && Math.abs(c.y - $gamePlayer.y) <= 4) :
             Math.abs(b.x - $gamePlayer.x) <= 4 && Math.abs(b.y - $gamePlayer.y) <= 4));
@@ -427,7 +440,7 @@
     const STORM_GATHER = 1;                    // hours of wind and darkening sky before the first drop
     const STORM_FADE = 1;                      // hours over which it dies away (the last quarter of them after its end)
     function weatherPlan(day) {
-        const forced = $gameSystem && $gameSystem._stormForce;
+        const forced = window.$gameSystem ? survival().stormForce : null;
         if (forced && forced.day === day) {   // the debug menu (F9): a storm right now, or no weather at all today
             return forced.off ? null : { type: "rain", start: forced.start, end: Math.min(24, forced.end + 1), power: 4, storm: { start: forced.start, end: forced.end } };
         }
@@ -468,10 +481,10 @@
     // F9: a storm starting in a moment and lasting `hours`; calm = no weather at all for the rest of today
     function forceStorm(hours) {
         const day = $gameSystem.dayNightDay(), start = Math.min(23, $gameSystem.dayNightHour() + 0.35);   // already gathering (no waiting a whole hour)
-        $gameSystem._stormForce = { day, start, end: Math.min(24, start + (hours || 2)) };
+        survival().stormForce = { day, start, end: Math.min(24, start + (hours || 2)) };
     }
     function calmWeather() {
-        $gameSystem._stormForce = { day: $gameSystem.dayNightDay(), off: true };
+        survival().stormForce = { day: $gameSystem.dayNightDay(), off: true };
     }
     const stormNow = () => stormLevel($gameSystem.dayNightDay(), $gameSystem.dayNightHour());
     // the hero says it (a speech bubble over him, SpeechBubbles.js; without it the old popup)
@@ -487,8 +500,9 @@
         const plan = isOutdoors() ? currentWeather() : null;
         const day = $gameSystem.dayNightDay(), hour = $gameSystem.dayNightHour(), storm = stormLevel(day, hour);
         // the sky warns you: wind and far thunder an hour before the storm breaks (outdoors, once per storm)
-        if (isOutdoors() && storm > 0 && stormPhase(day, hour) === "gather" && $gameSystem._stormWarned !== day) {
-            $gameSystem._stormWarned = day;
+        const sv = survival();
+        if (isOutdoors() && storm > 0 && stormPhase(day, hour) === "gather" && sv.stormWarned !== day) {
+            sv.stormWarned = day;
             shout("Idzie burza...");
         }
         // while the storm rages the rain is MZ's "storm" (heavier, slanted, see Storm.js), as hard as the storm is strong
@@ -499,15 +513,15 @@
         const target = $gameScreen._weatherPowerTarget || 0;
         if (plan && (target !== power || $gameScreen.weatherType() !== type)) {
             $gameScreen.changeWeather(type, power, 90);
-            $gameSystem._weatherOwn = true;
+            sv.weatherOwn = true;
             if (target === 0 && raging) shout("Burza!");
             else if (target === 0) T.popup(plan.type === "snow" ? "Zaczyna padać śnieg" : "Zaczyna padać deszcz", { color: "#bcd8ff" });
-        } else if (!plan && $gameSystem._weatherOwn) {
+        } else if (!plan && sv.weatherOwn) {
             $gameScreen.changeWeather("none", 0, 90);
-            $gameSystem._weatherOwn = false;
+            sv.weatherOwn = false;
         }
-        if (plan && plan.type === "rain" && $gameSystem._rainDay !== $gameSystem.dayNightDay()) {
-            $gameSystem._rainDay = $gameSystem.dayNightDay();
+        if (plan && plan.type === "rain" && sv.rainDay !== $gameSystem.dayNightDay()) {
+            sv.rainDay = $gameSystem.dayNightDay();
             if (window.Farming && typeof Farming.rainWater === "function") Farming.rainWater();
         }
     };

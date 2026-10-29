@@ -1,0 +1,38 @@
+{
+ "rywale": {
+  "ozzy": {
+   "name": "Dziadek Ozzy",
+   "short": "Ozzy",
+   "hello": "*czkawka* Rzutki? Kiedyś trafiałem muchę w locie. Dziś trafiam tarczę. Zazwyczaj.",
+   "throwLines": [
+    "Hop!",
+    "*czkawka*",
+    "Ups...",
+    "Celuję w środkową z trzech tarcz..."
+   ],
+   "good": [
+    "Byk! Widziałeś? Nikt nie widział...",
+    "Hehe, stara ręka!"
+   ],
+   "won": "Hehe! Stary Ozzy jeszcze umie! Postawisz mi piwo z tej stawki? Nie? No trudno.",
+   "lost": "Trzy tarcze to jednak za dużo dla jednego oka... Wygrałeś, synu. Uczciwie."
+  },
+  "wiesiek": {
+   "name": "Furman Wiesiek",
+   "short": "Wiesiek",
+   "hello": "Rzucamy? Ja furman: oko mam jak jastrząb - od patrzenia na drogę między końskimi uszami.",
+   "throwLines": [
+    "Rzut furmański!",
+    "Prosto jak droga do młyna.",
+    "Wiooo!"
+   ],
+   "good": [
+    "Dwadzieścia! Wiedziałem.",
+    "I kto tu jest jastrząb?"
+   ],
+   "won": "Ha! Nie ma to jak oko furmana. Stawka moja - dziękuję uprzejmie.",
+   "lost": "Eee, wiatr zawiał od drzwi. Ale wygrałeś, nie ma co gadać."
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TavernLife_Darts.js: OPPONENTS=rywale:/\\.(name|short|hello|throwLines|good|won|lost)$/)"
+}

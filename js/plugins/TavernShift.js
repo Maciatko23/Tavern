@@ -133,6 +133,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("zmiana");   // (the words of this file: js/teksty/zmiana.txt, kod.*)
 
     const PLUGIN = "TavernShift";
     const TW = window.Tawerna;   // (TW: T is the tile's size in the shift's files)
@@ -190,51 +191,48 @@
     }
 
     // ==================================================================
-    // Data: dishes, recipes, steps, difficulty
+    // Data: dishes, recipes, steps, difficulty (the names and the words: js/teksty/zmiana.txt - dania, kroki, przepisy, etapy, oceny)
     // ==================================================================
     const DISHES = {
-        beer:   { name: "Piwo", item: 81, icon: 337, tip: 2, q: "beer", weight: 34 },
-        bread:  { name: "Chleb", item: 83, icon: 339, tip: 1, weight: 16 },
-        stew:   { name: "Gulasz", item: 130, icon: 392, tip: 3, q: "kitchen", weight: 20 },
-        soup:   { name: "Zupa grzybowa", item: 132, icon: 394, tip: 3, q: "kitchen", weight: 16 },
-        cheese: { name: "Ser", item: 124, icon: 384, tip: 2, weight: 9 },
-        mead:   { name: "Miód pitny", item: 137, icon: 399, tip: 3, weight: 5 }
+        beer:   { item: 81, icon: 337, tip: 2, q: "beer", weight: 34 },
+        bread:  { item: 83, icon: 339, tip: 1, weight: 16 },
+        stew:   { item: 130, icon: 392, tip: 3, q: "kitchen", weight: 20 },
+        soup:   { item: 132, icon: 394, tip: 3, q: "kitchen", weight: 16 },
+        cheese: { item: 124, icon: 384, tip: 2, weight: 9 },
+        mead:   { item: 137, icon: 399, tip: 3, weight: 5 }
     };
+    Watki.scal(DISHES, "zmiana", "dania");
     const MENU_ORDER = ["beer", "bread", "stew", "soup", "cheese", "mead"];
     function dishIcon(key) {
         const d = DISHES[key], it = d && window.$dataItems && $dataItems[d.item];
         return it && it.iconIndex ? it.iconIndex : d ? d.icon : 0;
     }
     const STEPS = {
-        cut:   { key: "left",  name: "Kroić",      icon: 347, colour: "#ff8f7f", se: ["Slash1", 55, 140] },
-        stir:  { key: "up",    name: "Mieszać",    icon: 403, colour: "#8fc7ff", se: ["Water2", 50, 130] },
-        spice: { key: "right", name: "Przyprawić", icon: 413, colour: "#8ee08a", se: ["Sand", 60, 150] },
-        add:   { key: "down",  name: "Dorzucić",   icon: 327, colour: "#ffb347", se: ["Water1", 50, 100] },
-        serve: { key: "ok",    name: "Podać",      icon: 0,   colour: "#ffd23f", se: ["Item3", 60, 110] }
+        cut:   { key: "left",  icon: 347, colour: "#ff8f7f", se: ["Slash1", 55, 140] },
+        stir:  { key: "up",    icon: 403, colour: "#8fc7ff", se: ["Water2", 50, 130] },
+        spice: { key: "right", icon: 413, colour: "#8ee08a", se: ["Sand", 60, 150] },
+        add:   { key: "down",  icon: 327, colour: "#ffb347", se: ["Water1", 50, 100] },
+        serve: { key: "ok",    icon: 0,   colour: "#ffd23f", se: ["Item3", 60, 110] }
     };
+    Watki.scal(STEPS, "zmiana", "kroki");
     const STEP_ORDER = ["cut", "stir", "spice", "add", "serve"];
     const RECIPES = {
-        stew:     { name: "Gulasz", icon: 392, add: 326, steps: "cut:0 cut:1 cut:2 add:3 stir:4 stir:5 spice:6 serve:8" },
-        soup:     { name: "Zupa grzybowa", icon: 394, add: 359, steps: "cut:0 cut:1 add:2 add:3 stir:4 spice:5 stir:6 serve:8" },
-        eggs:     { name: "Jajecznica", icon: 363, add: 330, steps: "add:0 stir:1 stir:2 spice:3 serve:5" },
-        cabbage:  { name: "Kapuśniak", icon: 393, add: 328, steps: "cut:0 cut:0.5 cut:1 add:2 stir:3 stir:3.5 spice:4 serve:6" },
-        potatoes: { name: "Pieczone ziemniaki", icon: 364, add: 326, steps: "add:0 cut:1 cut:1.5 cut:2 spice:3 add:4 serve:6" }
+        stew:     { icon: 392, add: 326, steps: "cut:0 cut:1 cut:2 add:3 stir:4 stir:5 spice:6 serve:8" },
+        soup:     { icon: 394, add: 359, steps: "cut:0 cut:1 add:2 add:3 stir:4 spice:5 stir:6 serve:8" },
+        eggs:     { icon: 363, add: 330, steps: "add:0 stir:1 stir:2 spice:3 serve:5" },
+        cabbage:  { icon: 393, add: 328, steps: "cut:0 cut:0.5 cut:1 add:2 stir:3 stir:3.5 spice:4 serve:6" },
+        potatoes: { icon: 364, add: 326, steps: "add:0 cut:1 cut:1.5 cut:2 spice:3 add:4 serve:6" }
     };
+    Watki.scal(RECIPES, "zmiana", "przepisy");
     const PART_DEFS = {
-        clean:   { title: "Przed otwarciem", sub: "sprzątanie i drewno", weight: 0.2, bonus: 8 },
-        beer:    { title: "Beczka", sub: "nalewanie piwa na czas", weight: 0.2, bonus: 8 },
-        kitchen: { title: "Kuchnia w rytm", sub: "gotowanie do taktu", weight: 0.2, bonus: 8 },
-        serve:   { title: "Wieczór", sub: "obsługa sali", weight: 0.4, bonus: 16 }
+        clean:   { weight: 0.2, bonus: 8 },
+        beer:    { weight: 0.2, bonus: 8 },
+        kitchen: { weight: 0.2, bonus: 8 },
+        serve:   { weight: 0.4, bonus: 16 }
     };
+    Watki.scal(PART_DEFS, "zmiana", "etapy");
     const PART_ORDER = ["clean", "beer", "kitchen", "serve"];
-    const GRADES = [
-        null,
-        { name: "Katastrofa", say: "Coś ty tu wyprawiał?! Masz parę groszy na chleb i idź się wyspać." },
-        { name: "Słabiutko", say: "Oj, słabo. Goście narzekali, a ja sprzątałem po tobie. Jutro się popraw." },
-        { name: "Da się wytrzymać", say: "Może być. Następnym razem żwawiej, dobra?" },
-        { name: "Porządna robota", say: "Dobra robota! Parę drobiazgów, ale goście wyszli zadowoleni." },
-        { name: "Mistrz kufla", say: "No, no! Tak się robi. Dorzucam coś ekstra - i jutro też cię biorę." }
-    ];
+    const GRADES = Watki.scal([null, {}, {}, {}, {}, {}], "zmiana", "oceny");   // (1-5: the grade's name and what Borgar says)
     const gradeOf = s => (s >= 88 ? 5 : s >= 72 ? 4 : s >= 52 ? 3 : s >= 32 ? 2 : 1);
 
     function levelCfg(L) {
@@ -273,43 +271,43 @@
         const L = scene.level;
         if (id === "intro") {
             return {
-                kicker: "ZMIANA NR " + scene.shiftNo + (L ? " · TRUDNOŚĆ " + L : ""),
-                title: "Praca w tawernie",
-                sub: "„Pod Złotym Kuflem”",
-                say: scene.opts.intro || "Fartuch na grzbiet i do roboty! Uczciwie popracujesz - uczciwie zapłacę. Każdy grosz przybliża spłatę długu twojego dziadka.",
+                kicker: Watki.wstaw(TK.kod.cardSpec[1], { shiftNo: scene.shiftNo, "2": L ? Watki.wstaw(TK.kod.cardSpec[0], { L: L }) : "" }),
+                title: TK.kod.cardSpec[2],
+                sub: TK.kod.cardSpec[3],
+                say: scene.opts.intro || TK.kod.cardSpec[4],
                 lines: scene.partIds.map((p, i) => (i + 1) + ". " + PART_DEFS[p].title + " - " + PART_DEFS[p].sub),
-                keys: [[["P"], "pauza w trakcie zmiany (można ją przerwać)"]]
+                keys: [[["P"], TK.kod.cardSpec[5]]]
             };
         }
         if (id === "clean") {
             return {
-                kicker: "CZĘŚĆ " + (scene.partIndex + 1) + " Z " + scene.partIds.length, title: "Przed otwarciem", sub: "sprzątanie i drewno",
-                say: "Sala po wczorajszym wieczorze to pobojowisko. Zanim wpuścimy gości, ogarnij ją. Masz " + Math.round(cfg.time / 60) + " sekund.",
-                lines: ["Przetrzyj brudne stoły: stań przy stole i przytrzymaj O.", "Przynieś drewno ze stosu w rogu do kominka - po jednym polanie.", "Wynieś worki i kubły ze śmieciami za drzwi wejściowe.", "Za każde zadanie premia, za szybki koniec - ekstra."],
-                keys: [[["up", "left", "down", "right"], "/ WSAD: chodzenie"], [["Shift"], "szybciej"], [["O"], "akcja"]]
+                kicker: Watki.wstaw(TK.kod.cardSpec[6], { "1": scene.partIndex + 1, length: scene.partIds.length }), title: TK.kod.cardSpec[7], sub: TK.kod.cardSpec[8],
+                say: Watki.wstaw(TK.kod.cardSpec[9], { "1": Math.round(cfg.time / 60) }),
+                lines: [TK.kod.cardSpec[10], TK.kod.cardSpec[11], TK.kod.cardSpec[12], TK.kod.cardSpec[13]],
+                keys: [[["up", "left", "down", "right"], TK.kod.cardSpec[14]], [["Shift"], "szybciej"], [["O"], "akcja"]]
             };
         }
         if (id === "beer") {
             return {
-                kicker: "CZĘŚĆ " + (scene.partIndex + 1) + " Z " + scene.partIds.length, title: "Beczka", sub: "nalewanie piwa na czas",
-                say: "Pokaż, czy umiesz nalać. " + cfg.mugs + " kufli, jeden po drugim.",
-                lines: ["Przytrzymaj O: z kranu leje się piwo.", "Puść, gdy piana dojdzie do żółtej kreski.", "Piwo leci jeszcze chwilę po puszczeniu - puść odrobinę wcześniej.", "Za mało - goście marudzą, za dużo - rozlane. Równo nalane piwo = większe napiwki wieczorem."],
-                keys: [[["O"], "przytrzymaj: lej"]]
+                kicker: Watki.wstaw(TK.kod.cardSpec[6], { "1": scene.partIndex + 1, length: scene.partIds.length }), title: "Beczka", sub: TK.kod.cardSpec[15],
+                say: Watki.wstaw(TK.kod.cardSpec[16], { mugs: cfg.mugs }),
+                lines: [TK.kod.cardSpec[17], TK.kod.cardSpec[18], TK.kod.cardSpec[19], TK.kod.cardSpec[20]],
+                keys: [[["O"], TK.kod.cardSpec[21]]]
             };
         }
         if (id === "kitchen") {
             return {
-                kicker: "CZĘŚĆ " + (scene.partIndex + 1) + " Z " + scene.partIds.length, title: "Kuchnia w rytm", sub: "gotowanie do taktu",
-                say: "Ja gotuję, ty pomagasz. Rób dokładnie to, co trzeba, i wtedy, kiedy trzeba!",
-                lines: ["Kroki przepisu przesuwają się od prawej do lewej.", "Naciśnij właściwy klawisz, gdy krok jest w żółtej ramce.", "Im dokładniej, tym lepsze danie - i większe napiwki za gulasz i zupę."],
-                keys: [[["left"], "kroić"], [["up"], "mieszać"], [["right"], "przyprawić"], [["down"], "dorzucić"], [["O"], "podać"]]
+                kicker: Watki.wstaw(TK.kod.cardSpec[6], { "1": scene.partIndex + 1, length: scene.partIds.length }), title: TK.kod.cardSpec[22], sub: TK.kod.cardSpec[23],
+                say: TK.kod.cardSpec[24],
+                lines: [TK.kod.cardSpec[25], TK.kod.cardSpec[26], TK.kod.cardSpec[27]],
+                keys: [[["left"], TK.kod.cardSpec[28]], [["up"], TK.kod.cardSpec[29]], [["right"], TK.kod.cardSpec[30]], [["down"], TK.kod.cardSpec[31]], [["O"], TK.kod.cardSpec[32]]]
             };
         }
         return {
-            kicker: "CZĘŚĆ " + (scene.partIndex + 1) + " Z " + scene.partIds.length, title: "Wieczór", sub: "obsługa sali",
-            say: "Drzwi otwarte, goście schodzą się na kolację. Nie daj im czekać!",
-            lines: ["Gość siada i zamawia: dymek pokazuje, co chce.", "Weź danie z lady (O przy ladzie) - uniesiesz dwie rzeczy - i zanieś właściwemu gościowi (O przy nim). Zbędne danie odstawisz na końcu lady.", "Szybko = napiwek. Pomyłka albo długie czekanie = mniejsza zapłata; zniecierpliwiony gość wychodzi bez płacenia.", "Po gościu przetrzyj stół (przytrzymaj O). Gdy ogień przygasa - dorzuć drewna."],
-            keys: [[["up", "left", "down", "right"], "/ WSAD"], [["O"], "weź / podaj"], [["P"], "pauza"]]
+            kicker: Watki.wstaw(TK.kod.cardSpec[6], { "1": scene.partIndex + 1, length: scene.partIds.length }), title: TK.kod.cardSpec[33], sub: TK.kod.cardSpec[34],
+            say: TK.kod.cardSpec[35],
+            lines: [TK.kod.cardSpec[36], TK.kod.cardSpec[37], TK.kod.cardSpec[38], TK.kod.cardSpec[39]],
+            keys: [[["up", "left", "down", "right"], TK.kod.cardSpec[40]], [["O"], TK.kod.cardSpec[41]], [["P"], "pauza"]]
         };
     }
     function drawDot(b, x, y, colour) { b.fillRect(x - 3, y - 3, 6, 6, colour); }
@@ -412,7 +410,7 @@
         // P: the pause - back to work, or break the shift off (no pay)
         pause() {
             this.se("cancel");
-            this.showChoice({ title: "Pauza", options: ["Wracam do pracy", "Przerwij zmianę (bez zapłaty)"], cancel: 0, w: 440, onPick: i => { if (i === 1) this.abort(); } });
+            this.showChoice({ title: "Pauza", options: [TK.kod.pause[0], TK.kod.pause[1]], cancel: 0, w: 440, onPick: i => { if (i === 1) this.abort(); } });
         }
         // ---- flow
         // the card before the shift and before each part (Borgar explains): O starts it
@@ -420,7 +418,7 @@
             this.cardId = id;
             this.setPhase("card");
             const spec = Object.assign(cardSpec(id, this.part ? this.part.cfg : null, this),
-                { w: 980, h: 540, bust: BORGAR_BUST, who: "Borgar", whoSub: "karczmarz", foot: id === "intro" ? "O - zaczynamy" : "O - do roboty" });
+                { w: 980, h: 540, bust: BORGAR_BUST, who: "Borgar", whoSub: "karczmarz", foot: id === "intro" ? TK.kod.openCard[0] : TK.kod.openCard[1] });
             this.showCard(spec, () => {
                 if (id === "intro") this.nextPart();
                 else this.setPhase("play");
@@ -511,7 +509,7 @@
             const raw = wage + bonusR - deduct + extra, pay = aborted ? 0 : Math.max(3, raw);
             const hours = Math.round(HOURS * (aborted ? Math.max(0.25, frac) : 1) * 10) / 10;
             const stamina = Math.round(STAMINA * (aborted ? Math.max(0.25, frac) : 1));
-            if (aborted) bad.unshift("Zmiana przerwana - Borgar nie płaci za pół roboty");
+            if (aborted) bad.unshift(TK.kod.computeResult[0]);
             return {
                 pay, tips, total: pay + tips, grade, gradeName: grade ? GRADES[grade].name : "Przerwana", score, level: this.level, shift: this.shiftNo,
                 aborted: !!aborted, hours, stamina, wage: aborted ? 0 : wage, bonus: aborted ? 0 : bonusR, deduct: aborted ? 0 : deduct,
@@ -536,7 +534,7 @@
             b.clear();
             panel(b, 8, 6, W - 16, 66, { cut: 6 });
             const def = PART_DEFS[p.id];
-            txt(b, "CZĘŚĆ " + (this.partIndex + 1) + " Z " + this.partIds.length, 26, 11, 300, { size: 15, color: S.muted, bold: true });
+            txt(b, Watki.wstaw(TK.kod.drawHud[0], { "1": this.partIndex + 1, length: this.partIds.length }), 26, 11, 300, { size: 15, color: S.muted, bold: true });
             txt(b, def.title + " · " + def.sub, 26, 30, 420, { size: 24, color: S.accent, bold: true });
             // the middle: a timer bar or dots for the mugs
             const mx = 460, mw = 380;
@@ -551,8 +549,8 @@
                     b.fillRect(Math.round(x0 + i * (dw + gap)), 44, Math.round(dw), 10, sc === undefined ? S.trough : scoreColour(sc));
                 }
             }
-            txt(b, "Napiwki: " + Math.round(this.ctx.tips) + " G", W - 380, 10, 356, { size: 20, color: S.accent, bold: true, align: "right" });
-            txt(b, (info.right ? info.right + "   ·   " : "") + this.clockText(frac) + "  ·  zmiana nr " + this.shiftNo, W - 520, 38, 496, { size: 16, color: info.right && /Uwaga/.test(info.right) ? WARN : S.muted, align: "right" });
+            txt(b, Watki.wstaw(TK.kod.drawHud[1], { "1": Math.round(this.ctx.tips) }), W - 380, 10, 356, { size: 20, color: S.accent, bold: true, align: "right" });
+            txt(b, Watki.wstaw(TK.kod.drawHud[2], { "1": (info.right ? info.right + "   ·   " : "") + this.clockText(frac), shiftNo: this.shiftNo }), W - 520, 38, 496, { size: 16, color: info.right && /Uwaga/.test(info.right) ? WARN : S.muted, align: "right" });
         }
         drawBanner(p) {
             const b = this.overlay.bitmap, S = ST(), W = b.width, H = b.height;
@@ -562,15 +560,15 @@
             const pw = 620, lines = p.good.length + p.bad.length, ph = 190 + Math.max(1, lines) * 28, px = (W - pw) / 2, py = (H - ph) / 2;
             panel(b, px, py, pw, ph, { cut: 10 });
             const def = PART_DEFS[p.id], sc = p.result.score;
-            txt(b, def.title + " - koniec", px + 26, py + 18, pw - 52, { size: 28, color: S.accent, bold: true });
-            txt(b, "Wynik części", px + 26, py + 64, 300, { size: 19, color: S.muted });
+            txt(b, Watki.wstaw(TK.kod.drawBanner[0], { title: def.title }), px + 26, py + 18, pw - 52, { size: 28, color: S.accent, bold: true });
+            txt(b, TK.kod.drawBanner[1], px + 26, py + 64, 300, { size: 19, color: S.muted });
             txt(b, sc + " / 100", px + pw - 200, py + 58, 174, { size: 28, color: scoreColour(sc), bold: true, align: "right" });
             bar(b, px + 26, py + 100, pw - 52, 10, sc / 100, scoreColour(sc));
             let y = py + 126;
             for (const g of p.good) { drawDot(b, px + 34, y + 13, GOOD); txt(b, g, px + 48, y, pw - 74, { size: 19, color: GOOD }); y += 28; }
             for (const g of p.bad) { drawDot(b, px + 34, y + 13, BAD); txt(b, g, px + 48, y, pw - 74, { size: 19, color: BAD }); y += 28; }
-            if (!lines) { txt(b, sc >= 60 ? "Nieźle idzie." : "Mogło być lepiej.", px + 48, y, pw - 74, { size: 19 }); }
-            txt(b, this.partIndex + 1 < this.partIds.length ? "O - dalej" : "O - koniec zmiany", px, py + ph - 42, pw - 26, { size: 20, color: S.accent, bold: true, align: "right" });
+            if (!lines) { txt(b, sc >= 60 ? TK.kod.drawBanner[2] : TK.kod.drawBanner[3], px + 48, y, pw - 74, { size: 19 }); }
+            txt(b, this.partIndex + 1 < this.partIds.length ? TK.kod.drawBanner[4] : TK.kod.drawBanner[5], px, py + ph - 42, pw - 26, { size: 20, color: S.accent, bold: true, align: "right" });
         }
         drawSummary(res) {
             const b = this.overlay.bitmap, S = ST(), W = b.width, H = b.height;
@@ -588,20 +586,20 @@
                 b.fillRect(px + 24, py + 30 + bh, bw, 2, S.accent);
             }
             const sayY = py + 30 + 250;
-            const say = res.aborted ? "Zmywasz się w pół roboty? Za to nie płacę. Napiwki możesz zatrzymać." : GRADES[res.grade].say;
+            const say = res.aborted ? TK.kod.drawSummary[0] : GRADES[res.grade].say;
             let y = sayY + 8;
             for (const l of wrapLines(b, "„" + say + "”", 220, 19)) { txt(b, l, px + 30, y, 224, { size: 19, color: "#d8dde3" }); y += 26; }
-            txt(b, "- Borgar", px + 30, y + 4, 220, { size: 17, color: S.accent, align: "right" });
+            txt(b, TK.kod.drawSummary[1], px + 30, y + 4, 220, { size: 17, color: S.accent, align: "right" });
             // right column
             const x = px + 290, w = pw - 290 - 30;
-            txt(b, res.aborted ? "ZMIANA PRZERWANA" : "KONIEC ZMIANY NR " + res.shift, x, py + 22, w, { size: 16, color: S.muted, bold: true });
+            txt(b, res.aborted ? TK.kod.drawSummary[2] : Watki.wstaw(TK.kod.drawSummary[3], { shift: res.shift }), x, py + 22, w, { size: 16, color: S.muted, bold: true });
             txt(b, res.aborted ? "Przerwana" : res.gradeName, x, py + 42, w, { size: 40, color: res.aborted ? BAD : S.accent, bold: true });
             for (let i = 0; i < 5; i++) {   // the grade in mugs
                 const ix = x + w - 5 * 42 + i * 42;
                 if (i < res.grade) icon(b, 337, ix, py + 36, 38);
                 else { b.context.globalAlpha = 0.22; icon(b, 337, ix, py + 36, 38); b.context.globalAlpha = 1; dirty(b); }
             }
-            txt(b, "Ocena " + (res.grade || "-") + " / 5 · wynik " + res.score + " / 100" + (res.level ? " · trudność " + res.level : ""), x, py + 94, w, { size: 18, color: S.muted });
+            txt(b, Watki.wstaw(TK.kod.drawSummary[5], { "1": res.grade || "-", score: res.score, "3": res.level ? Watki.wstaw(TK.kod.drawSummary[4], { level: res.level }) : "" }), x, py + 94, w, { size: 18, color: S.muted });
             // parts
             y = py + 132;
             for (const id of this.partIds) {
@@ -616,9 +614,9 @@
             // the money
             const mx = x + 506, mw = w - 506;
             let my = py + 128;
-            const money = [["Dniówka", res.wage, S.text, ""], ["Premia za pracę", res.bonus, GOOD, "+"], ["Potrącenia", -res.deduct, res.deduct ? BAD : S.muted, res.deduct ? "" : ""]];
-            if (res.extra) money.push(["Ekstra od Borgara", res.extra, S.accent, "+"]);
-            if (res.floor > 0) money.push(["Na chleb od Borgara", res.floor, S.text, "+"]);
+            const money = [[TK.kod.drawSummary[6], res.wage, S.text, ""], [TK.kod.drawSummary[7], res.bonus, GOOD, "+"], [TK.kod.drawSummary[8], -res.deduct, res.deduct ? BAD : S.muted, res.deduct ? "" : ""]];
+            if (res.extra) money.push([TK.kod.drawSummary[9], res.extra, S.accent, "+"]);
+            if (res.floor > 0) money.push([TK.kod.drawSummary[10], res.floor, S.text, "+"]);
             money.push(["Napiwki", res.tips, S.accent, "+"]);
             panel(b, mx - 14, my - 10, mw + 14, 30 * money.length + 64, { cut: 6, accent: false, fill: "rgba(20,22,27,0.9)" });
             for (const [n, v, c, sign] of money) {
@@ -632,18 +630,18 @@
             y = Math.max(y, my + 70);
             // good and bad
             const colW = Math.floor((w - 20) / 2);
-            txt(b, "Co poszło dobrze", x, y, colW, { size: 20, color: GOOD, bold: true });
-            txt(b, "Co poszło źle", x + colW + 20, y, colW, { size: 20, color: BAD, bold: true });
+            txt(b, TK.kod.drawSummary[11], x, y, colW, { size: 20, color: GOOD, bold: true });
+            txt(b, TK.kod.drawSummary[12], x + colW + 20, y, colW, { size: 20, color: BAD, bold: true });
             let gy = y + 34, by = y + 34;
             for (const g of res.good.length ? res.good : ["-"]) for (const l of wrapLines(b, g, colW - 20, 18)) { if (l === g || true) drawDot(b, x + 5, gy + 12, GOOD); txt(b, l, x + 18, gy, colW - 18, { size: 18 }); gy += 26; }
-            for (const g of res.bad.length ? res.bad : ["nic - czysta robota"]) for (const l of wrapLines(b, g, colW - 20, 18)) { drawDot(b, x + colW + 25, by + 12, BAD); txt(b, l, x + colW + 38, by, colW - 18, { size: 18 }); by += 26; }
+            for (const g of res.bad.length ? res.bad : [TK.kod.drawSummary[13]]) for (const l of wrapLines(b, g, colW - 20, 18)) { drawDot(b, x + colW + 25, by + 12, BAD); txt(b, l, x + colW + 38, by, colW - 18, { size: 18 }); by += 26; }
             // the foot
             const fy = py + ph - 50;
             b.fillRect(px + 24, fy - 10, pw - 48, 1, S.line);
             const end = (this.startHour + res.hours);
             const endH = String(Math.floor(end) % 24).padStart(2, "0") + ":" + String(Math.round((end % 1) * 60) % 60).padStart(2, "0");
-            txt(b, "Czas: " + this.clockText(0) + " → " + endH + "   ·   wytrzymałość −" + res.stamina + "   ·   zarobek do sakiewki: " + res.total + " G", px + 30, fy, pw - 300, { size: 17, color: S.muted });
-            txt(b, "O - wracam do tawerny", px, fy - 2, pw - 30, { size: 21, color: S.accent, bold: true, align: "right" });
+            txt(b, Watki.wstaw(TK.kod.drawSummary[14], { "1": this.clockText(0), endH: endH, stamina: res.stamina, total: res.total }), px + 30, fy, pw - 300, { size: 17, color: S.muted });
+            txt(b, TK.kod.drawSummary[15], px, fy - 2, pw - 30, { size: 21, color: S.accent, bold: true, align: "right" });
         }
     }
     Scene_TavernShift.gameId = "TavernShift";   // (the bus's miniGameStart / miniGameEnd)
@@ -686,7 +684,7 @@
         stats: () => Object.assign({}, stats()),
         // null when fine, otherwise why the hero had better not go (the story decides whether to insist)
         canStart() {
-            if (window.$gameSystem && typeof $gameSystem.stamina === "function" && $gameSystem.stamina() < 15) return "Jesteś zbyt zmęczony na całą zmianę.";
+            if (window.$gameSystem && typeof $gameSystem.stamina === "function" && $gameSystem.stamina() < 15) return TK.kod.canStart[0];
             return null;
         },
         state() {

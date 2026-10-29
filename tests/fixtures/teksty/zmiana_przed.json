@@ -1,0 +1,97 @@
+{
+ "dania": {
+  "beer": {
+   "name": "Piwo"
+  },
+  "bread": {
+   "name": "Chleb"
+  },
+  "stew": {
+   "name": "Gulasz"
+  },
+  "soup": {
+   "name": "Zupa grzybowa"
+  },
+  "cheese": {
+   "name": "Ser"
+  },
+  "mead": {
+   "name": "Miód pitny"
+  }
+ },
+ "kroki": {
+  "cut": {
+   "name": "Kroić"
+  },
+  "stir": {
+   "name": "Mieszać"
+  },
+  "spice": {
+   "name": "Przyprawić"
+  },
+  "add": {
+   "name": "Dorzucić"
+  },
+  "serve": {
+   "name": "Podać"
+  }
+ },
+ "przepisy": {
+  "stew": {
+   "name": "Gulasz"
+  },
+  "soup": {
+   "name": "Zupa grzybowa"
+  },
+  "eggs": {
+   "name": "Jajecznica"
+  },
+  "cabbage": {
+   "name": "Kapuśniak"
+  },
+  "potatoes": {
+   "name": "Pieczone ziemniaki"
+  }
+ },
+ "etapy": {
+  "clean": {
+   "title": "Przed otwarciem",
+   "sub": "sprzątanie i drewno"
+  },
+  "beer": {
+   "title": "Beczka",
+   "sub": "nalewanie piwa na czas"
+  },
+  "kitchen": {
+   "title": "Kuchnia w rytm",
+   "sub": "gotowanie do taktu"
+  },
+  "serve": {
+   "title": "Wieczór",
+   "sub": "obsługa sali"
+  }
+ },
+ "oceny": {
+  "1": {
+   "name": "Katastrofa",
+   "say": "Coś ty tu wyprawiał?! Masz parę groszy na chleb i idź się wyspać."
+  },
+  "2": {
+   "name": "Słabiutko",
+   "say": "Oj, słabo. Goście narzekali, a ja sprzątałem po tobie. Jutro się popraw."
+  },
+  "3": {
+   "name": "Da się wytrzymać",
+   "say": "Może być. Następnym razem żwawiej, dobra?"
+  },
+  "4": {
+   "name": "Porządna robota",
+   "say": "Dobra robota! Parę drobiazgów, ale goście wyszli zadowoleni."
+  },
+  "5": {
+   "name": "Mistrz kufla",
+   "say": "No, no! Tak się robi. Dorzucam coś ekstra - i jutro też cię biorę."
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TavernShift.js: DISHES=dania:/(^|\\.)name$/, STEPS=kroki:/(^|\\.)name$/, RECIPES=przepisy:/(^|\\.)name$/, PART_DEFS=etapy:/(^|\\.)(title|sub)$/, GRADES=oceny:/(^|\\.)(name|say)$/)"
+}

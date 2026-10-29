@@ -8,6 +8,10 @@
 // Stage 3 (batch C3): Combat's _hero adopted into _tw.hero (day40_farm: level 6 kept), _combatMode / _combatHand into _tw.combat.
 // Stage 3 (batch D2): Hunting's _hunt and _carcasses adopted into _tw.hunt / _tw.carcasses (home_decor_v0: the wolf of day 14), an older
 //   save's _sneak into _tw.hunt.sneak (day40_farm made older: sneaking on, a carcass lying there).
+// Porządki (2026-10-28): the last plain keys of $gameSystem in Tawerna.state - the clock (_dayNightHour, _dayNightDay, _dayNightTinting
+//   -> _tw.clock), Survival's _buffs, _healAcc, _stormForce, _stormWarned, _weatherOwn, _rainDay (-> _tw.survival), Needs' _needs,
+//   Spoilage's _fresh, Durability's _wear (adopted), Minimap's _minimapHidden (-> _tw.minimap.hidden), TavernLife's _tavernLayout
+//   (-> _tw.tavernLife.layout): moved in from every fixture, the old names still ways there, none of them saved again.
 //   CDP_PORT=9398 node tests/core_fixtures_test.js
 const kit = require("./lib/kit.js");
 
@@ -27,6 +31,17 @@ kit.test({ port: 9398, plugins: ["TawernaCore", "TawernaUI", "HomeAmbience", "Ho
         return { adopted: sys._tw.hunt === h && sys._hunt === h && !own.includes("_hunt") && !!sys._tw.carcasses && sys._carcasses === sys._tw.carcasses && !own.includes("_carcasses") && !own.includes("_sneak"),
             v: [Tawerna.state.version("hunt"), Tawerna.state.version("carcasses")], kills: h.kills, killed: h.killed, sneak: Hunting.sneaking(), maps: Object.keys(sys._tw.carcasses).sort(),
             carcasses: Hunting.carcasses().length, journal: ((sys._hunt || {}).kills || {}).wolf || 0 }; })()`;
+    // the plain keys moved into Tawerna.state (porządki 2026-10-28): none left on $gameSystem itself, the old names lead to the fields
+    const OLDKEYS = ["_dayNightHour", "_dayNightDay", "_dayNightTinting", "_buffs", "_healAcc", "_stormForce", "_stormWarned", "_weatherOwn", "_rainDay",
+        "_needs", "_fresh", "_wear", "_minimapHidden", "_freeMove", "_mistForce", "_gridShown", "_tavernLayout", "_puddleClay"];
+    const MOVED = `(function(){ const sys = $gameSystem, tw = sys._tw, own = Object.keys(sys), sv = tw.survival || {};
+        return { own: ${JSON.stringify(OLDKEYS)}.filter(k => own.includes(k)), day: tw.clock && tw.clock.day, sysDay: sys.dayNightDay(), oldDay: sys._dayNightDay,
+            hourOk: !!tw.clock && sys.dayNightHour() === tw.clock.hour && sys._dayNightHour === tw.clock.hour, tinting: tw.clock && tw.clock.tinting, oldTint: sys._dayNightTinting,
+            needs: tw.needs && sys._needs === tw.needs ? [Math.round(tw.needs.food), Math.round(tw.needs.water)] : null, fresh: !!tw.fresh && sys._fresh === tw.fresh,
+            wear: tw.wear && sys._wear === tw.wear ? tw.wear.used : null, buffs: sys._buffs === sv.buffs && !!sv.buffs, healAcc: sv.healAcc, force: sv.stormForce || null,
+            sameForce: sys._stormForce === sv.stormForce, own2: sys._weatherOwn === sv.weatherOwn && sys._rainDay === sv.rainDay, rainDay: sv.rainDay, hidden: (tw.minimap || {}).hidden,
+            oldHidden: sys._minimapHidden, layout: tw.tavernLife && tw.tavernLife.layout, oldLayout: sys._tavernLayout,
+            v: ["clock", "survival", "needs", "fresh", "wear", "minimap"].map(k => Tawerna.state.version(k)).join() }; })()`;
     const plays = async () => { const f0 = await t.eval("Graphics.frameCount"); await t.frames(30); return (await t.eval("Graphics.frameCount")) > f0 && (await t.eval("SceneManager._scene instanceof Scene_Map")); };
 
     // ================= new_story_day1: a new story game in grandpa's house, day 1
@@ -50,6 +65,10 @@ kit.test({ port: 9398, plugins: ["TawernaCore", "TawernaUI", "HomeAmbience", "Ho
     h = await t.json(house);
     const ad = await t.json(`({ got: HomeDecor.state().got, kills: HomeDecor.state().kills, inTw: $gameSystem._tw.homeDecor === HomeDecor.state(), alias: $gameSystem._homeDecor === HomeDecor.state(),
         hidden: !Object.keys($gameSystem).includes("_homeDecor"), v: Tawerna.state.version("homeDecor") })`);
+    const mv0 = await t.json(MOVED);
+    t.check("... (porządki) its plain keys moved into Tawerna.state: day 14 in _tw.clock, 'no weather today' (the save's F9 one, then the kit's) in _tw.survival.stormForce, the minimap hidden in _tw.minimap; the old names lead there; none left on $gameSystem",
+        mv0.own.length === 0 && mv0.day === 14 && mv0.sysDay === 14 && mv0.oldDay === 14 && mv0.hourOk && mv0.force && mv0.force.off === true && mv0.sameForce &&
+        mv0.hidden === true && mv0.oldHidden === true && mv0.buffs && mv0.healAcc === 0 && mv0.needs && mv0.fresh && mv0.layout === 2 && mv0.oldLayout === 2 && mv0.v === "1,1,1,1,1,1", mv0);
     t.check("the old _homeDecor is adopted: the keepsakes (wolf, tankard on day 14) and the kill tally now in _tw.homeDecor, the old key only a hidden alias",
         ad.got.wolf === 14 && ad.got.tankard === 14 && ad.kills.wolf === 1 && ad.inTw && ad.alias && ad.hidden && ad.v === 1, ad);
     t.check("... the house shows them: the wolf's pelt by his bed, the tankard on his shelf, Easter's eggs on the table (day 14)",
@@ -75,6 +94,9 @@ kit.test({ port: 9398, plugins: ["TawernaCore", "TawernaUI", "HomeAmbience", "Ho
     t.check("... the core's state made, a plan easel there (by its <Tavern:plan> tag), no house decoration here (only the town's evening guests injected), the reputation and the purse as saved",
         c.tw && c.keys.includes("homeDecor") && c.map === 1 && tav.easel && !tav.decor && Object.keys(tav.injected).filter(k => k !== "TownLife").length === 0 && tav.rep === fx0("tavern_evening").summary.reputation &&
         tav.gold === fx0("tavern_evening").summary.gold && (await plays()), { c, tav });
+    const mvT = await t.json(MOVED);
+    t.check("... (porządki) day 20 in _tw.clock, no tint in the tavern, the tavern's layout known (2 - the game came in at the entrance), none of the old plain keys on $gameSystem",
+        mvT.own.length === 0 && mvT.day === 20 && mvT.oldDay === 20 && mvT.hourOk && !mvT.tinting && mvT.layout === 2 && mvT.oldLayout === 2 && !!mvT.needs && mvT.own2, mvT);
     st = await t.json(STORY);
     t.check("... the story as saved: hired at Borgar's, 300 G paid", st.story && st.forest && st.flags.hired && st.flags.tavern && st.paid === 300 && st.active, st);
 
@@ -98,11 +120,45 @@ kit.test({ port: 9398, plugins: ["TawernaCore", "TawernaUI", "HomeAmbience", "Ho
     t.check("... the old _hero adopted (_tw.hero, v1; the old name a hidden way there): level 6, 890 XP, every attribute 5, 15 + 5 points to give out, 115 health",
         hero.adopted && hero.v.join() === "1,1" && hero.level === 6 && hero.xp === 890 && hero.attr === "5,5,5,5,5" && hero.points === 15 && hero.sp === 5 && hero.skills === 0 &&
         hero.ready && hero.mhp === 115, hero);
+    const mv40 = await t.json(MOVED);
+    t.check("... (porządki) its plain keys moved into Tawerna.state: day 40 and the hour in _tw.clock (tinting on the field), the needs (72 / 70), the wear (axe and pick 6), the buffs, healAcc, weatherOwn and rainDay in _tw.survival; the old names lead there; none left on $gameSystem",
+        mv40.own.length === 0 && mv40.day === 40 && mv40.sysDay === 40 && mv40.oldDay === 40 && mv40.hourOk && mv40.tinting === true && mv40.oldTint === true && JSON.stringify(mv40.needs) === "[72,70]" &&
+        mv40.fresh && JSON.stringify(mv40.wear) === '{"65":6,"66":6}' && mv40.buffs && mv40.healAcc === 0 && mv40.own2 && mv40.rainDay >= 1 && mv40.force && mv40.force.off === true && mv40.sameForce && mv40.layout === 2 && mv40.v === "1,1,1,1,1,1", mv40);
     t.check("... saved (slot 3) and loaded again", (await t.saveTo(3)) && (await t.loadFrom(3, { calm: true, needsOff: true })));
     const hero2 = await t.json(HERO);
+    const savedMoved = await t.json(`(async function(){ const s = JSON.parse(await StorageManager.zipToJson(await StorageManager.loadZip(DataManager.makeSavename(3)))).system;
+        return { old: ${JSON.stringify(OLDKEYS)}.filter(k => k in s), day: s._tw && s._tw.clock ? s._tw.clock.day : 0, wear: s._tw && s._tw.wear ? s._tw.wear.used[65] : 0, survival: !!(s._tw && s._tw.survival) }; })()`);
+    const mv40b = await t.json(MOVED);
+    t.check("... (porządki) the new save has _tw.clock (day 40), _tw.wear, _tw.survival and none of the old plain keys; loaded again: the same",
+        savedMoved.old.length === 0 && savedMoved.day === 40 && savedMoved.wear === 6 && savedMoved.survival && mv40b.own.length === 0 && mv40b.day === 40 && JSON.stringify(mv40b.wear) === JSON.stringify(mv40.wear), { savedMoved, mv40b });
     const savedHero = await t.json("(async function(){ const s = JSON.parse(await StorageManager.zipToJson(await StorageManager.loadZip(DataManager.makeSavename(3)))).system; return { old: ['_hero', '_combatMode', '_combatHand'].filter(k => k in s), level: s._tw && s._tw.hero ? s._tw.hero.level : 0, combat: !!(s._tw && s._tw.combat) }; })()");
     t.check("... the new save has _tw.hero (level 6) and _tw.combat, none of _hero, _combatMode, _combatHand; the hero the same after loading it",
         savedHero.old.length === 0 && savedHero.level === 6 && savedHero.combat && JSON.stringify(hero2) === JSON.stringify(hero), { savedHero, hero2 });
+    // (porządki) this game made older: every moved plain key back on $gameSystem, with values of its own - each one moves into its field
+    // when the save is read (the core's ensure), none is left on $gameSystem; then the game as it was (free walking, the grid, the mist)
+    const olderPlain = await t.json(`(function(){
+        const c = JsonEx.parse(JsonEx.stringify(DataManager.makeSaveContents())), s = c.system, tw = s._tw, day = tw.clock.day, hour = tw.clock.hour;
+        Object.assign(s, { _dayNightHour: hour, _dayNightDay: day, _dayNightTinting: true, _buffs: { warm: day * 24 + 30 }, _healAcc: 0.25, _stormForce: { day, off: true },
+            _stormWarned: day, _weatherOwn: false, _rainDay: day - 1, _minimapHidden: false, _freeMove: true, _mistForce: { day: day + 2, m: 0.7 }, _gridShown: false, _tavernLayout: 2 });
+        for (const k of ["clock", "survival", "minimap", "freeMove", "sky"]) { delete tw[k]; delete tw._v[k]; }
+        delete tw.farm.gridShown; delete tw.tavernLife.layout;
+        for (const [o, k] of [["_needs", "needs"], ["_wear", "wear"], ["_fresh", "fresh"], ["_puddleClay", "puddleClay"]]) { s[o] = tw[k] || {}; delete tw[k]; delete tw._v[k]; }
+        DataManager.extractSaveContents(c);
+        const sys = $gameSystem, n = sys._tw, own = Object.keys(sys);
+        const out = { own: ${JSON.stringify(OLDKEYS)}.filter(k => own.includes(k)), day: n.clock.day === day && n.clock.hour === hour && n.clock.tinting === true, sv: n.survival, warm: sys.hasBuff("warm"),
+            hidden: n.minimap.hidden, free: n.freeMove.on, mist: n.sky.mistForce, grid: n.farm.gridShown, layout: n.tavernLife.layout, needs: !!n.needs && sys._needs === n.needs && n.needs.food > 0,
+            wear: !!n.wear && sys._wear === n.wear && n.wear.used[65], fresh: !!n.fresh && !!n.fresh.bag, clay: !!n.puddleClay && sys._puddleClay === n.puddleClay,
+            v: ["clock", "survival", "minimap", "freeMove", "sky", "needs", "wear", "fresh", "puddleClay"].map(k => Tawerna.state.version(k)).join() };
+        delete n.freeMove.on; n.sky.mistForce = null; sys.addBuff && delete sys.buffs().warm;
+        SceneManager.goto(Scene_Map);
+        return out; })()`);
+    await t.until(t.onMap(3), 30, 150);
+    await t.frames(20);
+    t.check("... (porządki) an older save's plain keys (_dayNightHour/Day/Tinting, _buffs, _healAcc, _stormForce, _stormWarned, _weatherOwn, _rainDay, _minimapHidden, _freeMove, _mistForce, _gridShown, _tavernLayout, _needs, _wear, _fresh, _puddleClay) move into their states; none left on $gameSystem",
+        olderPlain.own.length === 0 && olderPlain.day && olderPlain.warm && olderPlain.sv.healAcc === 0.25 && olderPlain.sv.stormForce && olderPlain.sv.stormForce.off === true &&
+        olderPlain.sv.stormWarned >= 40 && olderPlain.sv.weatherOwn === false && olderPlain.sv.rainDay >= 39 && olderPlain.hidden === false && olderPlain.free === true &&
+        olderPlain.mist && olderPlain.mist.m === 0.7 && olderPlain.grid === false && olderPlain.layout === 2 && olderPlain.needs && olderPlain.wear === 6 && olderPlain.fresh && olderPlain.clay &&
+        olderPlain.v === "1,1,1,1,1,1,1,1,1", olderPlain);
     // Hunting (batch D2): this game made older - _hunt, _carcasses and _sneak back on $gameSystem (sneaking on, a deer's carcass on the field)
     const older = await t.json(`(function(){
         Hunting.dropCarcass("deer", $gamePlayer.x + 1.5, $gamePlayer.y + 0.5, 6);

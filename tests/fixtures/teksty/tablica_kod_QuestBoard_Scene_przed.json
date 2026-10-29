@@ -1,0 +1,41 @@
+{
+ "scena": {
+  "choiceList": {
+   "0": "Tak, porzuć (sława -{1})",
+   "1": "Przyjmij zlecenie",
+   "2": "Oddaj na dług",
+   "3": "Oddaj zlecenie",
+   "4": "Nie śledź",
+   "5": "Śledź",
+   "6": "Porzuć"
+  },
+  "drawHints": {
+   "0": "potwierdź",
+   "1": "wróć",
+   "2": "wybierz kartkę",
+   "3": "oddaj / opcje",
+   "4": "otwórz",
+   "5": "wyjdź",
+   "6": "za {k} dni",
+   "7": "Nowe ogłoszenia: {1}  ·  zleceń w toku: {length}/{MAX_ACTIVE}"
+  },
+  "decide": {
+   "0": "Masz już {MAX_ACTIVE} zlecenia. Oddaj albo porzuć któreś.",
+   "1": "Brakuje: {1} {2}/{n}",
+   "2": "Jeszcze nie gotowe.",
+   "3": "Przyjęte. Postęp widać w dzienniku (J); „Śledź” pokaże je na ekranie.",
+   "4": "Śledzisz to zlecenie w okienku celu na ekranie.",
+   "5": "Już go nie śledzisz.",
+   "6": "Porzucone. Sława w tawernie -{loss}"
+  },
+  "updateAnim": {
+   "0": "+{xp} dośw.",
+   "1": "Nowa sława: {tierUp}!",
+   "2": "Nowa kość: {1}"
+  },
+  "drawTutorial": {
+   "0": "{1}/{length}   O - dalej"
+  }
+ },
+ "_opis": "Napisy kodu QuestBoard_Scene.js sprzed przeniesienia do js/teksty/tablica.txt (scena.*)"
+}

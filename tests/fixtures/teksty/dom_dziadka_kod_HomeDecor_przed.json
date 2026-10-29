@@ -1,0 +1,8 @@
+{
+ "ozdoby": {
+  "earn": {
+   "0": "Nowa pamiątka w domu dziadka"
+  }
+ },
+ "_opis": "Napisy kodu HomeDecor.js sprzed przeniesienia do js/teksty/dom_dziadka.txt (ozdoby.*)"
+}

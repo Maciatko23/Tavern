@@ -61,6 +61,11 @@ wizje.2.note = W soczewce latarni: kobieta w chuście w czerwone kwiaty stoi nad
 # ======================================================================== HEAVY (bufor)
 bufor.name = Ciężka głowa
 
+# ======================================================================== przepis w kociołku (receptury)
+receptury.tran.name = Wytop tran
+receptury.tran.doing = Trwa wytapianie
+receptury.tran.desc = Trzy surowe ryby (ze stawu albo z morza) wytopione w kociołku na gęsty, śmierdzący tran. Pali się w latarni - Bazyli z przylądka go skupuje.
+
 # ======================================================================== TX
 [meet]
 (Bazyli długo na ciebie patrzy. Jedno oko ma białe jak mleko.) Kruk na szyi.
@@ -104,23 +109,14 @@ Księga mgieł ma sto lat. Pisał ją latarnik przede mną i ten przed nim. Wszy
 Nie czytam ci, co tam jest. Czytają to ci, co przyjdą po mnie.
 
 stock = Opału na {n}.
-[stockNone]
-Nic. Dziś zgaśnie, jak nikt nie przyniesie.
-
 [stockFerry]
 Prom przywozi tran co tydzień. Póki przywozi.
 
 [stockWar]
 Prom już nie wozi tranu. Wojna. Jak nikt nie przyniesie, latarnia zgaśnie.
 
-[up]
-Drzwi na górę są otwarte. Tylko nie dotykaj ognia.
-
 [sleepyDay]
 (Bazyli przeciera twarz.) Śpię za dnia, chłopcze. Mów szybko.
-
-[mistComing]
-Dziś w nocy przyjdzie mgła. Czuję ją w kolanie i w tym oku, co nie widzi.
 
 [afterVision]
 Nie mów nic. Jeszcze nie.
@@ -133,7 +129,6 @@ izbaAsleep = Drzwi zaryglowane od środka. Zza nich słychać miarowe chrapanie.
 towerDay = Drzwi latarni zamknięte. Bazyli nosi klucz przy pasie.
 towerNight = Z góry dobiega głos Bazylego: „Nie teraz. Przyjdź z tranem albo we mgłę.”
 towerMist = Z góry woła Bazyli: „Wejdź. Mgła idzie.”
-towerBroken = Drzwi latarni wyważone. Zamek zwisa na jednym gwoździu.
 edge = Ścieżka na zachód urywa się nad osuwiskiem. Dalej nie przejdziesz.
 slup = Słup dawnej strażnicy zakonu. Na górze wykuty kruk z rozpostartymi skrzydłami - taki sam jak na twoim wisiorku.
 slupNoPendant = Słup dawnej strażnicy zakonu. Na górze wykuty kruk z rozpostartymi skrzydłami.
@@ -162,8 +157,6 @@ heavyResist = Głowa lekka - Hart ducha
 wreckEmpty = Zatoczka szczątków. Nic nowego. Morze wyrzuca coś dopiero po sztormie.
 wreckGot = Morze wyrzuciło po sztormie
 wreckEye = Na desce rozbitej skrzyni wypalone oko - znak Czarnych Oczu.
-bell = Dzwon mgłowy
-fireOut = Latarnia nie świeci. Brak opału.
 [janekTran]
 Tran? Mam trochę z wątroby dorsza. Śmierdzi, ale się pali. Sześć groszy dzbanek.
 
@@ -198,10 +191,6 @@ raidWin = Latarnia obroniona
 raidWinSub = Soczewka została na miejscu.
 raidLost = Soczewka skradziona
 raidLostSub = Złodzieje czekają w zatoczce szczątków na łódź - tej nocy jeszcze tam będą.
-[bazyliRobbed]
-(Bazyli ma rozbitą wargę i siniak pod zdrowym okiem.) Przyszli we trzech. Wyważyli drzwi i wyrwali szkło z oprawy.
-Nie płyną od razu. Czekają na łódź w zatoczce, tam gdzie morze wyrzuca szczątki. Dziś w nocy jeszcze tam będą.
-
 [bazyliDefended]
 (Bazyli ociera krew z czoła.) Dobrze, że byłeś. Sam bym ich nie zatrzymał.
 Weź szkło do pustelnika na klifie. Kroniki znają je lepiej niż ja. I przynieś z powrotem.
@@ -278,7 +267,7 @@ Bazyli rozbił soczewkę o parapet. Latarnia świeci dalej, ale we mgle nikt ju�
 # ======================================================================== K49 (zadania.K49)
 zadania.K49.title = Tran dla latarni
 zadania.K49.where = przylądek z latarnią
-zadania.K49.when = od dnia 24
+zadania.K49.when = od dnia 25
 zadania.K49.desc = Od drugiej fali prom nie przywozi tranu. Bazylemu kończy się opał - bez niego latarnia zgaśnie, a statki pójdą na skały.
 [zadania.K49.offer.say]
 Słuchaj. Od drugiej fali prom nie przywozi tranu. Wojsko bierze wszystko, co się pali.
@@ -329,6 +318,23 @@ Mgła wróci. Zawsze wraca.
 
 zadania.D22.steps.0.text = W mgliste noce spójrz w soczewkę latarni (laterna na szczycie wieży, nocą we mgle, raz na noc). Wizje: {n}/3.{kiedy}
 zadania.D22.steps.1.text = Bazyli pyta, co widziałeś. Powiedz mu - albo zachowaj to dla siebie.
+# rozmowa kroku 2: mówi Bazyli (latarnik); d22.powiem / d22.zachowam - wybór bohatera
+[d22.pyta]
+Trzy mgły. Trzy razy patrzyłeś w szkło. (Bazyli otwiera Księgę mgieł na czystej stronie.)
+Co widziałeś?
+
+d22.powiem = Powiem ci.
+d22.zachowam = Zachowam to dla siebie.
+[d22.powiedzial]
+> Statek bez bandery. Człowieka z piórem w czarnej wodzie. I kobietę nad rzeką.
+(Bazyli pisze długo, nie podnosząc głowy.) Teraz to i twoje, i księgi. Lżej będzie nieść we dwóch.
+Weź to. Stary latarnik przepisał tu kiedyś kartę z kroniki zakonu, zanim umarł. Szyfr. Ja nie umiem tego czytać.
+
+[d22.zachowal]
+> Zachowam to dla siebie.
+Niektóre rzeczy lepiej nosić samemu. Rozumiem.
+Ale to weź. Stary latarnik przepisał tu kiedyś kartę z kroniki zakonu. Szyfr. Mnie się nie przyda.
+
 [zadania.D22.reward.note]
 Księga mgieł
 Trzy mgliste noce przy soczewce latarni. Bazyli dał mi kartę, którą dawny latarnik przepisał do Księgi mgieł z kroniki zakonu - pisaną szyfrem.
@@ -345,6 +351,19 @@ zadania.W11.steps.3.text = Soczewkę skradziono. {gdzie}
 zadania.W11.steps.4.text = {kto}
 zadania.W11.steps.5.text = Wiesz, czym jest Oko Strażnicy. Zdecyduj u Bazylego: zostawić soczewkę w latarni, rozbić ją albo sprzedać Baltazarowi.
 zadania.W11.steps.6.text = Zanieś soczewkę Baltazarowi (kantor, 8–18) - 400 G.
+# wybory bohatera w rozmowach W11: u Baltazara (rozdz. 1: oferta, rozdz. 4: odkup - {1} to cena) i u Bazylego (rozdz. 6)
+w11.nieSprzedam = Nie sprzedam cudzego.
+w11.pomysle = Pomyślę.
+w11.biore = Biorę ({1} G).
+w11.nieTeraz = Nie teraz.
+w11.zostaw = Zostaw je w latarni.
+w11.rozbij = Rozbij je.
+w11.sprzedam = Sprzedam je Baltazarowi.
+# napis u góry: soczewka w torbie (od Bazylego / odkupiona); dymek, gdy brak pieniędzy na odkup
+w11.soczewka = Soczewka latarni
+w11.doKleofasa = Zanieś ją bratu Kleofasowi.
+w11.odkupiona = Odkupiona od Baltazara.
+w11.potrzebujesz = Potrzebujesz {price} G
 
 # ======================================================================== VITEMS (rzeczy)
 rzeczy.soczewka.name = Soczewka latarni (Oko Strażnicy)
@@ -407,11 +426,6 @@ kod.spawnRaid.0 = Szkło! Brać szkło!
 kod.spawnRaid.1 = Cicho... do wieży.
 # build
 kod.build.0 = Worek złodziei
-# w11Act
-kod.w11Act.0 = Soczewka latarni
-kod.w11Act.1 = Zanieś ją bratu Kleofasowi.
-kod.w11Act.2 = Potrzebujesz {price} G
-kod.w11Act.3 = Odkupiona od Baltazara.
 # vars
 kod.vars.0 = " Mgła jest teraz - wejdź na górę."
 kod.vars.1 = " Dziś w nocy będzie mgła."
@@ -420,7 +434,30 @@ kod.vars.3 = Łódź zabrała soczewkę z zatoczki. Baltazar ma ją w kantorze -
 kod.vars.4 = Złodzieje czekają na łódź w zatoczce szczątków na przylądku - w nocy z dnia {1} na {2}. Odbierz im worek.
 kod.vars.5 = Weź soczewkę od Bazylego i zanieś ją bratu Kleofasowi (pustelnia na klifie). Niech przeczyta w kronikach, czym jest.
 kod.vars.6 = Zanieś soczewkę bratu Kleofasowi (pustelnia na klifie). Niech przeczyta w kronikach, czym jest.
-# talk
+# defineBuffs
+kod.defineBuffs.0 = po wizji w latarni: do południa prace kosztują więcej sił
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+[stockNone]
+Nic. Dziś zgaśnie, jak nikt nie przyniesie.
+
+[up]
+Drzwi na górę są otwarte. Tylko nie dotykaj ognia.
+
+[mistComing]
+Dziś w nocy przyjdzie mgła. Czuję ją w kolanie i w tym oku, co nie widzi.
+
+towerBroken = Drzwi latarni wyważone. Zamek zwisa na jednym gwoździu.
+bell = Dzwon mgłowy
+fireOut = Latarnia nie świeci. Brak opału.
+[bazyliRobbed]
+(Bazyli ma rozbitą wargę i siniak pod zdrowym okiem.) Przyszli we trzech. Wyważyli drzwi i wyrwali szkło z oprawy.
+Nie płyną od razu. Czekają na łódź w zatoczce, tam gdzie morze wyrzuca szczątki. Dziś w nocy jeszcze tam będą.
+
+kod.w11Act.0 = Soczewka latarni
+kod.w11Act.1 = Zanieś ją bratu Kleofasowi.
+kod.w11Act.2 = Potrzebujesz {price} G
+kod.w11Act.3 = Odkupiona od Baltazara.
 kod.talk.0 = Trzy mgły. Trzy razy patrzyłeś w szkło. (Bazyli otwiera Księgę mgieł na czystej stronie.)
 kod.talk.1 = Co widziałeś?
 kod.talk.2 = Powiem ci.
@@ -438,5 +475,3 @@ kod.talk.13 = Nie teraz.
 kod.talk.14 = Zostaw je w latarni.
 kod.talk.15 = Rozbij je.
 kod.talk.16 = Sprzedam je Baltazarowi.
-# defineBuffs
-kod.defineBuffs.0 = po wizji w latarni: do południa prace kosztują więcej sił

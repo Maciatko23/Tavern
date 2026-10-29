@@ -29,6 +29,8 @@
  * @plugindesc [pakiet F] Stara cysterna zakonu (mapa 167): zapas wody, czerpak raz dziennie, słup miary, zasuwy, krata na Urwisku, D28 i K53. v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
+ * @base Cysterna_Data
  * @orderAfter Wyspa
  *
  * @help
@@ -61,43 +63,30 @@
     if (!T) throw new Error("Cysterna.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     if (!D) throw new Error("Cysterna.js: brak Cysterna_Data.js - musi być wyżej na liście wtyczek (the cistern's data is missing)");
     const PLUGIN = "Cysterna";
+    // the thread (Cysterna_Data.js, the engine Watki.js): the state "cysterna", D28 and K53, the talks, the hero's thoughts, the flags
+    const w = Watki.get("cysterna");
+    if (!w) throw new Error("Cysterna.js: brak wątku „cysterna” (Cysterna_Data.js / Watki.js)");
     const MAP = D.MAP, F30 = D.FLOOR30, URW = D.URWISKO, TOWN = D.TOWN, R = D.RESERVE, TX = D.TX;   // (TX: js/teksty/cysterna.txt; TX.kod - the words of this file)
-    const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
-    const HERO = { id: 0, name: "" };
-    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
+    const { fill, HERO, C, plain } = Watki.mowa;   // (plain: a message of the Order's notes, the post - a title line, four lines a page)
     const has = () => !!window.$gameSystem;
     const day = () => T.time.day();
     const item = id => (window.$dataItems && $dataItems[id]) || null;
     const count = id => (item(id) ? $gameParty.numItems(item(id)) : 0);
     const iconOf = id => (item(id) ? item(id).iconIndex : 0);
-    const TQ = () => T.api("TownQuests") || window.TownQuests || null;
     const W = () => window.Wyspa || T.api("Wyspa") || null;
     const FM = () => T.api("Farming") || window.Farming || null;
-    const qs = () => { const q = TQ(); return q && q.state ? q.state() : null; };
-    const flags = () => { const s = qs(); return s && s.flags ? s.flags : {}; };
-    const flag = k => !!flags()[k];
-    const isDone = id => { const q = TQ(); return !!(q && q.isDone && q.isDone(id)); };
-    const rec = id => { const q = TQ(); return q && q.rec ? q.rec(id) : null; };
+    const { flag, setFlag, autoChecks } = w;
+    const isDone = id => w.done(id);
     const clamp = v => Math.max(0, Math.min(R.max, v));
     const pop = (text, icon, color) => T.popup(text, { icon: icon || 0, color: color || "#cfe6ff" });
     const need = (icon, text) => T.popup.need(icon, text);
-    function setFlag(k) {
-        const w = W();
-        if (w && w.setFlag) w.setFlag(k);
-        else { const f = flags(); if (!f[k]) f[k] = day(); }
-    }
-    function autoChecks() {
-        const q = TQ();
-        if (q && q.autoChecks) q.autoChecks();
-        if (q && q.refreshMarkers) q.refreshMarkers();
-    }
+    const think = lines => w.mysl(lines);   // (the hero's thoughts: bubbles one after another - Cysterna_Data mysli)
+    const runList = (interp, list) => w.uruchom(interp && interp.setupChild ? interp : null, list);
 
     // ------------------------------------------------------------------
-    // The state (the save)
+    // The state (the save): the thread's (Cysterna_Data.js)
     // ------------------------------------------------------------------
-    const store = T.state.define("cysterna", () => ({ reserve: R.start, day: 0, been: 0, visits: 0, read: {}, rainGate: 0, gutters: {},
-        branch: "", branchDay: 0, branchSeen: 0, lever: 0, drawDay: 0, draws: 0, low: 0, drownedDay: 0, unwedged: 0 }), { version: 1, owner: PLUGIN });
-    const S = () => store();
+    const S = () => w.S();
     const level = () => (has() ? S().reserve : R.start);
 
     // ------------------------------------------------------------------
@@ -224,64 +213,6 @@
         if (S().lever && !$gameSwitches.value(D.SW.krata)) $gameSwitches.setValue(D.SW.krata, true);
     }
 
-    // ------------------------------------------------------------------
-    // Speech: the hero's thoughts (bubbles one after another), event commands for the talks
-    // ------------------------------------------------------------------
-    const thoughts = [];
-    let thoughtAt = 0;
-    function think(lines) { for (const l of [].concat(lines || [])) if (l) thoughts.push(String(l).replace(/^> /, "")); }
-    function updateThoughts() {
-        if (!thoughts.length || Graphics.frameCount < thoughtAt || !(SceneManager._scene instanceof Scene_Map) || $gameMessage.isBusy()) return;
-        const SB = T.api("SpeechBubbles"), text = thoughts.shift();
-        if (SB && SB.say) SB.say($gamePlayer, text, 200); else pop(text, 0, "#eceef0");
-        thoughtAt = Graphics.frameCount + 210;
-    }
-    const LINE = 46, PAGE = 3;
-    function wrap(text, width) {
-        const out = [];
-        for (const para of String(text).split("\n")) {
-            let line = "";
-            for (const w of para.split(/\s+/)) {
-                if (!w) continue;
-                if (line && (line + " " + w).length > (width || LINE)) { out.push(line); line = w; } else line = line ? line + " " + w : w;
-            }
-            if (line) out.push(line);
-        }
-        return out;
-    }
-    function sayTo(out, spk, text, ind) {
-        const lines = wrap(text);
-        for (let i = 0; i < lines.length; i += PAGE) {
-            out.push(C(101, ["", 0, 0, 2, spk.name || ""], ind));
-            lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 && spk.id !== null ? "\\SPK[" + spk.id + "]" : "") + l], ind)));
-        }
-        return out;
-    }
-    const linesTo = (out, spk, arr) => { for (const l of [].concat(arr || [])) if (l) sayTo(out, spk, String(l).replace(/^> /, "")); return out; };
-    const act = (out, args) => (out.push(C(355, ["Cysterna.act(this, " + JSON.stringify(args) + ")"])), out);
-    function choiceTo(out, labels, branches, cancel) {
-        out.push(C(102, [labels, cancel === undefined ? labels.length - 1 : cancel, 0, 2, 0]));
-        labels.forEach((l, i) => {
-            out.push(C(402, [i, l]));
-            for (const c of branches[i] || []) out.push(Object.assign({}, c, { indent: (c.indent || 0) + 1 }));
-            out.push(C(0, [], 1));
-        });
-        out.push(C(404, []));
-        return out;
-    }
-    // a plain message (the Order's notes, the post): a title line and the text wrapped, four lines a page
-    function plain(out, title, lines) {
-        const all = (title ? ["\\C[6]" + title + "\\C[0]"] : []).concat(...[].concat(lines).map(l => wrap(l, 52)));
-        for (let i = 0; i < all.length; i += 4) {
-            out.push(C(101, ["", 0, 0, 2, ""]));
-            all.slice(i, i + 4).forEach(l => out.push(C(401, [l])));
-        }
-        return out;
-    }
-    function runList(interp, list) {
-        if (interp && interp.setupChild) interp.setupChild(list.concat([C(0, [])]), interp.eventId());
-        else if (window.$gameMap) $gameMap._interpreter.setup(list.concat([C(0, [])]), 0);
-    }
 
     // ------------------------------------------------------------------
     // The events of the cistern (by their note tags - the editor may move them)
@@ -491,15 +422,14 @@
         if (gutterCount() < D.GUTTER.n) think(TX.rainClogged);
         autoChecks();
     }
+    // the manor branch: its talk is the data's (Cysterna_Data rozmowy.galaz) - shut it (closeBranch: the hook zamknijGalaz) or leave it
     function branch(interp) {
         if (!has()) return;
         const s = S();
         if (s.branch === "closed") { pop(TX.branchShut); return; }
-        const out = [];
-        if (!s.branchSeen) { s.branchSeen = day(); linesTo(out, HERO, TX.branchFirst); }
-        sayTo(out, HERO, TX.branchAsk);
-        choiceTo(out, [TX.branchClose, TX.branchLeave], [act([], ["close"]), act([], ["leave"]).concat(linesTo([], HERO, TX.branchLeft))], 1);
-        runList(interp, out);
+        const first = !s.branchSeen;
+        if (first) s.branchSeen = day();
+        runList(interp, w.rozmowa("galaz", { spk: HERO, pierwszy: first }));
     }
     function closeBranch() {
         const s = S();
@@ -516,11 +446,12 @@
         autoChecks();
         return true;
     }
+    // (the old script calls of the branch's choice - a talk saved before 2026-10-28; the new ones go to Watki.act)
     function actCall(interp, args) {
         if (!has() || !Array.isArray(args)) return;
         try {
-            if (args[0] === "close") closeBranch();
-            else if (args[0] === "leave") { const s = S(); if (!s.branch) { s.branch = "open"; s.branchDay = day(); } autoChecks(); }
+            if (args[0] === "close") w.akcja("zamknijGalaz", [], interp);
+            else if (args[0] === "leave") w.akcja("zostawGalaz", [], interp);
         } catch (e) { console.error("[Cysterna] act " + JSON.stringify(args), e); }
     }
 
@@ -611,28 +542,13 @@
     }
 
     // ------------------------------------------------------------------
-    // TownQuests: D28 "Zapas zakonu", K53 "Rynny zakonu"
+    // D28 "Zapas zakonu", K53 "Rynny zakonu" - the data's (Cysterna_Data.js); what their conditions and the talk ask of the game
     // ------------------------------------------------------------------
-    function hookQuests() {
-        const q = TQ();
-        if (!q || !q.FX || hookQuests.done) return;
-        hookQuests.done = true;
-        Object.assign(q.FX, {
-            // D28 starts by itself when the hero is on floor 30 (or in the cistern) with the sluice open - W1 rozdz. 7 done
-            d28Start: () => has() && built && flag("cisternOpen") && !!window.$gameMap && [F30, MAP].includes($gameMap.mapId()),
-            d28Wejdz: { check: () => S().been > 0 },
-            d28Ksiega: { check: () => !!(S().read.ksiega && S().read.slup) },
-            d28Vars: { vars: () => ({ n: (S().read.ksiega ? 1 : 0) + (S().read.slup ? 1 : 0) }) },
-            d28Krata: { check: () => !!S().lever },
-            d28Galaz: { check: () => !!S().branch },
-            // K53 starts after D28 in the cistern or on the Urwisko - once the Urwisko is built (package B)
-            k53Start: () => has() && isDone("D28") && !!W() && W().isReady(URW) && !!window.$gameMap && [MAP, URW].includes($gameMap.mapId()),
-            k53Zasuwa: { check: () => !!S().rainGate },
-            k53Rynny: { check: () => gutterCount() >= D.GUTTER.n },
-            k53Vars: { vars: () => ({ n: gutterCount() }) }
-        });
-    }
-    hookQuests();
+    w.haki({
+        zbudowana: () => built,
+        urwiskoGotowe: () => !!W() && W().isReady(URW),
+        zamknijGalaz: () => closeBranch()
+    });
     // the ladle's wedge out once D28 is done (the hero is in the cistern: the last step is taken by the manor branch)
     T.on("townQuestDone", e => {
         if (!has() || !e || e.id !== "D28" || S().unwedged) return;
@@ -662,21 +578,19 @@
     }
     T.on("mapReady", e => {
         if (!has()) return;
-        hookQuests();
         syncSwitches();
         const m = $gameMap.mapId();
         if (m === MAP) arrive(!!(e && e.transfer));
         else if (m === F30) autoChecks();
     }, { owner: PLUGIN });
     T.on("dayStart", () => { if (has()) { settle(); syncSwitches(); } }, { owner: PLUGIN });
-    T.on("load", () => { anim = null; thoughts.length = 0; }, { owner: PLUGIN });
-    T.on("newGame", () => { anim = null; thoughts.length = 0; }, { owner: PLUGIN });
+    T.on("load", () => { anim = null; }, { owner: PLUGIN });
+    T.on("newGame", () => { anim = null; }, { owner: PLUGIN });
     let tick = 0;
     T.onMapUpdate(() => {
         if (!has()) return;
         updateAnim();
         updateFrames();
-        updateThoughts();
         if (++tick % 60 === 0) syncSwitches();
     }, { owner: PLUGIN, name: "cistern" });
 
@@ -689,7 +603,7 @@
         ladle, post, read: (key, interp) => read(key, interp), grate, lever, rainGate, branch, closeBranch, act: actCall, gutter, gutterEvents,
         gutterCount, canDraw, drawnToday, ladleMenu, playing: () => (anim ? anim.kind : null), spawnDrowned, drowned: v => { drownedOn = v !== false; return drownedOn; },
         postFrame, ladleFrame: () => D.LADLE_FRAMES[anim ? anim.seq[anim.i][0] : 0], syncSwitches, patchSluice,
-        wellLow, rainyDay, manorDrain, townDrain, rainGain, thoughts: () => thoughts.length, hush: () => { thoughts.length = 0; return 0; }
+        wellLow, rainyDay, manorDrain, townDrain, rainGain, thoughts: () => w.mysli().length, hush: () => { w.thoughtsReset(); return 0; }
     };
     window.Cysterna = T.register(PLUGIN, api);
 })();

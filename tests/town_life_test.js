@@ -8,6 +8,7 @@ const SHOTS = path.join(__dirname, "..", "docs", "miasteczko");
 
 kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
     await t.newGame({ map: 8, x: 53, y: 55, dir: 8, hour: 10, quiet: true, minimap: false });
+    const TL_TRAVEL = await t.json("TownLife.RESIDENTS.filter(r => r.id >= 3020 && r.id <= 3049).map(r => r.key)");
     const at10 = await t.json(`(function(){ const out = {}; for (const r of TownLife.RESIDENTS.filter(r => TownLife.homeOf(r) === 8)) { const e = TownLife.eventOf(r.key);   // (Podgrodzie's live on Map111)
         out[r.key] = e ? [e.x, e.y, e._town.hidden ? "hidden" : "shown", e.characterName()] : null; } return out; })()`);
     // (19 since 2026-10-05: + Szymek, Lucjan Kość - only on market days, hidden the rest -, Bartek Kmieć, the carter Wojciech,
@@ -16,8 +17,11 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     // castaway of package E - Wrak_Data.js, TownLifeExtra 948 - on the market at 10:00; 22 since 2026-10-22: + Hieronim the gravedigger
     // of package D - Zakon_Data.js, TownLifeExtra 2930 - by the old graveyard east of the town; 30 since 2026-10-22: + the eight of the
     // new town's houses, TownLife_Data.js 2940-2947 - away (hidden) while Map008 has no "Miejsce:" of their doors)
-    t.check("30 residents in the town, each with its own sheet", Object.values(at10).filter(Boolean).length === 30 && Object.values(at10).every(v => v && /^\$Npc_/.test(v[3])), at10);
-    const want = { piekarka: [33, 59], woziwoda: [50, 50], kapral: [100, 51], kowal: [8, 63], soltys: [83, 48], kupiec: [16, 48], garbarz: [15, 85], feliks: [84, 48] };
+    // (2026-10-28: the ferry's travellers - Podroznicy_Data.js, ids 3020-3049 - live in the town while on the island: counted apart)
+    const own = Object.keys(at10).filter(k => !(TL_TRAVEL.includes(k)));
+    t.check("30 residents in the town, each with its own sheet", own.filter(k => at10[k]).length === 30 && own.every(k => at10[k] && /^\$Npc_/.test(at10[k][3])), at10);
+    // (the water seller: the author's "Miejsce: studnia_rynek" on Map008 stands at 50,49 since 2026-10-28)
+    const want = { piekarka: [33, 59], woziwoda: [50, 49], kapral: [100, 51], kowal: [8, 63], soltys: [83, 48], kupiec: [16, 48], garbarz: [15, 85], feliks: [84, 48] };
     t.check("at 10:00 each stands at its place (the baker at her stall, the water seller by the dry well, the corporal at the east gate...)",
         Object.entries(want).every(([k, [x, y]]) => at10[k][0] === x && at10[k][1] === y && at10[k][2] === "shown"), { at10 });
     // (judged by where his stroll goes: walking round a stall on the way he may be a cell or two further)

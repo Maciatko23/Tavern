@@ -80,7 +80,7 @@ unit.test(t => {
     const forced = [4, 5.5, 7, 12, 20.5].map(h => +S.mistAt(h, 5).toFixed(2)), otherDay = S.mistOfDay(6) === mornings[5];
     t.check("... the mist lies at dawn only (from the blue hour, gone with the sun high; none in the evening twilight); the F9 force sets that one day's mist",
         S.mistOfDay(5) === 1 && forced[1] > 0.5 && forced[2] > 0 && forced[3] === 0 && forced[4] === 0 && otherDay, forced);
-    sys._mistForce = null;
+    T.state("sky").mistForce = null;   // (the F9 force off again: Sky's state, $gameSystem._mistForce before)
 
     // ---------------------------------------------------------------- Sun.now(): the shadows
     const now = h => { sys.hour = h; Graphics.frameCount++; return S.now(); };

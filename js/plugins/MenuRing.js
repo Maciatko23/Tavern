@@ -1,7 +1,7 @@
 //=============================================================================
 // MenuRing.js
 //=============================================================================
-// The P menu of the graphite look "Grafit i miedź" (CleanHUD.js): the pages of the user's "Lista v2" (2026-10-22, docs/ui_proste/
+// The P menu - the game's one look (UITheme.js's palette, docs/UI_JEDEN_WYGLAD.md): the pages of the user's "Lista v2" (2026-10-22, docs/ui_proste/
 // POMYSLY.md, the mock-ups docs/ui_proste/lista_v2_*.png and propozycja_1_lista_widok.png made by tools/ui_proste/lista_v2.py):
 // "ma być prosty i przyciski O jako wejście i P jako wyjście" - "nie powinno być w postaci na sobie, tylko oddzielnie okno
 // ekwipunku, ładnie całego" - in the frame of the menu before it (2026-10-23: "ogólnie ten widok, gdzie opcje główne były na
@@ -11,7 +11,7 @@
 //   tab's page. No second row: each tab is its page. Two levels: A / D (← / →) along the tabs - the page shows the chosen one at
 //   once; O goes into the page (the tab turns brown, the others dim); P back to the tabs; P on the tabs closes the menu. Inside a
 //   page one smaller step at most (the choice of a thing for an equipment place, the skills' tree, a question) - O in, P back. A
-//   fixed bar of keys at the foot of every screen. No outlines round the layers: what is chosen is filled copper. The mouse works
+//   fixed bar of keys at the foot of every screen. No outlines round the layers: what is chosen is filled yellow. The mouse works
 //   too (a tab: chosen and in; the right button: back); J on the map opens the menu on Dziennik.
 //   - Postać: the bust (dressed - Ubior.js), the name, the level and its bar, the four needs, the purse, grandpa's debt (days), the
 //     town's opinion (its word only: "Obcy"...), the fight (top right), the attributes and what keeps him whole (ODPORNOŚCI);
@@ -35,13 +35,14 @@
 //   - Dziennik: A / D the section (the sections' row in the head), W / S the entries, O pins a goal; Shift + W / S scroll the words.
 //   - Opcje: OptionEx's list (W / S, A / D a value). - Zapisz grę: the files and the chosen one's card, O saves (it asks before
 //     writing over a file). - Wyjdź: to the title, out of the game, or back.
-// It is the same Scene_Menu with the same command window (MenuPanel's commands), only hidden. The classic look (Opcje -> Wygląd:
-// Klasyczny) keeps MenuPanel's panel and its separate screens. (The file keeps its old name - it held a ring of round buttons
-// first - so the plugin list stays as it is.)
+// It is the same Scene_Menu with the same command window (MenuPanel's commands), only hidden; it is the only P menu (2026-10-28: the
+// old panel menu of MenuPanel.js and the option "Wygląd" are gone). The file screens (the title's "Kontynuuj", Scene_Save) and the
+// title's "Opcje" (Scene_Options) are drawn in the same look. (The file keeps its old name - it held a ring of round buttons first -
+// so the plugin list stays as it is.)
 
 /*:
  * @target MZ
- * @plugindesc Grafit: menu P - zakładki u góry (Postać, Ekwipunek, Umiejętności, Plecak, Dziennik, Opcje, Zapisz grę, Wyjdź), pod nimi widok; A/D zakładka, O wejdź, P wróć. v4.1.0
+ * @plugindesc Menu P - zakładki u góry (Postać, Ekwipunek, Umiejętności, Plecak, Dziennik, Mapa, Opcje, Zapisz grę, Wyjdź), pod nimi widok; A/D zakładka, O wejdź, P wróć; ekrany plików i opcji z tytułu w tym samym wyglądzie. v4.2.0
  * @author Claude
  * @base CleanHUD
  * @orderAfter CleanHUD
@@ -55,7 +56,7 @@
  *
  * @help
  * ============================================================================
- * MenuRing.js - menu P w wyglądzie Grafit: zakładki u góry, widok pod nimi
+ * MenuRing.js - menu P: zakładki u góry, widok pod nimi
  * ============================================================================
  * U góry 8 zakładek: Postać, Ekwipunek, Umiejętności, Plecak, Dziennik,
  * Opcje, Zapisz grę, Wyjdź (bez podzakładek). Pod nimi widok wybranej.
@@ -69,7 +70,7 @@
  *   X          zdejmij (Ekwipunek), wyrzuć (Plecak)
  *   Tab        obróć postać (Ekwipunek), porządek (Plecak)
  * Mysz też działa. Klawisz J otwiera menu od razu na Dzienniku.
- * W wyglądzie Klasycznym (Opcje -> Wygląd) menu jest panelem jak dotąd.
+ * Kolory: jedna paleta gry (UITheme.js, UIStyle.C).
  * ============================================================================
  */
 
@@ -86,18 +87,18 @@
     const W = () => Graphics.width, H = () => Graphics.height;
     const clamp01 = v => (v < 0 ? 0 : v > 1 ? 1 : v);
     const ease = k => 1 - Math.pow(1 - clamp01(k), 3);
-    const useMenu = () => CH.isClean();
 
     // ---- the mock-ups' look (tools/ui_proste/kit.py): the colours and the places on the 1280 x 720 screen
-    // (2026-10-23, the user: "układ jest ok, a można kolory z klasycznego wziąć?" - the classic look's palette, UITheme.js "klasyczny":
-    // black panels, the bright yellow accent #ffd23f, light text, grey lines; the copper graphite one was: acc rgb(214,142,88) ...)
+    // (2026-10-23, the user: "układ jest ok, a można kolory z klasycznego wziąć?" - black panels, the bright yellow accent #ffd23f, light
+    // text, grey lines; since 2026-10-28 the game's one palette: UITheme.js's UIStyle.C, the same object as CleanHUD.C). K: the
+    // menu's short names for it.
     const K = {
-        text: "rgb(236,238,240)", muted: "rgb(138,144,153)", dim: "rgb(98,103,111)", line: "rgb(58,62,70)", soft: "rgb(212,214,218)",
-        panel: "rgba(11,12,15,0.93)", panel2: "rgb(20,21,25)", cell: "rgb(30,32,37)", empty: "rgb(17,18,22)", track: "rgb(38,40,46)",
-        acc: "rgb(255,210,63)", accDim: "rgb(92,76,24)", sel: "rgb(16,14,6)", selMuted: "rgb(88,70,12)", good: "rgb(150,205,130)",
-        gold: "rgb(255,214,96)", warn: "#ff9f8f", amber: "#e8b64a", cap: "rgb(236,238,240)", strip: "rgba(6,6,8,0.92)"
+        text: C.text, muted: C.muted, dim: C.dim, line: C.line, soft: C.soft,
+        panel: C.panel, panel2: C.panel2, cell: C.cell, empty: C.empty, track: C.track,
+        acc: C.accent, accDim: C.accentDark, sel: C.onAccent, selMuted: C.accentMuted, good: C.good,
+        gold: C.gold, warn: C.warn, amber: C.amber, cap: C.text, strip: C.strip
     };
-    const NEED_COL = { health: "rgb(216,96,90)", stamina: "rgb(148,191,110)", food: "rgb(221,166,80)", water: "rgb(98,166,220)" };
+    const NEED_COL = { health: C.health, stamina: C.stamina, food: C.food, water: C.water };
     // (the user, 2026-10-23: "ogólnie ten widok, gdzie opcje główne były na górze, był ok ... trzeba połączyć jakoś z bieżącym": the eight
     // as a row of tabs across the top - as the menu before the list - and under them one panel the whole width, the pages of the list
     // in it). The panel's own head (a strip with the page's word, its section tabs, the bag's load) is 54 px; RX().y0 lies 36 px over
@@ -142,15 +143,16 @@
     // ------------------------------------------------------------------
     const _Scene_Map_terminate = Scene_Map.prototype.terminate;
     Scene_Map.prototype.terminate = function() {
-        if (SceneManager.isNextScene(Scene_Menu) && useMenu()) {
+        if (SceneManager.isNextScene(Scene_Menu)) {
             for (const c of this.children) if (c !== this._spriteset && c !== this._mindVeil) c.renderable = false;
         }
         _Scene_Map_terminate.call(this);
     };
+    // (a test with the old HUD parts - ConfigManager.uiClean = false, CleanHUD.js - still gets Journal's own screen)
     const _push = SceneManager.push;
     SceneManager.push = function(sceneClass) {
         const J = T.api("Journal");
-        if (useMenu() && J && sceneClass === J.Scene_Journal && this._scene instanceof Scene_Map) {
+        if (CH.isClean() && J && sceneClass === J.Scene_Journal && this._scene instanceof Scene_Map) {
             $gameTemp._menuTab = "journal";
             $gameTemp._menuLevel = 2;
             return _push.call(this, Scene_Menu);
@@ -357,20 +359,20 @@
             const kw = Math.max(24, measure(k, 16) + 14);
             CH.rpanel(b.context, x, y, kw, 24, 5, { fill: "rgba(28,29,33,0.92)", shadow: 0 });
             textOut(b, k, x, y, kw, 24, "center", { size: 16, plain: true });
-            if (lab) textOut(b, lab, x + kw + 7, y, measure(lab, 16) + 8, 24, "left", { size: 16, color: "#d8d2c6", plain: true });
+            if (lab) textOut(b, lab, x + kw + 7, y, measure(lab, 16) + 8, 24, "left", { size: 16, color: K.soft, plain: true });
             x += kw + (lab ? measure(lab, 16) + 26 : 8);
         }
         return x;
     }
     const smallKeysWidth = pairs => pairs.reduce((a, [k, lab]) => a + Math.max(24, measure(k, 16) + 14) + (lab ? measure(lab, 16) + 26 : 8), 0) - 26;
-    // a group's heading: copper capitals, a count, a thin line to x1; returns the x where the line starts
+    // a group's heading: yellow capitals, a count, a thin line to x1; returns the x where the line starts
     function heading(b, x, y, s, x1, n) {
         let x2 = x + tx(b, s, x, y, 20, { top: true, face: "sc", color: K.acc }) + 10;
         if (n !== undefined && n !== null && n !== "") x2 += tx(b, String(n), x2, y + 1, 19, { top: true, color: K.muted }) + 12;
         if (x1 && x1 > x2) hl(b.context, x2, x1, y + 12);
         return x2;
     }
-    // the page's head strip (under the tabs): its word in copper capitals on the left (none: the page puts its own things there), a word
+    // the page's head strip (under the tabs): its word in yellow capitals on the left (none: the page puts its own things there), a word
     // on the right, the line under them
     // (the view's name is not written: the tab above already says it - the user, 2026-10-23; title kept for the callers' clarity)
     function header(b, title, note) {
@@ -381,7 +383,7 @@
     const STRIP_TOP = 39;   // (tabStrip's top in the head strip, from RX().y0)
     // the sections' names as tabs in ONE row in the head, right of the title (the user, 2026-10-22: "przy dzienniku niech widać nazwy
     // tych zakładek i można je w lewo i prawo", then "niech to będzie jeden wiersz, część będzie niewidoczna, ale się przewija"): the
-    // chosen one copper; what does not fit is hidden behind "‹" / "›" and the row slides along with A / D (st.first: the first tab
+    // chosen one yellow; what does not fit is hidden behind "‹" / "›" and the row slides along with A / D (st.first: the first tab
     // shown, kept between the draws so the row moves only as far as needed). Returns the boxes for the mouse: { i } a tab, { dir } an arrow.
     function tabStrip(b, names, cur, x0, x1, top, st) {
         const gap = 6, pad = 13, size = 18, h = 30, aw = 22, y = top + 9, n = names.length;
@@ -431,7 +433,7 @@
         ctx.restore();
     }
     // a speech-bubble of the menu (the user, 2026-10-23: "popup ... co dokładnie daje", "w ekwipunku też popup z opisem"): a dark panel,
-    // a copper edge, a small arrow to what it speaks of. arrow: { side: "left" | "right" | "up" | "down", at: x or y of its tip's line }
+    // a yellow edge, a small arrow to what it speaks of. arrow: { side: "left" | "right" | "up" | "down", at: x or y of its tip's line }
     function bubble(ctx, x, y, w, h, arrow) {
         const fill = "rgba(14,15,18,0.98)", r = 10, a = 10, s = 9;
         let tri = null;
@@ -454,7 +456,7 @@
         ctx.lineWidth = 1.5;
         CH.roundPath(ctx, x + 0.75, y + 0.75, w - 1.5, h - 1.5, r);
         ctx.stroke();
-        if (tri) {   // (the arrow: filled, its two outer sides copper, the edge under its base covered)
+        if (tri) {   // (the arrow: filled, its two outer sides yellow, the edge under its base covered)
             ctx.beginPath(); ctx.moveTo(tri[0][0], tri[0][1]); ctx.lineTo(tri[1][0], tri[1][1]); ctx.lineTo(tri[2][0], tri[2][1]); ctx.closePath();
             ctx.fill();
             ctx.beginPath(); ctx.moveTo(tri[0][0], tri[0][1]); ctx.lineTo(tri[1][0], tri[1][1]); ctx.lineTo(tri[2][0], tri[2][1]);
@@ -494,6 +496,7 @@
     // keys / not; rect(w, i) the row's whole rect when itemRect is only a part of it; repaint: the whole list drawn again on a change)
     function flatRows(w, bg) {
         w.refreshCursor = function() { this.setCursorRect(0, 0, 0, 0); };
+        w.refreshCursor();   // (the frame its first select() put there - the right half of the options' first row - goes too)
         w.drawItemBackground = function(i) {
             if (!bg || i !== this.index()) return;
             const fill = this.active ? bg.on : bg.off;
@@ -1234,7 +1237,7 @@
     // they ask ("poz. 1 / 4 / 10..." on the left), joined by the lines of what opens what -, the words on the right. Two steps, O in and
     // P back: O from the tabs - the fields' row has the keys (the tree a preview, the words about the field); O again - into the tree
     // (W / S / A / D along the boxes, O learns after a question); P - back to the fields' row; P again - back to the tabs.
-    // A box: copper filled - known (at the top rank), brown with a copper edge - learnt in part, a copper edge - can be learnt, dim -
+    // A box: yellow filled - known (at the top rank), dark yellow with a yellow edge - learnt in part, a yellow edge - can be learnt, dim -
     // closed; its small bars are the ranks. The rows, the columns and the boxes come from the trees' data (Combat.SKILLS / TREES).
     // ==================================================================
     function skillState(Cb, s) {
@@ -1946,7 +1949,7 @@
         this._toast.visible = false;
         this._toastText = "";
     };
-    // the head: the title, the order, the load as a copper bar; the line between the list and the card; "jeszcze N niżej"
+    // the head: the title, the order, the load as a yellow bar; the line between the list and the card; "jeszcze N niżej"
     BagView.prototype.drawHead = function() {
         const b = this._head.bitmap, ctx = b.context, R = RX(), S = T.api("Survival");
         b.clear();
@@ -2179,7 +2182,7 @@
             const it = this._items[index];
             if (!it) return;
             const r = this.itemRect(index), c = this.contents, ctx = c.context, on = index === this.index(), act = this.active, ink = on && act ? K.sel : null;
-            if (it.head) {   // (Zadania's group: its heading as in Plecak - copper capitals, the count, a line)
+            if (it.head) {   // (Zadania's group: its heading as in Plecak - yellow capitals, the count, a line)
                 heading(c, r.x + 6, r.y + 14, it.label, r.x + r.width - 6, it.count);
                 done(c);
                 return;
@@ -2187,7 +2190,7 @@
             if (on) rr(ctx, r.x, r.y, r.width, 40, 8, act ? K.acc : K.accDim);
             if (it.icon) CH.drawIcon(c, it.icon, r.x + 8, r.y + 4, 32);
             let right = r.x + r.width - 10;
-            if (it.mark === "pin" || it.mark === "ready") {   // (pinned: a copper diamond; can be done now: a dot)
+            if (it.mark === "pin" || it.mark === "ready") {   // (pinned: a yellow diamond; can be done now: a dot)
                 ctx.save();
                 ctx.fillStyle = ink || K.acc;
                 ctx.beginPath();
@@ -2282,7 +2285,7 @@
     };
 
     // ==================================================================
-    // Opcje: OptionEx's list of settings on the right panel (the volumes, Wygląd: Grafit / Klasyczny...)
+    // Opcje: OptionEx's list of settings on the right panel (the graphics' quality, the picture's effects, the volumes...)
     // ==================================================================
     function OptionsView(scene, def) {
         View.call(this, scene, def);
@@ -2312,7 +2315,7 @@
     OptionsView.prototype.info = function() { return { options: { index: this._win.index(), symbol: this._win.currentSymbol() } }; };
 
     // ------------------------------------------------------------------
-    // The save files in the graphite look - the P menu's "Zapisz grę" and the title's "Kontynuuj" (Scene_Load; Scene_Save too) alike
+    // The save files - the P menu's "Zapisz grę" and the title's "Kontynuuj" (Scene_Load; Scene_Save too) alike
     // (the user, 2026-10-12): a row = the hero's bust in a small tile, "Plik N" (Autozapis) and the date, under them the day, the season,
     // the place and the time played; an empty file a dashed tile and "pusty". The card: the bust big, the day and the season, the place,
     // then the rows Czas gry, Poziom, Sakiewka, Dług dziadka, Chatka, Zapisano (what the save knows - an old one less).
@@ -2345,9 +2348,9 @@
     }
     const dayOf = info => (info && info.day !== undefined ? "Dzień " + info.day + (info.season ? " · " + String(info.season).toLowerCase() : "") : (info && info.title) || "Zapis");
     const stampOf = ts => { const mp = MP(); return mp && mp.stampText ? mp.stampText(ts) : new Date(ts).toLocaleString(); };
-    const _fileDraw = Window_SavefileList.prototype.drawItem;
+    Window_SavefileList.prototype.maxCols = function() { return 1; };   // (one file a row)
+    Window_SavefileList.prototype.itemHeight = function() { return 66; };
     Window_SavefileList.prototype.drawItem = function(index) {
-        if (!useMenu()) return _fileDraw.call(this, index);
         const id = this.indexToSavefileId(index), info = DataManager.savefileInfo(id), r = this.itemRectWithPadding(index), c = this.contents;
         const tile = Math.min(56, r.height - 8), ty = r.y + Math.round((r.height - tile) / 2), tx0 = r.x + tile + 14, en = this.isEnabled(id);
         if (info) bustInTile(c, bustOf(info), r.x + 2, ty, tile, tile, tile * 0.0068, this._bustWait ? null : (this._bustWait = () => { this._bustWait = null; this.refresh(); }));
@@ -2356,7 +2359,7 @@
         textOut(c, id === 0 ? "Autozapis" : "Plik " + id, tx0, r.y + 6, 220, 26, "left", { size: 18, face: "bold", color: info ? C.text : C.muted, plain: true });
         if (info && info.timestamp) textOut(c, stampOf(info.timestamp), r.x, r.y + 6, r.width - 6, 26, "right", { size: 15, face: "regular", color: C.muted, plain: true });
         const line = info ? [dayOf(info), info.place].filter(Boolean).join(" · ") : "pusty";
-        textOut(c, CH.fit(line, 16, r.width - tile - 110, "regular"), tx0, r.y + 31, r.width - tile - 100, 24, "left", { size: 16, face: "regular", color: info ? "#cfc9bd" : C.dim, plain: true });
+        textOut(c, CH.fit(line, 16, r.width - tile - 110, "regular"), tx0, r.y + 31, r.width - tile - 100, 24, "left", { size: 16, face: "regular", color: info ? K.soft : C.dim, plain: true });
         if (info && info.playtime) textOut(c, info.playtime, r.x, r.y + 31, r.width - 6, 24, "right", { size: 16, color: C.muted, plain: true });
         c.paintOpacity = 255;
         c._baseTexture.update();
@@ -2388,18 +2391,16 @@
         return yy + 4;
     }
 
-    // ---- the file screen itself (Scene_Load from the title's "Kontynuuj", Scene_Save from an event) in the graphite look: the screen
-    // behind dimmed (the title's fire), one graphite panel - the title, the files on the left, the card on the right - and the keys under
-    // it: W / S choose, O loads / saves, P back (the arrows, Enter, Esc and the mouse too). The classic look keeps MenuPanel's panel.
+    // ---- the file screen itself (Scene_Load from the title's "Kontynuuj", Scene_Save from an event): the screen behind dimmed (the
+    // title's fire), one panel - the title, the files on the left, the card on the right - and the keys under it: W / S choose, O loads /
+    // saves, P back (the arrows, Enter, Esc and the mouse too).
     const FILEP = { x: 96, y: 76, w: 1088, h: 584, split: 548 };
     const _fileCreate = Scene_File.prototype.create;
     Scene_File.prototype.create = function() {
         _fileCreate.call(this);
         fillOldPlaces();   // (old files without a place: looked for once, if the boot did not get to it)
-        if (!useMenu()) return;
-        this._grafitFiles = true;
+        this._filesOn = true;
         const P = FILEP, list = this._listWindow, st = list && list.mzkp_statusWindow, load = this.mode() !== "save";
-        if (this._menuPanel) this._menuPanel.visible = false;
         if (this._helpWindow) this._helpWindow.hide();
         if (st) { st.hide(); st.refresh = function() {}; }
         if (this._cancelButton) this._cancelButton.visible = false;
@@ -2407,7 +2408,7 @@
         const bg = this._filesBg = new Sprite(new Bitmap(W(), H())), ctx = bg.bitmap.context;
         ctx.fillStyle = "rgba(10,10,12,0.55)";
         ctx.fillRect(0, 0, W(), H());
-        CH.rpanel(ctx, P.x, P.y, P.w, P.h, 12, { fill: "rgba(20,21,24,0.92)" });
+        CH.rpanel(ctx, P.x, P.y, P.w, P.h, 12, { fill: K.panel });
         textOut(bg.bitmap, load ? "Wczytaj grę" : "Zapisz grę", P.x + 24, P.y + 14, 400, 34, "left", { size: 26, face: "bold", plain: true });
         textOut(bg.bitmap, load ? "Wybierz zapis, od którego grasz dalej." : "Wybierz plik, w którym zapiszesz grę.", P.x + 24, P.y + 46, 600, 24, "left", { size: 15, face: "regular", color: C.muted, plain: true });
         ctx.fillStyle = C.line;
@@ -2442,15 +2443,65 @@
     const _fileUpdate = Scene_File.prototype.update;
     Scene_File.prototype.update = function() {
         _fileUpdate.call(this);
-        if (this._grafitFiles && this._listWindow && this._listWindow.savefileId() !== this._filesCardId) this.drawFilesCard();
+        if (this._filesOn && this._listWindow && this._listWindow.savefileId() !== this._filesCardId) this.drawFilesCard();
     };
     // (for the tests) what the file screen shows
     const filesInfo = () => {
         const s = SceneManager._scene;
-        if (!(s instanceof Scene_File) || !s._grafitFiles) return null;
+        if (!(s instanceof Scene_File) || !s._filesOn) return null;
         const list = s._listWindow;
         return { mode: s.mode(), id: list.savefileId(), index: list.index(), active: list.active, card: s._filesCardId, latest: DataManager.latestSavefileId(),
             rect: { x: list.x, y: list.y, w: list.width, h: list.height }, oldPanel: !!(s._menuPanel && s._menuPanel.visible), status: !!(list.mzkp_statusWindow && list.mzkp_statusWindow.visible) };
+    };
+
+    // ---- the title's "Opcje" (Scene_Options) as the file screen: the title's picture dimmed, one panel - "Opcje", the list of settings
+    // (the menu's Opcje page: the rows drawn the same, the chosen one filled), "▾ jeszcze N niżej" under it - and the keys under the panel
+    const OPTP = { w: 900, y: 76, h: 584, top: 96 };
+    const optPanel = () => ({ x: Math.round((W() - OPTP.w) / 2), y: OPTP.y, w: OPTP.w, h: OPTP.h });
+    Scene_Options.prototype.optionsWindowRect = function() {
+        const P = optPanel(), ow = Math.min(860, P.w - 40);
+        return new Rectangle(Math.round(P.x + (P.w - ow) / 2), P.y + OPTP.top, ow, P.h - OPTP.top - 34);
+    };
+    const _optCreate = Scene_Options.prototype.create;
+    Scene_Options.prototype.create = function() {
+        _optCreate.call(this);
+        const P = optPanel(), win = this._optionsWindow, at = Math.max(0, this.children.indexOf(this._windowLayer));
+        if (this._cancelButton) this._cancelButton.visible = false;
+        const bg = this._optBg = new Sprite(new Bitmap(W(), H())), ctx = bg.bitmap.context;
+        ctx.fillStyle = "rgba(10,10,12,0.55)";
+        ctx.fillRect(0, 0, W(), H());
+        CH.rpanel(ctx, P.x, P.y, P.w, P.h, 12, { fill: K.panel });
+        textOut(bg.bitmap, "Opcje", P.x + 24, P.y + 14, 400, 34, "left", { size: 26, face: "bold", plain: true });
+        textOut(bg.bitmap, "Zmiany zapisują się same.", P.x + 24, P.y + 46, 600, 24, "left", { size: 15, face: "regular", color: C.muted, plain: true });
+        ctx.fillStyle = C.line;
+        ctx.fillRect(P.x + 20, P.y + 78, P.w - 40, 1);
+        bg.bitmap._baseTexture.update();
+        this.addChildAt(bg, at);
+        this._optMore = new Sprite(new Bitmap(W(), H()));
+        this.addChildAt(this._optMore, at + 1);
+        this._optKeys = new Sprite(new Bitmap(W(), 28));
+        this._optKeys.y = 684;
+        const pairs = [["W/S", "opcja"], ["A/D", "wartość"], ["O", "przełącz"], ["P", "wróć"]];
+        smallKeys(this._optKeys.bitmap, Math.round(W() / 2 - smallKeysWidth(pairs) / 2), 2, pairs);
+        this.addChildAt(this._optKeys, at + 2);
+        win.opacity = 0;
+        win.frameVisible = false;
+        win.updateArrows = function() { this.downArrowVisible = false; this.upArrowVisible = false; };   // ("jeszcze N niżej" says it)
+        flatRows(win, { on: K.accDim, off: null, repaint: true, rect: (w, i) => { const r = w.itemRect(i, false); if (!(w.isDefaultSymbol && w.isDefaultSymbol(w.commandSymbol(i)))) r.width *= 2; return r; } });
+        fitRows(win);
+        win.refresh();
+        this._optSy = -1;
+    };
+    const _optUpdate = Scene_Options.prototype.update;
+    Scene_Options.prototype.update = function() {
+        _optUpdate.call(this);
+        const win = this._optionsWindow;
+        if (!this._optMore || !win || win.scrollY() === this._optSy) return;
+        this._optSy = win.scrollY();
+        const b = this._optMore.bitmap;
+        b.clear();
+        drawMore(b, win, W() / 2);
+        done(b);
     };
 
     // ==================================================================
@@ -2638,11 +2689,11 @@
         done(b);
     };
 
-    // the settings' rows in the graphite look (the menu's Opcje and the title's options alike): the name in the text's colour, "Tak" /
-    // "Nie", the volumes and the opacity as thin copper bars with their value
+    // the settings' rows (the menu's Opcje and the title's options alike): the name in the text's colour, "Tak" / "Nie", the volumes
+    // and the opacity as thin yellow bars with their value
     const _optDraw = Window_Options.prototype.drawItem;
     Window_Options.prototype.drawItem = function(index) {
-        if (!useMenu() || !this.itemLineRect) return _optDraw.call(this, index);
+        if (!this.itemLineRect) return _optDraw.call(this, index);
         const symbol = this.commandSymbol(index), title = this.commandName(index), r = this.itemLineRect(index, false), c = this.contents, en = this.isCommandEnabled(index);
         if (this.isDefaultSymbol && this.isDefaultSymbol(symbol)) { textOut(c, title, r.x, r.y, r.width, r.height, "center", { size: 17, color: K.acc, plain: true }); return; }
         textOut(c, title, r.x, r.y, r.width, r.height, "left", { size: 18, color: en ? C.text : C.dim, plain: true });
@@ -2653,7 +2704,7 @@
             meter(c.context, s.x + 66, s.y + Math.round(s.height / 2) - 2, s.width - 70, 4, rate, K.acc);
             c._baseTexture.update();
         } else {
-            const text = symbol !== "uiClean" && value === true ? "Tak" : symbol !== "uiClean" && value === false ? "Nie" : status;
+            const text = value === true ? "Tak" : value === false ? "Nie" : status;
             textOut(c, text, s.x, s.y, s.width - 4, s.height, "right", { size: 17, color: value === false ? C.muted : K.acc, plain: true });
         }
     };
@@ -2667,14 +2718,12 @@
     const VIEWS = { hero: PostacView, equip: EquipView, skills: SkillsView, item: BagView, journal: JournalView, mapa: MapaView, options: OptionsView, save: SaveView, gameEnd: EndView };
 
     // ==================================================================
-    // The menu scene in the graphite look: the list, the page, the keys
+    // The menu scene: the list, the page, the keys
     // ==================================================================
     const _create = Scene_Menu.prototype.create;
     Scene_Menu.prototype.create = function() {
         _create.call(this);
-        this._grafit = useMenu();
-        this._cardOn = this._grafit;   // (an older name the tests used)
-        if (this._grafit) this.createLista();
+        this.createLista();
     };
     const atLayer = scene => scene.children.indexOf(scene._windowLayer);
     Scene_Menu.prototype.createLista = function() {
@@ -2683,7 +2732,6 @@
         cw.deactivate();
         if (this._statusWindow) this._statusWindow.hide();
         if (this._goldWindow) this._goldWindow.hide();
-        if (this._menuPanel) this._menuPanel.visible = false;
         if (this._backgroundSprite) {
             this._blur = new PIXI.filters.BlurFilter();
             this._blur.blur = 0;
@@ -2731,7 +2779,7 @@
         this.drawKeys();
     };
     // the row of tabs over the panel (the menu's own eight, then the other plugins' commands): an icon and a word each, the chosen one a
-    // copper pill (brown while its page has the keys, the others dimmed); a small count of the points to give on Postać and
+    // yellow pill (dark yellow while its page has the keys, the others dimmed); a small count of the points to give on Postać and
     // Umiejętności; the day, the season, the hour and the place small over the row on the right. No second row: each tab is its page.
     Scene_Menu.prototype.drawList = function() {
         const b = this._listSpr.bitmap, ctx = b.context, inside = this._inside, xp = heroXp(), n = this._entries.length, T0 = L.tabs;
@@ -2757,7 +2805,7 @@
             } else if (e.icon) ready = false;
             const col = on ? (inside ? K.text : K.sel) : inside ? K.dim : K.soft;
             tx(b, e.label, x + pad + isz + 8, cy + 1, size, { face: on ? "bold" : null, color: col });
-            // (points to give: a small copper count on the tab's corner)
+            // (points to give: a small yellow count on the tab's corner)
             const pts = !xp ? 0 : e.sym === "hero" ? xp.points : e.sym === "skills" ? xp.skillPoints : 0;
             if (pts > 0) {
                 const bx = x + w - 6, by = y + 4;
@@ -2874,8 +2922,6 @@
     const _update = Scene_Menu.prototype.update;
     Scene_Menu.prototype.update = function() {
         _update.call(this);
-        if (!this._grafit) return;
-        if (!useMenu() && !this._closing) { this.closeMenu(); return; }   // (Wygląd switched to the classic look: the map, then the old menu)
         this._t++;
         const k = ease(this._t / 14), show = ease(this._t / 12);
         if (this._blur) this._blur.blur = 1.5 * k;
@@ -2909,13 +2955,13 @@
     };
     const _terminate = Scene_Menu.prototype.terminate;
     Scene_Menu.prototype.terminate = function() {
-        if (this._grafit) menuKeys(false);
-        if (this._grafit && this._views && this._views.options) ConfigManager.save();
+        menuKeys(false);
+        if (this._views && this._views.options) ConfigManager.save();
         _terminate.call(this);
     };
     // (for the tests) what the menu shows
     Scene_Menu.prototype.menuInfo = function() {
-        if (!this._grafit) return null;
+        if (!this._entries) return null;
         const v = this._view, e = this._entries[this._sel], pairs = this.keyPairs();
         const out = { tabs: this._entries.map(x => x.sym), labels: this._entries.map(x => x.label), active: e ? e.sym : null, level: this._inside ? 2 : 1, inside: this._inside,
             fade: !!this._fade, window: { visible: this._commandWindow.visible, active: this._commandWindow.active }, keys: pairs.map(p => p[1]), keyCaps: pairs.map(p => p[0]),

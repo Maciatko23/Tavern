@@ -192,7 +192,7 @@
         const farming = window.Farming, share = grassShare();
         this._gfxVersion = gfxVersion();
         if (!GRASS_DETAIL || !polishOn() || share <= 0 || !farming || typeof farming.groundInfoAt !== "function") { this._built = true; return; }
-        const mapId = $gameMap.mapId(), stored = ($gameSystem._farm && $gameSystem._farm.plots && $gameSystem._farm.plots[mapId]) || {};
+        const mapId = $gameMap.mapId(), stored = (T.state("farm").plots || {})[mapId] || {};
         const density = GRASS_DENSITY * share, patchChance = PATCH_CHANCE * share;   // (the same tiles keep theirs at a lower share: the hash decides)
         const built = [];
         for (let y = 0; y < $gameMap.height(); y++) {

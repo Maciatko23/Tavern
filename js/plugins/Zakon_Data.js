@@ -16,7 +16,10 @@
 //   - the grove of the Silent (Map120), the hour of silence
 //   - the wild ravens on the rocks of Map155 / Map157 (drawn in the engine, read from Kruk.png)
 //   - the pieces of the wreck that the storms bring out of the sand of the shoals (Map165)
-// Quests K67-K70, D36-D38 (window.TownQuestsPacks), the resident (window.TownLifeExtra, id 2930), the talk bust, the places.
+// The thread "zakon" (Watki.js, 2026-10-28): the state "zakon", the quests K67-K70, D36-D38 (into window.TownQuestsPacks with the
+// cards, the names and the remarks; their conditions here - the hooks are Zakon.js's), the talks at the places and their choices, the
+// hero's thoughts. The resident (window.TownLifeExtra, id 2930), the talk bust, the places (their names and the discoveries' words:
+// js/teksty/zakon.txt, miejsca / odkrycia - Zakon.js registers them once the words are in).
 // Stands under Okolice_Data and above TownLife / TownQuests_Data (its fixed place in js/plugins.js - package 0).
 // DROUGHT (the user's rule): nothing here gives water. The perches' basins hold rain - the eagles' water, the hero does not drink it.
 
@@ -25,6 +28,7 @@
  * @plugindesc [paczka D] Dane: Tajemnice i zakon - strażnice, kapliczki, kopce z Zapiskami strażnic, krąg menhirów i komora (mapa 176), miejsca tylko dla orła, orle grzędy, cmentarz z grabarzem i szubienica, gaj Milczących, kruki, kawałki wraku. v1.1.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
  * @orderAfter Okolice_Data
  *
  * @help
@@ -120,20 +124,20 @@
     // Every event of the package: { id, map, x, y, kind, ... }. The ids are the same range on every map (PLAN.md 3.2: 2700-2899);
     // they are kept apart here anyway, so one id means one thing.
     const TOWERS = [   // 7.1: the 6x6 foundations (x, y: the top left cell), the slab in the middle, Farming's random bushes under them
-        { key: "straznica_022", map: 22, x: 71, y: 36, name: "Fundamenty strażnicy przy Polnej drodze", card: true, ids: { ring: 2700, slab: 2701, blank: 2702 }, bushes: [[75, 36], [74, 40], [74, 41]] },
-        { key: "straznica_013", map: 13, x: 79, y: 20, name: "Fundamenty strażnicy w Górach", card: true, ids: { ring: 2700, slab: 2701, blank: 2702 }, bushes: [[82, 22]] },
-        { key: "straznica_157", map: 157, x: 94, y: 52, name: "Fundamenty strażnicy nad morzem", card: true, ids: { ring: 2700, slab: 2701, blank: 2702 }, bushes: [] }
+        { key: "straznica_022", map: 22, x: 71, y: 36, card: true, ids: { ring: 2700, slab: 2701, blank: 2702 }, bushes: [[75, 36], [74, 40], [74, 41]] },
+        { key: "straznica_013", map: 13, x: 79, y: 20, card: true, ids: { ring: 2700, slab: 2701, blank: 2702 }, bushes: [[82, 22]] },
+        { key: "straznica_157", map: 157, x: 94, y: 52, card: true, ids: { ring: 2700, slab: 2701, blank: 2702 }, bushes: [] }
     ];
     const SLAB_AT = [2, 3];   // the slab: the cell x+2, y+3 of a foundation (its middle, a little to the left)
     const SHRINES = [  // 7.2: the shrine stands on the bottom left cell of its 2x2 place (the road below)
-        { key: "kapliczka_022", map: 22, x: 72, y: 16, name: "Kapliczka przydrożna", id: 2710, at: [72, 17], bushes: [] },
-        { key: "kapliczka_021", map: 21, x: 58, y: 12, name: "Kapliczka z krukiem przy Leśnej drodze", id: 2710, at: [58, 13], bushes: [[58, 12]] },
-        { key: "kapliczka_004", map: 4, x: 66, y: 6, name: "Kapliczka z krukiem na Łące", id: 2710, at: [66, 7], bushes: [] }
+        { key: "kapliczka_022", map: 22, x: 72, y: 16, id: 2710, at: [72, 17], bushes: [] },
+        { key: "kapliczka_021", map: 21, x: 58, y: 12, id: 2710, at: [58, 13], bushes: [[58, 12]] },
+        { key: "kapliczka_004", map: 4, x: 66, y: 6, id: 2710, at: [66, 7], bushes: [] }
     ];
     const CAIRNS = [   // 7.3: the cairn (!$Rock_Cairn, its own list - never mined) and the raven stone on its top
-        { key: "kopiec_017", map: 17, x: 50, y: 36, name: "Kopiec z krukiem na Omszałej łące", ids: { cairn: 2750, stone: 2751 }, at: [50, 37] },
-        { key: "kopiec_023", map: 23, x: 58, y: 51, name: "Kopiec z krukiem na Skraju lasu", ids: { cairn: 2750, stone: 2751 }, at: [58, 52] },
-        { key: "kopiec_155", map: 155, x: 70, y: 40, name: "Kopiec z krukiem nad klifem", ids: { cairn: 2750, stone: 2751 }, at: [70, 41] }
+        { key: "kopiec_017", map: 17, x: 50, y: 36, ids: { cairn: 2750, stone: 2751 }, at: [50, 37] },
+        { key: "kopiec_023", map: 23, x: 58, y: 51, ids: { cairn: 2750, stone: 2751 }, at: [58, 52] },
+        { key: "kopiec_155", map: 155, x: 70, y: 40, ids: { cairn: 2750, stone: 2751 }, at: [70, 41] }
     ];
     // 7.4: the ring of menhirs on Map018 - the Watchman (the tallest), the plate in the middle, the hole where the key lies
     const RING = {
@@ -162,19 +166,19 @@
     // 7.5: the places only the white eagle reaches - the landing square (Orzel_Lot: 4x4 adult, 3x3 the fourth stage), its things
     // (outside the square: it stays free for the landing) and the one-way way down (the pegs: stand on them, O)
     const EAGLE = [
-        { key: "orzel_125_a", map: 125, x: 97, y: 44, w: 4, h: 4, seed: [97, 44], name: "Skrytka w gąszczu nad przystanią", rope: "lina",
+        { key: "orzel_125_a", map: 125, x: 97, y: 44, w: 4, h: 4, seed: [97, 44], rope: "lina",
           down: { id: 2782, at: [81, 63], to: [81, 68], dir: 2 },
           things: [{ id: 2780, kind: "stash", x: 95, y: 48 }, { id: 2781, kind: "warzucha", x: 101, y: 46 }] },
-        { key: "orzel_125_b", map: 125, x: 105, y: 30, w: 4, h: 4, seed: [106, 30], name: "Stare gniazdo nad przystanią", rope: "lina",
+        { key: "orzel_125_b", map: 125, x: 105, y: 30, w: 4, h: 4, seed: [106, 30], rope: "lina",
           down: { id: 2784, at: [109, 24], to: [109, 21], dir: 8 },
           things: [{ id: 2783, kind: "nest", x: 103, y: 36, feathers: 3 }] },
-        { key: "orzel_013_a", map: 13, x: 99, y: 38, w: 4, h: 4, seed: [99, 39], name: "Półka zakonnych orłów nad gawrą", rope: "kolki",
+        { key: "orzel_013_a", map: 13, x: 99, y: 38, w: 4, h: 4, seed: [99, 39], rope: "kolki",
           down: { id: 2720, at: [99, 37], to: [97, 37], dir: 4 },
           things: [{ id: 2721, kind: "nestOrder", x: 101, y: 43 }, { id: 2722, kind: "szarotka", x: 103, y: 40 }], bushes: [[100, 38]], blankId: 2723 },
-        { key: "orzel_013_b", map: 13, x: 33, y: 73, w: 4, h: 4, seed: [33, 73], name: "Półka z szarotką", rope: "kolki",
+        { key: "orzel_013_b", map: 13, x: 33, y: 73, w: 4, h: 4, seed: [33, 73], rope: "kolki",
           down: { id: 2730, at: [33, 73], to: [31, 73], dir: 4 },
           things: [{ id: 2731, kind: "szarotka", x: 38, y: 74 }, { id: 2732, kind: "ravenStone", x: 39, y: 76 }] },
-        { key: "orzel_168", map: 168, x: 51, y: 24, w: 4, h: 4, seed: [51, 24], name: "Skarpa nad spaloną zagrodą", rope: "kolki",
+        { key: "orzel_168", map: 168, x: 51, y: 24, w: 4, h: 4, seed: [51, 24], rope: "kolki",
           down: { id: 2785, at: [54, 24], to: [54, 20], dir: 8 },
           things: [{ id: 2786, kind: "warzucha", x: 55, y: 27 }, { id: 2787, kind: "camp", x: 50, y: 27 }] }
     ];
@@ -231,85 +235,67 @@
     const WORK = { cairn: 4, grave: 4, wreck: 6, dig: 3 };
 
     // ------------------------------------------------------------------ the places for Okolice's collision test and the discoveries
-    // (registered by the engine with Okolice.registerSpots("D", SPOTS); the modes as in OkoliceData.PLAN_SPOTS)
+    // (registered by the engine with Okolice.registerSpots("D", SPOTS) once the words are in; the modes as in OkoliceData.PLAN_SPOTS).
+    // Their names: js/teksty/zakon.txt, miejsca.<key>.name (Okolice copies them: Zakon.js registers them again after F9 "Wczytaj
+    // teksty od nowa")
     const SPOTS = [];
-    for (const t of TOWERS) SPOTS.push({ key: t.key, map: t.map, kind: "found", name: "Fundamenty strażnicy", mode: "reach", x: t.x, y: t.y, w: 6, h: 6 });
-    for (const s of SHRINES) SPOTS.push({ key: s.key, map: s.map, kind: "shrine", name: s.name, mode: "reach", x: s.x, y: s.y, w: 2, h: 2 });
-    for (const c of CAIRNS) SPOTS.push({ key: c.key, map: c.map, kind: "cairn", name: "Kopiec z krukiem", mode: "reach", x: c.x, y: c.y, w: 2, h: 2 });
-    SPOTS.push({ key: "menhiry_krag", map: 18, kind: "ring", name: "Krąg menhirów", mode: "reach",
+    for (const t of TOWERS) SPOTS.push({ key: t.key, map: t.map, kind: "found", mode: "reach", x: t.x, y: t.y, w: 6, h: 6 });
+    for (const s of SHRINES) SPOTS.push({ key: s.key, map: s.map, kind: "shrine", mode: "reach", x: s.x, y: s.y, w: 2, h: 2 });
+    for (const c of CAIRNS) SPOTS.push({ key: c.key, map: c.map, kind: "cairn", mode: "reach", x: c.x, y: c.y, w: 2, h: 2 });
+    SPOTS.push({ key: "menhiry_krag", map: 18, kind: "ring", mode: "reach",
         cells: RING.stones.concat([[RING.watchman.x, RING.watchman.y], RING.plate && [RING.plate.x, RING.plate.y], [RING.hole.x, RING.hole.y]]) });
-    for (const p of PERCHES) SPOTS.push({ key: p.key, map: p.map, kind: "perch", name: "Orla grzęda", mode: "reach", x: p.x, y: p.y, w: 3, h: 3 });
-    SPOTS.push({ key: "cmentarz", map: 8, kind: "cemetery", name: "Stary cmentarz", mode: "reach", x: CEMETERY.x, y: CEMETERY.y, w: CEMETERY.w, h: CEMETERY.h, allowOld: true });
-    SPOTS.push({ key: "szubienica", map: 8, kind: "gallows", name: "Wzgórze z szubienicą", mode: "reach", x: GALLOWS.x, y: GALLOWS.y, w: 3, h: 3 });
-    SPOTS.push({ key: "gaj_milczacych", map: 120, kind: "grove", name: "Gaj Milczących", mode: "reach", x: GROVE.x, y: GROVE.y, w: GROVE.w, h: GROVE.h });
+    for (const p of PERCHES) SPOTS.push({ key: p.key, map: p.map, kind: "perch", mode: "reach", x: p.x, y: p.y, w: 3, h: 3 });
+    SPOTS.push({ key: "cmentarz", map: 8, kind: "cemetery", mode: "reach", x: CEMETERY.x, y: CEMETERY.y, w: CEMETERY.w, h: CEMETERY.h, allowOld: true });
+    SPOTS.push({ key: "szubienica", map: 8, kind: "gallows", mode: "reach", x: GALLOWS.x, y: GALLOWS.y, w: 3, h: 3 });
+    SPOTS.push({ key: "gaj_milczacych", map: 120, kind: "grove", mode: "reach", x: GROVE.x, y: GROVE.y, w: GROVE.w, h: GROVE.h });
     for (const e of EAGLE) {
-        SPOTS.push({ key: e.key, map: e.map, kind: "eagle", name: e.name, mode: "eagle", seed: e.seed, x: e.x, y: e.y, w: e.w, h: e.h });
-        SPOTS.push({ key: e.key + "_rzeczy", map: e.map, kind: "eagle", name: e.name + " (rzeczy)", mode: "eagle", seed: e.seed, cells: e.things.map(t => [t.x, t.y]) });
-        SPOTS.push({ key: e.key + "_zejscie", map: e.map, kind: "rope", name: "Stare kołki", mode: "eagle", seed: e.seed, cells: [e.down.at] });
-        SPOTS.push({ key: e.key + "_zejscie_dol", map: e.map, kind: "rope", name: "Pod kołkami", mode: "reach", cells: [e.down.to] });
+        SPOTS.push({ key: e.key, map: e.map, kind: "eagle", mode: "eagle", seed: e.seed, x: e.x, y: e.y, w: e.w, h: e.h });
+        SPOTS.push({ key: e.key + "_rzeczy", map: e.map, kind: "eagle", mode: "eagle", seed: e.seed, cells: e.things.map(t => [t.x, t.y]) });
+        SPOTS.push({ key: e.key + "_zejscie", map: e.map, kind: "rope", mode: "eagle", seed: e.seed, cells: [e.down.at] });
+        SPOTS.push({ key: e.key + "_zejscie_dol", map: e.map, kind: "rope", mode: "reach", cells: [e.down.to] });
     }
-    SPOTS.push({ key: "ziola_klif_155", map: 155, kind: "cliffherb", name: "Zioła na klifie", mode: "dive", cells: CLIFF.filter(c => c.map === 155).map(c => [c.x, c.y]) });
-    SPOTS.push({ key: "ziola_klif_157", map: 157, kind: "cliffherb", name: "Zioła na klifie", mode: "dive", cells: CLIFF.filter(c => c.map === 157).map(c => [c.x, c.y]) });
-    for (const r of RAVENS) SPOTS.push({ key: r.key, map: r.map, kind: "ravens", name: "Kruki na skałach", mode: "zone", cells: r.rocks });
-    SPOTS.push({ key: "wrak_kawalki", map: 165, kind: "wreck", name: "Kawałki wraku", mode: "tide", cells: WRECK.pieces.map(p => [p.x, p.y]) });
+    SPOTS.push({ key: "ziola_klif_155", map: 155, kind: "cliffherb", mode: "dive", cells: CLIFF.filter(c => c.map === 155).map(c => [c.x, c.y]) });
+    SPOTS.push({ key: "ziola_klif_157", map: 157, kind: "cliffherb", mode: "dive", cells: CLIFF.filter(c => c.map === 157).map(c => [c.x, c.y]) });
+    for (const r of RAVENS) SPOTS.push({ key: r.key, map: r.map, kind: "ravens", mode: "zone", cells: r.rocks });
+    SPOTS.push({ key: "wrak_kawalki", map: 165, kind: "wreck", mode: "tide", cells: WRECK.pieces.map(p => [p.x, p.y]) });
+    Watki.scal(SPOTS, "zakon", "miejsca", "key");   // (its words: js/teksty/zakon.txt, miejsca, by the key)
 
-    // the discoveries (Okolice.discoverable; near: tiles, -1 only by the engine). The engine adds `when` where needed.
+    // the discoveries (Okolice.discoverable; near: tiles, -1 only by the engine). The engine adds `when` where needed. Their words:
+    // js/teksty/zakon.txt, odkrycia.<key> (name, text)
     const DISC = [
-        { key: "straznica_022", map: 22, x: 73, y: 38, near: 3, name: "Fundamenty strażnicy przy Polnej drodze", icon: ICON.plyta, xp: 30,
-          text: "Na wzgórku nad Polną drogą zostały z wieży same obmurówki - kwadrat sześć na sześć kroków. W środku zawalona płyta z wyrytym krukiem. Stąd widać łąki aż po las." },
-        { key: "straznica_013", map: 13, x: 81, y: 22, near: 3, name: "Fundamenty strażnicy w Górach", icon: ICON.plyta, xp: 30,
-          text: "Przy drodze ku przylądkowi kamienne obmurówki dawnej wieży zakonu. Z tego miejsca widać przełęcz i drogę w dół, do łąk." },
-        { key: "straznica_157", map: 157, x: 96, y: 54, near: 3, name: "Fundamenty strażnicy nad morzem", icon: ICON.plyta, xp: 30,
-          text: "Na wschodnim krańcu Urwiska stała wieża zakonu. Zostały fundamenty i płyta z krukiem. W dole tylko morze." },
-        { key: "kapliczka_022", map: 22, x: 72, y: 17, near: 2, name: "Kapliczka przydrożna", icon: ICON.kapliczka, xp: 20,
-          text: "Drewniany słupek z daszkiem przy drodze na wschód. Pod daszkiem wyrzeźbiony kruk. Ludzie zostawiają tu grosz albo okruch chleba i mówią, że droga potem lżejsza." },
-        { key: "kapliczka_021", map: 21, x: 58, y: 13, near: 2, name: "Kapliczka przy Leśnej drodze", icon: ICON.kapliczka, xp: 20,
-          text: "Kapliczka z krukiem przy Leśnej drodze. Daszek omszały, ale ktoś niedawno przetarł kruka z kurzu." },
-        { key: "kapliczka_004", map: 4, x: 66, y: 7, near: 2, name: "Kapliczka na Łące", icon: ICON.kapliczka, xp: 20,
-          text: "Kapliczka z krukiem przy drodze na północnym wschodzie Łąki. Kruk patrzy w stronę gór." },
-        { key: "kopiec_017", map: 17, x: 50, y: 37, near: 2, name: "Kopiec z krukiem na Omszałej łące", icon: ICON.kruk, xp: 20,
-          text: "Stos kamieni układany ręką, na szczycie płaski kamień z krukiem. Takie kopce znaczyły drogi zakonu." },
-        { key: "kopiec_023", map: 23, x: 58, y: 52, near: 2, name: "Kopiec z krukiem na Skraju lasu", icon: ICON.kruk, xp: 20,
-          text: "Kopiec z krukiem na skraju lasu. Mech porósł go do połowy, ale kruk na szczycie jest czysty, jakby ktoś go doglądał." },
-        { key: "kopiec_155", map: 155, x: 70, y: 41, near: 2, name: "Kopiec z krukiem nad klifem", icon: ICON.kruk, xp: 20,
-          text: "Kopiec nad klifem za pustelnią, zwrócony do morza. Kamień z krukiem na szczycie wytarty od wiatru." },
-        { key: "menhiry_krag", map: 18, x: 53, y: 45, near: 4, name: "Krąg menhirów", icon: ICON.plyta, xp: 30,
-          text: "Osiem stojących kamieni w kręgu na łące. Najwyższy, poszarpany, stoi od północnego zachodu - zapiski strażnic nazywają go Strażnikiem. W środku płaska płyta z krukiem i dziurką jak na klucz." },
-        { key: "cien_straznika", map: 18, x: 52, y: 43, near: -1, name: "Cień Strażnika", icon: ICON.klucz, xp: 60,
-          text: "Gdy słońce przeszło cztery części swej drogi z pięciu, cień Strażnika wskazał miejsce w kręgu. W ubitej ziemi leżał kamienny klucz z krukiem." },
-        { key: "komora", map: 176, x: 10, y: 6, near: -1, name: "Komora pod menhirami", icon: ICON.plyta, xp: 60,
-          text: "Pod płytą z krukiem schody prowadzą do komory. Sarkofag pierwszego strażnika, kamienna misa i ściana z wykutymi czterema wieżami." },
-        { key: "orzel_125_a", map: 125, x: 98, y: 45, near: 2, air: true, name: "Skrytka w gąszczu nad przystanią", icon: ICON.gniazdo, xp: 40,
-          text: "Polana w gąszczu nad przystanią, do której nie prowadzi żadna ścieżka. Ktoś jednak ukrył tu skrzynię - i zszedł na dół po linie." },
-        { key: "orzel_125_b", map: 125, x: 106, y: 31, near: 2, air: true, name: "Stare gniazdo nad przystanią", icon: ICON.gniazdo, xp: 40,
-          text: "Zarośnięta półka nad przystanią. Wielkie gniazdo z gałęzi, puste od lat - ale w środku zawsze leży kilka piór." },
-        { key: "orzel_013_a", map: 13, x: 100, y: 39, near: 2, air: true, name: "Półka zakonnych orłów", icon: ICON.gniazdo, xp: 50,
-          text: "Skalna półka nad gawrą. Tu zakon trzymał orły: gniazdo jest stare jak mury, a w szczelinach rośnie szarotka." },
-        { key: "orzel_013_b", map: 13, x: 34, y: 74, near: 2, air: true, name: "Półka z szarotką", icon: ICON.szarotka, xp: 40,
-          text: "Wysoka półka w zachodnich skałach. Szarotka, kamień z krukiem i stare kołki w ścianie: ktoś tu kiedyś schodził na dół." },
-        { key: "orzel_168", map: 168, x: 52, y: 25, near: 2, air: true, name: "Skarpa nad spaloną zagrodą", icon: ICON.gniazdo, xp: 40,
-          text: "Skarpa nad spaloną zagrodą Ługów. Stare palenisko w kręgu kamieni - ktoś tu nocował, kiedy jeszcze dało się tu wejść." },
-        { key: "ziola_klif", map: 157, x: 72, y: 5, near: -1, air: true, name: "Zioła z klifów", icon: ICON.warzucha, xp: 40,
-          text: "Na półkach klifów nad morzem rośnie warzucha nadmorska. Sięga się po nią tylko z grzbietu orła, nurkując nisko nad wodą." },
-        { key: "orle_grzedy_1", map: 175, x: 68, y: 13, near: 2, name: "Orla grzęda (północna)", icon: ICON.gniazdo, xp: 30,
-          text: "Kamienny słup z żelazną poprzeczką i misą na deszczówkę. Na takich grzędach siadały orły Skrzydlatej Straży." },
-        { key: "orle_grzedy_2", map: 175, x: 68, y: 26, near: 2, name: "Orla grzęda (środkowa)", icon: ICON.gniazdo, xp: 30,
-          text: "Druga grzęda Straży. Pod nią zbutwiałe siodło - za małe dla konia, za szerokie dla człowieka." },
-        { key: "orle_grzedy_3", map: 175, x: 68, y: 45, near: 2, name: "Orla grzęda (południowa)", icon: ICON.gniazdo, xp: 30,
-          text: "Ostatnia grzęda, nad samym urwiskiem. W szczelinie słupa tkwią stare pióra." },
-        { key: "cmentarz", map: 8, x: 9, y: 27, near: 3, name: "Stary cmentarz", icon: ICON.grob, xp: 25,
-          text: "Stary cmentarz za miasteczkiem, za niskim murkiem. Większość krzyży zwykłych, ale na trzech kamieniach wyryto kruka." },
-        { key: "szubienica", map: 8, x: 88, y: 124, near: 2, name: "Wzgórze z szubienicą", icon: ICON.grob, xp: 20,
-          text: "Szubienica Lorda przy wschodniej drodze. Tu dwór wiesza kłusowników i przemytników. Nocą skrzypi, choć nikt na niej nie wisi." },
-        { key: "gaj", map: 120, x: 57, y: 54, near: 3, name: "Gaj Milczących", icon: ICON.kamien, xp: 40,
-          text: "Polana w lesie za osadą. Siedem białych, płaskich kamieni w kręgu. Milczący przychodzą tu o zmierzchu i stoją godzinę bez słowa." },
-        { key: "kruki_155", map: 155, x: 76, y: 47, near: 4, name: "Kruki na skałach pustelni", icon: ICON.kruk, xp: 20,
-          text: "Na głazach nad klifem siadają dzikie kruki. Płoszą się, kiedy biegniesz - ale za rybę zostawią coś błyszczącego." },
-        { key: "kruki_157", map: 157, x: 78, y: 37, near: 4, name: "Kruki na skałach Urwiska", icon: ICON.kruk, xp: 20,
-          text: "Kruki z Urwiska siadają na skałach między ruinami. Kruczarze zakonu karmili ich przodków." },
-        { key: "wrak_kawalki", map: 165, x: 62, y: 18, near: -1, name: "Kawałki wraku w odpływie", icon: ICON.okucie, xp: 30,
-          text: "Po każdym sztormie piasek na płyciznach odsłania kolejny kawałek „Białej Źrenicy”. Widać je tylko w odpływie." }
+        { key: "straznica_022", map: 22, x: 73, y: 38, near: 3, icon: ICON.plyta, xp: 30 },
+        { key: "straznica_013", map: 13, x: 81, y: 22, near: 3, icon: ICON.plyta, xp: 30 },
+        { key: "straznica_157", map: 157, x: 96, y: 54, near: 3, icon: ICON.plyta, xp: 30 },
+        { key: "kapliczka_022", map: 22, x: 72, y: 17, near: 2, icon: ICON.kapliczka, xp: 20 },
+        { key: "kapliczka_021", map: 21, x: 58, y: 13, near: 2, icon: ICON.kapliczka, xp: 20 },
+        { key: "kapliczka_004", map: 4, x: 66, y: 7, near: 2, icon: ICON.kapliczka, xp: 20 },
+        { key: "kopiec_017", map: 17, x: 50, y: 37, near: 2, icon: ICON.kruk, xp: 20 },
+        { key: "kopiec_023", map: 23, x: 58, y: 52, near: 2, icon: ICON.kruk, xp: 20 },
+        { key: "kopiec_155", map: 155, x: 70, y: 41, near: 2, icon: ICON.kruk, xp: 20 },
+        { key: "menhiry_krag", map: 18, x: 53, y: 45, near: 4, icon: ICON.plyta, xp: 30 },
+        { key: "cien_straznika", map: 18, x: 52, y: 43, near: -1, icon: ICON.klucz, xp: 60 },
+        { key: "komora", map: 176, x: 10, y: 6, near: -1, icon: ICON.plyta, xp: 60 },
+        { key: "orzel_125_a", map: 125, x: 98, y: 45, near: 2, air: true, icon: ICON.gniazdo, xp: 40 },
+        { key: "orzel_125_b", map: 125, x: 106, y: 31, near: 2, air: true, icon: ICON.gniazdo, xp: 40 },
+        { key: "orzel_013_a", map: 13, x: 100, y: 39, near: 2, air: true, icon: ICON.gniazdo, xp: 50 },
+        { key: "orzel_013_b", map: 13, x: 34, y: 74, near: 2, air: true, icon: ICON.szarotka, xp: 40 },
+        { key: "orzel_168", map: 168, x: 52, y: 25, near: 2, air: true, icon: ICON.gniazdo, xp: 40 },
+        { key: "ziola_klif", map: 157, x: 72, y: 5, near: -1, air: true, icon: ICON.warzucha, xp: 40 },
+        { key: "orle_grzedy_1", map: 175, x: 68, y: 13, near: 2, icon: ICON.gniazdo, xp: 30 },
+        { key: "orle_grzedy_2", map: 175, x: 68, y: 26, near: 2, icon: ICON.gniazdo, xp: 30 },
+        { key: "orle_grzedy_3", map: 175, x: 68, y: 45, near: 2, icon: ICON.gniazdo, xp: 30 },
+        { key: "cmentarz", map: 8, x: 9, y: 27, near: 3, icon: ICON.grob, xp: 25 },
+        { key: "szubienica", map: 8, x: 88, y: 124, near: 2, icon: ICON.grob, xp: 20 },
+        { key: "gaj", map: 120, x: 57, y: 54, near: 3, icon: ICON.kamien, xp: 40 },
+        { key: "kruki_155", map: 155, x: 76, y: 47, near: 4, icon: ICON.kruk, xp: 20 },
+        { key: "kruki_157", map: 157, x: 78, y: 37, near: 4, icon: ICON.kruk, xp: 20 },
+        { key: "wrak_kawalki", map: 165, x: 62, y: 18, near: -1, icon: ICON.okucie, xp: 30 }
     ];
+    Watki.scal(DISC, "zakon", "odkrycia", "key");   // (its words: js/teksty/zakon.txt, odkrycia, by the key)
+    // the names of the towers, the cairns, the shrines and the eagle's places (F9's rows, the shrine's event): the words of their
+    // discovery (the towers, the cairns) or of their place (the shrines, the eagle's places) - read each time (a getter)
+    for (const t of TOWERS.concat(CAIRNS)) Watki.zTekstu(t, { name: "odkrycia." + t.key + ".name" }, "zakon");
+    for (const s of SHRINES.concat(EAGLE)) Watki.zTekstu(s, { name: "miejsca." + s.key + ".name" }, "zakon");
 
     // ------------------------------------------------------------------ "Zapiski strażnic": a series of its own (6 cards, the vitems
     // zak_karta_1..6). The cairns give 1-3, the towers 4-6 - in the order they are found. Brother Kleofas reads them (his talk:
@@ -323,9 +309,11 @@
         { n: 6 }
     ];
     Watki.scal(CARDS, "zakon", "karty");   // (its words: js/teksty/zakon.txt, karty)
+    // the things carried (TownQuests' v:) - their names: js/teksty/zakon.txt, rzeczy.<key>.name (they go with the quests' pack)
     const VITEMS = {};
-    for (const c of CARDS) VITEMS["zak_karta_" + c.n] = { name: "Zapiski strażnic (" + c.n + ")", icon: ICON.karta };
-    VITEMS.zak_imiona = { name: "Imiona z grobów z krukiem", icon: ICON.grob };
+    for (const c of CARDS) VITEMS["zak_karta_" + c.n] = { icon: ICON.karta };
+    VITEMS.zak_imiona = { icon: ICON.grob };
+    Watki.scal(VITEMS, "zakon", "rzeczy");   // (its words: js/teksty/zakon.txt, rzeczy)
     const READ_HOURS = [7, 19], READ_TIME = 2, READ_XP = 40;
 
     // ------------------------------------------------------------------ the texts
@@ -404,85 +392,7 @@
     const SB = window.SpeechBubbles;
     if (SB && SB.BUSTS) SB.BUSTS["$Npc_Grabarz:0"] = "Grabarz_Bust";
 
-    // ------------------------------------------------------------------ the quests (TownQuests packs; icon = the item's id)
-    const K67 = {
-        id: "K67", kind: "K", giver: "dzwonnik", icon: ITEM.klucz,
-        offer: {
-            cond: { hours: [7, 20], day: 4 }
-        },
-        steps: [
-            { type: "custom", check: "k67Modl", vars: "k67Vars" },
-            { type: "talk", to: "dzwonnik", hours: [6, 21] }
-        ],
-        reward: { xp: 80, flag: "zakKapliczki" }
-    };
-    Watki.scal(K67, "zakon", "zadania.K67");   // (its words: js/teksty/zakon.txt, zadania.K67)
-    const K68 = {
-        id: "K68", kind: "K", giver: "pustelnik", icon: ITEM.klucz,
-        offer: {
-            cond: { hours: [7, 19], fn: "k68Pora" }
-        },
-        steps: [
-            { type: "custom", check: "k68Karty", vars: "k68Vars" },
-            { type: "custom", check: "k68Czytaj", vars: "k68Vars" }
-        ],
-        reward: { xp: 150, flag: "zakZapiski" }
-    };
-    Watki.scal(K68, "zakon", "zadania.K68");   // (its words: js/teksty/zakon.txt, zadania.K68)
-    const D36 = {
-        id: "D36", kind: "D", giver: null, icon: ITEM.klucz, autoStart: "d36Start",
-        steps: [
-            { type: "custom", check: "d36Zapiski", vars: "d36Vars" },
-            { type: "custom", check: "d36Kop" },
-            { type: "custom", check: "d36Komora" },
-            { type: "custom", check: "d36Mapa" }
-        ],
-        reward: { xp: 200, flag: "zakKomora" }
-    };
-    Watki.scal(D36, "zakon", "zadania.D36");   // (its words: js/teksty/zakon.txt, zadania.D36)
-    const K69 = {
-        id: "K69", kind: "K", giver: "latarnik", icon: ITEM.strzemie, autoStart: "k69Start",
-        offer: {
-            cond: { hours: [14, 22], flags: ["orzelJajo"] }
-        },
-        steps: [
-            { type: "custom", check: "k69Grzedy", vars: "k69Vars" },
-            { type: "bring", to: "pustelnik", need: [[ITEM.strzemie, 1]], hours: [7, 19] }
-        ],
-        reward: { xp: 120, flag: "zakGrzedy", items: [[ITEM.strzemie, 1]] }
-    };
-    Watki.scal(K69, "zakon", "zadania.K69");   // (its words: js/teksty/zakon.txt, zadania.K69)
-    const K70 = {
-        id: "K70", kind: "K", giver: "rozbitek", icon: ITEM.okucie, autoStart: "k70Start",
-        offer: {
-            cond: { fn: "k70Pora" }
-        },
-        steps: [
-            { type: "custom", check: "k70Kawalki", vars: "k70Vars" }
-        ],
-        reward: { xp: 120, flag: "zakWrak" }
-    };
-    Watki.scal(K70, "zakon", "zadania.K70");   // (its words: js/teksty/zakon.txt, zadania.K70)
-    const D37 = {
-        id: "D37", kind: "D", giver: "dzwonnik", icon: ITEM.kamien,
-        offer: {
-            cond: { hours: [7, 20], day: 6 }
-        },
-        steps: [
-            { type: "custom", check: "d37Groby", vars: "d37Vars" },
-            { type: "bring", to: "dzwonnik", need: [["v:zak_imiona", 1]], hours: [6, 21] }
-        ],
-        reward: { xp: 120, opinion: 3, flag: "zakGroby" }
-    };
-    Watki.scal(D37, "zakon", "zadania.D37");   // (its words: js/teksty/zakon.txt, zadania.D37)
-    const D38 = {
-        id: "D38", kind: "D", giver: null, icon: ITEM.kamien, autoStart: "d38Start",
-        steps: [
-            { type: "custom", check: "d38Godzina" }
-        ],
-        reward: { xp: 150, flag: "zakGaj" }
-    };
-    Watki.scal(D38, "zakon", "zadania.D38");   // (its words: js/teksty/zakon.txt, zadania.D38)
+    // ------------------------------------------------------------------ the remarks and the gossip (they go with the quests' pack)
     const REMARKS = [
         { id: "zakGrabarzSoltys", who: "soltys", flag: "zakGroby" },
         { id: "zakGrobyKowal", who: "kowal", flag: "zakGroby" },
@@ -496,7 +406,137 @@
         grabarz: []
     };
     Watki.scal(GOSSIP, "zakon", "plotki");   // (its words: js/teksty/zakon.txt, plotki)
-    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Zakon", quests: [K67, K68, D36, K69, K70, D37, D38], vitems: VITEMS, remarks: REMARKS, gossip: GOSSIP });
+
+    // ------------------------------------------------------------------ the thread (the engine Watki.js, docs/WATKI_DANE.md): the state,
+    // the quests K67-K70, D36-D38 (icon = the item's id; their words: js/teksty/zakon.txt, zadania.*; the engine puts them into
+    // window.TownQuestsPacks with the cards' names, the remarks and the gossip), the talks at the places and their choices. The
+    // hooks (kleofasPoznany, przyPlycie, gajZnaleziony, maKlucz, the acts...) are Zakon.js's
+    const w = Watki.watek({
+        id: "zakon", wtyczka: "Zakon", teksty: "zakon",
+        stan: { klucz: "zakon", wersja: 1, domyslne: () => ({
+            cards: {}, read: {}, towers: {}, cairns: {}, prayed: {}, offered: {}, prayCount: {},
+            key: 0, plate: 0, chamber: { been: 0, wall: 0, chest: "", sarc: 0 }, feather: "",
+            eagle: {}, herbs: {}, nests: {}, stash: 0, downs: {}, cliff: {},
+            perches: {}, perchBond: {}, traces: {}, graves: {}, names: 0, gallows: 0,
+            grove: { done: 0, broken: 0, seen: 0, gift: 0, run: null }, ravens: {}, wreck: 0, wreckDug: {}, wreckSeen: 0, stormOn: 0,
+            work: {}, told: {}
+        }) },
+        // the hero's thoughts: a bubble 200 frames, the next after 210, not while a message is shown
+        mysli: { klatki: 200, odstep: 210, czekaj: "wiadomosc" },
+        mowa: { akapity: true },
+        zadania: {
+            // the three shrines with a raven (Ambroży): a prayer at each, then back to him
+            K67: { kind: "K", giver: "dzwonnik", icon: ITEM.klucz, offer: { cond: { hours: [7, 20], day: 4 } },
+                kroki: [
+                    { nazwa: "k67Modl", gotowe: "ile:prayCount>=3", zmienne: { n: { ile: "prayCount" } } },
+                    { nazwa: "k67Ambrozy", type: "talk", to: "dzwonnik", hours: [6, 21] }
+                ],
+                reward: { xp: 80, flag: "zakKapliczki" } },
+            // the six cards of the watch (Kleofas, once a card is found and he is met): found, then read with him
+            K68: { kind: "K", giver: "pustelnik", icon: ITEM.klucz, offer: { cond: { hours: [7, 19], fn: "k68Pora" } }, oferta: ["ile:cards", "kleofasPoznany"],
+                kroki: [
+                    { nazwa: "k68Karty", gotowe: "ile:cards>=6", zmienne: { n: { ile: "cards" }, r: { ile: "read" } } },
+                    { nazwa: "k68Czytaj", gotowe: "ile:read>=6", zmienne: { n: { ile: "cards" }, r: { ile: "read" } } }
+                ],
+                reward: { xp: 150, flag: "zakZapiski" } },
+            // the Watchman's shadow (starts by itself: K68 done, the key dug, or the hero by the plate in the ring): the hour, the key, the
+            // chamber, its wall
+            D36: { kind: "D", giver: null, icon: ITEM.klucz, start: { lub: ["zrobione:K68", "stan:key", ["mapa:" + RING.map, "przyPlycie"]] },
+                kroki: [
+                    { nazwa: "d36Zapiski", gotowe: { lub: ["stan:key", ["stan:read.3", "stan:read.4"]] }, zmienne: { n: { ile: "read.3+read.4" } } },
+                    { nazwa: "d36Kop", gotowe: "stan:key" },
+                    { nazwa: "d36Komora", gotowe: "stan:chamber.been" },
+                    { nazwa: "d36Mapa", gotowe: "stan:chamber.wall" }
+                ],
+                reward: { xp: 200, flag: "zakKomora" } },
+            // the perches of the Winged Guard (Bazyli, after the egg; starts by itself at the first perch seen): three seen, the stirrup
+            // to Kleofas
+            K69: { kind: "K", giver: "latarnik", icon: ITEM.strzemie, start: ["flaga:orzelJajo", "ile:perches"],
+                offer: { cond: { hours: [14, 22], flags: ["orzelJajo"] } },
+                kroki: [
+                    { nazwa: "k69Grzedy", gotowe: "ile:perches>=3", zmienne: { n: { ile: "perches" } } },
+                    { nazwa: "k69Strzemie", type: "bring", to: "pustelnik", need: [[ITEM.strzemie, 1]], hours: [7, 19] }
+                ],
+                reward: { xp: 120, flag: "zakGrzedy", items: [[ITEM.strzemie, 1]] } },
+            // the wreck's pieces (Eryk, once the sand showed the first; starts by itself when the hero saw one): three dug out
+            K70: { kind: "K", giver: "rozbitek", icon: ITEM.okucie, start: "stan:wreckSeen", offer: { cond: { fn: "k70Pora" } }, oferta: "stan:wreck>=1",
+                kroki: [
+                    { nazwa: "k70Kawalki", gotowe: "ile:wreckDug>=3", zmienne: { n: { ile: "wreckDug" } } }
+                ],
+                reward: { xp: 120, flag: "zakWrak" } },
+            // the raven graves (Ambroży): three stones cleaned, the names to him
+            D37: { kind: "D", giver: "dzwonnik", icon: ITEM.kamien, offer: { cond: { hours: [7, 20], day: 6 } },
+                kroki: [
+                    { nazwa: "d37Groby", gotowe: ["stan:graves.1", "stan:graves.2", "stan:graves.3"], zmienne: { n: { ile: "graves.1+graves.2+graves.3" } } },
+                    { nazwa: "d37Imiona", type: "bring", to: "dzwonnik", need: [["v:zak_imiona", 1]], hours: [6, 21] }
+                ],
+                reward: { xp: 120, opinion: 3, flag: "zakGroby" } },
+            // the hour of silence (starts by itself once the grove is found)
+            D38: { kind: "D", giver: null, icon: ITEM.kamien, start: "gajZnaleziony",
+                kroki: [
+                    { nazwa: "d38Godzina", gotowe: "stan:grove.done" }
+                ],
+                reward: { xp: 150, flag: "zakGaj" } }
+        },
+        paczka: { vitems: VITEMS, remarks: REMARKS, gossip: GOSSIP },
+        // the talks at the places (Zakon.js runs them; ctx.spk: the hero): the question and the choice - its script call goes to the
+        // actions below. (The old script calls Zakon.act(this, ["towerTake", ...]) of a talk saved before 2026-10-28 still work.)
+        rozmowy: {
+            // 7.1 the slab in the tower's foundations (ctx.key: the tower)
+            wieza: ["towerLook", { mow: "towerAsk", kto: "bohater" }, { wybor: [
+                { etykieta: "towerTake", tresc: [{ zrob: "towerTake", args: [{ ctx: "key" }] }] },
+                { etykieta: "towerLeave", tresc: [] }], anuluj: 1 }],
+            // 7.2 the shrine (ctx.key): a prayer, a coin, some food, away
+            kapliczka: [{ mow: "shrineAsk", kto: "bohater" }, { wybor: [
+                { etykieta: "shrinePray", tresc: [{ zrob: "pray", args: [{ ctx: "key" }] }] },
+                { etykieta: "shrineCoin", tresc: [{ zrob: "offer", args: [{ ctx: "key" }, "coin"] }] },
+                { etykieta: "shrineFood", tresc: [{ zrob: "offer", args: [{ ctx: "key" }, "food"] }] },
+                { etykieta: "shrineLeave", tresc: [] }], anuluj: 3 }],
+            // 7.3 the cairn's top (ctx.key)
+            kopiec: [{ mow: "cairnAsk", kto: "bohater" }, { wybor: [
+                { etykieta: "cairnTake", tresc: [{ zrob: "cairnWork", args: [{ ctx: "key" }] }] },
+                { etykieta: "cairnLeave", tresc: [] }], anuluj: 1 }],
+            // 7.4 the plate in the ring: looked at; with the Watchman's Key - put it in (no key: the look only, Zakon.js says what lacks)
+            plyta: ["plateLook", { gdy: "!maKlucz", koniec: true }, { mow: "plateAsk", kto: "bohater" }, { wybor: [
+                { etykieta: "plateKey", tresc: [{ zrob: "plateKey" }] },
+                { etykieta: "plateLeave", tresc: [] }], anuluj: 1 }],
+            // 7.5 the one-way way down from an eagle's place (ctx.key, ctx.lina: "lina" the rope / "kolki" the pegs)
+            zejscie: [{ hak: "zejscieLinia", kto: "bohater" }, { mow: "downWarn", kto: "bohater" }, { wybor: [
+                { etykieta: "downGo", tresc: [{ zrob: "downGo", args: [{ ctx: "key" }] }] },
+                { etykieta: "downStay", tresc: [] }], anuluj: 1 }],
+            // 7.7 a grave with the raven (ctx.n: 1-3)
+            grob: [{ mow: "graveRavenAsk", kto: "bohater" }, { wybor: [
+                { etykieta: "graveClean", tresc: [{ zrob: "graveWork", args: [{ ctx: "n" }] }] },
+                { etykieta: "graveLeave", tresc: [] }], anuluj: 1 }],
+            // 7.9 the ravens on a rock (ctx.key, ctx.ri: the rock, ctx.food: the item thrown, ctx.jedzenie: its name)
+            kruki: [{ mow: "ravenAsk", kto: "bohater" }, { zmienne: { name: { ctx: "jedzenie" } }, wybor: [
+                { etykieta: "kodDane.ravenFeed.0", tresc: [{ zrob: "ravenFeed", args: [{ ctx: "key" }, { ctx: "ri" }, { ctx: "food" }] }] },
+                { etykieta: "ravenLeave", tresc: [] }], anuluj: 1 }],
+            // 7.10 a piece of the wreck at low tide (ctx.n: 1-3)
+            wrak: [{ hak: "wrakLinia", kto: "bohater" }, { mow: "wreckAsk", kto: "bohater" }, { wybor: [
+                { etykieta: "wreckDig", tresc: [{ zrob: "wreckWork", args: [{ ctx: "n" }] }] },
+                { etykieta: "wreckLeave", tresc: [] }], anuluj: 1 }],
+            // Hieronim on the raven graves (D37 going on; ctx.spk: he) - told once
+            grabarz: ["grabarzGroby", { zrob: "grabarzPowiedzial" }],
+            // Eryk and the name board in the hero's bag (ctx.spk: he) - told once
+            ansgar: ["ansgarTabliczka", { zrob: "ansgarPowiedzial" }]
+        },
+        // the choices' actions: the acts of Zakon.js (hooks of the same names); the two "told once" marks
+        akcje: {
+            towerTake: [{ hak: "towerTake", args: [{ arg: 0 }] }],
+            pray: [{ hak: "pray", args: [{ arg: 0 }] }],
+            offer: [{ hak: "offer", args: [{ arg: 0 }, { arg: 1 }] }],
+            cairnWork: [{ hak: "cairnWork", args: [{ arg: 0 }] }],
+            plateKey: [{ hak: "plateKey" }],
+            downGo: [{ hak: "downGo", args: [{ arg: 0 }] }],
+            graveWork: [{ hak: "graveWork", args: [{ arg: 0 }] }],
+            ravenFeed: [{ hak: "ravenFeed", args: [{ arg: 0 }, { arg: 1 }, { arg: 2 }] }],
+            wreckWork: [{ hak: "wreckWork", args: [{ arg: 0 }] }],
+            grabarzPowiedzial: [{ stan: { "told.grabarzGroby": "dzis" } }],
+            ansgarPowiedzial: [{ stan: { "told.ansgarTabliczka": "dzis" } }]
+        }
+    });
+    const { K67, K68, D36, K69, K70, D37, D38 } = w.Q;
 
     // (2026-10-22, integration) the lines of the epilogue after the Heart (Underground.js asks Zakon.epilogue): one or two by what the hero did
     const EPILOG = {

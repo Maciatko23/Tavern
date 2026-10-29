@@ -1,0 +1,97 @@
+{
+ "czesci": {
+  "tick": {
+   "0": "Masz zajęte ręce",
+   "1": " (przytrzymaj)",
+   "2": "Wszystko zrobione!",
+   "3": "Pudło",
+   "4": "Kominek wygasł! Zimno...",
+   "5": "Masz pełne ręce"
+  },
+  "act": {
+   "0": "Najpierw odnieś to, co niesiesz",
+   "1": "Polano {done}/{need}",
+   "2": "Masz pełne ręce (dwie rzeczy)",
+   "3": "To nie to, co zamawiałem!",
+   "4": "Szybko! Dzięki!",
+   "5": "Dziękuję."
+  },
+  "finish": {
+   "0": "Sala wysprzątana na czas ({1} s zapasu)",
+   "1": "Brudne stoły: {1}",
+   "2": "Kominek bez drewna: {1} polana",
+   "3": "Śmieci zostały w sali: {1}",
+   "4": "Stoły lśnią",
+   "5": "Idealnie nalane kufle: {perfect} z {length}",
+   "6": "Rozlane kufle: {spilled}",
+   "7": "Za mało piwa w kuflach: {short}",
+   "8": "Kufle, które czekały na próżno: {timeout}",
+   "9": "Kuchnia w punkt: {perfect} z {length} kroków idealnie",
+   "10": "Wyborne: {1}",
+   "11": "Pomylone lub spóźnione kroki: {miss}",
+   "12": "Nieudane: {1}",
+   "13": "Obsłużeni wszyscy goście ({guests})",
+   "14": "Podane zamówienia: {served} z {orders}",
+   "15": "Szybka obsługa - napiwki: {tips} G",
+   "16": "Pomyłki przy stołach: {mistakes}",
+   "17": "Wyszli bez płacenia: {walkouts}",
+   "18": "Nie mieli gdzie usiąść (brudne stoły): {noSeat}",
+   "19": "Nie podane do zamknięcia: {unserved}",
+   "20": "Wygasły kominek - zmarznięci goście"
+  },
+  "frame": {
+   "0": "Lista zadań",
+   "1": "zanim wpuścimy gości",
+   "2": "Przetrzyj stoły",
+   "3": "stań przy stole, przytrzymaj O",
+   "4": "Drewno do kominka",
+   "5": "polana ze stosu w rogu",
+   "6": "Wynieś śmieci",
+   "7": "za drzwi wejściowe",
+   "8": "W rękach:",
+   "9": "śmieci",
+   "10": "lub WSAD: chodzenie",
+   "11": "Kufel {1} z {mugs}",
+   "12": "Kran skacze: raz leje mocniej, raz słabiej!",
+   "13": "Kran leje równo.",
+   "14": "Przytrzymaj O - leje się piwo.",
+   "15": "Puść, gdy piana sięga żółtej kreski.",
+   "16": "Po puszczeniu piwo leci jeszcze chwilę: puść odrobinę wcześniej.",
+   "17": "Czekam na O...",
+   "18": "Za mało / za dużo",
+   "19": "Średnio: {avg} / 100",
+   "20": "Kroki przepisu",
+   "21": "Teraz: {name}",
+   "22": "danie {1} z {length}",
+   "23": "Gotowe na wieczór",
+   "24": "Zamówienia",
+   "25": "Stół {1}",
+   "26": "+ {1} więcej",
+   "27": "W rękach",
+   "28": "Zgasł! Dorzuć drewna.",
+   "29": "Przygasa - dorzuć drewna.",
+   "30": "Napiwki: {tips} G",
+   "31": "lub WSAD",
+   "32": "weź / podaj (przytrzymaj: przetrzyj)"
+  },
+  "judge": {
+   "0": "Gość się nie doczekał",
+   "1": "Trochę za mało",
+   "2": "Trochę za dużo",
+   "3": "Za mało!",
+   "4": "Za dużo piany!"
+  },
+  "drawLegendRow": {
+   "0": "P - pauza"
+  },
+  "press": {
+   "0": "Nie ten krok!"
+  },
+  "tickGuest": {
+   "0": "Nie ma gdzie usiąść...",
+   "1": "Hmpf! Wychodzę!",
+   "2": "Dziękuję."
+  }
+ },
+ "_opis": "Napisy kodu TavernShift_Parts.js sprzed przeniesienia do js/teksty/zmiana.txt (czesci.*)"
+}

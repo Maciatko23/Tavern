@@ -95,6 +95,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("starcia");   // (the words of this file: js/teksty/starcia.txt, kod.*)
     const T = window.Tawerna;
     if (!T) throw new Error("Starcia.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     if (T.api("Starcia")) return;   // (put into the page twice: kept as it was)
@@ -144,14 +145,8 @@
         remains: { smell: 6, penalty: 5, sniff: 300, life: 12 },
         hunt: { range: 8.5, min: 2.5, cd: 900, fetch: 900, game: 0.7, deer: 0.3 }   // the camp archers' hunt; game: the chance a camp's archer hunted before dark
     };
-    const LINES = {
-        wolves: ["Wilki!", "Wilki pod obozem!", "Bierz głownię z ognia!", "Do ognia, chłopy, wilki!"],
-        brand: ["Precz, bestio!", "A sio!", "Ognia mu!", "Wynocha!"],
-        boar: ["Dzik! Z drogi!", "Uważaj, dzik!"],
-        bear: ["Niedźwiedź!", "Matko, niedźwiedź!"],
-        hunt: ["Cicho... kolacja.", "Zając. Nie ruszać się."],
-        roast: ["Pieczyste będzie.", "Dobra sztuka."]
-    };
+    // the men's shouts by the beasts (wolves, brand, boar, bear, hunt, roast - lists of lines: js/teksty/starcia.txt, okrzyki.<when>)
+    const LINES = Watki.scal({}, "starcia", "okrzyki");
 
     // the little state kept in the save: the hints said, what the others killed
     const S = T.state.define("starcia", () => ({ hints: {}, kills: {}, remains: [], seq: 0 }), { version: 1, owner: PLUGIN });
@@ -712,8 +707,8 @@
         const s = S();
         if (s.hints.carrion || heroDist(L) > 16) return;
         s.hints.carrion = true;
-        popup("Wilki poczuły padlinę… zwłoki zostawione na noc ściągają je", 0, "#ffd98f");
-        T.call("Journal", "addNote", "Padlina wabi wilki", "Zwłoki zwierzęcia zostawione nocą na ziemi ściągają wilki. Szarpią je, a co ogryzą, tego już nie oprawię: mniej mięsa, skóra podarta, w końcu same kości. Resztki po oprawianiu też trochę pachną. Ciała ludzi ich nie wabią.");
+        popup(TK.kod.carrionHint[0], 0, "#ffd98f");
+        T.call("Journal", "addNote", TK.kod.carrionHint[1], TK.kod.carrionHint[2]);
     }
     // one bite of a carcass: a piece of its meat gone (to the bones: it is taken away)
     function gnaw(c, L) {
@@ -724,7 +719,7 @@
         const left = W && W.gnawLeft ? W.gnawLeft(c.kind, c.gnawed) : null;
         if (left && left.meat <= 0) {
             Hn.removeCarcass(c);
-            if (heroDist(L) < 14) popup("Wilki ogryzły zwłoki do kości", 0, "#ffd98f");
+            if (heroDist(L) < 14) popup(TK.kod.gnaw[0], 0, "#ffd98f");
         }
     }
     // the bait the pack goes for: meat in a bundle (strongest), a carcass left lying, the remains of a dressed one - each within its own
@@ -743,7 +738,7 @@
         const e = pack._eat && pack._eat.id === best.id ? pack._eat : (pack._eat = { id: best.id, t: 0 });
         if (!e.said && heroDist(L) < 14 && !best.remains) {
             e.said = true;
-            popup(best.carcass ? "Wilki szarpią zwłoki" : "Wilki dopadły przynęty - szarpią mięso", 0, "#ffd98f");
+            popup(best.carcass ? TK.kod.baitTick[0] : TK.kod.baitTick[1], 0, "#ffd98f");
         }
         const need = best.carcass ? CFG.carrion.eat : best.remains ? CFG.remains.sniff : CFG.bait.eat;
         if ((e.t += CFG.every) >= need) {
@@ -1035,7 +1030,7 @@
         g._stFight = null;
         g._stFleeUntil = Graphics.frameCount + CFG.dog.flee;
         g._stFleeFrom = from || null;
-        if (Graphics.frameCount - (g._stFleeSaid || -9999) > 600) { g._stFleeSaid = Graphics.frameCount; T.popup("Pies ranny - ucieka z walki", { icon: DOG_ICON, color: "#ffb4a0" }); }
+        if (Graphics.frameCount - (g._stFleeSaid || -9999) > 600) { g._stFleeSaid = Graphics.frameCount; T.popup(TK.kod.startFlee[0], { icon: DOG_ICON, color: "#ffb4a0" }); }
     }
     function letGoDrag(g) {
         if (!g._drag) return;
@@ -1249,7 +1244,7 @@
                 const key = T.time.day() * 24 + Math.floor(T.time.hour() / 12);
                 if (b && night && wolves && meatIds().includes(Number(id)) && S().hints.bait !== key) {
                     S().hints.bait = key;
-                    T.popup("Zapach surowego mięsa niesie się w ciemności - wilki go zwęszą", { icon: $dataItems[id] ? $dataItems[id].iconIndex : 0, color: "#ffd98f" });
+                    T.popup(TK.kod.drop[0], { icon: $dataItems[id] ? $dataItems[id].iconIndex : 0, color: "#ffd98f" });
                 }
             } catch (e) { /* (no hint) */ }
             return b;
@@ -1284,29 +1279,29 @@
         if (!Hm || !Hn) return;
         if (p === "camp") {
             const camp = Hm.camp({ far: 9, near: 14, tag: "" });
-            if (!camp) { popup("Nie ma tu miejsca na obóz", 0, "#bcd8ff"); return; }
+            if (!camp) { popup(TK.kod.summon[0], 0, "#bcd8ff"); return; }
             const s = spotFrom(camp.x, camp.y, 8, 11, 7);
             const pack = s ? Hn.spawnPack(s.x, s.y, 3) : null;
-            if (!pack) { popup("Nie ma tu miejsca dla watahy", 0, "#bcd8ff"); return; }
+            if (!pack) { popup(TK.kod.summon[1], 0, "#bcd8ff"); return; }
             for (const w of pack.members) w._summoned = true;
             pack._prowl = { a: Math.atan2(s.y - camp.y, s.x - camp.x), t: 0, wait: 200, howl: 30 };
-            popup("Między drzewami błyszczą oczy... wataha krąży wokół obozu", 0, "#ffd98f");
+            popup(TK.kod.summon[2], 0, "#ffd98f");
             return;
         }
         if (p === "boar" || p === "bear") {
             const h = Hm.spawnNear("bandit", 7, 9, { tag: "starcia", mode: "roam" });
-            if (!h) { popup("Nie ma tu miejsca", 0, "#bcd8ff"); return; }
+            if (!h) { popup(TK.kod.summon[3], 0, "#bcd8ff"); return; }
             h._summoned = true;
             const s = spotFrom(h._x, h._y, p === "bear" ? 3 : 4, p === "bear" ? 4 : 5.5, 6);
             const a = s ? Hn.spawn(p, s.x, s.y) : null;
-            if (!a) { Hm.remove(h); popup("Nie ma tu miejsca", 0, "#bcd8ff"); return; }
+            if (!a) { Hm.remove(h); popup(TK.kod.summon[3], 0, "#bcd8ff"); return; }
             a._summoned = true;
             a._home = { x: s.x, y: s.y };
             a._clash = h;
             a._aware = 1;
             if (p === "bear") a.bearRear(); else a.setMode("warn", 40);
             a.turnTowardCharacter(h);
-            popup(p === "bear" ? "Niedźwiedź wypatrzył bandytę..." : "Dzik wypatrzył bandytę...", 0, "#ffd98f");
+            popup(p === "bear" ? TK.kod.summon[4] : TK.kod.summon[5], 0, "#ffd98f");
         }
     }
 

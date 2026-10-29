@@ -1,8 +1,10 @@
 # Wątki i zadania jako dane, teksty w plikach (refaktor, punkty 4 i 5)
 
 Stan na 2026-10-23, etap 1 zrobiony: spis, silnik `js/plugins/Watki.js`, format tekstów `js/teksty/*.txt` z narzędziem
-`tools/teksty.js`, pilot W4 „Krew kasztelana” rozdz. 6-8 (`Kasztelan_Data.js` + `js/teksty/kasztelan.txt`). Dalsze etapy (rozdz. 6)
-czekają na decyzję gracza.
+`tools/teksty.js`, pilot W4 „Krew kasztelana” rozdz. 6-8 (`Kasztelan_Data.js` + `js/teksty/kasztelan.txt`). Etap 2 (teksty w plikach):
+rozdz. 7a. Etap 3 (wątki paczek, W5, W7, W9 rozdz. 3, W10, Story rozdz. 1 na silniku, 2026-10-28): rozdz. 2.3a i 7b. Etap 4
+(TownQuests w kawałkach: rdzeń, zadania K/D bez kodu, W1, W2, W3, W6, W8, zadania Przystani, 2026-10-29): rozdz. 7c. Etap 5
+(reszta zadań TownQuests, W4 rozdz. 1-5, W9 rozdz. 6, F9 Act3 / podziemi / W5 / W7 / W9 z silnika, 2026-10-29): rozdz. 7d.
 
 Zasada wszystkich etapów (jak przy poprzednich refaktorach): po każdym kroku dotknięte testy na zielono, stare zapisy się wczytują,
 gracz widzi **dokładnie to samo** - te same teksty co do znaku, to samo łamanie linii, kolejność, warunki i nagrody.
@@ -99,7 +101,7 @@ można ją później przenieść do rdzenia bez zmiany plików tekstów.
 | rozmowy | `Watki.mowa`: `wrap`, `sayTo`, `linesTo`, `choiceTo`, `script`, `uruchom`, `HERO`, `C` | jeden budowniczy poleceń: 101/401 z `\SPK[n]`, linie po 46 znaków, 3 w oknie, `> ` bohater, opcje `akapity` (`\n`), `kto` (`@klucz:`), `twardaG` - warianty kopii z wtyczek |
 | wątek | `Watki.watek(def)` → uchwyt `w`; `w.haki({...})` | dane wątku: stan, rozdziały, rozmowy, akcje, skoki, F9 (2.3) |
 | skrypt rozmów | `Watki.act(this, [id, akcja, ...args])` | wołane z poleceń rozmowy; po akcji zdarzenie `watekAkcja` na szynie |
-| F9 | `Watki.f9.sekcje()` / `wybierz(row, delta)` / `ok(row)`; `Watki.skocz(id, i)` | Debug.js pokazuje sekcję każdego wątku ze skokami (W4: wiersz `isleW4` jak dotąd) |
+| F9 | `Watki.f9.sekcje()` / `wybierz(row, delta)` / `ok(row)`; `Watki.skocz(id, i)` | Debug.js pokazuje sekcję każdego wątku ze skokami (W4: wiersz `isleW4` jak dotąd); (2026-10-28) wątek może mieć też własne wiersze: `f9: { naglowek, wiersze() -> [{ co, label, icon, desc, pick }], wybierz(row, delta), ok(row) -> { go } \| { say, bad } }` - rodzaj wiersza `isleWatek:<co>` (Podroznicy: prom, przypłyń, odpływ...) |
 | dziennik | źródło `"watki"` (`addQuestSource` + `addTrackerSource`) | tylko dla wątków **bez** zadania TownQuests (własny rekord w `_tw.watki`) - stan i źródło powstają dopiero, gdy taki wątek jest; wątek na zadaniu TownQuests ma dziennik TownQuests jak dotąd (automatycznie, z tekstów kroków) |
 | zegar | jeden `onMapUpdate("watki")` | myśli bohatera każdego wątku (czasy z danych: `mysli: { klatki, odstep, czekaj }`), sprawdzanie własnych rekordów co 60 klatek |
 
@@ -149,6 +151,47 @@ Watki.watek({
 - **Kod specjalny**: haki rejestrowane przez wtyczkę wątku (`w.haki({ nazwa: (ctx, ...args) => ... })`); `ctx` = `{ spk, key, r, q,
   st, args, ...ustaw }`. Wtyczka dostaje też `w.S()`, `w.flag`, `w.setFlag`, `w.rec`, `w.cur`, `w.at`, `w.stepOf`, `w.complete`,
   `w.rozmowa(nazwa, ctx)`, `w.akcja(nazwa, args)`, `w.mysl(linie)`, `w.skocz(i)`, `w.tx` (teksty).
+
+### 2.3a Wątek z własnymi zadaniami (paczki K / D, etap 3 - 2026-10-28)
+
+```js
+const w = Watki.watek({                         // w X_Data.js - nad TownQuests_Data (tam stoją dane paczek)
+    id: "cysterna", wtyczka: "Cysterna", teksty: "cysterna",
+    stan: { klucz: "cysterna", wersja: 1, domyslne: () => ({...}) },        // ten sam klucz, wersja i pola co dotąd
+    mysli: { klatki: 200, odstep: 210, czekaj: "wiadomosc" },              // czekaj: true (zdarzenie albo okno) | "wiadomosc" (tylko okno)
+    mowa: { akapity: true },                                               // wariant dawnego wrap/sayTo
+    zadania: {                                                             // całe zadania TownQuests (pola TownQuests jak są)
+        D28: { kind: "D", giver: null, icon: 391, reward: {...},
+            start: ["zbudowana", "flaga:cisternOpen", { mapa: [147, 167] }],  // autoStart (nazwa FX: autoStart albo "d28Start")
+            oferta: "poraPawika",                                          // offer.cond.fn (nazwa: offer.cond.fn albo "d28Oferta")
+            kroki: [
+                { nazwa: "d28Wejdz", gotowe: "stan:been" },                // nazwa = klucz FX kroku (te same co dotąd: testy, inne wtyczki)
+                { nazwa: "d28Ksiega", gotowe: "ile:read.ksiega+read.slup>=2", zmienne: { n: { ile: "read.ksiega+read.slup" } } },
+                { nazwa: "k63Drewno", type: "bring", to: "drwal", need: [[61, 10]], haki: { hand: "k63Spal", tick: "k63Noc" } },
+                { nazwa: "d22Koniec", rozmowy: [{ kto: "latarnik", gdy: "...", tresc: [...], gotowa: false, znacznik: "..." }] }
+            ] }
+    },
+    paczka: { remarks: REMARKS, gossip: GOSSIP, spots: {...}, vitems: {...} },   // reszta paczki window.TownQuestsPacks
+    rozmowy: {...}, akcje: {...}
+});
+w.Q.D28                                          // obiekt zadania (silnik wkłada go do window.TownQuestsPacks i scala słowa "zadania.D28")
+```
+
+- Krok: pola silnika (`nazwa`, `gotowe`, `zmienne`, `rozmowy`, `temat`, `haki`, `nagroda`, `nagrodaFx`, `tekst`, `indeks`, `typ`) + każde
+  inne pole TownQuests bez zmian (`type`, `to`, `need`, `say`, `done`, `remind`, `early`, `choice`, `deadline`, `end`, `hours`...).
+  `haki: { hand, post, tick, enter, blocked, reward, spot, wanted, ch, say, act, ... }` - pozostałe obsługi FX kroku jako haki wtyczki
+  (hak dostaje `ctx { w, q, r, st }` i dalej argumenty TownQuests); silnik ustawia pole kroku, które je nazywa (`fx`, `tick`, `guard`...).
+- `rozmowy` kroku: `gotowa: false` - kwestia mówiona, ale krok nie gotowy (TownQuests `{ ready: false }`); `znacznik` - dodatkowy warunek
+  znacznika nad głową.
+- Warunki (nowe): `"stan:a.b>=3"` (też `!=`, `<=`, `>`, `<`; `=` jak dotąd - tekstowo), `"ile:a.b>=3"` (ile prawdziwych wartości ma obiekt
+  / lista pod a.b; `"ile:a+b+c"` - ile z tych ścieżek prawdziwych), `"zrobione:K53"`, `"aktywne:K53"`, `"mapa:167"`, `{ mapa: [..] }`.
+- Wartości (nowe): `{ stan: "a.b" }`, `{ ile: "a.b", najwyzej: 3 }`; `zmienne` jako obiekt wartości (`{ n: { ile: "gutters" } }`).
+- Akcje (nowe): `{ napis: klucz, ikona, kolor, rodzaj, gora: true, pod: klucz }` (popup).
+- Pomocniki uchwytu: `w.flag`, `w.setFlag`, `w.vcount`, `w.vgive`, `w.vtake`, `w.qstate()`, `w.done(id)`, `w.active(id)`, `w.rec(id)`,
+  `w.cur(id)`, `w.at(nazwa)`, `w.where(nazwa)`, `w.complete(nazwa, { to, reward })`, `w.autoChecks()`, `w.mysl(linie, postać)`,
+  `w.mysli()`, `w.thoughtsReset()`, `w.rozmowa(nazwa, ctx)`, `w.uruchom(interp | null, lista)` (bez interp - interpreter mapy),
+  `w.akcja(nazwa, args, interp)`; `Watki.mowa.plain(out, tytuł, linie, { spk })` (wiadomość bez mówcy: notatki, karty, słup).
+- `w.haki({...})` od razu podpina FX (wtyczka stoi pod TownQuests); wtyczka nad TownQuests - przy pierwszym `mapReady`.
 
 ### 2.4 Stan i stare zapisy
 
@@ -320,6 +363,109 @@ w F9 („Wyspa i fabuła”, Fabuła) wiersz „Wczytaj teksty od nowa” (`Watk
   Ludzie/Zakon/Latarnia (miejsca i odkrycia `Okolice.registerSpots` / `discoverable`, `defineBuff`, receptury, listy F9 - ok. 200
   napisów; potrzebują `Watki.poTekstach` przy rejestracji albo odświeżenia w Okolice), `tellIf` zadań (listy mieszane), TavernLife_*,
   QuestBoard_Data, Creatures_Data, Debug.
+
+## 7b. Etap 3 - stan (2026-10-28)
+
+Na silniku (dane wątku w `X_Data.js`, a gdy wtyczka nie ma pliku danych - blok na górze wtyczki; kod specjalny jako `w.haki`):
+
+| wątek | zadania / kroki w danych | stan | rozmowy w danych | uwagi |
+|---|---|---|---|---|
+| Cysterna | D28, K53 (`zadania`, warunki `stan:` / `ile:` / `mapa`) | `cysterna` | zasuwa gałęzi dworskiej | pierwszy wzór |
+| Motyle | K54 (oferta hakiem) | w wtyczce | kronika u Kleofasa | |
+| Pustelnia | K50, D23; W2 rozdz. 7 jako `obce` | `pustelnia` | spotkanie, Noc Pytania (wybór pytań z danych), karta od Ambrożego / Baltazara | menu Kleofasa i czytanie kart - kod |
+| Zasoby, Lowy, Ludzie, Zakon | K55-K70, D30-D38 | swoje | spotkania, pytania z wyborem, akcje | nazwy miejsc i odkryć, wzmocnienia, receptury, F9 - w plikach tekstów (`Watki.poTekstach`) |
+| Latarnia, Kruk, Orzel | K49, D22, W11, K51, D24, D29, W13 | swoje | rozmowy kroków (latarnik, Baltazar, Kleofas...) | |
+| Garnizon, Wrak | K52, D26, D27, D25, W12 | swoje | spotkania, przychylność, glejt, rekruci, kamienie | myśli Wraka zostały kodem (dymek od razu, bez kolejki) |
+| Kantor (W5), Dwor (W7) | W5 10 kroków, W7 8 kroków | swoje (pola dopisywane w locie - w `domyslne`) | najem, „komu”, zebranie; Lord, ślady Feliksa, szuflada, właz | skoki F9 z danych (`skoki`), `debugJump` = `w.skocz`, Debug.js bez zmian |
+| Rywal (W9 rozdz. 3) | 2 kroki W9 (`zadanie: "W9"`, indeksy 1-2) | `rywal` | rozmowa przywódcy (opcje drużyn z warunkami) | symulacja zejścia - kod |
+| Przystan | K47, D20, W10 jako `obce` (zostają w TownQuests_Data) | `przystan` | spotkania, noc Rocha, donos u celnika | menu Janka / Rocha, listy matki - kod |
+| Story rozdz. 1 | wątek z własnym rekordem (`_tw.watki.w.fabula`, FABUŁA): 9 kroków (dziadek, działka, praca, zmiana, dług; po stracie: wyniesienie, dach; piwnica; odkup), `pomin` dla drugiej drogi, `prowadzi` - okienko celu idzie za rozdziałem samo, `dogon` - stary zapis nadrabia kroki po cichu z dniami z dziennika | `story` (adopt `_story`) | wstęp, podziękowania, pierwsza rozmowa po stracie | decyzja gracza 2026-10-28: wpisy jak w innych wątkach; „Zbuduj schronienie” zostaje celem dziennika (po warsztacie) |
+| Homes D21 | D21 (`zadania` wątku „domy” w Homes.js; wtyczka pod TownQuests - silnik wkłada zadanie od razu do TownQuests.QUESTS) | w wtyczce | - | wybór aktu u sołtysa: `haki.pick` kroku |
+
+- Silnik dostał: zadania wątku (`zadania`, `paczka`, `start`, `oferta`), obsługę cudzych kroków (`obce`), `haki` kroku (wszystkie obsługi FX
+  TownQuests), warunki `ile:` / porównania / `zrobione:` / `aktywne:` / `mapa` / `v:x>=n`, wartości `{ stan }` / `{ ile }`, akcję `napis`,
+  wpis rozmowy `polecenie`, `gotowa: false` i `znacznik` w rozmowach kroku, `mysli.czekaj: "wiadomosc"`, `Watki.mowa.plain`, łamanie po
+  pikselach (`mowa.px` - Story) i twarz mówcy (`twarz`), `w.uruchom` bez interpretera. Testy: `tests/unit/watki.test.js` (34).
+- `tools/audyt/przejscie.js` zna wątki z `zadania` / `obce` i sprawdza, czy każdy hak nazwany w danych jest w kodzie; `tools/teksty.js`
+  zna `zadania:` (klucze `zadania.*` czytane).
+- Stare zapisy: te same klucze i wersje stanów, te same numery kroków; dawne wywołania skryptów `X.act(this, [...])` z rozmów zapisanych
+  w trakcie przekierowane na nowe akcje. Znikły tylko wewnętrzne nazwy FX, których nikt nie wołał (`d28Vars`, `k53Vars`, `w5Vars`,
+  `w7Kronika`..., `w12Vars`) - obsługi kroku mają nazwę kroku.
+- Kod wtyczek wątków: 21 606 → 20 235 linii (−1371), dane 3579 → 4286 (+707), razem −664; Watki.js 888 → 1049.
+- Własne rekordy wątków (Story): kroki z `tytul`, `pomin`, `gdzie` (kompas), `licznik` (pasek w okienku celu), `prowadzi`; dziennik
+  `prowadzi`, `dogon`, `dzienKroku`; `Journal.addTrackerSource(fn, { fallback: true })` - źródło pytane po innych, przed celem
+  dziennika (miejsce, które miały cele rozdziału 1). Przypięcie wątku ma id wiersza (`watek:<id>`).
+- Poprawki po decyzjach gracza (2026-10-28): D26 - „dziennik okrętu” daje swoje +5 Opinii (krok przed sprawdzeniem zadań). Usunięcie
+  „nieczytanych” kluczy tekstów (88) okazało się błędem - część czyta się dynamicznie (`f9Names.*`, klucze z danych) - wszystkie
+  wróciły 2026-10-29 („przywrócone” na końcach plików); `tools/teksty.js sprawdz` zostawia przy nich tylko uwagę.
+
+## 7c. Etap 4 - stan (2026-10-29): TownQuests w kawałkach
+
+- **Rdzeń**: TownQuests.js buduje rozmowy jednym budowniczym silnika (`Watki.mowa.sayTo / linesTo / choiceTo / C / fill`, opcje
+  `{ akapity, twardaG, kto }` - to samo łamanie co dotąd). Silnik: `paczka: false` (zadania wątku wkłada do listy właściciel, na ich
+  miejscach), `tekstyZadan: false` (słowa scala dalej TownQuests_Data po id), `teksty` zadania, krok `obcy` (obsługi z innego wątku -
+  W2 rozdz. 7 jest Pustelni: pola kroku zostają, nic nie jest wiązane pod jego nazwą; test w `tests/unit/watki.test.js`, 39).
+- **Zadania K/D bez kodu** (22: K2-K4, K6, K8, K10-K12, K21, K26, K30-K32, K40-K46, D1, D5): wątek „miasto” w TownQuests_Data.js
+  (`MIASTO.Q.<id>` na starych miejscach QUESTS), kroki z nazwami `<id><Przynies|Rozmowa|Miejsce|...>`.
+- **Łuki** - każdy wątkiem we własnej wtyczce danych nad TownQuests_Data (`W1_Data.js` „w1”, `W2_Data.js` „w2”, `W3_Data.js` „w3”,
+  `W6_Data.js` „w6”, `W8_Data.js` „w8”); w QUESTS `ARC("w1", "W1")` na starym miejscu. Nazwy kroków = dawne nazwy obsług FX (Dwor.js,
+  Underground.js i stare zapisy znają kroki po nich i po numerach - bez zmian); obsługi, które nie są krokiem (wspólne `vars`, drugi
+  `tick` kroku, `show`/`at` miejsc, `cond.fn` ofert innych zadań) - `obce` tego samego wątku. Kod kroków: haki w TownQuests.js
+  (`W1X` + `W1_HAKI` ... `W6_HAKI`, wiązane na końcu pliku), dawne metody spoza kroków w `WnX` (`W1X.TAG / ambushEnd`, `W3X.maybeDone /
+  defendEnd`, `W8X.count / duelEnd`, `W6X.risk / tally`...). Z zewnątrz dalej działają `TownQuests.FX.w8Choice.count()` (Rywal.js,
+  w6_test - klucz `haki.count`) i `FX.w3Verse.source` (owija go Dwor.js - wewnętrzne wywołania idą przez FX). Start łuku:
+  `autoStart: "startWn"` + `start: { hak }` (jedyna różnica w obiekcie zadania: pole `autoStart`).
+  | łuk | kroki | haki | obce | warunki w danych |
+  |---|---|---|---|---|
+  | W1 | 11 | 20 | - | `flaga:sluiceFound` |
+  | W2 | 11 (rozdz. 7 `obcy: "pustelnia"`) | 12 | w2Sell | `zrobione:D16` |
+  | W3 | 7 | 25 | - | - |
+  | W8 | 9 | 36 | w8Vars, w8Wall, w8Crate | - |
+  | W6 | 7 | 41 | 8 (w6Vars, w6Wave, w6NotHated - K27/K28/D10, w6Camp, w6Second, w6Work, w6Helper, w6Prop) | - |
+- **Przystań**: wątek „przystan” (stan, mowa, 6 rozmów, 6 akcji, zadania K47, K48, D20, W10 - 15 kroków) w `Przystan_Data.js`;
+  Przystan.js bierze go `Watki.get("przystan")` i daje haki; klucz i wersja stanu bez zmian.
+- **Liczby**: obiekt FX w TownQuests.js 117 wpisów / ok. 2060 linii → 60 / ok. 895 (reszta: zadania K/D z kodem, K22/K33/D13/D6, W4,
+  W9, miejsca i oferty); sekcje haków łuków ok. 1150 linii; TownQuests.js 4779 → 4739, TownQuests_Data.js 1415 → 1254, nowe dane łuków
+  i przystani ok. 410 linii (bez nagłówków).
+- **Sprawdzenie**: migawka wszystkich zadań (`snap_tq.js`: obiekt zadania ze słowami, check, vars, rozmowy każdego mieszkańca, znaczniki,
+  dziennik, oferty - w 3 światach, dla każdego kroku) przed etapem i po: różnice tylko `autoStart` W1/W2/W3/W6/W8 (+ nowe W15/W16
+  podróżnych). Fale W6 podróżnych (`CALENDAR.waves`, `waves()/isWave()`, `w6Obecni`, werbownik, rekwizycja, oferty K5/K27/K28/D14/K49)
+  bez zmian.
+
+## 7d. Etap 5 - stan (2026-10-29): reszta TownQuests na silniku
+
+- Wszystkie zadania TownQuests_Data są wątkami silnika; obiekt `FX` w TownQuests.js jest pusty (same komentarze-wskaźniki) - każdą
+  obsługę robi silnik z haków. Grupy (każda wtyczka danych nad TownQuests_Data, w QUESTS `ARC(wątek, id)` na starych miejscach):
+  | wątek | plik | zadania | kroki | haki | obce |
+  |---|---|---|---|---|---|
+  | rynek | Rynek_Data.js | K1, K5, K9, K13, K14, K15, K16, K17, K20, D3, D16 | 17 | 30 | 6 (k5Vars, k9Fair, k9Dice, k13Silence, k16Trade, k20Bonus) |
+  | straz | Straz_Data.js | K38, D11, D14, D17, K37, K39 | 18 | 28 | 1 (k37Hold) |
+  | oboz | Oboz_Data.js | K19, K27, K28, K29, D4, D10, D18 | 14 | 21 | 1 (d4Reward) |
+  | goscie | Goscie_Data.js | K22, K33, D13, D6 | 13 | 36 | 3 (d13Offer, d6Late, d6Bribe) |
+  | w4 | W4_Data.js | W4 rozdz. 1-5 (kroki 6-9 dokłada dalej Kasztelan_Data) | 6 | 16 | 1 (w4Open) |
+  | w9 | W9_Data.js | W9 rozdz. 6 (kroki 1-2 dokłada dalej Rywal) | 1 | 9 | - |
+- Silnik: `pola` wpisu (`obce` / krok) - zwykłe wartości na wpisie FX obok haków (`FX.k16Trade.GOODS`, czyta je w6_test);
+  test w `tests/unit/watki.test.js` (40).
+- Metody, które wołał ktoś z zewnątrz, zostały na FX jako klucze haków: `FX.d13Offer.pred` (regulars_quests_test), `FX.w9Truth.act`
+  (Kasztelan.js), `FX.k16Trade.goods/left/GOODS`; reszta dawnych metod pomocniczych w `STRAZX` (pościg K37), `GOSCIEX` (D13/D6),
+  `OBOZX` (K27).
+- Liczby: TownQuests.js 4739 → 4722 linii (obiekt FX 895 → 15, sekcje haków wszystkich wątków ok. 2000), TownQuests_Data.js 1254 → 805,
+  nowe dane grup ok. 760 linii.
+- Sprawdzenie: migawki grup przed / po - 0 różnic (poza `autoStart` W4 i W9); fale W6 podróżnych, K5 (czwarty bochen), K27/K28/D10
+  (od dnia 10/11, `w6NotHated`), D14 (od dnia 25) bez zmian.
+
+- **F9 z silnika** (Debug.js nie zna już Act3, Underground, Kantor, Dwor ani Rywal; nikt nie dokłada wierszy do listy z zewnątrz poza
+  `isleW10` Przystani): `f9.wiersze` może być listą danych `{ co, rodzaj, etykieta, opis, ikona, pola, gdy, zmienne, wybierz, ok }`
+  (etykieta / opis - klucze tekstów z `{x}` z haka `zmienne`; `wybierz` / `ok` - haki wtyczki; OK zwraca `{ go }`, `{ back }`,
+  `{ say, bad }` albo `{}`), `f9.zakladka` („wyspa” - domyślnie, albo „zdarzenia”), `f9.kolejnosc` (sekcje bez niej pierwsze, w
+  kolejności wtyczek, potem według liczby), `f9.nazwy` (własny klucz nazw rozdziałów), `{name}` w opisie skoku; dawne `wiersze()`
+  (podróżni) bez zmian. Wątki: „akt3” (Act3_Data: uzbrój / napad teraz / wyczyść, zakładka zdarzeń), „podziemia” (Underground_Data:
+  piętro, krata, zamki, winda, trzy wiersze Serca), W5 (Kantor_Data, `kolejnosc: 5`), W7 (Dwor_Data, 7), W9 (Rywal_Data: wariant i
+  spotkanie, 9). Rodzaje wierszy (`underground`, `ugGate`, `act3_*`, `isleW5`...) i ich kolejność bez zmian. Debug.js 943 → 858 linii.
+  Klucze `f9.txt`, których kod już nie czyta (33), zostały (uwagi `sprawdz`).
+
+Do zrobienia (reszta): wiersz F9 W10 (`isleW10`, Przystan.js) na silnik; wpis rozmowy z mówcą na wpis (sceny wielu postaci: pomiar
+działki, oprowadzanie).
 
 ## 8. Pytania do gracza
 

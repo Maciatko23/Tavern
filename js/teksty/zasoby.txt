@@ -71,7 +71,6 @@ farm.gardenMenu = Zdziczały ogródek
 farm.weed = Wypiel ogródek
 farm.weedHelp = Motyką wyrwiesz chwasty: pod nimi dzikie ziemniaki i marchew, a czasem nasiona. Odrasta po 12 dniach.
 farm.gardenDone = Ogródek wypielony. Chwasty odrosną za kilka dni.
-farm.gardenYield = "Spod chwastów: "
 farm.needHoe = Potrzebna motyka.
 farm.fence = Resztki płotu. Deski spróchniałe, słupki krzywe.
 well.menu = Studnia sąsiada
@@ -106,7 +105,6 @@ hive.empty = Plaster wybrany. Pszczoły zrobią nowy za kilka dni.
 hive.stung = Pszczoły! Użądlenie!
 hive.calm = Dym usypia pszczoły. Plaster wychodzi czysto.
 hive.spring = Wiosną plaster jeszcze młody - tylko trochę miodu.
-ring.pick = Grzyby z kręgu
 ring.whisper = ...coś szepcze w mgle...
 ring.fog = Mgła siada w środku kręgu.
 herb.notYours = Nie twoje, chłopcze.
@@ -178,7 +176,6 @@ orchard.needCan = Potrzebna konewka.
 orchard.canEmpty = Konewka pusta.
 orchard.wateredToday = Dziś już podlane.
 orchard.alive = Drzewo żyje. Za kilka dni puści liście.
-orchard.leaves = Liście! Drzewo żyje.
 orchard.noFruit = Jeszcze nie ma owoców.
 orchard.fruit = Dzikie jabłka z sadu Ługów
 field.menu = Pole mieszczan
@@ -422,6 +419,90 @@ Moneta z krukiem z wysypiska? (Kleofas obraca ją w palcach.) Grosz strażnicy. 
 epilog.springs = Źródełka, które znalazłeś w lasach i pod skałami, dalej biją - miska, dwie na dzień, w upał ani kropli. Nie mówisz o nich nikomu.
 epilog.well = Studnia Rzepków za działką dziadka zbiera deszcz w nową cembrowinę. Kiedy pada, ktoś zawsze przychodzi z wiadrem - nie zawsze ty.
 
+# ======================================================================== źródełka (zrodla.<klucz>: name - nazwa, where - okolica, hint - wskazówka)
+zrodla.zrodlo_017.name = Źródełko w mchu
+zrodla.zrodlo_017.where = Omszała łąka
+zrodla.zrodlo_017.hint = gęsty las na południowym wschodzie, mokry mech
+zrodla.zrodlo_021.name = Źródełko w lesie
+zrodla.zrodlo_021.where = Leśna droga
+zrodla.zrodlo_021.hint = las na południowym zachodzie, rechot żab o zmierzchu
+zrodla.zrodlo_013.name = Źródełko pod skałą
+zrodla.zrodlo_013.where = Góry
+zrodla.zrodlo_013.hint = pod skałą przy południowo-wschodnich ścianach
+zrodla.zrodlo_155.name = Źródełko w gąszczu
+zrodla.zrodlo_155.where = Pustelnia
+zrodla.zrodlo_155.hint = sosnowy gąszcz na południu, daleko od morza
+zrodla.zrodlo_168.name = Stare źródło Ługów
+zrodla.zrodlo_168.where = Spalona zagroda
+zrodla.zrodlo_168.hint = zarośla na południu, „stare źródło Ługów”
+
+# ======================================================================== miejsca i odkrycia (Okolice: zakładka „Okolice” w dzienniku, kompas)
+miejsca.jagna_miejsce.name = Miejsce Jagny
+# opis odkrytego źródełka ({where}: jego okolica, zrodla.<klucz>.where); nazwa - zrodla.<klucz>.name
+odkrycieZrodla = Źródełko ({where}): daje wodę kilka razy na dzień; w upał wysycha, zimą zamarza.
+odkrycia.zagroda.name = Zagroda Rzepków
+odkrycia.zagroda.text = Opuszczona zagroda sąsiadów: chata bez dachu, zdziczały ogródek i sucha studnia. Rzepkowie poszli do miasta, kiedy studnia wyschła.
+odkrycia.dzikie_ule.name = Dzikie ule
+odkrycia.dzikie_ule.text = Trzy dziuple z pszczołami w sosnach za murem działki. Miód i wosk co kilka dni - z dymem i nożem, bo pszczoły żądlą.
+odkrycia.grzyby_krag1.name = Czarci krąg
+odkrycia.grzyby_krag1.text = Po deszczu grzyby wyrastają tu w kręgu. Nocą w środku coś szepcze. Jagna mówi: grzybnia.
+odkrycia.grzyby_krag2.name = Czarci krąg (drugi)
+odkrycia.grzyby_krag2.text = Drugi krąg obok pierwszego. Nocą mgła siada w jego środku.
+odkrycia.ziola_jagny.name = Polanka Jagny
+odkrycia.ziola_jagny.text = Ciche miejsce zielarki: kępy arcydzięgla, dziurawca i kozłka. Nie twoje - chyba że Jagna pozwoli.
+odkrycia.wysypisko.name = Wysypisko
+odkrycia.wysypisko.text = Kupa śmieci za chatami Podgrodzia. Złom, szmaty, gwoździe - i czasem coś cenniejszego. Raz na dzień.
+odkrycia.glinianka.name = Glinianka
+odkrycia.glinianka.text = Dół z gliną. Łopatą wykopiesz mokrą glinę na garnki. Po deszczu stoi w nim mętna woda - nie do picia.
+odkrycia.kamieniolom_bloki.name = Ściana ciosowa
+odkrycia.kamieniolom_bloki.text = Dawny kamieniołom bloków: kilofem wyrąbiesz blok kamienny. Ściana daje sześć bloków na tydzień.
+odkrycia.zatoczka.name = Zatoczka
+odkrycia.zatoczka.text = Mała zatoczka za przystanią. W odpływie kałuże z krabami, po sztormie morze wyrzuca tu drewno.
+odkrycia.sad_spalony.name = Spalony sad
+odkrycia.sad_spalony.text = Osiem jabłonek Ługów spaliło się razem z domem. Przycięte, opatrzone i podlane mogą jeszcze ożyć.
+
+# ======================================================================== przepisy (receptury: name - nazwa, doing - „trwa...” przy pracy, desc - opis)
+receptury.crab.name = Upiecz kraba
+receptury.crab.doing = Trwa pieczenie
+receptury.crab.desc = Krab z kałuży pływowej, pół godziny przy ogniu. Czerwienieje, kiedy gotowy.
+receptury.drift.name = Rozłup drewno dryfowe
+receptury.drift.desc = Wybielone przez morze drewno, rozłupane na dwa polana. Zwykły opał.
+receptury.scrap.name = Przetop złom
+receptury.scrap.doing = Trwa wytapianie
+receptury.scrap.desc = Zardzewiałe żelastwo z wysypiska przetopione w żarze: sztaba żelaza.
+receptury.salve.name = Zrób maść szczepiarską
+receptury.salve.desc = Mokra glina rozrobiona z woskiem: zamyka rany drzew (sad Ługów). Przepis Jagny.
+receptury.brew.name = Zaparz napar z kozłka
+receptury.brew.doing = Trwa parzenie
+receptury.brew.desc = Korzeń kozłka w porcji wody z wiadra. Po wypiciu pierwszy sen daje o jedną piątą więcej sił. Przepis Jagny.
+
+# ======================================================================== premie (name - nazwa, desc - opis przy ikonie)
+premie.uzadlenie.name = Użądlony
+premie.uzadlenie.desc = pszczoły użądliły: prace kosztują 15% więcej sił
+premie.gleboki_sen.name = Głęboki sen
+premie.gleboki_sen.desc = pierwszy sen da o jedną piątą więcej sił
+
+# ======================================================================== F9 (Debug.js, zakładka „Wyspa i fabuła”: sekcja paczki A)
+f9.tytul = Paczka A: Woda i zasoby:
+# pływ bez wymuszenia (wiersz „Pływ: ...”)
+f9.naturalny = naturalny
+# „Idź do:” - miejsca po źródełkach
+f9.idz.zagroda = Zagroda Rzepków
+f9.idz.studnia = Studnia sąsiada
+f9.idz.ul = Dziki ul
+f9.idz.polanka = Polanka Jagny
+f9.idz.krag = Czarci krąg
+f9.idz.ogrodki = Ogródki Podgrodzia
+f9.idz.wysypisko = Wysypisko
+f9.idz.glinianka = Glinianka
+f9.idz.sciana = Ściana ciosowa
+f9.idz.zyla = Żyła rudy
+f9.idz.zatoczka = Zatoczka
+f9.idz.drewnoPustelnia = Drewno: Pustelnia
+f9.idz.drewnoGarnizon = Drewno: Garnizon
+f9.idz.sad = Spalony sad
+f9.idz.pola = Pola mieszczan
+
 # ======================================================================== z kodu Zasoby.js (kod.<funkcja>.<n>, w kolejności kodu)
 # strike
 kod.strike.0 = Brakuje narzędzia
@@ -548,3 +629,8 @@ Coś z morza na stół
 Goście z promu pytają o kraby. Kraby! W karczmie na wzgórzu! Przynieś pieczone kraby, to im podam.
 Ktoś mi powiedział, że w zatoczce za przystanią w odpływie łazi pełno krabów. Upiecz parę, zapłacę.
 
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+farm.gardenYield = "Spod chwastów: "
+ring.pick = Grzyby z kręgu
+orchard.leaves = Liście! Drzewo żyje.

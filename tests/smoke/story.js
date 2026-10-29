@@ -16,16 +16,17 @@ kit.test({}, async t => {
     t.check("the intro: grandpa (event 901) and the hero talk in bubbles, about the debt and Borgar's tavern", heard && intro.log.length >= 6 && intro.log[0].who === 901 && intro.log.some(l => l.who === 0) &&
         /2500/.test(intro.log.map(l => l.t).join(" ")) && /Borgar/.test(intro.log.map(l => l.t).join(" ")), intro.log.map(l => l.who));
     t.check("...after it: a cabbage soup from grandpa and the journal's note about the debt", intro.soup === 1 && intro.note, intro);
-    await t.eval("Journal.evaluateGoals(); 0");
-    const jr = await t.json("({ chapter: Journal.CHAPTERS[(Journal.GOALS.find(g => g.story) || {}).ch], cur: Journal.currentGoal().id })");
-    t.check("the journal: chapter 'Rozdział 1: Dług dziadka', the tracker says go to the field", jr.chapter === "Rozdział 1: Dług dziadka" && jr.cur === "story_field", jr);
+    // (2026-10-28: chapter 1 is a thread of the journal - Watki.js's "fabula", FABUŁA - no longer its goals)
+    await t.eval("Journal.evaluateGoals(); Watki.get('fabula').ownChecks(); 0");
+    const jr = await t.json("({ title: Watki.get('fabula').tekst('rozdzial1.tytul'), cur: Watki.krok('fabula'), line: (Journal.tracked() || {}).line })");
+    t.check("the journal: the thread 'Rozdział 1: Dług dziadka', the goal window says go to the field", jr.title === "Rozdział 1: Dług dziadka" && jr.cur === "dzialka" && jr.line === "Dojdź na działkę dziadka", jr);
 
-    // ---- the P menu: the debt on the card
+    // ---- the P menu: the debt on Postać (2026-10-28: MenuRing.js - the old panel's foot line is gone)
     await t.eval("SceneManager.push(Scene_Menu); 0");
     await t.until("SceneManager._scene instanceof Scene_Menu && SceneManager._scene._started && !SceneManager.isSceneChanging()", 15);
     await t.frames(10);
-    const line = await t.eval("Story.lastMenuLine");
-    t.check("the P menu's foot shows the debt (0 / 2500 G, day 60)", /^0 \/ 2500 G/.test(line) && /60/.test(line), line);
+    const debt = await t.json("({ d: MenuRing.debtInfo(), tab: MenuRing.info() && MenuRing.info().active })");
+    t.check("the P menu (Postać) shows the debt (0 of 2500 G, 60 days)", debt.tab === "hero" && !!debt.d && debt.d.paid === 0 && debt.d.debt === 2500 && debt.d.days === 60, debt);
     await t.eval("SceneManager.pop(); 0");
     await t.until(t.onMap(19), 15);
 

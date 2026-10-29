@@ -4,17 +4,11 @@
 
 # ======================================================================== TX
 klapaZamknieta = Klapa zamknięta na kłódkę.
-klapaZejdz = Zejść do piwnicy?
 tylneZamkniete = Tylne drzwi zamknięte na zasuwę.
 tylneSpoznienie = Za późno. Nikt już nie otwiera.
 kantorZamkniety = Kantor zamknięty z rozkazu sołtysa.
 stukanie = (Trzy stuknięcia w tylne drzwi kantoru.)
 drzwiOtwarte = Kto? ...Wchodź. Szybko.
-[kurierBarks]
-...
-Zimno jak u mnie w domu.
-Trzy razy. Nie dwa, nie cztery.
-
 kurierSploszony = Ktoś tu jest... Nie dziś.
 kurierWychodzi = Wóz o świcie. Kamienie pod słomą.
 felixBark = Szybko, szybko... Lord śpi, a ja tu stoję.
@@ -112,9 +106,6 @@ Wszystko? Dobrze. Dwadzieścia groszy. Do jutra, przyjacielu.
 
 [baltazarDone]
 Na dziś koniec. Idź spać - i nie śnij za głośno.
-
-[baltazarLate]
-Spóźniłeś się. Dziś nie ma roboty.
 
 [baltazarNight3]
 Dziś nic nie nosisz. Czekamy na wóz - o wpół do pierwszej idę na górę go przyjąć.
@@ -271,7 +262,6 @@ Zebranie jutro w południe. Przyjdź do ratusza.
 Kantor zamknięty
 Na zebraniu w ratuszu sołtys przeczytał rejestr Baltazara. Kantor zamknięty z rozkazu ratusza, Baltazar ma odpłynąć najbliższym promem. Miasto patrzy na mnie inaczej.
 
-promFirst = Wóz z ładunkiem Baltazara czeka na Polnej drodze, przy rozwidleniu na wschód.
 [promStraz]
 Kto idzie?!
 To ten od rejestru! Brać go!
@@ -323,7 +313,6 @@ Nie było mnie przy wozie w noc promu. Ładunek Baltazara - kamienie z krukiem i
 Wóz pojechał
 Ludzie Baltazara pobili mnie przy wozie na Polnej drodze. Ładunek popłynął na ląd.
 
-rafalTied = Rafał! Związany! Pomóż mi!
 [rafalFree]
 (Przecinasz sznury.) Myślałem, że już po mnie. Dwór sprzedał mnie im jak worek zboża - do kopania pod skałą.
 Wracam do Ludmiły. Nie zapomnę ci tego.
@@ -405,8 +394,6 @@ Twoja działka, wspólniku. Trzydzieści groszy. Za milczenie.
 
 lada = Lada kantoru miejskiego
 napadShout = Pozdrowienia od kupca!
-f9 = W5: przeskocz do rozdziału {n}
-f9desc = Ustawia wątek „Towary z kontynentu” na początku rozdziału {n} (flagi, pora, miejsce) i przenosi bohatera tam, gdzie się dzieje.
 
 # ======================================================================== REGISTER (rejestr)
 rejestr.0.line = K.W. - 5 G na tydzień. Za ciemność przy bramie.
@@ -540,6 +527,8 @@ kod.rafalOpinia = Rafał uwolniony
 kod.wartownia = Noc w wartowni
 kod.wartowniaSub = Rejestr spłonął w koszu żarowym. Baltazar już wie.
 kod.kartaSoltys = Sołtys znalazł ją w szkatule Baltazara.
+# (rzecz z ładunku, gdy żadna paczka jej nie ma - Kantor_Data.js)
+kod.kamienZKrukiem = Kamień z krukiem
 kod.potrzebujesz = Potrzebujesz {n} G
 kod.ladaNoc = Kantor miejski zamknięty na noc.
 kod.wozOboz = Wóz przemytników. Skrzynie pod płachtą.
@@ -555,3 +544,30 @@ kod.akt2.przed = zacznie się w Akcie II (po spłacie długu albo stracie dział
 kod.akt2.closed = sołtys szuka kogoś do pustego kantoru (ratusz, 8–18).
 kod.akt2.double = Baltazar ma dla wspólnika nowy towar (kantor, 8–18).
 kod.akt2.enemy = Baltazar sprzedaje wrogom drożej (kantor, 8–18).
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+klapaZejdz = Zejść do piwnicy?
+[kurierBarks]
+...
+Zimno jak u mnie w domu.
+Trzy razy. Nie dwa, nie cztery.
+
+[baltazarLate]
+Spóźniłeś się. Dziś nie ma roboty.
+
+promFirst = Wóz z ładunkiem Baltazara czeka na Polnej drodze, przy rozwidleniu na wschód.
+rafalTied = Rafał! Związany! Pomóż mi!
+f9 = W5: przeskocz do rozdziału {n}
+f9desc = Ustawia wątek „Towary z kontynentu” na początku rozdziału {n} (flagi, pora, miejsce) i przenosi bohatera tam, gdzie się dzieje.
+
+# ======================================================================== F9 (zakładka „Wyspa i fabuła”): skok do rozdziału W5 (2026-10-29: wiersz z silnika wątków)
+f9Naglowek = Wątek W5 (kantor Baltazara):
+f9Etykieta = W5: rozdział {n} - {nazwa}   ←→ zmień, OK idź
+f9Brak = Brak zadania W5 (TownQuests)
+f9Nazwy.1 = dziwny kupiec
+f9Nazwy.2 = trzy stuknięcia
+f9Nazwy.3 = nocny tragarz
+f9Nazwy.4 = rejestr
+f9Nazwy.5 = komu to dać
+f9Nazwy.6 = noc promu
+f9Nazwy.7 = co dalej z kantorem

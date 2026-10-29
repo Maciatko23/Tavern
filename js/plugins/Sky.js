@@ -55,6 +55,11 @@
     "use strict";
     const T = window.Tawerna;
     if (!T) throw new Error("Sky.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
+    // the saved state: Tawerna.state "sky" - mistForce { day, m } (F9: that day's morning mist); it was $gameSystem._mistForce, the name
+    // leads there still. The cycle tints the screen now: DayNightCycle's "clock" (tinting).
+    const skyState = T.state.define("sky", () => ({}), { version: 1, owner: "Sky" });
+    T.state.oldFields("sky", { _mistForce: "mistForce" });
+    const tinted = () => !!(window.$gameSystem && T.state("clock").tinting);
 
     // ---- the sun (user 2026-09-30: shadows that follow the sun): where it is and how bright, for the shadows the game draws itself -
     // the trees (here) and the people (CharacterPolish.js), through T.api("Sun"). (It lives here until it gets a plugin of its own: the
@@ -710,7 +715,7 @@
             this.createSideLight();
         }
         const layer = this._sideLight, sun = Sun.now(), sky = sun.sky;
-        const g = !!$gameSystem._dayNightTinting && sun.outdoors && !sun.flash ? sky.golden * (1 - 0.8 * (window.Storm ? Storm.level() : 0)) : 0;
+        const g = tinted() && sun.outdoors && !sun.flash ? sky.golden * (1 - 0.8 * (window.Storm ? Storm.level() : 0)) : 0;
         layer.visible = g > 0.01;
         if (!layer.visible) return;
         // (a scale that covers the screen - the world's view: Tawerna.view, bigger while flying high on the eagle; mirrored: the warm
@@ -766,10 +771,10 @@
     // The mist: wide soft banks of it low over the ground at dawn, drifting slowly with the air; it gathers in the blue hour, is
     // thickest at sunrise and is gone when the sun is ~16 deg up. Not every morning: thicker in spring and autumn, after a wet
     // evening or a rainy night much thicker, a few mornings none; in the rain only half. Bluish grey before sunrise, warm in the
-    // first light. SunApi.mistOfDay(day) - how misty a morning is (0..1); $gameSystem._mistForce { day, m } (F9) sets it.
+    // first light. SunApi.mistOfDay(day) - how misty a morning is (0..1); skyState().mistForce { day, m } (F9) sets it.
     const MIST_SEASON = [0.75, 0.45, 0.95, 0.55], MIST_ALPHA = 0.5, MIST_BLUE = [188, 200, 224], MIST_WARM = [255, 234, 212];
     function mistOfDay(day) {
-        const f = $gameSystem && $gameSystem._mistForce;
+        const f = window.$gameSystem ? skyState().mistForce : null;
         if (f && f.day === day) return f.m;
         const r = hash01(day, 7331);
         let m = r < 0.3 ? 0 : (r - 0.3) / 0.7;   // (about a third of the mornings clear)
@@ -851,7 +856,7 @@
         }
         // (the graphics' quality - Wydajnosc.js, Opcje -> Jakość grafiki: gfx.skyFx false at Niska - no rays and no mist)
         const W = T.api("Wydajnosc"), skyFx = !W || !W.gfx || W.gfx.skyFx !== false;
-        const sun = Sun.now(), sky = sun.sky, hour = T.time.hour(), on = !!$gameSystem._dayNightTinting && sun.outdoors && skyFx;
+        const sun = Sun.now(), sky = sun.sky, hour = T.time.hour(), on = tinted() && sun.outdoors && skyFx;
         const storm = window.Storm ? Storm.level() : 0, rain = rainingNow();
         const rays = on && !sun.flash ? raysAt(hour) * (1 - rain) * (1 - storm) : 0;
         const mist = on ? mistAt(hour) * (1 - 0.5 * rain) : 0;
@@ -912,7 +917,7 @@
 
 
     Object.assign(SunApi, { raysAt, mistAt, mistOfDay, sunTimes,
-        forceMist: (m, day) => { $gameSystem._mistForce = { day: day === undefined ? T.time.day() : day, m }; } });
+        forceMist: (m, day) => { skyState().mistForce = { day: day === undefined ? T.time.day() : day, m }; } });
     window.Sky = SunApi;
 
     // the side light, the rays and the mist: on the map's every frame, after the rest of the spriteset (made on the first one)

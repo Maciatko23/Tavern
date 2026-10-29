@@ -32,6 +32,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("tablica");   // (the words of this file: js/teksty/tablica.txt, scena.*)
     const T = window.Tawerna;
     if (!T || !T.ui || !T.ui.drawPaper) throw new Error("QuestBoard_Scene.js: brak TawernaCore.js / TawernaUI.js - muszą być wyżej na liście wtyczek (the Tawerna core or UI kit is missing)");
     const ui = T.ui;
@@ -227,17 +228,17 @@
         if (!el) return [];
         if (el === this._tag) return [{ id: "close", label: "Rozumiem" }];
         const n = el.n;
-        if (this._confirm) return [{ id: "abandonYes", label: "Tak, porzuć (sława -" + (REP_ABANDON + (n.urgent ? 2 : 0)) + ")" }, { id: "abandonNo", label: "Nie" }];
-        if (n.state === "open") return [{ id: "accept", label: "Przyjmij zlecenie", enabled: activeList().length < MAX_ACTIVE }, { id: "leave", label: "Zostaw" }];
+        if (this._confirm) return [{ id: "abandonYes", label: Watki.wstaw(TK.scena.choiceList[0], { "1": REP_ABANDON + (n.urgent ? 2 : 0) }) }, { id: "abandonNo", label: "Nie" }];
+        if (n.state === "open") return [{ id: "accept", label: TK.scena.choiceList[1], enabled: activeList().length < MAX_ACTIVE }, { id: "leave", label: "Zostaw" }];
         if (n.state === "active") {
             const out = [];
             const ready = isReady(n);
             if (n.giver === "feliks" && ready && T.call("Story", "isOpen")) {
                 out.push({ id: "turnIn", label: "Oddaj", enabled: true });
-                out.push({ id: "turnInDebt", label: "Oddaj na dług", enabled: true });
-            } else out.push({ id: "turnIn", label: "Oddaj zlecenie", enabled: ready });
-            out.push({ id: "track", label: data().track === n.id ? "Nie śledź" : "Śledź" });
-            out.push({ id: "abandon", label: "Porzuć" });
+                out.push({ id: "turnInDebt", label: TK.scena.choiceList[2], enabled: true });
+            } else out.push({ id: "turnIn", label: TK.scena.choiceList[3], enabled: ready });
+            out.push({ id: "track", label: data().track === n.id ? TK.scena.choiceList[4] : TK.scena.choiceList[5] });
+            out.push({ id: "abandon", label: TK.scena.choiceList[6] });
             return out;
         }
         return [{ id: "leave", label: "Zamknij" }];
@@ -276,10 +277,10 @@
     Scene_QuestBoard.prototype.drawHints = function() {
         const b = this._hints.bitmap, ctx = b.context, S = U();
         b.clear();
-        const list = this.mode === "choice" ? [["←→", "wybierz"], ["O", "potwierdź"], ["P", "wróć"]]
+        const list = this.mode === "choice" ? [["←→", "wybierz"], ["O", TK.scena.drawHints[0]], ["P", TK.scena.drawHints[1]]]
             : this.mode === "anim" ? [["O", "szybciej"]]
             : this.mode === "tutorial" ? [["O", "dalej"]]
-            : [["↑↓←→", "wybierz kartkę"], ["O", this.focus && this.focus.n && this.focus.n.state === "active" ? (isReady(this.focus.n) ? "oddaj / opcje" : "opcje") : "otwórz"], ["P", "wyjdź"]];
+            : [["↑↓←→", TK.scena.drawHints[2]], ["O", this.focus && this.focus.n && this.focus.n.state === "active" ? (isReady(this.focus.n) ? TK.scena.drawHints[3] : "opcje") : TK.scena.drawHints[4]], ["P", TK.scena.drawHints[5]]];
         let x = L.hints[0] + 2;
         for (const [key, what] of list) {
             ctx.font = F.ui(15, true);
@@ -300,7 +301,7 @@
         ctx.font = F.ui(16, false);
         ctx.fillStyle = S.muted;
         ctx.textAlign = "right";
-        ctx.fillText("Nowe ogłoszenia: " + (k <= 1 ? "jutro" : "za " + k + " dni") + "  ·  zleceń w toku: " + activeList().length + "/" + MAX_ACTIVE, L.hints[2] - 4, 19);
+        ctx.fillText(Watki.wstaw(TK.scena.drawHints[7], { "1": k <= 1 ? "jutro" : Watki.wstaw(TK.scena.drawHints[6], { k: k }), length: activeList().length, MAX_ACTIVE: MAX_ACTIVE }), L.hints[2] - 4, 19);
         void d;
         b._baseTexture.update();
     };
@@ -520,8 +521,8 @@
         const n = el.n;
         if (c.enabled === false) {
             SoundManager.playBuzzer();
-            if (c.id === "accept") this.toast("Masz już " + MAX_ACTIVE + " zlecenia. Oddaj albo porzuć któreś.");
-            else if (c.id === "turnIn") { const q = n.req.find(r => !rowDone(r)); this.toast(q ? "Brakuje: " + reqName(q) + " " + Math.min(have(q), q.n) + "/" + q.n : "Jeszcze nie gotowe."); }
+            if (c.id === "accept") this.toast(Watki.wstaw(TK.scena.decide[0], { MAX_ACTIVE: MAX_ACTIVE }));
+            else if (c.id === "turnIn") { const q = n.req.find(r => !rowDone(r)); this.toast(q ? Watki.wstaw(TK.scena.decide[1], { "1": reqName(q), "2": Math.min(have(q), q.n), n: q.n }) : TK.scena.decide[2]); }
             return;
         }
         switch (c.id) {
@@ -537,7 +538,7 @@
                 el.refreshStamp(true);
                 el.shake = 5;
                 this.closeChoice();
-                this.toast("Przyjęte. Postęp widać w dzienniku (J); „Śledź” pokaże je na ekranie.", "#ffd23f");
+                this.toast(TK.scena.decide[3], "#ffd23f");
                 this.drawSlate();
                 return;
             }
@@ -547,7 +548,7 @@
                 this.drawSlate();
                 this.choices = this.choiceList();
                 this.drawButtons();
-                this.toast(data().track === n.id ? "Śledzisz to zlecenie w okienku celu na ekranie." : "Już go nie śledzisz.", "#ffd23f");
+                this.toast(data().track === n.id ? TK.scena.decide[4] : TK.scena.decide[5], "#ffd23f");
                 return;
             case "abandon":
                 SoundManager.playOk();
@@ -561,7 +562,7 @@
                 this._confirm = false;
                 T.audio.se("Book2", { volume: 70, pitch: 70 });
                 this.tearOff(el);
-                this.toast("Porzucone. Sława w tawernie -" + loss, "#ff9f8f");
+                this.toast(Watki.wstaw(TK.scena.decide[6], { loss: loss }), "#ff9f8f");
                 this.repShown = data().rep;
                 this.drawSlate();
                 return;
@@ -638,7 +639,7 @@
                 const f = { s, from: [el.x + (Math.random() - 0.5) * 40, el.y + (Math.random() - 0.5) * 30], to: to || [1000, 640], delay: i * 3, dur: 34 + Math.random() * 12, t: 0, coin: true, arc: -90 - Math.random() * 80, spin: Math.random() * 6 };
                 (this._flyers = this._flyers || []).push(f);
             }
-            this.floatText("+" + a.res.xp + " dośw.", el.x, el.y - 40, "#c9a6ff");
+            this.floatText(Watki.wstaw(TK.scena.updateAnim[0], { xp: a.res.xp }), el.x, el.y - 40, "#c9a6ff");
         }
         // the stars fill after the coins
         if (a.t >= COINS + 40) {
@@ -648,13 +649,13 @@
                 a.tierSaid = true;
                 T.audio.se("Chime2", { volume: 80, pitch: 100 });
                 this.sparkles(this._repAt[0], this._repAt[1], 16, "#ffd23f");
-                this.banner("Nowa sława: " + a.res.tierUp + "!");
+                this.banner(Watki.wstaw(TK.scena.updateAnim[1], { tierUp: a.res.tierUp }));
             }
             if (a.gift === undefined && a.res.gift) { a.gift = true; this.flyIcon(iconOf(a.res.gift[0]), [el.x, el.y], this._purseAt, 0, 30, true); }
             if (!a.dieSaid && a.res.die) {
                 a.dieSaid = true;
                 const TD = T.api("TavernDice"), DT = TD && TD.DIE_TYPES && TD.DIE_TYPES[a.res.die];
-                this.floatText("Nowa kość: " + (DT ? DT.name : a.res.die), el.x, el.y + 10, "#ffe27a");
+                this.floatText(Watki.wstaw(TK.scena.updateAnim[2], { "1": DT ? DT.name : a.res.die }), el.x, el.y + 10, "#ffe27a");
             }
         }
         this.drawSlate();
@@ -796,7 +797,7 @@
         ctx.font = F.ui(16, false);
         ctx.fillStyle = S.muted;
         ctx.textAlign = "right";
-        ctx.fillText((this._tutPage + 1) + "/" + TUTORIAL.length + "   O - dalej", px + pw - 22, py + ph - 16);
+        ctx.fillText(Watki.wstaw(TK.scena.drawTutorial[0], { "1": this._tutPage + 1, length: TUTORIAL.length }), px + pw - 22, py + ph - 16);
         b._baseTexture.update();
         this._overlay.visible = true;
     };

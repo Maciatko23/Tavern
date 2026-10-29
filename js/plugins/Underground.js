@@ -2468,7 +2468,7 @@
         setSpeed(v) { film.speed = Math.max(0.05, Number(v) || 1); return film.speed; }
     });
 
-    // ---- F9: jump to an ending with a world chosen (Debug.js's menu; the rows are added here - Debug.js is not changed)
+    // ---- F9: jump to an ending with a world chosen (Debug.js's menu: the row "Serce: zakończenie" of the thread "podziemia" below)
     function debugEnding(kind, who, worldKey, lordKey) {
         const d = D(), s = state(), dbg = H().DEBUG;
         if (!d.ENDINGS[kind]) return false;
@@ -2487,61 +2487,56 @@
         $gamePlayer.setTransparent(false);
         return travel([d.MAPS.heart, x, y, dir]);
     }
-    let debugHooked = false;
-    function hookDebug() {
-        if (debugHooked || !inGame || !window.Scene_Debug || !D() || !D().HEART) return;
-        debugHooked = true;
-        const dbg = () => H().DEBUG, pick = { end: 0, world: 0, lord: 0 };
-        const label = {
-            heartEnd: () => { const [k, w] = dbg().endings[pick.end]; return Watki.wstaw(TK.kod.heartEnd[0], { "1": dbg().endingName(k, w) }); },
-            heartWorld: () => Watki.wstaw(TK.kod.heartWorld[0], { name: dbg().worlds[pick.world].name }),
-            heartLord: () => Watki.wstaw(TK.kod.heartLord[0], { name: dbg().lords[pick.lord].name })
-        };
-        const ROWS = { heartEnd: "end", heartWorld: "world", heartLord: "lord" };
-        const SIZE = { end: () => dbg().endings.length, world: () => dbg().worlds.length, lord: () => dbg().lords.length };
-        const _create = Scene_Debug.prototype.create;
-        Scene_Debug.prototype.create = function() {
-            _create.call(this);
-            const list = this._list;
-            if (!list || !list._all) return;
-            const at = list._all.findIndex(r => r.kind === "ugLifts");
-            const rows = Object.keys(ROWS).map(kind => ({ tab: 0, kind, label: label[kind](), icon: kind === "heartEnd" ? 189 : 195 }));
-            list._all.splice(at >= 0 ? at + 1 : list._all.length, 0, ...rows);
-            const _change = list.changeQty;
-            list.changeQty = function(delta) {
-                const row = this.rowData();
-                if (row && ROWS[row.kind]) {
-                    const k = ROWS[row.kind];
-                    pick[k] = (pick[k] + delta + SIZE[k]()) % SIZE[k]();
-                    row.label = label[row.kind]();
-                    SoundManager.playCursor();
-                    this.redrawItem(this.index());
-                    return;
+    // ---- F9 (Debug.js's first tab "Zdarzenia"): the rows are the data's - the thread "podziemia" (Underground_Data.js, the words
+    // js/teksty/podziemia.txt); here their hooks: the words' {x} (f9Zmienne), ←→ (f9Wybierz: the row's floor; the ending, the world, the
+    // Lord - kept between the menu's openings), OK (f9Ok: { back } - to the map; {} - the menu stays, the row read again)
+    const f9Pick = { koniec: 0, swiat: 0, lord: 0 };
+    const f9List = co => { const g = H().DEBUG; return co === "koniec" ? g.endings : co === "swiat" ? g.worlds : g.lords; };
+    function f9Hooks() {
+        const w = inGame && window.Watki && Watki.get ? Watki.get("podziemia") : null;
+        if (!w || w.hooks.f9Ok) return;
+        const t = key => w.tekst(key);
+        w.haki({
+            f9Zmienne(ctx) {
+                const row = ctx.row || {}, g = H().DEBUG;
+                if (row.co === "pietro") { const hm = D().FLOORS[row.floor]; return { f: row.floor, nazwa: row.floor === 0 ? t("f9.ruiny") : hm ? Watki.wstaw(t("f9.pietroNazwa"), { nazwa: hm.name }) : "" }; }
+                if (row.co === "krata") return { stan: t(sw("gate") ? "f9.krataOtwarta" : "f9.krataZamknieta") };
+                if (row.co === "zamki") return { stan: t(state().forceLocks.all ? "f9.zamkiWlaczone" : "f9.zamkiWylaczone") };
+                if (row.co === "winda") return { juz: liftStops().length >= 9 ? t("f9.windaJuz") : "" };
+                if (row.co === "koniec") { const [k, who] = g.endings[f9Pick.koniec]; return { "1": g.endingName(k, who) }; }
+                if (row.co === "swiat" || row.co === "lord") return { name: f9List(row.co)[f9Pick[row.co]].name };
+                return {};
+            },
+            f9Wybierz(ctx, delta) {
+                const row = ctx.row;
+                if (row.co === "pietro") { row.floor = (row.floor + delta * (Input.isPressed("shift") ? 10 : 1) + 101 * 10) % 101; return true; }
+                if (f9Pick[row.co] === undefined) return false;
+                const n = f9List(row.co).length;
+                f9Pick[row.co] = (f9Pick[row.co] + delta + n * 10) % n;
+                return true;
+            },
+            f9Ok(ctx) {
+                const row = ctx.row;
+                if (row.co === "pietro") { go(row.floor); return { back: true }; }
+                if (row.co === "krata") { sw("gate", !sw("gate")); return {}; }
+                if (row.co === "zamki") { forceLock("all", !state().forceLocks.all); return {}; }
+                if (row.co === "winda") { for (const f of D().LIFT.stops) state().lifts[f] = true; sw("lift", true); return {}; }
+                if (row.co === "koniec") {
+                    const g = H().DEBUG, [k, who] = g.endings[f9Pick.koniec];
+                    debugEnding(k, who, g.worlds[f9Pick.swiat].key, g.lords[f9Pick.lord].key);
+                    return { back: true };
                 }
-                return _change.call(this, delta);
-            };
-            if (this._tab === 0) list.setTab(0, list.index());
-        };
-        const _onOk = Scene_Debug.prototype.onOk;
-        Scene_Debug.prototype.onOk = function() {
-            const row = this._list.rowData();
-            if (row && row.kind === "heartEnd") {
-                const [k, w] = dbg().endings[pick.end];
-                this.popScene();
-                debugEnding(k, w, dbg().worlds[pick.world].key, dbg().lords[pick.lord].key);
-                SoundManager.playOk();
-                return;
+                if (row.co === "swiat" || row.co === "lord") { f9Pick[row.co] = (f9Pick[row.co] + 1) % f9List(row.co).length; return {}; }
+                return null;
             }
-            if (row && (row.kind === "heartWorld" || row.kind === "heartLord")) { this._list.changeQty(1); this._list.activate(); return; }
-            return _onOk.call(this);
-        };
-        Scene_Debug.prototype.heartPick = pick;
+        });
     }
-    if (inGame) {
+    f9Hooks();
+    if (inGame) {   // (the data loaded after this file - Underground.js's own loadScript below: the hooks once the game boots)
         const _Scene_Boot_start = Scene_Boot.prototype.start;
         Scene_Boot.prototype.start = function() {
             _Scene_Boot_start.apply(this, arguments);
-            hookDebug();
+            f9Hooks();
         };
     }
 

@@ -33,6 +33,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("kosci");   // (the words of this file: js/teksty/kosci.txt, scena.*)
     const TW = window.Tawerna;
     if (!TW || !TW.ui || !TW.ui.Scene_MiniGame) throw new Error("TavernDice_Scene.js: brak TawernaCore.js / TawernaUI.js - muszą być wyżej na liście wtyczek (the Tawerna core or UI kit is missing)");
     const ui = TW.ui;
@@ -422,7 +423,7 @@
         // who starts: each throws one die, the higher starts (a tie: again)
         *rollOffFlow() {
             const g = this.game;
-            this.banner.show("turn", "Kto zaczyna?", null, 42);
+            this.banner.show("turn", TK.scena.rollOffFlow[0], null, 42);
             yield 36;
             for (const [a, b] of g.setup.rolls) {
                 const da = this.newDie(g.match.players[0].dice[0], a), db = this.newDie("std", b);
@@ -431,14 +432,14 @@
                 this.dice = [da, db];
                 yield () => !da.busy() && !db.busy();
                 yield 20;
-                if (a === b) { this.banner.show("turn", "Remis! Jeszcze raz.", null, 56); yield 40; }
+                if (a === b) { this.banner.show("turn", TK.scena.rollOffFlow[1], null, 56); yield 40; }
                 else { (a > b ? da : db).liftTo = 1; snd("on"); yield 26; }
                 for (const d of [da, db]) d.fadeOut(12);
                 yield 14;
                 this.clearTable();
             }
             const heroFirst = g.match.cur === 0;
-            this.banner.show("turn", heroFirst ? "Zaczynasz ty" : "Zaczyna " + g.opp.short, null, 64);
+            this.banner.show("turn", heroFirst ? TK.scena.rollOffFlow[2] : Watki.wstaw(TK.scena.rollOffFlow[3], { short: g.opp.short }), null, 64);
             this.say(1, heroFirst ? "heroFirst" : "meFirst", 0.8);
             yield 40;
         }
@@ -447,7 +448,7 @@
             g.started = true;
             this.setActive(me);
             this.shown[me] = m.players[me].total;
-            this.banner.show("turn", hero ? "Twoja tura" : "Tura: " + g.opp.short, null, 58);
+            this.banner.show("turn", hero ? TK.scena.turnFlow[0] : Watki.wstaw(TK.scena.turnFlow[1], { short: g.opp.short }), null, 58);
             if (!hero && !this.hinted && MERCHANT_HINT[g.key] && m.turnNo >= 2 && locked(hourNow(), dayNow()).includes("kupiec")) { this.hinted = true; g.lastChat = m.turnNo; this.sayText(1, MERCHANT_HINT[g.key], true); }
             else if (!hero && g.opp.lines.chat && m.turnNo - g.lastChat >= 3 && g.R.talk() < (g.opp.stories ? 0.3 : 0.14)) { g.lastChat = m.turnNo; this.say(1, "chat", undefined, true); }
             yield 24;
@@ -609,7 +610,7 @@
             snd("bust");
             for (const d of this.dice) d.dimTo = 1;
             for (const d of this.aside[me]) d.dimTo = 1;
-            this.banner.show("bust", "Pudło!", lost > 0 ? "Tura przepada: −" + lost : "Żadna kość nie punktuje", 104);
+            this.banner.show("bust", TK.scena.bustFlow[0], lost > 0 ? Watki.wstaw(TK.scena.bustFlow[1], { lost: lost }) : TK.scena.bustFlow[2], 104);
             if (me === 0) {
                 const said = this.say(1, "heroBust", 0.75);
                 if (said && g.key === "grum" && g.R.talk() < 0.4) snd("laugh");
@@ -625,7 +626,7 @@
             const g = this.game, m = g.match, me = m.cur, hero = me === 0;
             const cx = hero ? ZONE.x + 64 : ZONE.x + ZONE.w - 64, cy = hero ? POT.y + 118 : POT.y - 70;
             snd("hot"); snd("hot2");
-            this.banner.show("hot", "Gorące kości!", "Wszystkie sześć odłożone — rzut całą szóstką, punkty zostają", 110);
+            this.banner.show("hot", TK.scena.hotFlow[0], TK.scena.hotFlow[1], 110);
             for (const d of this.aside[me]) { d.liftTo = 1; this.sparks(d.tx, d.ty - 10, 5); }
             if (hero) this.say(1, "heroHot", 0.7); else this.say(1, "myHot", 0.8);
             yield 40;
@@ -657,7 +658,7 @@
             this.say(0, "vision", undefined, true);
             const st = store();
             st.visions = (st.visions || 0) + 1;
-            if (st.visions === 1) this.rewards.notes.push(["Dziadek Ozzy i kości", "Grałem z Dziadkiem Ozzym w kości. Zanim kości wypadły z kubka, wymamrotał, co pokażą. Zgadzało się co do oczka.\nPijacki fart? Ozzy mówi czasem rzeczy, których nie mógłby wiedzieć..."]);
+            if (st.visions === 1) this.rewards.notes.push([TK.scena.visionAfter[0], TK.scena.visionAfter[1]]);
             yield 40;
         }
         *endFlow() {
@@ -666,7 +667,7 @@
             yield 20;
             this.shown = m.players.map(p => p.total);
             this.bustL.lightTo = this.bustR.lightTo = 1;
-            this.banner.show(won ? "win" : "lose", won ? "Wygrana!" : "Przegrana", won ? "Pula " + gold(g.pot) + " jest twoja" : g.opp.short + " zgarnia pulę", 170, FELT.y + 118);
+            this.banner.show(won ? "win" : "lose", won ? "Wygrana!" : "Przegrana", won ? Watki.wstaw(TK.scena.endFlow[0], { "1": gold(g.pot) }) : Watki.wstaw(TK.scena.endFlow[1], { short: g.opp.short }), 170, FELT.y + 118);
             if (won) { AudioManager.playMe({ name: "Item", volume: 70, pitch: 100, pan: 0 }); this.bustL.hop = 16; this.sparks(POT.x, POT.y, 24); }
             else { snd("lose"); this.bustR.hop = 16; }
             // the coins fly to the winner
@@ -698,16 +699,17 @@
             const s = score(idx.map(i => m.thrown[i].face));
             return { idx, n: idx.length, valid: s.valid, points: s.points, name: s.name };
         }
+        // (every frame: the words of js/teksty/kosci.txt, stol.rzut / stol.zapisz - the numbers glued on as before)
         buttons() {
-            const m = this.game && this.game.match, w = this.waitHero, sel = w === "choose" ? this.selection() : null;
+            const m = this.game && this.game.match, w = this.waitHero, sel = w === "choose" ? this.selection() : null, X = TK.stol;
             const left = m && sel ? (m.turn.free.length - sel.n) : 0;
             return BTN.map(b => {
                 const o = Object.assign({}, b, { y: 0, h: BAR.h });
                 if (b.id === "roll") {
-                    o.label = w === "choose" ? (sel.valid && left === 0 ? "Rzuć wszystkimi (6)" : "Rzuć dalej" + (sel.valid ? " (" + left + ")" : "")) : "Rzuć kośćmi";
+                    o.label = w === "choose" ? (sel.valid && left === 0 ? X.rzut.wszystkie : X.rzut.dalej + (sel.valid ? " (" + left + ")" : "")) : X.rzut.kosci;
                     o.enabled = w === "throw" || (w === "choose" && sel.valid);
                 } else if (b.id === "bank") {
-                    o.label = w === "choose" && sel.valid ? "Zapisz " + (m.turn.pts + sel.points) : "Zapisz punkty";
+                    o.label = w === "choose" && sel.valid ? X.zapisz.ile + (m.turn.pts + sel.points) : X.zapisz.punkty;
                     o.enabled = w === "choose" && sel.valid;
                 } else o.enabled = this.phase === "play";
                 return o;
@@ -833,8 +835,8 @@
         // who is in the hall but does not play with the hero yet: the words for the lobby
         fameHint() {
             const lk = locked(hourNow(), dayNow());
-            if (lk.includes("kupiec")) return "Przy oknie siedzi bogaty kupiec z miasta, ale gra tylko z ludźmi, których zna.";
-            if (lk.includes("nieznajomy") && (fame() || 0) >= 60) return "W kącie ktoś w kapturze przygląda się stołom. Podobno gra tylko z chlubą tawerny.";
+            if (lk.includes("kupiec")) return TK.scena.fameHint[0];
+            if (lk.includes("nieznajomy") && (fame() || 0) >= 60) return TK.scena.fameHint[1];
             return "";
         }
         stakesOf(card) { return card ? OPPONENTS[card.key].stakes : []; }
@@ -1001,14 +1003,14 @@
                     g.giftGold = d.orGold;
                     $gameParty.gainGold(d.orGold);
                     st.net += d.orGold;
-                    this.rewards.notices.push(["Sakiewka od: " + g.opp.name + " (+" + gold(d.orGold) + ")", ST().accent, null]);
+                    this.rewards.notices.push([Watki.wstaw(TK.scena.finishGame[0], { name: g.opp.name, "2": gold(d.orGold) }), ST().accent, null]);
                 } else if (d.giveOnce || (d.giveAfter && v.wins >= d.giveAfter) || (d.giveAtStake && g.stake >= d.giveAtStake)) {
                     v.given = true; v.gift = d.key;
                     giveDie(d.key);
                     g.gift = d.key;
                     const T = DIE_TYPES[d.key];
-                    this.rewards.notes.push(["Nowa kość: " + T.name, "Dostałem ją od: " + g.opp.name + ".\n" + T.desc + "\n" + T.effect + "\nPrzy stole do kości mogę ją wybrać do swojej szóstki."]);
-                    this.rewards.notices.push(["Nowa kość do gry: " + T.name, ST().accent, T.effect]);
+                    this.rewards.notes.push([Watki.wstaw(TK.scena.finishGame[1], { name: T.name }), Watki.wstaw(TK.scena.finishGame[2], { name: g.opp.name, desc: T.desc, effect: T.effect })]);
+                    this.rewards.notices.push([Watki.wstaw(TK.scena.finishGame[3], { name: T.name }), ST().accent, T.effect]);
                 }
             }
             if (won) {
@@ -1016,9 +1018,9 @@
                 this.rewards.xp += g.xp;
                 if (!st.firstWin) {
                     st.firstWin = true;
-                    this.rewards.notes.push(["Pierwsza wygrana w kości", "Wygrałem pierwszą partię kości w tawernie „Pod Złotym Kuflem”. Rywal: " + g.opp.name + ", pula " + gold(g.pot) + ".\nSzczęście? Może. Ale odłożyć właściwe kości też trzeba umieć."]);
+                    this.rewards.notes.push([TK.scena.finishGame[4], Watki.wstaw(TK.scena.finishGame[5], { name: g.opp.name, "2": gold(g.pot) })]);
                 }
-                if (g.pot >= BIG_POT) this.rewards.notices.push(["Wielka wygrana w kości: +" + gold(g.pot) + "!", ST().accent, "Pula od: " + g.opp.name]);
+                if (g.pot >= BIG_POT) this.rewards.notices.push([Watki.wstaw(TK.scena.finishGame[6], { "1": gold(g.pot) }), ST().accent, Watki.wstaw(TK.scena.finishGame[7], { name: g.opp.name })]);
             }
             const minutes = Math.round(MIN_BASE + MIN_TURN * m.turnNo);
             if (window.$gameSystem && typeof $gameSystem.advanceDayNight === "function" && minutes > 0) $gameSystem.advanceDayNight(minutes / 60);
@@ -1037,10 +1039,10 @@
         againBlock() {
             const g = this.game;
             if (!g) return "—";
-            if (this.opts.once) return "Tylko jedna partia.";
-            if (vsOf(g.key).lostToday >= g.opp.perDay) return g.opp.short + " już dziś nie zagra.";
-            if (!this.opts.opponent && !present(hourNow(), dayNow()).some(p => p.key === g.key)) return "Robi się późno — " + g.opp.short + " odchodzi od stołu.";
-            if ($gameParty.gold() < g.stake) return "Za mało złota na tę stawkę.";
+            if (this.opts.once) return TK.scena.againBlock[0];
+            if (vsOf(g.key).lostToday >= g.opp.perDay) return Watki.wstaw(TK.scena.againBlock[1], { short: g.opp.short });
+            if (!this.opts.opponent && !present(hourNow(), dayNow()).some(p => p.key === g.key)) return Watki.wstaw(TK.scena.againBlock[2], { short: g.opp.short });
+            if ($gameParty.gold() < g.stake) return TK.scena.againBlock[3];
             return null;
         }
         openEnd() {
@@ -1050,9 +1052,9 @@
             this.waitHero = null;
             const again = !this.againBlock(), lobby = !this.opts.opponent;
             this.endBtns = [
-                { id: "again", label: "Jeszcze raz", enabled: again, primary: true },
-                { id: "lobby", label: "Inna gra", enabled: lobby },
-                { id: "leave", label: "Odchodzę", enabled: true }
+                { id: "again", label: TK.scena.openEnd[0], enabled: again, primary: true },
+                { id: "lobby", label: TK.scena.openEnd[1], enabled: lobby },
+                { id: "leave", label: TK.scena.openEnd[2], enabled: true }
             ];
             this.endSel = again ? 0 : 2;
         }

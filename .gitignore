@@ -57,3 +57,8 @@ __pycache__/
 # the test map (tests/lib/mapa.js): per machine, like last_results.json - the texts of its measured versions are objects in this
 # machine's .git (git hash-object -w), not in any commit; 1-5 MB, rewritten by every measurement
 /tests/mapa_testow.json
+# the story autopilot's runs (tests/autopilot_fabula_test.js, tools/autopilot/ogladaj.js): logs, state, screenshots, the watch report
+/tests/autopilot_fabula/*.log
+/tests/autopilot_fabula/stan*.json
+/tests/autopilot_fabula/*.png
+/tests/autopilot_fabula/raport_ogladanie.md

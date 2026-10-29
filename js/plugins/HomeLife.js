@@ -78,6 +78,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("dom_dziadka");   // (the words of this file: js/teksty/dom_dziadka.txt, zycie.*)
 
     const PLUGIN = "HomeLife";
     const T = window.Tawerna;
@@ -558,7 +559,7 @@
     function noteBlocked(g, c) {
         if (c.blocked < 150 || frame() - c.barked < 60 * 25) return;
         c.barked = frame();
-        bark(g, pick(["Przepuścisz staruszka?", "Z drogi, młodzieży - stary idzie!", "Hop, hop, wnuku... ustąpisz miejsca?"]));
+        bark(g, pick([TK.zycie.noteBlocked[0], TK.zycie.noteBlocked[1], TK.zycie.noteBlocked[2]]));
     }
 
     // ------------------------------------------------------------------
@@ -723,7 +724,7 @@
         if (s.purrDay !== day()) {
             s.purrDay = day();
             if (typeof $gameSystem.changeStamina === "function") $gameSystem.changeStamina(PURR_STAMINA);
-            popup(STAMINA_ICON, "Kot mruczy - odpoczywasz chwilę (+" + PURR_STAMINA + " wytrzymałości)", GOOD);
+            popup(STAMINA_ICON, Watki.wstaw(TK.zycie.pet[0], { PURR_STAMINA: PURR_STAMINA }), GOOD);
         }
     }
 
@@ -737,17 +738,17 @@
         if (!storyOn() || !$dataItems[SOUP]) return false;
         const s = S(), g = grandpa(), awake = !!g && !asleep(g) && introDone(), item = $dataItems[SOUP];
         if (s.soupDay === day()) {
-            if (awake) bark(g, pick(["Wyjadłeś już wszystko, łakomczuchu! Jutro nagotuję nowego.", "Kocioł pusty. Jutro, wnuku, jutro.", "Dno widać! Kapusta nie rośnie tak szybko, jak ty jesz."]));
-            else popup(item.iconIndex, "Kocioł pusty - dziadek ugotuje jutro", MUTED);
+            if (awake) bark(g, pick([TK.zycie.cauldron[0], TK.zycie.cauldron[1], TK.zycie.cauldron[2]]));
+            else popup(item.iconIndex, TK.zycie.cauldron[3], MUTED);
             return false;
         }
         if (hour() < SOUP_FROM) {
-            if (awake) bark(g, pick(["Jeszcze nie doszła! Dobry kapuśniak lubi czas.", "Cierpliwości, wnuku. Od ósmej, nie wcześniej!"]));
-            else popup(item.iconIndex, "Kapuśniak jeszcze się nie ugotował", MUTED);
+            if (awake) bark(g, pick([TK.zycie.cauldron[4], TK.zycie.cauldron[5]]));
+            else popup(item.iconIndex, TK.zycie.cauldron[6], MUTED);
             return false;
         }
         if ($gameParty.maxItems(item) - $gameParty.numItems(item) < 1) {
-            popup(item.iconIndex, "Nie zmieści się w plecaku: " + item.name, BAD);
+            popup(item.iconIndex, Watki.wstaw(TK.zycie.cauldron[7], { name: item.name }), BAD);
             SoundManager.playBuzzer();
             return false;
         }
@@ -756,11 +757,11 @@
         $gameParty.gainItem(item, 1);
         se("Water1", 30, 135);
         if (awake) {
-            bark(g, pick(["Nalej sobie, póki gorący!", "Nalej sobie, póki gorący! Z mojej kapusty, nie z jakiejś tam kupnej.", "Jedz, jedz. Na pustym brzuchu długu nie spłacisz.",
-                "Tylko nie mów Borgarowi - jeszcze by mnie zatrudnił za kucharza."]));
+            bark(g, pick([TK.zycie.cauldron[8], TK.zycie.cauldron[9], TK.zycie.cauldron[10],
+                TK.zycie.cauldron[11]]));
         } else {
-            popup(item.iconIndex, "Nalewasz po cichu, żeby nie zbudzić dziadka", MUTED);
-            bark($gamePlayer, "(szeptem) Dzięki, dziadku...");
+            popup(item.iconIndex, TK.zycie.cauldron[12], MUTED);
+            bark($gamePlayer, TK.zycie.cauldron[13]);
         }
         return true;
     }
@@ -790,21 +791,21 @@
     };
     function arrivalLine() {
         const h = hour(), lines = [], W = T.call("Survival", "currentWeather") || null;
-        if (W && W.type === "snow") lines.push("Zamykaj drzwi, bo ciepło ucieka! Mruczek od rana nie odchodzi od pieca.");
-        else if (W && W.storm && (T.call("Survival", "stormLevel", day(), h) || 0) > 0.3) lines.push("Słyszysz, jak grzmi? Mruczek już siedzi pod piecem.", "Burza jak za starych czasów... Dobrze, że dach połatany.");
-        else if (W) lines.push("Zmokłeś? Siadaj bliżej ognia, bo mi się przeziębisz.", "Leje jak z cebra. Dobrze, że dach po burzy połatany... prawie.");
+        if (W && W.type === "snow") lines.push(TK.zycie.arrivalLine[0]);
+        else if (W && W.storm && (T.call("Survival", "stormLevel", day(), h) || 0) > 0.3) lines.push(TK.zycie.arrivalLine[1], TK.zycie.arrivalLine[2]);
+        else if (W) lines.push(TK.zycie.arrivalLine[3], TK.zycie.arrivalLine[4]);
         const st = T.call("Story", "state") || null, Story = T.api("Story");
-        if (st && st.lost) lines.push(st.buy && st.buy.done ? "Działka znowu nasza - odkupiona! Czasem chodzę tam rano, tak tylko, popatrzeć." : "Siadaj, wnuku. O działce dziś nie gadamy - ziemia to tylko ziemia.");
-        else if (st && (st.done || st.paid >= st.debt)) lines.push("Działka nasza! Jeszcze mi się w głowie nie mieści.");
+        if (st && st.lost) lines.push(st.buy && st.buy.done ? TK.zycie.arrivalLine[5] : TK.zycie.arrivalLine[6]);
+        else if (st && (st.done || st.paid >= st.debt)) lines.push(TK.zycie.arrivalLine[7]);
         else if (st && T.call("Story", "isOpen")) {
             const n = Story.daysLeft(), left = Story.left();
-            if (n <= 5) lines.push("Termin za pasem, wnuku... Trzymam kciuki. Oba.");
-            else if (st.paid > 0) lines.push("Lordowi już coś oddałeś? Dobry z ciebie wnuk. Brakuje jeszcze " + left + " G.");
-            else lines.push("Brakuje jeszcze " + left + " G dla Lorda. Liczę na ciebie... ale bez presji. Dużej.");
+            if (n <= 5) lines.push(TK.zycie.arrivalLine[8]);
+            else if (st.paid > 0) lines.push(Watki.wstaw(TK.zycie.arrivalLine[9], { left: left }));
+            else lines.push(Watki.wstaw(TK.zycie.arrivalLine[10], { left: left }));
         }
-        lines.push("Mruczek znowu spał na twoim posłaniu. Wszędzie sierść!", "Ten kot ma lepsze życie niż my obaj razem wzięci.", "Pogłaszcz Mruczka, to się odwdzięczy. Mruczeniem, bo myszy nie łowi.");
-        if (h >= 8 && h < 18 && S().soupDay !== day()) lines.push("Kapuśniak w kotle, nalej sobie, póki ciepły!");
-        if (h >= 18) lines.push("Wróciłeś wreszcie. Siadaj, opowiadaj, co w świecie słychać.");
+        lines.push(TK.zycie.arrivalLine[11], TK.zycie.arrivalLine[12], TK.zycie.arrivalLine[13]);
+        if (h >= 8 && h < 18 && S().soupDay !== day()) lines.push(TK.zycie.arrivalLine[14]);
+        if (h >= 18) lines.push(TK.zycie.arrivalLine[15]);
         const fresh = lines.filter(l => l !== S().lastBark);
         return pick(fresh.length ? fresh : lines);
     }

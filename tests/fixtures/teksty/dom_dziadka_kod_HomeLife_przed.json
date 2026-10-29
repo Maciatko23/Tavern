@@ -1,0 +1,47 @@
+{
+ "zycie": {
+  "noteBlocked": {
+   "0": "Przepuścisz staruszka?",
+   "1": "Z drogi, młodzieży - stary idzie!",
+   "2": "Hop, hop, wnuku... ustąpisz miejsca?"
+  },
+  "pet": {
+   "0": "Kot mruczy - odpoczywasz chwilę (+{PURR_STAMINA} wytrzymałości)"
+  },
+  "cauldron": {
+   "0": "Wyjadłeś już wszystko, łakomczuchu! Jutro nagotuję nowego.",
+   "1": "Kocioł pusty. Jutro, wnuku, jutro.",
+   "2": "Dno widać! Kapusta nie rośnie tak szybko, jak ty jesz.",
+   "3": "Kocioł pusty - dziadek ugotuje jutro",
+   "4": "Jeszcze nie doszła! Dobry kapuśniak lubi czas.",
+   "5": "Cierpliwości, wnuku. Od ósmej, nie wcześniej!",
+   "6": "Kapuśniak jeszcze się nie ugotował",
+   "7": "Nie zmieści się w plecaku: {name}",
+   "8": "Nalej sobie, póki gorący!",
+   "9": "Nalej sobie, póki gorący! Z mojej kapusty, nie z jakiejś tam kupnej.",
+   "10": "Jedz, jedz. Na pustym brzuchu długu nie spłacisz.",
+   "11": "Tylko nie mów Borgarowi - jeszcze by mnie zatrudnił za kucharza.",
+   "12": "Nalewasz po cichu, żeby nie zbudzić dziadka",
+   "13": "(szeptem) Dzięki, dziadku..."
+  },
+  "arrivalLine": {
+   "0": "Zamykaj drzwi, bo ciepło ucieka! Mruczek od rana nie odchodzi od pieca.",
+   "1": "Słyszysz, jak grzmi? Mruczek już siedzi pod piecem.",
+   "2": "Burza jak za starych czasów... Dobrze, że dach połatany.",
+   "3": "Zmokłeś? Siadaj bliżej ognia, bo mi się przeziębisz.",
+   "4": "Leje jak z cebra. Dobrze, że dach po burzy połatany... prawie.",
+   "5": "Działka znowu nasza - odkupiona! Czasem chodzę tam rano, tak tylko, popatrzeć.",
+   "6": "Siadaj, wnuku. O działce dziś nie gadamy - ziemia to tylko ziemia.",
+   "7": "Działka nasza! Jeszcze mi się w głowie nie mieści.",
+   "8": "Termin za pasem, wnuku... Trzymam kciuki. Oba.",
+   "9": "Lordowi już coś oddałeś? Dobry z ciebie wnuk. Brakuje jeszcze {left} G.",
+   "10": "Brakuje jeszcze {left} G dla Lorda. Liczę na ciebie... ale bez presji. Dużej.",
+   "11": "Mruczek znowu spał na twoim posłaniu. Wszędzie sierść!",
+   "12": "Ten kot ma lepsze życie niż my obaj razem wzięci.",
+   "13": "Pogłaszcz Mruczka, to się odwdzięczy. Mruczeniem, bo myszy nie łowi.",
+   "14": "Kapuśniak w kotle, nalej sobie, póki ciepły!",
+   "15": "Wróciłeś wreszcie. Siadaj, opowiadaj, co w świecie słychać."
+  }
+ },
+ "_opis": "Napisy kodu HomeLife.js sprzed przeniesienia do js/teksty/dom_dziadka.txt (zycie.*)"
+}

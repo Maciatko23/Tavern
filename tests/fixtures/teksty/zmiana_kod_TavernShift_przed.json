@@ -1,0 +1,94 @@
+{
+ "kod": {
+  "cardSpec": {
+   "0": " · TRUDNOŚĆ {L}",
+   "1": "ZMIANA NR {shiftNo}{2}",
+   "2": "Praca w tawernie",
+   "3": "„Pod Złotym Kuflem”",
+   "4": "Fartuch na grzbiet i do roboty! Uczciwie popracujesz - uczciwie zapłacę. Każdy grosz przybliża spłatę długu twojego dziadka.",
+   "5": "pauza w trakcie zmiany (można ją przerwać)",
+   "6": "CZĘŚĆ {1} Z {length}",
+   "7": "Przed otwarciem",
+   "8": "sprzątanie i drewno",
+   "9": "Sala po wczorajszym wieczorze to pobojowisko. Zanim wpuścimy gości, ogarnij ją. Masz {1} sekund.",
+   "10": "Przetrzyj brudne stoły: stań przy stole i przytrzymaj O.",
+   "11": "Przynieś drewno ze stosu w rogu do kominka - po jednym polanie.",
+   "12": "Wynieś worki i kubły ze śmieciami za drzwi wejściowe.",
+   "13": "Za każde zadanie premia, za szybki koniec - ekstra.",
+   "14": "/ WSAD: chodzenie",
+   "15": "nalewanie piwa na czas",
+   "16": "Pokaż, czy umiesz nalać. {mugs} kufli, jeden po drugim.",
+   "17": "Przytrzymaj O: z kranu leje się piwo.",
+   "18": "Puść, gdy piana dojdzie do żółtej kreski.",
+   "19": "Piwo leci jeszcze chwilę po puszczeniu - puść odrobinę wcześniej.",
+   "20": "Za mało - goście marudzą, za dużo - rozlane. Równo nalane piwo = większe napiwki wieczorem.",
+   "21": "przytrzymaj: lej",
+   "22": "Kuchnia w rytm",
+   "23": "gotowanie do taktu",
+   "24": "Ja gotuję, ty pomagasz. Rób dokładnie to, co trzeba, i wtedy, kiedy trzeba!",
+   "25": "Kroki przepisu przesuwają się od prawej do lewej.",
+   "26": "Naciśnij właściwy klawisz, gdy krok jest w żółtej ramce.",
+   "27": "Im dokładniej, tym lepsze danie - i większe napiwki za gulasz i zupę.",
+   "28": "kroić",
+   "29": "mieszać",
+   "30": "przyprawić",
+   "31": "dorzucić",
+   "32": "podać",
+   "33": "Wieczór",
+   "34": "obsługa sali",
+   "35": "Drzwi otwarte, goście schodzą się na kolację. Nie daj im czekać!",
+   "36": "Gość siada i zamawia: dymek pokazuje, co chce.",
+   "37": "Weź danie z lady (O przy ladzie) - uniesiesz dwie rzeczy - i zanieś właściwemu gościowi (O przy nim). Zbędne danie odstawisz na końcu lady.",
+   "38": "Szybko = napiwek. Pomyłka albo długie czekanie = mniejsza zapłata; zniecierpliwiony gość wychodzi bez płacenia.",
+   "39": "Po gościu przetrzyj stół (przytrzymaj O). Gdy ogień przygasa - dorzuć drewna.",
+   "40": "/ WSAD",
+   "41": "weź / podaj"
+  },
+  "pause": {
+   "0": "Wracam do pracy",
+   "1": "Przerwij zmianę (bez zapłaty)"
+  },
+  "openCard": {
+   "0": "O - zaczynamy",
+   "1": "O - do roboty"
+  },
+  "computeResult": {
+   "0": "Zmiana przerwana - Borgar nie płaci za pół roboty"
+  },
+  "drawHud": {
+   "0": "CZĘŚĆ {1} Z {length}",
+   "1": "Napiwki: {1} G",
+   "2": "{1}  ·  zmiana nr {shiftNo}"
+  },
+  "drawBanner": {
+   "0": "{title} - koniec",
+   "1": "Wynik części",
+   "2": "Nieźle idzie.",
+   "3": "Mogło być lepiej.",
+   "4": "O - dalej",
+   "5": "O - koniec zmiany"
+  },
+  "drawSummary": {
+   "0": "Zmywasz się w pół roboty? Za to nie płacę. Napiwki możesz zatrzymać.",
+   "1": "- Borgar",
+   "2": "ZMIANA PRZERWANA",
+   "3": "KONIEC ZMIANY NR {shift}",
+   "4": " · trudność {level}",
+   "5": "Ocena {1} / 5 · wynik {score} / 100{3}",
+   "6": "Dniówka",
+   "7": "Premia za pracę",
+   "8": "Potrącenia",
+   "9": "Ekstra od Borgara",
+   "10": "Na chleb od Borgara",
+   "11": "Co poszło dobrze",
+   "12": "Co poszło źle",
+   "13": "nic - czysta robota",
+   "14": "Czas: {1} → {endH}   ·   wytrzymałość −{stamina}   ·   zarobek do sakiewki: {total} G",
+   "15": "O - wracam do tawerny"
+  },
+  "canStart": {
+   "0": "Jesteś zbyt zmęczony na całą zmianę."
+  }
+ },
+ "_opis": "Napisy kodu TavernShift.js sprzed przeniesienia do js/teksty/zmiana.txt (kod.*)"
+}

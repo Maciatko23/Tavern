@@ -1,16 +1,10 @@
 /*:
  * @target MZ
- * @plugindesc Nowa postać (wieśniak w szarej tunice, boso): płynne chodzenie, bieg i skradanie w 8 kierunkach oraz nowe animacje pracy i walki (16 klatek). F9 przełącza na starą. v1.0.0
+ * @plugindesc Postać bohatera (wieśniak w szarej tunice, boso): płynne chodzenie, bieg i skradanie w 8 kierunkach oraz animacje pracy i walki (16 klatek). v2.0.0
  * @author Tawerna
  *
- * @param startOn
- * @text Nowa postać domyślnie
- * @type boolean
- * @default true
- * @desc true: nowa postać (w nowej grze i w zapisach, w których nie przełączano jej w F9); false: stary Reid.
- *
  * @help
- * Nowy wygląd bohatera (wieśniak w szarej tunice z worka, boso), na próbę.
+ * Wygląd bohatera (wieśniak w szarej tunice z worka, boso) - jedyny w grze.
  *
  * Chodzenie i bieg: img/characters/Hero_Walk.png i Hero_Run.png - 8 wierszy
  * (kierunki: dół, dół-lewo, lewo, góra-lewo, góra, góra-prawo, prawo, dół-prawo)
@@ -27,13 +21,14 @@
  * Z zapaloną pochodnią w ręku (Torch.js): Hero_TorchWalk, Hero_TorchRun, Hero_TorchSneak,
  * a schylając się po coś (kucanie): Hero_TorchCrouch.
  *
- * Menu F9, zakładka Zdarzenia: "Nowa postać" przełącza na starego Reida i z powrotem.
+ * Starego bohatera (Reid: $Reid_Poor, $Reid_Poor_Sneak i arkusze Swing_*) i jego
+ * przełącznika w F9 już nie ma (2026-10-28) - pliki leżą w archiwum
+ * ..\Tawerna_archiwum_2026-10-18\pliki\img\. Baza danych (data/Actors.json)
+ * wciąż podaje $Reid_Poor jako grafikę aktora: kto by o nią poprosił, dostaje
+ * arkusz bohatera (bez błędu wczytywania).
  */
 (() => {
     "use strict";
-
-    const params = PluginManager.parameters("HeroLook");
-    const START_ON = params.startOn !== "false";
 
     const WALK = "Hero_Walk", RUN = "Hero_Run", SNEAK = "Hero_Sneak";
     const CELL = 64;    // the walking sheets' cells; a row: the figure standing, then the frames of the cycle (as many as the sheet is wide)
@@ -72,10 +67,14 @@
     const TORCH_SHEETS = { walk: "Hero_TorchWalk", run: "Hero_TorchRun", sneak: "Hero_TorchSneak" };
     const torchHeld = () => !!(window.Torch && Torch.held && Torch.held());
 
-    const active = () => !!$gameSystem && ($gameSystem._heroLook === undefined ? START_ON : $gameSystem._heroLook === "new");
-    function setActive(on) {
-        if ($gameSystem) $gameSystem._heroLook = on ? "new" : "old";
-    }
+    // the hero's sheets are drawn whenever a game runs (the only look since 2026-10-28; the other plugins still ask)
+    const active = () => !!$gameSystem;
+    // the old hero's sheets (archived): the database's actor graphic and the old sneak sheet - asked for, the hero's own come instead
+    const OLD_SHEETS = { "$Reid_Poor": WALK, "$Reid_Poor_Sneak": SNEAK };
+    const _loadCharacter = ImageManager.loadCharacter;
+    ImageManager.loadCharacter = function(filename) {
+        return _loadCharacter.call(this, OLD_SHEETS[filename] || filename);
+    };
 
     // ---- which way he faces, in 8 directions, and how far his legs have gone
     const DIR8 = { 0: 6, 1: 3, 2: 2, 3: 1, 4: 4, "-4": 4, "-3": 7, "-2": 8, "-1": 9 };   // octant of the move (y down) -> numpad
@@ -188,13 +187,13 @@
         _updateFrame.call(this);
     };
 
-    // ---- the work: the new swing sheets where there are some
+    // ---- the work: the hero's swing sheets (a kind without one swings no sheet - the old Swing_* files are archived)
     const swingCache = {};
     // stooping with the burning torch in his hand (Torch.js): the crouch with it (the user, 2026-10-08: he does not put it down to pick
     // something up)
     const TORCH_SWINGS = { 6: "Hero_TorchCrouch" };
     function swingDef(kind, def) {
-        if (!active() || !SWINGS[kind]) return def;
+        if (!SWINGS[kind]) return swingCache["x" + kind] || (swingCache["x" + kind] = Object.assign({}, def, { sheet: null }));
         if (TORCH_SWINGS[kind] && torchHeld()) {
             const key = "t" + kind;
             return swingCache[key] || (swingCache[key] = Object.assign({}, def, SWINGS[kind], { sheet: TORCH_SWINGS[kind] }));
@@ -206,7 +205,6 @@
     const _Scene_Map_create = Scene_Map.prototype.create;
     Scene_Map.prototype.create = function() {
         _Scene_Map_create.call(this);
-        if (!active()) return;
         ImageManager.loadCharacter(WALK);
         ImageManager.loadCharacter(RUN);
         ImageManager.loadCharacter(SNEAK);
@@ -215,5 +213,5 @@
         for (const s of Object.values(TORCH_SWINGS)) ImageManager.loadSystem(s);
     };
 
-    window.HeroLook = { active, setActive, swingDef, heroCell, SWINGS, ROWS, STRIDE, TORCH_SHEETS, TORCH_SWINGS };
+    window.HeroLook = { active, swingDef, heroCell, SWINGS, ROWS, STRIDE, TORCH_SHEETS, TORCH_SWINGS, OLD_SHEETS };
 })();

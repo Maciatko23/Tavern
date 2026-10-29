@@ -131,6 +131,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("atmosfera");   // (the words of this file: js/teksty/atmosfera.txt, kod.*)
 
     const T = window.Tawerna;
     if (!T) throw new Error("Atmosphere.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
@@ -588,10 +589,10 @@
     // said at the top centre of the screen (SurvivalHUD's notice), not over the player
     const saveNotice = (text, color) => T.popup(text, { top: true, color });
     Scene_Map.prototype.onAutosaveSuccess = function() {
-        saveNotice("Gra zapisana (autozapis)", "#9fd4ff");
+        saveNotice(TK.kod.onAutosaveSuccess[0], "#9fd4ff");
     };
     Scene_Map.prototype.onAutosaveFailure = function() {
-        saveNotice("Autozapis nie powiódł się", "#ff9f8f");
+        saveNotice(TK.kod.onAutosaveFailure[0], "#ff9f8f");
     };
 
     // ------------------------------------------------------------------

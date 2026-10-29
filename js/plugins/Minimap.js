@@ -70,6 +70,12 @@
 
     const pluginName = "Minimap";
     const params = PluginManager.parameters(pluginName);
+    // the save: Tawerna.state "minimap" { hidden: true | false } (M hides it; none yet: shown - the clean look, CleanHUD.js, sets it
+    // hidden on its first time). It was $gameSystem._minimapHidden - the name leads there (CleanHUD, the tests)
+    const mapState = T.state.define("minimap", () => ({}), { version: 1, owner: pluginName });
+    T.state.oldFields("minimap", { _minimapHidden: "hidden" });
+    const hiddenNow = () => { const r = $gameSystem._tw, s = r && r.minimap; return !!(s ? s.hidden : mapState().hidden); };   // (asked every frame)
+    const toggleHidden = () => { const s = mapState(); s.hidden = !s.hidden; };
     const num = (v, d) => (v !== undefined && v !== "" && isFinite(Number(v)) ? Number(v) : d);
     const MAX_W = num(params.maxWidth, 208);
     const MAX_H = num(params.maxHeight, 150);
@@ -311,7 +317,7 @@
         bmp.clear();
         bmp.blt(this._terrain, 0, 0, this._terrain.width, this._terrain.height, 0, 0);
         const rect = (x, y, w, h, colour) => { ctx.fillStyle = colour; ctx.fillRect(Math.round(x * S), Math.round(y * S), Math.max(1, Math.round(w * S)), Math.max(1, Math.round(h * S))); };
-        const farm = ($gameSystem && $gameSystem._farm) || null, mapId = $gameMap.mapId();
+        const farm = $gameSystem ? T.state("farm") : null, mapId = $gameMap.mapId();
         if (farm && farm.plots && farm.plots[mapId]) {
             for (const [k, p] of Object.entries(farm.plots[mapId])) {
                 if (!p.crop && p.s !== "tilled" && p.s !== "raked") continue;
@@ -356,7 +362,7 @@
     };
 
     Sprite_Minimap.prototype.isShown = function() {
-        return this._wanted && !($gameSystem && $gameSystem._minimapHidden);
+        return this._wanted && !($gameSystem && hiddenNow());
     };
 
     Sprite_Minimap.prototype.update = function() {
@@ -364,7 +370,7 @@
         if (!$gameMap || !$dataMap || !$gamePlayer) return;
         if ($gameMap.mapId() !== this._mapId) this.rebuild();
         if (Input.isTriggered("minimap") && this._wanted && !$gameMessage.isBusy() && !$gameMap.isEventRunning()) {
-            $gameSystem._minimapHidden = !$gameSystem._minimapHidden;
+            toggleHidden();
         }
         this.visible = this.isShown();
         if (!this.visible) return;
@@ -419,7 +425,7 @@
             }
             return null;
         },
-        toggle() { if ($gameSystem) $gameSystem._minimapHidden = !$gameSystem._minimapHidden; },
+        toggle() { if ($gameSystem) toggleHidden(); },
         // a fog over some maps (Underground.js): fn(mapId) -> null or { rev, seen(x, y) } - see fogOf above
         addFog(fn) { if (typeof fn === "function" && !fogs.includes(fn)) fogs.push(fn); return true; },
         fogOf

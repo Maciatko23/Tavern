@@ -1,0 +1,46 @@
+{
+ "kod": {
+  "hitHuman": {
+   "0": "Garda przełamana!",
+   "1": "Blok -{damage}",
+   "2": "Cios w plecy!"
+  },
+  "kill": {
+   "0": "dobiłeś człowieka, który błagał o litość"
+  },
+  "offerChoice": {
+   "0": "{1} klęczy i błaga o życie. Co z nim zrobić?"
+  },
+  "decide": {
+   "0": "puściłeś wolno pokonanego"
+  },
+  "tellRumour": {
+   "0": "Plotka od pokonanego",
+   "1": "Plotka od pokonanego {1}"
+  },
+  "updateRobbery": {
+   "0": "Pobili cię i obrabowali",
+   "1": "Zabrali {gold} G",
+   "2": "Nie mieli czego zabrać",
+   "3": " i trochę jedzenia",
+   "4": "{1}. Jesteś ranny."
+  },
+  "updateArrows": {
+   "0": "strzała"
+  },
+  "take": {
+   "0": "Worek jest pusty",
+   "1": "Nic tu nie ma"
+  },
+  "summon": {
+   "0": "Ktoś idzie... {1}!",
+   "1": "Nie ma tu miejsca",
+   "2": "Ktoś się skradał do śpiącego...",
+   "3": "Nie ma tu miejsca na napad",
+   "4": "Nie ma tu miejsca na zasadzkę",
+   "5": "Gdzieś między drzewami płonie ognisko...",
+   "6": "Nie ma tu miejsca na obóz"
+  }
+ },
+ "_opis": "Napisy kodu Humans.js sprzed przeniesienia do js/teksty/zbojcy.txt (kod.*); kod.offerChoice.0 bez \\SPK[0] na początku (zostaje w kodzie: \"\\\\SPK[0]\" + tekst - jak w innych plikach, kod silnika nie trafia do tekstów)"
+}

@@ -1,0 +1,2100 @@
+{
+ "mieszkancy": {
+  "kowal": {
+   "name": "Tadek Młot",
+   "title": "kowal",
+   "barks": {
+    "work": [
+     "Żelazo trzeba kuć, póki gorące!",
+     "Kto chce naprawić narzędzie, niech podejdzie!",
+     "Uff... ten miech znowu cieknie.",
+     "Siekiera? Motyka? Wszystko naprostuję."
+    ],
+    "wander": [
+     "Chleb Hanki to jedyne, co tu jeszcze nie zdrożało.",
+     "Woda po trzy grosze... czasy."
+    ],
+    "rain": [
+     "Deszcz! Wreszcie kuźnia odetchnie!",
+     "Ha! Niech leje!"
+    ],
+    "night": [
+     "Dobranoc, chłopcze."
+    ],
+    "tavern": [
+     "Kto się siłuje na rękę? Stawiam piwo!",
+     "Borgar, jeszcze jedno!",
+     "Grum? Jutro go pokonam. Albo pojutrze."
+    ],
+    "home": [
+     "Ręce bolą od młota...",
+     "Węgla starczy jeszcze na tydzień."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Rano kuję najlepiej - ręka świeża, ogień czysty. Przynieś mi rudę, a zrobię ci porządne okucia.",
+     "Narzędzie ci się sypie? Pokaż. U mnie nic się nie marnuje."
+    ],
+    "day": [
+     "Od suszy połowa wioski przyszła z pękniętymi motykami. Ziemia twarda jak kamień.",
+     "Kapral Wit zamówił u mnie nowe groty do włóczni. Dużo grotów. Lord się na coś szykuje."
+    ],
+    "evening": [
+     "Wieczorem idę do Borgara. Kto mnie pokona na rękę, temu stawiam piwo. Na razie nikomu nie stawiałem.",
+     "Kuźnia zamknięta, ale zajrzyj jutro."
+    ],
+    "night": [
+     "Czego tu szukasz po nocy? Idź spać."
+    ],
+    "rain": [
+     "Słyszysz? Deszcz! Jutro wszyscy będą chcieli konewek i wiader."
+    ]
+   }
+  },
+  "piekarka": {
+   "name": "Hanka Mączna",
+   "title": "piekarka",
+   "barks": {
+    "stand": [
+     "Świeży chleb! Prosto z pieca!",
+     "Bułki, podpłomyki, chleb żytni!",
+     "Dla bosego chłopaka - kromka za darmo!"
+    ],
+    "wander": [
+     "Mąki coraz mniej... młyn stoi, odkąd strumień opadł.",
+     "Ciekawe, czemu u Lorda wszystko takie zielone."
+    ],
+    "rain": [
+     "Deszcz! Niech pada, niech pada!",
+     "Chowaj się pod daszek, zmokniesz!"
+    ],
+    "home": [
+     "Ciasto musi wyrosnąć, nie przeszkadzaj.",
+     "Jutro upiekę więcej, jeśli mąki starczy."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Wstaję o czwartej, żeby chleb był na szóstą. Weź bochenek, póki ciepły.",
+     "Gdybyś miał trochę zboża z działki dziadka - kupię. Mąka z młyna przestała przychodzić."
+    ],
+    "day": [
+     "Młyn stoi, bo strumień opadł i koło nie ma siły. Studnia ledwo daje, Kuba mówi, że wody brak... a jednak co rano ma pełne beczki.",
+     "Bierz chleb na drogę. Tobie i dziadkowi potrzeba sił."
+    ],
+    "evening": [
+     "Zamknięte, kochaneczku. Jutro od szóstej."
+    ],
+    "night": [
+     "Zamknięte, kochaneczku. Jutro od szóstej."
+    ],
+    "rain": [
+     "Deszcz to dla piekarza dobra nowina - ludzie siedzą w domach i jedzą!"
+    ]
+   }
+  },
+  "woziwoda": {
+   "name": "Kuba Woziwoda",
+   "title": "woziwoda",
+   "barks": {
+    "stand": [
+     "Woda tylko na przydział sołtysa!",
+     "Piekarnia, kuźnia, tawerna - kolejka po wodę!",
+     "Studnia ledwo kapie, ale Kuba ma wodę!"
+    ],
+    "wander": [
+     "Ech, nogi bolą od tych beczek.",
+     "Nie pytaj, skąd biorę wodę. Interes to interes."
+    ],
+    "work": [
+     "...cicho... nikt nie widzi...",
+     "Szybciej, zanim kapral przejdzie..."
+    ],
+    "rain": [
+     "Deszcz? Sołtys mniej mi zapłaci za wożenie...",
+     "Psia kość, wszyscy łapią deszczówkę."
+    ],
+    "tavern": [
+     "Piwo tańsze niż woda, ha!",
+     "Nie powiem, skąd wożę. Nie i już.",
+     "Ciii... sołtys patrzy."
+    ],
+    "home": [
+     "Beczki trzeba wyszorować przed nocą.",
+     "Nie zaglądaj do wozu!"
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Nie sprzedaję na kubki, chłopcze. Woda idzie na przydział sołtysa: piekarnia, kuźnia, tawerna. Chcesz pić - łap deszcz.",
+     "Studnia na rynku daje ledwie parę wiader na dzień. Bez Kuby to miasto by uschło."
+    ],
+    "day": [
+     "Skąd mam wodę? Ze... z daleka. Z gór. Wożę wozem przed świtem. Nie twoja sprawa, co?",
+     "Lord daje mi przepustkę przez bramę. Dobry człowiek z tego Lorda.",
+     "Dla ciebie? Nie ma. Wszystko rozpisane co do dzbana."
+    ],
+    "evening": [
+     "Po robocie idę do Borgara. Tam przynajmniej piwo nie kosztuje tyle co woda."
+    ],
+    "night": [
+     "Ty... co tu robisz o tej porze? Ja tylko... spaceruję. Idź spać i nikomu nic nie mów."
+    ],
+    "rain": [
+     "Jak pada, to wszyscy łapią deszczówkę do wiader i sołtys mniej mi płaci za wożenie."
+    ]
+   }
+  },
+  "kapral": {
+   "name": "Kapral Wit Czerwień",
+   "title": "straż Lorda",
+   "barks": {
+    "stand": [
+     "Brama Lorda. Myto - dwa grosze.",
+     "Stać. Kto idzie?",
+     "Bez przepustki dalej nie wejdziesz."
+    ],
+    "patrol": [
+     "Spokój w mieście. Na rozkaz Lorda.",
+     "Rozejść się, nie ma tu nic do oglądania.",
+     "Kto chodzi nocą, ten ma coś do ukrycia."
+    ],
+    "rain": [
+     "Przeklęty deszcz, zbroja rdzewieje.",
+     "Stój pod daszkiem, chłopcze."
+    ],
+    "home": [
+     "Zmiana warty o świcie.",
+     "Czego tu szukasz? To wieża straży."
+    ],
+    "night": [
+     "Do domu, chłopcze. Nocą po mieście chodzi straż - i złodzieje."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Kapral Wit Czerwień, straż Lorda Zaleskiego. Pilnuję bramy do dworu. Masz tam sprawę? Lord przyjmuje od ósmej.",
+     "Za bramą jest dwór. Za dworem - nic, co by cię obchodziło."
+    ],
+    "day": [
+     "Lord kazał zwiększyć straż. Mówią, że z kontynentu przypływa coraz więcej obcych.",
+     "Kupiec z kantoru? Ma przepustkę od samego Lorda. Nie zadaje się z nim nikt rozsądny."
+    ],
+    "evening": [
+     "Wieczorem obchodzę mury. Jak coś zobaczysz - przyjdź do mnie, nie do sołtysa."
+    ],
+    "night": [
+     "Nocą patroluję mury. Woziwoda? Nie, nie widziałem go. A ty go widziałeś?"
+    ],
+    "rain": [
+     "W deszcz nawet złodzieje siedzą w domach. Tylko straż musi moknąć."
+    ]
+   }
+  },
+  "dzwonnik": {
+   "name": "Ambroży",
+   "title": "dzwonnik",
+   "barks": {
+    "bell": [
+     "Dzwon mówi... słuchaj, co mówi.",
+     "Bim... bam..."
+    ],
+    "wander": [
+     "Kruki znowu kraczą nad murami.",
+     "Za moich młodych lat studnia była pełna."
+    ],
+    "stand": [
+     "Rycerze z kamienia... pamiętają więcej niż ludzie.",
+     "Tam jest ogród. Nikt już tam nie wchodzi. Nikt prócz mnie."
+    ],
+    "rain": [
+     "Woda wraca do skał... dobrze, dobrze."
+    ],
+    "home": [
+     "Lina od dzwonu się strzępi...",
+     "Kruk na belce... patrzy. Zawsze patrzy."
+    ],
+    "night": [
+     "Trzecia... trzeba zadzwonić. Ktoś musi pamiętać."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Dzwonię o szóstej, w południe i o szóstej wieczorem. Tak było zawsze. Odkąd stoi ten mur.",
+     "Słyszałeś dzwon w nocy? Nie, nie słyszałeś. Ludzie śpią."
+    ],
+    "day": [
+     "Ten ogród za murem... zakon tam sadził zioła, gdy jeszcze był zakon. Klucz? Jaki klucz?",
+     "Twój dziadek? Stach? Dobry chłopak. Kiedyś bał się wieży. Ty się nie boisz?"
+    ],
+    "evening": [
+     "Wieczorem wracam na wieżę. Stąd widać całe miasto. I to, czego miasto nie widzi."
+    ],
+    "night": [
+     "Jedno pytanie na rok, chłopcze. Pamiętaj. Jedno pytanie."
+    ],
+    "rain": [
+     "Deszcz... skały piją. Pod Kruczymi Skałami wody jest więcej, niż myślą."
+    ]
+   }
+  },
+  "kupiec": {
+   "name": "Baltazar Vey",
+   "title": "kupiec z kontynentu",
+   "barks": {
+    "stand": [
+     "Towary z kontynentu! Przyprawy, sukno, stal!",
+     "Dla przyjaciół - specjalne ceny.",
+     "Wszystko na sprzedaż. Prawie wszystko."
+    ],
+    "wander": [
+     "Hm, zboże drożeje. Wojna to dobry czas dla kupców.",
+     "Ta wyspa... wszyscy czegoś tu szukają."
+    ],
+    "rain": [
+     "Deszcz psuje sukno. Do środka, do środka!"
+    ],
+    "tavern": [
+     "Słucham, słucham... tawerna mówi więcej niż listy.",
+     "Jakie wieści z promu?",
+     "Dla przyjaciół - specjalne ceny."
+    ],
+    "home": [
+     "Witaj w kantorze. Towar z kontynentu, najlepszy na wyspie.",
+     "Nie dotykaj tej skrzyni, przyjacielu."
+    ],
+    "night": [
+     "Spóźniają się... Ach, to ty. Idź dalej, przyjacielu."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Baltazar Vey, do usług. Przywożę z kontynentu to, czego wyspa nie ma. A czego wyspa ma za dużo, wywożę.",
+     "Masz coś starego? Monety z krukiem, kawałki kamienia z napisami? Zapłacę dobrze."
+    ],
+    "day": [
+     "Na kontynencie wojna. Każda strona chce tego samego - pewności. Ludzie płacą fortunę za pewność, wiesz?",
+     "Lord Zaleski to rozsądny człowiek. Dobrze się nam razem handluje."
+    ],
+    "evening": [
+     "Wieczór spędzam u Borgara. Tawerna to najlepsze miejsce, by słuchać."
+    ],
+    "night": [
+     "Nie handluję po zmroku. Chyba że... nie. Dobranoc."
+    ],
+    "rain": [
+     "W taką pogodę statki nie przypływają. Pech."
+    ]
+   }
+  },
+  "soltys": {
+   "name": "Sołtys Bronisław",
+   "title": "sołtys",
+   "barks": {
+    "stand": [
+     "Ogłoszenie! Wodę wydzielamy po dzbanie na rodzinę!",
+     "Kto ma sprawę do ratusza - do południa!"
+    ],
+    "wander": [
+     "Ta studnia... kiedyś była sercem rynku.",
+     "Podatek dla Lorda w tym roku znów większy."
+    ],
+    "rain": [
+     "Deszcz! Wszyscy łapać wodę do beczek!"
+    ],
+    "tavern": [
+     "Racje wody znów w dół...",
+     "Sprawy do sołtysa - jutro w ratuszu!"
+    ],
+    "home": [
+     "Księga racji się nie zgadza... znowu.",
+     "Podatek dla Lorda, podatek dla Lorda..."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Sołtys Bronisław. Ratusz otwarty do południa. Woda wydzielana, zboże drożeje, uchodźców przybywa... a Lord chce podatku.",
+     "Słyszałem, że twój dziadek ma dług u Lorda. Zły to człowiek do bycia mu winnym."
+    ],
+    "day": [
+     "Studnia na wiosnę prawie wyschła - daje parę wiader na dzień, więc dzielę je na przydziały. Kopaliśmy głębiej - nic. Jakby ktoś zabrał wodę spod rynku.",
+     "Potrzebuję ludzi do pomocy. Zajrzyj na tablicę ogłoszeń w tawernie."
+    ],
+    "evening": [
+     "Po pracy idę do Borgara posłuchać, co gadają ludzie. Sołtys musi wiedzieć wszystko."
+    ],
+    "night": [
+     "Ratusz zamknięty. Jutro od ósmej."
+    ],
+    "rain": [
+     "Deszcz to błogosławieństwo. Każda kropla do beczki!"
+    ]
+   }
+  },
+  "garbarz": {
+   "name": "Ignac",
+   "title": "garbarz i szewc",
+   "barks": {
+    "work": [
+     "Skóry! Skupuję skóry z polowań!",
+     "Garbnik śmierdzi, ale buty z tego wyjdą piękne.",
+     "Hej, bosy! Zrobić ci buty?"
+    ],
+    "wander": [
+     "Bez wody nie wyprawię skór. Ta susza mnie wykończy."
+    ],
+    "rain": [
+     "Deszcz! Wreszcie mam w czym moczyć skóry!"
+    ],
+    "tavern": [
+     "Tadek znowu się chwali.",
+     "Szewc bez butów chodzi, mówią. U mnie jest odwrotnie."
+    ],
+    "home": [
+     "Kopyto, dratwa, szydło... gdzie ja położyłem szydło?",
+     "Przynieś skóry, zrobię buty."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Ignac, garbarz i szewc. Przynieś mi skóry z polowania - kupię albo zrobię ci z nich buty. Na boso daleko nie zajdziesz.",
+     "Skóra zająca, jelenia, dzika - wszystko się przyda."
+    ],
+    "day": [
+     "Do wyprawiania skór trzeba wody. Kupuję od Kuby po trzy grosze... i jakoś zawsze ma.",
+     "Dobre buty to trzy skóry i dzień roboty. Przynieś skóry, resztę zrobię ja."
+    ],
+    "evening": [
+     "Wieczorem do Borgara. Kowal znowu będzie się chwalił, że nikt go nie pokona."
+    ],
+    "night": [
+     "Zamknięte. Jutro od świtu."
+    ],
+    "rain": [
+     "Deszcz! Wystawiam kadzie - woda za darmo, kto by pomyślał."
+    ]
+   }
+  },
+  "feliks": {
+   "name": "Feliks",
+   "title": "kamerdyner Lorda",
+   "barks": {
+    "wander": [
+     "Najlepszy chleb dla dworu, pani Hanko.",
+     "Jaśnie pan lubi świeże bułki."
+    ],
+    "stand": [
+     "Jaśnie pan prosi o terminowe rachunki, panie sołtysie.",
+     "Proszę zapisać na rachunek dworu."
+    ],
+    "rain": [
+     "Deszcz... trzeba zdjąć pranie w oranżerii."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Feliks, kamerdyner jaśnie pana Zaleskiego. Zakupy dla dworu robię sam - nikomu innemu nie ufam.",
+     "Dług twojego dziadka? Zapisany co do grosza. Jaśnie pan przyjmuje od ósmej."
+    ],
+    "day": [
+     "Dwór? Wszystko w najlepszym porządku. Ogród? Ach, ogród... podlewamy z... z beczek. Bardzo oszczędnie."
+    ],
+    "evening": [
+     "Wieczorami pilnuję drzwi dworu. Jeśli masz pieniądze dla jaśnie pana, zapukaj."
+    ],
+    "night": [
+     "Już późno. Dobranoc."
+    ],
+    "rain": [
+     "Deszcz to dla ogrodu błogosławieństwo. Choć nasz ogród... nie narzeka."
+    ]
+   }
+  },
+  "bronek": {
+   "name": "Bronek",
+   "title": "chłopak z miasteczka",
+   "barks": {
+    "wander": [
+     "Złap mnie, Zośka!",
+     "A ja wiem, gdzie Kuba jeździ w nocy!",
+     "Hej, bosy! Ty też nie masz butów?"
+    ],
+    "rain": [
+     "Kałuża! Hop!",
+     "Deszcz, deszcz!"
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Bronek jestem. Mama mówi, żeby nie gadać z obcymi. Ale ty nie jesteś obcy, ty jesteś od dziadka Stacha!",
+     "Dzwonnik Ambroży czasem dzwoni w nocy. Słyszałem! Nikt mi nie wierzy."
+    ],
+    "day": [
+     "Kuba woziwoda wraca przed świtem z mokrym wozem. Skąd, jak wszędzie sucho?",
+     "Zośka się chowa za studnią. Nie mów jej, że wiem."
+    ],
+    "evening": [
+     "Muszę do domu, bo mama krzyczy."
+    ],
+    "night": [
+     "Zzz..."
+    ],
+    "rain": [
+     "Pada! Chodź skakać po kałużach!"
+    ]
+   }
+  },
+  "zosia": {
+   "name": "Zosia",
+   "title": "dziewczynka z miasteczka",
+   "barks": {
+    "wander": [
+     "Bronek, nie widzisz mnie!",
+     "Kotek! Gdzie jest kotek?",
+     "Raz, dwa, trzy... szukam!"
+    ],
+    "rain": [
+     "Mokro mi w warkocze!"
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Jestem Zosia. Masz kotka? U dziadka Stacha jest kotek Mruczek, wiem!",
+     "Pani Hanka daje mi czasem okruszki."
+    ],
+    "day": [
+     "Za murem z rycerzami jest ogród. Dzwonnik mówi, że tam rosną dziwne zioła.",
+     "Bawimy się w chowanego. Chcesz się chować?"
+    ],
+    "evening": [
+     "Mama woła. Pa!"
+    ],
+    "night": [
+     "Zzz..."
+    ],
+    "rain": [
+     "Jak pada, to ptaszki piją z rynny."
+    ]
+   }
+  },
+  "ludmila": {
+   "name": "Ludmiła",
+   "title": "uchodźczyni z kontynentu",
+   "barks": {
+    "stand": [
+     "Dobrzy ludzie... kromka chleba dla dziecka...",
+     "Panie sołtysie, choć dach nad głową..."
+    ],
+    "wander": [
+     "Ela, nie odchodź daleko.",
+     "Marek... gdzie ty jesteś..."
+    ],
+    "rain": [
+     "Ela, pod plandekę!"
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Ludmiła. Przypłynęłyśmy z córką promem, gdy spalili naszą wieś na kontynencie. Mąż... został w wojsku. Nie wiem, czy żyje.",
+     "Śpimy pod murem przy stogach. Sołtys mówi, że miejsca nie ma."
+    ],
+    "day": [
+     "Wszyscy na kontynencie czegoś szukają. Żołnierze mówili o jakimś sercu... o pewności. Ludzie giną za coś, czego nikt nie widział.",
+     "Gdybyś miał trochę jedzenia dla Eli... Ja wytrzymam."
+    ],
+    "evening": [
+     "Wieczorem wracamy pod mur. Jest tam jeszcze ciepło od kamieni."
+    ],
+    "night": [
+     "Cicho... Ela śpi."
+    ],
+    "rain": [
+     "Deszcz... przynajmniej Ela się napije."
+    ]
+   },
+   "alt": {
+    "barks": {
+     "wander": [
+      "Ela, trzymaj się blisko namiotu.",
+      "Za murem... jak psy za płotem.",
+      "Marek... gdzie ty jesteś..."
+     ],
+     "rain": [
+      "Ela, pod plandekę!"
+     ],
+     "night": [
+      "Słyszysz? Wilki..."
+     ]
+    },
+    "talk": {
+     "morning": [
+      "Brama zamknięta. Mieszkamy teraz tu, za murem. Darin dał nam miejsce przy swoim ognisku.",
+      "Nocą wyją wilki. Ela śpi z nożem pod poduszką. Sześć lat."
+     ],
+     "day": [
+      "Do miasta wpuszczają nas tylko za dnia. Po chleb. Jak żebraków.",
+      "Gdybyś miał trochę jedzenia dla Eli... Ja wytrzymam."
+     ],
+     "evening": [
+      "Wieczorem pilnujemy ognia. Wilki boją się ognia. Chyba."
+     ],
+     "night": [
+      "Cicho... Ela śpi."
+     ],
+     "rain": [
+      "Deszcz... przynajmniej Ela się napije."
+     ]
+    }
+   }
+  },
+  "ela": {
+   "name": "Ela",
+   "title": "córeczka Ludmiły",
+   "barks": {
+    "wander": [
+     "Mamo, patrz!",
+     "Głodna jestem...",
+     "Piesek?"
+    ],
+    "rain": [
+     "Kap, kap!"
+    ]
+   },
+   "talk": {
+    "morning": [
+     "...",
+     "Tata obiecał, że przypłynie. Przypłynie, prawda?"
+    ],
+    "day": [
+     "Masz chleb? Mama mówi, że nie wolno prosić... ale ja bardzo głodna."
+    ],
+    "evening": [
+     "Mama mówi, że na wyspie nie ma wojny."
+    ],
+    "night": [
+     "..."
+    ],
+    "rain": [
+     "Deszcz smakuje jak w domu."
+    ]
+   },
+   "alt": {
+    "barks": {
+     "wander": [
+      "Mamo, patrz! Franek ma procę!",
+      "Głodna jestem...",
+      "Wilki tu przychodzą?"
+     ],
+     "rain": [
+      "Kap, kap!"
+     ]
+    },
+    "talk": {
+     "morning": [
+      "Tu też są dzieci. Franek mówi, że jego mama pierze dla Lorda."
+     ],
+     "day": [
+      "Za murem jest ładniej. Tylko w nocy straszno."
+     ],
+     "evening": [
+      "Darin opowiada o wojnie. Mama mówi, że nie wolno słuchać."
+     ],
+     "night": [
+      "..."
+     ],
+     "rain": [
+      "Deszcz smakuje jak w domu."
+     ]
+    }
+   }
+  },
+  "rafal": {
+   "name": "Rafał",
+   "title": "obcy w podartym kaftanie",
+   "barks": {
+    "wander": [
+     "...nikt mnie nie widział...",
+     "Kapral? Gdzie kapral?",
+     "Cicho, cicho..."
+    ],
+    "stand": [
+     "Ogień grzeje. Tylko ognia tu nikt mi nie żałuje.",
+     "Siadaj, jak chcesz. Ale nie za blisko."
+    ],
+    "rain": [
+     "Dobrze. W deszcz straż siedzi pod dachem."
+    ],
+    "night": [
+     "Nie widziałeś mnie. Jasne?"
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Nie patrz tak. Jestem... pracuję przy sianie. Tak. Przy sianie."
+    ],
+    "day": [
+     "Czego chcesz?"
+    ],
+    "evening": [
+     "Kaftan? Podarłem o płot. Nic więcej."
+    ],
+    "night": [
+     "Słuchaj. Nie mów kapralowi, że tu jestem. Proszę. Na kontynencie wieszają takich jak ja.",
+     "Żołnierze szukali tu czegoś pod skałami. Kazali kopać. Uciekłem, zanim skończyliśmy."
+    ],
+    "rain": [
+     "Deszcz zmyje ślady. Dobrze."
+    ]
+   },
+   "alt": {
+    "barks": {
+     "wander": [
+      "Za murem przynajmniej kapral nie zagląda.",
+      "Drwal daje mi rąbać za miskę zupy. Uczciwie."
+     ],
+     "night": [
+      "Pilnuję ognia. Wilki."
+     ]
+    },
+    "talk": {
+     "morning": [
+      "Za murem jest gorzej i lepiej. Gorzej - wilki. Lepiej - nikt nie pyta, kim byłem."
+     ],
+     "day": [
+      "Rąbię u Zbycha. Za miskę. Ręce pamiętają kilof, ale siekiera też dobra."
+     ],
+     "evening": [
+      "Wilki obchodzą obóz co noc. Liczę je. Siedem."
+     ],
+     "night": [
+      "Nie śpię. Ktoś musi pilnować."
+     ],
+     "rain": [
+      "Deszcz zmyje ślady. Dobrze."
+     ]
+    }
+   }
+  },
+  "praczka": {
+   "name": "Marta Ługowa",
+   "title": "praczka",
+   "barks": {
+    "work": [
+     "Dwa wiadra z miasta na jeden kosz prania... a koszy cała góra.",
+     "Koszule mieszczan, prześcieradła z dworu... a ręce moje.",
+     "Franek! Nie łaź mi po praniu!"
+    ],
+    "wander": [
+     "Grosz za kosz. Kiedyś było dwa.",
+     "Ta studnia wyschła dawno. Teraz każde wiadro noszę z miasta."
+    ],
+    "rain": [
+     "Deszcz! Balie, wszystkie balie pod rynnę!",
+     "Franek, łap wodę, w co się da!"
+    ],
+    "night": [
+     "Do domu, dziecko. Nocą tu niebezpiecznie."
+    ],
+    "home": [
+     "Franek, umyj się... no, przetrzyj chociaż.",
+     "Jutro dworskie pranie. Trzeba wstać przed świtem."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Piorę dla mieszczan i dla dworu. Wodę noszę z miasta, z przydziału przy studni na rynku - dwa wiadra, tyle co sołtys pozwoli. Ale grosz jest.",
+     "Mój Janek zmarł zimą, został mi Franek. Ma osiem lat, a już nosi drewno za Zbycha."
+    ],
+    "day": [
+     "Kuba woziwoda wozi wodę mieszczanom pod same drzwi - piekarni, kuźni, tawernie. Do nas za mur nie przywiezie, sami nosimy. Podgrodzie się nie liczy.",
+     "Kamerdyner Lorda płaci za pranie najlepiej. I najmniej mówi. Pościel z dworu zawsze wilgotna, jakby u Lorda wody było w bród. Ciekawe, skąd."
+    ],
+    "evening": [
+     "Wieczorem siadam przy naszej suchej studni. Ludzie mówią, że kiedyś była w niej woda i tu był plac targowy. Dziś tylko my i kurz."
+    ],
+    "night": [
+     "Zamknij za sobą bramę, jak będziesz wracał. Nocą łażą tu różni."
+    ],
+    "rain": [
+     "Deszcz! Z beczki deszczówki zrobię pranie i nie muszę dźwigać wiader z miasta. Dzień jak święto!"
+    ]
+   }
+  },
+  "franek": {
+   "name": "Franek",
+   "title": "syn praczki",
+   "barks": {
+    "wander": [
+     "Ej, masz grosza?",
+     "Zakład, że nie trafisz kamieniem w tamten słupek!",
+     "Mama mówi, że jak dorosnę, pójdę do kuźni!",
+     "Rysiek obiecał, że pokaże mi sidła!"
+    ],
+    "rain": [
+     "Deszcz! Deszcz! Hura!"
+    ],
+    "home": [
+     "Nie chcę spać...",
+     "Mamo, a kiedy będzie deszcz?"
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Nosiłem drewno za Zbycha. Dał mi za to suchara. Chcesz pół?",
+     "Ty jesteś od tego dziadka z działki za lasem? On kiedyś dał mi jabłko."
+    ],
+    "day": [
+     "Widziałem, jak Kuba woziwoda jechał przed świtem z pustymi beczkami. A wracał z pełnymi! Skąd?",
+     "Józek ma w kramie prawdziwy hełm z kontynentu. Dziurawy, ale prawdziwy!"
+    ],
+    "evening": [
+     "Mama mówi, że nie wolno chodzić do namiotów uchodźców. A Darin opowiada najlepsze historie o wojnie."
+    ],
+    "night": [
+     "..."
+    ],
+    "rain": [
+     "Pada! Łapię deszcz do garnka! Mama się ucieszy!"
+    ]
+   }
+  },
+  "drwal": {
+   "name": "Zbych Smolarz",
+   "title": "drwal i węglarz",
+   "barks": {
+    "work": [
+     "Hop! ...Hop! Suche drewno pęka jak szkło.",
+     "Węgiel dla kowala, drewno dla piekarni. A dla siebie - drzazgi.",
+     "Nie stój pod siekierą, chłopcze."
+    ],
+    "wander": [
+     "Ogień grzeje lepiej, jak się przy nim gada.",
+     "Darin, opowiedz jeszcze o tych żelaznych ludziach z kontynentu."
+    ],
+    "rain": [
+     "Mokre drewno nie chce się palić... ale niech pada, niech pada."
+    ],
+    "night": [
+     "Idź spać, chłopcze. Ja zaraz też."
+    ],
+    "home": [
+     "Plecy... cholerne plecy.",
+     "Mielerz trzeba doglądać co dzień. Węgiel sam się nie zrobi."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Rano rąbię, w południe idę do lasu, wieczorem znowu rąbię. Las już nie ten - susza wysuszyła sosny na pieprz. Zapalą się od iskry.",
+     "Jak masz siekierę, to i ty utniesz drewna. Ale nie bierz z lasu Lorda. Jego gajowi pilnują lepiej niż strażnicy bramy."
+    ],
+    "day": [
+     "Byłem w lesie. Z pół dnia drogi stąd ludzie Lorda kopią coś przy skałach. Nie pozwolili mi podejść.",
+     "Kowal Tadek płaci za węgiel uczciwie. Jedyny w mieście, co nie targuje się z biedakiem."
+    ],
+    "evening": [
+     "Siadam przy ognisku uchodźców. Darin opowiada o wojnie, a ja słucham. Lepsze to niż piwo, na które mnie nie stać."
+    ],
+    "night": [
+     "Nocą Rysiek idzie w las. Ja nic nie wiem i ty nic nie wiesz."
+    ],
+    "rain": [
+     "Deszcz? To dobrze. Las przestanie być beczką prochu."
+    ]
+   }
+  },
+  "klusownik": {
+   "name": "Rysiek Sidło",
+   "title": "kłusownik",
+   "barks": {
+    "skraj_lasu": [
+     "Ciii! Spłoszysz mi zająca.",
+     "Nie widziałeś mnie. Rozumiemy się?",
+     "Pętla stoi, przynęta leży. Teraz tylko czekać."
+    ],
+    "wander": [
+     "Czego się gapisz?",
+     "Zając? Jaki zając? Kupiłem na targu.",
+     "Józek, mam dla ciebie skórki. Tylko cicho."
+    ],
+    "rain": [
+     "W deszcz zwierz idzie do wodopoju. Dobra noc na sidła."
+    ],
+    "night": [
+     "Nie widziałeś mnie. Rozumiemy się?"
+    ],
+    "home": [
+     "Śpię. Idź stąd.",
+     "Nie dotykaj sideł!"
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Mhm... śpię. Przyjdź po południu."
+    ],
+    "day": [
+     "Las Lorda jest pełen zwierzyny. A ludzie tutaj jedzą trawę. Powiedz mi, kto tu jest złodziejem?",
+     "Umiesz zastawić sidła? Przynęta to połowa roboty. Zając sam do pustej pętli nie przyjdzie."
+    ],
+    "evening": [
+     "Jak zajdzie słońce, idę na swoje. Gajowi Lorda śpią pijani, ale kapral Wit - nie śpi nigdy.",
+     "Chcesz kupić skórkę? Taniej niż u kupca z kontynentu. I nie pytaj skąd."
+    ],
+    "night": [
+     "Psst. W lesie za działką twojego dziadka jest źródło. Wyschło, ale ziemia przy nim jeszcze wilgotna. Ktoś tam kopał. Nie ja."
+    ],
+    "rain": [
+     "Deszcz zatrze ślady. Dzisiaj wrócę z pełną torbą."
+    ],
+    "skraj_lasu": [
+     "Cicho! ...Ty tutaj, o tej porze? Las nocą nie jest dla chłopaków z pola. Wracaj, zanim wilki cię zwęszą.",
+     "Psst. W lesie za działką twojego dziadka jest źródło. Wyschło, ale ziemia przy nim jeszcze wilgotna. Ktoś tam kopał. Nie ja.",
+     "Widzisz tę pętlę przy ścieżce? Zając chodzi zawsze tą samą drogą. Głupi jak gajowy Lorda."
+    ]
+   }
+  },
+  "znachorka": {
+   "name": "Babka Jadwiga",
+   "title": "znachorka",
+   "barks": {
+    "work": [
+     "Krwawnik na rany, pokrzywa na siłę, czosnek na wszystko.",
+     "Ziele schnie w trzy dni... w taką suszę w jeden.",
+     "Nie depcz mi ogródka, dziecko."
+    ],
+    "wander": [
+     "Święta panienko, daj deszczu...",
+     "Ręce mi drżą. Stara jestem."
+    ],
+    "stand": [
+     "...i odpuść nam nasze winy... i daj deszczu.",
+     "Pomódl się ze mną, dziecko. Nie zaszkodzi."
+    ],
+    "rain": [
+     "Wysłuchała! Wysłuchała!"
+    ],
+    "night": [
+     "Idź do domu, dziecko. Noc nie jest dla młodych."
+    ],
+    "home": [
+     "Siadaj, siadaj. Herbaty z mięty? Franek przyniósł wody z miasta, zaraz zagotuję.",
+     "Gorączka? Pokaż język."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Zbieram zioła o świcie, póki chłodno. Rosy nie ma od wiosny, ale ziele jeszcze się trzyma.",
+     "Skaleczyłeś się? Krwawnik przyłożony do rany zatrzymuje krew. Zawiąż szmatką i przejdzie."
+    ],
+    "day": [
+     "Sołtys mówi, że Podgrodzie to złodzieje i darmozjady. A kto mu leczył syna z gorączki? Babka Jadwiga.",
+     "Pamiętam, jak ten zamek był jeszcze zamkiem, nie tawerną. Strzegł czegoś. Mój dziad mówił: strzegł serca ziemi. Głupie bajki starego człowieka."
+    ],
+    "evening": [
+     "Wieczorem modlę się przy kapliczce. O deszcz, o zdrowie dla dzieci, o to, żeby wojna z kontynentu nie przyszła przez morze."
+    ],
+    "night": [
+     "Jak cię boli, zapukaj. Stara Jadwiga i tak nie śpi."
+    ],
+    "rain": [
+     "Deszcz! Widzisz? Mówiłam, że wysłucha!"
+    ]
+   }
+  },
+  "szmaciarz": {
+   "name": "Józek Łata",
+   "title": "handlarz starzyzną",
+   "barks": {
+    "stand": [
+     "Starzyzna! Gwoździe, garnki, łyżki, guziki!",
+     "Wszystko ma swoją cenę, nawet dziura w bucie!",
+     "Hełm z kontynentu! Prawie bez dziur!"
+    ],
+    "wander": [
+     "Ktoś coś wyrzucił? Józek weźmie.",
+     "Pod murem zawsze coś się znajdzie."
+    ],
+    "rain": [
+     "Deszcz! Rdza! Wszystko mi zardzewieje!"
+    ],
+    "night": [
+     "Zamknięte, zamknięte. Jutro!"
+    ],
+    "home": [
+     "Gdzie ja to położyłem...",
+     "Nie dotykaj! To jest... cenne. Bardzo cenne."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Kupię wszystko i sprzedam wszystko. Gwoździe z rozbiórki, skorupy, sznurek. Ty, chłopcze, wyglądasz na kogoś, kto znajduje rzeczy.",
+     "Kiedyś miałem sklep na rynku. Potem sołtys podniósł czynsz. Teraz mam kram za murem. Ale za to jaki widok!"
+    ],
+    "day": [
+     "Uchodźcy przynoszą rzeczy z kontynentu. Medaliki, guziki od mundurów, raz przynieśli kawałek mapy. Mapy czego? Nie wiem. Kupiłem.",
+     "Ten kupiec z rynku, Baltazar Vey, kupuje u mnie wszystko, co przychodzi z kontynentu. Wszystko. Nawet śmieci. Dziwne, nie?"
+    ],
+    "evening": [
+     "Wieczorem obchodzę plac. Ludzie wyrzucają rzeczy po zmroku, żeby nikt nie widział, że ich nie stać na naprawę."
+    ],
+    "night": [
+     "Zamknięte! ...a, to ty. Nadal zamknięte."
+    ],
+    "rain": [
+     "Deszcz zmywa błoto ze starych rzeczy. Czasem pod spodem jest coś dobrego!"
+    ]
+   }
+  },
+  "uchodzca": {
+   "name": "Darin z Kontynentu",
+   "title": "uchodźca",
+   "barks": {
+    "wander": [
+     "Szukam pracy. Jakiejkolwiek.",
+     "W mieście mówią na nas „przybłędy”.",
+     "Prom co trzeci dzień... może tym razem przypłyną moi."
+    ],
+    "work": [
+     "Zbych pozwala mi rąbać, kiedy jest w lesie. Za strawę.",
+     "W wojsku rąbałem drewno na palisady. Ręce pamiętają."
+    ],
+    "stand": [
+     "Siadaj przy ogniu. Ogień jest za darmo.",
+     "Każdej nocy ktoś nowy. Wojna nie śpi."
+    ],
+    "rain": [
+     "Deszcz... na kontynencie padało, kiedy palili nasze miasto. Nie lubię deszczu."
+    ],
+    "night": [
+     "Nie chodź sam po nocy. Ja już widziałem, co noc robi z ludźmi."
+    ],
+    "home": [
+     "Ciasno tu, ale dach jest.",
+     "Śpij, mała. Śpij..."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Darin. Byłem cieślą na kontynencie. Potem przyszły wojska i kazali mi budować szubienice. Uciekłem pierwszym promem.",
+     "Rano chodzę pod bramę. Czasem ktoś z miasta szuka rąk do pracy. Rzadko."
+    ],
+    "day": [
+     "Na kontynencie wszyscy walczą o to samo. O Serce. Nikt nie wie, co to jest, ale każdy król chce je mieć.",
+     "Widziałem tu chłopaka w podartym kaftanie, w stodole za murem. Nosił naszywkę z mojego pułku. Udaje, że mnie nie zna."
+    ],
+    "evening": [
+     "Wieczorem pilnuję ognia. Przychodzą Zbych, Rysiek, czasem babka Jadwiga. Opowiadam o wojnie, żeby wiedzieli, czego się bać."
+    ],
+    "night": [
+     "Śpij spokojnie, wyspiarzu. Dopóki morze jest między nami a nimi."
+    ],
+    "rain": [
+     "Ten deszcz pachnie jak u nas, przed wojną. Usiądź. Pomilczmy."
+    ]
+   }
+  },
+  "zebrak": {
+   "name": "Stary Gaweł",
+   "title": "żebrak",
+   "barks": {
+    "stand": [
+     "Grosik dla starego... Bóg zapłać.",
+     "Pamiętam ten mur, kiedy jeszcze był murem zamku.",
+     "Dobry człowiek, dobry... daj co łaska."
+    ],
+    "wander": [
+     "Kości bolą. Będzie deszcz. Albo i nie będzie.",
+     "Stary Gaweł wszystko widzi. Nikt nie pyta."
+    ],
+    "rain": [
+     "Deszcz! Jak za dawnych lat!",
+     "Niech leje, niech leje..."
+    ],
+    "night": [
+     "Idź spać, młody. Noc nie dla ciebie."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Gaweł. Stary Gaweł spod bramy. Byłem chłopcem w zamku, nosiłem wodę strażnikom - kiedy zamek był jeszcze zamkiem, a nie tawerną.",
+     "Daj grosik, a powiem ci coś, czego nikt już nie pamięta."
+    ],
+    "day": [
+     "Kiedyś dzwon mówił. Strażnicy znali każde bicie. Trzy i jeden - obcy w murach. Pięć - brama otwarta nocą. Reszty nie pamiętam... albo nie chcę pamiętać.",
+     "W ogrodzie za tawerną stały posągi rycerzy. Na ich tarczach są znaki. Strażnicy mówili, że kto zna dzwon, ten zna drogę."
+    ],
+    "evening": [
+     "Wieczorem siadam przy ognisku uchodźców. Darin to dobry człowiek. Opowiada o wojnie jak stary żołnierz - bo nim jest."
+    ],
+    "night": [
+     "Śpię pod daszkiem przy murze. Jak dzwon bije nocą, budzę się i liczę. Stary nawyk."
+    ],
+    "rain": [
+     "Deszcz... Za moich lat studnia na rynku była pełna po brzegi. Woda szła spod wzgórza, ze starej cysterny zakonu."
+    ]
+   }
+  },
+  "zlodziej": {
+   "name": "Szymek",
+   "title": "chłopak z obozu pod murem",
+   "barks": {
+    "wander": [
+     "Pan ma może skórkę chleba?",
+     "Nie gapię się. Tylko patrzę.",
+     "Najszybszy w całym obozie - to ja!",
+     "Z wozu coś spadło? Nie? Szkoda."
+    ],
+    "rain": [
+     "Deszcz! Otwórz gębę, to się napijesz!",
+     "Jak pada, nikt nie goni."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Szymek jestem. Z obozu pod murem. Mama została na kontynencie, a tata... nie wiem. Ludmiła mówi, żebym się jej trzymał.",
+     "Na targu zawsze coś spadnie z wozu. Trzeba tylko być szybszym od psów."
+    ],
+    "day": [
+     "Ty też chodzisz boso! To jesteś swój.",
+     "Rafał mówi, że na kontynencie za kradzież obcinają rękę. Tu tylko kapral krzyczy. I goni. Wolno goni."
+    ],
+    "evening": [
+     "Wieczorem pod murem ciepło od kamieni. Ela już śpi, a ja pilnuję."
+    ],
+    "night": [
+     "Nie śpię. Pilnuję obozu."
+    ],
+    "rain": [
+     "Jak pada, to nikt nie goni. Wszyscy pod daszkami."
+    ]
+   }
+  },
+  "gracz": {
+   "name": "Lucjan Kość",
+   "title": "wędrowny gracz w kości",
+   "barks": {
+    "stand": [
+     "Kości, panowie! Pięć groszy, a może wygrasz dziesięć!",
+     "Kto się nie boi szczęścia? Podejdź!",
+     "Szóstka! Znowu szóstka! Ach, co za dzień!"
+    ],
+    "rain": [
+     "Deszcz, a kości suche. Dobry znak!"
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Lucjan Kość, do usług. Gram tam, gdzie targ, a targ jest wszędzie, gdzie są ludzie z groszem.",
+     "Ręce czyste, kości uczciwe. Sprawdź sam - no, tylko nie za długo."
+    ],
+    "day": [
+     "Szczęście to nie grzech, mój drogi. Grzech to nie spróbować.",
+     "W zeszłym tygodniu jeden chłop przegrał tu cały jęczmień. Pech. Zdarza się najlepszym."
+    ],
+    "evening": [
+     "Po targu ruszam dalej. Wyspa duża, a jarmarków dużo."
+    ],
+    "night": [
+     "Dobranoc, dobranoc."
+    ],
+    "rain": [
+     "W deszcz ludzie siedzą pod daszkami i nudzą się. A nuda to najlepszy przyjaciel kości."
+    ]
+   }
+  },
+  "bartek": {
+   "name": "Bartek Kmieć",
+   "title": "chłop spod Młynówki",
+   "barks": {
+    "wander": [
+     "Wszystko przegrałem... wszystko.",
+     "Żona mnie zabije. Albo gorzej - nie odezwie się.",
+     "Siedem szóstek z rzędu. Siedem!"
+    ],
+    "rain": [
+     "Deszcz... przynajmniej pole się napije. Moje pole. Jeszcze moje."
+    ],
+    "tavern": [
+     "Jeszcze jedna partyjka... nie, nie, już nie gram.",
+     "Grosz do grosza, a potem kości...",
+     "Borgar, na kredę. Ostatni raz."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Bartek Kmieć, spod Młynówki. Młyn stoi, mąki nie ma, to przyszedłem sprzedać jęczmień w mieście. I sprzedałem. A potem przegrałem.",
+     "Na targu siedzi taki jeden, z piórem przy kapeluszu. Mówi, że szczęście trzeba zaprosić. Ja zaprosiłem. Przyszło do niego."
+    ],
+    "day": [
+     "Wody w Młynówce po kostki. Kiedyś koło młyna szło tak, że gadać się nie dało."
+    ],
+    "evening": [
+     "Wieczorem u Borgara... kości. Nie, nie, tylko patrzę. Patrzeć wolno."
+    ],
+    "night": [
+     "Do domu daleko. Prześpię się pod murem."
+    ],
+    "rain": [
+     "Deszcz! Może Młynówka się podniesie. Choć na palec."
+    ]
+   }
+  },
+  "woznica": {
+   "name": "Wojciech",
+   "title": "woźnica",
+   "barks": {
+    "work": [
+     "Skrzynie do kantoru! Z drogi!",
+     "Ostrożnie, to z kontynentu!",
+     "Konie się płoszą, nie stój za wozem."
+    ],
+    "stand": [
+     "Czekam na towar. Nie twoja sprawa jaki.",
+     "Konie zmarzną, zanim ten kupiec się ruszy..."
+    ],
+    "tavern": [
+     "Piwo dla woźnicy! Gardło suche jak droga.",
+     "Na przystań i z powrotem, co dzień ta sama droga."
+    ],
+    "rain": [
+     "Błoto po osie. Wóz się zakopie."
+    ],
+    "night": [
+     "Idź, chłopcze. Nocą przy wozach nie ma czego szukać."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Wojciech, woźnica. Wożę towar z przystani do kantoru i z powrotem. Co w skrzyniach? Nie pytam. Płacą od skrzyni, nie od pytania."
+    ],
+    "day": [
+     "Na przystani mówią, że wojna na kontynencie idzie w złą stronę. Dla kogo złą - zależy, kogo pytasz.",
+     "Kupiec Vey płaci dobrze. Za dobrze, jak na suszone grzyby."
+    ],
+    "evening": [
+     "Wieczorem jadę jeszcze raz pod bramę południową. Kupiec zawsze ma coś na nocny kurs."
+    ],
+    "night": [
+     "Ciii. Konie śpią. Ja nie."
+    ],
+    "rain": [
+     "W deszcz na przystań nie jadę. Kupiec może sobie krzyczeć."
+    ]
+   }
+  },
+  "straznik": {
+   "name": "Strażnik dworu",
+   "title": "straż Lorda",
+   "barks": {
+    "stand": [
+     "Dwór jaśnie pana Zaleskiego. Bez sprawy - ani kroku dalej.",
+     "Jaśnie pan przyjmuje od ósmej."
+    ],
+    "patrol": [
+     "Cisza... tylko świerszcze.",
+     "Kto tam? ...Kot. Tylko kot."
+    ],
+    "rain": [
+     "Deszcz, a ja w ogrodzie. Kwiatki mają lepiej niż straż."
+    ]
+   },
+   "talk": {
+    "day": [
+     "Jaśnie pan stoi przed drzwiami od ósmej. Ze sprawą - do niego. Bez sprawy - do domu."
+    ],
+    "evening": [
+     "Wieczorem obchodzę ogród. Do rana."
+    ],
+    "rain": [
+     "W deszcz nawet złodzieje siedzą w domach. A ja nie."
+    ]
+   }
+  },
+  "kamerdyner": {
+   "name": "Teodor",
+   "title": "kamerdyner Lorda",
+   "barks": {
+    "wander": [
+     "Dzień dobry, pani Hanko. Dwór płaci gotówką, jak należy.",
+     "Świeże bułki dla jaśnie pana, jeśli łaska."
+    ],
+    "stand": [
+     "Rachunki dworu są otwarte dla każdego, panie sołtysie.",
+     "Proszę mi mówić po imieniu. Teodor."
+    ],
+    "rain": [
+     "Deszcz! Jaśnie pan każe otworzyć rynny dla miasta."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Teodor, nowy kamerdyner jaśnie pana Zaleskiego. Służyłem jeszcze jego ojcu - wróciłem, kiedy Feliksa... zabrakło.",
+     "Dług twojego dziadka? Zapisany co do grosza, uczciwie. Jaśnie pan przyjmuje od ósmej, a nocą zapukaj - otworzę."
+    ],
+    "evening": [
+     "Wieczorami pilnuję drzwi dworu. Jeśli niesiesz spłatę dla jaśnie pana, zapukaj śmiało."
+    ],
+    "night": [
+     "Późno już, młodzieńcze. Dobranoc."
+    ],
+    "rain": [
+     "Deszcz to błogosławieństwo dla całego miasta, nie tylko dla ogrodu dworu."
+    ]
+   }
+  },
+  "marek": {
+   "name": "Marek",
+   "title": "mąż Ludmiły",
+   "barks": {
+    "wander": [
+     "...Ela.",
+     "Wiatr... konik... tak.",
+     "(Marek dotyka chusty na szyi.)"
+    ],
+    "stand": [
+     "(Marek patrzy w ogień. Tym razem mruga.)",
+     "...ciepło."
+    ],
+    "rain": [
+     "Deszcz... pamiętam deszcz."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "(Marek długo szuka słów.) ...Dzień... dobry. Tak się mówi. Pamiętam.",
+     "Ludmiła mówi... że byłem daleko. Byłem. W skale."
+    ],
+    "day": [
+     "(Marek pokazuje ci dłonie, pełne odcisków od kilofa.) ...Już nie kopię. Nigdy."
+    ],
+    "evening": [
+     "Ela śpiewa. Ja... słucham. Słuchanie jest dobre."
+    ],
+    "night": [
+     "...Cicho. Ela śpi."
+    ],
+    "rain": [
+     "(Marek wystawia twarz do deszczu i się uśmiecha.)"
+    ]
+   }
+  },
+  "janek": {
+   "name": "Janek",
+   "title": "rybak",
+   "barks": {
+    "work": [
+     "Mewy, a sio! To nie dla was!",
+     "Śledź idzie ławicą, jak wojsko na wojnę.",
+     "Sieć to jak życie: jedna dziura i wszystko ucieka."
+    ],
+    "stand": [
+     "Chleb, cebula i śledź. Królewski obiad.",
+     "Ławka twarda, ale widok na morze za darmo."
+    ],
+    "wander": [
+     "Wiatr od lądu... czuć dym. Znowu coś tam płonie.",
+     "Prom się spóźnia. Zawsze się spóźnia."
+    ],
+    "rain": [
+     "Deszcz! Łap, w co się da. Morza się nie napijesz.",
+     "W deszcz ryba bierze lepiej. Tylko rybak marznie."
+    ],
+    "night": [
+     "Późno już. Jutro o świcie na łódź."
+    ],
+    "tavern": [
+     "Borgar, jeszcze jedno! Ale słabe, jutro na morze.",
+     "Opowiadałem wam, jak znalazłem chłopaka na plaży?",
+     "Moje śledzie lepsze niż twoja kapusta, Borgar!"
+    ],
+    "home": [
+     "Sieć znowu porwana... dorsz to nie śledź, szarpie.",
+     "Zupa rybna. Trzeci dzień z rzędu. Dobra jest."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "O świcie ryba głupia, a rybak mądry. Potem na odwrót.",
+     "Śledzie biorą rano, aż woda się gotuje. Weź wędkę i stań na końcu pomostu."
+    ],
+    "day": [
+     "Wędzę na olszy. Kto wędzi na sośnie, ten je smołę.",
+     "Wodę noszę z miasta, jak wszyscy. Morza się nie napijesz - sól wyżre ci gardło.",
+     "Celnik liczy każdą rybę, co idzie promem. Moich nie liczy, bo za chude, mówi."
+    ],
+    "evening": [
+     "Idę do Borgara. Piwo słabe, ale opowieści mocne.",
+     "Wieczorem morze się uspokaja. Ludzie nie."
+    ],
+    "night": [
+     "Czego tu szukasz po nocy? Jak przemytników, to ja nic nie wiem."
+    ],
+    "rain": [
+     "Deszcz! Wystaw garnki, chłopcze. Morze to nie studnia."
+    ]
+   }
+  },
+  "przemytnik": {
+   "name": "Roch",
+   "title": "łata sieci na przystani",
+   "barks": {
+    "stand": [
+     "(Roch patrzy na morze i nic nie mówi.)",
+     "Ten kruk znowu siedzi na maszcie."
+    ],
+    "work": [
+     "Lina do liny, węzeł do węzła...",
+     "Smoły. Gdybym miał choć garnek smoły."
+    ],
+    "wander": [
+     "Plaża w nocy jest najuczciwsza. Nikt nie kłamie, bo nikogo nie ma."
+    ],
+    "rain": [
+     "Deszcz. Dobra noc, żeby coś przewieźć. Gdyby było czym."
+    ],
+    "night": [
+     "Idź spać, chłopcze."
+    ],
+    "home": [
+     "Hm? Zamknij drzwi. Przeciąg."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Kruk znowu siedział na maszcie wraku. Co rano. Patrzy na ciebie, nie na mnie."
+    ],
+    "day": [
+     "Prom co trzy dni. Na ląd puszczają tylko wojsko i ludzi z glejtem Lorda. Reszta pływa z takimi jak ja.",
+     "Celnik ma księgę. W tej księdze jest każdy grosz i każdy człowiek. Mnie tam nie ma. I niech tak zostanie."
+    ],
+    "evening": [
+     "Vey z kantoru? Ten by sprzedał własną matkę. I sprzedał, widziałem kwit.",
+     "Ogień w beczce. Najlepsze, co mam."
+    ],
+    "night": [
+     "Idź spać. Nocą na przystani kręcą się tylko ci, co nie powinni."
+    ],
+    "rain": [
+     "Deszcz zmywa ślady. Dlatego przemytnicy lubią deszcz. Ja nie jestem przemytnikiem, rzecz jasna."
+    ]
+   }
+  },
+  "celnik": {
+   "name": "Sambor Kwit",
+   "title": "celnik Lorda",
+   "barks": {
+    "stand": [
+     "Tobołki do kontroli! Po kolei!",
+     "Opłata portowa: dwa grosze. Kto nie ma, ten czeka.",
+     "Nie pić z morza! Czerwona woda! Czy ja tu do ściany mówię?"
+    ],
+    "wander": [
+     "Wszystko się zgadza. Wszystko musi się zgadzać."
+    ],
+    "rain": [
+     "Deszcz moczy papiery. Zakazuję deszczu. Żartuję."
+    ],
+    "night": [
+     "Komora zamknięta. Przyjdź za dnia."
+    ],
+    "home": [
+     "Dwa grosze... dwa grosze... i jeden kamień z krukiem. Zapisane.",
+     "Atrament znowu zgęstniał."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Komora czynna od ósmej. Ty jesteś ten chłopak od Stacha, tak? Mam cię w księdze. Wszyscy są w księdze."
+    ],
+    "day": [
+     "Rozkaz dworu: każdy kamień z krukiem do zgłoszenia. Po co dworowi kruki? Nie moja rzecz. Moja rzecz to zapisać.",
+     "Opłata portowa: dwa grosze od tobołka. Od ciebie nic, ty nie masz tobołka.",
+     "Tabliczki stawiam nie dla ozdoby. Czerwona woda: kto pije, ten rzyga do rana. A potem przychodzi do mnie po zwrot opłaty portowej."
+    ],
+    "evening": [
+     "Dzień zamknięty. Rachunki się zgadzają. Prawie."
+    ],
+    "night": [
+     "Po nocy nikt uczciwy nie chodzi po przystani. Ty też wracaj."
+    ],
+    "rain": [
+     "Deszcz. Papier tego nie lubi."
+    ]
+   }
+  },
+  "straznik_przystan": {
+   "name": "Strażnik przystani",
+   "title": "straż Lorda",
+   "barks": {
+    "stand": [
+     "Stój. Dokąd? ...A, przechodź.",
+     "Na przystani bez awantur, takie prawo."
+    ],
+    "patrol": [
+     "Spokojnie dziś.",
+     "Latarnie się palą, wszystko w porządku."
+    ],
+    "rain": [
+     "Mokro jak w rybim brzuchu."
+    ],
+    "night": [
+     "Kto tam? A, to ty."
+    ]
+   },
+   "talk": {
+    "morning": [
+     "Rano przypływają tylko mewy. Prom później."
+    ],
+    "day": [
+     "Pilnuję szlabanu. Kapral Wit mówi: nikt bez opłaty. Ja mówię: nikt bez powodu."
+    ],
+    "evening": [
+     "Zmiana do zmroku, potem obchód. Nuda, bracie, nuda."
+    ],
+    "night": [
+     "Nocą przystań zamknięta. Teoretycznie."
+    ],
+    "rain": [
+     "W taką pogodę nawet przemytnik siedzi w domu."
+    ]
+   }
+  },
+  "kolodziej": {
+   "name": "Szczepan Kołodziej",
+   "title": "woźnica",
+   "talk": {
+    "morning": [
+     "Szczepan Kołodziej, woźnica. Wożę wszystko, co się na wóz zmieści: zboże z pól za murem, drewno, kamień, czasem i człowieka.",
+     "Rano jadę na Polną drogę, póki chłodno. W południe koń by mi padł od upału."
+    ],
+    "day": [
+     "Wojciech wozi skrzynie dla kupca z kantoru i dobrze na tym wychodzi. Ja wożę ludziom. Mniej grosza, za to sumienie lekkie.",
+     "Najgorsza w tej suszy jest woda dla koni. Człowiek wytrzyma na dzbanie, koń - nie. Sołtys daje mi wiadro z przydziału, a Siwek wypija dwa.",
+     "Na drogach za murem kręcą się rabusie. Wóz z sianem ich nie kusi, ale wóz z workami - i owszem. Jak chodzisz sam, chodź za dnia."
+    ],
+    "evening": [
+     "Wieczorem obrządzam konie. Siwek ma już swoje lata, jak ja. Obaj kaszlemy od kurzu.",
+     "Mówią, że na kontynencie konie biorą do wojska co do jednego. Tu przynajmniej Siwek ciągnie siano, a nie wóz z rannymi."
+    ],
+    "night": [
+     "Nocą nie jeżdżę. Brama zamknięta, a na drogach ciemno jak w worku."
+    ],
+    "rain": [
+     "Deszcz! Wystawiłem koryto i wszystkie wiadra. Siwek stoi z łbem do góry i łapie krople jak dziecko."
+    ]
+   },
+   "zaczepki": {
+    "rano": [
+     "Wio, Siwku! Wio, nie śpij!",
+     "Z drogi, chłopcze, koła nie patrzą, kogo przejadą.",
+     "Na Polną drogę i z powrotem, zanim słońce przygrzeje."
+    ],
+    "dzien": [
+     "Kto ma ładunek na wóz? Tanio wiozę, uczciwie!",
+     "Koń pije więcej niż ja, a to już coś znaczy.",
+     "Kurz na drodze taki, że koń kicha jak stary dziad."
+    ],
+    "wieczor": [
+     "Siwek wyprzęgnięty, wóz pod wiatą. Dzień zaliczony.",
+     "Wieczorem nawet kurz się kładzie spać.",
+     "Jeszcze tylko koryto napełnić... z czego, pytam się?"
+    ],
+    "deszcz": [
+     "Deszcz! Siwku, pij, póki leje!",
+     "Błoto po piasty, ale niech leje, niech leje!"
+    ],
+    "noc": [
+     "Ciii... konie śpią.",
+     "Po nocy nie wożę. Na drogach różni się kręcą."
+    ],
+    "dom": [
+     "Uprząż trzeba nasmarować, bo skrzypi jak stara brama.",
+     "Siwek kaszle od kurzu... martwię się o niego.",
+     "Nie stój za koniem, kopnie."
+    ]
+   }
+  },
+  "przekupka": {
+   "name": "Agata",
+   "title": "przekupka",
+   "talk": {
+    "morning": [
+     "Agata jestem, przekupka. Jajka, cebula, czosnek, zioła z ogródka. A plotki gratis, do każdego zakupu!",
+     "Kury pić chcą jak ludzie. Każdą kroplę z przydziału dzielę: łyk dla mnie, dwa dla kur. Bez kur nie ma jajek, bez jajek nie ma grosza."
+    ],
+    "day": [
+     "Wiesz, że kapral Wit chodzi do kantoru częściej niż do kaplicy? Ja nic nie mówię. Ja tylko widzę.",
+     "Ceny? Ceny robi susza, nie ja. Za cebulę płacę chłopom z pól więcej niż rok temu, a i tak marnieje w ziemi.",
+     "Prom co trzy dni przywozi obcych z kontynentu. Jedni mówią, że to biedacy, drudzy, że szpiedzy. A ja mówię - jeść muszą jedni i drudzy. Byle płacili."
+    ],
+    "evening": [
+     "Wieczorem w tawernie Melia śpiewa. Ja tam nie chodzę, piwo drogie. Ale pod oknem słychać tak samo.",
+     "Lord Zaleski znowu podniósł targowe. Mówią, że się na coś szykuje. Ja mówię - na nasze grosze się szykuje."
+    ],
+    "night": [
+     "Zamknięte, złociutki. Przekupka też człowiek, też śpi."
+    ],
+    "rain": [
+     "Deszcz! Wystawiłam wszystkie garnki i miskę po zupie. Dziś kury będą piły jak jaśnie pan."
+    ]
+   },
+   "zaczepki": {
+    "rano": [
+     "Jajka! Świeże jajka, cebula, czosnek!",
+     "Kto pierwszy, ten lepszy - jajek mało, kury też pić chcą!",
+     "Przy studni zawsze kolejka... a ja mam pełny kosz plotek!"
+    ],
+    "dzien": [
+     "Cebula słodka jak miód! No, prawie jak miód!",
+     "Taniej nie będzie, złociutki, susza!",
+     "Słyszałeś? Prom znowu przywiózł obcych!"
+    ],
+    "wieczor": [
+     "Kosz pusty, nogi pełne... pora do domu.",
+     "Co zostało, oddam za pół ceny! No, za trzy czwarte.",
+     "Tablica znowu pełna ogłoszeń. Sołtys pisze, ludzie czytają, nikt nie słucha."
+    ],
+    "deszcz": [
+     "Deszcz! Kury się ucieszą!",
+     "Zakryć cebulę, zakryć jajka! A gębę otworzyć!"
+    ],
+    "noc": [
+     "Późno już, złociutki. Jutro przyjdź, jajka będą."
+    ],
+    "dom": [
+     "Jajka liczę... sześć, siedem... kura znowu nie zniosła.",
+     "Siadaj, ale nic nie ruszaj, to na sprzedaż."
+    ]
+   }
+  },
+  "szwaczka": {
+   "name": "Dorota Igła",
+   "title": "szwaczka",
+   "talk": {
+    "morning": [
+     "Dorota Igła. Szyję, ceruję, przerabiam. Z dwóch starych koszul zrobię jedną nową, a z jednej starej - porządną łatę.",
+     "Rano szyję w domu, póki światło dobre. Potem idę na plac po nici i sukno. Jak jakiś kupiec coś przywiezie."
+    ],
+    "day": [
+     "Twoja koszula... wybacz, ale to już nie koszula, to wspomnienie koszuli. Przynieś mi kiedyś grosz, a coś z niej uratuję.",
+     "Straż Lorda Zaleskiego zamawia u mnie kaftany. Czerwone, z czarnym koniem na piersi. Wyszyłam już tyle koni, że śnią mi się po nocach.",
+     "Płótna nie ma czym prać. Wodę z przydziału każdy pije, nie płucze. Toteż w mieście chodzą szarzy, choć wszyscy byli kiedyś biali."
+    ],
+    "evening": [
+     "Wieczorem szyję przy łuczywie. Oczy bolą, ale zamówienia same się nie zrobią.",
+     "Wdowa Halina przyprowadza mi czasem dzieci do przymiarki. Kostek wyrasta ze wszystkiego w miesiąc, a Jagódka dostaje to, co po nim zostanie."
+    ],
+    "night": [
+     "Już nie szyję. Przyjdź jutro, po świcie."
+    ],
+    "rain": [
+     "Deszcz! Wystawię balię i wypiorę wszystko, co mam. Nawet to, co mam na sobie."
+    ]
+   },
+   "zaczepki": {
+    "rano": [
+     "Nici... ciemne nici... gdzie są ciemne nici?",
+     "Sukno z kontynentu znowu droższe. Wojna wszystko podraża.",
+     "Igła, naparstek, nożyce - i do roboty."
+    ],
+    "dzien": [
+     "Hej, ty! Ta koszula prosi się o łatę!",
+     "Dwa łokcie płótna i szpulka nici, na więcej mnie nie stać.",
+     "Czerwone sukno dla straży Lorda... znowu czerwone."
+    ],
+    "wieczor": [
+     "Oczy już nie te... przy łuczywie szyć to męka.",
+     "Kaftany dla straży oddane. Może wreszcie zapłacą.",
+     "Jeszcze dwa guziki i koniec na dziś."
+    ],
+    "deszcz": [
+     "Deszcz! Płótno wreszcie się wypierze!",
+     "Do środka, do środka, sukno zmoknie!"
+    ],
+    "noc": [
+     "Późno już. Igła też musi odpocząć."
+    ],
+    "dom": [
+     "Nie ruszaj tego - to płaszcz dla żony sołtysa.",
+     "Ścieg za ściegiem... jak życie.",
+     "Usiądź, tylko nie na szpilkach."
+    ]
+   }
+  },
+  "wdowa": {
+   "name": "Halina",
+   "title": "wdowa",
+   "talk": {
+    "morning": [
+     "Halina. Wdowa. Rano stoję w kolejce do studni - jedno wiadro na rodzinę, tak kazał sołtys. Na nas troje. Musi wystarczyć.",
+     "Kostek chce iść na żołnierza, jak stary Wacław. Wybij mu to z głowy, jak będziesz mógł. Wojna zabiera, nic nie oddaje."
+    ],
+    "day": [
+     "Mój Michał kładł gont na dachu kaplicy. Ostatniej jesieni spadł. Leon mówi, że belka pękła. Przynosi nam czasem drewno, ale w oczy patrzeć mi nie umie.",
+     "Szyję dla Doroty, piorę dla Agaty, sprzątam u sołtysa. Grosz do grosza. Dzieci muszą jeść.",
+     "Masz dziadka, prawda? Dbaj o niego. Starych trzeba pilnować jak dzieci, tylko że oni się nie dają."
+    ],
+    "evening": [
+     "Wieczorem idę jeszcze raz do studni. Czasem zostaje na dnie choć pół wiadra, jak inni już wezmą.",
+     "Jagódka pyta, kiedy tata wróci z dachu. Nie umiem jej powiedzieć. Ty byś umiał?"
+    ],
+    "night": [
+     "Ciii... dzieci śpią. Przyjdź jutro."
+    ],
+    "rain": [
+     "Deszcz! Wszystkie garnki i miski pod rynnę. Dziś dzieci się umyją, a ja zasnę bez liczenia kropel."
+    ]
+   },
+   "zaczepki": {
+    "rano": [
+     "Kostek, nie pchaj się, kolejka jest kolejka.",
+     "Jedno wiadro na rodzinę... jak z tego ugotować i umyć dzieci?",
+     "Jagódko, trzymaj się spódnicy."
+    ],
+    "dzien": [
+     "Kostek! Nie łaź pod konie!",
+     "Jagódko, nie dotykaj, to nie nasze.",
+     "Dzieci, nie odchodźcie daleko!"
+    ],
+    "wieczor": [
+     "Do domu, dzieci, słońce zachodzi.",
+     "Jeszcze wiadro i do domu...",
+     "Kostek, Jagódka! Kolacja!"
+    ],
+    "deszcz": [
+     "Dzieci, wiadra! Wszystkie garnki na dwór!",
+     "Deszcz... Michał zawsze się cieszył z deszczu."
+    ],
+    "noc": [
+     "Dzieci śpią. Ja też powinnam."
+    ],
+    "dom": [
+     "Cicho, dzieci śpią.",
+     "Garnek pusty... jutro coś wymyślę.",
+     "Siadaj, chłopcze. Nie mam czym poczęstować, ale siadaj."
+    ]
+   }
+  },
+  "kostek": {
+   "name": "Kostek",
+   "title": "syn Haliny",
+   "talk": {
+    "morning": [
+     "Jestem Kostek! Mam osiem lat i miecz! No, z drewna, ale jak się nim walnie, to boli. Pan Leon mi wystrugał.",
+     "Mama mówi, że wody jest mało i nie wolno chlapać. To ja nie chlapię. Tylko troszkę."
+    ],
+    "day": [
+     "Pan Wacław był na prawdziwej wojnie! Ma bliznę i kulę, i opowiada o rycerzach, co mieli konie w żelazie! Jak urosnę, też pójdę na wojnę!",
+     "Pan Szczepan dał mi potrzymać lejce! Siwek mnie zna, naprawdę! Jak mówię „wio”, to rusza uchem.",
+     "Ty nie masz butów! Ja też nie! Jesteśmy jak żołnierze w marszu, tak mówi pan Wacław."
+    ],
+    "evening": [
+     "Już? Mama woła? Dobra, ale jutro znowu bitwa!",
+     "Tata spadł z dachu. Mama płacze w nocy, jak myśli, że śpię. Ja nie płaczę. Żołnierze nie płaczą."
+    ],
+    "night": [
+     "Zzz... na lewo... patrz... zzz..."
+    ],
+    "rain": [
+     "Deszcz! Kto zrobi większy plusk w kałuży, ten jest generałem! Ja pierwszy!"
+    ]
+   },
+   "zaczepki": {
+    "rano": [
+     "Mamo, ja poniosę wiadro! Ja jestem silny!",
+     "Patrz, jak pije koń! Glu, glu, glu!",
+     "Ja pierwszy w kolejce! ...No dobra, drugi."
+    ],
+    "dzien": [
+     "Baczność! Na lewo patrz! Raz, dwa!",
+     "Ciach! Ciach! Pokonałem smoka!",
+     "Pan Wacław mówi, że miecz trzyma się lekko, jak ptaszka!",
+     "Konie! Mogę pogłaskać? Proszę!"
+    ],
+    "wieczor": [
+     "Jeszcze troszkę, mamo! Jeszcze jedna bitwa!",
+     "Jagódka, ty jesteś wróg! Uciekaj!"
+    ],
+    "deszcz": [
+     "Deszcz! Kałuża jak morze!",
+     "Hop! Hop! Mokry jestem jak ryba!"
+    ],
+    "dom": [
+     "Mamo, ja nie chcę spać, ja jestem żołnierz!",
+     "Jagódka chrapie... hi, hi."
+    ]
+   }
+  },
+  "jagodka": {
+   "name": "Jagódka",
+   "title": "córka Haliny",
+   "talk": {
+    "morning": [
+     "Jestem Jagódka. Jak jagódki w lesie, tylko większa. Mam tyle lat! (Pokazuje pięć paluszków, potem namyśla się i dokłada szósty.)",
+     "Mama mówi, że wody nie wolno marnować. Ja piję po troszeczku. Jak ptaszek."
+    ],
+    "day": [
+     "Masz jagódki? Ja nigdy nie jadłam prawdziwych jagódek. Mama mówi, że w lesie rosną, ale las daleko i wilki.",
+     "Kostek ma miecz, a ja mam lalę ze szmatki. Pani Dorota mi uszyła! Ma guziczki zamiast oczu.",
+     "Pan z kulą opowiada straszne bajki. Ale ja się nie boję. Trochę się boję."
+    ],
+    "evening": [
+     "Tata naprawiał dach w kaplicy i spadł. Teraz jest w niebie. A w niebie jest woda?",
+     "Mama mówi, że jak będę grzeczna, to w Kupałę pójdziemy szukać kwiatu paproci."
+    ],
+    "night": [
+     "Zzz..."
+    ],
+    "rain": [
+     "Pada! Pada! Kropelki są zimne i słodkie. Spróbuj!"
+    ]
+   },
+   "zaczepki": {
+    "rano": [
+     "Mamo, ja też niosę! Ten mały garnuszek!",
+     "Kap, kap, kap... studnia płacze?",
+     "Jeszcze jestem śpiąca..."
+    ],
+    "dzien": [
+     "Kostek, poczekaj na mnie!",
+     "Kwiatek! Dla mamy!",
+     "Motylek! Motylku, chodź tu!",
+     "Lala, nie płacz, zaraz pójdziemy do domu."
+    ],
+    "wieczor": [
+     "Mamo, nóżki bolą...",
+     "Kostek mnie goni! Ratunku! Hi, hi!"
+    ],
+    "deszcz": [
+     "Deszcz! Buzia do góry - am!",
+     "Kropelki łaskoczą!"
+    ],
+    "dom": [
+     "Mama mówi, że tata patrzy z nieba. Ale przez dach nieba nie widać.",
+     "Ciii... lala śpi."
+    ]
+   }
+  },
+  "ciesla": {
+   "name": "Leon Dłuto",
+   "title": "cieśla",
+   "talk": {
+    "morning": [
+     "Leon Dłuto, cieśla. Stawiam dachy, kładę belki, naprawiam wszystko, co z drewna. Rano robię w warsztacie, póki drewno chłodne i nie pęka.",
+     "W tę suszę drewno schnie za szybko. Belka pęka wzdłuż słoja, deska paczy się na słońcu. Jak będziesz coś budował, kładź drewno w cieniu."
+    ],
+    "day": [
+     "Stragany na placu stawiałem wszystkie. Teraz chodzę je łatać. Przekupki tłuką w nie koszami, a dzieci włażą na daszki.",
+     "Zbych Smolarz zza muru wozi mi drewno. Uczciwy człowiek, tylko krzywe pnie mu się trafiają. Jak całe to miasto.",
+     "Hieronim zamawia u mnie trumny. W suszę starzy umierają szybciej. Smutna robota, ale ktoś musi ją zrobić porządnie."
+    ],
+    "evening": [
+     "Michał, mąż Haliny, był moim czeladnikiem. Spadł z dachu kaplicy, bo belka pękła. Moja belka. Noszę im drewno na zimę i nie umiem spojrzeć Halinie w oczy.",
+     "Kaplica ma nowy gont. Położyłem go sam, po Michale. Każdy gwóźdź wbijałem, jakby był ostatni."
+    ],
+    "night": [
+     "Warsztat zamknięty. Przyjdź jutro, o świcie."
+    ],
+    "rain": [
+     "Deszcz to dla cieśli zła pogoda i dobra nowina naraz. Robota stoi, za to drewno pije i przestaje pękać."
+    ]
+   },
+   "zaczepki": {
+    "rano": [
+     "Piła ostra, dłuto ostre, tylko ręce stare.",
+     "Deska krzywa jak ta susza... ech.",
+     "Raz, dwa... trach! Dobrze siadło."
+    ],
+    "dzien": [
+     "Ten stragan trzyma się na słowo honoru. Trzeba podbić.",
+     "Drewno wyschło na wiór, pęka pod dłutem.",
+     "Hej, młody! Podaj no tamten klin!"
+    ],
+    "wieczor": [
+     "Wióry z brody, trociny z uszu... koniec dnia.",
+     "Kaplica jeszcze stoi. Dobrze. Niech stoi.",
+     "Jutro trumna dla Hieronima. Znaczy - dla kogoś, kogo Hieronim pochowa."
+    ],
+    "deszcz": [
+     "Deszcz! Drewno odetchnie, i ja z nim.",
+     "Pod dach z deskami, szybko!"
+    ],
+    "noc": [
+     "Idź spać, chłopcze. Ja też już kończę."
+    ],
+    "dom": [
+     "Siekiera naostrzona, piła naostrzona... a sen nie przychodzi.",
+     "Siadaj na zydlu. Sam go zrobiłem. Nie skrzypi.",
+     "Michał... dobry był chłopak. Dobry."
+    ]
+   }
+  },
+  "weteran": {
+   "name": "Wacław Siwy",
+   "title": "stary żołnierz",
+   "talk": {
+    "morning": [
+     "Wacław Siwy. Służyłem w piechocie królewskiej, czterdzieści lat temu. Pod Czarnym Brodem kopia strzaskała mi kolano, a resztę przyniosłem tutaj.",
+     "Rano siedzę na ławce i patrzę, kto idzie na plac. Stary żołnierz zawsze patrzy. Nawet jak już nie ma czego pilnować."
+    ],
+    "day": [
+     "Ta wojna na kontynencie to nie wojna, chłopcze. Za moich czasów król bił się z królem. Teraz biją się wszyscy ze wszystkimi o coś, czego nikt nie widział. Serce, mówią. Ja tam widziałem tylko błoto i krew.",
+     "Kostek chce iść na żołnierza. Opowiadam mu o wojnie, żeby się bał. A on słucha z otwartą gębą i chce jeszcze. Głupi stary, sam sobie winien.",
+     "Werbownicy z garnizonu nad zatoką kręcą się po wyspie. Jak przyjdą do ciebie z grosikiem i dobrym słowem - uciekaj. Wojsko płaci z góry, a odbiera z odsetkami."
+    ],
+    "evening": [
+     "Wieczorem idę popatrzeć na wartę przy strażnicy. Chłopcy Lorda stoją krzywo jak płot. Ale mówię im to tylko w myślach. O kuli nie ucieknę.",
+     "Ten zamek nad placem... kiedyś była tu prawdziwa załoga. Ojciec mówił, że strzegli czegoś pod skałą. Teraz Borgar strzeże beczek. Też zacna służba."
+    ],
+    "night": [
+     "Nie śpię. Starzy żołnierze śpią na jedno oko. Idź do domu, chłopcze."
+    ],
+    "rain": [
+     "Deszcz! Siadaj obok, przeczekamy razem. Pod Brodem padało trzy dni i trzy noce, a my staliśmy w szyku. Tu przynajmniej jest ławka."
+    ]
+   },
+   "zaczepki": {
+    "rano": [
+     "Wstawać, maruderzy! Słońce już wysoko!",
+     "Kolano boli... będzie deszcz. Albo i nie będzie.",
+     "Ech, dawniej to warta stała prosto."
+    ],
+    "dzien": [
+     "Siadaj, chłopcze, opowiem ci, jak było pod Czarnym Brodem.",
+     "Lewa, prawa, lewa... za moich czasów chodziło się w nogę.",
+     "Kto pamięta starą wojnę? Nikt. A nowa już puka do drzwi."
+    ],
+    "wieczor": [
+     "Wartownicy! Hełm prosto, włócznia prosto, gęba na kłódkę!",
+     "Słońce zachodzi jak wtedy, nad Brodem... czerwono.",
+     "Do domu, staruszku. Kula sama nie zaniesie."
+    ],
+    "deszcz": [
+     "Deszcz! Jak w obozie pod Brodem - tylko błota mniej.",
+     "Kości mówiły, że będzie deszcz. Kości nie kłamią."
+    ],
+    "noc": [
+     "Nocą każdy szelest to wróg. Tak już zostaje na zawsze."
+    ],
+    "dom": [
+     "Medal gdzieś tu był... w skrzyni. Albo przepiłem.",
+     "Siadaj. Wody nie mam, ale opowieść mam."
+    ]
+   }
+  },
+  "szynkarz": {
+   "name": "Mietek Kwaśniak",
+   "title": "szynkarz",
+   "talk": {
+    "morning": [
+     "Mietek Kwaśniak, do usług. Szynk mam, nie karczmę - karczma jest na wzgórzu, u Borgara. U Borgara kufel po trzy grosze, u mnie kubek po jednym. I smakuje akurat na jeden.",
+     "Rano warzę kwas. Z czego? Ze skórek chleba, których Hanka z piekarni nie sprzeda, z garści jęczmienia i z wody... której nie ma. Dlatego taki kwaśny."
+    ],
+    "day": [
+     "Do szynku przychodzą ci od gliny, drwale, ludzie z promu. Płacą miedziakiem, guzikiem, czasem obietnicą. Obietnic mam już pełną beczkę.",
+     "Po południu chodzę do miasta po suchy chleb na kwas. Strażnik przy bramie za każdym razem zagląda do worka. Chleb, panie władzo. Stary chleb. A on i tak grzebie.",
+     "Ludzie Lorda, co kopią przy skałach, zaglądają tu czasem nocą. Piją dużo, mówią mało. Raz jeden się upił i gadał, że oni tam wcale nie kamienia szukają. Następnego dnia już go nie przysłali."
+    ],
+    "evening": [
+     "Wieczorem szynk ożywa. Darin opowiada o wojnie, Zbych pije na krechę, a Rysiek płaci zającem, o którego nikt nie pyta.",
+     "Grosz, który tu zostawisz, nie pójdzie do Lorda. To już coś. Siadaj, kwasu naleję. Na krechę też można - ale krótką."
+    ],
+    "night": [
+     "Szynk zamknięty... no, prawie zamknięty. Kubek kwasu się znajdzie, tylko cicho - kapral Wit nie lubi, jak biedota pije po nocy."
+    ],
+    "rain": [
+     "Deszcz! Beczki pod rynnę, wszystkie! Dziś kwas będzie z prawdziwej wody, a nie z modlitwy."
+    ]
+   },
+   "zaczepki": {
+    "rano": [
+     "Kwas świeży, prosto z beczki! No, prawie świeży.",
+     "Ławy wytarte, beczka wytoczona. Można żyć.",
+     "Kubek kwasu na dzień dobry? Grosz, nie więcej!"
+    ],
+    "dzien": [
+     "Siadaj, spocznij! Pod daszkiem jeszcze chłodno.",
+     "Kwas po groszu, cienkusz po dwa! Kto pije?",
+     "U Borgara drożej, u mnie bliżej!"
+    ],
+    "wieczor": [
+     "Wieczór, ludzie! Szynk otwarty do późna!",
+     "Kto ma grosz, niech siada. Kto nie ma - niech siada ciszej.",
+     "Zbych, znowu na krechę? Ech... siadaj."
+    ],
+    "deszcz": [
+     "Deszcz! Beczki pod rynnę!",
+     "Leje! Kwas z deszczówki - jak u króla!"
+    ],
+    "noc": [
+     "Ciszej, ciszej... kapral nie śpi.",
+     "Ostatni kubek i do domu, chłopcze."
+    ],
+    "dom": [
+     "Kwas musi postać trzy dni. Nie ruszaj beczki.",
+     "Krecha Zbycha, krecha Ryśka, krecha Józka... sama krecha, grosza nie widać.",
+     "Siadaj, jest jeszcze ława. Kulawa, ale jest."
+    ]
+   }
+  },
+  "opiekunka": {
+   "name": "Ciotka Stefa",
+   "title": "opiekunka przytułku",
+   "talk": {
+    "morning": [
+     "Stefania, ale wszyscy mówią: ciotka Stefa. Prowadzę przytułek. Kto chory, stary albo nie ma dachu - dostaje u mnie siennik i miskę. Siennik twardy, miska płytka, ale są.",
+     "O świcie rozpalam pod kotłem. Kasza, pokrzywa, czasem kość od rzeźnika z miasta. Jak gotujesz dla dwudziestu z garści, to się uczysz liczyć ziarnka."
+    ],
+    "day": [
+     "Sołtys liczy mi wodę jak jednej rodzinie: wiadro na dzień. A pod dachem mam dwadzieścia gąb, gorączkę i dwoje niemowląt. Noszę, ile udźwignę, a resztę wymadlam.",
+     "Ludzie z promu przypływają chorzy: kaszel, rany, głód. Babka Jadwiga daje mi zioła, Darin pomaga nosić. Lord przysłał nam kiedyś jeden kocioł i dużo obietnic. Kocioł się przydał.",
+     "Masz dziadka? To go pilnuj. Połowa moich starych ma dzieci w mieście. Tylko że dzieci w mieście mają ważniejsze sprawy."
+    ],
+    "evening": [
+     "Wieczorem nalewam zupę każdemu, kto przyjdzie z miską. Nikogo nie pytam, skąd jest. Głód nie ma ojczyzny.",
+     "Zanoszę miskę staremu Gawłowi. Do przytułku nie przyjdzie, uparty. Mówi, że pod murem śpi się jak za młodu na warcie."
+    ],
+    "night": [
+     "Ciii... chorzy śpią. Jak cię coś boli, wejdź. Jak nie - idź spać, póki możesz."
+    ],
+    "rain": [
+     "Deszcz! Kocioł pod niebo, beczki, miski, wszystko! Dziś zupa będzie gęsta, a dzieci umyte."
+    ]
+   },
+   "zaczepki": {
+    "rano": [
+     "Kasza się gotuje! Kto głodny - z miską!",
+     "Ostrożnie, gorące! Dzieci, odsuńcie się od kotła.",
+     "Jeszcze garść pokrzywy... i będzie zupa."
+    ],
+    "dzien": [
+     "Kto chory, niech przyjdzie. Kto zdrowy - niech pomoże nosić.",
+     "Wiadro z miasta, wiadro na dwudziestu... Panie, daj siły.",
+     "Masz może garść kaszy? Nie dla mnie, dla dzieci."
+    ],
+    "wieczor": [
+     "Zupa! Kto ma miskę, niech podchodzi!",
+     "Po kolei, po kolei, dla każdego starczy... może.",
+     "Gaweł, uparciuchu, zjedz chociaż ciepłe."
+    ],
+    "deszcz": [
+     "Deszcz! Kocioł pod niebo!",
+     "Dzieci, łapcie wodę, w co się da!"
+    ],
+    "noc": [
+     "Ciszej, chorzy śpią."
+    ],
+    "dom": [
+     "Cii... ten mały ma gorączkę.",
+     "Wolny siennik został jeden. I ten mokry.",
+     "Pij powoli, po łyczku. Woda droższa niż chleb."
+    ]
+   }
+  },
+  "garncarz": {
+   "name": "Wit Zduń",
+   "title": "garncarz",
+   "talk": {
+    "morning": [
+     "Wit Zduń, garncarz. Wit, jak kapral - tylko że ja ludziom lepię garnki, a on guzy. Moje przynajmniej się przydają.",
+     "Rano kopię glinę w gliniance za palisadą, póki chłodno. W tę suszę glina twarda jak cegła, zanim jeszcze trafi do pieca. Trzeba ją moczyć, a czym? Śliną?"
+    ],
+    "day": [
+     "W suszę garnek to skarb. Każdy chce dzban na wodę, której nie ma, i miskę na zupę od ciotki Stefy. Sprzedaję po groszu albo za garść kaszy. Bogaty nie będę, ale garnki idą.",
+     "Matka Tośki ugniata mi glinę, a ojciec dziewczyny kopie u Lorda przy skałach. Przyniósł mi stamtąd skorupy - stare, z jakimś znakiem. Takich tu nikt nie lepi od stu lat.",
+     "Znajdziesz po deszczu mokrą glinę przy kałuży - ulep sobie garnek i wysusz w cieniu. Krzywy będzie, ale twój. Mój pierwszy też był krzywy."
+    ],
+    "evening": [
+     "Wieczorem palę w piecu. Drewno od Zbycha, ogień do nocy. Jak garnek pęknie w ogniu, słychać - jak strzał. Trzy strzały na wieczór to zły wieczór.",
+     "Potem kubek kwasu u Mietka. Mówię mu, że jego kwas jest kwaśniejszy niż moja glina. Śmieje się. Nalewa. Takie życie."
+    ],
+    "night": [
+     "Piec stygnie, ja też. Przyjdź jutro, za dnia."
+    ],
+    "rain": [
+     "Deszcz! Glinę do koryt, niech pije! Dziś ulepię tyle, co przez cały tydzień."
+    ]
+   },
+   "zaczepki": {
+    "rano": [
+     "Hop! ...Twarda jak kamień, ta glina.",
+     "Kto kopie glinę o świcie, ten ma garnki o zmierzchu.",
+     "Uważaj, dół głęboki! Wpadniesz - wylepię z ciebie dzban."
+    ],
+    "dzien": [
+     "Garnki! Dzbany! Miski! Po groszu albo za garść kaszy!",
+     "Dzban na wodę, której nie ma - najlepszy towar w suszy!",
+     "Ten krzywy? Taniej. Krzywy też trzyma wodę."
+    ],
+    "wieczor": [
+     "Piec dyszy, garnki się pieką... oby żaden nie strzelił.",
+     "Mietek, kubek kwasu dla garncarza!",
+     "Dzień zaliczony. Dwa garnki pękły, osiem całych."
+    ],
+    "deszcz": [
+     "Deszcz! Glina pije!",
+     "Koryta pod rynnę! Dziś lepimy!"
+    ],
+    "noc": [
+     "Piec stygnie. Idź spać, chłopcze."
+    ],
+    "dom": [
+     "Koło się kręci, glina się kręci, świat się kręci...",
+     "Nie dotykaj, mokre! Zostawisz palec na wieki.",
+     "Ten dzbanek dla ciotki Stefy. Za darmo. Nie mów nikomu."
+    ]
+   }
+  },
+  "dziecko": {
+   "name": "Tośka",
+   "title": "dziecko z lepianki",
+   "talk": {
+    "morning": [
+     "Jestem Tośka. Z lepianki, tej pierwszej. Mam siedem lat i brata, co ciągle ryczy. Ja nie ryczę.",
+     "Rano sypię kurom ziarno. Znaczy, nie ziarno, bo ziarna nie ma - plewy. Kury też ich nie lubią."
+    ],
+    "day": [
+     "Mama ugniata glinę u pana Wita. Ma potem szare ręce aż po łokcie, jak w rękawiczkach. Ja też chcę takie rękawiczki!",
+     "Tata kopie u Lorda przy skałach. Wraca raz na tydzień, brudny, i nic nie mówi. Mama mówi, żeby nie pytać. To nie pytam. Ale ty możesz zapytać.",
+     "Ciotka Stefa daje w południe zupę. Jak się ładnie podziękuje, to nalewa z dna, gdzie gęsto!"
+    ],
+    "evening": [
+     "Franek mówi, że jak dorośniemy, pójdziemy razem do miasta i będziemy bogaci. Ja będę piekła chleb, a on będzie kowalem. I będziemy pili wodę, ile się chce.",
+     "Za murem, w mieście, dzieci mają buty. Widziałam przez bramę. Po co komu buty? Boso szybciej się biega."
+    ],
+    "night": [
+     "Zzz... kura... uciekła... zzz..."
+    ],
+    "rain": [
+     "Deszcz! Deszcz! Franek, chodź, łapiemy do garnka! Pan Wit da nam największy!"
+    ]
+   },
+   "zaczepki": {
+    "rano": [
+     "Cip, cip, cip! Kurki, chodźcie!",
+     "Ta koza znowu mnie goni!",
+     "Franek! Franek, poczekaj na mnie!"
+    ],
+    "dzien": [
+     "Berek! Ty gonisz!",
+     "Patrz, ulepiłam ludzika z gliny!",
+     "Masz coś do jedzenia? Tylko pytam.",
+     "Franek mówi, że ty walczyłeś z wilkiem. Naprawdę?"
+    ],
+    "wieczor": [
+     "Jeszcze troszkę! Mama jeszcze nie woła!",
+     "Franek, kto pierwszy do bramy!"
+    ],
+    "deszcz": [
+     "Deszcz! Kałuża jak jezioro!",
+     "Pada! Język na wierzch!"
+    ],
+    "dom": [
+     "Mama, a kiedy tata wróci?",
+     "Ciii... brat śpi. Nareszcie."
+    ]
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TownLife_Data.js: RESIDENTS, NEW_TOWN, NEW_PODGRODZIE - name, title, barks, talk, alt, zaczepki; mieszkancy.<key>)"
+}

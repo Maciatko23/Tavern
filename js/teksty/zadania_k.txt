@@ -131,12 +131,12 @@ Już, już! Cztery polana - złoty chłopak. Masz dwa bochny prosto z pieca, jes
 zadania.K4.fail.text = Hanka rozpaliła piec czym się dało.
 # K5, „Bochenki do dziewiątej”
 zadania.K5.title = Bochenki do dziewiątej
-zadania.K5.where = stragan → dzwonnik, brama wschodnia, obóz pod murem, ratusz
+zadania.K5.where = stragan → dzwonnik, brama wschodnia, studnia albo obóz pod murem, ratusz
 zadania.K5.when = 6–9, codziennie
-zadania.K5.desc = Cztery bochny przed dziewiątą: Ambrożemu, kapralowi Witowi przy bramie wschodniej, Ludmile do obozu pod murem i sołtysowi pod ratusz. Każdy rzuci słowo plotki.
+zadania.K5.desc = Cztery bochny przed dziewiątą: Ambrożemu, kapralowi Witowi przy bramie wschodniej, sołtysowi pod ratusz i czwarty - Kubie przy studni, a od pierwszej fali Ludmile do obozu pod murem. Każdy rzuci słowo plotki.
 [zadania.K5.offer.say]
-Pomożesz? Cztery bochny trzeba roznieść przed dziewiątą: Ambrożemu, kapralowi przy bramie wschodniej, Ludmile do obozu pod murem i sołtysowi pod ratusz.
-Za Ludmiłę płaci sołtys, reszta z góry. Ja płacę tobie - dwanaście groszy.
+Pomożesz? Cztery bochny trzeba roznieść przed dziewiątą: Ambrożemu, kapralowi przy bramie wschodniej, {czwartemu} i sołtysowi pod ratusz.
+{placi} Ja płacę tobie - dwanaście groszy.
 
 zadania.K5.offer.yes = Roznoszę!
 zadania.K5.offer.no = Nie dziś.
@@ -146,11 +146,12 @@ Leć! Tylko nie zjedz po drodze.
 [zadania.K5.offer.decline]
 To sama polecę. Moje nogi, moja sprawa.
 
-zadania.K5.steps.0.text = Roznieś 4 bochny przed 9:00: Ambroży (rynek), kapral Wit (brama wschodnia), Ludmiła (obóz pod murem), sołtys (ratusz, od 8:00).
+zadania.K5.steps.0.text = Roznieś 4 bochny przed 9:00: Ambroży (rynek), kapral Wit (brama wschodnia), {czwarty}, sołtys (ratusz, od 8:00).
 # lista w celu na ekranie (kto dostaje chleb; ptaszek, gdy oddany)
 zadania.K5.steps.0.lista.dzwonnik = Chleb dla Ambrożego (rynek)
 zadania.K5.steps.0.lista.kapral = Chleb dla kaprala Wita (brama wschodnia)
 zadania.K5.steps.0.lista.ludmila = Chleb dla Ludmiły (obóz pod murem)
+zadania.K5.steps.0.lista.woziwoda = Chleb dla Kuby (studnia na rynku)
 zadania.K5.steps.0.lista.soltys = Chleb dla sołtysa (ratusz, od 8:00)
 zadania.K5.steps.1.text = Wróć do Hanki po zapłatę (stragan, do 14:00).
 [zadania.K5.steps.1.say]
@@ -158,6 +159,13 @@ zadania.K5.steps.1.text = Wróć do Hanki po zapłatę (stragan, do 14:00).
 Wszyscy dostali? I nikt nie marudził? To zasłużyłeś. Dwanaście groszy, proszę.
 
 zadania.K5.fail.text = Chleb wystygł, a ludzie czekali.
+# (2026-10-28) czwarty bochen: przed pierwszą falą (dzień 10) Kuba przy studni, potem Ludmiła w obozie (docs/PODROZNI.md 5.2)
+zadania.K5.wiersze.czwarty.przed = Kuba (studnia na rynku)
+zadania.K5.wiersze.czwarty.po = Ludmiła (obóz pod murem)
+zadania.K5.wiersze.czwartemu.przed = Kubie przy studni na rynku
+zadania.K5.wiersze.czwartemu.po = Ludmile do obozu pod murem
+zadania.K5.wiersze.placi.przed = Kuba płaci od ręki, reszta z góry.
+zadania.K5.wiersze.placi.po = Za Ludmiłę płaci sołtys, reszta z góry.
 # K6, „Jęczmień do żaren”
 zadania.K6.title = Jęczmień do żaren
 zadania.K6.where = stragan na rynku
@@ -755,7 +763,7 @@ zadania.K37.lines.caught = Puść! Puść, nic nie zrobiłem!
 zadania.K37.lines.gone = Złodziejaszek wykorzystał chwilę i uciekł.
 [zadania.K37.lines.noteFree]
 Szymek z obozu
-Złodziejaszek, który odciął sakiewkę dworu, to Szymek - głodny chłopak z obozu pod murem. Puściłem go. Ludzie z obozu tego nie zapomną.
+Złodziejaszek, który odciął sakiewkę dworu, to Szymek - głodny chłopak spod murów. Puściłem go. Ludzie z obozu tego nie zapomną.
 
 [zadania.K37.lines.noteKeep]
 Sakiewka dworu

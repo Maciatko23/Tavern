@@ -2562,5 +2562,608 @@
     "scale": null,
     "height_px": 60,
     "notes": "Nowe Podgrodzie (docs/podgrodzie/NOWE_PODGRODZIE.md): TownLife 2951, przytułek (Map202). Chód W z trybu skeleton-v3 (szablonowy W i E gubił fartuch w części klatek), chód E = lustro chodu W (własna rotacja E). Czerwona plama na fartuchu = barszcz."
+  },
+  {
+    "key": "Pula_K",
+    "name": "Podróżna z promu (ciało puli: kobieta w chuście)",
+    "pixellab_id": "e1ef026f-95d7-4f49-9246-122344e4980c",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "fdbfcae0-da90-47ab-bd06-74f677f46388",
+    "animation": "walk",
+    "description": "an ordinary travelling peasant woman about 35, plain kind face, brown hair under a plain dark-red wool headscarf tied under the chin, a long plain dusty-blue wool dress, a simple off-white apron, a brown knitted shawl over the shoulders, worn brown shoes, plain medieval commoner, empty hands, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Pula_K",
+    "walk8": "Npc_Pula_K_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 7.1): ciało puli K; warianty kolorów K2, K3 kodem (tools/podroznicy/pula_kolory.py)."
+  },
+  {
+    "key": "Pula_M",
+    "name": "Podróżny z promu (ciało puli: mężczyzna w płaszczu)",
+    "pixellab_id": "8eafbc03-7808-44b0-8f16-d32ed02c55a3",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "9c89c977-5a51-419f-b950-3f7bd7568f59",
+    "animation": "walk",
+    "description": "an ordinary travelling man about 35, plain tanned face, short brown hair and a short brown beard, a long plain dark-green wool travelling cloak fastened at the neck over a simple undyed linen tunic, a leather belt with a small pouch, grey-brown trousers, worn brown leather boots, a small cloth bundle slung on his back, plain medieval commoner, empty hands, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8,
+      "walk_skeleton_v3_north": 3
+    },
+    "sheet": "$Npc_Pula_M",
+    "walk8": "Npc_Pula_M_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {
+        "north": "walk_sk_n"
+      },
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {
+        "north": "5:1,0:4"
+      },
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 61,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 7.1): ciało puli M; warianty kolorów M2, M3 kodem (tools/podroznicy/pula_kolory.py). Chód N z trybu skeleton-v3 (szablonowy gubił tobołek na plecach)."
+  },
+  {
+    "key": "Pula_S",
+    "name": "Podróżny z promu (ciało puli: starzec z laską)",
+    "pixellab_id": "ec696f39-41d5-4642-b37a-b78666ec273e",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "59b23380-e123-4949-98b1-ead2abcbeb12",
+    "animation": "walk",
+    "description": "an ordinary old travelling man about 70, thin wrinkled face, bald on top with white hair on the sides, a short white beard, a long plain grey-blue wool coat tied with a rope belt, a brown wool scarf, patched brown trousers, worn shoes, leaning on a simple wooden walking stick held in his right hand, plain medieval commoner, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8,
+      "walk_skeleton_v3_south_west": 3
+    },
+    "sheet": "$Npc_Pula_S",
+    "walk8": "Npc_Pula_S_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {
+        "south-west": "walk_sk_sw"
+      },
+      "mirror": {
+        "west": "east",
+        "north-west": "north-east",
+        "south-east": "south-west"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 7.1): ciało puli S; wariant kolorów S2 kodem (tools/podroznicy/pula_kolory.py). Szablonowy chód gubił laskę w W, NW, SW i SE: W = lustro E, NW = lustro NE, SW z trybu skeleton-v3, SE = lustro SW (laska w lewej ręce w tych kierunkach)."
+  },
+  {
+    "key": "Pula_Z",
+    "name": "Podróżny z promu (ciało puli: marynarz)",
+    "pixellab_id": "fe82a730-97d7-40bf-ba03-3c893e62cf6b",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "04639678-cb3b-4b82-9eea-86ec28c96de5",
+    "animation": "walk",
+    "description": "an ordinary sailor about 30, weathered tanned face, short dark stubble, a dark-blue knitted wool cap, a navy-blue wool sailor's jacket over a cream linen shirt, a brown leather belt, loose grey canvas trousers rolled up at the shins, worn brown boots, plain medieval seaman, empty hands, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Pula_Z",
+    "walk8": "Npc_Pula_Z_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 7.1): ciało puli Z; wariant kolorów Z2 kodem (tools/podroznicy/pula_kolory.py)."
+  },
+  {
+    "key": "Tobiasz",
+    "name": "Tobiasz Goniec (posłaniec z kontynentu, podróżny z promu)",
+    "pixellab_id": "e74d4f90-2e42-47e3-8269-cec6d22604e3",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "896e53db-9015-4f07-be66-1ea93dfd3fae",
+    "animation": "walk",
+    "description": "Tobiasz the courier, a lanky young man about 20, quick friendly face, short tousled brown hair, a wide brown felt hat with a grey feather, a mud-spattered dark-blue riding coat, a red neckerchief, a big brown leather letter satchel on a strap worn across the chest, tall worn brown boots, medieval, empty hands, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Tobiasz",
+    "walk8": "Npc_Tobiasz_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 59,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 2.1), TownLife 3020, pokój 23. W = lustro E (szablonowy chód W rozjaśniał kapelusz w 7 klatkach)."
+  },
+  {
+    "key": "Medyk",
+    "name": "Konstanty Mak (medyk z kontynentu, podróżny z promu)",
+    "pixellab_id": "3b59b74d-04ba-4a68-86ab-5ca3e87d112f",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "93683a4d-12b9-431c-a477-cd34fb9b26ab",
+    "animation": "walk",
+    "description": "Konstanty the physician, a thin tired man about 45, narrow face, round wire spectacles, short grey hair and a short grey beard, a long dark-green coat, a white linen apron over the coat, a leather bag with herb bundles and small glass vials at the hip, dried herbs tied to the belt, dark trousers, brown boots, medieval, empty hands, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Medyk",
+    "walk8": "Npc_Medyk_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east",
+        "north-west": "north-east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 2.2), TownLife 3021, pokój 11. W = lustro E (szablonowy chód W gubił fartuch w 4 klatkach), NW = lustro NE (biała plama fartucha w 2 klatkach)."
+  },
+  {
+    "key": "Kartograf",
+    "name": "Teofil Cyrkiel (kartograf, podróżny z promu)",
+    "pixellab_id": "8b44d644-49e8-4596-b989-747be8ca881b",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "92973323-54f4-41b4-b08e-48aa362ad52a",
+    "animation": "walk",
+    "description": "Teofil the cartographer, a stocky man about 50, bald head with grey hair on the sides, bushy grey eyebrows, a brown waistcoat over a cream shirt with rolled-up sleeves, ink-stained fingers, a coiled measuring cord and a brass compass at the belt, a long leather map tube strapped on his back, brown trousers, brown shoes, medieval, empty hands, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Kartograf",
+    "walk8": "Npc_Kartograf_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "north-east": "north-west"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 2.3), TownLife 3022, pokój 22. NE = lustro NW (szablonowy chód NE gubił tubę z mapami w 5 klatkach)."
+  },
+  {
+    "key": "Grajek",
+    "name": "Jędrek Dudarz (wędrowny grajek, podróżny z promu)",
+    "pixellab_id": "ade731e1-7628-4d20-af96-5256331c9b8b",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "d18b2cff-f4da-4f41-bf10-cf0d8b0b3535",
+    "animation": "walk",
+    "description": "Jedrek the travelling musician, a wiry man about 40, wide grin, stubble, a floppy felt cap with colourful ribbons, a patched colourful vest with red, ochre and green patches over a linen shirt, a bagpipe with a goatskin bag carried under his left arm, grey trousers, bast shoes, medieval, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Grajek",
+    "walk8": "Npc_Grajek_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 2.4), TownLife 3023, pokój 17. Dudy pod lewą pachą w każdym kierunku; w chodzie SE worek dud chowa się za ręką (widać piszczałki) - zostawione (SE nie wchodzi do arkusza $)."
+  },
+  {
+    "key": "Zboze",
+    "name": "Zenon Sita (kupiec zbożowy, podróżny z promu)",
+    "pixellab_id": "1ac4160a-e4e7-45cd-9078-0075ec609c9e",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "20d8f8ab-0c5c-447a-b0d3-cba179287c2d",
+    "animation": "walk",
+    "description": "Zenon the grain merchant, a portly man about 55, round clean-shaven face with a double chin, a flat brown cap, a fine burgundy coat with a brown fur collar, a wide belt with a coin purse and a small brass scale, a sack of grain carried on his right shoulder, dark trousers, brown boots, medieval, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Zboze",
+    "walk8": "Npc_Zboze_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 2.5), TownLife 3024, pokój 20. Worek zboża na ramieniu w każdym kierunku; w chodzie NW mniejszy w 5 klatkach, w SE prawie schowany za głową - zostawione (diagonale nie wchodzą do arkusza $)."
+  },
+  {
+    "key": "Urszula",
+    "name": "Urszula z Olszynki (matka szukająca syna, podróżna z promu)",
+    "pixellab_id": "5c42db70-0752-48a5-a1d5-615b48ef0703",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "3ff19e17-8fb3-4314-9f6c-15444bbeaf63",
+    "animation": "walk",
+    "description": "Urszula, a tired peasant woman about 40, kind sad face, a white linen headscarf, a faded grey-blue dress, a brown wool shawl over the shoulders, a small cloth bundle on her back, worn shoes, holding a folded letter in her hands, medieval, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8,
+      "walk_skeleton_v3_north": 3
+    },
+    "sheet": "$Npc_Urszula",
+    "walk8": "Npc_Urszula_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {
+        "north": "walk_sk_n"
+      },
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": "524493=4d3624"
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 2.6), TownLife 3025, pokój 21. Chód N z trybu skeleton-v3 (szablonowy gubił tobołek na plecach); fioletowe oczy szablonowego chodu S (524493) przekolorowane na brąz z rotacji. W chodzie SW list znika z rąk w 6 klatkach - zostawione (SW nie wchodzi do arkusza $)."
+  },
+  {
+    "key": "Relikwie",
+    "name": "Gaspar Lis (handlarz relikwii, podróżny z promu, W15)",
+    "pixellab_id": "3daa4794-0f82-4047-b61b-00caa891653a",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "97ba3629-662b-4f0d-8197-7259a9efcc1e",
+    "animation": "walk",
+    "description": "Gaspar the relic seller, a flashy man about 45, curled black moustache, a tall red felt cap, a purple coat with gold trim, many cheap amulets and medallions around the neck, a small wooden tray box on a neck strap in front of his belly holding tiny reliquaries, dark trousers, brown boots, medieval, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Relikwie",
+    "walk8": "Npc_Relikwie_Walk8",
+    "steps": [
+      1,
+      5
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east",
+        "south-east": "south-west"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 2.9), łańcuch W15, TownLife 3028, pokój 12. W = lustro E, SE = lustro SW (szablonowe chody W i SE gubiły skrzynkę z relikwiami); kroki arkusza $ 1 i 5 (w klatce 6 chodu E skrzynka znika)."
+  },
+  {
+    "key": "Dezerter",
+    "name": "Tymon Wrzos (dezerter, podróżny z promu, W16)",
+    "pixellab_id": "99976402-2fea-48ea-8826-d25d5cb72e08",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "e3146971-8e4d-4385-9199-3f7dccfb4e23",
+    "animation": "walk",
+    "description": "Tymon, a young soldier about 22, short dark hair, stubble, haunted tired eyes, a torn and dirty white army tunic with an orange phoenix on the chest, rank insignia ripped off, a bandaged left forearm, a plain brown cloak thrown over the shoulders, grey trousers, worn boots, medieval, empty hands, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8,
+      "walk_skeleton_v3_north": 3
+    },
+    "sheet": "$Npc_Dezerter",
+    "walk8": "Npc_Dezerter_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {
+        "north": "walk_sk_n"
+      },
+      "mirror": {
+        "east": "west"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": "af78a1=a0785e,6142a5=4a3428,161b49=1c1612,426cbc=4a3428"
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 61,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 2.11), łańcuch W16, TownLife 3030, pokój 5. Chód N z trybu skeleton-v3 (szablonowy gubił płaszcz w 5 klatkach); fioletowe piksele oczu szablonowego chodu W przekolorowane na brąz; E = lustro W (szablonowy E miał czerwone oczy i czerwono-żółty pas). Szablonowe NW i NE gubią płaszcz - zostawione (poza arkuszem $)."
+  },
+  {
+    "key": "Wizytator",
+    "name": "Brat Augustyn (wizytator z klasztoru w Lipnicy, podróżny z promu, W15)",
+    "pixellab_id": "69fa3497-eebc-4945-bb5c-a872d02d0499",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "978ce102-3675-4170-b226-d9e101bab31d",
+    "animation": "walk",
+    "description": "brother Augustyn, an elderly monk about 65, tonsure with white hair, small round spectacles, kind wrinkled face, a plain black habit, a white rope belt, a leather-bound book held under his left arm, a simple wooden walking stick in his right hand, sandals, medieval, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8,
+      "walk_skeleton_v3_s_w_n": 9,
+      "walk_v3_west": 1
+    },
+    "sheet": "$Npc_Wizytator",
+    "walk8": "Npc_Wizytator_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {
+        "south": "walk_sk",
+        "west": "walk_v3_w",
+        "north": "walk_sk"
+      },
+      "mirror": {
+        "east": "west"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": -1,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 2.10), łańcuch W15, TownLife 3029, pokój 16. Szablonowy chód gubił laskę prawie we wszystkich klatkach: S i N z trybu skeleton-v3; W z własnej animacji v3 (1 gen., 'walking slowly in place ... leaning on the wooden walking stick', skeleton-v3 W gubił laskę w klatkach 4-7); E = lustro W (szablonowy E miał też niebieskie szkła okularów). Diagonale szablonowe, bez laski - poza arkuszem $."
+  },
+  {
+    "key": "Lowczyni",
+    "name": "Szczerba (Dobrawa, łowczyni nagród, podróżna z promu, W16)",
+    "pixellab_id": "dffdb877-fda5-482b-882a-f787cf849371",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "c3a3ad8b-a3a3-414b-b6e3-9e3b63eb270e",
+    "animation": "walk",
+    "description": "Szczerba the bounty hunter, a tough woman about 40, a scar across the cheek, short cropped grey-streaked hair, a long dark leather coat, a crossbow on her back, iron manacles and a rolled paper at the belt, heavy boots, medieval, empty hands, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8,
+      "walk_skeleton_v3_north": 3
+    },
+    "sheet": "$Npc_Lowczyni",
+    "walk8": "Npc_Lowczyni_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {
+        "north": "walk_sk_n"
+      },
+      "mirror": {
+        "west": "east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": "7752a8=4a3a30,c15f8c=a87868"
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 2.12), łańcuch W16, TownLife 3031, pokój 6. Chód N z trybu skeleton-v3 (szablonowy gubił kuszę w 5 klatkach); W = lustro E (szablonowy W miał jaskrawoczerwone plamy na twarzy i czarne plamy na nogach); fioletowe oczy chodu S i różowe SE przekolorowane. Szablonowy NW ma czarne plamy na płaszczu - zostawione (poza arkuszem $)."
   }
 ]

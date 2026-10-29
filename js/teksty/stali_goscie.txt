@@ -1,0 +1,519 @@
+# Stali bywalcy tawerny: Melia, Dziadek Ozzy i Grum (TavernLife_Regulars.js)
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz stali_goscie
+
+# ======================================================================== ORD (godziny)
+[godziny]
+dwunastej
+pierwszej
+drugiej
+trzeciej
+czwartej
+piątej
+szóstej
+siódmej
+ósmej
+dziewiątej
+dziesiątej
+jedenastej
+
+# ======================================================================== TIERS (progi)
+progi.0.name = Obcy
+progi.1.name = Znajomy
+progi.2.name = Kompan
+progi.3.name = Przyjaciel
+progi.4.name = Powiernik
+
+# ======================================================================== REGULARS (bywalcy)
+# „pieśniarka”
+bywalcy.melia.name = Melia
+bywalcy.melia.full = Melia Srebrogłosa
+bywalcy.melia.title = pieśniarka
+[bywalcy.melia.tierText]
+""
+Melia zapamiętała twoją twarz.
+Melia nazywa cię swoim słuchaczem.
+Melia ci ufa - opowie więcej.
+Melia powierza ci to, czego nie śpiewa nikomu.
+
+[bywalcy.melia.greet.0]
+O, nowa twarz. Wędrowiec? Każdy wędrowiec to niedokończona ballada.
+Witaj, wędrowcze. Siadaj bliżej - z daleka pieśń brzmi gorzej.
+
+[bywalcy.melia.greet.1]
+A, to ty! Ten od działki za lasem. Pamiętam twarze - to połowa mojej roboty.
+Znowu ty, złotko? Dobrze. Lubię stałą publiczność.
+
+[bywalcy.melia.greet.2]
+Mój ulubiony słuchacz! Siadaj, zanim Ozzy zajmie ci miejsce.
+Jesteś! Czekałam, aż ktoś mi opowie coś, czego nie ma w żadnej balladzie.
+
+[bywalcy.melia.greet.3]
+Przyjacielu... Kiedy wchodzisz, w sali robi się cieplej. Nie śmiej się.
+Ty jeden słuchasz słów, a nie tylko melodii. Chodź, siadaj.
+
+[bywalcy.melia.greet.4]
+Wiesz, że o tobie też kiedyś zaśpiewam? Tylko jeszcze nie wiem, jak się ta pieśń skończy.
+Moja lutnia i ja - obie nastrojone pod ciebie. No, prawie.
+
+[bywalcy.melia.again]
+Coś jeszcze, złotko?
+Tak? Słucham - ja też czasem słucham, wiesz?
+Mów, mów. Pieśń poczeka.
+
+[bywalcy.melia.bye]
+Niech ci droga śpiewa, złotko.
+Wracaj wieczorem. Zostawię ci miejsce pod sceną.
+Idź, idź. Tylko nie zapomnij, co ci mówiłam.
+
+bywalcy.melia.heroBye = Bywaj, Melio.
+[bywalcy.melia.talk.morning]
+Rano struny są zimne jak rosa. Ja też. Daj mi chwilę, zanim się nastroję.
+Pół nocy szukałam rymu do „sakiewki”. Znalazłam „konewki”. Nie pytaj.
+Borgar już krzyczy na kuchnię. Słychać, że dzień się zaczął - jak w każdej dobrej balladzie, od krzyku.
+
+[bywalcy.melia.talk.day]
+Popołudnie to najgorsza pora dla pieśni. Ludzie są albo głodni, albo śpiący.
+Przepisuję stare słowa na nowe nuty. Czasem mam wrażenie, że to one przepisują mnie.
+Widziałeś, jak kurz tańczy w słońcu przy oknie? Gdybym umiała to zaśpiewać, byłabym sławna.
+
+[bywalcy.melia.talk.evening]
+Wieczór! Moja pora. Sala się zapełnia, a ludzie robią się szczerzy po drugim kuflu.
+Od szóstej śpiewam. Przyjdź pod scenę - dla ciebie zaśpiewam głośniej.
+Grum znowu siłuje się z każdym, kto ma dwie ręce. A ja śpiewam tym, co mają dwoje uszu.
+
+[bywalcy.melia.talk.night]
+Noc... Sala pusta, świece dogasają. Najlepsze pieśni przychodzą właśnie teraz. I najgorsze sny.
+Nie śpisz? Ja też nie. Lutnia mruczy mi do snu, ale dziś coś nie chce.
+Ozzy chrapie w kącie jak niedźwiedź w gawrze. Ładnie się przy tym śpiewa, wiesz?
+
+[bywalcy.melia.talk.rain]
+Słyszysz deszcz o okiennice? To najstarszy bęben świata. Wystaw garnki, póki leje!
+Deszcz! Ludzie biegną z wiadrami na rynek jak do kościoła. Napisałabym o tym pieśń, ale wyszłaby za smutna.
+
+[bywalcy.melia.talk.storm]
+Burza! Kiedy grzmi, pieśni przychodzą same. Albo uciekają - nigdy nie wiadomo.
+Grzmi tak, że lutnia drży mi na kolanach. Posiedź, póki nie przejdzie.
+
+[bywalcy.melia.talk.snow]
+Śnieg... Na kontynencie mówią, że w śniegu słychać to, co ktoś kiedyś powiedział. Ja słyszę tylko zimno.
+
+[bywalcy.melia.talk.drought]
+Tyle dni bez deszczu... Nawet słowa mi wysychają. Ludzie piją piwo zamiast wody, a potem dziwią się, że płaczą przy balladach.
+Susza. Ziemia pęka jak stara struna. Ktoś musi o tym zaśpiewać, zanim wszyscy zapomną, jak brzmi deszcz.
+
+[bywalcy.melia.talk.debtNear]
+Słyszałam o długu twojego dziadka. Lord ma dwór z kamieni i serce do kompletu. Trzymaj się, złotko.
+Termin u Lorda tuż-tuż, prawda? Widać ci to po oczach. Gdyby pieśnią dało się płacić, zaśpiewałabym za ciebie.
+
+[bywalcy.melia.talk.debtPaid]
+Spłaciłeś Lorda! Cała sala o tym mówiła. Ułożę pieśń: „Wnuk, co działkę wykupił”. Albo coś krótszego.
+
+[bywalcy.melia.talk.fieldLost]
+Słyszałam o działce, złotko. Przykro mi. Lord ma dwór z kamieni i serce do kompletu. Ale ty masz ręce i głos - zaśpiewasz jeszcze o tej działce, jak ją odkupisz.
+
+[bywalcy.melia.talk.fieldBack]
+Odkupiłeś działkę od samego Zaleskiego! To już nie pieśń, to ballada. Trzy zwrotki co najmniej.
+
+# kubaWater
+bywalcy.melia.rumours.0.text = Kuba Woziwoda nosi wodę, której w studni nie ma. Ludzie mówią: z nieba. Ja mówię: z czyjejś piwnicy.
+# kubaFled
+bywalcy.melia.rumours.1.text = Kuba uciekł z miasta! Hanka mówi, że wróci, jak mu sumienie wyschnie. Czyli prędko.
+# mill
+bywalcy.melia.rumours.2.text = Słyszysz młyn? Ruszył. Ludzie mówią, że ktoś odkręcił Lordowi wodę. Ktoś odważny. Albo głupi - w dobrej balladzie to jedno i to samo.
+# feliks
+bywalcy.melia.rumours.3.text = Feliksa nie ma. Kamerdyner, a zniknął jak kamfora. Lord udaje, że nic się nie stało - i dobrze mu to wychodzi.
+# lucjan
+bywalcy.melia.rumours.4.text = Ponoć wygoniłeś z targu oszusta od kości. Bartek opowiada o tym przy każdym piwie, za każdym razem w innej wersji.
+# purse
+bywalcy.melia.rumours.5.text = Ludzie gadają, że ktoś przytulił sakiewkę dworu. Nie patrz tak - ja tylko powtarzam.
+# market
+bywalcy.melia.rumours.6.text = Jutro targ. Przyjadą ludzie z dalszych wsi - zawsze ktoś z nich zna nową piosenkę. Kradnę je bez wstydu.
+# ferry
+bywalcy.melia.rumours.7.text = Dziś przypłynął prom. Na sali nowe twarze. Jeden siedzi od rana nad jednym kuflem i patrzy na drzwi.
+# nameday
+bywalcy.melia.rumours.8.text = Lord ma niedługo imieniny. Feliks już chodzi po mieście jak kogut przed jarmarkiem.
+# kupala
+bywalcy.melia.rumours.9.text = Za parę dni Noc Kupały. Dziewczęta będą puszczać wianki na stawie za halą. W taką suszę - wianki na błocie.
+# camp
+bywalcy.melia.rumours.10.text = Pod murem stanęły namioty. Ludzie z kontynentu. Mała Ela ma oczy, w które trudno patrzeć.
+# fame
+bywalcy.melia.rumours.11.text = Borgar mówi, że z tablicy zleceń zdejmujesz więcej kartek niż ktokolwiek. Rośnie ci sława, złotko.
+[bywalcy.melia.evergreen]
+Ambroży dzwoni czasem o dziwnych porach. Ludzie myślą, że stary się myli. Ja myślę, że on liczy.
+Grum wypytuje każdego, kto przyjdzie od wschodu, o góry. Płaci za odpowiedzi piwem. Odpowiedzi są tańsze.
+Ozzy mówi, że jutro spadnie deszcz. Mówi to od trzech miesięcy. Kiedyś trafi - a wtedy wszyscy powiemy, że zawsze mu wierzyliśmy.
+Wanda z łaźni wie o wszystkich wszystko. Ludzie w gorącej wodzie gadają jak na spowiedzi.
+Pod podłogą tej sali są kamienie starsze niż miasto. Borgar nie lubi, kiedy się o tym mówi. Czyli jest o czym.
+
+# „stały bywalec”
+bywalcy.ozzy.name = Dziadek Ozzy
+bywalcy.ozzy.full = Dziadek Ozzy
+bywalcy.ozzy.title = stały bywalec
+[bywalcy.ozzy.tierText]
+""
+Ozzy pamięta, kim jesteś. Prawie zawsze.
+Ozzy nazywa cię kompanem od kufla.
+Ozzy mówi ci rzeczy, których nie mówi nikomu.
+Ozzy ufa ci jak nikomu od sześćdziesięciu lat.
+
+[bywalcy.ozzy.greet.0]
+*hep* Ktoś ty? A, nieważne. Wszyscy kiedyś tu przychodzą.
+Młody! Masz może grosika na piwo? Nie? Ech, młodzież...
+
+[bywalcy.ozzy.greet.1]
+A, chłopak Stacha! *hep* Twój dziadek przesiadywał tu kiedyś co wieczór. Potem się ożenił. Głupiec.
+Znowu ty? Siadaj, siadaj. Stołek się nie obrazi.
+
+[bywalcy.ozzy.greet.2]
+Mój kompan od kufla! *hep* Siadaj, opowiem ci, jak to było z tą kozą.
+Synku! Dobrze, że jesteś. Borgar mi już nie nalewa na krechę.
+
+[bywalcy.ozzy.greet.3]
+Ty jesteś dobry chłopak. Ja to wiem. Ja wiem różne rzeczy. *hep*
+Przyjacielu... siadaj. Dziś widzę wyraźniej niż zwykle. To niedobry znak.
+
+[bywalcy.ozzy.greet.4]
+Synku... Tobie jednemu bym powiedział, gdybym pamiętał, co chciałem powiedzieć. *hep*
+Ty i ja, synku. Dwóch, co wiedzą za dużo. No, ty jeszcze nie. Jeszcze.
+
+[bywalcy.ozzy.again]
+*hep* Czego jeszcze?
+Mów, mów. Ucho mam jedno dobre.
+Hm? Jeszcze tu jesteś?
+
+[bywalcy.ozzy.bye]
+Idź, idź. *hep* Ja tu będę. Zawsze tu jestem.
+Uważaj na schody, synku. Na wszystkie schody.
+Idź z Bogiem. Albo z kimkolwiek. *hep*
+
+bywalcy.ozzy.heroBye = Bywaj, dziadku.
+[bywalcy.ozzy.talk.morning]
+Rano? *hep* Rano to ja jeszcze śpię. To, co widzisz, to moje ciało z przyzwyczajenia.
+Głowa mi pęka jak garnek na mrozie. Ale oczy widzą. Za dużo widzą.
+Borgar mówi, że mam iść do domu. A ja mówię: to jest mój dom. Od czterdziestu lat ten sam stołek.
+
+[bywalcy.ozzy.talk.day]
+W południe cienie są najkrótsze. Wtedy najmniej widać. *hep* Najlepsza pora na piwo.
+Siedzę i liczę muchy. Dziewiętnaście. Jutro będzie dwadzieścia trzy. Zobaczysz.
+Grzyby na ogień i piwo do dzbana - tego nauczył mnie ojciec. Reszty nauczyła mnie piwnica.
+
+[bywalcy.ozzy.talk.evening]
+Wieczorem sala gada, a ja słucham. Ludzie mówią jedno, a myślą drugie. *hep* Słyszę i to, i to.
+Melia zaraz zaśpiewa. Przy tej o chłopcu z piwnicy zawsze płaczę. Ze śmiechu. Na pewno ze śmiechu.
+Grum przegra dziś z kimś na rękę. Albo wygra. Jedno z dwojga, *hep*, na pewno.
+
+[bywalcy.ozzy.talk.night]
+Noc to dobra pora. Wtedy kamienie mówią. Słyszysz? Nie? Ja też nie. *hep* Kłamię.
+Śpij, synku. Ja popilnuję. Ktoś musi.
+
+[bywalcy.ozzy.talk.rain]
+Deszcz! A mówiłem? Mówiłem! *hep* Nie pamiętam, czy mówiłem. Ale wiedziałem.
+Leje! Wystaw garnek, synku, wystaw wiadro. Woda z nieba jest za darmo. Jedyna rzecz w tym mieście.
+
+[bywalcy.ozzy.talk.storm]
+Burza... Piorun lubi wysokie drzewa i głupich ludzi. *hep* Siedź tu.
+Słyszysz, jak grzmi? Tak samo grzmiało, kiedy wpadłem do piwnicy. Sześćdziesiąt lat temu. Może siedemdziesiąt.
+
+[bywalcy.ozzy.talk.snow]
+Śnieg... Zimą kamienie śpią głębiej. Wtedy łatwiej o nich zapomnieć.
+
+[bywalcy.ozzy.talk.drought]
+Ile dni bez deszczu? *hep* Ja wiem ile. I wiem, gdzie jest woda. Tylko nikt nie pyta.
+Sucho, synku. Sucho w ziemi, sucho w gardle. Z tych dwóch to drugie da się naprawić.
+
+[bywalcy.ozzy.talk.debtNear]
+Dług, dług... Lordowie liczą grosze, a nie widzą, na czym siedzą. *hep* Zdążysz, synku. Albo nie. Ale raczej zdążysz.
+
+[bywalcy.ozzy.talk.debtPaid]
+Spłacone? Hehe. Widziałem to we śnie. Wczoraj albo przedwczoraj. *hep*
+
+[bywalcy.ozzy.talk.fieldLost]
+Działka poszła do Lorda? *hep* Ziemia nie ucieka, synku. Lordowie przychodzą i odchodzą, a ziemia zostaje. Wróci do ciebie. Widziałem to... albo mi się wydawało.
+
+[bywalcy.ozzy.talk.fieldBack]
+Działka wróciła? A nie mówiłem? *hep* Mówiłem. Na pewno mówiłem.
+
+[bywalcy.ozzy.sleep]
+Chrrr... *hep* ...co? Kto? A, to ty. Śniła mi się woda. Dużo wody. Pod ziemią.
+Chrrr... fiuuu... (Ozzy śpi na ławie z głową na stole. Uśmiecha się przez sen.)
+...nie ta cegła... trzecia od dołu... chrrr...
+(Ozzy mruczy coś przez sen i przewraca się na drugi bok. Ława trzeszczy.)
+
+# roses
+bywalcy.ozzy.rumours.0.text = Woda u Kuby pachnie różami. A róże rosną tylko tam, gdzie ktoś je podlewa. *hep* Pomyśl.
+# bell
+bywalcy.ozzy.rumours.1.text = Ambroży dzwoni o trzeciej w nocy. Trzy razy. Ludzie śpią. A dzwon nie dzwoni dla ludzi. *hep*
+# garden
+bywalcy.ozzy.rumours.2.text = Byłeś w ogrodzie rycerzy, co? Pachniesz kamieniem i zakonem. *hep* Ja też tam byłem. Tylko pod spodem.
+# kubaFled
+bywalcy.ozzy.rumours.3.text = Kuba ucieka, a woda zostaje. *hep* Woda zawsze zostaje. Ludzie uciekają.
+# mill
+bywalcy.ozzy.rumours.4.text = Młyn ruszył. *hep* Słyszę go przez ściany. Ładnie śpiewa. Ładniej niż Melia - tylko jej nie mów.
+# feliks
+bywalcy.ozzy.rumours.5.text = Kamerdynera nie ma? Ja wiedziałem, że go nie będzie. Wiedziałem już w zeszłym roku. *hep*
+# stones
+bywalcy.ozzy.rumours.6.text = Lord pyta o kamienie z krukiem. Niech pyta. Kamienie i tak mu nie odpowiedzą. Mnie odpowiadają. *hep*
+# camp
+bywalcy.ozzy.rumours.7.text = Ludzie z promu szukają serca skały. Nie znajdą. *hep* Serce samo znajduje.
+# ferry
+bywalcy.ozzy.rumours.8.text = Prom przypłynął. Trzech zeszło na ląd, a jeden z nich nie jest tym, za kogo się podaje. *hep* Nie pytaj który.
+[bywalcy.ozzy.evergreen]
+Borgar trzyma nad barem pół klucza. Pół! Kto trzyma pół klucza? Ten, kto boi się całego. *hep*
+Grum to dobry chłop. Tylko płacą mu źli ludzie. *hep* Tak to bywa z najemnikami.
+Melia śpiewa rzeczy, których nie powinna znać. Ja też mówię rzeczy, których nie powinienem. Tylko ona ładniej.
+W piwnicy tej tawerny jedna cegła siedzi luźno. *hep* Albo dwie. Policz sam.
+Jak zobaczysz kruka na trzech kamieniach naraz - wracaj do domu. *hep* Nie pytaj, czemu.
+
+# „najemnik”
+bywalcy.grum.name = Grum
+bywalcy.grum.full = Grum Żelazna Pięść
+bywalcy.grum.title = najemnik
+[bywalcy.grum.tierText]
+""
+Grum kiwa ci głową na powitanie.
+Grum mówi do ciebie pełnymi zdaniami. Czasem.
+Grum ma do ciebie zaufanie. Rzadka rzecz.
+Grum stanąłby za tobą w szyku.
+
+[bywalcy.grum.greet.0]
+Hm.
+Czego?
+
+[bywalcy.grum.greet.1]
+Ty. Siadaj albo idź.
+A, chudzielec od działki.
+
+[bywalcy.grum.greet.2]
+Siadaj. Piwo jest, gadać nie muszę.
+No. Jesteś.
+
+[bywalcy.grum.greet.3]
+Dobrze cię widzieć. Nie mów nikomu, że to powiedziałem.
+Siadaj, chłopcze. Masz łokieć - masz kompana.
+
+[bywalcy.grum.greet.4]
+Ty jeden tu nie kłamiesz. Chyba. Siadaj.
+Bracie od stołu. Mów.
+
+[bywalcy.grum.again]
+Coś jeszcze?
+No?
+Mów.
+
+[bywalcy.grum.bye]
+Hm.
+Idź. Uważaj na plecy.
+Bywaj, chłopcze.
+
+bywalcy.grum.heroBye = Bywaj, Grum.
+[bywalcy.grum.talk.morning]
+Rano się nie gada. Rano się ostrzy.
+Spałem trzy godziny. Wystarczy. Na wojnie spałem mniej.
+Borgar daje kaszę. Kasza jest dobra. Na wojnie nie było kaszy.
+
+[bywalcy.grum.talk.day]
+Czekam.
+Ludzie przychodzą od wschodu. Pytam. Nie wiedzą. Czekam dalej.
+Zrobiłbym coś. Ale nie ma co.
+
+[bywalcy.grum.talk.evening]
+Wieczór. Ktoś przegra dziś na rękę. Nie ja.
+Kości są uczciwsze od ludzi. Ale rzadziej.
+Sala pełna. Pilnuj sakiewki. Nie przede mną - przed tamtymi.
+
+[bywalcy.grum.talk.night]
+Śpię jednym okiem. Starczy.
+Nocą słychać, kto chodzi po murach. Kapral chodzi. I ktoś jeszcze.
+Idź spać, chłopcze.
+
+[bywalcy.grum.talk.rain]
+Deszcz. Drogi rozmokną. Dobrze. W błocie nikt za tobą nie pójdzie.
+Pada. Na wojnie deszcz znaczył: dziś nie atakują.
+
+[bywalcy.grum.talk.storm]
+Burza. Konie się płoszą, ludzie też. Siedź pod dachem.
+Piorun to jedyny wróg, z którym nie wygrasz. Szanuję.
+
+[bywalcy.grum.talk.snow]
+Śnieg. Ślady widać na milę. Dobra pora na polowanie. Zła na ucieczkę.
+
+[bywalcy.grum.talk.drought]
+Woda drożeje. Wojna zaczyna się od wody. Zapamiętaj.
+Sucho. Pod Wrzosową Przełęczą piliśmy z kałuż. Tu jeszcze nie jest tak źle. Jeszcze.
+
+[bywalcy.grum.talk.debtNear]
+Lord chce pieniędzy. Lordowie zawsze chcą. Zarób albo uciekaj. Ja bym zarobił.
+
+[bywalcy.grum.talk.debtPaid]
+Spłaciłeś. Dobrze. Wolny człowiek śpi lepiej.
+
+[bywalcy.grum.talk.fieldLost]
+Lord wziął działkę. Tak bywa. Ja straciłem więcej niż działkę i siedzę tu, piję piwo. Ty też przeżyjesz.
+
+[bywalcy.grum.talk.fieldBack]
+Odkupiłeś. Uparty jesteś. To dobrze.
+
+# wolves
+bywalcy.grum.rumours.0.text = Wilki chodzą pod bramą południową. Trzy, może cztery. Przewodnik jest siwy. Nie idź nocą sam.
+# camp
+bywalcy.grum.rumours.1.text = Prom przywozi ludzi z kontynentu. Połowa to uciekinierzy. Reszta udaje uciekinierów. Ci są groźni.
+# gold
+bywalcy.grum.rumours.2.text = Kupiec z kantoru płaci złotem z kontynentu. Świeżym. Kto ma świeże złoto w czasie wojny? Jedna ze stron.
+# wit
+bywalcy.grum.rumours.3.text = Kapral bierze od wozów. Widziałem. Nic nie mówię. Nie moja wojna.
+# tourney
+bywalcy.grum.rumours.4.text = Jutro targ. W targ czasem siłują się na rynku. Wygrywam. Beczka piwa. Przyjdź, zobaczysz.
+# lucjan
+bywalcy.grum.rumours.5.text = Wyrzuciłeś szulera z targu. Dobrze. Nie lubię oszustów. Uczciwie przegrać umiem.
+# ambush
+bywalcy.grum.rumours.6.text = Napadli cię na Polnej. W kapturach. Następnym razem weź pałkę. Albo mnie.
+# ambushWon
+bywalcy.grum.rumours.7.text = Na Polnej leżeli ludzie w kapturach. Ktoś ich przetrzepał. Bosy, mówią. Hm. Dobra robota. Kto im płacił?
+# cistern
+bywalcy.grum.rumours.8.text = Studnia pełna. Ktoś dzwonił cztery i dwa, a pod rynkiem zaszumiało. Na kontynencie by za to zabili. Tu stawiają piwo.
+# feliks
+bywalcy.grum.rumours.9.text = Kamerdynera nie ma. Ktoś mu dał wybór: zniknąć albo zniknąć. Dobrze wybrał.
+[bywalcy.grum.evergreen]
+Na wschodzie są góry. W górach jaskinie. W jaskiniach ludzie, którzy nie wyszli. Tyle wiem.
+Ludzie z kontynentu kupują stare kamienie z krukiem. Płacą dobrze. Nie pytam za co.
+Ozzy gada bzdury. Tylko czemu te bzdury się sprawdzają?
+Melia śpiewa o skale. Ja byłem pod niejedną skałą. Żadna nie śpiewała.
+Dwór Lorda ma straż w barwach. Barwy nowe. Straż stara. Dziwne.
+
+# ======================================================================== MELIA_SOBER (melia_smutna)
+[melia_smutna.greet.0]
+(Melia stroi lutnię i nie podnosi wzroku.) Ty. Siadaj, jeśli musisz.
+Słucham. Mów krótko - struny same się nie nastroją.
+
+[melia_smutna.again]
+Coś jeszcze?
+Tak?
+Słucham.
+
+[melia_smutna.bye]
+Idź.
+Do zobaczenia.
+Drzwi są tam, gdzie były.
+
+[melia_smutna.talk.morning]
+Rano stroję lutnię. Długo. Dawniej żartowałam przy tym. Dawniej.
+Eryk siadał tu rano i rysował. Stół dalej ma ślady węgla.
+
+[melia_smutna.talk.day]
+Przepisuję stare pieśni. Nowych nie piszę.
+Ludzie pytają, czemu już nie żartuję. Niech zapytają tego, kto wydał rysownika wojsku.
+
+[melia_smutna.talk.evening]
+Wieczorem śpiewam. Tylko stare pieśni - na nowe nie mam serca.
+Sala się śmieje. Ja gram. Tyle.
+
+[melia_smutna.talk.night]
+Noc. Sala pusta. Nie śpię - nie mam już czym śpiewać do snu.
+Struna pękła mi wczoraj. Nie wymieniłam. Nie chce mi się.
+
+# ======================================================================== BARKS (zaczepki)
+[zaczepki.melia]
+♪ La, la-la... ♪
+♪ Hej, kruku, czarny kruku... ♪
+Ta struna znowu fałszuje...
+
+[zaczepki.ozzy]
+*hep*
+Karczmarz! Jeszcze jedno...
+Hehe... kozę, mówię, kozę!
+
+[zaczepki.grum]
+Hm.
+Kto następny na rękę?
+*ostrzy nóż*
+
+# Ozzy śpi (w nocy, w sali)
+[zaczepki.spi]
+Chrrr...
+Chrrr... fiuuu...
+...nie ta cegła...
+
+# ======================================================================== OPENS (otwiera): co otwiera zaufanie (dziennik, Miasteczko - Stali bywalcy)
+# „Przy 35: opowie, skąd zna ballady.” - liczba to próg zaufania (w kodzie), tu drugie pole pary
+otwiera.melia.0.1 = opowie, skąd zna ballady
+otwiera.melia.1.1 = opowie o swoich snach
+otwiera.ozzy.0.1 = opowie o piwnicy
+otwiera.ozzy.1.1 = powie, czego się boi
+otwiera.grum.0.1 = powie, skąd jest
+otwiera.grum.1.1 = powie, w co naprawdę wierzy
+
+# ======================================================================== z kodu TavernLife_Regulars.js (kod.<funkcja>.<n>, w kolejności kodu)
+# hourWords
+kod.hourWords.0 = " w nocy"
+kod.hourWords.1 = " rano"
+kod.hourWords.2 = " w południe"
+kod.hourWords.3 = " po południu"
+kod.hourWords.4 = " wieczorem"
+# całość: „o” + godzina (godziny) + pora dnia (pusta o dwunastej)
+kod.hourWords.5 = o {godzina}{pora}
+# menuOptions
+kod.menuOptions.0 = Co słychać?
+kod.menuOptions.1 = Jakieś plotki?
+kod.menuOptions.2 = Opowiedz o swoich pieśniach.
+kod.menuOptions.3 = Skąd znasz te ballady?
+kod.menuOptions.4 = Zaśpiewasz dziś?
+kod.menuOptions.5 = Postaw mu piwo ({BEER_PRICE} G)
+kod.menuOptions.6 = Opowiedz o piwnicy.
+kod.menuOptions.7 = Opowiedz o wojnie.
+kod.menuOptions.8 = Skąd jesteś?
+kod.menuOptions.9 = Zagrajmy w coś.
+# regularTopic
+kod.regularTopic.0 = Co słychać, dziadku?
+kod.regularTopic.1 = Co słychać?
+kod.regularTopic.2 = Jakieś plotki?
+kod.regularTopic.3 = Opowiedz o swoich pieśniach.
+kod.regularTopic.4 = Mam sześć starych ballad. Śpiewam je wieczorami, od szóstej, po kolei - kto przyjdzie sześć razy, usłyszy wszystkie. I dostanie natchnienie w prezencie.
+kod.regularTopic.5 = Słyszałeś już {length} z {length2}. Zostały jeszcze: {3}. Przyjdź wieczorem pod scenę.
+kod.regularTopic.6 = Siódma ballada rośnie, złotko. Zwrotka po zwrotce. Czuję ją w palcach jak drzazgę.
+kod.regularTopic.7 = Znasz wszystkie siedem. Nikt inny nie zna. Nawet ja nie znałam, zanim mi ich nie przyniosłeś.
+kod.regularTopic.8 = Znasz już wszystkie moje stare ballady. Czasem mam wrażenie, że jest siódma - tylko jeszcze się nie urodziła.
+kod.regularTopic.9 = Skąd znasz te ballady?
+kod.regularTopic.10 = Nie wiem. Naprawdę. Matka nie śpiewała, babki nie znałam. Któregoś dnia wzięłam lutnię i słowa były. Jakby ktoś je zostawił w moich palcach.
+kod.regularTopic.11 = Czasem śni mi się kamienna sala i kobiety w szarych płaszczach. Śpiewają, a ja się uczę. Rano pamiętam tylko melodię. I chłód.
+kod.regularTopic.12 = Zaśpiewasz dziś?
+kod.regularTopic.13 = Dziś już nie, złotko.
+kod.regularTopic.14 = Borgar! Piwo dla dziadka.
+kod.regularTopic.15 = Pusta sakiewka? *hep* Nic to. Myśl się liczy. Myśl się nie pije, ale się liczy.
+kod.regularTopic.16 = *glug, glug* Aaach... Dobry z ciebie chłopak.
+kod.regularTopic.17 = Masz, coś ci powiem. Ale nie mów nikomu, że ode mnie. *hep*
+kod.regularTopic.18 = Już mi dziś stawiałeś. Wizje mam jedną na dzień, synku. Reszta to piwo. *hep*
+kod.regularTopic.19 = Dziadku, opowiedz o piwnicy.
+kod.regularTopic.20 = Miałem siedem lat. Goniłem kota dziadka Borgara... i wpadłem. Przez dziurę w podłodze, prosto w ciemność. *hep*
+kod.regularTopic.21 = Leżałem tam do rana. Coś świeciło. Nie ogień. Coś, co patrzyło. I od tamtej pory... wiem rzeczy. Głupie rzeczy. Czasem nie głupie.
+kod.regularTopic.22 = Nie pytaj mnie, co tam jest, synku. Bo ci powiem. A wtedy będziesz wiedział. *hep* To gorsze niż kac. Dużo gorsze.
+kod.regularTopic.23 = Opowiedz o wojnie.
+kod.regularTopic.24 = Dwa królestwa za morzem biją się o coś, czego żadne nie widziało. Płacą dobrze. Umiera się tak samo.
+kod.regularTopic.25 = Byłem pod Wrzosową Przełęczą. Trzy dni deszczu i strzał. Wyszło nas dwunastu ze stu. Nie pytaj więcej.
+kod.regularTopic.26 = Najemnik nie wybiera strony. Wybiera, kto płaci w terminie. Tak mówiłem kiedyś. Dziś już nie wiem.
+kod.regularTopic.27 = Skąd jesteś, Grum?
+kod.regularTopic.28 = Z gór. Innych gór, za morzem. Ojciec kopał rudę, ja nie chciałem. Wziąłem miecz. Tyle.
+kod.regularTopic.29 = Matka mówiła, że w skale mieszkają duchy, które znają twoje imię. Śmiałem się. Teraz już się nie śmieję.
+kod.regularTopic.30 = Zagrajmy w coś.
+kod.regularTopic.31 = W co? Na rękę czy w kości?
+kod.regularTopic.32 = Siłujmy się.
+kod.regularTopic.33 = W kości.
+kod.regularTopic.34 = W kości (od piątej po południu).
+kod.regularTopic.35 = Innym razem.
+# regularStep
+kod.regularStep.0 = Kości wieczorem. Od piątej. Teraz piję.
+# visionLines
+kod.visionLines.0 = Jutro {1} burza. Taka, że psy pod ławy wejdą. Wystaw garnki, zanim przyjdzie.
+kod.visionLines.1 = Jutro {1} śnieg. Ciepło się ubierz, synku.
+kod.visionLines.2 = Jutro {1} będzie padać. Wystaw garnki z wieczora, nie gap się.
+kod.visionLines.3 = " burza."
+kod.visionLines.4 = " deszcz."
+kod.visionLines.5 = Jutro sucho. Ale pojutrze {1}{2} Zapamiętaj.
+kod.visionLines.6 = Jutro sucho. Pojutrze też. Sucho jak w moim gardle, synku. *hep*
+kod.visionLines.7 = Jutro targ. Ktoś na nim straci sakiewkę, a ktoś inny głowę. Pilnuj obu.
+kod.visionLines.8 = Brakuje ci {left} groszy dla Lorda. Co do grosza. Nie dziw się, ja liczę cudze pieniądze lepiej niż swoje.
+kod.visionLines.9 = Kuba wychodzi z domu po pierwszej w nocy. Idź za nim na palcach - na palcach, mówię!
+kod.visionLines.10 = Siedem w południe, synku. Siedem. *hep* Nie wiem, czemu to mówię.
+kod.visionLines.11 = W sakiewce masz {1} groszy. Ani grosza więcej. Wiem, wiem... nie pytaj skąd.
+# regularsInfo
+kod.regularsInfo.0 = Przy {1}: {2}.

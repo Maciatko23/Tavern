@@ -108,7 +108,8 @@ const DRIVER = String.raw`
         await ev("SceneManager.push(Scene_Menu); 0");
         await until("SceneManager._scene instanceof Scene_Menu && SceneManager._scene._started && !SceneManager.isSceneChanging()", 15);
         await frames(10);
-        const r = await J("({ line: Story.lastMenuLine, label: Story.lastMenuLabel })");
+        // (2026-10-28: the P menu is MenuRing.js's - grandpa's debt on its Postać page; the old panel's foot line is gone)
+        const r = await J("({ debt: MenuRing.debtInfo(), tab: MenuRing.info() && MenuRing.info().active })");
         await ev("SceneManager.pop(); 0");
         await until("SceneManager._scene instanceof Scene_Map && !SceneManager.isSceneChanging()", 15);
         await frames(10);
@@ -174,35 +175,40 @@ const DRIVER = String.raw`
         check("after the intro: talk done, a cabbage soup from grandpa, a journal note (with the way to the field and to the tavern, the dawn rule)", intro.s.intro === 2 && intro.s.flags.talk && intro.soup === 1 &&
             /Droga na działkę:/.test(note) && /Droga do tawerny: podwórze - Leśna droga - Polna droga - ścieżką na północ/.test(note) && /na wschód od tawerny/.test(note) && /do świtu/.test(note),
             { flags: intro.s.flags, soup: intro.soup, note });
-        await ev("Journal.evaluateGoals(); 0");
-        const jr = await J(`(function(){ const G = Journal.GOALS, ids = G.map(g => g.id), story = G.filter(g => g.story), at = id => ids.indexOf(id);
-            return { chapter: Journal.CHAPTERS[story[0] && story[0].ch], ids: story.map(g => g.id), first: ids.slice(0, 4), debtAfter: ids[at('story_debt') - 1], debtBefore: ids[at('story_debt') + 1], cellarBefore: ids[at('story_debt') + 2],
-                shelterAfter: ids[at('story_shelter') - 1], cur: Journal.currentGoal().id,
-                talkDone: Journal.goalDone(G.find(g => g.id === 'story_talk')), debtTitle: G.find(g => g.id === 'story_debt').title, debtLine: Journal.goalProgress(G.find(g => g.id === 'story_debt')),
-                listed: Journal.itemsForTab(0).map(i => i.label).slice(0, 4) }; })()`);
-        check("the journal has chapter 'Rozdział 1: Dług dziadka' with its goals (talk, field, work, shift, shelter, debt)", jr.chapter === "Rozdział 1: Dług dziadka" &&
-            ["story_talk", "story_field", "story_work", "story_shift", "story_shelter", "story_debt"].every(i => jr.ids.includes(i)), jr);
-        check("the tracker's order: talk, field, the job, the shift first; the shelter after the workbench; the debt right after the first steps (campfire), then the clue, before the sawmill",
-            jr.first.join() === "story_talk,story_field,story_work,story_shift" && jr.shelterAfter === "workbench" && jr.debtAfter === "campfire" && jr.debtBefore === "story_cellar" && jr.cellarBefore === "sawmill", jr);
-        check("'Porozmawiaj z dziadkiem' is done; the tracker now says go to the field; the debt goal shows 0/2500 and the days", jr.talkDone && jr.cur === "story_field" && jr.debtTitle === "Spłać dług dziadka (0/2500 G)" && /zostało 60 dni/.test(jr.debtLine), jr);
+        // (2026-10-28, the user: chapter 1 is a thread of the journal - Watki.js's own record, FABUŁA - no longer its goals; only the
+        // shelter stays a goal of the journal, among the first steps after the workbench)
+        await ev("Journal.evaluateGoals(); Watki.get('fabula').ownChecks(); 0");
+        const jr = await J(`(function(){ const G = Journal.GOALS, ids = G.map(g => g.id), at = id => ids.indexOf(id), W = Watki.get('fabula'), r = Watki.rekordy().w.fabula, tr = Journal.tracked();
+            const debt = W.def.kroki.find(k => k.nazwa === 'dlug');
+            return { story: G.filter(g => g.story).length, shelterAfter: ids[at('story_shelter') - 1], title: W.tekst('rozdzial1.tytul'), krok: Watki.krok('fabula'), done: Object.keys(r.t.done),
+                tracked: tr && { source: tr.source, title: tr.title, line: tr.line, where: tr.where }, debtTitle: W.slowa(debt.tytul), debtText: W.krokText(debt, r),
+                row: (Journal.itemsForTab(0) || []).find(i => i.watek === 'fabula') || null }; })()`);
+        check("the journal: the thread 'Rozdział 1: Dług dziadka' in FABUŁA (no goals of chapter 1 any more; the shelter after the workbench)", jr.title === "Rozdział 1: Dług dziadka" &&
+            jr.story === 0 && jr.shelterAfter === "workbench" && !!jr.row && jr.row.group === "story" && jr.row.label === "Rozdział 1: Dług dziadka", jr);
+        check("'Porozmawiaj z dziadkiem' is done; the goal window follows the chapter by itself: go to the field (the compass: Map003); the debt's step says 0/2500 and the days",
+            jr.done.join() === "0" && jr.krok === "dzialka" && jr.tracked && jr.tracked.source === "watki" && jr.tracked.line === "Dojdź na działkę dziadka" && jr.tracked.where && jr.tracked.where.map === 3 &&
+            jr.debtTitle === "Spłać dług dziadka (0/2500 G)" && /zostało 60 dni/.test(jr.debtText), jr);
 
         // ---- the P menu: a line with the debt on the card
         await ev("SceneManager.push(Scene_Menu); 0");
         await until("SceneManager._scene instanceof Scene_Menu && SceneManager._scene._started && !SceneManager.isSceneChanging()", 15);
         await frames(20);
         await b.shot(path.join(SHOTS, "fabula_2_menu_dlug.png"));
-        const ml = await J("({ line: Story.lastMenuLine, label: Story.lastMenuLabel })");
-        check("the P menu's foot shows the debt with its label (DŁUG DZIADKA, 0 / 2500 G, day 60, days left)", /^0 \/ 2500 G\s+·\s+do dnia 60\s+·\s+zostało 60 dni$/.test(ml.line) && ml.label === true, ml);
+        // (2026-10-28: the P menu is MenuRing.js's - grandpa's debt on its Postać page; the old panel's foot line is gone)
+        const ml = await J("({ debt: MenuRing.debtInfo(), tab: MenuRing.info() && MenuRing.info().active })");
+        check("the P menu (Postać) shows the debt: 0 of 2500 G, 60 days left", ml.tab === "hero" && !!ml.debt && ml.debt.paid === 0 && ml.debt.debt === 2500 && ml.debt.days === 60 && !ml.debt.done, ml);
         await ev("SceneManager.pop(); 0");
         await until(onMap(19), 15);
         // ---- the journal: the debt goal's page (chapter 1, what is paid, the day count)
         await ev("SceneManager.push(Journal.Scene_Journal); 0");
         await until("SceneManager._scene instanceof Journal.Scene_Journal && SceneManager._scene._started && !SceneManager.isSceneChanging()", 15);
-        const jd = await J(`(function(){ const w = SceneManager._scene._list, i = w._items.findIndex(it => it.goal && it.goal.id === 'story_debt'); if (i >= 0) w.select(i);
-            const ops = Journal.detailFor(0, w._items[i]).ops; return { i, sub: (ops.find(o => o.k === 'sub') || {}).text, p: (ops.find(o => o.k === 'p') || {}).text }; })()`);
+        const jd = await J(`(function(){ const w = SceneManager._scene._list, i = w._items.findIndex(it => it.watek === 'fabula'); if (i >= 0) w.select(i);
+            const ops = Journal.detailFor(0, w._items[i]).ops; return { i, title: (ops.find(o => o.k === 'title') || {}).text, h: ops.filter(o => o.k === 'h').map(o => o.text), muted: ops.filter(o => o.k === 'muted').map(o => o.text),
+                p: ops.filter(o => o.k === 'p').map(o => o.text) }; })()`);
         await frames(20);
         await b.shot(path.join(SHOTS, "fabula_2b_dziennik.png"));
-        check("the journal: the debt goal's page says chapter 1, what is paid, today's day and the deadline", jd.i >= 0 && jd.sub === "Rozdział 1: Dług dziadka" && /Spłacono 0 z 2500 G/.test(jd.p) && /Dziś dzień 1, termin: dzień 60/.test(jd.p), jd);
+        check("the journal: the chapter's page - its title, the step now (the field, the way there), what is done (grandpa's talk)", jd.i >= 0 && jd.title === "Rozdział 1: Dług dziadka" &&
+            jd.h[0] === "Dojdź na działkę dziadka" && jd.p.some(p => /Kruczego Jaru/.test(p)) && jd.muted.some(m => /^✓ Porozmawiaj z dziadkiem/.test(m)), jd);
         await ev("SceneManager.pop(); 0");
         await until(onMap(19), 15);
 
@@ -213,9 +219,9 @@ const DRIVER = String.raw`
 
         // ================= 2. the field, the tavern: Borgar
         await go(3, 26, 14);
-        await ev("Journal.evaluateGoals(); 0");
-        const fld = await J("({ f: $gameSystem._story.flags.field, done: Journal.goalDone(Journal.GOALS.find(g => g.id === 'story_field')), cur: Journal.currentGoal().id, name: $gameMap.displayName() })");
-        check("reaching grandpa's field (Map003, shown as 'Kruczy Jar') ticks 'Dojdź na działkę dziadka'; the tracker then says find the job", fld.f && fld.done && fld.cur === "story_work" && fld.name === "Kruczy Jar", fld);
+        await ev("Journal.evaluateGoals(); Watki.get('fabula').ownChecks(); 0");
+        const fld = await J("({ f: $gameSystem._story.flags.field, done: Watki.rekordy().w.fabula.t.done[1] !== undefined, cur: Watki.krok('fabula'), line: (Journal.tracked() || {}).line, name: $gameMap.displayName() })");
+        check("reaching grandpa's field (Map003, shown as 'Kruczy Jar') ticks 'Dojdź na działkę dziadka'; the chapter then says find the job", fld.f && fld.done && fld.cur === "praca" && fld.line === "Znajdź pracę w tawernie" && fld.name === "Kruczy Jar", fld);
         // the way in, walked with the keys: Polna droga north -> Okolice Tawerny (Map008) -> the tavern's door -> the tavern (Map001), out and in again
         await go(22, 12, 1, 8);
         const to8 = await walkTo("up", 8);
@@ -241,8 +247,8 @@ const DRIVER = String.raw`
         check("'Pogadaj' for his own man: no greeting to a stranger, straight to his questions (without a second 'Sprzedaj towar'); a question, then 'To wszystko' ends it",
             chat.done && !/Witaj, podróżniku/.test(chat.text) && /Pytaj, byle szybko/.test(chat.text) && chatQ.join("|") === "Zapytaj o historię tawerny|Zapytaj o gości|Zamów piwo, nie drąż|Zapytaj wprost o zamek|To wszystko, dzięki" &&
             /Melia/.test(chat.text) && /Wracaj, kiedy zechcesz/.test(chat.text) && chat.choices.length === 3 && !chat.missing.length && chat.log.some(l => l.who === bor.id), { text: chat.text.slice(0, 300), choices: chat.choices, missing: chat.missing });
-        await ev("Journal.evaluateGoals(); 0");
-        check("'Znajdź pracę w tawernie' is done", await ev("Journal.goalDone(Journal.GOALS.find(g => g.id === 'story_work'))"));
+        await ev("Watki.get('fabula').ownChecks(); 0");
+        check("'Znajdź pracę w tawernie' is done", await ev("Watki.rekordy().w.fabula.t.done[2] !== undefined && Watki.krok('fabula') === 'zmiana'"));
         // the evening: a shift (TavernShift driven with its test hooks: every part skipped with a score of 90, O on the cards)
         // (the hook also notes the guests' looks of the hall part)
         const shiftHook = `(function(){ $gameSystem.setStamina(100); window.__shiftT = 0; window.__shiftIntro = ""; window.__looks = [];
@@ -264,8 +270,8 @@ const DRIVER = String.raw`
         await ev("$gameSystem.setDayNightHour(18); 0");
         const again = await talkTo("Story.borgarEvent()", ["Nie teraz"]);
         check("the same evening again: no second shift ('Na dziś wystarczy')", again.done && /Na dziś wystarczy/.test(again.text) && again.choices.length === 1 && !again.choices[0].includes("Weź zmianę"), { text: again.text, choices: again.choices });
-        await ev("Journal.evaluateGoals(); 0");
-        check("'Przepracuj zmianę u Borgara' is done", await ev("Journal.goalDone(Journal.GOALS.find(g => g.id === 'story_shift'))"));
+        await ev("Watki.get('fabula').ownChecks(); 0");
+        check("'Przepracuj zmianę u Borgara' is done", await ev("Watki.rekordy().w.fabula.t.done[3] !== undefined && Watki.krok('fabula') === 'dlug'"));
 
         // ================= 3. the Lord: a part, then all
         await go(24, 1, 15, 6);
@@ -307,22 +313,22 @@ const DRIVER = String.raw`
         const pay3 = await talkTo("$gameMap.event(902)", ["Spłać cały dług"]);
         const p3 = await J("({ gold: $gameParty.gold(), s: $gameSystem._story, xp: { level: Combat.hero().level, xp: Combat.hero().xp }, notice: (window.__notices3.find(t => /Rozdział 1 zakończony/.test(t)) || $gameTemp._lastTopNotice), notices: window.__notices3, notes: $gameSystem._journal.notes.map(n => n.title), day: $gameSystem.dayNightDay() })");
         await ev("delete $gameTemp.pushTopNotice; 0");
-        await ev("Journal.evaluateGoals(); 0");
-        const debtDone = await ev("Journal.goalDone(Journal.GOALS.find(g => g.id === 'story_debt'))");
+        await ev("Watki.get('fabula').ownChecks(); 0");
+        const debtDone = await ev("Watki.rekordy().w.fabula.t.done[4] !== undefined");
         const debtBus = await J("window.__debt");
         check("the payments are told on the Tawerna bus: 'debtPayment' { amount } each time (500, 100, 1900), then 'debtPaid' { total: 2500 } once",
             JSON.stringify(debtBus) === JSON.stringify([["debtPayment", 500], ["debtPayment", 100], ["debtPayment", 1900], ["debtPaid", 2500]]), debtBus);
         check("paying the rest (1900 of 5000): gold 3100, paid 2500, chapter 1 done", p3.gold === 3100 && p3.s.paid === 2500 && p3.s.done === p3.day && pay3.choices[0] && pay3.choices[0].includes("Spłać cały dług (1900 G)"), { gold: p3.gold, paid: p3.s.paid, done: p3.s.done, choices: pay3.choices });
         check("the Lord's last words: the old fortress under the tavern as a real clue (Krucze Skały; he means it; he knows the hero works for Borgar)", /Kruczych Skał/.test(pay3.text) && /pod jego tawerną/.test(pay3.text) &&
             /Pracujesz u Borgara, prawda\?/.test(pay3.text) && /ja też nie\s+żartuję/.test(pay3.text) && /przyjdź najpierw\s+do mnie/.test(pay3.text) && !/Hrabi/.test(pay3.text), pay3.log.slice(-2).map(l => l.t));
-        // the clue as a goal: after the debt, "Drzwi pod Kruczymi Skałami" - done on reaching the tavern's cellar (Map009)
-        const clue0 = await J("(function(){ Journal.evaluateGoals(); const g = Journal.GOALS.find(g => g.id === 'story_cellar'); const i = Journal.GOALS.indexOf(g), d = Journal.GOALS.findIndex(g => g.id === 'story_debt');" +
-            " return { has: !!g, after: i === d + 1, done: !!(g && Journal.goalDone(g)), note: ($gameSystem._journal.notes.find(n => n.title === 'Pokwitowanie od Lorda') || {}).text || '' }; })()");
+        // the clue as the chapter's step: after the debt (the loss's steps passed over), "Drzwi pod Kruczymi Skałami" - done on reaching
+        // the tavern's cellar (Map009); then the chapter is done
+        const clue0 = await J("(function(){ Watki.get('fabula').ownChecks(); return { krok: Watki.krok('fabula'), line: Watki.get('fabula').stepTitle(), note: ($gameSystem._journal.notes.find(n => n.title === 'Pokwitowanie od Lorda') || {}).text || '' }; })()");
         await go(9, 5, 5, 2);
-        const clue1 = await J("(function(){ Journal.evaluateGoals(); const g = Journal.GOALS.find(g => g.id === 'story_cellar'); return { cellar: !!$gameSystem._story.flags.cellar, done: !!(g && Journal.goalDone(g)) }; })()");
-        check("the clue: goal 'Drzwi pod Kruczymi Skałami' right after the debt, open till the tavern's cellar is reached; the receipt says the Lord meant it",
-            clue0.has && clue0.after && !clue0.done && /Lord nie żartował/.test(clue0.note) && clue1.cellar && clue1.done, { clue0, clue1 });
-        check("the reward: experience, a top notice 'Rozdział 1 zakończony', a receipt in the notes, the debt goal done", (p3.xp.level > xp0.level || p3.xp.xp > xp0.xp) && /Rozdział 1 zakończony/.test(p3.notice || "") && p3.notes.includes("Pokwitowanie od Lorda") && debtDone,
+        const clue1 = await J("(function(){ Watki.get('fabula').ownChecks(); const r = Watki.rekordy().w.fabula; return { cellar: !!$gameSystem._story.flags.cellar, s: r.s, done: Object.keys(r.t.done) }; })()");
+        check("the clue: step 'Drzwi pod Kruczymi Skałami' right after the debt, open till the tavern's cellar is reached (then the chapter's thread is done); the receipt says the Lord meant it",
+            clue0.krok === "piwnica" && clue0.line === "Drzwi pod Kruczymi Skałami" && /Lord nie żartował/.test(clue0.note) && clue1.cellar && clue1.s === "done" && clue1.done.join() === "0,1,2,3,4,7", { clue0, clue1 });
+        check("the reward: experience, a top notice 'Rozdział 1 zakończony', a receipt in the notes, the debt's step done", (p3.xp.level > xp0.level || p3.xp.xp > xp0.xp) && /Rozdział 1 zakończony/.test(p3.notice || "") && p3.notes.includes("Pokwitowanie od Lorda") && debtDone,
             { xp0, xp: p3.xp, notice: p3.notice, notes: p3.notes });
         await go(19, 7, 7, 8);
         await ev("$gameSystem.setDayNightHour(11); 0");
@@ -363,14 +369,13 @@ const DRIVER = String.raw`
         check("a game saved in the middle of a talk: only data in the story state; it loads, grandpa is there, the talk ends cleanly", saved === true && plain && loadedOk === true && afterLoad.grandpa === "Dziadek Stach" && afterLoad.story && (await ev(calmMap)), { saved, plain, loadedOk, afterLoad });
         // (a talk's messages as one text: a long line wraps over two bubbles)
         const said = r => r.log.map(l => l.t).join(" ").replace(/\n/g, " ");
-        // ---- the P menu's foot later in the chapter: the label stays (the day of the deadline gives way first)
+        // ---- the P menu's debt later in the chapter
         await ev("(function(){ $gameSystem._story.paid = 1250; $gameSystem._dayNightDay = 30; $gameSystem.setDayNightHour(10); return 0; })()");
         const m30 = await menuLine();
         await ev("(function(){ $gameSystem._story.paid = 2100; $gameSystem._dayNightDay = 60; return 0; })()");
         const m60 = await menuLine();
         await ev("(function(){ $gameSystem._story.paid = 0; return 0; })()");
-        check("the P menu's foot at 1250 G (31 days left) and on the last day still has its label", m30.label === true && m60.label === true && /^1250 \/ 2500 G\s+·.*zostało 31 dni$/.test(m30.line) &&
-            /^2100 \/ 2500 G\s+·.*dziś ostatni dzień$/.test(m60.line), { m30, m60 });
+        check("the P menu's debt at 1250 G (31 days left) and on the last day (2100 G)", !!m30.debt && m30.debt.paid === 1250 && m30.debt.days === 31 && !!m60.debt && m60.debt.paid === 2100 && m60.debt.days <= 1, { m30, m60 });
         // ---- grandpa on the last day
         await ev("$gameSystem._dayNightDay = 60; $gameSystem.setDayNightHour(10); 0");
         await frames(20);
@@ -383,7 +388,7 @@ const DRIVER = String.raw`
         await ev("$gameSystem.advanceDayNight(0.2); 0");
         await frames(60);
         const mid = await J(`({ day: $gameSystem.dayNightDay(), hour: $gameSystem.dayNightHour(), scene: SceneManager._scene.constructor.name, running: $gameMap.isEventRunning(), ended: $gameSystem._story.ended,
-            save: $gameSystem.isSaveEnabled(), doomed: Story.doomed(), night: Story.lastNight(), status: Story.statusLine(), goal: Journal.goalProgress(Journal.GOALS.find(g => g.id === 'story_debt')) })`);
+            save: $gameSystem.isSaveEnabled(), doomed: Story.doomed(), night: Story.lastNight(), status: Story.statusLine(), goal: (function(){ const W = Watki.get('fabula'); return W.krokText(W.def.kroki.find(k => k.nazwa === 'dlug'), Watki.rekordy().w.fabula); })() })`);
         check("awake past midnight (day 61, 0:xx): no ending yet, saving works, 'Termin: dzień 60 - mija o świcie'", mid.day === 61 && mid.hour < 1 && mid.scene === "Scene_Map" && !mid.running && !mid.ended && mid.save &&
             !mid.doomed && mid.night && /Termin: dzień 60 - mija o świcie\./.test(mid.status) && /termin mija o świcie/.test(mid.goal), mid);
         // ---- the deadline day at 20:30: a shift that ends after midnight - Borgar warns, the butler takes the pay before dawn

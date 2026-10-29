@@ -2,7 +2,8 @@
 // Wrak.js
 //=============================================================================
 // PAKIET E (docs/miejsca_wyspy/PAKIETY.md, koncepcja docs/miejsca_wyspy/KONCEPCJA.md punkt 7): the wreck on the shoal and the
-// castaway in the tavern. The data: Wrak_Data.js (the resident 948 "rozbitek", D25, W12, the tables). This engine:
+// castaway in the tavern. The data: Wrak_Data.js (the resident 948 "rozbitek", the tables; the thread "wrak" of the engine Watki.js:
+// the state, D25 and W12 with their steps, talks and actions - here the hooks they name). This engine:
 //   - the TIDE on the package's maps (Wyspa.tide(): two low waters a day, ~50 min later each day): the sandbar's rings and the
 //     lower hold are regions (WrakData.FLOOD) - a cell is under water from its level up: drawn as water over the tiles (a soft
 //     layer in the tilemap, the sea's colour - red or grey with CzerwonaWoda's phase), closed to walking (Game_Map.checkPassage),
@@ -29,6 +30,8 @@
  * @plugindesc [pakiet E] Wrak na mieliźnie (mapy 165, 166): pływy na łasze i w ładowni, łódź Janka, żołnierze garnizonu, mapa z zaznaczeniami; rozbitek Eryk Sowa (W12). v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
+ * @base Wrak_Data
  * @orderAfter Wyspa
  * @orderAfter TownQuests
  * @orderAfter Przystan
@@ -58,11 +61,13 @@
     const D = window.WrakData;
     if (!D || !D.FLOOD) throw new Error("Wrak.js: brak Wrak_Data.js - musi stać nad TownLife na liście wtyczek (the package's data is missing)");
     const PLUGIN = "Wrak";
+    // the thread (Wrak_Data.js, the engine Watki.js): the state "wrak", D25 / W12 with their talks and actions, the flags
+    const w = Watki.get("wrak");
+    if (!w) throw new Error("Wrak.js: brak wątku „wrak” (Wrak_Data.js / Watki.js)");
     const MAP = D.MAP, UNDER = D.UNDER, HARBOUR = 125, TOWN = 8, TAVERN = 1, PODGRODZIE = 111;
     const IDS = D.IDS;
     const COIN_ICON = 314;
-    const HERO = { id: 0, name: "" };
-    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
+    const { HERO, C, choiceTo } = Watki.mowa;
     const day = () => T.time.day(), hour = () => T.time.hour();
     const now = () => day() * 24 + hour();
     const has = () => !!window.$gameSystem && !!window.$gameMap;
@@ -75,36 +80,24 @@
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
     // ------------------------------------------------------------------
-    // The state (the save)
+    // The state (the save): the thread's (Wrak_Data.js); TownQuests' flags and things through the thread
     // ------------------------------------------------------------------
-    const store = T.state.define("wrak", () => ({
-        been: 0, under: 0, key: 0, door: 0, desk: 0, chest: 0,      // the wreck: first visits, the key, the cabin
-        boat: null, boatWarned: 0,                                   // Janek's boat at the wreck: { until (absolute hour) }
-        fined: 0, glejtSeen: 0, ratsDay: 0, lowWarn: -1, floodTold: -1,
-        marks: {}, marksNoted: 0,                                    // the chart's white eyes visited (key -> day)
-        met: 0, portraits: 0, clues: {}, tatuazTry: 0, jozekTold: 0, w12: "", raid: 0, raidRoll: 1, raidDone: 0, janekAsked: 0, usualN: 0
-    }), { version: 1, owner: PLUGIN });
-    const S = () => store();
-
-    // TownQuests' flags and things
-    const qstate = () => { const q = TQ(); return q && q.state ? q.state() : null; };
-    const flags = () => { const s = qstate(); return s ? s.flags : {}; };
-    const flag = k => !!flags()[k];
+    const S = () => w.S();
+    const flags = () => w.flags();
+    const flag = k => w.flag(k);
+    // a flag, then the quests' markers (no checks: the callers ask them when they need)
     function setFlag(k) {
-        const f = flags();
-        if (f && !f[k]) f[k] = day();
+        w.setFlag(k);
         const q = TQ();
         if (q && q.refreshMarkers) q.refreshMarkers();
     }
-    const vcount = k => { const s = qstate(); return s && s.v ? s.v[k] || 0 : 0; };
-    const vgive = (k, n) => { const s = qstate(); if (s && s.v) s.v[k] = (s.v[k] || 0) + n; };
-    const vtake = (k, n) => { const s = qstate(); if (!s || !s.v) return; s.v[k] = Math.max(0, (s.v[k] || 0) - n); if (!s.v[k]) delete s.v[k]; };
-    const rec = id => { const q = TQ(); return q && q.rec ? q.rec(id) : null; };
-    const atStep = (id, n) => { const r = rec(id); return !!r && r.s === "active" && r.step === n; };
-    const isActive = id => { const r = rec(id); return !!r && r.s === "active"; };
+    const vcount = k => w.vcount(k);
+    const vgive = (k, n) => w.vgive(k, n);
+    const vtake = (k, n) => w.vtake(k, n);
+    const rec = id => w.rec(id);
     const isDone = id => { const r = rec(id); return !!r && r.s === "done"; };
     const note = (title, text) => T.call("Journal", "addNote", title, text);
-    const autoChecks = () => { const q = TQ(); if (q && q.autoChecks) q.autoChecks(); if (q && q.refreshMarkers) q.refreshMarkers(); };
+    const autoChecks = () => w.autoChecks();   // (the quests' checks, then the markers)
     const vname = k => { const V = window.TownQuestsData && TownQuestsData.VITEMS; return V && V[k] ? V[k].name : k; };
     const vicon = k => { const V = window.TownQuestsData && TownQuestsData.VITEMS; return V && V[k] ? V[k].icon : 0; };
     const raining = () => { const w = $gameScreen.weatherType(); return (w === "rain" || w === "storm") && $gameScreen.weatherPower() > 0; };
@@ -356,58 +349,16 @@
     };
 
     // ------------------------------------------------------------------
-    // Speech: bubbles (\SPK[n]) and choices, the way TownQuests and Przystan write them
+    // Speech: the engine's builder (Watki.mowa with the thread's options: "\n" starts a new line; "> text": the hero; "@key: text": a
+    // resident nearby; else the one spoken to) for the talks built here; the steps' talks, the castaway's first meeting and Józek's
+    // clue are the data's (Wrak_Data.js rozmowy)
     // ------------------------------------------------------------------
-    const LINE = 46, PAGE = 3;
-    function wrap(text) {
-        const out = [];
-        for (const para of String(text).split("\n")) {
-            let line = "";
-            for (const w of para.split(/\s+/)) {
-                if (!w) continue;
-                if (line && (line + " " + w).length > LINE) { out.push(line); line = w; } else line = line ? line + " " + w : w;
-            }
-            if (line) out.push(line);
-        }
-        return out;
-    }
-    function sayTo(out, spk, text, ind) {
-        const lines = wrap(text);
-        for (let i = 0; i < lines.length; i += PAGE) {
-            out.push(C(101, ["", 0, 0, 2, spk.name || ""], ind));
-            lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 ? "\\SPK[" + spk.id + "]" : "") + l], ind)));
-        }
-        return out;
-    }
     function speaker(key) {
         const L = TL(), ev = L && L.eventOf ? L.eventOf(key) : null, r = L && L.RESIDENTS ? L.RESIDENTS.find(x => x.key === key) : null;
         return { id: ev && $gameMap.event(ev.eventId()) === ev ? ev.eventId() : -1, name: r ? r.name : key };
     }
-    // "> text": the hero; "@key: text": a resident nearby; else the one spoken to
-    function linesTo(out, spk, arr, ind) {
-        for (const raw of [].concat(arr || [])) {
-            if (!raw) continue;
-            const s = String(raw);
-            if (s.startsWith("> ")) { sayTo(out, HERO, s.slice(2), ind); continue; }
-            const m = /^@(\w+):\s*([\s\S]*)$/.exec(s);
-            if (m) sayTo(out, speaker(m[1]), m[2], ind);
-            else sayTo(out, spk, s, ind);
-        }
-        return out;
-    }
-    const act = (out, args, ind) => (out.push(C(355, ["Wrak.act(this, " + JSON.stringify(args) + ")"], ind)), out);
-    const qact = (out, args, ind) => (out.push(C(355, ["TownQuests.act(this, " + JSON.stringify(args) + ")"], ind)), out);
-    function choiceTo(out, labels, branches, cancel, ind) {
-        const i0 = ind || 0;
-        out.push(C(102, [labels, cancel === undefined ? labels.length - 1 : cancel, 0, 2, 0], i0));
-        labels.forEach((l, i) => {
-            out.push(C(402, [i, l], i0));
-            for (const c of branches[i] || []) out.push(Object.assign({}, c, { indent: (c.indent || 0) + i0 + 1 }));
-            out.push(C(0, [], i0 + 1));
-        });
-        out.push(C(404, [], i0));
-        return out;
-    }
+    const say = (out, spk, arr) => Watki.mowa.linesTo(out, spk, arr, null, 0, w.def.mowa);
+    const act = (out, args, ind) => Watki.mowa.script(out, "Wrak.act(this, " + JSON.stringify(args) + ")", ind);
     function questWants(key) {
         const q = TQ();
         if (!q || !q.markers) return false;
@@ -449,7 +400,7 @@
     // TEXTS
     // ------------------------------------------------------------------
     const TX = Watki.teksty("wrak");
-    const fill = (s, v) => String(s).replace(/\{(\w+)\}/g, (m, k) => (v && v[k] !== undefined ? v[k] : m));
+    const fill = Watki.mowa.fill;
 
     // ------------------------------------------------------------------
     // W12's clues
@@ -485,12 +436,12 @@
         if (D.BOAT.needQuest && !isDone(D.BOAT.needQuest)) {
             if (S().janekAsked === day()) return null;
             act(out, ["janekAsked"]);
-            return linesTo(out, spk, TX.janekNoK47);
+            return say(out, spk, TX.janekNoK47);
         }
         const W = WY(), lows = W && W.lowWaters ? W.lowWaters() : [];
-        linesTo(out, spk, TX.janekOffer);
-        if (lows.length) linesTo(out, spk, [fill(TX.janekTide, { t: lows.map(hhmm).join(" i ") })]);
-        linesTo(out, spk, [TK.kod.janekHarbourTalk[0]]);
+        say(out, spk, TX.janekOffer);
+        if (lows.length) say(out, spk, [fill(TX.janekTide, { t: lows.map(hhmm).join(" i ") })]);
+        say(out, spk, [TK.kod.janekHarbourTalk[0]]);
         return choiceTo(out, [TK.kod.janekHarbourTalk[1], TK.kod.janekHarbourTalk[2]],
             [act([], ["boat"]), act([], ["passJanek"])], 1);
     }
@@ -498,23 +449,17 @@
         const spk = { id: ev.eventId(), name: TK.kod.erykTalk[0] }, out = [];
         if (questWants("rozbitek")) { const q = questTalk("rozbitek"); if (q && q.length) return q; }
         const e = TL() && TL().entryAt ? TL().entryAt(TL().RESIDENTS.find(r => r.key === D.RES.key), hour()) : null;
-        if (e && e.act === "work" && e.where === "rozbitek_studnia") return linesTo(out, spk, TX.erykWell);
-        if (!S().met) {
-            linesTo(out, spk, TX.erykMeet.concat(["Rysujemy?"]));
-            act(out, ["met"]);
-            return choiceTo(out, [TK.kod.erykTalk[1], TK.kod.erykTalk[2]], [act([], ["portrait"]), linesTo([], spk, [TK.kod.erykTalk[3]])], 1);
-        }
-        if (S().w12 === "double" || S().w12 === "ally") linesTo(out, spk, [usual(D.RES.key) || pick(TX.erykAsk)]);
-        else linesTo(out, spk, [pick(TX.erykAsk)]);
+        if (e && e.act === "work" && e.where === "rozbitek_studnia") return say(out, spk, TX.erykWell);
+        if (!S().met) return w.rozmowa("poznanie", { spk });   // (the first meeting: Wrak_Data rozmowy.poznanie)
+        if (S().w12 === "double" || S().w12 === "ally") say(out, spk, [usual(D.RES.key) || pick(TX.erykAsk)]);
+        else say(out, spk, [pick(TX.erykAsk)]);
         const labels = [TK.kod.erykTalk[4], TK.kod.erykTalk[5], TK.kod.erykTalk[6], "Bywaj."];
-        const branches = [act([], ["portrait"]), linesTo([], spk, [pick(TX.erykWhere)]), linesTo([], spk, [usual(D.RES.key) || TK.kod.erykTalk[7]]), []];
+        const branches = [act([], ["portrait"]), say([], spk, [pick(TX.erykWhere)]), say([], spk, [usual(D.RES.key) || TK.kod.erykTalk[7]]), []];
         return choiceTo(out, labels, branches, 3);
     }
     function jozekTalk(ev) {   // (before his own offers - once; a hand-in of his quest comes first)
         if (!S().met || S().clues.jozek || S().w12 || readyFor("szmaciarz")) return null;
-        const spk = { id: ev.eventId(), name: TK.kod.jozekTalk[0] }, out = [];
-        linesTo(out, spk, TX.jozek);
-        return act(out, ["clue", "jozek"]);
+        return w.rozmowa("jozek", { spk: { id: ev.eventId(), name: TK.kod.jozekTalk[0] } });   // (Wrak_Data rozmowy.jozek)
     }
     function hook(key, ev) {
         if (!has()) return null;
@@ -541,17 +486,18 @@
         const out = [];
         if (who === "janek") {
             const spk = { id: ev.eventId(), name: "Janek" };
-            linesTo(out, spk, TX.janekWait);
-            choiceTo(out, ["Wracajmy.", TK.kod.talk[0]], [linesTo([], spk, TX.janekBack).concat(act([], ["boatBack"])), linesTo([], spk, TX.janekStay)], 1);
+            say(out, spk, TX.janekWait);
+            choiceTo(out, ["Wracajmy.", TK.kod.talk[0]], [say([], spk, TX.janekBack).concat(act([], ["boatBack"])), say([], spk, TX.janekStay)], 1);
         } else if (who === "zolnierz") {
             const spk = { id: ev.eventId(), name: TK.kod.talk[1] };
-            linesTo(out, spk, [TX.soldierTalk[(ev.eventId() + day()) % TX.soldierTalk.length]]);
+            say(out, spk, [TX.soldierTalk[(ev.eventId() + day()) % TX.soldierTalk.length]]);
         }
         if (out.length) interp.setupChild(out.concat([C(0, [])]), ev.eventId());
     }
 
     // ------------------------------------------------------------------
-    // The script calls (the wreck's things, the talks)
+    // The script calls (the wreck's things, the talks built here): Wrak.act(this, [what, ...]) - "met" (a talk saved before 2026-10-28)
+    // goes to the data's action
     // ------------------------------------------------------------------
     function selfSwitch(ev, on) { if (ev) $gameSelfSwitches.setValue([$gameMap.mapId(), ev.eventId(), "A"], !!on); }
     function giveChart() {
@@ -622,13 +568,13 @@
                 note(TK.kod.actCall[8], TK.kod.actCall[9]);
                 autoChecks();
             } else if (what === "met") {
-                if (!S().met) { S().met = day(); note(TK.kod.actCall[10], TK.kod.actCall[11]); autoChecks(); }
+                w.akcja("poznal", [], interp);
             } else if (what === "portrait") {
                 if ($gameParty.gold() < 2) { T.popup.need(COIN_ICON, TK.kod.actCall[12]); stop(); return; }
                 $gameParty.loseGold(2);
                 S().portraits = (S().portraits || 0) + 1;
                 const spk = ev ? { id: ev.eventId(), name: TK.kod.actCall[10] } : HERO;
-                const list = linesTo([], spk, S().portraits === 1 ? TX.erykPortrait : TX.erykPortraitAgain);
+                const list = say([], spk, S().portraits === 1 ? TX.erykPortrait : TX.erykPortraitAgain);
                 if (S().portraits === 1) vgive("portret", 1);
                 if (interp && list.length) interp.setupChild(list.concat([C(0, [])]), interp.eventId());
             } else if (what === "clue") {
@@ -639,130 +585,38 @@
     }
 
     // ------------------------------------------------------------------
-    // TownQuests' handlers: D25 (the wreck, the key, the cabin, the stones) and W12 (the clues, the talk in private, the false map)
+    // The hooks the thread's data names (Wrak_Data.js): D25 (the wreck built, the stones) and W12 (the clues, the talk in private, the
+    // false map); TownQuests.act's "fx" of d25Kamienie / w12Talk / w12Map (an old talk, the tests) - to the data's actions
     // ------------------------------------------------------------------
-    const STONE_KEYS = ["celnik", "kupiec", "grandpa", "pustelnik"];
-    function stonesTalk(q, r, st, key, spk) {
-        if (!STONE_KEYS.includes(key) || vcount("kamien_kruk") < D.STONES.n) return null;
-        if (key === "kupiec" && !inHours(hour(), [8, 18])) return null;
-        const out = [], L = { celnik: [TX.stonesCelnik, TX.stonesCelnikOpt, TX.stonesCelnikDone], kupiec: [TX.stonesKupiec, TX.stonesKupiecOpt, TX.stonesKupiecDone],
-            grandpa: [TX.stonesGrandpa, TX.stonesGrandpaOpt, TX.stonesKeep], pustelnik: [TX.stonesPustelnik, TX.stonesPustelnikOpt, TX.stonesKeep] }[key];
-        if (key !== "grandpa" && key !== "pustelnik") linesTo(out, HERO, [TX.stonesAsk]);
-        linesTo(out, spk, L[0].concat([{ celnik: "Oddajesz?", kupiec: "Sprzedajesz?" }[key] || TK.kod.stonesTalk[0]]));
-        const yes = qact([], ["D25", "fx", "d25Kamienie", key]);
-        linesTo(yes, spk, key === "pustelnik" ? [TK.kod.stonesTalk[1]] : L[2]);
-        choiceTo(out, L[1], [yes, []], 1);
-        return { ready: true, list: out };
-    }
-    function stonesAct(q, key) {
-        if (!atStep("D25", 3) || vcount("kamien_kruk") < D.STONES.n) return;
-        let rw = null;
-        if (key === "celnik") {
-            vtake("kamien_kruk", D.STONES.n);
-            rw = { gold: D.STONES.celnik * D.STONES.n };
-            setFlag("wrakKamienieCelnik");
-            note(TK.kod.stonesAct[0], TK.kod.stonesAct[1]);
-        } else if (key === "kupiec") {
-            vtake("kamien_kruk", D.STONES.n);
-            rw = { gold: D.STONES.kupiec * D.STONES.n };
-            setFlag("wrakKamienieBaltazar");
-            note(TK.kod.stonesAct[2], TK.kod.stonesAct[3]);
-        } else {
-            setFlag("wrakKamienieZatrzymane");
-            note(TK.kod.stonesAct[4], key === "pustelnik"
-                ? TK.kod.stonesAct[5]
-                : TK.kod.stonesAct[6]);
-        }
-        const Q = TQ();
-        if (Q && Q.completeStep) Q.completeStep("D25", { reward: rw });
-    }
-    // the talk in private (W12, step 1): four ways out (+ "not yet")
-    function w12Talk(q, r, st, key, spk) {
-        if (key !== D.RES.key) return null;
-        const f = flags(), out = [];
-        linesTo(out, spk, TX.w12Open);
-        const labels = [], branches = [];
-        const opt = (label, how, lines) => {   // (his answer first, then the choice takes effect - "given" sends him away)
-            labels.push(label);
-            const b = linesTo([], spk, lines);
-            qact(b, ["W12", "fx", "w12Talk", how]);
-            branches.push(b);
-        };
-        opt(TK.kod.w12Talk[0], "given", TX.w12Given);
-        opt(TK.kod.w12Talk[1], "ally", TX.w12Ally);
-        if (f.d20Pomoc && !f.d20Wydany) opt(TK.kod.w12Talk[2], "fled", TX.w12Fled);
-        opt(TK.kod.w12Talk[3], "double", TX.w12Double);
-        labels.push(TK.kod.w12Talk[4]);
-        branches.push(linesTo([], spk, TX.w12Later));
-        choiceTo(out, labels, branches, labels.length - 1);
-        return { ready: true, list: out };
-    }
-    function w12Choose(q, how) {
-        if (!atStep("W12", 1)) return;
-        const Q = TQ(), L = TL();
-        S().w12 = how;
-        if (how === "given") {
-            setFlag("ansgarGiven");
-            if (L && L.setGone) L.setGone(D.RES.key, true);
-            if (!T.call("Garnizon", "addFavor", 20, TK.kod.w12Choose[0])) T.emit("wrakGarnizon", { favor: 20, why: TK.kod.w12Choose[0] });
-            note(TK.kod.w12Choose[1], TK.kod.w12Choose[2]);
-            Q.finish("W12", { gold: D.W12_GOLD.given, xp: D.W12_XP.given });
-        } else if (how === "ally") {
-            setFlag("ansgarAlly");
-            note(TK.kod.w12Choose[3], TK.kod.w12Choose[4]);
-            Q.finish("W12", { xp: D.W12_XP.ally });
-        } else if (how === "fled") {
-            setFlag("ansgarFled");
-            vgive("mapa_ansgara", 1);
-            if (L && L.setGone) L.setGone(D.RES.key, true);
-            note(TK.kod.w12Choose[5], TK.kod.w12Choose[6]);
-            Q.finish("W12", { xp: D.W12_XP.fled });
-        } else if (how === "double") {
-            setFlag("wrakPodwojnaGra");
-            vgive("falszywa_mapa", 1);
-            note(TK.kod.w12Choose[7], TK.kod.w12Choose[8]);
-            Q.completeStep("W12");
-        }
-    }
-    function w12MapTalk(q, r, st, key, spk) {
-        if (key !== "kupiec" || vcount("falszywa_mapa") < 1 || !inHours(hour(), [8, 18])) return null;
-        const out = [];
-        linesTo(out, spk, TX.w12Sale);
-        qact(out, ["W12", "fx", "w12Map", "sell"]);
-        return { ready: true, list: out };
-    }
-    function w12Sell() {
-        if (!atStep("W12", 2) || vcount("falszywa_mapa") < 1) return;
-        vtake("falszywa_mapa", 1);
-        setFlag("wrakMapaSprzedana");
-        S().raid = day() + D.RAID.after[0] + Math.floor(Math.random() * (D.RAID.after[1] - D.RAID.after[0] + 1));
-        S().raidRoll = Math.random();
-        note(TK.kod.w12Sell[0], TK.kod.w12Sell[1]);
-        TQ().finish("W12", { gold: D.W12_GOLD.sold, xp: D.W12_XP.double });
-    }
-    function hookQuests() {
-        const q = TQ();
-        if (!q || !q.FX || hookQuests.done) return;
-        hookQuests.done = true;
-        Object.assign(q.FX, {
-            d25Ready: { cond: () => isBuilt() },
-            d25Auto: () => has() && S().been > 0,
-            d25Wrak: { check: () => S().been > 0 },
-            d25Klucz: { check: () => S().key > 0 },
-            d25Kajuta: { check: () => S().desk > 0 && S().chest > 0 },
-            d25Kamienie: {
-                talk: stonesTalk,
-                ready: (qq, r, st, key) => STONE_KEYS.includes(key) && vcount("kamien_kruk") >= D.STONES.n && (key !== "kupiec" || inHours(hour(), [8, 18])),
-                act: (qq, key) => stonesAct(qq, key)
-            },
-            w12Auto: () => has() && S().met > 0 && clueCount() >= 1,
-            w12Poszlaki: { check: () => clueCount() >= 2 },
-            w12Vars: { vars: () => ({ n: Math.min(2, clueCount()) }) },
-            w12Talk: { talk: w12Talk, ready: (qq, r, st, key) => key === D.RES.key, act: (qq, how) => w12Choose(qq, how) },
-            w12Map: { talk: w12MapTalk, ready: (qq, r, st, key) => key === "kupiec" && vcount("falszywa_mapa") > 0 && inHours(hour(), [8, 18]), act: () => w12Sell() }
-        });
-    }
-    hookQuests();
+    const W12_HOW = { given: "w12Wydaj", ally: "w12Zachowaj", fled: "w12Ucieczka", double: "w12Podwojna" };
+    w.haki({
+        // "@key: ..." in a talk: that resident says it
+        mowca: (ctx, key) => speaker(key),
+        zbudowany: () => isBuilt(),
+        // D25: the five stones in the bag; given / sold / kept
+        kamienie: () => vcount("kamien_kruk") >= D.STONES.n,
+        kamienieFx: (ctx, q, key, interp) => w.akcja(key === "celnik" ? "kamienieCelnik" : key === "kupiec" ? "kamienieKupiec" : "kamienieZatrzymane", [key], interp),
+        // W12
+        poszlaka: (ctx, k) => { addClue(k); },
+        w12Fx: (ctx, q, how, interp) => {
+            if (W12_HOW[how]) w.akcja(W12_HOW[how], [], interp);
+            else if (w.at("w12Talk")) S().w12 = how;
+        },
+        w12MapFx: (ctx, q, what, interp) => w.akcja("w12Sprzedaj", [], interp),
+        rozbitekOdchodzi: () => { const L = TL(); if (L && L.setGone) L.setGone(D.RES.key, true); },
+        // the garrison's favour (package D); without it the bus "wrakGarnizon"
+        garnizon: (ctx, n, why) => { const t = w.tekst(why); if (!T.call("Garnizon", "addFavor", n, t)) T.emit("wrakGarnizon", { favor: n, why: t }); },
+        // the false map's revenge: Baltazar's men some nights later (35%)
+        zemsta: () => {
+            const s = S();
+            s.raid = day() + D.RAID.after[0] + Math.floor(Math.random() * (D.RAID.after[1] - D.RAID.after[0] + 1));
+            s.raidRoll = Math.random();
+        },
+        // the things, the markers, the quest's end with its reward
+        zabierz: (ctx, k, n) => { vtake(k, n); },
+        odswiez: () => { const q = TQ(); if (q && q.refreshMarkers) q.refreshMarkers(); },
+        zakoncz: (ctx, id, rw) => { TQ().finish(id, rw); }
+    });
 
     // (the castaway's talk bust Rozbitek_Bust is in SpeechBubbles' own BUSTS table since the integration)
 
@@ -978,7 +832,7 @@
         if (!has()) return;
         grid = null;
         later = [];
-        hookQuests(); hookTalk();
+        hookTalk();
         const m = $gameMap.mapId();
         if (m === MAP) {
             const first = !S().been;

@@ -1,7 +1,7 @@
 // The picture's mood (Mood.js, user 2026-10-12): bloom, colour grading by the time / weather / place, vignette - on the world only.
 // The filter is first in the map spriteset's own list and nowhere else (the HUD, the windows, the bubbles, the menus untouched - also
-// checked by pixels: every opaque HUD / window pixel is the same with the effects on and off), the options (both looks: Grafit's
-// menu P and the classic Window_Options; Wł / Wył, the strength, each effect), the config round trip, the kinds of places, the
+// checked by pixels: every opaque HUD / window pixel is the same with the effects on and off), the options (the menu P's Opcje and the
+// title's options screen - one look since 2026-10-28; Wł / Wył, the strength, each effect), the config round trip, the kinds of places, the
 // time of day (smooth, no jumps over 24 h), rain / storm / flash / winter, the breathing vignette in combat mode, and the cost
 // (frame render time with the GPU finished, on / off). CDP_PORT=9489. The plugin is put into the page while it is not registered.
 "use strict";
@@ -50,7 +50,7 @@ const stats = a => { const s = a.slice().sort((x, y) => x - y), q = p => s[Math.
 
 kit.test({ port: 9489, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli", plugins: ["Mood"] }, async t => {
     t.check("wtyczka jest (wpisana albo wstrzyknięta)", ["registered", "injected"].includes(t.plugins.Mood) && (await t.eval("!!(window.Mood && Tawerna.api('Mood'))")), t.plugins);
-    await t.eval("window.dispatchEvent(new Event('pointerdown')); ConfigManager.uiClean = true; 0");   // (Fullscreen.js's one-shot request used up: Esc not eaten)
+    await t.eval("window.dispatchEvent(new Event('pointerdown')); 0");   // (Fullscreen.js's one-shot request used up: Esc not eaten)
 
     // ---------------------------------------------------------------- the options: rows, texts, the slider, greying, the config
     const rows = await t.json(`(function(){ const w = new Window_Options(new Rectangle(0, 0, 600, 400)), L = w._list.map(c => c.symbol), i = s => w.findSymbol(s);
@@ -60,8 +60,9 @@ kit.test({ port: 9489, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         w.changeValue("moodFx", true); r.onEnabled = ["moodBloom", "moodGrade", "moodVignette", "moodPower"].map(s => w.isCommandEnabled(i(s)));
         w.cursorLeft && (w.select(i("moodPower")), w.cursorLeft()); r.powerLeft = ConfigManager.moodPower; w.cursorRight(); r.powerBack = ConfigManager.moodPower;
         w.destroy(); return r; })()`);
-    const at = rows.list.indexOf("uiClean");
-    t.check("opcje: 5 wierszy zaraz pod „Wygląd” (Efekty obrazu, Siła efektów, Poświata, Barwy pory dnia, Winieta)",
+    // (2026-10-28: the row "Wygląd" is gone - first "Jakość grafiki" and its line of text, Wydajnosc.js, then these)
+    const at = rows.list.indexOf("gfxQualityNote");
+    t.check("opcje: 5 wierszy zaraz pod „Jakość grafiki” i jej opisem (Efekty obrazu, Siła efektów, Poświata, Barwy pory dnia, Winieta)", at === 1 &&
         rows.list.slice(at + 1, at + 6).join() === "moodFx,moodPower,moodBloom,moodGrade,moodVignette" && rows.names.join() === "Efekty obrazu,Siła efektów,Poświata,Barwy pory dnia,Winieta", rows);
     t.check("opcje: przełączniki piszą „Wł” / „Wył”, siła to suwak 0-100% (5% na krok)", rows.texts.every(x => x === "Wł") && rows.offText === "Wył" && rows.power === "100%" && rows.gauge && rows.vol
         && rows.powerLeft === 95 && rows.powerBack === 100, rows);
@@ -217,38 +218,41 @@ kit.test({ port: 9489, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.setHour(23);
     t.check("po przejściach między mapami filtr dalej tylko w świecie", (await t.json("__outside()")).length === 0 && (await t.json("Mood.info().inSpriteset")));
 
-    // ---------------------------------------------------------------- the options in both looks: Grafit (menu P -> Opcje) and Klasyczny
+    // ---------------------------------------------------------------- the options: the menu P's Opcje and the title's options screen
     await t.go(3, 28, 12, 2);
     const inMenu = "SceneManager._scene instanceof Scene_Menu && !SceneManager.isSceneChanging()";
     await t.key("P");
-    t.check("Grafit: P otwiera menu", await t.until(inMenu, 10));
+    t.check("menu P: P otwiera menu", await t.until(inMenu, 10));
     await t.frames(40);
-    // (the menu's tabs since 2026-10-23: A / D along them - Postać, Ekwipunek, Umiejętności, Plecak, Dziennik, Opcje -, then O into Opcje)
-    for (let i = 0; i < 5; i++) { await t.key("D"); await t.frames(12); }
+    // (the menu's tabs since 2026-10-23: A / D along them - Postać, Ekwipunek, Umiejętności, Plecak, Dziennik, Mapa (2026-10-24), Opcje -,
+    // then O into Opcje)
+    for (let i = 0; i < 10 && (await t.json("MenuRing.info().active")) !== "options"; i++) { await t.key("D"); await t.frames(12); }
     await t.key("O");
     await t.frames(6);
-    const grafit = await t.json(`(function(){ const w = SceneManager._scene._views && SceneManager._scene._views.options && SceneManager._scene._views.options._win; if (!w) return null;
+    const menu = await t.json(`(function(){ const w = SceneManager._scene._views && SceneManager._scene._views.options && SceneManager._scene._views.options._win; if (!w) return null;
         const CH = Tawerna.api("CleanHUD"), texts = [], keep = CH.textOut; CH.textOut = function(b, text) { texts.push(String(text)); return keep.apply(this, arguments); };
         w.select(w.findSymbol("moodFx")); w.refresh(); CH.textOut = keep; return { active: MenuRing.info().active, sym: w.currentSymbol(), texts }; })()`);
-    t.check("Grafit: zakładka Opcje ma „Efekty obrazu: Wł” (napis w stylu Grafit)", grafit && grafit.active === "options" && grafit.sym === "moodFx" && grafit.texts.includes("Efekty obrazu") && grafit.texts.includes("Wł") && !grafit.texts.includes("Tak"), grafit);
+    t.check("menu P: zakładka Opcje ma „Efekty obrazu: Wł” (napis w stylu menu)", menu && menu.active === "options" && menu.sym === "moodFx" && menu.texts.includes("Efekty obrazu") && menu.texts.includes("Wł") && !menu.texts.includes("Tak"), menu);
     await t.key("Enter");
     await t.frames(6);
-    t.check("Grafit: Enter przełącza „Efekty obrazu” na Wył", (await t.eval("ConfigManager.moodFx")) === false);
+    t.check("menu P: Enter przełącza „Efekty obrazu” na Wył", (await t.eval("ConfigManager.moodFx")) === false);
     await t.key("Enter");
     await t.frames(6);
-    t.check("Grafit: drugi Enter z powrotem Wł", (await t.eval("ConfigManager.moodFx")) === true);
+    t.check("menu P: drugi Enter z powrotem Wł", (await t.eval("ConfigManager.moodFx")) === true);
     await t.key("Escape");   // (out of Opcje onto the menu's list, then out of the menu)
     await t.frames(8);
     await t.key("Escape");
     await t.until("SceneManager._scene instanceof Scene_Map && !SceneManager.isSceneChanging()", 10);
     await t.frames(20);
-    await t.eval("ConfigManager.uiClean = false; SceneManager.push(Scene_Options); 0");
+    // (the title's "Opcje" - Scene_Options: the same rows in the same look since 2026-10-28, MenuRing.js)
+    await t.eval("SceneManager.push(Scene_Options); 0");
     await t.until("SceneManager._scene instanceof Scene_Options && SceneManager._scene._started", 10);
     await t.frames(10);
-    const classic = await t.json(`(function(){ const w = SceneManager._scene._optionsWindow, drawn = [], keep = w.drawText; w.drawText = function(text) { drawn.push(String(text)); return keep.apply(this, arguments); };
-        w.refresh(); w.drawText = keep; const i = w.findSymbol("moodFx"); return { i, status: w.statusText(i), drawn }; })()`);
-    t.check("Klasyczny: okno Opcji ma „Efekty obrazu: Wł”, „Siła efektów: 100%”", classic.i >= 0 && classic.status === "Wł" && classic.drawn.includes("Efekty obrazu") && classic.drawn.includes("Wł") && classic.drawn.includes("100%"), classic);
-    await t.eval("SceneManager.pop(); ConfigManager.uiClean = true; 0");
+    const screen = await t.json(`(function(){ const w = SceneManager._scene._optionsWindow, CH = Tawerna.api("CleanHUD"), drawn = [], keep = CH.textOut;
+        CH.textOut = function(b, text) { drawn.push(String(text)); return keep.apply(this, arguments); };
+        w.refresh(); CH.textOut = keep; const i = w.findSymbol("moodFx"); return { i, status: w.statusText(i), power: w.statusText(w.findSymbol("moodPower")), flat: w.opacity === 0, drawn }; })()`);
+    t.check("ekran Opcji (z tytułu): „Efekty obrazu: Wł”, „Siła efektów: 100%” w tym samym wyglądzie (okno bez ramki, wiersze jak w menu P)", screen.i >= 0 && screen.status === "Wł" && screen.drawn.includes("Efekty obrazu") && screen.drawn.includes("Wł") && screen.power === "100%" && screen.flat, screen);
+    await t.eval("SceneManager.pop(); 0");
     await t.until("SceneManager._scene instanceof Scene_Map && !SceneManager.isSceneChanging()", 10);
     await t.frames(10);
     t.check("po menu: efekty dalej na mapie", (await t.json("Mood.info()")).enabled);

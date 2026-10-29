@@ -6,8 +6,8 @@
 // round goal compass in the top right corner (the goal on this map and on another one, through the exits) with the goal followed
 // under it (2026-10-23: what it needs, have / need, growing as things are picked up - a goal's recipe, a town quest's step; the load
 // hidden) and the minimap under that; the gains; no bars under the hero, no experience line; the thoughts over the hero; the fade under him (the whole
-// top left corner as one); the minimap on M; P opens the menu „Lista” (its pages: tests/menu_lista_test.js); the option "Wygląd" back
-// to the classic look and again; the map's name as one comes in - since 2026-10-24 "Kinowy" (CleanHUD NAME_STYLE): the first visit
+// top left corner as one); the minimap on M; P opens the menu „Lista” (its pages: tests/menu_lista_test.js); no option "Wygląd" any more
+// (one look, 2026-10-28) - the old parts drawn only by the tests' switch and back; the map's name as one comes in - since 2026-10-24 "Kinowy" (CleanHUD NAME_STYLE): the first visit
 // with black bars at the top and the bottom and the HUD hidden (back after it), the words, the name, the gold line and the sentence
 // in the bottom left corner, 306 frames; later 44 px without bars ~3 s, a room 32 px ~2.5 s, an underground floor with its band
 // (red on a guardian's floor), cleared at once by a transfer (the HUD given back), an older save not playing the long one on the
@@ -20,7 +20,7 @@ const kit = require("./lib/kit.js");
 
 kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli", plugins: ["CleanHUD", "CleanHUD_Compass", "MenuRing"] }, async t => {
     t.check("wtyczki wczytane", ["CleanHUD", "CleanHUD_Compass", "MenuRing"].every(n => t.plugins[n] === "injected" || t.plugins[n] === "registered"), t.plugins);
-    t.check("czysty widok jest domyślny", await t.eval("ConfigManager.uiClean === true && CleanHUD.lookClean()"));
+    t.check("czysty widok jest jedynym wyglądem (bez opcji „Wygląd”)", await t.eval("ConfigManager.uiClean === true && CleanHUD.lookClean() && CleanHUD.isClean()"));
     // (Fullscreen.js asks for fullscreen at the first key - the browser would then eat the first Esc to leave it: used up here)
     await t.eval("window.dispatchEvent(new Event('pointerdown')); 0");
     const ok = await t.newGame({ story: true, skipIntro: true, hour: 10, quiet: true });
@@ -38,7 +38,7 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("lewy górny róg: paski w samym rogu (margines 12; bez głodu i pragnienia: życie i kondycja)", P.needs.visible && P.needs.x === 12 && P.needs.y === 12
         && d.bars.map(b => b.key).join() === "health,stamina" && d.bars.every(b => b.x > 12 && b.y < P.goal.y), { needs: P.needs, bars: d.bars });
     t.check("pod paskami cel (tytuł, etykieta CEL), tej samej szerokości, wyrównany do lewej", P.goal.visible && P.goal.x === 12 && P.goal.y >= P.needs.y + P.needs.h && P.goal.y <= P.needs.y + P.needs.h + 12
-        && P.needs.w === P.goal.w && d.goalBox && d.goalBox.title === d.goal.title && d.goalBox.label === "CEL", { goal: P.goal, needs: P.needs, box: d.goalBox });
+        && P.needs.w === P.goal.w && d.goalBox && d.goalBox.title === d.goal.title && d.goalBox.label === "WĄTEK", { goal: P.goal, needs: P.needs, box: d.goalBox });   // (2026-10-28: chapter 1 is a thread of the journal - "WĄTEK")
     t.check("prawy górny róg: okrągły kompas w rogu (margines 12)", P.compass.visible && cmp0.centre.x + cmp0.centre.r === 1268 && cmp0.centre.y - cmp0.centre.r === 12, { box: P.compass, c: cmp0.centre });
     const ck = d.text && d.text.clock;
     t.check("zegar tuż obok kompasu z lewej: ta sama wielkość, w jednej linii, nie nachodzą na siebie", !!ck && ck.r === cmp0.centre.r && ck.y === cmp0.centre.y && ck.x + ck.r <= cmp0.centre.x - cmp0.centre.r && cmp0.centre.x - cmp0.centre.r - (ck.x + ck.r) <= 16 && !d.text.goal, { clock: ck, compass: cmp0.centre });
@@ -62,7 +62,7 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("minimapa domyślnie ukryta", !!mm0 && mm0.visible === false && mm0.hidden === true, mm0);
     const clock = await t.eval("SceneManager._scene._cleanClock._key");
     t.check("zegar ze wskazówkami: godzina gry (10:00 = 600 minut)", /^60\d#/.test(clock), clock);
-    t.check("cel z dziennika w lewym górnym rogu: Dojdź na działkę dziadka (bez składników i bez listy: pod tytułem jego linia)", d.goal && d.goal.id === "story_field" && /działkę dziadka/i.test(d.goal.title) && d.goalBox.needs.length === 0 && d.goalBox.list.length === 0 && !!d.goalBox.sub, { goal: d.goal, box: d.goalBox });
+    t.check("cel w lewym górnym rogu: wątek „Rozdział 1: Dług dziadka”, pod tytułem jego krok - Dojdź na działkę dziadka (bez składników i bez listy)", d.goal && d.goal.id === "fabula" && d.goal.source === "watki" && /Dług dziadka/.test(d.goal.title) && /działkę dziadka/i.test(d.goalBox.sub) && d.goalBox.needs.length === 0 && d.goalBox.list.length === 0, { goal: d.goal, box: d.goalBox });
     await t.shot(path.join(__dirname, "..", "docs", "ui_grafit", "test_hud_dom.png"));
 
     // ---------------------------------------------------------------- the compass: the goal on another map - through the exits
@@ -272,7 +272,8 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         const actDone = async args => { await t.eval(`(function(){ TownQuests.act(null, ${JSON.stringify(args)}); return 0; })()`); await t.frames(20); return (await dbg()).goalBox; };
         const ticks = gb => gb.list.map(l => (l.done ? 1 : 0)).join("");
         await t.eval("$gameSystem.setDayNightHour(7); 0");   // (K5: before nine)
-        const k5w = await rowsOf("zadania_k", "K5", ["dzwonnik", "kapral", "ludmila", "soltys"]);
+        // (2026-10-28, docs/PODROZNI.md 5.2: day 1 - before the first wave the fourth loaf goes to Kuba at the well, not to Ludmiła)
+        const k5w = await rowsOf("zadania_k", "K5", ["dzwonnik", "kapral", "woziwoda", "soltys"]);
         let gb = await follow("K5");
         t.check("K5 (cztery bochny): w okienku celu 4 wiersze z tekstów zadania (zadania.K5.steps.0.lista.*), żaden nie odhaczony", !!gb && gb.label === "MIASTECZKO" && gb.title === (await t.json("TownQuests.Q.K5.title"))
             && k5w.every(Boolean) && gb.list.length === 4 && gb.list.every((l, i) => l.name === k5w[i]) && ticks(gb) === "0000", { gb, k5w });
@@ -325,12 +326,14 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     let du = await dbg();
     t.check("układ z przypiętym celem: paski (cztery) w rogu, cel pod nimi, tej samej szerokości", du.parts.goal.y >= du.parts.needs.y + du.parts.needs.h && du.parts.needs.y === 12 && du.parts.needs.w === du.parts.goal.w && du.bars.length === 4, { goal: du.parts.goal, needs: du.parts.needs });
     await t.shot(path.join(__dirname, "..", "docs", "ui_proste", "hud_uklad.png"));
-    await t.eval(`(function(){ const d = Journal.data(); window._hudDone = Object.assign({}, d.done); for (const g of Journal.GOALS) if (d.done[g.id] === undefined) d.done[g.id] = 1; d.pinned = null; return 0; })()`);
+    // (2026-10-28: chapter 1 is a thread of the journal - "everything done" means its record too, for a moment)
+    await t.eval(`(function(){ const d = Journal.data(); window._hudDone = Object.assign({}, d.done); for (const g of Journal.GOALS) if (d.done[g.id] === undefined) d.done[g.id] = 1; d.pinned = null;
+        const f = Watki.rekordy() && Watki.rekordy().w.fabula; window._hudFab = f ? f.s : null; if (f) f.s = "done"; return 0; })()`);
     await t.frames(30);
     du = await dbg();
     t.check("bez celu okienka nie ma, a paski podjeżdżają do rogu (12, 12)", !du.parts.goal.visible && du.parts.needs.x === 12 && du.parts.needs.y === 12, { goal: du.parts.goal, needs: du.parts.needs });
     await t.shot(path.join(__dirname, "..", "docs", "ui_proste", "hud_uklad_bez_celu.png"));
-    await t.eval(`(function(){ Journal.data().done = window._hudDone; Needs.setEnabled(false); return 0; })()`);
+    await t.eval(`(function(){ Journal.data().done = window._hudDone; const f = Watki.rekordy() && Watki.rekordy().w.fabula; if (f && window._hudFab) f.s = window._hudFab; Needs.setEnabled(false); return 0; })()`);
     await t.frames(30);
 
     // ---------------------------------------------------------------- gains, thoughts, the arc, the experience
@@ -420,37 +423,34 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("P otwiera menu", await t.until("SceneManager._scene instanceof Scene_Menu && !SceneManager.isSceneChanging()", 10));
     await t.frames(45);
     const menu = await t.json("MenuRing.info()");
-    t.check("menu P: rząd ośmiu zakładek (Postać, Ekwipunek, Umiejętności, Plecak, Dziennik, Opcje, Zapisz, Wyjdź), na początku Postać", menu && menu.tabs.join() === "hero,equip,skills,item,journal,options,save,gameEnd" && menu.active === "hero" && !menu.window.visible, menu && menu.tabs);
+    // (2026-10-24: the ninth tab "Mapa" between Dziennik and Opcje - MapaWyspy.js)
+    t.check("menu P: rząd dziewięciu zakładek (Postać, Ekwipunek, Umiejętności, Plecak, Dziennik, Mapa, Opcje, Zapisz, Wyjdź), na początku Postać", menu && menu.tabs.join() === "hero,equip,skills,item,journal,mapa,options,save,gameEnd" && menu.active === "hero" && !menu.window.visible, menu && menu.tabs);
     const back = await t.json("(function(){ const s = SceneManager._scene._backgroundSprite; return { blur: s.filters && s.filters[0] ? +s.filters[0].blur.toFixed(1) : 0, opacity: s.opacity }; })()");
     t.check("mapa za menu rozmyta (wejście się dokończyło)", back.blur >= 1.4 && back.opacity === 255, back);
     await t.key("Escape");
     t.check("Esc zamyka menu", await t.until(t.onMap(20), 10));
     await t.frames(10);
 
-    // ---------------------------------------------------------------- Opcje: "Wygląd" - the classic look, and back
+    // ---------------------------------------------------------------- one look (2026-10-28): no "Wygląd" in Opcje; the old parts only for a test
     await t.key("P");
     await t.until("SceneManager._scene instanceof Scene_Menu && !SceneManager.isSceneChanging()", 10);
     await t.frames(30);
-    for (let i = 0; i < 5; i++) { await t.key("D"); await t.frames(12); }   // (the tabs: Postać -> Ekwipunek -> Umiejętności -> Plecak -> Dziennik -> Opcje)
+    for (let i = 0; i < 10 && (await t.json("MenuRing.info().active")) !== "options"; i++) { await t.key("D"); await t.frames(12); }
     await t.key("O");   // (into Opcje: their list has the keys)
     await t.frames(8);
-    const opt = await t.json(`(function(){ const i = MenuRing.info(), w = SceneManager._scene._views.options._win; return { tab: i.active, symbol: i.options.symbol, text: w.statusText(w.index()), name: w.commandName(w.index()) }; })()`);
-    t.check("Opcje (zakładka menu P): „Wygląd: Grafit” w pierwszym wierszu", opt.tab === "options" && opt.symbol === "uiClean" && opt.name === "Wygląd" && opt.text === "Grafit", opt);
-    await t.key("Enter");
-    const closed = await t.until(t.onMap(20), 10);
-    const opt2 = await t.json(`(function(){ return { cfg: ConfigManager.uiClean, saved: ConfigManager.makeData().uiClean }; })()`);
-    t.check("Enter zmienia na „Klasyczny” (zapisane w ustawieniach), menu Grafit się zamyka", closed && opt2.cfg === false && opt2.saved === false, opt2);
-    await t.frames(10);
-    await t.key("P");
-    await t.until("SceneManager._scene instanceof Scene_Menu && !SceneManager.isSceneChanging()", 10);
-    await t.frames(10);
-    t.check("klasyczny: menu P znowu jako panel", !(await t.eval("SceneManager._scene._cardOn")) && (await t.eval("SceneManager._scene._menuPanel.visible && SceneManager._scene._commandWindow.visible")));
+    const opt = await t.json(`(function(){ const i = MenuRing.info(), w = SceneManager._scene._views.options._win; return { tab: i.active, symbol: i.options.symbol, rows: w._list.map(c => c.symbol), names: w._list.map(c => c.name), saved: Object.keys(ConfigManager.makeData()) }; })()`);
+    t.check("Opcje (zakładka menu P): bez wiersza „Wygląd”, pierwsza „Jakość grafiki”; ustawienia nie zapisują „uiClean”", opt.tab === "options" && opt.symbol === "gfxQuality" && !opt.rows.includes("uiClean")
+        && !opt.names.includes("Wygląd") && !opt.saved.includes("uiClean"), opt);
+    await t.key("Escape");
+    await t.frames(8);
     await t.key("Escape");
     await t.until(t.onMap(20), 10);
     await t.frames(10);
+    // (the old HUD parts - SurvivalHUD, Needs, Minimap... - still work under this one; a test may draw them: CleanHUD.setClean(false), not saved)
+    await t.eval("CleanHUD.setClean(false); 0");
+    await t.frames(10);
     d = await dbg();
-    t.check("klasyczny: stare części znowu rysowane, czyste schowane", !d.clean && Object.values(d.old).every(v => v === true) && !d.parts.clock.visible && !d.parts.compass.visible && !d.parts.needs.visible, d.old);
-    await t.shot(path.join(__dirname, "..", "docs", "ui_grafit", "test_klasyczny.png"));
+    t.check("przełącznik testów (CleanHUD.setClean(false)): stare części rysowane, czyste schowane", !d.clean && Object.values(d.old).every(v => v === true) && !d.parts.clock.visible && !d.parts.compass.visible && !d.parts.needs.visible, d.old);
     await t.eval("CleanHUD.setClean(true); 0");
     await t.frames(10);
     d = await dbg();

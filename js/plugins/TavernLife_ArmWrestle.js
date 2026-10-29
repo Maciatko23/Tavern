@@ -36,6 +36,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("silowanie");   // (the words of this file: js/teksty/silowanie.txt, kod.*)
 
     const T = window.Tawerna;
     if (!T) throw new Error("TavernLife_ArmWrestle.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
@@ -61,17 +62,8 @@
         gain: 0.0036, loss: 0.0022, roundTicks: 2400
     };
     const grumLines = {
-        hello: ["Siłujesz się? Ha! Ostatni, co próbował, do dziś je lewą ręką.", "Znowu ty? Dobra, dziś bez taryfy ulgowej.", "Wróciłeś? Uparty jesteś. Lubię upartych - łatwiej ich łamać.",
-            "Ha! Słyszałem, że mnie pokonałeś. Nie słyszałem, że dwa razy.", "Ty i ja, łokieć w łokieć. Tym razem rozgrzałem się przed śniadaniem.", "Dobra. Od dziś siłuję się na serio.", "Chłopcze... ty mnie wykończysz. Siadaj."],
-        round: ["Gotów? Bo ja się dopiero rozgrzewam.", "Trzymaj mocno, chłopcze.", "Łokieć na stół. I nie płacz potem."],
-        burst: ["Hrrraaah!", "Hyyy!", "Nnngh!", "A masz!", "Hop!"],
-        winning: ["To wszystko?", "Łaskoczesz mnie?", "Mój miecz waży więcej niż ty!", "Ziewam..."],
-        losing: ["Co ty... jadłeś?!", "Nngh... nieźle...", "Kto cię... tego nauczył?!", "Ej... ej!"],
-        roundHe: ["I po zabawie!", "Następna runda - jeśli jeszcze czujesz rękę.", "Ha! Stół się ucieszył."],
-        roundYou: ["Szczęście! Czyste szczęście!", "Dobra... teraz na serio.", "Rozgrzewka. To była rozgrzewka."],
-        won: ["Ha! Wracaj, jak podrośniesz.", "Nie martw się, mało kto ze mną wygrywa. Właściwie nikt.", "Stawka moja. Postawię ci z niej piwo... kiedyś."],
-        lost: ["Masz krzepę, przyznaję. Stawka twoja.", "Na brodę mojej matki... wygrałeś uczciwie.", "Dobra, dobra. Ale następnym razem nie jadłem obiadu."]
     };
+    Watki.scal(grumLines, "silowanie", "grum");   // (its words: js/teksty/silowanie.txt, grum)
     function armTableBitmaps() {
         return cached("armTable", () => {
             const top = new Bitmap(W1, 70), front = new Bitmap(W1, 130), t = top.context, f = front.context;
@@ -109,9 +101,9 @@
                 ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0); ctx.lineTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1); ctx.stroke();
             }
             ctx.restore();
-            cardText(b, "słabo", cx - d.r - 32, cy - 2, 80, 14, S0.muted);
-            cardText(b, "za mocno", cx + d.r - 46, cy - 2, 80, 14, S0.muted, false, "right");
-            cardText(b, "SIŁA", cx - 60, cy + 14, 120, 13, S0.muted, true, "center");
+            cardText(b, TK.kod.dialBackBitmap[0], cx - d.r - 32, cy - 2, 80, 14, S0.muted);
+            cardText(b, TK.kod.dialBackBitmap[1], cx + d.r - 46, cy - 2, 80, 14, S0.muted, false, "right");
+            cardText(b, TK.kod.dialBackBitmap[2], cx - 60, cy + 14, 120, 13, S0.muted, true, "center");
             dirty(b);
             return b;
         });
@@ -123,7 +115,7 @@
             const rv = this.opts.rival || null;
             this.rivalKey = rv ? rv.key || "rival" : "grum";
             this.rivalName = rv ? rv.name : "Grum";
-            this.rivalSub = rv ? rv.sub || "" : "Żelazna Pięść, najemnik";
+            this.rivalSub = rv ? rv.sub || "" : TK.kod.createGame[0];
             this.rivalBust = rv ? rv.bust || bustOf("grum") : bustOf("grum");
             this.L = rv && rv.lines ? Object.assign({}, grumLines, rv.lines) : grumLines;
             this.level = clamp(this.opts.level !== undefined ? Number(this.opts.level) : rv && rv.level !== undefined ? Number(rv.level) : S().arm.level, 0, 6);
@@ -161,14 +153,14 @@
         }
         begin() {
             const hello = this.L.hello[Math.min(this.level, this.L.hello.length - 1)];
-            const rv = this.opts.rival, kick = rv && rv.kicker ? rv.kicker : "SIŁOWANIE NA RĘKĘ" + (this.level && !rv ? " · GRUM PODKRĘCA: " + this.level : "");
+            const rv = this.opts.rival, kick = rv && rv.kicker ? rv.kicker : Watki.wstaw(TK.kod.begin[1], { "1": this.level && !rv ? Watki.wstaw(TK.kod.begin[0], { level: this.level }) : "" });
             const card = { bust: this.rivalBust, who: this.rivalName, whoSub: this.rivalSub, kicker: kick,
-                title: this.stake ? "Stawka: " + this.stake + " G" : "Siłowanie na rękę", say: hello,
-                lines: this.first ? ["Trzymaj wskazówkę SIŁY w zielonym polu: przytrzymaj O, żeby ją podnieść, puść, żeby opadła - albo stukaj O.",
-                    "W zielonym polu twoja ręka zyskuje, poza nim zyskuje " + this.rivalName + ". Co chwila " + this.rivalName + " szarpie - wtedy wskazówka leci w dół, a pole skacze.",
-                    "Trzy rundy: kto pierwszy wygra dwie, bierze stawkę. Siła poszerza zielone pole, Kondycja łagodzi szarpnięcia."]
-                    : ["Wskazówka w zielonym polu: przytrzymaj albo stukaj O.", "Dwie wygrane rundy biorą stawkę."],
-                keys: [["O", "siła (trzymaj / stukaj)"], ["P", "pauza"]], foot: "O - łokieć na stół" };
+                title: this.stake ? Watki.wstaw(TK.kod.begin[2], { stake: this.stake }) : TK.kod.begin[3], say: hello,
+                lines: this.first ? [TK.kod.begin[4],
+                    Watki.wstaw(TK.kod.begin[5], { rivalName: this.rivalName }),
+                    TK.kod.begin[6]]
+                    : [TK.kod.begin[7], TK.kod.begin[8]],
+                keys: [["O", TK.kod.begin[9]], ["P", "pauza"]], foot: TK.kod.begin[10] };
             this.showCard(Object.assign(card, { wait: 16 }), () => this.nextRound());   // (O after 16 ticks: Decision, then the first round)
             this.setPhase("card");
         }
@@ -192,8 +184,8 @@
         }
         canPause() { return this.phase === "pull"; }
         helpLines() {
-            return ["Trzymaj wskazówkę SIŁY w zielonym polu: przytrzymaj O, żeby ją podnieść, puść, żeby opadła - albo stukaj O.",
-                "W polu twoja ręka zyskuje, poza nim - " + this.rivalName + ". Kto pierwszy wygra dwie rundy, bierze stawkę."];
+            return [TK.kod.helpLines[0],
+                Watki.wstaw(TK.kod.helpLines[1], { rivalName: this.rivalName })];
         }
         nextRound() {
             this.round++;
@@ -233,7 +225,7 @@
             if (this.ticks % 150 === 75) {
                 if (this.b < -0.45) this.sayOver("bubbleR", pick(this.L.winning, this.rng), 100);
                 else if (this.b > 0.45) this.sayOver("bubbleR", pick(this.L.losing, this.rng), 100);
-                else if (this.inZone && this.rng() < 0.4) this.sayOver("bubbleL", pick(["Nnngh!", "Jeszcze... trochę...", "Trzymaj się, ręko..."], this.rng), 80);
+                else if (this.inZone && this.rng() < 0.4) this.sayOver("bubbleL", pick(["Nnngh!", TK.kod.pull[0], TK.kod.pull[1]], this.rng), 80);
             }
             if (this.b >= 1 || this.b <= -1 || this.ticks >= AW.roundTicks) this.endRound(this.b > 0 || (this.b === 0 && this.zoneTicks > this.ticks / 2));
         }
@@ -259,10 +251,10 @@
             const line = pick(won ? this.L.lost : this.L.won, this.rng);
             this.result.line = line;
             if (won) se("Applause1", 55);
-            this.showCard({ wait: 30, bust: this.rivalBust, who: this.rivalName, whoSub: this.rivalSub, kicker: (this.opts.rival && this.opts.rival.kicker ? this.opts.rival.kicker : "SIŁOWANIE NA RĘKĘ") + " · KONIEC", title: won ? "Wygrana!" : gaveUp ? "Poddałeś się" : "Przegrana",
-                titleColor: won ? U().accent : BAD, sub: "Rundy: " + this.youWon + " : " + this.heWon + (this.stake ? "   ·   " + (won ? "+" : "−") + this.stake + " G" : ""), subColor: won ? GOOD : BAD,
-                say: line, lines: [["Czas: " + ARM.minutes + " minut gry   ·   wytrzymałość −" + ARM.stamina, U().muted], [this.opts.rival ? "Siła poszerza zielone pole, Kondycja łagodzi szarpnięcia." : won ? "Grum następnym razem przyłoży się mocniej." : "Grum się nie zmienia - ty możesz: Siła poszerza zielone pole.", U().muted]],
-                foot: "O - wracam do sali", h: 440 }, () => this.leave());
+            this.showCard({ wait: 30, bust: this.rivalBust, who: this.rivalName, whoSub: this.rivalSub, kicker: Watki.wstaw(TK.kod.finish[1], { "1": this.opts.rival && this.opts.rival.kicker ? this.opts.rival.kicker : TK.kod.finish[0] }), title: won ? "Wygrana!" : gaveUp ? TK.kod.finish[2] : "Przegrana",
+                titleColor: won ? U().accent : BAD, sub: Watki.wstaw(TK.kod.finish[3], { youWon: this.youWon, heWon: this.heWon, "3": this.stake ? "   ·   " + (won ? "+" : "−") + this.stake + " G" : "" }), subColor: won ? GOOD : BAD,
+                say: line, lines: [[Watki.wstaw(TK.kod.finish[4], { minutes: ARM.minutes, stamina: ARM.stamina }), U().muted], [this.opts.rival ? TK.kod.finish[5] : won ? TK.kod.finish[6] : TK.kod.finish[7], U().muted]],
+                foot: TK.kod.finish[8], h: 440 }, () => this.leave());
             this.setPhase("summary");
         }
         frame() {
@@ -348,18 +340,18 @@
             ctx.fillRect(Math.min(mid, to), by, Math.abs(to - mid), 10);
             ctx.fillStyle = "#eceef0"; ctx.fillRect(mid - 1, by - 3, 2, 16);
             ctx.restore();
-            const lead = this.b > 0.05 ? "przewaga: ty" : this.b < -0.05 ? "przewaga: " + this.rivalName : "remis";
+            const lead = this.b > 0.05 ? TK.kod.drawDial[0] : this.b < -0.05 ? this._leadHe || (this._leadHe = Watki.wstaw(TK.kod.drawDial[1], { rivalName: this.rivalName })) : "remis";   // (every frame: the line made once)
             cardText(b, lead, cx - 150, by + 14, 300, 15, this.b > 0.05 ? S0.accent : this.b < -0.05 ? BAD : S0.muted, true, "center");
             if (this.phase === "ready") {
                 const n = 3 - Math.floor(this.phaseT / 30);
-                cardText(b, n > 0 ? String(n) : "Ciągnij!", cx - 150, cy - 96, 300, n > 0 ? 44 : 34, S0.accent, true, "center");
+                cardText(b, n > 0 ? String(n) : TK.kod.drawDial[2], cx - 150, cy - 96, 300, n > 0 ? 44 : 34, S0.accent, true, "center");
             }
             dirty(b);
         }
         // the round and the score at the top (the key hints are the UI kit's, at the bottom), none over a card
         drawHud() {
             const play = this.phase === "pull" || this.phase === "ready" || this.phase === "slam";
-            this.showHud(play, [["O", "trzymaj lub stukaj: wskazówka SIŁY w zielonym polu"], ["P", "pauza"]]);
+            this.showHud(play, [["O", TK.kod.drawHud[0]], ["P", "pauza"]]);
             this.dial.visible = play;
             const key = [this.round, this.youWon, this.heWon, play].join("|");
             if (key === this._hudKey) return;
@@ -368,10 +360,10 @@
             b.clear();
             if (!play) return;
             ui.panel(b, 20, 16, 380, 70, { cut: 6 });
-            cardText(b, "SIŁOWANIE NA RĘKĘ", 36, 22, 340, 15, S0.muted, true);
-            cardText(b, (this.opts.rival ? this.opts.rival.with || "z: " + this.rivalName : "z Grumem") + (this.stake ? "  ·  stawka " + this.stake + " G" : ""), 36, 42, 340, 22, S0.accent, true);
+            cardText(b, TK.kod.drawHud[1], 36, 22, 340, 15, S0.muted, true);
+            cardText(b, (this.opts.rival ? this.opts.rival.with || "z: " + this.rivalName : TK.kod.drawHud[2]) + (this.stake ? Watki.wstaw(TK.kod.drawHud[3], { stake: this.stake }) : ""), 36, 42, 340, 22, S0.accent, true);
             ui.panel(b, W1 - 300, 16, 280, 70, { cut: 6 });
-            cardText(b, "RUNDA " + Math.max(1, this.round) + " Z 3", W1 - 284, 22, 250, 15, S0.muted, true);
+            cardText(b, Watki.wstaw(TK.kod.drawHud[4], { "1": Math.max(1, this.round) }), W1 - 284, 22, 250, 15, S0.muted, true);
             const pips = (x, y, n, colour, label) => {
                 cardText(b, label, x, y - 2, 70, 18, S0.text);
                 for (let i = 0; i < 2; i++) { b.fillRect(x + 64 + i * 22, y + 4, 14, 14, i < n ? colour : "#2a2e35"); }
@@ -392,37 +384,37 @@
     // ------------------------------------------------------------------
     function armTalk() {
         const o = [];
-        if (!npc("grum")) { popup(0, "Nie ma z kim się siłować - Grum gdzieś wyszedł.", BAD); return null; }
+        if (!npc("grum")) { popup(0, TK.kod.armTalk[0], BAD); return null; }
         const tq = T.call("TownQuests", "armTable");   // (2026-10-06: the tournament's evening - D6 - the table is the tournament's)
         if (tq && tq.length) return tq;
         if (typeof $gameSystem.stamina === "function" && $gameSystem.stamina() < ARM.needStamina) {
-            sayAs(o, "grum", "Ledwo stoisz na nogach. Najpierw odpocznij, bo mi się jeszcze rozsypiesz na stole.");
+            sayAs(o, "grum", TK.kod.armTalk[1]);
             return o;
         }
         const st = S().arm;
-        sayAs(o, "grum", st.played === 0 ? "Siłujesz się? Ha! Ostatni, co próbował, do dziś je lewą ręką. Ile stawiasz?"
-            : st.won > st.lost ? "Ty znowu? Dobra, ale dziś bez taryfy ulgowej. Ile stawiasz?" : "Rewanż? Lubię upartych. Ile stawiasz?");
-        choose(o, ARM_STAKES.map(n => ({ label: "Stawka " + n + " G", js: ["TavernLife.step(this, 'arm', " + n + ")", "TavernLife.step(this, 'gameAfter')"] }))
-            .concat([{ label: "Nie teraz", js: [] }]));
+        sayAs(o, "grum", st.played === 0 ? TK.kod.armTalk[2]
+            : st.won > st.lost ? TK.kod.armTalk[3] : TK.kod.armTalk[4]);
+        choose(o, ARM_STAKES.map(n => ({ label: Watki.wstaw(TK.kod.armTalk[5], { n: n }), js: ["TavernLife.step(this, 'arm', " + n + ")", "TavernLife.step(this, 'gameAfter')"] }))
+            .concat([{ label: TK.kod.armTalk[6], js: [] }]));
         return o;
     }
     lib.addKind("arm", () => armTalk());
     lib.addStep("arm", (interp, ev, arg) => {
         const stake = Number(arg) || 0;
-        if (gold() < stake) { needGold(stake); bark(npc("grum"), "Bez monet nie ma zabawy, chudzielcu.", 100); return; }
+        if (gold() < stake) { needGold(stake); bark(npc("grum"), TK.kod.glowna[0], 100); return; }
         if (lib.startGame(Scene_ArmWrestle, { stake })) lib.setGameAfter({ game: "arm", stake });
     });
     lib.defineGame("arm", {
-        xpWin: ARM.xpWin, xpLose: ARM.xpLose, reason: "siłowanie z Grumem",
+        xpWin: ARM.xpWin, xpLose: ARM.xpLose, get reason() { return TK.kod.reason[0]; },   // (read when the XP is given: the words of the file)
         apply(st, res) {
             if (res.rival) return;   // (a bout of D6's tournament: Grum's own level and streak stay as they are)
             st.streak = res.won ? Math.max(1, st.streak + 1) : Math.min(-1, st.streak - 1);
             if (res.won) st.level = Math.min(6, st.level + 1);   // (Grum takes it harder after each loss of his)
         },
-        note: () => ["Siłowanie z Grumem", "Grum Żelazna Pięść siłuje się na rękę o stawkę (" + ARM_STAKES.join(", ") + " G) przy stole w sali. Trzy rundy: wskazówka siły ma zostać w zielonym polu (przytrzymaj albo stukaj O), a Grum co chwila szarpie. Siła poszerza zielone pole. Po każdej jego przegranej Grum bierze się mocniej do roboty."],
+        note: () => [TK.kod.note[0], Watki.wstaw(TK.kod.note[1], { "1": ARM_STAKES.join(", ") })],
         who: () => npc("grum"),
         after(r, g, who) {
-            bark(who, r.won ? pick(["Masz. Zasłużyłeś.", "Bierz, zanim się rozmyślę.", "Jutro rewanż!"]) : pick(["Dzięki za datek!", "Następnym razem może ci się uda. Może."]), 120);
+            bark(who, r.won ? pick([TK.kod.after[0], TK.kod.after[1], TK.kod.after[2]]) : pick([TK.kod.after[3], TK.kod.after[4]]), 120);
         }
     });
 

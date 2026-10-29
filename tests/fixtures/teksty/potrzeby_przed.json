@@ -1,0 +1,21 @@
+{
+ "poziomy": {
+  "glod": {
+   "name": [
+    "",
+    "Głodny",
+    "Bardzo głodny",
+    "Głodujesz"
+   ]
+  },
+  "pragnienie": {
+   "name": [
+    "",
+    "Spragniony",
+    "Odwodniony",
+    "Wysuszony"
+   ]
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Needs.js: FOOD=poziomy.glod:/(^|\\.)name$/, WATER=poziomy.pragnienie:/(^|\\.)name$/)"
+}

@@ -1,0 +1,19 @@
+{
+ "kod": {
+  "eatPlant": {
+   "0": "roślina"
+  },
+  "report": {
+   "0": "Ptaki zjadły: {text}"
+  },
+  "zegar": {
+   "0": " roślinę",
+   "1": " rośliny",
+   "2": " roślin",
+   "3": "Pod twoją nieobecność ptaki wyjadły {awayReport}{2}",
+   "4": "Nie ma tu nic zasianego (albo pilnuje strach na wróble)",
+   "5": "Nie ma tu miejsca dla ptaków"
+  }
+ },
+ "_opis": "Napisy kodu Birds.js sprzed przeniesienia do js/teksty/ptaki.txt (kod.*)"
+}

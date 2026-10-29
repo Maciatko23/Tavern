@@ -24,14 +24,14 @@ async function test(body) {
 const data = name => sandbox.withMeta(sandbox.loadData(name));
 
 // unit.load(names, opts): the plugins in one fake window (tests/lib/sandbox.js). (2026-10-23) A plugin whose words are data
-// (Watki.scal / Watki.zTekstu - js/teksty/<name>.txt, which the game reads over the server before the title) gets Watki.js put in
+// (Watki.scal / Watki.zTekstu / Watki.teksty - js/teksty/<name>.txt, which the game reads over the server before the title) gets Watki.js put in
 // right after the core and every js/teksty file read from the disk, so its objects are whole as in the game - unless the test
 // loads Watki itself (then it feeds the words itself: Watki.wczytaj).
 function load(names, opts) {
     names = names.slice();
     const src = n => { try { return fs.readFileSync(path.join(sandbox.PLUGINS, n + ".js"), "utf8"); } catch (e) { return ""; } };
     const wantsTexts = !names.includes("Watki") && names.includes("TawernaCore") && fs.existsSync(path.join(sandbox.PLUGINS, "Watki.js")) &&
-        names.some(n => /\bWatki\.(scal|zTekstu)\(/.test(src(n)));
+        names.some(n => /\bWatki\.(scal|zTekstu|teksty)\(/.test(src(n)));
     if (wantsTexts) names.splice(names.indexOf("TawernaCore") + 1, 0, "Watki");
     const w = sandbox.loadPlugins(names, opts);
     if (wantsTexts && w.Watki && typeof w.Watki.wczytaj === "function") {

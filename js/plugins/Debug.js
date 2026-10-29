@@ -23,7 +23,11 @@
  *      - "Podziemia: piętro N" (Underground.js): ←→ wybiera piętro 0-100 (z Shiftem o 10; 0 Ruiny Zamku, co 10. piętro
  *        zrobione ręcznie, 100 Komnata Serca), OK przenosi tam (przy schodach w górę, bez względu na kratę i bossów);
  *        "Podziemia: zejście z piwnicy" otwiera / zamyka kratę (przełącznik 11); "Podziemia: zamki Serca na próbę" -
- *        klucz, dzwon i pieśń znane bez questów W2-W4; "Podziemia: wszystkie przystanki windy" włącza windę na 10-90.
+ *        klucz, dzwon i pieśń znane bez questów W2-W4; "Podziemia: wszystkie przystanki windy" włącza windę na 10-90;
+ *        "Serce: zakończenie / świat / Lord przy Sercu" - zakończenie zagrane w wybranym świecie.
+ *      - "Akt III: uzbrój napad", "Akt III: napad na tawernę teraz", "Akt III: wyczyść stan napadu" (Act3.js).
+ *      (Od 2026-10-29 wiersze podziemi i Aktu III daje silnik wątków Watki.js z danych wątków „podziemia” i „akt3” -
+ *      Underground_Data.js / Act3_Data.js, f9: { zakladka: "zdarzenia" }; ten plik nie zna tych wtyczek.)
  *      - "Bandyta w pobliżu", "Nożownik w pobliżu", "Łucznik w pobliżu", "Najemnik w pobliżu", "Zasadzka (2 bandytów i łucznik)",
  *        "Obóz bandytów (noc)", "Napad na śpiącego (bandyci)" (Humans.js, etap 3 walki): ludzie-wrogowie kilka pól od bohatera;
  *        obóz 9-16 pól dalej (w dzień zegar idzie na 22:00); napad - grupa, która przyszłaby po śpiącego, od razu w walce.
@@ -85,22 +89,24 @@
  *        Kasztelan_Data.js; tak samo każdy wątek silnika ze skokami: Watki.f9.)
  *      Wątek W5 (kantor Baltazara):
  *      - "W5: rozdział N - ...": ←→ wybiera rozdział 1-7 wątku „Towary z kontynentu”, OK ustawia go (flagi
- *        rozdziałów wcześniejszych, pora dnia) i przenosi tam, gdzie się dzieje (Kantor.debugJump).
+ *        rozdziałów wcześniejszych, pora dnia) i przenosi tam, gdzie się dzieje (skoki z Kantor_Data.js).
  *      Wątek W7 (dwór Lorda, Dwor.js):
  *      - "W7: rozdział N - ...": ←→ wybiera rozdział 1-7 wątku „Dwór z kamieni twierdzy”, OK ustawia go (spłaty, flagi
- *        rozdziałów wcześniejszych, pora dnia) i przenosi tam, gdzie się dzieje (Dwor.debugJump). Wnętrza dworu (hol,
+ *        rozdziałów wcześniejszych, pora dnia) i przenosi tam, gdzie się dzieje (skoki z Dwor_Data.js). Wnętrza dworu (hol,
  *        biblioteka, gabinet) są też w wierszu „Wnętrze”.
  *      Wątek W9 (rywal w ruinach, Rywal.js):
  *      - "W9: rywal (wymuś wariant): ...": ←→ z gry / ludzie Baltazara / Grum z najemnikami / ludzie Lorda /
  *        kopacze Czarnych Oczu; OK: krata otwarta, rywal już w drodze (piętro 3), bohater w Ruinach Zamku.
  *      - "W9: rywal - spotkanie na piętrze N": ←→ piętro 1-10, OK: rywal (wariant z wiersza wyżej) czeka na tym
  *        piętrze, bohater na jego schodach w górę (Rywal.debugMeet).
+ *      (Od 2026-10-29 sekcje W5, W7 i W9 też daje silnik wątków - f9 w danych wątków „kantor”, „dwor”, „rywal”.)
  * F9 otwiera się na tej zakładce (i podzakładce) i pozycji, na których ostatnio był. Esc (albo F9) zamyka.
  * Zakładki i podzakładki można też klikać myszą.
  * Tylko do testowania - przed wydaniem gry ustaw parametr "Włączone" na false.
  */
 (() => {
     "use strict";
+    const TK = Watki.teksty("f9");   // (the words of this file: js/teksty/f9.txt, kod.*)
 
     const enabled = PluginManager.parameters("Debug").enabled !== "false";
     if (!enabled) return;
@@ -112,156 +118,129 @@
             !($gamePlayer && $gamePlayer.isToolSwinging && $gamePlayer.isToolSwinging());
     }
 
-    const _Scene_Map_update = Scene_Map.prototype.update;
-    Scene_Map.prototype.update = function() {
-        _Scene_Map_update.call(this);
+    // F9 on the map; what the menu left for the map to do. The core's clock of the map (TawernaCore), in the order its own hook on
+    // Scene_Map.update had: after Spoilage's and Needs', before every other clock
+    window.Tawerna.onMapUpdate(scene => {
         if (Input.isTriggered("debugmenu") && canOpen()) SceneManager.push(Scene_Debug);
         // a building chosen in the menu: placed once the map is back (Farming.js's placer, free and finished at once)
-        if ($gameTemp._debugBuild && this === SceneManager._scene && !SceneManager.isSceneChanging() && !$gameTemp._buildMode && !$gameMessage.isBusy()) {
+        if ($gameTemp._debugBuild && scene === SceneManager._scene && !SceneManager.isSceneChanging() && !$gameTemp._buildMode && !$gameMessage.isBusy()) {
             const type = $gameTemp._debugBuild;
             $gameTemp._debugBuild = null;
             Farming.startFreePlacement(type);
         }
         // the island tab's acts that need the map (the raven's name screen, the prologue's film): once the map is back and calm
-        if ($gameTemp._isleAct && this === SceneManager._scene && !SceneManager.isSceneChanging() && !$gamePlayer.isTransferring() &&
+        if ($gameTemp._isleAct && scene === SceneManager._scene && !SceneManager.isSceneChanging() && !$gamePlayer.isTransferring() &&
             !$gameMessage.isBusy() && !$gameMap.isEventRunning()) {
             const what = $gameTemp._isleAct;
             $gameTemp._isleAct = null;
             if (what === "raven" && window.Kruk && Kruk.tameNow) Kruk.tameNow();
             else if (what === "prologue" && window.Prologue && Prologue.replay) Prologue.replay();
         }
-    };
+    }, { owner: "Debug", name: "f9", priority: -100 });
 
-    // the three tabs: their names and the key help shown over the list
-    const TABS = [
-        { name: "Zdarzenia", help: "↑↓ wybierz   OK wykonaj   Q / E zakładka   Esc zamknij" },
-        { name: "Budowanie", help: "↑↓ wybierz   OK postaw (za darmo, od razu gotowe)   Q / E zakładka   Esc zamknij" },
-        { name: "Przedmioty", help: "↑↓ wybierz   ←→ ilość   OK dodaj   Tab / [ ] rodzaj   Q / E zakładka   Esc zamknij" },
-        { name: "Rdzeń", help: "↑↓ przewiń   OK odśwież   Q / E zakładka   Esc zamknij" },
-        { name: "Kot", help: "↑↓ wybierz   OK każ mu (wraca na mapę)   na opisie OK odśwież   Q / E zakładka   Esc zamknij" },
-        { name: "Wyspa i fabuła", help: "↑↓ wybierz   ←→ zmień   OK wykonaj (przejścia wracają na mapę)   Q / E zakładka   Esc zamknij" }
-    ];
+    // the tabs: their names and the key help shown over the list (js/teksty/f9.txt, zakladki.<n>.name / .help)
+    const TABS = Watki.scal([{}, {}, {}, {}, {}, {}], "f9", "zakladki");
     const ITEMS_TAB = 2, CORE_TAB = 3, CAT_TAB = 4, ISLE_TAB = 5;
     // ---- the island tab ("Wyspa i fabuła", 2026-10-16 - the user's decision): the six island places and the story's big moments at
-    // once. Where to go: [name, map, x, y, facing, the line under it, "low": the low tide set] - each the landing tile of the place's
-    // own way in (always walkable)
+    // once. Where to go: { id, map, x, y, d (facing), low (the low tide set) } - each the landing tile of the place's own way in
+    // (always walkable); its name (nazwa) and the line under it (opis): js/teksty/f9.txt, wyspa.miejsca.<id>
     // (2026-10-18: the outdoor maps doubled - tools/powieksz: the landings by their east / south edges moved with them)
     const ISLE_GO = [
-        ["Przystań", 125, 110, 19, 4, "Map125: Janek, Roch Szkwał, celnik, prom. Lądujesz przy ścieżce z Podgrodzia."],
-        ["Pustelnia na klifie", 155, 24, 70, 8, "Map155: brat Kleofas, skryptorium, ule, wieża z dzwonem. Lądujesz przy zejściu na przystań."],
-        ["Urwisko Kruków", 157, 1, 19, 6, "Map157: kruczarnia, gniazda kruków, krata przelewu cysterny. Lądujesz na ścieżce od pustelni."],
-        ["Przylądek z latarnią", 159, 30, 78, 8, "Map159: latarnik Bazyli, wieża latarni, dzwon mgłowy. Lądujesz na ścieżce z gór."],
-        ["Garnizon nad zatoką", 162, 22, 1, 2, "Map162: rotmistrz, kwatermistrz Kłos, palisada, łacha do wraku. Lądujesz przy drodze z przystani."],
-        ["Wrak na mieliźnie", 165, 78, 20, 4, "Map165: kadłub na mieliźnie, wyrwa pod pokład. Ustawia odpływ (łacha sucha); pływ z zegara wraca niżej.", "low"],
-        ["Stara cysterna zakonu", 167, 3, 20, 6, "Map167: zbiornik, słup z miarą, czerpak, dźwignia kraty. Lądujesz przy zejściu z piętra 30."],
-        ["Chata pod lasem", 111, 8, 81, 2, "Podgrodzie (Map111): przed drzwiami chaty pod lasem i jej działką (dom na sprzedaż u sołtysa)."],
-        ["Spalona zagroda", 168, 98, 12, 4, "Map168: zgliszcza zagrody Ługów (zadanie D21). Lądujesz przy drodze ze Skraju lasu."]
+        { id: "przystan", map: 125, x: 110, y: 19, d: 4 },
+        { id: "pustelnia", map: 155, x: 24, y: 70, d: 8 },
+        { id: "urwisko", map: 157, x: 1, y: 19, d: 6 },
+        { id: "latarnia", map: 159, x: 30, y: 78, d: 8 },
+        { id: "garnizon", map: 162, x: 22, y: 1, d: 2 },
+        { id: "wrak", map: 165, x: 78, y: 20, d: 4, low: true },
+        { id: "cysterna", map: 167, x: 3, y: 20, d: 6 },
+        { id: "chata", map: 111, x: 8, y: 81, d: 2 },
+        { id: "zagroda", map: 168, x: 98, y: 12, d: 4 }
     ];
-    const ISLE_INSIDE = [["Skryptorium", 156, 6, 8, 8], ["Izba latarnika", 160, 6, 8, 8], ["Laterna", 161, 5, 7, 8], ["Kwatera rotmistrza", 163, 6, 8, 8],
-        ["Wrak - pod pokładem", 166, 4, 11, 8], ["Chata pod lasem - izba", 154, 4, 8, 8], ["Dom Ługów", 169, 6, 8, 8], ["Piwnica kantoru", 171, 2, 4, 2],
+    Watki.scal(ISLE_GO, "f9", "wyspa.miejsca", "id");
+    // the rooms inside ("Wnętrze": ←→): { id, map, x, y, d } - the names: js/teksty/f9.txt, wyspa.wnetrza.<id>.nazwa
+    const ISLE_INSIDE = [
+        { id: "skryptorium", map: 156, x: 6, y: 8, d: 8 }, { id: "izbaLatarnika", map: 160, x: 6, y: 8, d: 8 },
+        { id: "laterna", map: 161, x: 5, y: 7, d: 8 }, { id: "kwatera", map: 163, x: 6, y: 8, d: 8 },
+        { id: "wrak", map: 166, x: 4, y: 11, d: 8 }, { id: "chata", map: 154, x: 4, y: 8, d: 8 },
+        { id: "domLugow", map: 169, x: 6, y: 8, d: 8 }, { id: "piwnicaKantoru", map: 171, x: 2, y: 4, d: 2 },
         // (2026-10-17) W7: the manor's rooms (Dwor.js, maps 172-174)
-        ["Dwór - hol", 172, 11, 13, 8], ["Dwór - biblioteka", 173, 8, 10, 8], ["Dwór - gabinet", 174, 7, 9, 8]];
-    const WATER = [null, "red", "grey"], WATER_NAME = { red: "czerwona", grey: "szara" };
+        { id: "dworHol", map: 172, x: 11, y: 13, d: 8 }, { id: "dworBiblioteka", map: 173, x: 8, y: 10, d: 8 },
+        { id: "dworGabinet", map: 174, x: 7, y: 9, d: 8 }];
+    Watki.scal(ISLE_INSIDE, "f9", "wyspa.wnetrza", "id");
+    const placeGo = p => [p.nazwa, p.map, p.x, p.y, p.d];   // (as go() takes it: [name, map, x, y, facing])
+    const WATER = [null, "red", "grey"], WATER_NAME = Watki.scal({}, "f9", "wyspa.woda");   // (the sea's colour forced: its word by the key)
     const isleIcon = id => ($dataItems[id] ? $dataItems[id].iconIndex : 0);
     const storyOn = () => !!(window.Story && Story.active && Story.active());
-    // (2026-10-17) W4 "Krew kasztelana": straight to a chapter - since 2026-10-23 a row of the thread engine (Watki.f9, the jumps in
-    // Kasztelan_Data.js; ←→ 1-9, the 7th chapter twice: the bar, the cellar's night)
-    // (2026-10-17) W5 "Towary z kontynentu" (Kantor.js): straight to a chapter - ←→ the chapter, OK jumps (flags, hour, place)
-    const W5_NAMES = { 1: "dziwny kupiec", 2: "trzy stuknięcia", 3: "nocny tragarz", 4: "rejestr", 5: "komu to dać", 6: "noc promu", 7: "co dalej z kantorem" };
-    // (2026-10-17) W7 "Dwór z kamieni twierdzy" (Dwor.js): straight to a chapter - ←→ the chapter, OK jumps (payments, flags, hour, place)
-    const W7_NAMES = { 1: "dług", 2: "zaproszenie", 3: "dwa życia Feliksa", 4: "gabinet nocą", 5: "prawda i ostatnia spłata", 6: "do kogo najpierw", 7: "Lord przy Sercu" };
-    // (2026-10-17) W9 ch. 3 "Rywal w ruinach" (Rywal.js): the rival forced (←→ the variant), the meeting on a floor (←→ 1-10)
-    const W9_KEYS = ["", "baltazar", "grum", "lord", "kopacze"];
-    const w9Name = i => (window.RywalData ? RywalData.TX.f9Names[W9_KEYS[i] || "gra"] : W9_KEYS[i] || "z gry");   // (js/teksty/rywal.txt: "" - "gra")
+    // (2026-10-17) W4 "Krew kasztelana", W5 "Towary z kontynentu", W7 "Dwór z kamieni twierdzy", W9 ch. 3 "Rywal w ruinach": straight
+    // to a chapter / the rival forced - since 2026-10-23 (W4) and 2026-10-29 (W5, W7, W9) the rows of the thread engine (Watki.f9: the
+    // jumps and the rows in the threads' data - Kasztelan_Data, Kantor_Data, Dwor_Data, Rywal_Data); this file knows none of them
     const isleLabel = {
-        w9: i => (window.Rywal ? "W9: rywal (wymuś wariant): " + w9Name(i) + "   ←→ zmień, OK zacznij" : "W9: rywal (brak Rywal.js)"),
-        w9meet: n => (window.Rywal ? "W9: rywal - spotkanie na piętrze " + n + "   ←→ piętro, OK idź" : "W9: rywal - spotkanie (brak Rywal.js)"),
-        w5: n => (window.Kantor ? "W5: rozdział " + n + " - " + W5_NAMES[n] + "   ←→ zmień, OK idź" : "W5: przeskocz do rozdziału (brak Kantor.js)"),
-        w7: n => (window.Dwor ? "W7: rozdział " + n + " - " + W7_NAMES[n] + "   ←→ zmień, OK idź" : "W7: przeskocz do rozdziału (brak Dwor.js)"),
-        inside: i => "Wnętrze: " + ISLE_INSIDE[i][0] + "   ←→ zmień, OK idź",
+        inside: i => Watki.wstaw(TK.kod.inside[0], { nazwa: ISLE_INSIDE[i].nazwa }),
         tide: kind => {
-            const W = window.Wyspa, name = kind === "low" ? "Odpływ" : "Przypływ";
-            if (!W || !W.forceTide) return name + " (brak Wyspa.js)";
+            const W = window.Wyspa, name = kind === "low" ? TK.kod.tide[0] : TK.kod.tide[1];
+            if (!W || !W.forceTide) return Watki.wstaw(TK.kod.tide[2], { name: name });
             const f = W.tideForced();
-            if (f === kind) return name + " wymuszony   OK: pływy znowu z zegara";
-            return name + " teraz" + (f ? "" : "   (z zegara teraz: " + (W.tide().low ? "odpływ" : "przypływ") + ")");
+            if (f === kind) return Watki.wstaw(TK.kod.tide[3], { name: name });
+            return Watki.wstaw(TK.kod.tide[7], { name: name, "2": f ? "" : Watki.wstaw(TK.kod.tide[6], { "1": W.tide().low ? TK.kod.tide[4] : TK.kod.tide[5] }) });
         },
         water: () => {
             const C = window.CzerwonaWoda;
-            if (!C || !C.force) return "Woda w morzu (brak CzerwonaWoda.js)";
+            if (!C || !C.force) return TK.kod.water[0];
             const f = C.forced();
-            return "Woda w morzu: " + (f ? WATER_NAME[f] + " (wymuszona)" : "z pogody - dziś " + (C.phase().grey ? "szara" : "czerwona")) + "   ←→ / OK zmień";
+            return Watki.wstaw(TK.kod.water[3], { "1": f ? Watki.wstaw(TK.kod.water[1], { "1": WATER_NAME[f] }) : Watki.wstaw(TK.kod.water[2], { "1": C.phase().grey ? "szara" : "czerwona" }) });
         },
         lose: () => {
-            if (!storyOn()) return "Świt dnia 61 bez spłaty (gra bez fabuły - nie ma długu)";
+            if (!storyOn()) return TK.kod.lose[0];
             const s = Story.state();
-            if (s.lost) return "Działka już przepadła (dzień " + s.lost.day + ")";
-            if (s.done || s.paid >= s.debt) return "Świt dnia 61 bez spłaty (dług już spłacony)";
-            return "Świt dnia 61 bez spłaty: strata działki, scena na działce dziadka";
+            if (s.lost) return Watki.wstaw(TK.kod.lose[1], { day: s.lost.day });
+            if (s.done || s.paid >= s.debt) return TK.kod.lose[2];
+            return TK.kod.lose[3];
         },
         pay: () => {
-            if (!storyOn()) return "Spłać dług (gra bez fabuły - nie ma długu)";
+            if (!storyOn()) return TK.kod.pay[0];
             const s = Story.state();
-            if (s.lost) return s.buy && s.buy.done ? "Działka odkupiona od Lorda (dzień " + s.buy.done + ")" : "Odkup działkę od Lorda: " + Story.buyLeft() + " G";
-            if (s.done || s.paid >= s.debt) return "Dług spłacony (" + s.paid + " / " + s.debt + " G)";
-            return "Spłać dług: " + Story.left() + " G (z " + s.debt + " G)";
+            if (s.lost) return s.buy && s.buy.done ? Watki.wstaw(TK.kod.pay[1], { done: s.buy.done }) : Watki.wstaw(TK.kod.pay[2], { "1": Story.buyLeft() });
+            if (s.done || s.paid >= s.debt) return Watki.wstaw(TK.kod.pay[3], { paid: s.paid, debt: s.debt });
+            return Watki.wstaw(TK.kod.pay[4], { "1": Story.left(), debt: s.debt });
         },
         raven: () => {
-            if (!window.Kruk) return "Oswojony kruk (brak Kruk.js)";
+            if (!window.Kruk) return TK.kod.raven[0];
             const s = Kruk.state();
-            return s && s.stage === "tame" ? "Kruk oswojony: " + (s.name || "Kruk") : "Oswojony kruk od razu (potem ekran imienia)";
+            return s && s.stage === "tame" ? Watki.wstaw(TK.kod.raven[1], { "1": s.name || "Kruk" }) : TK.kod.raven[2];
         },
         // (2026-10-23) the texts' files read again (Watki.przeladuj): the last result in the label
         texts: () => {
             const W = window.Watki;
-            if (!W || !W.przeladuj) return "Wczytaj teksty od nowa (brak Watki.js)";
+            if (!W || !W.przeladuj) return TK.kod.texts[0];
             const r = W.ostatnieWczytanie();
-            return "Wczytaj teksty od nowa" + (r ? "   (" + r.text + ")" : "   (" + W.pliki().length + " plików w js/teksty)");
+            return Watki.wstaw(TK.kod.texts[2], { "1": r ? "   (" + r.text + ")" : Watki.wstaw(TK.kod.texts[1], { length: W.pliki().length }) });
         },
-        favor: () => (window.Garnizon && Garnizon.favor ? "Przychylność garnizonu: " + Garnizon.favor() + " / 100   ← -20   → +20" : "Przychylność garnizonu (brak Garnizon.js)"),
+        favor: () => (window.Garnizon && Garnizon.favor ? Watki.wstaw(TK.kod.favor[0], { "1": Garnizon.favor() }) : TK.kod.favor[1]),
         cistern: () => {
             const q = window.TownQuests, f = q && q.state ? q.state().flags : {};
-            return f.cisternOpen ? "Cysterna otwarta (dzień " + f.cisternOpen + ")" : "Otwórz cysternę (jak dzwon „cztery i dwa”, W1 rozdz. 7)";
+            return f.cisternOpen ? Watki.wstaw(TK.kod.cistern[0], { cisternOpen: f.cisternOpen }) : TK.kod.cistern[1];
         }
     };
     // ---- the cat tab (HomeLife.js's Mruczek): what it does now, where, for how long, what is next; its doings to send it to
-    const CAT_SPOTS = [
-        ["hearth", "Idź spać przy palenisku", "przy palenisku"],
-        ["rug", "Idź na dywan", "na dywanie"],
-        ["sill", "Wskocz na parapet okna", "na parapecie okna"],
-        ["stroll", "Pospaceruj po izbie", "na spacerze po izbie"],
-        ["feet", "Usiądź u stóp dziadka", "u stóp dziadka"],
-        ["heroBed", "Idź spać na posłanie bohatera", "na posłaniu bohatera"]
-    ];
-    const CAT_STEP = { go: "idzie", face: "odwraca się", look: "rozgląda się", stay: "odpoczywa", stayFeet: "siedzi u stóp dziadka", curl: "zwija się do snu",
-        uncurl: "przeciąga się i wstaje", hop: "skacze" };
-    const CAT_DAY = [
-        "W dzień (6-22) sam wybiera, co robić (bez powtarzania miejsca, poza paleniskiem):",
-        "  - najczęściej śpi zwinięty przy palenisku (1-3 min),",
-        "  - dywan: chwilę siedzi albo śpi (1-2 min),",
-        "  - parapet okna we wnęce bohatera (8-19): podskok i 25-60 s na górze,",
-        "  - spacer po izbie: idzie gdzieś i się rozgląda,",
-        "  - u stóp dziadka, gdy ten buja się albo pali fajkę (często tam zasypia).",
-        "W nocy (22-6): śpi na posłaniu bohatera (czasem przy palenisku), 2-5 min.",
-        "Chodzi w 8 kierunkach, omija bohatera i dziadka (czeka, potem obchodzi),",
-        "czasem przystaje i się rozgląda; nie wychodzi z domu, nie siada w drzwiach.",
-        "Pogłaskany mruczy (~4 s, serduszko); raz dziennie +5 wytrzymałości."
-    ];
+    // (id: HomeLife's spot; rozkaz: the row that sends it there, gdzie: where it is - js/teksty/f9.txt, kot.miejsca.<id>)
+    const CAT_SPOTS = Watki.scal([{ id: "hearth" }, { id: "rug" }, { id: "sill" }, { id: "stroll" }, { id: "feet" }, { id: "heroBed" }], "f9", "kot.miejsca", "id");
+    // what it is doing (HomeLife's steps: go, face, look...) and its day, as the tab tells them: js/teksty/f9.txt, kot.kroki / kot.dzien
+    const CAT_STEP = Watki.scal({}, "f9", "kot.kroki"), CAT_DAY = Watki.scal([], "f9", "kot.dzien");
     function catDoing(st) {
-        if (st.purr > 0) return "mruczy (pogłaskany)";
-        const spot = (CAT_SPOTS.find(r => r[0] === st.spot) || [])[2] || "";
-        if (st.cur === "go" || st.moving) return "idzie" + (spot ? " - " + spot.replace(/^na spacerze po izbie$/, "spacer po izbie") : "");
-        if (st.pose === "sleep") return "śpi zwinięty " + spot;
-        if (st.pose === "curl") return "zwija się do snu " + spot;
-        if (st.pose === "uncurl") return "przeciąga się i wstaje";
-        if (st.cur === "stayFeet") return "siedzi u stóp dziadka";
+        if (st.purr > 0) return TK.kod.catDoing[0];
+        const spot = (CAT_SPOTS.find(r => r.id === st.spot) || {}).gdzie || "";
+        if (st.cur === "go" || st.moving) return "idzie" + (spot ? " - " + (st.spot === "stroll" ? TK.kod.catDoing[1] : spot) : "");   // (the stroll's own words here)
+        if (st.pose === "sleep") return Watki.wstaw(TK.kod.catDoing[2], { spot: spot });
+        if (st.pose === "curl") return Watki.wstaw(TK.kod.catDoing[3], { spot: spot });
+        if (st.pose === "uncurl") return TK.kod.catDoing[4];
+        if (st.cur === "stayFeet") return TK.kod.catDoing[5];
         if (!st.perch && st.steps.includes("hop") && (st.spot === "sill" || st.spot === "heroBed"))   // (on the floor under it, before the jump)
-            return st.spot === "sill" ? "siedzi pod oknem, zaraz wskoczy na parapet" : "siedzi przy posłaniu, zaraz na nie wskoczy";
-        if (st.pose === "sit") return "siedzi " + spot;
+            return st.spot === "sill" ? TK.kod.catDoing[6] : TK.kod.catDoing[7];
+        if (st.pose === "sit") return Watki.wstaw(TK.kod.catDoing[8], { spot: spot });
         return (CAT_STEP[st.cur] || "stoi") + (spot ? " " + spot : "");
     }
     // the item tab's three kinds (a second band under the tabs; Tab or [ / ] switch them): tools and weapons, materials, food
-    const KINDS = ["Narzędzia i broń", "Surowce", "Jedzenie"];
+    const KINDS = Watki.scal([], "f9", "przedmioty.rodzaje");   // (js/teksty/f9.txt)
     const TOOL_EXTRA = [59, 127, 129, 138, 141, 142, 144];   // plain items that are tools all the same: torch, arrows, waterskin, bucket, cauldron, shears, tongs
     const RAW_FOOD = [94, 98, 157, 159, 161, 168, 173, 174];   // raw hare, fish, deer, boar, wolf, bear, herring, cod: food still to be cooked
     function kindOf(item) {
@@ -277,82 +256,73 @@
     const last = { tab: 0, kind: 0, index: {} };
     const spot = (tab, kind) => (tab === ITEMS_TAB ? tab + ":" + kind : String(tab));
 
-    const heroLookLabel = () => "Nowa postać: " + (window.HeroLook && HeroLook.active() ? "włączona" : "wyłączona (stary Reid)");
-    const layersLabel = () => "Warstwy z regionów: " + (window.RegionLayers && RegionLayers.overlay ? "ukryj kolory" : "pokaż kolory (1 zielony, 2 czerwony, 3 niebieski)");
-    // Underground.js: go to a floor (0 = Ruiny Zamku, every 10th made by hand, 100 = the Heart's chamber); ←→ change the floor
-    const ugFloorName = f => {
-        const d = window.Underground_Data, hm = d && d.FLOORS && d.FLOORS[f];
-        return f === 0 ? " (Ruiny Zamku)" : hm ? " (" + hm.name + ")" : "";
-    };
-    const ugFloorLabel = f => "Podziemia: piętro " + f + ugFloorName(f) + "   ←→ zmień (Shift: o 10), OK idź";
-    const ugGateLabel = () => "Podziemia: zejście z piwnicy " + (window.Underground && Underground.isOpen() ? "otwarte (zamknij)" : "zamknięte (otwórz)");
-    const ugLocksLabel = () => "Podziemia: zamki Serca na próbę " + (window.Underground && Underground.state().forceLocks.all ? "włączone (wyłącz)" : "wyłączone (włącz)");
-    const ugLiftsLabel = () => "Podziemia: wszystkie przystanki windy" + (window.Underground && Underground.liftStops().length >= 9 ? " (już działają)" : "");
+    const layersLabel = () => Watki.wstaw(TK.kod.layersLabel[2], { "1": window.RegionLayers && RegionLayers.overlay ? TK.kod.layersLabel[0] : TK.kod.layersLabel[1] });
+    // (2026-10-29) the sections of the thread engine (Watki.f9.sekcje()) on a tab: "zdarzenia" (this first tab - the rows only: the
+    // underground's, Act III's) or "wyspa" (the island tab - a header and the rows); a row keeps every field the thread gave it
+    const threadSections = tab => (window.Watki && Watki.f9 ? Watki.f9.sekcje().filter(s => (s.zakladka || "wyspa") === tab) : []);
     // Creatures.js (combat stage 4): a creature of the ruins / a boss of the underground a few tiles away; ←→ choose which
     const crKeys = kind => (window.Creatures ? Object.keys(kind === "cr_boss" ? Creatures.BOSSES : Creatures.KINDS) : []);
     const crLabel = (kind, i) => {
         const key = crKeys(kind)[i] || "";
-        if (kind === "cr_boss") { const b = Creatures.BOSSES[key] || {}; return "Boss podziemi: " + b.name + " (piętro " + b.floor + ")   ←→ zmień, OK przywołaj"; }
+        if (kind === "cr_boss") { const b = Creatures.BOSSES[key] || {}; return Watki.wstaw(TK.kod.crLabel[0], { name: b.name, floor: b.floor }); }
         const k = Creatures.KINDS[key] || {};
-        return "Stwór z ruin: " + (k.plural ? k.plural + " (rój)" : k.name) + "   ←→ zmień, OK przywołaj";
+        return Watki.wstaw(TK.kod.crLabel[2], { "1": k.plural ? Watki.wstaw(TK.kod.crLabel[1], { plural: k.plural }) : k.name });
     };
     // every row of the menu, each with its tab: 0 the events, 1 the buildings, 2 the items
     function allRows() {
         const rows = [
-            { tab: 0, kind: "hour", label: "+1 godzina", icon: 240 },
-            { tab: 0, kind: "day", label: "+1 dzień", icon: 241 }
+            { tab: 0, kind: "hour", label: TK.kod.allRows[0], icon: 240 },
+            { tab: 0, kind: "day", label: TK.kod.allRows[1], icon: 241 }
         ];
         if (window.Sky && Sky.sunTimes) {   // the sky (Sky.js): jump to the dawn or the sunset, a misty morning
-            rows.push({ tab: 0, kind: "dawn", label: "Godzina: świt (przed wschodem słońca)", icon: 240 },
-                { tab: 0, kind: "dusk", label: "Godzina: zachód słońca", icon: 240 },
-                { tab: 0, kind: "mist", label: "Gęsta mgła o świcie", icon: 70 });
+            rows.push({ tab: 0, kind: "dawn", label: TK.kod.allRows[2], icon: 240 },
+                { tab: 0, kind: "dusk", label: TK.kod.allRows[3], icon: 240 },
+                { tab: 0, kind: "mist", label: TK.kod.allRows[4], icon: 70 });
         }
         if (window.Survival && Survival.forceStorm) {   // the weather (Survival.js plans it, Storm.js shows it)
-            rows.push({ tab: 0, kind: "storm", label: "Burza teraz (2 godziny)", icon: 66 },
-                { tab: 0, kind: "strike", label: "Piorun tuż obok", icon: 66 },
-                { tab: 0, kind: "treestrike", label: "Piorun w drzewo (na ekranie)", icon: 66 },
-                { tab: 0, kind: "calm", label: "Koniec pogody na dziś", icon: 70 });
+            rows.push({ tab: 0, kind: "storm", label: TK.kod.allRows[5], icon: 66 },
+                { tab: 0, kind: "strike", label: TK.kod.allRows[6], icon: 66 },
+                { tab: 0, kind: "treestrike", label: TK.kod.allRows[7], icon: 66 },
+                { tab: 0, kind: "calm", label: TK.kod.allRows[8], icon: 70 });
         }
         if (window.Birds) {   // the birds (Birds.js): a flock landing near the player, a raid on the sown fields
-            rows.push({ tab: 0, kind: "birds", label: "Stadko ptaków na ziemi", icon: 407 },
-                { tab: 0, kind: "raid", label: "Nalot ptaków na pole", icon: 408 });
+            rows.push({ tab: 0, kind: "birds", label: TK.kod.allRows[9], icon: 407 },
+                { tab: 0, kind: "raid", label: TK.kod.allRows[10], icon: 408 });
         }
         if (window.Motyle) {   // the butterflies (Motyle.js): a summer meadow after rain here and now (a peacock too), moths at a fire at night, the net
-            rows.push({ tab: 0, kind: "motyle", label: "Motyle teraz (łąka, lato, po deszczu)", icon: Motyle.ICON.butterfly },
-                { tab: 0, kind: "cmy", label: "Ćmy przy ogniu (noc)", icon: Motyle.ICON.butterfly },
-                { tab: 0, kind: "siatka", label: "Daj siatkę na motyle", icon: Motyle.ICON.net });
+            rows.push({ tab: 0, kind: "motyle", label: TK.kod.allRows[11], icon: Motyle.ICON.butterfly },
+                { tab: 0, kind: "cmy", label: TK.kod.allRows[12], icon: Motyle.ICON.butterfly },
+                { tab: 0, kind: "siatka", label: TK.kod.allRows[13], icon: Motyle.ICON.net });
         }
-        if (window.Hunting && Hunting.SPECIES.boar) rows.push({ tab: 0, kind: "boar", label: "Dzik w pobliżu", icon: 416 });   // Hunting.js: one boar a few tiles away
-        if (window.Hunting && Hunting.SPECIES.wolf) rows.push({ tab: 0, kind: "wolves", label: "Wataha wilków (3)", icon: 416 });   // Hunting.js: a pack a few tiles away
-        if (window.Hunting && Hunting.SPECIES.deer) rows.push({ tab: 0, kind: "deer", label: "Jeleń w pobliżu", icon: 420 });   // Hunting.js: a deer a few tiles away (any hour)
-        if (window.Hunting && Hunting.SPECIES.bear) rows.push({ tab: 0, kind: "bear", label: "Niedźwiedź w pobliżu", icon: $dataItems[170] ? $dataItems[170].iconIndex : 416 });   // Hunting.js: a bear 7-10 tiles away (any hour)
+        if (window.Hunting && Hunting.SPECIES.boar) rows.push({ tab: 0, kind: "boar", label: TK.kod.allRows[14], icon: 416 });   // Hunting.js: one boar a few tiles away
+        if (window.Hunting && Hunting.SPECIES.wolf) rows.push({ tab: 0, kind: "wolves", label: TK.kod.allRows[15], icon: 416 });   // Hunting.js: a pack a few tiles away
+        if (window.Hunting && Hunting.SPECIES.deer) rows.push({ tab: 0, kind: "deer", label: TK.kod.allRows[16], icon: 420 });   // Hunting.js: a deer a few tiles away (any hour)
+        if (window.Hunting && Hunting.SPECIES.bear) rows.push({ tab: 0, kind: "bear", label: TK.kod.allRows[17], icon: $dataItems[170] ? $dataItems[170].iconIndex : 416 });   // Hunting.js: a bear 7-10 tiles away (any hour)
         if (window.Humans) {   // Humans.js (combat stage 3): men a few tiles away, an ambush, a camp at night
-            rows.push({ tab: 0, kind: "h_bandit", label: "Bandyta w pobliżu", icon: $dataItems[156] ? $dataItems[156].iconIndex : 418 },
-                { tab: 0, kind: "h_knifer", label: "Nożownik w pobliżu", icon: $dataItems[91] ? $dataItems[91].iconIndex : 347 },
-                { tab: 0, kind: "h_archer", label: "Łucznik w pobliżu", icon: $dataItems[126] ? $dataItems[126].iconIndex : 386 },
-                { tab: 0, kind: "h_mercenary", label: "Najemnik w pobliżu", icon: $dataItems[155] ? $dataItems[155].iconIndex : 417 },
-                { tab: 0, kind: "h_ambush", label: "Zasadzka (2 bandytów i łucznik)", icon: 76 },
-                { tab: 0, kind: "h_camp", label: "Obóz bandytów (noc)", icon: 64 },
-                { tab: 0, kind: "h_raid", label: "Napad na śpiącego (bandyci)", icon: 64 });
+            rows.push({ tab: 0, kind: "h_bandit", label: TK.kod.allRows[18], icon: $dataItems[156] ? $dataItems[156].iconIndex : 418 },
+                { tab: 0, kind: "h_knifer", label: TK.kod.allRows[19], icon: $dataItems[91] ? $dataItems[91].iconIndex : 347 },
+                { tab: 0, kind: "h_archer", label: TK.kod.allRows[20], icon: $dataItems[126] ? $dataItems[126].iconIndex : 386 },
+                { tab: 0, kind: "h_mercenary", label: TK.kod.allRows[21], icon: $dataItems[155] ? $dataItems[155].iconIndex : 417 },
+                { tab: 0, kind: "h_ambush", label: TK.kod.allRows[22], icon: 76 },
+                { tab: 0, kind: "h_camp", label: TK.kod.allRows[23], icon: 64 },
+                { tab: 0, kind: "h_raid", label: TK.kod.allRows[24], icon: 64 });
         }
         if (window.Starcia && window.Humans && window.Hunting) {   // Starcia.js: the beasts and the men fight each other (watch it from aside)
-            rows.push({ tab: 0, kind: "st_camp", label: "Wilki przy obozie bandytów (noc)", icon: 416 },
-                { tab: 0, kind: "st_boar", label: "Dzik i bandyta", icon: 416 },
-                { tab: 0, kind: "st_bear", label: "Niedźwiedź i bandyta", icon: $dataItems[170] ? $dataItems[170].iconIndex : 416 });
+            rows.push({ tab: 0, kind: "st_camp", label: TK.kod.allRows[25], icon: 416 },
+                { tab: 0, kind: "st_boar", label: TK.kod.allRows[26], icon: 416 },
+                { tab: 0, kind: "st_bear", label: TK.kod.allRows[27], icon: $dataItems[170] ? $dataItems[170].iconIndex : 416 });
         }
         if (window.Creatures) rows.push({ tab: 0, kind: "cr_kind", pick: 0, label: crLabel("cr_kind", 0), icon: 189 },   // Creatures.js: one of the 8 kinds
             { tab: 0, kind: "cr_boss", pick: 0, label: crLabel("cr_boss", 0), icon: 189 });   // a boss (the guardian, floors 20-90)
-        if (window.Combat) rows.push({ tab: 0, kind: "xp", label: "+200 doświadczenia", icon: 87 });   // Combat.js: to try the levels
-        if (window.HeroLook) rows.push({ tab: 0, kind: "herolook", label: heroLookLabel(), icon: 84 });   // HeroLook.js: the new hero, on trial
+        if (window.Combat) rows.push({ tab: 0, kind: "xp", label: TK.kod.allRows[28], icon: 87 });   // Combat.js: to try the levels
         if (window.RegionLayers) rows.push({ tab: 0, kind: "layers", label: layersLabel(), icon: 190 });   // RegionLayers.js: the painted regions 1-3 in colour over the map
-        if (window.Underground) rows.push({ tab: 0, kind: "underground", floor: 1, label: ugFloorLabel(1), icon: 189 },   // Underground.js: any floor
-            { tab: 0, kind: "ugGate", label: ugGateLabel(), icon: 195 },   // the grate in the tavern's cellar (switch 11) on / off
-            { tab: 0, kind: "ugLocks", label: ugLocksLabel(), icon: 195 },   // the Heart's three locks known without the quests (W2-W4)
-            { tab: 0, kind: "ugLifts", label: ugLiftsLabel(), icon: 189 });  // every stop of the lift (floors 10-90) working
+        // the threads' rows of this tab (Watki.f9, zakladka "zdarzenia"): the underground (a floor, the grate, the locks, the lift, the
+        // Heart's endings - Underground_Data.js), Act III (arm, now, clear - Act3_Data.js); ←→ and OK go to the engine (row.watek)
+        for (const sec of threadSections("zdarzenia")) for (const r of sec.rows) rows.push(Object.assign({}, r, { tab: 0 }));
         if (window.Farming && Farming.startFreePlacement) {   // every building of Farming.js, put down free and finished
             for (const [type, def] of Object.entries(Farming.BUILDINGS)) {
                 const iconItem = Farming.itemOf(def.pack || def.cost[0][0]);
-                rows.push({ tab: 1, kind: "build", type, label: "Postaw: " + def.name, icon: iconItem ? iconItem.iconIndex : 0 });
+                rows.push({ tab: 1, kind: "build", type, label: Watki.wstaw(TK.kod.allRows[29], { name: def.name }), icon: iconItem ? iconItem.iconIndex : 0 });
             }
         }
         const items = $dataItems.filter(item => item && item.name && !/^-{3,}/.test(item.name));   // (not the database's "-----" dividers)
@@ -393,7 +363,7 @@
     // (the rest indented under it); the section lines ("Stany:", "Zegary mapy:"...) are the ones not indented
     Window_DebugList.prototype.coreRows = function() {
         const T = window.Tawerna, rows = [], width = this.innerWidth - this.itemPadding() * 2;
-        const lines = T && T.debug ? T.debug.lines() : ["Brak TawernaCore.js - rdzeń nie jest wczytany"];
+        const lines = T && T.debug ? T.debug.lines() : [TK.kod.coreRows[0]];
         for (const text of lines) {
             const indent = /^\s*/.exec(text)[0] + "    ";
             let row = "";
@@ -409,27 +379,27 @@
     // the cat tab: read as the tab opens (and again with OK on a line of text)
     Window_DebugList.prototype.catRows = function() {
         const H = window.HomeLife, rows = [], info = (label, head) => rows.push({ tab: CAT_TAB, kind: "info", label, head: !!head });
-        if (!H || !H.catState) { info("Brak HomeLife.js - kota nie ma", true); return rows; }
+        if (!H || !H.catState) { info(TK.kod.catRows[0], true); return rows; }
         const st = H.catState(), icon = 0;   // (no icon of its own in the icon set)
-        info("Kot Mruczek - teraz:", true);
+        info(TK.kod.catRows[1], true);
         if (!st) {
-            info("  Kot jest tylko w domu dziadka (mapa " + H.MAP + ") - tu go nie ma.");
-            rows.push({ tab: CAT_TAB, kind: "catHouse", label: "Zabierz mnie do domu dziadka", icon });
+            info(Watki.wstaw(TK.kod.catRows[2], { MAP: H.MAP }));
+            rows.push({ tab: CAT_TAB, kind: "catHouse", label: TK.kod.catRows[3], icon });
         } else {
-            info("  Robi: " + catDoing(st));
-            info("  Gdzie: kratka " + st.x + ", " + st.y + (st.target && (st.target[0] !== st.x || st.target[1] !== st.y) ? " (idzie na " + st.target[0] + ", " + st.target[1] + ")" : ""));
-            if (st.left > 0) info("  Jeszcze: ok. " + st.left + " s" + (!st.cur && !st.steps.length ? ", potem sam wybierze, co robić" : ""));
-            if (st.steps.length) info("  Dalej: " + st.steps.map(t => CAT_STEP[t] || t).join(", "));
-            info("Każ mu (menu wraca na mapę, żeby popatrzeć):", true);
+            info(Watki.wstaw(TK.kod.catRows[4], { "1": catDoing(st) }));
+            info(Watki.wstaw(TK.kod.catRows[6], { x: st.x, y: st.y, "3": st.target && (st.target[0] !== st.x || st.target[1] !== st.y) ? Watki.wstaw(TK.kod.catRows[5], { "1": st.target[0], "2": st.target[1] }) : "" }));
+            if (st.left > 0) info(Watki.wstaw(TK.kod.catRows[8], { left: st.left, "2": !st.cur && !st.steps.length ? TK.kod.catRows[7] : "" }));
+            if (st.steps.length) info(Watki.wstaw(TK.kod.catRows[9], { "1": st.steps.map(t => CAT_STEP[t] || t).join(", ") }));
+            info(TK.kod.catRows[10], true);
             const can = H.catSpots();
-            for (const [spot, label] of CAT_SPOTS) {
+            for (const { id: spot, rozkaz: label } of CAT_SPOTS) {
                 if (can.includes(spot)) rows.push({ tab: CAT_TAB, kind: "cat", spot, label, icon });
-                else if (spot === "feet") info("  (u stóp dziadka - tylko gdy dziadek siedzi w fotelu)");
+                else if (spot === "feet") info(TK.kod.catRows[11]);
             }
-            rows.push({ tab: CAT_TAB, kind: "catChoose", label: "Niech sam wybierze, co robić", icon },
-                { tab: CAT_TAB, kind: "catPet", label: "Pogłaszcz (mruczy)", icon: 82 });
+            rows.push({ tab: CAT_TAB, kind: "catChoose", label: TK.kod.catRows[12], icon },
+                { tab: CAT_TAB, kind: "catPet", label: TK.kod.catRows[13], icon: 82 });
         }
-        info("Jego dzień:", true);
+        info(TK.kod.catRows[14], true);
         for (const line of CAT_DAY) info("  " + line);
         return rows;
     };
@@ -439,45 +409,37 @@
     Window_DebugList.prototype.isleRows = function() {
         const rows = [], head = label => rows.push({ tab: ISLE_TAB, kind: "info", label, head: true });
         const row = (kind, label, icon, desc, more) => rows.push(Object.assign({ tab: ISLE_TAB, kind, label, icon, desc }, more || {}));
-        head("Przenieś mnie do:");
-        ISLE_GO.forEach((g, i) => row("isleGo", g[0], 190, g[5], { go: i }));
-        row("isleInside", isleLabel.inside(last.isle || 0), 189, "Wnętrza nowych miejsc i domów: ←→ wybierz, OK przenosi do środka, przy drzwiach.", { pick: last.isle || 0 });
-        head("Morze i pogoda:");
-        row("isleTide", isleLabel.tide("low"), 70, "Odpływ od razu: łacha z garnizonu do wraku sucha, przełącznik 20 włączony. Drugi raz: pływy z zegara.", { tide: "low" });
-        row("isleTide", isleLabel.tide("high"), 70, "Przypływ od razu: łacha pod wodą, ładownia wraku zalana. Drugi raz: pływy z zegara.", { tide: "high" });
-        row("isleFog", "Mglista noc na przylądku (wizja w latarni)", 70, "Noc z mgłą morską, D22 zaczęte; przenosi do laterny - OK przy soczewce, gdy Bazyli jest na górze.");
-        row("isleWater", isleLabel.water(), isleIcon(173) || 70, "Morze przy wyspie: kolejno z pogody / czerwone (zakwit, śnięte ryby) / szare (po deszczu).");
-        head("Fabuła:");
-        row("isleLose", isleLabel.lose(), 241, "Zegar na świt dnia po terminie, bohater na działce dziadka: działka przechodzi na Lorda, scena ludzi dworu.");
-        row("islePay", isleLabel.pay(), 314, "Brakujące złoto dodane i od razu zapłacone (po stracie działki: odkup za 3000 G).");
-        row("isleGold", "+1000 G", 314, "Tysiąc sztuk złota do sakiewki.");
-        row("isleXp", "+10 000 doświadczenia", 87, "Dziesięć tysięcy punktów doświadczenia naraz: poziomy, punkty atrybutów i umiejętności jak za zwykłe zdobycie.");
-        row("islePrologue", "Odtwórz prolog „Ostatni prom”", isleIcon(172) || 87, "Sam film (bez ekranu imienia), potem powrót na mapę w to samo miejsce - stan gry bez zmian.");
-        row("isleTexts", isleLabel.texts(), 189, "Pliki js/teksty/*.txt czytane jeszcze raz z dysku: poprawka w pliku widoczna od razu, bez ponownego uruchamiania gry. Wynik: ile plików albo pierwszy błąd z numerem linii.");
+        head(TK.kod.isleRows[0]);
+        ISLE_GO.forEach((g, i) => row("isleGo", g.nazwa, 190, g.opis, { go: i }));
+        row("isleInside", isleLabel.inside(last.isle || 0), 189, TK.kod.isleRows[1], { pick: last.isle || 0 });
+        head(TK.kod.isleRows[2]);
+        row("isleTide", isleLabel.tide("low"), 70, TK.kod.isleRows[3], { tide: "low" });
+        row("isleTide", isleLabel.tide("high"), 70, TK.kod.isleRows[4], { tide: "high" });
+        row("isleFog", TK.kod.isleRows[5], 70, TK.kod.isleRows[6]);
+        row("isleWater", isleLabel.water(), isleIcon(173) || 70, TK.kod.isleRows[7]);
+        head(TK.kod.isleRows[8]);
+        row("isleLose", isleLabel.lose(), 241, TK.kod.isleRows[9]);
+        row("islePay", isleLabel.pay(), 314, TK.kod.isleRows[10]);
+        row("isleGold", "+1000 G", 314, TK.kod.isleRows[11]);
+        row("isleXp", TK.kod.isleRows[12], 87, TK.kod.isleRows[13]);
+        row("islePrologue", TK.kod.isleRows[14], isleIcon(172) || 87, TK.kod.isleRows[15]);
+        row("isleTexts", isleLabel.texts(), 189, TK.kod.isleRows[16]);
         head("Postacie:");
-        row("isleRaven", isleLabel.raven(), isleIcon(179) || 87, "Kruk z Urwiska oswojony od razu: obrączka, flagi krukTame i kronikaKarta6, ekran imienia. Klawisz K: jego menu.");
-        row("isleFavor", isleLabel.favor(), isleIcon(155) || 87, "Przychylność garnizonu nad zatoką: 40 glejt na wrak, 60 kowal, 80 dwóch żołnierzy w obronie (Akt III).");
-        row("isleCistern", isleLabel.cistern(), 391, "Flagi cisternOpen, sluiceHalf, millRuns, kubaHonest: zasuwa na piętrze 30 prowadzi do cysterny, D28.");
+        row("isleRaven", isleLabel.raven(), isleIcon(179) || 87, TK.kod.isleRows[17]);
+        row("isleFavor", isleLabel.favor(), isleIcon(155) || 87, TK.kod.isleRows[18]);
+        row("isleCistern", isleLabel.cistern(), 391, TK.kod.isleRows[19]);
         // (2026-10-18) the white eagle (Orzel.js): its rows come from the plugin - Orzel.f9Rows() / f9Pick(row, delta) / f9(row)
         if (window.Orzel && Orzel.f9Rows) {
-            head("Biały orzeł:");
+            head(TK.kod.isleRows[20]);
             for (const r of Orzel.f9Rows()) row("isleEagle", r.label, r.icon, r.desc, { what: r.what, pick: r.pick });
         }
-        // (2026-10-23) the threads of the engine (Watki.js) with chapter jumps in their data - W4 first: each its header and its row
-        // (Watki.f9.sekcje() / wybierz(row, delta) / ok(row)); a thread's data registers them, never this file
-        if (window.Watki && Watki.f9) {
-            for (const sec of Watki.f9.sekcje()) {
-                head(sec.head);
-                for (const r of sec.rows) row(r.kind, r.label, r.icon, r.desc, { pick: r.pick, watek: r.watek });
-            }
+        // (2026-10-23) the threads of the engine (Watki.js) with chapter jumps or rows of their own in their data - the ferry's
+        // travellers, W15, W16, W4, W5, W7, W9...: each its header and its rows (Watki.f9.sekcje() / wybierz(row, delta) / ok(row)); a
+        // thread's data registers them, never this file
+        for (const sec of threadSections("wyspa")) {
+            head(sec.head);
+            for (const r of sec.rows) rows.push(Object.assign({}, r, { tab: ISLE_TAB, desc: r.desc || "" }));
         }
-        head("Wątek W5 (kantor Baltazara):");
-        row("isleW5", isleLabel.w5(last.w5 || 1), 189, "Ustawia „Towary z kontynentu” na początku rozdziału (flagi, pora, miejsce) i przenosi tam, gdzie się dzieje.", { pick: last.w5 || 1 });
-        head("Wątek W7 (dwór Lorda):");
-        row("isleW7", isleLabel.w7(last.w7 || 1), 189, "Ustawia „Dwór z kamieni twierdzy” na początku rozdziału (spłaty, flagi, pora) i przenosi tam, gdzie się dzieje.", { pick: last.w7 || 1 });
-        head("Wątek W9 (rywal w ruinach):");
-        row("isleW9", isleLabel.w9(last.w9 || 0), 189, "Rywal z zewnątrz w ruinach (piętra 1-10). OK: krata otwarta, rywal już w drodze (piętro 3), bohater w Ruinach Zamku przy śladach.", { pick: last.w9 || 0 });
-        row("isleW9Meet", isleLabel.w9meet(last.w9f || 4), 190, "Rywal (wariant z wiersza wyżej) czeka na tym piętrze (1-10); bohater na jego schodach, kilka kroków do ich ogniska.", { pick: last.w9f || 4 });
         // (2026-10-21) the new terrain's packages (docs/rozszerzenia/PLAN.md): their rows come from Okolice.f9 - sections() / pick(row, delta)
         // / ok(row); a package registers them with Okolice.f9.add({ owner, title, rows, pick, ok }) and never edits this file
         if (window.Okolice && Okolice.f9 && Okolice.f9.sections) {
@@ -552,13 +514,6 @@
     };
     Window_DebugList.prototype.changeQty = function(delta) {
         const row = this.rowData();
-        if (row && row.kind === "underground") {   // (the floor to go to: 0-100; Shift: 10 at a time)
-            row.floor = (row.floor + delta * (Input.isPressed("shift") ? 10 : 1) + 101 * 10) % 101;
-            row.label = ugFloorLabel(row.floor);
-            SoundManager.playCursor();
-            this.redrawItem(this.index());
-            return;
-        }
         if (row && (row.kind === "cr_kind" || row.kind === "cr_boss")) {   // (which creature / boss)
             const n = crKeys(row.kind).length || 1;
             row.pick = (row.pick + delta + n) % n;
@@ -581,36 +536,8 @@
             this.redrawItem(this.index());
             return;
         }
-        if (row && row.watek && window.Watki && Watki.f9) {   // (a thread of the engine: its chapter - W4: 1-9, the 7th twice)
+        if (row && row.watek && window.Watki && Watki.f9) {   // (a row of a thread of the engine - any tab: its chapter, floor, variant...)
             Watki.f9.wybierz(row, delta);
-            SoundManager.playCursor();
-            this.redrawItem(this.index());
-            return;
-        }
-        if (row && row.kind === "isleW5") {   // (the chapter of W5: 1-7)
-            row.pick = last.w5 = ((row.pick - 1 + delta + 7) % 7) + 1;
-            row.label = isleLabel.w5(row.pick);
-            SoundManager.playCursor();
-            this.redrawItem(this.index());
-            return;
-        }
-        if (row && row.kind === "isleW7") {   // (the chapter of W7: 1-7)
-            row.pick = last.w7 = ((row.pick - 1 + delta + 7) % 7) + 1;
-            row.label = isleLabel.w7(row.pick);
-            SoundManager.playCursor();
-            this.redrawItem(this.index());
-            return;
-        }
-        if (row && row.kind === "isleW9") {   // (the rival's variant: from the game / Baltazar / Grum / the Lord / the diggers)
-            row.pick = last.w9 = (row.pick + delta + W9_KEYS.length) % W9_KEYS.length;
-            row.label = isleLabel.w9(row.pick);
-            SoundManager.playCursor();
-            this.redrawItem(this.index());
-            return;
-        }
-        if (row && row.kind === "isleW9Meet") {   // (the floor of the meeting: 1-10)
-            row.pick = last.w9f = ((row.pick - 1 + delta + 10) % 10) + 1;
-            row.label = isleLabel.w9meet(row.pick);
             SoundManager.playCursor();
             this.redrawItem(this.index());
             return;
@@ -729,7 +656,11 @@
 
     Scene_Debug.prototype.onOk = function() {
         const row = this._list.rowData();
-        if (row.kind === "hour" || row.kind === "day") {
+        if (row.watek && window.Watki && Watki.f9) {   // a row of a thread of the engine (any tab): its OK - then the labels read again
+            if (this.onThreadOk(row)) return;     // (gone back to the map)
+            if (this._tab === ISLE_TAB) this._list.setTab(this._tab, this._list.index());
+            else this._list.redrawItem(this._list.index());
+        } else if (row.kind === "hour" || row.kind === "day") {
             $gameSystem.advanceDayNight(row.kind === "day" ? 24 : 1);
             $gameTemp.pushLootPopup(row.icon, row.label, "#9ff0a8");
         } else if (row.kind === "dawn" || row.kind === "dusk") {   // today's sunrise / sunset (the sun's height): back to the map to watch it
@@ -739,7 +670,7 @@
         } else if (row.kind === "mist") {   // this morning's mist thick (past the morning: tomorrow's)
             const day = $gameSystem.dayNightDay(), t = Sky.sunTimes(day);
             Sky.forceMist(1, $gameSystem.dayNightHour() < t.rise + 2 ? day : day + 1);
-            $gameTemp.pushLootPopup(row.icon, $gameSystem.dayNightHour() < t.rise + 2 ? "Mgła o świcie: dziś" : "Mgła o świcie: jutro", "#9ff0a8");
+            $gameTemp.pushLootPopup(row.icon, $gameSystem.dayNightHour() < t.rise + 2 ? TK.kod.onOk[0] : TK.kod.onOk[1], "#9ff0a8");
         } else if (row.kind === "storm" || row.kind === "calm") {
             if (row.kind === "storm") Survival.forceStorm(2);
             else Survival.calmWeather();
@@ -752,7 +683,7 @@
             Motyle.pending = row.kind;
         } else if (row.kind === "siatka") {
             $gameParty.gainItem($dataItems[Motyle.ITEM.net], 1);
-            $gameTemp.pushLootPopup(row.icon, "Siatka na motyle", "#9ff0a8");
+            $gameTemp.pushLootPopup(row.icon, TK.kod.onOk[2], "#9ff0a8");
         } else if (row.kind === "boar" || row.kind === "wolves" || row.kind === "deer" || row.kind === "bear") {
             this.popScene();   // spawned once the map is back
             Hunting.pending = row.kind;
@@ -767,26 +698,6 @@
             Creatures.pending = crKeys(row.kind)[row.pick];
         } else if (row.kind === "xp") {
             Combat.gainXp(200, "F9");
-        } else if (row.kind === "herolook") {   // the new hero on and off (the menu stays: the row says which)
-            HeroLook.setActive(!HeroLook.active());
-            row.label = heroLookLabel();
-            this._list.redrawItem(this._list.index());
-        } else if (row.kind === "underground") {   // Underground.js: to that floor's stairs (the gate does not matter here)
-            Underground.go(row.floor);
-            this.popScene();
-        } else if (row.kind === "ugGate") {
-            if (Underground.isOpen()) Underground.close(); else Underground.open();
-            row.label = ugGateLabel();
-            this._list.redrawItem(this._list.index());
-        } else if (row.kind === "ugLocks") {   // (the menu stays: the row says which)
-            Underground.forceLock("all", !Underground.state().forceLocks.all);
-            row.label = ugLocksLabel();
-            this._list.redrawItem(this._list.index());
-        } else if (row.kind === "ugLifts") {
-            for (const f of window.Underground_Data.LIFT.stops) Underground.state().lifts[f] = true;
-            Underground.lift(true);
-            row.label = ugLiftsLabel();
-            this._list.redrawItem(this._list.index());
         } else if (row.kind === "layers") {   // the regions' colours on and off (the menu stays: the row says which)
             RegionLayers.overlay = !RegionLayers.overlay;
             row.label = layersLabel();
@@ -819,34 +730,40 @@
         this._list.activate();
     };
 
+    // a row of a thread of the engine (Watki.f9.ok - any tab): a place to go ({ go }), back to the map ({ back }), a popup ({ say,
+    // bad }) or nothing ({} - the menu stays); true when the menu closed
+    Scene_Debug.prototype.onThreadOk = function(row) {
+        const r = Watki.f9.ok(row) || {};
+        if (r.go && !$dataMapInfos[r.go[1]]) { $gameTemp.pushLootPopup(row.icon, Watki.wstaw(TK.kod.go[0], { "1": r.go[1] }), "#ffb4a0"); return false; }
+        if (r.go) $gamePlayer.reserveTransfer(r.go[1], r.go[2], r.go[3], r.go[4], 0);
+        if (r.go || r.back) { SoundManager.playOk(); this.popScene(); return true; }
+        if (r.say) $gameTemp.pushLootPopup(row.icon, r.say, r.bad ? "#ffb4a0" : "#9ff0a8");
+        return false;
+    };
+
     // the island tab's OK: true when the menu closed (back to the map), false when it stays
     Scene_Debug.prototype.onIsleOk = function(row) {
         const say = (icon, text, bad) => $gameTemp.pushLootPopup(icon, text, bad ? "#ffb4a0" : "#9ff0a8");
         const back = () => { SoundManager.playOk(); this.popScene(); return true; };
         const go = g => {
-            if (!$dataMapInfos[g[1]]) { say(row.icon, "Nie ma mapy " + g[1], true); return false; }
+            if (!$dataMapInfos[g[1]]) { say(row.icon, Watki.wstaw(TK.kod.go[0], { "1": g[1] }), true); return false; }
             $gamePlayer.reserveTransfer(g[1], g[2], g[3], g[4], 0);
             return back();
         };
-        if (row.watek && window.Watki && Watki.f9) {   // (a thread of the engine: the chapter set up, then there - or why not)
-            const r = Watki.f9.ok(row) || {};
-            if (r.go) return go(r.go);
-            if (r.say) say(row.icon, r.say, !!r.bad);
-            return false;
-        }
+        if (row.watek && window.Watki && Watki.f9) return this.onThreadOk(row);   // (a thread of the engine - onOk sends it there itself)
         switch (row.kind) {
             case "isleGo": {
                 const g = ISLE_GO[row.go];
-                if (g[6] === "low" && window.Wyspa && Wyspa.forceTide) Wyspa.forceTide("low");
-                return go(g);
+                if (g.low && window.Wyspa && Wyspa.forceTide) Wyspa.forceTide("low");
+                return go(placeGo(g));
             }
-            case "isleInside": return go(ISLE_INSIDE[row.pick]);
+            case "isleInside": return go(placeGo(ISLE_INSIDE[row.pick]));
             case "isleTide":
                 if (window.Wyspa && Wyspa.forceTide) Wyspa.forceTide(Wyspa.tideForced() === row.tide ? null : row.tide);
                 break;
             case "isleFog": {
                 const L = window.Latarnia, Q = window.TownQuests;
-                if (!L || !L.nightNow || !window.Sky || !Sky.forceMist) { say(row.icon, "Brak Latarnia.js albo Sky.js", true); break; }
+                if (!L || !L.nightNow || !window.Sky || !Sky.forceMist) { say(row.icon, TK.kod.onIsleOk[0], true); break; }
                 if (L.nightNow() === null) $gameSystem.setDayNightHour(23);
                 const nk = L.nightNow() === null ? $gameSystem.dayNightDay() : L.nightNow();
                 Sky.forceMist(1, nk + 1);                                   // (the fog of the night = tomorrow's misty morning)
@@ -858,22 +775,22 @@
                 if (window.CzerwonaWoda && CzerwonaWoda.force) CzerwonaWoda.force(WATER[(WATER.indexOf(CzerwonaWoda.forced()) + 1) % WATER.length]);
                 break;
             case "isleLose": {
-                if (!storyOn()) { say(row.icon, "Gra bez fabuły - nie ma długu", true); break; }
+                if (!storyOn()) { say(row.icon, TK.kod.onIsleOk[1], true); break; }
                 const s = Story.state();
-                if (s.lost || s.done || s.paid >= s.debt || s.pending) { say(row.icon, s.lost ? "Działka już przepadła" : "Dług spłacony - działki nie stracisz", true); break; }
+                if (s.lost || s.done || s.paid >= s.debt || s.pending) { say(row.icon, s.lost ? TK.kod.onIsleOk[2] : TK.kod.onIsleOk[3], true); break; }
                 s.off = false;                                              // (the deadline on, as in a real game)
-                $gameSystem._dayNightDay = s.deadline + 1;
+                window.Tawerna.state("clock").day = s.deadline + 1;   // (DayNightCycle's clock; $gameSystem._dayNightDay before)
                 $gameSystem.setDayNightHour((Story.DAWN || 6) + 0.05);
-                return go(["Działka dziadka", Story.MAP && Story.MAP.field ? Story.MAP.field : 3, 22, 14, 2]);
+                return go([TK.kod.onIsleOk[4], Story.MAP && Story.MAP.field ? Story.MAP.field : 3, 22, 14, 2]);
             }
             case "islePay": {
-                if (!storyOn()) { say(row.icon, "Gra bez fabuły - nie ma długu", true); break; }
+                if (!storyOn()) { say(row.icon, TK.kod.onIsleOk[1], true); break; }
                 const s = Story.state(), lost = !!s.lost;
                 const n = lost ? (s.buy && s.buy.done ? 0 : Story.buyLeft()) : s.done ? 0 : Story.left();
-                if (!(n > 0)) { say(row.icon, "Nie ma czego spłacać", true); break; }
+                if (!(n > 0)) { say(row.icon, TK.kod.onIsleOk[5], true); break; }
                 $gameParty.gainGold(n);
                 const got = Story.pay(n);
-                say(row.icon, (lost ? "Odkup działki: " : "Dług: ") + got + " G zapłacone");
+                say(row.icon, Watki.wstaw(TK.kod.onIsleOk[8], { "1": (lost ? TK.kod.onIsleOk[6] : TK.kod.onIsleOk[7]) + got }));
                 break;
             }
             case "isleGold":
@@ -881,27 +798,27 @@
                 say(row.icon, "+1000 G");
                 break;
             case "isleXp": {
-                if (!window.Combat || !Combat.gainXp) { say(row.icon, "Brak Combat.js", true); break; }
+                if (!window.Combat || !Combat.gainXp) { say(row.icon, TK.kod.onIsleOk[9], true); break; }
                 const lv0 = Combat.hero().level, got = Combat.gainXp(10000, "F9");
-                if (!got) { say(row.icon, "Już najwyższy poziom", true); break; }
+                if (!got) { say(row.icon, TK.kod.onIsleOk[10], true); break; }
                 const lv = Combat.hero().level;
-                say(row.icon, "+10 000 dośw." + (lv > lv0 ? " (poziom " + lv0 + " → " + lv + ")" : ""));
+                say(row.icon, Watki.wstaw(TK.kod.onIsleOk[12], { "1": lv > lv0 ? Watki.wstaw(TK.kod.onIsleOk[11], { lv0: lv0, lv: lv }) : "" }));
                 break;
             }
             case "islePrologue":
-                if (!window.Prologue || !Prologue.replay) { say(row.icon, "Brak Prologue.js", true); break; }
+                if (!window.Prologue || !Prologue.replay) { say(row.icon, TK.kod.onIsleOk[13], true); break; }
                 $gameTemp._isleAct = "prologue";   // (pushed over the map once it is back: Debug's Scene_Map.update)
                 return back();
             case "isleRaven":
-                if (!window.Kruk || !Kruk.tameNow) { say(row.icon, "Brak Kruk.js", true); break; }
-                if (Kruk.state().stage === "tame") { say(row.icon, "Kruk już oswojony", true); break; }
+                if (!window.Kruk || !Kruk.tameNow) { say(row.icon, TK.kod.onIsleOk[14], true); break; }
+                if (Kruk.state().stage === "tame") { say(row.icon, TK.kod.onIsleOk[15], true); break; }
                 $gameTemp._isleAct = "raven";
                 return back();
             case "isleFavor":
                 if (window.Garnizon && Garnizon.addFavor) Garnizon.addFavor(20, "F9", true);
                 break;
             case "isleOkolice": {   // (the new terrain's packages: Okolice.f9.ok says what happened - "back", a place to go, a popup)
-                if (!window.Okolice || !Okolice.f9) { say(row.icon, "Brak Okolice.js", true); break; }
+                if (!window.Okolice || !Okolice.f9) { say(row.icon, TK.kod.onIsleOk[16], true); break; }
                 const r = Okolice.f9.ok(row);
                 if (r && r.go) return go(r.go);
                 if (r && r.back) return back();
@@ -909,39 +826,15 @@
                 break;
             }
             case "isleEagle": {   // (the white eagle: Orzel.f9 says what happened - "back" to the map, a place to go, a popup)
-                if (!window.Orzel || !Orzel.f9) { say(row.icon, "Brak Orzel.js", true); break; }
+                if (!window.Orzel || !Orzel.f9) { say(row.icon, TK.kod.onIsleOk[17], true); break; }
                 const r = Orzel.f9(row);
                 if (r && r.go) return go(r.go);
                 if (r && r.back) return back();
                 if (r && r.say) say(row.icon, r.say, !!r.bad);
                 break;
             }
-            case "isleW5": {
-                if (!window.Kantor || !Kantor.debugJump) { say(row.icon, "Brak Kantor.js", true); break; }
-                const g = Kantor.debugJump(row.pick);
-                if (!g) { say(row.icon, "Brak zadania W5 (TownQuests)", true); break; }
-                return go(["W5", g[0], g[1], g[2], g[3]]);
-            }
-            case "isleW7": {
-                if (!window.Dwor || !Dwor.debugJump) { say(row.icon, "Brak Dwor.js", true); break; }
-                const g = Dwor.debugJump(row.pick);
-                if (!g) { say(row.icon, "Gra bez fabuły albo brak zadania W7", true); break; }
-                return go(["W7", g[0], g[1], g[2], g[3]]);
-            }
-            case "isleW9": {
-                if (!window.Rywal || !Rywal.debugStart) { say(row.icon, "Brak Rywal.js", true); break; }
-                const g = Rywal.debugStart(W9_KEYS[row.pick]);
-                if (!g) { say(row.icon, "Brak podziemi (Underground.js)", true); break; }
-                return go(["W9", g[0], g[1], g[2], g[3]]);
-            }
-            case "isleW9Meet": {
-                if (!window.Rywal || !Rywal.debugMeet) { say(row.icon, "Brak Rywal.js", true); break; }
-                const g = Rywal.debugMeet(row.pick, W9_KEYS[last.w9 || 0]);
-                if (!g) { say(row.icon, "Brak piętra " + row.pick, true); break; }
-                return go(["W9", g[0], g[1], g[2], g[3]]);
-            }
             case "isleTexts": {   // (the texts' files again: the label and a notice on the map say how it went)
-                if (!window.Watki || !Watki.przeladuj) { say(row.icon, "Brak Watki.js", true); break; }
+                if (!window.Watki || !Watki.przeladuj) { say(row.icon, TK.kod.onIsleOk[25], true); break; }
                 Watki.przeladuj(r => {
                     if (window.Tawerna) Tawerna.popup(r.text, { top: true, color: r.bad ? "#ff9f8f" : "#9ff0a8" });
                     const s = SceneManager._scene;
@@ -951,10 +844,10 @@
             }
             case "isleCistern": {
                 const q = window.TownQuests, f = q && q.state ? q.state().flags : null;
-                if (!f) { say(row.icon, "Brak TownQuests.js", true); break; }
+                if (!f) { say(row.icon, TK.kod.onIsleOk[26], true); break; }
                 for (const k of ["cisternOpen", "sluiceHalf", "millRuns", "kubaHonest"]) if (!f[k]) f[k] = $gameSystem.dayNightDay();
                 if (window.Cysterna && Cysterna.syncSwitches) Cysterna.syncSwitches();
-                say(row.icon, "Cysterna otwarta (cisternOpen)");
+                say(row.icon, TK.kod.onIsleOk[27]);
                 break;
             }
         }

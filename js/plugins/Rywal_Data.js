@@ -145,12 +145,63 @@
 
     // why this party (the journal and the report) and every word of the chapter: js/teksty/rywal.txt (why.*, the rest)
 
-    // the steps added to TownQuests' W9 (Rywal.js appends them - the step numbers of old saves stay as they were)
-    // (their text read from the words each time: a getter - Rywal.js copies them with it)
-    const STEPS = [
-        { ch: 3, type: "custom", vars: "w9Rywal", w9r: "rival", get text() { return TX.step; } },
-        { ch: 3, type: "pause", vars: "w9Rywal", w9r: "after", get text() { return TX.stepAfter; } }
-    ];
+    // ------------------------------------------------------------------ the thread (the engine Watki.js, docs/WATKI_DANE.md, 2026-10-28)
+    // the state "rywal"; W9's two steps of chapter 3 (the engine puts them at W9's places 1 and 2 - the step numbers of old saves stay
+    // as they were; their text: step / stepAfter of the words); the leader's talk at the meeting (ctx: partia - the party's key,
+    // pierwszy - the first talk, brama - at the tenth gate; ctx.vars.ranny - the wounded man's name). The hooks: Rywal.js
+    const defaults = () => ({
+        gateDay: 0, enter: 0,                       // the day the grate was first seen open; the hour (abs) they go in
+        party: "", why: "", forced: "",             // who (a key of D.PARTIES), why (a key of D.WHY), F9's choice
+        rf: 0, at: 0, gateSince: 0,                 // the floor they are on (0: not in yet), the hour they came onto it, at the tenth gate since
+        passed: {}, trail: {}, robbed: {}, robSeen: {}, torn: {},   // the floors they left (traces), the containers they emptied, the notes they took
+        seen: {}, first: 0, cellar: 0, w9: 0,       // the floors the hero saw traces on, the first sighting, the cellar's thought, W9 started by us
+        met: 0, talked: 0, fight: null,             // the meeting: the day it began, the first talk, a fight running { mapId, lead }
+        outcome: "", how: "", outDay: 0, outFloor: 0, learned: 0, deep: false, lead: "", gold: 0,
+        ropes: {}, traps: {}, notes: {}, toldUp: 0, recovered: 0
+    });
+    const opt = (etykieta, gdy, tresc) => Object.assign({ etykieta, tresc }, gdy ? { gdy } : {});
+    W.watek({
+        id: "rywal", wtyczka: "Rywal", teksty: "rywal", zadanie: "W9",
+        stan: { klucz: "rywal", wersja: 1, domyslne: defaults },
+        // the hero's thoughts (or a character's): a bubble 210 frames, the next after 220, also while a talk runs
+        mysli: { klatki: 210, odstep: 220, czekaj: false },
+        // F9 ("Wyspa i fabuła", the section "Wątek W9 (rywal w ruinach)"): the rival forced (←→ from the game / Baltazar's men / Grum's /
+        // the Lord's / the diggers; OK: the grate open, the rival on his way - floor 3, the hero in the Castle Ruins) and the meeting on a
+        // floor (←→ 1-10; OK: the rival of the row above waits there, the hero on his stairs). The words: js/teksty/rywal.txt (f9, f9desc,
+        // f9Meet, f9MeetDesc, f9Names.*, f9Naglowek, f9Brak); ←→ and OK: Rywal.js's hooks (f9Zmienne, f9Wybierz, f9Ok)
+        f9: { kolejnosc: 9, naglowek: "f9Naglowek", brak: "f9Brak", wiersze: [
+            { co: "wariant", rodzaj: "isleW9", etykieta: "f9", opis: "f9desc", ikona: 189, zmienne: "f9Zmienne", wybierz: "f9Wybierz", ok: "f9Ok" },
+            { co: "spotkanie", rodzaj: "isleW9Meet", etykieta: "f9Meet", opis: "f9MeetDesc", ikona: 190, zmienne: "f9Zmienne", wybierz: "f9Wybierz", ok: "f9Ok" }
+        ] },
+        kroki: [
+            { nazwa: "w9Rywal", indeks: 1, ch: 3, tekst: "step", zmienne: "krokZmienne", w9r: "rival" },
+            { nazwa: "w9RywalPo", indeks: 2, ch: 3, typ: "pause", tekst: "stepAfter", zmienne: "krokZmienne", w9r: "after" }
+        ],
+        rozmowy: {
+            // the leader: his greeting (the first time: by the party and the place - Rywal.js greetLines), his ask, the hero's options
+            przywodca: [
+                { jesli: "ctx:pierwszy", to: [{ hak: "powitanie" }], inaczej: ["again.{partia}"] },
+                "ask.{partia}",
+                { wybor: [
+                    opt("opt.fight.{partia}", null, ["fightStart.{partia}", { zrob: "walka" }]),
+                    opt("opt.sell", ["ctx:partia=baltazar", "znaSlowa"], ["sell.ask", "sell.say", { zrob: "uklad", args: ["haslo"] }]),
+                    opt("opt.guide", ["ctx:partia=kopacze", "znaSlowa"], ["guide.ask", "guide.say", { zrob: "uklad", args: ["przewodnik"] }]),
+                    opt("opt.report", "ctx:partia=lord", ["report.ask", "report.say", { zrob: "uklad", args: ["raport"] }]),
+                    opt("opt.turn", "ctx:partia=grum", [{ mow: "turn.ask", zmienne: { powody: { hak: "powody" } } },
+                        { jesli: "grumZawroci", to: ["turn.say", { zrob: "zawroc" }], inaczej: ["turn.need"] }]),
+                    opt("opt.warn", [{ lub: ["ctx:partia=baltazar", "ctx:partia=lord"] }, "!ctx:brama", "znaStraznika"], ["warn.ask", "warn.{partia}", { zrob: "ostrzez" }]),
+                    opt("opt.leave", null, ["leave.{partia}", { zrob: "odejdz" }])
+                ], anuluj: "ostatnia" }
+            ]
+        },
+        akcje: {
+            walka: [{ hak: "walka" }],
+            uklad: [{ hak: "uklad", args: [{ arg: 0 }] }],
+            zawroc: [{ hak: "zawroc" }],
+            ostrzez: [{ hak: "rozstrzygnij", args: ["zawrocili"] }],
+            odejdz: [{ stan: { walkOn: "dzis" } }]
+        }
+    });
 
-    window.RywalData = { MAP, IDS, EV, ART, FIRE_LIGHT, TIME, TRAIL, RUINS, FLOOR10, HEART, PARTIES, ORDER, LOOKS, get WHY() { return TX.why; }, TX, STEPS, OWNER: "Rywal" };
+    window.RywalData = { MAP, IDS, EV, ART, FIRE_LIGHT, TIME, TRAIL, RUINS, FLOOR10, HEART, PARTIES, ORDER, LOOKS, get WHY() { return TX.why; }, TX, OWNER: "Rywal" };
 })();

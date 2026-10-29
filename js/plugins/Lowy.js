@@ -14,7 +14,8 @@
 //     them through the API), the woken bear's rage by a wrapper of Combat.hitPlayer
 //   - the camps are Humans.js's (Humans.fixedCamp - the one marked block in Humans.js)
 //   - the gamekeeper is a TownLife resident (2905, Lowy_Data); his and the others' extra talk by Tawerna.talk.takeover
-//   - the quests are TownQuests' (K59-K62, D32-D33 in Lowy_Data; their custom steps' FX here), the board's contracts QuestBoard's
+//   - the quests are the thread "lowy" of Lowy_Data (the engine Watki.js: K59-K62, D32-D33 into TownQuests, the state, the talks with
+//     constant words and their actions); this file gives the hooks their conditions and actions ask for. The board's contracts: QuestBoard's
 //   - the strays are characters of this file (like Livestock.js's animals: not events, not saved - their state is)
 
 /*:
@@ -22,6 +23,8 @@
  * @plugindesc [paczka B] Zwierzęta i łowy: wilcza nora, gawra, błotnisko dzików, lizawka, stałe obozy, zwierzyniec Lorda z gajowym, zbłąkane zwierzęta, strzelnica. v1.1.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
+ * @base Lowy_Data
  * @orderAfter Okolice
  *
  * @help
@@ -68,6 +71,9 @@
     if (!T) throw new Error("Lowy.js: brak TawernaCore.js");
     const D = window.LowyData;
     if (!D || !D.ready) throw new Error("Lowy.js: Lowy_Data.js musi stać wyżej na liście wtyczek");
+    // the thread (Lowy_Data.js, the engine Watki.js): the state "lowy", K59-K62 / D32-D33, the talks and their actions, the flags
+    const w = Watki.get("lowy");
+    if (!w) throw new Error("Lowy.js: brak wątku „lowy” (Lowy_Data.js / Watki.js)");
     const VERSION = "1.1.0";
     const { ITEM, IDS, NORA, GAWRA, BLOTO, LIZAWKA, OBOZY, ZWIERZYNIEC: PARK, ZBLAKANE, STRZELNICA: RANGE, TX, TALK } = D;
 
@@ -108,9 +114,9 @@
         try { if (W && W.actTwo) return !!W.actTwo(); } catch (e) { /* (fall through) */ }
         return !!T.call("TownQuests", "actTwo");
     };
-    const tqFlag = name => { const q = TQ(); try { return !!(q && q.state && q.state().flags && q.state().flags[name]); } catch (e) { return false; } };
-    const setTqFlag = name => { const q = TQ(); try { if (q && q.state) q.state().flags[name] = day(); } catch (e) { /* (no quests) */ } };
-    const qRec = id => { const q = TQ(); try { return q && q.rec ? q.rec(id) : null; } catch (e) { return null; } };
+    const tqFlag = name => { try { return w.flag(name); } catch (e) { return false; } };
+    const setTqFlag = name => { const q = TQ(); try { if (q && q.state) q.state().flags[name] = day(); } catch (e) { /* (no quests) */ } };   // (always the day: the engine's w.setFlag keeps an older day)
+    const qRec = id => { try { return w.rec(id); } catch (e) { return null; } };
     const qStep = id => { const r = qRec(id); return r && r.s === "active" ? r.step : -1; };
     const qDone = id => { const r = qRec(id); return !!r && r.s === "done"; };
     const opinion = (n, why) => T.call("TownQuests", "addOpinion", n, why);
@@ -126,23 +132,10 @@
     const busy = () => !window.$gameMap || $gameMap.isEventRunning() || !sceneMap() || ($gameMessage && $gameMessage.isBusy());
 
     // ------------------------------------------------------------------
-    // Saved state (TawernaCore: _tw.lowy)
+    // Saved state (TawernaCore: _tw.lowy - the thread's, Lowy_Data.js: DEF)
     // ------------------------------------------------------------------
-    const DEF = () => ({
-        den: { meat: [], friendly: false, betrayed: false, emptyUntil: 0, choice: null, giftDay: -99, giftSeen: -1, forcePups: -1, seenBundles: [] },
-        bear: { deadYear: 0, wokeDay: -1, forceWinter: -1 },
-        wallow: { msg: -99, windows: {} },
-        lick: { until: 0, ever: false, watched: false, trophy: false, antlerKey: -1, windows: {} },
-        camps: { forceRab: -1, forceCzo: -1, marched: "" },
-        czo: { choice: null, bearDead: false, resolved: null, paid: false },
-        park: { seen: false, count: 0, shutUntil: 0, permitDay: -99, pending: [], wanted: null, legal: 0, fines: 0 },
-        d32: { taken: [false, false, false], met: false, choice: null },
-        strays: { done: {}, led: null, pos: {}, milkDay: -99 },
-        range: { best: 0, wins: 0, silver: false, beatBest: false, contestDay: -1, forceContest: -1, rounds: 0, last: null },
-        arrow: { rotmistrz: false, pustelnik: false },
-        trophies: []
-    });
-    const store = T.state.define("lowy", DEF, { version: 1, owner: PLUGIN });
+    const DEF = D.DEF;
+    const store = () => w.S();
     // (a save from an older version of the package: the missing parts filled in - once for each state object; S() is asked every frame)
     const filled = new WeakSet();
     function S() {
@@ -167,15 +160,19 @@
         const camp = Hn.campHere();
         return !!(camp && camp.fixed);
     }
-    (function registerPlaces() {
+    // (their names and texts are js/teksty/lowy.txt's - registered again once the words are in, still before any game; the first
+    // registration at load keeps the package's places and discoveries where they always stood among the other packages')
+    function registerPlaces() {
         const O = OK();
-        if (!O) { warn("brak Okolice.js - miejsca i odkrycia niezarejestrowane"); return; }
+        if (!O) { if (Watki.gotowe()) warn(TK.ostrzezenia.okolice); return; }
         O.registerSpots("B", D.SPOTS);
         for (const d of D.DISCOVER) {
             const when = d.day ? () => dayTime() : d.camp ? () => campLive(d.camp) : undefined;
             O.discoverable({ key: d.key, pkg: "B", map: d.map, x: d.x, y: d.y, name: d.name, text: d.text, icon: d.icon, xp: d.xp, near: d.near, when });
         }
-    })();
+    }
+    registerPlaces();
+    Watki.poTekstach(registerPlaces);
     const found = key => { const O = OK(); return !!(O && O.isFound && O.isFound(key)); };
 
     // ------------------------------------------------------------------
@@ -263,29 +260,10 @@
     }
 
     // ------------------------------------------------------------------
-    // The talk helpers (as in Kantor.js / Dwor.js): message pages with the speaker's bubble, choices, script calls back here
+    // The talks: the thread's (Lowy_Data rozmowy) and the ones built here from the game's state - one builder, Watki.mowa (message
+    // pages with the speaker's bubble, "> " the hero, "@key: " another speaker; choices; script calls back here)
     // ------------------------------------------------------------------
-    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
-    const HERO = { id: 0, name: "" };
-    const LINE = 46, PAGE = 3;
-    function wrap(text) {
-        const out = [];
-        let line = "";
-        for (const w of String(text).split(/\s+/)) {
-            if (!w) continue;
-            if (line && (line + " " + w).length > LINE) { out.push(line); line = w; } else line = line ? line + " " + w : w;
-        }
-        if (line) out.push(line);
-        return out;
-    }
-    function sayTo(out, spk, text, ind) {
-        const lines = wrap(text);
-        for (let i = 0; i < lines.length; i += PAGE) {
-            out.push(C(101, ["", 0, 0, 2, spk.name || ""], ind));
-            lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 ? "\\SPK[" + spk.id + "]" : "") + l], ind)));
-        }
-        return out;
-    }
+    const { C, HERO, choiceTo } = Watki.mowa;
     // the speakers a line may name with "@key: ": a resident (TownLife), the poacher by the snares, the hunters of the camp
     function speaker(key) {
         if (key === "rysiek") { const e = $gameMap.event(IDS.rysiek); return { id: e && mapId() === PARK.map ? IDS.rysiek : -1, name: TK.kod.speaker[0] }; }
@@ -293,28 +271,8 @@
         const L = TLf(), e = L && L.eventOf ? L.eventOf(key) : null, r = L && L.RESIDENTS ? L.RESIDENTS.find(x => x.key === key) : null;
         return { id: e && $gameMap.event(e.eventId()) === e ? e.eventId() : -1, name: r ? r.name : key };
     }
-    function linesTo(out, spk, arr, vars, ind) {
-        for (const raw of [].concat(arr || [])) {
-            if (!raw) continue;
-            const s = fill(raw, vars);
-            if (s.startsWith("> ")) { sayTo(out, HERO, s.slice(2), ind); continue; }
-            const m = /^@(\w+):\s*([\s\S]*)$/.exec(s);
-            if (m) sayTo(out, speaker(m[1]), m[2], ind);
-            else sayTo(out, spk, s, ind);
-        }
-        return out;
-    }
-    function choiceTo(out, labels, branches, cancel, ind) {
-        const i0 = ind || 0;
-        out.push(C(102, [labels, cancel === undefined ? labels.length - 1 : cancel, 0, 2, 0], i0));
-        labels.forEach((l, i) => {
-            out.push(C(402, [i, l], i0));
-            for (const c of branches[i] || []) out.push(Object.assign({}, c, { indent: (c.indent || 0) + i0 + 1 }));
-            out.push(C(0, [], i0 + 1));
-        });
-        out.push(C(404, [], i0));
-        return out;
-    }
+    // (the thread's words of its talks: "@key: " through the hook mowca - the same speaker)
+    const linesTo = (out, spk, arr, vars) => w.linie(out, spk, [].concat(arr || []), vars);
     const act = (out, args, ind) => (out.push(C(355, ["Lowy.act(this, " + JSON.stringify(args) + ")"], ind)), out);
     // a list run inside the talking event, or by itself on the map (no event running)
     function runList(interp, list) {
@@ -330,12 +288,15 @@
     // B1 THE WOLVES' DEN (Map023)
     // ==================================================================
     // the wolf cub: a species of its own (the wolf's sheet made small), no YIELD entry - nothing to dress
+    let pupSpecies = null;
     (function addPup() {
         const Hn = H();
-        if (Hn && Hn.SPECIES && !Hn.SPECIES.wolfPup) Hn.SPECIES.wolfPup = Object.assign({}, D.PUP);
+        if (Hn && Hn.SPECIES && !Hn.SPECIES.wolfPup) pupSpecies = Hn.SPECIES.wolfPup = Object.assign({}, D.PUP);
         const Cb = T.api("Combat");
         if (Cb && Cb.KILL_XP && Cb.KILL_XP.wolfPup === undefined) Cb.KILL_XP.wolfPup = 2;
     })();
+    // (its name once the words are in: js/teksty/lowy.txt, szczenie.name)
+    Watki.poTekstach(() => { if (pupSpecies) pupSpecies.name = D.PUP.name; });
     let denSession = { killed: 0, spawned: false, resolved: false };
     const denEmpty = () => S().den.emptyUntil > day();
     const denAdults = () => animals().filter(a => a._lowDen && !a._dead && a.kind() === "wolf");
@@ -531,10 +492,11 @@
     // ==================================================================
     let wallowSession = { window: "" };
     const muddy = () => !!($gameSystem && typeof $gameSystem.hasBuff === "function" && $gameSystem.hasBuff("ubloceny"));
-    (function defineMud() {
+    // (once the words are in - its name: js/teksty/lowy.txt, premie.ubloceny; still before any game)
+    Watki.poTekstach(function defineMud() {
         const Sv = T.api("Survival") || window.Survival;
-        if (Sv && Sv.defineBuff) Sv.defineBuff("ubloceny", { name: "Ubłocony", icon: D.ICON.kiel, desc: "pachniesz jak las: zwierzęta wyczują cię później" });
-    })();
+        if (Sv && Sv.defineBuff) Sv.defineBuff("ubloceny", { name: TK.premie.ubloceny.name, icon: D.ICON.kiel, desc: TK.premie.ubloceny.desc });
+    });
     const windowKey = ranges => { const h = hour(), i = ranges.findIndex(([a, b]) => h >= a && h < b); return i < 0 ? "" : day() + ":" + i; };
     const mudCells = () => { const out = []; for (let y = BLOTO.y; y < BLOTO.y + BLOTO.h; y++) for (let x = BLOTO.x; x < BLOTO.x + BLOTO.w; x++) out.push([x, y]); return out; };
     function cellsAround(cx, cy, lo, hi, n, avoidHero) {
@@ -644,13 +606,14 @@
         if (c.forceCzo === day()) return true;
         return actTwo() && !S().czo.resolved;
     }
-    (function registerCamps() {
+    // (once the words are in: Humans keeps a copy of the hunters' name - js/teksty/lowy.txt, obozy.czo.name)
+    Watki.poTekstach(function registerCamps() {
         const Hn = Hm();
-        if (!Hn || !Hn.fixedCamp) { warn("Humans.fixedCamp brak - stałe obozy wyłączone (blok paczki B w Humans.js)"); return; }
+        if (!Hn || !Hn.fixedCamp) { warn(TK.ostrzezenia.obozy); return; }
         const R = OBOZY.rabusie, Z = OBOZY.czo;
         Hn.fixedCamp(R.map, { x: R.x, y: R.y, size: R.size, tag: R.tag, when: rabusieWanted });
         Hn.fixedCamp(Z.map, { x: Z.x, y: Z.y, kinds: Z.kinds, looks: Z.looks, name: Z.name, tag: Z.tag, day: true, only: false, when: czoWanted, sack: Z.sack });
-    })();
+    });
     // the robbers' nights when the charcoal kiln burns (package C): the ones awake go to the kiln (a raid on Zbych)
     function campTick() {
         if (mapId() !== OBOZY.rabusie.map) return;
@@ -711,17 +674,10 @@
         if (mapId() !== OBOZY.czo.map || !campLive("czo") || busy()) return;
         const z = S().czo, Z = OBOZY.czo, near = heroDist(Z.x, Z.y) <= 4.5, men = czoMen();
         if (!near || men.some(h => h._engaged)) return;
-        if (qStep("D33") === 0 && !z.choice) {
-            const out = linesTo([], speaker("czo"), TALK.czoMeet);
-            choiceTo(out, [TK.kod.czoTick[0], TK.kod.czoTick[1]], [
-                act([], ["czoHelp"]).concat(linesTo([], speaker("czo"), TALK.czoHelp)),
-                linesTo([], speaker("czo"), TALK.czoDrive).concat(act([], ["czoDrive"]))], 1);
-            runList(null, out);
-        } else if (z.choice === "help" && z.bearDead && !z.paid) {
+        if (qStep("D33") === 0 && !z.choice) runList(null, w.rozmowa("czoSpotkanie", { spk: speaker("czo") }));
+        else if (z.choice === "help" && z.bearDead && !z.paid) {
             z.paid = true;
-            const out = linesTo([], speaker("czo"), TALK.czoPaid);
-            act(out, ["czoPaid"]);
-            runList(null, out);
+            runList(null, w.rozmowa("czoZaplata", { spk: speaker("czo") }));
         }
     }
     function czoResolve(how) {
@@ -813,22 +769,18 @@
         // the fine: he comes up to the hero
         if (p.wanted && g && !busy() && dist(g.x, g.y, $gamePlayer.x, $gamePlayer.y) <= 6) runList(null, fineList(g));
     }
+    // the gamekeeper's fine (Lowy_Data rozmowy.grzywna)
     function fineList(g) {
-        const p = S().park, w = p.wanted, spk = { id: g ? g.eventId() : -1, name: D.GAJOWY.name }, out = [];
-        if (!w) return out;
-        if (w.how === "found") linesTo(out, spk, [TALK.gajowyFound]);
-        linesTo(out, spk, TALK["gajowyFine" + w.n]);
-        if ($gameParty.gold() < w.fine) linesTo(out, spk, [TALK.gajowyNoGold]);
-        act(out, ["fine"]);
-        if (w.n >= 3) linesTo(out, spk, [TALK.gajowyEscort]);
-        return out;
+        const p = S().park, wd = p.wanted, spk = { id: g ? g.eventId() : -1, name: D.GAJOWY.name };
+        if (!wd) return [];
+        return w.rozmowa("grzywna", { spk, n: wd.n, znalazl: wd.how === "found", bezGrosza: $gameParty.gold() < wd.fine });
     }
     function payFine() {
-        const p = S().park, w = p.wanted;
-        if (!w) return;
+        const p = S().park, wd = p.wanted;
+        if (!wd) return;
         p.wanted = null;
         p.fines++;
-        if ($gameParty.gold() >= w.fine) { $gameParty.loseGold(w.fine); popup(Watki.wstaw(TK.kod.payFine[0], { fine: w.fine }), { icon: D.ICON.gold, color: "#ff9f8f" }); }
+        if ($gameParty.gold() >= wd.fine) { $gameParty.loseGold(wd.fine); popup(Watki.wstaw(TK.kod.payFine[0], { fine: wd.fine }), { icon: D.ICON.gold, color: "#ff9f8f" }); }
         else {
             const take = D.MEATS.concat([ITEM.skora, ITEM.skoraNiedzwiedzia, 163]);
             let n = 0;
@@ -836,7 +788,7 @@
             popup(Watki.wstaw(TK.kod.payFine[1], { n: n }), { icon: 94, color: "#ff9f8f" });
         }
         opinion(PARK.opinion, TK.kod.payFine[2]);
-        if (w.n >= 3) shutGap(true);
+        if (wd.n >= 3) shutGap(true);
     }
     function shutGap(escort) {
         const p = S().park;
@@ -859,13 +811,7 @@
         const e = $gameMap.event(IDS.rysiek);
         if (e && heroDist(PARK.rysiek[0], PARK.rysiek[1]) <= 2.2) runList(null, rysiekList(e));
     }
-    function rysiekList() {
-        const out = linesTo([], speaker("rysiek"), TALK.rysiekMeet);
-        choiceTo(out, [TK.kod.rysiekList[0], TK.kod.rysiekList[1]], [
-            linesTo([], speaker("rysiek"), TALK.rysiekGive).concat(act([], ["rysiek", "give"])),
-            linesTo([], speaker("rysiek"), TALK.rysiekWarn).concat(act([], ["rysiek", "warn"]))], -1);
-        return out;
-    }
+    const rysiekList = () => w.rozmowa("rysiek", { spk: speaker("rysiek") });   // (Lowy_Data rozmowy.rysiek)
     function rysiekDecide(how) {
         const d = S().d32;
         if (d.choice) return;
@@ -1024,7 +970,7 @@
     }
     function strayAction(a) {
         const s = S().strays, def = a._def;
-        if (a._mode === "home") { say(a, def.kind === "cow" ? "Muuu." : def.kind === "sheep" ? "Beee." : "Ko-ko.", 120); return; }
+        if (a._mode === "home") { say(a, def.kind === "cow" ? TK.glos.krowa : def.kind === "sheep" ? TK.glos.owca : TK.glos.kura, 120); return; }
         if (a._mode === "led") {
             const out = heroLines(["> " + def.name + "."]);
             choiceTo(out, [TK.kod.strayAction[0], TK.kod.strayAction[1]], [act([], ["strayLet", def.key]), []], 1);
@@ -1038,7 +984,7 @@
             return;
         }
         const out = heroLines(["> " + def.name + ". " + (def.kind === "cow" ? TK.kod.strayAction[3] : TK.kod.strayAction[4])]);
-        choiceTo(out, [TK.kod.strayAction[5], "Zostaw"], [act([], ["strayRope", def.key]), []], 1);
+        choiceTo(out, [TK.kod.strayAction[5], TK.zostaw], [act([], ["strayRope", def.key]), []], 1);
         runList(null, out);
     }
     function strayLead(a) {
@@ -1285,42 +1231,42 @@
     })();
 
     // ==================================================================
-    // The quests (TownQuests' FX of the custom steps) and the board
+    // The quests (the thread's - Lowy_Data.js, the engine Watki.js): what their conditions, talks and actions ask of the game
     // ==================================================================
     function refreshQuest() { const q = TQ(); try { if (q && q.autoChecks) q.autoChecks(); } catch (e) { /* (no quests yet) */ } }
-    (function hookQuests() {
-        const q = TQ();
-        if (!q || !q.FX) { warn("brak TownQuests - zadania K59-K62, D32-D33 nieaktywne"); return; }
-        const F = q.FX;
-        // K59: starts by itself once the den is found (Bogdan's notice on the board told of it); its end is the den's (finish with the reward)
-        F.lowK59Start = () => found("nora") && !S().den.choice;
-        F.lowK59 = { check: () => false, vars: () => ({ n: Math.min(NORA.meatDays, S().den.meat.length) }) };
-        // K60: once the lick is found
-        F.lowK60Start = () => found("lizawka");
-        F.lowK60Sol = { check: () => S().lick.ever };
-        F.lowK60Swit = { check: () => S().lick.watched };
-        F.lowK60Lup = { check: () => S().lick.trophy || has(ITEM.poroze) };
-        // K61: Kłos offers it (the range found); with Kłos gone (D27) it starts by itself
-        F.lowK61Offer = { cond: () => found("strzelnica") };
-        F.lowK61Start = () => found("strzelnica") && !!T.call("Garnizon", "klosGone");
-        F.lowK61 = { check: () => S().range.beatBest };
-        // K62
-        F.lowK62 = { check: () => strayCount() >= ZBLAKANE.list.length, vars: () => ({ n: strayCount() }) };
-        // D32
-        F.lowD32Offer = { cond: () => found("zwierzyniec") };
-        F.lowD32Sidla = { check: () => S().d32.taken.every(Boolean), vars: () => ({ n: S().d32.taken.filter(Boolean).length }) };
-        F.lowD32Noc = { check: () => !!S().d32.choice };
-        // D33 (Act II): the hunters' camp found
-        F.lowD33Start = () => actTwo() && found("oboz_czo") && !S().czo.resolved;
-        F.lowD33Wybor = { check: () => false };
-        F.lowD33Koniec = { check: () => false, vars: () => {
+    w.haki({
+        // the conditions: a place of the package found (K59 the den, K60 the lick, K61 the range, D32 the park, D33 the hunters' camp),
+        // a thing in the bag (K60: the antler), Kłos gone (K61 starts by itself), Act II (D33)
+        odkryte: (ctx, key) => found(key),
+        masz: (ctx, id) => has(id),
+        klosOdszedl: () => !!T.call("Garnizon", "klosGone"),
+        aktDrugi: () => actTwo(),
+        // D33's last step: what is left to do
+        d33Slowa: () => {
             const z = S().czo;
             return { co: z.choice === "help" ? (z.bearDead ? TK.kod.vars[0] : TK.kod.vars[1])
                 : TK.kod.vars[2] };
-        } };
-        // the quest done: the garrison's favour for K61
-        T.on("townQuestDone", e => { if (e && e.id === "K61") T.call("Garnizon", "addFavor", 5, TK.kod.hookQuests[0]); }, { owner: PLUGIN });
-    })();
+        },
+        // the talks: "@key: " - the speaker of a line
+        mowca: (ctx, key) => speaker(key),
+        // the actions of the talks
+        czoAtak: () => { for (const h of czoMen()) if (h.engage) h.engage(false); },
+        czoRozstrzygnij: (ctx, how) => czoResolve(how),
+        grzywna: () => payFine(),
+        rysiek: (ctx, how) => rysiekDecide(how),
+        strzala: (ctx, a) => {
+            S().arrow[a] = true;
+            if (a === "rotmistrz") T.call("Garnizon", "addFavor", 5, TK.kod.actCall[0]);
+            else T.call("Journal", "addNote", TK.kod.actCall[1], TK.kod.actCall[2]);
+        },
+        mleko: () => { S().strays.milkDay = day(); gain(ITEM.mleko, ZBLAKANE.milk); const it = item(ITEM.mleko); if (it) popup(it.name + " ×" + ZBLAKANE.milk, { icon: it.iconIndex, gain: true }); },
+        obudz: () => wakeBear(),
+        sol: () => putSalt()
+    });
+    // (with no TownQuests the quests do nothing - said once the words are in)
+    Watki.poTekstach(() => { const q = TQ(); if (!q || !q.FX) warn(TK.ostrzezenia.zadania); });
+    // the quest done: the garrison's favour for K61
+    T.on("townQuestDone", e => { if (e && e.id === "K61") T.call("Garnizon", "addFavor", 5, TK.kod.hookQuests[0]); }, { owner: PLUGIN });
 
     // ==================================================================
     // The talks of the residents (Tawerna.talk.takeover, "owner" priority): the gamekeeper's fine, the white-eye arrow shown, Rysiek's hides,
@@ -1331,19 +1277,13 @@
         const spk = { id: e ? e.eventId() : -1, name: (D.GAJOWY.key === key ? D.GAJOWY.name : speaker(key).name) };
         if (key === "gajowy" && S().park.wanted) return fineList(e);
         if (questWants(key)) return null;
-        if ((key === "rotmistrz" || key === "pustelnik") && has(ITEM.strzalaOko) && !S().arrow[key]) {
-            const out = linesTo([], spk, key === "rotmistrz" ? TALK.arrowRotmistrz : TALK.arrowKleofas);
-            return act(out, ["arrow", key]);
-        }
+        if ((key === "rotmistrz" || key === "pustelnik") && has(ITEM.strzalaOko) && !S().arrow[key]) return w.rozmowa("strzala", { spk, key });
         if (key === "klusownik" && tqFlag("lowOstrzegl")) {
             const out = linesTo([], spk, [TALK.rysiekShop]);
             choiceTo(out, [TK.kod.talkHook[0], TK.kod.talkHook[1]], [[C(302, [0, ITEM.skora, 1, 4, true]), C(605, [0, 163, 1, 3])], []], 1);
             return out;
         }
-        if (key === "praczka" && tqFlag("lowMlekoMarty") && day() - S().strays.milkDay >= ZBLAKANE.milkEvery) {
-            const out = linesTo([], spk, [TALK.martaMilk]);
-            return act(out, ["milk"]);
-        }
+        if (key === "praczka" && tqFlag("lowMlekoMarty") && day() - S().strays.milkDay >= ZBLAKANE.milkEvery) return w.rozmowa("mleko", { spk });
         return null;
     }
     // (2026-10-23, docs/ROZMOWY.md) the core's talk service: an "owner" takeover, after Zakon's and Ludzie's, before Zasoby's (as the old
@@ -1362,19 +1302,13 @@
         }
         if (what === "gawra") {
             if (bearDeadNow()) return runList(interp, heroLines(["> " + TX.empty]));
-            if (winter() && s.bear.wokeDay !== day()) {
-                const out = heroLines(["> " + TX.peekAsk]);
-                choiceTo(out, [TX.peekSleep, TX.peekLeave], [act([], ["wake"]), []], 1);
-                return runList(interp, out);
-            }
+            if (winter() && s.bear.wokeDay !== day()) return runList(interp, w.rozmowa("gawra", {}));
             return runList(interp, heroLines(["> " + (gawraBear() ? TX.nobody : TX.nobody)]));
         }
         if (what === "bloto") return need(0, TX.muddyNoDrink);
         if (what === "lizawka") {
             if (lickActive()) return runList(interp, heroLines(["> " + fill(TX.lickActive, { n: s.lick.until - day() })]));
-            const out = heroLines(["> " + TX.lickAsk]);
-            choiceTo(out, [TX.lickPut, TX.lickNo], [act([], ["salt"]), []], 1);
-            return runList(interp, out);
+            return runList(interp, w.rozmowa("lizawka", {}));
         }
         if (what === "namiot") return runList(interp, heroLines([TK.kod.lookAt[2]]));
         if (what === "namiotRab") return runList(interp, heroLines([TK.kod.lookAt[3]]));
@@ -1415,31 +1349,17 @@
         refreshWhen(true);
         refreshQuest();
     }
+    // the script calls of the talks built here (the strays, the rack) - and the old names of the thread's actions (a talk saved before
+    // 2026-10-28: the new ones go to Watki.act)
+    const OLD_ACTS = { salt: "sol", wake: "obudz", fine: "grzywna", rysiek: "rysiek", czoHelp: "czoPomoc", czoDrive: "czoPrzegon", czoPaid: "czoZaplata",
+        arrow: "strzala", milk: "mleko" };
     function actCall(interp, args) {
         const [what, a] = Array.isArray(args) ? args : [];
         try {
-            if (what === "salt") return putSalt();
-            if (what === "wake") return wakeBear();
-            if (what === "fine") return payFine();
-            if (what === "rysiek") return rysiekDecide(a);
+            if (OLD_ACTS[what]) { w.akcja(OLD_ACTS[what], args.slice(1), interp); return true; }
             if (what === "strayRope") return strayRope(a);
             if (what === "strayLet") return strayLet(a);
             if (what === "round") return startRound(!!a);
-            if (what === "czoHelp") { S().czo.choice = "help"; if (qStep("D33") === 0) T.call("TownQuests", "completeStep", "D33"); return true; }
-            if (what === "czoDrive") {
-                S().czo.choice = "drive";
-                if (qStep("D33") === 0) T.call("TownQuests", "completeStep", "D33");
-                for (const h of czoMen()) if (h.engage) h.engage(false);
-                return true;
-            }
-            if (what === "czoPaid") return czoResolve("help");
-            if (what === "arrow") {
-                S().arrow[a] = true;
-                if (a === "rotmistrz") T.call("Garnizon", "addFavor", 5, TK.kod.actCall[0]);
-                else T.call("Journal", "addNote", TK.kod.actCall[1], TK.kod.actCall[2]);
-                return true;
-            }
-            if (what === "milk") { S().strays.milkDay = day(); gain(ITEM.mleko, ZBLAKANE.milk); const it = item(ITEM.mleko); if (it) popup(it.name + " ×" + ZBLAKANE.milk, { icon: it.iconIndex, gain: true }); return true; }
         } catch (e) { console.error("[Lowy] act " + JSON.stringify(args), e); }
         return false;
     }
@@ -1496,18 +1416,20 @@
     // F9 (Debug.js, tab "Wyspa i fabuła", through Okolice.f9)
     // ==================================================================
     let f9Place = 0, f9Poach = 0;
-    const F9_GO = {
-        nora: ["Wilcza nora", 23, 65, 55, 8], gawra: ["Gawra", 13, 99, 49, 8], blotnisko: ["Błotnisko", 21, 66, 50, 8], lizawka: ["Lizawka (zasiadka)", 4, 70, 53, 6],
-        oboz_rabusiow: ["Obóz rabusiów", 21, 60, 45, 8], oboz_czo: ["Obóz myśliwych", 23, 66, 24, 8], zwierzyniec: ["Zwierzyniec (wyłom)", 24, 7, 31, 2],
-        zblakane: ["Zbłąkane zwierzęta", 168, 85, 32, 8], strzelnica: ["Strzelnica", 162, 74, 52, 6]
+    // the places to go to (their names: js/teksty/lowy.txt, f9.idz.<key>)
+    const F9_AT = {
+        nora: [23, 65, 55, 8], gawra: [13, 99, 49, 8], blotnisko: [21, 66, 50, 8], lizawka: [4, 70, 53, 6],
+        oboz_rabusiow: [21, 60, 45, 8], oboz_czo: [23, 66, 24, 8], zwierzyniec: [24, 7, 31, 2],
+        zblakane: [168, 85, 32, 8], strzelnica: [162, 74, 52, 6]
     };
+    const goTo = k => (F9_AT[k] ? [TK.f9.idz[k]].concat(F9_AT[k]) : undefined);
     const placeLabel = i => { const d = D.DISCOVER[i]; return Watki.wstaw(TK.kod.placeLabel[0], { "1": i + 1, length: D.DISCOVER.length, name: d.name }); };
     function f9Rows() {
         const s = S();
         return [
             { label: placeLabel(f9Place), icon: D.ICON.poroze, desc: TK.kod.f9Rows[0], what: "place", pick: f9Place },
             { label: TK.kod.f9Rows[1], icon: D.ICON.kiel, desc: TK.kod.f9Rows[2], what: "den" },
-            { label: Watki.wstaw(TK.kod.f9Rows[3], { "1": friendOn() ? "TAK" : "nie" }), icon: D.ICON.kiel, desc: TK.kod.f9Rows[4], what: "friend" },
+            { label: Watki.wstaw(TK.kod.f9Rows[3], { "1": friendOn() ? TK.f9.przyjazna.tak : TK.f9.przyjazna.nie }), icon: D.ICON.kiel, desc: TK.kod.f9Rows[4], what: "friend" },
             { label: TK.kod.f9Rows[5], icon: D.ICON.pazur, desc: TK.kod.f9Rows[6], what: "bear" },
             { label: TK.kod.f9Rows[7], icon: D.ICON.sol, desc: TK.kod.f9Rows[8], what: "salt" },
             { label: TK.kod.f9Rows[9], icon: 156, desc: TK.kod.f9Rows[10], what: "rab" },
@@ -1524,21 +1446,21 @@
     const setHour = h => { if ($gameSystem.setDayNightHour) $gameSystem.setDayNightHour(h); };
     function f9Ok(row) {
         const s = S();
-        if (row.what === "place") { const d = D.DISCOVER[row.pick || 0], g = F9_GO[d.key]; return g ? { go: g } : { go: [d.name, d.map, d.x, d.y, 2] }; }
-        if (row.what === "den") { setHour(10); s.den.forcePups = day(); s.den.emptyUntil = 0; return { go: F9_GO.nora }; }
-        if (row.what === "friend") { s.den.friendly = !friendOn(); s.den.betrayed = false; if (s.den.friendly) s.den.choice = "zostawione"; return { say: Watki.wstaw(TK.kod.f9Ok[0], { "1": friendOn() ? "tak" : "nie" }) }; }
-        if (row.what === "bear") { s.bear.forceWinter = day(); s.bear.wokeDay = -1; s.bear.deadYear = 0; return { go: F9_GO.gawra }; }
-        if (row.what === "salt") { s.lick.until = day() + LIZAWKA.days; s.lick.ever = true; s.lick.windows = {}; setHour(5.5); return { go: F9_GO.lizawka }; }
-        if (row.what === "rab") { s.camps.forceRab = day(); setHour(22); return { go: F9_GO.oboz_rabusiow }; }
-        if (row.what === "czo") { s.camps.forceCzo = day(); setHour(10); return { go: F9_GO.oboz_czo }; }
+        if (row.what === "place") { const d = D.DISCOVER[row.pick || 0], g = goTo(d.key); return g ? { go: g } : { go: [d.name, d.map, d.x, d.y, 2] }; }
+        if (row.what === "den") { setHour(10); s.den.forcePups = day(); s.den.emptyUntil = 0; return { go: goTo("nora") }; }
+        if (row.what === "friend") { s.den.friendly = !friendOn(); s.den.betrayed = false; if (s.den.friendly) s.den.choice = "zostawione"; return { say: Watki.wstaw(TK.kod.f9Ok[0], { "1": friendOn() ? TK.f9.przyjaznaOk.tak : TK.f9.przyjaznaOk.nie }) }; }
+        if (row.what === "bear") { s.bear.forceWinter = day(); s.bear.wokeDay = -1; s.bear.deadYear = 0; return { go: goTo("gawra") }; }
+        if (row.what === "salt") { s.lick.until = day() + LIZAWKA.days; s.lick.ever = true; s.lick.windows = {}; setHour(5.5); return { go: goTo("lizawka") }; }
+        if (row.what === "rab") { s.camps.forceRab = day(); setHour(22); return { go: goTo("oboz_rabusiow") }; }
+        if (row.what === "czo") { s.camps.forceCzo = day(); setHour(10); return { go: goTo("oboz_czo") }; }
         if (row.what === "poach") { s.park.count = row.pick || 0; s.park.wanted = null; return { say: Watki.wstaw(TK.kod.f9Ok[1], { count: s.park.count }) }; }
-        if (row.what === "contest") { s.range.forceContest = day(); s.range.contestDay = -1; setHour(10.5); return { go: F9_GO.strzelnica }; }
-        if (row.what === "strays") { if (!has(ITEM.lina)) gain(ITEM.lina, 2); return { go: F9_GO.zblakane }; }
+        if (row.what === "contest") { s.range.forceContest = day(); s.range.contestDay = -1; setHour(10.5); return { go: goTo("strzelnica") }; }
+        if (row.what === "strays") { if (!has(ITEM.lina)) gain(ITEM.lina, 2); return { go: goTo("zblakane") }; }
         return null;
     }
     (function addF9() {
         const O = OK();
-        if (O && O.f9 && O.f9.add) O.f9.add({ owner: PLUGIN, title: "Paczka B: Zwierzęta i łowy", rows: f9Rows, pick: f9Pick, ok: f9Ok });
+        if (O && O.f9 && O.f9.add) O.f9.add({ owner: PLUGIN, get title() { return TK.f9.tytul; }, rows: f9Rows, pick: f9Pick, ok: f9Ok });
     })();
 
     // ------------------------------------------------------------------

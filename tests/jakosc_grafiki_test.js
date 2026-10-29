@@ -5,7 +5,8 @@
 // shadows from the fires at night, no rays and mist, the least of the weather) - and the fires' lights stay at every level (every
 // light is a fire). Automatycznie (the default) steps down a level when the frames slow down for a while, never up on the same
 // map, up again after a change of map with room to spare, and a level that twice could not be kept is not tried again (no back and
-// forth). The row in Opcje by the keys (A / D a level, O round, W / S over the line of text under it) in the Grafit menu. CDP_PORT=9494.
+// forth). The row in Opcje by the keys (A / D a level, O round, W / S over the line of text under it) in the P menu - the first row since
+// the option "Wygląd" is gone (2026-10-28). CDP_PORT=9494.
 "use strict";
 const kit = require("./lib/kit.js");
 
@@ -73,14 +74,16 @@ kit.test({ port: 9494, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         W.set("auto", { auto: "low" }); const al = ConfigManager.makeData();
         ConfigManager.applyData(al); const back = { get: W.get(), level: W.level() };
         ConfigManager.applyData({ gfxQuality: 7, gfxAuto: -2 }); const bad = { get: W.get(), level: W.level() };
-        W.set("high"); return { def, m: m.gfxQuality, al: [al.gfxQuality, al.gfxAuto], back, bad, uiClean: ConfigManager.uiClean }; })()`);
+        W.set("high"); return { def, m: m.gfxQuality, al: [al.gfxQuality, al.gfxAuto], back, bad }; })()`);
     t.check("domyślnie Automatycznie na poziomie Wysoka (ConfigManager.gfxQuality 0, gfxAuto 1)", cfg.def.get === "auto" && cfg.def.level === "high" && cfg.def.q === 0 && cfg.def.a === 1, cfg.def);
     t.check("makeData zapisuje wybór (Średnia = 2) i poziom Automatycznie (Niska = 3); applyData czyta je z powrotem", cfg.m === 2 && cfg.al.join() === "0,3" && cfg.back.get === "auto" && cfg.back.level === "low", cfg);
     t.check("śmieci w zapisie -> domyślne (Automatycznie, Wysoka)", cfg.bad.get === "auto" && cfg.bad.level === "high", cfg.bad);
 
     // ---------------------------------------------------------------- Kruczy Jar at noon in the rain: what each level switches, at once
     t.check("nowa gra: Kruczy Jar, dzień 40, południe", await t.newGame({ map: 3, x: 22, y: 14, day: 40, hour: 12, quiet: true, minimap: true }));
-    await t.eval("$gameScreen.changeWeather('rain', 5, 0); 0");
+    // (the test's own rain: not Survival's - day 1 of a new game rains from 9:00, and when no Survival tick fell between the kit's
+    // calm and the jump to day 40, Survival still thought the screen's rain its own and ended it on the dry day 40: a race, 43/47)
+    await t.eval("$gameSystem._weatherOwn = false; $gameScreen.changeWeather('rain', 5, 0); 0");
     await t.frames(40);
     const at = async level => { await t.eval(`Wydajnosc.quality.set(${JSON.stringify(level)}); 0`); await t.frames(30); return t.json(STATE); };
     const hi = await at("high");
@@ -183,9 +186,9 @@ kit.test({ port: 9494, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("opis pod wierszem przy Automatycznie mówi, jaki poziom gra wybrała teraz", /Teraz: Niska\.$/.test(await t.eval("Wydajnosc.quality.note()")), await t.eval("Wydajnosc.quality.note()"));
     await t.json(`(function(){ SceneManager.updateMain = window.__um; Wydajnosc.quality.auto.tune(${JSON.stringify(defaults)}); Wydajnosc.quality.auto.reset(); Wydajnosc.quality.set("auto", { auto: "high" }); return 0; })()`);
 
-    // ---------------------------------------------------------------- Opcje by the keys: the row under Wygląd, A / D, O, the line of text passed over
+    // ---------------------------------------------------------------- Opcje by the keys: the first row, A / D, O, the line of text passed over
     await t.go(3, 22, 14, 2);
-    await t.eval("ConfigManager.uiClean = true; window.dispatchEvent(new Event('pointerdown')); 0");
+    await t.eval("window.dispatchEvent(new Event('pointerdown')); 0");
     await t.frames(20);
     const info = () => t.json("MenuRing.info()");
     const key = async (k, n) => { await t.key(k); await t.frames(n || 4); return info(); };
@@ -196,14 +199,13 @@ kit.test({ port: 9494, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     let m = await info();
     for (let i = 0; i < 10 && m.active !== "options"; i++) m = await key("D", 12);
     m = await key("O", 6);
-    t.check("Opcje: w środku, pierwsza „Wygląd”", m.level === 2 && m.options.symbol === "uiClean", m.options);
+    t.check("Opcje: w środku, pierwsza „Jakość grafiki” (wiersza „Wygląd” już nie ma)", m.level === 2 && m.options.symbol === "gfxQuality", m.options);
     const rows = await t.json("SceneManager._scene._views.options._win._list.map(c => c.symbol)");
     const at2 = rows.indexOf("gfxQuality");
-    t.check("wiersz „Jakość grafiki” zaraz pod „Wygląd”, a pod nim wiersz opisu", at2 === rows.indexOf("uiClean") + 1 && rows[at2 + 1] === "gfxQualityNote", rows.slice(0, 5));
+    t.check("wiersz „Jakość grafiki” pierwszy, a pod nim wiersz opisu; bez „uiClean”", at2 === 0 && rows[at2 + 1] === "gfxQualityNote" && !rows.includes("uiClean"), rows.slice(0, 5));
     const status = () => t.json("(function(){ const w = SceneManager._scene._views.options._win; return { symbol: w.currentSymbol(), text: w.statusText(w.index()), name: w.commandName(w.index()), cfg: ConfigManager.gfxQuality, level: Wydajnosc.gfx.level, note: Wydajnosc.quality.note() }; })()");
-    m = await key("S");
     let s = await status();
-    t.check("S: na „Jakość grafiki” - Automatycznie, opis: „Gra sama schodzi niżej... Teraz: Wysoka.”", s.symbol === "gfxQuality" && s.name === "Jakość grafiki" && s.text === "Automatycznie" && /^Gra sama schodzi/.test(s.note) && /Teraz: Wysoka\.$/.test(s.note), s);
+    t.check("na „Jakość grafiki” - Automatycznie, opis: „Gra sama schodzi niżej... Teraz: Wysoka.”", s.symbol === "gfxQuality" && s.name === "Jakość grafiki" && s.text === "Automatycznie" && /^Gra sama schodzi/.test(s.note) && /Teraz: Wysoka\.$/.test(s.note), s);
     await key("D"); s = await status();
     t.check("D: Wysoka (zapisane w ustawieniach: 1)", s.text === "Wysoka" && s.cfg === 1 && s.level === "high" && /^Nic nie wyłącza/.test(s.note), s);
     await key("D"); s = await status();
@@ -234,7 +236,6 @@ kit.test({ port: 9494, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     m = await info();
     for (let i = 0; i < 10 && m.active !== "options"; i++) m = await key("D", 12);
     await key("O", 6);
-    await key("S");
     await key("A"); await key("A"); s = await status();
     t.check("A, A: Automatycznie z powrotem (poziom Wysoka)", s.cfg === 0 && s.text === "Automatycznie" && s.level === "high", s);
     await key("P", 6);

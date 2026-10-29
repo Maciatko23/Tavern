@@ -1,0 +1,15 @@
+{
+ "kod": {
+  "refuse": {
+   "0": "Tego nie wyrzucę.",
+   "1": "Tego nie wyrzucę. To pamiątka.",
+   "2": "Nie mam tego.",
+   "3": "Tego nie wyrzucę. Potrzebne do zadania.",
+   "4": "Tu nie mam gdzie tego położyć."
+  },
+  "takeAll": {
+   "0": "Za ciężkie, więcej nie uniosę"
+  }
+ },
+ "_opis": "Napisy kodu Drops.js sprzed przeniesienia do js/teksty/lupy.txt (kod.*)"
+}

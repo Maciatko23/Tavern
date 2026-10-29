@@ -67,6 +67,7 @@ const QUIET = `if (window.Needs && Needs.setEnabled) Needs.setEnabled(false);
     if (window.Act3 && Act3.auto) Act3.auto(false);   // (the siege of the tavern does not arm itself in other systems' tests)
     if (window.Rywal && Rywal.auto) Rywal.auto(false);   // (W9 ch. 3: the rival in the ruins does not begin / move by itself)
     if (window.Combat && Combat.feel && Combat.feel.auto) Combat.feel.auto(false);   // (the combat mode does not switch itself on - Combat_Feel.js)
+    if (window.Podroznicy && Podroznicy.auto) Podroznicy.auto(false);   // (the ferry's landing scene at the harbour does not start by itself - Podroznicy.js)
     if (window.Survival && Survival.calmWeather) Survival.calmWeather(); $gameScreen.clearWeather();
     $gameSystem._minimapHidden = true; $gameSystem._combatMode = false;`;
 

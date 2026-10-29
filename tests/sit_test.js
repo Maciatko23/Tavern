@@ -19,8 +19,10 @@ const { launch, sleep } = require("./cdp.js");
         const swingT = () => ev("$gamePlayer._swingEvent ? $gamePlayer._swingEvent._swingT : -1");
         const waiting = () => ev("!!($gamePlayer._swingEvent && $gamePlayer._swingEvent._waiting)");
         const cell = () => J(`(function(){ const s = SceneManager._scene._spriteset._characterSprites.find(s => s._character === $gamePlayer); const f = s && s._swingBody && s._swingBody.visible ? s._swingBody._frame : null; return f ? { col: Math.round(f.x / 96), row: Math.round(f.y / 96) } : null; })()`);
-        const sheets = await ev(`new Promise(res => { const out = {}; let left = 2; for (const n of ["Swing_Sit", "Swing_Roast"]) { const bmp = ImageManager.loadSystem(n); bmp.addLoadListener(() => { out[n] = [bmp.width, bmp.height]; if (--left === 0) res(out); }); } setTimeout(() => res(out), 5000); })`);
-        check("both sheets load: 25 frames (sit down, then stand up) x 4 rows", JSON.stringify(sheets) === JSON.stringify({ Swing_Sit: [2400, 384], Swing_Roast: [2400, 384] }), sheets);
+        // (the sheets the hero plays: HeroLook.js's Hero_Sit / Hero_Roast - the old Swing_* files are archived since 2026-10-28)
+        const sheets = await ev(`new Promise(res => { const out = {}; let left = 2; for (const n of ["Swing_Sit", "Swing_Roast"]) { const f = ChoppableTree.swingKind(ChoppableTree.swingKindOf(n)).sheet, bmp = ImageManager.loadSystem(f); bmp.addLoadListener(() => { out[n] = [bmp.width, bmp.height, f]; if (--left === 0) res(out); }); } setTimeout(() => res(out), 5000); })`);
+        check("both sheets load (Hero_Sit, Hero_Roast): frames (sit down, then stand up) x 4 rows of 96", !!sheets.Swing_Sit && !!sheets.Swing_Roast && sheets.Swing_Sit[2] === "Hero_Sit" && sheets.Swing_Roast[2] === "Hero_Roast"
+            && [sheets.Swing_Sit, sheets.Swing_Roast].every(s => s[0] % 96 === 0 && s[0] >= 96 * 25 && s[1] === 384), sheets);
 
         const B = await ev(`(function(){
             for (let by = 3; by < $gameMap.height() - 8; by++) for (let bx = 3; bx < $gameMap.width() - 12; bx++) {

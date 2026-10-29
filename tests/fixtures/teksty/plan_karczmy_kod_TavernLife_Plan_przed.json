@@ -1,0 +1,119 @@
+{
+ "kod": {
+  "say": {
+   "0": ", nie co dzień",
+   "1": " (sława {minRep}{2})",
+   "2": " (nie co dzień)"
+  },
+  "diceRivals": {
+   "0": "Kości: {1}",
+   "1": "Goście od kości: {1}"
+  },
+  "sec": {
+   "0": "Co tu jest",
+   "1": "Kto i kiedy"
+  },
+  "planInfo": {
+   "0": "Borgar — za ladą, o każdej porze",
+   "1": "Zmiany u Borgara {1}–{2}, jedna dziennie",
+   "2": "Jedzenie i napitki: {1}–{2} G",
+   "3": "Danie dnia: {name} — {2} G (−{3}%)",
+   "4": "Pokój na noc: od {1} G (u Borgara)",
+   "5": "Twoja sława: u Borgara −{1}",
+   "6": "Otwarte — Borgar podaje o każdej porze",
+   "7": "Kucharze Borgara — od świtu do nocy",
+   "8": "Zamawiasz u Borgara przy ladzie; posiłek podadzą do stołu",
+   "9": "Kuchnia wydaje o każdej porze",
+   "10": "Melia Srebrogłosa — śpiewa {1}–24:00, raz na wieczór",
+   "11": "Napiwek do kapelusza: {SONG_TIP} G (nieobowiązkowy)",
+   "12": "Po pieśni: Natchniony, +{1}% doświadczenia na {2}",
+   "13": "Teraz: Melia śpiewa — podejdź pod scenę",
+   "14": "Dziś już śpiewała — jutro od {1}",
+   "15": "Teraz cisza — śpiewa od {1}",
+   "16": "Grum Żelazna Pięść — siłowanie na rękę, cały dzień",
+   "17": "Siłowanie: stawki {1} G",
+   "18": "Kości: stawka rywala, od {1} G",
+   "19": "Przy kościach: {1}",
+   "20": "Grum czeka przy stole · kości od {1}",
+   "21": "Grum czeka przy stole",
+   "22": "Dziadek Ozzy albo furman Wiesiek — o każdej porze",
+   "23": "Stawki {1} G · trzy rundy po trzy lotki",
+   "24": "Tarcze wolne — zawsze ktoś chętny",
+   "25": "Łaziebna Wanda — grzeje wodę o każdej porze",
+   "26": " (zamiast {BATH_PRICE} G)",
+   "27": "Kąpiel: {1} G{2} · godzina",
+   "28": "Po kąpieli: Czysty — prace o {1}% lżejsze przez {2}",
+   "29": "Otwarte — woda gorąca",
+   "30": "Dziadek Ozzy — przy kominku, zwykle od rana do nocy",
+   "31": "Tu też podają posiłki — zamówisz u Borgara",
+   "32": "Tablica zleceń — nowe ogłoszenia co {1} dni",
+   "33": "Tablica zleceń — ogłoszenia z okolicy",
+   "34": "ogłoszenie",
+   "35": "ogłoszenia",
+   "36": "ogłoszeń",
+   "37": "Na tablicy wisi teraz {b} {2}",
+   "38": "Twoja sława: {1} ({2}/100)",
+   "39": "Schody po obu stronach — na piętro, do pokoi gości",
+   "40": "Wejście otwarte dzień i noc",
+   "41": "Pokój gościnny",
+   "42": " (zamiast {price} G)",
+   "43": "Noc: {price} G{2} · do {CHECKOUT}:00 rano",
+   "44": " · Wypoczęty {1}",
+   "45": "Rano: {1}{2}",
+   "46": "Dla gości o sławie „{1}” ({need})",
+   "47": "Wynajmiesz u Borgara, przy ladzie na parterze",
+   "48": "Twój pokój do {CHECKOUT}:00 — drzwi otwarte",
+   "49": "Zamknięte — potrzebna sława {need}",
+   "50": "Zamknięte — tylko dla stałych gości",
+   "51": "Masz już pokój na tę noc",
+   "52": "Wolny na tę noc",
+   "53": " — dla gości o sławie „{1}” ({minrep})",
+   "54": " — dla dostojnych gości",
+   "55": "Złocona krata z dzwonkiem{1}",
+   "56": "Krata otwarta — Apartamenty czekają",
+   "57": " — potrzebna sława {minrep}",
+   "58": "Krata zamknięta{1}",
+   "59": "Zarezerwowany dla gości Lorda Zaleskiego",
+   "60": "Zamknięte — tylko dla gości Lorda",
+   "61": "Pokój gościnny{1}.",
+   "62": "Wynajęty przez innych gości — drzwi zamknięte",
+   "63": "Zajęty",
+   "64": "Schody w górę: ",
+   "65": "Schody w dół: ",
+   "66": "piętro",
+   "67": "Q/E — zobacz {1}",
+   "68": "Zajęty przez gości",
+   "69": "Prywatne — tylko dla domowników",
+   "70": "Zaplecze karczmy",
+   "71": "Przejście — otwarte dzień i noc"
+  },
+  "makeMarker": {
+   "0": "Tu jesteś"
+  },
+  "drawHints": {
+   "0": "pokój",
+   "1": "piętro",
+   "2": "pokaż drogę",
+   "3": "wyjdź",
+   "4": "Dzień {1} · ",
+   "5": "{1}godz. {2}"
+  },
+  "drawPanel": {
+   "0": "Droga: nie znalazłem przejścia.",
+   "1": " (od schodów).",
+   "2": "Droga zaznaczona na planie{1}",
+   "3": "Droga do: {1} ({2}) — Q/E, by iść dalej."
+  },
+  "drawLegend": {
+   "0": "Tu jesteś",
+   "1": "Jasne — czynne teraz · przygaszone — zamknięte"
+  },
+  "label": {
+   "0": "Plan karczmy"
+  },
+  "addOriginalCommands": {
+   "0": "Plan karczmy"
+  }
+ },
+ "_opis": "Napisy kodu TavernLife_Plan.js sprzed przeniesienia do js/teksty/plan_karczmy.txt (kod.*)"
+}

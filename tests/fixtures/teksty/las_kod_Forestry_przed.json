@@ -1,0 +1,28 @@
+{
+ "kod": {
+  "whyNot": {
+   "0": "Drzewo posadzisz tylko pod gołym niebem.",
+   "1": "Sadzonkę wsadzisz w zwykłą albo oczyszczoną ziemię.",
+   "2": "Tu jest woda.",
+   "3": "To miejsce jest zajęte.",
+   "4": "Stoisz w tym miejscu.",
+   "5": "Za blisko innego drzewa: zostaw mu miejsce na korzenie."
+  },
+  "plant": {
+   "0": "Nie masz nasion sosny",
+   "1": "Jesteś zbyt zmęczony"
+  },
+  "done": {
+   "0": "Za dużo posadzonych drzew na tej mapie.",
+   "1": "Posadzono sosnę. Za {GROW_DAYS} dni będzie drzewem."
+  },
+  "plantEntry": {
+   "0": "Posadź sosnę",
+   "1": "Wsadzasz w ziemię nasiono sosny (masz {n}). Sadzonka rośnie {GROW_DAYS} dni w dorosłe drzewo, które zetniesz siekierą. Młode drzewko da mniej drewna, a szyszki sypią się dopiero z dorosłego.",
+   "2": "Wsadzasz w ziemię jedno nasiono sosny. Sadzonka od razu stoi na mapie i przez {GROW_DAYS} dni rośnie z dnia na dzień w dorosłe drzewo.",
+   "3": "Masz nasion: {n}",
+   "4": "Młode drzewo: mniej uderzeń siekierą i mniej drewna"
+  }
+ },
+ "_opis": "Napisy kodu Forestry.js sprzed przeniesienia do js/teksty/las.txt (kod.*)"
+}

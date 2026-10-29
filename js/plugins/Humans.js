@@ -116,6 +116,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("zbojcy");   // (the words of this file: js/teksty/zbojcy.txt, kod.*)
     const T = window.Tawerna;
     if (!T) throw new Error("Humans.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     const D = window.HumansData;
@@ -992,7 +993,7 @@
                 h._stun = Math.max(h._stun, k.shield ? k.shield.breakStun : 50);
                 h._poise = 0;
                 damage = Math.round(damage * (k.shield ? k.shield.breakDmg : 0.8));
-                if (F2) F2.numberAt(h.centerX(), h.centerY() - 1.5, "Garda przełamana!", "#ffc080", 0.85);
+                if (F2) F2.numberAt(h.centerX(), h.centerY() - 1.5, TK.kod.hitHuman[0], "#ffc080", 0.85);
                 se("Sword4", 90, 70, panOf(h.centerX()));
                 endTurn(h);
                 if (h._mode === "guard") h.setMode("chase");
@@ -1002,7 +1003,7 @@
                 h._poise = Math.max(1, h._poise - Math.round((extra.poise || 10) * 0.3));
                 h._poiseT = 0;
                 h._blocks.push(Graphics.frameCount);
-                if (F2) { F2.numberAt(h.centerX(), h.centerY() - 1.3, damage > 0 ? "Blok -" + damage : "Zablokowane!", "#cfd6de", 0.8); F2.sparksAt(h.centerX() - (h.centerX() - (from ? from.x : heroX())) * 0.3, h.centerY() - 0.5, "#f0f0e0", 9); }
+                if (F2) { F2.numberAt(h.centerX(), h.centerY() - 1.3, damage > 0 ? Watki.wstaw(TK.kod.hitHuman[1], { damage: damage }) : "Zablokowane!", "#cfd6de", 0.8); F2.sparksAt(h.centerX() - (h.centerX() - (from ? from.x : heroX())) * 0.3, h.centerY() - 0.5, "#f0f0e0", 9); }
                 se(k.shield ? "Sword4" : "Blow3", 85, k.shield ? 110 : 120, panOf(h.centerX()));
                 if (how !== "shot" && !from && Cb && Cb.recoil) Cb.recoil(k.shield ? 14 : 8);
                 if (Math.random() < 0.35) say(h, pick(LINES.block), 90);
@@ -1015,7 +1016,7 @@
         // from behind the mercenary (his shield on the other side): it hurts more
         if (k.shield && !hidden && h._engaged && !inFront(-0.35)) {
             damage = Math.round(damage * k.shield.back);
-            if (F2) F2.numberAt(h.centerX(), h.centerY() - 1.55, "Cios w plecy!", "#ffd27f", 0.8);
+            if (F2) F2.numberAt(h.centerX(), h.centerY() - 1.55, TK.kod.hitHuman[2], "#ffd27f", 0.8);
         }
         h._hp -= damage;
         h._poiseT = 0;
@@ -1123,7 +1124,7 @@
         defeated(h, "killed", begged);
         if (begged) {
             const s = S(), d = day();
-            if (s.opinionDay.kill !== d) { s.opinionDay.kill = d; T.call("TownQuests", "addOpinion", D.OPINION.killBeggar, "dobiłeś człowieka, który błagał o litość"); }
+            if (s.opinionDay.kill !== d) { s.opinionDay.kill = d; T.call("TownQuests", "addOpinion", D.OPINION.killBeggar, TK.kod.kill[0]); }
         }
         if (his) morale(h._band);   // (torn by wolves: the others do not kneel to them)
         bandCheck(h._band);
@@ -1166,12 +1167,12 @@
     // ==================================================================
     // The choice over a kneeling man: spare him, take his purse, finish him, leave him (an interpreter's choice - bubbles over the hero)
     // ==================================================================
-    const CHOICES = ["Puść go wolno", "Zabierz mu sakiewkę", "Dobij go", "Zostaw"];
+    const CHOICES = Watki.scal([], "zbojcy", "wybor");   // (spare, rob, kill, leave - in this order: js/teksty/zbojcy.txt, wybor)
     function offerChoice(h) {
         h._offerCd = 99999;
         const list = [
             { code: 101, indent: 0, parameters: ["", 0, 0, 2, ""] },
-            { code: 401, indent: 0, parameters: ["\\SPK[0]" + h.name() + " klęczy i błaga o życie. Co z nim zrobić?"] },
+            { code: 401, indent: 0, parameters: ["\\SPK[0]" + Watki.wstaw(TK.kod.offerChoice[0], { "1": h.name() })] },
             { code: 102, indent: 0, parameters: [CHOICES, 3, 0, 2, 0] }
         ];
         const what = ["spare", "rob", "kill", "leave"];
@@ -1193,7 +1194,7 @@
             h._defeatedHow = "spared";
             defeated(h, "spared");
             const s = S(), d = day();
-            if (s.opinionDay.spare !== d) { s.opinionDay.spare = d; T.call("TownQuests", "addOpinion", D.OPINION.spare, "puściłeś wolno pokonanego"); }
+            if (s.opinionDay.spare !== d) { s.opinionDay.spare = d; T.call("TownQuests", "addOpinion", D.OPINION.spare, TK.kod.decide[0]); }
             if (Math.random() < 0.45) tellRumour(h);
             else if (Math.random() < 0.4) { const g = Math.max(1, Math.round(h._gold * 0.3)); $gameParty.gainGold(g); }
             h._surrendered = false;
@@ -1229,8 +1230,8 @@
     function tellRumour(h) {
         const s = S(), left = D.RUMOURS.filter(r => !s.rumours.includes(r)), r = pick(left.length ? left : D.RUMOURS);
         if (!s.rumours.includes(r)) s.rumours.push(r);
-        T.popup("Plotka od pokonanego", { top: true, color: "#ffe9a8", sub: r });
-        T.call("Journal", "addNote", "Plotka od pokonanego " + (h._def.name.toLowerCase()), r);
+        T.popup(TK.kod.tellRumour[0], { top: true, color: "#ffe9a8", sub: r });
+        T.call("Journal", "addNote", Watki.wstaw(TK.kod.tellRumour[1], { "1": h._def.name.toLowerCase() }), r);
     }
     // the hero next to a kneeling man, nobody else after him: the choice
     function checkOffer(scene) {
@@ -1295,7 +1296,7 @@
         }
         if (r.t === 180) {
             $gameScreen.startFadeIn(36);
-            T.popup("Pobili cię i obrabowali", { top: true, color: "#ff9f8f", sub: (r.gold > 0 ? "Zabrali " + r.gold + " G" : "Nie mieli czego zabrać") + (r.items.length ? " i trochę jedzenia" : "") + ". Jesteś ranny." });
+            T.popup(TK.kod.updateRobbery[0], { top: true, color: "#ff9f8f", sub: Watki.wstaw(TK.kod.updateRobbery[4], { "1": (r.gold > 0 ? Watki.wstaw(TK.kod.updateRobbery[1], { gold: r.gold }) : TK.kod.updateRobbery[2]) + (r.items.length ? TK.kod.updateRobbery[3] : "") }) });
             T.emit("heroRobbed", { tag: r.band.tag, gold: r.gold, items: r.items });
             robbery = null;
         }
@@ -1397,12 +1398,12 @@
                     const down = typeof tg.isDown === "function" && tg.isDown(), Hn = H(), sp = Hn && tg.kind ? Hn.SPECIES[tg.kind()] : null;
                     const r = Math.max(0.45, (sp && sp.radius) || tg._hitRadius || 0.5);   // (_hitRadius: a big target of its own - the eagle, Orzel.js)
                     if (!down && typeof tg.takeHit === "function" && Math.hypot(a.x - tg.centerX(), a.y - (tg.centerY() - 0.15)) < r) {
-                        tg.takeHit({ damage: a.dmg, poise: a.poise, from: a.from, name: "strzała", shot: true, knock: a.from._def.shot.knock, wound: a.from._def.shot.wound });
+                        tg.takeHit({ damage: a.dmg, poise: a.poise, from: a.from, name: TK.kod.updateArrows[0], shot: true, knock: a.from._def.shot.knock, wound: a.from._def.shot.wound });
                         a.done = true;
                         break;
                     }
                 } else if (!a.passed && Math.hypot(a.x - heroX(), a.y - (heroY() - 0.2)) < 0.45 && Cb && Cb.hitPlayer) {
-                    const res = Cb.hitPlayer({ damage: a.dmg, poise: a.poise, from: { x: a.x - a.vx, y: a.y - a.vy }, attacker: a.from, name: "strzała", wound: a.from._def.shot.wound,
+                    const res = Cb.hitPlayer({ damage: a.dmg, poise: a.poise, from: { x: a.x - a.vx, y: a.y - a.vy }, attacker: a.from, name: TK.kod.updateArrows[0], wound: a.from._def.shot.wound,
                         knock: a.from._def.shot.knock, unparryable: true, unblockable: !(Cb.shield && Cb.shield()), projectile: true, nonLethal: a.from.mercy(),
                         onBeaten: () => beatenBy(a.from) });
                     if (res === "dodged") { a.passed = true; continue; }
@@ -1465,7 +1466,7 @@
             if (!dropsOf().includes(c)) return;
             if (c.gold > 0) $gameParty.gainGold(c.gold);
             for (const [id, n] of c.items || []) if ($dataItems[id]) $gameParty.gainItem($dataItems[id], n);
-            if (!(c.gold > 0) && !(c.items || []).length) popup(0, c.kind === "sack" ? "Worek jest pusty" : "Nic tu nie ma", "#cfd6de");
+            if (!(c.gold > 0) && !(c.items || []).length) popup(0, c.kind === "sack" ? TK.kod.take[0] : TK.kod.take[1], "#cfd6de");
             c.gold = 0;
             c.items = [];
             if (c.kind !== "body") removeDrop(c);
@@ -1989,16 +1990,16 @@
         pending = null;
         if (p === "bandit" || p === "knifer" || p === "archer" || p === "mercenary") {
             const h = spawnNear(p, p === "archer" ? 6 : 5, p === "archer" ? 8 : 7, { tag: "f9" });
-            if (h) { h._summoned = true; popup(0, "Ktoś idzie... " + h._def.name.toLowerCase() + "!", "#ffd98f"); }
-            else popup(0, "Nie ma tu miejsca", "#bcd8ff");
+            if (h) { h._summoned = true; popup(0, Watki.wstaw(TK.kod.summon[0], { "1": h._def.name.toLowerCase() }), "#ffd98f"); }
+            else popup(0, TK.kod.summon[1], "#bcd8ff");
         } else if (p === "raid") {   // (as if he had been asleep: the band that came for the sleeper)
-            if (raidBand(false, { tag: "f9" })) popup(0, "Ktoś się skradał do śpiącego...", "#ffd98f");
-            else popup(0, "Nie ma tu miejsca na napad", "#bcd8ff");
+            if (raidBand(false, { tag: "f9" })) popup(0, TK.kod.summon[2], "#ffd98f");
+            else popup(0, TK.kod.summon[3], "#bcd8ff");
         } else if (p === "ambush") {
-            if (!ambush(["bandit", "bandit", "archer"], { tag: "f9" })) popup(0, "Nie ma tu miejsca na zasadzkę", "#bcd8ff");
+            if (!ambush(["bandit", "bandit", "archer"], { tag: "f9" })) popup(0, TK.kod.summon[4], "#bcd8ff");
         } else if (p === "camp") {
-            if (forceCamp({ tag: "" })) popup(0, "Gdzieś między drzewami płonie ognisko...", "#ffd98f");
-            else popup(0, "Nie ma tu miejsca na obóz", "#bcd8ff");
+            if (forceCamp({ tag: "" })) popup(0, TK.kod.summon[5], "#ffd98f");
+            else popup(0, TK.kod.summon[6], "#bcd8ff");
         }
     }
     let campWait = 0, rotWait = 0;

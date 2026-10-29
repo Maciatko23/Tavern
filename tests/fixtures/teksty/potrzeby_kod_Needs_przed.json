@@ -1,0 +1,39 @@
+{
+ "kod": {
+  "warn": {
+   "0": "Jesteś głodny",
+   "1": "Bardzo głodny: wszystko kosztuje więcej sił",
+   "2": "Głodujesz! Zjedz coś",
+   "3": "Chce ci się pić",
+   "4": "Odwodnienie! Napij się wody",
+   "5": "Umierasz z pragnienia! Napij się"
+  },
+  "eat": {
+   "0": "sytość +{1}",
+   "1": "nawodnienie +{1}"
+  },
+  "drinkFromSkin": {
+   "0": "Potrzebujesz bukłaka",
+   "1": "Bukłak jest pusty",
+   "2": "Nie chce ci się pić",
+   "3": "Napiłeś się: nawodnienie +{got} (bukłak {2}/{max})"
+  },
+  "playBuzzerSound": {
+   "0": "Bukłak jest pusty",
+   "1": "Nie chce ci się pić"
+  },
+  "setItem": {
+   "0": "na osiem łyków (powiększony)",
+   "1": "{text}\nWoda: {2} z {max} łyków."
+  },
+  "nag": {
+   "0": "Kręci mi się w głowie... muszę coś zjeść i się napić!",
+   "1": "Kręci mi się w głowie... muszę się napić!",
+   "2": "Kręci mi się w głowie... muszę coś zjeść!",
+   "3": "Jestem głodny i spragniony...",
+   "4": "Muszę się czegoś napić...",
+   "5": "Muszę coś zjeść..."
+  }
+ },
+ "_opis": "Napisy kodu Needs.js sprzed przeniesienia do js/teksty/potrzeby.txt (kod.*)"
+}

@@ -1,0 +1,72 @@
+# Teksty psa (Dog.js): oswajanie, menu psa, polowanie, miska, składowisko.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz pies
+
+
+# ======================================================================== z kodu Dog.js (kod.<funkcja>.<n>, w kolejności kodu)
+# think
+kod.think.0 = Pies zmęczony - odpoczywa w budzie
+# hunt
+kod.hunt.0 = {1} uciekł{2} psu
+kod.hunt.1 = Pies złapał ptaka i zjadł go
+kod.hunt.2 = Pies złapał ptaka
+kod.hunt.3 = Jeleń kopnął psa
+kod.hunt.4 = Jeleń wyrwał się psu i uciekł (ranny)
+kod.hunt.5 = Pies najadł się jeleniem - tusza leży
+kod.hunt.6 = Pies upolował i zjadł: {name}
+kod.hunt.7 = Pies upolował: {name}
+# haul
+kod.haul.0 = Pies przyniósł ci zdobycz
+# unload
+kod.unload.0 = Pies zniósł na składowisko: {1}
+# hurtDog
+kod.hurtDog.0 = Pies jest ranny - wlecze się do budy
+# tickNeeds
+kod.tickNeeds.0 = Pies wyzdrowiał
+# feedWild
+kod.feedWild.0 = Nie masz mięsa
+kod.feedWild.1 = Pies już zjadł - daj mu chwilę
+kod.feedWild.2 = Pies zjadł {1} (zaufanie {trust}/{trustNeed})
+kod.feedWild.3 = Pies ci zaufał! Zamieszka w budzie.
+kod.feedWild.4 = Pies ci zaufał i chodzi za tobą. Zbuduj mu budę.
+# setMode
+kod.setMode.0 = Pies potrzebuje budy
+kod.setMode.1 = Pies pobiegł do budy
+kod.setMode.2 = Pies idzie za tobą
+kod.setMode.3 = Pies zostaje tutaj
+kod.setMode.4 = Pies rusza na polowanie
+kod.setMode.5 = Pies pracuje: zbiera i poluje
+# bowlText
+kod.bowlText.0 = Miska: jedzenie {food}, woda {2}/{3}
+# pourWater
+kod.pourWater.0 = Miska jest pełna
+kod.pourWater.1 = Nie masz wody: nabierz do wiadra albo bukłaka
+kod.pourWater.2 = Woda w misce: {bowlWater}/{max}
+# glowna
+kod.glowna.0 = Nalej wody do miski
+kod.glowna.1 = Miska jest pełna.
+kod.glowna.2 = Nalewasz porcję wody z wiadra (albo z bukłaka). Pies napije się z miski, kiedy nie znajdzie wody - ze studni sam nie sięgnie.
+kod.glowna.3 = Potrzebujesz wody: nabierz do wiadra albo do bukłaka (przy studni, stawie, garnku z deszczówką).
+# statusNote
+kod.statusNote.0 = Nieufny: zaufanie {trust}/{trustNeed}. Rzuć mu mięso (najwyżej raz na godzinę).
+kod.statusNote.1 = " · RANNY ({1} godz.)"
+kod.statusNote.2 = Życie {1}/{2} · Siły {3}/{4} · Jedzenie {5} · Woda {6}{hurt}{8}
+# openDogMenu
+kod.openDogMenu.0 = Rzuć mu mięso
+kod.openDogMenu.1 = Rzucasz mu kawałek mięsa (z kilku kroków, bo nie da się podejść). Po trzech posiłkach, najwyżej jeden na godzinę, pies zostanie z tobą.
+kod.openDogMenu.2 = Potrzebujesz mięsa: surowego, pieczonego albo wędzonego (albo ryby).
+kod.openDogMenu.3 = Pogłaszcz
+kod.openDogMenu.4 = Pies merda ogonem.
+kod.openDogMenu.5 = Chodź za mną
+kod.openDogMenu.6 = Pies chodzi za tobą, także na inne mapy.
+kod.openDogMenu.7 = Pracuj sam
+kod.openDogMenu.8 = Pies zbiera gałęzie, kamienie i włókno, poluje na zające, jelenie i ptaki i znosi wszystko na składowisko. Nocą śpi w budzie.
+kod.openDogMenu.9 = Najpierw zbuduj psu budę.
+kod.openDogMenu.10 = Pies szuka zwierzyny na całej mapie - zające, jelenie i ptaki - i przynosi ją w pysku na składowisko (bez składowiska: pod budę albo do ciebie). Gdy nic nie widać, węszy po okolicy.
+kod.openDogMenu.11 = Zostań
+kod.openDogMenu.12 = Pies kładzie się tutaj i czeka.
+kod.openDogMenu.13 = Dziki pies
+# run
+kod.run.0 = Pies merda ogonem ♥
+# update
+kod.update.0 = Składowisko

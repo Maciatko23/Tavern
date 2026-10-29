@@ -8,7 +8,7 @@ import os
 import sys
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
-from make_residents import RESIDENTS
+from make_residents import RESIDENTS, PODROZNI
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
@@ -24,6 +24,13 @@ ENTRIES = [('hero', 'Hero_Bust', 'Bohater', 'Hero_Walk', (0, 0)), ('dziadek', 'S
 for key, who, base in RESIDENTS:
     K = key[0].upper() + key[1:]
     ENTRIES.append((key, K + '_Bust', who, '$Npc_' + K, (1, 0)))
+# the travellers from the ferry (2026-10-29): their own keys and sheet names (Pula_M, not Pula_m); the pool's colour variants too
+for key, K, who in PODROZNI:
+    ENTRIES.append((key, K + '_Bust', who, '$Npc_' + K, (1, 0)))
+for K, who in (('Pula_M2', 'Podróżny w płaszczu, wariant 2'), ('Pula_M3', 'Podróżny w płaszczu, wariant 3'),
+               ('Pula_K2', 'Podróżna w chuście, wariant 2'), ('Pula_K3', 'Podróżna w chuście, wariant 3'),
+               ('Pula_S2', 'Starzec z laską, wariant 2'), ('Pula_Z2', 'Marynarz, wariant 2')):
+    ENTRIES.append((K.lower(), K + '_Bust', who, '$Npc_' + K, (1, 0)))
 
 OK, PART, BAD, FIXED = 'PASUJE', 'CZĘŚCIOWO', 'NIE PASUJE', 'POPRAWIONE'
 COL = {OK: (120, 220, 120), PART: (240, 200, 80), BAD: (255, 100, 90), FIXED: (110, 190, 255)}
@@ -131,6 +138,41 @@ PO = {
                           'ciemna kamizelka - jak na mapie i na planszy prologu.'),
     'celnik': (FIXED, 'nowe Celnik_Bust (baza SF_People1_5, bez wąsów): czarna okrągła czapka bez daszka, krótkie siwe włosy, siwe '
                       'bokobrody, gładki podbródek, wąskie usta, czerwony kaftan z czarnym kołnierzem i czarnym koniem, księga pod pachą.'),
+    # the travellers from the ferry (2026-10-29, docs/PODROZNI.md): PixelLab sheets + busts made to match them from the start
+    'pula_m': (OK, 'baza SF_Actor1_7: ciemnozielony wełniany płaszcz zapięty pod szyją mosiężną zapinką, kaptur zsunięty na kark, kremowa '
+                   'lniana tunika, krótkie brązowe włosy, krótka pełna brązowa broda z wąsami, opalona twarz.'),
+    'pula_k': (OK, 'baza People4_6: ciemnoczerwona wełniana chusta zawiązana pod brodą, brązowe włosy na czole, brązowy dziany szal ze '
+                   'skrzyżowanymi końcami i frędzlami, zgaszona niebieska suknia, góra złamanobiałego fartucha.'),
+    'pula_s': (OK, 'baza People1_7: łysy czubek głowy, białe włosy po bokach, krzaczaste białe brwi, krótka biała broda z wąsami, '
+                   'pomarszczona twarz, gruby brązowy szal z frędzlami, długi szaroniebieski wełniany płaszcz (laska poniżej kadru).'),
+    'pula_z': (OK, 'baza SF_People1_3: granatowa dziana czapka bez daszka, ogorzała twarz, krótki ciemny zarost, granatowa wełniana kurta '
+                   'z wyłogami, kremowa lniana koszula rozpięta pod szyją.'),
+    'pula_m2': (OK, 'Pula_M przekolorowany (tools/podroznicy/pula_kolory.py): rdzawobrązowy płaszcz - jak arkusz.'),
+    'pula_m3': (OK, 'Pula_M przekolorowany: szaroniebieski płaszcz - jak arkusz.'),
+    'pula_k2': (OK, 'Pula_K przekolorowana: musztardowa chusta, mszysta suknia - jak arkusz.'),
+    'pula_k3': (OK, 'Pula_K przekolorowana: granatowa chusta, śliwkowa suknia - jak arkusz.'),
+    'pula_s2': (OK, 'Pula_S przekolorowany: oliwkowy płaszcz - jak arkusz.'),
+    'pula_z2': (OK, 'Pula_Z przekolorowany: bordowa czapka i kurta - jak arkusz.'),
+    'tobiasz': (OK, 'baza Actor1_1: szeroki brązowy filcowy kapelusz z ciemną taśmą i szarym piórem, potargane brązowe włosy, '
+                    'czerwona chusta, zabłocony granatowy płaszcz jeździecki ze stójką, skórzany pas torby przez pierś.'),
+    'medyk': (OK, 'baza People2_1: siwe dłuższe rozczochrane włosy, okrągłe druciane okulary, zmęczona twarz z workami pod oczami, '
+                  'krótka siwa broda z wąsami, ciemnozielony płaszcz, biały lniany fartuch z szelką na szyi. Twarz raczej ~55-60 lat.'),
+    'kartograf': (OK, 'baza People3_5 (bez bródki): łysy z siwymi kępkami nad uszami, krzaczaste siwe brwi, gładko ogolony, brązowa '
+                      'kamizelka na kremowej koszuli, za ramieniem skórzana tuba na mapy.'),
+    'grajek': (OK, 'baza People2_7: szeroki uśmiech, ciemny zarost, miękka szarobrązowa filcowa czapka z czerwonymi, niebieskimi i '
+                   'żółtymi wstążkami, łatana kamizelka (czerwień, ochra, oliwka) na lnianej koszuli, piszczałki dud za ramieniem.'),
+    'zboze': (PART, 'baza SF_Actor3_1: płaski brązowy kaszkiet, gładko ogolona pełniejsza twarz z podwójnym podbródkiem, bordowy płaszcz '
+                    'z brązowym futrzanym kołnierzem, wór zboża za ramieniem. Twarz młodsza (~45) i mniej okrągła niż na mapie.'),
+    'urszula': (OK, 'baza SF_Actor1_2: biała lniana chusta opadająca na ramiona, ciemne włosy z siwizną, zmęczona smutna twarz, '
+                    'brązowy dziany szal, sprana szaroniebieska suknia, list u dołu kadru.'),
+    'relikwie': (OK, 'baza Actor3_3: wysoka czerwona filcowa czapka (fez), czarne włosy na skroniach, podkręcone czarne wąsy, fioletowy '
+                     'kaftan ze złotą lamówką, kilkanaście tanich amuletów na sznurkach, rzemienie skrzynki. Twarz węższa niż na mapie.'),
+    'wizytator': (OK, 'baza People2_1: łysy z tonsurą, białe włosy na skroniach, małe okrągłe okulary w czarnej oprawce, dobrotliwa '
+                      'pomarszczona twarz bez zarostu, czarny habit z kapturem na ramionach (inny niż szary habit Ambrożego).'),
+    'dezerter': (OK, 'baza People3_3: krótkie potargane czarne włosy, zarost, cienie pod oczami, podarta brudna biała tunika z '
+                     'pomarańczowym feniksem i śladem po zerwanych dystynkcjach, brązowy płaszcz na ramionach (bandaż poniżej kadru).'),
+    'lowczyni': (OK, 'baza Actor2_6 (zbroja całkiem zamalowana): krótkie siwe włosy zaczesane do tyłu, blizna przez policzek, surowa '
+                     'twarz, długi ciemnobrązowy skórzany płaszcz z wysokim kołnierzem, kusza na plecach nad ramieniem, pas przez pierś.'),
 }
 
 BH = 280                 # the bust's height here

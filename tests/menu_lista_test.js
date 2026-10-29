@@ -316,12 +316,13 @@ kit.test({ port: 9579, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("Dziennik: działy Zadania, Zlecenia, Surowce, Notatki, Okolice, Gablotka (bez Cele, Miasteczko, Budynki, Receptury, Zapasy)",
         m.journal.names && m.journal.names.join() === "Zadania,Zlecenia,Surowce,Notatki,Okolice,Gablotka", m.journal.names);
     const heads = (m.journal.heads || []).map(h => h.label);
-    const rows = await t.json("SceneManager._scene._views.journal._list._items.map(i => ({ label: i.label, head: !!i.head, group: i.group || null, goal: i.goal ? i.goal.id : null, quest: i.quest ? i.quest.id : null, mark: i.mark || null }))");
+    const rows = await t.json("SceneManager._scene._views.journal._list._items.map(i => ({ label: i.label, head: !!i.head, group: i.group || null, goal: i.goal ? i.goal.id : null, quest: i.quest ? i.quest.id : null, watek: i.watek || null, mark: i.mark || null }))");
     const inGroup = (g, f) => rows.some(r => !r.head && r.group === g && f(r));
     t.check("Zadania: grupy z nagłówkami i licznikami - FABUŁA, POBOCZNE, ROZWÓJ ... UKOŃCZONE na końcu",
         heads[0] === "FABUŁA" && heads[1] === "POBOCZNE" && heads[2] === "ROZWÓJ" && heads[heads.length - 1] === "UKOŃCZONE" && m.journal.heads.every(h => h.count > 0), m.journal.heads);
-    t.check("FABUŁA: dług dziadka i wątek W1; POBOCZNE: K1 (z rombem - śledzone); ROZWÓJ: otwarte cele (np. młotek); UKOŃCZONE: rozmowa z dziadkiem i kamienie z plecaka",
-        inGroup("story", r => r.goal === "story_debt") && inGroup("story", r => r.quest === "W1") && inGroup("side", r => r.quest === "K1" && r.mark === "pin") && inGroup("growth", r => r.goal === "hammer") && inGroup("done", r => r.goal === "story_talk") && inGroup("done", r => r.goal === "stone"), rows.filter(r => !r.head).map(r => r.group + ":" + (r.goal || r.quest) + ":" + r.mark));
+    // (2026-10-28: chapter 1 is a thread of the journal - Watki.js's "fabula" - no longer its goals)
+    t.check("FABUŁA: rozdział 1 (dług dziadka) i wątek W1; POBOCZNE: K1 (z rombem - śledzone); ROZWÓJ: otwarte cele (np. młotek); UKOŃCZONE: kamienie z plecaka",
+        inGroup("story", r => r.watek === "fabula") && inGroup("story", r => r.quest === "W1") && inGroup("side", r => r.quest === "K1" && r.mark === "pin") && inGroup("growth", r => r.goal === "hammer") && inGroup("done", r => r.goal === "stone"), rows.filter(r => !r.head).map(r => r.group + ":" + (r.goal || r.quest || r.watek) + ":" + r.mark));
     t.check("kursor na pierwszym wpisie (nie na nagłówku), pod listą „w toku N · wykonane M”", m.journal.index === 1 && m.journal.kind === "goal" && /^w toku \d+ {2}· {2}wykonane \d+$/.test(m.journal.legend), m.journal);
     await shot("dziennik");
     m = await key("D", 6);
@@ -337,12 +338,12 @@ kit.test({ port: 9579, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("S z ostatniego wpisu FABUŁY: przez nagłówek prosto na pierwszy wpis POBOCZNYCH", m.journal.index === lastStory + 2 && m.journal.group === "side", m.journal);
     m = await key("W");
     t.check("W: z powrotem (nagłówek pominięty)", m.journal.index === lastStory, m.journal);
-    // the debt's goal: O pins it - K1 is let go
-    const debtAt = rows.findIndex(r => r.goal === "story_debt");
+    // chapter 1's thread: O pins it - K1 is let go
+    const debtAt = rows.findIndex(r => r.watek === "fabula");
     await t.eval(`(function(){ const l = SceneManager._scene._views.journal._list; l.select(${debtAt}); l.ensureCursorVisible(false); l.updateHelp(); return 0; })()`);
     m = await key("O", 6);
-    t.check("O na celu: przypięty (romb), K1 już nie śledzone - jedno naraz", m.journal.pinned === "story_debt" && m.journal.pin && m.journal.pin.owner === "goal" && (await t.eval("TownQuests.state().track")) === null && m.journal.marks.length === 1 && /^Spłać dług dziadka/.test(m.journal.marks[0]), { pin: m.journal.pin, marks: m.journal.marks });
-    t.check("okienko celu idzie za przypiętym celem", (await t.json("Journal.tracked() && Journal.tracked().id")) === "story_debt");
+    t.check("O na wątku: przypięty (romb), K1 już nie śledzone - jedno naraz", !m.journal.pinned && m.journal.pin && m.journal.pin.owner === "watki" && m.journal.pin.id === "watek:fabula" && (await t.eval("TownQuests.state().track")) === null && m.journal.marks.length === 1 && /^Rozdział 1: Dług dziadka/.test(m.journal.marks[0]), { pin: m.journal.pin, marks: m.journal.marks });
+    t.check("okienko celu idzie za przypiętym wątkiem", (await t.json("Journal.tracked() && Journal.tracked().id")) === "fabula");
     // the thread W1, with its words on the right
     const w1At = rows.findIndex(r => r.quest === "W1");
     await t.eval(`(function(){ const l = SceneManager._scene._views.journal._list; l.select(${w1At}); l.ensureCursorVisible(false); l.updateHelp(); return 0; })()`);
@@ -361,9 +362,10 @@ kit.test({ port: 9579, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // ---------------------------------------------------------------- Opcje: W / S, A / D a value
     m = await goTo("options");   // (2026-10-24: past the Mapa tab)
     m = await key("O", 6);
-    t.check("Opcje: lista opcji ma klawisze, pierwsza „Wygląd”", m.level === 2 && m.options.symbol === "uiClean" && m.activeWindows.includes("Window_Options"), m.options);
+    // (2026-10-28: one look - no "Wygląd"; the first row is "Jakość grafiki" with its line of text under it, Wydajnosc.js)
+    t.check("Opcje: lista opcji ma klawisze, pierwsza „Jakość grafiki”", m.level === 2 && m.options.symbol === "gfxQuality" && m.activeWindows.includes("Window_Options"), m.options);
     m = await key("S");
-    t.check("S: następna opcja", m.options.index === 1, m.options);
+    t.check("S: następna opcja (wiersz opisu pominięty)", m.options.index === 2, m.options);
     await t.eval(`(function(){ const w = SceneManager._scene._views.options._win; w.select(w.findSymbol("seVolume")); w.ensureCursorVisible(false); return 0; })()`);
     const se0 = await t.eval("ConfigManager.seVolume");
     await key("A");
@@ -449,12 +451,12 @@ kit.test({ port: 9579, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("wczytanie zapisu z menu", await t.loadFrom(free));
     t.check("po wczytaniu: sakiewka jak w chwili zapisu", (await t.eval("$gameParty.gold()")) === gold0, { gold0, now: await t.eval("$gameParty.gold()") });
 
-    // ---------------------------------------------------------------- the classic look still: MenuPanel's panel
+    // ---------------------------------------------------------------- one menu (2026-10-28): also with the tests' switch of the old HUD parts
     await t.eval("ConfigManager.uiClean = false; window.dispatchEvent(new Event('pointerdown')); 0");
     await t.key("P");
     await t.until(inMenu, 10);
     await t.frames(20);
-    t.check("Klasyczny (Opcje -> Wygląd): stare menu (panel i lista poleceń), bez zakładek Grafit", (await t.eval("!!SceneManager._scene._menuPanel && SceneManager._scene._menuPanel.visible && SceneManager._scene._commandWindow.visible && !SceneManager._scene._grafit")) && (await info()) === null);
+    t.check("jedno menu P: także przy starych częściach HUD-u (przełącznik testów) zakładki, bez panelu MenuPanel i bez listy poleceń", (await t.eval("!SceneManager._scene._menuPanel && !SceneManager._scene._commandWindow.visible")) && !!(await info()));
     await t.key("Escape");
     await t.until(t.onMap(), 10);
     await t.eval("ConfigManager.uiClean = true; 0");

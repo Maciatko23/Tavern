@@ -376,7 +376,8 @@ kit.test({ plugins: PARTS, beforeLoad: REGISTERED, bootCheck: "the game boots", 
         return { names, tab, items, pin: first && first.mark, ops, legend: Journal.itemsForTab(tab).length };
     })()`);
     t.check("the journal has a 'Zlecenia' tab listing the contract in hand and the finished ones", jr.tab >= 0 && jr.items.includes(second.title) && jr.items.length >= 3, jr);
-    t.check("its page shows what is needed (have/need), the pay and the term", jr.ops.some(o => /^h:Potrzeba/.test(o)) && jr.ops.some(o => /^cost:/.test(o)) && jr.ops.some(o => /^h:Nagroda/.test(o)), jr.ops);
+    // (2026-10-28, one look: the journal page's headings are "gh" - the old classic kind "h" is gone)
+    t.check("its page shows what is needed (have/need), the pay and the term", jr.ops.some(o => /^gh:Potrzeba/.test(o)) && jr.ops.some(o => /^cost:/.test(o)) && jr.ops.some(o => /^gh:Nagroda/.test(o)), jr.ops);
     await t.frames(10);
     await t.shot(path.join(SHOTS, "tablica_dziennik.png"));
     await t.eval("(function(){ const s = SceneManager._scene; s._list.select(0); s.onListOk(); return 0; })()");

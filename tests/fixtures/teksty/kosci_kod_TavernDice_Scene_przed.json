@@ -1,0 +1,57 @@
+{
+ "scena": {
+  "rollOffFlow": {
+   "0": "Kto zaczyna?",
+   "1": "Remis! Jeszcze raz.",
+   "2": "Zaczynasz ty",
+   "3": "Zaczyna {short}"
+  },
+  "turnFlow": {
+   "0": "Twoja tura",
+   "1": "Tura: {short}"
+  },
+  "bustFlow": {
+   "0": "Pudło!",
+   "1": "Tura przepada: −{lost}",
+   "2": "Żadna kość nie punktuje"
+  },
+  "hotFlow": {
+   "0": "Gorące kości!",
+   "1": "Wszystkie sześć odłożone — rzut całą szóstką, punkty zostają"
+  },
+  "visionAfter": {
+   "0": "Dziadek Ozzy i kości",
+   "1": "Grałem z Dziadkiem Ozzym w kości. Zanim kości wypadły z kubka, wymamrotał, co pokażą. Zgadzało się co do oczka.\nPijacki fart? Ozzy mówi czasem rzeczy, których nie mógłby wiedzieć..."
+  },
+  "endFlow": {
+   "0": "Pula {1} jest twoja",
+   "1": "{short} zgarnia pulę"
+  },
+  "fameHint": {
+   "0": "Przy oknie siedzi bogaty kupiec z miasta, ale gra tylko z ludźmi, których zna.",
+   "1": "W kącie ktoś w kapturze przygląda się stołom. Podobno gra tylko z chlubą tawerny."
+  },
+  "finishGame": {
+   "0": "Sakiewka od: {name} (+{2})",
+   "1": "Nowa kość: {name}",
+   "2": "Dostałem ją od: {name}.\n{desc}\n{effect}\nPrzy stole do kości mogę ją wybrać do swojej szóstki.",
+   "3": "Nowa kość do gry: {name}",
+   "4": "Pierwsza wygrana w kości",
+   "5": "Wygrałem pierwszą partię kości w tawernie „Pod Złotym Kuflem”. Rywal: {name}, pula {2}.\nSzczęście? Może. Ale odłożyć właściwe kości też trzeba umieć.",
+   "6": "Wielka wygrana w kości: +{1}!",
+   "7": "Pula od: {name}"
+  },
+  "againBlock": {
+   "0": "Tylko jedna partia.",
+   "1": "{short} już dziś nie zagra.",
+   "2": "Robi się późno — {short} odchodzi od stołu.",
+   "3": "Za mało złota na tę stawkę."
+  },
+  "openEnd": {
+   "0": "Jeszcze raz",
+   "1": "Inna gra",
+   "2": "Odchodzę"
+  }
+ },
+ "_opis": "Napisy kodu TavernDice_Scene.js sprzed przeniesienia do js/teksty/kosci.txt (scena.*)"
+}

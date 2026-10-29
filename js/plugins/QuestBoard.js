@@ -168,6 +168,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("tablica");   // (the words of this file: js/teksty/tablica.txt, kod.*)
 
     const PLUGIN = "QuestBoard";
     const T = window.Tawerna;
@@ -198,17 +199,18 @@
     const BOUNTY_GOLD = span(params.bountyGold, [90, 120]);
     // the reputation tiers: from `rep` (0-100) and from day `day` on. gold/xp: what a notice of that tier pays; days: its term
     const TIERS = [
-        { name: "Nowy w okolicy", rep: 0, day: 1, gold: span(params.goldTier0, [10, 25]), xp: [20, 35], gain: 4, days: [3, 4] },
-        { name: "Znajoma twarz", rep: 20, day: 4, gold: span(params.goldTier1, [15, 40]), xp: [35, 55], gain: 5, days: [4, 5] },
-        { name: "Swój chłop", rep: 40, day: 10, gold: span(params.goldTier2, [30, 55]), xp: [55, 80], gain: 6, days: [4, 6] },
-        { name: "Pewna ręka", rep: 60, day: 18, gold: span(params.goldTier3, [45, 80]), xp: [80, 110], gain: 7, days: [5, 7] },
-        { name: "Chluba tawerny", rep: 80, day: 28, gold: span(params.goldTier4, [60, 100]), xp: [110, 150], gain: 8, days: [6, 8] }
+        { rep: 0, day: 1, gold: span(params.goldTier0, [10, 25]), xp: [20, 35], gain: 4, days: [3, 4] },
+        { rep: 20, day: 4, gold: span(params.goldTier1, [15, 40]), xp: [35, 55], gain: 5, days: [4, 5] },
+        { rep: 40, day: 10, gold: span(params.goldTier2, [30, 55]), xp: [55, 80], gain: 6, days: [4, 6] },
+        { rep: 60, day: 18, gold: span(params.goldTier3, [45, 80]), xp: [80, 110], gain: 7, days: [5, 7] },
+        { rep: 80, day: 28, gold: span(params.goldTier4, [60, 100]), xp: [110, 150], gain: 8, days: [6, 8] }
     ];
+    Watki.scal(TIERS, "tablica", "progi");   // (the tiers' names: js/teksty/tablica.txt, progi.<n>.name)
     const plural = (n, one, few, many) => (n === 1 ? one : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? few : many);
-    const dniWord = n => (n === 1 ? "dzień" : "dni");
+    const dniWord = n => (n === 1 ? TK.kod.dniWord[0] : "dni");
     // places for the hunts (QuestBoard_Data.js PLACES: the name and "where"), else the map's own name
     const placeName = id => (D().PLACES[id] ? D().PLACES[id][0] : ($dataMapInfos && $dataMapInfos[id] ? String($dataMapInfos[id].name).replace(/#\d+$/, "") : "?"));
-    const placeWhere = id => (D().PLACES[id] ? D().PLACES[id][1] : "na mapie " + placeName(id));
+    const placeWhere = id => (D().PLACES[id] ? D().PLACES[id][1] : Watki.wstaw(TK.kod.placeWhere[0], { "1": placeName(id) }));
     const TEMPLATE = id => D().TEMPLATES.find(t => t.id === id) || null;
 
     // ------------------------------------------------------------------
@@ -312,7 +314,7 @@
         if (tier >= 1 && G.gift && G.gift.length && R.chance(0.35)) gift = R.pick(G.gift).slice();
         if (gift && !item(gift[0])) gift = null;
         const dieKey = bounty ? BOUNTIES[req[0].key].die : tier >= 4 && R.chance(0.15) ? "krucze" : null;   // (TavernDice.js special dice)
-        const fill = s => s.replace(/\{place\}/g, map ? placeWhere(map) : "w okolicy").replace(/\{Place\}/g, map ? placeName(map) : "okolica");
+        const fill = s => s.replace(/\{place\}/g, map ? placeWhere(map) : TK.kod.fill[0]).replace(/\{Place\}/g, map ? placeName(map) : "okolica");
         const pin = G.pin === "nail" ? R.pick(["nail", "nail", "brass", "red"]) : G.pin;
         return {
             id: "q" + ctx.nextId++, tpl: tpl.id, type: tpl.type, giver: tpl.giver, title: fill(R.pick(tpl.title)), text: fill(R.pick(tpl.text)),
@@ -417,7 +419,7 @@
     const daysLeft = n => (n.due || 0) - today() + 1;
     function daysText(n) {
         const k = daysLeft(n);
-        return k > 1 ? "zostały " + k + " dni" : k === 1 ? "dziś ostatni dzień" : "po terminie";
+        return k > 1 ? "zostały " + k + " dni" : k === 1 ? TK.kod.daysText[0] : TK.kod.daysText[1];
     }
     const reqName = q => (q.k === "item" ? itemName(q.id) : q.k === "bounty" ? D().BOUNTIES[q.key].name : cap(D().BEASTS[q.kind].few) + " upolowane");
     const reqPlace = q => (q.map ? placeName(q.map) : "");
@@ -426,8 +428,8 @@
 
     function accept(id) {
         const n = find(id);
-        if (!n || n.state !== "open") return { ok: false, why: "Tego zlecenia już nie ma na tablicy." };
-        if (activeList().length >= MAX_ACTIVE) return { ok: false, why: "Masz już " + MAX_ACTIVE + " zlecenia. Najpierw któreś oddaj albo porzuć." };
+        if (!n || n.state !== "open") return { ok: false, why: TK.kod.accept[0] };
+        if (activeList().length >= MAX_ACTIVE) return { ok: false, why: Watki.wstaw(TK.kod.accept[1], { MAX_ACTIVE: MAX_ACTIVE }) };
         n.state = "active";
         n.accepted = today();
         n.due = today() + n.days - 1;
@@ -465,9 +467,7 @@
         const J = T.api("Journal"), G = D().GIVERS[n.giver];
         if (J && J.addNote) {
             if (tpl && tpl.note) J.addNote(tpl.note[0], tpl.note[1]);
-            else J.addNote("Zlecenie: " + n.title, "Dla: " + G.name + " (" + G.role + "). Wykonane w dniu " + today() + ".\n" +
-                "Oddałem: " + n.req.map(q => reqName(q) + " " + q.n).join(", ") + ".\nZapłata: " + n.gold + " G" + (toDebt ? " (od razu na poczet długu dziadka)" : "") +
-                ", " + n.xp + " dośw., sława +" + n.rep + (n.gift ? ", " + itemName(n.gift[0]) + " ×" + n.gift[1] : "") + ".");
+            else J.addNote(Watki.wstaw(TK.kod.turnIn[0], { title: n.title }), Watki.wstaw(TK.kod.turnIn[2], { name: G.name, role: G.role, "3": today(), "4": n.req.map(q => reqName(q) + " " + q.n).join(", "), gold: n.gold, "6": toDebt ? TK.kod.turnIn[1] : "", xp: n.xp, rep: n.rep, "9": n.gift ? ", " + itemName(n.gift[0]) + " ×" + n.gift[1] : "" }));
         }
         const res = { id, gold: n.gold, xp, rep: n.rep, repBefore: before, repAfter: d.rep, gift: n.gift, die, toDebt, tierUp: repTier(d.rep) > repTier(before) ? TIERS[repTier(d.rep)].name : null };
         for (const fn of listeners) { try { fn(n, res); } catch (e) { console.error(e); } }
@@ -496,7 +496,7 @@
         d.history.unshift({ id: n.id, tpl: n.tpl, title: n.title, giver: n.giver, type: n.type, day: today(), gold: 0, xp: 0, rep: -loss, state: "failed", req: n.req.map(q => Object.assign({}, q)) });
         d.history.length = Math.min(d.history.length, 40);
         if (d.track === n.id) d.track = null;
-        notice("Zlecenie przepadło: " + n.title, "#ff9f8f", "Minął termin. Sława w tawernie -" + loss);
+        notice(Watki.wstaw(TK.kod.fail[0], { title: n.title }), "#ff9f8f", Watki.wstaw(TK.kod.fail[1], { loss: loss }));
         return loss;
     }
     function failDue() {
@@ -528,7 +528,7 @@
                 if (q.k === "bounty" && animal._qbBounty === n.id && (q.got || 0) < 1) { q.got = 1; moved = true; }
             }
             if (!moved) continue;
-            if (isReady(n)) notice("Zlecenie gotowe: " + n.title, "#9ff0a8", "Oddaj je przy tablicy zleceń w tawernie.");
+            if (isReady(n)) notice(Watki.wstaw(TK.kod.onKill[0], { title: n.title }), "#9ff0a8", TK.kod.onKill[1]);
             else {
                 const q = n.req.find(r => r.k !== "item" && have(r) < r.n) || n.req[0];
                 notice(n.title + ": " + reqName(q) + " " + Math.min(have(q), q.n) + "/" + q.n, "#ffd23f");
@@ -547,14 +547,14 @@
         if (scene._qbT % 30 !== 0 || !hasState()) return;
         const d = data();
         failDue();
-        if (checkCycle() && d.tutorial) notice("Na tablicy w tawernie wiszą nowe ogłoszenia", "#ffd23f");
+        if (checkCycle() && d.tutorial) notice(TK.kod.glowna[0], "#ffd23f");
         for (const n of activeList()) {
             if (n.req.some(q => q.k === "item")) {   // (kills say it themselves, see onKill)
                 const ok = isReady(n);
-                if (ok && !n.said) { n.said = true; notice("Masz wszystko do zlecenia: " + n.title, "#9ff0a8", "Oddaj je przy tablicy zleceń w tawernie."); }
+                if (ok && !n.said) { n.said = true; notice(Watki.wstaw(TK.kod.glowna[1], { title: n.title }), "#9ff0a8", TK.kod.glowna[2]); }
                 else if (!ok && n.said && n.req.some(q => q.k === "item" && !rowDone(q))) n.said = false;
             }
-            if (daysLeft(n) === 1 && !n.warned && !isReady(n)) { n.warned = true; notice("Dziś mija termin zlecenia: " + n.title, "#ffb36b"); }
+            if (daysLeft(n) === 1 && !n.warned && !isReady(n)) { n.warned = true; notice(Watki.wstaw(TK.kod.glowna[3], { title: n.title }), "#ffb36b"); }
         }
         updateBounties(scene);
     }, { owner: PLUGIN, name: "board" });
@@ -607,7 +607,7 @@
         beast._hp = beast._maxHp;
         beast._maxPoise = Math.round((beast._maxPoise || 20) * 1.5);
         beast._poise = beast._maxPoise;
-        notice("W pobliżu grasuje " + B.name + "!", "#ff9f8f", "POSZUKIWANY - zlecenie z tablicy w tawernie");
+        notice(Watki.wstaw(TK.kod.spawnBounty[0], { name: B.name }), "#ff9f8f", TK.kod.spawnBounty[1]);
         T.audio.se(B.kind === "wolf" ? "Wolf" : "Monster3", { volume: 70, pitch: B.kind === "wolf" ? 85 : 75 });
         return beast;
     }
@@ -713,12 +713,12 @@
     // addTrackerSource)
     // ------------------------------------------------------------------
     function trackLine(n) {
-        if (isReady(n)) return "Gotowe! Oddaj przy tablicy w tawernie.";
+        if (isReady(n)) return TK.kod.trackLine[0];
         const lack = n.req.filter(q => !rowDone(q)).slice(0, 2).map(q => reqName(q) + " " + Math.min(have(q), q.n) + "/" + q.n);
         return lack.join(" · ") + " · " + daysText(n);
     }
     function journalItems() {
-        if (!hasState()) return [{ label: "Brak zleceń", mark: "locked", dim: true, empty: true }];
+        if (!hasState()) return [{ label: TK.kod.journalItems[0], mark: "locked", dim: true, empty: true }];
         const d = data(), out = [];
         for (const n of activeList()) {
             const q = n.req.find(r => !rowDone(r)) || n.req[0];
@@ -728,32 +728,32 @@
         for (const h of d.history.slice(0, 15)) {
             const q = (h.req || [])[0];
             out.push({ label: h.title, icon: q ? (q.k === "item" ? iconOf(q.id) : iconOf(D().BEASTS[q.kind].icon)) : 0, mark: h.state === "done" ? "done" : "locked",
-                right: (h.state === "done" ? "dz. " : h.state === "failed" ? "przepadło, dz. " : "porzucone, dz. ") + h.day, dim: true, hist: h });
+                right: (h.state === "done" ? "dz. " : h.state === "failed" ? TK.kod.journalItems[1] : TK.kod.journalItems[2]) + h.day, dim: true, hist: h });
         }
-        if (!out.length) out.push({ label: "Brak zleceń", mark: "locked", dim: true, empty: true });
+        if (!out.length) out.push({ label: TK.kod.journalItems[0], mark: "locked", dim: true, empty: true });
         return out;
     }
     function journalOps(it) {
         if (!it || it.empty) {
             return [{ k: "title", text: "Zlecenia" }, { k: "rule" },
-                { k: "p", text: "Tu zobaczysz zlecenia z tablicy w tawernie „Pod Złotym Kuflem”: co trzeba przynieść albo upolować, do kiedy i za ile. Tablica wisi w sieni tawerny." }];
+                { k: "p", text: TK.kod.journalOps[0] }];
         }
         if (it.hist) {
             const h = it.hist, G = D().GIVERS[h.giver];
-            return [{ k: "title", text: h.title }, { k: "sub", text: (G ? G.name + ", " + G.role : "") + "  ·  dzień " + h.day }, { k: "rule" },
-                { k: "p", text: h.state === "done" ? "Wykonane. Zapłata: " + h.gold + " G, " + h.xp + " dośw., sława +" + h.rep + "." : h.state === "failed" ? "Termin minął. Sława " + h.rep + "." : "Porzucone. Sława " + h.rep + "." }];
+            return [{ k: "title", text: h.title }, { k: "sub", text: Watki.wstaw(TK.kod.journalOps[1], { "1": G ? G.name + ", " + G.role : "", day: h.day }) }, { k: "rule" },
+                { k: "p", text: h.state === "done" ? Watki.wstaw(TK.kod.journalOps[2], { gold: h.gold, xp: h.xp, rep: h.rep }) : h.state === "failed" ? Watki.wstaw(TK.kod.journalOps[3], { rep: h.rep }) : Watki.wstaw(TK.kod.journalOps[4], { rep: h.rep }) }];
         }
         const n = it.contract, G = D().GIVERS[n.giver], d = data(), J = T.api("Journal");
-        const ops = [{ k: "title", text: n.title, icon: it.icon }, { k: "sub", text: G.name + ", " + G.role + "  ·  " + (isReady(n) ? "gotowe do oddania" : "do dnia " + n.due + " (" + daysText(n) + ")") }, { k: "rule" },
+        const ops = [{ k: "title", text: n.title, icon: it.icon }, { k: "sub", text: G.name + ", " + G.role + "  ·  " + (isReady(n) ? TK.kod.journalOps[5] : Watki.wstaw(TK.kod.journalOps[6], { due: n.due, "2": daysText(n) })) }, { k: "rule" },
             { k: "p", text: n.text }, { k: "gap", n: 8 }, { k: "h", text: "Potrzeba" }];
         for (const q of n.req) {
             const src = q.k === "item" && J && J.sourceLines ? (J.sourceLines(q.id)[0] || "") : "";
             ops.push({ k: "cost", icon: q.k === "item" ? iconOf(q.id) : iconOf(D().BEASTS[q.kind].icon), name: reqName(q) + (q.map ? " (" + placeName(q.map) + ")" : ""), have: Math.min(have(q), q.n), need: q.n,
-                note: q.k === "item" && have(q) < q.n ? src : q.k === "bounty" ? "Grasuje " + placeWhere(q.map) + ", " + D().BOUNTIES[q.key].hint + "." : "" });
+                note: q.k === "item" && have(q) < q.n ? src : q.k === "bounty" ? Watki.wstaw(TK.kod.journalOps[7], { "1": placeWhere(q.map), hint: D().BOUNTIES[q.key].hint }) : "" });
         }
         ops.push({ k: "gap", n: 8 }, { k: "h", text: "Nagroda" },
-            { k: "row", text: n.gold + " G  ·  " + n.xp + " dośw.  ·  sława +" + n.rep + (n.gift ? "  ·  " + itemName(n.gift[0]) + " ×" + n.gift[1] : "") });
-        ops.push({ k: "gap", n: 8 }, { k: "muted", text: "Oddajesz je przy tablicy zleceń w tawernie „Pod Złotym Kuflem”. " + (d.track === n.id ? "Śledzisz je w okienku celu. OK: przestań śledzić." : "OK: śledź je w okienku celu na ekranie.") });
+            { k: "row", text: Watki.wstaw(TK.kod.journalOps[8], { gold: n.gold, xp: n.xp, rep: n.rep, "4": n.gift ? "  ·  " + itemName(n.gift[0]) + " ×" + n.gift[1] : "" }) });
+        ops.push({ k: "gap", n: 8 }, { k: "muted", text: Watki.wstaw(TK.kod.journalOps[11], { "1": d.track === n.id ? TK.kod.journalOps[9] : TK.kod.journalOps[10] }) });
         return ops;
     }
     const JOURNAL = T.api("Journal");
@@ -762,8 +762,8 @@
             name: "Zlecenia",
             items: () => journalItems(),
             detail: it => ({ ops: journalOps(it) }),
-            legend: () => { const d = hasState() ? data() : { rep: 0, stats: { done: 0 } }; return "Sława " + d.rep + "/100  ·  " + TIERS[repTier(d.rep)].name + "  ·  wykonane: " + d.stats.done; },
-            help: "OK: śledź na ekranie   ←/→: zakładka",
+            legend: () => { const d = hasState() ? data() : { rep: 0, stats: { done: 0 } }; return Watki.wstaw(TK.kod.legend[0], { rep: d.rep, name: TIERS[repTier(d.rep)].name, done: d.stats.done }); },
+            get help() { return TK.dziennik.pomoc; },   // (read when the tab shows - the words are in by then: js/teksty/tablica.txt)
             ok: it => { if (it && it.contract && it.contract.state === "active") { track(data().track === it.contract.id ? null : it.contract.id); SoundManager.playOk(); } }
         });
     }
@@ -780,7 +780,7 @@
             const reqIcon = r => (r.k === "item" ? iconOf(r.id) : D().BEASTS[r.kind] ? iconOf(D().BEASTS[r.kind].icon) : 0);
             const needs = n.req.map(r => ({ icon: reqIcon(r), name: reqName(r), have: have(r), need: r.n }));
             return { label: "ZLECENIE", title: n.title, line, key: n.id + "|" + line, source: "board", id: n.id, needs,
-                sub: isReady(n) ? "Gotowe! Oddaj przy tablicy w tawernie." : daysText(n),
+                sub: isReady(n) ? TK.kod.glowna[4] : daysText(n),
                 icon: q ? (q.k === "item" ? iconOf(q.id) : iconOf(D().BEASTS[q.kind].icon)) : 0 };
         }, { owner: "board", pinned: () => (hasState() ? data().track || null : null), unpin: () => { if (hasState()) data().track = null; } });
     }

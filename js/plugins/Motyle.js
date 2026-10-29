@@ -22,6 +22,7 @@
  * @plugindesc Motyle za dnia i ćmy nocą przy ogniu, siatka na motyle, gablotka w Dzienniku, zapylanie, bielinki na kapuście, K54. v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
  * @orderAfter Motyle_Data
  *
  * @param enabled
@@ -57,6 +58,7 @@
     const T = window.Tawerna;
     if (!T) throw new Error("Motyle.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
     const D = window.MotyleData;
+    const w = Watki.get("motyle");   // (the thread: Motyle_Data.js - K54, Kleofas's chronicle)
     if (!D) throw new Error("Motyle.js: brak Motyle_Data.js - musi stać wyżej na liście wtyczek (the butterflies' data is missing)");
     // (2026-10-23) the words: js/teksty/motyle.txt (D.TX; D.TX.kod - the words of this file)
     const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
@@ -967,25 +969,13 @@
     }
 
     // ------------------------------------------------------------------
-    // The quest K54 (TownQuests pack in Motyle_Data.js): the offer only while peacocks fly (spring, summer, the first week of autumn);
-    // the peacock in the net lives till dusk; done - it flies up from Ela
+    // The quest K54 (the thread's, Motyle_Data.js - the engine Watki.js): the offer only while peacocks fly (spring, summer, the first
+    // week of autumn); the peacock in the net lives till dusk; done - it flies up from Ela
     // ------------------------------------------------------------------
-    const TQ = () => T.api("TownQuests");
-    const qs = () => { const q = TQ(); try { return q && q.state ? q.state() : null; } catch (e) { return null; } };
-    const vcount = k => { const s = qs(); return s && s.v ? s.v[k] || 0 : 0; };
-    const vgive = (k, n) => { const s = qs(); if (s) s.v[k] = (s.v[k] || 0) + (n || 1); };
-    const vtake = (k, n) => { const s = qs(); if (!s || !s.v) return; s.v[k] = Math.max(0, (s.v[k] || 0) - (n || 1)); if (!s.v[k]) delete s.v[k]; };
-    const questActive = id => { const q = TQ(); try { const r = q && q.rec ? q.rec(id) : null; return !!r && r.s === "active"; } catch (e) { return false; } };
-    const qflag = k => { const s = qs(); return !!(s && s.flags && s.flags[k]); };
-    function refreshQuest() { const q = TQ(); try { if (q && q.refreshMarkers) q.refreshMarkers(); if (q && q.autoChecks) q.autoChecks(); } catch (e) { /* (no quests) */ } }
-    function hookQuests() {
-        const q = TQ();
-        if (!q || !q.FX || hookQuests.done) return;
-        hookQuests.done = true;
-        Object.assign(q.FX, {
-            k54Pora: { cond: () => { const s = season(); return s === 0 || s === 1 || (s === 2 && T.time.dayOfSeason() <= 7); } }
-        });
-    }
+    const { vcount, vgive, vtake } = w;
+    const questActive = id => w.active(id);
+    const qflag = k => w.flag(k);
+    function refreshQuest() { const q = T.api("TownQuests"); try { if (q && q.refreshMarkers) q.refreshMarkers(); if (q && q.autoChecks) q.autoChecks(); } catch (e) { /* (no quests) */ } }
     T.on("townQuestDone", e => {
         if (!e || e.id !== "K54") return;
         // the peacock flies up out of the net by Ela, round the camp and away
@@ -1010,46 +1000,15 @@
 
     // ------------------------------------------------------------------
     // Brother Kleofas (Pustelnia) writes the kinds into the chronicle: a short talk while there are kinds he has not written yet; the
-    // whole display case - his thanks and honey. Only once he has ink (K50 done: the flag kleofasCzyta)
+    // whole display case - his thanks and honey. Only once he has ink (K50 done: the flag kleofasCzyta). The talk: Motyle_Data
+    // rozmowy.kronika
     // ------------------------------------------------------------------
-    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
-    const LINE = 46, PAGE = 3;
-    function wrap(text) {
-        const out = [];
-        let line = "";
-        for (const w of String(text).split(/\s+/)) {
-            if (!w) continue;
-            if (line && (line + " " + w).length > LINE) { out.push(line); line = w; } else line = line ? line + " " + w : w;
-        }
-        if (line) out.push(line);
-        return out;
-    }
-    function sayTo(out, id, name, text) {
-        const lines = wrap(text);
-        for (let i = 0; i < lines.length; i += PAGE) {
-            out.push(C(101, ["", 0, 0, 2, name || ""]));
-            lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 ? "\\SPK[" + id + "]" : "") + l])));
-        }
-        return out;
-    }
-    function linesTo(out, spk, arr, vars) {
-        for (const raw of arr || []) {
-            let s = String(raw);
-            for (const k of Object.keys(vars || {})) s = s.split("{" + k + "}").join(vars[k]);
-            if (s.startsWith("> ")) sayTo(out, 0, "", s.slice(2)); else sayTo(out, spk.id, spk.name, s);
-        }
-        return out;
-    }
     function kleofasTalk(ev) {
         if (!qflag("kleofasCzyta")) return null;
         const s = store(), fresh = ORDER.filter(k => s.caught[k] && !s.kron[k]);
         if (!fresh.length) return null;
-        const spk = { id: ev.eventId(), name: D.TX.kod.kleofas }, out = [];
-        const all = ORDER.every(k => s.caught[k]);
-        if (all && !s.kronDone) linesTo(out, spk, D.KLEOFAS.full);
-        else linesTo(out, spk, D.KLEOFAS.partial, { lista: fresh.map(nameOf).join(", ") });
-        out.push(C(355, ["Motyle.act(this, " + JSON.stringify(["kron", fresh, all]) + ")"]));
-        return out;
+        return w.rozmowa("kronika", { spk: { id: ev.eventId(), name: D.TX.kod.kleofas }, swieze: fresh, lista: fresh.map(nameOf).join(", "),
+            wszystkie: ORDER.every(k => s.caught[k]), juzCala: !!s.kronDone });
     }
     // (2026-10-23, docs/ROZMOWY.md) the core's talk service: the chronicle of butterflies is an errand at Kleofas's talk - right after
     // Latarnia's, before every other takeover (as the old hook, put first at the first map)
@@ -1060,21 +1019,28 @@
             run: ctx => { try { return kleofasTalk(ctx.ev); } catch (e) { console.error("[Motyle]", e); return null; } } });
     }
     hookTalk();
+    // the kinds written (a, the list) - the whole case (b): his honey, the note
+    function chronicle(a, b) {
+        const s = store();
+        for (const k of a || []) s.kron[k] = day();
+        if (b && !s.kronDone && ORDER.every(k => s.kron[k])) {
+            s.kronDone = day();
+            const rw = D.KLEOFAS.reward;
+            for (const [id, n] of rw.items || []) if (itemOf(id)) $gameParty.gainItem(itemOf(id), n);
+            if (rw.xp) T.call("Combat", "gainXp", rw.xp, D.KLEOFAS.note[0]);
+            T.call("Journal", "addNote", D.KLEOFAS.note[0], D.KLEOFAS.note[1]);
+            T.popup(D.KLEOFAS.note[0], { top: true, color: "#9ff0a8", sub: fill(D.TX.kod.kronikaNagroda, { xp: rw.xp }) });
+        }
+    }
+    w.haki({
+        poraPawika: () => { const s = season(); return s === 0 || s === 1 || (s === 2 && T.time.dayOfSeason() <= 7); },
+        kronika: (ctx, a, b) => chronicle(a, b)
+    });
+    // (the old script call of the chronicle's talk - a talk saved before 2026-10-28; the new one goes to Watki.act)
     function act(interp, args) {
         if (!Array.isArray(args)) return;
         const [what, a, b] = args;
-        if (what === "kron") {
-            const s = store();
-            for (const k of a || []) s.kron[k] = day();
-            if (b && !s.kronDone && ORDER.every(k => s.kron[k])) {
-                s.kronDone = day();
-                const rw = D.KLEOFAS.reward;
-                for (const [id, n] of rw.items || []) if (itemOf(id)) $gameParty.gainItem(itemOf(id), n);
-                if (rw.xp) T.call("Combat", "gainXp", rw.xp, D.KLEOFAS.note[0]);
-                T.call("Journal", "addNote", D.KLEOFAS.note[0], D.KLEOFAS.note[1]);
-                T.popup(D.KLEOFAS.note[0], { top: true, color: "#9ff0a8", sub: fill(D.TX.kod.kronikaNagroda, { xp: rw.xp }) });
-            }
-        }
+        if (what === "kron") chronicle(a, b);
     }
 
     // ------------------------------------------------------------------
@@ -1209,7 +1175,7 @@
     T.on("mapEnter", () => reset(), { owner: PLUGIN });
     T.on("load", () => { reset(); force = null; }, { owner: PLUGIN });
     T.on("newGame", () => { reset(); force = null; }, { owner: PLUGIN });
-    T.on("mapReady", () => { hookQuests(); hookTalk(); }, { owner: PLUGIN });
+    T.on("mapReady", () => { hookTalk(); }, { owner: PLUGIN });
     const perf = { ms: 0, n: 0, max: 0, drawn: 0 };
     T.onMapUpdate(scene => {
         if (!ENABLED || !window.$gameMap || !$gamePlayer) return;

@@ -4,9 +4,10 @@
 // PAKIET B (docs/miejsca_wyspy/PAKIETY.md) - the data of "Urwisko Kruków" (Map157) and the tame raven (concept approved by the user
 // 2026-10-16: docs/miejsca_wyspy/KONCEPCJA.md section 4; the user's choices: the player names the raven, letters only about the
 // island, the perch stands on the field). Only data and texts - the engine is Kruk.js.
-//   - window.TownQuestsPacks: K51 "Kruk z masztu" (Roch at the harbour; the raven on the cutter's mast at dawn leads the hero over the
-//     hermitage to the ravenry), D24 "Oswojony kruk" (three feedings in the ravenry, the ring with the scroll = chronicle card 6,
-//     grandpa's "long story", the perch on the field), the residents' remarks once the raven is tame
+//   - the thread "kruk" (Watki.js, 2026-10-28): the state, K51 "Kruk z masztu" (Roch at the harbour; the raven on the cutter's mast at
+//     dawn leads the hero over the hermitage to the ravenry), D24 "Oswojony kruk" (three feedings in the ravenry, the ring with the
+//     scroll = chronicle card 6, grandpa's "long story", the perch on the field) - into window.TownQuestsPacks with the residents'
+//     remarks once the raven is tame; the talk of a foreign letter given back to its owner
 //   - window.KrukData: the raven's sheet, the food, the letters (to whom, the answers), the foreign letters it brings, the trinkets,
 //     the scouting, the texts
 // Stands under Wyspa_Data and above TownLife / TownQuests_Data (its fixed place in js/plugins.js - package 0).
@@ -17,6 +18,7 @@
  * @plugindesc [pakiet B] Dane: Urwisko Kruków (mapa 157) i oswojony kruk: K51, D24, listy, cudze listy, błyskotki, zwiad. v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
  * @orderAfter Wyspa_Data
  *
  * @help
@@ -109,31 +111,7 @@
     // ------------------------------------------------------------------ the texts
     const TX = Watki.teksty("kruk");
 
-    // ------------------------------------------------------------------ the quests (TownQuests packs - docs/QUESTY_STAN.md "Jak dopisać")
-    const K51 = {
-        id: "K51", kind: "K", giver: "przemytnik", icon: RING_ICON, 
-        offer: {
-            cond: { day: 8, hours: [5, 13], flags: ["rochMet"], fn: "k51Ready" }
-        },
-        steps: [
-            { type: "custom", check: "k51Mast" },
-            { type: "custom", check: "k51Follow", vars: "k51Follow" }
-        ],
-        reward: { xp: 40, flag: "urwiskoOdkryte" }
-    };
-    Watki.scal(K51, "kruk", "zadania.K51");   // (its words: js/teksty/kruk.txt, zadania.K51)
-    const D24 = {
-        id: "D24", kind: "D", giver: "grandpa", icon: RING_ICON, autoStart: "d24Start",
-        steps: [
-            { type: "custom", check: "d24Feed", vars: "d24Feed" },
-            { type: "talk", to: "grandpa", guard: "d24Ring", 
-                reward: { } },
-            { type: "custom", check: "d24Perch", vars: "d24Perch" }
-        ],
-        reward: { xp: 100 },
-        lines: { }
-    };
-    Watki.scal(D24, "kruk", "zadania.D24");   // (its words: js/teksty/kruk.txt, zadania.D24)
+    // ------------------------------------------------------------------ the remarks and the gossip (they go with the quests' pack)
     const REMARKS = [
         { id: "krukJanek", who: "janek", flag: "krukTame" },
         { id: "krukRoch", who: "przemytnik", flag: "krukTame" },
@@ -144,7 +122,58 @@
     Watki.scal(REMARKS, "kruk", "uwagi");   // (its words: js/teksty/kruk.txt, uwagi)
     const GOSSIP = { przemytnik: [] };
     Watki.scal(GOSSIP, "kruk", "plotki");   // (its words: js/teksty/kruk.txt, plotki)
-    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Kruk", quests: [K51, D24], remarks: REMARKS, gossip: GOSSIP });
+
+    // ------------------------------------------------------------------ the thread (the engine Watki.js, docs/WATKI_DANE.md): the state
+    // "kruk", the quests K51 "Kruk z masztu" and D24 "Oswojony kruk" (their words: js/teksty/kruk.txt, zadania.*; the engine puts them into
+    // window.TownQuestsPacks with the remarks and the gossip), the talk of a foreign letter given back. The hooks (the places built,
+    // the leg's words, the ring, the perch, the letter's return) are Kruk.js's
+    const w = Watki.watek({
+        id: "kruk", wtyczka: "Kruk", teksty: "kruk",
+        stan: { klucz: "kruk", wersja: 1, domyslne: () => ({
+            stage: "wild",          // wild | tame | gone (hungry: back at the Urwisko)
+            name: "", feeds: [], scaredUntil: 0, tamedDay: 0,
+            mode: "follow", food: 80, water: 80, clock: null, zeroSince: 0,
+            away: null,             // { kind: "letter" | "scout", until, to, map, quest }
+            letterDay: 0, scoutDay: 0, sent: {}, opinion: {},
+            scout: null,            // { day, map } - the marks shown there till the day's end
+            trinket: null, trinketDay: 0,
+            held: {}, gone: {},     // the foreign letters: held[id] = { read }, gone[id] = "back" | "sold"
+            k51: { leg: 0 }, stones: {}, camp: { cleared: {}, seen: 0, n: 0 }, visited: {}, baltAsked: 0, nightSaid: 0
+        }) },
+        zadania: {
+            // K51: from Roch, once the Urwisko and the hermitage are built and the raven is still wild; the legs: Kruk.js (state k51.leg)
+            K51: { kind: "K", giver: "przemytnik", icon: RING_ICON, offer: { cond: { day: 8, hours: [5, 13], flags: ["rochMet"], fn: "k51Ready" } },
+                oferta: [{ hak: "miejsceGotowe", args: [MAP] }, { hak: "miejsceGotowe", args: [HERMITAGE] }, "stan:stage=wild"],
+                kroki: [
+                    { nazwa: "k51Mast", gotowe: { lub: ["stan:k51.leg>=1", "stan:stage!=wild"] } },
+                    { nazwa: "k51Follow", gotowe: { lub: ["stan:k51.leg>=5", "stan:stage!=wild"] }, zmienne: { gdzie: { hak: "k51Gdzie" } } }
+                ],
+                reward: { xp: 40, flag: "urwiskoOdkryte" } },
+            // D24 starts by itself after K51 (or once the raven was fed / tamed)
+            D24: { kind: "D", giver: "grandpa", icon: RING_ICON, autoStart: "d24Start", start: { lub: ["zrobione:K51", "ile:feeds>0", "stan:stage=tame"] },
+                kroki: [
+                    { nazwa: "d24Feed", gotowe: { lub: ["stan:stage=tame", "ile:feeds>=" + RAVEN.feedNeed] }, zmienne: { n: { ile: "feeds", najwyzej: RAVEN.feedNeed } } },
+                    // grandpa looks at the ring (not without it in the bag)
+                    { nazwa: "d24Ring", type: "talk", to: "grandpa", haki: { blocked: "bezObraczki" },
+                        reward: { } },
+                    { nazwa: "d24Perch", gotowe: "grzedaStoi", zmienne: { imie: { hak: "imieKruka" } } }
+                ],
+                reward: { xp: 100 },
+                lines: { } }
+        },
+        paczka: { remarks: REMARKS, gossip: GOSSIP },
+        // a foreign letter the raven brought: the hero gives it back to its owner (ctx: nr - its place in FOREIGN, list - its id,
+        // przeczytany - read by the hero)
+        rozmowy: {
+            oddaj: [{ mow: "listOddaj", kto: "bohater" },
+                { jesli: "ctx:przeczytany", to: [{ mow: "obce.{nr}.backRead" }], inaczej: [{ mow: "obce.{nr}.back" }] },
+                { zrob: "oddaj", args: [{ ctx: "list" }] }]
+        },
+        akcje: {
+            oddaj: [{ hak: "oddajList", args: [{ arg: 0 }] }]
+        }
+    });
+    const K51 = w.Q.K51, D24 = w.Q.D24;
 
     window.KrukData = { MAP, HARBOUR, HERMITAGE, FIELD, IDS: [610, 629], ITEM, RAVEN_ICON, RING_ICON, SHEET, RAVEN, LETTERS, MOTHER, FOREIGN, TRINKET, TX,
         K51, D24, REMARKS,

@@ -61,7 +61,7 @@
  *   WINIETA - delikatnie ciemniejsze rogi; mocniej nocą, w jaskini i w
  *     podziemiach; w trybie walki lekko pulsuje.
  *
- * OPCJE (Opcje, w obu wyglądach - Grafit i Klasyczny):
+ * OPCJE (Opcje - menu P i ekran tytułowy):
  *   Efekty obrazu: Wł / Wył, Siła efektów 0-100%, Poświata, Barwy pory
  *   dnia, Winieta (każde Wł / Wył).
  *
@@ -115,13 +115,13 @@
     };
     const opt = k => (ConfigManager[k] === undefined ? DEFAULTS[k] : ConfigManager[k]);
 
-    // the rows: right under "Wygląd" (CleanHUD.js) when it is there, else first; the effect rows greyed while the main switch is off
+    // the rows: first in the list (Wydajnosc.js puts "Jakość grafiki" over them); the effect rows greyed while the main switch is off
     const _addGeneralOptions = Window_Options.prototype.addGeneralOptions;
     Window_Options.prototype.addGeneralOptions = function() {
         _addGeneralOptions.call(this);
-        const at = this._list.findIndex(c => c.symbol === "uiClean") + 1, main = !!opt(OPT.on);
+        const main = !!opt(OPT.on);
         const rows = ROWS.map(([name, symbol]) => ({ name, symbol, enabled: symbol === OPT.on || main, ext: null }));
-        this._list.splice(at, 0, ...rows);
+        this._list.splice(0, 0, ...rows);
     };
     // the strength is a slider like the volumes (OptionEx.js and MenuRing.js draw it as a bar, 5% a step, 0-100)
     const _isVolumeSymbol = Window_Options.prototype.isVolumeSymbol;
@@ -151,7 +151,7 @@
             for (const k in DEFAULTS) ConfigManager[k] = DEFAULTS[k];
         };
     }
-    // the graphite look (MenuRing.js) writes "Tak" / "Nie" for every switch: these say "Wł" / "Wył" there too, in the same style.
+    // the options' rows (MenuRing.js) write "Tak" / "Nie" for every switch: these say "Wł" / "Wył" there too, in the same style.
     // Put round the row drawing only once every plugin is in (at Scene_Boot's start, or at once when put into a running page), so it
     // is the outer one wherever this plugin stands on the list.
     let drawWrapped = false;
@@ -161,7 +161,7 @@
         const _drawItem = Window_Options.prototype.drawItem;
         Window_Options.prototype.drawItem = function(index) {
             const symbol = this.commandSymbol(index), CH = T.api("CleanHUD");
-            if (SWITCHES.includes(symbol) && T.api("MenuRing") && CH && CH.isClean && CH.isClean() && CH.textOut && this.itemLineRect) {
+            if (SWITCHES.includes(symbol) && T.api("MenuRing") && CH && CH.textOut && this.itemLineRect) {
                 const r = this.itemLineRect(index, false), s = this.itemLineRect(index, true), c = this.contents, C = CH.C;
                 const en = this.isCommandEnabled(index), on = !!this.getConfigValue(symbol);
                 CH.textOut(c, this.commandName(index), r.x, r.y, r.width, r.height, "left", { size: 18, color: en ? C.text : C.dim, plain: true });

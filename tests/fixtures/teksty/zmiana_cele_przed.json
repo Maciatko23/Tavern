@@ -1,0 +1,28 @@
+{
+ "czesci": {
+  "cel": {
+   "przetrzyj": "Przetrzyj stół",
+   "doKominka": "Dorzuć do kominka",
+   "polano": "Weź polano",
+   "worek": "Weź worek śmieci",
+   "kubel": "Weź kubeł z resztkami",
+   "wyrzuc": "Wyrzuć za drzwi",
+   "zajete": "Masz zajęte ręce",
+   "odstaw": "Odstaw: ",
+   "wez": "Weź: ",
+   "podaj": "Podaj: ",
+   "chce": "Chce: ",
+   "odstawWszystko": "Odstaw wszystko na ladę"
+  },
+  "hud": {
+   "doOtwarcia": "Do otwarcia: ",
+   "zadania": "Zadania: ",
+   "kufel": "Kufel ",
+   "kranSkacze": "Uwaga: kran skacze!",
+   "danie": "Danie ",
+   "doZamkniecia": "Do zamknięcia: ",
+   "obsluzone": "Obsłużone: "
+  }
+ },
+ "_opis": "Napisy targets() i hud() części zmiany (TavernShift_Parts.js) sprzed przeniesienia do js/teksty/zmiana.txt, czesci.cel / czesci.hud (co klatkę: liczby i nazwy dań doklejane jak dawniej)"
+}

@@ -184,6 +184,13 @@ Lista gry `js/tawerna_wtyczki.js` (do 2026-10-23 `js/plugins.js`; 82 wtyczek w t
 81  TownQuests_Data, TownQuests ← questy miasteczka (docs/QUESTY.md, stan: docs/QUESTY_STAN.md): zadania w rozmowach mieszkańców (TownLife.addTalkHook), Opinia w miasteczku 0-100, zakładka dziennika „Miasteczko”, dzień targowy, sygnały dzwonu; stan Tawerna.state("townQuests"); szyna: townQuestAccepted / townQuestDone / townQuestFailed / townOpinion; zdarzenia 951-959
 87  Underground_Data, Underground ← podziemia pod tawerną (docs/PODZIEMIA.md): piętra 1-9 składane z kawałków mapy 130 (ziarno zapisu, Tawerna.onMapData na mapach 131-139), piętro 10 ręcznie (Map140), krata w piwnicy (przełącznik 11); stan Tawerna.state("underground"); szyna: undergroundFloor / undergroundDeeper / undergroundLoot / undergroundNote / undergroundGate / undergroundLift; zdarzenia stworów 860-899
 96  Okolice_Data, Zasoby_Data, Lowy_Data, Ludzie_Data, Zakon_Data ← (2026-10-21/22) nowy teren 21 powiększonych map (docs/rozszerzenia/PLAN.md): dane rdzenia i czterech paczek, nad TownLife (TownLifeExtra, TownQuestsPacks)
+102 Podroznicy_Data ← (2026-10-28) podróżni z promu (docs/PODROZNI.md, rozdz. 18 niżej): obsada, pula, pokoje, plany dnia; mieszkańcy TownLife 3020-3049, wątek „podroznicy” (Watki.js); nad TownLife
+103 SwieteKosci_Data, Dezerter_Data ← (2026-10-29, etap 4 podróżnych) łańcuchy W15 „Święte kości” i W16 „Dezerter” jako wątki silnika (zadania do TownQuestsPacks, stany „swieteKosci” i „dezerter”); pod Podroznicy_Data, nad TownLife
+103 W1_Data, W2_Data, W3_Data, W6_Data, W8_Data, Przystan_Data ← (2026-10-29, etap 4 - docs/WATKI_DANE.md 7c) łuki miasteczka jako wątki silnika: zadania W1/W2/W3/W6/W8 (kroki z nazwami) i zadania przystani K47, K48, D20, W10 z rozmowami i stanem „przystan”; TownQuests_Data wkłada je na stare miejsca listy (ARC), kod kroków: haki W1_HAKI... w TownQuests.js, Przystan.js
+110 Rynek_Data, Straz_Data, Oboz_Data, Goscie_Data, W4_Data, W9_Data ← (2026-10-29, etap 5 - docs/WATKI_DANE.md 7d) reszta zadań miasteczka jako wątki silnika: rynek (K1, K5, K9, K13-K17, K20, D3, D16), straż (K37-K39, D11, D14, D17), obóz (K19, K27-K29, D4, D10, D18), stali goście (K22, K33, D13, D6), W4 rozdz. 1-5, W9 rozdz. 6; haki RYNEK_HAKI... w TownQuests.js (obiekt FX pusty)
+130 Podroznicy ← (2026-10-28) silnik podróżnych z promu: planowanie promu, księga pokoi, Renoma karczmy, scena przybycia, rozmowy, F9; pod Kasztelan (czyli pod TownQuests, Przystan, Garnizon, Kantor, Wrak, Act3)
+    Podroznicy_Sprawy ← (2026-10-29, etap 2) haki zadań K71, K72, D39-D43 (dane w Podroznicy_Data), podsłuch przez ścianę (Podroznicy.podsluch), Antek i Zenon w garnizonie; zaraz pod Podroznicy
+131 SwieteKosci, Dezerter ← (2026-10-29) silniki łańcuchów W15 / W16: haki danych, sceny (kazanie, bęben, noc pod piątką, przysięga), kurier 3050 i Tymon 3060 (`Tawerna.inject`, właściciel „Lancuchy”), echa w Akcie III (Act3Data.WIEDZA_FRAKCJI, obrońcy); pod Podroznicy
 135 Okolice, Zasoby, Lowy, Ludzie, Zakon ← silniki pod Orzel_Lot: rdzeń Okolice (miejsca i test kolizji, odkrycia i zakładka dziennika „Okolice”, kompas `Okolice.track`, wiersze F9 `Okolice.f9`, upał/susza, cień słońca) i paczki A woda i zasoby, B zwierzęta i łowy, C ludzie, D tajemnice i zakon
 ```
 
@@ -211,7 +218,7 @@ Części podzielonych wtyczek (partie B, C3, D2, E1, E2; stara nazwa została, c
 | `TavernLife_Darts.js` | rzutki z Ozzym / Wieśkiem (`Scene_MiniGame`) | TavernLife |
 | `TavernLife_Plan.js` | sztalugi z planem (wstawiane, id 950), scena planu karczmy, wpis „Plan karczmy” w menu P | TavernLife, MenuPanel |
 | `Combat_Fight.js` | oddech i bieg, broń w ręku, ciosy (kombo, ciężki cios), przewrót, blok i parowanie, `hitPlayer` (cios wroga w bohatera), zatrzymanie świata (hitstop), walka co klatkę | Combat |
-| `Combat_UI.js` | warstwa walki na mapie (liczby, iskry, paski wrogów, oddech, tarcza), plakietka broni, pasek doświadczenia, napis trybu, baner poziomu, ekran Postaci (`Scene_Hero`) | Combat_Fight |
+| `Combat_UI.js` | warstwa walki na mapie (liczby, iskry, paski wrogów, oddech, tarcza), plakietka broni, pasek doświadczenia, napis trybu, baner poziomu (ekran Postaci jest w menu P - MenuRing.js) | Combat_Fight |
 | `Hunting_Path.js` | droga w 8 kierunkach (A*, `path8`), pilnowanie utknięcia - także dla psa | Hunting |
 | `Hunting_AI.js` | zwierzę (`Game_Animal`): pasienie, ucieczka, przynęta, dzik, wilki | Hunting_Path |
 | `Hunting_Weapons.js` | proca, łuk, celowanie, oszczep, pociski, trafienie i `kill`, zwłoki i oprawianie | Hunting_AI |
@@ -300,6 +307,18 @@ Tawerna.state("homeDecor");               // to samo z każdego miejsca
   alias** (getter/setter, niezapisywany) - stary kod czytający `$gameSystem._homeDecor` dalej działa, a nowy zapis ma
   dane już tylko w nowym miejscu. Dane zaadoptowane mają wersję `adoptVersion` (1), potem idą migracje.
 - Zapis nowszy niż wtyczka (cofnięta wersja gry): zostaje nietknięty, ostrzeżenie w konsoli.
+- **oldFields** (porządki 2026-10-28) - dawne *proste* pola `$gameSystem` (liczba, flaga, rekord), które teraz są polami stanu:
+  ```js
+  const clock = Tawerna.state.define("clock", () => ({ hour: 9, day: 1 }), { version: 1, owner: "DayNightCycle" });
+  Tawerna.state.oldFields("clock", { _dayNightHour: "hour", _dayNightDay: "day", _dayNightTinting: "tinting" });
+  ```
+  Stara nazwa prowadzi do pola przez getter / setter na `Game_System.prototype` (niezapisywany) - inne wtyczki, F9 i testy czytają
+  i piszą ją jak dawniej (`$gameSystem._dayNightDay = 40`). Własne pola starego zapisu (także te, które konstruktor zapisał, zanim
+  obiekt został `$gameSystem` gry) przechodzą do stanu, gdy rdzeń go przegląda (`ensure`, zaraz po wczytaniu zapisu), i znikają
+  z `$gameSystem`. Inny `Game_System` niż ten gry (czytany zapis, obiekt testu) dostaje zwykłe własne pole. Uwaga:
+  `delete $gameSystem._stormForce` nic już nie robi - `= null`. Pole może dojść do stanu innej wtyczki (np. `gridShown` w `farm`
+  z Farming_Render.js, `layout` w `tavernLife`). Odczyt co klatkę: przez stan (`$gameSystem._tw.<klucz>` jako szybka droga,
+  jak `Farming.farm()`), nie przez starą nazwę.
 
 Zasady:
 
@@ -336,20 +355,31 @@ Stany w rdzeniu (`$gameSystem._tw.<klucz>`, wersja 1, stary klucz przejęty prze
 | `farm` | `_farm` (alias czyta 7 wtyczek: GroundDetail, Journal, Livestock, Minimap, Spoilage, Story, Survival; jest od początku gry). Etap 6: pola `lastSleep` (godzina przebudzenia po nocy), `bagWater` (woda w wiadrze w plecaku), `vesselBag` (garnki w plecaku) - dawne `_lastSleep`, `_bagWater`, `_vesselBag` przechodzą przy wczytaniu; stare nazwy: getter/setter na `Game_System.prototype` (czytają i piszą je testy) | Farming | E1, etap 6 | `core_fixtures_b2_test` (każdy zapis; `day40_farm`: 24 budynki na polu, meble chatki, pola, spiżarnia; `_lastSleep` z `tavern_evening` i `day40_farm`, postarzony `day40_farm` z `_bagWater` i `_vesselBag`) |
 | `treeFruit` | `_treeFruit` | ChoppableTree | E2 | `tree_strike_test` (stary zapis), `unit/choppable_tree` |
 | `smoulder` | `_smoulder` (Storm od etapu 6 przez `Tawerna.state("smoulder")`; alias już tylko dla starych zapisów i testów) | ChoppableTree | E2 | `tree_strike_test` (stary zapis), `unit/choppable_tree` |
+| `clock` (`hour`, `day`, `tinting`) | `_dayNightHour`, `_dayNightDay`, `_dayNightTinting` (oldFields; konstruktor nie zapisuje już godziny - domyślne stanu) | DayNightCycle | porządki | `core_fixtures_test` (dzień i godzina każdego zapisu, `tinting` z `day40_farm`; zapis bez starych pól) |
+| `survival` (`buffs`, `healAcc`, `stormForce`, `stormWarned`, `weatherOwn`, `rainDay`) | `_buffs`, `_healAcc`, `_stormForce`, `_stormWarned`, `_weatherOwn`, `_rainDay` (oldFields) | Survival | porządki | `core_fixtures_test` (`home_decor_v0`: `_stormForce`; `day40_farm`; „postarzony” zapis z każdym polem) |
+| `needs` | `_needs` | Needs | porządki | `core_fixtures_test` (głód 72 / pragnienie 70 z `day40_farm`) |
+| `fresh` | `_fresh` (`last` - zegar przy pierwszym pytaniu, jak dawniej przy tworzeniu) | Spoilage | porządki | `core_fixtures_test`, `unit/spoilage` |
+| `wear` | `_wear` | Durability | porządki | `core_fixtures_test` (siekiera i kilof z `day40_farm`), `unit/durability` |
+| `puddleClay` | `_puddleClay` | Puddles | porządki | `core_fixtures_test` („postarzony” zapis) |
+| `minimap` (`hidden`) | `_minimapHidden` (oldFields; CleanHUD pisze starą nazwą) | Minimap | porządki | `core_fixtures_test` (`home_decor_v0`) |
+| `freeMove` (`on`) | `_freeMove` (oldFields) | FreeMovement | porządki | `core_fixtures_test` („postarzony” zapis) |
+| `sky` (`mistForce`) | `_mistForce` (oldFields) | Sky | porządki | `core_fixtures_test`, `unit/sky` |
+| `farm.gridShown`, `tavernLife.layout` | `_gridShown` (Farming_Render), `_tavernLayout` (TavernLife) - pola cudzego stanu (oldFields) | Farming_Render, TavernLife | porządki | `core_fixtures_test` |
 
-Livestock nie ma stanu w zapisie (stado liczone na nowo po `load` / `mapEnter`). Stare klucze czytane przez alias w innych
-wtyczkach: `_dice`, `_quests` (HomeDecor: czy już coś jest, zanim zapyta API), `_forest`, `_hunt` (Journal), `_combatMode` (rdzeń:
-sprawdzenie `combat` w `isCalm`), `_farm` (7 wtyczek z tabeli). `_smoulder` czytają i piszą już tylko testy (`tree_strike_test`).
+Livestock nie ma stanu w zapisie (stado liczone na nowo po `load` / `mapEnter`). Od porządków 2026-10-28 moje wtyczki czytają
+cudze stany przez `Tawerna.state(...)` (Journal: needs, wear, hunt, forest, farm; GroundDetail, Livestock, Minimap, Spoilage,
+Survival: farm; CzerwonaWoda: survival; HomeDecor: `T.has("TavernDice")` / `T.has("QuestBoard")` zamiast `_dice` / `_quests`;
+rdzeń: `combat` w `isCalm` czyta `_tw.combat.mode`). Starą nazwą czytają i piszą jeszcze (działa przez alias / oldFields; pliki
+innych agentów - do zmiany przy ich pracy): Story (`_farm`), Kantor i Ludzie (`_dayNightDay`), Latarnia (`_dayNightTinting`),
+Kruk, Motyle, Orzel, Orzel_Lot, Zakon (`_combatMode`), CleanHUD (`_minimapHidden`); `_smoulder` - tylko testy.
 
-Jeszcze w starych kluczach (`$gameSystem._xxx`; docelowo każdy przez `Tawerna.state` z `adopt`):
+Jeszcze w starych kluczach (`$gameSystem._xxx`; docelowo każdy przez `Tawerna.state`):
 
-| klucz | wtyczka | klucz | wtyczka |
-|---|---|---|---|
-| `_stormForce`, `_stormWarned`, `_weatherOwn`, `_rainDay` | Survival | `_needs` | Needs (czyta Journal) |
-| `_fresh` | Spoilage | `_wear` | Durability (czyta Journal) |
-| `_freeMove` | FreeMovement | `_puddleClay` | Puddles |
-| `_dayNightTinting` | DayNightCycle (czytają Farming_Render, Storm) | `_heroLook` | HeroLook |
-| `_gridShown` | Farming_Render | `_minimapHidden` | Minimap |
+| klucz | wtyczka | dlaczego jeszcze nie |
+|---|---|---|
+| `_stamina` (`this._stamina` w metodach `Game_System`) | SurvivalHUD | plik agenta „jeden wygląd UI”; czytają go wszystkie wtyczki przez `stamina()` |
+| `_windowTone` | OptionEx | wtyczka z zewnątrz (barwa okien z Opcji) |
+| `_ubior` | Ubior | tylko zapasowa droga bez rdzenia (z rdzeniem: `Tawerna.state("ubior")`) |
 
 ---
 
@@ -466,7 +496,10 @@ jeden numer = jeden właściciel na każdej mapie. Nakładanie się zakresów = 
 | 2700–2899 | Zakon (paczka D) | nowy teren | tajemnice i zakon | `Tawerna.inject` |
 | 2900–2949 | TownLife (drugi zakres) | każda | mieszkańcy paczek nowego terenu: A 2900–2904, B 2905–2909, C 2910–2929, D 2930–2939, rezerwa 2940–2949 | `Tawerna.inject` ✓ |
 | 3000–3001 | Woz | 8, 111, 3, 21, 125 | wóz Wojciecha (3000) i Wojciech poza miasteczkiem (3001) na postojach szybkiej podróży (docs/ROZMOWY.md, tests/mapa_woz_test.js); ukryte, gdy wóz jest gdzie indziej | `Tawerna.inject` ✓ |
-| 3002+ | *wolne* | | | |
+| 3002–3019 | Podroznicy | 125 (też 1, 25, 26, 8, 162 w etapach 2-6) | podróżni z promu: aktorzy scen na przystani 3002–3008 (przybyli 9-11, odpływający 14-15, kto patrzy na molo); Map162 (etap 2, `Podroznicy_Sprawy.js`): Zenon przy wadze 3008 (D42), Antek wśród rekrutów 3009 (D43); rekwizyty 3010–3017 (trap...), zapas 3018–3019 (docs/PODROZNI.md 6.6); wstawiane z `Podroznicy_Data.js` (jego `T.inject` stoi przed TownLife - czyta znaczniki sali Map001 przed mieszkańcami) | `Tawerna.inject` ✓ |
+| 3020–3049 | TownLife (czwarty zakres) | każda | podróżni jako mieszkańcy: obsada 3020–3033, Wolna Kompania 3034–3037, miejsca puli 3038–3041, Ksenia 3042, „gość spod trójki” 3043, zapas 3044–3049 (`Podroznicy_Data.js`, `TownLifeData.EXTRA_RANGES`) | `Tawerna.inject` ✓ |
+| 3050–3069 | Lancuchy (łańcuchy podróżnych) | 25 (W15); 108, 19, 3, 162, 8, 111 (W16) | W15 „Święte kości”: kurier Baltazara pod pokojem 12 w noc sprzedaży 3050 (`SwieteKosci.js`), zapas 3051–3059; W16 „Dezerter”: Tymon w kryjówce (dzwonnica, chata dziadka, Kruczy Jar), w garnizonie, w obozie 3060 (`Dezerter.js`), zapas 3061–3069 (docs/PODROZNI.md 4.2, 4.3) | `Tawerna.inject` ✓ |
+| 3070+ | *wolne* | | | |
 
 ```js
 Tawerna.inject(19, { ids: [980, 998], owner: "HomeDecor",
@@ -493,6 +526,24 @@ Tawerna.onMapUpdate((scene, n) => { ... }, { owner: "HomeDecor", name: "refresh"
   w których zegar mógł ruszyć; `calm: true` (albo opcje jak niżej) pomija klatki niespokojne; `priority` ustawia
   kolejność między zegarami. Zegar, który rzuci błąd, jest zgłaszany raz i wyłączany - mapa idzie dalej.
 - Czas każdego zegara na klatkę: `Tawerna.debug.updaters()`.
+- **Własne haki `Scene_Map.prototype.update` → zegar mapy** (porządki 2026-10-28). Łańcuch haków szedł w kolejności listy wtyczek
+  (część „po” każdego haka: Wydajnosc, SurvivalHUD, Journal, Spoilage, Needs, Debug, Latarnia, CleanHUD), a zegary rdzenia - po
+  nim. Przeniesione dostały ujemne priorytety, żeby szły w dawnej kolejności między sobą i przed każdym starym zegarem (najmniejszy
+  dotąd: -10):
+
+  | zegar | wtyczka | priorytet | co |
+  |---|---|---|---|
+  | `filterArea` | Wydajnosc | -400 | obszar filtrów sceny i spriteset'u = ekran (ustawiany co klatkę, przed rysowaniem - miejsce w klatce bez znaczenia) |
+  | `tick` | Spoilage | -300 | psucie się jedzenia (zegar gry) |
+  | `drink` | Needs | -200 | G - łyk z bukłaka; dymki głodu i pragnienia co 30 klatek |
+  | `f9` | Debug | -100 | F9; budynek z menu i akty zakładki „Wyspa i fabuła” po powrocie na mapę |
+
+  Teraz idą po częściach „po” haków Latarnia i CleanHUD (wizja w latarni, układ czystego HUD) i po `checkClock` (dayStart /
+  hourChange) - nic z tego od siebie nie zależy. Zostają własne haki: **Journal** (J i podsumowanie dnia - Atmosphere, wyżej w
+  łańcuchu, robi autozapis po nocy w tej samej klatce, w której podsumowanie jest brane; na zegarze autozapis przyszedłby przed
+  nim), **Wydajnosc `keepQuality`** (musi iść *przed* aktualizacją), **TawernaCore** (sam zegar); w plikach innych agentów:
+  CleanHUD, SurvivalHUD (UI), Latarnia (wątki) - do przeniesienia przy ich pracy (priorytety jak wyżej: Latarnia -50, CleanHUD -40,
+  żeby została kolejność).
 
 **`Tawerna.isCalm(scene, opcje)`** - jedno wspólne „czy teraz spokojnie” (przed rozmową, szczeknięciem, pojawieniem się
 zwierzęcia, dymkiem). `Tawerna.whyNotCalm(...)` mówi, co przeszkadza.
@@ -792,12 +843,13 @@ _Art (`Scene_MiniGame`, `Banner`/`Bust`/`CoinFly` z `ticked`, `ticksThisFrame`, 
 
 Podgląd: `docs/architektura/minigra_karta.png`, `minigra_pauza.png`, `minigra_demo.png` (mała gra z `core_test.js`).
 
-### 11.3 Menu P (MenuPanel.js) i jego wpisy
+### 11.3 Menu P (MenuRing.js) i wpisy innych wtyczek (MenuPanel.js)
 
-Wygląd menu P (czerń i żółć, uzgodniony) zostaje własny: nagłówek (tytuł 28 px z krótką żółtą kreską, podtytuł z prawej) i płaskie
-podpowiedzi klawiszy (ciemny klawisz z białym napisem, opis szary) to nie `TitleBar` / `KeyHints` zestawu - te mają wygląd mini-gier
-(żółte pogrubione klawisze, rysowane strzałki, własny pasek). Panele i paski rysuje zestaw: `ui.panel` / `ui.bar` (to samo
-UIStyle + `dirty`). Porównanie bitmap przed i po przeniesieniu (menu P, plecak, Postać, dziennik, koniec gry): piksel w piksel.
+Od 2026-10-28 gra ma jeden wygląd interfejsu (docs/UI_JEDEN_WYGLAD.md): paleta `UIStyle.C` w UITheme.js (czerń, żółty akcent
+#ffd23f, jasny tekst, szare linie) - czytają ją HUD (`CleanHUD.C` to ten sam obiekt), menu P (`K` w MenuRing.js), mini-gry
+(`Tawerna.ui.style()`), dziennik, walka, prolog; skórka okien `img/system/Window.png` ma te same barwy. Menu P, ekrany plików
+(„Kontynuuj”, Scene_Save) i „Opcje” z tytułu rysuje MenuRing.js; dawne menu-panel MenuPanel.js, wygląd „Grafit i miedź” i wiersz
+„Wygląd” w Opcjach usunięto.
 
 Wpisy innych wtyczek (wołane przy wczytaniu; wtyczka stoi niżej na liście niż MenuPanel):
 
@@ -806,26 +858,16 @@ const MP = Tawerna.api("MenuPanel");
 MP.addCommand({ symbol: "tavernPlan", label: "Plan karczmy", owner: "TavernLife_Plan",
     when: () => wKarczmie(),                        // czy jest w menu tym razem (sprawdzane przy każdym otwarciu)
     enabled: () => true,                           // opcja (albo true / false)
-    glyph: (ctx, x, y, size, colour) => ...,       // mały rysunek w polu size x size (22 px), w jednym kolorze
-    badge: () => 0,                                // opcja: żółta liczba z prawej (jak punkty przy Postaci)
-    ok: scene => SceneManager.push(Scene_X) });    // Enter
-MP.addFoot({ owner: "Story", when: () => aktywna(),
-    draw(bitmap, area) { ... } });                 // area: { x (koniec klawiszy), y (ich linia), right (brzeg), room (right - x), rect }
+    ok: scene => SceneManager.push(Scene_X) });    // O na zakładce
+MP.addFoot({ owner: "Story", when: () => aktywna(), draw(bitmap, area) { ... } });   // przyjmowane, ale nic ich już nie rysuje
 MP.commands();                                     // ["tavernPlan"] - dopisane komendy
 ```
 
-- Komenda staje za komendami dokładanymi po staremu (`addOriginalCommands`: Dziennik z Journal, Postać z Combat), przed Opcjami;
-  potem MenuPanel układa kolejność: Postać, Plecak, Dziennik, reszta jak przyszła. Ten sam `symbol` (i ten sam `owner` stopki)
-  drugi raz - wtyczka włożona do strony dwa razy - zastępuje stary wpis. Wpis, który rzuci błąd, trafia do konsoli, a menu działa
-  dalej (błąd w `ok` z powrotem aktywuje listę).
-- Na API: „Plan karczmy” (TavernLife_Plan: `when` = bohater na piętrze karczmy, rysunek mapy z planu) i linia długu (Story:
-  `drawDebtFoot` dostaje `area.room` - nie mierzy już sama klawiszy MenuPanel). Bez MenuPanel obie wtyczki robią to po staremu
-  (zwykła komenda; linia pod kartą postaci).
-- Po staremu zostają: Journal i Combat (`addOriginalCommands` + `setHandler`; etykietę, rysunek i liczbę punktów daje im MenuPanel),
-  scena Postaci (Combat_UI `Scene_Hero`: `MenuPanel.Sprite_MenuPanel`, `HEAD/TABS/FOOT`) i dziennik (MenuPanel owija `Journal.Scene_Journal`).
-  Debug nie ma wpisu w menu P (jego F9 to `Scene_MenuBase`, więc bez przycisków dotykowych jak reszta menu).
-- Eksport: `panelRect(kind)`, `SIZES`, `HEAD`, `FOOT`, `TABS`, `Sprite_MenuPanel`, `Window_ItemDetail`, `addCommand`, `addFoot`,
-  `commands()`; zarejestrowany (`Tawerna.api("MenuPanel")`).
+- Komenda trafia do (ukrytego) okna poleceń Scene_Menu; MenuRing.js pokazuje ją jako osobną zakładkę za swoimi, O woła `ok(scena)`.
+  Ten sam `symbol` drugi raz - wtyczka włożona do strony dwa razy - zastępuje stary wpis. Wpis, który rzuci błąd, trafia do konsoli.
+- `addFoot` (Story: linia długu) zostaje dla zgodności - dług dziadka pokazuje zakładka Postać, stopki starego panelu już nie ma.
+- Reszta MenuPanel.js: bez przycisków dotykowych w menu i na mapie, `Window_ItemDetail` (okno karty Plecaka - kartę rysuje MenuRing),
+  lista „all” Plecaka, `isKeepsake`, `questNeeds`, `stampText`. Test: `tests/menu_panel_test.js`.
 
 ---
 
@@ -893,11 +935,36 @@ TavernLife_Plan).
 | bloki generowane w wtyczkach | `// <decor-data>` w HomeDecor (tools/house/decor/make_decor.py), `PLAN_DATA` w TavernLife (tools/tavern/plan/make_plan.py) | tylko generator - nie edytować ręcznie |
 | teksty w grze | tablice na górze wtyczki (`LINES`, `EARNED_NOTE`, przepisy), rozmowy przez `\SPK[n]` | ręcznie, po polsku |
 | teksty wątków (od 2026-10-23) | `js/teksty/<nazwa>.txt` (format: `docs/WATKI_DANE.md` 3; czyta `Watki.teksty`, przy starcie razem z `data/`) | ręcznie, po polsku; `node tools/teksty.js sprawdz` |
+| teksty systemów (porządki 2026-10-28) | `js/teksty/`: karczma (TavernLife, _Render), stali_goscie (_Regulars), plan_karczmy (_Plan), silowanie (_ArmWrestle), rzutki (_Darts), tablica (QuestBoard_Data, QuestBoard, _Art, _Scene), stwory (Creatures_Data, Creatures), f9 (Debug), mieszkancy (TownLife_Data), kosci (TavernDice*), zmiana (TavernShift*), dom_dziadka (HomeDecor, HomeLife), pies (Dog), umiejetnosci (Skills_Data), zbojcy (Humans_Data, Humans), starcia (Starcia), las (Forestry), ptaki (Birds), lupy (Drops), czerwona_woda (CzerwonaWoda), potrzeby (Needs), zuzycie (Durability), psucie (Spoilage), burza (Storm), atmosfera (Atmosphere) | jak wyżej; migawki „przed”: `tests/fixtures/teksty/<plik>_*przed.json` |
 | grafiki | `img/characters` (`!House_Decor`...), `img/pictures` (`*_Bust`), `img/system` (`QuestBoard_*`, Window.png) | PixelLab + narzędzia |
 | czcionki | `fonts/` (Alegreya Sans, Alegreya SC, Caveat + licencje OFL) | - |
 
 Zasady: nowe tabele do `Nazwa_Data.js` (edytor go nie rusza, ładuje się synchronicznie jak każda wtyczka); żadnych
 tekstów w środku logiki; zapis plików z Pythona zawsze binarnie, z zachowaniem LF/CRLF danego pliku.
+
+**Teksty systemów w plikach (porządki 2026-10-28)** - tak samo jak teksty wątków (`docs/WATKI_DANE.md` 3): stałe przez
+`Watki.scal(OBIEKT, "plik", "klucz"[, "id"])` (słowa scalane w miejscu po wczytaniu plików i po F9 „Wczytaj teksty od nowa”),
+napisy z funkcji `TK.kod.<funkcja>[n]` (`const TK = Watki.teksty("plik")`), z miejscami `Watki.wstaw(TK..., { n })`. Każdy plik
+przeszedł `porownaj` znak w znak z migawką sprzed zmiany, `zgodnosc` (żaden napis starej wtyczki nie zginął) i porównanie starej
+i nowej wtyczki w piaskownicy (dane, które gra czyta). Zasady przy przenoszeniu:
+- **Kopia przy wczytywaniu wtyczek** (zanim są pliki): premie dla Survival (`defineBuff`) - przez `Watki.poTekstach(fn)` i
+  `Tawerna.on("tekstyWczytane", fn)` (TavernLife `defineBuffs`, CzerwonaWoda `defineState`); argument przy wczytaniu (pomoc
+  zakładki dziennika, etykieta w menu P, podpis doświadczenia) - getter; teksty liczone z ustawień (`"... " + pct(x) + " ..."`) -
+  szablon `{rabat}` / `{procent}` w pliku, wypełniany przy użyciu.
+- **Co klatkę żadnego `Watki.wstaw`** (wyrażenie regularne i nowy obiekt): takie funkcje zostają w kodzie (`kody --bez-funkcji`:
+  `daysText` / `reqName` QuestBoard - okienko celu, `drawSlate` QuestBoard_Scene, pasek bossa Creatures - zwykłe sklejanie
+  z `TK`) albo napis liczony raz / przy zmianie klucza rysowania (rzutki, siłowanie, kości, zmiana w karczmie).
+- Zostają w kodzie: klucze, id, nazwy obrazków, dźwięków, czcionki, skrypty poleceń zdarzeń, nazwy wstawianych zdarzeń,
+  `PLAN_DATA` (pisze go generator), cztery listy strażnika / Teodora w `TownLife_Data` (Dwor_Data podmienia je getterem przy
+  wczytywaniu).
+- Teksty, które są też kluczem (ostrożnie przy poprawianiu pliku): imię „Dziadek” twarzy cienia (`stwory.txt`, boss 90 szuka po
+  imieniu), plotki zbójców (`zbojcy.txt` - zapis pamięta opowiedziane po treści).
+
+**Co zostało** (napisy jeszcze w kodzie): wtyczki stojące na liście *nad* Watki.js (Farming*, Survival, Journal, ChoppableTree*,
+Sky, DayNightCycle... - przy ich wczytywaniu nie ma jeszcze `Watki.teksty`; wymagałoby przesunięcia Watki.js wyżej na liście),
+pliki UI (UITheme, MenuRing, MenuPanel, CleanHUD, SurvivalHUD, Combat_UI, HeroLook) i zmieniane teraz przez agenta UI (Combat,
+Combat_Fight, Combat_Feel, Hunting*, Torch, Mood, Prologue, TitleScreen, Ubior), wątki (agent „wątki na silnik”), rodzina
+ekwipunku (Equipment, Ubior_Data, Bron_Data, Bron, Ubior_Sklepy), mapa wyspy i nowy teren (MapaWyspy*, Okolice*, Wyspa_Data, Woz).
 
 ---
 
@@ -1288,3 +1355,24 @@ Całość - spis wątków, silnik, format tekstów, pilot, plan dalszych etapów
   kopii w każdej wtyczce wątku (kopie znikają etapami).
 - **Pilot**: W4 rozdz. 6-8 - `Kasztelan_Data.js` (dane), `Kasztelan.js` (haki), `js/teksty/kasztelan.txt`. Testy: `tests/unit/watki.test.js`,
   `tests/watki_test.js` (port 9625), `w4_borgar_test`, `w4_key_test`.
+
+## 18. Podróżni z promu (`Podroznicy.js` + `Podroznicy_Data.js`, 2026-10-28)
+
+Projekt i stan budowy: **`docs/PODROZNI.md`** (rozdz. 11). Etap 1 = rdzeń bez zadań.
+
+- **Dane** (`Podroznicy_Data.js`, nad TownLife): obsada z oknami przybycia, pula 16 typów na 4 ciałach, pokoje 4-24 Map025 (miejsca
+  przy kufrach), plany dnia (szablony), scena przybycia; wątek `podroznicy` (`Watki.watek` - stan `Tawerna.state("podroznicy")` v1,
+  teksty `js/teksty/podroznicy.txt`, sekcja F9); mieszkańcy TownLife 3020-3049 z polami-getterami (imię, arkusz, mapa, plan, wnętrza)
+  pytającymi silnik - TownLife.js bez zmian.
+- **Silnik** (`Podroznicy.js`): planowanie promu raz w dzień promu (6:00; czysta `Podroznicy.logika.planuj` - test jednostkowy), odpływy
+  o 15:00, księga, Renoma karczmy (osobna od Sławy bohatera), utarg Borgara, aktorzy i scena na przystani, rozmowy (`Tawerna.talk`:
+  `meet+5` pierwsze spotkanie, `shop+25` menu, opcja Borgara „Księga gości”, hak startu „hidden” aktorów), F9 przez `Watki.f9`
+  (silnik wątków ma teraz wiersze własne wątku: `def.f9.wiersze/wybierz/ok`, rodzaj wiersza `isleWatek:<co>`).
+- **Fale W6** - jedno źródło: `TownQuests.waves()` (10, 25, 37, 52), czytają je Przystan, Garnizon i Podroznicy.
+- **Szyna:** `prom`, `podroznyPrzyplynal`, `podroznyOdplynal`, `renoma`, `podroznicyScena`. Testy: `tests/unit/podroznicy.test.js`,
+  `tests/podroznicy_test.js` (port 9761); tryb cichy testów wyłącza samą scenę (`Podroznicy.auto(false)` w `QUIET`).
+- **Łańcuchy W15 / W16** (etap 4, 2026-10-29): `SwieteKosci_Data.js` + `SwieteKosci.js` (teksty `swiete_kosci.txt`), `Dezerter_Data.js` +
+  `Dezerter.js` (`dezerter.txt`) - wątki silnika z własnymi zadaniami W15 i W16; postacie trzymają prom dłużej przez getter `zadania` w
+  `PodroznicyData.OBSADA` (raz, i tylko póki sprawa trwa - ich późniejszy odpływ to zakończenie łańcucha „bez bohatera”). Akt III: wspólna
+  lista `Act3Data.WIEDZA_FRAKCJI` (najwyżej jeden zwiadowca więcej w fali 3, nigdy obok zwiadowcy W9/W7), obrońcy „tymon” i „tymon_oboz”,
+  żołnierze garnizonu od przychylności 60 przy `tymonGarnizon`. Test: `tests/lancuchy_test.js` (port 9791).

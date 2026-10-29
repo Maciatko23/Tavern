@@ -1,0 +1,89 @@
+# Teksty rzutek przy tarczy w karczmie (TavernLife_Darts.js): przeciwnicy - Dziadek Ozzy i furman Wiesiek
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz rzutki
+
+# ======================================================================== OPPONENTS (rywale)
+rywale.ozzy.name = Dziadek Ozzy
+rywale.ozzy.short = Ozzy
+rywale.ozzy.hello = *czkawka* Rzutki? Kiedyś trafiałem muchę w locie. Dziś trafiam tarczę. Zazwyczaj.
+[rywale.ozzy.throwLines]
+Hop!
+*czkawka*
+Ups...
+Celuję w środkową z trzech tarcz...
+
+[rywale.ozzy.good]
+Byk! Widziałeś? Nikt nie widział...
+Hehe, stara ręka!
+
+rywale.ozzy.won = Hehe! Stary Ozzy jeszcze umie! Postawisz mi piwo z tej stawki? Nie? No trudno.
+rywale.ozzy.lost = Trzy tarcze to jednak za dużo dla jednego oka... Wygrałeś, synu. Uczciwie.
+rywale.wiesiek.name = Furman Wiesiek
+rywale.wiesiek.short = Wiesiek
+rywale.wiesiek.hello = Rzucamy? Ja furman: oko mam jak jastrząb - od patrzenia na drogę między końskimi uszami.
+[rywale.wiesiek.throwLines]
+Rzut furmański!
+Prosto jak droga do młyna.
+Wiooo!
+
+[rywale.wiesiek.good]
+Dwadzieścia! Wiedziałem.
+I kto tu jest jastrząb?
+
+rywale.wiesiek.won = Ha! Nie ma to jak oko furmana. Stawka moja - dziękuję uprzejmie.
+rywale.wiesiek.lost = Eee, wiatr zawiał od drzwi. Ale wygrałeś, nie ma co gadać.
+
+# ======================================================================== z kodu TavernLife_Darts.js (kod.<funkcja>.<n>, w kolejności kodu)
+# begin
+kod.begin.0 = stały bywalec
+kod.begin.1 = gość karczmy
+kod.begin.2 = " · STAWKA {stake} G"
+kod.begin.3 = Wieśkiem
+kod.begin.4 = Rzutki z {1}
+kod.begin.5 = Celownik chwieje się sam - strzałkami przesuwasz cel, O rzuca lotkę.
+kod.begin.6 = Środek (byk) 50, zielony pierścień 25, reszta tarczy tyle, ile liczba wycinka. Poza tarczą: pudło.
+kod.begin.7 = Trzy rundy po trzy lotki na zmianę; wygrywa większa suma. Zręczność i Czujność uspokajają rękę.
+kod.begin.8 = Strzałki - cel, O - rzut. Trzy rundy po trzy lotki.
+kod.begin.9 = strzałki
+kod.begin.10 = O - do tarczy
+# helpLines
+kod.helpLines.0 = Celownik chwieje się sam - strzałki przesuwają cel, O rzuca lotkę.
+kod.helpLines.1 = Środek (byk) 50, zielony pierścień 25, reszta tarczy tyle, ile liczba wycinka. Trzy rundy po trzy lotki; wygrywa większa suma.
+# nextTurn
+kod.nextTurn.0 = Runda {round} z 3 · twój rzut
+kod.nextTurn.1 = Runda {round} z 3 · rzuca {short}
+# land
+kod.land.0 = BYK! 50
+kod.land.1 = W ramę!
+kod.land.2 = Pudło!
+# finish
+kod.finish.0 = RZUTKI · KONIEC
+kod.finish.1 = Poddałeś się
+kod.finish.2 = twoja lotka bliżej środka
+kod.finish.3 = jego lotka bliżej środka
+kod.finish.4 = " (dogrywka: {1})"
+kod.finish.5 = "   ·   byki: {bulls}"
+kod.finish.6 = Czas: {minutes} minut gry{2}
+kod.finish.7 = O - wracam do sali
+# drawSlate
+kod.drawSlate.0 = Runda {1}
+# drawHud
+kod.drawHud.0 = strzałki
+kod.drawHud.1 = "  ·  STAWKA {stake} G"
+kod.drawHud.2 = Twój rzut
+kod.drawHud.3 = Rzuca {short}
+kod.drawHud.4 = {1}  ·  runda {round} z 3
+# dartsTalk
+kod.dartsTalk.0 = Rzutki... Z kim by tu zagrać?
+kod.dartsTalk.1 = Z Dziadkiem Ozzym
+kod.dartsTalk.2 = Z furmanem Wieśkiem
+kod.dartsTalk.3 = Nie teraz
+# dartsStakes
+kod.dartsStakes.0 = {hello} Ile stawiasz?
+kod.dartsStakes.1 = Stawka {n} G
+kod.dartsStakes.2 = Nie teraz
+# note
+kod.note.0 = Przy tarczy w karczmie gra się w rzutki o stawkę ({1} G): trzy rundy po trzy lotki, strzałki przesuwają cel, O rzuca. Środek (byk) 50, pierścień przy nim 25, reszta tarczy tyle, ile liczba wycinka. Zręczność i Czujność uspokajają rękę.
+# after
+kod.after.0 = Trzy tarcze to jednak za dużo...
+kod.after.1 = Hehe! Stary Ozzy jeszcze umie!

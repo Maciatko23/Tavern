@@ -1,0 +1,50 @@
+{
+ "jednostki": {
+  "blow": [
+   "uderzenie",
+   "uderzenia",
+   "uderzeń"
+  ],
+  "use": [
+   "użycie",
+   "użycia",
+   "użyć"
+  ],
+  "cast": [
+   "rzut",
+   "rzuty",
+   "rzutów"
+  ],
+  "cut": [
+   "cięcie",
+   "cięcia",
+   "cięć"
+  ],
+  "shot": [
+   "strzał",
+   "strzały",
+   "strzałów"
+  ],
+  "jab": [
+   "pchnięcie",
+   "pchnięcia",
+   "pchnięć"
+  ],
+  "block": [
+   "cios",
+   "ciosy",
+   "ciosów"
+  ],
+  "wear": [
+   "dzień pracy",
+   "dni pracy",
+   "dni pracy"
+  ]
+ },
+ "narzedzia": {
+  "171": {
+   "broke": "się podarła"
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Durability.js: UNIT=jednostki, TOOLS=narzedzia:/(^|\\.)broke$/)"
+}

@@ -1,0 +1,23 @@
+{
+ "progi": {
+  "0": {
+   "name": "Nowy w okolicy"
+  },
+  "1": {
+   "name": "Znajoma twarz"
+  },
+  "2": {
+   "name": "Swój chłop"
+  },
+  "3": {
+   "name": "Pewna ręka"
+  },
+  "4": {
+   "name": "Chluba tawerny"
+  }
+ },
+ "dziennik": {
+  "pomoc": "OK: śledź na ekranie   ←/→: zakładka"
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (QuestBoard.js: TIERS=progi:/(^|\\.)name$/); dziennik.pomoc - help zakładki „Zlecenia” w dzienniku (argument JOURNAL.addTab, dopisany ręcznie)"
+}

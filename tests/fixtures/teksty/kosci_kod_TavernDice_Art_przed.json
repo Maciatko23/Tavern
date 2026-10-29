@@ -1,0 +1,99 @@
+{
+ "art": {
+  "paintTable": {
+   "0": "POD ZŁOTYM KUFLEM"
+  },
+  "drawHeader": {
+   "0": "KOŚCI",
+   "1": "·   sala gier „Pod Złotym Kuflem”",
+   "2": "{name}   ·   stawka {2}   ·   gra do {target}",
+   "3": "{clock}   ·   dzień {2}"
+  },
+  "drawSide": {
+   "0": "sakiewka: {1}",
+   "1": "Odkłada",
+   "2": "nie punktują",
+   "3": "Kości"
+  },
+  "drawHint": {
+   "0": "wybór",
+   "1": "zatwierdź",
+   "2": "odejdź",
+   "3": "zostań przy stole",
+   "4": "kości i przyciski",
+   "5": "odłóż kość / wciśnij",
+   "6": "odejdź od stołu",
+   "7": "rzuć kośćmi",
+   "8": "przytrzymaj: szybciej"
+  },
+  "drawLobby": {
+   "0": "SALA GIER · „POD ZŁOTYM KUFLEM”",
+   "1": "Kości",
+   "2": "Sześć kości, kubek i odrobina odwagi. Kto pierwszy dojdzie do celu, bierze całą pulę.",
+   "3": "{clock} · dzień {2}",
+   "4": "Sakiewka: {1}",
+   "5": "KTO SIEDZI PRZY STOLE",
+   "6": "Kto siedzi przy stole, zależy od pory dnia.",
+   "7": "Stoły puste. Wróć wieczorem.",
+   "8": "O tej porze nikt nie gra w kości.",
+   "9": " (szybka partia)",
+   "10": " (wielka gra)",
+   "11": "pula {1}   ·   gra do {tg}{3}",
+   "12": "Masz za mało złota na tę stawkę.",
+   "13": "TWOJE KOŚCI",
+   "14": "   (O: zmień)",
+   "15": "Masz: {1}",
+   "16": "Wybierz kość strzałkami i zmień ją klawiszem O.",
+   "17": "Sześć zwykłych kości z kości.",
+   "18": "Kości wyjątkowe zdobywa się przy stole i w przygodach.",
+   "19": "Siadam do gry",
+   "20": "Odchodzę"
+  },
+  "drawCard": {
+   "0": "Dziś już nie gra",
+   "1": "{range} · za mała sakiewka"
+  },
+  "drawRules": {
+   "0": "JAK SIĘ GRA",
+   "1": "Zasady gry w kości",
+   "2": "Każdy ma sześć kości. Rzucasz wszystkimi naraz.",
+   "3": "Po każdym rzucie odkładasz co najmniej jedną punktującą kość. Potem zapisujesz punkty tury albo rzucasz dalej resztą kości.",
+   "4": "Rzut bez żadnej punktującej kości to „Pudło!” — punkty z tej tury przepadają.",
+   "5": "Odłożysz wszystkie sześć? „Gorące kości!” — rzucasz znowu całą szóstką, a punkty tury zostają.",
+   "6": "Liczą się tylko odłożone kości, a układy tylko w obrębie jednego rzutu.",
+   "7": "Wygrywa, kto pierwszy dojdzie do celu: 2000 punktów, przy małej stawce (do {1}) szybka partia do 1500. Zwycięzca bierze całą pulę.",
+   "8": "piątka",
+   "9": "trzy jedynki",
+   "10": "trzy takie same",
+   "11": "oczko × 100",
+   "12": "cztery takie same",
+   "13": "pięć takich samych",
+   "14": "sześć takich samych",
+   "15": "mały strit",
+   "16": "duży strit",
+   "17": "pełny strit",
+   "18": "Przykład: trzy czwórki to 400, cztery czwórki 800, pięć czwórek 1600.",
+   "19": "Zasady są zawsze pod przyciskiem „Zasady”.",
+   "20": "O — rozumiem, gramy"
+  },
+  "drawConfirm": {
+   "0": "Odejść od stołu?",
+   "1": "Partia trwa. Twoja stawka ({1}) przepada, a {short} zgarnia pulę.",
+   "2": "Zostaję",
+   "3": "Odchodzę"
+  },
+  "drawEnd": {
+   "0": "KONIEC PARTII · {1}",
+   "1": "gra do {target} · tury: {turnNo}",
+   "2": "+{1} do sakiewki",
+   "3": "Stawka przepada: −{1}",
+   "4": "+{xp} dośw.",
+   "5": "Twój najlepszy rzut:  {best}",
+   "6": "Pudła: {busts}   ·   gorące kości: {hot}   ·   w sakiewce: {3}",
+   "7": "Nowa kość: {name}",
+   "8": "Sakiewka od nieznajomego: +{1}",
+   "9": "Kość z Kruczych Skał już masz - dostajesz złoto."
+  }
+ },
+ "_opis": "Napisy kodu TavernDice_Art.js sprzed przeniesienia do js/teksty/kosci.txt (art.*)"
+}

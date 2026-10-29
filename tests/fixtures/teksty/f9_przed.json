@@ -1,0 +1,187 @@
+{
+ "zakladki": {
+  "0": {
+   "name": "Zdarzenia",
+   "help": "↑↓ wybierz   OK wykonaj   Q / E zakładka   Esc zamknij"
+  },
+  "1": {
+   "name": "Budowanie",
+   "help": "↑↓ wybierz   OK postaw (za darmo, od razu gotowe)   Q / E zakładka   Esc zamknij"
+  },
+  "2": {
+   "name": "Przedmioty",
+   "help": "↑↓ wybierz   ←→ ilość   OK dodaj   Tab / [ ] rodzaj   Q / E zakładka   Esc zamknij"
+  },
+  "3": {
+   "name": "Rdzeń",
+   "help": "↑↓ przewiń   OK odśwież   Q / E zakładka   Esc zamknij"
+  },
+  "4": {
+   "name": "Kot",
+   "help": "↑↓ wybierz   OK każ mu (wraca na mapę)   na opisie OK odśwież   Q / E zakładka   Esc zamknij"
+  },
+  "5": {
+   "name": "Wyspa i fabuła",
+   "help": "↑↓ wybierz   ←→ zmień   OK wykonaj (przejścia wracają na mapę)   Q / E zakładka   Esc zamknij"
+  }
+ },
+ "wyspa": {
+  "miejsca": {
+   "przystan": {
+    "nazwa": "Przystań",
+    "opis": "Map125: Janek, Roch Szkwał, celnik, prom. Lądujesz przy ścieżce z Podgrodzia."
+   },
+   "pustelnia": {
+    "nazwa": "Pustelnia na klifie",
+    "opis": "Map155: brat Kleofas, skryptorium, ule, wieża z dzwonem. Lądujesz przy zejściu na przystań."
+   },
+   "urwisko": {
+    "nazwa": "Urwisko Kruków",
+    "opis": "Map157: kruczarnia, gniazda kruków, krata przelewu cysterny. Lądujesz na ścieżce od pustelni."
+   },
+   "latarnia": {
+    "nazwa": "Przylądek z latarnią",
+    "opis": "Map159: latarnik Bazyli, wieża latarni, dzwon mgłowy. Lądujesz na ścieżce z gór."
+   },
+   "garnizon": {
+    "nazwa": "Garnizon nad zatoką",
+    "opis": "Map162: rotmistrz, kwatermistrz Kłos, palisada, łacha do wraku. Lądujesz przy drodze z przystani."
+   },
+   "wrak": {
+    "nazwa": "Wrak na mieliźnie",
+    "opis": "Map165: kadłub na mieliźnie, wyrwa pod pokład. Ustawia odpływ (łacha sucha); pływ z zegara wraca niżej."
+   },
+   "cysterna": {
+    "nazwa": "Stara cysterna zakonu",
+    "opis": "Map167: zbiornik, słup z miarą, czerpak, dźwignia kraty. Lądujesz przy zejściu z piętra 30."
+   },
+   "chata": {
+    "nazwa": "Chata pod lasem",
+    "opis": "Podgrodzie (Map111): przed drzwiami chaty pod lasem i jej działką (dom na sprzedaż u sołtysa)."
+   },
+   "zagroda": {
+    "nazwa": "Spalona zagroda",
+    "opis": "Map168: zgliszcza zagrody Ługów (zadanie D21). Lądujesz przy drodze ze Skraju lasu."
+   }
+  },
+  "wnetrza": {
+   "skryptorium": {
+    "nazwa": "Skryptorium"
+   },
+   "izbaLatarnika": {
+    "nazwa": "Izba latarnika"
+   },
+   "laterna": {
+    "nazwa": "Laterna"
+   },
+   "kwatera": {
+    "nazwa": "Kwatera rotmistrza"
+   },
+   "wrak": {
+    "nazwa": "Wrak - pod pokładem"
+   },
+   "chata": {
+    "nazwa": "Chata pod lasem - izba"
+   },
+   "domLugow": {
+    "nazwa": "Dom Ługów"
+   },
+   "piwnicaKantoru": {
+    "nazwa": "Piwnica kantoru"
+   },
+   "dworHol": {
+    "nazwa": "Dwór - hol"
+   },
+   "dworBiblioteka": {
+    "nazwa": "Dwór - biblioteka"
+   },
+   "dworGabinet": {
+    "nazwa": "Dwór - gabinet"
+   }
+  },
+  "woda": {
+   "red": "czerwona",
+   "grey": "szara"
+  }
+ },
+ "w5": {
+  "rozdzialy": {
+   "1": "dziwny kupiec",
+   "2": "trzy stuknięcia",
+   "3": "nocny tragarz",
+   "4": "rejestr",
+   "5": "komu to dać",
+   "6": "noc promu",
+   "7": "co dalej z kantorem"
+  }
+ },
+ "w7": {
+  "rozdzialy": {
+   "1": "dług",
+   "2": "zaproszenie",
+   "3": "dwa życia Feliksa",
+   "4": "gabinet nocą",
+   "5": "prawda i ostatnia spłata",
+   "6": "do kogo najpierw",
+   "7": "Lord przy Sercu"
+  }
+ },
+ "kot": {
+  "miejsca": {
+   "hearth": {
+    "rozkaz": "Idź spać przy palenisku",
+    "gdzie": "przy palenisku"
+   },
+   "rug": {
+    "rozkaz": "Idź na dywan",
+    "gdzie": "na dywanie"
+   },
+   "sill": {
+    "rozkaz": "Wskocz na parapet okna",
+    "gdzie": "na parapecie okna"
+   },
+   "stroll": {
+    "rozkaz": "Pospaceruj po izbie",
+    "gdzie": "na spacerze po izbie"
+   },
+   "feet": {
+    "rozkaz": "Usiądź u stóp dziadka",
+    "gdzie": "u stóp dziadka"
+   },
+   "heroBed": {
+    "rozkaz": "Idź spać na posłanie bohatera",
+    "gdzie": "na posłaniu bohatera"
+   }
+  },
+  "kroki": {
+   "go": "idzie",
+   "face": "odwraca się",
+   "look": "rozgląda się",
+   "stay": "odpoczywa",
+   "stayFeet": "siedzi u stóp dziadka",
+   "curl": "zwija się do snu",
+   "uncurl": "przeciąga się i wstaje",
+   "hop": "skacze"
+  },
+  "dzien": [
+   "W dzień (6-22) sam wybiera, co robić (bez powtarzania miejsca, poza paleniskiem):",
+   "  - najczęściej śpi zwinięty przy palenisku (1-3 min),",
+   "  - dywan: chwilę siedzi albo śpi (1-2 min),",
+   "  - parapet okna we wnęce bohatera (8-19): podskok i 25-60 s na górze,",
+   "  - spacer po izbie: idzie gdzieś i się rozgląda,",
+   "  - u stóp dziadka, gdy ten buja się albo pali fajkę (często tam zasypia).",
+   "W nocy (22-6): śpi na posłaniu bohatera (czasem przy palenisku), 2-5 min.",
+   "Chodzi w 8 kierunkach, omija bohatera i dziadka (czeka, potem obchodzi),",
+   "czasem przystaje i się rozgląda; nie wychodzi z domu, nie siada w drzwiach.",
+   "Pogłaskany mruczy (~4 s, serduszko); raz dziennie +5 wytrzymałości."
+  ]
+ },
+ "przedmioty": {
+  "rodzaje": [
+   "Narzędzia i broń",
+   "Surowce",
+   "Jedzenie"
+  ]
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Debug.js: TABS=zakladki, ISLE_GO=wyspa.miejsca:id:/(^|\\.)(nazwa|opis)$/, ISLE_INSIDE=wyspa.wnetrza:id:/(^|\\.)nazwa$/, WATER_NAME=wyspa.woda, W5_NAMES=w5.rozdzialy, W7_NAMES=w7.rozdzialy, CAT_SPOTS=kot.miejsca:id:/(^|\\.)(rozkaz|gdzie)$/, CAT_STEP=kot.kroki, CAT_DAY=kot.dzien, KINDS=przedmioty.rodzaje)"
+}

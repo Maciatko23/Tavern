@@ -712,6 +712,10 @@ Dzięki. Dwór kazał liczyć obcych przy bramie. Wychodzi ich więcej, niż wch
 Chleb? Dla nas? ...Dziękuję. Ela, chodź! Wiesz, w nocy ktoś chodzi koło stogów. Z beczkami.
 Dziękuję. Na kontynencie mówią, że wyspa ma pod skałami coś, za co warto ginąć. Tu nikt o tym nie mówi.
 
+[plotki.woziwoda]
+Chleb od Hanki? Dobra kobieta. Słuchaj: studnia daje coraz mniej. Tylko nie mów, że to ja powiedziałem.
+Dzięki. Dwór kazał liczyć wiadra. Liczę. Wieczorem wychodzi mniej niż rano.
+
 [plotki.soltys]
 Dziękuję. Lord znów podnosi podatek - na wojnę. A ogród ma zielony jak na wiosnę.
 Dziękuję. Uchodźców będzie więcej. Gdzie ja ich, na litość, pomieszczę?

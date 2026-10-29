@@ -1,5 +1,5 @@
 // The fight's feel (Combat_Feel.js + Combat_Fight.js, 2026-10-14 - the user's list "walka przyjemniejsza, płynniejsza i wygodniejsza"):
-// A - the combat mode switching itself on and off, the soft target (the copper ring, F), the input buffer, the roll cutting a blow's end,
+// A - the combat mode switching itself on and off, the soft target (the yellow ring, F), the input buffer, the roll cutting a blow's end,
 //     the roll without the arrows springing away from the foe;
 // B - the attacks' warnings, the perfect parry for everyone, the juicy hits, the last blow's slowed moment;
 // C - the arrows at the screen's edge, the quick heal (H), the training dummy, the difficulty.
@@ -165,7 +165,7 @@ kit.test({ port: 9491 }, async t => {
     await boar(-1, 1, true, "__b2");
     await t.frames(20);
     const tg1 = await t.json("({ st: Combat.feel.state(), is1: Combat.feel.target() && Combat.feel.target().ref === __b1, ring: SceneManager._scene._spriteset._targetRing.visible, rx: SceneManager._scene._spriteset._targetRing.x, bx: __b1._sprite ? __b1._sprite.x : -1 })");
-    t.check("A2 two boars, he faces the right one: the copper ring is under it (the soft target)", tg1.is1 && tg1.ring && Math.abs(tg1.rx - tg1.bx) <= 4, tg1);
+    t.check("A2 two boars, he faces the right one: the yellow ring is under it (the soft target)", tg1.is1 && tg1.ring && Math.abs(tg1.rx - tg1.bx) <= 4, tg1);
     await shot("walka_cel.png");
     await t.key("F");
     const tg2 = await t.json("({ is2: Combat.feel.target() && Combat.feel.target().ref === __b2, rx: SceneManager._scene._spriteset._targetRing.x, bx: __b2._sprite ? __b2._sprite.x : -1 })");
@@ -396,8 +396,10 @@ kit.test({ port: 9491 }, async t => {
     await t.frames(4);
     const e2 = await t.json("SceneManager._scene._edgeArrows._shown");
     await shot("walka_strzalki.png");
-    t.check("C9 a bandit in the fight above the screen: a small copper arrow at the top (below the notices there) pointing at him; while he winds up a blow - red",
-        e1.shown.length === 1 && e1.shown[0].kind === "bandit" && e1.shown[0].y >= 90 && e1.shown[0].y <= 100 && e1.shown[0].color === "#d08a5a" && e2.length === 1 && e2[0].color === "#ff5a3a", { e1, e2 });
+    // (2026-10-28: the interface's one accent - UITheme.js's UIStyle.C.accent - instead of the copper)
+    const accent = await t.eval("UIStyle.C.accent");
+    t.check("C9 a bandit in the fight above the screen: a small arrow in the accent's yellow at the top (below the notices there) pointing at him; while he winds up a blow - red",
+        e1.shown.length === 1 && e1.shown[0].kind === "bandit" && e1.shown[0].y >= 90 && e1.shown[0].y <= 100 && e1.shown[0].color === accent && e2.length === 1 && e2[0].color === "#ff5a3a", { e1, e2, accent });
     await t.eval(`$gameMap.setDisplayPos(${cx} - 13, ${cy} - 7); 0`);
     await t.frames(4);
     t.check("C9 ... on the screen: no arrow", (await t.json("SceneManager._scene._edgeArrows._shown")).length === 0);

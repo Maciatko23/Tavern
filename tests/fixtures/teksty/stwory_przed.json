@@ -1,0 +1,165 @@
+{
+ "rodzaje": {
+  "szczur": {
+   "name": "Szczur",
+   "plural": "Szczury"
+  },
+  "pajak": {
+   "name": "Pająk"
+  },
+  "zbroja": {
+   "name": "Pusta zbroja"
+  },
+  "nietoperz": {
+   "name": "Nietoperz",
+   "plural": "Nietoperze"
+  },
+  "topielec": {
+   "name": "Topielec"
+  },
+  "kamiennik": {
+   "name": "Kamiennik"
+  },
+  "upior": {
+   "name": "Upiór prawdy"
+  },
+  "cien": {
+   "name": "Cień"
+  }
+ },
+ "twarze": {
+  "0": {
+   "name": "Borgar",
+   "lines": [
+    "Zamykamy, synu. Idź na górę.",
+    "Nie pytaj o to, czego nie chcesz wiedzieć...",
+    "Piwo stygnie. Wracaj."
+   ]
+  },
+  "1": {
+   "name": "Tadek",
+   "lines": [
+    "Kowale trzymają klucze. Daj mi swój.",
+    "Co tu robisz tak głęboko, chłopcze?"
+   ]
+  },
+  "2": {
+   "name": "Hanka",
+   "lines": [
+    "Chleb się pali... Pomożesz mi?",
+    "Zgubiłam się tu, wiesz? Tak dawno."
+   ]
+  },
+  "3": {
+   "name": "Dziadek",
+   "lines": [
+    "Wnusiu... Chodź tu, do mnie.",
+    "Mówiłem ci, nie schodź tak nisko."
+   ]
+  },
+  "4": {
+   "name": "Melia",
+   "lines": [
+    "Trzeci schodek pusty... Zaśpiewasz ze mną?",
+    "Ciii. Posłuchaj, jak tu cicho."
+   ]
+  },
+  "5": {
+   "name": "Sołtys",
+   "lines": [
+    "Dług trzeba spłacić. Tak czy inaczej.",
+    "Wszyscy cię szukają na górze."
+   ]
+  },
+  "6": {
+   "name": "Wanda",
+   "lines": [
+    "Woda już grzeje... Chodź się umyć.",
+    "Zostań tu ze mną. Na górze nic nie ma."
+   ]
+  }
+ },
+ "bossowie": {
+  "guardian": {
+   "name": "Strażnik dziesiątej bramy",
+   "note": "pusta zbroja z ogniem w hełmie; tylko ciężki cios albo w plecy; raz się składa"
+  },
+  "boss_20": {
+   "name": "Przeor w zbroi",
+   "note": "krąg rytuału jednego pytania: każdy krok w kręgu to pytanie, trzecie dostaje odpowiedź kosturem; spoza kręgu ciosy go nie sięgają"
+  },
+  "boss_30": {
+   "name": "Królowa szczurów",
+   "note": "taranuje w linii prostej (w ścianę - stoi oszołomiona), gryzie; ranna piszczy i z murów wylewają się roje szczurów"
+  },
+  "boss_40": {
+   "name": "Matka pająków",
+   "note": "sieci na posadzce (spowalniają), trzy plunięcia naraz; znika pod sklepieniem i spada tam, gdzie stoisz (cień ostrzega), albo nić wciąga cię w górę"
+  },
+  "boss_50": {
+   "name": "Topielec z głębiny",
+   "note": "kałuże dookoła; łapie i wlecze do wody, a gdy obrywa, zanurza się i wychodzi przy kałuży najbliżej ciebie (zmarszczki ostrzegają)"
+  },
+  "boss_60": {
+   "name": "Kamienny Odźwierny",
+   "note": "śpi, dopóki nie staniesz na progu; bardzo wolny; uderza pięściami w posadzkę - pierścienie odłamków idą przez całą salę (przewrót przez pierścień)"
+  },
+  "boss_70": {
+   "name": "Zbroja bez herbu",
+   "note": "szybka i czysta: trzy cięcia pod rząd, długie pchnięcie; paruje lekki cios z przodu i od razu odpowiada - ciężki cios łamie jej gardę"
+  },
+  "boss_80": {
+   "name": "Upiór pytającego",
+   "note": "zadaje ci pytania twoim głosem - odpowiedz ciosem, zanim pytanie minie, inaczej uderza w umysł (Hart ducha); znika i wychodzi zza pleców"
+  },
+  "boss_90": {
+   "name": "Ostatni Strażnik",
+   "note": "twarz dziadka i jego głos, potem habit zakonu i ciemność; przy dwóch trzecich życia rozpada się na trzy cienie"
+  }
+ },
+ "pytania": [
+  "Po co tu schodzę?",
+  "Komu ufam najbardziej?",
+  "Czy dziadek mówi mi wszystko?",
+  "Co zrobię, gdy poznam prawdę?",
+  "Ile pytań zadałem w tym roku?",
+  "Czy wrócę na górę?",
+  "Czego naprawdę szukam?",
+  "Kto zapłaci za moje pytania?"
+ ],
+ "prawdy": [
+  "Zszedłeś tu, bo na górze nikt na ciebie nie czeka.",
+  "Każdy w tawernie coś przed tobą ukrywa.",
+  "Dziadek śni o twierdzy. Nie mówi ci, co widzi.",
+  "Ci, których kochasz, kłamią, żeby cię chronić.",
+  "Wrócisz na górę starszy, niż zszedłeś.",
+  "Pytasz, bo boisz się odpowiedzi.",
+  "Nikt nie zapamięta twojego imienia.",
+  "Kto pyta, ten płaci. Ty jeszcze nie zapłaciłeś.",
+  "Słyszysz? To twoje kroki. Schodziłeś już tędy.",
+  "Kto pyta ponad miarę, ten nie wraca cały."
+ ],
+ "umysl": {
+  "fear": "Strach!",
+  "confuse": "Zamęt!",
+  "resist": "Opierasz się!",
+  "resistSub": "Hart ducha",
+  "choke": "Dławisz się!",
+  "grabbed": "Złapał cię!",
+  "free": "Wyrwałeś się!",
+  "webbed": "Lepka sieć!",
+  "plate": "Dzwoni o blachę",
+  "stone": "Kamień!",
+  "crack": "W szczelinę!",
+  "broken": "Rozbita!",
+  "rises": "Składa się z powrotem!",
+  "stuck": "Utknął!",
+  "melt": "Rozpływa się w cieniu...",
+  "answer": "Odpowiedź!",
+  "ringSafe": "Krąg go chroni",
+  "parried": "Sparowała!",
+  "pulled": "Nić wciąga cię w górę!",
+  "dazed": "Oszołomiona!"
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Creatures_Data.js: KINDS=rodzaje:/(^|\\.)(name|plural)$/, FACES=twarze:/(^|\\.)(name|lines)$/, BOSSES=bossowie:/(^|\\.)(name|note)$/, QUESTIONS=pytania, TRUTHS=prawdy, MIND=umysl)"
+}

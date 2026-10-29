@@ -235,6 +235,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("karczma");   // (the words of this file: js/teksty/karczma.txt, kod.*)
 
     const PLUGIN = "TavernLife";
     const T = window.Tawerna;
@@ -298,13 +299,13 @@
     const attr = id => orElse(T.call("Combat", "attr", id), 5);
     const gold = () => $gameParty.gold();
     const item = id => ($dataItems && $dataItems[id]) || null;
-    const hoursText = h => { const r = Math.round(h * 10) / 10; return String(r).replace(".", ",") + " godz."; };
+    const hoursText = h => { const r = Math.round(h * 10) / 10; return Watki.wstaw(TK.kod.hoursText[0], { "1": String(r).replace(".", ",") }); };
     const pct = d => Math.round(d * 100) + "%";
     // a popup over the player (Tawerna.popup: SurvivalHUD's loot popups)
     const popup = (icon, text, colour) => T.popup(text, { icon: icon || 0, color: colour || "#eceef0" });
     // what is missing floats over the player (the user's rule), never in the message window
     function needGold(price) {
-        T.popup.need(GOLD_ICON, "Brakuje ci " + Math.max(1, price - gold()) + " G");
+        T.popup.need(GOLD_ICON, Watki.wstaw(TK.kod.needGold[0], { "1": Math.max(1, price - gold()) }));
         SoundManager.playBuzzer();
     }
     const notice = (text, sub) => T.popup(text, { top: true, color: U().accent, sub });
@@ -353,15 +354,27 @@
     // ------------------------------------------------------------------
     // The premia (Survival.js): Czysty after the bath, Natchniony after Melia's song, Ugoszczony after a meal at the tavern
     // ------------------------------------------------------------------
+    // (the names and the descriptions: js/teksty/karczma.txt, premie.<key> - {procent} filled from the parameters)
     const BUFFS = {
-        clean: { name: "Czysty", icon: 67, desc: "prace kosztują " + Math.round(CLEAN_COST * 100) + "% mniej sił (po kąpieli)", cost: 1 - CLEAN_COST },
-        inspired: { name: "Natchniony", icon: 80, desc: "+" + Math.round(INSPIRED_XP * 100) + "% doświadczenia (po pieśni Melii)" },
-        hosted: { name: "Ugoszczony", icon: 337, desc: "głód i pragnienie rosną o " + Math.round(HOSTED_NEEDS * 100) + "% wolniej (po posiłku w tawernie)" },
-        rested: { name: "Wypoczęty", icon: 8, desc: "odpoczynek daje 25% więcej sił (po nocy w komnacie albo w apartamencie)" }
+        clean: { name: "", icon: 67, desc: "", cost: 1 - CLEAN_COST },
+        inspired: { name: "", icon: 80, desc: "" },
+        hosted: { name: "", icon: 337, desc: "" },
+        rested: { name: "", icon: 8, desc: "" }
     };
+    const BUFF_PCT = { clean: Math.round(CLEAN_COST * 100), inspired: Math.round(INSPIRED_XP * 100), hosted: Math.round(HOSTED_NEEDS * 100) };
     const SV = T.api("Survival");
-    if (SV && SV.defineBuff) for (const k of Object.keys(BUFFS)) SV.defineBuff(k, BUFFS[k]);
-    else if (SV && SV.BUFFS) Object.assign(SV.BUFFS, BUFFS);   // (an older Survival.js: no cost factor there - see the wrapper below)
+    // given to Survival once the words are read (before the title) - and again after F9 "Wczytaj teksty od nowa"
+    function defineBuffs() {
+        for (const k of Object.keys(BUFFS)) {
+            const w = (TK.premie || {})[k] || {};
+            BUFFS[k].name = w.name || k;
+            BUFFS[k].desc = Watki.wstaw(w.desc || "", { procent: BUFF_PCT[k] });
+        }
+        if (SV && SV.defineBuff) for (const k of Object.keys(BUFFS)) SV.defineBuff(k, BUFFS[k]);
+        else if (SV && SV.BUFFS) Object.assign(SV.BUFFS, BUFFS);   // (an older Survival.js: no cost factor there - see the wrapper below)
+    }
+    Watki.poTekstach(defineBuffs);
+    T.on("tekstyWczytane", defineBuffs, { owner: PLUGIN });
     const hasBuff = k => !!($gameSystem && $gameSystem.hasBuff && $gameSystem.hasBuff(k));
     function addBuff(k, hours) {
         if ($gameSystem && $gameSystem.addBuff) $gameSystem.addBuff(k, hours);
@@ -481,11 +494,12 @@
 
     // the people of the tavern (found by name or by look, as Story.js finds Borgar; the "Atmosfera - ..." parallel events are skipped)
     const NPCS = {
-        borgar: { re: /^Borgar\b/i, sheet: "People3_Tall", index: 4, face: ["People3", 4], name: "Borgar", bust: "People3_5" },
-        melia: { re: /^Melia\b/i, sheet: "People2_Tall", index: 7, face: ["People2", 7], name: "Melia", bust: "People2_8" },
-        grum: { re: /^Grum\b/i, sheet: "Actor2_Tall", index: 4, face: ["Actor2", 4], name: "Grum", bust: "Actor2_5" },
-        ozzy: { re: /Ozzy/i, sheet: "People2_Tall", index: 0, face: ["People2", 0], name: "Dziadek Ozzy", bust: "People2_1" }
+        borgar: { re: /^Borgar\b/i, sheet: "People3_Tall", index: 4, face: ["People3", 4], bust: "People3_5" },
+        melia: { re: /^Melia\b/i, sheet: "People2_Tall", index: 7, face: ["People2", 7], bust: "People2_8" },
+        grum: { re: /^Grum\b/i, sheet: "Actor2_Tall", index: 4, face: ["Actor2", 4], bust: "Actor2_5" },
+        ozzy: { re: /Ozzy/i, sheet: "People2_Tall", index: 0, face: ["People2", 0], bust: "People2_1" }
     };
+    Watki.scal(NPCS, "karczma", "postacie");   // (its words: js/teksty/karczma.txt, postacie)
     // (2026-10-06) W8: Grum beaten at the tunnel (on the ferry, or dead) is gone from the tavern for good - TownQuests says so
     const grumAway = () => { const Q = T.api("TownQuests"); try { return !!(Q && Q.grumAway && Q.grumAway()); } catch (e) { return false; } };
     function npc(role) {
@@ -749,35 +763,18 @@
     // MEAL: Borgar's card of dishes, the dish of the day, a seat at a free table, the plate, the time it takes, the food and "Ugoszczony"
     // ==================================================================
     const DISHES = [
-        { id: "gulasz", item: 130, name: "Gulasz", price: num(params.priceGulasz, 16), bowl: true, hot: true, minutes: 30, hosted: 6,
-            sub: "gorący · syci na długo · rozgrzewa",
-            desc: "Gęsty gulasz z wołowiny, marchwi i kapusty, od rana pyrkający w żeliwnym garze. Łyżka w nim stoi.",
-            order: "Gulasz! Siadaj, już nakładam - z samego dna, tam najlepszy.", bite: "Łyżka naprawdę w nim stoi... Borgar, ty stary czarodzieju." },
-        { id: "kapusniak", item: 131, name: "Kapuśniak", price: num(params.priceKapusniak, 12), bowl: true, hot: true, minutes: 30, hosted: 6,
-            sub: "gorący · kwaśny · rozgrzewa",
-            desc: "Kwaśny kapuśniak na wędzonce, z ziemniakami i koperkiem. Rozgrzewa aż po palce u stóp.",
-            order: "Kapuśniak, jak u matki. No, prawie - matka sypała więcej pieprzu. Siadaj!", bite: "Kwaśny, gorący... jak u dziadka Stacha. Tylko bez gderania." },
-        { id: "pieczen", sheet: 0, popupIcon: 423, name: "Pieczeń z kaszą", price: num(params.pricePieczen, 18), hot: true, minutes: 30, hosted: 7,
-            food: { stamina: 70, buff: "sated", hours: 8, fed: 70, water: 4 }, sub: "najbardziej sycące danie karczmy",
-            desc: "Pieczeń wieprzowa z chrupiącą skórką, kasza gryczana i sos prosto z brytfanny. Po tym człowiek nie myśli o jedzeniu do wieczora.",
-            order: "Pieczeń z kaszą? Ha, dziś świętujesz! Siadaj, zaraz podam.", bite: "Skórka chrupie, kasza pachnie... mogę tu zamieszkać?" },
-        { id: "placek", sheet: 1, popupIcon: 398, name: "Placek z serem", price: num(params.pricePlacek, 9), minutes: 20, hosted: 4,
-            food: { stamina: 36, buff: "sated", hours: 3, fed: 32, water: 4 }, sub: "słodki · na ząb",
-            desc: "Ciepły placek drożdżowy z twarogiem i łyżką miodu z pasieki za młynem. Kruszy się na brodę.",
-            order: "Placek z serem, na słodko! Siadaj, zaraz przyniosę.", bite: "Słodki jak... no, jak placek z serem. I tyle mi trzeba." },
-        { id: "chleb", sheet: 2, popupIcon: 339, name: "Chleb ze smalcem", price: num(params.priceChleb, 5), minutes: 15, hosted: 3,
-            food: { stamina: 26, buff: "sated", hours: 2, fed: 28, water: 0 }, sub: "tanio · szybko · klasyka",
-            desc: "Gruba pajda razowca, smalec ze skwarkami i ogórek kiszony. Klasyka za grosze.",
-            order: "Chleb ze smalcem - jedzenie królów. Biednych królów. Siadaj!", bite: "Skwarki! Ogórek! Nic więcej do szczęścia." },
-        { id: "piwo", item: 81, name: "Kufel piwa", price: num(params.pricePiwo, 4), drink: true, minutes: 15, hosted: 2,
-            sub: "zimne · z beczki Borgara",
-            desc: "Złociste, z własnej beczki Borgara. Piana na dwa palce, chłód prosto z piwnicy.",
-            order: "Kufel już się napełnia. Siadaj, bo po piwie lepiej siedzieć.", bite: "Ach... piana na wąsach, spokój w duszy." },
-        { id: "miod", item: 137, name: "Miód pitny", price: num(params.priceMiod, 8), drink: true, minutes: 15, hosted: 3,
-            sub: "słodki · mocny · rozgrzewa",
-            desc: "Trójniak z pasieki za młynem. Słodki, mocny i zdradliwy - wchodzi jak woda, wychodzi nogami.",
-            order: "Miód pitny? Tylko ostrożnie - wchodzi jak woda, wychodzi nogami.", bite: "Słodki... i zdradliwy. Już go czuję w kolanach." }
+        { id: "gulasz", item: 130, price: num(params.priceGulasz, 16), bowl: true, hot: true, minutes: 30, hosted: 6 },
+        { id: "kapusniak", item: 131, price: num(params.priceKapusniak, 12), bowl: true, hot: true, minutes: 30, hosted: 6 },
+        { id: "pieczen", sheet: 0, popupIcon: 423, price: num(params.pricePieczen, 18), hot: true, minutes: 30, hosted: 7,
+            food: { stamina: 70, buff: "sated", hours: 8, fed: 70, water: 4 } },
+        { id: "placek", sheet: 1, popupIcon: 398, price: num(params.pricePlacek, 9), minutes: 20, hosted: 4,
+            food: { stamina: 36, buff: "sated", hours: 3, fed: 32, water: 4 } },
+        { id: "chleb", sheet: 2, popupIcon: 339, price: num(params.priceChleb, 5), minutes: 15, hosted: 3,
+            food: { stamina: 26, buff: "sated", hours: 2, fed: 28, water: 0 } },
+        { id: "piwo", item: 81, price: num(params.pricePiwo, 4), drink: true, minutes: 15, hosted: 2 },
+        { id: "miod", item: 137, price: num(params.priceMiod, 8), drink: true, minutes: 15, hosted: 3 }
     ];
+    Watki.scal(DISHES, "karczma", "dania", "id");   // (its words: js/teksty/karczma.txt, dania, by the id)
     const dishById = id => DISHES.find(d => d.id === id) || null;
     for (const d of DISHES) Object.defineProperty(d, "icon", { get() { return this.item && item(this.item) ? item(this.item).iconIndex : this.popupIcon || 0; } });
     const MAINS = DISHES.filter(d => !d.drink);
@@ -796,7 +793,7 @@
         const food = foodOf(dish), parts = [], before = $gameSystem.stamina();
         if (food.stamina) $gameSystem.changeStamina(food.stamina * (1 + perk("food.value")));
         const gained = Math.round($gameSystem.stamina() - before);
-        if (gained > 0) parts.push("+" + gained + " wytrzymałości");
+        if (gained > 0) parts.push(Watki.wstaw(TK.kod.eatDish[0], { gained: gained }));
         for (const [b, h] of [[food.buff, food.hours], [food.buff2, food.hours2]]) {
             if (!b || !(h > 0) || !SV || !SV.BUFFS || !SV.BUFFS[b]) continue;
             const hh = Math.round(h * (1 + perk("food.buff")) * 10) / 10;
@@ -806,26 +803,25 @@
         const N = T.api("Needs");
         if (N && N.eat) { const extra = N.eat(dish.item ? item(dish.item) : null, food); if (extra) parts.push(extra); }
         addBuff("hosted", dish.hosted);
-        parts.push("Ugoszczony (" + hoursText(dish.hosted) + ")");
-        popup(dish.icon, (dish.drink ? "Wypiłeś: " : "Zjadłeś: ") + dish.name + ". " + parts.join(", ") + ".", GOOD);
+        parts.push(Watki.wstaw(TK.kod.eatDish[1], { "1": hoursText(dish.hosted) }));
+        popup(dish.icon, (dish.drink ? TK.kod.eatDish[2] : TK.kod.eatDish[3]) + dish.name + ". " + parts.join(", ") + ".", GOOD);
         const s = S();
         s.meals++;
         s.dishes[dish.id] = (s.dishes[dish.id] || 0) + 1;
         if (first("meal")) {
-            note("Karczma Borgara", "U Borgara zjesz gorący posiłek za parę monet: przy ladzie wybierasz z karty, siadasz przy wolnym stole, a on podaje. Codziennie inne danie dnia jest tańsze.\n" +
-                "Po posiłku w tawernie jestem Ugoszczony: przez kilka godzin głód i pragnienie rosną o " + Math.round(HOSTED_NEEDS * 100) + "% wolniej.");
-            xp(10, "pierwszy posiłek w tawernie");
+            note(TK.kod.eatDish[4], Watki.wstaw(TK.kod.eatDish[5], { "1": Math.round(HOSTED_NEEDS * 100) }));
+            xp(10, TK.kod.eatDish[6]);
         }
     }
     function mealCardSpec() {
         const dd = dishOfDay();
         const entries = DISHES.map(d => {
             const price = priceOf(d), can = gold() >= price;
-            return { dish: d, name: d.name, right: price + " G", oldRight: price !== d.price ? d.price + " G" : "", badge: d === dd ? "DANIE DNIA" : "",
+            return { dish: d, name: d.name, right: price + " G", oldRight: price !== d.price ? d.price + " G" : "", badge: d === dd ? TK.kod.mealCardSpec[0] : "",
                 sub: d === dd ? "−" + Math.round(DAY_DISCOUNT * 100) + "% · " + d.sub : d.sub, enabled: can, why: () => needGold(price) };
         });
-        return { key: "meal", kicker: "KARCZMA „POD ZŁOTYM KUFLEM” · KUCHNIA BORGARA", title: "Karta dań", entries, okWord: "zamów",
-            foot: repFoot() || "Posiłek przy stole: 15-30 minut", index: Math.max(0, DISHES.indexOf(dd)) };
+        return { key: "meal", kicker: TK.kod.mealCardSpec[1], title: TK.kod.mealCardSpec[2], entries, okWord: TK.kod.mealCardSpec[3],
+            foot: repFoot() || TK.kod.mealCardSpec[4], index: Math.max(0, DISHES.indexOf(dd)) };
     }
     // a free seat at a table: the nearest <Tavern:mealtable> nobody sits at
     function freeSeat() {
@@ -865,7 +861,7 @@
             sat = !!(p.startToolSwing && p.startToolSwing(SIT_KIND, () => {}, null, { keepOnMove: true, still: false, wobble: 30, lift: seat.lift, holdWhile: () => !done }));
             if (sat) yield () => swingWaiting() || !p.isToolSwinging();
         } else {
-            bark($gamePlayer, "Stoły zajęte? Zjem przy ladzie.", 110);
+            bark($gamePlayer, TK.kod.mealSeq[0], 110);
         }
         yield W(18);
         const at = seat ? seat.plate : counterPlate();
@@ -895,9 +891,9 @@
     function mealTalk() {
         const o = [], dd = dishOfDay(), h = hour();
         repLine(o);
-        const greet = h < 11 ? "Śniadanko? Kuchnia już grzeje." : h < 17 ? "Głodny? U mnie nikt nie wychodzi głodny. Najwyżej biedniejszy." : h < 22 ? "Wieczór bez kolacji to wieczór stracony. Co podać?" : "O tej porze? Kuchnia prawie zgaszona, ale dla ciebie coś się znajdzie.";
-        sayAs(o, "borgar", greet + " Dziś danie dnia: " + dd.name.toLowerCase() + " - " + priceOf(dd) + " G zamiast " + dd.price + ".");
-        if (!S().firsts.meal) sayAs(o, "borgar", "Wybierasz z karty, płacisz, siadasz przy wolnym stole - a ja podaję. Kto zje u mnie, ten przez parę godzin jest ugoszczony: głód i pragnienie mniej mu dokuczają.");
+        const greet = h < 11 ? TK.kod.mealTalk[0] : h < 17 ? TK.kod.mealTalk[1] : h < 22 ? TK.kod.mealTalk[2] : TK.kod.mealTalk[3];
+        sayAs(o, "borgar", Watki.wstaw(TK.kod.mealTalk[4], { greet: greet, "2": dd.name.toLowerCase(), "3": priceOf(dd), price: dd.price }));
+        if (!S().firsts.meal) sayAs(o, "borgar", TK.kod.mealTalk[5]);
         script(o, "TavernLife.card(this, 'meal')");
         script(o, "TavernLife.step(this, 'meal')");
         return o;
@@ -908,7 +904,7 @@
     // QuestBoard.js the reputation is 0: no discounts, the chamber and the Apartamenty stay shut.
     // ==================================================================
     const REP_DISCOUNT = [0, 0].concat(nums(params.repDiscounts, "5,10,15").slice(0, 3).map(n => n / 100));   // by tier: 0 Nowy w okolicy .. 4 Chluba tawerny
-    const REP_NAMES = ["Nowy w okolicy", "Znajoma twarz", "Swój chłop", "Pewna ręka", "Chluba tawerny"];
+    const REP_NAMES = Watki.scal([], "karczma", "slawa.nazwy");   // (the tiers' names, Nowy w okolicy .. Chluba tawerny: js/teksty/karczma.txt)
     const REP_AT = [0, 20, 40, 60, 80];
     const QB = () => T.api("QuestBoard");
     function reputation() {
@@ -928,20 +924,16 @@
     }
     const repDiscount = () => REP_DISCOUNT[repTier()] || 0;
     const repPrice = base => { const d = repDiscount(); return d > 0 && base > 0 ? Math.max(1, Math.round(base * (1 - d))) : base; };
-    // Borgar says it once for each tier that brings a discount (the first talk with him about food or a room after it comes)
-    const REP_LINES = {
-        2: "Słyszę, co robisz dla ludzi z tablicy. Swój chłop z ciebie! Od dziś liczę ci wszystko " + pct(REP_DISCOUNT[2]) + " taniej - jedzenie, pokój i łaźnię.",
-        3: "Pewna ręka - tak o tobie mówią w całej okolicy. Takim gościom liczę " + pct(REP_DISCOUNT[3]) + " mniej. I komnata z kominkiem na górze stoi dla ciebie otworem.",
-        4: "Chluba tawerny we własnej osobie! " + pct(REP_DISCOUNT[4]) + " taniej, najlepszy kufel z beczki, a na piętrze złocona krata otworzy się przed tobą. Apartamenty czekają."
-    };
+    // Borgar says it once for each tier that brings a discount (the first talk with him about food or a room after it comes):
+    // js/teksty/karczma.txt, slawa.mowa.<tier> - {rabat} the tier's discount
     function repLine(o) {
         const t = repTier(), s = S();
         if (t >= 2 && REP_DISCOUNT[t] > 0 && (s.repSaid || 0) < t) {
             s.repSaid = t;
-            sayAs(o, "borgar", REP_LINES[t]);
+            sayAs(o, "borgar", Watki.wstaw(TK.slawa.mowa[t], { rabat: pct(REP_DISCOUNT[t]) }));
         }
     }
-    const repFoot = () => (repDiscount() > 0 ? "Sława: " + tierName(repTier()) + " · u Borgara −" + pct(repDiscount()) : "");
+    const repFoot = () => (repDiscount() > 0 ? Watki.wstaw(TK.kod.repFoot[0], { "1": tierName(repTier()), "2": pct(repDiscount()) }) : "");
 
     // ==================================================================
     // ROOMS: a bed for the night upstairs (<Tavern:bed room=N price=P name="..." minrep=R>), its door open till the morning
@@ -949,18 +941,11 @@
     // `room` (1, 2, 3, "komnata", "zloty"); minrep: the reputation a room needs (the big chamber 60, the Apartament Złoty 80)
     // ==================================================================
     const roomKey = v => String(v === undefined || v === null ? "" : v).trim().toLowerCase();
-    const ROOM_NAMES = { 1: "Izdebka przy schodach", 2: "Pokój z oknem na dziedziniec", 3: "Pokój narożny", komnata: "Komnata z kominkiem", zloty: "Apartament Złoty" };
-    const ROOM_DESCS = {
-        1: "Wąskie łóżko, gruby koc z owczej wełny i okienko na podwórze. Ciasno, ale czysto. Chrapanie zza ściany gratis.",
-        2: "Szerokie łóżko z pierzyną, dzbanek wody i okno na dziedziniec. Rano budzą cię kosy, a nie Grum.",
-        3: "Narożny pokój z dwoma oknami, dębowe łóżko i miednica z ciepłą wodą o poranku. Cicho jak w klasztorze.",
-        komnata: "Łoże z baldachimem, ogień w kominku i skóra niedźwiedzia przy łóżku. Borgar mówi, że spał tu sam Lord. Borgar dużo mówi.",
-        zloty: "Złocone łoże, jedwabna pościel, kotary z adamaszku. Rano pokojówka wnosi śniadanie do łóżka - na srebrnej tacy."
-    };
+    // the rooms' names and descriptions (keys 1, 2, 3, komnata, zloty): js/teksty/karczma.txt, pokoje.nazwy / pokoje.opisy
+    const ROOM_NAMES = Watki.scal({}, "karczma", "pokoje.nazwy"), ROOM_DESCS = Watki.scal({}, "karczma", "pokoje.opisy");
     const GIFTS = { 1: [[BREAD, 1]], 2: [[BREAD, 1], [MILK, 1]], 3: [[BREAD, 1], [CHEESE, 1]], komnata: [[BREAD, 1], [CHEESE, 1]], zloty: [] };
-    const GIFT_TEXT = { 1: "pajdę chleba", 2: "pajdę chleba i kubek mleka", 3: "pajdę chleba i kawałek sera", komnata: "pajdę chleba i kawałek sera" };   // (whom: "zostawił ci ...")
-    const GIFT_NAME = { 1: "pajda chleba", 2: "pajda chleba i kubek mleka", 3: "pajda chleba i kawałek sera", komnata: "pajda chleba i kawałek sera",
-        zloty: "do łóżka, na srebrnej tacy" };   // (what: "Śniadanie: ...")
+    // the breakfast left by the bed, whom ("zostawił ci ...": pokoje.dar_komu) and what ("Śniadanie: ...": pokoje.dar) - js/teksty/karczma.txt
+    const GIFT_TEXT = Watki.scal({}, "karczma", "pokoje.dar_komu"), GIFT_NAME = Watki.scal({}, "karczma", "pokoje.dar");
     const RESTED = { komnata: 8, zloty: 12 };   // the hours of "Wypoczęty" a night there gives
     const RESTED_BONUS = 0.25;
     const BREAKFAST_IN_BED = { zloty: { fed: 45, water: 25, hosted: 6 } };
@@ -968,7 +953,7 @@
     const giftText = room => GIFT_TEXT[roomKey(room)] || GIFT_TEXT[1];
     const giftName = room => GIFT_NAME[roomKey(room)] || GIFT_NAME[1];
     const isNumbered = room => Number(roomKey(room)) > 0;
-    const roomLabel = r => (isNumbered(r.room) && !namedAsRoom(r) ? "Pokój nr " + r.room : r.name);
+    const roomLabel = r => (isNumbered(r.room) && !namedAsRoom(r) ? Watki.wstaw(TK.kod.roomLabel[0], { room: r.room }) : r.name);
     // a bed named like its room already ("Pokój nr 1", the builders' maps): its number is not said twice
     const namedAsRoom = r => /^pok[oó]j/i.test(String(r.name || ""));
     const roomData = {}, doorData = {}, gateData = {};   // mapId -> beds / doors / gates read from the room maps (roomMaps) at the start
@@ -984,7 +969,7 @@
             const n = Number(room);
             out.push({ room, mapId, eventId: e.id, x: e.x, y: e.y, minrep: num(t.a.minrep, 0),
                 price: num(t.a.price, n > 0 ? ROOM_PRICES[n - 1] || ROOM_PRICES[ROOM_PRICES.length - 1] : 30),
-                name: t.a.name || ROOM_NAMES[room] || (n > 0 ? "Pokój " + n : room), desc: t.a.desc || ROOM_DESCS[room] || ROOM_DESCS[1] });
+                name: t.a.name || ROOM_NAMES[room] || (n > 0 ? Watki.wstaw(TK.kod.readTags[0], { n: n }) : room), desc: t.a.desc || ROOM_DESCS[room] || ROOM_DESCS[1] });
         }
         return out;
     }
@@ -1023,7 +1008,7 @@
     const roomOf = n => rooms().find(r => r.room === roomKey(n)) || null;
     const roomPrice = r => repPrice(r.price);
     const canRent = r => reputation() >= (r.minrep || 0);
-    const onlyFor = r => (roomKey(r.room) === "zloty" ? "tylko dla dostojnych gości" : "tylko dla stałych, zaufanych gości") + " (sława „" + tierName(repTierOf(r.minrep)) + "”)";
+    const onlyFor = r => Watki.wstaw(TK.kod.onlyFor[2], { "1": roomKey(r.room) === "zloty" ? TK.kod.onlyFor[0] : TK.kod.onlyFor[1], "2": tierName(repTierOf(r.minrep)) });
     // rented tonight: the room is his till CHECKOUT the next morning (after midnight, before dawn: till this morning's CHECKOUT)
     const rentUntil = () => (hour() < 6 ? day() : day() + 1) * 24 + CHECKOUT;
     function rentedRoom() {
@@ -1043,12 +1028,11 @@
         s.rooms++;
         syncDoors();
         if (first("room")) {
-            note("Pokój w karczmie", "Borgar wynajmuje pokoje na piętrze na jedną noc (" + rooms().filter(r => !r.minrep).map(r => r.name + ": " + r.price + " G").join(", ") + "). Drzwi pokoju są otwarte do " + CHECKOUT + ":00 rano.\n" +
-                "W łóżku w karczmie śpi się bezpiecznie (żadne wilki tu nie zajrzą) i budzi się w pełni sił. Rano przy łóżku czeka śniadanie od Borgara.");
+            note(TK.kod.rentRoom[0], Watki.wstaw(TK.kod.rentRoom[1], { "1": rooms().filter(r => !r.minrep).map(r => r.name + ": " + r.price + " G").join(", "), CHECKOUT: CHECKOUT }));
         }
         if (RESTED[room.room] && first("room_" + room.room)) {
-            note(room.name, room.room === "zloty" ? "Apartament Złoty na piętrze Apartamentów wynajmuje się tylko Chlubie tawerny. Po nocy w nim śniadanie podają do łóżka, a przez " + RESTED.zloty + " godz. jestem Wypoczęty: odpoczynek daje " + pct(RESTED_BONUS) + " więcej sił."
-                : "Komnatę z kominkiem Borgar wynajmuje tylko stałym, zaufanym gościom. Po nocy w niej przez " + RESTED.komnata + " godz. jestem Wypoczęty: odpoczynek daje " + pct(RESTED_BONUS) + " więcej sił.");
+            note(room.name, room.room === "zloty" ? Watki.wstaw(TK.kod.rentRoom[2], { zloty: RESTED.zloty, "2": pct(RESTED_BONUS) })
+                : Watki.wstaw(TK.kod.rentRoom[3], { komnata: RESTED.komnata, "2": pct(RESTED_BONUS) }));
         }
         return true;
     }
@@ -1124,9 +1108,9 @@
     }
     function welcomeGate(ev) {
         se("Bell3", 70, 110);
-        bark(ev, "Dzyń, dzyń! Witamy w Apartamentach, szanowny gościu!", 240);
-        notice("Apartamenty stoją przed tobą otworem", "Sława: " + tierName(4) + " - złocona krata na piętrze jest otwarta");
-        if (first("apartamenty")) note("Apartamenty", "Złocona krata na piętrze otworzyła się przede mną: sława „" + tierName(4) + "”. Za nią Apartament Złoty - Borgar wynajmuje go na noc. Śniadanie podają tam do łóżka.");
+        bark(ev, TK.kod.welcomeGate[0], 240);
+        notice(TK.kod.welcomeGate[1], Watki.wstaw(TK.kod.welcomeGate[2], { "1": tierName(4) }));
+        if (first("apartamenty")) note("Apartamenty", Watki.wstaw(TK.kod.welcomeGate[3], { "1": tierName(4) }));
     }
     // below the reputation a room or the gate needs, the plugin tells why (its own words; the map's pages come back after)
     function repLocked(ev, t) {
@@ -1138,14 +1122,14 @@
         const o = [];
         if (t.kind === "gate") {
             se("Bell1", 45, 130);
-            heroSay(o, "Złocona krata, a przy niej mosiężny dzwonek. Na tabliczce: „Apartamenty tylko dla dostojnych gości.”");
-            heroSay(o, "Dzwonię... cisza. Trzeba by być chlubą tej tawerny, żeby mi tu otworzyli.");
+            heroSay(o, TK.kod.lockedTalk[0]);
+            heroSay(o, TK.kod.lockedTalk[1]);
             return o;
         }
         const r = roomOf(t.a.room);
         se("Knock", 50, 105);
-        heroSay(o, r && r.room === "zloty" ? "Na drzwiach złota tabliczka: „Apartament Złoty. Wstęp tylko dla dostojnych gości.”"
-            : "Na drzwiach mosiężna tabliczka: „" + (r && r.room === "komnata" ? "Komnatę" : "Ten pokój") + " wynajmujemy tylko stałym, zaufanym gościom.”");
+        heroSay(o, r && r.room === "zloty" ? TK.kod.lockedTalk[2]
+            : Watki.wstaw(TK.kod.lockedTalk[5], { "1": r && r.room === "komnata" ? TK.kod.lockedTalk[3] : TK.kod.lockedTalk[4] }));
         return o;
     }
 
@@ -1154,38 +1138,38 @@
         const entries = rooms().map(r => {
             const price = roomPrice(r), ok = canRent(r);
             return { room: r.room, data: r, name: r.name, right: price + " G", oldRight: price !== r.price ? r.price + " G" : "",
-                sub: ok ? (isNumbered(r.room) && !namedAsRoom(r) ? "pokój nr " + r.room + " · " : "") + "śniadanie: " + giftName(r.room) : "sława „" + tierName(repTierOf(r.minrep)) + "” - " + (r.room === "zloty" ? "dla dostojnych gości" : "dla stałych gości"),
+                sub: ok ? Watki.wstaw(TK.kod.roomCardSpec[1], { "1": isNumbered(r.room) && !namedAsRoom(r) ? Watki.wstaw(TK.kod.roomCardSpec[0], { room: r.room }) : "", "2": giftName(r.room) }) : Watki.wstaw(TK.kod.roomCardSpec[4], { "1": tierName(repTierOf(r.minrep)), "2": r.room === "zloty" ? TK.kod.roomCardSpec[2] : TK.kod.roomCardSpec[3] }),
                 enabled: ok && gold() >= price, why: () => (ok ? needGold(price) : popup(0, r.name + ": " + onlyFor(r) + ".", BAD)) };
         });
-        return { key: "room", kicker: "PIĘTRO „ZŁOTEGO KUFLA” · POKOJE GOŚCI", title: "Pokoje na noc", entries, okWord: "wynajmij",
-            foot: repFoot() || "Płacisz za jedną noc · pobudka o " + wakeHour() + ":00" };
+        return { key: "room", kicker: TK.kod.roomCardSpec[5], title: TK.kod.roomCardSpec[6], entries, okWord: "wynajmij",
+            foot: repFoot() || Watki.wstaw(TK.kod.roomCardSpec[7], { "1": wakeHour() }) };
     }
     function roomTalk() {
         const o = [], list = rooms(), r = rentedRoom(), h = hour();
-        if (r) { sayAs(o, "borgar", "Masz już pokój na tę noc: " + (isNumbered(r.room) && !namedAsRoom(r) ? "nr " + r.room + ", " + r.name.toLowerCase() : roomLabel(r).replace(/^Pokój/, "pokój")) + ". Schody na górę, drzwi otwarte - śpij smacznie!"); return o; }
-        if (!list.length) { sayAs(o, "borgar", "Pokoje na górze jeszcze w remoncie - cieśle obiecali skończyć w tym tygodniu. Który to już tydzień..."); return o; }
+        if (r) { sayAs(o, "borgar", Watki.wstaw(TK.kod.roomTalk[1], { "1": isNumbered(r.room) && !namedAsRoom(r) ? "nr " + r.room + ", " + r.name.toLowerCase() : roomLabel(r).replace(/^Pokój/, TK.kod.roomTalk[0]) })); return o; }
+        if (!list.length) { sayAs(o, "borgar", TK.kod.roomTalk[2]); return o; }
         repLine(o);
-        sayAs(o, "borgar", h >= 6 && h < 15 ? "Pokój na noc? O tej porze? Proszę bardzo - płacisz za noc, a wylegiwać się możesz od zaraz."
-            : "Pokoje na piętrze. Pościel świeża, pluskwy wyprowadziły się w zeszłym miesiącu. Chyba.");
-        if (!S().firsts.room) sayAs(o, "borgar", "Płacisz za jedną noc: drzwi pokoju otwarte do " + CHECKOUT + ":00 rano, śpisz bezpiecznie jak u mamy, a rano przy łóżku czeka śniadanie.");
+        sayAs(o, "borgar", h >= 6 && h < 15 ? TK.kod.roomTalk[3]
+            : TK.kod.roomTalk[4]);
+        if (!S().firsts.room) sayAs(o, "borgar", Watki.wstaw(TK.kod.roomTalk[5], { CHECKOUT: CHECKOUT }));
         script(o, "TavernLife.card(this, 'room')");
         script(o, "TavernLife.step(this, 'room')");
         return o;
     }
     // Borgar's word after the rent
     function rentLine(r) {
-        if (r.room === "komnata") return "Komnata z kominkiem twoja do rana. Kazałem napalić w kominku i wytrzepać niedźwiedzia. Śniadanie będzie przy łóżku.";
-        if (r.room === "zloty") return "Apartament Złoty! Pościel taka sama jak u Lorda - no, prawie. Rano pokojówka poda śniadanie do łóżka, na srebrnej tacy.";
-        return roomLabel(r) + " " + (isNumbered(r.room) ? "twój" : "twoja") + " do rana. Schody na górę - drzwi już otwarte, świeca się pali. Śniadanie zostawię przy łóżku.";
+        if (r.room === "komnata") return TK.kod.rentLine[0];
+        if (r.room === "zloty") return TK.kod.rentLine[1];
+        return Watki.wstaw(TK.kod.rentLine[3], { "1": roomLabel(r), "2": isNumbered(r.room) ? TK.kod.rentLine[2] : "twoja" });
     }
 
     // the bed: "Położyć się spać?" - only in the room rented tonight, once a night
     function bedTalk(a) {
         const room = roomKey(a.room), r = rentedRoom(), o = [];
-        if (!isRented(room)) { popup(0, r ? "To nie twój pokój - twój to " + (isNumbered(r.room) ? "numer " + r.room : r.name) + "." : "To łóżko gościa. Pokój wynajmiesz u Borgara.", BAD); return null; }
-        if (r.slept) { popup(0, "Już się wyspałeś. Pokój jest twój do " + CHECKOUT + ":00.", BAD); return null; }
-        heroSay(o, hour() >= 6 && hour() < 18 ? "Za dnia? Ale łóżko kusi... Położyć się spać do rana?" : "Położyć się spać?");
-        choose(o, [{ label: "Śpij do rana", js: ["TavernLife.step(this, 'sleep', " + q(room) + ")"] }, { label: "Jeszcze nie", js: [] }]);
+        if (!isRented(room)) { popup(0, r ? Watki.wstaw(TK.kod.bedTalk[1], { "1": isNumbered(r.room) ? Watki.wstaw(TK.kod.bedTalk[0], { room: r.room }) : r.name }) : TK.kod.bedTalk[2], BAD); return null; }
+        if (r.slept) { popup(0, Watki.wstaw(TK.kod.bedTalk[3], { CHECKOUT: CHECKOUT }), BAD); return null; }
+        heroSay(o, hour() >= 6 && hour() < 18 ? TK.kod.bedTalk[4] : TK.kod.bedTalk[5]);
+        choose(o, [{ label: TK.kod.bedTalk[6], js: ["TavernLife.step(this, 'sleep', " + q(room) + ")"] }, { label: TK.kod.bedTalk[7], js: [] }]);
         return o;
     }
     // breakfast in bed (the Apartament Złoty): eaten at once - hunger and thirst away, "Ugoszczony" - and the tray stays on the blanket
@@ -1219,14 +1203,14 @@
         yield W(40);
         let morning;
         // (the day's plate is one line - and Story.js adds the debt to it: short words here, the rest in the popups)
-        if (room === "zloty") morning = "Śniadanie do łóżka, na srebrnej tacy. Liścik: „Na koszt domu. Borgar”.";
-        else if (room === "komnata") morning = "Wstajesz jak nowo narodzony. Przy kominku czeka pajda chleba i ser.";
-        else morning = ["Wyspałeś się jak król.", "Spałeś jak kamień, bez jednego snu.", "Pierzyna, cisza, zero wilków - wyspałeś się jak nigdy."][s.nights % 3] + " Borgar zostawił ci " + giftText(room) + ".";
+        if (room === "zloty") morning = TK.kod.sleepSeq[0];
+        else if (room === "komnata") morning = TK.kod.sleepSeq[1];
+        else morning = Watki.wstaw(TK.kod.sleepSeq[5], { "1": [TK.kod.sleepSeq[2], TK.kod.sleepSeq[3], TK.kod.sleepSeq[4]][s.nights % 3], "2": giftText(room) });
         if (typeof $gameTemp.queueDayBanner === "function") $gameTemp.queueDayBanner(morning);
         else popup(0, morning, GOOD);
-        if (BREAKFAST_IN_BED[room]) popup(363, "Śniadanie do łóżka: jajecznica, świeży chleb, kubek mleka. Ugoszczony (" + hoursText(BREAKFAST_IN_BED[room].hosted) + ")", GOOD);
-        if (RESTED[room]) popup(BUFFS.rested.icon, "Wypoczęty (" + hoursText(RESTED[room]) + "): odpoczynek daje " + pct(RESTED_BONUS) + " więcej sił", GOOD);
-        if (first("night")) xp(10, "noc w karczmie");
+        if (BREAKFAST_IN_BED[room]) popup(363, Watki.wstaw(TK.kod.sleepSeq[6], { "1": hoursText(BREAKFAST_IN_BED[room].hosted) }), GOOD);
+        if (RESTED[room]) popup(BUFFS.rested.icon, Watki.wstaw(TK.kod.sleepSeq[7], { "1": hoursText(RESTED[room]), "2": pct(RESTED_BONUS) }), GOOD);
+        if (first("night")) xp(10, TK.kod.sleepSeq[8]);
     }
     function sleepNow(room) {
         const r = rentedRoom();
@@ -1246,22 +1230,16 @@
     }
     function attSay(out, text) {
         const ev = attendant();
-        return say(out, ev ? ev.eventId() : -1, text, null, "Łaziebna Wanda");
+        return say(out, ev ? ev.eventId() : -1, text, null, TK.kod.attSay[0]);
     }
-    const BATH_LINES = [
-        "No, teraz przynajmniej konie się nie płoszą, jak przechodzisz.",
-        "Woda była gorąca, a teraz jest... brązowa. Ale ty lśnisz!",
-        "Takiego brudu nie widziałam od czasu, jak kąpał się tu Grum. A Grum kąpie się raz do roku. W porywach.",
-        "Pachniesz jak łąka po deszczu. No, jak łąka. Z tym deszczem to może przesadziłam.",
-        "Uważaj, żebyś się nie zakochał we własnym odbiciu w kuflu."
-    ];
+    const BATH_LINES = Watki.scal([], "karczma", "laznia.kwestie");   // (Wanda's words after a bath: js/teksty/karczma.txt)
     const bathPrice = () => repPrice(BATH_PRICE);
     function bathTalk() {
         const o = [], price = bathPrice();
-        attSay(o, hasBuff("clean") ? "Przecież dopiero co się kąpałeś! Jeszcze raz i zetrzesz sobie skórę do kości. No, ale płacisz - twoja wola."
-            : "Kąpiel? Gorąca woda, szare mydło i szorstki ręcznik - " + price + " G" + (price < BATH_PRICE ? ", Borgar kazał ci liczyć taniej" : "") + ". Szorowanie pleców gratis, ale tylko po znajomości.");
-        if (!S().firsts.bath) attSay(o, "Po kąpieli człowiek lżejszy - każda robota idzie o " + Math.round(CLEAN_COST * 100) + "% łatwiej, póki znowu się nie ubabrzesz. Czyli parę godzin.");
-        choose(o, [{ label: "Wykąp się (" + price + " G" + (price < BATH_PRICE ? " zamiast " + BATH_PRICE + " G" : "") + ")", js: "TavernLife.step(this, 'bath')" }, { label: "Nie teraz", js: [] }]);
+        attSay(o, hasBuff("clean") ? TK.kod.bathTalk[0]
+            : Watki.wstaw(TK.kod.bathTalk[2], { price: price, "2": price < BATH_PRICE ? TK.kod.bathTalk[1] : "" }));
+        if (!S().firsts.bath) attSay(o, Watki.wstaw(TK.kod.bathTalk[3], { "1": Math.round(CLEAN_COST * 100) }));
+        choose(o, [{ label: Watki.wstaw(TK.kod.bathTalk[5], { price: price, "2": price < BATH_PRICE ? Watki.wstaw(TK.kod.bathTalk[4], { BATH_PRICE: BATH_PRICE }) : "" }), js: "TavernLife.step(this, 'bath')" }, { label: TK.kod.bathTalk[6], js: [] }]);
         return o;
     }
     function* bathSeq(tub) {
@@ -1280,8 +1258,8 @@
             pass(BATH_HOURS / frames);
             if (i % 7 === 0) addFx({ kind: "steam", x: tub.x + (hash(i, 1) - 0.5) * 0.9, y: tub.y - 0.25, life: 80, rise: 0.5, size: 1.1 + hash(i, 2) * 0.5 });
             if (i % 19 === 0) addFx({ kind: "bubble", x: tub.x, y: tub.y, px: (hash(i, 4) - 0.5) * 30, py: 22, life: 26 });
-            if (i === Math.round(frames * 0.22)) bark(p, "Aaach... gorąca woda. Jak w niebie.", 150);
-            if (i === Math.round(frames * 0.66)) bark(p, "Tylko nie zasnąć...", 120);
+            if (i === Math.round(frames * 0.22)) bark(p, TK.kod.bathSeq[0], 150);
+            if (i === Math.round(frames * 0.66)) bark(p, TK.kod.bathSeq[1], 120);
             if (i % 70 === 35) se("Water2", 28, 125);
             yield 1;
         }
@@ -1294,12 +1272,12 @@
         se("Water1", 55, 130);
         for (let i = 0; i < 14; i++) addFx({ kind: "drop", x: p.x, y: p.y, px: (hash(i, 8) - 0.5) * 22, py: -22 - hash(i, 9) * 22, life: 26 + i * 5 });
         addBuff("clean", CLEAN_HOURS);
-        popup(BUFFS.clean.icon, "Czysty (" + hoursText(CLEAN_HOURS) + "): prace kosztują " + Math.round(CLEAN_COST * 100) + "% mniej sił", GOOD);
+        popup(BUFFS.clean.icon, Watki.wstaw(TK.kod.bathSeq[2], { "1": hoursText(CLEAN_HOURS), "2": Math.round(CLEAN_COST * 100) }), GOOD);
         const s = S();
         s.baths++;
         if (first("bath")) {
-            note("Łaźnia", "W łaźni karczmy gorąca kąpiel kosztuje " + BATH_PRICE + " G i trwa godzinę. Potem jestem Czysty: przez " + CLEAN_HOURS + " godz. każda praca kosztuje " + Math.round(CLEAN_COST * 100) + "% mniej sił.");
-            xp(10, "pierwsza kąpiel");
+            note(TK.kod.bathSeq[3], Watki.wstaw(TK.kod.bathSeq[4], { BATH_PRICE: BATH_PRICE, CLEAN_HOURS: CLEAN_HOURS, "3": Math.round(CLEAN_COST * 100) }));
+            xp(10, TK.kod.bathSeq[5]);
         }
     }
     function startBath(tub, interp) {
@@ -1311,32 +1289,10 @@
     // MELIA'S SONG: evenings, once an evening, at the listening spot before her stage; a tip is welcome. Six ballads in turn, each
     // with a crumb of the truth about Krucze Skały (docs/STORY.md: she does not know where she knows them from).
     // ==================================================================
-    const SONGS = [
-        { id: "kruk", title: "Czarny kruku", intro: "Dziś „Czarny kruku”. Najstarsza, jaką znam - stara jak kamienie pod tą podłogą.",
-            verses: [["Hej, kruku, czarny kruku,", "co krążysz nad naszym dachem?"], ["— Pamiętam mury ze skały", "i straż, co nie znała strachu."],
-                ["Nie złota strzegli ni ziemi,", "ni króla, ani korony —"], ["lecz tego, co w sercu skały", "śpi dotąd, niezbudzone."]],
-            after: "Skąd ją znam? Nie wiem. Czasem słowa przychodzą same, jak natchnienie... albo jak wspomnienie." },
-        { id: "pytanie", title: "Jedno pytanie", intro: "„Jedno pytanie”. Niby kołysanka. Tylko komu by się przy niej dobrze zasypiało?",
-            verses: [["Raz do roku, w zimną noc,", "strażnik schodził, gdzie śpi moc."], ["Jedno pytanie w dłoni niósł —", "więcej żaden by nie zniósł."],
-                ["Wracał blady, cichy, siwy,", "choć był młody, choć był żywy."], ["Prawda, synku, to nie miód:", "raz do roku — i to cud."]],
-            after: "Jedno pytanie na rok... Ciekawe, o co ty byś zapytał. Ja chyba wolę nie wiedzieć." },
-        { id: "straznik", title: "Strażnik, co pytał za wiele", intro: "„Strażnik, co pytał za wiele”. Smutna. A ludzie i tak proszą o nią najczęściej.",
-            verses: [["Był strażnik, co kochał żonę", "i bał się — jak każdy z nas."], ["Zszedł w dół, choć nie był to jego", "ni rok, ani dzień, ni czas."],
-                ["Pytał o żonę, o brata,", "o mury — czy przetrwają wiek?"], ["A Skała mu odpowiedziała.", "I nie wrócił ten sam człek."]],
-            after: "Brr. Po tej zawsze ktoś stawia kolejkę. Chyba żeby o niej nie myśleć." },
-        { id: "drzwi", title: "Drzwi pod skałą", intro: "„Drzwi pod skałą”. Melodia wesoła, a słowa... sam posłuchaj.",
-            verses: [["Pod kuflem deska, pod deską próg,", "pod progiem schody — kto by to mógł?"], ["A na dole drzwi z kamienia,", "zamknięte na klucz milczenia."],
-                ["Kto tam zapuka, ten usłyszy", "to, czego nie chciał — w wielkiej ciszy."], ["Więc pij, wędrowcze, śpiewaj z nami", "i nie pytaj, co pod kamieniami."]],
-            after: "Borgar nie lubi tej piosenki. Mówi, że goście potem zaglądają pod stoły." },
-        { id: "kasztelan", title: "Ostatni kasztelan", intro: "„Ostatni kasztelan”. O Kruczych Skałach i o kimś, kto bardzo nie chciał, żeby je pamiętano.",
-            verses: [["Gdy mury legły w pył i w proch,", "ostatni kasztelan zamknął loch."], ["Klucz zakopał, zatarł ślad", "i puścił plotkę w cały świat:"],
-                ["„Przeklęte gruzy, zły to gród —", "nie kop, bo zginiesz ty i twój ród!”"], ["Wieki minęły. Kto dziś wie,", "na czym ten Złoty Kufel śpi?"]],
-            after: "Kasztelan... Ciekawe, czy miał dzieci. I czy one wiedziały, co tatko zakopał." },
-        { id: "chlopiec", title: "O chłopcu z piwnicy", intro: "A teraz coś wesołego! „O chłopcu z piwnicy”. Ozzy, nie patrz tak na mnie.",
-            verses: [["Był raz chłopiec, psotnik mały,", "co wpadł w piwnicę pod Kruczą Skałą."], ["Wrócił nad ranem, brudny, chudy,", "i gadał rzeczy — same cudy!"],
-                ["Wiedział, kto kłamie, kto kradnie z sadu,", "i dzień, gdy spadnie deszcz pełen gradu."], ["Dziś pije piwo, gada do ściany —", "a wszyscy myślą, że jest pijany."]],
-            after: "Ozzy zawsze przy niej płacze. Mówi, że ze śmiechu. Ja myślę, że nie tylko." }
-    ];
+    // the ballads: title, intro, verses (each a list of lines), after - js/teksty/karczma.txt, piesni.<id>
+    const SONGS = [{ id: "kruk", verses: [] }, { id: "pytanie", verses: [] }, { id: "straznik", verses: [] }, { id: "drzwi", verses: [] },
+        { id: "kasztelan", verses: [] }, { id: "chlopiec", verses: [] }];
+    Watki.scal(SONGS, "karczma", "piesni", "id");
     const songById = id => SONGS.find(s => s.id === id) || null;
     const inSongHours = () => hour() >= SONG_FROM && hour() < 24;
     // (2026-10-06) what the quests changed: the whole seventh ballad sung (W3 a / b) - Natchniony brings 15%; its words burnt (W3 c) -
@@ -1354,22 +1310,22 @@
     let musicBack = null;   // { t, bgm, bgs }: the room's music, after the song
     function songTalk() {
         const o = [], s = S(), h = hour();
-        if (!npc("melia")) { popup(80, "Scena pusta. Melia dziś nie śpiewa.", BAD); return null; }
-        if (meliaAway() && h >= 17) { popup(80, "Scena pusta - Melia poszła śpiewać kołysankę pod murem.", "#eceef0"); return null; }
+        if (!npc("melia")) { popup(80, TK.kod.songTalk[0], BAD); return null; }
+        if (meliaAway() && h >= 17) { popup(80, TK.kod.songTalk[1], "#eceef0"); return null; }
         if (!inSongHours()) {
-            sayAs(o, "melia", h >= 6 && h < SONG_FROM ? "Śpiewam wieczorami, od " + SONG_FROM + ":00. Teraz stroję lutnię... i nerwy." : "O tej porze? Gardło mi śpi, a lutnia chrapie. Przyjdź wieczorem, od " + SONG_FROM + ":00.");
+            sayAs(o, "melia", h >= 6 && h < SONG_FROM ? Watki.wstaw(TK.kod.songTalk[2], { SONG_FROM: SONG_FROM }) : Watki.wstaw(TK.kod.songTalk[3], { SONG_FROM: SONG_FROM }));
             return o;
         }
-        if (s.songDay === day()) { sayAs(o, "melia", "Dziś już śpiewałam - gardło mam jedno, a ballad sto. Przyjdź jutro wieczorem!"); return o; }
+        if (s.songDay === day()) { sayAs(o, "melia", TK.kod.songTalk[4]); return o; }
         const song = nextSong();
-        sayAs(o, "melia", (s.songs ? "Znowu ty? Miło! " : "Posłuchasz? Wieczór bez pieśni jest jak kufel bez piany. ") + song.intro);
-        choose(o, [{ label: "Wrzuć " + SONG_TIP + " G do kapelusza", js: "TavernLife.step(this, 'song', 1)" }, { label: "Posłuchaj za darmo", js: "TavernLife.step(this, 'song', 0)" },
-            { label: "Innym razem", js: [] }]);
+        sayAs(o, "melia", (s.songs ? TK.kod.songTalk[5] : TK.kod.songTalk[6]) + song.intro);
+        choose(o, [{ label: Watki.wstaw(TK.kod.songTalk[7], { SONG_TIP: SONG_TIP }), js: "TavernLife.step(this, 'song', 1)" }, { label: TK.kod.songTalk[8], js: "TavernLife.step(this, 'song', 0)" },
+            { label: TK.kod.songTalk[9], js: [] }]);
         return o;
     }
     function songList(song, tipped) {
         const o = [], m = npc("melia"), id = m ? m.eventId() : -1;
-        if (tipped) sayAs(o, "melia", "Dziękuję, złotko! Za to dostaniesz jeszcze refren.");
+        if (tipped) sayAs(o, "melia", TK.kod.songList[0]);
         script(o, "TavernLife.step(this, 'songStart', " + q(song.id) + ")");
         song.verses.forEach(v => sayLines(o, id, ["♪ " + v[0], "   " + v[1]], NPCS.melia.face, "Melia"));
         if (tipped) sayLines(o, id, ["♪ " + song.verses[0][0], "   " + song.verses[0][1]], NPCS.melia.face, "Melia");
@@ -1397,17 +1353,17 @@
         se("Applause1", 55);
         const hours = inspiredHours(tipped);
         addBuff("inspired", hours);
-        popup(BUFFS.inspired.icon, "Natchniony (" + hoursText(hours) + "): +" + Math.round(inspiredXp() * 100) + "% doświadczenia", GOOD);
+        popup(BUFFS.inspired.icon, Watki.wstaw(TK.kod.songEnd[0], { "1": hoursText(hours), "2": Math.round(inspiredXp() * 100) }), GOOD);
         s.songs++;
         s.songDay = day();
         if (tipped) s.tips += SONG_TIP;
         if (song && !s.heard.includes(song.id)) s.heard.push(song.id);
         if (!song) return;
         const lyric = "„" + song.title + "”\n" + song.verses.map(v => v.join("\n")).join("\n") + "\n";
-        const J = T.api("Journal"), d = J && J.data ? J.data() : null, old = d && d.notes ? d.notes.find(n => n.title === "Pieśni Melii") : null;
-        if (!old) note("Pieśni Melii", "Melia Srebrogłosa śpiewa wieczorami (od " + SONG_FROM + ":00), raz na wieczór. Po jej pieśni jestem Natchniony: więcej doświadczenia. Sama nie wie, skąd zna te ballady...\n\n" + lyric);
-        else if (old.text.indexOf("„" + song.title + "”") < 0) { old.text += "\n" + lyric; popup(80, "Dziennik: nowa pieśń w notatce „Pieśni Melii”", "#eceef0"); }
-        if (s.heard.length === SONGS.length && first("allSongs")) xp(40, "wszystkie ballady Melii");
+        const J = T.api("Journal"), d = J && J.data ? J.data() : null, old = d && d.notes ? d.notes.find(n => n.title === TK.kod.songEnd[1]) : null;
+        if (!old) note(TK.kod.songEnd[1], Watki.wstaw(TK.kod.songEnd[2], { SONG_FROM: SONG_FROM, lyric: lyric }));
+        else if (old.text.indexOf("„" + song.title + "”") < 0) { old.text += "\n" + lyric; popup(80, TK.kod.songEnd[3], "#eceef0"); }
+        if (s.heard.length === SONGS.length && first("allSongs")) xp(40, TK.kod.songEnd[4]);
         emit("songHeard", { id: song.id, tipped: !!tipped, heard: s.heard.length });   // (2026-10-06: Melia's trust, W3)
     }
     function updateSinging() {
@@ -1473,7 +1429,7 @@
                 this.pause();
                 return true;
             }
-            quitLabel() { return "Poddaję się (" + (this.stake ? "tracisz " + this.stake + " G" : "przegrana") + ")"; }
+            quitLabel() { return Watki.wstaw(TK.kod.quitLabel[1], { "1": this.stake ? Watki.wstaw(TK.kod.quitLabel[0], { stake: this.stake }) : "przegrana" }); }
             quit() { this.giveUp(); }
             giveUp() {}
             get paused() { return !!(this.card && this.card.kind === "choice"); }
@@ -1544,8 +1500,8 @@
     // ==================================================================
     function counterTalk() {
         const o = [], h = hour();
-        sayAs(o, "borgar", h < 11 ? "Dzień dobry! Czym mogę służyć?" : h < 18 ? "Czym mogę służyć? Kuchnia grzeje, pokoje wietrzą się na górze." : "Dobry wieczór! Coś na ząb? Pokój na noc?");
-        choose(o, [{ label: "Zjedz coś", js: "TavernLife.talk(this, 'meal')" }, { label: "Wynajmij pokój", js: "TavernLife.talk(this, 'room')" }].concat(questBar(), [{ label: "Nic, dzięki", js: [] }]));
+        sayAs(o, "borgar", h < 11 ? TK.kod.counterTalk[0] : h < 18 ? TK.kod.counterTalk[1] : TK.kod.counterTalk[2]);
+        choose(o, [{ label: TK.kod.counterTalk[3], js: "TavernLife.talk(this, 'meal')" }, { label: TK.kod.counterTalk[4], js: "TavernLife.talk(this, 'room')" }].concat(questBar(), [{ label: TK.kod.counterTalk[5], js: [] }]));
         return o;
     }
     // (2026-10-06) what the town's quests want of Borgar at the bar (D6's sign-up, W4): TownQuests.borgarTopics
@@ -1561,7 +1517,7 @@
         let list = null;
         switch (t.kind) {
             case "meal": list = counterTalk(); break;
-            case "mealtable": popup(0, "Tu podają jedzenie - zamów u Borgara przy ladzie.", "#eceef0"); break;
+            case "mealtable": popup(0, TK.kod.use[0], "#eceef0"); break;
             case "bath": list = bathTalk(); break;
             case "stage": list = songTalk(); break;
             case "bed": list = bedTalk(t.a); break;
@@ -1584,11 +1540,11 @@
         switch (what) {
             case "meal": {
                 const e = takePick("meal");
-                if (!e) { run(interp, sayAs([], "borgar", pick(["Nie jesteś głodny? To może później.", "Rozmyśliłeś się? Kuchnia nie ucieknie."]))); return; }
+                if (!e) { run(interp, sayAs([], "borgar", pick([TK.kod.step[0], TK.kod.step[1]]))); return; }
                 const dish = e.dish, price = priceOf(dish);
                 if (!pay(price, npc("borgar") || ev, "meal", { dish: dish.id })) return;
                 const o = [];
-                sayAs(o, "borgar", freeSeat() ? dish.order : "Stoły zajęte - zjesz przy ladzie, jak za dawnych czasów.");
+                sayAs(o, "borgar", freeSeat() ? dish.order : TK.kod.step[2]);
                 script(o, "TavernLife.go(this, 'meal', " + q(dish.id) + ")");
                 run(interp, o);
                 return;
@@ -1605,7 +1561,7 @@
             case "bath": {
                 const tub = ev;
                 if (!tub) return;
-                if (!pay(bathPrice(), attendant() || tub, "bath")) { bark(attendant(), "Na krechę wody nie grzeję.", 100); return; }
+                if (!pay(bathPrice(), attendant() || tub, "bath")) { bark(attendant(), TK.kod.step[3], 100); return; }
                 const o = [];
                 script(o, "TavernLife.go(this, 'bath', " + tub.eventId() + ")");
                 attSay(o, BATH_LINES[S().baths % BATH_LINES.length]);
@@ -1620,7 +1576,7 @@
                 let tipped = false;
                 if (arg && SONG_TIP > 0) tipped = pay(SONG_TIP, npc("melia"), "song");
                 const o = [];
-                if (arg && !tipped) sayAs(o, "melia", "Pusta sakiewka? Nie szkodzi - zaśpiewam i tak.");
+                if (arg && !tipped) sayAs(o, "melia", TK.kod.step[4]);
                 run(interp, o.concat(songList(nextSong(), tipped)));
                 return;
             }
@@ -1642,7 +1598,7 @@
     // Story.js's Borgar: two more lines in his menu (and the quests' topics at the bar) - (2026-10-23, docs/ROZMOWY.md) an option of the
     // core's talk service, who "borgar", before his "Pogadaj"
     function borgarOptions() {
-        return [{ label: "Zjedz coś", js: "TavernLife.talk(this, \"meal\")" }, { label: "Wynajmij pokój", js: "TavernLife.talk(this, \"room\")" }].concat(questBar());
+        return [{ label: TK.kod.borgarOptions[0], js: "TavernLife.talk(this, \"meal\")" }, { label: TK.kod.borgarOptions[1], js: "TavernLife.talk(this, \"room\")" }].concat(questBar());
     }
     T.talk.option({ owner: PLUGIN, id: "borgar", who: "borgar", rows: () => borgarOptions().map(o => ({ label: o.label, cmds: [C(355, [o.js])] })) });
 
@@ -1751,19 +1707,22 @@
 
     // ------------------------------------------------------------------
     // The rebuilt ground floor (2026-10-05, tools/tavern/v2: 101x84 -> 101x55, every room rebuilt): a game saved inside the tavern
-    // before it lands at the entrance (the old coordinates are other rooms now, or past the map's bottom); the map is set up anew
+    // before it lands at the entrance (the old coordinates are other rooms now, or past the map's bottom); the map is set up anew.
+    // The layout a game knows: the state's field layout (none: older than the rebuild) - it was $gameSystem._tavernLayout, the name
+    // leads there
     // ------------------------------------------------------------------
     const TAVERN_LAYOUT = 2, ENTRANCE = [50, 53, 8];
+    T.state.oldFields("tavernLife", { _tavernLayout: "layout" });
     const _DataManager_setupNewGame = DataManager.setupNewGame;
     DataManager.setupNewGame = function() {
         _DataManager_setupNewGame.call(this);
-        $gameSystem._tavernLayout = TAVERN_LAYOUT;
+        store().layout = TAVERN_LAYOUT;
     };
     const _Game_System_onAfterLoad = Game_System.prototype.onAfterLoad;
     Game_System.prototype.onAfterLoad = function() {
         _Game_System_onAfterLoad.call(this);
-        if (this._tavernLayout === TAVERN_LAYOUT) return;
-        this._tavernLayout = TAVERN_LAYOUT;
+        if (store().layout === TAVERN_LAYOUT) return;
+        store().layout = TAVERN_LAYOUT;
         if ($gameMap.mapId() !== 1 || $gamePlayer.isTransferring()) return;
         $gamePlayer.setPosition(ENTRANCE[0], ENTRANCE[1]);   // (no map maths yet: the saved map is set up again by the transfer)
         $gamePlayer.reserveTransfer(1, ENTRANCE[0], ENTRANCE[1], ENTRANCE[2], 0);

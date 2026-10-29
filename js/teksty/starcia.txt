@@ -1,0 +1,54 @@
+# Teksty starć zwierząt z ludźmi (Starcia.js): okrzyki ludzi przy zwierzętach, podpowiedzi o padlinie i przynęcie, komunikaty przywołań z F9.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz starcia
+
+# ======================================================================== Okrzyki ludzi przy zwierzętach (losowo jeden z listy)
+[okrzyki.wolves]
+Wilki!
+Wilki pod obozem!
+Bierz głownię z ognia!
+Do ognia, chłopy, wilki!
+
+[okrzyki.brand]
+Precz, bestio!
+A sio!
+Ognia mu!
+Wynocha!
+
+[okrzyki.boar]
+Dzik! Z drogi!
+Uważaj, dzik!
+
+[okrzyki.bear]
+Niedźwiedź!
+Matko, niedźwiedź!
+
+[okrzyki.hunt]
+Cicho... kolacja.
+Zając. Nie ruszać się.
+
+[okrzyki.roast]
+Pieczyste będzie.
+Dobra sztuka.
+
+# ======================================================================== z kodu Starcia.js (kod.<funkcja>.<n>, w kolejności kodu)
+# carrionHint
+kod.carrionHint.0 = Wilki poczuły padlinę… zwłoki zostawione na noc ściągają je
+kod.carrionHint.1 = Padlina wabi wilki
+kod.carrionHint.2 = Zwłoki zwierzęcia zostawione nocą na ziemi ściągają wilki. Szarpią je, a co ogryzą, tego już nie oprawię: mniej mięsa, skóra podarta, w końcu same kości. Resztki po oprawianiu też trochę pachną. Ciała ludzi ich nie wabią.
+# gnaw
+kod.gnaw.0 = Wilki ogryzły zwłoki do kości
+# baitTick
+kod.baitTick.0 = Wilki szarpią zwłoki
+kod.baitTick.1 = Wilki dopadły przynęty - szarpią mięso
+# startFlee
+kod.startFlee.0 = Pies ranny - ucieka z walki
+# drop
+kod.drop.0 = Zapach surowego mięsa niesie się w ciemności - wilki go zwęszą
+# summon
+kod.summon.0 = Nie ma tu miejsca na obóz
+kod.summon.1 = Nie ma tu miejsca dla watahy
+kod.summon.2 = Między drzewami błyszczą oczy... wataha krąży wokół obozu
+kod.summon.3 = Nie ma tu miejsca
+kod.summon.4 = Niedźwiedź wypatrzył bandytę...
+kod.summon.5 = Dzik wypatrzył bandytę...

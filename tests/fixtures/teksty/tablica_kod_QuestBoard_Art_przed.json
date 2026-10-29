@@ -1,0 +1,43 @@
+{
+ "art": {
+  "drawCard": {
+   "0": "martwy, najlepiej",
+   "1": "Nagroda: {gold} G",
+   "2": "DWÓR ZALESKICH"
+  },
+  "stampBitmap": {
+   "0": "PRZYJĘTE",
+   "1": "PO TERMINIE"
+  },
+  "drawDetail": {
+   "0": "ZASADY TABLICY",
+   "1": "Jak to działa",
+   "2": "Zerwij kartkę - zlecenie jest twoje. Najwyżej {MAX_ACTIVE} naraz.",
+   "3": "Każde ma termin w dniach od przyjęcia. Nie zdążysz - wieś się dowie, a sława spadnie.",
+   "4": "Gotowe oddajesz tutaj: towar z plecaka, zapłata od ręki.",
+   "5": "Co {REFRESH_DAYS} dni wieszam nowe kartki. Im większa sława, tym lepiej płacą.",
+   "6": "— Borgar",
+   "7": "Twoja sława: {name} ({rep}/100)",
+   "8": "Następny próg: {name} - {rep} sławy, od dnia {day}; zlecenia do {4} G. ",
+   "9": "Wyżej już się nie da - cała okolica o tobie mówi. ",
+   "10": "{1}Wykonane: {done}, po terminie: {failed}, porzucone: {abandoned}, zarobione: {gold} G.",
+   "11": "PILNE · ",
+   "12": "DWÓR ZALESKICH",
+   "13": "na tablicy",
+   "14": "gotowe do oddania",
+   "15": "przyjęte · {1}",
+   "16": "wykonane w dniu {doneDay}",
+   "17": "po terminie",
+   "18": "Większy i silniejszy od innych, grasuje {hint}.",
+   "19": "{xp} dośw.",
+   "20": "sława +{rep}",
+   "21": "kość do gry",
+   "22": "{days} {2} od przyjęcia",
+   "23": "do dnia {due} · {2}",
+   "24": "oddane w dniu {doneDay}",
+   "25": "termin minął w dniu {due}",
+   "26": "Feliks może zaliczyć zapłatę od razu na poczet długu dziadka."
+  }
+ },
+ "_opis": "Napisy kodu QuestBoard_Art.js sprzed przeniesienia do js/teksty/tablica.txt (art.*)"
+}

@@ -69,6 +69,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("potrzeby");   // (the words of this file: js/teksty/potrzeby.txt, kod.*)
 
     const T = window.Tawerna;
     if (!T) throw new Error("Needs.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
@@ -91,8 +92,10 @@
     Input.keyMapper[71] = "drink";   // G
 
     // level 0..3 for each meter: thresholds, the cost factor, the ceiling of stamina (share of the maximum), the name
-    const FOOD = { steps: [50, 25, 0.5], factor: [1, 1.15, 1.35, 1.6], cap: [1, 1, 0.85, 0.55], name: ["", "Głodny", "Bardzo głodny", "Głodujesz"], drain: [0, 0, 0, 1] };
-    const WATER = { steps: [50, 25, 0.5], factor: [1, 1.2, 1.5, 2], cap: [1, 1, 0.7, 0.4], name: ["", "Spragniony", "Odwodniony", "Wysuszony"], drain: [0, 0, 0, 2] };
+    const FOOD = { steps: [50, 25, 0.5], factor: [1, 1.15, 1.35, 1.6], cap: [1, 1, 0.85, 0.55], drain: [0, 0, 0, 1] };
+    Watki.scal(FOOD, "potrzeby", "poziomy.glod");   // (its words: js/teksty/potrzeby.txt, poziomy.glod)
+    const WATER = { steps: [50, 25, 0.5], factor: [1, 1.2, 1.5, 2], cap: [1, 1, 0.7, 0.4], drain: [0, 0, 0, 2] };
+    Watki.scal(WATER, "potrzeby", "poziomy.pragnienie");   // (its words: js/teksty/potrzeby.txt, poziomy.pragnienie)
     // fullness and water an eaten item gives, [fed, water]: the fed / water columns of the one food table (FoodTable in Farming_Data.js -
     // changed there); FEED is kept for old readers
     const FEED = (window.FoodTable && FoodTable.FEED) || {};
@@ -101,14 +104,17 @@
     const clamp = v => Math.max(0, Math.min(100, v));
     const level = (v, t) => (v >= t.steps[0] ? 0 : v >= t.steps[1] ? 1 : v >= t.steps[2] ? 2 : 3);
 
-    // $gameSystem._needs = { food, water, skin (charges), lf, lw (last levels, for the warnings), drinks (how many times), meals }
+    // Tawerna.state "needs" = { food, water, skin (charges), lf, lw (last levels, for the warnings), drinks (how many times), meals,
+    // skinBig, nagAt }; an older save's $gameSystem._needs is adopted (the old name stays a hidden way there: Journal, the tests)
+    const needsState = T.state.define("needs", () => ({ food: 90, water: 90, skin: 0, lf: 0, lw: 0, drinks: 0, meals: 0 }),
+        { version: 1, adopt: "_needs", owner: "Needs" });
     function needs() {
-        if (!$gameSystem._needs) $gameSystem._needs = { food: 90, water: 90, skin: 0, lf: 0, lw: 0, drinks: 0, meals: 0 };
-        return $gameSystem._needs;
+        const r = $gameSystem._tw, n = r && r.needs;   // (the quick way: read every frame)
+        return n && typeof n === "object" ? n : needsState();
     }
     // the waterskin enlarged at the tannery (skinBig: it stays so, the same item)
     function skinBig() {
-        return typeof $gameSystem !== "undefined" && !!$gameSystem && !!$gameSystem._needs && !!$gameSystem._needs.skinBig;
+        return typeof $gameSystem !== "undefined" && !!$gameSystem && !!needs().skinBig;
     }
     function enlargeSkin() {
         needs().skinBig = true;
@@ -132,8 +138,8 @@
     const FOOD_ICON = 390, WATER_ICON = 391;
     function warn() {
         const n = needs(), l = levels();
-        if (l.food > n.lf) popup(FOOD_ICON, ["", "Jesteś głodny", "Bardzo głodny: wszystko kosztuje więcej sił", "Głodujesz! Zjedz coś"][l.food], l.food >= 3 ? "#ff8f8f" : l.food === 2 ? "#ffb070" : "#ffd98f");
-        if (l.water > n.lw) popup(WATER_ICON, ["", "Chce ci się pić", "Odwodnienie! Napij się wody", "Umierasz z pragnienia! Napij się"][l.water], l.water >= 3 ? "#ff8f8f" : l.water === 2 ? "#ffb070" : "#ffd98f");
+        if (l.food > n.lf) popup(FOOD_ICON, ["", TK.kod.warn[0], TK.kod.warn[1], TK.kod.warn[2]][l.food], l.food >= 3 ? "#ff8f8f" : l.food === 2 ? "#ffb070" : "#ffd98f");
+        if (l.water > n.lw) popup(WATER_ICON, ["", TK.kod.warn[3], TK.kod.warn[4], TK.kod.warn[5]][l.water], l.water >= 3 ? "#ff8f8f" : l.water === 2 ? "#ffb070" : "#ffd98f");
         n.lf = l.food;
         n.lw = l.water;
     }
@@ -207,8 +213,8 @@
         if (!enabled()) return "";
         const n = needs(), [fed, water] = foodValues(item, food || {});
         const parts = [];
-        if (fed > 0) { const before = n.food; n.food = clamp(n.food + fed); if (n.food > before) parts.push("sytość +" + Math.round(n.food - before)); }
-        if (water > 0) { const before = n.water; n.water = clamp(n.water + water); if (n.water > before) parts.push("nawodnienie +" + Math.round(n.water - before)); }
+        if (fed > 0) { const before = n.food; n.food = clamp(n.food + fed); if (n.food > before) parts.push(Watki.wstaw(TK.kod.eat[0], { "1": Math.round(n.food - before) })); }
+        if (water > 0) { const before = n.water; n.water = clamp(n.water + water); if (n.water > before) parts.push(Watki.wstaw(TK.kod.eat[1], { "1": Math.round(n.water - before) })); }
         n.meals = (n.meals || 0) + 1;
         n.lf = levels().food; n.lw = levels().water;
         return parts.join(", ");
@@ -238,13 +244,13 @@
     }
     function drinkFromSkin() {
         const icon = ($dataItems[SKIN.item] || {}).iconIndex || WATER_ICON;
-        if (!ownsSkin()) { T.popup.need(icon, "Potrzebujesz bukłaka"); return false; }
-        if (skinCharges() <= 0) { T.popup.need(icon, "Bukłak jest pusty"); return false; }
-        if (needs().water >= 95) { T.popup.need(WATER_ICON, "Nie chce ci się pić"); return false; }
+        if (!ownsSkin()) { T.popup.need(icon, TK.kod.drinkFromSkin[0]); return false; }
+        if (skinCharges() <= 0) { T.popup.need(icon, TK.kod.drinkFromSkin[1]); return false; }
+        if (needs().water >= 95) { T.popup.need(WATER_ICON, TK.kod.drinkFromSkin[2]); return false; }
         needs().skin = skinCharges() - 1;
         const got = drink(SKIN.sip);
         AudioManager.playSe({ name: "Liquid", volume: 90, pitch: 105, pan: 0 });
-        feedback(icon, "Napiłeś się: nawodnienie +" + got + " (bukłak " + skinCharges() + "/" + SKIN.max + ")");
+        feedback(icon, Watki.wstaw(TK.kod.drinkFromSkin[3], { got: got, "2": skinCharges(), max: SKIN.max }));
         return true;
     }
 
@@ -266,8 +272,8 @@
         _Window_ItemList_playBuzzerSound.call(this);
         const item = this.item();
         if (enabled() && isSkin(item)) {
-            if (skinCharges() <= 0) feedback(item.iconIndex, "Bukłak jest pusty");
-            else if (needs().water >= 95) feedback(item.iconIndex, "Nie chce ci się pić");
+            if (skinCharges() <= 0) feedback(item.iconIndex, TK.kod.playBuzzerSound[0]);
+            else if (needs().water >= 95) feedback(item.iconIndex, TK.kod.playBuzzerSound[1]);
         }
     };
     const _useItem = Game_Battler.prototype.useItem;
@@ -298,8 +304,8 @@
     const _Window_Help_setItem = Window_Help.prototype.setItem;
     Window_Help.prototype.setItem = function(item) {
         if (enabled() && isSkin(item)) {
-            const text = skinBig() ? item.description.replace(/na cztery łyki/, "na osiem łyków (powiększony)") : item.description;   // (the database says four)
-            this.setText(text + "\nWoda: " + skinCharges() + " z " + SKIN.max + " łyków.");
+            const text = skinBig() ? item.description.replace(/na cztery łyki/, TK.kod.setItem[0]) : item.description;   // (the database says four)
+            this.setText(Watki.wstaw(TK.kod.setItem[1], { text: text, "2": skinCharges(), max: SKIN.max }));
             return;
         }
         _Window_Help_setItem.call(this, item);
@@ -367,8 +373,8 @@
         if (n.nagAt !== null && n.nagAt !== undefined && now - n.nagAt < NAG_HOURS && now >= n.nagAt) return;
         n.nagAt = now;
         const faint = n.food < FAINT || n.water < FAINT;
-        const text = faint ? (thirsty && hungry ? "Kręci mi się w głowie... muszę coś zjeść i się napić!" : thirsty ? "Kręci mi się w głowie... muszę się napić!" : "Kręci mi się w głowie... muszę coś zjeść!")
-            : thirsty && hungry ? "Jestem głodny i spragniony..." : thirsty ? "Muszę się czegoś napić..." : "Muszę coś zjeść...";
+        const text = faint ? (thirsty && hungry ? TK.kod.nag[0] : thirsty ? TK.kod.nag[1] : TK.kod.nag[2])
+            : thirsty && hungry ? TK.kod.nag[3] : thirsty ? TK.kod.nag[4] : TK.kod.nag[5];
         SpeechBubbles.say($gamePlayer, text);
     }
     // faint with hunger or thirst: he walks slower
@@ -379,14 +385,13 @@
         return this === $gamePlayer && faintNow() ? d * FAINT_SPEED : d;
     };
 
-    // G: a sip from the flask
-    const _Scene_Map_update = Scene_Map.prototype.update;
-    Scene_Map.prototype.update = function() {
-        _Scene_Map_update.call(this);
+    // G: a sip from the flask; the bubbles of hunger and thirst (every 30 frames). The core's clock of the map, in the order its own
+    // hook on Scene_Map.update had: after Spoilage's, before the F9 menu's and every other clock
+    T.onMapUpdate(() => {
         if (Graphics.frameCount % 30 === 0) nag();
         if (!enabled() || !Input.isTriggered("drink")) return;
         if ($gamePlayer.canMove() && !$gameMessage.isBusy() && !$gameMap.isEventRunning() && !$gameTemp._farmMenuOpen && !$gameTemp._buildMode) drinkFromSkin();
-    };
+    }, { owner: "Needs", name: "drink", priority: -200 });
 
     window.Needs = {
         state: needs, levels, factor, capRatio, nag, URGENT, FAINT, FAINT_SPEED, eat, usefulFood, foodValues, drink, drinkFromSkin, fillSkin, skinCharges, ownsSkin, decay, warn,

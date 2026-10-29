@@ -1302,30 +1302,15 @@
     } });
 
     // ------------------------------------------------------------------
-    // F9 (Debug.js's menu, the events tab): arm it, start it now, clear it
+    // F9 (Debug.js's first tab "Zdarzenia"): the rows are the thread "akt3"'s data (Act3_Data.js, the words js/teksty/akt3.txt) - here
+    // what their OK does: arm it, start it now (both back to the map), clear it (the menu stays, a popup says so)
     // ------------------------------------------------------------------
-    function hookDebug() {
-        const SD = window.Scene_Debug;
-        if (!SD || SD._act3) return;
-        SD._act3 = true;
-        const _create = SD.prototype.create;
-        SD.prototype.create = function() {
-            _create.call(this);
-            const list = this._list;
-            if (!list || !list._all) return;
-            list._all.push({ tab: 0, kind: "act3_arm", label: TX.f9Arm, icon: 76 }, { tab: 0, kind: "act3_start", label: TX.f9Start, icon: 76 }, { tab: 0, kind: "act3_reset", label: TX.f9Reset, icon: 76 });
-            if (list._tab === 0 && typeof list.setTab === "function") list.setTab(0, list.index());
-        };
-        const _onOk = SD.prototype.onOk;
-        SD.prototype.onOk = function() {
-            const row = this._list && this._list.rowData ? this._list.rowData() : null;
-            if (row && row.kind === "act3_arm") { debugArm(); this.popScene(); return; }
-            if (row && row.kind === "act3_start") { debugStart(); this.popScene(); return; }
-            if (row && row.kind === "act3_reset") { reset(); $gameTemp.pushLootPopup(row.icon, TX.kod.f9Wyczyszczony, "#9ff0a8"); this._list.activate(); return; }
-            _onOk.call(this);
-        };
-    }
-    hookDebug();
+    const F9 = window.Watki && Watki.get ? Watki.get("akt3") : null;
+    if (F9) F9.haki({
+        f9Uzbroj: () => { debugArm(); return { back: true }; },
+        f9Teraz: () => { debugStart(); return { back: true }; },
+        f9Wyczysc: () => { reset(); return { say: TX.kod.f9Wyczyszczony }; }
+    });
     function debugArm() {
         const s = S();
         if (s.phase === "siege") return false;

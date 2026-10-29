@@ -1,0 +1,245 @@
+# Teksty zmiany w tawernie (TavernShift.js, TavernShift_Parts.js): karta pracy, cztery części zmiany, ocena i zapłata od Borgara.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz zmiana
+
+# ======================================================================== DISHES (dania)
+dania.beer.name = Piwo
+dania.bread.name = Chleb
+dania.stew.name = Gulasz
+dania.soup.name = Zupa grzybowa
+dania.cheese.name = Ser
+dania.mead.name = Miód pitny
+
+# ======================================================================== STEPS (kroki)
+kroki.cut.name = Kroić
+kroki.stir.name = Mieszać
+kroki.spice.name = Przyprawić
+kroki.add.name = Dorzucić
+kroki.serve.name = Podać
+
+# ======================================================================== RECIPES (przepisy)
+przepisy.stew.name = Gulasz
+przepisy.soup.name = Zupa grzybowa
+przepisy.eggs.name = Jajecznica
+przepisy.cabbage.name = Kapuśniak
+przepisy.potatoes.name = Pieczone ziemniaki
+
+# ======================================================================== PART_DEFS (etapy)
+# „Przed otwarciem”
+etapy.clean.title = Przed otwarciem
+etapy.clean.sub = sprzątanie i drewno
+# „Beczka”
+etapy.beer.title = Beczka
+etapy.beer.sub = nalewanie piwa na czas
+# „Kuchnia w rytm”
+etapy.kitchen.title = Kuchnia w rytm
+etapy.kitchen.sub = gotowanie do taktu
+# „Wieczór”
+etapy.serve.title = Wieczór
+etapy.serve.sub = obsługa sali
+
+# ======================================================================== GRADES (oceny)
+oceny.1.name = Katastrofa
+oceny.1.say = Coś ty tu wyprawiał?! Masz parę groszy na chleb i idź się wyspać.
+oceny.2.name = Słabiutko
+oceny.2.say = Oj, słabo. Goście narzekali, a ja sprzątałem po tobie. Jutro się popraw.
+oceny.3.name = Da się wytrzymać
+oceny.3.say = Może być. Następnym razem żwawiej, dobra?
+oceny.4.name = Porządna robota
+oceny.4.say = Dobra robota! Parę drobiazgów, ale goście wyszli zadowoleni.
+oceny.5.name = Mistrz kufla
+oceny.5.say = No, no! Tak się robi. Dorzucam coś ekstra - i jutro też cię biorę.
+
+# ======================================================================== z kodu TavernShift.js (kod.<funkcja>.<n>, w kolejności kodu)
+# cardSpec
+kod.cardSpec.0 = " · TRUDNOŚĆ {L}"
+kod.cardSpec.1 = ZMIANA NR {shiftNo}{2}
+kod.cardSpec.2 = Praca w tawernie
+kod.cardSpec.3 = „Pod Złotym Kuflem”
+kod.cardSpec.4 = Fartuch na grzbiet i do roboty! Uczciwie popracujesz - uczciwie zapłacę. Każdy grosz przybliża spłatę długu twojego dziadka.
+kod.cardSpec.5 = pauza w trakcie zmiany (można ją przerwać)
+kod.cardSpec.6 = CZĘŚĆ {1} Z {length}
+kod.cardSpec.7 = Przed otwarciem
+kod.cardSpec.8 = sprzątanie i drewno
+kod.cardSpec.9 = Sala po wczorajszym wieczorze to pobojowisko. Zanim wpuścimy gości, ogarnij ją. Masz {1} sekund.
+kod.cardSpec.10 = Przetrzyj brudne stoły: stań przy stole i przytrzymaj O.
+kod.cardSpec.11 = Przynieś drewno ze stosu w rogu do kominka - po jednym polanie.
+kod.cardSpec.12 = Wynieś worki i kubły ze śmieciami za drzwi wejściowe.
+kod.cardSpec.13 = Za każde zadanie premia, za szybki koniec - ekstra.
+kod.cardSpec.14 = / WSAD: chodzenie
+kod.cardSpec.15 = nalewanie piwa na czas
+kod.cardSpec.16 = Pokaż, czy umiesz nalać. {mugs} kufli, jeden po drugim.
+kod.cardSpec.17 = Przytrzymaj O: z kranu leje się piwo.
+kod.cardSpec.18 = Puść, gdy piana dojdzie do żółtej kreski.
+kod.cardSpec.19 = Piwo leci jeszcze chwilę po puszczeniu - puść odrobinę wcześniej.
+kod.cardSpec.20 = Za mało - goście marudzą, za dużo - rozlane. Równo nalane piwo = większe napiwki wieczorem.
+kod.cardSpec.21 = przytrzymaj: lej
+kod.cardSpec.22 = Kuchnia w rytm
+kod.cardSpec.23 = gotowanie do taktu
+kod.cardSpec.24 = Ja gotuję, ty pomagasz. Rób dokładnie to, co trzeba, i wtedy, kiedy trzeba!
+kod.cardSpec.25 = Kroki przepisu przesuwają się od prawej do lewej.
+kod.cardSpec.26 = Naciśnij właściwy klawisz, gdy krok jest w żółtej ramce.
+kod.cardSpec.27 = Im dokładniej, tym lepsze danie - i większe napiwki za gulasz i zupę.
+kod.cardSpec.28 = kroić
+kod.cardSpec.29 = mieszać
+kod.cardSpec.30 = przyprawić
+kod.cardSpec.31 = dorzucić
+kod.cardSpec.32 = podać
+kod.cardSpec.33 = Wieczór
+kod.cardSpec.34 = obsługa sali
+kod.cardSpec.35 = Drzwi otwarte, goście schodzą się na kolację. Nie daj im czekać!
+kod.cardSpec.36 = Gość siada i zamawia: dymek pokazuje, co chce.
+kod.cardSpec.37 = Weź danie z lady (O przy ladzie) - uniesiesz dwie rzeczy - i zanieś właściwemu gościowi (O przy nim). Zbędne danie odstawisz na końcu lady.
+kod.cardSpec.38 = Szybko = napiwek. Pomyłka albo długie czekanie = mniejsza zapłata; zniecierpliwiony gość wychodzi bez płacenia.
+kod.cardSpec.39 = Po gościu przetrzyj stół (przytrzymaj O). Gdy ogień przygasa - dorzuć drewna.
+kod.cardSpec.40 = / WSAD
+kod.cardSpec.41 = weź / podaj
+# pause
+kod.pause.0 = Wracam do pracy
+kod.pause.1 = Przerwij zmianę (bez zapłaty)
+# openCard
+kod.openCard.0 = O - zaczynamy
+kod.openCard.1 = O - do roboty
+# computeResult
+kod.computeResult.0 = Zmiana przerwana - Borgar nie płaci za pół roboty
+# drawHud
+kod.drawHud.0 = CZĘŚĆ {1} Z {length}
+kod.drawHud.1 = Napiwki: {1} G
+kod.drawHud.2 = {1}  ·  zmiana nr {shiftNo}
+# drawBanner
+kod.drawBanner.0 = {title} - koniec
+kod.drawBanner.1 = Wynik części
+kod.drawBanner.2 = Nieźle idzie.
+kod.drawBanner.3 = Mogło być lepiej.
+kod.drawBanner.4 = O - dalej
+kod.drawBanner.5 = O - koniec zmiany
+# drawSummary
+kod.drawSummary.0 = Zmywasz się w pół roboty? Za to nie płacę. Napiwki możesz zatrzymać.
+kod.drawSummary.1 = - Borgar
+kod.drawSummary.2 = ZMIANA PRZERWANA
+kod.drawSummary.3 = KONIEC ZMIANY NR {shift}
+kod.drawSummary.4 = " · trudność {level}"
+kod.drawSummary.5 = Ocena {1} / 5 · wynik {score} / 100{3}
+kod.drawSummary.6 = Dniówka
+kod.drawSummary.7 = Premia za pracę
+kod.drawSummary.8 = Potrącenia
+kod.drawSummary.9 = Ekstra od Borgara
+kod.drawSummary.10 = Na chleb od Borgara
+kod.drawSummary.11 = Co poszło dobrze
+kod.drawSummary.12 = Co poszło źle
+kod.drawSummary.13 = nic - czysta robota
+kod.drawSummary.14 = Czas: {1} → {endH}   ·   wytrzymałość −{stamina}   ·   zarobek do sakiewki: {total} G
+kod.drawSummary.15 = O - wracam do tawerny
+# canStart
+kod.canStart.0 = Jesteś zbyt zmęczony na całą zmianę.
+
+# ======================================================================== z kodu TavernShift_Parts.js (czesci.<funkcja>.<n>, w kolejności kodu)
+# tick
+czesci.tick.0 = Masz zajęte ręce
+czesci.tick.1 = " (przytrzymaj)"
+czesci.tick.2 = Wszystko zrobione!
+czesci.tick.3 = Pudło
+czesci.tick.4 = Kominek wygasł! Zimno...
+czesci.tick.5 = Masz pełne ręce
+# act
+czesci.act.0 = Najpierw odnieś to, co niesiesz
+czesci.act.1 = Polano {done}/{need}
+czesci.act.2 = Masz pełne ręce (dwie rzeczy)
+czesci.act.3 = To nie to, co zamawiałem!
+czesci.act.4 = Szybko! Dzięki!
+czesci.act.5 = Dziękuję.
+# finish
+czesci.finish.0 = Sala wysprzątana na czas ({1} s zapasu)
+czesci.finish.1 = Brudne stoły: {1}
+czesci.finish.2 = Kominek bez drewna: {1} polana
+czesci.finish.3 = Śmieci zostały w sali: {1}
+czesci.finish.4 = Stoły lśnią
+czesci.finish.5 = Idealnie nalane kufle: {perfect} z {length}
+czesci.finish.6 = Rozlane kufle: {spilled}
+czesci.finish.7 = Za mało piwa w kuflach: {short}
+czesci.finish.8 = Kufle, które czekały na próżno: {timeout}
+czesci.finish.9 = Kuchnia w punkt: {perfect} z {length} kroków idealnie
+czesci.finish.10 = Wyborne: {1}
+czesci.finish.11 = Pomylone lub spóźnione kroki: {miss}
+czesci.finish.12 = Nieudane: {1}
+czesci.finish.13 = Obsłużeni wszyscy goście ({guests})
+czesci.finish.14 = Podane zamówienia: {served} z {orders}
+czesci.finish.15 = Szybka obsługa - napiwki: {tips} G
+czesci.finish.16 = Pomyłki przy stołach: {mistakes}
+czesci.finish.17 = Wyszli bez płacenia: {walkouts}
+czesci.finish.18 = Nie mieli gdzie usiąść (brudne stoły): {noSeat}
+czesci.finish.19 = Nie podane do zamknięcia: {unserved}
+czesci.finish.20 = Wygasły kominek - zmarznięci goście
+# frame
+czesci.frame.0 = Lista zadań
+czesci.frame.1 = zanim wpuścimy gości
+czesci.frame.2 = Przetrzyj stoły
+czesci.frame.3 = stań przy stole, przytrzymaj O
+czesci.frame.4 = Drewno do kominka
+czesci.frame.5 = polana ze stosu w rogu
+czesci.frame.6 = Wynieś śmieci
+czesci.frame.7 = za drzwi wejściowe
+czesci.frame.8 = W rękach:
+czesci.frame.9 = śmieci
+czesci.frame.10 = lub WSAD: chodzenie
+czesci.frame.11 = Kufel {1} z {mugs}
+czesci.frame.12 = Kran skacze: raz leje mocniej, raz słabiej!
+czesci.frame.13 = Kran leje równo.
+czesci.frame.14 = Przytrzymaj O - leje się piwo.
+czesci.frame.15 = Puść, gdy piana sięga żółtej kreski.
+czesci.frame.16 = Po puszczeniu piwo leci jeszcze chwilę: puść odrobinę wcześniej.
+czesci.frame.17 = Czekam na O...
+czesci.frame.18 = Za mało / za dużo
+czesci.frame.19 = Średnio: {avg} / 100
+czesci.frame.20 = Kroki przepisu
+czesci.frame.21 = Teraz: {name}
+czesci.frame.22 = danie {1} z {length}
+czesci.frame.23 = Gotowe na wieczór
+czesci.frame.24 = Zamówienia
+czesci.frame.25 = Stół {1}
+czesci.frame.26 = + {1} więcej
+czesci.frame.27 = W rękach
+czesci.frame.28 = Zgasł! Dorzuć drewna.
+czesci.frame.29 = Przygasa - dorzuć drewna.
+czesci.frame.30 = Napiwki: {tips} G
+czesci.frame.31 = lub WSAD
+czesci.frame.32 = weź / podaj (przytrzymaj: przetrzyj)
+# judge
+czesci.judge.0 = Gość się nie doczekał
+czesci.judge.1 = Trochę za mało
+czesci.judge.2 = Trochę za dużo
+czesci.judge.3 = Za mało!
+czesci.judge.4 = Za dużo piany!
+# drawLegendRow
+czesci.drawLegendRow.0 = P - pauza
+# press
+czesci.press.0 = Nie ten krok!
+# tickGuest
+czesci.tickGuest.0 = Nie ma gdzie usiąść...
+czesci.tickGuest.1 = Hmpf! Wychodzę!
+czesci.tickGuest.2 = Dziękuję.
+
+# ======================================================================== części zmiany: co bohater może zrobić (napis nad celem; co klatkę)
+czesci.cel.przetrzyj = Przetrzyj stół
+czesci.cel.doKominka = Dorzuć do kominka
+czesci.cel.polano = Weź polano
+czesci.cel.worek = Weź worek śmieci
+czesci.cel.kubel = Weź kubeł z resztkami
+czesci.cel.wyrzuc = Wyrzuć za drzwi
+czesci.cel.zajete = Masz zajęte ręce
+# przed nazwą dania (sala wieczorem)
+czesci.cel.odstaw = "Odstaw: "
+czesci.cel.wez = "Weź: "
+czesci.cel.podaj = "Podaj: "
+# przed listą zamówionych dań
+czesci.cel.chce = "Chce: "
+czesci.cel.odstawWszystko = Odstaw wszystko na ladę
+
+# ======================================================================== części zmiany: pasek u góry (co klatkę - liczby doklejane za tekstem)
+czesci.hud.doOtwarcia = "Do otwarcia: "
+czesci.hud.zadania = "Zadania: "
+czesci.hud.kufel = "Kufel "
+czesci.hud.kranSkacze = Uwaga: kran skacze!
+czesci.hud.danie = "Danie "
+czesci.hud.doZamkniecia = "Do zamknięcia: "
+czesci.hud.obsluzone = "Obsłużone: "

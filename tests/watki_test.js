@@ -6,7 +6,8 @@
 //     game runs is used at once (the journal's chapter text) - the game keeps no copies
 //   - W4's steps 6-9 come from the data at their old indexes (old saves: the same numbers), the journal shows their words
 //   - the save: W4 in the cellar's night saved and loaded - the same step, Kasztelan's state as it was (key "kasztelan", version 1);
-//     nothing new in the save (no "watki" without threads of their own records); the old saves of tests/fixtures load and play
+//     nothing new in the save but the chapter 1's own record (2026-10-28: Story's thread "fabula" - _tw.watki.w.fabula); the old
+//     saves of tests/fixtures load and play
 // Port: CDP_PORT (9625 for this work). The changed file: tests/watki/nakladka/js/teksty/kasztelan.txt (made by the test).
 const fs = require("fs");
 const path = require("path");
@@ -57,16 +58,16 @@ kit.test({ port: 9625, overlay: "tests/watki/nakladka", overlayJs: true, bootChe
     await t.saveTo(1);
     const loaded = await t.loadFrom(1);
     await t.frames(20);
-    const s1 = await J("({ step: Kasztelan.step(), r: TownQuests.rec('W4').step, k: Kasztelan.state(), tw: Object.keys($gameSystem._tw || {}), night: Kasztelan.cellarNight(), text: TownQuests.Q.W4.steps[8].text })");
-    t.check("zapis i wczytanie: W4 w nocy w piwnicy (krok 8 „w4Piwnica”), stan Kasztelan taki sam (klucz kasztelan, wersja 1), bez nowego klucza w zapisie",
+    const s1 = await J("({ step: Kasztelan.step(), r: TownQuests.rec('W4').step, k: Kasztelan.state(), tw: Object.keys($gameSystem._tw || {}), own: Object.keys((($gameSystem._tw || {}).watki || {}).w || {}), night: Kasztelan.cellarNight(), text: TownQuests.Q.W4.steps[8].text })");
+    t.check("zapis i wczytanie: W4 w nocy w piwnicy (krok 8 „w4Piwnica”), stan Kasztelan taki sam (klucz kasztelan, wersja 1), z silnika w zapisie tylko rekord rozdziału 1",
         loaded && s0.step === "w4Piwnica" && s1.step === "w4Piwnica" && s1.r === 8 && JSON.stringify(s1.k) === JSON.stringify(s0.k) && s0.v === 1 &&
-        s1.tw.includes("kasztelan") && !s1.tw.includes("watki") && /czeka w piwnicy przy kracie/.test(s1.text), { s0, s1 });
+        s1.tw.includes("kasztelan") && s1.own.every(k => k === "fabula") && /czeka w piwnicy przy kracie/.test(s1.text), { s0, s1 });
 
     // the old saves of tests/fixtures (made before the engine): load and play, nothing of the engine in them
     for (const name of ["new_story_day1", "tavern_evening", "day40_farm"]) {
         const ok = await t.loadFixture(name, { calm: true, needsOff: true });
         await t.frames(30);
-        const f = await J("({ map: $gameMap.mapId(), w4: TownQuests.Q.W4.steps.length, tw: Object.keys($gameSystem._tw || {}), step: Kasztelan.step(), sb: SceneManager._scene.constructor.name })");
-        t.check("stary zapis " + name + " wstaje i gra: W4 ma swoje 10 kroków, w zapisie nic z silnika", ok && f.map > 0 && f.w4 === 10 && !f.tw.includes("watki") && f.sb === "Scene_Map", f);
+        const f = await J("({ map: $gameMap.mapId(), w4: TownQuests.Q.W4.steps.length, tw: Object.keys($gameSystem._tw || {}), own: Object.keys((($gameSystem._tw || {}).watki || {}).w || {}), step: Kasztelan.step(), sb: SceneManager._scene.constructor.name })");
+        t.check("stary zapis " + name + " wstaje i gra: W4 ma swoje 10 kroków, z silnika w zapisie tylko rekord rozdziału 1", ok && f.map > 0 && f.w4 === 10 && f.own.every(k => k === "fabula") && f.sb === "Scene_Map", f);
     }
 });

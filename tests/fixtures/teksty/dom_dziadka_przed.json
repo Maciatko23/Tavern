@@ -1,0 +1,37 @@
+{
+ "wspomnienia": {
+  "rogi": "Poroże mojego pierwszego jelenia. Młody widłak, ale mój.",
+  "kiel": "Kieł mojego pierwszego dzika. Szarżował prosto na mnie...",
+  "skora": "Skóra pierwszego wilka. Mało brakowało...",
+  "kufel": "Cynowy kufel od Borgara - na pamiątkę pierwszej zmiany w tawernie.",
+  "kosci": "Moje kości. Z nimi pierwszy raz kogoś ograłem w tawernie.",
+  "pokwitowanie": "„Dług Stanisława spłacony co do grosza. Działka zostaje przy nim.” - L. Zaleski",
+  "pokwitowanieDziadek": "Oprawiłem, jak Lord radził. Niech wisi - niech każdy widzi, że u nas długów nie ma.",
+  "gwozdz": "Pusty gwóźdź. Dziadek mówi: „Tu zawiśnie pokwitowanie od Lorda”.",
+  "recznik": "Haftowany ręcznik na obrazku Matki Boskiej. Krzyżyki wyszywała jeszcze babcia.",
+  "recznik_zima": "Świerk nad obrazkiem, pod nim haftowany ręcznik. Zima w chacie.",
+  "gwiazda": "Wycinanka z kolorowego papieru. Wycina się je nożycami do strzyżenia owiec.",
+  "leluja": "Leluja z kolorowego papieru - każda warstwa naklejona osobno.",
+  "chodnik": "Chodnik tkany ze starych szmat. W tym domu nic się nie marnuje.",
+  "skrzynia": "Malowana skrzynia - wiano babci. Dziadek trzyma w niej odświętne ubranie.",
+  "ziola": "Zioła suszą się przy ciepłym kominie: dziurawiec, rumianek i mięta.",
+  "wieniec": "Wieniec dożynkowy z tegorocznych kłosów. Wisi do wiosny.",
+  "bazie": "Bazie w dzbanku. Wiosna idzie.",
+  "kwiaty": "Polne kwiaty: maki, chabry i rumianek.",
+  "pisanki": "Koszyczek z pisankami na Wielkanoc. Dziadek maluje je woskiem.",
+  "jablka": "Kosz jabłek. Pachną na całą izbę.",
+  "dynie": "Dynie z działki - będzie zupa na zimę.",
+  "wigilia": "Opłatek na stole, sianko pod obrusem - Wigilia w chacie.",
+  "snop": "Snop zboża w kącie za skrzynią - na Wigilię, na dobry rok."
+ },
+ "pamiatki": {
+  "receipt": "Pokwitowanie od Lorda zawisło w ramce",
+  "wolf": "Skóra wilka leży przy twoim posłaniu",
+  "deer": "Poroże jelenia wisi nad twoim posłaniem",
+  "boar": "Kieł dzika wisi na rzemyku przy posłaniu",
+  "tankard": "Kufel od Borgara stoi na twojej półce",
+  "dice": "Twoje kości leżą na półce",
+  "notice": "Ogłoszenie z pierwszego zlecenia wisi przy posłaniu"
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (HomeDecor.js: LINES=wspomnienia, EARNED_NOTE=pamiatki)"
+}

@@ -1,0 +1,22 @@
+# Teksty ptaków (Birds.js): gatunki, najazdy na pole.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz ptaki
+
+# ======================================================================== SPECIES (gatunki)
+gatunki.crow.name = Wrona
+gatunki.sparrow.name = Wróbel
+gatunki.pigeon.name = Gołąb
+gatunki.partridge.name = Kuropatwa
+
+# ======================================================================== z kodu Birds.js (kod.<funkcja>.<n>, w kolejności kodu)
+# eatPlant
+kod.eatPlant.0 = roślina
+# report
+kod.report.0 = Ptaki zjadły: {text}
+# zegar mapy (raport najazdów pod nieobecność co 60 klatek, F9)
+kod.zegar.0 = " roślinę"
+kod.zegar.1 = " rośliny"
+kod.zegar.2 = " roślin"
+kod.zegar.3 = Pod twoją nieobecność ptaki wyjadły {awayReport}{2}
+kod.zegar.4 = Nie ma tu nic zasianego (albo pilnuje strach na wróble)
+kod.zegar.5 = Nie ma tu miejsca dla ptaków

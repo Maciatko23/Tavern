@@ -44,16 +44,17 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     };
 
     // ================================================================ the well
-    await t.newGame({ map: 8, x: 53, y: 50, dir: 4, day: 3, hour: 11, quiet: true, minimap: false });
+    // (2026-10-29: the author moved the well one row up on Map008 - the descent 52,49, the ration events on row 50)
+    await t.newGame({ map: 8, x: 53, y: 49, dir: 4, day: 3, hour: 11, quiet: true, minimap: false });
     const well = await t.json(`(function(){ const d = ${byName("Studnia miejska: zejście")};
         return { down: d && [d.eventId(), d.x, d.y, d._priorityType, d.isThrough()], rations: $gameMap.events().filter(e => e.event().name === "Studnia miejska").map(e => [e.eventId(), e.x, e.y, e.event().note]) }; })()`);
     t.check("the market well keeps its two ration events (241/242, <Studnia:2>) and has 'Studnia miejska: zejście' on its east stones (25,34)",
-        well.down && well.down[1] === 52 && well.down[2] === 50 && well.down[0] < 355 && well.rations.length === 2 &&
-        well.rations.every(r => r[2] === 51 && /<Studnia:2>/.test(r[3])), well);
+        well.down && well.down[1] === 52 && well.down[2] === 49 && well.down[0] < 355 && well.rations.length === 2 &&
+        well.rations.every(r => r[2] === 50 && /<Studnia:2>/.test(r[3])), well);
     await t.eval(`$gameParty.loseItem($dataItems[${LINA}], 999); 0`);
     const refuse = async () => {
         await t.popups({ clear: true });
-        await t.locate(53, 50, 4);
+        await t.locate(53, 49, 4);
         await t.frames(5);
         await t.press("ok");
         await t.frames(40);
@@ -67,7 +68,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("...with one rope the same", r1.pops.some(p => /2× Lina/.test(p)) && r1.map === 8 && !r1.msg, r1);
     await t.give(LINA, 1);
     await t.frames(240);                                   // (the popups and the gain notes fade first: the picture)
-    await t.locate(53, 50, 4);
+    await t.locate(53, 49, 4);
     await t.frames(5);
     await t.press("ok");
     await t.until("!!(SceneManager._scene._choiceListWindow && SceneManager._scene._choiceListWindow.active)", 15);

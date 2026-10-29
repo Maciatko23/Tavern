@@ -93,7 +93,9 @@
  *   najpierw przełącznik pauzy (parametr "Przełącznik pauzy cyklu"), a po
  *   cutscence wyłącz go z powrotem.
  *
- * Czas i numer dnia są zapisywane w stanie gry (przetrwają zapis/wczytanie).
+ * Czas i numer dnia są zapisywane w stanie gry (przetrwają zapis/wczytanie):
+ * Tawerna.state "clock" (hour, day, tinting); dawne $gameSystem._dayNightHour,
+ * _dayNightDay i _dayNightTinting prowadzą tam dalej.
  * ============================================================================
  */
 
@@ -171,25 +173,38 @@
         return T.mapFlag("DayNight", DEFAULT_ENABLED);
     }
 
-    const _Game_System_initialize = Game_System.prototype.initialize;
-    Game_System.prototype.initialize = function() {
-        _Game_System_initialize.call(this);
-        this._dayNightHour = START_HOUR;
-        this._dayNightDay = START_DAY;
-    };
+    // The clock in the save: Tawerna.state "clock" ($gameSystem._tw.clock): hour (0-24 with its fraction), day, tinting (the cycle
+    // tints the screen now). They were $gameSystem._dayNightHour, _dayNightDay and _dayNightTinting: those names lead to the fields
+    // (other plugins, the F9 menu and the tests set the day through them); an older save's fields move in when it is read.
+    const clockState = T.state.define("clock", () => ({ hour: START_HOUR, day: START_DAY }), { version: 1, owner: pluginName });
+    T.state.oldFields("clock", { _dayNightHour: "hour", _dayNightDay: "day", _dayNightTinting: "tinting" });
+    // the clock of a Game_System: the live game's state; another one (a save being read, a test's own) - null: its own fields
+    function clockOf(sys) {
+        const r = sys._tw, c = r && r.clock;
+        return c && typeof c === "object" ? c : sys === window.$gameSystem ? clockState() : null;
+    }
 
     Game_System.prototype.dayNightHour = function() {
+        const c = clockOf(this);
+        if (c) return c.hour;
         if (this._dayNightHour === undefined) this._dayNightHour = START_HOUR;
         return this._dayNightHour;
     };
 
     Game_System.prototype.dayNightDay = function() {
+        const c = clockOf(this);
+        if (c) return c.day;
         if (this._dayNightDay === undefined) this._dayNightDay = START_DAY;
         return this._dayNightDay;
     };
 
+    function setClock(sys, hour, day) {
+        const c = clockOf(sys);
+        if (c) { c.hour = hour; c.day = day; } else { sys._dayNightHour = hour; sys._dayNightDay = day; }
+    }
+
     Game_System.prototype.setDayNightHour = function(hour) {
-        this._dayNightHour = ((hour % 24) + 24) % 24;
+        setClock(this, ((hour % 24) + 24) % 24, this.dayNightDay());
     };
 
     // Moves time forward; crossing midnight starts a new day.
@@ -200,19 +215,16 @@
             hour -= 24;
             day += 1;
         }
-        this._dayNightHour = hour;
-        this._dayNightDay = day;
+        setClock(this, hour, day);
     };
 
     // Jumps to the given hour: today if it is still ahead, otherwise tomorrow.
     Game_System.prototype.sleepUntilHour = function(hour) {
         const target = ((hour % 24) + 24) % 24;
-        if (target <= this.dayNightHour()) {
-            this._dayNightDay = this.dayNightDay() + 1;
-        }
-        this._dayNightHour = target;
+        const day = target <= this.dayNightHour() ? this.dayNightDay() + 1 : this.dayNightDay();
+        setClock(this, target, day);
         syncVariables();
-        return { day: this._dayNightDay, hour: target };
+        return { day, hour: target };
     };
 
     Game_System.prototype.dayNightPeriod = function() {
@@ -236,14 +248,15 @@
             $gameSystem.advanceDayNight(1 / 60 / SECONDS_PER_HOUR);
         }
         syncVariables();
+        const c = clockOf($gameSystem);
         if (isToneEnabled()) {
             const tone = computeTone($gameSystem.dayNightHour());
             $gameScreen.startTint(window.Storm && Storm.adjustTone ? Storm.adjustTone(tone) : tone, 0);   // a storm darkens the sky (Storm.js)
-            $gameSystem._dayNightTinting = true;
-        } else if ($gameSystem._dayNightTinting) {
+            c.tinting = true;
+        } else if (c.tinting) {
             // Leaving a tinted map for one with the tint off: drop our tone once.
             $gameScreen.startTint([0, 0, 0, 0], 0);
-            $gameSystem._dayNightTinting = false;
+            c.tinting = false;
         }
     };
 

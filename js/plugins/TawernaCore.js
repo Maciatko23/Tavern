@@ -28,6 +28,9 @@
  *      stan wtyczki w zapisie gry ($gameSystem._tw[klucz]), z wersjami
  *      i migracjami; adopt: "_stareMiejsce" przejmuje dawny klucz ze starych
  *      zapisów (i zostawia ukryty alias dla starego kodu).
+ *  Tawerna.state.oldFields(klucz, { _staraNazwa: "pole" })
+ *      dawne proste pola $gameSystem jako pola stanu (stara nazwa prowadzi
+ *      do pola; pole starego zapisu przechodzi przy wczytaniu).
  *  Tawerna.on / once / off / emit
  *      szyna zdarzeń: mapEnter, mapLeave, mapReady, newGame, load, save,
  *      dayStart, hourChange, sleep, wake (+ zdarzenia systemów).
@@ -259,6 +262,14 @@
             const fresh = freshOf(spec);
             for (const k of Object.keys(fresh)) if (data[k] === undefined) data[k] = fresh[k];
         }
+        // (Tawerna.state.oldFields: an older save's own plain fields - and those a constructor wrote before this was the live game's
+        // $gameSystem - move into the state's fields; the prototype's getter / setter takes over the old names)
+        if (spec.oldFields) for (const [name, field] of spec.oldFields) {
+            const own = Object.getOwnPropertyDescriptor(sys, name);
+            if (!own || !("value" in own)) continue;
+            delete sys[name];
+            if (own.value !== undefined) data[field] = own.value;
+        }
         return data;
     }
     function ensureAll(sys) {
@@ -275,7 +286,7 @@
         const o = opts || {}, had = specs[key];
         if (had && (defaults === undefined || defaults === had.defaults) && (opts === undefined || (num(o.version, 1) === had.version && (o.adopt || "") === had.adopt))) return;
         specs[key] = { key, defaults: defaults === undefined ? {} : defaults, version: Math.max(1, Math.floor(num(o.version, 1))), migrate: o.migrate || null,
-            adopt: o.adopt || "", adoptVersion: Math.max(1, Math.floor(num(o.adoptVersion, 1))), owner: o.owner || "" };
+            adopt: o.adopt || "", adoptVersion: Math.max(1, Math.floor(num(o.adoptVersion, 1))), owner: o.owner || "", oldFields: had ? had.oldFields : null };
         if (readySys && readySys === window.$gameSystem) ready.delete(key);   // (defined during a game: looked over on the next access)
     }
     // Tawerna.state(key) -> the live object; Tawerna.state(key, defaults, opts) defines it too (then the live object, or a throwaway
@@ -299,6 +310,31 @@
         define(key, defaults, opts);
         if (window.$gameSystem) T.state(key);   // (a plugin put in during a game: its alias at once)
         return () => T.state(key);
+    };
+    // Old plain fields of $gameSystem (a flag, a number, a record) kept now in a state's fields:
+    //   Tawerna.state.oldFields("clock", { _dayNightHour: "hour", _dayNightDay: "day" })
+    // The old names lead to the fields - a getter / setter on Game_System.prototype, never saved - so older code, other plugins and
+    // the tests read and write them as before; an older save's own fields move in when the state is looked over (ensure, right after
+    // the save is read). Another Game_System than the live game's (a save being read, a test's own) keeps plain own fields.
+    // (`delete $gameSystem._x` does nothing now: set it to null instead.)
+    T.state.oldFields = function(key, map) {
+        const spec = specs[key];
+        if (!spec) throw new Error("Tawerna.state.oldFields: the state '" + key + "' is not defined");
+        const pairs = Object.entries(map || {});
+        spec.oldFields = (spec.oldFields || []).filter(p => !pairs.some(q => q[0] === p[0])).concat(pairs);
+        for (const [name, field] of pairs) {
+            Object.defineProperty(Game_System.prototype, name, { configurable: true, enumerable: false,
+                get() {
+                    const r = this._tw, s = r && r[key];   // (the quick way first: some are read many times a frame)
+                    if (s && typeof s === "object") return s[field];
+                    return this === window.$gameSystem ? T.state(key)[field] : undefined;
+                },
+                set(v) {
+                    if (this === window.$gameSystem) T.state(key)[field] = v;
+                    else Object.defineProperty(this, name, { value: v, writable: true, enumerable: true, configurable: true });
+                } });
+        }
+        if (window.$gameSystem && ready.has(key) && readySys === window.$gameSystem) ensure(window.$gameSystem, key);   // (put in during a game)
     };
     T.state.keys = () => Object.keys(specs);
     T.state.spec = key => (specs[key] ? Object.assign({}, specs[key]) : null);
@@ -379,7 +415,12 @@
         { owner: "TownLife", from: 2900, to: 2949, what: "mieszkańcy paczek nowego terenu (drugi zakres)" },
         // (2026-10-22) the new Podgrodzie's residents (docs/podgrodzie/NOWE_PODGRODZIE.md): 2900-2949 is given out (packages A-D,
         // the new town 2940-2947, 2948-2949 the tests' and spare) - a third range of the same owner
-        { owner: "TownLife", from: 2950, to: 2959, what: "nowi mieszkańcy Podgrodzia (trzeci zakres; 2950-2953 dane)" }
+        { owner: "TownLife", from: 2950, to: 2959, what: "nowi mieszkańcy Podgrodzia (trzeci zakres; 2950-2953 dane)" },
+        // (2026-10-28) the ferry's travellers (docs/PODROZNI.md 6.6): their scenes' actors and props (Podroznicy.js), and the
+        // travellers themselves as residents of the town - TownLife's fourth range (Podroznicy_Data.js)
+        { owner: "Podroznicy", from: 3002, to: 3019, what: "podróżni z promu: aktorzy scen na przystani (3002-3008), trap i rekwizyty (3010-3017)" },
+        { owner: "TownLife", from: 3020, to: 3049, what: "podróżni z promu jako mieszkańcy (czwarty zakres: obsada 3020-3033, Kompania 3034-3037, pula 3038-3041, Ksenia 3042, trójka 3043)" },
+        { owner: "Lancuchy", from: 3050, to: 3069, what: "łańcuchy podróżnych: W15 „Święte kości” - kurier Baltazara na piętrze gości (3050; SwieteKosci.js), W16 „Dezerter” - Tymon w kryjówce, garnizonie, obozie (3060; Dezerter.js)" }
     ];
     const injectors = [];     // { owner, from, to, maps(id), mapsText, build, when, fixSaved, editorWins }
     const dataHooks = [];     // { fn, owner }
@@ -558,7 +599,7 @@
         canMove: () => !!(window.$gamePlayer && $gamePlayer.canMove()),
         fade: s => !(window.$gameScreen && $gameScreen.brightness() < 250) && !(s && s.isFading && s.isFading()),
         summary: () => !(window.$gameTemp && $gameTemp._pendingSummary),
-        combat: () => !(window.$gameSystem && $gameSystem._combatMode),
+        combat: () => { const r = window.$gameSystem && $gameSystem._tw, c = r && r.combat; return !(c && c.mode); },   // (Combat.js's state; the old name _combatMode leads there)
         talk: () => { const sb = T.api("SpeechBubbles"), t = sb && typeof sb.talk === "function" ? sb.talk() : null; return !(t && t.on); }
     };
     const PRESETS = {

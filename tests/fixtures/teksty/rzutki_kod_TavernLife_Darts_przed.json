@@ -1,0 +1,69 @@
+{
+ "kod": {
+  "begin": {
+   "0": "stały bywalec",
+   "1": "gość karczmy",
+   "2": " · STAWKA {stake} G",
+   "3": "Wieśkiem",
+   "4": "Rzutki z {1}",
+   "5": "Celownik chwieje się sam - strzałkami przesuwasz cel, O rzuca lotkę.",
+   "6": "Środek (byk) 50, zielony pierścień 25, reszta tarczy tyle, ile liczba wycinka. Poza tarczą: pudło.",
+   "7": "Trzy rundy po trzy lotki na zmianę; wygrywa większa suma. Zręczność i Czujność uspokajają rękę.",
+   "8": "Strzałki - cel, O - rzut. Trzy rundy po trzy lotki.",
+   "9": "strzałki",
+   "10": "O - do tarczy"
+  },
+  "helpLines": {
+   "0": "Celownik chwieje się sam - strzałki przesuwają cel, O rzuca lotkę.",
+   "1": "Środek (byk) 50, zielony pierścień 25, reszta tarczy tyle, ile liczba wycinka. Trzy rundy po trzy lotki; wygrywa większa suma."
+  },
+  "nextTurn": {
+   "0": "Runda {round} z 3 · twój rzut",
+   "1": "Runda {round} z 3 · rzuca {short}"
+  },
+  "land": {
+   "0": "BYK! 50",
+   "1": "W ramę!",
+   "2": "Pudło!"
+  },
+  "finish": {
+   "0": "RZUTKI · KONIEC",
+   "1": "Poddałeś się",
+   "2": "twoja lotka bliżej środka",
+   "3": "jego lotka bliżej środka",
+   "4": " (dogrywka: {1})",
+   "5": "   ·   byki: {bulls}",
+   "6": "Czas: {minutes} minut gry{2}",
+   "7": "O - wracam do sali"
+  },
+  "drawSlate": {
+   "0": "Runda {1}"
+  },
+  "drawHud": {
+   "0": "strzałki",
+   "1": "  ·  STAWKA {stake} G",
+   "2": "Twój rzut",
+   "3": "Rzuca {short}",
+   "4": "{1}  ·  runda {round} z 3"
+  },
+  "dartsTalk": {
+   "0": "Rzutki... Z kim by tu zagrać?",
+   "1": "Z Dziadkiem Ozzym",
+   "2": "Z furmanem Wieśkiem",
+   "3": "Nie teraz"
+  },
+  "dartsStakes": {
+   "0": "{hello} Ile stawiasz?",
+   "1": "Stawka {n} G",
+   "2": "Nie teraz"
+  },
+  "note": {
+   "0": "Przy tarczy w karczmie gra się w rzutki o stawkę ({1} G): trzy rundy po trzy lotki, strzałki przesuwają cel, O rzuca. Środek (byk) 50, pierścień przy nim 25, reszta tarczy tyle, ile liczba wycinka. Zręczność i Czujność uspokajają rękę."
+  },
+  "after": {
+   "0": "Trzy tarcze to jednak za dużo...",
+   "1": "Hehe! Stary Ozzy jeszcze umie!"
+  }
+ },
+ "_opis": "Napisy kodu TavernLife_Darts.js sprzed przeniesienia do js/teksty/rzutki.txt (kod.*)"
+}

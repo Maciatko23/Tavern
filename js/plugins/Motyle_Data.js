@@ -11,6 +11,7 @@
  * @plugindesc Dane motyli i ciem: gatunki, mapy, kafelki kwiatów, zapylanie, siatka, gablotka, zadanie K54 „Motyl z oczkami”. v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
  * @orderAfter Birds
  *
  * @help
@@ -125,18 +126,7 @@
     };
     Watki.scal(KLEOFAS, "motyle", "kleofas");   // (its words: js/teksty/motyle.txt, kleofas)
 
-    // ------------------------------------------------------------------ K54 "Motyl z oczkami" (docs/QUESTY.md, the next free K number)
-    const K54 = {
-        id: "K54", kind: "K", giver: "ela", icon: ICON.butterfly, 
-        offer: {
-            cond: { hours: [7, 19], day: 3, fn: "k54Pora" }
-        },
-        steps: [
-            { type: "bring", to: "ela", need: [["v:pawik", 1]], hours: [6, 21] }
-        ],
-        reward: { xp: 60, opinion: 2, flag: "elaMotyl", items: [[ITEM.drawing, 1]] }
-    };
-    Watki.scal(K54, "motyle", "zadania.K54");   // (its words: js/teksty/motyle.txt, zadania.K54)
+    // ------------------------------------------------------------------ the things carried, the remarks (they go with the quest's pack)
     const VITEMS = { pawik: { icon: ICON.butterfly } };
     Watki.scal(VITEMS, "motyle", "rzeczy");   // (its words: js/teksty/motyle.txt, rzeczy)
     const REMARKS = [
@@ -144,7 +134,27 @@
         { id: "elaMotylEla", who: "ela", flag: "elaMotyl" }
     ];
     Watki.scal(REMARKS, "motyle", "uwagi");   // (its words: js/teksty/motyle.txt, uwagi)
-    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Motyle", quests: [K54], vitems: VITEMS, remarks: REMARKS });
+
+    // ------------------------------------------------------------------ the thread (the engine Watki.js, docs/WATKI_DANE.md): K54 "Motyl
+    // z oczkami" (docs/QUESTY.md, the next free K number - its words: js/teksty/motyle.txt, zadania.K54; into window.TownQuestsPacks
+    // with the things and the remarks) and Kleofas's chronicle of the kinds (the hooks: Motyle.js)
+    const w = Watki.watek({
+        id: "motyle", wtyczka: "Motyle", teksty: "motyle",
+        zadania: {
+            // the offer only while peacocks fly (spring, summer, the first week of autumn)
+            K54: { kind: "K", giver: "ela", icon: ICON.butterfly, offer: { cond: { hours: [7, 19], day: 3, fn: "k54Pora" } }, oferta: "poraPawika",
+                kroki: [{ nazwa: "k54Pawik", type: "bring", to: "ela", need: [["v:pawik", 1]], hours: [6, 21] }],
+                reward: { xp: 60, opinion: 2, flag: "elaMotyl", items: [[ITEM.drawing, 1]] } }
+        },
+        paczka: { vitems: VITEMS, remarks: REMARKS },
+        // brother Kleofas writes the kinds not written yet (ctx.swieze, their names ctx.lista); the whole case (ctx.wszystkie) - his thanks
+        rozmowy: {
+            kronika: [{ jesli: { i: ["ctx:wszystkie", "!ctx:juzCala"] }, to: ["kleofas.full"], inaczej: [{ mow: "kleofas.partial", zmienne: { lista: { ctx: "lista" } } }] },
+                { zrob: "kronika", args: [{ ctx: "swieze" }, { ctx: "wszystkie" }] }]
+        },
+        akcje: { kronika: [{ hak: "kronika", args: [{ arg: 0 }, { arg: 1 }] }] }
+    });
+    const K54 = w.Q.K54;
 
     window.MotyleData = { ITEM, ICON, SHEET, SPECIES, ORDER, MAPS, WILD, FLOWERS, LIMITS, WEATHER, SEASON_K, RUN_SHY, SNEAK_SHY, PAWIK, SHOULDER,
         POLLEN, CABBAGE, NET_RECIPE, REACH, TX, CASE, KLEOFAS, K54, VITEMS, REMARKS };

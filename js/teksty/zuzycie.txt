@@ -1,0 +1,58 @@
+# Teksty zużycia narzędzi (Durability.js): jednostki, złamane, naprawa.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz zuzycie
+
+# ======================================================================== UNIT (jednostki)
+[jednostki.blow]
+uderzenie
+uderzenia
+uderzeń
+
+[jednostki.use]
+użycie
+użycia
+użyć
+
+[jednostki.cast]
+rzut
+rzuty
+rzutów
+
+[jednostki.cut]
+cięcie
+cięcia
+cięć
+
+[jednostki.shot]
+strzał
+strzały
+strzałów
+
+[jednostki.jab]
+pchnięcie
+pchnięcia
+pchnięć
+
+[jednostki.block]
+cios
+ciosy
+ciosów
+
+[jednostki.wear]
+dzień pracy
+dni pracy
+dni pracy
+
+# ======================================================================== TOOLS (narzedzia)
+narzedzia.171.broke = się podarła
+
+# ======================================================================== z kodu Durability.js (kod.<funkcja>.<n>, w kolejności kodu)
+# broke
+kod.broke.0 = się złamał{1}
+# use
+kod.use.0 = {name}: zostało {remaining} {3}
+# repairRecipes
+kod.repairRecipes.0 = Napraw: {name}
+kod.repairRecipes.1 = Wzmacniasz i sklejasz to, co się poluzowało. Wytrzymałość wraca do pełna (teraz {1} z {2}).
+# setItem
+kod.setItem.0 = {description}\nWytrzymałość: {2} z {3}.

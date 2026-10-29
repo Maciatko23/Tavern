@@ -1,0 +1,235 @@
+{
+ "kod": {
+  "w9Name": {
+   "0": "z gry"
+  },
+  "w9": {
+   "0": "W9: rywal (wymuś wariant): {1}   ←→ zmień, OK zacznij",
+   "1": "W9: rywal (brak Rywal.js)"
+  },
+  "w9meet": {
+   "0": "W9: rywal - spotkanie na piętrze {n}   ←→ piętro, OK idź",
+   "1": "W9: rywal - spotkanie (brak Rywal.js)"
+  },
+  "w5": {
+   "0": "W5: rozdział {n} - {2}   ←→ zmień, OK idź",
+   "1": "W5: przeskocz do rozdziału (brak Kantor.js)"
+  },
+  "w7": {
+   "0": "W7: rozdział {n} - {2}   ←→ zmień, OK idź",
+   "1": "W7: przeskocz do rozdziału (brak Dwor.js)"
+  },
+  "inside": {
+   "0": "Wnętrze: {nazwa}   ←→ zmień, OK idź"
+  },
+  "tide": {
+   "0": "Odpływ",
+   "1": "Przypływ",
+   "2": "{name} (brak Wyspa.js)",
+   "3": "{name} wymuszony   OK: pływy znowu z zegara",
+   "4": "odpływ",
+   "5": "przypływ",
+   "6": "   (z zegara teraz: {1})",
+   "7": "{name} teraz{2}"
+  },
+  "water": {
+   "0": "Woda w morzu (brak CzerwonaWoda.js)",
+   "1": "{1} (wymuszona)",
+   "2": "z pogody - dziś {1}",
+   "3": "Woda w morzu: {1}   ←→ / OK zmień"
+  },
+  "lose": {
+   "0": "Świt dnia 61 bez spłaty (gra bez fabuły - nie ma długu)",
+   "1": "Działka już przepadła (dzień {day})",
+   "2": "Świt dnia 61 bez spłaty (dług już spłacony)",
+   "3": "Świt dnia 61 bez spłaty: strata działki, scena na działce dziadka"
+  },
+  "pay": {
+   "0": "Spłać dług (gra bez fabuły - nie ma długu)",
+   "1": "Działka odkupiona od Lorda (dzień {done})",
+   "2": "Odkup działkę od Lorda: {1} G",
+   "3": "Dług spłacony ({paid} / {debt} G)",
+   "4": "Spłać dług: {1} G (z {debt} G)"
+  },
+  "raven": {
+   "0": "Oswojony kruk (brak Kruk.js)",
+   "1": "Kruk oswojony: {1}",
+   "2": "Oswojony kruk od razu (potem ekran imienia)"
+  },
+  "texts": {
+   "0": "Wczytaj teksty od nowa (brak Watki.js)",
+   "1": "   ({length} plików w js/teksty)",
+   "2": "Wczytaj teksty od nowa{1}"
+  },
+  "favor": {
+   "0": "Przychylność garnizonu: {1} / 100   ← -20   → +20",
+   "1": "Przychylność garnizonu (brak Garnizon.js)"
+  },
+  "cistern": {
+   "0": "Cysterna otwarta (dzień {cisternOpen})",
+   "1": "Otwórz cysternę (jak dzwon „cztery i dwa”, W1 rozdz. 7)"
+  },
+  "catDoing": {
+   "0": "mruczy (pogłaskany)",
+   "1": "spacer po izbie",
+   "2": "śpi zwinięty {spot}",
+   "3": "zwija się do snu {spot}",
+   "4": "przeciąga się i wstaje",
+   "5": "siedzi u stóp dziadka",
+   "6": "siedzi pod oknem, zaraz wskoczy na parapet",
+   "7": "siedzi przy posłaniu, zaraz na nie wskoczy",
+   "8": "siedzi {spot}"
+  },
+  "layersLabel": {
+   "0": "ukryj kolory",
+   "1": "pokaż kolory (1 zielony, 2 czerwony, 3 niebieski)",
+   "2": "Warstwy z regionów: {1}"
+  },
+  "ugFloorName": {
+   "0": " (Ruiny Zamku)"
+  },
+  "ugFloorLabel": {
+   "0": "Podziemia: piętro {f}{2}   ←→ zmień (Shift: o 10), OK idź"
+  },
+  "ugGateLabel": {
+   "0": "otwarte (zamknij)",
+   "1": "zamknięte (otwórz)",
+   "2": "Podziemia: zejście z piwnicy {1}"
+  },
+  "ugLocksLabel": {
+   "0": "włączone (wyłącz)",
+   "1": "wyłączone (włącz)",
+   "2": "Podziemia: zamki Serca na próbę {1}"
+  },
+  "ugLiftsLabel": {
+   "0": " (już działają)",
+   "1": "Podziemia: wszystkie przystanki windy{1}"
+  },
+  "crLabel": {
+   "0": "Boss podziemi: {name} (piętro {floor})   ←→ zmień, OK przywołaj",
+   "1": "{plural} (rój)",
+   "2": "Stwór z ruin: {1}   ←→ zmień, OK przywołaj"
+  },
+  "allRows": {
+   "0": "+1 godzina",
+   "1": "+1 dzień",
+   "2": "Godzina: świt (przed wschodem słońca)",
+   "3": "Godzina: zachód słońca",
+   "4": "Gęsta mgła o świcie",
+   "5": "Burza teraz (2 godziny)",
+   "6": "Piorun tuż obok",
+   "7": "Piorun w drzewo (na ekranie)",
+   "8": "Koniec pogody na dziś",
+   "9": "Stadko ptaków na ziemi",
+   "10": "Nalot ptaków na pole",
+   "11": "Motyle teraz (łąka, lato, po deszczu)",
+   "12": "Ćmy przy ogniu (noc)",
+   "13": "Daj siatkę na motyle",
+   "14": "Dzik w pobliżu",
+   "15": "Wataha wilków (3)",
+   "16": "Jeleń w pobliżu",
+   "17": "Niedźwiedź w pobliżu",
+   "18": "Bandyta w pobliżu",
+   "19": "Nożownik w pobliżu",
+   "20": "Łucznik w pobliżu",
+   "21": "Najemnik w pobliżu",
+   "22": "Zasadzka (2 bandytów i łucznik)",
+   "23": "Obóz bandytów (noc)",
+   "24": "Napad na śpiącego (bandyci)",
+   "25": "Wilki przy obozie bandytów (noc)",
+   "26": "Dzik i bandyta",
+   "27": "Niedźwiedź i bandyta",
+   "28": "+200 doświadczenia",
+   "29": "Postaw: {name}"
+  },
+  "coreRows": {
+   "0": "Brak TawernaCore.js - rdzeń nie jest wczytany"
+  },
+  "catRows": {
+   "0": "Brak HomeLife.js - kota nie ma",
+   "1": "Kot Mruczek - teraz:",
+   "2": "  Kot jest tylko w domu dziadka (mapa {MAP}) - tu go nie ma.",
+   "3": "Zabierz mnie do domu dziadka",
+   "4": "  Robi: {1}",
+   "5": " (idzie na {1}, {2})",
+   "6": "  Gdzie: kratka {x}, {y}{3}",
+   "7": ", potem sam wybierze, co robić",
+   "8": "  Jeszcze: ok. {left} s{2}",
+   "9": "  Dalej: {1}",
+   "10": "Każ mu (menu wraca na mapę, żeby popatrzeć):",
+   "11": "  (u stóp dziadka - tylko gdy dziadek siedzi w fotelu)",
+   "12": "Niech sam wybierze, co robić",
+   "13": "Pogłaszcz (mruczy)",
+   "14": "Jego dzień:"
+  },
+  "isleRows": {
+   "0": "Przenieś mnie do:",
+   "1": "Wnętrza nowych miejsc i domów: ←→ wybierz, OK przenosi do środka, przy drzwiach.",
+   "2": "Morze i pogoda:",
+   "3": "Odpływ od razu: łacha z garnizonu do wraku sucha, przełącznik 20 włączony. Drugi raz: pływy z zegara.",
+   "4": "Przypływ od razu: łacha pod wodą, ładownia wraku zalana. Drugi raz: pływy z zegara.",
+   "5": "Mglista noc na przylądku (wizja w latarni)",
+   "6": "Noc z mgłą morską, D22 zaczęte; przenosi do laterny - OK przy soczewce, gdy Bazyli jest na górze.",
+   "7": "Morze przy wyspie: kolejno z pogody / czerwone (zakwit, śnięte ryby) / szare (po deszczu).",
+   "8": "Fabuła:",
+   "9": "Zegar na świt dnia po terminie, bohater na działce dziadka: działka przechodzi na Lorda, scena ludzi dworu.",
+   "10": "Brakujące złoto dodane i od razu zapłacone (po stracie działki: odkup za 3000 G).",
+   "11": "Tysiąc sztuk złota do sakiewki.",
+   "12": "+10 000 doświadczenia",
+   "13": "Dziesięć tysięcy punktów doświadczenia naraz: poziomy, punkty atrybutów i umiejętności jak za zwykłe zdobycie.",
+   "14": "Odtwórz prolog „Ostatni prom”",
+   "15": "Sam film (bez ekranu imienia), potem powrót na mapę w to samo miejsce - stan gry bez zmian.",
+   "16": "Pliki js/teksty/*.txt czytane jeszcze raz z dysku: poprawka w pliku widoczna od razu, bez ponownego uruchamiania gry. Wynik: ile plików albo pierwszy błąd z numerem linii.",
+   "17": "Kruk z Urwiska oswojony od razu: obrączka, flagi krukTame i kronikaKarta6, ekran imienia. Klawisz K: jego menu.",
+   "18": "Przychylność garnizonu nad zatoką: 40 glejt na wrak, 60 kowal, 80 dwóch żołnierzy w obronie (Akt III).",
+   "19": "Flagi cisternOpen, sluiceHalf, millRuns, kubaHonest: zasuwa na piętrze 30 prowadzi do cysterny, D28.",
+   "20": "Biały orzeł:",
+   "21": "Wątek W5 (kantor Baltazara):",
+   "22": "Ustawia „Towary z kontynentu” na początku rozdziału (flagi, pora, miejsce) i przenosi tam, gdzie się dzieje.",
+   "23": "Wątek W7 (dwór Lorda):",
+   "24": "Ustawia „Dwór z kamieni twierdzy” na początku rozdziału (spłaty, flagi, pora) i przenosi tam, gdzie się dzieje.",
+   "25": "Wątek W9 (rywal w ruinach):",
+   "26": "Rywal z zewnątrz w ruinach (piętra 1-10). OK: krata otwarta, rywal już w drodze (piętro 3), bohater w Ruinach Zamku przy śladach.",
+   "27": "Rywal (wariant z wiersza wyżej) czeka na tym piętrze (1-10); bohater na jego schodach, kilka kroków do ich ogniska."
+  },
+  "onOk": {
+   "0": "Mgła o świcie: dziś",
+   "1": "Mgła o świcie: jutro",
+   "2": "Siatka na motyle"
+  },
+  "go": {
+   "0": "Nie ma mapy {1}"
+  },
+  "onIsleOk": {
+   "0": "Brak Latarnia.js albo Sky.js",
+   "1": "Gra bez fabuły - nie ma długu",
+   "2": "Działka już przepadła",
+   "3": "Dług spłacony - działki nie stracisz",
+   "4": "Działka dziadka",
+   "5": "Nie ma czego spłacać",
+   "6": "Odkup działki: ",
+   "7": "Dług: ",
+   "8": "{1} G zapłacone",
+   "9": "Brak Combat.js",
+   "10": "Już najwyższy poziom",
+   "11": " (poziom {lv0} → {lv})",
+   "12": "+10 000 dośw.{1}",
+   "13": "Brak Prologue.js",
+   "14": "Brak Kruk.js",
+   "15": "Kruk już oswojony",
+   "16": "Brak Okolice.js",
+   "17": "Brak Orzel.js",
+   "18": "Brak Kantor.js",
+   "19": "Brak zadania W5 (TownQuests)",
+   "20": "Brak Dwor.js",
+   "21": "Gra bez fabuły albo brak zadania W7",
+   "22": "Brak Rywal.js",
+   "23": "Brak podziemi (Underground.js)",
+   "24": "Brak piętra {pick}",
+   "25": "Brak Watki.js",
+   "26": "Brak TownQuests.js",
+   "27": "Cysterna otwarta (cisternOpen)"
+  }
+ },
+ "_opis": "Napisy kodu Debug.js sprzed przeniesienia do js/teksty/f9.txt (kod.*)"
+}

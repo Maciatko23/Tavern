@@ -1,0 +1,57 @@
+{
+ "kod": {
+  "hitCreature": {
+   "0": "Cios w plecy!"
+  },
+  "updateWebs": {
+   "0": "sieć"
+  },
+  "take": {
+   "0": "Stare monety: {gold} G"
+  },
+  "bossStart": {
+   "0": "Podziemia - piętro {1}"
+  },
+  "bossBeaten": {
+   "0": "{1} pokonany",
+   "1": "Podziemia - piętro {1}"
+  },
+  "tick": {
+   "0": "Nić chybia",
+   "1": "Rozpada się na trzy cienie!"
+  },
+  "updatePull": {
+   "0": "Ukąszenie!"
+  },
+  "endPull": {
+   "0": "Nić pękła!"
+  },
+  "dragging": {
+   "0": "Wciąga cię pod wodę!"
+  },
+  "updateWaves": {
+   "0": "odłamki"
+  },
+  "make": {
+   "0": "Stwór: {1}"
+  },
+  "startGuardianFight": {
+   "0": "KTO SCHODZI, TEN PYTA. KTO DOBYWA MIECZA - TEN WALCZY."
+  },
+  "guardianBeaten": {
+   "0": "Dziesiąta brama stoi otworem",
+   "1": "Strażnik pokonany"
+  },
+  "rockLands": {
+   "0": "kamień"
+  },
+  "summon": {
+   "0": "Nie ma tu miejsca",
+   "1": "Z ciemności wychodzi... {1}!"
+  },
+  "update": {
+   "0": "   poz. "
+  }
+ },
+ "_opis": "Napisy kodu Creatures.js sprzed przeniesienia do js/teksty/stwory.txt (kod.*); kod.update.0 dopisane ręcznie (pasek bossa: zostaje sklejanie, bez szablonu co klatkę)"
+}

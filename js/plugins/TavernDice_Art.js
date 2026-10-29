@@ -32,6 +32,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("kosci");   // (the words of this file: js/teksty/kosci.txt, art.*)
     const TW = window.Tawerna;
     if (!TW || !TW.ui || !TW.ui.Scene_MiniGame) throw new Error("TavernDice_Art.js: brak TawernaCore.js / TawernaUI.js - muszą być wyżej na liście wtyczek (the Tawerna core or UI kit is missing)");
     const ui = TW.ui;
@@ -502,7 +503,7 @@
         const px = POT.x - ox, py = POT.y - oy + 8;
         ctx.beginPath(); ctx.ellipse(px, py, 74, 58, 0, 0, Math.PI * 2); ctx.strokeStyle = FELT_GOLD + "0.26)"; ctx.lineWidth = 1.5; ctx.stroke();
         ctx.beginPath(); ctx.ellipse(px, py, 67, 51, 0, 0, Math.PI * 2); ctx.strokeStyle = FELT_GOLD + "0.12)"; ctx.lineWidth = 1; ctx.stroke();
-        arcWords(ctx, "POD ZŁOTYM KUFLEM", px, py, 90, 72, -Math.PI / 2, FELT_GOLD + "0.30)", 13);
+        arcWords(ctx, TK.art.paintTable[0], px, py, 90, 72, -Math.PI / 2, FELT_GOLD + "0.30)", 13);
         ctx.restore();
         // the lip where the cloth meets the wood
         rr(ctx, fx - 0.5, fy - 0.5, fw + 1, fh + 1, 6); ctx.strokeStyle = "rgba(0,0,0,0.75)"; ctx.lineWidth = 2; ctx.stroke();
@@ -806,11 +807,12 @@
     const SIDE_L = { x: 12, y: 64, w: 240, h: 228 }, SIDE_R = { x: 1028, y: 64, w: 240, h: 228 };
     const BAR = { x: TBL.x, y: 620, w: TBL.w, h: 44 }, HINT = { x: TBL.x, y: 678, w: TBL.w, h: 32 };
     const BTN = [
-        { id: "rules", x: 0, w: 118, label: "Zasady", small: true },
+        { id: "rules", x: 0, w: 118, small: true },
         { id: "roll", x: 162, w: 212, primary: true },
         { id: "bank", x: 382, w: 212, primary: true },
-        { id: "leave", x: 638, w: 118, label: "Odejdź", small: true }
+        { id: "leave", x: 638, w: 118, small: true }
     ];
+    Watki.scal(BTN, "kosci", "stol.przyciski", "id");   // (the labels of rules / leave: js/teksty/kosci.txt; roll and bank are the scene's)
 
     // ==================================================================
     // The HUD and the panels over the table: methods of the table's scene (TavernDice_Scene.js takes them in)
@@ -828,14 +830,14 @@
             const b = this.header.bitmap, W = b.width;
             b.clear();
             panel(b, 0, 0, W, HEADER.h, { cut: 6 });
-            txt(b, "KOŚCI", 18, 8, 120, { size: 23, color: S.accent, bold: true });
-            const w1 = Math.ceil(measure(b, "KOŚCI", 23, true));
-            txt(b, "·   sala gier „Pod Złotym Kuflem”", 18 + w1 + 12, 12, 420, { size: 17, color: S.muted });
-            if (g && this.phase !== "lobby") txt(b, g.opp.name + "   ·   stawka " + gold(g.stake) + "   ·   gra do " + g.match.target, W / 2 - 300, 11, 600, { size: 18, color: S.text, align: "center" });
+            txt(b, TK.art.drawHeader[0], 18, 8, 120, { size: 23, color: S.accent, bold: true });
+            const w1 = Math.ceil(measure(b, TK.art.drawHeader[0], 23, true));
+            txt(b, TK.art.drawHeader[1], 18 + w1 + 12, 12, 420, { size: 17, color: S.muted });
+            if (g && this.phase !== "lobby") txt(b, Watki.wstaw(TK.art.drawHeader[2], { name: g.opp.name, "2": gold(g.stake), target: g.match.target }), W / 2 - 300, 11, 600, { size: 18, color: S.text, align: "center" });
             const gs = gold($gameParty.gold()), gw = Math.ceil(measure(b, gs, 20, true));
             txt(b, gs, W - 18 - gw, 10, gw + 4, { size: 20, color: S.accent, bold: true });
             icon(b, COIN_ICON, W - 18 - gw - 30, 10, 26);
-            txt(b, clock + "   ·   dzień " + dayNow(), W - 18 - gw - 250, 12, 212, { size: 17, color: S.muted, align: "right" });
+            txt(b, Watki.wstaw(TK.art.drawHeader[3], { clock: clock, "2": dayNow() }), W - 18 - gw - 250, 12, 212, { size: 17, color: S.muted, align: "right" });
         }
         drawSides() {
             const g = this.game, on = !!g && (this.phase === "play" || this.phase === "end" || this.phase === "confirm" || (this.phase === "rules" && this.rulesBack !== "lobby"));
@@ -859,7 +861,7 @@
             spr._key = key;
             b.clear();
             panel(b, 0, 0, W, H, { cut: 6, line: active ? S.accentDim : S.line, fill: active ? "rgba(26,23,13,0.93)" : "rgba(11,12,15,0.9)" });
-            const name = who ? g.opp.short : "Ty", sub = who ? g.opp.role + " · " + g.opp.style : "sakiewka: " + gold($gameParty.gold());
+            const name = who ? g.opp.short : "Ty", sub = who ? g.opp.role + " · " + g.opp.style : Watki.wstaw(TK.art.drawSide[0], { "1": gold($gameParty.gold()) });
             txt(b, name, 16, 10, W - 110, { size: 24, color: S.accent, bold: true });
             if (active) {
                 const tag = "RZUCA", tw = Math.ceil(measure(b, tag, 13, true)) + 16;
@@ -878,9 +880,9 @@
             b.fillRect(16, 142, W - 32, 1, S.line);
             txt(b, "Tura", 16, 148, 100, { size: 17, color: S.muted });
             txt(b, turn > 0 ? "+" + turn : "—", W - 116, 145, 100, { size: 22, color: turn > 0 ? S.accent : "#5d636e", bold: turn > 0, align: "right" });
-            txt(b, who ? "Odkłada" : "Wybrane", 16, 174, 100, { size: 17, color: S.muted });
-            txt(b, sel === null ? "—" : sel < 0 ? "nie punktują" : "+" + sel, W - 136, 172, 120, { size: sel === null ? 20 : 19, color: sel === null ? "#5d636e" : sel < 0 ? BAD : GOOD, bold: sel !== null, align: "right" });
-            txt(b, "Kości", 16, 200, 80, { size: 15, color: S.muted });
+            txt(b, who ? TK.art.drawSide[1] : "Wybrane", 16, 174, 100, { size: 17, color: S.muted });
+            txt(b, sel === null ? "—" : sel < 0 ? TK.art.drawSide[2] : "+" + sel, W - 136, 172, 120, { size: sel === null ? 20 : 19, color: sel === null ? "#5d636e" : sel < 0 ? BAD : GOOD, bold: sel !== null, align: "right" });
+            txt(b, TK.art.drawSide[3], 16, 200, 80, { size: 15, color: S.muted });
             p.dice.forEach((k, i) => paintDie(b.context, W - 16 - (6 - i) * 21 + 2, 201, 18, 5, k));
             dirty(b);
         }
@@ -899,14 +901,14 @@
         drawHint() {
             const p = this.phase, arrows = ["up", "left", "down", "right"];
             let rows;
-            if (p === "lobby") rows = [[arrows, "wybór"], [["O"], "zatwierdź"], [["P"], "odejdź"]];
+            if (p === "lobby") rows = [[arrows, TK.art.drawHint[0]], [["O"], TK.art.drawHint[1]], [["P"], TK.art.drawHint[2]]];
             else if (p === "rules") rows = [[["O"], "rozumiem"], [["P"], "zamknij"]];
-            else if (p === "confirm") rows = [[["left", "right"], "wybór"], [["O"], "zatwierdź"], [["P"], "zostań przy stole"]];
-            else if (p === "end") rows = [[["left", "right"], "wybór"], [["O"], "zatwierdź"], [["P"], "odejdź"]];
-            else if (this.waitHero === "choose") rows = [[arrows, "kości i przyciski"], [["O"], "odłóż kość / wciśnij"], [["P"], "odejdź od stołu"]];
-            else if (this.waitHero === "throw") rows = [[["O"], "rzuć kośćmi"], [["P"], "odejdź od stołu"]];
-            else if (this.game && this.game.started && this.game.match.cur === 1) rows = [[["O"], "przytrzymaj: szybciej"], [["P"], "odejdź od stołu"]];
-            else rows = [[["P"], "odejdź od stołu"]];
+            else if (p === "confirm") rows = [[["left", "right"], TK.art.drawHint[0]], [["O"], TK.art.drawHint[1]], [["P"], TK.art.drawHint[3]]];
+            else if (p === "end") rows = [[["left", "right"], TK.art.drawHint[0]], [["O"], TK.art.drawHint[1]], [["P"], TK.art.drawHint[2]]];
+            else if (this.waitHero === "choose") rows = [[arrows, TK.art.drawHint[4]], [["O"], TK.art.drawHint[5]], [["P"], TK.art.drawHint[6]]];
+            else if (this.waitHero === "throw") rows = [[["O"], TK.art.drawHint[7]], [["P"], TK.art.drawHint[6]]];
+            else if (this.game && this.game.started && this.game.match.cur === 1) rows = [[["O"], TK.art.drawHint[8]], [["P"], TK.art.drawHint[6]]];
+            else rows = [[["P"], TK.art.drawHint[6]]];
             const key = JSON.stringify(rows);
             if (key === this._hintKey) return;
             this._hintKey = key;
@@ -916,24 +918,25 @@
             keyHints(b, rows, Math.round((b.width - w) / 2), 3, 26, 17);
         }
         // the words on the cloth: whose column is whose, the turn's points, what the chosen dice give, the pot
+        // (every frame: the words of js/teksty/kosci.txt, art.felt - the rival's ones glued to his name as before, no {places} filled here)
         drawFelt() {
-            const g = this.game, S = ST();
+            const g = this.game, S = ST(), F = TK.art.felt;
             const m = g && g.match;
             let pill = "", pc = S.muted;
             if (g && this.phase !== "lobby") {
                 if (m.over) pill = "";
-                else if (!g.started) pill = "Rzut o pierwszeństwo: wyższe oczko zaczyna";
-                else if (this.waitHero === "throw") { pill = "Twoja tura — rzuć kośćmi"; pc = S.text; }
+                else if (!g.started) pill = F.pierwszenstwo;
+                else if (this.waitHero === "throw") { pill = F.twojaTura; pc = S.text; }
                 else if (this.waitHero === "choose") {
                     const s = this.selection();
-                    if (!s.n) pill = this.pillFlash > 0 ? "Najpierw odłóż co najmniej jedną punktującą kość" : "Wybierz kości, które odkładasz";
-                    else if (!s.valid) { pill = "Nie wszystkie wybrane kości punktują"; pc = BAD; }
+                    if (!s.n) pill = this.pillFlash > 0 ? F.najpierwOdloz : F.wybierz;
+                    else if (!s.valid) { pill = F.niePunktuja; pc = BAD; }
                     else { pill = s.name + "  ·  " + s.points; pc = S.accent; }
                     if (this.pillFlash > 0) { this.pillFlash--; if (!s.n) pc = BAD; }
                 } else if (m.cur === 1) {
                     const lifted = this.dice.map((d, i) => (d.liftTo > 0 ? i : -1)).filter(i => i >= 0);
-                    if (lifted.length && m.thrown) { const s = score(lifted.map(i => m.thrown[i].face)); pill = g.opp.short + " odkłada: " + (s.valid ? s.name + "  ·  " + s.points : "..."); pc = S.text; }
-                    else pill = "Tura: " + g.opp.short;
+                    if (lifted.length && m.thrown) { const s = score(lifted.map(i => m.thrown[i].face)); pill = g.opp.short + F.odklada + (s.valid ? s.name + "  ·  " + s.points : "..."); pc = S.text; }
+                    else pill = F.tura + g.opp.short;
                 }
             }
             const turns = g && g.started && !m.over ? [m.cur === 0 ? m.turn.pts : 0, m.cur === 1 ? m.turn.pts : 0] : [0, 0];
@@ -950,7 +953,7 @@
             }
             turns.forEach((t, i) => { if (t > 0) txt(b, "+" + t, (i ? OPP_COL : HERO_COL) - FELT.x - 50, H - 44, 100, { size: 20, color: "rgba(255,226,140,0.95)", bold: true, align: "center", outline: 3 }); });
             if (g.potShown > 0) {   // the pot's label under the coins
-                const s = "Pula " + gold(g.potShown), w = Math.ceil(measure(b, s, 16, true)) + 22, x = POT.x - FELT.x - w / 2, y = POT.y - FELT.y + 44;
+                const s = Watki.wstaw(F.pula, { pula: gold(g.potShown) }), w = Math.ceil(measure(b, s, 16, true)) + 22, x = POT.x - FELT.x - w / 2, y = POT.y - FELT.y + 44;
                 const ctx = b.context;
                 rr(ctx, x, y, w, 24, 12); ctx.fillStyle = "rgba(8,10,9,0.72)"; ctx.fill(); ctx.strokeStyle = FELT_GOLD + "0.5)"; ctx.lineWidth = 1; ctx.stroke(); dirty(b);
                 txt(b, s, x, y + 1, w, { size: 16, color: GOLD_TXT, bold: true, align: "center", lh: 22 });
@@ -1005,19 +1008,19 @@
             const S = ST(), L = this.lobby, px = 140, py = 48, pw = 1000, ph = 622;
             this.dim(b, 0.45);
             panel(b, px, py, pw, ph, { cut: 10 });
-            txt(b, "SALA GIER · „POD ZŁOTYM KUFLEM”", px + 32, py + 20, 600, { size: 15, color: S.muted, bold: true });
-            txt(b, "Kości", px + 32, py + 38, 400, { size: 44, color: S.accent, bold: true });
-            txt(b, "Sześć kości, kubek i odrobina odwagi. Kto pierwszy dojdzie do celu, bierze całą pulę.", px + 32, py + 96, pw - 64, { size: 18, color: S.text });
+            txt(b, TK.art.drawLobby[0], px + 32, py + 20, 600, { size: 15, color: S.muted, bold: true });
+            txt(b, TK.art.drawLobby[1], px + 32, py + 38, 400, { size: 44, color: S.accent, bold: true });
+            txt(b, TK.art.drawLobby[2], px + 32, py + 96, pw - 64, { size: 18, color: S.text });
             const h = hourNow(), clock = String(Math.floor(h) % 24).padStart(2, "0") + ":" + String(Math.floor((h % 1) * 60)).padStart(2, "0");
-            txt(b, clock + " · dzień " + dayNow(), px + pw - 332, py + 22, 300, { size: 17, color: S.muted, align: "right" });
-            txt(b, "Sakiewka: " + gold($gameParty.gold()), px + pw - 332, py + 46, 300, { size: 22, color: S.accent, bold: true, align: "right" });
+            txt(b, Watki.wstaw(TK.art.drawLobby[3], { clock: clock, "2": dayNow() }), px + pw - 332, py + 22, 300, { size: 17, color: S.muted, align: "right" });
+            txt(b, Watki.wstaw(TK.art.drawLobby[4], { "1": gold($gameParty.gold()) }), px + pw - 332, py + 46, 300, { size: 22, color: S.accent, bold: true, align: "right" });
             b.fillRect(px + 32, py + 132, pw - 64, 1, S.line);
-            txt(b, "KTO SIEDZI PRZY STOLE", px + 32, py + 142, 400, { size: 14, color: S.muted, bold: true });
-            txt(b, L.hint || "Kto siedzi przy stole, zależy od pory dnia.", px + 332, py + 142, pw - 364, { size: 14, color: L.hint ? "#c9b27a" : "#6d737c", align: "right" });
+            txt(b, TK.art.drawLobby[5], px + 32, py + 142, 400, { size: 14, color: S.muted, bold: true });
+            txt(b, L.hint || TK.art.drawLobby[6], px + 332, py + 142, pw - 364, { size: 14, color: L.hint ? "#c9b27a" : "#6d737c", align: "right" });
             const n = L.cards.length, gap = 22, cw = Math.min(212, Math.floor((pw - 64 - (n - 1) * gap) / Math.max(1, n))), ch = 226, total = n * cw + (n - 1) * gap, x0 = px + Math.round((pw - total) / 2), y0 = py + 168;
             if (!n) {
-                txt(b, "Stoły puste. Wróć wieczorem.", px, y0 + 70, pw, { size: 30, color: S.accent, bold: true, align: "center" });
-                txt(b, "O tej porze nikt nie gra w kości.", px, y0 + 114, pw, { size: 18, color: S.muted, align: "center" });
+                txt(b, TK.art.drawLobby[7], px, y0 + 70, pw, { size: 30, color: S.accent, bold: true, align: "center" });
+                txt(b, TK.art.drawLobby[8], px, y0 + 114, pw, { size: 18, color: S.muted, align: "center" });
             }
             L.cards.forEach((c, i) => this.drawCard(b, c, x0 + i * (cw + gap), y0, cw, ch, i === L.sel, L.row === "cards" && i === L.i));
             // the chosen rival's words
@@ -1040,12 +1043,12 @@
             this.hits.push({ row: "stake", dir: -1, x: bx, y: sy, w: 44, h: 40 }, { row: "stake", dir: 1, x: bx + bw - 44, y: sy, w: 44, h: 40 }, { row: "stake", x: bx + 44, y: sy, w: bw - 88, h: 40 });
             if (card) {
                 const afford = $gameParty.gold() >= stake;
-                const tg = targetFor(stake, card.key), info = afford ? "pula " + gold(stake * 2) + "   ·   gra do " + tg + (tg < TARGET ? " (szybka partia)" : tg > TARGET ? " (wielka gra)" : "") : "Masz za mało złota na tę stawkę.";
+                const tg = targetFor(stake, card.key), info = afford ? Watki.wstaw(TK.art.drawLobby[11], { "1": gold(stake * 2), tg: tg, "3": tg < TARGET ? TK.art.drawLobby[9] : tg > TARGET ? TK.art.drawLobby[10] : "" }) : TK.art.drawLobby[12];
                 txt(b, info, bx + bw + 20, sy + 8, 520, { size: 18, color: afford ? S.text : BAD });
             }
             // the hero's six
             const dy = py + 506, fD = L.row === "dice", set = heroSet(), specials = this.hasSpecials();
-            txt(b, "TWOJE KOŚCI", px + 32, dy + 10, 130, { size: 14, color: S.muted, bold: true });
+            txt(b, TK.art.drawLobby[13], px + 32, dy + 10, 130, { size: 14, color: S.muted, bold: true });
             set.forEach((k, i) => {
                 const x = px + 150 + i * 48, sz = 38;
                 paintDie(b.context, x, dy + 1, sz, [5, 1, 3, 6, 2, 4][i], k);
@@ -1061,17 +1064,17 @@
             const k = fD ? set[L.slot] : null, T = k ? DIE_TYPES[k] : null;
             if (specials && T) {
                 txt(b, T.name, px + 452, dy - 2, pw - 480, { size: 19, color: S.accent, bold: true });
-                txt(b, T.effect + (SPECIAL_ORDER.some(s => ownedCount(s) > 0) ? "   (O: zmień)" : ""), px + 452, dy + 22, pw - 480, { size: 15, color: S.muted });
+                txt(b, T.effect + (SPECIAL_ORDER.some(s => ownedCount(s) > 0) ? TK.art.drawLobby[14] : ""), px + 452, dy + 22, pw - 480, { size: 15, color: S.muted });
             } else if (specials) {
                 const names = SPECIAL_ORDER.filter(s => ownedCount(s) > 0).map(s => DIE_TYPES[s].name + (ownedCount(s) > 1 ? " ×" + ownedCount(s) : ""));
-                txt(b, "Masz: " + names.join(", "), px + 452, dy - 2, pw - 480, { size: 17, color: S.text });
-                txt(b, "Wybierz kość strzałkami i zmień ją klawiszem O.", px + 452, dy + 22, pw - 480, { size: 15, color: S.muted });
+                txt(b, Watki.wstaw(TK.art.drawLobby[15], { "1": names.join(", ") }), px + 452, dy - 2, pw - 480, { size: 17, color: S.text });
+                txt(b, TK.art.drawLobby[16], px + 452, dy + 22, pw - 480, { size: 15, color: S.muted });
             } else {
-                txt(b, "Sześć zwykłych kości z kości.", px + 452, dy - 2, pw - 480, { size: 17, color: S.text });
-                txt(b, "Kości wyjątkowe zdobywa się przy stole i w przygodach.", px + 452, dy + 22, pw - 480, { size: 15, color: S.muted });
+                txt(b, TK.art.drawLobby[17], px + 452, dy - 2, pw - 480, { size: 17, color: S.text });
+                txt(b, TK.art.drawLobby[18], px + 452, dy + 22, pw - 480, { size: 15, color: S.muted });
             }
             // the buttons
-            const by = py + ph - 62, btns = [["Zasady", px + 32, 150, false], ["Siadam do gry", px + pw - 32 - 170 - 14 - 250, 250, true], ["Odchodzę", px + pw - 32 - 170, 170, false]];
+            const by = py + ph - 62, btns = [["Zasady", px + 32, 150, false], [TK.art.drawLobby[19], px + pw - 32 - 170 - 14 - 250, 250, true], [TK.art.drawLobby[20], px + pw - 32 - 170, 170, false]];
             btns.forEach(([label, x, w, primary], i) => {
                 const en = i !== 1 || this.canPlay();
                 drawButton(b, x, by, w, 44, label, { focus: L.row === "buttons" && L.btn === i && en, disabled: !en, primary });
@@ -1105,8 +1108,8 @@
             txt(b, o.short, x + 14, y + 144, w - 28, { size: 22, color: off ? S.muted : S.accent, bold: true });
             txt(b, o.role, x + 14, y + 172, w - 28, { size: 15, color: S.muted });
             const st = o.stakes, range = st.length > 1 ? st[0] + "–" + gold(st[st.length - 1]) : gold(st[0]);
-            if (c.tired) txt(b, "Dziś już nie gra", x + 14, y + 194, w - 28, { size: 16, color: BAD, bold: true });
-            else if (!c.afford) txt(b, range + " · za mała sakiewka", x + 14, y + 194, w - 28, { size: 16, color: BAD });
+            if (c.tired) txt(b, TK.art.drawCard[0], x + 14, y + 194, w - 28, { size: 16, color: BAD, bold: true });
+            else if (!c.afford) txt(b, Watki.wstaw(TK.art.drawCard[1], { range: range }), x + 14, y + 194, w - 28, { size: 16, color: BAD });
             else {
                 txt(b, range, x + 14, y + 194, 90, { size: 16, color: S.text, bold: true });
                 txt(b, o.style, x + 14, y + 194, w - 28, { size: 16, color: o.styleColor, align: "right" });
@@ -1119,15 +1122,15 @@
             const S = ST(), px = 120, py = 50, pw = 1040, ph = 618, ctx = b.context;
             this.dim(b, 0.6);
             panel(b, px, py, pw, ph, { cut: 10, fill: "rgba(11,12,15,0.985)" });
-            txt(b, "JAK SIĘ GRA", px + 32, py + 20, 400, { size: 15, color: S.muted, bold: true });
-            txt(b, "Zasady gry w kości", px + 32, py + 38, 600, { size: 38, color: S.accent, bold: true });
+            txt(b, TK.art.drawRules[0], px + 32, py + 20, 400, { size: 15, color: S.muted, bold: true });
+            txt(b, TK.art.drawRules[1], px + 32, py + 38, 600, { size: 38, color: S.accent, bold: true });
             const rules = [
-                "Każdy ma sześć kości. Rzucasz wszystkimi naraz.",
-                "Po każdym rzucie odkładasz co najmniej jedną punktującą kość. Potem zapisujesz punkty tury albo rzucasz dalej resztą kości.",
-                "Rzut bez żadnej punktującej kości to „Pudło!” — punkty z tej tury przepadają.",
-                "Odłożysz wszystkie sześć? „Gorące kości!” — rzucasz znowu całą szóstką, a punkty tury zostają.",
-                "Liczą się tylko odłożone kości, a układy tylko w obrębie jednego rzutu.",
-                "Wygrywa, kto pierwszy dojdzie do celu: 2000 punktów, przy małej stawce (do " + gold(QUICK_STAKE) + ") szybka partia do 1500. Zwycięzca bierze całą pulę."
+                TK.art.drawRules[2],
+                TK.art.drawRules[3],
+                TK.art.drawRules[4],
+                TK.art.drawRules[5],
+                TK.art.drawRules[6],
+                Watki.wstaw(TK.art.drawRules[7], { "1": gold(QUICK_STAKE) })
             ];
             let y = py + 100;
             const cw = 452;
@@ -1141,10 +1144,10 @@
             const tx = px + 540, tw = pw - 540 - 32;
             txt(b, "PUNKTY", tx, py + 104, 200, { size: 14, color: S.muted, bold: true });
             const rows = [
-                [[1], "jedynka", "100"], [[5], "piątka", "50"], [[1, 1, 1], "trzy jedynki", "1000"],
-                [[4, 4, 4], "trzy takie same", "oczko × 100"], [[4, 4, 4, 4], "cztery takie same", "× 2"],
-                [[4, 4, 4, 4, 4], "pięć takich samych", "× 4"], [[4, 4, 4, 4, 4, 4], "sześć takich samych", "× 8"],
-                [[1, 2, 3, 4, 5], "mały strit", "500"], [[2, 3, 4, 5, 6], "duży strit", "750"], [[1, 2, 3, 4, 5, 6], "pełny strit", "1500"]
+                [[1], "jedynka", "100"], [[5], TK.art.drawRules[8], "50"], [[1, 1, 1], TK.art.drawRules[9], "1000"],
+                [[4, 4, 4], TK.art.drawRules[10], TK.art.drawRules[11]], [[4, 4, 4, 4], TK.art.drawRules[12], "× 2"],
+                [[4, 4, 4, 4, 4], TK.art.drawRules[13], "× 4"], [[4, 4, 4, 4, 4, 4], TK.art.drawRules[14], "× 8"],
+                [[1, 2, 3, 4, 5], TK.art.drawRules[15], "500"], [[2, 3, 4, 5, 6], TK.art.drawRules[16], "750"], [[1, 2, 3, 4, 5, 6], TK.art.drawRules[17], "1500"]
             ];
             y = py + 130;
             rows.forEach(([faces, name, pts], i) => {
@@ -1155,20 +1158,20 @@
                 y += 40;
             });
             dirty(b);
-            txt(b, "Przykład: trzy czwórki to 400, cztery czwórki 800, pięć czwórek 1600.", tx - 8, y + 4, tw + 16, { size: 15, color: S.muted });
+            txt(b, TK.art.drawRules[18], tx - 8, y + 4, tw + 16, { size: 15, color: S.muted });
             b.fillRect(px + 32, py + ph - 64, pw - 64, 1, S.line);
-            txt(b, "Zasady są zawsze pod przyciskiem „Zasady”.", px + 32, py + ph - 50, 600, { size: 16, color: S.muted });
-            txt(b, "O — rozumiem, gramy", px + pw - 432, py + ph - 52, 400, { size: 21, color: S.accent, bold: true, align: "right" });
+            txt(b, TK.art.drawRules[19], px + 32, py + ph - 50, 600, { size: 16, color: S.muted });
+            txt(b, TK.art.drawRules[20], px + pw - 432, py + ph - 52, 400, { size: 21, color: S.accent, bold: true, align: "right" });
         }
         drawConfirm(b) {
             const S = ST(), g = this.game, pw = 560, ph = 236, px = (b.width - pw) / 2, py = (b.height - ph) / 2 - 20;
             this.dim(b, 0.55);
             panel(b, px, py, pw, ph, { cut: 10 });
-            txt(b, "Odejść od stołu?", px + 30, py + 22, pw - 60, { size: 30, color: S.accent, bold: true });
-            const text = "Partia trwa. Twoja stawka (" + gold(g.stake) + ") przepada, a " + g.opp.short + " zgarnia pulę.";
+            txt(b, TK.art.drawConfirm[0], px + 30, py + 22, pw - 60, { size: 30, color: S.accent, bold: true });
+            const text = Watki.wstaw(TK.art.drawConfirm[1], { "1": gold(g.stake), short: g.opp.short });
             let y = py + 76;
             for (const l of wrapLines(b, text, pw - 60, 19)) { txt(b, l, px + 30, y, pw - 60, { size: 19 }); y += 26; }
-            [["Zostaję", px + 30, 230], ["Odchodzę", px + pw - 30 - 230, 230]].forEach(([label, x, w], i) => {
+            [[TK.art.drawConfirm[2], px + 30, 230], [TK.art.drawConfirm[3], px + pw - 30 - 230, 230]].forEach(([label, x, w], i) => {
                 drawButton(b, x, py + ph - 66, w, 44, label, { focus: this.confirmSel === i, primary: i === 0 });
                 this.hits.push({ row: "confirm", i, x, y: py + ph - 66, w, h: 44 });
             });
@@ -1179,21 +1182,21 @@
             const pw = 780, ph = 404 + (boxed ? 88 : 0) + (boxed && blockWhy ? 26 : 0), px = TBL.x + (TBL.w - pw) / 2, py = TBL.y + (TBL.h - ph) / 2 - 6, ctx = b.context;
             this.dim(b, 0.35);
             panel(b, px, py, pw, ph, { cut: 10 });
-            txt(b, "KONIEC PARTII · " + g.opp.name.toUpperCase(), px + 32, py + 20, pw - 64, { size: 15, color: S.muted, bold: true });
+            txt(b, Watki.wstaw(TK.art.drawEnd[0], { "1": g.opp.name.toUpperCase() }), px + 32, py + 20, pw - 64, { size: 15, color: S.muted, bold: true });
             txt(b, won ? "Wygrana!" : "Przegrana", px + 32, py + 38, 400, { size: 50, color: won ? S.accent : "#ff8f7f", bold: true });
             // the score
             const sc = "Ty  " + m.players[0].total + "  :  " + m.players[1].total + "  " + g.opp.short;
             txt(b, sc, px + pw - 432, py + 50, 400, { size: 24, color: S.text, bold: true, align: "right" });
-            txt(b, "gra do " + m.target + " · tury: " + m.turnNo, px + pw - 432, py + 84, 400, { size: 15, color: S.muted, align: "right" });
+            txt(b, Watki.wstaw(TK.art.drawEnd[1], { target: m.target, turnNo: m.turnNo }), px + pw - 432, py + 84, 400, { size: 15, color: S.muted, align: "right" });
             b.fillRect(px + 32, py + 116, pw - 64, 1, S.line);
             let y = py + 130;
-            txt(b, won ? "+" + gold(g.pot + (g.giftGold || 0)) + " do sakiewki" : "Stawka przepada: −" + gold(g.stake), px + 32, y, 420, { size: 24, color: won ? GOOD : BAD, bold: true });
-            if (won && g.xp) txt(b, "+" + g.xp + " dośw.", px + pw - 232, y + 4, 200, { size: 19, color: "#c9a6ff", bold: true, align: "right" });
+            txt(b, won ? Watki.wstaw(TK.art.drawEnd[2], { "1": gold(g.pot + (g.giftGold || 0)) }) : Watki.wstaw(TK.art.drawEnd[3], { "1": gold(g.stake) }), px + 32, y, 420, { size: 24, color: won ? GOOD : BAD, bold: true });
+            if (won && g.xp) txt(b, Watki.wstaw(TK.art.drawEnd[4], { xp: g.xp }), px + pw - 232, y + 4, 200, { size: 19, color: "#c9a6ff", bold: true, align: "right" });
             y += 44;
             const best = rec.best ? rec.best.name + " · " + rec.best.points : "—";
-            txt(b, "Twój najlepszy rzut:  " + best, px + 32, y, pw - 64, { size: 18, color: S.text });
+            txt(b, Watki.wstaw(TK.art.drawEnd[5], { best: best }), px + 32, y, pw - 64, { size: 18, color: S.text });
             y += 28;
-            txt(b, "Pudła: " + m.players[0].busts + "   ·   gorące kości: " + m.players[0].hot + "   ·   w sakiewce: " + gold($gameParty.gold()), px + 32, y, pw - 64, { size: 17, color: S.muted });
+            txt(b, Watki.wstaw(TK.art.drawEnd[6], { busts: m.players[0].busts, hot: m.players[0].hot, "3": gold($gameParty.gold()) }), px + 32, y, pw - 64, { size: 17, color: S.muted });
             y += 40;
             const line = g.closing || "";
             if (line) {
@@ -1208,15 +1211,15 @@
                 S.panel(ctx, px + 32, gy, pw - 64, 78, { cut: 5, fill: "rgba(255,210,63,0.08)", line: S.accentDim, accent: false });
                 paintDie(ctx, px + 48, gy + 11, 56, 1, g.gift);
                 dirty(b);
-                txt(b, "Nowa kość: " + gift.name, px + 124, gy + 10, pw - 180, { size: 21, color: S.accent, bold: true });
+                txt(b, Watki.wstaw(TK.art.drawEnd[7], { name: gift.name }), px + 124, gy + 10, pw - 180, { size: 21, color: S.accent, bold: true });
                 txt(b, gift.effect, px + 124, gy + 40, pw - 180, { size: 16, color: S.text });
             } else if (g.giftGold) {   // the stranger's purse (the hero has his die already)
                 const gy = py + ph - 62 - (blockWhy ? 36 : 12) - 78;
                 S.panel(ctx, px + 32, gy, pw - 64, 78, { cut: 5, fill: "rgba(255,210,63,0.08)", line: S.accentDim, accent: false });
                 const cb = coinBitmap();
                 for (let i = 0; i < 4; i++) b.blt(cb, 0, 0, cb.width, cb.height, px + 50 + (i % 2) * 6, gy + 34 - i * 8, cb.width, cb.height);
-                txt(b, "Sakiewka od nieznajomego: +" + gold(g.giftGold), px + 124, gy + 10, pw - 180, { size: 21, color: S.accent, bold: true });
-                txt(b, "Kość z Kruczych Skał już masz - dostajesz złoto.", px + 124, gy + 40, pw - 180, { size: 16, color: S.text });
+                txt(b, Watki.wstaw(TK.art.drawEnd[8], { "1": gold(g.giftGold) }), px + 124, gy + 10, pw - 180, { size: 21, color: S.accent, bold: true });
+                txt(b, TK.art.drawEnd[9], px + 124, gy + 40, pw - 180, { size: 16, color: S.text });
             }
             const by = py + ph - 62;
             if (blockWhy) txt(b, blockWhy, px + 32, by - 30, pw - 64, { size: 15, color: S.muted });

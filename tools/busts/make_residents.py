@@ -34,9 +34,22 @@ RESIDENTS = [
 TAVERN = [('borgar', 'Borgar', 'People3_5'), ('melia', 'Melia', 'People2_2'), ('grum', 'Grum', 'Actor2_5'), ('ozzy', 'Ozzy', 'SF_People1_7'),
           ('wanda', 'Wanda', 'People1_6')]
 EXTRA = ['ambrozy_zakon']
+# the travellers from the ferry (2026-10-29, docs/PODROZNI.md 2 + 7.2, PixelLab sheets $Npc_<Sheet>): (key, Sheet, who); the bust is
+# img/pictures/<Sheet>_Bust.png made by make_<key>.py (its RTP base is named in the script). The pool bodies' colour variants
+# (Pula_M2, Pula_M3, Pula_K2, Pula_K3, Pula_S2, Pula_Z2) are not here: tools/podroznicy/pula_kolory.py recolours the pool bodies'
+# sheets and busts (run it after make_pula_*.py).
+PODROZNI = [
+    ('pula_m', 'Pula_M', 'Podróżny w płaszczu (pula)'), ('pula_k', 'Pula_K', 'Podróżna w chuście (pula)'),
+    ('pula_s', 'Pula_S', 'Starzec z laską (pula)'), ('pula_z', 'Pula_Z', 'Marynarz (pula)'),
+    ('tobiasz', 'Tobiasz', 'Tobiasz Goniec'), ('medyk', 'Medyk', 'Konstanty Mak'), ('kartograf', 'Kartograf', 'Teofil Cyrkiel'),
+    ('grajek', 'Grajek', 'Jędrek Dudarz'), ('zboze', 'Zboze', 'Zenon Sita'), ('urszula', 'Urszula', 'Urszula z Olszynki'),
+    ('relikwie', 'Relikwie', 'Gaspar Lis'), ('wizytator', 'Wizytator', 'brat Augustyn'), ('dezerter', 'Dezerter', 'Tymon Wrzos'),
+    ('lowczyni', 'Lowczyni', 'Szczerba'),
+]
 
 if __name__ == '__main__':
-    keys = sys.argv[1:] or [k for k, _, _ in RESIDENTS + TAVERN] + EXTRA
+    keys = sys.argv[1:] or ([k for k, _, _ in RESIDENTS + TAVERN] + EXTRA +
+                            [k for k, sheet, _ in PODROZNI if os.path.exists(os.path.join(HERE, 'make_%s.py' % k))])
     for k in keys:
         r = subprocess.run([sys.executable, os.path.join(HERE, 'make_%s.py' % k)], cwd=HERE)
         if r.returncode:

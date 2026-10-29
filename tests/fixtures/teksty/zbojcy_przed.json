@@ -1,0 +1,97 @@
+{
+ "rodzaje": {
+  "bandit": {
+   "name": "Bandyta"
+  },
+  "knifer": {
+   "name": "Nożownik"
+  },
+  "archer": {
+   "name": "Łucznik"
+  },
+  "mercenary": {
+   "name": "Najemnik"
+  }
+ },
+ "okrzyki": {
+  "alert": [
+   "Hej! Kto tam?",
+   "Coś szeleści...",
+   "Stój!",
+   "Kto idzie?"
+  ],
+  "engage": [
+   "Brać go!",
+   "Mamy gościa!",
+   "Sakiewka albo życie!",
+   "Nie uciekniesz!",
+   "Dawaj, co masz!"
+  ],
+  "ambush": [
+   "Sakiewka albo życie!",
+   "Stój! Droga płatna!",
+   "Dawaj grosz, chłopku!"
+  ],
+  "raid": [
+   "Śpi jak kamień... Bierzemy wszystko!",
+   "Cicho... Teraz!",
+   "Pobudka, chłopku! Sakiewka!"
+  ],
+  "wake": [
+   "Wstawać! Ktoś tu jest!",
+   "Pobudka!",
+   "Co jest?!"
+  ],
+  "hurt": [
+   "Ach!",
+   "Psiakrew!",
+   "Ty draniu!"
+  ],
+  "block": [
+   "Ha!",
+   "Za wolno!"
+  ],
+  "broken": [
+   "Uciekać!",
+   "Nie warto za to ginąć!"
+  ],
+  "surrender": [
+   "Litości! Poddaję się!",
+   "Nie zabijaj! Mam dzieci!",
+   "Dość! Poddaję się!"
+  ],
+  "spared": [
+   "Dzięki ci... nie zapomnę.",
+   "Niech cię Bóg prowadzi.",
+   "Już mnie tu nie zobaczysz!"
+  ],
+  "robbed": [
+   "Bierz i daj mi odejść!",
+   "Masz, masz, tylko nie bij!"
+  ],
+  "fled": [
+   "Jeszcze się spotkamy!",
+   "Nogi za pas!"
+  ],
+  "beat": [
+   "Leż i nie wstawaj.",
+   "Zabieramy, co twoje.",
+   "Następnym razem nie pyskuj."
+  ],
+  "camp": [
+   "...kupiec miał pełny wóz, mówię ci...",
+   "...ognia nie gaś, zimno...",
+   "...jutro idziemy na Polną drogę...",
+   "...kto ma wartę?..."
+  ]
+ },
+ "plotki": [
+  "W kantorze Baltazara nocą ktoś wynosi worki tylnymi drzwiami.",
+  "Najemnicy z kontynentu pytają w tawernie o drogę w góry, do jaskiń.",
+  "Za Kruczymi Skałami ludzie kopią coś pod ziemią. Płacą dobrze, ale nikt nie wraca.",
+  "Ze starego zamku nocą słychać szepty. My tam nie chodzimy.",
+  "Kapral przy bramie bierze grosz od każdego wozu, co wjeżdża po zmroku.",
+  "Na Skraju lasu jest dziupla w starym dębie - przemytnicy zostawiają tam znaki."
+ ],
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Humans_Data.js: KINDS=rodzaje:/(^|\\.)name$/, LINES=okrzyki, RUMOURS=plotki)"
+}

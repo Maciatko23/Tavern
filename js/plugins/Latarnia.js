@@ -38,6 +38,8 @@
  * @plugindesc [pakiet C] Przylądek z latarnią (mapy 159-161): ogień latarni, mgła morska, latarnik Bazyli, wizje w soczewce (D22), tran (K49), Soczewka (W11). v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
+ * @base Latarnia_Data
  * @orderAfter Wyspa
  *
  * @help
@@ -54,7 +56,7 @@
  *   co godzinę, przełącznik 19 „Wyspa_MglaPrzyladek”;
  * - wizje w soczewce (D22 „Księga mgieł”): raz na noc, tylko we mgle;
  *   następnego dnia „Ciężka głowa” do południa (Hart ducha pomaga);
- * - K49 „Tran dla latarni” (od dnia 24), W11 „Soczewka” (Akt II);
+ * - K49 „Tran dla latarni” (od dnia 25), W11 „Soczewka” (Akt II);
  * - przepis „Wytop tran” w kociołku (3 ryby + drewno);
  * - zatoczka szczątków: po sztormie morze wyrzuca drewno i drobiazgi.
  *
@@ -72,10 +74,12 @@
     if (!T) throw new Error("Latarnia.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     if (!D) throw new Error("Latarnia.js: brak Latarnia_Data.js - musi być wyżej na liście wtyczek (the lighthouse's data is missing)");
     const PLUGIN = "Latarnia";
+    // the thread (Latarnia_Data.js, the engine Watki.js): the state "latarnia", K49 / D22 / W11 with their talks and actions, the flags
+    const w = Watki.get("latarnia");
+    if (!w) throw new Error("Latarnia.js: brak wątku „latarnia” (Latarnia_Data.js / Watki.js)");
     const MAP = D.MAP, IZBA = D.IZBA, LATERNA = D.LATERNA, HARBOUR = 125, OURS = [MAP, IZBA, LATERNA];
     const KEY = "latarnik", COIN_ICON = 314, SWITCH_FOG = 19;
-    const HERO = { id: 0, name: "" };
-    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
+    const { HERO, C, fill } = Watki.mowa;
     const day = () => T.time.day(), hour = () => T.time.hour(), now = () => day() * 24 + hour();
     const has = () => !!window.$gameSystem && !!window.$gameParty;
     const item = id => (window.$dataItems && $dataItems[id]) || null;
@@ -86,39 +90,26 @@
     const SKY = () => T.api("Sun") || window.Sky || null;
     const pick = list => list[Math.floor(Math.random() * list.length)];
     const inHours = (h, r) => (r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
-    const fill = (s, v) => String(s).replace(/\{(\w+)\}/g, (m, k) => (v && v[k] !== undefined ? v[k] : m));
     const onMap = id => !!window.$gameMap && $gameMap.mapId() === id;
     const ours = () => !!window.$gameMap && OURS.includes($gameMap.mapId());
 
     // ------------------------------------------------------------------
-    // The state (the save): what the lighthouse itself remembers (the quests' records and flags are TownQuests')
+    // The state (the save): the thread's (Latarnia_Data.js) - what the lighthouse itself remembers (the quests' records and flags are
+    // TownQuests')
     // ------------------------------------------------------------------
-    const store = T.state.define("latarnia", () => ({
-        met: 0, fuel: D.FUEL.start, gainDay: 0, burnDay: 0, nights: {}, sold: { day: 0, n: {} }, weatherDay: 0, bookN: 0, usualN: 0,
-        visions: {}, visionNight: -99, lens: "whole", wreck: 0, janek: { day: 0, n: 0 }, raid: null, told: "", trust: 0, out: 0
-    }), { version: 1, owner: PLUGIN });
-    const S = () => store();
-    const qs = () => { const q = TQ(); return q && q.state ? q.state() : null; };
-    const flags = () => { const s = qs(); return s ? s.flags : {}; };
-    const flag = k => !!flags()[k];
+    const S = () => w.S();
+    const flag = k => w.flag(k);
+    // a flag, then the quests' checks and the markers
     function setFlag(k) {
-        const w = W();
-        if (w && w.setFlag) w.setFlag(k);
-        else { const f = flags(); if (!f[k]) f[k] = day(); }
-        const q = TQ();
-        if (q && q.autoChecks) q.autoChecks();
-        if (q && q.refreshMarkers) q.refreshMarkers();
+        w.setFlag(k);
+        w.autoChecks();
     }
-    const vcount = k => { const s = qs(); return s && s.v ? s.v[k] || 0 : 0; };
-    const vgive = (k, n) => { const s = qs(); if (s) s.v[k] = (s.v[k] || 0) + (n || 1); };
-    const vtake = (k, n) => { const s = qs(); if (!s) return; s.v[k] = Math.max(0, (s.v[k] || 0) - (n || 1)); if (!s.v[k]) delete s.v[k]; };
-    const rec = id => { const q = TQ(); return q && q.rec ? q.rec(id) : null; };
-    const isDone = id => { const q = TQ(); return !!(q && q.isDone && q.isDone(id)); };
-    const isActive = id => { const r = rec(id); return !!r && r.s === "active"; };
-    const stepOf = id => { const r = rec(id); return r && r.s === "active" ? r.step : -1; };
+    const { vgive } = w;
+    const isDone = id => w.done(id);
+    const isActive = id => w.active(id);
     const note = (title, text) => T.call("Journal", "addNote", title, text);
     const xp = (n, why) => T.call("Combat", "gainXp", n, why, true) || 0;
-    const actTwo = () => { const w = W(); return !!(w && w.actTwo && w.actTwo()); };
+    const actTwo = () => { const wy = W(); return !!(wy && wy.actTwo && wy.actTwo()); };
     const refresh = () => { const q = TQ(); if (q && q.refreshMarkers) q.refreshMarkers(); };
 
     // ------------------------------------------------------------------
@@ -242,50 +233,12 @@
     const nightsText = n => { const k = Math.floor(n); return k === 1 ? TK.kod.nightsText[0] : k >= 2 && k <= 4 ? Watki.wstaw(TK.kod.nightsText[1], { k: k }) : Watki.wstaw(TK.kod.nightsText[2], { k: k }); };
 
     // ------------------------------------------------------------------
-    // Event commands: speech bubbles (\SPK[n]) and choices, the way TownQuests / Pustelnia write them
+    // Event commands: speech bubbles (\SPK[n]) and choices - the engine's builder (Watki.mowa, with the thread's options: "\n" starts
+    // a new line); the talks of the quests' steps and the first meeting are the data's (Latarnia_Data.js), the menus here are code
     // ------------------------------------------------------------------
-    const LINE = 46, PAGE = 3;
-    function wrap(text) {
-        const out = [];
-        for (const para of String(text).split("\n")) {
-            let line = "";
-            for (const w of para.split(/\s+/)) {
-                if (!w) continue;
-                if (line && (line + " " + w).length > LINE) { out.push(line); line = w; } else line = line ? line + " " + w : w;
-            }
-            if (line) out.push(line);
-        }
-        return out;
-    }
-    function sayTo(out, spk, text, ind) {
-        const lines = wrap(text);
-        for (let i = 0; i < lines.length; i += PAGE) {
-            out.push(C(101, ["", 0, 0, 2, spk.name || ""], ind));
-            lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 ? "\\SPK[" + spk.id + "]" : "") + l], ind)));
-        }
-        return out;
-    }
-    function linesTo(out, spk, arr, ind) {
-        for (const raw of [].concat(arr || [])) {
-            if (!raw) continue;
-            const s = String(raw);
-            if (s.startsWith("> ")) sayTo(out, HERO, s.slice(2), ind);
-            else sayTo(out, spk, s, ind);
-        }
-        return out;
-    }
-    const act = (out, args, ind) => (out.push(C(355, ["Latarnia.act(this, " + JSON.stringify(args) + ")"], ind)), out);
-    function choiceTo(out, labels, branches, cancel, ind) {
-        const i0 = ind || 0;
-        out.push(C(102, [labels, cancel === undefined ? labels.length - 1 : cancel, 0, 2, 0], i0));
-        labels.forEach((l, i) => {
-            out.push(C(402, [i, l], i0));
-            for (const c of branches[i] || []) out.push(Object.assign({}, c, { indent: (c.indent || 0) + i0 + 1 }));
-            out.push(C(0, [], i0 + 1));
-        });
-        out.push(C(404, [], i0));
-        return out;
-    }
+    const linesTo = (out, spk, arr) => Watki.mowa.linesTo(out, spk, arr, null, 0, w.def.mowa);
+    const choiceTo = Watki.mowa.choiceTo;
+    const act = (out, args) => Watki.mowa.script(out, "Latarnia.act(this, " + JSON.stringify(args) + ")");
     function bazyliEv() {
         const L = TL(), ev = L && L.eventOf ? L.eventOf(KEY) : null;
         return ev && $gameMap.event(ev.eventId()) === ev ? ev : null;
@@ -365,10 +318,7 @@
     // ------------------------------------------------------------------
     function bazyliTalk(ev) {
         const spk = { id: ev.eventId(), name: D.RESIDENT.name }, out = [];
-        if (!S().met) {
-            linesTo(out, spk, D.TX.meet);
-            return act(out, ["met"]);
-        }
+        if (!S().met) return w.rozmowa("spotkanie", { spk });   // (the first meeting: Latarnia_Data rozmowy.spotkanie)
         if (questWants()) { const q = questTalk(); if (q && q.length) return q; }
         const h = hour();
         linesTo(out, spk, [h >= 8 && h < 15 ? D.TX.sleepyDay[0] : pick(D.TX.ask)]);
@@ -427,28 +377,32 @@
     hookTalk();
 
     // ------------------------------------------------------------------
-    // Script calls from the talks: Latarnia.act(this, [what, ...])
+    // Script calls from the menus: Latarnia.act(this, [what, ...]) (the talks of the data: Watki.act(this, ["latarnia", akcja]))
     // ------------------------------------------------------------------
+    // (the old script calls of the first meeting, D22's end and W11 - a talk saved before 2026-10-28: the data's actions now)
+    const W11_OLD = { warn: "w11Ostrzez", give: "w11Daj", buyback: "w11Odkup", kleofas: "w11Kleofas", leave: "w11Zostaw", break: "w11Rozbij",
+        sell: "w11Sprzedam", sold: "w11Sprzedane" };
+    const stopOf = interp => () => { if (interp && interp._list) interp._index = interp._list.length; };
     function actCall(interp, args) {
         if (!has() || !Array.isArray(args)) return;
         const [what, a, b] = args;
-        const stop = () => { if (interp && interp._list) interp._index = interp._list.length; };
+        const stop = stopOf(interp);
         const ev = bazyliEv();
         try {
             if (what === "met") {
-                if (!S().met) { S().met = day(); setFlag("latarnikMet"); note(D.TX.meetNote[0], D.TX.meetNote[1]); }
+                w.akcja("poznany", [], interp);
             } else if (what === "sell") {
                 sell(a);
             } else if (what === "weather") {
                 if (S().weatherDay === day()) { if (ev) say(ev, D.TX.weatherAgain[0]); return; }
                 S().weatherDay = day();
                 const t = forecast();
-                if (interp) interp.setupChild(linesTo([], spkB(), [t]).concat([C(0, [])]), interp.eventId());
+                if (interp) w.uruchom(interp, linesTo([], spkB(), [t]));
             } else if (what === "stock") {
                 settle();
                 const n = S().fuel, lines = n < 1 ? D.TX.stockNone.slice() : [fill(D.TX.stock, { n: nightsText(n) })];
                 lines.push(day() < F.ferryUntil ? D.TX.stockFerry[0] : D.TX.stockWar[0]);
-                if (interp) interp.setupChild(linesTo([], spkB(), lines).concat([C(0, [])]), interp.eventId());
+                if (interp) w.uruchom(interp, linesTo([], spkB(), lines));
             } else if (what === "bookN") {
                 S().bookN = (S().bookN || 0) + 1;
             } else if (what === "janekTran") {
@@ -466,9 +420,10 @@
                 const L = TL();
                 if (L && L.talk && interp) L.talk(interp, { skip: PLUGIN });   // (the same talk without this errand - the core's skip)
             } else if (what === "d22") {
-                d22End(a);
+                w.akcja(a === "tell" ? "d22Powiem" : "d22Zachowam", [], interp);
             } else if (what === "w11") {
-                w11Act(a, b, interp, stop);
+                if (a === "oferta") w.akcja(b ? "w11Pomysle" : "w11Odmowa", [], interp);
+                else if (Object.prototype.hasOwnProperty.call(W11_OLD, a)) w.akcja(W11_OLD[a], [], interp);
             }
         } catch (e) { console.error("[Latarnia] act " + JSON.stringify(args), e); }
     }
@@ -492,7 +447,7 @@
         if (S().met && fogNow()) return "fog";
         if (isActive("D22") && fogNow()) return "fog";
         const r = S().raid;
-        if (r && stepOf("W11") === 2 && now() >= (r.day + 1) * 24 - 3 && now() < (r.day + 1) * 24 + D.RAID.until) return "raid";
+        if (r && w.at("w11Vars") && now() >= (r.day + 1) * 24 - 3 && now() < (r.day + 1) * 24 + D.RAID.until) return "raid";
         return null;
     }
     function door(interp) {
@@ -577,11 +532,11 @@
         if (!has() || !interp) return;
         const b = lensBlock();
         if (b && b.pop) { pop(b.pop); return; }
-        if (b && b.say) { interp.setupChild(linesTo([], spkB(), b.say).concat([C(0, [])]), interp.eventId()); return; }
+        if (b && b.say) { w.uruchom(interp, linesTo([], spkB(), b.say)); return; }
         const v = visionFor(nightNow());
         const out = [C(355, ["Latarnia.vision(this, " + v.n + ");"])];
         linesTo(out, spkB(), D.TX.afterVision);
-        interp.setupChild(out.concat([C(0, [])]), interp.eventId());
+        w.uruchom(interp, out);
     }
     // the hours of "Ciężka głowa": until noon (the next day's if before midnight)
     function heavy() {
@@ -607,9 +562,7 @@
             if (v.flag) setFlag(v.flag);
             xp(40, TK.kod.seeVision[1]);
         }
-        const q = TQ();
-        if (q && q.autoChecks) q.autoChecks();
-        refresh();
+        w.autoChecks();
         return true;
     }
 
@@ -687,15 +640,6 @@
         _Scene_Map_terminate.call(this);
     };
 
-    // D22's end: tell him or keep it
-    function d22End(how) {
-        if (!isActive("D22")) return;
-        S().told = how === "tell" ? "tell" : "keep";
-        if (how === "tell") { setFlag("latarniaPowiedzial"); S().trust += 20; } else { setFlag("latarniaMilczal"); S().trust += 5; }
-        const q = TQ();
-        if (q && q.finish) q.finish("D22");
-    }
-
     // ------------------------------------------------------------------
     // W11: the raid, the thieves, the lens's way
     // ------------------------------------------------------------------
@@ -732,24 +676,23 @@
         if (!r || (r.state !== "spawned" && r.state !== "wait")) return;
         r.state = won ? "defended" : "stolen";
         raidBand = false;
-        const q = TQ();
         if (won) {
             setFlag("latarniaObroniona");
             S().trust += 25;
             T.popup(D.TX.raidWin, { top: true, color: "#9ff0a8", sub: D.TX.raidWinSub });
-            if (q && q.completeStep && stepOf("W11") === 2) q.completeStep("W11", { to: 4 });
+            w.complete("w11Vars", { to: "w11Kleofas" });   // (defended: straight to rozdz. 5 - the lens to Kleofas)
         } else {
             S().lens = "stolen";
             setFlag("latarniaSkradziona");
             T.popup(D.TX.raidLost, { top: true, color: "#ff9f8f", sub: D.TX.raidLostSub });
-            if (q && q.completeStep && stepOf("W11") === 2) q.completeStep("W11");
+            w.complete("w11Vars");
         }
         refresh();
     }
     function raidRaiders() { const H = T.api("Humans") || window.Humans; return H && H.humans ? H.humans().filter(h => h._tag === R.tag && !h._dead) : []; }
     function updateRaid() {
         const r = S().raid;
-        if (!r || stepOf("W11") !== 2) return;
+        if (!r || !w.at("w11Vars")) return;
         const t = now();
         if (r.state === "wait") {
             if (t >= raidStart(r) && t < raidEnd(r) && (onMap(MAP) || onMap(LATERNA))) spawnRaid();
@@ -815,8 +758,7 @@
         T.popup(D.TX.sackGot, { top: true, color: "#ffd23f", sub: D.TX.sack });
         const ev = interp && $gameMap.event(interp.eventId());
         if (ev) ev.erase();
-        const q = TQ();
-        if (q && q.completeStep && stepOf("W11") === 3) q.completeStep("W11");
+        w.complete("w11Odkup");
         refresh();
     }
     const BLANK = { actorId: 1, actorValid: false, itemId: 1, itemValid: false, selfSwitchCh: "A", selfSwitchValid: false, switch1Id: 1,
@@ -832,172 +774,63 @@
             priorityType: 1, stepAnime: false, through: false, trigger: 0, walkAnime: false };
         return [{ id: D.IDS[0], name: TK.kod.build[0], note: "<Latarnia:worek>", pages: [page], x: at[0], y: at[1] }];
     } });
-    function w11Act(what, a, interp, stop) {
-        const q = TQ();
-        if (!q) return;
-        if (what === "oferta" && stepOf("W11") === 0) {
-            setFlag(a ? "latarniaBaltazarMoze" : "latarniaBaltazarNie");
-            q.completeStep("W11");
-        } else if (what === "warn" && stepOf("W11") === 1) {
-            S().raid = { day: day() + R.after, state: "wait" };   // (the night from day+1 to day+2: "jutro w nocy", after midnight)
-            q.completeStep("W11");
-        } else if (what === "give" && stepOf("W11") === 4 && S().lens === "whole") {
-            S().lens = "bag";
-            vgive("soczewka", 1);
-            T.popup(TK.kod.w11Act[0], { top: true, color: "#ffd23f", sub: TK.kod.w11Act[1] });
-        } else if (what === "buyback" && stepOf("W11") === 3 && S().lens === "baltazar") {
-            const price = buyBackPrice();
-            if ($gameParty.gold() < price) { T.popup.need(COIN_ICON, Watki.wstaw(TK.kod.w11Act[2], { price: price })); stop(); return; }
-            $gameParty.loseGold(price);
-            S().lens = "bag";
-            vgive("soczewka", 1);
-            T.popup(TK.kod.w11Act[0], { top: true, color: "#ffd23f", sub: TK.kod.w11Act[3] });
-            q.completeStep("W11");
-        } else if (what === "kleofas" && stepOf("W11") === 4 && S().lens === "bag") {
-            note(D.TX.kleofasNote[0], D.TX.kleofasNote[1]);
-            q.completeStep("W11");
-        } else if (stepOf("W11") === 5 && S().lens === "bag" && (what === "leave" || what === "break" || what === "sell")) {
-            if (what === "sell") { q.completeStep("W11"); return; }
-            vtake("soczewka", 1);
-            if (what === "leave") {
-                S().lens = "whole";
-                setFlag("latarniaSoczewkaZostaje");
-                S().trust += 20;
-                q.finish("W11", { xp: 150, note: D.TX.leaveNote });
-            } else {
-                S().lens = "broken";
-                setFlag("soczewkaRozbita");
-                q.finish("W11", { xp: 150, note: D.TX.breakNote });
-            }
-        } else if (what === "sold" && stepOf("W11") === 6 && S().lens === "bag") {
-            vtake("soczewka", 1);
-            S().lens = "sold";
-            setFlag("soczewkaSprzedana");
-            q.finish("W11", { gold: R.sale, xp: 80, note: D.TX.soldNote });
-        }
-        refresh();
-    }
-
     // ------------------------------------------------------------------
-    // TownQuests' handlers: K49 (the fuel), D22 (the visions, the end), W11
+    // K49, D22, W11 - the data's (Latarnia_Data.js: the steps, their talks and actions); what their conditions, words and actions
+    // ask of the game
     // ------------------------------------------------------------------
     const kantorOpen = () => inHours(hour(), [8, 18]);
     // (2026-10-17, W5 "Towary z kontynentu" - Kantor.js) Baltazar's price of the lens: double for an enemy, half in the hero's grip
     const buyBackPrice = () => Math.max(1, Math.round(R.buyBack * (T.call("Kantor", "priceMul") || 1)));
-    function hookQuests() {
-        const q = TQ();
-        if (!q || !q.FX || hookQuests.done) return;
-        hookQuests.done = true;
-        Object.assign(q.FX, {
-            k49Paliwo: { hand: () => { settle(); S().fuel = Math.min(F.max, S().fuel + 4 * F.value[D.ITEM.tran] + 6 * F.value[D.ITEM.wood]); S().trust += 20; } },
-            d22Ready: { cond: () => has() && !!S().met && (fogNow() || (fogTonight() && hour() >= 12)) },
-            d22Wizje: {
-                check: () => seenCount() >= D.VISIONS.length,
-                vars: () => {
-                    const nf = nextFog(), k = fogNow() ? TK.kod.vars[0] : nf === null ? "" : nf === day() ? TK.kod.vars[1] :
-                        Watki.wstaw(TK.kod.vars[2], { nf: nf, "2": nf + 1 });
-                    return { n: seenCount(), kiedy: k };
-                }
-            },
-            d22Koniec: {
-                ready: (qq, r, st, key) => (key === KEY ? true : null),
-                talk: (qq, r, st, key, spk) => {
-                    if (key !== KEY) return null;
-                    const out = [];
-                    linesTo(out, spk, [TK.kod.talk[0], TK.kod.talk[1]]);
-                    choiceTo(out, [TK.kod.talk[2], TK.kod.talk[3]], [
-                        linesTo([], spk, [TK.kod.talk[4],
-                            TK.kod.talk[5],
-                            TK.kod.talk[6]]).concat(act([], ["d22", "tell"])),
-                        linesTo([], spk, [TK.kod.talk[7], TK.kod.talk[8],
-                            TK.kod.talk[9]]).concat(act([], ["d22", "keep"]))
-                    ], -1);
-                    return { ready: true, list: out };
-                }
-            },
-            // W11 "Soczewka" (Act II)
-            w11Auto: () => has() && actTwo() && !!S().met && day() >= 25,
-            w11Oferta: {
-                ready: (qq, r, st, key) => (key === "kupiec" ? kantorOpen() : null),
-                talk: (qq, r, st, key, spk) => {
-                    if (key !== "kupiec" || !kantorOpen()) return null;
-                    const out = linesTo([], spk, D.TX.baltazar);
-                    choiceTo(out, [TK.kod.talk[10], TK.kod.talk[11]],
-                        [linesTo([], spk, D.TX.baltazarNo.slice(1)).concat(act([], ["w11", "oferta", 0])),
-                         linesTo([], spk, D.TX.baltazarMaybe.slice(1)).concat(act([], ["w11", "oferta", 1]))], -1);
-                    return { ready: true, list: out };
-                }
-            },
-            w11Ostrzez: {
-                ready: (qq, r, st, key) => (key === KEY ? true : null),
-                talk: (qq, r, st, key, spk) => (key === KEY ? { ready: true, list: act(linesTo([], spk, D.TX.warn), ["w11", "warn"]) } : null)
-            },
-            w11Vars: {
-                vars: () => {
-                    const r = S().raid || { day: day() }, st = S().lens;
-                    const gdzie = st === "baltazar" ? Watki.wstaw(TK.kod.vars[3], { "1": buyBackPrice() }) :
-                        Watki.wstaw(TK.kod.vars[4], { "1": r.day + 1, "2": r.day + 2 });
-                    const kto = st === "whole" ? TK.kod.vars[5] :
-                        TK.kod.vars[6];
-                    return { d: r.day, d1: r.day + 1, gdzie, kto };
-                }
-            },
-            w11Odkup: {
-                ready: (qq, r, st, key) => (key === "kupiec" && S().lens === "baltazar" ? kantorOpen() : null),
-                talk: (qq, r, st, key, spk) => {
-                    if (key !== "kupiec" || S().lens !== "baltazar" || !kantorOpen()) return null;
-                    const out = linesTo([], spk, D.TX.baltazarBack);
-                    choiceTo(out, [Watki.wstaw(TK.kod.talk[12], { "1": buyBackPrice() }), TK.kod.talk[13]],
-                        [act([], ["w11", "buyback"]).concat(linesTo([], spk, D.TX.baltazarBackYes)), linesTo([], spk, D.TX.baltazarBackNo)], 1);
-                    return { ready: true, list: out };
-                }
-            },
-            w11Kleofas: {
-                ready: (qq, r, st, key) => {
-                    if (key === "pustelnik") return S().lens === "bag";
-                    if (key === KEY) return S().lens === "whole" || (S().lens === "bag" && !hermitReady());
-                    return null;
-                },
-                talk: (qq, r, st, key, spk) => {
-                    if (key === "pustelnik" && S().lens === "bag") return { ready: true, list: act(linesTo([], spk, D.TX.kleofas), ["w11", "kleofas"]) };
-                    if (key !== KEY) return null;
-                    if (S().lens === "whole") {
-                        const lines = S().raid && S().raid.state === "defended" ? D.TX.bazyliDefended : D.TX.bazyliGive;
-                        return { ready: true, list: act(linesTo([], spk, lines), ["w11", "give"]) };
-                    }
-                    if (S().lens === "bag" && !hermitReady()) return { ready: true, list: act(linesTo([], spk, D.TX.bazyliReads), ["w11", "kleofas"]) };
-                    if (S().lens === "bag") return { ready: false, list: linesTo([], spk, D.TX.bazyliBagFirst) };
-                    return null;
-                }
-            },
-            w11Wybor: {
-                ready: (qq, r, st, key) => (key === KEY ? S().lens === "bag" : null),
-                talk: (qq, r, st, key, spk) => {
-                    if (key !== KEY || S().lens !== "bag") return null;
-                    const out = linesTo([], spk, D.TX.choiceAsk);
-                    choiceTo(out, [TK.kod.talk[14], TK.kod.talk[15], TK.kod.talk[16]], [
-                        linesTo([], spk, D.TX.choiceLeave).concat(act([], ["w11", "leave"])),
-                        linesTo([], spk, D.TX.choiceBreak).concat(act([], ["w11", "break"])),
-                        linesTo([], spk, D.TX.choiceSell).concat(act([], ["w11", "sell"]))], -1);
-                    return { ready: true, list: out };
-                }
-            },
-            w11Sprzedaz: {
-                ready: (qq, r, st, key) => (key === "kupiec" && S().lens === "bag" ? kantorOpen() : null),
-                talk: (qq, r, st, key, spk) => {
-                    if (key !== "kupiec" || S().lens !== "bag" || !kantorOpen()) return null;
-                    return { ready: true, list: act(linesTo([], spk, D.TX.sold), ["w11", "sold"]) };
-                }
-            }
-        });
-    }
-    const hermitReady = () => { const w = W(); return !!(w && w.isReady && w.isReady(155)); };
+    const hermitReady = () => { const wy = W(); return !!(wy && wy.isReady && wy.isReady(155)); };
+    w.haki({
+        // K49 handed over: 4 oil and 6 wood into the lighthouse's store, Bazyli's trust
+        k49Paliwo: () => { settle(); S().fuel = Math.min(F.max, S().fuel + 4 * F.value[D.ITEM.tran] + 6 * F.value[D.ITEM.wood]); S().trust += 20; },
+        // D22: the fog now / tonight; when the next one comes (the words of its step)
+        mglaTeraz: () => fogNow(),
+        mglaDzis: () => fogTonight(),
+        kiedyMgla: () => {
+            const nf = nextFog();
+            return fogNow() ? TK.kod.vars[0] : nf === null ? "" : nf === day() ? TK.kod.vars[1] : Watki.wstaw(TK.kod.vars[2], { nf: nf, "2": nf + 1 });
+        },
+        // W11: Act II, from a day on; the Kantor's hours, the hermitage built (Kleofas reads the lens)
+        aktDrugi: () => actTwo(),
+        odDnia: (ctx, n) => day() >= n,
+        kantorOtwarty: () => kantorOpen(),
+        pustelniaGotowa: () => hermitReady(),
+        // the words of rozdz. 3-5: the raid's night, where the lens is, who takes it to Kleofas
+        w11Zmienne: () => {
+            const r = S().raid || { day: day() }, st = S().lens;
+            const gdzie = st === "baltazar" ? Watki.wstaw(TK.kod.vars[3], { "1": buyBackPrice() }) :
+                Watki.wstaw(TK.kod.vars[4], { "1": r.day + 1, "2": r.day + 2 });
+            const kto = st === "whole" ? TK.kod.vars[5] :
+                TK.kod.vars[6];
+            return { d: r.day, d1: r.day + 1, gdzie, kto };
+        },
+        // the lines of a key without its first: the hero's line, said by the choice's label (Baltazar's "Nie sprzedam" / "Pomyślę")
+        bezPierwszej: (ctx, key) => [].concat(w.tekst(key) || []).slice(1),
+        cenaOdkupu: () => buyBackPrice(),
+        napadJutro: () => ({ day: day() + R.after, state: "wait" }),
+        stacNaOdkup: () => $gameParty.gold() >= buyBackPrice(),
+        brakGrosza: ctx => { T.popup.need(COIN_ICON, Watki.wstaw(w.tekst("w11.potrzebujesz"), { price: buyBackPrice() })); stopOf(ctx.interp)(); },
+        zaplac: (ctx, n) => $gameParty.loseGold(n),
+        zaufanie: (ctx, n) => { S().trust += n; },
+        zabierz: (ctx, k, n) => w.vtake(k, n),
+        // a quest done at once (TownQuests.finish) with more of a reward ({ notatka: key } - the note's [title, text] of the words)
+        zakoncz: (ctx, id, nagroda) => {
+            const q = TQ();
+            if (!q || !q.finish) return;
+            let rw;
+            if (nagroda) { rw = {}; for (const [k, v] of Object.entries(nagroda)) { if (k === "notatka") rw.note = w.tekst(v); else rw[k] = v; } }
+            q.finish(id, rw);
+        },
+        odswiez: () => refresh()
+    });
 
     // ------------------------------------------------------------------
     // The oil in the cauldron (Farming.BUILDINGS - Farming_Data.js unchanged), "Ciężka głowa", the bust
     // ------------------------------------------------------------------
-    const RECIPE = { id: "tran", name: "Wytop tran", doing: "Trwa wytapianie", inputs: [[D.ITEM.wood, 1]], fish: 3, output: [D.ITEM.tran, 1], hours: 3,
-        stamina: 2, startSe: "Liquid", desc: "Trzy surowe ryby (ze stawu albo z morza) wytopione w kociołku na gęsty, śmierdzący tran. Pali się w latarni - Bazyli z przylądka go skupuje." };
+    const RECIPE = { id: "tran", inputs: [[D.ITEM.wood, 1]], fish: 3, output: [D.ITEM.tran, 1], hours: 3, stamina: 2, startSe: "Liquid" };
+    Watki.scal(RECIPE, "latarnia", "receptury.tran");   // (its words - name, doing, desc: js/teksty/latarnia.txt, receptury.tran)
     (function addRecipe() {
         const Fa = window.Farming, B = Fa && Fa.BUILDINGS, c = B && B.cauldron;
         if (!c || !Array.isArray(c.recipes)) { console.warn("[Latarnia] Farming.BUILDINGS.cauldron is missing - the oil recipe waits for the integration"); return; }
@@ -1313,14 +1146,13 @@
             xhr.onload = () => {
                 try {
                     const n = xhr.status < 400 ? String(JSON.parse(xhr.responseText).note || "") : "<Wyspa:szkielet>";
-                    if (!/<Wyspa:szkielet>/.test(n)) { built = true; const w = W(); if (w && w.ready) w.ready(MAP); }
+                    if (!/<Wyspa:szkielet>/.test(n)) { built = true; const wy = W(); if (wy && wy.ready) wy.ready(MAP); }
                 } catch (e) { /* (no map: not built) */ }
             };
             xhr.send();
         } catch (e) { /* (no XHR: not built) */ }
     })();
 
-    hookQuests();
     let tick = 0;
     T.onMapUpdate(() => {
         if (!has()) return;
@@ -1333,7 +1165,6 @@
         if (ours()) updateThings();
     }, { owner: PLUGIN, name: "lighthouse" });
     T.on("mapReady", () => {
-        hookQuests();
         // (first: before the other hooks for Janek - "Nie, w innej sprawie" lets them speak)
         hookTalk();
         if (!has()) return;

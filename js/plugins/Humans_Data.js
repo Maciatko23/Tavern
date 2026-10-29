@@ -31,7 +31,7 @@
 
     // ---------------------------------------------------------------------------------------------------------------------------
     // The kinds. Common fields:
-    //   name, look (the sheets: $Human_<look> walking, _Atk the blows, _Kneel on his knees, _Crouch by the fire, _Lie lying; anim8/<look>_*8),
+    //   name (its words: js/teksty/zbojcy.txt, rodzaje.<kind>.name), look (the sheets: $Human_<look> walking, _Atk the blows, _Kneel on his knees, _Crouch by the fire, _Lie lying; anim8/<look>_*8),
     //   hp, poise (balance), stun (frames it reels), radius (its body, tiles), lv (levels over the place's), xp (beaten, level 1),
     //   attr: base at level 1 and grow per level (str, dex, con, per, wil - as the hero's, docs/WALKA.md 5 and 8),
     //   speed: walking (MZ move speed: 4 = the hero's), chase: after the hero (the run sheet from runAt), sight: tiles it sees him at,
@@ -46,7 +46,7 @@
         // strikes right after it; now and then he raises his club against the hero's blow (a guard: light blows lose most of their force,
         // a heavy one breaks it)
         bandit: {
-            name: "Bandyta", look: "Bandit", hp: 60, poise: 34, stun: 55, radius: 0.5, lv: 0, xp: 30,
+            look: "Bandit", hp: 60, poise: 34, stun: 55, radius: 0.5, lv: 0, xp: 30,
             attr: { base: { str: 6, dex: 8, con: 5, per: 6, wil: 4 }, grow: { str: 0.8, dex: 1, con: 0.6, per: 0.6, wil: 0.3 } },
             speed: 3.6, chase: 4.2, runAt: 4.1, sight: 7.5, turn: 0.12,
             blow: { dmg: 12, poise: 34, reach: 1.75, cone: 0.3, at: 1.5, windup: 26, combo: 0.55, windup2: 12, hitAt: 3, strike: 12, recover: 46, wound: 0.25, knock: 0.45 },
@@ -58,7 +58,7 @@
         // the bandit with a knife: lighter and quicker than the one with the club - short wind-ups, up to three stabs in a row (chain), each
         // weak but cutting (wounds); no guard to raise - he springs back from the hero's blow instead (dodge); quick to run when it goes badly
         knifer: {
-            name: "Nożownik", look: "Knife", hp: 46, poise: 26, stun: 50, radius: 0.45, lv: 0, xp: 30,
+            look: "Knife", hp: 46, poise: 26, stun: 50, radius: 0.45, lv: 0, xp: 30,
             attr: { base: { str: 5, dex: 11, con: 4, per: 7, wil: 4 }, grow: { str: 0.6, dex: 1.2, con: 0.5, per: 0.6, wil: 0.3 } },
             speed: 3.8, chase: 4.4, runAt: 4.1, sight: 7.5, turn: 0.17,
             blow: { dmg: 7, poise: 16, reach: 1.45, cone: 0.3, at: 1.3, windup: 17, combo: 0.75, chain: 3, windup2: 8, hitAt: 2, strike: 9, recover: 38, wound: 0.4, knock: 0.15 },
@@ -71,7 +71,7 @@
         // it locks lockAt frames before the arrow leaves (a step, a roll or the shield then) - and reloads; out of arrows, or pressed hard,
         // he shoves with the bow
         archer: {
-            name: "Łucznik", look: "Archer", hp: 44, poise: 24, stun: 60, radius: 0.5, lv: 0, xp: 30,
+            look: "Archer", hp: 44, poise: 24, stun: 60, radius: 0.5, lv: 0, xp: 30,
             attr: { base: { str: 4, dex: 9, con: 4, per: 9, wil: 4 }, grow: { str: 0.4, dex: 1, con: 0.4, per: 1, wil: 0.3 } },
             speed: 3.6, chase: 4.1, runAt: 4.0, sight: 9.5, turn: 0.15,
             shot: { dmg: 14, poise: 22, range: 8.5, keepMin: 3.4, keepMax: 6.5, draw: 52, lockAt: 14, speed: 0.3, reload: 70, arrows: [8, 14], wound: 0.35, knock: 0.25 },
@@ -85,7 +85,7 @@
         // the hero to his back while the hero keeps his own guard up. Three blows: the sword cut, the shield bash (quick, throws the hero
         // back) and the overhead blow (a long wind-up, a big "!": it breaks the hero's guard - roll, or parry it in time)
         mercenary: {
-            name: "Najemnik", look: "Merc", hp: 130, poise: 80, stun: 70, radius: 0.55, lv: 1, xp: 60,
+            look: "Merc", hp: 130, poise: 80, stun: 70, radius: 0.55, lv: 1, xp: 60,
             attr: { base: { str: 9, dex: 5, con: 9, per: 6, wil: 7 }, grow: { str: 1, dex: 0.5, con: 1, per: 0.5, wil: 0.5 } },
             speed: 3.4, chase: 3.8, runAt: 4.2, sight: 8, turn: 0.06,
             blow: { dmg: 19, poise: 48, reach: 1.85, cone: 0.3, at: 1.6, windup: 30, combo: 0, hitAt: 4, strike: 14, recover: 52, wound: 0.35, knock: 0.5 },
@@ -98,6 +98,7 @@
             surrender: { at: 0.18, chance: 0.3, flee: 0.1 }, mercy: true
         }
     };
+    Watki.scal(KINDS, "zbojcy", "rodzaje");   // (the names: js/teksty/zbojcy.txt, rodzaje.<kind>.name)
 
     // ---------------------------------------------------------------------------------------------------------------------------
     // The fight together: one blow at a time (the others go round the hero, `ring` tiles off), gap: the frames before the next one comes
@@ -128,32 +129,12 @@
     // ---------------------------------------------------------------------------------------------------------------------------
     const RAID = { perHour: 0.02, from: 23, to: 4, calmDays: 5, fullDay: 15, calm: 0.2, fire: 1.4, camp: 2.5, size: [2, 3], archer: 0.35, knife: 0.4, near: 8, dogNear: 13 };
 
-    // what they say (SpeechBubbles barks over their heads)
-    const LINES = {
-        alert: ["Hej! Kto tam?", "Coś szeleści...", "Stój!", "Kto idzie?"],
-        engage: ["Brać go!", "Mamy gościa!", "Sakiewka albo życie!", "Nie uciekniesz!", "Dawaj, co masz!"],
-        ambush: ["Sakiewka albo życie!", "Stój! Droga płatna!", "Dawaj grosz, chłopku!"],
-        raid: ["Śpi jak kamień... Bierzemy wszystko!", "Cicho... Teraz!", "Pobudka, chłopku! Sakiewka!"],
-        wake: ["Wstawać! Ktoś tu jest!", "Pobudka!", "Co jest?!"],
-        hurt: ["Ach!", "Psiakrew!", "Ty draniu!"],
-        block: ["Ha!", "Za wolno!"],
-        broken: ["Uciekać!", "Nie warto za to ginąć!"],
-        surrender: ["Litości! Poddaję się!", "Nie zabijaj! Mam dzieci!", "Dość! Poddaję się!"],
-        spared: ["Dzięki ci... nie zapomnę.", "Niech cię Bóg prowadzi.", "Już mnie tu nie zobaczysz!"],
-        robbed: ["Bierz i daj mi odejść!", "Masz, masz, tylko nie bij!"],
-        fled: ["Jeszcze się spotkamy!", "Nogi za pas!"],
-        beat: ["Leż i nie wstawaj.", "Zabieramy, co twoje.", "Następnym razem nie pyskuj."],
-        camp: ["...kupiec miał pełny wóz, mówię ci...", "...ognia nie gaś, zimno...", "...jutro idziemy na Polną drogę...", "...kto ma wartę?..."]
-    };
+    // what they say (SpeechBubbles barks over their heads): alert, engage, ambush, raid, wake, hurt, block, broken, surrender, spared,
+    // robbed, fled, beat, camp - lists of lines, js/teksty/zbojcy.txt, okrzyki.<when>
+    const LINES = Watki.scal({}, "zbojcy", "okrzyki");
     // what a spared man may tell out of thanks (one at random, a top notice; the journal keeps it when Journal.addNote is there)
-    const RUMOURS = [
-        "W kantorze Baltazara nocą ktoś wynosi worki tylnymi drzwiami.",
-        "Najemnicy z kontynentu pytają w tawernie o drogę w góry, do jaskiń.",
-        "Za Kruczymi Skałami ludzie kopią coś pod ziemią. Płacą dobrze, ale nikt nie wraca.",
-        "Ze starego zamku nocą słychać szepty. My tam nie chodzimy.",
-        "Kapral przy bramie bierze grosz od każdego wozu, co wjeżdża po zmroku.",
-        "Na Skraju lasu jest dziupla w starym dębie - przemytnicy zostawiają tam znaki."
-    ];
+    // (js/teksty/zbojcy.txt, plotki; the save keeps the told ones by their words - Humans.js tellRumour)
+    const RUMOURS = Watki.scal([], "zbojcy", "plotki");
     // the hero beaten down by them (their blows never kill - KINDS.mercy): the part of his gold they take, the food they may take, the hours
     // he lies, and the wound
     const ROBBED = { gold: 0.4, food: 0.5, hours: 1, hp: 0.15 };

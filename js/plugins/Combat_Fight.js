@@ -370,7 +370,7 @@
         const def = CT && CT.swingKind ? CT.swingKind(s._swingKind) : null;
         return !def || s._swingT >= def.impact;
     }
-    // the soft target (Combat_Feel.js, 2026-10-14): { ref, x, y } of the foe under the copper ring, or null
+    // the soft target (Combat_Feel.js, 2026-10-14): { ref, x, y } of the foe under the yellow ring, or null
     const softTarget = () => { const f = FE(); return f && f.target ? f.target() : null; };
     // what the guard turns to: the foe whose blow comes next (its warning - Combat_Feel.js), else the soft target
     const guardTarget = () => { const f = FE(), a = f && f.nextBlow ? f.nextBlow(4) : null; return a || softTarget(); };

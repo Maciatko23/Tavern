@@ -1,0 +1,733 @@
+# Teksty tablicy zleceń (QuestBoard_Data.js): ogłoszenia, zleceniodawcy, zwierzęta, miejsca polowań, listy gończe, rodzaje pracy, słowa Borgara
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz tablica
+
+# ======================================================================== Ogłoszenia (szablony.<id>): title - tytuł kartki (jeden z listy), text - treść (jedna z listy),
+# note - wpis w dzienniku po zleceniu fabularnym (tytuł, treść). {place} / {Place} wstawia gra (miejsce polowania)
+# rabbit_meat - pisze: Borgar
+[szablony.rabbit_meat.title]
+Zając w potrawce
+Potrawka sama się nie zrobi
+
+[szablony.rabbit_meat.text]
+Goście pytają o potrawkę z zająca. Ja pytam o zające. Przynieś świeże mięso, a potrawka zrobi się sama. Prawie sama.
+Kucharka grozi, że odejdzie, jak znowu podam kapuśniak. Przynieś zajęczyny i ratuj moją kuchnię.
+
+# firewood - pisze: Borgar
+[szablony.firewood.title]
+Drewno do kominka
+Opał na zimne wieczory
+
+[szablony.firewood.text]
+Kominek w sali zjada więcej niż Grum. Przynieś drewna - suchego, bo mokre dymi, a dym wygania gości.
+Kiedy w sali zimno, goście piją mniej. Kiedy piją mniej, ja płaczę. Przynieś drewna.
+
+# potatoes - pisze: Borgar
+[szablony.potatoes.title]
+Worek ziemniaków
+Ziemniaki, dużo ziemniaków
+
+[szablony.potatoes.text]
+Kuchnia bez ziemniaków to jak karczma bez piwa - da się, ale po co? Przynieś ziemniaki, byle nie zielone.
+Grum zjadł wczoraj cały zapas ziemniaków. Na surowo. Nie pytaj. Przynieś nowe.
+
+# mushrooms - pisze: Borgar
+[szablony.mushrooms.title]
+Grzyby na zupę
+
+[szablony.mushrooms.text]
+Po deszczu grzyby wyłażą jak goście po wypłacie. Zbierz jadalne. Które są jadalne? Te, po których Ozzy jeszcze śpiewa.
+
+# barley - pisze: Borgar
+[szablony.barley.title]
+Jęczmień do warzenia
+
+[szablony.barley.text]
+Piwo nie warzy się od patrzenia. Kupię jęczmień - suchy i czysty, bez myszy w worku. Myszy kupuję osobno. Żartuję.
+
+# bread - pisze: Borgar
+[szablony.bread.title]
+Chleb na śniadania
+
+[szablony.bread.text]
+Goście chcą chleba do jajecznicy. Piekarz chce urlopu. Ty chcesz złota. Wszyscy będą zadowoleni.
+
+# boar_meat - pisze: Borgar
+[szablony.boar_meat.title]
+Pieczeń na odpust
+
+[szablony.boar_meat.text]
+Na odpust musi być dzik. Bez dzika to nie odpust, tylko zebranie. Przynieś mięso dzika, resztę załatwi rożen.
+
+# s_cellar - pisze: Borgar
+[szablony.s_cellar.title]
+Deski do piwnicy
+
+[szablony.s_cellar.text]
+Od kilku nocy w starej piwnicy coś stuka. Pewnie szczury. Albo beczka turla się sama. Potrzebuję desek i gwoździ - zabiję ten kąt porządnie i będzie spokój. I nie pytaj.
+
+[szablony.s_cellar.note]
+Borgar i piwnica
+Borgar zamówił deski i gwoździe, żeby „porządnie zabić jeden kąt” w starej piwnicy. Od kilku nocy coś tam stuka - on mówi, że szczury. Nie wyglądał, jakby sam w to wierzył.
+
+# lord_planks - pisze: Feliks (dwór)
+[szablony.lord_planks.title]
+Dworowi potrzeba desek
+Zamówienie dworu: deski
+
+[szablony.lord_planks.text]
+Dwór Jaśnie Pana Zaleskiego pilnie zamawia deski na naprawę stajni. Zapłata według cennika dworu i dobrego humoru Jaśnie Pana.
+
+# lord_bricks - pisze: Feliks (dwór)
+[szablony.lord_bricks.title]
+Cegły na oranżerię
+
+[szablony.lord_bricks.text]
+Jaśnie pan zapragnął oranżerii. Proszę nie pytać, co to jest - Jaśnie pan też nie wie. Dwór potrzebuje cegieł. Dużo cegieł.
+
+# venison - pisze: Feliks (dwór)
+[szablony.venison.title]
+Dziczyzna na dworski stół
+
+[szablony.venison.text]
+Jaśnie pan wydaje kolację dla gości z miasta i życzy sobie dziczyzny. Świeżej. Goście z miasta poznają różnicę. Tak przynajmniej twierdzą.
+
+# quills - pisze: Feliks (dwór)
+[szablony.quills.title]
+Pióra do ksiąg dworu
+
+[szablony.quills.text]
+Jaśnie pan dyktuje szybciej, niż rosną gęsi. Dwór zamawia pióra do pisania. Uprasza się nie przynosić ich razem z ptakiem.
+
+# mead - pisze: Feliks (dwór)
+[szablony.mead.title]
+Miód pitny na imieniny
+
+[szablony.mead.text]
+Imieniny Jaśnie Pana to święto całej okolicy. Tak przynajmniej twierdzi Jaśnie Pan. Dwór zamawia miód pitny - najlepszy, jaki się uda.
+
+# cheese - pisze: Feliks (dwór)
+[szablony.cheese.title]
+Ser na dworski stół
+
+[szablony.cheese.text]
+Goście Jaśnie Pana nie jedzą sera z miasta, bo „śmierdzi miastem”. Ser ze wsi śmierdzi wsią i o to właśnie chodzi.
+
+# lord_deer - pisze: Feliks (dwór)
+[szablony.lord_deer.title]
+Polowanie dla Jaśnie Pana
+
+[szablony.lord_deer.text]
+Jaśnie pan chce pochwalić się przed gośćmi jeleniem. Upolować go osobiście nie zdąży - ma dużo pracy z chwaleniem się.
+
+# honey - pisze: Melia
+[szablony.honey.title]
+Miód na zdarte gardło
+
+[szablony.honey.text]
+Po wczorajszym koncercie mój głos brzmi jak skrzypiące drzwi. Łyżka miodu i znów będę słowikiem. Albo chociaż wróblem.
+
+# feathers - pisze: Melia
+[szablony.feathers.title]
+Pióra do kapelusza
+
+[szablony.feathers.text]
+Kapelusz bez pióra to jak pieśń bez refrenu. Potrzebuję piór - im barwniejsze, tym lepiej. Wróble też się liczą.
+
+# apples - pisze: Melia
+[szablony.apples.title]
+Jabłka dla muzy
+
+[szablony.apples.text]
+Moja muza lubi dzikie jabłka. Nie pytaj. Kwaśne, prosto z drzewa - wtedy rymy same się układają.
+
+# provisions - pisze: Grum
+[szablony.provisions.title]
+Prowiant na drogę
+
+[szablony.provisions.text]
+Idę w góry na wschodzie. Nie pytaj po co. Potrzebuję pieczonego mięsa na drogę - tyle, żeby starczyło, i jeszcze trochę.
+
+# smoked - pisze: Grum
+[szablony.smoked.title]
+Wędzonka na wyprawę
+
+[szablony.smoked.text]
+Góry na wschodzie nie mają karczm. Sprawdzałem. Potrzebuję wędzonego mięsa, które przetrwa tydzień w plecaku. I mnie.
+
+# hunt_mix - pisze: Grum
+[szablony.hunt_mix.title]
+Trening dla najemnika
+
+[szablony.hunt_mix.text]
+Moi chłopcy mówią, że się starzeję. Pokaż im, jak się poluje: wilki i dzik. Zapłacę jak za dziesięciu.
+
+# b_szary_kiel - pisze: Grum
+[szablony.b_szary_kiel.title]
+Szary Kieł
+
+[szablony.b_szary_kiel.text]
+Wielki szary wilk z blizną na pysku. Prowadzi watahę na Skraju lasu. Zagryzł już trzy owce, dwa psy i moją ulubioną czapkę. Poluje nocą.
+
+# berries - pisze: Ozzy
+[szablony.berries.title]
+Jagody na nalewkę
+
+[szablony.berries.text]
+Stara receptura mojej babki: jagody, cukier i cierpliwość. Cukier mam, cierpliwości nie. Przynieś jagody. *czkawka*
+
+# beer - pisze: Ozzy
+[szablony.beer.title]
+Piwo dla Ozzy'ego
+
+[szablony.beer.text]
+Borgar mówi, że mam za duży rachunek. Ja mówię, że mam za małe piwo. Przynieś parę kufli. Zapłacę. Chyba.
+
+# s_ozzy - pisze: Ozzy
+[szablony.s_ozzy.title]
+Grzyby za opowieść
+
+[szablony.s_ozzy.text]
+Przynieś mi miskę grzybów, to opowiem ci, co mruczy pod podłogą tawerny. Tylko nie mów Borgarowi. On nie lubi, jak o tym gadam.
+
+[szablony.s_ozzy.note]
+Bełkot Ozzy'ego
+Ozzy za miskę grzybów opowiedział mi, że „pod tawerną jest więcej piwnicy niż tawerny” i że „kamienie tam na dole pamiętają”. Potem zasnął z łyżką w ręku. Borgar udawał, że nic nie słyszał.
+
+# herbs - pisze: Jagna
+[szablony.herbs.title]
+Zioła na napar
+
+[szablony.herbs.text]
+Mój napar leczy wszystko: katar, smutek i łysienie. To ostatnie jeszcze sprawdzam. Potrzebuję świeżych ziół.
+
+# yarrow - pisze: Jagna
+[szablony.yarrow.title]
+Krwawnik na rany
+
+[szablony.yarrow.text]
+Krwawnik tamuje krew i kłótnie małżeńskie. To drugie nie zawsze. Przynieś trochę, zanim ktoś znowu ugryzie dzika.
+
+# nettle - pisze: Jagna
+[szablony.nettle.title]
+Pokrzywa na zupę
+
+[szablony.nettle.text]
+Zupa pokrzywowa - najtańsza zupa świata, jeśli nie liczyć poparzonych rąk. Twoich rąk. Przynieś pokrzywy.
+
+# garlic - pisze: Jagna
+[szablony.garlic.title]
+Czosnek na wampiry
+
+[szablony.garlic.text]
+Wampirów tu nie ma. Dzięki czosnkowi. Potrzebuję świeżego zapasu, bo stary już nikogo nie straszy.
+
+# bandages - pisze: Jagna
+[szablony.bandages.title]
+Opatrunki dla łowców
+
+[szablony.bandages.text]
+Dzik ugryzł Maćka. Maciek ugryzł dzika. Obaj potrzebują opatrunku, ale tylko jeden płaci. Zrób kilka na zapas.
+
+# hides - pisze: Tadeusz
+[szablony.hides.title]
+Skóry na kożuchy
+Skóra za skórę
+
+[szablony.hides.text]
+Zima przyjdzie jak co roku - niespodziewanie. Kupię surowe skóry, byle bez dziur po strzałach. No, najwyżej z jedną.
+
+# wolf_pelts - pisze: Tadeusz
+[szablony.wolf_pelts.title]
+Wilcze futra
+Skóry wilka dla sołtysowej
+
+[szablony.wolf_pelts.text]
+Sołtysowa chce futro z wilka, bo sąsiadka ma z lisa. Upoluj wilki i przynieś ich skóry. Wiem, że skóra to skóra, ale ja rozpoznam!
+
+# tanned - pisze: Tadeusz
+[szablony.tanned.title]
+Wyprawione skóry na buty
+
+[szablony.tanned.text]
+Szewc zamawia skóry u mnie, ja u ciebie. Taki łańcuszek szczęścia, tylko z pieniędzmi. Przynieś skóry wyprawione.
+
+# eggs - pisze: Halina
+[szablony.eggs.title]
+Jajka na niedzielne ciasto
+
+[szablony.eggs.text]
+Ciasto bez jajek to podpłomyk. A podpłomyk to smutek. Przynieś jajka, najlepiej całe.
+
+# flour - pisze: Halina
+[szablony.flour.title]
+Mąka na chleb
+
+[szablony.flour.text]
+Młyn stanął, bo młynarz się zakochał. Potrzebuję mąki, zanim cała wieś przejdzie na podpłomyki.
+
+# pie - pisze: Halina
+[szablony.pie.title]
+Placek na wesele
+
+[szablony.pie.text]
+Wesele u młynarzów! Pan młody zjadł już pół placka na próbę. Potrzebuję nowych, zanim zje resztę.
+
+# stones - pisze: sołtys Bartłomiej
+[szablony.stones.title]
+Kamienie na drogę
+
+[szablony.stones.text]
+Droga do młyna ma więcej dziur niż sito. Przynieś kamienie, a wieś ci podziękuje. Ja też, ale ciszej.
+
+# rope - pisze: sołtys Bartłomiej
+[szablony.rope.title]
+Lina do studni
+
+[szablony.rope.text]
+Wiadro w studni urwało się razem z liną. Wiadro wyłowimy, linę trzeba nową. A najlepiej dwie, na zapas.
+
+# bricks - pisze: sołtys Bartłomiej
+[szablony.bricks.title]
+Cegły na nowy komin
+
+[szablony.bricks.text]
+Komin w szkółce wali się od zeszłej zimy. Dzieci mówią, że to duch. Ja mówię, że to cegły. Przynieś nowe.
+
+# wolves - pisze: sołtys Bartłomiej
+[szablony.wolves.title]
+Wilki pod wsią
+
+[szablony.wolves.text]
+Wilki podchodzą pod obejścia i straszą owce. Owce straszą mnie. Ktoś musi z tym skończyć, zanim przestraszę się sam.
+
+# stew - pisze: sołtys Bartłomiej
+[szablony.stew.title]
+Gulasz dla drwali
+
+[szablony.stew.text]
+Drwale pracują za dwóch i jedzą za trzech. Przynieś gulasz, zanim zjedzą mnie.
+
+# clay - pisze: Wit
+[szablony.clay.title]
+Glina z kałuży
+
+[szablony.clay.text]
+Po deszczu w kałużach jest najlepsza glina. Ja mam reumatyzm, ty masz łopatę. Przynieś mokrą glinę.
+
+# pots - pisze: Wit
+[szablony.pots.title]
+Garnki na jarmark
+
+[szablony.pots.text]
+Jarmark za pasem, a ja mam dwa garnki, z czego jeden to kapelusz. Przynieś wypalone gliniane garnki.
+
+# charcoal - pisze: Zdzisław
+[szablony.charcoal.title]
+Węgiel do kuźni
+
+[szablony.charcoal.text]
+Mój węglarz uciekł z córką młynarza. Węgiel przynieś ty - córki młynarza nie trzeba.
+
+# ore - pisze: Zdzisław
+[szablony.ore.title]
+Ruda żelaza
+
+[szablony.ore.text]
+Kowal bez rudy jest jak bard bez głosu. Czyli jak Melia rano. Przynieś rudę żelaza.
+
+# iron - pisze: Zdzisław
+[szablony.iron.title]
+Żelazo na podkowy
+
+[szablony.iron.text]
+Wszystkie konie we wsi zgubiły podkowy tego samego dnia. Przypadek? Tak, przypadek. Potrzebuję żelaza.
+
+# sinew - pisze: Bogdan
+[szablony.sinew.title]
+Ścięgna na cięciwy
+
+[szablony.sinew.text]
+Moje cięciwy pękają częściej niż obietnice sołtysa. Potrzebuję ścięgien - suchych, mocnych, niegryzionych.
+
+# arrows - pisze: Bogdan
+[szablony.arrows.title]
+Strzały dla łowczego
+
+[szablony.arrows.text]
+Połowa moich strzał wisi na drzewach, druga połowa leci w nieznanym kierunku. Przydadzą się nowe.
+
+# wolf_meat - pisze: Bogdan
+[szablony.wolf_meat.title]
+Mięso dla psów gończych
+
+[szablony.wolf_meat.text]
+Moje psy nie jedzą byle czego. Jedzą wszystko. Ale wilczyna smakuje im najbardziej - to chyba osobiste.
+
+# wolves_map - pisze: Bogdan
+[szablony.wolves_map.title]
+Wataha: {Place}
+
+[szablony.wolves_map.text]
+Nocą {place} grasuje wataha. Kupcy nie chcą jechać, a ja nie chcę słuchać kupców. Przerzedź ją.
+
+# deer - pisze: Bogdan
+[szablony.deer.title]
+Jelenie w zbożu
+
+[szablony.deer.text]
+Jelenie wyjadają zboże, a potem patrzą na mnie z wyższością. Przerzedź stado, zanim zjedzą i mnie.
+
+# b_trojlap - pisze: Bogdan
+[szablony.b_trojlap.title]
+Trójłap
+
+[szablony.b_trojlap.text]
+Kulawy wilk na trzech łapach, a ucieka szybciej niż ja na czterech. Kradnie kury na Polnej drodze. Poluje nocą, z kompanem.
+
+# rabbits - pisze: Marianna
+[szablony.rabbits.title]
+Zające w kapuście
+
+[szablony.rabbits.text]
+Zające zjadają mi kapustę, marchew i cierpliwość. Przegoń je na zawsze. Najlepiej do garnka.
+
+# boar - pisze: Marianna
+[szablony.boar.title]
+Dzik w ogrodach
+
+[szablony.boar.text]
+Dzik zrył mi grządki, płot i dobry humor. Zrób coś z nim, zanim zryje mi dom.
+
+# milk - pisze: Marianna
+[szablony.milk.title]
+Mleko dla kociąt
+
+[szablony.milk.text]
+Kotka sołtysa okociła się pod moim piecem. Sołtys udaje, że to nie jego kot. Kocięta nie udają - są głodne.
+
+# flax - pisze: Marianna
+[szablony.flax.title]
+Len dla prządki
+
+[szablony.flax.text]
+Kołowrotek stoi, a zima idzie. Przynieś len, uprzędę z niego nić, a z nici... zobaczymy.
+
+# wool - pisze: Marianna
+[szablony.wool.title]
+Wełna na skarpety
+
+[szablony.wool.text]
+Dziergam skarpety dla całej wsi. Wieś ma sto nóg, a ja jeden motek wełny. Przynieś wełnę.
+
+# cabbage - pisze: Marianna
+[szablony.cabbage.title]
+Kapusta do kiszenia
+
+[szablony.cabbage.text]
+Beczka czeka, sąsiadki patrzą. Kiszona kapusta sama się nie zakisi. Potrzebuję główek twardych jak głowa sołtysa.
+
+# b_czarny_ryj - pisze: Marianna
+[szablony.b_czarny_ryj.title]
+Czarny Ryj
+
+[szablony.b_czarny_ryj.text]
+Czarny jak smoła, ciężki jak wóz z sianem. Rozwalił trzy płoty i jeden most. Ryje na Leśnej drodze o świcie i o zmierzchu.
+
+# planks - pisze: Kazimierz
+[szablony.planks.title]
+Deski na nowy płot
+
+[szablony.planks.text]
+Stary płot przewróciła krowa. Nowy też przewróci, ale przynajmniej będzie nowy. Potrzebuję desek.
+
+# nails - pisze: Kazimierz
+[szablony.nails.title]
+Gwoździe na dach
+
+[szablony.nails.text]
+Dach stodoły trzyma się na słowo honoru. Honoru mam dużo, gwoździ mało.
+
+# shed_wood - pisze: Kazimierz
+[szablony.shed_wood.title]
+Drewno na nową szopę
+
+[szablony.shed_wood.text]
+Stawiam szopę. Szopa stawia opór. Przynieś drewna, zanim podda się któreś z nas.
+
+# carrots - pisze: Józek
+[szablony.carrots.title]
+Marchew dla kucyka
+
+[szablony.carrots.text]
+Kucyk sołtysa nie ruszy bez marchwi. Sołtys też nie. Przynieś marchew, to może obaj ruszą.
+
+# branches - pisze: Józek
+[szablony.branches.title]
+Chrust na ognisko
+
+[szablony.branches.text]
+Robimy z chłopakami wielkie ognisko. Mama mówi, że nie wolno. Dlatego chrust musi być szybko, zanim się dowie.
+
+# cones - pisze: Józek
+[szablony.cones.title]
+Szyszki na wojnę
+
+[szablony.cones.text]
+Chłopaki z drugiego końca wsi wypowiedzieli nam wojnę na szyszki. Potrzebuję amunicji. Dużo amunicji.
+
+# ======================================================================== Zleceniodawcy: name - pełne imię, short - podpis na kartce, role - zajęcie, line - zdanie o nich
+zleceniodawcy.borgar.name = Borgar Kowal
+zleceniodawcy.borgar.short = Borgar
+zleceniodawcy.borgar.role = karczmarz
+zleceniodawcy.borgar.line = Płaci uczciwie. Jak na karczmarza.
+zleceniodawcy.feliks.name = Feliks
+zleceniodawcy.feliks.short = Feliks, kamerdyner
+zleceniodawcy.feliks.role = kamerdyner dworu Zaleskich
+zleceniodawcy.feliks.line = Zapisuje wszystko. Nawet to, czego nie powiedziałeś.
+zleceniodawcy.melia.name = Melia Srebrogłosa
+zleceniodawcy.melia.short = Melia
+zleceniodawcy.melia.role = bardka
+zleceniodawcy.melia.line = Ma pieśń na każdą okazję i okazję na każdą pieśń.
+zleceniodawcy.grum.name = Grum Żelazna Pięść
+zleceniodawcy.grum.short = Grum
+zleceniodawcy.grum.role = najemnik
+zleceniodawcy.grum.line = Mówi mało, bije mocno, płaci od ręki.
+zleceniodawcy.ozzy.name = Dziadek Ozzy
+zleceniodawcy.ozzy.short = Ozzy
+zleceniodawcy.ozzy.role = stały bywalec
+zleceniodawcy.ozzy.line = Pamięta czasy, których nie było.
+zleceniodawcy.jagna.name = Babka Jagna
+zleceniodawcy.jagna.short = Jagna
+zleceniodawcy.jagna.role = zielarka
+zleceniodawcy.jagna.line = Na każdą dolegliwość ma ziółko, a na resztę - gorsze ziółko.
+zleceniodawcy.tadeusz.name = Tadeusz Skórka
+zleceniodawcy.tadeusz.short = T. Skórka
+zleceniodawcy.tadeusz.role = kuśnierz
+zleceniodawcy.tadeusz.line = Od futra się zaczyna i na futrze kończy.
+zleceniodawcy.halina.name = Halina
+zleceniodawcy.halina.short = Halina
+zleceniodawcy.halina.role = piekarzowa
+zleceniodawcy.halina.line = Rano chleb, wieczorem plotki. Jedno i drugie świeże.
+zleceniodawcy.bartek.name = Bartłomiej
+zleceniodawcy.bartek.short = sołtys Bartłomiej
+zleceniodawcy.bartek.role = sołtys
+zleceniodawcy.bartek.line = Wie wszystko najlepiej, zwłaszcza to, czego nie wie.
+zleceniodawcy.wit.name = Wit
+zleceniodawcy.wit.short = Wit
+zleceniodawcy.wit.role = garncarz
+zleceniodawcy.wit.line = Lepi garnki, a przy okazji i historie.
+zleceniodawcy.zdzich.name = Zdzisław
+zleceniodawcy.zdzich.short = Zdzisław
+zleceniodawcy.zdzich.role = kowal ze wsi
+zleceniodawcy.zdzich.line = Ręce jak kowadła, serce jak miech.
+zleceniodawcy.bogdan.name = Bogdan
+zleceniodawcy.bogdan.short = Bogdan, łowczy
+zleceniodawcy.bogdan.role = łowczy
+zleceniodawcy.bogdan.line = Tropi wszystko, co ma cztery nogi. Trzy też.
+zleceniodawcy.marianna.name = Wdowa Marianna
+zleceniodawcy.marianna.short = Marianna
+zleceniodawcy.marianna.role = gospodyni
+zleceniodawcy.marianna.line = Liczy każdy grosz. Dwa razy.
+zleceniodawcy.kazimierz.name = Kazimierz
+zleceniodawcy.kazimierz.short = Kazimierz
+zleceniodawcy.kazimierz.role = cieśla
+zleceniodawcy.kazimierz.line = Mierzy dwa razy, tnie raz, narzeka trzy razy.
+zleceniodawcy.jozek.name = Mały Józek
+zleceniodawcy.jozek.short = Józek
+zleceniodawcy.jozek.role = chłopak na posyłki
+zleceniodawcy.jozek.line = Biega szybciej niż plotki. Prawie.
+
+# ======================================================================== Zwierzęta: one / few / many - 1, 2-4, 5 i więcej (zając, zające, zajęcy)
+zwierzeta.rabbit.one = zając
+zwierzeta.rabbit.few = zające
+zwierzeta.rabbit.many = zajęcy
+zwierzeta.deer.one = jeleń
+zwierzeta.deer.few = jelenie
+zwierzeta.deer.many = jeleni
+zwierzeta.wolf.one = wilk
+zwierzeta.wolf.few = wilki
+zwierzeta.wolf.many = wilków
+zwierzeta.boar.one = dzik
+zwierzeta.boar.few = dziki
+zwierzeta.boar.many = dzików
+
+# ======================================================================== Miejsca polowań (numer mapy): nazwa, potem „gdzie” (na łące...)
+[miejsca.4]
+Łąka
+na łące
+
+[miejsca.8]
+Okolice Tawerny
+koło tawerny
+
+[miejsca.20]
+Podwórze dziadka
+na podwórzu dziadka
+
+[miejsca.21]
+Leśna droga
+na Leśnej drodze
+
+[miejsca.22]
+Polna droga
+na Polnej drodze
+
+[miejsca.23]
+Skraj lasu
+na Skraju lasu
+
+# ======================================================================== Listy gończe: name - imię zwierzęcia, hint - kiedy grasuje
+poszukiwani.szary_kiel.name = Szary Kieł
+poszukiwani.szary_kiel.hint = nocą
+poszukiwani.czarny_ryj.name = Czarny Ryj
+poszukiwani.czarny_ryj.hint = o świcie i o zmierzchu
+poszukiwani.trojlap.name = Trójłap
+poszukiwani.trojlap.hint = nocą
+
+# ======================================================================== Rodzaje pracy (napis u góry kartki)
+rodzaje.deliver = DOSTAWA
+rodzaje.craft = ZAMÓWIENIE
+rodzaje.gather = ZBIERACTWO
+rodzaje.hunt = POLOWANIE
+rodzaje.bounty = POSZUKIWANY
+rodzaje.story = OGŁOSZENIE
+
+# ======================================================================== Pierwsza wizyta: Borgar objaśnia tablicę (jedna linia = jedna strona)
+[samouczek]
+Tu ludzie z okolicy wieszają swoje prośby. Zerwiesz kartkę - bierzesz robotę. Płacą złotem, a dobra robota niesie się po wsi: im większa twoja sława w tawernie, tym lepiej płatne zlecenia.
+Najwyżej trzy naraz, bo się nie wyrobisz. Każde ma termin - nie zdążysz, cała wieś się dowie. Robotę oddajesz tutaj, przy tablicy. Co trzy dni wieszam nowe kartki.
+
+# ======================================================================== Sława w tawernie: progi (kartka zasad, tabliczka, dziennik)
+progi.0.name = Nowy w okolicy
+progi.1.name = Znajoma twarz
+progi.2.name = Swój chłop
+progi.3.name = Pewna ręka
+progi.4.name = Chluba tawerny
+
+# ======================================================================== Dziennik (J), zakładka „Zlecenia”: podpowiedź klawiszy
+dziennik.pomoc = OK: śledź na ekranie   ←/→: zakładka
+
+# ======================================================================== z kodu QuestBoard.js (kod.<funkcja>.<n>, w kolejności kodu)
+# dniWord
+kod.dniWord.0 = dzień
+# placeWhere
+kod.placeWhere.0 = na mapie {1}
+# fill
+kod.fill.0 = w okolicy
+# daysText
+kod.daysText.0 = dziś ostatni dzień
+kod.daysText.1 = po terminie
+# accept
+kod.accept.0 = Tego zlecenia już nie ma na tablicy.
+kod.accept.1 = Masz już {MAX_ACTIVE} zlecenia. Najpierw któreś oddaj albo porzuć.
+# turnIn
+kod.turnIn.0 = Zlecenie: {title}
+kod.turnIn.1 = " (od razu na poczet długu dziadka)"
+kod.turnIn.2 = Dla: {name} ({role}). Wykonane w dniu {3}.\nOddałem: {4}.\nZapłata: {gold} G{6}, {xp} dośw., sława +{rep}{9}.
+# fail
+kod.fail.0 = Zlecenie przepadło: {title}
+kod.fail.1 = Minął termin. Sława w tawernie -{loss}
+# onKill
+kod.onKill.0 = Zlecenie gotowe: {title}
+kod.onKill.1 = Oddaj je przy tablicy zleceń w tawernie.
+# glowna
+kod.glowna.0 = Na tablicy w tawernie wiszą nowe ogłoszenia
+kod.glowna.1 = Masz wszystko do zlecenia: {title}
+kod.glowna.2 = Oddaj je przy tablicy zleceń w tawernie.
+kod.glowna.3 = Dziś mija termin zlecenia: {title}
+kod.glowna.4 = Gotowe! Oddaj przy tablicy w tawernie.
+# spawnBounty
+kod.spawnBounty.0 = W pobliżu grasuje {name}!
+kod.spawnBounty.1 = POSZUKIWANY - zlecenie z tablicy w tawernie
+# trackLine
+kod.trackLine.0 = Gotowe! Oddaj przy tablicy w tawernie.
+# journalItems
+kod.journalItems.0 = Brak zleceń
+kod.journalItems.1 = "przepadło, dz. "
+kod.journalItems.2 = "porzucone, dz. "
+# journalOps
+kod.journalOps.0 = Tu zobaczysz zlecenia z tablicy w tawernie „Pod Złotym Kuflem”: co trzeba przynieść albo upolować, do kiedy i za ile. Tablica wisi w sieni tawerny.
+kod.journalOps.1 = {1}  ·  dzień {day}
+kod.journalOps.2 = Wykonane. Zapłata: {gold} G, {xp} dośw., sława +{rep}.
+kod.journalOps.3 = Termin minął. Sława {rep}.
+kod.journalOps.4 = Porzucone. Sława {rep}.
+kod.journalOps.5 = gotowe do oddania
+kod.journalOps.6 = do dnia {due} ({2})
+kod.journalOps.7 = Grasuje {1}, {hint}.
+kod.journalOps.8 = {gold} G  ·  {xp} dośw.  ·  sława +{rep}{4}
+kod.journalOps.9 = Śledzisz je w okienku celu. OK: przestań śledzić.
+kod.journalOps.10 = OK: śledź je w okienku celu na ekranie.
+kod.journalOps.11 = Oddajesz je przy tablicy zleceń w tawernie „Pod Złotym Kuflem”. {1}
+# legend
+kod.legend.0 = Sława {rep}/100  ·  {name}  ·  wykonane: {done}
+
+# ======================================================================== z kodu QuestBoard_Art.js (art.<funkcja>.<n>, w kolejności kodu)
+# drawCard
+art.drawCard.0 = martwy, najlepiej
+art.drawCard.1 = Nagroda: {gold} G
+art.drawCard.2 = DWÓR ZALESKICH
+# stampBitmap
+art.stampBitmap.0 = PRZYJĘTE
+art.stampBitmap.1 = PO TERMINIE
+# drawDetail
+art.drawDetail.0 = ZASADY TABLICY
+art.drawDetail.1 = Jak to działa
+art.drawDetail.2 = Zerwij kartkę - zlecenie jest twoje. Najwyżej {MAX_ACTIVE} naraz.
+art.drawDetail.3 = Każde ma termin w dniach od przyjęcia. Nie zdążysz - wieś się dowie, a sława spadnie.
+art.drawDetail.4 = Gotowe oddajesz tutaj: towar z plecaka, zapłata od ręki.
+art.drawDetail.5 = Co {REFRESH_DAYS} dni wieszam nowe kartki. Im większa sława, tym lepiej płacą.
+art.drawDetail.6 = — Borgar
+art.drawDetail.7 = Twoja sława: {name} ({rep}/100)
+art.drawDetail.8 = "Następny próg: {name} - {rep} sławy, od dnia {day}; zlecenia do {4} G. "
+art.drawDetail.9 = "Wyżej już się nie da - cała okolica o tobie mówi. "
+art.drawDetail.10 = {1}Wykonane: {done}, po terminie: {failed}, porzucone: {abandoned}, zarobione: {gold} G.
+art.drawDetail.11 = "PILNE · "
+art.drawDetail.12 = DWÓR ZALESKICH
+art.drawDetail.13 = na tablicy
+art.drawDetail.14 = gotowe do oddania
+art.drawDetail.15 = przyjęte · {1}
+art.drawDetail.16 = wykonane w dniu {doneDay}
+art.drawDetail.17 = po terminie
+art.drawDetail.18 = Większy i silniejszy od innych, grasuje {hint}.
+art.drawDetail.19 = {xp} dośw.
+art.drawDetail.20 = sława +{rep}
+art.drawDetail.21 = kość do gry
+art.drawDetail.22 = {days} {2} od przyjęcia
+art.drawDetail.23 = do dnia {due} · {2}
+art.drawDetail.24 = oddane w dniu {doneDay}
+art.drawDetail.25 = termin minął w dniu {due}
+art.drawDetail.26 = Feliks może zaliczyć zapłatę od razu na poczet długu dziadka.
+
+# ======================================================================== z kodu QuestBoard_Scene.js (scena.<funkcja>.<n>, w kolejności kodu)
+# choiceList
+scena.choiceList.0 = Tak, porzuć (sława -{1})
+scena.choiceList.1 = Przyjmij zlecenie
+scena.choiceList.2 = Oddaj na dług
+scena.choiceList.3 = Oddaj zlecenie
+scena.choiceList.4 = Nie śledź
+scena.choiceList.5 = Śledź
+scena.choiceList.6 = Porzuć
+# drawHints
+scena.drawHints.0 = potwierdź
+scena.drawHints.1 = wróć
+scena.drawHints.2 = wybierz kartkę
+scena.drawHints.3 = oddaj / opcje
+scena.drawHints.4 = otwórz
+scena.drawHints.5 = wyjdź
+scena.drawHints.6 = za {k} dni
+scena.drawHints.7 = Nowe ogłoszenia: {1}  ·  zleceń w toku: {length}/{MAX_ACTIVE}
+# decide
+scena.decide.0 = Masz już {MAX_ACTIVE} zlecenia. Oddaj albo porzuć któreś.
+scena.decide.1 = Brakuje: {1} {2}/{n}
+scena.decide.2 = Jeszcze nie gotowe.
+scena.decide.3 = Przyjęte. Postęp widać w dzienniku (J); „Śledź” pokaże je na ekranie.
+scena.decide.4 = Śledzisz to zlecenie w okienku celu na ekranie.
+scena.decide.5 = Już go nie śledzisz.
+scena.decide.6 = Porzucone. Sława w tawernie -{loss}
+# updateAnim
+scena.updateAnim.0 = +{xp} dośw.
+scena.updateAnim.1 = Nowa sława: {tierUp}!
+scena.updateAnim.2 = Nowa kość: {1}
+# drawTutorial
+scena.drawTutorial.0 = {1}/{length}   O - dalej

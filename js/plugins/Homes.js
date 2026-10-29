@@ -28,6 +28,7 @@
  * @plugindesc Ziemia: działka dziadka po stracie (ludzie Lorda, znak, dni na wyniesienie dobytku, straż), Chata pod lasem u sołtysa i Spalona zagroda Ługów do odbudowy (zadanie D21). v1.1.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
  * @orderAfter TawernaCore
  * @orderAfter Farming
  * @orderAfter Livestock
@@ -917,41 +918,44 @@
     }, { owner: PLUGIN });
 
     // ------------------------------------------------------------------
-    // The quest D21 "Spalona zagroda" (TownQuests' engine; it lives here with the farm it is about): the ruin or the cross ->
-    // Józek Łata's story -> Marta -> the sołtys (350 G: to the Lord, or by the old law through Marta) -> the ruin cleared -> the
-    // toy back to Marta -> the house rebuilt
+    // The quest D21 "Spalona zagroda" (it lives here with the farm it is about) - a thread of the engine Watki.js (2026-10-28): the
+    // ruin or the cross -> Józek Łata's story -> Marta -> the sołtys (350 G: to the Lord, or by the old law through Marta) -> the
+    // ruin cleared -> the toy back to Marta -> the house rebuilt. Its words: js/teksty/domy.txt, zadania.D21 (the engine merges
+    // them); this plugin stands under TownQuests: the engine puts the quest in at once (TownQuests.QUESTS)
     // ------------------------------------------------------------------
-    const D21 = {
-        id: "D21", kind: "D", giver: null, icon: 61, autoStart: "d21Start",
-        steps: [
-            { type: "talk", to: "szmaciarz", hours: [7, 20] },
-            { type: "talk", to: "praczka", hours: [6, 21] },
-            { type: "talk", to: "soltys", hours: [8, 16], gold: num(params.priceFarm, 350), vars: "d21Vars",
-                choice: { 
-                    options: [
-                        { flag: "d21Lord", fx: "d21Deed", reward: { opinion: -2 } },
-                        { flag: "d21Marta", fx: "d21Deed", reward: { opinion: 5 } }
-                    ] } },
-            { type: "custom", check: "d21Clear" },
-            { type: "bring", to: "praczka", need: [["v:konik", 1]], hours: [6, 21], reward: { opinion: 2 } },
-            { type: "custom", check: "d21Built" }
-        ],
-        reward: { xp: 200 }
-    };
-    Watki.scal(D21, "domy", "zadania.D21");   // (its words: js/teksty/domy.txt, zadania.D21)
-    (function registerD21() {
-        const Q = window.TownQuests, D = window.TownQuestsData;
-        if (!Q || !Q.QUESTS || !Q.FX) return;
+    const watek = Watki.watek({
+        id: "domy", wtyczka: "Homes", teksty: "domy",
+        zadania: {
+            D21: { kind: "D", giver: null, icon: 61, start: "zagrodaWidziana",
+                kroki: [
+                    { nazwa: "d21Jozek", type: "talk", to: "szmaciarz", hours: [7, 20] },
+                    { nazwa: "d21Marta", type: "talk", to: "praczka", hours: [6, 21] },
+                    // ({price} of the sołtys's step: TownQuests fills it; the deed - either choice - is the step's pick)
+                    { nazwa: "d21Soltys", type: "talk", to: "soltys", hours: [8, 16], gold: num(params.priceFarm, 350), zmienne: "cenaZagrody",
+                        haki: { pick: "akt" },
+                        choice: {
+                            options: [
+                                { flag: "d21Lord", fx: "d21Soltys", reward: { opinion: -2 } },
+                                { flag: "d21Marta", fx: "d21Soltys", reward: { opinion: 5 } }
+                            ] } },
+                    { nazwa: "d21Clear", gotowe: { hak: "etapZagrody", args: [1] } },
+                    { nazwa: "d21Konik", type: "bring", to: "praczka", need: [["v:konik", 1]], hours: [6, 21], reward: { opinion: 2 } },
+                    { nazwa: "d21Built", gotowe: { hak: "etapZagrody", args: [5] } }
+                ],
+                reward: { xp: 200 } }
+        }
+    });
+    watek.haki({
+        zagrodaWidziana: () => !!Z().seen,
+        etapZagrody: (ctx, n) => stage() >= n,
+        akt: (ctx, q, op) => grantLand("zagroda", op && op.flag === "d21Marta" ? "marta" : "lord"),
+        cenaZagrody: () => ({ price: HOUSES.zagroda.price })
+    });
+    const D21 = watek.Q.D21;
+    (function registerKonik() {
+        const D = window.TownQuestsData;
         if (D && D.VITEMS && !D.VITEMS.konik) Object.defineProperty(D.VITEMS, "konik", { enumerable: true,
             value: { get name() { return WORDS.konik; }, get icon() { return window.$dataItems && $dataItems[ITEM.wood] ? $dataItems[ITEM.wood].iconIndex : 0; } } });
-        Object.assign(Q.FX, {
-            d21Start: () => !!Z().seen,
-            d21Clear: { check: () => stage() >= 1 },
-            d21Built: { check: () => stage() >= 5 },
-            d21Deed: { pick: (q, op) => grantLand("zagroda", op && op.flag === "d21Marta" ? "marta" : "lord") },
-            d21Vars: { vars: () => ({ price: HOUSES.zagroda.price }) }   // ({price} of the sołtys's step: TownQuests fills it)
-        });
-        if (!Q.Q.D21) { Q.QUESTS.push(D21); Q.Q.D21 = D21; }
     })();
 
     window.Homes = T.register(PLUGIN, {

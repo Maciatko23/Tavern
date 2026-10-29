@@ -89,7 +89,7 @@
     Input.keyMapper[74] = "journal";   // J
 
     const dataItem = id => $dataItems[id];
-    const farmData = () => ($gameSystem && $gameSystem._farm) || { plots: {}, buildings: {} };
+    const farmData = () => ($gameSystem && T.state("farm")) || { plots: {}, buildings: {} };
     const Farm = () => window.Farming || null;
     const iconOfItem = id => (dataItem(id) || {}).iconIndex || 0;
     const countOf = id => (dataItem(id) ? $gameParty.numItems(dataItem(id)) : 0);
@@ -143,7 +143,7 @@
             text: "Suche gałęzie (brązowe patyki) leżą na trawie. Podnosisz je przyciskiem akcji, tak jak kamienie. Zrobisz z nich młotek, warsztat i pierwsze narzędzia." },
         { id: "flax", ch: 0, title: "Zbierz len", item: 92, after: [], done: () => has(92),
             text: "Len rośnie na łące (niebieskie kwiatki, od wiosny do jesieni). Podnosisz go przyciskiem akcji. Wiążesz nim kamień z gałęzią, a z czterech sztuk skręcisz linę." },
-        { id: "drink", ch: 0, title: "Napij się wody", item: 129, after: [], done: () => ((($gameSystem._needs || {}).drinks) || 0) > 0,
+        { id: "drink", ch: 0, title: "Napij się wody", item: 129, after: [], done: () => (T.state("needs").drinks || 0) > 0,
             text: "Pod ikoną wytrzymałości są dwa paski: sytość i nawodnienie. Gdy spadają, wszystko kosztuje więcej sił. Stań przed stawem albo studnią i wybierz „Napij się”. W deszczu na dworze nawodnienie rośnie samo." },
         { id: "hammer", ch: 0, title: "Zrób młotek", item: 89, recipe: ["hand", "hammer"], after: ["stone", "branches", "flax"], done: () => has(89),
             text: "Bez młotka nie postawisz żadnego budynku. Stań przed trawą lub oczyszczoną ziemią, wybierz „Wytwórz...”, a potem „Zrób młotek”." },
@@ -168,7 +168,7 @@
             text: "Kilof robisz w warsztacie z drewna, gałęzi i kamieni. Rozbija skały i żyły rudy." },
         { id: "skin", ch: 4, title: "Zrób bukłak", item: 129, recipe: ["hand", "waterskin"], after: ["tannery"], done: () => has(129),
             text: "Bukłak z wyprawionej skóry (surową skórę z pułapki albo polowania wyprawisz w garbarni) mieści 4 łyki. Napełniasz go przy wodzie, a pijesz klawiszem G. Bez niego daleko od stawu szybko zaschnie ci w gardle." },
-        { id: "repair", ch: 1, title: "Napraw narzędzie", item: 89, after: ["axe"], done: () => ((($gameSystem._wear || {}).repaired) || 0) > 0,
+        { id: "repair", ch: 1, title: "Napraw narzędzie", item: 89, after: ["axe"], done: () => (T.state("wear").repaired || 0) > 0,
             text: "Narzędzia się zużywają: stan widać przy nich w plecaku, a gdy zostaje mało, nad postacią pojawia się dymek. W warsztacie jest „Napraw: ...” dla każdego nadwerężonego narzędzia. Złamane trzeba zrobić od nowa." },
         { id: "chest", ch: 1, title: "Postaw skrzynię", item: 80, build: "chest_s", after: ["planks"], done: () => isBuilt("chest_s") || isBuilt("chest_l"),
             text: "W skrzyni odłożysz nadmiar surowców, żeby nie dźwigać wszystkiego. Otwierasz ją przyciskiem akcji." },
@@ -249,23 +249,23 @@
             text: "Wędzone mięso i ryba to najbardziej sycące jedzenie w grze." },
         { id: "sling", ch: 4, title: "Zrób procę", item: 125, recipe: ["workbench", "sling"], after: ["rope", "wood"], done: () => hasAny([125, 126]),
             text: "Proca (albo łuk ze strzałami) pozwala polować na zające i jelenie. Strzelasz w trybie walki (Tab) klawiszem O, a amunicją do procy są kamienie." },
-        { id: "hunt", ch: 4, title: "Upoluj zwierzynę", item: 101, after: ["sling", "knife"], done: () => { const k = (($gameSystem._hunt || {}).kills) || {}; return (k.rabbit || 0) + (k.deer || 0) > 0; },
+        { id: "hunt", ch: 4, title: "Upoluj zwierzynę", item: 101, after: ["sling", "knife"], done: () => { const k = T.state("hunt").kills || {}; return (k.rabbit || 0) + (k.deer || 0) > 0; },
             text: "Zające pasą się na łące w ciągu dnia i uciekają, gdy podejdziesz. Włącz tryb walki (Tab) i strzel do nich z daleka klawiszem O: proca kręci się nad głową i wyrzuca kamień, łuk naciąga cięciwę i puszcza strzałę. Zabite zwierzę leży na ziemi: podejdź z nożem i naciśnij przycisk akcji - mięso, skóra i ścięgna." },
         { id: "spear", ch: 4, title: "Zrób oszczep", item: 154, recipe: ["workbench", "spear"], after: ["sling"], done: () => has(154),
             text: "Oszczep to broń do walki wręcz z najdłuższym zasięgiem: w trybie walki (Tab) klawisz O pchnie grotem zwierzę ponad 2 pola przed tobą, kolejne O to szybka seria, a przytrzymany O - mocne pchnięcie. Przyda się na dzika, który rano i wieczorem ryje w lesie i szarżuje, zamiast uciekać." },
         { id: "shield", ch: 4, title: "Zrób drewnianą tarczę", item: 155, recipe: ["workbench", "shield"], after: ["spear"], done: () => has(155),
             text: "Z tarczą w torbie w trybie walki (Tab) klawisz P zasłania cię przed ciosem: przyjmuje trzy czwarte obrażeń. Uniesiona tuż przed ciosem odbija atak, a wróg się zatacza - wtedy uderz. Każdy przyjęty cios ją zużywa; naprawisz ją w warsztacie." },
-        { id: "boar", ch: 4, title: "Upoluj dzika", item: 101, after: ["spear"], done: () => ((($gameSystem._hunt || {}).kills) || {}).boar > 0,
+        { id: "boar", ch: 4, title: "Upoluj dzika", item: 101, after: ["spear"], done: () => (T.state("hunt").kills || {}).boar > 0,
             text: "Dzik najpierw ostrzega (staje, prycha, \"!\"), potem szarżuje, a z bliska biegnie w długiej prostej linii. Przetocz się Spacją w bok (albo zejdź mu z drogi): przebiegnie dalej, stanie zziajany - wtedy bij. Szarży nie zatrzyma ani tarcza, ani parowanie (dzik błyska wtedy biało-złoto) - tylko przewrót w bok. Jeśli cię dopadnie, zrani cię - opatrunek z krwawnika (\"Wytwórz...\") zatamuje krew." },
-        { id: "wolves", ch: 4, title: "Odeprzyj wilki", item: 101, after: ["shield"], done: () => ((($gameSystem._hunt || {}).kills) || {}).wolf > 0,
+        { id: "wolves", ch: 4, title: "Odeprzyj wilki", item: 101, after: ["shield"], done: () => (T.state("hunt").kills || {}).wolf > 0,
             text: "Nocą (od 20 do 5) na łąkach i w lesie krążą watahy wilków. Otaczają cię i atakują po jednym: wilk kuca i szczeka (\"!\"), a potem skacze. Przetocz się Spacją albo odbij go klawiszem P (tryb walki), a gdy stoi po skoku - uderz. Zabij przewodnika (największy), a reszta ucieknie." },
         // (stage 2 of the fight, 2026-10-05: the leather jacket from the tannery, and the bear - lived through: it went home, ran off or died)
         { id: "jacket", ch: 4, title: "Uszyj skórzaną kurtkę", item: 171, recipe: ["tannery", "jacket"], after: ["tannery"], done: () => has(171),
             text: "W garbarni z trzech wyprawionych skór, dwóch ścięgien i liny uszyjesz skórzaną kurtkę. Wystarczy mieć ją w torbie: każdy cios, który do ciebie dojdzie, jest o 20% słabszy. Zużywa się od ciosów - naprawisz ją w warsztacie. Widać ją w menu P → Ekwipunek." },
         { id: "bear", ch: 4, title: "Przeżyj spotkanie z niedźwiedziem", item: 170, after: ["wolves"],
-            done: () => { const h = $gameSystem._hunt || {}; return ((h.bears || {}).survived || 0) > 0 || ((h.kills || {}).bear || 0) > 0; },
+            done: () => { const h = T.state("hunt"); return ((h.bears || {}).survived || 0) > 0 || ((h.kills || {}).bear || 0) > 0; },
             text: "Niedźwiedź czasem wychodzi z lasu do Kruczego Jaru, na łąki i leśne drogi. Gdy cię zobaczy, staje na tylnych łapach i ryczy: cofnij się wtedy, a da ci spokój. Jeśli podejdziesz albo go uderzysz, ruszy na ciebie. Jego łapy (\"!\" i cios) ani przygniecenia (staje dęba i skacze) nie zatrzyma tarcza ani parowanie - tylko przewrót (Spacja) albo krok w bok. Po każdym ataku stoi chwilę: wtedy bij. Zatacza się tylko od ciężkiego ciosu albo od ataku z ukrycia. Raz rozjuszony walczy do końca, ale daleko za tobą nie pójdzie." },
-        { id: "plant", ch: 4, title: "Posadź sosnę", item: 148, after: ["axe"], done: () => Object.values((($gameSystem._forest || {}).maps) || {}).some(list => list.length > 0),
+        { id: "plant", ch: 4, title: "Posadź sosnę", item: 148, after: ["axe"], done: () => Object.values(T.state("forest").maps || {}).some(list => list.length > 0),
             text: "Pod sosnami leżą szyszki. W \"Wytwórz...\" wyłuskasz z nich nasiona, a w menu wolnej ziemi posadzisz sosnę. Przez 8 dni rośnie w pełne drzewo - tak odnowisz wycięty las." },
         { id: "pantry", ch: 4, title: "Zbuduj spiżarnię", item: 99, build: "pantry", after: ["planks", "meat"], done: () => isBuilt("pantry"),
             text: "Surowe mięso i ryby psują się w ciągu kilku dni (widać to w opisie). W spiżarni jedzenie starzeje się pięć razy wolniej. Zepsute jedzenie wrzucisz do kompostownika." },
@@ -654,42 +654,15 @@
         panelFill: UI.fill || "rgba(11,12,15,0.9)",
         trackerLabel: UI.accent || "#ffd23f",
         trackerTitle: UI.text || "#eceef0",
-        trackerBody: "#a9afb8",
-        markDone: "#7ddc6a",
-        markReady: UI.accent || "#ffd23f",
-        markPin: "#ffe27a",
-        markBorderLocked: "#3a3e46",
-        markBorderNormal: "#6b717a",
-        markBoxFill: "rgba(11,12,15,0.9)"
+        trackerBody: "#a9afb8"
     };
 
-    // check boxes and markers drawn straight on the contents of a list row
-    function drawMark(win, x, y, state) {
-        const ctx = win.contents.context, s = 20, ty = y + Math.floor((win.lineHeight() - s) / 2);
-        ctx.save();
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = state === "locked" ? COLORS.markBorderLocked : COLORS.markBorderNormal;
-        ctx.fillStyle = COLORS.markBoxFill;
-        ctx.fillRect(x, ty, s, s);
-        ctx.strokeRect(x + 1, ty + 1, s - 2, s - 2);
-        if (state === "done") {
-            ctx.strokeStyle = COLORS.markDone;
-            ctx.lineWidth = 3;
-            ctx.beginPath(); ctx.moveTo(x + 4, ty + 10); ctx.lineTo(x + 8.5, ty + 15); ctx.lineTo(x + 16.5, ty + 5); ctx.stroke();
-        } else if (state === "ready" || state === "pin") {
-            ctx.fillStyle = state === "pin" ? COLORS.markPin : COLORS.markReady;
-            ctx.beginPath(); ctx.moveTo(x + 10, ty + 4); ctx.lineTo(x + 16, ty + 10); ctx.lineTo(x + 10, ty + 16); ctx.lineTo(x + 4, ty + 10); ctx.closePath(); ctx.fill();
-        }
-        ctx.restore();
-        win.contents._baseTexture.update();
-    }
-
     // ------------------------------------------------------------------
-    // The graphite look ("Grafit i miedź", docs/ui_pomysly2/pomysl_3_grafit_dziennik.png): the detail's head - the icon on a tile, the
-    // chapter in spaced copper small capitals, the title bold -; the headings as small capitals; a goal's direction (CleanHUD_Compass)
-    // and its chapter's progress; round marks in the list; the tabs underlined in copper; the keys in the foot. The classic look as above.
+    // The look of the journal's pages (the game's one look, 2026-10-28 - UITheme.js's palette; the shapes of
+    // docs/ui_pomysly2/pomysl_3_grafit_dziennik.png): the detail's head - the icon on a tile, the chapter in spaced yellow small
+    // capitals, the title bold -; the headings as small capitals; a goal's direction (CleanHUD_Compass) and its chapter's progress;
+    // round marks in the list; the tabs underlined in yellow; the keys in the foot
     // ------------------------------------------------------------------
-    const isGrafit = () => !!(window.UIStyle && UIStyle.grafit && UIStyle.grafit());
     const CHu = () => T.api("CleanHUD");
     const DIRS = ["na północ", "na północny wschód", "na wschód", "na południowy wschód", "na południe", "na południowy zachód", "na zachód", "na północny zachód"];
     // "Tawerna · 151 kroków na wschód" (the compass's way: to the exit when the goal is on another map), "" when unknown
@@ -707,10 +680,10 @@
             return name + " · " + n + " " + (CHu() ? CHu().pl(n, "krok", "kroki", "kroków") : "kroków") + " " + DIRS[Math.round(deg / 45) % 8];
         } catch (e) { return ""; }
     }
-    // the graphite ops: the head, the small-capital headings, plain text in the regular face, a progress bar
+    // the page's ops: the head, the small-capital headings, plain text in the regular face, a progress bar
     function iconTile(win, icon, y) {
         const c = win.contents, set = ImageManager.loadSystem("IconSet"), pw = ImageManager.iconWidth, ph = ImageManager.iconHeight;
-        UIStyle.panel(c.context, 0, y, 64, 64, { cut: 5, fill: "rgba(34,36,40,1)" });
+        UIStyle.panel(c.context, 0, y, 64, 64, { cut: 5, fill: UIStyle.cell });
         c.context.imageSmoothingEnabled = false;
         c.blt(set, (icon % 16) * pw, Math.floor(icon / 16) * ph, pw, ph, 8, y + 8, 48, 48);
     }
@@ -759,7 +732,7 @@
             }
         }
     });
-    // the ops of a detail in the graphite look: the title + the line under it as one head, no rule, the graphite kinds
+    // the ops of a detail: the title + the line under it as one head, no rule, the page's kinds
     function grafitOps(ops) {
         const out = [];
         for (let i = 0; i < ops.length; i++) {
@@ -776,12 +749,12 @@
         }
         return out;
     }
-    // a list row: a round mark (copper when done / ready, a small copper diamond when pinned), the icon, the name (dim when done)
+    // a list row: a round mark (yellow when done / ready, a small yellow diamond when pinned), the icon, the name (dim when done)
     function drawItemGrafit(win, index) {
         const it = win._items[index], rect = win.itemLineRect(index), U = UIStyle, C = CHu(), ctx = win.contents.context, cy = rect.y + rect.height / 2;
         ctx.save();
         ctx.lineWidth = 1.2;
-        ctx.strokeStyle = it.mark === "locked" ? "#3a3c42" : it.mark === "todo" ? U.muted : U.accent;
+        ctx.strokeStyle = it.mark === "locked" ? U.line : it.mark === "todo" ? U.muted : U.accent;
         ctx.beginPath(); ctx.arc(rect.x + 9, cy, 7, 0, Math.PI * 2); ctx.stroke();
         ctx.fillStyle = U.accent;
         if (it.mark === "done" || it.mark === "ready") { ctx.beginPath(); ctx.arc(rect.x + 9, cy, 4, 0, Math.PI * 2); ctx.fill(); }
@@ -796,14 +769,14 @@
             C.textOut(win.contents, it.right, right - w - 4, rect.y, w + 6, rect.height, "left", { size: 15, face: "regular", color: U.muted, plain: true });
             right -= w + 12;
         }
-        if (C) C.textOut(win.contents, C.fit(it.label, 18, Math.max(10, right - x)), x, rect.y, Math.max(0, right - x) + 4, rect.height, "left", { size: 18, color: it.dim ? "#5e5a54" : U.text, plain: true });
+        if (C) C.textOut(win.contents, C.fit(it.label, 18, Math.max(10, right - x)), x, rect.y, Math.max(0, right - x) + 4, rect.height, "left", { size: 18, color: it.dim ? U.dim : U.text, plain: true });
         else win.drawText(it.label, x, rect.y, Math.max(0, right - x), "left");
     }
-    // a group's heading: its name and count (copper in the graphite look, the system colour in the classic one), a thin line after
+    // a group's heading: its name and count in yellow (the system colour without CleanHUD.js), a thin line after
     function drawHead(win, index) {
         const it = win._items[index], rect = win.itemLineRect(index), C = CHu(), text = it.label + (it.count !== undefined ? "  " + it.count : "");
         let x2;
-        if (isGrafit() && C) {
+        if (C) {
             const w = C.measure(text, 16);
             C.textOut(win.contents, text, rect.x + 2, rect.y + 4, w + 6, rect.height, "left", { size: 16, color: UIStyle.accent, plain: true });
             x2 = rect.x + w + 14;
@@ -817,7 +790,7 @@
         }
         if (x2 < rect.x + rect.width) win.contents.fillRect(x2, rect.y + Math.round(rect.height / 2) + 3, rect.x + rect.width - x2, 1, "rgba(255,255,255,0.18)");
     }
-    // the tabs: text, the chosen one bright with a copper line under it (no cursor)
+    // the tabs: text, the chosen one bright with a yellow line under it (no cursor)
     function grafitTabs(w) {
         w.tabWidth = i => (CHu() ? CHu().measure(w.commandName(i), 17) + 4 : 90);
         w.itemRect = function(index) {
@@ -836,7 +809,7 @@
         w.select = function(i) { const was = this.index(); select.call(this, i); if (was !== i && this.contents) this.refresh(); };
         w.refresh();
     }
-    // the foot: the keys as small caps, the tab's count in copper on the right
+    // the foot: the keys as small caps, the tab's count in yellow on the right
     function legendGrafit(scene) {
         const w = scene._legend, C = CHu(), def = TAB_DEFS[scene._tab], c = w.contents;
         c.clear();
@@ -848,7 +821,7 @@
         const y = 4;
         for (const [k, lab] of pairs) {
             const kw = Math.max(24, C.measure(k, 15) + 14);
-            UIStyle.panel(c.context, x, y, kw, 24, { cut: 2, fill: "rgba(34,36,40,1)" });
+            UIStyle.panel(c.context, x, y, kw, 24, { cut: 2, fill: UIStyle.cell });
             C.textOut(c, k, x, y, kw, 24, "center", { size: 15, plain: true });
             C.textOut(c, lab, x + kw + 7, y, C.measure(lab, 15) + 8, 24, "left", { size: 15, color: UIStyle.muted, plain: true });
             x += kw + C.measure(lab, 15) + 26;
@@ -1074,7 +1047,7 @@
             const lines = sourceLines(g.item);
             if (lines.length) ops.push({ k: "gap", n: 8 }, { k: "h", text: "Skąd wziąć" }, ...lines.map(t => ({ k: "muted", text: t })));
         }
-        if (isGrafit() && done === undefined) {   // (the graphite look: where it is - the compass's way - and how far the chapter is)
+        if (done === undefined) {   // (where it is - the compass's way - and how far the chapter is)
             const dir = goalDirection(g);
             if (dir) ops.push({ k: "gap", n: 6 }, { k: "h", text: "Kierunek" }, { k: "p", text: dir });
             const inCh = GOALS.filter(x => x.ch === g.ch), ok = inCh.filter(goalDone).length;
@@ -1220,24 +1193,7 @@
     };
     Window_JournalList.prototype.drawItem = function(index) {
         if (isHead(this, index)) return drawHead(this, index);
-        if (isGrafit()) return drawItemGrafit(this, index);
-        const it = this._items[index], rect = this.itemLineRect(index);
-        this.changePaintOpacity(!it.dim);
-        drawMark(this, rect.x, rect.y, it.mark);
-        let x = rect.x + 30;
-        if (it.icon) { this.drawIcon(it.icon, x, rect.y + 2); x += ImageManager.iconWidth + 6; }
-        let right = rect.x + rect.width;
-        if (it.right) {
-            this.contents.fontSize = 20;
-            const w = this.textWidth(it.right);
-            this.changeTextColor(ColorManager.textColor(7));
-            this.drawText(it.right, right - w, rect.y + 1, w, "left");
-            this.resetFontSettings();
-            right -= w + 10;
-        }
-        this.resetTextColor();
-        this.drawText(it.label, x, rect.y, Math.max(0, right - x), "left");
-        this.changePaintOpacity(true);
+        drawItemGrafit(this, index);
     };
     Window_JournalList.prototype.updateHelp = function() {
         if (this._onSelect) this._onSelect(this.currentItem());
@@ -1263,7 +1219,7 @@
         return Math.max(this.innerHeight, this._contentH || 0);
     };
     Window_JournalDetail.prototype.setDetail = function(detail) {
-        this._ops = isGrafit() ? grafitOps(detail.ops || []) : detail.ops || [];
+        this._ops = grafitOps(detail.ops || []);
         this._imageName = detail.image || null;
         this._contents_token = null;
         this.redraw();
@@ -1386,7 +1342,7 @@
         this._legend = new Window_Base(R.legend);
         this.addWindow(this._legend);
         this._tab = Math.max(0, Math.min(TABS.length - 1, this._startTab || 0));
-        if (isGrafit()) grafitTabs(this._tabs);
+        grafitTabs(this._tabs);
         this.showTab();
     };
     Scene_Journal.prototype.showTab = function() {
@@ -1401,7 +1357,7 @@
         this.showTab();
     };
     Scene_Journal.prototype.refreshLegend = function() {
-        if (isGrafit() && legendGrafit(this)) return;
+        if (legendGrafit(this)) return;
         const w = this._legend;
         w.contents.clear();
         w.resetFontSettings();
@@ -1822,13 +1778,15 @@
     // under the title, needs: what it asks for with the counts, list: the people / places of the step, each done or not - CleanHUD.js
     // draws them); the first that gives one wins. opts { owner, pinned(), unpin() }: a source the
     // player pins things in by hand (a contract, a place) - pinning anything else lets it go (unpinOthers)
-    const trackerSources = [];
+    // opts.fallback: a source asked only when no other one gives a line, before the journal's own goal (Watki.js: a thread that leads
+    // by itself - Story's chapter 1 - in the place its goals had at the head of the list, 2026-10-28)
+    const trackerSources = [], trackerFallbacks = [];
     function addTrackerSource(fn, opts) {
-        if (typeof fn === "function") trackerSources.push(fn);
+        if (typeof fn === "function") (opts && opts.fallback ? trackerFallbacks : trackerSources).push(fn);
         if (opts && opts.owner && typeof opts.unpin === "function") pinners.push({ owner: opts.owner, pinned: opts.pinned || null, unpin: opts.unpin });
     }
-    function trackedExtra() {
-        for (const fn of trackerSources) {
+    function trackedExtra(list) {
+        for (const fn of list || trackerSources) {
             let r = null;
             try { r = fn(); } catch (e) { r = null; }
             if (r) return r;
@@ -1844,7 +1802,7 @@
         if (!SHOW_TRACKER || !$gameSystem) return null;
         const pg = pinnedGoal();
         if (pg) return goalTracked(pg);
-        const extra = trackedExtra();
+        const extra = trackedExtra() || trackedExtra(trackerFallbacks);
         if (extra) return Object.assign({ source: "extra", icon: 0, id: null }, extra);
         const g = currentGoal();
         return g ? goalTracked(g) : null;
@@ -1874,7 +1832,7 @@
             this.x = hud.x + hud._gauge.x;
             this.y = hud.y + (hud.rowY ? hud.rowY(5) : hud._gauge.y + 105) + 6;   // under the five HUD rows
         }
-        const extra = SHOW_TRACKER && $gameSystem && !pinnedGoal() ? trackedExtra() : null;
+        const extra = SHOW_TRACKER && $gameSystem && !pinnedGoal() ? trackedExtra() || trackedExtra(trackerFallbacks) : null;
         const g = extra ? null : SHOW_TRACKER && $gameSystem ? currentGoal() : null;
         this.visible = !!(g || extra) && !!hud && !!hud._gauge && hud._gauge.visible && !$gameMessage.isBusy();
         if (extra) {

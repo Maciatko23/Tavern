@@ -198,5 +198,19 @@
     // ---------------------------------------------------------------------------------------------------------------------------
     const TEXT = Watki.teksty("akt3");
 
+    // ---------------------------------------------------------------------------------------------------------------------------
+    // F9 (Debug.js's first tab "Zdarzenia" - the thread engine Watki.js, docs/WATKI_DANE.md): the strike armed (the warnings, the
+    // strike the next night), the strike now, its state cleared. The rows' words: js/teksty/akt3.txt (f9Arm, f9Start, f9Reset); what
+    // their OK does - Act3.js's hooks (f9Uzbroj, f9Teraz, f9Wyczysc)
+    // ---------------------------------------------------------------------------------------------------------------------------
+    Watki.watek({
+        id: "akt3", wtyczka: "Act3", teksty: "akt3",
+        f9: { zakladka: "zdarzenia", wiersze: [
+            { co: "uzbroj", rodzaj: "act3_arm", etykieta: "f9Arm", ikona: 76, ok: "f9Uzbroj" },
+            { co: "teraz", rodzaj: "act3_start", etykieta: "f9Start", ikona: 76, ok: "f9Teraz" },
+            { co: "wyczysc", rodzaj: "act3_reset", etykieta: "f9Reset", ikona: 76, ok: "f9Wyczysc" }
+        ] }
+    });
+
     window.Act3Data = { TRIGGER, TOWN, TAVERN, SPOTS, IDS, WAVES, CAPTAIN, LEVEL, PACE, DOORS, OUTCOME, POWER, REWARD, SCARS, DEFENDERS, AMBROZY, HELP, TEXT };
 })();

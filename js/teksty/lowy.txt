@@ -69,11 +69,9 @@ woke = Obudziłeś niedźwiedzia!
 wokeSub = Jest wściekły: przez minutę uderza mocniej.
 empty = Gawra jest pusta. Wiosną może przyjdzie nowy niedźwiedź.
 nobody = W gawrze nikogo nie ma. Gospodarz chodzi gdzieś po lesie.
-claw = Pazur niedźwiedzia
 muddy = Jesteś ubłocony
 muddySub = Pachniesz jak las: zwierzęta wyczują cię później (2 h).
 muddyNoDrink = Błotem się nie napijesz.
-tusk = Kieł odyńca
 lickAsk = Wydrążony pieniek. W środku biały nalot po soli.
 lickPut = Połóż bryłę soli
 lickNo = Nic nie kładź
@@ -83,13 +81,11 @@ lickActive = Sól jeszcze leży: jelenie przychodzą o świcie i o zmierzchu (zo
 hideIn = Zasiadka: siedzisz w chruście. Zwierzęta wyczują cię później, a łuk trzymasz pewniej.
 antler = Zrzucone poroże
 antlerSub = Jeleń zgubił je przy lizawce.
-czoArrow = Strzała z białym okiem
 parkFirst = Za żywopłotem: zwierzyniec Lorda. Tu poluje tylko dwór.
 parkShut = Wyłom zarósł cierniem. Gajowy go zamknął na {n} dni.
 caught = Gajowy cię widział!
 found = Gajowy znalazł ścierwo w zwierzyńcu.
 legal = Zezwolenie: ten jeleń jest twój, legalnie.
-legalUsed = Zezwolenie było już użyte w tym tygodniu.
 snareFound = Sidła kłusownika ({n}/3)
 roped = {name} idzie za tobą na powrozie.
 ropeNeed = Potrzebna lina na powróz.
@@ -103,7 +99,6 @@ roundEnd = Koniec rundy: {n} pkt.
 shotPts = +{n}
 shotMiss = pudło
 contest = Zawody! Rywale: {list}. Twoja runda decyduje.
-noContest = Zawody są co siódmy dzień, od 10 do 12.
 silver = Srebrna strzała
 
 # ======================================================================== TALK (rozmowy)
@@ -342,6 +337,88 @@ epilog.pack = Wataha spod korzeni na Skraju lasu nie rusza cię do dziś. Raz w 
 epilog.park = Gajowy Gniewko Bór dalej liczy jelenie w zwierzyńcu Lorda - i ani razu nie musiał liczyć twoich.
 epilog.permit = Raz w tygodniu, z zezwoleniem w zanadrzu, przechodzisz przez wyłom w żywopłocie na jelenia. Gniewko Bór kiwa ci głową jak swojemu.
 
+# ======================================================================== zwierzęta i ludzie paczki (nazwy)
+# szczenię wilka spod nory (nazwa gatunku w polowaniu)
+szczenie.name = Wilczę
+# myśliwi Czarnych Oczu w obozie na Skraju lasu (też mówiący „@czo:”)
+obozy.czo.name = Myśliwy Czarnych Oczu
+# rywale na zawodach strzeleckich (24 / 30 / 36 pkt)
+strzelnica.rivals.0.name = Szeregowy Wróbel
+strzelnica.rivals.1.name = Kapral Sowa
+strzelnica.rivals.2.name = Sierżant Bełt
+# zbłąkane zwierzęta w zagrodzie Ługów (dymek) i etykieta „zostaw” przy powrozie
+glos.krowa = Muuu.
+glos.owca = Beee.
+glos.kura = Ko-ko.
+zostaw = Zostaw
+
+# ======================================================================== miejsca (Okolice: miejsca paczki B, test kolizji)
+miejsca.nora_wilcza.name = Wilcza nora
+miejsca.szary_kiel.name = Szary Kieł
+miejsca.oboz_czo.name = Obóz myśliwych Czarnych Oczu
+miejsca.oboz_bandytow.name = Obóz rabusiów
+miejsca.blotnisko.name = Błotnisko dzików
+miejsca.gawra_wejscie.name = Gawra
+miejsca.gawra_pole.name = Przed gawrą
+miejsca.lizawka.name = Lizawka
+miejsca.zasiadka.name = Zasiadka
+miejsca.poroze_zrzut.name = Zrzucone poroże
+miejsca.wylom_zywoplot.name = Wyłom w żywopłocie
+miejsca.lesniczowka.name = Leśniczówka
+miejsca.pasnik.name = Paśnik
+miejsca.sidla_zwierzyniec.name = Sidła kłusownika
+miejsca.patrol_gajowego.name = Obchód gajowego
+miejsca.rysiek_zasadzka.name = Rysiek przy sidłach
+miejsca.zblakane_start.name = Zbłąkane zwierzęta
+miejsca.strzelnica.name = Strzelnica
+
+# ======================================================================== odkrycia (Okolice: zakładka „Okolice” w dzienniku)
+odkrycia.nora.name = Wilcza nora
+odkrycia.nora.text = Pod korzeniami starego pnia na Skraju lasu wataha ma norę. Za dnia wilki śpią przy wejściu, wiosną i latem bawią się tu szczenięta. Nocą wataha idzie na łowy.
+odkrycia.gawra.name = Gawra pod granią
+odkrycia.gawra.text = W skale nad kamieniołomem jest gawra. Od wiosny do jesieni niedźwiedź chodzi wokół niej. Zimą śpi w środku - słychać chrapanie. Lepiej go nie budzić.
+odkrycia.blotnisko.name = Błotnisko dzików
+odkrycia.blotnisko.text = Rozdeptane błoto przy Leśnej drodze. Rano i wieczorem dziki tarzają się tu godzinami. Kto się wytarza w błocie, pachnie jak las - zwierzęta później go wyczują.
+odkrycia.lizawka.name = Lizawka
+odkrycia.lizawka.text = Wydrążony pieniek na Łące. Położona w nim bryła soli przez sześć dni ściąga jelenie o świcie i o zmierzchu. Obok zasiadka z chrustu: stąd zwierzęta wyczują cię później.
+odkrycia.oboz_rabusiow.name = Obóz rabusiów
+odkrycia.oboz_rabusiow.text = Polana przy Leśnej drodze, wypalony krąg po ognisku. Rabusie wracają tu nocami. Kiedy nad lasem dymi mielerz, idą nocą pod szałas węglarza.
+odkrycia.oboz_czo.name = Obóz obcych myśliwych
+odkrycia.oboz_czo.text = Namiot i ognisko na Skraju lasu. Obcy myśliwi z białym okiem na lotkach strzał. Za dnia siedzą przy ogniu, nocą wychodzą w las.
+odkrycia.zwierzyniec.name = Zwierzyniec Lorda
+odkrycia.zwierzyniec.text = Za żywopłotem dworu ciągnie się zwierzyniec: jelenie, dziki, paśnik i leśniczówka gajowego. Tu poluje tylko dwór. Bez zezwolenia zabite zwierzę to kłusownictwo.
+odkrycia.zblakane.name = Zbłąkane zwierzęta
+odkrycia.zblakane.text = Krowa, owca i kury z zagrody Ługów. Po pożarze rozbiegły się i zdziczały. Krowę i owcę odprowadzisz na powrozie, kury trzeba łapać rękami.
+odkrycia.strzelnica.name = Strzelnica garnizonu
+odkrycia.strzelnica.text = Trzy tarcze na 6, 8 i 9 kroków. Przy stojaku z łukami można postrzelać. Strzały ćwiczebne są od wojska. Co siódmy dzień przed południem są zawody.
+
+# ======================================================================== premie (name - nazwa, desc - opis przy ikonie)
+premie.ubloceny.name = Ubłocony
+premie.ubloceny.desc = pachniesz jak las: zwierzęta wyczują cię później
+
+# ======================================================================== F9 (Debug.js, zakładka „Wyspa i fabuła”: sekcja paczki B)
+f9.tytul = Paczka B: Zwierzęta i łowy
+# wiersz „Zostaw szczenięta: wataha przyjazna (...)” i jego napis po OK
+f9.przyjazna.tak = TAK
+f9.przyjazna.nie = nie
+f9.przyjaznaOk.tak = tak
+f9.przyjaznaOk.nie = nie
+# „Miejsce ...”, OK przenosi na nie (i wiersze, które tam przenoszą)
+f9.idz.nora = Wilcza nora
+f9.idz.gawra = Gawra
+f9.idz.blotnisko = Błotnisko
+f9.idz.lizawka = Lizawka (zasiadka)
+f9.idz.oboz_rabusiow = Obóz rabusiów
+f9.idz.oboz_czo = Obóz myśliwych
+f9.idz.zwierzyniec = Zwierzyniec (wyłom)
+f9.idz.zblakane = Zbłąkane zwierzęta
+f9.idz.strzelnica = Strzelnica
+
+# ======================================================================== ostrzeżenia w konsoli (dla autorów, gracz ich nie widzi)
+ostrzezenia.okolice = brak Okolice.js - miejsca i odkrycia niezarejestrowane
+ostrzezenia.obozy = Humans.fixedCamp brak - stałe obozy wyłączone (blok paczki B w Humans.js)
+ostrzezenia.zadania = brak TownQuests - zadania K59-K62, D32-D33 nieaktywne
+
 # ======================================================================== z kodu Lowy.js (kod.<funkcja>.<n>, w kolejności kodu)
 # n23
 kod.n23.0 = Wilcza nora
@@ -475,3 +552,10 @@ kod.f9Pick.0 = Kłusownictwo: {pick} razy (OK ustawia)   ←→
 # f9Ok
 kod.f9Ok.0 = Wataha przyjazna: {1}
 kod.f9Ok.1 = Kłusownictwo: {count}
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+claw = Pazur niedźwiedzia
+tusk = Kieł odyńca
+czoArrow = Strzała z białym okiem
+legalUsed = Zezwolenie było już użyte w tym tygodniu.
+noContest = Zawody są co siódmy dzień, od 10 do 12.

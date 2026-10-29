@@ -37,6 +37,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("plan_karczmy");   // (the words of this file: js/teksty/plan_karczmy.txt, kod.*)
 
     const T = window.Tawerna;
     if (!T) throw new Error("TavernLife_Plan.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
@@ -89,9 +90,11 @@
     // the hand and the small capitals of the parchment (the UI kit's fonts: QB Hand, QB Caps)
     const PF = { hand: ui.inkFont.hand, handB: ui.inkFont.handBold, caps: ui.inkFont.caps };
     const INKC = { ink: "#2c1c10", soft: "#5b4128", red: "#8e2417", green: "#2f5e22" };
-    const KIND_WORD = { guest: "dla gości", service: "zaplecze", private: "prywatne", hall: "przejście", stairs: "schody" };
+    const KIND_WORD = { };
+    Watki.scal(KIND_WORD, "plan_karczmy", "rodzaje");   // (its words: js/teksty/plan_karczmy.txt, rodzaje)
     const KIND_TINT = { guest: "#e7b467", service: "#a9bd8e", private: "#d49b97", hall: "#e6d6b4", stairs: "#d8c6a2" };
-    const FLOOR_TAB = ["Parter", "Pokoje gości", "Apartamenty"];
+    const FLOOR_TAB = [];
+    Watki.scal(FLOOR_TAB, "plan_karczmy", "pietra");   // (its words: js/teksty/plan_karczmy.txt, pietra)
 
     // ------------------------------------------------------------------ the plan's data
     const PS = PLAN_DATA.sheet, PP = PLAN_DATA.panel;   // [x, y, w, h] on the screen
@@ -160,11 +163,11 @@
         const D = TD();
         if (!D || !D.OPPONENTS) return [];
         const h = hour(), now = new Set((D.present(h, day()) || []).map(p => p.key));
-        const say = k => { const o = D.OPPONENTS[k]; return o.short + " " + o.hours[0] + "–" + o.hours[1] + (o.minRep && QB() ? " (sława " + o.minRep + (o.rare ? ", nie co dzień" : "") + ")" : o.rare ? " (nie co dzień)" : ""); };
+        const say = k => { const o = D.OPPONENTS[k]; return o.short + " " + o.hours[0] + "–" + o.hours[1] + (o.minRep && QB() ? Watki.wstaw(TK.kod.say[1], { minRep: o.minRep, "2": o.rare ? TK.kod.say[0] : "" }) : o.rare ? TK.kod.say[2] : ""); };
         const regular = ["ozzy", "bartek", "grum"].filter(k => D.OPPONENTS[k]), fame = ["kupiec", "nieznajomy"].filter(k => D.OPPONENTS[k] && (QB() || !D.OPPONENTS[k].needsRep));
         const out = [];
-        if (regular.length) out.push({ text: "Kości: " + regular.map(say).join(" · "), on: regular.some(k => now.has(k)) });
-        if (fame.length) out.push({ text: "Goście od kości: " + fame.map(say).join(" · "), on: fame.some(k => now.has(k)) });
+        if (regular.length) out.push({ text: Watki.wstaw(TK.kod.diceRivals[0], { "1": regular.map(say).join(" · ") }), on: regular.some(k => now.has(k)) });
+        if (fame.length) out.push({ text: Watki.wstaw(TK.kod.diceRivals[1], { "1": fame.map(say).join(" · ") }), on: fame.some(k => now.has(k)) });
         return out;
     }
     const songDone = () => S().songDay === day();
@@ -187,8 +190,8 @@
             default: return true;   // the bar, the kitchen, Grum, the bath, the darts, the board, the stairs, the fires: all day
         }
     }
-    const ICON_WORD = { bar: "Bar · Borgar", kitchen: "Kuchnia", board: "Tablica zleceń", dice: "Kości", arm: "Siłowanie", darts: "Rzutki",
-        bath: "Łaźnia", stage: "Scena · Melia", stairs: "Schody", room: "Pokój na noc", gate: "Złocona krata", fire: "Kominek" };
+    const ICON_WORD = { };
+    Watki.scal(ICON_WORD, "plan_karczmy", "ikony");   // (its words: js/teksty/plan_karczmy.txt, ikony)
 
     // what the panel says about a room: { kicker, title, status: { tone, text }, sections: [{ head, lines: [{ icon, text, tone }] }] }
     const L_ = (icon, text, tone) => ({ icon, text, tone });
@@ -197,128 +200,128 @@
         const out = { kicker: (KIND_WORD[it.kind] || "") + " · " + FLOOR_TAB[it.floor], title: it.name, status: null, sections: [] };
         const what = [], who = [], price = [];
         const sec = () => {
-            if (what.length) out.sections.push({ head: "Co tu jest", lines: what });
-            if (who.length) out.sections.push({ head: "Kto i kiedy", lines: who });
+            if (what.length) out.sections.push({ head: TK.kod.sec[0], lines: what });
+            if (who.length) out.sections.push({ head: TK.kod.sec[1], lines: who });
             if (price.length) out.sections.push({ head: "Ceny", lines: price });
             return out;
         };
         const open = (text) => { out.status = { tone: "open", text }; };
         const shut = (text) => { out.status = { tone: "closed", text }; };
         const info = (text) => { out.status = { tone: "info", text }; };
-        const d = PLAN_DESC[key];
+        const d = (PLAN_DESC[f.map] || {})[it.key];
         if (d) what.push(L_(null, d));
         const h = hour();
         switch (key) {
             case "1:sala": {
-                who.push(L_("bar", "Borgar — za ladą, o każdej porze"));
-                if (hasStory()) { const [a, b] = storyShift(); who.push(L_("bar", "Zmiany u Borgara " + hhmm(a) + "–" + hhmm(b) + ", jedna dziennie", between(h, a, b) ? "good" : null)); }
+                who.push(L_("bar", TK.kod.planInfo[0]));
+                if (hasStory()) { const [a, b] = storyShift(); who.push(L_("bar", Watki.wstaw(TK.kod.planInfo[1], { "1": hhmm(a), "2": hhmm(b) }), between(h, a, b) ? "good" : null)); }
                 const dd = dishOfDay(), prices = DISHES.map(x => priceOf(x));
-                price.push(L_("kitchen", "Jedzenie i napitki: " + Math.min(...prices) + "–" + Math.max(...prices) + " G"));
-                price.push(L_("kitchen", "Danie dnia: " + dd.name + " — " + priceOf(dd) + " G (−" + Math.round(DAY_DISCOUNT * 100) + "%)", "good"));
+                price.push(L_("kitchen", Watki.wstaw(TK.kod.planInfo[2], { "1": Math.min(...prices), "2": Math.max(...prices) })));
+                price.push(L_("kitchen", Watki.wstaw(TK.kod.planInfo[3], { name: dd.name, "2": priceOf(dd), "3": Math.round(DAY_DISCOUNT * 100) }), "good"));
                 const rs = rooms().filter(x => !x.minrep);
-                if (rs.length) price.push(L_("room", "Pokój na noc: od " + Math.min(...rs.map(x => roomPrice(x))) + " G (u Borgara)"));
-                if (repDiscount() > 0) price.push(L_(null, "Twoja sława: u Borgara −" + pct(repDiscount()), "good"));
-                open("Otwarte — Borgar podaje o każdej porze");
+                if (rs.length) price.push(L_("room", Watki.wstaw(TK.kod.planInfo[4], { "1": Math.min(...rs.map(x => roomPrice(x))) })));
+                if (repDiscount() > 0) price.push(L_(null, Watki.wstaw(TK.kod.planInfo[5], { "1": pct(repDiscount()) }), "good"));
+                open(TK.kod.planInfo[6]);
                 break;
             }
             case "1:kuchnia":
-                who.push(L_("kitchen", "Kucharze Borgara — od świtu do nocy"));
-                price.push(L_("bar", "Zamawiasz u Borgara przy ladzie; posiłek podadzą do stołu"));
-                open("Kuchnia wydaje o każdej porze");
+                who.push(L_("kitchen", TK.kod.planInfo[7]));
+                price.push(L_("bar", TK.kod.planInfo[8]));
+                open(TK.kod.planInfo[9]);
                 break;
             case "1:scena": {
-                const m = "Melia Srebrogłosa — śpiewa " + hhmm(SONG_FROM) + "–24:00, raz na wieczór";
+                const m = Watki.wstaw(TK.kod.planInfo[10], { "1": hhmm(SONG_FROM) });
                 who.push(L_("stage", m, songOpen() ? "good" : null));
-                price.push(L_(null, "Napiwek do kapelusza: " + SONG_TIP + " G (nieobowiązkowy)"));
-                price.push(L_(null, "Po pieśni: Natchniony, +" + Math.round(INSPIRED_XP * 100) + "% doświadczenia na " + hoursText(INSPIRED_HOURS)));
-                if (songOpen()) open("Teraz: Melia śpiewa — podejdź pod scenę");
-                else if (inSongHours()) shut("Dziś już śpiewała — jutro od " + hhmm(SONG_FROM));
-                else shut("Teraz cisza — śpiewa od " + hhmm(SONG_FROM));
+                price.push(L_(null, Watki.wstaw(TK.kod.planInfo[11], { SONG_TIP: SONG_TIP })));
+                price.push(L_(null, Watki.wstaw(TK.kod.planInfo[12], { "1": Math.round(INSPIRED_XP * 100), "2": hoursText(INSPIRED_HOURS) })));
+                if (songOpen()) open(TK.kod.planInfo[13]);
+                else if (inSongHours()) shut(Watki.wstaw(TK.kod.planInfo[14], { "1": hhmm(SONG_FROM) }));
+                else shut(Watki.wstaw(TK.kod.planInfo[15], { "1": hhmm(SONG_FROM) }));
                 break;
             }
             case "1:gry": {
-                who.push(L_("arm", "Grum Żelazna Pięść — siłowanie na rękę, cały dzień"));
+                who.push(L_("arm", TK.kod.planInfo[16]));
                 for (const l of diceRivals()) who.push(L_("dice", l.text, l.on ? "good" : null));
-                price.push(L_("arm", "Siłowanie: stawki " + ARM_STAKES.join(" / ") + " G"));
-                if (TD()) price.push(L_("dice", "Kości: stawka rywala, od " + Math.min(...Object.values(TD().OPPONENTS).map(o => o.stakes[0])) + " G"));
+                price.push(L_("arm", Watki.wstaw(TK.kod.planInfo[17], { "1": ARM_STAKES.join(" / ") })));
+                if (TD()) price.push(L_("dice", Watki.wstaw(TK.kod.planInfo[18], { "1": Math.min(...Object.values(TD().OPPONENTS).map(o => o.stakes[0])) })));
                 const dn = diceNow();
-                if (dn && dn.length) open("Przy kościach: " + dn.map(p => p.name).join(", "));
-                else if (TD()) open("Grum czeka przy stole · kości od " + hhmm(10));
-                else open("Grum czeka przy stole");
+                if (dn && dn.length) open(Watki.wstaw(TK.kod.planInfo[19], { "1": dn.map(p => p.name).join(", ") }));
+                else if (TD()) open(Watki.wstaw(TK.kod.planInfo[20], { "1": hhmm(10) }));
+                else open(TK.kod.planInfo[21]);
                 break;
             }
             case "1:rzutki":
-                who.push(L_("darts", "Dziadek Ozzy albo furman Wiesiek — o każdej porze"));
-                price.push(L_("darts", "Stawki " + DARTS_STAKES.join(" / ") + " G · trzy rundy po trzy lotki"));
-                open("Tarcze wolne — zawsze ktoś chętny");
+                who.push(L_("darts", TK.kod.planInfo[22]));
+                price.push(L_("darts", Watki.wstaw(TK.kod.planInfo[23], { "1": DARTS_STAKES.join(" / ") })));
+                open(TK.kod.planInfo[24]);
                 break;
             case "1:laznia":
-                who.push(L_("bath", "Łaziebna Wanda — grzeje wodę o każdej porze"));
-                price.push(L_("bath", "Kąpiel: " + bathPrice() + " G" + (bathPrice() < BATH_PRICE ? " (zamiast " + BATH_PRICE + " G)" : "") + " · godzina"));
-                price.push(L_(null, "Po kąpieli: Czysty — prace o " + Math.round(CLEAN_COST * 100) + "% lżejsze przez " + hoursText(CLEAN_HOURS)));
-                open("Otwarte — woda gorąca");
+                who.push(L_("bath", TK.kod.planInfo[25]));
+                price.push(L_("bath", Watki.wstaw(TK.kod.planInfo[27], { "1": bathPrice(), "2": bathPrice() < BATH_PRICE ? Watki.wstaw(TK.kod.planInfo[26], { BATH_PRICE: BATH_PRICE }) : "" })));
+                price.push(L_(null, Watki.wstaw(TK.kod.planInfo[28], { "1": Math.round(CLEAN_COST * 100), "2": hoursText(CLEAN_HOURS) })));
+                open(TK.kod.planInfo[29]);
                 break;
             case "1:mysliwski":
-                who.push(L_("fire", "Dziadek Ozzy — przy kominku, zwykle od rana do nocy"));
+                who.push(L_("fire", TK.kod.planInfo[30]));
                 break;
             case "1:jadalnia":
-                price.push(L_("kitchen", "Tu też podają posiłki — zamówisz u Borgara"));
+                price.push(L_("kitchen", TK.kod.planInfo[31]));
                 break;
             case "1:sien": {
                 const Q = QB();
-                who.push(L_("board", Q ? "Tablica zleceń — nowe ogłoszenia co " + (Q.REFRESH_DAYS || 3) + " dni" : "Tablica zleceń — ogłoszenia z okolicy"));
+                who.push(L_("board", Q ? Watki.wstaw(TK.kod.planInfo[32], { "1": Q.REFRESH_DAYS || 3 }) : TK.kod.planInfo[33]));
                 if (Q) {
                     const b = Q.board ? Q.board().filter(n => n && !n.taken && !n.done).length : 0;
-                    if (b) who.push(L_("board", "Na tablicy wisi teraz " + b + " " + (b === 1 ? "ogłoszenie" : b < 5 ? "ogłoszenia" : "ogłoszeń"), "good"));
-                    price.push(L_(null, "Twoja sława: " + tierName(repTier()) + " (" + reputation() + "/100)"));
+                    if (b) who.push(L_("board", Watki.wstaw(TK.kod.planInfo[37], { b: b, "2": b === 1 ? TK.kod.planInfo[34] : b < 5 ? TK.kod.planInfo[35] : TK.kod.planInfo[36] }), "good"));
+                    price.push(L_(null, Watki.wstaw(TK.kod.planInfo[38], { "1": tierName(repTier()), "2": reputation() })));
                 }
-                who.push(L_("stairs", "Schody po obu stronach — na piętro, do pokoi gości"));
-                open("Wejście otwarte dzień i noc");
+                who.push(L_("stairs", TK.kod.planInfo[39]));
+                open(TK.kod.planInfo[40]);
                 break;
             }
             case "25:chamber": case "26:s4": case "25:r1": case "25:r2": case "25:r3": {
                 const id = { "25:chamber": "komnata", "26:s4": "zloty" }[key] || key.slice(4);
                 const st = rentState(id);
-                if (!st) { info("Pokój gościnny"); break; }
+                if (!st) { info(TK.kod.planInfo[41]); break; }
                 what.unshift(L_(null, st.r.desc));
-                price.push(L_("room", "Noc: " + st.price + " G" + (st.price !== st.r.price ? " (zamiast " + st.r.price + " G)" : "") + " · do " + CHECKOUT + ":00 rano"));
-                price.push(L_(null, "Rano: " + giftName(st.r.room) + (RESTED[st.r.room] ? " · Wypoczęty " + hoursText(RESTED[st.r.room]) : "")));
+                price.push(L_("room", Watki.wstaw(TK.kod.planInfo[43], { price: st.price, "2": st.price !== st.r.price ? Watki.wstaw(TK.kod.planInfo[42], { price: st.r.price }) : "", CHECKOUT: CHECKOUT })));
+                price.push(L_(null, Watki.wstaw(TK.kod.planInfo[45], { "1": giftName(st.r.room), "2": RESTED[st.r.room] ? Watki.wstaw(TK.kod.planInfo[44], { "1": hoursText(RESTED[st.r.room]) }) : "" })));
                 // (the tavern's fame is QuestBoard.js's: without it no word of fame, the room stays shut)
-                if (st.need && QB()) price.push(L_("gate", "Dla gości o sławie „" + tierName(repTierOf(st.need)) + "” (" + st.need + ")", st.ok ? "good" : "bad"));
-                who.push(L_("bar", "Wynajmiesz u Borgara, przy ladzie na parterze"));
-                if (st.mine) open("Twój pokój do " + CHECKOUT + ":00 — drzwi otwarte");
-                else if (!st.ok) shut(QB() ? "Zamknięte — potrzebna sława " + st.need : "Zamknięte — tylko dla stałych gości");
-                else if (st.taken) info("Masz już pokój na tę noc");
-                else open("Wolny na tę noc");
+                if (st.need && QB()) price.push(L_("gate", Watki.wstaw(TK.kod.planInfo[46], { "1": tierName(repTierOf(st.need)), need: st.need }), st.ok ? "good" : "bad"));
+                who.push(L_("bar", TK.kod.planInfo[47]));
+                if (st.mine) open(Watki.wstaw(TK.kod.planInfo[48], { CHECKOUT: CHECKOUT }));
+                else if (!st.ok) shut(QB() ? Watki.wstaw(TK.kod.planInfo[49], { need: st.need }) : TK.kod.planInfo[50]);
+                else if (st.taken) info(TK.kod.planInfo[51]);
+                else open(TK.kod.planInfo[52]);
                 break;
             }
             case "25:schody_gora": {
                 const g = (f.icons.find(ic => ic[0] === "gate") || [])[4] || { minrep: 80 };
                 const on = iconLit(["gate", 0, 0, "", g]);
-                who.push(L_("gate", "Złocona krata z dzwonkiem" + (QB() ? " — dla gości o sławie „" + tierName(repTierOf(g.minrep)) + "” (" + g.minrep + ")" : " — dla dostojnych gości"), on ? "good" : "bad"));
-                if (on) open("Krata otwarta — Apartamenty czekają"); else shut("Krata zamknięta" + (QB() ? " — potrzebna sława " + g.minrep : ""));
+                who.push(L_("gate", Watki.wstaw(TK.kod.planInfo[55], { "1": QB() ? Watki.wstaw(TK.kod.planInfo[53], { "1": tierName(repTierOf(g.minrep)), minrep: g.minrep }) : TK.kod.planInfo[54] }), on ? "good" : "bad"));
+                if (on) open(TK.kod.planInfo[56]); else shut(Watki.wstaw(TK.kod.planInfo[58], { "1": QB() ? Watki.wstaw(TK.kod.planInfo[57], { minrep: g.minrep }) : "" }));
                 break;
             }
             case "26:lord":
-                who.push(L_(null, "Zarezerwowany dla gości Lorda Zaleskiego"));
-                shut("Zamknięte — tylko dla gości Lorda");
+                who.push(L_(null, TK.kod.planInfo[59]));
+                shut(TK.kod.planInfo[60]);
                 break;
         }
         if (/^25:r\d+$/.test(key) && !["25:r1", "25:r2", "25:r3"].includes(key)) {
-            what.push(L_(null, "Pokój gościnny" + (r0.sub ? " — " + (r0.sub === "rodzinny" ? "rodzinny" : r0.sub.replace("1-os.", "jednoosobowy").replace("2-os.", "dwuosobowy")) : "") + "."));
-            who.push(L_(null, "Wynajęty przez innych gości — drzwi zamknięte"));
-            shut("Zajęty");
+            what.push(L_(null, Watki.wstaw(TK.kod.planInfo[61], { "1": r0.sub ? " — " + (r0.sub === "rodzinny" ? "rodzinny" : r0.sub.replace("1-os.", "jednoosobowy").replace("2-os.", "dwuosobowy")) : "" })));
+            who.push(L_(null, TK.kod.planInfo[62]));
+            shut(TK.kod.planInfo[63]);
         }
         if (it.kind === "stairs" && r0.to) {
             const to = planFloorOf(r0.to);
-            if (!what.length) what.push(L_(null, (r0.up ? "Schody w górę: " : "Schody w dół: ") + (to >= 0 ? FLOOR_TAB[to] : "") + "."));
-            if (!out.status) open("Q/E — zobacz " + (to >= 0 ? FLOOR_TAB[to] : "piętro"));
+            if (!what.length) what.push(L_(null, (r0.up ? TK.kod.planInfo[64] : TK.kod.planInfo[65]) + (to >= 0 ? FLOOR_TAB[to] : "") + "."));
+            if (!out.status) open(Watki.wstaw(TK.kod.planInfo[67], { "1": to >= 0 ? FLOOR_TAB[to] : TK.kod.planInfo[66] }));
         }
         if (!what.length) what.push(L_(null, PLAN_KIND_DESC[it.kind] || ""));
         if (!out.status) {
-            if (it.kind === "private") shut(key.startsWith("26:") ? "Zajęty przez gości" : "Prywatne — tylko dla domowników");
-            else if (it.kind === "service") info("Zaplecze karczmy");
-            else if (it.kind === "hall") info("Przejście — otwarte dzień i noc");
+            if (it.kind === "private") shut(key.startsWith("26:") ? TK.kod.planInfo[68] : TK.kod.planInfo[69]);
+            else if (it.kind === "service") info(TK.kod.planInfo[70]);
+            else if (it.kind === "hall") info(TK.kod.planInfo[71]);
             else open("Otwarte");
         }
         return sec();
@@ -338,51 +341,10 @@
         floor: fi => { const s = PLAN.scene; if (s) s.showFloor(clamp(fi, 0, PLAN_DATA.floors.length - 1)); return !!s; },
         DATA: PLAN_DATA, BOARDS: PLAN_BOARDS, EVENT: PLAN_EVENT
     };
-    const PLAN_KIND_DESC = { guest: "Dla gości karczmy.", service: "Zaplecze karczmy.", private: "Prywatne.", hall: "Przejście.", stairs: "Schody." };
-    const PLAN_DESC = {
-        "1:komorka": "Ciasna komórka za składem: stare beczki, połamane stołki i rupiecie, których Borgar nie ma serca wyrzucić.",
-        "1:sklad": "Worki z mąką i kaszą, skrzynie, sól i przyprawy. Stąd kuchnia bierze, co trzeba.",
-        "1:browar": "Kadzie, miedziany kocioł i beczki, w których dojrzewa piwo „Złotego Kufla”. Pachnie chmielem.",
-        "1:sluzba": "Łóżka i skrzynie ludzi Borgara. Tu odpoczywają między zmianami.",
-        "1:gabinet": "Biurko z księgą rachunków, szkatuła i klucze do pokoi. Tu Borgar liczy utarg.",
-        "1:magazyn": "Beczki piwa, skrzynie wina i zapasy na zimę.",
-        "1:wedzarnia": "Szynki i kiełbasy w dymie z olchy. Zapach niesie się aż na korytarz.",
-        "1:korytarz": "Korytarz zaplecza: z sal do składów, browaru, spiżarni i gabinetu.",
-        "1:spizarnia": "Półki z serami, słojami i chlebem — między kuchnią a piekarnią.",
-        "1:kuchnia": "Piec, kotły i stół do krojenia. Stąd wychodzą gulasz, kapuśniak i pieczeń.",
-        "1:piekarnia": "Piec chlebowy i dzieże z ciastem. Chleb i placki idą przez okienko prosto do sali.",
-        "1:mysliwski": "Kamienny kominek, poroża i łby dzików na ścianach, długi stół myśliwych.",
-        "1:biesiadna": "Dwa długie stoły na wesela i biesiady, chorągwie i zbroje w kątach.",
-        "1:scena": "Scena z czerwonymi kotarami, stoliki przy świecach, kapelusz na napiwki.",
-        "1:gry": "Stoły do kości, stół do siłowania na rękę, karty, warcaby i kredowa tablica wyników.",
-        "1:rzutki": "Tarcze do rzutek na ścianie i linia rzutu.",
-        "1:laznia": "Cztery balie z gorącą wodą za parawanami, szare mydło i szorstkie ręczniki.",
-        "1:sala": "Serce karczmy: lada w kształcie L, dwa kamienne kominki i długie stoły z ławami.",
-        "1:jadalnia": "Stół bankietowy dla gości, którzy wolą zjeść w spokoju.",
-        "1:palarnia": "Fotele, fajki i regały z książkami. Cicho jak w klasztorze.",
-        "1:sien": "Wejście do karczmy: tablica zleceń, ten plan, wieszaki na płaszcze i dwoje schodów na piętro.",
-        "1:schody_zach": "Schody na piętro, do pokoi gości.", "1:schody_wsch": "Schody na piętro, do pokoi gości.",
-        "25:nc": "Korytarz z drzwiami pokoi gości; boazeria, latarnie i obrazy.", "25:sc": "Korytarz z drzwiami pokoi gości; boazeria, latarnie i obrazy.",
-        "25:gal": "Galeria nad wielką salą: przez balustradę widać żyrandol i gości w dole.",
-        "25:hall": "Hall przy schodach z sali: księga gości, zegar stojący, żyrandol.",
-        "25:lounge": "Kominek z kamienia, fotele, sofa i biblioteczka — dla wszystkich gości piętra.",
-        "25:bath": "Balie za parawanami i umywalki dla gości piętra.",
-        "25:linen": "Półki z pościelą, ręcznikami i świecami na zapas.",
-        "25:maid": "Pokój pokojówki: łóżko, szafa i wózek z pościelą.",
-        "25:schody_dol": "Schody w dół, do wielkiej sali.", "25:schody_gora": "Schody na górę, do Apartamentów.",
-        "26:hall": "Marmur, kolumny i kandelabry. Na osi drzwi apartamentu Lorda z herbem Zaleskich.",
-        "26:serv": "Kącik służby: srebra, pościel i łóżko służącego.",
-        "26:bathlux": "Miedziana wanna i toaletka z lustrem.",
-        "26:lib": "Ściana regałów, pulpit z atlasem, fotele przy kominku.",
-        "26:salon": "Wielki salon: kominek, sofy, harfa i szpinet.",
-        "26:dining": "Długi stół na czternaście osób, srebra i kandelabry.",
-        "26:terrace": "Taras nad dziedzińcem: balustrada i donice z kwiatami.",
-        "26:s1": "Salonik z kominkiem i sypialnia z łożem z baldachimem. Zajęty przez gości.",
-        "26:s2": "Salonik z kominkiem i sypialnia z łożem z baldachimem. Zajęty przez gości.",
-        "26:s3": "Salonik z kominkiem i sypialnia z łożem z baldachimem. Zajęty przez gości.",
-        "26:lord": "Salon z herbem Zaleskich i chorągwiami, sypialnia z łożem Lorda.",
-        "26:schody": "Schody w dół, do pokoi gości."
-    };
+    const PLAN_KIND_DESC = { };
+    Watki.scal(PLAN_KIND_DESC, "plan_karczmy", "opisyRodzajow");   // (its words: js/teksty/plan_karczmy.txt, opisyRodzajow)
+    const PLAN_DESC = {};   // map -> room (its key on the plan, a suite's group) -> what is there: opisy.1.sala ... in the file
+    Watki.scal(PLAN_DESC, "plan_karczmy", "opisy");   // (its words: js/teksty/plan_karczmy.txt, opisy)
 
     // ------------------------------------------------------------------ the way (O): along the plan's walkable cells, floor by floor
     function planBfs(fi, from, goal) {
@@ -822,13 +784,13 @@
             dot.anchor.set(0.5, 0.5);
             const probe = new Bitmap(8, 8).context;
             probe.font = PF.handB(18);
-            const w = Math.ceil(probe.measureText("Tu jesteś").width) + 14, h = 21;
+            const w = Math.ceil(probe.measureText(TK.kod.makeMarker[0]).width) + 14, h = 21;
             tag.bitmap = new Bitmap(w + 2, h + 2);
             c = tag.bitmap.context;
             c.fillStyle = "rgba(252,243,220,0.94)"; c.strokeStyle = "rgba(142,36,23,0.95)"; c.lineWidth = 1.2;
             c.beginPath(); c.rect(1, 1, w, h); c.fill(); c.stroke();
             c.font = PF.handB(18); c.textAlign = "center"; c.textBaseline = "alphabetic"; c.fillStyle = "#8e2417";
-            c.fillText("Tu jesteś", 1 + w / 2, 17);
+            c.fillText(TK.kod.makeMarker[0], 1 + w / 2, 17);
             dirty(tag.bitmap);
             tag.anchor.set(0.5, 0.5);
             m.addChild(ring); m.addChild(tag); m.addChild(dot);
@@ -926,8 +888,8 @@
         drawHints() {
             const b = this.hints.bitmap, S0 = U();
             b.clear();
-            ui.keyHints(b, [["↑↓←→", "pokój"], ["Q/E", "piętro"], ["O", "pokaż drogę"], ["P", "wyjdź"]], PS[0] + 4, 5, 24, 17);
-            ui.text(b, (hasClock() ? "Dzień " + day() + " · " : "") + "godz. " + clockText(), PP[0], 5, PP[2] - 6, { size: 17, color: S0.muted, align: "right", lh: Math.round(17 * 1.4) });
+            ui.keyHints(b, [["↑↓←→", TK.kod.drawHints[0]], ["Q/E", TK.kod.drawHints[1]], ["O", TK.kod.drawHints[2]], ["P", TK.kod.drawHints[3]]], PS[0] + 4, 5, 24, 17);
+            ui.text(b, Watki.wstaw(TK.kod.drawHints[5], { "1": hasClock() ? Watki.wstaw(TK.kod.drawHints[4], { "1": day() }) : "", "2": clockText() }), PP[0], 5, PP[2] - 6, { size: 17, color: S0.muted, align: "right", lh: Math.round(17 * 1.4) });
             dirty(b);
         }
         drawPanel() {
@@ -984,8 +946,8 @@
             // the way, when asked for
             if (this.target && y < legendTop - 20) {
                 const tf = this.target.floor, same = tf === this.floor, tIt = planItem(tf, this.target.key);
-                const txt = !this.wayPath && same ? "Droga: nie znalazłem przejścia." : same ? "Droga zaznaczona na planie" + (this.here !== tf ? " (od schodów)." : ".")
-                    : "Droga do: " + (tIt ? tIt.name : "") + " (" + FLOOR_TAB[tf] + ") — Q/E, by iść dalej.";
+                const txt = !this.wayPath && same ? TK.kod.drawPanel[0] : same ? Watki.wstaw(TK.kod.drawPanel[2], { "1": this.here !== tf ? TK.kod.drawPanel[1] : "." })
+                    : Watki.wstaw(TK.kod.drawPanel[3], { "1": tIt ? tIt.name : "", "2": FLOOR_TAB[tf] });
                 ctx.font = PF.handB(18);
                 for (const ln of wrapCtx(ctx, txt, W0 - pad * 2)) { inkLine(ctx, ln, pad, y, PF.handB(18), "#9a2a1c"); y += 20; }
             }
@@ -1012,14 +974,14 @@
             let [x, y] = cell();
             ctx.fillStyle = "#c8281a"; ctx.beginPath(); ctx.arc(x + 9, y + 1, 5, 0, Math.PI * 2); ctx.fill();
             ctx.strokeStyle = "#fff4dc"; ctx.lineWidth = 1.4; ctx.stroke();
-            inkLine(ctx, "Tu jesteś", x + 22, y + 7, PF.hand(17), INKC.ink);
+            inkLine(ctx, TK.kod.drawLegend[0], x + 22, y + 7, PF.hand(17), INKC.ink);
             for (const k of kinds) {
                 [x, y] = cell();
                 ctx.save(); ctx.translate(x + 9, y + 1); ctx.scale(0.74, 0.74); planMedallion(ctx, k, 0, 0, true, null); ctx.restore();
                 inkLine(ctx, ICON_WORD[k] || k, x + 22, y + 7, PF.hand(17), INKC.ink);
             }
             const ly = top + 36 + Math.ceil(i / cols) * 23 + 2;
-            inkLine(ctx, "Jasne — czynne teraz · przygaszone — zamknięte", pad, ly, PF.hand(16), INKC.soft);
+            inkLine(ctx, TK.kod.drawLegend[1], pad, ly, PF.hand(16), INKC.soft);
         }
         // (tests) the scene's state
         state() {
@@ -1039,18 +1001,19 @@
     }
 
     // the P menu: "Plan karczmy" while he is on one of the tavern's floors (MenuPanel.addCommand; its little drawing: the plan's
-    // 20 px map glyph in MenuPanel's 22 px box)
+    // 20 px map glyph in MenuPanel's 22 px box). The label is a getter: registered while the plugins load, read when the menu is
+    // made - the words of js/teksty come in between
     const planOnMap = () => !!$gameMap && planFloorOf($gameMap.mapId()) >= 0;
     const planFromMenu = () => { PLAN.pending = {}; SceneManager.push(Scene_TavernPlan); };
     const MP = T.api("MenuPanel");
     if (MP && MP.addCommand) {
-        MP.addCommand({ symbol: "tavernPlan", label: "Plan karczmy", owner: "TavernLife_Plan", when: planOnMap, ok: planFromMenu,
+        MP.addCommand({ symbol: "tavernPlan", get label() { return TK.kod.label[0]; }, owner: "TavernLife_Plan", when: planOnMap, ok: planFromMenu,
             glyph: (ctx, x, y, size, colour) => planGlyph(ctx, "map", x + 1, y + 1, size - 2, colour, "#000") });
     } else {   // (without MenuPanel.js: a plain command)
         const _Window_MenuCommand_addOriginalCommands = Window_MenuCommand.prototype.addOriginalCommands;
         Window_MenuCommand.prototype.addOriginalCommands = function() {
             _Window_MenuCommand_addOriginalCommands.call(this);
-            if (planOnMap()) this.addCommand("Plan karczmy", "tavernPlan", true);
+            if (planOnMap()) this.addCommand(TK.kod.addOriginalCommands[0], "tavernPlan", true);
         };
         const _Scene_Menu_createCommandWindow = Scene_Menu.prototype.createCommandWindow;
         Scene_Menu.prototype.createCommandWindow = function() {

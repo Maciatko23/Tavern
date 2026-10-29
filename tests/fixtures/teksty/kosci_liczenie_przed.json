@@ -1,0 +1,56 @@
+{
+ "liczenie": {
+  "oczka": {
+   "1": [
+    "jedynka",
+    "jedynki",
+    "jedynek"
+   ],
+   "2": [
+    "dwójka",
+    "dwójki",
+    "dwójek"
+   ],
+   "3": [
+    "trójka",
+    "trójki",
+    "trójek"
+   ],
+   "4": [
+    "czwórka",
+    "czwórki",
+    "czwórek"
+   ],
+   "5": [
+    "piątka",
+    "piątki",
+    "piątek"
+   ],
+   "6": [
+    "szóstka",
+    "szóstki",
+    "szóstek"
+   ]
+  },
+  "ile": {
+   "1": "jedna",
+   "2": "dwie",
+   "3": "trzy",
+   "4": "cztery",
+   "5": "pięć",
+   "6": "sześć"
+  },
+  "strity": {
+   "s15": {
+    "name": "mały strit"
+   },
+   "s26": {
+    "name": "duży strit"
+   },
+   "s16": {
+    "name": "pełny strit"
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TavernDice.js: FACE=liczenie.oczka, COUNT=liczenie.ile, STRAIGHTS=liczenie.strity:/(^|\\.)name$/)"
+}

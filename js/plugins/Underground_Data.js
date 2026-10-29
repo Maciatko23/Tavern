@@ -908,6 +908,24 @@
     };
     Watki.scal(NOTES, "podziemia", "notatki");   // (its words: js/teksty/podziemia.txt, notatki)
 
+    // ------------------------------------------------------------------ F9 (Debug.js's first tab "Zdarzenia" - the thread engine Watki.js)
+    // the floor to go to (←→ 0-100, Shift: by 10; OK - to its stairs up, the grate and the bosses do not matter), the cellar's grate
+    // (switch 11) open / shut, the Heart's three locks known without W2-W4, every stop of the lift (10-90), an ending of the Heart
+    // (←→ which; OK plays it) and the world and the Lord it is played with (←→ or OK). The words: js/teksty/podziemia.txt (f9.*,
+    // kod.heartEnd / heartWorld / heartLord); what ←→ and OK do: Underground.js's hooks (f9Zmienne - the {x}, f9Wybierz, f9Ok)
+    Watki.watek({
+        id: "podziemia", wtyczka: "Underground", teksty: "podziemia",
+        f9: { zakladka: "zdarzenia", wiersze: [
+            { co: "pietro", rodzaj: "underground", etykieta: "f9.pietro", ikona: 189, pola: { floor: 1 } },
+            { co: "krata", rodzaj: "ugGate", etykieta: "f9.krata", ikona: 195 },
+            { co: "zamki", rodzaj: "ugLocks", etykieta: "f9.zamki", ikona: 195 },
+            { co: "winda", rodzaj: "ugLifts", etykieta: "f9.winda", ikona: 189 },
+            { co: "koniec", rodzaj: "heartEnd", etykieta: "kod.heartEnd.0", ikona: 189 },
+            { co: "swiat", rodzaj: "heartWorld", etykieta: "kod.heartWorld.0", ikona: 195 },
+            { co: "lord", rodzaj: "heartLord", etykieta: "kod.heartLord.0", ikona: 195 }
+        ].map(r => Object.assign({ zmienne: "f9Zmienne", wybierz: "f9Wybierz", ok: "f9Ok" }, r)) }
+    });
+
     window.Underground_Data = { VERSION: "2.2.0", MAPS, SWITCHES, IDS, SPOTS, FLOORS, LIFT, MAZE, BANDS, FLOOR_NOTE, ART, TORCH_LIGHT, BLUE_LIGHT,
         SPIKE_STEPS, SPIKES, LOOT, LOOT_NAMES, GOLD_ICON, BOSSES, LOCKS, TEXT: T, ENDINGS, EPILOGUE, HEART, WHISPERS, APPARITIONS, TRUTH_WHO, NOTES };
 })();

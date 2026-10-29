@@ -3,7 +3,7 @@
 // tests/unit/core_map.test.js). The event bus: priority, once, off, the counts, a listener that throws (told with its owner, the
 // rest still run). The saved state: $gameSystem._tw[key] with its version in _tw._v, a throwaway copy while there is no game, the
 // versioned migrations (step by step or one function; one that throws is told), an older save's own key adopted (and left as a
-// hidden alias that is never saved), both keys in a save, a newer save. Tags: Tawerna.parseArgs, tags of a note, of a page's
+// hidden alias that is never saved), both keys in a save, a newer save, old plain fields as a state's fields (oldFields). Tags: Tawerna.parseArgs, tags of a note, of a page's
 // comments, of an event's data (every page) and of a live event (the page it is on now), the first one wins, names case-blind.
 // The calendar: seasons by Farming's seasonLength, the day of the season, the year, Easter and Christmas Eve, the night, the
 // periods without DayNightCycle. has / api / call / register; the map's drawing order with a sprite without z; the view's scale.
@@ -100,6 +100,26 @@ unit.test(t => {
     let badKey = "";
     try { T.state("zły klucz", {}); } catch (e) { badKey = e.message; }
     t.check("a key that is not letters, digits and _: a readable error", /a bad key 'zły klucz'/.test(badKey), badKey);
+
+    // (porządki 2026-10-28) old plain fields of $gameSystem as a state's fields: Tawerna.state.oldFields
+    T.state.define("ctClock", () => ({ hour: 9, day: 1 }), { version: 1, owner: "CoreTest" });
+    T.state.oldFields("ctClock", { _ctHour: "hour", _ctDay: "day", _ctTint: "tint" });
+    sys = save({ _ctHour: 17.5, _ctDay: 40, _ctTint: true, _other: 2 });   // (a save from before: its own plain fields)
+    const ck = T.state("ctClock"), ownAfter = Object.keys(sys).filter(k => /^_ct(Hour|Day|Tint)$/.test(k));
+    const viaOld = [sys._ctHour, sys._ctDay, sys._ctTint];
+    sys._ctDay = 41;                                          // (old code writing the old name)
+    const savedCk = JSON.parse(JSON.stringify(sys));
+    const other = new Game_System();                          // (not the live game's: a plain own field)
+    other._ctDay = 3;
+    let noSpec = "";
+    try { T.state.oldFields("ctNone", { _x: "x" }); } catch (e) { noSpec = e.message; }
+    t.check("oldFields: an older save's own plain fields move into the state when it is looked over (none left on $gameSystem), the old names read and write the fields (never saved), another Game_System keeps its own field; an undefined state: an error",
+        ck.hour === 17.5 && ck.day === 41 && ck.tint === true && ownAfter.length === 0 && viaOld.join() === "17.5,40,true" && savedCk._tw.ctClock.day === 41 &&
+        !("_ctDay" in savedCk) && savedCk._other === 2 && other._ctDay === 3 && Object.keys(other).includes("_ctDay") && ck.day === 41 && /not defined/.test(noSpec),
+        { ck, ownAfter, viaOld, savedCk, noSpec });
+    sys = new Game_System();
+    const fresh = T.state("ctClock");
+    t.check("... a new game: the defaults (hour 9, day 1), the old names lead there", fresh.hour === 9 && sys._ctHour === 9 && sys._ctDay === 1 && sys._ctTint === undefined, fresh);
 
     // ---------------------------------------------------------------- tags
     const P = T.parseArgs;

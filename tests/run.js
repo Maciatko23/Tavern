@@ -53,8 +53,9 @@ const SMOKE = [
     "home_decor_test"
 ];
 // not in "full": long runs that are not pass / fail tests (the marathon plays days and messages the phone), and the whole game in one
-// go (przejscie_ciagiem_test, ~10-15 min: the prologue to the Heart's chamber - only on request, with --timeout 1500)
-const SKIP_FULL = ["marathon_test", "przejscie_ciagiem_test"];
+// go (przejscie_ciagiem_test, ~10-15 min: the prologue to the Heart's chamber - only on request, with --timeout 1500), and the story
+// autopilot that plays it honestly (autopilot_fabula_test, 2-3 hours: --port 9751 --timeout 10800; the test stops itself after --minuty, default 150)
+const SKIP_FULL = ["marathon_test", "przejscie_ciagiem_test", "autopilot_fabula_test"];
 // turbo (tests/cdp.js TEST_TURBO): these run N game updates for each drawn frame - the same frames, the clock time divided (checked
 // green both ways, 2026-10-23); --turbo N: every test so (to try one before it goes on this list), --bez-turbo: none
 // (tried and left off: tavern_shift_test - P and the abort by the clock, heart_test - stops, creatures_test, birds_test - the aim's

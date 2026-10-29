@@ -13,7 +13,7 @@ const OLD_API = ["ATTRS", "SKILLS", "TREES", "MELEE", "SHIELDS", "MAX_LEVEL", "A
     "canRun", "hand", "handMelee", "switchHand", "shield", "pressAttack", "pressDodge", "hitPlayer", "enemyHurtFx", "hitstop", "numberAt", "sparksAt",
     "shovePlayer", "strMult", "poiseMult", "critChance", "rollCost", "rollIFrames", "parryWindow", "knockdownAt", "carryBonus", "gatherBonus", "workSpeed",
     "dexWork", "tired", "TIRED_AT", "heroMhp", "comboWindow", "aimSteady", "baseBreath", "mapFreePlay", "act", "stopFrames", "ROLL_KIND", "KNOCK_KIND",
-    "resetAct", "Scene_Hero", "unspent",
+    "resetAct", "unspent",
     // (stage 2 of the fight, 2026-10-05: the armour, the blow from hiding)
     "ARMORS", "armor", "SNEAK", "sneakAttack", "sneakMult",
     // (stages 3 and 4, 2026-10-06: the foes of other plugins - Humans.js, Creatures.js -, the hero jarred / held down / frozen, the mind)
@@ -51,9 +51,10 @@ unit.test(t => {
         TW.api("Combat") === C && !!(parts && parts.core && parts.fight && parts.ui), parts && Object.keys(parts));
     const writable = ["perk", "gainXp", "hitPlayer", "hero"].every(k => Object.getOwnPropertyDescriptor(C, k).writable);
     t.check("... perk, gainXp, hitPlayer, hero are plain fields (TavernLife puts its own over Combat.perk, the tests over gainXp)", writable);
-    t.check("... the fight's names lead to Combat_Fight.js (act, MELEE, the functions), the Postać screen to Combat_UI.js",
+    // (2026-10-28: the old Postać screen - Scene_Hero - is gone; the P menu's Postać and Umiejętności are MenuRing.js's pages)
+    t.check("... the fight's names lead to Combat_Fight.js (act, MELEE, the functions); no old Postać screen (Scene_Hero) any more",
         C.act === parts.fight.act && C.MELEE === parts.fight.MELEE && C.MELEE[154].name === "Oszczep" && typeof C.hitPlayer === "function" &&
-        C.Scene_Hero === parts.ui.Scene_Hero && typeof C.Scene_Hero === "function");
+        C.Scene_Hero === undefined && parts.ui.Scene_Hero === undefined);
     let err = "";
     try { unit.load(["TawernaCore", "Skills_Data", "Combat", "Combat_UI"]); } catch (e) { err = String(e.message); }
     t.check("Combat_UI.js without Combat_Fight.js above it: a readable error", /Combat_UI\.js: musi być pod Combat\.js i Combat_Fight\.js/.test(err), err);

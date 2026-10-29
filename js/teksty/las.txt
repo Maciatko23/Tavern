@@ -1,0 +1,25 @@
+# Teksty z Forestry.js
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz las
+
+
+# ======================================================================== z kodu Forestry.js (kod.<funkcja>.<n>, w kolejności kodu)
+# whyNot
+kod.whyNot.0 = Drzewo posadzisz tylko pod gołym niebem.
+kod.whyNot.1 = Sadzonkę wsadzisz w zwykłą albo oczyszczoną ziemię.
+kod.whyNot.2 = Tu jest woda.
+kod.whyNot.3 = To miejsce jest zajęte.
+kod.whyNot.4 = Stoisz w tym miejscu.
+kod.whyNot.5 = Za blisko innego drzewa: zostaw mu miejsce na korzenie.
+# plant
+kod.plant.0 = Nie masz nasion sosny
+kod.plant.1 = Jesteś zbyt zmęczony
+# done
+kod.done.0 = Za dużo posadzonych drzew na tej mapie.
+kod.done.1 = Posadzono sosnę. Za {GROW_DAYS} dni będzie drzewem.
+# plantEntry
+kod.plantEntry.0 = Posadź sosnę
+kod.plantEntry.1 = Wsadzasz w ziemię nasiono sosny (masz {n}). Sadzonka rośnie {GROW_DAYS} dni w dorosłe drzewo, które zetniesz siekierą. Młode drzewko da mniej drewna, a szyszki sypią się dopiero z dorosłego.
+kod.plantEntry.2 = Wsadzasz w ziemię jedno nasiono sosny. Sadzonka od razu stoi na mapie i przez {GROW_DAYS} dni rośnie z dnia na dzień w dorosłe drzewo.
+kod.plantEntry.3 = Masz nasion: {n}
+kod.plantEntry.4 = Młode drzewo: mniej uderzeń siekierą i mniej drewna

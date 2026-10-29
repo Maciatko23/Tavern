@@ -38,12 +38,14 @@ const OUT = __dirname + "/";
         await frames(10);
         const speed0 = await ev("$gamePlayer.realMoveSpeed()");
         await press("sneak");
-        const sn = await J("({ on: Hunting.sneaking(), sheet: $gamePlayer.characterName(), speed: $gamePlayer.realMoveSpeed(), badge: SceneManager._scene._sneakBadge.visible })");
-        check("C: sneaking on - the crouched sheet, half the speed, the badge", sn.on && sn.sheet === "$Reid_Poor_Sneak" && sn.speed === speed0 - 1 && sn.badge, { speed0, sn });
+        await frames(4);
+        // (the crouched sheet: the hero's own Hero_Sneak - HeroLook.js; the old $Reid_Poor_Sneak is archived since 2026-10-28)
+        const sn = await J("({ on: Hunting.sneaking(), sheet: HeroLook.heroCell().sheet, speed: $gamePlayer.realMoveSpeed(), badge: SceneManager._scene._sneakBadge.visible })");
+        check("C: sneaking on - the crouched sheet, half the speed, the badge", sn.on && sn.sheet === "Hero_Sneak" && sn.speed === speed0 - 1 && sn.badge, { speed0, sn });
         await frames(20);
         await b.shot(OUT + "birds_sneak.png");
         await press("sneak");
-        check("C again: back to walking", !(await ev("Hunting.sneaking()")) && (await ev("$gamePlayer.characterName()")) === "$Reid_Poor");
+        check("C again: back to walking", !(await ev("Hunting.sneaking()")) && (await ev("HeroLook.heroCell().sheet")) !== "Hero_Sneak");
 
         // ---------------------------------------------------------------- awareness: walking up to a rabbit, then sneaking up to it
         const approach = async sneak => {
@@ -156,7 +158,7 @@ const OUT = __dirname + "/";
         // ---------------------------------------------------------------- raids while away: counted when you come back
         await ev(`(function(){ const f = $gameSystem._farm, P = f.plots[3]; for (let i = 0; i < 8; i++) P[(${field.x} + i) + "," + (${field.y} - 3)] = { s: "tilled", crop: "potato", day: $gameSystem.dayNightDay() - 1 }; f.rev++; })(); 0`);
         const before = await ev("Birds.openCrops(3).length");
-        await ev("window.__pop = []; Birds.store().maps[3] = { upto: $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour() - 48 }; delete $gameSystem._stormForce; 0");
+        await ev("window.__pop = []; Birds.store().maps[3] = { upto: $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour() - 48 }; $gameSystem._stormForce = null; 0");   // (Survival's state since 2026-10-28: the old name leads there, a delete does nothing)
         const expected = await ev(`(function(){ const now = $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour(), from = now - 48; let n = 0;
             for (let d = Math.floor(from / 24); d <= Math.floor(now / 24); d++) for (const v of Birds.visitsOf(3, d)) { const s = d * 24 + v.start; if (s > from && s <= now) n++; } return n; })()`);
         await frames(70);

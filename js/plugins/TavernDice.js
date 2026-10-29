@@ -195,6 +195,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("kosci");   // (the words of this file: js/teksty/kosci.txt, kod.*)
 
     const PLUGIN = "TavernDice";
     const TW = window.Tawerna;
@@ -244,10 +245,8 @@
     // ==================================================================
     // Scoring (pure): the best way to count ALL the dice given (null: some die would not count)
     // ==================================================================
-    const FACE = [null,
-        ["jedynka", "jedynki", "jedynek"], ["dwójka", "dwójki", "dwójek"], ["trójka", "trójki", "trójek"],
-        ["czwórka", "czwórki", "czwórek"], ["piątka", "piątki", "piątek"], ["szóstka", "szóstki", "szóstek"]];
-    const COUNT = { 1: "jedna", 2: "dwie", 3: "trzy", 4: "cztery", 5: "pięć", 6: "sześć" };
+    // the words of a face (one, two to four, five and six of it) and of how many: js/teksty/kosci.txt, liczenie.oczka / liczenie.ile
+    const FACE = Watki.scal({}, "kosci", "liczenie.oczka"), COUNT = Watki.scal({}, "kosci", "liczenie.ile");
     // "trzy czwórki", "pięć szóstek", "jedynka"
     function facesWord(n, face) {
         if (n === 1) return FACE[face][0];
@@ -255,10 +254,11 @@
     }
     const cap = s => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
     const STRAIGHTS = {
-        s15: { name: "mały strit", faces: [1, 2, 3, 4, 5], points: 500 },
-        s26: { name: "duży strit", faces: [2, 3, 4, 5, 6], points: 750 },
-        s16: { name: "pełny strit", faces: [1, 2, 3, 4, 5, 6], points: 1500 }
+        s15: { faces: [1, 2, 3, 4, 5], points: 500 },
+        s26: { faces: [2, 3, 4, 5, 6], points: 750 },
+        s16: { faces: [1, 2, 3, 4, 5, 6], points: 1500 }
     };
+    Watki.scal(STRAIGHTS, "kosci", "liczenie.strity");   // (the names: js/teksty/kosci.txt)
     const kindPoints = (face, n) => (face === 1 ? 1000 : face * 100) * Math.pow(2, n - 3);
 
     const memo = new Map();
@@ -588,7 +588,7 @@
         const n = countsOf(faces);
         if (n[1] === 1 && !n[5]) return pickOf(rng, lines.one);
         if (n[5] === 1 && !n[1]) return pickOf(rng, lines.five);
-        return cap([n[1] ? facesWord(n[1], 1) : "", n[5] ? facesWord(n[5], 5) : ""].filter(Boolean).join(" i ")) + "... hyk.";
+        return Watki.wstaw(TK.kod.visionText[0], { "1": cap([n[1] ? facesWord(n[1], 1) : "", n[5] ? facesWord(n[5], 5) : ""].filter(Boolean).join(" i ")) });
     }
 
     // ==================================================================
@@ -598,7 +598,7 @@
     function applyRewards(p) {
         const r = p.rewards || {};
         try {
-            if (r.xp > 0) TW.call("Combat", "gainXp", r.xp, "wygrana w kości");
+            if (r.xp > 0) TW.call("Combat", "gainXp", r.xp, TK.kod.applyRewards[0]);
             for (const [t, x] of r.notes || []) TW.call("Journal", "addNote", t, x);
             for (const [t, c, sub] of r.notices || []) TW.popup(t, { top: true, color: c, sub });
         } catch (e) { console.error(e); }
@@ -644,13 +644,13 @@
         const hour = hourNow(), list = present(hour, dayNow(), o.only);
         if (!list.length) {
             const only = o.only && D().OPPONENTS[o.only];
-            popupMsg(only && hour >= 10 ? only.short + " siada do kości dopiero od " + only.hours[0] + ":00." : "Stoły puste. Wróć wieczorem.", "#eceef0");
+            popupMsg(only && hour >= 10 ? Watki.wstaw(TK.kod.openTable[0], { short: only.short, "2": only.hours[0] }) : TK.kod.openTable[1], "#eceef0");
             return false;
         }
         const awake = list.filter(p => !p.tired);
-        if (!awake.length) { popupMsg("Nikt już dziś nie chce grać. Wróć jutro.", "#eceef0"); return false; }
+        if (!awake.length) { popupMsg(TK.kod.openTable[2], "#eceef0"); return false; }
         const min = Math.min(...awake.map(p => D().OPPONENTS[p.key].stakes[0]));
-        if ($gameParty.gold() < min) { popupMsg("Za mało złota na grę (najmniej " + gold(min) + ")."); return false; }
+        if ($gameParty.gold() < min) { popupMsg(Watki.wstaw(TK.kod.openTable[3], { "1": gold(min) })); return false; }
         return launch(Object.assign({}, o));
     }
     function launch(opts) {
@@ -678,12 +678,12 @@
             if (opts.opponent && opts.stake !== undefined) {
                 const stake = Number(opts.stake);
                 if (!(stake > 0)) return false;
-                if ($gameParty.gold() < stake) { popupMsg("Nie stać cię na stawkę " + gold(stake) + "."); return false; }
+                if ($gameParty.gold() < stake) { popupMsg(Watki.wstaw(TK.kod.start[0], { "1": gold(stake) })); return false; }
                 opts.stake = stake;
                 return launch(opts);
             }
             if (opts.opponent) {
-                if ($gameParty.gold() < OPPONENTS[opts.opponent].stakes[0]) { popupMsg("Za mało złota na grę (najmniej " + gold(OPPONENTS[opts.opponent].stakes[0]) + ")."); return false; }
+                if ($gameParty.gold() < OPPONENTS[opts.opponent].stakes[0]) { popupMsg(Watki.wstaw(TK.kod.start[1], { "1": gold(OPPONENTS[opts.opponent].stakes[0]) })); return false; }
                 return launch(opts);
             }
             return openTable(opts);
@@ -694,7 +694,7 @@
         giveDie(key) {
             if (!giveDie(key)) return false;
             const DT = D().DIE_TYPES[key];
-            if (SceneManager._scene instanceof Scene_Map) TW.popup("Nowa kość do gry: " + DT.name, { top: true, color: ui.style().accent, sub: DT.effect });
+            if (SceneManager._scene instanceof Scene_Map) TW.popup(Watki.wstaw(TK.kod.giveDie[0], { name: DT.name }), { top: true, color: ui.style().accent, sub: DT.effect });
             return true;
         },
         // the hero's dice: the chosen six and the special ones he has

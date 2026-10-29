@@ -1,0 +1,89 @@
+{
+ "pietra": [
+  "Parter",
+  "Pokoje gości",
+  "Apartamenty"
+ ],
+ "rodzaje": {
+  "guest": "dla gości",
+  "service": "zaplecze",
+  "private": "prywatne",
+  "hall": "przejście",
+  "stairs": "schody"
+ },
+ "ikony": {
+  "bar": "Bar · Borgar",
+  "kitchen": "Kuchnia",
+  "board": "Tablica zleceń",
+  "dice": "Kości",
+  "arm": "Siłowanie",
+  "darts": "Rzutki",
+  "bath": "Łaźnia",
+  "stage": "Scena · Melia",
+  "stairs": "Schody",
+  "room": "Pokój na noc",
+  "gate": "Złocona krata",
+  "fire": "Kominek"
+ },
+ "opisyRodzajow": {
+  "guest": "Dla gości karczmy.",
+  "service": "Zaplecze karczmy.",
+  "private": "Prywatne.",
+  "hall": "Przejście.",
+  "stairs": "Schody."
+ },
+ "opisy": {
+  "1": {
+   "komorka": "Ciasna komórka za składem: stare beczki, połamane stołki i rupiecie, których Borgar nie ma serca wyrzucić.",
+   "sklad": "Worki z mąką i kaszą, skrzynie, sól i przyprawy. Stąd kuchnia bierze, co trzeba.",
+   "browar": "Kadzie, miedziany kocioł i beczki, w których dojrzewa piwo „Złotego Kufla”. Pachnie chmielem.",
+   "sluzba": "Łóżka i skrzynie ludzi Borgara. Tu odpoczywają między zmianami.",
+   "gabinet": "Biurko z księgą rachunków, szkatuła i klucze do pokoi. Tu Borgar liczy utarg.",
+   "magazyn": "Beczki piwa, skrzynie wina i zapasy na zimę.",
+   "wedzarnia": "Szynki i kiełbasy w dymie z olchy. Zapach niesie się aż na korytarz.",
+   "korytarz": "Korytarz zaplecza: z sal do składów, browaru, spiżarni i gabinetu.",
+   "spizarnia": "Półki z serami, słojami i chlebem — między kuchnią a piekarnią.",
+   "kuchnia": "Piec, kotły i stół do krojenia. Stąd wychodzą gulasz, kapuśniak i pieczeń.",
+   "piekarnia": "Piec chlebowy i dzieże z ciastem. Chleb i placki idą przez okienko prosto do sali.",
+   "mysliwski": "Kamienny kominek, poroża i łby dzików na ścianach, długi stół myśliwych.",
+   "biesiadna": "Dwa długie stoły na wesela i biesiady, chorągwie i zbroje w kątach.",
+   "scena": "Scena z czerwonymi kotarami, stoliki przy świecach, kapelusz na napiwki.",
+   "gry": "Stoły do kości, stół do siłowania na rękę, karty, warcaby i kredowa tablica wyników.",
+   "rzutki": "Tarcze do rzutek na ścianie i linia rzutu.",
+   "laznia": "Cztery balie z gorącą wodą za parawanami, szare mydło i szorstkie ręczniki.",
+   "sala": "Serce karczmy: lada w kształcie L, dwa kamienne kominki i długie stoły z ławami.",
+   "jadalnia": "Stół bankietowy dla gości, którzy wolą zjeść w spokoju.",
+   "palarnia": "Fotele, fajki i regały z książkami. Cicho jak w klasztorze.",
+   "sien": "Wejście do karczmy: tablica zleceń, ten plan, wieszaki na płaszcze i dwoje schodów na piętro.",
+   "schody_zach": "Schody na piętro, do pokoi gości.",
+   "schody_wsch": "Schody na piętro, do pokoi gości."
+  },
+  "25": {
+   "nc": "Korytarz z drzwiami pokoi gości; boazeria, latarnie i obrazy.",
+   "sc": "Korytarz z drzwiami pokoi gości; boazeria, latarnie i obrazy.",
+   "gal": "Galeria nad wielką salą: przez balustradę widać żyrandol i gości w dole.",
+   "hall": "Hall przy schodach z sali: księga gości, zegar stojący, żyrandol.",
+   "lounge": "Kominek z kamienia, fotele, sofa i biblioteczka — dla wszystkich gości piętra.",
+   "bath": "Balie za parawanami i umywalki dla gości piętra.",
+   "linen": "Półki z pościelą, ręcznikami i świecami na zapas.",
+   "maid": "Pokój pokojówki: łóżko, szafa i wózek z pościelą.",
+   "schody_dol": "Schody w dół, do wielkiej sali.",
+   "schody_gora": "Schody na górę, do Apartamentów."
+  },
+  "26": {
+   "hall": "Marmur, kolumny i kandelabry. Na osi drzwi apartamentu Lorda z herbem Zaleskich.",
+   "serv": "Kącik służby: srebra, pościel i łóżko służącego.",
+   "bathlux": "Miedziana wanna i toaletka z lustrem.",
+   "lib": "Ściana regałów, pulpit z atlasem, fotele przy kominku.",
+   "salon": "Wielki salon: kominek, sofy, harfa i szpinet.",
+   "dining": "Długi stół na czternaście osób, srebra i kandelabry.",
+   "terrace": "Taras nad dziedzińcem: balustrada i donice z kwiatami.",
+   "s1": "Salonik z kominkiem i sypialnia z łożem z baldachimem. Zajęty przez gości.",
+   "s2": "Salonik z kominkiem i sypialnia z łożem z baldachimem. Zajęty przez gości.",
+   "s3": "Salonik z kominkiem i sypialnia z łożem z baldachimem. Zajęty przez gości.",
+   "lord": "Salon z herbem Zaleskich i chorągwiami, sypialnia z łożem Lorda.",
+   "schody": "Schody w dół, do pokoi gości."
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TavernLife_Plan.js: FLOOR_TAB=pietra, KIND_WORD=rodzaje, ICON_WORD=ikony, PLAN_KIND_DESC=opisyRodzajow, PLAN_DESC=opisy)"
+}

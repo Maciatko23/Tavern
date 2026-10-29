@@ -1,0 +1,641 @@
+# Teksty gry w kości (TavernDice_Data.js, TavernDice.js, TavernDice_Art.js, TavernDice_Scene.js): kości, rywale i ich kwestie, liczenie punktów, stół.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz kosci
+
+# ======================================================================== DIE_TYPES (kosci)
+kosci.std.name = Zwykła kość
+kosci.std.short = zwykła
+kosci.std.desc = Kość z kości, jak w każdej karczmie. Uczciwa jak Borgar przy wadze.
+kosci.std.effect = Każde oczko tak samo często.
+kosci.grusza.name = Kość z gruszy
+kosci.grusza.short = z gruszy
+kosci.grusza.desc = Wystrugana przez Bartka Kmiecia z gruszkowego drewna. Pachnie sadem.
+kosci.grusza.effect = Jedynki i piątki odrobinę częściej.
+kosci.wdowa.name = Kość wdowy
+kosci.wdowa.short = wdowy
+kosci.wdowa.desc = Czarna jak żałoba, lekka jak plotka. Dziadek Ozzy wygrał ją kiedyś od wdowy z Młynówki.
+kosci.wdowa.effect = Piątki wyraźnie częściej (ok. 1 na 4 rzuty).
+kosci.szczesciarz.name = Kość szczęściarza
+kosci.szczesciarz.short = szczęściarza
+kosci.szczesciarz.desc = Szczęśliwa kość Gruma, ze złotym połyskiem i czerwonym oczkiem.
+kosci.szczesciarz.effect = Jedynki wyraźnie częściej (ok. 1 na 4 rzuty).
+kosci.krucze.name = Kość z Kruczych Skał
+kosci.krucze.short = z Kruczych Skał
+kosci.krucze.desc = Z czarnego kamienia dawnej twierdzy. Zamiast jedynki wyryty kruk. Zimna w dłoni, nawet przy ogniu.
+kosci.krucze.effect = Kruk (jedynka) i piątki częściej, trójki rzadziej.
+
+# ======================================================================== OPPONENTS (rywale)
+rywale.grum.name = Grum Żelazna Pięść
+rywale.grum.short = Grum
+rywale.grum.role = najemnik
+rywale.grum.style = ryzykant
+rywale.grum.quote = Siadaj. Tylko nie płacz potem, jak zgarnę pulę.
+[rywale.grum.lines.greet]
+Siadaj. Tylko nie płacz potem, jak zgarnę pulę.
+No proszę, ktoś odważny. Kości czekają.
+Stawiaj, chłopcze. Grum nie gra za darmo.
+
+[rywale.grum.lines.meFirst]
+Ja pierwszy. Patrz i się ucz.
+Moja kolej na start. Tak ma być.
+
+[rywale.grum.lines.heroFirst]
+Zaczynaj. I tak cię dogonię.
+Ty pierwszy. Dam ci fory. Małe.
+
+[rywale.grum.lines.myBig]
+Ha! Tak się rzuca!
+Widzisz? Szczęście sprzyja odważnym.
+No i co ty na to, chłopcze?
+
+[rywale.grum.lines.myBust]
+Na brodę mojej matki...
+Kości dziś krzywe.
+Niech to szlag!
+Pfff. Rozgrzewka.
+
+[rywale.grum.lines.myHot]
+Wszystkie sześć! Grum się rozkręca!
+Gorące! Jeszcze raz, całą garścią!
+
+[rywale.grum.lines.push]
+Jeszcze raz. Kto nie ryzykuje, ten nie pije.
+Mało. Rzucam dalej.
+Grum nie zapisuje drobnych.
+
+[rywale.grum.lines.bank]
+Dobra, zapisuję. Nie przyzwyczajaj się.
+Do sakwy z tym.
+
+[rywale.grum.lines.heroBust]
+Ha! Pudło! Kości cię nie lubią, chłopcze.
+Hehe. Bywa.
+I tyle z twojej tury.
+
+[rywale.grum.lines.heroHot]
+Gorące kości? Farciarz...
+Hmpf. Rzucaj, rzucaj.
+
+[rywale.grum.lines.heroBig]
+Hmpf. Zwykłe szczęście.
+Nieźle. Ale to jeszcze nie koniec.
+
+[rywale.grum.lines.heroSmall]
+Zapisujesz tak mało? Tchórzysz?
+Ostrożny jak baba na lodzie.
+
+[rywale.grum.lines.win]
+Moje! Dzięki za piwo, chłopcze.
+Pula moja. Wróć, jak urośniesz.
+
+[rywale.grum.lines.lose]
+Wygrałeś. Uczciwie. Nie myśl, że się nie odegram.
+Grr. Masz szczęście, że lubię tę karczmę.
+
+[rywale.grum.lines.lucky]
+Moja szczęśliwa kość. Nie dotykaj, bo straci moc.
+
+[rywale.grum.lines.chat]
+Słyszałeś coś o jaskiniach na wschód stąd? Nie? Szkoda.
+Za górami płacą lepiej niż Borgar. Ale kości tam gorsze.
+Najemnik bez kości to jak miecz bez ostrza.
+
+[rywale.grum.lines.give]
+Weź ją. Moja szczęśliwa kość przestała mnie lubić. Może ciebie polubi.
+
+[rywale.grum.lines.tired]
+Dość na dziś. Sakwa pusta, a duma obolała. Jutro się odegram.
+
+rywale.ozzy.name = Dziadek Ozzy
+rywale.ozzy.short = Ozzy
+rywale.ozzy.role = stały bywalec
+rywale.ozzy.style = ostrożny
+rywale.ozzy.quote = Siadaj, siadaj, młody. Stary Ozzy lubi towarzystwo.
+[rywale.ozzy.lines.greet]
+Siadaj, siadaj, młody. Stary Ozzy lubi towarzystwo.
+O, gość! Zagramy? Tylko nie o grube pieniądze, emerytura skromna.
+
+[rywale.ozzy.lines.meFirst]
+Ja zaczynam? Starszym się ustępuje, hehe.
+
+[rywale.ozzy.lines.heroFirst]
+Młodzi przodem. Rzucaj.
+
+[rywale.ozzy.lines.myBig]
+O! Widzisz? Stare ręce jeszcze umieją.
+Hehe, jak za młodu!
+
+[rywale.ozzy.lines.myBust]
+Ech... Kości jak moja pamięć. Nic nie zostało.
+Pudło? No to się napiję.
+
+[rywale.ozzy.lines.myHot]
+Wszystkie? Ojej, a ja nawet nie celowałem!
+
+[rywale.ozzy.lines.push]
+Jeszcze jeden rzut... No dobra, jeden.
+Raz się żyje, a ja żyję już dość długo.
+
+[rywale.ozzy.lines.bank]
+Zapisuję, zapisuję. Pewne to pewne.
+Wróbel w garści, jak mawiała moja Halinka.
+
+[rywale.ozzy.lines.heroBust]
+Oj, pudło. Nie martw się, mnie też się zdarza. Codziennie.
+Kości mają humory. Jak ja.
+
+[rywale.ozzy.lines.heroHot]
+Gorące! Uważaj, żeby się nie sparzyć, hehe.
+
+[rywale.ozzy.lines.heroBig]
+No, no! Pięknie rzucone!
+Ho, ho! Masz rękę do kości.
+
+[rywale.ozzy.lines.heroSmall]
+Rozsądnie. Rozsądnie.
+Mądrze. Pewne to pewne.
+
+[rywale.ozzy.lines.win]
+Hehe! Stary Ozzy jeszcze coś potrafi!
+Moja wygrana. Postawię ci za to piwo. Za twoje pieniądze.
+
+[rywale.ozzy.lines.lose]
+Wygrałeś uczciwie. Moja Halinka by cię polubiła.
+Ech, przegrałem. Ale jaka zabawa!
+
+[rywale.ozzy.lines.lucky]
+Ta czarna? Kość wdowy. Gram nią, jak mi smutno.
+
+[rywale.ozzy.lines.chat]
+Za moich młodych lat grało się o kury, nie o grosze. Raz wygrałem koguta. Dziobał mnie do zimy.
+Moja Halinka grała lepiej ode mnie. I lepiej gotowała. Właściwie wszystko robiła lepiej.
+Kiedyś jeden kupiec z miasta przegrał tu buty. Szedł do domu boso, a śpiewał!
+Ta tawerna stoi na starych kamieniach, wiesz? Jako chłopak wlazłem raz do piwnicy... Hyk. Nieważne. Rzucaj.
+Borgar mówi: nie pytaj o to, czego nie chcesz wiedzieć. Mądry chłopak. Po dziadku.
+Grum? Dobry chłopak, tylko za dużo pyta o jaskinie na wschodzie. Po co mu jaskinie?
+Kiedyś rzuciłem sześć jedynek. Nikt mi nie wierzy. Ja też już nie wierzę.
+Kości trzeba ogrzać w dłoni. Tak mówił mój ojciec. Potem przegrał krowę.
+
+[rywale.ozzy.lines.vision.bust]
+Hyk... Nic z tego nie będzie. Nic a nic...
+Widzę pustkę... Hyk. Pudło.
+
+[rywale.ozzy.lines.vision.s16]
+Wszystkie po kolei... od jedynki do szóstki... hyk.
+
+[rywale.ozzy.lines.vision.straight]
+Po kolei... ładnie po kolei, jak kaczki...
+
+[rywale.ozzy.lines.vision.kind]
+{w}... hyk... tak mi się widzi.
+
+[rywale.ozzy.lines.vision.one]
+Jedynka... Widzę jedynkę. Hyk.
+
+[rywale.ozzy.lines.vision.five]
+Piątka. Samotna piątka... hyk.
+
+[rywale.ozzy.lines.vision.after]
+Mówiłem.
+Hehe. Mówiłem przecież.
+
+[rywale.ozzy.lines.give]
+Weź ją. Wygrałem ją kiedyś od wdowy z Młynówki. Ta to grała! Niech ci służy lepiej niż mnie.
+
+[rywale.ozzy.lines.tired]
+Na dziś dość, młody. Stare kości potrzebują snu. I moje, i te.
+
+rywale.kupiec.name = Kupiec Wawrzyniec
+rywale.kupiec.short = Wawrzyniec
+rywale.kupiec.role = bogaty gość z miasta
+rywale.kupiec.style = wyrachowany
+rywale.kupiec.quote = Pięćdziesiąt groszy tu, pięćdziesiąt tam... Siadaj, młodzieńcze.
+[rywale.kupiec.lines.greet]
+Pięćdziesiąt groszy tu, pięćdziesiąt tam... Siadaj, młodzieńcze.
+Szukam rozrywki na wieczór. Zagramy o coś wartego uwagi?
+
+[rywale.kupiec.lines.meFirst]
+Pozwolisz, że zacznę. Czas to pieniądz.
+
+[rywale.kupiec.lines.heroFirst]
+Proszę. Gość przodem.
+
+[rywale.kupiec.lines.myBig]
+Inwestycja się zwraca.
+Tak wygląda dobry interes.
+
+[rywale.kupiec.lines.myBust]
+Hm. Koszty prowadzenia interesu.
+Każdy kupiec czasem traci towar.
+
+[rywale.kupiec.lines.myHot]
+Pełna ładownia. Płyniemy dalej.
+
+[rywale.kupiec.lines.push]
+Ryzyko jest ceną zysku.
+Jeszcze jeden rzut. Liczby są po mojej stronie.
+
+[rywale.kupiec.lines.bank]
+Zysk w kieszeni jest lepszy niż zysk w obietnicy.
+Zamykam rachunek tej tury.
+
+[rywale.kupiec.lines.heroBust]
+Tak kończy się chciwość.
+Przykro mi. Naprawdę. Trochę.
+
+[rywale.kupiec.lines.heroHot]
+Ho, ho. Imponujące.
+Szczęście początkującego?
+
+[rywale.kupiec.lines.heroBig]
+Dobry rzut. Zanotuję to sobie.
+Proszę, proszę.
+
+[rywale.kupiec.lines.heroSmall]
+Ostrożność. Cenię to.
+
+[rywale.kupiec.lines.win]
+Interes się opłacił. Dziękuję za grę.
+Pula moja. Nic osobistego, młodzieńcze.
+
+[rywale.kupiec.lines.lose]
+Brawo. Rzadko przegrywam. Zapamiętam twoją twarz.
+Wygrałeś. Pieniądz lubi zmieniać właściciela.
+
+[rywale.kupiec.lines.lucky]
+Ta czarna? Pamiątka z podróży. Nie zwracaj na nią uwagi.
+
+[rywale.kupiec.lines.chat]
+Na targu w grodzie gra się o większe stawki. Ale tu jest przytulniej.
+Kupiłem kiedyś kość od kopacza spod Kruczych Skał. Od tamtej pory śnią mi się kruki.
+Rachunek prawdopodobieństwa, młodzieńcze. Nie szczęście.
+
+[rywale.kupiec.lines.tired]
+Na dziś wystarczy. Mój skarbnik by mnie zabił.
+
+rywale.bartek.name = Bartek Kmieć
+rywale.bartek.short = Bartek
+rywale.bartek.role = chłop spod Młynówki
+rywale.bartek.style = nowicjusz
+rywale.bartek.quote = Pięć groszy, więcej nie mam, żona liczy.
+[rywale.bartek.lines.greet]
+Pięć groszy, więcej nie mam, żona liczy.
+Zagramy? Tylko powoli, ja dopiero się uczę.
+
+[rywale.bartek.lines.meFirst]
+Ja pierwszy? Ojej. Dobra.
+
+[rywale.bartek.lines.heroFirst]
+Ty zaczynaj, ja popatrzę, jak się to robi.
+
+[rywale.bartek.lines.myBig]
+O matko, to się liczy? Liczy się, nie?
+Hej! Szkoda, że żona nie widziała!
+
+[rywale.bartek.lines.myBust]
+Ojej... No nic, ziemniaki też nie zawsze wschodzą.
+Ech. Jak z moim polem.
+
+[rywale.bartek.lines.myHot]
+Wszystkie sześć? To tak można?!
+
+[rywale.bartek.lines.push]
+Rzucę jeszcze. Chyba tak się robi?
+
+[rywale.bartek.lines.bank]
+Zapiszę, zapiszę, bo mi ucieknie.
+Lepiej zapiszę, bo zapomnę.
+
+[rywale.bartek.lines.heroBust]
+Oj. Współczuję. Szczerze!
+Pudło? Tak jak ja wczoraj.
+
+[rywale.bartek.lines.heroHot]
+Wszystkie sześć? Jak to się robi?!
+
+[rywale.bartek.lines.heroBig]
+Ale rzut! Nauczysz mnie tak?
+
+[rywale.bartek.lines.heroSmall]
+Mądrze.
+
+[rywale.bartek.lines.win]
+Wygrałem! Kupię żonie wstążkę!
+Naprawdę wygrałem? No proszę!
+
+[rywale.bartek.lines.lose]
+Przegrałem... Tylko nie mów żonie.
+No trudno. Dobra zabawa za pięć groszy.
+
+[rywale.bartek.lines.lucky]
+Ta z gruszy? Sam wystrugałem. Nie jest krzywa. Chyba.
+
+[rywale.bartek.lines.chat]
+U nas we wsi gra się w kości tylko w niedzielę. Po kościele. Za kościołem.
+Żona mówi, że kości to grzech. Ale sama gra w karty.
+
+[rywale.bartek.lines.give]
+Nie mam już grosza... Weź moją kość. Sam wystrugałem z gruszy. Mnie i tak nie przynosi szczęścia.
+
+[rywale.bartek.lines.tired]
+Na dziś koniec. Żona mnie zabije, jak przegram jeszcze grosz.
+
+rywale.nieznajomy.name = Nieznajomy w kapturze
+rywale.nieznajomy.short = Nieznajomy
+rywale.nieznajomy.role = gość bez imienia
+rywale.nieznajomy.style = zagadka
+rywale.nieznajomy.quote = Kości nie kłamią. Ludzie kłamią. Siadaj.
+[rywale.nieznajomy.lines.greet]
+Kości nie kłamią. Ludzie kłamią. Siadaj.
+Sto sztuk złota. Do trzech tysięcy. Chluba tawerny chyba się nie boi?
+
+[rywale.nieznajomy.lines.meFirst]
+Ja pierwszy. Tak miało być.
+
+[rywale.nieznajomy.lines.heroFirst]
+Proszę. Pokaż, ile jesteś wart.
+
+[rywale.nieznajomy.lines.myBig]
+Tak musiało być.
+Wiedziałem.
+
+[rywale.nieznajomy.lines.myBust]
+...
+Ciekawe.
+
+[rywale.nieznajomy.lines.myHot]
+Wszystkie sześć. Jak dawniej.
+
+[rywale.nieznajomy.lines.push]
+Jeszcze.
+Za mało, żeby przestać.
+
+[rywale.nieznajomy.lines.bank]
+Wystarczy.
+Zapisz to.
+
+[rywale.nieznajomy.lines.heroBust]
+Każdy kiedyś sięga o jeden rzut za daleko.
+Chciałeś wiedzieć za dużo.
+
+[rywale.nieznajomy.lines.heroHot]
+Kości cię dziś lubią. Nie przyzwyczajaj się.
+
+[rywale.nieznajomy.lines.heroBig]
+Nieźle.
+Kości cię lubią. Na razie.
+
+[rywale.nieznajomy.lines.heroSmall]
+Ostrożnie. Mądrze.
+
+[rywale.nieznajomy.lines.win]
+Pula moja. Jeszcze się spotkamy.
+Tak miało być.
+
+[rywale.nieznajomy.lines.lose]
+Wygrałeś. Rzadko to słyszę.
+Dobrze. Zasłużyłeś.
+
+[rywale.nieznajomy.lines.lucky]
+Ta kość jest stara. Starsza niż ta tawerna.
+
+[rywale.nieznajomy.lines.chat]
+Pod tą podłogą leżą starsze kamienie, niż myślisz.
+Pytasz, kim jestem? Zapytaj lepiej, czego szukasz.
+Niektórzy rzucają kośćmi, żeby nie myśleć o tym, co wiedzą.
+
+[rywale.nieznajomy.lines.give]
+Weź ją. Z Kruczych Skał. Ona i tak woli ciebie.
+
+[rywale.nieznajomy.lines.giveGold]
+Kość z Kruczych Skał już masz. Weź więc to. I nie pytaj.
+
+[rywale.nieznajomy.lines.tired]
+Na dziś dość. Znajdę cię.
+
+# ======================================================================== MERCHANT_HINT (kupiec_przy_oknie)
+kupiec_przy_oknie.grum = Ten kupiec przy oknie? Gra tylko z ludźmi, których zna. Mnie też długo nie znał.
+kupiec_przy_oknie.ozzy = Widzisz tego kupca z miasta? Gra tylko z ludźmi, których zna. Pokaż się w tawernie, to i z tobą siądzie.
+kupiec_przy_oknie.bartek = Kupiec mówi, że gra tylko z ludźmi, których zna. Mnie nie zna. Nikt mnie nie zna.
+
+# ======================================================================== HERO_LINES (bohater)
+[bohater.vision]
+Skąd on to wiedział...?
+Zaraz... skąd on wiedział?
+
+# ======================================================================== FACE (liczenie.oczka)
+[liczenie.oczka.1]
+jedynka
+jedynki
+jedynek
+
+[liczenie.oczka.2]
+dwójka
+dwójki
+dwójek
+
+[liczenie.oczka.3]
+trójka
+trójki
+trójek
+
+[liczenie.oczka.4]
+czwórka
+czwórki
+czwórek
+
+[liczenie.oczka.5]
+piątka
+piątki
+piątek
+
+[liczenie.oczka.6]
+szóstka
+szóstki
+szóstek
+
+# ======================================================================== COUNT (liczenie.ile)
+liczenie.ile.1 = jedna
+liczenie.ile.2 = dwie
+liczenie.ile.3 = trzy
+liczenie.ile.4 = cztery
+liczenie.ile.5 = pięć
+liczenie.ile.6 = sześć
+
+# ======================================================================== STRAIGHTS (liczenie.strity)
+liczenie.strity.s15.name = mały strit
+liczenie.strity.s26.name = duży strit
+liczenie.strity.s16.name = pełny strit
+
+# ======================================================================== z kodu TavernDice.js (kod.<funkcja>.<n>, w kolejności kodu)
+# visionText
+kod.visionText.0 = {1}... hyk.
+# applyRewards
+kod.applyRewards.0 = wygrana w kości
+# openTable
+kod.openTable.0 = {short} siada do kości dopiero od {2}:00.
+kod.openTable.1 = Stoły puste. Wróć wieczorem.
+kod.openTable.2 = Nikt już dziś nie chce grać. Wróć jutro.
+kod.openTable.3 = Za mało złota na grę (najmniej {1}).
+# start
+kod.start.0 = Nie stać cię na stawkę {1}.
+kod.start.1 = Za mało złota na grę (najmniej {1}).
+# giveDie
+kod.giveDie.0 = Nowa kość do gry: {name}
+
+# ======================================================================== BTN (stol.przyciski)
+# rules
+stol.przyciski.rules.label = Zasady
+# leave
+stol.przyciski.leave.label = Odejdź
+
+# ======================================================================== z kodu TavernDice_Art.js (art.<funkcja>.<n>, w kolejności kodu)
+# paintTable
+art.paintTable.0 = POD ZŁOTYM KUFLEM
+# drawHeader
+art.drawHeader.0 = KOŚCI
+art.drawHeader.1 = ·   sala gier „Pod Złotym Kuflem”
+art.drawHeader.2 = {name}   ·   stawka {2}   ·   gra do {target}
+art.drawHeader.3 = {clock}   ·   dzień {2}
+# drawSide
+art.drawSide.0 = sakiewka: {1}
+art.drawSide.1 = Odkłada
+art.drawSide.2 = nie punktują
+art.drawSide.3 = Kości
+# drawHint
+art.drawHint.0 = wybór
+art.drawHint.1 = zatwierdź
+art.drawHint.2 = odejdź
+art.drawHint.3 = zostań przy stole
+art.drawHint.4 = kości i przyciski
+art.drawHint.5 = odłóż kość / wciśnij
+art.drawHint.6 = odejdź od stołu
+art.drawHint.7 = rzuć kośćmi
+art.drawHint.8 = przytrzymaj: szybciej
+# drawLobby
+art.drawLobby.0 = SALA GIER · „POD ZŁOTYM KUFLEM”
+art.drawLobby.1 = Kości
+art.drawLobby.2 = Sześć kości, kubek i odrobina odwagi. Kto pierwszy dojdzie do celu, bierze całą pulę.
+art.drawLobby.3 = {clock} · dzień {2}
+art.drawLobby.4 = Sakiewka: {1}
+art.drawLobby.5 = KTO SIEDZI PRZY STOLE
+art.drawLobby.6 = Kto siedzi przy stole, zależy od pory dnia.
+art.drawLobby.7 = Stoły puste. Wróć wieczorem.
+art.drawLobby.8 = O tej porze nikt nie gra w kości.
+art.drawLobby.9 = " (szybka partia)"
+art.drawLobby.10 = " (wielka gra)"
+art.drawLobby.11 = pula {1}   ·   gra do {tg}{3}
+art.drawLobby.12 = Masz za mało złota na tę stawkę.
+art.drawLobby.13 = TWOJE KOŚCI
+art.drawLobby.14 = "   (O: zmień)"
+art.drawLobby.15 = Masz: {1}
+art.drawLobby.16 = Wybierz kość strzałkami i zmień ją klawiszem O.
+art.drawLobby.17 = Sześć zwykłych kości z kości.
+art.drawLobby.18 = Kości wyjątkowe zdobywa się przy stole i w przygodach.
+art.drawLobby.19 = Siadam do gry
+art.drawLobby.20 = Odchodzę
+# drawCard
+art.drawCard.0 = Dziś już nie gra
+art.drawCard.1 = {range} · za mała sakiewka
+# drawRules
+art.drawRules.0 = JAK SIĘ GRA
+art.drawRules.1 = Zasady gry w kości
+art.drawRules.2 = Każdy ma sześć kości. Rzucasz wszystkimi naraz.
+art.drawRules.3 = Po każdym rzucie odkładasz co najmniej jedną punktującą kość. Potem zapisujesz punkty tury albo rzucasz dalej resztą kości.
+art.drawRules.4 = Rzut bez żadnej punktującej kości to „Pudło!” — punkty z tej tury przepadają.
+art.drawRules.5 = Odłożysz wszystkie sześć? „Gorące kości!” — rzucasz znowu całą szóstką, a punkty tury zostają.
+art.drawRules.6 = Liczą się tylko odłożone kości, a układy tylko w obrębie jednego rzutu.
+art.drawRules.7 = Wygrywa, kto pierwszy dojdzie do celu: 2000 punktów, przy małej stawce (do {1}) szybka partia do 1500. Zwycięzca bierze całą pulę.
+art.drawRules.8 = piątka
+art.drawRules.9 = trzy jedynki
+art.drawRules.10 = trzy takie same
+art.drawRules.11 = oczko × 100
+art.drawRules.12 = cztery takie same
+art.drawRules.13 = pięć takich samych
+art.drawRules.14 = sześć takich samych
+art.drawRules.15 = mały strit
+art.drawRules.16 = duży strit
+art.drawRules.17 = pełny strit
+art.drawRules.18 = Przykład: trzy czwórki to 400, cztery czwórki 800, pięć czwórek 1600.
+art.drawRules.19 = Zasady są zawsze pod przyciskiem „Zasady”.
+art.drawRules.20 = O — rozumiem, gramy
+# drawConfirm
+art.drawConfirm.0 = Odejść od stołu?
+art.drawConfirm.1 = Partia trwa. Twoja stawka ({1}) przepada, a {short} zgarnia pulę.
+art.drawConfirm.2 = Zostaję
+art.drawConfirm.3 = Odchodzę
+# drawEnd
+art.drawEnd.0 = KONIEC PARTII · {1}
+art.drawEnd.1 = gra do {target} · tury: {turnNo}
+art.drawEnd.2 = +{1} do sakiewki
+art.drawEnd.3 = Stawka przepada: −{1}
+art.drawEnd.4 = +{xp} dośw.
+art.drawEnd.5 = Twój najlepszy rzut:  {best}
+art.drawEnd.6 = Pudła: {busts}   ·   gorące kości: {hot}   ·   w sakiewce: {3}
+art.drawEnd.7 = Nowa kość: {name}
+art.drawEnd.8 = Sakiewka od nieznajomego: +{1}
+art.drawEnd.9 = Kość z Kruczych Skał już masz - dostajesz złoto.
+
+# ======================================================================== stół: napisy na suknie (co klatkę - bez {miejsc} poza pulą)
+art.felt.pierwszenstwo = Rzut o pierwszeństwo: wyższe oczko zaczyna
+art.felt.twojaTura = Twoja tura — rzuć kośćmi
+art.felt.najpierwOdloz = Najpierw odłóż co najmniej jedną punktującą kość
+art.felt.wybierz = Wybierz kości, które odkładasz
+art.felt.niePunktuja = Nie wszystkie wybrane kości punktują
+# po imieniu rywala („Grum odkłada: ...”) / przed nim („Tura: Grum”)
+art.felt.odklada = " odkłada: "
+art.felt.tura = "Tura: "
+art.felt.pula = Pula {pula}
+
+# ======================================================================== z kodu TavernDice_Scene.js (scena.<funkcja>.<n>, w kolejności kodu)
+# rollOffFlow
+scena.rollOffFlow.0 = Kto zaczyna?
+scena.rollOffFlow.1 = Remis! Jeszcze raz.
+scena.rollOffFlow.2 = Zaczynasz ty
+scena.rollOffFlow.3 = Zaczyna {short}
+# turnFlow
+scena.turnFlow.0 = Twoja tura
+scena.turnFlow.1 = Tura: {short}
+# bustFlow
+scena.bustFlow.0 = Pudło!
+scena.bustFlow.1 = Tura przepada: −{lost}
+scena.bustFlow.2 = Żadna kość nie punktuje
+# hotFlow
+scena.hotFlow.0 = Gorące kości!
+scena.hotFlow.1 = Wszystkie sześć odłożone — rzut całą szóstką, punkty zostają
+# visionAfter
+scena.visionAfter.0 = Dziadek Ozzy i kości
+scena.visionAfter.1 = Grałem z Dziadkiem Ozzym w kości. Zanim kości wypadły z kubka, wymamrotał, co pokażą. Zgadzało się co do oczka.\nPijacki fart? Ozzy mówi czasem rzeczy, których nie mógłby wiedzieć...
+# endFlow
+scena.endFlow.0 = Pula {1} jest twoja
+scena.endFlow.1 = {short} zgarnia pulę
+# fameHint
+scena.fameHint.0 = Przy oknie siedzi bogaty kupiec z miasta, ale gra tylko z ludźmi, których zna.
+scena.fameHint.1 = W kącie ktoś w kapturze przygląda się stołom. Podobno gra tylko z chlubą tawerny.
+# finishGame
+scena.finishGame.0 = Sakiewka od: {name} (+{2})
+scena.finishGame.1 = Nowa kość: {name}
+scena.finishGame.2 = Dostałem ją od: {name}.\n{desc}\n{effect}\nPrzy stole do kości mogę ją wybrać do swojej szóstki.
+scena.finishGame.3 = Nowa kość do gry: {name}
+scena.finishGame.4 = Pierwsza wygrana w kości
+scena.finishGame.5 = Wygrałem pierwszą partię kości w tawernie „Pod Złotym Kuflem”. Rywal: {name}, pula {2}.\nSzczęście? Może. Ale odłożyć właściwe kości też trzeba umieć.
+scena.finishGame.6 = Wielka wygrana w kości: +{1}!
+scena.finishGame.7 = Pula od: {name}
+# againBlock
+scena.againBlock.0 = Tylko jedna partia.
+scena.againBlock.1 = {short} już dziś nie zagra.
+scena.againBlock.2 = Robi się późno — {short} odchodzi od stołu.
+scena.againBlock.3 = Za mało złota na tę stawkę.
+# openEnd
+scena.openEnd.0 = Jeszcze raz
+scena.openEnd.1 = Inna gra
+scena.openEnd.2 = Odchodzę
+
+# ======================================================================== stół: przyciski rzutu i zapisu (co klatkę - liczba doklejana jak dawniej)
+stol.rzut.wszystkie = Rzuć wszystkimi (6)
+# za nim: „ (ile kości zostaje)”
+stol.rzut.dalej = Rzuć dalej
+stol.rzut.kosci = Rzuć kośćmi
+# za nim: punkty tury
+stol.zapisz.ile = "Zapisz "
+stol.zapisz.punkty = Zapisz punkty

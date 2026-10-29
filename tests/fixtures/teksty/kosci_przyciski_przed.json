@@ -1,0 +1,14 @@
+{
+ "stol": {
+  "rzut": {
+   "wszystkie": "Rzuć wszystkimi (6)",
+   "dalej": "Rzuć dalej",
+   "kosci": "Rzuć kośćmi"
+  },
+  "zapisz": {
+   "ile": "Zapisz ",
+   "punkty": "Zapisz punkty"
+  }
+ },
+ "_opis": "Napisy buttons() (TavernDice_Scene.js) sprzed przeniesienia do js/teksty/kosci.txt, stol.rzut / stol.zapisz (co klatkę: liczby doklejane jak dawniej)"
+}

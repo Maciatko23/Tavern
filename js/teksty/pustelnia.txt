@@ -141,9 +141,6 @@ Hm?
 Mów. Krótko.
 Słucham, chłopcze. Tylko nie stój w świetle.
 
-[honeyAsk]
-Miód z moich uli. Dwanaście groszy słoik. Dla posłańca nie ma zniżek. Posłańcy płacą jak wszyscy.
-
 [honeyBuy]
 Masz. Nie jedz od razu. Miód lubi czekać.
 
@@ -411,3 +408,8 @@ kod.build.0 = Karta kroniki (Księga pytań)
 kod.build.1 = Karta kroniki (regał w Archiwum)
 # glowna
 kod.glowna.0 = Rejestr straży
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+[honeyAsk]
+Miód z moich uli. Dwanaście groszy słoik. Dla posłańca nie ma zniżek. Posłańcy płacą jak wszyscy.
+

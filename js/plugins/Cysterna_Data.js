@@ -8,7 +8,8 @@
 //     only through the rain gate (shut: 0, open: 1 + 0.5 for each of the four gutters on the Urwisko cleaned - K53: 3)
 //   - the ladle of the Order: ONE draw a day (drink your fill, or fill ONE vessel: waterskin, bucket, clay pot, watering can), only
 //     after D28; the chain reaches the third mark - under 30 the bucket hangs over the water. Under 15 the town's well gives less.
-//   - window.TownQuestsPacks: D28 "Zapas zakonu", K53 "Rynny zakonu", the residents' remarks
+//   - the thread (Watki.js, 2026-10-28): the state "cysterna", D28 "Zapas zakonu", K53 "Rynny zakonu" (into window.TownQuestsPacks
+//     with the residents' remarks), the manor branch's talk
 //   - LEVEL_TILES: the basin's tiles for each band of the water (tools/cysterna/build.py writes them - the map file holds band 1)
 // Stands under Wyspa_Data and above TownLife / TownQuests_Data (its fixed place in js/plugins.js - package 0).
 // DROUGHT (the user's rule): the only new water of the game - late (Act II, after W1 rozdz. 7 and D28), one draw a day, a finite
@@ -19,6 +20,7 @@
  * @plugindesc [pakiet F] Dane: Stara cysterna zakonu (mapa 167) - zapas wody, czerpak raz dziennie, zasuwy, krata, D28 „Zapas zakonu”, K53 „Rynny zakonu”. v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
  * @orderAfter Wyspa_Data
  *
  * @help
@@ -96,27 +98,7 @@
     const NOTE_DONE = [];
     Watki.scal(NOTE_DONE, "cysterna", "noteDone");   // (its words: js/teksty/cysterna.txt, noteDone)
 
-    // ------------------------------------------------------------------ the quests (TownQuests packs - docs/QUESTY_STAN.md "Jak dopisać")
-    const D28 = {
-        id: "D28", kind: "D", giver: null, icon: 391, autoStart: "d28Start",
-        steps: [
-            { type: "custom", check: "d28Wejdz" },
-            { type: "custom", check: "d28Ksiega", vars: "d28Vars" },
-            { type: "custom", check: "d28Krata" },
-            { type: "custom", check: "d28Galaz" }
-        ],
-        reward: { xp: 150, note: NOTE_DONE }
-    };
-    Watki.scal(D28, "cysterna", "zadania.D28");   // (its words: js/teksty/cysterna.txt, zadania.D28)
-    const K53 = {
-        id: "K53", kind: "K", giver: null, icon: 391, autoStart: "k53Start",
-        steps: [
-            { type: "custom", check: "k53Zasuwa" },
-            { type: "custom", check: "k53Rynny", vars: "k53Vars" }
-        ],
-        reward: { xp: 60, opinion: 3, flag: "rynnyCzyste" }
-    };
-    Watki.scal(K53, "cysterna", "zadania.K53");   // (its words: js/teksty/cysterna.txt, zadania.K53)
+    // ------------------------------------------------------------------ the remarks and the gossip (they go with the quests' pack)
     const REMARKS = [
         { id: "cystSoltys", who: "soltys", flag: "cysternaOtwarta" },
         { id: "cystNiskoSoltys", who: "soltys", flag: "cysternaNisko" },
@@ -128,7 +110,50 @@
     Watki.scal(REMARKS, "cysterna", "uwagi");   // (its words: js/teksty/cysterna.txt, uwagi)
     const GOSSIP = { dzwonnik: [] };   // (the key stays: TownQuests_Data copies the gossip key by key while the plugins load)
     Watki.scal(GOSSIP, "cysterna", "plotki");   // (its words: js/teksty/cysterna.txt, plotki)
-    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Cysterna", quests: [D28, K53], remarks: REMARKS, gossip: GOSSIP });
+
+    // ------------------------------------------------------------------ the thread (the engine Watki.js, docs/WATKI_DANE.md): the state,
+    // the quests D28 "Zapas zakonu" and K53 "Rynny zakonu" (their words: js/teksty/cysterna.txt, zadania.*; the engine puts them into
+    // window.TownQuestsPacks with the remarks and the gossip), the manor branch's talk. The hooks (zbudowana, urwiskoGotowe,
+    // zamknijGalaz) are Cysterna.js's
+    const w = Watki.watek({
+        id: "cysterna", wtyczka: "Cysterna", teksty: "cysterna",
+        stan: { klucz: "cysterna", wersja: 1, domyslne: () => ({ reserve: RESERVE.start, day: 0, been: 0, visits: 0, read: {}, rainGate: 0, gutters: {},
+            branch: "", branchDay: 0, branchSeen: 0, lever: 0, drawDay: 0, draws: 0, low: 0, drownedDay: 0, unwedged: 0 }) },
+        // the hero's thoughts: a bubble 200 frames, the next after 210, not while a message is shown
+        mysli: { klatki: 200, odstep: 210, czekaj: "wiadomosc" },
+        mowa: { akapity: true },
+        zadania: {
+            // D28 starts by itself when the hero is on floor 30 (or in the cistern) with the sluice open - W1 rozdz. 7 done
+            D28: { kind: "D", giver: null, icon: 391, start: ["zbudowana", "flaga:cisternOpen", { mapa: [FLOOR30, MAP] }],
+                kroki: [
+                    { nazwa: "d28Wejdz", gotowe: "stan:been" },
+                    { nazwa: "d28Ksiega", gotowe: "ile:read.ksiega+read.slup>=2", zmienne: { n: { ile: "read.ksiega+read.slup" } } },
+                    { nazwa: "d28Krata", gotowe: "stan:lever" },
+                    { nazwa: "d28Galaz", gotowe: "stan:branch" }
+                ],
+                reward: { xp: 150, note: NOTE_DONE } },
+            // K53 starts after D28 in the cistern or on the Urwisko - once the Urwisko is built (package B)
+            K53: { kind: "K", giver: null, icon: 391, start: ["zrobione:D28", "urwiskoGotowe", { mapa: [MAP, URWISKO] }],
+                kroki: [
+                    { nazwa: "k53Zasuwa", gotowe: "stan:rainGate" },
+                    { nazwa: "k53Rynny", gotowe: "ile:gutters>=" + GUTTER.n, zmienne: { n: { ile: "gutters" } } }
+                ],
+                reward: { xp: 60, opinion: 3, flag: "rynnyCzyste" } }
+        },
+        paczka: { remarks: REMARKS, gossip: GOSSIP },
+        // the manor branch's sluice (Cysterna.branch): the first time the hero looks at it, then shut it or leave it
+        rozmowy: {
+            galaz: [{ gdy: "ctx:pierwszy", mow: "branchFirst" }, "branchAsk", { wybor: [
+                { etykieta: "branchClose", tresc: [{ zrob: "zamknijGalaz" }] },
+                { etykieta: "branchLeave", tresc: [{ zrob: "zostawGalaz" }, "branchLeft"] }
+            ], anuluj: 1 }]
+        },
+        akcje: {
+            zamknijGalaz: [{ hak: "zamknijGalaz" }],
+            zostawGalaz: [{ gdy: "!stan:branch", stan: { branch: "open", branchDay: "dzis" } }, { sprawdz: true }]
+        }
+    });
+    const D28 = w.Q.D28, K53 = w.Q.K53;
 
     // <POZIOMY> (tools/cysterna/build.py - nie zmieniaj ręcznie)
     const LEVEL_TILES = {

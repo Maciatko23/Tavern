@@ -2,14 +2,14 @@
 // ChoppableTree_Swing.js
 //=============================================================================
 // The hero's swings (split out of ChoppableTree.js, 2026-09-29): a swing started for an action (Farming.js, Hunting.js, Combat.js...)
-// and stepped frame by frame (the pose held while something lasts), held O striking again and again, the swing sheets (img/system:
-// the whole figure swings the tool) and, without a sheet, the tool of img/system/Tools.png turned about the grip. The kinds and their
+// and stepped frame by frame (the pose held while something lasts), held O striking again and again, the swing sheets (img/system,
+// HeroLook.js's Hero_*: the whole figure swings the tool) and, without a sheet, the tool of img/system/Tools.png turned about the grip. The kinds and their
 // timing are ChoppableTree.js's SWING_KINDS (Combat.js reads them while it loads). Functions only: ChoppableTree.js holds every engine
 // hook (Game_Player.startToolSwing / stepToolSwing, Sprite_Character.updateSwingSheet / updateToolSwing call in here).
 
 /*:
  * @target MZ
- * @plugindesc Zamachy bohatera (część ChoppableTree.js): arkusze Swing_* i Hero_*, narzędzie bez arkusza, trzymane O. Sama nic nie robi - parametry i haki ma ChoppableTree.js. v1.0.0
+ * @plugindesc Zamachy bohatera (część ChoppableTree.js): arkusze Hero_* (HeroLook.js), narzędzie bez arkusza, trzymane O. Sama nic nie robi - parametry i haki ma ChoppableTree.js. v1.0.1
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -22,8 +22,9 @@
  * ============================================================================
  * Część ChoppableTree.js (wydzielona z niego): zamach narzędziem (siekiera,
  * kilof, łopata, grabie, motyka, młotek, wędka, proca, łuk, oszczep, pałka,
- * pięści, siedzenie, przewrót...) klatka po klatce z arkuszy img/system
- * (tablica SWING_KINDS w ChoppableTree.js), bez arkusza - narzędzie z
+ * pięści, siedzenie, przewrót...) klatka po klatce z arkuszy bohatera
+ * img/system/Hero_* (HeroLook.js; rodzaje i czasy - tablica SWING_KINDS
+ * w ChoppableTree.js), bez arkusza - narzędzie z
  * Tools.png; trzymane O uderza raz po raz. Sama nic nie robi: woła ją
  * ChoppableTree.js, który ma parametry.
  *

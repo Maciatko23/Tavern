@@ -44,12 +44,13 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`SceneManager._scene._list.select(${axeIdx}); SceneManager._scene._list.updateHelp(); 0`);
         await frames(4);
         const axeOps = await J("SceneManager._scene._detail._ops");
-        check("the axe's detail panel names it, shows its durability and the repair cost (branch + fibre)", axeOps.some(o => o.k === "title" && o.text === "Kamienna siekiera") && axeOps.some(o => o.k === "sub" && /^Wytrzymałość: \d+ z \d+/.test(o.text)) && axeOps.some(o => o.k === "h" && o.text === "Naprawa") && axeOps.some(o => o.k === "cost"), axeOps);
+        // (2026-10-28, one look: the page's head is one op - gtitle: the title and the line under it -, the headings are gh)
+        check("the axe's detail panel names it, shows its durability and the repair cost (branch + fibre)", axeOps.some(o => o.k === "gtitle" && o.text === "Kamienna siekiera" && /^Wytrzymałość: \d+ z \d+/.test(o.sub || "")) && axeOps.some(o => o.k === "gh" && o.text === "Naprawa") && axeOps.some(o => o.k === "cost"), axeOps);
         check("...and says where to repair it (the workbench)", axeOps.some(o => /warsztacie/.test(o.text || "")), axeOps.map(o => o.text));
         await ev(`SceneManager._scene._list.select(${breadIdx}); SceneManager._scene._list.updateHelp(); 0`);
         await frames(4);
         const breadOps = await J("SceneManager._scene._detail._ops");
-        check("the bread's detail panel shows a freshness line and the pantry tip", breadOps.some(o => o.k === "title" && o.text === "Chleb") && breadOps.some(o => o.k === "sub" && /zepsuje/.test(o.text)) && breadOps.some(o => /spiżarni/.test(o.text || "")), breadOps.map(o => o.text));
+        check("the bread's detail panel shows a freshness line and the pantry tip", breadOps.some(o => o.k === "gtitle" && o.text === "Chleb" && /zepsuje/.test(o.sub || "")) && breadOps.some(o => /spiżarni/.test(o.text || "")), breadOps.map(o => o.text + (o.sub ? " | " + o.sub : "")));
         await key(27); await frames(20);   // Esc: back to the map
 
         // an empty state: nothing worn, nothing perishable
@@ -67,19 +68,20 @@ const { launch, sleep } = require("./cdp.js");
         await frames(10);
         const info = await J("DataManager.savefileInfo(1)");
         check("saving stashes the day, season and hut-built flag into the save's own info", info.day === before.day && info.season === before.season && info.hutBuilt === before.hut, { before, info });
-        // the save screen actually paints that line (spy on drawText instead of reading pixels; Window_SavefileStatus
-        // itself is private to AltSaveScreen.js's closure, so spy on the true global Window_Base that it descends from)
-        await ev(`window.__drawn = []; const _dt = Window_Base.prototype.drawText; Window_Base.prototype.drawText = function(text) { window.__drawn.push(text); return _dt.apply(this, arguments); }; 0`);
+        // the save screen actually paints that line (spy on drawText instead of reading pixels): since 2026-10-28 the file screen is
+        // MenuRing.js's (one look) - the row and the card are drawn on its bitmaps (CleanHUD's textOut -> Bitmap.drawText)
+        await ev(`window.__drawn = []; window.__bdt = Bitmap.prototype.drawText; Bitmap.prototype.drawText = function(text) { window.__drawn.push(String(text)); return window.__bdt.apply(this, arguments); }; 0`);
         await ev("SceneManager.push(Scene_Save); 0");
         await frames(20);
         check("the save scene opened without errors", await ev("SceneManager._scene.constructor.name === 'Scene_Save'"));
         // force slot 1 (the one just saved) to be the one drawn, whatever the cursor's default position is
-        await ev("(function(){ const w = SceneManager._scene._listWindow.mzkp_statusWindow; w.setSavefileId(1); w.refresh(); })()");
+        await ev("(function(){ const s = SceneManager._scene; s._listWindow.selectSavefile(1); s._listWindow.refresh(); s.drawFilesCard(); })()");
         await frames(4);
         const drawn = await J("window.__drawn");
-        // (MenuPanel.js: the row of the file says the day and the season, the panel beside it says the hut too)
-        const wantRow = "Dzień " + before.day + (before.season ? " · " + before.season : ""), wantDay = before.day + (before.season ? "  ·  " + before.season : ""), wantHut = before.hut ? "zbudowana" : "jeszcze nie ma";
-        check("...and paints the day, the season and the hut for the used slot", drawn.some(t => t.startsWith(wantRow)) && drawn.includes(wantDay) && drawn.includes("Chatka") && drawn.includes(wantHut), { wantRow, wantDay, wantHut, drawn: drawn.slice(0, 30) });
+        await ev("Bitmap.prototype.drawText = window.__bdt; 0");
+        // (MenuRing.js: the file's row says the day and the season - "Dzień 40 · lato" -, the card beside it says the hut too)
+        const wantRow = "Dzień " + before.day + (before.season ? " · " + String(before.season).toLowerCase() : ""), wantHut = before.hut ? "zbudowana" : "jeszcze nie ma";
+        check("...and paints the day, the season and the hut for the used slot", drawn.some(t => t.startsWith(wantRow)) && drawn.includes("Chatka") && drawn.includes(wantHut), { wantRow, wantHut, drawn: drawn.slice(0, 40) });
         await b.shot(require("path").join(__dirname, "save_card.png"));
         await ev("SceneManager.pop(); 0");
         await frames(20);

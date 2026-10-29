@@ -112,8 +112,6 @@
     // where the torch's head is on each cell (tools/torch/build_torch_crouch.py) - always in his fist in front of him
     const CROUCH_TIPS = [[[28,46],[26,46],[26,46],[24,48],[26,52],[28,52],[28,56],[28,62],[30,64],[30,64],[30,64],[29,66],[27,62],[27,62],[27,62],[29,64],[30,64],[29,64],[27,62],[27,62],[27,62],[29,66],[30,64],[30,64],[30,64],[28,62],[28,56],[28,52],[26,52],[24,48],[26,46],[26,46],[28,46]],[[36,49],[35,50],[34,50],[31,52],[30,58],[29,60],[28,62],[27,66],[30,66],[31,66],[30,66],[29,66],[27,64],[29,66],[26,64],[26,62],[26,62],[26,62],[26,64],[29,66],[27,64],[29,66],[30,66],[31,66],[30,66],[27,66],[28,62],[29,60],[30,58],[31,52],[34,50],[35,50],[36,49]],[[60,49],[61,50],[62,50],[65,52],[66,58],[67,60],[68,62],[69,66],[66,66],[65,66],[66,66],[67,66],[69,64],[67,66],[70,64],[70,62],[70,62],[70,62],[70,64],[67,66],[69,64],[67,66],[66,66],[65,66],[66,66],[69,66],[68,62],[67,60],[66,58],[65,52],[62,50],[61,50],[60,49]],[[70,46],[70,48],[70,48],[70,50],[70,52],[72,56],[72,60],[72,62],[72,62],[72,62],[72,60],[72,60],[72,60],[72,62],[72,62],[70,62],[72,60],[70,62],[72,62],[72,62],[72,60],[72,60],[72,60],[72,62],[72,62],[72,62],[72,60],[72,56],[70,52],[70,50],[70,48],[70,48],[70,46]]];
     const CELL = 64, SWING_CELL = 96, SWING_FEET = { x: 48, y: 80 };
-    // the old hero (Reid, F9): no torch sheets - a torch drawn beside him (feet-relative px, per 4-way facing; up: behind him)
-    const OLD_HAND = { 2: [-12, -22, 0], 4: [-9, -24, 0], 6: [9, -24, 0], 8: [11, -24, 1] };
 
     // ------------------------------------------------------------------
     // The saved state: lit, the hours left of `max`, the clock it was looked at (`at`, day * 24 + hour), the downpour it has stood
@@ -572,7 +570,7 @@
         bmp._baseTexture.update();
         return (glowBmp = bmp);
     }
-    // the torch stuck in the ground (and the old hero's torch in hand): the stick and the rag head, upright (12 x 22, the ground at the bottom)
+    // the torch stuck in the ground: the stick and the rag head, upright (12 x 22, the ground at the bottom)
     let stickBmp = null;
     function stickBitmap() {
         if (stickBmp) return stickBmp;
@@ -638,9 +636,7 @@
         this._glow.blendMode = 1;
         this._flame = new Sprite();
         this._flame.anchor.set(0.5, FLAME_BASE / FLAME_H);
-        this._stick = new Sprite(stickBitmap());   // (the old hero only)
-        this._stick.anchor.set(0.5, 1);
-        this._hold.addChild(this._stick, this._glow, this._flame);
+        this._hold.addChild(this._glow, this._flame);
         // stuck in the ground: its own holder, sorted at its own ground line
         this._ground = new Sprite();
         this._ground.z = 3;
@@ -736,17 +732,16 @@
     };
     Sprite_TorchLayer.prototype.drawHeld = function(hero, frames, frameK) {
         const kind = swingNow(), torchSwing = kind >= 0 && kind === torchKind();
-        const h = this._hold, look = T.api("HeroLook"), active = look && look.active && look.active();
+        const h = this._hold;
         h.x = hero.x;
         h.rotation = hero.rotation;
         h.scale.x = hero.scale.x;
         h.scale.y = hero.scale.y;
         h.opacity = hero.opacity;
         let tx = null, ty = null, behind = false;
-        this._stick.visible = false;
         if (torchSwing) {   // the blow: the sheet's own fire; the sparks fly from it
             const body = hero._swingBody, f = body && body._frame;
-            if (body && body.visible && f && body.bitmap && /Hero_Torch/.test(body.bitmap._url || "")) {   // (the old hero swings his club sheet: no table)
+            if (body && body.visible && f && body.bitmap && /Hero_Torch/.test(body.bitmap._url || "")) {
                 const col = Math.round(f.x / SWING_CELL), row = Math.round(f.y / SWING_CELL), tip = (SWING_TIPS[row] || [])[col];
                 if (tip) { tx = tip[0] - SWING_FEET.x + body.x; ty = tip[1] - SWING_FEET.y + body.y; }
             }
@@ -760,28 +755,19 @@
             this._flame.visible = !!tip;
             this._glow.visible = !!tip;
             this._swingSparks = false;
-        } else if (kind >= 0) {   // another swing of a fight (a blow of another weapon, the roll, the fall): out of sight, only its light
+        } else if (kind >= 0 || !(hero._heroSheet && TIPS[hero._heroSheet] && hero._heroCell)) {
+            // another swing of a fight (a blow of another weapon, the roll, the fall) - or the walking sheet not the torch's yet (the frame
+            // it is lit): out of sight, only its light
             this._flame.visible = false;
             this._glow.visible = false;
             this._swingSparks = false;
             this._spot = { x: hero.x, y: hero.y - 30, gx: hero.x, gy: hero.y };
             return;
-        } else if (active && hero._heroSheet && TIPS[hero._heroSheet] && hero._heroCell) {   // in his hand: where the walking sheet holds it
+        } else {   // in his hand: where the walking sheet holds it
             const c = hero._heroCell, row = c.row || 0, col = c.col || 0, tip = (TIPS[hero._heroSheet][row] || [])[col];
             if (tip) { tx = tip[0] - CELL / 2; ty = tip[1] - CELL; behind = !!tip[2]; }
             this._flame.visible = !!tip;
             this._glow.visible = !!tip;
-            this._swingSparks = false;
-        } else {   // the old hero (Reid): a torch drawn beside him
-            const o = OLD_HAND[$gamePlayer.direction()] || OLD_HAND[2];
-            this._stick.visible = true;
-            this._stick.x = o[0];
-            this._stick.y = o[1] + 22 - STICK_TIP.y;
-            tx = o[0];
-            ty = o[1];
-            behind = !!o[2];
-            this._flame.visible = true;
-            this._glow.visible = true;
             this._swingSparks = false;
         }
         if (tx === null) {

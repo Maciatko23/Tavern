@@ -3,8 +3,8 @@
 //=============================================================================
 // The harbour on the island's west coast (Map125 "Przystań", behind Podgrodzie; interiors 126 Chata Janka, 127 Szopa przy pochylni,
 // 128 Komora celna - tools/przystan, docs/przystan/KONCEPCJA.md, approved by the user 2026-10-14). Its people are TownLife residents
-// (TownLife_Data.js: janek 939, przemytnik 940, celnik 941, straznik_przystan 942); their quests are TownQuests' (K47, K48, D20, W10 in
-// TownQuests_Data.js). This plugin is what is the harbour's own:
+// (TownLife_Data.js: janek 939, przemytnik 940, celnik 941, straznik_przystan 942); their quests are TownQuests' (K47, K48, D20, W10 -
+// the thread "przystan" of Przystan_Data.js, put into TownQuests_Data.js's list). This plugin is what is the harbour's own:
 //   - the first meetings, before any quest (Tawerna.talk.takeover, "meet" priority): Janek, who found the hero on the beach, gives back the
 //     mother's scarf the sea threw up with the bundle (item 175, a keepsake); Roch Szkwał, the smuggler of the prologue, alive, hiding
 //     under his first name - "hide that pendant"; the customs officer's ledger
@@ -20,8 +20,8 @@
 //     (her bust - an injected silent event 763 beside the hero); grandpa's talk about his daughter (TownQuests' talk step); the hero's
 //     answers with money or a parcel of food that keeps (ferry: 3 G and a tenth to the officer; the cutter free); one epilogue line
 //     after the Heart (Przystan.epilogue, read by Underground.js); F9 "Wyspa i fabuła": "W10: przyślij list od matki"
-//   - Janek's boat away while he is at sea; the TownQuests handlers k47Rod, d20Noc, w10Wyslany, w10Wiesc, w10List1-3, w10BezFabuly,
-//     w10Vars; the sea's fishing bonus after Janek's advice (Farming_Plots asks fishBonus)
+//   - Janek's boat away while he is at sea; the thread's hooks (K47's rod, W10's words, the talks' actions); the sea's fishing bonus
+//     after Janek's advice (Farming_Plots asks fishBonus)
 // Ids 760-779 (Tawerna.inject, Map125): 760 the ferryman, 761-762 people off the ferry on the wave days, 763 the mother's voice
 // (never seen: the letters' speaker, with her bust).
 // DROUGHT (the user's rule): the sea is salt (the map's <Water:salt>, Farming_Plots.js) - nothing here gives the hero water.
@@ -31,6 +31,9 @@
  * @plugindesc Przystań (mapa 125): Janek i chusta matki, Roch Szkwał i jego kuter, celnik Lorda, prom w dni promu, skup ryb, list do matki. v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
+ * @base Przystan_Data
+ * @orderAfter Przystan_Data
  * @orderAfter TownLife
  * @orderAfter TownQuests
  *
@@ -40,9 +43,9 @@
  * ============================================================================
  * Mapa 125 „Przystań” (za Podgrodziem), wnętrza 126 Chata Janka, 127 Szopa
  * przy pochylni, 128 Komora celna. Mieszkańcy są w TownLife_Data.js (Janek,
- * Roch, celnik Sambor Kwit, strażnik przystani), zadania w TownQuests_Data.js
+ * Roch, celnik Sambor Kwit, strażnik przystani), zadania w Przystan_Data.js
  * (K47 „Pierwszy połów”, K48 „Sieci po sztormie”, D20 „Kuter na pochylni”,
- * W10 „List do matki”).
+ * W10 „List do matki”) - wątek „przystan”, tu jego haki.
  *
  * Ta wtyczka:
  * - pierwsze spotkania: Janek oddaje Chustę matki (pamiątka), Roch żyje i
@@ -76,7 +79,7 @@
     const BUY_SMOKED = 16;                                   // a smoked fish from Janek
     const GOODS = [[86, 23], [143, 60], [152, 9]];           // Roch's goods from the mainland (half again dearer than the town)
     const LETTER_FERRY = 3, BETRAY_GOLD = 40, RUN_EVERY = 4;
-    const WAVES = [10, 24, 38, 52];                          // the ferry's wave days (TownQuests' calendar, W6)
+    const WAVES = [10, 25, 37, 52];                          // the ferry's wave days - a fallback: TownQuests.waves() is the one source (W6)
     const FERRY_HOURS = [9, 15];
     const IDS = [760, 779];
     const COIN_ICON = 314;
@@ -86,8 +89,6 @@
     const MOTHER = 763;
     const W10 = { gap1: 8, gap2: 10, replyGap: 8, silentGap: 16, gap3: 10, noAct3: 24, gold: [20, 50], food: [105, 106, 124, 76], foodN: 3,
         cut: 0.1, step: { letter1: 2, grandpa: 3, letter2: 4, letter3: 5 } };
-    const HERO = { id: 0, name: "" };
-    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
     const day = () => T.time.day(), hour = () => T.time.hour();
     const item = id => (window.$dataItems && $dataItems[id]) || null;
     const count = id => (item(id) ? $gameParty.numItems(item(id)) : 0);
@@ -96,24 +97,33 @@
     const has = () => !!window.$gameSystem;
 
     // ------------------------------------------------------------------
-    // The state (the save): the meetings live in TownQuests' flags (the quests' offers ask them), the rest here
+    // The thread "przystan" (the engine Watki.js, docs/WATKI_DANE.md; its data - the harbour's state, the quests K47, K48, D20, W10
+    // with their steps, the first meetings, Roch's night, the officer's offer - in Przystan_Data.js since 2026-10-29). Its words:
+    // js/teksty/przystan.txt; the hooks below (w.haki: the menus with fish, goods and letters stay code - Watki.mowa)
     // ------------------------------------------------------------------
-    const store = T.state.define("przystan", () => ({ celnikMet: 0, runDay0: 0, letterDay: 0, letterHour: 0, newsGiven: 0, sold: 0,
-        janekBetrayTold: 0, newsN: 0, w10: null }), { version: 1, owner: PLUGIN });
-    const S = () => store();
+    const resident = key => { const L = TL(); return L && L.RESIDENTS ? L.RESIDENTS.find(r => r.key === key) || null : null; };
+    function speaker(key) {
+        const L = TL(), ev = L && L.eventOf ? L.eventOf(key) : null, r = resident(key);
+        return { id: ev && $gameMap.event(ev.eventId()) === ev ? ev.eventId() : -1, name: r ? r.name : key };
+    }
+    const w = Watki.get("przystan");
+    if (!w) throw new Error("Przystan.js: brak wątku „przystan” - Przystan_Data.js musi być wyżej na liście wtyczek");
+    const { HERO, C, choiceTo } = Watki.mowa;
+    const AK = { akapity: true, kto: speaker };
+    const sayTo = (out, spk, text, ind) => Watki.mowa.sayTo(out, spk, text, ind || 0, AK);
+    const linesTo = (out, spk, arr, ind) => Watki.mowa.linesTo(out, spk, arr, null, ind || 0, AK);
+
+    // ------------------------------------------------------------------
+    // The state (the save): the thread's
+    // ------------------------------------------------------------------
+    const S = () => w.S();
     // W10's letters (an older save has none yet): got [{ day, via }] the mother's letters read, replies [{ day, via, gold, food, gp }]
     // the hero's (gp: grandpa's words were in it), gold / food sent in all, force: the next letter comes at once (F9)
     const W = () => { const s = S(); return s.w10 || (s.w10 = { got: [], replies: [], gold: 0, food: 0, force: 0 }); };
-    const flags = () => { const q = TQ(); return q && q.state ? q.state().flags : {}; };
-    function setFlag(k) {
-        const f = flags();
-        if (!f[k]) f[k] = day();
-        const q = TQ();
-        if (q && q.autoChecks) q.autoChecks();
-        if (q && q.refreshMarkers) q.refreshMarkers();
-    }
+    const flags = () => w.flags();
+    function setFlag(k) { w.setFlag(k); w.autoChecks(); }   // (a flag and at once the quests' checks and markers)
     const note = (title, text) => T.call("Journal", "addNote", title, text);
-    const qRec = id => { const q = TQ(); return q && q.rec ? q.rec(id) : null; };
+    const qRec = id => w.rec(id);
     const atStep = (id, n) => { const r = qRec(id); return !!r && r.s === "active" && r.step === n; };
 
     // ------------------------------------------------------------------
@@ -121,7 +131,11 @@
     // ------------------------------------------------------------------
     const ferryToday = (d = day()) => { const q = TQ(); return q && q.isFerry ? !!q.isFerry(d) : (d - 1) % 3 === 0; };
     const ferryNow = () => has() && ferryToday() && hour() >= FERRY_HOURS[0] && hour() < FERRY_HOURS[1];
-    const waveNow = () => ferryNow() && WAVES.includes(day()) && hour() < 14;
+    // (2026-10-28, docs/PODROZNI.md 5.1-5.2) the waves are TownQuests' (10, 25, 37, 52 - always a ferry day); the first wave brings
+    // Ludmiła and Ela - on the pier till noon (in the town from noon: TownLife "w6Obecni"), the others till 14
+    const waves = () => { const q = TQ(); return q && q.waves ? q.waves() : WAVES; };
+    const firstWave = () => has() && waves()[0] === day();
+    const waveNow = () => ferryNow() && waves().includes(day()) && hour() < (firstWave() ? 12 : 14);
     function kuterState() {
         const f = flags();
         if (f.d20Wydany) return "seized";
@@ -194,58 +208,9 @@
     const canReply = () => has() && W().got.length > 0 && !replyTo(W().got.length);
 
     // ------------------------------------------------------------------
-    // Event commands: speech bubbles (\SPK[n]) and choices, the way TownQuests writes them
+    // Event commands (Watki.mowa; "> " the hero, "@key: " another resident of the harbour) for the menus built here
     // ------------------------------------------------------------------
-    const LINE = 46, PAGE = 3;
-    function wrap(text) {
-        const out = [];
-        for (const para of String(text).split("\n")) {
-            let line = "";
-            for (const w of para.split(/\s+/)) {
-                if (!w) continue;
-                if (line && (line + " " + w).length > LINE) { out.push(line); line = w; } else line = line ? line + " " + w : w;
-            }
-            if (line) out.push(line);
-        }
-        return out;
-    }
-    function sayTo(out, spk, text, ind) {
-        const lines = wrap(text);
-        for (let i = 0; i < lines.length; i += PAGE) {
-            out.push(C(101, ["", 0, 0, 2, spk.name || ""], ind));
-            lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 ? "\\SPK[" + spk.id + "]" : "") + l], ind)));
-        }
-        return out;
-    }
-    // "> text": the hero; "@key: text": another resident of the harbour (TownLife's event); else the one spoken to
-    function linesTo(out, spk, arr, ind) {
-        for (const raw of [].concat(arr || [])) {
-            if (!raw) continue;
-            const s = String(raw);
-            if (s.startsWith("> ")) { sayTo(out, HERO, s.slice(2), ind); continue; }
-            const m = /^@(\w+):\s*([\s\S]*)$/.exec(s);
-            if (m) sayTo(out, speaker(m[1]), m[2], ind);
-            else sayTo(out, spk, s, ind);
-        }
-        return out;
-    }
-    const act = (out, args, ind) => (out.push(C(355, ["Przystan.act(this, " + JSON.stringify(args) + ")"], ind)), out);
-    function choiceTo(out, labels, branches, cancel, ind) {
-        const i0 = ind || 0;
-        out.push(C(102, [labels, cancel === undefined ? labels.length - 1 : cancel, 0, 2, 0], i0));
-        labels.forEach((l, i) => {
-            out.push(C(402, [i, l], i0));
-            for (const c of branches[i] || []) out.push(Object.assign({}, c, { indent: (c.indent || 0) + i0 + 1 }));
-            out.push(C(0, [], i0 + 1));
-        });
-        out.push(C(404, [], i0));
-        return out;
-    }
-    const resident = key => { const L = TL(); return L && L.RESIDENTS ? L.RESIDENTS.find(r => r.key === key) || null : null; };
-    function speaker(key) {
-        const L = TL(), ev = L && L.eventOf ? L.eventOf(key) : null, r = resident(key);
-        return { id: ev && $gameMap.event(ev.eventId()) === ev ? ev.eventId() : -1, name: r ? r.name : key };
-    }
+    const act = (out, args, ind) => Watki.mowa.script(out, "Przystan.act(this, " + JSON.stringify(args) + ")", ind);
     // the resident's usual line for now (TownLife's talk slots)
     function usual(key) {
         const L = TL(), t = L && L.lines ? L.lines(key) : null;
@@ -346,7 +311,8 @@
         if (flags().w10Dziadek && !W().replies.some(r => r.gp)) out.push(R.pipe);
         if (gift === "g1" || gift === "g2") out.push(fillN(R.gold, W10.gold[gift === "g1" ? 0 : 1]));
         if (gift === "food") out.push(R.food);
-        const said = via === "prom" ? R.ferry.concat(gift === "g1" || gift === "g2" ? R.ferryCut : []) : R.roch;
+        // (2026-10-29, docs/PODROZNI.md decyzja 14: Tobiasz i Urszula biorą list bez celnika i opłaty - ich słowa: reply.<via>)
+        const said = via === "prom" ? R.ferry.concat(gift === "g1" || gift === "g2" ? R.ferryCut : []) : (via !== "kuter" && R[via]) || R.roch;
         return linesTo([], spk, out.concat(said));
     }
 
@@ -356,12 +322,8 @@
     const pick = list => list[Math.floor(Math.random() * list.length)];
     function janekTalk(ev) {
         const spk = { id: ev.eventId(), name: "Janek" }, f = flags(), out = [];
-        if (!f.janekMet) {
-            linesTo(out, spk, TX.janekMeet);
-            act(out, ["janekMet"]);
-            return linesTo(out, spk, TX.janekMeet2);
-        }
-        if (f.d20Wydany && !S().janekBetrayTold) { act(out, ["janekBetrayTold"]); return linesTo(out, spk, TX.janekBetray); }
+        if (!f.janekMet) return w.rozmowa("janekSpotkanie", { spk });
+        if (f.d20Wydany && !S().janekBetrayTold) return w.rozmowa("janekZdrada", { spk });
         if (questWants("janek")) { const q = questTalk("janek"); if (q && q.length) return q; }
         // (W10) a letter from the mother waits with the ferryman or with Roch: Janek says so
         const lk = letterNo(), lw = lk && letterHere(lk, "prom") ? "prom" : lk && letterHere(lk, "kuter") ? "kuter" : null;
@@ -376,20 +338,16 @@
         if (RW && RW.seaHere && $gameMap.mapId() === MAP) { labels.push(TK.kod.janekTalk[3]); branches.push(linesTo([], spk, RW.phase().grey ? TX.janekGrey : TX.janekRed)); }
         labels.push(TK.kod.janekTalk[4]);
         branches.push(linesTo([], spk, [usual("janek") || TK.kod.janekTalk[5]]));
-        labels.push("Bywaj.");
+        labels.push(TX.bywaj);
         branches.push([]);
         return choiceTo(out, labels, branches, labels.length - 1);
     }
     function rochTalk(ev) {
         const spk = { id: ev.eventId(), name: "Roch" }, f = flags(), out = [];
-        if (!f.rochMet) { linesTo(out, spk, TX.rochMeet); act(out, ["rochMet"]); return out; }
+        if (!f.rochMet) return w.rozmowa("rochSpotkanie", { spk });
         // D20's night: the cutter is ready - tonight, while the guard sits by the brazier
         const h = hour();
-        if (atStep("D20", 6) && (h >= 20 || h < 2)) {
-            linesTo(out, spk, TX.rochNightAsk);
-            return choiceTo(out, [TK.kod.rochTalk[0], TK.kod.rochTalk[1]],
-                [act([], ["d20Help"]).concat(linesTo([], spk, TX.rochNightHelp)), linesTo([], spk, TX.rochNightLater)], 1);
-        }
+        if (atStep("D20", 6) && (h >= 20 || h < 2)) return w.rozmowa("rochNoc", { spk });
         // (W10) a letter from the mother came with the cutter: handed over first
         const lk = letterNo();
         if (lk && letterHere(lk, "kuter")) return letterList(lk, "kuter", spk);
@@ -415,20 +373,15 @@
         if (T.api("CzerwonaWoda")) { labels.push(TK.kod.rochTalk[5]); branches.push(linesTo([], spk, TX.rochRed)); }
         labels.push(TK.kod.rochTalk[6]);
         branches.push(linesTo([], spk, [usual("przemytnik") || TK.kod.rochTalk[7]]));
-        labels.push("Bywaj.");
+        labels.push(TX.bywaj);
         branches.push([]);
         return choiceTo(out, labels, branches, labels.length - 1);
     }
     function celnikTalk(ev) {
-        const spk = { id: ev.eventId(), name: TK.kod.celnikTalk[0] }, out = [];
-        if (!S().celnikMet) { act(out, ["celnikMet"]); return linesTo(out, spk, TX.celnikMeet); }
+        const spk = { id: ev.eventId(), name: TK.kod.celnikTalk[0] };
+        if (!S().celnikMet) return w.rozmowa("celnikSpotkanie", { spk });
         // D20: the hero may give Roch away - in the customs house, at the officer's desk
-        if ($gameMap.mapId() === CUSTOMS && atStep("D20", 6) && !flags().d20Wydany) {
-            linesTo(out, spk, [usual("celnik") || TK.kod.celnikTalk[1]]);
-            return choiceTo(out, [TK.kod.celnikTalk[2], TK.kod.celnikTalk[3]],
-                [linesTo([], spk, TX.betrayAsk).concat(choiceTo([], [TK.kod.celnikTalk[4], TK.kod.celnikTalk[5]],
-                    [act([], ["d20Betray"]).concat(linesTo([], spk, TX.betrayYes)), linesTo([], spk, [TK.kod.celnikTalk[6]])], 1)), []], 1);
-        }
+        if ($gameMap.mapId() === CUSTOMS && atStep("D20", 6) && !flags().d20Wydany) return w.rozmowa("celnikDonos", { spk });
         return null;
     }
     function hook(key, ev) {
@@ -469,8 +422,9 @@
                 else if (canReply()) choiceTo(out, [TX.replyOpts.ferry, TK.kod.talk[2]], [replyMenu("prom", spk), []], 1);
             }
         } else {
-            const spk = { id: ev.eventId(), name: ev.event().name };
-            linesTo(out, spk, TX.refugees[(ev.eventId() + day()) % TX.refugees.length]);
+            const p = PEOPLE.find(x => x.id === ev.eventId()), f1 = p && p.fala1 && firstWave() ? p.fala1 : null;
+            const spk = { id: ev.eventId(), name: f1 ? (resident(f1.who) || {}).name || ev.event().name : ev.event().name };
+            linesTo(out, spk, f1 ? TX.fala1[f1.who] : TX.refugees[(ev.eventId() + day()) % TX.refugees.length]);
         }
         if (out.length) interp.setupChild(out.concat([C(0, [])]), ev.eventId());
     }
@@ -592,9 +546,10 @@
         w.food += food;
         setFlag("w10Odpisal");
         if (net || food) setFlag("w10Pomoc");
-        const text = Watki.wstaw(TK.kod.replyAct[7], { "1": via === "prom" ? TK.kod.replyAct[1] : TK.kod.replyAct[2], "2": g ? Watki.wstaw(TK.kod.replyAct[4], { net: net, "2": net !== g ? Watki.wstaw(TK.kod.replyAct[3], { g: g }) : "" }) : "", "3": food ? Watki.wstaw(TK.kod.replyAct[5], { "1": names.join(", ") }) : "", "4": gp ? TK.kod.replyAct[6] : "" });
+        const przez = via === "prom" ? TK.kod.replyAct[1] : via === "kuter" ? TK.kod.replyAct[2] : (TK.kod.przez && TK.kod.przez[via]) || TK.kod.replyAct[2];
+        const text = Watki.wstaw(TK.kod.replyAct[7], { "1": przez, "2": g ? Watki.wstaw(TK.kod.replyAct[4], { net: net, "2": net !== g ? Watki.wstaw(TK.kod.replyAct[3], { g: g }) : "" }) : "", "3": food ? Watki.wstaw(TK.kod.replyAct[5], { "1": names.join(", ") }) : "", "4": gp ? TK.kod.replyAct[6] : "" });
         note(TX.replyTitles[Math.min(w.replies.length, TX.replyTitles.length) - 1] + (w.replies.length > TX.replyTitles.length ? " (" + w.replies.length + ")" : ""), text);
-        T.popup(TX.replyPop, { top: true, color: "#ffd23f", sub: via === "prom" ? TK.kod.replyAct[8] : TK.kod.replyAct[9] });
+        T.popup(TX.replyPop, { top: true, color: "#ffd23f", sub: via === "prom" ? TK.kod.replyAct[8] : via === "kuter" ? TK.kod.replyAct[9] : (TK.kod.przezPod && TK.kod.przezPod[via]) || TK.kod.replyAct[9] });
     }
     // (the mother's bust is asked for before her first words: SpeechBubbles checks a tag's picture once, then knows it)
     function probeBust(ev) {
@@ -608,31 +563,23 @@
     }
 
     // ------------------------------------------------------------------
-    // TownQuests' handlers (its FX table is open: TownQuests.FX)
+    // The hooks the thread's data names: K47's rod, W10's words, the talks' actions (the old Przystan.act), the officer's line
     // ------------------------------------------------------------------
-    function hookQuests() {
-        const q = TQ();
-        if (!q || !q.FX || hookQuests.done) return;
-        hookQuests.done = true;
-        q.FX.k47Rod = { pick() {
+    w.haki({
+        // the speaker of a "@key: ..." line of the thread's talks (Przystan_Data.js mowa.kto)
+        mowca: (ctx, key) => speaker(key),
+        wedka: () => {
             if (count(ITEM.rod) > 0) { T.popup(TK.kod.pick[0], { icon: item(ITEM.rod).iconIndex, color: "#ffe9a8" }); return; }
             $gameParty.gainItem(item(ITEM.rod), 1);
-        } };
-        q.FX.d20Noc = { check: () => !!(flags().d20Pomoc || flags().d20Wydany) };
-        q.FX.w10Wyslany = { check: () => !!(flags().w10Prom || flags().w10Kuter) };
-        q.FX.w10Wiesc = { check: () => !!flags().w10Wiesc };
-        // (2026-10-17) W10 continued: the mother's three letters read; grandpa's talk skipped in a game without the story (no
-        // grandpa); the step's words by the hero's answer
-        q.FX.w10List1 = { check: () => W().got.length >= 1 };
-        q.FX.w10List2 = { check: () => W().got.length >= 2 };
-        q.FX.w10List3 = { check: () => W().got.length >= 3 };
-        q.FX.w10BezFabuly = { check: () => !storyGame() };
-        q.FX.w10Vars = { vars: (qq, r) => {
-            const k = r && r.step === W10.step.letter3 ? 2 : 1;
+        },
+        fabula: () => storyGame(),
+        w10Zmienne: ctx => {
+            const r = ctx.r, k = r && r.step === W10.step.letter3 ? 2 : 1;
             return { odpis: replyTo(k) ? (k === 1 ? TX.vars.sent : TX.vars.sent2) : (k === 1 ? TX.vars.write : TX.vars.write2) };
-        } };
-    }
-    hookQuests();
+        },
+        akt: (ctx, name) => actCall(ctx.interp, [name]),
+        zwykle: (ctx, key, orKey) => [usual(key) || w.tekst(orKey)]
+    });
 
     // TownLife's conditions by name (a plan entry may name them too)
     (() => {
@@ -648,8 +595,9 @@
     // ------------------------------------------------------------------
     const PEOPLE = [
         { id: 760, sheet: "$Npc_Kopacz", x: 11, y: 17, d: 2, who: "ferry", show: () => ferryNow() },
-        { id: 761, sheet: "$Npc_Bogdan", x: 15, y: 16, d: 6, who: "refugee", show: () => waveNow() },
-        { id: 762, sheet: "$Npc_Halina", x: 16, y: 16, d: 4, who: "refugee", show: () => waveNow() },
+        // (2026-10-28) the first wave: Ludmiła and Ela come off the ferry (docs/PODROZNI.md 5.2) - fala1: their sheets and words that day
+        { id: 761, sheet: "$Npc_Bogdan", x: 15, y: 16, d: 6, who: "refugee", show: () => waveNow(), fala1: { who: "ludmila", sheet: "$Npc_Ludmila" } },
+        { id: 762, sheet: "$Npc_Halina", x: 16, y: 16, d: 4, who: "refugee", show: () => waveNow(), fala1: { who: "ela", sheet: "$Npc_Ela" } },
         // (W10) the mother's voice: never seen, never started - the letters' speaker (her bust, the plate "Matka"); moved beside the
         // hero as a letter is read (act w10Open)
         { id: MOTHER, sheet: "$Npc_Halina", x: 12, y: 18, d: 2, who: "mother", show: () => false,
@@ -708,7 +656,11 @@
         // (on a run night the cutter goes once Roch is aboard: he walks to it and is gone - then it sails)
         const L = TL(), roch = L && L.eventOf ? L.eventOf("przemytnik") : null, aboard = !roch || !!(roch._town && roch._town.hidden);
         show(TK.kod.sync[3], k === "water" && !(away && aboard));
-        for (const p of PEOPLE) setShown($gameMap.event(p.id), p.show());
+        for (const p of PEOPLE) {
+            const e = $gameMap.event(p.id);
+            if (e && p.fala1) { const want = firstWave() ? p.fala1.sheet : p.sheet; if (e.characterName() !== want) e.setImage(want, 0); }
+            setShown(e, p.show());
+        }
     }
     // a thing hidden (the ferry on other days, the cutter that is elsewhere, the ferryman away) never starts
     T.onEventStart(ev => !!(ev._przystan && ev._przystan.hidden), { owner: PLUGIN, priority: "hidden" });   // (the core's one start hook, 2026-10-23)
@@ -716,7 +668,6 @@
     Game_Map.prototype.setupEvents = function() {
         _Game_Map_setupEvents.call(this);
         cache = null;
-        hookQuests();
         hookTalk();
         if (this.mapId() === MAP) { sync(); probeBust(this.event(MOTHER)); }
     };
@@ -799,11 +750,13 @@
     // The API
     // ------------------------------------------------------------------
     const api = {
-        MAP, ITEM, IDS, SELL, GOODS, RUN_EVERY, state: () => S(), flags, act: actCall, talk, ferryToday, ferryNow, waveNow, kuterState, kuterAway,
+        MAP, ITEM, IDS, SELL, GOODS, RUN_EVERY, state: () => S(), flags, act: actCall, talk, ferryToday, ferryNow, waveNow, waves, kuterState, kuterAway,
         runNight, lastRunBack, rochGone, fishBonus, sync, janekAtSea, TX,
         // (2026-10-17) W10's letters: the next one (1-3, 0), the day it may come from, does the ferryman / Roch have it, may the
         // hero answer, what the letter says now, the record, F9's letter at once, the Heart's epilogue line
-        W10, MOTHER, letterNo, dueDay, letterHere, canReply, letterText, letters: () => W(), debugLetter, epilogue
+        W10, MOTHER, letterNo, dueDay, letterHere, canReply, letterText, letters: () => W(), debugLetter, epilogue,
+        // (2026-10-29) the answer's menu for another carrier (Podroznicy: Tobiasz, Urszula - no fee, no customs): via = its key
+        odpowiedz: (via, spk) => replyMenu(via, spk)
     };
     window.Przystan = T.register(PLUGIN, api);
 })();

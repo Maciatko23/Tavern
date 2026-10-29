@@ -537,19 +537,67 @@ Stój! Złodziej! Do mnie!
 Więc od morza nic nam teraz nie grozi. Czarne Oczy straciły jedyny okręt w tych wodach.
 Bęben! Lista poborowa - tylko ochotnicy. Kto nie chce, ten nie idzie. (Do ciebie.) Dobra robota, chłopcze.
 
-[d26Done]
-Trzech! Mam trzech! Rotmistrz będzie zadowolony. Masz, uczciwie, jak obiecałem.
+# ======================================================================== wątek (Garnizon_Data.js: rozmowy i akcje, Garnizon.js: haki)
+# notatki w dzienniku (tytuł, tekst): poznany rotmistrz, glejt, lista zaginionych, Kłos wydany / Kłos milczy
+[notatki.garnizon]
+Garnizon nad zatoką
+Na południe od przystani stoi garnizon wojsk królewskich z lądu - chorągiew z feniksem. Rotmistrz Florian Bełza: surowy, sprawiedliwy, zmęczony wojną. Lord wpuścił ich za pieniądze i płaci Koronie podatek wojenny - dlatego tak naciska na dług dziadka. Kwatermistrz Kłos skupuje dla wojska zboże i drwa.
 
-[d26DoneWarn]
-Nikogo! Wszyscy jakby się pod ziemię zapadli. Ktoś ich ostrzegł... (Bęben patrzy na ciebie długo.) Nie, ty byś nie... prawda?
+[notatki.glejt]
+Glejt na wrak
+Rotmistrz Bełza dał mi glejt garnizonu na wrak na mieliźnie. Do wraku dojdę w odpływie po łasze spod garnizonu. Papiery z kajuty mam przynieść najpierw jemu.
+
+[notatki.lista]
+Lista zaginionych
+Na stole rotmistrza leży lista zaginionych czterech chorągwi. Chorągiew brzozowska: dwudziestu dwóch - „zaginiony”. Nazwisk nie ma. „Zaginiony to nie poległy” - powiedział.
+
+[notatki.klosWydany]
+Kłos wydany
+Powiedziałem rotmistrzowi, że kwatermistrz Kłos nocą sprzedaje zboże z rekwizycji. Kłos popłynie najbliższym promem - w łańcuchu. Baltazar z kantoru stracił dostawcę.
+
+[notatki.klosMilczy]
+Kłos moim dłużnikiem
+Obiecałem Kłosowi, że nikomu nie powiem o nocnym zbożu. W skupie płaci mi teraz lepiej - „jak dla swojego”.
+
+# „Jak garnizon na mnie patrzy?” - napis nad bohaterem ({slowo}: kod.favorWord, {prog}: następny próg albo nic)
+przychylnosc.info = Przychylność garnizonu: {fv}/100 ({slowo}){prog}
+przychylnosc.prog = " - następny próg: {next}"
+# glejt na wrak (napis u góry)
+glejt.napis = Glejt garnizonu na wrak
+glejt.pod = Wartownicy i łódź ratownicza przepuszczą cię na wrak.
+# D27: cztery worki od Kłosa nocą ({cena}: 4 × 15 G)
+zboze.biore = Biorę ({cena} G).
+zboze.nieMam = Nie mam tyle.
+zboze.napis = Worek zboża z rekwizycji ×4
+# D26: lista w tekście kroku, rozmowa z kimś z listy (bohater milczy; odpowiedź po namowie / po ostrzeżeniu - inny: ktoś spoza listy)
+d26.zglosil = " (zgłosił się)"
+d26.ukryty = " (ukryty)"
+d26.milcz = (Nic nie mów.)
+d26.zloto = +10 G od werbownika
+d26.pomoc.bartek = Wojsko? ...Może i lepiej. W wojsku przynajmniej nie ma kości. Pójdę.
+d26.pomoc.drwal = Siekierę zostawię Marcie. ...Pójdę. Tam przynajmniej karmią.
+d26.pomoc.uchodzca = Znowu wojsko. Dobrze. Lepiej z własnej woli niż w łańcuchu. Pójdę.
+d26.pomoc.inny = Pójdę.
+d26.ostrzez.bartek = Werbownik? Dzięki, chłopcze. Schowam się u szwagra na Młynówce.
+d26.ostrzez.drwal = Dzięki. Pójdę w las na dzień czy dwa. Las mnie zna.
+d26.ostrzez.uchodzca = Znowu ktoś mnie ostrzega. Na kontynencie też ostrzegali. Dziękuję. Zniknę.
+d26.ostrzez.inny = Dzięki.
+# powody zmiany przychylności (szyna „garnizonFavor”)
+powody.dziennik = dziennik okrętu
+powody.pobor = pobór
+powody.klosWydany = kwatermistrz wydany
 
 # ======================================================================== z kodu Garnizon.js (kod.<funkcja>.<n>, w kolejności kodu)
 # addFavor
 kod.addFavor.0 = Przychylność garnizonu {1}{got}
 kod.addFavor.1 = Garnizon: {1}
-# favorWord
+# favorWord (od 80, 60, 40, 20, 10, poniżej 10)
 kod.favorWord.0 = swój
 kod.favorWord.1 = przyjaciel garnizonu
+kod.favorWord.2 = zaufany
+kod.favorWord.3 = znajomy
+kod.favorWord.4 = obcy
+kod.favorWord.5 = podejrzany
 # sell
 kod.sell.0 = Skup wojskowy
 kod.sell.1 = " - Opinia {got}"
@@ -575,8 +623,6 @@ kod.rotmistrzTalk.8 = Sprzedam coś wojsku.
 kod.kwatTalk.0 = Kwatermistrz Kłos
 kod.kwatTalk.1 = Sprzedam coś wojsku.
 kod.kwatTalk.2 = Sprzedasz cztery worki zboża? Po cenie dla swoich.
-kod.kwatTalk.3 = Biorę ({1} G).
-kod.kwatTalk.4 = Nie mam tyle.
 kod.kwatTalk.5 = Nikomu nie powiem o nocnym zbożu.
 kod.kwatTalk.6 = Co słychać?
 kod.kwatTalk.7 = Liczę. Zawsze liczę.
@@ -593,48 +639,13 @@ kod.buildMap.3 = Kwatermistrz Kłos
 kod.look.0 = Lista poborowa z pieczęcią z feniksem. Kilka nazwisk już przekreślonych.
 # granary
 kod.granary.0 = Worek zboża z rekwizycji ×4
-# actCall
-kod.actCall.0 = Garnizon nad zatoką
-kod.actCall.1 = Na południe od przystani stoi garnizon wojsk królewskich z lądu - chorągiew z feniksem. Rotmistrz Florian Bełza: surowy, sprawiedliwy, zmęczony wojną. Lord wpuścił ich za pieniądze i płaci Koronie podatek wojenny - dlatego tak naciska na dług dziadka. Kwatermistrz Kłos skupuje dla wojska zboże i drwa.
-kod.actCall.2 = " - następny próg: {next}"
-kod.actCall.3 = Przychylność garnizonu: {fv}/100 ({2}){3}
+# actCall (i zakup zboża z danych: brak grosza)
 kod.actCall.4 = Potrzebujesz {cost} G
-kod.actCall.5 = Glejt garnizonu na wrak
-kod.actCall.6 = Wartownicy i łódź ratownicza przepuszczą cię na wrak.
-kod.actCall.7 = Glejt na wrak
-kod.actCall.8 = Rotmistrz Bełza dał mi glejt garnizonu na wrak na mieliźnie. Do wraku dojdę w odpływie po łasze spod garnizonu. Papiery z kajuty mam przynieść najpierw jemu.
-kod.actCall.9 = Lista zaginionych
-kod.actCall.10 = Na stole rotmistrza leży lista zaginionych czterech chorągwi. Chorągiew brzozowska: dwudziestu dwóch - „zaginiony”. Nazwisk nie ma. „Zaginiony to nie poległy” - powiedział.
-kod.actCall.11 = Worek zboża z rekwizycji ×4
 kod.actCall.12 = kruk na szyi
 kod.actCall.13 = -5 G (opłata za przepustkę)
 kod.actCall.14 = złodziej zboża
 kod.actCall.15 = Noc w dybach
 kod.actCall.16 = Złapali mnie przy spichlerzu garnizonu z workami zboża. Noc w dybach, rano rotmistrz kazał mnie wypuścić. Worki zostały w spichlerzu.
-# vars
-kod.vars.0 = " (zgłosił się)"
-kod.vars.1 = " (ukryty)"
-# talk
-kod.talk.0 = (Nic nie mów.)
-# act
-kod.act.0 = dziennik okrętu
-kod.act.1 = +10 G od werbownika
-kod.act.2 = pobór
-kod.act.3 = kwatermistrz wydany
-kod.act.4 = Kłos wydany
-kod.act.5 = Powiedziałem rotmistrzowi, że kwatermistrz Kłos nocą sprzedaje zboże z rekwizycji. Kłos popłynie najbliższym promem - w łańcuchu. Baltazar z kantoru stracił dostawcę.
-kod.act.6 = Kłos moim dłużnikiem
-kod.act.7 = Obiecałem Kłosowi, że nikomu nie powiem o nocnym zbożu. W skupie płaci mi teraz lepiej - „jak dla swojego”.
-# helpReply
-kod.helpReply.0 = Wojsko? ...Może i lepiej. W wojsku przynajmniej nie ma kości. Pójdę.
-kod.helpReply.1 = Siekierę zostawię Marcie. ...Pójdę. Tam przynajmniej karmią.
-kod.helpReply.2 = Znowu wojsko. Dobrze. Lepiej z własnej woli niż w łańcuchu. Pójdę.
-kod.helpReply.3 = Pójdę.
-# warnReply
-kod.warnReply.0 = Werbownik? Dzięki, chłopcze. Schowam się u szwagra na Młynówce.
-kod.warnReply.1 = Dzięki. Pójdę w las na dzień czy dwa. Las mnie zna.
-kod.warnReply.2 = Znowu ktoś mnie ostrzega. Na kontynencie też ostrzegali. Dziękuję. Zniknę.
-kod.warnReply.3 = Dzięki.
 # sync
 kod.sync.0 = rozbitek wydany
 
@@ -653,3 +664,43 @@ obrona.b.start = Za króla! I za Stacha!
 obrona.b.hit = Za króla!
 obrona.b.down = Ranny... trzymajcie... linię...
 obrona.b.win = Rotmistrz kazał przekazać: garnizon pamięta przyjaciół.
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+[d26Done]
+Trzech! Mam trzech! Rotmistrz będzie zadowolony. Masz, uczciwie, jak obiecałem.
+
+[d26DoneWarn]
+Nikogo! Wszyscy jakby się pod ziemię zapadli. Ktoś ich ostrzegł... (Bęben patrzy na ciebie długo.) Nie, ty byś nie... prawda?
+
+kod.kwatTalk.3 = Biorę ({1} G).
+kod.kwatTalk.4 = Nie mam tyle.
+kod.actCall.0 = Garnizon nad zatoką
+kod.actCall.1 = Na południe od przystani stoi garnizon wojsk królewskich z lądu - chorągiew z feniksem. Rotmistrz Florian Bełza: surowy, sprawiedliwy, zmęczony wojną. Lord wpuścił ich za pieniądze i płaci Koronie podatek wojenny - dlatego tak naciska na dług dziadka. Kwatermistrz Kłos skupuje dla wojska zboże i drwa.
+kod.actCall.2 = " - następny próg: {next}"
+kod.actCall.3 = Przychylność garnizonu: {fv}/100 ({2}){3}
+kod.actCall.5 = Glejt garnizonu na wrak
+kod.actCall.6 = Wartownicy i łódź ratownicza przepuszczą cię na wrak.
+kod.actCall.7 = Glejt na wrak
+kod.actCall.8 = Rotmistrz Bełza dał mi glejt garnizonu na wrak na mieliźnie. Do wraku dojdę w odpływie po łasze spod garnizonu. Papiery z kajuty mam przynieść najpierw jemu.
+kod.actCall.9 = Lista zaginionych
+kod.actCall.10 = Na stole rotmistrza leży lista zaginionych czterech chorągwi. Chorągiew brzozowska: dwudziestu dwóch - „zaginiony”. Nazwisk nie ma. „Zaginiony to nie poległy” - powiedział.
+kod.actCall.11 = Worek zboża z rekwizycji ×4
+kod.vars.0 = " (zgłosił się)"
+kod.vars.1 = " (ukryty)"
+kod.talk.0 = (Nic nie mów.)
+kod.act.0 = dziennik okrętu
+kod.act.1 = +10 G od werbownika
+kod.act.2 = pobór
+kod.act.3 = kwatermistrz wydany
+kod.act.4 = Kłos wydany
+kod.act.5 = Powiedziałem rotmistrzowi, że kwatermistrz Kłos nocą sprzedaje zboże z rekwizycji. Kłos popłynie najbliższym promem - w łańcuchu. Baltazar z kantoru stracił dostawcę.
+kod.act.6 = Kłos moim dłużnikiem
+kod.act.7 = Obiecałem Kłosowi, że nikomu nie powiem o nocnym zbożu. W skupie płaci mi teraz lepiej - „jak dla swojego”.
+kod.helpReply.0 = Wojsko? ...Może i lepiej. W wojsku przynajmniej nie ma kości. Pójdę.
+kod.helpReply.1 = Siekierę zostawię Marcie. ...Pójdę. Tam przynajmniej karmią.
+kod.helpReply.2 = Znowu wojsko. Dobrze. Lepiej z własnej woli niż w łańcuchu. Pójdę.
+kod.helpReply.3 = Pójdę.
+kod.warnReply.0 = Werbownik? Dzięki, chłopcze. Schowam się u szwagra na Młynówce.
+kod.warnReply.1 = Dzięki. Pójdę w las na dzień czy dwa. Las mnie zna.
+kod.warnReply.2 = Znowu ktoś mnie ostrzega. Na kontynencie też ostrzegali. Dziękuję. Zniknę.
+kod.warnReply.3 = Dzięki.

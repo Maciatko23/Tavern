@@ -2,7 +2,7 @@
 // ch2: the camp's trust (three deeds + Rafał's) opens ch3; ch3: Rafał's story by the camp's fire at night (TownLife "w6Fire" seats him
 // there); ch4: the wanted poster on the tavern's quest board (the board opens after it) - the choice: hide him (the attic room in the
 // tavern, grandpa's house, the bell tower; the corporal's search on the third day - the risk rolled), turn him in to Wit (120 G),
-// smuggle him on the ferry through Baltazar (50 G), or nothing (the camp searched: taken); ch5: the second wave of day 24 (the props: a
+// smuggle him on the ferry through Baltazar (50 G), or nothing (the camp searched: taken); ch5: the second wave of day 25 (its ferry - docs/PODROZNI.md 5.1; was 24) (the props: a
 // tent, Bogdan and Halina), the vote at the town hall (Opinia = the hero's weight): the refugees in with a week of work (the helpers
 // harvest grandpa's field) or the gate shut (the camp moves to Podgrodzie - TownLife "alt", wolves at night); ch6-7 in one step: Marek
 // (Ludmiła's kerchief, the diggers' cave Map014: he turns from the wall and follows; a word with the guard / the fight / seen -> the
@@ -140,10 +140,10 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.loadFrom(2, { quiet: true });
     await at(22, 12, 40);
     const before = await J("({ t904: !!($gameMap.event(904) && $gameMap.event(904).page()), text: TownQuests.journalOps({ quest: TownQuests.Q.W6 }).map(o => o.text || '').join(' | ') })");
-    t.check("ch5 before day 24: 'Prom z drugą falą ... przypłynie w dniu 24'; no second tent yet", !before.t904 && /w dniu 24/.test(before.text), before);
-    await at(24, 10, 60);
+    t.check("ch5 before day 25: 'Prom z drugą falą ... przypłynie w dniu 25'; no second tent yet", !before.t904 && /w dniu 25/.test(before.text), before);
+    await at(25, 10, 60);
     const wave = { tent: await prop(904), bogdan: await prop(906), halina: await prop(907), tent1: await prop(903) };
-    t.check("day 24: the second wave - a tent more (904), Bogdan (906) and Halina (907): PixelLab sheets", wave.tent.page && wave.bogdan.page && wave.bogdan.img === "$Npc_Bogdan" && wave.halina.img === "$Npc_Halina" && wave.tent1.page, wave);
+    t.check("day 25: the second wave - a tent more (904), Bogdan (906) and Halina (907): PixelLab sheets", wave.tent.page && wave.bogdan.page && wave.bogdan.img === "$Npc_Bogdan" && wave.halina.img === "$Npc_Halina" && wave.tent1.page, wave);
     await t.locate(53, 89, 2);
     await t.frames(30);
     await t.shot(path.join(SHOTS, "w6_druga_fala.png"));
@@ -152,19 +152,19 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.saveTo(3);
     await t.eval("(function(){ TownQuests.addOpinion(40 - TownQuests.opinion(), 'test'); return 0; })()");
     await t.go(104, 6, 6, 8);
-    await at(25, 13.5, 60);
+    await at(26, 13.5, 60);
     const tally = await J("TownQuests.w6Tally('open')");
     const vote = await talkTo(res("soltys"), ["Wpuścić"]);
     await t.until("SpeechBubbles.log.some(l => /Za wpuszczeniem/.test(l))", 15, 300);
     const vt = await J("({ r: TownQuests.rec('W6'), f: TownQuests.state().flags, w: TownQuests.state().w6, log: SpeechBubbles.log.slice(-4) })");
-    t.check("ch5: the town hall (Map104), day 25 13:00: the sołtys asks the town - the hero's weight = Opinia/2 (40 -> 20): let in 74 vs 55 - campInside, a week of work",
-        /zamykamy bramę dla nowych/.test(vote.text) && tally.open === 45 + 9 + 20 && tally.close === 55 && vt.f.campInside && !vt.f.campOutside && vt.w.work.from === 25 && vt.w.work.until === 32 && vt.r.step === 6,
+    t.check("ch5: the town hall (Map104), day 26 13:00: the sołtys asks the town - the hero's weight = Opinia/2 (40 -> 20): let in 74 vs 55 - campInside, a week of work",
+        /zamykamy bramę dla nowych/.test(vote.text) && tally.open === 45 + 9 + 20 && tally.close === 55 && vt.f.campInside && !vt.f.campOutside && vt.w.work.from === 26 && vt.w.work.until === 33 && vt.r.step === 6,
         { tally, step: vt.r.step, work: vt.w && vt.w.work, log: vt.log });
     // the helpers on grandpa's field (the crops under a scarecrow: Birds' planned raids eat unguarded ones)
-    await t.eval(`(function(){ const F = Farming.farm(); const p = F.plots[3] || (F.plots[3] = {}); p["10,20"] = { s: "tilled", crop: "potato", day: 1 }; p["12,20"] = { s: "tilled", crop: "carrot", day: 1 }; p["14,20"] = { s: "tilled", crop: "carrot", day: 25 };
+    await t.eval(`(function(){ const F = Farming.farm(); const p = F.plots[3] || (F.plots[3] = {}); p["10,20"] = { s: "tilled", crop: "potato", day: 1 }; p["12,20"] = { s: "tilled", crop: "carrot", day: 1 }; p["14,20"] = { s: "tilled", crop: "carrot", day: 26 };
         (F.buildings[3] || (F.buildings[3] = [])).push({ id: 9901, type: "scarecrow", x: 12, y: 18 }); F.rev++; return 0; })()`);
     await t.go(3, 20, 24, 2);
-    await at(26, 9, 40);
+    await at(27, 9, 40);
     const help = { a: await prop(906), b: await prop(907) };
     t.check("...on grandpa's field (Map003) during the work week Bogdan and Halina stand by the crops (906, 907 - the tile under the first plots)",
         help.a.page && help.b.page && help.a.img === "$Npc_Bogdan" && help.a.x === 10 && help.a.y === 21, help);
@@ -172,34 +172,34 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.frames(20);
     await t.shot(path.join(SHOTS, "w6_pomocnicy.png"));
     const pot0 = await t.count(71), car0 = await t.count(72);
-    await at(26, 16.2, 120);
+    await at(27, 16.2, 120);
     const hv = await J(`(function(){ const p = Farming.farm().plots[3]; return { a: p["10,20"].crop, b: p["12,20"].crop, c: p["14,20"].crop, last: TownQuests.state().w6.work.last }; })()`);
     t.check("...at 16:00 they harvest the ripe crops by themselves (the young carrot stays); no chest on the field - the crops go to the hero",
-        hv.a === null && hv.b === null && hv.c === "carrot" && hv.last === 26 && (await t.count(71)) > pot0 && (await t.count(72)) > car0, hv);
+        hv.a === null && hv.b === null && hv.c === "carrot" && hv.last === 27 && (await t.count(71)) > pot0 && (await t.count(72)) > car0, hv);
     await t.saveTo(4);
 
     // ...or the gate shut: the camp moves out to Podgrodzie (TownLife "alt"), wolves at night
     await t.loadFrom(3, { quiet: true });
     await t.eval("(function(){ TownQuests.addOpinion(10 - TownQuests.opinion(), 'test'); return 0; })()");
     await t.go(104, 6, 6, 8);
-    await at(25, 13.5, 60);
+    await at(26, 13.5, 60);
     await talkTo(res("soltys"), ["Zamknąć bramę"]);
     const cl = await J("({ f: TownQuests.state().flags, home: TownLife.homeOf(TownLife.RESIDENTS.find(r => r.key === 'ludmila')), w6: TownQuests.w6() })");
     t.check("ch5 the other way: 'Zamknąć bramę' - campOutside: Ludmiła now lives on Map111 (TownLife alt)", cl.f.campOutside && cl.home === 111 && cl.w6.camp === "outside", cl.w6);
     await t.go(8, 57, 89, 2);
-    await at(25, 15, 40);
+    await at(26, 15, 40);
     const inTown = await J(`({ ludmila: !TownLife.state('ludmila') || TownLife.state('ludmila').hidden, tent: !!($gameMap.event(903) && $gameMap.event(903).page()) })`);
     t.check("...in the town she is away and the camp's tent is gone", inTown.ludmila && !inTown.tent, inTown);
     await t.go(111, 39, 16, 8);
-    await at(25, 15, 60);
+    await at(26, 15, 60);
     const pod = await J(`({ ludmila: (function(){ const s = TownLife.state('ludmila'); return s && !s.hidden; })(), tent: !!($gameMap.event(903) && $gameMap.event(903).page()) })`);
     t.check("...in Podgrodzie: Ludmiła by the tents, the second wave's tent (903 on Map111)", pod.ludmila && pod.tent, pod);
     await t.shot(path.join(SHOTS, "w6_podgrodzie_oboz.png"));
     await t.eval("TownQuests.w6Opts = { wolves: 1 }; 0");
-    await t.setDay(25, 22);
+    await t.setDay(26, 22);
     await t.until("Hunting.animals.some(a => a.kind === 'wolf' || a._kind === 'wolf' || (a.species && a.species === 'wolf'))", 15, 300);
     const wolves = await J("({ n: Hunting.animals.length, night: TownQuests.state().w6.wolf })");
-    t.check("...at night (22:00) near the tents: wolves come to the camp outside the wall", wolves.n >= 1 && wolves.night === 25, wolves);
+    t.check("...at night (22:00) near the tents: wolves come to the camp outside the wall", wolves.n >= 1 && wolves.night === 26, wolves);
     await t.eval("TownQuests.w6Opts = null; 0");
 
     // ------------------------------------------------------------------ ch6-7: Marek

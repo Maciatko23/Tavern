@@ -1,0 +1,458 @@
+{
+ "kosci": {
+  "std": {
+   "name": "Zwykła kość",
+   "short": "zwykła",
+   "desc": "Kość z kości, jak w każdej karczmie. Uczciwa jak Borgar przy wadze.",
+   "effect": "Każde oczko tak samo często."
+  },
+  "grusza": {
+   "name": "Kość z gruszy",
+   "short": "z gruszy",
+   "desc": "Wystrugana przez Bartka Kmiecia z gruszkowego drewna. Pachnie sadem.",
+   "effect": "Jedynki i piątki odrobinę częściej."
+  },
+  "wdowa": {
+   "name": "Kość wdowy",
+   "short": "wdowy",
+   "desc": "Czarna jak żałoba, lekka jak plotka. Dziadek Ozzy wygrał ją kiedyś od wdowy z Młynówki.",
+   "effect": "Piątki wyraźnie częściej (ok. 1 na 4 rzuty)."
+  },
+  "szczesciarz": {
+   "name": "Kość szczęściarza",
+   "short": "szczęściarza",
+   "desc": "Szczęśliwa kość Gruma, ze złotym połyskiem i czerwonym oczkiem.",
+   "effect": "Jedynki wyraźnie częściej (ok. 1 na 4 rzuty)."
+  },
+  "krucze": {
+   "name": "Kość z Kruczych Skał",
+   "short": "z Kruczych Skał",
+   "desc": "Z czarnego kamienia dawnej twierdzy. Zamiast jedynki wyryty kruk. Zimna w dłoni, nawet przy ogniu.",
+   "effect": "Kruk (jedynka) i piątki częściej, trójki rzadziej."
+  }
+ },
+ "rywale": {
+  "grum": {
+   "name": "Grum Żelazna Pięść",
+   "short": "Grum",
+   "role": "najemnik",
+   "style": "ryzykant",
+   "quote": "Siadaj. Tylko nie płacz potem, jak zgarnę pulę.",
+   "lines": {
+    "greet": [
+     "Siadaj. Tylko nie płacz potem, jak zgarnę pulę.",
+     "No proszę, ktoś odważny. Kości czekają.",
+     "Stawiaj, chłopcze. Grum nie gra za darmo."
+    ],
+    "meFirst": [
+     "Ja pierwszy. Patrz i się ucz.",
+     "Moja kolej na start. Tak ma być."
+    ],
+    "heroFirst": [
+     "Zaczynaj. I tak cię dogonię.",
+     "Ty pierwszy. Dam ci fory. Małe."
+    ],
+    "myBig": [
+     "Ha! Tak się rzuca!",
+     "Widzisz? Szczęście sprzyja odważnym.",
+     "No i co ty na to, chłopcze?"
+    ],
+    "myBust": [
+     "Na brodę mojej matki...",
+     "Kości dziś krzywe.",
+     "Niech to szlag!",
+     "Pfff. Rozgrzewka."
+    ],
+    "myHot": [
+     "Wszystkie sześć! Grum się rozkręca!",
+     "Gorące! Jeszcze raz, całą garścią!"
+    ],
+    "push": [
+     "Jeszcze raz. Kto nie ryzykuje, ten nie pije.",
+     "Mało. Rzucam dalej.",
+     "Grum nie zapisuje drobnych."
+    ],
+    "bank": [
+     "Dobra, zapisuję. Nie przyzwyczajaj się.",
+     "Do sakwy z tym."
+    ],
+    "heroBust": [
+     "Ha! Pudło! Kości cię nie lubią, chłopcze.",
+     "Hehe. Bywa.",
+     "I tyle z twojej tury."
+    ],
+    "heroHot": [
+     "Gorące kości? Farciarz...",
+     "Hmpf. Rzucaj, rzucaj."
+    ],
+    "heroBig": [
+     "Hmpf. Zwykłe szczęście.",
+     "Nieźle. Ale to jeszcze nie koniec."
+    ],
+    "heroSmall": [
+     "Zapisujesz tak mało? Tchórzysz?",
+     "Ostrożny jak baba na lodzie."
+    ],
+    "win": [
+     "Moje! Dzięki za piwo, chłopcze.",
+     "Pula moja. Wróć, jak urośniesz."
+    ],
+    "lose": [
+     "Wygrałeś. Uczciwie. Nie myśl, że się nie odegram.",
+     "Grr. Masz szczęście, że lubię tę karczmę."
+    ],
+    "lucky": [
+     "Moja szczęśliwa kość. Nie dotykaj, bo straci moc."
+    ],
+    "chat": [
+     "Słyszałeś coś o jaskiniach na wschód stąd? Nie? Szkoda.",
+     "Za górami płacą lepiej niż Borgar. Ale kości tam gorsze.",
+     "Najemnik bez kości to jak miecz bez ostrza."
+    ],
+    "give": [
+     "Weź ją. Moja szczęśliwa kość przestała mnie lubić. Może ciebie polubi."
+    ],
+    "tired": [
+     "Dość na dziś. Sakwa pusta, a duma obolała. Jutro się odegram."
+    ]
+   }
+  },
+  "ozzy": {
+   "name": "Dziadek Ozzy",
+   "short": "Ozzy",
+   "role": "stały bywalec",
+   "style": "ostrożny",
+   "quote": "Siadaj, siadaj, młody. Stary Ozzy lubi towarzystwo.",
+   "lines": {
+    "greet": [
+     "Siadaj, siadaj, młody. Stary Ozzy lubi towarzystwo.",
+     "O, gość! Zagramy? Tylko nie o grube pieniądze, emerytura skromna."
+    ],
+    "meFirst": [
+     "Ja zaczynam? Starszym się ustępuje, hehe."
+    ],
+    "heroFirst": [
+     "Młodzi przodem. Rzucaj."
+    ],
+    "myBig": [
+     "O! Widzisz? Stare ręce jeszcze umieją.",
+     "Hehe, jak za młodu!"
+    ],
+    "myBust": [
+     "Ech... Kości jak moja pamięć. Nic nie zostało.",
+     "Pudło? No to się napiję."
+    ],
+    "myHot": [
+     "Wszystkie? Ojej, a ja nawet nie celowałem!"
+    ],
+    "push": [
+     "Jeszcze jeden rzut... No dobra, jeden.",
+     "Raz się żyje, a ja żyję już dość długo."
+    ],
+    "bank": [
+     "Zapisuję, zapisuję. Pewne to pewne.",
+     "Wróbel w garści, jak mawiała moja Halinka."
+    ],
+    "heroBust": [
+     "Oj, pudło. Nie martw się, mnie też się zdarza. Codziennie.",
+     "Kości mają humory. Jak ja."
+    ],
+    "heroHot": [
+     "Gorące! Uważaj, żeby się nie sparzyć, hehe."
+    ],
+    "heroBig": [
+     "No, no! Pięknie rzucone!",
+     "Ho, ho! Masz rękę do kości."
+    ],
+    "heroSmall": [
+     "Rozsądnie. Rozsądnie.",
+     "Mądrze. Pewne to pewne."
+    ],
+    "win": [
+     "Hehe! Stary Ozzy jeszcze coś potrafi!",
+     "Moja wygrana. Postawię ci za to piwo. Za twoje pieniądze."
+    ],
+    "lose": [
+     "Wygrałeś uczciwie. Moja Halinka by cię polubiła.",
+     "Ech, przegrałem. Ale jaka zabawa!"
+    ],
+    "lucky": [
+     "Ta czarna? Kość wdowy. Gram nią, jak mi smutno."
+    ],
+    "chat": [
+     "Za moich młodych lat grało się o kury, nie o grosze. Raz wygrałem koguta. Dziobał mnie do zimy.",
+     "Moja Halinka grała lepiej ode mnie. I lepiej gotowała. Właściwie wszystko robiła lepiej.",
+     "Kiedyś jeden kupiec z miasta przegrał tu buty. Szedł do domu boso, a śpiewał!",
+     "Ta tawerna stoi na starych kamieniach, wiesz? Jako chłopak wlazłem raz do piwnicy... Hyk. Nieważne. Rzucaj.",
+     "Borgar mówi: nie pytaj o to, czego nie chcesz wiedzieć. Mądry chłopak. Po dziadku.",
+     "Grum? Dobry chłopak, tylko za dużo pyta o jaskinie na wschodzie. Po co mu jaskinie?",
+     "Kiedyś rzuciłem sześć jedynek. Nikt mi nie wierzy. Ja też już nie wierzę.",
+     "Kości trzeba ogrzać w dłoni. Tak mówił mój ojciec. Potem przegrał krowę."
+    ],
+    "vision": {
+     "bust": [
+      "Hyk... Nic z tego nie będzie. Nic a nic...",
+      "Widzę pustkę... Hyk. Pudło."
+     ],
+     "s16": [
+      "Wszystkie po kolei... od jedynki do szóstki... hyk."
+     ],
+     "straight": [
+      "Po kolei... ładnie po kolei, jak kaczki..."
+     ],
+     "kind": [
+      "{w}... hyk... tak mi się widzi."
+     ],
+     "one": [
+      "Jedynka... Widzę jedynkę. Hyk."
+     ],
+     "five": [
+      "Piątka. Samotna piątka... hyk."
+     ],
+     "after": [
+      "Mówiłem.",
+      "Hehe. Mówiłem przecież."
+     ]
+    },
+    "give": [
+     "Weź ją. Wygrałem ją kiedyś od wdowy z Młynówki. Ta to grała! Niech ci służy lepiej niż mnie."
+    ],
+    "tired": [
+     "Na dziś dość, młody. Stare kości potrzebują snu. I moje, i te."
+    ]
+   }
+  },
+  "kupiec": {
+   "name": "Kupiec Wawrzyniec",
+   "short": "Wawrzyniec",
+   "role": "bogaty gość z miasta",
+   "style": "wyrachowany",
+   "quote": "Pięćdziesiąt groszy tu, pięćdziesiąt tam... Siadaj, młodzieńcze.",
+   "lines": {
+    "greet": [
+     "Pięćdziesiąt groszy tu, pięćdziesiąt tam... Siadaj, młodzieńcze.",
+     "Szukam rozrywki na wieczór. Zagramy o coś wartego uwagi?"
+    ],
+    "meFirst": [
+     "Pozwolisz, że zacznę. Czas to pieniądz."
+    ],
+    "heroFirst": [
+     "Proszę. Gość przodem."
+    ],
+    "myBig": [
+     "Inwestycja się zwraca.",
+     "Tak wygląda dobry interes."
+    ],
+    "myBust": [
+     "Hm. Koszty prowadzenia interesu.",
+     "Każdy kupiec czasem traci towar."
+    ],
+    "myHot": [
+     "Pełna ładownia. Płyniemy dalej."
+    ],
+    "push": [
+     "Ryzyko jest ceną zysku.",
+     "Jeszcze jeden rzut. Liczby są po mojej stronie."
+    ],
+    "bank": [
+     "Zysk w kieszeni jest lepszy niż zysk w obietnicy.",
+     "Zamykam rachunek tej tury."
+    ],
+    "heroBust": [
+     "Tak kończy się chciwość.",
+     "Przykro mi. Naprawdę. Trochę."
+    ],
+    "heroHot": [
+     "Ho, ho. Imponujące.",
+     "Szczęście początkującego?"
+    ],
+    "heroBig": [
+     "Dobry rzut. Zanotuję to sobie.",
+     "Proszę, proszę."
+    ],
+    "heroSmall": [
+     "Ostrożność. Cenię to."
+    ],
+    "win": [
+     "Interes się opłacił. Dziękuję za grę.",
+     "Pula moja. Nic osobistego, młodzieńcze."
+    ],
+    "lose": [
+     "Brawo. Rzadko przegrywam. Zapamiętam twoją twarz.",
+     "Wygrałeś. Pieniądz lubi zmieniać właściciela."
+    ],
+    "lucky": [
+     "Ta czarna? Pamiątka z podróży. Nie zwracaj na nią uwagi."
+    ],
+    "chat": [
+     "Na targu w grodzie gra się o większe stawki. Ale tu jest przytulniej.",
+     "Kupiłem kiedyś kość od kopacza spod Kruczych Skał. Od tamtej pory śnią mi się kruki.",
+     "Rachunek prawdopodobieństwa, młodzieńcze. Nie szczęście."
+    ],
+    "tired": [
+     "Na dziś wystarczy. Mój skarbnik by mnie zabił."
+    ]
+   }
+  },
+  "bartek": {
+   "name": "Bartek Kmieć",
+   "short": "Bartek",
+   "role": "chłop spod Młynówki",
+   "style": "nowicjusz",
+   "quote": "Pięć groszy, więcej nie mam, żona liczy.",
+   "lines": {
+    "greet": [
+     "Pięć groszy, więcej nie mam, żona liczy.",
+     "Zagramy? Tylko powoli, ja dopiero się uczę."
+    ],
+    "meFirst": [
+     "Ja pierwszy? Ojej. Dobra."
+    ],
+    "heroFirst": [
+     "Ty zaczynaj, ja popatrzę, jak się to robi."
+    ],
+    "myBig": [
+     "O matko, to się liczy? Liczy się, nie?",
+     "Hej! Szkoda, że żona nie widziała!"
+    ],
+    "myBust": [
+     "Ojej... No nic, ziemniaki też nie zawsze wschodzą.",
+     "Ech. Jak z moim polem."
+    ],
+    "myHot": [
+     "Wszystkie sześć? To tak można?!"
+    ],
+    "push": [
+     "Rzucę jeszcze. Chyba tak się robi?"
+    ],
+    "bank": [
+     "Zapiszę, zapiszę, bo mi ucieknie.",
+     "Lepiej zapiszę, bo zapomnę."
+    ],
+    "heroBust": [
+     "Oj. Współczuję. Szczerze!",
+     "Pudło? Tak jak ja wczoraj."
+    ],
+    "heroHot": [
+     "Wszystkie sześć? Jak to się robi?!"
+    ],
+    "heroBig": [
+     "Ale rzut! Nauczysz mnie tak?"
+    ],
+    "heroSmall": [
+     "Mądrze."
+    ],
+    "win": [
+     "Wygrałem! Kupię żonie wstążkę!",
+     "Naprawdę wygrałem? No proszę!"
+    ],
+    "lose": [
+     "Przegrałem... Tylko nie mów żonie.",
+     "No trudno. Dobra zabawa za pięć groszy."
+    ],
+    "lucky": [
+     "Ta z gruszy? Sam wystrugałem. Nie jest krzywa. Chyba."
+    ],
+    "chat": [
+     "U nas we wsi gra się w kości tylko w niedzielę. Po kościele. Za kościołem.",
+     "Żona mówi, że kości to grzech. Ale sama gra w karty."
+    ],
+    "give": [
+     "Nie mam już grosza... Weź moją kość. Sam wystrugałem z gruszy. Mnie i tak nie przynosi szczęścia."
+    ],
+    "tired": [
+     "Na dziś koniec. Żona mnie zabije, jak przegram jeszcze grosz."
+    ]
+   }
+  },
+  "nieznajomy": {
+   "name": "Nieznajomy w kapturze",
+   "short": "Nieznajomy",
+   "role": "gość bez imienia",
+   "style": "zagadka",
+   "quote": "Kości nie kłamią. Ludzie kłamią. Siadaj.",
+   "lines": {
+    "greet": [
+     "Kości nie kłamią. Ludzie kłamią. Siadaj.",
+     "Sto sztuk złota. Do trzech tysięcy. Chluba tawerny chyba się nie boi?"
+    ],
+    "meFirst": [
+     "Ja pierwszy. Tak miało być."
+    ],
+    "heroFirst": [
+     "Proszę. Pokaż, ile jesteś wart."
+    ],
+    "myBig": [
+     "Tak musiało być.",
+     "Wiedziałem."
+    ],
+    "myBust": [
+     "...",
+     "Ciekawe."
+    ],
+    "myHot": [
+     "Wszystkie sześć. Jak dawniej."
+    ],
+    "push": [
+     "Jeszcze.",
+     "Za mało, żeby przestać."
+    ],
+    "bank": [
+     "Wystarczy.",
+     "Zapisz to."
+    ],
+    "heroBust": [
+     "Każdy kiedyś sięga o jeden rzut za daleko.",
+     "Chciałeś wiedzieć za dużo."
+    ],
+    "heroHot": [
+     "Kości cię dziś lubią. Nie przyzwyczajaj się."
+    ],
+    "heroBig": [
+     "Nieźle.",
+     "Kości cię lubią. Na razie."
+    ],
+    "heroSmall": [
+     "Ostrożnie. Mądrze."
+    ],
+    "win": [
+     "Pula moja. Jeszcze się spotkamy.",
+     "Tak miało być."
+    ],
+    "lose": [
+     "Wygrałeś. Rzadko to słyszę.",
+     "Dobrze. Zasłużyłeś."
+    ],
+    "lucky": [
+     "Ta kość jest stara. Starsza niż ta tawerna."
+    ],
+    "chat": [
+     "Pod tą podłogą leżą starsze kamienie, niż myślisz.",
+     "Pytasz, kim jestem? Zapytaj lepiej, czego szukasz.",
+     "Niektórzy rzucają kośćmi, żeby nie myśleć o tym, co wiedzą."
+    ],
+    "give": [
+     "Weź ją. Z Kruczych Skał. Ona i tak woli ciebie."
+    ],
+    "giveGold": [
+     "Kość z Kruczych Skał już masz. Weź więc to. I nie pytaj."
+    ],
+    "tired": [
+     "Na dziś dość. Znajdę cię."
+    ]
+   }
+  }
+ },
+ "kupiec_przy_oknie": {
+  "grum": "Ten kupiec przy oknie? Gra tylko z ludźmi, których zna. Mnie też długo nie znał.",
+  "ozzy": "Widzisz tego kupca z miasta? Gra tylko z ludźmi, których zna. Pokaż się w tawernie, to i z tobą siądzie.",
+  "bartek": "Kupiec mówi, że gra tylko z ludźmi, których zna. Mnie nie zna. Nikt mnie nie zna."
+ },
+ "bohater": {
+  "vision": [
+   "Skąd on to wiedział...?",
+   "Zaraz... skąd on wiedział?"
+  ]
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TavernDice_Data.js: DIE_TYPES=kosci:/(^|\\.)(name|short|desc|effect)$/, OPPONENTS=rywale:/(^|\\.)(name|short|role|style|quote)$|(^|\\.)lines(\\.|$)/, MERCHANT_HINT=kupiec_przy_oknie, HERO_LINES=bohater)"
+}

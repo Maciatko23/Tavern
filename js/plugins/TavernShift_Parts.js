@@ -29,6 +29,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("zmiana");   // (the words of this file: js/teksty/zmiana.txt, czesci.*)
     const TW = window.Tawerna;   // (TW: T is the tile's size here)
     if (!TW) throw new Error("TavernShift_Parts.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     const P = TW.api("TavernShift_parts") || TW.register("TavernShift_parts", {});
@@ -81,13 +82,14 @@
         }
         units() { return { total: this.tablesTotal + this.wood.need + this.sacks.length, done: this.tablesClean() + this.wood.done + this.trashDone }; }
         tablesClean() { return this.tablesTotal - this.room.tables.filter(tb => tb.dirty > 0).length; }
+        // (every frame: the words of js/teksty/zmiana.txt, czesci.cel)
         targets() {
-            const r = this.room, list = [];
-            for (const tb of r.tables) if (tb.dirty > 0) list.push({ kind: "wipe", table: tb, rect: r.tableRect(tb), hold: true, label: "Przetrzyj stół" });
-            if (this.carry === "log") list.push({ kind: "fire", rect: r.rectOf(SPOT.fire.tx, SPOT.fire.ty), label: "Dorzuć do kominka" });
-            else if (this.wood.done < this.wood.need) list.push({ kind: "log", rect: r.rectOf(SPOT.pile.tx, SPOT.pile.ty), label: "Weź polano", busy: !!this.carry });
-            for (const s of this.sacks) if (s.state === "lying") list.push({ kind: "sack", sack: s, rect: r.rectOf(s.tx, s.ty), label: s.kind === "sack" ? "Weź worek śmieci" : "Weź kubeł z resztkami", busy: !!this.carry });
-            if (this.carry === "trash") list.push({ kind: "door", rect: r.rectOf(DOOR_X0, RR - 1, 3, 1), label: "Wyrzuć za drzwi" });
+            const r = this.room, list = [], C = TK.czesci.cel;
+            for (const tb of r.tables) if (tb.dirty > 0) list.push({ kind: "wipe", table: tb, rect: r.tableRect(tb), hold: true, label: C.przetrzyj });
+            if (this.carry === "log") list.push({ kind: "fire", rect: r.rectOf(SPOT.fire.tx, SPOT.fire.ty), label: C.doKominka });
+            else if (this.wood.done < this.wood.need) list.push({ kind: "log", rect: r.rectOf(SPOT.pile.tx, SPOT.pile.ty), label: C.polano, busy: !!this.carry });
+            for (const s of this.sacks) if (s.state === "lying") list.push({ kind: "sack", sack: s, rect: r.rectOf(s.tx, s.ty), label: s.kind === "sack" ? C.worek : C.kubel, busy: !!this.carry });
+            if (this.carry === "trash") list.push({ kind: "door", rect: r.rectOf(DOOR_X0, RR - 1, 3, 1), label: C.wyrzuc });
             return list;
         }
         setCarry(what) {
@@ -124,7 +126,7 @@
             // the prompt
             if (tg) {
                 const ratio = tg.hold ? tg.table.wipe / this.cfg.wipe : undefined;
-                const label = tg.busy ? "Masz zajęte ręce" : tg.label + (tg.hold ? " (przytrzymaj)" : "");
+                const label = tg.busy ? TK.czesci.tick[0] : tg.label + (tg.hold ? TK.czesci.tick[1] : "");
                 this.prompt.show(label, tg.rect.x + tg.rect.w / 2, tg.rect.y - (tg.kind === "door" ? 4 : 6), ratio, tg.busy);
             } else this.prompt.hide();
             r.tickFire(this.t);
@@ -132,13 +134,13 @@
             this.tickFx();
             this.t++;
             const u = this.units();
-            if (u.done >= u.total && this.endWait < 0) { this.endWait = 50; se("Applause1", 45, 120); this.float("Wszystko zrobione!", ROOM_X + h.x, ROOM_Y + h.y - 70, ST().accent, 26); }
+            if (u.done >= u.total && this.endWait < 0) { this.endWait = 50; se("Applause1", 45, 120); this.float(TK.czesci.tick[2], ROOM_X + h.x, ROOM_Y + h.y - 70, ST().accent, 26); }
             if (this.endWait > 0 && --this.endWait === 0) this.finish();
             else if (this.t >= this.limit) this.finish();
         }
         act(tg) {
             const r = this.room, h = this.hero, fx = ROOM_X + h.x, fy = ROOM_Y + h.y - 64;
-            if (tg.busy) { se("Buzzer1", 50); this.float("Najpierw odnieś to, co niesiesz", fx, fy, WARN, 18); return; }
+            if (tg.busy) { se("Buzzer1", 50); this.float(TK.czesci.act[0], fx, fy, WARN, 18); return; }
             if (tg.kind === "log") { this.setCarry("log"); se("Equip1", 60, 90); }
             else if (tg.kind === "fire") {
                 this.setCarry(null);
@@ -146,7 +148,7 @@
                 r.setFire(this.wood.done);
                 se("Fire1", 55, 110);
                 this.burst(ROOM_X + cx(SPOT.fire.tx), ROOM_Y + SPOT.fire.ty * T + 20, "#ffb347", 10, 1.8, -0.02);
-                this.float("Polano " + this.wood.done + "/" + this.wood.need, ROOM_X + cx(SPOT.fire.tx), ROOM_Y + SPOT.fire.ty * T - 10, ST().accent);
+                this.float(Watki.wstaw(TK.czesci.act[1], { done: this.wood.done, need: this.wood.need }), ROOM_X + cx(SPOT.fire.tx), ROOM_Y + SPOT.fire.ty * T - 10, ST().accent);
             } else if (tg.kind === "sack") {
                 tg.sack.state = "carried";
                 tg.sack.spr.visible = false;
@@ -167,12 +169,12 @@
             if (u.done >= u.total) s += 10 * Math.min(1, left / (this.limit * 0.35));
             this.ctx.fire = this.wood.done;
             const tables = this.tablesClean(), good = [], bad = [];
-            if (u.done >= u.total) good.push("Sala wysprzątana na czas (" + Math.ceil(left / 60) + " s zapasu)");
+            if (u.done >= u.total) good.push(Watki.wstaw(TK.czesci.finish[0], { "1": Math.ceil(left / 60) }));
             else {
-                if (tables < this.tablesTotal) bad.push("Brudne stoły: " + (this.tablesTotal - tables));
-                if (this.wood.done < this.wood.need) bad.push("Kominek bez drewna: " + (this.wood.need - this.wood.done) + " polana");
-                if (this.trashDone < this.sacks.length) bad.push("Śmieci zostały w sali: " + (this.sacks.length - this.trashDone));
-                if (u.done > 0 && tables === this.tablesTotal) good.push("Stoły lśnią");
+                if (tables < this.tablesTotal) bad.push(Watki.wstaw(TK.czesci.finish[1], { "1": this.tablesTotal - tables }));
+                if (this.wood.done < this.wood.need) bad.push(Watki.wstaw(TK.czesci.finish[2], { "1": this.wood.need - this.wood.done }));
+                if (this.trashDone < this.sacks.length) bad.push(Watki.wstaw(TK.czesci.finish[3], { "1": this.sacks.length - this.trashDone }));
+                if (u.done > 0 && tables === this.tablesTotal) good.push(TK.czesci.finish[4]);
             }
             this.complete(s, {
                 done: u.done, total: u.total, timeLeft: Math.round(left / 60),
@@ -184,9 +186,10 @@
             return { done: 0, total: 0, skipped: true };
         }
         progress() { return clamp(this.t / this.limit, 0, 1); }
+        // (every frame: the words of js/teksty/zmiana.txt, czesci.hud - the numbers glued on as before, no {places} filled here)
         hud() {
-            const left = Math.max(0, this.limit - this.t), u = this.units();
-            return { timer: left / this.limit, label: "Do otwarcia: " + fmtTime(left), right: "Zadania: " + u.done + " / " + u.total };
+            const left = Math.max(0, this.limit - this.t), u = this.units(), H = TK.czesci.hud;
+            return { timer: left / this.limit, label: H.doOtwarcia + fmtTime(left), right: H.zadania + u.done + " / " + u.total };
         }
         frame() {
             const u = this.units();
@@ -196,12 +199,12 @@
             const b = this.side.bitmap;
             b.clear();
             panel(b, 0, 0, SIDE.w, SIDE.h, { cut: 6 });
-            txt(b, "Lista zadań", 20, 14, SIDE.w - 40, { size: 26, color: ST().accent, bold: true });
-            txt(b, "zanim wpuścimy gości", 20, 46, SIDE.w - 40, { size: 17, color: ST().muted });
+            txt(b, TK.czesci.frame[0], 20, 14, SIDE.w - 40, { size: 26, color: ST().accent, bold: true });
+            txt(b, TK.czesci.frame[1], 20, 46, SIDE.w - 40, { size: 17, color: ST().muted });
             const rows = [
-                [400, "Przetrzyj stoły", this.tablesClean(), this.tablesTotal, "stań przy stole, przytrzymaj O"],
-                [381, "Drewno do kominka", this.wood.done, this.wood.need, "polana ze stosu w rogu"],
-                [338, "Wynieś śmieci", this.trashDone, this.sacks.length, "za drzwi wejściowe"]
+                [400, TK.czesci.frame[2], this.tablesClean(), this.tablesTotal, TK.czesci.frame[3]],
+                [381, TK.czesci.frame[4], this.wood.done, this.wood.need, TK.czesci.frame[5]],
+                [338, TK.czesci.frame[6], this.trashDone, this.sacks.length, TK.czesci.frame[7]]
             ];
             let y = 90;
             for (const [ic, name, d, n, hint] of rows) {
@@ -214,9 +217,9 @@
                 txt(b, hint, 68, y + 58, SIDE.w - 96, { size: 15, color: ST().muted });
                 y += 104;
             }
-            txt(b, "W rękach:", 20, y + 6, 120, { size: 19, color: ST().muted });
-            txt(b, this.carry === "log" ? "polano" : this.carry === "trash" ? "śmieci" : "nic", 120, y + 6, 180, { size: 19, color: this.carry ? ST().accent : ST().text, bold: true });
-            drawLegend(b, 20, SIDE.h - 128, [[["up", "left", "down", "right"], "lub WSAD: chodzenie"], [["Shift"], "szybciej"], [["O"], "akcja"], [["P"], "pauza"]]);
+            txt(b, TK.czesci.frame[8], 20, y + 6, 120, { size: 19, color: ST().muted });
+            txt(b, this.carry === "log" ? "polano" : this.carry === "trash" ? TK.czesci.frame[9] : "nic", 120, y + 6, 180, { size: 19, color: this.carry ? ST().accent : ST().text, bold: true });
+            drawLegend(b, 20, SIDE.h - 128, [[["up", "left", "down", "right"], TK.czesci.frame[10]], [["Shift"], "szybciej"], [["O"], "akcja"], [["P"], "pauza"]]);
         }
         state() {
             const r = this.room;
@@ -360,11 +363,11 @@
             const d = this.level - this.line, ad = Math.abs(d);
             let score, label, colour, res;
             if (kind === "spill") { this.level = 1; this.spilled = true; score = 0; label = "Rozlane!"; colour = BAD; res = "spill"; se("Splash", 60, 110); }
-            else if (kind === "timeout") { score = 0; label = "Gość się nie doczekał"; colour = BAD; res = "timeout"; se("Buzzer1", 50); }
+            else if (kind === "timeout") { score = 0; label = TK.czesci.judge[0]; colour = BAD; res = "timeout"; se("Buzzer1", 50); }
             else if (ad <= 0.02) { score = 100; label = "Idealnie!"; colour = ST().accent; res = "perfect"; se("Chime2", 60, 120); }
             else if (ad <= 0.045) { score = 80; label = "Dobrze"; colour = GOOD; res = "good"; se("Decision2", 55, 110); }
-            else if (ad <= 0.08) { score = 55; label = d < 0 ? "Trochę za mało" : "Trochę za dużo"; colour = ST().text; res = d < 0 ? "short" : "over"; se("Cursor2", 55); }
-            else { score = Math.max(5, Math.round(40 - (ad - 0.08) * 250)); label = d < 0 ? "Za mało!" : "Za dużo piany!"; colour = WARN; res = d < 0 ? "short" : "over"; se("Buzzer2", 45); }
+            else if (ad <= 0.08) { score = 55; label = d < 0 ? TK.czesci.judge[1] : TK.czesci.judge[2]; colour = ST().text; res = d < 0 ? "short" : "over"; se("Cursor2", 55); }
+            else { score = Math.max(5, Math.round(40 - (ad - 0.08) * 250)); label = d < 0 ? TK.czesci.judge[3] : TK.czesci.judge[4]; colour = WARN; res = d < 0 ? "short" : "over"; se("Buzzer2", 45); }
             this.flow = 0;
             this.results.push({ score, res, diff: Math.round(d * 1000) / 1000 });
             this.phase = "judge";
@@ -379,17 +382,17 @@
             const perfect = count("perfect"), good = count("good"), spilled = count("spill"), short = count("short"), timeout = count("timeout");
             this.ctx.beerQ = avg / 100;
             const g = [], b = [];
-            if (perfect) g.push("Idealnie nalane kufle: " + perfect + " z " + this.results.length);
-            if (spilled) b.push("Rozlane kufle: " + spilled);
-            if (short) b.push("Za mało piwa w kuflach: " + short);
-            if (timeout) b.push("Kufle, które czekały na próżno: " + timeout);
+            if (perfect) g.push(Watki.wstaw(TK.czesci.finish[5], { perfect: perfect, length: this.results.length }));
+            if (spilled) b.push(Watki.wstaw(TK.czesci.finish[6], { spilled: spilled }));
+            if (short) b.push(Watki.wstaw(TK.czesci.finish[7], { short: short }));
+            if (timeout) b.push(Watki.wstaw(TK.czesci.finish[8], { timeout: timeout }));
             this.complete(avg, { mugs: this.results.length, perfect, good, spilled, short, results: this.results.slice() }, g, b);
         }
         skipData(score) { this.ctx.beerQ = score / 100; return { mugs: 0, perfect: 0, good: 0, spilled: 0, short: 0, results: [], skipped: true }; }
         progress() { return clamp((this.i + (this.phase === "judge" || this.phase === "out" ? 1 : 0)) / this.cfg.mugs, 0, 1); }
         hud() {
-            const i = Math.min(this.i + 1, this.cfg.mugs);
-            return { dots: this.results.map(r => r.score), dotsTotal: this.cfg.mugs, label: "Kufel " + i + " z " + this.cfg.mugs, right: this.pulse && this.phase !== "end" ? "Uwaga: kran skacze!" : "" };
+            const i = Math.min(this.i + 1, this.cfg.mugs), H = TK.czesci.hud;
+            return { dots: this.results.map(r => r.score), dotsTotal: this.cfg.mugs, label: H.kufel + i + " z " + this.cfg.mugs, right: this.pulse && this.phase !== "end" ? H.kranSkacze : "" };
         }
         frame() {
             const flowing = this.phase === "pour" || (this.phase === "lag" && this.flow > 0.0006);
@@ -410,12 +413,12 @@
                 const b = this.info.bitmap;
                 b.clear();
                 panel(b, 0, 0, 330, 300, { cut: 6 });
-                txt(b, "Kufel " + Math.min(this.i + 1, this.cfg.mugs) + " z " + this.cfg.mugs, 18, 12, 294, { size: 28, color: ST().accent, bold: true });
-                txt(b, this.pulse ? "Kran skacze: raz leje mocniej, raz słabiej!" : "Kran leje równo.", 18, 50, 294, { size: 18, color: this.pulse ? WARN : ST().muted });
-                const lines = ["Przytrzymaj O - leje się piwo.", "Puść, gdy piana sięga żółtej kreski.", "Po puszczeniu piwo leci jeszcze chwilę: puść odrobinę wcześniej."];
+                txt(b, Watki.wstaw(TK.czesci.frame[11], { "1": Math.min(this.i + 1, this.cfg.mugs), mugs: this.cfg.mugs }), 18, 12, 294, { size: 28, color: ST().accent, bold: true });
+                txt(b, this.pulse ? TK.czesci.frame[12] : TK.czesci.frame[13], 18, 50, 294, { size: 18, color: this.pulse ? WARN : ST().muted });
+                const lines = [TK.czesci.frame[14], TK.czesci.frame[15], TK.czesci.frame[16]];
                 let y = 92;
                 for (const l of lines) for (const w of wrapLines(b, l, 294, 18)) { txt(b, w, 18, y, 294, { size: 18 }); y += 25; }
-                if (this.phase === "ready") txt(b, "Czekam na O...", 18, 256, 294, { size: 19, color: ST().accent, bold: true });
+                if (this.phase === "ready") txt(b, TK.czesci.frame[17], 18, 256, 294, { size: 19, color: ST().accent, bold: true });
             }
             const tk = this.results.map(r => r.res).join(",");
             if (tk !== this._tallyKey) {
@@ -425,11 +428,11 @@
                 panel(b, 0, 0, 330, 240, { cut: 6 });
                 txt(b, "Wynik", 18, 12, 294, { size: 26, color: ST().accent, bold: true });
                 const count = res => this.results.filter(r => r.res === res).length;
-                const rows = [["Idealnie", count("perfect"), ST().accent], ["Dobrze", count("good"), GOOD], ["Za mało / za dużo", count("short") + count("over"), ST().text], ["Rozlane", count("spill") + count("timeout"), BAD]];
+                const rows = [["Idealnie", count("perfect"), ST().accent], ["Dobrze", count("good"), GOOD], [TK.czesci.frame[18], count("short") + count("over"), ST().text], ["Rozlane", count("spill") + count("timeout"), BAD]];
                 let y = 56;
                 for (const [n, v, c] of rows) { txt(b, n, 18, y, 220, { size: 20 }); txt(b, String(v), 240, y, 70, { size: 20, color: c, bold: true, align: "right" }); y += 32; }
                 const avg = this.results.length ? Math.round(this.results.reduce((a, r) => a + r.score, 0) / this.results.length) : 0;
-                txt(b, "Średnio: " + avg + " / 100", 18, 194, 294, { size: 19, color: ST().muted });
+                txt(b, Watki.wstaw(TK.czesci.frame[19], { avg: avg }), 18, 194, 294, { size: 19, color: ST().muted });
                 // the row of mugs at the bottom
                 const rb = this.row.bitmap;
                 rb.clear();
@@ -559,7 +562,7 @@
                 txt(b, st.name, x, 5, 160, { size: 19, color: ST().text });
                 x += Math.ceil(measure(b, st.name, 19)) + 22;
             }
-            txt(b, "P - pauza", b.width - 160, 5, 156, { size: 17, color: ST().muted, align: "right" });
+            txt(b, TK.czesci.drawLegendRow[0], b.width - 160, 5, 156, { size: 17, color: ST().muted, align: "right" });
         }
         currentDish() {
             const n = this.notes.find(x => !x.res);
@@ -578,7 +581,7 @@
             } else {
                 n.res = "wrong";
                 se("Buzzer1", 45);
-                this.judge("Nie ten krok!", BAD);
+                this.judge(TK.czesci.press[0], BAD);
             }
             this.dishCheck(n.dish);
         }
@@ -615,7 +618,7 @@
             for (const n of this.notes) {
                 if (!n.res && this.t > n.t + WIN.good) {
                     n.res = "miss";
-                    this.judge("Pudło", BAD);
+                    this.judge(TK.czesci.tick[3], BAD);
                     this.dishCheck(n.dish);
                 }
             }
@@ -631,19 +634,19 @@
             const score = this.notes.reduce((a, n) => a + (n.res === "perfect" ? 100 : n.res === "good" ? 65 : 0), 0) / this.notes.length;
             this.ctx.kitchenQ = score / 100;
             const g = [], b = [];
-            if (perfect >= this.notes.length * 0.6) g.push("Kuchnia w punkt: " + perfect + " z " + this.notes.length + " kroków idealnie");
+            if (perfect >= this.notes.length * 0.6) g.push(Watki.wstaw(TK.czesci.finish[9], { perfect: perfect, length: this.notes.length }));
             const best = this.dishes.filter(d => d.res && d.res.stars === 3);
-            if (best.length) g.push("Wyborne: " + best.map(d => d.name).join(", "));
-            if (miss) b.push("Pomylone lub spóźnione kroki: " + miss);
+            if (best.length) g.push(Watki.wstaw(TK.czesci.finish[10], { "1": best.map(d => d.name).join(", ") }));
+            if (miss) b.push(Watki.wstaw(TK.czesci.finish[11], { miss: miss }));
             const burnt = this.dishes.filter(d => d.res && d.res.stars === 0);
-            if (burnt.length) b.push("Nieudane: " + burnt.map(d => d.name).join(", "));
+            if (burnt.length) b.push(Watki.wstaw(TK.czesci.finish[12], { "1": burnt.map(d => d.name).join(", ") }));
             this.complete(score, { notes: this.notes.length, perfect, good, miss, dishes: this.dishes.map(d => ({ name: d.name, score: d.res ? d.res.score : 0, stars: d.res ? d.res.stars : 0 })) }, g, b);
         }
         skipData(score) { this.ctx.kitchenQ = score / 100; return { notes: 0, perfect: 0, good: 0, miss: 0, dishes: [], skipped: true }; }
         progress() { return clamp(this.t / this.end, 0, 1); }
         hud() {
             const di = this.currentDish();
-            return { timer: 1 - this.progress(), label: "Danie " + (di + 1) + " z " + this.dishes.length + ": " + this.dishes[di].name, right: "" };
+            return { timer: 1 - this.progress(), label: TK.czesci.hud.danie + (di + 1) + " z " + this.dishes.length + ": " + this.dishes[di].name, right: "" };
         }
         frame() {
             // the lane and its beat
@@ -657,7 +660,7 @@
                 const y = LANE.h / 2 + 8;
                 b.fillRect(20, y - 2, LANE.w - 40, 4, "rgba(255,255,255,0.08)");
                 b.fillRect(LANE.hitX - LANE.x - 2, 20, 4, LANE.h - 30, "rgba(255,210,63," + (0.18 + 0.5 * pulse) + ")");
-                txt(b, "Kroki przepisu", LANE.w - 316, 6, 300, { size: 16, color: ST().muted, align: "right" });
+                txt(b, TK.czesci.frame[20], LANE.w - 316, 6, 300, { size: 16, color: ST().muted, align: "right" });
             }
             this.zone.scale.set(1 + 0.06 * pulse);
             this.judgeSpr.scale.set(1 + 0.25 * Math.max(0, 1 - this.judgeT / 6));
@@ -686,8 +689,8 @@
                 cb.clear();
                 panel(cb, 0, 0, 560, 128, { cut: 6 });
                 icon(cb, d.icon, 16, 14, 48);
-                txt(cb, "Teraz: " + d.name, 76, 12, 460, { size: 26, color: ST().accent, bold: true });
-                txt(cb, "danie " + (di + 1) + " z " + this.dishes.length, 76, 44, 300, { size: 16, color: ST().muted });
+                txt(cb, Watki.wstaw(TK.czesci.frame[21], { name: d.name }), 76, 12, 460, { size: 26, color: ST().accent, bold: true });
+                txt(cb, Watki.wstaw(TK.czesci.frame[22], { "1": di + 1, length: this.dishes.length }), 76, 44, 300, { size: 16, color: ST().muted });
                 const ns = this.notes.filter(n => n.dish === di);
                 const w = 44, x0 = Math.round((560 - ns.length * w) / 2);
                 ns.forEach((n, i) => {
@@ -712,7 +715,7 @@
                 const pb = this.plates.bitmap;
                 pb.clear();
                 panel(pb, 0, 0, pb.width, 96, { cut: 6 });
-                txt(pb, "Gotowe na wieczór", 18, 8, 300, { size: 18, color: ST().muted });
+                txt(pb, TK.czesci.frame[23], 18, 8, 300, { size: 18, color: ST().muted });
                 const w = 250, x0 = Math.max(220, Math.round((pb.width - this.dishes.length * w) / 2) + 90);
                 this.dishes.forEach((x, i) => {
                     const px = x0 + i * w;
@@ -829,7 +832,7 @@
                     else {
                         g.wait++;
                         if (g.wait === 1) this.bubble(g, "?");
-                        if (g.wait > 600) { g.state = "leave"; this.stats.noSeat++; this.float("Nie ma gdzie usiąść...", ROOM_X + g.x, ROOM_Y + g.y - 70, WARN, 18); g.path = [{ x: g.x, y: g.y + 80 }]; }
+                        if (g.wait > 600) { g.state = "leave"; this.stats.noSeat++; this.float(TK.czesci.tickGuest[0], ROOM_X + g.x, ROOM_Y + g.y - 70, WARN, 18); g.path = [{ x: g.x, y: g.y + 80 }]; }
                     }
                     break;
                 }
@@ -860,7 +863,7 @@
                         g.t = 0;
                         this.stats.walkouts++;
                         se("Buzzer2", 55);
-                        this.float("Hmpf! Wychodzę!", ROOM_X + g.x, ROOM_Y + g.y - 80, BAD, 20);
+                        this.float(TK.czesci.tickGuest[1], ROOM_X + g.x, ROOM_Y + g.y - 80, BAD, 20);
                     }
                     break;
                 case "eat":
@@ -871,7 +874,7 @@
                         this.ctx.tips += tip;
                         this.stats.tips += tip;
                         if (tip > 0) { se("Coin", 60); this.float("+" + tip + " G", ROOM_X + g.x, ROOM_Y + g.y - 76, ST().accent, 22, GOLD_ICON); }
-                        else this.float("Dziękuję.", ROOM_X + g.x, ROOM_Y + g.y - 76, ST().text, 18);
+                        else this.float(TK.czesci.tickGuest[2], ROOM_X + g.x, ROOM_Y + g.y - 76, ST().text, 18);
                     }
                     break;
                 case "pay":
@@ -905,23 +908,24 @@
             g.mark = mark;
         }
         // ---- the hero's targets
+        // (every frame: the words of js/teksty/zmiana.txt, czesci.cel - the dishes' names glued on as before)
         targets() {
-            const r = this.room, list = [];
+            const r = this.room, list = [], C = TK.czesci.cel;
             for (const s of this.spots) {
                 const holding = this.hands.includes(s.key);
                 const full = this.hands.length >= 2 || this.hands.includes("log");
-                list.push({ kind: "spot", spot: s, rect: r.rectOf(s.tx, s.ty), label: (full && holding ? "Odstaw: " : full ? "" : "Weź: ") + DISHES[s.key].name, busy: full && !holding, putBack: full && holding });
+                list.push({ kind: "spot", spot: s, rect: r.rectOf(s.tx, s.ty), label: (full && holding ? C.odstaw : full ? "" : C.wez) + DISHES[s.key].name, busy: full && !holding, putBack: full && holding });
             }
-            if (this.hands.length && !this.hands.includes("log")) list.push({ kind: "tray", rect: r.rectOf(COUNTER_X1, COUNTER_Y), label: "Odstaw wszystko na ladę" });
+            if (this.hands.length && !this.hands.includes("log")) list.push({ kind: "tray", rect: r.rectOf(COUNTER_X1, COUNTER_Y), label: C.odstawWszystko });
             for (const g of this.guests) {
                 if (!g.seat || g.state !== "wait") continue;
                 const want = g.order.filter((k, i) => !g.got[i]);
                 const has = this.hands.find(k => want.includes(k));
-                list.push({ kind: "guest", guest: g, rect: r.rectOf(g.seat.tx, g.seat.ty), label: has ? "Podaj: " + DISHES[has].name : this.hands.length ? "Chce: " + want.map(k => DISHES[k].name).join(", ") : "Chce: " + want.map(k => DISHES[k].name).join(", "), dim: !has && !this.hands.length, wrong: !has && this.hands.length > 0 && !this.hands.includes("log") });
+                list.push({ kind: "guest", guest: g, rect: r.rectOf(g.seat.tx, g.seat.ty), label: has ? C.podaj + DISHES[has].name : this.hands.length ? C.chce + want.map(k => DISHES[k].name).join(", ") : C.chce + want.map(k => DISHES[k].name).join(", "), dim: !has && !this.hands.length, wrong: !has && this.hands.length > 0 && !this.hands.includes("log") });
             }
-            for (const tb of r.tables) if (tb.dirty > 0 && !tb.seats.some(s => s.guest && s.guest.state !== "leave")) list.push({ kind: "wipe", table: tb, rect: r.tableRect(tb), hold: true, label: "Przetrzyj stół" });
-            if (this.hands.includes("log")) list.push({ kind: "fire", rect: r.rectOf(SPOT.fire.tx, SPOT.fire.ty), label: "Dorzuć do kominka" });
-            else list.push({ kind: "log", rect: r.rectOf(SPOT.pile.tx, SPOT.pile.ty), label: this.hands.length ? "Masz zajęte ręce" : "Weź polano", busy: this.hands.length > 0 });
+            for (const tb of r.tables) if (tb.dirty > 0 && !tb.seats.some(s => s.guest && s.guest.state !== "leave")) list.push({ kind: "wipe", table: tb, rect: r.tableRect(tb), hold: true, label: C.przetrzyj });
+            if (this.hands.includes("log")) list.push({ kind: "fire", rect: r.rectOf(SPOT.fire.tx, SPOT.fire.ty), label: C.doKominka });
+            else list.push({ kind: "log", rect: r.rectOf(SPOT.pile.tx, SPOT.pile.ty), label: this.hands.length ? C.zajete : C.polano, busy: this.hands.length > 0 });
             return list;
         }
         act(tg) {
@@ -929,7 +933,7 @@
             if (tg.kind === "spot") {
                 const key = tg.spot.key, i = this.hands.indexOf(key);
                 if (tg.putBack || (i >= 0 && this.hands.length >= 2)) { this.hands.splice(i, 1); se("Cancel1", 45); }
-                else if (tg.busy) { se("Buzzer1", 45); this.float("Masz pełne ręce (dwie rzeczy)", fx, fy, WARN, 18); }
+                else if (tg.busy) { se("Buzzer1", 45); this.float(TK.czesci.act[2], fx, fy, WARN, 18); }
                 else { this.hands.push(key); se("Equip1", 55, 110); }
                 this.drawHands();
             } else if (tg.kind === "guest") {
@@ -941,7 +945,7 @@
                     g.patience = Math.max(1, g.patience - g.max * 0.15);
                     g.shake = 20;
                     se("Buzzer1", 55);
-                    this.float("To nie to, co zamawiałem!", ROOM_X + g.x, ROOM_Y + g.y - 84, BAD, 18);
+                    this.float(TK.czesci.act[3], ROOM_X + g.x, ROOM_Y + g.y - 84, BAD, 18);
                     return;
                 }
                 const key = this.hands.splice(hi, 1)[0];
@@ -956,7 +960,7 @@
                 if (g.order.every((k, i) => g.got[i])) {
                     g.state = "eat";
                     g.t = 0;
-                    this.float(ratio > 0.66 ? "Szybko! Dzięki!" : ratio > 0.33 ? "Dziękuję." : "Nareszcie...", ROOM_X + g.x, ROOM_Y + g.y - 80, ratio > 0.66 ? GOOD : ratio > 0.33 ? ST().text : WARN, 18);
+                    this.float(ratio > 0.66 ? TK.czesci.act[4] : ratio > 0.33 ? TK.czesci.act[5] : "Nareszcie...", ROOM_X + g.x, ROOM_Y + g.y - 80, ratio > 0.66 ? GOOD : ratio > 0.33 ? ST().text : WARN, 18);
                     const plate = new Sprite(new Bitmap(36, 36));
                     icon(plate.bitmap, dishIcon(g.order[0]), 2, 2, 32);
                     const tb = g.seat.table;
@@ -970,7 +974,7 @@
                 se("Cancel1", 45);
                 this.drawHands();
             } else if (tg.kind === "log") {
-                if (tg.busy) { se("Buzzer1", 45); this.float("Najpierw odnieś to, co niesiesz", fx, fy, WARN, 18); return; }
+                if (tg.busy) { se("Buzzer1", 45); this.float(TK.czesci.act[0], fx, fy, WARN, 18); return; }
                 this.hands = ["log"];
                 se("Equip1", 55, 90);
                 this.drawHands();
@@ -1006,7 +1010,7 @@
                 const before = Math.ceil(this.fire);
                 this.fire = Math.max(0, this.fire - this.cfg.fireDecay);
                 if (Math.ceil(this.fire) !== before) r.setFire(this.fire);
-                if (this.fire <= 0) this.float("Kominek wygasł! Zimno...", ROOM_X + cx(SPOT.fire.tx), ROOM_Y + 70, BAD, 20);
+                if (this.fire <= 0) this.float(TK.czesci.tick[4], ROOM_X + cx(SPOT.fire.tx), ROOM_Y + 70, BAD, 20);
             } else this.stats.cold++;
             // the hero's action
             const tg = r.nearest(h, this.targets());
@@ -1021,7 +1025,7 @@
                 }
             } else if (tg && kt.ok) this.act(tg);
             if (tg) {
-                const label = tg.busy && tg.kind === "spot" ? "Masz pełne ręce" : tg.label + (tg.hold ? " (przytrzymaj)" : "");
+                const label = tg.busy && tg.kind === "spot" ? TK.czesci.tick[5] : tg.label + (tg.hold ? TK.czesci.tick[1] : "");
                 this.prompt.show(label, tg.rect.x + tg.rect.w / 2, tg.kind === "guest" ? tg.rect.y + tg.rect.h + 36 : tg.rect.y - 6, tg.hold ? tg.table.wipe / this.cfg.wipe : undefined, tg.busy || tg.dim);
             } else this.prompt.hide();
             // Melia plays
@@ -1047,22 +1051,22 @@
             // the ones who are still eating pay now
             for (const g of this.guests) if (g.state === "eat") { const tip = Math.round(g.tip); this.ctx.tips += tip; s.tips += tip; }
             const g = [], b = [];
-            if (s.served >= orders && s.served > 0) g.push("Obsłużeni wszyscy goście (" + s.guests + ")");
-            else if (s.served > 0) g.push("Podane zamówienia: " + s.served + " z " + orders);
-            if (speed >= 0.6 && s.served >= 3) g.push("Szybka obsługa - napiwki: " + s.tips + " G");
-            if (s.mistakes) b.push("Pomyłki przy stołach: " + s.mistakes);
-            if (s.walkouts) b.push("Wyszli bez płacenia: " + s.walkouts);
-            if (s.noSeat) b.push("Nie mieli gdzie usiąść (brudne stoły): " + s.noSeat);
-            if (unserved) b.push("Nie podane do zamknięcia: " + unserved);
-            if (s.cold > 600) b.push("Wygasły kominek - zmarznięci goście");
+            if (s.served >= orders && s.served > 0) g.push(Watki.wstaw(TK.czesci.finish[13], { guests: s.guests }));
+            else if (s.served > 0) g.push(Watki.wstaw(TK.czesci.finish[14], { served: s.served, orders: orders }));
+            if (speed >= 0.6 && s.served >= 3) g.push(Watki.wstaw(TK.czesci.finish[15], { tips: s.tips }));
+            if (s.mistakes) b.push(Watki.wstaw(TK.czesci.finish[16], { mistakes: s.mistakes }));
+            if (s.walkouts) b.push(Watki.wstaw(TK.czesci.finish[17], { walkouts: s.walkouts }));
+            if (s.noSeat) b.push(Watki.wstaw(TK.czesci.finish[18], { noSeat: s.noSeat }));
+            if (unserved) b.push(Watki.wstaw(TK.czesci.finish[19], { unserved: unserved }));
+            if (s.cold > 600) b.push(TK.czesci.finish[20]);
             if (this.bgsOn) AudioManager.fadeOutBgs(1);
             this.complete(score, { guests: s.guests, orders, served: s.served, mistakes: s.mistakes, walkouts: s.walkouts, noSeat: s.noSeat, unserved, tips: s.tips, speed: Math.round(speed * 100) / 100 }, g, b);
         }
         skipData(score) { const tip = Math.round(score / 4); this.ctx.tips += tip; return { guests: 0, orders: 0, served: 0, mistakes: 0, walkouts: 0, noSeat: 0, unserved: 0, tips: tip, skipped: true }; }
         progress() { return clamp(this.t / this.limit, 0, 1); }
         hud() {
-            const left = Math.max(0, this.limit - this.t);
-            return { timer: left / this.limit, label: "Do zamknięcia: " + fmtTime(left), right: "Obsłużone: " + this.stats.served };
+            const left = Math.max(0, this.limit - this.t), H = TK.czesci.hud;
+            return { timer: left / this.limit, label: H.doZamkniecia + fmtTime(left), right: H.obsluzone + this.stats.served };
         }
         frame() {
             // the order bubbles over the guests
@@ -1101,21 +1105,21 @@
             const b = this.side.bitmap;
             b.clear();
             panel(b, 0, 0, SIDE.w, SIDE.h, { cut: 6 });
-            txt(b, "Zamówienia", 20, 12, 200, { size: 25, color: ST().accent, bold: true });
+            txt(b, TK.czesci.frame[24], 20, 12, 200, { size: 25, color: ST().accent, bold: true });
             txt(b, waiting.length ? String(waiting.length) : "brak", SIDE.w - 120, 16, 100, { size: 18, color: ST().muted, align: "right" });
             let y = 52;
             for (const g of waiting.slice(0, 5)) {
                 const want = g.order.filter((k, i) => !g.got[i]), ratio = clamp(g.patience / g.max, 0, 1);
                 panel(b, 14, y, SIDE.w - 28, 52, { cut: 4, accent: false, fill: "rgba(22,24,29,0.9)", line: ratio < 0.25 ? BAD : ST().line });
-                txt(b, "Stół " + (g.seat.table.i + 1), 24, y + 4, 90, { size: 17, color: ST().muted });
+                txt(b, Watki.wstaw(TK.czesci.frame[25], { "1": g.seat.table.i + 1 }), 24, y + 4, 90, { size: 17, color: ST().muted });
                 want.forEach((k, i) => icon(b, dishIcon(k), 100 + i * 36, y + 9, 32));
                 txt(b, want.map(k => DISHES[k].name).join(", "), 24, y + 24, 80, { size: 13, color: ST().text });
                 bar(b, 186, y + 22, SIDE.w - 214, 7, ratio, ratio > 0.5 ? GOOD : ratio > 0.25 ? WARN : BAD);
                 y += 58;
             }
-            if (waiting.length > 5) txt(b, "+ " + (waiting.length - 5) + " więcej", 24, y, 200, { size: 16, color: ST().muted });
+            if (waiting.length > 5) txt(b, Watki.wstaw(TK.czesci.frame[26], { "1": waiting.length - 5 }), 24, y, 200, { size: 16, color: ST().muted });
             y = 360;
-            txt(b, "W rękach", 20, y, 200, { size: 19, color: ST().muted });
+            txt(b, TK.czesci.frame[27], 20, y, 200, { size: 19, color: ST().muted });
             for (let i = 0; i < 2; i++) {
                 panel(b, 130 + i * 50, y - 4, 44, 44, { cut: 3, accent: false, fill: "rgba(22,24,29,0.9)" });
                 const k = this.hands[i];
@@ -1126,10 +1130,10 @@
             txt(b, "Kominek", 20, y, 120, { size: 19, color: ST().muted });
             const fr = this.fire / 3;
             bar(b, 130, y + 9, SIDE.w - 160, 8, fr, fr > 0.34 ? WARN : BAD);
-            if (fr <= 0.34) txt(b, fr <= 0 ? "Zgasł! Dorzuć drewna." : "Przygasa - dorzuć drewna.", 20, y + 22, SIDE.w - 40, { size: 16, color: BAD });
+            if (fr <= 0.34) txt(b, fr <= 0 ? TK.czesci.frame[28] : TK.czesci.frame[29], 20, y + 22, SIDE.w - 40, { size: 16, color: BAD });
             y += 50;
-            txt(b, "Napiwki: " + this.ctx.tips + " G", 20, y, SIDE.w - 40, { size: 20, color: ST().accent, bold: true });
-            drawLegend(b, 20, SIDE.h - 98, [[["up", "left", "down", "right"], "lub WSAD"], [["O"], "weź / podaj (przytrzymaj: przetrzyj)"], [["P"], "pauza"]]);
+            txt(b, Watki.wstaw(TK.czesci.frame[30], { tips: this.ctx.tips }), 20, y, SIDE.w - 40, { size: 20, color: ST().accent, bold: true });
+            drawLegend(b, 20, SIDE.h - 98, [[["up", "left", "down", "right"], TK.czesci.frame[31]], [["O"], TK.czesci.frame[32]], [["P"], "pauza"]]);
         }
         state() {
             const r = this.room;

@@ -1,0 +1,17 @@
+{
+ "gatunki": {
+  "crow": {
+   "name": "Wrona"
+  },
+  "sparrow": {
+   "name": "Wróbel"
+  },
+  "pigeon": {
+   "name": "Gołąb"
+  },
+  "partridge": {
+   "name": "Kuropatwa"
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Birds.js: SPECIES=gatunki:/(^|\\.)name$/)"
+}

@@ -4,7 +4,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Spójny ciemny wygląd interfejsu (czerń i jasna żółć, styl HUD): czcionka, wspólne panele i paski, porządek w menu, listach i ekranie tytułowym. v2.0.0
+ * @plugindesc Jeden wygląd interfejsu: paleta (czarne panele, jasnożółty akcent, jasny tekst, szare linie), czcionka, wspólne panele, paski i symbole, porządek w menu, listach i ekranie tytułowym. v3.0.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -24,12 +24,6 @@
  * @param hideRpgCommands
  * @text Ukryj komendy z klasycznego RPG
  * @desc W menu głównym zostają: Przedmioty, Opcje, Zapisz, Zakończ grę. Znikają: Zdolność, Wyposażenie, Status, Formacja.
- * @type boolean
- * @default true
- *
- * @param survivalStatusCard
- * @text Karta postaci w menu (survival)
- * @desc Zamiast HP / MP / poziomu menu pokazuje dzień, porę roku, wytrzymałość, premie i narzędzia.
  * @type boolean
  * @default true
  *
@@ -58,41 +52,43 @@
  * @default Tawerna_Title
  *
  * @param saveDayLine
- * @text Dzień i chatka na ekranie zapisu
- * @desc Pod tytułem na liście zapisów dopisuje dzień, porę roku i to, czy chatka jest już zbudowana.
+ * @text Dzień i chatka w zapisie
+ * @desc Zapis pamięta dzień, porę roku i to, czy chatka jest już zbudowana (pokazują je ekrany plików - MenuRing.js).
  * @type boolean
  * @default true
  *
  * @help
  * ============================================================================
- * UITheme.js
+ * UITheme.js - jeden wygląd interfejsu
  * ============================================================================
- * Wygląd okien (czarne tło, cienka szara ramka ze ściętymi rogami, jasnożółte
- * narożniki i zaznaczenie) pochodzi z grafiki img/system/Window.png, przyciski
- * z img/system/ButtonSet.png, tarcza zegara z img/system/Clock.png.
- * Ta wtyczka dopilnowuje reszty:
+ * Gra ma JEDEN wygląd (2026-10-28, docs/UI_JEDEN_WYGLAD.md): czarne panele,
+ * jasnożółty akcent #ffd23f, jasny tekst, szare linie - jak menu P
+ * (MenuRing.js) - w zaokrąglonych panelach z jedną cienką linią. Dawnego
+ * wyglądu „Grafit i miedź” i wiersza „Wygląd” w Opcjach już nie ma.
  *
- *  - Czcionka: Alegreya Sans (fonts/AlegreyaSans-Medium.ttf, licencja SIL OFL w
- *    AlegreyaSans-OFL.txt) w rozmiarze 22 - parametry wyżej. Ustawiana przy
- *    starcie gry, więc edytor zapisujący System.json jej nie cofnie.
- *  - Wszystkie nowe obrazki z tekstem (tabliczki HUD, dymki łupów, napisy na
- *    ekranie) używają tej samej czcionki co okna.
- *  - Wspólny wygląd wszystkiego, co inne wtyczki rysują same (tabliczka zegara,
- *    paski siły, głodu, pragnienia i ciężaru, dymki, ramka celu, minimapa):
- *    window.UIStyle - kolory oraz panel() i bar(). Zmiana stylu = zmiana tutaj.
- *  - Menu główne bez komend z klasycznego RPG i z kartą postaci pod survival.
+ *  - Paleta: window.UIStyle.C - jedyne miejsce z kolorami interfejsu. Czytają
+ *    ją HUD (CleanHUD.js, CleanHUD_Compass.js), menu P (MenuRing.js),
+ *    mini-gry (TawernaUI.js), dziennik, oznaczenia walki, prolog. Zmiana
+ *    koloru = zmiana tutaj.
+ *  - Wspólne rysowanie: UIStyle.panel(), bar(), glyph(), chip(), hudRow(),
+ *    roundPath().
+ *  - Okna (wiadomości, wybory, listy): img/system/Window.png w tych samych
+ *    barwach (tools/ui_jeden_wyglad/make_skin.py), przyciski
+ *    img/system/ButtonSet.png.
+ *  - Czcionka: Alegreya Sans (fonts/AlegreyaSans-Medium.ttf, licencja SIL OFL
+ *    w AlegreyaSans-OFL.txt) w rozmiarze 22 - parametry wyżej. Ustawiana przy
+ *    starcie gry, więc edytor zapisujący System.json jej nie cofnie. Wszystkie
+ *    nowe obrazki z tekstem używają tej samej czcionki co okna.
+ *  - Menu główne bez komend z klasycznego RPG.
  *  - Lista przedmiotów: "×7" zamiast ": 7", puste zakładki Broń / Zbroja
  *    ukryte, zakładki równo rozłożone na całą szerokość.
- *  - Ekran tytułowy: jasnożółty napis z czarnym obrysem.
+ *  - Ekran tytułowy: jasnożółty napis z czarnym obrysem (gdy TitleScreen.js
+ *    jest wyłączony).
  *
  * Ustawienia okien są w wtyczce OptionEx: suwaki koloru okna są wyłączone
  * (przy stałej skórce psułyby wygląd), przezroczystość zostaje do wyboru.
- * Każdy z elementów wyżej można wyłączyć w parametrach tej wtyczki.
- *
- * Kolory tekstu (jasny szary, żółte etykiety, zielony / czerwony) zapisane są
- * w tabeli barw na dole pliku Window.png (8 x 4 pól po 12 px), jak w każdym
- * standardowym pliku okna RPG Makera. Poprzedni wygląd (drewno i mosiądz) jest
- * w kopii ..\Tawerna_backup_ui_mosiadz.
+ * Kolory tekstu \C[n] są w tabeli barw na dole pliku Window.png (8 x 4 pól po
+ * 12 px), jak w każdym standardowym pliku okna RPG Makera.
  * ============================================================================
  */
 
@@ -106,7 +102,6 @@
     const params = PluginManager.parameters(pluginName);
     const flag = (v, d) => (v === undefined || v === "" ? d : v === "true");
     const HIDE_RPG = flag(params.hideRpgCommands, true);
-    const STATUS_CARD = flag(params.survivalStatusCard, true);
     const HIDE_EMPTY = flag(params.hideEmptyCategories, true);
     const COUNT_TIMES = flag(params.countAsTimes, true);
     const GOLD_TITLE = flag(params.goldTitle, true);
@@ -126,37 +121,35 @@
     };
 
     // ------------------------------------------------------------------
-    // The look of everything other plugins draw themselves (the clock's plate, the bars of stamina, hunger,
-    // thirst and weight, the popups, the goal tracker, the minimap frame): black with a bright yellow accent,
-    // the same as the windows (Window.png). One place to restyle them all.
+    // The palette: ONE look for the whole interface (2026-10-28, docs/UI_JEDEN_WYGLAD.md) - black panels, the bright yellow accent
+    // #ffd23f, light text, grey lines: the colours the user took for the P menu (MenuRing.js, 2026-10-23: "a można kolory z klasycznego
+    // wziąć?") in the rounded one-line shapes he sees since 2026-10-08. The copper "Grafit i miedź" and the option "Wygląd" are gone.
+    // UIStyle.C is the only place with the interface's colours: the HUD (CleanHUD.C is this object), the P menu (MenuRing's K reads it),
+    // the mini-games (TawernaUI), the journal, the fight's marks, the prologue; the windows' skin img/system/Window.png has the same
+    // ones (tools/ui_jeden_wyglad/make_skin.py). Change a colour here.
     // ------------------------------------------------------------------
-    // Two looks (Opcje -> "Wygląd", ConfigManager.uiClean - CleanHUD.js puts the option there; graphite unless it says otherwise):
-    //   "grafit"  "Grafit i miedź" (2026-10-08, docs/ui_pomysly2 idea 3): graphite see-through panels rounded 8-12 px, one thin line,
-    //             one copper accent, the skin img/system/Window_Grafit.png (tools/ui_grafit/make_skin.py)
-    //   "classic" black with the bright yellow corner brackets (2026-09-23), the skin Window.png
-    // Every colour below is read when something is drawn, so the look changes with the option.
-    const LOOKS = {
-        classic: {
-            fill: "rgba(11,12,15,0.9)",   // panel background
-            solid: "#0b0c0f",
-            line: "#3a3e46",              // thin grey frame line
-            accent: "#ffd23f",            // bright yellow
-            accentDim: "#c9a12a",
-            text: "#eceef0",
-            muted: "#8a9099",
-            trough: "#16181c",            // the empty part of a bar
-            outline: "rgba(0,0,0,0.9)"    // text outline on the map
-        },
-        grafit: {
-            fill: "rgba(22,23,26,0.9)", solid: "#16171a", line: "#40424a", accent: "#d08a5a", accentDim: "#8a5a3a",
-            text: "#ece6da", muted: "#9a958c", trough: "#2a2c31", outline: "rgba(0,0,0,0.9)"
-        }
+    const C = Object.freeze({
+        // the text: light, a little softer, quiet, dim (what cannot be chosen)
+        text: "#eceef0", soft: "#d4d6da", muted: "#8a9099", dim: "#62676f",
+        // the accent; darker (a bar's end, a rule), very dark (a chosen row's fill), dark muted (a dimmed choice); the ink on it
+        accent: "#ffd23f", accentDim: "#c9a12a", accentDark: "#5c4c18", accentMuted: "#58460c", onAccent: "#100e06",
+        // panels: a window's (fill, solid), the menu's big one (panel), the HUD's see-through one (glass), a strip, the inner ones
+        fill: "rgba(11,12,15,0.9)", solid: "#0b0c0f", panel: "rgba(11,12,15,0.93)", glass: "rgba(11,12,15,0.84)", strip: "rgba(6,6,8,0.92)",
+        panel2: "#141519", cell: "#1e2025", empty: "#111216", track: "#26282e", trough: "#16181c",
+        // the thin line; the text's outline where it stands on the map alone
+        line: "#3a3e46", outline: "rgba(0,0,0,0.82)",
+        // meanings: done / fresh, coins, a warning, heavy, the sun in the clock
+        good: "#96cd82", gold: "#ffd660", warn: "#ff9f8f", amber: "#e8b64a", sun: "#f2c25a",
+        // the needs' bars (the HUD, the P menu's Postać, the bag's "Po zjedzeniu"); the breath in the combat mode
+        health: "#d8605a", stamina: "#94bf6e", food: "#dda650", water: "#62a6dc", breath: "#8fe3ff"
+    });
+    const UIStyle = Object.assign({ C }, C);
+    // a palette colour (#rrggbb) with an alpha: UIStyle.rgba(C.cell, 0.94)
+    UIStyle.rgba = function(hex, alpha) {
+        const n = parseInt(String(hex).slice(1, 7), 16);
+        return "rgba(" + (n >> 16 & 255) + "," + (n >> 8 & 255) + "," + (n & 255) + "," + alpha + ")";
     };
-    const look = () => (window.ConfigManager && ConfigManager.uiClean === false ? "classic" : "grafit");
-    const grafit = () => look() === "grafit";
-    const UIStyle = { look, grafit, LOOKS };
-    for (const k of Object.keys(LOOKS.classic)) Object.defineProperty(UIStyle, k, { enumerable: true, get: () => LOOKS[look()][k] });
-    // a rounded rectangle's path (the graphite panels)
+    // a rounded rectangle's path (every panel, tile and track of the interface)
     UIStyle.roundPath = function(ctx, x, y, w, h, r) {
         r = Math.max(0, Math.min(r, w / 2, h / 2));
         ctx.beginPath();
@@ -167,85 +160,38 @@
         ctx.arcTo(x, y, x + w, y, r);
         ctx.closePath();
     };
-    // a panel like the windows: corners cut off, a thin grey line, short yellow brackets on the top-left and
-    // bottom-right corners. opts: { cut (px, 4), fill, line, accent: false }
+    // a panel: rounded (the cut x 2, 4..12 px), the see-through fill, one thin line. opts: { cut (4), fill, line }
     UIStyle.panel = function(ctx, x, y, w, h, opts) {
-        const o = opts || {}, c = o.cut === undefined ? 4 : o.cut;
-        if (grafit()) {   // the graphite look: rounded (the cut x 2, at least 4 px), the see-through fill, one thin line, no brackets
-            const r = Math.max(4, Math.min(12, c * 2));
-            ctx.save();
-            UIStyle.roundPath(ctx, x, y, w, h, r);
-            ctx.fillStyle = o.fill || UIStyle.fill;
-            ctx.fill();
-            UIStyle.roundPath(ctx, x + 0.5, y + 0.5, w - 1, h - 1, r);
-            ctx.strokeStyle = o.line || UIStyle.line;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-            ctx.restore();
-            return;
-        }
-        const outline = k => {
-            ctx.beginPath();
-            ctx.moveTo(x + c + k, y + k); ctx.lineTo(x + w - c - k, y + k); ctx.lineTo(x + w - k, y + c + k);
-            ctx.lineTo(x + w - k, y + h - c - k); ctx.lineTo(x + w - c - k, y + h - k); ctx.lineTo(x + c + k, y + h - k);
-            ctx.lineTo(x + k, y + h - c - k); ctx.lineTo(x + k, y + c + k);
-            ctx.closePath();
-        };
+        const o = opts || {}, c = o.cut === undefined ? 4 : o.cut, r = Math.max(4, Math.min(12, c * 2));
         ctx.save();
-        outline(0.5);
-        ctx.fillStyle = o.fill || UIStyle.fill;
+        UIStyle.roundPath(ctx, x, y, w, h, r);
+        ctx.fillStyle = o.fill || C.fill;
         ctx.fill();
-        ctx.strokeStyle = o.line || UIStyle.line;
+        UIStyle.roundPath(ctx, x + 0.5, y + 0.5, w - 1, h - 1, r);
+        ctx.strokeStyle = o.line || C.line;
         ctx.lineWidth = 1;
         ctx.stroke();
-        if (o.accent !== false) {
-            const L = Math.max(3, Math.min(10, w / 4, h / 2 - c));
-            ctx.strokeStyle = UIStyle.accent;
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(x + 1, y + c + L); ctx.lineTo(x + 1, y + c); ctx.lineTo(x + c, y + 1); ctx.lineTo(x + c + L, y + 1);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(x + w - 1, y + h - c - L); ctx.lineTo(x + w - 1, y + h - c); ctx.lineTo(x + w - c, y + h - 1); ctx.lineTo(x + w - c - L, y + h - 1);
-            ctx.stroke();
-        }
         ctx.restore();
     };
-    // a bar: a dark trough in a thin grey line, filled `ratio` (0..1) with a flat colour and a light top edge
+    // a bar: a rounded dark track, filled `ratio` (0..1) with a flat colour
     UIStyle.bar = function(ctx, x, y, w, h, ratio, colour) {
-        if (grafit()) {   // the graphite look: a rounded track and the colour over it, no frame
-            const r = Math.min(h / 2, 3), fw = Math.round(w * Math.max(0, Math.min(1, ratio)));
-            ctx.save();
-            ctx.fillStyle = "rgba(52,54,60,1)";
-            UIStyle.roundPath(ctx, x, y, w, h, r);
-            ctx.fill();
-            if (fw > 0 && colour) {
-                ctx.fillStyle = colour;
-                UIStyle.roundPath(ctx, x, y, Math.max(fw, Math.min(w, h)), h, r);
-                ctx.fill();
-            }
-            ctx.restore();
-            return;
-        }
-        ctx.fillStyle = UIStyle.line;
-        ctx.fillRect(x - 1, y - 1, w + 2, h + 2);
-        ctx.fillStyle = UIStyle.trough;
-        ctx.fillRect(x, y, w, h);
-        const fw = Math.round(w * Math.max(0, Math.min(1, ratio)));
+        const r = Math.min(h / 2, 3), fw = Math.round(w * Math.max(0, Math.min(1, ratio)));
+        ctx.save();
+        ctx.fillStyle = C.track;
+        UIStyle.roundPath(ctx, x, y, w, h, r);
+        ctx.fill();
         if (fw > 0 && colour) {
             ctx.fillStyle = colour;
-            ctx.fillRect(x, y, fw, h);
-            ctx.fillStyle = "rgba(255,255,255,0.28)";
-            ctx.fillRect(x, y, fw, 1);
-            ctx.fillStyle = "rgba(0,0,0,0.25)";
-            ctx.fillRect(x, y + h - 1, fw, 1);
+            UIStyle.roundPath(ctx, x, y, Math.max(fw, Math.min(w, h)), h, r);
+            ctx.fill();
         }
+        ctx.restore();
     };
     // The HUD's symbols, one set in one style: flat shapes on a 20 x 20 grid, filled with `fill` (the yellow accent unless
     // told otherwise) inside a dark outline so they read on any ground. kind: stamina (a bolt), food (a drumstick), water (a
     // drop), weight (a kettlebell), sated (a fork and a knife), warm (a flame), cold (a snowflake), wound (three scratches), health (a heart).
     UIStyle.glyph = function(ctx, kind, x, y, size, fill, bare) {
-        const col = fill || UIStyle.accent, dark = bare ? "rgba(0,0,0,0)" : "rgba(8,9,11,0.92)";   // bare: no outline (on a chip)
+        const col = fill || C.accent, dark = bare ? "rgba(0,0,0,0)" : "rgba(8,9,11,0.92)";   // bare: no outline (on a chip)
         ctx.save();
         ctx.translate(x, y);
         ctx.scale(size / 20, size / 20);
@@ -340,7 +286,7 @@
     UIStyle.HUD = { row: 20, step: 23, gap: 6, barW: 112, barH: 8 };
     // the symbol on a small dark plate with a thin line, so it reads on grass, snow or trees alike
     UIStyle.chip = function(ctx, kind, x, y, size, fill) {
-        UIStyle.panel(ctx, x, y, size, size, { cut: 3, fill: "rgba(11,12,15,0.86)", accent: false });
+        UIStyle.panel(ctx, x, y, size, size, { cut: 3, fill: "rgba(11,12,15,0.86)" });
         const inset = Math.round(size * 0.12);
         UIStyle.glyph(ctx, kind, x + inset, y + inset, size - inset * 2, fill, true);
     };
@@ -351,44 +297,8 @@
     };
     window.UIStyle = UIStyle;
 
-    // ---- the windows' skin and the text colours follow the look: Window_Grafit.png in the graphite one (the cursor, the frame, the
-    // arrows, the palette of \C[n]); ColorManager reads the skin of the look (its own one is kept for the classic)
-    const SKIN_GRAFIT = "Window_Grafit";
-    const _loadWindowskin = Window_Base.prototype.loadWindowskin;
-    Window_Base.prototype.loadWindowskin = function() {
-        _loadWindowskin.call(this);
-        if (grafit()) this.windowskin = ImageManager.loadSystem(SKIN_GRAFIT);
-    };
-    let grafitSkin = null;
-    const classicSkin = Object.getOwnPropertyDescriptor(ColorManager, "_windowskin");
-    let ownSkin = classicSkin && "value" in classicSkin ? classicSkin.value : undefined;
-    Object.defineProperty(ColorManager, "_windowskin", {
-        configurable: true,
-        get() {
-            if (grafit() && ownSkin) {
-                if (!grafitSkin) grafitSkin = ImageManager.loadSystem(SKIN_GRAFIT);
-                if (grafitSkin.isReady()) return grafitSkin;
-            }
-            return ownSkin;
-        },
-        set(v) { ownSkin = v; }
-    });
-    // the graphite look's lists have no band behind each row (only the cursor marks the chosen one)
-    const _drawItemBackground = Window_Selectable.prototype.drawItemBackground;
-    Window_Selectable.prototype.drawItemBackground = function(index) {
-        if (grafit()) return;
-        _drawItemBackground.call(this, index);
-    };
-    // a window made before the look changed (Opcje -> Wygląd) takes the other skin the next time it is drawn
-    const _Window_Base_update = Window_Base.prototype.update;
-    Window_Base.prototype.update = function() {
-        _Window_Base_update.call(this);
-        if (this._lookWas !== look()) {
-            const first = this._lookWas === undefined;
-            this._lookWas = look();
-            if (!first && this.windowskin) this.loadWindowskin();
-        }
-    };
+    // the lists have no band behind each row: only the cursor marks the chosen one
+    Window_Selectable.prototype.drawItemBackground = function() {};
 
     // ------------------------------------------------------------------
     // One font everywhere: bitmaps drawn by plugins (HUD, popups, labels) used to fall back to the
@@ -429,177 +339,6 @@
     };
 
     // ------------------------------------------------------------------
-    // The character card in the menu
-    // ------------------------------------------------------------------
-    const SEASONS = ["Wiosna", "Lato", "Jesień", "Zima"];
-    const hoursText = h => {
-        const total = Math.max(1, Math.ceil(h));
-        return total + " godz.";
-    };
-
-    function clockText() {
-        const h = $gameSystem.dayNightHour();
-        const hh = Math.floor(h), mm = Math.floor((h - hh) * 60);
-        return String(hh).padStart(2, "0") + ":" + String(mm).padStart(2, "0");
-    }
-
-    function weatherText() {
-        const outdoors = T.mapFlag("Clouds", false) || T.mapFlag("Weather", false);
-        if (!outdoors) return "pod dachem";
-        const type = $gameScreen.weatherType(), active = ($gameScreen._weatherPowerTarget || 0) > 0;
-        if (active && type === "storm") return "burza";
-        if (active && type === "rain") return "deszcz";
-        if (active && type === "snow") return "śnieg";
-        return "bezdeszczowo";
-    }
-
-    function drawKeyIcons(win, x, y, width) {
-        const icons = $gameParty.items().filter(i => i.itypeId === 2).map(i => i.iconIndex);
-        const step = ImageManager.iconWidth + 4;
-        const perRow = Math.max(1, Math.floor(width / step));
-        const rowH = ImageManager.iconHeight + 8;
-        icons.slice(0, perRow * 2).forEach((icon, i) => {
-            const sx = x + (i % perRow) * step, sy = y + Math.floor(i / perRow) * rowH;
-            win.contents.fillRect(sx - 2, sy - 2, ImageManager.iconWidth + 4, ImageManager.iconHeight + 4, ColorManager.textColor(26));
-            win.contents.fillRect(sx - 1, sy - 1, ImageManager.iconWidth + 2, ImageManager.iconHeight + 2, UIStyle.trough);
-            win.drawIcon(icon, sx, sy);
-        });
-        return Math.ceil(Math.min(icons.length, perRow * 2) / perRow) * rowH;
-    }
-
-    // A plain gauge (the engine's own gauges belong to sprites, not to windows)
-    function drawBar(win, x, y, width, rate, color1, color2) {
-        const h = 16, gy = y + Math.floor((win.lineHeight() - h) / 2) + 2;
-        win.contents.fillRect(x, gy, width, h, ColorManager.gaugeBackColor());
-        win.contents.fillRect(x, gy, width, 1, ColorManager.textColor(26));
-        win.contents.gradientFillRect(x + 1, gy + 1, Math.max(0, Math.floor((width - 2) * Math.max(0, Math.min(1, rate)))), h - 2, color1, color2);
-    }
-
-    function drawSurvivalCard(win, index) {
-        const actor = win.actor(index);
-        const rect = win.itemRectWithPadding(index);
-        const lh = win.lineHeight();
-        const portraitW = Math.min(300, Math.floor(rect.width * 0.26));
-        win.drawActorPicture(actor, rect.x, rect.y, portraitW, rect.height, true, true);
-        const x = rect.x + portraitW + 36;
-        const w = rect.width - portraitW - 36 - 12;
-        let y = rect.y + 2;
-
-        win.contents.fontSize = 36;
-        win.changeTextColor(ColorManager.textColor(16));
-        win.drawText(actor.name(), x, y, w);
-        win.resetFontSettings();
-        y += 46;
-        win.contents.fillRect(x, y, w, 2, ColorManager.textColor(26));
-        y += 12;
-
-        if (index > 0) return;   // the survival figures belong to the whole party: only drawn once
-
-        // day, season, time
-        const day = $gameSystem.dayNightDay();
-        const season = window.Farming && Farming.seasonIndex ? SEASONS[Farming.seasonIndex(day)] : "";
-        win.changeTextColor(ColorManager.systemColor());
-        win.drawText("Dzień", x, y, 120);
-        win.resetTextColor();
-        win.drawText(day + (season ? "  ·  " + season : "") + "  ·  " + clockText(), x + 130, y, w - 130);
-        y += lh + 6;
-
-        // health (the hero's HP, Survival.js) and stamina
-        const gx = x + 210, gw = Math.min(300, w - 210 - 120);
-        const hpRatio = actor.mhp > 0 ? actor.hp / actor.mhp : 1;
-        win.changeTextColor(ColorManager.systemColor());
-        win.drawText("Zdrowie", x, y, 200);
-        win.resetTextColor();
-        drawBar(win, gx, y, gw, hpRatio, "#e5484d", "#b8323a");
-        win.drawText(actor.hp + " / " + actor.mhp, gx + gw + 14, y, 110);
-        y += lh + 6;
-        const ratio = typeof $gameSystem.staminaRatio === "function" ? $gameSystem.staminaRatio() : 1;
-        const cur = Math.round($gameSystem.stamina ? $gameSystem.stamina() : 100), max = Math.round($gameSystem.maxStamina ? $gameSystem.maxStamina() : 100);
-        win.changeTextColor(ColorManager.systemColor());
-        win.drawText("Wytrzymałość", x, y, 200);
-        win.resetTextColor();
-        drawBar(win, gx, y, gw, ratio, ratio > 0.25 ? ColorManager.textColor(20) : ColorManager.textColor(17), ratio > 0.25 ? ColorManager.textColor(21) : ColorManager.textColor(18));
-        win.drawText(cur + " / " + max, gx + gw + 14, y, 110);
-        y += lh + 6;
-
-        // hunger and thirst (Needs.js)
-        if (window.Needs && Needs.enabled()) {
-            const st = Needs.state();
-            for (const [label, value, text, c1, c2] of [["Sytość", st.food, Needs.foodText(), "#e0b24a", "#c98a2c"], ["Nawodnienie", st.water, Needs.waterText(), "#62b6ee", "#4a94d6"]]) {
-                win.changeTextColor(ColorManager.systemColor());
-                win.drawText(label, x, y, 200);
-                win.resetTextColor();
-                drawBar(win, gx, y, gw, value / 100, c1, c2);
-                if (text) win.changeTextColor(ColorManager.textColor(17));
-                win.drawText(text || Math.round(value) + " / 100", gx + gw + 14, y, 200);
-                win.resetTextColor();
-                y += lh + 6;
-            }
-        }
-
-        // place and weather
-        win.changeTextColor(ColorManager.systemColor());
-        win.drawText("Miejsce", x, y, 120);
-        win.resetTextColor();
-        win.drawText($gameMap.displayName() || ($dataMapInfos[$gameMap.mapId()] || {}).name || "", x + 130, y, w - 130);
-        y += lh + 6;
-        win.changeTextColor(ColorManager.systemColor());
-        win.drawText("Pogoda", x, y, 120);
-        win.resetTextColor();
-        win.drawText(weatherText(), x + 130, y, w - 130);
-        y += lh + 14;
-
-        // effects
-        win.changeTextColor(ColorManager.systemColor());
-        win.drawText("Samopoczucie", x, y, 220);
-        win.resetTextColor();
-        const buffs = typeof $gameSystem.activeBuffs === "function" && window.Survival ? $gameSystem.activeBuffs() : [];
-        const cold = typeof $gameSystem.isCold === "function" && $gameSystem.isCold();
-        let by = y;
-        if (buffs.length === 0 && !cold) {
-            win.changeTextColor(ColorManager.textColor(7));
-            win.drawText("w normie", x + 230, by, w - 230);
-            win.resetTextColor();
-            by += lh;
-        }
-        for (const b of buffs) {
-            const def = Survival.BUFFS[b.name];
-            win.drawIcon(def.icon, x + 230, by + 2);
-            win.drawText(def.name + "  ·  jeszcze " + hoursText(b.left), x + 230 + 40, by, w - 230 - 40);
-            by += lh;
-        }
-        if (cold) {
-            win.changeTextColor(ColorManager.textColor(4));
-            win.drawText("Zimno! Wytrzymałość kosztuje więcej", x + 230, by, w - 230);
-            win.resetTextColor();
-            by += lh;
-        }
-        y = by + 14;
-
-        // tools and gear
-        win.contents.fillRect(x, y, w, 2, ColorManager.textColor(26));
-        y += 12;
-        win.changeTextColor(ColorManager.systemColor());
-        win.drawText("Narzędzia i wyposażenie", x, y, w);
-        win.resetTextColor();
-        y += lh + 2;
-        drawKeyIcons(win, x, y, w);
-    }
-
-    if (STATUS_CARD) {
-        const _drawItem = Window_MenuStatus.prototype.drawItem;
-        Window_MenuStatus.prototype.drawItem = function(index) {
-            if (this instanceof Window_MenuActor) return _drawItem.call(this, index);
-            this.drawPendingItemBackground(index);
-            drawSurvivalCard(this, index);
-        };
-        const _maxCols = Window_MenuStatus.prototype.maxCols;
-        Window_MenuStatus.prototype.maxCols = function() {
-            return this instanceof Window_MenuActor ? _maxCols.call(this) : 1;
-        };
-    }
-
-    // ------------------------------------------------------------------
     // Item lists
     // ------------------------------------------------------------------
     if (COUNT_TIMES) {
@@ -635,27 +374,7 @@
             }
             return info;
         };
-        // Window_SavefileStatus is private to AltSaveScreen.js's own closure (the whole file is one
-        // IIFE), so it cannot be referenced by name from here. Scene_File.create is where that file
-        // hands the finished window to the scene (this._listWindow.mzkp_statusWindow) - patch that
-        // one instance's drawContents there instead, before anything has drawn with it yet.
-        const _Scene_File_create = Scene_File.prototype.create;
-        Scene_File.prototype.create = function() {
-            _Scene_File_create.call(this);
-            const w = this._listWindow && this._listWindow.mzkp_statusWindow;
-            if (!w || w.__dayLinePatched) return;
-            w.__dayLinePatched = true;
-            const _drawContents = w.drawContents.bind(w);
-            w.drawContents = function(info, rect) {
-                _drawContents(info, rect);
-                if (info.day === undefined) return;   // a save from before this feature: nothing to show
-                this.contents.fontSize = 22;
-                this.changeTextColor(ColorManager.textColor(7));
-                const line = "Dzień " + info.day + (info.season ? "  ·  " + info.season : "") + "  ·  " + (info.hutBuilt ? "chatka zbudowana" : "chatki jeszcze nie ma");
-                this.drawText(line, rect.x + 192, rect.y + this.lineHeight(), rect.width - 192);
-                this.resetFontSettings();
-            };
-        };
+        // (the file screens - MenuRing.js - write it: "Dzień 40 · lato" on the row, Chatka on the card)
     }
 
     // ------------------------------------------------------------------

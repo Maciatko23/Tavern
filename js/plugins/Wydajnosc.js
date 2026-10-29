@@ -50,7 +50,7 @@
  * Dla innych wtyczek: Tawerna.api("Wydajnosc") - opts (leaf, filterArea, cull,
  * lazy, idleFilters, outline, night: true/false), stats, settleFilters.
  *
- * JAKOŚĆ GRAFIKI (Opcje, pod „Wygląd”; zapis w ustawieniach, działa od razu):
+ * JAKOŚĆ GRAFIKI (Opcje, pierwszy wiersz; zapis w ustawieniach, działa od razu):
  *   Automatycznie (domyślnie) - gra mierzy czas klatki i schodzi o poziom
  *     niżej, gdy przez kilka sekund nie trzyma ~55 kl/s; wyżej wraca dopiero
  *     po zmianie mapy, gdy jest zapas; poziom, który dwa razy nie utrzymał
@@ -103,14 +103,13 @@
         const want = opts.filterArea ? area : null;
         if (o.filterArea !== want && (o._wyArea || !o.filterArea)) { o.filterArea = want; o._wyArea = !!want; }   // (never one another plugin set)
     }
-    const _Scene_Map_update = Scene_Map.prototype.update;
-    Scene_Map.prototype.update = function() {
-        _Scene_Map_update.call(this);
-        const area = screenArea(), set = this._spriteset;
+    // (the core's clock of the map, first of all: before the frame is drawn - where in the frame does not matter, it only sets the area)
+    T.onMapUpdate(scene => {
+        const area = screenArea(), set = scene._spriteset;
         if (!area) return;
-        setArea(this, area);
+        setArea(scene, area);
         if (set) { setArea(set, area); setArea(set._baseSprite, area); }
-    };
+    }, { owner: "Wydajnosc", name: "filterArea", priority: -400 });
 
     // ---- a character off the screen is not drawn. At the time of drawing its world matrix is the one of this frame; the target is the
     // screen - or the filter's texture of the screen, or a snapshot of it - whose part of the world is renderer.renderTexture.sourceFrame.
@@ -405,8 +404,8 @@
         _sceneMapUpdateQ.call(this);
     };
 
-    // ---- the row in Opcje (both looks: the Grafit menu - MenuRing.js - and the classic options): "Jakość grafiki" right under
-    // "Wygląd", and under it a line of small text - what the chosen level turns off - which the cursor passes over. A / D a level
+    // ---- the row in Opcje (the P menu's and the title's - MenuRing.js): "Jakość grafiki" first in the list, and under it a line of
+    // small text - what the chosen level turns off - which the cursor passes over. A / D a level
     // (no further than the ends), O the next one round. Put round the options' window once every plugin is in (OptionEx.js puts its
     // own methods in place of the engine's), at Scene_Boot's start - or at once when put into a running page.
     const OPT_SYMBOL = "gfxQuality", NOTE_SYMBOL = "gfxQualityNote";
@@ -422,8 +421,7 @@
         const _make = P.makeCommandList;
         P.makeCommandList = function() {
             _make.call(this);
-            const at = this._list.findIndex(c => c.symbol === "uiClean") + 1;
-            this._list.splice(at, 0, { name: "Jakość grafiki", symbol: OPT_SYMBOL, enabled: true, ext: null }, { name: "", symbol: NOTE_SYMBOL, enabled: false, ext: null });
+            this._list.splice(0, 0, { name: "Jakość grafiki", symbol: OPT_SYMBOL, enabled: true, ext: null }, { name: "", symbol: NOTE_SYMBOL, enabled: false, ext: null });
         };
         const _status = P.statusText;
         P.statusText = function(index) {
@@ -478,13 +476,13 @@
                 applyQuality();
             };
         }
-        // the line of text: small, dimmer, across the whole row (the Grafit look - CleanHUD's text, as the other rows; else the window's)
+        // the line of text: small, dimmer, across the whole row (CleanHUD's text, as the other rows - MenuRing.js; else the window's)
         const _draw = P.drawItem;
         P.drawItem = function(index) {
             if (this.commandSymbol(index) !== NOTE_SYMBOL) return _draw.call(this, index);
             const r = this.itemLineRect ? this.itemLineRect(index, false) : this.itemRect(index), s = this.itemLineRect ? this.itemLineRect(index, true) : r;
             const x = r.x + 12, w = Math.max(r.width, s.x + s.width - r.x) - 16, text = qualityNote(), CH = T.api("CleanHUD");
-            if (T.api("MenuRing") && CH && CH.isClean && CH.isClean() && CH.textOut) {
+            if (T.api("MenuRing") && CH && CH.textOut) {
                 CH.textOut(this.contents, text, x, r.y, w, r.height, "left", { size: 15, color: CH.C.muted, plain: true });
                 return;
             }

@@ -100,6 +100,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("dom_dziadka");   // (the words of this file: js/teksty/dom_dziadka.txt, ozdoby.*)
 
     const PLUGIN = "HomeDecor";
     const T = window.Tawerna;
@@ -162,31 +163,9 @@
 
     // the memory lines (hover / the action button)
     const LINES = {
-        rogi: "Poroże mojego pierwszego jelenia. Młody widłak, ale mój.",
-        kiel: "Kieł mojego pierwszego dzika. Szarżował prosto na mnie...",
-        skora: "Skóra pierwszego wilka. Mało brakowało...",
-        list: () => { const t = state().noticeTitle; return t ? "Moje pierwsze zlecenie: „" + t + "”. Wisi na pamiątkę." : "Moje pierwsze zlecenie z tablicy w tawernie. Wisi na pamiątkę."; },
-        kufel: "Cynowy kufel od Borgara - na pamiątkę pierwszej zmiany w tawernie.",
-        kosci: "Moje kości. Z nimi pierwszy raz kogoś ograłem w tawernie.",
-        pokwitowanie: "„Dług Stanisława spłacony co do grosza. Działka zostaje przy nim.” - L. Zaleski",
-        pokwitowanieDziadek: "Oprawiłem, jak Lord radził. Niech wisi - niech każdy widzi, że u nas długów nie ma.",
-        gwozdz: "Pusty gwóźdź. Dziadek mówi: „Tu zawiśnie pokwitowanie od Lorda”.",
-        recznik: "Haftowany ręcznik na obrazku Matki Boskiej. Krzyżyki wyszywała jeszcze babcia.",
-        recznik_zima: "Świerk nad obrazkiem, pod nim haftowany ręcznik. Zima w chacie.",
-        gwiazda: "Wycinanka z kolorowego papieru. Wycina się je nożycami do strzyżenia owiec.",
-        leluja: "Leluja z kolorowego papieru - każda warstwa naklejona osobno.",
-        chodnik: "Chodnik tkany ze starych szmat. W tym domu nic się nie marnuje.",
-        skrzynia: "Malowana skrzynia - wiano babci. Dziadek trzyma w niej odświętne ubranie.",
-        ziola: "Zioła suszą się przy ciepłym kominie: dziurawiec, rumianek i mięta.",
-        wieniec: "Wieniec dożynkowy z tegorocznych kłosów. Wisi do wiosny.",
-        bazie: "Bazie w dzbanku. Wiosna idzie.",
-        kwiaty: "Polne kwiaty: maki, chabry i rumianek.",
-        pisanki: "Koszyczek z pisankami na Wielkanoc. Dziadek maluje je woskiem.",
-        jablka: "Kosz jabłek. Pachną na całą izbę.",
-        dynie: "Dynie z działki - będzie zupa na zimę.",
-        wigilia: "Opłatek na stole, sianko pod obrusem - Wigilia w chacie.",
-        snop: "Snop zboża w kącie za skrzynią - na Wigilię, na dobry rok."
+        list: () => { const t = state().noticeTitle; return t ? "Moje pierwsze zlecenie: „" + t + "”. Wisi na pamiątkę." : "Moje pierwsze zlecenie z tablicy w tawernie. Wisi na pamiątkę."; }
     };
+    Watki.scal(LINES, "dom_dziadka", "wspomnienia");   // (the lines by the look: js/teksty/dom_dziadka.txt, wspomnienia)
     // the line of a look (a part of it: the shelf's tankard or dice)
     const LOOK_LINE = { rogi: "rogi", kiel: "kiel", kiel_rog: "kiel", skora: "skora", list: "list", polka_kufel: "kufel", polka_kosci: "kosci",
         polka_oba: "kufel", pokwitowanie: "pokwitowanie", pokwitowanie_zima: "pokwitowanie", gwozdz: "gwozdz", recznik: "recznik",
@@ -195,9 +174,7 @@
         dynie_r: "dynie", wigilia: "wigilia", snop: "snop", skrzynia: "skrzynia" };
     const lineOf = k => { const v = LINES[k]; return typeof v === "function" ? v() : v || ""; };
     // the keepsakes and the notice when one comes
-    const EARNED_NOTE = { receipt: "Pokwitowanie od Lorda zawisło w ramce", wolf: "Skóra wilka leży przy twoim posłaniu",
-        deer: "Poroże jelenia wisi nad twoim posłaniem", boar: "Kieł dzika wisi na rzemyku przy posłaniu", tankard: "Kufel od Borgara stoi na twojej półce",
-        dice: "Twoje kości leżą na półce", notice: "Ogłoszenie z pierwszego zlecenia wisi przy posłaniu" };
+    const EARNED_NOTE = Watki.scal({}, "dom_dziadka", "pamiatki");   // (by the keepsake: js/teksty/dom_dziadka.txt, pamiatki)
 
     // ------------------------------------------------------------------
     // State: Tawerna.state("homeDecor") = $gameSystem._tw.homeDecor (plain data, saved with the game; an older save's
@@ -215,7 +192,7 @@
         const s = state();
         if (s.got[key]) return false;
         s.got[key] = day();
-        if (!quiet && NOTICES && EARNED_NOTE[key]) T.popup("Nowa pamiątka w domu dziadka", { top: true, color: "#ffd23f", sub: EARNED_NOTE[key] + "." });
+        if (!quiet && NOTICES && EARNED_NOTE[key]) T.popup(TK.ozdoby.earn[0], { top: true, color: "#ffd23f", sub: EARNED_NOTE[key] + "." });
         dirty = true;
         return true;
     }
@@ -224,10 +201,10 @@
     const storyPaid = () => safe(() => { const st = T.call("Story", "state"); return !!st && !st.pending && !!(st.done || st.paid >= st.debt || (st.buy && st.buy.done)); }, false);
     const storyActive = () => safe(() => !!T.call("Story", "active"), false);
     const shiftsDone = () => safe(() => (T.call("TavernShift", "stats") || {}).done || 0, 0);
-    const diceWins = () => safe(() => ($gameSystem._dice ? (T.call("TavernDice", "stats") || {}).wins || 0 : 0), 0);   // (_dice: not made by asking)
+    const diceWins = () => safe(() => (T.has("TavernDice") ? (T.call("TavernDice", "stats") || {}).wins || 0 : 0), 0);
     function firstContract() {
         return safe(() => {
-            if (!$gameSystem._quests || !T.has("QuestBoard")) return null;
+            if (!T.has("QuestBoard")) return null;
             const q = T.call("QuestBoard", "state");
             if (!q || !q.stats || !(q.stats.done > 0)) return null;
             const done = (q.history || []).filter(h => h && h.state === "done");

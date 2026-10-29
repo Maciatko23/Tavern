@@ -31,7 +31,8 @@
  *   Przy kałuży (przycisk akcji na polu z wodą, menu "Kałuża") jest "Wykop glinę" (Farming.js): łopata,
  *   jak zwykłe kopanie; daje 1-2 mokrej gliny. Z jednej kałuży - najwyżej 3 razy na mokry okres,
  *   potem gliny tam już nie ma (do następnego deszczu po wyschnięciu, gdy kałuże są gdzie indziej).
- *   Zapis gry pamięta tylko, ile razy kopano w której kałuży ($gameSystem._puddleClay).
+ *   Zapis gry pamięta tylko, ile razy kopano w której kałuży (Tawerna.state "puddleClay";
+ *   dawne $gameSystem._puddleClay prowadzi tam dalej).
  *
  * DLA INNYCH WTYCZEK (window.Puddles)
  *   level()        ile wody stoi teraz na ziemi tej mapy (0 = sucho, 1 = pełne zagłębienia; po długim deszczu trochę więcej)
@@ -60,6 +61,9 @@
     const DRY_PER_HOUR = 0.022;                  // drying in spring by day; the sun and the season change it (dryRate)
     const LEVELS = 12;                           // pictures of one puddle, from a film of water to full
 
+    // the save: Tawerna.state "puddleClay" = { mapId: { hollowId: { spell, n } } } - an older save's $gameSystem._puddleClay is adopted
+    // (the old name stays a hidden way there)
+    const clayState = Tawerna.state.define("puddleClay", () => ({}), { version: 1, adopt: "_puddleClay", owner: "Puddles" });
     const hash = (a, b, s) => Farming.hash2(a, b, s);
     const outdoors = () => !!(window.Survival && Survival.isOutdoors && Survival.isOutdoors());
     const winter = () => Farming.seasonIndex($gameSystem.dayNightDay()) === 3;
@@ -191,8 +195,7 @@
     }
     const wetAt = (x, y) => !!at(x, y);
     function clayRecord(h, create) {
-        const all = $gameSystem._puddleClay || (create ? ($gameSystem._puddleClay = {}) : null);
-        if (!all) return null;
+        const all = clayState();
         const mapId = $gameMap.mapId(), m = all[mapId] || (create ? (all[mapId] = {}) : null);
         if (!m) return null;
         let r = m[h.id];

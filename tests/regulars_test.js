@@ -123,25 +123,25 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         /Mówiłem\? Mówiłem!/.test(oz2.text) && (await step("K33")) === "done:2" && (await t.count(81)) === beer0 + 1 && (await trust("ozzy")) >= 13 &&
         (await J("Journal.data().notes.some(n => n.title === \"Czapka Ozzy'ego\")")), oz2.text.slice(0, 200));
 
-    // ------------------------------------------------------------------ K27, Melia's way
+    // ------------------------------------------------------------------ K27, Melia's way (2026-10-28: Ludmiła comes with the first wave - K27 from day 10, docs/PODROZNI.md 5.2)
     await t.go(8, 58, 91, 8);
-    await at(5, 18, 40);
+    await at(11, 18, 40);
     await talk(res("ludmila"), ["Wystrugam"]);
     t.check("K27: Ludmiła asks for a toy horse for Ela (the step's text names Melia's way too)", (await step("K27")) === "active:0" && /poproś Melię/.test(await J("TownQuests.Q.K27.steps[0].text")));
     await t.go(1, 74, 31, 8);
-    await at(5, 18.5, 20);
+    await at(11, 18.5, 20);
     const k27 = await talk(reg(2), ["Zaśpiewasz Eli", "Bywaj"]);
     const away = await J("({ flag: TownQuests.state().flags.k27Melia, song: TavernLife.song(0) })");
     t.check("...Melia's own topic 'Zaśpiewasz Eli kołysankę pod murem?': she goes - and that evening there is no song in the tavern",
-        /Dziecku, które nie śpi/.test(k27.text) && away.flag === 5 && away.song === false, { away, text: k27.text.slice(0, 160) });
+        /Dziecku, które nie śpi/.test(k27.text) && away.flag === 11 && away.song === false, { away, text: k27.text.slice(0, 160) });
     await t.go(8, 58, 91, 8);
-    await at(6, 9, 40);
+    await at(12, 9, 40);
     const lu = await talk(res("ludmila"), []);
     t.check("...the next morning Ludmiła: Ela slept the whole night - K27 done, Melia's trust +5", /przespała całą noc/.test(lu.text) && (await step("K27")).startsWith("done"), lu.text.slice(0, 160));
 
     // ------------------------------------------------------------------ W8 rozdz. 1: Grum asks about the mountains
     await t.go(1, 95, 33, 8);
-    await at(6, 19, 20);
+    await at(12, 19, 20);
     t.check("W8 waits until the hero beats Grum at arm-wrestling and at dice", (await step("W8")) === "none");
     await t.eval("TavernLife.state().arm.won = 1; Tawerna.state('dice').vs = { grum: { games: 1, wins: 1, losses: 0, day: 0, lostToday: 0, given: false } }; TownQuests.autoChecks(); 0");
     t.check("...after both: the arc 'Żelazna Pięść' begins", (await step("W8")) === "active:0");

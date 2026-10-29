@@ -3,8 +3,9 @@
 //=============================================================================
 // The white eagle (the user's idea 2026-10-18; the concept approved the same day: docs/orzel/KONCEPCJA.md, with one change - the adult
 // is about 4 x 4 tiles, the fourth stage about 2.5). Only data here: the stages, the care's numbers, the fight's, the flight's, the
-// sheets, the texts, the quests D29 / W13 (a TownQuests pack) and the residents' remarks. The logic: Orzel.js (the bird, its care,
-// its fights, the quests' handlers) and Orzel_Lot.js (riding it: the camera far out, the flight over everything, the landing).
+// sheets, the texts, the thread "orzel" (Watki.js, 2026-10-28: the state, the quests D29 / W13 - into window.TownQuestsPacks with the
+// residents' remarks). The logic: Orzel.js (the bird, its care, its fights, the hooks of the quests' conditions and words) and
+// Orzel_Lot.js (riding it: the camera far out, the flight over everything, the landing).
 // Stands above TownQuests_Data (the pack is read there) and above Orzel.js / Orzel_Lot.js.
 // DROUGHT (the user's rule): the eagle never gives the hero water; it drinks from its bowl and, older, flies off to the Order's old
 // stone basins on the ridge by itself. It never drinks the sea.
@@ -14,6 +15,7 @@
  * @plugindesc Dane białego orła: etapy wzrostu, opieka, walka, lot, arkusze, teksty, zadania D29 „Jajo z grani” i W13 „Skrzydlata Straż”. v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
  * @orderAfter TawernaCore
  *
  * @help
@@ -189,39 +191,7 @@
     // ------------------------------------------------------------------ the texts
     const TX = Watki.teksty("orzel");
 
-    // ------------------------------------------------------------------ the quests (a TownQuests pack; docs/QUESTY.md, the next free D and W)
-    const D29 = {
-        id: "D29", kind: "D", giver: "latarnik", icon: ITEM.jajo,
-        offer: {
-            cond: { hours: [14, 22], fn: "d29Pora" }
-        },
-        steps: [
-            { type: "custom", check: "d29Jajo" }
-        ],
-        reward: { xp: 100, flag: "orzelJajo" }
-    };
-    Watki.scal(D29, "orzel", "zadania.D29");   // (its words: js/teksty/orzel.txt, zadania.D29)
-    const W13 = {
-        id: "W13", kind: "W", giver: null, icon: ITEM.jajo,
-        autoStart: "w13Start",
-        steps: [
-            { ch: 1, type: "custom", check: "w13Wyklucie", vars: "w13Vars" },
-            { ch: 2, type: "talk", to: "grandpa", 
-                reward: { xp: 40 } },
-            { ch: 3, type: "talk", to: "pustelnik", need: [[ITEM.pioro, 1]], 
-                reward: { xp: 80, flag: "orzelKroniki" } },
-            { ch: 4, type: "custom", check: "w13Podlot", vars: "w13Vars" },
-            { ch: 5, type: "custom", check: "w13Kradziez", vars: "w13Vars" },
-            { ch: 6, type: "talk", to: "lord", 
-                choice: { options: [
-                    { flag: "orzelLordOdmowa", reward: { xp: 40 } },
-                    { flag: "orzelLordPokaz", reward: { xp: 60, opinion: 3 } }
-                ] } },
-            { ch: 7, type: "custom", check: "w13Lot", vars: "w13Vars" }
-        ],
-        reward: { xp: 200 }
-    };
-    Watki.scal(W13, "orzel", "zadania.W13");   // (its words: js/teksty/orzel.txt, zadania.W13)
+    // ------------------------------------------------------------------ the remarks (they go with the quests' pack)
     const REMARKS = [
         { id: "orzelJanek", who: "janek", flag: "orzelLot" },
         { id: "orzelKleofas", who: "pustelnik", flag: "orzelLot" },
@@ -231,7 +201,54 @@
     ];
     Watki.scal(REMARKS, "orzel", "uwagi");   // (its words: js/teksty/orzel.txt, uwagi)
     const VITEMS = {};
-    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Orzel", quests: [D29, W13], vitems: VITEMS, remarks: REMARKS });
+
+    // ------------------------------------------------------------------ the thread (the engine Watki.js, docs/WATKI_DANE.md): the state
+    // "orzel", the quests D29 "Jajo z grani" and W13 "Skrzydlata Straż" (docs/QUESTY.md, the next free D and W - their words:
+    // js/teksty/orzel.txt, zadania.*; the engine puts them into window.TownQuestsPacks with the remarks). The hooks (the egg ready,
+    // the words of W13's steps) are Orzel.js's
+    const w = Watki.watek({
+        id: "orzel", wtyczka: "Orzel", teksty: "orzel",
+        stan: { klucz: "orzel", wersja: 1, domyslne: () => ({
+            have: false,            // the egg or the bird is the hero's
+            stage: 0,               // 0 the egg .. 5 the adult
+            egg: { warm: 0, cold: 0, where: "bag", basket: null, knock: false },
+            care: 0,                // the days of care (the stages: STAGE_AT)
+            dayLog: null,           // the day being counted: { d, food, water, n, cold }
+            food: 80, water: 80, bond: CARE.bond.start, hp: -1, st: -1,
+            name: "", mode: "follow", map: 0, x: -1, y: -1,
+            clock: null, petAt: -99, handDay: 0, flyDay: 0, eveDay: 0, fightDay: 0,
+            hurtUntil: 0, away: null, hungryDays: 0, seenDay: 0,
+            hunted: 0, drank: 0, molt: false, glove: false, theft: null,
+            flights: 0, lands: {}, fly: null, sleepingWarm: false,
+            stormAfterAct2: 0, act2Day: 0, flags: {}
+        }) },
+        zadania: {
+            // D29: Bazyli's, while the egg waits on the ridge (Act II, after a storm) and the hero has none; done - the egg taken
+            D29: { kind: "D", giver: "latarnik", icon: ITEM.jajo, offer: { cond: { hours: [14, 22], fn: "d29Pora" } }, oferta: ["jajoGotowe", "!stan:have"],
+                kroki: [{ nazwa: "d29Jajo", gotowe: "stan:have" }],
+                reward: { xp: 100, flag: "orzelJajo" } },
+            // W13 starts by itself once the egg is the hero's; the words of its custom steps: the hook w13Zmienne
+            W13: { kind: "W", giver: null, icon: ITEM.jajo, autoStart: "w13Start", start: "stan:have",
+                kroki: [
+                    { nazwa: "w13Wyklucie", ch: 1, gotowe: "stan:stage>=1", zmienne: "w13Zmienne" },
+                    { nazwa: "w13Dziadek", ch: 2, type: "talk", to: "grandpa",
+                        reward: { xp: 40 } },
+                    { nazwa: "w13Kleofas", ch: 3, type: "talk", to: "pustelnik", need: [[ITEM.pioro, 1]],
+                        reward: { xp: 80, flag: "orzelKroniki" } },
+                    { nazwa: "w13Podlot", ch: 4, gotowe: { lub: ["stan:glove", "stan:stage>=5"] }, zmienne: "w13Zmienne" },
+                    { nazwa: "w13Kradziez", ch: 5, gotowe: { lub: ["stan:theft.state=saved", "stan:theft.state=freed", "stan:stage>=5"] }, zmienne: "w13Zmienne" },
+                    { nazwa: "w13Lord", ch: 6, type: "talk", to: "lord",
+                        choice: { options: [
+                            { flag: "orzelLordOdmowa", reward: { xp: 40 } },
+                            { flag: "orzelLordPokaz", reward: { xp: 60, opinion: 3 } }
+                        ] } },
+                    { nazwa: "w13Lot", ch: 7, gotowe: "stan:flights>0", zmienne: "w13Zmienne" }
+                ],
+                reward: { xp: 200 } }
+        },
+        paczka: { vitems: VITEMS, remarks: REMARKS }
+    });
+    const D29 = w.Q.D29, W13 = w.Q.W13;
 
     window.OrzelData = { MAP, GORY, IDS, ITEM, ICON, KEY, WAY_UP, WAY_DOWN, STAGES, STAGE_AT, CARE, FIGHT, FLY, LAND_REGION, TOWN_SQUARES, SIDES,
         NO_LAND, SHEETS, AIR, ROWS, POSE_SPEED, NESTS, IDLE, TX, D29, W13, REMARKS };

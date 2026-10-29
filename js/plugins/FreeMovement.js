@@ -144,14 +144,19 @@
     // numpad direction -> [dx, dy]
     const DIR_VECTOR = { 1: [-1, 1], 2: [0, 1], 3: [1, 1], 4: [-1, 0], 6: [1, 0], 7: [-1, -1], 8: [0, -1], 9: [1, -1] };
 
+    // the plugin command's choice, in the save: Tawerna.state "freeMove" { on: true | false } (none yet: the map's note decides); it
+    // was $gameSystem._freeMove - the name leads there
+    const moveState = T.state.define("freeMove", () => ({}), { version: 1, owner: pluginName });
+    T.state.oldFields("freeMove", { _freeMove: "on" });
     PluginManager.registerCommand(pluginName, "setFreeMove", args => {
-        $gameSystem._freeMove = !args || args.enabled !== "false";
+        moveState().on = !args || args.enabled !== "false";
     });
 
     // switch > command > map note > default
     function freeMoveOn() {
         if (OFF_SWITCH > 0 && $gameSwitches && $gameSwitches.value(OFF_SWITCH)) return false;
-        if ($gameSystem && typeof $gameSystem._freeMove === "boolean") return $gameSystem._freeMove;
+        const r = $gameSystem && $gameSystem._tw, s = r && r.freeMove, on = s ? s.on : $gameSystem ? moveState().on : undefined;   // (asked every step)
+        if (typeof on === "boolean") return on;
         return T.mapFlag("FreeMove", DEFAULT_ON, "off");   // (<FreeMove:off> wins over a <FreeMove:on> beside it)
     }
 
@@ -188,24 +193,29 @@
         return tiles;
     };
 
-    // a tile the feet may not enter
-    Game_Player.prototype.freeTileBlocked = function(x, y) {
+    // a tile the feet may not enter; edge: the side they come in by (2 bottom, 4 left, 6 right, 8 top) - the engine's one-way edges
+    // count then (the rim of a wall top, a fence) as on the grid; without it: a tile shut on all four sides
+    Game_Player.prototype.freeTileBlocked = function(x, y, edge) {
         x = $gameMap.roundX(x);
         y = $gameMap.roundY(y);
         if (!$gameMap.isValid(x, y)) return true;
         if (this.isThrough() || this.isDebugThrough()) return false;
-        if (![2, 4, 6, 8].some(d => $gameMap.isPassable(x, y, d))) return true;
+        if (edge ? !$gameMap.isPassable(x, y, edge) : ![2, 4, 6, 8].some(d => $gameMap.isPassable(x, y, d))) return true;
         return this.isCollidedWithCharacters(x, y);
     };
 
     // The first blocking tile the feet would newly touch at (fx, fy) - a tile they
     // already overlap never blocks, so nobody gets stuck inside something.
+    // A new tile is crossed into by its edge towards the feet, and that edge must be open, as in the engine's step (2026-10-29: the
+    // rim of an A4 wall top is shut only on its floor side - the feet walked onto it and then over the whole rock of the underground
+    // floors). The edge of the tile they leave is not asked: feet already in a wall (an old save, a push) always get out of it.
     Game_Player.prototype.freeBlocker = function(fx, fy, fromX, fromY) {
         const from = feetBox(fromX, fromY), to = feetBox(fx, fy);
         for (let y = to.y0; y <= to.y1; y++) {
             for (let x = to.x0; x <= to.x1; x++) {
                 if (x >= from.x0 && x <= from.x1 && y >= from.y0 && y <= from.y1) continue;
-                if (this.freeTileBlocked(x, y)) return { x: $gameMap.roundX(x), y: $gameMap.roundY(y) };
+                const edge = x > from.x1 ? 4 : x < from.x0 ? 6 : y > from.y1 ? 8 : 2;   // (going right the feet come in by its left edge...)
+                if (this.freeTileBlocked(x, y, edge)) return { x: $gameMap.roundX(x), y: $gameMap.roundY(y) };
             }
         }
         return null;

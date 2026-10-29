@@ -65,6 +65,9 @@
     if (!D) throw new Error("Orzel.js: brak Orzel_Data.js - musi być wyżej na liście wtyczek (the eagle's data is missing)");
     if (T.api("Orzel")) return;   // (put into the page twice: kept as it was)
     const PLUGIN = "Orzel";
+    // the thread (Orzel_Data.js, the engine Watki.js): the state "orzel", D29 and W13, the flags
+    const w = Watki.get("orzel");
+    if (!w) throw new Error("Orzel.js: brak wątku „orzel” (Orzel_Data.js / Watki.js)");
     const TX = D.TX, CARE = D.CARE, ST = D.STAGES;
     const day = () => T.time.day(), hour = () => T.time.hour();
     const clock = () => day() * 24 + hour();
@@ -79,27 +82,13 @@
     const rand = (a, b) => a + Math.random() * (b - a);
     const pick = list => list[Math.floor(Math.random() * list.length)];
     const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
-    const fill = (s, vars) => String(s).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
+    const { fill } = Watki.mowa;
     const TILE = () => ($gameMap ? $gameMap.tileWidth() : 48);
 
     // ------------------------------------------------------------------
-    // The state (the save)
+    // The state (the save): the thread's (Orzel_Data.js)
     // ------------------------------------------------------------------
-    const store = T.state.define("orzel", () => ({
-        have: false,            // the egg or the bird is the hero's
-        stage: 0,               // 0 the egg .. 5 the adult
-        egg: { warm: 0, cold: 0, where: "bag", basket: null, knock: false },
-        care: 0,                // the days of care (the stages: Orzel_Data STAGE_AT)
-        dayLog: null,           // the day being counted: { d, food, water, n, cold }
-        food: 80, water: 80, bond: CARE.bond.start, hp: -1, st: -1,
-        name: "", mode: "follow", map: 0, x: -1, y: -1,
-        clock: null, petAt: -99, handDay: 0, flyDay: 0, eveDay: 0, fightDay: 0,
-        hurtUntil: 0, away: null, hungryDays: 0, seenDay: 0,
-        hunted: 0, drank: 0, molt: false, glove: false, theft: null,
-        flights: 0, lands: {}, fly: null, sleepingWarm: false,
-        stormAfterAct2: 0, act2Day: 0, flags: {}
-    }), { version: 1, owner: PLUGIN });
-    const S = () => store();
+    const S = () => w.S();
     const nameOf = () => (has() && S().name) || TX.defaultName;
     const V = extra => Object.assign({ imie: nameOf() }, extra || {});
     const stageDef = () => ST[S().stage] || ST[0];
@@ -111,23 +100,18 @@
     const underground = () => { const U = T.api("Underground"); return !!(U && U.isUnderground && U.isUnderground()); };
     const night = () => { const h = hour(); return h >= CARE.nightFrom || h < CARE.nightTo; };
 
-    // the quests' state (TownQuests flags)
-    const qs = () => { const q = TQ(); return q && q.state ? q.state() : null; };
-    const flag = k => { const s = qs(); return !!(s && s.flags && s.flags[k]); };
+    // the quests' state (TownQuests flags, records) - the thread's helpers
+    const { flag, rec, autoChecks } = w;
+    // a flag, then the quests' checks and the markers (Orzel_Lot.js calls it too: Orzel.setFlag)
     function setFlag(k) {
-        const s = qs();
-        if (s && s.flags && !s.flags[k]) s.flags[k] = day();
-        const q = TQ();
-        if (q && q.autoChecks) q.autoChecks();
-        if (q && q.refreshMarkers) q.refreshMarkers();
+        w.setFlag(k);
+        autoChecks();
     }
-    const rec = id => { const q = TQ(); return q && q.rec ? q.rec(id) : null; };
-    const isActive = id => { const r = rec(id); return !!r && r.s === "active"; };
-    const isDone = id => { const q = TQ(); return !!(q && q.isDone && q.isDone(id)); };
+    const isActive = id => w.active(id);
+    const isDone = id => w.done(id);
     const note = (title, text) => T.call("Journal", "addNote", fill(title, V()), fill(text, V()));
     const xp = (n, why) => T.call("Combat", "gainXp", n, why, true) || 0;
-    const autoChecks = () => { const q = TQ(); if (q && q.autoChecks) q.autoChecks(); if (q && q.refreshMarkers) q.refreshMarkers(); };
-    const actTwo = () => { const st = T.api("Story"); if (st && typeof st.chapterEnded === "function") return !!st.chapterEnded(); const w = T.api("Wyspa"); return !!(w && w.actTwo && w.actTwo()); };
+    const actTwo = () => { const st = T.api("Story"); if (st && typeof st.chapterEnded === "function") return !!st.chapterEnded(); const wy = T.api("Wyspa"); return !!(wy && wy.actTwo && wy.actTwo()); };
 
     // ------------------------------------------------------------------
     // The nests on the hero's land (Farming buildings): the basket (stages 1-2, the egg), the nest (3-4), the perch (5)
@@ -1985,32 +1969,21 @@
     }
 
     // ------------------------------------------------------------------
-    // The quests' handlers (TownQuests: D29, W13)
+    // D29, W13 - the data's (Orzel_Data.js); what their conditions and words ask of the game
     // ------------------------------------------------------------------
-    function hookQuests() {
-        const q = TQ();
-        if (!q || !q.FX || hookQuests.done) return;
-        hookQuests.done = true;
-        Object.assign(q.FX, {
-            d29Pora: { cond: () => eggReady() && !S().have },
-            d29Jajo: { check: () => S().have },
-            w13Start: () => S().have,
-            w13Vars: { vars: () => {
-                const s = S(), t = s.theft;
-                const cieplo = Watki.wstaw(TK.kod.vars[0], { "1": Math.floor(s.egg.warm), warmHours: ST[0].warmHours });
-                const gdzie = s.stage < 3 ? Watki.wstaw(TK.kod.vars[1], { "1": D.STAGE_AT[3] }) : count(D.ITEM.rekawica) < 1 ? TK.kod.vars[2] : TK.kod.vars[3];
-                const kradziez = !t || t.state === "plan" ? TK.kod.vars[4] : t.state === "fight" ? TK.kod.vars[5] :
-                    t.state === "camp" ? TK.kod.vars[6] : TK.kod.vars[7];
-                const lot = s.stage < 4 ? Watki.wstaw(TK.kod.vars[8], { "1": D.STAGE_AT[4] }) : TK.kod.vars[9];
-                return { cieplo, gdzie, kradziez, lot, imie: nameOf() };
-            } },
-            w13Wyklucie: { check: () => S().stage >= 1 },
-            w13Podlot: { check: () => S().glove || S().stage >= 5 },
-            w13Kradziez: { check: () => { const t = S().theft; return !!(t && (t.state === "saved" || t.state === "freed")) || S().stage >= 5; } },
-            w13Lot: { check: () => S().flights > 0 }
-        });
-    }
-    hookQuests();
+    w.haki({
+        jajoGotowe: () => eggReady(),
+        // the words of W13's custom steps (rozdz. 1, 4, 5, 7): the egg's warmth, where the glove is, the theft, the first flight
+        w13Zmienne: () => {
+            const s = S(), t = s.theft;
+            const cieplo = Watki.wstaw(TK.kod.vars[0], { "1": Math.floor(s.egg.warm), warmHours: ST[0].warmHours });
+            const gdzie = s.stage < 3 ? Watki.wstaw(TK.kod.vars[1], { "1": D.STAGE_AT[3] }) : count(D.ITEM.rekawica) < 1 ? TK.kod.vars[2] : TK.kod.vars[3];
+            const kradziez = !t || t.state === "plan" ? TK.kod.vars[4] : t.state === "fight" ? TK.kod.vars[5] :
+                t.state === "camp" ? TK.kod.vars[6] : TK.kod.vars[7];
+            const lot = s.stage < 4 ? Watki.wstaw(TK.kod.vars[8], { "1": D.STAGE_AT[4] }) : TK.kod.vars[9];
+            return { cieplo, gdzie, kradziez, lot, imie: nameOf() };
+        }
+    });
     // the glove (W13 ch. 4): the podrostek near him with the glove in the bag - it sits on his hand
     function gloveCheck() {
         const s = S();
@@ -2054,7 +2027,7 @@
     T.on("wake", () => { if (!has() || !S().have) return; tickNeeds(); S().sleepingWarm = false; theftNight(); }, { owner: PLUGIN });
     T.on("mapEnter", () => { removeEagle(); }, { owner: PLUGIN });
     T.on("load", () => { removeEagle(); S().sleepingWarm = false; }, { owner: PLUGIN });
-    T.on("mapReady", () => { registerBody(); if (has()) { hookQuests(); campGuards(); } }, { owner: PLUGIN });
+    T.on("mapReady", () => { registerBody(); if (has()) campGuards(); }, { owner: PLUGIN });
 
     // ------------------------------------------------------------------
     // The map's clock

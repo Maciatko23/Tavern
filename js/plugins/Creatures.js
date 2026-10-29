@@ -89,6 +89,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("stwory");   // (the words of this file: js/teksty/stwory.txt, kod.*)
     const T = window.Tawerna;
     if (!T) throw new Error("Creatures.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     const D = window.CreaturesData;
@@ -746,7 +747,7 @@
             se("Sword4", 75, 125, panOf(c.centerX()));
             T.call("Combat", "recoil", 8);
         } else if (plate && !hidden && how !== "shot" && c.frontDot() <= k.plate.back) {
-            numberAt(c.centerX(), c.centerY() - 1.55 * c._scale, "Cios w plecy!", "#ffd27f", 0.75);
+            numberAt(c.centerX(), c.centerY() - 1.55 * c._scale, TK.kod.hitCreature[0], "#ffd27f", 0.75);
         }
         // the stone: nothing through its front; its back's crack hurts it most
         if (k.stone && !hidden && !c._stoneStunned) {
@@ -1431,7 +1432,7 @@
                 w.gone += w.speed / 2;
                 if (!w.passed && Math.hypot(w.x - heroX(), w.y - (heroY() - 0.2)) < 0.5 && Cb && Cb.hitPlayer) {
                     const res = Cb.hitPlayer({ damage: Math.max(1, Math.round(w.m.dmg * w.from.strK())), poise: w.m.poise, from: { x: w.x - w.vx, y: w.y - w.vy }, attacker: w.from,
-                        name: "sieć", knock: 0.1, unparryable: true, unblockable: !(Cb.shield && Cb.shield()), projectile: true });
+                        name: TK.kod.updateWebs[0], knock: 0.1, unparryable: true, unblockable: !(Cb.shield && Cb.shield()), projectile: true });
                     if (res === "dodged") { w.passed = true; continue; }
                     w.done = true;
                     if (res === "hit") {
@@ -1492,7 +1493,7 @@
         if (Math.hypot(dx, dy) > 0.3) $gamePlayer.setDirection(DIR4(dx, dy));
         const take = () => {
             if (!dropsOf().includes(c)) return;
-            if (c.gold > 0) { $gameParty.gainGold(c.gold); T.popup("Stare monety: " + c.gold + " G", { icon: 313, gain: true }); }
+            if (c.gold > 0) { $gameParty.gainGold(c.gold); T.popup(Watki.wstaw(TK.kod.take[0], { gold: c.gold }), { icon: 313, gain: true }); }
             for (const [id, n] of c.items || []) if ($dataItems[id]) { $gameParty.gainItem($dataItems[id], n); T.popup($dataItems[id].name + (n > 1 ? " ×" + n : ""), { icon: $dataItems[id].iconIndex, gain: true }); }
             c.gold = 0;
             c.items = [];
@@ -1516,7 +1517,7 @@
     function bossStart(c) {
         c._bossStarted = true;
         bossNow = c;
-        T.popup(c.name(), { top: true, color: "#ffb07f", sub: "Podziemia - piętro " + (c._boss.floor || "?") });
+        T.popup(c.name(), { top: true, color: "#ffb07f", sub: Watki.wstaw(TK.kod.bossStart[0], { "1": c._boss.floor || "?" }) });
         se("Darkness3", 80, 70);
         if (BOSS_AI[c._kind] && BOSS_AI[c._kind].start) BOSS_AI[c._kind].start(c);
         T.emit("creatureBoss", { kind: c._kind, floor: c._boss.floor, how: "start" });
@@ -1531,7 +1532,7 @@
         const ug = UG(), f = c._boss.floor;
         const floorHere = ug && ug.floorOf ? ug.floorOf($gameMap.mapId()) : 0;
         if (c._kind !== "guardian" && ug && ug.bossDefeated && floorHere === f) ug.bossDefeated(f);
-        else T.popup(c.name() + " pokonany", { top: true, color: "#ffe9a8", sub: "Podziemia - piętro " + (f || "?") });
+        else T.popup(Watki.wstaw(TK.kod.bossBeaten[0], { "1": c.name() }), { top: true, color: "#ffe9a8", sub: Watki.wstaw(TK.kod.bossBeaten[1], { "1": f || "?" }) });
         T.emit("creatureBoss", { kind: c._kind, floor: f, how: "beaten" });
         if (bossNow === c) bossNow = null;
         rings = rings.filter(r => r.c !== c);
@@ -1675,7 +1676,7 @@
                 const near = Math.hypot(heroX() - r.x, heroY() - r.y) <= r.r, Cb = C();
                 if (c._pulling) {
                     if (near && !(Cb && Cb.act && Cb.act.iframes > 0)) { startPull(c); return; }
-                    numberAt(r.x, r.y - 1, "Nić chybia", "#e8e8e8", 0.8);
+                    numberAt(r.x, r.y - 1, TK.kod.tick[0], "#e8e8e8", 0.8);
                     this.land(c, r.x, r.y, false);
                     return;
                 }
@@ -1730,7 +1731,7 @@
         if (p.t >= P2.hold) {   // up at her: the bite
             const a = $gameParty.leader();
             if (a && a.hp > 0) a.gainHp(-Math.round(P2.bite * c.strK()));
-            numberAt(heroX(), heroY() - 1.6, "Ukąszenie!", "#ff8f7f", 0.95);
+            numberAt(heroX(), heroY() - 1.6, TK.kod.updatePull[0], "#ff8f7f", 0.95);
             se("Damage3", 90, 80);
             $gameScreen.startFlash([255, 40, 30, 110], 12);
             if (typeof $gameSystem.injure === "function" && Math.random() < 0.6) $gameSystem.injure(0);
@@ -1744,7 +1745,7 @@
         const c = p.c, Cb = C();
         if (Cb && Cb.act) Cb.act.stun = Math.min(Cb.act.stun, 2);
         if (torn) {
-            numberAt(heroX(), heroY() - 1.4, "Nić pękła!", "#9ff0a8", 0.9);
+            numberAt(heroX(), heroY() - 1.4, TK.kod.endPull[0], "#9ff0a8", 0.9);
             const a = $gameParty.leader();
             if (a && a.hp > 1) a.gainHp(-Math.min(a.hp - 1, c._boss ? c._boss.pull.fall : 5));
         }
@@ -1807,7 +1808,7 @@
             if (Math.hypot(heroX() - (p.x + 0.5), heroY() - (p.y + 0.5)) < 0.9 && g.t > 30) {
                 const a = $gameParty.leader();
                 if (a) a.gainHp(-Math.round(22 * c.strK()));
-                numberAt(heroX(), heroY() - 1.5, "Wciąga cię pod wodę!", "#9fd8c8", 0.9);
+                numberAt(heroX(), heroY() - 1.5, TK.kod.dragging[0], "#9fd8c8", 0.9);
                 se("Water2", 90, 60);
                 $gameScreen.startFlash([40, 80, 120, 120], 20);
                 releaseGrab(false);
@@ -1842,7 +1843,7 @@
             if (!w.hit && Math.abs(Math.hypot(heroX() - w.x, (heroY() - w.y) / 0.8) - w.r) < w.width && Cb && Cb.hitPlayer) {
                 w.hit = true;
                 const a = Math.atan2(heroY() - w.y, heroX() - w.x);
-                const res = Cb.hitPlayer({ damage: w.dmg, poise: 60, from: { x: heroX() - Math.cos(a), y: heroY() - Math.sin(a) }, attacker: w.c, name: "odłamki", unblockable: false, unparryable: true, knock: 0.6, wound: 0.2 });
+                const res = Cb.hitPlayer({ damage: w.dmg, poise: 60, from: { x: heroX() - Math.cos(a), y: heroY() - Math.sin(a) }, attacker: w.c, name: TK.kod.updateWaves[0], unblockable: false, unparryable: true, knock: 0.6, wound: 0.2 });
                 if (res === "dodged") w.hit = true;
             }
             if (Graphics.frameCount % 3 === 0) for (let i = 0; i < 3; i++) { const a = Math.random() * Math.PI * 2; sparksAt(w.x + Math.cos(a) * w.r, w.y + Math.sin(a) * w.r * 0.8, "#b8ad98", 1); }
@@ -1955,7 +1956,7 @@
                     c._parts.push(p);
                     for (let i = 0; i < 10; i++) wisps.push({ x: p.centerX() + (Math.random() - 0.5), y: p.centerY() - Math.random(), vy: -0.02, t: 0, life: 40, color: "#141018" });
                 }
-                numberAt(c.centerX(), c.centerY() - 2.2, "Rozpada się na trzy cienie!", "#c9b8ff", 0.95);
+                numberAt(c.centerX(), c.centerY() - 2.2, TK.kod.tick[1], "#c9b8ff", 0.95);
                 se("Darkness3", 85, 120, panOf(c.centerX()));
             }
         },
@@ -2107,7 +2108,7 @@
         const ug = UG();
         if (registered || !ug || !ug.registerCreature) return;
         registered = true;
-        const make = kind => (sp, ctx) => ({ name: "Stwór: " + (KINDS[kind] ? KINDS[kind].name : (BOSSES[kind] || {}).name || kind), note: "<Creature:" + kind + ">",
+        const make = kind => (sp, ctx) => ({ name: Watki.wstaw(TK.kod.make[0], { "1": KINDS[kind] ? KINDS[kind].name : (BOSSES[kind] || {}).name || kind }), note: "<Creature:" + kind + ">",
             pages: [MARKER_PAGE()], x: sp.x, y: sp.y });
         for (const kind of Object.keys(KINDS).concat(Object.keys(BOSSES).filter(k => k !== "guardian"))) ug.registerCreature(kind, make(kind));
         ug.registerCreature("*", (sp, ctx) => make(kindFor("dowolny", ctx.floor, false, sp) || "szczur")(sp, ctx));
@@ -2146,7 +2147,7 @@
         c._aware = 1;
         c.setMode("wake", 50);
         ev.erase();
-        say(c, "KTO SCHODZI, TEN PYTA. KTO DOBYWA MIECZA - TEN WALCZY.", 220);
+        say(c, TK.kod.startGuardianFight[0], 220);
         se("Darkness3", 85, 70);
         return c;
     }
@@ -2155,7 +2156,7 @@
         const ug = UG();
         if (window.Underground_Data) $gameSwitches.setValue(Underground_Data.SWITCHES.gate10, true);
         if (ug && ug.gate10Opened) ug.gate10Opened();
-        T.popup("Dziesiąta brama stoi otworem", { top: true, color: "#ffe9a8", sub: "Strażnik pokonany" });
+        T.popup(TK.kod.guardianBeaten[0], { top: true, color: "#ffe9a8", sub: TK.kod.guardianBeaten[1] });
     }
     // on the floor again: the beaten guardian's event gone (his pieces lie there - the drop); a dormant one is a target
     function guardianCheck() {
@@ -2434,7 +2435,7 @@
         se("Earth1", 70, 100, panOf(r.x));
         if (Math.hypot(heroX() - r.x, heroY() - r.y) <= r.r) {
             const Cb = C();
-            if (Cb && Cb.hitPlayer) Cb.hitPlayer({ damage: r.dmg || 20, poise: 40, from: { x: r.x, y: r.y - 0.2 }, attacker: r.c, name: "kamień", unblockable: false, unparryable: true, knock: 0.3 });
+            if (Cb && Cb.hitPlayer) Cb.hitPlayer({ damage: r.dmg || 20, poise: 40, from: { x: r.x, y: r.y - 0.2 }, attacker: r.c, name: TK.kod.rockLands[0], unblockable: false, unparryable: true, knock: 0.3 });
         }
     }
 
@@ -2544,7 +2545,7 @@
         bmp.outlineColor = "rgba(0,0,0,0.95)";
         bmp.outlineWidth = 5;
         bmp.textColor = "#ffe9c8";
-        bmp.drawText(b._boss.name + "   poz. " + b._level, 0, 0, 520, 24, "center");
+        bmp.drawText(b._boss.name + TK.kod.update[0] + b._level, 0, 0, 520, 24, "center");   // (plain joining: redrawn while the boss reels - no template a frame)
         ctx.fillStyle = "rgba(0,0,0,0.8)";
         ctx.fillRect(x - 2, 26, w + 4, 16);
         ctx.fillStyle = "#3a1614";
@@ -2630,10 +2631,10 @@
         const boss = !!BOSSES[kind];
         const spots = openNear($gamePlayer.x, $gamePlayer.y, boss ? 5 : 4, boss ? 7 : 6).filter(s => HP().clearLine(HP().pathGrid(), s.x, s.y, $gamePlayer.x, $gamePlayer.y, true));
         const s = spots[0];
-        if (!s) { popup(0, "Nie ma tu miejsca", "#bcd8ff"); return; }
+        if (!s) { popup(0, TK.kod.summon[0], "#bcd8ff"); return; }
         if (kind === "guardian" && guardianEvent() && !S().guardian) { guardianFightWanted = true; startGuardianFight(guardianEvent()); return; }
         const c = spawn(kind, s.x, s.y, { tag: "f9", engaged: kind !== "cien" && kind !== "upior" });
-        if (c) { c._summoned = true; popup(0, "Z ciemności wychodzi... " + (boss ? BOSSES[kind].name : KINDS[kind].name.toLowerCase()) + "!", "#ffd98f"); }
+        if (c) { c._summoned = true; popup(0, Watki.wstaw(TK.kod.summon[1], { "1": boss ? BOSSES[kind].name : KINDS[kind].name.toLowerCase() }), "#ffd98f"); }
         if (c && kind === "upior") c.engage();
     }
     T.onMapUpdate(scene => {

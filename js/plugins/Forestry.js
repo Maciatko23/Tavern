@@ -52,6 +52,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("las");   // (the words of this file: js/teksty/las.txt, kod.*)
 
     const PLUGIN = "Forestry";
     const T = window.Tawerna;
@@ -205,13 +206,13 @@
     // null when a pine can be planted here, else why not
     function whyNot(x, y) {
         const F = T.api("Farming");
-        if (!F || !outdoors() || (F.isHutInterior && F.isHutInterior())) return "Drzewo posadzisz tylko pod gołym niebem.";
+        if (!F || !outdoors() || (F.isHutInterior && F.isHutInterior())) return TK.kod.whyNot[0];
         const plot = F.plotAt(x, y);
-        if (!plot || plot.s !== "cleared") return "Sadzonkę wsadzisz w zwykłą albo oczyszczoną ziemię.";
-        if (F.isWaterTile(x, y)) return "Tu jest woda.";
-        if (F.buildingAt(x, y) || $gameMap.eventsXy(x, y).length > 0) return "To miejsce jest zajęte.";
-        if ($gamePlayer.x === x && $gamePlayer.y === y) return "Stoisz w tym miejscu.";
-        if (standingTreeNear(x, y)) return "Za blisko innego drzewa: zostaw mu miejsce na korzenie.";
+        if (!plot || plot.s !== "cleared") return TK.kod.whyNot[1];
+        if (F.isWaterTile(x, y)) return TK.kod.whyNot[2];
+        if (F.buildingAt(x, y) || $gameMap.eventsXy(x, y).length > 0) return TK.kod.whyNot[3];
+        if ($gamePlayer.x === x && $gamePlayer.y === y) return TK.kod.whyNot[4];
+        if (standingTreeNear(x, y)) return TK.kod.whyNot[5];
         return null;
     }
     // the first id of 1000-1999 neither the map's data nor a record of this map holds (0: the map is full)
@@ -239,19 +240,19 @@
     }
     function plant(x, y) {
         const seed = seedItem(), why = whyNot(x, y);
-        if (!seed || $gameParty.numItems(seed) < 1) { refuse(seed ? seed.iconIndex : 0, "Nie masz nasion sosny"); return false; }
+        if (!seed || $gameParty.numItems(seed) < 1) { refuse(seed ? seed.iconIndex : 0, TK.kod.plant[0]); return false; }
         if (why) { refuse(seed.iconIndex, why); return false; }
-        if (typeof $gameSystem.trySpendStamina === "function" && !$gameSystem.trySpendStamina(PLANT_STAMINA)) { refuse(82, "Jesteś zbyt zmęczony"); return false; }
+        if (typeof $gameSystem.trySpendStamina === "function" && !$gameSystem.trySpendStamina(PLANT_STAMINA)) { refuse(82, TK.kod.plant[1]); return false; }
         const done = () => {
             if (whyNot(x, y)) return;   // (something got there during the crouch)
             $gameParty.loseItem(seed, 1);
             const mapId = $gameMap.mapId(), F = T.api("Farming"), id = nextId(mapId);
-            if (!id) { refuse(seed.iconIndex, "Za dużo posadzonych drzew na tej mapie."); return; }
+            if (!id) { refuse(seed.iconIndex, TK.kod.done[0]); return; }
             const rec = { id, x, y, day: day(), graphic: GRAPHICS[Math.floor(F ? F.hash2(x, y, 521) * GRAPHICS.length : 0)] };
             treesOf(mapId).push(rec);
             spawn(rec);
             T.audio.se("Earth1", { volume: 80, pitch: 110 });
-            popup(seed.iconIndex, "Posadzono sosnę. Za " + GROW_DAYS + " dni będzie drzewem.");
+            popup(seed.iconIndex, Watki.wstaw(TK.kod.done[1], { GROW_DAYS: GROW_DAYS }));
         };
         if (!($gamePlayer.startToolSwing && $gamePlayer.startToolSwing(CROUCH_KIND, done))) done();
         return true;
@@ -259,10 +260,10 @@
     // the line of the ground menu (Farming.js shows it while there are seeds in the bag)
     function plantEntry(x, y) {
         const seed = seedItem(), n = seed ? $gameParty.numItems(seed) : 0, why = whyNot(x, y);
-        return { name: "Posadź sosnę", icon: seed ? seed.iconIndex : 0, right: "-" + PLANT_STAMINA, enabled: !why && n > 0,
-            help: why || "Wsadzasz w ziemię nasiono sosny (masz " + n + "). Sadzonka rośnie " + GROW_DAYS + " dni w dorosłe drzewo, które zetniesz siekierą. Młode drzewko da mniej drewna, a szyszki sypią się dopiero z dorosłego.",
-            tip: "Wsadzasz w ziemię jedno nasiono sosny. Sadzonka od razu stoi na mapie i przez " + GROW_DAYS + " dni rośnie z dnia na dzień w dorosłe drzewo.",
-            facts: ["Masz nasion: " + n, "Młode drzewo: mniej uderzeń siekierą i mniej drewna"],
+        return { name: TK.kod.plantEntry[0], icon: seed ? seed.iconIndex : 0, right: "-" + PLANT_STAMINA, enabled: !why && n > 0,
+            help: why || Watki.wstaw(TK.kod.plantEntry[1], { n: n, GROW_DAYS: GROW_DAYS }),
+            tip: Watki.wstaw(TK.kod.plantEntry[2], { GROW_DAYS: GROW_DAYS }),
+            facts: [Watki.wstaw(TK.kod.plantEntry[3], { n: n }), TK.kod.plantEntry[4]],
             run: () => plant(x, y) };
     }
 

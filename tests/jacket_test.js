@@ -1,8 +1,8 @@
 // The leather jacket (combat stage 2, docs/WALKA.md 10 / 11.2; Combat_Fight.js ARMORS, Farming_Data.js tannery, Durability.js): the
 // item and its icon, sewn at the tannery (3 tanned hides, 2 sinews, a rope), worn by having it in the bag (like the shield): every
-// blow that gets through takes 20% less and wears it, a worn one is mended at the workbench, a worn-out one tears; the Postać screen
-// shows it; the journal's goal.
-// CDP_PORT=9464 node tests/jacket_test.js        (SHOTS=1: a picture of the Postać screen into docs/walka/)
+// blow that gets through takes 20% less and wears it, a worn one is mended at the workbench, a worn-out one tears; the P menu's
+// Ekwipunek page shows it; the journal's goal.
+// CDP_PORT=9464 node tests/jacket_test.js        (SHOTS=1: a picture of the Ekwipunek page into docs/walka/)
 const kit = require("./lib/kit.js");
 const SHOTS = !!process.env.SHOTS;
 
@@ -78,16 +78,15 @@ kit.test({ port: 9464 }, async t => {
     t.check("its last blow: the jacket tears and is gone ('Skórzana kurtka się podarła') - that blow it still softened (24)", torn.lost === 24 &&
         (await t.eval("$gameParty.numItems($dataItems[171])")) === 0 && pops.some(p => /Skórzana kurtka się podarła/.test(p)), { torn, pops });
 
-    // ================= 5. the Postać screen shows it =================
+    // ================= 5. the P menu shows it (since 2026-10-28 the menu's Ekwipunek page - MenuRing.js; the old Postać screen is gone) =================
     await t.give(171, 1);
-    await t.eval("SceneManager.push(Combat.Scene_Hero); 0");
-    await t.until("SceneManager._scene instanceof Combat.Scene_Hero && !SceneManager.isSceneChanging()", 10, 50);
+    await t.eval("$gameTemp._menuTab = 'equip'; SceneManager.push(Scene_Menu); 0");
+    await t.until("SceneManager._scene instanceof Scene_Menu && !SceneManager.isSceneChanging() && !!MenuRing.info()", 10, 50);
     await t.frames(20);
-    const scr = await t.json(`(function(){ const w = SceneManager._scene._list, drawn = [];
-        const c = w.contents, _ct = c.drawText; c.drawText = function(text) { drawn.push(String(text)); return _ct.apply(this, arguments); }; w.refresh(); c.drawText = _ct;
-        return { drawn, armor: Combat.armor() && Combat.armor().id }; })()`);
-    t.check("menu P -> Postać, the attributes: under them 'WYPOSAŻENIE' with the jacket - what it does and how worn it is",
-        scr.armor === 171 && scr.drawn.includes("WYPOSAŻENIE") && scr.drawn.includes("Skórzana kurtka") && scr.drawn.some(s => /o 20% mniejsze/.test(s) && /\d+\/60/.test(s)) && scr.drawn.includes("Drewniana tarcza"), scr);
+    const scr = await t.json(`(function(){ const i = MenuRing.info(), slots = i && i.equip && i.equip.slots || [], at = id => slots.find(x => x.id === id) || {};
+        return { tab: i && i.active, torso: at("torso"), left: at("left"), worn: slots.filter(x => x.item).map(x => x.id + ":" + x.item), armor: Combat.armor() && Combat.armor().id }; })()`);
+    t.check("menu P -> Ekwipunek: the jacket worn in a place (and it is the armour), the shield too",
+        scr.tab === "equip" && scr.armor === 171 && scr.worn.some(w => /:171$/.test(w)) && scr.worn.some(w => /:155$/.test(w)), scr);
     if (SHOTS) await t.shot("../docs/walka/postac_wyposazenie.png");
     await t.eval("SceneManager.pop(); 0");
     await t.until(t.onMap(3), 10, 50);

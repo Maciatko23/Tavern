@@ -1,0 +1,344 @@
+# Teksty menu F9 (Debug.js): zakładki, wiersze, opisy i podpowiedzi - menu tylko do testowania gry.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz f9
+
+# ======================================================================== Zakładki: nazwa i podpowiedź klawiszy nad listą (po kolei)
+zakladki.0.name = Zdarzenia
+zakladki.0.help = ↑↓ wybierz   OK wykonaj   Q / E zakładka   Esc zamknij
+zakladki.1.name = Budowanie
+zakladki.1.help = ↑↓ wybierz   OK postaw (za darmo, od razu gotowe)   Q / E zakładka   Esc zamknij
+zakladki.2.name = Przedmioty
+zakladki.2.help = ↑↓ wybierz   ←→ ilość   OK dodaj   Tab / [ ] rodzaj   Q / E zakładka   Esc zamknij
+zakladki.3.name = Rdzeń
+zakladki.3.help = ↑↓ przewiń   OK odśwież   Q / E zakładka   Esc zamknij
+zakladki.4.name = Kot
+zakladki.4.help = ↑↓ wybierz   OK każ mu (wraca na mapę)   na opisie OK odśwież   Q / E zakładka   Esc zamknij
+zakladki.5.name = Wyspa i fabuła
+zakladki.5.help = ↑↓ wybierz   ←→ zmień   OK wykonaj (przejścia wracają na mapę)   Q / E zakładka   Esc zamknij
+
+# ======================================================================== Wyspa i fabuła - „Przenieś mnie do:” (nazwa miejsca i linia pod nią)
+# przystan
+wyspa.miejsca.przystan.nazwa = Przystań
+wyspa.miejsca.przystan.opis = Map125: Janek, Roch Szkwał, celnik, prom. Lądujesz przy ścieżce z Podgrodzia.
+# pustelnia
+wyspa.miejsca.pustelnia.nazwa = Pustelnia na klifie
+wyspa.miejsca.pustelnia.opis = Map155: brat Kleofas, skryptorium, ule, wieża z dzwonem. Lądujesz przy zejściu na przystań.
+# urwisko
+wyspa.miejsca.urwisko.nazwa = Urwisko Kruków
+wyspa.miejsca.urwisko.opis = Map157: kruczarnia, gniazda kruków, krata przelewu cysterny. Lądujesz na ścieżce od pustelni.
+# latarnia
+wyspa.miejsca.latarnia.nazwa = Przylądek z latarnią
+wyspa.miejsca.latarnia.opis = Map159: latarnik Bazyli, wieża latarni, dzwon mgłowy. Lądujesz na ścieżce z gór.
+# garnizon
+wyspa.miejsca.garnizon.nazwa = Garnizon nad zatoką
+wyspa.miejsca.garnizon.opis = Map162: rotmistrz, kwatermistrz Kłos, palisada, łacha do wraku. Lądujesz przy drodze z przystani.
+# wrak
+wyspa.miejsca.wrak.nazwa = Wrak na mieliźnie
+wyspa.miejsca.wrak.opis = Map165: kadłub na mieliźnie, wyrwa pod pokład. Ustawia odpływ (łacha sucha); pływ z zegara wraca niżej.
+# cysterna
+wyspa.miejsca.cysterna.nazwa = Stara cysterna zakonu
+wyspa.miejsca.cysterna.opis = Map167: zbiornik, słup z miarą, czerpak, dźwignia kraty. Lądujesz przy zejściu z piętra 30.
+# chata
+wyspa.miejsca.chata.nazwa = Chata pod lasem
+wyspa.miejsca.chata.opis = Podgrodzie (Map111): przed drzwiami chaty pod lasem i jej działką (dom na sprzedaż u sołtysa).
+# zagroda
+wyspa.miejsca.zagroda.nazwa = Spalona zagroda
+wyspa.miejsca.zagroda.opis = Map168: zgliszcza zagrody Ługów (zadanie D21). Lądujesz przy drodze ze Skraju lasu.
+
+# ======================================================================== Wyspa i fabuła - „Wnętrze: ...” (←→)
+# skryptorium
+wyspa.wnetrza.skryptorium.nazwa = Skryptorium
+# izbaLatarnika
+wyspa.wnetrza.izbaLatarnika.nazwa = Izba latarnika
+# laterna
+wyspa.wnetrza.laterna.nazwa = Laterna
+# kwatera
+wyspa.wnetrza.kwatera.nazwa = Kwatera rotmistrza
+# wrak
+wyspa.wnetrza.wrak.nazwa = Wrak - pod pokładem
+# chata
+wyspa.wnetrza.chata.nazwa = Chata pod lasem - izba
+# domLugow
+wyspa.wnetrza.domLugow.nazwa = Dom Ługów
+# piwnicaKantoru
+wyspa.wnetrza.piwnicaKantoru.nazwa = Piwnica kantoru
+# dworHol
+wyspa.wnetrza.dworHol.nazwa = Dwór - hol
+# dworBiblioteka
+wyspa.wnetrza.dworBiblioteka.nazwa = Dwór - biblioteka
+# dworGabinet
+wyspa.wnetrza.dworGabinet.nazwa = Dwór - gabinet
+
+# ======================================================================== Woda w morzu wymuszona
+wyspa.woda.red = czerwona
+wyspa.woda.grey = szara
+
+# ======================================================================== W5 „Towary z kontynentu”: rozdziały 1-7
+w5.rozdzialy.1 = dziwny kupiec
+w5.rozdzialy.2 = trzy stuknięcia
+w5.rozdzialy.3 = nocny tragarz
+w5.rozdzialy.4 = rejestr
+w5.rozdzialy.5 = komu to dać
+w5.rozdzialy.6 = noc promu
+w5.rozdzialy.7 = co dalej z kantorem
+
+# ======================================================================== W7 „Dwór z kamieni twierdzy”: rozdziały 1-7
+w7.rozdzialy.1 = dług
+w7.rozdzialy.2 = zaproszenie
+w7.rozdzialy.3 = dwa życia Feliksa
+w7.rozdzialy.4 = gabinet nocą
+w7.rozdzialy.5 = prawda i ostatnia spłata
+w7.rozdzialy.6 = do kogo najpierw
+w7.rozdzialy.7 = Lord przy Sercu
+
+# ======================================================================== Kot: rozkaz (wiersz) i gdzie jest
+# hearth
+kot.miejsca.hearth.rozkaz = Idź spać przy palenisku
+kot.miejsca.hearth.gdzie = przy palenisku
+# rug
+kot.miejsca.rug.rozkaz = Idź na dywan
+kot.miejsca.rug.gdzie = na dywanie
+# sill
+kot.miejsca.sill.rozkaz = Wskocz na parapet okna
+kot.miejsca.sill.gdzie = na parapecie okna
+# stroll
+kot.miejsca.stroll.rozkaz = Pospaceruj po izbie
+kot.miejsca.stroll.gdzie = na spacerze po izbie
+# feet
+kot.miejsca.feet.rozkaz = Usiądź u stóp dziadka
+kot.miejsca.feet.gdzie = u stóp dziadka
+# heroBed
+kot.miejsca.heroBed.rozkaz = Idź spać na posłanie bohatera
+kot.miejsca.heroBed.gdzie = na posłaniu bohatera
+
+# ======================================================================== Kot: co robi (kroki HomeLife.js)
+kot.kroki.go = idzie
+kot.kroki.face = odwraca się
+kot.kroki.look = rozgląda się
+kot.kroki.stay = odpoczywa
+kot.kroki.stayFeet = siedzi u stóp dziadka
+kot.kroki.curl = zwija się do snu
+kot.kroki.uncurl = przeciąga się i wstaje
+kot.kroki.hop = skacze
+
+# ======================================================================== Kot: jego dzień (opis na zakładce)
+[kot.dzien]
+W dzień (6-22) sam wybiera, co robić (bez powtarzania miejsca, poza paleniskiem):
+"  - najczęściej śpi zwinięty przy palenisku (1-3 min),"
+"  - dywan: chwilę siedzi albo śpi (1-2 min),"
+"  - parapet okna we wnęce bohatera (8-19): podskok i 25-60 s na górze,"
+"  - spacer po izbie: idzie gdzieś i się rozgląda,"
+"  - u stóp dziadka, gdy ten buja się albo pali fajkę (często tam zasypia)."
+W nocy (22-6): śpi na posłaniu bohatera (czasem przy palenisku), 2-5 min.
+Chodzi w 8 kierunkach, omija bohatera i dziadka (czeka, potem obchodzi),
+czasem przystaje i się rozgląda; nie wychodzi z domu, nie siada w drzwiach.
+Pogłaskany mruczy (~4 s, serduszko); raz dziennie +5 wytrzymałości.
+
+# ======================================================================== Przedmioty: rodzaje (druga belka)
+[przedmioty.rodzaje]
+Narzędzia i broń
+Surowce
+Jedzenie
+
+# ======================================================================== z kodu Debug.js (kod.<funkcja>.<n>, w kolejności kodu)
+# w9Name
+kod.w9Name.0 = z gry
+# w9
+kod.w9.0 = W9: rywal (wymuś wariant): {1}   ←→ zmień, OK zacznij
+kod.w9.1 = W9: rywal (brak Rywal.js)
+# w9meet
+kod.w9meet.0 = W9: rywal - spotkanie na piętrze {n}   ←→ piętro, OK idź
+kod.w9meet.1 = W9: rywal - spotkanie (brak Rywal.js)
+# w5
+kod.w5.0 = W5: rozdział {n} - {2}   ←→ zmień, OK idź
+kod.w5.1 = W5: przeskocz do rozdziału (brak Kantor.js)
+# w7
+kod.w7.0 = W7: rozdział {n} - {2}   ←→ zmień, OK idź
+kod.w7.1 = W7: przeskocz do rozdziału (brak Dwor.js)
+# inside
+kod.inside.0 = Wnętrze: {nazwa}   ←→ zmień, OK idź
+# tide
+kod.tide.0 = Odpływ
+kod.tide.1 = Przypływ
+kod.tide.2 = {name} (brak Wyspa.js)
+kod.tide.3 = {name} wymuszony   OK: pływy znowu z zegara
+kod.tide.4 = odpływ
+kod.tide.5 = przypływ
+kod.tide.6 = "   (z zegara teraz: {1})"
+kod.tide.7 = {name} teraz{2}
+# water
+kod.water.0 = Woda w morzu (brak CzerwonaWoda.js)
+kod.water.1 = {1} (wymuszona)
+kod.water.2 = z pogody - dziś {1}
+kod.water.3 = Woda w morzu: {1}   ←→ / OK zmień
+# lose
+kod.lose.0 = Świt dnia 61 bez spłaty (gra bez fabuły - nie ma długu)
+kod.lose.1 = Działka już przepadła (dzień {day})
+kod.lose.2 = Świt dnia 61 bez spłaty (dług już spłacony)
+kod.lose.3 = Świt dnia 61 bez spłaty: strata działki, scena na działce dziadka
+# pay
+kod.pay.0 = Spłać dług (gra bez fabuły - nie ma długu)
+kod.pay.1 = Działka odkupiona od Lorda (dzień {done})
+kod.pay.2 = Odkup działkę od Lorda: {1} G
+kod.pay.3 = Dług spłacony ({paid} / {debt} G)
+kod.pay.4 = Spłać dług: {1} G (z {debt} G)
+# raven
+kod.raven.0 = Oswojony kruk (brak Kruk.js)
+kod.raven.1 = Kruk oswojony: {1}
+kod.raven.2 = Oswojony kruk od razu (potem ekran imienia)
+# texts
+kod.texts.0 = Wczytaj teksty od nowa (brak Watki.js)
+kod.texts.1 = "   ({length} plików w js/teksty)"
+kod.texts.2 = Wczytaj teksty od nowa{1}
+# favor
+kod.favor.0 = Przychylność garnizonu: {1} / 100   ← -20   → +20
+kod.favor.1 = Przychylność garnizonu (brak Garnizon.js)
+# cistern
+kod.cistern.0 = Cysterna otwarta (dzień {cisternOpen})
+kod.cistern.1 = Otwórz cysternę (jak dzwon „cztery i dwa”, W1 rozdz. 7)
+# catDoing
+kod.catDoing.0 = mruczy (pogłaskany)
+kod.catDoing.1 = spacer po izbie
+kod.catDoing.2 = śpi zwinięty {spot}
+kod.catDoing.3 = zwija się do snu {spot}
+kod.catDoing.4 = przeciąga się i wstaje
+kod.catDoing.5 = siedzi u stóp dziadka
+kod.catDoing.6 = siedzi pod oknem, zaraz wskoczy na parapet
+kod.catDoing.7 = siedzi przy posłaniu, zaraz na nie wskoczy
+kod.catDoing.8 = siedzi {spot}
+# layersLabel
+kod.layersLabel.0 = ukryj kolory
+kod.layersLabel.1 = pokaż kolory (1 zielony, 2 czerwony, 3 niebieski)
+kod.layersLabel.2 = Warstwy z regionów: {1}
+# ugFloorName
+kod.ugFloorName.0 = " (Ruiny Zamku)"
+# ugFloorLabel
+kod.ugFloorLabel.0 = Podziemia: piętro {f}{2}   ←→ zmień (Shift: o 10), OK idź
+# ugGateLabel
+kod.ugGateLabel.0 = otwarte (zamknij)
+kod.ugGateLabel.1 = zamknięte (otwórz)
+kod.ugGateLabel.2 = Podziemia: zejście z piwnicy {1}
+# ugLocksLabel
+kod.ugLocksLabel.0 = włączone (wyłącz)
+kod.ugLocksLabel.1 = wyłączone (włącz)
+kod.ugLocksLabel.2 = Podziemia: zamki Serca na próbę {1}
+# ugLiftsLabel
+kod.ugLiftsLabel.0 = " (już działają)"
+kod.ugLiftsLabel.1 = Podziemia: wszystkie przystanki windy{1}
+# crLabel
+kod.crLabel.0 = Boss podziemi: {name} (piętro {floor})   ←→ zmień, OK przywołaj
+kod.crLabel.1 = {plural} (rój)
+kod.crLabel.2 = Stwór z ruin: {1}   ←→ zmień, OK przywołaj
+# allRows
+kod.allRows.0 = +1 godzina
+kod.allRows.1 = +1 dzień
+kod.allRows.2 = Godzina: świt (przed wschodem słońca)
+kod.allRows.3 = Godzina: zachód słońca
+kod.allRows.4 = Gęsta mgła o świcie
+kod.allRows.5 = Burza teraz (2 godziny)
+kod.allRows.6 = Piorun tuż obok
+kod.allRows.7 = Piorun w drzewo (na ekranie)
+kod.allRows.8 = Koniec pogody na dziś
+kod.allRows.9 = Stadko ptaków na ziemi
+kod.allRows.10 = Nalot ptaków na pole
+kod.allRows.11 = Motyle teraz (łąka, lato, po deszczu)
+kod.allRows.12 = Ćmy przy ogniu (noc)
+kod.allRows.13 = Daj siatkę na motyle
+kod.allRows.14 = Dzik w pobliżu
+kod.allRows.15 = Wataha wilków (3)
+kod.allRows.16 = Jeleń w pobliżu
+kod.allRows.17 = Niedźwiedź w pobliżu
+kod.allRows.18 = Bandyta w pobliżu
+kod.allRows.19 = Nożownik w pobliżu
+kod.allRows.20 = Łucznik w pobliżu
+kod.allRows.21 = Najemnik w pobliżu
+kod.allRows.22 = Zasadzka (2 bandytów i łucznik)
+kod.allRows.23 = Obóz bandytów (noc)
+kod.allRows.24 = Napad na śpiącego (bandyci)
+kod.allRows.25 = Wilki przy obozie bandytów (noc)
+kod.allRows.26 = Dzik i bandyta
+kod.allRows.27 = Niedźwiedź i bandyta
+kod.allRows.28 = +200 doświadczenia
+kod.allRows.29 = Postaw: {name}
+# coreRows
+kod.coreRows.0 = Brak TawernaCore.js - rdzeń nie jest wczytany
+# catRows
+kod.catRows.0 = Brak HomeLife.js - kota nie ma
+kod.catRows.1 = Kot Mruczek - teraz:
+kod.catRows.2 = "  Kot jest tylko w domu dziadka (mapa {MAP}) - tu go nie ma."
+kod.catRows.3 = Zabierz mnie do domu dziadka
+kod.catRows.4 = "  Robi: {1}"
+kod.catRows.5 = " (idzie na {1}, {2})"
+kod.catRows.6 = "  Gdzie: kratka {x}, {y}{3}"
+kod.catRows.7 = , potem sam wybierze, co robić
+kod.catRows.8 = "  Jeszcze: ok. {left} s{2}"
+kod.catRows.9 = "  Dalej: {1}"
+kod.catRows.10 = Każ mu (menu wraca na mapę, żeby popatrzeć):
+kod.catRows.11 = "  (u stóp dziadka - tylko gdy dziadek siedzi w fotelu)"
+kod.catRows.12 = Niech sam wybierze, co robić
+kod.catRows.13 = Pogłaszcz (mruczy)
+kod.catRows.14 = Jego dzień:
+# isleRows
+kod.isleRows.0 = Przenieś mnie do:
+kod.isleRows.1 = Wnętrza nowych miejsc i domów: ←→ wybierz, OK przenosi do środka, przy drzwiach.
+kod.isleRows.2 = Morze i pogoda:
+kod.isleRows.3 = Odpływ od razu: łacha z garnizonu do wraku sucha, przełącznik 20 włączony. Drugi raz: pływy z zegara.
+kod.isleRows.4 = Przypływ od razu: łacha pod wodą, ładownia wraku zalana. Drugi raz: pływy z zegara.
+kod.isleRows.5 = Mglista noc na przylądku (wizja w latarni)
+kod.isleRows.6 = Noc z mgłą morską, D22 zaczęte; przenosi do laterny - OK przy soczewce, gdy Bazyli jest na górze.
+kod.isleRows.7 = Morze przy wyspie: kolejno z pogody / czerwone (zakwit, śnięte ryby) / szare (po deszczu).
+kod.isleRows.8 = Fabuła:
+kod.isleRows.9 = Zegar na świt dnia po terminie, bohater na działce dziadka: działka przechodzi na Lorda, scena ludzi dworu.
+kod.isleRows.10 = Brakujące złoto dodane i od razu zapłacone (po stracie działki: odkup za 3000 G).
+kod.isleRows.11 = Tysiąc sztuk złota do sakiewki.
+kod.isleRows.12 = +10 000 doświadczenia
+kod.isleRows.13 = Dziesięć tysięcy punktów doświadczenia naraz: poziomy, punkty atrybutów i umiejętności jak za zwykłe zdobycie.
+kod.isleRows.14 = Odtwórz prolog „Ostatni prom”
+kod.isleRows.15 = Sam film (bez ekranu imienia), potem powrót na mapę w to samo miejsce - stan gry bez zmian.
+kod.isleRows.16 = Pliki js/teksty/*.txt czytane jeszcze raz z dysku: poprawka w pliku widoczna od razu, bez ponownego uruchamiania gry. Wynik: ile plików albo pierwszy błąd z numerem linii.
+kod.isleRows.17 = Kruk z Urwiska oswojony od razu: obrączka, flagi krukTame i kronikaKarta6, ekran imienia. Klawisz K: jego menu.
+kod.isleRows.18 = Przychylność garnizonu nad zatoką: 40 glejt na wrak, 60 kowal, 80 dwóch żołnierzy w obronie (Akt III).
+kod.isleRows.19 = Flagi cisternOpen, sluiceHalf, millRuns, kubaHonest: zasuwa na piętrze 30 prowadzi do cysterny, D28.
+kod.isleRows.20 = Biały orzeł:
+kod.isleRows.21 = Wątek W5 (kantor Baltazara):
+kod.isleRows.22 = Ustawia „Towary z kontynentu” na początku rozdziału (flagi, pora, miejsce) i przenosi tam, gdzie się dzieje.
+kod.isleRows.23 = Wątek W7 (dwór Lorda):
+kod.isleRows.24 = Ustawia „Dwór z kamieni twierdzy” na początku rozdziału (spłaty, flagi, pora) i przenosi tam, gdzie się dzieje.
+kod.isleRows.25 = Wątek W9 (rywal w ruinach):
+kod.isleRows.26 = Rywal z zewnątrz w ruinach (piętra 1-10). OK: krata otwarta, rywal już w drodze (piętro 3), bohater w Ruinach Zamku przy śladach.
+kod.isleRows.27 = Rywal (wariant z wiersza wyżej) czeka na tym piętrze (1-10); bohater na jego schodach, kilka kroków do ich ogniska.
+# onOk
+kod.onOk.0 = Mgła o świcie: dziś
+kod.onOk.1 = Mgła o świcie: jutro
+kod.onOk.2 = Siatka na motyle
+# go
+kod.go.0 = Nie ma mapy {1}
+# onIsleOk
+kod.onIsleOk.0 = Brak Latarnia.js albo Sky.js
+kod.onIsleOk.1 = Gra bez fabuły - nie ma długu
+kod.onIsleOk.2 = Działka już przepadła
+kod.onIsleOk.3 = Dług spłacony - działki nie stracisz
+kod.onIsleOk.4 = Działka dziadka
+kod.onIsleOk.5 = Nie ma czego spłacać
+kod.onIsleOk.6 = "Odkup działki: "
+kod.onIsleOk.7 = "Dług: "
+kod.onIsleOk.8 = {1} G zapłacone
+kod.onIsleOk.9 = Brak Combat.js
+kod.onIsleOk.10 = Już najwyższy poziom
+kod.onIsleOk.11 = " (poziom {lv0} → {lv})"
+kod.onIsleOk.12 = +10 000 dośw.{1}
+kod.onIsleOk.13 = Brak Prologue.js
+kod.onIsleOk.14 = Brak Kruk.js
+kod.onIsleOk.15 = Kruk już oswojony
+kod.onIsleOk.16 = Brak Okolice.js
+kod.onIsleOk.17 = Brak Orzel.js
+kod.onIsleOk.18 = Brak Kantor.js
+kod.onIsleOk.19 = Brak zadania W5 (TownQuests)
+kod.onIsleOk.20 = Brak Dwor.js
+kod.onIsleOk.21 = Gra bez fabuły albo brak zadania W7
+kod.onIsleOk.22 = Brak Rywal.js
+kod.onIsleOk.23 = Brak podziemi (Underground.js)
+kod.onIsleOk.24 = Brak piętra {pick}
+kod.onIsleOk.25 = Brak Watki.js
+kod.onIsleOk.26 = Brak TownQuests.js
+kod.onIsleOk.27 = Cysterna otwarta (cisternOpen)

@@ -1,0 +1,309 @@
+# Teksty łańcucha W15 „Święte kości” (wtyczki SwieteKosci_Data.js i SwieteKosci.js) - docs/PODROZNI.md 2.9, 2.10, 4.2, etap 4.
+# Gaspar Lis, handlarz relikwii (podróżny „relikwie”, pokój 12), brat Augustyn, wizytator z Lipnicy („wizytator”, pokój 16),
+# Baltazar Vey i jego kurier. Bohater jest nastolatkiem: dorośli mówią do niego „chłopcze”, „synu”.
+# „> ” - mówi bohater; bez tego - postać, z którą się rozmawia. {nazwa} - wstawia gra.
+
+# ======================================================================== zadanie W15 (dziennik: FABUŁA)
+zadania.W15.title = Święte kości
+zadania.W15.where = rynek, tawerna (pokój 12 na piętrze gości), pustelnia, Podgrodzie, kantor, przystań
+zadania.W15.when = od promu z Gasparem Lisem (dzień 13) do odpływu brata Augustyna
+zadania.W15.desc = Gaspar Lis, handlarz relikwii, sprzedaje na rynku kości świętych i odłamki Serca. Ludzie płacą. A potem przypływa ktoś, kto zna jego towar lepiej niż on sam.
+zadania.W15.fail.text = Gaspar Lis odpłynął ze swoją skrzynką.
+zadania.W15.steps.0.text = Kram Gaspara: Gaspar Lis sprzedaje relikwie. W dzień targowy ({targ}) wygłasza kazanie na rynku, 9-12. Zobacz, co i komu sprzedaje.
+zadania.W15.steps.1.text = Fałszywe kości? Poszlaki ({n} z 2): Ignac zna się na kościach (garbarnia), Tadek na srebrze (pokaż mu medalik Gaspara), brat Kleofas na zakonie (pustelnia), Melia na balladach (tawerna).
+zadania.W15.steps.2.text = {augustyn}
+zadania.W15.steps.3.text = Dowód: {kiedy} Posłuchaj przy drzwiach pokoju 12 albo z pokoju obok, wypatruj kuriera na korytarzu. Józek Łata (Podgrodzie) też wie, kto handluje papierami.
+zadania.W15.steps.4.text = Skrzynka Gaspara: skonfrontuj go. Przed ludźmi, przy kapralu Wicie (dwie opinie o fałszywych kościach: {n}/2), przy bracie Augustynie albo w cztery oczy.
+zadania.W15.steps.5.text = {co}
+zadania.W15.steps.6.text = Brat Augustyn odpływa promem {dzien}. Pożegnaj się z nim.
+
+# słowa kroków (zmienne)
+kroki.augustyn.czeka = Gaspar handluje dalej. Na wyspę płynie ktoś, kto zna jego towar - wypatruj podróżnych z następnego promu.
+kroki.augustyn.jest = Brat Augustyn, wizytator z klasztoru w Lipnicy, pyta o Gaspara. Porozmawiaj z nim (rano kaplica, po południu ogród zakonu, wieczorem tawerna, nocą pokój 16).
+kroki.dowod.przed = w nocy {dzien} (22-24) Gaspar ma gościa.
+kroki.dowod.po = noc {dzien} minęła.
+kroki.komu.oba = Kamień z krukiem: komu? Bratu Kleofasowi (pustelnia), Ambrożemu (dzwonnica), Baltazarowi (kantor, 80 G) albo celnikowi (przystań, 5 G). Spis z Lipnicy: bratu Augustynowi albo Kleofasowi.
+kroki.komu.kamien = Kamień z krukiem: komu? Bratu Kleofasowi (pustelnia), Ambrożemu (dzwonnica), Baltazarowi (kantor, 80 G) albo celnikowi (przystań, 5 G).
+kroki.komu.spis = Spis z Lipnicy: bratu Augustynowi (pokój 16) albo bratu Kleofasowi (pustelnia).
+kroki.komu.nic = Kamień i spis są już u swoich ludzi.
+
+# napisy nad bohaterem i u góry
+napis.zloto = +{n} G
+napis.slawa = Sława w tawernie +{n}
+
+# ======================================================================== rzeczy (niesione w torbie zadania)
+rzeczy.medalik_gaspara.name = Medalik Gaspara
+rzeczy.kamien_gaspara.name = Kamień z krukiem (ze skrzynki Gaspara)
+rzeczy.spis_lipnicy.name = Spis biblioteki z Lipnicy
+
+# ======================================================================== rozdz. 1: kazanie na rynku (dymki nad Gasparem, dzień targowy 9-12)
+[scena.kazanie]
+Ludzie Kruczej Wyspy! Oto kość palca świętego strażnika Kruczych Skał!
+Za dotknięcie - grosz. Za kość - porozmawiamy!
+A to? Odłamek Serca w srebrze. Sam go nie dotykam!
+Medaliki na drogę, na morze, na wojnę!
+
+scena.hanka = Medalik dla mnie! Za siostrę na lądzie.
+scena.tlum = Święta kość...
+mysl.kazanie = (Ludzie płacą. Nawet Dziadek Ozzy z tawerny dał trzy grosze za „odłamek Serca”.)
+
+# menu Gaspara (opcje dopisane do menu podróżnego)
+menu.medalik = Kup medalik ({cena} G)
+[medalik.kupiony]
+Proszę bardzo, chłopcze. Medalik świętego strażnika. Chroni przed morzem, wojną i złym okiem.
+
+medalik.brak = Potrzebujesz {cena} G
+menu.kamien = Sprzedaj kamień z krukiem ({cena} G)
+[kamien.sprzedany]
+Oho! Prawdziwy kruk. Trzydzieści groszy, jak obiecałem. Gaspar Lis dotrzymuje słowa... czasem.
+
+# ======================================================================== rozdz. 1: fałszywe kości (kto mówi: Ignac, Tadek, Kleofas, Melia)
+[falsz.ignac]
+> Ignacu, widziałeś kość, którą handlarz pokazuje na rynku?
+Widziałem. Trzydzieści lat garbuję skóry, chłopcze. Znam każdą kość, co chodziła na czterech nogach.
+To żaden palec świętego. To kość barania, z udźca. Pewnie z czyjegoś obiadu.
+
+[falsz.tadek]
+> Tadku, zobacz ten medalik. Gaspar mówi, że srebrny.
+(Tadek stuka medalikiem o kowadło.) Słyszysz? Srebro dzwoni. To brzęczy jak garnek.
+Cyna, chłopcze. Pomalowana. Za taki medalik dałbym ci gwóźdź. Jeden.
+
+[falsz.kleofas]
+> Bracie, handlarz na rynku sprzedaje kości świętego strażnika Kruczych Skał.
+Strażnika? Zakon nie trzymał kości, synu. Zakon trzymał pytania.
+Nikt z braci nie dał się zamknąć w relikwiarzu. Leżą na starym cmentarzu, pod zwykłym kamieniem.
+
+[falsz.melia]
+> Melio, znasz pieśni o świętych z Kruczych Skał?
+O świętych? Znam ballady o kruczarzach, o dzwonie, o kasztelanie, co pił z hełmu.
+Żadna nie zna świętego. Gdyby był, ktoś by o nim zaśpiewał. Ballady pamiętają wszystko - zwłaszcza to, co ładnie brzmi.
+
+poszlaka.falsz = Poszlaka: fałszywe kości ({n}/2)
+[notatki.falsz]
+Fałszywe kości
+Kość „świętego strażnika” jest barania, medaliki z cyny, a zakon nie trzymał relikwii. Gaspar Lis sprzedaje ludziom oszustwo.
+
+# ======================================================================== rozdz. 2: brat Augustyn
+[augustyn.rozmowa]
+Synu. Ten człowiek na rynku... Gaspar Lis. Wiesz, co on sprzedaje?
+> Kości świętych. I odłamki Serca. Ludzie płacą.
+Kości to głupstwo. Ludzie zawsze kupowali kości. Gorzej, że on sprzedaje księgi naszego klasztoru.
+Lipnica stała czterysta lat. Biblioteka - trzysta. Ludzie z okiem potrzebowali jednej nocy, po świętym Marcinie.
+Wynieśli, co nie spłonęło. A teraz nasze księgi wypływają na targach - spisane, policzone, sprzedane.
+Ktoś kupuje od Gaspara papiery. Nie wiem kto. Mnie wszyscy widzą w habicie. Ty... ty jesteś stąd.
+> Dowiem się, komu je sprzedaje.
+Niech Bóg prowadzi. I uważaj - kto kupuje skradzione księgi, ten nie lubi świadków.
+
+[notatki.augustyn]
+Brat Augustyn z Lipnicy
+Wizytator z klasztoru w Lipnicy mówi, że Gaspar Lis handluje księgami jego klasztoru, obrabowanego przez ludzi z okiem. Ktoś je od Gaspara kupuje. Mam się dowiedzieć, kto.
+
+# ======================================================================== rozdz. 2: dowód - kurier Baltazara (noc na piętrze gości)
+kurier.imie = Kurier w kapturze
+[kurier.rozmowa]
+> (Mężczyzna w kapturze, z pakunkiem pod pachą. Pachnie końmi i atramentem.)
+Nie twoja sprawa, chłopcze. Ja tylko noszę.
+> Dla Baltazara Veya?
+Pan Vey płaci za papiery. Ja za buty. Zejdź mi z drogi.
+
+mysl.kurier = (Kurier w kapturze pod drzwiami dwunastki. Tą samą drogą chodzą nocni goście kantoru.)
+kurier.wyszedl = Kurier wyszedł.
+
+# podsłuch (przez ścianę pokoju 12 albo pod drzwiami, 22-24): „kto: tekst”, słowa kluczowe w {nawiasach}
+[podsluch.kurier]
+Gaspar: Spis biblioteki z {Lipnicy}. Trzysta lat ksiąg na trzech kartach.
+Kurier: Pan Vey płaci {zaliczkę}. Resztę przy {promie}, jak zawsze.
+Gaspar: A kamień? {Kamień z krukiem} też chce?
+Kurier: Za {kamień} zapłaci osobno. Przy promie.
+Gaspar: Niech będzie. Tylko żeby {mnich} się nie dowiedział.
+
+[dowod.jozek]
+> Józku, handlarz od relikwii coś od ciebie kupował?
+Kamień z krukiem. Dał za niego więcej, niż ja bym dał za konia. Takich kupców się nie zapomina.
+I jeszcze jedno, ale nie mów, że ode mnie. W nocy widziałem kuriera Baltazara. Wyszedł z tawerny z papierami pod pachą.
+Gaspar mówi, że handluje świętością. A świętość, chłopcze, płaci zaliczki.
+
+[dowod.baltazar]
+> Kupujesz papiery od Gaspara Lisa?
+Wspólniku... kupuję wszystko, co się sprzeda za morzem. Spis starej biblioteki - są tacy, co za to płacą.
+Tylko nie przyprowadzaj mi tu mnicha. Mnisi źle wpływają na interesy.
+
+poszlaka.dowod = Dowód: Gaspar sprzedaje papiery z Lipnicy
+[notatki.dowod]
+Kurier Baltazara
+Gaspar sprzedaje kurierowi Baltazara Veya spis biblioteki z Lipnicy. Zaliczka już zapłacona, resztę kurier odbierze przy promie. I kamień z krukiem - osobno.
+
+# ======================================================================== rozdz. 3: skrzynka Gaspara (punkt zwrotny)
+[konfrontacja.zaczep]
+> Gaspar. Wiem o kurierze Baltazara. I o spisie z Lipnicy.
+Ciszej, chłopcze, ciszej! Ściany w tej karczmie są cieńsze niż moje kazania.
+
+konfrontacja.opcja.rynek = Otwórz skrzynkę. Na rynku, przy kapralu.
+konfrontacja.opcja.augustyn = Pokażesz skrzynkę bratu Augustynowi.
+konfrontacja.opcja.dzialka = Dogadajmy się.
+konfrontacja.opcja.nic = Jeszcze nie.
+[konfrontacja.rynek]
+Przed ludźmi? Chłopcze, ty mnie chcesz zgubić. Dobrze, dobrze... otwieram.
+
+[konfrontacja.augustyn]
+Do mnicha? ...Niech będzie. Mnisi przynajmniej nie krzyczą na rynku.
+
+[konfrontacja.dzialka]
+Mądry chłopiec. Trzydzieści groszy - i nic nie widziałeś. Skrzynka zostaje zamknięta, a ja odpływam z błogosławieństwem.
+> ...Niech będzie.
+
+[konfrontacja.nic]
+Mądrze. Wiara lubi cierpliwych.
+
+[skrzynka.zawartosc]
+> (W skrzynce: kości owinięte w aksamit - baranie i kurze. Cynowe medaliki. Pod podwójnym dnem prawdziwy kamień z wyrytym krukiem.)
+> (I trzy karty w skórzanej teczce: „Spis biblioteki klasztoru w Lipnicy”. Na marginesie dopisek: „Karty brata Dobiesza - wyjęte. Ludzie z okiem, noc po świętym Marcinie.”)
+
+# dymki sceny na rynku (kapral Wit, Gaspar, ludzie)
+scena.rynek.wit = Otwieraj, kupcze. Do dna.
+scena.rynek.gaspar = Toż to święte rzeczy! Święte!
+scena.rynek.tlum = Barania kość! I cyna!
+scena.rynek.hanka = Oddawaj grosze, oszuście!
+
+[notatki.rynek]
+Gaspar zdemaskowany
+Na rynku, przy kapralu Wicie, Gaspar otworzył skrzynkę: baranie kości, cynowe medaliki. Oddał ludziom grosze - Ozzy odzyskał swoje trzy, Hanka medalik. Gaspar więcej tu nie przypłynie. A spod podwójnego dna wyjąłem kamień z krukiem i spis z Lipnicy.
+
+[notatki.przyAugustynie]
+Skrzynka przy bracie Augustynie
+Gaspar otworzył skrzynkę przy bracie Augustynie - bez krzyku i bez rynku. Spis z Lipnicy i kamień z krukiem wziąłem ja. Handlarz zostaje do swojego promu, ale towaru z Lipnicy już nie sprzeda.
+
+[notatki.dzialka]
+Działka
+Wziąłem od Gaspara trzydzieści groszy za milczenie. Skrzynka została zamknięta. Spis z Lipnicy i kamień z krukiem popłyną przy promie do Baltazara - a dalej do ludzi z okiem.
+
+[notatki.przeszukana]
+Skrzynka Gaspara
+Przeszukałem skrzynkę Gaspara, kiedy go nie było. Wziąłem spis z Lipnicy i kamień z krukiem. Handlarz jeszcze nie wie.
+
+# ======================================================================== rozdz. 4: kamień i spis - komu
+[komu.kleofas.pyta]
+> Bracie Kleofasie, mam coś ze skrzynki handlarza relikwii.
+Pokaż, synu.
+
+komu.kleofas.opcja.kamien = Zostaw kamień z krukiem u Kleofasa.
+komu.kleofas.opcja.spis = Pokaż mu spis z Lipnicy.
+komu.kleofas.opcja.nie = Jeszcze nie.
+[komu.kleofas.kamien]
+(Kleofas obraca kamień w palcach długo, bardzo długo.) Kruczarze nosili takie na szyi. Z listem w dziobie kruka szła prośba o pomoc.
+Zostaw go u mnie. Tu, na klifie, nikt go nie sprzeda. Ani nie kupi.
+
+[komu.kleofas.spis]
+(Kleofas czyta, a potem siada, jakby ktoś zabrał mu ławkę.) Dobiesz... Więc tak to było.
+Karty brata Dobiesza opisywały Serce i drogę do niego. Ludzie z okiem znaleźli je w Lipnicy - i dlatego przypłynęli tutaj.
+Zapiszę to. Kronika musi wiedzieć, skąd przyszło nieszczęście.
+
+[komu.ambrozy.pyta]
+> Ambroży, przechowasz kamień z krukiem? Był w skrzynce handlarza.
+(Ambroży długo patrzy na kamień, potem na dzwonnicę.) Mój dziad mówił: kruk na kamieniu to znak, że ktoś obiecał wrócić.
+
+komu.ambrozy.opcja.tak = Oddaj kamień Ambrożemu.
+komu.ambrozy.opcja.nie = Jeszcze nie.
+[komu.ambrozy.tak]
+Schowam go w dzwonnicy, pod belką. A jak przyjdzie zła noc - zadzwonię, zanim ktoś mnie poprosi.
+
+[komu.baltazar.pyta]
+> Baltazarze. Kamień z krukiem, prawdziwy.
+(Baltazar nie mruga.) Osiemdziesiąt groszy. Od ręki. I nie pytaj, kto za morzem płaci więcej.
+
+komu.baltazar.opcja.tak = Sprzedaj ({cena} G).
+komu.baltazar.opcja.nie = Nie sprzedam.
+[komu.baltazar.tak]
+Interes to interes. Szkoda tylko, że ludzie z okiem płacą najlepiej. ...Żartowałem, chłopcze.
+
+[komu.celnik.pyta]
+> Panie celniku, kamień z krukiem. Ze skrzynki handlarza relikwii.
+Kamień z krukiem? Do składu Lorda - jak te z wraku. Pięć groszy, pokwitowanie i spokój.
+
+komu.celnik.opcja.tak = Oddaj ({cena} G).
+komu.celnik.opcja.nie = Nie oddam.
+[komu.celnik.tak]
+Pokwitowanie. Pieczęć. Podpis. Wszystko jak trzeba.
+
+[komu.augustyn.pyta]
+> Bracie Augustynie. Spis biblioteki z Lipnicy. Ze skrzynki Gaspara.
+(Augustyn bierze karty obiema rękami, jak chleb.) Nasz spis. Pismo brata Bonifacego...
+
+komu.augustyn.opcja.spis = Oddaj spis bratu Augustynowi.
+komu.augustyn.opcja.kroniki = Oddaj mu spis i kroniki zakonu.
+komu.augustyn.opcja.nie = Jeszcze nie.
+[komu.augustyn.spis]
+Teraz będę wiedział, czego szukać na targach. I komu je sprzedano.
+
+[komu.augustyn.kroniki]
+> I jeszcze to. Kroniki zakonu Kruczych Skał. Z archiwum pod dzwonnicą.
+(Augustyn milknie na długo.) W Lipnicy będą bezpieczne. W murach, przy świecach, pod strażą braci. Obiecuję.
+
+[notatki.kamienKleofas]
+Kamień u Kleofasa
+Kamień z krukiem ze skrzynki Gaspara został u brata Kleofasa w pustelni. Na klifie nikt go nie sprzeda.
+
+[notatki.kamienAmbrozy]
+Kamień u Ambrożego
+Ambroży schował kamień z krukiem w dzwonnicy, pod belką. Mówi, że w złą noc zadzwoni sam, zanim ktoś go poprosi.
+
+[notatki.kamienBaltazar]
+Kamień u Baltazara
+Sprzedałem Baltazarowi kamień z krukiem za osiemdziesiąt groszy. Ludzie z okiem mają teraz o jeden kamień więcej.
+
+[notatki.kamienCelnik]
+Kamień w składzie Lorda
+Oddałem kamień z krukiem celnikowi Samborowi - do składu Lorda, jak kamienie z wraku. Pięć groszy i pokwitowanie.
+
+[notatki.spisKleofas]
+Jak Czarne Oczy dowiedziały się o Sercu
+Brat Kleofas przeczytał spis z Lipnicy. Karty brata Dobiesza opisywały Serce Kruczych Skał i drogę do niego. Ludzie z okiem obrabowali klasztor po świętym Marcinie, znaleźli karty - i przypłynęli na wyspę.
+
+[notatki.spisAugustyn]
+Spis wraca do Lipnicy
+Oddałem bratu Augustynowi spis biblioteki z Lipnicy. Klasztor będzie wiedział, czego szukać na targach i komu sprzedano jego księgi.
+
+[notatki.kroniki]
+Kroniki płyną na ląd
+Oddałem bratu Augustynowi kroniki zakonu Kruczych Skał. Popłyną do Lipnicy - w mury, do biblioteki, pod straż braci.
+
+# ======================================================================== rozdz. 5: pożegnanie brata Augustyna
+[pozegnanie.dobre]
+Odpływam, synu. Lipnica dostanie z powrotem choć trochę swojej pamięci.
+Weź to - jałmużna klasztoru. Nie odmawiaj, nie wypada odmawiać mnichowi.
+
+[pozegnanie.dzialka]
+Józek Łata mówi, że handlarz odpłynął spokojnie, z kuframi. I że ty wiedziałeś.
+Nie będę cię sądził, synu. Ale ludzie w miasteczku już wiedzą. Ludzie zawsze wiedzą.
+
+[pozegnanie.modl]
+Módl się za Lipnicę. I za księgi.
+
+# ======================================================================== zakończenie bez bohatera (Gaspar odpływa ze skrzynką)
+[notatki.uciekl]
+Gaspar odpłynął
+Gaspar Lis odpłynął z kramem i skrzynką. Spis z Lipnicy i kamień z krukiem odebrał przy promie kurier Baltazara. Brat Augustyn odpłynie z niczym.
+
+# ======================================================================== uwagi mieszkańców po tym, co się stało (raz)
+# 0: Ozzy po kazaniu; 1: Ozzy po zdemaskowaniu; 2: Hanka po zdemaskowaniu
+[uwagi.0.lines]
+Widziałeś? Odłamek Serca! W srebrze! Trzy grosze, chłopcze, trzy grosze za kawałek świętości!
+
+[uwagi.1.lines]
+Oddali mi trzy grosze. A ten „odłamek”... Tadek mówi, że to szkło od butelki. Szkło! Napiję się za te trzy grosze.
+
+[uwagi.2.lines]
+Medalik oddał. Cynowy. A ja go siostrze chciałam posłać na ląd... Dobrze, że nie posłałam.
+
+# ======================================================================== F9 („Wyspa i fabuła”, sekcja wątku W15)
+f9.naglowek = Wątek W15 (Święte kości):
+f9.etykieta = W15: rozdział {ch} - {nazwa}
+f9.opis = ◀ ▶ rozdział, O - przeskok (Gaspar i Augustyn na wyspie, poszlaki, dzień, godzina i miejsce)
+f9.brak = Nie da się tam przeskoczyć
+f9.nazwy.1 = kram Gaspara
+f9.nazwy.2 = fałszywe kości
+f9.nazwy.3 = brat Augustyn
+f9.nazwy.4 = noc kuriera
+f9.nazwy.5 = skrzynka Gaspara
+f9.nazwy.6 = kamień i spis
+f9.nazwy.7 = pożegnanie Augustyna

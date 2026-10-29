@@ -25,6 +25,8 @@
  * @plugindesc [pakiet A] Pustelnia na klifie i Skryptorium (mapy 155, 156): brat Kleofas, zaszyfrowane kroniki (D23), atrament (K50), Noc Pytania (W2 rozdz. 7). v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
+ * @base Pustelnia_Data
  * @orderAfter Wyspa
  *
  * @help
@@ -55,10 +57,12 @@
     if (!T) throw new Error("Pustelnia.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     if (!D) throw new Error("Pustelnia.js: brak Pustelnia_Data.js - musi być wyżej na liście wtyczek (the hermitage's data is missing)");
     const PLUGIN = "Pustelnia";
+    // the thread (Pustelnia_Data.js, the engine Watki.js): the state, K50, D23, W2 rozdz. 7's step, the talks; the flags, the things
+    const w = Watki.get("pustelnia");
+    if (!w) throw new Error("Pustelnia.js: brak wątku „pustelnia” (Pustelnia_Data.js / Watki.js)");
     const MAP = D.MAP, INNER = D.INNER, ARCHIVE = 119, FLOOR20 = 146, ELDER = 123;
     const KEY = "pustelnik", COIN_ICON = 314, BELL = { name: "Bell3", volume: 85, pitch: 70 };
-    const HERO = { id: 0, name: "" };
-    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
+    const { HERO, C, linesTo, choiceTo } = Watki.mowa;
     const day = () => T.time.day(), hour = () => T.time.hour();
     const has = () => !!window.$gameSystem;
     const item = id => (window.$dataItems && $dataItems[id]) || null;
@@ -69,33 +73,23 @@
     const pick = list => list[Math.floor(Math.random() * list.length)];
     const inHours = (h, r) => (r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
     // (2026-10-23) the words: js/teksty/pustelnia.txt (D.TX; D.TX.kod - the words of this file)
-    const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
+    const fill = Watki.mowa.fill;
     const K = () => D.TX.kod;
 
     // ------------------------------------------------------------------
-    // The state (the save): what the hermitage itself remembers (the quests' records and flags are TownQuests')
+    // The state (the save): what the hermitage itself remembers - the thread's (Pustelnia_Data.js); the quests' records and flags
+    // are TownQuests' (through the thread: w.flag, w.vcount...)
     // ------------------------------------------------------------------
-    const store = T.state.define("pustelnia", () => ({ met: 0, read: {}, got: {}, asked: {}, rung: {}, honey: { day: 0, n: 0 }, chronN: 0, usualN: 0 }),
-        { version: 1, owner: PLUGIN });
-    const S = () => store();
-    const qs = () => { const q = TQ(); return q && q.state ? q.state() : null; };
-    const flags = () => { const s = qs(); return s ? s.flags : {}; };
-    const flag = k => !!flags()[k];
-    function setFlag(k) {
-        const w = W();
-        if (w && w.setFlag) w.setFlag(k);
-        else { const f = flags(); if (!f[k]) f[k] = day(); }
-        const q = TQ();
-        if (q && q.autoChecks) q.autoChecks();
-        if (q && q.refreshMarkers) q.refreshMarkers();
-    }
-    const vcount = k => { const s = qs(); return s && s.v ? s.v[k] || 0 : 0; };
-    const vgive = (k, n) => { const s = qs(); if (s) s.v[k] = (s.v[k] || 0) + (n || 1); };
-    const vtake = (k, n) => { const s = qs(); if (!s) return; s.v[k] = Math.max(0, (s.v[k] || 0) - (n || 1)); if (!s.v[k]) delete s.v[k]; };
+    const S = () => w.S();
+    const qs = () => w.qstate();
+    const flags = () => w.flags();
+    const flag = k => w.flag(k);
+    function setFlag(k) { w.setFlag(k); w.autoChecks(); }   // (a flag and at once the quests' checks and markers)
+    const { vcount, vgive, vtake } = w;
     const vname = k => (D.VITEMS[k] ? D.VITEMS[k].name : k);
-    const rec = id => { const q = TQ(); return q && q.rec ? q.rec(id) : null; };
-    const isDone = id => { const q = TQ(); return !!(q && q.isDone && q.isDone(id)); };
-    const isActive = id => { const r = rec(id); return !!r && r.s === "active"; };
+    const rec = id => w.rec(id);
+    const isDone = id => w.done(id);
+    const isActive = id => w.active(id);
     const note = (title, text) => T.call("Journal", "addNote", title, text);
     const xp = (n, why) => T.call("Combat", "gainXp", n, why, true) || 0;
     const actTwo = () => { const w = W(); return !!(w && w.actTwo && w.actTwo()); };
@@ -136,50 +130,12 @@
     }
 
     // ------------------------------------------------------------------
-    // Event commands: speech bubbles (\SPK[n]) and choices, the way TownQuests / Przystan write them
+    // Event commands (Watki.mowa: speech bubbles \SPK[n], "\n" a new line - akapity) for the talks built here: Kleofas's menu, the
+    // reading at the lectern; the rest are the data's (Pustelnia_Data rozmowy)
     // ------------------------------------------------------------------
-    const LINE = 46, PAGE = 3;
-    function wrap(text) {
-        const out = [];
-        for (const para of String(text).split("\n")) {
-            let line = "";
-            for (const w of para.split(/\s+/)) {
-                if (!w) continue;
-                if (line && (line + " " + w).length > LINE) { out.push(line); line = w; } else line = line ? line + " " + w : w;
-            }
-            if (line) out.push(line);
-        }
-        return out;
-    }
-    function sayTo(out, spk, text, ind) {
-        const lines = wrap(text);
-        for (let i = 0; i < lines.length; i += PAGE) {
-            out.push(C(101, ["", 0, 0, 2, spk.name || ""], ind));
-            lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 ? "\\SPK[" + spk.id + "]" : "") + l], ind)));
-        }
-        return out;
-    }
-    function linesTo(out, spk, arr, ind) {
-        for (const raw of [].concat(arr || [])) {
-            if (!raw) continue;
-            const s = String(raw);
-            if (s.startsWith("> ")) sayTo(out, HERO, s.slice(2), ind);
-            else sayTo(out, spk, s, ind);
-        }
-        return out;
-    }
-    const act = (out, args, ind) => (out.push(C(355, ["Pustelnia.act(this, " + JSON.stringify(args) + ")"], ind)), out);
-    function choiceTo(out, labels, branches, cancel, ind) {
-        const i0 = ind || 0;
-        out.push(C(102, [labels, cancel === undefined ? labels.length - 1 : cancel, 0, 2, 0], i0));
-        labels.forEach((l, i) => {
-            out.push(C(402, [i, l], i0));
-            for (const c of branches[i] || []) out.push(Object.assign({}, c, { indent: (c.indent || 0) + i0 + 1 }));
-            out.push(C(0, [], i0 + 1));
-        });
-        out.push(C(404, [], i0));
-        return out;
-    }
+    const AK = { akapity: true };
+    const say_ = (out, spk, arr) => linesTo(out, spk, arr, null, 0, AK);
+    const act = (out, args, ind) => Watki.mowa.script(out, "Pustelnia.act(this, " + JSON.stringify(args) + ")", ind);
     function kleofasEv() {
         const L = TL(), ev = L && L.eventOf ? L.eventOf(KEY) : null;
         return ev && $gameMap.event(ev.eventId()) === ev ? ev : null;
@@ -261,12 +217,12 @@
     }
     function readList(n) {
         const spk = spkK(), out = [];
-        linesTo(out, spk, D.TX.readGo);
+        say_(out, spk, D.TX.readGo);
         out.push(C(221, []));                 // (the screen fades: two hours over the cipher)
         act(out, ["read", n]);
         out.push(C(222, []));
-        linesTo(out, spk, CARD(n).read);
-        return linesTo(out, spk, D.TX.readDone);
+        say_(out, spk, CARD(n).read);
+        return say_(out, spk, D.TX.readDone);
     }
     function readChoice() {
         const cards = inBag();
@@ -281,7 +237,7 @@
         const b = readBlock();
         if (b && b.need) { T.popup.need(pendantIcon(), b.need); return; }
         if (b && b.pop) { T.popup(b.pop, { color: "#ffe9a8" }); return; }
-        const out = b ? linesTo([], spkK(), b.say) : readChoice();
+        const out = b ? say_([], spkK(), b.say) : readChoice();
         if (out.length) interp.setupChild(out.concat([C(0, [])]), interp.eventId());
     }
 
@@ -319,22 +275,11 @@
         if (id === "dobiesz") return { lines: A.dobiesz.lines.slice(), note: A.dobiesz.note };
         return { lines: D.TX.night.keep, note: "" };
     }
+    // the Night's talk: the data's (rozmowy.noc) - null when there is no Night now
     function nightTalk(spk) {
         const n = nightOf(day(), hour());
         if (!n || !heartHung()) return null;
-        if (n.phase === "early") return linesTo([], spk, D.TX.night.early);
-        if (S().asked[n.year]) return linesTo([], spk, D.TX.night.used);
-        const out = [], first = !Object.keys(S().asked).length;
-        linesTo(out, spk, first ? D.TX.night.ask : D.TX.night.askAgain);
-        const list = D.QUESTIONS.filter(canAsk);
-        const branches = list.map(qd => {
-            const b = [];
-            if (qd.keep) return linesTo(b, spk, D.TX.night.keep);
-            act(b, ["ask", qd.id]);
-            linesTo(b, spk, answer(qd.id).lines);
-            return linesTo(b, spk, D.TX.night.done);
-        });
-        return choiceTo(out, list.map(qd => qd.label).concat([K().jeszczeNieWiem]), branches.concat([linesTo([], spk, D.TX.night.later)]), list.length);
+        return w.rozmowa("noc", { spk });
     }
     function ask(id) {
         const n = nightOf(day(), hour()), qd = D.QUESTIONS.find(x => x.id === id);
@@ -376,60 +321,52 @@
     // ------------------------------------------------------------------
     function kleofasTalk(ev) {
         const spk = { id: ev.eventId(), name: D.RESIDENT.name }, out = [];
-        if (!S().met) {
-            const Tr = T.api("Torch");
-            if (Tr && Tr.isLit && Tr.isLit()) linesTo(out, spk, D.TX.meetTorch);
-            linesTo(out, spk, D.TX.meet);
-            return act(out, ["met"]);
-        }
+        if (!S().met) return w.rozmowa("spotkanie", { spk });
         const nt = nightTalk(spk);
         if (nt) return nt;
         if (questWants()) { const q = questTalk(); if (q && q.length) return q; }
-        linesTo(out, spk, [pick(D.TX.ask)]);
+        say_(out, spk, [pick(D.TX.ask)]);
         const labels = [], branches = [];
         if (inBag().length) {   // (outside the scriptorium he sends the hero to the lectern)
             labels.push(K().menu.czytaj);
             const b = readBlock();
-            branches.push(b ? (b.say ? linesTo([], spk, b.say) : act([], ["pop", b.need || b.pop])) : readChoice());
+            branches.push(b ? (b.say ? say_([], spk, b.say) : act([], ["pop", b.need || b.pop])) : readChoice());
         }
-        if (vcount("kroniki") > 0 && !found(1)) { labels.push(K().menu.kroniki); branches.push(chronicleCard(spk)); }
+        if (vcount("kroniki") > 0 && !found(1)) { labels.push(K().menu.kroniki); branches.push(w.rozmowa("kroniki", { spk })); }
         labels.push(fill(K().menu.miod, { cena: D.HONEY_PRICE }));
         branches.push(act([], ["honey"]));
         labels.push(K().menu.wisiorek);
-        branches.push(linesTo([], spk, D.TX.pendant));
+        branches.push(say_([], spk, D.TX.pendant));
         labels.push(K().menu.coPisza);
-        branches.push(act([], ["chron"]).concat(linesTo([], spk, [D.TX.chronicles[(S().chronN || 0) % D.TX.chronicles.length]])));
+        branches.push(act([], ["chron"]).concat(say_([], spk, [D.TX.chronicles[(S().chronN || 0) % D.TX.chronicles.length]])));
         labels.push(K().menu.coSlychac);
-        branches.push(linesTo([], spk, [usual() || K().cicho]));
+        branches.push(say_([], spk, [usual() || K().cicho]));
         labels.push(K().menu.bywaj);
         branches.push([]);
         return choiceTo(out, labels, branches, labels.length - 1);
     }
-    function chronicleCard(spk) {
-        const out = [];
-        linesTo(out, spk, K().kronikiKarta);
-        return act(out, ["card", 1, K().kronikiKartaPopup]);
-    }
     // Ambroży hands over the card of the chronicles the hero gave him; Baltazar sells it back - (2026-10-17, W5) only once the card
     // is no longer in his strongbox in the kantor's cellar (Kantor.cardInBox: taken there at night in W5 rozdz. 4), at his prices
-    // (double for an enemy, half in the hero's grip - Kantor.priceMul)
+    // (double for an enemy, half in the hero's grip - Kantor.priceMul). Their talks: the data's (rozmowy.ambrozy, rozmowy.baltazar)
     function ambrozyTalk(ev) {
         const f = flags();
         if (found(1) || !(f.ambrozyChronicles || f.chroniclesForAmbrozy) || !(isActive("D23") || isDone("K50"))) return null;
         if (!inHours(hour(), [6, 21])) return null;
-        const spk = { id: ev.eventId(), name: K().ambrozy }, out = [];
-        linesTo(out, spk, K().ambrozyPyta.concat(D.TX.ambrozyCard));
-        return act(out, ["card", 1, K().ambrozyPopup]);
+        return w.rozmowa("ambrozy", { spk: { id: ev.eventId(), name: K().ambrozy } });
     }
     const cardPrice = () => Math.max(1, Math.round(D.CARD_BUYBACK * (T.call("Kantor", "priceMul") || 1)));
     function baltazarTalk(ev) {
         const f = flags();
         if (found(1) || !f.w5ChroniclesSold || !isActive("D23") || !inHours(hour(), [8, 18])) return null;
         if (T.call("Kantor", "cardInBox")) return null;   // (W5: the card waits in his strongbox - the night in his cellar)
-        const spk = { id: ev.eventId(), name: K().baltazar }, out = [];
-        linesTo(out, spk, D.TX.balt);
-        return choiceTo(out, [fill(K().biore, { cena: cardPrice() }), K().nieTeraz],
-            [act([], ["buyCard"]).concat(linesTo([], spk, D.TX.baltYes)), linesTo([], spk, D.TX.baltNo)], 1);
+        return w.rozmowa("baltazar", { spk: { id: ev.eventId(), name: K().baltazar } });
+    }
+    // buying the card back from Baltazar: not enough gold - the talk stops (his "yes" lines not said)
+    function buyCard(interp) {
+        const price = cardPrice();
+        if ($gameParty.gold() < price) { T.popup.need(COIN_ICON, fill(K().potrzebujesz, { cena: price })); if (interp && interp._list) interp._index = interp._list.length; return; }
+        $gameParty.loseGold(price);
+        giveCard(1, K().baltazarPopup);
     }
     function hook(key, ev) {
         if (!has()) return null;
@@ -448,14 +385,15 @@
     }
     hookTalk();
 
-    // the script calls from the talks: Pustelnia.act(this, [what, ...])
+    // the script calls from the talks built here: Pustelnia.act(this, [what, ...]) (the data's talks: Watki.act; their old names -
+    // met, card, buyCard, ask, serce, zawies - a talk saved before 2026-10-28 - go to the same actions)
     function actCall(interp, args) {
         if (!has() || !Array.isArray(args)) return;
         const [what, a, b] = args;
         const stop = () => { if (interp && interp._list) interp._index = interp._list.length; };
         try {
             if (what === "met") {
-                if (!S().met) { S().met = day(); setFlag("pustelnikMet"); note(D.TX.meetNote[0], D.TX.meetNote[1]); }
+                w.akcja("poznal", [], interp);
             } else if (what === "honey") {
                 const h = S().honey;
                 if (h.day !== day()) { h.day = day(); h.n = 0; }
@@ -471,10 +409,7 @@
             } else if (what === "card") {
                 giveCard(a, b);
             } else if (what === "buyCard") {
-                const price = cardPrice();
-                if ($gameParty.gold() < price) { T.popup.need(COIN_ICON, fill(K().potrzebujesz, { cena: price })); stop(); return; }
-                $gameParty.loseGold(price);
-                giveCard(1, K().baltazarPopup);
+                buyCard(interp);
             } else if (what === "read") {
                 read(a);
             } else if (what === "pop") {
@@ -568,46 +503,45 @@
         }
         if (q && q.refreshMarkers) q.refreshMarkers();
     }
-    function hookQuests() {
-        const q = TQ();
-        if (!q || !q.FX || hookQuests.done) return;
-        hookQuests.done = true;
-        Object.assign(q.FX, {
-            d23Karty: {
-                check: () => readCount() >= 6,
-                vars: () => {
-                    const bag = inBag(), miss = D.CARDS.filter(c => !found(c.n) && !isRead(c.n));
-                    return { n: readCount(), wtorbie: bag.length ? fill(K().doOdczytania, { n: bag.length }) : "",
-                        gdzie: miss.length ? fill(K().szukaj, { gdzie: miss.slice(0, 2).map(c => c.where).join("; ") }) : "" };
-                },
-                ready: (qq, r, st, key) => (key === KEY && inBag().length > 0 && inHours(hour(), D.READ_HOURS) ? true : null),
-                talk: () => null
-            },
-            w2Pytanie: {
-                vars: (qq, r) => {
-                    const L = W2L(), s = stage(r), nn = nextNight();
-                    const etap = s === 0 ? (actTwo() ? L.stage0 : L.stage0Wait) : s === 1 ? L.stage1 : s === 2 ? L.stage2 : L.stage3;
-                    return { etap: String(etap || "").replace("{wigilia}", nn.wig).replace("{rok}", nn.year), wigilia: nn.wig, rok: nn.year };
-                },
-                ready: (qq, r, st, key) => {
-                    const s = stage(r);
-                    if (key === "dzwonnik") return s === 0 && actTwo() && ambrozyOk();
-                    if (key === KEY) return (s === 1 && vcount("serce_dzwonu") > 0) || (s === 2 && nightNow() && nightOf(day(), hour()).phase === "open");
-                    return null;
-                },
-                talk: (qq, r, st, key, spk) => {
-                    const s = stage(r), L = W2L();
-                    if (key === "dzwonnik" && s === 0 && actTwo() && ambrozyOk()) return { ready: true, list: act(linesTo([], spk, L.heart), ["serce"]) };
-                    if (key === "dzwonnik" && s === 1 && vcount("serce_dzwonu") > 0) return { ready: false, list: linesTo([], spk, L.heartAway) };
-                    if (key === KEY && s === 1 && vcount("serce_dzwonu") > 0) return { ready: true, list: act(linesTo([], spk, L.heartKleofas), ["zawies"]) };
-                    if (key === KEY && s === 2) { const nt = nightTalk(spk); if (nt) return { ready: true, list: nt }; }
-                    return null;
-                },
-                tick: (qq, r) => { if (r && r.t && r.t.w2s === undefined) r.t.w2s = 0; }
-            }
-        });
-    }
-    hookQuests();
+    // ------------------------------------------------------------------
+    // The hooks the thread's data names (Pustelnia_Data.js): D23, W2 rozdz. 7, the talks' conditions and actions
+    // ------------------------------------------------------------------
+    w.haki({
+        // D23: the step's words (what is read, what waits in the bag, where to look); the marker over Kleofas
+        d23Zmienne: () => {
+            const bag = inBag(), miss = D.CARDS.filter(c => !found(c.n) && !isRead(c.n));
+            return { n: readCount(), wtorbie: bag.length ? fill(K().doOdczytania, { n: bag.length }) : "",
+                gdzie: miss.length ? fill(K().szukaj, { gdzie: miss.slice(0, 2).map(c => c.where).join("; ") }) : "" };
+        },
+        d23Znacznik: (ctx, qq, r, st, key) => (key === KEY && inBag().length > 0 && inHours(hour(), D.READ_HOURS) ? true : null),
+        // W2 rozdz. 7: the step's words, its stages
+        w2Zmienne: ctx => {
+            const L = W2L(), s = stage(ctx.r), nn = nextNight();
+            const etap = s === 0 ? (actTwo() ? L.stage0 : L.stage0Wait) : s === 1 ? L.stage1 : s === 2 ? L.stage2 : L.stage3;
+            return { etap: String(etap || "").replace("{wigilia}", nn.wig).replace("{rok}", nn.year), wigilia: nn.wig, rok: nn.year };
+        },
+        w2Etapy: ctx => { const r = ctx.r; if (r && r.t && r.t.w2s === undefined) r.t.w2s = 0; },
+        etapW2: (ctx, n) => stage(ctx.r) === n,
+        w2Linie: (ctx, key) => [].concat(W2L()[key] || []),
+        w2Akcja: (ctx, what) => w2Act(what),
+        aktII: () => actTwo(),
+        ambrozyJest: () => ambrozyOk(),
+        nocTrwa: () => nightNow(),
+        nocOtwarta: () => { const n = nightOf(day(), hour()); return !!n && n.phase === "open"; },
+        // the Night of the Question
+        nocWczesna: () => { const n = nightOf(day(), hour()); return !!n && n.phase === "early"; },
+        pytanieZadane: () => { const n = nightOf(day(), hour()); return !!n && !!S().asked[n.year]; },
+        pierwszePytanie: () => !Object.keys(S().asked).length,
+        moznaPytac: (ctx, id) => { const qd = D.QUESTIONS.find(x => x.id === id); return !!qd && canAsk(qd); },
+        odpowiedz: (ctx, id) => answer(id).lines,
+        pytaj: (ctx, id) => ask(id),
+        // the meeting, the card
+        pochodnia: () => { const Tr = T.api("Torch"); return !!(Tr && Tr.isLit && Tr.isLit()); },
+        flagaOdswiez: (ctx, k) => setFlag(k),
+        dajKarte: (ctx, n, skad) => giveCard(n, skad === "ambrozy" ? K().ambrozyPopup : skad === "kroniki" ? K().kronikiKartaPopup : skad),
+        cenaKarty: () => cardPrice(),
+        kupKarte: ctx => buyCard(ctx.interp)
+    });
 
     // TownLife's conditions by name (Pustelnia_Data's plan names them as functions too)
     (() => {
@@ -643,7 +577,7 @@
         updateBell();
         if (++tick % 60 === 0) syncCards();
     }, { owner: PLUGIN, name: "hermitage" });
-    T.on("mapReady", () => { hookQuests(); hookTalk(); syncCards(); }, { owner: PLUGIN });
+    T.on("mapReady", () => { hookTalk(); syncCards(); }, { owner: PLUGIN });
 
     // ------------------------------------------------------------------
     // The API

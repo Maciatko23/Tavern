@@ -1,0 +1,83 @@
+{
+ "kod": {
+  "dialBackBitmap": {
+   "0": "słabo",
+   "1": "za mocno",
+   "2": "SIŁA"
+  },
+  "createGame": {
+   "0": "Żelazna Pięść, najemnik"
+  },
+  "begin": {
+   "0": " · GRUM PODKRĘCA: {level}",
+   "1": "SIŁOWANIE NA RĘKĘ{1}",
+   "2": "Stawka: {stake} G",
+   "3": "Siłowanie na rękę",
+   "4": "Trzymaj wskazówkę SIŁY w zielonym polu: przytrzymaj O, żeby ją podnieść, puść, żeby opadła - albo stukaj O.",
+   "5": "W zielonym polu twoja ręka zyskuje, poza nim zyskuje {rivalName}. Co chwila {rivalName} szarpie - wtedy wskazówka leci w dół, a pole skacze.",
+   "6": "Trzy rundy: kto pierwszy wygra dwie, bierze stawkę. Siła poszerza zielone pole, Kondycja łagodzi szarpnięcia.",
+   "7": "Wskazówka w zielonym polu: przytrzymaj albo stukaj O.",
+   "8": "Dwie wygrane rundy biorą stawkę.",
+   "9": "siła (trzymaj / stukaj)",
+   "10": "O - łokieć na stół"
+  },
+  "helpLines": {
+   "0": "Trzymaj wskazówkę SIŁY w zielonym polu: przytrzymaj O, żeby ją podnieść, puść, żeby opadła - albo stukaj O.",
+   "1": "W polu twoja ręka zyskuje, poza nim - {rivalName}. Kto pierwszy wygra dwie rundy, bierze stawkę."
+  },
+  "pull": {
+   "0": "Jeszcze... trochę...",
+   "1": "Trzymaj się, ręko..."
+  },
+  "finish": {
+   "0": "SIŁOWANIE NA RĘKĘ",
+   "1": "{1} · KONIEC",
+   "2": "Poddałeś się",
+   "3": "Rundy: {youWon} : {heWon}{3}",
+   "4": "Czas: {minutes} minut gry   ·   wytrzymałość −{stamina}",
+   "5": "Siła poszerza zielone pole, Kondycja łagodzi szarpnięcia.",
+   "6": "Grum następnym razem przyłoży się mocniej.",
+   "7": "Grum się nie zmienia - ty możesz: Siła poszerza zielone pole.",
+   "8": "O - wracam do sali"
+  },
+  "drawDial": {
+   "0": "przewaga: ty",
+   "1": "przewaga: {rivalName}",
+   "2": "Ciągnij!"
+  },
+  "drawHud": {
+   "0": "trzymaj lub stukaj: wskazówka SIŁY w zielonym polu",
+   "1": "SIŁOWANIE NA RĘKĘ",
+   "2": "z Grumem",
+   "3": "  ·  stawka {stake} G",
+   "4": "RUNDA {1} Z 3"
+  },
+  "armTalk": {
+   "0": "Nie ma z kim się siłować - Grum gdzieś wyszedł.",
+   "1": "Ledwo stoisz na nogach. Najpierw odpocznij, bo mi się jeszcze rozsypiesz na stole.",
+   "2": "Siłujesz się? Ha! Ostatni, co próbował, do dziś je lewą ręką. Ile stawiasz?",
+   "3": "Ty znowu? Dobra, ale dziś bez taryfy ulgowej. Ile stawiasz?",
+   "4": "Rewanż? Lubię upartych. Ile stawiasz?",
+   "5": "Stawka {n} G",
+   "6": "Nie teraz"
+  },
+  "glowna": {
+   "0": "Bez monet nie ma zabawy, chudzielcu."
+  },
+  "reason": {
+   "0": "siłowanie z Grumem"
+  },
+  "note": {
+   "0": "Siłowanie z Grumem",
+   "1": "Grum Żelazna Pięść siłuje się na rękę o stawkę ({1} G) przy stole w sali. Trzy rundy: wskazówka siły ma zostać w zielonym polu (przytrzymaj albo stukaj O), a Grum co chwila szarpie. Siła poszerza zielone pole. Po każdej jego przegranej Grum bierze się mocniej do roboty."
+  },
+  "after": {
+   "0": "Masz. Zasłużyłeś.",
+   "1": "Bierz, zanim się rozmyślę.",
+   "2": "Jutro rewanż!",
+   "3": "Dzięki za datek!",
+   "4": "Następnym razem może ci się uda. Może."
+  }
+ },
+ "_opis": "Napisy kodu TavernLife_ArmWrestle.js sprzed przeniesienia do js/teksty/silowanie.txt (kod.*)"
+}

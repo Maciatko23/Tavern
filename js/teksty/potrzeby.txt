@@ -1,0 +1,47 @@
+# Teksty głodu i pragnienia (Needs.js): poziomy, ostrzeżenia, bukłak, dymki bohatera.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz potrzeby
+
+# ======================================================================== FOOD (poziomy.glod)
+[poziomy.glod.name]
+""
+Głodny
+Bardzo głodny
+Głodujesz
+
+# ======================================================================== WATER (poziomy.pragnienie)
+[poziomy.pragnienie.name]
+""
+Spragniony
+Odwodniony
+Wysuszony
+
+# ======================================================================== z kodu Needs.js (kod.<funkcja>.<n>, w kolejności kodu)
+# warn
+kod.warn.0 = Jesteś głodny
+kod.warn.1 = Bardzo głodny: wszystko kosztuje więcej sił
+kod.warn.2 = Głodujesz! Zjedz coś
+kod.warn.3 = Chce ci się pić
+kod.warn.4 = Odwodnienie! Napij się wody
+kod.warn.5 = Umierasz z pragnienia! Napij się
+# eat
+kod.eat.0 = sytość +{1}
+kod.eat.1 = nawodnienie +{1}
+# drinkFromSkin
+kod.drinkFromSkin.0 = Potrzebujesz bukłaka
+kod.drinkFromSkin.1 = Bukłak jest pusty
+kod.drinkFromSkin.2 = Nie chce ci się pić
+kod.drinkFromSkin.3 = Napiłeś się: nawodnienie +{got} (bukłak {2}/{max})
+# playBuzzerSound
+kod.playBuzzerSound.0 = Bukłak jest pusty
+kod.playBuzzerSound.1 = Nie chce ci się pić
+# setItem
+kod.setItem.0 = na osiem łyków (powiększony)
+kod.setItem.1 = {text}\nWoda: {2} z {max} łyków.
+# nag
+kod.nag.0 = Kręci mi się w głowie... muszę coś zjeść i się napić!
+kod.nag.1 = Kręci mi się w głowie... muszę się napić!
+kod.nag.2 = Kręci mi się w głowie... muszę coś zjeść!
+kod.nag.3 = Jestem głodny i spragniony...
+kod.nag.4 = Muszę się czegoś napić...
+kod.nag.5 = Muszę coś zjeść...

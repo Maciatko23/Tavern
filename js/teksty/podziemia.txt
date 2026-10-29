@@ -1239,3 +1239,16 @@ kod.heartWorld.0 = Serce: świat - {name}   ←→
 kod.heartLord.0 = Serce: Lord przy Sercu - {name}   ←→
 # verify
 kod.verify.0 = no data
+
+# ======================================================================== F9 (menu deweloperskie, zakładka „Zdarzenia”): wiersze wątku „podziemia” (Underground_Data.js, 2026-10-29)
+f9.pietro = Podziemia: piętro {f}{nazwa}   ←→ zmień (Shift: o 10), OK idź
+f9.ruiny = " (Ruiny Zamku)"
+f9.pietroNazwa = " ({nazwa})"
+f9.krata = Podziemia: zejście z piwnicy {stan}
+f9.krataOtwarta = otwarte (zamknij)
+f9.krataZamknieta = zamknięte (otwórz)
+f9.zamki = Podziemia: zamki Serca na próbę {stan}
+f9.zamkiWlaczone = włączone (wyłącz)
+f9.zamkiWylaczone = wyłączone (włącz)
+f9.winda = Podziemia: wszystkie przystanki windy{juz}
+f9.windaJuz = " (już działają)"

@@ -30,6 +30,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("tablica");   // (the words of this file: js/teksty/tablica.txt, art.*)
     const T = window.Tawerna;
     if (!T || !T.ui || !T.ui.drawPaper) throw new Error("QuestBoard_Art.js: brak TawernaCore.js / TawernaUI.js - muszą być wyżej na liście wtyczek (the Tawerna core or UI kit is missing)");
     const ui = T.ui;
@@ -230,16 +231,16 @@
             inkLine(ctx, 22, 48, w - 22, 48, "#8a1c10", 1.2, R);
             drawBeast(ctx, n.req[0].kind, 18, 56, w - 36, 74, true);
             inkText(ctx, n.title, cx, 158, F.handB(32), INK.dark, "center");
-            inkText(ctx, "martwy, najlepiej", cx, 177, F.hand(18), INK.faded, "center", 0.85);
+            inkText(ctx, TK.art.drawCard[0], cx, 177, F.hand(18), INK.faded, "center", 0.85);
             flourish(ctx, cx, 190, w - 60, INK.soft, R);
-            inkText(ctx, "Nagroda: " + n.gold + " G", cx, 216, F.handB(26), INK.gold, "center");
+            inkText(ctx, Watki.wstaw(TK.art.drawCard[1], { gold: n.gold }), cx, 216, F.handB(26), INK.gold, "center");
             inkText(ctx, placeName(n.req[0].map) + " · " + D().BOUNTIES[n.req[0].key].hint, cx, 238, F.hand(17), INK.soft, "center", 0.85);
         } else {
             const top = topOf(n);
             ctx.font = F.caps(12);
             ctx.fillStyle = ink;
             ctx.globalAlpha = 0.85;
-            const label = n.giver === "feliks" ? "DWÓR ZALESKICH" : D().TYPE_LABEL[n.type];
+            const label = n.giver === "feliks" ? TK.art.drawCard[2] : D().TYPE_LABEL[n.type];
             const lw = spaced(ctx, label, cx, 30 + top, 2.2, "center");
             ctx.globalAlpha = 1;
             inkLine(ctx, 16, 25 + top, cx - lw / 2 - 7, 25 + top, ink, 1, R);
@@ -310,7 +311,7 @@
     }
     // a rubber stamp: PRZYJĘTE (blue), WYKONANE (green), PO TERMINIE (red); eroded by the ink mask
     function stampBitmap(kind, A) {
-        const S = { active: ["PRZYJĘTE", "#27458f"], done: ["WYKONANE", "#2e6b2c"], failed: ["PO TERMINIE", "#9b2418"] }[kind];
+        const S = { active: [TK.art.stampBitmap[0], "#27458f"], done: ["WYKONANE", "#2e6b2c"], failed: [TK.art.stampBitmap[1], "#9b2418"] }[kind];
         if (!S) return null;
         const probe = document.createElement("canvas").getContext("2d");
         probe.font = F.caps(25);
@@ -530,18 +531,18 @@
         let y = 40;
         if (!n) {
             ctx.font = F.caps(14); ctx.fillStyle = INK.soft; ctx.globalAlpha = 0.85;
-            spaced(ctx, "ZASADY TABLICY", cx, y, 3, "center");
+            spaced(ctx, TK.art.drawDetail[0], cx, y, 3, "center");
             ctx.globalAlpha = 1;
             y += 38;
-            inkText(ctx, "Jak to działa", cx, y, F.handB(38), INK.dark, "center");
+            inkText(ctx, TK.art.drawDetail[1], cx, y, F.handB(38), INK.dark, "center");
             y += 16;
             flourish(ctx, cx, y, 200, INK.soft, R);
             y += 30;
             const rules = [
-                "Zerwij kartkę - zlecenie jest twoje. Najwyżej " + C().MAX_ACTIVE + " naraz.",
-                "Każde ma termin w dniach od przyjęcia. Nie zdążysz - wieś się dowie, a sława spadnie.",
-                "Gotowe oddajesz tutaj: towar z plecaka, zapłata od ręki.",
-                "Co " + C().REFRESH_DAYS + " dni wieszam nowe kartki. Im większa sława, tym lepiej płacą."
+                Watki.wstaw(TK.art.drawDetail[2], { MAX_ACTIVE: C().MAX_ACTIVE }),
+                TK.art.drawDetail[3],
+                TK.art.drawDetail[4],
+                Watki.wstaw(TK.art.drawDetail[5], { REFRESH_DAYS: C().REFRESH_DAYS })
             ];
             ctx.font = F.hand(21);
             rules.forEach((r, i) => {
@@ -550,17 +551,16 @@
                 lines.forEach(l => { inkText(ctx, l, x0 + 28, y, F.hand(21), INK.dark, "left"); y += 22; });
                 y += 4;
             });
-            inkText(ctx, "— Borgar", x1, y, F.hand(20), INK.faded, "right");
+            inkText(ctx, TK.art.drawDetail[6], x1, y, F.hand(20), INK.faded, "right");
             y += 12;
             inkLine(ctx, x0, y, x1, y, INK.faded, 0.9, R);
             y += 26;
             const TIERS = C().TIERS, d = data(), t = repTier(d.rep), nextT = TIERS[t + 1], st = d.stats;
-            inkText(ctx, "Twoja sława: " + TIERS[t].name + " (" + d.rep + "/100)", x0, y, F.handB(21), INK.dark, "left");
+            inkText(ctx, Watki.wstaw(TK.art.drawDetail[7], { name: TIERS[t].name, rep: d.rep }), x0, y, F.handB(21), INK.dark, "left");
             y += 22;
             ctx.font = F.hand(18);
-            const more = (nextT ? "Następny próg: " + nextT.name + " - " + nextT.rep + " sławy, od dnia " + nextT.day + "; zlecenia do " + nextT.gold[1] + " G. "
-                : "Wyżej już się nie da - cała okolica o tobie mówi. ") +
-                "Wykonane: " + st.done + ", po terminie: " + st.failed + ", porzucone: " + st.abandoned + ", zarobione: " + st.gold + " G.";
+            const more = Watki.wstaw(TK.art.drawDetail[10], { "1": nextT ? Watki.wstaw(TK.art.drawDetail[8], { name: nextT.name, rep: nextT.rep, day: nextT.day, "4": nextT.gold[1] })
+                : TK.art.drawDetail[9], done: st.done, failed: st.failed, abandoned: st.abandoned, gold: st.gold });
             for (const l of wrap(ctx, more, cw).slice(0, 3)) { inkText(ctx, l, x0, y, F.hand(18), INK.soft, "left"); y += 20; }
             ctx.restore();
             bmp._baseTexture.update();
@@ -571,9 +571,9 @@
         ctx.font = F.caps(14);
         ctx.fillStyle = n.urgent ? "#8e2417" : TYPE_INK[n.type];
         ctx.globalAlpha = 0.88;
-        spaced(ctx, (n.urgent ? "PILNE · " : "") + (n.giver === "feliks" ? "DWÓR ZALESKICH" : D().TYPE_LABEL[n.type]), x0, y, 2.4, "left");
+        spaced(ctx, (n.urgent ? TK.art.drawDetail[11] : "") + (n.giver === "feliks" ? TK.art.drawDetail[12] : D().TYPE_LABEL[n.type]), x0, y, 2.4, "left");
         ctx.globalAlpha = 1;
-        const st = n.state === "open" ? "na tablicy" : n.state === "active" ? (isReady(n) ? "gotowe do oddania" : "przyjęte · " + daysText(n)) : n.state === "done" ? "wykonane w dniu " + n.doneDay : "po terminie";
+        const st = n.state === "open" ? TK.art.drawDetail[13] : n.state === "active" ? (isReady(n) ? TK.art.drawDetail[14] : Watki.wstaw(TK.art.drawDetail[15], { "1": daysText(n) })) : n.state === "done" ? Watki.wstaw(TK.art.drawDetail[16], { doneDay: n.doneDay }) : TK.art.drawDetail[17];
         inkText(ctx, st, x1, y, F.handB(19), n.state === "active" && isReady(n) ? INK.green : n.state === "failed" ? INK.red : INK.soft, "right");
         y += 44;
         // the title
@@ -619,7 +619,7 @@
         }
         if (n.req.some(q => q.k === "bounty")) {
             const q = n.req.find(r => r.k === "bounty"), B = D().BOUNTIES[q.key];
-            inkText(ctx, "Większy i silniejszy od innych, grasuje " + B.hint + ".", x0, y + 12, F.hand(18), INK.soft, "left", 0.9);
+            inkText(ctx, Watki.wstaw(TK.art.drawDetail[18], { hint: B.hint }), x0, y + 12, F.hand(18), INK.soft, "left", 0.9);
             y += 20;
         }
         y += 18;
@@ -639,13 +639,13 @@
         ctx.globalCompositeOperation = "source-over";
         star(ctx, x + 9, y + 12, 9, "#9a7cd0", "#4b2d7a", 1.2);
         ctx.globalCompositeOperation = "multiply";
-        inkText(ctx, n.xp + " dośw.", x + 22, y + 20, F.handB(22), INK.purple, "left");
+        inkText(ctx, Watki.wstaw(TK.art.drawDetail[19], { xp: n.xp }), x + 22, y + 20, F.handB(22), INK.purple, "left");
         ctx.font = F.handB(22);
-        x += 22 + ctx.measureText(n.xp + " dośw.").width + 18;
+        x += 22 + ctx.measureText(Watki.wstaw(TK.art.drawDetail[19], { xp: n.xp })).width + 18;
         ctx.globalCompositeOperation = "source-over";
         star(ctx, x + 9, y + 12, 9, "#ffd23f", "#7a5a10", 1.2);
         ctx.globalCompositeOperation = "multiply";
-        inkText(ctx, "sława +" + n.rep, x + 22, y + 20, F.handB(22), INK.gold, "left");
+        inkText(ctx, Watki.wstaw(TK.art.drawDetail[20], { rep: n.rep }), x + 22, y + 20, F.handB(22), INK.gold, "left");
         y += 30;
         const extra = [];
         if (n.gift) extra.push(["gift", n.gift]);
@@ -662,7 +662,7 @@
                     ctx.font = F.hand(20);
                     ex += 28 + ctx.measureText(t).width + 16;
                 } else {
-                    inkText(ctx, "i " + (dieName(v) || "kość do gry"), ex, y + 16, F.hand(20), INK.dark, "left");
+                    inkText(ctx, "i " + (dieName(v) || TK.art.drawDetail[21]), ex, y + 16, F.hand(20), INK.dark, "left");
                 }
             }
             y += 24;
@@ -671,11 +671,11 @@
         // the term
         hourglass(ctx, x0, y, INK.soft);
         const termY = y;
-        const term = n.state === "open" ? n.days + " " + dniWord(n.days) + " od przyjęcia" : n.state === "active" ? "do dnia " + n.due + " · " + daysText(n) : n.state === "done" ? "oddane w dniu " + n.doneDay : "termin minął w dniu " + n.due;
+        const term = n.state === "open" ? Watki.wstaw(TK.art.drawDetail[22], { days: n.days, "2": dniWord(n.days) }) : n.state === "active" ? Watki.wstaw(TK.art.drawDetail[23], { due: n.due, "2": daysText(n) }) : n.state === "done" ? Watki.wstaw(TK.art.drawDetail[24], { doneDay: n.doneDay }) : Watki.wstaw(TK.art.drawDetail[25], { due: n.due });
         inkText(ctx, term, x0 + 18, y + 13, F.handB(20), n.state === "active" && daysLeft(n) <= 1 ? INK.red : INK.soft, "left");
         y += 18;
         if (felix) {
-            inkText(ctx, "Feliks może zaliczyć zapłatę od razu na poczet długu dziadka.", x0, y + 18, F.hand(18), INK.faded, "left", 0.9);
+            inkText(ctx, TK.art.drawDetail[26], x0, y + 18, F.hand(18), INK.faded, "left", 0.9);
             y += 24;
         }
         // the signature, bottom right, above the buttons (a wax seal beside it for those who seal their notices)

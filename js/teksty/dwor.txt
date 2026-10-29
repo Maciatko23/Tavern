@@ -3,9 +3,6 @@
 # Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz dwor
 
 # ======================================================================== TX
-drzwiWejdz = Wejść do dworu?
-drzwiTak = Wejdź.
-drzwiNie = Nie teraz.
 kamien = Kamień z dawnej twierdzy z wyrytym krukiem. Co dziesiąty kamień w tej ścianie ma takiego kruka.
 brak = Tu powinien być kruk. Kamień jaśniejszy od innych, zaprawa wokół biała i świeża. Ktoś go niedawno wymienił.
 brakPo = Tu był kruk. Feliks wyjął go i sprzedał - jak dwa następne obok drzwi gabinetu.
@@ -30,7 +27,6 @@ klapaNie = Jeszcze nie.
 wlazZejdz = Zejść przez właz?
 wlazTak = Zejdź do kanału.
 wlazNie = Nie teraz.
-wlazZamkniety = Zasuwa włazu zamknięta od środka.
 wlazFeliks = Przy włazie stoi Feliks z Kubą. Nie teraz.
 wlazDzien = Za dnia ogrodnik i straż widzą każdy krok. Nocą.
 wlazRygiel = Zasuwa zaryglowana od dołu. Feliks pilnuje się teraz bardziej - spróbuj za dwie noce.
@@ -334,15 +330,6 @@ epilog.truth = W holu dworu brakuje trzech kruków. Lord nie kazał ich zamurowa
 epilog.lie = Dwór Zaleskich zamyka bramę przed wnukiem Stacha. Myto przy bramie wschodniej wciąż kosztuje go pięć groszy.
 epilog.fled = Gdzieś na lądzie Feliks pisze listy do sztabu, którego już nikt nie czyta.
 epilog.silent = Lord do dziś nie wie, kto mu wyjmował kruki ze ścian. Liczy gości.
-f9 = W7: rozdział {n} - {name}   ←→ zmień, OK idź
-f9desc = Ustawia „Dwór z kamieni twierdzy” na początku rozdziału {n} (spłaty, flagi, pora) i przenosi tam, gdzie się dzieje.
-f9names.1 = dług
-f9names.2 = zaproszenie
-f9names.3 = dwa życia Feliksa
-f9names.4 = gabinet nocą
-f9names.5 = prawda i ostatnia spłata
-f9names.6 = do kogo najpierw
-f9names.7 = Lord przy Sercu
 
 # ======================================================================== W7 (zadania.W7)
 zadania.W7.title = Dwór z kamieni twierdzy
@@ -475,3 +462,22 @@ kod.kroki.najpierwAkt2 = w Akcie II (po spłacie długu albo stracie działki).
 kod.kroki.najpierwZejdz = kiedy zejdziesz pod tawernę (krata w piwnicy), Lord zapyta, co tam jest.
 kod.kroki.najpierwPyta = Lord pyta przed dworem (8–20), co jest pod Kruczymi Skałami.
 kod.kroki.serceTydzien = " Sto groszy na tydzień - u Lorda przed dworem."
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+drzwiWejdz = Wejść do dworu?
+drzwiTak = Wejdź.
+drzwiNie = Nie teraz.
+wlazZamkniety = Zasuwa włazu zamknięta od środka.
+f9 = W7: rozdział {n} - {name}   ←→ zmień, OK idź
+f9desc = Ustawia „Dwór z kamieni twierdzy” na początku rozdziału {n} (spłaty, flagi, pora) i przenosi tam, gdzie się dzieje.
+f9names.1 = dług
+f9names.2 = zaproszenie
+f9names.3 = dwa życia Feliksa
+f9names.4 = gabinet nocą
+f9names.5 = prawda i ostatnia spłata
+f9names.6 = do kogo najpierw
+f9names.7 = Lord przy Sercu
+
+# ======================================================================== F9 (zakładka „Wyspa i fabuła”): skok do rozdziału W7 (2026-10-29: wiersz z silnika wątków; etykieta f9, opis f9desc, nazwy f9names.N wyżej)
+f9Naglowek = Wątek W7 (dwór Lorda):
+f9Brak = Gra bez fabuły albo brak zadania W7

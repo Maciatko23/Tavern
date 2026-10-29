@@ -32,6 +32,8 @@
  * @plugindesc [pakiet B] Urwisko Kruków (mapa 157) i oswojony kruk: kruczarnia, K51, D24, grzęda, listy, zwiad, błyskotki, pilnowanie pola. v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
+ * @base Kruk_Data
  * @orderAfter Wyspa
  *
  * @help
@@ -65,9 +67,12 @@
     if (!T) throw new Error("Kruk.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     if (!D) throw new Error("Kruk.js: brak Kruk_Data.js - musi być wyżej na liście wtyczek (the raven's data is missing)");
     const PLUGIN = "Kruk";
+    // the thread (Kruk_Data.js, the engine Watki.js): the state "kruk", K51 and D24, the talk of a letter given back, the flags
+    const w = Watki.get("kruk");
+    if (!w) throw new Error("Kruk.js: brak wątku „kruk” (Kruk_Data.js / Watki.js)");
     const MAP = D.MAP, HARBOUR = D.HARBOUR, HERMITAGE = D.HERMITAGE;
     const SH = D.SHEET, R = D.RAVEN, TX = D.TX;
-    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
+    const { C, fill } = Watki.mowa;
     const day = () => T.time.day(), hour = () => T.time.hour();
     const clock = () => day() * 24 + hour();
     const has = () => !!window.$gameSystem && !!window.$gameMap && !!window.$gamePlayer;
@@ -80,48 +85,30 @@
     const F = () => window.Farming || null;
     const rand = (a, b) => a + Math.random() * (b - a);
     const pick = list => list[Math.floor(Math.random() * list.length)];
-    const fill = (s, vars) => String(s).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
     const inHours = (h, r) => (r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
     const TILE = () => $gameMap.tileWidth();
 
     // ------------------------------------------------------------------
-    // The state (the save)
+    // The state (the save): the thread's (Kruk_Data.js)
     // ------------------------------------------------------------------
-    const store = T.state.define("kruk", () => ({
-        stage: "wild",          // wild | tame | gone (hungry: back at the Urwisko)
-        name: "", feeds: [], scaredUntil: 0, tamedDay: 0,
-        mode: "follow", food: 80, water: 80, clock: null, zeroSince: 0,
-        away: null,             // { kind: "letter" | "scout", until, to, map, quest }
-        letterDay: 0, scoutDay: 0, sent: {}, opinion: {},
-        scout: null,            // { day, map } - the marks shown there till the day's end
-        trinket: null, trinketDay: 0,
-        held: {}, gone: {},     // the foreign letters: held[id] = { read }, gone[id] = "back" | "sold"
-        k51: { leg: 0 }, stones: {}, camp: { cleared: {}, seen: 0, n: 0 }, visited: {}, baltAsked: 0, nightSaid: 0
-    }), { version: 1, owner: PLUGIN });
-    const S = () => store();
+    const S = () => w.S();
     const ravenName = () => (has() && S().name) || R.defaultName;
     const V = extra => Object.assign({ imie: ravenName(), need: R.feedNeed }, extra || {});
     const pop = (text, opts) => T.popup(fill(text, V(opts && opts.vars)), Object.assign({ color: "#f3e0a0", icon: D.RAVEN_ICON }, opts || {}));
     const popNeed = (icon, text) => T.popup.need(icon, fill(text, V()));
 
-    // the quests' state (TownQuests): flags, records
-    const qs = () => { const q = TQ(); return q && q.state ? q.state() : null; };
-    const flag = k => { const s = qs(); return !!(s && s.flags && s.flags[k]); };
+    // the quests' state (TownQuests): flags, records - the thread's helpers
+    const { flag, rec, autoChecks } = w;
+    // a flag, then the quests' checks and the markers
     function setFlag(k) {
-        const w = W();
-        if (w && w.setFlag) w.setFlag(k);
-        else { const s = qs(); if (s && s.flags && !s.flags[k]) s.flags[k] = day(); }
-        const q = TQ();
-        if (q && q.autoChecks) q.autoChecks();
-        if (q && q.refreshMarkers) q.refreshMarkers();
+        w.setFlag(k);
+        autoChecks();
     }
-    const rec = id => { const q = TQ(); return q && q.rec ? q.rec(id) : null; };
-    const isDone = id => { const q = TQ(); return !!(q && q.isDone && q.isDone(id)); };
-    const isActive = id => { const r = rec(id); return !!r && r.s === "active"; };
-    const stepOf = id => { const r = rec(id); return r && r.s === "active" ? r.step : -1; };
+    const isDone = id => w.done(id);
+    const isActive = id => w.active(id);
+    const stepNow = id => { const r = rec(id); return r && r.s === "active" ? r.step : -1; };   // (any quest's: a letter may carry its step)
     const note = (title, text) => T.call("Journal", "addNote", title, text);
     const xp = (n, why) => T.call("Combat", "gainXp", n, why, true) || 0;
-    const autoChecks = () => { const q = TQ(); if (q && q.autoChecks) q.autoChecks(); if (q && q.refreshMarkers) q.refreshMarkers(); };
     const outdoors = () => { const Sv = T.api("Survival"); return !!(Sv && Sv.isOutdoors ? Sv.isOutdoors() : T.mapFlag && T.mapFlag("Clouds", false)); };
     const tame = () => has() && S().stage === "tame";
     let built = false;   // data/Map157.json is the real map (not package 0's stub) - set by checkBuilt() below
@@ -897,10 +884,10 @@
         if (a.kind === "letter") {
             let text = null;
             if (a.quest) {
-                const before = stepOf(a.quest.id);
+                const before = stepNow(a.quest.id);
                 const q = TQ();
                 if (q && q.act) q.act(null, [a.quest.id, "hand", a.quest.step, -1]);
-                text = stepOf(a.quest.id) !== before ? fill(TX.letterQuest, V({ co: a.quest.title })) : fill(TX.letterQuestFail, V());
+                text = stepNow(a.quest.id) !== before ? fill(TX.letterQuest, V({ co: a.quest.title })) : fill(TX.letterQuestFail, V());
             } else {
                 const L = D.LETTERS.find(x => x.key === a.to);
                 text = L ? pick(L.replies) : fill(TX.letterBack, V());
@@ -986,47 +973,22 @@
         if (q && q.markers && (q.markers()[key] === "ready")) return null;   // (a quest's hand-in first)
         const spk = { id: ev.eventId(), name: (TL() && TL().RESIDENTS.find(r => r.key === key) || {}).name || key };
         const mine = heldFor(key);
-        if (mine.length) {
-            const L = mine[0], out = [], h = S().held[L.id];
-            sayTo(out, { id: 0 }, TK.kod.talkHook[0]);
-            for (const line of h.read ? L.backRead : L.back) sayTo(out, spk, line);
-            out.push(C(355, ["Kruk.act(this, [\"back\", " + JSON.stringify(L.id) + "])"]));
-            return out;
+        if (mine.length) {   // (the talk: Kruk_Data rozmowy.oddaj)
+            const L = mine[0], h = S().held[L.id];
+            return w.rozmowa("oddaj", { spk, nr: D.FOREIGN.indexOf(L), list: L.id, przeczytany: !!h.read });
         }
+        // Baltazar's offer for the letters held (its options: the letters - code on the engine's builder, Watki.mowa)
         if (key === "kupiec" && S().baltAsked !== day()) {
             const sell = D.FOREIGN.filter(L => S().held[L.id] && L.sell > 0);
             if (!sell.length) return null;
             S().baltAsked = day();
-            const out = [];
-            sayTo(out, { id: 0 }, TX.letterSellAsk[0].replace(/^> /, ""));
-            sayTo(out, spk, TX.letterSellAsk[1]);
+            const out = [], M = Watki.mowa;
+            M.linesTo(out, spk, [TX.letterSellAsk[0], TX.letterSellAsk[1]]);
             const labels = sell.map(L => fill(TX.letterSellOpt, { co: L.name, g: L.sell })).concat([TK.kod.talkHook[1]]);
-            const branches = sell.map(L => [C(355, ["Kruk.act(this, [\"sell\", " + JSON.stringify(L.id) + "])"])].concat(sayTo([], spk, TX.letterSold[0]))).concat([[]]);
-            out.push(C(102, [labels, labels.length - 1, 0, 2, 0]));
-            labels.forEach((l, i) => { out.push(C(402, [i, l])); for (const c of branches[i]) out.push(Object.assign({}, c, { indent: (c.indent || 0) + 1 })); out.push(C(0, [], 1)); });
-            out.push(C(404, []));
-            return out;
+            const branches = sell.map(L => M.script([], "Kruk.act(this, [\"sell\", " + JSON.stringify(L.id) + "])").concat(M.sayTo([], spk, TX.letterSold[0]))).concat([[]]);
+            return M.choiceTo(out, labels, branches);
         }
         return null;
-    }
-    const LINE = 46, PAGE = 3;
-    function wrap(text) {
-        const out = [];
-        let line = "";
-        for (const w of String(text).split(/\s+/)) {
-            if (!w) continue;
-            if (line && (line + " " + w).length > LINE) { out.push(line); line = w; } else line = line ? line + " " + w : w;
-        }
-        if (line) out.push(line);
-        return out;
-    }
-    function sayTo(out, spk, text) {
-        const lines = wrap(text);
-        for (let i = 0; i < lines.length; i += PAGE) {
-            out.push(C(101, ["", 0, 0, 2, spk.name || ""]));
-            lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 ? "\\SPK[" + spk.id + "]" : "") + l])));
-        }
-        return out;
     }
     // (2026-10-23, docs/ROZMOWY.md) the core's talk service: a letter the raven brought goes back to its owner, Baltazar buys the others -
     // "handBack": after the owners' takeovers (Garnizon...), before Pustelnia's and Przystan's, as the old hooks
@@ -1515,24 +1477,28 @@
         T.popup(which === "zbocze" ? TX.edgeSlope : TX.edgeEast, { color: "info" });
     }
 
-    // the script calls from the talks: Kruk.act(this, [what, ...])
+    // a foreign letter back with its owner (the data's talk: Watki.act(this, ["kruk", "oddaj", id])): Opinion +1 and his trust if unread
+    function giveBack(a) {
+        const s = S(), L = D.FOREIGN.find(x => x.id === a), h = s.held[a];
+        if (!L || !h) return;
+        delete s.held[a];
+        s.gone[a] = "back";
+        if (!h.read) {
+            const q = TQ();
+            if (q && q.addOpinion) q.addOpinion(1, TK.kod.actCall[0]);
+            setFlag("krukUfa_" + L.owner);
+        }
+        if (L.backGold) { $gameParty.gainGold(L.backGold); T.popup("+" + L.backGold + " G", { icon: 314, kind: "gold" }); }
+    }
+    // the script calls from the talks: Kruk.act(this, [what, ...]) ("back": the old call of a talk saved before 2026-10-28 - the data's
+    // action now)
     function actCall(interp, args) {
         if (!has() || !Array.isArray(args)) return;
         const [what, a] = args, s = S();
         try {
             if (what === "name") nameScene();
-            else if (what === "back") {
-                const L = D.FOREIGN.find(x => x.id === a), h = s.held[a];
-                if (!L || !h) return;
-                delete s.held[a];
-                s.gone[a] = "back";
-                if (!h.read) {
-                    const q = TQ();
-                    if (q && q.addOpinion) q.addOpinion(1, TK.kod.actCall[0]);
-                    setFlag("krukUfa_" + L.owner);
-                }
-                if (L.backGold) { $gameParty.gainGold(L.backGold); T.popup("+" + L.backGold + " G", { icon: 314, kind: "gold" }); }
-            } else if (what === "sell") {
+            else if (what === "back") w.akcja("oddaj", [a], interp);
+            else if (what === "sell") {
                 const L = D.FOREIGN.find(x => x.id === a);
                 if (!L || !s.held[a]) return;
                 delete s.held[a];
@@ -1545,29 +1511,17 @@
     }
 
     // ------------------------------------------------------------------
-    // TownQuests' handlers: K51, D24
+    // K51, D24 - the data's (Kruk_Data.js); what their conditions, words and actions ask of the game
     // ------------------------------------------------------------------
-    function hookQuests() {
-        const q = TQ();
-        if (!q || !q.FX || hookQuests.done) return;
-        hookQuests.done = true;
-        Object.assign(q.FX, {
-            k51Ready: { cond: () => !!(W() && W().isReady && W().isReady(MAP) && W().isReady(HERMITAGE)) && S().stage === "wild" },
-            k51Mast: { check: () => S().k51.leg >= 1 || S().stage !== "wild" },
-            k51Follow: {
-                check: () => S().k51.leg >= 5 || S().stage !== "wild",
-                vars: () => {
-                    const leg = S().k51.leg;
-                    return { gdzie: leg <= 1 ? TK.kod.vars[0] : leg === 2 ? TK.kod.vars[1] : TK.kod.vars[2] };
-                }
-            },
-            d24Start: () => isDone("K51") || S().feeds.length > 0 || S().stage === "tame",
-            d24Feed: { check: () => S().stage === "tame" || S().feeds.length >= R.feedNeed, vars: () => ({ n: Math.min(R.feedNeed, S().feeds.length) }) },
-            d24Ring: { blocked: () => count(D.ITEM.ring) < 1 },
-            d24Perch: { check: () => perches().length > 0, vars: () => ({ imie: ravenName() }) }
-        });
-    }
-    hookQuests();
+    w.haki({
+        miejsceGotowe: (ctx, id) => !!(W() && W().isReady && W().isReady(id)),
+        // K51's second step: where the raven waits now (by its leg)
+        k51Gdzie: () => { const leg = S().k51.leg; return leg <= 1 ? TK.kod.vars[0] : leg === 2 ? TK.kod.vars[1] : TK.kod.vars[2]; },
+        bezObraczki: () => count(D.ITEM.ring) < 1,
+        grzedaStoi: () => perches().length > 0,
+        imieKruka: () => ravenName(),
+        oddajList: (ctx, id) => giveBack(id)
+    });
 
     // ------------------------------------------------------------------
     // The place is built: the hermitage's east edge leads here (Wyspa.js) - only once data/Map157.json is the real map (package 0's
@@ -1581,7 +1535,7 @@
             xhr.onload = () => {
                 try {
                     const n = xhr.status < 400 ? String(JSON.parse(xhr.responseText).note || "") : "<Wyspa:szkielet>";
-                    if (!/<Wyspa:szkielet>/.test(n)) { built = true; const w = W(); if (w && w.ready) w.ready(MAP); }
+                    if (!/<Wyspa:szkielet>/.test(n)) { built = true; const wy = W(); if (wy && wy.ready) wy.ready(MAP); }
                 } catch (e) { /* (no map: not built) */ }
             };
             xhr.send();
@@ -1605,7 +1559,6 @@
     T.on("load", () => reset(), { owner: PLUGIN });
     T.on("mapReady", () => {
         if (!has()) return;
-        hookQuests();
         if (outdoors()) { const s0 = S(); s0.visited[$gameMap.mapId()] = day(); (s0.names = s0.names || {})[$gameMap.mapId()] = $gameMap.displayName() || ""; catPending = true; }
         // K51: the hero is ahead of the raven - it was faster (the next map's leg)
         const s = S();

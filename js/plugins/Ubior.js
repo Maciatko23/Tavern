@@ -1325,7 +1325,7 @@
         }
         return cv;
     }
-    // the sheet to show for `name` now (null: the plain one - not ready yet, the old Reid, nothing ever worn on this sheet)
+    // the sheet to show for `name` now (null: the plain one - not ready yet, without HeroLook.js, nothing ever worn on this sheet)
     function sheetFor(name, folder) {
         const def = SHEETS[name];
         if (!def || def.folder !== folder || !window.$gameSystem) return null;

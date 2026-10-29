@@ -397,10 +397,9 @@
     window.RoamingActor = { spriteset: roamingSpriteset, addSprite: roamingAddSprite, dropSprite: roamingDropSprite, fleeDirection: roamingFleeDirection, step: roamingStep, canStep: roamingCanStep };
 
     // ------------------------------------------------------------------
-    // Sneaking (C switches it on and off): slower, never running, a crouched walk (its own sheet), quieter steps
+    // Sneaking (C switches it on and off): slower, never running, a crouched walk (HeroLook.js's Hero_Sneak), quieter steps
     // (Atmosphere.js asks Hunting.sneaking()), and the animals and birds notice the player much later (noticeRate).
     // ------------------------------------------------------------------
-    const SNEAK_SHEET = "$Reid_Poor_Sneak";
     const sneaking = () => !!($gameSystem && huntState().sneak);
     function setSneak(on) {
         huntState().sneak = !!on;
@@ -413,11 +412,6 @@
     const _Game_Player_isDashing = Game_Player.prototype.isDashing;
     Game_Player.prototype.isDashing = function() {
         return !sneaking() && _Game_Player_isDashing.call(this);
-    };
-    const _Game_Player_characterName = Game_Player.prototype.characterName;
-    Game_Player.prototype.characterName = function() {
-        const name = _Game_Player_characterName.call(this);
-        return sneaking() && name === "$Reid_Poor" ? SNEAK_SHEET : name;   // (only for the hero's own sheet)
     };
     // how far the player went last frame (tiles): standing, walking or running changes how easily he is seen
     let lastPlayerPos = null, playerStep = 0;

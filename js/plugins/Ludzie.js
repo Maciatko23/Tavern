@@ -20,14 +20,17 @@
 //   C6 the smugglers' cave (Map125 -> Map177): only at low tide, from W5 ch. 4; Sławek at night (Humans); D34 „Jaskinia pod
 //      zatoczką” (the crate to the customs officer / to Baltazar / broken open); Ludzie.stashFound() for package D's eagle stash
 //   C7 the old graves of the Ług family (Map168): cleaned by hand (3 x 4 blows); Marta sometimes there on her grave days
-// Event ids 2500-2699 (TawernaCore registry, owner "Ludzie"), state Tawerna.state("ludzie"), F9 rows through Okolice.f9.add,
-// places through Okolice.registerSpots("C", ...), discoveries through Okolice.discoverable / Okolice.discover.
+// Event ids 2500-2699 (TawernaCore registry, owner "Ludzie"), F9 rows through Okolice.f9.add, places through
+// Okolice.registerSpots("C", ...), discoveries through Okolice.discoverable / Okolice.discover. The thread (Ludzie_Data.js, the engine
+// Watki.js, 2026-10-28): the state Tawerna.state("ludzie"), the quests' steps, conditions, talks and actions - this file gives their
+// hooks (w.haki); the talks of logic (the menus, the trades, the patrol's search) stay here, built with Watki.mowa.
 
 /*:
  * @target MZ
  * @plugindesc [paczka C] Ludzie: Zbych Smolarz i mielerz, pasterz z owcami, wędrowny handlarz, patrole, obóz kopaczy (W8), jaskinia przemytników (W5, mapa 177), stare groby Ługów. v1.1.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
  * @base Ludzie_Data
  * @orderAfter Okolice
  *
@@ -58,10 +61,12 @@
     if (!T) throw new Error("Ludzie.js: brak TawernaCore.js");
     const D = window.LudzieData;
     if (!D || !D.ready) { console.warn("Ludzie.js: brak Ludzie_Data.js - paczka C wyłączona"); window.Ludzie = T.register(PLUGIN, { PKG: "C", ready: false }); return; }
+    // the thread (Ludzie_Data.js, the engine Watki.js): the state "ludzie", K63-K66, D34, D35, the talks, the hero's thoughts, the flags
+    const w = Watki.get("ludzie");
+    if (!w) throw new Error("Ludzie.js: brak wątku „ludzie” (Ludzie_Data.js / Watki.js)");
     const M = D.MAP, EV = D.EV, TX = D.TX;
     const COIN_ICON = 314, STAMINA_ICON = 82;
-    const HERO = { id: 0, name: "" };
-    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
+    const { C, HERO, fill } = Watki.mowa;
     const day = () => T.time.day(), hour = () => T.time.hour();
     const has = () => !!window.$gameSystem && !!window.$gameMap;
     const item = id => (window.$dataItems && $dataItems[id]) || null;
@@ -80,7 +85,6 @@
     const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
     const onMap = id => !!(window.$gameMap && $gameMap.mapId() === id);
     const report = (where, e) => console.error("[Ludzie] " + where + ":", e);
-    const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
     const inRect = (z, x, y) => !!z && x >= z.x && x < z.x + z.w && y >= z.y && y < z.y + z.h;
     const inHours = (h, r) => (r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
     const dist = (ax, ay, bx, by) => Math.hypot(ax - bx, ay - by);
@@ -93,35 +97,18 @@
     const OPTS = { auto: true, kilnWait: 0 };   // tests: no men spawned by themselves (the camp, Sławek); the frames before the kiln's thieves come
 
     // ------------------------------------------------------------------
-    // The state (the save)
+    // The state (the save): the thread's (Ludzie_Data.js - Tawerna.state "ludzie" v1)
     // ------------------------------------------------------------------
-    const store = T.state.define("ludzie", () => ({
-        shop: { coalCycle: -1, coalN: 0, water: 0, rumour: 0, map: 0, steel: 0, shear: 0, told: {} },
-        order: null,                                                   // wood given to Zbych: { day, ready }
-        k63: null, k64: null, k65: null, k66: null,                    // the quests' own records
-        camp: { beaten: 0, gone: 0 },                                  // the diggers' camp (C5)
-        d35: { journal: 0, how: "", end: 0, hits: 0 },
-        d34: { taken: 0, opened: 0, given: "", stash: 0, gave: 0 },
-        graves: { c: [0, 0, 0], done: 0 },
-        force: { camp: false, cave: false, storm: 0 }
-    }), { version: 1, owner: PLUGIN });
-    const S = () => store();
+    const S = () => w.S();
 
-    // TownQuests' flags, records, opinion
-    const qstate = () => { const q = TQ(); return q && q.state ? q.state() : null; };
-    const flags = () => { const s = qstate(); return s ? s.flags : {}; };
-    const flag = k => !!flags()[k];
-    function setFlag(k) { const f = flags(); if (f && k && !f[k]) f[k] = day(); }
-    const vgive = (k, n) => { const s = qstate(); if (s && s.v) s.v[k] = (s.v[k] || 0) + (n || 1); };
-    const vcount = k => { const s = qstate(); return s && s.v ? s.v[k] || 0 : 0; };
-    const rec = id => { const q = TQ(); return q && q.rec ? q.rec(id) : null; };
-    const isActive = id => { const r = rec(id); return !!r && r.s === "active"; };
-    const isDone = id => { const r = rec(id); return !!r && (r.s === "done" || (r.times || 0) > 0); };
-    const atStep = (id, i) => { const r = rec(id); return !!r && r.s === "active" && r.step === i; };
+    // TownQuests' flags, records, opinion (the thread's helpers); at(step name): that step of its quest is the current one
+    const { flag, setFlag, vgive, vcount, rec, autoChecks } = w;
+    const isActive = id => w.active(id);
+    const isDone = id => w.done(id);
+    const onStep = name => w.at(name);
     const note = (title, text) => T.call("Journal", "addNote", title, text);
     const opinion = (n, why) => { const q = TQ(); return q && q.addOpinion ? q.addOpinion(n, why) : 0; };
     const xp = (n, why) => T.call("Combat", "gainXp", n, why || "Ludzie", true);
-    const autoChecks = () => { const q = TQ(); if (q && q.autoChecks) q.autoChecks(); if (q && q.refreshMarkers) q.refreshMarkers(); };
     // the chapter of an arc (W5, W8): 0 not begun, its step's "ch" while active, 9 done
     function arcCh(id) {
         const q = TQ(), r = rec(id);
@@ -133,53 +120,16 @@
     }
 
     // ------------------------------------------------------------------
-    // Talk helpers (event commands; "> " the hero, "@key: " a resident nearby) - the way TownQuests writes them
+    // Talk helpers (event commands; "> " the hero, "@key: " a resident nearby) - the engine's builder (Watki.mowa), the way TownQuests
+    // writes them; the talks of logic (the menus, the trades) are built here, the quests' talks are the data's (Ludzie_Data rozmowy)
     // ------------------------------------------------------------------
-    const LINE = 46, PAGE = 3;
-    function wrap(text) {
-        const out = [];
-        let line = "";
-        for (const w of String(text).split(/\s+/)) {
-            if (!w) continue;
-            if (line && (line + " " + w).length > LINE) { out.push(line); line = w; } else line = line ? line + " " + w : w;
-        }
-        if (line) out.push(line);
-        return out;
-    }
-    function sayTo(out, spk, text, ind) {
-        const lines = wrap(text);
-        for (let i = 0; i < lines.length; i += PAGE) {
-            out.push(C(101, ["", 0, 0, 2, spk.name || ""], ind));
-            lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 ? "\\SPK[" + spk.id + "]" : "") + l], ind)));
-        }
-        return out;
-    }
     function speaker(key) {
         const L = TL(), ev = L && L.eventOf ? L.eventOf(key) : null, r = L && L.RESIDENTS ? L.RESIDENTS.find(x => x.key === key) : null;
         return { id: ev && $gameMap.event(ev.eventId()) === ev ? ev.eventId() : -1, name: r ? r.name : key };
     }
-    function linesTo(out, spk, arr, vars, ind) {
-        for (const raw of [].concat(arr || [])) {
-            if (!raw) continue;
-            const s = fill(raw, vars);
-            if (s.startsWith("> ")) { sayTo(out, HERO, s.slice(2), ind); continue; }
-            const m = /^@(\w+):\s*([\s\S]*)$/.exec(s);
-            if (m) sayTo(out, speaker(m[1]), m[2], ind);
-            else sayTo(out, spk, s, ind);
-        }
-        return out;
-    }
-    function choiceTo(out, labels, branches, cancel, ind) {
-        const i0 = ind || 0;
-        out.push(C(102, [labels, cancel === undefined ? labels.length - 1 : cancel, 0, 2, 0], i0));
-        labels.forEach((l, i) => {
-            out.push(C(402, [i, l], i0));
-            for (const c of branches[i] || []) out.push(Object.assign({}, c, { indent: (c.indent || 0) + i0 + 1 }));
-            out.push(C(0, [], i0 + 1));
-        });
-        out.push(C(404, [], i0));
-        return out;
-    }
+    const MOWA = { kto: speaker };
+    const linesTo = (out, spk, arr, vars, ind) => Watki.mowa.linesTo(out, spk, arr, vars, ind, MOWA);
+    const choiceTo = Watki.mowa.choiceTo;
     const cmdAct = (out, args, ind) => (out.push(C(355, ["Ludzie.act(this, " + JSON.stringify(args) + ")"], ind)), out);
     const end = list => list.concat([C(0, [])]);
     const say = (ch, text, frames) => { const sb = SBl(); if (sb && sb.say && ch) sb.say(ch, text, frames || 200); };
@@ -243,9 +193,15 @@
     // The places, the discoveries, TownLife's conditions and homes
     // ------------------------------------------------------------------
     (function register() {
-        const O = OK();
-        if (O && O.registerSpots) O.registerSpots("C", D.SPOTS);
-        if (O && O.discoverable) for (const d of D.DISCOVER) O.discoverable(Object.assign({ pkg: "C", xp: 25 }, d, d.key === "lud_oboz" ? { when: () => campActive() } : {}));
+        // (the places' names and the discoveries' words are js/teksty/ludzie.txt's and Okolice copies them: registered once the words
+        // are in - still before any game - and again after F9 "Wczytaj teksty od nowa")
+        const places = () => {
+            const O = OK();
+            if (O && O.registerSpots) O.registerSpots("C", D.SPOTS);
+            if (O && O.discoverable) for (const d of D.DISCOVER) O.discoverable(Object.assign({ pkg: "C", xp: 25 }, d, d.key === "lud_oboz" ? { when: () => campActive() } : {}));
+        };
+        Watki.poTekstach(places);
+        T.on("tekstyWczytane", places, { owner: PLUGIN });
         const L = TL();
         if (L && L.addCondition) {
             L.addCondition("ludMielerz", () => has() && zbychAtKiln());
@@ -255,7 +211,7 @@
         }
         if (L && L.HOMES) for (const m of D.CYCLE.stops) L.HOMES.add(m);
     })();
-    function patrolNightOn() { const h = hour(); return atStep("K66", 0) && h >= 20.5 && S().k66 && S().k66.night === (h < 12 ? day() - 1 : day()); }
+    function patrolNightOn() { const h = hour(); return onStep("ludPatrolNoc") && h >= 20.5 && S().k66 && S().k66.night === (h < 12 ? day() - 1 : day()); }
 
     // ------------------------------------------------------------------
     // The events (Tawerna.inject 2500-2699): built for each map; shown / hidden at runtime by the state
@@ -364,7 +320,7 @@
             showEv(evOf(EV.szalas));
             setShown(evOf(EV.ogien021), stop === M.droga && night);
             setShown(evOf(EV.tobol021), stop === M.droga);
-            const k = S().k65, juk = evOf(EV.juk), on = atStep("K65", 0) && !!k && !k.picked;
+            const k = S().k65, juk = evOf(EV.juk), on = onStep("ludJuk") && !!k && !k.picked;
             if (on && juk) { const j = D.JUK_SPOTS[k.spot || 0]; if (juk.x !== j[0] || juk.y !== j[1]) juk.locate(j[0], j[1]); }
             setShown(juk, on);
         } else if (D.STOPS[id] && id !== M.droga) {
@@ -892,12 +848,12 @@
         const out = linesTo([], spk, TX.patrolSearch.concat(G && G.TX && G.TX.patrol ? G.TX.patrol : []));
         return cmdAct(out, ["szukaj"]);
     }
-    // the extra crate (the eagle's stash, found after D34 was done): the officer or Baltazar takes it too
+    // the extra crate (the eagle's stash, found after D34 was done): the officer or Baltazar takes it too (the data's talk "skrzynia")
     function crateExtra(key, ev) {
         if (!isDone("D34") || count(D.ITEMS.skrzynia) <= 0) return null;
         if (key === "kupiec" && !baltazarOk()) return null;
         const spk = spkOf(ev, key === "celnik" ? TK.kod.crateExtra[0] : TK.kod.crateExtra[1]);
-        return choiceTo([], [key === "celnik" ? TX.crateLabel.celnik : TX.crateLabel.baltazar, TX.crateLabel.keep], [cmdAct([], ["d34", key === "celnik" ? "celnik" : "baltazar"]), []], 1);
+        return w.rozmowa("skrzynia", { spk, komu: key === "celnik" ? "celnik" : "baltazar" });
     }
     function talkHook(key, ev) {
         if (!has()) return null;
@@ -1068,7 +1024,7 @@
             case "skrzynki": info(TX.camp.crates); return;
             case "juk": {
                 const k = s.k65;
-                if (!atStep("K65", 0) || !k || k.picked) return;
+                if (!onStep("ludJuk") || !k || k.picked) return;
                 k.picked = day();
                 vgive("juk", 1);
                 hideEv(ev);
@@ -1091,12 +1047,12 @@
             }
             case "szyb": {
                 if (s.d35.how) { info(TX.camp.shaftDone); return; }
-                if (!atStep("D35", 1)) { info(TX.camp.shaft); return; }
+                if (!onStep("ludSzybKomu")) { info(TX.camp.shaft); return; }
                 const sh = D.SHAFT;
                 if (count(sh.saw) <= 0) { T.popup.need(item(sh.saw) ? item(sh.saw).iconIndex : 0, TK.kod.eventAct[4]); return; }
                 if (count(sh.rope) <= 0 && !s.d35.hits) { T.popup.need(item(sh.rope) ? item(sh.rope).iconIndex : 0, TK.kod.eventAct[5]); return; }
                 strike(ev, {
-                    can: () => !S().d35.how && atStep("D35", 1),
+                    can: () => !S().d35.how && onStep("ludSzybKomu"),
                     blow: () => {
                         const z = S().d35;
                         if (!z.hits && count(sh.rope) > 0) $gameParty.loseItem(item(sh.rope), 1);
@@ -1118,8 +1074,7 @@
             case "jaskinia_wyjscie": $gamePlayer.reserveTransfer(M.przystan, D.CAVE.back[0], D.CAVE.back[1], 2, 0); return;
             case "nisza": {
                 if (s.d34.taken || s.d34.opened) { info(TX.cave.niche); return; }
-                const out = linesTo([], HERO, ["> " + TX.cave.nicheLook]);
-                sayLater(interp, choiceTo(out, TX.caveTake, [cmdAct([], ["nisza", 0]), cmdAct([], ["nisza", 1]), []], 2));
+                sayLater(interp, w.rozmowa("nisza", { spk: HERO }));   // (the data's talk: take / break open / leave)
                 return;
             }
             case "stol": info(TX.cave.table); return;
@@ -1159,6 +1114,8 @@
         const O = OK();
         if (O && O.discover) O.discover("lud_groby");
     }
+    // thoughts over the hero, one after another (outside a talk): the thread's (Ludzie_Data mysli - also during an event)
+    const think = lines => w.mysl(lines);
     // the shaft's end (D35 step 2): filled by the hero, Grum told, the captain told
     function shaftChoice(how, interp) {
         const s = S();
@@ -1173,16 +1130,6 @@
         else if (how === "rotmistrz") { setFlag("ludSzybRotmistrz"); const G = GZ(); if (G && G.addFavor) G.addFavor(8, TK.kod.shaftChoice[0]); }
         if (count(D.ITEMS.dziennik) > 0 && how !== "zasyp") $gameParty.loseItem(item(D.ITEMS.dziennik), 1);
         autoChecks();
-    }
-    // thoughts over the hero, one after another (outside a talk)
-    const thoughts = [];
-    let thoughtAt = 0;
-    function think(lines, who) { for (const l of [].concat(lines || [])) if (l) thoughts.push({ who: who || null, text: String(l).replace(/^> /, "") }); }
-    function updateThoughts() {
-        if (!thoughts.length || Graphics.frameCount < thoughtAt || !(SceneManager._scene instanceof Scene_Map)) return;
-        const t = thoughts.shift(), sb = SBl();
-        if (sb && sb.say) sb.say(t.who || $gamePlayer, t.text, 220); else T.popup(t.text, { color: "#eceef0" });
-        thoughtAt = Graphics.frameCount + 230;
     }
     // the crate of the cave: taken whole, or broken open on the spot
     function niche(how, interp) {
@@ -1248,10 +1195,11 @@
                 case "collect": collectCoal(ev ? spkOf(ev, TK.kod.act[2]) : HERO, interp); return;
                 case "steel": buySteel(); return;
                 case "szukaj": patrolSearch(interp); return;
-                case "k63wegiel": k63Coal(a); return;
-                case "nisza": niche(a, interp); return;
-                case "d34": giveCrate(a, interp); return;
-                case "d35": shaftChoice(a, interp); return;
+                // (the old script calls of the quests' talks - a talk saved before 2026-10-28; the new ones go to Watki.act)
+                case "k63wegiel": w.akcja("k63Wegiel", [a], interp); return;
+                case "nisza": w.akcja("nisza", [a], interp); return;
+                case "d34": w.akcja("skrzynia", [a], interp); return;
+                case "d35": w.akcja("szyb", [a], interp); return;
                 default: return;
             }
         } catch (e) { report("act " + JSON.stringify(args), e); }
@@ -1259,7 +1207,7 @@
     // K63: Zbych hands over the charcoal (fewer when the night went wrong)
     function k63Coal(n) {
         const k = S().k63;
-        if (!k || k.taken || !atStep("K63", 2)) return;
+        if (!k || k.taken || !onStep("ludK63Wegiel")) return;
         k.taken = day();
         $gameParty.gainItem(item(79), n);
         T.popup(Watki.wstaw(TK.kod.k63Coal[0], { n: n }), { icon: item(79).iconIndex, kind: "good" });
@@ -1268,74 +1216,38 @@
     }
 
     // ------------------------------------------------------------------
-    // TownQuests' handlers (its FX table) and the quests' own bookkeeping
+    // K63-K66, D34, D35 - the data's (Ludzie_Data.js); what their conditions, words, talks and actions ask of the game
     // ------------------------------------------------------------------
-    function hookQuests() {
-        const q = TQ();
-        if (!q || !q.FX || hookQuests.done) return;
-        hookQuests.done = true;
-        const FX = q.FX;
-        // K63
-        FX.ludK63Drewno = { hand: () => { S().k63 = { burn: day(), guarded: 0, ambush: 0, lost: 0, spoiled: 0, taken: 0, near: 0 }; } };
-        FX.ludK63Noc = {
-            check: () => { const k = S().k63; return !!k && !!(k.guarded || k.lost || k.spoiled); },
-            tick: () => k63Tick()
-        };
-        FX.ludK63Vars = { vars: () => { const k = S().k63 || { burn: day() }; return { noc: k.burn, gotowy: k.burn + 2 }; } };
-        FX.ludK63Wegiel = {
-            ready: (Q, r, st, key) => (key === "drwal" ? coalReady() : null),
-            talk(Q, r, st, key, spk) {
-                if (key !== "drwal") return null;
-                const k = S().k63 || {};
-                if (!coalReady()) return { ready: false, list: linesTo([], spk, [fill(TX.collectWait, { day: (k.burn || day()) + 2 })]) };
-                const n = k.spoiled ? 5 : k.lost ? 6 : 10;
-                const lines = k.spoiled ? [TK.kod.talk[0]]
-                    : k.lost ? [TK.kod.talk[1]]
-                    : [TK.kod.talk[2]];
-                return { ready: true, list: cmdAct(linesTo([], spk, lines), ["k63wegiel", n]) };
-            }
-        };
-        // K64
-        FX.ludPoBurzy = { cond: () => stormRecently() };
-        FX.ludOwcaIdzie = { check: () => { const k = S().k64; return !!k && !!(k.follow || k.home); } };
-        FX.ludOwcaDoma = { check: () => { const k = S().k64; return !!k && !!k.home; } };
-        FX.ludOwcaVars = { vars: () => { const k = S().k64 || { spot: 0 }; return { gdzie: D.SHEEP_WHERE[k.spot || 0] }; } };
-        // K65
-        FX.ludJuk = { check: () => { const k = S().k65; return !!k && !!k.picked; } };
-        FX.ludJukVars = { vars: (Q, r) => { const k = S().k65 || { spot: 0 }; return { gdzie: [TK.kod.vars[0], TK.kod.vars[1], TK.kod.vars[2]][k.spot || 0], do: (r && r.sday ? r.sday : day()) + 2, postoj: stopName() }; } };
-        // K66
-        FX.ludPatrolNoc = { check: () => { const k = S().k66; return !!k && !!k.done; }, tick: () => patrolNightTick() };
-        FX.ludPatrolVars = { vars: () => ({}) };
-        // D34
-        FX.ludJaskiniaOtwarta = { cond: () => caveOpen() };
-        FX.ludD34Start = () => has() && onMap(M.jaskinia) && caveOpen();
-        FX.ludSkrzynia = { check: () => { const s = S().d34; return !!(s.taken || s.opened || s.stash) && count(D.ITEMS.skrzynia) + (s.opened ? 1 : 0) > 0; } };
-        FX.ludD34Vars = { vars: () => ({ balt: baltazarOk() ? TK.kod.vars[3] : "" }) };
-        FX.ludKomuSkrzynia = {
-            ready: (Q, r, st, key) => (key === "celnik" || (key === "kupiec" && baltazarOk()) ? count(D.ITEMS.skrzynia) > 0 : null),
-            talk(Q, r, st, key, spk) {
-                if (!(key === "celnik" || (key === "kupiec" && baltazarOk())) || count(D.ITEMS.skrzynia) <= 0) return null;
-                const to = key === "celnik" ? "celnik" : "baltazar";
-                return { ready: true, list: choiceTo([], [TX.crateLabel[to], TX.crateLabel.keep], [cmdAct([], ["d34", to]), []], 1) };
-            }
-        };
-        // D35
-        FX.ludD35Start = () => has() && onMap(M.gory) && campActive() && heroAt(D.CAMP.chest[0], D.CAMP.chest[1]) <= D.CAMP.near;
-        FX.ludDziennik = { check: () => !!S().d35.journal };
-        FX.ludSzybKoniec = { check: () => !!S().d35.how };
-        FX.ludD35Vars = { vars: () => ({ grum: grumOk() ? TK.kod.vars[4] : "" }) };
-        FX.ludSzybKomu = {
-            ready: (Q, r, st, key) => ((key === "grum" && grumOk()) || key === "rotmistrz" ? count(D.ITEMS.dziennik) > 0 && !S().d35.how : null),
-            talk(Q, r, st, key, spk) {
-                if (!((key === "grum" && grumOk()) || key === "rotmistrz") || S().d35.how || count(D.ITEMS.dziennik) <= 0) return null;
-                const lines = key === "grum" ? TX.shaftGrum : TX.shaftCaptain;
-                const out = linesTo([], spk, [lines[0]]);
-                const rest = cmdAct(linesTo([], spk, lines.slice(1)), ["d35", key === "grum" ? "grum" : "rotmistrz"]);
-                return { ready: true, list: choiceTo(out, [TK.kod.talk[3], TK.kod.talk[4]], [rest, []], 1) };
-            }
-        };
-    }
-    hookQuests();
+    w.haki({
+        // K63: the wood handed in (the burn from tonight), the guarded night, the sacks
+        k63Drewno: () => { S().k63 = { burn: day(), guarded: 0, ambush: 0, lost: 0, spoiled: 0, taken: 0, near: 0 }; },
+        k63Noc: () => k63Tick(),
+        k63Zmienne: () => { const k = S().k63 || { burn: day() }; return { noc: k.burn, gotowy: k.burn + 2 }; },
+        wegielGotowy: () => coalReady(),
+        wegielDzien: () => ((S().k63 || {}).burn || day()) + 2,
+        k63Wegiel: (ctx, n) => k63Coal(n),
+        // K64: the offer for two days after a storm; where the shepherd saw her
+        poBurzy: () => stormRecently(),
+        owcaZmienne: () => { const k = S().k64 || { spot: 0 }; return { gdzie: D.SHEEP_WHERE[k.spot || 0] }; },
+        // K65: where the pack lies, by when, the pedlar's stop today
+        jukZmienne: ctx => { const k = S().k65 || { spot: 0 }, r = ctx.r; return { gdzie: [TK.kod.vars[0], TK.kod.vars[1], TK.kod.vars[2]][k.spot || 0], do: (r && r.sday ? r.sday : day()) + 2, postoj: stopName() }; },
+        // K66: the night round
+        patrolNoc: () => patrolNightTick(),
+        // D34: the cave open (W5 ch. 4), the crate in the bag, Baltazar still trading; the crate given, the niche's choice
+        jaskiniaOtwarta: () => caveOpen(),
+        maSkrzynie: () => count(D.ITEMS.skrzynia) > 0,
+        baltazarOk: () => baltazarOk(),
+        d34Zmienne: () => ({ balt: baltazarOk() ? TK.kod.vars[3] : "" }),
+        skrzynia: (ctx, to) => giveCrate(to, ctx.interp),
+        nisza: (ctx, how) => niche(how, ctx.interp),
+        // D35: by the commander's chest while the camp stands; the journal in the bag, Grum at the tavern; the shaft told (komu)
+        przyObozie: () => campActive() && heroAt(D.CAMP.chest[0], D.CAMP.chest[1]) <= D.CAMP.near,
+        maDziennik: () => count(D.ITEMS.dziennik) > 0,
+        grumOk: () => grumOk(),
+        d35Zmienne: () => ({ grum: grumOk() ? TK.kod.vars[4] : "" }),
+        szybLinie: (ctx, a, b) => [].concat(ctx.komu === "grum" ? TX.shaftGrum : TX.shaftCaptain).slice(a, b),
+        szyb: (ctx, how) => shaftChoice(how, ctx.interp)
+    });
     // the quests' own records as they begin; the garrison's favour after the night round
     T.on("townQuestAccepted", e => {
         if (!has() || !e) return;
@@ -1405,7 +1317,6 @@
     T.on("mapReady", () => {
         if (!has()) return;
         try {
-            hookQuests();
             syncMap();
             spawnSheep();
             spawnCamp();
@@ -1417,7 +1328,6 @@
     T.onMapUpdate((scene, n) => {
         if (!has()) return;
         try {
-            updateThoughts();
             if (n % 20 === 0) syncMap();
             if (n % 30 === 5) { patrolTick(); lostTick(); }
             if (n % 60 === 11) { flockTick(); campTick(); spawnSlawek(); k63Deadline(); }
@@ -1429,14 +1339,15 @@
     // ------------------------------------------------------------------
     // F9: the package's rows (Okolice.f9 - Debug.js shows them in the tab "Wyspa i fabuła")
     // ------------------------------------------------------------------
+    // [name, map, x, y, direction] - the names: js/teksty/ludzie.txt, f9.miejsca (each row's [0] read from the words)
     const PLACES = [
-        ["Mielerz Zbycha (Leśna droga)", 21, 49, 21, 8], ["Szałas węglarza", 21, 53, 23, 8], ["Postój handlarza (Polna droga)", 22, 52, 23, 8],
-        ["Postój handlarza (Leśna droga)", 21, 54, 18, 8], ["Postój handlarza (Łąka)", 4, 62, 12, 8], ["Postój handlarza (Kruczy Jar)", 3, 61, 12, 8],
-        ["Koszar i pastwisko (Łąka)", 4, 52, 45, 8], ["Pastwisko przy menhirach", 18, 68, 34, 8], ["Omszała łąka (owca K64)", 17, 60, 40, 8],
-        ["Juk K65 (Leśna droga)", 21, 55, 13, 8], ["Obóz kopaczy (Góry)", 13, 101, 77, 8], ["Szyb kopaczy", 13, 105, 73, 8],
-        ["Zatoczka: wylot jaskini (Przystań)", 125, 16, 66, 8], ["Jaskinia przemytników (mapa 177)", 177, 3, 11, 8], ["Stare groby Ługów", 168, 89, 28, 8],
-        ["Patrol: przylądek z latarnią", 159, 53, 46, 2], ["Patrol: garnizon (wybrzeże)", 162, 60, 46, 2]
-    ];
+        [21, 49, 21, 8], [21, 53, 23, 8], [22, 52, 23, 8],
+        [21, 54, 18, 8], [4, 62, 12, 8], [3, 61, 12, 8],
+        [4, 52, 45, 8], [18, 68, 34, 8], [17, 60, 40, 8],
+        [21, 55, 13, 8], [13, 101, 77, 8], [13, 105, 73, 8],
+        [125, 16, 66, 8], [177, 3, 11, 8], [168, 89, 28, 8],
+        [159, 53, 46, 2], [162, 60, 46, 2]
+    ].map((p, i) => Watki.zTekstu([""].concat(p), { 0: "f9.miejsca." + i }, "ludzie"));
     let f9Place = 0, f9Stop = 0;
     const placeLabel = i => Watki.wstaw(TK.kod.placeLabel[0], { "1": i + 1, length: PLACES.length, "3": PLACES[i][0] });
     const stopLabel = i => Watki.wstaw(TK.kod.stopLabel[0], { "1": stopName(D.CYCLE.stops[i]) });
@@ -1449,7 +1360,7 @@
         return d;
     }
     const f9 = {
-        owner: PLUGIN, title: "Paczka C: Ludzie (mielerz, pasterz, handlarz, patrole, kopacze, jaskinia, groby):",
+        owner: PLUGIN, get title() { return TK.f9.tytul; },
         rows: () => {
             const s = has() ? S() : null;
             return [
@@ -1507,6 +1418,8 @@
         // the cycles and the places (the tests, F9)
         kilnState, kilnDay, zbychAtKiln, stopMap, stopIndex, stopName, pasterz018, flockMap, flockWanted, campActive, caveOpen, tideLow, stormRecently,
         coalLeft, pedlarGoods, waterPrice, lostNow, flockSize, martaHere,
-        sheep: () => sheep.slice(), spawnSheep, spawnCamp, spawnSlawek, syncMap, lightsNow, f9, PLACES, Game_LudSheep, niche, giveCrate, shaftChoice, gravesDone
+        sheep: () => sheep.slice(), spawnSheep, spawnCamp, spawnSlawek, syncMap, lightsNow, f9, PLACES, Game_LudSheep, niche, giveCrate, shaftChoice, gravesDone,
+        // (the thread's talks: "@key: " - a resident nearby says the line)
+        speaker
     });
 })();

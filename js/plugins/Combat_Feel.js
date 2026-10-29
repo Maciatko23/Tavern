@@ -2,7 +2,7 @@
 // Combat_Feel.js
 //=============================================================================
 // The fight made pleasanter, smoother and handier (2026-10-14, the user's list: "po kolei robimy, co uważasz za OK"). A: the combat mode
-// switching itself on when a foe starts an attack (and off after a calm moment, when it came on by itself), the soft target (a copper
+// switching itself on when a foe starts an attack (and off after a calm moment, when it came on by itself), the soft target (a yellow
 // ring under the foe the blows, the guard and the roll go by; F the next one). B: the attacks' warnings (a red or white-gold outline and
 // a sound just before a blow), the last blow's slowed moment (the perfect parry, the counter, the hits' white and sounds: Combat_Fight.js
 // / Combat_UI.js). C: the arrows at the screen's edge, the quick heal (H), the training dummy, the difficulty. Functions and classes
@@ -211,7 +211,7 @@
 
     // ==================================================================
     // 2. The soft target: of the foes in a fight within TARGET.pick tiles, the one nearest and most in front of the hero (or the training
-    // dummy near him) gets a copper ring under its feet. The blows, the guard and the roll go by it (Combat_Fight.js: autoFace, rollWay,
+    // dummy near him) gets a yellow ring under its feet. The blows, the guard and the roll go by it (Combat_Fight.js: autoFace, rollWay,
     // updateBlock, faceAfterRoll). It keeps its target while it lives, fights and stays within TARGET.keep tiles; every TARGET.recheck
     // frames a clearly better one (TARGET.switchBy) takes over - not for TARGET.hold frames after F picked one. F: the next one round him
     // (clockwise).
@@ -272,9 +272,10 @@
         return { ref: target, x: p.x, y: p.y };
     }
 
-    // the ring: a thin copper ellipse on the ground with four small notches, a dark edge under it; it snaps in when the target changes and
-    // breathes slowly (no light - it does not glow)
-    const RING = { color: "#d08a5a", dark: "rgba(24,14,8,0.62)", alpha: [150, 215], beat: 90, snap: 0.35 };
+    // the ring: a thin ellipse on the ground in the interface's accent (UITheme.js's palette) with four small notches, a dark edge under
+    // it; it snaps in when the target changes and breathes slowly (no light - it does not glow)
+    const ACCENT = (window.UIStyle && UIStyle.C && UIStyle.C.accent) || "#ffd23f";
+    const RING = { color: ACCENT, dark: "rgba(8,9,11,0.62)", alpha: [150, 215], beat: 90, snap: 0.35 };
     const ringCache = {};
     function ringBitmap(r) {
         if (ringCache[r]) return ringCache[r];
@@ -449,11 +450,11 @@
 
     // ==================================================================
     // 9. The arrows at the screen's edge (stage C): a foe in a fight that the screen does not show (an archer far off, a wolf behind
-    // him) - a small arrow at the edge, pointing at it: copper while it only fights, warm red while it winds up a blow a guard holds,
+    // him) - a small arrow at the edge, pointing at it: the accent's yellow while it only fights, warm red while it winds up a blow a guard holds,
     // white-gold for one no guard holds; it breathes while the blow comes.
     // ==================================================================
     // inset: from the screen's sides and bottom; top: below the notices at the top (a goal done, the map's name, the experience)
-    const EDGE = { inset: 22, top: 96, out: 10, max: 8, size: 20, copper: "#d08a5a", red: "#ff5a3a", gold: "#ffe8a0", dark: "rgba(16,10,6,0.85)" };
+    const EDGE = { inset: 22, top: 96, out: 10, max: 8, size: 20, fight: ACCENT, red: "#ff5a3a", gold: "#ffe8a0", dark: "rgba(8,9,11,0.85)" };
     const arrowCache = {};
     function arrowBitmap(color) {
         if (arrowCache[color]) return arrowCache[color];
@@ -490,7 +491,7 @@
                 const kx = (W / 2 - EDGE.inset) / Math.max(1e-6, Math.abs(dx)), ky = (dy < 0 ? Hh / 2 - EDGE.top : Hh / 2 - EDGE.inset) / Math.max(1e-6, Math.abs(dy));
                 const k = Math.min(kx, ky);
                 const tl = t.tell && t.tell.t <= TELE.lead * 3 ? t.tell : null;
-                out.push({ a: t.a, x: cx + dx * k, y: cy + dy * k, ang, color: tl ? (tl.heavy ? EDGE.gold : EDGE.red) : EDGE.copper, pulse: !!tl });
+                out.push({ a: t.a, x: cx + dx * k, y: cy + dy * k, ang, color: tl ? (tl.heavy ? EDGE.gold : EDGE.red) : EDGE.fight, pulse: !!tl });
             }
         }
         while (this._pool.length < out.length) { const s = new Sprite(); s.anchor.set(0.5, 0.5); this.addChild(s); this._pool.push(s); }

@@ -20,8 +20,10 @@ const { launch, sleep } = require("./cdp.js");
         await ev("window.__pop = []; const o = $gameTemp.pushLootPopup.bind($gameTemp); $gameTemp.pushLootPopup = (i, t, c) => { window.__pop.push(t); return o(i, t, c); }; 0");
 
         // ---------------------------------------------------------------- the sheets
-        const sheets = await ev(`new Promise(res => { const out = {}; let left = 2; for (const n of ["Swing_Sling", "Swing_Bow"]) { const bmp = ImageManager.loadSystem(n); bmp.addLoadListener(() => { out[n] = [bmp.width, bmp.height]; if (--left === 0) res(out); }); } })`);
-        check("both sheets load: 13 frames of 96 x 96 in 4 rows", JSON.stringify(sheets) === JSON.stringify({ Swing_Sling: [1248, 384], Swing_Bow: [1248, 384] }), sheets);
+        // (the sheets the hero plays: HeroLook.js's Hero_Sling / Hero_Bow - the old Swing_* files are archived since 2026-10-28)
+        const sheets = await ev(`new Promise(res => { const out = {}; let left = 2; for (const n of ["Swing_Sling", "Swing_Bow"]) { const f = ChoppableTree.swingKind(ChoppableTree.swingKindOf(n)).sheet, bmp = ImageManager.loadSystem(f); bmp.addLoadListener(() => { out[n] = [bmp.width, bmp.height, f]; if (--left === 0) res(out); }); } })`);
+        check("both sheets load (Hero_Sling, Hero_Bow): frames of 96 x 96 in 4 rows", !!sheets.Swing_Sling && !!sheets.Swing_Bow && sheets.Swing_Sling[2] === "Hero_Sling" && sheets.Swing_Bow[2] === "Hero_Bow"
+            && [sheets.Swing_Sling, sheets.Swing_Bow].every(s => s[0] % 96 === 0 && s[0] >= 96 * 13 && s[1] === 384), sheets);
 
         // an open lane
         const room = await ev(`(function(){

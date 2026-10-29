@@ -149,6 +149,7 @@ function usedKeys(srcs, defined) {
         for (const m of src.matchAll(/["']([\w-]+(?:\.[\w-]+)*)\.["']\s*\+/g)) prefixes.add(m[1]);   // ("tops." + how)
         if (/\bkroki\s*:\s*\[/.test(src)) prefixes.add("kroki");                                       // (the engine: kroki.<nazwa>)
         if (/\bf9\s*:\s*\{/.test(src)) prefixes.add("f9");                                             // (the engine: f9.naglowek...)
+        if (/\bzadania\s*:\s*\{/.test(src)) prefixes.add("zadania");                                   // (the engine: zadania.<id> scalone w zadania wątku)
         for (const m of src.matchAll(/["']([\w-]+(?:\.[\w{}-]+)*)["']/g)) {
             const k = m[1];
             if (/\{\w+\}/.test(k)) { prefixes.add(k.split(/\.?\{/)[0]); continue; }

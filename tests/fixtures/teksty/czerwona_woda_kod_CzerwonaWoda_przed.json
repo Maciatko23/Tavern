@@ -1,0 +1,36 @@
+{
+ "kod": {
+  "seaPopup": {
+   "0": "Woda jest czerwona i cuchnie.",
+   "1": "Słona - nie do picia."
+  },
+  "seaMenu": {
+   "0": "Napij się mimo to",
+   "1": "Czerwona woda cuchnie zakwitem. Rybacy mówią, że od niej się rzyga do rana.",
+   "2": "Morska woda. Słona - pragnienie po niej tylko gorsze.",
+   "3": "Nabierz wody",
+   "4": "Do bukłaka, wiadra albo garnka.",
+   "5": "Nabrać do wiadra i zagotować na ogniu? Rybacy się z tego śmieją.",
+   "6": "Czerwona woda"
+  },
+  "act": {
+   "0": "Wymiotujesz. Zatrucie!",
+   "1": "Słona! Pragnienie jeszcze gorsze."
+  },
+  "fillRefused": {
+   "0": "Czerwonej wody nie nabierzesz. Zepsujesz naczynie.",
+   "1": "Słonej wody nie ma po co nosić."
+  },
+  "boilRefused": {
+   "0": "Dalej czerwona. Nawet para śmierdzi.",
+   "1": "Sól zostaje. Przegotowana dalej słona."
+  },
+  "deadCatch": {
+   "0": "Śnięta ryba. Wyrzucasz ją z powrotem."
+  },
+  "triggerButtonAction": {
+   "0": "Śnięta ryba. Cuchnie zakwitem."
+  }
+ },
+ "_opis": "Napisy kodu CzerwonaWoda.js sprzed przeniesienia do js/teksty/czerwona_woda.txt (kod.*)"
+}

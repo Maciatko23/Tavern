@@ -1,0 +1,33 @@
+{
+ "okrzyki": {
+  "wolves": [
+   "Wilki!",
+   "Wilki pod obozem!",
+   "Bierz głownię z ognia!",
+   "Do ognia, chłopy, wilki!"
+  ],
+  "brand": [
+   "Precz, bestio!",
+   "A sio!",
+   "Ognia mu!",
+   "Wynocha!"
+  ],
+  "boar": [
+   "Dzik! Z drogi!",
+   "Uważaj, dzik!"
+  ],
+  "bear": [
+   "Niedźwiedź!",
+   "Matko, niedźwiedź!"
+  ],
+  "hunt": [
+   "Cicho... kolacja.",
+   "Zając. Nie ruszać się."
+  ],
+  "roast": [
+   "Pieczyste będzie.",
+   "Dobra sztuka."
+  ]
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Starcia.js: LINES=okrzyki)"
+}

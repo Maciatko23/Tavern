@@ -1,0 +1,185 @@
+{
+ "kod": {
+  "hoursText": {
+   "0": "{1} godz."
+  },
+  "needGold": {
+   "0": "Brakuje ci {1} G"
+  },
+  "eatDish": {
+   "0": "+{gained} wytrzymałości",
+   "1": "Ugoszczony ({1})",
+   "2": "Wypiłeś: ",
+   "3": "Zjadłeś: ",
+   "4": "Karczma Borgara",
+   "5": "U Borgara zjesz gorący posiłek za parę monet: przy ladzie wybierasz z karty, siadasz przy wolnym stole, a on podaje. Codziennie inne danie dnia jest tańsze.\nPo posiłku w tawernie jestem Ugoszczony: przez kilka godzin głód i pragnienie rosną o {1}% wolniej.",
+   "6": "pierwszy posiłek w tawernie"
+  },
+  "mealCardSpec": {
+   "0": "DANIE DNIA",
+   "1": "KARCZMA „POD ZŁOTYM KUFLEM” · KUCHNIA BORGARA",
+   "2": "Karta dań",
+   "3": "zamów",
+   "4": "Posiłek przy stole: 15-30 minut"
+  },
+  "mealSeq": {
+   "0": "Stoły zajęte? Zjem przy ladzie."
+  },
+  "mealTalk": {
+   "0": "Śniadanko? Kuchnia już grzeje.",
+   "1": "Głodny? U mnie nikt nie wychodzi głodny. Najwyżej biedniejszy.",
+   "2": "Wieczór bez kolacji to wieczór stracony. Co podać?",
+   "3": "O tej porze? Kuchnia prawie zgaszona, ale dla ciebie coś się znajdzie.",
+   "4": "{greet} Dziś danie dnia: {2} - {3} G zamiast {price}.",
+   "5": "Wybierasz z karty, płacisz, siadasz przy wolnym stole - a ja podaję. Kto zje u mnie, ten przez parę godzin jest ugoszczony: głód i pragnienie mniej mu dokuczają."
+  },
+  "repFoot": {
+   "0": "Sława: {1} · u Borgara −{2}"
+  },
+  "roomLabel": {
+   "0": "Pokój nr {room}"
+  },
+  "readTags": {
+   "0": "Pokój {n}"
+  },
+  "onlyFor": {
+   "0": "tylko dla dostojnych gości",
+   "1": "tylko dla stałych, zaufanych gości",
+   "2": "{1} (sława „{2}”)"
+  },
+  "rentRoom": {
+   "0": "Pokój w karczmie",
+   "1": "Borgar wynajmuje pokoje na piętrze na jedną noc ({1}). Drzwi pokoju są otwarte do {CHECKOUT}:00 rano.\nW łóżku w karczmie śpi się bezpiecznie (żadne wilki tu nie zajrzą) i budzi się w pełni sił. Rano przy łóżku czeka śniadanie od Borgara.",
+   "2": "Apartament Złoty na piętrze Apartamentów wynajmuje się tylko Chlubie tawerny. Po nocy w nim śniadanie podają do łóżka, a przez {zloty} godz. jestem Wypoczęty: odpoczynek daje {2} więcej sił.",
+   "3": "Komnatę z kominkiem Borgar wynajmuje tylko stałym, zaufanym gościom. Po nocy w niej przez {komnata} godz. jestem Wypoczęty: odpoczynek daje {2} więcej sił."
+  },
+  "welcomeGate": {
+   "0": "Dzyń, dzyń! Witamy w Apartamentach, szanowny gościu!",
+   "1": "Apartamenty stoją przed tobą otworem",
+   "2": "Sława: {1} - złocona krata na piętrze jest otwarta",
+   "3": "Złocona krata na piętrze otworzyła się przede mną: sława „{1}”. Za nią Apartament Złoty - Borgar wynajmuje go na noc. Śniadanie podają tam do łóżka."
+  },
+  "lockedTalk": {
+   "0": "Złocona krata, a przy niej mosiężny dzwonek. Na tabliczce: „Apartamenty tylko dla dostojnych gości.”",
+   "1": "Dzwonię... cisza. Trzeba by być chlubą tej tawerny, żeby mi tu otworzyli.",
+   "2": "Na drzwiach złota tabliczka: „Apartament Złoty. Wstęp tylko dla dostojnych gości.”",
+   "3": "Komnatę",
+   "4": "Ten pokój",
+   "5": "Na drzwiach mosiężna tabliczka: „{1} wynajmujemy tylko stałym, zaufanym gościom.”"
+  },
+  "roomCardSpec": {
+   "0": "pokój nr {room} · ",
+   "1": "{1}śniadanie: {2}",
+   "2": "dla dostojnych gości",
+   "3": "dla stałych gości",
+   "4": "sława „{1}” - {2}",
+   "5": "PIĘTRO „ZŁOTEGO KUFLA” · POKOJE GOŚCI",
+   "6": "Pokoje na noc",
+   "7": "Płacisz za jedną noc · pobudka o {1}:00"
+  },
+  "roomTalk": {
+   "0": "pokój",
+   "1": "Masz już pokój na tę noc: {1}. Schody na górę, drzwi otwarte - śpij smacznie!",
+   "2": "Pokoje na górze jeszcze w remoncie - cieśle obiecali skończyć w tym tygodniu. Który to już tydzień...",
+   "3": "Pokój na noc? O tej porze? Proszę bardzo - płacisz za noc, a wylegiwać się możesz od zaraz.",
+   "4": "Pokoje na piętrze. Pościel świeża, pluskwy wyprowadziły się w zeszłym miesiącu. Chyba.",
+   "5": "Płacisz za jedną noc: drzwi pokoju otwarte do {CHECKOUT}:00 rano, śpisz bezpiecznie jak u mamy, a rano przy łóżku czeka śniadanie."
+  },
+  "rentLine": {
+   "0": "Komnata z kominkiem twoja do rana. Kazałem napalić w kominku i wytrzepać niedźwiedzia. Śniadanie będzie przy łóżku.",
+   "1": "Apartament Złoty! Pościel taka sama jak u Lorda - no, prawie. Rano pokojówka poda śniadanie do łóżka, na srebrnej tacy.",
+   "2": "twój",
+   "3": "{1} {2} do rana. Schody na górę - drzwi już otwarte, świeca się pali. Śniadanie zostawię przy łóżku."
+  },
+  "bedTalk": {
+   "0": "numer {room}",
+   "1": "To nie twój pokój - twój to {1}.",
+   "2": "To łóżko gościa. Pokój wynajmiesz u Borgara.",
+   "3": "Już się wyspałeś. Pokój jest twój do {CHECKOUT}:00.",
+   "4": "Za dnia? Ale łóżko kusi... Położyć się spać do rana?",
+   "5": "Położyć się spać?",
+   "6": "Śpij do rana",
+   "7": "Jeszcze nie"
+  },
+  "sleepSeq": {
+   "0": "Śniadanie do łóżka, na srebrnej tacy. Liścik: „Na koszt domu. Borgar”.",
+   "1": "Wstajesz jak nowo narodzony. Przy kominku czeka pajda chleba i ser.",
+   "2": "Wyspałeś się jak król.",
+   "3": "Spałeś jak kamień, bez jednego snu.",
+   "4": "Pierzyna, cisza, zero wilków - wyspałeś się jak nigdy.",
+   "5": "{1} Borgar zostawił ci {2}.",
+   "6": "Śniadanie do łóżka: jajecznica, świeży chleb, kubek mleka. Ugoszczony ({1})",
+   "7": "Wypoczęty ({1}): odpoczynek daje {2} więcej sił",
+   "8": "noc w karczmie"
+  },
+  "attSay": {
+   "0": "Łaziebna Wanda"
+  },
+  "bathTalk": {
+   "0": "Przecież dopiero co się kąpałeś! Jeszcze raz i zetrzesz sobie skórę do kości. No, ale płacisz - twoja wola.",
+   "1": ", Borgar kazał ci liczyć taniej",
+   "2": "Kąpiel? Gorąca woda, szare mydło i szorstki ręcznik - {price} G{2}. Szorowanie pleców gratis, ale tylko po znajomości.",
+   "3": "Po kąpieli człowiek lżejszy - każda robota idzie o {1}% łatwiej, póki znowu się nie ubabrzesz. Czyli parę godzin.",
+   "4": " zamiast {BATH_PRICE} G",
+   "5": "Wykąp się ({price} G{2})",
+   "6": "Nie teraz"
+  },
+  "bathSeq": {
+   "0": "Aaach... gorąca woda. Jak w niebie.",
+   "1": "Tylko nie zasnąć...",
+   "2": "Czysty ({1}): prace kosztują {2}% mniej sił",
+   "3": "Łaźnia",
+   "4": "W łaźni karczmy gorąca kąpiel kosztuje {BATH_PRICE} G i trwa godzinę. Potem jestem Czysty: przez {CLEAN_HOURS} godz. każda praca kosztuje {3}% mniej sił.",
+   "5": "pierwsza kąpiel"
+  },
+  "songTalk": {
+   "0": "Scena pusta. Melia dziś nie śpiewa.",
+   "1": "Scena pusta - Melia poszła śpiewać kołysankę pod murem.",
+   "2": "Śpiewam wieczorami, od {SONG_FROM}:00. Teraz stroję lutnię... i nerwy.",
+   "3": "O tej porze? Gardło mi śpi, a lutnia chrapie. Przyjdź wieczorem, od {SONG_FROM}:00.",
+   "4": "Dziś już śpiewałam - gardło mam jedno, a ballad sto. Przyjdź jutro wieczorem!",
+   "5": "Znowu ty? Miło! ",
+   "6": "Posłuchasz? Wieczór bez pieśni jest jak kufel bez piany. ",
+   "7": "Wrzuć {SONG_TIP} G do kapelusza",
+   "8": "Posłuchaj za darmo",
+   "9": "Innym razem"
+  },
+  "songList": {
+   "0": "Dziękuję, złotko! Za to dostaniesz jeszcze refren."
+  },
+  "songEnd": {
+   "0": "Natchniony ({1}): +{2}% doświadczenia",
+   "1": "Pieśni Melii",
+   "2": "Melia Srebrogłosa śpiewa wieczorami (od {SONG_FROM}:00), raz na wieczór. Po jej pieśni jestem Natchniony: więcej doświadczenia. Sama nie wie, skąd zna te ballady...\n\n{lyric}",
+   "3": "Dziennik: nowa pieśń w notatce „Pieśni Melii”",
+   "4": "wszystkie ballady Melii"
+  },
+  "quitLabel": {
+   "0": "tracisz {stake} G",
+   "1": "Poddaję się ({1})"
+  },
+  "counterTalk": {
+   "0": "Dzień dobry! Czym mogę służyć?",
+   "1": "Czym mogę służyć? Kuchnia grzeje, pokoje wietrzą się na górze.",
+   "2": "Dobry wieczór! Coś na ząb? Pokój na noc?",
+   "3": "Zjedz coś",
+   "4": "Wynajmij pokój",
+   "5": "Nic, dzięki"
+  },
+  "use": {
+   "0": "Tu podają jedzenie - zamów u Borgara przy ladzie."
+  },
+  "step": {
+   "0": "Nie jesteś głodny? To może później.",
+   "1": "Rozmyśliłeś się? Kuchnia nie ucieknie.",
+   "2": "Stoły zajęte - zjesz przy ladzie, jak za dawnych czasów.",
+   "3": "Na krechę wody nie grzeję.",
+   "4": "Pusta sakiewka? Nie szkodzi - zaśpiewam i tak."
+  },
+  "borgarOptions": {
+   "0": "Zjedz coś",
+   "1": "Wynajmij pokój"
+  }
+ },
+ "_opis": "Napisy kodu TavernLife.js sprzed przeniesienia do js/teksty/karczma.txt (kod.*)"
+}

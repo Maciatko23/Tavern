@@ -23,8 +23,9 @@ const { launch, sleep } = require("./cdp.js");
         const clearPopups = () => ev("window.__popups.length = 0; 0");
 
         // ================= 1. the pictures and the map =================
-        const sizes = await ev(`new Promise(res => { const out = {}, list = [["c", "$Animal_Boar"], ["c", "$Animal_Boar_Run"], ["s", "Swing_Spear"]]; let left = list.length; for (const [k, n] of list) { const bmp = k === "c" ? ImageManager.loadCharacter(n) : ImageManager.loadSystem(n); bmp.addLoadListener(() => { out[n] = [bmp.width, bmp.height]; if (--left === 0) res(out); }); } })`);
-        check("the boar's walk and charge sheets (3 x 4) and the spear jab sheet (8 x 4 cells of 96) load", sizes["$Animal_Boar"][0] % 3 === 0 && sizes["$Animal_Boar"][1] % 4 === 0 && sizes["$Animal_Boar_Run"][0] % 3 === 0 && sizes["Swing_Spear"][0] === 768 && sizes["Swing_Spear"][1] === 384, sizes);
+        // (the spear jab: the sheet the hero plays - HeroLook.js's Hero_Spear; the old Swing_* files are archived since 2026-10-28)
+        const sizes = await ev(`new Promise(res => { const out = {}, list = [["c", "$Animal_Boar"], ["c", "$Animal_Boar_Run"], ["s", "Swing_Spear"]]; let left = list.length; for (const [k, n] of list) { const f = k === "c" ? n : ChoppableTree.swingKind(ChoppableTree.swingKindOf(n)).sheet, bmp = k === "c" ? ImageManager.loadCharacter(f) : ImageManager.loadSystem(f); bmp.addLoadListener(() => { out[n] = [bmp.width, bmp.height, f]; if (--left === 0) res(out); }); } })`);
+        check("the boar's walk and charge sheets (3 x 4) and the spear jab sheet (Hero_Spear: cells of 96 in 4 rows) load", sizes["$Animal_Boar"][0] % 3 === 0 && sizes["$Animal_Boar"][1] % 4 === 0 && sizes["$Animal_Boar_Run"][0] % 3 === 0 && sizes["Swing_Spear"][2] === "Hero_Spear" && sizes["Swing_Spear"][0] % 96 === 0 && sizes["Swing_Spear"][0] >= 768 && sizes["Swing_Spear"][1] === 384, sizes);
         const tg = await J("Hunting.mapTargets()");
         check("Map003 has one boar (besides the rabbits); it is out at dawn and dusk", tg.boar === 1 && (await J("Hunting.SPECIES.boar.hours")).join() === "5,9,17,21", tg);
 

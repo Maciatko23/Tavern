@@ -1,0 +1,10 @@
+# Teksty z Atmosphere.js
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz atmosfera
+
+
+# ======================================================================== z kodu Atmosphere.js (kod.<funkcja>.<n>, w kolejności kodu)
+# onAutosaveSuccess
+kod.onAutosaveSuccess.0 = Gra zapisana (autozapis)
+# onAutosaveFailure
+kod.onAutosaveFailure.0 = Autozapis nie powiódł się

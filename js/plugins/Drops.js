@@ -46,6 +46,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("lupy");   // (the words of this file: js/teksty/lupy.txt, kod.*)
     const T = window.Tawerna;
     if (!T) throw new Error("Drops.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
     const PLUGIN = "Drops";
@@ -87,11 +88,11 @@
     }
     // why it cannot go (the popup's words), "" when it can
     function refuse(it) {
-        if (!it || !DataManager.isItem(it)) return "Tego nie wyrzucę.";
-        if (isKeep(it)) return "Tego nie wyrzucę. To pamiątka.";
-        if (!($gameParty.numItems(it) > 0)) return "Nie mam tego.";
-        if (maxDrop(it) <= 0) return "Tego nie wyrzucę. Potrzebne do zadania.";
-        if (!spot()) return "Tu nie mam gdzie tego położyć.";
+        if (!it || !DataManager.isItem(it)) return TK.kod.refuse[0];
+        if (isKeep(it)) return TK.kod.refuse[1];
+        if (!($gameParty.numItems(it) > 0)) return TK.kod.refuse[2];
+        if (maxDrop(it) <= 0) return TK.kod.refuse[3];
+        if (!spot()) return TK.kod.refuse[4];
         return "";
     }
     // a worn thing whose last one goes (the jacket, the boots, the cloak, the backpack, the shield, the weapon in his hand); the
@@ -180,7 +181,7 @@
             else { delete b.items[key]; if (b.fresh) delete b.fresh[key]; }
         }
         if (!Object.keys(b.items).length) list.splice(list.indexOf(b), 1);
-        else T.popup("Za ciężkie, więcej nie uniosę", { icon: item(Number(Object.keys(b.items)[0])).iconIndex, kind: "need" });
+        else T.popup(TK.kod.takeAll[0], { icon: item(Number(Object.keys(b.items)[0])).iconIndex, kind: "need" });
         rev++;
         return got;
     }

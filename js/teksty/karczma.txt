@@ -1,0 +1,403 @@
+# Teksty karczmy Borgara (TavernLife.js, TavernLife_Render.js): posiłki, pokoje, łaźnia, pieśni Melii, sława.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz karczma
+
+# ======================================================================== Postacie karczmy (imię nad zwykłym okienkiem rozmowy)
+postacie.borgar.name = Borgar
+postacie.melia.name = Melia
+postacie.grum.name = Grum
+postacie.ozzy.name = Dziadek Ozzy
+
+# ======================================================================== Premie (ikonki pod paskiem sił; {procent} - z ustawień wtyczki)
+premie.clean.name = Czysty
+premie.clean.desc = prace kosztują {procent}% mniej sił (po kąpieli)
+premie.inspired.name = Natchniony
+premie.inspired.desc = +{procent}% doświadczenia (po pieśni Melii)
+premie.hosted.name = Ugoszczony
+premie.hosted.desc = głód i pragnienie rosną o {procent}% wolniej (po posiłku w tawernie)
+premie.rested.name = Wypoczęty
+premie.rested.desc = odpoczynek daje 25% więcej sił (po nocy w komnacie albo w apartamencie)
+
+# ======================================================================== Karta dań Borgara (nazwa, podpis, opis, Borgar przy zamówieniu, bohater przy pierwszym kęsie)
+# gulasz
+dania.gulasz.name = Gulasz
+dania.gulasz.sub = gorący · syci na długo · rozgrzewa
+dania.gulasz.desc = Gęsty gulasz z wołowiny, marchwi i kapusty, od rana pyrkający w żeliwnym garze. Łyżka w nim stoi.
+dania.gulasz.order = Gulasz! Siadaj, już nakładam - z samego dna, tam najlepszy.
+dania.gulasz.bite = Łyżka naprawdę w nim stoi... Borgar, ty stary czarodzieju.
+# kapusniak
+dania.kapusniak.name = Kapuśniak
+dania.kapusniak.sub = gorący · kwaśny · rozgrzewa
+dania.kapusniak.desc = Kwaśny kapuśniak na wędzonce, z ziemniakami i koperkiem. Rozgrzewa aż po palce u stóp.
+dania.kapusniak.order = Kapuśniak, jak u matki. No, prawie - matka sypała więcej pieprzu. Siadaj!
+dania.kapusniak.bite = Kwaśny, gorący... jak u dziadka Stacha. Tylko bez gderania.
+# pieczen
+dania.pieczen.name = Pieczeń z kaszą
+dania.pieczen.sub = najbardziej sycące danie karczmy
+dania.pieczen.desc = Pieczeń wieprzowa z chrupiącą skórką, kasza gryczana i sos prosto z brytfanny. Po tym człowiek nie myśli o jedzeniu do wieczora.
+dania.pieczen.order = Pieczeń z kaszą? Ha, dziś świętujesz! Siadaj, zaraz podam.
+dania.pieczen.bite = Skórka chrupie, kasza pachnie... mogę tu zamieszkać?
+# placek
+dania.placek.name = Placek z serem
+dania.placek.sub = słodki · na ząb
+dania.placek.desc = Ciepły placek drożdżowy z twarogiem i łyżką miodu z pasieki za młynem. Kruszy się na brodę.
+dania.placek.order = Placek z serem, na słodko! Siadaj, zaraz przyniosę.
+dania.placek.bite = Słodki jak... no, jak placek z serem. I tyle mi trzeba.
+# chleb
+dania.chleb.name = Chleb ze smalcem
+dania.chleb.sub = tanio · szybko · klasyka
+dania.chleb.desc = Gruba pajda razowca, smalec ze skwarkami i ogórek kiszony. Klasyka za grosze.
+dania.chleb.order = Chleb ze smalcem - jedzenie królów. Biednych królów. Siadaj!
+dania.chleb.bite = Skwarki! Ogórek! Nic więcej do szczęścia.
+# piwo
+dania.piwo.name = Kufel piwa
+dania.piwo.sub = zimne · z beczki Borgara
+dania.piwo.desc = Złociste, z własnej beczki Borgara. Piana na dwa palce, chłód prosto z piwnicy.
+dania.piwo.order = Kufel już się napełnia. Siadaj, bo po piwie lepiej siedzieć.
+dania.piwo.bite = Ach... piana na wąsach, spokój w duszy.
+# miod
+dania.miod.name = Miód pitny
+dania.miod.sub = słodki · mocny · rozgrzewa
+dania.miod.desc = Trójniak z pasieki za młynem. Słodki, mocny i zdradliwy - wchodzi jak woda, wychodzi nogami.
+dania.miod.order = Miód pitny? Tylko ostrożnie - wchodzi jak woda, wychodzi nogami.
+dania.miod.bite = Słodki... i zdradliwy. Już go czuję w kolanach.
+
+# ======================================================================== Sława w tawernie: progi
+[slawa.nazwy]
+Nowy w okolicy
+Znajoma twarz
+Swój chłop
+Pewna ręka
+Chluba tawerny
+
+# Borgar raz na każdy próg z rabatem ({rabat} - rabat progu, np. 10%)
+slawa.mowa.2 = Słyszę, co robisz dla ludzi z tablicy. Swój chłop z ciebie! Od dziś liczę ci wszystko {rabat} taniej - jedzenie, pokój i łaźnię.
+slawa.mowa.3 = Pewna ręka - tak o tobie mówią w całej okolicy. Takim gościom liczę {rabat} mniej. I komnata z kominkiem na górze stoi dla ciebie otworem.
+slawa.mowa.4 = Chluba tawerny we własnej osobie! {rabat} taniej, najlepszy kufel z beczki, a na piętrze złocona krata otworzy się przed tobą. Apartamenty czekają.
+
+# ======================================================================== Pokoje na piętrze: nazwy
+pokoje.nazwy.1 = Izdebka przy schodach
+pokoje.nazwy.2 = Pokój z oknem na dziedziniec
+pokoje.nazwy.3 = Pokój narożny
+pokoje.nazwy.komnata = Komnata z kominkiem
+pokoje.nazwy.zloty = Apartament Złoty
+
+# ======================================================================== Pokoje: opisy na karcie
+pokoje.opisy.1 = Wąskie łóżko, gruby koc z owczej wełny i okienko na podwórze. Ciasno, ale czysto. Chrapanie zza ściany gratis.
+pokoje.opisy.2 = Szerokie łóżko z pierzyną, dzbanek wody i okno na dziedziniec. Rano budzą cię kosy, a nie Grum.
+pokoje.opisy.3 = Narożny pokój z dwoma oknami, dębowe łóżko i miednica z ciepłą wodą o poranku. Cicho jak w klasztorze.
+pokoje.opisy.komnata = Łoże z baldachimem, ogień w kominku i skóra niedźwiedzia przy łóżku. Borgar mówi, że spał tu sam Lord. Borgar dużo mówi.
+pokoje.opisy.zloty = Złocone łoże, jedwabna pościel, kotary z adamaszku. Rano pokojówka wnosi śniadanie do łóżka - na srebrnej tacy.
+
+# ======================================================================== Śniadanie przy łóżku: „Borgar zostawił ci ...”
+pokoje.dar_komu.1 = pajdę chleba
+pokoje.dar_komu.2 = pajdę chleba i kubek mleka
+pokoje.dar_komu.3 = pajdę chleba i kawałek sera
+pokoje.dar_komu.komnata = pajdę chleba i kawałek sera
+
+# ======================================================================== Śniadanie: co (popup „Śniadanie: ...”)
+pokoje.dar.1 = pajda chleba
+pokoje.dar.2 = pajda chleba i kubek mleka
+pokoje.dar.3 = pajda chleba i kawałek sera
+pokoje.dar.komnata = pajda chleba i kawałek sera
+pokoje.dar.zloty = do łóżka, na srebrnej tacy
+
+# ======================================================================== Łaźnia: łaziebna Wanda po kąpieli (po kolei)
+[laznia.kwestie]
+No, teraz przynajmniej konie się nie płoszą, jak przechodzisz.
+Woda była gorąca, a teraz jest... brązowa. Ale ty lśnisz!
+Takiego brudu nie widziałam od czasu, jak kąpał się tu Grum. A Grum kąpie się raz do roku. W porywach.
+Pachniesz jak łąka po deszczu. No, jak łąka. Z tym deszczem to może przesadziłam.
+Uważaj, żebyś się nie zakochał we własnym odbiciu w kuflu.
+
+# ======================================================================== Pieśni Melii (tytuł, zapowiedź, zwrotki - każda linia osobno, słowa po pieśni)
+# kruk, „Czarny kruku”
+piesni.kruk.title = Czarny kruku
+piesni.kruk.intro = Dziś „Czarny kruku”. Najstarsza, jaką znam - stara jak kamienie pod tą podłogą.
+[piesni.kruk.verses.0]
+Hej, kruku, czarny kruku,
+co krążysz nad naszym dachem?
+
+[piesni.kruk.verses.1]
+— Pamiętam mury ze skały
+i straż, co nie znała strachu.
+
+[piesni.kruk.verses.2]
+Nie złota strzegli ni ziemi,
+ni króla, ani korony —
+
+[piesni.kruk.verses.3]
+lecz tego, co w sercu skały
+śpi dotąd, niezbudzone.
+
+piesni.kruk.after = Skąd ją znam? Nie wiem. Czasem słowa przychodzą same, jak natchnienie... albo jak wspomnienie.
+# pytanie, „Jedno pytanie”
+piesni.pytanie.title = Jedno pytanie
+piesni.pytanie.intro = „Jedno pytanie”. Niby kołysanka. Tylko komu by się przy niej dobrze zasypiało?
+[piesni.pytanie.verses.0]
+Raz do roku, w zimną noc,
+strażnik schodził, gdzie śpi moc.
+
+[piesni.pytanie.verses.1]
+Jedno pytanie w dłoni niósł —
+więcej żaden by nie zniósł.
+
+[piesni.pytanie.verses.2]
+Wracał blady, cichy, siwy,
+choć był młody, choć był żywy.
+
+[piesni.pytanie.verses.3]
+Prawda, synku, to nie miód:
+raz do roku — i to cud.
+
+piesni.pytanie.after = Jedno pytanie na rok... Ciekawe, o co ty byś zapytał. Ja chyba wolę nie wiedzieć.
+# straznik, „Strażnik, co pytał za wiele”
+piesni.straznik.title = Strażnik, co pytał za wiele
+piesni.straznik.intro = „Strażnik, co pytał za wiele”. Smutna. A ludzie i tak proszą o nią najczęściej.
+[piesni.straznik.verses.0]
+Był strażnik, co kochał żonę
+i bał się — jak każdy z nas.
+
+[piesni.straznik.verses.1]
+Zszedł w dół, choć nie był to jego
+ni rok, ani dzień, ni czas.
+
+[piesni.straznik.verses.2]
+Pytał o żonę, o brata,
+o mury — czy przetrwają wiek?
+
+[piesni.straznik.verses.3]
+A Skała mu odpowiedziała.
+I nie wrócił ten sam człek.
+
+piesni.straznik.after = Brr. Po tej zawsze ktoś stawia kolejkę. Chyba żeby o niej nie myśleć.
+# drzwi, „Drzwi pod skałą”
+piesni.drzwi.title = Drzwi pod skałą
+piesni.drzwi.intro = „Drzwi pod skałą”. Melodia wesoła, a słowa... sam posłuchaj.
+[piesni.drzwi.verses.0]
+Pod kuflem deska, pod deską próg,
+pod progiem schody — kto by to mógł?
+
+[piesni.drzwi.verses.1]
+A na dole drzwi z kamienia,
+zamknięte na klucz milczenia.
+
+[piesni.drzwi.verses.2]
+Kto tam zapuka, ten usłyszy
+to, czego nie chciał — w wielkiej ciszy.
+
+[piesni.drzwi.verses.3]
+Więc pij, wędrowcze, śpiewaj z nami
+i nie pytaj, co pod kamieniami.
+
+piesni.drzwi.after = Borgar nie lubi tej piosenki. Mówi, że goście potem zaglądają pod stoły.
+# kasztelan, „Ostatni kasztelan”
+piesni.kasztelan.title = Ostatni kasztelan
+piesni.kasztelan.intro = „Ostatni kasztelan”. O Kruczych Skałach i o kimś, kto bardzo nie chciał, żeby je pamiętano.
+[piesni.kasztelan.verses.0]
+Gdy mury legły w pył i w proch,
+ostatni kasztelan zamknął loch.
+
+[piesni.kasztelan.verses.1]
+Klucz zakopał, zatarł ślad
+i puścił plotkę w cały świat:
+
+[piesni.kasztelan.verses.2]
+„Przeklęte gruzy, zły to gród —
+nie kop, bo zginiesz ty i twój ród!”
+
+[piesni.kasztelan.verses.3]
+Wieki minęły. Kto dziś wie,
+na czym ten Złoty Kufel śpi?
+
+piesni.kasztelan.after = Kasztelan... Ciekawe, czy miał dzieci. I czy one wiedziały, co tatko zakopał.
+# chlopiec, „O chłopcu z piwnicy”
+piesni.chlopiec.title = O chłopcu z piwnicy
+piesni.chlopiec.intro = A teraz coś wesołego! „O chłopcu z piwnicy”. Ozzy, nie patrz tak na mnie.
+[piesni.chlopiec.verses.0]
+Był raz chłopiec, psotnik mały,
+co wpadł w piwnicę pod Kruczą Skałą.
+
+[piesni.chlopiec.verses.1]
+Wrócił nad ranem, brudny, chudy,
+i gadał rzeczy — same cudy!
+
+[piesni.chlopiec.verses.2]
+Wiedział, kto kłamie, kto kradnie z sadu,
+i dzień, gdy spadnie deszcz pełen gradu.
+
+[piesni.chlopiec.verses.3]
+Dziś pije piwo, gada do ściany —
+a wszyscy myślą, że jest pijany.
+
+piesni.chlopiec.after = Ozzy zawsze przy niej płacze. Mówi, że ze śmiechu. Ja myślę, że nie tylko.
+
+# ======================================================================== z kodu TavernLife.js (kod.<funkcja>.<n>, w kolejności kodu)
+# hoursText
+kod.hoursText.0 = {1} godz.
+# needGold
+kod.needGold.0 = Brakuje ci {1} G
+# eatDish
+kod.eatDish.0 = +{gained} wytrzymałości
+kod.eatDish.1 = Ugoszczony ({1})
+kod.eatDish.2 = "Wypiłeś: "
+kod.eatDish.3 = "Zjadłeś: "
+kod.eatDish.4 = Karczma Borgara
+kod.eatDish.5 = U Borgara zjesz gorący posiłek za parę monet: przy ladzie wybierasz z karty, siadasz przy wolnym stole, a on podaje. Codziennie inne danie dnia jest tańsze.\nPo posiłku w tawernie jestem Ugoszczony: przez kilka godzin głód i pragnienie rosną o {1}% wolniej.
+kod.eatDish.6 = pierwszy posiłek w tawernie
+# mealCardSpec
+kod.mealCardSpec.0 = DANIE DNIA
+kod.mealCardSpec.1 = KARCZMA „POD ZŁOTYM KUFLEM” · KUCHNIA BORGARA
+kod.mealCardSpec.2 = Karta dań
+kod.mealCardSpec.3 = zamów
+kod.mealCardSpec.4 = Posiłek przy stole: 15-30 minut
+# mealSeq
+kod.mealSeq.0 = Stoły zajęte? Zjem przy ladzie.
+# mealTalk
+kod.mealTalk.0 = Śniadanko? Kuchnia już grzeje.
+kod.mealTalk.1 = Głodny? U mnie nikt nie wychodzi głodny. Najwyżej biedniejszy.
+kod.mealTalk.2 = Wieczór bez kolacji to wieczór stracony. Co podać?
+kod.mealTalk.3 = O tej porze? Kuchnia prawie zgaszona, ale dla ciebie coś się znajdzie.
+kod.mealTalk.4 = {greet} Dziś danie dnia: {2} - {3} G zamiast {price}.
+kod.mealTalk.5 = Wybierasz z karty, płacisz, siadasz przy wolnym stole - a ja podaję. Kto zje u mnie, ten przez parę godzin jest ugoszczony: głód i pragnienie mniej mu dokuczają.
+# repFoot
+kod.repFoot.0 = Sława: {1} · u Borgara −{2}
+# roomLabel
+kod.roomLabel.0 = Pokój nr {room}
+# readTags
+kod.readTags.0 = Pokój {n}
+# onlyFor
+kod.onlyFor.0 = tylko dla dostojnych gości
+kod.onlyFor.1 = tylko dla stałych, zaufanych gości
+kod.onlyFor.2 = {1} (sława „{2}”)
+# rentRoom
+kod.rentRoom.0 = Pokój w karczmie
+kod.rentRoom.1 = Borgar wynajmuje pokoje na piętrze na jedną noc ({1}). Drzwi pokoju są otwarte do {CHECKOUT}:00 rano.\nW łóżku w karczmie śpi się bezpiecznie (żadne wilki tu nie zajrzą) i budzi się w pełni sił. Rano przy łóżku czeka śniadanie od Borgara.
+kod.rentRoom.2 = Apartament Złoty na piętrze Apartamentów wynajmuje się tylko Chlubie tawerny. Po nocy w nim śniadanie podają do łóżka, a przez {zloty} godz. jestem Wypoczęty: odpoczynek daje {2} więcej sił.
+kod.rentRoom.3 = Komnatę z kominkiem Borgar wynajmuje tylko stałym, zaufanym gościom. Po nocy w niej przez {komnata} godz. jestem Wypoczęty: odpoczynek daje {2} więcej sił.
+# welcomeGate
+kod.welcomeGate.0 = Dzyń, dzyń! Witamy w Apartamentach, szanowny gościu!
+kod.welcomeGate.1 = Apartamenty stoją przed tobą otworem
+kod.welcomeGate.2 = Sława: {1} - złocona krata na piętrze jest otwarta
+kod.welcomeGate.3 = Złocona krata na piętrze otworzyła się przede mną: sława „{1}”. Za nią Apartament Złoty - Borgar wynajmuje go na noc. Śniadanie podają tam do łóżka.
+# lockedTalk
+kod.lockedTalk.0 = Złocona krata, a przy niej mosiężny dzwonek. Na tabliczce: „Apartamenty tylko dla dostojnych gości.”
+kod.lockedTalk.1 = Dzwonię... cisza. Trzeba by być chlubą tej tawerny, żeby mi tu otworzyli.
+kod.lockedTalk.2 = Na drzwiach złota tabliczka: „Apartament Złoty. Wstęp tylko dla dostojnych gości.”
+kod.lockedTalk.3 = Komnatę
+kod.lockedTalk.4 = Ten pokój
+kod.lockedTalk.5 = Na drzwiach mosiężna tabliczka: „{1} wynajmujemy tylko stałym, zaufanym gościom.”
+# roomCardSpec
+kod.roomCardSpec.0 = "pokój nr {room} · "
+kod.roomCardSpec.1 = {1}śniadanie: {2}
+kod.roomCardSpec.2 = dla dostojnych gości
+kod.roomCardSpec.3 = dla stałych gości
+kod.roomCardSpec.4 = sława „{1}” - {2}
+kod.roomCardSpec.5 = PIĘTRO „ZŁOTEGO KUFLA” · POKOJE GOŚCI
+kod.roomCardSpec.6 = Pokoje na noc
+kod.roomCardSpec.7 = Płacisz za jedną noc · pobudka o {1}:00
+# roomTalk
+kod.roomTalk.0 = pokój
+kod.roomTalk.1 = Masz już pokój na tę noc: {1}. Schody na górę, drzwi otwarte - śpij smacznie!
+kod.roomTalk.2 = Pokoje na górze jeszcze w remoncie - cieśle obiecali skończyć w tym tygodniu. Który to już tydzień...
+kod.roomTalk.3 = Pokój na noc? O tej porze? Proszę bardzo - płacisz za noc, a wylegiwać się możesz od zaraz.
+kod.roomTalk.4 = Pokoje na piętrze. Pościel świeża, pluskwy wyprowadziły się w zeszłym miesiącu. Chyba.
+kod.roomTalk.5 = Płacisz za jedną noc: drzwi pokoju otwarte do {CHECKOUT}:00 rano, śpisz bezpiecznie jak u mamy, a rano przy łóżku czeka śniadanie.
+# rentLine
+kod.rentLine.0 = Komnata z kominkiem twoja do rana. Kazałem napalić w kominku i wytrzepać niedźwiedzia. Śniadanie będzie przy łóżku.
+kod.rentLine.1 = Apartament Złoty! Pościel taka sama jak u Lorda - no, prawie. Rano pokojówka poda śniadanie do łóżka, na srebrnej tacy.
+kod.rentLine.2 = twój
+kod.rentLine.3 = {1} {2} do rana. Schody na górę - drzwi już otwarte, świeca się pali. Śniadanie zostawię przy łóżku.
+# bedTalk
+kod.bedTalk.0 = numer {room}
+kod.bedTalk.1 = To nie twój pokój - twój to {1}.
+kod.bedTalk.2 = To łóżko gościa. Pokój wynajmiesz u Borgara.
+kod.bedTalk.3 = Już się wyspałeś. Pokój jest twój do {CHECKOUT}:00.
+kod.bedTalk.4 = Za dnia? Ale łóżko kusi... Położyć się spać do rana?
+kod.bedTalk.5 = Położyć się spać?
+kod.bedTalk.6 = Śpij do rana
+kod.bedTalk.7 = Jeszcze nie
+# sleepSeq
+kod.sleepSeq.0 = Śniadanie do łóżka, na srebrnej tacy. Liścik: „Na koszt domu. Borgar”.
+kod.sleepSeq.1 = Wstajesz jak nowo narodzony. Przy kominku czeka pajda chleba i ser.
+kod.sleepSeq.2 = Wyspałeś się jak król.
+kod.sleepSeq.3 = Spałeś jak kamień, bez jednego snu.
+kod.sleepSeq.4 = Pierzyna, cisza, zero wilków - wyspałeś się jak nigdy.
+kod.sleepSeq.5 = {1} Borgar zostawił ci {2}.
+kod.sleepSeq.6 = Śniadanie do łóżka: jajecznica, świeży chleb, kubek mleka. Ugoszczony ({1})
+kod.sleepSeq.7 = Wypoczęty ({1}): odpoczynek daje {2} więcej sił
+kod.sleepSeq.8 = noc w karczmie
+# attSay
+kod.attSay.0 = Łaziebna Wanda
+# bathTalk
+kod.bathTalk.0 = Przecież dopiero co się kąpałeś! Jeszcze raz i zetrzesz sobie skórę do kości. No, ale płacisz - twoja wola.
+kod.bathTalk.1 = , Borgar kazał ci liczyć taniej
+kod.bathTalk.2 = Kąpiel? Gorąca woda, szare mydło i szorstki ręcznik - {price} G{2}. Szorowanie pleców gratis, ale tylko po znajomości.
+kod.bathTalk.3 = Po kąpieli człowiek lżejszy - każda robota idzie o {1}% łatwiej, póki znowu się nie ubabrzesz. Czyli parę godzin.
+kod.bathTalk.4 = " zamiast {BATH_PRICE} G"
+kod.bathTalk.5 = Wykąp się ({price} G{2})
+kod.bathTalk.6 = Nie teraz
+# bathSeq
+kod.bathSeq.0 = Aaach... gorąca woda. Jak w niebie.
+kod.bathSeq.1 = Tylko nie zasnąć...
+kod.bathSeq.2 = Czysty ({1}): prace kosztują {2}% mniej sił
+kod.bathSeq.3 = Łaźnia
+kod.bathSeq.4 = W łaźni karczmy gorąca kąpiel kosztuje {BATH_PRICE} G i trwa godzinę. Potem jestem Czysty: przez {CLEAN_HOURS} godz. każda praca kosztuje {3}% mniej sił.
+kod.bathSeq.5 = pierwsza kąpiel
+# songTalk
+kod.songTalk.0 = Scena pusta. Melia dziś nie śpiewa.
+kod.songTalk.1 = Scena pusta - Melia poszła śpiewać kołysankę pod murem.
+kod.songTalk.2 = Śpiewam wieczorami, od {SONG_FROM}:00. Teraz stroję lutnię... i nerwy.
+kod.songTalk.3 = O tej porze? Gardło mi śpi, a lutnia chrapie. Przyjdź wieczorem, od {SONG_FROM}:00.
+kod.songTalk.4 = Dziś już śpiewałam - gardło mam jedno, a ballad sto. Przyjdź jutro wieczorem!
+kod.songTalk.5 = "Znowu ty? Miło! "
+kod.songTalk.6 = "Posłuchasz? Wieczór bez pieśni jest jak kufel bez piany. "
+kod.songTalk.7 = Wrzuć {SONG_TIP} G do kapelusza
+kod.songTalk.8 = Posłuchaj za darmo
+kod.songTalk.9 = Innym razem
+# songList
+kod.songList.0 = Dziękuję, złotko! Za to dostaniesz jeszcze refren.
+# songEnd
+kod.songEnd.0 = Natchniony ({1}): +{2}% doświadczenia
+kod.songEnd.1 = Pieśni Melii
+kod.songEnd.2 = Melia Srebrogłosa śpiewa wieczorami (od {SONG_FROM}:00), raz na wieczór. Po jej pieśni jestem Natchniony: więcej doświadczenia. Sama nie wie, skąd zna te ballady...\n\n{lyric}
+kod.songEnd.3 = Dziennik: nowa pieśń w notatce „Pieśni Melii”
+kod.songEnd.4 = wszystkie ballady Melii
+# quitLabel
+kod.quitLabel.0 = tracisz {stake} G
+kod.quitLabel.1 = Poddaję się ({1})
+# counterTalk
+kod.counterTalk.0 = Dzień dobry! Czym mogę służyć?
+kod.counterTalk.1 = Czym mogę służyć? Kuchnia grzeje, pokoje wietrzą się na górze.
+kod.counterTalk.2 = Dobry wieczór! Coś na ząb? Pokój na noc?
+kod.counterTalk.3 = Zjedz coś
+kod.counterTalk.4 = Wynajmij pokój
+kod.counterTalk.5 = Nic, dzięki
+# use
+kod.use.0 = Tu podają jedzenie - zamów u Borgara przy ladzie.
+# step
+kod.step.0 = Nie jesteś głodny? To może później.
+kod.step.1 = Rozmyśliłeś się? Kuchnia nie ucieknie.
+kod.step.2 = Stoły zajęte - zjesz przy ladzie, jak za dawnych czasów.
+kod.step.3 = Na krechę wody nie grzeję.
+kod.step.4 = Pusta sakiewka? Nie szkodzi - zaśpiewam i tak.
+# borgarOptions
+kod.borgarOptions.0 = Zjedz coś
+kod.borgarOptions.1 = Wynajmij pokój
+
+# ======================================================================== z kodu TavernLife_Render.js (obraz.<funkcja>.<n>, w kolejności kodu)
+# redraw
+obraz.redraw.0 = wybór
+obraz.redraw.1 = wróć
+# dishFacts
+obraz.dishFacts.0 = Wytrzymałość +{stamina}
+obraz.dishFacts.1 = Sytość +{fed}
+obraz.dishFacts.2 = Nawodnienie +{water}
+obraz.dishFacts.3 = Ugoszczony · {1}
+# detailRoom
+obraz.detailRoom.0 = Pokój {room} · {name}
+obraz.detailRoom.1 = Pełny wypoczynek, bezpieczny sen
+obraz.detailRoom.2 = Śniadanie: {1}
+obraz.detailRoom.3 = Rano: Wypoczęty · {1} (odpoczynek +{2})
+obraz.detailRoom.4 = Świeca i ciepła pościel
+obraz.detailRoom.5 = Pokój twój do {CHECKOUT}:00 rano

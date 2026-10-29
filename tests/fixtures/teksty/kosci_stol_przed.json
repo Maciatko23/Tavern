@@ -1,0 +1,13 @@
+{
+ "stol": {
+  "przyciski": {
+   "rules": {
+    "label": "Zasady"
+   },
+   "leave": {
+    "label": "Odejdź"
+   }
+  }
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TavernDice_Art_przed.js: BTN=stol.przyciski:id:/(^|\\.)label$/)"
+}

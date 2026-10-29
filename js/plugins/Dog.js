@@ -35,6 +35,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("pies");   // (the words of this file: js/teksty/pies.txt, kod.*)
 
     const PLUGIN = "Dog";
     const T = window.Tawerna;
@@ -265,7 +266,7 @@
             if (d.st >= maxSt() * DOG.rested) this._task = null;
             else return this.lieAt(k, "rest");
         }
-        if (d.st < maxSt() * DOG.tired && !this._drag && !(this._task && this._task.kind === "hunt")) { this._task = { kind: "rest" }; popup(DOG_ICON(), "Pies zmęczony - odpoczywa w budzie", "#cfe6a8"); return; }
+        if (d.st < maxSt() * DOG.tired && !this._drag && !(this._task && this._task.kind === "hunt")) { this._task = { kind: "rest" }; popup(DOG_ICON(), TK.kod.think[0], "#cfe6a8"); return; }
         this.setPose("");
         if (!this._task) this._task = this.nextTask();
         if (this._task) this.doTask();
@@ -415,7 +416,7 @@
                 if (!p.bird && p.ref._scare) { p.ref._scare.x = this._realX; p.ref._scare.y = this._realY; p.ref._scare.t = Math.max(p.ref._scare.t, 60); }
                 if (++t.bolted > (p.bird ? 10 : DOG.giveUp / 8)) {
                     p.ref._dogSpared = Graphics.frameCount + DOG.spared;
-                    popup(DOG_ICON(), (p.bird ? "Ptaki" : Hunting.SPECIES[p.ref.kind()] ? Hunting.SPECIES[p.ref.kind()].name : "Zwierzyna") + " uciekł" + (p.bird ? "y" : "") + " psu", "#ffd98f");
+                    popup(DOG_ICON(), Watki.wstaw(TK.kod.hunt[0], { "1": p.bird ? "Ptaki" : Hunting.SPECIES[p.ref.kind()] ? Hunting.SPECIES[p.ref.kind()].name : "Zwierzyna", "2": p.bird ? "y" : "" }), "#ffd98f");
                     this._task = null;
                     this._huntT = d.mode === "hunt" ? DOG.huntGap / 6 : DOG.huntGap;
                     return;
@@ -432,19 +433,19 @@
             AudioManager.playSe({ name: "Bite", volume: 55, pitch: 115, pan: 0 });
             if (p.bird) {
                 const n = Birds.killBird(p.ref, { forDog: true }) || 1;
-                if (d.food < DOG.eatPrey) { preyMeal(d, "bird"); popup(DOG_ICON(), "Pies złapał ptaka i zjadł go", "#cfe6a8"); }   // (hungry: its own meal)
-                else { addCarry(FEATHERS, n); popup($dataItems[FEATHERS].iconIndex, "Pies złapał ptaka", "#cfe6a8"); }
+                if (d.food < DOG.eatPrey) { preyMeal(d, "bird"); popup(DOG_ICON(), TK.kod.hunt[1], "#cfe6a8"); }   // (hungry: its own meal)
+                else { addCarry(FEATHERS, n); popup($dataItems[FEATHERS].iconIndex, TK.kod.hunt[2], "#cfe6a8"); }
                 this._task = null; this._huntT = d.mode === "hunt" ? DOG.huntGap / 6 : DOG.huntGap;
                 return;
             }
             const a = p.ref, kind = a.kind();
             Hunting.hit(a, kind === "deer" ? Math.ceil((a._maxHp || 40) / DOG.deerBites) : DOG.bite, "dog");
-            if (kind === "deer" && a._hp > 0 && Math.random() < DOG.deerKick) { hurtDog(DOG.kick); popup(DOG_ICON(), "Jeleń kopnął psa", "#ffb4a0"); }
+            if (kind === "deer" && a._hp > 0 && Math.random() < DOG.deerKick) { hurtDog(DOG.kick); popup(DOG_ICON(), TK.kod.hunt[3], "#ffb4a0"); }
             if (kind === "deer" && a._hp > 0 && !a._dead && Math.random() < DOG.deerEscape) {   // wounded, it breaks away; the dog lets it go
                 a._scare = { x: this._realX, y: this._realY, t: 300 };
                 a._fleeing = true;
                 a._dogSpared = Graphics.frameCount + DOG.spared;
-                popup(DOG_ICON(), "Jeleń wyrwał się psu i uciekł (ranny)", "#ffd98f");
+                popup(DOG_ICON(), TK.kod.hunt[4], "#ffd98f");
                 this._task = null;
                 this._huntT = d.mode === "hunt" ? DOG.huntGap / 6 : DOG.huntGap;
                 return;
@@ -455,12 +456,12 @@
                 const name = Hunting.SPECIES[kind] ? Hunting.SPECIES[kind].name : kind;
                 if (c && d.food < DOG.eatPrey) {   // hungry: it eats - a small catch whole; from a deer its fill, the carcass stays for him
                     preyMeal(d, kind);
-                    if (kind === "deer") popup(DOG_ICON(), "Pies najadł się jeleniem - tusza leży", "#cfe6a8");
-                    else { if (Hunting.removeCarcass) Hunting.removeCarcass(c); popup(DOG_ICON(), "Pies upolował i zjadł: " + name, "#cfe6a8"); }
+                    if (kind === "deer") popup(DOG_ICON(), TK.kod.hunt[5], "#cfe6a8");
+                    else { if (Hunting.removeCarcass) Hunting.removeCarcass(c); popup(DOG_ICON(), Watki.wstaw(TK.kod.hunt[6], { name: name }), "#cfe6a8"); }
                     this._task = null;
                     this._wait = 60;
                 }
-                else if (c) { this._drag = c; this._task = { kind: "haul" }; popup(DOG_ICON(), "Pies upolował: " + name, "#cfe6a8"); }
+                else if (c) { this._drag = c; this._task = { kind: "haul" }; popup(DOG_ICON(), Watki.wstaw(TK.kod.hunt[7], { name: name }), "#cfe6a8"); }
                 else this._task = null;
                 this._huntT = d.mode === "hunt" ? DOG.huntGap / 6 : DOG.huntGap;
             }
@@ -477,7 +478,7 @@
         letGo(this);
         this._task = null;
         if (c) { c.x = (toHim ? this.centerX() : spot.x + 0.5) + (Math.random() - 0.5) * 0.6; c.y = (toHim ? this.centerY() : spot.y) + 0.75; }
-        if (c && toHim) popup(DOG_ICON(), "Pies przyniósł ci zdobycz", "#cfe6a8");
+        if (c && toHim) popup(DOG_ICON(), TK.kod.haul[0], "#cfe6a8");
         this._wait = 30;
     };
 
@@ -501,7 +502,7 @@
             c.n -= put;
         }
         d.carry = d.carry.filter(c => c.n > 0);
-        if (names.length) popup(DOG_ICON(), "Pies zniósł na składowisko: " + names.join(", "), "#cfe6a8");
+        if (names.length) popup(DOG_ICON(), Watki.wstaw(TK.kod.unload[0], { "1": names.join(", ") }), "#cfe6a8");
         void g;
     }
     function hurtDog(n) {
@@ -510,7 +511,7 @@
         if (d.hp <= 0 && !(d.hurtUntil > clock())) {
             d.hurtUntil = clock() + DOG.hurtHours;
             if (dog) { dog._task = null; letGo(dog); }
-            popup(DOG_ICON(), "Pies jest ranny - wlecze się do budy", "#ffb4a0");
+            popup(DOG_ICON(), TK.kod.hurtDog[0], "#ffb4a0");
         }
     }
 
@@ -584,7 +585,7 @@
         if (d.hurtUntil && now >= d.hurtUntil) {
             d.hurtUntil = 0;
             d.hp = maxHp();
-            popup(DOG_ICON(), "Pies wyzdrowiał", "#cfe6a8");
+            popup(DOG_ICON(), TK.kod.tickNeeds[0], "#cfe6a8");
         }
         const hunting = dog && dog._task && dog._task.kind === "hunt";
         const resting = !dog || dog._sleeping || (d.hurtUntil > now) || d.mode === "stay";
@@ -689,13 +690,13 @@
     const meatInBag = () => MEATS.find(id => $dataItems[id] && $gameParty.numItems($dataItems[id]) > 0) || 0;
     function feedWild() {
         const d = state(), meat = meatInBag();
-        if (!meat) { popup(DOG_ICON(), "Nie masz mięsa", "#ffb4a0"); return; }
-        if (clock() - d.fedAt < DOG.feedGapHours) { popup(DOG_ICON(), "Pies już zjadł - daj mu chwilę", "#ffb4a0"); return; }
+        if (!meat) { popup(DOG_ICON(), TK.kod.feedWild[0], "#ffb4a0"); return; }
+        if (clock() - d.fedAt < DOG.feedGapHours) { popup(DOG_ICON(), TK.kod.feedWild[1], "#ffb4a0"); return; }
         $gameParty.loseItem($dataItems[meat], 1);
         d.fedAt = clock();
         d.trust++;
         AudioManager.playSe({ name: "Bite", volume: 50, pitch: 120, pan: 0 });
-        if (d.trust < DOG.trustNeed) { popup(DOG_ICON(), "Pies zjadł " + $dataItems[meat].name.toLowerCase() + " (zaufanie " + d.trust + "/" + DOG.trustNeed + ")", "#cfe6a8"); return; }
+        if (d.trust < DOG.trustNeed) { popup(DOG_ICON(), Watki.wstaw(TK.kod.feedWild[2], { "1": $dataItems[meat].name.toLowerCase(), trust: d.trust, trustNeed: DOG.trustNeed }), "#cfe6a8"); return; }
         d.tame = true;
         d.hp = maxHp(); d.st = maxSt(); d.food = 80; d.water = 70; d.clock = clock();
         d.map = $gameMap.mapId();
@@ -703,19 +704,19 @@
         d.mode = k ? "work" : "follow";
         if (k && k.map !== d.map) d.mode = "follow";
         AudioManager.playSe({ name: "Item3", volume: 70, pitch: 100, pan: 0 });
-        popup(DOG_ICON(), d.mode === "work" ? "Pies ci zaufał! Zamieszka w budzie." : "Pies ci zaufał i chodzi za tobą. Zbuduj mu budę.", "#9ff0a8");
+        popup(DOG_ICON(), d.mode === "work" ? TK.kod.feedWild[3] : TK.kod.feedWild[4], "#9ff0a8");
     }
     function setMode(mode) {
         const d = state();
         if (mode === "hunt" && dog) dog._huntT = 0;
         if (mode === "work") {
             const k = kennelAnywhere();
-            if (!k) { popup(DOG_ICON(), "Pies potrzebuje budy", "#ffb4a0"); return; }
-            if (k.map !== $gameMap.mapId()) { d.map = k.map; d.x = kennelSpot(k.b).x; d.y = kennelSpot(k.b).y; removeDog(); popup(DOG_ICON(), "Pies pobiegł do budy", "#cfe6a8"); d.mode = "work"; return; }
+            if (!k) { popup(DOG_ICON(), TK.kod.setMode[0], "#ffb4a0"); return; }
+            if (k.map !== $gameMap.mapId()) { d.map = k.map; d.x = kennelSpot(k.b).x; d.y = kennelSpot(k.b).y; removeDog(); popup(DOG_ICON(), TK.kod.setMode[1], "#cfe6a8"); d.mode = "work"; return; }
         }
         d.mode = mode;
         if (dog) { dog._task = null; dog._wait = 0; }
-        popup(DOG_ICON(), mode === "follow" ? "Pies idzie za tobą" : mode === "stay" ? "Pies zostaje tutaj" : mode === "hunt" ? "Pies rusza na polowanie" : "Pies pracuje: zbiera i poluje", "#cfe6a8");
+        popup(DOG_ICON(), mode === "follow" ? TK.kod.setMode[2] : mode === "stay" ? TK.kod.setMode[3] : mode === "hunt" ? TK.kod.setMode[4] : TK.kod.setMode[5], "#cfe6a8");
     }
     // ---- the bowl at the kennel: food in its store (a small food-only chest: it spoils there as in a chest), water in bowlWater
     // what one piece from the bowl gives: the dog column of the one food table (FoodTable in Farming_Data.js - changed there)
@@ -753,35 +754,35 @@
     }
     function bowlText(k) {
         const food = bowlStacks(k).reduce((t, s) => t + s.n, 0);
-        return "Miska: jedzenie " + food + ", woda " + (k.bowlWater || 0) + "/" + (F().BUILDINGS.doghouse.bowl || 3);
+        return Watki.wstaw(TK.kod.bowlText[0], { food: food, "2": k.bowlWater || 0, "3": F().BUILDINGS.doghouse.bowl || 3 });
     }
     // the water: poured from the bucket carried in the bag, else from the waterskin
     function pourWater(k) {
         const max = F().BUILDINGS.doghouse.bowl || 3;
-        if ((k.bowlWater || 0) >= max) { popup(391, "Miska jest pełna", "#9fd4ff"); return false; }
+        if ((k.bowlWater || 0) >= max) { popup(391, TK.kod.pourWater[0], "#9fd4ff"); return false; }
         if (F().bagWater && F().bagWater() >= 1) F().setBagWater(F().bagWater() - 1);
         else if (window.Needs && Needs.skinCharges && Needs.skinCharges() >= 1) Needs.state().skin = Needs.skinCharges() - 1;
-        else { popup(391, "Nie masz wody: nabierz do wiadra albo bukłaka", "#ffb4a0"); return false; }
+        else { popup(391, TK.kod.pourWater[1], "#ffb4a0"); return false; }
         k.bowlWater = (k.bowlWater || 0) + 1;
         AudioManager.playSe({ name: "Water1", volume: 70, pitch: 110, pan: 0 });
-        popup(391, "Woda w misce: " + k.bowlWater + "/" + max, "#9fd4ff");
+        popup(391, Watki.wstaw(TK.kod.pourWater[2], { bowlWater: k.bowlWater, max: max }), "#9fd4ff");
         return true;
     }
     if (window.Farming && Farming.addMenuHook) Farming.addMenuHook((b, def, entries) => {
         if (b.type !== "doghouse" || b.site) return null;
         const max = def.bowl || 3, have = (F().bagWater && F().bagWater() >= 1) || (window.Needs && Needs.skinCharges && Needs.skinCharges() >= 1);
         const at = Math.max(0, entries.findIndex(e => e.name === def.openName) + 1);
-        entries.splice(at, 0, { name: "Nalej wody do miski", icon: 391, right: (b.bowlWater || 0) + "/" + max, enabled: (b.bowlWater || 0) < max && !!have,
-            help: (b.bowlWater || 0) >= max ? "Miska jest pełna." : have ? "Nalewasz porcję wody z wiadra (albo z bukłaka). Pies napije się z miski, kiedy nie znajdzie wody - ze studni sam nie sięgnie."
-                : "Potrzebujesz wody: nabierz do wiadra albo do bukłaka (przy studni, stawie, garnku z deszczówką).", run: () => pourWater(b) });
+        entries.splice(at, 0, { name: TK.kod.glowna[0], icon: 391, right: (b.bowlWater || 0) + "/" + max, enabled: (b.bowlWater || 0) < max && !!have,
+            help: (b.bowlWater || 0) >= max ? TK.kod.glowna[1] : have ? TK.kod.glowna[2]
+                : TK.kod.glowna[3], run: () => pourWater(b) });
         return bowlText(b);
     });
     function statusNote() {
         const d = state();
-        if (!d.tame) return "Nieufny: zaufanie " + d.trust + "/" + DOG.trustNeed + ". Rzuć mu mięso (najwyżej raz na godzinę).";
-        const hurt = d.hurtUntil > clock() ? " · RANNY (" + Math.ceil(d.hurtUntil - clock()) + " godz.)" : "";
+        if (!d.tame) return Watki.wstaw(TK.kod.statusNote[0], { trust: d.trust, trustNeed: DOG.trustNeed });
+        const hurt = d.hurtUntil > clock() ? Watki.wstaw(TK.kod.statusNote[1], { "1": Math.ceil(d.hurtUntil - clock()) }) : "";
         const k = kennelAnywhere();
-        return "Życie " + Math.round(d.hp) + "/" + maxHp() + " · Siły " + Math.round(d.st) + "/" + maxSt() + " · Jedzenie " + Math.round(d.food) + " · Woda " + Math.round(d.water) + hurt + (k ? " · " + bowlText(k.b) : "");
+        return Watki.wstaw(TK.kod.statusNote[2], { "1": Math.round(d.hp), "2": maxHp(), "3": Math.round(d.st), "4": maxSt(), "5": Math.round(d.food), "6": Math.round(d.water), hurt: hurt, "8": k ? " · " + bowlText(k.b) : "" });
     }
     function openDogMenu() {
         const d = state(), scene = SceneManager._scene;
@@ -789,19 +790,19 @@
         let entries;
         if (!d.tame) {
             const meat = meatInBag();
-            entries = [{ name: "Rzuć mu mięso", icon: meat ? $dataItems[meat].iconIndex : icon, right: meat ? $dataItems[meat].name : "", enabled: !!meat,
-                help: meat ? "Rzucasz mu kawałek mięsa (z kilku kroków, bo nie da się podejść). Po trzech posiłkach, najwyżej jeden na godzinę, pies zostanie z tobą." : "Potrzebujesz mięsa: surowego, pieczonego albo wędzonego (albo ryby).", run: feedWild }];
+            entries = [{ name: TK.kod.openDogMenu[0], icon: meat ? $dataItems[meat].iconIndex : icon, right: meat ? $dataItems[meat].name : "", enabled: !!meat,
+                help: meat ? TK.kod.openDogMenu[1] : TK.kod.openDogMenu[2], run: feedWild }];
         } else {
             const k = kennelAnywhere();
             entries = [
-                { name: "Pogłaszcz", icon, help: "Pies merda ogonem.", run: () => { if (dog) { dog._wag = 90; dog.turnTowardCharacter($gamePlayer); } popup(icon, "Pies merda ogonem ♥", "#f3e0a0"); } },
-                { name: "Chodź za mną", icon, enabled: d.mode !== "follow", help: "Pies chodzi za tobą, także na inne mapy.", run: () => setMode("follow") },
-                { name: "Pracuj sam", icon, enabled: d.mode !== "work" && !!k, help: k ? "Pies zbiera gałęzie, kamienie i włókno, poluje na zające, jelenie i ptaki i znosi wszystko na składowisko. Nocą śpi w budzie." : "Najpierw zbuduj psu budę.", run: () => setMode("work") },
-                { name: "Poluj", icon, enabled: d.mode !== "hunt", help: "Pies szuka zwierzyny na całej mapie - zające, jelenie i ptaki - i przynosi ją w pysku na składowisko (bez składowiska: pod budę albo do ciebie). Gdy nic nie widać, węszy po okolicy.", run: () => setMode("hunt") },
-                { name: "Zostań", icon, enabled: d.mode !== "stay", help: "Pies kładzie się tutaj i czeka.", run: () => setMode("stay") }
+                { name: TK.kod.openDogMenu[3], icon, help: TK.kod.openDogMenu[4], run: () => { if (dog) { dog._wag = 90; dog.turnTowardCharacter($gamePlayer); } popup(icon, TK.kod.run[0], "#f3e0a0"); } },
+                { name: TK.kod.openDogMenu[5], icon, enabled: d.mode !== "follow", help: TK.kod.openDogMenu[6], run: () => setMode("follow") },
+                { name: TK.kod.openDogMenu[7], icon, enabled: d.mode !== "work" && !!k, help: k ? TK.kod.openDogMenu[8] : TK.kod.openDogMenu[9], run: () => setMode("work") },
+                { name: "Poluj", icon, enabled: d.mode !== "hunt", help: TK.kod.openDogMenu[10], run: () => setMode("hunt") },
+                { name: TK.kod.openDogMenu[11], icon, enabled: d.mode !== "stay", help: TK.kod.openDogMenu[12], run: () => setMode("stay") }
             ];
         }
-        if (scene && scene.openFarmMenu) scene.openFarmMenu(d.tame ? "Pies" : "Dziki pies", entries, undefined, undefined, undefined, undefined, statusNote());
+        if (scene && scene.openFarmMenu) scene.openFarmMenu(d.tame ? "Pies" : TK.kod.openDogMenu[13], entries, undefined, undefined, undefined, undefined, statusNote());
     }
     const CALM_MENU = { only: ["onMap", "event", "farmMenu"] };   // (on the map, no event running, no farm menu open)
     const _triggerButtonAction = Game_Player.prototype.triggerButtonAction;
@@ -924,7 +925,7 @@
         bm._baseTexture && bm._baseTexture.update();
         bm.fontSize = 17;
         bm.textColor = window.UIStyle ? UIStyle.accent : "#ffd23f";
-        bm.drawText("Składowisko", 10, 5, labelW - 12, 26, "left");
+        bm.drawText(TK.kod.update[0], 10, 5, labelW - 12, 26, "left");
         if (!stacks.length) { bm.textColor = "#8a9099"; bm.fontSize = 15; bm.drawText("pusto", labelW, 5, 80, 26, "left"); }
         bm.fontSize = 15;
         bm.textColor = "#eceef0";

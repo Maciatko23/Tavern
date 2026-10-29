@@ -9,7 +9,6 @@ missed = Uciekł...
 released = Wypuszczasz go. Odlatuje.
 pawikNet = Pawik w siatce. Pokaż go Eli przed zmierzchem.
 pawikGone = Pawik w siatce osłabł. Wypuszczasz go - odfruwa.
-noNet = Potrzebujesz siatki na motyle
 honey = Motyle przy kwiatach: +
 crop = Zapylone kwiaty: +
 nibbled = Bielinki podgryzły kapustę: -
@@ -17,7 +16,6 @@ full = Gablotka pełna: wszystkie gatunki
 f9none = Nie ma tu ognia - wbijam pochodnię
 f9moths = Ćmy lecą do ognia
 f9butter = Motyle: łąka, lato, po deszczu
-f9net = Siatka na motyle
 
 # ======================================================================== SPECIES (gatunki)
 gatunki.cytrynek.name = Cytrynek
@@ -159,3 +157,7 @@ kod.pomoc = ↑↓ okaz   ←/→ zakładka   Anuluj: wróć
 kod.wanted.0 = brak motyli na tej mapie
 kod.wanted.1 = burza nadchodzi
 kod.wanted.2 = po deszczu
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+noNet = Potrzebujesz siatki na motyle
+f9net = Siatka na motyle

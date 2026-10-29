@@ -1,0 +1,130 @@
+# Teksty ludzi z traktu (Humans_Data.js, Humans.js): bandyci, nożownicy, łucznicy, najemnicy - nazwy, okrzyki, plotki, wybór nad klęczącym.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz zbojcy
+
+# ======================================================================== Rodzaje ludzi (nazwa: dymki, „Ktoś idzie... bandyta!”, doświadczenie)
+rodzaje.bandit.name = Bandyta
+rodzaje.knifer.name = Nożownik
+rodzaje.archer.name = Łucznik
+rodzaje.mercenary.name = Najemnik
+
+# ======================================================================== Okrzyki nad głowami (na każdą okazję losowo jeden z listy)
+[okrzyki.alert]
+Hej! Kto tam?
+Coś szeleści...
+Stój!
+Kto idzie?
+
+[okrzyki.engage]
+Brać go!
+Mamy gościa!
+Sakiewka albo życie!
+Nie uciekniesz!
+Dawaj, co masz!
+
+[okrzyki.ambush]
+Sakiewka albo życie!
+Stój! Droga płatna!
+Dawaj grosz, chłopku!
+
+[okrzyki.raid]
+Śpi jak kamień... Bierzemy wszystko!
+Cicho... Teraz!
+Pobudka, chłopku! Sakiewka!
+
+[okrzyki.wake]
+Wstawać! Ktoś tu jest!
+Pobudka!
+Co jest?!
+
+[okrzyki.hurt]
+Ach!
+Psiakrew!
+Ty draniu!
+
+[okrzyki.block]
+Ha!
+Za wolno!
+
+[okrzyki.broken]
+Uciekać!
+Nie warto za to ginąć!
+
+[okrzyki.surrender]
+Litości! Poddaję się!
+Nie zabijaj! Mam dzieci!
+Dość! Poddaję się!
+
+[okrzyki.spared]
+Dzięki ci... nie zapomnę.
+Niech cię Bóg prowadzi.
+Już mnie tu nie zobaczysz!
+
+[okrzyki.robbed]
+Bierz i daj mi odejść!
+Masz, masz, tylko nie bij!
+
+[okrzyki.fled]
+Jeszcze się spotkamy!
+Nogi za pas!
+
+[okrzyki.beat]
+Leż i nie wstawaj.
+Zabieramy, co twoje.
+Następnym razem nie pyskuj.
+
+[okrzyki.camp]
+...kupiec miał pełny wóz, mówię ci...
+...ognia nie gaś, zimno...
+...jutro idziemy na Polną drogę...
+...kto ma wartę?...
+
+# ======================================================================== Plotki od oszczędzonego (zapis gry pamięta opowiedziane po ich słowach - poprawka tekstu = plotka znów „nowa”)
+[plotki]
+W kantorze Baltazara nocą ktoś wynosi worki tylnymi drzwiami.
+Najemnicy z kontynentu pytają w tawernie o drogę w góry, do jaskiń.
+Za Kruczymi Skałami ludzie kopią coś pod ziemią. Płacą dobrze, ale nikt nie wraca.
+Ze starego zamku nocą słychać szepty. My tam nie chodzimy.
+Kapral przy bramie bierze grosz od każdego wozu, co wjeżdża po zmroku.
+Na Skraju lasu jest dziupla w starym dębie - przemytnicy zostawiają tam znaki.
+
+# ======================================================================== Wybór nad klęczącym (po kolei: puść, zabierz sakiewkę, dobij, zostaw)
+[wybor]
+Puść go wolno
+Zabierz mu sakiewkę
+Dobij go
+Zostaw
+
+# ======================================================================== z kodu Humans.js (kod.<funkcja>.<n>, w kolejności kodu)
+# hitHuman
+kod.hitHuman.0 = Garda przełamana!
+kod.hitHuman.1 = Blok -{damage}
+kod.hitHuman.2 = Cios w plecy!
+# kill
+kod.kill.0 = dobiłeś człowieka, który błagał o litość
+# offerChoice
+kod.offerChoice.0 = {1} klęczy i błaga o życie. Co z nim zrobić?
+# decide
+kod.decide.0 = puściłeś wolno pokonanego
+# tellRumour
+kod.tellRumour.0 = Plotka od pokonanego
+kod.tellRumour.1 = Plotka od pokonanego {1}
+# updateRobbery
+kod.updateRobbery.0 = Pobili cię i obrabowali
+kod.updateRobbery.1 = Zabrali {gold} G
+kod.updateRobbery.2 = Nie mieli czego zabrać
+kod.updateRobbery.3 = " i trochę jedzenia"
+kod.updateRobbery.4 = {1}. Jesteś ranny.
+# updateArrows
+kod.updateArrows.0 = strzała
+# take
+kod.take.0 = Worek jest pusty
+kod.take.1 = Nic tu nie ma
+# summon
+kod.summon.0 = Ktoś idzie... {1}!
+kod.summon.1 = Nie ma tu miejsca
+kod.summon.2 = Ktoś się skradał do śpiącego...
+kod.summon.3 = Nie ma tu miejsca na napad
+kod.summon.4 = Nie ma tu miejsca na zasadzkę
+kod.summon.5 = Gdzieś między drzewami płonie ognisko...
+kod.summon.6 = Nie ma tu miejsca na obóz

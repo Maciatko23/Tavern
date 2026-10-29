@@ -23,6 +23,8 @@
 //   7 "Co dalej z Kantorem" (Act II) - shut: the reeve asks who runs it - Ludmiła's camp or the town hall (an honest counter, 10%
 //     cheaper); Baltazar back at the harbour with mercenaries. The double game: iron and steel at half price, but the faction knows
 //     his every step underground. The enemy: double prices.
+// The thread "kantor" (Kantor_Data.js, the engine Watki.js): the state, W5's steps with the talks and actions of chapters 3, 5 and 7,
+// the hero's thoughts, the F9 jumps - here the hooks they name, and all that only code does (the nights, the cellar, the camp, the ferry).
 // Events: Tawerna.inject ids 730-759 (owner "Kantor"). No map file of the user is changed: the back door and the front door of the
 // kantor (Map008) answer through Game_Event.list while W5 needs it, the trapdoor of Map103 is an injected event on the user's tile.
 // API: window.Kantor (Tawerna.api("Kantor")).
@@ -32,6 +34,7 @@
  * @plugindesc [W5] Wątek „Towary z kontynentu”: trzy stuknięcia, obóz przemytników, nocny tragarz, rejestr Baltazara, noc promu, kantor w Akcie II. v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
  * @base Kantor_Data
  * @orderAfter Kantor_Data
  * @orderAfter TownQuests
@@ -60,11 +63,13 @@
     if (!T) throw new Error("Kantor.js: brak TawernaCore.js");
     if (!D) { console.warn("Kantor.js: brak Kantor_Data.js - wątek W5 wyłączony"); return; }
     const PLUGIN = "Kantor";
+    // the thread (Kantor_Data.js, the engine Watki.js): the state "kantor", W5, its talks and actions, the thoughts, the F9 jumps
+    const w = Watki.get("kantor");
+    if (!w) throw new Error("Kantor.js: brak wątku „kantor” (Kantor_Data.js / Watki.js)");
     const M = D.MAP, EV = D.EV, P = D.PLACES, TM = D.TIME, TX = D.TX, ART = D.ART;
     const COIN_ICON = 314;
-    const HERO = { id: 0, name: "" };
+    const { HERO, C, choiceTo } = Watki.mowa;
     const OPTS = { talkGap: 215, slawekFace: 0 };   // (tests: the frames between two lines of the talk by the camp's fire; Sławek's facing held)
-    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
     const day = () => T.time.day(), hour = () => T.time.hour();
     const has = () => !!window.$gameSystem && !!window.$gameMap;
     const item = id => (window.$dataItems && $dataItems[id]) || null;
@@ -82,114 +87,48 @@
     const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
     const onMap = id => !!(window.$gameMap && $gameMap.mapId() === id);
     const report = (where, e) => console.error("[Kantor] " + where + ":", e);
-    const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
+    const fill = Watki.mowa.fill;
     const K = () => TX.kod;   // (the words of this file: js/teksty/kantor.txt, kod.*)
 
     // ------------------------------------------------------------------
-    // The state (the save)
+    // The state (the save): the thread's (Kantor_Data.js); TownQuests' flags, things, records through the thread
     // ------------------------------------------------------------------
-    const store = T.state.define("kantor", () => ({
-        clues: {},                                                     // own clues: klos, goscie, dzwon
-        knock: { seen: 0, night: -1, spooked: -1 }, guests: {},        // ch. 2: the knock seen (day), the guests witnessed
-        camp: { heard: 0, fought: 0, beaten: -1, night: -1 },           // ch. 2: the camp
-        hired: 0, mood: "", shifts: 0,                                  // ch. 3
-        shift: { night: -1, n: 0, carrying: false, paid: false, seen: 0 },   // tonight's shift: crates placed, carrying one, paid
-        reg: { night: -1, state: "", back: 0, caught: 0, done: 0, took: "", card: 0 },   // ch. 4
-        outcome: "", komu: "", zebranie: 0,                             // ch. 5: closed | double | enemy ; wit | witBurn | soltys | double | blackmail
-        ferry: { day: 0, state: "", ambush: 0, rafal: "" },             // ch. 6
-        honest: "", weekPaid: 0, raid: { day: 0, done: 0 }, back: 0, backRaid: 0
-    }), { version: 1, owner: PLUGIN });
-    const S = () => store();
-
-    // TownQuests' flags, things, records
-    const qstate = () => { const q = TQ(); return q && q.state ? q.state() : null; };
-    const flags = () => { const s = qstate(); return s ? s.flags : {}; };
-    const flag = k => !!flags()[k];
-    function setFlag(k) { const f = flags(); if (f && k && !f[k]) f[k] = day(); }
-    const vcount = k => { const s = qstate(); return s && s.v ? s.v[k] || 0 : 0; };
-    const vgive = (k, n) => { const s = qstate(); if (s && s.v) s.v[k] = (s.v[k] || 0) + (n || 1); };
-    const vtake = (k, n) => { const s = qstate(); if (!s || !s.v) return; s.v[k] = Math.max(0, (s.v[k] || 0) - (n || 1)); if (!s.v[k]) delete s.v[k]; };
-    const rec = id => { const q = TQ(); return q && q.rec ? q.rec(id) : null; };
-    const isActive = id => { const r = rec(id); return !!r && r.s === "active"; };
+    const S = () => w.S();
+    const qstate = () => w.qstate();
+    const flags = () => w.flags();
+    const flag = k => w.flag(k);
+    const setFlag = k => w.setFlag(k);
+    const vcount = k => w.vcount(k);
+    const vgive = (k, n) => w.vgive(k, n);
+    const vtake = (k, n) => w.vtake(k, n);
+    const rec = id => w.rec(id);
+    const isActive = id => w.active(id);
     const isDone = id => { const r = rec(id); return !!r && (r.s === "done" || (r.times || 0) > 0); };
     const note = (title, text) => T.call("Journal", "addNote", title, text);
     const notePair = p => note(p[0], p[1]);
     const opinion = (n, why) => { const q = TQ(); return q && q.addOpinion ? q.addOpinion(n, why) : 0; };
     const xp = (n, why) => T.call("Combat", "gainXp", n, why || "W5", true);
-    const autoChecks = () => { const q = TQ(); if (q && q.autoChecks) q.autoChecks(); if (q && q.refreshMarkers) q.refreshMarkers(); };
+    const autoChecks = () => w.autoChecks();   // (the quests' checks, then the markers)
     const actTwo = () => { const q = TQ(); try { return !!(q && q.actTwo && q.actTwo()); } catch (e) { return false; } };
     const gone = key => !!T.call("TownLife", "gone", key);
-    // the W5 record and its step's name (the step's check / talk)
-    const W5 = () => (TQ() && TQ().Q ? TQ().Q.W5 : null);
-    const w5 = () => rec("W5");
-    const STEP_NAMES = D.W5.steps.map(s => s.check || s.talk);
-    const stepIdx = name => STEP_NAMES.indexOf(name);
-    function cur() { const r = w5(); return r && r.s === "active" ? STEP_NAMES[r.step] || "" : ""; }
-    const at = name => cur() === name;
-    const pastStep = name => { const r = w5(); return !!r && (r.s === "done" || (r.s === "active" && r.step > stepIdx(name))); };
-    function complete(opts) { const q = TQ(); if (q && q.completeStep && isActive("W5")) q.completeStep("W5", opts); }
+    // W5's step by its name (the thread's steps: Kantor_Data.js)
+    const cur = () => w.cur();
+    const at = name => w.at(name);
+    const pastStep = name => { const r = rec("W5"); return !!r && (r.s === "done" || (r.s === "active" && r.step > w.stepOf(name))); };
+    function complete(opts) { const q = TQ(); if (q && q.completeStep && isActive("W5")) q.completeStep("W5", opts); }   // (the current step done)
 
     // ------------------------------------------------------------------
-    // Talk helpers (event commands; "> " the hero, "@key: " a resident nearby)
+    // Talk helpers: the engine's builder (Watki.mowa with the thread's options: "> " the hero, "@key: " a resident nearby, a line one
+    // paragraph); the bubbles one after another outside a talk: the thread's thoughts (w.mysl - over the hero "> ...", or a character)
     // ------------------------------------------------------------------
-    const LINE = 46, PAGE = 3;
-    function wrap(text) {
-        const out = [];
-        let line = "";
-        for (const w of String(text).split(/\s+/)) {
-            if (!w) continue;
-            if (line && (line + " " + w).length > LINE) { out.push(line); line = w; } else line = line ? line + " " + w : w;
-        }
-        if (line) out.push(line);
-        return out;
-    }
-    function sayTo(out, spk, text, ind) {
-        const lines = wrap(text);
-        for (let i = 0; i < lines.length; i += PAGE) {
-            out.push(C(101, ["", 0, 0, 2, spk.name || ""], ind));
-            lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 ? "\\SPK[" + spk.id + "]" : "") + l], ind)));
-        }
-        return out;
-    }
     function speaker(key) {
         const L = TL(), ev = L && L.eventOf ? L.eventOf(key) : null, r = L && L.RESIDENTS ? L.RESIDENTS.find(x => x.key === key) : null;
         return { id: ev && $gameMap.event(ev.eventId()) === ev ? ev.eventId() : -1, name: r ? r.name : key };
     }
-    function linesTo(out, spk, arr, vars, ind) {
-        for (const raw of [].concat(arr || [])) {
-            if (!raw) continue;
-            const s = fill(raw, vars);
-            if (s.startsWith("> ")) { sayTo(out, HERO, s.slice(2), ind); continue; }
-            const m = /^@(\w+):\s*([\s\S]*)$/.exec(s);
-            if (m) sayTo(out, speaker(m[1]), m[2], ind);
-            else sayTo(out, spk, s, ind);
-        }
-        return out;
-    }
-    function choiceTo(out, labels, branches, cancel, ind) {
-        const i0 = ind || 0;
-        out.push(C(102, [labels, cancel === undefined ? labels.length - 1 : cancel, 0, 2, 0], i0));
-        labels.forEach((l, i) => {
-            out.push(C(402, [i, l], i0));
-            for (const c of branches[i] || []) out.push(Object.assign({}, c, { indent: (c.indent || 0) + i0 + 1 }));
-            out.push(C(0, [], i0 + 1));
-        });
-        out.push(C(404, [], i0));
-        return out;
-    }
-    const act = (out, args, ind) => (out.push(C(355, ["Kantor.act(this, " + JSON.stringify(args) + ")"], ind)), out);
-    // bubbles one after another outside a talk (over the hero "> ...", or over a character)
-    const thoughts = [];
-    let thoughtAt = 0;
-    function think(lines, who) {
-        for (const l of [].concat(lines || [])) if (l) thoughts.push({ who: /^> /.test(l) ? null : who || null, text: String(l).replace(/^> /, "") });
-    }
-    function updateThoughts() {
-        if (!thoughts.length || Graphics.frameCount < thoughtAt || !(SceneManager._scene instanceof Scene_Map)) return;
-        const t = thoughts.shift(), sb = SB(), who = t.who && (t.who === $gamePlayer || $gameMap.event(t.who.eventId ? t.who.eventId() : -1) === t.who) ? t.who : $gamePlayer;
-        if (sb && sb.say) sb.say(who, t.text, 210); else T.popup(t.text, { color: "#eceef0" });
-        thoughtAt = Graphics.frameCount + 220;
-    }
+    const linesTo = (out, spk, arr, vars) => Watki.mowa.linesTo(out, spk, arr, vars, 0, w.def.mowa);
+    const sayTo = (out, spk, text) => Watki.mowa.sayTo(out, spk, text, 0, w.def.mowa);
+    const act = (out, args, ind) => Watki.mowa.script(out, "Kantor.act(this, " + JSON.stringify(args) + ")", ind);
+    const think = (lines, who) => w.mysl(lines, who);
     const say = (ch, text, frames) => { const sb = SB(); if (sb && sb.say && ch) sb.say(ch, text, frames || 200); };
     const sneaking = () => !!T.call("Hunting", "sneaking");
     // the clock moved on to an hour (past midnight: the next day) - as a wait does
@@ -599,7 +538,7 @@
         s.shift.paid = true;
         $gameParty.gainGold(D.PAY.shift);
         T.popup(fill(K().zaplata, { n: D.PAY.shift }), { icon: COIN_ICON, kind: "gold" });
-        think(TX.baltazarPay.map(l => l));
+        think(TX.baltazarPay);
         s.shifts++;
         s.shift.over = true;
         autoChecks();
@@ -914,141 +853,16 @@
     }
 
     // ------------------------------------------------------------------
-    // Chapters 5 and 7: TownQuests' handlers (the talks with Wit, the reeve, Baltazar)
+    // Chapters 5 and 7: what the data's talks and actions ask (the talks with Wit, the reeve, Baltazar: Kantor_Data.js)
     // ------------------------------------------------------------------
     const hasRegister = () => vcount("rejestr") > 0 || vcount("odpis_rejestru") > 0;
     function giveUpRegister() { vtake("rejestr", 9); vtake("odpis_rejestru", 9); }
     function w5Vars() {
-        const s = S(), r = w5();
+        const s = S();
         const d = s.ferry.day || (at("w5Prom") ? ferryDay() : 0);
         const A = K().akt2, akt2 = !actTwo() ? A.przed : s.outcome === "closed" ? A.closed : s.outcome === "double" ? A.double : A.enemy;
         return { n: Math.min(2, clueList().length), zmiany: Math.min(D.SHIFTS, s.shifts), noce: D.SHIFTS, rejestr: vcount("rejestr") > 0 ? K().rejestrMasz : K().odpisMasz,
             zebranie: s.zebranie || day() + 1, prom: d ? fill(K().promNoc, { d, d2: d + 1 }) : K().promNajblizszy, akt2 };
-    }
-    function hookQuests() {
-        const q = TQ();
-        if (!q || !q.FX || hookQuests.done) return;
-        hookQuests.done = true;
-        Object.assign(q.FX, {
-            w5Auto: () => has() && day() >= 10 && clueList().length >= 1,
-            w5Vars: { vars: () => w5Vars() },
-            w5Poszlaki: { check: () => clueList().length >= 2 },
-            w5Stuk: { check: () => S().knock.seen > 0 },
-            w5Oboz: { check: () => S().camp.heard > 0 || S().camp.fought > 0 },
-            w5Najem: {
-                ready: (qq, r, st, key) => key === "kupiec" && inHours(hour(), TM.work),
-                talk(qq, r, st, key, spk) {
-                    if (key !== "kupiec" || !inHours(hour(), TM.work)) return null;
-                    const s = S(), mood = trust() ? "trust" : s.camp.fought ? "fight" : "cold";
-                    const out = linesTo([], spk, mood === "trust" ? TX.najemTrust : mood === "fight" ? TX.najemFight : TX.najemCold);
-                    choiceTo(out, [TX.najemYes, TX.najemNo], [act(linesTo([], spk, TX.najemOk), ["hire", mood]), linesTo([], spk, TX.najemLater)], 1);
-                    return { ready: true, list: out };
-                }
-            },
-            w5Zmiany: { check: () => S().shifts >= D.SHIFTS },
-            w5Rejestr: { check: () => S().reg.done > 0 && hasRegister() },
-            w5Komu: {
-                ready: (qq, r, st, key) => (key === "kapral" || (key === "soltys" && inHours(hour(), [8, 18])) || (key === "kupiec" && inHours(hour(), TM.work))) && hasRegister(),
-                talk(qq, r, st, key, spk) {
-                    if (!hasRegister()) return null;
-                    if (key === "kapral") {
-                        const L = TX.komuWit, out = linesTo([], spk, L.ask.concat(witTrusts() ? L.trust : L.burn));
-                        return { ready: true, list: act(out, ["komu", witTrusts() ? "wit" : "witBurn"]) };
-                    }
-                    if (key === "soltys" && inHours(hour(), [8, 18])) {
-                        const L = TX.komuSoltys;
-                        return { ready: true, list: act(linesTo([], spk, L.ask.concat(L.say)), ["komu", "soltys"]) };
-                    }
-                    if (key === "kupiec" && inHours(hour(), TM.work)) {
-                        const L = TX.komuBaltazar, out = linesTo([], spk, L.ask.concat(L.say));
-                        choiceTo(out, [L.double, L.blackmail, L.later], [act(linesTo([], spk, L.doubleSay), ["komu", "double"]),
-                            act(linesTo([], spk, L.blackmailSay), ["komu", "blackmail"]), linesTo([], spk, L.laterSay)], 2);
-                        return { ready: true, list: out };
-                    }
-                    return null;
-                }
-            },
-            w5Zebranie: {
-                ready: (qq, r, st, key) => key === "soltys" && day() >= S().zebranie && inHours(hour(), TM.meeting),
-                talk(qq, r, st, key, spk) {
-                    if (key !== "soltys") return null;
-                    if (day() < S().zebranie || !inHours(hour(), TM.meeting)) return { ready: false, list: linesTo([], spk, TX.zebranie.notYet) };
-                    return { ready: true, list: act(linesTo([], spk, TX.zebranie.say), ["zebranie"]) };
-                }
-            },
-            w5Prom: { check: () => !!S().ferry.state },
-            w5Akt2: {
-                ready: (qq, r, st, key) => actTwo() && ((S().outcome === "closed" && key === "soltys") || (S().outcome !== "closed" && key === "kupiec")) && inHours(hour(), TM.work),
-                talk(qq, r, st, key, spk) {
-                    if (!actTwo() || !inHours(hour(), TM.work)) return null;
-                    const s = S();
-                    if (s.outcome === "closed" && key === "soltys") {
-                        const out = linesTo([], spk, TX.akt2Soltys);
-                        choiceTo(out, [TX.akt2Ludmila, TX.akt2Ratusz], [act(linesTo([], spk, TX.akt2LudmilaSay), ["akt2", "ludmila"]), act(linesTo([], spk, TX.akt2RatuszSay), ["akt2", "ratusz"])], -1);
-                        return { ready: true, list: out };
-                    }
-                    if (s.outcome !== "closed" && key === "kupiec") {
-                        return { ready: true, list: act(linesTo([], spk, s.outcome === "double" ? TX.akt2Grip : TX.akt2Enemy), ["akt2", s.outcome]) };
-                    }
-                    return null;
-                }
-            }
-        });
-    }
-    hookQuests();
-    // ch. 5: the choice taken
-    function komu(how) {
-        const s = S(), q = TQ(), Q = W5();
-        if (!at("w5Komu") || !q) return;
-        s.komu = how;
-        const prom = stepIdx("w5Prom");
-        if (how === "wit") {
-            giveUpRegister();
-            s.outcome = "closed";
-            for (const f of ["w5WitAlly", "witAlly", "w5Zamkniety", "w5BaltazarWrog"]) setFlag(f);
-            notePair(TX.noteWit);
-            closeKantor();
-            complete({ to: prom, reward: { opinion: 8, xp: 150 } });
-        } else if (how === "witBurn") {
-            giveUpRegister();
-            s.outcome = "enemy";
-            for (const f of ["w5WitSpalil", "w5BaltazarWrog"]) setFlag(f);
-            notePair(TX.noteWitBurn);
-            scheduleRaid();
-            if (hour() >= 7) $gameSystem._dayNightDay = day() + 1;   // (a night in the guardhouse: out at seven in the morning)
-            $gameSystem.setDayNightHour(7);
-            T.popup(K().wartownia, { top: true, color: "#ff9f8f", sub: K().wartowniaSub });
-            complete({ to: prom, reward: { opinion: -1, xp: 30 } });
-        } else if (how === "soltys") {
-            giveUpRegister();
-            s.zebranie = day() + 1;
-            notePair(TX.noteSoltys);
-            complete({ reward: { xp: 50 } });
-        } else if (how === "double") {
-            if (vcount("rejestr") > 0) vtake("rejestr", 9);   // (he takes the original back; a copy stays with the hero)
-            s.outcome = "double";
-            s.weekPaid = day();
-            for (const f of ["w5Podwojna", "w5FactionWatches"]) setFlag(f);
-            notePair(TX.noteDouble);
-            complete({ to: prom, reward: { xp: 100 } });
-        } else if (how === "blackmail") {
-            s.outcome = "enemy";
-            for (const f of ["w5Szantaz", "w5BaltazarWrog"]) setFlag(f);
-            notePair(TX.noteBlackmail);
-            scheduleRaid();
-            complete({ to: prom, reward: { gold: D.PAY.blackmail, xp: 50, opinion: -2 } });
-        }
-    }
-    function zebranie() {
-        const s = S();
-        if (!at("w5Zebranie")) return;
-        s.outcome = "closed";
-        for (const f of ["w5Zamkniety", "w5Soltys", "w5BaltazarWrog"]) setFlag(f);
-        notePair(TX.noteZebranie);
-        // the loose card of the chronicles found in the strongbox: the reeve hands it over
-        if (cardInBoxAny()) { S().reg.card = day(); if (!T.call("Pustelnia", "giveCard", 1, K().kartaSoltys)) vgive("karta_1", 1); }
-        closeKantor();
-        complete({ reward: { opinion: 12, xp: 150 } });
     }
     const cardInBoxAny = () => { const f = flags(), PU = T.api("Pustelnia"); return !!(f.w5ChroniclesSold && !S().reg.card && !(PU && PU.state && PU.state().got && PU.state().got[1])); };
     // the kantor shut: Baltazar off the island (the next ferry) - back in Act II at the harbour
@@ -1057,18 +871,47 @@
         S().back = 0;
     }
     function scheduleRaid() { const s = S(); if (!s.raid.day) s.raid = { day: day() + rnd(D.RAID.after[0], D.RAID.after[1]), done: 0 }; }
-    function akt2(how) {
-        const s = S(), q = TQ();
-        if (!at("w5Akt2") || !q) return;
-        if (how === "ludmila" || how === "ratusz") {
-            s.honest = how;
-            setFlag(how === "ludmila" ? "w5KantorLudmila" : "w5KantorRatusz");
-            setFlag("w5KantorUczciwy");
-            notePair(TX.noteHonest);
-        } else if (how === "double") { setFlag("w5KantorTani"); notePair(TX.noteGrip); }
-        else { setFlag("w5KantorDrogi"); notePair(TX.noteEnemy); }
-        q.finish("W5");
-    }
+
+    // ------------------------------------------------------------------
+    // The hooks the thread's data names (Kantor_Data.js): W5's start and steps, the talks' conditions, the actions, the F9 jumps
+    // ------------------------------------------------------------------
+    w.haki({
+        // "@key: ..." in a talk: that resident says it
+        mowca: (ctx, key) => speaker(key),
+        // W5 from day 10 with the first clue; two clues: chapter 1 done; the step's words
+        odDnia: (ctx, n) => day() >= n,
+        poszlaki: (ctx, n) => clueList().length >= n,
+        w5Zmienne: () => w5Vars(),
+        // ch. 3: Baltazar's mood (trust / fight / cold)
+        zaufanie: () => trust(),
+        nastroj: () => (trust() ? "trust" : S().camp.fought ? "fight" : "cold"),
+        // ch. 5: Wit's trust; the register given up; the kantor shut; the enemy's raid; a night in the guardhouse (out at seven); the
+        // meeting tomorrow, the meeting now (its day, 12-16); the card of the chronicles from the strongbox
+        witUfa: () => witTrusts(),
+        oddajRejestr: () => { giveUpRegister(); },
+        zabierz: (ctx, k, n) => { vtake(k, n); },
+        zamknijKantor: () => { closeKantor(); },
+        napad: () => { scheduleRaid(); },
+        nocWWartowni: () => {
+            if (hour() >= 7) $gameSystem._dayNightDay = day() + 1;
+            $gameSystem.setDayNightHour(7);
+        },
+        jutro: () => day() + 1,
+        zebranieTrwa: () => day() >= S().zebranie && inHours(hour(), TM.meeting),
+        kartaWSzkatule: () => cardInBoxAny(),
+        dajKarte: (ctx, why) => { if (!T.call("Pustelnia", "giveCard", 1, w.tekst(why))) vgive("karta_1", 1); },
+        // ch. 7: Act II; W5 done
+        aktDrugi: () => actTwo(),
+        zakoncz: () => { TQ().finish("W5"); },
+        // F9: at least day 10; the ferry night's record afresh (ch. 6); tonight's shift and the register's night afresh (ch. 4)
+        dzienDziesiaty: () => { if (day() < 10) $gameSystem._dayNightDay = 10; },
+        nowyProm: () => ({ day: day(), state: "", ambush: 0, rafal: "" }),
+        nowaNoc: () => {
+            const s = S();
+            s.shift = { night: -1, n: 0, carrying: false, paid: false, seen: 0, over: false };
+            s.reg = Object.assign(s.reg, { night: -1, state: "", took: "", back: 0, done: 0 });
+        }
+    });
 
     // ------------------------------------------------------------------
     // After: Baltazar back at the harbour (Act II, the kantor shut), the raids of the enemy, the weekly pay, the shops
@@ -1211,20 +1054,16 @@
             if (out && out.length) interp.setupChild(out.concat([C(0, [])]), ev.eventId());
         } catch (e) { report("act", e); }
     }
+    // (hire, komu, zebranie, akt2 - a talk saved before 2026-10-28: the data's actions now)
+    const KOMU = { wit: "komuWit", witBurn: "komuWitSpalil", soltys: "komuSoltys", double: "komuWspolnik", blackmail: "komuSzantaz" };
     function actArgs(args, interp, stop) {
         const [what, a, b] = args;
-        if (what === "hire") {
-            if (!at("w5Najem")) return;
-            const s = S();
-            s.hired = day(); s.mood = a;
-            if (a !== "trust") setFlag("w5NajetyZimno");
-            notePair(TX.noteNajem);
-            complete();
-        } else if (what === "biurko") takeRegister(a, interp);
+        if (what === "hire") w.akcja("najem", [a], interp);
+        else if (what === "biurko") takeRegister(a, interp);
         else if (what === "wait") { const t = clock(); if (t < 24 + TM.out - 0.1) advanceTo(TM.out - 0.08); }
-        else if (what === "komu") komu(a);
-        else if (what === "zebranie") zebranie();
-        else if (what === "akt2") akt2(a);
+        else if (what === "komu") { if (KOMU[a]) w.akcja(KOMU[a], [], interp); else if (at("w5Komu") && TQ()) S().komu = a; }
+        else if (what === "zebranie") w.akcja("zebranie", [], interp);
+        else if (what === "akt2") { if (TQ()) w.akcja("akt2", [a], interp); }
         else if (what === "swap") swap();
         else if (what === "letgo") { if (ferryNow() && !S().ferry.state) ferryEnd("letgo"); }
         else if (what === "rafal") freeRafal();
@@ -1257,7 +1096,6 @@
     // ------------------------------------------------------------------
     T.onMapUpdate((scene, n) => {
         if (!has()) return;
-        updateThoughts();
         try { updateVisitors(); } catch (e) { report("visitors", e); }
         try { updateCellar(); } catch (e) { report("cellar", e); }
         if (pendingOut && Graphics.frameCount >= pendingOut && !$gameMap.isEventRunning()) {
@@ -1286,42 +1124,14 @@
         if (e.tag === CAMP_TAG) { S().camp.beaten = nightOf(); think(TX.obozPobity); }
         if (e.tag === PROM_TAG && ferryNow()) ferryEnd("beaten");
     }, { owner: PLUGIN });
-    T.on("load", () => { thoughts.length = 0; thoughtAt = 0; }, { owner: PLUGIN });
-    T.on("newGame", () => { thoughts.length = 0; thoughtAt = 0; }, { owner: PLUGIN });
 
     // ------------------------------------------------------------------
-    // F9 ("Wyspa i fabuła"): straight to a chapter - the flags, the hour, the place
+    // F9 ("Wyspa i fabuła", Debug.js's row "isleW5"): straight to a chapter - the engine's jumps (Kantor_Data.js skoki)
     // ------------------------------------------------------------------
-    const JUMP = {
-        1: { step: "w5Poszlaki", hour: 10, go: [M.town, 16, 49, 8] },
-        2: { step: "w5Stuk", hour: 23.85, go: [M.town, 10, 49, 2] },
-        3: { step: "w5Najem", hour: 10, go: [M.town, 16, 49, 8] },
-        4: { step: "w5Rejestr", hour: 22.05, go: [M.town, 14, 49, 8] },
-        5: { step: "w5Komu", hour: 10, go: [M.town, 16, 49, 8] },
-        6: { step: "w5Prom", hour: 21.5, go: [M.droga, 12, 2, 2] },
-        7: { step: "w5Akt2", hour: 10, go: [M.town, 16, 49, 8] }
-    };
-    function debugJump(ch) {
-        const j = JUMP[ch], q = TQ();
-        if (!j || !q || !has()) return null;
-        if (day() < 10) $gameSystem._dayNightDay = 10;
-        const s = S();
-        if (ch >= 2) { s.clues.debug = day(); setFlag("k15Clean"); }
-        if (ch >= 3) { s.knock.seen = s.knock.seen || day(); s.camp.heard = s.camp.heard || day(); }
-        if (ch >= 4) { s.hired = s.hired || day(); s.mood = s.mood || "trust"; s.shifts = Math.max(s.shifts, D.SHIFTS); }
-        if (ch >= 5) { s.reg.done = s.reg.done || day(); if (!hasRegister()) vgive("odpis_rejestru", 1); }
-        if (ch >= 6 && !s.outcome) { s.outcome = "closed"; setFlag("w5Zamkniety"); setFlag("w5BaltazarWrog"); closeKantor(); giveUpRegister(); }
-        if (ch === 6) { s.ferry = { day: day(), state: "", ambush: 0, rafal: "" }; }
-        if (ch >= 7 && !s.ferry.state) s.ferry.state = "seized";
-        const r = q.rec("W5");
-        if (!r || r.s !== "active") q.start("W5", stepIdx(j.step));
-        else { r.step = stepIdx(j.step); r.sday = day(); }
-        $gameSystem.setDayNightHour(j.hour);
-        if (ch === 6) s.ferry.day = day();
-        if (ch === 4) { s.shift = { night: -1, n: 0, carrying: false, paid: false, seen: 0, over: false }; s.reg = Object.assign(s.reg, { night: -1, state: "", took: "", back: 0, done: 0 }); }
-        if (q.refreshMarkers) q.refreshMarkers();
-        return j.go;
-    }
+    // (the jumps: Kantor_Data's skoki - the earlier chapters' flags, the step, the hour; -> the place [map, x, y, dir] or null)
+    const debugJump = ch => w.skocz(ch);
+    const JUMP = {};
+    for (const [k, j] of Object.entries(w.def.skoki.lista)) JUMP[k] = { step: j.krok, hour: j.godzina, go: j.idz };
 
     // ------------------------------------------------------------------
     // API

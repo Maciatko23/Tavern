@@ -18,7 +18,9 @@
 //   - the wild ravens on the rocks of Map155/157: drawn here from img/system/Kruk.png (Kruk.js only read), fed once a day per rock
 //   - the gallows at night (22-3): its creak and a little fog round it
 //   - the wreck: each storm's end (a storm seen to start) one more piece out of the sand; dug at low tide
-//   - TownQuests FX of K67-K70, D36-D38; the gravedigger's and Ansgar's few words; F9 rows (Okolice.f9)
+//   - the thread "zakon" (Zakon_Data.js, the engine Watki.js, 2026-10-28): the state, K67-K70 and D36-D38, the talks at the places
+//     (the question and the choice) and the gravedigger's and Eryk's few words are the data's - this file gives their hooks
+//     (w.haki); Kleofas's reading is built here (from the card); F9 rows (Okolice.f9)
 // No water anywhere here (the drought): the perches' rain is the eagles', the chamber's basin is dry or not the hero's.
 
 /*:
@@ -26,6 +28,7 @@
  * @plugindesc [paczka D] Tajemnice i zakon: strażnice, kapliczki, kopce z Zapiskami strażnic, krąg menhirów z zagadką cieni i komora (mapa 176), miejsca tylko dla orła, orle grzędy, cmentarz z grabarzem i szubienica, gaj Milczących, kruki, kawałki wraku. v1.1.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
  * @orderAfter Okolice
  *
  * @help
@@ -55,12 +58,15 @@
     const D = window.ZakonData;
     if (!D || !D.ready) throw new Error("Zakon.js: brak Zakon_Data.js - musi być wyżej na liście wtyczek (the package's data is missing)");
     const VERSION = D.VERSION, TX = D.TX, ITEM = D.ITEM, ICON = D.ICON, IMG = D.IMG;
+    // the thread (Zakon_Data.js, the engine Watki.js): the state "zakon", K67-K70, D36-D38, the places' talks, the hero's thoughts
+    const w = Watki.get("zakon");
+    if (!w) throw new Error("Zakon.js: brak wątku „zakon” (Zakon_Data.js / Watki.js)");
     const OK = () => T.api("Okolice") || window.Okolice || null;
 
     // ------------------------------------------------------------------
     // Small helpers
     // ------------------------------------------------------------------
-    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
+    const { C, HERO } = Watki.mowa;   // (the event commands' maker and the hero as a speaker: the engine's)
     const has = () => !!window.$gameSystem && !!window.$gameMap;
     const day = () => T.time.day();
     const hour = () => T.time.hour();
@@ -71,16 +77,11 @@
     const nameOf = id => (item(id) ? item(id).name : "");
     const report = (where, e) => { try { console.error("[Zakon] " + where, e); } catch (x) { /* (no console) */ } };
     const TQ = () => T.api("TownQuests") || window.TownQuests || null;
-    const qs = () => { const q = TQ(); return q && q.state ? q.state() : null; };
-    const flags = () => { const s = qs(); return s && s.flags ? s.flags : {}; };
-    const qflag = k => !!flags()[k];
-    const setFlag = k => { const W = T.api("Wyspa"); if (W && W.setFlag) W.setFlag(k); else { const f = flags(); if (!f[k]) f[k] = day(); } };
-    const isDone = id => { const q = TQ(); return !!(q && q.isDone && q.isDone(id)); };
-    const isActive = id => { const q = TQ(); return !!(q && q.isActive && q.isActive(id)); };
-    function autoChecks() { const q = TQ(); try { if (q && q.autoChecks) q.autoChecks(); if (q && q.refreshMarkers) q.refreshMarkers(); } catch (e) { report("autoChecks", e); } }
-    const vcount = k => { const s = qs(); return s && s.v ? s.v[k] || 0 : 0; };
-    function vgive(k, n) { const s = qs(); if (!s) return; s.v = s.v || {}; s.v[k] = (s.v[k] || 0) + (n || 1); }
-    function vtake(k, n) { const s = qs(); if (!s || !s.v || !s.v[k]) return; s.v[k] -= n || 1; if (s.v[k] <= 0) delete s.v[k]; }
+    // TownQuests' flags, things, records (the thread's helpers); the checks after a change (a quest check's error told here, as before)
+    const { vcount, vgive, vtake } = w;
+    const qflag = k => w.flag(k);
+    const isActive = id => w.active(id);
+    function autoChecks() { try { w.autoChecks(); } catch (e) { report("autoChecks", e); } }
     const pop = (text, icon, color) => T.popup(text, { icon: icon || 0, color: color || "#cfe6ff" });
     const need = (icon, text) => T.popup.need(icon, text);
     const top = (text, sub, color) => T.popup(text, { top: true, sub: sub || "", color: color || "#ffe27a" });
@@ -99,96 +100,37 @@
     const stamina = () => (typeof $gameSystem.trySpendStamina === "function");
 
     // ------------------------------------------------------------------
-    // The state (the save)
+    // The state (the save): the thread's (Zakon_Data.js - Tawerna.state "zakon" v1)
     // ------------------------------------------------------------------
-    const store = T.state.define("zakon", () => ({
-        cards: {}, read: {}, towers: {}, cairns: {}, prayed: {}, offered: {}, prayCount: {},
-        key: 0, plate: 0, chamber: { been: 0, wall: 0, chest: "", sarc: 0 }, feather: "",
-        eagle: {}, herbs: {}, nests: {}, stash: 0, downs: {}, cliff: {},
-        perches: {}, perchBond: {}, traces: {}, graves: {}, names: 0, gallows: 0,
-        grove: { done: 0, broken: 0, seen: 0, gift: 0, run: null }, ravens: {}, wreck: 0, wreckDug: {}, wreckSeen: 0, stormOn: 0,
-        work: {}, told: {}
-    }), { version: 1, owner: PLUGIN });
-    const S = () => store();
+    const S = () => w.S();
 
     // ------------------------------------------------------------------
-    // Speech: the hero's thoughts (bubbles one after another), event commands for the talks
+    // Speech: the hero's thoughts (the thread's - bubbles one after another, Zakon_Data mysli), event commands for the talks (the
+    // engine's builder, Watki.mowa: "\n" a new line, as before). The places' talks are the data's (Zakon_Data rozmowy); the lines
+    // looked at and Kleofas's reading (built from the card) are built here
     // ------------------------------------------------------------------
-    const thoughts = [];
-    let thoughtAt = 0;
-    function think(lines) { for (const l of [].concat(lines || [])) if (l) thoughts.push(String(l).replace(/^> /, "")); }
-    function updateThoughts() {
-        if (!thoughts.length || Graphics.frameCount < thoughtAt || !(SceneManager._scene instanceof Scene_Map) || $gameMessage.isBusy()) return;
-        const SB = T.api("SpeechBubbles"), text = thoughts.shift();
-        if (SB && SB.say) SB.say($gamePlayer, text, 200); else pop(text, 0, "#eceef0");
-        thoughtAt = Graphics.frameCount + 210;
-    }
-    const LINE = 46, PAGE = 3;
-    function wrap(text, width) {
-        const out = [];
-        for (const para of String(text).split("\n")) {
-            let line = "";
-            for (const w of para.split(/\s+/)) {
-                if (!w) continue;
-                if (line && (line + " " + w).length > (width || LINE)) { out.push(line); line = w; } else line = line ? line + " " + w : w;
-            }
-            if (line) out.push(line);
-        }
-        return out;
-    }
-    const HERO = { id: 0, name: "" };
-    function sayTo(out, spk, text, ind) {
-        const lines = wrap(text);
-        for (let i = 0; i < lines.length; i += PAGE) {
-            out.push(C(101, ["", 0, 0, 2, spk.name || ""], ind));
-            lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 && spk.id !== null ? "\\SPK[" + spk.id + "]" : "") + l], ind)));
-        }
-        return out;
-    }
+    const think = lines => w.mysl(lines);
+    const MOWA = { akapity: true };
     // "> text" the hero, else the speaker
-    const linesTo = (out, spk, arr) => {
-        for (const l of [].concat(arr || [])) {
-            if (!l) continue;
-            const s = String(l);
-            if (s.startsWith("> ")) sayTo(out, HERO, s.slice(2)); else sayTo(out, spk, s);
-        }
-        return out;
-    };
+    const linesTo = (out, spk, arr) => Watki.mowa.linesTo(out, spk, arr, null, 0, MOWA);
     const act = (out, args) => (out.push(C(355, ["Zakon.act(this, " + JSON.stringify(args) + ")"])), out);
-    function choiceTo(out, labels, branches, cancel) {
-        out.push(C(102, [labels, cancel === undefined ? labels.length - 1 : cancel, 0, 2, 0]));
-        labels.forEach((l, i) => {
-            out.push(C(402, [i, l]));
-            for (const c of branches[i] || []) out.push(Object.assign({}, c, { indent: (c.indent || 0) + 1 }));
-            out.push(C(0, [], 1));
-        });
-        out.push(C(404, []));
-        return out;
-    }
-    // a plain message (the cards read): a title line and the text wrapped, four lines a page
-    function plain(out, title, lines) {
-        const all = (title ? ["\\C[6]" + title + "\\C[0]"] : []).concat(...[].concat(lines).map(l => wrap(l, 52)));
-        for (let i = 0; i < all.length; i += 4) {
-            out.push(C(101, ["", 0, 0, 2, ""]));
-            all.slice(i, i + 4).forEach((l, j) => out.push(C(401, [(i === 0 && j === 0 ? "\\SPK[-1]" : "") + l])));
-        }
-        return out;
-    }
-    function runList(interp, list) {
-        if (!list || !list.length) return;
-        if (interp && interp.setupChild) interp.setupChild(list.concat([C(0, [])]), interp.eventId());
-        else if (window.$gameMap) $gameMap._interpreter.setup(list.concat([C(0, [])]), 0);
-    }
+    const choiceTo = Watki.mowa.choiceTo;
+    // a plain message (the cards read): a title line and the text wrapped, four lines a page, no bubble (\SPK[-1])
+    const plain = (out, title, lines) => Watki.mowa.plain(out, title, lines, { spk: -1 });
+    const runList = (interp, list) => w.uruchom(interp && interp.setupChild ? interp : null, list);
 
     // ------------------------------------------------------------------
-    // The places and the discoveries (Okolice): registered at load
+    // The places and the discoveries (Okolice): their names and words are js/teksty/zakon.txt's and Okolice copies them - registered
+    // once the words are in (still before any game) and again after F9 "Wczytaj teksty od nowa"
     // ------------------------------------------------------------------
-    (function register() {
+    function registerPlaces() {
         const O = OK();
         if (!O) return;
         O.registerSpots("D", D.SPOTS);
         for (const d of D.DISC) O.discoverable(Object.assign({ pkg: "D", when: () => !flying() }, d));
-    })();
+    }
+    Watki.poTekstach(registerPlaces);
+    T.on("tekstyWczytane", registerPlaces, { owner: PLUGIN });
     const discover = (key, quiet) => { const O = OK(); return !!(O && O.discover && O.discover(key, quiet)); };
     const found = key => { const O = OK(); return !!(O && O.isFound && O.isFound(key)); };
 
@@ -388,14 +330,14 @@
         return true;
     }
     function blow(def) {
-        const w = S().work, n = w[def.key] = Math.min(def.need, (w[def.key] || 0) + 1), last = n >= def.need;
+        const wk = S().work, n = wk[def.key] = Math.min(def.need, (wk[def.key] || 0) + 1), last = n >= def.need;
         if (def.tool) T.call("Durability", "use", def.tool);
         se(def.se || "Earth1", 80, 95 + Math.floor(Math.random() * 10));
         try {
             ($gameTemp._hitFx || ($gameTemp._hitFx = [])).push({ type: def.fx || "dirt", final: last, bx: def.x + 0.5, by: def.y + 1,
                 dx: Math.sign(def.x - $gamePlayer.x), dy: Math.sign(def.y - $gamePlayer.y) });
         } catch (e) { /* (no hit effects) */ }
-        if (last) { again = null; delete w[def.key]; try { def.done(); } catch (e) { report("work " + def.key, e); } }
+        if (last) { again = null; delete wk[def.key]; try { def.done(); } catch (e) { report("work " + def.key, e); } }
         else pop(def.label(n, def.need), def.icon || 0, "#e8e0c8");
     }
     function holdUpdate() {
@@ -474,10 +416,7 @@
     ACT.tower = (interp, key) => {
         const s = S();
         if (s.towers[key]) { pop(TX.towerEmpty, ICON.karta); return; }
-        const out = [];
-        linesTo(out, HERO, TX.towerLook);
-        sayTo(out, HERO, TX.towerAsk);
-        runList(interp, choiceTo(out, [TX.towerTake, TX.towerLeave], [act([], ["towerTake", key]), []], 1));
+        runList(interp, w.rozmowa("wieza", { spk: HERO, key }));   // (the data's talk: look under the slab or leave it)
     };
     ACT.towerTake = (interp, key) => {
         const s = S();
@@ -498,12 +437,7 @@
         autoChecks();
     };
     // 7.2 the shrines
-    ACT.shrine = (interp, key) => {
-        const s = S(), out = [];
-        sayTo(out, HERO, TX.shrineAsk);
-        runList(interp, choiceTo(out, [TX.shrinePray, TX.shrineCoin, TX.shrineFood, TX.shrineLeave],
-            [act([], ["pray", key]), act([], ["offer", key, "coin"]), act([], ["offer", key, "food"]), []], 3));
-    };
+    ACT.shrine = (interp, key) => runList(interp, w.rozmowa("kapliczka", { spk: HERO, key }));   // (the data's talk: pray, a coin, food, away)
     function buffLeft(key) { const b = $gameSystem.buffs ? $gameSystem.buffs()[key] : 0; const now = day() * 24 + hour(); return b ? Math.max(0, b - now) : 0; }
     ACT.pray = (interp, key) => {
         const s = S();
@@ -542,9 +476,7 @@
     ACT.cairn = (interp, key) => {
         const s = S();
         if (s.cairns[key]) { pop(TX.cairnDone, ICON.kruk); return; }
-        const out = [];
-        sayTo(out, HERO, TX.cairnAsk);
-        runList(interp, choiceTo(out, [TX.cairnTake, TX.cairnLeave], [act([], ["cairnWork", key]), []], 1));
+        runList(interp, w.rozmowa("kopiec", { spk: HERO, key }));   // (the data's talk: take the top down or leave it)
     };
     ACT.cairnWork = (interp, key) => {
         const c = D.CAIRNS.find(x => x.key === key);
@@ -565,11 +497,8 @@
     ACT.stone = () => think(TX.stoneLook);
     ACT.watchman = () => think(TX.watchmanLook);
     ACT.plate = interp => {
-        const s = S(), out = [];
-        linesTo(out, HERO, TX.plateLook);
-        if (count(ITEM.klucz) < 1) { runList(interp, out); need(ICON.klucz, TX.plateNoKey); return; }
-        sayTo(out, HERO, TX.plateAsk);
-        runList(interp, choiceTo(out, [TX.plateKey, TX.plateLeave], [act([], ["plateKey"]), []], 1));
+        runList(interp, w.rozmowa("plyta", { spk: HERO }));   // (the data's talk: the look; with the key - put it in or leave it)
+        if (count(ITEM.klucz) < 1) need(ICON.klucz, TX.plateNoKey);
     };
     ACT.plateKey = interp => {
         const s = S();
@@ -641,10 +570,7 @@
     ACT.down = (interp, key) => {
         const e = D.EAGLE.find(x => x.key === key);
         if (!e) return;
-        const out = [];
-        sayTo(out, HERO, TX.downAsk(e.rope));
-        sayTo(out, HERO, TX.downWarn);
-        runList(interp, choiceTo(out, [TX.downGo, TX.downStay], [act([], ["downGo", key]), []], 1));
+        runList(interp, w.rozmowa("zejscie", { spk: HERO, key, lina: e.rope }));   // (the data's talk: go down or stay)
     };
     ACT.downGo = (interp, key) => {
         const e = D.EAGLE.find(x => x.key === key);
@@ -727,9 +653,7 @@
     ACT.grave = (interp, n) => {
         const s = S(), name = TX.graveNames[n];
         if (s.graves[n]) { runList(interp, linesTo([], HERO, TX.graveRead(name))); return; }
-        const out = [];
-        sayTo(out, HERO, TX.graveRavenAsk);
-        runList(interp, choiceTo(out, [TX.graveClean, TX.graveLeave], [act([], ["graveWork", n]), []], 1));
+        runList(interp, w.rozmowa("grob", { spk: HERO, n }));   // (the data's talk: clean the stone or leave it)
     };
     ACT.graveWork = (interp, n) => {
         const g = D.CEMETERY.graves.find(x => x.raven === n);
@@ -773,10 +697,7 @@
         const s = S();
         if (s.wreckDug[n] || s.wreck < n) return;
         if (!tideLow()) { need(ICON.okucie, TX.wreckHigh); return; }
-        const out = [];
-        sayTo(out, HERO, TX.wreckLook(n));
-        sayTo(out, HERO, TX.wreckAsk);
-        runList(interp, choiceTo(out, [TX.wreckDig, TX.wreckLeave], [act([], ["wreckWork", n]), []], 1));
+        runList(interp, w.rozmowa("wrak", { spk: HERO, n }));   // (the data's talk: dig it out or leave it)
     };
     ACT.wreckHole = () => {};
     ACT.wreckWork = (interp, n) => {
@@ -804,6 +725,9 @@
     ACT.told = (interp, k) => { S().told[k] = day(); };
     ACT.ravenFeed = (interp, key, ri, itemId) => feedRavens(key, ri, itemId);
 
+    // (the old script calls of the places' talks - towerTake, pray, offer, cairnWork, plateKey, downGo, graveWork, wreckWork,
+    // ravenFeed, told: a talk saved before 2026-10-28 - are these same acts; the new ones go through Watki.act to the data's actions,
+    // whose hooks call them)
     function actCall(interp, args) {
         if (!has() || !Array.isArray(args)) return;
         const e = evOf(interp);
@@ -1056,9 +980,7 @@
         if (s.ravens[k] === day()) { need(ICON.kruk, TX.ravenFedToday); return true; }
         const food = D.RAVEN_FOOD.find(id => count(id) > 0);
         if (!food) { need(ICON.kruk, TX.ravenNoFood); return true; }
-        const out = [];
-        sayTo(out, HERO, TX.ravenAsk);
-        runList(null, choiceTo(out, [TX.ravenFeed(nameOf(food)), TX.ravenLeave], [act([], ["ravenFeed", R.key, ri, food]), []], 1));
+        runList(null, w.rozmowa("kruki", { spk: HERO, key: R.key, ri, food, jedzenie: nameOf(food) }));   // (the data's talk: throw it or not)
         return true;
     }
     function feedRavens(key, ri, itemId) {
@@ -1188,21 +1110,16 @@
         plain(branch, Watki.wstaw(TK.kod.kleofasTalk[3], { n: n, title: c.title }), c.read);
         return choiceTo(out, [Watki.wstaw(TK.kod.kleofasTalk[4], { n: n }), TK.kod.kleofasTalk[5]], [branch, act([], ["pass"])], 1);
     }
+    // (the gravedigger's and Eryk's words: the data's talks "grabarz" / "ansgar" - said once)
     function grabarzTalk(ev) {
         const s = S();
         if (!isActive("D37") || s.told.grabarzGroby || [1, 2, 3].every(k => s.graves[k])) return null;
-        const spk = { id: ev.eventId(), name: "Hieronim" }, out = [];
-        linesTo(out, spk, [TK.kod.grabarzTalk[0],
-            TK.kod.grabarzTalk[1]]);
-        return act(out, ["told", "grabarzGroby"]);
+        return w.rozmowa("grabarz", { spk: { id: ev.eventId(), name: TX.digger } });
     }
     function ansgarTalk(ev) {
         const s = S();
         if (count(ITEM.tabliczka) < 1 || s.told.ansgarTabliczka) return null;
-        const spk = { id: ev.eventId(), name: TK.kod.ansgarTalk[0] }, out = [];
-        linesTo(out, spk, [TK.kod.ansgarTalk[1],
-            TK.kod.ansgarTalk[2]]);
-        return act(out, ["told", "ansgarTabliczka"]);
+        return w.rozmowa("ansgar", { spk: { id: ev.eventId(), name: TK.kod.ansgarTalk[0] } });
     }
     // (2026-10-23, docs/ROZMOWY.md) the core's talk service: the owner of the order's matters at Kleofas, Hieronim and Eryk - first of the
     // "owner" takeovers (as the old hook: the last one put first at the load)
@@ -1223,71 +1140,59 @@
     hookTalk();
 
     // ------------------------------------------------------------------
-    // TownQuests: K67-K70, D36-D38 (the packs are in Zakon_Data.js; the checks here)
+    // K67-K70, D36-D38 and the places' talks - the data's (Zakon_Data.js); what their conditions, talks and actions ask of the game
     // ------------------------------------------------------------------
-    function hookQuests() {
-        const q = TQ();
-        if (!q || !q.FX || hookQuests.done) return;
-        hookQuests.done = true;
-        const s = () => S();
-        Object.assign(q.FX, {
-            k67Modl: { check: () => Object.keys(s().prayCount).length >= 3 },
-            k67Vars: { vars: () => ({ n: Object.keys(s().prayCount).length }) },
-            k68Pora: { cond: () => cardsFound() > 0 && kleofasMet() },
-            k68Karty: { check: () => cardsFound() >= 6 },
-            k68Czytaj: { check: () => cardsRead() >= 6 },
-            k68Vars: { vars: () => ({ n: cardsFound(), r: cardsRead() }) },
-            d36Start: () => has() && (isDone("K68") || !!s().key || (mapId() === D.RING.map && dist($gamePlayer.x, $gamePlayer.y, D.RING.plate.x, D.RING.plate.y) <= 2)),
-            d36Zapiski: { check: () => !!s().key || (!!s().read[3] && !!s().read[4]) },
-            d36Vars: { vars: () => ({ n: (s().read[3] ? 1 : 0) + (s().read[4] ? 1 : 0) }) },
-            d36Kop: { check: () => !!s().key },
-            d36Komora: { check: () => !!s().chamber.been },
-            d36Mapa: { check: () => !!s().chamber.wall },
-            k69Start: () => has() && qflag("orzelJajo") && Object.keys(s().perches).length > 0,
-            k69Grzedy: { check: () => Object.keys(s().perches).length >= 3 },
-            k69Vars: { vars: () => ({ n: Object.keys(s().perches).length }) },
-            k70Pora: { cond: () => s().wreck >= 1 },
-            k70Start: () => has() && !!s().wreckSeen,
-            k70Kawalki: { check: () => Object.keys(s().wreckDug).length >= 3 },
-            k70Vars: { vars: () => ({ n: Object.keys(s().wreckDug).length }) },
-            d37Groby: { check: () => [1, 2, 3].every(k => s().graves[k]) },
-            d37Vars: { vars: () => ({ n: [1, 2, 3].filter(k => s().graves[k]).length }) },
-            d38Start: () => has() && found("gaj"),
-            d38Godzina: { check: () => !!s().grove.done }
-        });
-    }
-    hookQuests();
+    w.haki({
+        // K68's offer: brother Kleofas met; D36 starts by the plate in the ring; D38 once the grove is found
+        kleofasPoznany: () => kleofasMet(),
+        przyPlycie: () => dist($gamePlayer.x, $gamePlayer.y, D.RING.plate.x, D.RING.plate.y) <= 2,
+        gajZnaleziony: () => found("gaj"),
+        // the places' talks: the Watchman's Key in the bag; the line of the way down (the rope / the pegs) and of the wreck's piece
+        maKlucz: () => count(ITEM.klucz) > 0,
+        zejscieLinia: ctx => [TX.downAsk(ctx.lina)],
+        wrakLinia: ctx => [TX.wreckLook(ctx.n)],
+        // the talks' choices: this file's acts
+        towerTake: (ctx, key) => ACT.towerTake(ctx.interp, key),
+        pray: (ctx, key) => ACT.pray(ctx.interp, key),
+        offer: (ctx, key, what) => ACT.offer(ctx.interp, key, what),
+        cairnWork: (ctx, key) => ACT.cairnWork(ctx.interp, key),
+        plateKey: ctx => ACT.plateKey(ctx.interp),
+        downGo: (ctx, key) => ACT.downGo(ctx.interp, key),
+        graveWork: (ctx, n) => ACT.graveWork(ctx.interp, n),
+        ravenFeed: (ctx, key, ri, itemId) => feedRavens(key, ri, itemId),
+        wreckWork: (ctx, n) => ACT.wreckWork(ctx.interp, n)
+    });
 
     // ------------------------------------------------------------------
     // The buffs (Survival): the blessing of the road (the shrines), the calm of the Silent (the grove)
     // ------------------------------------------------------------------
-    (function buffs() {
+    // (their names and descriptions: js/teksty/zakon.txt, premie - defined once the words are in, before any game)
+    Watki.poTekstach(function defineBuffs() {
         const Sv = T.api("Survival") || window.Survival;
         if (!Sv || !Sv.defineBuff) return;
-        Sv.defineBuff("blogoslawienstwo", { name: "Błogosławieństwo drogi", icon: ICON.blogoslawienstwo, desc: "Prace kosztują 10% mniej sił.", cost: 0.9 });
-        Sv.defineBuff("spokoj", { name: "Spokój Milczących", icon: ICON.spokoj, desc: "Noc i praca mniej męczą: prace kosztują 5% mniej sił.", cost: 0.95 });
-    })();
+        const PR = TK.premie;
+        Sv.defineBuff("blogoslawienstwo", { name: PR.blogoslawienstwo.name, icon: ICON.blogoslawienstwo, desc: PR.blogoslawienstwo.desc, cost: 0.9 });
+        Sv.defineBuff("spokoj", { name: PR.spokoj.name, icon: ICON.spokoj, desc: PR.spokoj.desc, cost: 0.95 });
+    });
 
     // ------------------------------------------------------------------
     // The map, the day, the frame
     // ------------------------------------------------------------------
     T.on("mapReady", e => {
         if (!has()) return;
-        hookQuests();
         sync();
         if (mapId() === D.CHAMBER.map) arriveChamber();
         birdMap = -1;
     }, { owner: PLUGIN });
     T.on("dayStart", () => { if (has()) sync(); }, { owner: PLUGIN });
-    T.on("load", () => { thoughts.length = 0; again = null; dropBirds(); birdMap = -1; }, { owner: PLUGIN });
-    T.on("newGame", () => { thoughts.length = 0; again = null; dropBirds(); birdMap = -1; }, { owner: PLUGIN });
+    T.on("load", () => { again = null; dropBirds(); birdMap = -1; }, { owner: PLUGIN });
+    T.on("newGame", () => { again = null; dropBirds(); birdMap = -1; }, { owner: PLUGIN });
     let tick = 0;
     T.onMapUpdate(() => { if (has()) diveUpdate(); }, { owner: PLUGIN, name: "dive", priority: 4 });
     T.onMapUpdate(() => {
         if (!has()) return;
         tick++;
         holdUpdate();
-        updateThoughts();
         updateBirds();
         gallowsUpdate();
         groveUpdate();
@@ -1297,21 +1202,23 @@
     // ------------------------------------------------------------------
     // F9 (Debug.js, the tab "Wyspa i fabuła"): the package's rows through Okolice.f9
     // ------------------------------------------------------------------
-    const GO = [].concat(
+    // [name, map, x, y] - the names: js/teksty/zakon.txt, f9.* (a tower, a cairn: its discovery's; a shrine, an eagle's place: its
+    // place's), read when F9 asks
+    const GO = () => [].concat(
         D.TOWERS.map(t => [t.name, t.map, t.x + 2, t.y + 4]),
         D.SHRINES.map(s => [s.name, s.map, s.at[0], s.at[1] + 1]),
-        D.CAIRNS.map(c => [c.key.replace("kopiec_", "Kopiec z krukiem, mapa "), c.map, c.at[0], c.at[1] + 1]),
-        [["Krąg menhirów (przy dole)", 18, 52, 44], ["Komora pod menhirami", 176, D.CHAMBER.entry[0], D.CHAMBER.entry[1]]],
-        D.EAGLE.map(e => [e.name + " (tylko z orła)", e.map, e.x + 1, e.y + 1]),
-        D.PERCHES.map(p => ["Orla grzęda " + p.n, p.map, p.at[0], p.at[1] + 1]),
-        [["Stary cmentarz", 8, 9, 27], ["Szubienica", 8, 88, 125], ["Gaj Milczących (środek)", 120, 57, 54], ["Kruki: pustelnia", 155, 76, 49], ["Kruki: Urwisko", 157, 78, 39],
-         ["Płycizna P2 (wrak)", 165, 62, 19]]);
+        D.CAIRNS.map(c => [Watki.wstaw(TK.f9.kopiec, { n: c.key.replace("kopiec_", "") }), c.map, c.at[0], c.at[1] + 1]),
+        [[TK.f9.krag, 18, 52, 44], [TK.f9.komora, 176, D.CHAMBER.entry[0], D.CHAMBER.entry[1]]],
+        D.EAGLE.map(e => [Watki.wstaw(TK.f9.orzel, { name: e.name }), e.map, e.x + 1, e.y + 1]),
+        D.PERCHES.map(p => [Watki.wstaw(TK.f9.grzeda, { n: p.n }), p.map, p.at[0], p.at[1] + 1]),
+        [[TK.f9.cmentarz, 8, 9, 27], [TK.f9.szubienica, 8, 88, 125], [TK.f9.gaj, 120, 57, 54], [TK.f9.krukiPustelnia, 155, 76, 49], [TK.f9.krukiUrwisko, 157, 78, 39],
+         [TK.f9.wrak, 165, 62, 19]]);
     let f9Spot = 0;
-    const f9Label = i => Watki.wstaw(TK.kod.f9Label[0], { "1": i + 1, length: GO.length, "3": GO[i][0], "4": GO[i][1] });
+    const f9Label = i => { const g = GO(); return Watki.wstaw(TK.kod.f9Label[0], { "1": i + 1, length: g.length, "3": g[i][0], "4": g[i][1] }); };
     (function f9() {
         const O = OK();
         if (!O || !O.f9) return;
-        O.f9.add({ owner: PLUGIN, title: "Paczka D: Tajemnice i zakon:",
+        O.f9.add({ owner: PLUGIN, get title() { return TK.f9.tytul; },
             rows: () => [
                 { label: f9Label(f9Spot), icon: ICON.plyta, desc: TK.kod.rows[0], what: "spot", pick: f9Spot },
                 { label: TK.kod.rows[1], icon: ICON.klucz, desc: TK.kod.rows[2], what: "shadow" },
@@ -1325,19 +1232,20 @@
             ],
             pick(row, delta) {
                 if (row.what !== "spot") return;
-                f9Spot = row.pick = ((row.pick || 0) + delta + GO.length) % GO.length;
+                const n = GO().length;
+                f9Spot = row.pick = ((row.pick || 0) + delta + n) % n;
                 row.label = f9Label(row.pick);
             },
             ok(row) {
                 if (!has()) return { say: TK.kod.ok[0], bad: true };
                 const s = S();
-                if (row.what === "spot") { const g = GO[row.pick || 0]; return { go: [g[0], g[1], g[2], g[3], 2] }; }
+                if (row.what === "spot") { const g = GO()[row.pick || 0]; return { go: [g[0], g[1], g[2], g[3], 2] }; }
                 if (row.what === "shadow") {
-                    const w = shadowWindow(day());
-                    if (!w) return { say: TK.kod.ok[1], bad: true };
+                    const sw = shadowWindow(day());
+                    if (!sw) return { say: TK.kod.ok[1], bad: true };
                     const S0 = T.api("Survival"); if (S0 && S0.calmWeather) S0.calmWeather();
-                    $gameSystem.setDayNightHour((w[0] + w[1]) / 2);
-                    return { say: Watki.wstaw(TK.kod.ok[2], { "1": w[0].toFixed(2), "2": w[1].toFixed(2), "3": ((w[0] + w[1]) / 2).toFixed(2) }) };
+                    $gameSystem.setDayNightHour((sw[0] + sw[1]) / 2);
+                    return { say: Watki.wstaw(TK.kod.ok[2], { "1": sw[0].toFixed(2), "2": sw[1].toFixed(2), "3": ((sw[0] + sw[1]) / 2).toFixed(2) }) };
                 }
                 if (row.what === "key") { if (count(ITEM.klucz) < 1) give(ITEM.klucz, 1); s.key = s.key || day(); sync(); return { say: TK.kod.ok[3] }; }
                 if (row.what === "cards") { for (let n = 1; n <= 6; n++) giveCard(n); return { say: Watki.wstaw(TK.kod.ok[4], { "1": cardsFound() }) }; }
@@ -1381,7 +1289,7 @@
         giveCard, readCard, cardsFound, cardsRead, revealWreck, raining, tideLow, herbReady, kleofasTalk, grabarzTalk, ansgarTalk,
         ravens: () => birds.map(b => ({ key: b.key, ri: b.ri, x: b.x, y: b.y, z: b.z, state: b.state })), ravensAt, feedRavens,
         grove: () => Object.assign({}, S().grove, { window: groveWindow(), sunset: sunset(day()) }), finishGrove,
-        fog: () => (fog ? { alpha: fog.alpha, visible: fog.layer.visible } : null), thoughts: () => thoughts.slice(), hush: () => { thoughts.length = 0; return 0; },
+        fog: () => (fog ? { alpha: fog.alpha, visible: fog.layer.visible } : null), thoughts: () => w.mysli().map(t => t.text), hush: () => { w.thoughtsReset(); return 0; },
         work: () => (again ? again.def.key : null), MAPS
     });
 })();

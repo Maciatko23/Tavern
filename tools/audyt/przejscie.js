@@ -92,9 +92,7 @@ if (!TQ || !TL) { console.error("Brak TownQuestsData / TownLifeData - nie da si�
 // ------------------------------------------------------------------ zadania
 const QUESTS = TQ.QUESTS.slice();
 if (homesOk && win.Homes && win.Homes.D21 && !QUESTS.some(q => q.id === "D21")) QUESTS.push(win.Homes.D21);
-// W9 rozdz. 3 (Rywal.js appends Rywal_Data.STEPS when it loads)
-const W9 = QUESTS.find(q => q.id === "W9");
-if (W9 && win.RywalData && Array.isArray(win.RywalData.STEPS)) for (const st of win.RywalData.STEPS) if (!W9.steps.some(s => s.w9r === st.w9r)) W9.steps.push(Object.defineProperties({}, Object.getOwnPropertyDescriptors(st)));
+// W9 rozdz. 3 (Rywal_Data: Watki.watek(zadanie: "W9") - its steps 1-2 come in the loop below with W4's)
 // W4 rozdz. 6-8 (Watki.watek(zadanie: "W4") puts its chapters at their indexes when TownQuests is there)
 const threadSteps = [];   // { quest, kroki, tx }
 for (const id of (W && W.watki ? W.watki() : [])) {
@@ -265,9 +263,57 @@ for (const m of allCode.matchAll(/\bflags:\s*\{([^}]*)\}/g)) for (const f of m[1
 for (const m of allCode.matchAll(/\.flags\[\s*["']([A-Za-z0-9_]+)["']\s*\]\s*=/g)) flagsSet.add(m[1]);
 const flagsSetSoft = new Set();   // named anywhere at all (a flag given through a variable): a weaker "set"
 for (const m of allCode.matchAll(/["']([A-Za-z][A-Za-z0-9_]{3,})["']/g)) flagsSetSoft.add(m[1]);
+// (2026-10-28, etap 3) the threads with their own quests (Watki.watek({ zadania })): the engine makes the FX handlers of their steps
+// (by the steps' names), their start and their offer - and the hooks the data names must be in the thread's plugin (w.haki({...}))
+const engineFx = new Set(), threadHooks = [];   // { watek, zadanie, hak }
+// the hooks a piece of the data names: mode "cond" (a string without ":" is a hook), "talk" (a string is a text key), "action"
+// (a string in a list of actions is a hook); { hak } anywhere, zmienne: "hook"
+const COND_KEYS = new Set(["gdy", "jesli", "znacznik", "gotowy", "nie", "lub", "i", "start", "oferta", "gotowe"]);
+function hooksOf(v, out, mode) {
+    if (v === undefined || v === null || typeof v === "boolean" || typeof v === "number") return out;
+    if (typeof v === "string") { const s = v.replace(/^!+/, ""); if ((mode === "cond" || mode === "action") && s && !s.includes(":")) out.push(s); return out; }
+    if (Array.isArray(v)) { for (const x of v) hooksOf(x, out, mode); return out; }
+    for (const [k, x] of Object.entries(v)) {
+        if (k === "hak" && typeof x === "string") out.push(x);
+        else if (k === "zmienne" && typeof x === "string") out.push(x);
+        else if (COND_KEYS.has(k)) hooksOf(x, out, "cond");
+        else if (k === "zrob") { if (Array.isArray(x)) hooksOf(x, out, "action"); }
+        else if (typeof x === "object") hooksOf(x, out, mode === "cond" ? "value" : mode === "action" ? "value" : mode);
+    }
+    return out;
+}
+for (const id of (W && W.watki ? W.watki() : [])) {
+    const w = W.get(id);
+    if (!w || !w.def || !(w.def.zadania || w.def.obce)) continue;
+    const hook = (zid, list) => { for (const h of list) threadHooks.push({ watek: id, zadanie: zid, hak: h }); };
+    for (const k of w.def.obce || []) {   // (the handlers of a step of someone else's quest: W2's w2Pytanie...)
+        engineFx.add(k.nazwa);
+        hook(k.zadanie || "-", hooksOf(k.gotowe, [], "cond").concat(typeof k.zmienne === "string" ? [k.zmienne] : hooksOf(k.zmienne, [], "value"), hooksOf([k.rozmowy, k.temat], [], "talk"), Object.values(k.haki || {})));
+    }
+    for (const [zid, z] of Object.entries(w.def.zadania || {})) {
+        const q = w.Q && w.Q[zid];
+        if (q && q.autoStart) engineFx.add(q.autoStart);
+        if (q && q.offer && q.offer.cond && q.offer.cond.fn && z.oferta !== undefined) engineFx.add(q.offer.cond.fn);
+        hook(zid, hooksOf([z.start, z.oferta], [], "cond"));
+        (z.kroki || []).forEach((k, i) => {
+            engineFx.add(k.nazwa);
+            if (k.nagrodaFx) { engineFx.add(k.nagrodaFx.nazwa); hook(zid, [k.nagrodaFx.hak]); }
+            hook(zid, hooksOf(k.gotowe, [], "cond").concat(typeof k.zmienne === "string" ? [k.zmienne] : hooksOf(k.zmienne, [], "value"), hooksOf([k.rozmowy, k.temat], [], "talk")));
+            hook(zid, Object.values(k.haki || {}));
+            const st = q && q.steps ? q.steps[i] : null;
+            if (st) for (const e of [].concat(k.rozmowy || [], k.temat ? [k.temat] : [])) if (e.kto) st.rozmowyKto = (st.rozmowyKto || []).concat(e.kto);
+        });
+    }
+    for (const list of Object.values(w.def.akcje || {})) hook("-", hooksOf(list, [], "action"));
+    for (const list of Object.values(w.def.rozmowy || {})) hook("-", hooksOf(list, [], "talk"));
+    for (const sk of Object.values((w.def.skoki && w.def.skoki.lista) || {})) hook("-", hooksOf(sk.zrob, [], "action"));
+}
 function fxExists(name) {
     if (!name) return true;
+    if (engineFx.has(name)) return true;
     const n = name.replace(/[^\w]/g, "\\$&");
+    // (a thread in a plugin of its own - Przystan.js: obce: [{ nazwa: "d20Noc", ... }] - the engine makes that handler)
+    if (new RegExp("\\bnazwa:\\s*[\"']" + n + "[\"']").test(allCode)) return true;
     const re = new RegExp("(^|[^A-Za-z0-9_$.])" + n + "\\s*[:(]|\\." + n + "\\s*=[^=]|[\"']" + n + "[\"']\\s*[:\\]]|FX\\[\"" + n + "\"\\]", "m");
     return re.test(allCode);
 }
@@ -295,6 +341,17 @@ for (const m of allCode.matchAll(/\bv\.([A-Za-z0-9_]+)\s*=\s*\(?\s*\(?\s*(?:v\.|
 const problems = [];
 const note = (waga, zadanie, krok, co) => problems.push({ waga, zadanie, krok, co });
 const stepLabel = (q, i, st) => "krok " + i + (st.ch ? " (rozdz. " + st.ch + ")" : "") + (st.nazwa ? " " + st.nazwa : st.type ? " " + st.type : "");
+// the hooks the threads' data names (Watki.watek: conditions, words, actions, talks) - each in some plugin's code (w.haki({ nazwa: ... }))
+{
+    const seen = new Set();
+    for (const h of threadHooks) {
+        const key = h.watek + "|" + h.hak;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        const n = h.hak.replace(/[^\w]/g, "\\$&");
+        if (!new RegExp("(^|[^A-Za-z0-9_$.])" + n + "\\s*[:(]", "m").test(allCode)) note("blokada", h.zadanie === "-" ? h.watek : h.zadanie, "wątek " + h.watek, "hak „" + h.hak + "” z danych wątku - brak w kodzie (w.haki)");
+    }
+}
 const FX_FIELDS = ["talk", "check", "tick", "fx", "custom", "vars", "spotFx", "rewardFx", "show", "at", "talkFx"];
 const rows = [];   // the table of quests
 for (const q of QUESTS) {

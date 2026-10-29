@@ -1,6 +1,7 @@
-// The new hero (HeroLook.js, the default; F9 switches back to the old Reid): the player is drawn from Hero_Walk / Hero_Run / Hero_Sneak -
-// 8 directions (the diagonals from the move itself), 8 frames a cycle chosen by the distance walked, standing still = column 0;
-// every swing plays its Hero_ sheet; switched off, the old $Reid_Poor comes back.
+// The hero (HeroLook.js - the only look since 2026-10-28: the old Reid and his F9 switch are gone): the player is drawn from Hero_Walk /
+// Hero_Run / Hero_Sneak - 8 directions (the diagonals from the move itself), 8 frames a cycle chosen by the distance walked, standing
+// still = column 0; every swing plays its Hero_ sheet (none the archived Swing_*); the database's old sheet ($Reid_Poor) asked for
+// gives the hero's own.
 const { launch, sleep } = require("./cdp.js");
 const OUT = process.argv[2] || "";
 (async () => {
@@ -33,15 +34,10 @@ const OUT = process.argv[2] || "";
         const start = async () => { await ev(`$gamePlayer.locate(${R.x + 1}, ${R.y + 1}); $gamePlayer.setDirection(2); 0`); await frames(10); };
 
         const s0 = await S();
-        check("the new hero is the default (a new game): the sheet Hero_Walk", s0.sheet === "Hero_Walk" && (await ev("HeroLook.active()")) === true, s0);
-        await ev("HeroLook.setActive(false); 0");
-        await frames(5);
-        const sOld = await S();
-        check("switched off (F9): the old hero ($Reid_Poor)", !sOld.sheet && /Reid_Poor/.test(sOld.url) && sOld.visible === true, sOld);
-        await ev("HeroLook.setActive(true); 0");
+        check("a new game: the hero's sheet Hero_Walk; no switch to the old hero any more", s0.sheet === "Hero_Walk" && (await ev("HeroLook.active()")) === true && (await ev("HeroLook.setActive === undefined")), s0);
         await start();
         const s1 = await S();
-        check("switched on: the new sheet Hero_Walk (visible), standing = column 0, facing down = row 0, 64x64 cells", s1.sheet === "Hero_Walk" && /Hero_Walk/.test(s1.url) && s1.visible === true && s1.col === 0 && s1.row === 0 && s1.frame[2] === 64 && s1.frame[3] === 64, s1);
+        check("the sheet Hero_Walk (visible), standing = column 0, facing down = row 0, 64x64 cells", s1.sheet === "Hero_Walk" && /Hero_Walk/.test(s1.url) && s1.visible === true && s1.col === 0 && s1.row === 0 && s1.frame[2] === 64 && s1.frame[3] === 64, s1);
 
         // walking right: row 6, the columns go round 1..8 with the distance
         // (2026-10-23: the frames noted in the game's own loop - read from outside every 3 frames, a busy machine skipped one)
@@ -143,11 +139,15 @@ const OUT = process.argv[2] || "";
         await frames(5);
         check("sneaking (C): the sneak sheet Hero_Sneak", sk.sheet === "Hero_Sneak" && /Hero_Sneak/.test(sk.url), sk);
 
-        // off again: the old hero
-        await ev("HeroLook.setActive(false); 0");
-        await frames(5);
-        const s9 = await S();
-        check("switched off: the old $Reid_Poor again (visible)", !s9.sheet && /Reid_Poor/.test(s9.url) && s9.visible === true && (await J("ChoppableTree.swingKind(3).sheet")) === "Swing_AxeSide", s9);
+        // the old hero's sheets are archived: no swing plays a Swing_* sheet, and the database's $Reid_Poor (data/Actors.json) asked for
+        // gives the hero's own sheet - nothing tries to load a file that is not there
+        const old = await J(`(function(){ const n = Tawerna.api("ChoppableTree_parts").core.SWING_KINDS.length, sheets = [];
+            for (let k = 0; k < n; k++) sheets.push(ChoppableTree.swingKind(k).sheet || null);
+            return { sheets, reid: ImageManager.loadCharacter("$Reid_Poor")._url.split("/").pop(), sneak: ImageManager.loadCharacter("$Reid_Poor_Sneak")._url.split("/").pop(),
+                actor: $gameParty.leader().characterName(), named: $gamePlayer.characterName() }; })()`);
+        check("no swing plays an old Swing_* sheet (each its Hero_ sheet), $Reid_Poor / $Reid_Poor_Sneak asked for -> Hero_Walk / Hero_Sneak",
+            old.sheets.length >= 22 && old.sheets.every(n => n === null || /^Hero_/.test(n)) && old.sheets.slice(0, 22).every(n => /^Hero_/.test(n)) &&
+            old.reid === "Hero_Walk.png" && old.sneak === "Hero_Sneak.png", old);
     } catch (e) { console.log("ERR", e.message); results.push(false); }
     await ev("Input.clear(); 0").catch(() => 0);
     const err = b.logs.filter(l => /EXC|rror/.test(l));

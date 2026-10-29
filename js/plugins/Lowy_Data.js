@@ -4,9 +4,11 @@
 // PACZKA B „Zwierzęta i łowy” (docs/rozszerzenia/PLAN.md, punkt 5) - the data of: wilcza nora, gawra, błotnisko dzików, lizawka, stałe
 // obozy rabusiów i myśliwych Czarnych Oczu, zwierzyniec Lorda z gajowym, zbłąkane zwierzęta, strzelnica.
 // Here (loaded under QuestBoard_Data and above TownLife / TownQuests_Data): the places (registered by the engine with
-// Okolice.registerSpots("B", ...)), the discoveries, the gamekeeper (window.TownLifeExtra, id 2905, Map024), the quests K59-K62 and
-// D32-D33 (window.TownQuestsPacks), the board's contracts with the prefix "low_" and its two new beasts (QuestBoard.TEMPLATES / BEASTS),
-// the gamekeeper's bust (SpeechBubbles.BUSTS), every number and every text. The engine is Lowy.js (below every system).
+// Okolice.registerSpots("B", ...)), the discoveries, the gamekeeper (window.TownLifeExtra, id 2905, Map024), the thread "lowy" (Watki.js,
+// 2026-10-28: the state, the quests K59-K62 and D32-D33 - into window.TownQuestsPacks -, the talks by the hunters' fire, the gamekeeper's
+// fine, Rysiek, the white-eye arrow, Marta's milk, the den and the lick), the board's contracts with the prefix "low_" and its two new
+// beasts (QuestBoard.TEMPLATES / BEASTS), the gamekeeper's bust (SpeechBubbles.BUSTS), every number. The texts: js/teksty/lowy.txt.
+// The engine is Lowy.js (below every system).
 // The user's decisions (2026-10-21): the cubs left alone - the den's pack turns friendly, nothing is taken away; poaching in the Lord's
 // park - a fine, the third time the hedge's gap is shut for 7 days; never the gallows, never the game's end.
 
@@ -15,6 +17,7 @@
  * @plugindesc [paczka B] Dane: Zwierzęta i łowy - wilcza nora, gawra, błotnisko dzików, lizawka, stałe obozy, zwierzyniec Lorda z gajowym, zbłąkane zwierzęta, strzelnica. v1.1.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
  * @orderAfter Okolice_Data
  *
  * @help
@@ -74,7 +77,8 @@
     };
     // the wolf cub: the wolf's sheet made small (QuestBoard's _qbScale), a grazer (no `aggressive`, no `pack`: it runs from the hero)
     // and no YIELD entry: nothing to dress
-    const PUP = { name: "Wilczę", sheet: "$Animal_Wolf", hp: 14, poise: 8, stun: 40, speed: 3, flee: 4.6, sight: 6, radius: 0.35, hours: [[0, 24]], markY: -30 };
+    const PUP = { sheet: "$Animal_Wolf", hp: 14, poise: 8, stun: 40, speed: 3, flee: 4.6, sight: 6, radius: 0.35, hours: [[0, 24]], markY: -30 };
+    Watki.scal(PUP, "lowy", "szczenie");   // (its name: js/teksty/lowy.txt, szczenie)
 
     // ------------------------------------------------------------------ B2 the bear's den (Map013)
     const GAWRA = {
@@ -95,8 +99,9 @@
         rabusie: { map: 21, x: 60, y: 41, area: { x: 58, y: 39, w: 6, h: 5 }, tent: [62, 39], tag: "camp", every: 4, mielerz: [50, 21],
             size: [2, 4], knife: 0.35 },
         czo: { map: 23, x: 66, y: 21, area: { x: 64, y: 18, w: 6, h: 5 }, tent: [68, 19], tag: "lowCzo", hours: [6, 20],
-            kinds: ["archer", "bandit"], looks: ["Archer", "Archer"], name: "Myśliwy Czarnych Oczu", sack: [[205, 1], [127, 6], [96, 2]] }
+            kinds: ["archer", "bandit"], looks: ["Archer", "Archer"], sack: [[205, 1], [127, 6], [96, 2]] }
     };
+    Watki.scal(OBOZY, "lowy", "obozy");   // (the hunters' name: js/teksty/lowy.txt, obozy.czo.name)
 
     // ------------------------------------------------------------------ B6 the Lord's game park (Map024)
     const ZWIERZYNIEC = {
@@ -127,54 +132,50 @@
         map: 162, area: { x: 73, y: 50, w: 12, h: 5 }, line: [73, 74], stand: [74, 53], rack: [73, 50],
         targets: [{ x: 79, y: 51, d: 6 }, { x: 81, y: 53, d: 8 }, { x: 82, y: 51, d: 9 }], radius: 0.5, faceY: -0.05,
         shots: 5, ring: { center: 6, mid: 14 }, score: { center: 10, mid: 5, edge: 2 }, practice: 5,
-        rivals: [{ name: "Szeregowy Wróbel", score: 24 }, { name: "Kapral Sowa", score: 30 }, { name: "Sierżant Bełt", score: 36 }],
+        rivals: [{ score: 24 }, { score: 30 }, { score: 36 }],
         prizes: [25, 40, 60], favor: [3, 5, 8], contestDay: d => d % 7 === 3, contestHours: [10, 12], drill: [9, 12],
         soldiers: [[75, 50], [75, 54]]
     };
+    Watki.scal(STRZELNICA, "lowy", "strzelnica");   // (the rivals' names: js/teksty/lowy.txt, strzelnica.rivals)
 
-    // ------------------------------------------------------------------ the places (Okolice.registerSpots("B", ...); the collision test)
+    // ------------------------------------------------------------------ the places (Okolice.registerSpots("B", ...); the collision test) -
+    // their names: js/teksty/lowy.txt, miejsca.<key> (Lowy.js registers them once the words are in)
     const SPOTS = [
-        { key: "nora_wilcza", map: 23, kind: "den", name: "Wilcza nora", mode: "reach", x: 64, y: 49, w: 3, h: 2 },
-        { key: "szary_kiel", map: 23, kind: "bounty", name: "Szary Kieł", mode: "reach", cells: [[66, 51]] },
-        { key: "oboz_czo", map: 23, kind: "camp", name: "Obóz myśliwych Czarnych Oczu", mode: "reach", x: 64, y: 18, w: 6, h: 5 },
-        { key: "oboz_bandytow", map: 21, kind: "camp", name: "Obóz rabusiów", mode: "reach", x: 58, y: 39, w: 6, h: 5 },
-        { key: "blotnisko", map: 21, kind: "wallow", name: "Błotnisko dzików", mode: "reach", x: 65, y: 46, w: 4, h: 3 },
-        { key: "gawra_wejscie", map: 13, kind: "den", name: "Gawra", mode: "wall", x: 99, y: 45, w: 2, h: 2 },
-        { key: "gawra_pole", map: 13, kind: "den", name: "Przed gawrą", mode: "reach", x: 99, y: 47, w: 2, h: 1 },
-        { key: "lizawka", map: 4, kind: "lick", name: "Lizawka", mode: "reach", x: 73, y: 51, w: 1, h: 1 },
-        { key: "zasiadka", map: 4, kind: "hide", name: "Zasiadka", mode: "reach", x: 70, y: 53, w: 1, h: 1 },
-        { key: "poroze_zrzut", map: 4, kind: "antler", name: "Zrzucone poroże", mode: "reach", x: 74, y: 52, w: 1, h: 1 },
-        { key: "wylom_zywoplot", map: 24, kind: "gap", name: "Wyłom w żywopłocie", mode: "reach", x: 7, y: 29, w: 2, h: 1, allowOld: true },
-        { key: "lesniczowka", map: 24, kind: "hut", name: "Leśniczówka", mode: "reach", x: 59, y: 2, w: 5, h: 3 },
-        { key: "pasnik", map: 24, kind: "feeder", name: "Paśnik", mode: "reach", x: 59, y: 22, w: 2, h: 1 },
-        { key: "sidla_zwierzyniec", map: 24, kind: "snares", name: "Sidła kłusownika", mode: "reach", cells: [[20, 46], [45, 38], [66, 12]] },
-        { key: "patrol_gajowego", map: 24, kind: "patrol", name: "Obchód gajowego", mode: "reach", cells: [[13, 40], [30, 50], [53, 45], [71, 20], [61, 5]] },
-        { key: "rysiek_zasadzka", map: 24, kind: "npc", name: "Rysiek przy sidłach", mode: "reach", cells: [[46, 38]] },
-        { key: "zblakane_start", map: 168, kind: "animals", name: "Zbłąkane zwierzęta", mode: "reach", x: 84, y: 28, w: 3, h: 3 },
-        { key: "strzelnica", map: 162, kind: "range", name: "Strzelnica", mode: "reach", x: 73, y: 50, w: 12, h: 5 }
+        { key: "nora_wilcza", map: 23, kind: "den", mode: "reach", x: 64, y: 49, w: 3, h: 2 },
+        { key: "szary_kiel", map: 23, kind: "bounty", mode: "reach", cells: [[66, 51]] },
+        { key: "oboz_czo", map: 23, kind: "camp", mode: "reach", x: 64, y: 18, w: 6, h: 5 },
+        { key: "oboz_bandytow", map: 21, kind: "camp", mode: "reach", x: 58, y: 39, w: 6, h: 5 },
+        { key: "blotnisko", map: 21, kind: "wallow", mode: "reach", x: 65, y: 46, w: 4, h: 3 },
+        { key: "gawra_wejscie", map: 13, kind: "den", mode: "wall", x: 99, y: 45, w: 2, h: 2 },
+        { key: "gawra_pole", map: 13, kind: "den", mode: "reach", x: 99, y: 47, w: 2, h: 1 },
+        { key: "lizawka", map: 4, kind: "lick", mode: "reach", x: 73, y: 51, w: 1, h: 1 },
+        { key: "zasiadka", map: 4, kind: "hide", mode: "reach", x: 70, y: 53, w: 1, h: 1 },
+        { key: "poroze_zrzut", map: 4, kind: "antler", mode: "reach", x: 74, y: 52, w: 1, h: 1 },
+        { key: "wylom_zywoplot", map: 24, kind: "gap", mode: "reach", x: 7, y: 29, w: 2, h: 1, allowOld: true },
+        { key: "lesniczowka", map: 24, kind: "hut", mode: "reach", x: 59, y: 2, w: 5, h: 3 },
+        { key: "pasnik", map: 24, kind: "feeder", mode: "reach", x: 59, y: 22, w: 2, h: 1 },
+        { key: "sidla_zwierzyniec", map: 24, kind: "snares", mode: "reach", cells: [[20, 46], [45, 38], [66, 12]] },
+        { key: "patrol_gajowego", map: 24, kind: "patrol", mode: "reach", cells: [[13, 40], [30, 50], [53, 45], [71, 20], [61, 5]] },
+        { key: "rysiek_zasadzka", map: 24, kind: "npc", mode: "reach", cells: [[46, 38]] },
+        { key: "zblakane_start", map: 168, kind: "animals", mode: "reach", x: 84, y: 28, w: 3, h: 3 },
+        { key: "strzelnica", map: 162, kind: "range", mode: "reach", x: 73, y: 50, w: 12, h: 5 }
     ];
+    Watki.scal(SPOTS, "lowy", "miejsca", "key");   // (its words: js/teksty/lowy.txt, miejsca, by the key)
 
-    // ------------------------------------------------------------------ the discoveries (Okolice.discoverable; the tab "Okolice")
+    // ------------------------------------------------------------------ the discoveries (Okolice.discoverable; the tab "Okolice") - their
+    // words: js/teksty/lowy.txt, odkrycia.<key>
     const DISCOVER = [
-        { key: "nora", map: 23, x: 65, y: 51, near: 8, icon: 481, xp: 30, name: "Wilcza nora", day: true,
-          text: "Pod korzeniami starego pnia na Skraju lasu wataha ma norę. Za dnia wilki śpią przy wejściu, wiosną i latem bawią się tu szczenięta. Nocą wataha idzie na łowy." },
-        { key: "gawra", map: 13, x: 99, y: 47, near: 6, icon: 483, xp: 30, name: "Gawra pod granią",
-          text: "W skale nad kamieniołomem jest gawra. Od wiosny do jesieni niedźwiedź chodzi wokół niej. Zimą śpi w środku - słychać chrapanie. Lepiej go nie budzić." },
-        { key: "blotnisko", map: 21, x: 66, y: 47, near: 4, icon: 482, xp: 25, name: "Błotnisko dzików",
-          text: "Rozdeptane błoto przy Leśnej drodze. Rano i wieczorem dziki tarzają się tu godzinami. Kto się wytarza w błocie, pachnie jak las - zwierzęta później go wyczują." },
-        { key: "lizawka", map: 4, x: 73, y: 51, near: 4, icon: 480, xp: 25, name: "Lizawka",
-          text: "Wydrążony pieniek na Łące. Położona w nim bryła soli przez sześć dni ściąga jelenie o świcie i o zmierzchu. Obok zasiadka z chrustu: stąd zwierzęta wyczują cię później." },
-        { key: "oboz_rabusiow", map: 21, x: 60, y: 41, near: 7, icon: 156, xp: 20, name: "Obóz rabusiów", camp: "rabusie",
-          text: "Polana przy Leśnej drodze, wypalony krąg po ognisku. Rabusie wracają tu nocami. Kiedy nad lasem dymi mielerz, idą nocą pod szałas węglarza." },
-        { key: "oboz_czo", map: 23, x: 66, y: 21, near: 8, icon: 485, xp: 30, name: "Obóz obcych myśliwych", camp: "czo",
-          text: "Namiot i ognisko na Skraju lasu. Obcy myśliwi z białym okiem na lotkach strzał. Za dnia siedzą przy ogniu, nocą wychodzą w las." },
-        { key: "zwierzyniec", map: 24, x: 7, y: 31, near: 2, icon: 484, xp: 25, name: "Zwierzyniec Lorda",
-          text: "Za żywopłotem dworu ciągnie się zwierzyniec: jelenie, dziki, paśnik i leśniczówka gajowego. Tu poluje tylko dwór. Bez zezwolenia zabite zwierzę to kłusownictwo." },
-        { key: "zblakane", map: 168, x: 85, y: 29, near: 6, icon: 349, xp: 20, name: "Zbłąkane zwierzęta",
-          text: "Krowa, owca i kury z zagrody Ługów. Po pożarze rozbiegły się i zdziczały. Krowę i owcę odprowadzisz na powrozie, kury trzeba łapać rękami." },
-        { key: "strzelnica", map: 162, x: 76, y: 52, near: 5, icon: 486, xp: 20, name: "Strzelnica garnizonu",
-          text: "Trzy tarcze na 6, 8 i 9 kroków. Przy stojaku z łukami można postrzelać. Strzały ćwiczebne są od wojska. Co siódmy dzień przed południem są zawody." }
+        { key: "nora", map: 23, x: 65, y: 51, near: 8, icon: 481, xp: 30, day: true },
+        { key: "gawra", map: 13, x: 99, y: 47, near: 6, icon: 483, xp: 30 },
+        { key: "blotnisko", map: 21, x: 66, y: 47, near: 4, icon: 482, xp: 25 },
+        { key: "lizawka", map: 4, x: 73, y: 51, near: 4, icon: 480, xp: 25 },
+        { key: "oboz_rabusiow", map: 21, x: 60, y: 41, near: 7, icon: 156, xp: 20, camp: "rabusie" },
+        { key: "oboz_czo", map: 23, x: 66, y: 21, near: 8, icon: 485, xp: 30, camp: "czo" },
+        { key: "zwierzyniec", map: 24, x: 7, y: 31, near: 2, icon: 484, xp: 25 },
+        { key: "zblakane", map: 168, x: 85, y: 29, near: 6, icon: 349, xp: 20 },
+        { key: "strzelnica", map: 162, x: 76, y: 52, near: 5, icon: 486, xp: 20 }
     ];
+    Watki.scal(DISCOVER, "lowy", "odkrycia", "key");   // (its words: js/teksty/lowy.txt, odkrycia, by the key)
 
     // ------------------------------------------------------------------ the gamekeeper (TownLife 2905, Map024)
     // Gniewko Bór, about 40: a green kaftan, a bow on his back, a horn at his hip. Calm, dry, loyal to the forest more than to the Lord.
@@ -211,74 +212,6 @@
     };
     Watki.scal(TALK, "lowy", "rozmowy");   // (its words: js/teksty/lowy.txt, rozmowy)
 
-    // ------------------------------------------------------------------ the quests (TownQuests packs)
-    const Q_K59 = {
-        id: "K59", kind: "K", giver: null, icon: 161, 
-        autoStart: "lowK59Start",
-        steps: [
-            { type: "custom", check: "lowK59", vars: "lowK59" }
-        ],
-        reward: { xp: 0 }
-    };
-    Watki.scal(Q_K59, "lowy", "zadania.K59");   // (its words: js/teksty/lowy.txt, zadania.K59)
-    const Q_K60 = {
-        id: "K60", kind: "K", giver: null, icon: 201, 
-        autoStart: "lowK60Start",
-        steps: [
-            { type: "custom", check: "lowK60Sol" },
-            { type: "custom", check: "lowK60Swit" },
-            { type: "custom", check: "lowK60Lup" }
-        ],
-        reward: { gold: 40, xp: 80 }
-    };
-    Watki.scal(Q_K60, "lowy", "zadania.K60");   // (its words: js/teksty/lowy.txt, zadania.K60)
-    const Q_K61 = {
-        id: "K61", kind: "K", giver: "kwatermistrz", icon: 126, 
-        autoStart: "lowK61Start",
-        offer: {
-            cond: { hours: [8, 18], fn: "lowK61Offer" }
-        },
-        steps: [
-            { type: "custom", check: "lowK61" }
-        ],
-        reward: { gold: 50, xp: 120 }
-    };
-    Watki.scal(Q_K61, "lowy", "zadania.K61");   // (its words: js/teksty/lowy.txt, zadania.K61)
-    const Q_K62 = {
-        id: "K62", kind: "K", giver: "praczka", icon: 123, 
-        offer: {
-            cond: { hours: [6, 19] }
-        },
-        steps: [
-            { type: "custom", check: "lowK62", vars: "lowK62" }
-        ],
-        reward: { gold: 30, xp: 100, flag: "lowMlekoMarty" }
-    };
-    Watki.scal(Q_K62, "lowy", "zadania.K62");   // (its words: js/teksty/lowy.txt, zadania.K62)
-    const Q_D32 = {
-        id: "D32", kind: "D", giver: "gajowy", icon: 204, 
-        offer: {
-            cond: { hours: [6, 20], fn: "lowD32Offer" }
-        },
-        steps: [
-            { type: "custom", check: "lowD32Sidla", vars: "lowD32Sidla" },
-            { type: "custom", check: "lowD32Noc" },
-            { type: "talk", to: "gajowy" }
-        ],
-        reward: { xp: 120, items: [[204, 1]] }
-    };
-    Watki.scal(Q_D32, "lowy", "zadania.D32");   // (its words: js/teksty/lowy.txt, zadania.D32)
-    const Q_D33 = {
-        id: "D33", kind: "D", giver: null, icon: 203, 
-        autoStart: "lowD33Start",
-        steps: [
-            { type: "custom", check: "lowD33Wybor" },
-            { type: "custom", check: "lowD33Koniec", vars: "lowD33Koniec" }   // (2026-10-24 audyt: the words {co} come from lowD33Koniec.vars - "lowD33" had no handler, the journal showed "{co}")
-        ],
-        reward: { xp: 150 }
-    };
-    Watki.scal(Q_D33, "lowy", "zadania.D33");   // (its words: js/teksty/lowy.txt, zadania.D33)
-
     const REMARKS = [
         { id: "lowCzoKleofas", who: "pustelnik", flag: "lowCzoPrzegnani" },
         { id: "lowCzoBazyli", who: "latarnik", flag: "lowCzoPrzegnani" },
@@ -288,7 +221,107 @@
         { id: "lowMartaKrasula", who: "praczka", flag: "lowMlekoMarty" }
     ];
     Watki.scal(REMARKS, "lowy", "uwagi");   // (its words: js/teksty/lowy.txt, uwagi)
-    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Lowy", quests: [Q_K59, Q_K60, Q_K61, Q_K62, Q_D32, Q_D33], remarks: REMARKS });
+
+    // ------------------------------------------------------------------ the thread (the engine Watki.js, docs/WATKI_DANE.md)
+    // The saved state (TawernaCore: _tw.lowy - Lowy.js fills in what an older save of the package lacks)
+    const DEF = () => ({
+        den: { meat: [], friendly: false, betrayed: false, emptyUntil: 0, choice: null, giftDay: -99, giftSeen: -1, forcePups: -1, seenBundles: [] },
+        bear: { deadYear: 0, wokeDay: -1, forceWinter: -1 },
+        wallow: { msg: -99, windows: {} },
+        lick: { until: 0, ever: false, watched: false, trophy: false, antlerKey: -1, windows: {} },
+        camps: { forceRab: -1, forceCzo: -1, marched: "" },
+        czo: { choice: null, bearDead: false, resolved: null, paid: false },
+        park: { seen: false, count: 0, shutUntil: 0, permitDay: -99, pending: [], wanted: null, legal: 0, fines: 0 },
+        d32: { taken: [false, false, false], met: false, choice: null },
+        strays: { done: {}, led: null, pos: {}, milkDay: -99 },
+        range: { best: 0, wins: 0, silver: false, beatBest: false, contestDay: -1, forceContest: -1, rounds: 0, last: null },
+        arrow: { rotmistrz: false, pustelnik: false },
+        trophies: []
+    });
+    // the quests K59-K62, D32-D33 (TownQuests' fields; their words: js/teksty/lowy.txt, zadania.*; the engine puts them into
+    // window.TownQuestsPacks with the remarks), the talks (lines: "> " the hero, "@key: " another speaker - Lowy.js's hook mowca -, else
+    // the one spoken to) and their actions. The hooks (odkryte, masz, klosOdszedl, aktDrugi, d33Slowa, mowca and the actions' ones) are
+    // Lowy.js's
+    const w = Watki.watek({
+        id: "lowy", wtyczka: "Lowy", teksty: "lowy",
+        stan: { klucz: "lowy", wersja: 1, domyslne: DEF },
+        mowa: { kto: key => w.hak("mowca", null, key) },
+        zadania: {
+            // K59: starts by itself once the den is found (Bogdan's notice on the board told of it); its end is the den's (Lowy.js
+            // finishes it with the reward: the pack broken or befriended)
+            K59: { kind: "K", giver: null, icon: 161, autoStart: "lowK59Start", start: [{ hak: "odkryte", args: ["nora"] }, "!stan:den.choice"],
+                kroki: [{ nazwa: "lowK59", gotowe: false, zmienne: { n: { ile: "den.meat", najwyzej: NORA.meatDays } } }],
+                reward: { xp: 0 } },
+            // K60: once the lick is found - the salt, the dawn in the hide, the antler or the deer's meat
+            K60: { kind: "K", giver: null, icon: 201, autoStart: "lowK60Start", start: { hak: "odkryte", args: ["lizawka"] },
+                kroki: [
+                    { nazwa: "lowK60Sol", gotowe: "stan:lick.ever" },
+                    { nazwa: "lowK60Swit", gotowe: "stan:lick.watched" },
+                    { nazwa: "lowK60Lup", gotowe: { lub: ["stan:lick.trophy", { hak: "masz", args: [ITEM.poroze] }] } }
+                ],
+                reward: { gold: 40, xp: 80 } },
+            // K61: Kłos offers it (the range found); with Kłos gone (D27) it starts by itself
+            K61: { kind: "K", giver: "kwatermistrz", icon: 126, autoStart: "lowK61Start", start: [{ hak: "odkryte", args: ["strzelnica"] }, "klosOdszedl"],
+                offer: { cond: { hours: [8, 18], fn: "lowK61Offer" } }, oferta: { hak: "odkryte", args: ["strzelnica"] },
+                kroki: [{ nazwa: "lowK61", gotowe: "stan:range.beatBest" }],
+                reward: { gold: 50, xp: 120 } },
+            // K62: the four strays brought home (the farm of the Ługs or the hero's own yard)
+            K62: { kind: "K", giver: "praczka", icon: 123, offer: { cond: { hours: [6, 19] } },
+                kroki: [{ nazwa: "lowK62", gotowe: "ile:strays.done>=" + ZBLAKANE.list.length, zmienne: { n: { ile: "strays.done" } } }],
+                reward: { gold: 30, xp: 100, flag: "lowMlekoMarty" } },
+            // D32: offered once the park is found - the three snares, the night by them (Rysiek), back to the gamekeeper
+            D32: { kind: "D", giver: "gajowy", icon: 204, offer: { cond: { hours: [6, 20], fn: "lowD32Offer" } }, oferta: { hak: "odkryte", args: ["zwierzyniec"] },
+                kroki: [
+                    { nazwa: "lowD32Sidla", gotowe: "ile:d32.taken>=" + ZWIERZYNIEC.snares.length, zmienne: { n: { ile: "d32.taken" } } },
+                    { nazwa: "lowD32Noc", gotowe: "stan:d32.choice" },
+                    { nazwa: "lowD32Gajowy", type: "talk", to: "gajowy" }
+                ],
+                reward: { xp: 120, items: [[204, 1]] } },
+            // D33 (Act II): the hunters' camp found; the choice by their fire, then its end (Lowy.js finishes it)
+            D33: { kind: "D", giver: null, icon: 203, autoStart: "lowD33Start", start: ["aktDrugi", { hak: "odkryte", args: ["oboz_czo"] }, "!stan:czo.resolved"],
+                kroki: [
+                    { nazwa: "lowD33Wybor", gotowe: false },
+                    { nazwa: "lowD33Koniec", gotowe: false, zmienne: "d33Slowa" }   // (2026-10-24 audyt: the words {co} come from lowD33Koniec.vars - "lowD33" had no handler, the journal showed "{co}")
+                ],
+                reward: { xp: 150 } }
+        },
+        paczka: { remarks: REMARKS },
+        rozmowy: {
+            // D33 by the hunters' fire (ctx.spk: the hunters): help them - or tell them to go (they take up their bows)
+            czoSpotkanie: ["rozmowy.czoMeet", { wybor: [
+                { etykieta: "kod.czoTick.0", tresc: [{ zrob: "czoPomoc" }, "rozmowy.czoHelp"] },
+                { etykieta: "kod.czoTick.1", tresc: ["rozmowy.czoDrive", { zrob: "czoPrzegon" }] }], anuluj: 1 }],
+            // the bear dead: they pay (and let slip where their captain digs)
+            czoZaplata: ["rozmowy.czoPaid", { zrob: "czoZaplata" }],
+            // the gamekeeper's fine (ctx.spk: him; ctx.n: the how-many-th, ctx.znalazl: he found the carcass, ctx.bezGrosza: the gold short)
+            grzywna: [{ gdy: "ctx:znalazl", mow: "rozmowy.gajowyFound" }, "rozmowy.gajowyFine{n}", { gdy: "ctx:bezGrosza", mow: "rozmowy.gajowyNoGold" },
+                { zrob: "grzywna" }, { gdy: "ctx:n>=3", mow: "rozmowy.gajowyEscort" }],
+            // D32: Rysiek by the snares at night (ctx.spk: him) - take him to the gamekeeper or warn him
+            rysiek: ["rozmowy.rysiekMeet", { wybor: [
+                { etykieta: "kod.rysiekList.0", tresc: ["rozmowy.rysiekGive", { zrob: "rysiek", args: ["give"] }] },
+                { etykieta: "kod.rysiekList.1", tresc: ["rozmowy.rysiekWarn", { zrob: "rysiek", args: ["warn"] }] }], anuluj: -1 }],
+            // the white-eye arrow shown to the captain or to Kleofas (ctx.key)
+            strzala: [{ jesli: "ctx:key=rotmistrz", to: ["rozmowy.arrowRotmistrz"], inaczej: ["rozmowy.arrowKleofas"] }, { zrob: "strzala", args: [{ ctx: "key" }] }],
+            // Marta's milk, once a week after K62
+            mleko: ["rozmowy.martaMilk", { zrob: "mleko" }],
+            // the bear's den in winter: a peek wakes it
+            gawra: [{ mow: "peekAsk", kto: "bohater" }, { wybor: [{ etykieta: "peekSleep", tresc: [{ zrob: "obudz" }] }, { etykieta: "peekLeave", tresc: [] }], anuluj: 1 }],
+            // the lick: a lump of salt into it
+            lizawka: [{ mow: "lickAsk", kto: "bohater" }, { wybor: [{ etykieta: "lickPut", tresc: [{ zrob: "sol" }] }, { etykieta: "lickNo", tresc: [] }], anuluj: 1 }]
+        },
+        akcje: {
+            czoPomoc: [{ stan: { "czo.choice": "help" } }, { krok: "lowD33Wybor" }],
+            czoPrzegon: [{ stan: { "czo.choice": "drive" } }, { krok: "lowD33Wybor" }, { hak: "czoAtak" }],
+            czoZaplata: [{ hak: "czoRozstrzygnij", args: ["help"] }],
+            grzywna: [{ hak: "grzywna" }],
+            rysiek: [{ hak: "rysiek", args: [{ arg: 0 }] }],
+            strzala: [{ hak: "strzala", args: [{ arg: 0 }] }],
+            mleko: [{ hak: "mleko" }],
+            obudz: [{ hak: "obudz" }],
+            sol: [{ hak: "sol" }]
+        }
+    });
+    const Q = w.Q;
 
     // ------------------------------------------------------------------ the board (QuestBoard: its tables are live objects)
     const QB = window.QuestBoard;
@@ -329,6 +362,6 @@
         VERSION, PKG: "B", OWNER: "Lowy", ready: true,
         IDS_RANGE: P ? P.ids : [2300, 2499], RESIDENTS: P ? P.residents : [2905, 2909], ITEMS: P ? P.items : [200, 209], ICONS: P ? P.icons : [480, 495],
         SWITCHES: P ? P.switches : [23, 24], SW_WYLOM, ITEM, MEATS, ICON, IDS, RESIDENT, NORA, PUP, GAWRA, BLOTO, LIZAWKA, OBOZY, ZWIERZYNIEC, ZBLAKANE, STRZELNICA,
-        SPOTS, DISCOVER, GAJOWY, GAJ_SPOTS, TX, TALK, QUESTS: [Q_K59, Q_K60, Q_K61, Q_K62, Q_D32, Q_D33], BEASTS, TEMPLATES, addBoard
+        SPOTS, DISCOVER, GAJOWY, GAJ_SPOTS, TX, TALK, QUESTS: [Q.K59, Q.K60, Q.K61, Q.K62, Q.D32, Q.D33], BEASTS, TEMPLATES, addBoard, DEF
     };
 })();

@@ -1,0 +1,58 @@
+{
+ "grum": {
+  "hello": [
+   "Siłujesz się? Ha! Ostatni, co próbował, do dziś je lewą ręką.",
+   "Znowu ty? Dobra, dziś bez taryfy ulgowej.",
+   "Wróciłeś? Uparty jesteś. Lubię upartych - łatwiej ich łamać.",
+   "Ha! Słyszałem, że mnie pokonałeś. Nie słyszałem, że dwa razy.",
+   "Ty i ja, łokieć w łokieć. Tym razem rozgrzałem się przed śniadaniem.",
+   "Dobra. Od dziś siłuję się na serio.",
+   "Chłopcze... ty mnie wykończysz. Siadaj."
+  ],
+  "round": [
+   "Gotów? Bo ja się dopiero rozgrzewam.",
+   "Trzymaj mocno, chłopcze.",
+   "Łokieć na stół. I nie płacz potem."
+  ],
+  "burst": [
+   "Hrrraaah!",
+   "Hyyy!",
+   "Nnngh!",
+   "A masz!",
+   "Hop!"
+  ],
+  "winning": [
+   "To wszystko?",
+   "Łaskoczesz mnie?",
+   "Mój miecz waży więcej niż ty!",
+   "Ziewam..."
+  ],
+  "losing": [
+   "Co ty... jadłeś?!",
+   "Nngh... nieźle...",
+   "Kto cię... tego nauczył?!",
+   "Ej... ej!"
+  ],
+  "roundHe": [
+   "I po zabawie!",
+   "Następna runda - jeśli jeszcze czujesz rękę.",
+   "Ha! Stół się ucieszył."
+  ],
+  "roundYou": [
+   "Szczęście! Czyste szczęście!",
+   "Dobra... teraz na serio.",
+   "Rozgrzewka. To była rozgrzewka."
+  ],
+  "won": [
+   "Ha! Wracaj, jak podrośniesz.",
+   "Nie martw się, mało kto ze mną wygrywa. Właściwie nikt.",
+   "Stawka moja. Postawię ci z niej piwo... kiedyś."
+  ],
+  "lost": [
+   "Masz krzepę, przyznaję. Stawka twoja.",
+   "Na brodę mojej matki... wygrałeś uczciwie.",
+   "Dobra, dobra. Ale następnym razem nie jadłem obiadu."
+  ]
+ },
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (TavernLife_ArmWrestle.js: grumLines=grum)"
+}

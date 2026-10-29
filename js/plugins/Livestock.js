@@ -50,7 +50,7 @@
     let alwaysOut = false;   // tests: the animals do not go to bed
     const key = (x, y) => x + "," + y;
     const F = () => window.Farming;
-    const farmOf = () => ($gameSystem && $gameSystem._farm) || null;
+    const farmOf = () => ($gameSystem ? T.state("farm") : null);
     const hour = () => T.time.hour();   // (12 without the day/night clock)
     const outNow = kind => alwaysOut || (hour() >= SPECIES[kind].hours[0] && hour() < SPECIES[kind].hours[1]);
     const between = ([a, b]) => a + Math.floor(Math.random() * (b - a + 1));

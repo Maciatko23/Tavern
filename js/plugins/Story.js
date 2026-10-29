@@ -111,8 +111,10 @@
  * końca, bez zapisu). Wszystko czeka, aż bohater wstanie (odpoczynek) i
  * skończy rozmowę czy zmianę.
  *
- * Dziennik: rozdział „Rozdział 1: Dług dziadka” z celami. Stan długu
- * widać też w menu (P) i na porannej tabliczce dnia.
+ * Dziennik: wątek „Rozdział 1: Dług dziadka” (FABUŁA, silnik Watki.js) -
+ * kolejne kroki rozdziału, okienko celu prowadzi przez nie samo, dopóki
+ * gracz nic innego nie przypnie; „Zbuduj schronienie” zostaje celem
+ * dziennika. Stan długu widać też w menu (P) i na porannej tabliczce dnia.
  *
  * Stary zapis (bez fabuły) i gra, która nie zaczyna się w domu dziadka,
  * działają jak dawniej: bez postaci, bez długu, bez terminu.
@@ -181,19 +183,96 @@
     Watki.scal(MAP_FIELD, "fabula", "pole");   // (its words: js/teksty/fabula.txt, pole)
     const MAP_NAMES = { get [MAP.field]() { return MAP_FIELD.name; } };
     const BORGAR_FACE = ["People3", 4];
-    const CHAPTER = "Rozdział 1: Dług dziadka";
+    const KEY = "story";
+
+    // ------------------------------------------------------------------
+    // The thread (Watki.js, docs/WATKI_DANE.md): chapter 1 as data - its state, its steps in the journal (the thread's own record:
+    // FABUŁA, "Rozdział 1: Dług dziadka"; the user 2026-10-28: as the other threads, no longer goals of the journal), the talks that
+    // are a plain sequence (grandpa's first talk, his thanks, his first words after the loss). What has conditions and menus (grandpa's
+    // tips, the Lord, the butler, Borgar, the payments) and the scenes (the measuring, the escort) stay code below, built with
+    // Watki.mowa: the lines wrapped at 540 px as the message window shows them (\N[1] counted as the hero's name, "5 G" kept on one
+    // line), the speaker's face in the plain window, no name. The script calls of the talks stay Story's own (Story.introDone() ...).
+    // ------------------------------------------------------------------
+    const XPG = 50;   // (a step done: what a goal of the journal gave - Combat's XP.goal)
+    const got = key => ({ xp: XPG, za: { hak: "zaKrok", args: [key] } });
+    const w = Watki.watek({
+        id: "fabula", wtyczka: PLUGIN, teksty: "fabula",
+        // Tawerna.state("story") = $gameSystem._tw.story; an older save's $gameSystem._story is taken over (see the state below)
+        stan: { klucz: KEY, wersja: 1, domyslne: () => ({}), adopt: "_story" },
+        mowa: { px: 540, twardaG: true, akapity: true },
+        // the chapter in the journal: its own record (Watki: _tw.watki) begun quietly once the story is on; dogon - an older save's
+        // chapter (its goals of the journal) is caught up at once, quietly, with the days the journal had (dzienKroku); prowadzi - the
+        // goal window follows the chapter by itself while nothing is pinned by hand (its steps' prowadzi: the debt and what comes
+        // after it only once the journal's first steps are done - as the goals' order had it)
+        start: "fabulaTrwa", cicho: { start: true },
+        dziennik: { tytul: "rozdzial1.tytul", opis: "rozdzial1.opis", grupa: "story", ikona: GOLD_ICON, prowadzi: true, dogon: true, dzienKroku: "dzienCelu" },
+        // the steps: tytul / tekst (a key of the file | { klucz, zmienne } | { hak }), gotowe (done), pomin (another way of the chapter:
+        // passed over - the debt paid without the job, the field lost or not), gdzie (the compass), licznik (the goal window's bar)
+        kroki: [
+            { nazwa: "rozmowa", tytul: "kod.storyGoals.0", tekst: "kod.storyGoals.1", gotowe: "stan:flags.talk", pomin: "rozdzialKoniec", gdzie: { person: "grandpa" },
+                nagroda: got("kod.storyGoals.0") },
+            { nazwa: "dzialka", tytul: "kod.storyGoals.2", tekst: "kod.storyGoals.4", gotowe: "stan:flags.field", pomin: "rozdzialKoniec", gdzie: { hak: "gdzieDzialka" },
+                nagroda: got("kod.storyGoals.2") },
+            { nazwa: "praca", tytul: "kod.storyGoals.5", tekst: "kod.storyGoals.6", gotowe: "stan:flags.hired", pomin: "rozdzialKoniec", gdzie: { person: "borgar" },
+                nagroda: got("kod.storyGoals.5") },
+            { nazwa: "zmiana", tytul: "kod.storyGoals.7", tekst: { klucz: "kod.storyGoals.8", zmienne: { SHIFT_FROM, SHIFT_TO } }, gotowe: "zmianaZrobiona", pomin: "rozdzialKoniec",
+                gdzie: { person: "borgar" }, nagroda: got("kod.storyGoals.7") },
+            { nazwa: "dlug", tytul: { hak: "tytulDlugu" }, tekst: { hak: "tekstDlugu" }, gotowe: "dlugSplacony", pomin: "stan:lost", gdzie: { person: "lord" },
+                licznik: "licznikDlugu", prowadzi: "pierwszeKroki", nagroda: got("kod.title.9") },
+            // ---- the field lost: carrying off, a new roof; the cellar's clue in both ways; the field lost: the buyback (no deadline)
+            { nazwa: "wyniesienie", tytul: { klucz: "kod.title.4", zmienne: { 1: { hak: "wyniesienieIle" } } }, tekst: { klucz: "kod.text.2", zmienne: { 1: { hak: "wyniesienieDo" } } },
+                gotowe: { lub: ["dzialkaZamknieta", "dzialkaOdkupiona"] }, pomin: "!stan:lost", gdzie: { hak: "gdzieDzialka" }, prowadzi: "pierwszeKroki",
+                nagroda: { xp: XPG, za: { hak: "zaWyniesienie" } } },
+            { nazwa: "dach", tytul: "kod.storyGoals.9", tekst: "kod.storyGoals.10", gotowe: "nowyDach", pomin: "!stan:lost", gdzie: { person: "soltys" },
+                prowadzi: "pierwszeKroki", nagroda: got("kod.storyGoals.9") },
+            { nazwa: "piwnica", tytul: "kod.storyGoals.11", tekst: "kod.storyGoals.12", gotowe: "stan:flags.cellar", gdzie: { map: MAP.tavern, name: "Tawerna" },
+                prowadzi: "pierwszeKroki", nagroda: got("kod.storyGoals.11") },
+            { nazwa: "odkup", tytul: { jesli: "stan:buy", to: { klucz: "kod.title.5", zmienne: { 1: { hak: "odkupOddane" }, price: { stan: "buy.price" } } }, inaczej: "kod.title.6" },
+                tekst: { hak: "tekstOdkupu" }, gotowe: "dzialkaOdkupiona", pomin: "!stan:lost", gdzie: { person: "lord" }, licznik: "licznikOdkupu",
+                prowadzi: "pierwszeKroki", nagroda: got("kod.title.6") }
+        ],
+        // the talks said by the one spoken to (ctx.spk: grandpa), "kto: bohater" the hero's
+        rozmowy: {
+            // grandpa's first talk - after the prologue (Prologue.js): the fisherman Janek found the hero on the beach, three days of
+            // fever, grandpa reads his daughter's wet letter and goes quiet; then the debt, the field, Borgar and the Lord as before.
+            // \N[1] = the name the player chose. (2026-10-12: replaces "No, nareszcie wstałeś!...", every fact of the old talk kept.)
+            wstep: [
+                "kod.introList.0", { mow: "kod.introList.1", kto: "bohater" }, "kod.introList.2",
+                { polecenie: 230, parametry: [90] },   // (he reads the letter; the fire crackles)
+                "kod.introList.3", { mow: "kod.introList.4", kto: "bohater" }, "kod.introList.5",
+                { polecenie: 230, parametry: [60] },
+                "kod.introList.6", { mow: "kod.introList.7", kto: "bohater" },
+                { mow: "kod.introList.8", zmienne: { DEBT, DEADLINE } }, { mow: "kod.introList.9", kto: "bohater", zmienne: { DEBT } },
+                "kod.introList.10", "kod.introList.11", "kod.introList.12", "kod.introList.13", "kod.introList.14",
+                { mow: "kod.introList.15", kto: "bohater" }, "kod.introList.16", "kod.introList.17",
+                { skrypt: "Story.introDone()" }
+            ],
+            // the debt paid: grandpa's thanks (two soups) - the receipt brought by the butler
+            podziekowanie: [{ mow: "kod.grandpaList.2", zmienne: { 1: { hak: "kamerdyner" } } }, "kod.grandpaList.3", { skrypt: "Story.thanks()" }],
+            // the field bought back: the same with the deed of the buyback
+            podziekowanieOdkup: [{ mow: "kod.grandpaList.0", zmienne: { 1: { hak: "kamerdyner" } } }, "kod.grandpaList.1", { skrypt: "Story.thanksBack()" }],
+            // the first talk after the field is lost (the user 2026-10-15: sad but warm, no blame): the days to carry things off, the
+            // buyback, where to sleep, the houses for sale
+            poStracie: [
+                { mow: "kod.lossFirstList.0", zmienne: { 1: { hak: "kamerdyner" } } }, { mow: "kod.lossFirstList.1", kto: "bohater" },
+                "kod.lossFirstList.2", "kod.lossFirstList.3",
+                { gdy: "wyniesienieTrwa", mow: "kod.lossFirstList.6", zmienne: { 1: { hak: "wyniesienieMasz" } } },
+                "kod.lossFirstList.7", "radyPoStracie.1", "radyPoStracie.5",
+                { skrypt: "Story.step(\"grandpaLost\")" }, { skrypt: "Tawerna.call(\"Homes\", \"hear\")" }
+            ]
+        }
+    });
 
     // ------------------------------------------------------------------
     // State: Tawerna.state("story") = $gameSystem._tw.story (plain data only, saved with the game; an older save's
-    // $gameSystem._story is taken over). A game without the story (an old save, an old-style start elsewhere) keeps an empty object
-    // there: Story.state() is null then.
+    // $gameSystem._story is taken over) - the thread's state (w.S()). A game without the story (an old save, an old-style start
+    // elsewhere) keeps an empty object there: Story.state() is null then.
     // ------------------------------------------------------------------
     function newState() {
         return { v: 1, pending: true, debt: DEBT, deadline: DEADLINE, paid: 0, payments: [], intro: 0, hint: 0,
             flags: {}, letters: {}, shiftDay: -1, lastShift: null, done: 0, ended: 0, off: !END_ON_DEADLINE };
     }
-    const KEY = "story";
-    const store = T.state.define(KEY, () => ({}), { version: 1, adopt: "_story", owner: PLUGIN });
+    const store = () => w.S();
     const isStory = s => !!s && typeof s === "object" && s.debt !== undefined;
     const state = () => { if (!window.$gameSystem) return null; const s = store(); return isStory(s) ? s : null; };
     // a new story, or none (null): the saved object itself is replaced
@@ -278,55 +357,20 @@
 
     // ------------------------------------------------------------------
     // Event commands: the talks are built as lists of ordinary commands (messages in the speech bubbles of SpeechBubbles.js,
-    // choices, script calls back into this plugin). Only data - a game saved in the middle of a talk loads fine.
+    // choices, script calls back into this plugin). Only data - a game saved in the middle of a talk loads fine. One builder for
+    // every thread: Watki.mowa with this thread's options (w.def.mowa: wrapped at 540 px as the window shows it, "5 G" on one line).
     // ------------------------------------------------------------------
-    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
-    const WRAP_W = 540, PAGE_LINES = 3;
-    let probe = null;
-    // a line measured as it will be shown: \N[n] is the actor's name (the hero's own name from the prologue's name screen)
-    const shownNames = text => String(text).replace(/\\N\[(\d+)\]/gi, (m, n) => (window.$gameActors && $gameActors.actor(Number(n)) ? $gameActors.actor(Number(n)).name() : ""));
-    function wrap(text) {
-        if (!probe) probe = new Bitmap(8, 8);
-        probe.fontFace = $gameSystem.mainFontFace();
-        probe.fontSize = $gameSystem.mainFontSize();
-        const lines = [];
-        for (const para of String(text).replace(/(\d) G\b/g, "$1 G").split("\n")) {   // (a sum keeps its "G" on its line)
-            let line = "";
-            for (const word of para.split(" ")) {
-                const trial = line ? line + " " + word : word;
-                if (line && probe.measureTextWidth(shownNames(trial)) > WRAP_W) { lines.push(line); line = word; } else line = trial;
-            }
-            lines.push(line);
-        }
-        return lines;
-    }
-    // who: 0 the hero, an event id, -1 the plain window; face: [name, index] (shown only in the plain window)
-    function say(out, who, text, face, indent) {
-        const lines = wrap(text);
-        for (let i = 0; i < lines.length; i += PAGE_LINES) {
-            out.push(C(101, [face ? face[0] : "", face ? face[1] : 0, 0, 2, ""], indent));
-            lines.slice(i, i + PAGE_LINES).forEach((l, j) => out.push(C(401, [(j === 0 ? "\\SPK[" + who + "]" : "") + l], indent)));
-        }
-        return out;
-    }
-    const script = (out, js, indent) => (out.push(C(355, [js], indent)), out);
+    const { C, choiceTo } = Watki.mowa;
+    const MOWA = w.def.mowa;
+    // who: 0 the hero, an event id, -1 the plain window; face: [name, index] (shown only in the plain window); no name
+    const spk = (who, face) => ({ id: who, name: "", twarz: face || null });
+    const say = (out, who, text, face, indent) => Watki.mowa.sayTo(out, spk(who, face), text, indent || 0, MOWA);
+    const script = (out, js, indent) => Watki.mowa.script(out, js, indent);
     // options: [{ label, js }] - each branch calls back into the plugin; `cancel`: the option Esc picks
-    function choose(out, options, cancel, indent) {
-        const ind = indent || 0;
-        out.push(C(102, [options.map(o => o.label), cancel === undefined ? options.length - 1 : cancel, 0, 2, 0], ind));
-        options.forEach((o, i) => {
-            out.push(C(402, [i, o.label], ind));
-            for (const js of [].concat(o.js || [])) out.push(C(355, [js], ind + 1));
-            out.push(C(0, [], ind + 1));
-        });
-        out.push(C(404, [], ind));
-        return out;
-    }
+    const choose = (out, options, cancel) => choiceTo(out, options.map(o => o.label), options.map(o => [].concat(o.js || []).map(js => C(355, [js]))), cancel);
     const end = out => (out.push(C(0, [])), out);
     // runs a list after the current command of this interpreter (a child: the talk goes on in it)
-    function run(interp, list) {
-        if (interp && list && list.length) interp.setupChild(end(list), interp.eventId());
-    }
+    const run = (interp, list) => w.uruchom(interp, list);
     const stub = role => [C(355, ["Story.talk(this, \"" + role + "\")"]), C(0, [])];
     const STUBS = { borgar: stub("borgar"), door: stub("door"), grandpa: stub("grandpa"), lord: stub("lord") };
 
@@ -430,36 +474,11 @@
     const gSay = (out, text) => say(out, G(), text, NPCS.grandpa.face);
     const hSay = (out, text) => say(out, 0, text, null);
     const lSay = (out, text) => say(out, L(), text, NPCS.lord.face);
+    // a talk of the thread's data (w.def.rozmowy) said by grandpa
+    const grandpaTalk = name => w.rozmowa(name, { spk: spk(G(), NPCS.grandpa.face) });
 
-    // grandpa's first talk - after the prologue (Prologue.js): the fisherman Janek found the hero on the beach, three days of fever,
-    // grandpa reads his daughter's wet letter and goes quiet; then the debt, the field, Borgar and the Lord as before. \N[1] = the
-    // name the player chose. (2026-10-12: replaces "No, nareszcie wstałeś!...", every fact of the old talk kept.)
-    const pause = (out, frames) => (out.push(C(230, [frames])), out);
-    function introList() {
-        const o = [];
-        gSay(o, TK.kod.introList[0]);
-        hSay(o, TK.kod.introList[1]);
-        gSay(o, TK.kod.introList[2]);
-        pause(o, 90);   // (he reads the letter; the fire crackles)
-        gSay(o, TK.kod.introList[3]);
-        hSay(o, TK.kod.introList[4]);
-        gSay(o, TK.kod.introList[5]);
-        pause(o, 60);
-        gSay(o, TK.kod.introList[6]);
-        hSay(o, TK.kod.introList[7]);
-        gSay(o, Watki.wstaw(TK.kod.introList[8], { DEBT: DEBT, DEADLINE: DEADLINE }));
-        hSay(o, Watki.wstaw(TK.kod.introList[9], { DEBT: DEBT }));
-        gSay(o, TK.kod.introList[10]);
-        gSay(o, TK.kod.introList[11]);
-        gSay(o, TK.kod.introList[12]);
-        gSay(o, TK.kod.introList[13]);
-        gSay(o, TK.kod.introList[14]);
-        hSay(o, TK.kod.introList[15]);
-        gSay(o, TK.kod.introList[16]);
-        gSay(o, TK.kod.introList[17]);
-        script(o, "Story.introDone()");
-        return o;
-    }
+    // grandpa's first talk (the data: rozmowy.wstep)
+    const introList = () => grandpaTalk("wstep");
     const HINTS = [];
     Watki.scal(HINTS, "fabula", "rady");   // (its words: js/teksty/fabula.txt, rady)
     // (a tip's {od} / {do}: Borgar's shift)
@@ -468,20 +487,8 @@
     // after the field is lost (the user 2026-10-15: sad but warm, no blame): where to sleep, the houses for sale, the buyback
     const LOSS_HINTS = [];
     Watki.scal(LOSS_HINTS, "fabula", "radyPoStracie");   // (its words: js/teksty/fabula.txt, radyPoStracie)
-    function lossFirstList() {
-        const o = [], n = carryLeft();
-        gSay(o, Watki.wstaw(TK.kod.lossFirstList[0], { "1": butler() }));
-        hSay(o, TK.kod.lossFirstList[1]);
-        gSay(o, TK.kod.lossFirstList[2]);
-        gSay(o, TK.kod.lossFirstList[3]);
-        if (n > 0) gSay(o, Watki.wstaw(TK.kod.lossFirstList[6], { "1": n === 1 ? TK.kod.lossFirstList[4] : Watki.wstaw(TK.kod.lossFirstList[5], { "1": dni(n) }) }));
-        gSay(o, TK.kod.lossFirstList[7]);
-        gSay(o, LOSS_HINTS[1]);
-        gSay(o, LOSS_HINTS[5]);
-        script(o, "Story.step(\"grandpaLost\")");
-        script(o, "Tawerna.call(\"Homes\", \"hear\")");
-        return o;
-    }
+    // grandpa's first words after the loss (the data: rozmowy.poStracie)
+    const lossFirstList = () => grandpaTalk("poStracie");
     function grandpaLossList() {
         const s = state(), o = [];
         if (fieldBack()) {
@@ -498,18 +505,8 @@
     function grandpaList() {
         const s = state(), o = [], h = hour(), n = daysLeft();
         if (s.lost && !s.flags.grandpaLost) return lossFirstList();
-        if (fieldBack() && !s.flags.thankedBack) {
-            gSay(o, Watki.wstaw(TK.kod.grandpaList[0], { "1": butler() }));
-            gSay(o, TK.kod.grandpaList[1]);
-            script(o, "Story.thanksBack()");
-            return o;
-        }
-        if (s.done && !s.flags.thanked) {
-            gSay(o, Watki.wstaw(TK.kod.grandpaList[2], { "1": butler() }));
-            gSay(o, TK.kod.grandpaList[3]);
-            script(o, "Story.thanks()");
-            return o;
-        }
+        if (fieldBack() && !s.flags.thankedBack) return grandpaTalk("podziekowanieOdkup");
+        if (s.done && !s.flags.thanked) return grandpaTalk("podziekowanie");
         if (h >= NIGHT[0] || h < NIGHT[1]) {
             if (isOpen() && n <= 1) gSay(o, Watki.wstaw(TK.kod.grandpaList[4], { "1": left(), "2": butler() }));
             else if (fieldLost() && !fieldLocked() && carryLeft() <= 1) gSay(o, TK.kod.grandpaList[5]);
@@ -945,21 +942,13 @@
         T.emit("buybackPayment", { amount: n, paid: s.buy.paid, price: s.buy.price, day: day() });
         return n;
     }
-    // the journal's goal ticked off without its "Cel wykonany" (the debt's goal when the field is lost: nothing to praise)
-    function closeGoal(id) {
-        const J = T.api("Journal"), d = J && J.data ? J.data() : null;
-        if (!d || !d.done || d.done[id] !== undefined) return;
-        d.done[id] = day();
-        if (d.pinned === id) d.pinned = null;
-    }
-    // dawn after the deadline, the debt unpaid: the field goes to the Lord (the game goes on)
+    // dawn after the deadline, the debt unpaid: the field goes to the Lord (the game goes on; the chapter's thread passes over the debt
+    // to the carrying off - its step "dlug": pomin)
     function loseField() {
         const s = state();
         s.lost = { day: day(), scene: 0, locked: 0, hook: 0, noted: 0, missing: left() };
         s.buy = { price: BUYBACK, paid: 0, payments: [], done: 0 };
         mark("chapterLost");
-        closeGoal("story_debt");
-        if (!s.flags.field) closeGoal("story_field");
         syncGoals();
         T.emit("fieldLost", { day: day(), missing: s.lost.missing });
         tell("chapterLost");
@@ -1003,7 +992,6 @@
         const inHut = here === 100 && fieldHut, onField = here === MAP.field || inHut;
         lo.locked = day();
         if (!lo.scene) lo.scene = -2;   // (never seen: the sign stands all the same)
-        closeGoal("story_carry");
         T.emit("fieldLocked", { day: day() });
         tell("fieldLocked");
         if (onField) { $gameMap._interpreter.setup(end(escortList(inHut)), 0); return true; }
@@ -1047,6 +1035,7 @@
             TK.kod.introDone[5] +
             TK.kod.introDone[6]);
         if (first) tell("talk");
+        w.ownChecks();   // (the chapter's next step at once)
     }
     function thanks() {
         const s = state();
@@ -1113,7 +1102,8 @@
     };
 
     // ------------------------------------------------------------------
-    // The journal: chapter 1 and its goals (only in a story game; an old save's journal stays as it was)
+    // The journal: chapter 1 is the thread's (above); one goal of the journal stays - the shelter, among the journal's first steps
+    // after the workbench (only in a story game)
     // ------------------------------------------------------------------
     function farmBuilt(mapId, types) {
         const list = (($gameSystem._farm || {}).buildings || {})[mapId] || [];
@@ -1125,91 +1115,90 @@
         return Object.keys(all).some(m => !(notField && Number(m) === MAP.field) && !(F && F.landHeld && F.landHeld(Number(m))) &&
             (all[m] || []).some(b => !b.site && !b.boarded && types.includes(b.type)));
     }
-    function chapterIndex() {
-        const J = T.api("Journal");
-        if (!J || !J.CHAPTERS) return 0;
-        let i = J.CHAPTERS.indexOf(CHAPTER);
-        if (i < 0) i = J.CHAPTERS.push(CHAPTER) - 1;
-        return i;
+    // "Zbuduj schronienie" (the words read from the file each time; on the field until it is lost, anywhere one may build after)
+    const getter = (o, field, fn) => Object.defineProperty(o, field, { get: fn, enumerable: true, configurable: true });
+    function shelterGoal(ch) {
+        const g = { id: "story_shelter", storyShelter: true, ch, item: 121, after: [], done: () => !!w.hak("schronienie") };
+        getter(g, "where", () => (lostState() ? null : { map: MAP.field, name: TK.kod.where[0] }));
+        getter(g, "title", () => (lostState() ? TK.kod.title[0] : TK.kod.title[1]));
+        getter(g, "text", () => (lostState() ? TK.kod.text[0] : TK.kod.text[1]));
+        return g;
     }
-    function storyGoals() {
-        const ch = chapterIndex();
-        return {
-            talk: { id: "story_talk", story: true, ch, title: TK.kod.storyGoals[0], item: SOUP, where: { person: "grandpa" }, after: [], done: () => !!(state() && state().flags.talk),
-                text: TK.kod.storyGoals[1] },
-            field: { id: "story_field", story: true, ch, title: TK.kod.storyGoals[2], item: 67, where: { map: MAP.field, name: TK.kod.storyGoals[3] }, after: ["story_talk"], done: () => !!(state() && state().flags.field),
-                text: TK.kod.storyGoals[4] },
-            work: { id: "story_work", story: true, ch, title: TK.kod.storyGoals[5], item: 81, where: { person: "borgar" }, after: ["story_field"], done: () => !!(state() && state().flags.hired),
-                text: TK.kod.storyGoals[6] },
-            shift: { id: "story_shift", story: true, ch, title: TK.kod.storyGoals[7], item: 81, where: { person: "borgar" }, after: ["story_work"],
-                done: () => { const st = T.call("TavernShift", "stats"); return !!st && st.done > 0; },
-                text: Watki.wstaw(TK.kod.storyGoals[8], { SHIFT_FROM: SHIFT_FROM, SHIFT_TO: SHIFT_TO }) },
-            shelter: { id: "story_shelter", story: true, ch, item: 121, after: ["story_field"],
-                get title() { return lostState() ? TK.kod.title[0] : TK.kod.title[1]; },
-                get where() { return lostState() ? null : { map: MAP.field, name: TK.kod.where[0] }; },
-                done: () => (!lostState() && farmBuilt(MAP.field, SHELTERS)) || farmBuiltAnywhere(SHELTERS.concat(["bed"])),
-                get text() { return lostState() ? TK.kod.text[0]
-                    : TK.kod.text[1]; } },
-            // ---- the field lost (only in the goals' list once it is: syncGoals)
-            carry: { id: "story_carry", story: true, storyLoss: true, ch, item: 67, where: { map: MAP.field, name: TK.kod.storyGoals[3] }, after: [], done: () => fieldLocked() || fieldBack(),
-                get title() { const n = carryLeft(); return Watki.wstaw(TK.kod.title[4], { "1": n > 1 ? zostalo(n) + " " + dni(n) : n === 1 ? TK.kod.title[2] : TK.kod.title[3] }); },
-                get text() {
-                    const lo = lostState();
-                    return Watki.wstaw(TK.kod.text[2], { "1": (lo ? lo.day : 0) + CARRY_DAYS });
-                } },
-            roof: { id: "story_roof", story: true, storyLoss: true, ch, item: 80, where: { person: "soltys" }, after: [], done: () => !!T.call("Homes", "hasRoof") || farmBuiltAnywhere(["hut"], true),
-                title: TK.kod.storyGoals[9],
-                text: TK.kod.storyGoals[10] },
-            // (count: the goal window's bar on the map - Journal.goalNeeds)
-            buyback: { id: "story_buyback", story: true, storyLoss: true, ch, icon: GOLD_ICON, where: { person: "lord" }, after: [], done: () => fieldBack(),
-                count: () => { const s = state(); return s && s.buy ? { have: Math.min(s.buy.paid, s.buy.price), need: s.buy.price, unit: "G" } : null; },
-                get title() { const s = state(); return s && s.buy ? Watki.wstaw(TK.kod.title[5], { "1": Math.min(s.buy.paid, s.buy.price), price: s.buy.price }) : TK.kod.title[6]; },
-                get text() { const s = state(); return Watki.wstaw(TK.kod.text[4], { "1": s && s.buy ? s.buy.price : BUYBACK, "2": LORD_HOURS[0], "3": LORD_HOURS[1], "4": s && s.buy && s.buy.paid > 0 ? Watki.wstaw(TK.kod.text[3], { paid: s.buy.paid }) : "" }); } },
-            cellar: { id: "story_cellar", story: true, ch, title: TK.kod.storyGoals[11], item: TORCH, where: { map: MAP.tavern, name: "Tawerna" }, after: ["story_debt"],
-                done: () => !!(state() && state().flags.cellar),
-                text: TK.kod.storyGoals[12] },
-            debt: { id: "story_debt", story: true, ch, icon: GOLD_ICON, where: { person: "lord" }, after: ["story_talk"], done: () => !!(state() && (state().done || state().paid >= state().debt)),
-                count: () => { const s = state(); return s && !s.lost ? { have: Math.min(s.paid, s.debt), need: s.debt, unit: "G" } : null; },
-                get title() { const s = state(); return s && s.lost ? Watki.wstaw(TK.kod.title[7], { paid: s.paid, debt: s.debt }) : s ? Watki.wstaw(TK.kod.title[8], { "1": Math.min(s.paid, s.debt), debt: s.debt }) : TK.kod.title[9]; },
-                get text() {
-                    const s = state();
-                    if (!s) return TK.kod.text[5];
-                    if (s.lost) return Watki.wstaw(TK.kod.text[6], { deadline: s.deadline, paid: s.paid, debt: s.debt, day: s.lost.day, price: s.buy.price });
-                    if (s.done || s.paid >= s.debt) return Watki.wstaw(TK.kod.text[7], { debt: s.debt });
-                    const n = daysLeft();
-                    return Watki.wstaw(TK.kod.text[11], { paid: s.paid, debt: s.debt, "3": n > 1 ? Watki.wstaw(TK.kod.text[8], { "1": daysPhrase(n) }) : n === 1 ? TK.kod.text[9] : TK.kod.text[10], "4": day(), deadline: s.deadline, "6": LORD_HOURS[0], "7": LORD_HOURS[1] });
-                } }
-        };
-    }
-    // the tracker (the first open goal in the list) leads: grandpa -> the field -> the job -> the first shift -> the first steps (the
-    // survival goals of Journal's chapter 1, with the shelter after the workbench) -> the debt, which stays up till it is paid
-    // the field lost: carrying off (right after the debt), then the cellar's clue as before, a new roof and the buyback after it
+    // in a story game: the shelter's goal among the journal's first steps, right after the workbench (out of it otherwise); the goals
+    // of chapter 1 an older version put here are taken out (their place: the thread)
     function syncGoals() {
         const J = T.api("Journal");
         if (!J || !J.GOALS) return;
-        const GOALS = J.GOALS, want = active(), has = GOALS.some(g => g.story);
-        const wantLoss = want && !!lostState(), hasLoss = GOALS.some(g => g.storyLoss);
-        if (wantLoss !== hasLoss && hasLoss) for (let i = GOALS.length - 1; i >= 0; i--) if (GOALS[i].storyLoss) GOALS.splice(i, 1);
-        if (want !== has) {
-            if (!want) { for (let i = GOALS.length - 1; i >= 0; i--) if (GOALS[i].story) GOALS.splice(i, 1); return; }
-            const g = storyGoals(), at = id => { const i = GOALS.findIndex(x => x.id === id); return i < 0 ? -1 : i + 1; };
-            const firstCh = GOALS.length ? GOALS[0].ch : 0;
-            let end1 = 0;   // (just after the goals of Journal's first chapter)
-            while (end1 < GOALS.length && GOALS[end1].ch === firstCh) end1++;
-            GOALS.splice(end1, 0, g.debt, g.cellar);
-            GOALS.unshift(g.talk, g.field, g.work, g.shift);
-            let i = at("workbench");
-            if (i < 0) i = at("story_shift");
-            GOALS.splice(i, 0, g.shelter);
-        }
-        if (wantLoss && !GOALS.some(g => g.storyLoss)) {
-            const g = storyGoals(), at = id => GOALS.findIndex(x => x.id === id);
-            const d = at("story_debt");
-            if (d >= 0) GOALS.splice(d + 1, 0, g.carry);
-            const c = at("story_cellar");
-            GOALS.splice(c >= 0 ? c + 1 : GOALS.length, 0, g.roof, g.buyback);
-        }
+        const GOALS = J.GOALS, want = active();
+        for (let i = GOALS.length - 1; i >= 0; i--) if (GOALS[i].story || (!want && GOALS[i].storyShelter)) GOALS.splice(i, 1);
+        if (!want || GOALS.some(g => g.storyShelter)) return;
+        const wb = GOALS.findIndex(x => x.id === "workbench"), ch = wb >= 0 ? GOALS[wb].ch : GOALS.length ? GOALS[0].ch : 0;
+        GOALS.splice(wb >= 0 ? wb + 1 : GOALS.filter(x => x.ch === ch).length, 0, shelterGoal(ch));
     }
+    // an older save: what its journal knew of chapter 1 - the days its goals were done (the thread's dogon) and a goal pinned by hand
+    // (now the thread pinned)
+    const OLD_GOALS = { rozmowa: "story_talk", dzialka: "story_field", praca: "story_work", zmiana: "story_shift", dlug: "story_debt",
+        wyniesienie: "story_carry", piwnica: "story_cellar", dach: "story_roof", odkup: "story_buyback" };
+    T.on("watekStart", e => {
+        if (!e || e.watek !== "fabula" || !window.$gameSystem) return;
+        const J = T.api("Journal"), d = J && J.data ? J.data() : null, rk = Watki.rekordy();
+        if (d && d.pinned && /^story_/.test(d.pinned) && d.pinned !== "story_shelter") { d.pinned = null; if (rk) rk.track = "fabula"; }
+    }, { owner: PLUGIN });
+
+    // ------------------------------------------------------------------
+    // The thread's hooks: the names its data uses (the goals' conditions, words and bars; the words of the talks)
+    // ------------------------------------------------------------------
+    w.haki({
+        // the chapter: on (a story game begun), over (the debt paid or the field lost); the field's place for the compass; the
+        // journal's first steps done (the debt leads the goal window after them, as the goals' order had it); a step's day in an
+        // older save's journal; the experience's line ("cel: ...", as the journal's goals said it)
+        fabulaTrwa: () => active(),
+        rozdzialKoniec: () => chapterEnded(),
+        gdzieDzialka: () => ({ map: MAP.field, name: TK.kod.storyGoals[3] }),
+        pierwszeKroki: () => {
+            const J = T.api("Journal");
+            if (!J || !J.GOALS || !J.GOALS.length || !J.goalDone) return true;
+            const ch0 = J.GOALS[0].ch;
+            return !J.GOALS.some(g => g.ch === ch0 && !J.goalDone(g) && (!J.goalAvailable || J.goalAvailable(g)));
+        },
+        dzienCelu: (ctx, nazwa) => { const J = T.api("Journal"), d = J && J.data ? J.data() : null, id = OLD_GOALS[nazwa]; return d && d.done && id ? d.done[id] : undefined; },
+        zaKrok: (ctx, key) => "cel: " + w.tekst(key),
+        zaWyniesienie: () => "cel: " + Watki.wstaw(TK.kod.title[4], { "1": TK.kod.title[3] }),
+        // the steps: done
+        zmianaZrobiona: () => { const st = T.call("TavernShift", "stats"); return !!st && st.done > 0; },
+        schronienie: () => (!lostState() && farmBuilt(MAP.field, SHELTERS)) || farmBuiltAnywhere(SHELTERS.concat(["bed"])),
+        dzialkaZamknieta: () => fieldLocked(),
+        dzialkaOdkupiona: () => fieldBack(),
+        nowyDach: () => !!T.call("Homes", "hasRoof") || farmBuiltAnywhere(["hut"], true),
+        dlugSplacony: () => { const s = state(); return !!(s && (s.done || s.paid >= s.debt)); },
+        // the goals: the bar of the goal window on the map (Journal.goalNeeds)
+        licznikDlugu: () => { const s = state(); return s && !s.lost ? { have: Math.min(s.paid, s.debt), need: s.debt, unit: "G" } : null; },
+        licznikOdkupu: () => { const s = state(); return s && s.buy ? { have: Math.min(s.buy.paid, s.buy.price), need: s.buy.price, unit: "G" } : null; },
+        // the goals: the words counted
+        wyniesienieIle: () => { const n = carryLeft(); return n > 1 ? zostalo(n) + " " + dni(n) : n === 1 ? TK.kod.title[2] : TK.kod.title[3]; },
+        wyniesienieDo: () => { const lo = lostState(); return (lo ? lo.day : 0) + CARRY_DAYS; },
+        odkupOddane: () => { const s = state(); return Math.min(s.buy.paid, s.buy.price); },
+        tekstOdkupu: () => {
+            const s = state();
+            return Watki.wstaw(TK.kod.text[4], { "1": s && s.buy ? s.buy.price : BUYBACK, "2": LORD_HOURS[0], "3": LORD_HOURS[1], "4": s && s.buy && s.buy.paid > 0 ? Watki.wstaw(TK.kod.text[3], { paid: s.buy.paid }) : "" });
+        },
+        tytulDlugu: () => {
+            const s = state();
+            return s && s.lost ? Watki.wstaw(TK.kod.title[7], { paid: s.paid, debt: s.debt }) : s ? Watki.wstaw(TK.kod.title[8], { "1": Math.min(s.paid, s.debt), debt: s.debt }) : TK.kod.title[9];
+        },
+        tekstDlugu: () => {
+            const s = state();
+            if (!s) return TK.kod.text[5];
+            if (s.lost) return Watki.wstaw(TK.kod.text[6], { deadline: s.deadline, paid: s.paid, debt: s.debt, day: s.lost.day, price: s.buy.price });
+            if (s.done || s.paid >= s.debt) return Watki.wstaw(TK.kod.text[7], { debt: s.debt });
+            const n = daysLeft();
+            return Watki.wstaw(TK.kod.text[11], { paid: s.paid, debt: s.debt, "3": n > 1 ? Watki.wstaw(TK.kod.text[8], { "1": daysPhrase(n) }) : n === 1 ? TK.kod.text[9] : TK.kod.text[10], "4": day(), deadline: s.deadline, "6": LORD_HOURS[0], "7": LORD_HOURS[1] });
+        },
+        // the talks' words (rozmowy: podziekowanie, podziekowanieOdkup, poStracie)
+        kamerdyner: () => butler(),
+        wyniesienieTrwa: () => carryLeft() > 0,
+        wyniesienieMasz: () => { const n = carryLeft(); return n === 1 ? TK.kod.lossFirstList[4] : Watki.wstaw(TK.kod.lossFirstList[5], { "1": dni(n) }); }
+    });
 
     // ------------------------------------------------------------------
     // On the map: the intro, the Lord's hours, the letters, the deadline
@@ -1258,7 +1247,8 @@
         if (!lo.locked && !lo.scene && $gameMap.mapId() === MAP.field && T.call("Homes", "castReady")) return startMeasure();
         return false;
     }
-    T.on("mapReady", () => syncGoals(), { owner: PLUGIN });
+    // (the chapter's thread checked at once on every map - begun, or an older save's caught up - not only every second)
+    T.on("mapReady", () => { syncGoals(); w.ownChecks(); }, { owner: PLUGIN });
     // calm: Tawerna.isCalm's "strict" (no talk, menu, build, mini-game, transfer, fade, day summary, rest or blow - when he is up)
     T.onMapUpdate(scene => {
         if (!active() || !$gameMap) return;
@@ -1411,7 +1401,6 @@
         };
     }
 
-    chapterIndex();
     window.Story = T.register(PLUGIN, {
         NPCS, MAP, DEBT, DEADLINE, DAWN, LETTERS_BEFORE, PENDANT, CAST, CARRY_DAYS, BUYBACK, LOSE_ENDS, state, active, left, daysLeft, lastNight, isOpen, statusLine, newState, pay: payOutside, talk, pick,
         introDone, thanks, thanksBack, chapterDone, startIntro, checkDeadline, showEnding, syncGoals, npc, doorEvent, borgarEvent, roleOf, doomed: () => doomed(), step,

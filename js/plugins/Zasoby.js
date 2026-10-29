@@ -2,7 +2,8 @@
 // Zasoby.js
 //=============================================================================
 // PACZKA A „Woda i zasoby” (docs/rozszerzenia/PLAN.md, punkt 4) - the engine. The data and texts: Zasoby_Data.js. Event ids 2100-2299
-// (Tawerna.inject, owner "Zasoby"), its state Tawerna.state("zasoby"), its F9 rows through Okolice.f9.add, its places through
+// (Tawerna.inject, owner "Zasoby"), its state Tawerna.state("zasoby") and its quests: the thread "zasoby" of Zasoby_Data.js (the
+// engine Watki.js - this file gives its conditions' hooks), its F9 rows through Okolice.f9.add, its places through
 // Okolice.registerSpots("A", ...), its discoveries through Okolice.discoverable / Okolice.discover.
 //   A1 five hidden springs (Map017/021/013/155/168): portions a day by the season and the weather (dry in the heat and the drought,
 //      frozen in snow); the menu of a well (drink, waterskin, can, bucket) - each draw takes a portion; the dog sniffs towards one it
@@ -27,6 +28,8 @@
  * @plugindesc [paczka A] Woda i zasoby: źródełka, zagroda sąsiada ze studnią deszczową, dzikie ule, kręgi grzybów, Babka Jagna i jej zioła, ogródki, wysypisko i glinianka, kamieniołom bloków i żyły rudy, kraby i drewno z morza, spalony sad, pola mieszczan. v1.1.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
+ * @base Zasoby_Data
  * @orderAfter Okolice
  *
  * @help
@@ -59,26 +62,23 @@
     if (!D) throw new Error("Zasoby.js: brak Zasoby_Data.js - musi stać wyżej na liście wtyczek");
     const OK = T.api("Okolice") || window.Okolice;
     if (!OK) throw new Error("Zasoby.js: brak Okolice.js - musi stać wyżej na liście wtyczek");
+    // the thread (Zasoby_Data.js, the engine Watki.js): the state "zasoby", K55-K58 / D30-D31, the hero's thoughts, the flags
+    const w = Watki.get("zasoby");
+    if (!w) throw new Error("Zasoby.js: brak wątku „zasoby” (Zasoby_Data.js / Watki.js)");
     const VERSION = "1.1.0";
     const { ITEM, TX } = D;
     const ICON = D.ICON;
 
     // ------------------------------------------------------------------
-    // The state in the save
+    // The state in the save: the thread's (Zasoby_Data.js)
     // ------------------------------------------------------------------
-    const store = T.state.define("zasoby", () => ({
-        springs: {}, well: { stage: 0, water: 0, wt: -1, hot: 0 }, ruin: 0, garden: -99, hives: {}, rings: {}, fairy: {}, herbs: {},
-        jagna: { met: 0, trust: 0, taken: {}, permit: false, ring: 0, scold: 0 }, plotDay: 0, k56: [], steal: {}, dump: { day: 0, n: 0, hero: 0 },
-        clay: { day: 0, n: 0 }, quarry: { from: 0, n: 0 }, veins: {}, crabs: {}, drift: {}, driftDay: 0, orchard: [], fieldDay: 0,
-        fieldSteal: 0, dog: 0, work: {}, deep: 0, frogs: 0
-    }), { version: 1, owner: PLUGIN });
     const has = () => !!window.$gameSystem;
-    const S = () => store();
+    const S = () => w.S();
 
     // ------------------------------------------------------------------
     // Small helpers
     // ------------------------------------------------------------------
-    const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
+    const { C } = Watki.mowa;
     const day = () => T.time.day(), hour = () => T.time.hour();
     const season = d => T.time.season(d === undefined ? day() : d);
     const item = id => (window.$dataItems && $dataItems[id]) || null;
@@ -96,11 +96,11 @@
     const TQ = () => T.api("TownQuests");
     const TL = () => T.api("TownLife");
     const SB = () => T.api("SpeechBubbles");
-    const isDone = id => !!T.call("TownQuests", "isDone", id);
-    const isActive = id => !!T.call("TownQuests", "isActive", id);
+    const isDone = id => w.done(id);
+    const isActive = id => w.active(id);
     const opinion = (n, why) => T.call("TownQuests", "addOpinion", n, why);
-    const tqState = () => { const q = TQ(); return q && q.state ? q.state() : null; };
-    const flag = k => { const s = tqState(); return !!(s && s.flags && s.flags[k]); };
+    const tqState = () => w.qstate();
+    const flag = k => w.flag(k);
     const mapId = () => (window.$gameMap ? $gameMap.mapId() : 0);
     const hash = (a, b) => { let h = Math.imul(a | 0, 374761393) ^ Math.imul(b | 0, 668265263); h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
     const inHours = (h, r) => (r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
@@ -119,50 +119,14 @@
     const snowOn = d => (dbg.snow && d === day()) || !!OK.snowOn(d);
 
     // ------------------------------------------------------------------
-    // Speech: the hero's thoughts one after another; messages for talks and notes
+    // Speech: the hero's thoughts one after another (the thread's - Zasoby_Data mysli); messages for talks and notes (Watki.mowa:
+    // "\n" a new line, "> " the hero; plain - a title line and the text wrapped at 52, four lines a page)
     // ------------------------------------------------------------------
-    const thoughts = [];
-    let thoughtAt = 0;
-    function think(lines) { for (const l of [].concat(lines || [])) if (l) thoughts.push(String(l).replace(/^> /, "")); }
-    T.onMapUpdate(() => {
-        if (!thoughts.length || Graphics.frameCount < thoughtAt || $gameMessage.isBusy()) return;
-        const sb = SB(), text = thoughts.shift();
-        if (sb && sb.say) sb.say($gamePlayer, text, 200); else pop(text, 0, "#eceef0");
-        thoughtAt = Graphics.frameCount + 210;
-    }, { owner: PLUGIN, name: "thoughts" });
-    const LINE = 46, PAGE = 3;
-    function wrap(text, width) {
-        const out = [];
-        for (const para of String(text).split("\n")) {
-            let line = "";
-            for (const w of para.split(/\s+/)) {
-                if (!w) continue;
-                if (line && (line + " " + w).length > (width || LINE)) { out.push(line); line = w; } else line = line ? line + " " + w : w;
-            }
-            if (line) out.push(line);
-        }
-        return out;
-    }
-    const HERO = { id: 0, name: "" };
-    function sayTo(out, spk, text) {
-        const lines = wrap(text);
-        for (let i = 0; i < lines.length; i += PAGE) {
-            out.push(C(101, ["", 0, 0, 2, spk.name || ""]));
-            lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 && spk.id !== null ? "\\SPK[" + spk.id + "]" : "") + l])));
-        }
-        return out;
-    }
-    const linesTo = (out, spk, arr) => { for (const l of [].concat(arr || [])) if (l) sayTo(out, /^> /.test(l) ? HERO : spk, String(l).replace(/^> /, "")); return out; };
-    function plain(out, title, lines) {
-        const all = (title ? ["\\C[6]" + title + "\\C[0]"] : []).concat(...[].concat(lines).map(l => wrap(l, 52)));
-        for (let i = 0; i < all.length; i += 4) {
-            out.push(C(101, ["", 0, 0, 2, ""]));
-            all.slice(i, i + 4).forEach(l => out.push(C(401, [l])));
-        }
-        return out;
-    }
+    const think = lines => w.mysl(lines);
+    const linesTo = (out, spk, arr) => w.linie(out, spk, [].concat(arr || []));
+    const plain = (out, title, lines) => Watki.mowa.plain(out, title, lines);
     function runList(list) {
-        if (window.$gameMap && !$gameMap._interpreter.isRunning()) $gameMap._interpreter.setup(list.concat([C(0, [])]), 0);
+        if (window.$gameMap && !$gameMap._interpreter.isRunning()) w.uruchom(null, list);
     }
 
     // ------------------------------------------------------------------
@@ -963,8 +927,7 @@
         else crouch(go);
         return true;
     }
-    const VITEM_NAMES = { zas_medalik: "Medalik ze świętym Krzysztofem", zas_klucz: "Stary klucz z kółkiem", zas_moneta_kruk: "Moneta z krukiem" };
-    const vitemName = k => VITEM_NAMES[k] || k;
+    const vitemName = k => (D.VITEMS[k] && D.VITEMS[k].name) || k;   // (D31's things: js/teksty/zasoby.txt, rzeczy)
     function useClay() {
         if (!OK.isFound("glinianka")) OK.discover("glinianka");
         const c = S().clay, d = day(), wet = rainedRecently(d);
@@ -1122,7 +1085,7 @@
     function useMarta(interp) {
         const lines = [TK.kod.useMarta[0], TK.kod.useMarta[1]];
         const ev = evOf(interp.eventId()), out = linesTo([], { id: interp.eventId(), name: TK.kod.useMarta[2] }, [lines[day() % 2]]);
-        if (ev) interp.setupChild(out.concat([C(0, [])]), interp.eventId());
+        if (ev) w.uruchom(interp, out);
     }
 
     // ---- A10 the fields
@@ -1164,11 +1127,17 @@
     // ------------------------------------------------------------------
     // The discoveries, the places (the collision test), the first find of a spring, the hives found by walking near
     // ------------------------------------------------------------------
-    OK.registerSpots("A", D.SPOTS);
-    for (const d of D.DISCOVERIES) {
-        const icon = /^zrodlo_/.test(d.key) ? ICON.water : d.key === "dzikie_ule" ? ICON.honey : /^grzyby_/.test(d.key) ? ICON.mushroom : d.key === "ziola_jagny" ? ICON.herb : d.key === "glinianka" ? ICON.clay : ICON.wosk;
-        OK.discoverable(Object.assign({ pkg: "A", xp: 25, icon }, d));
+    // (their names and texts are js/teksty/zasoby.txt's - registered again once the words are in, still before any game; the first
+    // registration at load keeps the package's places and discoveries where they always stood among the other packages')
+    function registerPlaces() {
+        OK.registerSpots("A", D.SPOTS);
+        for (const d of D.DISCOVERIES) {
+            const icon = /^zrodlo_/.test(d.key) ? ICON.water : d.key === "dzikie_ule" ? ICON.honey : /^grzyby_/.test(d.key) ? ICON.mushroom : d.key === "ziola_jagny" ? ICON.herb : d.key === "glinianka" ? ICON.clay : ICON.wosk;
+            OK.discoverable(Object.assign({ pkg: "A", xp: 25, icon }, d));
+        }
     }
+    registerPlaces();
+    Watki.poTekstach(registerPlaces);
     T.on("okoliceDiscover", e => {
         if (!e || e.pkg !== "A") return;
         if (/^zrodlo_/.test(e.key)) think(TX.spring.found);
@@ -1298,14 +1267,7 @@
                 j.buyDay = day();
                 const out = linesTo([], spk, D.JAGNA_BUY_TX.ask);
                 const labels = buys.map(b => item(b.id).name + " ×" + count(b.id) + " - " + b.price * count(b.id) + " G").concat([D.JAGNA_BUY_TX.no]);
-                out.push(C(102, [labels, labels.length - 1, 0, 2, 0]));
-                labels.forEach((l, i) => {
-                    out.push(C(402, [i, l]));
-                    if (i < buys.length) out.push(C(355, ["Zasoby.jagnaSell(" + buys[i].id + ")"], 1));
-                    out.push(C(0, [], 1));
-                });
-                out.push(C(404, []));
-                return out;
+                return Watki.mowa.choiceTo(out, labels, labels.map((l, i) => (i < buys.length ? [C(355, ["Zasoby.jagnaSell(" + buys[i].id + ")"])] : [])), labels.length - 1);
             }
             return null;
         } });
@@ -1324,25 +1286,17 @@
     }
 
     // ------------------------------------------------------------------
-    // The quests' handlers (TownQuests.FX), the recipes D30 teaches, the deep sleep, the food, the buffs
+    // The quests (the thread's - Zasoby_Data.js, the engine Watki.js): what their conditions ask of the game; the recipes D30
+    // teaches, the deep sleep, the food, the buffs
     // ------------------------------------------------------------------
-    (function hookQuests() {
-        const q = TQ();
-        if (!q || !q.FX) return;
-        const v = k => { const s = tqState(); return s && s.v ? s.v[k] || 0 : 0; };
-        Object.assign(q.FX, {
-            k56Dni: { check: () => has() && S().k56.length >= 3, vars: () => ({ n: Math.min(3, has() ? S().k56.length : 0) }) },
-            k57Zagroda: { check: () => has() && (OK.isFound("zagroda") || !!S().ruin) },
-            k57Oczyszczona: { check: () => has() && S().well.stage >= 1 },
-            k57Bloki: { check: () => has() && (S().well.stage >= 2 || !!S().work["well:fix"] || (count(ITEM.blok) >= 4 && count(ITEM.rope) >= 2 && count(ITEM.planks) >= 2)),
-                vars: () => ({ b: Math.min(4, count(ITEM.blok)), l: Math.min(2, count(ITEM.rope)), d: Math.min(2, count(ITEM.planks)) }) },
-            k57Naprawiona: { check: () => has() && S().well.stage >= 2 },
-            k58Gotowe: { cond: () => isDone("D21") },
-            k58Sad: { check: () => has() && treesAlive() >= 8, vars: () => ({ n: has() ? treesAlive() : 0 }) },
-            d30Gotowe: { cond: () => has() && !!S().jagna.met && S().jagna.trust >= 0 },
-            d31Rzeczy: { check: () => D.D31_THINGS.every(k => v(k) > 0), vars: () => ({ n: D.D31_THINGS.filter(k => v(k) > 0).length }) }
-        });
-    })();
+    w.haki({
+        zagrodaZnaleziona: () => OK.isFound("zagroda"),                       // K57: the neighbour's farm found
+        masz: (ctx, id, n) => count(id) >= n,                                 // K57: the materials for the well in the bag
+        ileMasz: (ctx, id, max) => Math.min(max, count(id)),
+        sadOdratowany: () => has() && treesAlive() >= 8,                      // K58: the eight trees of the Ługs' orchard alive
+        zyweDrzewa: () => (has() ? treesAlive() : 0),
+        rzeczyD31: () => D.D31_THINGS.filter(k => w.vcount(k) > 0).length   // D31: the things found in the heap
+    });
     T.on("townQuestAccepted", e => { if (e && e.id === "K56" && has()) S().k56 = []; }, { owner: PLUGIN });
     T.on("townQuestDone", e => {
         if (!e || !has()) return;
@@ -1350,19 +1304,16 @@
     }, { owner: PLUGIN });
 
     // the recipes: always - roasting a crab (campfire), splitting driftwood (workbench), melting scrap (forge); after D30 - the
-    // grafting salve (by hand) and the valerian brew (cauldron, one portion of the bucket's water)
+    // grafting salve (by hand) and the valerian brew (cauldron, one portion of the bucket's water). Their words (name, doing, desc):
+    // js/teksty/zasoby.txt, receptury.* - merged into these very objects (the ones in Farming's lists)
     const RECIPES = {
-        crab: { id: "zas_roast_crab", name: "Upiecz kraba", doing: "Trwa pieczenie", inputs: [[ITEM.krab, 1]], output: [ITEM.krabPieczony, 1], hours: 0.5, stamina: 1, startSe: "Fire2",
-            desc: "Krab z kałuży pływowej, pół godziny przy ogniu. Czerwienieje, kiedy gotowy." },
-        drift: { id: "zas_split_drift", name: "Rozłup drewno dryfowe", inputs: [[ITEM.drewnoDryfowe, 1]], output: [ITEM.wood, 2], manual: true, hours: 0.25, stamina: 2, startSe: "Hammer",
-            desc: "Wybielone przez morze drewno, rozłupane na dwa polana. Zwykły opał." },
-        scrap: { id: "zas_scrap_iron", name: "Przetop złom", doing: "Trwa wytapianie", inputs: [[ITEM.zlom, 3], [ITEM.charcoal, 1]], output: [86, 1], hours: 6, stamina: 3,
-            desc: "Zardzewiałe żelastwo z wysypiska przetopione w żarze: sztaba żelaza." },
-        salve: { id: "zas_masc", name: "Zrób maść szczepiarską", inputs: [[ITEM.clay, 1], [ITEM.wosk, 1]], output: [ITEM.masc, 1], manual: true, swing: "crouch", hours: 0.25, stamina: 1, startSe: "Item1",
-            desc: "Mokra glina rozrobiona z woskiem: zamyka rany drzew (sad Ługów). Przepis Jagny." },
-        brew: { id: "zas_napar", name: "Zaparz napar z kozłka", doing: "Trwa parzenie", inputs: [[ITEM.kozlek, 1]], water: 1, output: [ITEM.napar, 1], hours: 1, stamina: 1, startSe: "Liquid",
-            desc: "Korzeń kozłka w porcji wody z wiadra. Po wypiciu pierwszy sen daje o jedną piątą więcej sił. Przepis Jagny." }
+        crab: { id: "zas_roast_crab", inputs: [[ITEM.krab, 1]], output: [ITEM.krabPieczony, 1], hours: 0.5, stamina: 1, startSe: "Fire2" },
+        drift: { id: "zas_split_drift", inputs: [[ITEM.drewnoDryfowe, 1]], output: [ITEM.wood, 2], manual: true, hours: 0.25, stamina: 2, startSe: "Hammer" },
+        scrap: { id: "zas_scrap_iron", inputs: [[ITEM.zlom, 3], [ITEM.charcoal, 1]], output: [86, 1], hours: 6, stamina: 3 },
+        salve: { id: "zas_masc", inputs: [[ITEM.clay, 1], [ITEM.wosk, 1]], output: [ITEM.masc, 1], manual: true, swing: "crouch", hours: 0.25, stamina: 1, startSe: "Item1" },
+        brew: { id: "zas_napar", inputs: [[ITEM.kozlek, 1]], water: 1, output: [ITEM.napar, 1], hours: 1, stamina: 1, startSe: "Liquid" }
     };
+    Watki.scal(RECIPES, "zasoby", "receptury");   // (its words: js/teksty/zasoby.txt, receptury)
     function addRecipe(list, r) { if (list && !list.some(x => x.id === r.id)) list.push(r); }
     function dropRecipe(list, r) { if (!list) return; const i = list.findIndex(x => x.id === r.id); if (i >= 0) list.splice(i, 1); }
     (function staticRecipes() {
@@ -1394,12 +1345,15 @@
                 if (rows[k].stamina !== undefined && FT.FEED) FT.FEED[k] = [rows[k].fed, rows[k].water];
             }
         }
-        const Sv = T.api("Survival");
-        if (Sv && Sv.defineBuff) {
-            Sv.defineBuff("uzadlenie", { name: "Użądlony", icon: ICON.honey, bad: true, cost: D.HIVE_RULE.stingCost || 1.15, desc: "pszczoły użądliły: prace kosztują 15% więcej sił" });
-            Sv.defineBuff("gleboki_sen", { name: "Głęboki sen", icon: ICON.napar, desc: "pierwszy sen da o jedną piątą więcej sił" });
-        }
     })();
+    // the buffs (once the words are in - their names: js/teksty/zasoby.txt, premie; still before any game)
+    Watki.poTekstach(function defineBuffs() {
+        const Sv = T.api("Survival"), P = TK.premie;
+        if (Sv && Sv.defineBuff) {
+            Sv.defineBuff("uzadlenie", { name: P.uzadlenie.name, icon: ICON.honey, bad: true, cost: D.HIVE_RULE.stingCost || 1.15, desc: P.uzadlenie.desc });
+            Sv.defineBuff("gleboki_sen", { name: P.gleboki_sen.name, icon: ICON.napar, desc: P.gleboki_sen.desc });
+        }
+    });
     // the deep sleep: the first night's sleep after the brew gives a fifth of the strength more (after the bed's own rest is set)
     let deepPending = false;
     T.on("wake", () => { if (has() && typeof $gameSystem.hasBuff === "function" && $gameSystem.hasBuff("gleboki_sen")) deepPending = true; }, { owner: PLUGIN });
@@ -1415,21 +1369,22 @@
     // ------------------------------------------------------------------
     // F9 (Debug.js, the tab "Wyspa i fabuła"): go to each thing, the weather, the tide, the storm's end, the well, the orchard, D30
     // ------------------------------------------------------------------
-    const GO = [].concat(
-        D.SPRINGS.map(s => [s.name, s.map, s.sx, s.sy + 1, 8]),
-        [["Zagroda Rzepków", 3, 42, 52, 8], ["Studnia sąsiada", 3, 47, 54, 8], ["Dziki ul", 3, 66, 39, 8], ["Polanka Jagny", 17, 67, 16, 8],
-         ["Czarci krąg", 17, 54, 45, 8], ["Ogródki Podgrodzia", 111, 66, 15, 8], ["Wysypisko", 111, 72, 66, 8], ["Glinianka", 111, 48, 74, 8],
-         ["Ściana ciosowa", 13, 108, 82, 8], ["Żyła rudy", 13, 114, 79, 8], ["Zatoczka", 125, 17, 67, 8], ["Drewno: Pustelnia", 155, 4, 53, 4],
-         ["Drewno: Garnizon", 162, 3, 47, 4], ["Spalony sad", 168, 62, 22, 2], ["Pola mieszczan", 8, 10, 108, 8]]);
+    // the places to go to: the springs, then the others (their names: js/teksty/zasoby.txt, f9.idz.<key>)
+    const GO_TO = [["zagroda", 3, 42, 52, 8], ["studnia", 3, 47, 54, 8], ["ul", 3, 66, 39, 8], ["polanka", 17, 67, 16, 8],
+        ["krag", 17, 54, 45, 8], ["ogrodki", 111, 66, 15, 8], ["wysypisko", 111, 72, 66, 8], ["glinianka", 111, 48, 74, 8],
+        ["sciana", 13, 108, 82, 8], ["zyla", 13, 114, 79, 8], ["zatoczka", 125, 17, 67, 8], ["drewnoPustelnia", 155, 4, 53, 4],
+        ["drewnoGarnizon", 162, 3, 47, 4], ["sad", 168, 62, 22, 2], ["pola", 8, 10, 108, 8]];
+    const GO = () => [].concat(D.SPRINGS.map(s => [s.name, s.map, s.sx, s.sy + 1, 8]), GO_TO.map(([k, ...at]) => [TK.f9.idz[k]].concat(at)));
+    const GO_N = D.SPRINGS.length + GO_TO.length;
     let goPick = 0, wellPick = 0, treePick = 0, d30Pick = 0;
     const onOff = v => (v ? TK.kod.onOff[0] : TK.kod.onOff[1]);
-    OK.f9.add({ owner: PLUGIN, title: "Paczka A: Woda i zasoby:",
+    OK.f9.add({ owner: PLUGIN, get title() { return TK.f9.tytul; },
         rows: () => [
-            { owner: PLUGIN, label: Watki.wstaw(TK.kod.rows[0], { "1": GO[goPick][0], "2": goPick + 1, length: GO.length }), icon: ICON.water, desc: TK.kod.rows[1], what: "go", pick: goPick },
+            { owner: PLUGIN, label: Watki.wstaw(TK.kod.rows[0], { "1": GO()[goPick][0], "2": goPick + 1, length: GO_N }), icon: ICON.water, desc: TK.kod.rows[1], what: "go", pick: goPick },
             { owner: PLUGIN, label: Watki.wstaw(TK.kod.rows[2], { "1": onOff(dbg.rain) }), icon: 70, desc: TK.kod.rows[3], what: "rain" },
             { owner: PLUGIN, label: Watki.wstaw(TK.kod.rows[4], { "1": onOff(dbg.hot) }), icon: 70, desc: TK.kod.rows[5], what: "hot" },
             { owner: PLUGIN, label: Watki.wstaw(TK.kod.rows[6], { "1": onOff(dbg.snow) }), icon: 70, desc: TK.kod.rows[7], what: "snow" },
-            { owner: PLUGIN, label: Watki.wstaw(TK.kod.rows[8], { "1": T.call("Wyspa", "tideForced") || "naturalny" }), icon: ICON.krab, desc: TK.kod.rows[9], what: "tide" },
+            { owner: PLUGIN, label: Watki.wstaw(TK.kod.rows[8], { "1": T.call("Wyspa", "tideForced") || TK.f9.naturalny }), icon: ICON.krab, desc: TK.kod.rows[9], what: "tide" },
             { owner: PLUGIN, label: TK.kod.rows[10], icon: ICON.drewno, desc: TK.kod.rows[11], what: "storm" },
             { owner: PLUGIN, label: Watki.wstaw(TK.kod.rows[12], { wellPick: wellPick }), icon: ICON.water, desc: TK.kod.rows[13], what: "well", pick: wellPick },
             { owner: PLUGIN, label: Watki.wstaw(TK.kod.rows[14], { treePick: treePick }), icon: iconOf(ITEM.wildApple), desc: TK.kod.rows[15], what: "tree", pick: treePick },
@@ -1437,14 +1392,14 @@
             { owner: PLUGIN, label: TK.kod.rows[18], icon: ICON.water, desc: TK.kod.rows[19], what: "reset" }
         ],
         pick(row, delta) {
-            if (row.what === "go") { goPick = row.pick = (goPick + delta + GO.length) % GO.length; row.label = Watki.wstaw(TK.kod.pick[0], { "1": GO[goPick][0], "2": goPick + 1, length: GO.length }); }
+            if (row.what === "go") { goPick = row.pick = (goPick + delta + GO_N) % GO_N; row.label = Watki.wstaw(TK.kod.pick[0], { "1": GO()[goPick][0], "2": goPick + 1, length: GO_N }); }
             if (row.what === "well") { wellPick = row.pick = (wellPick + delta + 3) % 3; row.label = Watki.wstaw(TK.kod.pick[1], { wellPick: wellPick }); }
             if (row.what === "tree") { treePick = row.pick = (treePick + delta + 5) % 5; row.label = Watki.wstaw(TK.kod.pick[2], { treePick: treePick }); }
             if (row.what === "d30") { d30Pick = row.pick = (d30Pick + delta + 3) % 3; row.label = Watki.wstaw(TK.kod.pick[3], { "1": d30Pick + 1 }); }
         },
         ok(row) {
             switch (row.what) {
-                case "go": return { go: GO[goPick] };
+                case "go": return { go: GO()[goPick] };
                 case "rain": dbg.rain = !dbg.rain; syncSoon(); return { say: Watki.wstaw(TK.kod.ok[0], { "1": onOff(dbg.rain) }) };
                 case "hot": dbg.hot = !dbg.hot; syncSoon(); return { say: Watki.wstaw(TK.kod.ok[1], { "1": onOff(dbg.hot) }) };
                 case "snow": dbg.snow = !dbg.snow; syncSoon(); return { say: Watki.wstaw(TK.kod.ok[2], { "1": onOff(dbg.snow) }) };
@@ -1452,7 +1407,7 @@
                     const W = T.api("Wyspa"), now = W && W.tideForced ? W.tideForced() : null, next = now === null ? "low" : now === "low" ? "high" : null;
                     if (W && W.forceTide) W.forceTide(next);
                     syncSoon();
-                    return { say: Watki.wstaw(TK.kod.ok[3], { "1": next || "naturalny" }) };
+                    return { say: Watki.wstaw(TK.kod.ok[3], { "1": next || TK.f9.naturalny }) };
                 }
                 case "storm": addDrift(); syncSoon(); return { say: TK.kod.ok[4] };
                 case "well": { const w = S().well; w.stage = wellPick; delete S().work["well:clear"]; delete S().work["well:fix"]; if (wellPick === 2) { w.water = D.FARMSTEAD.well.max; w.wt = -1; wellSync(); w.water = D.FARMSTEAD.well.max; } syncSoon(); return { say: Watki.wstaw(TK.kod.ok[5], { wellPick: wellPick }) }; }

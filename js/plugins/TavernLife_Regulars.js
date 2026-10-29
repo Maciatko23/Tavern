@@ -40,6 +40,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("stali_goscie");   // (the words of this file: js/teksty/stali_goscie.txt, kod.*)
 
     const T = window.Tawerna;
     if (!T) throw new Error("TavernLife_Regulars.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
@@ -55,8 +56,9 @@
     // Trust: 0-100 per regular, five tiers; what everyday things give stops at a cap (the rest comes from deeds - the quests)
     // ------------------------------------------------------------------
     const TIERS = [
-        { at: 0, name: "Obcy" }, { at: 15, name: "Znajomy" }, { at: 35, name: "Kompan" }, { at: 60, name: "Przyjaciel" }, { at: 85, name: "Powiernik" }
+        { at: 0 }, { at: 15 }, { at: 35 }, { at: 60 }, { at: 85 }
     ];
+    Watki.scal(TIERS, "stali_goscie", "progi");   // (its words: js/teksty/stali_goscie.txt, progi)
     const CAPS = { chat: 30, song: 40, beer: 50, game: 45, win: 50 };
     function rec(role) {
         const s = S(), all = s.regulars || (s.regulars = {});
@@ -115,157 +117,70 @@
     const slot = h => (h >= 5 && h < 11 ? "morning" : h >= 11 && h < 17 ? "day" : h >= 17 && h < 22 ? "evening" : "night");
     const asleep = role => role === "ozzy" && (hour() >= 23 || hour() < 6);
     // the hour as said: "o trzeciej po południu", "o ósmej rano"
-    const ORD = ["dwunastej", "pierwszej", "drugiej", "trzeciej", "czwartej", "piątej", "szóstej", "siódmej", "ósmej", "dziewiątej", "dziesiątej", "jedenastej"];
+    const ORD = [];
+    Watki.scal(ORD, "stali_goscie", "godziny");   // (its words: js/teksty/stali_goscie.txt, godziny)
     function hourWords(h) {
-        const H = Math.floor(h) % 24, part = H < 5 ? " w nocy" : H < 11 ? " rano" : H < 13 ? " w południe" : H < 18 ? " po południu" : " wieczorem";
-        return "o " + ORD[H % 12] + (H === 12 ? "" : part);
+        const H = Math.floor(h) % 24, part = H < 5 ? TK.kod.hourWords[0] : H < 11 ? TK.kod.hourWords[1] : H < 13 ? TK.kod.hourWords[2] : H < 18 ? TK.kod.hourWords[3] : TK.kod.hourWords[4];
+        return Watki.wstaw(TK.kod.hourWords[5], { godzina: ORD[H % 12], pora: H === 12 ? "" : part });   // ("o " + the hour + the part of the day)
     }
 
     // ------------------------------------------------------------------
-    // THE REGULARS: names, how they greet (by trust tier: 0..4), what they say, their rumours and topics
+    // THE REGULARS: names, how they greet (by trust tier: 0..4), what they say, their rumours and topics - the words in
+    // js/teksty/stali_goscie.txt (bywalcy.<role>.*: name, full, title, tierText, greet.<tier>, again, bye, heroBye, talk.*, sleep,
+    // rumours.<n>.text - n in the order of the list below -, evergreen); here what the code needs: the rumours' ids and conditions
     // ------------------------------------------------------------------
     const REGULARS = {
         melia: {
-            name: "Melia", full: "Melia Srebrogłosa", title: "pieśniarka",
-            tierText: ["", "Melia zapamiętała twoją twarz.", "Melia nazywa cię swoim słuchaczem.", "Melia ci ufa - opowie więcej.", "Melia powierza ci to, czego nie śpiewa nikomu."],
-            greet: [["O, nowa twarz. Wędrowiec? Każdy wędrowiec to niedokończona ballada.", "Witaj, wędrowcze. Siadaj bliżej - z daleka pieśń brzmi gorzej."],
-                ["A, to ty! Ten od działki za lasem. Pamiętam twarze - to połowa mojej roboty.", "Znowu ty, złotko? Dobrze. Lubię stałą publiczność."],
-                ["Mój ulubiony słuchacz! Siadaj, zanim Ozzy zajmie ci miejsce.", "Jesteś! Czekałam, aż ktoś mi opowie coś, czego nie ma w żadnej balladzie."],
-                ["Przyjacielu... Kiedy wchodzisz, w sali robi się cieplej. Nie śmiej się.", "Ty jeden słuchasz słów, a nie tylko melodii. Chodź, siadaj."],
-                ["Wiesz, że o tobie też kiedyś zaśpiewam? Tylko jeszcze nie wiem, jak się ta pieśń skończy.", "Moja lutnia i ja - obie nastrojone pod ciebie. No, prawie."]],
-            again: ["Coś jeszcze, złotko?", "Tak? Słucham - ja też czasem słucham, wiesz?", "Mów, mów. Pieśń poczeka."],
-            bye: ["Niech ci droga śpiewa, złotko.", "Wracaj wieczorem. Zostawię ci miejsce pod sceną.", "Idź, idź. Tylko nie zapomnij, co ci mówiłam."],
-            heroBye: "Bywaj, Melio.",
-            talk: {
-                morning: ["Rano struny są zimne jak rosa. Ja też. Daj mi chwilę, zanim się nastroję.", "Pół nocy szukałam rymu do „sakiewki”. Znalazłam „konewki”. Nie pytaj.",
-                    "Borgar już krzyczy na kuchnię. Słychać, że dzień się zaczął - jak w każdej dobrej balladzie, od krzyku."],
-                day: ["Popołudnie to najgorsza pora dla pieśni. Ludzie są albo głodni, albo śpiący.", "Przepisuję stare słowa na nowe nuty. Czasem mam wrażenie, że to one przepisują mnie.",
-                    "Widziałeś, jak kurz tańczy w słońcu przy oknie? Gdybym umiała to zaśpiewać, byłabym sławna."],
-                evening: ["Wieczór! Moja pora. Sala się zapełnia, a ludzie robią się szczerzy po drugim kuflu.", "Od szóstej śpiewam. Przyjdź pod scenę - dla ciebie zaśpiewam głośniej.",
-                    "Grum znowu siłuje się z każdym, kto ma dwie ręce. A ja śpiewam tym, co mają dwoje uszu."],
-                night: ["Noc... Sala pusta, świece dogasają. Najlepsze pieśni przychodzą właśnie teraz. I najgorsze sny.", "Nie śpisz? Ja też nie. Lutnia mruczy mi do snu, ale dziś coś nie chce.",
-                    "Ozzy chrapie w kącie jak niedźwiedź w gawrze. Ładnie się przy tym śpiewa, wiesz?"],
-                rain: ["Słyszysz deszcz o okiennice? To najstarszy bęben świata. Wystaw garnki, póki leje!", "Deszcz! Ludzie biegną z wiadrami na rynek jak do kościoła. Napisałabym o tym pieśń, ale wyszłaby za smutna."],
-                storm: ["Burza! Kiedy grzmi, pieśni przychodzą same. Albo uciekają - nigdy nie wiadomo.", "Grzmi tak, że lutnia drży mi na kolanach. Posiedź, póki nie przejdzie."],
-                snow: ["Śnieg... Na kontynencie mówią, że w śniegu słychać to, co ktoś kiedyś powiedział. Ja słyszę tylko zimno."],
-                drought: ["Tyle dni bez deszczu... Nawet słowa mi wysychają. Ludzie piją piwo zamiast wody, a potem dziwią się, że płaczą przy balladach.",
-                    "Susza. Ziemia pęka jak stara struna. Ktoś musi o tym zaśpiewać, zanim wszyscy zapomną, jak brzmi deszcz."],
-                debtNear: ["Słyszałam o długu twojego dziadka. Lord ma dwór z kamieni i serce do kompletu. Trzymaj się, złotko.",
-                    "Termin u Lorda tuż-tuż, prawda? Widać ci to po oczach. Gdyby pieśnią dało się płacić, zaśpiewałabym za ciebie."],
-                debtPaid: ["Spłaciłeś Lorda! Cała sala o tym mówiła. Ułożę pieśń: „Wnuk, co działkę wykupił”. Albo coś krótszego."],
-                fieldLost: ["Słyszałam o działce, złotko. Przykro mi. Lord ma dwór z kamieni i serce do kompletu. Ale ty masz ręce i głos - zaśpiewasz jeszcze o tej działce, jak ją odkupisz."],
-                fieldBack: ["Odkupiłeś działkę od samego Zaleskiego! To już nie pieśń, to ballada. Trzy zwrotki co najmniej."]
-            },
+            greet: [[], [], [], [], []],
+            talk: {},
             rumours: [
-                { id: "kubaWater", when: () => !qRec("W1"), text: "Kuba Woziwoda nosi wodę, której w studni nie ma. Ludzie mówią: z nieba. Ja mówię: z czyjejś piwnicy." },
-                { id: "kubaFled", when: () => !!flags().kubaFled, text: "Kuba uciekł z miasta! Hanka mówi, że wróci, jak mu sumienie wyschnie. Czyli prędko." },
-                { id: "mill", when: () => !!flags().sluiceHalf, text: "Słyszysz młyn? Ruszył. Ludzie mówią, że ktoś odkręcił Lordowi wodę. Ktoś odważny. Albo głupi - w dobrej balladzie to jedno i to samo." },
-                { id: "feliks", when: () => gone("feliks"), text: "Feliksa nie ma. Kamerdyner, a zniknął jak kamfora. Lord udaje, że nic się nie stało - i dobrze mu to wychodzi." },
-                { id: "lucjan", when: () => !!flags().lucjanOut, text: "Ponoć wygoniłeś z targu oszusta od kości. Bartek opowiada o tym przy każdym piwie, za każdym razem w innej wersji." },
-                { id: "purse", when: () => !!flags().k37Seen, text: "Ludzie gadają, że ktoś przytulił sakiewkę dworu. Nie patrz tak - ja tylko powtarzam." },
-                { id: "market", when: () => isMarket(day() + 1), text: "Jutro targ. Przyjadą ludzie z dalszych wsi - zawsze ktoś z nich zna nową piosenkę. Kradnę je bez wstydu." },
-                { id: "ferry", when: () => isFerry(day()), text: "Dziś przypłynął prom. Na sali nowe twarze. Jeden siedzi od rana nad jednym kuflem i patrzy na drzwi." },
-                { id: "nameday", when: () => day() >= 26 && day() < 33, text: "Lord ma niedługo imieniny. Feliks już chodzi po mieście jak kogut przed jarmarkiem." },
-                { id: "kupala", when: () => day() >= 35 && day() < 42, text: "Za parę dni Noc Kupały. Dziewczęta będą puszczać wianki na stawie za halą. W taką suszę - wianki na błocie." },
-                { id: "camp", when: () => day() >= 10, text: "Pod murem stanęły namioty. Ludzie z kontynentu. Mała Ela ma oczy, w które trudno patrzeć." },
-                { id: "fame", when: () => fame() >= 40, text: "Borgar mówi, że z tablicy zleceń zdejmujesz więcej kartek niż ktokolwiek. Rośnie ci sława, złotko." }
-            ],
-            evergreen: ["Ambroży dzwoni czasem o dziwnych porach. Ludzie myślą, że stary się myli. Ja myślę, że on liczy.",
-                "Grum wypytuje każdego, kto przyjdzie od wschodu, o góry. Płaci za odpowiedzi piwem. Odpowiedzi są tańsze.",
-                "Ozzy mówi, że jutro spadnie deszcz. Mówi to od trzech miesięcy. Kiedyś trafi - a wtedy wszyscy powiemy, że zawsze mu wierzyliśmy.",
-                "Wanda z łaźni wie o wszystkich wszystko. Ludzie w gorącej wodzie gadają jak na spowiedzi.",
-                "Pod podłogą tej sali są kamienie starsze niż miasto. Borgar nie lubi, kiedy się o tym mówi. Czyli jest o czym."]
+                { id: "kubaWater", when: () => !qRec("W1") },
+                { id: "kubaFled", when: () => !!flags().kubaFled },
+                { id: "mill", when: () => !!flags().sluiceHalf },
+                { id: "feliks", when: () => gone("feliks") },
+                { id: "lucjan", when: () => !!flags().lucjanOut },
+                { id: "purse", when: () => !!flags().k37Seen },
+                { id: "market", when: () => isMarket(day() + 1) },
+                { id: "ferry", when: () => isFerry(day()) },
+                { id: "nameday", when: () => day() >= 26 && day() < 33 },
+                { id: "kupala", when: () => day() >= 35 && day() < 42 },
+                { id: "camp", when: () => day() >= 10 },
+                { id: "fame", when: () => fame() >= 40 }
+            ]
         },
         ozzy: {
-            name: "Dziadek Ozzy", full: "Dziadek Ozzy", title: "stały bywalec",
-            tierText: ["", "Ozzy pamięta, kim jesteś. Prawie zawsze.", "Ozzy nazywa cię kompanem od kufla.", "Ozzy mówi ci rzeczy, których nie mówi nikomu.", "Ozzy ufa ci jak nikomu od sześćdziesięciu lat."],
-            greet: [["*hep* Ktoś ty? A, nieważne. Wszyscy kiedyś tu przychodzą.", "Młody! Masz może grosika na piwo? Nie? Ech, młodzież..."],
-                ["A, chłopak Stacha! *hep* Twój dziadek przesiadywał tu kiedyś co wieczór. Potem się ożenił. Głupiec.", "Znowu ty? Siadaj, siadaj. Stołek się nie obrazi."],
-                ["Mój kompan od kufla! *hep* Siadaj, opowiem ci, jak to było z tą kozą.", "Synku! Dobrze, że jesteś. Borgar mi już nie nalewa na krechę."],
-                ["Ty jesteś dobry chłopak. Ja to wiem. Ja wiem różne rzeczy. *hep*", "Przyjacielu... siadaj. Dziś widzę wyraźniej niż zwykle. To niedobry znak."],
-                ["Synku... Tobie jednemu bym powiedział, gdybym pamiętał, co chciałem powiedzieć. *hep*", "Ty i ja, synku. Dwóch, co wiedzą za dużo. No, ty jeszcze nie. Jeszcze."]],
-            again: ["*hep* Czego jeszcze?", "Mów, mów. Ucho mam jedno dobre.", "Hm? Jeszcze tu jesteś?"],
-            bye: ["Idź, idź. *hep* Ja tu będę. Zawsze tu jestem.", "Uważaj na schody, synku. Na wszystkie schody.", "Idź z Bogiem. Albo z kimkolwiek. *hep*"],
-            heroBye: "Bywaj, dziadku.",
-            talk: {
-                morning: ["Rano? *hep* Rano to ja jeszcze śpię. To, co widzisz, to moje ciało z przyzwyczajenia.", "Głowa mi pęka jak garnek na mrozie. Ale oczy widzą. Za dużo widzą.",
-                    "Borgar mówi, że mam iść do domu. A ja mówię: to jest mój dom. Od czterdziestu lat ten sam stołek."],
-                day: ["W południe cienie są najkrótsze. Wtedy najmniej widać. *hep* Najlepsza pora na piwo.", "Siedzę i liczę muchy. Dziewiętnaście. Jutro będzie dwadzieścia trzy. Zobaczysz.",
-                    "Grzyby na ogień i piwo do dzbana - tego nauczył mnie ojciec. Reszty nauczyła mnie piwnica."],
-                evening: ["Wieczorem sala gada, a ja słucham. Ludzie mówią jedno, a myślą drugie. *hep* Słyszę i to, i to.",
-                    "Melia zaraz zaśpiewa. Przy tej o chłopcu z piwnicy zawsze płaczę. Ze śmiechu. Na pewno ze śmiechu.",
-                    "Grum przegra dziś z kimś na rękę. Albo wygra. Jedno z dwojga, *hep*, na pewno."],
-                night: ["Noc to dobra pora. Wtedy kamienie mówią. Słyszysz? Nie? Ja też nie. *hep* Kłamię.", "Śpij, synku. Ja popilnuję. Ktoś musi."],
-                rain: ["Deszcz! A mówiłem? Mówiłem! *hep* Nie pamiętam, czy mówiłem. Ale wiedziałem.", "Leje! Wystaw garnek, synku, wystaw wiadro. Woda z nieba jest za darmo. Jedyna rzecz w tym mieście."],
-                storm: ["Burza... Piorun lubi wysokie drzewa i głupich ludzi. *hep* Siedź tu.", "Słyszysz, jak grzmi? Tak samo grzmiało, kiedy wpadłem do piwnicy. Sześćdziesiąt lat temu. Może siedemdziesiąt."],
-                snow: ["Śnieg... Zimą kamienie śpią głębiej. Wtedy łatwiej o nich zapomnieć."],
-                drought: ["Ile dni bez deszczu? *hep* Ja wiem ile. I wiem, gdzie jest woda. Tylko nikt nie pyta.", "Sucho, synku. Sucho w ziemi, sucho w gardle. Z tych dwóch to drugie da się naprawić."],
-                debtNear: ["Dług, dług... Lordowie liczą grosze, a nie widzą, na czym siedzą. *hep* Zdążysz, synku. Albo nie. Ale raczej zdążysz."],
-                debtPaid: ["Spłacone? Hehe. Widziałem to we śnie. Wczoraj albo przedwczoraj. *hep*"],
-                fieldLost: ["Działka poszła do Lorda? *hep* Ziemia nie ucieka, synku. Lordowie przychodzą i odchodzą, a ziemia zostaje. Wróci do ciebie. Widziałem to... albo mi się wydawało."],
-                fieldBack: ["Działka wróciła? A nie mówiłem? *hep* Mówiłem. Na pewno mówiłem."]
-            },
-            sleep: ["Chrrr... *hep* ...co? Kto? A, to ty. Śniła mi się woda. Dużo wody. Pod ziemią.", "Chrrr... fiuuu... (Ozzy śpi na ławie z głową na stole. Uśmiecha się przez sen.)",
-                "...nie ta cegła... trzecia od dołu... chrrr...", "(Ozzy mruczy coś przez sen i przewraca się na drugi bok. Ława trzeszczy.)"],
+            greet: [[], [], [], [], []],
+            talk: {},
             rumours: [
-                { id: "roses", when: () => !qRec("W1"), text: "Woda u Kuby pachnie różami. A róże rosną tylko tam, gdzie ktoś je podlewa. *hep* Pomyśl." },
-                { id: "bell", when: () => !qRec("W2"), text: "Ambroży dzwoni o trzeciej w nocy. Trzy razy. Ludzie śpią. A dzwon nie dzwoni dla ludzi. *hep*" },
-                { id: "garden", when: () => !!flags().gardenKey, text: "Byłeś w ogrodzie rycerzy, co? Pachniesz kamieniem i zakonem. *hep* Ja też tam byłem. Tylko pod spodem." },
-                { id: "kubaFled", when: () => !!flags().kubaFled, text: "Kuba ucieka, a woda zostaje. *hep* Woda zawsze zostaje. Ludzie uciekają." },
-                { id: "mill", when: () => !!flags().sluiceHalf, text: "Młyn ruszył. *hep* Słyszę go przez ściany. Ładnie śpiewa. Ładniej niż Melia - tylko jej nie mów." },
-                { id: "feliks", when: () => gone("feliks"), text: "Kamerdynera nie ma? Ja wiedziałem, że go nie będzie. Wiedziałem już w zeszłym roku. *hep*" },
-                { id: "stones", when: () => clue("lord_stones"), text: "Lord pyta o kamienie z krukiem. Niech pyta. Kamienie i tak mu nie odpowiedzą. Mnie odpowiadają. *hep*" },
-                { id: "camp", when: () => day() >= 10, text: "Ludzie z promu szukają serca skały. Nie znajdą. *hep* Serce samo znajduje." },
-                { id: "ferry", when: () => isFerry(day()), text: "Prom przypłynął. Trzech zeszło na ląd, a jeden z nich nie jest tym, za kogo się podaje. *hep* Nie pytaj który." }
-            ],
-            evergreen: ["Borgar trzyma nad barem pół klucza. Pół! Kto trzyma pół klucza? Ten, kto boi się całego. *hep*",
-                "Grum to dobry chłop. Tylko płacą mu źli ludzie. *hep* Tak to bywa z najemnikami.",
-                "Melia śpiewa rzeczy, których nie powinna znać. Ja też mówię rzeczy, których nie powinienem. Tylko ona ładniej.",
-                "W piwnicy tej tawerny jedna cegła siedzi luźno. *hep* Albo dwie. Policz sam.",
-                "Jak zobaczysz kruka na trzech kamieniach naraz - wracaj do domu. *hep* Nie pytaj, czemu."]
+                { id: "roses", when: () => !qRec("W1") },
+                { id: "bell", when: () => !qRec("W2") },
+                { id: "garden", when: () => !!flags().gardenKey },
+                { id: "kubaFled", when: () => !!flags().kubaFled },
+                { id: "mill", when: () => !!flags().sluiceHalf },
+                { id: "feliks", when: () => gone("feliks") },
+                { id: "stones", when: () => clue("lord_stones") },
+                { id: "camp", when: () => day() >= 10 },
+                { id: "ferry", when: () => isFerry(day()) }
+            ]
         },
         grum: {
-            name: "Grum", full: "Grum Żelazna Pięść", title: "najemnik",
-            tierText: ["", "Grum kiwa ci głową na powitanie.", "Grum mówi do ciebie pełnymi zdaniami. Czasem.", "Grum ma do ciebie zaufanie. Rzadka rzecz.", "Grum stanąłby za tobą w szyku."],
-            greet: [["Hm.", "Czego?"], ["Ty. Siadaj albo idź.", "A, chudzielec od działki."], ["Siadaj. Piwo jest, gadać nie muszę.", "No. Jesteś."],
-                ["Dobrze cię widzieć. Nie mów nikomu, że to powiedziałem.", "Siadaj, chłopcze. Masz łokieć - masz kompana."],
-                ["Ty jeden tu nie kłamiesz. Chyba. Siadaj.", "Bracie od stołu. Mów."]],
-            again: ["Coś jeszcze?", "No?", "Mów."],
-            bye: ["Hm.", "Idź. Uważaj na plecy.", "Bywaj, chłopcze."],
-            heroBye: "Bywaj, Grum.",
-            talk: {
-                morning: ["Rano się nie gada. Rano się ostrzy.", "Spałem trzy godziny. Wystarczy. Na wojnie spałem mniej.", "Borgar daje kaszę. Kasza jest dobra. Na wojnie nie było kaszy."],
-                day: ["Czekam.", "Ludzie przychodzą od wschodu. Pytam. Nie wiedzą. Czekam dalej.", "Zrobiłbym coś. Ale nie ma co."],
-                evening: ["Wieczór. Ktoś przegra dziś na rękę. Nie ja.", "Kości są uczciwsze od ludzi. Ale rzadziej.", "Sala pełna. Pilnuj sakiewki. Nie przede mną - przed tamtymi."],
-                night: ["Śpię jednym okiem. Starczy.", "Nocą słychać, kto chodzi po murach. Kapral chodzi. I ktoś jeszcze.", "Idź spać, chłopcze."],
-                rain: ["Deszcz. Drogi rozmokną. Dobrze. W błocie nikt za tobą nie pójdzie.", "Pada. Na wojnie deszcz znaczył: dziś nie atakują."],
-                storm: ["Burza. Konie się płoszą, ludzie też. Siedź pod dachem.", "Piorun to jedyny wróg, z którym nie wygrasz. Szanuję."],
-                snow: ["Śnieg. Ślady widać na milę. Dobra pora na polowanie. Zła na ucieczkę."],
-                drought: ["Woda drożeje. Wojna zaczyna się od wody. Zapamiętaj.", "Sucho. Pod Wrzosową Przełęczą piliśmy z kałuż. Tu jeszcze nie jest tak źle. Jeszcze."],
-                debtNear: ["Lord chce pieniędzy. Lordowie zawsze chcą. Zarób albo uciekaj. Ja bym zarobił."],
-                debtPaid: ["Spłaciłeś. Dobrze. Wolny człowiek śpi lepiej."],
-                fieldLost: ["Lord wziął działkę. Tak bywa. Ja straciłem więcej niż działkę i siedzę tu, piję piwo. Ty też przeżyjesz."],
-                fieldBack: ["Odkupiłeś. Uparty jesteś. To dobrze."]
-            },
+            greet: [[], [], [], [], []],
+            talk: {},
             rumours: [
-                { id: "wolves", when: () => day() >= 3 && !qDone("D5"), text: "Wilki chodzą pod bramą południową. Trzy, może cztery. Przewodnik jest siwy. Nie idź nocą sam." },
-                { id: "camp", when: () => day() >= 10, text: "Prom przywozi ludzi z kontynentu. Połowa to uciekinierzy. Reszta udaje uciekinierów. Ci są groźni." },
-                { id: "gold", when: () => day() >= 5, text: "Kupiec z kantoru płaci złotem z kontynentu. Świeżym. Kto ma świeże złoto w czasie wojny? Jedna ze stron." },
-                { id: "wit", when: () => !flags().witDegraded, text: "Kapral bierze od wozów. Widziałem. Nic nie mówię. Nie moja wojna." },
-                { id: "tourney", when: () => !qDone("D6") && isMarket(day() + 1), text: "Jutro targ. W targ czasem siłują się na rynku. Wygrywam. Beczka piwa. Przyjdź, zobaczysz." },
-                { id: "lucjan", when: () => !!flags().lucjanOut, text: "Wyrzuciłeś szulera z targu. Dobrze. Nie lubię oszustów. Uczciwie przegrać umiem." },
-                { id: "ambush", when: () => !!flags().w1Ambushed, text: "Napadli cię na Polnej. W kapturach. Następnym razem weź pałkę. Albo mnie." },
-                { id: "ambushWon", when: () => !!flags().w1AmbushWon, text: "Na Polnej leżeli ludzie w kapturach. Ktoś ich przetrzepał. Bosy, mówią. Hm. Dobra robota. Kto im płacił?" },
-                { id: "cistern", when: () => !!flags().cisternOpen, text: "Studnia pełna. Ktoś dzwonił cztery i dwa, a pod rynkiem zaszumiało. Na kontynencie by za to zabili. Tu stawiają piwo." },
-                { id: "feliks", when: () => gone("feliks"), text: "Kamerdynera nie ma. Ktoś mu dał wybór: zniknąć albo zniknąć. Dobrze wybrał." }
-            ],
-            evergreen: ["Na wschodzie są góry. W górach jaskinie. W jaskiniach ludzie, którzy nie wyszli. Tyle wiem.",
-                "Ludzie z kontynentu kupują stare kamienie z krukiem. Płacą dobrze. Nie pytam za co.",
-                "Ozzy gada bzdury. Tylko czemu te bzdury się sprawdzają?",
-                "Melia śpiewa o skale. Ja byłem pod niejedną skałą. Żadna nie śpiewała.",
-                "Dwór Lorda ma straż w barwach. Barwy nowe. Straż stara. Dziwne."]
+                { id: "wolves", when: () => day() >= 3 && !qDone("D5") },
+                { id: "camp", when: () => day() >= 10 },
+                { id: "gold", when: () => day() >= 5 },
+                { id: "wit", when: () => !flags().witDegraded },
+                { id: "tourney", when: () => !qDone("D6") && isMarket(day() + 1) },
+                { id: "lucjan", when: () => !!flags().lucjanOut },
+                { id: "ambush", when: () => !!flags().w1Ambushed },
+                { id: "ambushWon", when: () => !!flags().w1AmbushWon },
+                { id: "cistern", when: () => !!flags().cisternOpen },
+                { id: "feliks", when: () => gone("feliks") }
+            ]
         }
     };
+    Watki.scal(REGULARS, "stali_goscie", "bywalcy");   // (its words: js/teksty/stali_goscie.txt, bywalcy)
 
     // ------------------------------------------------------------------
     // Which event is which regular (the tavern only): TavernLife's NPCS (by name, else by look)
@@ -292,16 +207,10 @@
     // (2026-10-16, W12 "Rozbitek", Wrak.js) Eryk - the castaway who drew her - handed to the soldiers (flag ansgarGiven): Melia stops
     // joking FOR GOOD - her greetings, her "what is new" by the hour and her farewells stay short and cold (the songs and the rumours stay)
     const MELIA_SOBER = {
-        greet: [["(Melia stroi lutnię i nie podnosi wzroku.) Ty. Siadaj, jeśli musisz.", "Słucham. Mów krótko - struny same się nie nastroją."]],
-        again: ["Coś jeszcze?", "Tak?", "Słucham."],
-        bye: ["Idź.", "Do zobaczenia.", "Drzwi są tam, gdzie były."],
-        talk: {
-            morning: ["Rano stroję lutnię. Długo. Dawniej żartowałam przy tym. Dawniej.", "Eryk siadał tu rano i rysował. Stół dalej ma ślady węgla."],
-            day: ["Przepisuję stare pieśni. Nowych nie piszę.", "Ludzie pytają, czemu już nie żartuję. Niech zapytają tego, kto wydał rysownika wojsku."],
-            evening: ["Wieczorem śpiewam. Tylko stare pieśni - na nowe nie mam serca.", "Sala się śmieje. Ja gram. Tyle."],
-            night: ["Noc. Sala pusta. Nie śpię - nie mam już czym śpiewać do snu.", "Struna pękła mi wczoraj. Nie wymieniłam. Nie chce mi się."]
-        }
+        greet: [[]],
+        talk: {}
     };
+    Watki.scal(MELIA_SOBER, "stali_goscie", "melia_smutna");   // (its words: js/teksty/stali_goscie.txt, melia_smutna)
     const R0 = role => {
         const d = REGULARS[role];
         if (role !== "melia" || !flags().ansgarGiven) return d;
@@ -365,18 +274,18 @@
     }
     // the menu: options by the hour, the trust and the quests; each topic comes back to it, the farewell ends the talk
     function menuOptions(role) {
-        const tr = trust(role), h = hour(), o = [["news", "Co słychać?"], ["rumour", "Jakieś plotki?"]];
+        const tr = trust(role), h = hour(), o = [["news", TK.kod.menuOptions[0]], ["rumour", TK.kod.menuOptions[1]]];
         if (role === "melia") {
-            o.push(["songs", "Opowiedz o swoich pieśniach."]);
-            if (tr >= 35) o.push(["origin", "Skąd znasz te ballady?"]);
-            if (lib.inSongHours() && S().songDay !== day() && !lib.meliaAway()) o.push(["sing", "Zaśpiewasz dziś?"]);
+            o.push(["songs", TK.kod.menuOptions[2]]);
+            if (tr >= 35) o.push(["origin", TK.kod.menuOptions[3]]);
+            if (lib.inSongHours() && S().songDay !== day() && !lib.meliaAway()) o.push(["sing", TK.kod.menuOptions[4]]);
         } else if (role === "ozzy") {
-            o.push(["beer", "Postaw mu piwo (" + BEER_PRICE + " G)"]);
-            if (tr >= 35) o.push(["cellar", "Opowiedz o piwnicy."]);
+            o.push(["beer", Watki.wstaw(TK.kod.menuOptions[5], { BEER_PRICE: BEER_PRICE })]);
+            if (tr >= 35) o.push(["cellar", TK.kod.menuOptions[6]]);
         } else if (role === "grum") {
-            o.push(["war", "Opowiedz o wojnie."]);
-            if (tr >= 15) o.push(["home", "Skąd jesteś?"]);
-            o.push(["play", "Zagrajmy w coś."]);
+            o.push(["war", TK.kod.menuOptions[7]]);
+            if (tr >= 15) o.push(["home", TK.kod.menuOptions[8]]);
+            o.push(["play", TK.kod.menuOptions[9]]);
         }
         // the quests' own topics (K27: Melia under the wall, W3: a jug of mead for Ozzy) - TownQuests says which
         const Q = TQ();
@@ -413,77 +322,77 @@
             return;
         }
         switch (key) {
-            case "news": hero(role === "ozzy" ? "Co słychać, dziadku?" : "Co słychać?"); her(newsLine(role)); break;
-            case "rumour": hero("Jakieś plotki?"); her(rumourLine(role)); break;
+            case "news": hero(role === "ozzy" ? TK.kod.regularTopic[0] : TK.kod.regularTopic[1]); her(newsLine(role)); break;
+            case "rumour": hero(TK.kod.regularTopic[2]); her(rumourLine(role)); break;
             // ---- Melia
             case "songs": {
                 const heard = S().heard || [], all = TL.SONGS || [];
-                hero("Opowiedz o swoich pieśniach.");
-                if (!heard.length) her("Mam sześć starych ballad. Śpiewam je wieczorami, od szóstej, po kolei - kto przyjdzie sześć razy, usłyszy wszystkie. I dostanie natchnienie w prezencie.");
+                hero(TK.kod.regularTopic[3]);
+                if (!heard.length) her(TK.kod.regularTopic[4]);
                 else if (heard.length < all.length) {
                     const left = all.filter(s => !heard.includes(s.id)).map(s => "„" + s.title + "”");
-                    her("Słyszałeś już " + heard.length + " z " + all.length + ". Zostały jeszcze: " + left.join(", ") + ". Przyjdź wieczorem pod scenę.");
+                    her(Watki.wstaw(TK.kod.regularTopic[5], { length: heard.length, length2: all.length, "3": left.join(", ") }));
                 } else {
                     const w3 = qRec("W3");
-                    her(w3 && w3.s === "active" ? "Siódma ballada rośnie, złotko. Zwrotka po zwrotce. Czuję ją w palcach jak drzazgę."
-                        : w3 && w3.s === "done" ? "Znasz wszystkie siedem. Nikt inny nie zna. Nawet ja nie znałam, zanim mi ich nie przyniosłeś."
-                            : "Znasz już wszystkie moje stare ballady. Czasem mam wrażenie, że jest siódma - tylko jeszcze się nie urodziła.");
+                    her(w3 && w3.s === "active" ? TK.kod.regularTopic[6]
+                        : w3 && w3.s === "done" ? TK.kod.regularTopic[7]
+                            : TK.kod.regularTopic[8]);
                 }
                 break;
             }
             case "origin":
-                hero("Skąd znasz te ballady?");
-                her("Nie wiem. Naprawdę. Matka nie śpiewała, babki nie znałam. Któregoś dnia wzięłam lutnię i słowa były. Jakby ktoś je zostawił w moich palcach.");
-                if (tr >= 60) her("Czasem śni mi się kamienna sala i kobiety w szarych płaszczach. Śpiewają, a ja się uczę. Rano pamiętam tylko melodię. I chłód.");
+                hero(TK.kod.regularTopic[9]);
+                her(TK.kod.regularTopic[10]);
+                if (tr >= 60) her(TK.kod.regularTopic[11]);
                 break;
             case "sing": {
-                hero("Zaśpiewasz dziś?");
+                hero(TK.kod.regularTopic[12]);
                 const list = lib.songTalk ? lib.songTalk() : null;
                 if (list) { run(interp, out.concat(list)); return; }
-                her("Dziś już nie, złotko.");
+                her(TK.kod.regularTopic[13]);
                 break;
             }
             // ---- Ozzy
             case "beer": {
-                hero("Borgar! Piwo dla dziadka.");
-                if (gold() < BEER_PRICE) { needGold(BEER_PRICE); her("Pusta sakiewka? *hep* Nic to. Myśl się liczy. Myśl się nie pije, ale się liczy."); break; }
+                hero(TK.kod.regularTopic[14]);
+                if (gold() < BEER_PRICE) { needGold(BEER_PRICE); her(TK.kod.regularTopic[15]); break; }
                 $gameParty.loseGold(BEER_PRICE);
                 lib.spend(BEER_PRICE);
                 const r = rec(role), first = r.vis !== day();
-                her("*glug, glug* Aaach... Dobry z ciebie chłopak.");
+                her(TK.kod.regularTopic[16]);
                 if (first) {
                     r.vis = day();
                     addTrust(role, 2, "piwo", "beer");
-                    her("Masz, coś ci powiem. Ale nie mów nikomu, że ode mnie. *hep*");
+                    her(TK.kod.regularTopic[17]);
                     for (const l of visionLines()) her(l);
-                } else her("Już mi dziś stawiałeś. Wizje mam jedną na dzień, synku. Reszta to piwo. *hep*");
+                } else her(TK.kod.regularTopic[18]);
                 break;
             }
             case "cellar":
-                hero("Dziadku, opowiedz o piwnicy.");
-                her("Miałem siedem lat. Goniłem kota dziadka Borgara... i wpadłem. Przez dziurę w podłodze, prosto w ciemność. *hep*");
-                her("Leżałem tam do rana. Coś świeciło. Nie ogień. Coś, co patrzyło. I od tamtej pory... wiem rzeczy. Głupie rzeczy. Czasem nie głupie.");
-                if (tr >= 60) her("Nie pytaj mnie, co tam jest, synku. Bo ci powiem. A wtedy będziesz wiedział. *hep* To gorsze niż kac. Dużo gorsze.");
+                hero(TK.kod.regularTopic[19]);
+                her(TK.kod.regularTopic[20]);
+                her(TK.kod.regularTopic[21]);
+                if (tr >= 60) her(TK.kod.regularTopic[22]);
                 break;
             // ---- Grum
             case "war": {
-                hero("Opowiedz o wojnie.");
-                her(said(role, ["Dwa królestwa za morzem biją się o coś, czego żadne nie widziało. Płacą dobrze. Umiera się tak samo.",
-                    "Byłem pod Wrzosową Przełęczą. Trzy dni deszczu i strzał. Wyszło nas dwunastu ze stu. Nie pytaj więcej.",
-                    "Najemnik nie wybiera strony. Wybiera, kto płaci w terminie. Tak mówiłem kiedyś. Dziś już nie wiem."], "war"));
+                hero(TK.kod.regularTopic[23]);
+                her(said(role, [TK.kod.regularTopic[24],
+                    TK.kod.regularTopic[25],
+                    TK.kod.regularTopic[26]], "war"));
                 break;
             }
             case "home":
-                hero("Skąd jesteś, Grum?");
-                her("Z gór. Innych gór, za morzem. Ojciec kopał rudę, ja nie chciałem. Wziąłem miecz. Tyle.");
-                if (tr >= 60) her("Matka mówiła, że w skale mieszkają duchy, które znają twoje imię. Śmiałem się. Teraz już się nie śmieję.");
+                hero(TK.kod.regularTopic[27]);
+                her(TK.kod.regularTopic[28]);
+                if (tr >= 60) her(TK.kod.regularTopic[29]);
                 break;
             case "play": {
-                hero("Zagrajmy w coś.");
-                her("W co? Na rękę czy w kości?");
+                hero(TK.kod.regularTopic[30]);
+                her(TK.kod.regularTopic[31]);
                 const TD = T.api("TavernDice"), dice = !!(TD && TD.present && TD.present(undefined, undefined, "grum").length);
-                const opts = [{ label: "Siłujmy się.", js: "TavernLife.regularStep(this, 'grum', 'arm')" },
-                    { label: dice ? "W kości." : "W kości (od piątej po południu).", js: "TavernLife.regularStep(this, 'grum', 'dice')" }, { label: "Innym razem.", js: [] }];
+                const opts = [{ label: TK.kod.regularTopic[32], js: "TavernLife.regularStep(this, 'grum', 'arm')" },
+                    { label: dice ? TK.kod.regularTopic[33] : TK.kod.regularTopic[34], js: "TavernLife.regularStep(this, 'grum', 'dice')" }, { label: TK.kod.regularTopic[35], js: [] }];
                 lib.choose(out, opts);
                 run(interp, out);
                 return;
@@ -500,7 +409,7 @@
         }
         if (what === "dice") {
             const TD = T.api("TavernDice");
-            if (!TD || !TD.present || !TD.present(undefined, undefined, "grum").length) { run(interp, sayAs([], role, "Kości wieczorem. Od piątej. Teraz piję.")); return; }
+            if (!TD || !TD.present || !TD.present(undefined, undefined, "grum").length) { run(interp, sayAs([], role, TK.kod.regularStep[0])); return; }
             TD.start({ opponent: "grum" });
         }
     }
@@ -508,20 +417,20 @@
     function visionLines() {
         const out = [], Sv = T.api("Survival"), d = day() + 1;
         const plan = Sv && Sv.weatherPlan ? Sv.weatherPlan(d) : null, after = Sv && Sv.weatherPlan ? Sv.weatherPlan(d + 1) : null;
-        if (plan && plan.storm) out.push("Jutro " + hourWords(plan.storm.start) + " burza. Taka, że psy pod ławy wejdą. Wystaw garnki, zanim przyjdzie.");
-        else if (plan && plan.type === "snow") out.push("Jutro " + hourWords(plan.start) + " śnieg. Ciepło się ubierz, synku.");
-        else if (plan) out.push("Jutro " + hourWords(plan.start) + " będzie padać. Wystaw garnki z wieczora, nie gap się.");
-        else if (after) out.push("Jutro sucho. Ale pojutrze " + hourWords(after.storm ? after.storm.start : after.start) + (after.storm ? " burza." : " deszcz.") + " Zapamiętaj.");
-        else out.push("Jutro sucho. Pojutrze też. Sucho jak w moim gardle, synku. *hep*");
+        if (plan && plan.storm) out.push(Watki.wstaw(TK.kod.visionLines[0], { "1": hourWords(plan.storm.start) }));
+        else if (plan && plan.type === "snow") out.push(Watki.wstaw(TK.kod.visionLines[1], { "1": hourWords(plan.start) }));
+        else if (plan) out.push(Watki.wstaw(TK.kod.visionLines[2], { "1": hourWords(plan.start) }));
+        else if (after) out.push(Watki.wstaw(TK.kod.visionLines[5], { "1": hourWords(after.storm ? after.storm.start : after.start), "2": after.storm ? TK.kod.visionLines[3] : TK.kod.visionLines[4] }));
+        else out.push(TK.kod.visionLines[6]);
         const extra = [];
-        if (isMarket(day() + 1)) extra.push("Jutro targ. Ktoś na nim straci sakiewkę, a ktoś inny głowę. Pilnuj obu.");
+        if (isMarket(day() + 1)) extra.push(TK.kod.visionLines[7]);
         const dbt = debt();
-        if (dbt && !dbt.done && dbt.left > 0) extra.push("Brakuje ci " + dbt.left + " groszy dla Lorda. Co do grosza. Nie dziw się, ja liczę cudze pieniądze lepiej niż swoje.");
+        if (dbt && !dbt.done && dbt.left > 0) extra.push(Watki.wstaw(TK.kod.visionLines[8], { left: dbt.left }));
         const w1 = qRec("W1");
-        if (w1 && w1.s === "active" && w1.step === 1) extra.push("Kuba wychodzi z domu po pierwszej w nocy. Idź za nim na palcach - na palcach, mówię!");
+        if (w1 && w1.s === "active" && w1.step === 1) extra.push(TK.kod.visionLines[9]);
         const w2 = qRec("W2");
-        if (w2 && w2.s === "active" && flags().gardenKey && !flags().signalBook) extra.push("Siedem w południe, synku. Siedem. *hep* Nie wiem, czemu to mówię.");
-        extra.push("W sakiewce masz " + gold() + " groszy. Ani grosza więcej. Wiem, wiem... nie pytaj skąd.");
+        if (w2 && w2.s === "active" && flags().gardenKey && !flags().signalBook) extra.push(TK.kod.visionLines[10]);
+        extra.push(Watki.wstaw(TK.kod.visionLines[11], { "1": gold() }));
         if (extra.length && hash(day(), 31) < 0.7) out.push(extra[Math.floor(hash(day(), 33) * extra.length) % extra.length]);
         return out;
     }
@@ -544,11 +453,8 @@
     // ------------------------------------------------------------------
     // A word now and then when the hero walks by (Ozzy snores at night)
     // ------------------------------------------------------------------
-    const BARKS = {
-        melia: ["♪ La, la-la... ♪", "♪ Hej, kruku, czarny kruku... ♪", "Ta struna znowu fałszuje..."],
-        ozzy: ["*hep*", "Karczmarz! Jeszcze jedno...", "Hehe... kozę, mówię, kozę!"],
-        grum: ["Hm.", "Kto następny na rękę?", "*ostrzy nóż*"]
-    };
+    const BARKS = {};   // melia, ozzy, grum; spi - Ozzy asleep at night (the words: js/teksty/stali_goscie.txt, zaczepki)
+    Watki.scal(BARKS, "stali_goscie", "zaczepki");   // (its words: js/teksty/stali_goscie.txt, zaczepki)
     const nextBark = {};
     T.onMapUpdate(scene => {
         if (scene !== SceneManager._scene || !$gameMap || $gameMap.mapId() !== TAVERN || Graphics.frameCount % 20 || $gameMap.isEventRunning() || lib.busy()) return;
@@ -558,7 +464,7 @@
             if ((nextBark[role] || 0) > Graphics.frameCount) continue;
             nextBark[role] = Graphics.frameCount + 1500 + Math.floor(Math.random() * 1200);
             if (Math.random() < 0.5) continue;
-            const list = asleep(role) ? ["Chrrr...", "Chrrr... fiuuu...", "...nie ta cegła..."] : BARKS[role];
+            const list = asleep(role) ? BARKS.spi : BARKS[role];
             bark(ev, list[Math.floor(Math.random() * list.length)], 130);
         }
     }, { owner: "TavernLife_Regulars", name: "barks" });
@@ -567,17 +473,18 @@
     // ------------------------------------------------------------------
     // For the journal (TownQuests' tab "Miasteczko"): each regular, the trust and what it opens
     // ------------------------------------------------------------------
-    const OPENS = {
-        melia: [[35, "opowie, skąd zna ballady"], [60, "opowie o swoich snach"]],
-        ozzy: [[35, "opowie o piwnicy"], [60, "powie, czego się boi"]],
-        grum: [[15, "powie, skąd jest"], [60, "powie, w co naprawdę wierzy"]]
+    const OPENS = {   // [trust, what it opens] - the words in js/teksty/stali_goscie.txt (otwiera.<role>.<n>.1)
+        melia: [[35, ""], [60, ""]],
+        ozzy: [[35, ""], [60, ""]],
+        grum: [[15, ""], [60, ""]]
     };
+    Watki.scal(OPENS, "stali_goscie", "otwiera");   // (its words: js/teksty/stali_goscie.txt, otwiera)
     function regularsInfo() {
         return ROLES.map(role => {
             const t = trust(role), ti = tierOf(t), nx = TIERS[ti + 1];
             const next = OPENS[role].find(([at]) => at > t);
             return { role, name: REGULARS[role].full, title: REGULARS[role].title, trust: t, tier: ti, tierName: TIERS[ti].name, text: REGULARS[role].tierText[ti] || "",
-                next: nx ? nx.at : null, opens: next ? "Przy " + next[0] + ": " + next[1] + "." : "" };
+                next: nx ? nx.at : null, opens: next ? Watki.wstaw(TK.kod.regularsInfo[0], { "1": next[0], "2": next[1] }) : "" };
         });
     }
 

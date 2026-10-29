@@ -390,7 +390,7 @@ Szkoda. No cóż - idź do swojego kaprala.
 # D14, „Zboże na wojnę”
 zadania.D14.title = Zboże na wojnę
 zadania.D14.where = brama wschodnia + działka dziadka
-zadania.D14.when = od dnia 24, 3 dni
+zadania.D14.when = od dnia 25, 3 dni
 zadania.D14.desc = Dwór zbiera „zboże na wojnę”: trzecią część jęczmienia z każdego pola. Z działki dziadka - sześć garści. Oddać, przekupić kaprala czy schować?
 [zadania.D14.offer.say]
 Rozkaz z dworu. Po bitwie na kontynencie zbieramy zboże na wojnę - trzecią część jęczmienia z każdego pola.

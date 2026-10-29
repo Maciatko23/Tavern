@@ -40,7 +40,6 @@ leverDone = Dźwignia opuszczona. Krata stoi otworem.
 [leverThink]
 > Za kratą świeże powietrze i krzyk mew. Urwisko - prosto nad morzem.
 
-rainShut = Zasuwa deszczowa: zardzewiała na amen.
 rainOpen = Zasuwa deszczowa otwarta
 rainOpenSub = Deszcz z Urwiska znów spłynie do cysterny.
 rainTired = Jesteś zbyt zmęczony
@@ -65,7 +64,6 @@ branchShut = Zasuwa gałęzi dworskiej zamknięta. Klin siedzi mocno.
 > Lord się dowie, kto mu zakręcił wodę. Prędzej czy później.
 
 tankWater = Przy brzegu woda stoi pod kożuchem szlamu. Czysta jest tylko z głębi - z czerpaka.
-gutterLook = Rynna zakonu, wykuta w skale - zapchana gruzem i starym gniazdem.
 gutterNeed = Potrzebujesz kilofa albo łopaty
 gutterDoneN = Rynna oczyszczona ({n}/4)
 [gutterAll]
@@ -76,7 +74,6 @@ gutterDoneN = Rynna oczyszczona ({n}/4)
 > Stara cysterna zakonu. Prawdziwy zapas pod wzgórzem.
 
 arriveN = Stara cysterna zakonu  ·  zapas {lv}/100
-wellLow = Studnia prawie sucha - sołtys daje dziś jedno nabranie
 lowNotice = Cysterna zakonu prawie pusta
 lowSub = Studnia na rynku daje mniej. Ludzie szemrzą.
 
@@ -193,3 +190,8 @@ kod.zapiskiOdkrycie = zapiski zakonu ({tytul})
 # ======================================================================== z kodu Cysterna.js (kod.<funkcja>.<n>, w kolejności kodu)
 # gutterEvent
 kod.gutterEvent.0 = Rynna zakonu (zapchana) {n}
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+rainShut = Zasuwa deszczowa: zardzewiała na amen.
+gutterLook = Rynna zakonu, wykuta w skale - zapchana gruzem i starym gniazdem.
+wellLow = Studnia prawie sucha - sołtys daje dziś jedno nabranie

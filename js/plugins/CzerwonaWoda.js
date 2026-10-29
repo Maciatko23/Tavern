@@ -51,6 +51,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("czerwona_woda");   // (the words of this file: js/teksty/czerwona_woda.txt, kod.*)
 
     const T = window.Tawerna;
     if (!T) throw new Error("CzerwonaWoda.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
@@ -328,15 +329,18 @@
     };
 
     // ------------------------------------------------------------------
-    // The state "Zatrucie" (Survival's premia: the work costs more; the strength capped like a wound; the breath follows the strength)
+    // The state "Zatrucie" (Survival's premia: the work costs more; the strength capped like a wound; the breath follows the strength).
+    // Its name and description: js/teksty/czerwona_woda.txt, zatrucie.* ({koszt}, {limit} from the constants) - given to Survival once
+    // the words are read (before the title), and again after F9 "Wczytaj teksty od nowa"
     // ------------------------------------------------------------------
     function defineState() {
-        const sv = SV();
-        if (sv && sv.defineBuff) sv.defineBuff("zatrucie", { name: "Zatrucie", icon: POISON_ICON, bad: true, cost: POISON_COST,
-            desc: "prace kosztują " + Math.round((POISON_COST - 1) * 100) + "% więcej sił, wytrzymałość najwyżej " + Math.round(POISON_CAP * 100) + "%" });
+        const sv = SV(), w = TK.zatrucie || {};
+        if (sv && sv.defineBuff) sv.defineBuff("zatrucie", { name: w.name, icon: POISON_ICON, bad: true, cost: POISON_COST,
+            desc: Watki.wstaw(w.desc || "", { koszt: Math.round((POISON_COST - 1) * 100), limit: Math.round(POISON_CAP * 100) }) });
     }
-    defineState();
-    const poisoned = () => !!(window.$gameSystem && typeof $gameSystem.hasBuff === "function" && $gameSystem._buffs && $gameSystem.hasBuff("zatrucie"));
+    Watki.poTekstach(defineState);
+    T.on("tekstyWczytane", defineState, { owner: PLUGIN });
+    const poisoned = () => !!(window.$gameSystem && typeof $gameSystem.hasBuff === "function" && T.state("survival").buffs && $gameSystem.hasBuff("zatrucie"));
     const _Game_System_stamina = Game_System.prototype.stamina;
     Game_System.prototype.stamina = function() {
         const s = _Game_System_stamina.call(this);
@@ -350,8 +354,8 @@
     function seaPopup(force) {
         if (Graphics.frameCount - toldAt < (force ? 120 : 900)) return;   // (without a rod every time - but not twice in two seconds)
         toldAt = Graphics.frameCount;
-        if (isRed()) pop("Woda jest czerwona i cuchnie.", THIRST_ICON);
-        else pop("Słona - nie do picia.", THIRST_ICON);
+        if (isRed()) pop(TK.kod.seaPopup[0], THIRST_ICON);
+        else pop(TK.kod.seaPopup[1], THIRST_ICON);
     }
     const ownsAny = ids => ids.some(id => window.$dataItems && $dataItems[id] && $gameParty.numItems($dataItems[id]) > 0);
     function seaMenu(fishEntry) {
@@ -359,14 +363,14 @@
         seaPopup(!fishEntry);
         const out = [];
         if (fishEntry) out.push(fishEntry);
-        out.push({ name: "Napij się mimo to", icon: THIRST_ICON, enabled: true,
-            help: red ? "Czerwona woda cuchnie zakwitem. Rybacy mówią, że od niej się rzyga do rana." : "Morska woda. Słona - pragnienie po niej tylko gorsze.",
+        out.push({ name: TK.kod.seaMenu[0], icon: THIRST_ICON, enabled: true,
+            help: red ? TK.kod.seaMenu[1] : TK.kod.seaMenu[2],
             run: drinkAnyway });
-        out.push({ name: "Nabierz wody", icon: ownsAny([BUCKET]) ? (($dataItems[BUCKET] || {}).iconIndex || 0) : THIRST_ICON, enabled: true,
-            help: "Do bukłaka, wiadra albo garnka.", run: fillRefused });
-        if (ownsAny([BUCKET, CAULDRON])) out.push({ name: "Przegotuj", icon: ($dataItems[ownsAny([CAULDRON]) ? CAULDRON : BUCKET] || {}).iconIndex || 0, enabled: true,
-            help: "Nabrać do wiadra i zagotować na ogniu? Rybacy się z tego śmieją.", run: boilRefused });
-        return { title: red ? "Czerwona woda" : "Morze", entries: out };
+        out.push({ name: TK.kod.seaMenu[3], icon: ownsAny([BUCKET]) ? (($dataItems[BUCKET] || {}).iconIndex || 0) : THIRST_ICON, enabled: true,
+            help: TK.kod.seaMenu[4], run: fillRefused });
+        if (ownsAny([BUCKET, CAULDRON])) out.push({ name: TK.kod.seaMenu[7], icon: ($dataItems[ownsAny([CAULDRON]) ? CAULDRON : BUCKET] || {}).iconIndex || 0, enabled: true,
+            help: TK.kod.seaMenu[5], run: boilRefused });
+        return { title: red ? TK.kod.seaMenu[6] : TK.kod.seaMenu[8], entries: out };
     }
     function drinkAnyway() {
         const red = isRed(), n = N(), on = !!(n && n.enabled && n.enabled());
@@ -378,11 +382,11 @@
                 if (typeof $gameSystem.changeStamina === "function") $gameSystem.changeStamina(-10);
                 if (typeof $gameSystem.addBuff === "function") $gameSystem.addBuff("zatrucie", POISON_HOURS);
                 T.audio && T.audio.se ? T.audio.se("Poison", { volume: 70 }) : AudioManager.playSe({ name: "Poison", volume: 70, pitch: 100, pan: 0 });
-                pop("Wymiotujesz. Zatrucie!", POISON_ICON);
+                pop(TK.kod.act[0], POISON_ICON);
                 S0().poisoned = (S0().poisoned || 0) + 1;
             } else {
                 if (on) { const s = n.state(); s.water = Math.max(0, s.water - 10); }
-                pop("Słona! Pragnienie jeszcze gorsze.", THIRST_ICON);
+                pop(TK.kod.act[1], THIRST_ICON);
                 S0().salty = (S0().salty || 0) + 1;
             }
         };
@@ -390,11 +394,11 @@
         return true;
     }
     function fillRefused() {
-        pop(isRed() ? "Czerwonej wody nie nabierzesz. Zepsujesz naczynie." : "Słonej wody nie ma po co nosić.", ($dataItems[BUCKET] || {}).iconIndex || THIRST_ICON);
+        pop(isRed() ? TK.kod.fillRefused[0] : TK.kod.fillRefused[1], ($dataItems[BUCKET] || {}).iconIndex || THIRST_ICON);
         return false;
     }
     function boilRefused() {
-        pop(isRed() ? "Dalej czerwona. Nawet para śmierdzi." : "Sól zostaje. Przegotowana dalej słona.", ($dataItems[CAULDRON] || {}).iconIndex || THIRST_ICON);
+        pop(isRed() ? TK.kod.boilRefused[0] : TK.kod.boilRefused[1], ($dataItems[CAULDRON] || {}).iconIndex || THIRST_ICON);
         return false;
     }
     const store = T.state.define("czerwonaWoda", () => ({ poisoned: 0, salty: 0, dead: 0 }), { version: 1, owner: PLUGIN });
@@ -408,7 +412,7 @@
     }
     function deadCatch() {
         S0().dead = (S0().dead || 0) + 1;
-        pop("Śnięta ryba. Wyrzucasz ją z powrotem.", 0, "#d8c0a8");
+        pop(TK.kod.deadCatch[0], 0, "#d8c0a8");
     }
 
     // a dead fish looked at (the action button facing it)
@@ -416,7 +420,7 @@
     Game_Player.prototype.triggerButtonAction = function() {
         if (Input.isTriggered("ok") && has() && seaHere() && !$gameMap.isEventRunning()) {
             const d = this.direction(), x = $gameMap.roundXWithDirection(this.x, d), y = $gameMap.roundYWithDirection(this.y, d);
-            if (fishOn(x, y) && $gameMap.eventsXy(x, y).length === 0) { pop("Śnięta ryba. Cuchnie zakwitem.", 0, "#d8c0a8"); return true; }
+            if (fishOn(x, y) && $gameMap.eventsXy(x, y).length === 0) { pop(TK.kod.triggerButtonAction[0], 0, "#d8c0a8"); return true; }
         }
         return _Game_Player_triggerButtonAction.call(this);
     };

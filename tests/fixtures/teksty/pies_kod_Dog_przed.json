@@ -1,0 +1,86 @@
+{
+ "kod": {
+  "think": {
+   "0": "Pies zmęczony - odpoczywa w budzie"
+  },
+  "hunt": {
+   "0": "{1} uciekł{2} psu",
+   "1": "Pies złapał ptaka i zjadł go",
+   "2": "Pies złapał ptaka",
+   "3": "Jeleń kopnął psa",
+   "4": "Jeleń wyrwał się psu i uciekł (ranny)",
+   "5": "Pies najadł się jeleniem - tusza leży",
+   "6": "Pies upolował i zjadł: {name}",
+   "7": "Pies upolował: {name}"
+  },
+  "haul": {
+   "0": "Pies przyniósł ci zdobycz"
+  },
+  "unload": {
+   "0": "Pies zniósł na składowisko: {1}"
+  },
+  "hurtDog": {
+   "0": "Pies jest ranny - wlecze się do budy"
+  },
+  "tickNeeds": {
+   "0": "Pies wyzdrowiał"
+  },
+  "feedWild": {
+   "0": "Nie masz mięsa",
+   "1": "Pies już zjadł - daj mu chwilę",
+   "2": "Pies zjadł {1} (zaufanie {trust}/{trustNeed})",
+   "3": "Pies ci zaufał! Zamieszka w budzie.",
+   "4": "Pies ci zaufał i chodzi za tobą. Zbuduj mu budę."
+  },
+  "setMode": {
+   "0": "Pies potrzebuje budy",
+   "1": "Pies pobiegł do budy",
+   "2": "Pies idzie za tobą",
+   "3": "Pies zostaje tutaj",
+   "4": "Pies rusza na polowanie",
+   "5": "Pies pracuje: zbiera i poluje"
+  },
+  "bowlText": {
+   "0": "Miska: jedzenie {food}, woda {2}/{3}"
+  },
+  "pourWater": {
+   "0": "Miska jest pełna",
+   "1": "Nie masz wody: nabierz do wiadra albo bukłaka",
+   "2": "Woda w misce: {bowlWater}/{max}"
+  },
+  "glowna": {
+   "0": "Nalej wody do miski",
+   "1": "Miska jest pełna.",
+   "2": "Nalewasz porcję wody z wiadra (albo z bukłaka). Pies napije się z miski, kiedy nie znajdzie wody - ze studni sam nie sięgnie.",
+   "3": "Potrzebujesz wody: nabierz do wiadra albo do bukłaka (przy studni, stawie, garnku z deszczówką)."
+  },
+  "statusNote": {
+   "0": "Nieufny: zaufanie {trust}/{trustNeed}. Rzuć mu mięso (najwyżej raz na godzinę).",
+   "1": " · RANNY ({1} godz.)",
+   "2": "Życie {1}/{2} · Siły {3}/{4} · Jedzenie {5} · Woda {6}{hurt}{8}"
+  },
+  "openDogMenu": {
+   "0": "Rzuć mu mięso",
+   "1": "Rzucasz mu kawałek mięsa (z kilku kroków, bo nie da się podejść). Po trzech posiłkach, najwyżej jeden na godzinę, pies zostanie z tobą.",
+   "2": "Potrzebujesz mięsa: surowego, pieczonego albo wędzonego (albo ryby).",
+   "3": "Pogłaszcz",
+   "4": "Pies merda ogonem.",
+   "5": "Chodź za mną",
+   "6": "Pies chodzi za tobą, także na inne mapy.",
+   "7": "Pracuj sam",
+   "8": "Pies zbiera gałęzie, kamienie i włókno, poluje na zające, jelenie i ptaki i znosi wszystko na składowisko. Nocą śpi w budzie.",
+   "9": "Najpierw zbuduj psu budę.",
+   "10": "Pies szuka zwierzyny na całej mapie - zające, jelenie i ptaki - i przynosi ją w pysku na składowisko (bez składowiska: pod budę albo do ciebie). Gdy nic nie widać, węszy po okolicy.",
+   "11": "Zostań",
+   "12": "Pies kładzie się tutaj i czeka.",
+   "13": "Dziki pies"
+  },
+  "run": {
+   "0": "Pies merda ogonem ♥"
+  },
+  "update": {
+   "0": "Składowisko"
+  }
+ },
+ "_opis": "Napisy kodu Dog.js sprzed przeniesienia do js/teksty/pies.txt (kod.*)"
+}

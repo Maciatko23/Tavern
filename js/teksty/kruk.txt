@@ -195,7 +195,6 @@ Kruk podchodzi bliżej niż wczoraj. Bierze mięso prawie z ręki. (karmienie {n
 (Na nóżce ma starą mosiężną obrączkę z wybitym krukiem. W obrączce tkwi ciasno zwinięty zwitek.)
 (Kruk wyciąga nóżkę, jakby czekał. Zdejmujesz obrączkę razem ze zwitkiem.)
 
-tamedPop = {imie} siada ci na ramieniu
 named = Kruk ma imię: {imie}
 ringSub = Zwitek w obrączce to karta pisana szyfrem. Brat Kleofas umie ją przeczytać.
 menuTitle = Kruk: {imie}
@@ -213,7 +212,6 @@ letterToday = Dziś {imie} już niósł list - jutro
 letterQuest = {imie} doręczył: {co}
 letterQuestFail = {imie} wrócił z listem - nie zastał adresata
 scoutGone = {imie} leci na zwiad: {gdzie}
-scoutBack = {imie} wraca ze zwiadu: {gdzie}
 scoutToday = Dziś {imie} już był na zwiadzie - jutro
 scoutTitle = Zwiad kruka: {gdzie}
 scoutEmpty = spokojnie - nic nie wypatrzył
@@ -221,7 +219,6 @@ scoutWarn = Uwaga! {gdzie}: {co}.
 scoutBubble = Kra! {gdzie}: {co}.
 scoutNoCat = (Jagód i grzybów nie policzył - nie byłeś tam w tej porze roku.)
 busy = {imie} jeszcze nie wrócił
-hungry = {imie} jest głodny
 leftHungry = {imie} odleciał na Urwisko. Głodny.
 backHome = {imie} wraca z tobą
 chase = {imie} przegania ptaki z pola!
@@ -244,7 +241,6 @@ Kraa!
 
 k51Kleofas = Ten? To z Urwiska. Kruczarnia zakonu. Ostatni kruczarz umarł, zanim się urodziłem.
 k51KleofasThink = Kruk przysiadł na kopcu z krukiem. Znak zakonu - i żywy ptak. Jakby wiedział.
-k51Ravenry = (Kruk siada na starej żerdzi w ruinie baszty, między innymi krukami. Na nóżce błyska mu mosiężna obrączka.)
 [campNote]
 Obcy na Urwisku
 Nocą na Urwisku obcy ludzie kopią w gruzie dawnych murów. Szukają kamieni z krukiem. Mówią jak ludzie z lądu.
@@ -257,8 +253,9 @@ Gdzieś tu musi być. Mapa nie kłamie.
 letterAsk = Cudzy list: {co}
 letterRead = Przeczytaj
 letterKeep = Schowaj (oddasz właścicielowi albo sprzedasz)
-letterBackOpt = Oddaj: {co}
 letterSellOpt = Sprzedaj: {co} ({g} G)
+# rozmowa z właścicielem cudzego listu: bohater oddaje list (dalej obce.N.back / obce.N.backRead - mówi właściciel)
+listOddaj = To chyba twoje. Kruk przyniósł.
 [letterSellAsk]
 > Kruk przyniósł mi coś... nie mojego.
 (Baltazar obraca kartkę w palcach.) Ciekawe. Bardzo ciekawe. Ile chcesz?
@@ -374,7 +371,6 @@ kod.letterChoice.1 = " albo sprzedasz Baltazarowi w kantorze."
 kod.letterChoice.2 = Chowasz list. Oddasz go {ownerName}{2}
 kod.letterChoice.3 = Właściciel: {ownerName}
 # talkHook
-kod.talkHook.0 = To chyba twoje. Kruk przyniósł.
 kod.talkHook.1 = Nic. Zapomnij.
 # finishAway
 kod.finishAway.0 = " roślinę"
@@ -452,3 +448,11 @@ kod.actCall.0 = oddany list
 kod.vars.0 = Kruk czeka przy górnej krawędzi przystani (ścieżka na klif).
 kod.vars.1 = Kruk przysiadł przy pustelni na klifie.
 kod.vars.2 = Kruk poleciał na wschód, na Urwisko Kruków.
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+tamedPop = {imie} siada ci na ramieniu
+scoutBack = {imie} wraca ze zwiadu: {gdzie}
+hungry = {imie} jest głodny
+k51Ravenry = (Kruk siada na starej żerdzi w ruinie baszty, między innymi krukami. Na nóżce błyska mu mosiężna obrączka.)
+letterBackOpt = Oddaj: {co}
+kod.talkHook.0 = To chyba twoje. Kruk przyniósł.

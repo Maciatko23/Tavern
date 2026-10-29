@@ -18,16 +18,17 @@
 //   bottom right  what he gains: text and icons, the older ones fading; the weapon in the combat mode
 // No experience bar (the user: "pasek doświadczenia z dołu wywalić"): the level is in the P menu and Postać, a new level still has
 // its "Poziom N!" banner at the top.
-// The old look (SurvivalHUD, Needs, Survival, Journal's goal window, Minimap, Combat_UI's plates, SpeechBubbles' bubbles over the
-// hero) stays as it is: in the clean look its parts keep working (the same data, the same timing, the tests' hooks) and are only
-// not drawn (renderable = false) - this plugin draws the same things its own way. Options: "Wygląd: Grafit / Klasyczny"
-// (ConfigManager.uiClean, saved in config; Grafit by default).
+// The old HUD (SurvivalHUD, Needs, Survival, Journal's goal window, Minimap, Combat_UI's plates, SpeechBubbles' bubbles over the
+// hero) keeps working (the same data, the same timing, the tests' hooks) and is only not drawn (renderable = false) - this plugin
+// draws the same things its own way. One look (2026-10-28, docs/UI_JEDEN_WYGLAD.md): the colours are UITheme.js's palette
+// (UIStyle.C - CleanHUD.C is that object); the option "Wygląd" (Grafit / Klasyczny) is gone. The old parts are drawn again only
+// for a test (ConfigManager.uiClean = false - not an option, not saved) or on a map with the note <CleanHud:off>.
 // Load order: after every plugin of the HUD (SurvivalHUD, Survival, Needs, Journal, Minimap, Combat_UI, SpeechBubbles, Dog...).
 // CleanHUD_Compass.js and MenuRing.js come right after it.
 
 /*:
  * @target MZ
- * @plugindesc Grafit i miedź: HUD na mapie (zegar, obok poziome paski potrzeb, pod nim cel, okrągły kompas). W Opcjach: Wygląd - Grafit / Klasyczny. v1.3.0
+ * @plugindesc HUD na mapie w jednym wyglądzie gry (paleta UITheme.js): zegar, poziome paski potrzeb, cel, okrągły kompas, nazwa miejsca, zdobycze. v2.0.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -45,11 +46,12 @@
  *
  * @help
  * ============================================================================
- * CleanHUD.js - Grafit i miedź (Czysty widok)
+ * CleanHUD.js - HUD na mapie (czysty widok)
  * ============================================================================
- * Interfejs na mapie bez ciężkich paneli: tekst z ciemnym obrysem, grafitowe
+ * Interfejs na mapie bez ciężkich paneli: tekst z ciemnym obrysem, ciemne
  * pigułki i lekkie przyciemnienie przy górnej i dolnej krawędzi ekranu
- * (mocniejsze na jasnym tle: śnieg, piasek, błysk burzy).
+ * (mocniejsze na jasnym tle: śnieg, piasek, błysk burzy). Kolory z jednej
+ * palety gry (UITheme.js, UIStyle.C): czerń, jasnożółty akcent, jasny tekst.
  *  - Lewy górny róg: śledzony cel lub zadanie (ikona, tytuł, bieżący krok
  *    i potrzebne rzeczy z ilościami „mam/potrzeba”), pod nim okno z poziomymi
  *    paskami potrzeb (życie, kondycja, sytość, nawodnienie; w trybie walki
@@ -72,11 +74,10 @@
  *  - Myśli bohatera i komunikaty o brakach - tekst z obrysem nad nim.
  *  - Prawy dolny róg: zdobycze (starsze bledną) i broń w trybie walki.
  *  - Bez paska doświadczenia: poziom widać w menu P i w Postaci.
- * Gdy bohater wejdzie pod któryś element, ten robi się prawie przezroczysty
- * (jak w klasycznym wyglądzie).
- * Opcje: „Wygląd” - Grafit / Klasyczny (stary wygląd z panelami).
- * Notatka mapy <CleanHud:off> - na tej mapie zawsze klasyczny wygląd.
- * Skrypt: CleanHUD.isClean(), CleanHUD.setClean(true / false).
+ * Gdy bohater wejdzie pod któryś element, ten robi się prawie przezroczysty.
+ * Notatka mapy <CleanHud:off> - na tej mapie stare części HUD-u (z paskami
+ * pod zegarem). Skrypt (testy): CleanHUD.isClean(), CleanHUD.setClean(false)
+ * - stare części na chwilę, nie zapisuje się w ustawieniach.
  * ============================================================================
  */
 
@@ -89,65 +90,32 @@
     if (T.api(PLUGIN)) return;   // (put into the page twice: kept as it was)
 
     // ------------------------------------------------------------------
-    // The look: Opcje -> "Wygląd" (Czysty widok / Klasyczny), kept in the config file; the clean one unless it says otherwise
+    // One look (2026-10-28): no option any more - an old config's "uiClean" (Grafit / Klasyczny) is not read, every game starts with
+    // this HUD. ConfigManager.uiClean = false is left for the tests only (the old parts drawn again; never written to the config).
     // ------------------------------------------------------------------
-    if (ConfigManager.uiClean === undefined) ConfigManager.uiClean = true;
-    const _makeData = ConfigManager.makeData;
-    ConfigManager.makeData = function() {
-        const config = _makeData.call(this);
-        config.uiClean = this.uiClean !== false;
-        return config;
-    };
-    const _applyData = ConfigManager.applyData;
-    ConfigManager.applyData = function(config) {
-        _applyData.call(this, config);
-        this.uiClean = !config || config.uiClean === undefined ? true : !!config.uiClean;
-    };
-    const LOOK_SYMBOL = "uiClean";
-    const _addGeneralOptions = Window_Options.prototype.addGeneralOptions;
-    Window_Options.prototype.addGeneralOptions = function() {
-        this.addCommand("Wygląd", LOOK_SYMBOL);
-        _addGeneralOptions.call(this);
-    };
-    const _statusText = Window_Options.prototype.statusText;
-    Window_Options.prototype.statusText = function(index) {
-        if (this.commandSymbol(index) === LOOK_SYMBOL) return this.getConfigValue(LOOK_SYMBOL) !== false ? "Grafit" : "Klasyczny";
-        return _statusText.call(this, index);
-    };
-    const _statusWidth = Window_Options.prototype.statusWidth;
-    Window_Options.prototype.statusWidth = function() {
-        return Math.max(_statusWidth.call(this), 150);   // ("Klasyczny" is the longest value)
-    };
-    const _getConfigValue = Window_Options.prototype.getConfigValue;
-    Window_Options.prototype.getConfigValue = function(symbol) {
-        if (symbol === LOOK_SYMBOL) return ConfigManager.uiClean !== false;
-        return _getConfigValue.call(this, symbol);
-    };
-
+    ConfigManager.uiClean = true;
     const lookClean = () => ConfigManager.uiClean !== false;
-    // the clean look on the map now: the option, and the map does not ask for the old one (<CleanHud:off>)
+    // this HUD on the map now: not switched off for a test, and the map does not ask for the old parts (<CleanHud:off>)
     function isClean() {
         if (!lookClean()) return false;
         return !(window.$dataMap && T.mapFlag("CleanHud", true, "off") === false);
     }
 
     // ------------------------------------------------------------------
-    // The palette and the drawing helpers. "Grafit i miedź" (the user's choice 2026-10-08, round 2 of the mock-ups:
-    // docs/ui_pomysly2/POMYSLY.md idea 3, tools/ui_pomysly2/p3_grafit.py): graphite see-through panels rounded 8-12 px, one thin line,
-    // one copper accent, spaced small capitals as labels; text with a dark outline where it stands on the map alone.
+    // The palette and the drawing helpers: the game's one palette (UITheme.js, UIStyle.C - black, the bright yellow accent, light
+    // text, grey lines, the needs' colours); see-through panels rounded 8-12 px with one thin line (C.glass), spaced small capitals as
+    // labels, text with a dark outline where it stands on the map alone (the HUD's shapes since 2026-10-08).
     // ------------------------------------------------------------------
-    const C = {
-        text: "#ece6da", muted: "#9a958c", dim: "#5e5a54", accent: "#d08a5a", copper2: "#8a5a3a", outline: "rgba(0,0,0,0.82)",
-        panel: "rgba(22,23,26,0.84)", panel2: "rgba(30,32,36,0.92)", line: "#40424a", sun: "#f2c25a",
-        health: "#d8605a", stamina: "#94bf6e", food: "#dda650", water: "#62a6dc", breath: "#8fe3ff"
-    };
+    const US = window.UIStyle;
+    if (!US || !US.C) throw new Error("CleanHUD.js: brak UITheme.js (paleta UIStyle.C) - musi być wyżej na liście wtyczek (UITheme is missing or below)");
+    const C = US.C;
     const NEED_KEYS = ["health", "stamina", "food", "water", "breath"];
     const NEED_ICONS = { health: [84, "dark"], stamina: [82, "bare"], food: [390, "plain"], water: [391, "plain"] };
     const BAG_ICON = 370;
     const W = () => Graphics.width, H = () => Graphics.height;
     const clamp01 = v => (v < 0 ? 0 : v > 1 ? 1 : v);
 
-    // the faces of the graphite look (fonts/: Alegreya Sans Regular and Bold, Alegreya Sans SC for the spaced small capitals - OFL, the
+    // the HUD's faces (fonts/: Alegreya Sans Regular and Bold, Alegreya Sans SC for the spaced small capitals - OFL, the
     // Alegreya Sans project like the Medium the game already uses): loaded once without FontManager (a missing file must not stop the
     // game); a part drawn before they are ready draws again (its key has facesReady()). The map's name ("Kronika", below): Alegreya
     // SC Bold for the name, EB Garamond for its sentence (OFL, fonts/ - the game's FontManager loads neither under a name of its own:
@@ -220,18 +188,9 @@
         const s = String(text).toLowerCase(), k = kind || "sc";
         return Array.from(s).reduce((a, ch) => a + (ch === " " ? measure("n", size, k) : measure(ch, size, k)), 0) + (sp === undefined ? 2 : sp) * Math.max(0, s.length - 1);
     }
-    // a rounded rectangle's path
-    function roundPath(ctx, x, y, w, h, r) {
-        r = Math.max(0, Math.min(r, w / 2, h / 2));
-        ctx.beginPath();
-        ctx.moveTo(x + r, y);
-        ctx.arcTo(x + w, y, x + w, y + h, r);
-        ctx.arcTo(x + w, y + h, x, y + h, r);
-        ctx.arcTo(x, y + h, x, y, r);
-        ctx.arcTo(x, y, x + w, y, r);
-        ctx.closePath();
-    }
-    // a graphite panel: a soft shadow, the see-through fill, one thin line (the mock-ups' rpanel)
+    // a rounded rectangle's path (UITheme.js)
+    const roundPath = US.roundPath;
+    // a HUD panel: a soft shadow, the see-through fill, one thin line (the mock-ups' rpanel)
     function rpanel(ctx, x, y, w, h, r, o) {
         o = o || {};
         ctx.save();
@@ -241,7 +200,7 @@
             ctx.fill();
         }
         if (o.fill !== null) {
-            ctx.fillStyle = o.fill || C.panel;
+            ctx.fillStyle = o.fill || C.glass;
             roundPath(ctx, x, y, w, h, r);
             ctx.fill();
         }
@@ -431,7 +390,7 @@
     };
 
     // ---- the shade at the top and bottom edges: stronger on bright ground (snow, sand, stone), in a flash of the storm, in snowfall
-    const SHADE = { top: 96, bottom: 84, base: 0.2, bright: 0.3, flash: 0.32, snow: 0.08, max: 0.75 };   // (lighter: the graphite panels hold their own text)
+    const SHADE = { top: 96, bottom: 84, base: 0.2, bright: 0.3, flash: 0.32, snow: 0.08, max: 0.75 };   // (lighter: the dark panels hold their own text)
     function Sprite_CleanShade() {
         this.initialize(...arguments);
     }
@@ -619,7 +578,7 @@
         if (!this.visible) return under;
         return this._text && this._text.day ? Math.max(under, L.dayY + 22) : this._showClock ? Math.max(under, L.cy + CLK.r + 4) : under;
     };
-    // no icon of its own: a small copper diamond
+    // no icon of its own: a small yellow diamond
     function drawGoalMark(b, cx, cy) {
         const ctx = b.context;
         ctx.save();
@@ -628,28 +587,28 @@
         ctx.restore();
         b._baseTexture.update();
     }
-    // the clock: a graphite face with a copper ring inside, 12 dots (the four quarters bigger, light), the sun inside on a 24 h day
-    // (noon at the top; the moon there at night), the hour hand in the text's colour, the copper minute hand, a copper hub
+    // the clock: a dark face with a dark yellow ring inside, 12 dots (the four quarters bigger, light), the sun inside on a 24 h day
+    // (noon at the top; the moon there at night), the hour hand in the text's colour, the yellow minute hand, a yellow hub
     function drawClock(ctx, cx, cy, r, hour) {
         const dot = (x, y, rr, col) => { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, rr, 0, Math.PI * 2); ctx.fill(); };
         const at = (rr, deg) => [cx + Math.sin(deg * Math.PI / 180) * rr, cy - Math.cos(deg * Math.PI / 180) * rr];
         ctx.save();
         dot(cx, cy, r + 1, "rgba(8,9,11,0.67)");
-        dot(cx, cy, r, "rgba(30,32,36,0.94)");
+        dot(cx, cy, r, US.rgba(C.cell, 0.94));
         ctx.lineWidth = 1;
-        ctx.strokeStyle = "rgb(64,66,72)";
+        ctx.strokeStyle = C.line;
         ctx.beginPath(); ctx.arc(cx, cy, r - 0.5, 0, Math.PI * 2); ctx.stroke();
-        ctx.strokeStyle = C.copper2;
+        ctx.strokeStyle = C.accentDark;
         ctx.beginPath(); ctx.arc(cx, cy, r - 4, 0, Math.PI * 2); ctx.stroke();
         for (let k = 0; k < 12; k++) {
             const [x, y] = at(r - 8, k * 30);
             if (k % 3 === 0) dot(x, y, 1.4, C.text);
-            else dot(x, y, 0.8, "#8a857c");
+            else dot(x, y, 0.8, C.muted);
         }
         const [sx, sy] = at(r * 0.5, ((((hour - 12) % 24) + 24) % 24) * 15), sr = Math.max(2.5, r * 0.11);
         if (T.time.isNight(hour)) {   // the moon: pale, a bite of the face taken out of it
             dot(sx, sy, sr, "#dfe6ff");
-            dot(sx + sr * 0.45, sy - sr * 0.3, sr * 0.8, "rgb(30,32,36)");
+            dot(sx + sr * 0.45, sy - sr * 0.3, sr * 0.8, C.cell);
         } else dot(sx, sy, sr, C.sun);
         ctx.lineCap = "round";
         const hand = (deg, len, w, col) => {
@@ -664,7 +623,7 @@
         ctx.restore();
     }
 
-    // ---- top right, under the compass and its label: the load - "41 / 120" and the bag (copper when heavy, red when full)
+    // ---- top right, under the compass and its label: the load - "41 / 120" and the bag (yellow when heavy, red when full)
     // SHOW_LOAD: hidden for now (the user, 2026-10-23: "udźwig można usunąć z ekranu na razie") - true brings it back; the load itself
     // works as before (Survival.js) and the P menu's Plecak still shows it
     const SHOW_LOAD = false;
@@ -702,7 +661,7 @@
 
     // ---- top left, in the corner (the user, 2026-10-23: first "czy Cel można dać na prawo pod kompasem?", then "okno z celem w lewo
     // u góry w kącie, ładnie"): the goal followed, "widzieć nie tylko nazwę zadania, ale też potrzebne i aktualne składniki". On a
-    // graphite plate: its label (CEL, WĄTEK, MIASTECZKO, ZLECENIE...), the icon and the title, the step / the line under it, then what it
+    // dark plate: its label (CEL, WĄTEK, MIASTECZKO, ZLECENIE...), the icon and the title, the step / the line under it, then what it
     // needs with the counts as they are now ("Gałąź 2/5": a done row green with a tick, a missing one yellow), "+N" past the rows, where
     // it is made, a bar for a goal that counts (the debt). All of it from Journal.tracked() (its sources' needs / sub, Journal.goalNeeds).
     const GBOX = { pad: 10, minW: 236, maxW: 340, rows: 5, row: 24, titleSize: 17, subSize: 14, rowSize: 15, ok: "#9fdc8a", lack: "#f2c25a", list: 8, listRow: 22 };
@@ -837,7 +796,7 @@
         ctx.restore();
     }
 
-    // ---- the needs' bars under the goal (top left, see the layout above; no goal: in the corner): on a light graphite plate as wide as
+    // ---- the needs' bars under the goal (top left, see the layout above; no goal: in the corner): on a light plate as wide as
     // the goal's, one row each - the small icon, a thin dark track with the need's colour as far as it is full, the number (health in %,
     // the others as the game counts them); low: red, pulsing, the number red. The breath (no icon of its own) a small pixel sign of
     // gusts, only in the combat mode. Under the plate the pills: "Tryb walki", the premia (hidden while a message is up).
@@ -992,10 +951,10 @@
         return { x: p.x, y: p.y };
     }
 
-    // ---- bottom right: what was gained (SurvivalHUD's list, its plates read as they are) - graphite pills with the icon and the text,
+    // ---- bottom right: what was gained (SurvivalHUD's list, its plates read as they are) - dark pills with the icon and the text,
     // the newest at the bottom, the older ones fading
     const GAINS = { right: 10, row: 38, size: 18, bottom: 40, h: 32, ages: [1, 0.85, 0.7, 0.55, 0.45, 0.38, 0.32] };
-    // a pill: icon (or none) and text on a graphite panel rounded to its half height
+    // a pill: icon (or none) and text on a dark panel rounded to its half height
     function pillBitmap(text, icon, colour, extra) {
         const tw = measure(text, GAINS.size), xw = extra ? measure(extra, 15) + 10 : 0, w = (icon > 0 ? 44 : 14) + tw + 12 + xw, b = new Bitmap(w + 2, GAINS.h + 4);
         rpanel(b.context, 0, 0, w, GAINS.h, GAINS.h / 2);
@@ -2031,7 +1990,7 @@
         // (the map's name: what it would show here, the visits kept in the save, whether it says the floor - Underground.js asks)
         placeInfo: () => (window.$gameMap && $gameMap.mapId() ? placeInfo() : null), visits: () => visits(), saysFloor, KR,
         Sprite_CleanPart, NEED_KEYS, NEED_ICONS,
-        // (the graphite look's pieces for the other parts and windows: MenuRing, CleanHUD_Compass)
+        // (the HUD's pieces for the other parts and windows: MenuRing, CleanHUD_Compass)
         face, facesReady, spaced, spacedWidth, roundPath, rpanel, mix, drawClock
     });
 })();

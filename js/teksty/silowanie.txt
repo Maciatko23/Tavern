@@ -1,0 +1,124 @@
+# Teksty siłowania na rękę z Grumem (TavernLife_ArmWrestle.js)
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz silowanie
+
+# ======================================================================== grumLines (grum)
+[grum.hello]
+Siłujesz się? Ha! Ostatni, co próbował, do dziś je lewą ręką.
+Znowu ty? Dobra, dziś bez taryfy ulgowej.
+Wróciłeś? Uparty jesteś. Lubię upartych - łatwiej ich łamać.
+Ha! Słyszałem, że mnie pokonałeś. Nie słyszałem, że dwa razy.
+Ty i ja, łokieć w łokieć. Tym razem rozgrzałem się przed śniadaniem.
+Dobra. Od dziś siłuję się na serio.
+Chłopcze... ty mnie wykończysz. Siadaj.
+
+[grum.round]
+Gotów? Bo ja się dopiero rozgrzewam.
+Trzymaj mocno, chłopcze.
+Łokieć na stół. I nie płacz potem.
+
+[grum.burst]
+Hrrraaah!
+Hyyy!
+Nnngh!
+A masz!
+Hop!
+
+[grum.winning]
+To wszystko?
+Łaskoczesz mnie?
+Mój miecz waży więcej niż ty!
+Ziewam...
+
+[grum.losing]
+Co ty... jadłeś?!
+Nngh... nieźle...
+Kto cię... tego nauczył?!
+Ej... ej!
+
+[grum.roundHe]
+I po zabawie!
+Następna runda - jeśli jeszcze czujesz rękę.
+Ha! Stół się ucieszył.
+
+[grum.roundYou]
+Szczęście! Czyste szczęście!
+Dobra... teraz na serio.
+Rozgrzewka. To była rozgrzewka.
+
+[grum.won]
+Ha! Wracaj, jak podrośniesz.
+Nie martw się, mało kto ze mną wygrywa. Właściwie nikt.
+Stawka moja. Postawię ci z niej piwo... kiedyś.
+
+[grum.lost]
+Masz krzepę, przyznaję. Stawka twoja.
+Na brodę mojej matki... wygrałeś uczciwie.
+Dobra, dobra. Ale następnym razem nie jadłem obiadu.
+
+# ======================================================================== z kodu TavernLife_ArmWrestle.js (kod.<funkcja>.<n>, w kolejności kodu)
+# dialBackBitmap
+kod.dialBackBitmap.0 = słabo
+kod.dialBackBitmap.1 = za mocno
+kod.dialBackBitmap.2 = SIŁA
+# createGame
+kod.createGame.0 = Żelazna Pięść, najemnik
+# begin
+kod.begin.0 = " · GRUM PODKRĘCA: {level}"
+kod.begin.1 = SIŁOWANIE NA RĘKĘ{1}
+kod.begin.2 = Stawka: {stake} G
+kod.begin.3 = Siłowanie na rękę
+kod.begin.4 = Trzymaj wskazówkę SIŁY w zielonym polu: przytrzymaj O, żeby ją podnieść, puść, żeby opadła - albo stukaj O.
+kod.begin.5 = W zielonym polu twoja ręka zyskuje, poza nim zyskuje {rivalName}. Co chwila {rivalName} szarpie - wtedy wskazówka leci w dół, a pole skacze.
+kod.begin.6 = Trzy rundy: kto pierwszy wygra dwie, bierze stawkę. Siła poszerza zielone pole, Kondycja łagodzi szarpnięcia.
+kod.begin.7 = Wskazówka w zielonym polu: przytrzymaj albo stukaj O.
+kod.begin.8 = Dwie wygrane rundy biorą stawkę.
+kod.begin.9 = siła (trzymaj / stukaj)
+kod.begin.10 = O - łokieć na stół
+# helpLines
+kod.helpLines.0 = Trzymaj wskazówkę SIŁY w zielonym polu: przytrzymaj O, żeby ją podnieść, puść, żeby opadła - albo stukaj O.
+kod.helpLines.1 = W polu twoja ręka zyskuje, poza nim - {rivalName}. Kto pierwszy wygra dwie rundy, bierze stawkę.
+# pull
+kod.pull.0 = Jeszcze... trochę...
+kod.pull.1 = Trzymaj się, ręko...
+# finish
+kod.finish.0 = SIŁOWANIE NA RĘKĘ
+kod.finish.1 = {1} · KONIEC
+kod.finish.2 = Poddałeś się
+kod.finish.3 = Rundy: {youWon} : {heWon}{3}
+kod.finish.4 = Czas: {minutes} minut gry   ·   wytrzymałość −{stamina}
+kod.finish.5 = Siła poszerza zielone pole, Kondycja łagodzi szarpnięcia.
+kod.finish.6 = Grum następnym razem przyłoży się mocniej.
+kod.finish.7 = Grum się nie zmienia - ty możesz: Siła poszerza zielone pole.
+kod.finish.8 = O - wracam do sali
+# drawDial
+kod.drawDial.0 = przewaga: ty
+kod.drawDial.1 = przewaga: {rivalName}
+kod.drawDial.2 = Ciągnij!
+# drawHud
+kod.drawHud.0 = trzymaj lub stukaj: wskazówka SIŁY w zielonym polu
+kod.drawHud.1 = SIŁOWANIE NA RĘKĘ
+kod.drawHud.2 = z Grumem
+kod.drawHud.3 = "  ·  stawka {stake} G"
+kod.drawHud.4 = RUNDA {1} Z 3
+# armTalk
+kod.armTalk.0 = Nie ma z kim się siłować - Grum gdzieś wyszedł.
+kod.armTalk.1 = Ledwo stoisz na nogach. Najpierw odpocznij, bo mi się jeszcze rozsypiesz na stole.
+kod.armTalk.2 = Siłujesz się? Ha! Ostatni, co próbował, do dziś je lewą ręką. Ile stawiasz?
+kod.armTalk.3 = Ty znowu? Dobra, ale dziś bez taryfy ulgowej. Ile stawiasz?
+kod.armTalk.4 = Rewanż? Lubię upartych. Ile stawiasz?
+kod.armTalk.5 = Stawka {n} G
+kod.armTalk.6 = Nie teraz
+# glowna
+kod.glowna.0 = Bez monet nie ma zabawy, chudzielcu.
+# reason
+kod.reason.0 = siłowanie z Grumem
+# note
+kod.note.0 = Siłowanie z Grumem
+kod.note.1 = Grum Żelazna Pięść siłuje się na rękę o stawkę ({1} G) przy stole w sali. Trzy rundy: wskazówka siły ma zostać w zielonym polu (przytrzymaj albo stukaj O), a Grum co chwila szarpie. Siła poszerza zielone pole. Po każdej jego przegranej Grum bierze się mocniej do roboty.
+# after
+kod.after.0 = Masz. Zasłużyłeś.
+kod.after.1 = Bierz, zanim się rozmyślę.
+kod.after.2 = Jutro rewanż!
+kod.after.3 = Dzięki za datek!
+kod.after.4 = Następnym razem może ci się uda. Może.

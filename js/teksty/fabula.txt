@@ -360,3 +360,7 @@ kod.drawItem.0 = Dług dziadka: {lastMenuLine}
 # queueDayBanner
 kod.queueDayBanner.0 = z działki wynieś dobytek: {1}
 kod.queueDayBanner.1 = do spłaty {1} G, {2}
+
+# ======================================================================== rozdział 1 w dzienniku (wątek „fabula”, FABUŁA; kroki: kod.storyGoals.*, kod.title.*, kod.text.*)
+rozdzial1.tytul = Rozdział 1: Dług dziadka
+rozdzial1.opis = Dziadek Stach jest winien Lordowi Zaleskiemu pieniądze, a w zastawie jest jego działka. Dług trzeba spłacić w terminie - inaczej działka przejdzie na Lorda.

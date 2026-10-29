@@ -1,0 +1,11 @@
+{
+ "kod": {
+  "onAutosaveSuccess": {
+   "0": "Gra zapisana (autozapis)"
+  },
+  "onAutosaveFailure": {
+   "0": "Autozapis nie powiódł się"
+  }
+ },
+ "_opis": "Napisy kodu Atmosphere.js sprzed przeniesienia do js/teksty/atmosfera.txt (kod.*)"
+}

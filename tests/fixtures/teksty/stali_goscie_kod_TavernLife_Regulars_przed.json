@@ -1,0 +1,82 @@
+{
+ "kod": {
+  "hourWords": {
+   "0": " w nocy",
+   "1": " rano",
+   "2": " w południe",
+   "3": " po południu",
+   "4": " wieczorem"
+  },
+  "menuOptions": {
+   "0": "Co słychać?",
+   "1": "Jakieś plotki?",
+   "2": "Opowiedz o swoich pieśniach.",
+   "3": "Skąd znasz te ballady?",
+   "4": "Zaśpiewasz dziś?",
+   "5": "Postaw mu piwo ({BEER_PRICE} G)",
+   "6": "Opowiedz o piwnicy.",
+   "7": "Opowiedz o wojnie.",
+   "8": "Skąd jesteś?",
+   "9": "Zagrajmy w coś."
+  },
+  "regularTopic": {
+   "0": "Co słychać, dziadku?",
+   "1": "Co słychać?",
+   "2": "Jakieś plotki?",
+   "3": "Opowiedz o swoich pieśniach.",
+   "4": "Mam sześć starych ballad. Śpiewam je wieczorami, od szóstej, po kolei - kto przyjdzie sześć razy, usłyszy wszystkie. I dostanie natchnienie w prezencie.",
+   "5": "Słyszałeś już {length} z {length2}. Zostały jeszcze: {3}. Przyjdź wieczorem pod scenę.",
+   "6": "Siódma ballada rośnie, złotko. Zwrotka po zwrotce. Czuję ją w palcach jak drzazgę.",
+   "7": "Znasz wszystkie siedem. Nikt inny nie zna. Nawet ja nie znałam, zanim mi ich nie przyniosłeś.",
+   "8": "Znasz już wszystkie moje stare ballady. Czasem mam wrażenie, że jest siódma - tylko jeszcze się nie urodziła.",
+   "9": "Skąd znasz te ballady?",
+   "10": "Nie wiem. Naprawdę. Matka nie śpiewała, babki nie znałam. Któregoś dnia wzięłam lutnię i słowa były. Jakby ktoś je zostawił w moich palcach.",
+   "11": "Czasem śni mi się kamienna sala i kobiety w szarych płaszczach. Śpiewają, a ja się uczę. Rano pamiętam tylko melodię. I chłód.",
+   "12": "Zaśpiewasz dziś?",
+   "13": "Dziś już nie, złotko.",
+   "14": "Borgar! Piwo dla dziadka.",
+   "15": "Pusta sakiewka? *hep* Nic to. Myśl się liczy. Myśl się nie pije, ale się liczy.",
+   "16": "*glug, glug* Aaach... Dobry z ciebie chłopak.",
+   "17": "Masz, coś ci powiem. Ale nie mów nikomu, że ode mnie. *hep*",
+   "18": "Już mi dziś stawiałeś. Wizje mam jedną na dzień, synku. Reszta to piwo. *hep*",
+   "19": "Dziadku, opowiedz o piwnicy.",
+   "20": "Miałem siedem lat. Goniłem kota dziadka Borgara... i wpadłem. Przez dziurę w podłodze, prosto w ciemność. *hep*",
+   "21": "Leżałem tam do rana. Coś świeciło. Nie ogień. Coś, co patrzyło. I od tamtej pory... wiem rzeczy. Głupie rzeczy. Czasem nie głupie.",
+   "22": "Nie pytaj mnie, co tam jest, synku. Bo ci powiem. A wtedy będziesz wiedział. *hep* To gorsze niż kac. Dużo gorsze.",
+   "23": "Opowiedz o wojnie.",
+   "24": "Dwa królestwa za morzem biją się o coś, czego żadne nie widziało. Płacą dobrze. Umiera się tak samo.",
+   "25": "Byłem pod Wrzosową Przełęczą. Trzy dni deszczu i strzał. Wyszło nas dwunastu ze stu. Nie pytaj więcej.",
+   "26": "Najemnik nie wybiera strony. Wybiera, kto płaci w terminie. Tak mówiłem kiedyś. Dziś już nie wiem.",
+   "27": "Skąd jesteś, Grum?",
+   "28": "Z gór. Innych gór, za morzem. Ojciec kopał rudę, ja nie chciałem. Wziąłem miecz. Tyle.",
+   "29": "Matka mówiła, że w skale mieszkają duchy, które znają twoje imię. Śmiałem się. Teraz już się nie śmieję.",
+   "30": "Zagrajmy w coś.",
+   "31": "W co? Na rękę czy w kości?",
+   "32": "Siłujmy się.",
+   "33": "W kości.",
+   "34": "W kości (od piątej po południu).",
+   "35": "Innym razem."
+  },
+  "regularStep": {
+   "0": "Kości wieczorem. Od piątej. Teraz piję."
+  },
+  "visionLines": {
+   "0": "Jutro {1} burza. Taka, że psy pod ławy wejdą. Wystaw garnki, zanim przyjdzie.",
+   "1": "Jutro {1} śnieg. Ciepło się ubierz, synku.",
+   "2": "Jutro {1} będzie padać. Wystaw garnki z wieczora, nie gap się.",
+   "3": " burza.",
+   "4": " deszcz.",
+   "5": "Jutro sucho. Ale pojutrze {1}{2} Zapamiętaj.",
+   "6": "Jutro sucho. Pojutrze też. Sucho jak w moim gardle, synku. *hep*",
+   "7": "Jutro targ. Ktoś na nim straci sakiewkę, a ktoś inny głowę. Pilnuj obu.",
+   "8": "Brakuje ci {left} groszy dla Lorda. Co do grosza. Nie dziw się, ja liczę cudze pieniądze lepiej niż swoje.",
+   "9": "Kuba wychodzi z domu po pierwszej w nocy. Idź za nim na palcach - na palcach, mówię!",
+   "10": "Siedem w południe, synku. Siedem. *hep* Nie wiem, czemu to mówię.",
+   "11": "W sakiewce masz {1} groszy. Ani grosza więcej. Wiem, wiem... nie pytaj skąd."
+  },
+  "regularsInfo": {
+   "0": "Przy {1}: {2}."
+  }
+ },
+ "_opis": "Napisy kodu TavernLife_Regulars.js sprzed przeniesienia do js/teksty/stali_goscie.txt (kod.*); kod.glowna (dwie linie chrapania Ozzy'ego) przeniesione do zaczepki.spi - patrz stali_goscie_przed.json"
+}

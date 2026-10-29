@@ -1,0 +1,191 @@
+# Teksty planu karczmy (TavernLife_Plan.js): zakładki pięter, rodzaje sal, legenda, opisy sal i panel z tym, co gdzie jest
+# Nazwy sal na planie są w PLAN_DATA (pisze je tools/tavern/plan/make_plan.py razem z obrazkami planu) - zostają w kodzie
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz plan_karczmy
+
+# ======================================================================== FLOOR_TAB (pietra)
+[pietra]
+Parter
+Pokoje gości
+Apartamenty
+
+# ======================================================================== KIND_WORD (rodzaje)
+rodzaje.guest = dla gości
+rodzaje.service = zaplecze
+rodzaje.private = prywatne
+rodzaje.hall = przejście
+rodzaje.stairs = schody
+
+# ======================================================================== ICON_WORD (ikony)
+ikony.bar = Bar · Borgar
+ikony.kitchen = Kuchnia
+ikony.board = Tablica zleceń
+ikony.dice = Kości
+ikony.arm = Siłowanie
+ikony.darts = Rzutki
+ikony.bath = Łaźnia
+ikony.stage = Scena · Melia
+ikony.stairs = Schody
+ikony.room = Pokój na noc
+ikony.gate = Złocona krata
+ikony.fire = Kominek
+
+# ======================================================================== PLAN_KIND_DESC (opisyRodzajow)
+opisyRodzajow.guest = Dla gości karczmy.
+opisyRodzajow.service = Zaplecze karczmy.
+opisyRodzajow.private = Prywatne.
+opisyRodzajow.hall = Przejście.
+opisyRodzajow.stairs = Schody.
+
+# ======================================================================== PLAN_DESC (opisy)
+opisy.1.komorka = Ciasna komórka za składem: stare beczki, połamane stołki i rupiecie, których Borgar nie ma serca wyrzucić.
+opisy.1.sklad = Worki z mąką i kaszą, skrzynie, sól i przyprawy. Stąd kuchnia bierze, co trzeba.
+opisy.1.browar = Kadzie, miedziany kocioł i beczki, w których dojrzewa piwo „Złotego Kufla”. Pachnie chmielem.
+opisy.1.sluzba = Łóżka i skrzynie ludzi Borgara. Tu odpoczywają między zmianami.
+opisy.1.gabinet = Biurko z księgą rachunków, szkatuła i klucze do pokoi. Tu Borgar liczy utarg.
+opisy.1.magazyn = Beczki piwa, skrzynie wina i zapasy na zimę.
+opisy.1.wedzarnia = Szynki i kiełbasy w dymie z olchy. Zapach niesie się aż na korytarz.
+opisy.1.korytarz = Korytarz zaplecza: z sal do składów, browaru, spiżarni i gabinetu.
+opisy.1.spizarnia = Półki z serami, słojami i chlebem — między kuchnią a piekarnią.
+opisy.1.kuchnia = Piec, kotły i stół do krojenia. Stąd wychodzą gulasz, kapuśniak i pieczeń.
+opisy.1.piekarnia = Piec chlebowy i dzieże z ciastem. Chleb i placki idą przez okienko prosto do sali.
+opisy.1.mysliwski = Kamienny kominek, poroża i łby dzików na ścianach, długi stół myśliwych.
+opisy.1.biesiadna = Dwa długie stoły na wesela i biesiady, chorągwie i zbroje w kątach.
+opisy.1.scena = Scena z czerwonymi kotarami, stoliki przy świecach, kapelusz na napiwki.
+opisy.1.gry = Stoły do kości, stół do siłowania na rękę, karty, warcaby i kredowa tablica wyników.
+opisy.1.rzutki = Tarcze do rzutek na ścianie i linia rzutu.
+opisy.1.laznia = Cztery balie z gorącą wodą za parawanami, szare mydło i szorstkie ręczniki.
+opisy.1.sala = Serce karczmy: lada w kształcie L, dwa kamienne kominki i długie stoły z ławami.
+opisy.1.jadalnia = Stół bankietowy dla gości, którzy wolą zjeść w spokoju.
+opisy.1.palarnia = Fotele, fajki i regały z książkami. Cicho jak w klasztorze.
+opisy.1.sien = Wejście do karczmy: tablica zleceń, ten plan, wieszaki na płaszcze i dwoje schodów na piętro.
+opisy.1.schody_zach = Schody na piętro, do pokoi gości.
+opisy.1.schody_wsch = Schody na piętro, do pokoi gości.
+opisy.25.nc = Korytarz z drzwiami pokoi gości; boazeria, latarnie i obrazy.
+opisy.25.sc = Korytarz z drzwiami pokoi gości; boazeria, latarnie i obrazy.
+opisy.25.gal = Galeria nad wielką salą: przez balustradę widać żyrandol i gości w dole.
+opisy.25.hall = Hall przy schodach z sali: księga gości, zegar stojący, żyrandol.
+opisy.25.lounge = Kominek z kamienia, fotele, sofa i biblioteczka — dla wszystkich gości piętra.
+opisy.25.bath = Balie za parawanami i umywalki dla gości piętra.
+opisy.25.linen = Półki z pościelą, ręcznikami i świecami na zapas.
+opisy.25.maid = Pokój pokojówki: łóżko, szafa i wózek z pościelą.
+opisy.25.schody_dol = Schody w dół, do wielkiej sali.
+opisy.25.schody_gora = Schody na górę, do Apartamentów.
+opisy.26.hall = Marmur, kolumny i kandelabry. Na osi drzwi apartamentu Lorda z herbem Zaleskich.
+opisy.26.serv = Kącik służby: srebra, pościel i łóżko służącego.
+opisy.26.bathlux = Miedziana wanna i toaletka z lustrem.
+opisy.26.lib = Ściana regałów, pulpit z atlasem, fotele przy kominku.
+opisy.26.salon = Wielki salon: kominek, sofy, harfa i szpinet.
+opisy.26.dining = Długi stół na czternaście osób, srebra i kandelabry.
+opisy.26.terrace = Taras nad dziedzińcem: balustrada i donice z kwiatami.
+opisy.26.s1 = Salonik z kominkiem i sypialnia z łożem z baldachimem. Zajęty przez gości.
+opisy.26.s2 = Salonik z kominkiem i sypialnia z łożem z baldachimem. Zajęty przez gości.
+opisy.26.s3 = Salonik z kominkiem i sypialnia z łożem z baldachimem. Zajęty przez gości.
+opisy.26.lord = Salon z herbem Zaleskich i chorągwiami, sypialnia z łożem Lorda.
+opisy.26.schody = Schody w dół, do pokoi gości.
+
+# ======================================================================== z kodu TavernLife_Plan.js (kod.<funkcja>.<n>, w kolejności kodu)
+# say
+kod.say.0 = , nie co dzień
+kod.say.1 = " (sława {minRep}{2})"
+kod.say.2 = " (nie co dzień)"
+# diceRivals
+kod.diceRivals.0 = Kości: {1}
+kod.diceRivals.1 = Goście od kości: {1}
+# sec
+kod.sec.0 = Co tu jest
+kod.sec.1 = Kto i kiedy
+# planInfo
+kod.planInfo.0 = Borgar — za ladą, o każdej porze
+kod.planInfo.1 = Zmiany u Borgara {1}–{2}, jedna dziennie
+kod.planInfo.2 = Jedzenie i napitki: {1}–{2} G
+kod.planInfo.3 = Danie dnia: {name} — {2} G (−{3}%)
+kod.planInfo.4 = Pokój na noc: od {1} G (u Borgara)
+kod.planInfo.5 = Twoja sława: u Borgara −{1}
+kod.planInfo.6 = Otwarte — Borgar podaje o każdej porze
+kod.planInfo.7 = Kucharze Borgara — od świtu do nocy
+kod.planInfo.8 = Zamawiasz u Borgara przy ladzie; posiłek podadzą do stołu
+kod.planInfo.9 = Kuchnia wydaje o każdej porze
+kod.planInfo.10 = Melia Srebrogłosa — śpiewa {1}–24:00, raz na wieczór
+kod.planInfo.11 = Napiwek do kapelusza: {SONG_TIP} G (nieobowiązkowy)
+kod.planInfo.12 = Po pieśni: Natchniony, +{1}% doświadczenia na {2}
+kod.planInfo.13 = Teraz: Melia śpiewa — podejdź pod scenę
+kod.planInfo.14 = Dziś już śpiewała — jutro od {1}
+kod.planInfo.15 = Teraz cisza — śpiewa od {1}
+kod.planInfo.16 = Grum Żelazna Pięść — siłowanie na rękę, cały dzień
+kod.planInfo.17 = Siłowanie: stawki {1} G
+kod.planInfo.18 = Kości: stawka rywala, od {1} G
+kod.planInfo.19 = Przy kościach: {1}
+kod.planInfo.20 = Grum czeka przy stole · kości od {1}
+kod.planInfo.21 = Grum czeka przy stole
+kod.planInfo.22 = Dziadek Ozzy albo furman Wiesiek — o każdej porze
+kod.planInfo.23 = Stawki {1} G · trzy rundy po trzy lotki
+kod.planInfo.24 = Tarcze wolne — zawsze ktoś chętny
+kod.planInfo.25 = Łaziebna Wanda — grzeje wodę o każdej porze
+kod.planInfo.26 = " (zamiast {BATH_PRICE} G)"
+kod.planInfo.27 = Kąpiel: {1} G{2} · godzina
+kod.planInfo.28 = Po kąpieli: Czysty — prace o {1}% lżejsze przez {2}
+kod.planInfo.29 = Otwarte — woda gorąca
+kod.planInfo.30 = Dziadek Ozzy — przy kominku, zwykle od rana do nocy
+kod.planInfo.31 = Tu też podają posiłki — zamówisz u Borgara
+kod.planInfo.32 = Tablica zleceń — nowe ogłoszenia co {1} dni
+kod.planInfo.33 = Tablica zleceń — ogłoszenia z okolicy
+kod.planInfo.34 = ogłoszenie
+kod.planInfo.35 = ogłoszenia
+kod.planInfo.36 = ogłoszeń
+kod.planInfo.37 = Na tablicy wisi teraz {b} {2}
+kod.planInfo.38 = Twoja sława: {1} ({2}/100)
+kod.planInfo.39 = Schody po obu stronach — na piętro, do pokoi gości
+kod.planInfo.40 = Wejście otwarte dzień i noc
+kod.planInfo.41 = Pokój gościnny
+kod.planInfo.42 = " (zamiast {price} G)"
+kod.planInfo.43 = Noc: {price} G{2} · do {CHECKOUT}:00 rano
+kod.planInfo.44 = " · Wypoczęty {1}"
+kod.planInfo.45 = Rano: {1}{2}
+kod.planInfo.46 = Dla gości o sławie „{1}” ({need})
+kod.planInfo.47 = Wynajmiesz u Borgara, przy ladzie na parterze
+kod.planInfo.48 = Twój pokój do {CHECKOUT}:00 — drzwi otwarte
+kod.planInfo.49 = Zamknięte — potrzebna sława {need}
+kod.planInfo.50 = Zamknięte — tylko dla stałych gości
+kod.planInfo.51 = Masz już pokój na tę noc
+kod.planInfo.52 = Wolny na tę noc
+kod.planInfo.53 = " — dla gości o sławie „{1}” ({minrep})"
+kod.planInfo.54 = " — dla dostojnych gości"
+kod.planInfo.55 = Złocona krata z dzwonkiem{1}
+kod.planInfo.56 = Krata otwarta — Apartamenty czekają
+kod.planInfo.57 = " — potrzebna sława {minrep}"
+kod.planInfo.58 = Krata zamknięta{1}
+kod.planInfo.59 = Zarezerwowany dla gości Lorda Zaleskiego
+kod.planInfo.60 = Zamknięte — tylko dla gości Lorda
+kod.planInfo.61 = Pokój gościnny{1}.
+kod.planInfo.62 = Wynajęty przez innych gości — drzwi zamknięte
+kod.planInfo.63 = Zajęty
+kod.planInfo.64 = "Schody w górę: "
+kod.planInfo.65 = "Schody w dół: "
+kod.planInfo.66 = piętro
+kod.planInfo.67 = Q/E — zobacz {1}
+kod.planInfo.68 = Zajęty przez gości
+kod.planInfo.69 = Prywatne — tylko dla domowników
+kod.planInfo.70 = Zaplecze karczmy
+kod.planInfo.71 = Przejście — otwarte dzień i noc
+# makeMarker
+kod.makeMarker.0 = Tu jesteś
+# drawHints
+kod.drawHints.0 = pokój
+kod.drawHints.1 = piętro
+kod.drawHints.2 = pokaż drogę
+kod.drawHints.3 = wyjdź
+kod.drawHints.4 = "Dzień {1} · "
+kod.drawHints.5 = {1}godz. {2}
+# drawPanel
+kod.drawPanel.0 = Droga: nie znalazłem przejścia.
+kod.drawPanel.1 = " (od schodów)."
+kod.drawPanel.2 = Droga zaznaczona na planie{1}
+kod.drawPanel.3 = Droga do: {1} ({2}) — Q/E, by iść dalej.
+# drawLegend
+kod.drawLegend.0 = Tu jesteś
+kod.drawLegend.1 = Jasne — czynne teraz · przygaszone — zamknięte
+# label
+kod.label.0 = Plan karczmy
+# addOriginalCommands
+kod.addOriginalCommands.0 = Plan karczmy

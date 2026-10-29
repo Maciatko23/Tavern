@@ -121,7 +121,7 @@ Wyspa jest ziemią niczyją, kilka godzin promem od lądu. Ciągną na nią ucho
 
 - **Dzień targowy** co 7 dni (7, 14, 21…).
 - **Prom** co 3 dni (9–15 przy molo).
-- **Fale uchodźców** w dniach 10, 24, 38, 52.
+- **Fale uchodźców** w dniach 10, 25, 37, 52 - zawsze w dzień promu (od 2026-10-28, docs/PODROZNI.md 5.1; Ludmiła i Ela przypływają z pierwszą falą).
 - **Święta**:
 
   | Święto | Kiedy |
@@ -297,7 +297,7 @@ Pieśń daje skrót przez piętra 1–10 i jest jednym z trzech zamków Serca.
    - ukryć Rafała (izdebka, chata dziadka, dzwonnica);
    - wydać go Witowi (120 G);
    - przemycić go przez Baltazara.
-4. **Druga fala (dzień 24)** i **głosowanie w ratuszu:** obóz zostaje w murach albo idzie na Podgrodzie. Twoje czyny dodają głosy.
+4. **Druga fala (dzień 25)** i **głosowanie w ratuszu:** obóz zostaje w murach albo idzie na Podgrodzie. Twoje czyny dodają głosy.
 5. **Wigilia (dzień 96)** w obozie albo w tawernie: 4 gorące dania, Opinia +10.
 6. **Marek** (Akt II): z chustą od Ludmiły idziesz do jaskini w górach i wyprowadzasz go od kopaczy. Wraca do Ludmiły i Eli.
 
@@ -399,7 +399,7 @@ Wszystkie drogi na wybrzeże zaczynają się na **przystani**. Idziesz z miastec
 
 - **Latarnik Bazyli** za dnia śpi, a nocą czuwa przy ogniu. Mówi, jaka będzie pogoda na dwa dni naprzód.
 - **Latarnia potrzebuje opału:** drewna, węgla albo tranu, który wytapiasz z ryb w kociołku.
-- **K49 „Tran dla latarni”** (od dnia 24).
+- **K49 „Tran dla latarni”** (od dnia 25).
 - **D22 „Księga mgieł”:** w mgliste noce przy soczewce przychodzą **wizje**. Są trzy:
   - statek bez bandery;
   - człowiek z piórem i białym okiem;

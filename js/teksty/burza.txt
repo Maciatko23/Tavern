@@ -1,0 +1,10 @@
+# Teksty z Storm.js
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz burza
+
+
+# ======================================================================== z kodu Storm.js (kod.<funkcja>.<n>, w kolejności kodu)
+# hitTree
+kod.hitTree.0 = Piorun trafił w drzewo!
+# strike
+kod.strike.0 = Nie ma tu drzewa, w które mógłby trafić

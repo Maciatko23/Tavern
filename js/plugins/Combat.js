@@ -691,7 +691,7 @@
             for (const k in OPT_DEFAULTS) ConfigManager[k] = OPT_DEFAULTS[k];
         };
     }
-    // the graphite look (MenuRing.js) writes "Tak" / "Nie" for a switch: this one says "Wł" / "Wył" there too, in the same style (put round
+    // the options' rows (MenuRing.js) write "Tak" / "Nie" for a switch: this one says "Wł" / "Wył" there too, in the same style (put round
     // the row drawing once every plugin is in, so it is the outer one - as Mood.js does)
     let optDrawWrapped = false;
     function wrapOptionDraw() {
@@ -700,7 +700,7 @@
         const _drawItem = Window_Options.prototype.drawItem;
         Window_Options.prototype.drawItem = function(index) {
             const symbol = this.commandSymbol(index), CH = T.api("CleanHUD");
-            if (symbol === OPTS.auto && T.api("MenuRing") && CH && CH.isClean && CH.isClean() && CH.textOut && this.itemLineRect) {
+            if (symbol === OPTS.auto && T.api("MenuRing") && CH && CH.textOut && this.itemLineRect) {
                 const r = this.itemLineRect(index, false), s = this.itemLineRect(index, true), c = this.contents, C = CH.C, on = !!this.getConfigValue(symbol);
                 CH.textOut(c, this.commandName(index), r.x, r.y, r.width, r.height, "left", { size: 18, color: C.text, plain: true });
                 CH.textOut(c, on ? "Wł" : "Wył", s.x, s.y, s.width - 4, s.height, "right", { size: 17, color: on ? C.accent : C.muted, plain: true });
@@ -730,17 +730,7 @@
     Scene_Shop.prototype.sellingPrice = function() {
         return Math.floor(_Scene_Shop_sellingPrice.call(this) * (1 + perk("sell")));
     };
-    // the command in the P menu (MenuPanel.js gives it its label, its little drawing and the count of points to give out)
-    const _addOriginalCommands = Window_MenuCommand.prototype.addOriginalCommands;
-    Window_MenuCommand.prototype.addOriginalCommands = function() {
-        _addOriginalCommands.call(this);
-        this.addCommand("Postać", "hero", true);
-    };
-    const _Scene_Menu_createCommandWindow = Scene_Menu.prototype.createCommandWindow;
-    Scene_Menu.prototype.createCommandWindow = function() {
-        _Scene_Menu_createCommandWindow.call(this);
-        this._commandWindow.setHandler("hero", () => SceneManager.push(UI().Scene_Hero));
-    };
+    // (the P menu's Postać and Umiejętności are MenuRing.js's own pages: no command and no screen of their own here since 2026-10-28)
 
     // ==================================================================
     // For the parts, and window.Combat (the same as before the split: Combat.perk(key) is asked by every system)
@@ -764,7 +754,7 @@
         stunPlayer: fight("stunPlayer"), drainBreath: fight("drainBreath"), mindResist, mindTime,
         strMult, poiseMult, critChance, rollCost, rollIFrames, parryWindow, knockdownAt, carryBonus, gatherBonus, workSpeed, dexWork, tired, TIRED_AT, heroMhp, comboWindow, aimSteady, baseBreath, mapFreePlay,
         get act() { return F().act; }, get stopFrames() { return F().stopFrames(); }, get ROLL_KIND() { return F().ROLL_KIND; }, get KNOCK_KIND() { return F().KNOCK_KIND; },
-        resetAct: fight("resetAct"), get Scene_Hero() { return UI().Scene_Hero; }, unspent,
+        resetAct: fight("resetAct"), unspent,
         get feel() { return P.feel || null; }   // (Combat_Feel.js: the automatic combat mode, the soft target, the warnings, the quick heal, the dummy, the difficulty)
     });
 

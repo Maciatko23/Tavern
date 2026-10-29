@@ -1,0 +1,19 @@
+{
+ "kod": {
+  "spoilBag": {
+   "0": "Zepsuło się: {name} ×{bad}",
+   "1": "{name}: zaraz się zepsuje"
+  },
+  "timeText": {
+   "0": "{1} dni",
+   "1": "około doby",
+   "2": " godzinę",
+   "3": " godziny",
+   "4": " godzin"
+  },
+  "freshnessText": {
+   "0": "Najstarsza sztuka zepsuje się za {1}."
+  }
+ },
+ "_opis": "Napisy kodu Spoilage.js sprzed przeniesienia do js/teksty/psucie.txt (kod.*)"
+}

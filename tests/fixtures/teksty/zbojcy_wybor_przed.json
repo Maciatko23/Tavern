@@ -1,0 +1,9 @@
+{
+ "wybor": [
+  "Puść go wolno",
+  "Zabierz mu sakiewkę",
+  "Dobij go",
+  "Zostaw"
+ ],
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (Humans.js: CHOICES=wybor)"
+}

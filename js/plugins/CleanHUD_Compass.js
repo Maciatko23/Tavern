@@ -370,15 +370,15 @@
         this._angle = null;
         this._box = { x: SIZE / 2 - DIAL.R - 4, y: SIZE / 2 - DIAL.R - 4, w: DIAL.R * 2 + 8, h: DIAL.R * 2 + 8 };
     };
-    // the dial in the graphite look: a graphite disc with a thin line and a soft shadow, marks every 15 degrees (longer at 45), N in
-    // copper, E S W muted
+    // the dial: a dark see-through disc with a thin line and a soft shadow, marks every 15 degrees (longer at 45), N in
+    // yellow, E S W muted
     Sprite_CleanCompass.prototype.drawDial = function() {
         const b = this.bitmap, ctx = b.context, c = SIZE / 2, R = DIAL.R;
         b.clear();
         ctx.save();
         ctx.fillStyle = "rgba(0,0,0,0.16)";
         ctx.beginPath(); ctx.ellipse(c, c + 3, R + 1, R + 1, 0, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = C.panel;
+        ctx.fillStyle = C.glass;
         ctx.beginPath(); ctx.arc(c, c, R, 0, Math.PI * 2); ctx.fill();
         ctx.strokeStyle = C.line;
         ctx.lineWidth = 1;
@@ -400,7 +400,7 @@
         b._baseTexture.update();
         this._dialFaces = CH.facesReady();
     };
-    // the goal's arrow, pointing up (turned to the goal): a copper line from the middle and a copper head at the rim
+    // the goal's arrow, pointing up (turned to the goal): a yellow line from the middle and a yellow head at the rim
     Sprite_CleanCompass.prototype.needleBitmap = function() {
         const b = new Bitmap(SIZE, SIZE), ctx = b.context, c = SIZE / 2, R = DIAL.R, k = 7 * Math.PI / 180;
         ctx.save();

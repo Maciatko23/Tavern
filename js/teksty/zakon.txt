@@ -111,7 +111,6 @@ holeDug = Tu był klucz. Dołek już zarasta
 > (Łopata stuka o kamień. W ziemi leży klucz - kamienny, z wyrytym krukiem.)
 > Cień Strażnika pada dokładnie tutaj. Cztery części drogi z pięciu.
 
-keyGot = Klucz Strażnika
 [chamberFirst]
 > (Chłód i zapach kamienia. Tu nikt nie oddychał od stuleci.)
 > Komora pod menhirami. Bez pochodni nic tu nie zobaczę.
@@ -153,7 +152,6 @@ downWarn = Na górę nie wejdziesz bez orła
 > (Skrzynia przykryta gałęziami. Na wieku wypalony znak: kotwica i oko.)
 
 stashTaken = Skrzynia pusta. Ktoś ją już opróżnił - ty
-stashLoot = Skrzynia przemytników
 [nestLook]
 > Stare gniazdo z gałęzi grubych jak ramię. Puste od lat.
 
@@ -165,7 +163,6 @@ nestEmpty = W gnieździe pusto. Pióra przybędą
 > (Między gałęziami, wbite w splot, tkwi pióro w srebrnej oprawce.)
 > Pióro Skrzydlatej Straży. Jeździec zostawił je tu dla następnego.
 
-herbLook = Roślina w szczelinie skały
 herbGone = Zerwane. Odrośnie za kilka dni
 [ravenStoneLook]
 > Kamień z wyrytym krukiem, zwrócony na wschód, ku Kręgowi. Kruczarze znaczyli tak swoje drogi.
@@ -174,13 +171,10 @@ herbGone = Zerwane. Odrośnie za kilka dni
 [campLook]
 > Stare palenisko w kręgu kamieni. Popiół dawno zbity deszczem. Obok kość i strzęp płótna.
 
-diveHerb = Warzucha nadmorska
-diveYoung = Tylko dorosły orzeł zanurkuje tak nisko
 diveTired = Orzeł jest zbyt zmęczony
 diveGone = Tu już zerwane. Odrośnie
 perchWater = W misie deszczówka. To woda orłów - nie twoja
 perchDry = Misa sucha
-stirrupGot = Strzemię jeźdźca
 traceTaken = Tu leżało strzemię. Masz je w torbie
 featherTaken = Pióra już zebrane
 [saddleLook]
@@ -200,10 +194,6 @@ graveNames.3.line = „Brat Wit, strażnik bramy, roku sto szóstego.” - roku 
 > Trzy imiona braci zakonu. Przepisuję je na kartkę - Ambroży będzie wiedział, co z nimi zrobić.
 
 lampLook = Lampka na słupie. Grabarz zapala ją o zmierzchu
-[gallowsLook]
-> Szubienica Lorda. Belka poczerniała od deszczu, pusty sznur kołysze się na wietrze.
-> Tu dwór wiesza kłusowników i przemytników. Przy drodze, żeby każdy widział.
-
 [gallowsNight]
 > (Belka skrzypi, choć nie ma wiatru.)
 
@@ -221,7 +211,6 @@ groveBroken = Milczący odwracają głowy.
 > Wiedzieli za dużo, więc przestali mówić. Teraz rozumiem trochę, dlaczego.
 
 groveDoneSub = Spokój Milczących  ·  6 h
-groveTodayBroken = Dziś już złamałeś ciszę. Jutro o zmierzchu
 groveStone = Biały kamień milczenia. Zimny i gładki
 ravenAsk = Kruki na skale przyglądają ci się z ukosa.
 ravenLeave = Zostaw je.
@@ -466,6 +455,148 @@ Tych trzech z krukiem nikt nie odwiedza. Ja tylko kosę obok przeciągnę.
 epilog.chamber = Pod płytą z krukiem na Łące menhirów śpi pierwszy strażnik warty. Ściana z czterema wieżami pamięta, gdzie stały - teraz pamiętasz i ty.
 epilog.grove = W gaju Milczących siedem białych kamieni stoi jak stało. O zmierzchu ktoś tam zawsze milczy przez godzinę - czasem ty.
 
+# ======================================================================== SPOTS (miejsca.<klucz>.name) - miejsca paczki D w Okolice
+# (test kolizji, F9 „Miejsce” rdzenia). Nazwa kapliczki i miejsca orła to też nazwa w F9 paczki i nazwa zdarzenia kapliczki
+miejsca.straznica_022.name = Fundamenty strażnicy
+miejsca.straznica_013.name = Fundamenty strażnicy
+miejsca.straznica_157.name = Fundamenty strażnicy
+miejsca.kapliczka_022.name = Kapliczka przydrożna
+miejsca.kapliczka_021.name = Kapliczka z krukiem przy Leśnej drodze
+miejsca.kapliczka_004.name = Kapliczka z krukiem na Łące
+miejsca.kopiec_017.name = Kopiec z krukiem
+miejsca.kopiec_023.name = Kopiec z krukiem
+miejsca.kopiec_155.name = Kopiec z krukiem
+miejsca.menhiry_krag.name = Krąg menhirów
+miejsca.orle_grzedy_1.name = Orla grzęda
+miejsca.orle_grzedy_2.name = Orla grzęda
+miejsca.orle_grzedy_3.name = Orla grzęda
+miejsca.cmentarz.name = Stary cmentarz
+miejsca.szubienica.name = Wzgórze z szubienicą
+miejsca.gaj_milczacych.name = Gaj Milczących
+miejsca.orzel_125_a.name = Skrytka w gąszczu nad przystanią
+miejsca.orzel_125_a_rzeczy.name = Skrytka w gąszczu nad przystanią (rzeczy)
+miejsca.orzel_125_a_zejscie.name = Stare kołki
+miejsca.orzel_125_a_zejscie_dol.name = Pod kołkami
+miejsca.orzel_125_b.name = Stare gniazdo nad przystanią
+miejsca.orzel_125_b_rzeczy.name = Stare gniazdo nad przystanią (rzeczy)
+miejsca.orzel_125_b_zejscie.name = Stare kołki
+miejsca.orzel_125_b_zejscie_dol.name = Pod kołkami
+miejsca.orzel_013_a.name = Półka zakonnych orłów nad gawrą
+miejsca.orzel_013_a_rzeczy.name = Półka zakonnych orłów nad gawrą (rzeczy)
+miejsca.orzel_013_a_zejscie.name = Stare kołki
+miejsca.orzel_013_a_zejscie_dol.name = Pod kołkami
+miejsca.orzel_013_b.name = Półka z szarotką
+miejsca.orzel_013_b_rzeczy.name = Półka z szarotką (rzeczy)
+miejsca.orzel_013_b_zejscie.name = Stare kołki
+miejsca.orzel_013_b_zejscie_dol.name = Pod kołkami
+miejsca.orzel_168.name = Skarpa nad spaloną zagrodą
+miejsca.orzel_168_rzeczy.name = Skarpa nad spaloną zagrodą (rzeczy)
+miejsca.orzel_168_zejscie.name = Stare kołki
+miejsca.orzel_168_zejscie_dol.name = Pod kołkami
+miejsca.ziola_klif_155.name = Zioła na klifie
+miejsca.ziola_klif_157.name = Zioła na klifie
+miejsca.kruki_155.name = Kruki na skałach
+miejsca.kruki_157.name = Kruki na skałach
+miejsca.wrak_kawalki.name = Kawałki wraku
+
+# ======================================================================== DISC (odkrycia.<klucz>) - odkrycia w zakładce „Okolice”
+# (nazwa strażnicy i kopca to też ich nazwa w F9 paczki)
+odkrycia.straznica_022.name = Fundamenty strażnicy przy Polnej drodze
+odkrycia.straznica_022.text = Na wzgórku nad Polną drogą zostały z wieży same obmurówki - kwadrat sześć na sześć kroków. W środku zawalona płyta z wyrytym krukiem. Stąd widać łąki aż po las.
+odkrycia.straznica_013.name = Fundamenty strażnicy w Górach
+odkrycia.straznica_013.text = Przy drodze ku przylądkowi kamienne obmurówki dawnej wieży zakonu. Z tego miejsca widać przełęcz i drogę w dół, do łąk.
+odkrycia.straznica_157.name = Fundamenty strażnicy nad morzem
+odkrycia.straznica_157.text = Na wschodnim krańcu Urwiska stała wieża zakonu. Zostały fundamenty i płyta z krukiem. W dole tylko morze.
+odkrycia.kapliczka_022.name = Kapliczka przydrożna
+odkrycia.kapliczka_022.text = Drewniany słupek z daszkiem przy drodze na wschód. Pod daszkiem wyrzeźbiony kruk. Ludzie zostawiają tu grosz albo okruch chleba i mówią, że droga potem lżejsza.
+odkrycia.kapliczka_021.name = Kapliczka przy Leśnej drodze
+odkrycia.kapliczka_021.text = Kapliczka z krukiem przy Leśnej drodze. Daszek omszały, ale ktoś niedawno przetarł kruka z kurzu.
+odkrycia.kapliczka_004.name = Kapliczka na Łące
+odkrycia.kapliczka_004.text = Kapliczka z krukiem przy drodze na północnym wschodzie Łąki. Kruk patrzy w stronę gór.
+odkrycia.kopiec_017.name = Kopiec z krukiem na Omszałej łące
+odkrycia.kopiec_017.text = Stos kamieni układany ręką, na szczycie płaski kamień z krukiem. Takie kopce znaczyły drogi zakonu.
+odkrycia.kopiec_023.name = Kopiec z krukiem na Skraju lasu
+odkrycia.kopiec_023.text = Kopiec z krukiem na skraju lasu. Mech porósł go do połowy, ale kruk na szczycie jest czysty, jakby ktoś go doglądał.
+odkrycia.kopiec_155.name = Kopiec z krukiem nad klifem
+odkrycia.kopiec_155.text = Kopiec nad klifem za pustelnią, zwrócony do morza. Kamień z krukiem na szczycie wytarty od wiatru.
+odkrycia.menhiry_krag.name = Krąg menhirów
+odkrycia.menhiry_krag.text = Osiem stojących kamieni w kręgu na łące. Najwyższy, poszarpany, stoi od północnego zachodu - zapiski strażnic nazywają go Strażnikiem. W środku płaska płyta z krukiem i dziurką jak na klucz.
+odkrycia.cien_straznika.name = Cień Strażnika
+odkrycia.cien_straznika.text = Gdy słońce przeszło cztery części swej drogi z pięciu, cień Strażnika wskazał miejsce w kręgu. W ubitej ziemi leżał kamienny klucz z krukiem.
+odkrycia.komora.name = Komora pod menhirami
+odkrycia.komora.text = Pod płytą z krukiem schody prowadzą do komory. Sarkofag pierwszego strażnika, kamienna misa i ściana z wykutymi czterema wieżami.
+odkrycia.orzel_125_a.name = Skrytka w gąszczu nad przystanią
+odkrycia.orzel_125_a.text = Polana w gąszczu nad przystanią, do której nie prowadzi żadna ścieżka. Ktoś jednak ukrył tu skrzynię - i zszedł na dół po linie.
+odkrycia.orzel_125_b.name = Stare gniazdo nad przystanią
+odkrycia.orzel_125_b.text = Zarośnięta półka nad przystanią. Wielkie gniazdo z gałęzi, puste od lat - ale w środku zawsze leży kilka piór.
+odkrycia.orzel_013_a.name = Półka zakonnych orłów
+odkrycia.orzel_013_a.text = Skalna półka nad gawrą. Tu zakon trzymał orły: gniazdo jest stare jak mury, a w szczelinach rośnie szarotka.
+odkrycia.orzel_013_b.name = Półka z szarotką
+odkrycia.orzel_013_b.text = Wysoka półka w zachodnich skałach. Szarotka, kamień z krukiem i stare kołki w ścianie: ktoś tu kiedyś schodził na dół.
+odkrycia.orzel_168.name = Skarpa nad spaloną zagrodą
+odkrycia.orzel_168.text = Skarpa nad spaloną zagrodą Ługów. Stare palenisko w kręgu kamieni - ktoś tu nocował, kiedy jeszcze dało się tu wejść.
+odkrycia.ziola_klif.name = Zioła z klifów
+odkrycia.ziola_klif.text = Na półkach klifów nad morzem rośnie warzucha nadmorska. Sięga się po nią tylko z grzbietu orła, nurkując nisko nad wodą.
+odkrycia.orle_grzedy_1.name = Orla grzęda (północna)
+odkrycia.orle_grzedy_1.text = Kamienny słup z żelazną poprzeczką i misą na deszczówkę. Na takich grzędach siadały orły Skrzydlatej Straży.
+odkrycia.orle_grzedy_2.name = Orla grzęda (środkowa)
+odkrycia.orle_grzedy_2.text = Druga grzęda Straży. Pod nią zbutwiałe siodło - za małe dla konia, za szerokie dla człowieka.
+odkrycia.orle_grzedy_3.name = Orla grzęda (południowa)
+odkrycia.orle_grzedy_3.text = Ostatnia grzęda, nad samym urwiskiem. W szczelinie słupa tkwią stare pióra.
+odkrycia.cmentarz.name = Stary cmentarz
+odkrycia.cmentarz.text = Stary cmentarz za miasteczkiem, za niskim murkiem. Większość krzyży zwykłych, ale na trzech kamieniach wyryto kruka.
+odkrycia.szubienica.name = Wzgórze z szubienicą
+odkrycia.szubienica.text = Szubienica Lorda przy wschodniej drodze. Tu dwór wiesza kłusowników i przemytników. Nocą skrzypi, choć nikt na niej nie wisi.
+odkrycia.gaj.name = Gaj Milczących
+odkrycia.gaj.text = Polana w lesie za osadą. Siedem białych, płaskich kamieni w kręgu. Milczący przychodzą tu o zmierzchu i stoją godzinę bez słowa.
+odkrycia.kruki_155.name = Kruki na skałach pustelni
+odkrycia.kruki_155.text = Na głazach nad klifem siadają dzikie kruki. Płoszą się, kiedy biegniesz - ale za rybę zostawią coś błyszczącego.
+odkrycia.kruki_157.name = Kruki na skałach Urwiska
+odkrycia.kruki_157.text = Kruki z Urwiska siadają na skałach między ruinami. Kruczarze zakonu karmili ich przodków.
+odkrycia.wrak_kawalki.name = Kawałki wraku w odpływie
+odkrycia.wrak_kawalki.text = Po każdym sztormie piasek na płyciznach odsłania kolejny kawałek „Białej Źrenicy”. Widać je tylko w odpływie.
+
+# ======================================================================== VITEMS (rzeczy.<klucz>.name) - rzeczy zadań w torbie (TownQuests v:)
+rzeczy.zak_karta_1.name = Zapiski strażnic (1)
+rzeczy.zak_karta_2.name = Zapiski strażnic (2)
+rzeczy.zak_karta_3.name = Zapiski strażnic (3)
+rzeczy.zak_karta_4.name = Zapiski strażnic (4)
+rzeczy.zak_karta_5.name = Zapiski strażnic (5)
+rzeczy.zak_karta_6.name = Zapiski strażnic (6)
+rzeczy.zak_imiona.name = Imiona z grobów z krukiem
+
+# ======================================================================== premie (wzmocnienia Survival: kapliczka, gaj Milczących)
+premie.blogoslawienstwo.name = Błogosławieństwo drogi
+premie.blogoslawienstwo.desc = Prace kosztują 10% mniej sił.
+premie.spokoj.name = Spokój Milczących
+premie.spokoj.desc = Noc i praca mniej męczą: prace kosztują 5% mniej sił.
+
+# ======================================================================== F9 (zakładka „Wyspa i fabuła”, sekcja paczki D)
+f9.tytul = Paczka D: Tajemnice i zakon:
+# wiersz „Miejsce D”: nazwy miejsc, na które przenosi (strażnice, kopce z krukiem, kapliczki: odkrycia / miejsca wyżej)
+f9.kopiec = Kopiec z krukiem, mapa {n}
+f9.krag = Krąg menhirów (przy dole)
+f9.komora = Komora pod menhirami
+f9.orzel = {name} (tylko z orła)
+f9.grzeda = Orla grzęda {n}
+f9.cmentarz = Stary cmentarz
+f9.szubienica = Szubienica
+f9.gaj = Gaj Milczących (środek)
+f9.krukiPustelnia = Kruki: pustelnia
+f9.krukiUrwisko = Kruki: Urwisko
+f9.wrak = Płycizna P2 (wrak)
+
+# ======================================================================== rozmowy ludzi (Zakon_Data.js, rozmowy: grabarz, ansgar)
+# Hieronim, grabarz - gdy D37 trwa, a kamienie z krukiem jeszcze nie oczyszczone (raz)
+[grabarzGroby]
+Ambroży cię przysłał? Do tych z krukiem? Dwa w północnym rzędzie, przy murku, jeden w południowym, po prawej.
+Czyść rękami, nie łopatą. Ojciec mówił: kamień brata zakonu dotyka się jak chleba.
+
+# Eryk Sowa - gdy deska z nazwą okrętu jest w torbie (raz)
+[ansgarTabliczka]
+(Eryk widzi deskę w twojej torbie i blednie.) Skąd... To z dziobu. Sam ją przybijałem w porcie, zanim wypłynęliśmy.
+„Biała Źrenica”. Straż Pewności. Schowaj to, chłopcze. Jak zobaczy to ktoś z garnizonu, zacznie pytać. A jak zobaczy ktoś z naszych... nie zapyta.
+
 # ======================================================================== z kodu Zakon.js (kod.<funkcja>.<n>, w kolejności kodu)
 # blank
 kod.blank.0 = Znacznik (Zakon)
@@ -533,13 +664,8 @@ kod.kleofasTalk.2 = Następna karta Zapisków? Daj, przeczytam.
 kod.kleofasTalk.3 = Zapiski strażnic ({n}): {title}
 kod.kleofasTalk.4 = Przeczytaj mi Zapiski strażnic ({n}).
 kod.kleofasTalk.5 = Nie, w innej sprawie.
-# grabarzTalk
-kod.grabarzTalk.0 = Ambroży cię przysłał? Do tych z krukiem? Dwa w północnym rzędzie, przy murku, jeden w południowym, po prawej.
-kod.grabarzTalk.1 = Czyść rękami, nie łopatą. Ojciec mówił: kamień brata zakonu dotyka się jak chleba.
 # ansgarTalk
 kod.ansgarTalk.0 = Eryk Sowa
-kod.ansgarTalk.1 = (Eryk widzi deskę w twojej torbie i blednie.) Skąd... To z dziobu. Sam ją przybijałem w porcie, zanim wypłynęliśmy.
-kod.ansgarTalk.2 = „Biała Źrenica”. Straż Pewności. Schowaj to, chłopcze. Jak zobaczy to ktoś z garnizonu, zacznie pytać. A jak zobaczy ktoś z naszych... nie zapyta.
 # f9Label
 kod.f9Label.0 = Miejsce D {1}/{length}: {3} (mapa {4})   ←→
 # rows
@@ -623,3 +749,20 @@ kodDane.wreckGot.0 = > (Wyrywam z desek dwa okucia. Sól zjadła je do połowy, 
 kodDane.wreckGot.1 = > (Deska z dziobu okrętu. Białe oko i litery: BIAŁA ŹRENICA - STRAŻ PEWNOŚCI.)
 kodDane.wreckGot.2 = > Ktoś w tawernie by ją poznał. Ktoś, kto rysuje portrety za piwo.
 kodDane.wreckGot.3 = > (Skrzynka kapitańska. W środku sakiewka z monetami i słój smoły, szczelnie zalakowany.)
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+keyGot = Klucz Strażnika
+stashLoot = Skrzynia przemytników
+herbLook = Roślina w szczelinie skały
+diveHerb = Warzucha nadmorska
+diveYoung = Tylko dorosły orzeł zanurkuje tak nisko
+stirrupGot = Strzemię jeźdźca
+[gallowsLook]
+> Szubienica Lorda. Belka poczerniała od deszczu, pusty sznur kołysze się na wietrze.
+> Tu dwór wiesza kłusowników i przemytników. Przy drodze, żeby każdy widział.
+
+groveTodayBroken = Dziś już złamałeś ciszę. Jutro o zmierzchu
+kod.grabarzTalk.0 = Ambroży cię przysłał? Do tych z krukiem? Dwa w północnym rzędzie, przy murku, jeden w południowym, po prawej.
+kod.grabarzTalk.1 = Czyść rękami, nie łopatą. Ojciec mówił: kamień brata zakonu dotyka się jak chleba.
+kod.ansgarTalk.1 = (Eryk widzi deskę w twojej torbie i blednie.) Skąd... To z dziobu. Sam ją przybijałem w porcie, zanim wypłynęliśmy.
+kod.ansgarTalk.2 = „Biała Źrenica”. Straż Pewności. Schowaj to, chłopcze. Jak zobaczy to ktoś z garnizonu, zacznie pytać. A jak zobaczy ktoś z naszych... nie zapyta.

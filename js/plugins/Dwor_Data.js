@@ -6,7 +6,9 @@
 // years sold the faction (Straż Pewności, "the Black Eyes") the water of the Order's canal, news and the raven stones of the manor's
 // own walls. Dwor.js is the engine. Registered in js/plugins.js under the other arcs' data (Kantor_Data), above TownLife and
 // TownQuests:
-//   - window.TownQuestsPacks: the quest W7 (eight steps, chapters 1-7), its things (Feliks's letters, the copy), the remarks
+//   - the thread "dwor" (Watki.js, 2026-10-28): the state "dwor", the quest W7 (eight steps, chapters 1-7 - into window.TownQuestsPacks
+//     with its things: Feliks's letters, the copy; the remarks), the talks at the Lord's door, of Feliks's traces, the drawer, the
+//     hatch and the trapdoor, their actions, the F9 jumps (Dwor.debugJump), the hero's thoughts; the hooks are Dwor.js's
 //   - TownLifeData: Feliks's day (6-10:30 the market, 10:30-20 in the manor's hall behind the butler's lectern - "inside dwor" on the
 //     town map = gone through the east gate; the hall's marker "Miejsce: feliks_hol"), the same for Teodor once Feliks is gone
 //   - window.DworData: the maps (172-174, built by tools/w7/build_dwor.py), the event ids (570-599, owner "Dwor" - TawernaCore's
@@ -17,14 +19,16 @@
  * @plugindesc [W7] Dane wątku „Dwór z kamieni twierdzy” (wariant A: Lord nic nie wie, Feliks sprzedaje frakcji): hol, biblioteka, gabinet (mapy 172-174). v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
  * @orderAfter Kantor_Data
  *
  * @help
  * ============================================================================
  * Dwor_Data.js - dane wątku W7 „Dwór z kamieni twierdzy”
  * ============================================================================
- * Same dane: czyta je Dwor.js (silnik). Zadanie W7 trafia do TownQuests
- * przez window.TownQuestsPacks, plan dnia Feliksa (i Teodora) do TownLife.
+ * Same dane: czyta je Dwor.js (silnik). Wątek W7 na silniku Watki.js (stan,
+ * kroki, rozmowy, akcje, skoki F9); zadanie W7 trafia do TownQuests przez
+ * window.TownQuestsPacks, plan dnia Feliksa (i Teodora) do TownLife.
  * Musi stać nad TownLife.js i TownQuests_Data.js (pod Kantor_Data).
  * Numery zdarzeń 570-599 (właściciel "Dwor"), nowe mapy 172 „Dwór - Hol”,
  * 173 „Dwór - Biblioteka”, 174 „Dwór - Gabinet” (pod Posiadłością Lorda).
@@ -76,23 +80,7 @@
     const TX = {};
     Watki.scal(TX, "dwor", "");   // (its words: js/teksty/dwor.txt)
 
-    // ------------------------------------------------------------------ the quest W7 (TownQuests)
-    const W7 = {
-        id: "W7", kind: "W", giver: null, icon: 0,
-        autoStart: "w7Auto",
-        steps: [
-            { ch: 1, type: "custom", check: "w7Dlug", vars: "w7Vars" },
-            { ch: 2, type: "custom", talk: "w7Zapro", check: "w7Kronika", vars: "w7Vars" },
-            { ch: 3, type: "custom", talk: "w7Slady", check: "w7Feliks", vars: "w7Vars" },
-            { ch: 4, type: "custom", vars: "w7Vars" },
-            { ch: 4, type: "custom", talk: "w7Prawda", check: "w7PoPrawdzie", vars: "w7Vars" },
-            { ch: 5, type: "custom", talk: "w7Prawda", check: "w7Splata", vars: "w7Vars" },
-            { ch: 6, type: "custom", talk: "w7Najpierw", check: "w7Wybor", vars: "w7Vars" },
-            { ch: 7, type: "custom", talk: "w7Tydzien", check: "w7Serce", vars: "w7Vars" }
-        ],
-        reward: { xp: 300 }
-    };
-    Watki.scal(W7, "dwor", "zadania.W7");   // (its words: js/teksty/dwor.txt, zadania.W7)
+    // ------------------------------------------------------------------ the things carried, the remarks (they go with the quest's pack)
     const VITEMS = {
         listy_feliksa: { icon: 191 },
         odpis_listow: { icon: 189 }
@@ -109,7 +97,149 @@
         { id: "w7StrazKlamstwo", who: "straznik", flag: "w7KlamstwoWyszlo" }
     ];
     Watki.scal(REMARKS, "dwor", "uwagi");   // (its words: js/teksty/dwor.txt, uwagi)
-    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Dwor", quests: [W7], vitems: VITEMS, remarks: REMARKS });
+
+    // ------------------------------------------------------------------ the thread (the engine Watki.js, docs/WATKI_DANE.md): the state,
+    // the quest W7 (eight steps, chapters 1-7; its words: js/teksty/dwor.txt, zadania.W7 - the engine puts it into
+    // window.TownQuestsPacks with the things and the remarks), the talks (the Lord's at his door, the traces of Feliks, the drawer, the
+    // hatch and the trapdoor) and their actions, the F9 jumps. The hooks (fabula, polowaDlugu, lordMowi, prawda...) are Dwor.js's:
+    // which talk the Lord gives and when stays code there; what he says, the choices and their actions are here
+    const DOOR1 = { name: "Door1", volume: 80, pitch: 100, pan: 0 }, OPEN1 = { name: "Open1", volume: 70, pitch: 80, pan: 0 };
+    const transfer = (map, p) => ({ polecenie: 201, parametry: [0, map, p[0], p[1], p[2], 0] });
+    const LORD = { talk: "lordMowi", ready: "lordGotowy" };   // (the step's talk at the Lord's door: Dwor.js picks the talk by the step)
+    const w = Watki.watek({
+        id: "dwor", wtyczka: "Dwor", teksty: "dwor",
+        stan: { klucz: "dwor", wersja: 1, domyslne: () => ({
+            tour: 0, tourHall: 0, tourGone: 0, invited: 0, zaproNo: 0,     // ch. 2: 1 the Lord shows him round, 2 the chronicle read
+            obs: {}, acc: { rano: 0, dzien: 0, noc: 0 }, spotted: {},       // ch. 3: what he saw of Feliks (day), the frames watched
+            traces: {},                                                    // ch. 3 with Feliks gone: teodor, hanka, kuba, rejestr
+            letters: "", lettersDay: 0, bolt: -1, caught: 0, garden: -1,   // ch. 4
+            truth: 0, how: "", fate: "", told: 0, flee: 0,                 // the truth (day), how the Lord learnt it, Feliks's fate
+            najpierw: "", najDay: 0, weekPaid: 0, lieOut: 0, search: 0, searched: 0, toll: -1, donosi: -1, hostileSaid: 0,   // ch. 6
+            down: 0, saidW9: 0, guardW9: -1, serce: ""
+        }) },
+        // the hero's thoughts: a bubble 210 frames, the next after 220, not while an event runs
+        mysli: { klatki: 210, odstep: 220, czekaj: true },
+        // "@key: " - a resident nearby says the line (Dwor.speaker: the TownLife resident's event and name)
+        mowa: { kto: key => { const D = window.Dwor; return D && D.speaker ? D.speaker(key) : null; } },
+        zadania: {
+            W7: { kind: "W", giver: null, icon: 0, autoStart: "w7Auto", start: ["fabula", "dlugZaczety"],
+                kroki: [
+                    // 1 "Dług": half of grandpa's debt paid (or half of the buyback)
+                    { nazwa: "w7Dlug", ch: 1, gotowe: "polowaDlugu", zmienne: "w7Zmienne" },
+                    // 2 "Zaproszenie": the Lord asks him in, the hall, the chronicle in the library
+                    { nazwa: "w7Zapro", ch: 2, gotowe: "stan:tour>=2", zmienne: "w7Zmienne", haki: LORD },
+                    // 3 "Dwa życia Feliksa": three of the four things seen of Feliks (or his traces - Teodor, Hanka, Kuba)
+                    { nazwa: "w7Feliks", ch: 3, gotowe: "planGotowy", zmienne: "w7Zmienne", haki: { talk: "sladRozmowa", ready: "sladGotowy" } },
+                    // 4 "Gabinet nocą": the drawer (Dwor.js moves on when the letters are taken / copied / left)
+                    { nazwa: "w7Gabinet", ch: 4, zmienne: "w7Zmienne" },
+                    // 4 the truth for the Lord (or the chapter 1 over)
+                    { nazwa: "w7Prawda", ch: 4, gotowe: { lub: ["stan:truth", "rozdzialKoniec"] }, zmienne: "w7Zmienne", haki: LORD },
+                    // 5 "Ostatnia spłata": the end of the story's chapter 1
+                    { nazwa: "w7Splata", ch: 5, gotowe: "rozdzialKoniec", zmienne: "w7Zmienne", haki: LORD },
+                    // 6 "Do kogo najpierw": the Lord's question after the hero was down
+                    { nazwa: "w7Najpierw", ch: 6, gotowe: "stan:najpierw", zmienne: "w7Zmienne", haki: LORD },
+                    // 7 "Lord przy Sercu": Underground.js's scene
+                    { nazwa: "w7Serce", ch: 7, gotowe: "serceGotowe", zmienne: "w7Zmienne", haki: LORD }
+                ],
+                reward: { xp: 300 } }
+        },
+        paczka: { vitems: VITEMS, remarks: REMARKS },
+        rozmowy: {
+            // ---- the Lord at his door (ctx.spk: the Lord). Ch. 2: the invitation in (the words by the field and W1), the hall
+            zaproszenie: [
+                { jesli: "dzialkaPrzepadla", to: ["zaproAskBuy"], inaczej: [{ jesli: "flaga:lordAlly", to: ["zaproAskAlly"],
+                    inaczej: [{ jesli: { lub: ["flaga:w1Revealed", "flaga:lordCold"] }, to: ["zaproAskCold"], inaczej: ["zaproAsk"] }] }] },
+                { wybor: [
+                    { etykieta: "zaproTak", tresc: [{ zrob: "tour" }, { polecenie: 250, parametry: [DOOR1] }, transfer(MAP.hol, PLACES.hol.land)] },
+                    { etykieta: "zaproNie", tresc: ["zaproLater", { zrob: "zaproNo" }] }], anuluj: 1 }],
+            lordCzeka: ["tourLordWaits"],
+            // the truth: the letters (or the copy) shown (ctx.how, ctx.los: Feliks's fate now)
+            prawdaListy: [{ mow: "prawdaAsk", kto: "bohater" }, { wybor: [
+                { etykieta: "prawdaOpt", tresc: [{ rozmowa: "prawdaScena" }] },
+                { etykieta: "prawdaLater", tresc: ["prawdaLaterSay"] }], anuluj: 1 }],
+            // ...told without them (the letters left in the drawer): he checks himself, the truth the next day
+            powiedz: [{ wybor: [
+                { etykieta: "powiedzOpt", tresc: ["powiedzSay", { zrob: "powiedz" }] },
+                { etykieta: "prawdaLater", tresc: [] }], anuluj: 1 }],
+            powiedzCzekaj: ["powiedzWait"],
+            // the Lord breaks (ctx.how: letters / copy / check; ctx.los: arrest / fled / jailed / sent / gone)
+            prawdaScena: [
+                { gdy: "ctx:how=copy", mow: "copyCheck" }, { gdy: "ctx:how=check", mow: "sprawdzil" }, "prawda",
+                { gdy: "flaga:feliksPays", mow: "prawdaPays" }, "fate.{los}",
+                { jesli: "splataTrwa", to: ["reward.debt"], inaczej: [{ jesli: "odkupTrwa", to: ["reward.buyback"], inaczej: ["reward.other"] }] },
+                { gdy: "garnizon", mow: "prawdaGaraz" }, { gdy: "flaga:galazDworskaZamknieta", mow: "prawdaGalaz" }, "prawdaKoniec",
+                { zrob: "prawda", args: [{ ctx: "how" }] }],
+            // ch. 6: who first - the Lord, a lie, silence (no cancel: an answer is due)
+            najpierw: [
+                { jesli: { lub: ["flaga:lordAlly", "flaga:w7Prawda"] }, to: ["najpierwAsk.ally"],
+                    inaczej: [{ jesli: { lub: ["flaga:w1Revealed", "flaga:lordCold"] }, to: ["najpierwAsk.cold"], inaczej: ["najpierwAsk.normal"] }] },
+                { wybor: [
+                    { etykieta: "optLord", tresc: ["sayLord", { zrob: "najpierw", args: ["lord"] }] },
+                    { etykieta: "optLie", tresc: ["sayLie", { zrob: "najpierw", args: ["lie"] }] },
+                    { etykieta: "optSilent", tresc: ["saySilent", { gdy: "feliksTutaj", mow: "saySilentFeliks" }, { zrob: "najpierw", args: ["silent"] }] }], anuluj: -1 }],
+            // the hundred groszy a week (none while the cistern's manor branch is shut); the lie found out; W9's beaten men
+            tydzien: ["tydzien", { zrob: "tydzien" }],
+            tydzienNie: ["tydzienNie", { zrob: "weekNie" }],
+            wrogi: ["lordHostile", { zrob: "hostileSaid" }],
+            w9: ["w9Lord", { zrob: "w9Said" }],
+            // ---- ch. 3 with Feliks gone: a trace of him (ctx.key: the resident - kamerdyner / piekarka / woziwoda, ctx.slad: the trace)
+            slady: ["slady.{key}", { zrob: "slad", args: [{ ctx: "slad" }] }],
+            // ---- ch. 4: Feliks's drawer in the study (the hero speaks; the letters shown while it is open)
+            szuflada: [
+                "szuflada.open", { jesli: "stan:obs.dzien", to: ["szuflada.key"], inaczej: ["szuflada.keyGuess"] }, "szuflada.bundle",
+                { zrob: "drawerShow" }, "szuflada.letters",
+                { jesli: "!feliksTutaj", to: ["szuflada.lastGone"], inaczej: [{ jesli: ["flaga:feliksPays", "!flaga:feliksBroke"], to: ["szuflada.lastPays"], inaczej: ["szuflada.lastHere"] }] },
+                "szuflada.hand", { mow: "szuflada.ask", kto: "bohater" },
+                { wybor: [
+                    { etykieta: "szuflada.take", tresc: [{ zrob: "szuflada", args: ["take"] }] },
+                    { etykieta: "szuflada.copy", tresc: [{ zrob: "szuflada", args: ["copy"] }] },
+                    { etykieta: "szuflada.leave", tresc: [{ zrob: "szuflada", args: ["leave"] }] }], anuluj: 2 },
+                { zrob: "drawerHide" }],
+            // ---- the hatch behind the orangery (Map024) down the Order's canal to the study's trapdoor, and the trapdoor back
+            wlaz: [{ mow: "wlazZejdz", kto: "bohater" }, { wybor: [
+                { etykieta: "wlazTak", tresc: [{ polecenie: 250, parametry: [OPEN1] }, { mow: "kanalGora", kto: "bohater" }, { polecenie: 221 },
+                    transfer(MAP.gab, PLACES.gab.trapLand), { polecenie: 222 }] },
+                { etykieta: "wlazNie", tresc: [] }], anuluj: 1 }],
+            klapa: [{ mow: "klapaZejdz", kto: "bohater" }, { wybor: [
+                { etykieta: "klapaTak", tresc: [{ polecenie: 250, parametry: [OPEN1] }, { mow: "kanalDol", kto: "bohater" }, { polecenie: 221 },
+                    transfer(MAP.manor, PLACES.manor.hatchLand), { polecenie: 222 }] },
+                { etykieta: "klapaNie", tresc: [] }], anuluj: 1 }]
+        },
+        // the talks' actions (Watki.act); the old script calls Dwor.act(this, [...]) of a talk saved before 2026-10-28 come here too
+        akcje: {
+            tour: [{ gdy: "!stan:tour", stan: { tour: 1, tourHall: 0, tourGone: 0 } }],
+            zaproNo: [{ stan: { zaproNo: "dzis" } }],
+            powiedz: [{ gdy: "!stan:told", zrob: [{ stan: { told: "dzis" } }, { flaga: "w7LordWie" }] }],
+            prawda: [{ hak: "prawda", args: [{ arg: 0 }] }],
+            najpierw: [{ hak: "najpierw", args: [{ arg: 0 }] }],
+            tydzien: [{ hak: "tydzien" }],
+            weekNie: [{ stan: { weekPaid: "dzis" } }],
+            hostileSaid: [{ stan: { hostileSaid: "dzis" } }],
+            w9Said: [{ stan: { saidW9: "dzis" } }],
+            slad: [{ hak: "slad", args: [{ arg: 0 }] }],
+            szuflada: [{ hak: "szuflada", args: [{ arg: 0 }] }],
+            drawerShow: [{ hak: "drawerShow" }],
+            drawerHide: [{ hak: "drawerHide" }]
+        },
+        // F9 ("Wyspa i fabuła": the engine's section "Wątek W7", its row "isleW7" "W7: rozdział N" - Dwor.debugJump is the same jump):
+        // straight to a chapter; skokPrzygotuj (Dwor.js) pays and sets what the chapters before it need. The words js/teksty/dwor.txt
+        // (f9Naglowek, f9, f9desc, f9Brak, f9names.N)
+        f9: { rodzaj: "isleW7", ikona: 189, kolejnosc: 7, naglowek: "f9Naglowek", etykieta: "f9", opis: "f9desc", brak: "f9Brak", nazwy: "f9names" },
+        skoki: {
+            wymaga: "fabula",
+            przed: ["skokPrzygotuj"],
+            lista: {
+                1: { ch: 1, krok: "w7Dlug", godzina: 10, idz: [MAP.manor].concat(PLACES.manor.f9) },
+                2: { ch: 2, krok: "w7Zapro", godzina: 10, idz: [MAP.manor].concat(PLACES.manor.f9) },
+                3: { ch: 3, krok: "w7Feliks", godzina: 6.5, idz: [MAP.town].concat(PLACES.town.f9) },
+                4: { ch: 4, krok: "w7Gabinet", godzina: 22.5, idz: [MAP.manor, 3, 22, 8] },
+                5: { ch: 5, krok: "w7Prawda", godzina: 10, idz: [MAP.manor].concat(PLACES.manor.f9) },
+                6: { ch: 6, krok: "w7Najpierw", godzina: 10, idz: [MAP.manor].concat(PLACES.manor.f9) },
+                7: { ch: 7, krok: "w7Serce", godzina: 10, idz: [MAP.manor].concat(PLACES.manor.f9) }
+            }
+        }
+    });
+    const W7 = w.Q.W7;
 
     // ------------------------------------------------------------------ TownLife: Feliks's day (and Teodor's once Feliks is gone)
     // 6-10:30 the market (as before from 7: K30, K31, K37 and the tests keep their hours), 10:30-20 the manor's hall ("inside dwor" =
@@ -167,7 +297,7 @@
 
     window.DworData = {
         MAP, IDS, OWNER: "Dwor", EV, ART, PLACES, TIME, OBS, PAY, GEAR, KAZIMIERZ, TX, W7, VITEMS, REMARKS,
-        // the steps' names (Dwor.js: which step is on): the chapters 1, 2, 3, 4, 4 (the truth), 5, 6, 7
-        STEPS: ["w7Dlug", "w7Zapro", "w7Feliks", "w7Gabinet", "w7Prawda", "w7Splata", "w7Najpierw", "w7Serce"]
+        // the steps' names (Dwor.step(): which step is on): the chapters 1, 2, 3, 4, 4 (the truth), 5, 6, 7
+        STEPS: W7.steps.map(s => s.nazwa)
     };
 })();

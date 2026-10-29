@@ -1,0 +1,15 @@
+{
+ "art": {
+  "felt": {
+   "pierwszenstwo": "Rzut o pierwszeństwo: wyższe oczko zaczyna",
+   "twojaTura": "Twoja tura — rzuć kośćmi",
+   "najpierwOdloz": "Najpierw odłóż co najmniej jedną punktującą kość",
+   "wybierz": "Wybierz kości, które odkładasz",
+   "niePunktuja": "Nie wszystkie wybrane kości punktują",
+   "odklada": " odkłada: ",
+   "tura": "Tura: ",
+   "pula": "Pula {pula}"
+  }
+ },
+ "_opis": "Napisy drawFelt (TavernDice_Art.js) sprzed przeniesienia do js/teksty/kosci.txt, art.felt.* (co klatkę: doklejane jak dawniej; pula: \"Pula \" + złoto -> szablon {pula})"
+}

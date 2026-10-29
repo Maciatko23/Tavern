@@ -54,9 +54,11 @@ Wyjątki wpisane w sklepach (`questFirst`, `YIELD` w Bron i Ubior_Sklepy) znikn�
 | 9 | `owner` (700) | Garnizon | `rotmistrz`, `kwatermistrz`, `werbownik` | zawsze (pierwsze spotkania, sprawy zadań przez `questWants`, potem menu) | menu rotmistrza (przychylność, glejt, lista zaginionych...), **menu Kłosa** (rozdz. 2), werbownika |
 | 10 | `handBack` (650) | Kruk | `kupiec` i właściciele cudzych listów (`kowal`, `kapral`, `janek`, `dzwonnik`, `soltys`, `znachorka`, `zosia`, `kupiec`) | list w torbie (bez gotowego oddania zadania); Baltazar odkupuje cudze listy raz dziennie | oddanie listu, wybór listów na sprzedaż |
 | 11 | `meet+10` (610) | Pustelnia | `pustelnik`, `dzwonnik`, `kupiec` | Kleofas: zawsze (spotkanie, noc pytań, zadania przez `questWants`, menu: karta, kroniki, miód, wisiorek, kroniki, „Co słychać?”); Ambroży / Baltazar: luźna karta kronik (D23) | rozmowa i menu Kleofasa; oddanie / odkupienie karty |
+| 11a | `meet+5` (605) | Podroznicy (2026-10-28) | podróżni z promu (3020-3049: obsada, Kompania, miejsca puli) | pierwsza rozmowa z podróżnym w danej wizycie (raz) | podróżny się przedstawia (docs/PODROZNI.md) |
 | 12 | `meet` (600) | Przystań | `janek`, `przemytnik`, `celnik` | Janek, Roch: zawsze (spotkanie, zdrada, zadania przez `questWants`, listy W10, menu); celnik: pierwsze spotkanie, D20 w komorze celnej | menu Janka (ryby, wędzona ryba, czerwona woda...), Rocha, wydanie Rocha |
 | 13 | `wrap` (550) | Homes | `soltys` | usłyszał o chacie, coś na sprzedaż, godziny ratusza | najpierw zwykła rozmowa sołtysa (ta sama rozmowa bez Homes: zadania, powitanie, linijka), potem „Domy na sprzedaż” / „Do widzenia” |
 | 14 | `quest` (500) | TownQuests | każdy mieszkaniec | **co zadania mają do powiedzenia**, po kolei: pieniądze Kuby w dzień targowy, uwaga po zdarzeniu (raz), gotowe oddanie / przypomnienie własnego zadania / oferta / rozmowa kroku w toku (np. „Jeszcze schnie” K22, łapówka D6), chłód W6 | sprawy zadań |
+| 14a | `shop+25` (475) | Podroznicy (2026-10-28) | podróżni z promu | zawsze, gdy podróżny jest na wyspie (zadania podróżnych - `quest` - mają pierwszeństwo) | menu: „Skąd płyniesz?”, „Jakie wieści z lądu?”, „Co słychać?”, przysługa z puli, opcje innych, „Bywaj.” |
 | 15 | `shop+20` (470) | Kantor („baltazar”) | `kupiec` | po W5: cotygodniowa działka (podwójny kantor), sklep w godzinach pracy (wróg / w garści) | działka; „Pokaż towar”, opcje innych (Bron), „Bywaj” |
 | 16 | `shop+10` (460) | Bron | `kowal`, `kupiec` | sklep otwarty (godziny, towar) - i nikt wyżej nic nie ma (zadania, menu Ludzi z rabatem, sklep Kantoru po W5, listy kruka, karta Pustelni, skrzynia D34) | menu sklepu: „Pokaż broń i zbroje” / „Sprzedaj...” / „Napraw...” / „Porozmawiaj” (= ta sama rozmowa bez Bron) / „Nic, dziękuję” |
 | 16a | `shop+5` (455) | Woz (2026-10-24) | `woznica` | wóz stoi na postoju tej mapy i są godziny przewozu (7:00-19:30) - i nikt wyżej nic nie ma (K15 i inne zadania pierwsze) | zaproszenie na wóz, menu: „Podwieź mnie” (opcja `Woz`: wybór postoju na mapie wyspy), opcje innych, „Bywaj.” |
@@ -78,7 +80,7 @@ mieszkańca na poziomie `owner` („first”) albo `after` (bez), z ostrzeżenie
 | `ludmila` | Kantor | „Pokaż towar” | Bron: „Broń z kontynentu” | „Obóz” (`ORDER.chat`), „Bywaj” |
 | `kupiec` (Baltazar po W5) | Kantor | „Pokaż towar” | Bron: „Broń z kontynentu” | „Bywaj” |
 | `szwaczka`, `garbarz`, `przekupka`, `szmaciarz` | Ubior_Sklepy | zakładki (Pokaż / Sprzedaj / Napraw / Ufarbuj) | Bron: skórzane zbroje, przeszywanice, stara broń (garbarz, szwaczka, szmaciarz) | „Porozmawiaj”, „Nic, dziękuję” |
-| `borgar` (Story) | Story | „Weź zmianę” (w godzinach), „Sprzedaj towar” | TavernLife: „Zjedz coś”, „Wynajmij pokój” + tematy zadań przy barze (TownQuests przez TavernLife) | „Pogadaj”, „Nie teraz” |
+| `borgar` (Story) | Story | „Weź zmianę” (w godzinach), „Sprzedaj towar” | TavernLife: „Zjedz coś”, „Wynajmij pokój” + tematy zadań przy barze (TownQuests przez TavernLife); Podroznicy: „Księga gości” (2026-10-28); PodroznicySprawy: „Podgrzej list kamerdynera nad kociołkiem” (K71, gdy list w torbie) | „Pogadaj”, „Nie teraz” |
 | `woznica` (Wojciech przy wozie; na innych mapach jego zastępca - zdarzenie 3001 Woz) | Woz | - (jedna z jego kwestii „wita”) | Woz: „Podwieź mnie” (gdy wóz tu stoi, 7:00-19:30) | „Bywaj.” |
 
 `addMenu` w Garnizon, Kantor, Ludzie i Ubior_Sklepy - **usunięte**; jedynym użytkownikiem był Bron, który rejestruje teraz opcje
@@ -110,7 +112,7 @@ jako odczyt (testy).
 
 | priorytet | wtyczka | co |
 |---|---|---|
-| `hidden` (900) | Garnizon, Ludzie, Przystan, TownLife, Woz, Wrak | ukryta postać / rzecz nie startuje (każda sprawdza swoje pole: `_garn`, `_ludHidden`, `_przystan`, `_town`, `_wozShown` (wóz i Wojciech poza postojem), `_wrak`) |
+| `hidden` (900) | Garnizon, Ludzie, Podroznicy (aktorzy przystani 3002-3008, `_podr`), PodroznicySprawy (Antek i Zenon w garnizonie 3008-3009, `_podrS`), Przystan, TownLife, Woz, Wrak | ukryta postać / rzecz nie startuje (każda sprawdza swoje pole: `_garn`, `_ludHidden`, `_przystan`, `_town`, `_wozShown` (wóz i Wojciech poza postojem), `_wrak`) |
 | `instead` (500) | HomeLife | kot na posłaniu nie zabiera startu łóżku („spać?”) |
 | `instead` (500) | TavernDice | stół z `<Tavern:dice>` otwiera grę zamiast strony |
 | `before` (100) | Combat | automatyczny tryb walki wyłączany przed rozmową (Combat_Feel `beforeEvent`); nigdy nie przejmuje |

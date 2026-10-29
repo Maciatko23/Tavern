@@ -1,0 +1,11 @@
+{
+ "kod": {
+  "hitTree": {
+   "0": "Piorun trafił w drzewo!"
+  },
+  "strike": {
+   "0": "Nie ma tu drzewa, w które mógłby trafić"
+  }
+ },
+ "_opis": "Napisy kodu Storm.js sprzed przeniesienia do js/teksty/burza.txt (kod.*)"
+}

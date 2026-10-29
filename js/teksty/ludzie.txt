@@ -394,9 +394,7 @@ Nocą nie handluję. Przyjdź rano, po ósmej.
 [pedlarNoBuy]
 Nie masz nic, co bym wziął. Skóry, wełna, miód, wosk, rzadkie zioła, trofea - to kupuję.
 
-pedlarMapSold = Mapę już masz - drugiej takiej nie zrobię.
 pedlarWaterDone = Dziś już piłeś z mojej beczki. Jutro.
-pedlarWaterNone = Beczka sucha. Upał wypił wszystko.
 pedlarWaterLine = Łyk z beczki. Woda z daleka - stąd cena.
 [rumourNone]
 Nic nowego. Wszystko, o czym słyszałem, już wiesz.
@@ -470,26 +468,12 @@ cave.nicheLook = W niszy skrzynia z wypalonym krukiem. Ciężka.
 cave.table = Stół przemytników. Rejestr: skrzynie, kamienie z krukiem, worki zboża. Pismo Baltazara.
 cave.barrel = Beczki z solą i suszoną rybą. Na wieku znak kruka.
 cave.salt = Woda morska. Słona - nie do picia.
-[caveTake]
-Weź skrzynię (ciężka).
-Wyłam wieko i zajrzyj.
-Zostaw.
-
-[caveOpened]
-Pod wiekiem: przyprawy w woreczkach, gwoździe, sakiewka z groszem... i pusta przegródka po kamieniu z krukiem. Celnik się dowie, że ktoś tu był.
-
-[crateCelnik]
-> Skrzynia z jaskini pod zatoczką. Pieczęć kruka.
-(Celnik zapisuje długo.) Jedna skrzynia, pieczęć kruka, skład przemytników... Zgadza się.
-Czterdzieści groszy. I w księdze stoi teraz, że wnuk Stacha jest po stronie prawa.
-
+# nisza w jaskini: wybór (rozmowa „nisza” w Ludzie_Data.js)
+caveTake.wez = Weź skrzynię (ciężka).
+caveTake.wylam = Wyłam wieko i zajrzyj.
+caveTake.zostaw = Zostaw.
 [crateCelnik2]
 Druga? (Celnik unosi brwi.) Skąd... nie, nie mów. Dwadzieścia więcej. I nikomu ani słowa.
-
-[crateBaltazar]
-> Twoja skrzynia. Z jaskini pod zatoczką.
-(Baltazar uśmiecha się szeroko.) Mój przyjaciel! Wiedziałem, że jesteś rozsądny. Dziewięćdziesiąt groszy.
-Celnik nic nie wie, prawda? Prawda.
 
 [crateBaltazar2]
 I druga? Ach, przyjacielu... Czterdzieści więcej. Rozsądek się opłaca.
@@ -498,16 +482,11 @@ crateLabel.celnik = Oddaj skrzynię celnikowi.
 crateLabel.baltazar = Oddaj skrzynię Baltazarowi.
 crateLabel.keep = Jeszcze nie.
 stash = Druga skrzynia przemytu z pieczęcią kruka. Ciężka.
-graves.dirty = Stary krzyż, zarośnięty chwastami i mchem.
 graves.clean = Oczyszczony krzyż. Ktoś tu dba o pamięć.
-graves.cleaning = Wyrywasz chwasty, zdzierasz mech...
 [graves.done]
 Trzy stare krzyże czyste. Ławka znowu widać. Ługowie mają tu spokój.
 
 graves.bench = Stara ławka przy grobach. Usiąść, pomyśleć.
-[patrolSearch]
-Stój! Przeszukanie. Rozkaz rotmistrza.
-
 [patrolNight]
 Do broni! Rabusie!
 Za króla!
@@ -532,6 +511,15 @@ epilog.graves = Marta Ługowa siada czasem przy starych grobach w lesie, tych, k
 epilog.cave.celnik = Jaskinia pod zatoczką stoi pusta: celnik Sambor przybił przy wejściu deskę z pieczęcią. Przemytnicy szukają nowej dziury w brzegu.
 epilog.cave.baltazar = Skrzynia z jaskini wróciła do Baltazara. W jego księgach stoisz teraz po stronie zysków - a on niczego nie zapomina.
 epilog.cave.otwarta = Jaskinię pod zatoczką zalewa przypływ jak dawniej. O wyłamanej skrzyni mówi się na przystani szeptem - nikt nie wie, że to ty.
+
+# ======================================================================== rozmowy kroków zadań (Ludzie_Data.js, rozmowy)
+# K63, krok „odbierz węgiel” (mówi Zbych): rabusie rozkopali kopiec / pobili bohatera / spokojna noc
+wegiel.rozkopany = Rabusie rozkopali kopiec w nocy. Uratowałem pięć worków. Resztę dokup albo przynieś z innego wypału.
+wegiel.pobity = Pobili cię, a i tak coś zostało. Sześć worków - więcej nie dam rady.
+wegiel.caly = Kopiec ostygł, węgiel jak smoła. Dziesięć worków dla Tadka - i dzięki za noc przy kopcu.
+# D35, krok „co z szybem” (Grum albo rotmistrz - ich kwestie: shaftGrum, shaftCaptain): wybór
+szyb.powiedz = Powiedz o szybie.
+szyb.nie = Jeszcze nie.
 
 # ======================================================================== z kodu Ludzie.js (kod.<funkcja>.<n>, w kolejności kodu)
 # stopName
@@ -628,12 +616,6 @@ kod.act.1 = Wawrzyn Owczarz
 kod.act.2 = Zbych Smolarz
 # k63Coal
 kod.k63Coal.0 = Węgiel drzewny ×{n}
-# talk
-kod.talk.0 = Rabusie rozkopali kopiec w nocy. Uratowałem pięć worków. Resztę dokup albo przynieś z innego wypału.
-kod.talk.1 = Pobili cię, a i tak coś zostało. Sześć worków - więcej nie dam rady.
-kod.talk.2 = Kopiec ostygł, węgiel jak smoła. Dziesięć worków dla Tadka - i dzięki za noc przy kopcu.
-kod.talk.3 = Powiedz o szybie.
-kod.talk.4 = Jeszcze nie.
 # vars
 kod.vars.0 = za mielerzem, przy drodze
 kod.vars.1 = dalej na wschód, przy zakręcie
@@ -687,3 +669,84 @@ Przychodzę raz na jakiś czas. Posiedzę - i do prania.
 Stary Ług przyszedł tu z kontynentu, jak zagroda była jeszcze lasem. Tak mówił Jan.
 Idź, idź. Ja jeszcze chwilę.
 
+# ======================================================================== SPOTS (miejsca.<klucz>.name) - miejsca paczki C w Okolice
+miejsca.mielerz.name = Mielerz
+miejsca.szalas_wegl.name = Szałas węglarza
+miejsca.postoj_021.name = Postój handlarza (Leśna droga)
+miejsca.juk_021.name = Zgubiony juk
+miejsca.postoj_handlarza.name = Postój handlarza
+miejsca.koszar.name = Koszar
+miejsca.pastwisko.name = Pastwisko
+miejsca.postoj_004.name = Postój handlarza (Łąka)
+miejsca.postoj_003.name = Postój handlarza (Kruczy Jar)
+miejsca.pastwisko_018.name = Pastwisko przy menhirach
+miejsca.owca_017.name = Zabłąkana owca
+miejsca.oboz_kopaczy.name = Obóz kopaczy
+miejsca.szyb_czo.name = Szyb poszukiwawczy
+miejsca.jaskinia_wejscie.name = Wejście do jaskini
+miejsca.grob_lugow.name = Stare groby Ługów
+miejsca.patrol_159.name = Obchód patrolu
+miejsca.patrol_162.name = Obchód patrolu
+
+# ======================================================================== DISCOVER (odkrycia.<klucz>) - odkrycia w zakładce „Okolice”
+odkrycia.lud_mielerz.name = Mielerz Zbycha
+odkrycia.lud_mielerz.text = Kopiec polan obłożony darnią przy Leśnej drodze. Zbych Smolarz pali tu węgiel drzewny: co szósty dzień rozpala, dwa dni kopiec się tli i dymi, nocą żarzy się jak oko. W dni wypału Zbych śpi obok, w szałasie.
+odkrycia.lud_koszar.name = Koszar pasterza
+odkrycia.lud_koszar.text = Wiklinowa zagroda na Łące. Wawrzyn Owczarz pasie tu sześć owiec, wieczorem zagania je za płot - wilki nocą nie przeskoczą plecionki. Co trzeci dzień pasie stado przy menhirach.
+odkrycia.lud_postoj.name = Postój wędrownego handlarza
+odkrycia.lud_postoj.text = Wóz pod plandeką, osiołek i ognisko przy Polnej drodze. Szymon Juczny krąży czterema postojami: Polna droga, Leśna droga, Łąka, Kruczy Jar - dzień tu, dzień tam. Sprzedaje to, czego w miasteczku nie ma, i słyszy, co gdzie leży.
+odkrycia.lud_oboz.name = Obóz kopaczy Czarnych Oczu
+odkrycia.lud_oboz.text = Dwa namioty pod skałą na wschodzie gór i szyb wykuty w kamieniu. Kopacze Czarnych Oczu drążą tu coś po cichu - za dnia pilnują, nocą śpią przy ognisku.
+odkrycia.lud_jaskinia.name = Jaskinia pod zatoczką
+odkrycia.lud_jaskinia.text = Skalny otwór nad zatoczką przemytników, zalewany przez przypływ. Wejść można tylko w odpływie. Ktoś tu bywa nocą - na piasku ślady skrzyń.
+odkrycia.lud_groby.name = Stare groby Ługów
+odkrycia.lud_groby.text = Trzy omszałe krzyże i ławka na skraju spalonej zagrody. Tu leżą rodzice i dziadkowie Jana Ługa - starsi niż jego krzyż przy drodze.
+
+# ======================================================================== F9 (zakładka „Wyspa i fabuła”, sekcja paczki C)
+f9.tytul = Paczka C: Ludzie (mielerz, pasterz, handlarz, patrole, kopacze, jaskinia, groby):
+[f9.miejsca]  # wiersz „Miejsce”: miejsca, na które przenosi (kolejność jak w Ludzie.js, PLACES)
+Mielerz Zbycha (Leśna droga)
+Szałas węglarza
+Postój handlarza (Polna droga)
+Postój handlarza (Leśna droga)
+Postój handlarza (Łąka)
+Postój handlarza (Kruczy Jar)
+Koszar i pastwisko (Łąka)
+Pastwisko przy menhirach
+Omszała łąka (owca K64)
+Juk K65 (Leśna droga)
+Obóz kopaczy (Góry)
+Szyb kopaczy
+Zatoczka: wylot jaskini (Przystań)
+Jaskinia przemytników (mapa 177)
+Stare groby Ługów
+Patrol: przylądek z latarnią
+Patrol: garnizon (wybrzeże)
+
+
+# (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
+pedlarMapSold = Mapę już masz - drugiej takiej nie zrobię.
+pedlarWaterNone = Beczka sucha. Upał wypił wszystko.
+[caveOpened]
+Pod wiekiem: przyprawy w woreczkach, gwoździe, sakiewka z groszem... i pusta przegródka po kamieniu z krukiem. Celnik się dowie, że ktoś tu był.
+
+[crateCelnik]
+> Skrzynia z jaskini pod zatoczką. Pieczęć kruka.
+(Celnik zapisuje długo.) Jedna skrzynia, pieczęć kruka, skład przemytników... Zgadza się.
+Czterdzieści groszy. I w księdze stoi teraz, że wnuk Stacha jest po stronie prawa.
+
+[crateBaltazar]
+> Twoja skrzynia. Z jaskini pod zatoczką.
+(Baltazar uśmiecha się szeroko.) Mój przyjaciel! Wiedziałem, że jesteś rozsądny. Dziewięćdziesiąt groszy.
+Celnik nic nie wie, prawda? Prawda.
+
+graves.dirty = Stary krzyż, zarośnięty chwastami i mchem.
+graves.cleaning = Wyrywasz chwasty, zdzierasz mech...
+[patrolSearch]
+Stój! Przeszukanie. Rozkaz rotmistrza.
+
+kod.talk.0 = Rabusie rozkopali kopiec w nocy. Uratowałem pięć worków. Resztę dokup albo przynieś z innego wypału.
+kod.talk.1 = Pobili cię, a i tak coś zostało. Sześć worków - więcej nie dam rady.
+kod.talk.2 = Kopiec ostygł, węgiel jak smoła. Dziesięć worków dla Tadka - i dzięki za noc przy kopcu.
+kod.talk.3 = Powiedz o szybie.
+kod.talk.4 = Jeszcze nie.

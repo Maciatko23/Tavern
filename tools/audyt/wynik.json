@@ -1,13 +1,13 @@
 {
  "summary": {
-  "zadania": 106,
-  "mieszkancy": 60,
+  "zadania": 115,
+  "mieszkancy": 84,
   "mapy": 126,
   "znaczniki": 332,
   "problemy": {
    "do sprawdzenia": 1,
-   "uciążliwość": 2,
-   "info": 20
+   "uciążliwość": 4,
+   "info": 60
   },
   "bledyWczytania": []
  },
@@ -15,49 +15,79 @@
   {
    "waga": "do sprawdzenia",
    "zadanie": "W13",
-   "krok": "krok 2 (rozdz. 3) talk",
+   "krok": "krok 2 (rozdz. 3) w13Kleofas",
    "co": "przedmiot „Pióro białego orła” (184) ×1 - nie znalazłem źródła (receptura, zbiór, sklep, łup, nagroda)"
   },
   {
    "waga": "uciążliwość",
    "zadanie": "D21",
-   "krok": "krok 2 talk",
+   "krok": "krok 2 d21Soltys",
    "co": "krok wymaga 350 G"
   },
   {
    "waga": "uciążliwość",
+   "zadanie": "D43",
+   "krok": "krok 0 d43Rozpytaj",
+   "co": "Rafał dostępny tylko przez 8% okna 0-24 (w domu bez wnętrza (brak znacznika Miejsce: rafal_wnetrze))"
+  },
+  {
+   "waga": "uciążliwość",
    "zadanie": "K19",
-   "krok": "krok 0 custom",
+   "krok": "krok 0 k19Count",
+   "co": "Rafał dostępny tylko przez 8% okna 0-24 (w domu bez wnętrza (brak znacznika Miejsce: rafal_wnetrze))"
+  },
+  {
+   "waga": "uciążliwość",
+   "zadanie": "W16",
+   "krok": "krok 0 (rozdz. 1) w16Tomek",
    "co": "Rafał dostępny tylko przez 8% okna 0-24 (w domu bez wnętrza (brak znacznika Miejsce: rafal_wnetrze))"
   },
   {
    "waga": "info",
+   "zadanie": "D10",
+   "krok": "krok 0 d10Lek",
+   "co": "Ludmiła bywa tylko, gdy „w6Obecni”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D10",
+   "krok": "krok 2 d10Morning",
+   "co": "Ludmiła bywa tylko, gdy „w6Obecni”"
+  },
+  {
+   "waga": "info",
    "zadanie": "D20",
-   "krok": "krok 2 bring",
+   "krok": "krok 2 d20Burta",
    "co": "Roch bywa tylko, gdy „warunek z kodu”"
   },
   {
    "waga": "info",
    "zadanie": "D20",
-   "krok": "krok 5 bring",
+   "krok": "krok 5 d20Kuter",
    "co": "Roch bywa tylko, gdy „warunek z kodu”"
   },
   {
    "waga": "info",
+   "zadanie": "D27",
+   "krok": "krok 1 (rozdz. 2) d27Ludmila",
+   "co": "Ludmiła bywa tylko, gdy „w6Obecni”"
+  },
+  {
+   "waga": "info",
    "zadanie": "D30",
-   "krok": "krok 0 (rozdz. 1) bring",
+   "krok": "krok 0 (rozdz. 1) d30Arcydziegiel",
    "co": "Babka Jagna w godzinach kroku 5-21 tylko pod warunkiem: zasRosa, zasPoDeszczu"
   },
   {
    "waga": "info",
    "zadanie": "D30",
-   "krok": "krok 1 (rozdz. 2) bring",
+   "krok": "krok 1 (rozdz. 2) d30Dziurawiec",
    "co": "Babka Jagna w godzinach kroku 5-21 tylko pod warunkiem: zasRosa, zasPoDeszczu"
   },
   {
    "waga": "info",
    "zadanie": "D30",
-   "krok": "krok 2 (rozdz. 3) bring",
+   "krok": "krok 2 (rozdz. 3) d30Kozlek",
    "co": "Babka Jagna w godzinach kroku 5-21 tylko pod warunkiem: zasRosa, zasPoDeszczu"
   },
   {
@@ -69,20 +99,116 @@
   {
    "waga": "info",
    "zadanie": "D31",
-   "krok": "krok 1 (rozdz. 2) bring",
+   "krok": "krok 1 (rozdz. 2) d31Jozek",
    "co": "rzecz spoza bazy „zas_medalik” daje kod wtyczki (nie vgives w danych)"
   },
   {
    "waga": "info",
    "zadanie": "D31",
-   "krok": "krok 1 (rozdz. 2) bring",
+   "krok": "krok 1 (rozdz. 2) d31Jozek",
    "co": "rzecz spoza bazy „zas_klucz” daje kod wtyczki (nie vgives w danych)"
   },
   {
    "waga": "info",
    "zadanie": "D31",
-   "krok": "krok 1 (rozdz. 2) bring",
+   "krok": "krok 1 (rozdz. 2) d31Jozek",
    "co": "rzecz spoza bazy „zas_moneta_kruk” daje kod wtyczki (nie vgives w danych)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D39",
+   "krok": "krok 0 d39Ziola",
+   "co": "Konstanty Mak bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D39",
+   "krok": "krok 1 d39Woda",
+   "co": "Konstanty Mak bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D39",
+   "krok": "krok 2 d39Noc",
+   "co": "Konstanty Mak bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D4",
+   "krok": "krok 1 d4Ela",
+   "co": "Ela bywa tylko, gdy „w6Obecni”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D40",
+   "krok": "krok 1 d40Oddaj",
+   "co": "Teofil Cyrkiel bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D41",
+   "krok": "krok 0 d41Scena",
+   "co": "Jędrek Dudarz bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D41",
+   "krok": "krok 2 d41Jedrek",
+   "co": "Jędrek Dudarz bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D41",
+   "krok": "krok 3 d41Zwrotka",
+   "co": "Jędrek Dudarz bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D42",
+   "krok": "krok 3 d42Worki",
+   "co": "Zenon Sita bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "K19",
+   "krok": "krok 0 k19Count",
+   "co": "Ludmiła bywa tylko, gdy „w6Obecni”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "K19",
+   "krok": "krok 0 k19Count",
+   "co": "Ela bywa tylko, gdy „w6Obecni”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "K27",
+   "krok": "krok 0 k27Melia",
+   "co": "Ela bywa tylko, gdy „w6Obecni”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "K28",
+   "krok": "krok 0 k28Winter",
+   "co": "Ludmiła bywa tylko, gdy „w6Obecni”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "K5",
+   "krok": "krok 0 k5",
+   "co": "Ludmiła bywa tylko, gdy „w6Obecni”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "K54",
+   "krok": "krok 0 k54Pawik",
+   "co": "Ela bywa tylko, gdy „w6Obecni”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "K71",
+   "krok": "krok 1 k71Powrot",
+   "co": "Tobiasz Goniec bywa tylko, gdy „warunek z kodu”"
   },
   {
    "waga": "info",
@@ -110,6 +236,18 @@
   },
   {
    "waga": "info",
+   "zadanie": "mieszkaniec gwardzista",
+   "krok": "inside podr_pokoj",
+   "co": "Ostap w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: gwardzista_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec gwardzista",
+   "krok": "inside podr_sala",
+   "co": "Ostap w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: gwardzista_wnetrze)"
+  },
+  {
+   "waga": "info",
    "zadanie": "mieszkaniec kamerdyner",
    "krok": "inside brama_wsch",
    "co": "Teodor w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: kamerdyner_wnetrze)"
@@ -128,9 +266,33 @@
   },
   {
    "waga": "info",
+   "zadanie": "mieszkaniec posel",
+   "krok": "inside podr_pokoj",
+   "co": "Adam Wierzbięta w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: posel_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec posel",
+   "krok": "inside podr_sala",
+   "co": "Adam Wierzbięta w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: posel_wnetrze)"
+  },
+  {
+   "waga": "info",
    "zadanie": "mieszkaniec rafal",
    "krok": "inside stodola",
    "co": "Rafał w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: rafal_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec trojka",
+   "krok": "inside podr_pokoj",
+   "co": "Gość spod trójki w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: trojka_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "mieszkaniec trojka",
+   "krok": "inside podr_sala",
+   "co": "Gość spod trójki w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: trojka_wnetrze)"
   },
   {
    "waga": "info",
@@ -149,6 +311,96 @@
    "zadanie": "mieszkaniec zlodziej",
    "krok": "inside pod_murem",
    "co": "Szymek w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: zlodziej_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W15",
+   "krok": "krok 2 (rozdz. 2) w15Augustyn",
+   "co": "brat Augustyn bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W15",
+   "krok": "krok 4 (rozdz. 3) w15Skrzynka",
+   "co": "Gaspar Lis bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W15",
+   "krok": "krok 5 (rozdz. 4) w15Komu",
+   "co": "brat Augustyn bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W15",
+   "krok": "krok 6 (rozdz. 5) w15Pozegnanie",
+   "co": "brat Augustyn bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W16",
+   "krok": "krok 0 (rozdz. 1) w16Tomek",
+   "co": "Szczerba bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W16",
+   "krok": "krok 0 (rozdz. 1) w16Tomek",
+   "co": "Tomek bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W16",
+   "krok": "krok 1 (rozdz. 2) w16Lowczyni",
+   "co": "Szczerba bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W16",
+   "krok": "krok 1 (rozdz. 2) w16Lowczyni",
+   "co": "Tomek bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W16",
+   "krok": "krok 1 (rozdz. 2) w16Lowczyni",
+   "co": "Szczerba bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W16",
+   "krok": "krok 2 (rozdz. 2) w16Tymon",
+   "co": "Szczerba bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W16",
+   "krok": "krok 2 (rozdz. 2) w16Tymon",
+   "co": "Tomek bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W16",
+   "krok": "krok 2 (rozdz. 2) w16Tymon",
+   "co": "Tomek bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W16",
+   "krok": "krok 3 (rozdz. 3) w16Plan",
+   "co": "Szczerba bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W16",
+   "krok": "krok 3 (rozdz. 3) w16Plan",
+   "co": "Roch bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W16",
+   "krok": "krok 3 (rozdz. 3) w16Plan",
+   "co": "Tomek bywa tylko, gdy „warunek z kodu”"
   }
  ],
  "quests": [
@@ -195,7 +447,7 @@
    "giver": "piekarka",
    "steps": 2,
    "blokady": 0,
-   "inne": 0
+   "inne": 1
   },
   {
    "id": "K6",
@@ -375,7 +627,7 @@
    "giver": "soltys",
    "steps": 2,
    "blokady": 0,
-   "inne": 1
+   "inne": 3
   },
   {
    "id": "K27",
@@ -384,7 +636,7 @@
    "giver": "ludmila",
    "steps": 1,
    "blokady": 0,
-   "inne": 0
+   "inne": 1
   },
   {
    "id": "K28",
@@ -393,7 +645,7 @@
    "giver": "ludmila",
    "steps": 1,
    "blokady": 0,
-   "inne": 0
+   "inne": 1
   },
   {
    "id": "K29",
@@ -420,7 +672,7 @@
    "giver": "piekarka",
    "steps": 3,
    "blokady": 0,
-   "inne": 0
+   "inne": 1
   },
   {
    "id": "D10",
@@ -429,7 +681,7 @@
    "giver": "ludmila",
    "steps": 3,
    "blokady": 0,
-   "inne": 0
+   "inne": 2
   },
   {
    "id": "D18",
@@ -708,7 +960,7 @@
    "giver": "ela",
    "steps": 1,
    "blokady": 0,
-   "inne": 0
+   "inne": 1
   },
   {
    "id": "K50",
@@ -816,7 +1068,7 @@
    "giver": "ludmila",
    "steps": 3,
    "blokady": 0,
-   "inne": 0
+   "inne": 1
   },
   {
    "id": "D25",
@@ -1098,6 +1350,87 @@
    "inne": 0
   },
   {
+   "id": "K71",
+   "kind": "K",
+   "title": "Listy z lądu",
+   "giver": "tobiasz",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 1
+  },
+  {
+   "id": "K72",
+   "kind": "K",
+   "title": "Poczta z lądu",
+   "giver": "tobiasz",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D39",
+   "kind": "D",
+   "title": "Gorączka z promu",
+   "giver": "medyk",
+   "steps": 4,
+   "blokady": 0,
+   "inne": 3
+  },
+  {
+   "id": "D40",
+   "kind": "D",
+   "title": "Mapa dla kartografa",
+   "giver": "kartograf",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 1
+  },
+  {
+   "id": "D41",
+   "kind": "D",
+   "title": "Pieśń z lądu",
+   "giver": "grajek",
+   "steps": 4,
+   "blokady": 0,
+   "inne": 3
+  },
+  {
+   "id": "D42",
+   "kind": "D",
+   "title": "Zboże w suszę",
+   "giver": "piekarka",
+   "steps": 5,
+   "blokady": 0,
+   "inne": 1
+  },
+  {
+   "id": "D43",
+   "kind": "D",
+   "title": "Matka szuka syna",
+   "giver": "urszula",
+   "steps": 3,
+   "blokady": 0,
+   "inne": 1
+  },
+  {
+   "id": "W15",
+   "kind": "W",
+   "title": "Święte kości",
+   "giver": "-",
+   "steps": 7,
+   "blokady": 0,
+   "inne": 4
+  },
+  {
+   "id": "W16",
+   "kind": "W",
+   "title": "Dezerter",
+   "giver": "-",
+   "steps": 4,
+   "blokady": 0,
+   "inne": 12
+  },
+  {
    "id": "D21",
    "kind": "D",
    "title": "Spalona zagroda",
@@ -1330,7 +1663,7 @@
    "key": "woznica",
    "name": "Wojciech",
    "map": 8,
-   "reach": 34,
+   "reach": 5,
    "whys": [
     "w domu bez wnętrza (brak znacznika Miejsce: woznica_wnetrze)"
    ],
@@ -1647,6 +1980,216 @@
     "poza mapą (grabarz_chata)"
    ],
    "problems": 0
+  },
+  {
+   "key": "tobiasz",
+   "name": "Tobiasz Goniec",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "medyk",
+   "name": "Konstanty Mak",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "zboze",
+   "name": "Zenon Sita",
+   "map": 8,
+   "reach": 96,
+   "whys": [
+    "poza mapą (podr_droga)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "relikwie",
+   "name": "Gaspar Lis",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "kartograf",
+   "name": "Teofil Cyrkiel",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "ksenia",
+   "name": "Ksenia Żuraw",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "wizytator",
+   "name": "brat Augustyn",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "urszula",
+   "name": "Urszula z Olszynki",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "dezerter",
+   "name": "Tomek",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "lowczyni",
+   "name": "Szczerba",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "grajek",
+   "name": "Jędrek Dudarz",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "poborca",
+   "name": "Erazm Łaska",
+   "map": 8,
+   "reach": 83,
+   "whys": [
+    "poza mapą (podr_dwor)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "pielgrzym",
+   "name": "Albin",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "trojka",
+   "name": "Gość spod trójki",
+   "map": 8,
+   "reach": 0,
+   "whys": [
+    "w domu bez wnętrza (brak znacznika Miejsce: trojka_wnetrze)"
+   ],
+   "problems": 2
+  },
+  {
+   "key": "kompania_1",
+   "name": "Hubert Szary",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "kompania_2",
+   "name": "Jasiek Brzytwa",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "kompania_3",
+   "name": "Kazik Kołek",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "kompania_4",
+   "name": "Ruda Hela",
+   "map": 8,
+   "reach": 100,
+   "whys": [],
+   "problems": 0
+  },
+  {
+   "key": "posel",
+   "name": "Adam Wierzbięta",
+   "map": 8,
+   "reach": 0,
+   "whys": [
+    "w domu bez wnętrza (brak znacznika Miejsce: posel_wnetrze)"
+   ],
+   "problems": 2
+  },
+  {
+   "key": "gwardzista",
+   "name": "Ostap",
+   "map": 8,
+   "reach": 0,
+   "whys": [
+    "w domu bez wnętrza (brak znacznika Miejsce: gwardzista_wnetrze)"
+   ],
+   "problems": 2
+  },
+  {
+   "key": "pula_1",
+   "name": "",
+   "map": 8,
+   "reach": 0,
+   "whys": [
+    "poza mapą (podr_droga)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "pula_2",
+   "name": "",
+   "map": 8,
+   "reach": 0,
+   "whys": [
+    "poza mapą (podr_droga)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "pula_3",
+   "name": "",
+   "map": 8,
+   "reach": 0,
+   "whys": [
+    "poza mapą (podr_droga)"
+   ],
+   "problems": 0
+  },
+  {
+   "key": "pula_4",
+   "name": "",
+   "map": 8,
+   "reach": 0,
+   "whys": [
+    "poza mapą (podr_droga)"
+   ],
+   "problems": 0
   }
  ],
  "ekonomia": [
@@ -1933,7 +2476,7 @@
    "id": "K27",
    "kind": "K",
    "title": "Konik dla Eli",
-   "day": 2,
+   "day": 10,
    "gold": 0,
    "optMax": 0,
    "debt": 0,
@@ -1944,7 +2487,7 @@
    "id": "K28",
    "kind": "K",
    "title": "Kocioł dla obozu",
-   "day": 3,
+   "day": 11,
    "gold": 0,
    "optMax": 0,
    "debt": 0,
@@ -2139,7 +2682,7 @@
    "id": "D14",
    "kind": "D",
    "title": "Zboże na wojnę",
-   "day": 24,
+   "day": 25,
    "gold": 0,
    "optMax": 0,
    "debt": 50,
@@ -2424,7 +2967,7 @@
    "id": "K49",
    "kind": "K",
    "title": "Tran dla latarni",
-   "day": 24,
+   "day": 25,
    "gold": 30,
    "optMax": 0,
    "debt": 0,
@@ -2828,6 +3371,105 @@
    "id": "D38",
    "kind": "D",
    "title": "Godzina milczenia",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K71",
+   "kind": "K",
+   "title": "Listy z lądu",
+   "day": 1,
+   "gold": 4,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K72",
+   "kind": "K",
+   "title": "Poczta z lądu",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "daily",
+   "items": []
+  },
+  {
+   "id": "D39",
+   "kind": "D",
+   "title": "Gorączka z promu",
+   "day": 1,
+   "gold": 15,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D40",
+   "kind": "D",
+   "title": "Mapa dla kartografa",
+   "day": 1,
+   "gold": 30,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D41",
+   "kind": "D",
+   "title": "Pieśń z lądu",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D42",
+   "kind": "D",
+   "title": "Zboże w suszę",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D43",
+   "kind": "D",
+   "title": "Matka szuka syna",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W15",
+   "kind": "W",
+   "title": "Święte kości",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W16",
+   "kind": "W",
+   "title": "Dezerter",
    "day": 1,
    "gold": 0,
    "optMax": 0,

@@ -30,6 +30,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("karczma");   // (the words of this file: js/teksty/karczma.txt, obraz.*)
 
     const T = window.Tawerna;
     if (!T) throw new Error("TavernLife_Render.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
@@ -576,7 +577,7 @@
         // the foot: keys and a word
         const fy = H0 - CARD.foot + 14;
         b.fillRect(24, H0 - CARD.foot, W0 - 48, 1, S0.line);
-        keyHintsInto(b, [["↑↓", "wybór"], ["O", spec.okWord || "wybierz"], ["P", "wróć"]], 30, fy);
+        keyHintsInto(b, [["↑↓", TK.obraz.redraw[0]], ["O", spec.okWord || "wybierz"], ["P", TK.obraz.redraw[1]]], 30, fy);
         if (spec.foot) cardText(b, spec.foot, W0 - 430, fy, 400, 16, S0.muted, false, "right");
         dirty(b);
     };
@@ -640,13 +641,13 @@
     // the facts of a dish, as the card lists them: [glyph, text, colour]
     function dishFacts(dish) {
         const food = foodOf(dish), out = [];
-        if (food.stamina) out.push(["stamina", "Wytrzymałość +" + food.stamina]);
+        if (food.stamina) out.push(["stamina", Watki.wstaw(TK.obraz.dishFacts[0], { stamina: food.stamina })]);
         if (T.call("Needs", "enabled")) {
-            if (food.fed) out.push(["food", "Sytość +" + food.fed]);
-            if (food.water) out.push(["water", "Nawodnienie +" + food.water]);
+            if (food.fed) out.push(["food", Watki.wstaw(TK.obraz.dishFacts[1], { fed: food.fed })]);
+            if (food.water) out.push(["water", Watki.wstaw(TK.obraz.dishFacts[2], { water: food.water })]);
         }
         for (const [b, h] of [[food.buff, food.hours], [food.buff2, food.hours2]]) if (b && h > 0 && SV && SV.BUFFS && SV.BUFFS[b]) out.push([b, SV.BUFFS[b].name + " · " + hoursText(h)]);
-        out.push(["hosted", "Ugoszczony · " + hoursText(dish.hosted), U().accent]);
+        out.push(["hosted", Watki.wstaw(TK.obraz.dishFacts[3], { "1": hoursText(dish.hosted) }), U().accent]);
         return out;
     }
     function detailIllustration(b, x, y, w, h, paint) {
@@ -785,16 +786,16 @@
             ctx.fillStyle = g; ctx.fillRect(x, y, w, ih);
         });
         let ty = y + ih + 12;
-        const title = isNumbered(r.room) && !namedAsRoom(r) ? "Pokój " + r.room + " · " + r.name : r.name;
+        const title = isNumbered(r.room) && !namedAsRoom(r) ? Watki.wstaw(TK.obraz.detailRoom[0], { room: r.room, name: r.name }) : r.name;
         cardText(b, title, x, ty, w - 90, title.length > 26 ? 21 : 25, S0.accent, true);
         cardText(b, e.right, x + w - 110, ty + 2, 110, 24, e.enabled === false ? BAD : S0.accent, true, "right");
         ty += 38;
         for (const l of wrapText(b, r.desc, w, 18).slice(0, 3)) { cardText(b, l, x, ty, w, 18, "#d8dde3"); ty += 25; }
         ty += 8;
-        const facts = [["stamina", "Pełny wypoczynek, bezpieczny sen"], ["sated", "Śniadanie: " + giftName(r.room)]];
-        if (RESTED[r.room]) facts.push(["rested", "Rano: Wypoczęty · " + hoursText(RESTED[r.room]) + " (odpoczynek +" + pct(RESTED_BONUS) + ")", S0.accent]);
-        else facts.push(["warm", "Świeca i ciepła pościel"]);
-        facts.push(!canRent(r) ? ["weight", onlyFor(r).replace(/^./, c => c.toUpperCase()), BAD] : ["weight", "Pokój twój do " + CHECKOUT + ":00 rano"]);
+        const facts = [["stamina", TK.obraz.detailRoom[1]], ["sated", Watki.wstaw(TK.obraz.detailRoom[2], { "1": giftName(r.room) })]];
+        if (RESTED[r.room]) facts.push(["rested", Watki.wstaw(TK.obraz.detailRoom[3], { "1": hoursText(RESTED[r.room]), "2": pct(RESTED_BONUS) }), S0.accent]);
+        else facts.push(["warm", TK.obraz.detailRoom[4]]);
+        facts.push(!canRent(r) ? ["weight", onlyFor(r).replace(/^./, c => c.toUpperCase()), BAD] : ["weight", Watki.wstaw(TK.obraz.detailRoom[5], { CHECKOUT: CHECKOUT })]);
         facts.forEach((f, i) => {
             const fy = ty + i * 28;
             if (S0.chip) S0.chip(b.context, f[0], x, fy + 2, 20, f[0] === "rested" ? S0.accent : undefined);

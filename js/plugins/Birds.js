@@ -42,6 +42,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("ptaki");   // (the words of this file: js/teksty/ptaki.txt, kod.*)
 
     const PLUGIN = "Birds";
     const T = window.Tawerna;
@@ -56,11 +57,12 @@
     // sight: tiles it watches (Hunting.noticeRate); radius: tiles a shot has to come within; flock: how many; fly: tiles per
     // frame in the air; hop: tiles per frame on the ground; eats: comes to the fields; drop: what a kill gives
     const SPECIES = {
-        crow: { name: "Wrona", sheet: "Bird_Crow", sight: 8, radius: 0.34, flock: [2, 5], fly: 0.085, hop: 0.03, eats: true, drop: [[ITEM.bird, 1]], call: "Crow" },
-        sparrow: { name: "Wróbel", sheet: "Bird_Sparrow", sight: 5.5, radius: 0.24, flock: [4, 9], fly: 0.1, hop: 0.045, eats: true, seeds: true, peck: 1.4, drop: [[ITEM.feathers, 2]] },
-        pigeon: { name: "Gołąb", sheet: "Bird_Pigeon", sight: 6.5, radius: 0.3, flock: [3, 6], fly: 0.09, hop: 0.03, eats: true, drop: [[ITEM.bird, 1]] },
-        partridge: { name: "Kuropatwa", sheet: "Bird_Partridge", sight: 5, radius: 0.32, flock: [3, 6], fly: 0.07, hop: 0.035, eats: false, walker: true, drop: [[ITEM.bird, 2]] }
+        crow: { sheet: "Bird_Crow", sight: 8, radius: 0.34, flock: [2, 5], fly: 0.085, hop: 0.03, eats: true, drop: [[ITEM.bird, 1]], call: "Crow" },
+        sparrow: { sheet: "Bird_Sparrow", sight: 5.5, radius: 0.24, flock: [4, 9], fly: 0.1, hop: 0.045, eats: true, seeds: true, peck: 1.4, drop: [[ITEM.feathers, 2]] },
+        pigeon: { sheet: "Bird_Pigeon", sight: 6.5, radius: 0.3, flock: [3, 6], fly: 0.09, hop: 0.03, eats: true, drop: [[ITEM.bird, 1]] },
+        partridge: { sheet: "Bird_Partridge", sight: 5, radius: 0.32, flock: [3, 6], fly: 0.07, hop: 0.035, eats: false, walker: true, drop: [[ITEM.bird, 2]] }
     };
+    Watki.scal(SPECIES, "ptaki", "gatunki");   // (its words: js/teksty/ptaki.txt, gatunki)
     const EAT_FRAMES = 540, SEED_FRAMES = 300;   // pecking one plant away (about 9 / 5 s)
     const SETTLE = 30;   // frames after landing in which a bird pays the player no heed: half a second of calm (user)
     const SCARECROW_RANGE = 3;
@@ -120,7 +122,7 @@
     function eatPlant(mapId, x, y) {
         const f = farmOf(), plot = f && f.plots[mapId] && f.plots[mapId][x + "," + y];
         if (!plot || !plot.crop) return null;
-        const name = window.Farming && Farming.CROPS[plot.crop] ? Farming.CROPS[plot.crop].name : "roślina";
+        const name = window.Farming && Farming.CROPS[plot.crop] ? Farming.CROPS[plot.crop].name : TK.kod.eatPlant[0];
         delete plot.crop;
         delete plot.day;
         f.rev++;
@@ -496,7 +498,7 @@
         const counts = {};
         for (const n of eaten) counts[n] = (counts[n] || 0) + 1;
         const text = Object.keys(counts).map(n => n + (counts[n] > 1 ? " ×" + counts[n] : "")).join(", ");
-        T.popup("Ptaki zjadły: " + text, { icon: featherIcon(), color: "#ffb4a0" });
+        T.popup(Watki.wstaw(TK.kod.report[0], { text: text }), { icon: featherIcon(), color: "#ffb4a0" });
     }
     const featherIcon = () => ($dataItems[ITEM.feathers] ? $dataItems[ITEM.feathers].iconIndex : 0);
 
@@ -632,7 +634,7 @@
             checkWait = 60;
             checkVisits();
             if (awayReport > 0 && T.isCalm(scene, CALM_REPORT)) {
-                T.popup("Pod twoją nieobecność ptaki wyjadły " + awayReport + (awayReport === 1 ? " roślinę" : awayReport < 5 ? " rośliny" : " roślin"), { icon: featherIcon(), color: "#ffb4a0" });
+                T.popup(Watki.wstaw(TK.kod.zegar[3], { awayReport: awayReport, "2": awayReport === 1 ? TK.kod.zegar[0] : awayReport < 5 ? TK.kod.zegar[1] : TK.kod.zegar[2] }), { icon: featherIcon(), color: "#ffb4a0" });
                 awayReport = 0;
             }
         }
@@ -643,7 +645,7 @@
             // come by themselves)
             const f = what === "raid" ? startRaid({ kind: "crow", size: SPECIES.crow.flock[1], hours: 1 }) : startGrounded(pick(Object.keys(SPECIES)));
             if (f) f.summoned = true;
-            else T.popup(what === "raid" ? "Nie ma tu nic zasianego (albo pilnuje strach na wróble)" : "Nie ma tu miejsca dla ptaków", { icon: 0, color: "#bcd8ff" });
+            else T.popup(what === "raid" ? TK.kod.zegar[4] : TK.kod.zegar[5], { icon: 0, color: "#bcd8ff" });
         }
         if (auto && birdTime() && --nextAmbient <= 0) {
             nextAmbient = Math.round(rand(1200, 2700));   // 20 to 45 s (user: more often); four times in five a flock that lands and pecks

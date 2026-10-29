@@ -60,11 +60,13 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     await t.setHour(6.2);
     const lostOk = await t.until("!!Story.state().lost", 15);
     await t.frames(30);
+    // (2026-10-28, the user: chapter 1 is a thread of the journal - Watki.js's own record "fabula" - no longer goals; its steps:
+    // 0 rozmowa, 1 dzialka, 2 praca, 3 zmiana, 4 dlug, 5 wyniesienie, 6 dach, 7 piwnica, 8 odkup)
+    await t.eval("Watki.get('fabula').ownChecks(); 0");
     const A = await J(`({ scene: SceneManager._scene.constructor.name, save: $gameSystem.isSaveEnabled(), doomed: Story.doomed(), lost: Story.state().lost, buy: Story.state().buy,
         open: Story.isOpen(), fieldLost: Story.fieldLost(), locked: Story.fieldLocked(), carry: Story.carryLeft(), ended: Story.chapterEnded(),
-        notes: Journal.data().notes.map(n => n.title), debtDone: Journal.goalDone(Journal.GOALS.find(g => g.id === 'story_debt')),
-        goals: Journal.GOALS.filter(g => g.storyLoss).map(g => g.id), carryTitle: (Journal.GOALS.find(g => g.id === 'story_carry') || {}).title,
-        roofDone: Journal.goalDone(Journal.GOALS.find(g => g.id === 'story_roof')) })`);
+        notes: Journal.data().notes.map(n => n.title), debtDone: Watki.rekordy().w.fabula.t.done[4] !== undefined, krok: Watki.krok('fabula'),
+        carryTitle: Watki.get('fabula').stepTitle(), roofDone: Watki.rekordy().w.fabula.t.done[6] !== undefined })`);
     const notices = await t.notices();
     t.check("A1 dawn of day 61 away from the field: NO ending (the map goes on), saving works, the field is the Lord's now (3 days to carry things off)",
         lostOk && A.scene === "Scene_Map" && A.save === true && !A.doomed && A.lost.day === 61 && A.fieldLost && !A.locked && A.carry === 3 && !A.open && A.ended, A);
@@ -74,8 +76,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     const note = await J("Journal.data().notes.find(n => n.title === 'Działka przepadła').text");
     t.check("A3 the note: 3 days (till dawn of day 64), the buyback 3000 G, grandpa's house, Chata pod lasem (the sołtys) and the Ług farm, the doors under Krucze Skały",
         /do świtu dnia 64/.test(note) && /3000 G/.test(note) && /Chatę pod lasem/.test(note) && /zagroda Ługów/.test(note) && /Kruczych Skał/.test(note), note.slice(0, 500));
-    t.check("A4 the journal: the debt's goal closed (no 'Cel wykonany'), the loss's goals in: carry off (3 days), a new roof (not done by the hut on the lost field), the buyback",
-        A.debtDone && A.goals.join() === "story_carry,story_roof,story_buyback" && /Wynieś dobytek z działki \(zostały 3 dni\)/.test(A.carryTitle) && !A.roofDone &&
+    t.check("A4 the journal: the chapter passes over the debt (not done, no 'Cel wykonany') to the loss's way: carry off (3 days); a new roof not done by the hut on the lost field",
+        !A.debtDone && A.krok === "wyniesienie" && /Wynieś dobytek z działki \(zostały 3 dni\)/.test(A.carryTitle) && !A.roofDone &&
         !notices.some(n => /Cel wykonany: (Spłać dług|Dług dziadka|Znajdź nowy dach)/.test(n)), { A, notices });
     t.check("A5 a save after the loss works and loads with the loss kept", (await t.saveTo(1)) === true && (await t.loadFrom(1, { quiet: true })) && !!(await J("Story.state().lost.day")));
     await t.eval(LOG);
@@ -125,7 +127,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     t.check("C4 the guard by the sign: 'Masz jeszcze 3 dni' (day 61)", watch.done && /Masz jeszcze 3 dni/.test(watch.text), watch.text);
     await t.setDay(62, 9);
     await t.frames(20);
-    t.check("C5 day 62: the journal says 2 days, the menu foot the buyback", /Wynieś dobytek z działki \(zostały 2 dni\)/.test(await J("Journal.GOALS.find(g => g.id === 'story_carry').title")), await J("Journal.GOALS.find(g => g.id === 'story_carry').title"));
+    t.check("C5 day 62: the journal says 2 days, the menu foot the buyback", /Wynieś dobytek z działki \(zostały 2 dni\)/.test(await J("Watki.get('fabula').stepTitle()")), await J("Watki.get('fabula').stepTitle()"));
 
     // ================= D. the dawn of day 64 on the field: shut
     const hutCount = await J("(Farming.farm().buildings[3] || []).length");
@@ -138,7 +140,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     await t.until(t.onMap(23), 20);
     await t.frames(40);
     const D = await J(`({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, locked: Story.state().lost.locked, guard: ${shown(23, 704)}, inside: (Farming.farm().buildings[100] || []).length,
-        held: ((Farming.farm().buildings[3] || []).find(b => b.type === 'hut') || {}).held, hutOf: Farming.hutOf(), dog: Dog.state(), carryDone: Journal.goalDone(Journal.GOALS.find(g => g.id === 'story_carry')),
+        held: ((Farming.farm().buildings[3] || []).find(b => b.type === 'hut') || {}).held, hutOf: Farming.hutOf(), dog: Dog.state(), carryDone: (Watki.get('fabula').ownChecks(), Watki.rekordy().w.fabula.t.done[5] !== undefined),
         held3: Farming.landHeld(3) })`);
     const escText = await logFrom(n1), pop1 = await t.popups({ clear: true });
     t.check("D1 dawn of day 64 on the field: the guard sees him out ('Minęły 3 dni') to Skraj lasu (1,13); 'Działka należy teraz do Lorda.' over the hero",
@@ -178,7 +180,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
         !chat.log.some(l => /Ratusz\s+słucha|na sprzedaż/.test(l.t)), chat.log.map(l => l.t));
     await t.gold(3000);
     const s2 = await t.talkTo("TownLife.eventOf('soltys')", ["Domy na sprzedaż", "Kup chatę"]);
-    const E1 = await J("({ own: Homes.owns('chata'), gold: $gameParty.gold(), furn: (Farming.farm().buildings[154] || []).map(b => b.type + (b.fixed ? '!' : '')), roof: Journal.goalDone(Journal.GOALS.find(g => g.id === 'story_roof')), notes: Journal.data().notes.map(n => n.title), forSale: Homes.forSale() })");
+    const E1 = await J("({ own: Homes.owns('chata'), gold: $gameParty.gold(), furn: (Farming.farm().buildings[154] || []).map(b => b.type + (b.fixed ? '!' : '')), roof: (Watki.get('fabula').ownChecks(), Watki.rekordy().w.fabula.t.done[6] !== undefined), notes: Journal.data().notes.map(n => n.title), forSale: Homes.forSale() })");
     t.check("E2 bought for 600 G: the key, the bed and the chest in the room (fixed), the deed in the journal, the goal 'a new roof' done, nothing more for sale",
         E1.own && E1.gold === 2400 && E1.furn.join() === "bed!,chest_s!" && E1.roof && E1.notes.includes("Akt kupna: Chata pod lasem") && /klucz/i.test(s2.text) && E1.forSale.length === 0, E1);
     // the hut on Podgrodzie's new rows: its door -> the room, and back
@@ -323,7 +325,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     await t.frames(30);
     await t.eval("TownQuests.autoChecks(); 0");
     const S5 = await J(`(function(){ const e = $gameMap.event(${Z0.id}); return { stage: Homes.stage(), d: e.direction(), p: e.pattern(), smoke: $gameSelfSwitches.value([168, 711, 'A']), furn: (Farming.farm().buildings[169] || []).map(b => b.type + (b.fixed ? '!' : '')).sort(),
-        d21: TownQuests.rec('D21').s, notes: Journal.data().notes.map(n => n.title), roof: Journal.goalDone(Journal.GOALS.find(g => g.id === 'story_roof')) }; })()`);
+        d21: TownQuests.rec('D21').s, notes: Journal.data().notes.map(n => n.title), roof: Watki.rekordy().w.fabula.t.done[6] !== undefined }; })()`);
     const nt5 = await t.notices({ clear: true });
     t.check("E17 'Drzwi, okiennice, palenisko' done: stage 5 - the house stands (its picture), smoke from the chimney, the bed, the big chest and the larder inside; D21 done",
         began5 && S5.stage === 5 && S5.d === 4 && S5.p === 2 && S5.smoke && S5.furn.join() === "bed!,chest_l!,larder!" && S5.d21 === "done" && S5.notes.includes("Dom Ługów odbudowany") &&
@@ -387,17 +389,19 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     await t.calm();
     await t.frames(60);
     await t.gold(700);
+    // (the chapter's thread: the tavern's cellar reached - its clue - and on to the buyback, its last step)
+    await t.eval("Story.step('cellar'); Watki.get('fabula').ownChecks(); 0");
     const lord = await t.talkTo(902, ["Oddaj 500 G"], { shotAtChoice: path.join(SHOTS, "oferta_odkupu.png") });
-    const G1 = await J("({ paid: Story.state().buy.paid, flag: Story.state().flags.lordLost, title: Journal.GOALS.find(g => g.id === 'story_buyback').title })");
+    const G1 = await J("({ paid: Story.state().buy.paid, flag: Story.state().flags.lordLost, krok: Watki.krok('fabula'), title: Watki.get('fabula').stepTitle() })");
     t.check("G1 the Lord after the loss: he sells the field back for 3000 G in instalments, no deadline; 500 G paid", lord.done && /Odsprzedam je: 3000/.test(lord.text) && /Bez terminu/.test(lord.text) &&
-        G1.paid === 500 && G1.flag && G1.title === "Odkup działkę dziadka (500 / 3000 G)", { text: lord.text.slice(0, 500), G1 });
+        G1.paid === 500 && G1.flag && G1.krok === "odkup" && G1.title === "Odkup działkę dziadka (500 / 3000 G)", { text: lord.text.slice(0, 500), G1 });
     await t.gold(3000);
     await t.notices({ clear: true });
     const got = await J("Story.pay(2500)");
     await t.frames(20);
     const back = await J(`({ done: Story.state().buy.done, back: Story.fieldBack(), lost: Story.fieldLost(), inside: (Farming.farm().buildings[100] || []).length, field: (Farming.farm().buildings[3] || []).length,
         boarded: (Farming.farm().buildings[3] || []).some(b => b.boarded), hutOf: Farming.hutOf() && Farming.hutOf().mapId, sign: $gameSelfSwitches.value([3, 703, 'A']), guard: $gameSelfSwitches.value([23, 704, 'A']),
-        notes: Journal.data().notes.map(n => n.title), goal: Journal.goalDone(Journal.GOALS.find(g => g.id === 'story_buyback')), world: Underground.world().fieldBack })`);
+        notes: Journal.data().notes.map(n => n.title), goal: (Watki.get('fabula').ownChecks(), Watki.rekordy().w.fabula.s === "done" && Watki.rekordy().w.fabula.t.done[8] !== undefined), world: Underground.world().fieldBack })`);
     const backNotices = await t.notices();
     t.check("G2 the last 2500 G: the field back - every building left on it there again, the hut's furniture back inside, the hut the hero's",
         got === 2500 && back.done && back.back && !back.lost && back.field === hutCount && back.inside === before.inside && !back.boarded && back.hutOf === 3, back);

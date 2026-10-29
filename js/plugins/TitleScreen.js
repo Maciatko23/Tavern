@@ -6,7 +6,8 @@
 // flickers and its light wavers on the wall and the table, sparks rise from the logs, the candle's flame trembles, steam rises
 // over the cauldron and (faintly) over the tankard. The game's name, the line under it and the menu are drawn by the game, so
 // they stay sharp: "Tawerna" in gold gothic letters, "Ciepły kąt na krańcu świata", then Nowa gra / Kontynuuj (the last save's
-// day, season and place under it; grey and skipped without a save) / Opcje / Wyjdź - the graphite and copper look of the menu P.
+// day, season and place under it; grey and skipped without a save) / Opcje / Wyjdź - in the picture's own gold (the game's one
+// interface palette, UITheme.js, starts after the title: the file and options screens are MenuRing.js's).
 // Keys as everywhere: W/S or the arrows, O or Enter, P or Esc; the mouse points and clicks.
 // How: the engine's own Window_TitleCommand stays (its keys, mouse, handlers, the "busy" checks of Scene_Title) but draws
 // nothing; the menu sprite reads its index. The picture, the effects and the letters are sprites of the scene. UITheme.js's
@@ -15,7 +16,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Ekran tytułowy „Kufel przy kominku”: żywy ogień, iskry, świeca i para; napis i menu w stylu Grafit i miedź. v1.0.0
+ * @plugindesc Ekran tytułowy „Kufel przy kominku”: żywy ogień, iskry, świeca i para; napis i menu w złocie obrazu. v1.0.0
  * @author Claude
  * @orderAfter UITheme
  * @orderAfter TawernaUI
@@ -325,7 +326,7 @@
     };
 
     // ------------------------------------------------------------------
-    // The menu: four rows drawn from the (invisible) command window; a copper bar glides to the chosen one
+    // The menu: four rows drawn from the (invisible) command window; a gold bar glides to the chosen one
     // ------------------------------------------------------------------
     function saveLine() {
         if (!DataManager.isAnySavefileExists()) return { text: "brak zapisanej gry", ok: false };

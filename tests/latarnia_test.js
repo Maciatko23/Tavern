@@ -10,7 +10,7 @@
 //   - mgła morska: noc przed mglistym rankiem, przełącznik 19, pasma mgły, dzwon mgłowy o pełnej godzinie
 //   - D22: oferta przed mglistą nocą, wizja w soczewce (biały ekran, plansza, zdanie), raz na noc, Ciężka głowa, flaga mgla, trzy
 //     wizje -> rozmowa -> karta 5 (kronikaKarta5 -> karta w torbie przez Pustelnia.js)
-//   - K49: od dnia 24, tran od Janka, oddanie -> 30 G, latarniaUfa, opał +5,5, drzwi latarni otwarte; przepis tranu w kociołku
+//   - K49: od dnia 25, tran od Janka, oddanie -> 30 G, latarniaUfa, opał +5,5, drzwi latarni otwarte; przepis tranu w kociołku
 //   - W11 (Akt II): oferta Baltazara, ostrzeżenie, napad nocą (skradziona), obóz złodziei w zatoczce i worek, Kleofas czyta, sprzedaż
 //     Baltazarowi (400 G); druga droga: obrona, rozbicie (soczewkaRozbita)
 // Przed instalacją map: nakładka tools/miejsca_wyspy/staging_C (sama się włącza, gdy data/Map159.json to jeszcze szkielet).
@@ -219,28 +219,28 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
         d22.done && d22.card && d22.told && (await t.gold()) === g1 + 60 && d22.bag === 1 && /Co widziałeś/.test(end.text), [d22, end.text.slice(-200)]);
 
     // ---------------------------------------------------------------- K49: tran dla latarni
-    await t.eval("(function(){ $gameSystem._dayNightDay = 24; $gameSystem.setDayNightHour(23); return 0; })()");
+    await t.eval("(function(){ $gameSystem._dayNightDay = 25; $gameSystem.setDayNightHour(23); return 0; })()");
     await t.frames(30);
     const k49o = await t.talkTo(B, ["Przyniosę"]);
-    t.check("K49 „Tran dla latarni” od dnia 24 (prom już nie wozi tranu): oferta i przyjęcie", (await t.json("TownQuests.isActive('K49')")) && /prom nie przywozi tranu/.test(k49o.text.replace(/\s+/g, " ")), k49o.text.slice(0, 200));
+    t.check("K49 „Tran dla latarni” od dnia 25 (prom już nie wozi tranu): oferta i przyjęcie", (await t.json("TownQuests.isActive('K49')")) && /prom nie przywozi tranu/.test(k49o.text.replace(/\s+/g, " ")), k49o.text.slice(0, 200));
     // Janek sells oil while K49 is on
     await t.go(125, 12, 8, 8);
-    await t.setDay(24, 10);
-    await t.eval("(function(){ const q = TownQuests.state(); q.flags.janekMet = q.flags.janekMet || 1; for (const k of ['K47', 'K48', 'W10', 'D20', 'D25']) q.declined[k] = 24; return 0; })()");
+    await t.setDay(25, 10);
+    await t.eval("(function(){ const q = TownQuests.state(); q.flags.janekMet = q.flags.janekMet || 1; for (const k of ['K47', 'K48', 'W10', 'D20', 'D25']) q.declined[k] = 25; return 0; })()");
     await t.frames(40);
     await t.gold(40);
     const jt = await t.talkTo("TownLife.eventOf('janek')", ["Kupię dzbanek"]);
     t.check("Janek na przystani sprzedaje tran, póki trwa K49: 6 G za dzbanek", (await t.count(177)) === 1 && (await t.gold()) === 34 && /Tran\?/.test(jt.text), [jt.text.slice(0, 200), await t.count(177), await t.gold()]);
     await t.give(177, 3); await t.give(61, 6);
     await t.go(159, 22, 16, 8);
-    await t.setDay(24, 16);
+    await t.setDay(25, 16);
     await t.frames(40);
     const f1 = await S("s.fuel"), g2 = await t.gold();
     const k49 = await t.talkTo(B, []);
     const k49r = await t.json(`({ done: TownQuests.isDone('K49'), ufa: !!TownQuests.state().flags.latarniaUfa, tran: $gameParty.numItems($dataItems[177]), wood: $gameParty.numItems($dataItems[61]) })`);
     t.check("...oddane: 4× Tran i 6× Drewno; nagroda 30 G, latarniaUfa, opał latarni +5,5 nocy", k49r.done && k49r.ufa && k49r.tran === 0 && k49r.wood === 0
         && (await t.gold()) === g2 + 30 && Math.abs((await S("s.fuel")) - Math.min(20, f1 + 5.5)) < 0.01, [k49r, k49.text.slice(-200)]);
-    await t.setDay(24, 12);
+    await t.setDay(25, 12);
     await t.eval("(function(){ $gamePlayer.locate(22, 10); $gamePlayer.setDirection(8); $gameMap.events().find(e => /<Latarnia:wieza>/.test(e.event().note)).start(); return 0; })()");
     t.check("po K49 drzwi latarni otwarte także za dnia (laterna)", await t.until(t.onMap(161), 20));
 

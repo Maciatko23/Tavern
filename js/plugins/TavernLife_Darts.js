@@ -35,6 +35,7 @@
 
 (() => {
     "use strict";
+    const TK = Watki.teksty("rzutki");   // (the words of this file: js/teksty/rzutki.txt, kod.*)
 
     const T = window.Tawerna;
     if (!T) throw new Error("TavernLife_Darts.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
@@ -66,15 +67,10 @@
     // (2026-10-06) Wiesiek's bust: RTP People2_7 (a weathered carter with road goggles on his brow) - unused anywhere else since the
     // arm-wrestling's carter got Woznica_Bust; People1_5 was the Sołtys bust's face
     const OPPONENTS = {
-        ozzy: { name: "Dziadek Ozzy", short: "Ozzy", role: "ozzy", sway: 50, scatter: 15, lucky: 0.16, aim: "bull",
-            hello: "*czkawka* Rzutki? Kiedyś trafiałem muchę w locie. Dziś trafiam tarczę. Zazwyczaj.",
-            throwLines: ["Hop!", "*czkawka*", "Ups...", "Celuję w środkową z trzech tarcz..."], good: ["Byk! Widziałeś? Nikt nie widział...", "Hehe, stara ręka!"],
-            won: "Hehe! Stary Ozzy jeszcze umie! Postawisz mi piwo z tej stawki? Nie? No trudno.", lost: "Trzy tarcze to jednak za dużo dla jednego oka... Wygrałeś, synu. Uczciwie." },
-        wiesiek: { name: "Furman Wiesiek", short: "Wiesiek", role: null, bust: "People2_7", face: ["People2", 6], sway: 38, scatter: 10, lucky: 0.05, aim: "twenty",
-            hello: "Rzucamy? Ja furman: oko mam jak jastrząb - od patrzenia na drogę między końskimi uszami.",
-            throwLines: ["Rzut furmański!", "Prosto jak droga do młyna.", "Wiooo!"], good: ["Dwadzieścia! Wiedziałem.", "I kto tu jest jastrząb?"],
-            won: "Ha! Nie ma to jak oko furmana. Stawka moja - dziękuję uprzejmie.", lost: "Eee, wiatr zawiał od drzwi. Ale wygrałeś, nie ma co gadać." }
+        ozzy: { role: "ozzy", sway: 50, scatter: 15, lucky: 0.16, aim: "bull" },
+        wiesiek: { role: null, bust: "People2_7", face: ["People2", 6], sway: 38, scatter: 10, lucky: 0.05, aim: "twenty" }
     };
+    Watki.scal(OPPONENTS, "rzutki", "rywale");   // (its words: js/teksty/rzutki.txt, rywale)
     function dartBoardBitmap() {
         return cached("dartBoard", () => {
             const size = 460, c = size / 2, b = new Bitmap(size, size), ctx = b.context, S0 = U();
@@ -212,12 +208,12 @@
             this.ph = [this.rng() * 6, this.rng() * 6, this.rng() * 6, this.rng() * 6];
         }
         begin() {
-            this.showCard({ wait: 16, bust: this.opp.role ? bustOf(this.opp.role) : this.opp.bust, who: this.opp.name, whoSub: this.opp.role ? "stały bywalec" : "gość karczmy",
-                kicker: "RZUTKI" + (this.stake ? " · STAWKA " + this.stake + " G" : ""), title: "Rzutki z " + (this.opp.role ? "Ozzym" : "Wieśkiem"), say: this.opp.hello,
-                lines: this.first ? ["Celownik chwieje się sam - strzałkami przesuwasz cel, O rzuca lotkę.", "Środek (byk) 50, zielony pierścień 25, reszta tarczy tyle, ile liczba wycinka. Poza tarczą: pudło.",
-                    "Trzy rundy po trzy lotki na zmianę; wygrywa większa suma. Zręczność i Czujność uspokajają rękę."]
-                    : ["Strzałki - cel, O - rzut. Trzy rundy po trzy lotki."],
-                keys: [["strzałki", "cel"], ["O", "rzut"], ["P", "pauza"]], foot: "O - do tarczy" }, () => this.nextTurn());
+            this.showCard({ wait: 16, bust: this.opp.role ? bustOf(this.opp.role) : this.opp.bust, who: this.opp.name, whoSub: this.opp.role ? TK.kod.begin[0] : TK.kod.begin[1],
+                kicker: "RZUTKI" + (this.stake ? Watki.wstaw(TK.kod.begin[2], { stake: this.stake }) : ""), title: Watki.wstaw(TK.kod.begin[4], { "1": this.opp.role ? "Ozzym" : TK.kod.begin[3] }), say: this.opp.hello,
+                lines: this.first ? [TK.kod.begin[5], TK.kod.begin[6],
+                    TK.kod.begin[7]]
+                    : [TK.kod.begin[8]],
+                keys: [[TK.kod.begin[9], "cel"], ["O", "rzut"], ["P", "pauza"]], foot: TK.kod.begin[10] }, () => this.nextTurn());
             this.setPhase("card");
         }
         tick() {
@@ -237,8 +233,8 @@
         }
         canPause() { return this.phase === "aim"; }
         helpLines() {
-            return ["Celownik chwieje się sam - strzałki przesuwają cel, O rzuca lotkę.",
-                "Środek (byk) 50, zielony pierścień 25, reszta tarczy tyle, ile liczba wycinka. Trzy rundy po trzy lotki; wygrywa większa suma."];
+            return [TK.kod.helpLines[0],
+                TK.kod.helpLines[1]];
         }
         swayTick() {
             const t = this.t, a = this.phase === "oppAim" ? this.opp.sway : this.amp, p = this.ph;
@@ -266,7 +262,7 @@
                 this.oppTarget = target;
                 this.aim = { x: DB.cx + (this.rng() - 0.5) * 120, y: DB.cy + (this.rng() - 0.5) * 120 };
             }
-            this.bannerText = this.turn === "you" ? "Runda " + this.round + " z 3 · twój rzut" : "Runda " + this.round + " z 3 · rzuca " + this.opp.short;
+            this.bannerText = this.turn === "you" ? Watki.wstaw(TK.kod.nextTurn[0], { round: this.round }) : Watki.wstaw(TK.kod.nextTurn[1], { round: this.round, short: this.opp.short });
             this.showTurn();
             this.setPhase("banner");
         }
@@ -322,7 +318,7 @@
             se(onBoard ? "Blow1" : "Miss", onBoard ? 70 : 60, onBoard ? 150 : 100);
             if (score >= 25) se("Chime2", 40, score === 50 ? 120 : 100);
             this.board.x = DB.cx + (onBoard ? 2 : 0);
-            this.popup(score === 50 ? "BYK! 50" : score === 25 ? "25" : score > 0 ? "+" + score : onBoard ? "W ramę!" : "Pudło!", s.x, s.y, score >= 25 ? U().accent : score > 0 ? "#eceef0" : BAD);
+            this.popup(score === 50 ? TK.kod.land[0] : score === 25 ? "25" : score > 0 ? "+" + score : onBoard ? TK.kod.land[1] : TK.kod.land[2], s.x, s.y, score >= 25 ? U().accent : score > 0 ? "#eceef0" : BAD);
             if (s.who === "opp" && score >= 25 && this.rng() < 0.7) this.sayOver("bubbleR", pick(this.opp.good, this.rng), 80);
             this.setPhase("stuck");
         }
@@ -358,11 +354,11 @@
             this.sight.visible = false;
             this.bustL.dim(false);
             this.bustR.dim(false);
-            this.showCard({ wait: 30, bust: this.opp.role ? bustOf(this.opp.role) : this.opp.bust, who: this.opp.name, whoSub: "rzutki", kicker: "RZUTKI · KONIEC",
-                title: won ? "Wygrana!" : gaveUp ? "Poddałeś się" : "Przegrana", titleColor: won ? U().accent : BAD,
-                sub: "Ty " + you + " : " + opp + " " + this.opp.short + (you === opp && !gaveUp ? " (dogrywka: " + (won ? "twoja lotka bliżej środka" : "jego lotka bliżej środka") + ")" : "") + (this.stake ? "   ·   " + (won ? "+" : "−") + this.stake + " G" : ""),
+            this.showCard({ wait: 30, bust: this.opp.role ? bustOf(this.opp.role) : this.opp.bust, who: this.opp.name, whoSub: "rzutki", kicker: TK.kod.finish[0],
+                title: won ? "Wygrana!" : gaveUp ? TK.kod.finish[1] : "Przegrana", titleColor: won ? U().accent : BAD,
+                sub: "Ty " + you + " : " + opp + " " + this.opp.short + (you === opp && !gaveUp ? Watki.wstaw(TK.kod.finish[4], { "1": won ? TK.kod.finish[2] : TK.kod.finish[3] }) : "") + (this.stake ? "   ·   " + (won ? "+" : "−") + this.stake + " G" : ""),
                 subColor: won ? GOOD : BAD, say: line,
-                lines: [["Czas: " + DARTS.minutes + " minut gry" + (this.bulls ? "   ·   byki: " + this.bulls : ""), U().muted]], foot: "O - wracam do sali", h: 440 }, () => this.leave());
+                lines: [[Watki.wstaw(TK.kod.finish[6], { minutes: DARTS.minutes, "2": this.bulls ? Watki.wstaw(TK.kod.finish[5], { bulls: this.bulls }) : "" }), U().muted]], foot: TK.kod.finish[7], h: 440 }, () => this.leave());
             this.setPhase("summary");
         }
         popup(text, x, y, colour) {
@@ -413,7 +409,7 @@
             ctx.fillStyle = dim; ctx.fillRect(24, 56, 312, 1); ctx.fillRect(126, 24, 1, 270); ctx.fillRect(236, 24, 1, 270);
             for (let r = 0; r < 3; r++) {
                 const y = 70 + r * 66, cur = this.round === r + 1;
-                cardText(b, "Runda " + (r + 1), 24, y + 10, 100, 19, cur ? S0.accent : chalk, cur);
+                cardText(b, Watki.wstaw(TK.kod.drawSlate[0], { "1": r + 1 }), 24, y + 10, 100, 19, cur ? S0.accent : chalk, cur);
                 for (const [who, x] of [["you", 130], ["opp", 240]]) {
                     const list = this.scores[who][r], sum = list.reduce((a, v) => a + v, 0);
                     cardText(b, list.length ? String(sum) : "-", x, y, 100, 26, chalk, true, "center");
@@ -429,7 +425,7 @@
         // the round, whose throw and the darts left at the top (the key hints are the UI kit's, at the bottom), none over a card
         drawHud() {
             const play = this.phase !== "card" && this.phase !== "summary";
-            this.showHud(play, [["strzałki", "cel"], ["O", "rzut"], ["P", "pauza"]]);
+            this.showHud(play, [[TK.kod.drawHud[0], "cel"], ["O", "rzut"], ["P", "pauza"]]);
             const key = [this.phase, this.round, this.turn, this.dartNo, this.bannerText].join("|");
             if (key === this._hudKey) return;
             this._hudKey = key;
@@ -437,8 +433,8 @@
             b.clear();
             if (!play) return;
             ui.panel(b, 20, 16, 420, 70, { cut: 6 });
-            cardText(b, "RZUTKI" + (this.stake ? "  ·  STAWKA " + this.stake + " G" : ""), 36, 22, 380, 15, S0.muted, true);
-            cardText(b, (this.turn === "you" ? "Twój rzut" : "Rzuca " + this.opp.short) + "  ·  runda " + this.round + " z 3", 36, 42, 380, 22, this.turn === "you" ? S0.accent : "#ff9f8f", true);
+            cardText(b, "RZUTKI" + (this.stake ? Watki.wstaw(TK.kod.drawHud[1], { stake: this.stake }) : ""), 36, 22, 380, 15, S0.muted, true);
+            cardText(b, Watki.wstaw(TK.kod.drawHud[4], { "1": this.turn === "you" ? TK.kod.drawHud[2] : Watki.wstaw(TK.kod.drawHud[3], { short: this.opp.short }), round: this.round }), 36, 42, 380, 22, this.turn === "you" ? S0.accent : "#ff9f8f", true);
             // the darts left
             for (let i = 0; i < 3; i++) {
                 const left = i >= this.dartNo || this.phase === "banner";
@@ -466,18 +462,18 @@
     }
     function dartsTalk() {
         const o = [], ozzy = !!npc("ozzy"), options = [];
-        heroSay(o, "Rzutki... Z kim by tu zagrać?");
-        if (ozzy) options.push({ label: "Z Dziadkiem Ozzym", js: "TavernLife.step(this, 'dartsWho', 'ozzy')" });
-        options.push({ label: "Z furmanem Wieśkiem", js: "TavernLife.step(this, 'dartsWho', 'wiesiek')" });
-        options.push({ label: "Nie teraz", js: [] });
+        heroSay(o, TK.kod.dartsTalk[0]);
+        if (ozzy) options.push({ label: TK.kod.dartsTalk[1], js: "TavernLife.step(this, 'dartsWho', 'ozzy')" });
+        options.push({ label: TK.kod.dartsTalk[2], js: "TavernLife.step(this, 'dartsWho', 'wiesiek')" });
+        options.push({ label: TK.kod.dartsTalk[3], js: [] });
         choose(o, options);
         return o;
     }
     function dartsStakes(key) {
         const o = [];
-        oppSay(o, key, OPPONENTS[key].hello + " Ile stawiasz?");
-        choose(o, DARTS_STAKES.map(n => ({ label: "Stawka " + n + " G", js: ["TavernLife.step(this, 'darts', " + n + ", " + q(key) + ")", "TavernLife.step(this, 'gameAfter')"] }))
-            .concat([{ label: "Nie teraz", js: [] }]));
+        oppSay(o, key, Watki.wstaw(TK.kod.dartsStakes[0], { hello: OPPONENTS[key].hello }));
+        choose(o, DARTS_STAKES.map(n => ({ label: Watki.wstaw(TK.kod.dartsStakes[1], { n: n }), js: ["TavernLife.step(this, 'darts', " + n + ", " + q(key) + ")", "TavernLife.step(this, 'gameAfter')"] }))
+            .concat([{ label: TK.kod.dartsStakes[2], js: [] }]));
         return o;
     }
     lib.addKind("darts", () => dartsTalk());
@@ -493,10 +489,10 @@
             st.best = Math.max(st.best || 0, res.score || 0);
             st.bulls = (st.bulls || 0) + (res.bulls || 0);
         },
-        note: () => ["Rzutki", "Przy tarczy w karczmie gra się w rzutki o stawkę (" + DARTS_STAKES.join(", ") + " G): trzy rundy po trzy lotki, strzałki przesuwają cel, O rzuca. Środek (byk) 50, pierścień przy nim 25, reszta tarczy tyle, ile liczba wycinka. Zręczność i Czujność uspokajają rękę."],
+        note: () => ["Rzutki", Watki.wstaw(TK.kod.note[0], { "1": DARTS_STAKES.join(", ") })],
         who: g => (g.opponent === "ozzy" ? npc("ozzy") : spots("darts")[0] ? spots("darts")[0].ev : null),
         after(r, g, who) {
-            if (who && g.opponent === "ozzy") bark(who, r.won ? "Trzy tarcze to jednak za dużo..." : "Hehe! Stary Ozzy jeszcze umie!", 120);
+            if (who && g.opponent === "ozzy") bark(who, r.won ? TK.kod.after[0] : TK.kod.after[1], 120);
         }
     });
 

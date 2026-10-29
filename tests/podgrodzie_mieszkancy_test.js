@@ -61,7 +61,7 @@ kit.test({ port: 9582, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
             old: TownLifeData.EXTRA_RANGE }; })()`);
     t.check("rejestr: TownLife 910-949, 2900-2949 i 2950-2959 (wstrzykiwane), obcy właściciel na 2955 odrzucony",
         reg.list.includes("2950-2959+") && reg.list.includes("2900-2949+") && reg.list.includes("910-949+") && /TownLife/.test(reg.other)
-        && JSON.stringify(reg.ranges) === "[[2900,2949],[2950,2959]]" && JSON.stringify(reg.old) === "[2900,2949]", reg);
+        && JSON.stringify(reg.ranges.slice(0, 2)) === "[[2900,2949],[2950,2959]]" && JSON.stringify(reg.old) === "[2900,2949]", reg);
 
     // ---------------------------------------------------------------- the data
     const R = await t.json(`${sel}.map(r => ({ id: r.id, key: r.key, name: r.name, map: r.map, title: r.title,

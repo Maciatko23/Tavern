@@ -37,10 +37,10 @@ kit.test({ port: 9550, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.newGame({ map: 3, x: 25, y: 15, hour: 12, quiet: true, minimap: false });
     const reg = await t.json(`(function(){ const T = Tawerna, tryIt = ids => { try { T.inject(3, { ids, owner: "Obcy", build: () => [] }); return "ok"; } catch (e) { return e.message; } };
         return { list: T.inject.list().map(r => r.owner + " " + r.ids), a: tryIt([2150, 2151]), b: tryIt([2350, 2350]), c: tryIt([2550, 2550]), d: tryIt([2750, 2750]),
-            o: tryIt([2050, 2050]), tl: tryIt([2910, 2910]), f: tryIt([1500, 1500]), free: tryIt([3000, 3001]) }; })()`);
-    t.check("rejestr: Forestry 1000-1999, Okolice 2000-2099, paczki 2100-2899, TownLife 2900-2949 - obcy właściciel odrzucony, 3000+ wolne",
+            o: tryIt([2050, 2050]), tl: tryIt([2910, 2910]), f: tryIt([1500, 1500]), woz: tryIt([3000, 3000]), free: tryIt([3900, 3901]) }; })()`);
+    t.check("rejestr: Forestry 1000-1999, Okolice 2000-2099, paczki 2100-2899, TownLife 2900-2949, Woz 3000-3001 - obcy właściciel odrzucony, 3900+ wolne (3002-3049 to podróżni)",
         /Zasoby/.test(reg.a) && /Lowy/.test(reg.b) && /Ludzie/.test(reg.c) && /Zakon/.test(reg.d) && /Okolice/.test(reg.o) && /TownLife/.test(reg.tl)
-        && /Forestry/.test(reg.f) && reg.free === "ok" && reg.list.includes("Forestry 1000-1999"), reg);
+        && /Forestry/.test(reg.f) && /Woz/.test(reg.woz) && reg.free === "ok" && reg.list.includes("Forestry 1000-1999"), reg);
 
     // ---------------------------------------------------------------- dane: przedmioty, ikony, mapy, przełączniki
     const db = await t.json(`(function(){ const it = []; for (let i = 185; i <= 249; i++) it.push($dataItems[i] ? [i, $dataItems[i].name, $dataItems[i].note] : [i, null]);

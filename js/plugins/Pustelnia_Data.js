@@ -17,6 +17,7 @@
  * @plugindesc [pakiet A] Dane: pustelnia na klifie i skryptorium (mapy 155, 156), brat Kleofas, karty kroniki, K50, D23. v1.0.0
  * @author Claude
  * @base TawernaCore
+ * @base Watki
  * @orderAfter Wyspa_Data
  *
  * @help
@@ -101,29 +102,7 @@
     // ------------------------------------------------------------------ Kleofas's own talk
     const TX = Watki.teksty("pustelnia");
 
-    // ------------------------------------------------------------------ the quests (TownQuests packs - docs/QUESTY_STAN.md "Jak dopisać")
-    const K50 = {
-        id: "K50", kind: "K", giver: "pustelnik", icon: 147, 
-        offer: {
-            cond: { hours: [5, 20], day: 6, flags: ["pustelnikMet"] }
-        },
-        steps: [
-            { type: "bring", to: "pustelnik", need: [[147, 4], [86, 1]], water: 1, hours: [5, 20] }
-        ],
-        reward: { gold: 15, xp: 40, items: [[76, 2]], flag: "kleofasCzyta" }
-    };
-    Watki.scal(K50, "pustelnia", "zadania.K50");   // (its words: js/teksty/pustelnia.txt, zadania.K50)
-    const D23 = {
-        id: "D23", kind: "D", giver: "pustelnik", icon: 189, 
-        offer: {
-            cond: { hours: [7, 19] }
-        },
-        steps: [
-            { type: "custom", talk: "d23Karty", check: "d23Karty", vars: "d23Karty" }
-        ],
-        reward: { gold: 120, flag: "kleofasUfa" }
-    };
-    Watki.scal(D23, "pustelnia", "zadania.D23");   // (its words: js/teksty/pustelnia.txt, zadania.D23)
+    // ------------------------------------------------------------------ the things carried, the remarks, the gossip (with the quests' pack)
     const VITEMS = {
         karta_1: { icon: 189 },
         karta_2: { icon: 189 },
@@ -142,7 +121,64 @@
     Watki.scal(REMARKS, "pustelnia", "uwagi");   // (its words: js/teksty/pustelnia.txt, uwagi)
     const GOSSIP = { pustelnik: [] };   // (the key stays: TownQuests_Data copies the gossip key by key while the plugins load)
     Watki.scal(GOSSIP, "pustelnia", "plotki");   // (its words: js/teksty/pustelnia.txt, plotki)
-    (window.TownQuestsPacks = window.TownQuestsPacks || []).push({ owner: "Pustelnia", quests: [K50, D23], vitems: VITEMS, remarks: REMARKS, gossip: GOSSIP });
+
+    // ------------------------------------------------------------------ the thread (the engine Watki.js, docs/WATKI_DANE.md, 2026-10-28):
+    // the state "pustelnia", K50 "Atrament dla pustelnika" and D23 "Zaszyfrowane kroniki" (their words: zadania.*; into
+    // window.TownQuestsPacks with the things, the remarks, the gossip), W2 rozdz. 7's step (TownQuests_Data.js's W2 names it
+    // "w2Pytanie"), the talks: the meeting, the Night of the Question, Ambroży's and Baltazar's card. The hooks: Pustelnia.js
+    const w = Watki.watek({
+        id: "pustelnia", wtyczka: "Pustelnia", teksty: "pustelnia",
+        stan: { klucz: "pustelnia", wersja: 1, domyslne: () => ({ met: 0, read: {}, got: {}, asked: {}, rung: {}, honey: { day: 0, n: 0 }, chronN: 0, usualN: 0 }) },
+        mowa: { akapity: true },
+        zadania: {
+            K50: { kind: "K", giver: "pustelnik", icon: 147, offer: { cond: { hours: [5, 20], day: 6, flags: ["pustelnikMet"] } },
+                kroki: [{ nazwa: "k50Atrament", type: "bring", to: "pustelnik", need: [[147, 4], [86, 1]], water: 1, hours: [5, 20] }],
+                reward: { gold: 15, xp: 40, items: [[76, 2]], flag: "kleofasCzyta" } },
+            // the six cards read at the lectern (the marker over Kleofas: a card in the bag, in the reading hours)
+            D23: { kind: "D", giver: "pustelnik", icon: 189, offer: { cond: { hours: [7, 19] } },
+                kroki: [{ nazwa: "d23Karty", gotowe: "ile:read>=6", zmienne: "d23Zmienne", haki: { ready: "d23Znacznik" } }],
+                reward: { gold: 120, flag: "kleofasUfa" } }
+        },
+        paczka: { vitems: VITEMS, remarks: REMARKS, gossip: GOSSIP },
+        // W2 rozdz. 7 "Jedno pytanie" (its stages r.t.w2s): 0 Ambroży gives the bell's heart (Act II), 1 Kleofas hangs it, 2 the Night
+        // of the Question (the marker only after midnight), 3 asked. The lines of the first three: W2's own (js/teksty/w2.txt)
+        obce: [{ zadanie: "W2", nazwa: "w2Pytanie", zmienne: "w2Zmienne", haki: { tick: "w2Etapy" },
+            rozmowy: [
+                { kto: "dzwonnik", gdy: [{ hak: "etapW2", args: [0] }, "aktII", "ambrozyJest"], tresc: [{ hak: "w2Linie", args: ["heart"] }, { zrob: "serce" }] },
+                { kto: "dzwonnik", gdy: [{ hak: "etapW2", args: [1] }, "v:serce_dzwonu"], gotowa: false, tresc: [{ hak: "w2Linie", args: ["heartAway"] }] },
+                { kto: "pustelnik", gdy: [{ hak: "etapW2", args: [1] }, "v:serce_dzwonu"], tresc: [{ hak: "w2Linie", args: ["heartKleofas"] }, { zrob: "zawies" }] },
+                { kto: "pustelnik", gdy: [{ hak: "etapW2", args: [2] }, "nocTrwa"], znacznik: "nocOtwarta", tresc: [{ rozmowa: "noc" }] }
+            ] }],
+        rozmowy: {
+            // the first meeting (a lit torch: he stops the hero first)
+            spotkanie: [{ gdy: "pochodnia", mow: "meetTorch" }, "meet", { zrob: "poznal" }],
+            // the Night of the Question (Kleofas, only while it is on - the caller asks Pustelnia.nightNow): one question a year
+            noc: [
+                { gdy: "nocWczesna", mow: "night.early", koniec: true },
+                { gdy: "pytanieZadane", mow: "night.used", koniec: true },
+                { jesli: "pierwszePytanie", to: ["night.ask"], inaczej: ["night.askAgain"] },
+                { wybor: QUESTIONS.map((qd, i) => ({ etykieta: "pytania." + i + ".label", gdy: { hak: "moznaPytac", args: [qd.id] },
+                    tresc: qd.keep ? ["night.keep"] : [{ zrob: "pytaj", args: [qd.id] }, { hak: "odpowiedz", args: [qd.id] }, "night.done"] }))
+                    .concat([{ etykieta: "kod.jeszczeNieWiem", tresc: ["night.later"] }]), anuluj: "ostatnia" }
+            ],
+            // the card of the chronicles: from the chronicles the hero carries (Kleofas's menu), from Ambroży, from Baltazar
+            kroniki: ["kod.kronikiKarta", { zrob: "karta", args: [1, "kroniki"] }],
+            ambrozy: ["kod.ambrozyPyta", "ambrozyCard", { zrob: "karta", args: [1, "ambrozy"] }],
+            baltazar: ["balt", { zmienne: { cena: { hak: "cenaKarty" } }, wybor: [
+                { etykieta: "kod.biore", tresc: [{ zrob: "kupKarte" }, "baltYes"] },
+                { etykieta: "kod.nieTeraz", tresc: ["baltNo"] }
+            ], anuluj: 1 }]
+        },
+        akcje: {
+            poznal: [{ gdy: "stan:met", koniec: true }, { stan: { met: "dzis" } }, { hak: "flagaOdswiez", args: ["pustelnikMet"] }, { notatka: "meetNote" }],
+            pytaj: [{ hak: "pytaj", args: [{ arg: 0 }] }],
+            karta: [{ hak: "dajKarte", args: [{ arg: 0 }, { arg: 1 }] }],
+            kupKarte: [{ hak: "kupKarte" }],
+            serce: [{ hak: "w2Akcja", args: ["serce"] }],
+            zawies: [{ hak: "w2Akcja", args: ["zawies"] }]
+        }
+    });
+    const K50 = w.Q.K50, D23 = w.Q.D23;
 
     window.PustelniaData = { MAP, INNER, ITEM, IDS: [600, 609], HONEY_PRICE: 12, CARD_BUYBACK: 40, READ_HOURS: [7, 19], READ_TIME: 2,
         NIGHT: { from: 22.5, until: 1.5, bell: 0 }, RESIDENT, CARDS, QUESTIONS, TX, K50, D23, VITEMS, REMARKS };

@@ -149,12 +149,19 @@
         if (tgt && String(tgt.id) === String(id) && !out.includes(tgt.name)) out.push(wstaw(word(TX, "karta.cel") || "cel: {co}", { co: tgt.name }));
         return out;
     }
+    // (2026-10-29, docs/PODROZNI.md D40) a sentence for a place not seen yet instead of the plain "?" - other plugins' hints
+    // (Podroznicy_Sprawy.js: Teofil's sketch): fn(key) -> text | null, the first one that answers
+    const HINTS = [];
+    function hintOf(key) {
+        for (const f of HINTS) { try { const t = f(String(key)); if (t) return t; } catch (e) { console.error("[MapaWyspy] hint", e); } }
+        return "";
+    }
     const interiorsOf = id => Object.keys(D.WNETRZA).filter(k => String(D.WNETRZA[k][0]) === String(id)).map(k => D.WNETRZA[k][1]);
     function card(id) {
         const p = place(id);
         if (!p) return null;
         const key = p.key;
-        if (!discovered(key)) return { id: p.id, title: word(TX, "nieznane.nazwa") || "?", sub: "", opis: word(TX, "nieznane.opis"), known: false, ludzie: [], sklepy: [], zadania: [], wnetrza: [], woz: "" };
+        if (!discovered(key)) return { id: p.id, title: word(TX, "nieznane.nazwa") || "?", sub: "", opis: hintOf(key) || word(TX, "nieznane.opis"), known: false, ludzie: [], sklepy: [], zadania: [], wnetrza: [], woz: "" };
         const people = residentsAt(key).concat((D.LUDZIE_FABULY[key] || []).map(n => ({ key: "", name: n, title: "" })));
         let sub = word(TXM, "mapa." + key + ".pod"), opis = word(TXM, "mapa." + key + ".opis");
         if (key === UND) { const d = deepest(); sub = d > 0 ? wstaw(word(TX, "podziemia.pietro"), { n: d }) : word(TX, "podziemia.brak"); }
@@ -534,6 +541,7 @@
     };
 
     window.MapaWyspy = T.register(PLUGIN, {
+        addHint: fn => { if (typeof fn === "function") HINTS.push(fn); },
         PLACES: ALL, UND, K, place, nameOf, placeOf, hereId, discovered, nodes, roads, card, targetPlace, draw, next, tabIcon, menuView, drawCard,
         choose, Scene_MapaWybor, choosing: () => { const s = SceneManager._scene; return s instanceof Scene_MapaWybor ? s.state() : null; },
         neighbours: key => (NEXT.get(String(key)) || []).slice()

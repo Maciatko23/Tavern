@@ -1,0 +1,17 @@
+# Teksty z Spoilage.js
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz psucie
+
+
+# ======================================================================== z kodu Spoilage.js (kod.<funkcja>.<n>, w kolejności kodu)
+# spoilBag
+kod.spoilBag.0 = Zepsuło się: {name} ×{bad}
+kod.spoilBag.1 = {name}: zaraz się zepsuje
+# timeText
+kod.timeText.0 = {1} dni
+kod.timeText.1 = około doby
+kod.timeText.2 = " godzinę"
+kod.timeText.3 = " godziny"
+kod.timeText.4 = " godzin"
+# freshnessText
+kod.freshnessText.0 = Najstarsza sztuka zepsuje się za {1}.

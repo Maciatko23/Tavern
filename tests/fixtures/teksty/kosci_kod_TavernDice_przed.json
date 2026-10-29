@@ -1,0 +1,24 @@
+{
+ "kod": {
+  "visionText": {
+   "0": "{1}... hyk."
+  },
+  "applyRewards": {
+   "0": "wygrana w kości"
+  },
+  "openTable": {
+   "0": "{short} siada do kości dopiero od {2}:00.",
+   "1": "Stoły puste. Wróć wieczorem.",
+   "2": "Nikt już dziś nie chce grać. Wróć jutro.",
+   "3": "Za mało złota na grę (najmniej {1})."
+  },
+  "start": {
+   "0": "Nie stać cię na stawkę {1}.",
+   "1": "Za mało złota na grę (najmniej {1})."
+  },
+  "giveDie": {
+   "0": "Nowa kość do gry: {name}"
+  }
+ },
+ "_opis": "Napisy kodu TavernDice.js sprzed przeniesienia do js/teksty/kosci.txt (kod.*)"
+}

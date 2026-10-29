@@ -1,0 +1,708 @@
+{
+ "szablony": {
+  "rabbit_meat": {
+   "title": [
+    "Zając w potrawce",
+    "Potrawka sama się nie zrobi"
+   ],
+   "text": [
+    "Goście pytają o potrawkę z zająca. Ja pytam o zające. Przynieś świeże mięso, a potrawka zrobi się sama. Prawie sama.",
+    "Kucharka grozi, że odejdzie, jak znowu podam kapuśniak. Przynieś zajęczyny i ratuj moją kuchnię."
+   ]
+  },
+  "firewood": {
+   "title": [
+    "Drewno do kominka",
+    "Opał na zimne wieczory"
+   ],
+   "text": [
+    "Kominek w sali zjada więcej niż Grum. Przynieś drewna - suchego, bo mokre dymi, a dym wygania gości.",
+    "Kiedy w sali zimno, goście piją mniej. Kiedy piją mniej, ja płaczę. Przynieś drewna."
+   ]
+  },
+  "potatoes": {
+   "title": [
+    "Worek ziemniaków",
+    "Ziemniaki, dużo ziemniaków"
+   ],
+   "text": [
+    "Kuchnia bez ziemniaków to jak karczma bez piwa - da się, ale po co? Przynieś ziemniaki, byle nie zielone.",
+    "Grum zjadł wczoraj cały zapas ziemniaków. Na surowo. Nie pytaj. Przynieś nowe."
+   ]
+  },
+  "mushrooms": {
+   "title": [
+    "Grzyby na zupę"
+   ],
+   "text": [
+    "Po deszczu grzyby wyłażą jak goście po wypłacie. Zbierz jadalne. Które są jadalne? Te, po których Ozzy jeszcze śpiewa."
+   ]
+  },
+  "barley": {
+   "title": [
+    "Jęczmień do warzenia"
+   ],
+   "text": [
+    "Piwo nie warzy się od patrzenia. Kupię jęczmień - suchy i czysty, bez myszy w worku. Myszy kupuję osobno. Żartuję."
+   ]
+  },
+  "bread": {
+   "title": [
+    "Chleb na śniadania"
+   ],
+   "text": [
+    "Goście chcą chleba do jajecznicy. Piekarz chce urlopu. Ty chcesz złota. Wszyscy będą zadowoleni."
+   ]
+  },
+  "boar_meat": {
+   "title": [
+    "Pieczeń na odpust"
+   ],
+   "text": [
+    "Na odpust musi być dzik. Bez dzika to nie odpust, tylko zebranie. Przynieś mięso dzika, resztę załatwi rożen."
+   ]
+  },
+  "s_cellar": {
+   "title": [
+    "Deski do piwnicy"
+   ],
+   "text": [
+    "Od kilku nocy w starej piwnicy coś stuka. Pewnie szczury. Albo beczka turla się sama. Potrzebuję desek i gwoździ - zabiję ten kąt porządnie i będzie spokój. I nie pytaj."
+   ],
+   "note": [
+    "Borgar i piwnica",
+    "Borgar zamówił deski i gwoździe, żeby „porządnie zabić jeden kąt” w starej piwnicy. Od kilku nocy coś tam stuka - on mówi, że szczury. Nie wyglądał, jakby sam w to wierzył."
+   ]
+  },
+  "lord_planks": {
+   "title": [
+    "Dworowi potrzeba desek",
+    "Zamówienie dworu: deski"
+   ],
+   "text": [
+    "Dwór Jaśnie Pana Zaleskiego pilnie zamawia deski na naprawę stajni. Zapłata według cennika dworu i dobrego humoru Jaśnie Pana."
+   ]
+  },
+  "lord_bricks": {
+   "title": [
+    "Cegły na oranżerię"
+   ],
+   "text": [
+    "Jaśnie pan zapragnął oranżerii. Proszę nie pytać, co to jest - Jaśnie pan też nie wie. Dwór potrzebuje cegieł. Dużo cegieł."
+   ]
+  },
+  "venison": {
+   "title": [
+    "Dziczyzna na dworski stół"
+   ],
+   "text": [
+    "Jaśnie pan wydaje kolację dla gości z miasta i życzy sobie dziczyzny. Świeżej. Goście z miasta poznają różnicę. Tak przynajmniej twierdzą."
+   ]
+  },
+  "quills": {
+   "title": [
+    "Pióra do ksiąg dworu"
+   ],
+   "text": [
+    "Jaśnie pan dyktuje szybciej, niż rosną gęsi. Dwór zamawia pióra do pisania. Uprasza się nie przynosić ich razem z ptakiem."
+   ]
+  },
+  "mead": {
+   "title": [
+    "Miód pitny na imieniny"
+   ],
+   "text": [
+    "Imieniny Jaśnie Pana to święto całej okolicy. Tak przynajmniej twierdzi Jaśnie Pan. Dwór zamawia miód pitny - najlepszy, jaki się uda."
+   ]
+  },
+  "cheese": {
+   "title": [
+    "Ser na dworski stół"
+   ],
+   "text": [
+    "Goście Jaśnie Pana nie jedzą sera z miasta, bo „śmierdzi miastem”. Ser ze wsi śmierdzi wsią i o to właśnie chodzi."
+   ]
+  },
+  "lord_deer": {
+   "title": [
+    "Polowanie dla Jaśnie Pana"
+   ],
+   "text": [
+    "Jaśnie pan chce pochwalić się przed gośćmi jeleniem. Upolować go osobiście nie zdąży - ma dużo pracy z chwaleniem się."
+   ]
+  },
+  "honey": {
+   "title": [
+    "Miód na zdarte gardło"
+   ],
+   "text": [
+    "Po wczorajszym koncercie mój głos brzmi jak skrzypiące drzwi. Łyżka miodu i znów będę słowikiem. Albo chociaż wróblem."
+   ]
+  },
+  "feathers": {
+   "title": [
+    "Pióra do kapelusza"
+   ],
+   "text": [
+    "Kapelusz bez pióra to jak pieśń bez refrenu. Potrzebuję piór - im barwniejsze, tym lepiej. Wróble też się liczą."
+   ]
+  },
+  "apples": {
+   "title": [
+    "Jabłka dla muzy"
+   ],
+   "text": [
+    "Moja muza lubi dzikie jabłka. Nie pytaj. Kwaśne, prosto z drzewa - wtedy rymy same się układają."
+   ]
+  },
+  "provisions": {
+   "title": [
+    "Prowiant na drogę"
+   ],
+   "text": [
+    "Idę w góry na wschodzie. Nie pytaj po co. Potrzebuję pieczonego mięsa na drogę - tyle, żeby starczyło, i jeszcze trochę."
+   ]
+  },
+  "smoked": {
+   "title": [
+    "Wędzonka na wyprawę"
+   ],
+   "text": [
+    "Góry na wschodzie nie mają karczm. Sprawdzałem. Potrzebuję wędzonego mięsa, które przetrwa tydzień w plecaku. I mnie."
+   ]
+  },
+  "hunt_mix": {
+   "title": [
+    "Trening dla najemnika"
+   ],
+   "text": [
+    "Moi chłopcy mówią, że się starzeję. Pokaż im, jak się poluje: wilki i dzik. Zapłacę jak za dziesięciu."
+   ]
+  },
+  "b_szary_kiel": {
+   "title": [
+    "Szary Kieł"
+   ],
+   "text": [
+    "Wielki szary wilk z blizną na pysku. Prowadzi watahę na Skraju lasu. Zagryzł już trzy owce, dwa psy i moją ulubioną czapkę. Poluje nocą."
+   ]
+  },
+  "berries": {
+   "title": [
+    "Jagody na nalewkę"
+   ],
+   "text": [
+    "Stara receptura mojej babki: jagody, cukier i cierpliwość. Cukier mam, cierpliwości nie. Przynieś jagody. *czkawka*"
+   ]
+  },
+  "beer": {
+   "title": [
+    "Piwo dla Ozzy'ego"
+   ],
+   "text": [
+    "Borgar mówi, że mam za duży rachunek. Ja mówię, że mam za małe piwo. Przynieś parę kufli. Zapłacę. Chyba."
+   ]
+  },
+  "s_ozzy": {
+   "title": [
+    "Grzyby za opowieść"
+   ],
+   "text": [
+    "Przynieś mi miskę grzybów, to opowiem ci, co mruczy pod podłogą tawerny. Tylko nie mów Borgarowi. On nie lubi, jak o tym gadam."
+   ],
+   "note": [
+    "Bełkot Ozzy'ego",
+    "Ozzy za miskę grzybów opowiedział mi, że „pod tawerną jest więcej piwnicy niż tawerny” i że „kamienie tam na dole pamiętają”. Potem zasnął z łyżką w ręku. Borgar udawał, że nic nie słyszał."
+   ]
+  },
+  "herbs": {
+   "title": [
+    "Zioła na napar"
+   ],
+   "text": [
+    "Mój napar leczy wszystko: katar, smutek i łysienie. To ostatnie jeszcze sprawdzam. Potrzebuję świeżych ziół."
+   ]
+  },
+  "yarrow": {
+   "title": [
+    "Krwawnik na rany"
+   ],
+   "text": [
+    "Krwawnik tamuje krew i kłótnie małżeńskie. To drugie nie zawsze. Przynieś trochę, zanim ktoś znowu ugryzie dzika."
+   ]
+  },
+  "nettle": {
+   "title": [
+    "Pokrzywa na zupę"
+   ],
+   "text": [
+    "Zupa pokrzywowa - najtańsza zupa świata, jeśli nie liczyć poparzonych rąk. Twoich rąk. Przynieś pokrzywy."
+   ]
+  },
+  "garlic": {
+   "title": [
+    "Czosnek na wampiry"
+   ],
+   "text": [
+    "Wampirów tu nie ma. Dzięki czosnkowi. Potrzebuję świeżego zapasu, bo stary już nikogo nie straszy."
+   ]
+  },
+  "bandages": {
+   "title": [
+    "Opatrunki dla łowców"
+   ],
+   "text": [
+    "Dzik ugryzł Maćka. Maciek ugryzł dzika. Obaj potrzebują opatrunku, ale tylko jeden płaci. Zrób kilka na zapas."
+   ]
+  },
+  "hides": {
+   "title": [
+    "Skóry na kożuchy",
+    "Skóra za skórę"
+   ],
+   "text": [
+    "Zima przyjdzie jak co roku - niespodziewanie. Kupię surowe skóry, byle bez dziur po strzałach. No, najwyżej z jedną."
+   ]
+  },
+  "wolf_pelts": {
+   "title": [
+    "Wilcze futra",
+    "Skóry wilka dla sołtysowej"
+   ],
+   "text": [
+    "Sołtysowa chce futro z wilka, bo sąsiadka ma z lisa. Upoluj wilki i przynieś ich skóry. Wiem, że skóra to skóra, ale ja rozpoznam!"
+   ]
+  },
+  "tanned": {
+   "title": [
+    "Wyprawione skóry na buty"
+   ],
+   "text": [
+    "Szewc zamawia skóry u mnie, ja u ciebie. Taki łańcuszek szczęścia, tylko z pieniędzmi. Przynieś skóry wyprawione."
+   ]
+  },
+  "eggs": {
+   "title": [
+    "Jajka na niedzielne ciasto"
+   ],
+   "text": [
+    "Ciasto bez jajek to podpłomyk. A podpłomyk to smutek. Przynieś jajka, najlepiej całe."
+   ]
+  },
+  "flour": {
+   "title": [
+    "Mąka na chleb"
+   ],
+   "text": [
+    "Młyn stanął, bo młynarz się zakochał. Potrzebuję mąki, zanim cała wieś przejdzie na podpłomyki."
+   ]
+  },
+  "pie": {
+   "title": [
+    "Placek na wesele"
+   ],
+   "text": [
+    "Wesele u młynarzów! Pan młody zjadł już pół placka na próbę. Potrzebuję nowych, zanim zje resztę."
+   ]
+  },
+  "stones": {
+   "title": [
+    "Kamienie na drogę"
+   ],
+   "text": [
+    "Droga do młyna ma więcej dziur niż sito. Przynieś kamienie, a wieś ci podziękuje. Ja też, ale ciszej."
+   ]
+  },
+  "rope": {
+   "title": [
+    "Lina do studni"
+   ],
+   "text": [
+    "Wiadro w studni urwało się razem z liną. Wiadro wyłowimy, linę trzeba nową. A najlepiej dwie, na zapas."
+   ]
+  },
+  "bricks": {
+   "title": [
+    "Cegły na nowy komin"
+   ],
+   "text": [
+    "Komin w szkółce wali się od zeszłej zimy. Dzieci mówią, że to duch. Ja mówię, że to cegły. Przynieś nowe."
+   ]
+  },
+  "wolves": {
+   "title": [
+    "Wilki pod wsią"
+   ],
+   "text": [
+    "Wilki podchodzą pod obejścia i straszą owce. Owce straszą mnie. Ktoś musi z tym skończyć, zanim przestraszę się sam."
+   ]
+  },
+  "stew": {
+   "title": [
+    "Gulasz dla drwali"
+   ],
+   "text": [
+    "Drwale pracują za dwóch i jedzą za trzech. Przynieś gulasz, zanim zjedzą mnie."
+   ]
+  },
+  "clay": {
+   "title": [
+    "Glina z kałuży"
+   ],
+   "text": [
+    "Po deszczu w kałużach jest najlepsza glina. Ja mam reumatyzm, ty masz łopatę. Przynieś mokrą glinę."
+   ]
+  },
+  "pots": {
+   "title": [
+    "Garnki na jarmark"
+   ],
+   "text": [
+    "Jarmark za pasem, a ja mam dwa garnki, z czego jeden to kapelusz. Przynieś wypalone gliniane garnki."
+   ]
+  },
+  "charcoal": {
+   "title": [
+    "Węgiel do kuźni"
+   ],
+   "text": [
+    "Mój węglarz uciekł z córką młynarza. Węgiel przynieś ty - córki młynarza nie trzeba."
+   ]
+  },
+  "ore": {
+   "title": [
+    "Ruda żelaza"
+   ],
+   "text": [
+    "Kowal bez rudy jest jak bard bez głosu. Czyli jak Melia rano. Przynieś rudę żelaza."
+   ]
+  },
+  "iron": {
+   "title": [
+    "Żelazo na podkowy"
+   ],
+   "text": [
+    "Wszystkie konie we wsi zgubiły podkowy tego samego dnia. Przypadek? Tak, przypadek. Potrzebuję żelaza."
+   ]
+  },
+  "sinew": {
+   "title": [
+    "Ścięgna na cięciwy"
+   ],
+   "text": [
+    "Moje cięciwy pękają częściej niż obietnice sołtysa. Potrzebuję ścięgien - suchych, mocnych, niegryzionych."
+   ]
+  },
+  "arrows": {
+   "title": [
+    "Strzały dla łowczego"
+   ],
+   "text": [
+    "Połowa moich strzał wisi na drzewach, druga połowa leci w nieznanym kierunku. Przydadzą się nowe."
+   ]
+  },
+  "wolf_meat": {
+   "title": [
+    "Mięso dla psów gończych"
+   ],
+   "text": [
+    "Moje psy nie jedzą byle czego. Jedzą wszystko. Ale wilczyna smakuje im najbardziej - to chyba osobiste."
+   ]
+  },
+  "wolves_map": {
+   "title": [
+    "Wataha: {Place}"
+   ],
+   "text": [
+    "Nocą {place} grasuje wataha. Kupcy nie chcą jechać, a ja nie chcę słuchać kupców. Przerzedź ją."
+   ]
+  },
+  "deer": {
+   "title": [
+    "Jelenie w zbożu"
+   ],
+   "text": [
+    "Jelenie wyjadają zboże, a potem patrzą na mnie z wyższością. Przerzedź stado, zanim zjedzą i mnie."
+   ]
+  },
+  "b_trojlap": {
+   "title": [
+    "Trójłap"
+   ],
+   "text": [
+    "Kulawy wilk na trzech łapach, a ucieka szybciej niż ja na czterech. Kradnie kury na Polnej drodze. Poluje nocą, z kompanem."
+   ]
+  },
+  "rabbits": {
+   "title": [
+    "Zające w kapuście"
+   ],
+   "text": [
+    "Zające zjadają mi kapustę, marchew i cierpliwość. Przegoń je na zawsze. Najlepiej do garnka."
+   ]
+  },
+  "boar": {
+   "title": [
+    "Dzik w ogrodach"
+   ],
+   "text": [
+    "Dzik zrył mi grządki, płot i dobry humor. Zrób coś z nim, zanim zryje mi dom."
+   ]
+  },
+  "milk": {
+   "title": [
+    "Mleko dla kociąt"
+   ],
+   "text": [
+    "Kotka sołtysa okociła się pod moim piecem. Sołtys udaje, że to nie jego kot. Kocięta nie udają - są głodne."
+   ]
+  },
+  "flax": {
+   "title": [
+    "Len dla prządki"
+   ],
+   "text": [
+    "Kołowrotek stoi, a zima idzie. Przynieś len, uprzędę z niego nić, a z nici... zobaczymy."
+   ]
+  },
+  "wool": {
+   "title": [
+    "Wełna na skarpety"
+   ],
+   "text": [
+    "Dziergam skarpety dla całej wsi. Wieś ma sto nóg, a ja jeden motek wełny. Przynieś wełnę."
+   ]
+  },
+  "cabbage": {
+   "title": [
+    "Kapusta do kiszenia"
+   ],
+   "text": [
+    "Beczka czeka, sąsiadki patrzą. Kiszona kapusta sama się nie zakisi. Potrzebuję główek twardych jak głowa sołtysa."
+   ]
+  },
+  "b_czarny_ryj": {
+   "title": [
+    "Czarny Ryj"
+   ],
+   "text": [
+    "Czarny jak smoła, ciężki jak wóz z sianem. Rozwalił trzy płoty i jeden most. Ryje na Leśnej drodze o świcie i o zmierzchu."
+   ]
+  },
+  "planks": {
+   "title": [
+    "Deski na nowy płot"
+   ],
+   "text": [
+    "Stary płot przewróciła krowa. Nowy też przewróci, ale przynajmniej będzie nowy. Potrzebuję desek."
+   ]
+  },
+  "nails": {
+   "title": [
+    "Gwoździe na dach"
+   ],
+   "text": [
+    "Dach stodoły trzyma się na słowo honoru. Honoru mam dużo, gwoździ mało."
+   ]
+  },
+  "shed_wood": {
+   "title": [
+    "Drewno na nową szopę"
+   ],
+   "text": [
+    "Stawiam szopę. Szopa stawia opór. Przynieś drewna, zanim podda się któreś z nas."
+   ]
+  },
+  "carrots": {
+   "title": [
+    "Marchew dla kucyka"
+   ],
+   "text": [
+    "Kucyk sołtysa nie ruszy bez marchwi. Sołtys też nie. Przynieś marchew, to może obaj ruszą."
+   ]
+  },
+  "branches": {
+   "title": [
+    "Chrust na ognisko"
+   ],
+   "text": [
+    "Robimy z chłopakami wielkie ognisko. Mama mówi, że nie wolno. Dlatego chrust musi być szybko, zanim się dowie."
+   ]
+  },
+  "cones": {
+   "title": [
+    "Szyszki na wojnę"
+   ],
+   "text": [
+    "Chłopaki z drugiego końca wsi wypowiedzieli nam wojnę na szyszki. Potrzebuję amunicji. Dużo amunicji."
+   ]
+  }
+ },
+ "zleceniodawcy": {
+  "borgar": {
+   "name": "Borgar Kowal",
+   "short": "Borgar",
+   "role": "karczmarz",
+   "line": "Płaci uczciwie. Jak na karczmarza."
+  },
+  "feliks": {
+   "name": "Feliks",
+   "short": "Feliks, kamerdyner",
+   "role": "kamerdyner dworu Zaleskich",
+   "line": "Zapisuje wszystko. Nawet to, czego nie powiedziałeś."
+  },
+  "melia": {
+   "name": "Melia Srebrogłosa",
+   "short": "Melia",
+   "role": "bardka",
+   "line": "Ma pieśń na każdą okazję i okazję na każdą pieśń."
+  },
+  "grum": {
+   "name": "Grum Żelazna Pięść",
+   "short": "Grum",
+   "role": "najemnik",
+   "line": "Mówi mało, bije mocno, płaci od ręki."
+  },
+  "ozzy": {
+   "name": "Dziadek Ozzy",
+   "short": "Ozzy",
+   "role": "stały bywalec",
+   "line": "Pamięta czasy, których nie było."
+  },
+  "jagna": {
+   "name": "Babka Jagna",
+   "short": "Jagna",
+   "role": "zielarka",
+   "line": "Na każdą dolegliwość ma ziółko, a na resztę - gorsze ziółko."
+  },
+  "tadeusz": {
+   "name": "Tadeusz Skórka",
+   "short": "T. Skórka",
+   "role": "kuśnierz",
+   "line": "Od futra się zaczyna i na futrze kończy."
+  },
+  "halina": {
+   "name": "Halina",
+   "short": "Halina",
+   "role": "piekarzowa",
+   "line": "Rano chleb, wieczorem plotki. Jedno i drugie świeże."
+  },
+  "bartek": {
+   "name": "Bartłomiej",
+   "short": "sołtys Bartłomiej",
+   "role": "sołtys",
+   "line": "Wie wszystko najlepiej, zwłaszcza to, czego nie wie."
+  },
+  "wit": {
+   "name": "Wit",
+   "short": "Wit",
+   "role": "garncarz",
+   "line": "Lepi garnki, a przy okazji i historie."
+  },
+  "zdzich": {
+   "name": "Zdzisław",
+   "short": "Zdzisław",
+   "role": "kowal ze wsi",
+   "line": "Ręce jak kowadła, serce jak miech."
+  },
+  "bogdan": {
+   "name": "Bogdan",
+   "short": "Bogdan, łowczy",
+   "role": "łowczy",
+   "line": "Tropi wszystko, co ma cztery nogi. Trzy też."
+  },
+  "marianna": {
+   "name": "Wdowa Marianna",
+   "short": "Marianna",
+   "role": "gospodyni",
+   "line": "Liczy każdy grosz. Dwa razy."
+  },
+  "kazimierz": {
+   "name": "Kazimierz",
+   "short": "Kazimierz",
+   "role": "cieśla",
+   "line": "Mierzy dwa razy, tnie raz, narzeka trzy razy."
+  },
+  "jozek": {
+   "name": "Mały Józek",
+   "short": "Józek",
+   "role": "chłopak na posyłki",
+   "line": "Biega szybciej niż plotki. Prawie."
+  }
+ },
+ "zwierzeta": {
+  "rabbit": {
+   "one": "zając",
+   "few": "zające",
+   "many": "zajęcy"
+  },
+  "deer": {
+   "one": "jeleń",
+   "few": "jelenie",
+   "many": "jeleni"
+  },
+  "wolf": {
+   "one": "wilk",
+   "few": "wilki",
+   "many": "wilków"
+  },
+  "boar": {
+   "one": "dzik",
+   "few": "dziki",
+   "many": "dzików"
+  }
+ },
+ "miejsca": {
+  "4": [
+   "Łąka",
+   "na łące"
+  ],
+  "8": [
+   "Okolice Tawerny",
+   "koło tawerny"
+  ],
+  "20": [
+   "Podwórze dziadka",
+   "na podwórzu dziadka"
+  ],
+  "21": [
+   "Leśna droga",
+   "na Leśnej drodze"
+  ],
+  "22": [
+   "Polna droga",
+   "na Polnej drodze"
+  ],
+  "23": [
+   "Skraj lasu",
+   "na Skraju lasu"
+  ]
+ },
+ "poszukiwani": {
+  "szary_kiel": {
+   "name": "Szary Kieł",
+   "hint": "nocą"
+  },
+  "czarny_ryj": {
+   "name": "Czarny Ryj",
+   "hint": "o świcie i o zmierzchu"
+  },
+  "trojlap": {
+   "name": "Trójłap",
+   "hint": "nocą"
+  }
+ },
+ "rodzaje": {
+  "deliver": "DOSTAWA",
+  "craft": "ZAMÓWIENIE",
+  "gather": "ZBIERACTWO",
+  "hunt": "POLOWANIE",
+  "bounty": "POSZUKIWANY",
+  "story": "OGŁOSZENIE"
+ },
+ "samouczek": [
+  "Tu ludzie z okolicy wieszają swoje prośby. Zerwiesz kartkę - bierzesz robotę. Płacą złotem, a dobra robota niesie się po wsi: im większa twoja sława w tawernie, tym lepiej płatne zlecenia.",
+  "Najwyżej trzy naraz, bo się nie wyrobisz. Każde ma termin - nie zdążysz, cała wieś się dowie. Robotę oddajesz tutaj, przy tablicy. Co trzy dni wieszam nowe kartki."
+ ],
+ "_opis": "Teksty sprzed przeniesienia do js/teksty (QuestBoard_Data.js: TEMPLATES=szablony:zadanie:id, GIVERS=zleceniodawcy:/(^|\\.)(name|short|role|line)$/, BEASTS=zwierzeta:/(^|\\.)(one|few|many)$/, PLACES=miejsca, BOUNTIES=poszukiwani:/(^|\\.)(name|hint)$/, TYPE_LABEL=rodzaje, TUTORIAL=samouczek)"
+}

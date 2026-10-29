@@ -1,0 +1,36 @@
+# Teksty z CzerwonaWoda.js
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz czerwona_woda
+
+
+# ======================================================================== Zatrucie (premia Survival.js po czerwonej wodzie; {koszt} i {limit} - procenty z ustawień wtyczki)
+zatrucie.name = Zatrucie
+zatrucie.desc = prace kosztują {koszt}% więcej sił, wytrzymałość najwyżej {limit}%
+
+# ======================================================================== z kodu CzerwonaWoda.js (kod.<funkcja>.<n>, w kolejności kodu)
+# seaPopup
+kod.seaPopup.0 = Woda jest czerwona i cuchnie.
+kod.seaPopup.1 = Słona - nie do picia.
+# seaMenu
+kod.seaMenu.0 = Napij się mimo to
+kod.seaMenu.1 = Czerwona woda cuchnie zakwitem. Rybacy mówią, że od niej się rzyga do rana.
+kod.seaMenu.2 = Morska woda. Słona - pragnienie po niej tylko gorsze.
+kod.seaMenu.3 = Nabierz wody
+kod.seaMenu.4 = Do bukłaka, wiadra albo garnka.
+kod.seaMenu.5 = Nabrać do wiadra i zagotować na ogniu? Rybacy się z tego śmieją.
+kod.seaMenu.6 = Czerwona woda
+kod.seaMenu.7 = Przegotuj
+kod.seaMenu.8 = Morze
+# act
+kod.act.0 = Wymiotujesz. Zatrucie!
+kod.act.1 = Słona! Pragnienie jeszcze gorsze.
+# fillRefused
+kod.fillRefused.0 = Czerwonej wody nie nabierzesz. Zepsujesz naczynie.
+kod.fillRefused.1 = Słonej wody nie ma po co nosić.
+# boilRefused
+kod.boilRefused.0 = Dalej czerwona. Nawet para śmierdzi.
+kod.boilRefused.1 = Sól zostaje. Przegotowana dalej słona.
+# deadCatch
+kod.deadCatch.0 = Śnięta ryba. Wyrzucasz ją z powrotem.
+# triggerButtonAction
+kod.triggerButtonAction.0 = Śnięta ryba. Cuchnie zakwitem.

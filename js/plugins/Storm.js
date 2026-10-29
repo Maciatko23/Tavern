@@ -66,6 +66,7 @@
  */
 (() => {
     "use strict";
+    const TK = Watki.teksty("burza");   // (the words of this file: js/teksty/burza.txt, kod.*)
 
     const T = window.Tawerna;
     if (!T) throw new Error("Storm.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
@@ -185,7 +186,7 @@
         smoulders()[$gameMap.mapId() + ":" + tree.eventId()] = hoursNow();
         state.thunders.push({ at: state.t + 8, se: ["Fire2", 70, 90, pan] });   // the crown catches fire for a moment
         const coal = $dataItems[C.CHARCOAL];
-        T.popup("Piorun trafił w drzewo!", { icon: coal ? coal.iconIndex : 0, color: "#ffc27a" });
+        T.popup(TK.kod.hitTree[0], { icon: coal ? coal.iconIndex : 0, color: "#ffc27a" });
         return true;
     }
 
@@ -197,7 +198,7 @@
         if (state.outdoors && ((opts && opts.tree) || (state.phase === "rage" && d < 0.3 && treesHitToday() < TREES_PER_STORM && Math.random() < TREE_CHANCE))) {
             tree = opts && opts.tree instanceof Game_Event ? opts.tree : treeInView();
             if (tree) d = Math.min(d, 0.1);
-            else if (opts && opts.tree) T.popup("Nie ma tu drzewa, w które mógłby trafić", { color: "#bcd8ff" });   // F9
+            else if (opts && opts.tree) T.popup(TK.kod.strike[0], { color: "#bcd8ff" });   // F9
         }
         const t = state.t, crown = tree ? crownOf(tree) : null;
         const x = crown ? clamp01(crown.x / Graphics.width) : rand(0.12, 0.88), pan = (x - 0.5) * 120;
@@ -562,7 +563,7 @@
             for (const b of branches) stroke(b, Math.max(1, w / 2), c, a * 0.8);
         }
     };
-    const nightNow = () => ($gameSystem._dayNightTinting && T.call("Farming", "nightAmount")) || 0;
+    const nightNow = () => (T.state("clock").tinting && T.call("Farming", "nightAmount")) || 0;
     Sprite_StormSky.prototype.update = function() {
         const night = nightNow();
         this._light.alpha = state.flash * (0.5 - 0.22 * night);   // at night the lifted darkness does most of the work

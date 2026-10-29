@@ -1,0 +1,71 @@
+{
+ "kod": {
+  "dniWord": {
+   "0": "dzień"
+  },
+  "placeWhere": {
+   "0": "na mapie {1}"
+  },
+  "fill": {
+   "0": "w okolicy"
+  },
+  "daysText": {
+   "0": "dziś ostatni dzień",
+   "1": "po terminie"
+  },
+  "accept": {
+   "0": "Tego zlecenia już nie ma na tablicy.",
+   "1": "Masz już {MAX_ACTIVE} zlecenia. Najpierw któreś oddaj albo porzuć."
+  },
+  "turnIn": {
+   "0": "Zlecenie: {title}",
+   "1": " (od razu na poczet długu dziadka)",
+   "2": "Dla: {name} ({role}). Wykonane w dniu {3}.\nOddałem: {4}.\nZapłata: {gold} G{6}, {xp} dośw., sława +{rep}{9}."
+  },
+  "fail": {
+   "0": "Zlecenie przepadło: {title}",
+   "1": "Minął termin. Sława w tawernie -{loss}"
+  },
+  "onKill": {
+   "0": "Zlecenie gotowe: {title}",
+   "1": "Oddaj je przy tablicy zleceń w tawernie."
+  },
+  "glowna": {
+   "0": "Na tablicy w tawernie wiszą nowe ogłoszenia",
+   "1": "Masz wszystko do zlecenia: {title}",
+   "2": "Oddaj je przy tablicy zleceń w tawernie.",
+   "3": "Dziś mija termin zlecenia: {title}",
+   "4": "Gotowe! Oddaj przy tablicy w tawernie."
+  },
+  "spawnBounty": {
+   "0": "W pobliżu grasuje {name}!",
+   "1": "POSZUKIWANY - zlecenie z tablicy w tawernie"
+  },
+  "trackLine": {
+   "0": "Gotowe! Oddaj przy tablicy w tawernie."
+  },
+  "journalItems": {
+   "0": "Brak zleceń",
+   "1": "przepadło, dz. ",
+   "2": "porzucone, dz. "
+  },
+  "journalOps": {
+   "0": "Tu zobaczysz zlecenia z tablicy w tawernie „Pod Złotym Kuflem”: co trzeba przynieść albo upolować, do kiedy i za ile. Tablica wisi w sieni tawerny.",
+   "1": "{1}  ·  dzień {day}",
+   "2": "Wykonane. Zapłata: {gold} G, {xp} dośw., sława +{rep}.",
+   "3": "Termin minął. Sława {rep}.",
+   "4": "Porzucone. Sława {rep}.",
+   "5": "gotowe do oddania",
+   "6": "do dnia {due} ({2})",
+   "7": "Grasuje {1}, {hint}.",
+   "8": "{gold} G  ·  {xp} dośw.  ·  sława +{rep}{4}",
+   "9": "Śledzisz je w okienku celu. OK: przestań śledzić.",
+   "10": "OK: śledź je w okienku celu na ekranie.",
+   "11": "Oddajesz je przy tablicy zleceń w tawernie „Pod Złotym Kuflem”. {1}"
+  },
+  "legend": {
+   "0": "Sława {rep}/100  ·  {name}  ·  wykonane: {done}"
+  }
+ },
+ "_opis": "Napisy kodu QuestBoard.js sprzed przeniesienia do js/teksty/tablica.txt (kod.*)"
+}

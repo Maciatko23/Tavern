@@ -278,15 +278,35 @@
     // 2. Talks: the event commands (one builder for every thread)
     // ==================================================================
     // o.akapity: "\n" starts a new line (TownQuests); o.kto(key): the speaker of a "@key: text" line (TownQuests' residents);
-    // o.twardaG: "5 G" kept on one line (TownQuests)
+    // o.twardaG: "5 G" kept on one line (TownQuests); o.szer: the line's width (46)
     const LINE = 46, PAGE = 3, HERO = { id: 0, name: "" };
+    // o.px: the line's width in pixels as the message window shows it (Story.js's talks: 540) - measured with the game's font, \N[n]
+    // as the actor's name, the words split on single spaces, an empty paragraph kept as an empty line (Story's own wrap, as it was)
+    let probe = null;
+    const shownNames = text => String(text).replace(/\\N\[(\d+)\]/gi, (m, n) => (window.$gameActors && $gameActors.actor(Number(n)) ? $gameActors.actor(Number(n)).name() : ""));
+    function wrapPx(text, px) {
+        if (!probe) probe = new Bitmap(8, 8);
+        probe.fontFace = $gameSystem.mainFontFace();
+        probe.fontSize = $gameSystem.mainFontSize();
+        const lines = [];
+        for (const para of String(text).split("\n")) {
+            let line = "";
+            for (const word of para.split(" ")) {
+                const trial = line ? line + " " + word : word;
+                if (line && probe.measureTextWidth(shownNames(trial)) > px) { lines.push(line); line = word; } else line = trial;
+            }
+            lines.push(line);
+        }
+        return lines;
+    }
     function wrap(text, o) {
-        const out = [];
+        if (o && o.px) return wrapPx(text, o.px);
+        const out = [], width = (o && o.szer) || LINE;
         for (const para of o && o.akapity ? String(text).split("\n") : [String(text)]) {
             let line = "";
             for (const w of para.split(/\s+/)) {
                 if (!w) continue;
-                if (line && (line + " " + w).length > LINE) { out.push(line); line = w; } else line = line ? line + " " + w : w;
+                if (line && (line + " " + w).length > width) { out.push(line); line = w; } else line = line ? line + " " + w : w;
             }
             if (line) out.push(line);
         }
@@ -295,7 +315,7 @@
     function sayTo(out, spk, text, ind, o) {
         const lines = wrap(o && o.twardaG ? String(text).replace(/(\d) G\b/g, "$1 G") : text, o);
         for (let i = 0; i < lines.length; i += PAGE) {
-            out.push(C(101, ["", 0, 0, 2, spk.name || ""], ind));
+            out.push(C(101, [spk.twarz ? spk.twarz[0] : "", spk.twarz ? spk.twarz[1] : 0, 0, 2, spk.name || ""], ind));   // (twarz: [face, index] - Story's plain window)
             lines.slice(i, i + PAGE).forEach((l, j) => out.push(C(401, [(j === 0 ? "\\SPK[" + spk.id + "]" : "") + l], ind)));
         }
         return out;
@@ -324,13 +344,25 @@
         return out;
     }
     const script = (out, code, ind) => (out.push(C(355, [code], ind)), out);
+    // a plain message, nobody's (the notes read, the cards, a post): a title line in \C[6] and the text wrapped at 52 ("\n": a new
+    // line), four lines a window; o.spk: \SPK[n] before the first line (-1: no bubble - the window at the bottom)
+    function plain(out, title, lines, o) {
+        const all = (title ? ["\\C[6]" + title + "\\C[0]"] : []).concat(...[].concat(lines).map(l => wrap(l, { akapity: true, szer: 52 })));
+        for (let i = 0; i < all.length; i += 4) {
+            out.push(C(101, ["", 0, 0, 2, ""]));
+            all.slice(i, i + 4).forEach((l, j) => out.push(C(401, [(o && o.spk !== undefined && i === 0 && j === 0 ? "\\SPK[" + o.spk + "]" : "") + l])));
+        }
+        return out;
+    }
     // the commands as a child of the running event (the talk goes on in the same interpreter)
+    // (no interpreter - a plugin's call from code, a test: the map's own interpreter runs them)
     function uruchom(interp, list) {
-        if (!interp || !list || !list.length) return;
+        if (!list || !list.length) return;
+        if (!interp) { if (window.$gameMap && $gameMap._interpreter) $gameMap._interpreter.setup(list.concat([C(0, [])]), 0); return; }
         const ev = $gameMap.event(interp.eventId());
         interp.setupChild(list.concat([C(0, [])]), ev ? ev.eventId() : 0);
     }
-    const mowa = { C, HERO, LINE, PAGE, fill, wrap, sayTo, linesTo, choiceTo, script, uruchom };
+    const mowa = { C, HERO, LINE, PAGE, fill, wrap, sayTo, linesTo, choiceTo, script, plain, uruchom };
 
     // ==================================================================
     // 3. Threads
@@ -342,7 +374,7 @@
     let recDef = null;
     const defineRec = () => recDef || (recDef = T.state.define("watki", () => ({ w: {}, track: null }), { version: 1, owner: PLUGIN }));
     const recStore = () => defineRec()();
-    const ownThreads = () => order.map(k => threads.get(k)).filter(w => !w.def.zadanie && w.def.dziennik);
+    const ownThreads = () => order.map(k => threads.get(k)).filter(w => !w.def.zadanie && !w.def.zadania && w.def.dziennik);
 
     function watek(def) {
         if (!def || !def.id) throw new Error("Watki.watek: wątek bez id");
@@ -350,7 +382,7 @@
         const w = makeThread(def);
         threads.set(def.id, w);
         order.push(def.id);
-        if (!def.zadanie && def.dziennik) { defineRec(); hookJournal(); }   // (the state and the journal's source "watki": only with such a thread)
+        if (!def.zadanie && !def.zadania && def.dziennik) { defineRec(); hookJournal(); }   // (the state and the journal's source "watki": only with such a thread)
         return w;
     }
 
@@ -378,7 +410,7 @@
         const tekstMoze = key => lookup(tx, key);
 
         // ---------------------------------------------------------- the hooks
-        w.haki = obj => { Object.assign(hooks, obj || {}); return w; };
+        w.haki = obj => { Object.assign(hooks, obj || {}); bindQuest(); return w; };   // (the thread's plugin stands under TownQuests: its FX at once)
         function hook(name, ctx, args) {
             const f = hooks[name];
             if (typeof f !== "function") { if (!missing.has("hak:" + name)) { missing.add("hak:" + name); console.error("[Watki] " + id + ": brak haka „" + name + "”"); } return undefined; }
@@ -387,42 +419,88 @@
         w.hak = (name, ctx, ...args) => hook(name, ctx, args);
 
         // ---------------------------------------------------------- TownQuests (the record of the quest the chapters belong to)
-        const quest = () => { const q = TQ(); return q && q.Q && def.zadanie ? q.Q[def.zadanie] || null : null; };
+        // def.zadanie: one quest whose steps the thread adds (W4: chapters 6-8); def.zadania: the thread's own quests, whole (a
+        // package's K / D quests - the engine makes them and puts them into window.TownQuestsPacks); with neither: its own record
+        const zids = () => (def.zadanie ? [def.zadanie] : Object.keys(def.zadania || {}));
+        const quest = zid => { const q = TQ(), k = zid || zids()[0]; return q && q.Q && k ? q.Q[k] || null : null; };
         const qstate = () => { const q = TQ(); try { return q && q.state ? q.state() : null; } catch (e) { return null; } };
         const flags = () => { const s = qstate(); return (s && s.flags) || {}; };
         const flag = k => !!flags()[k];
         function setFlag(k) { const s = qstate(); if (s && s.flags && k && !s.flags[k]) s.flags[k] = day(); }
         const vcount = k => { const s = qstate(); return s && s.v ? s.v[k] || 0 : 0; };
         const vgive = (k, n) => { const s = qstate(); if (s && s.v) s.v[k] = (s.v[k] || 0) + (n || 1); };
-        const rec = () => (def.zadanie ? (TQ() && TQ().rec ? TQ().rec(def.zadanie) : null) : own());
+        const vtake = (k, n) => { const s = qstate(); if (!s || !s.v) return; s.v[k] = Math.max(0, (s.v[k] || 0) - (n || 1)); if (!s.v[k]) delete s.v[k]; };
+        const onQuests = () => zids().length > 0;
+        const rec = zid => (zid || onQuests() ? (TQ() && TQ().rec ? TQ().rec(zid || zids()[0]) : null) : own());   // (a quest named: always TownQuests' record)
         const stepName = s => (s ? s.nazwa || s.talk || s.check || s.vars || "" : "");
-        const steps = () => { const q = quest(); return q ? q.steps : def.kroki || []; };
-        function cur() {
-            const r = rec(), list = steps();
-            if (!r || r.s !== "active" || !list) return "";
-            return def.zadanie ? stepName(list[r.step]) : list[r.krok] ? list[r.krok].nazwa || "" : "";
+        const steps = zid => { const q = quest(zid); return q ? q.steps : onQuests() ? [] : def.kroki || []; };
+        // a step's place by its name: { zid, i } - in whichever of the thread's quests it is
+        function where(name) {
+            const find = z => steps(z).findIndex(s => stepName(s) === name || s.talk === name || s.check === name || s.vars === name);
+            for (const z of zids()) { const i = find(z); if (i >= 0) return { zid: z, i }; }
+            for (const k of def.obce || []) if (k.nazwa === name && k.zadanie) { const i = find(k.zadanie); if (i >= 0) return { zid: k.zadanie, i }; }
+            if (!onQuests()) { const i = (def.kroki || []).findIndex(s => s.nazwa === name); if (i >= 0) return { zid: null, i }; }
+            return null;
         }
-        const at = name => (Array.isArray(name) ? name.includes(cur()) : cur() === name);
-        const stepOf = name => { const list = steps(); return list ? list.findIndex(s => s.nazwa === name || s.talk === name || s.check === name || s.vars === name) : -1; };
+        // the current step's name (of the quest zid; with several quests and no zid: the first active one's)
+        function cur(zid) {
+            if (!onQuests()) { const r = own(), list = def.kroki || []; return r && r.s === "active" && list[r.krok] ? list[r.krok].nazwa || "" : ""; }
+            for (const z of zid ? [zid] : zids()) {
+                const r = rec(z), list = steps(z);
+                if (r && r.s === "active" && list[r.step]) return stepName(list[r.step]);
+            }
+            return "";
+        }
+        function atOne(name) {
+            if (!onQuests()) return cur() === name;
+            const p = where(name), r = p && rec(p.zid);
+            return !!r && r.s === "active" && r.step === p.i;
+        }
+        const at = name => (Array.isArray(name) ? name.some(atOne) : atOne(name));
+        const stepOf = name => { const p = where(name); return p ? p.i : -1; };
         const autoChecks = () => { const q = TQ(); if (q && q.autoChecks) q.autoChecks(); if (q && q.refreshMarkers) q.refreshMarkers(); };
         // the step done: TownQuests' completeStep (to a step by name; the reward; the notice) - only while that step is the current one
         function complete(names, o) {
-            const name = [].concat(names).find(n => at(n));
+            const name = [].concat(names).find(n => atOne(n));
             if (!name) return false;
             const opts = Object.assign({}, o || {});
             if (typeof opts.to === "string") opts.to = stepOf(opts.to);
-            if (def.zadanie) { const q = TQ(); if (q && q.completeStep) q.completeStep(def.zadanie, opts); }
+            if (onQuests()) { const q = TQ(), p = where(name); if (q && q.completeStep && p) q.completeStep(p.zid, opts); }
             else ownNext(opts);
             return true;
         }
-        Object.assign(w, { flags, flag, setFlag, vcount, vgive, rec, cur, at, stepOf, complete, autoChecks, tekst, tekstMoze, pair, quest });
+        Object.assign(w, { flags, flag, setFlag, vcount, vgive, vtake, qstate, rec, cur, at, stepOf, where, complete, autoChecks, tekst, tekstMoze, pair, quest, zadania: zids,
+            ile: p => ile(S(), p), done: z => tqDone(z), active: z => tqActive(z) });
 
         // ---------------------------------------------------------- conditions (gdy)
-        // a string: "nazwa" - a hook; "!..." - not; "flaga:x", "stan:a.b" (truthy) / "stan:a.b=wartość", "ctx:x" / "ctx:x=wartość",
-        // "krok:nazwa" (the current chapter), "v:klucz" (a thing in the bag); an array - all of them; an object: { nie }, { lub: [] },
-        // { i: [] }, { hak, args }, { godziny: [a, b] }
+        // a string: "nazwa" - a hook; "!..." - not; "flaga:x", "stan:a.b" (truthy) / "stan:a.b=wartość" (also != >= <= > <: numbers),
+        // "ile:a.b>=3" (how many truthy values the object / list at a.b has - or the listed paths "ile:a+b+c"), "ctx:x" / "ctx:x=wartość",
+        // "krok:nazwa" (the current chapter), "v:klucz" (a thing in the bag), "zrobione:K53" / "aktywne:K53" (a TownQuests quest),
+        // "mapa:167" (the hero's map now); an array - all of them; an object: { nie }, { lub: [] }, { i: [] }, { hak, args },
+        // { godziny: [a, b] }, { mapa: [ids] }
         const path = (o, p) => { let v = o; for (const k of String(p).split(".")) { if (v === null || v === undefined) return undefined; v = v[k]; } return v; };
         const eqv = (v, want) => String(v === undefined || v === null ? "" : v) === want;
+        const OP_RE = /^([^<>=!]*)(>=|<=|!=|=|>|<)([\s\S]*)$/;
+        // how many: an object's truthy values, a list's truthy elements; "a+b+c" - how many of these paths are truthy
+        const ile = (o, p) => {
+            if (String(p).includes("+")) return String(p).split("+").filter(x => !!path(o, x)).length;
+            const v = path(o, p);
+            if (Array.isArray(v)) return v.filter(Boolean).length;
+            if (v && typeof v === "object") return Object.keys(v).filter(k => v[k]).length;
+            return typeof v === "number" ? v : v ? 1 : 0;
+        };
+        function compare(v, op, want) {
+            if (op === null) return !!v;
+            const n = Number(want), num = want !== "" && !isNaN(n);
+            if (op === "=") return eqv(v, want);
+            if (op === "!=") return !eqv(v, want);
+            const x = Number(v === undefined || v === null || v === false ? 0 : v === true ? 1 : v);
+            if (!num) return false;
+            return op === ">=" ? x >= n : op === "<=" ? x <= n : op === ">" ? x > n : x < n;
+        }
+        const tqDone = zid => { const q = TQ(); return !!(q && q.isDone && q.isDone(zid)); };
+        const tqActive = zid => { const q = TQ(), r = q && q.rec ? q.rec(zid) : null; return !!r && r.s === "active"; };
+        const mapNow = () => (window.$gameMap && $gameMap.mapId ? $gameMap.mapId() : 0);
         function ok(c, ctx) {
             ctx = ctx || {};
             if (c === undefined || c === null || c === true) return true;
@@ -432,13 +510,17 @@
                 if (c[0] === "!") return !ok(c.slice(1), ctx);
                 const i = c.indexOf(":");
                 if (i < 0) return !!hook(c, ctx);
-                const kind = c.slice(0, i), rest = c.slice(i + 1), eq = rest.indexOf("="), p = eq < 0 ? rest : rest.slice(0, eq), want = eq < 0 ? null : rest.slice(eq + 1);
-                const test = v => (want === null ? !!v : eqv(v, want));
+                const kind = c.slice(0, i), rest = c.slice(i + 1), m = OP_RE.exec(rest);
+                const p = m ? m[1] : rest, op = m ? m[2] : null, want = m ? m[3] : null;
                 if (kind === "flaga") return flag(rest);
-                if (kind === "stan") return test(path(S(), p));
-                if (kind === "ctx") return test(path(ctx, p));
+                if (kind === "stan") return compare(path(S(), p), op, want);
+                if (kind === "ile") return op === null ? ile(S(), p) > 0 : compare(ile(S(), p), op, want);
+                if (kind === "ctx") return compare(path(ctx, p), op, want);
                 if (kind === "krok") return at(rest);
-                if (kind === "v") return vcount(rest) > 0;
+                if (kind === "v") return op === null ? vcount(p) > 0 : compare(vcount(p), op, want);
+                if (kind === "zrobione") return tqDone(rest);
+                if (kind === "aktywne") return tqActive(rest);
+                if (kind === "mapa") return mapNow() === Number(rest);
                 console.error("[Watki] " + id + ": nie znam warunku „" + c + "”");
                 return false;
             }
@@ -447,20 +529,26 @@
             if (c.i) return c.i.every(x => ok(x, ctx));
             if (c.hak) return !!hook(c.hak, ctx, c.args);
             if (c.godziny) return inHours(hour(), c.godziny);
+            if (c.mapa) return [].concat(c.mapa).map(Number).includes(mapNow());
             console.error("[Watki] " + id + ": nie znam warunku", c);
             return false;
         }
         w.ok = ok;
-        // a value in the data: "dzis" - today; { hak, args } - a hook's; { arg: i } - the action's i-th argument; { ctx: "x" }
+        // a value in the data: "dzis" - today; { hak, args } - a hook's; { arg: i } - the action's i-th argument; { ctx: "x" };
+        // { stan: "a.b" } - the state's; { ile: "a.b" | "a+b", najwyzej: n } - how many (see "ile:" above), at most n
         function val(v, ctx) {
             if (v === "dzis") return day();
             if (v && typeof v === "object" && !Array.isArray(v)) {
                 if (v.hak) return hook(v.hak, ctx, v.args);
                 if (v.arg !== undefined) return ctx && ctx.args ? ctx.args[v.arg] : undefined;
                 if (v.ctx !== undefined) return path(ctx, v.ctx);
+                if (v.stan !== undefined) return path(S(), v.stan);
+                if (v.ile !== undefined) { const n = ile(S(), v.ile); return v.najwyzej !== undefined ? Math.min(v.najwyzej, n) : n; }
             }
             return v;
         }
+        // the words of a step's text: a hook's name, or an object of values ({ n: { ile: "read" } })
+        const wordsOf = (z, ctx) => (!z ? {} : typeof z === "string" ? hook(z, ctx) || {} : Object.fromEntries(Object.entries(z).map(([k, v]) => [k, val(v, ctx)])));
 
         // ---------------------------------------------------------- actions (zrob): one effect each, in order
         //   { gdy, zrob: [...] }   a block (gdy false: skipped)        { gdy, koniec: true }   the action ends here (gdy true)
@@ -495,6 +583,15 @@
                 else if (a.notatka) { const p = pair(val(a.notatka, ctx), vars(a, ctx)); if (p) T.call("Journal", "addNote", p[0], p[1]); }
                 else if (a.ogloszenie) { const p = pair(val(a.ogloszenie, ctx), vars(a, ctx)); if (p) T.popup(p[0], { top: true, color: a.kolor || "#ffe27a", sub: p[1] }); }
                 else if (a.info) { const t = tekst(val(a.info, ctx), vars(a, ctx)); if (t) T.popup(fill(t, vars(a, ctx)), { kind: "info" }); }
+                else if (a.napis) {   // a popup of its own look: { napis: klucz, ikona, kolor, rodzaj, gora: true, pod: klucz }
+                    const vs = vars(a, ctx), t = tekst(val(a.napis, ctx), vs), o = {};
+                    if (a.ikona !== undefined) o.icon = val(a.ikona, ctx);
+                    if (a.kolor) o.color = a.kolor;
+                    if (a.rodzaj) o.kind = a.rodzaj;
+                    if (a.gora) o.top = true;
+                    if (a.pod) o.sub = fill(tekst(a.pod, vs) || "", vs);
+                    if (t) T.popup(fill(t, vs), o);
+                }
                 else if (a.mysl) mysl(tekst(val(a.mysl, ctx), vars(a, ctx)));
                 else if (a.xp) T.call("Combat", "gainXp", a.xp, a.za ? fill(a.za, vars(a, ctx)) : owner, true);
                 else if (a.krok) complete(a.krok, { to: a.do, reward: reward(a.nagroda, ctx) });
@@ -505,8 +602,9 @@
             }
             return true;
         }
-        // the words of an entry: zmienne - a hook's name, { hak, args }, or an object; else the talk's own (ctx.vars)
-        const vars = (e, ctx) => (e && e.zmienne ? (typeof e.zmienne === "string" ? hook(e.zmienne, ctx) : e.zmienne.hak ? hook(e.zmienne.hak, ctx, e.zmienne.args) : e.zmienne) : ctx && ctx.vars);
+        // the words of an entry: zmienne - a hook's name, { hak, args }, or an object of values (val: { ile }, { stan }, "dzis"...);
+        // else the talk's own (ctx.vars)
+        const vars = (e, ctx) => (e && e.zmienne ? (e.zmienne.hak ? hook(e.zmienne.hak, ctx, e.zmienne.args) : wordsOf(e.zmienne, ctx)) : ctx && ctx.vars);
         // a named action (def.akcje) - from a talk's script call or the plugin's code
         function akcja(name, args, interp) {
             const list = def.akcje && def.akcje[name];
@@ -554,6 +652,7 @@
                     choiceTo(out, labels, branches, cancel);
                 } else if (e.zrob) script(out, "Watki.act(this, " + JSON.stringify([id, e.zrob].concat((e.args || []).map(x => val(x, ctx)))) + ")");
                 else if (e.skrypt) script(out, e.skrypt);
+                else if (e.polecenie !== undefined) out.push(C(e.polecenie, (e.parametry || []).slice()));   // (a raw command: 221 fade out, 222 in...)
                 if (e.koniec) break;
             }
             return out;
@@ -576,7 +675,8 @@
         }
         function thoughtsTick() {
             if (!thoughts.length || Graphics.frameCount < thoughtAt || !(SceneManager._scene instanceof Scene_Map)) return;
-            if (M.czekaj && ($gameMap.isEventRunning() || $gameMessage.isBusy())) return;
+            // czekaj: true - not while an event or a message runs; "wiadomosc" - only not while a message is shown
+            if (M.czekaj === "wiadomosc" ? $gameMessage.isBusy() : M.czekaj && ($gameMap.isEventRunning() || $gameMessage.isBusy())) return;
             const t = thoughts.shift(), sb = SB();
             const ch = t.who && t.who.eventId && $gameMap.event(t.who.eventId()) === t.who ? t.who : $gamePlayer;
             if (sb && sb.say) sb.say(ch, t.text, M.klatki); else T.popup(t.text, { color: "#eceef0" });
@@ -589,35 +689,51 @@
         // def.kroki: [{ nazwa, indeks, ch, tekst (key), gotowe (a condition: the step done by itself), zmienne (a hook: the words of the
         // step's text), nagroda, nagrodaFx: { nazwa, hak }, rozmowy: [{ kto, gdy, tresc }] (the residents / Story's people: TownQuests
         // asks them), temat: { kto: "borgar", etykieta, gdy, gotowy, tresc } (a topic at Borgar's bar) }] - in the quest's steps at
-        // `indeks` (an old save's step number stays its step); the handlers go into TownQuests.FX under the step's name
+        // `indeks` (an old save's step number stays its step); the handlers go into TownQuests.FX under the step's name.
+        // haki: { hand: "nazwaHaka", tick, enter, blocked, post, reward, spot, wanted, ch, say, act, ... } - TownQuests' other handlers
+        // of the step, each a hook (ctx { w, q, r, st }, then TownQuests' own arguments); the step's field that names them is set
+        // (hand / post -> fx, tick / enter -> tick, blocked -> guard...). Any other field of a krok is TownQuests' own (type, to,
+        // need, say, done, remind, early, choice, deadline, end, hours...) and goes to the step as it is.
+        // obcy: "watek" (2026-10-29) - a step of this thread's quest whose handlers another thread gives (its `obce`: W2's rozdz. 7 is
+        // Pustelnia's) - its handler fields stay as written (talk / tick / vars...), this thread binds nothing under its name
+        // pola: { NAZWA: wartość } (2026-10-29) - plain values on the handler's FX entry besides the hooks (K16's GOODS: others read it)
+        const KROK = new Set(["nazwa", "indeks", "tekst", "gotowe", "zmienne", "nagroda", "nagrodaFx", "rozmowy", "temat", "typ", "haki", "obcy", "pola"]);
+        const SLOT = { hand: "fx", post: "fx", tick: "tick", enter: "tick", blocked: "guard", reward: "rewardFx", spot: "spotFx", wanted: "spotFx", ch: "chFx", say: "sayFx",
+            talk: "talk", ready: "talk", topic: "talk", topicList: "talk", borgarTopic: "talk", borgarList: "talk", check: "check", vars: "vars" };
         function stepData(k) {
-            const s = { ch: k.ch, type: k.typ || "custom", nazwa: k.nazwa };
+            const s = {};
+            for (const [f, v] of Object.entries(k)) if (!KROK.has(f)) s[f] = v;
+            s.type = k.typ || k.type || "custom";
+            s.nazwa = k.nazwa;
             if (k.rozmowy || k.temat) s.talk = k.nazwa;
             if (k.gotowe !== undefined) s.check = k.nazwa;
             if (k.zmienne) s.vars = k.nazwa;
+            for (const f of Object.keys(k.haki || {})) if (SLOT[f]) s[SLOT[f]] = k.nazwa;
             if (k.nagrodaFx) s.rewardFx = k.nagrodaFx.nazwa;
             if (k.nagroda) s.reward = Object.assign({}, k.nagroda);
             return s;
         }
         function fxOf(k) {
-            const fx = {};
+            const fx = Object.assign({}, k.pola || {});
             const ctxOf = (q, r, st, extra) => Object.assign({ w, q, r, st }, extra || {});
-            if (k.zmienne) fx.vars = (q, r) => hook(k.zmienne, ctxOf(q, r)) || {};
+            if (k.zmienne) fx.vars = (q, r) => wordsOf(k.zmienne, ctxOf(q, r)) || {};
             if (k.gotowe !== undefined) fx.check = (q, r, st) => ok(k.gotowe, ctxOf(q, r, st));
             if (k.rozmowy) {
+                // { kto, gdy, tresc, gotowa: false (said, but the step not ready: TownQuests' { ready: false }), znacznik (one more
+                // condition for the marker over the head) }
                 fx.talk = (q, r, st, key, spk) => {
                     for (const e of k.rozmowy) {
                         if (!whoIs(e.kto, key)) continue;
                         const ctx = ctxOf(q, r, st, { key, spk });
                         if (!ok(e.gdy, ctx)) continue;
-                        return { ready: true, list: build(e.tresc, ctx, []) };
+                        return { ready: e.gotowa !== false, list: build(e.tresc, ctx, []) };
                     }
                     return null;
                 };
                 fx.ready = (q, r, st, key) => {
                     const mine = k.rozmowy.filter(e => whoIs(e.kto, key));
                     if (!mine.length) return k.temat && whoIs(k.temat.kto, key) ? topicReady(k.temat, ctxOf(q, r, st, { key })) : null;
-                    return mine.some(e => ok(e.gdy, ctxOf(q, r, st, { key })));
+                    return mine.some(e => e.gotowa !== false && ok(e.gdy, ctxOf(q, r, st, { key })) && ok(e.znacznik, ctxOf(q, r, st, { key })));
                 };
             }
             if (k.temat) {
@@ -631,13 +747,63 @@
                 }
                 if (!fx.ready) fx.ready = (q, r, st, key) => (whoIs(t.kto, key) ? topicReady(t, ctxOf(q, r, st, { key })) : null);
             }
+            // (the hooks last: they may take over what the talks made - a step's own ready)
+            for (const [f, h] of Object.entries(k.haki || {})) fx[f] = (...a) => hook(h, ctxOf(a[0], a[1], a[2]), a);
             return fx;
         }
         const whoIs = (kto, key) => (Array.isArray(kto) ? kto.includes(key) : kto === key);
         const topicReady = (t, ctx) => !!ok(t.gotowy !== undefined ? t.gotowy : t.gdy, ctx);
+        // ---------------------------------------------------------- the thread's own quests (def.zadania: a package's K / D quests)
+        // { K53: { kind, giver, icon, offer, reward, repeat, ... (TownQuests' fields, as they are), kroki: [...] (the steps, in order),
+        //   start: a condition (the quest starts by itself: TownQuests' autoStart - its name: autoStart or "k53Start"),
+        //   oferta: a condition (the offer's cond.fn - its name: offer.cond.fn or "k53Oferta") } } - made while the plugin loads, put
+        // into window.TownQuestsPacks with def.paczka ({ remarks, gossip, spots, vitems }) - the data plugin stands above
+        // TownQuests_Data; their words: the thread's file under "zadania.<id>" (Watki.scal, as before)
+        const startName = zid => { const z = def.zadania[zid]; return z.autoStart || zid.charAt(0).toLowerCase() + zid.slice(1) + "Start"; };
+        const offerName = zid => { const z = def.zadania[zid]; return (z.offer && z.offer.cond && z.offer.cond.fn) || zid.charAt(0).toLowerCase() + zid.slice(1) + "Oferta"; };
+        const made = {};
+        function makeQuests() {
+            if (!def.zadania) return;
+            const ZQ = new Set(["kroki", "start", "oferta", "teksty"]);
+            for (const [zid, z] of Object.entries(def.zadania)) {
+                const q = { id: zid };
+                for (const [f, v] of Object.entries(z)) if (!ZQ.has(f)) q[f] = v;
+                q.steps = (z.kroki || []).map(stepData);
+                if (z.start !== undefined) q.autoStart = startName(zid);
+                if (z.oferta !== undefined) q.offer = Object.assign({}, q.offer, { cond: Object.assign({}, q.offer && q.offer.cond, { fn: offerName(zid) }) });
+                made[zid] = q;
+                if (def.tekstyZadan !== false) scal(q, z.teksty || def.teksty || id, "zadania." + zid);   // (a quest's own file: z.teksty)
+            }
+            // (paczka: false - the quests go into the list by their owner's hand: TownQuests_Data's own, at their places)
+            if (def.paczka === false) return;
+            const pack = Object.assign({ owner }, def.paczka || {}, { quests: Object.values(made) });
+            (window.TownQuestsPacks = window.TownQuestsPacks || []).push(pack);
+        }
+        w.Q = made;
+        // def.obce: [{ zadanie: "W2", nazwa: "w2Pytanie", gotowe, zmienne, rozmowy, haki... }] - the handlers of a step of someone
+        // else's quest (its fields stay where they are - TownQuests_Data.js names the step's handlers by this name)
+        const bindFx = (q, k) => {
+            q.FX[k.nazwa] = fxOf(k);
+            if (k.nagrodaFx) q.FX[k.nagrodaFx.nazwa] = { reward: (qq, r, st) => reward(hook(k.nagrodaFx.hak, { w, q: qq, r, st }), { r }) };
+        };
         let bound = false;
         function bindQuest() {
-            if (bound || !def.zadanie || !def.kroki) return bound;
+            if (bound) return bound;
+            if (def.zadania || def.obce) {
+                const q = TQ();
+                if (!q || !q.FX) return false;
+                for (const [zid, z] of Object.entries(def.zadania || {})) {
+                    if (q.Q && q.Q[zid] && q.Q[zid] !== made[zid]) console.error("[Watki] " + id + ": zadanie " + zid + " ma już ktoś inny");
+                    // (a thread under TownQuests - Homes' D21: its pack came too late for TownQuests_Data - the quest goes in at once)
+                    else if (q.Q && !q.Q[zid] && Array.isArray(q.QUESTS)) { q.QUESTS.push(made[zid]); q.Q[zid] = made[zid]; }
+                    for (const k of z.kroki || []) if (!k.obcy) bindFx(q, k);
+                    if (z.start !== undefined) q.FX[startName(zid)] = () => has() && ok(z.start, { w, zid });
+                    if (z.oferta !== undefined) q.FX[offerName(zid)] = { cond: () => has() && ok(z.oferta, { w, zid }) };
+                }
+                for (const k of def.obce || []) bindFx(q, k);
+                if (!def.zadanie) { bound = true; return true; }
+            }
+            if (!def.zadanie || !def.kroki) return bound;
             const q = TQ(), Q = quest();
             if (!q || !q.FX || !Q) return false;
             bound = true;
@@ -658,15 +824,48 @@
         w.bindQuest = bindQuest;
 
         // ---------------------------------------------------------- own records (a thread with no TownQuests quest)
+        // a krok of an own record: { nazwa, tytul (its title: the journal's heading, the goal window's line, the list of what is done),
+        // tekst (the words: a key, { klucz, zmienne }, { hak }, { jesli, to, inaczej } - default "kroki.<nazwa>"), gotowe (done by
+        // itself), pomin (a condition: the step is passed over, not done - another way of the chapter), gdzie (the compass: { person } |
+        // { map, name } | { hak }), licznik (a hook: { have, need, unit } - the goal window's bar), prowadzi (a condition: with
+        // dziennik.prowadzi the thread leads the goal window by itself while nothing is pinned by hand), nagroda ({ xp, za, gold, ... }) }
         function own() { if (!has()) return null; const s = recStore(); return s.w[id] || null; }
+        // the words of a spec: a key | { klucz, zmienne } | { hak, args } | { jesli, to, inaczej }
+        function slowa(spec, ctx) {
+            if (spec === undefined || spec === null) return "";
+            if (typeof spec === "string") { const v = tekst(spec); return typeof v === "string" ? v : ""; }
+            if (spec.jesli !== undefined) return slowa(ok(spec.jesli, ctx) ? spec.to : spec.inaczej, ctx);
+            if (spec.klucz) return fill(tekst(spec.klucz) || "", wordsOf(spec.zmienne, ctx));
+            if (spec.hak) { const v = hook(spec.hak, ctx || {}, spec.args); return v === undefined || v === null ? "" : String(v); }
+            return "";
+        }
+        const krokOf = r => (r ? (def.kroki || [])[r.krok] : null);
+        const stepTitle = k => (k && k.tytul !== undefined ? slowa(k.tytul, { w }) : "");
         function ownStart(step) {
-            if (def.zadanie || !has()) return false;
+            if (onQuests() || !has()) return false;
             const s = recStore(), k = Math.max(0, typeof step === "string" ? stepOf(step) : step || 0);
             s.w[id] = { s: "active", krok: k, dzien: day(), sday: day(), sh: hour(), t: { done: {} } };
             const d = def.dziennik || {};
-            if (d.tytul && !(def.cicho && def.cicho.start)) T.popup("Nowy wątek: " + (tekst(d.tytul) || id), { top: true, color: "#ffe27a", sub: stepText() });
-            T.emit("watekStart", { watek: id, krok: k });
+            // (dogon: what the game shows done already - an older save's chapter - is marked done at once, quietly: no reward, no notice;
+            // the day it was done from a hook of the thread when it knows it: dziennik.dzienKroku)
+            if (d.dogon && !(typeof step === "number" && step > 0)) catchUp();
+            if (d.tytul && !(def.cicho && def.cicho.start)) T.popup("Nowy wątek: " + (tekst(d.tytul) || id), { top: true, color: "#ffe27a", sub: stepTitle(krokOf(own())) || stepText() });
+            T.emit("watekStart", { watek: id, krok: s.w[id].krok });
             return true;
+        }
+        function catchUp() {
+            const r = own(), list = def.kroki || [], d = def.dziennik || {};
+            if (!r) return;
+            for (let guard = 0; guard < list.length + 1 && r.s === "active"; guard++) {
+                const k = list[r.krok];
+                if (!k) break;
+                if (k.pomin !== undefined && ok(k.pomin, { w, r })) { r.krok++; continue; }
+                if (k.gotowe === undefined || !ok(k.gotowe, { w, r })) break;
+                const when = d.dzienKroku ? hook(d.dzienKroku, { w, r }, [k.nazwa]) : undefined;
+                r.t.done[r.krok] = typeof when === "number" && when > 0 ? when : day();
+                r.krok++;
+            }
+            if (r.krok >= list.length) { r.s = "done"; r.end = day(); }
         }
         function ownNext(o) {
             const r = own();
@@ -676,15 +875,16 @@
             const rw = reward(k && k.nagroda, {});
             if (rw) giveOwn(rw);
             if (o && o.reward) giveOwn(o.reward);
-            const to = o && o.to !== undefined && o.to >= 0 ? o.to : r.krok + 1;
+            let to = o && o.to !== undefined && o.to >= 0 ? o.to : r.krok + 1;
+            while (to < list.length && list[to].pomin !== undefined && ok(list[to].pomin, { w, r })) to++;   // (another way of the chapter)
             if (to >= list.length || (k && k.koniec)) return ownFinish();
             r.krok = to; r.sday = day(); r.sh = hour();
             T.emit("watekKrok", { watek: id, krok: to });
             const d = def.dziennik || {};
-            T.popup(tekst(d.tytul) || id, { top: true, color: "#ffe27a", sub: stepText() });
+            T.popup(tekst(d.tytul) || id, { top: true, color: "#ffe27a", sub: stepTitle(list[to]) || stepText() });
         }
         function giveOwn(rw) {
-            if (rw.xp) T.call("Combat", "gainXp", rw.xp, owner, true);
+            if (rw.xp) T.call("Combat", "gainXp", rw.xp, rw.za || owner, true);
             if (rw.gold) $gameParty.gainGold(rw.gold);
             if (rw.note) T.call("Journal", "addNote", rw.note[0], rw.note[1]);
             if (rw.flag) setFlag(rw.flag);
@@ -702,24 +902,46 @@
         function stepText() {
             const r = rec(), list = steps();
             if (!r || !list) return "";
-            const k = def.zadanie ? list[r.step] : list[r.krok];
-            if (!k) return "";
-            const t = def.zadanie ? k.text : tekst(k.tekst || "kroki." + k.nazwa);
-            const vs = k.zmienne && !def.zadanie ? hook(k.zmienne, { w, r }) : null;
+            const k = onQuests() ? list[r.step] : list[r.krok];
+            return k ? krokText(k, r) : "";
+        }
+        function krokText(k, r) {
+            if (onQuests()) return k.text ? fill(k.text, null) : "";
+            if (k.tekst && typeof k.tekst === "object") return slowa(k.tekst, { w, r });
+            const t = tekst(k.tekst || "kroki." + k.nazwa);
+            const vs = k.zmienne ? wordsOf(k.zmienne, { w, r }) : null;
             return t ? fill(t, vs) : "";
         }
-        // the own records' checks: autoStart (dziennik.start: a condition) and gotowe of the current step
+        // the own records' checks: autoStart (dziennik.start: a condition) and gotowe of the current step (pomin: passed over)
         function ownChecks() {
-            if (def.zadanie || !has()) return;
+            if (onQuests() || !has()) return;
             const r = own();
             if (!r) { if (def.start !== undefined && ok(def.start, { w })) ownStart(0); return; }
-            for (let guard = 0; guard < 6 && r.s === "active"; guard++) {
-                const k = (def.kroki || [])[r.krok];
+            for (let guard = 0; guard < 8 && r.s === "active"; guard++) {
+                const list = def.kroki || [], k = list[r.krok];
+                if (k && k.pomin !== undefined && ok(k.pomin, { w, r })) {
+                    let to = r.krok + 1;
+                    while (to < list.length && list[to].pomin !== undefined && ok(list[to].pomin, { w, r })) to++;
+                    if (to >= list.length) { ownFinish(); break; }
+                    r.krok = to; r.sday = day(); r.sh = hour();
+                    continue;
+                }
                 if (!k || k.gotowe === undefined || !ok(k.gotowe, { w, r })) break;
                 ownNext({});
             }
         }
-        Object.assign(w, { start: ownStart, next: ownNext, finish: ownFinish, stepText, ownChecks });
+        // the goal window: does the thread lead by itself now (nothing pinned by hand - Watki's tracker source asks)
+        function leads() {
+            const r = own(), d = def.dziennik || {};
+            if (!d.prowadzi || !r || r.s !== "active") return false;
+            const k = krokOf(r);
+            return !!k && (k.prowadzi === undefined || !!ok(k.prowadzi, { w, r }));
+        }
+        // the compass's place and the bar of the current step
+        const krokWhere = k => (!k || !k.gdzie ? null : k.gdzie.hak ? hook(k.gdzie.hak, { w }, k.gdzie.args) || null : k.gdzie);
+        const krokCount = k => (k && k.licznik ? hook(k.licznik, { w }) || null : null);
+        Object.assign(w, { start: ownStart, next: ownNext, finish: ownFinish, stepText, stepTitle: () => stepTitle(krokOf(own())), krokText, slowa, ownChecks, leads,
+            krokWhere, krokCount, catchUp });
 
         // ---------------------------------------------------------- F9: straight to a chapter (def.skoki)
         // { wymaga: a condition (else the jump says no), przed: [actions of every jump], lista: { 1: { ch, krok: index | name, godzina,
@@ -729,14 +951,15 @@
             if (!j || !has()) return null;
             const ctx = { w, skok: Number(i), j };
             if (!ok(sk.wymaga, ctx)) return null;
-            if (def.zadanie && !TQ()) return null;
+            if (onQuests() && !TQ()) return null;
             if (wykonaj(sk.przed, ctx) === false) return null;
+            const zid = j.zadanie || (typeof j.krok === "string" && where(j.krok) ? where(j.krok).zid : zids()[0]);
             const idx = typeof j.krok === "string" ? stepOf(j.krok) : j.krok;
             if (idx < 0) return null;
             if (wykonaj(j.zrob, ctx) === false) return null;
-            if (def.zadanie) {
-                const q = TQ(), r = q.rec(def.zadanie);
-                if (!r || r.s !== "active") q.start(def.zadanie, idx);
+            if (onQuests()) {
+                const q = TQ(), r = q.rec(zid);
+                if (!r || r.s !== "active") q.start(zid, idx);
                 else { r.step = idx; r.sday = day(); }
             } else {
                 const r = own();
@@ -748,9 +971,12 @@
             if (q && q.refreshMarkers) q.refreshMarkers();
             return j.idz || null;
         }
-        const skokNazwa = i => { const v = lookup(tx, "f9.nazwy." + i); return v === undefined ? "" : v; };
+        // (the chapter's name in the words: <f9.nazwy>.<jump> - by default "f9.nazwy.N"; a file whose "f9" is a word of its own names
+        // another key: Dwor_Data "f9names", Kantor_Data "f9Nazwy")
+        const skokNazwa = i => { const v = lookup(tx, ((def.f9 && def.f9.nazwy) || "f9.nazwy") + "." + i); return v === undefined ? "" : v; };
         Object.assign(w, { skocz, skokNazwa });
 
+        makeQuests();
         bindQuest();
         return w;
     }
@@ -803,15 +1029,32 @@
             { k: "sub", text: "Wątek" + (r ? "  ·  od dnia " + r.dzien : "") }, { k: "rule" }];
         if (d.opis) ops.push({ k: "p", text: w.tekst(d.opis) || "" });
         if (r && r.s === "active") {
-            const k = (w.def.kroki || [])[r.krok];
-            ops.push({ k: "gap", n: 8 }, { k: "h", text: k && k.ch ? "Rozdział " + k.ch : "Teraz" }, { k: "p", text: w.stepText() });
+            const k = (w.def.kroki || [])[r.krok], title = w.stepTitle();
+            ops.push({ k: "gap", n: 8 }, { k: "h", text: title || (k && k.ch ? "Rozdział " + k.ch : "Teraz") }, { k: "p", text: w.stepText() });
+            const cnt = w.krokCount(k);
+            if (cnt && cnt.need > 0) ops.push({ k: "gap", n: 4 }, { k: "bar", ratio: Math.min(1, (cnt.have || 0) / cnt.need), text: (cnt.have || 0) + " / " + cnt.need + (cnt.unit ? " " + cnt.unit : "") });
             const done = Object.keys(r.t.done || {}).map(Number).sort((a, b) => a - b);
             if (done.length) {
                 ops.push({ k: "gap", n: 6 }, { k: "h", text: "Zrobione" });
-                for (const i of done) { const kk = w.def.kroki[i], t = kk ? w.tekst(kk.tekst || "kroki." + kk.nazwa) : ""; if (t) ops.push({ k: "muted", text: "✓ " + fill(t, {}).split(/(?<=[.!?])\s/)[0] }); }
+                for (const i of done) {
+                    const kk = w.def.kroki[i];
+                    if (!kk) continue;
+                    const t = kk.tytul !== undefined ? w.slowa(kk.tytul, { w }) : fill(w.krokText(kk, r), {}).split(/(?<=[.!?])\s/)[0];
+                    if (t) ops.push({ k: "muted", text: "✓ " + t + (kk.tytul !== undefined ? "  ·  dz. " + r.t.done[i] : "") });
+                }
             }
         } else if (r) ops.push({ k: "gap", n: 8 }, { k: "p", text: "Wykonane w dniu " + r.end + "." });
         return ops;
+    }
+    // the goal window's row of a thread (pinned, or leading by itself)
+    function trackerRow(w, r) {
+        const k = (w.def.kroki || [])[r.krok], title = w.stepTitle(), line = title || w.stepText().split(/(?<=[.!?])\s/)[0];
+        const row = { label: "WĄTEK", title: w.tekst(w.def.dziennik.tytul) || w.id, line, sub: line, needs: [], key: "watek|" + w.id + "|" + r.krok, source: "watki", id: w.id,
+            icon: w.def.dziennik.ikona || 0 };
+        const where = w.krokWhere(k), cnt = w.krokCount(k);
+        if (where) row.where = where;
+        if (cnt) row.count = cnt;
+        return row;
     }
     function hookJournal() {
         const J = T.api("Journal");
@@ -822,52 +1065,143 @@
             items: () => journalRows(),
             detail: it => journalDetail(it),
             canPin: it => { const w = it && threads.get(it.watek), r = w && w.rec(); return !!(r && r.s === "active"); },
-            pinned: () => (has() ? recStore().track || null : null),
+            pinned: () => (has() && recStore().track ? "watek:" + recStore().track : null),   // (the rows' own ids: OK on the pinned row unpins it)
             pin: wid => { if (has()) recStore().track = wid && threads.has(String(wid).replace(/^watek:/, "")) ? String(wid).replace(/^watek:/, "") : null; }
         });
-        if (J.addTrackerSource) J.addTrackerSource(() => {
-            if (!has()) return null;
-            const s = recStore(), w = s.track ? threads.get(s.track) : null, r = w && w.rec();
-            if (!w || !r || r.s !== "active") { if (s.track) s.track = null; return null; }
-            const line = w.stepText().split(/(?<=[.!?])\s/)[0];
-            return { label: "WĄTEK", title: w.tekst(w.def.dziennik.tytul) || w.id, line, sub: line, needs: [], key: "watek|" + w.id + "|" + r.krok, source: "watki", id: w.id, icon: w.def.dziennik.ikona || 0 };
-        });
+        if (J.addTrackerSource) {
+            // a thread pinned by hand
+            J.addTrackerSource(() => {
+                if (!has()) return null;
+                const s = recStore(), w = s.track ? threads.get(s.track) : null, r = w && w.rec();
+                if (w && (!r || r.s !== "active")) { s.track = null; return null; }
+                return w && r ? trackerRow(w, r) : null;
+            });
+            // a thread that leads by itself (Story's chapter 1) - asked only when no other source has a line, before the journal's goal
+            // (Journal's fallback), and only while nothing is pinned by hand
+            J.addTrackerSource(() => {
+                if (!has()) return null;
+                let other = null;
+                try { other = J.pinnedNow ? J.pinnedNow() : null; } catch (e) { other = null; }
+                if (other) return null;
+                const w = ownThreads().find(x => x.leads()), r = w && w.rec();
+                return w && r ? trackerRow(w, r) : null;
+            }, { fallback: true });
+        }
     }
 
     // ------------------------------------------------------------------
-    // F9 ("Wyspa i fabuła", Debug.js): one section per thread with jumps - ←→ the chapter, OK goes there
+    // F9 (Debug.js): one section per thread - its chapter jumps (def.skoki: ←→ the chapter, OK goes there) and / or rows of its own
     // ------------------------------------------------------------------
+    // def.f9: { rodzaj (the jump row's kind), ikona; the keys of the words - naglowek, etykieta, opis, brak, nazwy (the chapters'
+    // names <nazwy>.<jump>) - by default "f9.naglowek", "f9.etykieta", "f9.opis", "f9.brak", "f9.nazwy"; (2026-10-29) zakladka: "wyspa"
+    // ("Wyspa i fabuła", the default - a header and the rows with their descriptions) | "zdarzenia" (the first tab: the rows only);
+    // kolejnosc: the sections without it first, as the plugins come, then by it (W5 5, W7 7, W9 9); wiersze / wybierz / ok - below }
     const f9Last = {};
     const f9Keys = w => Object.keys((w.def.skoki && w.def.skoki.lista) || {}).map(Number).filter(n => n > 0).sort((a, b) => a - b);
+    // (the {x} of a jump's label and description: ch, nazwa (= name), zadanie, n - the jump's number)
+    function f9Vars(w, i) {
+        const j = w.def.skoki.lista[i] || {}, nazwa = w.skokNazwa(i);
+        return { ch: j.ch === undefined ? i : j.ch, nazwa, name: nazwa, zadanie: w.def.zadanie || w.id, n: i };
+    }
     function f9Label(w, i) {
-        const f = w.def.f9 || {}, j = w.def.skoki.lista[i] || {};
-        return fill(w.tekstMoze(f.etykieta || "f9.etykieta") || "{zadanie}: rozdział {ch} - {nazwa}", { ch: j.ch === undefined ? i : j.ch, nazwa: w.skokNazwa(i), zadanie: w.def.zadanie || w.id, n: i });
+        return fill(w.tekstMoze((w.def.f9 || {}).etykieta || "f9.etykieta") || "{zadanie}: rozdział {ch} - {nazwa}", f9Vars(w, i));
+    }
+    const f9Desc = (w, i) => fill(w.tekstMoze((w.def.f9 || {}).opis || "f9.opis") || "", f9Vars(w, i));
+    // A thread's own rows besides the jumps, two ways:
+    //  - (2026-10-28, Podroznicy) f9.wiersze() -> [{ co, label, icon, desc, pick, ... }], ←→ f9.wybierz(row, delta) (changes row.label /
+    //    row.pick), OK f9.ok(row);
+    //  - (2026-10-29, Act3 / Underground / Rywal) f9.wiersze: [...] - the rows as data: { co, rodzaj (the row's kind; else
+    //    "isleWatek:<co>"), etykieta / opis (keys of the thread's words - their {x} from the hook `zmienne` (ctx { w, row }) -> { x }),
+    //    ikona, pola ({...}: the row's own fields from the start - the underground's floor), gdy (a condition: the row only then),
+    //    wybierz (a hook (ctx { w, row }, delta): ←→; false - nothing to change), ok (a hook (ctx { w, row }): OK) } - the label and the
+    //    description read again after ←→ and OK.
+    // OK's answer: { go: [name, map, x, y, dir] } | { back: true } (the menu closes, back to the map) | { say, bad } | {} (the menu stays,
+    // the row read again). Debug.js keeps every field of a row: the thread in `watek`, the row's `co` (the old way: in the kind too)
+    const OWN = "isleWatek:";
+    const coOf = row => (!row ? null : row.co !== undefined && row.co !== null ? String(row.co)
+        : typeof row.kind === "string" && row.kind.indexOf(OWN) === 0 ? row.kind.slice(OWN.length) : null);
+    const ownRow = row => coOf(row) !== null;
+    const rowDefs = w => (Array.isArray((w.def.f9 || {}).wiersze) ? w.def.f9.wiersze : null);
+    const rowDef = (w, co) => (rowDefs(w) || []).find(d => String(d.co) === co) || null;
+    // a data row's words: its label and description, the {x} from the thread's hook
+    function rowWords(w, d, row) {
+        let vars = {};
+        if (d.zmienne) { try { vars = w.hak(d.zmienne, { w, row }) || {}; } catch (e) { report("f9 " + w.id, e); } }
+        row.label = fill(w.tekst(d.etykieta) || String(d.co), vars);
+        row.desc = d.opis ? fill(w.tekstMoze(d.opis) || "", vars) : "";
+        return row;
+    }
+    function ownRows(w, k, f) {
+        const defs = rowDefs(w);
+        if (!defs) {
+            let rows = [];
+            try { rows = f.wiersze.call(w) || []; } catch (e) { report("f9 " + k, e); }
+            return rows.map(r => Object.assign({}, r, { kind: OWN + r.co, watek: k, co: r.co, label: r.label, icon: r.icon || f.ikona || 189, desc: r.desc || "", pick: r.pick }));
+        }
+        const out = [];
+        for (const d of defs) {
+            try {
+                if (d.gdy !== undefined && !w.ok(d.gdy, { w })) continue;
+                out.push(rowWords(w, d, Object.assign({}, d.pola || {}, { kind: d.rodzaj || OWN + d.co, watek: k, co: String(d.co), icon: d.ikona || f.ikona || 189 })));
+            } catch (e) { report("f9 " + k, e); }
+        }
+        return out;
     }
     const f9 = {
         sekcje() {
             const out = [];
             for (const k of order) {
                 const w = threads.get(k), f = w.def.f9;
-                if (!f || !w.def.skoki || !f9Keys(w).length) continue;
+                if (!f) continue;
+                const where = { watek: k, zakladka: f.zakladka || "wyspa", kolejnosc: Number(f.kolejnosc) || 0 };
+                if (f.wiersze) {
+                    const rows = ownRows(w, k, f);
+                    if (rows.length) out.push(Object.assign({ head: w.tekstMoze(f.naglowek || "f9.naglowek") || "Wątek " + k + ":", rows }, where));
+                }
+                if (!w.def.skoki || !f9Keys(w).length) continue;
                 const keys = f9Keys(w), pickI = keys.includes(f9Last[k]) ? f9Last[k] : keys[0];
-                out.push({ watek: k, head: w.tekstMoze(f.naglowek || "f9.naglowek") || "Wątek " + (w.def.zadanie || k) + ":",
-                    rows: [{ kind: f.rodzaj || "isleWatek", watek: k, label: f9Label(w, pickI), icon: f.ikona || 189, desc: w.tekstMoze(f.opis || "f9.opis") || "", pick: pickI }] });
+                out.push(Object.assign({ head: w.tekstMoze(f.naglowek || "f9.naglowek") || "Wątek " + (w.def.zadanie || k) + ":",
+                    rows: [{ kind: f.rodzaj || "isleWatek", watek: k, label: f9Label(w, pickI), icon: f.ikona || 189, desc: f9Desc(w, pickI), pick: pickI }] }, where));
             }
-            return out;
+            // (the sections without kolejnosc first, in the plugins' order, then by it - the sort keeps the order of equal ones)
+            return out.map((s, i) => [s, i]).sort((a, b) => a[0].kolejnosc - b[0].kolejnosc || a[1] - b[1]).map(x => x[0]);
         },
         wybierz(row, delta) {
             const w = row && threads.get(row.watek);
             if (!w) return false;
+            if (ownRow(row)) {
+                const f = w.def.f9 || {}, co = row.co = coOf(row);
+                if (!rowDefs(w)) {
+                    if (typeof f.wybierz !== "function") return false;
+                    try { return f.wybierz.call(w, row, delta) !== false; } catch (e) { report("f9 " + w.id, e); return false; }
+                }
+                const d = rowDef(w, co);
+                if (!d || !d.wybierz) return false;
+                try { const r = w.hak(d.wybierz, { w, row }, delta) !== false; rowWords(w, d, row); return r; } catch (e) { report("f9 " + w.id, e); return false; }
+            }
             const keys = f9Keys(w), i = Math.max(0, keys.indexOf(row.pick));
             row.pick = f9Last[w.id] = keys[(i + delta + keys.length * 10) % keys.length];
             row.label = f9Label(w, row.pick);
+            row.desc = f9Desc(w, row.pick);
             return true;
         },
         ok(row) {
             const w = row && threads.get(row.watek);
             if (!w) return { say: "Brak wątku " + (row && row.watek), bad: true };
+            const f = w.def.f9 || {}, brak = otherwise => w.tekstMoze(f.brak || "f9.brak") || otherwise;
+            if (ownRow(row)) {
+                const co = row.co = coOf(row);
+                let r = null;
+                if (!rowDefs(w)) {
+                    try { r = typeof f.ok === "function" ? f.ok.call(w, row) : null; } catch (e) { report("f9 " + w.id, e); }
+                } else {
+                    const d = rowDef(w, co);
+                    try { r = d && d.ok ? w.hak(d.ok, { w, row }) : null; if (d) rowWords(w, d, row); } catch (e) { report("f9 " + w.id, e); }
+                }
+                return r || { say: brak("Nie da się"), bad: true };
+            }
             const g = w.skocz(row.pick);
-            if (!g) return { say: w.tekstMoze((w.def.f9 || {}).brak || "f9.brak") || "Nie da się tam przeskoczyć", bad: true };
+            if (!g) return { say: brak("Nie da się tam przeskoczyć"), bad: true };
             return { go: [w.def.zadanie || w.id, g[0], g[1], g[2], g[3]] };
         }
     };

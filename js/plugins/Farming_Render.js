@@ -663,7 +663,8 @@
     };
 
     // the "?" key: a plain tile grid over the visible ground, for lining up buildings by eye. Toggled
-    // (on $gameSystem, so it stays on across a save/load), redrawn only when the view actually scrolls.
+    // (in the farm's state - gridShown -, so it stays on across a save/load), redrawn only when the view actually scrolls.
+    T.state.oldFields("farm", { _gridShown: "gridShown" });   // (an older save's $gameSystem._gridShown moves in; the name leads there)
     function Sprite_TileGrid() {
         this.initialize(...arguments);
     }
@@ -680,10 +681,11 @@
     Sprite_TileGrid.prototype.update = function() {
         Sprite.prototype.update.call(this);
         if (!$gameMap || !$gamePlayer || !$gameMessage) return;
+        const F = Farming.farm();   // (gridShown: the grid on, in the farm's state - $gameSystem._gridShown before, the name leads there)
         if (Input.isTriggered("grid") && !$gameMessage.isBusy() && !$gameMap.isEventRunning()) {
-            $gameSystem._gridShown = !$gameSystem._gridShown;
+            F.gridShown = !F.gridShown;
         }
-        this.visible = !!$gameSystem._gridShown;
+        this.visible = !!F.gridShown;
         if (!this.visible) return;
         const scrollKey = $gameMap.displayX() + "," + $gameMap.displayY();
         if (scrollKey !== this._scrollKey) {
@@ -952,7 +954,7 @@
         this._age++;
         this.fitView();
         // a lightning flash (Storm.js, 0..1) lifts the night for a moment: the whole map in its real colours, then dark again
-        const dark = ($gameSystem && $gameSystem._dayNightTinting && typeof $gameSystem.dayNightHour === "function" ? nightAmount() : 0) * (window.Storm ? 1 - 0.85 * Storm.flash() : 1);
+        const dark = ($gameSystem && T.state("clock").tinting && typeof $gameSystem.dayNightHour === "function" ? nightAmount() : 0) * (window.Storm ? 1 - 0.85 * Storm.flash() : 1);
         this.visible = dark > 0.01;
         if (!this.visible) return;
         const Sun = T.api("Sun"), things = Sun && Sun.occluders && Sun.shadows && fireShadowsOn() ? Sun.occluders(this._spriteset) : [];

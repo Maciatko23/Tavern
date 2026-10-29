@@ -60,7 +60,10 @@
     const HOLD = 72;                     // frames P is held to skip the whole film
     const W = 1280, H = 720, BAR = 56;
     const HERO_BUST_LAD = "Hero_Bust_Lad";   // (the hero before the storm: whole clothes - tools/busts/make_hero_lad.py)
-    const C = { text: "#ece6da", muted: "#b8b0a2", dim: "#8a8478", copper: "#d08a5a", plate: "#e8c8a0", panel: "rgba(22,23,26,0.92)",
+    // (the accent - the frames' corners, the chosen button, the name plates - is the game's one: UITheme.js's palette; the film's panels
+    // stay their own darker graphite - Kruk.js and Orzel.js cover the name screen's title with that colour)
+    const UIS = (window.UIStyle && window.UIStyle.C) || { accent: "#ffd23f", onAccent: "#100e06" };
+    const C = { text: "#ece6da", muted: "#b8b0a2", dim: "#8a8478", accent: UIS.accent, onAccent: UIS.onAccent, plate: UIS.accent, panel: "rgba(22,23,26,0.92)",
         line: "rgba(64,66,72,1)", cell: "rgba(30,32,36,1)", cellOn: "rgba(48,50,56,1)" };
     const api = { log: [], speedK: 1, info: () => null, speed(n) { api.speedK = Math.max(1, Math.floor(n) || 1); return api.speedK; } };
     window.Prologue = T && T.register ? T.register(PLUGIN, api) : api;
@@ -284,7 +287,7 @@
     api.SCENES = SCENES;
 
     // ------------------------------------------------------------------
-    // A bubble: the game's graphite panel with copper corners, a name plate, a tail (left / right / down) or thought dots
+    // A bubble: the film's graphite panel with yellow corners (the game's accent), a name plate, a tail (left / right / down) or thought dots
     // ------------------------------------------------------------------
     function Sprite_ProBubble() {
         this.initialize(...arguments);
@@ -317,7 +320,7 @@
         if (tail === "think") {
             for (const [dx, dy, r] of [[0, 8, 5], [6, 18, 3]]) { ctx.beginPath(); ctx.arc(x0 + bw / 2 + dx, y0 + bh + dy, r, 0, Math.PI * 2); ctx.fill(); }
         }
-        ctx.strokeStyle = C.copper; ctx.lineWidth = 2;
+        ctx.strokeStyle = C.accent; ctx.lineWidth = 2;
         ctx.beginPath(); ctx.moveTo(x0, y0 + 12); ctx.lineTo(x0, y0); ctx.lineTo(x0 + 12, y0); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(x0 + bw, y0 + bh - 12); ctx.lineTo(x0 + bw, y0 + bh); ctx.lineTo(x0 + bw - 12, y0 + bh); ctx.stroke();
         ctx.font = font(21);
@@ -935,7 +938,7 @@
         ctx.globalAlpha = bright ? 1 : 0.45;
         ctx.lineWidth = 2;
         ctx.strokeStyle = "rgba(90,92,100,0.9)"; ctx.beginPath(); ctx.arc(cx, cy, 11, 0, Math.PI * 2); ctx.stroke();
-        if (k > 0) { ctx.strokeStyle = C.copper; ctx.beginPath(); ctx.arc(cx, cy, 11, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * k); ctx.stroke(); }
+        if (k > 0) { ctx.strokeStyle = C.accent; ctx.beginPath(); ctx.arc(cx, cy, 11, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * k); ctx.stroke(); }
         ctx.font = font(13, "bold", "bold"); ctx.fillStyle = C.text; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("P", cx, cy + 1);
         ctx.font = font(15); ctx.fillStyle = C.muted; ctx.textAlign = "right"; ctx.fillText("przytrzymaj: pomiń", cx - 20, cy);
         ctx.restore();
@@ -1174,13 +1177,13 @@
         // the field
         const F = FIELD, on = this._focus === "field";
         ctx.fillStyle = C.cell; rr(ctx, F.x, F.y, F.w, F.h, 8); ctx.fill();
-        ctx.strokeStyle = on ? C.copper : C.line; ctx.lineWidth = on ? 2 : 1; rr(ctx, F.x + 0.5, F.y + 0.5, F.w - 1, F.h - 1, 8); ctx.stroke();
-        ctx.fillStyle = C.copper; ctx.fillRect(F.x + 16, F.y + F.h - 10, F.w - 32, 1);
+        ctx.strokeStyle = on ? C.accent : C.line; ctx.lineWidth = on ? 2 : 1; rr(ctx, F.x + 0.5, F.y + 0.5, F.w - 1, F.h - 1, 8); ctx.stroke();
+        ctx.fillStyle = C.accent; ctx.fillRect(F.x + 16, F.y + F.h - 10, F.w - 32, 1);
         const name = this.text();
         ctx.font = font(36, "bold", "bold"); ctx.fillStyle = name ? C.text : "#5e5a54";
         const shown = name || DEFAULT_NAME, tw = ctx.measureText(shown).width;
         ctx.fillText(shown, PW / 2, F.y + F.h / 2 - 2);
-        if (on && Math.floor(this._t / 30) % 2 === 0) { ctx.fillStyle = C.copper; ctx.fillRect(PW / 2 + (name ? tw / 2 : -tw / 2 - 6) + 4, F.y + 14, 2, F.h - 30); }
+        if (on && Math.floor(this._t / 30) % 2 === 0) { ctx.fillStyle = C.accent; ctx.fillRect(PW / 2 + (name ? tw / 2 : -tw / 2 - 6) + 4, F.y + 14, 2, F.h - 30); }
         ctx.font = font(14); ctx.textAlign = "left"; ctx.fillStyle = C.dim;
         ctx.fillText(on ? "Pisz z klawiatury (także ą ć ę ł ń ó ś ź ż)  ·  ↓ litery na ekranie" : "Litery: W/S/A/D lub strzałki, O wpisz  ·  ↑ do pola", F.x + 2, F.y + F.h + 18);
         ctx.textAlign = "right"; ctx.fillStyle = C.muted; ctx.fillText(this._name.length + " / " + MAXLEN, F.x + F.w - 2, F.y + F.h + 18);
@@ -1189,16 +1192,16 @@
         LETTERS.forEach((L, i) => {
             const r = this.cellRect(i), sel = this._focus === "grid" && this._gi === i;
             ctx.fillStyle = sel ? C.cellOn : C.cell; rr(ctx, r.x, r.y, r.w, r.h, 6); ctx.fill();
-            ctx.strokeStyle = sel ? C.copper : "rgba(52,54,60,1)"; ctx.lineWidth = sel ? 2 : 1; rr(ctx, r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1, 6); ctx.stroke();
+            ctx.strokeStyle = sel ? C.accent : "rgba(52,54,60,1)"; ctx.lineWidth = sel ? 2 : 1; rr(ctx, r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1, 6); ctx.stroke();
             ctx.font = sel ? font(21, "bold", "bold") : font(20); ctx.fillStyle = sel ? C.text : "#cfc9bd";
             ctx.fillText(this._upper ? L : L.toLocaleLowerCase("pl"), r.x + r.w / 2, r.y + r.h / 2 + 1);
         });
         // the buttons
         this.buttonRects().forEach((r, i) => {
             const [id, label] = BUTTONS[i], sel = this._focus === "buttons" && this._gi === i, main = id === "done";
-            ctx.fillStyle = main ? C.copper : sel ? C.cellOn : C.cell; rr(ctx, r.x, r.y, r.w, r.h, 8); ctx.fill();
-            if (!main || sel) { ctx.strokeStyle = sel ? (main ? "#ffe0c0" : C.copper) : C.line; ctx.lineWidth = sel ? 2 : 1; rr(ctx, r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1, 8); ctx.stroke(); }
-            ctx.font = main || sel ? font(17, "bold", "bold") : font(17); ctx.fillStyle = main ? "#1a1310" : C.text;
+            ctx.fillStyle = main ? C.accent : sel ? C.cellOn : C.cell; rr(ctx, r.x, r.y, r.w, r.h, 8); ctx.fill();
+            if (!main || sel) { ctx.strokeStyle = sel ? (main ? "#fff0b8" : C.accent) : C.line; ctx.lineWidth = sel ? 2 : 1; rr(ctx, r.x + 0.5, r.y + 0.5, r.w - 1, r.h - 1, 8); ctx.stroke(); }
+            ctx.font = main || sel ? font(17, "bold", "bold") : font(17); ctx.fillStyle = main ? C.onAccent : C.text;
             ctx.fillText(id === "case" ? (this._upper ? "Aa" : "aA") : label, r.x + r.w / 2, r.y + r.h / 2 + 1);
         });
         ctx.font = font(14); ctx.fillStyle = "#77736b"; ctx.fillText("Puste pole = „" + DEFAULT_NAME + "”", PW / 2, PH - 34);

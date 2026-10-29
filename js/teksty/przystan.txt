@@ -194,6 +194,12 @@ Trzy grosze. (Przewoźnik chowa list za pazuchę.) Pójdzie z najbliższym kurse
 [reply.ferryCut]
 Pieniądze? Celnik weźmie dziesiątą część - cło. Reszta dojdzie, słowo przewoźnika.
 
+[reply.tobiasz]
+Do mamy? (Tobiasz chowa list do torby, na sam spód.) Za darmo, chłopcze. Ty nosiłeś moje - ja poniosę twój. I nikt go nie otworzy.
+
+[reply.urszula]
+Daj, synku... chłopcze. Zaniosę na ląd, do rąk. Ja też chodzę od taboru do taboru. Może ją spotkam.
+
 [reply.roch]
 Pod deskę w dziobie. Tam nawet Czarne Oczy nie zaglądają. Dojdzie do rąk, jak ją znajdę. A znajdę.
 
@@ -253,6 +259,14 @@ Gdzie tu miasto? Mówili, że za lasem, za takim biednym przedmieściem.
 [refugees.2]
 Celnik zabrał nam dwa grosze i nadzieję. Grosze były ważniejsze.
 
+# (2026-10-28) pierwsza fala (dzień 10): Ludmiła i Ela schodzą z promu - na molo do południa (docs/PODROZNI.md 5.2)
+[fala1.ludmila]
+Dopiero zeszłyśmy z promu. Gdzie tu się staje, kiedy nie ma się dokąd iść?
+Mówili, że pod murem miasta można rozbić namiot. Mówili też, że tu nie ma wojny.
+
+[fala1.ela]
+To tu nie ma wojny?
+
 # ======================================================================== z kodu Przystan.js (kod.<funkcja>.<n>, w kolejności kodu)
 # janekTalk
 kod.janekTalk.0 = Sprzedam ryby ({1}).
@@ -308,6 +322,11 @@ kod.replyAct.6 = " Dopisałem od dziadka: „Fajka dalej śmierdzi”."
 kod.replyAct.7 = Posłałem list do mamy {1}{2}{3}.{4}
 kod.replyAct.8 = Promem, przez ręce celnika.
 kod.replyAct.9 = Kutrem Rocha, pod deską w dziobie.
+# (2026-10-29, podróżni z promu - decyzja 14) list przez Tobiasza albo Urszulę: bez opłaty i bez celnika
+kod.przez.tobiasz = pocztą lądową Tobiasza (nikt go nie otworzy)
+kod.przez.urszula = przez Urszulę z Olszynki, do rąk własnych
+kod.przezPod.tobiasz = Torbą Tobiasza Gońca - cudzy list to dla niego świętość.
+kod.przezPod.urszula = W tobołku Urszuli, przy liście do jej syna.
 # newsOfMother
 kod.newsOfMother.0 = Wieści o mamie
 kod.newsOfMother.1 = {who} wieści z lądu: Brzozowa Wola spalona. W obozie za rzeką widziano kobietę w chuście w czerwone kwiaty - pytała o chłopca z krukiem. Poszła z taborem na północ, za wojskiem.
@@ -334,3 +353,6 @@ ludzie.1.name = Człowiek z promu
 ludzie.2.name = Kobieta z promu
 # mówi: mother
 ludzie.3.name = Matka (list)
+
+# ======================================================================== menu Janka i Rocha: ostatnia opcja (2026-10-28 z kodu)
+bywaj = Bywaj.

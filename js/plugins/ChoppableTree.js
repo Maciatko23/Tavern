@@ -364,9 +364,11 @@
  * zabraknie, uderzenie nie następuje - trzeba się wyspać w łóżku.
  *
  * ANIMACJA MACHANIA: podczas uderzenia postać gracza jest zastępowana klatkami
- * z arkuszy img/system/Swing_*.png (siekiera z góry, siekiera z boku,
- * kilof, łopata). Arkusz ma 4 wiersze (dół, lewo, prawo, góra) i po
- * jednej komórce 96x96 na klatkę; stopy postaci stoją w punkcie (48, 80).
+ * z arkuszy bohatera img/system/Hero_*.png (HeroLook.js: siekiera z góry,
+ * siekiera z boku, kilof, łopata...). Arkusz ma 4 wiersze (dół, lewo, prawo,
+ * góra) i po jednej komórce 96x96 na klatkę; stopy postaci stoją w punkcie
+ * (48, 80). Nazwy Swing_* w tablicy SWING_KINDS to już tylko klucze rodzajów
+ * (dawne arkusze starego bohatera są w archiwum).
  * Rodzaje zamachu (tablica SWING_KINDS w kodzie): siekiera z boku przy stojących
  * drzewach (Swing_AxeSide), siekiera z góry przy kłodach (Swing_Axe), kilof
  * przy kamieniach, łopata przy pieńkach, grabie i motyka przy pracy na polu
@@ -553,8 +555,9 @@
     const BUSH_SE = params.bushSe || "Slash3";
 
     // A swing: wind up, strike, recover. The hit lands on the strike frame.
-    // One entry per kind of swing. sheet: file in img/system holding its frames
-    // (see ANIMACJA MACHANIA in the help). tool: frame in img/system/Tools.png,
+    // One entry per kind of swing. sheet: the kind's name (swingKindOf, Torch.js) - it named the old hero's sheet in img/system; the
+    // hero is drawn from HeroLook.js's Hero_* sheets (swingKind() asks it; the Swing_* files are archived since 2026-10-28) - (see
+    // ANIMACJA MACHANIA in the help). tool: frame in img/system/Tools.png,
     // used only when the sheet is missing. frames / impact / hold: length of the
     // whole swing, the game frame the tool connects on and how long that frame is
     // held (all in game frames, 60 = 1 s). reach: px the body lunges toward the
@@ -599,12 +602,10 @@
         { sheet: "Swing_Club", tool: -1, frames: 22, impact: 11, hold: 2, reach: 3, hit: [4, 5, 5, 4] },
         // 19: a punch (Combat.js, no weapon): fists up, a step, a straight punch, back
         { sheet: "Swing_Punch", tool: -1, frames: 18, impact: 8, hold: 2, reach: 2, hit: [3, 4, 4, 4] },
-        // 20: the burning torch (Torch.js, Combat.js): raised, swept in front of him, back up - the new hero's own sheet (HeroLook
-        // Hero_Torch); the old one (Reid) has none, so it swings his club sheet
+        // 20: the burning torch (Torch.js, Combat.js): raised, swept in front of him, back up - the hero's sheet Hero_Torch (HeroLook)
         { sheet: "Swing_Club", name: "torch", tool: -1, frames: 22, impact: 11, hold: 2, reach: 3, hit: [4, 5, 5, 4] },
         // 21: the sword (2026-10-23, Bron_Data.js zamach "sword": sword, long sword, cleaver, sabre): a step into a lunge, the arm with the
-        // blade stretched far out in front, a wide cut and back - the new hero's own sheet (HeroLook Hero_Sword, PixelLab); the old one
-        // (Reid) swings his club sheet
+        // blade stretched far out in front, a wide cut and back - the hero's sheet Hero_Sword (HeroLook, PixelLab)
         { sheet: "Swing_Club", name: "sword", tool: -1, frames: 26, impact: 13, hold: 2, reach: 5, hit: [4, 5, 5, 4] }
     ];
     const SWING_KIND = { log: 0, rock: 1, stump: 2, fall: 3, bush: 3 };   // bushes: axe from the side
@@ -615,7 +616,7 @@
     const EMBER_FRONT = 0.2;   // h: about 12 s at the usual clock speed from the tip to the foot
     const EMBER_SMOULDER = 0.5, EMBER_LIFE = EMBER_FRONT + EMBER_SMOULDER;   // then 30 game minutes of embers and smoke
 
-    // (the new hero - HeroLook.js - may play its own sheet for a kind)
+    // (the hero's sheet for a kind - HeroLook.js; a kind without one swings no sheet)
     function swingKind(kind) {
         const def = SWING_KINDS[kind] || SWING_KINDS[0], look = T.api("HeroLook");
         return look && look.swingDef ? look.swingDef(kind, def) : def;
@@ -959,11 +960,11 @@
         if (k < 1) this.opacity = Math.round(this.opacity * k);
     };
 
-    // Load the sheets with the map so the first swing does not have to wait for them.
+    // Load the sheets with the map so the first swing does not have to wait for them (the ones the hero plays: HeroLook.js's)
     const _Scene_Map_create = Scene_Map.prototype.create;
     Scene_Map.prototype.create = function() {
         _Scene_Map_create.call(this);
-        for (const def of SWING_KINDS) if (def.sheet) ImageManager.loadSystem(def.sheet);
+        SWING_KINDS.forEach((d, i) => { const sheet = swingKind(i).sheet; if (sheet) ImageManager.loadSystem(sheet); });
     };
 
     // Single override chain for updateFrame: the swing sheet (player only) takes priority, then a tree

@@ -1,0 +1,1494 @@
+# Teksty podróżnych z promu (wtyczki Podroznicy_Data.js i Podroznicy.js) - docs/PODROZNI.md, etap 1 (rdzeń systemu).
+# Obsada: imię, tytuł (napis nad postacią w dymku: „Imię (tytuł)”), dymek przy zejściu z promu, pierwsza rozmowa, „Skąd płyniesz?”,
+# „Co słychać?” (głos postaci - po kolei), okrzyki (gdy bohater przechodzi obok) i słowo na pożegnanie (molo, dzień odjazdu).
+# Pula: to samo dla 16 typów zwykłych podróżnych (imiona z list niżej) i ich drobne przysługi.
+# Bohater jest nastolatkiem: podróżni mówią do niego „chłopcze”, „synku”, „dzieciaku”. Wody nikt nie daje.
+
+# ======================================================================== obsada
+# tobiasz - Tobiasz Goniec, posłaniec z lądu (pokój 23)
+obsada.tobiasz.imie = Tobiasz Goniec
+obsada.tobiasz.tytul = posłaniec z lądu
+obsada.tobiasz.przybycie = Poczta! Poczta lądowa!
+[obsada.tobiasz.spotkanie]
+> (Chudy chłopak z wielką torbą listów przez pierś. Mówi szybciej, niż chodzi.)
+Tobiasz, poczta lądowa! Kto tu jest Hanką Mączną? Mam dla niej list i trzy pozdrowienia od siostry.
+
+[obsada.tobiasz.skad]
+Z Brzozowej Woli, przez trzy brody i dwa promy. Na lądzie poczta chodzi tam, gdzie jeszcze nie ma wojny.
+
+[obsada.tobiasz.glos]
+Listu nie otwieram. Raz otworzyłem. Potem przez rok nosiłem listy tylko do siebie.
+Wojna jest tam, gdzie nie ma poczty. Póki ja chodzę, jeszcze nie jest najgorzej.
+Prom za kilka godzin, a ja mam jeszcze cztery adresy. Nogi, nie zawiedźcie.
+
+[obsada.tobiasz.okrzyki]
+Poczta! Kto czeka na list?
+Z drogi, z drogi - poczta!
+Ratusz, kantor, przystań... uff.
+
+obsada.tobiasz.odjazd = Wrócę, jak będą listy. Zawsze są listy.
+
+# medyk - Konstanty Mak, medyk z kontynentu (pokój 11)
+obsada.medyk.imie = Konstanty Mak
+obsada.medyk.tytul = medyk z kontynentu
+obsada.medyk.przybycie = Gdzie tu jest woda? Czysta, nie morska.
+[obsada.medyk.spotkanie]
+Konstanty Mak, medyk. Ręce. Pokaż ręce.
+Brudne. Pół gorączek tego świata siedzi pod paznokciami.
+
+[obsada.medyk.skad]
+Z lazaretu pod Brzozową Wolą. Leczyłem żołnierzy, póki nie zabrakło bandaży. Potem leczyłem bez bandaży.
+
+[obsada.medyk.glos]
+Wody nie mam, chłopcze. Nikt tu nie ma. Dlatego liczę ją na kubki jak złoto.
+Na lądzie leczyłem żołnierzy. Tu przynajmniej nikt mnie nie pyta, kogo wolno ratować.
+Amulet? Amulet pomaga sprzedawcy amuletów.
+
+[obsada.medyk.okrzyki]
+Myj ręce, chłopcze.
+Gorączka nie pyta o nazwisko.
+Wasza babka Jadwiga gada do ziół. Zioła jej słuchają, przyznaję.
+
+obsada.medyk.odjazd = Pij przegotowaną. I myj ręce.
+
+# kartograf - Teofil Cyrkiel, kartograf (pokój 22; w grze jest już kamerdyner Teodor)
+obsada.kartograf.imie = Teofil Cyrkiel
+obsada.kartograf.tytul = kartograf
+obsada.kartograf.przybycie = Ląd! Krzywy, nierówny, piękny ląd.
+[obsada.kartograf.spotkanie]
+Teofil Cyrkiel, kartograf. Sześćset dwanaście kroków od bramy do studni.
+Twoje miasto jest krzywe, chłopcze. Pięknie krzywe.
+
+[obsada.kartograf.skad]
+Z Brzegu Solnego. Zapłacono mi za wybrzeże. Ale kto przepływa morze i nie rysuje gór?
+
+[obsada.kartograf.glos]
+Mapa nie kłamie. Kłamią ci, którzy ją zamawiają.
+Tu, gdzie stoi tawerna, na starych planach był mur. Gruby. Bardzo gruby. Ciekawe, prawda?
+Liczę kroki. Ludzie liczą grosze, ja kroki. Kroki nie kłamią.
+
+[obsada.kartograf.okrzyki]
+Czterysta... czterysta jeden...
+Nie ruszaj się, mierzę.
+Ten róg nie trzyma kąta.
+
+obsada.kartograf.odjazd = Wrócę z mapą. Twoja wyspa zasługuje na porządną mapę.
+
+# grajek - Jędrek Dudarz, wędrowny grajek (pokój 17)
+obsada.grajek.imie = Jędrek Dudarz
+obsada.grajek.tytul = wędrowny grajek
+obsada.grajek.przybycie = Dudy dopłynęły! I ja z nimi!
+[obsada.grajek.spotkanie]
+Jędrek Dudarz, grajek. Lutnia? Lutnia to dla panienek.
+Dudy budzą umarłych i dzieci sąsiada.
+
+[obsada.grajek.skad]
+Zewsząd. Grałem w obozie pod Brzozową Wolą. Ludzie tańczyli, bo rano mieli umierać. Wiesz, jak się wtedy gra?
+
+[obsada.grajek.glos]
+Wasza Melia śpiewa o Kruczych Skałach? U nas w wojsku śpiewali to samo. Tylko słowa brzydsze.
+Za grosz zagram wesoło. Za dwa - smutno. Smutne trudniej.
+Jedna scena w tej karczmie. Jedna! Zobaczymy, czyja.
+
+[obsada.grajek.okrzyki]
+Hej, hop!
+Grosz dla grajka, grosz dla szczęścia!
+Dudy nie lubią deszczu. Ja też nie.
+
+obsada.grajek.odjazd = Zagraj coś czasem. Choćby na grzebieniu.
+
+# zboze - Zenon Sita, kupiec zbożowy (pokój 20)
+obsada.zboze.imie = Zenon Sita
+obsada.zboze.tytul = kupiec zbożowy
+obsada.zboze.przybycie = Ostrożnie z workami! To nie piasek, to pieniądze.
+[obsada.zboze.spotkanie]
+Zenon Sita, zboże i mąka. Susza to nie nieszczęście, młodzieńcze. Susza to cena.
+
+[obsada.zboze.skad]
+Z Solnego Brodu. Tam zboże tanieje, tu drożeje. Ja tylko stoję pośrodku.
+
+[obsada.zboze.glos]
+Woda? Mam beczki z lądu. Wojsko płaci z góry. Ty nie jesteś wojskiem.
+Kupię twój jęczmień. Po sześć... no, po siedem. Dla przyjaciela.
+Chleb drożeje sam. Ja tylko stoję obok.
+
+[obsada.zboze.okrzyki]
+Worek, worek, kto ma worek?
+Ceny? Ceny są, jakie są.
+Uprzejmie, uprzejmie...
+
+obsada.zboze.odjazd = Interesy, młodzieńcze. Zawsze interesy.
+
+# urszula - Urszula z Olszynki, kobieta szukająca syna (pokój 21; w dni promu 9-15 na molo)
+obsada.urszula.imie = Urszula z Olszynki
+obsada.urszula.tytul = szuka syna
+obsada.urszula.przybycie = Antek...? Nie. Nie on.
+[obsada.urszula.spotkanie]
+Antek. Szesnaście lat, wyższy od ciebie, pieg na nosie. Widziałeś?
+> (Kręcę głową.)
+Synku... przepraszam. Każdy chłopak to dla mnie synek.
+
+[obsada.urszula.skad]
+Z Olszynki. Na lądzie mówią, że chłopców biorą do wojska królewskiego. Wsiadłam na prom, zanim zdążyłam się bać.
+
+[obsada.urszula.glos]
+Twoja matka też gdzieś stoi przy drodze i patrzy na każdego chłopaka. Pamiętaj o tym, synku.
+Prom przypłynął. Pójdę popatrzeć. Zawsze chodzę popatrzeć.
+Szyję dla Borgara za pokój. Igła trzyma ręce zajęte, a głowę... nie.
+
+[obsada.urszula.okrzyki]
+Antek...?
+Pieg na nosie. Wyższy od ciebie.
+Może jutro.
+
+obsada.urszula.odjazd = Bywaj, synku. I pisz do matki.
+
+# poborca - Erazm Łaska, poborca podatku wojennego (pokój 4)
+obsada.poborca.imie = Erazm Łaska
+obsada.poborca.tytul = poborca Korony
+obsada.poborca.przybycie = Rejestr, pióro, atrament. Reszta to szczegóły.
+[obsada.poborca.spotkanie]
+Erazm Łaska, poborca Korony. Korona nie pyta, skąd pieniądze. Korona liczy.
+
+[obsada.poborca.skad]
+Ze stolicy, przez trzy komory celne. Wasz Lord płaci za chorągiew w zatoce. Pytanie, czym płaci.
+
+[obsada.poborca.glos]
+Nie przyjmuję prezentów. Zapisuję je.
+Ty tu pracujesz, chłopcze. Wiesz, kto chodzi po schodach o północy?
+Liczby są cierpliwe. Ludzie mniej.
+
+[obsada.poborca.okrzyki]
+Hm. Zapisane.
+Trzy, cztery... i jeszcze grosz.
+Pióro skrzypi. Dobrze.
+
+obsada.poborca.odjazd = Raport pójdzie. Taki, jaki wyjdzie z liczb.
+
+# pielgrzym - Albin, pątnik (pokój 15)
+obsada.pielgrzym.imie = Albin
+obsada.pielgrzym.tytul = pątnik
+obsada.pielgrzym.przybycie = Chwała niech będzie. Ziemia pod stopami.
+[obsada.pielgrzym.spotkanie]
+Albin, pątnik. Idę do świętych Kruczych Skał. Na lądzie mówią, że tu ziemia pamięta.
+
+[obsada.pielgrzym.skad]
+Z daleka, synu. Z tak daleka, że już nie pamiętam drogi. Pamiętam tylko, dokąd idę.
+
+[obsada.pielgrzym.glos]
+Piękne kamienie w waszej tawernie. Stare. Niektóre... ze znakiem?
+„Nie pytać o to, czego nie chce się wiedzieć.” Ładne powiedzenie. Kto je wymyślił?
+Modlę się przy murach. Mury też się modlą, tylko ciszej.
+
+[obsada.pielgrzym.okrzyki]
+Pokój z tobą.
+Kamień do kamienia...
+Ciche miasto. Bardzo ciche.
+
+obsada.pielgrzym.odjazd = Pokój z tobą, synu. Jeszcze się zobaczymy.
+
+# relikwie - Gaspar Lis, handlarz relikwii (pokój 12)
+obsada.relikwie.imie = Gaspar Lis
+obsada.relikwie.tytul = handlarz relikwii
+obsada.relikwie.przybycie = Ludzie Kruczej Wyspy! Gaspar Lis przypłynął z błogosławieństwem!
+[obsada.relikwie.spotkanie]
+Gaspar Lis, relikwie i medaliki. Kość palca świętego strażnika Kruczych Skał!
+Za dotknięcie grosz, za kość - porozmawiamy.
+
+[obsada.relikwie.skad]
+Z każdego odpustu na lądzie, chłopcze. Gdzie wiara, tam i Gaspar.
+
+[obsada.relikwie.glos]
+Odłamek Serca w srebrze. Sam go nie dotykam - nie chcę wiedzieć, jak umrę.
+Fałsz? Chłopcze, wiara nie pyta o rachunek.
+Masz coś starego? Z krukiem? Płacę jak za relikwię.
+
+[obsada.relikwie.okrzyki]
+Medaliki! Medaliki na drogę!
+Święta kość, święty grosz!
+Kto dotknie, ten zdrowszy!
+
+obsada.relikwie.odjazd = Niech was błogosławi... ktokolwiek zechce.
+
+# wizytator - brat Augustyn, wizytator z klasztoru w Lipnicy (pokój 16)
+obsada.wizytator.imie = brat Augustyn
+obsada.wizytator.tytul = wizytator z Lipnicy
+obsada.wizytator.przybycie = Spokojnie, spokojnie. Stare nogi, stary trap.
+[obsada.wizytator.spotkanie]
+Brat Augustyn z klasztoru w Lipnicy. Szukam ksiąg, które nam zabrano. I ksiąg, których nikt nie powinien mieć.
+
+[obsada.wizytator.skad]
+Z Lipnicy. Klasztor stał czterysta lat. Biblioteka - trzysta. Ludzie z okiem potrzebowali jednej nocy.
+
+[obsada.wizytator.glos]
+Twój pustelnik pisze szyfrem? Mądry człowiek. My pisaliśmy po łacinie i to nie pomogło.
+Synu, prawda nie jest towarem. Nawet jeśli dobrze się sprzedaje.
+Modlę się przy grobach braci. Ktoś musi.
+
+[obsada.wizytator.okrzyki]
+Niech Bóg prowadzi.
+Księgi... wszędzie księgi.
+Ładnie tu dzwon bije. Prawie jak w Lipnicy.
+
+obsada.wizytator.odjazd = Módl się za Lipnicę, synu. I za księgi.
+
+# dezerter - „Tomek” (naprawdę Tymon Wrzos, dezerter - W16, etap 4; pokój 5)
+obsada.dezerter.imie = Tomek
+obsada.dezerter.tytul = uchodźca z promu
+obsada.dezerter.przybycie = Ląd. Nareszcie ląd.
+[obsada.dezerter.spotkanie]
+Nazywam się Tomek. Tomasz. Z... nieważne skąd.
+
+[obsada.dezerter.skad]
+Z lądu. Jak wszyscy. Nie pytaj, z której strony.
+
+[obsada.dezerter.glos]
+Kazali nam stać, kiedy płonęła wieś. Staliśmy. Potem ja już nie umiałem stać.
+Bęben. Słyszysz? Nie mów nikomu, że się trzęsę.
+Śpię mało. Lepiej mało niż źle.
+
+[obsada.dezerter.okrzyki]
+...
+Cicho. Ktoś idzie?
+Nie patrz tak na mnie.
+
+obsada.dezerter.odjazd = Dziękuję. Za nic. Za to, że nic.
+
+# lowczyni - Szczerba (Dobrawa), łowczyni nagród (pokój 6)
+obsada.lowczyni.imie = Szczerba
+obsada.lowczyni.tytul = łowczyni nagród
+obsada.lowczyni.przybycie = Mała wyspa. Tu się nikt długo nie ukryje.
+[obsada.lowczyni.spotkanie]
+Szczerba. Szukam człowieka. Nie ciebie. Jeszcze.
+
+[obsada.lowczyni.skad]
+Z miejsc, o których nie chcesz wiedzieć. List mówi: żywy albo martwy. Ja wolę żywych. Więcej płacą i mniej ważą.
+
+[obsada.lowczyni.glos]
+Każdy ma cenę, chłopcze. Twoja to pewnie ciepła kolacja.
+Patrzę na wejście. Zawsze patrzę na wejście.
+Kiedyś też uciekłam z pola. Różnica: mnie nikt nie szukał.
+
+[obsada.lowczyni.okrzyki]
+Hm.
+Widziałeś tu żołnierza? Młodego?
+Nie zasłaniaj mi drzwi.
+
+obsada.lowczyni.odjazd = Bywaj, dzieciaku. Dobrze, że masz odwagę.
+
+# posel - Adam Wierzbięta, poseł Korony (Apartament Złoty - dopiero z furtką TavernLife, etap 5)
+obsada.posel.imie = Adam Wierzbięta
+obsada.posel.tytul = poseł Korony
+obsada.posel.przybycie = Krucza Wyspa. Pachnie rybą i długiem.
+[obsada.posel.spotkanie]
+Adam Wierzbięta, poseł Korony. Korona nie przyjechała negocjować. Przyjechała pomóc panu Zaleskiemu zrozumieć.
+
+[obsada.posel.skad]
+Z dworu Korony. Liczyłem na pałac. Zadowolę się złotem.
+
+[obsada.posel.glos]
+Złoty apartament? Liczyłem na pałac. Zadowolę się złotem.
+Ten list jest wart więcej niż wasza wyspa, karczmarzu.
+Cierpliwości. Korona ma jej więcej niż ktokolwiek.
+
+[obsada.posel.okrzyki]
+Ostap, za mną.
+Hm. Prowincja.
+
+obsada.posel.odjazd = Korona pamięta. Zawsze pamięta.
+
+# gwardzista - Ostap, gwardzista posła
+obsada.gwardzista.imie = Ostap
+obsada.gwardzista.tytul = gwardzista posła
+obsada.gwardzista.przybycie = Z drogi! Poseł Korony!
+[obsada.gwardzista.spotkanie]
+Ostap. Gwardia posła. Dalej nie wolno.
+
+[obsada.gwardzista.skad]
+Z gwardii. Gdzie poseł, tam ja.
+
+[obsada.gwardzista.glos]
+Dalej nie wolno.
+Pan poseł śpi. Ja nie.
+Halabarda ciężka. Ale poseł cięższy.
+
+[obsada.gwardzista.okrzyki]
+Dalej nie wolno.
+Z drogi.
+
+obsada.gwardzista.odjazd = Z drogi.
+
+# ksenia - Ksenia Żuraw, wdowa po kupcu korzennym (pokój 18; D46 - etap 3)
+obsada.ksenia.imie = Ksenia Żuraw
+obsada.ksenia.tytul = wdowa po kupcu korzennym
+obsada.ksenia.przybycie = Ostrożnie z kuferkiem! W środku są rzeczy, których nie da się kupić drugi raz.
+[obsada.ksenia.spotkanie]
+Ksenia Żuraw. Mój mąż handlował korzeniami od morza do morza.
+Karczmarz odpowiada za rzeczy gości. Tak jest na całym lądzie.
+
+[obsada.ksenia.skad]
+Z Portu Pieprzowego. Po mężu zostały mi pierścienie i długi. Pierścienie wożę ze sobą.
+
+[obsada.ksenia.glos]
+Mój pokój to osiemnastka. Nikt nie wchodzi bez pukania.
+Na lądzie pieprz droższy od srebra. Tu - woda.
+Kuferek mam po matce. Zamek po mężu.
+
+[obsada.ksenia.okrzyki]
+Pierścienie? Nie są na sprzedaż.
+Ostrożnie, chłopcze.
+Gdzie ten karczmarz?
+
+obsada.ksenia.odjazd = Żegnaj. Pilnuj swoich rzeczy, chłopcze.
+
+# trojka - „gość spod trójki” (D45 - pokój 3, dopiero z furtką TavernLife, etap 3)
+obsada.trojka.imie = Gość spod trójki
+obsada.trojka.tytul = nikt go nie widzi
+obsada.trojka.przybycie = ...
+[obsada.trojka.spotkanie]
+...
+> (Mamrocze liczby i odwraca się.)
+
+[obsada.trojka.skad]
+...
+
+[obsada.trojka.glos]
+Trzydzieści jeden... trzydzieści dwa...
+Nie przeszkadzaj.
+
+[obsada.trojka.okrzyki]
+...
+Trzydzieści...
+
+obsada.trojka.odjazd = ...
+
+# kompania - Wolna Kompania (pokoje 9 i 10; D47 - etap 5): wspólne słowa, imiona osobno
+obsada.kompania.tytul = Wolna Kompania
+obsada.kompania.przybycie = Wolna Kompania na lądzie! To znaczy - na wyspie!
+[obsada.kompania.spotkanie]
+Hubert Szary, Wolna Kompania. Najemnicy, nie bandyci. Różnica jest w umowie.
+
+[obsada.kompania.skad]
+Z wojny, chłopcze. Wojna płaci, póki trwa.
+
+[obsada.kompania.glos]
+Kompania nie walczy za darmo. Ani za mało.
+Grum? Znamy Gruma. Kiedyś był nasz.
+Mleko? Chłopak pije mleko! Borgar, daj mu dwa!
+
+[obsada.kompania.okrzyki]
+Hej, kto stawia?
+Kompania pije!
+Cicho tam, my śpimy! ...Nie śpimy.
+
+obsada.kompania.odjazd = Kompania odpływa. Kto nie zapłacił, ten zapamięta.
+obsada.kompania_1.imie = Hubert Szary
+obsada.kompania_2.imie = Jasiek Brzytwa
+obsada.kompania_3.imie = Kazik Kołek
+obsada.kompania_4.imie = Ruda Hela
+
+# ======================================================================== pula: 16 typów zwykłych podróżnych
+# tytul - napis nad postacią; spotkanie - pierwsza rozmowa; skad - „Skąd płyniesz?”; glos - „Co słychać?” (kolor typu); okrzyki
+pula.flisak.tytul = flisak z lądu
+[pula.flisak.spotkanie]
+Flisak jestem, z rzeki na lądzie. Rzeka stanęła - wojsko zabrało tratwy. To płynę, gdzie się da.
+
+[pula.flisak.skad]
+Z Wiślanego Brodu. Promy chodzą rzadziej niż kiedyś, a pływa nimi więcej ludzi.
+
+[pula.flisak.glos]
+Morze dziś spokojne. Spokojne morze to złe morze - za długo czeka.
+Na promie śpi się na workach. Na workach z cudzym zbożem.
+
+[pula.flisak.okrzyki]
+Wiatr się kręci.
+Ziemia się nie kołysze. Dziwne.
+
+pula.kupiec_sukno.tytul = kupiec suknem
+[pula.kupiec_sukno.spotkanie]
+Sukno, płótno, nici, igły. Dobre towary na złe czasy.
+
+[pula.kupiec_sukno.skad]
+Z targu w Grodzisku. Ceny tam takie, że łokieć płótna kosztuje jak koza.
+
+[pula.kupiec_sukno.glos]
+Na lądzie wszyscy chcą czarne płótno. Na żałobę. Dużo żałoby.
+Wyprawioną skórę kupię zawsze. Wojsko zdziera buty szybciej niż sumienie.
+
+[pula.kupiec_sukno.okrzyki]
+Sukno! Dobre sukno!
+Igły, nici, kto potrzebuje?
+
+pula.patniczka.tytul = stara pątniczka
+[pula.patniczka.spotkanie]
+Przypłynęłam do grobów braci. Moi bracia leżą na waszym starym cmentarzu. Od dawna.
+
+[pula.patniczka.skad]
+Z Olchowej Góry. Stara jestem, synku. Każdy prom może być moim ostatnim.
+
+[pula.patniczka.glos]
+Za braci dzwoniło się cztery i jeden. Tak mówiła matka. Nikt już tego nie pamięta.
+Dzwon macie ładny. Stary. Taki, co pamięta.
+
+[pula.patniczka.okrzyki]
+Pochwalony...
+Nogi już nie te.
+
+pula.zolnierz.tytul = żołnierz na przepustce
+[pula.zolnierz.spotkanie]
+Szeregowy na przepustce. Trzy dni wolnego i pół dnia promu w każdą stronę. Policz, ile zostaje.
+
+[pula.zolnierz.skad]
+Z chorągwi nad rzeką. Wojna idzie falami: przypływ, odpływ. My jesteśmy tym, co zostaje na piasku.
+
+[pula.zolnierz.glos]
+Gram w kości, jak nie strzelam. Kości przynajmniej czasem dają wygrać.
+Na froncie mówią, że wyspa ma pod skałami skarb. Na froncie mówią dużo.
+
+[pula.zolnierz.okrzyki]
+Przepustka! Trzy dni!
+Gdzie tu się gra w kości?
+
+pula.kowal.tytul = wędrowny kowal
+[pula.kowal.spotkanie]
+Kowal od drogi. Kowadło mam w torbie, młot u pasa, a kuźnię - gdzie mnie wpuszczą.
+
+[pula.kowal.skad]
+Z Żelaznej Doliny. Groty drożeją, chłopcze. Kto kuje groty, ten nie głoduje.
+
+[pula.kowal.glos]
+Stępione narzędzie to dwa razy więcej roboty. Daj, naostrzę.
+Wasz Tadek ma dobre kowadło. Nie powiem mu tego, bo urośnie.
+
+[pula.kowal.okrzyki]
+Ostrzę! Tanio ostrzę!
+Słychać dobry młot.
+
+pula.kowal.przysluga.etykieta = Naostrz mi narzędzie (5 G).
+pula.kowal.przysluga.dzieki = Proszę. Ostre jak plotka.
+pula.kowal.przysluga.brak = Potrzeba 5 G.
+pula.kowal.przysluga.nic = Nie masz nic stępionego.
+
+pula.cyrulik.tytul = cyrulik
+[pula.cyrulik.spotkanie]
+Cyrulik. Puszczam krew, rwę zęby, szyję rany. Bandaże sprzedaję, krwawnik kupuję.
+
+[pula.cyrulik.skad]
+Z taborów na lądzie. Gorączki w taborach idą szybciej niż wojsko.
+
+[pula.cyrulik.glos]
+Krwawnik zatrzymuje krew. Dziurawiec - smutek. Na resztę jest wódka. Ale nie dla ciebie.
+Masz krwawnik? Trzy łodygi i dam pięć groszy.
+
+[pula.cyrulik.okrzyki]
+Zęby! Kto ma chore zęby?
+Krwawnik kupię!
+
+pula.cyrulik.przysluga.etykieta = Sprzedaj mu krwawnik (3 szt. - 5 G).
+pula.cyrulik.przysluga.dzieki = Dobre ziele. W taborach płacą za to krwią.
+pula.cyrulik.przysluga.brak = Potrzeba 3 krwawników.
+
+pula.uczen.tytul = uczeń kupca
+[pula.uczen.spotkanie]
+Mam list do pana Veya, do rąk własnych. Gdzie tu jest kantor?
+
+[pula.uczen.skad]
+Z kantoru w Grodzisku. Pan kazał płynąć i nie pytać. To nie pytam.
+
+[pula.uczen.glos]
+List jest zapieczętowany trzy razy. Raz by wystarczyło, gdyby nie było w nim nic ważnego.
+Pan Vey płaci dobrze. Mój pan mówi, że za dobrze.
+
+[pula.uczen.okrzyki]
+Kantor? Gdzie kantor?
+Do rąk własnych...
+
+pula.wyspiarz.tytul = stary wyspiarz
+[pula.wyspiarz.spotkanie]
+Czterdzieści lat mnie tu nie było. Wróciłem umrzeć tam, gdzie się urodziłem. Ale jeszcze nie dziś.
+
+[pula.wyspiarz.skad]
+Z lądu, gdzie spędziłem życie. Ale stąd. Zawsze stąd.
+
+[pula.wyspiarz.glos]
+Tawerna... Za moich lat to był jeszcze zamek. Pod tawerną był mur grubszy niż mój wóz.
+Gaweł żyje? Stary Gaweł spod bramy? To był chłopak, kiedy ja byłem chłopakiem.
+
+[pula.wyspiarz.okrzyki]
+Wszystko mniejsze, niż pamiętam.
+Mur jak mur. Stary.
+
+pula.matka.tytul = matka z dzieckiem
+[pula.matka.spotkanie]
+Uciekłyśmy z córką przed poborem. Męża wzięli, nas nie chcieli. Na razie.
+
+[pula.matka.skad]
+Z Kamiennego Brodu. Pół wsi poszło na drogę. Druga połowa czeka, aż przyjdzie ich kolej.
+
+[pula.matka.glos]
+Mała pyta, czy tu nie ma wojny. Mówię, że nie ma. Mam nadzieję, że nie kłamię.
+Ludzie z obozu pod murem pomogli nam pierwszej nocy. Dobrzy ludzie.
+
+[pula.matka.okrzyki]
+Nie oddalaj się, kochanie!
+Gdzie ona znowu poszła...
+
+pula.mysliwy.tytul = myśliwy z lądu
+[pula.mysliwy.spotkanie]
+Myśliwy. Skóry kupuję, skóry sprzedaję. Wilcze najchętniej.
+
+[pula.mysliwy.skad]
+Z Puszczy Bukowej. Na lądzie wilki chodzą za wojskiem. Mają czym się żywić.
+
+[pula.mysliwy.glos]
+Wilk za wojskiem, kruk za wilkiem, a człowiek za krukiem. Tak się teraz poluje.
+U was dziki jeszcze się nie boją. To dobrze. Albo źle - zależy, kto pyta.
+
+[pula.mysliwy.okrzyki]
+Skóry kupię!
+Ślad świeży.
+
+pula.skryba.tytul = wędrowny skryba
+[pula.skryba.spotkanie]
+Skryba. Piszę listy tym, co nie piszą, i czytam tym, co nie czytają. Ładnie i do rzeczy.
+
+[pula.skryba.skad]
+Z kancelarii w Brzegu. Kancelarię spalili, a pióro zostało.
+
+[pula.skryba.glos]
+List do matki? Pisz sam, chłopcze. Matka pozna twoje krzywe litery, a moich ładnych nie.
+Atrament drożeje. Wojsko pisze rozkazy, a rozkazów jest coraz więcej.
+
+[pula.skryba.okrzyki]
+Listy piszę!
+Pióro i atrament, ładnie i do rzeczy.
+
+pula.szwaczka.tytul = wędrowna szwaczka
+[pula.szwaczka.spotkanie]
+Szwaczka. Łatam, zszywam, przerabiam. Z pańskiego na chłopskie, z chłopskiego na żołnierskie.
+
+[pula.szwaczka.skad]
+Z Grodziska. Na lądzie wszyscy chcą czarne płaszcze. Jak u tych z okiem.
+
+[pula.szwaczka.glos]
+Czarne płaszcze, mówię ci. Moda. Kto ją wymyślił, nie chcę wiedzieć.
+Twoje ubranie woła o łatę. Głośno woła.
+
+[pula.szwaczka.okrzyki]
+Łaty, ściegi, guziki!
+Ach, ta moda...
+
+pula.mnich.tytul = mnich żebraczy
+[pula.mnich.spotkanie]
+Brat od drogi, synu. Nie mam nic i niczego nie potrzebuję. Prócz chleba, czasem.
+
+[pula.mnich.skad]
+Z każdego progu, który mnie przyjął. Z lądu, jak wszyscy.
+
+[pula.mnich.glos]
+Głód uczy pokory szybciej niż kazanie.
+Niech twój próg zawsze ma chleb. I niech ktoś pod nim stoi.
+
+[pula.mnich.okrzyki]
+Pokój temu miastu.
+Chleba dla brata...
+
+pula.mnich.przysluga.etykieta = Daj mu chleb.
+pula.mnich.przysluga.dzieki = Bóg zapłać, synu. Miasto zapamięta dobre serce.
+pula.mnich.przysluga.brak = Nie masz chleba.
+
+pula.marynarz.tytul = marynarz z promu
+[pula.marynarz.spotkanie]
+Marynarz z promu. Prom stoi, to i ja stoję. Na lądzie, ale tylko na chwilę.
+
+[pula.marynarz.skad]
+Z promu, chłopcze. Ja nie płynę skądś. Ja pływam.
+
+[pula.marynarz.glos]
+Ostatnio na morzu widać statki bez bandery. Płyną nocą, bez świateł. Nie lubię takich.
+Pogodę czuję w kolanie i w linach. Kolano rzadziej się myli.
+
+[pula.marynarz.okrzyki]
+Ahoj!
+Morze patrzy.
+
+pula.marynarz.przysluga.etykieta = Jaka jutro będzie pogoda?
+pula.marynarz.przysluga.deszcz = Jutro popada. Czuję w kolanie i w linach.
+pula.marynarz.przysluga.sucho = Jutro sucho jak w spichlerzu. Morze mówi, że długo jeszcze.
+
+pula.zielarka.tytul = zielarka z lądu
+[pula.zielarka.spotkanie]
+Zielarka. Nasiona wożę, nie zioła. Ziół na lądzie nikt nie zbiera, bo pola stratowane.
+
+[pula.zielarka.skad]
+Z Zielonej Doliny. Z tego, co z niej zostało.
+
+[pula.zielarka.glos]
+Wasza ziemia sucha, ale dobra. Kamień ją trzyma.
+Babka Jadwiga? Słyszałam o niej nawet na lądzie.
+
+[pula.zielarka.okrzyki]
+Nasiona! Dobre nasiona!
+Sucho tu. Bardzo sucho.
+
+pula.kostkarz.tytul = podróżny z kośćmi
+[pula.kostkarz.spotkanie]
+Grasz w kości? Nie? Szkoda. Mam szczęśliwe kości. Bardzo szczęśliwe.
+
+[pula.kostkarz.skad]
+Z każdej karczmy na lądzie, z której mnie jeszcze nie wyrzucili.
+
+[pula.kostkarz.glos]
+Kości nie kłamią. Kłamią tylko ci, co nimi rzucają.
+Jedna partia? Tylko jedna. Dla zabawy.
+
+[pula.kostkarz.okrzyki]
+Kto zagra?
+Szczęście sprzyja odważnym!
+
+# dymek człowieka z puli przy zejściu z promu (po kolei)
+[przybycie.pula]
+Ziemia! Wreszcie ziemia.
+Ostrożnie, trap mokry.
+Uff. Morze nie dla mnie.
+Krucza Wyspa... Mniejsza, niż mówili.
+
+# imiona puli (kobiety: typy z ciałem kobiety)
+[imiona.m]
+Gerwazy
+Bonifacy
+Walenty
+Kasper
+Fabian
+Wawrzyniec
+Hilary
+Prot
+Klemens
+Wincenty
+Grzegorz
+Leon
+Jacek
+Eustachy
+Dionizy
+Mateusz
+
+[imiona.k]
+Agnieszka
+Barbara
+Dorota
+Teresa
+Weronika
+Bogumiła
+Marianna
+Ewa
+Klara
+Regina
+Józefa
+Celina
+
+# ======================================================================== wieści z lądu (etap wojny; zgodne z listami matki - nic o ojcu)
+[wiesci.etap1]
+Pod Brzozową Wolą znowu stoją wojska. Mówią, że to już trzecia bitwa o tę samą rzekę.
+Pobór idzie od wsi do wsi. Chłopców od piętnastu lat wpisują do ksiąg.
+Na drogach pełno ludzi z tobołkami. Każdy idzie tam, skąd ktoś inny ucieka.
+Mąka na lądzie po dziewięć groszy. Za miesiąc będzie po dwanaście.
+
+[wiesci.etap2]
+Wojsko rekwiruje wozy, konie i zboże. Kto ma spichlerz, ten ma kłopot.
+Na drogach widuje się ludzi w czarnych płaszczach. Nikt nie wie, czyi są. Wszyscy wiedzą, żeby nie pytać.
+Ceny skaczą jak pchły. Sól droższa od mięsa.
+Mówią, że jeńców spod Brzozowej Woli prowadzą na północ, do taborów. Nikt nie wie, ilu.
+
+[wiesci.etap3]
+Na morzu pływają statki bez bandery. Nocą, bez świateł.
+W portach ktoś skupuje stare kamienie. Z krukiem. Płaci złotem i nie pyta o drogę.
+Mówią, że wojna przeniesie się na morze. Mówią też, że nie. Mówią dużo.
+Ludzie z okiem pytają w karczmach o Kruczą Wyspę. Grzecznie pytają. To najgorsze.
+
+[wiesci.akt2]
+Na lądzie szepczą o drzwiach pod skałą. Że ktoś je szuka, a ktoś inny pilnuje.
+Kupcy mówią, że na Kruczej Wyspie dzieje się coś, o czym lepiej nie gadać przy obcych.
+Ludzie z okiem płacą przewoźnikom za każdą wieść z wyspy.
+
+[wiesci.akt3]
+Na lądzie już wiedzą o napadzie na karczmę. Każdy opowiada to inaczej.
+Mówią, że ludzie z okiem dostali po nosie na jakiejś wyspie. Ja tylko powtarzam.
+
+# ======================================================================== rozmowa z podróżnym (menu)
+menu.skad = Skąd płyniesz?
+menu.wiesci = Jakie wieści z lądu?
+menu.glos = Co słychać?
+menu.bywaj = Bywaj.
+[menu.pyta]
+Coś chciałeś?
+Słucham?
+Tak?
+Hm?
+
+przysluga.zrobione = Już mi pomogłeś. Dzięki.
+przysluga.dosc = Na dziś dość przysług, chłopcze. Następnym promem.
+
+# ======================================================================== księga gości (u Borgara) i renoma karczmy
+ksiega.etykieta = Księga gości
+ksiega.tytul = Księga gości „Pod Złotym Kuflem”
+[ksiega.borgar]
+Księga gości. Kto śpi pod moim dachem - wszystko tu jest.
+Moja księga. Czytaj, tylko nie zalej piwem.
+Księga. Ja liczę pokoje, a pokoje liczą mnie.
+
+ksiega.wiersz = Pokój {pokoj}: {kto} - do dnia {do}
+ksiega.wierszDzis = Pokój {pokoj}: {kto} - odpływa dziś o 15:00
+ksiega.wierszDroga = Pokój {pokoj}: {kto} - przypływa promem, od południa
+ksiega.gosc = gość z lądu
+ksiega.eryk = Pokój 7: Eryk Sowa, kupiec suknem - od dawna
+ksiega.rafal = Pokój 1: krewniak Borgara - na razie
+ksiega.pusto = Pokoje gości stoją puste. Przy promie ktoś przypłynie.
+ksiega.renoma = Renoma karczmy: {renoma} - {opis}
+ksiega.utarg = Utarg z pokoi w tym tygodniu: {utarg} G
+
+renoma.opis.80 = sławna karczma
+renoma.opis.60 = karczma z renomą
+renoma.opis.40 = dobra karczma
+renoma.opis.20 = zwykła karczma
+renoma.opis.0 = karczma o złej sławie
+renoma.zmiana = Renoma karczmy {zmiana}
+
+# ======================================================================== wydarzenia
+odplynal.m = odpłynął
+odplynal.k = odpłynęła
+napis.zostaje = {imie} zostaje do dnia {dzien}.
+napis.zostajePod = sprawa jeszcze nie skończona
+[notatka.bezKonca]
+Sprawa bez końca
+{imie} - {odplynal} promem, a sprawa została niezałatwiona. Borgar pokręcił głową - renoma karczmy spadła.
+
+# ======================================================================== scena przybycia promu (przystań, 9:00)
+scena.przewoznik = Krucza Wyspa! Kto do lądu - za sześć godzin!
+scena.celnik = Nazwisko? Cel?
+[scena.cele]
+Za chlebem.
+Za interesem.
+Za spokojem.
+Przejazdem.
+Do rodziny.
+scena.ela = To tu nie ma wojny?
+scena.ludmila = Ela, trzymaj się mnie. Krok w krok.
+scena.pomin = przytrzymaj P: pomiń
+
+# ======================================================================== F9 („Wyspa i fabuła”, sekcja z Podroznicy.f9)
+f9.naglowek = Podróżni z promu:
+f9.prom = Następny prom teraz (dzień {dzien})
+f9.promOpis = dzień promu, 8:55, na przystani - planowanie promu i scena przybycia
+f9.przyplyn = Przypłyń teraz: {kto}
+f9.przyplynOpis = ◀ ▶ wybór postaci, O - przypływa dziś (pokój z księgi, pobyt jak w danych)
+f9.odplyw = Odpływ wszystkich ({n})
+f9.odplywOpis = wszyscy podróżni odpływają teraz (jak promem o 15:00)
+f9.wyczysc = Księga pokoi: wyczyść
+f9.wyczyscOpis = stan podróżnych od nowa - bez odpływów, bez renomy, ziarno zostaje
+f9.renoma = Renoma karczmy: {renoma} ({zmiana})
+f9.renomaOpis = ◀ ▶ +10 / -10, O - zmienia
+f9.ziarno = Ziarno puli: nowe (teraz {ziarno})
+f9.ziarnoOpis = inni ludzie z puli przy następnych promach
+f9.scena = Scena przybycia: odtwórz
+f9.scenaOpis = przystań o 8:55 - scena z dzisiejszymi przybyłymi (albo obecnymi)
+f9.pula = ktoś z puli
+f9.brak = Nie da się
+f9.ok.prom = Prom: dzień {dzien}, 8:55
+f9.ok.przyplyn = {kto}: na wyspie, pokój {pokoj}
+f9.ok.nie = {kto}: brak miejsca albo już jest
+f9.ok.odplyw = Odpłynęło: {n}
+f9.ok.wyczysc = Księga wyczyszczona
+f9.ok.renoma = Renoma karczmy: {renoma}
+f9.ok.ziarno = Nowe ziarno puli: {ziarno}
+
+# ######################################################################## ETAP 2 (2026-10-29): sprawy pierwszej szóstki
+# Zadania K71, K72, D39, D40, D41, D42, D43 (dane: Podroznicy_Data.js, haki: Podroznicy_Sprawy.js), podsłuch przez ścianę (I2),
+# Antek i Zenon w garnizonie. Bohater jest nastolatkiem. Wody nikt nie daje - zadania biorą tylko jego własną.
+
+# ======================================================================== rzeczy, miejsca, uwagi, przepis
+rzeczy.list_hanka.name = List do Hanki Mącznej (od siostry)
+rzeczy.list_soltys.name = Pismo z lądu do sołtysa
+rzeczy.list_marta.name = List do Jana Ługa (od brata)
+rzeczy.list_feliks.name = List „Do kamerdynera dworu, do rąk własnych”
+rzeczy.list_poczta.name = Listy z poczty lądowej
+
+miejsca.d40_pustelnia.name = Punkt widokowy: klif pustelni
+miejsca.d40_urwisko.name = Punkt widokowy: baszta kruków
+miejsca.d40_latarnia.name = Punkt widokowy: pod laterną
+miejsca.d40_garnizon.name = Punkt widokowy: wieża garnizonu
+miejsca.d40_gory.name = Punkt widokowy: nad kamieniołomem
+miejsca.d40_przystan.name = Punkt widokowy: róg nabrzeża
+
+# uwagi (raz, przy pierwszej rozmowie po zdarzeniu): 0 Ludmiła - list od Tobiasza u Borgara (K71); 1 Urszula - po pierwszym liście
+# matki (W10); 2 Hanka - po zdemaskowaniu Zenona (D42)
+[uwagi.0.lines]
+Borgar dał mi list. Od siostry, z Olchowej. Jakiś posłaniec zostawił go „dla Ludmiły, gdy przypłynie”.
+Siostra żyje. Dom stoi, tylko dach przecieka. O Marku... nic. Ani słowa.
+Przeczytałam go Eli trzy razy. Za trzecim razem już się nie płakało.
+
+[uwagi.1.lines]
+Synku... przepraszam, chłopcze. Ty też dostałeś list z lądu? Od matki?
+Przy taborze na północ prała kobieta w chuście w czerwone kwiaty. Mówiła, że ma syna za morzem.
+Nie wiem, czy to ona. Ale pomyślałam o tobie. Matki przy drogach są do siebie podobne.
+
+[uwagi.2.lines]
+Słyszałeś? Sita odpływa najbliższym promem. Sołtys mu powiedział przy ludziach, co o nim myśli.
+Mąka nie stanieje od tego. Ale przynajmniej nikt mi już nie wmawia, że to susza.
+
+przepis.name = Zrób opatrunek medyka
+przepis.desc = Włókno i krwawnik, zwinięte ciasno, jak pokazał Konstanty Mak. Bez ziół od znachorki.
+
+# ======================================================================== K71 „Listy z lądu” (Tobiasz, pierwsza wizyta)
+zadania.K71.title = Listy z lądu
+zadania.K71.where = Rynek, Podgrodzie, dwór Lorda; tawerna (Tobiasz, pokój 23)
+zadania.K71.when = pierwsza wizyta Tobiasza (prom dnia 4)
+zadania.K71.desc = Tobiasz Goniec, posłaniec z lądu, ma więcej adresów niż czasu do promu. Cztery listy do ludzi z wyspy - dwa grosze od listu.
+[zadania.K71.offer.say]
+Prom za cztery godziny, a ja mam jeszcze cztery adresy. Hanka Mączna, sołtys, jakaś Marta Ługowa w Podgrodziu i „kamerdyner dworu, do rąk własnych”.
+Pomożesz? Dwa grosze od listu. I jeszcze cztery, jak wrócisz z pustą torbą.
+
+zadania.K71.offer.yes = Rozniosę.
+zadania.K71.offer.no = Nie mam czasu.
+[zadania.K71.offer.accept]
+Trzymaj. Tylko nie otwieraj - cudzy list to świętość. Piąty, „do Ludmiły z Olchowej, gdy przypłynie”, zostawię u Borgara.
+Ona jeszcze nie przypłynęła. Ale przypłynie. Wszyscy w końcu przypływają.
+
+[zadania.K71.offer.decline]
+Trudno. Pobiegnę sam. Szybciej niż prom nie pobiegnę, ale spróbuję.
+
+zadania.K71.steps.0.text = Rozdaj listy Tobiasza ({n}/{z}): Hanka (piekarnia), sołtys (ratusz), Marta Ługowa (Podgrodzie), kamerdyner Feliks (dwór Lorda). Tobiasz odpływa w dniu {dzien}.
+zadania.K71.steps.1.text = Wróć do Tobiasza z pustą torbą (rynek, wieczorem tawerna).
+[zadania.K71.steps.1.say]
+> Wszystkie listy doręczone.
+
+[zadania.K71.steps.1.done]
+Wszystkie? Szybciej niż ja! Masz swoje grosze i jeszcze cztery za komplet.
+Jak wrócę z następną pocztą, znajdę cię. Ludzie, co noszą cudze listy i ich nie czytają, są rzadsi niż woda na tej wyspie.
+
+zadania.K71.fail.text = Tobiasz odpłynął, zanim listy dotarły.
+
+[k71.hanka]
+> List do ciebie, Hanko. Od siostry, z lądu.
+Od Dorotki! Daj... (czyta, poruszając ustami) Mąka na lądzie po dziewięć groszy. Dziewięć!
+Chleb tu jeszcze podrożeje, chłopcze. A ludzie myślą, że to ja zdzieram.
+
+[k71.soltys]
+> Pismo do pana sołtysa. Z lądu.
+Pieczęć starostwa... (czyta, marszczy brwi) „Przyjąć ludzi z promu, dać dach i wodę”. Dach i wodę! A skąd ja im wezmę wodę?
+Fala uciekinierów, piszą. Dziesiątego dnia. No to mamy kłopot z pieczęcią.
+
+[k71.marta]
+> List do Jana Ługa, od brata z lądu.
+(Marta Ługowa długo patrzy na kopertę.) Jan nie żyje od trzech zim. A ja nie umiem czytać. Przeczytasz mi, chłopcze?
+> (Czytasz na głos: brat pyta, czy zagroda stoi, czy jabłonie rodzą i czy Jan jeszcze gra na fujarce.)
+Stoi. Rodzą. Nie gra. Napiszesz mu to kiedyś? Ja tylko krzyżyk postawię.
+
+[k71.feliks]
+> List do pana kamerdynera. Do rąk własnych.
+Do rąk własnych, oczywiście. (Feliks chowa list do kieszeni, nawet na niego nie patrząc.) Dziękuję, chłopcze. Rachunki.
+
+[k71.feliksSlad]
+> List do pana kamerdynera. Do rąk własnych.
+(Feliks obraca list w palcach. Kciukiem dotyka laku.) Pieczęć... dziwnie miękka. Ciepło dziś, prawda?
+Dziękuję, chłopcze. Zapamiętam, kto mi go przyniósł.
+
+[k71.lord]
+> Jaśnie panie, mam list do pana kamerdynera. Z lądu, ze sklepu.
+Feliks kupuje papier? Pisze mi rachunki, dobry człowiek. Papier, lak, atrament... na kopy?
+Na kopy. Ja nawet listów nie czytam, chłopcze. Ciekawe, do kogo on tyle pisze. Zanieś mu go, zanieś.
+
+k71.para.etykieta = Podgrzej list kamerdynera nad kociołkiem
+[k71.para.borgar]
+Kociołek? Proszę bardzo, para jest. Tylko ja nic nie widziałem i nic nie wiem.
+
+[k71.para.czysto]
+> (Lak mięknie nad parą i odchodzi czysto. Nikt nie pozna, że ktoś zaglądał.)
+
+[k71.para.slad]
+> (Lak pęka na krawędzi. Wciskasz go z powrotem palcem - prawie nie widać. Prawie.)
+
+[k71.para.tresc]
+> (W środku rachunek ze sklepu na lądzie: papier dobry, lak czerwony, atrament czarny - „na kopy”. Za dużo jak na rachunki jednego domu.)
+
+[k71.notatka.para]
+Rachunek Feliksa
+List do kamerdynera, otwarty nad parą u Borgara: rachunek ze sklepu na lądzie za papier, lak i atrament - „na kopy”. Feliks pisze dużo listów. Do kogo?
+
+[k71.notatka.lord]
+Rachunek Feliksa
+Pokazałem Lordowi list do kamerdynera: rachunek za papier, lak i atrament „na kopy”. Lord nie czyta listów - więc do kogo Feliks tyle pisze?
+
+# ======================================================================== K72 „Poczta z lądu” (powroty Tobiasza)
+zadania.K72.title = Poczta z lądu
+zadania.K72.where = Cała wyspa - adresaci w dzienniku
+zadania.K72.when = przy każdym powrocie Tobiasza
+zadania.K72.desc = Tobiasz znów przypłynął z torbą listów. Dwa grosze od listu - bez czytania.
+[zadania.K72.offer.say]
+Znowu ja, znowu listy! Wyspa niby mała, a ludzie rozsiani jak ziarno po wietrze.
+Weźmiesz kilka? Dwa grosze od sztuki.
+
+zadania.K72.offer.yes = Dawaj listy.
+zadania.K72.offer.no = Nie dziś.
+[zadania.K72.offer.accept]
+Masz. Adresy napisane dużymi literami, żebyś nie błądził. I pamiętaj - nie otwierać.
+
+[zadania.K72.offer.decline]
+Trudno. Kiedy indziej. Listy poczekają, one są cierpliwe.
+
+zadania.K72.steps.0.text = Rozdaj listy z poczty lądowej. Zostało: {komu}.
+zadania.K72.fail.text = Tobiasz odpłynął, a listy zostały w torbie.
+
+k72.kto.piekarka = Hanka (piekarnia)
+k72.kto.kowal = kowal Tadek (kuźnia)
+k72.kto.garbarz = Ignac (garbarnia)
+k72.kto.dzwonnik = Ambroży (dzwonnica)
+k72.kto.praczka = Marta Ługowa (Podgrodzie)
+k72.kto.celnik = celnik Sambor (przystań)
+k72.kto.rotmistrz = rotmistrz Bełza (garnizon)
+k72.kto.latarnik = latarnik (przylądek)
+k72.kto.pustelnik = brat Kleofas (pustelnia)
+k72.kto.znachorka = babka Jadwiga (Podgrodzie)
+
+[k72.do.piekarka]
+> List z lądu, Hanko.
+Znowu od Dorotki? Nie... od młynarza. Pisze, że mąki nie będzie przed żniwami. Pięknie. Po prostu pięknie.
+
+[k72.do.kowal]
+> List z lądu dla kowala.
+Dla mnie? Od czeladnika, co uciekł do miasta. (czyta) Pisze, że tam kują tylko podkowy dla wojska. Wraca. Głupiec. Dobrze, że wraca.
+
+[k72.do.garbarz]
+> List z lądu, mistrzu.
+Kto by do garbarza pisał... (czyta, chrząka) Żona brata. Że brat pije. Że skóry tanieją. Że kocha. W tej kolejności.
+
+[k72.do.dzwonnik]
+> List z lądu dla dzwonnika.
+Od starego proboszcza z Lipowca. Pyta, czy dzwon jeszcze pęknięty. Pęknięty, ojcze, pęknięty. Ale dzwoni.
+
+[k72.do.praczka]
+> List dla pani Marty, z lądu.
+Znowu od brata Jana? (Czytasz jej na głos: brat dziękuje za krzyżyk i przysyła nasiona jabłoni.) Nasiona... Posadzę przy grobie.
+
+[k72.do.celnik]
+> List z lądu dla celnika.
+Mnie list? (otwiera, czyta, chowa szybko) Od wdowy z Brzozowej. Prywatne, chłopcze. Celnik też człowiek, choć nikt w to nie wierzy.
+
+[k72.do.rotmistrz]
+> List z lądu dla pana rotmistrza.
+(Bełza czyta stojąc, potem siada.) Matka jednego z moich chłopców. Pyta, czy syn je. Je. Odpisz jej... nie. Sam odpiszę.
+
+[k72.do.latarnik]
+> List z lądu dla latarnika.
+List? Do mnie? (latarnik obraca kopertę) Od córki. Dwadzieścia lat nie pisała. Idź już, chłopcze. Idź, zanim się rozkleję.
+
+[k72.do.pustelnik]
+> List do brata Kleofasa. Z lądu, z klasztoru w Lipnicy.
+Z Lipnicy... (Kleofas łamie pieczęć ostrożnie, jak chleb) Bracia piszą, że ktoś wywiózł spis naszej biblioteki. Trzysta lat ksiąg na trzech kartach.
+I że przyślą wizytatora. Brata Augustyna. Szuka czegoś, co ktoś sprzedaje jako relikwie. Dziękuję, chłopcze. Módl się, żeby to nie było to, o czym myślę.
+
+[k72.do.znachorka]
+> List z lądu dla babki Jadwigi.
+Od zielarki z Olchowej. Pyta o krwawnik - u nich też żółknie. Susza wszędzie jedna, chłopcze. Ludzie różni.
+
+# ======================================================================== D39 „Gorączka z promu” (Konstanty Mak)
+zadania.D39.title = Gorączka z promu
+zadania.D39.where = Tawerna (Konstanty, pokój 11), ratusz
+zadania.D39.when = pobyt medyka (prom dnia 7)
+zadania.D39.desc = Z promu zszedł flisak Gerwazy, rozpalony od gorączki. Konstanty Mak, medyk z lądu, położył go w swoim pokoju przy kominku. Potrzebuje ziół, wody i kogoś do nocnego czuwania.
+[zadania.D39.offer.say]
+Ręce. Pokaż ręce. Brudne. No trudno, i tak cię potrzebuję.
+Z promu zszedł flisak z gorączką. Leży u mnie, w jedenastce. Potrzebuję trzech garści krwawnika i dwóch główek czosnku. I wody na napar.
+Wody nie mam, chłopcze. Nikt tu nie ma.
+Dlatego liczę ją na kubki jak złoto. Pomożesz?
+
+zadania.D39.offer.yes = Przyniosę zioła.
+zadania.D39.offer.no = Nie dam rady.
+[zadania.D39.offer.accept]
+Dobrze. Krwawnik rośnie przy drogach, czosnek dziki pod lasem. Szybko, zanim gorączka zrobi się mądrzejsza ode mnie.
+
+[zadania.D39.offer.decline]
+Rozumiem. Każdy ma swoje gorączki.
+
+zadania.D39.steps.0.text = Przynieś Konstantemu 3× Krwawnik i 2× Dziki czosnek (tawerna albo obóz pod murem; 7-23).
+[zadania.D39.steps.0.hero]
+> Krwawnik i czosnek. Jak pan prosił.
+
+[zadania.D39.steps.0.done]
+Dobre. Świeże. Teraz woda - dwie porcje. Bez wody napar to tylko mokre siano.
+
+[zadania.D39.steps.0.remind]
+Trzy garście krwawnika, dwie główki czosnku. Rośnie przy drogach i pod lasem.
+
+zadania.D39.steps.1.text = Daj Konstantemu 2 porcje własnej wody (bukłak albo wiadro) na napar.
+[zadania.D39.steps.1.hero]
+> Woda. Moja, z deszczu.
+
+[zadania.D39.steps.1.done]
+Z deszczu. Najczystsza, jaka jest. Dziękuję - wiem, ile to dla ciebie znaczy.
+Napar będzie gotowy wieczorem. Przyjdź w nocy, do jedenastki. Ja muszę choć trochę pospać, a ktoś musi zmienić mu okład o drugiej.
+
+[zadania.D39.steps.1.remind]
+Dwie porcje wody. Bez tego nic z naparu.
+
+zadania.D39.steps.2.text = Przyjdź nocą (22-4) do pokoju 11 na piętrze gości i czuwaj przy chorym flisaku.
+zadania.D39.steps.3.text = Rano sołtys chce zamknąć flisaka w szopie przy pochylni. Porozmawiaj z sołtysem (ratusz, 6-19).
+zadania.D39.fail.text = Konstanty odpłynął, a gorączka została na wyspie.
+
+[d39.noc.wstep]
+> (Gerwazy rzuca się na łóżku. Konstanty śpi na krześle z okularami na czole. Dochodzi druga.)
+> (Okład na czole flisaka zrobił się gorący. Trzeba go zmienić. Ale na co?)
+
+d39.noc.zimny = Zimny okład - zmocz szmatę w naparze.
+d39.noc.koc = Ciepły koc - flisak dygocze.
+[d39.noc.zimnyTak]
+> (Zimna szmata, napar z krwawnika. Gerwazy wzdycha i przestaje się rzucać.)
+(Konstanty otwiera jedno oko.) Dobrze. Bardzo dobrze. Gorączkę się studzi, nie dogrzewa. Idź spać, chłopcze.
+
+[d39.noc.kocTak]
+> (Okrywasz flisaka kocem. Przestaje dygotać, ale oddycha coraz ciężej.)
+(Konstanty budzi się i wzdycha.) Koc... Gorączkę się studzi, nie dogrzewa. Nic, wyjdzie z tego. Dzień później, ale wyjdzie.
+
+[d39.soltys.zaraza]
+Słyszałem! Zaraza z promu! W tawernie!
+Zamknąć go w szopie przy pochylni. I niech nikt nie podchodzi!
+
+d39.soltys.za = „Konstanty mówi, że to zwykła gorączka. Nie zaraza.”
+d39.soltys.szopa = Niech będzie szopa.
+[d39.soltys.zaTak]
+> Konstanty mówi, że to zwykła gorączka. Przespałem przy nim noc i żyję. Szopa go zabije.
+Hm... (sołtys drapie się po karku) Skoro medyk z lądu tak mówi, a ty przy nim czuwałeś... Niech leży. Ale jak ktoś zachoruje, to na twoją głowę.
+
+[d39.soltys.zaNie]
+> Konstanty mówi, że to zwykła gorączka...
+Konstanty mówi, Konstanty mówi. Obcy mówi, a ja tu odpowiadam za ludzi. Szopa i koniec.
+
+[d39.soltys.szopaTak]
+> Niech będzie szopa.
+Mądry chłopak. Lepiej dmuchać na zimne.
+
+[d39.notatka.za]
+Przepis medyka
+Flisak Gerwazy wyzdrowiał w tawernie, nie w szopie. Konstanty Mak pokazał mi opatrunek z włókna i krwawnika - bez ziół od znachorki. Sołtys posłuchał medyka.
+
+[d39.notatka.szopa]
+Przepis medyka
+Flisak leżał w szopie przy pochylni i zdrowiał dłużej. Konstanty był chłodny, ale pokazał mi opatrunek z włókna i krwawnika - bez ziół od znachorki.
+
+# ======================================================================== D40 „Mapa dla kartografa” (Teofil Cyrkiel, wizyta 1)
+zadania.D40.title = Mapa dla kartografa
+zadania.D40.where = Punkty widokowe wyspy; tawerna (Teofil, Palarnia 15-19)
+zadania.D40.when = pierwsza wizyta kartografa
+zadania.D40.desc = Teofil Cyrkiel, kartograf z lądu, rysuje wybrzeże wyspy. Brakuje mu widoków z miejsc, do których nie dojdzie ze sznurem mierniczym. Pięć szkiców.
+[zadania.D40.offer.say]
+Sześćset dwanaście kroków od bramy do studni. Twoje miasto jest krzywe, chłopcze. Pięknie krzywe.
+Zapłacono mi za wybrzeże. Ale kto przepływa morze i nie rysuje gór? Brakuje mi widoków - klif pustelni, baszta kruków, latarnia, wieża garnizonu, kamieniołom, przystań.
+Pięć szkiców. Byle jakich, ja je poprawię. Trzydzieści groszy.
+
+zadania.D40.offer.yes = Narysuję.
+zadania.D40.offer.no = Nie umiem rysować.
+[zadania.D40.offer.accept]
+Nie trzeba umieć. Trzeba patrzeć. Stań, gdzie widać najdalej, i rysuj, co widzisz. Kreska to kreska.
+
+[zadania.D40.offer.decline]
+Każdy umie rysować. Nie każdy umie patrzeć. Szkoda.
+
+zadania.D40.steps.0.text = Szkice z punktów widokowych ({n}/{z}): klif pustelni, baszta kruków, latarnia, wieża garnizonu, nad kamieniołomem, róg nabrzeża przystani - na miejscu O przy znaczku.
+zadania.D40.steps.1.text = Oddaj szkice Teofilowi - Palarnia i czytelnia w tawernie (15-23).
+zadania.D40.fail.text = Teofil odpłynął bez szkiców wyspy.
+
+d40.szkicNapis = Szkic: {miejsce}
+d40.szkicPod = szkice dla Teofila {n}/{z}
+slawa = Sława +{n}
+
+[d40.oddaj]
+> Szkice. Pięć.
+(Teofil rozkłada kartki pod świecą, mruczy, liczy.)
+Krzywe. Uczciwie krzywe. Z tego da się zrobić mapę.
+
+d40.mapa.pokaz = Pokaż mu mapę z wraku.
+d40.mapa.nie = Nie pokazuj.
+[d40.mapa.teofil]
+> Mam jeszcze to. Znalazłem na wraku.
+(Teofil długo milczy. Przesuwa palcem po kropkach na brzegu.) Ta ręka... wojskowy kreślarz z lądu. Robi kropki jak oczy.
+Ktoś rysował twoją wyspę dla wojska, chłopcze. I nie po to, żeby kupcy wiedzieli, gdzie przybić.
+
+[d40.mury]
+Wiesz, co jest dziwne? Tu, gdzie stoi tawerna, na starych planach był mur. Gruby. Bardzo gruby.
+Mapa nie kłamie. Kłamią ci, którzy ją zamawiają. Masz swoje grosze. Zrobię ci szkic całej wyspy - przyda się.
+
+[d40.notatka]
+Szkic kartografa
+Teofil Cyrkiel narysował mi szkic wyspy. Na mapie (zakładka „Mapa”) miejsca, których jeszcze nie znam, mają teraz jego słowa zamiast znaku zapytania. Mówił też o murze pod tawerną - „gruby, bardzo gruby”.
+
+# słowa Teofila na mapie wyspy przy miejscach jeszcze nieznanych (klucz: numer mapy)
+d40.karta.8 = „Krzywe miasto na wzgórzu. Studnia, rynek i tawerna na murach starszych niż miasto.”
+d40.karta.24 = „Dwór na wschód od miasta. Ogród, oranżeria i więcej piwnic, niż trzeba jednemu panu.”
+d40.karta.111 = „Podgrodzie za bramą zachodnią. Biedne domy, sucha studnia, dużo ludzi z lądu.”
+d40.karta.125 = „Przystań na zachodzie. Molo, kutry, celnik. Prom co trzy dni.”
+d40.karta.22 = „Polna droga na południe od miasta. Pola, susza, rozstaje.”
+d40.karta.20 = „Dom przy Leśnej drodze. Kamienny, stary, z widokiem na wschód.”
+d40.karta.21 = „Leśna droga. Mielerz, smolarz, rabusie nocą. Prowadzi w góry.”
+d40.karta.13 = „Góry na wschodzie. Kamieniołom, stare schody w skale i dziura, z której ciągnie zimnem.”
+d40.karta.120 = „Za górami osada, do której nikt nie chodzi. Ludzie tam nie mówią. Nie rysowałem.”
+d40.karta.175 = „Grań nad osadą. Orły. Wiatr, który zdmuchnie ci kapelusz razem z głową.”
+d40.karta.23 = „Skraj lasu na południu. Stąd drogi rozchodzą się jak palce.”
+d40.karta.168 = „Spalona zagroda na południowym skraju. Sadza na kamieniach. Nikt nie odbudował.”
+d40.karta.3 = „Jar w kształcie kruczego dzioba. Mur dookoła, ziemia dobra, wody mało.”
+d40.karta.4 = „Łąka i koszar pasterza. Owce liczą się szybciej niż kroki.”
+d40.karta.17 = „Omszała łąka. Mokro tylko z nazwy.”
+d40.karta.18 = „Łąka z kamieniami w kręgu. Ustawione za równo, żeby to był przypadek.”
+d40.karta.162 = „Garnizon nad zatoką. Palisada, wieża, chorągiew z feniksem.”
+d40.karta.165 = „Wrak na mieliźnie, na zachód od garnizonu. Dojdziesz tylko w odpływ.”
+d40.karta.155 = „Pustelnia na klifie. Mnisi, ule i najlepszy widok na zachodnie morze.”
+d40.karta.157 = „Urwisko na północy. Baszta pełna kruków. Kruki patrzą, jak rysujesz.”
+d40.karta.159 = „Przylądek z latarnią na północnym wschodzie. Laterna widoczna z gór.”
+
+# ======================================================================== D41 „Pieśń z lądu” (Jędrek Dudarz)
+zadania.D41.title = Pieśń z lądu
+zadania.D41.where = Tawerna (sala ze sceną; Melia, Jędrek)
+zadania.D41.when = pobyt grajka
+zadania.D41.desc = Jędrek Dudarz, wędrowny grajek z lądu, chce grać tam, gdzie śpiewa Melia. Borgar mówi: jedna scena. A Jędrek zna wojskową wersję „Pieśni o Kruczych Skałach”.
+[zadania.D41.offer.say]
+Lutnia? Lutnia to dla panienek. Dudy budzą umarłych i dzieci sąsiada.
+Borgar mówi: jedna scena. A na scenie wasza Melia.
+Pogadaj z nią, chłopcze. Ja nie umiem rozmawiać - umiem grać.
+
+zadania.D41.offer.yes = Zobaczę, co da się zrobić.
+zadania.D41.offer.no = To nie moja sprawa.
+[zadania.D41.offer.accept]
+Mądry chłopak. Grałem w obozach przed bitwą - wiem, jak się czeka. Ale nie lubię.
+
+[zadania.D41.offer.decline]
+Nie twoja, nie moja. A scena dalej jedna.
+
+zadania.D41.steps.0.text = Jędrek chce grać na scenie Melii. Porozmawiaj z Jędrkiem i zdecyduj, co z tym zrobić.
+zadania.D41.steps.1.text = Porozmawiaj z Melią w tawernie (18-21) - niech się zgodzi dzielić scenę.
+zadania.D41.steps.2.text = Wróć do Jędrka po występie Melii (21-24).
+zadania.D41.steps.3.text = Jędrek zna zwrotkę „Pieśni o Kruczych Skałach” z lądu. Śpiewa za dzban miodu pitnego (albo za darmo, jeśli wygrał zawody).
+zadania.D41.fail.text = Jędrek odpłynął z dudami pod pachą.
+
+[d41.scena.wstep]
+Jedna scena, chłopcze. Ja albo ona. Co robimy?
+
+d41.scena.pogodz = Pogodzę was - zagracie razem.
+d41.scena.zawody = Niech goście zdecydują: zawody! (zakład 10 G)
+d41.scena.odpraw = Tu śpiewa Melia. Graj gdzie indziej.
+d41.scena.pozniej = Pomyślę.
+[d41.scena.pogodzTak]
+> Pogadam z Melią. Zagracie razem - ona śpiewa, ty grasz.
+Razem? Z karczemną śpiewaczką? (śmieje się) Spróbuj. Jak ci się uda, zagram ci to, czego nie grałem od wojny.
+
+[d41.scena.odprawTak]
+> Tu śpiewa Melia. Graj na rynku.
+(Jędrek wzrusza ramionami.) Na rynku. Za grosze. Dobrze, dobrze. Dudy nie płaczą.
+
+[d41.notatka.odpraw]
+Jędrek Dudarz
+Odprawiłem grajka z lądu - scena została Melii. Jędrek gra teraz na rynku za grosze. Goście w karczmie gadali o tym jeszcze długo.
+
+[d41.zawody.wstep]
+> Niech goście zdecydują. Kto dostanie więcej oklasków, ten gra.
+Zawody! To rozumiem. Stawiasz na kogoś, chłopcze? Dziesięć groszy.
+
+d41.zawody.melia = Stawiam na Melię.
+d41.zawody.jedrek = Stawiam na Jędrka.
+[d41.zawody.wygrywaMelia]
+> (Melia śpiewa o Kruczych Skałach. Sala milknie, ktoś przy barze ociera oko. Jędrek gra głośno i wesoło - ale oklaski są dla niej.)
+No... no dobrze. Wasza śpiewaczka umie. Przyznaję.
+
+[d41.zawody.wygrywaJedrek]
+> (Jędrek gra tak, że stoły tańczą. Melia śpiewa pięknie, ale sala chce skakać, nie płakać. Oklaski są dla dud.)
+Dudy budzą umarłych! Mówiłem? Mówiłem.
+
+[d41.zawody.zakladTak]
+> (Wygrany zakład - dziesięć groszy więcej w sakiewce.)
+
+[d41.zawody.zakladNie]
+> (Przegrany zakład. Dziesięć groszy mniej.)
+
+[d41.melia]
+> Melio, ten grajek z lądu... chce grać z tobą. Nie zamiast ciebie. Z tobą.
+Z tym od dud? (Melia przewraca oczami, ale się uśmiecha.) Głośny jest. Ale gra czysto, słyszałam przez ścianę.
+Niech przyjdzie po moim występie. Jedną pieśń. Zobaczymy.
+
+[d41.pogodzeni]
+> Melia się zgodziła. Jedna pieśń razem.
+Zgodziła się? (Jędrek bierze dudy pod pachę.) Chłopcze, ty byś wojnę zatrzymał, gdyby cię tam wpuścili.
+Zagram z nią. A potem zagram tobie - coś, czego nie gram każdemu.
+
+[d41.zwrotka.miod]
+> Dzban miodu pitnego. Za zwrotkę z lądu.
+Miód! No to słuchaj, chłopcze. Tego nie śpiewa się w karczmach.
+
+[d41.zwrotka.bezMiodu]
+Za darmo nie śpiewam tej pieśni, chłopcze. Dzban miodu pitnego - i będzie zwrotka, jakiej tu nikt nie zna.
+
+[d41.spiew.zwrotka]
+Grałem w obozie pod Brzozową Wolą. Ludzie tańczyli, bo rano mieli umierać. Śpiewali to:
+
+[d41.spiew.zLadu]
+> (Tej zwrotki brakowało w pieśni Melii. Wojskowa, z lądu - ale ta sama pieśń.)
+
+[d41.spiew.wojskowa]
+Twoja Melia śpiewa o Kruczych Skałach? U nas w wojsku śpiewali to samo. Tylko słowa brzydsze.
+> (Jędrek śpiewa wojskową wersję. Te same zwrotki co u Melii - tylko na końcu ktoś „z okiem na sztandarze” szuka serca pod skałą.)
+Śpiewali to żołnierze z czarnymi oczami na tarczach. Nie pytaj mnie, skąd ją znali. Nie wiem. Nie chcę wiedzieć.
+
+[d41.notatka.wojskowa]
+Wojskowa pieśń
+Jędrek zaśpiewał wojskową wersję „Pieśni o Kruczych Skałach”. Śpiewali ją żołnierze z czarnymi oczami na tarczach - Czarne Oczy znają pieśń i wiedzą, czego szukać pod skałą.
+
+d41.natchniony = Natchniony ({h} godz.)
+
+# ======================================================================== D42 „Zboże w suszę” (Hanka; Zenon Sita)
+zadania.D42.title = Zboże w suszę
+zadania.D42.where = Rynek, tawerna (Jadalnia prywatna), garnizon, przystań
+zadania.D42.when = pobyt Zenona Sity (prom dnia 10)
+zadania.D42.desc = Hanka mówi, że kupiec zbożowy z lądu, Zenon Sita, skupuje zboże od biednych z Podgrodzia po groszu, a mąka drożeje. Komu on to sprzedaje?
+[zadania.D42.offer.say]
+Ten gruby z lądu, Sita. Skupuje zboże od biednych z Podgrodzia po groszu, a mnie mąka drożeje.
+Komuś to sprzedaje. Nie mnie.
+Dowiedz się komu, chłopcze. Ja nie mogę zostawić pieca.
+
+zadania.D42.offer.yes = Dowiem się.
+zadania.D42.offer.no = To sprawa sołtysa.
+[zadania.D42.offer.accept]
+Uważaj na niego. Uśmiecha się jak waga - zawsze trochę na swoją korzyść.
+
+[zadania.D42.offer.decline]
+Sołtysa. No tak. Sołtys je mój chleb i milczy.
+
+zadania.D42.steps.0.text = Dowiedz się, komu Zenon sprzedaje zboże ({n}/2 poszlaki): podsłuchaj jego narady w Jadalni prywatnej tawerny (dzień {narada}, 20-22:30, O przy drzwiach), idź za nim o 11 do garnizonu albo zajrzyj do księgi celnika na przystani.
+zadania.D42.steps.1.text = Wiesz, komu Zenon sprzedaje. Wróć do Hanki i zdecydujcie, co dalej (piekarnia, 6-19).
+zadania.D42.steps.2.text = Ujawnij Zenona przed sołtysem (ratusz, 8-19).
+zadania.D42.steps.3.text = Wymuś na Zenonie cztery worki zboża dla obozu pod murem.
+zadania.D42.steps.4.text = Powiedz kwatermistrzowi Kłosowi, że wiesz o jego umowie z Zenonem (garnizon, 7-22).
+zadania.D42.fail.text = Zenon odpłynął ze swoimi workami.
+
+d42.sladNapis = Zboże w suszę: nowa poszlaka
+d42.sladPod = poszlaki {n}/2
+[d42.sledzenie.mysl]
+> (Zenon przy wadze kwatermistrza. Kłos wpisuje worki do księgi, Zenon liczy pieczęcie z feniksem. Wojsko kupuje od niego zboże.)
+
+[d42.notatka.slad.narada]
+Narada w jadalni
+Zenon Sita i kwatermistrz Kłos za drzwiami Jadalni prywatnej: cztery wozy zboża dla chorągwi królewskiej, piąty dla kantoru Veya. Woda w beczkach tylko dla wojska.
+
+[d42.notatka.slad.sledzenie]
+Zenon w garnizonie
+Szedłem za Zenonem do garnizonu. Przy wadze Kłosa sprzedaje zboże wojsku - za pieczęcie z feniksem.
+
+[d42.notatka.slad.celnik]
+Księga celna
+W księdze celnika Sambora: beczki i worki Zenona Sity z pieczęcią chorągwi królewskiej. Cztery wozy dla wojska, piąty - „do kantoru Vey”.
+
+[d42.celnik.pyta]
+Księga celna? Za pięć groszy mogę ją położyć na stole i odwrócić się do morza.
+Co kto w niej przeczyta, to jego sprawa.
+
+d42.celnik.plac = Daj 5 G i zajrzyj do księgi.
+d42.celnik.nie = Nie trzeba.
+[d42.celnik.ksiega]
+> (Zenon Sita: beczki z wodą i worki zboża, pieczęć chorągwi królewskiej. Cztery wozy dla wojska. Piąty: „do kantoru Vey”.)
+
+[d42.wybor.hanka]
+I co? Komu ten łajdak sprzedaje moje zboże?
+> Wojsku. Cztery wozy dla chorągwi królewskiej, piąty dla kantoru Baltazara. A woda w beczkach - tylko dla żołnierzy.
+Wojsku... (Hanka ściska fartuch) No to co teraz, chłopcze?
+
+d42.wybor.a = Powiem o tym sołtysowi - przy ludziach.
+d42.wybor.b = Sam mu sprzedam swoje zboże. Płaci lepiej niż skup.
+d42.wybor.c = Wymuszę na nim cztery worki dla obozu pod murem.
+d42.wybor.d = Powiem kwatermistrzowi, że wiem. Niech się boi.
+d42.wybor.pozniej = Jeszcze pomyślę.
+[d42.wybor.aTak]
+> Powiem sołtysowi. Przy wszystkich.
+Dobrze. Niech ludzie wiedzą, kto im chleb drożej sprzedaje.
+
+[d42.wybor.bTak]
+> Płaci lepiej niż skup. Sprzedam mu swój jęczmień.
+(Hanka patrzy na ciebie długo.) Ty też? No tak. Susza to cena, prawda? Idź już.
+
+[d42.wybor.cTak]
+> Wiem o jego umowie. Odda cztery worki dla ludzi spod muru - albo rotmistrz się dowie.
+Ludzie spod muru... Oni naprawdę głodują. Idź, chłopcze. Tylko uważaj.
+
+[d42.wybor.dTak]
+> Powiem Kłosowi, że wiem. Kłos zamilknie, a skup zapłaci uczciwiej.
+Kłos... Tak. Taki boi się bardziej rotmistrza niż Boga. Może być.
+
+[d42.notatka.b]
+Zboże dla Zenona
+Sprzedaję jęczmień Zenonowi Sicie - lepiej płaci niż skup garnizonu (najwyżej dwadzieścia worków). Hanka jest zawiedziona.
+
+[d42.zebranie]
+> Panie sołtysie, Zenon Sita sprzedaje zboże z Podgrodzia wojsku. Cztery wozy. Piąty Baltazarowi.
+(Sołtys czerwienieje.) Przy mnie, w moim ratuszu, skupuje od moich ludzi i wiezie wojsku? Najbliższym promem wraca na ląd i nie wraca tu wcale!
+Hanka mówiła, że to ty. Masz - od niej. Dziesięć groszy i bochen. I ode mnie dobre słowo.
+
+[d42.notatka.a]
+Zenon odpływa
+Ujawniłem Zenona Sitę przed sołtysem. Odpływa najbliższym promem i więcej nie wróci. Hanka dała mi dziesięć groszy i bochen.
+
+[d42.worki]
+> Wiem o umowie z chorągwią. Cztery worki dla obozu pod murem - i nikt się nie dowie.
+(Zenon uśmiecha się jak waga.) Szantaż, młodzieńcze? Cztery worki... Niech będzie. Woda zostaje dla wojska - tego nie dotykaj.
+
+[d42.notatka.c]
+Cztery worki dla obozu
+Zenon Sita dał cztery worki zboża dla ludzi spod muru. Obóz pamięta, kto im pomógł.
+
+[d42.klos]
+> Panie kwatermistrzu, wiem o waszej umowie z Zenonem Sitą. Cztery wozy, piąty dla kantoru.
+(Kłos blednie, potem czerwienieje.) Ciszej, chłopcze, ciszej! Dobrze... Twoje towary będę brał po lepszej cenie. Jak od przyjaciela. I nikt nic nie mówi.
+
+[d42.notatka.d]
+Kłos milczy
+Kwatermistrz Kłos wie, że znam jego umowę z Zenonem. Skup garnizonu płaci mi odtąd lepiej - „jak od przyjaciela”.
+
+d42.sprzedaj.etykieta = Sprzedaj jęczmień (po {cena} G, jeszcze {zostalo} worków)
+d42.sprzedaj.brak = Nie masz jęczmienia.
+d42.sprzedaj.ok = Kupię twój jęczmień. {n} worków... {zloto} groszy. Dla przyjaciela.
+
+# podsłuch: narada Zenona z Kłosem w Jadalni prywatnej (dzień przyjazdu Zenona + 2, 20-22:30)
+[podsluch.narada]
+Zenon: Cztery wozy, panie kwatermistrzu. Dla {chorągwi królewskiej}, jak w umowie.
+Kłos: A piąty?
+Zenon: Piąty jedzie do {kantoru Vey}. Pan Baltazar płaci z góry.
+Kłos: Rotmistrz nie może wiedzieć. Wpiszę go jako {zepsuty}.
+Zenon: Beczki z wodą tylko dla wojska. Biedota niech pije {kurz}.
+
+# ======================================================================== D43 „Matka szuka syna” (Urszula z Olszynki)
+zadania.D43.title = Matka szuka syna
+zadania.D43.where = Garnizon nad zatoką, przystań, rynek
+zadania.D43.when = pobyt Urszuli
+zadania.D43.desc = Urszula z Olszynki szuka syna, Antka. Szesnaście lat, wyższy od bohatera, pieg na nosie. Na lądzie mówią, że chłopców biorą do wojska królewskiego.
+[zadania.D43.offer.say]
+Antek. Szesnaście lat, wyższy od ciebie, pieg na nosie. Widziałeś?
+Na lądzie mówią, że chłopców biorą do wojska królewskiego. Wsiadłam na prom, zanim zdążyłam się bać.
+Pomożesz mi go szukać, synku? Przepraszam... chłopcze.
+
+zadania.D43.offer.yes = Popytam o Antka.
+zadania.D43.offer.no = Nie wiem, gdzie szukać.
+[zadania.D43.offer.accept]
+Dziękuję. Ja chodzę na molo w każdy dzień promu. Patrzę na twarze. Zawsze chodzę popatrzeć.
+
+[zadania.D43.offer.decline]
+Nikt nie wie. Ale ktoś musi szukać.
+
+zadania.D43.steps.0.text = Rozpytaj o Antka ({n}/2): rotmistrz Bełza (garnizon), werbownik Bęben (garnizon, dzień po fali na rynku), Darin albo Rafał (widzieli ludzi z promu).
+zadania.D43.steps.1.text = Antek jest wśród rekrutów garnizonu (plac ćwiczeń, 7-19). Porozmawiaj z nim.
+zadania.D43.steps.2.text = Rotmistrz Bełza wypisze Antka z wojska - za 40 groszy albo za przysługę (przychylność garnizonu 40+).
+zadania.D43.fail.text = Urszula odpłynęła, nic nie wiedząc o synu.
+
+[d43.rotmistrz]
+> Szukam Antka z Olszynki. Szesnaście lat, pieg na nosie. Matka go szuka.
+Na liście zaginionych go nie ma. Ale ja mam listę zaginionych, nie listę zaciągniętych. Zapytaj Bębna.
+
+[d43.werbownik]
+> Antek z Olszynki. Jest w twojej księdze?
+(Bęben kartkuje księgę poborową.) Olszynka, Olszynka... Jest. „Antoni z Olszynki, zaciężny, wpisany na wyspie”. Pod nazwiskiem Kmiotek. Sam przyszedł, chłopak. Za żołd.
+
+[d43.darin]
+> Darin, widziałeś na promie chłopaka z piegiem na nosie? Szesnaście lat.
+Z piegiem... Był taki. Na drugim promie, jak wysiadaliśmy. Nie płakał, jak inni. Poszedł prosto do bębna werbownika.
+
+[d43.rafal]
+> Rafał, widziałeś na promie chłopaka z piegiem? Szesnaście lat, z Olszynki.
+Widziałem. Wyższy od ciebie, chudy jak tyka. Pytał, gdzie się płaci żołd. Ktoś mu pokazał garnizon.
+
+[d43.notatka.slad.rotmistrz]
+Antek z Olszynki - rotmistrz
+Rotmistrz Bełza: Antka nie ma na liście zaginionych. „Zapytaj Bębna.”
+
+[d43.notatka.slad.werbownik]
+Antek z Olszynki - księga poborowa
+W księdze werbownika: „Antoni z Olszynki, zaciężny, wpisany na wyspie” - pod nazwiskiem Kmiotek. Sam się zaciągnął, za żołd.
+
+[d43.notatka.slad.prom]
+Antek z Olszynki - prom
+Ludzie z promu widzieli chudego chłopaka z piegiem. Pytał o żołd i poszedł do garnizonu.
+
+aktor.antek = Antek
+aktor.zenon = Zenon Sita
+[aktor.antekMowi]
+Kmiotek, panie. Rekrut. Nie mam czasu, musztra.
+
+[aktor.zenonMowi]
+Interesy, młodzieńcze. Kupuję, sprzedaję, ważę. Nic ciekawego.
+
+[d43.antek.wstep]
+> Antek? Antek z Olszynki?
+(Chłopak z piegiem na nosie blednie.) Kmiotek. Nazywam się Kmiotek. Kto pyta?
+> Twoja matka. Jest na wyspie. Przypłynęła cię szukać.
+Mama tu? Zaciągnąłem się, żeby mama miała żołd. Jak mnie zobaczy w tym mundurze, to...
+Nie każ mi do niej iść.
+
+d43.antek.a = Chodź do niej. Choć na chwilę.
+d43.antek.b = Rotmistrz może cię wypisać.
+d43.antek.c = To twój wybór, Antku. Ale powiedz jej sam.
+d43.antek.d = (Nie powiem jej, że cię znalazłem.)
+d43.antek.pozniej = Wrócę.
+[d43.antek.aList]
+> Moja matka też jest daleko. Pisze do mnie. Wiesz, co bym dał, żeby przyszła i stanęła przy bramie?
+
+[d43.antek.aHart]
+> Ona przepłynęła morze, Antku. Ty przejdziesz dwadzieścia kroków do bramy.
+
+[d43.antek.aTak]
+(Antek długo milczy. Potem zdejmuje czapkę rekruta.) Dobrze. Przy bramie. Tylko... ty ją przyprowadź.
+> (Przy bramie garnizonu Urszula nie mówi nic. Trzyma syna za rękę, jakby znowu miał pięć lat.)
+
+[d43.antek.bTak]
+> Pogadam z rotmistrzem. Może cię wypisze.
+Wypisze? Za darmo nikt nikogo nie wypisuje. Ale... jak by się dało... mama by się ucieszyła.
+
+[d43.antek.cTak]
+> To twój wybór, Antku. Ale powiedz jej sam. Ona przyjdzie do bramy.
+(Antek kiwa głową.) Zostaję. Żołd to żołd. Ale powiem jej. Sam.
+> (Przy bramie Urszula błogosławi syna i odchodzi na molo. Nie ogląda się.)
+
+[d43.antek.dTak]
+> (Odchodzisz bez słowa. Antek patrzy za tobą, jakby chciał coś powiedzieć.)
+
+[d43.wykup.pyta]
+Antek z Olszynki? Rekrut Kmiotek.
+Wypiszę go za czterdzieści groszy. Albo za przysługę.
+
+d43.wykup.zloto = Zapłać 40 G.
+d43.wykup.przysluga = Przypomnij rotmistrzowi, co zrobiłeś dla garnizonu.
+d43.wykup.nie = Jeszcze nie.
+[d43.wykup.tak]
+Niech będzie. (Bełza skreśla wpis.) Rekrut Kmiotek nie istnieje. Antek z Olszynki może iść do matki.
+
+[d43.notatka.a]
+Antek i Urszula
+Antek poszedł do matki, do bramy garnizonu. Urszula trzymała go za rękę i nic nie mówiła. Matki przy drogach są do siebie podobne.
+
+[d43.notatka.b]
+Antek wypisany
+Rotmistrz Bełza wypisał Antka z wojska. Urszula zabiera syna do domu, do Olszynki.
+
+[d43.notatka.c]
+Antek zostaje
+Antek został w garnizonie - żołd to żołd. Sam powiedział matce. Urszula pobłogosławiła go przy bramie i odpłynęła.
+
+[d43.notatka.d]
+Przemilczałem
+Znalazłem Antka i nie powiedziałem Urszuli. Odpłynie, nic nie wiedząc. Może tak lepiej. Nie wiem.
+
+# W10: list do mamy przez Tobiasza (po K71) albo Urszulę (w dniu jej odpływu) - bez opłaty i bez celnika (Przystan.odpowiedz)
+list.etykieta = Zabierzesz list do mojej mamy?
+
+# ======================================================================== I2: podsłuch przez ścianę (Podroznicy.podsluch)
+podsluch.glosy = > (Zza ściany dochodzą głosy. Gdyby tak przyłożyć ucho... O twarzą do ściany.)
+podsluch.przyloz = (Przykładasz ucho do ściany.)
+podsluch.drzwi = (Przykładasz ucho do drzwi.)
+podsluch.dymek = (zza ściany) {linia}
+podsluch.niewyraznie = (zza ściany) ... (nie słychać)
+podsluch.ktoTam = (zza ściany) Kto tam?! ... (Milkną.)
+podsluch.chrapie = (Cisza. Ktoś chrapie.)
+podsluch.kartki = (Ktoś przewraca kartki.)
+podsluch.nic = (Nic.)
+podsluch.notatka = Podsłuchane: {co}
+podsluch.niepelna = (Nie wszystko zrozumiałem - część słów zginęła za ścianą.)
