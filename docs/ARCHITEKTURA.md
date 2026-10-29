@@ -186,11 +186,15 @@ Lista gry `js/tawerna_wtyczki.js` (do 2026-10-23 `js/plugins.js`; 82 wtyczek w t
 96  Okolice_Data, Zasoby_Data, Lowy_Data, Ludzie_Data, Zakon_Data ← (2026-10-21/22) nowy teren 21 powiększonych map (docs/rozszerzenia/PLAN.md): dane rdzenia i czterech paczek, nad TownLife (TownLifeExtra, TownQuestsPacks)
 102 Podroznicy_Data ← (2026-10-28) podróżni z promu (docs/PODROZNI.md, rozdz. 18 niżej): obsada, pula, pokoje, plany dnia; mieszkańcy TownLife 3020-3049, wątek „podroznicy” (Watki.js); nad TownLife
 103 SwieteKosci_Data, Dezerter_Data ← (2026-10-29, etap 4 podróżnych) łańcuchy W15 „Święte kości” i W16 „Dezerter” jako wątki silnika (zadania do TownQuestsPacks, stany „swieteKosci” i „dezerter”); pod Podroznicy_Data, nad TownLife
+    Intrygi_Data ← (2026-10-29, etap 3 podróżnych) wątek „intrygi”: zadania D45, D46, K73 i dane mechanizmów intryg; pod Dezerter_Data, nad TownLife
+    Poselstwo_Data, Podroznicy5_Data ← (2026-10-29, etap 5 podróżnych) wątki „poselstwo” (W14) i „podroznicy5” (D44, D47, D48): zadania do TownQuestsPacks, miejsca posła i Ostapa na Map026 (TownLifeData.SPOTS_BY_MAP), gettery `zadania` obsady; pod Dezerter_Data, nad TownLife
 103 W1_Data, W2_Data, W3_Data, W6_Data, W8_Data, Przystan_Data ← (2026-10-29, etap 4 - docs/WATKI_DANE.md 7c) łuki miasteczka jako wątki silnika: zadania W1/W2/W3/W6/W8 (kroki z nazwami) i zadania przystani K47, K48, D20, W10 z rozmowami i stanem „przystan”; TownQuests_Data wkłada je na stare miejsca listy (ARC), kod kroków: haki W1_HAKI... w TownQuests.js, Przystan.js
 110 Rynek_Data, Straz_Data, Oboz_Data, Goscie_Data, W4_Data, W9_Data ← (2026-10-29, etap 5 - docs/WATKI_DANE.md 7d) reszta zadań miasteczka jako wątki silnika: rynek (K1, K5, K9, K13-K17, K20, D3, D16), straż (K37-K39, D11, D14, D17), obóz (K19, K27-K29, D4, D10, D18), stali goście (K22, K33, D13, D6), W4 rozdz. 1-5, W9 rozdz. 6; haki RYNEK_HAKI... w TownQuests.js (obiekt FX pusty)
 130 Podroznicy ← (2026-10-28) silnik podróżnych z promu: planowanie promu, księga pokoi, Renoma karczmy, scena przybycia, rozmowy, F9; pod Kasztelan (czyli pod TownQuests, Przystan, Garnizon, Kantor, Wrak, Act3)
+    Intrygi ← (2026-10-29, etap 3) intrygi na piętrach: drzwi zajętych pokoi, przeszukanie, nocne kroki ze świecą, listy pod drzwiami, D45/D46/K73; furtki TavernLife (addRoomGuard, addRoomPrice, addGatePass, addWake, plan.addInfo) i TavernShift.addTipBonus; zaraz pod Podroznicy_Sprawy
     Podroznicy_Sprawy ← (2026-10-29, etap 2) haki zadań K71, K72, D39-D43 (dane w Podroznicy_Data), podsłuch przez ścianę (Podroznicy.podsluch), Antek i Zenon w garnizonie; zaraz pod Podroznicy
 131 SwieteKosci, Dezerter ← (2026-10-29) silniki łańcuchów W15 / W16: haki danych, sceny (kazanie, bęben, noc pod piątką, przysięga), kurier 3050 i Tymon 3060 (`Tawerna.inject`, właściciel „Lancuchy”), echa w Akcie III (Act3Data.WIEDZA_FRAKCJI, obrońcy); pod Podroznicy
+    Poselstwo, Podroznicy5 ← (2026-10-29, etap 5) silniki W14 (kolacja „w służbie” - TavernLife.addGatePass, narada, Noc Kupały, ślady, list) i spraw D44/D47/D48 (Feliks na korytarzu, podsłuch pokoju 4, burdy Kompanii, siłowanie i kości z Hubertem, bójka - Humans, tuba Teofila); zdarzenia 3070-3089 (`Tawerna.inject`, właściciel „Poselstwo”), echa w Akcie III; pod Dezerter
 135 Okolice, Zasoby, Lowy, Ludzie, Zakon ← silniki pod Orzel_Lot: rdzeń Okolice (miejsca i test kolizji, odkrycia i zakładka dziennika „Okolice”, kompas `Okolice.track`, wiersze F9 `Okolice.f9`, upał/susza, cień słońca) i paczki A woda i zasoby, B zwierzęta i łowy, C ludzie, D tajemnice i zakon
 ```
 
@@ -496,10 +500,11 @@ jeden numer = jeden właściciel na każdej mapie. Nakładanie się zakresów = 
 | 2700–2899 | Zakon (paczka D) | nowy teren | tajemnice i zakon | `Tawerna.inject` |
 | 2900–2949 | TownLife (drugi zakres) | każda | mieszkańcy paczek nowego terenu: A 2900–2904, B 2905–2909, C 2910–2929, D 2930–2939, rezerwa 2940–2949 | `Tawerna.inject` ✓ |
 | 3000–3001 | Woz | 8, 111, 3, 21, 125 | wóz Wojciecha (3000) i Wojciech poza miasteczkiem (3001) na postojach szybkiej podróży (docs/ROZMOWY.md, tests/mapa_woz_test.js); ukryte, gdy wóz jest gdzie indziej | `Tawerna.inject` ✓ |
-| 3002–3019 | Podroznicy | 125 (też 1, 25, 26, 8, 162 w etapach 2-6) | podróżni z promu: aktorzy scen na przystani 3002–3008 (przybyli 9-11, odpływający 14-15, kto patrzy na molo); Map162 (etap 2, `Podroznicy_Sprawy.js`): Zenon przy wadze 3008 (D42), Antek wśród rekrutów 3009 (D43); rekwizyty 3010–3017 (trap...), zapas 3018–3019 (docs/PODROZNI.md 6.6); wstawiane z `Podroznicy_Data.js` (jego `T.inject` stoi przed TownLife - czyta znaczniki sali Map001 przed mieszkańcami) | `Tawerna.inject` ✓ |
+| 3002–3019 | Podroznicy | 125 (też 1, 25, 26, 8, 162 w etapach 2-6) | podróżni z promu: aktorzy scen na przystani 3002–3008 (przybyli 9-11, odpływający 14-15, kto patrzy na molo); Map162 (etap 2, `Podroznicy_Sprawy.js`): Zenon przy wadze 3008 (D42), Antek wśród rekrutów 3009 (D43); etap 3 (`Intrygi.js`, przez `Podroznicy.dodajWstaw`): nocny piechur ze świecą 3002 (Map025), sadza 3011 (Map025), list pod drzwiami 3014 (Map025/026), worek flisaka 3012 (Map125), sznur z ołowianką 3017 (Map009); rekwizyty 3010–3017 (trap...), zapas 3018–3019 (docs/PODROZNI.md 6.6); wstawiane z `Podroznicy_Data.js` (jego `T.inject` stoi przed TownLife - czyta znaczniki sali Map001 przed mieszkańcami) | `Tawerna.inject` ✓ |
 | 3020–3049 | TownLife (czwarty zakres) | każda | podróżni jako mieszkańcy: obsada 3020–3033, Wolna Kompania 3034–3037, miejsca puli 3038–3041, Ksenia 3042, „gość spod trójki” 3043, zapas 3044–3049 (`Podroznicy_Data.js`, `TownLifeData.EXTRA_RANGES`) | `Tawerna.inject` ✓ |
 | 3050–3069 | Lancuchy (łańcuchy podróżnych) | 25 (W15); 108, 19, 3, 162, 8, 111 (W16) | W15 „Święte kości”: kurier Baltazara pod pokojem 12 w noc sprzedaży 3050 (`SwieteKosci.js`), zapas 3051–3059; W16 „Dezerter”: Tymon w kryjówce (dzwonnica, chata dziadka, Kruczy Jar), w garnizonie, w obozie 3060 (`Dezerter.js`), zapas 3061–3069 (docs/PODROZNI.md 4.2, 4.3) | `Tawerna.inject` ✓ |
-| 3070+ | *wolne* | | | |
+| 3070–3089 | Poselstwo (etap 5 podróżnych) | 26, 25 (W14); 25 (D44) | W14 „Poselstwo” (`Poselstwo.js`): Lord 3070 i Feliks 3071 na naradzie w Wielkim salonie, Albin pod Apartamentem Złotym w Noc Kupały 3072 (Map026), wosk na galerii 3073 i ślady przy złotej kracie 3074 (Map025), zapas 3075–3079; D44 „Podatek wojenny” (`Podroznicy5.js`): Feliks na korytarzu gości przed czwórką 3080 (Map025), zapas 3081–3089 (docs/PODROZNI.md 4.1, 2.7) | `Tawerna.inject` ✓ |
+| 3090+ | *wolne* | | | |
 
 ```js
 Tawerna.inject(19, { ids: [980, 998], owner: "HomeDecor",
@@ -1376,3 +1381,11 @@ Projekt i stan budowy: **`docs/PODROZNI.md`** (rozdz. 11). Etap 1 = rdzeń bez z
   `PodroznicyData.OBSADA` (raz, i tylko póki sprawa trwa - ich późniejszy odpływ to zakończenie łańcucha „bez bohatera”). Akt III: wspólna
   lista `Act3Data.WIEDZA_FRAKCJI` (najwyżej jeden zwiadowca więcej w fali 3, nigdy obok zwiadowcy W9/W7), obrońcy „tymon” i „tymon_oboz”,
   żołnierze garnizonu od przychylności 60 przy `tymonGarnizon`. Test: `tests/lancuchy_test.js` (port 9791).
+- **Etap 5** (2026-10-29): `Poselstwo_Data.js` + `Poselstwo.js` (`poselstwo.txt`) - łańcuch W14 (Albin, poseł z Ostapem w Apartamencie
+  Złotym - przyjeżdżają tylko, gdy jest `TavernLife.addRoomGuard`; kolacja u Borgara 20:00-21:00 = przepustka „w służbie” przez
+  `TavernLife.addGatePass`; narada przez ścianę Jadalni; Noc Kupały; ślady i molo; list); `Podroznicy5_Data.js` + `Podroznicy5.js`
+  (`podroznicy5.txt`) - D44 „Podatek wojenny”, D47 „Wolna Kompania” (Hubert jako rywal kości tylko tej sprawy: dopisany w biegu do
+  `TavernDice_parts.data.OPPONENTS`, bez `OPP_ORDER`), D48 „Mapa Kruczej Wyspy”. Mechanizmy etapów 2-3 (podsłuch, nocne kroki, listy,
+  przeszukanie) rejestrowane, gdy są. Akt III: `WIEDZA_FRAKCJI` (+`pielgrzymDonosi`, `mapaTwierdzy`), nowe wspólne listy
+  `Act3Data.WIEDZA_FALA2` (łucznik więcej w fali 2) i `WIEDZA_FALA4` (najemnik więcej w fali 4), obrońca „kompania” (2, po dzwonie),
+  żołnierze garnizonu przy `poselWdzieczny` od przychylności 70. Test: `tests/poselstwo_test.js` (port 9791).

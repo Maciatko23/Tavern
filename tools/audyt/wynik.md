@@ -1,8 +1,8 @@
 # Przegląd statyczny zadań (tools/audyt/przejscie.js)
 
-Stan: 2026-10-29 13:00. Zadań 115, mieszkańców 84, map 126.
+Stan: 2026-10-29 17:06. Zadań 122, mieszkańców 84, map 126.
 
-Problemy: do sprawdzenia 1, uciążliwość 4, info 60
+Problemy: do sprawdzenia 1, uciążliwość 4, info 74
 
 | waga | zadanie | krok | co |
 |---|---|---|---|
@@ -32,6 +32,10 @@ Problemy: do sprawdzenia 1, uciążliwość 4, info 60
 | info | D41 | krok 2 d41Jedrek | Jędrek Dudarz bywa tylko, gdy „warunek z kodu” |
 | info | D41 | krok 3 d41Zwrotka | Jędrek Dudarz bywa tylko, gdy „warunek z kodu” |
 | info | D42 | krok 3 d42Worki | Zenon Sita bywa tylko, gdy „warunek z kodu” |
+| info | D44 | krok 1 (rozdz. 2) d44Raport | Erazm Łaska bywa tylko, gdy „warunek z kodu” |
+| info | D46 | krok 0 d46Sledztwo | Gaspar Lis bywa tylko, gdy „warunek z kodu” |
+| info | D47 | krok 0 (rozdz. 1) d47Kompania | Hubert Szary bywa tylko, gdy „warunek z kodu” |
+| info | D48 | krok 0 (rozdz. 1) d48Mapa | Teofil Cyrkiel bywa tylko, gdy „warunek z kodu” |
 | info | K19 | krok 0 k19Count | Ludmiła bywa tylko, gdy „w6Obecni” |
 | info | K19 | krok 0 k19Count | Ela bywa tylko, gdy „w6Obecni” |
 | info | K27 | krok 0 k27Melia | Ela bywa tylko, gdy „w6Obecni” |
@@ -43,19 +47,29 @@ Problemy: do sprawdzenia 1, uciążliwość 4, info 60
 | info | mieszkaniec ela | inside pod_murem | Ela w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: ela_wnetrze) |
 | info | mieszkaniec feliks | inside brama_wsch | Feliks w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: feliks_wnetrze) |
 | info | mieszkaniec gracz | inside brama_pld | Lucjan Kość w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: gracz_wnetrze) |
-| info | mieszkaniec gwardzista | inside podr_pokoj | Ostap w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: gwardzista_wnetrze) |
-| info | mieszkaniec gwardzista | inside podr_sala | Ostap w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: gwardzista_wnetrze) |
 | info | mieszkaniec kamerdyner | inside brama_wsch | Teodor w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: kamerdyner_wnetrze) |
 | info | mieszkaniec ludmila | inside pod_murem | Ludmiła w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: ludmila_wnetrze) |
 | info | mieszkaniec marek | inside pod_murem | Marek w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: marek_wnetrze) |
-| info | mieszkaniec posel | inside podr_pokoj | Adam Wierzbięta w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: posel_wnetrze) |
-| info | mieszkaniec posel | inside podr_sala | Adam Wierzbięta w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: posel_wnetrze) |
 | info | mieszkaniec rafal | inside stodola | Rafał w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: rafal_wnetrze) |
 | info | mieszkaniec trojka | inside podr_pokoj | Gość spod trójki w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: trojka_wnetrze) |
 | info | mieszkaniec trojka | inside podr_sala | Gość spod trójki w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: trojka_wnetrze) |
 | info | mieszkaniec woznica | inside brama_pld | Wojciech w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: woznica_wnetrze) |
 | info | mieszkaniec zebrak | inside zebrak_noc | Stary Gaweł w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: zebrak_wnetrze) |
 | info | mieszkaniec zlodziej | inside pod_murem | Szymek w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: zlodziej_wnetrze) |
+| info | W14 | krok 0 (rozdz. 1) w14Patnik | Adam Wierzbięta bywa tylko, gdy „warunek z kodu” |
+| info | W14 | krok 0 (rozdz. 1) w14Patnik | Albin bywa tylko, gdy „warunek z kodu” |
+| info | W14 | krok 1 (rozdz. 2) w14Posel | Adam Wierzbięta bywa tylko, gdy „warunek z kodu” |
+| info | W14 | krok 1 (rozdz. 2) w14Posel | Albin bywa tylko, gdy „warunek z kodu” |
+| info | W14 | krok 2 (rozdz. 3) w14Narada | Adam Wierzbięta bywa tylko, gdy „warunek z kodu” |
+| info | W14 | krok 2 (rozdz. 3) w14Narada | Albin bywa tylko, gdy „warunek z kodu” |
+| info | W14 | krok 3 (rozdz. 4) w14Kradziez | Adam Wierzbięta bywa tylko, gdy „warunek z kodu” |
+| info | W14 | krok 3 (rozdz. 4) w14Kradziez | Albin bywa tylko, gdy „warunek z kodu” |
+| info | W14 | krok 4 (rozdz. 4) w14Sledztwo | Albin bywa tylko, gdy „warunek z kodu” |
+| info | W14 | krok 4 (rozdz. 4) w14Sledztwo | Albin bywa tylko, gdy „warunek z kodu” |
+| info | W14 | krok 4 (rozdz. 4) w14Sledztwo | Albin bywa tylko, gdy „warunek z kodu” |
+| info | W14 | krok 5 (rozdz. 5) w14List | Adam Wierzbięta bywa tylko, gdy „warunek z kodu” |
+| info | W14 | krok 6 (rozdz. 5) w14Spokoj | Adam Wierzbięta bywa tylko, gdy „warunek z kodu” |
+| info | W14 | krok 6 (rozdz. 5) w14Spokoj | Adam Wierzbięta bywa tylko, gdy „warunek z kodu” |
 | info | W15 | krok 2 (rozdz. 2) w15Augustyn | brat Augustyn bywa tylko, gdy „warunek z kodu” |
 | info | W15 | krok 4 (rozdz. 3) w15Skrzynka | Gaspar Lis bywa tylko, gdy „warunek z kodu” |
 | info | W15 | krok 5 (rozdz. 4) w15Komu | brat Augustyn bywa tylko, gdy „warunek z kodu” |
@@ -190,6 +204,13 @@ Problemy: do sprawdzenia 1, uciążliwość 4, info 60
 | D43 | D | Matka szuka syna | urszula | 3 | 0 | 1 |
 | W15 | W | Święte kości | - | 7 | 0 | 4 |
 | W16 | W | Dezerter | - | 4 | 0 | 12 |
+| W14 | W | Poselstwo | - | 7 | 0 | 14 |
+| D44 | D | Podatek wojenny | poborca | 2 | 0 | 1 |
+| D47 | D | Wolna Kompania | - | 1 | 0 | 1 |
+| D48 | D | Mapa Kruczej Wyspy | kartograf | 1 | 0 | 1 |
+| D45 | D | Gość spod trójki | - | 2 | 0 | 0 |
+| D46 | D | Skradziona szkatułka | - | 2 | 0 | 1 |
+| K73 | K | Nocne kroki | - | 1 | 0 | 0 |
 | D21 | D | Spalona zagroda | - | 6 | 0 | 1 |
 
 ## Mieszkańcy (osiągalność w dobie)
@@ -274,8 +295,8 @@ Problemy: do sprawdzenia 1, uciążliwość 4, info 60
 | kompania_2 | Jasiek Brzytwa | 8 | 100 |  |
 | kompania_3 | Kazik Kołek | 8 | 100 |  |
 | kompania_4 | Ruda Hela | 8 | 100 |  |
-| posel | Adam Wierzbięta | 8 | 0 | w domu bez wnętrza (brak znacznika Miejsce: posel_wnetrze) |
-| gwardzista | Ostap | 8 | 0 | w domu bez wnętrza (brak znacznika Miejsce: gwardzista_wnetrze) |
+| posel | Adam Wierzbięta | 8 | 100 |  |
+| gwardzista | Ostap | 8 | 100 |  |
 | pula_1 |  | 8 | 0 | poza mapą (podr_droga) |
 | pula_2 |  | 8 | 0 | poza mapą (podr_droga) |
 | pula_3 |  | 8 | 0 | poza mapą (podr_droga) |

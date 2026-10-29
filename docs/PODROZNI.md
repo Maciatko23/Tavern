@@ -2,7 +2,7 @@
 
 Stan: 2026-10-29. **Projekt zatwierdzony przez gracza 2026-10-28 (decyzje: rozdz. 10). Zbudowane: etap 0 (poprawki W6), etap 1 (rdzeń
 systemu), etap 2 (sprawy pierwszej szóstki, podsłuch I2) i etap 4 (łańcuchy W15 i W16) - opis budowy, jak to zobaczyć i co dalej:
-rozdz. 11.** Etapy 3 i 5-8 czekają (3 - na furtki refaktoru tawerny).
+rozdz. 11.** Etap 3 (intrygi, furtki TavernLife) zbudowany 29.10 po południu (rozdz. 11.9); etap 5 w budowie; etapy 6-8 czekają.
 Gracz zatwierdził pomysł w całości (cztery części): podróżni z promu jako stały system, podróżni z własnymi zadaniami, intrygi na
 piętrach tawerny, łańcuchy przez kilka promów. Do tego poprawki niespójności W6 i (dopisek gracza) sceny i historyjki.
 
@@ -1243,7 +1243,7 @@ wczytują. Na grafikę etap nie czeka - zastępcze arkusze do czasu PixelLab.
 | 0 ✓ | **zrobione 2026-10-29** (rozdz. 11.1): decyzje gracza (rozdz. 10); poprawki W6 (fale 10/25/37/52, Ludmiła i Ela od dnia 10, K5/K27/K28, teksty Darina i Szymka) + testy W6 | - | 0,5 | 0 |
 | 1 ✓ | **zrobione 2026-10-29** (rozdz. 11.2) - **rdzeń systemu:** `Podroznicy.js` + `_Data` + `podroznicy.txt`; planowanie promu, pula (4 ciała zastępcze), czwarty zakres TownLife, plany dnia, księga (pokoje 4-24), Renoma, odpływ i powroty, zapis, F9, scena przybycia na przystani, „Księga gości” u Borgara; test jednostkowy + szkielet głównego | - | 2 | 84 (pula) |
 | 2 ✓ | **zrobione 2026-10-29** (rozdz. 11.6) - **pierwsza szóstka:** Tobiasz (K71/K72), Konstanty (D39), Teofil (D40, wizyta 1), Zenon (D42), Urszula (D43), Jędrek (D41); podsłuch I2; popiersia (PixelLab - osobny pomocnik, rozdz. 11.8) | 1 | 2 | 120 (+12 pozy) |
-| 3 | **intrygi:** furtki TavernLife (od refaktoru tawerny), drzwi zajętych pokoi, przeszukanie, nocne kroki I4, listy pod drzwiami I5, szkatułka I3 (3 warianty), trójka I1 | 1, TavernLife | 1,5 | ok. 15 (rekwizyty) |
+| 3 ✓ | **zrobione 2026-10-29** (rozdz. 11.9) - **intrygi:** furtki TavernLife (od refaktoru tawerny), drzwi zajętych pokoi, przeszukanie, nocne kroki I4, listy pod drzwiami I5, szkatułka I3 (3 warianty), trójka I1 | 1, TavernLife | 1,5 | ok. 15 (rekwizyty) |
 | 4 ✓ | **zrobione 2026-10-29** (rozdz. 11.7, bez kroków etapu 3) - **W15 „Święte kości”** (Gaspar, Augustyn) i **W16 „Dezerter”** (Tymon, Szczerba) + flagi Aktu III | 2, 3 | 2 | 80 (+12 pozy) |
 | 5 | **W14 „Poselstwo”** (Albin, poseł, Ostap; piętro II, przepustka „w służbie”), **D44** (Erazm), **D47** (Kompania), Teofil - wizyta 2 | 3 | 1,5 | 80 (+10 pozy) |
 | 6 | **sceny na mapie** - dopracowanie wszystkich z tabeli 8.1 (kamera, emotki, światła, dźwięki) | 2-5 | 1 | 15 / 30 (rekwizyty) |
@@ -1451,9 +1451,9 @@ Ludzie z puli siadają na pierwszym wolnym `podrozny_N`. Na Map025 można przesu
   „chorągwi brzozowskiej” (decyzja 4) tylko przy zaufaniu.
 - **Czeka na etap 3** (furtki TavernLife): `SwieteKosci.przeszukanie()` (skrzynka w pokoju 12 pod nieobecność Gaspara),
   `Dezerter.kuchnia({ nakarmil })` (nocne kroki do kuchni), `Dezerter.list(kto)` (listy pod drzwiami).
-- **Pytania pomocnika do gracza** (przyjęte zastępczo, do potwierdzenia): 1) działka 30 G w W15 daje też `kamienBaltazar`? (tak);
-  2) W15 bez bohatera - zadanie przegrane, a W16 „nic nie zrobił” - zrobione z Renomą -2? (tak); 3) Tymon jako trzeci obrońca w Akcie III
-  czy tylko próg 60? (próg 60 + Tymon z żołnierzami); 4) kroniki W2 oddane Augustynowi znikają z W8 i z karty 1 Kleofasa? (tak).
+- **Odpowiedzi - ZATWIERDZONE przez gracza 2026-10-29:** 1) działka 30 G w W15 daje też `kamienBaltazar` - tak; 2) W15 bez bohatera -
+  zadanie przegrane, a W16 „nic nie zrobił” - zrobione z Renomą -2 - tak; 3) Tymon w Akcie III tylko przez próg przychylności 60, razem
+  z żołnierzami (bez osobnego miejsca obrońcy) - tak; 4) kroniki W2 oddane Augustynowi znikają z W8 i z karty 1 Kleofasa - tak.
 
 ### 11.8 Grafika PixelLab (2026-10-29, osobny pomocnik)
 
@@ -1467,3 +1467,78 @@ Ludzie z puli siadają na pierwszym wolnym `podrozny_N`. Na Map025 można przesu
 - **Na zastępczych arkuszach zostali:** Erazm (Poborca), Albin (Pielgrzym), poseł, gwardzista, Ksenia, „trójka”, Kompania 1-4 (etapy 3 i 5).
   Antek (D43) ma arkusz żołnierza garnizonu i rozmawia bez popiersia (popiersie żołnierzy to dorosły mężczyzna).
 - **Do obejrzenia:** `docs/postacie/lineup_podrozni_2026-10-29.png`, `docs/popiersia/zgodnosc_podrozni.png`, `docs/postacie/pula_warianty.png`.
+
+### 11.9 Etap 3 - intrygi na piętrach (zbudowane 2026-10-29)
+
+- **Pliki:** `js/plugins/Intrygi_Data.js` (lista wtyczek: pod `Dezerter_Data`, nad TownLife i TownQuests_Data; wątek „intrygi”: zadania
+  D45, D46, K73, dane mechanizmów), `js/plugins/Intrygi.js` (pod `Podroznicy_Sprawy`), `js/teksty/intrygi.txt` (155 kluczy), test
+  `tests/intrygi_test.js` (port 9763, 16 sprawdzeń). Kopie zmienianych plików: `backup_art_2026-10-28/podroznicy/etap3/`.
+- **Furtki TavernLife (rozdz. 6.4)** - małe dopiski w cudzych plikach:
+  - `TavernLife.addRoomGuard(fn(room) -> { kto, do, napis } | null)` - pokój bohatera zajęty: Borgar nie wynajmuje (popup nad bohaterem
+    „Pokój nr 3: zajęte do dnia 49.”), wiersz karty pokoi przygaszony z tym samym napisem; Intrygi zgłasza pokoje 3 i Złoty z księgi
+    Podroznicy - od teraz przypływają też „trójka” (D45) i poseł z gwardzistą (W14).
+  - `TavernLife.addRoomPrice(fn(room, cena) -> cena)` - Renoma 75+: pokoje bohatera 20% taniej; 90+: Komnata z kominkiem raz w tygodniu
+    za darmo.
+  - `TavernLife.addGatePass(fn() -> bool)` - złota krata piętra II otwarta, póki przepustka trwa (W14: kolacja „w służbie” - etap 5).
+  - `TavernLife.addWake(fn(room) -> { hour, kto } | null)` - sen w wynajętym łóżku przerwany o tej godzinie; szyna `tavernWake`;
+    `TavernLife.sleep(room)` śpi dalej do rana.
+  - `TavernLife.plan.addInfo(fn(piętro, klucz) -> linie)` - na planie karczmy przy pokoju: „Tobiasz Goniec - do dnia 7”.
+  - `TavernShift.addTipBonus(fn() -> G)` - napiwki na zmianie u Borgara +1 / +2 / +3 G przy Renomie 40 / 60 / 80.
+  - `RoomLighting.js`: `<LightFollow>` - światło idzie ze swoim zdarzeniem i gaśnie, gdy zdarzenie jest ukryte (świeca nocnego piechura).
+- **Drzwi zajętych pokoi 4-24** (Map025, zdarzenia „Drzwi -> Pokój N” / „Wejście -> Pokój N” - mapa bez zmian, `Tawerna.onEventList`
+  „closed”): gdy gość mieszka - „Zamknięte. Ktoś tu mieszka.”, „Zapukaj” (gość w środku odpowiada przez drzwi) / „Odejdź”; otwarte, gdy
+  gościa nie ma, a pokojówka sprząta (9-11) albo bohater ma klucz Borgara (opcja u Borgara przy Renomie 50+, na godzinę, tylko gdy
+  jakaś sprawa chce przeszukania).
+- **Przeszukanie** (`Podroznicy.przeszukanie.dodaj`): kufer / torba gościa w jego pokoju (zdarzenia mapy „Kufer podróżny”, „Torba
+  podróżna”) - „Przeszukać cudze rzeczy?”; gość w środku albo wraca w ciągu pół godziny (plan dnia) - przyłapany: Renoma -3 i gość nie
+  rozmawia z bohaterem do końca pobytu. Pokój szukania idzie za gościem z księgi (gdy jego stały był zajęty). Zarejestrowane: W15 -
+  skrzynka Gaspara (`SwieteKosci.przeszukanie()`: kamień i spis bez konfrontacji), D42 - umowa w kufrze Zenona (trzecia poszlaka, już
+  bez księgi celnika), D46 - pokój Kseni (poszlaka wg wariantu).
+- **I4 nocne kroki** (`Podroznicy.kroki.dodaj`): piechur ze świecą (zdarzenie 3002 na Map025, `<LightFollow>`) idzie korytarzem do schodów.
+  Bohater śpiący w wynajętym pokoju (1, 2, 3, Komnata) budzi się o godzinie piechura: „Kroki na korytarzu...” - „Wstań po cichu” / „Śpij
+  dalej”; bohater na piętrze o tej porze - piechur rusza sam. Piechur czeka, aż bohater wyjdzie na korytarz; w kręgu jego świecy (3 pola,
+  skradanie 1,5) widzi bohatera - wymówka, wraca do pokoju; dalej niż 9 pól na końcu - zgubiony. Najwyżej jeden na noc. Pierwszy raz
+  zawsze Ozzy-lunatyk (K73 „Nocne kroki” - 40 XP; brakująca zwrotka W3 „bełkot” z jego śpiewu przez sen); Tymon do kuchni po chleb (W16 -
+  `Dezerter.kuchnia({ nakarmil })`, z bochenem w torbie wybór „Zostaw mu bochen”). Szyna `nocneKroki { id, ok, jak }`.
+- **I5 listy pod drzwiami** (`Podroznicy.listy.dodaj`): rano (6-10) po nocy w wynajętym pokoju list przy drzwiach (rekwizyt 3014,
+  `!$Podr_List`; Złoty - przy łóżku), O - czytanie, notatka. Zarejestrowane: Tymon i Szczerba (W16 - `Dezerter.list`), Urszula po D43
+  (podziękowanie). Szyna `listPodDrzwiami { id }`.
+- **D45 „Gość spod trójki” (I1):** „trójka” (obsada, pokój 3) - zadanie rusza samo w tawernie; poszlaki 3 z 5: sadza pod drzwiami trójki
+  rano (rekwizyt 3011), sznur z ołowianką w piwnicy nad beczkami (Map009, 3017), liczby zza ściany z pokoju 1 (1-3 w nocy, podsłuch
+  I2), dziurka od klucza (drzwi trójki nocą przy skradaniu), Eryk Sowa (gdy sojusznik W12). Rozwiązania: a) Borgar wyważa drzwi (opcja u
+  Borgara po 3 poszlakach: notes, `pomiaryPrzejete`, Renoma +6, 20 G, gość ucieka oknem), b) kapral Wit w dniu jego odpływu (areszt na
+  molo, przychylność +5, Renoma +3), c) notes zabrany o świcie (4-5, skradanie), d) nic - odpływa z pomiarami: `pomiaryWyszly` (lista
+  wiedzy frakcji Aktu III: najwyżej +1 zwiadowca).
+- **D46 „Skradziona szkatułka” (I3):** w nocy po trzecim dniu pani Kseni; wariant z ziarna zapisu (A - sama Ksenia, B - Gaspar, gdy jest
+  na wyspie, C - flisak); poszlaki: zamek (opcja na jej drzwiach), pokój (przeszukanie), rozmowy (Gaspar, Szymek, Janek), podsłuch pod
+  drzwiami (A); oskarżenie u Borgara (pięciu podejrzanych): złe - Opinia -5, Renoma -5 i flaga podejrzanego; trafne - A i B od razu, C
+  - worek flisaka na molo przed jej promem (rekwizyt 3012, 9-14). Nagroda: Renoma +6, Sława +3, 150 XP, 25 G (A) / 30 G (B, C); jej prom
+  bez szkatułki - Borgar płaci 60 G, Renoma -6, zadanie przegrane.
+- **Drobne zaległości etapu 2 zrobione przy okazji:** finał W3 przy ognisku z Jędrkiem - Opinia +2 i myśl (flaga `d41Kupala` + `w3Sung`),
+  scena dwóch kartografów (Eryk Sowa jako sojusznik siada przy stole Teofila w D40).
+- **Nie zrobione:** szkatułka - wariant C bez prawdziwej postaci flisaka (worek i słowa ludzi), Wanda bez własnej rozmowy (tylko
+  oskarżenie), skutki złych oskarżeń poza flagami (Szymek - zaufanie obozu, Wanda - droższa łaźnia, Gaspar - trudniejszy W15) czekają na
+  decyzję; dar Renomy 50 (kufel z imieniem) - potrzebny przedmiot w `data/Items.json`; Rafał w kryjówce W6 nie blokuje pokoju 1 (furtka
+  jest, reguła czeka na decyzję).
+
+### 11.10 Etap 5 - W14 „Poselstwo”, D44, D47, D48 (zbudowane 2026-10-29, pomocnik)
+
+- **Pliki:** `Poselstwo_Data.js` + `Poselstwo.js` (`poselstwo.txt`) - W14; `Podroznicy5_Data.js` + `Podroznicy5.js` (`podroznicy5.txt`) -
+  D44, D47, D48. Dane pod `Dezerter_Data`, silniki pod `Dezerter`. Zdarzenia 3070-3089 (właściciel „Poselstwo”). Test: `tests/poselstwo_test.js`
+  (port 9791, 39 sprawdzeń, ~100 s).
+- **W14:** Albin (pątnik) z falą 37, poseł z Ostapem w Apartamencie Złotym 3 dni później (tylko gdy jest `TavernLife.addRoomGuard`).
+  Rozdziały: trzy poszlaki (Ambroży, rozmowa pod oknem pokoju 15, Borgar; Wit może zamknąć Albina przed kradzieżą), kolacja u Borgara
+  20:00-21:00 = „w służbie” (`addGatePass` do 23:00), narada w Wielkim salonie (Lord 3070, Feliks 3071, podsłuch z Jadalni), Noc Kupały
+  (Albin pod Złotym 3072: bohater obok = kradzież udaremniona, inaczej list znika o 1:30), śledztwo (wosk 3073, ślady 3074, konfrontacja:
+  wieża / fałszywa droga / puszczony), list: poseł (60 G, Renoma +8, przychylność +10), Lord (`w14LordWie`, przychylność -10), kopia
+  nocą (ryzyko 35% minus 3 za Percepcję; złapany: Renoma -8). Albin odpływa z listem = `poselstwoWyciek`.
+- **D44:** Erazm, noc podatku = przyjazd + 2; Feliks na korytarzu przed czwórką 22:40-23:20 (3080), podsłuch pokoju 4 o 23:00. Raport:
+  Lord (`w7PoborcaMonety` + obserwacja nocy W7), Feliks (przychylność +5), 20 G (`w7FeliksCzujny`), milczenie.
+- **D47:** burdy do 1:00 (Renoma -1 za noc), Hubert: siłowanie (poziom 3), kości (rywal tylko tej sprawy, 10 G), bójka na dziedzińcu
+  (Humans), najęcie 60 G (`kompaniaNajeta`), Wit (`kompaniaWroga`), Grum. **D48:** pamiątka (przedmiot „Mapa Kruczej Wyspy”), 25 G +
+  `mapaTwierdzy`, przekonanie (2 karty kronik albo Hart 6), tuba w pokoju 22 (przeszukanie; złapany: Renoma -3).
+- **Akt III:** `WIEDZA_FRAKCJI` (+`pielgrzymDonosi`, `mapaTwierdzy`); nowe listy `WIEDZA_FALA2` (łucznik, wyciek) i `WIEDZA_FALA4`
+  (najemnik, `kompaniaWroga`); obrońca „kompania” (2, po dzwonie); garnizon przy `poselWdzieczny` od przychylności 70; fala 3 o jednego
+  mniej przy złapanym pątniku (nie obok `ansgarAlly`).
+- **Nie zrobione:** dopisek o poborcy w liście Lorda z dnia 40 (Story); odczyt `w14LordWie` w Dworze; rejestr Kantora; pamiątka na ścianę
+  chatki (HomeDecor) - brak przedmiotu dekoracji; własna grafika Hubertowej bójki poza Humans.

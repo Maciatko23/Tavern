@@ -1006,7 +1006,23 @@
         return [...byRoom.values()].sort((a, b) => rank(a) - rank(b));
     }
     const roomOf = n => rooms().find(r => r.room === roomKey(n)) || null;
-    const roomPrice = r => repPrice(r.price);
+    // (2026-10-29, docs/PODROZNI.md 6.4 - the gates of the ferry's travellers) other plugins' rules over the hero's rooms:
+    //   addRoomGuard(fn(room) -> { kto, do, napis } | null): a room taken by someone else (Podroznicy's book: room 3, the Gold suite) -
+    //     Borgar does not rent it (a popup over the hero), its card row greyed with the same words
+    //   addRoomPrice(fn(room, price) -> price): the price a night (the tavern's renown: 20% off, the chamber free once a week)
+    //   addGatePass(fn() -> bool): the gilded gate open while one says so (W14: the hero carrying the envoy's dinner "w służbie")
+    //   addWake(fn(room) -> { hour, kto } | null): a night in a rented bed broken at that hour (I4: steps in the corridor) - the plugin
+    //     is told by the bus "tavernWake" { room, hour, kto } and asks the hero; TavernLife.sleep(room) sleeps on till the morning
+    const ROOM_GUARDS = [], PRICE_RULES = [], GATE_PASSES = [], WAKES = [];
+    const askAll = (list, fn) => { for (const f of list) { let v = null; try { v = fn(f); } catch (e) { console.error("[TavernLife] furtka", e); v = null; } if (v) return v; } return null; };
+    const guardOf = room => askAll(ROOM_GUARDS, f => f(roomKey(room)));
+    const guardText = (r, g) => g.napis || Watki.wstaw(TK.kod.zajety || "{room}: zajęte do dnia {do}.", { room: roomLabel(r), do: g.do, kto: g.kto || "" });
+    const gatePass = () => !!askAll(GATE_PASSES, f => f());
+    function roomPrice(r) {
+        let p = repPrice(r.price);
+        for (const f of PRICE_RULES) { try { const v = f(roomKey(r.room), p); if (typeof v === "number" && v >= 0) p = Math.round(v); } catch (e) { console.error("[TavernLife] furtka", e); } }
+        return p;
+    }
     const canRent = r => reputation() >= (r.minrep || 0);
     const onlyFor = r => Watki.wstaw(TK.kod.onlyFor[2], { "1": roomKey(r.room) === "zloty" ? TK.kod.onlyFor[0] : TK.kod.onlyFor[1], "2": tierName(repTierOf(r.minrep)) });
     // rented tonight: the room is his till CHECKOUT the next morning (after midnight, before dawn: till this morning's CHECKOUT)
@@ -1021,6 +1037,8 @@
         const room = roomOf(n);
         if (!room || rentedRoom()) return false;
         if (!canRent(room)) { popup(0, room.name + ": " + onlyFor(room) + ".", BAD); SoundManager.playBuzzer(); return false; }
+        const g = guardOf(room.room);
+        if (g) { popup(0, guardText(room, g), BAD); SoundManager.playBuzzer(); return false; }
         const price = roomPrice(room);
         if (!pay(price, to, "room", { room: room.room })) return false;
         const s = S();
@@ -1098,10 +1116,12 @@
             }
         }
         if (!$gameMap) return;
+        const pass = gatePass();
         for (const g of spots("gate")) {
             const k = gateKey(here, g.ev.eventId()), key = [here, g.ev.eventId(), "A"];
             if (!s.gates[k] && rep >= num(g.a.minrep, 80)) s.gates[k] = "new";
-            if (!s.gates[k]) continue;
+            // (a pass: open while it lasts, shut again after - the gate's own page)
+            if (!s.gates[k]) { if (!!$gameSelfSwitches.value(key) !== pass) $gameSelfSwitches.setValue(key, pass); continue; }
             if (!$gameSelfSwitches.value(key)) $gameSelfSwitches.setValue(key, true);
             if (s.gates[k] === "new") { s.gates[k] = true; welcomeGate(g.ev); }
         }
@@ -1114,7 +1134,7 @@
     }
     // below the reputation a room or the gate needs, the plugin tells why (its own words; the map's pages come back after)
     function repLocked(ev, t) {
-        if (t.kind === "gate") { const g = S().gates; return !(g && g[gateKey($gameMap.mapId(), ev.eventId())]) && reputation() < num(t.a.minrep, 80); }
+        if (t.kind === "gate") { const g = S().gates; return !(g && g[gateKey($gameMap.mapId(), ev.eventId())]) && reputation() < num(t.a.minrep, 80) && !gatePass(); }
         if (t.kind === "door") { const r = roomOf(t.a.room); return !!r && (r.minrep || 0) > reputation() && !isRented(r.room); }
         return false;
     }
@@ -1136,7 +1156,8 @@
 
     function roomCardSpec() {
         const entries = rooms().map(r => {
-            const price = roomPrice(r), ok = canRent(r);
+            const price = roomPrice(r), ok = canRent(r), g = ok ? guardOf(r.room) : null;
+            if (g) return { room: r.room, data: r, name: r.name, right: price + " G", oldRight: "", sub: guardText(r, g), enabled: false, why: () => popup(0, guardText(r, g), BAD) };
             return { room: r.room, data: r, name: r.name, right: price + " G", oldRight: price !== r.price ? r.price + " G" : "",
                 sub: ok ? Watki.wstaw(TK.kod.roomCardSpec[1], { "1": isNumbered(r.room) && !namedAsRoom(r) ? Watki.wstaw(TK.kod.roomCardSpec[0], { room: r.room }) : "", "2": giftName(r.room) }) : Watki.wstaw(TK.kod.roomCardSpec[4], { "1": tierName(repTierOf(r.minrep)), "2": r.room === "zloty" ? TK.kod.roomCardSpec[2] : TK.kod.roomCardSpec[3] }),
                 enabled: ok && gold() >= price, why: () => (ok ? needGold(price) : popup(0, r.name + ": " + onlyFor(r) + ".", BAD)) };
@@ -1185,10 +1206,19 @@
     function* sleepSeq(room) {
         const r = S().rent;
         room = roomKey(room);
+        const wake = askAll(WAKES, f => f(room));
         $gameScreen.startFadeOut(W(30));
         yield W(34);
         me(PluginManager.parameters("SurvivalHUD").sleepMe || "Inn1", 90);
         // (no wolves: a tavern bed is never a night outdoors - Hunting.nightRaid is not asked)
+        if (wake && typeof wake.hour === "number") {
+            // (2026-10-29) woken in the night (I4): the hours slept are rested, the night is not over - TavernLife.sleep goes on
+            $gameSystem.sleepUntilHour(wake.hour);
+            $gameScreen.startFadeIn(W(30));
+            yield W(30);
+            emit("tavernWake", { room, hour: wake.hour, kto: wake.kto || "" });
+            return;
+        }
         $gameSystem.sleepUntilHour(wakeHour());
         if (typeof $gameSystem.setStamina === "function") $gameSystem.setStamina($gameSystem.maxStamina());
         for (const m of $gameParty.members()) m.recoverAll();
@@ -1684,6 +1714,11 @@
             return runOnMap([C(355, ["TavernLife.go(this, 'sleep', " + q(r.room) + ")"])]);
         },
         dishOfDay, priceOf, rooms, rentedRoom, isRented, syncDoors, nextSong, npc,
+        // (2026-10-29) the gates for other plugins (docs/PODROZNI.md 6.4)
+        addRoomGuard: fn => { if (typeof fn === "function") ROOM_GUARDS.push(fn); }, roomGuard: n => guardOf(n),
+        addRoomPrice: fn => { if (typeof fn === "function") PRICE_RULES.push(fn); },
+        addGatePass: fn => { if (typeof fn === "function") GATE_PASSES.push(fn); }, gatePass: () => gatePass(),
+        addWake: fn => { if (typeof fn === "function") WAKES.push(fn); },
         reputation, repTier, repDiscount, tierName, bathPrice: () => bathPrice(), roomPrice: n => { const r = roomOf(n); return r ? roomPrice(r) : null; },
         gates: () => Object.assign({}, S().gates || {}),
         spots: kind => spots(kind).map(s => ({ id: s.ev.eventId(), x: s.ev.x, y: s.ev.y, a: s.a })),

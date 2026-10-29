@@ -45,6 +45,11 @@ PODROZNI = [
     ('grajek', 'Grajek', 'Jędrek Dudarz'), ('zboze', 'Zboze', 'Zenon Sita'), ('urszula', 'Urszula', 'Urszula z Olszynki'),
     ('relikwie', 'Relikwie', 'Gaspar Lis'), ('wizytator', 'Wizytator', 'brat Augustyn'), ('dezerter', 'Dezerter', 'Tymon Wrzos'),
     ('lowczyni', 'Lowczyni', 'Szczerba'),
+    # etap 3 i 5 (2026-10-29): poseł, jego gwardzista, poborca, pątnik (PixelLab) i Wolna Kompania (arkusze Humans.js
+    # przekolorowane - tools/podroznicy/kompania.py); Ksenia i „gość spod trójki” to przekolorowane ciała puli (pula_kolory.py)
+    ('poborca', 'Poborca', 'Erazm Łaska'), ('pielgrzym', 'Pielgrzym', 'Albin, „pątnik”'), ('posel', 'Posel', 'Poseł Adam Wierzbięta'),
+    ('gwardzista', 'Gwardzista', 'Gwardzista Ostap'), ('kompania_1', 'Kompania_1', 'Hubert Szary'),
+    ('kompania_2', 'Kompania_2', 'Jasiek Brzytwa'), ('kompania_3', 'Kompania_3', 'Kazik Kołek'), ('kompania_4', 'Kompania_4', 'Ruda Hela'),
 ]
 
 if __name__ == '__main__':

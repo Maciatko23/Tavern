@@ -264,7 +264,7 @@
         return true;
     }
     for (const d of D.PODSLUCH) dodaj(Object.assign({}, d, { gdy: typeof d.gdy === "string" ? (name => () => !!w.hak(name, {}))(d.gdy) : d.gdy }));
-    const roomKey = p => (/^\d+$/.test(String(p)) ? "r" + p : String(p));
+    const roomKey = p => { if (typeof p === "function") { try { p = p(); } catch (e) { p = ""; } } return /^\d+$/.test(String(p)) ? "r" + p : String(p); };
     const planFloor = mapId => { const TL = T.api("TavernLife"), PD = TL && TL.plan && TL.plan.DATA; return PD ? PD.floors.find(f => f.map === mapId) || null : null; };
     const inRoom = (r, x, y) => r.r.some(q => x >= q[0] && x <= q[2] && y >= q[1] && y <= q[3]);
     const roomAt = (f, x, y) => f.rooms.find(r => inRoom(r, x, y)) || null;
@@ -500,6 +500,12 @@
     T.onMapUpdate(() => {
         if (sluch) { try { sluchTick(); } catch (e) { report("podsłuch", e); sluch = null; } }
         if (++ticks % 30 || !has()) return;
+        // D41: Jędrek played at the Kupała fire (the flag while he was here) - W3's public end merrier (once, the song sung: w3Sung)
+        if (w.flag("d41Kupala") && w.flag("w3Sung") && !w.flag("d41KupalaGral")) {
+            w.setFlag("d41KupalaGral");
+            T.call("TownQuests", "addOpinion", SP.d41.kupalaOpinia, "D41");
+            w.mysl([tx("d41.kupala")]);
+        }
         if ($gameMap.mapId() === AKT.antek.mapa) aktorzyTick();
         else if (!$gameMap.isEventRunning()) { try { podpowiedzTick(); } catch (e) { report("podpowiedź", e); } }
     }, { owner: PLUGIN, name: "podroznicySprawy" });

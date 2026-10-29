@@ -377,7 +377,7 @@
                 const fill = soft || Math.max(color[0], color[1], color[2]) < FILL_COLOUR;
                 const flame = flicker === null && FLAME_FLICKER && !fill && when !== "day" ? flameFlicker(radius) : flicker || null;
                 markers.push({ x: event.x, y: event.y, shape: "circle", radius, color, when, soft, flicker: flame, eventId: event.id,
-                    height: height ? Number(height[1]) : 0 });
+                    height: height ? Number(height[1]) : 0, follow: /<LightFollow>/i.test(event.note) });
             }
         }
         return markers;
@@ -612,6 +612,10 @@
         this._weight = 1;
         this._gain = 1;                        // (other plugins may dim it: 0..1)
         this._eventId = marker.eventId || 0;
+        // (2026-10-29) <LightFollow>: the light goes with its event (a candle carried along a corridor - Intrygi.js), dark while the
+        // event is hidden
+        this._follow = !!marker.follow;
+        this._carried = false;
         // how high the flame is (px), for the shadows it makes things throw: <LightHeight:N>, else a fire, a stove, a cauldron (always
         // lit) low, a candle a little higher, a lamp or a chandelier high up
         this._lightHeight = marker.height || (marker.when !== "night" ? 22 : marker.radius <= 130 ? 30 : 56);
@@ -645,15 +649,21 @@
         Sprite.prototype.update.call(this);
         // Same conversion as Sprite_ParticleBase above (adjustX/Y, not a manual
         // displayX() subtraction) so this also scrolls correctly on looping maps.
-        this.x = Math.round($gameMap.adjustX(this._tileX) * $gameMap.tileWidth() + this._offsetX);
-        this.y = Math.round($gameMap.adjustY(this._tileY) * $gameMap.tileHeight() + this._offsetY);
+        let tx = this._tileX, ty = this._tileY;
+        if (this._follow) {
+            const ev = $gameMap.event(this._eventId);
+            this._carried = !!ev && !ev.isTransparent() && !!ev.characterName();
+            if (ev) { tx = ev._realX; ty = ev._realY; }
+        }
+        this.x = Math.round($gameMap.adjustX(tx) * $gameMap.tileWidth() + this._offsetX);
+        this.y = Math.round($gameMap.adjustY(ty) * $gameMap.tileHeight() + this._offsetY);
     };
 
     // visible = inside the part of the map on screen (view: {x0, y0, x1, y1} in the spriteset's own coordinates) and
     // lit at this hour; the glow's strength follows the hour too
     Sprite_RoomLight.prototype.updateShown = function(view, tod) {
         if (this._flicker) this.updateFlicker(Graphics.frameCount);
-        this._weight = lightWeight(this._when, tod) * this._gain * (this._flicker ? this._flicker.k : 1);
+        this._weight = lightWeight(this._when, tod) * this._gain * (this._flicker ? this._flicker.k : 1) * (this._follow && !this._carried ? 0 : 1);
         const r = this._reach;
         const inView = this.x + r > view.x0 && this.x - r < view.x1 && this.y + r > view.y0 && this.y - r < view.y1;
         this.visible = inView && this._weight > 0.004;

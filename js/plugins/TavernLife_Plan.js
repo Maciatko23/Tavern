@@ -318,6 +318,8 @@
             if (!out.status) open(Watki.wstaw(TK.kod.planInfo[67], { "1": to >= 0 ? FLOOR_TAB[to] : TK.kod.planInfo[66] }));
         }
         if (!what.length) what.push(L_(null, PLAN_KIND_DESC[it.kind] || ""));
+        // (2026-10-29) other plugins' lines (Podroznicy: who lives here, till when): fn(floor, key) -> [{ icon, text, tone }] | null
+        for (const f of PLAN_INFO) { try { for (const l of f(it.floor, it.key) || []) who.push(L_(l.icon || null, l.text, l.tone || null)); } catch (e) { console.error("[TavernLife_Plan] addInfo", e); } }
         if (!out.status) {
             if (it.kind === "private") shut(key.startsWith("26:") ? TK.kod.planInfo[68] : TK.kod.planInfo[69]);
             else if (it.kind === "service") info(TK.kod.planInfo[70]);
@@ -327,7 +329,9 @@
         return sec();
     }
     // (for other plugins and the tests)
+    const PLAN_INFO = [];
     const planApi = {
+        addInfo: fn => { if (typeof fn === "function") PLAN_INFO.push(fn); },
         open: opts => openPlan(opts),
         get scene() { return PLAN.scene; },
         state: () => (PLAN.scene ? PLAN.scene.state() : null),

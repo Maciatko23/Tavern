@@ -29,7 +29,8 @@ for key, K, who in PODROZNI:
     ENTRIES.append((key, K + '_Bust', who, '$Npc_' + K, (1, 0)))
 for K, who in (('Pula_M2', 'Podróżny w płaszczu, wariant 2'), ('Pula_M3', 'Podróżny w płaszczu, wariant 3'),
                ('Pula_K2', 'Podróżna w chuście, wariant 2'), ('Pula_K3', 'Podróżna w chuście, wariant 3'),
-               ('Pula_S2', 'Starzec z laską, wariant 2'), ('Pula_Z2', 'Marynarz, wariant 2')):
+               ('Pula_S2', 'Starzec z laską, wariant 2'), ('Pula_Z2', 'Marynarz, wariant 2'),
+               ('Ksenia', 'Ksenia Żuraw (ciało puli K)'), ('Trojka', '„Gość spod trójki” (ciało puli M)')):
     ENTRIES.append((K.lower(), K + '_Bust', who, '$Npc_' + K, (1, 0)))
 
 OK, PART, BAD, FIXED = 'PASUJE', 'CZĘŚCIOWO', 'NIE PASUJE', 'POPRAWIONE'
@@ -153,6 +154,16 @@ PO = {
     'pula_k3': (OK, 'Pula_K przekolorowana: granatowa chusta, śliwkowa suknia - jak arkusz.'),
     'pula_s2': (OK, 'Pula_S przekolorowany: oliwkowy płaszcz - jak arkusz.'),
     'pula_z2': (OK, 'Pula_Z przekolorowany: bordowa czapka i kurta - jak arkusz.'),
+    'poborca': (OK, 'czarny kapelusz z szerokim rondem, krótkie ciemne włosy, cienki czarny wąsik, czarny kaftan z białym kołnierzem i pomarańczowym feniksem, księga pod pachą.'),
+    'pielgrzym': (OK, 'krótkie czarne włosy, czujne oczy, gładka twarz, niebarwiona kremowa wełniana szata z opuszczonym kapturem, różaniec, kij pielgrzymi za ramieniem.'),
+    'posel': (OK, 'baza People3_5: siwe zaczesane włosy, siwa kozia bródka, biała szata z pomarańczowymi lamówkami, srebrny łańcuch urzędowy z medalionem, łupkowy płaszcz z futrzanym kołnierzem (na mapie futro jaśniejsze i płaszcz szerszy).'),
+    'gwardzista': (OK, 'kapalin, gruby ciemny wąs, kolczy kaptur i napierśnik, biały wapenrok z pomarańczowym feniksem, halabarda za ramieniem.'),
+    'kompania_1': (OK, 'Hubert Szary: kapalin, pełna siwa broda, szara pikowana przeszywanica z kolczym kołnierzem.'),
+    'kompania_2': (OK, 'Jasiek Brzytwa: szara opaska na głowie, ciemnoszara chusta zasłaniająca twarz po oczy, szara kamizelka.'),
+    'kompania_3': (OK, 'Kazik Kołek: szary kaptur z peleryną, krótka brązowa broda, brązowa skórzana tunika, kołczan i rzemień łuku.'),
+    'kompania_4': (OK, 'Ruda Hela: szary kaptur z peleryną, rude włosy i kosmyki przy twarzy, zdecydowana twarz, szara tunika.'),
+    'ksenia': (OK, 'Pula_K przekolorowana (pula_kolory.py): kremowy czepiec, bordowy szal, ciemnozielona suknia - jak arkusz.'),
+    'trojka': (OK, 'Pula_M przekolorowany: czarny płaszcz i ciemna tunika (sadza na dłoniach tylko na arkuszu - dłonie poniżej kadru).'),
     'tobiasz': (OK, 'baza Actor1_1: szeroki brązowy filcowy kapelusz z ciemną taśmą i szarym piórem, potargane brązowe włosy, '
                     'czerwona chusta, zabłocony granatowy płaszcz jeździecki ze stójką, skórzany pas torby przez pierś.'),
     'medyk': (OK, 'baza People2_1: siwe dłuższe rozczochrane włosy, okrągłe druciane okulary, zmęczona twarz z workami pod oczami, '

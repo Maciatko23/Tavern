@@ -54,10 +54,10 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         shopQ.shops.every(x => x.ok) && shopQ.by === "TestZadanie", shopQ);
 
     const hooks = await t.json(`({ start: Tawerna.onEventStart.list().map(g => g.owner + ":" + g.priority), list: Tawerna.onEventList.list().map(g => g.owner + ":" + g.priority) })`);
-    t.check("jeden hak startu zdarzenia: ukryci (Garnizon, Ludzie, Podroznicy - aktorzy przystani, PodroznicySprawy - aktorzy w garnizonie, Przystan, TownLife, Woz, Wrak) > kot, kości > tryb walki (zawsze ostatni)",
-        JSON.stringify(hooks.start) === JSON.stringify(["Garnizon:900", "Ludzie:900", "Podroznicy:900", "PodroznicySprawy:900", "Przystan:900", "TownLife:900", "Woz:900", "Wrak:900", "HomeLife:500", "TavernDice:500", "Combat:100"]), hooks.start);
-    t.check("jeden hak poleceń zdarzenia: Kasztelan > Dwor > Kantor > Homes > TownQuests > HomeLife > bywalcy > TavernLife > QuestBoard > Story (dawna kolejność wtyczek)",
-        JSON.stringify(hooks.list) === JSON.stringify(["Kasztelan:900", "Dwor:830", "Kantor:820", "Homes:810", "TownQuests:800", "HomeLife:530", "TavernLife_Regulars:520", "TavernLife:510", "QuestBoard:500", "Story:300"]), hooks.list);
+    t.check("jeden hak startu zdarzenia: ukryci (Garnizon, Ludzie, Podroznicy - aktorzy przystani, PodroznicySprawy - aktorzy w garnizonie, Intrygi - nocny piechur i rekwizyty, Przystan, TownLife, Woz, Wrak) > kot, kości > tryb walki (zawsze ostatni)",
+        JSON.stringify(hooks.start) === JSON.stringify(["Garnizon:900", "Intrygi:900", "Intrygi:900", "Ludzie:900", "Podroznicy:900", "PodroznicySprawy:900", "Przystan:900", "TownLife:900", "Woz:900", "Wrak:900", "HomeLife:500", "TavernDice:500", "Combat:100"]), hooks.start);
+    t.check("jeden hak poleceń zdarzenia: Intrygi (drzwi zajętych pokoi) > Kasztelan > Dwor > Kantor > Homes > Intrygi (przeszukanie) > TownQuests > HomeLife > bywalcy > TavernLife > QuestBoard > Story (dawna kolejność wtyczek)",
+        JSON.stringify(hooks.list) === JSON.stringify(["Intrygi:900", "Kasztelan:900", "Dwor:830", "Kantor:820", "Homes:810", "Intrygi:800", "TownQuests:800", "HomeLife:530", "TavernLife_Regulars:520", "TavernLife:510", "QuestBoard:500", "Story:300"]), hooks.list);
 
     // rows: two systems' options on one character, registered in either order - the same menu; the farewell last
     const rows = await t.json(`(function(){ const k = Tawerna.talk, own = [{ label: "Własna 1" }, { label: "Własna 2" }, { label: "Co słychać?", order: k.ORDER.chat }];

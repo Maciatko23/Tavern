@@ -3165,5 +3165,174 @@
     "scale": null,
     "height_px": 60,
     "notes": "Podróżni z promu (docs/PODROZNI.md 2.12), łańcuch W16, TownLife 3031, pokój 6. Chód N z trybu skeleton-v3 (szablonowy gubił kuszę w 5 klatkach); W = lustro E (szablonowy W miał jaskrawoczerwone plamy na twarzy i czarne plamy na nogach); fioletowe oczy chodu S i różowe SE przekolorowane. Szablonowy NW ma czarne plamy na płaszczu - zostawione (poza arkuszem $)."
+  },
+  {
+    "key": "Pielgrzym",
+    "name": "Albin, „pątnik” (naprawdę Ragnar Holm, zwiadowca Czarnych Oczu; podróżny z promu, W14)",
+    "pixellab_id": "4744a581-af3b-4515-b775-6daa4d2e9806",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "87bb9939-57e0-4b8f-8cf7-bdc7bbe0a70d",
+    "animation": "walk_v3",
+    "description": "Albin the pilgrim, a lean man about 35, sharp watchful eyes, short dark hair, a coarse undyed wool robe with the hood lowered on the shoulders, a rope belt, a tall wooden pilgrim staff held upright in his right hand, a scallop shell on the shoulder, wooden prayer beads, a thin black cord around the neck, sandals, medieval, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_v3": 8
+    },
+    "sheet": "$Npc_Pielgrzym",
+    "walk8": "Npc_Pielgrzym_Walk8",
+    "steps": [
+      3,
+      7
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 2.8), łańcuch W14, TownLife 3027, pokój 15. Chód z własnej animacji v3 (1 gen./kierunek, 'walking in place ... holding the tall wooden pilgrim staff upright'), bo szablonowy gubi trzymane rzeczy."
+  },
+  {
+    "key": "Gwardzista",
+    "name": "Ostap (gwardzista posła, podróżny z promu, W14)",
+    "pixellab_id": "f5848dae-ce95-488c-886b-b3766d35d13b",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "2f42cebb-2dd2-4b13-9c70-7a3a65e81dfe",
+    "animation": "walk_v3",
+    "description": "Ostap the royal guardsman, a big burly man about 30, a thick moustache, a steel kettle hat helmet, a steel breastplate over a white tabard with an orange phoenix, a halberd held upright in his right hand, grey trousers, heavy brown boots, medieval soldier, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_v3": 8,
+      "walk_template_w_e": 2
+    },
+    "sheet": "$Npc_Gwardzista",
+    "walk8": "Npc_Gwardzista_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {
+        "west": "walk_tpl_we"
+      },
+      "mirror": {
+        "east": "west"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 2.13), łańcuch W14, strażnik posła. Chód z własnej animacji v3 (1 gen./kierunek, 'walking in place ... holding the halberd upright'), bo szablonowy gubi trzymane rzeczy; klatki v3 przycięte do 64 x 64 od środka płótna przed budową (halabarda wystaje ponad płótno - inaczej to_cell przycinał część klatek od dołu i postać podskakiwała). W z szablonu walking-8-frames, E = lustro W: rotacje W/E PixelLaba są bez halabardy (schowana za postacią), a chód v3 i szablonowy E pokazywały ją w części klatek."
+  },
+  {
+    "key": "Poborca",
+    "name": "Erazm Łaska (poborca podatku wojennego, podróżny z promu)",
+    "pixellab_id": "4b44741f-9782-4bf5-b9f5-3623f02daf0b",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "3ad10d63-a055-480a-bc55-12533323dd16",
+    "animation": "walk_v3",
+    "description": "Erazm the royal tax collector, a thin man about 35, neat thin black moustache, a black brimmed hat, a black doublet with a white collar, a small orange phoenix badge on the chest, a ledger book held under his left arm, a small iron strongbox hanging at his belt, black trousers, black boots, medieval, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_v3": 8
+    },
+    "sheet": "$Npc_Poborca",
+    "walk8": "Npc_Poborca_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "east": "west"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 59,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 2.7), D44, TownLife 3026, pokój 4. Chód z własnej animacji v3 (1 gen./kierunek, 'walking in place ... the ledger book stays held under the left arm'); klatki v3 przycięte do 64 x 64 od środka płótna przed budową. E = lustro W (rotacja E bez księgi, a chód E pokazywał ją od klatki 4)."
+  },
+  {
+    "key": "Posel",
+    "name": "Adam Wierzbięta (poseł Korony, podróżny z promu, W14)",
+    "pixellab_id": "3d34ef38-96e7-4be0-b9dd-92f0e35e1781",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "0ec9b6db-db95-48e2-9c61-e28732a1f54b",
+    "animation": "walk",
+    "description": "Adam the royal envoy, a dignified man about 60, grey hair and a neat grey goatee, a long white-and-orange robe, a fur-trimmed dark cloak, a silver chain of office on the chest, a leather document case with red wax seals hanging at his hip on a strap, medieval nobleman, empty hands, full body, standing, neutral pose, muted earthy medieval palette",
+    "gens_used": {
+      "character_pro": 10,
+      "walk_template": 8
+    },
+    "sheet": "$Npc_Posel",
+    "walk8": "Npc_Posel_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 0,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 0,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "Podróżni z promu (docs/PODROZNI.md 2.13), łańcuch W14. W = lustro E (szablonowy W miał bordowe plamy i gubił teczkę). Chód N bez rozłożonej peleryny z rotacji (węższy płaszcz) - zostawione."
   }
 ]

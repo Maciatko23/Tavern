@@ -24,17 +24,8 @@ BUST_HEAD = 0.55        # część wysokości popiersia z głową
 # hair = (hue, sat, val) albo None - włosy i broda (brązy / czernie w głowie), keep = barwy (zakres stopni) zostawione w spokoju
 POSTACIE = {
     # ---- obsada (14 + Ksenia, „gość spod trójki”)
-    "Poborca":    ("Celnik",     dict(hue=230, sat=0.20, val=0.32)),                 # czarny kubrak
-    "Pielgrzym":  ("Grabarz",    dict(hue=38, sat=0.30, val=1.25)),                  # habit z niebarwionej wełny
-    "Posel":      ("Lord",       dict(hue=28, sat=0.95, val=1.20)),                  # biel i pomarańcz Korony
-    "Gwardzista": ("Straznik",   dict(hue=30, sat=0.90, val=1.10)),                  # pomarańczowy feniks na bieli
-    "Ksenia":     ("Szwaczka",   dict(hue=150, sat=0.70, val=0.62)),                 # ciemnozielona suknia
-    "Trojka":     ("Woznica",    dict(hue=230, sat=0.10, val=0.30)),                 # człowiek w czerni
+    # "Posel": zrobiony w PixelLab - nie nadpisywac ("Lord",       dict(hue=28, sat=0.95, val=1.20)),                  # biel i pomarańcz Korony
     # ---- Wolna Kompania (szare płaszcze najemników)
-    "Kompania_1": ("Grum",       dict(hue=210, sat=0.18, val=0.80)),                 # Hubert Szary
-    "Kompania_2": ("Drwal",      dict(hue=210, sat=0.22, val=0.70)),                 # Jasiek Brzytwa
-    "Kompania_3": ("Weteran",    dict(hue=200, sat=0.25, val=0.75)),                 # Kazik Kołek
-    "Kompania_4": ("Praczka",    dict(hue=210, sat=0.20, val=0.70, hair=(12, 0.95, 1.05))),   # Ruda Hela
     # ---- ciała puli: mężczyzna w płaszczu, kobieta w chuście, starzec z laską, marynarz - po kilka kolorów
 }
 # Halina nie ma popiersia - ciało kobiety bierze popiersie Praczki (ta sama chusta)

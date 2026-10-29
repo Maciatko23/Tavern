@@ -1,0 +1,308 @@
+# Teksty intryg na piętrach tawerny (wtyczki Intrygi_Data.js i Intrygi.js) - docs/PODROZNI.md, etap 3 (rozdz. 1.5-1.7 i 3):
+# zamknięte drzwi zajętych pokoi, przeszukanie cudzych rzeczy, nocne kroki (I4), listy pod drzwiami (I5), zadania D45 „Gość spod
+# trójki” (I1), D46 „Skradziona szkatułka” (I3), K73 „Nocne kroki”. Bohater jest nastolatkiem. „> ” - mówi albo myśli bohater.
+
+# ======================================================================== plan karczmy (kto mieszka w pokoju)
+plan.gosc = {kto} - do dnia {do}
+
+# ======================================================================== drzwi zajętych pokoi (Map025)
+drzwi.zamkniete = > (Zamknięte. Ktoś tu mieszka.)
+drzwi.zapukaj = Zapukaj.
+drzwi.odejdz = Odejdź.
+drzwi.zza.gosc = > (Zza drzwi:) „Kto tam? ... Nie teraz, chłopcze. Później.”
+drzwi.zza.pula = > (Zza drzwi:) „Śpię... znaczy, nie ma mnie. Przyjdź jutro.”
+drzwi.cisza = > (Cisza. Nikogo.)
+
+# ======================================================================== przeszukanie
+szukanie.pyta = > (Cudze rzeczy. Przeszukać?)
+szukanie.tak = Przeszukaj.
+szukanie.nie = Zostaw.
+szukanie.zlapany = > (Kroki za drzwiami! {kto} staje w progu i patrzy na otwarty kufer. Nic nie mówi. Nie musi.)
+szukanie.nic = > (Ubrania, buty, chleb w chuście. Nic, czego szukam.)
+szukanie.obrazony = Nie rozmawiam z kimś, kto grzebie w moich rzeczach. Wynoś się.
+[szukanie.w15]
+> (W skrzynce-tacy pod fałszywymi kośćmi leży kamień z wyrytym krukiem i trzy kartki spisu - „Biblioteka klasztoru w Lipnicy”.)
+> (Biorę oba. Gaspar sam się nie przyzna, czym handluje.)
+
+[szukanie.d42]
+> (Pod koszulami w kufrze Zenona - umowa z pieczęcią: „cztery wozy dla chorągwi królewskiej, piąty - kantor Vey”.)
+
+szukanie.d46.ogolnie = > (Pokój pani Kseni. Pachnie korzeniami i lawendą.)
+[szukanie.d46.A]
+> (W kominku stopiony wosk jej świecy i popiół z papieru. Ktoś tu spalił listę - może spis tego, co było w szkatułce?)
+
+[szukanie.d46.B]
+> (W powietrzu zapach kadzidła. Takiego, jakie kopci przy kramie handlarz relikwii.)
+
+[szukanie.d46.C]
+> (Na podłodze czarne smugi - smoła. Taka, jaką mają na butach flisacy z łodzi.)
+
+# ======================================================================== nocne kroki (I4)
+kroki.budzi = > (Kroki na korytarzu... Ktoś idzie ze świecą.)
+kroki.wstan = Wstań po cichu.
+kroki.spij = Śpij dalej.
+kroki.slychac = > (Kroki. Ktoś idzie korytarzem ze świecą. Za nim - nie za blisko.)
+kroki.zgubiony = > (Zgubiłem go. Świeca zniknęła za zakrętem.)
+kroki.zlapany = > (Zobaczył mnie. Dziś już nic z tego.)
+kroki.wymowka = Szukam wychodka. Ciemno tu jak w beczce.
+kroki.ozzy.kto = Dziadek Ozzy
+kroki.ozzy.wymowka = Mmm... kto... a, to ty. Śpij, chłopcze. Ja tylko... chodzę.
+[kroki.ozzy.zwrotka]
+> (Ozzy schodzi po schodach z zamkniętymi oczami i śpiewa przez sen. Te słowa... to brakująca zwrotka pieśni Melii!)
+
+[kroki.ozzy.spiew]
+> (Ozzy schodzi po schodach z zamkniętymi oczami i mruczy przez sen starą pieśń. Lunatyk. Wraca na swoją ławę.)
+
+kroki.tymon.kto = Tomek
+kroki.tymon.wymowka = Ja... ja tylko po wodę. Nie mów nikomu. Proszę.
+kroki.tymon.kuchnia = > (Tomek schodzi do kuchni i szuka chleba po ciemku. Chodzi cicho - jak żołnierz na warcie.)
+kroki.tymon.chleb = Zostaw mu bochen na schodach.
+kroki.tymon.wroc = Wróć do pokoju.
+
+# ======================================================================== listy pod drzwiami (I5)
+listy.tytul = List pod drzwiami
+[listy.urszula]
+List od Urszuli
+„Synku... chłopcze. Piszę, bo powiedzieć nie umiałam. Dziękuję ci za Antka. Niech twoja mama też kiedyś stanie przy bramie i zobaczy, że jesteś cały. - U.”
+
+# ======================================================================== Borgar
+borgar.klucz = Pożycz klucz do pokoi gości (na godzinę).
+[borgar.kluczDaje]
+Klucz? (Borgar długo na ciebie patrzy.) Masz. Na godzinę. Jak ktoś się poskarży, to ja ci go nie dawałem.
+
+borgar.d45 = Wyważmy drzwi trójki.
+borgar.d46 = Szkatułka pani Kseni - wiem, kto.
+
+# ======================================================================== D45 „Gość spod trójki” (I1)
+zadania.D45.title = Gość spod trójki
+zadania.D45.where = Tawerna: piętro gości (pokój 3), piwnica
+zadania.D45.when = koniec rozdziału, gdy ktoś zajmie pokój 3
+zadania.D45.desc = Ktoś wziął pokój 3 na trzy noce i zapłacił z góry obcą monetą. Nie schodzi na dół. Nocą w kominie coś drapie i stuka. Kim jest i czego szuka?
+zadania.D45.steps.0.text = Dowiedz się, kim jest gość spod trójki ({n}/3 poszlaki): sadza pod drzwiami rano, piwnica, ściana pokoju 1 nocą (1-3), dziurka od klucza nocą (skradanie), może Eryk Sowa. Odpływa w dniu {do}.
+zadania.D45.steps.1.text = Gość spod trójki mierzy sklepienia pod tawerną. Powiedz Borgarowi, zawołaj kaprala Wita w dniu jego odpływu albo zabierz mu notes o świcie (4-5, skradanie). Odpływa w dniu {do}.
+zadania.D45.fail.text = Gość spod trójki odpłynął ze swoimi pomiarami.
+[d45.start]
+> (Borgar mówił: ktoś wziął trójkę na trzy noce. Zapłacił z góry obcą monetą - z okiem zamiast korony.)
+
+d45.sladNapis = Gość spod trójki: nowa poszlaka
+d45.sladPod = poszlaki {n}/3
+[d45.sadza]
+> (Na progu trójki i w korytarzu - sadza. Świeża. Jakby ktoś w nocy wychodził z komina.)
+
+[d45.sznur]
+> (Z dziury w sklepieniu nad beczkami zwisa cienki sznur z ołowianką. Ktoś z góry mierzył, jak głęboko jest piwnica.)
+
+d45.dziurka.etykieta = Zajrzyj przez dziurkę od klucza.
+[d45.dziurka.widok]
+> (Przez dziurkę: człowiek w czerni klęczy przy kominku i spuszcza w komin linę. Liczy pod nosem. Na stole notes pełen cyfr.)
+
+d45.notes.etykieta = Wejdź po cichu i zabierz notes.
+[d45.notes.widok]
+> (Śpi w ubraniu, z ręką na notesie. Zsuwasz notes spod jego palców. Nie budzi się.)
+> („31 sążni do sklepienia. Krata zakonu pod beczkami.” Tego nie powinien mieć nikt z lądu.)
+
+[d45.ansgar]
+> Eryku, ten z trójki - nie schodzi, drapie w kominie, liczy...
+Mierniczy. (Eryk blednie.) Oni liczą, jak głęboko są sklepienia. Tak robili na lądzie, zanim przyszło wojsko.
+
+[d45.wywazamy]
+Pomiary? W moim kominie? Pod moimi beczkami? (Borgar zdejmuje fartuch.) Idziemy.
+> (Drzwi trójki trzaskają o ścianę. Gość w czerni wyskakuje oknem na dach i znika w ciemności. Na stole zostaje notes.)
+„31 sążni do sklepienia. Krata zakonu pod beczkami.” (Borgar czyta i robi się szary.) Masz. Dwadzieścia groszy. I... dziękuję, chłopcze.
+
+[d45.wit.pyta]
+Gość spod trójki? Odpływa dziś promem? Masz na niego coś więcej niż gadanie, chłopcze?
+
+d45.wit.tak = Mam. Sadza, sznur w piwnicy, liczby nocą.
+d45.wit.nie = Jeszcze nie.
+[d45.wit.areszt]
+No to go weźmiemy. Na molo, przy trapie. Żeby nie uciekł wodą.
+> (Na molo Wit i dwóch żołnierzy zatrzymują człowieka w czerni. W jego worku notes pełen cyfr i ołowianka.)
+
+[d45.notatka.slad.sadza]
+Gość spod trójki - sadza
+Rano na progu trójki i w korytarzu świeża sadza. Ktoś w nocy wychodzi z komina.
+
+[d45.notatka.slad.sznur]
+Gość spod trójki - sznur w piwnicy
+W piwnicy nad beczkami z dziury w sklepieniu zwisa sznur z ołowianką. Ktoś z góry mierzy, jak głęboko jest piwnica.
+
+[d45.notatka.slad.liczby]
+Gość spod trójki - liczby
+Przez ścianę pokoju 1, nocą: „trzydzieści jeden... trzydzieści dwa sążnie”.
+
+[d45.notatka.slad.dziurka]
+Gość spod trójki - dziurka od klucza
+Przez dziurkę od klucza: człowiek w czerni spuszcza linę w komin i liczy. Na stole notes pełen cyfr.
+
+[d45.notatka.slad.ansgar]
+Gość spod trójki - Eryk Sowa
+Eryk Sowa: „Mierniczy. Liczą, jak głęboko są sklepienia.”
+
+[d45.notatka.a]
+Gość spod trójki - drzwi wyważone
+Z Borgarem wyważyliśmy drzwi trójki. Gość uciekł oknem, a jego notes został: „31 sążni do sklepienia. Krata zakonu pod beczkami.” Borgar ufa mi bardziej.
+
+[d45.notatka.b]
+Gość spod trójki - na molo
+Kapral Wit zatrzymał człowieka w czerni na molo, przy trapie. Notes z pomiarami zabrał garnizon.
+
+[d45.notatka.c]
+Gość spod trójki - notes
+O świcie zabrałem śpiącemu gościowi spod trójki notes z pomiarami. Odpłynie bez nich.
+
+[podsluch.liczby]
+Gość: Dwadzieścia dziewięć... {trzydzieści}...
+Gość: {Trzydzieści jeden}. Trzydzieści dwa {sążnie}.
+Gość: Krata pod {beczkami}. Zakonna. Zapisać.
+Gość: Jeszcze jedna noc. Potem {prom}.
+
+# ======================================================================== D46 „Skradziona szkatułka” (I3)
+zadania.D46.title = Skradziona szkatułka
+zadania.D46.where = Tawerna: piętro gości (pokój 18), przystań
+zadania.D46.when = pobyt pani Kseni Żuraw
+zadania.D46.desc = W nocy z pokoju 18 zniknęła szkatułka pani Kseni Żuraw, wdowy po kupcu korzennym. „Karczmarz odpowiada za rzeczy gości.” Jeśli szkatułka się nie znajdzie do jej promu, Borgar zapłaci sześćdziesiąt groszy.
+zadania.D46.steps.0.text = Kto ukradł szkatułkę? ({n} poszlaki) Obejrzyj zamek pokoju 18, rozejrzyj się w pokoju, popytaj (Gaspar, Szymek, Janek z przystani), posłuchaj nocą pod drzwiami. Potem powiedz Borgarowi, kto. Pani Ksenia odpływa w dniu {do} o 14:00.
+zadania.D46.steps.1.text = Flisak odpływa ze szkatułką w worku. Znajdź jego worek na molo przed promem (dzień {do}, 9-14).
+zadania.D46.fail.text = Pani Ksenia odpłynęła bez szkatułki. Borgar zapłacił jej sześćdziesiąt groszy.
+[d46.krzyk]
+> (Krzyk na korytarzu na piętrze! Pani Ksenia z osiemnastki: „Szkatułka! Moja szkatułka!”)
+> (Borgar blady: „Karczmarz odpowiada za rzeczy gości.”)
+
+d46.sladNapis = Skradziona szkatułka: nowa poszlaka
+d46.sladPod = poszlaki {n}
+[d46.notatka.slad]
+Skradziona szkatułka - poszlaka
+{tekst}
+
+d46.zamek.etykieta = Obejrzyj zamek.
+[d46.zamek.A]
+> (Zamek cały. Otwarty kluczem, nie wyłamany. Klucz do osiemnastki ma tylko pani Ksenia... i Borgar.)
+
+[d46.zamek.B]
+> (Zamek otwarty kluczem albo wytrychem. Na klamce czerwona nitka - jak z wysokiej filcowej czapki.)
+
+[d46.zamek.C]
+> (Zamek podważony nożem. Na progu czarna smuga - smoła.)
+
+d46.slad.zamek.A = Zamek osiemnastki otwarty kluczem, nie wyłamany.
+d46.slad.zamek.B = Na klamce osiemnastki czerwona nitka - jak z czapki Gaspara.
+d46.slad.zamek.C = Zamek osiemnastki podważony nożem, na progu smoła.
+d46.slad.pokoj.A = W kominku pani Kseni stopiony wosk i popiół z papieru - ktoś spalił spis.
+d46.slad.pokoj.B = W pokoju pani Kseni zapach kadzidła - jak przy kramie Gaspara.
+d46.slad.pokoj.C = Na podłodze pokoju 18 smugi smoły - jak na butach flisaków.
+d46.slad.gaspar.A = Gaspar: „Pani Ksenia jest mi winna za relikwiarz. I nie spieszy się z zapłatą.”
+d46.slad.szymek.B = Szymek widział o drugiej w nocy „pana w fioletach” na schodach.
+d46.slad.janek.C = Janek: flisak z promu pytał, który pokój ma „ta bogata pani”.
+d46.slad.podsluch.A = Pod drzwiami osiemnastki: „...Borgar zapłaci, ma pieniądze z pokoi...”
+
+d46.gaspar.A = Szkatułka pani Kseni? Hm. Pani Ksenia jest mi winna za relikwiarz, wiesz? I jakoś się nie spieszy z zapłatą. Ciekawe.
+d46.gaspar.inne = Szkatułka? Ja handluję świętością, chłopcze, nie szkatułkami. Zresztą spałem jak dziecko.
+d46.szymek.B = Ja nic nie wziąłem! Ale... widziałem kogoś o drugiej. Pan w fioletach, na schodach. Z taką tacą na brzuchu.
+d46.szymek.inne = Zawsze ja, co? Jak coś zginie, to Szymek. Nie byłem tam. Spałem pod murem.
+d46.janek.C = Jeden flisak z promu wypytywał mnie, który pokój ma „ta bogata pani”. Dziwne pytanie jak na flisaka.
+d46.janek.inne = Flisacy z promu? Pili, grali w kości, spali. Nic dziwnego.
+
+d46.oskarz.pyta = No? Kto? Tylko się nie pomyl, chłopcze. Zła gęba w karczmie roznosi się szybciej niż dobre piwo.
+d46.oskarz.etykieta.ksenia = Sama pani Ksenia.
+d46.oskarz.etykieta.gaspar = Gaspar, handlarz relikwii.
+d46.oskarz.etykieta.flisak = Flisak z promu.
+d46.oskarz.etykieta.szymek = Szymek spod murów.
+d46.oskarz.etykieta.wanda = Wanda z łaźni.
+d46.oskarz.etykieta.nie = Jeszcze nie wiem.
+[d46.oskarz.ksenia.trafny]
+Sama? (Borgar idzie na górę. Wraca po chwili z panią Ksenią i ze szkatułką.)
+Podwójne dno w jej kufrze. Chciała, żebym zapłacił, bo jest winna handlarzowi. (Borgar oddycha.) Masz dwadzieścia pięć groszy, chłopcze. Uratowałeś mi sześćdziesiąt.
+
+[d46.oskarz.ksenia.zle]
+Pani Ksenia?! (Pani Ksenia słyszy to z sali. Wychodzi bez słowa.) Pięknie. Teraz to dopiero będzie gadanie.
+
+[d46.oskarz.gaspar.trafny]
+Gaspar? (Borgar i ty zaglądacie do skrzynki-tacy handlarza. Pod fałszywymi kośćmi - szkatułka.)
+„Relikwie w środku!” - krzyczy Gaspar. W środku są pierścionki. Pani Ksenia daje ci trzydzieści groszy.
+
+[d46.oskarz.gaspar.zle]
+Gaspar? (Handlarz pokazuje pustą tacę i obraża się na całą tawernę.) Ze mną już nie pogadasz, chłopcze.
+
+[d46.oskarz.flisak.trafny]
+Flisak? Ten, co odpływa dziś promem? (Borgar spluwa.) To leć na molo, zanim wsiądzie! Jego worek stoi przy trapie.
+
+[d46.oskarz.flisak.zle]
+Flisak? Odpłynął i tyle go widzieli - a szkatułki jak nie było, tak nie ma. Pięknie, chłopcze.
+
+[d46.oskarz.szymek.trafny]
+Szymek.
+
+[d46.oskarz.szymek.zle]
+Szymek? (Borgar kręci głową.) Chłopak spod muru. Zawsze on, co? Ludzie z obozu ci tego nie zapomną.
+
+[d46.oskarz.wanda.trafny]
+Wanda.
+
+[d46.oskarz.wanda.zle]
+Wanda?! Dwadzieścia lat u mnie sprząta i nigdy grosza nie wzięła. (Wanda płacze w łaźni.) Przez tydzień kąpiel będzie droższa - dla ciebie.
+
+d46.kto.ksenia = panią Ksenię
+d46.kto.gaspar = Gaspara
+d46.kto.flisak = flisaka z promu
+d46.kto.szymek = Szymka
+d46.kto.wanda = Wandę z łaźni
+[d46.notatka.zle]
+Skradziona szkatułka - złe oskarżenie
+Oskarżyłem {kto}. Niesłusznie. Cała tawerna o tym gada.
+
+[d46.notatka.molo]
+Skradziona szkatułka - flisak
+Szkatułkę ma flisak z promu. Jego worek stoi przy trapie na molo - muszę zdążyć przed promem.
+
+[d46.bagaz]
+> (Worek flisaka przy trapie. Na wierzchu siatka, pod siatką - okuta szkatułka pani Kseni.)
+(Celnik Sambor przytrzymuje flisaka za kołnierz.) Ładne rzeczy wozisz, przyjacielu. To zostaje na wyspie.
+
+[d46.notatka.dobrze.A]
+Skradziona szkatułka - pani Ksenia
+Szkatułka była w kufrze samej pani Kseni, pod podwójnym dnem. Chciała, żeby Borgar zapłacił. Borgar dał mi dwadzieścia pięć groszy.
+
+[d46.notatka.dobrze.B]
+Skradziona szkatułka - Gaspar
+Szkatułkę ukradł Gaspar, handlarz relikwii - była w jego skrzynce-tacy pod fałszywymi kośćmi. Pani Ksenia dała mi trzydzieści groszy.
+
+[d46.notatka.dobrze.C]
+Skradziona szkatułka - flisak
+Szkatułka była w worku flisaka na molo. Zdążyłem przed promem. Pani Ksenia dała mi trzydzieści groszy.
+
+[d46.notatka.przepadla]
+Skradziona szkatułka - przepadła
+Pani Ksenia odpłynęła bez szkatułki. Borgar zapłacił jej sześćdziesiąt groszy. Goście gadają, że w karczmie pod Kruczymi Skałami giną rzeczy.
+
+[podsluch.ksenia]
+Ksenia: Nie płacz, Kseniu. Nie płacz...
+Ksenia: {Borgar zapłaci}. Ma pieniądze {z pokoi}.
+Ksenia: A {handlarzowi} oddam z tego. Wszystko się ułoży.
+Ksenia: Tylko żeby nikt nie zajrzał do {kufra}...
+
+# ======================================================================== K73 „Nocne kroki” (I4)
+zadania.K73.title = Nocne kroki
+zadania.K73.where = Tawerna: piętro gości, nocą
+zadania.K73.when = noc w wynajętym pokoju
+zadania.K73.desc = Nocą ktoś chodzi korytarzem ze świecą. Kto i dokąd?
+zadania.K73.steps.0.text = Idź za kimś, kto nocą chodzi korytarzem ze świecą - nie wchodź w krąg jego światła (skradanie pomaga), nie zgub go do schodów.
+
+# ======================================================================== F9 („Wyspa i fabuła”)
+f9.naglowek = Intrygi na piętrach:
+f9.d45 = Gość spod trójki: przypłyń teraz
+f9.d45Opis = „Trójka” przypływa dziś (pokój 3), zadanie D45 rusza w tawernie.
+f9.d46 = Szkatułka pani Kseni - wariant: {w}
+f9.d46Opis = ◀ ▶ wariant (A: sama Ksenia, B: Gaspar, C: flisak). O - Ksenia na wyspie, kradzież tej nocy już była, rano.
+f9.kroki = Nocne kroki: teraz
+f9.krokiOpis = Godzina 1:06 na piętrze gości - idzie ten, kto ma dziś nocne wyjście.
+f9.list = List pod drzwiami: od nowa
+f9.listOpis = Jutro rano (po nocy w wynajętym pokoju) list może leżeć znowu.
+f9.klucz = Klucz Borgara (godzina)
+f9.kluczOpis = Drzwi pokoi gości otwarte na godzinę, gdy gościa nie ma.
+f9.nie = Nie da się (brak miejsca w księdze?).
+f9.ok.d45 = Gość spod trójki jest w pokoju 3.
+f9.ok.d46 = Pani Ksenia w pokoju 18, wariant {w}.
+f9.ok.kroki = 1:06 - piętro gości.
+f9.ok.list = List może leżeć jutro rano.
+f9.ok.klucz = Klucz Borgara na godzinę.

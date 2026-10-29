@@ -1,0 +1,281 @@
+# Teksty łańcucha W14 „Poselstwo” (wtyczki Poselstwo_Data.js i Poselstwo.js) - docs/PODROZNI.md 2.8, 2.13, I6, 4.1, 4.4, etap 5.
+# Albin, „pątnik” (naprawdę Ragnar Holm, zwiadowca Czarnych Oczu - podróżny „pielgrzym”, pokój 15), poseł Korony Adam Wierzbięta
+# i gwardzista Ostap („posel”, „gwardzista” - Apartament Złoty na piętrze II), Lord Zaleski, Feliks, Borgar, kapral Wit.
+# Bohater jest nastolatkiem: dorośli mówią do niego „chłopcze”, „synu”. „> ” - mówi bohater; bez tego - postać, z którą się
+# rozmawia. {nazwa} - wstawia gra.
+
+# ======================================================================== zadanie W14 (dziennik: FABUŁA)
+zadania.W14.title = Poselstwo
+zadania.W14.where = tawerna (pokój 15; piętro II: Apartament Złoty, Jadalnia, Wielki salon), dzwonnica, mury, przystań, dwór
+zadania.W14.when = od trzeciej fali z promu (dzień 37) do odpływu posła Korony
+zadania.W14.desc = Z trzecią falą przypłynął łagodny pątnik, który za bardzo lubi stare kamienie. Trzy dni później Korona przysyła do Lorda posła z listem, który jest wart więcej niż cała wyspa.
+zadania.W14.fail.text = List posła odpłynął z pątnikiem.
+zadania.W14.steps.0.text = Kim jest pątnik? Poszlaki ({n} z 3): Ambroży (dzwonnica), Borgar (przy barze), dłoń Albina (Czujność 6), Eryk Sowa - jeśli to sojusznik, rozmowa nocą w pokoju 15 (ściana albo drzwi, 23-24). Z trzema - kapral Wit.
+zadania.W14.steps.1.text = {posel}
+zadania.W14.steps.2.text = Narada: dzień {narada}, 21:00 - poseł i Lord w Wielkim salonie (piętro II). Zanieś kolację do Złotego (20:00) i zostań w Jadalni - ściana z salonem (O twarzą do ściany).
+zadania.W14.steps.3.text = Noc Kupały ({noc}): Ostap idzie pić do ogniska. Po północy ktoś może sięgnąć po list posła - pilnuj drzwi Złotego (piętro II) albo bądź przy ognisku.
+zadania.W14.steps.4.text = {ostap}Śledztwo: kto ukradł list posła? Ślady ({n} z 2): wosk na galerii przy pokoju 15, ślady przy złotej kracie, kreda na sandałach Albina, odźwierny (Borgar). Potem Albin i jego kij. Pątnik chce odpłynąć dziś promem o 15:00.
+zadania.W14.steps.5.text = {list}
+zadania.W14.steps.6.text = {spokoj}
+
+# słowa kroków (zmienne)
+kroki.posel.czeka = Na wyspę płynie poseł Korony - Borgar szykuje dla niego Apartament Złoty. Do tego czasu: oczy na pątnika.
+kroki.posel.jest = Poseł Korony Adam Wierzbięta mieszka w Apartamencie Złotym (piętro II), gwardzista Ostap pilnuje drzwi. Borgar szuka kogoś, kto zaniesie mu kolację (20:00-21:00).
+kroki.ostap = "Ostap podejrzewa ciebie - nosiłeś kolację. "
+kroki.list.ma = List posła w twojej torbie: oddać posłowi (Apartament Złoty), pokazać Lordowi (dwór) - albo najpierw przepisać go wieczorem (papier i atrament od Borgara).
+kroki.list.kopia = Oryginał wrócił do posła. Kopia listu jest w twojej torbie - pokaż ją Lordowi (dwór), zanim poseł odpłynie ({dzien}).
+kroki.spokoj.czeka = Pątnik nie dostał listu. Poseł Korony jeszcze nie przypłynął - Borgar szykuje dla niego Apartament Złoty.
+kroki.spokoj.jest = Pątnik nie dostał listu. Poseł odpływa promem {dzien} - pożegnaj się z nim (Apartament Złoty, piętro II).
+
+# napisy nad bohaterem i u góry
+napis.zloto = +{n} G
+napis.trop = Poszlaka: kim jest pątnik ({n}/3)
+napis.slad = Ślad: kto ukradł list ({n}/2)
+napis.sluzba = W służbie: piętro II otwarte do 23:00
+napis.taca = Taca z kolacją - Apartament Złoty, piętro II
+napis.kradziez = Kradzież w Apartamencie Złotym!
+napis.kopia = List przepisany - godzina przy świecy
+napis.kopiaZlapany = Ostap! Przyłapany przy przepisywaniu listu
+
+# ======================================================================== rzeczy (niesione w torbie zadania)
+rzeczy.taca_kolacja.name = Taca z kolacją dla posła
+rzeczy.list_posla.name = List posła Korony
+rzeczy.kopia_listu.name = Kopia listu posła
+
+# ======================================================================== rozdz. 1: kim jest pątnik (poszlaki)
+[trop.palec]
+> (Albin składa ręce do modlitwy. Na palcach prawej dłoni - zgrubienie od cięciwy. Łucznika, nie pątnika.)
+> Strzelasz z łuku, Albinie?
+(Albin chowa dłoń w rękaw.) Zbierałem kiedyś chrust. Ciernie, synu. Ciernie.
+
+[trop.ambrozy]
+> Ambroży, pątnik Albin był u ciebie?
+Był. Dwa razy. Nie o modlitwę pytał. O sygnały: ile razy, kiedy, co znaczy trzy i jeden.
+Pątnik, co liczy uderzenia dzwonu jak strażnik na murze. Dziwny pątnik.
+
+temat.borgar = Ten pątnik z piętnastki...
+[trop.borgar]
+> Borgarze, ten pątnik z piętnastki...
+Albin? Dwa razy pytał o piwnicę. Raz, czy głęboka. Drugi raz, czy drzwi stare. Pątnicy pytają o kaplice, nie o piwnice.
+
+[trop.ansgar]
+> Widziałeś pątnika z piętnastki?
+(Ansgar blednie.) To Holm. Ragnar Holm. Zwiadowca. Płynął drugim statkiem, kiedy ja płynąłem pierwszym.
+On nie modli się przy murach. On je liczy. Uważaj na niego.
+
+# podsłuch: nocna rozmowa w pokoju 15 (ściana albo drzwi z korytarza, 23-24): „kto: tekst”, słowa kluczowe w {nawiasach}
+[podsluch.okno]
+Albin: Siedem miejsc. Trzy już {policzone}.
+Głos spod okna: A {piwnica}?
+Albin: Pod tawerną. Mur grubszy niż {wóz}. Drzwi stare, zamek {zakonny}.
+Głos spod okna: Poseł Korony płynie za trzy dni. Z {listem} do Lorda.
+Albin: Wezmę go w noc {ognisk}. Ludzie będą przy ogniu.
+
+[notatki.patnik]
+Kim jest pątnik
+Albin nie jest pątnikiem: liczy mury, pyta o piwnicę i sygnały dzwonu, ma na palcach ślad cięciwy. Ktoś pod oknem mówi z nim o liście posła - i o nocy ognisk.
+
+# list pod drzwiami (I5 - etap 3: rano po nocy w wynajętym pokoju) i przeszukanie pokoju 15 (etap 3)
+[list.albin]
+List bez podpisu
+„O drugiej pod drzwiami piwnicy. Sam. Przyjaciel zakonu.” Pismo staranne, jak u mnicha. Ktoś bardzo chce wiedzieć, co jest pod tawerną - i co ja o tym wiem.
+
+[przeszukanie.rozaniec]
+> (W torbie Albina: drewniany różaniec. Paciorki rzeźbione w kształt oczu.)
+> (Nie modli się na nim. Liczy.)
+
+[przeszukanie.notatki]
+> (W kufrze Albina: kartki zapisane szyfrem i plan pięter tawerny - z drogą od piętnastki do złotej kraty.)
+> (Ta sama ręka co wosk na galerii.)
+
+# wczesne zdemaskowanie: kapral Wit (trzy poszlaki)
+[wit.wczesnie]
+> Kapralu. Ten pątnik z piętnastki to nie pątnik. Liczy mury, pyta o piwnicę i o sygnały dzwonu.
+(Wit drapie się w kark.) Trzy rzeczy to już nie przypadek. Mogę go zabrać do wieży. Ale jak się mylisz, chłopcze - wstyd będzie twój.
+
+wit.opcja.tak = Zabierz go do wieży.
+wit.opcja.nie = Jeszcze nie.
+[wit.zabral]
+Do wieży z pątnikiem. Jutro przy bramie zobaczysz, jak pątnicy chodzą w kajdanach. Dobra robota.
+
+[notatki.wczesnie]
+Pątnik w wieży
+Kapral Wit zabrał Albina do wieży, zanim jego ludzie dostali list posła. W jego kiju pielgrzymim były notatki - siedem miejsc, jak na mapie z wraku. Ludzie z okiem stracili zwiadowcę.
+
+# ======================================================================== rozdz. 2: poseł i kolacja do Złotego (I6)
+borgar.kolacja = Zanieś kolację do Złotego
+[borgar.kolacjaDaje]
+Jesteś. Dobrze. Taca dla pana posła, Apartament Złoty, piętro drugie. Odźwierny otworzy ci kratę - jesteś w służbie.
+Nie gadaj za dużo. Posłowie lubią ciszę. I nie zjedz po drodze.
+
+[kolacja.posel]
+> (Ostap otwiera drzwi tylko na szerokość tacy.)
+Postaw tam, chłopcze. Ostrożnie - na stole leżą rzeczy warte więcej niż wasza wyspa.
+> (Na stole: teczka z czerwonymi pieczęciami Korony.)
+Możesz posprzątać w jadalni, kiedy skończę. Borgar mówi, że jesteś zwinny i nie gadasz.
+
+[notatki.kolacja]
+Kolacja dla posła
+Zaniosłem posłowi kolację do Apartamentu Złotego. Na stole leżała teczka z pieczęciami Korony. Ostap pilnuje drzwi - w dzień i w nocy.
+
+# ======================================================================== rozdz. 3: narada w Wielkim salonie (podsłuch z Jadalni)
+[podsluch.narada]
+Poseł: Korona nie przyjechała negocjować, panie Zaleski. Przyjechała pomóc panu {zrozumieć}.
+Lord: Mój dziad trzymał tę wyspę bez łaski Korony.
+Poseł: Pański dziad nie płacił podatku {wojennego}. Pan płaci. Srebrem, które nie zawsze jest pańskie.
+Feliks: Pan poseł pozwoli... jeszcze wina?
+Poseł: Korona chce jednego: {drzwi pod skałą}. W zamian umorzy podatek i da panu {tytuł}.
+Lord: A jeśli odmówię?
+Poseł: Chorągiew w zatoce {zaopiekuje się} pańskim dworem. Ma pan czas do zimy. List leży w mojej {teczce}.
+
+[notatki.narada]
+Treść listu Korony
+Korona żąda od Lorda „drzwi pod skałą”. W zamian umorzy podatek wojenny i da tytuł. Termin - do zimy. Przy odmowie chorągiew z zatoki „zaopiekuje się” dworem. List leży w teczce posła, w Apartamencie Złotym.
+
+# ======================================================================== rozdz. 4: Noc Kupały (punkt zwrotny)
+mysl.kupala = (Noc Kupały. Ostap poszedł do ogniska. Drzwi Złotego pilnuje tylko klamka.)
+albin.imie = Albin
+albin.przylapany = Ja... szukałem kaplicy. Zabłądziłem, synu.
+mysl.przylapany = (Albin. Pod drzwiami Złotego, z wytrychem w rękawie. Uciekł na schody.)
+[notatki.zapobiegl]
+Albin pod Złotym
+W Noc Kupały złapałem Albina pod drzwiami Apartamentu Złotego, z wytrychem w rękawie. Uciekł na schody. Listu nie dostał - a ja wiem, kim jest.
+
+scena.rano.posel = Mój list! Ktoś był w nocy w apartamencie!
+scena.rano.ostap = Chłopak od kolacji! Nosił tacę - widział teczkę!
+[notatki.kradziez]
+Kradzież listu
+W Noc Kupały, kiedy Ostap pił przy ognisku, ktoś wyniósł z Apartamentu Złotego list Korony. Poseł wściekły, Ostap patrzy na mnie - nosiłem kolację.
+
+# ======================================================================== rozdz. 4: śledztwo (ślady)
+imie.wosk = Krople wosku
+[slad.wosk]
+> (Na galerii, tuż przy drzwiach piętnastki - krople czerwonego wosku. Takiej świecy używa tylko poseł.)
+
+imie.krata = Ślady przy kracie
+[slad.krata]
+> (Przy złotej kracie - ślady sandałów w kurzu. Odźwierny śpi w kącie jak kamień, z pustym kuflem przy łokciu.)
+
+[slad.kreda]
+> (Na sandałach Albina - biały pył. Kreda... jak ta, którą bielono kratę na piętrze.)
+Co tak patrzysz, synu? Piasek z drogi.
+
+temat.odzwierny = Odźwierny w nocy?
+[slad.borgar]
+> Borgarze, co z odźwiernym w Noc Kupały?
+Spał jak zabity. Ktoś mu postawił kufel - a on kufli nie odmawia. Kto? Mówi, że pątnik. Pątnik, co stawia piwo...
+
+# konfrontacja z Albinem (w tawernie albo na molo przed promem)
+[konfrontacja.albin]
+> Albinie. Wosk posła na galerii. Ślady przy kracie. Pokaż kij.
+(Albin długo milczy. Potem uśmiecha się, jakby skończył modlitwę.) Pusty kij nosi się lżej niż pełny. Szkoda.
+> (W wydrążonym kiju - zwinięty list z pieczęcią Korony.)
+
+konfrontacja.opcja.straz = Straż! Do wieży z nim.
+konfrontacja.opcja.zwiedz = Odpływaj. I powiedz swoim, że przejście jest pod kaplicą.
+konfrontacja.opcja.pusc = Odpływaj i nie wracaj.
+[konfrontacja.straz]
+Do wieży, do wieży... Moi znajdą drogę bez moich notatek. Tylko wolniej.
+
+[konfrontacja.zwiedz]
+Pod kaplicą? ...Dziękuję, synu. Bóg ci zapłać.
+
+[konfrontacja.pusc]
+Mądrze. Nie widzieliśmy się.
+
+[konfrontacja.malo]
+Kradzież? Synu, ja się modlę. Prom za chwilę. Nie zatrzymuj starego pątnika.
+
+[notatki.zlapany]
+Albin w wieży
+Albin - naprawdę Ragnar Holm - poszedł do wieży, a list posła wrócił do mojej torby. Jego notatki (siedem miejsc, jak na mapie z wraku) przeczyta Ansgar albo brat Kleofas.
+
+[notatki.zwiedziony]
+Fałszywy trop
+Puściłem Albina z listem odebranym - i z kłamstwem: „przejście jest pod kaplicą”. Uwierzył. Ludzie z okiem będą szukać w złym miejscu.
+
+[notatki.puszczony]
+Albin odpłynął
+Odebrałem Albinowi list i pozwoliłem mu odpłynąć. Wie, że wiem. Na wyspę już nie wróci.
+
+# ======================================================================== rozdz. 5: co z listem
+[list.posel]
+> Panie pośle. Pański list.
+(Poseł sprawdza pieczęcie, jedna po drugiej.) Nienaruszone. Chłopcze... Korona pamięta takich jak ty.
+Sześćdziesiąt groszy. I moje słowo u rotmistrza Bełzy.
+
+[list.lord]
+> Panie. To list posła Korony. Przeczytałem go.
+(Lord czyta raz, potem drugi.) „Drzwi pod skałą.” Więc o to chodzi Koronie. Nie o podatek.
+Dobrze, że przyszedłeś najpierw do mnie. Zapamiętam to.
+
+list.opcja.oddaj = Oddaj list posłowi.
+list.opcja.kopia = Oddaj list posłowi (kopia zostaje u mnie).
+list.opcja.lord = Pokaż Lordowi list Korony.
+list.opcja.lordKopia = Pokaż Lordowi kopię listu.
+list.opcja.nie = Jeszcze nie.
+borgar.papier = Pożycz papier i atrament
+[borgar.papierDaje]
+Papier? W nocy? ...Masz. Tylko nie pal świecy do rana.
+
+[kopia.ostap]
+Co tu masz, chłopcze? List pana posła?! Oddawaj - i módl się, żeby pan poseł był w dobrym humorze.
+
+[notatki.oddany]
+List wrócił do posła
+Oddałem posłowi Korony list. Pieczęcie nienaruszone. Sześćdziesiąt groszy i słowo posła u rotmistrza Bełzy.
+
+[notatki.lord]
+List u Lorda
+Pokazałem Lordowi list Korony, zanim zobaczył go poseł. Lord wie, że Korona chce „drzwi pod skałą”. Poseł odpłynie wściekły.
+
+[notatki.kopia]
+Kopia listu
+Przepisałem nocą list Korony. Kopia może iść do Lorda, a oryginał wraca do posła.
+
+[notatki.kopiaZlapany]
+Przyłapany przy liście
+Ostap złapał mnie przy przepisywaniu listu. Zabrał list i kopię. Pan poseł nie był w dobrym humorze.
+
+# ======================================================================== pożegnanie posła i zakończenia bez bohatera
+[pozegnanie.posel]
+Odpływam, chłopcze. Tym razem bez strat - dzięki tobie. Korona pamięta karczmę pod Kruczymi Skałami.
+Sześćdziesiąt groszy. I moje słowo u rotmistrza Bełzy.
+
+[pozegnanie.zly]
+Odpływam. Korona pamięta, chłopcze. Zawsze pamięta.
+
+[notatki.wyciek]
+List odpłynął
+Albin odpłynął promem z listem posła w pustym kiju. Poseł oskarża Borgara - karczmarz odpowiada za gości. Ludzie z okiem znają teraz treść listu Korony.
+
+[notatki.donosi]
+Pątnik odpłynął
+Albin odpłynął i nikt go nie zatrzymał. Mówił, że jeszcze się zobaczymy.
+
+# Akt III: łucznik więcej w fali 2 (list posła wyciekł)
+akt3.lucznik = Łucznik z okiem
+
+# ======================================================================== uwagi mieszkańców po tym, co się stało (raz)
+# 0: kapral - Albin w wieży; 1: Ambroży - Albin w wieży; 2: Eryk Sowa - Albin w wieży
+[uwagi.0.lines]
+Pątnik w wieży gada we śnie po obcemu. Liczy kamienie. Dobrze, że go mamy.
+
+[uwagi.1.lines]
+Ten, co pytał o sygnały? W wieży. Dzwon dziś bije lżej.
+
+[uwagi.2.lines]
+Holm w wieży... Pierwszy raz od miesięcy śpię spokojnie.
+
+# ======================================================================== F9 („Wyspa i fabuła”, sekcja wątku W14)
+f9.naglowek = Wątek W14 (Poselstwo):
+f9.etykieta = W14: rozdział {ch} - {nazwa}
+f9.opis = ◀ ▶ rozdział, O - przeskok (Albin, poseł i Ostap na wyspie, poszlaki, dzień, godzina i miejsce)
+f9.brak = Nie da się tam przeskoczyć
+f9.nazwy.1 = kim jest pątnik
+f9.nazwy.2 = kolacja do Złotego
+f9.nazwy.3 = narada w salonie
+f9.nazwy.4 = Noc Kupały
+f9.nazwy.5 = śledztwo
+f9.nazwy.6 = pościg na molo
+f9.nazwy.7 = co z listem

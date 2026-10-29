@@ -264,6 +264,8 @@ kod.mealTalk.5 = Wybierasz z karty, płacisz, siadasz przy wolnym stole - a ja p
 kod.repFoot.0 = Sława: {1} · u Borgara −{2}
 # roomLabel
 kod.roomLabel.0 = Pokój nr {room}
+# (2026-10-29) pokój bohatera zajęty przez kogoś innego (TavernLife.addRoomGuard - podróżni z promu)
+kod.zajety = {room}: zajęte do dnia {do}.
 # readTags
 kod.readTags.0 = Pokój {n}
 # onlyFor

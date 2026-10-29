@@ -235,7 +235,7 @@
             adresaci: ["piekarka", "kowal", "garbarz", "dzwonnik", "praczka", "celnik", "rotmistrz", "latarnik", "pustelnik", "znachorka"] },
         d39: { opinia: 20, poNocy: 3, przepis: "podr_opatrunek" },   // poNocy: hours after the night before the sołtys's talk
         d40: { szkice: 5, mapa: 178, slawa: 3 },
-        d41: { zaklad: 10, miod: 137, prog: 20, natchniony: 4, kupala: 42, melia: { pogodz: 5, wygrana: 10, przegrana: -5 }, renoma: { pogodz: 3, odpraw: -2 } },
+        d41: { zaklad: 10, miod: 137, prog: 20, natchniony: 4, kupala: 42, kupalaOpinia: 2, melia: { pogodz: 5, wygrana: 10, przegrana: -5 }, renoma: { pogodz: 3, odpraw: -2 } },
         d42: { cena: 8, najwyzej: 20, jeczmien: 74, garnizon: 162, sledzenie: [11, 13.5], widzi: 7, celnik: 5, chleb: 83,
             narada: { po: 2, godziny: [20, 22.5] }, opinia: { ujawnij: 5, handel: -2 } },
         d43: { wykup: 40, przychylnosc: 40, hart: 5, garnizon: 5, renoma: 4, opinia: 3 },
@@ -388,7 +388,9 @@
             // D40: the sketches given (the wreck's map, when he has it), the walls under the tavern
             d40Oddaj: ["d40.oddaj", { jesli: "maMapeWraku", to: [{ wybor: [
                 { etykieta: "d40.mapa.pokaz", tresc: ["d40.mapa.teofil", { zrob: "d40Mapa" }] },
-                { etykieta: "d40.mapa.nie", tresc: [] }], anuluj: 1 }] }, "d40.mury", { zrob: "d40Koniec" }],
+                { etykieta: "d40.mapa.nie", tresc: [] }], anuluj: 1 }] },
+                // (Ansgar - Eryk Sowa - the hero's ally: two cartographers at one table, the castaway afraid of the other's eye)
+                { jesli: "flaga:ansgarAlly", to: ["d40.dwaj"] }, "d40.mury", { zrob: "d40Koniec" }],
             // D41: the stage, the contest (the winner is known before the bet is said: Melia's trust), the verse
             d41Scena: ["d41.scena.wstep", { wybor: [
                 { etykieta: "d41.scena.pogodz", tresc: ["d41.scena.pogodzTak", { zrob: "d41Droga", args: ["pogodz"] }] },

@@ -134,6 +134,7 @@
 (() => {
     "use strict";
     const TK = Watki.teksty("zmiana");   // (the words of this file: js/teksty/zmiana.txt, kod.*)
+    const TIP_BONUS = [];   // (2026-10-29) other plugins' tips on top (TavernShift.addTipBonus)
 
     const PLUGIN = "TavernShift";
     const TW = window.Tawerna;   // (TW: T is the tile's size in the shift's files)
@@ -501,7 +502,9 @@
             }
             const played = Object.keys(parts).length, frac = played / this.partIds.length;
             const score = wsum ? Math.round(ssum / wsum) : 0;
-            const tips = Math.max(0, Math.round(this.ctx.tips));
+            // (2026-10-29, docs/PODROZNI.md 1.6) the tavern's renown and the like: more tips (other plugins' addTipBonus)
+            const tipBonus = aborted ? 0 : TIP_BONUS.reduce((n, f) => { try { return n + (Number(f()) || 0); } catch (e) { return n; } }, 0);
+            const tips = Math.max(0, Math.round(this.ctx.tips + tipBonus));
             const s = parts.serve || {}, b = parts.beer || {};
             const deduct = (s.walkouts || 0) * 3 + (s.mistakes || 0) + (b.spilled || 0);
             const wage = BASE_WAGE + 3 * this.level;
@@ -682,6 +685,8 @@
         scene: () => scene(),
         level: () => Math.min(MAX_LEVEL, stats().done),
         stats: () => Object.assign({}, stats()),
+        // (2026-10-29) more tips at the end of a shift: fn() -> G (Podroznicy: the tavern's renown 40/60/80 - +1/+2/+3 G)
+        addTipBonus: fn => { if (typeof fn === "function") TIP_BONUS.push(fn); },
         // null when fine, otherwise why the hero had better not go (the story decides whether to insist)
         canStart() {
             if (window.$gameSystem && typeof $gameSystem.stamina === "function" && $gameSystem.stamina() < 15) return TK.kod.canStart[0];

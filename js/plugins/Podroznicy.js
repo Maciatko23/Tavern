@@ -602,11 +602,16 @@
         if (mapId === 1) { znaczniki = skanuj(data.events); znaczniki01 = true; bump(); }
         const out = [];
         if (mapId === SC.mapa) for (let i = 0; i < AKT_N; i++) out.push(aktorDane(AKT0 + i));
-        // (stage 2: Podroznicy_Sprawy.js - Antek and Zenon at the garrison)
+        // (stage 2: Podroznicy_Sprawy.js - Antek and Zenon at the garrison; stage 3 and on: Podroznicy.dodajWstaw(fn) - the walker, the
+        // letter, the soot, the rope...) - each gives the events of its own ids on this map
         const S2 = window.PodroznicySprawy;
-        if (S2 && typeof S2.wstaw === "function") { try { out.push(...S2.wstaw(data, mapId)); } catch (e) { console.error("[Podroznicy] wstaw", e); } }
+        for (const f of [S2 && S2.wstaw].concat(WSTAWKI)) {
+            if (typeof f !== "function") continue;
+            try { out.push(...(f(data, mapId) || [])); } catch (e) { console.error("[Podroznicy] wstaw", e); }
+        }
         return out;
     }
+    const WSTAWKI = [];
     // who stands on the pier now: the arrived 9-11, the leaving 14-15, who watches the faces 9-15 (only on a ferry day)
     function naMolo() {
         const out = [], d = day(), h = hour(), s = S();
@@ -1117,6 +1122,7 @@
         naPromie: x => naPromie(x, isFerry),
         wyjazd: (pk, d) => { const e = wpis(pk); if (!e) return false; e.do = Math.max(day(), Number(d) || day()); e.zostal = 1; bump(); return true; },
         odswiez: () => bump(),
+        dodajWstaw: fn => { if (typeof fn === "function") WSTAWKI.push(fn); },
         f9: { wiersze: f9Wiersze, wybierz: f9Wybierz, ok: f9Ok }
     };
     window.Podroznicy = T.register(PLUGIN, api);

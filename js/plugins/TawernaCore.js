@@ -420,7 +420,8 @@
         // travellers themselves as residents of the town - TownLife's fourth range (Podroznicy_Data.js)
         { owner: "Podroznicy", from: 3002, to: 3019, what: "podróżni z promu: aktorzy scen na przystani (3002-3008), trap i rekwizyty (3010-3017)" },
         { owner: "TownLife", from: 3020, to: 3049, what: "podróżni z promu jako mieszkańcy (czwarty zakres: obsada 3020-3033, Kompania 3034-3037, pula 3038-3041, Ksenia 3042, trójka 3043)" },
-        { owner: "Lancuchy", from: 3050, to: 3069, what: "łańcuchy podróżnych: W15 „Święte kości” - kurier Baltazara na piętrze gości (3050; SwieteKosci.js), W16 „Dezerter” - Tymon w kryjówce, garnizonie, obozie (3060; Dezerter.js)" }
+        { owner: "Lancuchy", from: 3050, to: 3069, what: "łańcuchy podróżnych: W15 „Święte kości” - kurier Baltazara na piętrze gości (3050; SwieteKosci.js), W16 „Dezerter” - Tymon w kryjówce, garnizonie, obozie (3060; Dezerter.js)" },
+        { owner: "Poselstwo", from: 3070, to: 3089, what: "podróżni etap 5: W14 „Poselstwo” - Lord i Feliks na naradzie, Albin pod Złotym (Map026), wosk i ślady przy kracie (Map025) 3070-3074 (Poselstwo.js); D44 - Feliks na korytarzu gości (3080; Podroznicy5.js)" }
     ];
     const injectors = [];     // { owner, from, to, maps(id), mapsText, build, when, fixSaved, editorWins }
     const dataHooks = [];     // { fn, owner }

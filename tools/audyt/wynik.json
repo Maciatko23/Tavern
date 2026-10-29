@@ -1,13 +1,13 @@
 {
  "summary": {
-  "zadania": 115,
+  "zadania": 122,
   "mieszkancy": 84,
   "mapy": 126,
   "znaczniki": 332,
   "problemy": {
    "do sprawdzenia": 1,
    "uciążliwość": 4,
-   "info": 60
+   "info": 74
   },
   "bledyWczytania": []
  },
@@ -170,6 +170,30 @@
   },
   {
    "waga": "info",
+   "zadanie": "D44",
+   "krok": "krok 1 (rozdz. 2) d44Raport",
+   "co": "Erazm Łaska bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D46",
+   "krok": "krok 0 d46Sledztwo",
+   "co": "Gaspar Lis bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D47",
+   "krok": "krok 0 (rozdz. 1) d47Kompania",
+   "co": "Hubert Szary bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "D48",
+   "krok": "krok 0 (rozdz. 1) d48Mapa",
+   "co": "Teofil Cyrkiel bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
    "zadanie": "K19",
    "krok": "krok 0 k19Count",
    "co": "Ludmiła bywa tylko, gdy „w6Obecni”"
@@ -236,18 +260,6 @@
   },
   {
    "waga": "info",
-   "zadanie": "mieszkaniec gwardzista",
-   "krok": "inside podr_pokoj",
-   "co": "Ostap w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: gwardzista_wnetrze)"
-  },
-  {
-   "waga": "info",
-   "zadanie": "mieszkaniec gwardzista",
-   "krok": "inside podr_sala",
-   "co": "Ostap w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: gwardzista_wnetrze)"
-  },
-  {
-   "waga": "info",
    "zadanie": "mieszkaniec kamerdyner",
    "krok": "inside brama_wsch",
    "co": "Teodor w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: kamerdyner_wnetrze)"
@@ -263,18 +275,6 @@
    "zadanie": "mieszkaniec marek",
    "krok": "inside pod_murem",
    "co": "Marek w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: marek_wnetrze)"
-  },
-  {
-   "waga": "info",
-   "zadanie": "mieszkaniec posel",
-   "krok": "inside podr_pokoj",
-   "co": "Adam Wierzbięta w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: posel_wnetrze)"
-  },
-  {
-   "waga": "info",
-   "zadanie": "mieszkaniec posel",
-   "krok": "inside podr_sala",
-   "co": "Adam Wierzbięta w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: posel_wnetrze)"
   },
   {
    "waga": "info",
@@ -311,6 +311,90 @@
    "zadanie": "mieszkaniec zlodziej",
    "krok": "inside pod_murem",
    "co": "Szymek w środku jest nieosiągalny: w domu bez wnętrza (brak znacznika Miejsce: zlodziej_wnetrze)"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W14",
+   "krok": "krok 0 (rozdz. 1) w14Patnik",
+   "co": "Adam Wierzbięta bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W14",
+   "krok": "krok 0 (rozdz. 1) w14Patnik",
+   "co": "Albin bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W14",
+   "krok": "krok 1 (rozdz. 2) w14Posel",
+   "co": "Adam Wierzbięta bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W14",
+   "krok": "krok 1 (rozdz. 2) w14Posel",
+   "co": "Albin bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W14",
+   "krok": "krok 2 (rozdz. 3) w14Narada",
+   "co": "Adam Wierzbięta bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W14",
+   "krok": "krok 2 (rozdz. 3) w14Narada",
+   "co": "Albin bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W14",
+   "krok": "krok 3 (rozdz. 4) w14Kradziez",
+   "co": "Adam Wierzbięta bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W14",
+   "krok": "krok 3 (rozdz. 4) w14Kradziez",
+   "co": "Albin bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W14",
+   "krok": "krok 4 (rozdz. 4) w14Sledztwo",
+   "co": "Albin bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W14",
+   "krok": "krok 4 (rozdz. 4) w14Sledztwo",
+   "co": "Albin bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W14",
+   "krok": "krok 4 (rozdz. 4) w14Sledztwo",
+   "co": "Albin bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W14",
+   "krok": "krok 5 (rozdz. 5) w14List",
+   "co": "Adam Wierzbięta bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W14",
+   "krok": "krok 6 (rozdz. 5) w14Spokoj",
+   "co": "Adam Wierzbięta bywa tylko, gdy „warunek z kodu”"
+  },
+  {
+   "waga": "info",
+   "zadanie": "W14",
+   "krok": "krok 6 (rozdz. 5) w14Spokoj",
+   "co": "Adam Wierzbięta bywa tylko, gdy „warunek z kodu”"
   },
   {
    "waga": "info",
@@ -1431,6 +1515,69 @@
    "inne": 12
   },
   {
+   "id": "W14",
+   "kind": "W",
+   "title": "Poselstwo",
+   "giver": "-",
+   "steps": 7,
+   "blokady": 0,
+   "inne": 14
+  },
+  {
+   "id": "D44",
+   "kind": "D",
+   "title": "Podatek wojenny",
+   "giver": "poborca",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 1
+  },
+  {
+   "id": "D47",
+   "kind": "D",
+   "title": "Wolna Kompania",
+   "giver": "-",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 1
+  },
+  {
+   "id": "D48",
+   "kind": "D",
+   "title": "Mapa Kruczej Wyspy",
+   "giver": "kartograf",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 1
+  },
+  {
+   "id": "D45",
+   "kind": "D",
+   "title": "Gość spod trójki",
+   "giver": "-",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
+   "id": "D46",
+   "kind": "D",
+   "title": "Skradziona szkatułka",
+   "giver": "-",
+   "steps": 2,
+   "blokady": 0,
+   "inne": 1
+  },
+  {
+   "id": "K73",
+   "kind": "K",
+   "title": "Nocne kroki",
+   "giver": "-",
+   "steps": 1,
+   "blokady": 0,
+   "inne": 0
+  },
+  {
    "id": "D21",
    "kind": "D",
    "title": "Spalona zagroda",
@@ -2135,21 +2282,17 @@
    "key": "posel",
    "name": "Adam Wierzbięta",
    "map": 8,
-   "reach": 0,
-   "whys": [
-    "w domu bez wnętrza (brak znacznika Miejsce: posel_wnetrze)"
-   ],
-   "problems": 2
+   "reach": 100,
+   "whys": [],
+   "problems": 0
   },
   {
    "key": "gwardzista",
    "name": "Ostap",
    "map": 8,
-   "reach": 0,
-   "whys": [
-    "w domu bez wnętrza (brak znacznika Miejsce: gwardzista_wnetrze)"
-   ],
-   "problems": 2
+   "reach": 100,
+   "whys": [],
+   "problems": 0
   },
   {
    "key": "pula_1",
@@ -3470,6 +3613,83 @@
    "id": "W16",
    "kind": "W",
    "title": "Dezerter",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "W14",
+   "kind": "W",
+   "title": "Poselstwo",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D44",
+   "kind": "D",
+   "title": "Podatek wojenny",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D47",
+   "kind": "D",
+   "title": "Wolna Kompania",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D48",
+   "kind": "D",
+   "title": "Mapa Kruczej Wyspy",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D45",
+   "kind": "D",
+   "title": "Gość spod trójki",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "D46",
+   "kind": "D",
+   "title": "Skradziona szkatułka",
+   "day": 1,
+   "gold": 0,
+   "optMax": 0,
+   "debt": 0,
+   "repeat": "",
+   "items": []
+  },
+  {
+   "id": "K73",
+   "kind": "K",
+   "title": "Nocne kroki",
    "day": 1,
    "gold": 0,
    "optMax": 0,

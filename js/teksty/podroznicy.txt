@@ -1112,6 +1112,11 @@ d40.mapa.nie = Nie pokazuj.
 (Teofil długo milczy. Przesuwa palcem po kropkach na brzegu.) Ta ręka... wojskowy kreślarz z lądu. Robi kropki jak oczy.
 Ktoś rysował twoją wyspę dla wojska, chłopcze. I nie po to, żeby kupcy wiedzieli, gdzie przybić.
 
+[d40.dwaj]
+> (Przy stole siada Eryk Sowa. Na widok Teofila blednie i chowa lewy nadgarstek pod stół.)
+(Teofil przygląda mu się długo.) Pan też rysuje. Widzę po palcach. Atrament schodzi tygodniami.
+(Eryk, cicho:) Kiedyś. Teraz maluję portrety. Po dwa grosze. Jest spokojniej.
+
 [d40.mury]
 Wiesz, co jest dziwne? Tu, gdzie stoi tawerna, na starych planach był mur. Gruby. Bardzo gruby.
 Mapa nie kłamie. Kłamią ci, którzy ją zamawiają. Masz swoje grosze. Zrobię ci szkic całej wyspy - przyda się.
@@ -1239,6 +1244,7 @@ Wojskowa pieśń
 Jędrek zaśpiewał wojskową wersję „Pieśni o Kruczych Skałach”. Śpiewali ją żołnierze z czarnymi oczami na tarczach - Czarne Oczy znają pieśń i wiedzą, czego szukać pod skałą.
 
 d41.natchniony = Natchniony ({h} godz.)
+d41.kupala = > (Przy ognisku Kupały Jędrek gra na dudach, a Melia śpiewa. Tańczy całe miasteczko - nawet sołtys.)
 
 # ======================================================================== D42 „Zboże w suszę” (Hanka; Zenon Sita)
 zadania.D42.title = Zboże w suszę

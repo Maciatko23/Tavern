@@ -80,7 +80,7 @@ mieszkańca na poziomie `owner` („first”) albo `after` (bez), z ostrzeżenie
 | `ludmila` | Kantor | „Pokaż towar” | Bron: „Broń z kontynentu” | „Obóz” (`ORDER.chat`), „Bywaj” |
 | `kupiec` (Baltazar po W5) | Kantor | „Pokaż towar” | Bron: „Broń z kontynentu” | „Bywaj” |
 | `szwaczka`, `garbarz`, `przekupka`, `szmaciarz` | Ubior_Sklepy | zakładki (Pokaż / Sprzedaj / Napraw / Ufarbuj) | Bron: skórzane zbroje, przeszywanice, stara broń (garbarz, szwaczka, szmaciarz) | „Porozmawiaj”, „Nic, dziękuję” |
-| `borgar` (Story) | Story | „Weź zmianę” (w godzinach), „Sprzedaj towar” | TavernLife: „Zjedz coś”, „Wynajmij pokój” + tematy zadań przy barze (TownQuests przez TavernLife); Podroznicy: „Księga gości” (2026-10-28); PodroznicySprawy: „Podgrzej list kamerdynera nad kociołkiem” (K71, gdy list w torbie) | „Pogadaj”, „Nie teraz” |
+| `borgar` (Story) | Story | „Weź zmianę” (w godzinach), „Sprzedaj towar” | TavernLife: „Zjedz coś”, „Wynajmij pokój” + tematy zadań przy barze (TownQuests przez TavernLife); Podroznicy: „Księga gości” (2026-10-28); PodroznicySprawy: „Podgrzej list kamerdynera nad kociołkiem” (K71, gdy list w torbie); Intrygi: „Pożycz klucz do pokoi gości” (Renoma 50+), „Wyważmy drzwi trójki” (D45), „Szkatułka pani Kseni - wiem, kto.” (D46) | „Pogadaj”, „Nie teraz” |
 | `woznica` (Wojciech przy wozie; na innych mapach jego zastępca - zdarzenie 3001 Woz) | Woz | - (jedna z jego kwestii „wita”) | Woz: „Podwieź mnie” (gdy wóz tu stoi, 7:00-19:30) | „Bywaj.” |
 
 `addMenu` w Garnizon, Kantor, Ludzie i Ubior_Sklepy - **usunięte**; jedynym użytkownikiem był Bron, który rejestruje teraz opcje
@@ -112,7 +112,7 @@ jako odczyt (testy).
 
 | priorytet | wtyczka | co |
 |---|---|---|
-| `hidden` (900) | Garnizon, Ludzie, Podroznicy (aktorzy przystani 3002-3008, `_podr`), PodroznicySprawy (Antek i Zenon w garnizonie 3008-3009, `_podrS`), Przystan, TownLife, Woz, Wrak | ukryta postać / rzecz nie startuje (każda sprawdza swoje pole: `_garn`, `_ludHidden`, `_przystan`, `_town`, `_wozShown` (wóz i Wojciech poza postojem), `_wrak`) |
+| `hidden` (900) | Garnizon, Ludzie, Podroznicy (aktorzy przystani 3002-3008, `_podr`), PodroznicySprawy (Antek i Zenon w garnizonie 3008-3009, `_podrS`), Intrygi (nocny piechur 3002 i rekwizyty intryg, `_intryga`), Przystan, TownLife, Woz, Wrak | ukryta postać / rzecz nie startuje (każda sprawdza swoje pole: `_garn`, `_ludHidden`, `_przystan`, `_town`, `_wozShown` (wóz i Wojciech poza postojem), `_wrak`) |
 | `instead` (500) | HomeLife | kot na posłaniu nie zabiera startu łóżku („spać?”) |
 | `instead` (500) | TavernDice | stół z `<Tavern:dice>` otwiera grę zamiast strony |
 | `before` (100) | Combat | automatyczny tryb walki wyłączany przed rozmową (Combat_Feel `beforeEvent`); nigdy nie przejmuje |
@@ -122,10 +122,12 @@ jako odczyt (testy).
 | priorytet | wtyczka | co podmienia |
 |---|---|---|
 | `closed` (900) | Kasztelan | zamknięty bar (Borgar, lada), drzwi tawerny, krata w piwnicy (ostrzeżenie W4) |
+| `closed` (900) | Intrygi (2026-10-29) | drzwi zajętych pokoi gości 4-24 na Map025 („Zamknięte. Ktoś tu mieszka.”, Zapukaj; otwarte przy sprzątaniu albo z kluczem Borgara, gdy gościa nie ma) |
 | `scene+30` (830) | Dwor | drzwi dworu w W7 (nad rozmową drzwi Story), właz |
 | `scene+20` (820) | Kantor | drzwi kantoru (zamknięty, nocna zmiana W5) |
 | `scene+10` (810) | Homes | drzwi chaty na sprzedaż (Podgrodzie) |
 | `scene` (800) | TownQuests | furtka (K33), cokoły (W3), krata (W4), tablica / Marek / straż obozu (W6) |
+| `scene` (800) | Intrygi (2026-10-29) | kufer / torba gościa w jego pokoju, gdy sprawa chce przeszukania („Przeszukać cudze rzeczy?”) |
 | `own+30` (530) | HomeLife | kocioł dziadka |
 | `own+20` (520) | TavernLife_Regulars | Melia, Ozzy, Grum |
 | `own+10` (510) | TavernLife | miejsca tawerny z `<Tavern:...>`, drzwi poniżej reputacji |

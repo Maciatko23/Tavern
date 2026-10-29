@@ -1,0 +1,326 @@
+# Teksty spraw etapu 5 podróżnych (wtyczki Podroznicy5_Data.js i Podroznicy5.js) - docs/PODROZNI.md 2.3 (wizyta 2), 2.7, 2.13, I7, 4.4.
+# D44 „Podatek wojenny” (Erazm Łaska, poborca Korony - podróżny „poborca”, pokój 4), D47 „Wolna Kompania” (Hubert Szary, Jasiek
+# Brzytwa, Kazik Kołek, Ruda Hela - „kompania_1..4”, pokoje 9 i 10), D48 „Mapa Kruczej Wyspy” (Teofil Cyrkiel, druga wizyta).
+# Bohater jest nastolatkiem: dorośli mówią do niego „chłopcze”, „mały”. Nikt nie częstuje go wódką. „> ” - mówi bohater.
+
+# ======================================================================== D44 „Podatek wojenny” (Erazm)
+zadania.D44.title = Podatek wojenny
+zadania.D44.where = tawerna (pokój 4 Erazma, pokój 2 przez ścianę), dwór Lorda
+zadania.D44.when = od promu z poborcą (dzień 34) do jego odpływu
+zadania.D44.desc = Erazm Łaska, poborca Korony, liczy podatek wojenny Lorda. I pyta, kto chodzi do dworu nocą - i czym płaci.
+zadania.D44.fail.text = Erazm odpłynął z raportem.
+[zadania.D44.offer.say]
+Ty tu pracujesz, chłopcze. Wiesz, kto chodzi po schodach o północy?
+Pan Zaleski płaci Koronie podatek na chorągiew w zatoce. Pytanie, czym płaci. Dwadzieścia groszy za każde imię.
+
+zadania.D44.offer.yes = Dowiem się.
+zadania.D44.offer.no = Nie donoszę.
+[zadania.D44.offer.accept]
+Dobrze. Ja nie przyjmuję prezentów. Zapisuję je. Ty - zapisuj imiona.
+
+[zadania.D44.offer.decline]
+Szkoda. Raport i tak pójdzie. Taki, jaki wyjdzie z liczb.
+
+zadania.D44.steps.0.text = Noc {noc}, 23:00: kto przychodzi do Erazma? Posłuchaj przez ścianę z pokoju 2 (wynajmij go u Borgara) albo pod drzwiami czwórki - albo wypatruj gościa na korytarzu (od 22:40).
+zadania.D44.steps.1.text = Raport Erazma: „Pan Zaleski płaci podatek srebrem wroga.” {kto}Powiedz Lordowi o monetach (dwór), powiedz Erazmowi, kto płaci, weź jego dwadzieścia groszy - albo milcz, aż odpłynie ({dzien}).
+kroki.d44.feliks = "Płaci Feliks, kamerdyner Lorda - monetami z okiem. "
+kroki.d44.ktos = "Ktoś płaci monetami z okiem - nie wiesz kto. "
+
+# podsłuch: noc w pokoju 4 (ściana z pokojem 2 albo drzwi z korytarza, 23-24): „kto: tekst”, słowa kluczowe w {nawiasach}
+[podsluch.d44]
+Feliks: Reszta podatku, panie poborco. Jak zawsze - do rąk {własnych}.
+Erazm: Liczę... Dwadzieścia trzy, dwadzieścia cztery. A to? Moneta z {okiem}?
+Feliks: Kupcy z lądu płacą, czym {mają}. Pan Zaleski nie wybrzydza.
+Erazm: Pan kamerdyner płaci w obcej {monecie}. Zapiszę to starannie.
+Feliks: Niech pan zapisze. Dobranoc, panie poborco.
+
+feliks.imie = Feliks
+[feliks.korytarz]
+Dobry wieczór, chłopcze. Pan poborca prosił o rachunki. Nie stój w przejściu.
+
+mysl.d44.feliks = (Feliks, kamerdyner Lorda, o tej porze pod czwórką. Z sakiewką pod płaszczem.)
+[d44.moneta]
+Widziałeś kiedyś taką monetę, chłopcze? Oko. Obce srebro. Ktoś mi nią płaci podatek pana Zaleskiego.
+
+[d44.raport]
+Raport gotowy. „Pan Zaleski płaci podatek srebrem wroga.” Chyba że ktoś mi powie coś, czego nie wiem.
+
+d44.opcja.feliks = To Feliks płaci, nie Lord.
+d44.opcja.donos = Biorę dwadzieścia groszy. Powiem, co wiem.
+d44.opcja.milcz = Nic nie powiem.
+d44.opcja.pozniej = Jeszcze pomyślę.
+[d44.feliks]
+Kamerdyner? ...To zmienia raport. Korona oczyści pana Zaleskiego, jeśli to prawda. A ja zawsze sprawdzam.
+
+[d44.donos]
+Dwadzieścia groszy. Zapisane - jako prezent, którego nie przyjmuję. Kamerdyner, mówisz? Ktoś mu szepnie, że pytam. Zawsze ktoś szepcze.
+
+[d44.milcz]
+Milczenie też się zapisuje, chłopcze.
+
+[d44.lord]
+> Panie, poborca pisze raport, że płaci pan podatek srebrem wroga. Monetami z okiem.
+Feliks? Niemożliwe. Feliks jest ze mną od dwudziestu lat. ...Sprawdzę szkatułę. Sam.
+
+[notatki.d44Lord]
+Monety z okiem
+Powiedziałem Lordowi o monetach z okiem w podatku wojennym. „Feliks? Niemożliwe” - ale sprawdzi szkatułę. Sam.
+
+[notatki.d44Feliks]
+Raport o kamerdynerze
+Powiedziałem Erazmowi, że monetami z okiem płaci Feliks, nie Lord. Raport pójdzie o kamerdynerze - a Korona oczyści pana Zaleskiego, kiedy prawda wyjdzie.
+
+[notatki.d44Donos]
+Dwadzieścia groszy
+Wziąłem od Erazma dwadzieścia groszy i powiedziałem, co wiem. Feliks się dowie, że ktoś o niego pyta.
+
+[notatki.d44Milczy]
+Raport poszedł
+Milczałem. Raport Erazma pójdzie do Korony: „Pan Zaleski płaci podatek srebrem wroga.” Garnizon będzie patrzył na Lorda chłodniej.
+
+# ======================================================================== D47 „Wolna Kompania” (I7)
+zadania.D47.title = Wolna Kompania
+zadania.D47.where = tawerna (pokoje 9 i 10, wieczorem sala), dziedziniec tawerny, kapral Wit
+zadania.D47.when = od promu z Wolną Kompanią do jej odpływu
+zadania.D47.desc = Czworo najemników w szarych płaszczach: Hubert Szary, Jasiek Brzytwa, Kazik Kołek i Ruda Hela. Śpiewy i łomot do pierwszej w nocy, kufle w kawałkach. Borgar zaczyna liczyć straty.
+zadania.D47.fail.text = Wolna Kompania odpłynęła, a karczma liczy straty.
+zadania.D47.steps.0.text = Uspokój Wolną Kompanię (Hubert Szary - pokój 9, wieczorem tawerna): siłowanie na rękę, kości ({stawka} G), bójka na dziedzińcu, kapral Wit, najęcie ({cena} G) albo Grum. Noce burd: {noce}.
+
+temat.borgar = Ta Kompania...
+[d47.borgar]
+Czwórka z lądu. Piją, śpiewają do pierwszej, a rano kufle w kawałkach. Goście się skarżą, Melia nie może śpiewać.
+Zrób coś, chłopcze, zanim ja zrobię coś głupiego. Hubert to ich herszt.
+
+[d47.hubert]
+Kompania nie walczy za darmo. Ani za mało. Czego chcesz, mały?
+
+d47.opcja.silowanie = Siłujmy się na rękę.
+d47.opcja.kosci = Zagrajmy w kości ({stawka} G).
+d47.opcja.bojka = Na dziedziniec. Jeden na jednego, na pięści.
+d47.opcja.najmij = Najmę was ({cena} G).
+d47.opcja.grum = Grum chce z wami pogadać.
+d47.opcja.nic = Nic.
+[d47.silowanieStart]
+Ha! Chłopak ma odwagę. Dawaj łapę.
+
+[d47.koscStart]
+Kości? Lubię. Stawiaj.
+
+[d47.bojkaStart]
+Na pięści? Ha! Za kwadrans na dziedzińcu. Bez noży - Kompania ma honor.
+
+[d47.najmij]
+Sześćdziesiąt groszy z góry? ...Masz słowo Kompanii. Gdy dzwon zadzwoni trzy i jeden - wrócimy. A do tego czasu: cisza w karczmie.
+
+[d47.grum]
+Grum? Ten Grum? ...Znamy Gruma. Kiedyś był nasz. Dobra, mały. Cisza.
+
+d47.brak = Potrzebujesz {cena} G
+mysl.d47.wygrana = (Hubert kręci głową i się śmieje. Kompania szanuje krzepę - po dziesiątej ma być cisza.)
+mysl.d47.przegrana = (Hubert się śmieje. „Wróć, jak urośniesz, mały.”)
+mysl.d47.bojka = (Za kwadrans na dziedzińcu tawerny. Jeden na jednego, bez noży.)
+mysl.d47.bojkaKoniec = („Dostałeś, ale się nie bałeś. Kompania szanuje takich.” Na dziś cisza.)
+mysl.burda = (Z pokoi 9 i 10 - śpiewy, łomot i śmiech. Do pierwszej w nocy.)
+napis.burda = Noc burd Kompanii: Renoma -1
+hubert.imie = Hubert Szary
+hubert.bojka = Na pięści, mały! Bez noży!
+[d47.wit]
+> Kapralu, Wolna Kompania rozrabia w tawernie.
+Najemnicy z lądu? Słyszę ich aż przy bramie. Mogę ich wyrzucić za mur - popłyną najbliższym promem. Ale zapamiętają.
+
+d47.opcja.witTak = Wyrzuć ich.
+d47.opcja.witNie = Jeszcze nie.
+[d47.witTak]
+Za mur z nimi. A ty uważaj, jak będą wracać.
+
+[notatki.d47Spokoj]
+Kompania cichnie
+Wolna Kompania mnie szanuje - po dziesiątej cisza. Karczma śpi spokojnie, Melia znów śpiewa.
+
+[notatki.d47Najeta]
+Kompania najęta
+Nająłem Wolną Kompanię za sześćdziesiąt groszy. „Gdy dzwon zadzwoni trzy i jeden - wrócimy.” Do tego czasu cisza w karczmie.
+
+[notatki.d47Wit]
+Kompania za murem
+Kapral Wit wyrzucił Wolną Kompanię za mur. Odpłyną najbliższym promem - i zapamiętają.
+
+[notatki.d47Krew]
+Krew na dziedzińcu
+Bójka na pięści skończyła się krwią. Hubert Szary nie wstał. Kompania odpłynie najbliższym promem - i nie zapomni.
+
+# rywal w siłowaniu na rękę i w kościach (Hubert Szary)
+silowanie.hubert.name = Hubert Szary
+silowanie.hubert.sub = herszt Wolnej Kompanii
+silowanie.hubert.kicker = WOLNA KOMPANIA · O DZIESIĘĆ GROSZY
+silowanie.hubert.with = z Hubertem Szarym, hersztem Kompanii
+[silowanie.hubert.lines.hello]
+Dawaj łapę, mały. Zobaczymy, ile w niej mleka.
+
+[silowanie.hubert.lines.won]
+Ha! Kompania górą.
+
+[silowanie.hubert.lines.lost]
+Na brodę mojej matki... Chłopak ma krzepę!
+
+[silowanie.hubert.lines.round]
+Łokieć na stół, mały. Kompania patrzy.
+
+[silowanie.hubert.lines.burst]
+Hah!
+Kompania!
+Uch!
+
+[silowanie.hubert.lines.winning]
+Mleko, mówiłem. Samo mleko!
+Jasiek, patrz, jak się trzęsie!
+
+[silowanie.hubert.lines.losing]
+Co jest... Kazik, nie gap się!
+Uch... skąd ty to masz?
+
+[silowanie.hubert.lines.roundHe]
+Kompania górą!
+
+[silowanie.hubert.lines.roundYou]
+Niech to... jeszcze raz!
+
+kosci.hubert.name = Hubert Szary
+kosci.hubert.short = Hubert
+kosci.hubert.role = najemnik
+kosci.hubert.style = ryzykant
+kosci.hubert.quote = Kości? Lubię. Stawiaj.
+[kosci.hubert.lines.greet]
+Siadaj, mały. Kompania gra uczciwie. Prawie.
+
+[kosci.hubert.lines.meFirst]
+Ja pierwszy. Kompania zawsze pierwsza.
+
+[kosci.hubert.lines.heroFirst]
+Zaczynaj. Najemnik poczeka.
+
+[kosci.hubert.lines.myBig]
+Ha! Tak się rzuca w Kompanii!
+
+[kosci.hubert.lines.myBust]
+Na brodę mojej matki...
+Krzywe kości. Kazik, coś ty z nimi robił?
+
+[kosci.hubert.lines.myHot]
+Wszystkie sześć! Jasiek, patrz!
+
+[kosci.hubert.lines.push]
+Jeszcze raz. Kto nie ryzykuje, ten nie pije.
+
+[kosci.hubert.lines.bank]
+Zapisuję. Nie przyzwyczajaj się.
+
+[kosci.hubert.lines.heroBust]
+Ha! Pudło, mały.
+
+[kosci.hubert.lines.heroHot]
+Wszystkie sześć? Chłopak ma szczęście.
+
+[kosci.hubert.lines.heroBig]
+No proszę. Dobry rzut.
+
+[kosci.hubert.lines.heroSmall]
+Mało. Rzucaj dalej, jak masz odwagę.
+
+[kosci.hubert.lines.win]
+Kompania wygrywa. Jak zawsze.
+
+[kosci.hubert.lines.lose]
+Wygrałeś. Uczciwie. Kompania pamięta uczciwych.
+
+[kosci.hubert.lines.lucky]
+Szczęście sprzyja odważnym. Albo głupim.
+
+[kosci.hubert.lines.chat]
+Grum kiedyś grał z nami. Przegrywał. Nie mów mu, że ci powiedziałem.
+
+[kosci.hubert.lines.tired]
+Dość na dziś. Kompania idzie spać. No, prawie.
+
+# Akt III: Kompania wśród obrońców (najęta) i najemnik więcej w fali 4 (wyrzucona)
+obrona.kompania.name = Wolna Kompania
+obrona.kompania.start = Trzy i jeden! Kompania dotrzymuje słowa!
+obrona.kompania.hit = Za karczmę!
+obrona.kompania.down = Dobra... na dziś... dość...
+obrona.kompania.win = Kompania nie przegrywa. Zwykle.
+akt3.najemnik = Najemnik Kompanii
+
+# ======================================================================== D48 „Mapa Kruczej Wyspy” (Teofil, druga wizyta)
+zadania.D48.title = Mapa Kruczej Wyspy
+zadania.D48.where = tawerna (Palarnia i czytelnia, pokój 22)
+zadania.D48.when = druga wizyta Teofila Cyrkla (od dnia 40)
+zadania.D48.desc = Teofil Cyrkiel wrócił z gotową mapą wyspy. I z pytaniem o siedem miejsc, gdzie „stare linie murów się schodzą”.
+zadania.D48.fail.text = Teofil odpłynął z mapą twierdzy.
+[zadania.D48.offer.say]
+Chłopcze! Patrz - Mapa Kruczej Wyspy. Gotowa. Pierwsza od stu lat. Dla ciebie, za szkice.
+Ale coś mnie gryzie. Siedem miejsc, gdzie stare linie murów się schodzą. Jak oczy. Porozmawiamy?
+
+zadania.D48.offer.yes = Porozmawiajmy.
+zadania.D48.offer.no = Nie teraz.
+[zadania.D48.offer.accept]
+Wiedziałem! Siadaj. Mapa nie kłamie - kłamią ci, którzy ją zamawiają.
+
+[zadania.D48.offer.decline]
+Nie teraz? Mapa poczeka. Mapy są cierpliwe.
+
+zadania.D48.steps.0.text = Teofil chce narysować dawną twierdzę Kruczych Skał - kupcy z lądu zapłacą za taką mapę. Pomóż mu (25 G), przekonaj, żeby stare mury ominął, albo zabierz mu szkic nocą z tuby (pokój 22).
+
+[d48.pyta]
+Siedem miejsc: tawerna, kamieniołom, latarnia, pustelnia, urwisko, kopiec, dwór. Wszystkie na liniach dawnych murów. Rysujemy twierdzę?
+
+d48.opcja.pomoz = Narysujmy twierdzę.
+d48.opcja.przekonaj = Nie rysuj starych murów.
+d48.opcja.ukradnij = (Zabiorę mu ten szkic nocą.)
+d48.opcja.nie = Jeszcze nie wiem.
+[d48.pomoz]
+Ha! Twierdza Kruczych Skał - na papierze, po trzystu latach! Kupcy z lądu zapłacą złotem. Masz, twoja część: dwadzieścia pięć.
+
+[d48.przekonaj]
+> Niektórych rzeczy nie trzeba rysować, Teofilu. Brat Kleofas mówi to samo.
+...Nie wszystko trzeba rysować. Może i tak. Zostawię puste pole. Kartografowie zostawiają puste pola tam, gdzie się boją.
+
+[d48.przekonajNie]
+Bez powodu? Mapa nie kłamie, chłopcze. Kłamią ci, którzy ją zamawiają.
+
+[d48.ukradnij]
+> (Szkic twierdzy leży w skórzanej tubie, w pokoju 22. Kiedy Teofila nie ma...)
+
+napis.mapa = Mapa Kruczej Wyspy - pamiątka od Teofila
+rzeczy.mapa_wyspy.name = Mapa Kruczej Wyspy (od Teofila)
+[przeszukanie.tuba]
+> (W skórzanej tubie: szkic dawnej twierdzy Kruczych Skał - mury, baszty i siedem oczu na liniach.)
+> (Zabieram go. Teofil narysuje wyspę bez twierdzy.)
+
+[notatki.d48Pomoc]
+Mapa twierdzy
+Pomogłem Teofilowi narysować dawną twierdzę Kruczych Skał. Kupcy z lądu zapłacą za nią złotem - a ludzie z okiem też potrafią kupować mapy.
+
+[notatki.d48Bez]
+Puste pole
+Teofil zostawi na mapie puste pole tam, gdzie były stare mury. „Kartografowie zostawiają puste pola tam, gdzie się boją.”
+
+[notatki.d48Szkic]
+Szkic twierdzy
+Zabrałem Teofilowi nocą szkic twierdzy z tuby. Jego mapa pójdzie na ląd bez starych murów.
+
+[notatki.d48Zlapany]
+Przyłapany przy tubie
+Teofil przyłapał mnie przy swojej tubie. Szkic został u niego - i pójdzie na ląd razem z mapą.
+
+# napisy
+napis.zloto = +{n} G
+
+# ======================================================================== F9 („Wyspa i fabuła”, sekcja spraw etapu 5)
+f9.naglowek = Podróżni - sprawy etapu 5:
+f9.etykieta = {nazwa}
+f9.opis = ◀ ▶ sprawa, O - przeskok (podróżny na wyspie, dzień, godzina i miejsce)
+f9.brak = Nie da się tam przeskoczyć
+f9.nazwy.1 = D44: noc u poborcy
+f9.nazwy.2 = D44: raport Erazma
+f9.nazwy.3 = D47: Wolna Kompania
+f9.nazwy.4 = D48: Teofil i mapa

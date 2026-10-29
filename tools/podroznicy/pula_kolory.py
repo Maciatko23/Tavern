@@ -10,6 +10,9 @@ chusta i suknia, kubrak, kurtka z czapką) dostają nową barwę; nasycenie i ja
 Skóra, włosy, broda, skóra wyprawiona (pasy, buty), len i kontur (bardzo ciemne piksele) się nie zmieniają. Pasma są osobno
 dla arkusza (zmierzone na arkuszach PixelLab) i dla popiersia (barwy popiersi z make_pula_*.py) - wynik ten sam kolor.
 Uruchamiać po przebudowie ciała (build_npc.py) albo jego popiersia (make_pula_*.py). Stykówka: docs/postacie/pula_warianty.png.
+Te same ciała w innych barwach to też dwie postacie obsady (docs/PODROZNI.md 2.13, 0 generacji): Ksenia Żuraw (Pula_K: chusta jako
+kremowy czepiec, bordowy szal, ciemnozielona suknia - wdowa po kupcu) i „gość spod trójki” Trojka (Pula_M cały w czerni, sadza na
+dłoniach).
 """
 import os, sys, colorsys, tempfile
 import numpy as np
@@ -19,12 +22,19 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), 
 CH = os.path.join(ROOT, "img", "characters")
 PICS = os.path.join(ROOT, "img", "pictures")
 
-# pasmo: (hue od, hue do - stopnie, od > do = przez czerwień), (sat od, do), (val od, do)
-# ciało -> {ubranie: (pasmo arkusza, pasmo popiersia)}
+# pasmo: (hue od, hue do - stopnie, od > do = przez czerwień), (sat od, do), (val od, do) [, (wiersz od, do)] - wiersze: w klatce
+# 64 x 64 arkusza (y % 64), na popiersiu bezwzględne (np. tylko ubranie pod szyją, bez twarzy i włosów)
+# ciało -> {ubranie: (pasmo arkusza, pasmo popiersia albo None)}
 PASMA = {
-    "Pula_M": {"plaszcz": (((95, 135), (0.18, 1), (0.12, 1)), ((85, 125), (0.15, 1), (0.08, 1)))},
+    "Pula_M": {"plaszcz": (((95, 135), (0.18, 1), (0.12, 1)), ((85, 125), (0.15, 1), (0.08, 1))),
+               # (Trojka) lniana tunika, spodnie i tobołek: mało nasycone beże pod głową; skóra butów i pasa; dłonie
+               "tunika": (((20, 50), (0.08, 0.33), (0.12, 1), (28, 64)), ((20, 50), (0.08, 0.32), (0.40, 1), (215, 350))),
+               "skora": (((15, 35), (0.38, 0.75), (0.12, 0.60), (28, 64)), None),
+               "dlonie": (((12, 35), (0.38, 0.70), (0.60, 1), (30, 64)), None)},
     "Pula_K": {"chusta": (((340, 6), (0.45, 1), (0.18, 0.66)), ((354, 8), (0.40, 1), (0.08, 1))),
-               "suknia": (((188, 218), (0.15, 1), (0.18, 1)), ((198, 218), (0.12, 1), (0.08, 1)))},
+               "suknia": (((188, 218), (0.15, 1), (0.18, 1)), ((198, 218), (0.12, 1), (0.08, 1))),
+               # (Ksenia) brązowy dziany szal na ramionach - pod głową, nad fartuchem (bez włosów, twarzy i butów)
+               "szal": (((12, 40), (0.35, 0.75), (0.12, 0.60), (20, 40)), ((12, 35), (0.35, 0.75), (0.08, 0.62), (215, 350)))},
     "Pula_S": {"kubrak": (((185, 216), (0.15, 1), (0.18, 1)), ((200, 216), (0.15, 1), (0.08, 1)))},
     "Pula_Z": {"kurtka": (((208, 236), (0.33, 1), (0.12, 1)), ((215, 232), (0.30, 1), (0.08, 1)))},
 }
@@ -36,6 +46,10 @@ WARIANTY = {
     "Pula_K3": ("Pula_K", {"chusta": (218, 0.70, 0.95), "suknia": (305, 0.85, 0.95)}),   # granatowa chusta, śliwkowa suknia
     "Pula_S2": ("Pula_S", {"kubrak": (80, 1.45, 1.00)}),                        # oliwkowy kubrak
     "Pula_Z2": ("Pula_Z", {"kurtka": (356, 0.95, 1.25)}),                       # bordowa kurtka i czapka
+    # postacie obsady z ciał puli (docs/PODROZNI.md 2.13)
+    "Ksenia": ("Pula_K", {"chusta": (42, 0.22, 1.75), "szal": (345, 1.05, 0.90), "suknia": (145, 1.50, 0.62)}),   # czepiec, bordo, zieleń
+    "Trojka": ("Pula_M", {"plaszcz": (230, 0.20, 0.45), "tunika": (230, 0.25, 0.34), "skora": (25, 0.60, 0.55),
+                          "dlonie": (25, 0.35, 0.50)}),                         # cały w czerni, sadza na dłoniach
 }
 
 
@@ -63,19 +77,29 @@ def _hsv_rgb(h, s, v):
     return np.stack([r + m, g + m, b + m], -1)
 
 
-def maska(h, s, v, a, pasmo):
-    (h0, h1), (s0, s1), (v0, v1) = pasmo
+def maska(h, s, v, a, pasmo, wiersze=None):
+    (h0, h1), (s0, s1), (v0, v1) = pasmo[:3]
     mh = ((h >= h0) & (h <= h1)) if h0 <= h1 else ((h >= h0) | (h <= h1))
-    return mh & (s >= s0) & (s <= s1) & (v >= v0) & (v <= v1) & (a > 0.02)
+    m = mh & (s >= s0) & (s <= s1) & (v >= v0) & (v <= v1) & (a > 0.02)
+    if len(pasmo) > 3:
+        y0, y1 = pasmo[3]
+        m &= (wiersze >= y0) & (wiersze < y1)
+    return m
 
 
 def przekoloruj(path, cialo, zmiany, ktore):
     """ktore: 0 = pasma arkusza, 1 = pasma popiersia"""
     im = np.asarray(Image.open(path).convert("RGBA")).astype(np.float64) / 255.0
     h, s, v = _rgb_hsv(im[..., :3])
+    wiersze = np.arange(im.shape[0])[:, None] * np.ones((1, im.shape[1]))
+    if ktore == 0:
+        wiersze = wiersze % 64      # (arkusz: wiersz w klatce)
     out = im.copy()
     for ubranie, (hue, sm, vm) in zmiany.items():
-        m = maska(h, s, v, im[..., 3], PASMA[cialo][ubranie][ktore])
+        pasmo = PASMA[cialo][ubranie][ktore]
+        if pasmo is None:
+            continue
+        m = maska(h, s, v, im[..., 3], pasmo, wiersze)
         rgb = _hsv_rgb(np.full_like(h, float(hue)), np.clip(s * sm, 0, 1), np.clip(v * vm, 0, 1))
         out[..., :3] = np.where(m[..., None], rgb, out[..., :3])
     return Image.fromarray(np.clip(out * 255.0 + 0.5, 0, 255).astype(np.uint8), "RGBA")
@@ -83,7 +107,7 @@ def przekoloruj(path, cialo, zmiany, ktore):
 
 def main():
     podglad = "--podglad" in sys.argv
-    klucze = ["Pula_M", "Pula_M2", "Pula_M3", "Pula_K", "Pula_K2", "Pula_K3", "Pula_S", "Pula_S2", "Pula_Z", "Pula_Z2"]
+    klucze = ["Pula_M", "Pula_M2", "Pula_M3", "Pula_K", "Pula_K2", "Pula_K3", "Pula_S", "Pula_S2", "Pula_Z", "Pula_Z2", "Ksenia", "Trojka"]
     W, H = 150, 250
     sheet = Image.new("RGBA", (len(klucze) * W, H), (128, 128, 128, 255))
     d = ImageDraw.Draw(sheet)
