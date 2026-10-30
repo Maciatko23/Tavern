@@ -1542,3 +1542,47 @@ Ludzie z puli siadają na pierwszym wolnym `podrozny_N`. Na Map025 można przesu
   mniej przy złapanym pątniku (nie obok `ansgarAlly`).
 - **Nie zrobione:** dopisek o poborcy w liście Lorda z dnia 40 (Story); odczyt `w14LordWie` w Dworze; rejestr Kantora; pamiątka na ścianę
   chatki (HomeDecor) - brak przedmiotu dekoracji; własna grafika Hubertowej bójki poza Humans.
+
+### 11.11 Etap 6 - sceny na mapie (2026-10-29)
+
+- **Dopisek w liście Lorda z dnia 40** (decyzja gracza): w liście z dnia „termin - 20” (dzień 40 przy terminie 60), gdy trwa D44 -
+  „PS. Słyszę, że w tawernie nocuje poborca Korony i że pyta o dwór...” (`Story.js` pyta `Podroznicy5.listPoborcy()`, słowa
+  `kod.letterPoborca` w `fabula.txt`).
+- **Sceny już w grze** (budowane razem z sprawami, proste: dymki, emotki, dźwięki RTP, bez serca): przybicie promu z pasami kinowymi i kamerą
+  (etap 1), kazanie Gaspara i otwarcie skrzynki (W15), bęben werbownika, Szczerba wchodząca do tawerny, noc pod piątką, przysięga u Bełzy
+  (W16), narada w salonie, Noc Kupały, pościg i ujęcia posła (W14), nocny piechur ze świecą idący z własnym światłem (I4),
+  Antek i Zenon w garnizonie (D42/D43), podsłuch w przygaszonych dymkach (I2).
+- **Nie zrobione (zostają jako zwykłe rozmowy):** osobne sceny z tabeli „kluczowe chwile” - Tobiasz biegnący od domu do domu,
+  Konstanty przy chorym, Teofil mierzący rynek, zawody Jędrka z Melią, Zenon przy wadze u Hanki, Erazm liczący monety, Albin przy murze,
+  Augustyn przy grobach, burda Kompanii. Wspólnej usługi scen („Scena.play”) nie wydzielałem - każda wtyczka ma swoje proste ujęcia.
+
+### 11.13 Etap 8 - bilans i audyt (2026-10-29)
+
+- **Audyt** `node tools/audyt/przejscie.js`: 122 zadania (65 K, 41 D, 16 W), 0 blokad; zadania podróżnych mają dawców, godziny i miejsca.
+  Złoto z podróżnych nie liczy się w „ekonomii” audytu (nagrody dają haki wątków, nie pola `reward.gold`): suma audytu bez zmian, 932 G.
+- **Ekonomia z danych** (złoto pewne przy dobrych wyborach, bez chciwych): K71 12 G, K72 ok. 2 G za list (2-3 listy na powrót, 5 powrotów),
+  D39 15 G, D40 30 G, D42 10 G, D45 20 G, D46 25-30 G, W14 60 G, W15 25 G, D48 25 G (chciwy wybór: kupcy z lądu), D44 20 G (donos),
+  D41 ±10 G zakład, D43 0 G (wykup kosztuje 40 G), D47 najęcie kosztuje 60 G, W16 0 G (Szczerba 60-80 G przy wydaniu) - razem ok. 220-260 G
+  pewne, do ok. 450 G z chciwymi wyborami: mniej niż w projekcie (320 / 590 G), dług 2500 G bez odpisów od podróżnych, jak zatwierdzono.
+- **Wydajność** (`tests/wydajnosc_test.js`, nowy punkt „tawerna wieczorem”, budżet 15 ms przy CPU x4): pełna karczma (Tobiasz, Teofil, Jędrek,
+  Kompania + osoba z puli, 20:00) kosztuje tyle samo co pusta (ok. 18-19 ms przy obciążonej maszynie przez inne agenty - różnica w granicach
+  szumu), więc podróżni nic nie dokładają; sama sala karczmy jest jednak ponad budżetem 15 ms, tak jak Kruczy Jar, miasto i przystań w
+  tym przebiegu (stan sprzed moich zmian: „7/10 FAIL”). Do powtórzenia na cichej maszynie; budżetów nie luzowałem.
+
+### 11.12 Etap 7 - historyjki (wersja oszczędna, zbudowane 2026-10-29, pomocnik)
+
+- **Pliki:** `Historyjki_Data.js` (4 historyjki: plansze, ujęcia, wyzwalacze) + `Historyjki.js` (odtwarzacz i zakładka Dziennika),
+  teksty `js/teksty/historyjki.txt`, plansze `img/pictures/Hist_<H1|H2|H3|H5>_1.png` (1280x720, po jednej), test `tests/historyjki_test.js`
+  (port 9791, 19 sprawdzeń, ~25 s). Wtyczki pod `Podroznicy5`; stan `Tawerna.state "historyjki"` (wersja 1: `seen`, `order`, `pending`).
+- **Odtwarzacz:** własna scena `Scene_Historyjka` wzorowana na prologu (nie ruszałem `Prologue.js`): plansze ładowane przed startem
+  (`Bitmap.load`, bez pamięci podręcznej - brak pliku nie wywala gry) i zwalniane po końcu; kamera (przesuw i zbliżenie), efekty w kodzie
+  (mgła, dym, deszcz, iskry, pył, drżenie świec), napisy kroniki, linia `@Imię: ...` z tabliczką mówiącego, karta tytułowa. Klawisze: O -
+  następna kwestia, krótkie P - następne ujęcie, przytrzymane P (~1,2 s) - cała historyjka. Brak planszy = sepia z napisami. API:
+  `Historyjki.play(id, { replay, onEnd })`; szyna `historyjkaObejrzana { id, replay, all }`.
+- **Wyzwalacze** (raz na grę, co pół sekundy na spokojnej mapie, myśl nad bohaterem, historyjka po ok. 2,5 s): H1 po pierwszej poszlace D43
+  (Urszula), H2 przy fladze `tymonBrzozowa` (Tymon), H3 przy `gasparZdemaskowany` (Augustyn), H5 gdy list posła jest w rękach bohatera
+  (`Poselstwo.stan().list` = bohater / posel / lord).
+- **Wspomnienia:** zakładka Dziennika (`Journal.addTab`, bez zmian w `Journal.js`): obejrzane od najnowszej, opis z kwestiami, O -
+  „Obejrzyj jeszcze raz” (powrót do Dziennika z jego pierwszą zakładką - tak działa `SceneManager.pop`).
+- **Nie zrobione:** H4, H6-H8 (wersja pełna); wiersz F9 „Historyjka: odtwórz” (obejrzane da się powtórzyć w zakładce); postać z klatek
+  idąca drogą w H1 (jedna plansza bez warstw - ruch samą kamerą); muzyka historyjek (gra muzykę mapy).

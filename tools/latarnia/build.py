@@ -34,13 +34,13 @@ STAGING = os.path.join(HERE, "staging")
 MAP_ID, IZBA, LATERNA, CLIFFS, MOUNTAINS = 159, 160, 161, 157, 13
 W, H = 44, 40
 NOTE = "<Clouds:on>\n<Farm:off>\n<Water:salt>"
-TOWER = (22, 9)                    # the lighthouse's picture (bottom-middle cell = its door)
+TOWER = (22, 11)                   # the lighthouse's picture (bottom-middle cell = its door)
 IZBA_DOOR = (15, 18)               # the keeper's room (front 15, 19)
 LAND_WEST = [(1, 33), (1, 34)]
 LAND_SOUTH = [(29, 38), (30, 38), (31, 38)]
 # TownLife's spots of Bazyli (Miejsce: <key>) - Latarnia_Data.js plans with these names ("inside" = in through that door)
 SPOTS = {
-    "laterna": (22, 10, 8),        # in front of the tower's door: up to the lantern room
+    "laterna": (22, 12, 8),        # in front of the tower's door: up to the lantern room
     "izba": (15, 19, 8),           # in front of the room's door
     "izba_sen": (15, 19, 8),       # (asleep inside, by day - away: shown nowhere)
     "drewutnia": (25, 19, 6),      # by the chopping block, facing the woodshed
@@ -49,7 +49,7 @@ SPOTS = {
 MARKS = {
     "lat_napad": (6, 33, 6),       # W11: the raiders come along the path from the west
     "lat_oboz": (6, 31, 2),        # W11: the thieves wait for their boat in the cove (their camp)
-    "lat_dzwon": (29, 14, 8),      # in front of the fog bell
+    "lat_dzwon": (26, 10, 8),      # in front of the fog bell (on the summit, beside the tower)
 }
 
 
@@ -87,12 +87,19 @@ def terrain(mp):
     land -= {(x, y) for x in range(0, 4) for y in range(27, 33)}
     sea = mp.all - land
     l1 = {c for c in cape if c[1] < 26}
-    l2 = mp.blob(22, 9, 7, 5, seed=6, rough=0.1)
+    # 2026-10-29: three tiers one on another (the player's wish): l1 the cape's lawn, l2 a terrace on it (the woodshed), l3 the summit
+    # with the lighthouse; faces of 3 rows under l2 and l3, a flight of steps through each, the path winding up from flight to flight
+    l2 = {(x, y) for x in range(21, 34) for y in range(17, 22)} - {(21, 17), (33, 17), (33, 21), (21, 21)}
+    l3 = {(x, y) for x in range(18, 28) for y in range(7, 14)} - {(18, 7), (19, 7), (26, 7), (27, 7), (18, 13), (27, 13)}
     mp.raise_to(l1, 1)
     mp.raise_to(l2 & l1, 2)
+    mp.raise_to(l3 & l1, 3)
+    mp.face_h[2] = 3
+    mp.face_h[3] = 3
     mp.terraces()
     mp.stairs(21, 23, 25, "stone")
-    mp.stairs(22, 23, 13, "stone")
+    stairs_n(mp, 31, 32, 21, 3)          # l2 -> l1 (east end of the terrace)
+    stairs_n(mp, 25, 26, 13, 3)          # summit -> l2
     mp.sea(sea)
     mp.deep({(x, y) for (x, y) in sea if y < 2 or x < 2 or x > W - 3})
     for (x, y) in [(5, 6), (8, 3), (38, 5), (40, 10), (6, 15), (39, 20), (3, 24), (41, 25)]:
@@ -102,26 +109,51 @@ def terrain(mp):
     # the paths: from Urwisko (west), from the mountains (bottom), up to the lighthouse
     mp.lane([(-0.5, 33.5), (10, 33.2), (18, 32), (22, 30), (22, 26.5)], 2.2, seed=41)
     mp.lane([(30.5, 39.5), (30, 35), (26, 32), (22.5, 30.5)], 1.8, seed=42)
-    mp.lane([(22.4, 22.8), (22.6, 18), (22.6, 14.6)], 2.0, seed=43)
-    mp.lane([(22.6, 12.5), (22.5, 10.2)], 1.6, seed=44)
-    mp.lane([(22.5, 19), (16, 19.5), (15.2, 19.2)], 1.6, seed=45)
-    mp.lane([(23.2, 19), (25.5, 19.2)], 1.4, seed=46)                    # to the woodshed
-    mp.lane([(23.4, 11.2), (27.5, 12.6), (29, 14)], 1.2, seed=47)        # to the fog bell
+    # the winding way up: lower flight -> east along the lawn -> flight to the terrace -> across it -> flight to the summit -> the door
+    mp.lane([(22.4, 24.6), (26, 24.7), (30, 24.4), (31.5, 24.8)], 1.8, seed=43)
+    mp.lane([(31.5, 20.6), (30.5, 19.4), (28, 18.6), (25.8, 17.6), (25.6, 16.4)], 1.7, seed=44)
+    mp.lane([(25.6, 12.6), (24.6, 12.3), (22.6, 12.2)], 1.6, seed=48)
+    mp.lane([(22.3, 24.2), (18.5, 22.2), (15.5, 19.8), (15.2, 19.2)], 1.6, seed=45)   # to the keeper's room
+    mp.lane([(30.4, 19.8), (27.4, 19.6), (25.5, 19.2)], 1.3, seed=46)                    # to the woodshed
     mp.sea_set = sea
     mp.land = land
     # the cove (west): pebbles and the sea's leavings
     mp.kind(0, {(x, y) for x in range(4, 9) for y in range(27, 34) if (x, y) in land}, DIRT)
 
 
+def stairs_n(mp, x0, x1, top_y, rows, kind="stone"):
+    """mtlib's stairs() cuts two face rows; the new terraces' faces are `rows` high: the flight through all of them"""
+    mp.stairs(x0, x1, top_y, kind)
+    for x in range(x0, x1 + 1):
+        for dy in range(3, rows + 1):
+            c = (x, top_y + dy)
+            col = 3 if x0 == x1 else 0 if x == x0 else 2 if x == x1 else 1
+            mp.layers[0][c] = ("t", mtlib.A5(col, mtlib.STAIRS[kind]))
+            mp.faces.pop(c, None)
+            mp.solid.discard(c)
+            mp.stair_cells.add(c)
+            mp.alias[c] = mtlib.GROUND_OF[mp.style.get(mp.lv(*c), "grass")]
+    for dy in range(3, rows + 1):                       # the face pieces beside the flight become its ends
+        y = top_y + dy
+        part = "L" if dy == rows else "M1" if dy % 2 == 0 else "M2"
+        for x, end in ((x0 - 1, 2), (x1 + 1, 0)):
+            f = mp.faces.get((x, y))
+            if f and part == "L": mp.layers[0][(x, y)] = ("t", mtlib.a5(mtlib.FACE[mp.style.get(f[1], "grass")]["L"][end]))
+            elif f: mp.layers[0][(x, y)] = ("t", mtlib.a5(mtlib.FACE_PLAIN["U" if part == "M1" else "L"][end]))
+
+
 def buildings(mp):
     # the lighthouse on the Order's old watchtower foundation: one picture (PixelLab), its foot on (22, 9) = the door
     js = "Latarnia.door(this);"
     mp.picture(TOWER[0], TOWER[1], "!$Latarnia_Wieza", 0, 2, 0, name="Latarnia", priority=1, cmds=script_cmds(js), note="<Latarnia:wieza>")
-    for c in [(21, 9), (23, 9), (21, 8), (22, 8), (23, 8), (21, 7), (22, 7), (23, 7), (22, 6)]:
-        mp.solid.add(c)
-    mp.blocker(21, 7, 21, 9, name="Latarnia: mur")
-    mp.blocker(23, 7, 23, 9, name="Latarnia: mur")
-    mp.blocker(22, 6, 22, 8, name="Latarnia: mur")
+    # (the picture is 2x since 2026-10-29: its whole base blocks, the doorway is the cell before it)
+    for x in (21, 23):
+        for y in range(8, 12): mp.solid.add((x, y))
+    for y in range(8, 11): mp.solid.add((22, y))
+    mp.solid |= {(20, 11), (24, 11)}
+    mp.blocker(21, 8, 21, 11, name="Latarnia: mur")
+    mp.blocker(23, 8, 23, 11, name="Latarnia: mur")
+    mp.blocker(22, 8, 22, 10, name="Latarnia: mur")
     # the keeper's room: boards on a stone footing, the woodpile under a lean-to on the left
     rec = mp.house("latarnik", "Izba latarnika", 13, 15, 6, 2, 2, "shingle_dark", "boards_stone", door=2, windows=[(4, "wood_lit")],
                    chimney=4, chimney_style=4, lean="left", lean_fill="logs", interior="latarnik", hours=(0, 24))
@@ -140,11 +172,11 @@ def things(mp):
     mp.solid |= {(16, 11), (17, 11)}
     mp.thing("bench", 15, 8)
     # the fog bell (rung every hour in a sea fog - Latarnia.js swings it)
-    mp.picture(29, 13, "!$Ug_Bell", 0, 2, 0, name="Dzwon mgłowy", priority=1, cmds=script_cmds("Latarnia.look(this, \"dzwon\");"),
+    mp.picture(26, 9, "!$Ug_Bell", 0, 2, 0, name="Dzwon mgłowy", priority=1, cmds=script_cmds("Latarnia.look(this, \"dzwon\");"),
                note="<Latarnia:dzwon>")
-    mp.solid.add((29, 13))
+    mp.solid.add((26, 9))
     # the woodshed and the firewood, the chopping block
-    mp.thing("firewood", 26, 17)
+    mp.thing("firewood", 29, 19)
     mp.thing("woodshed", 27, 21)
     mp.thing("chopping_block", 26, 19)
     mp.look(27, 18, "Drewutnia", "", priority=0, through=True, js="Latarnia.look(this, \"drewno\");")

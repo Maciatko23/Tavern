@@ -1,0 +1,93 @@
+# Historyjki ilustrowane podróżnych (wtyczki Historyjki_Data.js i Historyjki.js) - docs/PODROZNI.md 8.2.
+# Napisy jak kronika prologu: jedno-dwa zdania na ujęcie. Linia zaczynająca się od „@Imię: ” to słowa opowiadającego (z tabliczką).
+# Bohater jest nastolatkiem. Plansze: img/pictures/Hist_<H1|H2|H3|H5>_<n>.png (gdy ich nie ma - sepia z napisami).
+
+# ======================================================================== zakładka Dziennika i odtwarzacz
+zakladka.pusto = Brak wspomnień
+zakladka.legenda = Obejrzane historyjki: {n} z {m}
+zakladka.pomoc = ←/→ lub Q/E: zakładka   O: obejrzyj jeszcze raz   P: wróć
+zakladka.tytul = Wspomnienia
+[zakladka.puste]
+Tu zostają historyjki, które ktoś ci opowiedział - albo które wyczytałeś z cudzych listów. Można do nich wrócić i obejrzeć je jeszcze raz.
+
+zakladka.opowiada = Opowiada: {kto}
+zakladka.dzien = Obejrzane w dniu {dzien}
+zakladka.powtorz = O - obejrzyj jeszcze raz
+odtwarzacz.pomin = przytrzymaj: pomiń
+napis.nowa = Nowe wspomnienie: {tytul}
+
+# ======================================================================== H1 „Olszynka, dzień poboru” (Urszula, po pierwszej poszlace D43)
+H1.title = Olszynka, dzień poboru
+H1.who = Urszula
+[H1.mysl]
+(Urszula patrzy w stronę bramy garnizonu. Chyba chce coś powiedzieć.)
+
+[H1.s1]
+Olszynka. Wieś mała jak dłoń, a świt miała zawsze piękny.
+@Urszula: W dzień poboru mgła leżała w rowach jak mleko. Usłyszałam bęben, zanim zobaczyłam werbownika.
+
+[H1.s2]
+Werbownik szedł środkiem drogi i nie rozglądał się na boki. Tacy się nie rozglądają.
+@Urszula: Wołali imiona z listy. Pierwszy był Antek.
+
+[H1.s3]
+Chłopak z piegami poszedł drogą, nie oglądając się. Szedł prosto, żeby nikt nie widział jego twarzy.
+@Urszula: Nie płakał. Płakałam ja, przy płocie, i trzymałam się go oburącz, jakbym go miała utrzymać.
+
+[H1.s4]
+Mgła zamknęła się za nim, jak woda za kamieniem.
+@Urszula: Dlatego stoję przy bramie, chłopcze. Bo kiedyś ktoś musi stać tam, gdzie oni wracają.
+
+# ======================================================================== H2 „Pod Brzozową Wolą” (Tymon, gdy zaufa bohaterowi - W16)
+H2.title = Pod Brzozową Wolą
+H2.who = Tymon
+[H2.mysl]
+(Tymon patrzy na swoje dłonie, jakby coś na nich widział.)
+
+[H2.s1]
+Noc nad polem. Daleko płonie wieś, a łuna leży na brzuchach chmur.
+@Tymon: Stałem w tym wojsku trzy lata. W tamtą noc pierwszy raz bałem się nie wroga.
+
+[H2.s2]
+Chorągiew z pomarańczowym feniksem wisiała bez ruchu. Nie było wiatru, tylko dym.
+@Tymon: Chorągiew brzozowska stała na lewym skrzydle. Ich nie zabijali. Brali. Całymi rzędami.
+
+[H2.s3]
+Jeńcy szli w szeregu, związani jednym sznurem, i nikt z nich nie podniósł głowy.
+@Tymon: Rozkaz brzmiał: „Zapisać, nie liczyć”. Więc przestałem liczyć. Tej nocy odłożyłem bęben i poszedłem w ciemność.
+
+# ======================================================================== H3 „Biblioteka w Lipnicy” (Augustyn, po znalezieniu spisu - W15)
+H3.title = Biblioteka w Lipnicy
+H3.who = brat Augustyn
+[H3.mysl]
+(Spis z Lipnicy leży w twojej torbie. Brat Augustyn patrzy na niego długo.)
+
+[H3.s1]
+Biblioteka klasztoru w Lipnicy. Świece, półki aż po sufit, deszcz bijący w okno.
+@Augustyn: Przyszli w deszczu, w czarnych tabardach z białym okiem. Nikt nie zdążył zamknąć drzwi.
+
+[H3.s2]
+Wynosili księgi workami, jedna po drugiej. Karty brata Dobiesza zajęły się od pochodni.
+@Augustyn: Brat Dobiesz próbował je zasłonić własnymi rękami. Najgorsze, że nie krzyczeli. Pracowali.
+
+[H3.s3]
+Deszcz nie gasił nic. Ogień jest cierpliwszy niż woda.
+@Augustyn: Co się uratowało, jest w tym spisie. I dlatego ktoś wciąż płaci za kamień z krukiem.
+
+# ======================================================================== H5 „Pieczęć” (punkt zwrotny W14 - treść listu)
+H5.title = Pieczęć
+H5.who = list posła Korony
+[H5.mysl]
+(Pieczęć jest pęknięta. List Korony leży przed tobą i czyta się sam.)
+
+[H5.s1]
+Sala rady Korony. Długi stół, dziesięć świec, pomarańczowy feniks na ścianie.
+Pismo posła brzmiało: „Rada postanowiła. Wyspa ma być zbadana, nim zostanie oddana.”
+
+[H5.s2]
+W cieniu za krzesłem stał ktoś w płaszczu. Gdy świeca drgnęła, pod kapturem błysnęło białe oko.
+Czytasz dalej: „Drzwi pod skałą. Zamek zakonny. Kto go otworzy, ten ma wyspę.”
+
+[H5.s3]
+Rada rozeszła się o świcie. Ktoś z białym okiem rozesłał kruki szybciej niż poseł dojechał do portu.
+Teraz wiesz, o co naprawdę chodzi Koronie. Nie o podatek.

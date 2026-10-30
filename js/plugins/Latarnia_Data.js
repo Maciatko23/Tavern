@@ -61,7 +61,7 @@
     const INDOOR = { 160: { place: "izba", at: [5, 7, 8] }, 161: { place: "laterna", at: [6, 5, 4] } };
     const TLD = window.TownLifeData;
     if (TLD && TLD.SPOTS_BY_MAP) {
-        TLD.SPOTS_BY_MAP[MAP] = Object.assign({ laterna: [22, 10, 8], izba: [15, 19, 8], izba_sen: [15, 19, 8], drewutnia: [25, 19, 6] },
+        TLD.SPOTS_BY_MAP[MAP] = Object.assign({ laterna: [22, 12, 8], izba: [15, 19, 8], izba_sen: [15, 19, 8], drewutnia: [25, 19, 6] },
             TLD.SPOTS_BY_MAP[MAP] || {});
         for (const [mid, o] of Object.entries(INDOOR)) {
             const spots = TLD.SPOTS_BY_MAP[mid] = TLD.SPOTS_BY_MAP[mid] || {};
@@ -224,8 +224,8 @@
 
     window.LatarniaData = { MAP, IZBA, LATERNA, ITEM, IDS: [630, 639], OWNER: "Latarnia", PLAN, RESIDENT, INDOOR, FUEL, FOG, VISIONS, HEAVY,
         RAID, TX, K49, D22, W11, VITEMS, REMARKS, EPILOG,
-        // the lighthouse's fire on the tower's picture (tools/latarnia/art/art.json: px right of / above the middle of its foot)
-        FIRE: { x: 2, y: 177, w: 12 }, TOWER: [22, 9], IZBA_DOOR: [15, 18], LANDING: { 160: [6, 8], 161: [5, 7] },
+        // the lighthouse's fire on the tower's picture (tools/latarnia/art/art.json: px right of / above the middle of its foot; 2026-10-29 the tower is 2x: 288x512 cell, flame k = 1.6)
+        FIRE: { x: 0, y: 354, w: 24, k: 1.6 }, TOWER: [22, 11], IZBA_DOOR: [15, 18], LANDING: { 160: [6, 8], 161: [5, 7] },
         // the beams seen from afar at night on the maps around: from beyond the right edge of the screen, sy = its height (a share)
         FAR: { 13: { side: "right", sy: 0.2 }, 157: { side: "right", sy: 0.3 } } };
 })();

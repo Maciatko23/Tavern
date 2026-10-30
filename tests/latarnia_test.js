@@ -141,7 +141,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.setDay(10, 15);
     await t.frames(30);
     const day = await t.json(`(function(){ const ss = SceneManager._scene._spriteset; return { lit: Latarnia.lit(), flame: !!(ss._latFlame && ss._latFlame.visible) }; })()`);
-    if (SHOT) { await t.locate(22, 14, 8); await t.frames(40); await t.shot(path.join(SHOTS, "latarnia_dzien.png")); }
+    if (SHOT) { await t.locate(22, 12, 8); await t.frames(40); await t.shot(path.join(SHOTS, "latarnia_dzien.png")); }
     await t.setDay(10, 23);
     await t.frames(60);
     const night = await t.json(`(function(){ const ss = SceneManager._scene._spriteset, nl = ss._nightLight;
@@ -149,7 +149,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
             light: nl && nl.visible ? nl.lights().some(l => l.id === 6630 && l.r >= 480) : false, beams: !!(ss._latLayer && ss._latLayer._beams.visible), fuel: Latarnia.state().fuel }; })()`);
     t.check("za dnia latarnia nie świeci; nocą płomień w koszu na wieży, szyby laterny świecą, duże światło w warstwie nocy i snopy nad morzem",
         !day.lit && !day.flame && night.lit && night.flame && night.glass > 100 && night.light && night.beams, { day, night });
-    if (SHOT) { await t.locate(22, 16, 8); await t.frames(60); await t.shot(path.join(SHOTS, "latarnia_noc.png")); }
+    if (SHOT) { await t.locate(22, 12, 8); await t.frames(60); await t.shot(path.join(SHOTS, "latarnia_noc.png")); }
     // without fuel: dark
     await t.eval("(function(){ $gameSystem._dayNightDay = 11; $gameSystem.setDayNightHour(15); Latarnia.settle(); Latarnia.state().fuel = 0; $gameSystem.setDayNightHour(23); return 0; })()");
     await t.frames(40);
@@ -171,9 +171,9 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const fog = await t.json(`(function(){ const ss = SceneManager._scene._spriteset; return { fog: Latarnia.fogNow(), sw: $gameSwitches.value(19), layer: !!(ss._latLayer && ss._latLayer._fog.visible), bells: window.__se.filter(n => n === 'Bell1').length }; })()`);
     t.check("mgła morska nocą: Latarnia.fogNow, przełącznik 19, pasma mgły nad przylądkiem, o pełnej godzinie dzwon mgłowy bije 3 razy",
         fog.fog && fog.sw && fog.layer && fog.bells === 3, fog);
-    if (SHOT) { await t.locate(22, 15, 8); await t.frames(30); await t.shot(path.join(SHOTS, "latarnia_mgla.png")); }
+    if (SHOT) { await t.locate(22, 12, 8); await t.frames(30); await t.shot(path.join(SHOTS, "latarnia_mgla.png")); }
     // the tower's door: before K49 only in a fog (and he is up there)
-    await t.eval("(function(){ $gamePlayer.locate(22, 10); $gamePlayer.setDirection(8); $gameMap.events().find(e => /<Latarnia:wieza>/.test(e.event().note)).start(); return 0; })()");
+    await t.eval("(function(){ $gamePlayer.locate(22, 12); $gamePlayer.setDirection(8); $gameMap.events().find(e => /<Latarnia:wieza>/.test(e.event().note)).start(); return 0; })()");
     const inLat = await t.until(t.onMap(161), 20);
     await t.frames(30);
     await t.calm({ quiet: true });
@@ -232,7 +232,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const jt = await t.talkTo("TownLife.eventOf('janek')", ["Kupię dzbanek"]);
     t.check("Janek na przystani sprzedaje tran, póki trwa K49: 6 G za dzbanek", (await t.count(177)) === 1 && (await t.gold()) === 34 && /Tran\?/.test(jt.text), [jt.text.slice(0, 200), await t.count(177), await t.gold()]);
     await t.give(177, 3); await t.give(61, 6);
-    await t.go(159, 22, 16, 8);
+    await t.go(159, 22, 12, 8);
     await t.setDay(25, 16);
     await t.frames(40);
     const f1 = await S("s.fuel"), g2 = await t.gold();
@@ -241,7 +241,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     t.check("...oddane: 4× Tran i 6× Drewno; nagroda 30 G, latarniaUfa, opał latarni +5,5 nocy", k49r.done && k49r.ufa && k49r.tran === 0 && k49r.wood === 0
         && (await t.gold()) === g2 + 30 && Math.abs((await S("s.fuel")) - Math.min(20, f1 + 5.5)) < 0.01, [k49r, k49.text.slice(-200)]);
     await t.setDay(25, 12);
-    await t.eval("(function(){ $gamePlayer.locate(22, 10); $gamePlayer.setDirection(8); $gameMap.events().find(e => /<Latarnia:wieza>/.test(e.event().note)).start(); return 0; })()");
+    await t.eval("(function(){ $gamePlayer.locate(22, 12); $gamePlayer.setDirection(8); $gameMap.events().find(e => /<Latarnia:wieza>/.test(e.event().note)).start(); return 0; })()");
     t.check("po K49 drzwi latarni otwarte także za dnia (laterna)", await t.until(t.onMap(161), 20));
 
     // ---------------------------------------------------------------- W11 „Soczewka”: droga przez kradzież i sprzedaż
@@ -252,7 +252,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.frames(60);
     const balt = await t.talkTo("TownLife.eventOf('kupiec')", ["Nie sprzedam"]);
     t.check("rozdz. 1: Baltazar w kantorze chce „szkiełka z latarni” za 400 G; odmowa", /Czterysta/.test(balt.text) && (await t.json("TownQuests.rec('W11').step")) === 1, balt.text.slice(0, 250));
-    await t.go(159, 22, 16, 8);
+    await t.go(159, 22, 12, 8);
     await t.setDay(70, 16);
     await t.frames(40);
     const warn = await t.talkTo(B, []);
@@ -286,7 +286,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const kln = await t.json(`({ step: TownQuests.rec('W11').step, notes: ($gameSystem._journal.notes || []).map(n => n.title) })`);
     t.check("rozdz. 5: brat Kleofas czyta w kronikach: „Oko Strażnicy”, z kryształu Pierwszych, nie odłamek Serca (notatka)",
         /Oko Strażnicy/.test(kl.text.replace(/\s+/g, " ")) && /kryształu Pierwszych/.test(kl.text.replace(/\s+/g, " ")) && kln.step === 5 && kln.notes.includes("Oko Strażnicy"), [kln, kl.text.slice(0, 300)]);
-    await t.go(159, 22, 16, 8);
+    await t.go(159, 22, 12, 8);
     await t.setDay(73, 16);
     await t.frames(40);
     await t.talkTo(B, ["Sprzedam je"]);
@@ -303,7 +303,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // ---------------------------------------------------------------- W11: druga droga - obrona i rozbicie
     await t.eval(`(function(){ const q = TownQuests.state(); delete q.q.W11; delete q.flags.soczewkaSprzedana; const s = Latarnia.state(); s.lens = 'whole'; s.raid = null;
         $gameSystem._dayNightDay = 80; $gameSystem.setDayNightHour(16); TownQuests.autoChecks(); TownQuests.completeStep('W11'); return TownQuests.rec('W11').step; })()`);
-    await t.go(159, 22, 16, 8);
+    await t.go(159, 22, 12, 8);
     await t.setDay(80, 16);
     await t.frames(40);
     await t.talkTo(B, []);

@@ -12,7 +12,7 @@ const kit = require("./lib/kit.js");
 // walking 47.2 before the speed-ups -> 11.8 after, the town walking 19.3 -> 9.5, the harbour at night 16.4 -> 10.4 (this test's
 // best of 3: ~12, ~8.5, ~9). A return to "before" is red on all three.
 const THROTTLE = 4, FRAMES = 150, RUNS = 3;
-const BUDGET = { jar: 22, miasto: 15, przystan: 14 };
+const BUDGET = { jar: 22, miasto: 15, przystan: 14, tawerna: 15 };
 
 // one frame's update + drawing, measured on the page (walk: the hero walks right and left, the map scrolls - the heaviest case)
 const MEASURE = (n, walk) => `new Promise(res => {
@@ -119,4 +119,14 @@ kit.test({ port: 9493, bootCheck: "the game boots", errorCheck: "no errors in th
     await t.setHour(22);
     const harbour = await measure("przystan", false);
     t.check("the harbour at night: a frame under " + BUDGET.przystan + " ms at 4x slower CPU (before ~16.5)", harbour.frame < BUDGET.przystan, harbour);
+
+    // ---- the tavern's hall in the evening (2026-10-29, docs/PODROZNI.md 6.11): the regulars and a full house of the ferry's travellers
+    // (four of the cast and the pool, the Company's group counts as one) - the same budget as the town
+    await t.eval(`(function(){ $gameSystem._dayNightDay = 40; $gameSystem.setDayNightHour(20); for (const k of ["tobiasz", "kartograf", "grajek", "kompania"]) { try { Podroznicy.przyplyn(k); } catch (e) {} } Podroznicy.przyplyn("pula"); return 0; })()`);
+    await t.go(1, 50, 34, 8);
+    await near(50, 34);
+    await t.setHour(20);
+    await t.frames(120);
+    const hall = await measure("tawerna", false);
+    t.check("the tavern's hall at 20:00 with the ferry's travellers: a frame under " + BUDGET.tawerna + " ms at 4x slower CPU", hall.frame < BUDGET.tawerna, hall);
 });

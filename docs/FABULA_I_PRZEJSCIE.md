@@ -122,6 +122,7 @@ Wyspa jest ziemią niczyją, kilka godzin promem od lądu. Ciągną na nią ucho
 - **Dzień targowy** co 7 dni (7, 14, 21…).
 - **Prom** co 3 dni (9–15 przy molo).
 - **Fale uchodźców** w dniach 10, 25, 37, 52 - zawsze w dzień promu (od 2026-10-28, docs/PODROZNI.md 5.1; Ludmiła i Ela przypływają z pierwszą falą).
+- **Podróżni z promu** (2026-10-29, docs/PODROZNI.md 11): prom co 3 dni przywozi obsadę z zadaniami (K71-K73, D39-D48, W14-W16) i pulę; sprawy nie blokują głównego wątku, każda ma wyjście „bez bohatera”. Echa w Akcie III: `pielgrzymDonosi`, `mapaTwierdzy`, `kamienBaltazar`, `pomiaryWyszly` (jeden zwiadowca więcej w fali 3), `poselstwoWyciek` (fala 2), `kompaniaWroga` (fala 4), `kompaniaNajeta`, `tymonGarnizon`, `poselWdzieczny` (obrońcy).
 - **Święta**:
 
   | Święto | Kiedy |

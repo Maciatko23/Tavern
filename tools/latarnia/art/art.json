@@ -1,15 +1,16 @@
 {
  "tower": {
   "cell": [
-   144,
-   256
+   288,
+   512
   ],
   "fire": {
-   "x": 2,
-   "y": 177
+   "x": 0,
+   "y": 354
   },
-  "glassPixels": 516,
-  "foot": 253
+  "glassPixels": 2241,
+  "foot": 506,
+  "note": "2x (2026-10-29), build_tower2x.py"
  },
  "visions": [
   "Latarnia_Wizja_1.png",

@@ -313,8 +313,8 @@ kit.test({ port: 9579, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     m = await key("D", 12);
     m = await key("O", 6);
     t.check("Dziennik: w środku, dział Zadania, klawisze A/D dział · W/S wpis · O przypnij · P wróć", m.level === 2 && m.journal.name === "Zadania" && m.keyCaps.join() === "A/D,W/S,O,P" && m.keys.join() === "dział,wpis,przypnij,wróć" && m.activeWindows.includes("Window_JournalList"), m.journal);
-    t.check("Dziennik: działy Zadania, Zlecenia, Surowce, Notatki, Okolice, Gablotka (bez Cele, Miasteczko, Budynki, Receptury, Zapasy)",
-        m.journal.names && m.journal.names.join() === "Zadania,Zlecenia,Surowce,Notatki,Okolice,Gablotka", m.journal.names);
+    t.check("Dziennik: działy Zadania, Zlecenia, Surowce, Notatki, Okolice, Gablotka, Wspomnienia (2026-10-29: historyjki; bez Cele, Miasteczko, Budynki, Receptury, Zapasy)",
+        m.journal.names && m.journal.names.join() === "Zadania,Zlecenia,Surowce,Notatki,Okolice,Gablotka,Wspomnienia", m.journal.names);
     const heads = (m.journal.heads || []).map(h => h.label);
     const rows = await t.json("SceneManager._scene._views.journal._list._items.map(i => ({ label: i.label, head: !!i.head, group: i.group || null, goal: i.goal ? i.goal.id : null, quest: i.quest ? i.quest.id : null, watek: i.watek || null, mark: i.mark || null }))");
     const inGroup = (g, f) => rows.some(r => !r.head && r.group === g && f(r));

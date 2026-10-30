@@ -3,7 +3,7 @@
 // paths over the tiles (8-way where both corners are free), walking by the keys, facing, O / Q / E, holding O,
 // reading the menus to pick entries by name. Tasks run from a queue; reflexes (eat, rest) run between steps.
 (function() {
-    const VERSION = 72;
+    const VERSION = 77;
     if (window.AP && window.AP.version === VERSION) return "same";
     const AP = window.AP = { version: VERSION, queue: [], cur: null, curName: "", log: [], paused: false, reserve: 16, restTo: 90, frame: 0 };
     const hour = () => ($gameSystem.dayNightHour ? $gameSystem.dayNightHour() : 12);
@@ -58,6 +58,15 @@
     const W = () => $gameMap.width(), H = () => $gameMap.height();
     function passStep(x, y, dx, dy) {
         const p = P();
+        // (AP.freeWalk - the story autopilot: when canPass finds no way, FreeMovement's own rule - a tile is walkable when it passes
+        // in any direction and no one stands there; the tiles' one-way flags (wall faces in the underground's maze) do not stop the feet.
+        // Only as a fallback: by that rule paths also run over the tops of walls - he stood on one over a room of rats once)
+        // (FreeMovement since 2026-10-29: a tile is entered by its edge towards the feet - the reverse of the step - as the engine's grid)
+        if (AP.freeWalk && AP._freeNow && p.freeTileBlocked) {
+            const eh = dx > 0 ? 4 : 6, ev = dy > 0 ? 8 : 2;
+            if (dx && dy) return !p.freeTileBlocked(x + dx, y, eh) && !p.freeTileBlocked(x, y + dy, ev) && !p.freeTileBlocked(x + dx, y + dy, eh) && !p.freeTileBlocked(x + dx, y + dy, ev);
+            return !p.freeTileBlocked(x + dx, y + dy, dx ? eh : ev);
+        }
         if (dx && dy) {
             const h = dx > 0 ? 6 : 4, v = dy > 0 ? 2 : 8;
             return p.canPass(x, y, h) && p.canPass(x + dx, y, v) && p.canPass(x, y, v) && p.canPass(x, y + dy, h);
@@ -154,7 +163,8 @@
             yield* align(sx, sy);
             if (P().x === tx && P().y === ty) return true;
             const f = attempt === 0 && f0 && f0.sx === P().x && f0.sy === P().y ? f0 : field(P().x, P().y);
-            const path = pathFrom(f, tx, ty);
+            let path = pathFrom(f, tx, ty);
+            if (!path && AP.freeWalk) { AP._freeNow = true; try { path = pathFrom(field(P().x, P().y), tx, ty); } finally { AP._freeNow = false; } }
             if (!path) { say("nie ma drogi do " + tx + "," + ty); return false; }
             let stuck = false;
             for (const s of segments(path)) if (!(yield* followSeg(s))) { stuck = true; break; }
@@ -1666,7 +1676,8 @@
         AP.cur = null; AP.fleeing = false; AP.saved = null; AP.restDepth = 0; AP.feedDepth = 0; AP.onTrip = false; AP.goingHome = false; AP.pantryDepth = 0; AP.queue = [];
         releaseAll();
         AP.errors = (AP.errors || []).filter(f => AP.frame - f < 60 * 60).concat([AP.frame]);
-        if (AP.wantPlay && AP.errors.length <= 5) { AP.queue = [["play"]]; say("gra dalej od nowa"); }
+        // (AP.restartWith: another brain run as a task - the story autopilot tests/autopilot_fabula/fab.js - restarts itself, not "play")
+        if ((AP.wantPlay || AP.restartWith) && AP.errors.length <= 5) { AP.queue = (AP.restartWith || [["play"]]).map(t => t.slice()); say("gra dalej od nowa"); }
     };
     AP.status = function() {
         const s = window.Needs ? Needs.state() : {};
@@ -1921,7 +1932,7 @@
             if (w) { releaseAll(); AP.dodgeDir = dodgeKeys(w.centerX(), w.centerY()); AP.dodgeT = 4; return; }
             if (chargeComing(3.6)) { releaseAll(); return; }   // (brace: stand, the roll comes at 2 tiles)
         }
-        if (AP.frame % (60 * 180) === 0 && free() && $gameSystem.isSaveEnabled()) {
+        if (AP.frame % (60 * 180) === 0 && free() && $gameSystem.isSaveEnabled() && !(AP.saveOk && !AP.saveOk())) {   // (AP.saveOk: another brain says when a save is safe)
             $gameSystem.onBeforeSave();
             DataManager.saveGame(0).then(() => say("zapisano")).catch(() => say("zapis nieudany"));
         }
@@ -1942,7 +1953,7 @@
         if ((AP.cur || AP.queue.length) && ((AP.frame - (AP.saidAt || 0) > 60 * 60 && free()) || AP.frame - (AP.saidAt || 0) > 60 * 120)) {
             const sc = SceneManager._scene;
             say("stoi od minuty: " + (AP.curName || "-") + " / krok " + (AP.lastStep || "-") + " / wytrz. " + Math.round(stamina()) + " / " + (sc ? sc.constructor.name : "") + " - zaczyna od nowa");
-            releaseAll(); AP.cur = null; AP.fleeing = false; AP.saved = null; AP.restDepth = 0; AP.feedDepth = 0; AP.onTrip = false; AP.goingHome = false; AP.pantryDepth = 0; AP.queue = [["play"]];
+            releaseAll(); AP.cur = null; AP.fleeing = false; AP.saved = null; AP.restDepth = 0; AP.feedDepth = 0; AP.onTrip = false; AP.goingHome = false; AP.pantryDepth = 0; AP.queue = (AP.restartWith || [["play"]]).map(t => t.slice());
             if (menuOpen() && SceneManager._scene && SceneManager._scene._farmMenu) Input._currentState.escape = true, setTimeout(() => { Input._currentState.escape = false; }, 80);
         }
         // danger first: the task waits (it is picked up again after running away)
@@ -1962,7 +1973,7 @@
                 if (armed && heroHp() >= 0.7 && stamina() >= 25 && t.a._mode !== "roam" && AP.frame > (AP.noFightUntil || 0)) { gen = fight(t); name = "walka"; }
                 else { gen = flee(); name = "ucieczka"; }
             }
-            else if (night && (built("bedroll") || built("tent")) && AP.frame - (AP.sleepTry || -1e9) > 60 * 40 && P().canMove() && !$gameTemp._buildMode && !menuOpen() && AP.frame > (AP.holdOff || 0)) {
+            else if (night && !AP.noNightSleep && (built("bedroll") || built("tent")) && AP.frame - (AP.sleepTry || -1e9) > 60 * 40 && P().canMove() && !$gameTemp._buildMode && !menuOpen() && AP.frame > (AP.holdOff || 0)) {
                 AP.sleepTry = AP.frame; gen = sleepNight(); name = "sen";
             }
             if (gen) {
@@ -2007,6 +2018,9 @@
         catch (e) { if (window.AP && window.AP.onError) window.AP.onError(e); else releaseAll(); }
         return window.__APorig.apply(this, arguments);
     };
+    // the building blocks for another brain run as a task (tests/autopilot_fabula/fab.js - the story autopilot)
+    AP.lib = { walkTo, goFace, choose, press, wait, waitFree, closeMenus, standUp, setMove, key, releaseAll, keysToward, field, pathFrom, segments, followSeg, align,
+        spotsFor, threat, fight, fightPack, flee, eat, entryNames, count, stamina, staminaCap, free, busy, menuOpen, working, heroHp, inZone, say, rolling, clearLine };
     say("autopilot v" + VERSION);
     return "ok";
 })();

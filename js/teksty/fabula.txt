@@ -334,6 +334,8 @@ kod.letterText.0 = Uprzejmie przypominam, że dziś mija termin spłaty długu (
 kod.letterText.1 = Pojutrze o świcie działka przechodzi na własność dworu, chyba że wcześniej zobaczę {sum}. {2} już grzeje lak do pieczęci.
 kod.letterText.2 = Do terminu {1}. Brakuje {sum}. {3} ostrzy pióro do aktu przejęcia działki - proszę go do tego nie zmuszać.
 kod.letterText.3 = Uprzejmie przypominam o długu Stacha: {sum} do dnia {deadline}. Do terminu {3}. Z wyrazami szacunku, Leopold Zaleski. PS. {4} pozdrawia.
+# letterPoborca (2026-10-29: dopisek w liście z dnia 40, gdy w tawernie jest poborca Korony - D44)
+kod.letterPoborca = PS. Słyszę, że w tawernie nocuje poborca Korony i że pyta o dwór. Proszę nie rozmawiać z nim o moich sprawach - ani o monetach.
 # updateLetters
 kod.updateLetters.0 = List od Lorda Zaleskiego
 kod.updateLetters.1 = Do spłaty {1} G - {2}. (Dziennik: Notatki)

@@ -261,7 +261,7 @@
     const SPOTS = {
         d40_pustelnia: { map: 155, id: 951, marker: "urwisko", dx: 1, x: 8, y: 7, deco: "glint" },
         d40_urwisko: { map: 157, id: 951, marker: "kruczarnia", dy: 1, x: 26, y: 13, deco: "glint" },
-        d40_latarnia: { map: 159, id: 951, marker: "laterna", dx: 1, x: 23, y: 10, deco: "glint" },
+        d40_latarnia: { map: 159, id: 951, marker: "laterna", dx: 1, x: 23, y: 12, deco: "glint" },
         d40_garnizon: { map: 162, id: 951, marker: "wieza", dx: 1, x: 50, y: 17, deco: "glint" },
         d40_gory: { map: 13, id: 954, marker: "punkt_widokowy", dx: 1, x: 58, y: 12, deco: "glint" },
         d40_przystan: { map: 125, id: 952, marker: "nabrzeze_rog", dx: 1, x: 21, y: 10, deco: "glint" }

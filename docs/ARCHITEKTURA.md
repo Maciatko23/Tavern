@@ -195,6 +195,7 @@ Lista gry `js/tawerna_wtyczki.js` (do 2026-10-23 `js/plugins.js`; 82 wtyczek w t
     Podroznicy_Sprawy ← (2026-10-29, etap 2) haki zadań K71, K72, D39-D43 (dane w Podroznicy_Data), podsłuch przez ścianę (Podroznicy.podsluch), Antek i Zenon w garnizonie; zaraz pod Podroznicy
 131 SwieteKosci, Dezerter ← (2026-10-29) silniki łańcuchów W15 / W16: haki danych, sceny (kazanie, bęben, noc pod piątką, przysięga), kurier 3050 i Tymon 3060 (`Tawerna.inject`, właściciel „Lancuchy”), echa w Akcie III (Act3Data.WIEDZA_FRAKCJI, obrońcy); pod Podroznicy
     Poselstwo, Podroznicy5 ← (2026-10-29, etap 5) silniki W14 (kolacja „w służbie” - TavernLife.addGatePass, narada, Noc Kupały, ślady, list) i spraw D44/D47/D48 (Feliks na korytarzu, podsłuch pokoju 4, burdy Kompanii, siłowanie i kości z Hubertem, bójka - Humans, tuba Teofila); zdarzenia 3070-3089 (`Tawerna.inject`, właściciel „Poselstwo”), echa w Akcie III; pod Dezerter
+    Historyjki_Data, Historyjki ← (2026-10-29, etap 7 podróżnych) historyjki ilustrowane H1/H2/H3/H5: scena odtwarzacza (plansze `img/pictures/Hist_*`, kamera, efekty, napisy) i zakładka Dziennika „Wspomnienia” (`Journal.addTab`); zaraz pod Podroznicy5
 135 Okolice, Zasoby, Lowy, Ludzie, Zakon ← silniki pod Orzel_Lot: rdzeń Okolice (miejsca i test kolizji, odkrycia i zakładka dziennika „Okolice”, kompas `Okolice.track`, wiersze F9 `Okolice.f9`, upał/susza, cień słońca) i paczki A woda i zasoby, B zwierzęta i łowy, C ludzie, D tajemnice i zakon
 ```
 

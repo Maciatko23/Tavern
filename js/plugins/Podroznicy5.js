@@ -474,5 +474,8 @@
 
     Object.assign(api, { D, stan: () => S(), nocD44, zdarzenie: zdarzenie_, silowanie, kosci, d44Koniec, d47Koniec, d48Koniec, d48Pamiatka, burdy, zegar,
         feliksWidoczny, bojka: { trwa: () => bojkaTrwa }, mechanizmy: () => Object.assign({}, zarejestrowane) });
+    // (2026-10-29, etap 6) the Lord's letter of the 20th day before the deadline (day 40 of 60): a postscript about the tax collector
+    // while D44 goes on (Story.js asks it) - the words: kod.letterPoborca in fabula.txt
+    api.listPoborcy = () => { try { return has() && (w.active("D44") || (S().d44 && S().d44.noc && !S().d44.koniec && przyjazd(KTO.erazm))) ? "1" : ""; } catch (e) { return ""; } };
     window.Podroznicy5 = T.register(PLUGIN, api);
 })();

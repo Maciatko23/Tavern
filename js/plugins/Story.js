@@ -1227,7 +1227,9 @@
         for (const d of due) s.letters[d] = true;
         const d = Math.max(...due);
         T.popup(TK.kod.updateLetters[0], { top: true, color: U().accent, sub: Watki.wstaw(TK.kod.updateLetters[1], { "1": left(), "2": daysPhrase(daysLeft()) }) });
-        T.call("Journal", "addNote", Watki.wstaw(TK.kod.updateLetters[2], { today: today }), letterText(d));
+        // (2026-10-29, docs/PODROZNI.md 2.7) the day-40 letter: a postscript about the king's tax collector while D44 goes on
+        const ps = s.deadline - d === 20 && T.call("Podroznicy5", "listPoborcy") ? " " + TK.kod.letterPoborca : "";
+        T.call("Journal", "addNote", Watki.wstaw(TK.kod.updateLetters[2], { today: today }), letterText(d) + ps);
         s.lastLetter = today;
     }
     function checkDeadline() {

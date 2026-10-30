@@ -499,6 +499,13 @@
     // bubbles one after another outside a talk (over the hero "> ...", or over a character) - the thread's (Rywal_Data mysli)
     const think = (lines, whoCh) => w.mysl(lines, whoCh);
     const calm = () => !$gameMessage.isBusy() && !$gameMap.isEventRunning() && !$gamePlayer.isTransferring() && SceneManager._scene instanceof Scene_Map && !SceneManager.isSceneChanging();
+    // a fight round the hero: a foe of Combat.foes() that fights him within 10 tiles (2026-10-29: the meeting began while the rats
+    // of the floor were biting him) - the meeting and its talk wait till it is over
+    const fightNear = () => {
+        const C = T.api("Combat"), F = (T.api("Combat_parts") || {}).feel;
+        if (!C || !C.foes || !F || !F.isThreat) return false;
+        try { return C.foes().some(a => F.isThreat(a) && Math.hypot(a.centerX() - $gamePlayer.x, a.centerY() - $gamePlayer.y) <= 10); } catch (e) { return false; }
+    };
 
     // ------------------------------------------------------------------
     // What the hero knows (the deals and the warning ask it)
@@ -908,10 +915,10 @@
         const lead = evOf(EV.lead);
         if (!lead || hidden(lead)) return;
         if (pendingTalk) {
-            if (Graphics.frameCount >= pendingTalk && calm()) { pendingTalk = 0; lead.start(); }
+            if (Graphics.frameCount >= pendingTalk && calm() && !fightNear()) { pendingTalk = 0; lead.start(); }
             return;
         }
-        if (s.met || !calm()) return;
+        if (s.met || !calm() || fightNear()) return;
         if (Math.hypot($gamePlayer.x - lead.x, $gamePlayer.y - lead.y) > TM.meet) return;
         s.met = day();
         lead.setDirection(DIR4($gamePlayer.x - lead.x, $gamePlayer.y - lead.y));

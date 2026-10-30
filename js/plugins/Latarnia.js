@@ -851,7 +851,7 @@
     let flameFrames = null;
     function makeFlames() {
         if (flameFrames) return flameFrames;
-        const Wd = 16, Hd = 26, out = [];
+        const K = FIRE.k || 1, Wd = Math.round(16 * K), Hd = Math.round(26 * K), out = [];
         const PAL = [[120, 24, 8], [200, 56, 12], [240, 120, 24], [255, 186, 60], [255, 236, 150], [255, 252, 226]];
         for (let f = 0; f < 8; f++) {
             const b = new Bitmap(Wd, Hd), ctx = b.context, img = ctx.createImageData(Wd, Hd);
