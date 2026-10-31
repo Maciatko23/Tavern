@@ -468,12 +468,16 @@
         if (!has()) return;
         const show = here() && on("edges");
         this.visible = show;
-        if (!show) { if (ST && !here()) dropState(); return; }
+        if (!show) { this._wasHidden = true; if (ST && !here()) dropState(); return; }
         const st = geometry();
         if (this._st !== st || this._map !== $dataMap) { this._st = st; this._map = $dataMap; this.restore(); st.rectKey = ""; }
         stat.frames++;
         this.refreshWindow(st, MARGIN);
-        if (st.queue.length) this.work(2.5);
+        // (2026-10-31) back after being off (the quality went Niska -> Wysoka): the screen at once, as on a map's entry, not a trickle of cells
+        // over the next seconds (one short hitch on a rare switch; else the ground showed bare edges and the frozen frames of the tests differed)
+        if (this._wasHidden && st.queue.length) { this._wasHidden = false; for (let i = 0; i < 12 && !this.work(24); i++); }
+        else if (st.queue.length) this.work(2.5);
+        this._wasHidden = false;
         this.x = Math.round(-$gameMap.displayX() * TW); this.y = Math.round(-$gameMap.displayY() * TW);
     };
 
@@ -589,7 +593,7 @@
         if (!has()) return;
         const show = here() && on("shade") && (() => { const W = T.api("Wydajnosc"); return !(W && W.gfx && W.gfx.smallShadows === false); })();
         this.visible = show;
-        if (!show) { if (this._items.size || this._farm.length) this.clear(); return; }
+        if (!show) { if (this._items.size || this._farm.length) this.clear(); this._age = 0; return; }   // (2026-10-31) _age 0: the shade is laid at the first update after the switch back on, not within 20 frames)
         const mk = $gameMap.mapId() + ":" + ($dataMap && $dataMap.events ? $dataMap.events.length : 0);
         if (mk !== this._mapKey) { this._mapKey = mk; this.clear(); this._age = 0; }
         if (this._age++ % 20 === 0) { this.syncEvents(); this.syncFarm(); }

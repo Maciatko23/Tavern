@@ -225,6 +225,8 @@ const { launch, sleep } = require("./cdp.js");
         // the one by him called it on again, every frame; the ring's places off the map, or out on the map's edge behind the wall)
         // packRun: the hero at (hx, hy) (real, he may stand half on the wall), a pack of 3 engaged 7-10 tiles off (on ground they can walk
         // from to him), `n` frames: how long each stood still hunting, the leaps, whether the pack kept the hunt on
+        // (2026-10-31: the user's wall now stands on the old half-on-the-wall tile (38, 21) and walls block free movement: the hero cannot stand
+        // on it any more - 37.6 rounded onto the wall and no wolf had a clear run at a tile in it, so none leapt; 37.2 is as close to the wall as he gets)
         const packRun = async (hx, hy, n) => {
             await clear();
             const ok = await J(`(function(){ $gameSystem.setDayNightHour(23); const tx = Math.round(${hx}), ty = Math.round(${hy});
@@ -259,7 +261,7 @@ const { launch, sleep } = require("./cdp.js");
             await ev("__rec.on = false; 0");
             return r;
         };
-        for (const [name, hx, hy] of [["by the east edge (half on the wall, the marathon's place)", 37.6, 21], ["in the south-east corner", 37, 26], ["by the north edge, in the east corner", 37, 5]]) {
+        for (const [name, hx, hy] of [["by the east edge (against the wall, the marathon's place)", 37.2, 21], ["in the south-east corner", 37, 26], ["by the north edge, in the east corner", 37, 5]]) {
             const r = await packRun(hx, hy, 1200);
             check("(f) " + name + ": the pack keeps the hunt on, every wolf moves (none stands 2 s), and they leap at him", !!r && r.offs === 0 && r.maxStill.every(s => s < 120) && r.lunges >= 2, r);
         }

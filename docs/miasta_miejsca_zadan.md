@@ -359,7 +359,7 @@ góry, kamieniołom i jaskinia z obozem są dostępne od początku gry (obóz is
 | `kamieniolom_schody` | 13 | 56 | 19 | 8 | u stóp schodów kamieniarzy na wysoką półkę |
 | `punkt_widokowy` | 13 | 57 | 12 | 4 | wschodni kraniec wysokiej półki — widok na wyspę (rozmowa z Grumem) |
 | `jaskinia_wejscie` | 13 | 44 | 8 | 8 | przed wejściem do jaskini |
-| `osada_brama` | 13 | 6 | 4 | 8 | przed Bramą Milczących |
+| `osada_brama` | 120 | 20 | 30 | 8 | przed Bramą Milczących w palisadzie Osady (przeniesiona z Map013, 2026-10-31) |
 | `jaskinia_wyjscie` | 14 | 20 | 27 | 2 | tu się przychodzi z gór (i wychodzi w dół) |
 | `oboz_kopaczy` | 14 | 18 | 18 | 8 | środek obozu, przed ogniskiem (W8 rozdz. 3) |
 | `straz_obozu` | 14 | 9 | 13 | 6 | strażnik obozu (zdarzenie 19) |

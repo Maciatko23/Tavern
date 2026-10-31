@@ -263,12 +263,31 @@
         exitsOf = { map: $gameMap.mapId(), data: $dataMap, list: out };
         return out;
     }
+    // (2026-10-31, the world in tiles: Swiat_Data.js) a seam open only as SwiatData.links (no transfer event in the map) is flown over too, into the
+    // SAME world tile of the neighbour - the way Krawedzie.js walks it. The story's closed ways are not in the links (13 -> 175 stays an event or nothing),
+    // so the flight opens no road to Orla Grań that the walk and the climb do not have. An event standing within BESPOKE tiles of the flight (a place's own way) wins.
+    const BESPOKE = 3;
+    function worldExit(side, along) {
+        const sw = window.SwiatData, me = sw && sw.enabled && sw.maps[$gameMap.mapId()];
+        if (!me) return null;
+        const [x0, y0, w, h] = me, ns = side === "N" || side === "S", a = Math.round(along);
+        const wx = ns ? x0 + a : side === "W" ? x0 - 1 : x0 + w, wy = ns ? (side === "N" ? y0 - 1 : y0 + h) : y0 + a;
+        const wa = ns ? wx : wy, here = $gameMap.mapId();
+        for (const id of Object.keys(sw.maps)) {
+            const [bx, by, bw, bh] = sw.maps[id];
+            if (+id === here || wx < bx || wx >= bx + bw || wy < by || wy >= by + bh) continue;
+            if (!sw.links.some(l => l.a === here && l.b === +id && l.side === side && wa >= l.from && wa <= l.to)) return null;
+            const W = $gameMap.width(), H = $gameMap.height();
+            return { x: ns ? a : side === "W" ? 0 : W - 1, y: ns ? (side === "N" ? 0 : H - 1) : a, map: +id, tx: wx - bx, ty: wy - by, dir: 0 };
+        }
+        return null;
+    }
     function exitOn(side, along) {
-        const list = exits()[side];
-        if (!list || !list.length) return null;
+        const list = exits()[side], ns = side === "N" || side === "S";
         let best = null, bd = Infinity;
-        for (const x of list) { const d = Math.abs((side === "N" || side === "S" ? x.x : x.y) - along); if (d < bd) { bd = d; best = x; } }
-        return best;
+        for (const x of list || []) { const d = Math.abs((ns ? x.x : x.y) - along); if (d < bd) { bd = d; best = x; } }
+        if (best && bd <= BESPOKE) return best;
+        return worldExit(side, along) || best;
     }
     function startEdge(exit, side, nx, ny) {
         const along = side === "N" || side === "S" ? nx - exit.x : ny - exit.y;

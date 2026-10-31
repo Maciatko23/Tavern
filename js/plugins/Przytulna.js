@@ -130,7 +130,8 @@
         const k = 0.35 + 0.65 * dark;
         P.high = [P.high[0] * (1 + 0.03 * k), P.high[1], P.high[2] * (1 - 0.04 * k)];
         P.shadow = [P.shadow[0] * (1 + 0.03 * k), P.shadow[1] * (1 - 0.01 * k), P.shadow[2] * (1 - 0.03 * k)];
-        P.vig += 0.22 * k; P.vigIn = Math.max(0.28, P.vigIn - 0.08 * k);
+        // (2026-10-31) the corners never heavier than a cave's (Mood: cave 0.55, underground 0.62) - the places keep their order
+        P.vig = Math.min(0.5, P.vig + 0.22 * k); P.vigIn = Math.max(0.28, P.vigIn - 0.08 * k);
         P.bloom *= 1 + 0.15 * k;
     }
     function hookMood() { const M = T.api("Mood"); if (M && M.addTweak) M.addTweak(PLUGIN, moodTweak); }
@@ -338,6 +339,9 @@
         }
         update() {
             super.update();
+            // (2026-10-31) once per drawn frame: a repeated update of the same frame (the tests redraw one frozen frame) does not move the sparks and glow on
+            if (this._frame === Graphics.frameCount) return;
+            this._frame = Graphics.frameCount;
             const dt = 1 / 60;
             ST.t += dt;
             if (!on()) { this.reset(); return; }

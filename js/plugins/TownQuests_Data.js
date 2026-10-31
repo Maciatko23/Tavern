@@ -201,7 +201,7 @@
         // shift; x/y only a fallback) - Grum as a picture with his bust at each place, the commander's crate in the diggers' camp
         w8_start: { map: 13, id: 951, marker: "grum_przewodnik_start", x: 4, y: 38, name: "Grum", img: ["$Npc_Grum", 0, 4, 1], solid: true, bust: "Actor2_5" },
         w8_quarry: { map: 13, id: 952, marker: "kamieniolom_znak", dx: 1, x: 41, y: 18, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
-        w8_gate: { map: 13, id: 953, marker: "osada_brama", dx: 1, x: 7, y: 4, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
+        w8_gate: { map: 120, id: 953, marker: "osada_brama", dx: 1, x: 21, y: 30, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
         w8_cave: { map: 14, id: 951, marker: "marek", dx: -2, dy: 1, x: 28, y: 6, name: "Grum", img: ["$Npc_Grum", 0, 6, 1], solid: true, bust: "Actor2_5" },
         w8_crate: { map: 14, id: 952, marker: "list_kryjowka", x: 27, y: 11, name: "Skrzynia dowódcy" },
         w8_osada: { map: 120, id: 951, marker: "osada_grum", x: 21, y: 25, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },

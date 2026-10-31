@@ -527,6 +527,22 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("przelot wschodnią krawędzią: Map003 -> Map023 w powietrzu (dalej x0,5, orzeł pod bohaterem, przy lewym brzegu)",
         crossed && edge.map === 23 && edge.on && edge.s === 0.5 && edge.eMap === 23 && edge.ridden && edge.x <= 4 && edge.tm === edge.gw * 2, edge);
     await shot("10_przelot_map023.png");
+    // (2026-10-31, the world in tiles) a seam without a transfer event, open only as SwiatData.links: Map023's east edge (no event there) -> Map168, and back
+    const flyEdge = async (key, ang, x, y, want) => {
+        await t.eval(`(function(){ const p = $gamePlayer; p._realX = ${x}; p._realY = ${y}; OrzelLot.lot.angle = ${ang}; Input._currentState.${key} = true; return 0; })()`);
+        const ok = await t.until(t.onMap(want), 20);
+        await t.eval(`Input._currentState.${key} = false; 0`);
+        await t.frames(50);
+        return { ok, map: await t.eval("$gameMap.mapId()"), on: await t.eval("OrzelLot.flying()") };
+    };
+    const m23 = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "data", "Map023.json"), "utf8"));   // (the file: no plugin's injected event in it)
+    const noEv = m23.events.filter(e => e && e.x === m23.width - 1 && e.pages.some(pg => pg.list.some(c => c.code === 201))).length;
+    const viaLink = await flyEdge("right", 0, 76, 20, 168);
+    t.check("przelot nad stykiem z links (wschodnia krawędź Map023 nie ma zdarzenia przejścia): Map023 -> Map168 w powietrzu", noEv === 0 && viaLink.ok && viaLink.map === 168 && viaLink.on, { noEv, viaLink });
+    const backLink = await flyEdge("left", 3.14159, 2, await t.eval("$gamePlayer.y"), 23);
+    t.check("...i z powrotem Map168 -> Map023 (to samo miejsce świata)", backLink.ok && backLink.map === 23 && backLink.on, backLink);
+    const closedFly = await t.json(`(function(){ const L = SwiatData.links; return { a175: L.filter(l => l.a === 175 || l.b === 175).every(l => [931, 175].includes(l.a) && [931, 175].includes(l.b)), no165: !L.some(l => l.a === 165 || l.b === 165), no13_175: !L.some(l => (l.a === 13 && l.b === 175) || (l.a === 175 && l.b === 934)) }; })()`);
+    t.check("lot po stykach nie otwiera zamkniętych dróg: w links nie ma 13 -> 175, 175 <-> 934/120 ani 165 (Orla Grań i łacha zostają)", closedFly.a175 && closedFly.no165 && closedFly.no13_175, closedFly);
     const airSaves = await t.eval("window.__saves");
     t.check("w powietrzu (start, Q, noc, przelot krawędzią) gra się nie zapisała ani razu (także autozapis przejścia)", airSaves === 0, airSaves);
     await t.eval("OrzelLot.tryLand(true); 0");

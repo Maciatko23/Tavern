@@ -26,7 +26,7 @@ const { launch, sleep } = require("./cdp.js");
         // (2026-10-23: inside the field's fence - Farming.fieldAllows. The fenced field is wild: no 10 x 7 without a tree, a rock or a
         // bush - the window with the fewest is taken and they are carried off to the map's far corner, as yard_test does)
         const B = await ev(`(function(){
-            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && !Farming.hasObjectTile(x, y) && Farming.naturalFarmland(x, y) && Farming.fieldAllows(x, y);
+            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && !Farming.hasObjectTile(x, y) && Farming.groundIsSoil(x, y) && Farming.fieldAllows(x, y);   // (2026-10-31: the author's field is overgrown ON PURPOSE - branch tangles, ore, boulders, trees; the player clears it. So the window is chosen by the ground alone, the one with the fewest things on it, and the things are carried off the way flip_test always did - the building rules are not touched.)
             const evsIn = (bx, by) => { const out = []; for (let y = by; y < by + 7; y++) for (let x = bx; x < bx + 10; x++) out.push(...$gameMap.eventsXy(x, y)); return out; };
             let best = null;
             for (let by = 2; by < $gameMap.height() - 8; by++) for (let bx = 2; bx < $gameMap.width() - 12; bx++) {

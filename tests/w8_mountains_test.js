@@ -111,14 +111,37 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         dayPop.some(p => /Kopacze nie śpią/.test(p)) && /Kopia rozkazu/.test(crate.text) && (await J("TownQuests.state().flags.w8Letter_crate")) && (await step()) === "active:6", { dayPop, text: crate.text.slice(0, 200) });
 
     // ------------------------------------------------------------------ ch5: the Silent's valley (Act II - no story game here: open)
-    await t.go(13, 6, 6, 8, { calm: false });
+    await t.go(120, 20, 31, 8, { calm: false });
     await at(24, 10, 30);
+    // (2026-10-31: the gate stands in the palisade of Map120, on the road from the south; before switch 16 the village's inside cannot be reached on foot
+    // from where one comes onto the map - the cells of the palisade's inside (4..35 x 8..28) not in the set reached from before the gate)
+    const reachIn = () => J(`(function(){ const W = $gameMap.width(), H = $gameMap.height(), seen = new Uint8Array(W * H), q = [[20, 31]];
+        const blocked = (x, y) => $gameMap.eventsXyNt(x, y).some(e => e.isNormalPriority() && !e.isThrough());
+        seen[31 * W + 20] = 1;
+        while (q.length) { const [x, y] = q.pop();
+            for (const [dx, dy, d] of [[0, 1, 2], [-1, 0, 4], [1, 0, 6], [0, -1, 8]]) { const nx = x + dx, ny = y + dy;
+                if (nx < 0 || ny < 0 || nx >= W || ny >= H || seen[ny * W + nx]) continue;
+                if (!$gameMap.isPassable(x, y, d) || !$gameMap.isPassable(nx, ny, 10 - d) || blocked(nx, ny)) continue;
+                seen[ny * W + nx] = 1; q.push([nx, ny]); } }
+        let inside = 0, total = 0; for (let y = 8; y <= 28; y++) for (let x = 4; x <= 35; x++) { if (seen[y * W + x]) inside++; }
+        return { inside, circle: !!seen[22 * W + 19], reached: seen.reduce((a, b) => a + b, 0) }; })()`);
+    const shutR = await reachIn();
     const s5 = await spot(953);
-    t.check("ch5: Grum before the Silent's gate (marker 'osada_brama' +1: 7,4); the gate shut (switch 16 off)", s5 && s5.x === 7 && s5.y === 4 && !(await J("$gameSwitches.value(16)")), s5);
-    await t.locate(6, 4, 6);
+    t.check("ch5: Grum before the Silent's gate in the palisade of Map120 (marker 'osada_brama' +1: 21,30); the gate shut (switch 16 off)",
+        s5 && s5.x === 21 && s5.y === 30 && !(await J("$gameSwitches.value(16)")), s5);
+    t.check("...before switch 16 the village's inside is out of reach on foot (none of the 4..35 x 8..28 cells, not the circle) - the way outside is open (a big set)",
+        shutR.inside === 0 && !shutR.circle && shutR.reached > 1500, shutR);
+    await t.locate(20, 30, 6);
     const gate = await talkTo("$gameMap.event(953)", [], { place: false });
     t.check("...the gate opens from inside (switch 16) - 'Wpuszczają nas'", /Wpuszczają nas/.test(gate.text) && (await J("$gameSwitches.value(16)")) && !!(await J("TownQuests.rec('W8').t.gate")), gate.text.slice(0, 200));
-    t.check("into the Osada (Map120) through the ravine", await t.go(120, 20, 30, 8));
+    await t.frames(20);
+    const openR = await reachIn();
+    t.check("...after switch 16 the inside can be reached (the circle too)", openR.inside > 300 && openR.circle, openR);
+    await t.locate(20, 30, 8);
+    await t.eval("(function(){ Input.clear(); Input._currentState.up = true; return 0; })()");
+    await t.frames(70);
+    await t.eval("(function(){ Input._currentState.up = false; return 0; })()");
+    t.check("into the Osada through the open gate (20,29) on foot", (await J("$gamePlayer.y")) <= 28 && (await J("$gameMap.mapId()")) === 120, await J("({ x: $gamePlayer.x, y: $gamePlayer.y })"));
     await at(24, 11, 30);
     const s6 = await spot(951);
     t.check("...Grum stands by their circle (marker 'osada_grum': 21,25)", s6 && s6.x === 21 && s6.y === 25, s6);

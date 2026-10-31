@@ -1,17 +1,19 @@
-// Łąki #2 i #3 (2026-10-18): Kruczy Jar (Map003) ma przejścia na Łąkę#2 (Map017, krawędź południowa) i na Łąkę#3 (Map018,
-// krawędź zachodnia) - tools/apply_laki.py, tools/newstart/layout.py MEADOW_EDGES. Bohater staje przed wyjściem, trzyma strzałkę
-// aż do zmiany mapy, sprawdzamy mapę, kafelek i kierunek; ścieżka widoczna aż do krawędzi (kafelek drogi w danych); kompas zna
-// wyjścia; usunięte puste mapy 5, 6, 7, 15, 16 nie wiszą w MapInfos.
+// Łąki #2 i #3 (2026-10-18): dawne wyjścia Kruczego Jaru (Map003) na Łąkę#2 (południe) i Łąkę#3 (zachód) - tools/apply_laki.py.
+// (2026-10-31, świat bez szwów, docs/mapy/SWIAT.md) te same drogi prowadzą teraz tam, gdzie leży sąsiad w świecie (Swiat_Data.js):
+// Kruczy Jar południe -> Dom dziadka (20), zachód -> Posiadłość Lorda (24); Łąka#2 północ -> Skraj lasu (23); Łąka#3 wschód -> Łąka pod
+// Klifem (963). Cel i kratkę lądowania test liczy z mapy świata (ta sama kratka świata, najwyżej krok w głąb). Ścieżki widoczne aż do
+// krawędzi (kafelek drogi w danych); przejścia zapisane w plikach map prowadzą tylko do sąsiadów w świecie; usunięte puste mapy 5, 6, 7,
+// 15, 16 nie wiszą w MapInfos.
 // CDP_PORT=9541 node tests/laki_przejscia_test.js
 const kit = require("./lib/kit.js");
 
-// [z mapy, x, y, na mapę, x, y, kierunek po przejściu, kierunek marszu] - obie strony obu przejść (środkowy kafelek i skraje)
-// (2026-10-18: the field and the meadows doubled to 80x60 by tools/powieksz - the south exit is on row 59, Łąka#3's east one on x 79)
+// [z mapy, x, y, kierunek marszu] - środkowy kafelek i skraje dawnych wyjść; cel i lądowanie liczy mapa świata
+// (2026-10-18: the field and the meadows doubled to 80x60 by tools/powieksz - the south exit is on row 59; 2026-10-31: Łąka#3 is 90 wide, its east edge x 89)
 const WALKS = [
-    [3, 9, 59, 17, 9, 1, 2, 2], [3, 8, 59, 17, 8, 1, 2, 2], [3, 10, 59, 17, 10, 1, 2, 2],
-    [17, 9, 0, 3, 9, 58, 8, 8], [17, 8, 0, 3, 8, 58, 8, 8],
-    [3, 0, 16, 18, 78, 16, 4, 4], [3, 0, 14, 18, 78, 14, 4, 4],
-    [18, 79, 15, 3, 1, 15, 6, 6], [18, 79, 16, 3, 1, 16, 6, 6]
+    [3, 9, 59, 2], [3, 8, 59, 2], [3, 10, 59, 2],
+    [17, 9, 0, 8], [17, 8, 0, 8],
+    [3, 0, 16, 4], [3, 0, 14, 4],
+    [18, 89, 15, 6], [18, 89, 16, 6]
 ];
 const KEY = { 2: "down", 4: "left", 6: "right", 8: "up" }, STEP = { 2: [0, 1], 4: [-1, 0], 6: [1, 0], 8: [0, -1] };
 
@@ -31,25 +33,37 @@ kit.test({ port: 9541 }, async t => {
     t.check("Map003: ścieżka (rodzaj 39) aż do zachodniej krawędzi (0..2, 16) i połączona z drogą przy (9, 17)", data.west.every(v => v === 39) && data.joined === 39, data);
     t.check("MapInfos: bez pustych map 5, 6, 7, 15, 16; Łąki #2 i #3 są", data.gone.length === 0 && data.meadows.every(Boolean), data);
 
-    for (const [fm, x, y, tm, tx, ty, d, walk] of WALKS) {
+    for (const [fm, x, y, walk] of WALKS) {
+        // the world's neighbour of that edge tile and the same world tile on it (Krawedzie.js lands there)
+        const exp = await t.json(`(function(){ const sw = SwiatData, [x0, y0, w, h] = sw.maps[${fm}], d = ${walk};
+            const wx = d === 4 ? x0 - 1 : d === 6 ? x0 + w : x0 + ${x}, wy = d === 8 ? y0 - 1 : d === 2 ? y0 + h : y0 + ${y};
+            for (const id of Object.keys(sw.maps)) { const [bx, by, bw, bh] = sw.maps[id];
+                if (+id !== ${fm} && wx >= bx && wx < bx + bw && wy >= by && wy < by + bh) return { map: +id, x: wx - bx, y: wy - by }; }
+            return null; })()`);
         const sx = x - STEP[walk][0], sy = y - STEP[walk][1];
         await t.go(fm, sx, sy, walk);
         await t.until(`$gamePlayer.x === ${sx} && $gamePlayer.y === ${sy}`, 10);
         await t.eval(`(function(){ if ($gameMessage.isBusy()) $gameMessage.clear(); Input.clear(); Input._currentState["${KEY[walk]}"] = true; return 0; })()`);
         const moved = await t.until(`$gamePlayer.isTransferring() || $gameMap.mapId() !== ${fm}`, 8, 60);
         await t.eval(`(function(){ Input._currentState["${KEY[walk]}"] = false; return 0; })()`);
+        const tm = exp ? exp.map : -1;
         await t.until(`!$gamePlayer.isTransferring() && SceneManager._scene.constructor.name === "Scene_Map" && !SceneManager.isSceneChanging() && $gameMap.mapId() === ${tm}`, 20);
         await t.frames(5);
         const r = await t.json(`({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction() })`);
-        t.check(`Map${String(fm).padStart(3, "0")} (${x},${y}) idąc ${KEY[walk]} -> Map${String(tm).padStart(3, "0")} (${tx},${ty}), twarzą ${KEY[d]}`,
-            moved && r.map === tm && r.x === tx && r.y === ty && r.d === d, r);
+        const near = exp && Math.abs(r.x - exp.x) + Math.abs(r.y - exp.y) <= 1;
+        t.check(`Map${String(fm).padStart(3, "0")} (${x},${y}) idąc ${KEY[walk]} -> sąsiad w świecie Map${String(tm).padStart(3, "0")} w tej samej kratce świata (${exp ? exp.x + "," + exp.y : "-"}), twarzą ${KEY[walk]}`,
+            moved && !!exp && r.map === tm && near && r.d === walk, { r, exp });
     }
 
-    // the compass (CleanHUD_Compass) reads the exits from the map files: grandpa's field leads to both meadows and back
+    // the compass (CleanHUD_Compass) and the eagle's flight read the exits from the map files: they lead only to the world's neighbours
     const graph = await t.json(`Promise.all([3, 17, 18].map(id => fetch("data/Map" + String(id).padStart(3, "0") + ".json").then(r => r.json()).then(m =>
         ({ id, to: [...new Set(m.events.filter(Boolean).flatMap(e => e.pages.flatMap(p => p.list.filter(c => c.code === 201 && c.parameters[0] === 0).map(c => c.parameters[1]))))] }))))`, 20000);
-    const to = id => (graph.find(g => g.id === id) || { to: [] }).to;
-    t.check("przejścia w plikach map: 3 -> 17 i 18, 17 -> 3, 18 -> 3 (kompas i lot orła czytają je stąd)",
-        to(3).includes(17) && to(3).includes(18) && to(17).includes(3) && to(18).includes(3), graph);
+    const nb = await t.json(`(function(){ const M = SwiatData.maps, out = {};
+        for (const a of [3, 17, 18]) { const [ax, ay, aw, ah] = M[a]; out[a] = Object.keys(M).map(Number).filter(b => { if (b === a) return false; const [bx, by, bw, bh] = M[b];
+            const ew = (ax + aw === bx || bx + bw === ax) && Math.min(ay + ah, by + bh) > Math.max(ay, by), ns = (ay + ah === by || by + bh === ay) && Math.min(ax + aw, bx + bw) > Math.max(ax, bx);
+            return ew || ns; }); }
+        return out; })()`);
+    const bad = graph.flatMap(g => g.to.filter(m => !(nb[g.id] || []).includes(m)).map(m => g.id + "->" + m));
+    t.check("przejścia w plikach map 3, 17, 18 prowadzą tylko do sąsiadów w świecie (kompas i lot orła czytają je stąd)", graph.length === 3 && bad.length === 0, { graph, bad });
     await t.done();
 });

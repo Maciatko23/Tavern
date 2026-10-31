@@ -1,8 +1,7 @@
 // The mountain world of W8 "Żelazna Pięść" (tools/mountains, docs/miasta_miejsca_zadan.md "Góry"; 2026-10-06) - maps, ways in and
 // out, markers; no quest logic:
-//   - Leśna droga (Map021) -> its trail's end on the east edge (79, 8..10; the map doubled 2026-10-19, tools/powieksz) -> Map013
-//     "Góry i kamieniołom" (1, 38..40) and back (-> Leśna droga 78, 9)
-//   - Map013: the markers (13 keys), each reachable on foot from the west edge; the steps up both shelves; the quarry's things
+//   - the town (Map008) north gate (x 24-26) -> Map013 "Góry i kamieniołom" (40..42, 95) and back (world's road, 2026-10-31)
+//   - Map013: the markers (12 keys), each reachable on foot from the way in from the town; the steps up both shelves; the quarry's things
 //     (the raven in the wall, blocks, the crane, the dry pond: no water tile anywhere on the map); the cave's mouth (44,7) -> Map014
 //   - Map014 "Jaskinia": the camp (fire = a light, lanterns), the guard and diggers standing (no human enemies: <Humans:off>),
 //     Marek at his marker facing the wall; the way out -> Map013 (44,8)
@@ -52,24 +51,22 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const sw = (id, v) => t.eval(`(function(){ $gameSwitches.setValue(${id}, ${v}); $gameMap.requestRefresh(); return 0; })()`);
     const popups = async () => (await t.popups({ clear: true })).join(" | ");
 
-    // ================================================================ Leśna droga -> Góry
-    await t.newGame({ map: 21, x: 76, y: 9, dir: 6, day: 3, hour: 10, quiet: true, minimap: false });
-    const road = await t.json(`$gameMap.events().filter(e => /Góry i kamieniołom/.test(e.event().name)).map(e => [e.x, e.y])`);
-    t.check("Leśna droga has three exits at the end of its east trail (79, 8..10)", JSON.stringify(road) === "[[79,8],[79,9],[79,10]]", road);
-    await walkOut("right", 21);
+    // ================================================================ the town (Map008) -> Góry (the world's road, Swiat_Data.js)
+    await t.newGame({ map: 8, x: 25, y: 2, dir: 8, day: 3, hour: 10, quiet: true, minimap: false });
+    await walkOut("up", 8);
     const in13 = await t.until(t.onMap(13), 15);
     const at13 = await t.json(where);
-    t.check("walking right off the trail -> Map013 'Góry i kamieniołom' (1, 39), facing right", in13 && at13.x === 1 && at13.y === 39 && at13.d === 6, at13);
+    t.check("walking up through the town's north gate (8: x 24-26) -> Map013 'Góry i kamieniołom' (40..42, 95; the held key may have moved him one step), facing up", in13 && at13.x >= 40 && at13.x <= 42 && at13.y >= 94 && at13.y <= 95 && at13.d === 8, at13);
     await t.frames(30);
     await t.shot(path.join(SHOTS, "gory_wejscie.png"));
 
     // ================================================================ Map013: markers, reach, water
     const keys13 = ["gory_wejscie", "grum_przewodnik_start", "gory_schody", "nocleg", "kamieniolom", "kamieniolom_znak", "blok_kruk", "dzwig",
-        "staw_suchy", "kamieniolom_schody", "punkt_widokowy", "jaskinia_wejscie", "osada_brama"];
-    const n13 = await t.json(REACH(1, 39));
+        "staw_suchy", "kamieniolom_schody", "punkt_widokowy", "jaskinia_wejscie"];
+    const n13 = await t.json(REACH(41, 95));
     const r13 = await t.json(REACHED(keys13));
     const m13 = await t.json(MARKERS);
-    t.check("Map013: all 13 markers 'Miejsce: <key>' are there (below the hero, through, no picture) and reachable on foot from the west edge",
+    t.check("Map013: all 12 markers 'Miejsce: <key>' are there (below the hero, through, no picture) and reachable on foot from the way in from the town (41, 95)",
         keys13.every(k => m13[k] && m13[k][3] && m13[k][4] === 0 && r13[k] === true), { n13, r13 });
     const w13 = await t.json(`(function(){ let n = 0; for (let y = 0; y < $gameMap.height(); y++) for (let x = 0; x < $gameMap.width(); x++)
         for (let z = 0; z < 4; z++) if (Tilemap.isTileA1($gameMap.tileId(x, y, z))) n++; return n; })()`);
@@ -163,47 +160,63 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const ato = await t.json(where);
     t.check("out of the cave (the bottom edge) -> Map013 before the mouth (44,8) facing down", out13 && ato.x === 44 && ato.y === 8 && ato.d === 2, ato);
 
-    // ================================================================ the Silent's gate (switch 16)
+    // ================================================================ the old gate on Map013 (6,3): no part in anything now
     await sw(16, false);
     await t.locate(6, 4, 8);
     await t.frames(30);
     await t.popups({ clear: true });
     await t.press("ok");
     await t.frames(20);
+    const pg13 = await popups();
+    const old13 = await t.json(`({ blocked: ${byName("Brama Milczących")}.isNormalPriority(), pages: ${byName("Brama Milczących")}.event().pages.length, mark: !!${byName("Miejsce: osada_brama")} })`);
+    t.check("Map013: the old gate (6,3) is a collapsed gate with one page (a popup: solid rock behind, the Silent moved the entrance); no 'osada_brama' marker",
+        /lita skała/.test(pg13) && old13.blocked && old13.pages === 1 && !old13.mark, { pg13, old13 });
+    await sw(16, true);
+    await t.frames(10);
+    const still = await t.json(`${byName("Brama Milczących")}.isNormalPriority()`);
+    t.check("...and switch 16 does not open it", still === true, still);
+    await sw(16, false);
+
+    // ================================================================ the Silent's gate in the palisade of Map120 (switch 16)
+    await t.go(120, 20, 31, 8);
+    await t.frames(30);
+    await sw(16, false);
+    await t.json(REACH(20, 31));
+    const keys120 = ["osada_wejscie", "osada_krag", "osada_sciana", "osada_grum", "osada_starszy", "osada_dom_1", "osada_dom_2", "osada_dom_3", "osada_dom_4"];
+    const shut = await t.json(REACHED(keys120));
+    t.check("switch 16 off: from before the gate (20,31) the Osada's inside is not reachable (only the outside marker is); 'osada_brama' is there",
+        shut.osada_wejscie === true && keys120.filter(k => k !== "osada_wejscie").every(k => shut[k] === false) && (await t.json(MARKERS)).osada_brama[0] === 20, shut);
+    await t.locate(20, 30, 8);
+    await t.frames(30);
+    await t.popups({ clear: true });
+    await t.press("ok");
+    await t.frames(20);
     const pg = await popups();
     await bump("up", 40);
-    const gate = await t.json(`({ at: ${where}, pass: [$gameMap.isPassable(6, 3, 8)], blocked: ${byName("Brama Milczących")}.isNormalPriority() })`);
-    t.check("switch 16 off: the Silent's gate is closed - a popup, the hero stays before it", /Brama z pali/.test(pg) && gate.at.y === 4 && gate.blocked, { pg, gate });
+    const gate = await t.json(`({ at: ${where}, blocked: ${byName("Brama Milczących")}.isNormalPriority() })`);
+    t.check("...the gate (20,29) is closed - a popup, the hero stays before it", /Brama z pali/.test(pg) && gate.at.y === 30 && gate.blocked, { pg, gate });
     await t.frames(20);
     await t.shot(path.join(SHOTS, "brama_milczacych.png"));
     await sw(16, true);
     await t.frames(10);
-    await t.locate(6, 4, 8);
-    await walkOut("up", 13, 15);
-    const in120 = await t.until(t.onMap(120), 20);
-    const at120 = await t.json(where);
-    t.check("switch 16 on: through the open gate up the ravine -> Map120 'Osada Milczących' (20,31)", in120 && at120.x === 20 && at120.y === 31, at120);
-    const keys120 = ["osada_wejscie", "osada_krag", "osada_sciana", "osada_grum", "osada_starszy", "osada_dom_1", "osada_dom_2", "osada_dom_3", "osada_dom_4"];
     await t.json(REACH(20, 31));
-    const r120 = await t.json(REACHED(keys120));
     const res = await t.json(`$gameMap.events().filter(e => /Milcz/.test(e.event().name)).map(e => e.characterName())`);
-    t.check("Osada: its 9 markers reachable; the Silent standing there", keys120.every(k => r120[k] === true) && res.length >= 4, { r120, res });
+    const open = await t.json(REACHED(keys120));
+    t.check("switch 16 on: through the open gate - the 9 markers reachable; the Silent standing there", keys120.every(k => open[k] === true) && res.length >= 4, { open, res });
+    await t.locate(20, 30, 8);
+    await bump("up", 60);
+    t.check("...the hero walks through the gate (20,29) into the village", (await t.json(`$gamePlayer.y`)) <= 28, await t.json(where));
     await t.frames(30);
     await t.shot(path.join(SHOTS, "osada.png"));
     await t.locate(19, 23, 8);
     await t.frames(20);
     await t.shot(path.join(SHOTS, "osada_krag.png"));
-    await t.locate(20, 65, 2);                       // (the bottom edge is row 67 since the map doubled, tools/powieksz)
-    await walkOut("down", 120);
-    const back13 = await t.until(t.onMap(13), 15);
-    const atg = await t.json(where);
-    t.check("out of Osada (the bottom edge) -> Map013 the ravine behind the gate (6,1) facing down", back13 && atg.x === 6 && atg.y === 1 && atg.d === 2, atg);
     await sw(16, false);
 
-    // ================================================================ back to Leśna droga
-    await t.locate(1, 39, 4);
-    await walkOut("left", 13);
-    const in21 = await t.until(t.onMap(21), 15);
-    const at21 = await t.json(where);
-    t.check("walking left off Map013's west edge -> Leśna droga (78, 9) facing left", in21 && at21.x === 78 && at21.y === 9 && at21.d === 4, at21);
+    // ================================================================ back to the town
+    await t.go(13, 41, 95, 2);
+    await walkOut("down", 13);
+    const in8 = await t.until(t.onMap(8), 15);
+    const at8 = await t.json(where);
+    t.check("walking down off Map013's south edge (x 40-42) -> the town's north gate (Map008, x 24-26), facing down", in8 && at8.x >= 24 && at8.x <= 26 && at8.d === 2, at8);
 });

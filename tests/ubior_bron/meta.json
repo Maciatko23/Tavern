@@ -3855,93 +3855,93 @@
  "ms": {
   "Hero_Sword": {
    "n": 12,
-   "min": 5.3,
-   "max": 6.6,
-   "avg": 5.6
+   "min": 6.4,
+   "max": 8.8,
+   "avg": 7.8
   },
   "Hero_Club": {
    "n": 68,
-   "min": 2.4,
-   "max": 13.3,
-   "avg": 4
+   "min": 2.8,
+   "max": 21,
+   "avg": 5.7
   },
   "Hero_Axe": {
    "n": 11,
-   "min": 5.3,
-   "max": 10.5,
-   "avg": 6.2
+   "min": 6.9,
+   "max": 11.2,
+   "avg": 8.2
   },
   "Hero_Pick": {
    "n": 7,
-   "min": 5.4,
-   "max": 8.4,
-   "avg": 6.3
+   "min": 6.8,
+   "max": 11.1,
+   "avg": 8.4
   },
   "Hero_Spear": {
    "n": 9,
-   "min": 5.3,
-   "max": 8.7,
-   "avg": 6.1
+   "min": 7,
+   "max": 12.5,
+   "avg": 8.6
   },
   "Hero_Bow": {
    "n": 5,
-   "min": 5.2,
-   "max": 8.8,
-   "avg": 6.2
+   "min": 7.7,
+   "max": 11.9,
+   "avg": 9.3
   },
   "Hero_Sling": {
    "n": 3,
-   "min": 5.3,
-   "max": 7.9,
-   "avg": 6.2
+   "min": 7.6,
+   "max": 11.3,
+   "avg": 9.1
   },
   "Hero_Punch": {
    "n": 1,
-   "min": 5.3,
-   "max": 5.3,
-   "avg": 5.3
+   "min": 8.6,
+   "max": 8.6,
+   "avg": 8.6
   },
   "Hero_Walk": {
    "n": 64,
-   "min": 1.2,
-   "max": 16.2,
-   "avg": 2.8
+   "min": 1.4,
+   "max": 22.6,
+   "avg": 3.9
   },
   "Hero_Run": {
    "n": 24,
-   "min": 2.8,
-   "max": 4.8,
-   "avg": 3.1
+   "min": 3.8,
+   "max": 7,
+   "avg": 4.4
   },
   "Hero_AxeSide": {
    "n": 57,
-   "min": 3.1,
-   "max": 15.5,
-   "avg": 4.5
+   "min": 3.3,
+   "max": 19.5,
+   "avg": 6.4
   },
   "Hero_Sit": {
    "n": 56,
-   "min": 4.5,
-   "max": 14.2,
-   "avg": 6.7
+   "min": 4.9,
+   "max": 19.9,
+   "avg": 9
   },
   "Hero_LieDown": {
    "n": 57,
-   "min": 4.6,
-   "max": 24.1,
-   "avg": 7.2
+   "min": 5.6,
+   "max": 48.6,
+   "avg": 10.4
   },
   "Hero_Roll": {
    "n": 24,
-   "min": 3.1,
-   "max": 9.8,
-   "avg": 3.6
+   "min": 4.2,
+   "max": 15.5,
+   "avg": 5.2
   },
   "Hero_Bust": {
    "n": 7,
-   "min": 2.6,
-   "max": 15.2,
-   "avg": 6.9
+   "min": 3.3,
+   "max": 25.7,
+   "avg": 9.3
   }
  }
 }

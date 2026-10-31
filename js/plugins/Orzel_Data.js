@@ -136,6 +136,8 @@
     };
     // the maps' sides for the flight over the edge (tools/orzel/krawedzie.py: EDGES and ISLAND_EDGES of tools/newstart/layout.py and the
     // edge transfers found in the maps) - map -> { side: target map } (N up, S down, W left, E right; the target's opposite side)
+    // (2026-10-31) the old map-level graph, kept as data only - nothing reads it: Orzel_Lot.js flies over the maps' edge events and over the seams of
+    // Swiat_Data.js links (worldExit), so the world's new maps (900-964 ...) need no entry here
     const SIDES = {
         3: { E: 23, N: 4, S: 20, W: 24 }, 4: { S: 3 }, 17: { N: 23, E: 933 }, 933: { W: 17 }, 18: { N: 910 }, 910: { S: 18, E: 950, W: 918 }, 918: { E: 910 }, 930: { S: 157, E: 932 }, 932: { W: 930 }, 950: { N: 155, W: 910 }, 951: { E: 162 },
         8: { S: 125, N: 13, E: 24, W: 111 }, 13: { W: 157, E: 120, N: MAP, S: 8 }, 20: { N: 3 }, 21: { W: 22 }, 22: { E: 21, W: 8, N: 120 },

@@ -700,7 +700,9 @@
     function restingOpts(rate, still, why) {
         const r = { hours: 0, gained: 0, hp: heroHpNow(), end: "" };
         const step = REST_HOURS_A_SECOND / 60;
-        return {
+        // (2026-10-31) danger: he does not rise at the calm pace (the sitting sheet's ~94 frames of standing up were longer than a boar's
+        // warning + charge from 5 tiles, so it knocked him down as he rose) - he scrambles up HURRY times as fast (the swing options rate)
+        const o = {
             still,
             holdWhile: () => {
                 if (r.end) return false;
@@ -713,7 +715,7 @@
                 if (!(perHour > 0)) { r.end = "place"; return; }
                 if (heroHpNow() < r.hp) { r.end = "hit"; return; }
                 const danger = restDanger();
-                if (danger) { r.end = "danger"; r.danger = danger; return; }
+                if (danger) { r.end = "danger"; r.danger = danger; o.rate = REST_HURRY; return; }
                 if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(step);
                 r.hours += step;
                 const before = $gameSystem.stamina();
@@ -734,7 +736,9 @@
                 else if (r.end === "full" && needsCeiling() < restCap()) later(40, () => complain(ICON.stamina, "Głodny i spragniony więcej sił nie odzyskasz"));
             }
         };
+        return o;
     }
+    const REST_HURRY = 3;   // standing up with danger near: x3 (94 frames -> ~31)
     const heroHpNow = () => { const a = $gameParty.leader(); return a ? a.hp : 0; };
     // a boar or wolves coming at him (not roaming about, not running away) within 8 tiles: the name of the first, else ""
     function restDanger() {

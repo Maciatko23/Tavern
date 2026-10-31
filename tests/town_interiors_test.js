@@ -8,13 +8,28 @@
 const path = require("path");
 const fs = require("fs");
 const kit = require("./lib/kit.js");
-const STAGING = path.join(__dirname, "..", "tools", "interiors", "staging");
+const DATA = path.join(__dirname, "..", "data");
 const SHOTS = path.join(__dirname, "..", "docs", "wnetrza");
+const readMap = id => JSON.parse(fs.readFileSync(path.join(DATA, "Map" + String(id).padStart(3, "0") + ".json"), "utf8"));
+const transferOf = e => { for (const p of e.pages) for (const c of p.list) if (c.code === 201) return c.parameters.slice(1, 5); return null; };
 
-const metas = fs.readdirSync(STAGING).filter(f => /^Map1\d\d_meta\.json$/.test(f)).sort()
-    .map(f => JSON.parse(fs.readFileSync(path.join(STAGING, f), "utf8")));
-const doors = [];
-for (const m of metas) for (const ex of m.exits) doors.push({ map: m.id, name: m.display, door: ex.door, town: ex.town, landing: ex.landing, exit: [ex.x, ex.y] });
+// (2026-10-31: tools/interiors/staging is gone - it was deleted when the town was rebuilt. The doors and the interiors are read from the
+// installed maps: every event of Map008 whose page transfers into maps 102-110 (the interiors tools/interiors made) - by what it DOES, not by
+// its name: the doors the user drew in the editor are "EV124" (-> 110), "EV134" (-> 105), "EV137" (-> 107), "EV141" (-> 106); the landing is the
+// door's transfer, the cell in front of the door is (x, y + 1), the way out is the interior's own "Drzwi" event.) The residents' spots are the ones tools/interiors placed.
+const RESIDENTS = { 102: [{ key: "piekarka", x: 13, y: 5, dir: 2 }], 103: [{ key: "kupiec", x: 12, y: 5, dir: 2 }], 104: [{ key: "soltys", x: 7, y: 4, dir: 2 }],
+    105: [{ key: "kowal", x: 9, y: 6, dir: 4 }], 106: [{ key: "garbarz", x: 6, y: 8, dir: 8 }], 107: [{ key: "woziwoda", x: 7, y: 5, dir: 8 }],
+    108: [{ key: "dzwonnik", x: 5, y: 8, dir: 8 }], 109: [{ key: "zosia", x: 11, y: 5, dir: 2 }, { key: "bronek", x: 13, y: 6, dir: 4 }] };
+const doors = [], metas = [];
+for (const e of readMap(8).events) {
+    const to = e ? transferOf(e) : null;
+    if (!to || to[0] < 102 || to[0] > 110) continue;
+    const inside = readMap(to[0]);
+    const back = inside.events.find(x => x && /^(Drzwi|Tylne drzwi)/.test(x.name) && (transferOf(x) || [])[0] === 8 && (transferOf(x) || [])[1] === e.x && (transferOf(x) || [])[2] === e.y + 1);
+    if (!back) continue;
+    if (!metas.some(m => m.id === to[0])) metas.push({ id: to[0], display: inside.displayName, residents: RESIDENTS[to[0]] || [] });
+    doors.push({ map: to[0], name: inside.displayName, door: e.id, town: [e.x, e.y + 1], landing: [to[1], to[2], to[3]], exit: [back.x, back.y] });
+}
 const ALWAYS_OPEN = new Set([236]);
 
 // walks into the door from its front cell (the doors are "player touch", like the tavern's gate) once the map is settled
@@ -35,7 +50,7 @@ async function knock(t, d) {
 kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
     await t.newGame({ map: 8, x: 53, y: 55, dir: 2, hour: 12, quiet: true, minimap: false });
     await t.eval(`(function(){ const _s = Game_Event.prototype.start; Game_Event.prototype.start = function() { if (/^Drzwi: /.test(this.event().name)) window.__doorRan = true; return _s.apply(this, arguments); }; return 0; })()`);
-    t.check("9 interiors staged, 11 doors", metas.length === 9 && doors.length === 11, doors.map(d => d.door));
+    t.check("9 interiors, 11 doors of the town lead into the interiors 102-110 (read from the installed maps, the editor doors EV124/134/137/141 too)", metas.length === 9 && doors.length === 11, doors.map(d => d.door));
     const shot = {};
     for (const d of doors) {
         // ---- by day: in
@@ -52,7 +67,10 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         if (!shot[d.map]) {
             shot[d.map] = true;
             // ---- reachability by the game's own rules, from this landing
+            // (2026-10-31: the town's residents (TownLife.js, event ids 900+) stand in their houses and walk away - a girl in the aisle is not a
+            // wall: they are made pass-through for the walk and put back; the interior's own events and tiles count as always)
             const r = await t.json(`(function(){ const w = $gameMap.width(), h = $gameMap.height(), p = $gamePlayer, key = (x, y) => x + "," + y;
+                const people = $gameMap.events().filter(e => e.eventId() >= 900 && !e.isThrough()); for (const e of people) e._through = true;
                 const open = (x, y) => [2, 4, 6, 8].some(dd => $gameMap.isPassable(x, y, dd)) && !p.isCollidedWithCharacters(x, y);
                 const start = [p.x, p.y], seen = new Set([key(...start)]), todo = [start];
                 while (todo.length) { const [x, y] = todo.pop();
@@ -61,6 +79,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
                         seen.add(key(nx, ny)); todo.push([nx, ny]); } }
                 const closed = [];
                 for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (open(x, y) && !seen.has(key(x, y))) closed.push([x, y]);
+                for (const e of people) e._through = false;
                 return { reached: seen.size, closed }; })()`);
             t.check(`${d.name}: every open cell is reachable from the landing (${r.reached} cells)`, r.closed.length === 0, r.closed);
             const meta = metas.find(m => m.id === d.map);

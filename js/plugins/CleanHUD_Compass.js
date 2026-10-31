@@ -297,26 +297,97 @@
         }
         return out;
     }
+    // (2026-10-31, the world in tiles: Swiat_Data.js) the seams that are open only as SwiatData.links (no transfer events in the maps): the pairs
+    // grouped once per map and side (a few dozen groups, not the hundreds of segments); a walk over one lands in the SAME world tile on the
+    // neighbour (Krawedzie.worldNext). The story's closed ways (13 -> 175 by the eagle, the ebb bar 162 <-> 165) are not in the links, so they stay closed here too.
+    let seamSrc = null, seamBy = null;
+    function seams() {
+        const sw = window.SwiatData;
+        if (!sw || !sw.enabled || !sw.links) return null;
+        if (seamSrc === sw.links) return seamBy;
+        seamSrc = sw.links; seamBy = new Map();
+        const groups = new Map();
+        for (const l of sw.links) {
+            if (!sw.maps[l.a] || !sw.maps[l.b]) continue;
+            const k = l.a + "|" + l.b + "|" + l.side;
+            let g = groups.get(k);
+            if (!g) { g = { a: l.a, b: l.b, side: l.side, segs: [] }; groups.set(k, g); if (!seamBy.has(l.a)) seamBy.set(l.a, []); seamBy.get(l.a).push(g); }
+            g.segs.push([l.from, l.to]);
+        }
+        return seamBy;
+    }
+    // a map's seam exits in the transfer events' shape; each at the tile of the seam nearest to (rx, ry) - where the walk starts / came in
+    function seamExits(mapId, rx, ry) {
+        const by = seams(), list = by && by.get(mapId);
+        if (!list) return [];
+        const M = window.SwiatData.maps, out = [];
+        for (const g of list) {
+            const [ax, ay, aw, ah] = M[g.a], [bx, by0] = M[g.b], ns = g.side === "N" || g.side === "S";
+            const want = ns ? ax + rx : ay + ry;
+            let at = g.segs[0][0], bd = Infinity;
+            for (const s of g.segs) {
+                const c = want < s[0] ? s[0] : want > s[1] ? s[1] : want, d = Math.abs(c - want);
+                if (d < bd) { bd = d; at = c; }
+            }
+            const wx = ns ? at : g.side === "W" ? ax - 1 : ax + aw, wy = ns ? (g.side === "N" ? ay - 1 : ay + ah) : at;
+            out.push({
+                id: "w" + g.b + g.side,
+                x: ns ? at - ax : g.side === "W" ? 0 : aw - 1, y: ns ? (g.side === "N" ? 0 : ah - 1) : at - ay,
+                to: { map: g.b, x: wx - bx, y: wy - by0 }
+            });
+        }
+        return out;
+    }
     const dist = (ax, ay, bx, by) => Math.hypot(ax - bx, ay - by);
+    // (2026-10-31) the answer is kept for a second and a half while the hero stays on the same tile and the goal does not change (the needle asks
+    // a few times a second; the whole graph walked for a goal that cannot be reached cost ~10 ms a time); a "pending" answer is never kept
+    const CACHE_FRAMES = 90;
+    let cache = null;
     function route(tgt) {
         if (!tgt || !$gameMap || !$gamePlayer) return null;
         const here = $gameMap.mapId(), px = $gamePlayer._realX, py = $gamePlayer._realY;
+        const key = here + "|" + Math.round(px * 2) + "|" + Math.round(py * 2) + "|" + tgt.map + "|" + tgt.x + "|" + tgt.y, fc = Graphics.frameCount || 0;
+        if (cache && cache.key === key && fc >= cache.fc && fc - cache.fc < CACHE_FRAMES && cache.src === $dataMap) return cache.out;
+        const out = routeOver(tgt, here, px, py);
+        cache = out && out.pending ? null : { key, fc, out, src: $dataMap };
+        return out;
+    }
+    // a binary heap on .cost (the open list of the walk)
+    function heapPush(h, n) {
+        let i = h.push(n) - 1;
+        while (i > 0) { const p = (i - 1) >> 1; if (h[p].cost <= n.cost) break; h[i] = h[p]; i = p; }
+        h[i] = n;
+    }
+    function heapPop(h) {
+        const top = h[0], last = h.pop();
+        if (h.length) {
+            let i = 0;
+            for (;;) {
+                let c = i * 2 + 1;
+                if (c >= h.length) break;
+                if (c + 1 < h.length && h[c + 1].cost < h[c].cost) c++;
+                if (h[c].cost >= last.cost) break;
+                h[i] = h[c]; i = c;
+            }
+            h[i] = last;
+        }
+        return top;
+    }
+    function routeOver(tgt, here, px, py) {
         if (tgt.map === here) {
             if (tgt.x === undefined || tgt.y === undefined) return { here: true };
             return { x: tgt.x, y: tgt.y, steps: dist(tgt.x, tgt.y, px, py), direct: true };
         }
         const open = [], done = new Set();
         let pending = false, best = null;
-        for (const e of exitsHere()) open.push({ cost: dist(e.x, e.y, px, py) + DOOR, map: e.to.map, x: e.to.x, y: e.to.y, first: e, key: here + ":" + e.id });
+        for (const e of exitsHere().concat(seamExits(here, px, py))) heapPush(open, { cost: dist(e.x, e.y, px, py) + DOOR, map: e.to.map, x: e.to.x, y: e.to.y, first: e, key: here + ":" + e.id });
         while (open.length) {
-            let mi = 0;
-            for (let i = 1; i < open.length; i++) if (open[i].cost < open[mi].cost) mi = i;
-            const n = open.splice(mi, 1)[0];
+            const n = heapPop(open);
             if (n.goal) { best = n; break; }
             if (done.has(n.key)) continue;
             done.add(n.key);
             if (n.map === tgt.map) {
-                open.push({ goal: true, cost: n.cost + (tgt.x === undefined ? 0 : dist(tgt.x, tgt.y, n.x, n.y)), first: n.first, key: "goal" });
+                heapPush(open, { goal: true, cost: n.cost + (tgt.x === undefined ? 0 : dist(tgt.x, tgt.y, n.x, n.y)), first: n.first, key: "goal" });
                 continue;
             }
             if (n.map === here) continue;   // (back on this map: its exits were the start)
@@ -325,9 +396,9 @@
                 if (DATA[n.map] !== "missing") { pending = true; if (!DATA[n.map]) { loadAll(); fetchMap(n.map); } }
                 continue;
             }
-            for (const e of d.exits) {
+            for (const e of d.exits.concat(seamExits(n.map, n.x, n.y))) {
                 const k = n.map + ":" + e.id;
-                if (!done.has(k)) open.push({ cost: n.cost + dist(e.x, e.y, n.x, n.y) + DOOR, map: e.to.map, x: e.to.x, y: e.to.y, first: n.first, key: k });
+                if (!done.has(k)) heapPush(open, { cost: n.cost + dist(e.x, e.y, n.x, n.y) + DOOR, map: e.to.map, x: e.to.x, y: e.to.y, first: n.first, key: k });
             }
         }
         if (!best) return pending ? { pending: true } : null;
@@ -517,7 +588,7 @@
 
     window.CleanCompass = T.register(PLUGIN, {
         WHERE, DATA, loadAll, allLoaded, mapData, mapName, findEvent, person, questSpot, townPlace, boardPlace, buildingPlace, goalPlace,
-        resolve, targetOf, route, exitsHere,
+        resolve, targetOf, route, exitsHere, seamExits,
         target: () => targetOf(CH.goalInfo(SceneManager._scene)),
         info: () => { const s = SceneManager._scene && SceneManager._scene._cleanCompass; return s ? s.info() : null; },
         // (the tests: think again now)

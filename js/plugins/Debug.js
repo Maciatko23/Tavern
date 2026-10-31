@@ -359,7 +359,7 @@
         this.ensureCursorVisible(true);
     };
 
-    // the core tab: Tawerna.debug.lines() (TawernaCore.js), read as the tab opens; a line too wide for the list is cut at ", "
+    // the core tab: Tawerna.debug.lines() (TawernaCore.js), read as the tab opens; a line too wide for the list is cut at ", " or "; "
     // (the rest indented under it); the section lines ("Stany:", "Zegary mapy:"...) are the ones not indented
     Window_DebugList.prototype.coreRows = function() {
         const T = window.Tawerna, rows = [], width = this.innerWidth - this.itemPadding() * 2;
@@ -367,7 +367,7 @@
         for (const text of lines) {
             const indent = /^\s*/.exec(text)[0] + "    ";
             let row = "";
-            for (const part of String(text).split(/(?<=, )/)) {
+            for (const part of String(text).split(/(?<=, |; )/)) {
                 if (row.trim() && this.textWidth(row + part) > width) { rows.push(row.replace(/\s+$/, "")); row = indent + part; }
                 else row += part;
             }

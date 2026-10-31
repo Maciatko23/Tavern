@@ -39,19 +39,23 @@ const { launch, sleep } = require("./cdp.js");
         const B = await ev(`(function(){
             // (2026-10-22: Map003 was doubled - its new part is not grandpa's field - and walled by the user: buildings only inside the wall,
             // 2 tiles from it - look where the field allows it)
-            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !Farming.hasObjectTile(x, y)
+            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && !Farming.hasObjectTile(x, y) && Farming.groundIsSoil(x, y)
                 && Farming.fieldAllows(x, y);
+            // (2026-10-31: the author's field is overgrown ON PURPOSE - branch tangles, ore, boulders, trees; the player clears it. So the window is chosen by the ground alone, the one with the fewest things on it, and the things are carried off the way flip_test always did - the building rules are not touched.)
+            const evsIn = (bx, by) => { const out = []; for (let y = by; y < by + 7; y++) for (let x = bx; x < bx + 8; x++) out.push(...$gameMap.eventsXy(x, y)); return out; };
+            let best = null;
             for (let by = 2; by < $gameMap.height() - 8; by++) for (let bx = 2; bx < $gameMap.width() - 10; bx++) {
                 let ok = true;
                 for (let y = by; y < by + 7 && ok; y++) for (let x = bx; x < bx + 8; x++) { if (!free(x, y)) { ok = false; break; } }
-                if (ok) {
-                    const plots = ($gameSystem._farm.plots[$gameMap.mapId()] = $gameSystem._farm.plots[$gameMap.mapId()] || {});
-                    for (let y = by; y < by + 7; y++) for (let x = bx; x < bx + 8; x++) if (!plots[x + "," + y]) plots[x + "," + y] = { s: "cleared" };
-                    $gameSystem._farm.rev++;
-                    return { bx, by };
-                }
+                if (ok) { const n = evsIn(bx, by).length; if (!best || n < best.n) best = { bx, by, n }; }
             }
-            return null; })()`);
+            if (!best) return null;
+            for (const e of evsIn(best.bx, best.by)) e.locate($gameMap.width() - 1, $gameMap.height() - 1);
+            const bx = best.bx, by = best.by;
+            const plots = ($gameSystem._farm.plots[$gameMap.mapId()] = $gameSystem._farm.plots[$gameMap.mapId()] || {});
+            for (let y = by; y < by + 7; y++) for (let x = bx; x < bx + 8; x++) if (!plots[x + "," + y]) plots[x + "," + y] = { s: "cleared" };
+            $gameSystem._farm.rev++;
+            return { bx, by }; })()`);
         check("found an open ground", !!B, B);
         const { bx, by } = B;
         const kx = bx + 1, ky = by + 3;

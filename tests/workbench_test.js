@@ -91,12 +91,18 @@ fs.mkdirSync(OUT, { recursive: true });
 
         // ================= 5. the workbench =================
         const B = await ev(`(function(){
+            // (2026-10-31: the author's field is overgrown ON PURPOSE - branch tangles, ore, boulders, trees; the player clears it. So the window is chosen by the ground alone, the one with the fewest things on it, and the things are carried off the way flip_test always did - the building rules are not touched.)
+            const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && !Farming.hasObjectTile(x, y) && Farming.groundIsSoil(x, y) && Farming.fieldAllows(x, y);
+            const evsIn = (bx, by) => { const out = []; for (let y = by; y < by + 6; y++) for (let x = bx; x < bx + 10; x++) out.push(...$gameMap.eventsXy(x, y)); return out; };
+            let best = null;
             for (let by = 2; by < $gameMap.height() - 8; by++) for (let bx = 2; bx < $gameMap.width() - 12; bx++) {
                 let ok = true;
-                for (let y = by; y < by + 6 && ok; y++) for (let x = bx; x < bx + 10; x++) { if (!Farming.naturalFarmland(x, y)) { ok = false; break; } }
-                if (ok) return { bx, by };
+                for (let y = by; y < by + 6 && ok; y++) for (let x = bx; x < bx + 10; x++) { if (!free(x, y)) { ok = false; break; } }
+                if (ok) { const n = evsIn(bx, by).length; if (!best || n < best.n) best = { bx, by, n }; }
             }
-            return null; })()`);
+            if (!best) return null;
+            for (const e of evsIn(best.bx, best.by)) e.locate($gameMap.width() - 1, $gameMap.height() - 1);
+            return { bx: best.bx, by: best.by }; })()`);
         check("found an open meadow", !!B, B);
         const { bx, by } = B;
         const standAt = (x, y, d) => ev(`$gamePlayer.locate(${x}, ${y}); $gamePlayer.setDirection(${d}); $gameMap.setDisplayPos(${x} - 13, ${y} - 7); $gameSystem.setStamina(100); 0`);
