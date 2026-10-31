@@ -2022,7 +2022,7 @@
     Game_Map.prototype.update = function(sceneActive) {
         _Game_Map_update.call(this, sceneActive);
         if (robbery) return;
-        for (const h of humans.slice()) h.update();
+        if (humans.length) for (const h of humans.slice()) h.update();   // (2026-10-30: no list copy while there are none)
         updateArrows();
         updateBands();
     };

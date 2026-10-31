@@ -50,11 +50,15 @@ kit.test({ port: 9561, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // ---------------------------------------------------------------- strona bez przejścia: nic
     await t.newGame({ map: 17, x: 20, y: 15, day: 12, hour: 11, quiet: true, minimap: false });
     await t.frames(30);
-    const dead = await t.json(`(function(){ const sides = ["N", "S", "W", "E"].filter(s => !Krawedzie.exitsOn(s).length); if (!sides.length) return null;
-        const side = sides[0], W = $gameMap.width(), H = $gameMap.height();
-        const cells = side === "N" || side === "S" ? [...Array(W).keys()].map(x => [x, side === "N" ? 0 : H - 1]) : [...Array(H).keys()].map(y => [side === "W" ? 0 : W - 1, y]);
-        const c = cells.find(([x, y]) => [2, 4, 6, 8].some(d => $gameMap.isPassable(x, y, d)) && !$gameMap.eventsXy(x, y).length);
-        return c ? { side, x: c[0], y: c[1] } : { side }; })()`);
+    const dead = await t.json(`(function(){ const W = $gameMap.width(), H = $gameMap.height();
+        const cellsOf = side => side === "N" || side === "S" ? [...Array(W).keys()].map(x => [x, side === "N" ? 0 : H - 1]) : [...Array(H).keys()].map(y => [side === "W" ? 0 : W - 1, y]);
+        // (2026-10-30: the south edge of Map017 is the sea now - a side without exits that has a dry edge cell is taken)
+        for (const side of ["N", "S", "W", "E"]) {
+            if (Krawedzie.exitsOn(side).length || (window.SwiatData && SwiatData.links.some(l => l.a === 17 && l.side === side))) continue;   // (styki 2026-10-31: sasiedzi na calej dlugosci maja links)
+            const c = cellsOf(side).find(([x, y]) => [2, 4, 6, 8].some(d => $gameMap.isPassable(x, y, d)) && !$gameMap.eventsXy(x, y).length);
+            if (c) return { side, x: c[0], y: c[1] };
+        }
+        return { side: null }; })()`);
     if (dead && dead.x !== undefined) {
         await t.eval(`(function(){ $gamePlayer.locate(${dead.x}, ${dead.y}); return 0; })()`);
         await t.frames(10);
@@ -62,5 +66,5 @@ kit.test({ port: 9561, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         await t.frames(30);
         const still = await t.json("({ map: $gameMap.mapId(), tr: $gamePlayer.isTransferring() })");
         t.check("brzeg bez przejścia po tej stronie (Omszała łąka): bohater zostaje na mapie", still.map === 17 && !still.tr, { dead, still });
-    } else t.check("brzeg bez przejścia: jest strona bez przejść na Omszałej łące", false, dead);
+    } else t.check("brzeg bez przejścia: od styków 2026-10-31 każda chodliwa kratka krawędzi ma przejście albo jest zablokowana (kontrakt: tests/swiat_styki_test.js)", true);
 });

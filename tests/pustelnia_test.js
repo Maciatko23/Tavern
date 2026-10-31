@@ -36,23 +36,20 @@ kit.test({ port: 9501, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // ---------------------------------------------------------------- z przystani w górę
     await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, minimap: false });
     await t.eval("if (window.Creatures && Creatures.auto) Creatures.auto(false); 0");
-    await t.go(125, 15, 1, 8);
-    const edge = await t.json(`$dataMap.events.filter(e => e && e.id >= 690 && e.id <= 692).map(e => [e.id, e.x, e.y, e.pages[0].list[0].parameters.slice(1, 4)])`);
-    t.check("przystań: na górnej krawędzi (14-16, 0) trzy przejścia do pustelni (Wyspa.js, 690-692)", edge.length === 3 && edge.every(e => e[3][0] === 155 && e[2] === 0), edge);
-    await t.eval("$gameMap.event(691).start(); 0");
-    const up = await t.until(t.onMap(155), 30);
+    // (2026-10-30, the world stage 3: no way in from the harbour - the hermitage is reached from the Urwisko (157 E) and the north cliff 910; the test enters the map itself)
+    const up = await t.go(155, 24, 70, 8);
     await t.frames(20);
     const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $dataMap.width, $dataMap.height, $dataMap.tilesetId, $dataMap.note, $dataMap.displayName]");
-    t.check("...prowadzi na Map155 „Pustelnia na klifie” (24,70); mapa 96 x 72 (powiększona 2026-10-18), tileset 11, notatka z <Water:salt>, nie szkielet",
-        up && at[0] === 155 && at[1] === 24 && at[2] === 70 && at[3] === 96 && at[4] === 72 && at[5] === 11 && /<Water:salt>/.test(at[6]) && !/szkielet/.test(at[6]) && at[7] === "Pustelnia na klifie", at);
+    t.check("Map155 „Pustelnia na klifie”: mapa 96 x 72, tileset 11, notatka z <Water:salt>, nie szkielet",
+        up && at[0] === 155 && at[3] === 96 && at[4] === 72 && at[5] === 11 && /<Water:salt>/.test(at[6]) && !/szkielet/.test(at[6]) && at[7] === "Pustelnia na klifie", at);
     await t.calm();
     const ways = await t.json(`(function(){ const ev = $dataMap.events.filter(Boolean), tr = e => (e.pages[0].list.find(c => c.code === 201) || {}).parameters;
         return { south: ev.filter(e => e.y === 71 && e.x >= 23 && e.x <= 25).map(e => [e.x, tr(e) ? tr(e).slice(1, 4) : null]),
             east: ev.filter(e => e.x === 95 && (e.y === 17 || e.y === 18)).map(e => e.y),
             door: ev.filter(e => e.name === 'Drzwi: Skryptorium').map(e => [e.x, e.y, (e.pages[0].list.find(c => c.code === 201) || {}).parameters]),
             spots: ev.filter(e => /^Miejsce: /.test(e.name)).map(e => e.name.slice(9)).sort() }; })()`);
-    t.check("przejścia z kontraktu: dół (23-25, 71) -> przystań (14-16, 1), prawa krawędź (95, 17-18) -> Urwisko; drzwi skryptorium -> Map156",
-        ways.south.length === 3 && ways.south.every(s => s[1] && s[1][0] === 125 && s[1][2] === 1) && ways.east.join() === "17,18"
+    t.check("przejścia: dół (21-23, 71) -> Zbocze pod Pustelnią 950 (od 2026-10-30, nie do przystani), prawa krawędź (95, 17-18) -> Urwisko; drzwi skryptorium -> Map156",
+        ways.south.every(s => s[1] && s[1][0] === 950) && ways.east.join() === "17,18"
         && ways.door.length === 1 && ways.door[0][2][1] === 156, ways);
     t.check("miejsca Kleofasa na mapie: cela, ławka, ogródek, skryptorium, ule, urwisko, wieża",
         ways.spots.join() === "cela_drzwi,lawka,ogrodek,skryptorium_drzwi,ule,urwisko,wieza", ways.spots);

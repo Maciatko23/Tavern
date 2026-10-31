@@ -127,7 +127,7 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const gran = await t.json(`(function(){ const ev = id => { const e = $gameMap.event(id); return e ? { x: e.x, y: e.y, pic: e.characterName(), dir: e.direction(), name: e.event().name } : null; };
         return { at: [$gamePlayer.x, $gamePlayer.y], name: $gameMap.displayName(), size: [$dataMap.width, $dataMap.height], outdoors: Survival.isOutdoors(),
             things: [510, 511, 512, 513, 514, 515, 516].map(ev), down: [520, 521, 522].map(ev) }; })()`);
-    t.check("akcja przy kołkach -> Orla Grań (Map175, 80×60 od 2026-10-18 - tools/powieksz, pod chmurami) na (20,57)", up && gran.at.join() === "20,57" && gran.name === "Orla Grań" && gran.size.join() === "80,60" && gran.outdoors, gran);
+    t.check("akcja przy kołkach -> Orla Grań (Map175, 80×60 od 2026-10-18, 96×60 od 2026-10-30, 156×60 od świata etapu 3 - morze na wschodzie, pod chmurami) na (20,57)", up && gran.at.join() === "20,57" && gran.name === "Orla Grań" && (gran.size.join() === "96,60" || gran.size.join() === "156,60") && gran.outdoors, gran);
     t.check("na grani: rozbite gniazdo z jajem (510), martwa orlica, strzały z białym okiem, misa, płyta, zimny obóz, pusta klatka (516); zejście 520-522",
         gran.things.every(Boolean) && gran.things[0].pic === "!$Orzel_Gniazdo" && gran.things[0].dir === 2 && gran.things[1].pic === "!$Orzel_Orlica" && gran.things[6].pic === "!$Orzel_Klatka" && gran.things[6].dir === 4
         && gran.down.every(Boolean), gran);

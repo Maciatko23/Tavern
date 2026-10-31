@@ -374,14 +374,24 @@
     // (stands: standing(); without it the things that throw the shadows) are taken out of it - each keeps only the shadows that
     // climb it from its foot (keepOffStanding) - and then the mask is cut out of the light
     function cutLightShadows(c, blockers, k, ox, oy, stands) {
-        const W = c.canvas.width, H = c.canvas.height, m = maskCanvas(W, H);
-        drawLightShadows(m, blockers, k, ox, oy);
-        keepOffStanding(m, blockers, stands || blockers.map(b => standOfOccluder(b.o, spriteOf(b.o))), k, ox, oy);
+        const m = lightShadowMask(c.canvas.width, c.canvas.height, blockers, k, ox, oy, stands);
         c.setTransform(1, 0, 0, 1, 0, 0);
         c.globalAlpha = 1;
         c.globalCompositeOperation = "destination-out";
-        c.drawImage(m.canvas, 0, 0);
+        c.drawImage(m, 0, 0);
         c.globalCompositeOperation = "source-over";
+    }
+    // the shadows of a light's blockers as a mask canvas W x H (opaque = shadow; the things that stand in the light taken out of it):
+    // what cutLightShadows cuts out of a light. The canvas is one per size, shared - use it (upload it) before asking for another of
+    // that size. The lights drawn on the graphics card (RoomLighting.js, Farming_Render.js) cut it out there.
+    function lightShadowMask(W, H, blockers, k, ox, oy, stands) {
+        const m = maskCanvas(W, H);
+        drawLightShadows(m, blockers, k, ox, oy);
+        keepOffStanding(m, blockers, stands || blockers.map(b => standOfOccluder(b.o, spriteOf(b.o))), k, ox, oy);
+        m.setTransform(1, 0, 0, 1, 0, 0);
+        m.globalAlpha = 1;
+        m.globalCompositeOperation = "source-over";
+        return m.canvas;
     }
     // the character sprite of an occluder (its place in the drawing order)
     function spriteOf(o) {
@@ -672,7 +682,7 @@
     const SunApi = T.api("Sun") || T.register("Sun", { now: sunNow, shadows: true });
     Object.assign(SunApi, { now: sunNow, cloudCover, layer: sunShadowLayer, layerAlpha, silhouette: silhouetteBitmap, silhouetteOf, occluder: makeOccluder,
         matrix: shadowMatrix, lay: laySunShadow, occluders, soft: softSilhouette, FLAT: SHADOW_FLAT, sky: skyAt, elevation: sunElev, NIGHT_TONE,
-        lightBlockers, cutLightShadows, scratchCanvas, blockersKey, standing, standOfSprite, standOfOccluder, keepOffStanding, drawLightShadows,
+        lightBlockers, cutLightShadows, lightShadowMask, scratchCanvas, blockersKey, standing, standOfSprite, standOfOccluder, keepOffStanding, drawLightShadows,
         shadeOf, shadeAt, maskCanvas, standOrder });
 
     // ---- the light from the side at sunrise and sunset (user 2026-10-01): the side of the screen the sun is on (the right - the east -

@@ -352,22 +352,101 @@
         if (a.y !== b.y) return a.y - b.y;
         return a.spriteId - b.spriteId;
     };
+    // ------------------------------------------------------------------
+    // One dispatcher for the character sprites' per-frame methods (2026-10-30, docs/WYDAJNOSC.md). Sixteen plugins used to wrap
+    // Sprite_Character.update / updateBitmap / updateFrame / updatePosition / updateOther, each its own closure, a call chain
+    // sixteen deep for every event on the map (a tree, a stone, a sign...) though most of the hooks are for a few characters only.
+    //   Tawerna.sprite.hook({ owner, method, when, before, replace, after })
+    //     method   "update" | "updateBitmap" | "updateFrame" | "updatePosition" | "updateOther"
+    //     when     (sprite) -> bool, OPTIONAL: is this hook for this sprite at all? Asked once for a character (and again when its page
+    //              changes, or Tawerna.sprite.dirty(character) is called, or the filter is switched), NOT every frame - it must be
+    //              about what stays the same: the class, the note, the id, the map. A hook without it runs for every sprite.
+    //     before   (sprite): before what is under it (the hooks of the plugins loaded earlier, and the engine's own method)
+    //     replace  (sprite) -> true: done, what is under it is not called (false / nothing: it is called, as with a wrapper that
+    //              falls through)
+    //     after    (sprite): after what is under it
+    //   The order is the order the plugins load in (the first registered is the innermost, as the first wrapper was): the same
+    //   calls in the same order as the wrappers made. The body of a hook must still guard itself fully (as the wrapper did): with
+    //   Tawerna.sprite.filter = false (Wydajnosc.opts.dispatch) every hook runs for every sprite, the tests compare the picture so.
+    //   Tawerna.sprite.dirty(character): its hooks asked again (after a change of what `when` looked at); dirty(): all of them.
+    // ------------------------------------------------------------------
+    const SPRITE_METHODS = ["update", "updateBitmap", "updateFrame", "updatePosition", "updateOther"];
+    const spriteHooks = SPRITE_METHODS.map(() => []);
+    const spriteBase = {};
+    const NO_HOOKS = [];
+    const spriteState = { filter: true, ver: 0 };
+    function spriteLists(s) {
+        const ch = s._character, page = ch && ch._pageIndex !== undefined ? ch._pageIndex : -2, chV = ch && ch._tshV || 0;
+        let c = s._tsh;
+        if (c && c.ch === ch && c.page === page && c.ver === spriteState.ver && c.chV === chV) return c;
+        if (!c) c = s._tsh = { ch: null, page: 0, ver: 0, chV: 0, lists: SPRITE_METHODS.map(() => NO_HOOKS) };
+        c.ch = ch; c.page = page; c.ver = spriteState.ver; c.chV = chV;
+        for (let m = 0; m < SPRITE_METHODS.length; m++) {
+            const all = spriteHooks[m], out = [];
+            for (let i = 0; i < all.length; i++) if (!spriteState.filter || !all[i].when || all[i].when(s)) out.push(all[i]);
+            c.lists[m] = out.length ? out : NO_HOOKS;
+        }
+        return c;
+    }
+    function spriteRun(s, list, i, base) {
+        if (i < 0) { base.call(s); return; }
+        const h = list[i];
+        if (h.before) h.before(s);
+        if (!(h.replace && h.replace(s))) spriteRun(s, list, i - 1, base);
+        if (h.after) h.after(s);
+    }
+    SPRITE_METHODS.forEach((name, m) => {
+        const base = spriteBase[name] = Sprite_Character.prototype[name];
+        Sprite_Character.prototype[name] = function() {
+            const list = spriteLists(this).lists[m];
+            if (list === NO_HOOKS) return base.call(this);
+            spriteRun(this, list, list.length - 1, base);
+        };
+    });
+    T.sprite = {
+        hook(spec) {
+            const m = SPRITE_METHODS.indexOf(spec && spec.method);
+            if (m < 0 || !(spec.before || spec.replace || spec.after)) throw new Error("Tawerna.sprite.hook: a method (" + SPRITE_METHODS.join(", ") + ") and before / replace / after");
+            spriteHooks[m].push(spec);
+            spriteState.ver++;
+            return spec;
+        },
+        dirty(ch) { if (ch) ch._tshV = (ch._tshV || 0) + 1; else spriteState.ver++; },
+        get filter() { return spriteState.filter; },
+        set filter(v) { v = !!v; if (v !== spriteState.filter) { spriteState.filter = v; spriteState.ver++; } },
+        // how many hooks a sprite runs for each method now (the tests, the profile)
+        count(s) { const c = spriteLists(s); return SPRITE_METHODS.map((n, m) => c.lists[m].length); },
+        methods: SPRITE_METHODS.slice()
+    };
+
+    // (a `when` may look at the character's picture: a change of it - the page's, an event command's, a plugin's setImage - asks again)
+    for (const name of ["setImage", "setTileImage"]) {
+        const orig = Game_CharacterBase.prototype[name];
+        Game_CharacterBase.prototype[name] = function() {
+            this._tshV = (this._tshV || 0) + 1;
+            return orig.apply(this, arguments);
+        };
+    }
+
     // <Px:dx,dy> in an event's note: its picture drawn that many pixels off its cell (2026-10-22, user: "książki leżą na krawędzi
     // stołu" - an item tile on a two-row table stands half off it in either cell; tools/mapy/popraw.py puts such an item as an
     // event with its tile's picture, moved onto the middle of the table top)
     const pxOff = new WeakMap();
-    const _Sprite_Character_updatePosition = Sprite_Character.prototype.updatePosition;
-    Sprite_Character.prototype.updatePosition = function() {
-        _Sprite_Character_updatePosition.call(this);
-        const ch = this._character;
-        if (!(ch instanceof Game_Event)) return;
+    const pxOf = ch => {
         if (!pxOff.has(ch)) {
             const d = ch.event(), m = d && /<Px:(-?\d+),(-?\d+)>/i.exec(d.note || "");
             pxOff.set(ch, m ? [Number(m[1]), Number(m[2])] : null);
         }
-        const o = pxOff.get(ch);
-        if (o) { this.x += o[0]; this.y += o[1]; }
+        return pxOff.get(ch);
     };
+    T.sprite.hook({ owner: "TawernaCore", method: "updatePosition",
+        when: s => s._character instanceof Game_Event && !!pxOf(s._character),
+        after(s) {
+            const ch = s._character;
+            if (!(ch instanceof Game_Event)) return;
+            const o = pxOf(ch);
+            if (o) { s.x += o[0]; s.y += o[1]; }
+        } });
 
     // ------------------------------------------------------------------
     // Map injection: events put into a map's data as it loads (the map files stay as they are)
@@ -420,6 +499,8 @@
         // travellers themselves as residents of the town - TownLife's fourth range (Podroznicy_Data.js)
         { owner: "Podroznicy", from: 3002, to: 3019, what: "podróżni z promu: aktorzy scen na przystani (3002-3008), trap i rekwizyty (3010-3017)" },
         { owner: "TownLife", from: 3020, to: 3049, what: "podróżni z promu jako mieszkańcy (czwarty zakres: obsada 3020-3033, Kompania 3034-3037, pula 3038-3041, Ksenia 3042, trójka 3043)" },
+        // (2026-10-30) the trial of a prettier map: small groups of things on Kruczy Jar (Ziemia_Ozdoby.js)
+        { owner: "Ziemia", from: 3100, to: 3139, what: "ozdoby Kruczego Jaru: grupy przedmiotów przy murze, ścieżce i skraju lasu (mapa 3; próba ładniejszej mapy)" },
         { owner: "Lancuchy", from: 3050, to: 3069, what: "łańcuchy podróżnych: W15 „Święte kości” - kurier Baltazara na piętrze gości (3050; SwieteKosci.js), W16 „Dezerter” - Tymon w kryjówce, garnizonie, obozie (3060; Dezerter.js)" },
         { owner: "Poselstwo", from: 3070, to: 3089, what: "podróżni etap 5: W14 „Poselstwo” - Lord i Feliks na naradzie, Albin pod Złotym (Map026), wosk i ślady przy kracie (Map025) 3070-3074 (Poselstwo.js); D44 - Feliks na korytarzu gości (3080; Podroznicy5.js)" }
     ];

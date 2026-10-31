@@ -310,10 +310,10 @@
     // Skraj lasu: the guard (story), the way west to the burnt farm (its west edge above the way onto the field: the open grass of
     // rows 6-8, the user's tiles untouched) and the signpost by it (everyone)
     T.inject([EDGE], { ids: [GUARD_EDGE, SIGNPOST], owner: PLUGIN, build() {
-        const out = WAY.map((id, i) => ({ id, name: TK.kod.build[2], note: "", x: 0, y: 6 + i,
+        const out = WAY.map((id, i) => ({ id, name: TK.kod.build[2], note: "", x: 79, y: 27 + i,
             // (2026-10-18: the burnt farm doubled to 100x72 - its east edge is x 99, one inside it 98)
-            pages: [page({ characterName: "" }, [C(201, [0, ZAGRODA, 98, 11 + i, 4, 0]), C(0, [])], { priorityType: 0, trigger: 1, walkAnime: false })] }));
-        out.push({ id: SIGNPOST, name: TK.kod.build[3], note: "", x: 1, y: 5,
+            pages: [page({ characterName: "" }, [C(201, [0, ZAGRODA, 1, 71 + i, 6, 0]), C(0, [])], { priorityType: 0, trigger: 1, walkAnime: false })] }));
+        out.push({ id: SIGNPOST, name: TK.kod.build[3], note: "", x: 78, y: 26,
             pages: [page({ characterName: "!$Drogowskaz", direction: 2, pattern: 1 }, stub("Tawerna.call(\"Homes\", \"signpost\")"), { directionFix: true, walkAnime: false })] });
         if (storyGame()) out.push(shownOnA(GUARD_EDGE, TK.kod.build[0], 1, 11, { characterName: "$Npc_Straznik", direction: 2 }, stub(GUARD_TALK)));
         return out;

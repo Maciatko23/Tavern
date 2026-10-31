@@ -26,7 +26,7 @@ Sołtys w ratuszu sprzedaje chatę pod lasem na Podgrodziu, z działką obok. Zi
 Borgar wynajmuje pokoje nad tawerną. Drogo, ale za to pod dachem i blisko roboty.
 Lord sprzedaje wszystko, co ma. Nawet ziemię, którą wziął. Kiedyś ją odkupimy - albo i nie. Ziemia to tylko ziemia.
 Na noc w lesie wystarczy namiot albo leśne legowisko. Ale pod dachem śpi się lepiej - wiesz, gdzie mnie szukać.
-Za Skrajem lasu, na zachód, stoi zagroda Ługów. Lord wziął ją za długi, jak naszą działkę, a dom spłonął. Ziemi tam w bród - popytaj o nią na Podgrodziu.
+Za Skrajem lasu, na wschód, stoi zagroda Ługów. Lord wziął ją za długi, jak naszą działkę, a dom spłonął. Ziemi tam w bród - popytaj o nią na Podgrodziu.
 
 # ======================================================================== HOOK (dawnaTwierdza)
 [dawnaTwierdza]

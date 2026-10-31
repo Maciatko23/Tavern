@@ -259,6 +259,22 @@
         coneCache = { stamp, tiles };
         return tiles;
     }
+    // (2026-10-30, wydajność) the tiles where gatherKindOf says "something may lie here", row by row, as a flat [x, y, kind, ...]: the
+    // drawing layer's rebuild and the dog's search walked the whole map and hashed every tile three times to find the same few
+    // hundred. The answer depends on the map, its size and the cone tiles (themselves worked out once a day and when the events
+    // change - the Set is the key: a new Set, a new list).
+    let kindGrid = { cones: null, map: 0, w: 0, h: 0, list: [] };
+    function gatherTiles() {
+        const cones = coneTiles(), mapId = $gameMap.mapId(), w = $gameMap.width(), h = $gameMap.height();
+        if (kindGrid.cones === cones && kindGrid.map === mapId && kindGrid.w === w && kindGrid.h === h) return kindGrid.list;
+        const list = [];
+        for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+            const kind = gatherKindOf(x, y);
+            if (kind) list.push(x, y, kind);
+        }
+        kindGrid = { cones: coneTiles(), map: mapId, w, h, list };
+        return list;
+    }
     // ---- mushrooms: on a tile of the pool a new one may appear each day (seldom; in the days after rain many more; never in winter) and it stays for
     // MUSHROOM_LIFE days unless it is picked. Nothing is stored except the day it was picked.
     const rainOn = day => { const p = T.call("Survival", "weatherPlan", day); return !!p && p.type === "rain"; };
@@ -1005,7 +1021,7 @@
     }
 
     P.plots = { isSoilTile, groundInfoAt, groundIsSoil, hasObjectTile, naturalFarmland, plotAt, claimGround, releaseGround,
-        gatherRev, gatherKindOf, mushroomChance, mushroomBirth, bushState, bushSolid, gatherSpot, gatherAt, stoneSpot, stoneAt,
+        gatherRev, gatherKindOf, gatherTiles, mushroomChance, mushroomBirth, bushState, bushSolid, gatherSpot, gatherAt, stoneSpot, stoneAt,
         pickGather, pickStone, takeGatherFor, canCharges, isWaterTile, seaHere, fillCan, needsOn, drink, fillSkin, goFishing, wellEntries,
         rationWell, rationLeft, rationOf,
         rainHoursBetween, bucketSync, bucketUnits, takeBucketWater, stowVessel, unstowVessel, ownsBucket, bagWater, setBagWater,

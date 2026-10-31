@@ -14,6 +14,8 @@
 //   node tools/wydajnosc/pomiar.js jar --idzie --poziomy   the three levels one after another on the same map, in turns (wysoka,
 //                                                         srednia, niska, wysoka, ...: --rundy of each), the median of each - the
 //                                                         machine's load drifts, and only turns on the same map cancel it out
+//   node tools/wydajnosc/pomiar.js jar --idzie --ziemia   the trial of a prettier map (Ziemia.js) in turns on the same map: all off, edges, shade,
+//                                                         mood, all on (window.ZIEMIA; --rundy of each), the median of each and the cost against "off"
 //   node tools/wydajnosc/pomiar.js przystan --efekty  each part of the quality on its own (gfx: mood, bloom, grass, particles,
 //                                                         critters, lazyEvery, smallShadows, fireShadows, nightScale, skyFx): Wysoka's
 //                                                         value against Niska's, in turns (A, B, A, B...), the difference of the medians
@@ -40,7 +42,7 @@ const flag = n => { const i = args.indexOf("--" + n); if (i < 0) return false; a
 const PORT = Number(opt("port", 9652)), THROTTLE = Number(opt("dlawienie", 4)), FRAMES = Number(opt("klatki", 240)), ROUNDS = Number(opt("rundy", 1));
 const PRZED = opt("przed", null), PROFILE = flag("profil"), WALK = flag("idzie");
 const JAKOSC = { wysoka: "high", srednia: "medium", niska: "low", auto: "auto" }, jakosc = String(opt("jakosc", "wysoka")).toLowerCase();
-const POZIOMY = flag("poziomy"), EFEKTY = flag("efekty"), CICHO = flag("cicho");
+const POZIOMY = flag("poziomy"), EFEKTY = flag("efekty"), CICHO = flag("cicho"), ZIEMIA = flag("ziemia");
 if (!JAKOSC[jakosc]) { console.log("--jakosc: wysoka | srednia | niska | auto"); process.exit(2); }
 const OUT = opt("wyniki", path.join(os.tmpdir(), "tawerna_wydajnosc")), TAG = opt("tag", (PRZED ? "przed" : "teraz") + (WALK ? "_idzie" : "_stoi") + (jakosc === "wysoka" ? "" : "_" + jakosc) + (POZIOMY ? "_poziomy" : EFEKTY ? "_efekty" : ""));
 fs.mkdirSync(OUT, { recursive: true });
@@ -76,7 +78,30 @@ const PLACES = {
         await t.frames(60);
         await t.calm();
     },
+    // (2026-10-30, the world stage 1) the new sea maps of the tail and the bridge's night
+    ogon914: async t => { await t.newGame({ map: 914, x: 70, y: 42, day: 40, hour: 22 }); await t.eval(near(70, 42)); },
+    ogon917: async t => { await t.newGame({ map: 917, x: 30, y: 4, day: 40, hour: 22 }); await t.eval(near(30, 4)); },
+    most: async t => { await t.newGame({ map: 111, x: 93, y: 18, day: 40, hour: 22 }); await t.eval(near(93, 18)); },
+    // (2026-10-30, the world stage 2) grandpa's yard grown to 80x64 and the new fields / orchards maps
+    dom: async t => { await t.newGame({ map: 20, x: 15, y: 10, day: 40, hour: 12 }); await t.eval(near(15, 10)); },
+    pola900: async t => { await t.newGame({ map: 900, x: 37, y: 30, day: 40, hour: 21 }); await t.eval(near(37, 30)); },
+    sady901: async t => { await t.newGame({ map: 901, x: 40, y: 20, day: 40, hour: 21 }); await t.eval(near(40, 20)); },
+    zagroda168: async t => { await t.newGame({ map: 168, x: 20, y: 12, day: 40, hour: 12 }); await t.eval(near(20, 12)); },
+    brzeg912: async t => { await t.newGame({ map: 912, x: 60, y: 54, day: 40, hour: 21 }); await t.eval(near(60, 54)); },
+    pustelnia155: async t => { await t.newGame({ map: 155, x: 52, y: 17, day: 40, hour: 21 }); await t.eval(near(52, 17)); },
+    garnizon162: async t => { await t.newGame({ map: 162, x: 36, y: 12, day: 40, hour: 21 }); await t.eval(near(36, 12)); },
+    klif910: async t => { await t.newGame({ map: 910, x: 75, y: 71, day: 40, hour: 21 }); await t.eval(near(75, 71)); },
+    gran175: async t => { await t.newGame({ map: 175, x: 56, y: 54, day: 40, hour: 21 }); await t.eval(near(56, 54)); },
     przystan: async t => { await t.newGame({ map: 125, x: 24, y: 14, day: 40, hour: 22 }); await t.eval(near(24, 14)); },
+    // the tavern's hall at 20:00 with a full house of the ferry's travellers (as tests/wydajnosc_test.js)
+    tawerna: async t => {
+        await t.newGame({ map: 1, x: 50, y: 34, day: 40, hour: 20 });
+        await t.eval(`(function(){ for (const k of ["tobiasz", "kartograf", "grajek", "kompania"]) { try { Podroznicy.przyplyn(k); } catch (e) {} } Podroznicy.przyplyn("pula"); return 0; })()`);
+        await t.go(1, 50, 34, 8);
+        await t.eval(near(50, 34));
+        await t.setHour(20);
+        await t.frames(120);
+    },
     burza: async t => {
         await t.newGame({ map: 3, x: 22, y: 14, day: 40, hour: 14, calm: false });
         await t.eval("Survival.forceStorm(2); $gameSystem.setDayNightHour($gameSystem._stormForce.start + 0.6); 0");
@@ -182,7 +207,8 @@ async function measureEffects(t, name) {
     return out;
 }
 
-const opts = Object.assign({ port: PORT, evalTimeout: 120000 }, PRZED ? { overlay: overlayOf(PRZED), overlayJs: true } : {});
+// (lightGpu: the lights on the graphics card, as the game draws them - tests/lib/kit.js puts the tests on the 2D canvases)
+const opts = Object.assign({ port: PORT, evalTimeout: 120000, lightGpu: true }, PRZED ? { overlay: overlayOf(PRZED), overlayJs: true } : {});
 kit.test(opts, async t => {
     const list = args.length ? args : Object.keys(PLACES), results = {};
     for (const name of list) {
@@ -194,6 +220,24 @@ kit.test(opts, async t => {
                 await t.eval("Survival.forceStorm(2); $gameSystem.setDayNightHour($gameSystem._stormForce.start + 0.6); 0");
                 await t.frames(400);
             }
+        }
+        if (ZIEMIA) {
+            await t.frames(90);
+            await t.b.send("Emulation.setCPUThrottlingRate", { rate: THROTTLE });
+            const V = { wylaczone: "{ off: true }", granice: "{ off: false, edges: true, shade: false, mood: false }", cien: "{ off: false, edges: false, shade: true, mood: false }",
+                barwy: "{ off: false, edges: false, shade: false, mood: true }", wszystko: "{ off: false }" }, runs = {};
+            for (const k in V) runs[k] = [];
+            for (let r = 0; r < ROUNDS; r++) for (const k in V) {
+                await t.eval(`window.ZIEMIA = ${V[k]}; 0`);
+                await t.frames(60);
+                runs[k].push(JSON.parse(await t.eval(MEASURE(FRAMES, WALK), 600000)));
+            }
+            const med = a => median(a), base = med(runs.wylaczone).frame;
+            console.log(name + (WALK ? " (idzie)" : " (stoi)") + " - Ziemia w turach, CPU " + THROTTLE + "x wolniejsze:");
+            for (const k in V) { const m = med(runs[k]); console.log("   " + k.padEnd(11) + fmt(m) + "  koszt " + (m.frame - base).toFixed(2) + " ms  [" + runs[k].map(x => x.frame).join(", ") + "]"); }
+            console.log("   ziemia: " + JSON.stringify(await t.json("Ziemia.stats()")));
+            await t.b.send("Emulation.setCPUThrottlingRate", { rate: 1 });
+            continue;
         }
         if (POZIOMY || EFEKTY) {
             await t.frames(90);

@@ -223,8 +223,8 @@ const DRIVER = String.raw`
         const fld = await J("({ f: $gameSystem._story.flags.field, done: Watki.rekordy().w.fabula.t.done[1] !== undefined, cur: Watki.krok('fabula'), line: (Journal.tracked() || {}).line, name: $gameMap.displayName() })");
         check("reaching grandpa's field (Map003, shown as 'Kruczy Jar') ticks 'Dojdź na działkę dziadka'; the chapter then says find the job", fld.f && fld.done && fld.cur === "praca" && fld.line === "Znajdź pracę w tawernie" && fld.name === "Kruczy Jar", fld);
         // the way in, walked with the keys: Polna droga north -> Okolice Tawerny (Map008) -> the tavern's door -> the tavern (Map001), out and in again
-        await go(22, 12, 1, 8);
-        const to8 = await walkTo("up", 8);
+        await go(22, 6, 42, 4);   // (2026-10-30 the world: Polna droga -> the town through the east gate, not the old south gate)
+        const to8 = await walkTo("left", 8);
         const at8 = await J("({ x: $gamePlayer.x, y: $gamePlayer.y, door: ($gameMap.events().find(e => /^Drzwi tawerny/.test(e.event().name)) || { x: -1 }).x })");
         await ev("(function(){ $gamePlayer.locate(51, 17); $gamePlayer.setDirection(8); return 0; })()");   // (in front of the tavern's gate, the hall since 2026-10-04)
         const to1 = await walkTo("up", 1);
@@ -233,7 +233,7 @@ const DRIVER = String.raw`
         const out8 = await J("({ x: $gamePlayer.x, y: $gamePlayer.y })");
         await ev("(function(){ $gamePlayer.locate(51, 17); $gamePlayer.setDirection(8); return 0; })()");
         const in1 = await walkTo("up", 1);
-        check("the way in: Polna droga north -> Okolice Tawerny, its door -> the tavern with Borgar; the tavern's exit -> back in front of the door", to8 && at8.y >= 20 && at8.door === 51 && to1 && at1.borgar &&
+        check("the way in: Polna droga west (the east gate) -> Okolice Tawerny, its door -> the tavern with Borgar; the tavern's exit -> back in front of the door", to8 && at8.x >= 100 && at8.door === 51 && to1 && at1.borgar &&
             back8 && out8.x === 51 && out8.y === 17 && in1, { to8, at8, to1, at1, back8, out8, in1 });
         await ev("$gameSystem.setDayNightHour(10); $gameSystem.setStamina(100); 0");
         const bor = await J("(function(){ const e = Story.borgarEvent(); return e && { id: e.eventId(), name: e.event().name, stub: e.list().length === 2 && e.list()[0].code === 355, atmo: $gameMap.events().filter(x => /Atmosfera - Borgar/.test(x.event().name)).map(x => Story.roleOf(x)) }; })()");

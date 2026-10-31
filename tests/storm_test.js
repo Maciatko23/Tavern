@@ -123,6 +123,7 @@ const OUT = __dirname + "/";
         await frames(80);
 
         // ---------------------------------------------------------------- the night lit up by a flash
+        await ev("Wydajnosc.opts.lightGpu = false; 0");   // (the night's dark is read off its canvas below: the canvases' path - the card's has none)
         await ev("Survival.calmWeather(); $gameSystem.setDayNightHour(22); 0");
         await frames(20);
         await ev("delete $gameSystem._stormForce; Survival.forceStorm(2); $gameSystem.setDayNightHour($gameSystem._stormForce.start + 0.7); Storm.state.nextStrike = Storm.state.t + 100000; 0");

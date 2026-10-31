@@ -53,8 +53,8 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const came = await t.until(t.onMap(157), 30);
     await t.frames(30);
     const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $dataMap.width, $dataMap.height, $dataMap.tilesetId, $dataMap.note, $dataMap.displayName]");
-    t.check("prawa krawędź pustelni (95,17) prowadzi na Map157 „Urwisko Kruków” (1,19); 112 x 72, tileset 11, <Water:salt>, nie szkielet",
-        came && at[0] === 157 && at[1] === 1 && at[2] === 19 && at[3] === 112 && at[4] === 72 && at[5] === 11 && /<Water:salt>/.test(at[6]) && !/szkielet/.test(at[6]) && at[7] === "Urwisko Kruków", at);
+    t.check("prawa krawędź pustelni (95,17) prowadzi na Map157 „Urwisko Kruków” (1,19); 122 x 72 (od 2026-10-30), tileset 11, <Water:salt>, nie szkielet",
+        came && at[0] === 157 && at[1] === 1 && at[2] === 19 && (at[3] === 112 || at[3] === 122) && at[4] === 72 && at[5] === 11 && /<Water:salt>/.test(at[6]) && !/szkielet/.test(at[6]) && at[7] === "Urwisko Kruków", at);
     await t.calm();
     const ways = await t.json(`(function(){ const ev = $dataMap.events.filter(Boolean), tr = e => (e.pages[0].list.find(c => c.code === 201) || {}).parameters;
         const g = ev.find(e => e.name === 'Przelew cysterny');
@@ -65,19 +65,12 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
             rynny: ev.filter(e => /^Miejsce: rynna_/.test(e.name)).map(e => e.name.slice(9)).sort(),
             rynnyObok: ev.filter(e => /^Miejsce: rynna_/.test(e.name)).every(e => [[0, 1], [0, -1], [1, 0], [-1, 0]].some(([dx, dy]) => $gameMap.isPassable(e.x + dx, e.y + dy, 2) && !$gameMap.eventsXy(e.x + dx, e.y + dy).some(o => o.isNormalPriority()))),
             land: [[1, 19], [1, 20], [110, 19], [110, 20], [41, 16]].every(([x, y]) => $gameMap.isPassable(x, y, 2)) }; })()`);
-    t.check("przejścia z kontraktu: lewa krawędź (0,19-20) -> pustelnia (94,17-18), prawa (111,19-20) -> przylądek z bramą Wyspa.isReady(159); lądowania przechodnie",
-        ways.west.length === 2 && ways.west.every(w => w && w[0] === 155 && w[1] === 94) && ways.east.length === 2 && ways.east.every(Boolean) && ways.land, ways);
+    t.check("przejścia z kontraktu: lewa krawędź (0,19-20) -> pustelnia (94,17-18), prawa (111,19-20) bez przejścia do przylądka (od 2026-10-30 świat: 157 E -> Góry); lądowania przechodnie",
+        ways.west.length === 2 && ways.west.every(w => w && w[0] === 155 && w[1] === 94) && ways.east.length === 0 && ways.land, ways);
     t.check("krata przelewu (41,15): „Przelew cysterny”, !Quest_Places 0/2/0, strona 2 na przełączniku 17 -> cysterna 167 (33,3); znaczniki rynna_1..4 dla K53 (każdy z wolnym polem obok - pakiet F stawia tam gruz)",
         ways.grate && ways.grate.x === 41 && ways.grate.y === 15 && ways.grate.img.join() === "!Quest_Places,0,2,0" && ways.grate.p2 === 17 && ways.grate.to
         && ways.rynny.join() === "rynna_1,rynna_2,rynna_3,rynna_4" && ways.rynnyObok, ways);
-    // the east edge: the cape not built -> a popup (or, when package C is in, the way through)
-    await t.popups({ clear: true });
-    await t.eval("(function(){ const e = $gameMap.events().find(e => e.x === 111 && e.y === 19); $gamePlayer.locate(110, 19); e.start(); return 0; })()");
-    await t.frames(30);
-    const eastPop = await t.popups(), capeReady = await t.eval("Wyspa.isReady(159)");
-    t.check("prawa krawędź: przylądek niegotowy - popup nad bohaterem, bez przejścia (gotowy - przejście)",
-        capeReady ? (await t.eval("$gameMap.mapId()")) === 159 : (await t.eval("$gameMap.mapId()")) === 157 && eastPop.some(p => /osunęło/.test(p)), { eastPop, capeReady });
-    if (capeReady) await t.go(157, 26, 13, 8);
+    // (2026-10-30, the world: the east edge (111,19-20) has no Wyspa way to the cape any more - 157 E leads to the mountains through Swiat_Data)
     // the grate shut: a popup
     await t.popups({ clear: true });
     await t.locate(41, 16, 8);

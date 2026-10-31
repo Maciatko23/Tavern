@@ -935,30 +935,31 @@
     Sprite_Character.prototype.updateSwingSheet = via(S, "updateSwingSheet");   // (HeroLook.js asks it too)
     Sprite_Character.prototype.updateToolSwing = via(S, "updateToolSwing");
 
-    // The core (pre-ChoppableTree.js) updateFrame, kept so the tree/swing override below can fall through to it.
-    const _Sprite_Character_updateFrame = Sprite_Character.prototype.updateFrame;
-
-    const _Sprite_Character_updatePosition = Sprite_Character.prototype.updatePosition;
-    Sprite_Character.prototype.updatePosition = function() {
-        _Sprite_Character_updatePosition.call(this);
-        if (this._character instanceof Game_Event && anyHarvestConfig(this._character)) {
-            this.updateTreeEffects(this._character);
-            this.updateCharredTone(this._character);
-        } else if (this._character === $gamePlayer) {
-            this.updateToolSwing();
-        } else if (this._character instanceof Game_Event && DECOR_TREE.test(this._characterName || "")) {
-            this.updateDecorTreeSeeThrough(this._character);   // (a decorative tree picture: fades while the player is behind it)
-        }
-    };
+    // (Tawerna.sprite, TawernaCore.js: each hook runs for the sprites it is for - the hero, the harvest things, the decorative
+    // trees - not for every sign and every neighbour on the map; what a hook looks at is fixed by the event: its notes and its page)
     const DECOR_TREE = /^!.*tree/i;
+    const isHarvestEvent = ch => ch instanceof Game_Event && !!anyHarvestConfig(ch);
+    const isDecorTree = s => s._character instanceof Game_Event && (DECOR_TREE.test(s._characterName || "") || DECOR_TREE.test(s._character.characterName() || ""));
+    T.sprite.hook({ owner: "ChoppableTree", method: "updatePosition",
+        when: s => isHarvestEvent(s._character) || s._character === $gamePlayer || isDecorTree(s),
+        after(s) {
+            if (s._character instanceof Game_Event && anyHarvestConfig(s._character)) {
+                s.updateTreeEffects(s._character);
+                s.updateCharredTone(s._character);
+            } else if (s._character === $gamePlayer) {
+                s.updateToolSwing();
+            } else if (s._character instanceof Game_Event && DECOR_TREE.test(s._characterName || "")) {
+                s.updateDecorTreeSeeThrough(s._character);   // (a decorative tree picture: fades while the player is behind it)
+            }
+        } });
     // the see-through factors of bushes and decorative trees, applied after the engine's updateOther (which sets the opacity from
     // the character every frame, after updatePosition)
-    const _Sprite_Character_updateOther = Sprite_Character.prototype.updateOther;
-    Sprite_Character.prototype.updateOther = function() {
-        _Sprite_Character_updateOther.call(this);
-        const k = (this._bushSeeK === undefined ? 1 : this._bushSeeK) * (this._decorSeeK === undefined ? 1 : this._decorSeeK);
-        if (k < 1) this.opacity = Math.round(this.opacity * k);
-    };
+    T.sprite.hook({ owner: "ChoppableTree", method: "updateOther",
+        when: s => isHarvestEvent(s._character) || isDecorTree(s),
+        after(s) {
+            const k = (s._bushSeeK === undefined ? 1 : s._bushSeeK) * (s._decorSeeK === undefined ? 1 : s._decorSeeK);
+            if (k < 1) s.opacity = Math.round(s.opacity * k);
+        } });
 
     // Load the sheets with the map so the first swing does not have to wait for them (the ones the hero plays: HeroLook.js's)
     const _Scene_Map_create = Scene_Map.prototype.create;
@@ -972,16 +973,18 @@
     // be two separate overrides, each patching whatever updateFrame already was, which happened to work
     // only because the two conditions (player vs. tree event) can never both be true at once - fragile
     // if the file were ever reordered. One override, one backup alias, order made explicit instead.
-    Sprite_Character.prototype.updateFrame = function() {
-        if (this._character === $gamePlayer && this.updateSwingSheet()) {
-            this.setFrame(0, 0, 0, this.patternHeight());   // the swing sheet draws the figure
-        } else if (this.isTreeSprite()) {
-            this.updateTreeFrame();
-        } else {
-            this.setTreeBodyVisible(false);
-            _Sprite_Character_updateFrame.call(this);
-        }
-    };
+    // (only the hero's sprite and the harvest events' have a swing sheet / a tree's strips to look after: the rest falls to the core)
+    T.sprite.hook({ owner: "ChoppableTree", method: "updateFrame",
+        when: s => s._character === $gamePlayer || isHarvestEvent(s._character),
+        replace(s) {
+            if (s._character === $gamePlayer && s.updateSwingSheet()) {
+                s.setFrame(0, 0, 0, s.patternHeight());   // the swing sheet draws the figure
+                return true;
+            }
+            if (s.isTreeSprite()) { s.updateTreeFrame(); return true; }
+            s.setTreeBodyVisible(false);
+            return false;
+        } });
 
     const _Spriteset_Map_createCharacters = Spriteset_Map.prototype.createCharacters;
     Spriteset_Map.prototype.createCharacters = function() {

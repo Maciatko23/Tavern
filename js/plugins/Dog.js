@@ -517,10 +517,13 @@
 
     // the nearest tile holding one of `kinds` (from Farming's ground items), within `radius` of `center` (all the map without one)
     function findTile(g, kinds, center, radius, bad, food) {
-        const W = $gameMap.width(), H = $gameMap.height();
+        // (2026-10-30, wydajność: only the tiles where something may lie at all - Farming.gatherTiles, row by row as the whole-map walk
+        // was, so a tie goes to the same tile - and only the box of the radius around the centre)
+        const tiles = F().gatherTiles();
         let best = null, bd = Infinity;
-        for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-            if (center && Math.hypot(x - center.x, y - center.y) > radius) continue;
+        for (let i = 0; i < tiles.length; i += 3) {
+            const x = tiles[i], y = tiles[i + 1];
+            if (center && (Math.abs(x - center.x) > radius || Math.abs(y - center.y) > radius || Math.hypot(x - center.x, y - center.y) > radius)) continue;
             if (bad && bad.has(x + "," + y)) continue;
             const k = F().gatherAt(x, y);
             if (!k || !kinds.includes(k)) continue;

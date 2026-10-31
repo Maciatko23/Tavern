@@ -620,11 +620,9 @@
         UI().addHud(this);
         if (P.feel) P.feel.addHud(this);   // (the arrows at the screen's edge - Combat_Feel.js)
     };
-    const _Sprite_Character_update = Sprite_Character.prototype.update;
-    Sprite_Character.prototype.update = function() {
-        _Sprite_Character_update.call(this);
-        UI().updateCharacter(this);
-    };
+    // (for the hero and the animals only - Combat_UI.js updateCharacter does nothing for anyone else)
+    T.sprite.hook({ owner: "Combat", method: "update", when: s => s._character === $gamePlayer || !!(s._character && s._character.isAnimal),
+        after(s) { UI().updateCharacter(s); } });
     // ---- the fight's options (2026-10-14, Combat_Feel.js reads them), kept in the config file like the volumes: "Automatyczny tryb walki"
     // (Wł / Wył, on by default) and "Trudność walki" (Łatwy / Normalny / Trudny, Normalny by default). Rows after the game's switches
     // (OptionEx.js: always run, remember the command...), in both looks (Window_Options draws the Grafit one too - MenuRing.js)

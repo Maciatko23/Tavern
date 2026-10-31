@@ -51,27 +51,19 @@
 
     // ------------------------------------------------------------------ the ways in from the user's maps (Wyspa.js puts them in as the
     // map loads - the map files stay as they are - and only once the place is built: Wyspa.ready(mapId) from its package)
-    const EDGES = [
-        { id: "przystan_pustelnia", from: 125, to: 155, ids: [690, 692], dir: 8, name: "Przejście -> Pustelnia na klifie",
-          cells: [[14, 0], [15, 0], [16, 0]], land: [[23, 70], [24, 70], [25, 70]] },
-        { id: "przystan_garnizon", from: 125, to: 162, ids: [693, 695], dir: 2, name: "Przejście -> Garnizon nad zatoką",
-          cells: [[21, 79], [22, 79], [23, 79]], land: [[21, 1], [22, 1], [23, 1]] },
-        { id: "gory_przyladek", from: 13, to: 159, ids: [696, 698], dir: 8, name: "Przejście -> Przylądek z latarnią",
-          cells: [[119, 11], [119, 12], [119, 13]], land: [[29, 78], [30, 78], [31, 78]] }
-    ];
+    // (2026-10-30, the world stage 3) no ways in from the harbour (125) and the mountains (13): Pustelnia, Garnizon and the lighthouse are reached by land
+    // from their neighbours in the world (Swiat_Data.js; Krawedzie.js)
+    const EDGES = [];
     // (2026-10-18) the outdoor maps doubled (tools/powieksz/powieksz.py: the old part stays, new land east and south): the cells
     // and landings on their east / south edges moved to the new edges - Map125 112x80, Map013 120x96, Map155 96x72, Map157 112x72,
     // Map159 88x80, Map162 112x80, Map165 80x60
     // the ways back and between the new maps are events of the new maps themselves (their package puts them in its map): the cells
     // every package keeps (docs/miejsca_wyspy/PAKIETY.md "Kontrakty")
     const LINKS = [
-        { from: 155, cells: [[23, 71], [24, 71], [25, 71]], to: 125, land: [[14, 1], [15, 1], [16, 1]], dir: 2 },
+        // (2026-10-30, the world) 155 S -> 125 removed: Pustelnia's south neighbour is 950
         { from: 155, cells: [[95, 17], [95, 18]], to: 157, land: [[1, 19], [1, 20]], dir: 6 },
         { from: 157, cells: [[0, 19], [0, 20]], to: 155, land: [[94, 17], [94, 18]], dir: 4 },
-        { from: 157, cells: [[111, 19], [111, 20]], to: 159, land: [[1, 33], [1, 34]], dir: 6 },
-        { from: 159, cells: [[0, 33], [0, 34]], to: 157, land: [[110, 19], [110, 20]], dir: 4 },
-        { from: 159, cells: [[29, 79], [30, 79], [31, 79]], to: 13, land: [[118, 11], [118, 12], [118, 13]], dir: 4 },
-        { from: 162, cells: [[21, 0], [22, 0], [23, 0]], to: 125, land: [[21, 78], [22, 78], [23, 78]], dir: 8 },
+        // (2026-10-30, the world) 157 E -> 159, 159 W -> 157, 159 S -> 13, 162 N -> 125 removed: the maps meet their neighbours of the world (Swiat_Data.js)
         { from: 162, cells: [[0, 20], [0, 21]], to: 165, land: [[78, 20], [78, 21]], dir: 4, tide: "low" },
         { from: 165, cells: [[79, 20], [79, 21]], to: 162, land: [[1, 20], [1, 21]], dir: 6, tide: "low" },
         { from: 167, cells: [[33, 2]], to: 157, land: [[41, 16]], dir: 2, gate: "krataUrwisko" },

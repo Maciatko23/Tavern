@@ -137,10 +137,10 @@
     // the maps' sides for the flight over the edge (tools/orzel/krawedzie.py: EDGES and ISLAND_EDGES of tools/newstart/layout.py and the
     // edge transfers found in the maps) - map -> { side: target map } (N up, S down, W left, E right; the target's opposite side)
     const SIDES = {
-        3: { E: 23, N: 4, S: 17, W: 18 }, 4: { S: 3 }, 17: { N: 3 }, 18: { E: 3 },
-        8: { S: 22, E: 24, W: 111 }, 13: { W: 21, E: 159, N: MAP }, 20: { S: 21 }, 21: { N: 20, W: 22, E: 13 }, 22: { E: 21, S: 23, N: 8 },
-        23: { N: 22, W: 3 }, 24: { W: 8 }, 111: { E: 8, W: 125 }, 125: { E: 111, N: 155, S: 162 }, 155: { S: 125, E: 157 },
-        157: { W: 155, E: 159 }, 159: { W: 157, S: 13 }, 162: { N: 125, W: 165 }, 165: { E: 162 }, 168: {}, 175: { S: 13 }
+        3: { E: 23, N: 4, S: 20, W: 24 }, 4: { S: 3 }, 17: { N: 23, E: 933 }, 933: { W: 17 }, 18: { N: 910 }, 910: { S: 18, E: 950, W: 918 }, 918: { E: 910 }, 930: { S: 157, E: 932 }, 932: { W: 930 }, 950: { N: 155, W: 910 }, 951: { E: 162 },
+        8: { S: 125, N: 13, E: 24, W: 111 }, 13: { W: 157, E: 120, N: MAP, S: 8 }, 20: { N: 3 }, 21: { W: 22 }, 22: { E: 21, W: 8, N: 120 },
+        23: { N: 900, S: 17, W: 3 }, 24: { W: 8, E: 3, S: 901 }, 900: { S: 23, E: 168 }, 901: { N: 24 }, 111: { E: 8, W: 162 }, 125: { N: 8 }, 155: { E: 157, S: 950 },
+        157: { W: 155, E: 13, N: 930 }, 159: { W: 120 }, 120: { S: 22, E: 159, N: 934 }, 934: { S: 120 }, 162: { E: 111, W: 165 }, 165: { E: 162 }, 168: { W: 900, N: 912 }, 912: { S: 168 }, 175: { S: 13 }
     };
     // maps where the eagle never lands (and never comes down to on foot): the inside ones are found by Survival.isOutdoors
     const NO_LAND = [1, 14, 120];

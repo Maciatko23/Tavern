@@ -32,8 +32,12 @@ const point = what => {
     if (!p) throw new Error("tools/podgrodzie2/mapowanie.json: brak punktu " + what);
     return p.nowe;
 };
-const IN_GATE = point("Map008 ev237"), IN_GATE2 = point("Map008 ev238");
-const WALL = MAPOWANIE.d_strefy.mur_miasta, PAL = MAPOWANIE.d_strefy.palisada;
+// (2026-10-30, the world stage 1: Map111 got 10 columns before the wall: the wall, its gate and the transfers stand 10 columns further east;
+// on the staging: GAME_OVERLAY=tools/swiat/etap1/staging. After the installation Swiat_Data.js has enabled: true and the shift is 10 without the overlay.)
+const SHIFT = (/swiat[\/]etap1/.test(process.env.GAME_OVERLAY || "") || /enabled: true/.test(fs.readFileSync(path.join(__dirname, "..", "js", "plugins", "Swiat_Data.js"), "utf8"))) ? 10 : 0;
+const IN_GATE = point("Map008 ev237").map((v, i) => i === 0 ? v + SHIFT : v), IN_GATE2 = point("Map008 ev238").map((v, i) => i === 0 ? v + SHIFT : v);
+const WALL = JSON.parse(JSON.stringify(MAPOWANIE.d_strefy.mur_miasta)), PAL = MAPOWANIE.d_strefy.palisada;
+if (SHIFT) { WALL.x = WALL.x.map(v => v + SHIFT); if (WALL.brama) WALL.brama = WALL.brama.map(c => [c[0] + SHIFT, c[1]]); }
 const SPOT_KEYS = Object.keys(MAPOWANIE.c_miejsca.stare_miejsca).concat(Object.keys(MAPOWANIE.c_miejsca.nowe_miejsca));
 // the old cabins' residents: their "Miejsce: <key>_wnetrze" inside (data/Map112-117)
 const OLD_RESIDENTS = { 112: ["praczka", "franek"], 113: ["drwal"], 114: ["klusownik"], 115: ["znachorka"], 116: ["szmaciarz"], 117: ["uchodzca"] };

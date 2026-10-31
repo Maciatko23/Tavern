@@ -21,7 +21,7 @@ kit.test({ port: 9701, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     let nodes = await t.json("MapaWyspy.nodes().map(n => [n.key, n.state, n.here])");
     const st = k => (nodes.find(n => n[0] === k) || [])[1];
     t.check("dom dziadka (wnętrze 19 -> podwórze 20) jest miejscem bohatera i jest znane", st("20") === "known" && nodes.find(n => n[0] === "20")[2] === true, nodes);
-    t.check("Leśna droga za podwórzem to „?”, miasteczko i Przystań ukryte", st("21") === "hint" && st("8") === "hidden" && st("125") === "hidden", { l: st("21"), m: st("8"), p: st("125") });
+    t.check("Kruczy Jar za podwórzem to „?” (od 2026-10-30 dom dziadka dotyka pola), Leśna droga, miasteczko i Przystań ukryte", st("3") === "hint" && st("21") === "hidden" && st("8") === "hidden" && st("125") === "hidden", { j: st("3"), l: st("21"), m: st("8"), p: st("125") });
     t.check("podziemia ukryte (żadnego piętra), wnętrza nie są punktami", st("podziemia") === "hidden" && !nodes.some(n => n[0] === "19" || n[0] === "1"), nodes.length);
     await visit([21, 22, 8]);
     nodes = await t.json("MapaWyspy.nodes().map(n => [n.key, n.state])");
@@ -45,11 +45,10 @@ kit.test({ port: 9701, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("O: w mapę (poziom 2), kursor na miejscu bohatera, klawisze W/S/A/D miejsce · O karta · P wróć", m.level === 2 && m.mapa.cursor === "20" && m.keyCaps.join() === "W/S/A/D,O,P" && m.keys[1] === "karta miejsca", m.keys);
     m = await key("S", 8);
     t.check("S: kursor idzie w dół na Leśną drogę", m.mapa.cursor === "21", m.mapa.cursor);
-    m = await key("A", 8);
-    t.check("A: w lewo na Polną drogę", m.mapa.cursor === "22", m.mapa.cursor);
     m = await key("W", 8);
-    t.check("W: w górę na miasteczko", m.mapa.cursor === "8", m.mapa.cursor);
-    m = await key("S", 8);
+    t.check("W: w górę na miasteczko (układ świata z etapu 4: Leśna droga pod Przystanią pod miastem; Przystań jeszcze nieznana, kursor ją przeskakuje)", m.mapa.cursor === "8", m.mapa.cursor);
+    m = await key("W", 8);
+    t.check("W: dalej w górę na Polną drogę (leży na północny wschód od miasteczka)", m.mapa.cursor === "22", m.mapa.cursor);
     m = await key("O", 8);
     const pod = await t.eval("Watki.teksty('miejsca').mapa['22'].pod"), opis = await t.eval("Watki.teksty('miejsca').mapa['22'].opis");
     t.check("O: karta miejsca - nazwa, podpis i zdanie z miejsca.txt, klawisz P", m.mapa.card && m.mapa.cardData.title === "Polna droga" && m.mapa.cardData.sub === pod && m.mapa.cardData.opis === opis && m.keyCaps.join() === "P", m.mapa.cardData);
@@ -58,7 +57,8 @@ kit.test({ port: 9701, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("na karcie strzałki i O nic nie zmieniają", m.mapa.card && m.mapa.cursor === "22" && m.mapa.cardData.title === "Polna droga", m.mapa.cursor);
     m = await key("P", 8);
     t.check("P zamyka kartę (kursor zostaje)", !m.mapa.card && m.level === 2 && m.mapa.cursor === "22", { card: m.mapa.card, level: m.level });
-    m = await key("W", 8);
+    m = await key("S", 8);
+    t.check("S z Polnej drogi: miasteczko", m.mapa.cursor === "8", m.mapa.cursor);
     m = await key("O", 8);
     const cd = m.mapa.cardData || {};
     t.check("karta miasteczka: ludzie (Tadek Młot), sklepy i usługi (tawerna, kowal), 30+ wnętrz (Piekarnia)", cd.title === "Okolice Tawerny" && cd.ludzie.some(l => /Tadek Młot/.test(l)) && cd.sklepy.some(s => /Tawerna/.test(s)) && cd.sklepy.some(s => /Tadek Młot/.test(s)) && cd.wnetrza.length >= 30 && cd.wnetrza.includes("Piekarnia"), { ludzie: cd.ludzie && cd.ludzie.length, sklepy: cd.sklepy, wnetrza: cd.wnetrza && cd.wnetrza.length });
@@ -78,7 +78,7 @@ kit.test({ port: 9701, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     for (const h of [6.5, 7.5, 8.2, 9.8, 12, 14, 16.5, 19, 21.5, 23]) plan[h] = await whereAt(h);
     t.check("rozkład: 7-8 miasto, 8:00-8:30 w drodze, 9:30-10:30 Przystań, 11:30-12:30 miasto, 13:30-14:30 Leśna droga, 16-17 Kruczy Jar, 18:30-19:30 miasto, 21:20-22:40 miasto (K15), noc nic",
         plan[6.5] === null && plan[7.5] === "miasto" && plan[8.2] === null && plan[9.8] === "przystan" && plan[12] === "miasto" && plan[14] === "lesna" && plan[16.5] === "jar" && plan[19] === "miasto" && plan[21.5] === "miasto" && plan[23] === null, plan);
-    t.check("cena i czas: miasto -> Podgrodzie 4 G, pół godziny; -> Przystań 6 G, 1 godz.; -> Kruczy Jar 8 G, 1 godz. 30 min", (await t.json("[Woz.hops('miasto','podgrodzie'), Woz.hops('miasto','przystan'), Woz.hops('miasto','jar'), Woz.priceOf(1), Woz.priceOf(2), Woz.priceOf(3), Woz.timeWords(Woz.timeOf(1)), Woz.timeWords(Woz.timeOf(2)), Woz.timeWords(Woz.timeOf(3))]")).join() === "1,2,3,4,6,8,30 min,1 godz.,1 godz. 30 min");
+    t.check("cena i czas: miasto -> Podgrodzie 4 G, pół godziny; -> Przystań 4 G, pół godziny (od 2026-10-30 bezpośrednia brama miasta -> Przystań); -> Kruczy Jar 6 G, 1 godz. (miasto -> dwór -> pole)", (await t.json("[Woz.hops('miasto','podgrodzie'), Woz.hops('miasto','przystan'), Woz.hops('miasto','jar'), Woz.priceOf(1), Woz.priceOf(2), Woz.priceOf(3), Woz.timeWords(Woz.timeOf(1)), Woz.timeWords(Woz.timeOf(2)), Woz.timeWords(Woz.timeOf(3))]")).join() === "1,1,2,4,6,8,30 min,1 godz.,1 godz. 30 min");
     await t.setHour(11.7);
     await t.go(8, 50, 90, 6);
     await t.frames(30);
@@ -116,13 +116,13 @@ kit.test({ port: 9701, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const sceneUp = await t.until("SceneManager._scene instanceof MapaWyspy.Scene_MapaWybor && !SceneManager.isSceneChanging()", 10);
     let ch = await t.json("MapaWyspy.choosing()");
     t.check("„Podwieź mnie” w menu Wojciecha otwiera wybór postoju na mapie wyspy (tytuł, kursor na najbliższym: Podgrodzie)", sceneUp && talk.choices.some(c => c.includes("Podwieź mnie")) && ch && ch.title === "Dokąd cię podwieźć?" && ch.cursor === "111", { choices: talk.choices, ch });
-    t.check("postoje z ceną i czasem: Podgrodzie 4 G · 30 min, Przystań 6 G · 1 godz., Leśna droga 6 G, Kruczy Jar 8 G · 1 godz. 30 min", ch.items.length === 4 && ch.items.every(i => i.enabled)
-        && /^4 G · 30 min · na miejscu ok\. 12:1\d/.test(ch.items.find(i => i.key === "111").note) && /^6 G · 1 godz\. · na miejscu ok\. 12:4\d/.test(ch.items.find(i => i.key === "125").note) && /^8 G · 1 godz\. 30 min/.test(ch.items.find(i => i.key === "3").note), ch.items);
+    t.check("postoje z ceną i czasem: Podgrodzie 4 G · 30 min, Przystań 4 G · 30 min, Leśna droga 6 G, Kruczy Jar 6 G · 1 godz.", ch.items.length === 4 && ch.items.every(i => i.enabled)
+        && /^4 G · 30 min · na miejscu ok\. 12:1\d/.test(ch.items.find(i => i.key === "111").note) && /^4 G · 30 min · na miejscu ok\. 12:1\d/.test(ch.items.find(i => i.key === "125").note) && /^6 G · 1 godz\./.test(ch.items.find(i => i.key === "3").note), ch.items);
     await shot("wybor_postoju");
-    await t.key("ArrowLeft");
+    await t.key("ArrowDown");
     await t.frames(6);
     ch = await t.json("MapaWyspy.choosing()");
-    t.check("strzałka w lewo: kursor na Przystań", ch.cursor === "125", ch.cursor);
+    t.check("strzałka w dół: kursor na Przystań (od etapu 4 leży pod Podgrodziem, na prawo od niego)", ch.cursor === "125", ch.cursor);
     await t.key("O");
     const arrivedMap = await t.until(t.onMap(125), 20);
     await t.frames(40);
@@ -131,12 +131,12 @@ kit.test({ port: 9701, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
             where: Woz.where(), ride: Woz.state().ride, rides: Woz.state().rides, dog: d.map, carter: ev ? [ev.x, ev.y, !ev.isTransparent()] : null, cart: cart ? [cart.x, cart.y, !cart.isTransparent()] : null,
             free: $gameMap.checkPassage(p.x, p.y, 0x0f), event: $gameMap.isEventRunning(), arrived: Woz.arrived() }; })()`);
     t.check("O: przejazd - bohater na Przystani przy postoju (ok. 103,17), na wolnym polu, rozmowa skończona", arrivedMap && after.map === 125 && Math.abs(after.x - 103) <= 3 && Math.abs(after.y - 17) <= 3 && after.free && !after.event, after);
-    t.check("opłata 6 G zdjęta, minęła godzina drogi (11:42 -> 12:42)", after.gold === before.gold - 6 && Math.abs(after.hour - (before.hour + 1)) < 0.08 && after.day === before.day, { before: before.gold, after: after.gold, h0: before.hour, h1: after.hour });
+    t.check("opłata 4 G zdjęta, minęło pół godziny drogi (11:42 -> 12:12)", after.gold === before.gold - 4 && Math.abs(after.hour - (before.hour + 0.5)) < 0.08 && after.day === before.day, { before: before.gold, after: after.gold, h0: before.hour, h1: after.hour });
     t.check("głód i pragnienie minęły jak przy godzinie na nogach", after.food < before.food && after.water < before.water, { food: [before.food, after.food], water: [before.water, after.water] });
     t.check("wóz i Wojciech stoją przy postoju na Przystani (106,17 / 104,17), zostają tam godzinę", after.where === "przystan" && after.ride && after.ride.stop === "przystan" && after.rides === 1 && after.carter && after.carter[0] === 104 && after.carter[2] && after.cart && after.cart[2], after);
     t.check("pies pojechał z bohaterem", after.dog === 125, after.dog);
     const pops = await t.popups();
-    t.check("dymek przyjazdu nad bohaterem: Przystań, 6 G, w drodze 1 godz.", pops.some(p => /Przystań.*6 G.*1 godz\./.test(p)) || (after.arrived && /Przystań/.test(after.arrived.text)), pops);
+    t.check("dymek przyjazdu nad bohaterem: Przystań, 4 G, w drodze 30 min", pops.some(p => /Przystań.*4 G.*30 min/.test(p)) || (after.arrived && /Przystań/.test(after.arrived.text)), pops);
     await shot("przyjazd_przystan");
     // the stand-in carter on the harbour talks like the resident, with the ride's row; the ride back with no talk (Woz.go)
     const back = await t.talkTo(`$gameMap.event(${await t.eval("Woz.IDS.woznica")})`, ["Bywaj"], { secs: 8 });
@@ -151,7 +151,7 @@ kit.test({ port: 9701, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const back2 = await t.until(t.onMap(21), 20);
     await t.frames(30);
     const l = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, gold: $gameParty.gold(), hour: Tawerna.time.hour(), where: Woz.where() })");
-    t.check("9:50 z Przystani na Leśną drogę (4 mapy): 10 G, 2 godz., przyjazd ok. 11:50 przy postoju (4,20)", ok && back2 && l.map === 21 && Math.abs(l.x - 4) <= 3 && Math.abs(l.y - 20) <= 3 && l.gold === after.gold - 10 && Math.abs(l.hour - 11.8) < 0.05 && l.where === "lesna", l);
+    t.check("9:50 z Przystani na Leśną drogę (1 przejazd: Przystań -> Leśna droga): 4 G, pół godziny, przyjazd ok. 10:20 przy postoju (4,20)", ok && back2 && l.map === 21 && Math.abs(l.x - 4) <= 3 && Math.abs(l.y - 20) <= 3 && l.gold === after.gold - 4 && Math.abs(l.hour - 10.3) < 0.05 && l.where === "lesna", l);
     await shot("postoj_lesna");
     t.check("zapis i wczytanie po jeździe", (await t.saveTo(1)) && (await t.loadFrom(1)) && (await t.eval("$gameMap.mapId()")) === 21 && (await t.eval("Woz.state().rides")) === 2);
 });

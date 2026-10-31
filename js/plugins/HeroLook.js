@@ -146,26 +146,28 @@
     }
 
     // ---- the player's sprite: the new sheets instead of the actor's character graphic
-    const _updateBitmap = Sprite_Character.prototype.updateBitmap;
-    Sprite_Character.prototype.updateBitmap = function() {
-        if (this._character === $gamePlayer && active()) {
-            const cell = heroCell();
-            if (this._heroSheet !== cell.sheet) {
-                this._heroSheet = cell.sheet;
-                this.bitmap = ImageManager.loadCharacter(cell.sheet);
-                this._isBigCharacter = false;
-                this._characterName = cell.sheet;   // (not empty: an empty name hides the sprite - isEmptyCharacter)
+    // (Tawerna.sprite, TawernaCore.js: these two are for the hero's sprite only)
+    const heroSprite = s => s._character === $gamePlayer;
+    window.Tawerna.sprite.hook({ owner: "HeroLook", method: "updateBitmap", when: heroSprite,
+        replace(s) {
+            if (s._character === $gamePlayer && active()) {
+                const cell = heroCell();
+                if (s._heroSheet !== cell.sheet) {
+                    s._heroSheet = cell.sheet;
+                    s.bitmap = ImageManager.loadCharacter(cell.sheet);
+                    s._isBigCharacter = false;
+                    s._characterName = cell.sheet;   // (not empty: an empty name hides the sprite - isEmptyCharacter)
+                }
+                s._heroCell = cell;
+                return true;
             }
-            this._heroCell = cell;
-            return;
-        }
-        if (this._heroSheet) {
-            this._heroSheet = null;
-            this._heroCell = null;
-            this._characterName = null;
-        }
-        _updateBitmap.call(this);
-    };
+            if (s._heroSheet) {
+                s._heroSheet = null;
+                s._heroCell = null;
+                s._characterName = null;
+            }
+            return false;
+        } });
     const _patternWidth = Sprite_Character.prototype.patternWidth;
     Sprite_Character.prototype.patternWidth = function() {
         return this._heroSheet && this.bitmap ? CELL : _patternWidth.call(this);
@@ -175,17 +177,17 @@
         return this._heroSheet && this.bitmap ? CELL : _patternHeight.call(this);
     };
     // a swing sheet (ChoppableTree) still takes over while he works
-    const _updateFrame = Sprite_Character.prototype.updateFrame;
-    Sprite_Character.prototype.updateFrame = function() {
-        if (this._heroSheet && this._heroCell && !(this.updateSwingSheet && this.updateSwingSheet())) {
-            const c = this._heroCell, n = Math.max(1, Math.round(this.bitmap.width / CELL) - 1);
-            const col = c.phase < 0 ? 0 : 1 + Math.min(n - 1, Math.floor(c.phase * n));
-            c.col = col;
-            this.setFrame(col * CELL, c.row * CELL, CELL, CELL);
-            return;
-        }
-        _updateFrame.call(this);
-    };
+    window.Tawerna.sprite.hook({ owner: "HeroLook", method: "updateFrame", when: heroSprite,
+        replace(s) {
+            if (s._heroSheet && s._heroCell && !(s.updateSwingSheet && s.updateSwingSheet())) {
+                const c = s._heroCell, n = Math.max(1, Math.round(s.bitmap.width / CELL) - 1);
+                const col = c.phase < 0 ? 0 : 1 + Math.min(n - 1, Math.floor(c.phase * n));
+                c.col = col;
+                s.setFrame(col * CELL, c.row * CELL, CELL, CELL);
+                return true;
+            }
+            return false;
+        } });
 
     // ---- the work: the hero's swing sheets (a kind without one swings no sheet - the old Swing_* files are archived)
     const swingCache = {};

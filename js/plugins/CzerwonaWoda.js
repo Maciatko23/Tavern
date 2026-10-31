@@ -28,6 +28,7 @@
  * @orderAfter Farming_Plots
  * @orderAfter Survival
  * @orderAfter Needs
+ * @orderAfter TerenKit
  *
  * @help
  * ============================================================================
@@ -56,6 +57,10 @@
     const T = window.Tawerna;
     if (!T) throw new Error("CzerwonaWoda.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     const PLUGIN = "CzerwonaWoda";
+    // (2026-10-30) the ground-painting tools shared with Ziemia.js (noise, blur, distances, the tileset's own pixels, atlases, hash): TerenKit.js
+    const K = T.api("TerenKit");
+    if (!K) throw new Error("CzerwonaWoda.js: brak TerenKit.js - musi stać wyżej na liście wtyczek (the shared ground tools are missing)");
+    const { hash, vnoise, boxBlur, chamfer, descOf, srcOf, profileOf, tileSheet, tileImage, a5Pixels, rimStone, rimGrass, rimEarth, a5Grass, a5Earth, lerp, atlasSlot, flushAtlas } = K;
     const GREY_RAINS = 2;              // rain days among the last three that wash the bloom out (grey water)
     const RED_RANGE = 9, GREY_RANGE = 7;   // cells from the shore the tint reaches
     // (2026-10-15, the user: the grey water after rain must be clearly bad - murky, grey-brown - not the plain sea; weaker than the red)
@@ -120,6 +125,21 @@
     // cells (where the waves leave dead fish) - worked out once per map
     // ------------------------------------------------------------------
     let geo = null;
+    // (2026-10-30, the player: "po wyjściu z menu nakładka pojawia się po chwili") a shore map's finished geometry - the fields and the
+    // painted pieces in their atlases - is kept for the next time the map is read (back from the menu, from a hut): the last two shore
+    // maps (an atlas set is tens of MB); the key: the map, its tiles and its water as they are now
+    const geoKept = [];
+    function geoKey(W, H, water) {
+        let h = 0;
+        const d = $dataMap.data || [];
+        for (let i = 0; i < d.length; i++) h = (Math.imul(h, 31) + d[i]) | 0;
+        for (let i = 0; i < water.length; i++) h = (Math.imul(h, 31) + water[i]) | 0;
+        return $gameMap.mapId() + ":" + $gameMap.tilesetId() + ":" + W + "x" + H + ":" + h;
+    }
+    function dropGeo(g) {
+        for (const k in g.atlas || {}) for (const at of g.atlas[k]) at.bm.destroy();
+        g.atlas = null; g.chunks = null;
+    }
     function geometry() {
         if (geo && geo.map === $dataMap) return geo;
         const W = $gameMap.width(), H = $gameMap.height(), water = new Uint8Array(W * H), sea = new Uint8Array(W * H);
@@ -127,6 +147,8 @@
         // water: the open water (not under the piers' planks); sea: all the sea, the piers' water too - the shore is the real land
         const isSea = (x, y) => { for (let z = 0; z < 2; z++) { const id = $gameMap.tileId(x, y, z); if (id > 0 && Tilemap.isWaterTile(id)) return true; } return false; };
         for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { water[y * W + x] = isW(x, y) ? 1 : 0; sea[y * W + x] = water[y * W + x] || isSea(x, y) ? 1 : 0; }
+        const key = brzegMap() ? geoKey(W, H, water) : null, kept = key && geoKept.find(g => g.key === key);
+        if (kept) { geo = kept; geo.map = $dataMap; return geo; }
         // multi-source BFS (8 neighbours): from the land into the water (dist 1 = beside the shore) and from the water onto the land
         const bfs = from => {
             const dist = new Int16Array(W * H).fill(-1), q = [];
@@ -153,7 +175,12 @@
         const type = new Uint8Array(W * H);   // (1 open water, 0 land, 2 the rest of the sea: a pier)
         for (let i = 0; i < W * H; i++) type[i] = water[i] ? 1 : sea[i] ? 2 : 0;
         geo = { map: $dataMap, W, H, water, sea, toLand, toWater, shore, type, tw: $gameMap.tileWidth(), th: $gameMap.tileHeight(), sd: null, tex: null, paint: null, foam: {}, chunks: null };
-        if (brzegMap()) buildField(geo);
+        if (brzegMap()) {
+            buildField(geo);
+            geo.key = key;
+            geoKept.push(geo);
+            while (geoKept.length > 2) dropGeo(geoKept.shift());
+        }
         return geo;
     }
     const inside = (x, y) => has() && x >= 0 && y >= 0 && x < $gameMap.width() && y < $gameMap.height();
@@ -177,57 +204,10 @@
     //   - where the new line cuts into the old land the sea is drawn in (its own shading by the depth from the shore)
     // The tint and the foam follow the same line (wAt). Built in pieces over the first frames after the map is shown.
     // ------------------------------------------------------------------
-    const BRZEG_MAPS = [125, 155, 157, 159, 162, 165];   // (the island's sea maps - none of them is the player's: docs/mapy/PRZEGLAD.md)
+    const BRZEG_MAPS = [125, 155, 157, 159, 162, 165, 120, 175, 168, 17, 18, 960, 961, 962, 963, 964];   // (styki 2026-10-31: the new maps of the old holes)   // (the island's sea maps - none of them is the player's: docs/mapy/PRZEGLAD.md; 2026-10-30 the east / south ends 159, 120, 175, 168, 17, 18)
     const SHORE_GROW = 0.3;   // (the new line lies about 19 px out in the old water: nothing of the sea has to be drawn over the old land, and the square corners are covered)
     const SD_Q = 4, CH = 192, DMAX = 576, RING_W = 11, WP_W = 24;
     const brzegMap = () => has() && seaHere() && (BRZEG_MAPS.indexOf($gameMap.mapId()) >= 0 || !!window.BRZEG_ALL);
-    function vnoise(x, y, sc, seed) {   // smooth value noise 0..1, one feature about sc px
-        const fx = x / sc, fy = y / sc, ix = Math.floor(fx), iy = Math.floor(fy);
-        let ax = fx - ix, ay = fy - iy;
-        ax = ax * ax * (3 - 2 * ax); ay = ay * ay * (3 - 2 * ay);
-        const a = hash(ix, iy, seed, 1), b = hash(ix + 1, iy, seed, 1), c = hash(ix, iy + 1, seed, 1), d = hash(ix + 1, iy + 1, seed, 1);
-        return (a * (1 - ax) + b * ax) * (1 - ay) + (c * (1 - ax) + d * ax) * ay;
-    }
-    function boxBlur(a, w, h, r) {   // two passes of a box blur of radius r (clamped edges)
-        const t = new Float32Array(w * h), n = 2 * r + 1;
-        for (let pass = 0; pass < 2; pass++) {
-            for (let y = 0; y < h; y++) {
-                let s = 0; const o = y * w;
-                for (let k = -r; k <= r; k++) s += a[o + Math.max(0, Math.min(w - 1, k))];
-                for (let x = 0; x < w; x++) { t[o + x] = s / n; s += a[o + Math.min(w - 1, x + r + 1)] - a[o + Math.max(0, x - r)]; }
-            }
-            for (let x = 0; x < w; x++) {
-                let s = 0;
-                for (let k = -r; k <= r; k++) s += t[Math.max(0, Math.min(h - 1, k)) * w + x];
-                for (let y = 0; y < h; y++) { a[y * w + x] = s / n; s += t[Math.min(h - 1, y + r + 1) * w + x] - t[Math.max(0, y - r) * w + x]; }
-            }
-        }
-    }
-    function chamfer(src, w, h) {   // distance (x3) of every texel to the nearest texel with src = 1 (0 on them)
-        const d = new Int32Array(w * h), INF = 1 << 28;
-        for (let i = 0; i < w * h; i++) d[i] = src[i] ? 0 : INF;
-        for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-            const i = y * w + x; let v = d[i];
-            if (x > 0 && d[i - 1] + 3 < v) v = d[i - 1] + 3;
-            if (y > 0) {
-                if (d[i - w] + 3 < v) v = d[i - w] + 3;
-                if (x > 0 && d[i - w - 1] + 4 < v) v = d[i - w - 1] + 4;
-                if (x < w - 1 && d[i - w + 1] + 4 < v) v = d[i - w + 1] + 4;
-            }
-            d[i] = v;
-        }
-        for (let y = h - 1; y >= 0; y--) for (let x = w - 1; x >= 0; x--) {
-            const i = y * w + x; let v = d[i];
-            if (x < w - 1 && d[i + 1] + 3 < v) v = d[i + 1] + 3;
-            if (y < h - 1) {
-                if (d[i + w] + 3 < v) v = d[i + w] + 3;
-                if (x < w - 1 && d[i + w + 1] + 4 < v) v = d[i + w + 1] + 4;
-                if (x > 0 && d[i + w - 1] + 4 < v) v = d[i + w - 1] + 4;
-            }
-            d[i] = v;
-        }
-        return d;
-    }
     function buildField(g) {
         const tw = g.tw, th = g.th, TW = Math.ceil(g.W * tw / SD_Q), TH = Math.ceil(g.H * th / SD_Q), f = new Float32Array(TW * TH);
         for (let y = 0; y < TH; y++) {
@@ -258,25 +238,26 @@
         for (let i = 0; i < TW * TH; i++) sd[i] = (wm[i] ? -(dL[i] / 3 - 0.5) : (dW[i] / 3 - 0.5)) * SD_Q;
         g.sd = sd; g.TW = TW; g.TH = TH;
         // the mask of the cells where the strip may be painted, blurred: the strip's edge by paths, hills and walls is a smooth curve
-        const P = paintable(g), pm = new Float32Array(TW * TH);
+        // and the earth's field (the paths' and the bare ground's cells, blurred): earth or grass is chosen by the pixel, so their border
+        // in the strip is a soft line, not the tiles' squares (2026-10-30, the player: "kanciaście")
+        const P = paintable(g), pm = new Float32Array(TW * TH), em = new Float32Array(TW * TH);
         for (let y = 0; y < TH; y++) {
             const cy = Math.min(g.H - 1, Math.floor((y + 0.5) * SD_Q / th));
-            for (let x = 0; x < TW; x++) { const c = cy * g.W + Math.min(g.W - 1, Math.floor((x + 0.5) * SD_Q / tw)), t = g.type[c]; pm[y * TW + x] = t !== 0 || P[c] ? 1 : 0; }   // (water and piers count as paintable: they are not painted, but they must not eat the strip's edge)
+            for (let x = 0; x < TW; x++) {
+                const c = cy * g.W + Math.min(g.W - 1, Math.floor((x + 0.5) * SD_Q / tw)), t = g.type[c];
+                pm[y * TW + x] = t !== 0 || P[c] ? 1 : 0;   // (water and piers count as paintable: they are not painted, but they must not eat the strip's edge)
+                em[y * TW + x] = t === 0 && P[c] === 2 ? 1 : 0;
+            }
         }
         boxBlur(pm, TW, TH, 5);
-        g.pm = pm;
+        boxBlur(em, TW, TH, 4);
+        g.pm = pm; g.em = em;
     }
-    function pmAt(g, px, py) {
-        const u = px / SD_Q - 0.5, v = py / SD_Q - 0.5, ix = Math.floor(u), iy = Math.floor(v), fx = u - ix, fy = v - iy, TW = g.TW, TH = g.TH;
-        const x0 = Math.max(0, Math.min(TW - 1, ix)), x1 = Math.max(0, Math.min(TW - 1, ix + 1)), y0 = Math.max(0, Math.min(TH - 1, iy)), y1 = Math.max(0, Math.min(TH - 1, iy + 1)), s = g.pm;
-        return (s[y0 * TW + x0] * (1 - fx) + s[y0 * TW + x1] * fx) * (1 - fy) + (s[y1 * TW + x0] * (1 - fx) + s[y1 * TW + x1] * fx) * fy;
-    }
-    function sdAt(g, px, py) {
-        const u = px / SD_Q - 0.5, v = py / SD_Q - 0.5, ix = Math.floor(u), iy = Math.floor(v), fx = u - ix, fy = v - iy, TW = g.TW, TH = g.TH;
-        const x0 = Math.max(0, Math.min(TW - 1, ix)), x1 = Math.max(0, Math.min(TW - 1, ix + 1)), y0 = Math.max(0, Math.min(TH - 1, iy)), y1 = Math.max(0, Math.min(TH - 1, iy + 1));
-        const s = g.sd;
-        return (s[y0 * TW + x0] * (1 - fx) + s[y0 * TW + x1] * fx) * (1 - fy) + (s[y1 * TW + x0] * (1 - fx) + s[y1 * TW + x1] * fx) * fy;
-    }
+    const fieldAt = (g, s, px, py) => K.sample(s, g.TW, g.TH, SD_Q, px, py);
+    const pmAt = (g, px, py) => fieldAt(g, g.pm, px, py);
+    // earth (not grass) under this pixel: the earth's field against a noisy threshold - a soft, uneven line
+    const earthAt = (g, px, py) => !!g.em && fieldAt(g, g.em, px, py) > 0.5 + (vnoise(px, py, 30, 17) - 0.5) * 0.45;
+    const sdAt = (g, px, py) => K.sample(g.sd, g.TW, g.TH, SD_Q, px, py);
     function wAt(g, px, py) {   // is this pixel of the map water (the new shore line)?
         if (g.sd) return sdAt(g, px, py) < 0;
         const cx = Math.floor(px / g.tw), cy = Math.floor(py / g.th);
@@ -294,51 +275,6 @@
         return null;
     }
     // ---- the textures (the map's own tileset): interior tiles of autotiles, the stone border's profile, the sea's shading
-    function descOf(id) {
-        let bx, by, sheet;
-        if (id >= 2048 && id < 2816) {
-            if (!Tilemap.isWaterTile(id)) return null;
-            const kind = ((id - 2048) / 48) | 0, tx = kind % 8, ty = (kind / 8) | 0;
-            sheet = 0;
-            if (kind === 0) { bx = 0; by = 0; } else if (kind === 1) { bx = 0; by = 3; }
-            else if (kind % 2 === 1) return null;
-            else { bx = ((tx / 4) | 0) * 8; by = ty * 6 + (((tx / 2) | 0) % 2) * 3; }
-        } else if (id >= 2816 && id < 4352) {
-            const kind = ((id - 2048) / 48) | 0, tx = kind % 8, ty = (kind / 8) | 0;
-            sheet = 1; bx = tx * 2; by = (ty - 2) * 3;
-        } else return null;
-        const q = [[2, 4], [1, 4], [2, 3], [1, 3]];   // (the autotile table's shape 0: the middle of the block)
-        return { sheet, bx, by, key: "a" + sheet + "_" + bx + "_" + by, quads: q.map((c, i) => [(bx * 2 + c[0]) * 24, (by * 2 + c[1]) * 24, 24, 24, (i % 2) * 24, ((i / 2) | 0) * 24]) };
-    }
-    const tileSheet = n => ImageManager.loadTileset(($gameMap.tileset().tilesetNames || [])[n] || "");
-    const srcCache = {};
-    function srcOf(d) {   // 48 x 48 RGBA pixels of the interior tile; null while the sheet loads
-        const names = $gameMap.tileset().tilesetNames || [], k = names[d.sheet] + ":" + d.key;
-        if (srcCache[k]) return srcCache[k];
-        const bm = tileSheet(d.sheet);
-        if (!bm || !bm.isReady()) return null;
-        const c = document.createElement("canvas"); c.width = 48; c.height = 48;
-        const cx = c.getContext("2d"), cv = bm.canvas || bm._canvas;
-        for (const q of d.quads) cx.drawImage(cv, q[0], q[1], q[2], q[3], q[4], q[5], q[2], q[3]);
-        return (srcCache[k] = cx.getImageData(0, 0, 48, 48).data);
-    }
-    function profileOf(sheetNo, x0, y0, w, h, depthMax, rightEdge, key) {   // the average colour by depth of an edge strip
-        const k = "pf" + key;
-        if (srcCache[k]) return srcCache[k];
-        const bm = tileSheet(sheetNo);
-        if (!bm || !bm.isReady()) return null;
-        const img = bm.context.getImageData(x0, y0, w, h).data, out = [];
-        for (let dpt = 0; dpt < depthMax; dpt++) {
-            let r = 0, gg = 0, b = 0, n = 0;
-            for (let y = (rightEdge ? 36 : 0); y < (rightEdge ? 108 : h); y++) { const p = (y * w + (w - 1 - dpt)) * 4; if (img[p + 3] > 200) { r += img[p]; gg += img[p + 1]; b += img[p + 2]; n++; } }
-            out.push(n ? [r / n, gg / n, b / n] : null);
-        }
-        let last = null;
-        for (let i = depthMax - 1; i >= 0; i--) { if (out[i]) last = out[i]; else out[i] = last; }
-        let last2 = last || [90, 110, 100];
-        for (let i = 0; i < depthMax; i++) { if (out[i]) last2 = out[i]; else out[i] = last2; }
-        return (srcCache[k] = out);
-    }
     const waterIdAt = (x, y) => { for (let z = 1; z >= 0; z--) { const id = $gameMap.tileId(x, y, z); if (id > 0 && Tilemap.isWaterTile(id)) return id; } return 0; };
     // the texture set of the shore (null while a sheet is loading)
     function textures(g) {
@@ -356,38 +292,45 @@
         const deep = wp[WP_W - 1], wsc = [deep[0] / (ar / 2304), deep[1] / (ag / 2304), deep[2] / (ab / 2304)];
         return (g.tex = { grass, dirt, cobble, water, wp, wsc });
     }
-    // paintable cells: plain grass or the terrace's stone border on layer 0, nothing on the layers 1-3
+    // the soft ground overlays of the A2 sheet (grass tufts, green / earth / mud patches, flowers, cobbles) that the strip paints over
+    // (2026-10-30: the bright green squares by the water; hills, walls, fences, planks and stairs are not in it). Tileset 9's sheet has
+    // its hard green patch on the row of the stone outline (kind 30), so there it is an overlay too.
+    const OVERLAY_RELS = [1, 2, 3, 4, 5, 6, 7, 9, 10, 12, 13, 15, 20, 21, 23, 31];
+    function overlayOk(id) {
+        if (!(id >= 2816 && id < 4352)) return false;
+        const rel = Math.floor((id - 2816) / 48);
+        return OVERLAY_RELS.indexOf(rel) >= 0 || (rel === 30 && $gameMap.tilesetId() === 9);
+    }
+    // paintable cells: plain grass, plain earth or a terrace on layer 0, nothing on the layers 1-3
     function paintable(g) {
         if (g.paint) return g.paint;
-        const W = g.W, H = g.H, p = new Uint8Array(W * H);
+        const W = g.W, H = g.H, p = new Uint8Array(W * H), flags = $gameMap.tilesetFlags();
         for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
             if (g.type[y * W + x] !== 0) continue;
             const id = $gameMap.tileId(x, y, 0);
             let kind = 0;   // 1 grass (the two grass kinds) or the terrace's stone border, 2 earth (no dry grass painted on it), 3 the dirt / grass patches of the A2 sheet (painted over with grass beyond the strip)
             const rel = id >= 2816 && id < 4352 ? Math.floor((id - 2816) / 48) : -1;
-            if (rel === 0 || rel === 11 || (id >= 1624 && id <= 1642 && (id % 8) <= 2)) kind = 1;
-            else if (rel === 8) kind = 2;
+            if (rel === 0 || rel === 11 || rimGrass(id) || a5Grass(id)) kind = 1;
+            else if (rel === 8 || rimEarth(id) || a5Earth(id)) kind = 2;
             else if (rel === 1 || rel === 9 || rel === 10) kind = 3;
             if (!kind) continue;
             // (layer 1: the grass-patch overlays of the A2 sheet and the ordinary B-E tiles are painted over - the ordinary ones are drawn again on top; hills, piers, walls are not)
             const l1 = $gameMap.tileId(x, y, 1);
-            if (!(l1 === 0 || l1 < 2048 || (l1 >= 2816 + 48 * 4 && l1 < 2816 + 48 * 8) || (l1 >= 2816 + 48 * 31 && l1 < 2816 + 48 * 32))) continue;
+            if (!(l1 === 0 || l1 < 2048 || overlayOk(l1))) continue;
+            // (2026-10-30, the player: "jak jest wzniesienie, to boczne krawędzie tego wzniesienia są niewidoczne") a terrace's rim
+            // shuts the side of its drop, and its stones are the only sign of the raised ground's side: the rim is painted, its stones
+            // drawn again on top (paintChunk, g.rim); any other cell whose own ground shuts a side keeps its tile
+            if (rimGrass(id) || rimEarth(id)) (g.rim || (g.rim = new Uint16Array(W * H)))[y * W + x] = id;
+            else if ((flags[id] | (l1 > 0 ? flags[l1] : 0)) & 0x0f) continue;
             p[y * W + x] = kind;
         }
         return (g.paint = p);
     }
+    // an A5 tile as 48 x 48 pixels (a terrace's rim); null while its sheet loads
     // a B-E tile as 48 x 48 pixels (the decorations drawn again on the strip); null while its sheet loads
-    const tileCache = {};
-    function tileImage(id) {
-        if (tileCache[id]) return tileCache[id];
-        const bm = tileSheet(5 + Math.floor(id / 256));
-        if (!bm || !bm.isReady()) return null;
-        const sx = ((Math.floor(id / 128) % 2) * 8 + id % 8) * 48, sy = (Math.floor((id % 256) / 8) % 16) * 48;
-        return (tileCache[id] = bm.context.getImageData(sx, sy, 48, 48).data);
-    }
-    const lerp = (a, b, t) => a + (b - a) * t;
-    // one pixel of the land by its depth d (px) from the shore line; null: leave the map's own tile
-    function landPixel(T, x, y, d, si, mode) {
+    // one pixel of the land by its depth d (px) from the shore line (earth: on the paths' / the bare ground's side of the soft line -
+    // packed earth there, never grass); beyond the dry grass the plain grass (the strip fades into the map's own tiles: paintChunk)
+    function landPixel(T, x, y, d, si, earth) {
         if (d < RING_W) {   // the stone border: the cobbles of the map's own tileset, darker, with a dark outline on the water's edge
             if (d < 1.4) return [30, 48, 56];
             if (d < 2.6) return [52, 74, 82];
@@ -402,9 +345,8 @@
             col = [S[si] * m, S[si + 1] * m, S[si + 2] * m];
         } else {
             const gv = a * 1.35 + (n1 - 0.5) * 0.45 + (n2 - 0.5) * 0.55;
-            if (gv >= 1) return mode === 3 ? [T.grass[si], T.grass[si + 1], T.grass[si + 2]] : null;
-            if (mode === 2 && gv >= 0.5) return null;
-            if (gv < 0.5) {   // packed earth, darker patches
+            if (gv >= 1 && !earth) return [T.grass[si], T.grass[si + 1], T.grass[si + 2]];
+            if (gv < 0.5 || earth) {   // packed earth, darker patches
                 const m = 0.9 + 0.12 * n2;
                 col = [T.dirt[si] * m, T.dirt[si + 1] * m, T.dirt[si + 2] * m];
                 if (d < 300 && n2 > 0.6 && n1 > 0.5) { const c = T.cobble; col = [lerp(col[0], c[si], 0.5), lerp(col[1], c[si + 1], 0.5), lerp(col[2], c[si + 2], 0.5)]; }
@@ -435,18 +377,6 @@
     }
     // one chunk (CH x CH px) of the redrawn shore; null: nothing to draw there
     // (shared atlas bitmaps: a few big textures instead of hundreds of small ones keep the drawing in a few batches)
-    function atlasSlot(g, name, slot, size) {
-        const a = g.atlas || (g.atlas = {}), list = a[name] || (a[name] = []), per = Math.floor(size / slot);
-        let cur = list[list.length - 1];
-        if (!cur || cur.n >= per * per) { cur = { bm: new Bitmap(size, size), n: 0, per, dirty: false }; list.push(cur); }
-        const i = cur.n++;
-        cur.dirty = true;
-        return { at: cur, sx: (i % per) * slot, sy: Math.floor(i / per) * slot };
-    }
-    function flushAtlas(g) {
-        if (!g.atlas) return;
-        for (const k in g.atlas) for (const at of g.atlas[k]) if (at.dirty) { at.dirty = false; if (at.bm._baseTexture && at.bm._baseTexture.update) at.bm._baseTexture.update(); }
-    }
     function paintChunk(g, T, ccx, ccy) {
         const X0 = ccx * CH, Y0 = ccy * CH, img = new ImageData(CH, CH), d = img.data, P = paintable(g);
         let any = false;
@@ -455,15 +385,27 @@
             const wx = X0 + x, wy = Y0 + y;
             if (wx >= g.W * g.tw || wy >= g.H * g.th) continue;
             const c = Math.floor(wy / g.th) * g.W + Math.floor(wx / g.tw), t = g.type[c], sd = sdAt(g, wx + 0.5, wy + 0.5);
-            let col = null;
+            let col = null, alpha = 1;
             if (sd < 0) {
                 // (the sea is the map's own)
             } else if (t === 1) {
-                col = landPixel(T, wx, wy, sd, ((((wy % 48) + 48) % 48) * 48 + (((wx % 48) + 48) % 48)) * 4);
-            } else if (t === 0 && P[c] && sd < DMAX && pmAt(g, wx + 0.5, wy + 0.5) > 0.6 + (vnoise(wx, wy, 34, 9) - 0.5) * 0.3) {
-                col = landPixel(T, wx, wy, sd, ((((wy % 48) + 48) % 48) * 48 + (((wx % 48) + 48) % 48)) * 4, P[c]);
+                col = landPixel(T, wx, wy, sd, ((((wy % 48) + 48) % 48) * 48 + (((wx % 48) + 48) % 48)) * 4, earthAt(g, wx + 0.5, wy + 0.5));
+            } else if (t === 0 && P[c] && sd < DMAX) {
+                // (2026-10-30, the player: "kanciaście" - every paintable cell of the strip is painted, none left as its own tile with the
+                // squares of its autotile; by walls, hills and other ground the paintable mask fades the strip out, and at its inland end
+                // it fades into the map's own tiles over two cells)
+                const pv = pmAt(g, wx + 0.5, wy + 0.5), hi = 0.78 + (vnoise(wx, wy, 34, 9) - 0.5) * 0.2;
+                alpha = Math.min(1, Math.max(0, (pv - 0.5) / (hi - 0.5))) * Math.min(1, (DMAX - sd) / 96);
+                if (alpha > 0.02) col = landPixel(T, wx, wy, sd, ((((wy % 48) + 48) % 48) * 48 + (((wx % 48) + 48) % 48)) * 4, earthAt(g, wx + 0.5, wy + 0.5));
+                const rid = g.rim ? g.rim[c] : 0;
+                if (col && rid) {   // (a terrace's rim: its own stones over the painted ground - the raised ground's edge stays seen)
+                    const R = a5Pixels(rid);
+                    if (!R) return undefined;   // (its sheet is loading: tried again)
+                    const q = ((((wy % 48) + 48) % 48) * 48 + (((wx % 48) + 48) % 48)) * 4;
+                    if (rimStone(R, q, rimEarth(rid))) col = [R[q], R[q + 1], R[q + 2]];
+                }
             }
-            if (col) { const p = (y * CH + x) * 4; d[p] = col[0]; d[p + 1] = col[1]; d[p + 2] = col[2]; d[p + 3] = 255; any = true; }
+            if (col) { const p = (y * CH + x) * 4; d[p] = col[0]; d[p + 1] = col[1]; d[p + 2] = col[2]; d[p + 3] = Math.round(255 * alpha); any = true; }
         }
         if (!any) return null;
         // the ordinary decorations (layers 1-3, not the upper-layer ones) drawn again on the painted pixels
@@ -482,9 +424,10 @@
                         const x = cx2 * tw + px - X0;
                         if (x < 0 || x >= CH) continue;
                         const q = (py * 48 + px) * 4, a = ti[q + 3], o = (y * CH + x) * 4;
-                        if (!a || d[o + 3] !== 255) continue;
+                        if (!a || !d[o + 3]) continue;
                         const k = a / 255;
                         d[o] = ti[q] * k + d[o] * (1 - k); d[o + 1] = ti[q + 1] * k + d[o + 1] * (1 - k); d[o + 2] = ti[q + 2] * k + d[o + 2] * (1 - k);
+                        d[o + 3] = Math.round(d[o + 3] + (255 - d[o + 3]) * k);   // (in the fading edge: the decoration whole, as under it)
                     }
                 }
             }
@@ -497,11 +440,6 @@
     // ------------------------------------------------------------------
     // Dead fish on the shore: a few of the shore's cells each day (hashed), red only
     // ------------------------------------------------------------------
-    function hash(a, b, c, d) {
-        let h = Math.imul(a | 0, 374761393) ^ Math.imul(b | 0, 668265263) ^ Math.imul(c | 0, 2246822519) ^ Math.imul(d | 0, 3266489917);
-        h = Math.imul(h ^ (h >>> 13), 1274126177);
-        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-    }
     let fishCache = { key: "", list: [] };
     function deadFish() {
         if (!has() || !isRed()) return [];
@@ -626,6 +564,8 @@
         this._foam = new Sprite();
         this._fish = new Sprite();
         this.addChild(this._patch); this.addChild(this._tint); this.addChild(this._foam); this.addChild(this._fish);
+        // (2026-10-30, wydajność) their pieces are plain pictures: Sprite.update would walk all of them every frame for nothing
+        this._patch.update = this._foam.update = this._fish.update = function() {};
         this._key = "";
         this._age = 0;
     };
@@ -692,7 +632,7 @@
     Sprite_RedWater.prototype.addChunk = function(c) {
         const s = new Sprite(c.slot.at.bm); s.setFrame(c.slot.sx, c.slot.sy, CH, CH); s.x = c.cx * CH; s.y = c.cy * CH; this._patch.addChild(s);
     };
-    Sprite_RedWater.prototype.workPatches = function() {
+    Sprite_RedWater.prototype.workPatches = function(budget) {
         const g = geo;
         if (!g || !g.chunks || !g.sd) return;
         const T = textures(g);
@@ -705,16 +645,33 @@
             if (r === undefined) { all = false; break; }
             c.slot = r; c.done = true;
             if (c.slot) this.addChunk(c);
-            if (performance.now() - t0 > 3) { all = false; break; }
+            if (performance.now() - t0 > (budget || 3)) { all = false; break; }
         }
         flushAtlas(g);
         if (all) this._queue = null;   // (finished: nothing more to do each frame)
     };
+    // the look's key: the map, the day, red or grey and how red
+    const lookKey = () => $gameMap.mapId() + ":" + day() + ":" + (seaHere() ? (phase().grey ? "g" : "r") + ":" + phase().red : "-");
+    // (2026-10-30, the player: "widać trawę przed nakładką, dopiero po chwili się pojawia") while the screen is still black: the shore's
+    // pieces painted with a big budget a frame - Scene_Map waits for them before it fades in (at most ~1.5 s, never stuck)
+    Sprite_RedWater.prototype.prepare = function() {
+        if (!has()) return true;
+        if (lookKey() !== this._key) this.rebuild();
+        if (this.visible && this._queue) this.workPatches(24);
+        return !this.visible || !this._queue;
+    };
+    const _Scene_Map_isReady = Scene_Map.prototype.isReady;
+    Scene_Map.prototype.isReady = function() {
+        if (!_Scene_Map_isReady.call(this)) return false;
+        const s = this._spriteset && this._spriteset._redWater;
+        if (!s || !brzegMap()) return true;
+        this._cwWait = (this._cwWait || 0) + 1;
+        return s.prepare() || this._cwWait > 90;
+    };
     Sprite_RedWater.prototype.update = function() {
         Sprite.prototype.update.call(this);
         if (!has()) return;
-        const key = $gameMap.mapId() + ":" + day() + ":" + (seaHere() ? (phase().grey ? "g" : "r") + ":" + phase().red : "-");
-        if (key !== this._key) this.rebuild();
+        if (lookKey() !== this._key) this.rebuild();
         if (!this.visible) return;
         if (this._queue) this.workPatches();
         this._age++;
@@ -726,7 +683,14 @@
         // the foam breathes in and out with the waves (towards the land and back)
         // (the container follows the map; the breathing itself every other frame - it is slow)
         this._foam.x = Math.round(ox); this._foam.y = Math.round(oy);
+        // (2026-10-30, wydajność: the harbour's ~100 shore pieces and ~240 foam strips are mostly off the screen - they cost ~2.5 ms a
+        // frame at 4x slower CPU) only the ones on the screen are drawn and breathe (renderable, docs/WYDAJNOSC.md; Wydajnosc.opts.cull)
+        const px = this._patch.x, py = this._patch.y, fx = this._foam.x, fy = this._foam.y, m = 2 * $gameMap.tileWidth();
+        const cull = !(window.Wydajnosc && Wydajnosc.opts && Wydajnosc.opts.cull === false);
+        for (const s of this._patch.children) s.renderable = !cull || T.view.sees(px + s.x - m, py + s.y - m, px + s.x + CH + m, py + s.y + CH + m);
+        for (const s of this._foam.children) s.renderable = !cull || T.view.sees(fx + s._cx - m, fy + s._cy - m, fx + s._cx + m, fy + s._cy + m);
         if (this._age & 1) for (const s of this._foam.children) {
+            if (!s.renderable) continue;
             const w = Math.sin(this._age / 40 + s._ph);
             s.x = Math.round(s._cx + s._dx * w * 2); s.y = Math.round(s._cy + s._dy * w * 2);
             s.opacity = Math.round(150 + 80 * (0.5 + 0.5 * w));

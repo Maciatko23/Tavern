@@ -207,7 +207,7 @@
     const _Game_Map_update = Game_Map.prototype.update;
     Game_Map.prototype.update = function(sceneActive) {
         _Game_Map_update.call(this, sceneActive);
-        for (const a of herd.slice()) a.update();
+        if (herd.length) for (const a of herd.slice()) a.update();   // (2026-10-30: no list copy on a map without a herd)
     };
     const _Spriteset_Map_createCharacters = Spriteset_Map.prototype.createCharacters;
     Spriteset_Map.prototype.createCharacters = function() {

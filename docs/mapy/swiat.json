@@ -1,0 +1,9461 @@
+{
+ "opis": "Swiat Kruczej Wyspy w kratkach (PROJEKT). Kratka swiata = kratka maski + przesuniecie. Mapa = prostokat [x0, y0, szer, wys] w kratkach swiata; sasiedzi dziela krawedz co do kratki. Morze i brzeg z jednej maski (swiat_maska.png).",
+ "skala_kratek_na_piksel_atlasu": 0.7,
+ "przesuniecie_swiata": [
+  80,
+  60
+ ],
+ "rozmiar_swiata": [
+  940,
+  600
+ ],
+ "maska": "docs/mapy/swiat_maska.png (jedna kratka = jeden piksel, bialy = lad, w ukladzie swiata; to maska PO wybrzuszeniach wokol tresci)",
+ "mapy": {
+  "3": {
+   "id": 3,
+   "nazwa": "Kruczy Jar",
+   "nowa": false,
+   "gracz": true,
+   "x0": 604,
+   "y0": 252,
+   "szer": 80,
+   "wys": 60,
+   "x0_maski": 524,
+   "y0_maski": 192,
+   "rozmiar_obecny": [
+    80,
+    60
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 15,
+    "w_pasie_surowej_sylwetki": [],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 604,
+      "do": 609,
+      "typ": "sasiad",
+      "sasiad": 22,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 609,
+      "do": 684,
+      "typ": "sasiad",
+      "sasiad": 4,
+      "przejscia": [
+       {
+        "pos": 633,
+        "droga": "Droga Kruczego Jaru (Łąka#1 -> Kruczy Jar)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "E": [
+     {
+      "od": 252,
+      "do": 312,
+      "typ": "sasiad",
+      "sasiad": 23,
+      "przejscia": [
+       {
+        "pos": 266,
+        "droga": "Droga do dworu i do pola (brama wschodnia -> dwór -> Kruczy Jar -> Skraj lasu)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "S": [
+     {
+      "od": 604,
+      "do": 684,
+      "typ": "sasiad",
+      "sasiad": 20,
+      "przejscia": [
+       {
+        "pos": 614,
+        "droga": "Droga pola dziadka (Kruczy Jar -> Dom dziadka)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "W": [
+     {
+      "od": 252,
+      "do": 312,
+      "typ": "sasiad",
+      "sasiad": 24,
+      "przejscia": [
+       {
+        "pos": 267,
+        "droga": "Droga do dworu i do pola (brama wschodnia -> dwór -> Kruczy Jar -> Skraj lasu)"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "4": {
+   "id": 4,
+   "nazwa": "Łąka#1",
+   "nowa": false,
+   "gracz": true,
+   "x0": 609,
+   "y0": 192,
+   "szer": 80,
+   "wys": 60,
+   "x0_maski": 529,
+   "y0_maski": 132,
+   "rozmiar_obecny": [
+    80,
+    60
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 4,
+    "w_pasie_surowej_sylwetki": [],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 609,
+      "do": 620,
+      "typ": "sasiad",
+      "sasiad": 120,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 620,
+      "do": 689,
+      "typ": "sasiad",
+      "sasiad": 159,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "E": [
+     {
+      "od": 192,
+      "do": 252,
+      "typ": "sasiad",
+      "sasiad": 900,
+      "przejscia": [
+       {
+        "pos": 229,
+        "droga": "Droga ku Spalonej zagrodzie (Łąka#1 -> pola -> zagroda)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "S": [
+     {
+      "od": 609,
+      "do": 684,
+      "typ": "sasiad",
+      "sasiad": 3,
+      "przejscia": [
+       {
+        "pos": 633,
+        "droga": "Droga Kruczego Jaru (Łąka#1 -> Kruczy Jar)"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 684,
+      "do": 689,
+      "typ": "sasiad",
+      "sasiad": 23,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "W": [
+     {
+      "od": 192,
+      "do": 252,
+      "typ": "sasiad",
+      "sasiad": 22,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ]
+   }
+  },
+  "8": {
+   "id": 8,
+   "nazwa": "Okolice Tawerny",
+   "nowa": false,
+   "gracz": true,
+   "x0": 420,
+   "y0": 216,
+   "szer": 104,
+   "wys": 138,
+   "x0_maski": 340,
+   "y0_maski": 156,
+   "rozmiar_obecny": [
+    104,
+    138
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 349,
+    "w_pasie_surowej_sylwetki": [],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 420,
+      "do": 524,
+      "typ": "sasiad",
+      "sasiad": 13,
+      "przejscia": [
+       {
+        "pos": 446,
+        "droga": "Szlak górski (północna brama miasta -> Góry -> Orla Grań)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "E": [
+     {
+      "od": 216,
+      "do": 252,
+      "typ": "sasiad",
+      "sasiad": 22,
+      "przejscia": [
+       {
+        "pos": 234,
+        "droga": "Droga polna (miasto -> Polna droga -> Osada)"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 252,
+      "do": 312,
+      "typ": "sasiad",
+      "sasiad": 24,
+      "przejscia": [
+       {
+        "pos": 266,
+        "droga": "Droga do dworu i do pola (brama wschodnia -> dwór -> Kruczy Jar -> Skraj lasu)"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 312,
+      "do": 354,
+      "typ": "sasiad",
+      "sasiad": 901,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "S": [
+     {
+      "od": 420,
+      "do": 524,
+      "typ": "sasiad",
+      "sasiad": 125,
+      "przejscia": [
+       {
+        "pos": 452,
+        "droga": "Trakt portowy (brama południowa miasta -> nabrzeże Przystani)"
+       }
+      ],
+      "rzeka": [
+       420
+      ]
+     }
+    ],
+    "W": [
+     {
+      "od": 216,
+      "do": 249,
+      "typ": "sciana"
+     },
+     {
+      "od": 249,
+      "do": 354,
+      "typ": "sasiad",
+      "sasiad": 111,
+      "przejscia": [
+       {
+        "pos": 266,
+        "droga": "Trakt zachodni (miasto -> most nad korytem -> Podgrodzie -> Garnizon -> Wrak)"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "13": {
+   "id": 13,
+   "nazwa": "Góry i kamieniołom",
+   "nowa": false,
+   "gracz": true,
+   "x0": 404,
+   "y0": 120,
+   "szer": 120,
+   "wys": 96,
+   "x0_maski": 324,
+   "y0_maski": 60,
+   "rozmiar_obecny": [
+    120,
+    96
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 22,
+    "w_pasie_surowej_sylwetki": [
+     {
+      "id": 6,
+      "nazwa": "Brama Milczących",
+      "x": 5,
+      "y": 3
+     }
+    ],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 404,
+      "do": 524,
+      "typ": "sasiad",
+      "sasiad": 175,
+      "przejscia": [
+       {
+        "pos": 465,
+        "droga": "Szlak górski (północna brama miasta -> Góry -> Orla Grań)"
+       }
+      ],
+      "rzeka": [
+       458
+      ]
+     }
+    ],
+    "E": [
+     {
+      "od": 120,
+      "do": 124,
+      "typ": "sciana"
+     },
+     {
+      "od": 124,
+      "do": 192,
+      "typ": "sasiad",
+      "sasiad": 120,
+      "przejscia": [
+       {
+        "pos": 135,
+        "droga": "Szlak latarni (Góry -> Osada -> Latarnia)"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 192,
+      "do": 216,
+      "typ": "sasiad",
+      "sasiad": 22,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "S": [
+     {
+      "od": 404,
+      "do": 420,
+      "typ": "sciana"
+     },
+     {
+      "od": 420,
+      "do": 524,
+      "typ": "sasiad",
+      "sasiad": 8,
+      "przejscia": [
+       {
+        "pos": 446,
+        "droga": "Szlak górski (północna brama miasta -> Góry -> Orla Grań)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "W": [
+     {
+      "od": 120,
+      "do": 144,
+      "typ": "sciana"
+     },
+     {
+      "od": 144,
+      "do": 216,
+      "typ": "sasiad",
+      "sasiad": 157,
+      "przejscia": [
+       {
+        "pos": 160,
+        "droga": "Szlak Pustelni (Góry -> Urwisko -> Pustelnia)"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "17": {
+   "id": 17,
+   "nazwa": "Łąka#2",
+   "nowa": false,
+   "gracz": false,
+   "x0": 684,
+   "y0": 312,
+   "szer": 80,
+   "wys": 96,
+   "x0_maski": 604,
+   "y0_maski": 252,
+   "rozmiar_obecny": [
+    80,
+    96
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 100,
+    "proc": 1.3
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 2,
+    "w_pasie_surowej_sylwetki": [],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 684,
+      "do": 764,
+      "typ": "sasiad",
+      "sasiad": 23,
+      "przejscia": [
+       {
+        "pos": 724,
+        "droga": "Droga łąk (Skraj lasu -> Łąka#2)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "E": [
+     {
+      "od": 312,
+      "do": 316,
+      "typ": "sasiad",
+      "sasiad": 168,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 316,
+      "do": 396,
+      "typ": "sasiad",
+      "sasiad": 933,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 396,
+      "do": 408,
+      "typ": "morze"
+     }
+    ],
+    "S": [
+     {
+      "od": 684,
+      "do": 764,
+      "typ": "morze"
+     }
+    ],
+    "W": [
+     {
+      "od": 312,
+      "do": 376,
+      "typ": "sasiad",
+      "sasiad": 20,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 376,
+      "do": 408,
+      "typ": "sasiad",
+      "sasiad": 923,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ]
+   }
+  },
+  "18": {
+   "id": 18,
+   "nazwa": "Łąka#3",
+   "nowa": false,
+   "gracz": false,
+   "x0": 26,
+   "y0": 225,
+   "szer": 90,
+   "wys": 76,
+   "x0_maski": -54,
+   "y0_maski": 165,
+   "rozmiar_obecny": [
+    80,
+    76
+   ],
+   "rosnie": [
+    10,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 108,
+    "proc": 1.8
+   },
+   "nowa_czesc_kratek": 760,
+   "nowa_czesc_morza": 121,
+   "tresc": {
+    "razem": 15,
+    "w_pasie_surowej_sylwetki": [
+     {
+      "id": 1,
+      "nazwa": "Menhir",
+      "x": 28,
+      "y": 4
+     },
+     {
+      "id": 2,
+      "nazwa": "Menhir",
+      "x": 31,
+      "y": 5
+     },
+     {
+      "id": 4,
+      "nazwa": "Menhir",
+      "x": 31,
+      "y": 8
+     },
+     {
+      "id": 6,
+      "nazwa": "Menhir",
+      "x": 26,
+      "y": 8
+     },
+     {
+      "id": 23,
+      "nazwa": "Kamienny kopiec",
+      "x": 30,
+      "y": 19
+     },
+     {
+      "id": 78,
+      "nazwa": "Kamienny kopiec",
+      "x": 24,
+      "y": 65
+     },
+     {
+      "id": 248,
+      "nazwa": "Menhir",
+      "x": 43,
+      "y": 43
+     },
+     {
+      "id": 249,
+      "nazwa": "Menhir",
+      "x": 44,
+      "y": 11
+     },
+     {
+      "id": 250,
+      "nazwa": "Menhir",
+      "x": 57,
+      "y": 37
+     },
+     {
+      "id": 253,
+      "nazwa": "Menhir",
+      "x": 51,
+      "y": 51
+     },
+     {
+      "id": 255,
+      "nazwa": "Menhir",
+      "x": 6,
+      "y": 36
+     },
+     {
+      "id": 258,
+      "nazwa": "Menhir",
+      "x": 41,
+      "y": 21
+     },
+     {
+      "id": 274,
+      "nazwa": "Kamienny kopiec",
+      "x": 52,
+      "y": 5
+     },
+     {
+      "id": 276,
+      "nazwa": "Kamienny kopiec",
+      "x": 12,
+      "y": 50
+     }
+    ],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 26,
+      "do": 66,
+      "typ": "sasiad",
+      "sasiad": 918,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 66,
+      "do": 116,
+      "typ": "sasiad",
+      "sasiad": 910,
+      "przejscia": [
+       {
+        "pos": 91,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "E": [
+     {
+      "od": 225,
+      "do": 287,
+      "typ": "sciana"
+     },
+     {
+      "od": 287,
+      "do": 301,
+      "typ": "morze"
+     }
+    ],
+    "S": [
+     {
+      "od": 26,
+      "do": 116,
+      "typ": "morze"
+     }
+    ],
+    "W": [
+     {
+      "od": 225,
+      "do": 290,
+      "typ": "sciana"
+     },
+     {
+      "od": 290,
+      "do": 301,
+      "typ": "morze"
+     }
+    ]
+   }
+  },
+  "20": {
+   "id": 20,
+   "nazwa": "Dom dziadka",
+   "nowa": false,
+   "gracz": false,
+   "x0": 604,
+   "y0": 312,
+   "szer": 80,
+   "wys": 64,
+   "x0_maski": 524,
+   "y0_maski": 252,
+   "rozmiar_obecny": [
+    80,
+    64
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 30,
+    "w_pasie_surowej_sylwetki": [],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 604,
+      "do": 684,
+      "typ": "sasiad",
+      "sasiad": 3,
+      "przejscia": [
+       {
+        "pos": 614,
+        "droga": "Droga pola dziadka (Kruczy Jar -> Dom dziadka)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "E": [
+     {
+      "od": 312,
+      "do": 376,
+      "typ": "sasiad",
+      "sasiad": 17,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "S": [
+     {
+      "od": 604,
+      "do": 624,
+      "typ": "morze"
+     },
+     {
+      "od": 624,
+      "do": 684,
+      "typ": "sasiad",
+      "sasiad": 923,
+      "przejscia": [
+       {
+        "pos": 654,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "W": [
+     {
+      "od": 312,
+      "do": 354,
+      "typ": "sasiad",
+      "sasiad": 901,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 354,
+      "do": 363,
+      "typ": "sciana"
+     },
+     {
+      "od": 363,
+      "do": 376,
+      "typ": "morze"
+     }
+    ]
+   }
+  },
+  "21": {
+   "id": 21,
+   "nazwa": "Leśna droga",
+   "nowa": false,
+   "gracz": false,
+   "x0": 440,
+   "y0": 434,
+   "szer": 100,
+   "wys": 80,
+   "x0_maski": 360,
+   "y0_maski": 374,
+   "rozmiar_obecny": [
+    100,
+    80
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 2,
+    "w_pasie_surowej_sylwetki": [
+     {
+      "id": 343,
+      "nazwa": "Kamienny kopiec",
+      "x": 64,
+      "y": 48
+     }
+    ],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 440,
+      "do": 540,
+      "typ": "sasiad",
+      "sasiad": 125,
+      "przejscia": [
+       {
+        "pos": 450,
+        "droga": "Droga leśna (nabrzeże -> Leśna droga)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "E": [
+     {
+      "od": 434,
+      "do": 474,
+      "typ": "sasiad",
+      "sasiad": 920,
+      "przejscia": [
+       {
+        "pos": 454,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 474,
+      "do": 514,
+      "typ": "morze"
+     }
+    ],
+    "S": [
+     {
+      "od": 440,
+      "do": 540,
+      "typ": "morze"
+     }
+    ],
+    "W": [
+     {
+      "od": 434,
+      "do": 514,
+      "typ": "sasiad",
+      "sasiad": 914,
+      "przejscia": [
+       {
+        "pos": 474,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "22": {
+   "id": 22,
+   "nazwa": "Polna droga",
+   "nowa": false,
+   "gracz": false,
+   "x0": 524,
+   "y0": 192,
+   "szer": 85,
+   "wys": 60,
+   "x0_maski": 444,
+   "y0_maski": 132,
+   "rozmiar_obecny": [
+    85,
+    60
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 0,
+    "w_pasie_surowej_sylwetki": [],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 524,
+      "do": 609,
+      "typ": "sasiad",
+      "sasiad": 120,
+      "przejscia": [
+       {
+        "pos": 570,
+        "droga": "Droga polna (miasto -> Polna droga -> Osada)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "E": [
+     {
+      "od": 192,
+      "do": 252,
+      "typ": "sasiad",
+      "sasiad": 4,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "S": [
+     {
+      "od": 524,
+      "do": 604,
+      "typ": "sasiad",
+      "sasiad": 24,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 604,
+      "do": 609,
+      "typ": "sasiad",
+      "sasiad": 3,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "W": [
+     {
+      "od": 192,
+      "do": 216,
+      "typ": "sasiad",
+      "sasiad": 13,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 216,
+      "do": 252,
+      "typ": "sasiad",
+      "sasiad": 8,
+      "przejscia": [
+       {
+        "pos": 234,
+        "droga": "Droga polna (miasto -> Polna droga -> Osada)"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "23": {
+   "id": 23,
+   "nazwa": "Skraj lasu",
+   "nowa": false,
+   "gracz": true,
+   "x0": 684,
+   "y0": 252,
+   "szer": 80,
+   "wys": 60,
+   "x0_maski": 604,
+   "y0_maski": 192,
+   "rozmiar_obecny": [
+    80,
+    60
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 2,
+    "w_pasie_surowej_sylwetki": [],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 684,
+      "do": 689,
+      "typ": "sasiad",
+      "sasiad": 4,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 689,
+      "do": 764,
+      "typ": "sasiad",
+      "sasiad": 900,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "E": [
+     {
+      "od": 252,
+      "do": 312,
+      "typ": "sasiad",
+      "sasiad": 168,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "S": [
+     {
+      "od": 684,
+      "do": 764,
+      "typ": "sasiad",
+      "sasiad": 17,
+      "przejscia": [
+       {
+        "pos": 724,
+        "droga": "Droga łąk (Skraj lasu -> Łąka#2)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "W": [
+     {
+      "od": 252,
+      "do": 312,
+      "typ": "sasiad",
+      "sasiad": 3,
+      "przejscia": [
+       {
+        "pos": 266,
+        "droga": "Droga do dworu i do pola (brama wschodnia -> dwór -> Kruczy Jar -> Skraj lasu)"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "24": {
+   "id": 24,
+   "nazwa": "Posiadłość Lorda",
+   "nowa": false,
+   "gracz": true,
+   "x0": 524,
+   "y0": 252,
+   "szer": 80,
+   "wys": 60,
+   "x0_maski": 444,
+   "y0_maski": 192,
+   "rozmiar_obecny": [
+    80,
+    60
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 82,
+    "w_pasie_surowej_sylwetki": [],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 524,
+      "do": 604,
+      "typ": "sasiad",
+      "sasiad": 22,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "E": [
+     {
+      "od": 252,
+      "do": 312,
+      "typ": "sasiad",
+      "sasiad": 3,
+      "przejscia": [
+       {
+        "pos": 267,
+        "droga": "Droga do dworu i do pola (brama wschodnia -> dwór -> Kruczy Jar -> Skraj lasu)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "S": [
+     {
+      "od": 524,
+      "do": 604,
+      "typ": "sasiad",
+      "sasiad": 901,
+      "przejscia": [
+       {
+        "pos": 564,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "W": [
+     {
+      "od": 252,
+      "do": 312,
+      "typ": "sasiad",
+      "sasiad": 8,
+      "przejscia": [
+       {
+        "pos": 266,
+        "droga": "Droga do dworu i do pola (brama wschodnia -> dwór -> Kruczy Jar -> Skraj lasu)"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "111": {
+   "id": 111,
+   "nazwa": "Podgrodzie",
+   "nowa": false,
+   "gracz": true,
+   "x0": 318,
+   "y0": 249,
+   "szer": 102,
+   "wys": 112,
+   "x0_maski": 238,
+   "y0_maski": 189,
+   "rozmiar_obecny": [
+    102,
+    112
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 154,
+    "w_pasie_surowej_sylwetki": [
+     {
+      "id": 93,
+      "nazwa": "Dym z komina",
+      "x": 6,
+      "y": 76
+     },
+     {
+      "id": 94,
+      "nazwa": "Drzwi (zamknięte): Chata pod lasem",
+      "x": 8,
+      "y": 80
+     }
+    ],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 318,
+      "do": 420,
+      "typ": "sciana"
+     }
+    ],
+    "E": [
+     {
+      "od": 249,
+      "do": 354,
+      "typ": "sasiad",
+      "sasiad": 8,
+      "przejscia": [
+       {
+        "pos": 266,
+        "droga": "Trakt zachodni (miasto -> most nad korytem -> Podgrodzie -> Garnizon -> Wrak)"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 354,
+      "do": 361,
+      "typ": "sasiad",
+      "sasiad": 125,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "S": [
+     {
+      "od": 318,
+      "do": 418,
+      "typ": "sasiad",
+      "sasiad": 917,
+      "przejscia": [
+       {
+        "pos": 368,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 418,
+      "do": 420,
+      "typ": "sciana"
+     }
+    ],
+    "W": [
+     {
+      "od": 249,
+      "do": 260,
+      "typ": "sciana"
+     },
+     {
+      "od": 260,
+      "do": 360,
+      "typ": "sasiad",
+      "sasiad": 162,
+      "przejscia": [
+       {
+        "pos": 292,
+        "droga": "Trakt zachodni (miasto -> most nad korytem -> Podgrodzie -> Garnizon -> Wrak)"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 360,
+      "do": 361,
+      "typ": "sciana"
+     }
+    ]
+   }
+  },
+  "120": {
+   "id": 120,
+   "nazwa": "Osada Milczących",
+   "nowa": false,
+   "gracz": false,
+   "x0": 524,
+   "y0": 124,
+   "szer": 96,
+   "wys": 68,
+   "x0_maski": 444,
+   "y0_maski": 64,
+   "rozmiar_obecny": [
+    96,
+    68
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 46,
+    "w_pasie_surowej_sylwetki": [
+     {
+      "id": 1,
+      "nazwa": "Drzwi chaty 1",
+      "x": 8,
+      "y": 16
+     },
+     {
+      "id": 3,
+      "nazwa": "Drzwi chaty 2",
+      "x": 29,
+      "y": 14
+     },
+     {
+      "id": 5,
+      "nazwa": "Drzwi chaty 3",
+      "x": 29,
+      "y": 25
+     },
+     {
+      "id": 6,
+      "nazwa": "Boczne drzwi chaty 3",
+      "x": 26,
+      "y": 24
+     },
+     {
+      "id": 7,
+      "nazwa": "EV003",
+      "x": 28,
+      "y": 22
+     },
+     {
+      "id": 8,
+      "nazwa": "EV008",
+      "x": 27,
+      "y": 25
+     },
+     {
+      "id": 9,
+      "nazwa": "EV009",
+      "x": 28,
+      "y": 25
+     },
+     {
+      "id": 10,
+      "nazwa": "Drzwi chaty 4",
+      "x": 8,
+      "y": 25
+     },
+     {
+      "id": 12,
+      "nazwa": "Kamień kręgu",
+      "x": 16,
+      "y": 16
+     },
+     {
+      "id": 13,
+      "nazwa": "Kamień kręgu",
+      "x": 22,
+      "y": 16
+     },
+     {
+      "id": 14,
+      "nazwa": "Kamień kręgu",
+      "x": 16,
+      "y": 20
+     },
+     {
+      "id": 15,
+      "nazwa": "Kamień kręgu",
+      "x": 22,
+      "y": 20
+     },
+     {
+      "id": 17,
+      "nazwa": "Kopczyk milczenia",
+      "x": 14,
+      "y": 19
+     },
+     {
+      "id": 18,
+      "nazwa": "Kopczyk milczenia",
+      "x": 24,
+      "y": 19
+     },
+     {
+      "id": 19,
+      "nazwa": "Słup z zaszytymi ustami",
+      "x": 17,
+      "y": 26
+     },
+     {
+      "id": 20,
+      "nazwa": "Słup z zaszytymi ustami",
+      "x": 23,
+      "y": 26
+     },
+     {
+      "id": 22,
+      "nazwa": "Kopczyk milczenia",
+      "x": 24,
+      "y": 8
+     },
+     {
+      "id": 27,
+      "nazwa": "Latarnia przy drzwiach",
+      "x": 9,
+      "y": 15
+     },
+     {
+      "id": 28,
+      "nazwa": "Latarnia przy drzwiach",
+      "x": 30,
+      "y": 13
+     },
+     {
+      "id": 86,
+      "nazwa": "Milczący przy ścianie",
+      "x": 14,
+      "y": 10
+     },
+     {
+      "id": 87,
+      "nazwa": "Milcząca przy ścianie",
+      "x": 17,
+      "y": 10
+     },
+     {
+      "id": 88,
+      "nazwa": "Najstarszy z Milczących",
+      "x": 19,
+      "y": 21
+     },
+     {
+      "id": 89,
+      "nazwa": "Milcząca przy grządce",
+      "x": 12,
+      "y": 16
+     },
+     {
+      "id": 90,
+      "nazwa": "Miejsce: osada_wejscie",
+      "x": 20,
+      "y": 31
+     },
+     {
+      "id": 91,
+      "nazwa": "Miejsce: osada_krag",
+      "x": 19,
+      "y": 22
+     },
+     {
+      "id": 92,
+      "nazwa": "Miejsce: osada_sciana",
+      "x": 15,
+      "y": 10
+     },
+     {
+      "id": 93,
+      "nazwa": "Miejsce: osada_grum",
+      "x": 21,
+      "y": 25
+     },
+     {
+      "id": 94,
+      "nazwa": "Miejsce: osada_starszy",
+      "x": 19,
+      "y": 21
+     },
+     {
+      "id": 95,
+      "nazwa": "Miejsce: osada_dom_1",
+      "x": 8,
+      "y": 17
+     },
+     {
+      "id": 96,
+      "nazwa": "Miejsce: osada_dom_2",
+      "x": 29,
+      "y": 15
+     },
+     {
+      "id": 97,
+      "nazwa": "Miejsce: osada_dom_3",
+      "x": 29,
+      "y": 26
+     },
+     {
+      "id": 98,
+      "nazwa": "Miejsce: osada_dom_4",
+      "x": 8,
+      "y": 26
+     },
+     {
+      "id": 268,
+      "nazwa": "Kamień kręgu",
+      "x": 62,
+      "y": 3
+     },
+     {
+      "id": 273,
+      "nazwa": "Kamień kręgu",
+      "x": 3,
+      "y": 40
+     },
+     {
+      "id": 274,
+      "nazwa": "Kamień kręgu",
+      "x": 76,
+      "y": 9
+     },
+     {
+      "id": 275,
+      "nazwa": "Kamień kręgu",
+      "x": 69,
+      "y": 1
+     }
+    ],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 524,
+      "do": 560,
+      "typ": "sciana"
+     },
+     {
+      "od": 560,
+      "do": 620,
+      "typ": "sasiad",
+      "sasiad": 934,
+      "przejscia": [
+       {
+        "pos": 590,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "E": [
+     {
+      "od": 124,
+      "do": 192,
+      "typ": "sasiad",
+      "sasiad": 159,
+      "przejscia": [
+       {
+        "pos": 153,
+        "droga": "Szlak latarni (Góry -> Osada -> Latarnia)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "S": [
+     {
+      "od": 524,
+      "do": 609,
+      "typ": "sasiad",
+      "sasiad": 22,
+      "przejscia": [
+       {
+        "pos": 570,
+        "droga": "Droga polna (miasto -> Polna droga -> Osada)"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 609,
+      "do": 620,
+      "typ": "sasiad",
+      "sasiad": 4,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "W": [
+     {
+      "od": 124,
+      "do": 192,
+      "typ": "sasiad",
+      "sasiad": 13,
+      "przejscia": [
+       {
+        "pos": 135,
+        "droga": "Szlak latarni (Góry -> Osada -> Latarnia)"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "125": {
+   "id": 125,
+   "nazwa": "Przystań",
+   "nowa": false,
+   "gracz": false,
+   "x0": 420,
+   "y0": 354,
+   "szer": 132,
+   "wys": 80,
+   "x0_maski": 340,
+   "y0_maski": 294,
+   "rozmiar_obecny": [
+    132,
+    80
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 71,
+    "proc": 0.7
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 46,
+    "w_pasie_surowej_sylwetki": [],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 420,
+      "do": 524,
+      "typ": "sasiad",
+      "sasiad": 8,
+      "przejscia": [
+       {
+        "pos": 452,
+        "droga": "Trakt portowy (brama południowa miasta -> nabrzeże Przystani)"
+       }
+      ],
+      "rzeka": [
+       420
+      ]
+     },
+     {
+      "od": 524,
+      "do": 552,
+      "typ": "sasiad",
+      "sasiad": 901,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "E": [
+     {
+      "od": 354,
+      "do": 362,
+      "typ": "morze"
+     },
+     {
+      "od": 362,
+      "do": 386,
+      "typ": "sciana"
+     },
+     {
+      "od": 386,
+      "do": 394,
+      "typ": "morze"
+     },
+     {
+      "od": 394,
+      "do": 434,
+      "typ": "sasiad",
+      "sasiad": 922,
+      "przejscia": [
+       {
+        "pos": 414,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "S": [
+     {
+      "od": 420,
+      "do": 440,
+      "typ": "sasiad",
+      "sasiad": 914,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 440,
+      "do": 540,
+      "typ": "sasiad",
+      "sasiad": 21,
+      "przejscia": [
+       {
+        "pos": 450,
+        "droga": "Droga leśna (nabrzeże -> Leśna droga)"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 540,
+      "do": 552,
+      "typ": "sasiad",
+      "sasiad": 920,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "W": [
+     {
+      "od": 354,
+      "do": 361,
+      "typ": "sasiad",
+      "sasiad": 111,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 361,
+      "do": 364,
+      "typ": "sciana"
+     },
+     {
+      "od": 364,
+      "do": 382,
+      "typ": "morze"
+     },
+     {
+      "od": 382,
+      "do": 385,
+      "typ": "sciana"
+     },
+     {
+      "od": 385,
+      "do": 434,
+      "typ": "morze"
+     }
+    ]
+   }
+  },
+  "155": {
+   "id": 155,
+   "nazwa": "Pustelnia na klifie",
+   "nowa": false,
+   "gracz": false,
+   "x0": 186,
+   "y0": 146,
+   "szer": 96,
+   "wys": 72,
+   "x0_maski": 106,
+   "y0_maski": 86,
+   "rozmiar_obecny": [
+    96,
+    72
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 1,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 26,
+    "w_pasie_surowej_sylwetki": [
+     {
+      "id": 1,
+      "nazwa": "Dym z komina",
+      "x": 16,
+      "y": 4
+     },
+     {
+      "id": 2,
+      "nazwa": "Drzwi: Skryptorium",
+      "x": 14,
+      "y": 9
+     },
+     {
+      "id": 3,
+      "nazwa": "Wieża skryptorium",
+      "x": 20,
+      "y": 9
+     },
+     {
+      "id": 4,
+      "nazwa": "Wieża skryptorium: podstawa",
+      "x": 19,
+      "y": 8
+     },
+     {
+      "id": 5,
+      "nazwa": "Dzwon w wieży",
+      "x": 20,
+      "y": 8
+     },
+     {
+      "id": 6,
+      "nazwa": "Dym z komina",
+      "x": 24,
+      "y": 4
+     },
+     {
+      "id": 7,
+      "nazwa": "Drzwi (zamknięte): Cela brata Kleofasa",
+      "x": 23,
+      "y": 7
+     },
+     {
+      "id": 8,
+      "nazwa": "Latarenka u drzwi skryptorium",
+      "x": 15,
+      "y": 7
+     },
+     {
+      "id": 9,
+      "nazwa": "Latarenka przy celi",
+      "x": 25,
+      "y": 6
+     },
+     {
+      "id": 10,
+      "nazwa": "Latarnia przy wieży",
+      "x": 22,
+      "y": 10
+     },
+     {
+      "id": 11,
+      "nazwa": "Pusta cysterna na deszczówkę",
+      "x": 8,
+      "y": 10
+     },
+     {
+      "id": 12,
+      "nazwa": "Grób kronikarza",
+      "x": 27,
+      "y": 6
+     },
+     {
+      "id": 13,
+      "nazwa": "Grób kronikarza",
+      "x": 28,
+      "y": 6
+     },
+     {
+      "id": 14,
+      "nazwa": "Grób kronikarza",
+      "x": 29,
+      "y": 6
+     },
+     {
+      "id": 16,
+      "nazwa": "Ule brata Kleofasa",
+      "x": 28,
+      "y": 9
+     },
+     {
+      "id": 17,
+      "nazwa": "Ule: miejsce",
+      "x": 27,
+      "y": 9
+     },
+     {
+      "id": 18,
+      "nazwa": "Kopiec z krukiem",
+      "x": 27,
+      "y": 19
+     },
+     {
+      "id": 22,
+      "nazwa": "Kamienny kopiec",
+      "x": 44,
+      "y": 9
+     },
+     {
+      "id": 28,
+      "nazwa": "Rozbita skrzynia",
+      "x": 5,
+      "y": 28
+     },
+     {
+      "id": 54,
+      "nazwa": "Miejsce: skryptorium_drzwi",
+      "x": 14,
+      "y": 10
+     },
+     {
+      "id": 55,
+      "nazwa": "Miejsce: cela_drzwi",
+      "x": 23,
+      "y": 8
+     },
+     {
+      "id": 56,
+      "nazwa": "Miejsce: urwisko",
+      "x": 7,
+      "y": 7
+     },
+     {
+      "id": 57,
+      "nazwa": "Miejsce: lawka",
+      "x": 9,
+      "y": 6
+     },
+     {
+      "id": 58,
+      "nazwa": "Miejsce: ogrodek",
+      "x": 16,
+      "y": 11
+     },
+     {
+      "id": 59,
+      "nazwa": "Miejsce: ule",
+      "x": 26,
+      "y": 8
+     },
+     {
+      "id": 60,
+      "nazwa": "Miejsce: wieza",
+      "x": 20,
+      "y": 10
+     }
+    ],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 186,
+      "do": 282,
+      "typ": "morze"
+     }
+    ],
+    "E": [
+     {
+      "od": 146,
+      "do": 216,
+      "typ": "sasiad",
+      "sasiad": 157,
+      "przejscia": [
+       {
+        "pos": 180,
+        "droga": "Szlak Pustelni (Góry -> Urwisko -> Pustelnia)"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 216,
+      "do": 218,
+      "typ": "sciana"
+     }
+    ],
+    "S": [
+     {
+      "od": 186,
+      "do": 282,
+      "typ": "sasiad",
+      "sasiad": 950,
+      "przejscia": [
+       {
+        "pos": 199,
+        "droga": "Szlak Pustelni (Góry -> Urwisko -> Pustelnia)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "W": [
+     {
+      "od": 146,
+      "do": 218,
+      "typ": "sasiad",
+      "sasiad": 910,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ]
+   }
+  },
+  "157": {
+   "id": 157,
+   "nazwa": "Urwisko Kruków",
+   "nowa": false,
+   "gracz": false,
+   "x0": 282,
+   "y0": 144,
+   "szer": 122,
+   "wys": 72,
+   "x0_maski": 202,
+   "y0_maski": 84,
+   "rozmiar_obecny": [
+    112,
+    72
+   ],
+   "rosnie": [
+    10,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 720,
+   "nowa_czesc_morza": 1,
+   "tresc": {
+    "razem": 21,
+    "w_pasie_surowej_sylwetki": [],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 282,
+      "do": 398,
+      "typ": "sasiad",
+      "sasiad": 930,
+      "przejscia": [
+       {
+        "pos": 340,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 398,
+      "do": 404,
+      "typ": "sciana"
+     }
+    ],
+    "E": [
+     {
+      "od": 144,
+      "do": 216,
+      "typ": "sasiad",
+      "sasiad": 13,
+      "przejscia": [
+       {
+        "pos": 160,
+        "droga": "Szlak Pustelni (Góry -> Urwisko -> Pustelnia)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "S": [
+     {
+      "od": 282,
+      "do": 404,
+      "typ": "sciana"
+     }
+    ],
+    "W": [
+     {
+      "od": 144,
+      "do": 146,
+      "typ": "morze"
+     },
+     {
+      "od": 146,
+      "do": 216,
+      "typ": "sasiad",
+      "sasiad": 155,
+      "przejscia": [
+       {
+        "pos": 180,
+        "droga": "Szlak Pustelni (Góry -> Urwisko -> Pustelnia)"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "159": {
+   "id": 159,
+   "nazwa": "Przylądek z latarnią",
+   "nowa": false,
+   "gracz": false,
+   "x0": 620,
+   "y0": 112,
+   "szer": 104,
+   "wys": 80,
+   "x0_maski": 540,
+   "y0_maski": 52,
+   "rozmiar_obecny": [
+    104,
+    80
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 22,
+    "w_pasie_surowej_sylwetki": [
+     {
+      "id": 1,
+      "nazwa": "Latarnia",
+      "x": 22,
+      "y": 11
+     },
+     {
+      "id": 2,
+      "nazwa": "Latarnia: mur",
+      "x": 21,
+      "y": 8
+     },
+     {
+      "id": 3,
+      "nazwa": "Latarnia: mur",
+      "x": 23,
+      "y": 8
+     },
+     {
+      "id": 4,
+      "nazwa": "Latarnia: mur",
+      "x": 22,
+      "y": 8
+     },
+     {
+      "id": 5,
+      "nazwa": "Dym z komina",
+      "x": 17,
+      "y": 15
+     },
+     {
+      "id": 6,
+      "nazwa": "Drzwi: Izba latarnika",
+      "x": 15,
+      "y": 18
+     },
+     {
+      "id": 7,
+      "nazwa": "Latarenka przy izbie",
+      "x": 17,
+      "y": 17
+     },
+     {
+      "id": 8,
+      "nazwa": "Słup strażnicy zakonu",
+      "x": 18,
+      "y": 8
+     },
+     {
+      "id": 9,
+      "nazwa": "Płyta strażnicy",
+      "x": 30,
+      "y": 14
+     },
+     {
+      "id": 10,
+      "nazwa": "Dzwon mgłowy",
+      "x": 26,
+      "y": 9
+     },
+     {
+      "id": 12,
+      "nazwa": "Beczki tranu",
+      "x": 18,
+      "y": 22
+     },
+     {
+      "id": 14,
+      "nazwa": "Zatoczka szczątków",
+      "x": 6,
+      "y": 31
+     },
+     {
+      "id": 19,
+      "nazwa": "Kamienny kopiec",
+      "x": 42,
+      "y": 28
+     },
+     {
+      "id": 41,
+      "nazwa": "Miejsce: laterna",
+      "x": 22,
+      "y": 12
+     },
+     {
+      "id": 42,
+      "nazwa": "Miejsce: izba",
+      "x": 15,
+      "y": 19
+     },
+     {
+      "id": 43,
+      "nazwa": "Miejsce: izba_sen",
+      "x": 15,
+      "y": 19
+     },
+     {
+      "id": 44,
+      "nazwa": "Miejsce: drewutnia",
+      "x": 25,
+      "y": 19
+     },
+     {
+      "id": 45,
+      "nazwa": "Miejsce: lat_napad",
+      "x": 6,
+      "y": 33
+     },
+     {
+      "id": 46,
+      "nazwa": "Miejsce: lat_oboz",
+      "x": 6,
+      "y": 31
+     },
+     {
+      "id": 47,
+      "nazwa": "Miejsce: lat_dzwon",
+      "x": 26,
+      "y": 10
+     },
+     {
+      "id": 48,
+      "nazwa": "Latarnia: mur",
+      "x": 20,
+      "y": 11
+     },
+     {
+      "id": 52,
+      "nazwa": "Latarnia: mur",
+      "x": 24,
+      "y": 11
+     }
+    ],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 620,
+      "do": 724,
+      "typ": "morze"
+     }
+    ],
+    "E": [
+     {
+      "od": 112,
+      "do": 148,
+      "typ": "sasiad",
+      "sasiad": 936,
+      "przejscia": [
+       {
+        "pos": 130,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 148,
+      "do": 192,
+      "typ": "morze"
+     }
+    ],
+    "S": [
+     {
+      "od": 620,
+      "do": 689,
+      "typ": "sasiad",
+      "sasiad": 4,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 689,
+      "do": 724,
+      "typ": "sasiad",
+      "sasiad": 900,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "W": [
+     {
+      "od": 112,
+      "do": 124,
+      "typ": "sasiad",
+      "sasiad": 934,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 124,
+      "do": 192,
+      "typ": "sasiad",
+      "sasiad": 120,
+      "przejscia": [
+       {
+        "pos": 153,
+        "droga": "Szlak latarni (Góry -> Osada -> Latarnia)"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "162": {
+   "id": 162,
+   "nazwa": "Garnizon nad zatoką",
+   "nowa": false,
+   "gracz": false,
+   "x0": 206,
+   "y0": 260,
+   "szer": 112,
+   "wys": 100,
+   "x0_maski": 126,
+   "y0_maski": 200,
+   "rozmiar_obecny": [
+    112,
+    80
+   ],
+   "rosnie": [
+    0,
+    20
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 2240,
+   "nowa_czesc_morza": 768,
+   "tresc": {
+    "razem": 99,
+    "w_pasie_surowej_sylwetki": [
+     {
+      "id": 71,
+      "nazwa": "Kosz ogniowy na pomoście",
+      "x": 4,
+      "y": 26
+     }
+    ],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 206,
+      "do": 282,
+      "typ": "sasiad",
+      "sasiad": 950,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 282,
+      "do": 318,
+      "typ": "sciana"
+     }
+    ],
+    "E": [
+     {
+      "od": 260,
+      "do": 360,
+      "typ": "sasiad",
+      "sasiad": 111,
+      "przejscia": [
+       {
+        "pos": 292,
+        "droga": "Trakt zachodni (miasto -> most nad korytem -> Podgrodzie -> Garnizon -> Wrak)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "S": [
+     {
+      "od": 206,
+      "do": 307,
+      "typ": "morze"
+     },
+     {
+      "od": 307,
+      "do": 318,
+      "typ": "sciana"
+     }
+    ],
+    "W": [
+     {
+      "od": 260,
+      "do": 320,
+      "typ": "sasiad",
+      "sasiad": 165,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 320,
+      "do": 360,
+      "typ": "sasiad",
+      "sasiad": 951,
+      "przejscia": [
+       {
+        "pos": 340,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "165": {
+   "id": 165,
+   "nazwa": "Wrak na mieliźnie",
+   "nowa": false,
+   "gracz": false,
+   "x0": 126,
+   "y0": 260,
+   "szer": 80,
+   "wys": 60,
+   "x0_maski": 46,
+   "y0_maski": 200,
+   "rozmiar_obecny": [
+    80,
+    60
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 46,
+    "w_pasie_surowej_sylwetki": [],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 126,
+      "do": 186,
+      "typ": "morze"
+     },
+     {
+      "od": 186,
+      "do": 206,
+      "typ": "sasiad",
+      "sasiad": 950,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "E": [
+     {
+      "od": 260,
+      "do": 320,
+      "typ": "sasiad",
+      "sasiad": 162,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "S": [
+     {
+      "od": 126,
+      "do": 146,
+      "typ": "morze"
+     },
+     {
+      "od": 146,
+      "do": 206,
+      "typ": "sasiad",
+      "sasiad": 951,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "W": [
+     {
+      "od": 260,
+      "do": 320,
+      "typ": "morze"
+     }
+    ]
+   }
+  },
+  "168": {
+   "id": 168,
+   "nazwa": "Spalona zagroda",
+   "nowa": false,
+   "gracz": false,
+   "x0": 764,
+   "y0": 208,
+   "szer": 130,
+   "wys": 108,
+   "x0_maski": 684,
+   "y0_maski": 148,
+   "rozmiar_obecny": [
+    130,
+    108
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 686,
+    "proc": 4.9
+   },
+   "nowa_czesc_kratek": 0,
+   "nowa_czesc_morza": 0,
+   "tresc": {
+    "razem": 9,
+    "w_pasie_surowej_sylwetki": [
+     {
+      "id": 1,
+      "nazwa": "Resztki stodoły",
+      "x": 29,
+      "y": 9
+     },
+     {
+      "id": 2,
+      "nazwa": "Stara studnia (zasypana)",
+      "x": 13,
+      "y": 9
+     },
+     {
+      "id": 3,
+      "nazwa": "Krzyż: Jan Ług",
+      "x": 34,
+      "y": 5
+     },
+     {
+      "id": 32,
+      "nazwa": "Kamienny kopiec",
+      "x": 40,
+      "y": 27
+     },
+     {
+      "id": 55,
+      "nazwa": "Dom Ługów",
+      "x": 18,
+      "y": 7
+     },
+     {
+      "id": 198,
+      "nazwa": "Kamienny kopiec",
+      "x": 75,
+      "y": 1
+     },
+     {
+      "id": 199,
+      "nazwa": "Kamienny kopiec",
+      "x": 58,
+      "y": 9
+     }
+    ],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 764,
+      "do": 884,
+      "typ": "sasiad",
+      "sasiad": 912,
+      "przejscia": [
+       {
+        "pos": 824,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 884,
+      "do": 891,
+      "typ": "sciana"
+     },
+     {
+      "od": 891,
+      "do": 894,
+      "typ": "morze"
+     }
+    ],
+    "E": [
+     {
+      "od": 208,
+      "do": 216,
+      "typ": "morze"
+     },
+     {
+      "od": 216,
+      "do": 235,
+      "typ": "sciana"
+     },
+     {
+      "od": 235,
+      "do": 316,
+      "typ": "morze"
+     }
+    ],
+    "S": [
+     {
+      "od": 764,
+      "do": 844,
+      "typ": "sasiad",
+      "sasiad": 933,
+      "przejscia": [
+       {
+        "pos": 804,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 844,
+      "do": 894,
+      "typ": "morze"
+     }
+    ],
+    "W": [
+     {
+      "od": 208,
+      "do": 252,
+      "typ": "sasiad",
+      "sasiad": 900,
+      "przejscia": [
+       {
+        "pos": 233,
+        "droga": "Droga ku Spalonej zagrodzie (Łąka#1 -> pola -> zagroda)"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 252,
+      "do": 312,
+      "typ": "sasiad",
+      "sasiad": 23,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 312,
+      "do": 316,
+      "typ": "sasiad",
+      "sasiad": 17,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ]
+   }
+  },
+  "175": {
+   "id": 175,
+   "nazwa": "Orla Grań",
+   "nowa": false,
+   "gracz": false,
+   "x0": 404,
+   "y0": 60,
+   "szer": 156,
+   "wys": 60,
+   "x0_maski": 324,
+   "y0_maski": 0,
+   "rozmiar_obecny": [
+    96,
+    60
+   ],
+   "rosnie": [
+    60,
+    0
+   ],
+   "morze_do_domalowania": {
+    "kratek": 0,
+    "proc": 0.0
+   },
+   "woda_poza_maska": {
+    "kratek": 102,
+    "proc": 1.8
+   },
+   "nowa_czesc_kratek": 3600,
+   "nowa_czesc_morza": 1783,
+   "tresc": {
+    "razem": 11,
+    "w_pasie_surowej_sylwetki": [
+     {
+      "id": 49,
+      "nazwa": "Kamienny kopiec",
+      "x": 4,
+      "y": 28
+     },
+     {
+      "id": 56,
+      "nazwa": "Miejsce: orzel_wejscie",
+      "x": 20,
+      "y": 27
+     },
+     {
+      "id": 57,
+      "nazwa": "Miejsce: orzel_jajo",
+      "x": 20,
+      "y": 9
+     },
+     {
+      "id": 58,
+      "nazwa": "Miejsce: orzel_orlica",
+      "x": 24,
+      "y": 11
+     },
+     {
+      "id": 59,
+      "nazwa": "Miejsce: orzel_strzaly",
+      "x": 22,
+      "y": 12
+     },
+     {
+      "id": 60,
+      "nazwa": "Miejsce: orzel_misa",
+      "x": 12,
+      "y": 12
+     },
+     {
+      "id": 61,
+      "nazwa": "Miejsce: orzel_plyta",
+      "x": 15,
+      "y": 8
+     },
+     {
+      "id": 62,
+      "nazwa": "Miejsce: orzel_oboz",
+      "x": 29,
+      "y": 18
+     },
+     {
+      "id": 63,
+      "nazwa": "Miejsce: orzel_klatka",
+      "x": 33,
+      "y": 16
+     },
+     {
+      "id": 64,
+      "nazwa": "Miejsce: orzel_ladowisko",
+      "x": 24,
+      "y": 26
+     }
+    ],
+    "w_morzu_po_wybrzuszeniu": []
+   },
+   "krawedzie": {
+    "N": [
+     {
+      "od": 404,
+      "do": 508,
+      "typ": "sasiad",
+      "sasiad": 931,
+      "przejscia": [
+       {
+        "pos": 456,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 508,
+      "do": 511,
+      "typ": "sciana"
+     },
+     {
+      "od": 511,
+      "do": 560,
+      "typ": "morze"
+     }
+    ],
+    "E": [
+     {
+      "od": 60,
+      "do": 84,
+      "typ": "morze"
+     },
+     {
+      "od": 84,
+      "do": 120,
+      "typ": "sasiad",
+      "sasiad": 934,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "S": [
+     {
+      "od": 404,
+      "do": 524,
+      "typ": "sasiad",
+      "sasiad": 13,
+      "przejscia": [
+       {
+        "pos": 465,
+        "droga": "Szlak górski (północna brama miasta -> Góry -> Orla Grań)"
+       }
+      ],
+      "rzeka": [
+       458
+      ]
+     },
+     {
+      "od": 524,
+      "do": 560,
+      "typ": "sciana"
+     }
+    ],
+    "W": [
+     {
+      "od": 60,
+      "do": 120,
+      "typ": "sciana"
+     }
+    ]
+   }
+  },
+  "900": {
+   "id": 900,
+   "nazwa": "Pola pod grzbietem",
+   "nowa": true,
+   "gracz": false,
+   "x0": 689,
+   "y0": 192,
+   "szer": 75,
+   "wys": 60,
+   "x0_maski": 609,
+   "y0_maski": 132,
+   "opis": "pola i łąka za Łąką#1, droga do Spalonej zagrody, widok na wzgórza",
+   "rodzic": 4,
+   "czesc": "prawe skrzydło",
+   "atlas": [
+    1033,
+    289
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 689,
+      "do": 724,
+      "typ": "sasiad",
+      "sasiad": 159,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 724,
+      "do": 743,
+      "typ": "morze"
+     },
+     {
+      "od": 743,
+      "do": 764,
+      "typ": "sciana"
+     }
+    ],
+    "E": [
+     {
+      "od": 192,
+      "do": 208,
+      "typ": "sasiad",
+      "sasiad": 912,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 208,
+      "do": 252,
+      "typ": "sasiad",
+      "sasiad": 168,
+      "przejscia": [
+       {
+        "pos": 233,
+        "droga": "Droga ku Spalonej zagrodzie (Łąka#1 -> pola -> zagroda)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "S": [
+     {
+      "od": 689,
+      "do": 764,
+      "typ": "sasiad",
+      "sasiad": 23,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "W": [
+     {
+      "od": 192,
+      "do": 252,
+      "typ": "sasiad",
+      "sasiad": 4,
+      "przejscia": [
+       {
+        "pos": 229,
+        "droga": "Droga ku Spalonej zagrodzie (Łąka#1 -> pola -> zagroda)"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "901": {
+   "id": 901,
+   "nazwa": "Sady pod dworem",
+   "nowa": true,
+   "gracz": false,
+   "x0": 524,
+   "y0": 312,
+   "szer": 80,
+   "wys": 42,
+   "x0_maski": 444,
+   "y0_maski": 252,
+   "opis": "sady i ogrody Lorda, ścieżka nad zatokę",
+   "rodzic": 24,
+   "czesc": "prawe skrzydło",
+   "atlas": [
+    801,
+    448
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 524,
+      "do": 604,
+      "typ": "sasiad",
+      "sasiad": 24,
+      "przejscia": [
+       {
+        "pos": 564,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "E": [
+     {
+      "od": 312,
+      "do": 354,
+      "typ": "sasiad",
+      "sasiad": 20,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "S": [
+     {
+      "od": 524,
+      "do": 552,
+      "typ": "sasiad",
+      "sasiad": 125,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 552,
+      "do": 595,
+      "typ": "morze"
+     },
+     {
+      "od": 595,
+      "do": 604,
+      "typ": "sciana"
+     }
+    ],
+    "W": [
+     {
+      "od": 312,
+      "do": 354,
+      "typ": "sasiad",
+      "sasiad": 8,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ]
+   }
+  },
+  "910": {
+   "id": 910,
+   "nazwa": "Północny klif lewego skrzydła II",
+   "nowa": true,
+   "gracz": false,
+   "x0": 66,
+   "y0": 145,
+   "szer": 120,
+   "wys": 80,
+   "x0_maski": -14,
+   "y0_maski": 85,
+   "opis": "klif z widokiem na morze albo plaża do chodzenia; ścieżka od rodzica, kilka drzew i skał",
+   "rodzic": 18,
+   "czesc": "lewe skrzydło",
+   "atlas": [
+    176,
+    237
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 66,
+      "do": 186,
+      "typ": "morze"
+     }
+    ],
+    "E": [
+     {
+      "od": 145,
+      "do": 146,
+      "typ": "morze"
+     },
+     {
+      "od": 146,
+      "do": 218,
+      "typ": "sasiad",
+      "sasiad": 155,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 218,
+      "do": 225,
+      "typ": "sasiad",
+      "sasiad": 950,
+      "przejscia": [
+       {
+        "pos": 224,
+        "droga": "Szlak Pustelni (Góry -> Urwisko -> Pustelnia)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "S": [
+     {
+      "od": 66,
+      "do": 116,
+      "typ": "sasiad",
+      "sasiad": 18,
+      "przejscia": [
+       {
+        "pos": 91,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 116,
+      "do": 186,
+      "typ": "sciana"
+     }
+    ],
+    "W": [
+     {
+      "od": 145,
+      "do": 185,
+      "typ": "morze"
+     },
+     {
+      "od": 185,
+      "do": 225,
+      "typ": "sasiad",
+      "sasiad": 918,
+      "przejscia": [
+       {
+        "pos": 205,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "912": {
+   "id": 912,
+   "nazwa": "Północny brzeg pól",
+   "nowa": true,
+   "gracz": false,
+   "x0": 764,
+   "y0": 148,
+   "szer": 120,
+   "wys": 60,
+   "x0_maski": 684,
+   "y0_maski": 88,
+   "opis": "klif z widokiem na morze albo plaża do chodzenia; ścieżka od rodzica, kilka drzew i skał",
+   "rodzic": 168,
+   "czesc": "prawe skrzydło",
+   "atlas": [
+    1173,
+    227
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 764,
+      "do": 784,
+      "typ": "sasiad",
+      "sasiad": 936,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 784,
+      "do": 884,
+      "typ": "morze"
+     }
+    ],
+    "E": [
+     {
+      "od": 148,
+      "do": 201,
+      "typ": "morze"
+     },
+     {
+      "od": 201,
+      "do": 208,
+      "typ": "sciana"
+     }
+    ],
+    "S": [
+     {
+      "od": 764,
+      "do": 884,
+      "typ": "sasiad",
+      "sasiad": 168,
+      "przejscia": [
+       {
+        "pos": 824,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "W": [
+     {
+      "od": 148,
+      "do": 184,
+      "typ": "morze"
+     },
+     {
+      "od": 184,
+      "do": 192,
+      "typ": "sciana"
+     },
+     {
+      "od": 192,
+      "do": 208,
+      "typ": "sasiad",
+      "sasiad": 900,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ]
+   }
+  },
+  "914": {
+   "id": 914,
+   "nazwa": "Zatoczka pod ogonem",
+   "nowa": true,
+   "gracz": false,
+   "x0": 360,
+   "y0": 434,
+   "szer": 80,
+   "wys": 80,
+   "x0_maski": 280,
+   "y0_maski": 374,
+   "opis": "klif z widokiem na morze albo plaża do chodzenia; ścieżka od rodzica, kilka drzew i skał",
+   "rodzic": 21,
+   "czesc": "ogon",
+   "atlas": [
+    567,
+    649
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 360,
+      "do": 420,
+      "typ": "morze"
+     },
+     {
+      "od": 420,
+      "do": 440,
+      "typ": "sasiad",
+      "sasiad": 125,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "E": [
+     {
+      "od": 434,
+      "do": 514,
+      "typ": "sasiad",
+      "sasiad": 21,
+      "przejscia": [
+       {
+        "pos": 474,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "S": [
+     {
+      "od": 360,
+      "do": 440,
+      "typ": "morze"
+     }
+    ],
+    "W": [
+     {
+      "od": 434,
+      "do": 514,
+      "typ": "morze"
+     }
+    ]
+   }
+  },
+  "917": {
+   "id": 917,
+   "nazwa": "Cypel ogona",
+   "nowa": true,
+   "gracz": false,
+   "x0": 298,
+   "y0": 361,
+   "szer": 120,
+   "wys": 60,
+   "x0_maski": 218,
+   "y0_maski": 301,
+   "opis": "klif z widokiem na morze albo plaża do chodzenia; ścieżka od rodzica, kilka drzew i skał",
+   "rodzic": 111,
+   "czesc": "ogon",
+   "atlas": [
+    507,
+    531
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 298,
+      "do": 307,
+      "typ": "morze"
+     },
+     {
+      "od": 307,
+      "do": 318,
+      "typ": "sciana"
+     },
+     {
+      "od": 318,
+      "do": 418,
+      "typ": "sasiad",
+      "sasiad": 111,
+      "przejscia": [
+       {
+        "pos": 368,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "E": [
+     {
+      "od": 361,
+      "do": 364,
+      "typ": "sciana"
+     },
+     {
+      "od": 364,
+      "do": 382,
+      "typ": "morze"
+     },
+     {
+      "od": 382,
+      "do": 385,
+      "typ": "sciana"
+     },
+     {
+      "od": 385,
+      "do": 421,
+      "typ": "morze"
+     }
+    ],
+    "S": [
+     {
+      "od": 298,
+      "do": 418,
+      "typ": "morze"
+     }
+    ],
+    "W": [
+     {
+      "od": 361,
+      "do": 421,
+      "typ": "morze"
+     }
+    ]
+   }
+  },
+  "918": {
+   "id": 918,
+   "nazwa": "Północny klif lewego skrzydła IV",
+   "nowa": true,
+   "gracz": false,
+   "x0": 6,
+   "y0": 185,
+   "szer": 60,
+   "wys": 40,
+   "x0_maski": -74,
+   "y0_maski": 125,
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 910,
+   "czesc": "lewe skrzydło",
+   "atlas": [
+    47,
+    265
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 6,
+      "do": 66,
+      "typ": "morze"
+     }
+    ],
+    "E": [
+     {
+      "od": 185,
+      "do": 225,
+      "typ": "sasiad",
+      "sasiad": 910,
+      "przejscia": [
+       {
+        "pos": 205,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "S": [
+     {
+      "od": 6,
+      "do": 10,
+      "typ": "morze"
+     },
+     {
+      "od": 10,
+      "do": 26,
+      "typ": "sciana"
+     },
+     {
+      "od": 26,
+      "do": 66,
+      "typ": "sasiad",
+      "sasiad": 18,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "W": [
+     {
+      "od": 185,
+      "do": 225,
+      "typ": "morze"
+     }
+    ]
+   }
+  },
+  "920": {
+   "id": 920,
+   "nazwa": "Wschodni brzeg ogona II",
+   "nowa": true,
+   "gracz": false,
+   "x0": 540,
+   "y0": 434,
+   "szer": 60,
+   "wys": 40,
+   "x0_maski": 460,
+   "y0_maski": 374,
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 21,
+   "czesc": "ogon",
+   "atlas": [
+    810,
+    621
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 540,
+      "do": 552,
+      "typ": "sasiad",
+      "sasiad": 125,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 552,
+      "do": 600,
+      "typ": "sasiad",
+      "sasiad": 922,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "E": [
+     {
+      "od": 434,
+      "do": 474,
+      "typ": "morze"
+     }
+    ],
+    "S": [
+     {
+      "od": 540,
+      "do": 600,
+      "typ": "morze"
+     }
+    ],
+    "W": [
+     {
+      "od": 434,
+      "do": 474,
+      "typ": "sasiad",
+      "sasiad": 21,
+      "przejscia": [
+       {
+        "pos": 454,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "922": {
+   "id": 922,
+   "nazwa": "Wschodni brzeg ogona III",
+   "nowa": true,
+   "gracz": false,
+   "x0": 552,
+   "y0": 394,
+   "szer": 60,
+   "wys": 40,
+   "x0_maski": 472,
+   "y0_maski": 334,
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 125,
+   "czesc": "ogon",
+   "atlas": [
+    827,
+    564
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 552,
+      "do": 612,
+      "typ": "morze"
+     }
+    ],
+    "E": [
+     {
+      "od": 394,
+      "do": 434,
+      "typ": "morze"
+     }
+    ],
+    "S": [
+     {
+      "od": 552,
+      "do": 600,
+      "typ": "sasiad",
+      "sasiad": 920,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 600,
+      "do": 612,
+      "typ": "morze"
+     }
+    ],
+    "W": [
+     {
+      "od": 394,
+      "do": 434,
+      "typ": "sasiad",
+      "sasiad": 125,
+      "przejscia": [
+       {
+        "pos": 414,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "923": {
+   "id": 923,
+   "nazwa": "Cypel ogona II",
+   "nowa": true,
+   "gracz": false,
+   "x0": 624,
+   "y0": 376,
+   "szer": 60,
+   "wys": 40,
+   "x0_maski": 544,
+   "y0_maski": 316,
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 20,
+   "czesc": "ogon",
+   "atlas": [
+    930,
+    538
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 624,
+      "do": 684,
+      "typ": "sasiad",
+      "sasiad": 20,
+      "przejscia": [
+       {
+        "pos": 654,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "E": [
+     {
+      "od": 376,
+      "do": 408,
+      "typ": "sasiad",
+      "sasiad": 17,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 408,
+      "do": 416,
+      "typ": "morze"
+     }
+    ],
+    "S": [
+     {
+      "od": 624,
+      "do": 684,
+      "typ": "morze"
+     }
+    ],
+    "W": [
+     {
+      "od": 376,
+      "do": 416,
+      "typ": "morze"
+     }
+    ]
+   }
+  },
+  "930": {
+   "id": 930,
+   "nazwa": "Północny klif lewego skrzydła",
+   "nowa": true,
+   "gracz": false,
+   "x0": 278,
+   "y0": 64,
+   "szer": 120,
+   "wys": 80,
+   "x0_maski": 198,
+   "y0_maski": 4,
+   "opis": "klif z widokiem na morze albo plaża do chodzenia; ścieżka od rodzica, kilka drzew i skał",
+   "rodzic": 157,
+   "czesc": "lewe skrzydło",
+   "atlas": [
+    479,
+    121
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 278,
+      "do": 328,
+      "typ": "morze"
+     },
+     {
+      "od": 328,
+      "do": 388,
+      "typ": "sasiad",
+      "sasiad": 935,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 388,
+      "do": 398,
+      "typ": "sciana"
+     }
+    ],
+    "E": [
+     {
+      "od": 64,
+      "do": 144,
+      "typ": "sciana"
+     }
+    ],
+    "S": [
+     {
+      "od": 278,
+      "do": 282,
+      "typ": "morze"
+     },
+     {
+      "od": 282,
+      "do": 398,
+      "typ": "sasiad",
+      "sasiad": 157,
+      "przejscia": [
+       {
+        "pos": 340,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "W": [
+     {
+      "od": 64,
+      "do": 104,
+      "typ": "morze"
+     },
+     {
+      "od": 104,
+      "do": 144,
+      "typ": "sasiad",
+      "sasiad": 932,
+      "przejscia": [
+       {
+        "pos": 124,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "931": {
+   "id": 931,
+   "nazwa": "Grań nad szczytem",
+   "nowa": true,
+   "gracz": false,
+   "x0": 388,
+   "y0": 0,
+   "szer": 120,
+   "wys": 60,
+   "x0_maski": 308,
+   "y0_maski": -60,
+   "opis": "klif z widokiem na morze albo plaża do chodzenia; ścieżka od rodzica, kilka drzew i skał",
+   "rodzic": 175,
+   "czesc": "głowa",
+   "atlas": [
+    636,
+    15
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 388,
+      "do": 508,
+      "typ": "sciana"
+     }
+    ],
+    "E": [
+     {
+      "od": 0,
+      "do": 42,
+      "typ": "morze"
+     },
+     {
+      "od": 42,
+      "do": 60,
+      "typ": "sciana"
+     }
+    ],
+    "S": [
+     {
+      "od": 388,
+      "do": 404,
+      "typ": "sciana"
+     },
+     {
+      "od": 404,
+      "do": 508,
+      "typ": "sasiad",
+      "sasiad": 175,
+      "przejscia": [
+       {
+        "pos": 456,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "W": [
+     {
+      "od": 0,
+      "do": 24,
+      "typ": "morze"
+     },
+     {
+      "od": 24,
+      "do": 60,
+      "typ": "sasiad",
+      "sasiad": 935,
+      "przejscia": [
+       {
+        "pos": 42,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "932": {
+   "id": 932,
+   "nazwa": "Północny klif lewego skrzydła III",
+   "nowa": true,
+   "gracz": false,
+   "x0": 178,
+   "y0": 104,
+   "szer": 100,
+   "wys": 40,
+   "x0_maski": 98,
+   "y0_maski": 44,
+   "opis": "klif z widokiem na morze albo plaża do chodzenia; ścieżka od rodzica, kilka drzew i skał",
+   "rodzic": 930,
+   "czesc": "lewe skrzydło",
+   "atlas": [
+    321,
+    149
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 178,
+      "do": 278,
+      "typ": "morze"
+     }
+    ],
+    "E": [
+     {
+      "od": 104,
+      "do": 144,
+      "typ": "sasiad",
+      "sasiad": 930,
+      "przejscia": [
+       {
+        "pos": 124,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "S": [
+     {
+      "od": 178,
+      "do": 278,
+      "typ": "morze"
+     }
+    ],
+    "W": [
+     {
+      "od": 104,
+      "do": 144,
+      "typ": "morze"
+     }
+    ]
+   }
+  },
+  "933": {
+   "id": 933,
+   "nazwa": "Wschodni brzeg ogona",
+   "nowa": true,
+   "gracz": false,
+   "x0": 764,
+   "y0": 316,
+   "szer": 80,
+   "wys": 80,
+   "x0_maski": 684,
+   "y0_maski": 256,
+   "opis": "klif z widokiem na morze albo plaża do chodzenia; ścieżka od rodzica, kilka drzew i skał",
+   "rodzic": 168,
+   "czesc": "ogon",
+   "atlas": [
+    1144,
+    481
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 764,
+      "do": 844,
+      "typ": "sasiad",
+      "sasiad": 168,
+      "przejscia": [
+       {
+        "pos": 804,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "E": [
+     {
+      "od": 316,
+      "do": 396,
+      "typ": "morze"
+     }
+    ],
+    "S": [
+     {
+      "od": 764,
+      "do": 844,
+      "typ": "morze"
+     }
+    ],
+    "W": [
+     {
+      "od": 316,
+      "do": 396,
+      "typ": "sasiad",
+      "sasiad": 17,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ]
+   }
+  },
+  "934": {
+   "id": 934,
+   "nazwa": "Północny brzeg pól II",
+   "nowa": true,
+   "gracz": false,
+   "x0": 560,
+   "y0": 84,
+   "szer": 60,
+   "wys": 40,
+   "x0_maski": 480,
+   "y0_maski": 24,
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 120,
+   "czesc": "prawe skrzydło",
+   "atlas": [
+    839,
+    121
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 560,
+      "do": 620,
+      "typ": "morze"
+     }
+    ],
+    "E": [
+     {
+      "od": 84,
+      "do": 112,
+      "typ": "morze"
+     },
+     {
+      "od": 112,
+      "do": 124,
+      "typ": "sasiad",
+      "sasiad": 159,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "S": [
+     {
+      "od": 560,
+      "do": 620,
+      "typ": "sasiad",
+      "sasiad": 120,
+      "przejscia": [
+       {
+        "pos": 590,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "W": [
+     {
+      "od": 84,
+      "do": 120,
+      "typ": "sasiad",
+      "sasiad": 175,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 120,
+      "do": 124,
+      "typ": "sciana"
+     }
+    ]
+   }
+  },
+  "935": {
+   "id": 935,
+   "nazwa": "Północny klif lewego skrzydła V",
+   "nowa": true,
+   "gracz": false,
+   "x0": 328,
+   "y0": 24,
+   "szer": 60,
+   "wys": 40,
+   "x0_maski": 248,
+   "y0_maski": -36,
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 931,
+   "czesc": "lewe skrzydło",
+   "atlas": [
+    507,
+    35
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 328,
+      "do": 388,
+      "typ": "morze"
+     }
+    ],
+    "E": [
+     {
+      "od": 24,
+      "do": 60,
+      "typ": "sasiad",
+      "sasiad": 931,
+      "przejscia": [
+       {
+        "pos": 42,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 60,
+      "do": 64,
+      "typ": "sciana"
+     }
+    ],
+    "S": [
+     {
+      "od": 328,
+      "do": 388,
+      "typ": "sasiad",
+      "sasiad": 930,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "W": [
+     {
+      "od": 24,
+      "do": 64,
+      "typ": "morze"
+     }
+    ]
+   }
+  },
+  "936": {
+   "id": 936,
+   "nazwa": "Północny brzeg pól III",
+   "nowa": true,
+   "gracz": false,
+   "x0": 724,
+   "y0": 108,
+   "szer": 60,
+   "wys": 40,
+   "x0_maski": 644,
+   "y0_maski": 48,
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 159,
+   "czesc": "prawe skrzydło",
+   "atlas": [
+    1073,
+    155
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 724,
+      "do": 784,
+      "typ": "morze"
+     }
+    ],
+    "E": [
+     {
+      "od": 108,
+      "do": 148,
+      "typ": "morze"
+     }
+    ],
+    "S": [
+     {
+      "od": 724,
+      "do": 764,
+      "typ": "morze"
+     },
+     {
+      "od": 764,
+      "do": 784,
+      "typ": "sasiad",
+      "sasiad": 912,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "W": [
+     {
+      "od": 108,
+      "do": 112,
+      "typ": "morze"
+     },
+     {
+      "od": 112,
+      "do": 148,
+      "typ": "sasiad",
+      "sasiad": 159,
+      "przejscia": [
+       {
+        "pos": 130,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ]
+   }
+  },
+  "950": {
+   "id": 950,
+   "nazwa": "Zbocze pod Pustelnią",
+   "nowa": true,
+   "gracz": false,
+   "x0": 186,
+   "y0": 218,
+   "szer": 96,
+   "wys": 42,
+   "x0_maski": 106,
+   "y0_maski": 158,
+   "opis": "zbocze i skraj lasu pod Pustelnią, ścieżka od Pustelni w dół do puszczy; od zachodu lądowe przejście do lewego skrzydła",
+   "rodzic": 155,
+   "czesc": "lewe skrzydło",
+   "atlas": [
+    330,
+    314
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 186,
+      "do": 282,
+      "typ": "sasiad",
+      "sasiad": 155,
+      "przejscia": [
+       {
+        "pos": 199,
+        "droga": "Szlak Pustelni (Góry -> Urwisko -> Pustelnia)"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "E": [
+     {
+      "od": 218,
+      "do": 260,
+      "typ": "sciana"
+     }
+    ],
+    "S": [
+     {
+      "od": 186,
+      "do": 206,
+      "typ": "sasiad",
+      "sasiad": 165,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     },
+     {
+      "od": 206,
+      "do": 282,
+      "typ": "sasiad",
+      "sasiad": 162,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "W": [
+     {
+      "od": 218,
+      "do": 225,
+      "typ": "sasiad",
+      "sasiad": 910,
+      "przejscia": [
+       {
+        "pos": 224,
+        "droga": "Szlak Pustelni (Góry -> Urwisko -> Pustelnia)"
+       }
+      ],
+      "rzeka": []
+     },
+     {
+      "od": 225,
+      "do": 252,
+      "typ": "sciana"
+     },
+     {
+      "od": 252,
+      "do": 260,
+      "typ": "morze"
+     }
+    ]
+   }
+  },
+  "951": {
+   "id": 951,
+   "nazwa": "Zachodnie klify",
+   "nowa": true,
+   "gracz": false,
+   "x0": 146,
+   "y0": 320,
+   "szer": 60,
+   "wys": 40,
+   "x0_maski": 66,
+   "y0_maski": 260,
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 162,
+   "czesc": "lewe skrzydło",
+   "atlas": [
+    247,
+    458
+   ],
+   "krawedzie": {
+    "N": [
+     {
+      "od": 146,
+      "do": 206,
+      "typ": "sasiad",
+      "sasiad": 165,
+      "przejscia": [],
+      "rzeka": [],
+      "uwaga": "wspolna krawedz bez przejscia: sciana (klif / geste drzewa / gory)"
+     }
+    ],
+    "E": [
+     {
+      "od": 320,
+      "do": 360,
+      "typ": "sasiad",
+      "sasiad": 162,
+      "przejscia": [
+       {
+        "pos": 340,
+        "droga": "Ścieżka brzegowa"
+       }
+      ],
+      "rzeka": []
+     }
+    ],
+    "S": [
+     {
+      "od": 146,
+      "do": 206,
+      "typ": "morze"
+     }
+    ],
+    "W": [
+     {
+      "od": 320,
+      "do": 360,
+      "typ": "morze"
+     }
+    ]
+   }
+  }
+ },
+ "drogi": {
+  "Trakt portowy (brama południowa miasta -> nabrzeże Przystani)": [
+   [
+    454.0,
+    346.0
+   ],
+   [
+    453.96875,
+    346.15625
+   ],
+   [
+    453.90625,
+    346.46875
+   ],
+   [
+    453.8125,
+    346.9375
+   ],
+   [
+    453.6875,
+    347.5625
+   ],
+   [
+    453.53125,
+    348.34375
+   ],
+   [
+    453.34375,
+    349.28125
+   ],
+   [
+    453.125,
+    350.375
+   ],
+   [
+    452.875,
+    351.625
+   ],
+   [
+    452.546875,
+    352.828125
+   ],
+   [
+    452.140625,
+    353.984375
+   ],
+   [
+    451.65625,
+    355.09375
+   ],
+   [
+    451.09375,
+    356.15625
+   ],
+   [
+    450.453125,
+    357.171875
+   ],
+   [
+    449.734375,
+    358.140625
+   ],
+   [
+    448.9375,
+    359.0625
+   ],
+   [
+    448.0625,
+    359.9375
+   ],
+   [
+    447.21875,
+    360.828125
+   ],
+   [
+    446.40625,
+    361.734375
+   ],
+   [
+    445.625,
+    362.65625
+   ],
+   [
+    444.875,
+    363.59375
+   ],
+   [
+    444.15625,
+    364.546875
+   ],
+   [
+    443.46875,
+    365.515625
+   ],
+   [
+    442.8125,
+    366.5
+   ],
+   [
+    442.1875,
+    367.5
+   ],
+   [
+    441.640625,
+    368.375
+   ],
+   [
+    441.171875,
+    369.125
+   ],
+   [
+    440.78125,
+    369.75
+   ],
+   [
+    440.46875,
+    370.25
+   ],
+   [
+    440.234375,
+    370.625
+   ],
+   [
+    440.078125,
+    370.875
+   ],
+   [
+    440.0,
+    371.0
+   ]
+  ],
+  "Droga leśna (nabrzeże -> Leśna droga)": [
+   [
+    441.0,
+    366.0
+   ],
+   [
+    441.015625,
+    366.53125
+   ],
+   [
+    441.046875,
+    367.59375
+   ],
+   [
+    441.09375,
+    369.1875
+   ],
+   [
+    441.15625,
+    371.3125
+   ],
+   [
+    441.234375,
+    373.96875
+   ],
+   [
+    441.328125,
+    377.15625
+   ],
+   [
+    441.4375,
+    380.875
+   ],
+   [
+    441.5625,
+    385.125
+   ],
+   [
+    441.765625,
+    389.34375
+   ],
+   [
+    442.046875,
+    393.53125
+   ],
+   [
+    442.40625,
+    397.6875
+   ],
+   [
+    442.84375,
+    401.8125
+   ],
+   [
+    443.359375,
+    405.90625
+   ],
+   [
+    443.953125,
+    409.96875
+   ],
+   [
+    444.625,
+    414.0
+   ],
+   [
+    445.375,
+    418.0
+   ],
+   [
+    446.21875,
+    421.8125
+   ],
+   [
+    447.15625,
+    425.4375
+   ],
+   [
+    448.1875,
+    428.875
+   ],
+   [
+    449.3125,
+    432.125
+   ],
+   [
+    450.53125,
+    435.1875
+   ],
+   [
+    451.84375,
+    438.0625
+   ],
+   [
+    453.25,
+    440.75
+   ],
+   [
+    454.75,
+    443.25
+   ],
+   [
+    456.375,
+    445.625
+   ],
+   [
+    458.125,
+    447.875
+   ],
+   [
+    460.0,
+    450.0
+   ],
+   [
+    462.0,
+    452.0
+   ],
+   [
+    464.125,
+    453.875
+   ],
+   [
+    466.375,
+    455.625
+   ],
+   [
+    468.75,
+    457.25
+   ],
+   [
+    471.25,
+    458.75
+   ],
+   [
+    473.4375,
+    460.0625
+   ],
+   [
+    475.3125,
+    461.1875
+   ],
+   [
+    476.875,
+    462.125
+   ],
+   [
+    478.125,
+    462.875
+   ],
+   [
+    479.0625,
+    463.4375
+   ],
+   [
+    479.6875,
+    463.8125
+   ],
+   [
+    480.0,
+    464.0
+   ]
+  ],
+  "Droga do dworu i do pola (brama wschodnia -> dwór -> Kruczy Jar -> Skraj lasu)": [
+   [
+    516.0,
+    266.0
+   ],
+   [
+    516.6875,
+    266.0
+   ],
+   [
+    518.0625,
+    266.0
+   ],
+   [
+    520.125,
+    266.0
+   ],
+   [
+    522.875,
+    266.0
+   ],
+   [
+    526.3125,
+    266.0
+   ],
+   [
+    530.4375,
+    266.0
+   ],
+   [
+    535.25,
+    266.0
+   ],
+   [
+    540.75,
+    266.0
+   ],
+   [
+    546.25,
+    266.015625
+   ],
+   [
+    551.75,
+    266.046875
+   ],
+   [
+    557.25,
+    266.09375
+   ],
+   [
+    562.75,
+    266.15625
+   ],
+   [
+    568.25,
+    266.234375
+   ],
+   [
+    573.75,
+    266.328125
+   ],
+   [
+    579.25,
+    266.4375
+   ],
+   [
+    584.75,
+    266.5625
+   ],
+   [
+    590.8125,
+    266.640625
+   ],
+   [
+    597.4375,
+    266.671875
+   ],
+   [
+    604.625,
+    266.65625
+   ],
+   [
+    612.375,
+    266.59375
+   ],
+   [
+    620.6875,
+    266.484375
+   ],
+   [
+    629.5625,
+    266.328125
+   ],
+   [
+    639.0,
+    266.125
+   ],
+   [
+    649.0,
+    265.875
+   ],
+   [
+    658.46875,
+    265.703125
+   ],
+   [
+    667.40625,
+    265.609375
+   ],
+   [
+    675.8125,
+    265.59375
+   ],
+   [
+    683.6875,
+    265.65625
+   ],
+   [
+    691.03125,
+    265.796875
+   ],
+   [
+    697.84375,
+    266.015625
+   ],
+   [
+    704.125,
+    266.3125
+   ],
+   [
+    709.875,
+    266.6875
+   ],
+   [
+    714.90625,
+    267.015625
+   ],
+   [
+    719.21875,
+    267.296875
+   ],
+   [
+    722.8125,
+    267.53125
+   ],
+   [
+    725.6875,
+    267.71875
+   ],
+   [
+    727.84375,
+    267.859375
+   ],
+   [
+    729.28125,
+    267.953125
+   ],
+   [
+    730.0,
+    268.0
+   ]
+  ],
+  "Droga pola dziadka (Kruczy Jar -> Dom dziadka)": [
+   [
+    613.0,
+    275.0
+   ],
+   [
+    613.0,
+    275.578125
+   ],
+   [
+    613.0,
+    276.734375
+   ],
+   [
+    613.0,
+    278.46875
+   ],
+   [
+    613.0,
+    280.78125
+   ],
+   [
+    613.0,
+    283.671875
+   ],
+   [
+    613.0,
+    287.140625
+   ],
+   [
+    613.0,
+    291.1875
+   ],
+   [
+    613.0,
+    295.8125
+   ],
+   [
+    613.09375,
+    299.984375
+   ],
+   [
+    613.28125,
+    303.703125
+   ],
+   [
+    613.5625,
+    306.96875
+   ],
+   [
+    613.9375,
+    309.78125
+   ],
+   [
+    614.40625,
+    312.140625
+   ],
+   [
+    614.96875,
+    314.046875
+   ],
+   [
+    615.625,
+    315.5
+   ],
+   [
+    616.375,
+    316.5
+   ],
+   [
+    617.03125,
+    317.375
+   ],
+   [
+    617.59375,
+    318.125
+   ],
+   [
+    618.0625,
+    318.75
+   ],
+   [
+    618.4375,
+    319.25
+   ],
+   [
+    618.71875,
+    319.625
+   ],
+   [
+    618.90625,
+    319.875
+   ],
+   [
+    619.0,
+    320.0
+   ]
+  ],
+  "Droga Kruczego Jaru (Łąka#1 -> Kruczy Jar)": [
+   [
+    633.0,
+    220.0
+   ],
+   [
+    633.0,
+    220.5
+   ],
+   [
+    633.0,
+    221.5
+   ],
+   [
+    633.0,
+    223.0
+   ],
+   [
+    633.0,
+    225.0
+   ],
+   [
+    633.0,
+    227.5
+   ],
+   [
+    633.0,
+    230.5
+   ],
+   [
+    633.0,
+    234.0
+   ],
+   [
+    633.0,
+    238.0
+   ],
+   [
+    633.0,
+    241.859375
+   ],
+   [
+    633.0,
+    245.578125
+   ],
+   [
+    633.0,
+    249.15625
+   ],
+   [
+    633.0,
+    252.59375
+   ],
+   [
+    633.0,
+    255.890625
+   ],
+   [
+    633.0,
+    259.046875
+   ],
+   [
+    633.0,
+    262.0625
+   ],
+   [
+    633.0,
+    264.9375
+   ],
+   [
+    633.0,
+    267.453125
+   ],
+   [
+    633.0,
+    269.609375
+   ],
+   [
+    633.0,
+    271.40625
+   ],
+   [
+    633.0,
+    272.84375
+   ],
+   [
+    633.0,
+    273.921875
+   ],
+   [
+    633.0,
+    274.640625
+   ],
+   [
+    633.0,
+    275.0
+   ]
+  ],
+  "Droga polna (miasto -> Polna droga -> Osada)": [
+   [
+    516.0,
+    234.0
+   ],
+   [
+    516.6875,
+    233.96875
+   ],
+   [
+    518.0625,
+    233.90625
+   ],
+   [
+    520.125,
+    233.8125
+   ],
+   [
+    522.875,
+    233.6875
+   ],
+   [
+    526.3125,
+    233.53125
+   ],
+   [
+    530.4375,
+    233.34375
+   ],
+   [
+    535.25,
+    233.125
+   ],
+   [
+    540.75,
+    232.875
+   ],
+   [
+    545.71875,
+    232.3125
+   ],
+   [
+    550.15625,
+    231.4375
+   ],
+   [
+    554.0625,
+    230.25
+   ],
+   [
+    557.4375,
+    228.75
+   ],
+   [
+    560.28125,
+    226.9375
+   ],
+   [
+    562.59375,
+    224.8125
+   ],
+   [
+    564.375,
+    222.375
+   ],
+   [
+    565.625,
+    219.625
+   ],
+   [
+    566.71875,
+    216.4375
+   ],
+   [
+    567.65625,
+    212.8125
+   ],
+   [
+    568.4375,
+    208.75
+   ],
+   [
+    569.0625,
+    204.25
+   ],
+   [
+    569.53125,
+    199.3125
+   ],
+   [
+    569.84375,
+    193.9375
+   ],
+   [
+    570.0,
+    188.125
+   ],
+   [
+    570.0,
+    181.875
+   ],
+   [
+    570.0,
+    176.40625
+   ],
+   [
+    570.0,
+    171.71875
+   ],
+   [
+    570.0,
+    167.8125
+   ],
+   [
+    570.0,
+    164.6875
+   ],
+   [
+    570.0,
+    162.34375
+   ],
+   [
+    570.0,
+    160.78125
+   ],
+   [
+    570.0,
+    160.0
+   ]
+  ],
+  "Droga ku Spalonej zagrodzie (Łąka#1 -> pola -> zagroda)": [
+   [
+    650.0,
+    230.0
+   ],
+   [
+    650.609375,
+    229.96875
+   ],
+   [
+    651.828125,
+    229.90625
+   ],
+   [
+    653.65625,
+    229.8125
+   ],
+   [
+    656.09375,
+    229.6875
+   ],
+   [
+    659.140625,
+    229.53125
+   ],
+   [
+    662.796875,
+    229.34375
+   ],
+   [
+    667.0625,
+    229.125
+   ],
+   [
+    671.9375,
+    228.875
+   ],
+   [
+    676.84375,
+    228.71875
+   ],
+   [
+    681.78125,
+    228.65625
+   ],
+   [
+    686.75,
+    228.6875
+   ],
+   [
+    691.75,
+    228.8125
+   ],
+   [
+    696.78125,
+    229.03125
+   ],
+   [
+    701.84375,
+    229.34375
+   ],
+   [
+    706.9375,
+    229.75
+   ],
+   [
+    712.0625,
+    230.25
+   ],
+   [
+    717.078125,
+    230.75
+   ],
+   [
+    721.984375,
+    231.25
+   ],
+   [
+    726.78125,
+    231.75
+   ],
+   [
+    731.46875,
+    232.25
+   ],
+   [
+    736.046875,
+    232.75
+   ],
+   [
+    740.515625,
+    233.25
+   ],
+   [
+    744.875,
+    233.75
+   ],
+   [
+    749.125,
+    234.25
+   ],
+   [
+    753.296875,
+    234.40625
+   ],
+   [
+    757.390625,
+    234.21875
+   ],
+   [
+    761.40625,
+    233.6875
+   ],
+   [
+    765.34375,
+    232.8125
+   ],
+   [
+    769.203125,
+    231.59375
+   ],
+   [
+    772.984375,
+    230.03125
+   ],
+   [
+    776.6875,
+    228.125
+   ],
+   [
+    780.3125,
+    225.875
+   ],
+   [
+    783.484375,
+    223.90625
+   ],
+   [
+    786.203125,
+    222.21875
+   ],
+   [
+    788.46875,
+    220.8125
+   ],
+   [
+    790.28125,
+    219.6875
+   ],
+   [
+    791.640625,
+    218.84375
+   ],
+   [
+    792.546875,
+    218.28125
+   ],
+   [
+    793.0,
+    218.0
+   ]
+  ],
+  "Trakt zachodni (miasto -> most nad korytem -> Podgrodzie -> Garnizon -> Wrak)": [
+   [
+    430.0,
+    266.0
+   ],
+   [
+    429.828125,
+    266.0
+   ],
+   [
+    429.484375,
+    266.0
+   ],
+   [
+    428.96875,
+    266.0
+   ],
+   [
+    428.28125,
+    266.0
+   ],
+   [
+    427.421875,
+    266.0
+   ],
+   [
+    426.390625,
+    266.0
+   ],
+   [
+    425.1875,
+    266.0
+   ],
+   [
+    423.8125,
+    266.0
+   ],
+   [
+    422.40625,
+    266.03125
+   ],
+   [
+    420.96875,
+    266.09375
+   ],
+   [
+    419.5,
+    266.1875
+   ],
+   [
+    418.0,
+    266.3125
+   ],
+   [
+    416.46875,
+    266.46875
+   ],
+   [
+    414.90625,
+    266.65625
+   ],
+   [
+    413.3125,
+    266.875
+   ],
+   [
+    411.6875,
+    267.125
+   ],
+   [
+    409.859375,
+    267.5625
+   ],
+   [
+    407.828125,
+    268.1875
+   ],
+   [
+    405.59375,
+    269.0
+   ],
+   [
+    403.15625,
+    270.0
+   ],
+   [
+    400.515625,
+    271.1875
+   ],
+   [
+    397.671875,
+    272.5625
+   ],
+   [
+    394.625,
+    274.125
+   ],
+   [
+    391.375,
+    275.875
+   ],
+   [
+    387.5625,
+    277.59375
+   ],
+   [
+    383.1875,
+    279.28125
+   ],
+   [
+    378.25,
+    280.9375
+   ],
+   [
+    372.75,
+    282.5625
+   ],
+   [
+    366.6875,
+    284.15625
+   ],
+   [
+    360.0625,
+    285.71875
+   ],
+   [
+    352.875,
+    287.25
+   ],
+   [
+    345.125,
+    288.75
+   ],
+   [
+    337.59375,
+    290.03125
+   ],
+   [
+    330.28125,
+    291.09375
+   ],
+   [
+    323.1875,
+    291.9375
+   ],
+   [
+    316.3125,
+    292.5625
+   ],
+   [
+    309.65625,
+    292.96875
+   ],
+   [
+    303.21875,
+    293.15625
+   ],
+   [
+    297.0,
+    293.125
+   ],
+   [
+    291.0,
+    292.875
+   ],
+   [
+    285.28125,
+    292.5625
+   ],
+   [
+    279.84375,
+    292.1875
+   ],
+   [
+    274.6875,
+    291.75
+   ],
+   [
+    269.8125,
+    291.25
+   ],
+   [
+    265.21875,
+    290.6875
+   ],
+   [
+    260.90625,
+    290.0625
+   ],
+   [
+    256.875,
+    289.375
+   ],
+   [
+    253.125,
+    288.625
+   ],
+   [
+    249.578125,
+    287.921875
+   ],
+   [
+    246.234375,
+    287.265625
+   ],
+   [
+    243.09375,
+    286.65625
+   ],
+   [
+    240.15625,
+    286.09375
+   ],
+   [
+    237.421875,
+    285.578125
+   ],
+   [
+    234.890625,
+    285.109375
+   ],
+   [
+    232.5625,
+    284.6875
+   ],
+   [
+    230.4375,
+    284.3125
+   ],
+   [
+    228.578125,
+    283.984375
+   ],
+   [
+    226.984375,
+    283.703125
+   ],
+   [
+    225.65625,
+    283.46875
+   ],
+   [
+    224.59375,
+    283.28125
+   ],
+   [
+    223.796875,
+    283.140625
+   ],
+   [
+    223.265625,
+    283.046875
+   ],
+   [
+    223.0,
+    283.0
+   ]
+  ],
+  "Szlak Pustelni (Góry -> Urwisko -> Pustelnia)": [
+   [
+    412.0,
+    159.0
+   ],
+   [
+    411.03125,
+    159.171875
+   ],
+   [
+    409.09375,
+    159.515625
+   ],
+   [
+    406.1875,
+    160.03125
+   ],
+   [
+    402.3125,
+    160.71875
+   ],
+   [
+    397.46875,
+    161.578125
+   ],
+   [
+    391.65625,
+    162.609375
+   ],
+   [
+    384.875,
+    163.8125
+   ],
+   [
+    377.125,
+    165.1875
+   ],
+   [
+    369.28125,
+    166.546875
+   ],
+   [
+    361.34375,
+    167.890625
+   ],
+   [
+    353.3125,
+    169.21875
+   ],
+   [
+    345.1875,
+    170.53125
+   ],
+   [
+    336.96875,
+    171.828125
+   ],
+   [
+    328.65625,
+    173.109375
+   ],
+   [
+    320.25,
+    174.375
+   ],
+   [
+    311.75,
+    175.625
+   ],
+   [
+    303.5,
+    176.875
+   ],
+   [
+    295.5,
+    178.125
+   ],
+   [
+    287.75,
+    179.375
+   ],
+   [
+    280.25,
+    180.625
+   ],
+   [
+    273.0,
+    181.875
+   ],
+   [
+    266.0,
+    183.125
+   ],
+   [
+    259.25,
+    184.375
+   ],
+   [
+    252.75,
+    185.625
+   ],
+   [
+    246.6875,
+    186.71875
+   ],
+   [
+    241.0625,
+    187.65625
+   ],
+   [
+    235.875,
+    188.4375
+   ],
+   [
+    231.125,
+    189.0625
+   ],
+   [
+    226.8125,
+    189.53125
+   ],
+   [
+    222.9375,
+    189.84375
+   ],
+   [
+    219.5,
+    190.0
+   ],
+   [
+    216.5,
+    190.0
+   ],
+   [
+    213.84375,
+    190.28125
+   ],
+   [
+    211.53125,
+    190.84375
+   ],
+   [
+    209.5625,
+    191.6875
+   ],
+   [
+    207.9375,
+    192.8125
+   ],
+   [
+    206.65625,
+    194.21875
+   ],
+   [
+    205.71875,
+    195.90625
+   ],
+   [
+    205.125,
+    197.875
+   ],
+   [
+    204.875,
+    200.125
+   ],
+   [
+    204.59375,
+    202.21875
+   ],
+   [
+    204.28125,
+    204.15625
+   ],
+   [
+    203.9375,
+    205.9375
+   ],
+   [
+    203.5625,
+    207.5625
+   ],
+   [
+    203.15625,
+    209.03125
+   ],
+   [
+    202.71875,
+    210.34375
+   ],
+   [
+    202.25,
+    211.5
+   ],
+   [
+    201.75,
+    212.5
+   ],
+   [
+    201.25,
+    213.46875
+   ],
+   [
+    200.75,
+    214.40625
+   ],
+   [
+    200.25,
+    215.3125
+   ],
+   [
+    199.75,
+    216.1875
+   ],
+   [
+    199.25,
+    217.03125
+   ],
+   [
+    198.75,
+    217.84375
+   ],
+   [
+    198.25,
+    218.625
+   ],
+   [
+    197.75,
+    219.375
+   ],
+   [
+    197.15625,
+    220.0625
+   ],
+   [
+    196.46875,
+    220.6875
+   ],
+   [
+    195.6875,
+    221.25
+   ],
+   [
+    194.8125,
+    221.75
+   ],
+   [
+    193.84375,
+    222.1875
+   ],
+   [
+    192.78125,
+    222.5625
+   ],
+   [
+    191.625,
+    222.875
+   ],
+   [
+    190.375,
+    223.125
+   ],
+   [
+    189.0625,
+    223.375
+   ],
+   [
+    187.6875,
+    223.625
+   ],
+   [
+    186.25,
+    223.875
+   ],
+   [
+    184.75,
+    224.125
+   ],
+   [
+    183.1875,
+    224.375
+   ],
+   [
+    181.5625,
+    224.625
+   ],
+   [
+    179.875,
+    224.875
+   ],
+   [
+    178.125,
+    225.125
+   ],
+   [
+    176.59375,
+    225.34375
+   ],
+   [
+    175.28125,
+    225.53125
+   ],
+   [
+    174.1875,
+    225.6875
+   ],
+   [
+    173.3125,
+    225.8125
+   ],
+   [
+    172.65625,
+    225.90625
+   ],
+   [
+    172.21875,
+    225.96875
+   ],
+   [
+    172.0,
+    226.0
+   ]
+  ],
+  "Szlak latarni (Góry -> Osada -> Latarnia)": [
+   [
+    516.0,
+    132.0
+   ],
+   [
+    516.84375,
+    132.28125
+   ],
+   [
+    518.53125,
+    132.84375
+   ],
+   [
+    521.0625,
+    133.6875
+   ],
+   [
+    524.4375,
+    134.8125
+   ],
+   [
+    528.65625,
+    136.21875
+   ],
+   [
+    533.71875,
+    137.90625
+   ],
+   [
+    539.625,
+    139.875
+   ],
+   [
+    546.375,
+    142.125
+   ],
+   [
+    553.0625,
+    144.125
+   ],
+   [
+    559.6875,
+    145.875
+   ],
+   [
+    566.25,
+    147.375
+   ],
+   [
+    572.75,
+    148.625
+   ],
+   [
+    579.1875,
+    149.625
+   ],
+   [
+    585.5625,
+    150.375
+   ],
+   [
+    591.875,
+    150.875
+   ],
+   [
+    598.125,
+    151.125
+   ],
+   [
+    604.375,
+    151.46875
+   ],
+   [
+    610.625,
+    151.90625
+   ],
+   [
+    616.875,
+    152.4375
+   ],
+   [
+    623.125,
+    153.0625
+   ],
+   [
+    629.375,
+    153.78125
+   ],
+   [
+    635.625,
+    154.59375
+   ],
+   [
+    641.875,
+    155.5
+   ],
+   [
+    648.125,
+    156.5
+   ],
+   [
+    653.15625,
+    156.8125
+   ],
+   [
+    656.96875,
+    156.4375
+   ],
+   [
+    659.5625,
+    155.375
+   ],
+   [
+    660.9375,
+    153.625
+   ],
+   [
+    661.09375,
+    151.1875
+   ],
+   [
+    660.03125,
+    148.0625
+   ],
+   [
+    657.75,
+    144.25
+   ],
+   [
+    654.25,
+    139.75
+   ],
+   [
+    651.1875,
+    135.8125
+   ],
+   [
+    648.5625,
+    132.4375
+   ],
+   [
+    646.375,
+    129.625
+   ],
+   [
+    644.625,
+    127.375
+   ],
+   [
+    643.3125,
+    125.6875
+   ],
+   [
+    642.4375,
+    124.5625
+   ],
+   [
+    642.0,
+    124.0
+   ]
+  ],
+  "Droga łąk (Skraj lasu -> Łąka#2)": [
+   [
+    724.0,
+    288.0
+   ],
+   [
+    724.0,
+    288.375
+   ],
+   [
+    724.0,
+    289.125
+   ],
+   [
+    724.0,
+    290.25
+   ],
+   [
+    724.0,
+    291.75
+   ],
+   [
+    724.0,
+    293.625
+   ],
+   [
+    724.0,
+    295.875
+   ],
+   [
+    724.0,
+    298.5
+   ],
+   [
+    724.0,
+    301.5
+   ],
+   [
+    723.96875,
+    304.71875
+   ],
+   [
+    723.90625,
+    308.15625
+   ],
+   [
+    723.8125,
+    311.8125
+   ],
+   [
+    723.6875,
+    315.6875
+   ],
+   [
+    723.53125,
+    319.78125
+   ],
+   [
+    723.34375,
+    324.09375
+   ],
+   [
+    723.125,
+    328.625
+   ],
+   [
+    722.875,
+    333.375
+   ],
+   [
+    722.65625,
+    337.53125
+   ],
+   [
+    722.46875,
+    341.09375
+   ],
+   [
+    722.3125,
+    344.0625
+   ],
+   [
+    722.1875,
+    346.4375
+   ],
+   [
+    722.09375,
+    348.21875
+   ],
+   [
+    722.03125,
+    349.40625
+   ],
+   [
+    722.0,
+    350.0
+   ]
+  ],
+  "Szlak górski (północna brama miasta -> Góry -> Orla Grań)": [
+   [
+    445.0,
+    224.0
+   ],
+   [
+    445.046875,
+    223.625
+   ],
+   [
+    445.140625,
+    222.875
+   ],
+   [
+    445.28125,
+    221.75
+   ],
+   [
+    445.46875,
+    220.25
+   ],
+   [
+    445.703125,
+    218.375
+   ],
+   [
+    445.984375,
+    216.125
+   ],
+   [
+    446.3125,
+    213.5
+   ],
+   [
+    446.6875,
+    210.5
+   ],
+   [
+    447.140625,
+    207.4375
+   ],
+   [
+    447.671875,
+    204.3125
+   ],
+   [
+    448.28125,
+    201.125
+   ],
+   [
+    448.96875,
+    197.875
+   ],
+   [
+    449.734375,
+    194.5625
+   ],
+   [
+    450.578125,
+    191.1875
+   ],
+   [
+    451.5,
+    187.75
+   ],
+   [
+    452.5,
+    184.25
+   ],
+   [
+    453.515625,
+    180.8125
+   ],
+   [
+    454.546875,
+    177.4375
+   ],
+   [
+    455.59375,
+    174.125
+   ],
+   [
+    456.65625,
+    170.875
+   ],
+   [
+    457.734375,
+    167.6875
+   ],
+   [
+    458.828125,
+    164.5625
+   ],
+   [
+    459.9375,
+    161.5
+   ],
+   [
+    461.0625,
+    158.5
+   ],
+   [
+    462.0625,
+    155.59375
+   ],
+   [
+    462.9375,
+    152.78125
+   ],
+   [
+    463.6875,
+    150.0625
+   ],
+   [
+    464.3125,
+    147.4375
+   ],
+   [
+    464.8125,
+    144.90625
+   ],
+   [
+    465.1875,
+    142.46875
+   ],
+   [
+    465.4375,
+    140.125
+   ],
+   [
+    465.5625,
+    137.875
+   ],
+   [
+    465.609375,
+    135.4375
+   ],
+   [
+    465.578125,
+    132.8125
+   ],
+   [
+    465.46875,
+    130.0
+   ],
+   [
+    465.28125,
+    127.0
+   ],
+   [
+    465.015625,
+    123.8125
+   ],
+   [
+    464.671875,
+    120.4375
+   ],
+   [
+    464.25,
+    116.875
+   ],
+   [
+    463.75,
+    113.125
+   ],
+   [
+    463.265625,
+    109.40625
+   ],
+   [
+    462.796875,
+    105.71875
+   ],
+   [
+    462.34375,
+    102.0625
+   ],
+   [
+    461.90625,
+    98.4375
+   ],
+   [
+    461.484375,
+    94.84375
+   ],
+   [
+    461.078125,
+    91.28125
+   ],
+   [
+    460.6875,
+    87.75
+   ],
+   [
+    460.3125,
+    84.25
+   ],
+   [
+    459.984375,
+    81.1875
+   ],
+   [
+    459.703125,
+    78.5625
+   ],
+   [
+    459.46875,
+    76.375
+   ],
+   [
+    459.28125,
+    74.625
+   ],
+   [
+    459.140625,
+    73.3125
+   ],
+   [
+    459.046875,
+    72.4375
+   ],
+   [
+    459.0,
+    72.0
+   ]
+  ]
+ },
+ "suche_koryto": [
+  [
+   [
+    452.0,
+    78.0
+   ],
+   [
+    452.0625,
+    78.5
+   ],
+   [
+    452.1875,
+    79.5
+   ],
+   [
+    452.375,
+    81.0
+   ],
+   [
+    452.625,
+    83.0
+   ],
+   [
+    452.9375,
+    85.5
+   ],
+   [
+    453.3125,
+    88.5
+   ],
+   [
+    453.75,
+    92.0
+   ],
+   [
+    454.25,
+    96.0
+   ],
+   [
+    454.8125,
+    100.125
+   ],
+   [
+    455.4375,
+    104.375
+   ],
+   [
+    456.125,
+    108.75
+   ],
+   [
+    456.875,
+    113.25
+   ],
+   [
+    457.6875,
+    117.875
+   ],
+   [
+    458.5625,
+    122.625
+   ],
+   [
+    459.5,
+    127.5
+   ],
+   [
+    460.5,
+    132.5
+   ],
+   [
+    461.5,
+    137.375
+   ],
+   [
+    462.5,
+    142.125
+   ],
+   [
+    463.5,
+    146.75
+   ],
+   [
+    464.5,
+    151.25
+   ],
+   [
+    465.5,
+    155.625
+   ],
+   [
+    466.5,
+    159.875
+   ],
+   [
+    467.5,
+    164.0
+   ],
+   [
+    468.5,
+    168.0
+   ],
+   [
+    469.40625,
+    171.90625
+   ],
+   [
+    470.21875,
+    175.71875
+   ],
+   [
+    470.9375,
+    179.4375
+   ],
+   [
+    471.5625,
+    183.0625
+   ],
+   [
+    472.09375,
+    186.59375
+   ],
+   [
+    472.53125,
+    190.03125
+   ],
+   [
+    472.875,
+    193.375
+   ],
+   [
+    473.125,
+    196.625
+   ],
+   [
+    473.34375,
+    199.46875
+   ],
+   [
+    473.53125,
+    201.90625
+   ],
+   [
+    473.6875,
+    203.9375
+   ],
+   [
+    473.8125,
+    205.5625
+   ],
+   [
+    473.90625,
+    206.78125
+   ],
+   [
+    473.96875,
+    207.59375
+   ],
+   [
+    474.0,
+    208.0
+   ]
+  ],
+  [
+   [
+    413.0,
+    253.0
+   ],
+   [
+    413.0,
+    253.34375
+   ],
+   [
+    413.0,
+    254.03125
+   ],
+   [
+    413.0,
+    255.0625
+   ],
+   [
+    413.0,
+    256.4375
+   ],
+   [
+    413.0,
+    258.15625
+   ],
+   [
+    413.0,
+    260.21875
+   ],
+   [
+    413.0,
+    262.625
+   ],
+   [
+    413.0,
+    265.375
+   ],
+   [
+    413.0,
+    268.25
+   ],
+   [
+    413.0,
+    271.25
+   ],
+   [
+    413.0,
+    274.375
+   ],
+   [
+    413.0,
+    277.625
+   ],
+   [
+    413.0,
+    281.0
+   ],
+   [
+    413.0,
+    284.5
+   ],
+   [
+    413.0,
+    288.125
+   ],
+   [
+    413.0,
+    291.875
+   ],
+   [
+    413.015625,
+    295.625
+   ],
+   [
+    413.046875,
+    299.375
+   ],
+   [
+    413.09375,
+    303.125
+   ],
+   [
+    413.15625,
+    306.875
+   ],
+   [
+    413.234375,
+    310.625
+   ],
+   [
+    413.328125,
+    314.375
+   ],
+   [
+    413.4375,
+    318.125
+   ],
+   [
+    413.5625,
+    321.875
+   ],
+   [
+    413.734375,
+    325.421875
+   ],
+   [
+    413.953125,
+    328.765625
+   ],
+   [
+    414.21875,
+    331.90625
+   ],
+   [
+    414.53125,
+    334.84375
+   ],
+   [
+    414.890625,
+    337.578125
+   ],
+   [
+    415.296875,
+    340.109375
+   ],
+   [
+    415.75,
+    342.4375
+   ],
+   [
+    416.25,
+    344.5625
+   ],
+   [
+    416.796875,
+    346.53125
+   ],
+   [
+    417.390625,
+    348.34375
+   ],
+   [
+    418.03125,
+    350.0
+   ],
+   [
+    418.71875,
+    351.5
+   ],
+   [
+    419.453125,
+    352.84375
+   ],
+   [
+    420.234375,
+    354.03125
+   ],
+   [
+    421.0625,
+    355.0625
+   ],
+   [
+    421.9375,
+    355.9375
+   ],
+   [
+    422.8125,
+    356.71875
+   ],
+   [
+    423.6875,
+    357.40625
+   ],
+   [
+    424.5625,
+    358.0
+   ],
+   [
+    425.4375,
+    358.5
+   ],
+   [
+    426.3125,
+    358.90625
+   ],
+   [
+    427.1875,
+    359.21875
+   ],
+   [
+    428.0625,
+    359.4375
+   ],
+   [
+    428.9375,
+    359.5625
+   ],
+   [
+    429.703125,
+    359.671875
+   ],
+   [
+    430.359375,
+    359.765625
+   ],
+   [
+    430.90625,
+    359.84375
+   ],
+   [
+    431.34375,
+    359.90625
+   ],
+   [
+    431.671875,
+    359.953125
+   ],
+   [
+    431.890625,
+    359.984375
+   ],
+   [
+    432.0,
+    360.0
+   ]
+  ]
+ ],
+ "suche_koryto_wlot": [
+  474,
+  208
+ ],
+ "suche_koryto_wylot": [
+  413,
+  253
+ ],
+ "opis_koryta": "Suche koryto rzeki, bez wody: popękane błoto, otoczaki, suche trzciny przy skarpach. Rzeka znika pod wzgorzem zamkowym (wlot w Gorach) i wyplywa suchym jarem tuz za zachodnim murem miasta (pas w Podgrodziu), konczac sie w basenie Przystani. Droge przecina most.",
+ "drogi_cele": {
+  "Trakt zachodni (miasto -> most nad korytem -> Podgrodzie -> Garnizon -> Wrak)": {
+   "mapa": 162,
+   "zdarzenie": "Miejsce: brzeg",
+   "x": 223,
+   "y": 282
+  },
+  "Szlak latarni (Góry -> Osada -> Latarnia)": {
+   "mapa": 159,
+   "zdarzenie": "Latarnia",
+   "x": 642,
+   "y": 123
+  },
+  "Droga ku Spalonej zagrodzie (Łąka#1 -> pola -> zagroda)": {
+   "mapa": 168,
+   "zdarzenie": "Resztki stodoły",
+   "x": 793,
+   "y": 217
+  },
+  "Droga pola dziadka (Kruczy Jar -> Dom dziadka)": {
+   "mapa": 20,
+   "zdarzenie": "Drzwi chaty -> Dom dziadka - Wnętrze",
+   "x": 619,
+   "y": 319
+  },
+  "Trakt portowy (brama południowa miasta -> nabrzeże Przystani)": {
+   "mapa": 125,
+   "zdarzenie": "Miejsce: nabrzeze",
+   "x": 440,
+   "y": 370
+  }
+ },
+ "przejscia": [
+  {
+   "a": 3,
+   "b": 20,
+   "strona": "S",
+   "pos": 614,
+   "droga": "Droga pola dziadka (Kruczy Jar -> Dom dziadka)"
+  },
+  {
+   "a": 3,
+   "b": 23,
+   "strona": "E",
+   "pos": 266,
+   "droga": "Droga do dworu i do pola (brama wschodnia -> dwór -> Kruczy Jar -> Skraj lasu)"
+  },
+  {
+   "a": 4,
+   "b": 3,
+   "strona": "S",
+   "pos": 633,
+   "droga": "Droga Kruczego Jaru (Łąka#1 -> Kruczy Jar)"
+  },
+  {
+   "a": 4,
+   "b": 900,
+   "strona": "E",
+   "pos": 229,
+   "droga": "Droga ku Spalonej zagrodzie (Łąka#1 -> pola -> zagroda)"
+  },
+  {
+   "a": 8,
+   "b": 22,
+   "strona": "E",
+   "pos": 234,
+   "droga": "Droga polna (miasto -> Polna droga -> Osada)"
+  },
+  {
+   "a": 8,
+   "b": 24,
+   "strona": "E",
+   "pos": 266,
+   "droga": "Droga do dworu i do pola (brama wschodnia -> dwór -> Kruczy Jar -> Skraj lasu)"
+  },
+  {
+   "a": 8,
+   "b": 125,
+   "strona": "S",
+   "pos": 452,
+   "droga": "Trakt portowy (brama południowa miasta -> nabrzeże Przystani)"
+  },
+  {
+   "a": 13,
+   "b": 8,
+   "strona": "S",
+   "pos": 446,
+   "droga": "Szlak górski (północna brama miasta -> Góry -> Orla Grań)"
+  },
+  {
+   "a": 13,
+   "b": 120,
+   "strona": "E",
+   "pos": 135,
+   "droga": "Szlak latarni (Góry -> Osada -> Latarnia)"
+  },
+  {
+   "a": 23,
+   "b": 17,
+   "strona": "S",
+   "pos": 724,
+   "droga": "Droga łąk (Skraj lasu -> Łąka#2)"
+  },
+  {
+   "a": 24,
+   "b": 3,
+   "strona": "E",
+   "pos": 267,
+   "droga": "Droga do dworu i do pola (brama wschodnia -> dwór -> Kruczy Jar -> Skraj lasu)"
+  },
+  {
+   "a": 111,
+   "b": 8,
+   "strona": "E",
+   "pos": 266,
+   "droga": "Trakt zachodni (miasto -> most nad korytem -> Podgrodzie -> Garnizon -> Wrak)"
+  },
+  {
+   "a": 120,
+   "b": 22,
+   "strona": "S",
+   "pos": 570,
+   "droga": "Droga polna (miasto -> Polna droga -> Osada)"
+  },
+  {
+   "a": 120,
+   "b": 159,
+   "strona": "E",
+   "pos": 153,
+   "droga": "Szlak latarni (Góry -> Osada -> Latarnia)"
+  },
+  {
+   "a": 125,
+   "b": 21,
+   "strona": "S",
+   "pos": 450,
+   "droga": "Droga leśna (nabrzeże -> Leśna droga)"
+  },
+  {
+   "a": 155,
+   "b": 157,
+   "strona": "E",
+   "pos": 180,
+   "droga": "Szlak Pustelni (Góry -> Urwisko -> Pustelnia)"
+  },
+  {
+   "a": 155,
+   "b": 950,
+   "strona": "S",
+   "pos": 199,
+   "droga": "Szlak Pustelni (Góry -> Urwisko -> Pustelnia)"
+  },
+  {
+   "a": 157,
+   "b": 13,
+   "strona": "E",
+   "pos": 160,
+   "droga": "Szlak Pustelni (Góry -> Urwisko -> Pustelnia)"
+  },
+  {
+   "a": 162,
+   "b": 111,
+   "strona": "E",
+   "pos": 292,
+   "droga": "Trakt zachodni (miasto -> most nad korytem -> Podgrodzie -> Garnizon -> Wrak)"
+  },
+  {
+   "a": 175,
+   "b": 13,
+   "strona": "S",
+   "pos": 465,
+   "droga": "Szlak górski (północna brama miasta -> Góry -> Orla Grań)"
+  },
+  {
+   "a": 900,
+   "b": 168,
+   "strona": "E",
+   "pos": 233,
+   "droga": "Droga ku Spalonej zagrodzie (Łąka#1 -> pola -> zagroda)"
+  },
+  {
+   "a": 910,
+   "b": 950,
+   "strona": "E",
+   "pos": 224,
+   "droga": "Szlak Pustelni (Góry -> Urwisko -> Pustelnia)"
+  },
+  {
+   "a": 20,
+   "b": 923,
+   "strona": "S",
+   "pos": 654,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 21,
+   "b": 920,
+   "strona": "E",
+   "pos": 454,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 24,
+   "b": 901,
+   "strona": "S",
+   "pos": 564,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 111,
+   "b": 917,
+   "strona": "S",
+   "pos": 368,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 125,
+   "b": 922,
+   "strona": "E",
+   "pos": 414,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 159,
+   "b": 936,
+   "strona": "E",
+   "pos": 130,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 168,
+   "b": 933,
+   "strona": "S",
+   "pos": 804,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 910,
+   "b": 18,
+   "strona": "S",
+   "pos": 91,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 912,
+   "b": 168,
+   "strona": "S",
+   "pos": 824,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 914,
+   "b": 21,
+   "strona": "E",
+   "pos": 474,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 918,
+   "b": 910,
+   "strona": "E",
+   "pos": 205,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 930,
+   "b": 157,
+   "strona": "S",
+   "pos": 340,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 931,
+   "b": 175,
+   "strona": "S",
+   "pos": 456,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 932,
+   "b": 930,
+   "strona": "E",
+   "pos": 124,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 934,
+   "b": 120,
+   "strona": "S",
+   "pos": 590,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 935,
+   "b": 931,
+   "strona": "E",
+   "pos": 42,
+   "droga": "Ścieżka brzegowa"
+  },
+  {
+   "a": 951,
+   "b": 162,
+   "strona": "E",
+   "pos": 340,
+   "droga": "Ścieżka brzegowa"
+  }
+ ],
+ "suche_koryto_przejscia": [
+  {
+   "a": 8,
+   "b": 125,
+   "strona": "S",
+   "pos": 420
+  },
+  {
+   "a": 111,
+   "b": 8,
+   "strona": "E",
+   "pos": 354
+  },
+  {
+   "a": 175,
+   "b": 13,
+   "strona": "S",
+   "pos": 458
+  }
+ ],
+ "obecne_wyjscia": [
+  {
+   "od": 3,
+   "strona": "N",
+   "do": 4,
+   "wyjscie": [
+    30,
+    0
+   ],
+   "ladowanie": [
+    25,
+    59
+   ],
+   "swiat": 634,
+   "kratki_lokalne": [
+    [
+     28,
+     0
+    ],
+    [
+     29,
+     0
+    ],
+    [
+     30,
+     0
+    ],
+    [
+     31,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    632,
+    633,
+    634,
+    635
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 3,
+   "strona": "S",
+   "do": 20,
+   "wyjscie": [
+    9,
+    59
+   ],
+   "ladowanie": [
+    9,
+    1
+   ],
+   "swiat": 613,
+   "kratki_lokalne": [
+    [
+     8,
+     59
+    ],
+    [
+     9,
+     59
+    ],
+    [
+     10,
+     59
+    ]
+   ],
+   "kratki_swiata": [
+    612,
+    613,
+    614
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 3,
+   "strona": "E",
+   "do": 23,
+   "wyjscie": [
+    79,
+    13
+   ],
+   "ladowanie": [
+    1,
+    13
+   ],
+   "swiat": 265,
+   "kratki_lokalne": [
+    [
+     79,
+     12
+    ],
+    [
+     79,
+     13
+    ],
+    [
+     79,
+     14
+    ]
+   ],
+   "kratki_swiata": [
+    264,
+    265,
+    266
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 3,
+   "strona": "W",
+   "do": 24,
+   "wyjscie": [
+    0,
+    15
+   ],
+   "ladowanie": [
+    78,
+    15
+   ],
+   "swiat": 267,
+   "kratki_lokalne": [
+    [
+     0,
+     14
+    ],
+    [
+     0,
+     15
+    ],
+    [
+     0,
+     16
+    ]
+   ],
+   "kratki_swiata": [
+    266,
+    267,
+    268
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 4,
+   "strona": "S",
+   "do": 3,
+   "wyjscie": [
+    25,
+    59
+   ],
+   "ladowanie": [
+    30,
+    0
+   ],
+   "swiat": 634,
+   "kratki_lokalne": [
+    [
+     23,
+     59
+    ],
+    [
+     24,
+     59
+    ],
+    [
+     25,
+     59
+    ],
+    [
+     26,
+     59
+    ]
+   ],
+   "kratki_swiata": [
+    632,
+    633,
+    634,
+    635
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 8,
+   "strona": "N",
+   "do": 13,
+   "wyjscie": [
+    25,
+    0
+   ],
+   "ladowanie": [
+    41,
+    94
+   ],
+   "swiat": 445,
+   "kratki_lokalne": [
+    [
+     24,
+     0
+    ],
+    [
+     25,
+     0
+    ],
+    [
+     26,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    444,
+    445,
+    446
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 8,
+   "strona": "E",
+   "do": 22,
+   "wyjscie": [
+    103,
+    18
+   ],
+   "ladowanie": [
+    1,
+    42
+   ],
+   "swiat": 234,
+   "kratki_lokalne": [
+    [
+     103,
+     17
+    ],
+    [
+     103,
+     18
+    ],
+    [
+     103,
+     19
+    ]
+   ],
+   "kratki_swiata": [
+    233,
+    234,
+    235
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 8,
+   "strona": "E",
+   "do": 24,
+   "wyjscie": [
+    103,
+    51
+   ],
+   "ladowanie": [
+    1,
+    15
+   ],
+   "swiat": 267,
+   "kratki_lokalne": [
+    [
+     103,
+     50
+    ],
+    [
+     103,
+     51
+    ]
+   ],
+   "kratki_swiata": [
+    266,
+    267
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 8,
+   "strona": "W",
+   "do": 111,
+   "wyjscie": [
+    0,
+    51
+   ],
+   "ladowanie": [
+    100,
+    18
+   ],
+   "swiat": 267,
+   "kratki_lokalne": [
+    [
+     0,
+     50
+    ],
+    [
+     0,
+     51
+    ]
+   ],
+   "kratki_swiata": [
+    266,
+    267
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 8,
+   "strona": "S",
+   "do": 125,
+   "wyjscie": [
+    34,
+    137
+   ],
+   "ladowanie": [
+    34,
+    1
+   ],
+   "swiat": 454,
+   "kratki_lokalne": [
+    [
+     33,
+     137
+    ],
+    [
+     34,
+     137
+    ],
+    [
+     35,
+     137
+    ]
+   ],
+   "kratki_swiata": [
+    453,
+    454,
+    455
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 13,
+   "strona": "S",
+   "do": 8,
+   "wyjscie": [
+    41,
+    95
+   ],
+   "ladowanie": [
+    25,
+    4
+   ],
+   "swiat": 445,
+   "kratki_lokalne": [
+    [
+     40,
+     95
+    ],
+    [
+     41,
+     95
+    ],
+    [
+     42,
+     95
+    ]
+   ],
+   "kratki_swiata": [
+    444,
+    445,
+    446
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 13,
+   "strona": "W",
+   "do": 21,
+   "wyjscie": [
+    0,
+    39
+   ],
+   "ladowanie": [
+    78,
+    9
+   ],
+   "swiat": 159,
+   "kratki_lokalne": [
+    [
+     0,
+     38
+    ],
+    [
+     0,
+     39
+    ],
+    [
+     0,
+     40
+    ]
+   ],
+   "kratki_swiata": [
+    158,
+    159,
+    160
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 157",
+   "kod": "nowy_cel",
+   "nowy_cel": 157,
+   "nowe_ladowanie_lokalne": [
+    [
+     120,
+     14
+    ],
+    [
+     120,
+     15
+    ],
+    [
+     120,
+     16
+    ]
+   ]
+  },
+  {
+   "od": 13,
+   "strona": "N",
+   "do": 120,
+   "wyjscie": [
+    6,
+    0
+   ],
+   "ladowanie": [
+    20,
+    31
+   ],
+   "swiat": 410,
+   "kratki_lokalne": [
+    [
+     5,
+     0
+    ],
+    [
+     6,
+     0
+    ],
+    [
+     7,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    409,
+    410,
+    411
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 175",
+   "kod": "nowy_cel",
+   "nowy_cel": 175,
+   "nowe_ladowanie_lokalne": [
+    [
+     5,
+     58
+    ],
+    [
+     6,
+     58
+    ],
+    [
+     7,
+     58
+    ]
+   ]
+  },
+  {
+   "od": 13,
+   "strona": "E",
+   "do": 159,
+   "wyjscie": [
+    119,
+    12
+   ],
+   "ladowanie": [
+    30,
+    78
+   ],
+   "swiat": 132,
+   "kratki_lokalne": [
+    [
+     119,
+     11
+    ],
+    [
+     119,
+     12
+    ],
+    [
+     119,
+     13
+    ]
+   ],
+   "kratki_swiata": [
+    131,
+    132,
+    133
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 120",
+   "kod": "nowy_cel",
+   "nowy_cel": 120,
+   "nowe_ladowanie_lokalne": [
+    [
+     1,
+     7
+    ],
+    [
+     1,
+     8
+    ],
+    [
+     1,
+     9
+    ]
+   ]
+  },
+  {
+   "od": 17,
+   "strona": "N",
+   "do": 23,
+   "wyjscie": [
+    40,
+    0
+   ],
+   "ladowanie": [
+    40,
+    58
+   ],
+   "swiat": 724,
+   "kratki_lokalne": [
+    [
+     39,
+     0
+    ],
+    [
+     40,
+     0
+    ],
+    [
+     41,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    723,
+    724,
+    725
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 20,
+   "strona": "N",
+   "do": 3,
+   "wyjscie": [
+    9,
+    0
+   ],
+   "ladowanie": [
+    9,
+    58
+   ],
+   "swiat": 613,
+   "kratki_lokalne": [
+    [
+     8,
+     0
+    ],
+    [
+     9,
+     0
+    ],
+    [
+     10,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    612,
+    613,
+    614
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 21,
+   "strona": "E",
+   "do": 13,
+   "wyjscie": [
+    99,
+    9
+   ],
+   "ladowanie": [
+    1,
+    39
+   ],
+   "swiat": 443,
+   "kratki_lokalne": [
+    [
+     99,
+     8
+    ],
+    [
+     99,
+     9
+    ],
+    [
+     99,
+     10
+    ]
+   ],
+   "kratki_swiata": [
+    442,
+    443,
+    444
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 920",
+   "kod": "nowy_cel",
+   "nowy_cel": 920,
+   "nowe_ladowanie_lokalne": [
+    [
+     1,
+     8
+    ],
+    [
+     1,
+     9
+    ],
+    [
+     1,
+     10
+    ]
+   ]
+  },
+  {
+   "od": 21,
+   "strona": "W",
+   "do": 22,
+   "wyjscie": [
+    0,
+    20
+   ],
+   "ladowanie": [
+    83,
+    20
+   ],
+   "swiat": 454,
+   "kratki_lokalne": [
+    [
+     0,
+     19
+    ],
+    [
+     0,
+     20
+    ],
+    [
+     0,
+     21
+    ]
+   ],
+   "kratki_swiata": [
+    453,
+    454,
+    455
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 914",
+   "kod": "nowy_cel",
+   "nowy_cel": 914,
+   "nowe_ladowanie_lokalne": [
+    [
+     78,
+     19
+    ],
+    [
+     78,
+     20
+    ],
+    [
+     78,
+     21
+    ]
+   ]
+  },
+  {
+   "od": 21,
+   "strona": "N",
+   "do": 125,
+   "wyjscie": [
+    11,
+    0
+   ],
+   "ladowanie": [
+    31,
+    78
+   ],
+   "swiat": 451,
+   "kratki_lokalne": [
+    [
+     10,
+     0
+    ],
+    [
+     11,
+     0
+    ],
+    [
+     12,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    450,
+    451,
+    452
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 22,
+   "strona": "W",
+   "do": 8,
+   "wyjscie": [
+    0,
+    42
+   ],
+   "ladowanie": [
+    102,
+    18
+   ],
+   "swiat": 234,
+   "kratki_lokalne": [
+    [
+     0,
+     41
+    ],
+    [
+     0,
+     42
+    ],
+    [
+     0,
+     43
+    ]
+   ],
+   "kratki_swiata": [
+    233,
+    234,
+    235
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 22,
+   "strona": "E",
+   "do": 21,
+   "wyjscie": [
+    84,
+    20
+   ],
+   "ladowanie": [
+    1,
+    20
+   ],
+   "swiat": 212,
+   "kratki_lokalne": [
+    [
+     84,
+     19
+    ],
+    [
+     84,
+     20
+    ],
+    [
+     84,
+     21
+    ]
+   ],
+   "kratki_swiata": [
+    211,
+    212,
+    213
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 4",
+   "kod": "nowy_cel",
+   "nowy_cel": 4,
+   "nowe_ladowanie_lokalne": [
+    [
+     1,
+     19
+    ],
+    [
+     1,
+     20
+    ],
+    [
+     1,
+     21
+    ]
+   ]
+  },
+  {
+   "od": 22,
+   "strona": "N",
+   "do": 120,
+   "wyjscie": [
+    46,
+    0
+   ],
+   "ladowanie": [
+    46,
+    66
+   ],
+   "swiat": 570,
+   "kratki_lokalne": [
+    [
+     45,
+     0
+    ],
+    [
+     46,
+     0
+    ],
+    [
+     47,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    569,
+    570,
+    571
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 23,
+   "strona": "W",
+   "do": 3,
+   "wyjscie": [
+    0,
+    13
+   ],
+   "ladowanie": [
+    78,
+    13
+   ],
+   "swiat": 265,
+   "kratki_lokalne": [
+    [
+     0,
+     12
+    ],
+    [
+     0,
+     13
+    ],
+    [
+     0,
+     14
+    ]
+   ],
+   "kratki_swiata": [
+    264,
+    265,
+    266
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 23,
+   "strona": "S",
+   "do": 17,
+   "wyjscie": [
+    40,
+    59
+   ],
+   "ladowanie": [
+    40,
+    1
+   ],
+   "swiat": 724,
+   "kratki_lokalne": [
+    [
+     39,
+     59
+    ],
+    [
+     40,
+     59
+    ],
+    [
+     41,
+     59
+    ]
+   ],
+   "kratki_swiata": [
+    723,
+    724,
+    725
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 24,
+   "strona": "E",
+   "do": 3,
+   "wyjscie": [
+    79,
+    15
+   ],
+   "ladowanie": [
+    1,
+    15
+   ],
+   "swiat": 267,
+   "kratki_lokalne": [
+    [
+     79,
+     14
+    ],
+    [
+     79,
+     15
+    ],
+    [
+     79,
+     16
+    ]
+   ],
+   "kratki_swiata": [
+    266,
+    267,
+    268
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 24,
+   "strona": "W",
+   "do": 8,
+   "wyjscie": [
+    0,
+    15
+   ],
+   "ladowanie": [
+    102,
+    51
+   ],
+   "swiat": 267,
+   "kratki_lokalne": [
+    [
+     0,
+     14
+    ],
+    [
+     0,
+     15
+    ],
+    [
+     0,
+     16
+    ]
+   ],
+   "kratki_swiata": [
+    266,
+    267,
+    268
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 111,
+   "strona": "E",
+   "do": 8,
+   "wyjscie": [
+    101,
+    18
+   ],
+   "ladowanie": [
+    1,
+    51
+   ],
+   "swiat": 267,
+   "kratki_lokalne": [
+    [
+     101,
+     17
+    ],
+    [
+     101,
+     18
+    ]
+   ],
+   "kratki_swiata": [
+    266,
+    267
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 111,
+   "strona": "W",
+   "do": 125,
+   "wyjscie": [
+    0,
+    19
+   ],
+   "ladowanie": [
+    108,
+    19
+   ],
+   "swiat": 268,
+   "kratki_lokalne": [
+    [
+     0,
+     19
+    ]
+   ],
+   "kratki_swiata": [
+    268
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 162",
+   "kod": "nowy_cel",
+   "nowy_cel": 162,
+   "nowe_ladowanie_lokalne": [
+    [
+     110,
+     8
+    ]
+   ]
+  },
+  {
+   "od": 120,
+   "strona": "S",
+   "do": 13,
+   "wyjscie": [
+    20,
+    67
+   ],
+   "ladowanie": [
+    6,
+    1
+   ],
+   "swiat": 544,
+   "kratki_lokalne": [
+    [
+     19,
+     67
+    ],
+    [
+     20,
+     67
+    ],
+    [
+     21,
+     67
+    ]
+   ],
+   "kratki_swiata": [
+    543,
+    544,
+    545
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 22",
+   "kod": "nowy_cel",
+   "nowy_cel": 22,
+   "nowe_ladowanie_lokalne": [
+    [
+     19,
+     1
+    ],
+    [
+     20,
+     1
+    ],
+    [
+     21,
+     1
+    ]
+   ]
+  },
+  {
+   "od": 120,
+   "strona": "S",
+   "do": 22,
+   "wyjscie": [
+    46,
+    67
+   ],
+   "ladowanie": [
+    46,
+    1
+   ],
+   "swiat": 570,
+   "kratki_lokalne": [
+    [
+     45,
+     67
+    ],
+    [
+     46,
+     67
+    ],
+    [
+     47,
+     67
+    ]
+   ],
+   "kratki_swiata": [
+    569,
+    570,
+    571
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 120,
+   "strona": "E",
+   "do": 159,
+   "wyjscie": [
+    95,
+    29
+   ],
+   "ladowanie": [
+    1,
+    41
+   ],
+   "swiat": 153,
+   "kratki_lokalne": [
+    [
+     95,
+     28
+    ],
+    [
+     95,
+     29
+    ],
+    [
+     95,
+     30
+    ]
+   ],
+   "kratki_swiata": [
+    152,
+    153,
+    154
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 125,
+   "strona": "N",
+   "do": 8,
+   "wyjscie": [
+    34,
+    0
+   ],
+   "ladowanie": [
+    34,
+    136
+   ],
+   "swiat": 454,
+   "kratki_lokalne": [
+    [
+     33,
+     0
+    ],
+    [
+     34,
+     0
+    ],
+    [
+     35,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    453,
+    454,
+    455
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 125,
+   "strona": "S",
+   "do": 21,
+   "wyjscie": [
+    31,
+    79
+   ],
+   "ladowanie": [
+    11,
+    1
+   ],
+   "swiat": 451,
+   "kratki_lokalne": [
+    [
+     30,
+     79
+    ],
+    [
+     31,
+     79
+    ],
+    [
+     32,
+     79
+    ]
+   ],
+   "kratki_swiata": [
+    450,
+    451,
+    452
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 125,
+   "strona": "N",
+   "do": 155,
+   "wyjscie": [
+    15,
+    0
+   ],
+   "ladowanie": [
+    24,
+    70
+   ],
+   "swiat": 435,
+   "kratki_lokalne": [
+    [
+     14,
+     0
+    ],
+    [
+     15,
+     0
+    ],
+    [
+     16,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    434,
+    435,
+    436
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 8",
+   "kod": "nowy_cel",
+   "nowy_cel": 8,
+   "nowe_ladowanie_lokalne": [
+    [
+     14,
+     136
+    ],
+    [
+     15,
+     136
+    ],
+    [
+     16,
+     136
+    ]
+   ]
+  },
+  {
+   "od": 125,
+   "strona": "S",
+   "do": 162,
+   "wyjscie": [
+    22,
+    79
+   ],
+   "ladowanie": [
+    22,
+    1
+   ],
+   "swiat": 442,
+   "kratki_lokalne": [
+    [
+     21,
+     79
+    ],
+    [
+     22,
+     79
+    ],
+    [
+     23,
+     79
+    ]
+   ],
+   "kratki_swiata": [
+    441,
+    442,
+    443
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 21",
+   "kod": "nowy_cel",
+   "nowy_cel": 21,
+   "nowe_ladowanie_lokalne": [
+    [
+     1,
+     1
+    ],
+    [
+     2,
+     1
+    ],
+    [
+     3,
+     1
+    ]
+   ]
+  },
+  {
+   "od": 155,
+   "strona": "S",
+   "do": 125,
+   "wyjscie": [
+    23,
+    71
+   ],
+   "ladowanie": [
+    14,
+    1
+   ],
+   "swiat": 209,
+   "kratki_lokalne": [
+    [
+     23,
+     71
+    ],
+    [
+     24,
+     71
+    ],
+    [
+     25,
+     71
+    ],
+    [
+     23,
+     71
+    ],
+    [
+     24,
+     71
+    ],
+    [
+     25,
+     71
+    ]
+   ],
+   "kratki_swiata": [
+    209,
+    210,
+    211,
+    209,
+    210,
+    211
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 950",
+   "kod": "nowy_cel",
+   "nowy_cel": 950,
+   "nowe_ladowanie_lokalne": [
+    [
+     23,
+     1
+    ],
+    [
+     24,
+     1
+    ],
+    [
+     25,
+     1
+    ],
+    [
+     23,
+     1
+    ],
+    [
+     24,
+     1
+    ],
+    [
+     25,
+     1
+    ]
+   ]
+  },
+  {
+   "od": 155,
+   "strona": "E",
+   "do": 157,
+   "wyjscie": [
+    95,
+    18
+   ],
+   "ladowanie": [
+    1,
+    20
+   ],
+   "swiat": 164,
+   "kratki_lokalne": [
+    [
+     95,
+     17
+    ],
+    [
+     95,
+     18
+    ]
+   ],
+   "kratki_swiata": [
+    163,
+    164
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 157,
+   "strona": "W",
+   "do": 155,
+   "wyjscie": [
+    0,
+    19
+   ],
+   "ladowanie": [
+    94,
+    17
+   ],
+   "swiat": 163,
+   "kratki_lokalne": [
+    [
+     0,
+     19
+    ],
+    [
+     0,
+     20
+    ],
+    [
+     0,
+     19
+    ],
+    [
+     0,
+     20
+    ]
+   ],
+   "kratki_swiata": [
+    163,
+    164,
+    163,
+    164
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 157,
+   "strona": "E",
+   "do": 159,
+   "wyjscie": [
+    111,
+    20
+   ],
+   "ladowanie": [
+    1,
+    34
+   ],
+   "swiat": 164,
+   "kratki_lokalne": [
+    [
+     111,
+     19
+    ],
+    [
+     111,
+     20
+    ]
+   ],
+   "kratki_swiata": [
+    163,
+    164
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 13",
+   "kod": "nowy_cel",
+   "nowy_cel": 13,
+   "nowe_ladowanie_lokalne": [
+    [
+     1,
+     43
+    ],
+    [
+     1,
+     44
+    ]
+   ]
+  },
+  {
+   "od": 159,
+   "strona": "S",
+   "do": 13,
+   "wyjscie": [
+    29,
+    79
+   ],
+   "ladowanie": [
+    118,
+    11
+   ],
+   "swiat": 649,
+   "kratki_lokalne": [
+    [
+     29,
+     79
+    ],
+    [
+     30,
+     79
+    ],
+    [
+     31,
+     79
+    ],
+    [
+     29,
+     79
+    ],
+    [
+     30,
+     79
+    ],
+    [
+     31,
+     79
+    ]
+   ],
+   "kratki_swiata": [
+    649,
+    650,
+    651,
+    649,
+    650,
+    651
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 4",
+   "kod": "nowy_cel",
+   "nowy_cel": 4,
+   "nowe_ladowanie_lokalne": [
+    [
+     40,
+     1
+    ],
+    [
+     41,
+     1
+    ],
+    [
+     42,
+     1
+    ],
+    [
+     40,
+     1
+    ],
+    [
+     41,
+     1
+    ],
+    [
+     42,
+     1
+    ]
+   ]
+  },
+  {
+   "od": 159,
+   "strona": "W",
+   "do": 120,
+   "wyjscie": [
+    0,
+    41
+   ],
+   "ladowanie": [
+    94,
+    29
+   ],
+   "swiat": 153,
+   "kratki_lokalne": [
+    [
+     0,
+     40
+    ],
+    [
+     0,
+     41
+    ],
+    [
+     0,
+     42
+    ]
+   ],
+   "kratki_swiata": [
+    152,
+    153,
+    154
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 159,
+   "strona": "W",
+   "do": 157,
+   "wyjscie": [
+    0,
+    34
+   ],
+   "ladowanie": [
+    110,
+    20
+   ],
+   "swiat": 146,
+   "kratki_lokalne": [
+    [
+     0,
+     33
+    ],
+    [
+     0,
+     34
+    ]
+   ],
+   "kratki_swiata": [
+    145,
+    146
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 120",
+   "kod": "nowy_cel",
+   "nowy_cel": 120,
+   "nowe_ladowanie_lokalne": [
+    [
+     94,
+     21
+    ],
+    [
+     94,
+     22
+    ]
+   ]
+  },
+  {
+   "od": 162,
+   "strona": "N",
+   "do": 125,
+   "wyjscie": [
+    21,
+    0
+   ],
+   "ladowanie": [
+    21,
+    78
+   ],
+   "swiat": 227,
+   "kratki_lokalne": [
+    [
+     21,
+     0
+    ],
+    [
+     22,
+     0
+    ],
+    [
+     23,
+     0
+    ],
+    [
+     21,
+     0
+    ],
+    [
+     22,
+     0
+    ],
+    [
+     23,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    227,
+    228,
+    229,
+    227,
+    228,
+    229
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 950",
+   "kod": "nowy_cel",
+   "nowy_cel": 950,
+   "nowe_ladowanie_lokalne": [
+    [
+     41,
+     40
+    ],
+    [
+     42,
+     40
+    ],
+    [
+     43,
+     40
+    ],
+    [
+     41,
+     40
+    ],
+    [
+     42,
+     40
+    ],
+    [
+     43,
+     40
+    ]
+   ]
+  },
+  {
+   "od": 162,
+   "strona": "W",
+   "do": 165,
+   "wyjscie": [
+    0,
+    21
+   ],
+   "ladowanie": [
+    78,
+    21
+   ],
+   "swiat": 281,
+   "kratki_lokalne": [
+    [
+     0,
+     20
+    ],
+    [
+     0,
+     21
+    ]
+   ],
+   "kratki_swiata": [
+    280,
+    281
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 165,
+   "strona": "E",
+   "do": 162,
+   "wyjscie": [
+    79,
+    20
+   ],
+   "ladowanie": [
+    1,
+    20
+   ],
+   "swiat": 280,
+   "kratki_lokalne": [
+    [
+     79,
+     20
+    ],
+    [
+     79,
+     21
+    ],
+    [
+     79,
+     20
+    ],
+    [
+     79,
+     21
+    ]
+   ],
+   "kratki_swiata": [
+    280,
+    281,
+    280,
+    281
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  }
+ ],
+ "brzeg_na_krawedziach": [
+  {
+   "a": 17,
+   "b": 933,
+   "strona": "E",
+   "od": 316,
+   "do": 396,
+   "skok_kratek": 1,
+   "przeciecia": [
+    {
+     "pos": 388,
+     "przejscie": "lad->morze",
+     "kat": 135.0,
+     "kat_a": 145.1,
+     "kat_b": 179.0,
+     "roznica_kata": 33.9
+    }
+   ]
+  },
+  {
+   "a": 20,
+   "b": 923,
+   "strona": "S",
+   "od": 624,
+   "do": 684,
+   "skok_kratek": 1,
+   "przeciecia": [
+    {
+     "pos": 674,
+     "przejscie": "morze->lad",
+     "kat": 128.3,
+     "kat_a": 146.2,
+     "kat_b": 160.7,
+     "roznica_kata": 14.5
+    }
+   ]
+  },
+  {
+   "a": 21,
+   "b": 920,
+   "strona": "E",
+   "od": 434,
+   "do": 474,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 447,
+     "przejscie": "lad->morze",
+     "kat": 38.1,
+     "kat_a": 74.3,
+     "kat_b": 41.4,
+     "roznica_kata": 32.9
+    }
+   ]
+  },
+  {
+   "a": 120,
+   "b": 159,
+   "strona": "E",
+   "od": 124,
+   "do": 192,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 145,
+     "przejscie": "morze->lad",
+     "kat": 10.2,
+     "kat_a": 107.3,
+     "kat_b": 52.9,
+     "roznica_kata": 54.4
+    }
+   ]
+  },
+  {
+   "a": 125,
+   "b": 914,
+   "strona": "S",
+   "od": 420,
+   "do": 440,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 435,
+     "przejscie": "morze->lad",
+     "kat": 101.8,
+     "kat_a": 81.0,
+     "kat_b": 30.0,
+     "roznica_kata": 51.0
+    }
+   ]
+  },
+  {
+   "a": 125,
+   "b": 922,
+   "strona": "E",
+   "od": 394,
+   "do": 434,
+   "skok_kratek": 1,
+   "przeciecia": [
+    {
+     "pos": 420,
+     "przejscie": "morze->lad",
+     "kat": 135.0,
+     "kat_a": 134.1,
+     "kat_b": 102.0,
+     "roznica_kata": 32.1
+    }
+   ]
+  },
+  {
+   "a": 155,
+   "b": 157,
+   "strona": "E",
+   "od": 146,
+   "do": 216,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 149,
+     "przejscie": "morze->lad",
+     "kat": 10.0,
+     "kat_a": 1.9,
+     "kat_b": 2.9,
+     "roznica_kata": 1.0
+    }
+   ]
+  },
+  {
+   "a": 155,
+   "b": 950,
+   "strona": "S",
+   "od": 186,
+   "do": 282,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 207,
+     "przejscie": "morze->lad",
+     "kat": 98.0,
+     "kat_a": 158.1,
+     "kat_b": 30.0,
+     "roznica_kata": 51.9
+    }
+   ]
+  },
+  {
+   "a": 159,
+   "b": 900,
+   "strona": "S",
+   "od": 689,
+   "do": 724,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 708,
+     "przejscie": "lad->morze",
+     "kat": 90.5,
+     "kat_a": 59.3,
+     "kat_b": 143.0,
+     "roznica_kata": 83.7
+    }
+   ]
+  },
+  {
+   "a": 165,
+   "b": 162,
+   "strona": "E",
+   "od": 260,
+   "do": 320,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 280,
+     "przejscie": "morze->lad",
+     "kat": 113.5,
+     "kat_a": 3.3,
+     "kat_b": 68.6,
+     "roznica_kata": 65.3
+    },
+    {
+     "pos": 283,
+     "przejscie": "lad->morze",
+     "kat": 48.6,
+     "kat_a": 3.3,
+     "kat_b": 69.7,
+     "roznica_kata": 66.4
+    }
+   ]
+  },
+  {
+   "a": 168,
+   "b": 933,
+   "strona": "S",
+   "od": 764,
+   "do": 844,
+   "skok_kratek": 2,
+   "przeciecia": [
+    {
+     "pos": 823,
+     "przejscie": "lad->morze",
+     "kat": 34.9,
+     "kat_a": 70.7,
+     "kat_b": 24.9,
+     "roznica_kata": 45.8
+    }
+   ]
+  },
+  {
+   "a": 175,
+   "b": 934,
+   "strona": "E",
+   "od": 84,
+   "do": 120,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 107,
+     "przejscie": "morze->lad",
+     "kat": 9.0,
+     "kat_a": 118.9,
+     "kat_b": 176.7,
+     "roznica_kata": 57.8
+    }
+   ]
+  },
+  {
+   "a": 901,
+   "b": 125,
+   "strona": "S",
+   "od": 524,
+   "do": 552,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 549,
+     "przejscie": "lad->morze",
+     "kat": 88.0,
+     "kat_a": 8.8,
+     "kat_b": 112.5,
+     "roznica_kata": 76.3
+    }
+   ]
+  },
+  {
+   "a": 910,
+   "b": 950,
+   "strona": "E",
+   "od": 218,
+   "do": 225,
+   "skok_kratek": 2,
+   "przeciecia": [
+    {
+     "pos": 221,
+     "przejscie": "morze->lad",
+     "kat": 123.0,
+     "kat_a": 126.7,
+     "kat_b": 170.3,
+     "roznica_kata": 43.6
+    }
+   ]
+  },
+  {
+   "a": 914,
+   "b": 21,
+   "strona": "E",
+   "od": 434,
+   "do": 514,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 502,
+     "przejscie": "lad->morze",
+     "kat": 0.0,
+     "kat_a": 144.3,
+     "kat_b": 0.0,
+     "roznica_kata": 35.7
+    }
+   ]
+  },
+  {
+   "a": 918,
+   "b": 910,
+   "strona": "E",
+   "od": 185,
+   "do": 225,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 213,
+     "przejscie": "morze->lad",
+     "kat": 174.9,
+     "kat_a": 177.8,
+     "kat_b": 158.6,
+     "roznica_kata": 19.2
+    }
+   ]
+  },
+  {
+   "a": 922,
+   "b": 920,
+   "strona": "S",
+   "od": 552,
+   "do": 600,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 554,
+     "przejscie": "lad->morze",
+     "kat": 54.6,
+     "kat_a": 96.2,
+     "kat_b": 43.1,
+     "roznica_kata": 53.1
+    }
+   ]
+  },
+  {
+   "a": 923,
+   "b": 17,
+   "strona": "E",
+   "od": 376,
+   "do": 408,
+   "skok_kratek": 1,
+   "przeciecia": [
+    {
+     "pos": 380,
+     "przejscie": "lad->morze",
+     "kat": 28.7,
+     "kat_a": 160.7,
+     "kat_b": 160.8,
+     "roznica_kata": 0.1
+    }
+   ]
+  },
+  {
+   "a": 930,
+   "b": 157,
+   "strona": "S",
+   "od": 282,
+   "do": 398,
+   "skok_kratek": 2,
+   "przeciecia": [
+    {
+     "pos": 397,
+     "przejscie": "morze->lad",
+     "kat": 73.4,
+     "kat_a": 125.6,
+     "kat_b": 88.1,
+     "roznica_kata": 37.5
+    }
+   ]
+  },
+  {
+   "a": 934,
+   "b": 120,
+   "strona": "S",
+   "od": 560,
+   "do": 620,
+   "skok_kratek": 1,
+   "przeciecia": [
+    {
+     "pos": 611,
+     "przejscie": "lad->morze",
+     "kat": 57.4,
+     "kat_a": 148.0,
+     "kat_b": 96.2,
+     "roznica_kata": 51.8
+    }
+   ]
+  },
+  {
+   "a": 935,
+   "b": 930,
+   "strona": "S",
+   "od": 328,
+   "do": 388,
+   "skok_kratek": 1,
+   "przeciecia": [
+    {
+     "pos": 365,
+     "przejscie": "morze->lad",
+     "kat": 119.7,
+     "kat_a": 86.5,
+     "kat_b": 107.2,
+     "roznica_kata": 20.7
+    }
+   ]
+  },
+  {
+   "a": 935,
+   "b": 931,
+   "strona": "E",
+   "od": 24,
+   "do": 60,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 46,
+     "przejscie": "morze->lad",
+     "kat": 9.0,
+     "kat_a": 2.9,
+     "kat_b": 24.1,
+     "roznica_kata": 21.2
+    }
+   ]
+  },
+  {
+   "a": 950,
+   "b": 162,
+   "strona": "S",
+   "od": 206,
+   "do": 282,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 221,
+     "przejscie": "morze->lad",
+     "kat": 81.1,
+     "kat_a": 150.0,
+     "kat_b": 86.5,
+     "roznica_kata": 63.5
+    }
+   ]
+  },
+  {
+   "a": 951,
+   "b": 162,
+   "strona": "E",
+   "od": 320,
+   "do": 360,
+   "skok_kratek": 1,
+   "przeciecia": [
+    {
+     "pos": 327,
+     "przejscie": "morze->lad",
+     "kat": 20.6,
+     "kat_a": 44.6,
+     "kat_b": 85.5,
+     "roznica_kata": 40.9
+    },
+    {
+     "pos": 357,
+     "przejscie": "lad->morze",
+     "kat": 157.2,
+     "kat_a": 125.9,
+     "kat_b": 10.0,
+     "roznica_kata": 64.1
+    }
+   ]
+  }
+ ],
+ "pokrycie": {
+  "linia_brzegu_proc": 91.87
+ },
+ "wybrzuszenia_wokol_tresci_kratek": 64053
+}

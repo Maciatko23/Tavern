@@ -1,0 +1,362 @@
+{
+ "opis": "STAŁY układ map świata (przeliczony z --przelicz-uklad).",
+ "mapy": {
+  "3": {
+   "x0": 604,
+   "y0": 252,
+   "szer": 80,
+   "wys": 60
+  },
+  "4": {
+   "x0": 609,
+   "y0": 192,
+   "szer": 80,
+   "wys": 60
+  },
+  "8": {
+   "x0": 420,
+   "y0": 216,
+   "szer": 104,
+   "wys": 138
+  },
+  "13": {
+   "x0": 404,
+   "y0": 120,
+   "szer": 120,
+   "wys": 96
+  },
+  "17": {
+   "x0": 684,
+   "y0": 312,
+   "szer": 80,
+   "wys": 96
+  },
+  "18": {
+   "x0": 26,
+   "y0": 225,
+   "szer": 90,
+   "wys": 76
+  },
+  "20": {
+   "x0": 604,
+   "y0": 312,
+   "szer": 80,
+   "wys": 64
+  },
+  "21": {
+   "x0": 440,
+   "y0": 434,
+   "szer": 100,
+   "wys": 80
+  },
+  "22": {
+   "x0": 524,
+   "y0": 192,
+   "szer": 85,
+   "wys": 60
+  },
+  "23": {
+   "x0": 684,
+   "y0": 252,
+   "szer": 80,
+   "wys": 60
+  },
+  "24": {
+   "x0": 524,
+   "y0": 252,
+   "szer": 80,
+   "wys": 60
+  },
+  "111": {
+   "x0": 318,
+   "y0": 249,
+   "szer": 102,
+   "wys": 112
+  },
+  "120": {
+   "x0": 524,
+   "y0": 124,
+   "szer": 96,
+   "wys": 68
+  },
+  "125": {
+   "x0": 420,
+   "y0": 354,
+   "szer": 132,
+   "wys": 80
+  },
+  "155": {
+   "x0": 186,
+   "y0": 146,
+   "szer": 96,
+   "wys": 72
+  },
+  "157": {
+   "x0": 282,
+   "y0": 144,
+   "szer": 122,
+   "wys": 72
+  },
+  "159": {
+   "x0": 620,
+   "y0": 112,
+   "szer": 104,
+   "wys": 80
+  },
+  "162": {
+   "x0": 206,
+   "y0": 260,
+   "szer": 112,
+   "wys": 100
+  },
+  "165": {
+   "x0": 126,
+   "y0": 260,
+   "szer": 80,
+   "wys": 60
+  },
+  "168": {
+   "x0": 764,
+   "y0": 208,
+   "szer": 130,
+   "wys": 108
+  },
+  "175": {
+   "x0": 404,
+   "y0": 60,
+   "szer": 156,
+   "wys": 60
+  },
+  "900": {
+   "x0": 689,
+   "y0": 192,
+   "szer": 75,
+   "wys": 60,
+   "nowa": true,
+   "nazwa": "Pola pod grzbietem",
+   "opis": "pola i łąka za Łąką#1, droga do Spalonej zagrody, widok na wzgórza",
+   "rodzic": 4,
+   "reczna": true
+  },
+  "901": {
+   "x0": 524,
+   "y0": 312,
+   "szer": 80,
+   "wys": 42,
+   "nowa": true,
+   "nazwa": "Sady pod dworem",
+   "opis": "sady i ogrody Lorda, ścieżka nad zatokę",
+   "rodzic": 24,
+   "reczna": true
+  },
+  "910": {
+   "x0": 66,
+   "y0": 145,
+   "szer": 120,
+   "wys": 80,
+   "nowa": true,
+   "nazwa": "Północny klif lewego skrzydła II",
+   "opis": "klif z widokiem na morze albo plaża do chodzenia; ścieżka od rodzica, kilka drzew i skał",
+   "rodzic": 18,
+   "reczna": false
+  },
+  "912": {
+   "x0": 764,
+   "y0": 148,
+   "szer": 120,
+   "wys": 60,
+   "nowa": true,
+   "nazwa": "Północny brzeg pól",
+   "opis": "klif z widokiem na morze albo plaża do chodzenia; ścieżka od rodzica, kilka drzew i skał",
+   "rodzic": 168,
+   "reczna": false
+  },
+  "914": {
+   "x0": 360,
+   "y0": 434,
+   "szer": 80,
+   "wys": 80,
+   "nowa": true,
+   "nazwa": "Zatoczka pod ogonem",
+   "opis": "klif z widokiem na morze albo plaża do chodzenia; ścieżka od rodzica, kilka drzew i skał",
+   "rodzic": 21,
+   "reczna": false
+  },
+  "917": {
+   "x0": 298,
+   "y0": 361,
+   "szer": 120,
+   "wys": 60,
+   "nowa": true,
+   "nazwa": "Cypel ogona",
+   "opis": "klif z widokiem na morze albo plaża do chodzenia; ścieżka od rodzica, kilka drzew i skał",
+   "rodzic": 111,
+   "reczna": false
+  },
+  "918": {
+   "x0": 6,
+   "y0": 185,
+   "szer": 60,
+   "wys": 40,
+   "nowa": true,
+   "nazwa": "Północny klif lewego skrzydła IV",
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 910,
+   "reczna": false
+  },
+  "920": {
+   "x0": 540,
+   "y0": 434,
+   "szer": 60,
+   "wys": 40,
+   "nowa": true,
+   "nazwa": "Wschodni brzeg ogona II",
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 21,
+   "reczna": false
+  },
+  "922": {
+   "x0": 552,
+   "y0": 394,
+   "szer": 60,
+   "wys": 40,
+   "nowa": true,
+   "nazwa": "Wschodni brzeg ogona III",
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 125,
+   "reczna": false
+  },
+  "923": {
+   "x0": 624,
+   "y0": 376,
+   "szer": 60,
+   "wys": 40,
+   "nowa": true,
+   "nazwa": "Cypel ogona II",
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 20,
+   "reczna": false
+  },
+  "931": {
+   "x0": 388,
+   "y0": 0,
+   "szer": 120,
+   "wys": 60,
+   "nowa": true,
+   "nazwa": "Grań nad szczytem",
+   "opis": "klif z widokiem na morze albo plaża do chodzenia; ścieżka od rodzica, kilka drzew i skał",
+   "rodzic": 175,
+   "reczna": false
+  },
+  "933": {
+   "x0": 764,
+   "y0": 316,
+   "szer": 80,
+   "wys": 80,
+   "nowa": true,
+   "nazwa": "Wschodni brzeg ogona",
+   "opis": "klif z widokiem na morze albo plaża do chodzenia; ścieżka od rodzica, kilka drzew i skał",
+   "rodzic": 168,
+   "reczna": false
+  },
+  "934": {
+   "x0": 560,
+   "y0": 84,
+   "szer": 60,
+   "wys": 40,
+   "nowa": true,
+   "nazwa": "Północny brzeg pól II",
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 120,
+   "reczna": false
+  },
+  "935": {
+   "x0": 328,
+   "y0": 24,
+   "szer": 60,
+   "wys": 40,
+   "nowa": true,
+   "nazwa": "Północny klif lewego skrzydła V",
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 931,
+   "reczna": false
+  },
+  "950": {
+   "x0": 186,
+   "y0": 218,
+   "szer": 96,
+   "wys": 42,
+   "nowa": true,
+   "nazwa": "Zbocze pod Pustelnią",
+   "opis": "zbocze i skraj lasu pod Pustelnią, ścieżka od Pustelni w dół do puszczy; od zachodu lądowe przejście do lewego skrzydła",
+   "rodzic": 155,
+   "reczna": true
+  },
+  "951": {
+   "x0": 146,
+   "y0": 320,
+   "szer": 60,
+   "wys": 40,
+   "nowa": true,
+   "nazwa": "Zachodnie klify",
+   "opis": "przesmyk brzegu: ścieżka między sąsiadami, skały i widok na morze",
+   "rodzic": 162,
+   "reczna": false
+  },
+  "960": {
+   "x0": 282,
+   "y0": 216,
+   "szer": 36,
+   "wys": 44,
+   "nowa": true,
+   "nazwa": "Stok nad Garnizonem",
+   "opis": "Wiatr z zatoki przygina tu trawę, a z lasu słychać siekierę, której nikt nie widzi.",
+   "rodzic": 157,
+   "reczna": false
+  },
+  "961": {
+   "x0": 318,
+   "y0": 216,
+   "szer": 102,
+   "wys": 33,
+   "nowa": true,
+   "nazwa": "Przesieka pod Murami",
+   "opis": "Przesieka, którą wydeptały owce, wilki i ci, którzy nie chcą płacić myta przy bramie.",
+   "rodzic": 157,
+   "reczna": false
+  },
+  "962": {
+   "x0": 349,
+   "y0": 64,
+   "szer": 55,
+   "wys": 80,
+   "nowa": true,
+   "nazwa": "Zachodni Stok Gór",
+   "opis": "Za plecami szumi morze, przed tobą stromizna, której nikt rozsądny nie próbuje.",
+   "rodzic": 13,
+   "reczna": false
+  },
+  "963": {
+   "x0": 116,
+   "y0": 225,
+   "szer": 70,
+   "wys": 35,
+   "nowa": true,
+   "nazwa": "Łąka pod Klifem",
+   "opis": "Trawa po kolana i cisza, w której słychać, jak daleko jest do ludzi.",
+   "rodzic": 18,
+   "reczna": false
+  },
+  "964": {
+   "x0": -14,
+   "y0": 225,
+   "szer": 40,
+   "wys": 76,
+   "nowa": true,
+   "nazwa": "Zachodni Brzeg",
+   "opis": "Dalej już tylko woda i mewy, które patrzą na ciebie tak, jakbyś był zagubiony.",
+   "rodzic": 18,
+   "reczna": false
+  }
+ }
+}

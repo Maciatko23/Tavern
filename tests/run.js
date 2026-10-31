@@ -79,6 +79,9 @@ const REFRESH = flag("odswiez-mape");             // --odswiez-mape <names>: mea
 const STALE = flag("nieaktualne");                // mapa --nieaktualne: the tests measured on an older plugin version
 const MEASURE = REFRESH || args.includes("mapa");
 const TIMEOUT = Number(opt("timeout", MEASURE ? 900 : 420));
+// the long tests: their own limit (s) when it is above the run's (2026-10-30: town_quests ~250 s in September, 393 on 10-17, ~420 now -
+// sixty quests walked through one after another, not a slower game)
+const LONG = { town_quests_test: 720 };
 if (!args.length && !REFRESH) { console.log("usage: node tests/run.js smoke|full|unit|zmiany [files] [--od REF|znacznik[:name]]|znacznik [name]|mapa [names]|affected <Plugin...>|changed|<name...> [--odswiez-mape <names>] [--czesc k/n] [--port N] [--retry N] [--timeout S] [--list] [--reuse|--no-reuse]"); process.exit(2); }
 const ROOT = path.join(TESTS, "..");
 const LAST = path.join(TESTS, "last_results.json");
@@ -301,7 +304,7 @@ function runOnce(t) {
         const before = cover ? require("./lib/mapa.js").pluginHashes() : null;
         const child = spawn(process.execPath, [t.file], { cwd: TESTS, stdio: ["ignore", fd, fd], env });
         let timedOut = false;
-        const limit = t.unit ? 120 : TIMEOUT;
+        const limit = t.unit ? 120 : Math.max(TIMEOUT, LONG[path.basename(t.file, ".js")] || 0);
         const timer = setTimeout(() => { timedOut = true; killTree(child.pid); }, limit * 1000);
         child.on("exit", code => {
             clearTimeout(timer);

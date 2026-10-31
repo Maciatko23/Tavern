@@ -47,42 +47,24 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // ---------------------------------------------------------------- z gór na przylądek
     await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, minimap: false });
     await t.setDay(10, 16);
-    await t.go(13, 118, 12, 6);   // (2026-10-18: Góry 120x96, the cape 88x80 - tools/powieksz)
-    const edge = await t.json(`$dataMap.events.filter(e => e && e.id >= 696 && e.id <= 698).map(e => [e.id, e.x, e.y, e.pages[0].list[0].parameters.slice(1, 4)])`);
-    t.check("Góry: na prawej krawędzi (119, 11-13) trzy przejścia na przylądek (Wyspa.js, 696-698)", edge.length === 3 && edge.every(e => e[3][0] === 159 && e[1] === 119), edge);
-    await t.eval("$gameMap.event(697).start(); 0");
-    const up = await t.until(t.onMap(159), 30);
+    // (2026-10-30, the world stage 3: Gory -> Przylądek is no longer a Wyspa.js edge; the cape is reached from the Osada (120 E) through Swiat_Data - the test enters the map itself)
+    const up = await t.go(159, 30, 78, 8);
     await t.frames(20);
     await t.calm({ quiet: true });
     const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $dataMap.width, $dataMap.height, $dataMap.tilesetId, $dataMap.note, $dataMap.displayName]");
-    t.check("...prowadzi na Map159 „Przylądek z latarnią” (30,78); mapa 88 x 80, tileset 11, notatka z <Water:salt>, nie szkielet",
-        up && at[0] === 159 && at[1] === 30 && at[2] === 78 && at[3] === 88 && at[4] === 80 && at[5] === 11 && /<Water:salt>/.test(at[6]) && !/szkielet/.test(at[6]) && at[7] === "Przylądek z latarnią", at);
+    t.check("Map159 „Przylądek z latarnią”: mapa 104 x 80, tileset 11, notatka z <Water:salt>, nie szkielet",
+        up && at[0] === 159 && at[3] === 104 && at[4] === 80 && at[5] === 11 && /<Water:salt>/.test(at[6]) && !/szkielet/.test(at[6]) && at[7] === "Przylądek z latarnią", at);
     const ways = await t.json(`(function(){ const ev = $dataMap.events.filter(Boolean), tr = e => (e.pages[0].list.find(c => c.code === 201) || {}).parameters;
         return { south: ev.filter(e => e.y === 79 && e.x >= 29 && e.x <= 31).map(e => [e.x, tr(e) ? tr(e).slice(1, 5) : null]),
             west: ev.filter(e => e.x === 0 && (e.y === 33 || e.y === 34)).map(e => [e.y, /isReady\\(157\\)/.test(e.pages[0].list[0].parameters[0])]),
             izba: ev.filter(e => e.name === 'Drzwi: Izba latarnika').map(e => [e.x, e.y]), tower: ev.filter(e => /<Latarnia:wieza>/.test(e.note)).map(e => [e.x, e.y, e.pages[0].image.characterName]),
             spots: ev.filter(e => /^Miejsce: /.test(e.name)).map(e => e.name.slice(9)).sort() }; })()`);
-    t.check("przejścia z kontraktu: dół (29-31, 79) -> Góry (118, 11-13, w lewo), lewa krawędź (0, 33-34) -> Urwisko (tylko gdy gotowe); izba i wieża latarni",
-        ways.south.length === 3 && ways.south.every((s, i) => s[1] && s[1][0] === 13 && s[1][1] === 118 && s[1][2] === 11 + i && s[1][3] === 4)
-        && ways.west.length === 2 && ways.west.every(w => w[1]) && ways.izba.join() === "15,18" && ways.tower.length === 1 && ways.tower[0][2] === "!$Latarnia_Wieza", ways);
+    t.check("przejścia: dół (29-31, 79) i lewa krawędź (0, 33-34) bez przejść Wyspy (od 2026-10-30 przejścia robi świat); izba i wieża latarni",
+        ways.south.length === 0 && ways.west.length === 0 && ways.izba.join() === "15,18" && ways.tower.length === 1 && ways.tower[0][2] === "!$Latarnia_Wieza", ways);
     t.check("miejsca Bazylego i pakietu na mapie: drewutnia, izba, izba_sen, laterna, lat_dzwon, lat_napad, lat_oboz",
         ways.spots.join() === "drewutnia,izba,izba_sen,lat_dzwon,lat_napad,lat_oboz,laterna", ways.spots);
-    // the way west: the Urwisko built (package B installed, 2026-10-16: Kruk.js says Wyspa.ready(157)) -> over to it (54,19), then back;
-    // not built (a stub Map157) -> a popup, no transfer
-    await t.popups({ clear: true });
-    const urwReady = await t.eval("Wyspa.isReady(157)");
-    await t.eval("(function(){ const e = $gameMap.events().find(e => e.x === 0 && e.y === 33); $gamePlayer.locate(1, 33); e.start(); return 0; })()");
-    if (urwReady) {
-        const over = await t.until(t.onMap(157), 15);
-        await t.frames(10);
-        const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]");
-        t.check("Urwisko (157) gotowe: lewa krawędź (0,33) prowadzi na Urwisko Kruków (110,19)", over && at.join() === "157,110,19", at);
-        await t.go(159, 30, 78, 8);
-    } else {
-        await t.frames(30);
-        const westPop = await t.popups();
-        t.check("Urwisko (157) jeszcze nie gotowe: na lewej krawędzi popup nad bohaterem, bez przejścia", (await t.eval("$gameMap.mapId()")) === 159 && westPop.some(p => /urywa się/.test(p)), westPop);
-    }
+    // (2026-10-30, the world: 159 W (0,33-34) has no Wyspa way to the Urwisko any more - its west neighbour is the Osada (120); the test only stands on the cape)
+    await t.go(159, 30, 78, 8);
 
     // ---------------------------------------------------------------- Bazyli: plan dnia za słońcem
     const sunPlan = await t.json(`(function(){ const out = [];

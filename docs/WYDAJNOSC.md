@@ -134,6 +134,33 @@ Liczenie tylko przy zmianie kąta słońca okazało się niepotrzebne: koszt zja
   godzinę”, a działała co klatkę - pełne `refresh()` każdego owocowego drzewa (szukanie strony od nowa). Teraz tylko samoprzełącznik
   owoców trzymany w zgodzie, jak robi to `refresh()` na początku; gdy się przełączy, MZ sam odświeża zdarzenia mapy - ta sama strona.
 
+## Etap 3 (2026-10-30, gracz: „poprawiamy wszystko co się da”)
+
+Szczegóły w trzech notatkach: [światła](wydajnosc/etap3_swiatla.md), [postacie](wydajnosc/etap3_postacie.md),
+[świat](wydajnosc/etap3_swiat.md). Pomiar porównawczy `tools/wydajnosc/pomiar.js ... --przed HEAD --cicho --rundy 3`, na przemian
+przed / po (dwie pary dla stojących), CPU 4× wolniejsze, światła na karcie jak w grze (`pomiar.js` daje teraz `lightGpu: true`):
+
+| miejsce | przed | po | zmiana |
+|---|---|---|---|
+| Przystań nocą (22:00) | 15,4 / 17,0 ms | 9,7 / 9,8 ms | ok. −40% |
+| sala Tawerny 20:00 z podróżnymi (nowe miejsce `tawerna`) | 14,6 / 16,3 ms | 10,7 / 10,0 ms | ok. −33% |
+| farma | 20,2 / 19,7 ms | 18,3 / 19,5 ms | ok. −5% |
+| burza | 20,7 / 20,5 ms | 20,0 / 19,3 ms | ok. −5% |
+| Kruczy Jar, idzie | 17,3 ms | 16,4 ms | ok. −5% |
+| miasteczko, idzie | 12,4 ms | 12,6 ms | bez zmian |
+
+- **Światła na karcie** (`opts.lightGpu`): ciemność wnętrz, poświaty, warstwa nocy jako sprite'y i RenderTexture zamiast płócien 2D.
+  Zamrożona klatka płótno / karta: najwyżej kilka /255, sprawdzane w `wydajnosc_test` (sala, Przystań). **Testy domyślnie idą na
+  płótnach** (tests/lib/kit.js: czytają piksele ciemności); `kit.test({ lightGpu: true })` - na karcie, jak gra.
+- **Rozdzielacz haków postaci** (`Tawerna.sprite.hook`, `opts.dispatch`) zamiast 13 owinięć `Sprite_Character.update*`, oraz
+  **„still”** (`opts.still`): ustalone rzeczy zbieractwa daleko poza ekranem nieodświeżane wcale, bez macierzy i rysowania. Zysk mniejszy,
+  niż obiecywał profil: czas na mapach z lasem siedzi w treści haków drzew (kołysanie pasów `updateTreeFrame` / `layStrips`,
+  `updateTreeEffects`), nie w owinięciach - **następny kandydat: kołysanie drzew na karcie** (shader wierzchołków zamiast pasów co klatkę).
+  Zmiana jakości grafiki (`gfx.version`) budzi wszystkie uśpione rzeczy (cienie kamieni na Niskiej).
+- **Lista kratek zbieractwa** (`Farming.gatherTiles`) dla warstwy kamieni i psa; wczesne wyjścia w `Game_Map.update`.
+- **Odrzucone:** indeks zdarzeń na kratkach - wymagał akcesorów `_x/_y/_characterName`, czyli zmiany formatu zapisu gry, za 0,3-1,5 ms.
+- **Test:** budżety farmy i burzy (22 ms) w `tests/wydajnosc_test.js`.
+
 ## Co zmieniono (etap 1)
 
 - **Pasy drzew jako siatka (ChoppableTree_Render.js).** Drzewo kołysze się w poziomych pasach po 6 wierszy (25-40 pasów).
@@ -329,6 +356,11 @@ Po obu etapach, Kruczy Jar, CPU 4× wolniejsze: krok gry ok. 7-9 ms + rysowanie 
    wszystkich dzieci tylko po to, by przyciąć je do ekranu.
 6. **Bitmapę rysuj od nowa (i wysyłaj na kartę: `_baseTexture.update()`) tylko gdy coś się zmieniło** - klucz z tego, od czego
    zależy (pozycja widoku, godzina, liczba...).
+7a. **(etap 3) Nowa wtyczka nie owija `Sprite_Character.prototype.update*`** - rejestruje hak `Tawerna.sprite.hook({ owner, method,
+   when, before, replace, after })` (TawernaCore; reguły w [etap3_postacie.md](wydajnosc/etap3_postacie.md)): `when` liczone raz na
+   postać, ciało haka i tak samo się zabezpiecza (`opts.dispatch = false` puszcza każdy hak dla każdego sprite'a). Ustalone rzeczy
+   zbieractwa daleko poza ekranem (`opts.still`) mają stan sprite'a sprzed dowolnie dawna - czytaj `Game_Event`, nie sprite;
+   `sprite._wyKeep = true` trzyma odświeżanie. Nigdy nie zmieniaj pól zapisywanych w grze (`_x`, `_y`, ... na akcesory) dla wydajności.
 7. **Haki na `Sprite_Character.update` / `updatePosition` / `updateFrame` idą dla każdego zdarzenia** (Kruczy Jar 386, miasteczko
    576, ok. 16 wtyczek w łańcuchu): najpierw tani warunek i wyjście, notatki zdarzeń czytane raz (WeakMap), żadnych wyrażeń
    regularnych co klatkę.

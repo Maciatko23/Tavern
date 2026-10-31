@@ -52,7 +52,7 @@
     const word = (obj, key) => { let o = obj; for (const p of String(key).split(".")) { if (!o || typeof o !== "object") return ""; o = o[p]; } return typeof o === "string" ? o : ""; };
     const CH = () => T.api("CleanHUD");
     const UND = "podziemia";
-    const ASPECT = 820 / 550;   // (the atlas's box)
+    const ASPECT = D.ASPEKT > 0 ? D.ASPEKT : 820 / 550;   // (the island's box: the data's ASPEKT, else the atlas's)
 
     // ------------------------------------------------------------------ the places
     const PLACES = D.MIEJSCA.map(p => Object.assign({}, p, { key: String(p.id) }));
@@ -109,7 +109,7 @@
             const target = !!tgt && String(tgt.id) === p.key;
             // (the goal's place not seen yet: a "?" with the diamond - the compass points there anyway)
             const state = known.has(p.key) ? "known" : target || (NEXT.get(p.key) || []).some(k => known.has(k)) ? "hint" : "hidden";
-            return { id: p.id, key: p.key, name: p.nazwa, x: p.x, y: p.y, state, here: String(here) === p.key, target };
+            return { id: p.id, key: p.key, name: p.nazwa, x: p.x, y: p.y, lab: p.lab, state, here: String(here) === p.key, target };
         });
     }
     const roads = () => D.DROGI.map(([a, b]) => [String(a), String(b)]).filter(([a, b]) => BY.has(a) && BY.has(b));
@@ -176,7 +176,8 @@
     const K = {
         text: "rgb(236,238,240)", muted: "rgb(138,144,153)", dim: "rgb(98,103,111)", line: "rgb(58,62,70)", soft: "rgb(212,214,218)",
         panel: "rgba(11,12,15,0.93)", panel2: "rgb(20,21,25)", cell: "rgb(30,32,37)", acc: "rgb(255,210,63)", accDim: "rgb(92,76,24)", sel: "rgb(16,14,6)",
-        gold: "rgb(255,214,96)", warn: "#ff9f8f", land: "rgb(31,37,33)", shore: "rgb(74,84,76)", road: "rgb(96,100,108)", sea: "rgb(14,18,22)"
+        gold: "rgb(255,214,96)", warn: "#ff9f8f", land: "rgb(31,37,33)", shore: "rgb(74,84,76)", road: "rgb(96,100,108)", sea: "rgb(14,18,22)",
+        forest: "rgba(64,80,68,0.65)", bed: "rgb(94,88,72)"
     };
     // the island's box inside a rect (the atlas's aspect), centred
     function boxIn(rect) {
@@ -185,8 +186,8 @@
         return { x: rect.x + (rect.w - w) / 2, y: rect.y + (rect.h - h) / 2, w, h };
     }
     const at = (box, p) => ({ x: box.x + p.x * box.w, y: box.y + p.y * box.h });
-    function shore(ctx, box) {
-        const pts = D.BRZEG.map(([x, y]) => at(box, { x, y })), n = pts.length;
+    function shore(ctx, box, line) {
+        const pts = (line || D.BRZEG).map(([x, y]) => at(box, { x, y })), n = pts.length;
         ctx.beginPath();
         for (let i = 0; i < n; i++) {
             const a = pts[i], b = pts[(i + 1) % n], mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
@@ -202,12 +203,23 @@
         const ctx = b.context, c = CH(), list = o.nodes || nodes(), box = boxIn(rect), out = [];
         ctx.save();
         if (o.sea !== false) { ctx.fillStyle = K.sea; if (c && c.roundPath) { c.roundPath(ctx, rect.x, rect.y, rect.w, rect.h, 12); ctx.fill(); } else ctx.fillRect(rect.x, rect.y, rect.w, rect.h); }
-        shore(ctx, box);
-        ctx.fillStyle = K.land;
-        ctx.fill();
-        ctx.lineWidth = 1.5;
-        ctx.strokeStyle = K.shore;
-        ctx.stroke();
+        for (const line of [null].concat(D.BRZEGI || [])) {   // (the island, then its islets)
+            shore(ctx, box, line);
+            ctx.fillStyle = K.land;
+            ctx.fill();
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = K.shore;
+            ctx.stroke();
+        }
+        if (D.LAS && D.LAS.length) {   // the trackless forest between the maps: a soft pattern of dots
+            ctx.fillStyle = K.forest;
+            for (const [fx, fy] of D.LAS) { const q = at(box, { x: fx, y: fy }); ctx.beginPath(); ctx.arc(q.x, q.y, 1.7, 0, Math.PI * 2); ctx.fill(); }
+        }
+        if (D.KORYTO && D.KORYTO.length) {   // the dry riverbed: a thin broken line
+            ctx.lineWidth = 1.3; ctx.strokeStyle = K.bed; ctx.setLineDash([5, 4]);
+            for (const part of D.KORYTO) { ctx.beginPath(); part.forEach(([kx, ky], i) => { const q = at(box, { x: kx, y: ky }); if (i) ctx.lineTo(q.x, q.y); else ctx.moveTo(q.x, q.y); }); ctx.stroke(); }
+            ctx.setLineDash([]);
+        }
         // the roads: both ends seen (a "?" end: dashed)
         const byKey = new Map(list.map(n => [n.key, n]));
         for (const [a, b2] of roads()) {
@@ -249,10 +261,17 @@
                 ctx.fillStyle = K.gold; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = K.sel; ctx.stroke();
             }
             if (n.state === "known") {
-                const above = n.y > 0.82, size = on ? 17 : 16, ly = above ? p.y - r - (n.target ? 40 : 24) : p.y + r + 4;
-                label(n.name, p.x, ly, size, on ? K.acc : can ? K.text : K.dim, on ? "bold" : null);
+                const side = n.lab || (n.y > 0.82 ? "n" : "s"), size = on ? 17 : 16, col = on ? K.acc : can ? K.text : K.dim, face = on ? "bold" : null;
                 const extra = typeof o.labelOf === "function" ? o.labelOf(n.key) : "";
-                if (extra) label(extra, p.x, ly + size + 3, 14, on ? K.acc : K.muted);
+                if (side === "e" || side === "w") {   // (beside the point: the name, the stop's line under it)
+                    const ly = p.y - Math.ceil(size * 0.75), lx = side === "e" ? p.x + r + 7 : p.x - r - 7 - 300;
+                    if (c && c.textOut) c.textOut(b, n.name, Math.round(lx), Math.round(ly), 300, Math.ceil(size * 1.5), side === "e" ? "left" : "right", { size, color: col, face, plain: true });
+                    if (extra && c && c.textOut) c.textOut(b, extra, Math.round(lx), Math.round(ly + size + 3), 300, 21, side === "e" ? "left" : "right", { size: 14, color: on ? K.acc : K.muted, plain: true });
+                } else {
+                    const above = side === "n", ly0 = above ? p.y - r - (n.target ? 40 : 24) : p.y + r + 4, ly = above && extra ? ly0 - size - 3 : ly0;   // (above: the name over its second line)
+                    label(n.name, p.x, ly, size, col, face);
+                    if (extra) label(extra, p.x, ly + size + 3, 14, on ? K.acc : K.muted);
+                }
             }
             out.push({ key: n.key, id: n.id, x: Math.round(p.x), y: Math.round(p.y), state: n.state, r, here: n.here, target: n.target, can });
         }

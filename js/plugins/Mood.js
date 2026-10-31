@@ -466,6 +466,8 @@ void main(void) {
         P.vigCol = mix3(P.vigCol, DARK_FOREST.vigCol, 0.7);
         P.bloom = Math.max(P.bloom, 0.5); P.thr = Math.min(P.thr, 0.78); P.flat = Math.min(P.flat, 0.2);
     }
+    // Mood.addTweak(name, (look, kind, dark) => void): a plugin's own change of the look (in place, before the options; null removes it)
+    const tweaks = new Map();
     // the look before the options (strength, the effects on / off)
     function target() {
         const kind = kindOf(), sky = skyNow(), dark = clamp01(sky.dark);
@@ -504,6 +506,8 @@ void main(void) {
             if (w.flash > 0) { P.bloom *= 1 - w.flash; P.vig *= 1 - 0.6 * w.flash; }
         } else if (kind === "interior") P = mixLook(LOOKS.interior, LOOKS.interiorNight, dark);
         else P = mixLook(LOOKS[kind] || LOOKS.neutral, LOOKS.neutral, 0);
+        // (2026-10-30) another plugin's small change of the look before the options (Ziemia.js: a touch more colour and vignette on a trial map)
+        for (const f of tweaks.values()) { try { f(P, kind, dark); } catch (e) { tweaks.clear(); } }
         return { kind, look: P };
     }
     // the options on a look: the strength (0..1) towards the neutral one, an effect off = its part neutral
@@ -594,6 +598,7 @@ void main(void) {
         snap() { const s = set(); if (s) { s._moodCur = null; s.updateMood(); } return !!s; },
         // the map's kind read again (after its note was changed in memory)
         refresh() { kindCache = { map: -1, kind: "outdoor" }; return kindOf(); },
+        addTweak(name, fn) { if (typeof fn === "function") tweaks.set(name, fn); else tweaks.delete(name); },
         setOption(key, value) { const k = OPT[key] || key; ConfigManager[k] = value; return opt(k); }
     };
     window.Mood = T.register(PLUGIN, Mood);

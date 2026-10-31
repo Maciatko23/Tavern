@@ -45,6 +45,7 @@ const OUT = __dirname + "/";
             fam.api && fam.parts.join() === "core,objects,swing,render" && fam.scripts.join() === "1,1,1,1" && (!REGISTERED || fam.order.join() === "MapZoom,ChoppableTree,ChoppableTree_Objects,ChoppableTree_Swing,ChoppableTree_Render,SurvivalHUD"), fam);
         await ev("window.__chops = []; Tawerna.on('chop', e => window.__chops.push({ kind: e.kind, id: e.id, mapId: e.mapId, x: e.x, y: e.y, done: e.done, drops: e.drops, charred: e.charred, hand: e.hand, same: e.event === $gameMap.event(e.id) }), { owner: 'test' }); 0");
         // a storm raging right now; no strikes of its own while we look
+        await ev("Wydajnosc.opts.lightGpu = false; 0");   // (the embers' glow is read off the night's canvas below)
         await ev("Survival.forceStorm(2); $gameSystem.setDayNightHour($gameSystem._stormForce.start + 0.7); 0");
         await frames(120);
         await ev("Storm.state.nextStrike = Storm.state.t + 100000; 0");

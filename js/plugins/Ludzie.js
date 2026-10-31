@@ -301,13 +301,11 @@
         const d = ev.event && ev.event(), m = d && /<LudOff:(-?\d+),(-?\d+)>/.exec(d.note || "");
         return (ev._ludOff = m ? [Number(m[1]), Number(m[2])] : null);
     };
-    const _Sprite_Character_updatePosition = Sprite_Character.prototype.updatePosition;
-    Sprite_Character.prototype.updatePosition = function() {
-        _Sprite_Character_updatePosition.call(this);
-        const ch = this._character;
-        // (2026-10-22: also the cave's own events on Map177 - its table has <LudOff:24,0> in the map file)
-        if (ch instanceof Game_Event && ((ch.eventId() >= D.IDS[0] && ch.eventId() <= D.IDS[1]) || $gameMap.mapId() === D.MAP.jaskinia)) { const o = offOf(ch); if (o) { this.x += o[0]; this.y += o[1]; } }
-    };
+    // (2026-10-22: also the cave's own events on Map177 - its table has <LudOff:24,0> in the map file)
+    const ludOffOf = ch => (ch instanceof Game_Event && ((ch.eventId() >= D.IDS[0] && ch.eventId() <= D.IDS[1]) || $gameMap.mapId() === D.MAP.jaskinia) ? offOf(ch) : null);
+    T.sprite.hook({ owner: PLUGIN, method: "updatePosition",
+        when: s => !!ludOffOf(s._character),   // (the id, the map and the note do not change: asked once per event)
+        after(s) { const o = ludOffOf(s._character); if (o) { s.x += o[0]; s.y += o[1]; } } });
 
     // the looks by the state (every 20 frames and as the map comes up)
     function syncMap() {

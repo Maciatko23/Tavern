@@ -745,7 +745,7 @@
     const _Game_Map_update = Game_Map.prototype.update;
     Game_Map.prototype.update = function(sceneActive) {
         _Game_Map_update.call(this, sceneActive);
-        for (const a of animals.slice()) a.update();
+        if (animals.length) for (const a of animals.slice()) a.update();   // (2026-10-30: no list copy while there are none)
     };
     // sprites of the animals that exist when the spriteset is (re)built, e.g. after a menu; the aiming circle (Hunting_Weapons.js)
     const _Spriteset_Map_createCharacters = Spriteset_Map.prototype.createCharacters;
@@ -830,85 +830,91 @@
         const cw = (b - a + 8) % 8;
         return RING8[(a + (cw <= 4 ? 1 : 7)) % 8];
     }
-    const _look8UpdateBitmap = Sprite_Character.prototype.updateBitmap;
-    Sprite_Character.prototype.updateBitmap = function() {
-        let look = look8For(this._character);
-        // standing (not a pose, a few frames without a step): the look's breathing sheet, if it has one
-        if (look && look.idle && !look.pose && (this._l8still || 0) >= 8 && !this._character.isJumping()) look = look.idle;
-        if (look) {
-            if (this._look8Sheet !== look.sheet) {
-                this._look8Sheet = look.sheet;
-                this.bitmap = ImageManager.loadCharacter(look.sheet);
-            }
-            // (not an empty name: that hides the sprite - isEmptyCharacter; the dog coming out of its kennel stayed invisible)
-            this._characterName = look.sheet;
-            this._tileId = 0;
-            this._look8 = look;
-            return;
-        }
-        if (this._look8Sheet) { this._look8Sheet = null; this._look8 = null; this._characterName = null; }   // (the old sheet is loaded again)
-        _look8UpdateBitmap.call(this);
+    // The three hooks below (Tawerna.sprite, TawernaCore.js) are for the sprites whose picture has an 8-way sheet (or still shows one):
+    // asked again when the character's picture changes (the core) or the sheets are switched (look8)
+    const look8Sprite = s => {
+        const ch = s._character;
+        return !!ch && ch !== $gamePlayer && ((look8On && !!LOOK8[ch.characterName()]) || !!s._look8Sheet || !!s._look8);
     };
+    T.sprite.hook({ owner: "Hunting", method: "updateBitmap", when: look8Sprite,
+        replace(s) {
+            let look = look8For(s._character);
+            // standing (not a pose, a few frames without a step): the look's breathing sheet, if it has one
+            if (look && look.idle && !look.pose && (s._l8still || 0) >= 8 && !s._character.isJumping()) look = look.idle;
+            if (look) {
+                if (s._look8Sheet !== look.sheet) {
+                    s._look8Sheet = look.sheet;
+                    s.bitmap = ImageManager.loadCharacter(look.sheet);
+                }
+                // (not an empty name: that hides the sprite - isEmptyCharacter; the dog coming out of its kennel stayed invisible)
+                s._characterName = look.sheet;
+                s._tileId = 0;
+                s._look8 = look;
+                return true;
+            }
+            if (s._look8Sheet) { s._look8Sheet = null; s._look8 = null; s._characterName = null; }   // (the old sheet is loaded again)
+            return false;
+        } });
     const _look8PatternWidth = Sprite_Character.prototype.patternWidth;
     Sprite_Character.prototype.patternWidth = function() { return this._look8 && this.bitmap ? this._look8.cell : _look8PatternWidth.call(this); };
     const _look8PatternHeight = Sprite_Character.prototype.patternHeight;
     Sprite_Character.prototype.patternHeight = function() { return this._look8 && this.bitmap ? this._look8.cell : _look8PatternHeight.call(this); };
-    const _look8UpdateFrame = Sprite_Character.prototype.updateFrame;
-    Sprite_Character.prototype.updateFrame = function() {
-        const look = this._look8, ch = this._character;
-        if (!look || !ch) return _look8UpdateFrame.call(this);
+    T.sprite.hook({ owner: "Hunting", method: "updateFrame", when: look8Sprite, replace: s => look8Frame(s) });
+    function look8Frame(spr) {
+        const look = spr._look8, ch = spr._character;
+        if (!look || !ch) return false;
         // how it moved since the last frame: the facing (smoothed, a turn held a few frames so it does not flicker) and the legs
-        const x = ch._realX, y = ch._realY, dx = this._l8x === undefined ? 0 : x - this._l8x, dy = this._l8y === undefined ? 0 : y - this._l8y;
-        this._l8x = x; this._l8y = y;
-        if (Math.abs(dx) > 0.0005) this._l8side = dx > 0 ? 6 : 4;   // (the last way it went sideways: for a look whose up and down rows are wanting)
+        const x = ch._realX, y = ch._realY, dx = spr._l8x === undefined ? 0 : x - spr._l8x, dy = spr._l8y === undefined ? 0 : y - spr._l8y;
+        spr._l8x = x; spr._l8y = y;
+        if (Math.abs(dx) > 0.0005) spr._l8side = dx > 0 ? 6 : 4;   // (the last way it went sideways: for a look whose up and down rows are wanting)
         const d = Math.hypot(dx, dy);
         if (d > 0.0005 && d < 1.5) {
-            this._l8vx = (this._l8vx || 0) * 0.6 + dx;
-            this._l8vy = (this._l8vy || 0) * 0.6 + dy;
-            const want = LOOK8_OCT[Math.round(Math.atan2(this._l8vy, this._l8vx) / (Math.PI / 4))];
-            if (!this._l8dir || want === this._l8dir) { this._l8dir = want; this._l8turn = 0; }
+            spr._l8vx = (spr._l8vx || 0) * 0.6 + dx;
+            spr._l8vy = (spr._l8vy || 0) * 0.6 + dy;
+            const want = LOOK8_OCT[Math.round(Math.atan2(spr._l8vy, spr._l8vx) / (Math.PI / 4))];
+            if (!spr._l8dir || want === spr._l8dir) { spr._l8dir = want; spr._l8turn = 0; }
             // (the count starts from nothing: ++ on an unset one gave NaN, and a NaN count never reached its turn - an animal that had
             // turned where it stood ran on drawn the other way, "moonwalking", till it went exactly the way it faced; 2026-10-06)
-            else if (look.turn) { if ((this._l8turn = (this._l8turn || 0) + 1) >= look.turn) { this._l8dir = turnStep(this._l8dir, want); this._l8turn = 0; } }   // (through the ways between)
-            else if ((this._l8turn = (this._l8turn || 0) + 1) >= 4) { this._l8dir = want; this._l8turn = 0; }
-            this._l8step = (this._l8step || 0) + d;
-            this._l8still = 0;
+            else if (look.turn) { if ((spr._l8turn = (spr._l8turn || 0) + 1) >= look.turn) { spr._l8dir = turnStep(spr._l8dir, want); spr._l8turn = 0; } }   // (through the ways between)
+            else if ((spr._l8turn = (spr._l8turn || 0) + 1) >= 4) { spr._l8dir = want; spr._l8turn = 0; }
+            spr._l8step = (spr._l8step || 0) + d;
+            spr._l8still = 0;
         } else {
-            this._l8still = (this._l8still || 0) + 1;
+            spr._l8still = (spr._l8still || 0) + 1;
             // turned where it stands (towards the hero, a growl): the 8-way facing follows the 4-way one - or the one it says itself
             // (face8: the bear rearing up or striking faces the hero on the slant too)
             const d4 = ch.direction(), f8 = typeof ch.face8 === "function" ? ch.face8() : 0;
-            if (f8 && look.pose) this._l8dir = f8;   // (a pose faces him at once: its frames are drawn that way)
+            if (f8 && look.pose) spr._l8dir = f8;   // (a pose faces him at once: its frames are drawn that way)
             else {
-                const want = f8 || (!this._l8dir || !(LOOK8_FITS[d4] || []).includes(this._l8dir) ? d4 : this._l8dir);
-                if (!look.turn || !this._l8dir) this._l8dir = want;
-                else if (want !== this._l8dir && (this._l8turn = (this._l8turn || 0) + 1) >= look.turn) { this._l8dir = turnStep(this._l8dir, want); this._l8turn = 0; }
+                const want = f8 || (!spr._l8dir || !(LOOK8_FITS[d4] || []).includes(spr._l8dir) ? d4 : spr._l8dir);
+                if (!look.turn || !spr._l8dir) spr._l8dir = want;
+                else if (want !== spr._l8dir && (spr._l8turn = (spr._l8turn || 0) + 1) >= look.turn) { spr._l8dir = turnStep(spr._l8dir, want); spr._l8turn = 0; }
             }
         }
-        if (look.pose && typeof ch.face8 === "function" && ch.face8()) this._l8dir = ch.face8();   // (a leap: it faces where it leaps)
-        const cell = look.cell, n = Math.max(1, Math.round(this.bitmap.width / cell) - 1);
-        const moving = this._l8still < 6 || ch.isJumping();
+        if (look.pose && typeof ch.face8 === "function" && ch.face8()) spr._l8dir = ch.face8();   // (a leap: it faces where it leaps)
+        const cell = look.cell, n = Math.max(1, Math.round(spr.bitmap.width / cell) - 1);
+        const moving = spr._l8still < 6 || ch.isJumping();
         // a pose sheet: the frame the character says (look8Col(cells) -> 0..cells-1)
         const own = look.pose && typeof ch.look8Col === "function" ? ch.look8Col(n + 1, look) : undefined;
         // a breathing sheet plays by itself (faster while it pants after a blow: ch.breathRate)
-        if (look.rate && own === undefined) this._l8breath = (this._l8breath || 0) + (typeof ch.breathRate === "function" ? ch.breathRate() : 1);
-        const col = own !== undefined ? Math.max(0, Math.min(n, own)) : look.rate ? 1 + Math.floor((this._l8breath || 0) / look.rate) % n
-            : moving ? 1 + Math.min(n - 1, Math.floor((((this._l8step || 0) / look.stride) % 1) * n)) : 0;
+        if (look.rate && own === undefined) spr._l8breath = (spr._l8breath || 0) + (typeof ch.breathRate === "function" ? ch.breathRate() : 1);
+        const col = own !== undefined ? Math.max(0, Math.min(n, own)) : look.rate ? 1 + Math.floor((spr._l8breath || 0) / look.rate) % n
+            : moving ? 1 + Math.min(n - 1, Math.floor((((spr._l8step || 0) / look.stride) % 1) * n)) : 0;
         // a sheet may say which of its rows to use for a facing (look.rows(dir, moving, side) -> a numpad dir): some have no good
         // back views - the cat's walking up rows show its face, as if it went backwards (user 2026-10-01)
-        const dir = look.rows ? look.rows(this._l8dir, moving, this._l8side || 6) : this._l8dir;
-        this.setFrame(col * cell, (LOOK8_ROW[dir] || 0) * cell, cell, cell);
-    };
+        const dir = look.rows ? look.rows(spr._l8dir, moving, spr._l8side || 6) : spr._l8dir;
+        spr.setFrame(col * cell, (LOOK8_ROW[dir] || 0) * cell, cell, cell);
+        return true;
+    }
     // a blow's weight: the sprite pushed the way it strikes (ch.lungeOffset() -> [px, py], the bear's paw), back again after
-    const _look8UpdatePosition = Sprite_Character.prototype.updatePosition;
-    Sprite_Character.prototype.updatePosition = function() {
-        _look8UpdatePosition.call(this);
-        const ch = this._character;
-        if (ch && typeof ch.lungeOffset === "function") {
-            const o = ch.lungeOffset();
-            if (o) { this.x += o[0]; this.y += o[1]; }
-        }
-    };
+    T.sprite.hook({ owner: "Hunting", method: "updatePosition", when: s => !!s._character && typeof s._character.lungeOffset === "function",
+        after(s) {
+            const ch = s._character;
+            if (ch && typeof ch.lungeOffset === "function") {
+                const o = ch.lungeOffset();
+                if (o) { s.x += o[0]; s.y += o[1]; }
+            }
+        } });
     // the sheets come with the map, so the first step does not wait for them
     const _look8MapCreate = Scene_Map.prototype.create;
     Scene_Map.prototype.create = function() {
@@ -932,7 +938,7 @@
     const ai = name => function() { const a = AI(); return a[name].apply(a, arguments); };
     const weapon = name => function() { const w = W(); return w[name].apply(w, arguments); };
     const API = window.Hunting = T.register("Hunting", {
-        auto: v => { auto = !!v; }, LOOK8, look8: v => { look8On = !!v; }, animate: weapon("animate"), SPECIES, BEAR_SPAWN, get WEAPONS() { return W().WEAPONS; },
+        auto: v => { auto = !!v; }, LOOK8, look8: v => { look8On = !!v; T.sprite.dirty(); }, animate: weapon("animate"), SPECIES, BEAR_SPAWN, get WEAPONS() { return W().WEAPONS; },
         spawn, shoot: weapon("shoot"), populate, hit: weapon("hit"), kill: weapon("kill"), removeAnimal, mapTargets,
         get animals() { return animals; }, get projectiles() { return W().projectiles(); }, hunt, killedToday, pickWeapon: weapon("pickWeapon"),
         updateProjectiles: weapon("updateProjectiles"),

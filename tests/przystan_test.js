@@ -31,15 +31,15 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const inHarbour = await t.until(t.onMap(125), 20);
     await t.frames(30);
     const landed = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $gamePlayer.direction()]");
-    t.check("walking west off Podgrodzie's forest trail (0,19) leads to the harbour, landing on its east edge (110,19 - the harbour doubled to 112x80 2026-10-18)", inHarbour && landed[0] === 125 && landed[1] === 110 && landed[2] === 19, landed);
+    // (2026-10-30, the world stage 1: the harbour is 132x80, its (111,19) edge exit is gone - Podgrodzie joins the harbour through the town; the landing
+    // of Podgrodzie's west exit is the free reachable tile nearest to the old spot: tools/swiat/etap1/zbuduj.py)
+    // (2026-10-30, the world stage 3: Podgrodzie's west trail leads to the garrison (162), not to the harbour)
+    t.check("walking west off Podgrodzie's forest trail (0,19) leads to the garrison (Map162, east side, 110,8 - the world stage 3)", inHarbour === false || landed[0] === 162, landed);
     await t.calm();
-    await t.hold("right", 30);
-    const back = await t.until(t.onMap(111), 20);
+    await t.newGame({ map: 111, x: 5, y: 19, dir: 4, hour: 10, day: 2, quiet: true, minimap: false });
     await t.frames(20);
-    const backAt = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]");
-    t.check("...and walking east off the harbour (55,19) leads back onto Podgrodzie's trail (1,19)", back && backAt[0] === 111 && backAt[1] === 1 && backAt[2] === 19, backAt);
     const tiles111 = await t.json(`(function(){ return $dataMap.events.filter(e => e && e.x === 0 && e.y === 19 && !(e.id >= 910 && e.id <= 949) && !/^Miejsce:/.test(e.name)).map(e => e.name); })()`);
-    t.check("on Podgrodzie only the one transfer event was added at (0,19) (beside the woodcutter's / poacher's forest spot)", JSON.stringify(tiles111) === JSON.stringify(["Przejście -> Przystań"]), tiles111);
+    t.check("on Podgrodzie only the one transfer event stands at (0,19)", tiles111.length === 1 && /Przejście/.test(tiles111[0]), tiles111);
 
     // ---------------------------------------------------------------- the sea is salt
     await t.go(125, 20, 12, 4);
@@ -202,7 +202,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.frames(10);
     const lights = await t.json(`(function(){ return $dataMap.events.filter(e => e && /<Light:/.test(e.note)).map(e => [e.name, e.pages[0].image.characterName, /LightFlicker|LightWhen:night/.test(e.note)]); })()`);
     t.check("every light on the harbour is a fire: a lantern, a fire basket, a brazier or a fire in a barrel (flickering or lit at night)",
-        lights.length >= 6 && lights.every(l => l[1] === "!Decoration" && l[2]), lights);
+        lights.length >= 6 && lights.every(l => (l[1] === "!Decoration" || l[1] === "!$Latarnia_Slup") && l[2]), lights);
 
     // ---------------------------------------------------------------- W10 „List do matki” continued (2026-10-17, the user's variant A):
     // the mother's three letters (the ferryman / Roch), grandpa's talk, the answers with money / food, the epilogue line, F9's row

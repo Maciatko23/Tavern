@@ -185,7 +185,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
         E1.own && E1.gold === 2400 && E1.furn.join() === "bed!,chest_s!" && E1.roof && E1.notes.includes("Akt kupna: Chata pod lasem") && /klucz/i.test(s2.text) && E1.forSale.length === 0, E1);
     // the hut on Podgrodzie's new rows: its door -> the room, and back
     t.check("E3 Podgrodzie is 92 x 112 now (20 rows added at the bottom, then doubled 2026-10-18 by tools/powieksz), <BuildRegion:8>", await t.go(111, 8, 81, 8) &&
-        (await J("$gameMap.width() + 'x' + $gameMap.height() + ' ' + Farming.buildRegion()")) === "92x112 8");
+        ["92x112 8", "102x112 8"].includes(await J("$gameMap.width() + 'x' + $gameMap.height() + ' ' + Farming.buildRegion()")));   // (2026-10-30 world stage 1: 10 columns of the moat before the wall)
     await t.eval("$gameMap.events().find(e => /Chata pod lasem/.test(e.event().name)).start(); 0");
     const inHut = await t.until(t.onMap(154), 20);
     await t.frames(30);
@@ -216,17 +216,17 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     await t.shot(path.join(SHOTS, "chata_pod_lasem.png"));
 
     // ---- the burnt farm: the way from Skraj lasu, the ruin, the quest D21
-    await t.go(23, 2, 7, 4);
+    await t.go(23, 77, 28, 6);   // (2026-10-30, the world: the burnt farm lies EAST of Skraj lasu - the way is on the east edge, rows 27-29)
     const way = await J("({ sign: ($gameMap.event(709) || { characterName: () => '' }).characterName(), way: [706, 707, 708].map(id => { const e = $gameMap.event(id); return e ? e.x + ',' + e.y : null; }) })");
-    await t.locate(1, 7, 4);
+    await t.locate(78, 28, 6);
     await t.frames(10);
     await t.shot(path.join(SHOTS, "zagroda_wejscie.png"));
     await t.eval("$gameMap.event(707).start(); 0");
     const onFarm = await t.until(t.onMap(168), 20);
     await t.frames(40);
     const Z0 = await J("(function(){ const e = $gameMap.events().find(x => /^<Zagroda:dom>/.test(x.event().note)); return { x: $gamePlayer.x, y: $gamePlayer.y, pic: e.characterName(), d: e.direction(), p: e.pattern(), id: e.eventId(), allows: Farming.mapAllowsBuilding(), smoke: $gameSelfSwitches.value([168, 711, 'A']) }; })()");
-    t.check("E7 Skraj lasu's west edge (rows 6-8, Homes' events with the signpost) -> the burnt farm (Map168, 98,12 - the map doubled 2026-10-18): the house a ruin (stage 0), no smoke; not his land",
-        way.sign === "!$Drogowskaz" && way.way.join() === "0,6,0,7,0,8" && onFarm && Z0.x === 98 && Z0.y === 12 && Z0.pic === "!$Zagroda_Dom" && Z0.d === 2 && Z0.p === 0 && !Z0.smoke && !Z0.allows, { way, Z0 });
+    t.check("E7 Skraj lasu's east edge (rows 27-29, Homes' events with the signpost) -> the burnt farm (Map168, 1,72 - its west edge, the world): the house a ruin (stage 0), no smoke; not his land",
+        way.sign === "!$Drogowskaz" && way.way.join() === "79,27,79,28,79,29" && onFarm && Z0.x === 1 && Z0.y === 72 && Z0.pic === "!$Zagroda_Dom" && Z0.d === 2 && Z0.p === 0 && !Z0.smoke && !Z0.allows, { way, Z0 });
     await t.locate(20, 12, 8);
     await t.frames(30);
     await t.shot(path.join(SHOTS, "zagroda_przed.png"));

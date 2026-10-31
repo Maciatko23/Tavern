@@ -17,7 +17,7 @@
 // The culls of the other plugins (the trees' strips and shadows, the people's shadows: ChoppableTree_Render.js, Sky.js,
 // CharacterPolish.js) ask Tawerna.view.sees (TawernaCore.js) - wrapped here so that opts.cull switches them all.
 // Other plugins: Tawerna.api("Wydajnosc") (also window.Wydajnosc) - opts { leaf, filterArea, cull, lazy, idleFilters, outline,
-// night } (true: on; the tests switch them off to compare the picture), stats { culled, lazy } (the last frame), settleFilters(root).
+// night, lightGpu } (true: on; the tests switch them off to compare the picture), stats { culled, lazy } (the last frame), settleFilters(root).
 
 /*:
  * @target MZ
@@ -72,8 +72,11 @@
     const T = window.Tawerna;
     if (!T) throw new Error("Wydajnosc.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     const PLUGIN = "Wydajnosc";
-    const opts = { leaf: true, filterArea: true, cull: true, idleFilters: true, lazy: true, night: true, outline: true };
-    const stats = { culled: 0, frame: -1, drawing: -1, lazy: 0, lazyFrame: -1 };
+    const opts = { leaf: true, filterArea: true, cull: true, idleFilters: true, lazy: true, night: true, outline: true, lightGpu: true, still: true };
+    const stats = { culled: 0, frame: -1, drawing: -1, lazy: 0, lazyFrame: -1, idle: 0, idleFrame: -1 };
+    // opts.dispatch: the character sprites' hooks run only for the sprites they are for (Tawerna.sprite, TawernaCore.js); false: every
+    // hook for every sprite, as the chain of wrappers did
+    if (T.sprite) Object.defineProperty(opts, "dispatch", { enumerable: true, get: () => T.sprite.filter, set: v => { T.sprite.filter = !!v; } });
 
     // ---- the empty updates: MZ's Sprite.update calls update() on every child; a plain Sprite's update only does the same for its
     // own children - with none it does nothing. Such a child is passed over (the same children, in the same order, as before: the
@@ -118,6 +121,7 @@
     const CULL_PAD = 160;
     const _render = Sprite_Character.prototype.render;
     Sprite_Character.prototype.render = function(renderer) {
+        if (this._wyIdle) return;   // (a settled thing far off the screen: not updated, its matrix is old - see "still" below)
         if (opts.cull && this.visible && this.renderable && this.worldAlpha > 0 && offTarget(this, renderer)) {
             const drawing = renderer.textureGC ? renderer.textureGC.count : Graphics.frameCount;   // (PIXI counts its drawings there)
             if (stats.drawing !== drawing) { stats.drawing = drawing; stats.culled = 0; }
@@ -182,12 +186,57 @@
         const pad = (P.night ? FAR_PAD : DAY_PAD + 1.2 * P.len * size) + size;
         return x + pad < r.x0 || x - pad > r.x1 || y + pad < r.y0 || y - pad - size > r.y1;
     }
+    // ---- "still" (2026-10-30): a settled thing far off the screen is not updated at all - not every 4th frame. Only the things the
+    // game has in thousands that never move on their own: the trees, rocks, bushes, stumps, logs (an event with a harvest config,
+    // ChoppableTree_Objects.js). Settled: its look - the place, the picture, the page, the pattern, the direction, the opacity - the
+    // same as at its last update, which was made when it was already far off (so that its shadows and layers were laid for "far");
+    // nothing falling, breaking, burning on it. A change of any of that, or the screen coming near (the margin above), and it is
+    // updated every frame again at once. Meanwhile its matrix is not made (PIXI's updateTransform, below) and it is not drawn: it lies
+    // beyond the margin, and what lies there is not on the screen. opts.still false: only the 4th-frame rule, as before.
+    // (docs/WYDAJNOSC.md, rule 0: code that reads another event's sprite gets an old x and y of it while it is far off - read the
+    // character, not the sprite; a sprite that must go on can set `sprite._wyKeep = true`)
+    const chop = () => { const P = T.api("ChoppableTree_parts"); return P && P.objects; };
+    const stillKinds = new WeakMap();
+    function stillKind(c) {
+        let v = stillKinds.get(c);
+        if (v === undefined) { const O = chop(); v = !!O && !!O.anyHarvestConfig(c); stillKinds.set(c, v); }
+        return v;
+    }
+    // is the look of a character (as numbers) the one of the last update? (set: and note the new one) - the graphics' quality is a
+    // part of it (a new level switches the rocks' and bushes' shadows: every settled thing takes it at once, not when it comes near)
+    function lookIs(s, c, set) {
+        const same = s._wyX === c._realX && s._wyY === c._realY && s._wyDir === c._direction && s._wyPat === c._pattern && s._wyOp === c._opacity &&
+            s._wyPage === c._pageIndex && s._wyV === (c._tshV || 0) && s._wyTr === c._transparent && s._wyBl === c._blendType && s._wyEr === c._erased &&
+            s._wyJ === c._jumpCount && s._wyIdx === c._characterIndex && s._wyTile === c._tileId && s._wyGfx === gfx.version;
+        if (set && !same) {
+            s._wyX = c._realX; s._wyY = c._realY; s._wyDir = c._direction; s._wyPat = c._pattern; s._wyOp = c._opacity; s._wyPage = c._pageIndex;
+            s._wyV = c._tshV || 0; s._wyTr = c._transparent; s._wyBl = c._blendType; s._wyEr = c._erased; s._wyJ = c._jumpCount;
+            s._wyIdx = c._characterIndex; s._wyTile = c._tileId; s._wyGfx = gfx.version;
+        }
+        return same;
+    }
+    const busy = (c, sprite) => c._treeFallT >= 0 || c._breakT >= 0 || !!sprite._emberSpots || !!sprite._emberGlow || !!sprite._tqCap || !!sprite._wyKeep;
     function lazyNow(sprite) {
         const c = sprite._character;
         if (!(c instanceof Game_Event) || (sprite._wySeen = (sprite._wySeen || 0) + 1) <= 2) return false;
+        if (busy(c, sprite)) { sprite._wyFar = false; sprite._wyIdle = false; return false; }
+        if (sprite._wyFar && opts.still) {
+            if (!lookIs(sprite, c, false)) { sprite._wyFar = false; sprite._wyIdle = false; return false; }   // (it changed: updated now)
+            if (farAway(sprite, c)) { sprite._wyIdle = true; return true; }
+            sprite._wyFar = false;   // (near again)
+        }
+        sprite._wyIdle = false;
         if (((Graphics.frameCount + sprite.spriteId) % gfx.lazyEvery) === 0) return false;   // (its turn: spread over the frames)
-        if (c._treeFallT >= 0 || c._breakT >= 0 || sprite._emberSpots || sprite._emberGlow || sprite._tqCap) return false;
         return farAway(sprite, c);
+    }
+    // after an update it was given (not skipped): settled and far now? (the look unchanged over two such updates)
+    function noteStill(sprite) {
+        const c = sprite._character;
+        if (!(c instanceof Game_Event) || sprite._wySeen <= 2) return;
+        if (sprite._wyKindOf !== c) { sprite._wyKindOf = c; sprite._wyKind = stillKind(c); }
+        if (!sprite._wyKind || busy(c, sprite)) { sprite._wyFar = false; return; }
+        if (!lookIs(sprite, c, true)) { sprite._wyStable = 0; sprite._wyFar = false; return; }
+        if ((sprite._wyStable = (sprite._wyStable || 0) + 1) >= 2) sprite._wyFar = farAway(sprite, c);
     }
     // put round the whole update when a map's sprites are made - outside every plugin's own hook on it (each once: one put round a
     // hook added later goes outside that one too, and both decide alike)
@@ -196,15 +245,28 @@
         if (cur._wyLazy) return;
         const lazy = function() {
             if (opts.lazy && lazyNow(this)) {
-                if (stats.lazyFrame !== Graphics.frameCount) { stats.lazyFrame = Graphics.frameCount; stats.lazy = 0; }
-                stats.lazy++;
+                if (this._wyIdle) {
+                    if (stats.idleFrame !== Graphics.frameCount) { stats.idleFrame = Graphics.frameCount; stats.idle = 0; }
+                    stats.idle++;
+                } else {
+                    if (stats.lazyFrame !== Graphics.frameCount) { stats.lazyFrame = Graphics.frameCount; stats.lazy = 0; }
+                    stats.lazy++;
+                }
                 return;
             }
+            this._wyIdle = false;
             cur.call(this);
+            if (opts.lazy && opts.still) noteStill(this);
         };
         lazy._wyLazy = true;
         Sprite_Character.prototype.update = lazy;
     }
+    // the matrix of a settled sprite far off is not made (it is not drawn either: render above); its children's neither
+    const _updateTransform = Sprite_Character.prototype.updateTransform;
+    Sprite_Character.prototype.updateTransform = function() {
+        if (this._wyIdle) return;
+        _updateTransform.call(this);
+    };
     const _createCharacters = Spriteset_Map.prototype.createCharacters;
     Spriteset_Map.prototype.createCharacters = function() {
         installLazy();

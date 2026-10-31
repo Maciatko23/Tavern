@@ -13,7 +13,7 @@ domy.chata.what = chatę pod lasem na Podgrodziu
 domy.chata.where = Podgrodzie: za palisadą, przy lesie, na południe od osady - wyjdź południową bramą i idź ścieżką na zachód. Obok chaty ogrodzona działka (furtka od ścieżki).
 domy.zagroda.name = Zagroda Ługów
 domy.zagroda.what = spaloną zagrodę Ługów
-domy.zagroda.where = na zachód od Skraju lasu (ścieżka przy drogowskazie, nad drogą do Kruczego Jaru). Pole i podwórze wokół domu.
+domy.zagroda.where = na wschód od Skraju lasu (ścieżka przy drogowskazie, nad drogą do Kruczego Jaru). Pole i podwórze wokół domu.
 
 # ======================================================================== ANIMALS (zwierzeta)
 [zwierzeta.cow]
@@ -67,7 +67,7 @@ Idź, idź. Ja tu jeszcze chwilę posiedzę.
 
 # ======================================================================== D21 (zadania.D21)
 zadania.D21.title = Spalona zagroda
-zadania.D21.where = Spalona zagroda (na zachód od Skraju lasu), Podgrodzie, ratusz
+zadania.D21.where = Spalona zagroda (na wschód od Skraju lasu), Podgrodzie, ratusz
 zadania.D21.when = po obejrzeniu zgliszcz albo krzyża
 zadania.D21.desc = Za Skrajem lasu stoją zgliszcza zagrody. Pole zarosło, przy lesie stoi brzozowy krzyż. Czyja to ziemia - i czy da się tu jeszcze zamieszkać?
 zadania.D21.steps.0.text = Zapytaj Józka Łatę na Podgrodziu, czyja to zagroda - handlarz starzyzną wie wszystko o wszystkich.
@@ -201,7 +201,7 @@ kod.well.1 = Sucho. Ani kropli - tylko piach i kamienie na dnie.
 # cross
 kod.cross.0 = Prosty krzyż z brzozy. Wycięte nożem: „Jan Ług”. Ktoś zostawił polne kwiaty.
 # signpost
-kod.signpost.0 = Na zachód: zagroda Ługów. Deska omszała, napis ledwo widać.
+kod.signpost.0 = Na wschód: zagroda Ługów. Deska omszała, napis ledwo widać.
 # costText
 kod.costText.0 = {1} ×{n} (masz {3})
 kod.costText.1 = bez materiałów

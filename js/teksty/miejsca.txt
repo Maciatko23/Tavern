@@ -312,3 +312,25 @@ pasmo.4.opis = Te sale budowały ręce, których imion nikt nie zapisał.
 
 # 5 Warstwa Prawdy (piętra 76-99)
 pasmo.5.opis = Płomienie palą się tu na niebiesko, a ciemność szepcze.
+
+# ======================================================================== Styki świata (2026-10-31): mapy w dawnych dziurach
+# 960 Stok nad Garnizonem
+mapa.960.pod = stok między urwiskiem a garnizonem
+mapa.960.opis = Wiatr z zatoki przygina tu trawę, a z lasu słychać siekierę, której nikt nie widzi.
+
+# 961 Przesieka pod Murami
+mapa.961.pod = dzika ziemia przy murach miasta
+mapa.961.opis = Przesieka, którą wydeptały owce, wilki i ci, którzy nie chcą płacić myta przy bramie.
+
+# 962 Zachodni Stok Gór
+mapa.962.pod = skalisty cypel nad morzem
+mapa.962.opis = Za plecami szumi morze, przed tobą stromizna, której nikt rozsądny nie próbuje.
+
+# 963 Łąka pod Klifem
+mapa.963.pod = wilgotna łąka u stóp klifu
+mapa.963.opis = Trawa po kolana i cisza, w której słychać, jak daleko jest do ludzi.
+
+# 964 Zachodni Brzeg
+mapa.964.pod = ostatni skrawek lądu na zachodzie
+mapa.964.opis = Dalej już tylko woda i mewy, które patrzą na ciebie tak, jakbyś był zagubiony.
+

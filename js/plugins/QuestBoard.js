@@ -613,25 +613,26 @@
     }
 
     // the wanted animal's look: bigger, tinted, its name over it; the board's marker over the board event
-    const _Sprite_Character_update = Sprite_Character.prototype.update;
-    Sprite_Character.prototype.update = function() {
-        if (this._qbScaled) { this.scale.x /= this._qbScaled; this.scale.y /= this._qbScaled; this._qbScaled = 0; }
-        _Sprite_Character_update.call(this);
-        const c = this._character;
-        if (!c) return;
-        if (c._qbScale) {
-            this.scale.x *= c._qbScale;
-            this.scale.y *= c._qbScale;
-            this._qbScaled = c._qbScale;
-            if (c._qbTone) this.setColorTone(c._qbTone);
-            if (!this._qbLabel && c._qbName) { this._qbLabel = new Sprite(nameplate(c._qbName)); this._qbLabel.anchor.set(0.5, 1); this.addChild(this._qbLabel); }
-            if (this._qbLabel) {
-                this._qbLabel.y = -Math.round(this.patternHeight() * 0.92) - 4;
-                this._qbLabel.scale.set(1 / (this.scale.x || 1), 1 / (this.scale.y || 1));   // (the name stays its size and unmirrored)
-                this._qbLabel.visible = !c._dead;
-            }
-        } else if (c instanceof Game_Event && isBoardEvent(c)) updateMarker(this);
-    };
+    // (for the animals - a wanted beast, a pack's leader, a wolf cub carry _qbScale - and the board's own event)
+    T.sprite.hook({ owner: "QuestBoard", method: "update",
+        when: s => { const c = s._character; return !!c && (!!c.isAnimal || (c instanceof Game_Event && isBoardEvent(c))); },
+        before(s) { if (s._qbScaled) { s.scale.x /= s._qbScaled; s.scale.y /= s._qbScaled; s._qbScaled = 0; } },
+        after(s) {
+            const c = s._character;
+            if (!c) return;
+            if (c._qbScale) {
+                s.scale.x *= c._qbScale;
+                s.scale.y *= c._qbScale;
+                s._qbScaled = c._qbScale;
+                if (c._qbTone) s.setColorTone(c._qbTone);
+                if (!s._qbLabel && c._qbName) { s._qbLabel = new Sprite(nameplate(c._qbName)); s._qbLabel.anchor.set(0.5, 1); s.addChild(s._qbLabel); }
+                if (s._qbLabel) {
+                    s._qbLabel.y = -Math.round(s.patternHeight() * 0.92) - 4;
+                    s._qbLabel.scale.set(1 / (s.scale.x || 1), 1 / (s.scale.y || 1));   // (the name stays its size and unmirrored)
+                    s._qbLabel.visible = !c._dead;
+                }
+            } else if (c instanceof Game_Event && isBoardEvent(c)) updateMarker(s);
+        } });
     function nameplate(name) {
         const b = new Bitmap(8, 8);
         b.fontSize = 15;

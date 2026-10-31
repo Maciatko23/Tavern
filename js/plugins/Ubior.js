@@ -1414,14 +1414,14 @@
         return sheetFor(filename, "system") || _loadSystem.apply(this, arguments);
     };
     // the walking sprite: HeroLook.js sets the sheet only when it changes - the live one put in once it is there
-    const _updateBitmap = Sprite_Character.prototype.updateBitmap;
-    Sprite_Character.prototype.updateBitmap = function() {
-        _updateBitmap.call(this);
-        if (this._heroSheet && SHEETS[this._heroSheet] && SHEETS[this._heroSheet].folder === "characters") {
-            const b = ImageManager.loadCharacter(this._heroSheet);
-            if (b !== this.bitmap && b.isReady()) this.bitmap = b;
-        }
-    };
+    // (only the hero's sprite has a _heroSheet: HeroLook.js)
+    if (T) T.sprite.hook({ owner: "Ubior", method: "updateBitmap", when: s => s._character === $gamePlayer,
+        after(s) {
+            if (s._heroSheet && SHEETS[s._heroSheet] && SHEETS[s._heroSheet].folder === "characters") {
+                const b = ImageManager.loadCharacter(s._heroSheet);
+                if (b !== s.bitmap && b.isReady()) s.bitmap = b;
+            }
+        } });
     // ---- over the head on the screen (2026-10-23): a child sprite of whoever shows a dressed sheet (the walking hero, the swing's body,
     // the eagle's rider, the hall's waiter) draws the strip's part over that sprite's frame - put in when the sheet is given to a sprite,
     // following its frame each time it is drawn (after every update, before the render: never a frame late). Its parent's opacity,

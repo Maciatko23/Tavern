@@ -402,23 +402,22 @@
     }
 
     // the bather (TavernLife.bathing): only the top of him shows, a little higher, in front of the tub he sits in
-    const _Sprite_Character_updateFrame = Sprite_Character.prototype.updateFrame;
-    Sprite_Character.prototype.updateFrame = function() {
-        _Sprite_Character_updateFrame.call(this);
-        const bathing = lib.bathing;
-        if (bathing && this._character === $gamePlayer && this._frame) {
-            const f = this._frame;
-            this.setFrame(f.x, f.y, f.width, Math.max(8, Math.round(f.height * (1 - bathing.cut))));
-        }
-    };
-    const _Sprite_Character_updatePosition = Sprite_Character.prototype.updatePosition;
-    Sprite_Character.prototype.updatePosition = function() {
-        _Sprite_Character_updatePosition.call(this);
-        if (this._character !== $gamePlayer) return;
-        const bathing = lib.bathing;
-        if (bathing) { this.y -= bathing.lift; this._sortY = this.y + bathing.lift + 8; }   // (sorted after the tub he sits in)
-        else if (this._sortY !== undefined) delete this._sortY;
-    };
+    // (the hero's sprite only)
+    T.sprite.hook({ owner: "TavernLife_Render", method: "updateFrame", when: s => s._character === $gamePlayer,
+        after(s) {
+            const bathing = lib.bathing;
+            if (bathing && s._character === $gamePlayer && s._frame) {
+                const f = s._frame;
+                s.setFrame(f.x, f.y, f.width, Math.max(8, Math.round(f.height * (1 - bathing.cut))));
+            }
+        } });
+    T.sprite.hook({ owner: "TavernLife_Render", method: "updatePosition", when: s => s._character === $gamePlayer,
+        after(s) {
+            if (s._character !== $gamePlayer) return;
+            const bathing = lib.bathing;
+            if (bathing) { s.y -= bathing.lift; s._sortY = s.y + bathing.lift + 8; }   // (sorted after the tub he sits in)
+            else if (s._sortY !== undefined) delete s._sortY;
+        } });
 
     // ------------------------------------------------------------------
     // Coins: the money flies from the hand that pays to the one that takes it (screen space, over the map, under the windows) - the

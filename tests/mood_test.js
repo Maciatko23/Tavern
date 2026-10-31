@@ -48,7 +48,8 @@ const PIXELS = String.raw`(function(){
 const stats = a => { const s = a.slice().sort((x, y) => x - y), q = p => s[Math.min(s.length - 1, Math.floor(p * s.length))];
     return { n: s.length, mean: +(s.reduce((x, y) => x + y, 0) / Math.max(1, s.length)).toFixed(3), med: +q(0.5).toFixed(3), p95: +q(0.95).toFixed(3) }; };
 
-kit.test({ port: 9489, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli", plugins: ["Mood"] }, async t => {
+// (2026-10-30: Ziemia.js tweaks the day look of Kruczy Jar - the trial of a prettier map; this test is about Mood's own looks)
+kit.test({ port: 9489, beforeLoad: "window.ZIEMIA = { off: true };", bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli", plugins: ["Mood"] }, async t => {
     t.check("wtyczka jest (wpisana albo wstrzyknięta)", ["registered", "injected"].includes(t.plugins.Mood) && (await t.eval("!!(window.Mood && Tawerna.api('Mood'))")), t.plugins);
     await t.eval("window.dispatchEvent(new Event('pointerdown')); 0");   // (Fullscreen.js's one-shot request used up: Esc not eaten)
 

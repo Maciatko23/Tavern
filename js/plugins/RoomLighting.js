@@ -742,6 +742,106 @@
     const HARD_STOPS = [[0, 1], [0.6, 0.85], [1, 0]];
     const SOFT_STOPS = [[0, 1], [0.25, 0.9], [0.5, 0.62], [0.75, 0.27], [1, 0]];
 
+    // ---- the lights on the graphics card (2026-10-30, docs/wydajnosc/etap3_swiatla.md; Wydajnosc.opts.lightGpu false: the canvases
+    // as before). The darkness, the glows (here) and Farming_Render's night are RenderTextures drawn from pooled sprites: a hole in the
+    // dark is a gradient sprite with the ERASE blend (the canvas's "destination-out"), a glow an ADD sprite - no 2D canvas painted and
+    // uploaded each time. Two blends PIXI has not got are added to the renderer: ATOP (the canvas's "source-atop": a colour only where
+    // the dark still is) and DST_IN ("destination-in": a mask). The gradients are 256 px textures made once (a flame that flares past
+    // full strength gets its own, clamped as the canvas clamped it: LEVELS of them per shape). T.api("LightGpu").
+    const LightGpu = (function() {
+        const BLEND_ATOP = 28, BLEND_DST_IN = 29, SIZE = 256, STEP = 0.02, LEVELS = 24;
+        let installed = null;
+        const renderer = () => (window.Graphics && Graphics._app && Graphics._app.renderer) || null;
+        function available() {
+            const W = T.api("Wydajnosc");
+            if (W && W.opts && W.opts.lightGpu === false) return false;
+            const r = renderer();
+            if (!r || !r.gl || !r.state || !r.state.blendModes || !window.PIXI || !PIXI.RenderTexture || !PIXI.utils || !PIXI.utils.premultiplyBlendMode) return false;
+            if (installed !== r) {
+                const gl = r.gl;
+                r.state.blendModes[BLEND_ATOP] = [gl.DST_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ZERO, gl.ONE];
+                r.state.blendModes[BLEND_DST_IN] = [gl.ZERO, gl.SRC_ALPHA];
+                for (const pm of PIXI.utils.premultiplyBlendMode) { pm[BLEND_ATOP] = BLEND_ATOP; pm[BLEND_DST_IN] = BLEND_DST_IN; }
+                installed = r;
+            }
+            return true;
+        }
+        const textureOf = canvas => { const bt = new PIXI.BaseTexture(canvas); bt.scaleMode = PIXI.SCALE_MODES.LINEAR; return new PIXI.Texture(bt); };
+        // a radial gradient texture: rgb "r,g,b", stops [[at, alpha]...] (alpha times mul, at most 1), a ring that starts at `inner` of the radius
+        const gradients = new Map();
+        function gradient(name, rgb, stops, inner, mul) {
+            let t = gradients.get(name);
+            if (t) return t;
+            const c = document.createElement("canvas");
+            c.width = c.height = SIZE;
+            const x = c.getContext("2d"), h = SIZE / 2, g = x.createRadialGradient(h, h, h * (inner || 0), h, h, h);
+            for (const s of stops) g.addColorStop(s[0], "rgba(" + (s[2] || rgb) + "," + Math.min(1, s[1] * (mul || 1)).toFixed(4) + ")");   // ([at, alpha, "r,g,b"?])
+            x.fillStyle = g;
+            x.fillRect(0, 0, SIZE, SIZE);
+            t = textureOf(c);
+            gradients.set(name, t);
+            return t;
+        }
+        // a hole in the dark: shape 0 hard / 1 soft, at strength w (the alpha of the sprite up to 1; past it the stops are clamped)
+        const HOLE_STOPS = [HARD_STOPS, SOFT_STOPS];
+        function holeTexture(shape, w) {
+            const lv = w > 1 ? Math.min(LEVELS, Math.round((w - 1) / STEP)) : 0;
+            return gradient("hole" + shape + "_" + lv, "0,0,0", HOLE_STOPS[shape], 0, 1 + lv * STEP);
+        }
+        function Pool(blend) { this.c = new PIXI.Container(); this.blend = blend; this.n = 0; }
+        Pool.prototype.next = function(tex) {
+            let s = this.c.children[this.n++];
+            if (!s) { s = new PIXI.Sprite(tex); s.blendMode = this.blend; this.c.addChild(s); } else if (s.texture !== tex) s.texture = tex;
+            s.visible = true;
+            return s;
+        };
+        Pool.prototype.end = function() {
+            const list = this.c.children;
+            for (let i = this.n; i < list.length && list[i].visible; i++) list[i].visible = false;
+            this.n = 0;
+        };
+        // a layer: its texture and the root that draws into it
+        function Target(w, h) {
+            this.w = w;
+            this.h = h;
+            this.rt = PIXI.RenderTexture.create({ width: w, height: h, scaleMode: PIXI.SCALE_MODES.LINEAR });
+            this.root = new PIXI.Container();
+        }
+        Target.prototype.draw = function(clear) { renderer().render(this.root, this.rt, clear !== false); };
+        const render = (container, target, clear) => renderer().render(container, target.rt, clear !== false);
+        Target.prototype.resize = function(w, h) { if (w !== this.w || h !== this.h) { this.w = w; this.h = h; this.rt.resize(w, h); return true; } return false; };
+        Target.prototype.free = function() { if (this.rt) this.rt.destroy(true); this.rt = null; };
+        // a canvas drawn onto a layer by hand (a light with people in it: its shadows were cut out on the canvas): one texture per canvas
+        const canvases = new WeakMap();
+        function canvasTexture(canvas) {
+            let t = canvases.get(canvas);
+            if (!t || t.baseTexture.width !== canvas.width || t.baseTexture.height !== canvas.height) {
+                if (t) t.destroy(true);
+                t = textureOf(canvas);
+                canvases.set(canvas, t);
+            } else t.baseTexture.update();
+            return t;
+        }
+        const bitmapTexture = bitmap => bitmap._lgTex || (bitmap._lgTex = new PIXI.Texture(bitmap._baseTexture));
+        // one sprite of a texture drawn at once onto a layer (clear: false)
+        const solo = new Map();
+        function drawSolo(target, tex, x, y, sx, sy, blend, alpha) {
+            let s = solo.get(blend);
+            if (!s) { s = new PIXI.Sprite(tex); s.blendMode = blend; solo.set(blend, s); }
+            s.texture = tex;
+            s.position.set(x, y);
+            s.scale.set(sx, sy);
+            s.alpha = alpha === undefined ? 1 : alpha;
+            renderer().render(s, target.rt, false);
+        }
+        // the ids of the silhouettes' keys (a number in a light's signature instead of a string)
+        const ids = new Map();
+        const idOf = k => { let v = ids.get(k); if (v === undefined) { v = ids.size + 1; ids.set(k, v); } return v; };
+        return { available, gradient, holeTexture, Pool, Target, render, canvasTexture, bitmapTexture, drawSolo, idOf, textureOf, SIZE,
+            ERASE: PIXI.BLEND_MODES.ERASE, ADD: PIXI.BLEND_MODES.ADD, NORMAL: PIXI.BLEND_MODES.NORMAL, ATOP: BLEND_ATOP, DST_IN: BLEND_DST_IN };
+    })();
+    T.register("LightGpu", LightGpu);
+
     function punchConeHole(context, cx, cy, geom, weight = 1) {
         const { nearLeft, nearRight, leftDir, rightDir, mainDir, length } = geom;
         const farLeft = { x: nearLeft.x + leftDir.x * length, y: nearLeft.y + leftDir.y * length };
@@ -772,22 +872,69 @@
 
     // a light's strength now; a hole another plugin put in (e.g. TavernLife's room candle) has none of its own: full
     const weightOf = sp => (typeof sp._weight === "number" && isFinite(sp._weight) ? sp._weight : 1);
+    const r3 = v => Math.round(v * 1000);
+    // what the darkness depends on, as numbers (into `cur`, reused): the hour, the view, and for each visible light its place, strength,
+    // flicker and the people in its way (nothing moved and the numbers are the same: the last picture is still right)
+    function darkSignature(cur, visible, tod, view) {
+        let n = 0;
+        cur[n++] = r3(tod.alpha);
+        cur[n++] = r3(tod.night);
+        cur[n++] = Math.round(view.x0);
+        cur[n++] = Math.round(view.y0);
+        cur[n++] = view.x1 - view.x0;
+        cur[n++] = visible.length;
+        for (let i = 0; i < visible.length; i++) {
+            const h = visible[i], s = h.sprite, f = s._flicker, b = h._blockers;
+            cur[n++] = s.x;
+            cur[n++] = s.y;
+            cur[n++] = r3(weightOf(s));
+            cur[n++] = f ? r3(f.s) : -1;
+            cur[n++] = f ? Math.round(f.c * 100) : -1;
+            if (b && b.length) {
+                cur[n++] = b.length;
+                for (let j = 0; j < b.length; j++) { const o = b[j].o; cur[n++] = Math.round(o.fx); cur[n++] = Math.round(o.fy); cur[n++] = LightGpu.idOf(o.bmp._key || ""); cur[n++] = Math.round(o.alpha * 100); }
+            } else cur[n++] = 0;
+        }
+        cur.length = n;
+        return cur;
+    }
+    const sameNumbers = (a, b) => { if (!a || a.length !== b.length) return false; for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false; return true; };
+    const DARK_TINT = (DARK_COLOR[0] << 16) | (DARK_COLOR[1] << 8) | DARK_COLOR[2];
+
     Spriteset_Map.prototype.redrawDarkness = function() {
         if (!this._darknessSprite) return;
         const tod = this._roomTimeOfDay || timeOfDay();
         const view = this._roomView || this.roomLightView();
-        const visible = this._roomHoles.filter(h => h.sprite.visible);
+        const visible = this._roomVisible || (this._roomVisible = []);
+        visible.length = 0;
+        for (const h of this._roomHoles) if (h.sprite.visible) visible.push(h);
         this.updateLightBlockers(visible);
+        const gpu = LightGpu.available();
+        if (gpu !== !!this._lgOn) this.switchLightGpu(gpu);
         // nothing moved and the hour's light is the same: the last picture is still right (skip the paint and upload)
-        // (a light's own strength is in the key too: a flickering flame or one another plugin dims; and who stands in it)
+        // (a light's own strength is in the signature too: a flickering flame or one another plugin dims; and who stands in it)
         const Sun = T.api("Sun");
         const stuck = T.call("Torch", "groundLights") || [];   // (torches stuck in the ground: Torch.js - they flicker, so no saved picture)
-        const key = this._playerTorch || stuck.length ? "" : [tod.alpha.toFixed(3), tod.night.toFixed(3), Math.round(view.x0), Math.round(view.y0),
-            view.x1 - view.x0, visible.map(h => h.sprite.x + "," + h.sprite.y + "," + weightOf(h.sprite).toFixed(3) +
-                (h.sprite._flicker ? "," + h.sprite._flicker.s.toFixed(3) + "," + h.sprite._flicker.c.toFixed(2) : "") +
-                (h._blockers && h._blockers.length ? "," + Sun.blockersKey(h._blockers) : "")).join(";")].join("|");
-        if (key && key === this._darkKey) return;
-        this._darkKey = key;
+        if (this._playerTorch || stuck.length) this._darkKey = "";
+        else {
+            const cur = darkSignature(this._darkCur || (this._darkCur = []), visible, tod, view);
+            if (this._darkKey && sameNumbers(this._darkSig, cur)) return;
+            this._darkCur = this._darkSig || [];
+            this._darkSig = cur;
+            this._darkKey = String(this._darkSerial = (this._darkSerial || 0) + 1);   // (one per picture: the tests count the repaints)
+        }
+        if (gpu) {
+            this.paintDarkGpu(visible, tod, stuck);
+            this.redrawGlows(visible);
+            this.paintBlockedGpu(visible, Sun);   // (the lights with people in them: their holes and glows, shadows cut out, last)
+        } else {
+            this.paintDarkCanvas(visible, tod, stuck, Sun);
+            this.redrawGlows(visible);
+        }
+    };
+
+    // the darkness on the 2D canvas (Wydajnosc.opts.lightGpu false)
+    Spriteset_Map.prototype.paintDarkCanvas = function(visible, tod, stuck, Sun) {
         const bitmap = this._darknessSprite.bitmap;
         const context = bitmap.context;
         const k = 1 / DARK_SCALE;
@@ -826,7 +973,153 @@
         for (const l of stuck) punchCircleHole(context, l.x, l.y, TORCH_RADIUS * (0.97 + 0.03 * Math.sin(Graphics.frameCount * 0.21 + l.id)));
         context.restore();
         bitmap._baseTexture.update();
-        this.redrawGlows(visible);
+    };
+
+    // the layers on the graphics card, switched on / off with Wydajnosc.opts.lightGpu (the sprites show a RenderTexture or their canvas)
+    Spriteset_Map.prototype.switchLightGpu = function(on) {
+        this._lgOn = on;
+        const LG = LightGpu;
+        for (const [sprite, name] of [[this._darknessSprite, "_lgDark"], [this._glowSprite, "_lgGlow"]]) {
+            if (!sprite) continue;
+            if (!sprite._lgLegacy) sprite._lgLegacy = sprite.texture;
+            if (on) {
+                if (!this[name]) {
+                    const t = this[name] = new LG.Target(sprite.bitmap.width, sprite.bitmap.height);
+                    if (name === "_lgDark") {
+                        t.fill = new PIXI.Sprite(PIXI.Texture.WHITE);
+                        t.fill.width = t.w;
+                        t.fill.height = t.h;
+                        t.holes = new LG.Pool(LG.ERASE);
+                        t.root.addChild(t.fill, t.holes.c);
+                        // the scratch layer of a light with people in it: its gradient (or glow) with the shadows' mask erased from it
+                        t.scratch = new LG.Target(t.w, t.h);
+                        t.sg = new LG.Pool(LG.NORMAL);
+                        t.sm = new PIXI.Sprite();
+                        t.sm.blendMode = LG.ERASE;
+                        t.scratch.root.addChild(t.sg.c, t.sm);
+                    } else {
+                        t.adds = new LG.Pool(LG.ADD);
+                        t.root.addChild(t.adds.c);
+                    }
+                }
+                sprite.texture = this[name].rt;
+            } else sprite.texture = sprite._lgLegacy;
+        }
+        this._darkKey = "";
+        this._darkSig = null;
+    };
+    Spriteset_Map.prototype.freeLightGpu = function() {
+        for (const name of ["_lgDark", "_lgGlow"]) if (this[name]) { if (this[name].scratch) this[name].scratch.free(); this[name].free(); this[name] = null; }
+        this._lgOn = false;
+    };
+    const _Spriteset_Map_destroy = Spriteset_Map.prototype.destroy;
+    Spriteset_Map.prototype.destroy = function(options) {
+        this.freeLightGpu();
+        _Spriteset_Map_destroy.call(this, options);
+    };
+
+    // a cone's hole as a texture, made once (its shape is fixed; the beam's strength is the sprite's alpha): { tex, x, y } - the
+    // texture's corner from the light's point, in the darkness layer's pixels
+    function coneHole(hole) {
+        if (hole._lgCone) return hole._lgCone;
+        const g = hole.geom, k = 1 / DARK_SCALE;
+        const pts = [g.nearLeft, g.nearRight, { x: g.nearLeft.x + g.leftDir.x * g.length, y: g.nearLeft.y + g.leftDir.y * g.length },
+            { x: g.nearRight.x + g.rightDir.x * g.length, y: g.nearRight.y + g.rightDir.y * g.length }];
+        const x0 = Math.floor(Math.min(...pts.map(p => p.x)) * k) - 2, y0 = Math.floor(Math.min(...pts.map(p => p.y)) * k) - 2;
+        const x1 = Math.ceil(Math.max(...pts.map(p => p.x)) * k) + 2, y1 = Math.ceil(Math.max(...pts.map(p => p.y)) * k) + 2;
+        const canvas = document.createElement("canvas");
+        canvas.width = x1 - x0;
+        canvas.height = y1 - y0;
+        const ctx = canvas.getContext("2d");
+        ctx.translate(-x0, -y0);
+        ctx.scale(k, k);
+        punchConeHole(ctx, 0, 0, g, 1);
+        return (hole._lgCone = { tex: LightGpu.textureOf(canvas), x: x0, y: y0 });
+    }
+    // the hole of a circle light in the darkness layer: its sprite from the pool (centre cx, cy and radius in the layer's pixels)
+    function placeHole(pool, tex, cx, cy, rad, alpha) {
+        const s = pool.next(tex), sc = (rad * 2) / LightGpu.SIZE;
+        s.position.set(cx - rad, cy - rad);
+        s.scale.set(sc, sc);
+        s.alpha = alpha > 1 ? 1 : alpha < 0 ? 0 : alpha;
+        return s;
+    }
+
+    // the darkness on the graphics card: the dark fill, then every hole erased from it; a light with people in it was cut on a canvas
+    // first (their shadows) and goes in as a texture
+    Spriteset_Map.prototype.paintDarkGpu = function(visible, tod, stuck) {
+        const g = this._lgDark, k = 1 / DARK_SCALE, holes = g.holes;
+        g.fill.tint = DARK_TINT;
+        g.fill.alpha = tod.alpha;
+        for (let i = 0; i < visible.length; i++) {
+            const hole = visible[i], s = hole.sprite, w = weightOf(s);
+            if (hole.shape === "circle") {
+                if (hole._blockers && hole._blockers.length) continue;   // (paintBlockedGpu)
+                const reach = s._flicker ? hole.radius * s._flicker.s : hole.radius;
+                placeHole(holes, LightGpu.holeTexture(hole.soft ? 1 : 0, w), s.x * k, s.y * k, reach * k, w);
+            } else {
+                const c = coneHole(hole), sp = holes.next(c.tex);
+                sp.position.set(s.x * k + c.x, s.y * k + c.y);
+                sp.scale.set(1, 1);
+                sp.alpha = w > 1 ? 1 : w < 0 ? 0 : w;
+            }
+        }
+        if (this._playerTorch) placeHole(holes, LightGpu.holeTexture(0, 1), this._playerTorch.x * k, this._playerTorch.y * k, TORCH_RADIUS * k, 1);
+        for (const l of stuck) placeHole(holes, LightGpu.holeTexture(0, 1), l.x * k, l.y * k, TORCH_RADIUS * (0.97 + 0.03 * Math.sin(Graphics.frameCount * 0.21 + l.id)) * k, 1);
+        holes.end();
+        g.draw(true);
+    };
+    // the lights with people in them, last: a light's gradient (its glow too) on the scratch layer with the mask of the shadows erased
+    // from it (Sky.js lightShadowMask - made on a canvas, once for both), then erased from the darkness / added to the glows
+    Spriteset_Map.prototype.paintBlockedGpu = function(visible, Sun) {
+        const g = this._lgDark, gl = this._lgGlow, k = 1 / DARK_SCALE, LG = LightGpu;
+        for (let i = 0; i < visible.length; i++) {
+            const hole = visible[i], s = hole.sprite;
+            if (hole.shape !== "circle" || !hole._blockers || !hole._blockers.length) continue;
+            const w = weightOf(s), reach = s._flicker ? hole.radius * s._flicker.s : hole.radius;
+            const cx = s.x * k, cy = s.y * k, rad = reach * k, size = Math.ceil(rad * 2) + 2;
+            const ox = cx - rad - 1, oy = cy - rad - 1;
+            g.sm.texture = LG.canvasTexture(Sun.lightShadowMask(size, size, hole._blockers, k, ox, oy));
+            g.sm.position.set(ox, oy);
+            placeHole(g.sg, LG.holeTexture(hole.soft ? 1 : 0, w), cx, cy, rad, w);
+            g.sg.end();
+            LG.render(g.scratch.root, g.scratch, true);
+            LG.drawSolo(g, g.scratch.rt, 0, 0, 1, 1, LG.ERASE, 1);
+            const src = s.bitmap;
+            if (!src || !src._canvas) continue;
+            const f = s._flicker, sc = f && hole.shape === "circle" ? f.s : 1;
+            const gw = src.width * sc, gh = src.height * sc, x = (s.x - s.anchor.x * gw) * k, y = (s.y - s.anchor.y * gh) * k;
+            const a = Math.max(0, Math.min(1, weightOf(s)));
+            const alt = f && f.alt && s._altBitmap && s._altBitmap._canvas;
+            if (x >= ox - 0.5 && y >= oy - 0.5 && x + gw * k <= ox + size + 0.5 && y + gh * k <= oy + size + 0.5) {
+                const sp = g.sg.next(LG.bitmapTexture(src));
+                sp.position.set(x, y);
+                sp.scale.set((gw * k) / src.width, (gh * k) / src.height);
+                sp.alpha = alt ? a * (1 - f.c) : a;
+                if (alt) {
+                    const sp2 = g.sg.next(LG.bitmapTexture(s._altBitmap));
+                    sp2.position.set(x, y);
+                    sp2.scale.set((gw * k) / s._altBitmap.width, (gh * k) / s._altBitmap.height);
+                    sp2.alpha = a * f.c;
+                }
+                g.sg.end();
+                LG.render(g.scratch.root, g.scratch, true);
+                LG.drawSolo(gl, g.scratch.rt, 0, 0, 1, 1, LG.ADD, 1);
+            } else {   // (a glow that does not lie inside the mask - another plugin's light: cut on its own canvas)
+                const c = Sun.scratchCanvas(Math.ceil(gw * k) + 1, Math.ceil(gh * k) + 1);
+                if (alt) {
+                    c.globalAlpha = a * (1 - f.c);
+                    c.drawImage(src._canvas, 0, 0, gw * k, gh * k);
+                    c.globalAlpha = a * f.c;
+                    c.drawImage(s._altBitmap._canvas, 0, 0, gw * k, gh * k);
+                } else {
+                    c.globalAlpha = a;
+                    c.drawImage(src._canvas, 0, 0, gw * k, gh * k);
+                }
+                Sun.cutLightShadows(c, hole._blockers, k, x, y);
+                LG.drawSolo(gl, LG.canvasTexture(c.canvas), x, y, 1, 1, LG.ADD, 1);
+            }
+        }
     };
 
     // the people and animals in each visible light's way (hole._blockers; T.api("Sun") - ChoppableTree_Render.js): a lamp, a hearth, a
@@ -847,6 +1140,38 @@
     // the glows of the visible lights, added together ("lighter") at half resolution, each as strong as the hour says
     Spriteset_Map.prototype.redrawGlows = function(visible) {
         if (!this._glowSprite) return;
+        if (this._lgOn) { this.paintGlowsGpu(visible); return; }
+        this.paintGlowsCanvas(visible);
+    };
+    // the same on the graphics card: every glow bitmap an ADD sprite in a layer of its own (a light with people in it: its glow cut on a
+    // canvas first, no warm glow in a shadow)
+    Spriteset_Map.prototype.paintGlowsGpu = function(visible) {
+        const g = this._lgGlow, k = 1 / DARK_SCALE, adds = g.adds;
+        for (let i = 0; i < visible.length; i++) {
+            const hole = visible[i], s = hole.sprite, src = s.bitmap;
+            if (!src || !src._canvas) continue;
+            if (hole._blockers && hole._blockers.length) continue;   // (paintBlockedGpu)
+            const f = s._flicker, sc = f && hole.shape === "circle" ? f.s : 1;   // (a flame's glow grows and shrinks with its reach)
+            const w = src.width * sc, h = src.height * sc, x = (s.x - s.anchor.x * w) * k, y = (s.y - s.anchor.y * h) * k;
+            const a = Math.max(0, Math.min(1, weightOf(s)));
+            const alt = f && f.alt && s._altBitmap && s._altBitmap._canvas;   // its colour drifting to the other one
+            const sp = adds.next(LightGpu.bitmapTexture(src));
+            sp.position.set(x, y);
+            sp.scale.set((w * k) / src.width, (h * k) / src.height);
+            sp.alpha = alt ? a * (1 - f.c) : a;
+            if (alt) {
+                const sp2 = adds.next(LightGpu.bitmapTexture(s._altBitmap));
+                sp2.position.set(x, y);
+                sp2.scale.set((w * k) / s._altBitmap.width, (h * k) / s._altBitmap.height);
+                sp2.alpha = a * f.c;
+            }
+        }
+        adds.end();
+        g.draw(true);
+    };
+
+    // the glows on the 2D canvas (Wydajnosc.opts.lightGpu false)
+    Spriteset_Map.prototype.paintGlowsCanvas = function(visible) {
         const bitmap = this._glowSprite.bitmap;
         const context = bitmap.context;
         const k = 1 / DARK_SCALE;

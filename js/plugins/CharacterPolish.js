@@ -132,11 +132,7 @@
             !(typeof Game_Vehicle !== "undefined" && c instanceof Game_Vehicle);
     };
 
-    const _Sprite_Character_update = Sprite_Character.prototype.update;
-    Sprite_Character.prototype.update = function() {
-        _Sprite_Character_update.call(this);
-        if (CHAR_SHADOW || CHAR_OUTLINE) this.updatePolish();
-    };
+    T.sprite.hook({ owner: "CharacterPolish", method: "update", after(s) { if (CHAR_SHADOW || CHAR_OUTLINE) s.updatePolish(); } });
 
     Sprite_Character.prototype.updatePolish = function() {
         const show = polishOn() && this.isPerson();

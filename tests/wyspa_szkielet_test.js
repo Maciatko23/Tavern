@@ -84,28 +84,21 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     // ---------------------------------------------------------------- przejścia z map użytkownika (dopiero gdy miejsce gotowe)
     await t.eval(`TownLifeData.SPOTS_BY_MAP[155] = Object.assign(TownLifeData.SPOTS_BY_MAP[155] || {}, { nigdzie: [24, 30, 2] }); 0`);   // (miejsce testowego mieszkańca)
     await t.newGame({ map: 125, x: 15, y: 2, dir: 8, hour: 10, day: 3, quiet: true, minimap: false });
-    const ready = await t.json("({ ready: Wyspa.readyMaps(), forced: Wyspa.forced(), ev: $dataMap.events.filter(e => e && e.id >= 690 && e.id <= 699).map(e => e.id) })");
-    t.check("pakiety same zgłaszają gotowe miejsca (Wyspa.ready 155, 157, 159, 162, 165, 167) - przystań ma przejścia od razu, bez Wyspa.force",
-        [155, 157, 159, 162, 165, 167].every(m => ready.ready.includes(m)) && !ready.forced && ready.ev.length === 6, ready);
-    await t.eval("Wyspa.force(true); $gamePlayer.requestMapReload(); $gamePlayer.reserveTransfer(125, 15, 2, 8, 0); 0");
-    await t.until(`$gameMap.mapId() === 125 && !$gamePlayer.isTransferring()`, 10);
-    await t.frames(20);
-    const on = await t.json(`$dataMap.events.filter(e => e && e.id >= 690 && e.id <= 699).map(e => [e.id, e.x, e.y, e.pages[0].list[0].parameters.slice(1, 4).join(",")])`);
-    t.check("gotowe miejsca: na przystani przejścia 690-692 (14-16,0 -> 155) i 693-695 (21-23,79 -> 162; mapy powiększone 2026-10-18)",
-        on.length === 6 && on[0][0] === 690 && on[0][1] === 14 && on[0][2] === 0 && on[0][3] === "155,23,70" && on[5][0] === 695 && on[5][2] === 79 && on[5][3] === "162,23,1", on);
-    await t.calm();
-    await t.hold("up", 80);
-    const went = await t.until(t.onMap(155), 15);
+    // (2026-10-30, the world stage 3: Wyspa.EDGES is empty - no ways in from the harbour and the mountains; the places are reached by land through Swiat_Data)
+    const ready = await t.json("({ ready: Wyspa.readyMaps(), forced: Wyspa.forced(), edges: WyspaData.EDGES.length, ev: $dataMap.events.filter(e => e && e.id >= 690 && e.id <= 699).map(e => e.id) })");
+    t.check("pakiety same zgłaszają gotowe miejsca (Wyspa.ready 155, 157, 159, 162, 165, 167); Wyspa.EDGES puste, na przystani nie ma przejść 690-699",
+        [155, 157, 159, 162, 165, 167].every(m => ready.ready.includes(m)) && !ready.forced && ready.edges === 0 && ready.ev.length === 0, ready);
+    await t.go(155, 24, 70, 8);
     await t.frames(20);
     const landed = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $dataMap.note]");
-    t.check("przejście z górnej krawędzi przystani prowadzi na Map155 (24,70) - prawdziwą mapę pustelni, nie szkielet", went && landed[0] === 155 && landed[1] === 24 && landed[2] === 70 && !/Wyspa:szkielet/.test(landed[3]), landed);
+    t.check("Map155 to prawdziwa mapa pustelni, nie szkielet", landed[0] === 155 && !/Wyspa:szkielet/.test(landed[3]), landed);
     const res = await t.json(`(function(){ const e = TownLife.eventOf("wyspa_test"); return e ? [e.eventId(), $gameMap.mapId()] : null; })()`);
     t.check("...a testowy mieszkaniec z map: 155 stoi tam jako zdarzenie 949", res && res[0] === 949, res);
     await t.eval("$gamePlayer.reserveTransfer(13, 57, 12, 6, 0); 0");
     await t.until(`$gameMap.mapId() === 13 && !$gamePlayer.isTransferring()`, 10);
     await t.frames(20);
-    const gory = await t.json(`$dataMap.events.filter(e => e && e.id >= 690 && e.id <= 699).map(e => [e.id, e.x, e.y, e.pages[0].list[0].parameters[1]])`);
-    t.check("w górach (Map013) przejścia 696-698 na prawej krawędzi (119,11-13) -> przylądek 159", gory.length === 3 && gory.every(g => g[1] === 119 && g[3] === 159), gory);
+    const gory = await t.json(`$dataMap.events.filter(e => e && e.id >= 690 && e.id <= 699).map(e => e.id)`);
+    t.check("w górach (Map013) nie ma przejść Wyspa.js 696-698 (od 2026-10-30 wschód Gór to Osada przez świat)", gory.length === 0, gory);
 
     // ---------------------------------------------------------------- pływy
     const tide = await t.json(`(function(){ const w = [], d = 5; for (let h = 0; h < 24; h += 0.25) w.push(Wyspa.tide(d, h).low ? 1 : 0);

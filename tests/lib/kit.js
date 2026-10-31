@@ -250,6 +250,10 @@ class Test extends Report {
         // and never Automatycznie's step down on a busy machine (jakosc_grafiki_test switches it itself; opts.gfxQuality: false - as
         // the page's config says). Only in the page: not saved to the config.
         if (this.opts.gfxQuality !== false) await this.eval("(function(){ const W = window.Wydajnosc; if (W && W.quality) W.quality.set('high'); return 0; })()");
+        // (2026-10-30) the lights on the graphics card (Wydajnosc.opts.lightGpu): the tests read the darkness's and the night's pixels
+        // off their canvases, so they run on the canvases (the picture of the card's path is compared with that one in
+        // wydajnosc_test.js); opts.lightGpu: true - on the card, as the game
+        if (this.opts.lightGpu !== true) await this.eval("(function(){ const W = window.Wydajnosc; if (W && W.opts) W.opts.lightGpu = false; return 0; })()");
         return true;
     }
     // plugins not on the plugin list yet (the game's list js/tawerna_wtyczki.js + js/plugins.js): put into the page (a script tag);

@@ -1,0 +1,3841 @@
+{
+ "opis": "Swiat Kruczej Wyspy w kratkach, wersja z map (bez maski kruka). Kazda mapa to prostokat [x0, y0, szer, wys] w kratkach swiata; sasiedzi dziela krawedz co do kratki; woda w kafelkach map to morze swiata; nowe mapy brzegowe maja profil wody: pas morza 16 kratek od wskazanych stron.",
+ "mapy": {
+  "8": {
+   "id": 8,
+   "nazwa": "Okolice Tawerny",
+   "nowa": false,
+   "gracz": true,
+   "x0": 162,
+   "y0": 182,
+   "szer": 104,
+   "wys": 145,
+   "rozmiar_obecny": [
+    104,
+    138
+   ],
+   "rosnie": [
+    0,
+    7
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 22,
+     "od": 274,
+     "do": 327
+    },
+    {
+     "strona": "E",
+     "mapa": 24,
+     "od": 214,
+     "do": 274
+    },
+    {
+     "strona": "E",
+     "mapa": 120,
+     "od": 182,
+     "do": 214
+    },
+    {
+     "strona": "N",
+     "mapa": 13,
+     "od": 162,
+     "do": 266
+    },
+    {
+     "strona": "S",
+     "mapa": 125,
+     "od": 162,
+     "do": 266
+    },
+    {
+     "strona": "W",
+     "mapa": 111,
+     "od": 215,
+     "do": 327
+    }
+   ]
+  },
+  "24": {
+   "id": 24,
+   "nazwa": "Posiadłość Lorda",
+   "nowa": false,
+   "gracz": true,
+   "x0": 266,
+   "y0": 214,
+   "szer": 80,
+   "wys": 60,
+   "rozmiar_obecny": [
+    80,
+    60
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 3,
+     "od": 242,
+     "do": 274
+    },
+    {
+     "strona": "N",
+     "mapa": 120,
+     "od": 266,
+     "do": 346
+    },
+    {
+     "strona": "S",
+     "mapa": 22,
+     "od": 266,
+     "do": 346
+    },
+    {
+     "strona": "W",
+     "mapa": 8,
+     "od": 214,
+     "do": 274
+    }
+   ]
+  },
+  "111": {
+   "id": 111,
+   "nazwa": "Podgrodzie",
+   "nowa": false,
+   "gracz": true,
+   "x0": 60,
+   "y0": 215,
+   "szer": 102,
+   "wys": 112,
+   "rozmiar_obecny": [
+    92,
+    112
+   ],
+   "rosnie": [
+    10,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 8,
+     "od": 215,
+     "do": 327
+    },
+    {
+     "strona": "S",
+     "mapa": 125,
+     "od": 154,
+     "do": 162
+    },
+    {
+     "strona": "W",
+     "mapa": 904,
+     "od": 215,
+     "do": 271
+    },
+    {
+     "strona": "W",
+     "mapa": 905,
+     "od": 271,
+     "do": 327
+    }
+   ]
+  },
+  "125": {
+   "id": 125,
+   "nazwa": "Przystań",
+   "nowa": false,
+   "gracz": false,
+   "x0": 154,
+   "y0": 327,
+   "szer": 112,
+   "wys": 80,
+   "rozmiar_obecny": [
+    112,
+    80
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 21,
+     "od": 334,
+     "do": 394
+    },
+    {
+     "strona": "E",
+     "mapa": 22,
+     "od": 327,
+     "do": 334
+    },
+    {
+     "strona": "E",
+     "mapa": 902,
+     "od": 394,
+     "do": 407
+    },
+    {
+     "strona": "N",
+     "mapa": 8,
+     "od": 162,
+     "do": 266
+    },
+    {
+     "strona": "N",
+     "mapa": 111,
+     "od": 154,
+     "do": 162
+    },
+    {
+     "strona": "S",
+     "mapa": 162,
+     "od": 154,
+     "do": 266
+    }
+   ]
+  },
+  "22": {
+   "id": 22,
+   "nazwa": "Polna droga",
+   "nowa": false,
+   "gracz": false,
+   "x0": 266,
+   "y0": 274,
+   "szer": 80,
+   "wys": 60,
+   "rozmiar_obecny": [
+    80,
+    60
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 3,
+     "od": 274,
+     "do": 302
+    },
+    {
+     "strona": "E",
+     "mapa": 20,
+     "od": 302,
+     "do": 334
+    },
+    {
+     "strona": "N",
+     "mapa": 24,
+     "od": 266,
+     "do": 346
+    },
+    {
+     "strona": "S",
+     "mapa": 21,
+     "od": 266,
+     "do": 346
+    },
+    {
+     "strona": "W",
+     "mapa": 8,
+     "od": 274,
+     "do": 327
+    },
+    {
+     "strona": "W",
+     "mapa": 125,
+     "od": 327,
+     "do": 334
+    }
+   ]
+  },
+  "20": {
+   "id": 20,
+   "nazwa": "Dom dziadka",
+   "nowa": false,
+   "gracz": false,
+   "x0": 346,
+   "y0": 302,
+   "szer": 60,
+   "wys": 44,
+   "rozmiar_obecny": [
+    60,
+    44
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 18,
+     "od": 302,
+     "do": 346
+    },
+    {
+     "strona": "N",
+     "mapa": 3,
+     "od": 346,
+     "do": 406
+    },
+    {
+     "strona": "W",
+     "mapa": 21,
+     "od": 334,
+     "do": 346
+    },
+    {
+     "strona": "W",
+     "mapa": 22,
+     "od": 302,
+     "do": 334
+    }
+   ]
+  },
+  "21": {
+   "id": 21,
+   "nazwa": "Leśna droga",
+   "nowa": false,
+   "gracz": false,
+   "x0": 266,
+   "y0": 334,
+   "szer": 80,
+   "wys": 60,
+   "rozmiar_obecny": [
+    80,
+    60
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 20,
+     "od": 334,
+     "do": 346
+    },
+    {
+     "strona": "N",
+     "mapa": 22,
+     "od": 266,
+     "do": 346
+    },
+    {
+     "strona": "S",
+     "mapa": 902,
+     "od": 266,
+     "do": 346
+    },
+    {
+     "strona": "W",
+     "mapa": 125,
+     "od": 334,
+     "do": 394
+    }
+   ]
+  },
+  "13": {
+   "id": 13,
+   "nazwa": "Góry i kamieniołom",
+   "nowa": false,
+   "gracz": true,
+   "x0": 146,
+   "y0": 86,
+   "szer": 120,
+   "wys": 96,
+   "rozmiar_obecny": [
+    120,
+    96
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 120,
+     "od": 146,
+     "do": 182
+    },
+    {
+     "strona": "E",
+     "mapa": 175,
+     "od": 86,
+     "do": 146
+    },
+    {
+     "strona": "N",
+     "mapa": 157,
+     "od": 146,
+     "do": 258
+    },
+    {
+     "strona": "N",
+     "mapa": 159,
+     "od": 258,
+     "do": 266
+    },
+    {
+     "strona": "S",
+     "mapa": 8,
+     "od": 162,
+     "do": 266
+    },
+    {
+     "strona": "W",
+     "mapa": 155,
+     "od": 86,
+     "do": 88
+    },
+    {
+     "strona": "W",
+     "mapa": 901,
+     "od": 88,
+     "do": 182
+    }
+   ]
+  },
+  "120": {
+   "id": 120,
+   "nazwa": "Osada Milczących",
+   "nowa": false,
+   "gracz": false,
+   "x0": 266,
+   "y0": 146,
+   "szer": 96,
+   "wys": 68,
+   "rozmiar_obecny": [
+    96,
+    68
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "N",
+     "mapa": 175,
+     "od": 266,
+     "do": 362
+    },
+    {
+     "strona": "S",
+     "mapa": 24,
+     "od": 266,
+     "do": 346
+    },
+    {
+     "strona": "W",
+     "mapa": 8,
+     "od": 182,
+     "do": 214
+    },
+    {
+     "strona": "W",
+     "mapa": 13,
+     "od": 146,
+     "do": 182
+    }
+   ]
+  },
+  "175": {
+   "id": 175,
+   "nazwa": "Orla Grań",
+   "nowa": false,
+   "gracz": false,
+   "x0": 266,
+   "y0": 86,
+   "szer": 96,
+   "wys": 60,
+   "rozmiar_obecny": [
+    96,
+    60
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "N",
+     "mapa": 159,
+     "od": 266,
+     "do": 362
+    },
+    {
+     "strona": "S",
+     "mapa": 120,
+     "od": 266,
+     "do": 362
+    },
+    {
+     "strona": "W",
+     "mapa": 13,
+     "od": 86,
+     "do": 146
+    }
+   ]
+  },
+  "23": {
+   "id": 23,
+   "nazwa": "Skraj lasu",
+   "nowa": false,
+   "gracz": true,
+   "x0": 426,
+   "y0": 242,
+   "szer": 80,
+   "wys": 60,
+   "rozmiar_obecny": [
+    80,
+    60
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "N",
+     "mapa": 4,
+     "od": 426,
+     "do": 450
+    },
+    {
+     "strona": "N",
+     "mapa": 903,
+     "od": 450,
+     "do": 506
+    },
+    {
+     "strona": "S",
+     "mapa": 17,
+     "od": 486,
+     "do": 506
+    },
+    {
+     "strona": "S",
+     "mapa": 18,
+     "od": 426,
+     "do": 486
+    },
+    {
+     "strona": "W",
+     "mapa": 3,
+     "od": 242,
+     "do": 302
+    }
+   ]
+  },
+  "168": {
+   "id": 168,
+   "nazwa": "Spalona zagroda",
+   "nowa": false,
+   "gracz": false,
+   "x0": 566,
+   "y0": 290,
+   "szer": 100,
+   "wys": 88,
+   "rozmiar_obecny": [
+    100,
+    88
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "N",
+     "mapa": 906,
+     "od": 566,
+     "do": 616
+    },
+    {
+     "strona": "N",
+     "mapa": 907,
+     "od": 616,
+     "do": 666
+    },
+    {
+     "strona": "W",
+     "mapa": 17,
+     "od": 302,
+     "do": 378
+    }
+   ]
+  },
+  "3": {
+   "id": 3,
+   "nazwa": "Kruczy Jar",
+   "nowa": false,
+   "gracz": true,
+   "x0": 346,
+   "y0": 242,
+   "szer": 80,
+   "wys": 60,
+   "rozmiar_obecny": [
+    80,
+    60
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 23,
+     "od": 242,
+     "do": 302
+    },
+    {
+     "strona": "N",
+     "mapa": 4,
+     "od": 370,
+     "do": 426
+    },
+    {
+     "strona": "S",
+     "mapa": 18,
+     "od": 406,
+     "do": 426
+    },
+    {
+     "strona": "S",
+     "mapa": 20,
+     "od": 346,
+     "do": 406
+    },
+    {
+     "strona": "W",
+     "mapa": 22,
+     "od": 274,
+     "do": 302
+    },
+    {
+     "strona": "W",
+     "mapa": 24,
+     "od": 242,
+     "do": 274
+    }
+   ]
+  },
+  "4": {
+   "id": 4,
+   "nazwa": "Łąka#1",
+   "nowa": false,
+   "gracz": true,
+   "x0": 370,
+   "y0": 182,
+   "szer": 80,
+   "wys": 60,
+   "rozmiar_obecny": [
+    80,
+    60
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 903,
+     "od": 182,
+     "do": 242
+    },
+    {
+     "strona": "S",
+     "mapa": 3,
+     "od": 370,
+     "do": 426
+    },
+    {
+     "strona": "S",
+     "mapa": 23,
+     "od": 426,
+     "do": 450
+    }
+   ]
+  },
+  "17": {
+   "id": 17,
+   "nazwa": "Łąka#2",
+   "nowa": false,
+   "gracz": false,
+   "x0": 486,
+   "y0": 302,
+   "szer": 80,
+   "wys": 76,
+   "rozmiar_obecny": [
+    80,
+    76
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 168,
+     "od": 302,
+     "do": 378
+    },
+    {
+     "strona": "N",
+     "mapa": 23,
+     "od": 486,
+     "do": 506
+    },
+    {
+     "strona": "W",
+     "mapa": 18,
+     "od": 302,
+     "do": 378
+    }
+   ]
+  },
+  "18": {
+   "id": 18,
+   "nazwa": "Łąka#3",
+   "nowa": false,
+   "gracz": false,
+   "x0": 406,
+   "y0": 302,
+   "szer": 80,
+   "wys": 76,
+   "rozmiar_obecny": [
+    80,
+    76
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 17,
+     "od": 302,
+     "do": 378
+    },
+    {
+     "strona": "N",
+     "mapa": 3,
+     "od": 406,
+     "do": 426
+    },
+    {
+     "strona": "N",
+     "mapa": 23,
+     "od": 426,
+     "do": 486
+    },
+    {
+     "strona": "W",
+     "mapa": 20,
+     "od": 302,
+     "do": 346
+    }
+   ]
+  },
+  "162": {
+   "id": 162,
+   "nazwa": "Garnizon nad zatoką",
+   "nowa": false,
+   "gracz": false,
+   "x0": 154,
+   "y0": 407,
+   "szer": 112,
+   "wys": 80,
+   "rozmiar_obecny": [
+    112,
+    80
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 902,
+     "od": 407,
+     "do": 487
+    },
+    {
+     "strona": "N",
+     "mapa": 125,
+     "od": 154,
+     "do": 266
+    },
+    {
+     "strona": "S",
+     "mapa": 908,
+     "od": 154,
+     "do": 202
+    },
+    {
+     "strona": "S",
+     "mapa": 909,
+     "od": 202,
+     "do": 266
+    },
+    {
+     "strona": "W",
+     "mapa": 165,
+     "od": 407,
+     "do": 467
+    }
+   ]
+  },
+  "165": {
+   "id": 165,
+   "nazwa": "Wrak na mieliźnie",
+   "nowa": false,
+   "gracz": false,
+   "x0": 74,
+   "y0": 407,
+   "szer": 80,
+   "wys": 60,
+   "rozmiar_obecny": [
+    80,
+    60
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 162,
+     "od": 407,
+     "do": 467
+    }
+   ]
+  },
+  "155": {
+   "id": 155,
+   "nazwa": "Pustelnia na klifie",
+   "nowa": false,
+   "gracz": false,
+   "x0": 50,
+   "y0": 16,
+   "szer": 96,
+   "wys": 72,
+   "rozmiar_obecny": [
+    96,
+    72
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 13,
+     "od": 86,
+     "do": 88
+    },
+    {
+     "strona": "E",
+     "mapa": 157,
+     "od": 16,
+     "do": 86
+    },
+    {
+     "strona": "S",
+     "mapa": 901,
+     "od": 50,
+     "do": 146
+    }
+   ]
+  },
+  "157": {
+   "id": 157,
+   "nazwa": "Urwisko Kruków",
+   "nowa": false,
+   "gracz": false,
+   "x0": 146,
+   "y0": 14,
+   "szer": 112,
+   "wys": 72,
+   "rozmiar_obecny": [
+    112,
+    72
+   ],
+   "rosnie": [
+    0,
+    0
+   ],
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 159,
+     "od": 14,
+     "do": 86
+    },
+    {
+     "strona": "S",
+     "mapa": 13,
+     "od": 146,
+     "do": 258
+    },
+    {
+     "strona": "W",
+     "mapa": 155,
+     "od": 16,
+     "do": 86
+    }
+   ]
+  },
+  "159": {
+   "id": 159,
+   "nazwa": "Przylądek z latarnią",
+   "nowa": false,
+   "gracz": false,
+   "x0": 258,
+   "y0": 0,
+   "szer": 104,
+   "wys": 86,
+   "rozmiar_obecny": [
+    104,
+    80
+   ],
+   "rosnie": [
+    0,
+    6
+   ],
+   "sasiedzi": [
+    {
+     "strona": "S",
+     "mapa": 13,
+     "od": 258,
+     "do": 266
+    },
+    {
+     "strona": "S",
+     "mapa": 175,
+     "od": 266,
+     "do": 362
+    },
+    {
+     "strona": "W",
+     "mapa": 157,
+     "od": 14,
+     "do": 86
+    }
+   ]
+  },
+  "901": {
+   "id": 901,
+   "nazwa": "Nowa mapa 901",
+   "nowa": true,
+   "gracz": false,
+   "x0": 50,
+   "y0": 88,
+   "szer": 96,
+   "wys": 110,
+   "morze_strony": "WS",
+   "pas_morza": 16,
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 13,
+     "od": 88,
+     "do": 182
+    },
+    {
+     "strona": "N",
+     "mapa": 155,
+     "od": 50,
+     "do": 146
+    }
+   ]
+  },
+  "902": {
+   "id": 902,
+   "nazwa": "Nowa mapa 902",
+   "nowa": true,
+   "gracz": false,
+   "x0": 266,
+   "y0": 394,
+   "szer": 96,
+   "wys": 96,
+   "morze_strony": "SE",
+   "pas_morza": 16,
+   "sasiedzi": [
+    {
+     "strona": "N",
+     "mapa": 21,
+     "od": 266,
+     "do": 346
+    },
+    {
+     "strona": "W",
+     "mapa": 125,
+     "od": 394,
+     "do": 407
+    },
+    {
+     "strona": "W",
+     "mapa": 162,
+     "od": 407,
+     "do": 487
+    },
+    {
+     "strona": "W",
+     "mapa": 909,
+     "od": 487,
+     "do": 490
+    }
+   ]
+  },
+  "903": {
+   "id": 903,
+   "nazwa": "Nowa mapa 903",
+   "nowa": true,
+   "gracz": false,
+   "x0": 450,
+   "y0": 166,
+   "szer": 72,
+   "wys": 76,
+   "morze_strony": "NE",
+   "pas_morza": 16,
+   "sasiedzi": [
+    {
+     "strona": "S",
+     "mapa": 23,
+     "od": 450,
+     "do": 506
+    },
+    {
+     "strona": "W",
+     "mapa": 4,
+     "od": 182,
+     "do": 242
+    }
+   ]
+  },
+  "904": {
+   "id": 904,
+   "nazwa": "Nowa mapa 904",
+   "nowa": true,
+   "gracz": false,
+   "x0": 0,
+   "y0": 199,
+   "szer": 60,
+   "wys": 72,
+   "morze_strony": "WN",
+   "pas_morza": 16,
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 111,
+     "od": 215,
+     "do": 271
+    },
+    {
+     "strona": "S",
+     "mapa": 905,
+     "od": 0,
+     "do": 60
+    }
+   ]
+  },
+  "905": {
+   "id": 905,
+   "nazwa": "Nowa mapa 905",
+   "nowa": true,
+   "gracz": false,
+   "x0": 0,
+   "y0": 271,
+   "szer": 60,
+   "wys": 72,
+   "morze_strony": "WS",
+   "pas_morza": 16,
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 111,
+     "od": 271,
+     "do": 327
+    },
+    {
+     "strona": "N",
+     "mapa": 904,
+     "od": 0,
+     "do": 60
+    }
+   ]
+  },
+  "906": {
+   "id": 906,
+   "nazwa": "Nowa mapa 906",
+   "nowa": true,
+   "gracz": false,
+   "x0": 550,
+   "y0": 230,
+   "szer": 66,
+   "wys": 60,
+   "morze_strony": "NW",
+   "pas_morza": 16,
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 907,
+     "od": 230,
+     "do": 290
+    },
+    {
+     "strona": "S",
+     "mapa": 168,
+     "od": 566,
+     "do": 616
+    }
+   ]
+  },
+  "907": {
+   "id": 907,
+   "nazwa": "Nowa mapa 907",
+   "nowa": true,
+   "gracz": false,
+   "x0": 616,
+   "y0": 230,
+   "szer": 66,
+   "wys": 60,
+   "morze_strony": "NE",
+   "pas_morza": 16,
+   "sasiedzi": [
+    {
+     "strona": "S",
+     "mapa": 168,
+     "od": 616,
+     "do": 666
+    },
+    {
+     "strona": "W",
+     "mapa": 906,
+     "od": 230,
+     "do": 290
+    }
+   ]
+  },
+  "908": {
+   "id": 908,
+   "nazwa": "Nowa mapa 908",
+   "nowa": true,
+   "gracz": false,
+   "x0": 138,
+   "y0": 487,
+   "szer": 64,
+   "wys": 60,
+   "morze_strony": "SW",
+   "pas_morza": 16,
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 909,
+     "od": 487,
+     "do": 547
+    },
+    {
+     "strona": "N",
+     "mapa": 162,
+     "od": 154,
+     "do": 202
+    }
+   ]
+  },
+  "909": {
+   "id": 909,
+   "nazwa": "Nowa mapa 909",
+   "nowa": true,
+   "gracz": false,
+   "x0": 202,
+   "y0": 487,
+   "szer": 64,
+   "wys": 60,
+   "morze_strony": "S",
+   "pas_morza": 16,
+   "sasiedzi": [
+    {
+     "strona": "E",
+     "mapa": 902,
+     "od": 487,
+     "do": 490
+    },
+    {
+     "strona": "N",
+     "mapa": 162,
+     "od": 202,
+     "do": 266
+    },
+    {
+     "strona": "W",
+     "mapa": 908,
+     "od": 487,
+     "do": 547
+    }
+   ]
+  }
+ },
+ "brzeg_na_krawedziach": [
+  {
+   "a": 8,
+   "b": 125,
+   "strona": "S",
+   "od": 202,
+   "do": 306,
+   "skok_kratek": 0,
+   "przeciecia": []
+  },
+  {
+   "a": 125,
+   "b": 162,
+   "strona": "S",
+   "od": 194,
+   "do": 306,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 209,
+     "przejscie": "morze->lad",
+     "kat": 93.5
+    }
+   ]
+  },
+  {
+   "a": 175,
+   "b": 120,
+   "strona": "S",
+   "od": 306,
+   "do": 402,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 386,
+     "przejscie": "lad->morze",
+     "kat": 91.5
+    }
+   ]
+  },
+  {
+   "a": 17,
+   "b": 168,
+   "strona": "E",
+   "od": 342,
+   "do": 418,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 402,
+     "przejscie": "lad->morze",
+     "kat": 178.5
+    }
+   ]
+  },
+  {
+   "a": 18,
+   "b": 17,
+   "strona": "E",
+   "od": 342,
+   "do": 418,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 402,
+     "przejscie": "lad->morze",
+     "kat": 178.0
+    }
+   ]
+  },
+  {
+   "a": 162,
+   "b": 902,
+   "strona": "E",
+   "od": 447,
+   "do": 527,
+   "skok_kratek": 0,
+   "przeciecia": []
+  },
+  {
+   "a": 165,
+   "b": 162,
+   "strona": "E",
+   "od": 447,
+   "do": 507,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 467,
+     "przejscie": "morze->lad",
+     "kat": 113.5
+    },
+    {
+     "pos": 470,
+     "przejscie": "lad->morze",
+     "kat": 48.6
+    }
+   ]
+  },
+  {
+   "a": 155,
+   "b": 157,
+   "strona": "E",
+   "od": 56,
+   "do": 126,
+   "skok_kratek": 1,
+   "przeciecia": [
+    {
+     "pos": 60,
+     "przejscie": "morze->lad",
+     "kat": 13.7
+    }
+   ]
+  },
+  {
+   "a": 155,
+   "b": 901,
+   "strona": "S",
+   "od": 90,
+   "do": 186,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 111,
+     "przejscie": "morze->lad",
+     "kat": 53.1
+    }
+   ]
+  },
+  {
+   "a": 157,
+   "b": 159,
+   "strona": "E",
+   "od": 54,
+   "do": 126,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 73,
+     "przejscie": "morze->lad",
+     "kat": 2.6
+    }
+   ]
+  },
+  {
+   "a": 159,
+   "b": 175,
+   "strona": "S",
+   "od": 306,
+   "do": 402,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 386,
+     "przejscie": "lad->morze",
+     "kat": 91.5
+    }
+   ]
+  },
+  {
+   "a": 904,
+   "b": 905,
+   "strona": "S",
+   "od": 40,
+   "do": 100,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 56,
+     "przejscie": "morze->lad",
+     "kat": 90.0
+    }
+   ]
+  },
+  {
+   "a": 906,
+   "b": 907,
+   "strona": "E",
+   "od": 270,
+   "do": 330,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 286,
+     "przejscie": "morze->lad",
+     "kat": 0.0
+    }
+   ]
+  },
+  {
+   "a": 908,
+   "b": 909,
+   "strona": "E",
+   "od": 527,
+   "do": 587,
+   "skok_kratek": 0,
+   "przeciecia": [
+    {
+     "pos": 571,
+     "przejscie": "lad->morze",
+     "kat": 0.0
+    }
+   ]
+  }
+ ],
+ "obecne_wyjscia": [
+  {
+   "od": 3,
+   "strona": "N",
+   "do": 4,
+   "wyjscie": [
+    30,
+    0
+   ],
+   "ladowanie": [
+    25,
+    59
+   ],
+   "swiat": 416,
+   "kratki_lokalne": [
+    [
+     28,
+     0
+    ],
+    [
+     29,
+     0
+    ],
+    [
+     30,
+     0
+    ],
+    [
+     31,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    414,
+    415,
+    416,
+    417
+   ],
+   "wynik": "ten sam sasiad, ladowanie przesuniete o 19 kratek",
+   "kod": "przesuniete"
+  },
+  {
+   "od": 3,
+   "strona": "S",
+   "do": 17,
+   "wyjscie": [
+    9,
+    59
+   ],
+   "ladowanie": [
+    9,
+    1
+   ],
+   "swiat": 395,
+   "kratki_lokalne": [
+    [
+     8,
+     59
+    ],
+    [
+     9,
+     59
+    ],
+    [
+     10,
+     59
+    ]
+   ],
+   "kratki_swiata": [
+    394,
+    395,
+    396
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 20",
+   "kod": "nowy_cel",
+   "nowy_cel": 20
+  },
+  {
+   "od": 3,
+   "strona": "W",
+   "do": 18,
+   "wyjscie": [
+    0,
+    15
+   ],
+   "ladowanie": [
+    78,
+    15
+   ],
+   "swiat": 297,
+   "kratki_lokalne": [
+    [
+     0,
+     14
+    ],
+    [
+     0,
+     15
+    ],
+    [
+     0,
+     16
+    ]
+   ],
+   "kratki_swiata": [
+    296,
+    297,
+    298
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 24",
+   "kod": "nowy_cel",
+   "nowy_cel": 24
+  },
+  {
+   "od": 3,
+   "strona": "E",
+   "do": 23,
+   "wyjscie": [
+    79,
+    13
+   ],
+   "ladowanie": [
+    1,
+    13
+   ],
+   "swiat": 295,
+   "kratki_lokalne": [
+    [
+     79,
+     12
+    ],
+    [
+     79,
+     13
+    ],
+    [
+     79,
+     14
+    ]
+   ],
+   "kratki_swiata": [
+    294,
+    295,
+    296
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 4,
+   "strona": "S",
+   "do": 3,
+   "wyjscie": [
+    25,
+    59
+   ],
+   "ladowanie": [
+    30,
+    0
+   ],
+   "swiat": 435,
+   "kratki_lokalne": [
+    [
+     23,
+     59
+    ],
+    [
+     24,
+     59
+    ],
+    [
+     25,
+     59
+    ],
+    [
+     26,
+     59
+    ]
+   ],
+   "kratki_swiata": [
+    433,
+    434,
+    435,
+    436
+   ],
+   "wynik": "ten sam sasiad, ladowanie przesuniete o 19 kratek",
+   "kod": "przesuniete"
+  },
+  {
+   "od": 8,
+   "strona": "S",
+   "do": 22,
+   "wyjscie": [
+    25,
+    137
+   ],
+   "ladowanie": [
+    12,
+    1
+   ],
+   "swiat": 227,
+   "kratki_lokalne": [
+    [
+     24,
+     137
+    ],
+    [
+     25,
+     137
+    ],
+    [
+     26,
+     137
+    ]
+   ],
+   "kratki_swiata": [
+    226,
+    227,
+    228
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 125",
+   "kod": "nowy_cel",
+   "nowy_cel": 125
+  },
+  {
+   "od": 8,
+   "strona": "E",
+   "do": 24,
+   "wyjscie": [
+    103,
+    51
+   ],
+   "ladowanie": [
+    1,
+    15
+   ],
+   "swiat": 273,
+   "kratki_lokalne": [
+    [
+     103,
+     50
+    ],
+    [
+     103,
+     51
+    ]
+   ],
+   "kratki_swiata": [
+    272,
+    273
+   ],
+   "wynik": "ten sam sasiad, ladowanie przesuniete o 4 kratek",
+   "kod": "przesuniete"
+  },
+  {
+   "od": 8,
+   "strona": "W",
+   "do": 111,
+   "wyjscie": [
+    0,
+    51
+   ],
+   "ladowanie": [
+    90,
+    18
+   ],
+   "swiat": 273,
+   "kratki_lokalne": [
+    [
+     0,
+     50
+    ],
+    [
+     0,
+     51
+    ]
+   ],
+   "kratki_swiata": [
+    272,
+    273
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 13,
+   "strona": "W",
+   "do": 21,
+   "wyjscie": [
+    0,
+    39
+   ],
+   "ladowanie": [
+    78,
+    9
+   ],
+   "swiat": 165,
+   "kratki_lokalne": [
+    [
+     0,
+     38
+    ],
+    [
+     0,
+     39
+    ],
+    [
+     0,
+     40
+    ]
+   ],
+   "kratki_swiata": [
+    164,
+    165,
+    166
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 901",
+   "kod": "nowy_cel",
+   "nowy_cel": 901
+  },
+  {
+   "od": 13,
+   "strona": "N",
+   "do": 120,
+   "wyjscie": [
+    6,
+    0
+   ],
+   "ladowanie": [
+    20,
+    31
+   ],
+   "swiat": 192,
+   "kratki_lokalne": [
+    [
+     5,
+     0
+    ],
+    [
+     6,
+     0
+    ],
+    [
+     7,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    191,
+    192,
+    193
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 157",
+   "kod": "nowy_cel",
+   "nowy_cel": 157
+  },
+  {
+   "od": 13,
+   "strona": "E",
+   "do": 159,
+   "wyjscie": [
+    119,
+    12
+   ],
+   "ladowanie": [
+    30,
+    78
+   ],
+   "swiat": 138,
+   "kratki_lokalne": [
+    [
+     119,
+     11
+    ],
+    [
+     119,
+     12
+    ],
+    [
+     119,
+     13
+    ]
+   ],
+   "kratki_swiata": [
+    137,
+    138,
+    139
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 175",
+   "kod": "nowy_cel",
+   "nowy_cel": 175
+  },
+  {
+   "od": 17,
+   "strona": "N",
+   "do": 3,
+   "wyjscie": [
+    9,
+    0
+   ],
+   "ladowanie": [
+    9,
+    58
+   ],
+   "swiat": 535,
+   "kratki_lokalne": [
+    [
+     8,
+     0
+    ],
+    [
+     9,
+     0
+    ],
+    [
+     10,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    534,
+    535,
+    536
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 23",
+   "kod": "nowy_cel",
+   "nowy_cel": 23
+  },
+  {
+   "od": 18,
+   "strona": "E",
+   "do": 3,
+   "wyjscie": [
+    79,
+    15
+   ],
+   "ladowanie": [
+    1,
+    15
+   ],
+   "swiat": 357,
+   "kratki_lokalne": [
+    [
+     79,
+     14
+    ],
+    [
+     79,
+     15
+    ],
+    [
+     79,
+     16
+    ]
+   ],
+   "kratki_swiata": [
+    356,
+    357,
+    358
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 17",
+   "kod": "nowy_cel",
+   "nowy_cel": 17
+  },
+  {
+   "od": 20,
+   "strona": "S",
+   "do": 21,
+   "wyjscie": [
+    15,
+    43
+   ],
+   "ladowanie": [
+    20,
+    1
+   ],
+   "swiat": 401,
+   "kratki_lokalne": [
+    [
+     14,
+     43
+    ],
+    [
+     15,
+     43
+    ],
+    [
+     16,
+     43
+    ]
+   ],
+   "kratki_swiata": [
+    400,
+    401,
+    402
+   ],
+   "wynik": "zamyka sie",
+   "kod": "zamyka"
+  },
+  {
+   "od": 21,
+   "strona": "E",
+   "do": 13,
+   "wyjscie": [
+    79,
+    9
+   ],
+   "ladowanie": [
+    1,
+    39
+   ],
+   "swiat": 383,
+   "kratki_lokalne": [
+    [
+     79,
+     8
+    ],
+    [
+     79,
+     9
+    ],
+    [
+     79,
+     10
+    ]
+   ],
+   "kratki_swiata": [
+    382,
+    383,
+    384
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 20",
+   "kod": "nowy_cel",
+   "nowy_cel": 20
+  },
+  {
+   "od": 21,
+   "strona": "N",
+   "do": 20,
+   "wyjscie": [
+    20,
+    0
+   ],
+   "ladowanie": [
+    15,
+    42
+   ],
+   "swiat": 326,
+   "kratki_lokalne": [
+    [
+     19,
+     0
+    ],
+    [
+     20,
+     0
+    ],
+    [
+     21,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    325,
+    326,
+    327
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 22",
+   "kod": "nowy_cel",
+   "nowy_cel": 22
+  },
+  {
+   "od": 21,
+   "strona": "W",
+   "do": 22,
+   "wyjscie": [
+    0,
+    20
+   ],
+   "ladowanie": [
+    78,
+    20
+   ],
+   "swiat": 394,
+   "kratki_lokalne": [
+    [
+     0,
+     19
+    ],
+    [
+     0,
+     20
+    ],
+    [
+     0,
+     21
+    ]
+   ],
+   "kratki_swiata": [
+    393,
+    394,
+    395
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 125",
+   "kod": "nowy_cel",
+   "nowy_cel": 125
+  },
+  {
+   "od": 22,
+   "strona": "N",
+   "do": 8,
+   "wyjscie": [
+    12,
+    0
+   ],
+   "ladowanie": [
+    25,
+    136
+   ],
+   "swiat": 318,
+   "kratki_lokalne": [
+    [
+     11,
+     0
+    ],
+    [
+     12,
+     0
+    ],
+    [
+     13,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    317,
+    318,
+    319
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 24",
+   "kod": "nowy_cel",
+   "nowy_cel": 24
+  },
+  {
+   "od": 22,
+   "strona": "E",
+   "do": 21,
+   "wyjscie": [
+    79,
+    20
+   ],
+   "ladowanie": [
+    1,
+    20
+   ],
+   "swiat": 334,
+   "kratki_lokalne": [
+    [
+     79,
+     19
+    ],
+    [
+     79,
+     20
+    ],
+    [
+     79,
+     21
+    ]
+   ],
+   "kratki_swiata": [
+    333,
+    334,
+    335
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 3",
+   "kod": "nowy_cel",
+   "nowy_cel": 3
+  },
+  {
+   "od": 22,
+   "strona": "S",
+   "do": 23,
+   "wyjscie": [
+    24,
+    59
+   ],
+   "ladowanie": [
+    24,
+    1
+   ],
+   "swiat": 330,
+   "kratki_lokalne": [
+    [
+     23,
+     59
+    ],
+    [
+     24,
+     59
+    ],
+    [
+     25,
+     59
+    ]
+   ],
+   "kratki_swiata": [
+    329,
+    330,
+    331
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 21",
+   "kod": "nowy_cel",
+   "nowy_cel": 21
+  },
+  {
+   "od": 23,
+   "strona": "W",
+   "do": 3,
+   "wyjscie": [
+    0,
+    13
+   ],
+   "ladowanie": [
+    78,
+    13
+   ],
+   "swiat": 295,
+   "kratki_lokalne": [
+    [
+     0,
+     12
+    ],
+    [
+     0,
+     13
+    ],
+    [
+     0,
+     14
+    ]
+   ],
+   "kratki_swiata": [
+    294,
+    295,
+    296
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 23,
+   "strona": "N",
+   "do": 22,
+   "wyjscie": [
+    24,
+    0
+   ],
+   "ladowanie": [
+    24,
+    58
+   ],
+   "swiat": 490,
+   "kratki_lokalne": [
+    [
+     23,
+     0
+    ],
+    [
+     24,
+     0
+    ],
+    [
+     25,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    489,
+    490,
+    491
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 903",
+   "kod": "nowy_cel",
+   "nowy_cel": 903
+  },
+  {
+   "od": 24,
+   "strona": "W",
+   "do": 8,
+   "wyjscie": [
+    0,
+    15
+   ],
+   "ladowanie": [
+    102,
+    51
+   ],
+   "swiat": 269,
+   "kratki_lokalne": [
+    [
+     0,
+     14
+    ],
+    [
+     0,
+     15
+    ],
+    [
+     0,
+     16
+    ]
+   ],
+   "kratki_swiata": [
+    268,
+    269,
+    270
+   ],
+   "wynik": "ten sam sasiad, ladowanie przesuniete o 4 kratek",
+   "kod": "przesuniete"
+  },
+  {
+   "od": 111,
+   "strona": "E",
+   "do": 8,
+   "wyjscie": [
+    91,
+    18
+   ],
+   "ladowanie": [
+    1,
+    51
+   ],
+   "swiat": 273,
+   "kratki_lokalne": [
+    [
+     91,
+     17
+    ],
+    [
+     91,
+     18
+    ]
+   ],
+   "kratki_swiata": [
+    272,
+    273
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 111,
+   "strona": "W",
+   "do": 125,
+   "wyjscie": [
+    0,
+    19
+   ],
+   "ladowanie": [
+    110,
+    19
+   ],
+   "swiat": 274,
+   "kratki_lokalne": [
+    [
+     0,
+     19
+    ]
+   ],
+   "kratki_swiata": [
+    274
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 904",
+   "kod": "nowy_cel",
+   "nowy_cel": 904
+  },
+  {
+   "od": 120,
+   "strona": "S",
+   "do": 13,
+   "wyjscie": [
+    20,
+    67
+   ],
+   "ladowanie": [
+    6,
+    1
+   ],
+   "swiat": 326,
+   "kratki_lokalne": [
+    [
+     19,
+     67
+    ],
+    [
+     20,
+     67
+    ],
+    [
+     21,
+     67
+    ]
+   ],
+   "kratki_swiata": [
+    325,
+    326,
+    327
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 24",
+   "kod": "nowy_cel",
+   "nowy_cel": 24
+  },
+  {
+   "od": 125,
+   "strona": "E",
+   "do": 111,
+   "wyjscie": [
+    111,
+    19
+   ],
+   "ladowanie": [
+    1,
+    19
+   ],
+   "swiat": 386,
+   "kratki_lokalne": [
+    [
+     111,
+     19
+    ]
+   ],
+   "kratki_swiata": [
+    386
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 21",
+   "kod": "nowy_cel",
+   "nowy_cel": 21
+  },
+  {
+   "od": 125,
+   "strona": "N",
+   "do": 155,
+   "wyjscie": [
+    15,
+    0
+   ],
+   "ladowanie": [
+    24,
+    70
+   ],
+   "swiat": 209,
+   "kratki_lokalne": [
+    [
+     14,
+     0
+    ],
+    [
+     15,
+     0
+    ],
+    [
+     16,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    208,
+    209,
+    210
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 8",
+   "kod": "nowy_cel",
+   "nowy_cel": 8
+  },
+  {
+   "od": 125,
+   "strona": "S",
+   "do": 162,
+   "wyjscie": [
+    22,
+    79
+   ],
+   "ladowanie": [
+    22,
+    1
+   ],
+   "swiat": 216,
+   "kratki_lokalne": [
+    [
+     21,
+     79
+    ],
+    [
+     22,
+     79
+    ],
+    [
+     23,
+     79
+    ]
+   ],
+   "kratki_swiata": [
+    215,
+    216,
+    217
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 155,
+   "strona": "S",
+   "do": 125,
+   "wyjscie": [
+    23,
+    71
+   ],
+   "ladowanie": [
+    14,
+    1
+   ],
+   "swiat": 113,
+   "kratki_lokalne": [
+    [
+     23,
+     71
+    ],
+    [
+     24,
+     71
+    ],
+    [
+     25,
+     71
+    ],
+    [
+     23,
+     71
+    ],
+    [
+     24,
+     71
+    ],
+    [
+     25,
+     71
+    ]
+   ],
+   "kratki_swiata": [
+    113,
+    114,
+    115,
+    113,
+    114,
+    115
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 901",
+   "kod": "nowy_cel",
+   "nowy_cel": 901
+  },
+  {
+   "od": 155,
+   "strona": "E",
+   "do": 157,
+   "wyjscie": [
+    95,
+    18
+   ],
+   "ladowanie": [
+    1,
+    20
+   ],
+   "swiat": 74,
+   "kratki_lokalne": [
+    [
+     95,
+     17
+    ],
+    [
+     95,
+     18
+    ]
+   ],
+   "kratki_swiata": [
+    73,
+    74
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 157,
+   "strona": "W",
+   "do": 155,
+   "wyjscie": [
+    0,
+    19
+   ],
+   "ladowanie": [
+    94,
+    17
+   ],
+   "swiat": 73,
+   "kratki_lokalne": [
+    [
+     0,
+     19
+    ],
+    [
+     0,
+     20
+    ],
+    [
+     0,
+     19
+    ],
+    [
+     0,
+     20
+    ]
+   ],
+   "kratki_swiata": [
+    73,
+    74,
+    73,
+    74
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 157,
+   "strona": "E",
+   "do": 159,
+   "wyjscie": [
+    111,
+    20
+   ],
+   "ladowanie": [
+    1,
+    34
+   ],
+   "swiat": 74,
+   "kratki_lokalne": [
+    [
+     111,
+     19
+    ],
+    [
+     111,
+     20
+    ]
+   ],
+   "kratki_swiata": [
+    73,
+    74
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 159,
+   "strona": "S",
+   "do": 13,
+   "wyjscie": [
+    29,
+    79
+   ],
+   "ladowanie": [
+    118,
+    11
+   ],
+   "swiat": 327,
+   "kratki_lokalne": [
+    [
+     29,
+     79
+    ],
+    [
+     30,
+     79
+    ],
+    [
+     31,
+     79
+    ],
+    [
+     29,
+     79
+    ],
+    [
+     30,
+     79
+    ],
+    [
+     31,
+     79
+    ]
+   ],
+   "kratki_swiata": [
+    327,
+    328,
+    329,
+    327,
+    328,
+    329
+   ],
+   "wynik": "ta sama krawedz, nowy cel: 175",
+   "kod": "nowy_cel",
+   "nowy_cel": 175
+  },
+  {
+   "od": 159,
+   "strona": "W",
+   "do": 157,
+   "wyjscie": [
+    0,
+    34
+   ],
+   "ladowanie": [
+    110,
+    20
+   ],
+   "swiat": 74,
+   "kratki_lokalne": [
+    [
+     0,
+     33
+    ],
+    [
+     0,
+     34
+    ]
+   ],
+   "kratki_swiata": [
+    73,
+    74
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 162,
+   "strona": "N",
+   "do": 125,
+   "wyjscie": [
+    21,
+    0
+   ],
+   "ladowanie": [
+    21,
+    78
+   ],
+   "swiat": 215,
+   "kratki_lokalne": [
+    [
+     21,
+     0
+    ],
+    [
+     22,
+     0
+    ],
+    [
+     23,
+     0
+    ],
+    [
+     21,
+     0
+    ],
+    [
+     22,
+     0
+    ],
+    [
+     23,
+     0
+    ]
+   ],
+   "kratki_swiata": [
+    215,
+    216,
+    217,
+    215,
+    216,
+    217
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 162,
+   "strona": "W",
+   "do": 165,
+   "wyjscie": [
+    0,
+    21
+   ],
+   "ladowanie": [
+    78,
+    21
+   ],
+   "swiat": 468,
+   "kratki_lokalne": [
+    [
+     0,
+     20
+    ],
+    [
+     0,
+     21
+    ]
+   ],
+   "kratki_swiata": [
+    467,
+    468
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 165,
+   "strona": "E",
+   "do": 162,
+   "wyjscie": [
+    79,
+    20
+   ],
+   "ladowanie": [
+    1,
+    20
+   ],
+   "swiat": 467,
+   "kratki_lokalne": [
+    [
+     79,
+     20
+    ],
+    [
+     79,
+     21
+    ],
+    [
+     79,
+     20
+    ],
+    [
+     79,
+     21
+    ]
+   ],
+   "kratki_swiata": [
+    467,
+    468,
+    467,
+    468
+   ],
+   "wynik": "zostaje (ta sama kratka)",
+   "kod": "zostaje"
+  },
+  {
+   "od": 168,
+   "strona": "E",
+   "do": 23,
+   "wyjscie": [
+    99,
+    12
+   ],
+   "ladowanie": [
+    1,
+    7
+   ],
+   "swiat": 342,
+   "kratki_lokalne": [
+    [
+     99,
+     11
+    ],
+    [
+     99,
+     12
+    ],
+    [
+     99,
+     13
+    ]
+   ],
+   "kratki_swiata": [
+    341,
+    342,
+    343
+   ],
+   "wynik": "zamyka sie",
+   "kod": "zamyka"
+  }
+ ],
+ "ucięte_krawedzie": [
+  {
+   "mapa": 8,
+   "strona": "W",
+   "od": 0,
+   "do": 33,
+   "kratek": 33,
+   "swiat_od": [
+    161,
+    182
+   ]
+  },
+  {
+   "mapa": 24,
+   "strona": "E",
+   "od": 0,
+   "do": 28,
+   "kratek": 28,
+   "swiat_od": [
+    346,
+    214
+   ]
+  },
+  {
+   "mapa": 111,
+   "strona": "N",
+   "od": 0,
+   "do": 102,
+   "kratek": 102,
+   "swiat_od": [
+    60,
+    214
+   ]
+  },
+  {
+   "mapa": 111,
+   "strona": "S",
+   "od": 0,
+   "do": 94,
+   "kratek": 94,
+   "swiat_od": [
+    60,
+    327
+   ]
+  },
+  {
+   "mapa": 125,
+   "strona": "W",
+   "od": 28,
+   "do": 31,
+   "kratek": 3,
+   "swiat_od": [
+    153,
+    355
+   ]
+  },
+  {
+   "mapa": 20,
+   "strona": "S",
+   "od": 0,
+   "do": 60,
+   "kratek": 60,
+   "swiat_od": [
+    346,
+    346
+   ]
+  },
+  {
+   "mapa": 21,
+   "strona": "E",
+   "od": 12,
+   "do": 60,
+   "kratek": 48,
+   "swiat_od": [
+    346,
+    346
+   ]
+  },
+  {
+   "mapa": 13,
+   "strona": "S",
+   "od": 0,
+   "do": 16,
+   "kratek": 16,
+   "swiat_od": [
+    146,
+    182
+   ]
+  },
+  {
+   "mapa": 120,
+   "strona": "S",
+   "od": 80,
+   "do": 96,
+   "kratek": 16,
+   "swiat_od": [
+    346,
+    214
+   ]
+  },
+  {
+   "mapa": 120,
+   "strona": "E",
+   "od": 63,
+   "do": 68,
+   "kratek": 5,
+   "swiat_od": [
+    362,
+    209
+   ]
+  },
+  {
+   "mapa": 23,
+   "strona": "E",
+   "od": 0,
+   "do": 60,
+   "kratek": 60,
+   "swiat_od": [
+    506,
+    242
+   ]
+  },
+  {
+   "mapa": 168,
+   "strona": "W",
+   "od": 0,
+   "do": 12,
+   "kratek": 12,
+   "swiat_od": [
+    565,
+    290
+   ]
+  },
+  {
+   "mapa": 168,
+   "strona": "E",
+   "od": 0,
+   "do": 72,
+   "kratek": 72,
+   "swiat_od": [
+    666,
+    290
+   ]
+  },
+  {
+   "mapa": 3,
+   "strona": "N",
+   "od": 0,
+   "do": 24,
+   "kratek": 24,
+   "swiat_od": [
+    346,
+    241
+   ]
+  },
+  {
+   "mapa": 4,
+   "strona": "N",
+   "od": 0,
+   "do": 80,
+   "kratek": 80,
+   "swiat_od": [
+    370,
+    181
+   ]
+  },
+  {
+   "mapa": 4,
+   "strona": "W",
+   "od": 0,
+   "do": 60,
+   "kratek": 60,
+   "swiat_od": [
+    369,
+    182
+   ]
+  },
+  {
+   "mapa": 17,
+   "strona": "N",
+   "od": 20,
+   "do": 80,
+   "kratek": 60,
+   "swiat_od": [
+    506,
+    301
+   ]
+  },
+  {
+   "mapa": 18,
+   "strona": "W",
+   "od": 44,
+   "do": 60,
+   "kratek": 16,
+   "swiat_od": [
+    405,
+    346
+   ]
+  },
+  {
+   "mapa": 162,
+   "strona": "W",
+   "od": 67,
+   "do": 80,
+   "kratek": 13,
+   "swiat_od": [
+    153,
+    474
+   ]
+  },
+  {
+   "mapa": 909,
+   "strona": "E",
+   "od": 3,
+   "do": 44,
+   "kratek": 41,
+   "swiat_od": [
+    266,
+    490
+   ]
+  }
+ ],
+ "kratki_do_poprawienia_na_stykach": [
+  {
+   "mapa": 8,
+   "strona": "S",
+   "poz": 0,
+   "sasiad": 125,
+   "swiat": [
+    162,
+    327
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 8,
+   "strona": "S",
+   "poz": 1,
+   "sasiad": 125,
+   "swiat": [
+    163,
+    327
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 8,
+   "strona": "S",
+   "poz": 2,
+   "sasiad": 125,
+   "swiat": [
+    164,
+    327
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 8,
+   "strona": "S",
+   "poz": 3,
+   "sasiad": 125,
+   "swiat": [
+    165,
+    327
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 111,
+   "strona": "S",
+   "poz": 94,
+   "sasiad": 125,
+   "swiat": [
+    154,
+    327
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 111,
+   "strona": "S",
+   "poz": 95,
+   "sasiad": 125,
+   "swiat": [
+    155,
+    327
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 111,
+   "strona": "S",
+   "poz": 96,
+   "sasiad": 125,
+   "swiat": [
+    156,
+    327
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 111,
+   "strona": "S",
+   "poz": 97,
+   "sasiad": 125,
+   "swiat": [
+    157,
+    327
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 111,
+   "strona": "S",
+   "poz": 98,
+   "sasiad": 125,
+   "swiat": [
+    158,
+    327
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 111,
+   "strona": "S",
+   "poz": 99,
+   "sasiad": 125,
+   "swiat": [
+    159,
+    327
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 111,
+   "strona": "S",
+   "poz": 100,
+   "sasiad": 125,
+   "swiat": [
+    160,
+    327
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 111,
+   "strona": "S",
+   "poz": 101,
+   "sasiad": 125,
+   "swiat": [
+    161,
+    327
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 125,
+   "strona": "N",
+   "poz": 0,
+   "sasiad": 111,
+   "swiat": [
+    154,
+    326
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 125,
+   "strona": "N",
+   "poz": 1,
+   "sasiad": 111,
+   "swiat": [
+    155,
+    326
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 125,
+   "strona": "N",
+   "poz": 2,
+   "sasiad": 111,
+   "swiat": [
+    156,
+    326
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 125,
+   "strona": "N",
+   "poz": 3,
+   "sasiad": 111,
+   "swiat": [
+    157,
+    326
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 125,
+   "strona": "N",
+   "poz": 4,
+   "sasiad": 111,
+   "swiat": [
+    158,
+    326
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 125,
+   "strona": "N",
+   "poz": 5,
+   "sasiad": 111,
+   "swiat": [
+    159,
+    326
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 125,
+   "strona": "N",
+   "poz": 6,
+   "sasiad": 111,
+   "swiat": [
+    160,
+    326
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 125,
+   "strona": "N",
+   "poz": 7,
+   "sasiad": 111,
+   "swiat": [
+    161,
+    326
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 125,
+   "strona": "N",
+   "poz": 8,
+   "sasiad": 8,
+   "swiat": [
+    162,
+    326
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 125,
+   "strona": "N",
+   "poz": 9,
+   "sasiad": 8,
+   "swiat": [
+    163,
+    326
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 125,
+   "strona": "N",
+   "poz": 10,
+   "sasiad": 8,
+   "swiat": [
+    164,
+    326
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 125,
+   "strona": "N",
+   "poz": 11,
+   "sasiad": 8,
+   "swiat": [
+    165,
+    326
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 162,
+   "strona": "W",
+   "poz": 20,
+   "sasiad": 165,
+   "swiat": [
+    153,
+    427
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 162,
+   "strona": "W",
+   "poz": 21,
+   "sasiad": 165,
+   "swiat": [
+    153,
+    428
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 162,
+   "strona": "W",
+   "poz": 22,
+   "sasiad": 165,
+   "swiat": [
+    153,
+    429
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 162,
+   "strona": "E",
+   "poz": 67,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    474
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 162,
+   "strona": "E",
+   "poz": 68,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    475
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 162,
+   "strona": "E",
+   "poz": 69,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    476
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 162,
+   "strona": "E",
+   "poz": 70,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    477
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 162,
+   "strona": "E",
+   "poz": 71,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    478
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 162,
+   "strona": "E",
+   "poz": 72,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    479
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 162,
+   "strona": "E",
+   "poz": 73,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    480
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 162,
+   "strona": "E",
+   "poz": 74,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    481
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 162,
+   "strona": "E",
+   "poz": 75,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    482
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 162,
+   "strona": "E",
+   "poz": 76,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    483
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 162,
+   "strona": "E",
+   "poz": 77,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    484
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 162,
+   "strona": "E",
+   "poz": 78,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    485
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 162,
+   "strona": "E",
+   "poz": 79,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    486
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 165,
+   "strona": "E",
+   "poz": 20,
+   "sasiad": 162,
+   "swiat": [
+    154,
+    427
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 165,
+   "strona": "E",
+   "poz": 21,
+   "sasiad": 162,
+   "swiat": [
+    154,
+    428
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 165,
+   "strona": "E",
+   "poz": 22,
+   "sasiad": 162,
+   "swiat": [
+    154,
+    429
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 155,
+   "strona": "S",
+   "poz": 16,
+   "sasiad": 901,
+   "swiat": [
+    66,
+    88
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 155,
+   "strona": "S",
+   "poz": 17,
+   "sasiad": 901,
+   "swiat": [
+    67,
+    88
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 155,
+   "strona": "S",
+   "poz": 18,
+   "sasiad": 901,
+   "swiat": [
+    68,
+    88
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 155,
+   "strona": "S",
+   "poz": 19,
+   "sasiad": 901,
+   "swiat": [
+    69,
+    88
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 155,
+   "strona": "S",
+   "poz": 20,
+   "sasiad": 901,
+   "swiat": [
+    70,
+    88
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 155,
+   "strona": "E",
+   "poz": 3,
+   "sasiad": 157,
+   "swiat": [
+    146,
+    19
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 157,
+   "strona": "W",
+   "poz": 5,
+   "sasiad": 155,
+   "swiat": [
+    145,
+    19
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 901,
+   "strona": "N",
+   "poz": 16,
+   "sasiad": 155,
+   "swiat": [
+    66,
+    87
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 901,
+   "strona": "N",
+   "poz": 17,
+   "sasiad": 155,
+   "swiat": [
+    67,
+    87
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 901,
+   "strona": "N",
+   "poz": 18,
+   "sasiad": 155,
+   "swiat": [
+    68,
+    87
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 901,
+   "strona": "N",
+   "poz": 19,
+   "sasiad": 155,
+   "swiat": [
+    69,
+    87
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 901,
+   "strona": "N",
+   "poz": 20,
+   "sasiad": 155,
+   "swiat": [
+    70,
+    87
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 80,
+   "sasiad": 162,
+   "swiat": [
+    265,
+    474
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 81,
+   "sasiad": 162,
+   "swiat": [
+    265,
+    475
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 82,
+   "sasiad": 162,
+   "swiat": [
+    265,
+    476
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 83,
+   "sasiad": 162,
+   "swiat": [
+    265,
+    477
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 84,
+   "sasiad": 162,
+   "swiat": [
+    265,
+    478
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 85,
+   "sasiad": 162,
+   "swiat": [
+    265,
+    479
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 86,
+   "sasiad": 162,
+   "swiat": [
+    265,
+    480
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 87,
+   "sasiad": 162,
+   "swiat": [
+    265,
+    481
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 88,
+   "sasiad": 162,
+   "swiat": [
+    265,
+    482
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 89,
+   "sasiad": 162,
+   "swiat": [
+    265,
+    483
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 90,
+   "sasiad": 162,
+   "swiat": [
+    265,
+    484
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 91,
+   "sasiad": 162,
+   "swiat": [
+    265,
+    485
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 92,
+   "sasiad": 162,
+   "swiat": [
+    265,
+    486
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 93,
+   "sasiad": 909,
+   "swiat": [
+    265,
+    487
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 94,
+   "sasiad": 909,
+   "swiat": [
+    265,
+    488
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 902,
+   "strona": "W",
+   "poz": 95,
+   "sasiad": 909,
+   "swiat": [
+    265,
+    489
+   ],
+   "woda_a": true
+  },
+  {
+   "mapa": 909,
+   "strona": "E",
+   "poz": 0,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    487
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 909,
+   "strona": "E",
+   "poz": 1,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    488
+   ],
+   "woda_a": false
+  },
+  {
+   "mapa": 909,
+   "strona": "E",
+   "poz": 2,
+   "sasiad": 902,
+   "swiat": [
+    266,
+    489
+   ],
+   "woda_a": false
+  }
+ ],
+ "wersja_kruk": "docs/mapy/kruk_wersja/"
+}

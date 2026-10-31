@@ -465,17 +465,19 @@
 
     Sprite_StoneLayer.prototype.update = function() {
         Sprite.prototype.update.call(this);
-        const mapId = $gameMap.mapId(), stamp = mapId + ":" + Farming.gatherRev() + ":" + Farming.today() + ":" + Farming.farm().rev;
-        if (stamp !== this._stamp) {
+        // (2026-10-30, wydajność: the four numbers kept as they are - no string made and compared on every frame)
+        const mapId = $gameMap.mapId(), rev = Farming.gatherRev(), day = Farming.today(), farmRev = Farming.farm().rev, s = this._stamp;
+        if (!s || s.map !== mapId || s.rev !== rev || s.day !== day || s.farm !== farmRev) {
             if (!this.rebuild()) return;   // the ground pictures are not loaded yet: try again next frame
-            this._stamp = stamp;
+            this._stamp = { map: mapId, rev, day, farm: farmRev };
             this._scrollKey = null;
         }
         // (the part of the world on the screen too: a zoom or the eagle's flight shows more of it without a scroll - reposition culls)
         const v = T.view && T.view.rect ? T.view.rect() : null;
-        const scrollKey = $gameMap.displayX() + "," + $gameMap.displayY() + (v ? "," + v.x0 + "," + v.y0 + "," + v.x1 + "," + v.y1 : "");
-        if (scrollKey !== this._scrollKey) {
-            this._scrollKey = scrollKey;
+        // (the place of the view kept as numbers, not a string made on every frame)
+        const dx = $gameMap.displayX(), dy = $gameMap.displayY(), k = this._scrollKey;
+        if (!k || k.dx !== dx || k.dy !== dy || (v ? (k.x0 !== v.x0 || k.y0 !== v.y0 || k.x1 !== v.x1 || k.y1 !== v.y1) : k.x0 !== undefined)) {
+            this._scrollKey = v ? { dx, dy, x0: v.x0, y0: v.y0, x1: v.x1, y1: v.y1 } : { dx, dy };
             this.reposition();
         }
         if (this._swaying.length) this.updateSway();
@@ -524,10 +526,10 @@
     };
 
     Sprite_StoneLayer.prototype.rebuild = function() {
-        const found = [];
-        for (let y = 0; y < $gameMap.height(); y++) {
-            for (let x = 0; x < $gameMap.width(); x++) {
-                if (!Farming.gatherKindOf(x, y)) continue;   // most tiles have nothing
+        const found = [], tiles = Farming.gatherTiles();   // (the tiles where something may lie: most have nothing)
+        {
+            for (let i = 0; i < tiles.length; i += 3) {
+                const x = tiles[i], y = tiles[i + 1];
                 const spot = Farming.gatherSpot(x, y);
                 if (spot === undefined) return false;
                 const kind = spot && Farming.gatherAt(x, y);
@@ -940,6 +942,7 @@
     Sprite_NightLight.prototype.fitView = function() {
         const S = nightScale(), w = Math.ceil(T.view.w() / S), h = Math.ceil(T.view.h() / S);
         if (this._nightK === S && this.bitmap && this.bitmap.width === w && this.bitmap.height === h) return;
+        this.leaveGpu();   // (the sprites show their bitmaps again until the new ones are in; drawGpu follows the new size)
         this._nightK = S;   // (another level of quality: the picture at its size from this frame on)
         this.scale.set(S, S);
         for (const sp of [this, this._warm, this._glow]) {
@@ -973,6 +976,9 @@
             if (same && (frame & 1) && this._nightDrawnAt !== frame) return;
             this._nightDrawnAt = frame;
         }
+        const LG = T.api("LightGpu");
+        if (LG && LG.available()) { this.drawGpu(LG, lights, things, dark, S); return; }   // (the graphics card: Wydajnosc.opts.lightGpu)
+        this.leaveGpu();
         const bmp = this.bitmap, ctx = bmp.context, w = bmp.width, h = bmp.height;
         ctx.globalCompositeOperation = "source-over";
         ctx.clearRect(0, 0, w, h);
@@ -1176,6 +1182,193 @@
         });
         ctx.globalCompositeOperation = "source-over";
         if (bmp._baseTexture && bmp._baseTexture.update) bmp._baseTexture.update();
+    };
+
+    // ---- the night on the graphics card (2026-10-30, Wydajnosc.opts.lightGpu; RoomLighting.js's LightGpu, docs/wydajnosc/etap3_swiatla.md).
+    // The same picture as the canvases above, drawn into RenderTextures from pooled sprites instead of being painted on 2D canvases and
+    // uploaded: the dark fill, every light a gradient sprite ERASED from it (the canvas's "destination-out"), the warm ring ATOP what is
+    // still dark ("source-atop"), the warm multiply layer, the glow (ADD). Where the map has water the warm passes are cut by a mask
+    // (DST_IN, "destination-in") - the mask is the tiles' own little picture scaled up by the sprite, not repainted as the view moves.
+    // A light with things standing in it is still cut on a canvas (its shadows, Sky.js) and goes in as a texture.
+    const NIGHT_STOPS = [[0, 1], [0.2, 0.93], [0.45, 0.62], [0.72, 0.25], [1, 0]];
+    const FIRE_GLOW_STOPS = [[0, 0.75, "255,172,72"], [0.35, 0.32, "255,122,40"], [1, 0, "255,90,20"]];
+    const place = (pool, tex, x, y, r, alpha) => {
+        const s = pool.next(tex), sc = (r * 2) / 256;
+        s.position.set(x - r, y - r);
+        s.scale.set(sc, sc);
+        s.alpha = alpha > 1 ? 1 : alpha < 0 ? 0 : alpha;
+    };
+    // the three layers' and the scratch layer's targets and pools (made once; the size follows the night's bitmap)
+    Sprite_NightLight.prototype.enterGpu = function(LG) {
+        const w = this.bitmap.width, h = this.bitmap.height;
+        let g = this._gpu;
+        if (!g) {
+            g = this._gpu = { night: new LG.Target(w, h), warm: new LG.Target(w, h), glow: new LG.Target(w, h), tmp: new LG.Target(w, h), def: [], x: [], y: [], r: [], a: [], gx: [], gy: [], gr: [], ga: [], cellsKey: null };
+            const mask = () => { const s = new PIXI.Sprite(); s.blendMode = LG.DST_IN; s.visible = false; return s; };
+            g.fill = new PIXI.Sprite(PIXI.Texture.WHITE);
+            g.holes = new LG.Pool(LG.ERASE);
+            g.night.root.addChild(g.fill, g.holes.c);
+            g.atopRoot = new PIXI.Container();
+            g.atop = new LG.Pool(LG.ATOP);
+            g.atopRoot.addChild(g.atop.c);
+            g.warmPool = new LG.Pool(LG.NORMAL);
+            g.maskW = mask();
+            g.warm.root.addChild(g.warmPool.c, g.maskW);
+            g.fire = new LG.Pool(LG.ADD);
+            g.edge = new LG.Pool(LG.ADD);
+            g.tmpEdge = new PIXI.Sprite();
+            g.tmpEdge.blendMode = LG.ADD;
+            g.tmpEdge.visible = false;
+            g.glow.root.addChild(g.fire.c, g.edge.c, g.tmpEdge);
+            g.tmpPool = new LG.Pool(LG.NORMAL);
+            g.sroot = new PIXI.Container();   // (the scratch layer for a light with things in it: its gradient, the shadows' mask erased)
+            g.sg = new LG.Pool(LG.NORMAL);
+            g.sm = new PIXI.Sprite();
+            g.sm.blendMode = LG.ERASE;
+            g.sroot.addChild(g.sg.c, g.sm);
+            g.maskT = mask();
+            g.tmp.root.addChild(g.tmpPool.c, g.maskT);
+        } else if (g.night.w !== w || g.night.h !== h) {
+            for (const k of ["night", "warm", "glow", "tmp"]) g[k].resize(w, h);
+        }
+        if (!this._gpuOn) {
+            this._gpuOn = true;
+            for (const [sp, k] of [[this, "night"], [this._warm, "warm"], [this._glow, "glow"]]) {
+                sp._lgLegacy = sp.texture;
+                sp.texture = g[k].rt;
+            }
+            this._nightSig = null;
+        }
+        return g;
+    };
+    // back to the canvases (the option switched off, a new size of the picture): the sprites show their bitmaps again
+    Sprite_NightLight.prototype.leaveGpu = function() {
+        if (!this._gpuOn) return;
+        this._gpuOn = false;
+        for (const sp of [this, this._warm, this._glow]) if (sp._lgLegacy) { sp.texture = sp._lgLegacy; sp._lgLegacy = null; }
+        this._nightSig = null;
+    };
+    Sprite_NightLight.prototype.destroy = function(options) {
+        this.leaveGpu();
+        if (this._gpu) { for (const k of ["night", "warm", "glow", "tmp"]) this._gpu[k].free(); this._gpu = null; }
+        Sprite.prototype.destroy.call(this, options);
+    };
+    // the water mask for the warm passes: the sprites (maskW, maskT) set up, or hidden on a map with no water (then the warmth is
+    // WARM_LAND of itself everywhere, straight)
+    Sprite_NightLight.prototype.maskGpu = function(g, LG, S) {
+        const grid = waterCells();
+        if (!grid) { g.maskW.visible = g.maskT.visible = false; return false; }
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), W = $gameMap.width(), H = $gameMap.height();
+        const x0 = Math.floor($gameMap.displayX()) - 1, y0 = Math.floor($gameMap.displayY()) - 1;
+        const cols = Math.ceil(T.view.w() / tw) + 3, rows = Math.ceil(T.view.h() / th) + 3;
+        const key = g.cellsKey;
+        if (!key || key.grid !== grid || key.x0 !== x0 || key.y0 !== y0 || key.cols !== cols || key.rows !== rows) {
+            g.cellsKey = { grid, x0, y0, cols, rows };
+            const cells = g.cells || (g.cells = document.createElement("canvas"));
+            if (cells.width !== cols || cells.height !== rows) { cells.width = cols; cells.height = rows; }
+            const cc = cells.getContext("2d"), img = cc.createImageData(cols, rows), land = Math.round(255 * WARM_LAND);
+            for (let j = 0; j < rows; j++) {
+                for (let i = 0; i < cols; i++) {
+                    const mx = $gameMap.roundX(x0 + i), my = $gameMap.roundY(y0 + j);
+                    const water = mx >= 0 && my >= 0 && mx < W && my < H && grid[my * W + mx];
+                    img.data[(j * cols + i) * 4 + 3] = water ? 255 : land;
+                }
+            }
+            cc.putImageData(img, 0, 0);
+            g.cellsTex = LG.canvasTexture(cells);
+        }
+        for (const m of [g.maskW, g.maskT]) {
+            m.texture = g.cellsTex;
+            m.position.set($gameMap.adjustX(x0) * tw / S, $gameMap.adjustY(y0) * th / S);
+            m.scale.set(tw / S, th / S);   // (one texel a tile)
+            m.visible = true;
+        }
+        return true;
+    };
+    Sprite_NightLight.prototype.drawGpu = function(LG, lights, things, dark, S) {
+        const g = this.enterGpu(LG), w = g.night.w, h = g.night.h, Sun = T.api("Sun");
+        g.fill.width = w;
+        g.fill.height = h;
+        g.fill.tint = 0x030718;
+        g.fill.alpha = Math.min(1, NIGHT_ALPHA * dark);
+        const holes = g.holes, nightTex = LG.gradient("night", "0,0,0", NIGHT_STOPS);
+        let wn = 0, gn = 0, bn = 0;
+        for (const l of lights) {
+            const flick = 0.93 + 0.05 * Math.sin(this._age * 0.21 + l.id * 1.7) + 0.03 * Math.sin(this._age * 0.53 + l.id);
+            const x = l.x / S, y = l.y / S, r = (l.r / S) * (0.97 + 0.03 * flick);
+            if (x + r < 0 || y + r < 0 || x - r > w || y - r > h) continue;
+            if (l.glow) { g.gx[gn] = x; g.gy[gn] = y; g.gr[gn] = r; g.ga[gn] = l.i * fireGlowAlpha(this._age + l.id * 17); gn++; }
+            g.x[wn] = x; g.y[wn] = y; g.r[wn] = r; g.a[wn] = l.i * flick; wn++;
+            const blockers = l.gy !== undefined && things.length ? Sun.lightBlockers(l, things, this._age, flick) : null;
+            if (blockers && blockers.length) {
+                this._nightInfo.blockers += blockers.length;
+                const d = g.def[bn++] || (g.def[bn - 1] = {});
+                d.x = x; d.y = y; d.r = r; d.a = l.i * flick; d.b = blockers;
+            } else place(holes, nightTex, x, y, r, l.i * flick);
+        }
+        holes.end();
+        g.night.draw(true);
+        // the lights with things standing in them: the light's gradient on the scratch layer with the mask of their shadows (Sky.js
+        // lightShadowMask: made on a canvas) erased from it, then that erased from the dark
+        let stands = null;
+        for (let i = 0; i < bn; i++) {
+            const d = g.def[i], x = d.x, y = d.y, r = d.r, size = Math.ceil(r * 2) + 2, ox = x - r - 1, oy = y - r - 1;
+            if (!stands) stands = Sun.standing ? Sun.standing(this._spriteset, this.standingSprites()) : undefined;
+            g.sm.texture = LG.canvasTexture(Sun.lightShadowMask(size, size, d.b, 1 / S, ox, oy, stands));
+            g.sm.position.set(ox, oy);
+            place(g.sg, nightTex, x, y, r, d.a);
+            g.sg.end();
+            LG.render(g.sroot, g.tmp, true);
+            LG.drawSolo(g.night, g.tmp.rt, 0, 0, 1, 1, LG.ERASE, 1);
+            d.b = null;
+        }
+        const masked = wn > 0 ? this.maskGpu(g, LG, S) : (g.maskW.visible = g.maskT.visible = false);
+        const land = masked ? 1 : WARM_LAND;
+        // the darkness left in each light's ring: warm brown instead of the night's blue
+        if (wn) {
+            const tex = LG.gradient("warmDark", WARM_DARK, [[0, 1], [0.7, 0.7], [1, 0]]);
+            if (masked) {
+                for (let i = 0; i < wn; i++) place(g.tmpPool, tex, g.x[i], g.y[i], g.r[i], WARM_DARK_A * g.a[i]);
+                g.tmpPool.end();
+                g.tmp.draw(true);
+                LG.drawSolo(g.night, g.tmp.rt, 0, 0, 1, 1, LG.ATOP, 1);
+            } else {
+                for (let i = 0; i < wn; i++) place(g.atop, tex, g.x[i], g.y[i], g.r[i], WARM_DARK_A * g.a[i] * land);
+                g.atop.end();
+                LG.render(g.atopRoot, g.night, false);
+            }
+        }
+        // the world under the lights multiplied by the firelight's colour
+        const warm = this._warm;
+        warm.visible = wn > 0;
+        if (warm.visible) {
+            const tex = LG.gradient("warmMul", WARM_MUL, [[0, WARM_MUL_CORE], [0.5, 1], [0.8, 0.7], [1, 0]]);
+            for (let i = 0; i < wn; i++) place(g.warmPool, tex, g.x[i], g.y[i], g.r[i], WARM_MUL_A * g.a[i] * dark * land);
+            g.warmPool.end();
+            g.maskW.visible = masked;
+            g.warm.draw(true);
+        }
+        // the glow: the fires' own, and a faint warm edge from the middle of every ring out to the light's reach
+        const glow = this._glow;
+        glow.visible = gn > 0 || wn > 0;
+        if (glow.visible) {
+            const fireTex = LG.gradient("fireGlow", "255,172,72", FIRE_GLOW_STOPS);
+            for (let i = 0; i < gn; i++) place(g.fire, fireTex, g.gx[i], g.gy[i], g.gr[i] * FIRE_GLOW_REACH, g.ga[i]);
+            g.fire.end();
+            const edgeTex = LG.gradient("warmEdge", WARM_EDGE, [[0, 0], [0.4, 1], [1, 0]], 0.35);
+            g.tmpEdge.visible = false;
+            if (masked) {
+                for (let i = 0; i < wn; i++) place(g.tmpPool, edgeTex, g.x[i], g.y[i], g.r[i], WARM_EDGE_A * g.a[i] * dark);
+                g.tmpPool.end();
+                g.tmp.draw(true);
+                g.tmpEdge.texture = g.tmp.rt;
+                g.tmpEdge.visible = true;
+            } else {
+                for (let i = 0; i < wn; i++) place(g.edge, edgeTex, g.x[i], g.y[i], g.r[i], WARM_EDGE_A * g.a[i] * dark * land);
+            }
+            g.edge.end();
+            g.glow.draw(true);
+        }
     };
 
     // the <Light> events of this map (RoomLighting's tag - read the same way: <Light:radius,R,G,B>, <LightWhen:night|day>,

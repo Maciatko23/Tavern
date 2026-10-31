@@ -204,6 +204,7 @@
         const beds = propsOf(PROPS.heroBed);
         if (beds.length) ev.heroBed = beds.reduce((a, b) => (b.y > a.y ? b : a));   // (the foot end of the straw bed)
         for (const k of Object.keys(ev)) if (ev[k]) ev[k]._homeKind = k;
+        T.sprite.dirty();   // (the sprites' hooks asked again: who has a prop's look now)
         // fully passable tiles without anything solid on them (the characters are not counted here). The solid things are looked at
         // anew every frame: HomeDecor.js puts some up and takes them away (the pumpkins by the door in autumn, a sheaf)
         const walk = [];
@@ -385,6 +386,7 @@
     }
     const SHEET_POSES = { stir: 1, sitdown: 1, standup: 1, shuffle: 1, sit: 1, rock: 1, smoke: 1 };
     function setPose(ev, k, extra) {
+        T.sprite.dirty(ev);
         if (!k) { ev._homePose = null; delete ev._pose; return; }
         ev._homePose = Object.assign({ k, t: frame() }, extra || {});
         if (SHEET_POSES[k] || k === "sleep" || k === "liedown" || k === "getup") ev._pose = "home"; else delete ev._pose;
@@ -585,6 +587,7 @@
         c.until = frame() + 60 * (40 + rand(80));
     }
     function setCatPose(ev, k) {
+        T.sprite.dirty(ev);
         if (!k) { ev._homePose = null; delete ev._pose; return; }
         ev._homePose = { k, t: frame() };
         if (k === "sleep" || k === "curl" || k === "uncurl") ev._pose = "home"; else delete ev._pose;
@@ -922,21 +925,28 @@
         if (ch._homeKind) return propLook(ch._homeKind);
         return poseLook(ch);
     }
-    const _SC_updateBitmap = Sprite_Character.prototype.updateBitmap;
-    Sprite_Character.prototype.updateBitmap = function() {
-        const look = homeLook(this._character);
-        this._homeLook = look;
-        if (look && look.sheet) {
-            if (this._homeSheet !== look.sheet) { this._homeSheet = look.sheet; this.bitmap = ImageManager.loadCharacter(look.sheet); }
-            this._characterName = look.sheet;
-            this._tileId = 0;
-            this._look8Sheet = null;   // (Hunting's 8-way look loads its sheet again afterwards)
-            this._look8 = null;
-            return;
-        }
-        if (this._homeSheet) { this._homeSheet = null; this._characterName = null; }   // (the own sheet comes back)
-        _SC_updateBitmap.call(this);
+    // The four hooks below are for the sprites of the pose / prop events (and those still showing a look of it) only: Tawerna.sprite,
+    // TawernaCore.js. What `when` looks at changes in setPose / setCatPose / buildLayout, which say so (Tawerna.sprite.dirty), and
+    // in the last hook (updatePosition) when a sprite has let go of its look.
+    const homeSprite = s => {
+        const ch = s._character;
+        return !!(ch && (ch._homePose || ch._homeKind)) || !!(s._homeLook || s._homeSheet || s._homeRot || s._homeFlip);
     };
+    T.sprite.hook({ owner: PLUGIN, method: "updateBitmap", when: homeSprite,
+        replace(s) {
+            const look = homeLook(s._character);
+            s._homeLook = look;
+            if (look && look.sheet) {
+                if (s._homeSheet !== look.sheet) { s._homeSheet = look.sheet; s.bitmap = ImageManager.loadCharacter(look.sheet); }
+                s._characterName = look.sheet;
+                s._tileId = 0;
+                s._look8Sheet = null;   // (Hunting's 8-way look loads its sheet again afterwards)
+                s._look8 = null;
+                return true;
+            }
+            if (s._homeSheet) { s._homeSheet = null; s._characterName = null; }   // (the own sheet comes back)
+            return false;
+        } });
     const _SC_patternWidth = Sprite_Character.prototype.patternWidth;
     Sprite_Character.prototype.patternWidth = function() {
         return this._homeLook && this._homeLook.sheet ? this._homeLook.cw : _SC_patternWidth.call(this);
@@ -945,34 +955,32 @@
     Sprite_Character.prototype.patternHeight = function() {
         return this._homeLook && this._homeLook.sheet ? this._homeLook.ch : _SC_patternHeight.call(this);
     };
-    const _SC_updateFrame = Sprite_Character.prototype.updateFrame;
-    Sprite_Character.prototype.updateFrame = function() {
-        const look = this._homeLook;
-        if (look && look.sheet) {
-            const col = look.i !== undefined ? look.i % 3 : look.col, row = look.i !== undefined ? Math.floor(look.i / 3) : look.row;
-            this.setFrame(col * look.cw, row * look.ch, look.cw, look.ch);
-            return;
-        }
-        _SC_updateFrame.call(this);
-    };
-    const _SC_updatePosition = Sprite_Character.prototype.updatePosition;
-    Sprite_Character.prototype.updatePosition = function() {
-        _SC_updatePosition.call(this);
-        const look = this._homeLook;
-        if (look) {
-            if (look.dx) this.x += look.dx;
-            if (look.dy) this.y += look.dy;
-        }
-        const rot = look && look.rot ? look.rot : 0;
-        if (rot || this._homeRot) { this.rotation = rot; this._homeRot = !!rot; }
-        const flip = !!(look && look.flip);
-        if (flip || this._homeFlip) { this.scale.x = flip ? -Math.abs(this.scale.x) : Math.abs(this.scale.x); this._homeFlip = flip; }
-    };
-    const _SC_update = Sprite_Character.prototype.update;
-    Sprite_Character.prototype.update = function() {
-        _SC_update.call(this);
-        if (this._homeLook && this._homeLook.hide) this.visible = false;
-    };
+    T.sprite.hook({ owner: PLUGIN, method: "updateFrame", when: homeSprite,
+        replace(s) {
+            const look = s._homeLook;
+            if (look && look.sheet) {
+                const col = look.i !== undefined ? look.i % 3 : look.col, row = look.i !== undefined ? Math.floor(look.i / 3) : look.row;
+                s.setFrame(col * look.cw, row * look.ch, look.cw, look.ch);
+                return true;
+            }
+            return false;
+        } });
+    T.sprite.hook({ owner: PLUGIN, method: "updatePosition", when: homeSprite,
+        after(s) {
+            const look = s._homeLook;
+            if (look) {
+                if (look.dx) s.x += look.dx;
+                if (look.dy) s.y += look.dy;
+            }
+            const rot = look && look.rot ? look.rot : 0;
+            if (rot || s._homeRot) { s.rotation = rot; s._homeRot = !!rot; }
+            const flip = !!(look && look.flip);
+            if (flip || s._homeFlip) { s.scale.x = flip ? -Math.abs(s.scale.x) : Math.abs(s.scale.x); s._homeFlip = flip; }
+            // (nothing left of it on this sprite and none to come: its hooks are not asked for again)
+            if (!look && !s._homeSheet && !s._homeRot && !s._homeFlip && s._character && !(s._character._homePose || s._character._homeKind) && T.sprite.filter) T.sprite.dirty(s._character);
+        } });
+    T.sprite.hook({ owner: PLUGIN, method: "update", when: homeSprite,
+        after(s) { if (s._homeLook && s._homeLook.hide) s.visible = false; } });
 
     // ------------------------------------------------------------------
     // Grandpa asleep over the quilt, smoke, rings, "Zzz", hearts: in the tilemap (they go with the map and its zoom)

@@ -1039,7 +1039,7 @@
     const _Game_Map_update = Game_Map.prototype.update;
     Game_Map.prototype.update = function(sceneActive) {
         _Game_Map_update.call(this, sceneActive);
-        for (const a of strays.slice()) a.update();
+        if (strays.length) for (const a of strays.slice()) a.update();   // (2026-10-30: no list copy on a map without strays)
     };
     const _createCharacters = Spriteset_Map.prototype.createCharacters;
     Spriteset_Map.prototype.createCharacters = function() {

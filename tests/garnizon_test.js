@@ -42,22 +42,21 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("miejsce gotowe: Wyspa.isReady(162) (mapa 162 z notatką <Garnizon:mapa>)", await t.eval("Wyspa.isReady(162)"));
 
     if (part("mapy")) {
-        await t.newGame({ map: 125, x: 22, y: 76, dir: 2, hour: 10, day: 6, quiet: true, minimap: false });   // (2026-10-18: the harbour 112x80, its south edge row 79)
-        const edge = await t.json(`$dataMap.events.filter(e => e && e.id >= 693 && e.id <= 695).map(e => [e.x, e.y, e.pages[0].list[0].parameters.slice(1, 4).join(",")])`);
-        t.check("na przystani przejścia 693-695 (21-23,79 -> 162)", edge.length === 3 && edge.every(e => e[1] === 79 && /^162,/.test(e[2])), edge);
-        await t.hold("down", 70);
+        // (2026-10-30, the world stage 3: the harbour does not touch the garrison - the way in is Podgrodzie's west trail (111, 0-19) -> the garrison's east edge)
+        await t.newGame({ map: 111, x: 2, y: 19, dir: 4, hour: 10, day: 6, quiet: true, minimap: false });
+        await t.hold("left", 70);
         const went = await t.until(t.onMap(162), 60);
         await t.frames(20);
         const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $dataMap.width, $dataMap.height, $dataMap.note]");
-        t.check("pieszo z dolnej krawędzi przystani do garnizonu: Map162 112x80, lądowanie w rzędzie 1 (pola 21-23)",
-            went && at[0] === 162 && at[2] === 1 && at[1] >= 21 && at[1] <= 23 && at[3] === 112 && at[4] === 80, at);
+        t.check("pieszo z leśnej ścieżki Podgrodzia (0,19) do garnizonu: Map162 112x100, lądowanie przy wschodniej krawędzi (y 8)",
+            went && at[0] === 162 && at[1] >= 108 && at[2] >= 6 && at[2] <= 10 && at[3] === 112 && at[4] === 100, at);
         t.check("notatka mapy: <Water:salt> (czerwone, trujące morze), <Clouds:on>, <Farm:off>", /<Water:salt>/.test(at[5]) && /<Clouds:on>/.test(at[5]) && /<Farm:off>/.test(at[5]), at[5]);
         await t.calm();
-        await t.hold("up", 40);
-        const back = await t.until(t.onMap(125), 60);
+        await t.hold("right", 70);
+        const back = await t.until(t.onMap(111), 60);
         await t.frames(20);
         const b2 = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]");
-        t.check("...i z powrotem: górna krawędź garnizonu -> przystań (rząd 78)", back && b2[0] === 125 && b2[2] === 78, b2);
+        t.check("...i z powrotem: wschodnia krawędź garnizonu -> Podgrodzie (y 19)", back && b2[0] === 111 && b2[2] >= 17 && b2[2] <= 21, b2);
         await t.go(162, 36, 12, 2);
         const m = await t.json(`(function(){ const ev = $dataMap.events.filter(Boolean);
             const pal = ev.filter(e => /<Garnizon:palisada>/.test(e.note)).length;
@@ -66,8 +65,8 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
             const lights = ev.filter(e => /<Light:/.test(e.note)).map(e => { const m = /<Light:(\\d+),(\\d+),(\\d+)/.exec(e.note); return [e.name, +m[2], +m[3]]; });
             const water = ev.filter(e => /woda|wody/i.test(e.name) && e.pages[0].list.some(c => c.code === 355 && /Garnizon\\.look/.test(c.parameters[0]))).length;
             return { n: ev.length, pal, tr, lacha, lights, water, kw: ev.filter(e => /Drzwi: Kwatera/.test(e.name)).map(e => [e.x, e.y]) }; })()`);
-        t.check("palisada z pali (zdarzenia <Garnizon:palisada>), przejścia do przystani (21-23,0), koniec łachy (0,20-21), drzwi kwatery",
-            m.pal >= 30 && m.tr.sort().join() === "21,22,23" && m.lacha.map(c => c.join(":")).sort().join() === "0:20,0:21" && m.kw.length === 1, m);
+        t.check("palisada z pali (zdarzenia <Garnizon:palisada>), bez przejść do przystani (od 2026-10-30), koniec łachy (0,20-21), drzwi kwatery",
+            m.pal >= 30 && m.tr.length === 0 && m.lacha.map(c => c.join(":")).sort().join() === "0:20,0:21" && m.kw.length === 1, m);
         t.check("każde światło to płomień (ciepła barwa: zielony i niebieski kanał niżej niż czerwony w tagu <Light:r,g,b>)",
             m.lights.length >= 5 && m.lights.every(l => l[1] <= 120 && l[2] <= 90), m.lights);
         // water barrels: a bubble, no water

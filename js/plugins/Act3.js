@@ -1061,7 +1061,7 @@
         _Game_Map_update.call(this, sceneActive);
         const Hm = HM();
         if (Hm && Hm.robbery) return;
-        for (const d of runtime.defenders.slice()) d.update();
+        if (runtime.defenders.length) for (const d of runtime.defenders.slice()) d.update();   // (2026-10-30: no list copy while there are none)
     };
 
     // ------------------------------------------------------------------

@@ -1148,7 +1148,7 @@
         TILE, farm, itemOf, key, mirrorGeo, onRing, today, SMOULDER_HOURS, rainingHere });
     // what the parts do, through the bag (called while a part is not in the page: the error names the file)
     const exportFrom = (part, names) => { for (const n of names) API[n] = function() { return part()[n].apply(null, arguments); }; };
-    exportFrom(PL, ["setBagWater", "takeGatherFor", "bushState", "bushSolid", "mushroomBirth", "mushroomChance", "gatherKindOf",
+    exportFrom(PL, ["setBagWater", "takeGatherFor", "bushState", "bushSolid", "mushroomBirth", "mushroomChance", "gatherKindOf", "gatherTiles",
         "claimGround", "releaseGround", "bucketUnits", "bucketSync", "takeBucketWater", "bucketFor", "rainHoursBetween",
         "bagWater", "bagWaterWeight", "fillSkin", "plotAt", "isSoilTile", "groundIsSoil", "naturalFarmland", "rake", "till",
         "plant", "harvest", "uproot", "groundInfoAt", "hasObjectTile", "cropStage", "isRipe", "daysLeft", "growthRate", "dig",

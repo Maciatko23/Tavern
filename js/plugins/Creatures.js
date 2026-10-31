@@ -2652,14 +2652,14 @@
     const _Game_Map_update = Game_Map.prototype.update;
     Game_Map.prototype.update = function(sceneActive) {
         _Game_Map_update.call(this, sceneActive);
-        for (const c of creatures.slice()) c.update();
-        updateSwarms();
+        if (creatures.length) for (const c of creatures.slice()) c.update();   // (2026-10-30: no list copy / filter on a map without creatures)
+        if (swarms.length) updateSwarms();
         updateWebs();
         updateGrab();
         updatePull();
         updateLift();
         updateWaves();
-        updateRings();
+        if (rings.length) updateRings();
         if (mind.confuseT > 0) mind.confuseT--;
         if (mind.fearT > 0) mind.fearT--;
     };
@@ -2687,34 +2687,34 @@
         this.addChild(this._bossBar);
     };
     // a creature's own look on its sprite: its size, its tone (a boss, a shadow), how see-through it is (a wraith), a drowned one sinking
-    const _Sprite_Character_update = Sprite_Character.prototype.update;
-    Sprite_Character.prototype.update = function() {
-        _Sprite_Character_update.call(this);
-        const c = this._character;
-        if (!c || !c.isCreature) return;
-        const sx = Math.sign(this.scale.x) || 1, rushX = Math.abs(this.scale.x) || 1, rushY = this.scale.y || 1;
-        const stretch = c._mode === "charge" && c._running ? [1.06, 0.96] : [1, 1];
-        let s = c._drawScale || c._scale || 1;   // (a boss with its own art: the art's own size)
-        if (c._def.flying && c._mode === "dive" && c._modeT > 0) s *= 1 + 0.06 * Math.sin(c._poseT);
-        const sink = c._sink || 0;
-        this.scale.set(sx * s * stretch[0] * (rushX > 1.01 ? 1 : 1), s * stretch[1] * (1 - 0.6 * sink));
-        if (c._mode === "wake" && c._base === "zbroja") this.x += Math.round(Math.sin(c._poseT * 1.3));
-        // a small one without an end sheet of its own (a rat, a bat): it rolls over onto its back as it dies
-        if (c._dying && !(LOOKS[c._look] || {}).die && c._base !== "upior" && c._base !== "cien") {
-            const k = Math.min(1, (c._dyingT || 0) / 12);
-            this.rotation = Math.PI * k * (c.centerX() >= heroX() ? 1 : -1);
-            this.anchor.y = 0.5;
-            this.y -= Math.round(this.patternHeight() * 0.25 * s);
-        } else if (this.rotation && c.isCreature) { this.rotation = 0; this.anchor.y = 1; }
-        const op = c._opacity !== undefined ? c._opacity : 255;
-        this.opacity = c._hidden ? (c._base === "upior" && perk("mind.see") > 0 ? 46 : 0) : op;
-        const tone = c._tone || null;
-        if (tone) this.setColorTone(tone);
-        else if (this._crTone) this.setColorTone([0, 0, 0, 0]);
-        this._crTone = !!tone;
-        if (c._def.flying) this.z = c._alt > 14 ? 5 : 3;
-        if (c._markHolder) { c._markHolder.x = this.x; c._markHolder.y = this.y; }
-    };
+    T.sprite.hook({ owner: "Creatures", method: "update", when: s => !!(s._character && s._character.isCreature),
+        after(s) {
+            const c = s._character;
+            if (!c || !c.isCreature) return;
+            const sx = Math.sign(s.scale.x) || 1, rushX = Math.abs(s.scale.x) || 1, rushY = s.scale.y || 1;
+            const stretch = c._mode === "charge" && c._running ? [1.06, 0.96] : [1, 1];
+            let size = c._drawScale || c._scale || 1;   // (a boss with its own art: the art's own size)
+            if (c._def.flying && c._mode === "dive" && c._modeT > 0) size *= 1 + 0.06 * Math.sin(c._poseT);
+            const sink = c._sink || 0;
+            s.scale.set(sx * size * stretch[0] * (rushX > 1.01 ? 1 : 1), size * stretch[1] * (1 - 0.6 * sink));
+            if (c._mode === "wake" && c._base === "zbroja") s.x += Math.round(Math.sin(c._poseT * 1.3));
+            // a small one without an end sheet of its own (a rat, a bat): it rolls over onto its back as it dies
+            if (c._dying && !(LOOKS[c._look] || {}).die && c._base !== "upior" && c._base !== "cien") {
+                const k = Math.min(1, (c._dyingT || 0) / 12);
+                s.rotation = Math.PI * k * (c.centerX() >= heroX() ? 1 : -1);
+                s.anchor.y = 0.5;
+                s.y -= Math.round(s.patternHeight() * 0.25 * size);
+            } else if (s.rotation && c.isCreature) { s.rotation = 0; s.anchor.y = 1; }
+            const op = c._opacity !== undefined ? c._opacity : 255;
+            s.opacity = c._hidden ? (c._base === "upior" && perk("mind.see") > 0 ? 46 : 0) : op;
+            const tone = c._tone || null;
+            if (tone) s.setColorTone(tone);
+            else if (s._crTone) s.setColorTone([0, 0, 0, 0]);
+            s._crTone = !!tone;
+            if (c._def.flying) s.z = c._alt > 14 ? 5 : 3;
+            if (c._markHolder) { c._markHolder.x = s.x; c._markHolder.y = s.y; }
+        } });
+
     // lifted by the spider's thread: drawn higher
     const _Game_Player_screenY = Game_Player.prototype.screenY;
     Game_Player.prototype.screenY = function() { return _Game_Player_screenY.call(this) - (this === $gamePlayer ? Math.round(heroLift) : 0); };

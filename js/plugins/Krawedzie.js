@@ -82,8 +82,59 @@
         }
         return out;
     }
+    // (2026-10-30, the world in tiles: docs/mapy/SWIAT.md) maps that are in window.SwiatData (and it is enabled) land in the SAME world tile on the
+    // neighbour: world tile = map origin + local tile, the target map is the one the next world tile falls into. A side is open when an active
+    // transfer event on it leads to that map (its gate and conditions stay) or SwiatData.links lists the pair there (a road without events).
+    // An event leading elsewhere and standing within BESPOKE tiles of the hero stays as before (a place's own way in, Wyspa.js).
+    const BESPOKE = 3;
+    const SW = () => (window.SwiatData && window.SwiatData.enabled) ? window.SwiatData : null;
+    function worldNext(side) {
+        const sw = SW(), me = sw && sw.maps[$gameMap.mapId()];
+        if (!me) return null;
+        const p = $gamePlayer, [x0, y0, w, h] = me;
+        const wx = side === "W" ? x0 - 1 : side === "E" ? x0 + w : x0 + p.x;
+        const wy = side === "N" ? y0 - 1 : side === "S" ? y0 + h : y0 + p.y;
+        for (const id of Object.keys(sw.maps)) {
+            const [bx, by, bw, bh] = sw.maps[id];
+            if (+id !== $gameMap.mapId() && wx >= bx && wx < bx + bw && wy >= by && wy < by + bh) return { mapId: +id, x: wx - bx, y: wy - by, wx, wy, sw };
+        }
+        for (const id of Object.keys(sw.later || {})) {   // a map of the world not rebuilt yet (stages 2-3): the old way
+            const [bx, by, bw, bh] = sw.later[id];
+            if (wx >= bx && wx < bx + bw && wy >= by && wy < by + bh) return null;
+        }
+        return { mapId: 0, sw };   // the sea (nothing there)
+    }
+    // the links indexed once per pair and side (there are hundreds of them since the seams are open along their whole length)
+    let linkIdx = null, linkSrc = null;
+    function linkIndex(sw) {
+        if (linkIdx && linkSrc === sw.links) return linkIdx;
+        linkIdx = new Map(); linkSrc = sw.links;
+        for (const l of sw.links) { const k = l.a + "|" + l.b + "|" + l.side; if (!linkIdx.has(k)) linkIdx.set(k, []); linkIdx.get(k).push(l); }
+        return linkIdx;
+    }
+    function worldGo(side, list) {
+        const p = $gamePlayer, nx = worldNext(side);
+        if (!nx) return undefined;
+        const along = side === "W" || side === "E" ? p.y : p.x;
+        const near = list.filter(o => Math.abs((side === "W" || side === "E" ? o.ev.y : o.ev.x) - along) <= BESPOKE && o.cmd[1] !== nx.mapId);
+        if (near.length) return undefined;   // the place's own exit: the old way
+        if (!nx.mapId) return false;
+        const alongW = side === "W" || side === "E" ? nx.wy : nx.wx;
+        const viaEvent = list.find(o => o.cmd[1] === nx.mapId);
+        const viaData = !viaEvent && (linkIndex(nx.sw).get($gameMap.mapId() + "|" + nx.mapId + "|" + side) || []).some(l => alongW >= l.from && alongW <= l.to);
+        if (!viaEvent && !viaData) return false;
+        if (viaEvent && viaEvent.gated) { const ev = viaEvent.ev; if (!ev.isStarting() && !$gameMap.isEventRunning()) ev.start(); return true; }
+        const dir = viaEvent ? viaEvent.cmd[4] : ({ N: 8, S: 2, W: 4, E: 6 })[side];
+        const fade = viaEvent && viaEvent.cmd[5] !== undefined ? viaEvent.cmd[5] : 0;
+        pending = { mapId: nx.mapId, x: nx.x, y: nx.y, side };
+        p.reserveTransfer(nx.mapId, nx.x, nx.y, dir || p.direction(), fade);
+        if (!p.isTransferring()) { pending = null; return false; }
+        return true;
+    }
     function go(side) {
         const p = $gamePlayer, list = exitsOn(side);
+        const wr = worldGo(side, list);
+        if (wr !== undefined) return wr;
         if (!list.length) return false;
         const along = side === "W" || side === "E" ? p.y : p.x;
         list.sort((a, b) => Math.abs((side === "W" || side === "E" ? a.ev.y : a.ev.x) - along) - Math.abs((side === "W" || side === "E" ? b.ev.y : b.ev.x) - along));
@@ -140,5 +191,5 @@
     }
     T.on("mapReady", () => { if (pending) snap(); }, { owner: PLUGIN });
 
-    window.Krawedzie = T.register(PLUGIN, { pushedSide, exitsOn, go, snap, pending: () => pending, HOLD });
+    window.Krawedzie = T.register(PLUGIN, { pushedSide, exitsOn, go, snap, worldNext, pending: () => pending, HOLD });
 })();

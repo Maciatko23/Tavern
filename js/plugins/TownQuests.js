@@ -1119,12 +1119,19 @@
         }
         if (s && (kind || deco) && !c.isTransparent()) spr.visible = true;   // (MZ hides an event without a picture - a place shows its marker and its little picture)
     }
-    const _Sprite_Character_update = Sprite_Character.prototype.update;
-    Sprite_Character.prototype.update = function() {
-        _Sprite_Character_update.call(this);
-        const c = this._character;
-        if (c instanceof Game_Event && has() && $gameMap) { try { updateDeco(this, c); updateCap(this, c); } catch (e) { /* (a sprite must never stop the map) */ } }
-    };
+    // (only the events that can carry a marker, a little picture or the statue's cap - a spot, a resident, the story's two, the tavern's
+    // people, the statue: all fixed by the map and the event's id and note, so asked once per event, not for every tree and stone)
+    T.sprite.hook({ owner: "TownQuests", method: "update",
+        when: s => {
+            const c = s._character;
+            if (!(c instanceof Game_Event) || !has() || !$gameMap) return false;
+            const map = $gameMap.mapId(), id = c.eventId();
+            return !!spotOf(map, id) || !!residentKeyOf(c) || (id >= 900 && id <= 902) || (map === TAVERN && id < 100) || (map === TOWN && id === capStatueId());
+        },
+        after(s) {
+            const c = s._character;
+            if (c instanceof Game_Event && has() && $gameMap) { try { updateDeco(s, c); updateCap(s, c); } catch (e) { /* (a sprite must never stop the map) */ } }
+        } });
 
     // ------------------------------------------------------------------
     // The bell: TownLife's bell kept quiet when the hero rang that hour himself (or the rope broke: K13); the signals (W2)
