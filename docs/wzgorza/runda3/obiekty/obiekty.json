@@ -1,0 +1,1307 @@
+[
+ {
+  "mapa": 990,
+  "rodzaj": "drzewo",
+  "n": 1,
+  "obiekt": "!$Pine_C",
+  "kratka_obiektu": [
+   40,
+   4
+  ],
+  "kratka_bohatera": [
+   40,
+   3
+  ],
+  "plik": "990_drzewo_1.png"
+ },
+ {
+  "mapa": 990,
+  "rodzaj": "drzewo",
+  "n": 2,
+  "obiekt": "!$Pine_C",
+  "kratka_obiektu": [
+   49,
+   4
+  ],
+  "kratka_bohatera": [
+   49,
+   3
+  ],
+  "plik": "990_drzewo_2.png"
+ },
+ {
+  "mapa": 990,
+  "rodzaj": "drzewo",
+  "n": 3,
+  "obiekt": "!$Pine_A",
+  "kratka_obiektu": [
+   24,
+   10
+  ],
+  "kratka_bohatera": [
+   24,
+   9
+  ],
+  "plik": "990_drzewo_3.png"
+ },
+ {
+  "mapa": 990,
+  "rodzaj": "krzak",
+  "n": 1,
+  "obiekt": "!$Bush_Bare_Thicket",
+  "kratka_obiektu": [
+   35,
+   10
+  ],
+  "kratka_bohatera": [
+   35,
+   8
+  ],
+  "plik": "990_krzak_1.png"
+ },
+ {
+  "mapa": 990,
+  "rodzaj": "krzak",
+  "n": 2,
+  "obiekt": "!$Bush_Bare_Thicket",
+  "kratka_obiektu": [
+   25,
+   24
+  ],
+  "kratka_bohatera": [
+   25,
+   22
+  ],
+  "plik": "990_krzak_2.png"
+ },
+ {
+  "mapa": 990,
+  "rodzaj": "krzak",
+  "n": 3,
+  "obiekt": "!$Bush_Bare_A",
+  "kratka_obiektu": [
+   33,
+   25
+  ],
+  "kratka_bohatera": [
+   33,
+   24
+  ],
+  "plik": "990_krzak_3.png"
+ },
+ {
+  "mapa": 990,
+  "rodzaj": "skala",
+  "n": 1,
+  "obiekt": "!$Rock_Cairn",
+  "kratka_obiektu": [
+   9,
+   25
+  ],
+  "kratka_bohatera": [
+   9,
+   24
+  ],
+  "plik": "990_skala_1.png"
+ },
+ {
+  "mapa": 990,
+  "rodzaj": "skala",
+  "n": 2,
+  "obiekt": "!$Rock_Flat",
+  "kratka_obiektu": [
+   28,
+   27
+  ],
+  "kratka_bohatera": [
+   28,
+   26
+  ],
+  "plik": "990_skala_2.png"
+ },
+ {
+  "mapa": 990,
+  "rodzaj": "skala",
+  "n": 3,
+  "obiekt": "!$Rock_Chunk",
+  "kratka_obiektu": [
+   36,
+   38
+  ],
+  "kratka_bohatera": [
+   36,
+   37
+  ],
+  "plik": "990_skala_3.png"
+ },
+ {
+  "mapa": 990,
+  "rodzaj": "pien",
+  "n": 1,
+  "obiekt": "!$Trunk_Dead",
+  "kratka_obiektu": [
+   47,
+   28
+  ],
+  "kratka_bohatera": [
+   47,
+   27
+  ],
+  "plik": "990_pien_1.png"
+ },
+ {
+  "mapa": 990,
+  "rodzaj": "plot",
+  "n": 1,
+  "obiekt": "A2 3147",
+  "kratka_obiektu": [
+   17,
+   11
+  ],
+  "kratka_bohatera": [
+   17,
+   10
+  ],
+  "plik": "990_plot_1.png"
+ },
+ {
+  "mapa": 990,
+  "rodzaj": "plot",
+  "n": 2,
+  "obiekt": "A2 3137",
+  "kratka_obiektu": [
+   11,
+   17
+  ],
+  "kratka_bohatera": [
+   11,
+   16
+  ],
+  "plik": "990_plot_2.png"
+ },
+ {
+  "mapa": 990,
+  "rodzaj": "plot",
+  "n": 3,
+  "obiekt": "A2 3137",
+  "kratka_obiektu": [
+   17,
+   17
+  ],
+  "kratka_bohatera": [
+   17,
+   16
+  ],
+  "plik": "990_plot_3.png"
+ },
+ {
+  "mapa": 991,
+  "rodzaj": "drzewo",
+  "n": 1,
+  "obiekt": "!$Pine_B",
+  "kratka_obiektu": [
+   15,
+   2
+  ],
+  "kratka_bohatera": [
+   15,
+   1
+  ],
+  "plik": "991_drzewo_1.png"
+ },
+ {
+  "mapa": 991,
+  "rodzaj": "drzewo",
+  "n": 2,
+  "obiekt": "!$Tree_Small",
+  "kratka_obiektu": [
+   29,
+   4
+  ],
+  "kratka_bohatera": [
+   29,
+   3
+  ],
+  "plik": "991_drzewo_2.png"
+ },
+ {
+  "mapa": 991,
+  "rodzaj": "drzewo",
+  "n": 3,
+  "obiekt": "!$Pine_B",
+  "kratka_obiektu": [
+   49,
+   4
+  ],
+  "kratka_bohatera": [
+   49,
+   3
+  ],
+  "plik": "991_drzewo_3.png"
+ },
+ {
+  "mapa": 991,
+  "rodzaj": "skala",
+  "n": 1,
+  "obiekt": "!$Rock_Pile",
+  "kratka_obiektu": [
+   30,
+   2
+  ],
+  "kratka_bohatera": [
+   30,
+   1
+  ],
+  "plik": "991_skala_1.png"
+ },
+ {
+  "mapa": 991,
+  "rodzaj": "skala",
+  "n": 2,
+  "obiekt": "!$Rock_Cairn",
+  "kratka_obiektu": [
+   10,
+   5
+  ],
+  "kratka_bohatera": [
+   10,
+   4
+  ],
+  "plik": "991_skala_2.png"
+ },
+ {
+  "mapa": 991,
+  "rodzaj": "skala",
+  "n": 3,
+  "obiekt": "!$Rock_Cracked",
+  "kratka_obiektu": [
+   46,
+   12
+  ],
+  "kratka_bohatera": [
+   46,
+   11
+  ],
+  "plik": "991_skala_3.png"
+ },
+ {
+  "mapa": 991,
+  "rodzaj": "krzak",
+  "n": 1,
+  "obiekt": "!$Bush_Bare_B",
+  "kratka_obiektu": [
+   49,
+   2
+  ],
+  "kratka_bohatera": [
+   49,
+   1
+  ],
+  "plik": "991_krzak_1.png"
+ },
+ {
+  "mapa": 991,
+  "rodzaj": "krzak",
+  "n": 2,
+  "obiekt": "!$Bush_Bare_Tall",
+  "kratka_obiektu": [
+   61,
+   5
+  ],
+  "kratka_bohatera": [
+   61,
+   3
+  ],
+  "plik": "991_krzak_2.png"
+ },
+ {
+  "mapa": 991,
+  "rodzaj": "krzak",
+  "n": 3,
+  "obiekt": "!$Bush_Bare_B",
+  "kratka_obiektu": [
+   27,
+   10
+  ],
+  "kratka_bohatera": [
+   27,
+   9
+  ],
+  "plik": "991_krzak_3.png"
+ },
+ {
+  "mapa": 991,
+  "rodzaj": "plot",
+  "n": 1,
+  "obiekt": "A2 3194",
+  "kratka_obiektu": [
+   14,
+   19
+  ],
+  "kratka_bohatera": [
+   14,
+   18
+  ],
+  "plik": "991_plot_1.png"
+ },
+ {
+  "mapa": 991,
+  "rodzaj": "plot",
+  "n": 2,
+  "obiekt": "A2 3196",
+  "kratka_obiektu": [
+   23,
+   21
+  ],
+  "kratka_bohatera": [
+   23,
+   20
+  ],
+  "plik": "991_plot_2.png"
+ },
+ {
+  "mapa": 991,
+  "rodzaj": "plot",
+  "n": 3,
+  "obiekt": "A2 3185",
+  "kratka_obiektu": [
+   29,
+   21
+  ],
+  "kratka_bohatera": [
+   29,
+   20
+  ],
+  "plik": "991_plot_3.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "skala",
+  "n": 1,
+  "obiekt": "!$Mt_Blocks",
+  "kratka_obiektu": [
+   39,
+   21
+  ],
+  "kratka_bohatera": [
+   39,
+   20
+  ],
+  "plik": "13_skala_1.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "skala",
+  "n": 2,
+  "obiekt": "!$Mt_Blocks",
+  "kratka_obiektu": [
+   45,
+   20
+  ],
+  "kratka_bohatera": [
+   45,
+   19
+  ],
+  "plik": "13_skala_2.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "skala",
+  "n": 3,
+  "obiekt": "!$Mt_Blocks",
+  "kratka_obiektu": [
+   54,
+   27
+  ],
+  "kratka_bohatera": [
+   54,
+   26
+  ],
+  "plik": "13_skala_3.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "drzewo",
+  "n": 1,
+  "obiekt": "!$Pine_C",
+  "kratka_obiektu": [
+   53,
+   8
+  ],
+  "kratka_bohatera": [
+   53,
+   7
+  ],
+  "plik": "13_drzewo_1.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "drzewo",
+  "n": 2,
+  "obiekt": "!$Pine_C",
+  "kratka_obiektu": [
+   35,
+   9
+  ],
+  "kratka_bohatera": [
+   35,
+   8
+  ],
+  "plik": "13_drzewo_2.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "drzewo",
+  "n": 3,
+  "obiekt": "!$Pine_C",
+  "kratka_obiektu": [
+   49,
+   14
+  ],
+  "kratka_bohatera": [
+   49,
+   13
+  ],
+  "plik": "13_drzewo_3.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "krzak",
+  "n": 1,
+  "obiekt": "!$Bush_Bare_A",
+  "kratka_obiektu": [
+   43,
+   13
+  ],
+  "kratka_bohatera": [
+   43,
+   12
+  ],
+  "plik": "13_krzak_1.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "krzak",
+  "n": 2,
+  "obiekt": "!$Bush_Bare_B",
+  "kratka_obiektu": [
+   35,
+   11
+  ],
+  "kratka_bohatera": [
+   35,
+   10
+  ],
+  "plik": "13_krzak_2.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "krzak",
+  "n": 3,
+  "obiekt": "!$Bush_Bare_Wide",
+  "kratka_obiektu": [
+   24,
+   11
+  ],
+  "kratka_bohatera": [
+   24,
+   9
+  ],
+  "plik": "13_krzak_3.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "pien",
+  "n": 1,
+  "obiekt": "!$Trunk_Dead",
+  "kratka_obiektu": [
+   12,
+   34
+  ],
+  "kratka_bohatera": [
+   12,
+   33
+  ],
+  "plik": "13_pien_1.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "pien",
+  "n": 2,
+  "obiekt": "!$Trunk_Dead",
+  "kratka_obiektu": [
+   36,
+   37
+  ],
+  "kratka_bohatera": [
+   36,
+   36
+  ],
+  "plik": "13_pien_2.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "pien",
+  "n": 3,
+  "obiekt": "!$Stump_Tall",
+  "kratka_obiektu": [
+   13,
+   45
+  ],
+  "kratka_bohatera": [
+   13,
+   43
+  ],
+  "plik": "13_pien_3.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "plot",
+  "n": 1,
+  "obiekt": "A2 3194",
+  "kratka_obiektu": [
+   22,
+   8
+  ],
+  "kratka_bohatera": [
+   22,
+   7
+  ],
+  "plik": "13_plot_1.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "plot",
+  "n": 2,
+  "obiekt": "A2 3198",
+  "kratka_obiektu": [
+   5,
+   9
+  ],
+  "kratka_bohatera": [
+   5,
+   8
+  ],
+  "plik": "13_plot_2.png"
+ },
+ {
+  "mapa": 13,
+  "rodzaj": "plot",
+  "n": 3,
+  "obiekt": "A2 3192",
+  "kratka_obiektu": [
+   28,
+   9
+  ],
+  "kratka_bohatera": [
+   28,
+   8
+  ],
+  "plik": "13_plot_3.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "skala",
+  "n": 1,
+  "obiekt": "!$Rock_Mossy",
+  "kratka_obiektu": [
+   31,
+   20
+  ],
+  "kratka_bohatera": [
+   31,
+   18
+  ],
+  "plik": "159_skala_1.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "skala",
+  "n": 2,
+  "obiekt": "!$Rock_Pile",
+  "kratka_obiektu": [
+   11,
+   23
+  ],
+  "kratka_bohatera": [
+   11,
+   22
+  ],
+  "plik": "159_skala_2.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "skala",
+  "n": 3,
+  "obiekt": "!$Rock_Mound",
+  "kratka_obiektu": [
+   42,
+   28
+  ],
+  "kratka_bohatera": [
+   42,
+   27
+  ],
+  "plik": "159_skala_3.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "pien",
+  "n": 1,
+  "obiekt": "!$Logs_Big",
+  "kratka_obiektu": [
+   7,
+   33
+  ],
+  "kratka_bohatera": [
+   7,
+   32
+  ],
+  "plik": "159_pien_1.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "pien",
+  "n": 2,
+  "obiekt": "!$Stump_Tall",
+  "kratka_obiektu": [
+   93,
+   39
+  ],
+  "kratka_bohatera": [
+   93,
+   38
+  ],
+  "plik": "159_pien_2.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "pien",
+  "n": 3,
+  "obiekt": "!$Stump_Tall",
+  "kratka_obiektu": [
+   92,
+   46
+  ],
+  "kratka_bohatera": [
+   92,
+   45
+  ],
+  "plik": "159_pien_3.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "drzewo",
+  "n": 1,
+  "obiekt": "!$Pine_C",
+  "kratka_obiektu": [
+   3,
+   36
+  ],
+  "kratka_bohatera": [
+   3,
+   35
+  ],
+  "plik": "159_drzewo_1.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "drzewo",
+  "n": 2,
+  "obiekt": "!$Pine_A",
+  "kratka_obiektu": [
+   9,
+   37
+  ],
+  "kratka_bohatera": [
+   9,
+   36
+  ],
+  "plik": "159_drzewo_2.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "drzewo",
+  "n": 3,
+  "obiekt": "!$Pine_B",
+  "kratka_obiektu": [
+   35,
+   32
+  ],
+  "kratka_bohatera": [
+   35,
+   31
+  ],
+  "plik": "159_drzewo_3.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "krzak",
+  "n": 1,
+  "obiekt": "!$Bush_Bare_A",
+  "kratka_obiektu": [
+   71,
+   57
+  ],
+  "kratka_bohatera": [
+   71,
+   56
+  ],
+  "plik": "159_krzak_1.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "krzak",
+  "n": 2,
+  "obiekt": "!$Bush_Bare_A",
+  "kratka_obiektu": [
+   78,
+   45
+  ],
+  "kratka_bohatera": [
+   78,
+   44
+  ],
+  "plik": "159_krzak_2.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "krzak",
+  "n": 3,
+  "obiekt": "!$Bush_Bare_A",
+  "kratka_obiektu": [
+   43,
+   63
+  ],
+  "kratka_bohatera": [
+   43,
+   62
+  ],
+  "plik": "159_krzak_3.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "plot",
+  "n": 1,
+  "obiekt": "A2 3198",
+  "kratka_obiektu": [
+   25,
+   9
+  ],
+  "kratka_bohatera": [
+   25,
+   8
+  ],
+  "plik": "159_plot_1.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "plot",
+  "n": 2,
+  "obiekt": "A2 3198",
+  "kratka_obiektu": [
+   19,
+   11
+  ],
+  "kratka_bohatera": [
+   19,
+   10
+  ],
+  "plik": "159_plot_2.png"
+ },
+ {
+  "mapa": 159,
+  "rodzaj": "plot",
+  "n": 3,
+  "obiekt": "A2 3198",
+  "kratka_obiektu": [
+   32,
+   16
+  ],
+  "kratka_bohatera": [
+   32,
+   15
+  ],
+  "plik": "159_plot_3.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "drzewo",
+  "n": 1,
+  "obiekt": "!$Tree_Small",
+  "kratka_obiektu": [
+   75,
+   38
+  ],
+  "kratka_bohatera": [
+   75,
+   37
+  ],
+  "plik": "8_drzewo_1.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "drzewo",
+  "n": 2,
+  "obiekt": "!$Tree_Small",
+  "kratka_obiektu": [
+   73,
+   119
+  ],
+  "kratka_bohatera": [
+   73,
+   118
+  ],
+  "plik": "8_drzewo_2.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "drzewo",
+  "n": 3,
+  "obiekt": "!$Tree_Small",
+  "kratka_obiektu": [
+   17,
+   59
+  ],
+  "kratka_bohatera": [
+   17,
+   58
+  ],
+  "plik": "8_drzewo_3.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "budynek",
+  "n": 1,
+  "obiekt": "!Town_Props",
+  "kratka_obiektu": [
+   33,
+   58
+  ],
+  "kratka_bohatera": [
+   33,
+   57
+  ],
+  "plik": "8_budynek_1.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "budynek",
+  "n": 2,
+  "obiekt": "!Town_Props",
+  "kratka_obiektu": [
+   65,
+   58
+  ],
+  "kratka_bohatera": [
+   65,
+   57
+  ],
+  "plik": "8_budynek_2.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "budynek",
+  "n": 3,
+  "obiekt": "!Statue",
+  "kratka_obiektu": [
+   32,
+   9
+  ],
+  "kratka_bohatera": [
+   32,
+   8
+  ],
+  "plik": "8_budynek_3.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "skala",
+  "n": 1,
+  "obiekt": "!$Boulder_A",
+  "kratka_obiektu": [
+   66,
+   111
+  ],
+  "kratka_bohatera": [
+   66,
+   110
+  ],
+  "plik": "8_skala_1.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "skala",
+  "n": 2,
+  "obiekt": "!$Boulder_A",
+  "kratka_obiektu": [
+   102,
+   113
+  ],
+  "kratka_bohatera": [
+   102,
+   112
+  ],
+  "plik": "8_skala_2.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "skala",
+  "n": 3,
+  "obiekt": "!$Boulder_A",
+  "kratka_obiektu": [
+   65,
+   117
+  ],
+  "kratka_bohatera": [
+   65,
+   116
+  ],
+  "plik": "8_skala_3.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "krzak",
+  "n": 1,
+  "obiekt": "!$Bush_Bare_A",
+  "kratka_obiektu": [
+   80,
+   122
+  ],
+  "kratka_bohatera": [
+   80,
+   121
+  ],
+  "plik": "8_krzak_1.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "krzak",
+  "n": 2,
+  "obiekt": "!$Bush_Bare_A",
+  "kratka_obiektu": [
+   101,
+   107
+  ],
+  "kratka_bohatera": [
+   101,
+   106
+  ],
+  "plik": "8_krzak_2.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "krzak",
+  "n": 3,
+  "obiekt": "!$Bush_Bare_A",
+  "kratka_obiektu": [
+   16,
+   127
+  ],
+  "kratka_bohatera": [
+   16,
+   126
+  ],
+  "plik": "8_krzak_3.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "pien",
+  "n": 1,
+  "obiekt": "!$Stump_Tall",
+  "kratka_obiektu": [
+   48,
+   130
+  ],
+  "kratka_bohatera": [
+   48,
+   129
+  ],
+  "plik": "8_pien_1.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "pien",
+  "n": 2,
+  "obiekt": "!$Stump_Tall",
+  "kratka_obiektu": [
+   32,
+   113
+  ],
+  "kratka_bohatera": [
+   32,
+   112
+  ],
+  "plik": "8_pien_2.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "mur",
+  "n": 1,
+  "obiekt": "A3/A4 6720",
+  "kratka_obiektu": [
+   102,
+   20
+  ],
+  "kratka_bohatera": [
+   102,
+   19
+  ],
+  "plik": "8_mur_1.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "mur",
+  "n": 2,
+  "obiekt": "A3/A4 6747",
+  "kratka_obiektu": [
+   27,
+   31
+  ],
+  "kratka_bohatera": [
+   27,
+   30
+  ],
+  "plik": "8_mur_2.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "mur",
+  "n": 3,
+  "obiekt": "A3/A4 6737",
+  "kratka_obiektu": [
+   35,
+   31
+  ],
+  "kratka_bohatera": [
+   35,
+   30
+  ],
+  "plik": "8_mur_3.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "plot",
+  "n": 1,
+  "obiekt": "A2 3146",
+  "kratka_obiektu": [
+   15,
+   7
+  ],
+  "kratka_bohatera": [
+   15,
+   6
+  ],
+  "plik": "8_plot_1.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "plot",
+  "n": 2,
+  "obiekt": "A2 3139",
+  "kratka_obiektu": [
+   80,
+   7
+  ],
+  "kratka_bohatera": [
+   80,
+   6
+  ],
+  "plik": "8_plot_2.png"
+ },
+ {
+  "mapa": 8,
+  "rodzaj": "plot",
+  "n": 3,
+  "obiekt": "A2 3149",
+  "kratka_obiektu": [
+   81,
+   13
+  ],
+  "kratka_bohatera": [
+   81,
+   12
+  ],
+  "plik": "8_plot_3.png"
+ },
+ {
+  "mapa": 3,
+  "rodzaj": "drzewo",
+  "n": 1,
+  "obiekt": "!$Pine_B",
+  "kratka_obiektu": [
+   8,
+   7
+  ],
+  "kratka_bohatera": [
+   8,
+   6
+  ],
+  "plik": "3_drzewo_1.png"
+ },
+ {
+  "mapa": 3,
+  "rodzaj": "drzewo",
+  "n": 2,
+  "obiekt": "!$Pine_A",
+  "kratka_obiektu": [
+   15,
+   9
+  ],
+  "kratka_bohatera": [
+   15,
+   8
+  ],
+  "plik": "3_drzewo_2.png"
+ },
+ {
+  "mapa": 3,
+  "rodzaj": "drzewo",
+  "n": 3,
+  "obiekt": "!$Pine_A",
+  "kratka_obiektu": [
+   22,
+   5
+  ],
+  "kratka_bohatera": [
+   22,
+   4
+  ],
+  "plik": "3_drzewo_3.png"
+ },
+ {
+  "mapa": 3,
+  "rodzaj": "pien",
+  "n": 1,
+  "obiekt": "!$Trunk_Dead",
+  "kratka_obiektu": [
+   11,
+   14
+  ],
+  "kratka_bohatera": [
+   11,
+   13
+  ],
+  "plik": "3_pien_1.png"
+ },
+ {
+  "mapa": 3,
+  "rodzaj": "pien",
+  "n": 2,
+  "obiekt": "!$Stump_Tall",
+  "kratka_obiektu": [
+   5,
+   9
+  ],
+  "kratka_bohatera": [
+   5,
+   8
+  ],
+  "plik": "3_pien_2.png"
+ },
+ {
+  "mapa": 3,
+  "rodzaj": "pien",
+  "n": 3,
+  "obiekt": "!$Trunk_Dead",
+  "kratka_obiektu": [
+   10,
+   36
+  ],
+  "kratka_bohatera": [
+   10,
+   35
+  ],
+  "plik": "3_pien_3.png"
+ },
+ {
+  "mapa": 3,
+  "rodzaj": "skala",
+  "n": 1,
+  "obiekt": "!$Boulder_A",
+  "kratka_obiektu": [
+   3,
+   8
+  ],
+  "kratka_bohatera": [
+   3,
+   7
+  ],
+  "plik": "3_skala_1.png"
+ },
+ {
+  "mapa": 3,
+  "rodzaj": "skala",
+  "n": 2,
+  "obiekt": "!$Rock_Ore_Iron",
+  "kratka_obiektu": [
+   33,
+   19
+  ],
+  "kratka_bohatera": [
+   33,
+   18
+  ],
+  "plik": "3_skala_2.png"
+ },
+ {
+  "mapa": 3,
+  "rodzaj": "skala",
+  "n": 3,
+  "obiekt": "!$Boulder_A",
+  "kratka_obiektu": [
+   16,
+   10
+  ],
+  "kratka_bohatera": [
+   16,
+   8
+  ],
+  "plik": "3_skala_3.png"
+ },
+ {
+  "mapa": 3,
+  "rodzaj": "krzak",
+  "n": 1,
+  "obiekt": "!$Bush_Bare_Wide",
+  "kratka_obiektu": [
+   28,
+   19
+  ],
+  "kratka_bohatera": [
+   28,
+   17
+  ],
+  "plik": "3_krzak_1.png"
+ },
+ {
+  "mapa": 3,
+  "rodzaj": "krzak",
+  "n": 2,
+  "obiekt": "!$Bush_Bare_Tall",
+  "kratka_obiektu": [
+   6,
+   18
+  ],
+  "kratka_bohatera": [
+   6,
+   16
+  ],
+  "plik": "3_krzak_2.png"
+ },
+ {
+  "mapa": 3,
+  "rodzaj": "krzak",
+  "n": 3,
+  "obiekt": "!$Bush_Bare_A",
+  "kratka_obiektu": [
+   7,
+   11
+  ],
+  "kratka_bohatera": [
+   7,
+   10
+  ],
+  "plik": "3_krzak_3.png"
+ }
+]

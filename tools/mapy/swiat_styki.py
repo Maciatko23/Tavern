@@ -27,13 +27,15 @@ if "--zywe" in sys.argv: STAGING = None
 if "--staging" in sys.argv: STAGING = os.path.abspath(sys.argv[sys.argv.index("--staging") + 1])
 MASKA = os.path.join(ROOT, "docs", "mapy", "swiat_maska.png")
 BESPOKE = 3
+POZA_WYSPA = 1500    # x0 świata, od którego leżą mapy próbne (poza wyspą)
 PADX = 24           # margines rastra na zachód od x 0 świata
 WASKI = 17          # pas lądu bez mapy węższy niż ekran (17 kratek): gracz go nie zobaczy, krawędzie przy nim mają być zablokowane (licznik donikad)
 OPP = {"N": "S", "S": "N", "E": "W", "W": "E"}
 
 # Wyjątki fabularne (a, b): przejście z a do b ma być ZAMKNIĘTE (kratki a na krawędzi z b widocznie zablokowane albo bramka).
 #  13 -> 175: Orla Grań tylko wspinaczką (Orzel.wayUp); 175 <-> 934/120: bez pieszego styku; 165 <-> 162: tylko łacha w odpływie.
-WYJATKI = {(13, 175), (175, 13), (175, 934), (934, 175), (175, 120), (120, 175), (162, 165), (165, 162)}
+WYJATKI = {(13, 175), (175, 13), (175, 934), (934, 175), (175, 120), (120, 175), (162, 165), (165, 162),
+           (175, 962), (962, 175), (935, 962), (962, 935)}      # (962|175, 962|935: też tylko wspinaczka orła; gracz 2026-10-31)
 # 175 -> 13: zejście pieszo zostaje (Orzel_Data), jak jest (nie otwieram go na całej długości); 931 i 935 osiągalne tylko przez 175 (nowe mapy przy 175: dopisz je tu).
 
 
@@ -42,6 +44,9 @@ def swiat_data_zywe():
     maps = json.loads(re.search(r"maps: (\{.*?\}),\s*\n\s*links", txt, re.S).group(1))
     links = json.loads("[" + re.search(r"links: \[(.*?)\]\s*,\s*\n\s*//", txt, re.S).group(1) + "]")
     later = json.loads(re.search(r"later: (\{.*?\})\s*\n", txt, re.S).group(1))
+    # (2026-11-01) mapy próbne leżą celowo poza wyspą (x0 >= POZA_WYSPA, tools/mapa_probna): nie należą do kontraktu świata
+    maps = {k: v for k, v in maps.items() if v[0] < POZA_WYSPA}
+    links = [l for l in links if str(l["a"]) in maps and str(l["b"]) in maps]
     return {int(k): v for k, v in maps.items()}, links, {int(k): v for k, v in later.items()}
 
 

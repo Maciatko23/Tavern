@@ -7,11 +7,11 @@
 // under it (2026-10-23: what it needs, have / need, growing as things are picked up - a goal's recipe, a town quest's step; the load
 // hidden) and the minimap under that; the gains; no bars under the hero, no experience line; the thoughts over the hero; the fade under him (the whole
 // top left corner as one); the minimap on M; P opens the menu „Lista” (its pages: tests/menu_lista_test.js); no option "Wygląd" any more
-// (one look, 2026-10-28) - the old parts drawn only by the tests' switch and back; the map's name as one comes in - since 2026-10-24 "Kinowy" (CleanHUD NAME_STYLE): the first visit
-// with black bars at the top and the bottom and the HUD hidden (back after it), the words, the name, the gold line and the sentence
-// in the bottom left corner, 306 frames; later 44 px without bars ~3 s, a room 32 px ~2.5 s, an underground floor with its band
-// (red on a guardian's floor), cleared at once by a transfer (the HUD given back), an older save not playing the long one on the
-// maps it knows; the old "Kronika" (Sprite_CleanChronicle, still in the top stack) driven by hand once (docs/ui_nazwa_mapy);
+// (one look, 2026-10-28) - the old parts drawn only by the tests' switch and back; the map's name as one comes in - since 2026-10-24 "Kinowy" (CleanHUD NAME_STYLE), since
+// 2026-11-06 the small one on every visit: the words, the name 44 px and the gold line in the bottom left corner as one ready
+// picture (img/nazwy_map), no sentence, no bars, the HUD stays, nothing under it, ~3 s; a room 32 px ~2.5 s, an underground floor
+// with its band (red on a guardian's floor, "najgłębiej: piętro N" under it), cleared at once by a transfer, an older save; the
+// old "Kronika" (Sprite_CleanChronicle, still in the top stack) driven by hand once (docs/ui_nazwa_mapy);
 // (2026-10-24) a town quest's step with several people: the list in the goal window (K5, D17, K19), at most 8 rows. CDP_PORT=9460.
 // The plugins are put into the page while they are not in js/plugins.js yet.
 "use strict";
@@ -88,11 +88,12 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("cel na tej mapie: wprost, 6 kroków", direct && direct.direct && Math.round(direct.steps) === 6, direct);
 
     // ---------------------------------------------------------------- the map's name as one comes in: "Kinowy" (CleanHUD NAME_STYLE, 2026-10-24)
-    // the first visit: black bars at the top and the bottom, the HUD gone (SurvivalHUD's fade: $gameTemp._hudCinema; the top stack's
-    // notices stay), in the bottom left corner the words in gold capitals, the name 60 px sliding in from the left, a gold line, the
-    // sentence - 306 frames; a later visit 44 px without the bars ~3 s; a room 32 px ~2.5 s; the underground's floors (red on a
-    // guardian's); a transfer while it shows clears it at once and gives the HUD back; the old "Kronika" by hand; an older save does
-    // not play the long one on the maps it knows (at the end)
+    // since 2026-11-06 (the user: "niech zawsze będzie ten mniejszy opis, taki jak przy drugim wejściu", "nie będzie tego »pokaż
+    // mapę«"): every visit - the first too - in the bottom left corner the words in gold capitals, the name 44 px, a gold line; no
+    // sentence, no black bars, the HUD stays, nothing under the line; one picture made ahead (img/nazwy_map) shown whole from its
+    // first frame, only fading at the end, 180 frames (~3 s); a room 32 px ~2.5 s; the underground's floors (red on a guardian's,
+    // "najgłębiej: piętro N" under it); a transfer while it shows clears it at once; the old "Kronika" by hand; an older save
+    // (at the end)
     const nm = () => t.json("(function(){ const d = CleanHUD.debug(); return d && d.name; })()");
     const word = k => t.json(`Watki.tekst("miejsca", ${JSON.stringify(k)}) || ""`);
     const toMap = (id, x, y) => t.eval(`$gamePlayer.reserveTransfer(${id}, ${x}, ${y}, 2, 0); 0`);
@@ -103,25 +104,27 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         await t.until(`(function(){ const l = CleanHUD.debug().nameLast; return !!(l && l.mapId === ${id} && l.why !== "new"); })()`, 20, 50);
         return t.json("CleanHUD.debug().nameLast");
     };
-    // where its parts stand now: the letters as one (their pen boxes), the words over them, the gold line, the sentence, the small
-    // line; each letter's slide (px still to go) and alpha, the line's colour, the gold pixels of the words, the bars' heights
+    // where its parts stand now (2026-11-06: one picture, P.pic - made ahead, img/nazwy_map, or drawn once -, the parts' boxes from
+    // c.rects()): the letters as one (their pen boxes), the words over them, the gold line, the sentence, the small line; the pieces
+    // drawn on their own (only the picture: 1), the alphas, the line's colour and the gold pixels of the words read from the picture
+    // (a copy of it: a file's picture has no canvas of its own), the bars' heights
     const cine = () => t.json(`(function(){ const c = SceneManager._scene._cleanCinema, P = c && c._parts; if (!P || c._t < 0) return null;
-        const r = s => s && s.visible && s.bitmap ? { x: Math.round(s.x), y: Math.round(s.y), w: Math.round(s._frame.width), h: Math.round(s._frame.height), a: +s.alpha.toFixed(2) } : null;
-        let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
-        for (const s of P.letters) { const p = s.bitmap._pad || 0; x0 = Math.min(x0, s._x0 + p); y0 = Math.min(y0, s.y + p); x1 = Math.max(x1, s._x0 + s.bitmap.width - p); y1 = Math.max(y1, s.y + s.bitmap.height - p); }
-        const px = (s, f) => { if (!s) return 0; const b = s.bitmap, d = b.context.getImageData(0, 0, b.width, b.height).data; let n = 0; for (let i = 0; i < d.length; i += 4) if (f(d[i], d[i + 1], d[i + 2], d[i + 3])) n++; return n; };
-        const l = P.line.bitmap.context.getImageData(0, 0, 1, 1).data;
-        return { t: c._t, letters: { x: Math.round(x0), y: Math.round(y0), w: Math.round(x1 - x0), h: Math.round(y1 - y0) }, slide: P.letters.map(s => Math.round(s._x0 - s.x)),
-            alpha: P.letters.map(s => +s.alpha.toFixed(2)), tag: r(P.tag), line: r(P.line), opis: r(P.opis), hint: r(P.hint), lineRgb: [l[0], l[1], l[2]],
-            tagGold: px(P.tag, (R, G, B, A) => A > 200 && R > 225 && G > 175 && G < 235 && B < 120),
+        const R = c.rects(), pic = P.pic, b = pic.bitmap, px0 = Math.round(pic.x), py0 = Math.round(pic.y);
+        const cv = document.createElement("canvas"); cv.width = b.width; cv.height = b.height; const cx = cv.getContext("2d"); cx.drawImage(b._canvas || b._image, 0, 0);
+        const r = k => R[k] ? { x: R[k].x, y: R[k].y, w: R[k].w, h: R[k].h } : null;
+        const area = (q, f) => { if (!q) return 0; const d = cx.getImageData(q.x - px0, q.y - py0, q.w, q.h).data; let n = 0; for (let i = 0; i < d.length; i += 4) if (f(d[i], d[i + 1], d[i + 2], d[i + 3])) n++; return n; };
+        const l = cx.getImageData(R.line.x - px0, R.line.y - py0, 1, 1).data;
+        const hint = P.hint ? { x: Math.round(P.hint.x), y: Math.round(P.hint.y), w: P.hint.bitmap.width, h: P.hint.bitmap.height, a: +P.hint.alpha.toFixed(2) } : null;
+        return { t: c._t, pieces: c.children.filter(s => s !== P.shade && s !== P.top && s !== P.bottom && s !== P.hint).length, alpha: +c.alpha.toFixed(2),
+            pic: { x: px0, y: py0, w: b.width, h: b.height, a: +pic.alpha.toFixed(2) }, shade: +P.shade.alpha.toFixed(2),
+            letters: r("letters"), tag: r("tag"), line: r("line"), opis: r("opis"), hint, lineRgb: [l[0], l[1], l[2]],
+            tagGold: area(R.tag, (R_, G, B, A) => A > 200 && R_ > 225 && G > 175 && G < 235 && B < 120),
             bars: P.top ? { top: Math.round(P.top.scale.y * 4), bottom: Math.round(P.bottom.scale.y * 4), bottomY: Math.round(P.bottom.y) } : null }; })()`);
     // the HUD's parts now: hidden by the name's bars ($gameTemp._hudCinema) or not; the top stack keeps itself, the name is not in the fade
     const hudA = () => t.json(`(function(){ const s = SceneManager._scene, a = p => p ? +p.alpha.toFixed(2) : null;
         return { cinema: !!$gameTemp._hudCinema, clock: a(s._cleanClock), goal: a(s._cleanGoal), needs: a(s._cleanNeeds), compass: a(s._cleanCompass), top: a(s._cleanTop),
             keep: !!(s._cleanTop && s._cleanTop._cinemaKeep), name: a(s._cleanCinema),
             onBar: !!s._cleanLayer && s._cleanLayer.children.indexOf(s._cleanTop) > s._cleanLayer.children.indexOf(s._cleanCinema) }; })()`);
-    // (the top stack - its notices - stays and is drawn over the bars, not under them)
-    const hidden = h => h.cinema && [h.clock, h.goal, h.needs, h.compass].every(v => v !== null && v <= 0.05) && h.top === 1 && h.keep && h.onBar && h.name === 1;
     // (not hidden: no bars, these parts whole - the left column only where the hero stands clear of it)
     const solid = (h, keys) => !h.cinema && keys.every(k => h[k] === 1);
     // the bottom left corner: the gold line 70 px in, under the name; the name in the left half, low; the words over it, the rest under
@@ -134,30 +137,26 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await toMap(20, 10, 12);
     t.check("podwórze dziadka: napis się pojawia", await nameOn(20, 1));
     let n = await nm(), cn = await cine();
-    const pod20 = await word("mapa.20.pod"), opis20 = await word("mapa.20.opis");
-    t.check("pierwsza wizyta (Kinowy): nazwa 60 px, podpis i zdanie o miejscu z js/teksty/miejsca.txt, czarne pasy, pokaz 306 klatek (ok. 5 s)",
-        n && n.style === "kinowy" && n.mode === "first" && n.title === "Dom dziadka" && n.size === 60 && !!pod20 && n.sub === pod20 && !!opis20 && n.opis === opis20 && n.dur === 306 && n.bars === true, n);
-    t.check("...litery wchodzą po kolei, wsuwane z lewej (na początku nie wszystkie, pierwsza jeszcze przesunięta)", n.letters === 10 && n.lettersIn < n.letters && !!cn && cn.slide[0] > 0 && cn.alpha[9] === 0,
-        { n, slide: cn && cn.slide, alpha: cn && cn.alpha });
+    const pod20 = await word("mapa.20.pod");
+    t.check("pierwsza wizyta (Kinowy): ta sama mała nazwa co przy drugiej - 44 px i podpis z js/teksty/miejsca.txt, bez zdania i bez czarnych pasów, 180 klatek (ok. 3 s)",
+        n && n.style === "kinowy" && n.first && n.mode === "again" && n.title === "Dom dziadka" && n.size === 44 && !!pod20 && n.sub === pod20 && !n.opis && n.dur === 180 && !n.bars, n);
+    const cn0 = cn, still = c => JSON.stringify([c.pic, c.letters, c.tag, c.line, c.opis, c.bars]);
+    t.check("...od pierwszej klatki cały, bez wjeżdżania: wszystkie 10 liter, podpis, kreska - jeden gotowy obrazek z pliku (img/nazwy_map), nic nie przezroczyste",
+        n.letters === 10 && n.lettersIn === n.letters && n.file === true && !!cn && cn.pieces === 1 && !!cn.tag && !cn.opis && cn.line.w === 90 && cn.alpha === 1 && cn.pic.a === 1 && cn.shade === 1
+        && !cn.bars, { n, cn });
     await nameOn(20, 130);
     n = await nm();
     cn = await cine();
     lastDbg = await dbg();
     const hud1 = await hudA();
-    t.check("...po 2 s: wszystkie litery na miejscu, podpis, zdanie, niżej „M: pokaż mapę”; nie w stosie u góry (tam tylko komunikaty)", n.lettersIn === n.letters && cn.slide.every(v => v === 0)
-        && cn.alpha.every(v => v === 1) && !!cn.tag && !!cn.opis && /M: pokaż mapę/.test(n.hint) && !lastDbg.top.some(x => x.k === "name"), { n, cn, top: lastDbg.top });
-    t.check("...w lewym dolnym rogu: podpis, pod nim nazwa, złota kreska, zdanie - nad dolnym pasem", corner(cn) && cn.lineRgb.join() === GOLD.join()
-        && cn.opis.y + cn.opis.h <= 720 - 64 + 2 && cn.hint.y + cn.hint.h <= 720 - 64 + 2, cn);
+    t.check("...po 2 s: wszystko tam, gdzie od początku (nic się nie przesunęło), pod kreską nic - bez „M: pokaż mapę”; nie w stosie u góry (tam tylko komunikaty)", n.lettersIn === n.letters
+        && still(cn) === still(cn0) && cn.alpha === 1 && !cn.hint && n.hint === "" && !lastDbg.top.some(x => x.k === "name"), { n, cn, cn0, top: lastDbg.top });
+    t.check("...w lewym dolnym rogu, nisko: podpis, pod nim nazwa, złota kreska", corner(cn) && cn.line.y > 640 && cn.lineRgb.join() === GOLD.join(), cn);
     t.check("...podpis złotymi wersalikami (złote piksele w napisie)", cn.tagGold > 40, cn.tagGold);
-    t.check("...czarne pasy 64 px u góry i u dołu", !!cn.bars && cn.bars.top === 64 && cn.bars.bottom === 64 && cn.bars.bottomY === 720 - 64, cn.bars);
-    t.check("...HUD schowany ($gameTemp._hudCinema): zegar, cel, paski, kompas zgaszone; stos u góry (komunikaty) zostaje, na pasie, nie pod nim; sam napis nie gaśnie", hidden(hud1), hud1);
+    t.check("...HUD zostaje (nic nie gaśnie): zegar, cel, paski, kompas", solid(hud1, ["clock", "goal", "needs", "compass"]), hud1);
     await t.shot(path.join(__dirname, "..", "docs", "ui_nazwa_mapy", "test_pierwsza_wizyta.png"));
     let end = await nameEnd(20);
-    const hud2 = await hudA();
-    t.check("...trzyma się do 4,5 s i znika: cały pokaz 306 klatek", end && end.why === "end" && end.mode === "first" && end.frames >= 301 && end.frames <= 311, end);
-    await t.frames(45);
-    const hud3 = await hudA();
-    t.check("...po nim HUD wraca (od razu przestaje gasnąć, po chwili cały widoczny)", !hud2.cinema && solid(hud3, ["clock", "goal", "needs", "compass"]), { hud2, hud3 });
+    t.check("...trzyma się ok. 2,6 s i znika: cały pokaz 180 klatek", end && end.why === "end" && end.mode === "again" && end.frames >= 175 && end.frames <= 185, end);
 
     // a room: grandpa's house - 32 px, its words, no sentence, no bars (the HUD stays), ~2.5 s
     await toMap(19, 4, 6);
@@ -186,7 +185,7 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("...pokaz trwa 180 klatek", end && end.why === "end" && end.frames >= 175 && end.frames <= 185, end);
     t.check("odwiedziny w stanie gry (Tawerna.state nazwaMapy): podwórze 2 razy", (await t.json("CleanHUD.visits().odw[20]")) === 2);
 
-    // a transfer while the bars are in (Polna droga, the first time): the name goes at once and gives the HUD back
+    // a transfer while it shows (Polna droga, the first time): the name goes at once
     await toMap(22, 12, 10);
     await nameOn(22, 40);
     const n22 = await nm(), h22 = await hudA();
@@ -194,7 +193,7 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await toMap(19, 4, 6);
     await t.frames(2);
     const cut = await t.json("(function(){ const c = window.__kino; return { visible: c.visible, t: c._t, cinema: !!$gameTemp._hudCinema, last: CleanHUD.debug() && CleanHUD.debug().nameLast }; })()");
-    t.check("przejście na inną mapę w trakcie pierwszej wizyty (pasy, HUD schowany): napis znika od razu (po 2 klatkach) i oddaje HUD", !!n22 && n22.mode === "first" && n22.bars && hidden(h22)
+    t.check("przejście na inną mapę w trakcie pokazu (pierwsza wizyta, HUD widoczny): napis znika od razu (po 2 klatkach)", !!n22 && n22.first && n22.mode === "again" && !n22.bars && !h22.cinema
         && !cut.visible && cut.t < 0 && !cut.cinema && !!cut.last && cut.last.mapId === 22 && cut.last.why === "map", { n22, h22, cut });
     const own19 = await nameOn(19, 5), hBack = await hudA();
     t.check("...a na nowej mapie jej własny, HUD widoczny", own19 && solid(hBack, ["clock", "compass"]), hBack);
@@ -205,9 +204,9 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.eval("Underground.go(12); 0");
     await nameOn(1012, 30);
     n = await nm();
-    const band2 = await t.json(`({ name: Underground_Data.BANDS[1].name.toLocaleLowerCase("pl"), opis: Watki.tekst("miejsca", "pasmo.2.opis") })`);
-    t.check("piętro podziemi (12, składane): „Piętro 12”, podpis - nazwa pasma, przy pierwszym zejściu w pasmo jego zdanie (i pasy)", n && n.title === "Piętro 12" && n.floor === 12 && n.sub === band2.name
-        && !!band2.opis && n.opis === band2.opis && n.mode === "first" && n.bars && !n.boss, { n, band2 });
+    const band2 = await t.json(`({ name: Underground_Data.BANDS[1].name.toLocaleLowerCase("pl") })`);
+    t.check("piętro podziemi (12, składane, pierwsze zejście w pasmo): „Piętro 12”, podpis - nazwa pasma; mała nazwa, bez zdania i bez pasów", n && n.title === "Piętro 12" && n.floor === 12 && n.sub === band2.name
+        && n.first && n.mode === "again" && !n.opis && !n.bars && !n.boss, { n, band2 });
     t.check("...bez osobnego komunikatu „Piętro 12” pod spodem (nazwa mówi to sama)", !(await t.notices()).some(x => /^Piętro 12/.test(x)), await t.notices());
     await t.eval("Underground.go(20); 0");
     await nameOn(146, 130);
@@ -220,8 +219,8 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await nameOn(1013, 30);
     n = await nm();
     cn = await cine();
-    t.check("piętro 13: pasmo już znane - krótko, bez zdania i bez pasów, kreska złota; niżej „najgłębiej: piętro 20”", n && n.title === "Piętro 13" && n.mode === "again" && !n.opis && !n.bars
-        && /najgłębiej: piętro 20/.test(n.hint) && !!cn && cn.lineRgb.join() === GOLD.join(), n);
+    t.check("piętro 13: krótko, bez zdania i bez pasów, kreska złota; niżej samo „najgłębiej: piętro 20” (bez „M: pokaż mapę”)", n && n.title === "Piętro 13" && n.mode === "again" && !n.opis && !n.bars
+        && n.hint === "najgłębiej: piętro 20" && !!cn && !!cn.hint && cn.lineRgb.join() === GOLD.join(), n);
     await t.go(19, 4, 6, 2);
     await t.eval("CleanCompass.refresh(); 0");
     await t.frames(20);
@@ -495,5 +494,5 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await toMap(22, 12, 2);
     await nameOn(22, 10);
     n = await nm();
-    t.check("...Polna droga (nigdy nie był): pierwsza wizyta, ze zdaniem i pasami", n && n.mode === "first" && n.bars && n.dur === 306 && !!n.opis && n.opis === (await word("mapa.22.opis")), n);
+    t.check("...Polna droga (nigdy nie był): pierwsza wizyta - też mała nazwa, bez zdania i bez pasów", n && n.first && n.mode === "again" && !n.bars && n.dur === 180 && !n.opis, n);
 });

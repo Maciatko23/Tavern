@@ -482,6 +482,15 @@
     const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
     const STUB = [C(355, ["TavernLife.use(this)"]), C(0, [])];
     const CORE_KINDS = new Set(["meal", "mealtable", "bath", "stage", "bed"]);
+    // (2026-11-05) miejsca na wolnej podłodze (mata do rzutek, miejsce słuchacza...) nie blokują już przejścia: stojąc na takim, przycisk nadal działa
+    const _standOnSpot = Game_Player.prototype.triggerButtonAction;
+    Game_Player.prototype.triggerButtonAction = function() {
+        if (Input.isTriggered("ok") && !$gameMap.isEventRunning()) {
+            const e = $gameMap.eventsXy(this.x, this.y).find(q => q.isThrough() && q.isNormalPriority() && q.isTriggerIn([0]) && /^Tavern:/.test(String((q.event() || {}).name || "")));
+            if (e) { e.start(); if ($gameMap.setupStartingEvent()) return true; }
+        }
+        return _standOnSpot.call(this);
+    };
     const kinds = Object.create(null);   // kind -> fn(tag, event, interpreter): a talk (a list of commands) or null
     // (2026-10-23) the core's one list hook (Tawerna.onEventList): the tavern's own places - after HomeLife's and the regulars', before
     // QuestBoard's and Story's (as the old wrappers by the plugin list)

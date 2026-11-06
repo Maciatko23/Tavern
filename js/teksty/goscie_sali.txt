@@ -1,0 +1,402 @@
+# Goście przy stołach w sali tawerny: ludzie, którzy wieczorem przychodzą, jedzą, piją, chodzą po sali i można z nimi pogadać (Goscie_Sala.js)
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz goscie_sali
+# Każda linijka w bloku to jedna odpowiedź; gość mówi je po kolei.
+
+# ======================================================================== pytania bohatera (wiersze menu)
+pytania.kim = Kim jesteś?
+pytania.slychac = Co słychać?
+pytania.rada = Masz dla mnie jakąś radę?
+pytania.bywaj = Bywaj.
+
+# ======================================================================== goście
+goscie.g400.imie = Maciej
+[goscie.g400.witaj]
+Siadaj, jeśli chcesz. Tylko nie pytaj, czy ten tobołek na sprzedaż, bo nie.
+O, znowu ty. Dobry wieczór.
+
+[goscie.g400.kim]
+Maciej. Szukam brata. Poszedł na wojnę na lądzie, a ktoś widział go podobno na ostatnim promie. Dlatego siedzę tu i patrzę na każdego, kto wchodzi.
+
+[goscie.g400.slychac]
+Nic. Pytam każdego przybysza o chudego chłopaka z blizną na brodzie. Każdy kręci głową, a ja stawiam mu piwo i tak.
+Podobno jak prom przypływa, ludzie schodzą z niego z niczym, nawet butów niektórzy nie mają. Strach pomyśleć, co tam się dzieje.
+
+[goscie.g400.rada]
+Jak kogoś szukasz, pytaj tu, wieczorem. Przy piwie ludzie pamiętają więcej niż rano przy robocie.
+
+goscie.g400.bye = Trzymaj się.
+
+goscie.g401.imie = Bogna
+[goscie.g401.witaj]
+Dobry wieczór. Nie sprzedaję już, dzisiaj siedzę jak człowiek.
+A, to ty. Usiądź, nogi mi odpadają po targu.
+
+[goscie.g401.kim]
+Bogna, wdowa. Chodzę z chustami od wsi do wsi. Mąż mi zostawił wóz bez koła i długi z kołem, tak mawiam.
+
+[goscie.g401.slychac]
+Na targu mówią tylko o cenach. Mąka droższa, sól droższa, a woda kosztuje tyle co piwo. Kto by pomyślał, że dożyję.
+Czerwone morze widziałeś? Baby nad brzegiem się żegnają. Ja mówię: suszy się boję, nie koloru.
+
+[goscie.g401.rada]
+W dzień targowy nie płać pierwszej ceny. Nikt jej nie płaci, tylko ci, co się spieszą.
+
+goscie.g401.bye = Idź z Bogiem.
+
+goscie.g402.imie = Protazy
+[goscie.g402.witaj]
+Hm? Ach, młody człowiek. Mów głośniej, ucho już nie to.
+Znów ty. Dobrze, że ktoś jeszcze zagląda do starego.
+
+[goscie.g402.kim]
+Protazy. Czterdzieści lat pisałem cudze listy i cudze długi. Teraz nikt nic nie pisze, tylko liczy. A liczyć każdy głupi umie, dopóki nie trzeba oddać.
+
+[goscie.g402.slychac]
+Słyszę, że Lord znowu coś przelicza. Zawsze przelicza. Za mojej młodości liczyło się na krowy, teraz na srebro, a chłop dalej w tym samym miejscu.
+Wojna, mówią, daleko. Daleko to ona jest, dopóki nie przyjdzie po podatek.
+
+[goscie.g402.rada]
+Co pożyczasz, zapisz. Co ci obiecują, też zapisz. Pamięć jest dobra, ale atrament się nie wypiera.
+
+goscie.g402.bye = Bądź zdrów, młody.
+
+goscie.g403.imie = Sobek
+[goscie.g403.witaj]
+Ahoj. Znaczy, dobry wieczór, tu się chyba tak mówi.
+No proszę, znajoma gęba. Siadaj, ja stawiam słuchanie, ty stawiasz piwo.
+
+[goscie.g403.kim]
+Sobek, marynarz. Przypłynąłem tym promem i miałem wracać. Statek odpłynął, a ja spałem. Takie to moje szczęście.
+
+[goscie.g403.slychac]
+Morze czerwone jak rzeźnia, śnięte ryby przy brzegu. Na lądzie bym powiedział, że to znak. Tu mówią, że to susza. Nie wiem, co gorsze.
+Po deszczu robi się szare i ryba wraca. Widziałem na własne oczy. Ale kiedy tu ostatnio padało?
+
+[goscie.g403.rada]
+Morskiej wody nie pij, choćbyś schnął. Znałem takich, co pili. Już ich nie znam.
+
+goscie.g403.bye = Pomyślnych wiatrów.
+
+goscie.g404.imie = Kajetan
+[goscie.g404.witaj]
+Igły, nici, guziki! A, nie, ty nie po to. Dobry wieczór.
+O, mój ulubiony niekupujący. Siadaj.
+
+[goscie.g404.kim]
+Kajetan, domokrążca. Znam każdy próg na tej wyspie i każdego psa przy tym progu. Psy lubią mnie mniej niż gospodynie.
+
+[goscie.g404.slychac]
+W miasteczku studnia sucha, a ludzie udają, że to na chwilę. Na wsiach już nie udają.
+Podgrodzie biedne, ale tam najlepiej się handluje. Kto ma mało, ten pilnuje każdej igły.
+
+[goscie.g404.rada]
+Narzędzia się zużywają, wiesz? Napraw, zanim pęknie. Nowe zawsze kosztuje więcej, niż myślisz.
+
+goscie.g404.bye = Gdybyś potrzebował guzika, wiesz, gdzie siedzę.
+
+goscie.g405.imie = Tekla
+[goscie.g405.witaj]
+Dobry wieczór, dziecko. Wyglądasz, jakbyś nie spał od tygodnia.
+To znowu ty. Jadłeś coś dzisiaj? Pytam poważnie.
+
+[goscie.g405.kim]
+Tekla, akuszerka. Połowę tej sali przyjęłam na świat, a drugą połowę opatrywałam po bójkach. Nie mów im, wstydzą się.
+
+[goscie.g405.slychac]
+Dzieci się rodzą, susza czy nie susza. Tylko matki chudsze. O to się martwię, nie o Lorda.
+Ludzie chorują od złej wody. Zawsze przegotuj, co znajdziesz, nawet jak wygląda czysto.
+
+[goscie.g405.rada]
+Pusty żołądek i sucha gardziel to głupota, nie odwaga. Najpierw jedz i pij, potem bądź bohaterem.
+
+goscie.g405.bye = Idź, i wyśpij się wreszcie.
+
+goscie.g406.imie = Hipolit
+[goscie.g406.witaj]
+Baczność! Żartuję. Spocznij, młody.
+Melduj się, co tam u ciebie. Siadaj, siadaj.
+
+[goscie.g406.kim]
+Hipolit, sierżant, kiedyś. Służyłem jeszcze przed tym Lordem. Dziś mam kolano, które przepowiada deszcz, i ostatnio milczy.
+
+[goscie.g406.slychac]
+W garnizonie młodziki bez wąsów. Dawniej nad zatoką stało trzy razy tyle chłopa, a i tak baliśmy się tego samego: że ktoś przypłynie.
+Na drogach znowu rabują. Jak idziesz sam, nie noś srebra na wierzchu.
+
+[goscie.g406.rada]
+W walce nie wymachuj bez końca. Oddech to twoja druga szabla. Kto się zadyszy, ten już przegrał.
+
+goscie.g406.bye = Wolno, żołnierzu.
+
+goscie.g407.imie = Dyzma
+[goscie.g407.witaj]
+Czy mówiłem ci już o wielorybie? Siadaj, zaraz powiem.
+A, słuchacz wrócił! Na czym to ja stanąłem.
+
+[goscie.g407.kim]
+Dyzma, bosman. Miałem statek, trzy maszty, potem dwa, potem szalupę. Teraz mam ten kufel i on jeszcze nie zatonął.
+
+[goscie.g407.slychac]
+Mówię ci, wieloryb był wielki jak ten dach. Sternik nie wierzy, bo spał. Wszyscy zawsze spali, kiedy widziałem coś ciekawego.
+Podobno w ruinach pod wyspą ktoś znalazł złoto. Podobno. Ja podobno miałem kiedyś czterdzieści ludzi załogi.
+
+[goscie.g407.rada]
+Nie wierz gawędziarzom. Ale słuchaj ich, bo za dziesiątą bajką jest kawałek prawdy. Tylko nigdy nie wiadomo za którą.
+
+goscie.g407.bye = Wracaj, wieloryb jeszcze nieskończony.
+
+goscie.g408.imie = Cyprian
+[goscie.g408.witaj]
+Dobry wieczór. Pachnę żywicą, wiem, przepraszam.
+Witaj. Siedzę tu, bo w lesie za cicho się zrobiło.
+
+[goscie.g408.kim]
+Cyprian. Zbieram żywicę i smołę, sprzedaję szkutnikom. Teraz szkutników mało, więc sprzedaję komu popadnie.
+
+[goscie.g408.slychac]
+Las schnie od góry. Wilki podchodzą bliżej, bo zwierzyny mniej. Parę nocy temu słyszałem je tuż za polaną.
+Dzik u mnie przewrócił cały zapas beczek. Z dzikiem się nie dyskutuje, schodzi się z drogi i tyle.
+
+[goscie.g408.rada]
+Nocą w lesie trzymaj ogień przy sobie. Pochodnia to nie tylko światło, wilk też ma swój rozum.
+
+goscie.g408.bye = Spokojnej nocy.
+
+goscie.g409.imie = Salomea
+[goscie.g409.witaj]
+Spróbuj tego gulaszu i powiedz mi, że soli za mało. Mów, nie obrażę się. Może.
+A, to ty. Znów chudszy. Kto cię karmi?
+
+[goscie.g409.kim]
+Salomea. Gotowałam na dworze, dopóki Lord nie policzył, ile kosztuje dobra kucharka. Teraz gotuję u siebie i jem u Borgara, żeby było na kogo narzekać.
+
+[goscie.g409.slychac]
+Na dworze zawsze wiedzieli wszystko pierwsi, bo mówili przy stole, jakby służby nie było. Wiele bym mogła opowiedzieć. Nie dziś.
+Borgar solidny człowiek, ale mięso trzyma za długo. Świeże jedz od razu albo susz, bo w taki upał nic nie poczeka.
+
+[goscie.g409.rada]
+Nawet z marnych rzeczy zrób ciepłą strawę. Surowy grzyb to głód, a zupa z niego to już kolacja.
+
+goscie.g409.bye = I zjedz coś, na miłość boską.
+
+goscie.g410.imie = Nikodem
+[goscie.g410.witaj]
+Wieczór. Patrzę, czy ten stół się trzyma. Trzyma się, ale robił go partacz.
+O, ty. Siadaj, ten stołek akurat dobry.
+
+[goscie.g410.kim]
+Nikodem, cieśla okrętowy. Statków się nie buduje, to łatam dachy i stodoły. Ręce mają robotę, głowa się nudzi.
+
+[goscie.g410.slychac]
+Na przystani stoją łodzie, których nikt nie naprawia, bo nie ma z czego zapłacić. Szkoda drewna.
+Każdy chce dziś budować szybko i tanio. Potem pierwszy wiatr i znów do mnie przychodzą.
+
+[goscie.g410.rada]
+Jak budujesz, zacznij od małego i porządnie. Dobry warsztat zwraca się szybciej niż wielki dom.
+
+goscie.g410.bye = Bywaj. I sprawdzaj, co robisz, dwa razy.
+
+goscie.g411.imie = Rozalia
+[goscie.g411.witaj]
+Dobry wieczór. Mój jeszcze nie wrócił, jakbyś pytał.
+Witaj. Nie ma go. Dziś też nie.
+
+[goscie.g411.kim]
+Rozalia, żona rybaka. Wypłynął daleko, bo przy brzegu ryb nie ma. Przychodzę tu, bo w domu za cicho, a stąd słychać, kto wraca z przystani.
+
+[goscie.g411.slychac]
+Mówią, że daleko od brzegu woda czystsza. Mówią też różne inne rzeczy. Staram się słuchać tylko tego pierwszego.
+Sąsiadki przestały mnie pytać. To chyba gorsze, niż jak pytały.
+
+[goscie.g411.rada]
+Jak masz kogoś bliskiego, idź do niego dziś, a nie jutro. Tyle wiem.
+
+goscie.g411.bye = Idź zdrowo.
+
+goscie.g412.imie = Alojzy
+[goscie.g412.witaj]
+Eee, młody. Ty masz młyn? Nie? To dobrze, nie masz zmartwienia.
+A, znowu. Siadaj, siadaj, powiem ci o wodzie.
+
+[goscie.g412.kim]
+Alojzy, młynarz bez wody. Koło stoi od dwóch lat. Zamiast mleć, przychodzę tu i mielę językiem.
+
+[goscie.g412.slychac]
+Potok, co mi koło kręcił, teraz by kota nie utopił. A dziadek twój jeszcze tam, za lasem? Twardy człowiek, zawsze był twardy.
+Woda to dziś pieniądz. Kto ma beczkę pod rynną, ten bogaty, jak raz w miesiącu popada.
+
+[goscie.g412.rada]
+Jak tylko pada, wystawiaj wszystko, co ma dno. Wiadro, garnek, co masz. Deszcz tu nie wraca, bo ktoś poprosi.
+
+goscie.g412.bye = Wody ci życzę. I zdrowia, ale głównie wody.
+
+goscie.g413.imie = Kacper
+[goscie.g413.witaj]
+Hej! Ty jesteś ten od działki, nie? Słyszałem o tobie.
+Cześć. Mam pomysł, jak się wzbogacić, chcesz posłuchać?
+
+[goscie.g413.kim]
+Kacper, chłopak okrętowy. Znaczy byłem, dopóki nie zszedłem na ląd i nie przestało mi się kręcić w głowie. Teraz szukam roboty, ale takiej, co płaci od razu.
+
+[goscie.g413.slychac]
+Na tablicy u Borgara wiszą zlecenia. Patrzę na nie codziennie, tylko że wszystkie są albo daleko, albo z wilkami.
+Starsi mówią, że w kamieniołomie jeszcze płacą. Ale to trzeba mieć plecy. No, takie dosłowne plecy.
+
+[goscie.g413.rada]
+Ty mnie pytasz o radę? Ha! No dobra: tablica u Borgara. Tam jest srebro, jak ktoś ma odwagę, a ja jeszcze nie mam.
+
+goscie.g413.bye = Trzymaj się, kolego.
+
+goscie.g414.imie = Sewer
+[goscie.g414.witaj]
+Grasz w kości? Nie? Szkoda. Dobry wieczór.
+No i co, dziś dasz się namówić na partyjkę? Nie ze mną, ja już przegrałem.
+
+[goscie.g414.kim]
+Sewer. Kiedyś miałem sklep, potem kości mi go zabrały. Teraz liczę, ile mógłbym wygrać, gdybym miał za co zagrać.
+
+[goscie.g414.slychac]
+Dziś przy kościach ktoś postawił buty. Przegrał. Poszedł do domu boso, śpiewając. Tak to się zaczyna, wiem, co mówię.
+Grum, ten wielki, siłuje się na rękę o piwo. Nie stawiaj przeciwko niemu, bo płaczą nawet kowale.
+
+[goscie.g414.rada]
+Graj o tyle, ile możesz stracić. I przestań, jak idzie dobrze. Nikt tego nie robi, ale ja ci powiedziałem.
+
+goscie.g414.bye = Powodzenia. Nie w kościach, tak ogólnie.
+
+goscie.g415.imie = Marcysia
+[goscie.g415.witaj]
+Dobry wieczór. Nie patrz na ręce, od ługu takie.
+A, ty. Koszula ci się prosi o pranie, wiesz?
+
+[goscie.g415.kim]
+Marcysia, praczka. Prać nie ma czym, wody tyle co kot napłakał, a ludzie brudni jak zawsze. Dzień w dzień cud robię z jednego wiadra.
+
+[goscie.g415.slychac]
+Wszystko o wszystkich wiem. Po koszuli poznasz, kto gdzie był. Ale nie powiem, bo mnie jeszcze potrzebują.
+Stare kałuże po deszczu to nie tylko błoto. Dobra glina w nich zostaje, garncarze wiedzą.
+
+[goscie.g415.rada]
+Po deszczu leć do kałuż, nim wyschną. Na glinę, na garnek. Bez garnka to nawet wody nie przegotujesz.
+
+goscie.g415.bye = Bywaj, i uważaj na koszulę.
+
+goscie.g416.imie = Melchior
+[goscie.g416.witaj]
+Wieczór. Owce zostawiłem z psem, pies mądrzejszy ode mnie.
+Znasz się na psach? Nie? Ja też nie, on się zna na mnie.
+
+[goscie.g416.kim]
+Melchior, pasterz. Sześćdziesiąt lat chodzę za owcami, a one dalej nie wiedzą, którędy do domu.
+
+[goscie.g416.slychac]
+Trawa żółta aż po grzbiet. Owce chude, wilki chude, a wszyscy patrzą na siebie nawzajem.
+Dobry pies wart więcej niż parobek. Jak znajdziesz bezpańskiego, nakarm mięsem, cierpliwie. Odwdzięczy się.
+
+[goscie.g416.rada]
+Patrz na zwierzęta. Jak ptaki nagle milkną, schodź z otwartego. Burza albo wilk, jedno i drugie cię nie zapyta.
+
+goscie.g416.bye = Z Bogiem.
+
+goscie.g417.imie = Teodor
+[goscie.g417.witaj]
+Wieczór. Widziałeś dziś kruka? Ja widziałem cztery.
+Siadaj. Liczę kruki, nie przeszkadzasz.
+
+[goscie.g417.kim]
+Teodor, byłem sternikiem. Przy sterze człowiek uczy się patrzeć na ptaki, bo ptaki wiedzą, gdzie ląd. Tu ląd jest wszędzie, a ja dalej patrzę.
+
+[goscie.g417.slychac]
+Na urwisku kruków tyle co kiedyś ludzi w porcie. Podobno nakarmiony kruk pamięta twarz. Mnie jeden już pamięta, ciągle czegoś chce.
+Na wyspie mówi się, że kruk to dobry znak. Na morzu mówiło się, że zły. Wniosek: lepiej mieć chleb w kieszeni.
+
+[goscie.g417.rada]
+Zanieś krukom coś do jedzenia, nie żałuj. To mądrzejsze ptaki, niż ci się zdaje. Niejeden człowiek powinien się od nich uczyć.
+
+goscie.g417.bye = Patrz w niebo, młody.
+
+goscie.g418.imie = Gustaw
+[goscie.g418.witaj]
+Rym do „kufel”? Nic mi nie przychodzi. Dobry wieczór.
+A, ty. Posłuchaj: „Sucha ziemia, sucha rola...” Nie, jednak nie.
+
+[goscie.g418.kim]
+Gustaw, roznoszę listy, kiedy są, a kiedy nie ma, piszę wiersze. Melia mówi, że są okropne. To znaczy, że je przeczytała!
+
+[goscie.g418.slychac]
+Melia dziś znów śpiewała tę o promie. Pół sali patrzyło w kufle. Ja bym napisał lepszą, gdybym umiał.
+List z lądu idzie teraz miesiącami, jeśli w ogóle. Ludzie i tak pytają codziennie. Mówię im: jutro.
+
+[goscie.g418.rada]
+Posłuchaj Melii, jak śpiewa. Po dobrej pieśni człowiek wstaje silniejszy, sprawdzałem, i to nie od piwa.
+
+goscie.g418.bye = Do zobaczenia. Przemyśl ten rym.
+
+goscie.g419.imie = Otylia
+[goscie.g419.witaj]
+Dobry wieczór. Pan pozwoli, że nie wstanę, nogi mam jeszcze z lądu.
+A, to pan. Niech pan siada, proszę.
+
+[goscie.g419.kim]
+Otylia. Miałam gospodę na lądzie, większą od tej, ale proszę nie mówić Borgarowi. Nie mam już gospody. Mam ten stołek i córkę w Podgrodziu.
+
+[goscie.g419.slychac]
+Wojsko przechodzi przez wieś i wieś się kończy. Tyle mam do powiedzenia o wojnie. Tutaj ludzie narzekają na suszę i ja im zazdroszczę.
+Z każdym promem przybywa takich jak ja. Miejscowi patrzą coraz krzywiej, a ja się nawet nie dziwię.
+
+[goscie.g419.rada]
+Niech pan trzyma, co pan ma, i nie mówi głośno, ile tego jest. Ja mówiłam. Zobaczy pan, jak to się kończy.
+
+goscie.g419.bye = Dobranoc panu.
+
+goscie.g420.imie = Łukasz
+[goscie.g420.witaj]
+Wieczór. Ręce mam jak deski, nie podam ci ręki, bo szkoda twojej.
+O, siemasz. Rąbałeś coś dzisiaj?
+
+[goscie.g420.kim]
+Łukasz, drwal. Sześć dni rąbię, siódmego siedzę tutaj i udaję, że mnie nie boli.
+
+[goscie.g420.slychac]
+Las suchy, drzewo pali się samo, jakby tylko czekało. Pilnuj ognia, bo jeden iskrą może stracić całe dobro.
+Łosia widziałem na zrębie. Dawno nie widziałem. Stał i patrzył, jakby to ja wszedłem mu do domu.
+
+[goscie.g420.rada]
+Nie rąb, jak ledwo stoisz. Zmęczony tylko siekierę tępi i siebie. Odpocznij przy ogniu, drzewo nie ucieknie.
+
+goscie.g420.bye = Trzymaj się. I siekiery też.
+
+goscie.g421.imie = Apolonia
+[goscie.g421.witaj]
+A kogóż to niesie? Wiem kogo, wiem. Siadaj, opowiadaj, ja i tak wszystko wiem.
+Znowu ty! Mów prędko, co u ciebie, bo i tak się dowiem.
+
+[goscie.g421.kim]
+Apolonia, mam stragan przy rynku. Sprzedaję trochę kapusty i dużo wiadomości. Kapusta ostatnio gorsza.
+
+[goscie.g421.slychac]
+Sołtys się z kimś pokłócił, ale nie powiem z kim. Dobrze, powiem później. Kowal ma kłopoty, a przekupka nowy czepek, i to mnie martwi bardziej.
+Mówią, że nocą ktoś się kręci koło starych murów. Mówią też, że to nic. Ja tam mówię, że nikt nie kręci się po nic.
+
+[goscie.g421.rada]
+Rozmawiaj z ludźmi, kiedy nie musisz. Jak przyjdzie bieda, pomoże ten, z kim gadałeś o kapuście.
+
+goscie.g421.bye = No idź już, idź. Ale wracaj z nowinami.
+
+goscie.g422.imie = Hubert
+[goscie.g422.witaj]
+Kto tam? Podejdź, nie widzę. A, młody od Stacha. Znałem twojego dziadka, jak miał jeszcze wszystkie zęby.
+Siadaj, chłopcze. Powiem ci, jak tu było, zanim zapomnę.
+
+[goscie.g422.kim]
+Hubert. Starszy jestem od tego dachu. Pamiętam, jak tu stał zamek i jak przestał stać. Nikt mnie nie pyta, więc sam opowiadam.
+
+[goscie.g422.slychac]
+Tu, gdzie siedzimy, była kiedyś straż. Grube mury. Czego pilnowali, nikt ci dziś nie powie, ja też nie, bo jak byłem mały, to już nikt nie wiedział.
+Suszę pamiętam jedną taką, ale wtedy morze nie było czerwone. Przynajmniej tak mi się zdaje.
+
+[goscie.g422.rada]
+Kłaniaj się dziadkowi. I nie śpij tam, gdzie ci ciemno i obco. Stare mury mają długą pamięć.
+
+goscie.g422.bye = Bywaj, chłopcze. Jutro ci opowiem resztę.

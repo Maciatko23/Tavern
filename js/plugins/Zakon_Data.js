@@ -167,11 +167,11 @@
     // (outside the square: it stays free for the landing) and the one-way way down (the pegs: stand on them, O)
     const EAGLE = [
         { key: "orzel_125_a", map: 125, x: 97, y: 44, w: 4, h: 4, seed: [97, 44], rope: "lina",
-          down: { id: 2782, at: [81, 63], to: [81, 68], dir: 2 },
-          things: [{ id: 2780, kind: "stash", x: 95, y: 48 }, { id: 2781, kind: "warzucha", x: 101, y: 46 }] },
+          down: { id: 2782, at: [99, 49], to: [99, 52], dir: 2 },   // (2026-11-03: na skarpie - dawniej korytarz w liściach do 81,63)
+          things: [{ id: 2780, kind: "stash", x: 97, y: 48 }, { id: 2781, kind: "warzucha", x: 101, y: 46 }] },
         { key: "orzel_125_b", map: 125, x: 105, y: 30, w: 4, h: 4, seed: [106, 30], rope: "lina",
-          down: { id: 2784, at: [109, 24], to: [109, 21], dir: 8 },
-          things: [{ id: 2783, kind: "nest", x: 103, y: 36, feathers: 3 }] },
+          down: { id: 2784, at: [108, 34], to: [108, 37], dir: 2 },   // (2026-11-03: po ścianie skarpy w dół)
+          things: [{ id: 2783, kind: "nest", x: 104, y: 33, feathers: 3 }] },
         { key: "orzel_013_a", map: 13, x: 99, y: 38, w: 4, h: 4, seed: [99, 39], rope: "kolki",
           down: { id: 2720, at: [99, 37], to: [97, 37], dir: 4 },
           things: [{ id: 2721, kind: "nestOrder", x: 101, y: 43 }, { id: 2722, kind: "szarotka", x: 103, y: 40 }], bushes: [[100, 38]], blankId: 2723 },

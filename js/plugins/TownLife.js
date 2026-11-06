@@ -280,17 +280,113 @@
         st.absent = absent(res);
         if (e.act === "inside" || st.absent) hide(ev, st); else show(ev, st);
     }
-    // indoors: there while the plan has them inside this very place, hidden otherwise
-    function placeIndoor(ev) {
+    // ------------------------------------------------------------------
+    // Indoors nobody comes or goes on the spot (user 2026-11-05: "nikt nie znika tylko wychodzi"): with the hero in the room they come in
+    // by the door and walk to their place, and walk out by the door. Straight there only when nobody saw it: coming onto the map, the
+    // clock jumping. Nothing of it is saved: the walk goes on from where the event stands (after a load too).
+    // ------------------------------------------------------------------
+    let doorsMemo = null;
+    function roomDoors() {
+        if (doorsMemo && doorsMemo.data === $dataMap) return doorsMemo.list;
+        const all = [];
+        for (const d of $dataMap.events || []) {
+            if (!d) continue;
+            for (const p of d.pages || []) {
+                const c = p.trigger === 1 ? (p.list || []).find(l => l.code === 201 && l.parameters && l.parameters[0] === 0) : null;
+                if (c) { all.push({ x: d.x, y: d.y, out: HOMES.has(c.parameters[1]) }); break; }
+            }
+        }
+        const out = all.filter(d => d.out);   // (the way outside, not the stairs to the rooms)
+        doorsMemo = { data: $dataMap, list: out.length ? out : all };
+        return doorsMemo.list;
+    }
+    function nearestDoor(x, y) {
+        let best = null, score = Infinity;
+        for (const d of roomDoors()) { const s = Math.abs(d.x - x) + Math.abs(d.y - y); if (s < score) { score = s; best = d; } }
+        return best;
+    }
+    const openCell = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f);
+    const takenCell = (x, y, ev) => ($gamePlayer.x === x && $gamePlayer.y === y) || $gameMap.eventsXyNt(x, y).some(o => o !== ev && o.isNormalPriority());
+    const SIDES = [[4, -1, 0], [6, 1, 0], [2, 0, 1], [8, 0, -1]];
+    // the free cell beside one nobody walks onto (a chair), nearest (nx, ny); d: the way from the chair to it
+    function besideCell(x, y, nx, ny, ev) {
+        let best = null, score = Infinity;
+        for (const [d, dx, dy] of SIDES) {
+            const cx = x + dx, cy = y + dy;
+            if (!openCell(cx, cy) || takenCell(cx, cy, ev)) continue;
+            const s = Math.abs(cx - nx) + Math.abs(cy - ny) + (dy ? 40 : 0);   // (seated sideways: in and out by the side whenever it is free)
+            if (s < score) { score = s; best = { x: cx, y: cy, d }; }
+        }
+        return best;
+    }
+    function stepOver(ev, d) { ev.setThrough(true); ev.moveStraight(d); ev.setThrough(false); }
+    const rising = new WeakMap(), RISE_FRAMES = 18;   // (getting up from a chair before the step off it: Przytulna draws it)
+    // one step of the way in the room; true when it is there
+    function walkIndoor(ev, st, tx, ty) {
+        if (ev.x === tx && ev.y === ty) { rising.delete(ev); return true; }
+        if (!openCell(ev.x, ev.y)) {                     // up from a chair: he gets up, then a step aside
+            const off = besideCell(ev.x, ev.y, tx, ty, ev), t = (rising.get(ev) || 0) + 1;
+            if (!off) return false;
+            if (t < RISE_FRAMES) { rising.set(ev, t); return false; }
+            rising.delete(ev);
+            stepOver(ev, off.d);
+            return false;
+        }
+        let gx = tx, gy = ty;
+        if (!openCell(tx, ty)) {                         // to a chair: to the cell beside it, the last step over it
+            const by = besideCell(tx, ty, ev.x, ev.y, ev);
+            if (!by) return false;
+            if (ev.x === by.x && ev.y === by.y) { stepOver(ev, 10 - by.d); return false; }
+            gx = by.x; gy = by.y;
+        }
+        const H = window.Hunting, RA = window.RoamingActor;
+        const d = H && H.path8 ? H.path8(ev, gx, gy, { key: "town" }).dir : ev.findDirectionTo(gx, gy);
+        if (d > 0 && (RA ? RA.canStep(ev, ev.x, ev.y, d) : ev.canPass(ev.x, ev.y, d))) {
+            if (RA) RA.step(ev, d); else ev.moveStraight(d);
+            st.stuck = 0;
+            return false;
+        }
+        if (++st.stuck > 45) {                           // someone in the way: a moment, then past them
+            ev.setThrough(true);
+            const dir = ev.findDirectionTo(gx, gy);
+            if (dir > 0) ev.moveStraight(dir);
+            ev.setThrough(false);
+            if (st.stuck > 240) { if (!takenCell(gx, gy, ev)) ev.locate(gx, gy); st.stuck = 0; }
+        }
+        return false;
+    }
+    const walkingIn = new WeakSet();   // (on its way to its place: it turns the place's way when there)
+    // indoors: there while the plan has them inside this very place, hidden otherwise. instant: nobody saw it happen
+    function placeIndoor(ev, instant) {
         const res = resOf(ev.eventId());
         if (!res) return;
         const st = stateOf(ev), e = entryAt(res, hourNow());
         const name = e.act === "inside" && !absent(res) ? indoorName(res, e) : null;
         const at = name ? indoorSpot($dataMap.events, $gameMap.mapId(), name) : null;
-        if (at && st.hidden !== false) { ev.locate(at[0], at[1]); ev.setDirection(at[2]); show(ev, st); }
-        else if (at && (ev.x !== at[0] || ev.y !== at[1]) && !talking(ev)) { ev.locate(at[0], at[1]); ev.setDirection(at[2]); }
-        else if (!at && !st.hidden) hide(ev, st);
         st.here = !!at;
+        if (instant || st.held || !roomDoors().length) {
+            rising.delete(ev);
+            if (at && st.hidden !== false) { ev.locate(at[0], at[1]); ev.setDirection(at[2]); show(ev, st); }
+            else if (at && (ev.x !== at[0] || ev.y !== at[1]) && !talking(ev)) { ev.locate(at[0], at[1]); ev.setDirection(at[2]); }
+            else if (!at && !st.hidden) hide(ev, st);
+            return;
+        }
+        if (talking(ev) || ev.isMoving()) return;
+        if (at) {
+            if (st.hidden !== false) {                   // the hour has come: in by the door (the hero in the doorway: in a moment)
+                const door = nearestDoor(at[0], at[1]);
+                if (takenCell(door.x, door.y, ev)) return;
+                ev.locate(door.x, door.y); ev.setDirection(8); show(ev, st); st.stuck = 0;
+                walkingIn.add(ev);
+                return;
+            }
+            if (!walkIndoor(ev, st, at[0], at[1])) { walkingIn.add(ev); return; }
+            if (walkingIn.delete(ev)) ev.setDirection(at[2]);
+            return;
+        }
+        if (st.hidden) return;
+        const door = nearestDoor(ev.x, ev.y);            // the hour is up: out by the door
+        if (walkIndoor(ev, st, door.x, door.y)) hide(ev, st);
     }
     function residents() {
         if (!$gameMap) return [];
@@ -306,7 +402,7 @@
         spotMap = null;
         lastHour = null;
         if (isTown()) placeAll();
-        else for (const ev of residents()) { stateOf(ev).hidden = null; placeIndoor(ev); }
+        else for (const ev of residents()) { stateOf(ev).hidden = null; placeIndoor(ev, true); }
     };
 
     // ------------------------------------------------------------------
@@ -435,7 +531,11 @@
         if (isTown()) tick();
         else {
             const list = residents();
-            if (list.length) { const h = hourNow(); for (const ev of list) { placeIndoor(ev); barks(ev, h); } }
+            if (list.length) {
+                const h = hourNow(), dh = lastHour === null ? 0 : Math.abs(h - lastHour), jump = Math.min(dh, 24 - dh) > 0.25;   // (slept, F9: straight where they should be)
+                lastHour = h;
+                for (const ev of list) { placeIndoor(ev, jump); barks(ev, h); }
+            }
         }
     };
 
@@ -486,6 +586,8 @@
     // ------------------------------------------------------------------
     const api = {
         RESIDENTS: RES, spot, entryAt, placeAll, talk, residents, homeOf, HOMES,
+        // (2026-11-05) frames into getting up from a chair, -1: not getting up
+        risingT: ev => (rising.has(ev) ? rising.get(ev) : -1),
         // (2026-10-23) old: Tawerna.talk.takeover instead (docs/ROZMOWY.md)
         addTalkHook,
         say: (key, text) => { const ev = api.eventOf(key), SB = T.api("SpeechBubbles"); if (ev && SB && !stateOf(ev).hidden) SB.say(ev, text); },

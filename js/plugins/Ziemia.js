@@ -159,8 +159,12 @@
     // 1. EDGES
     // ------------------------------------------------------------------
     // the A2 ground kinds that are blended: grass (several), earth, cobbles, mud stones - walls, planks, water, flowers and the blank are not
-    const ALLOW = new Set([0, 1, 3, 4, 5, 8, 9, 10, 11, 15, 18, 19, 20, 21, 23, 30]);
-    const OVERLAY = new Set([12, 13, 31]);   // soft overlays of the A2 sheet (flowers, the feather pieces): the ground is painted, the overlay's own pieces drawn again on top
+    const ALLOW_9 = new Set([0, 1, 3, 4, 5, 8, 9, 10, 11, 15, 18, 19, 20, 21, 23, 30]);
+    // (zestaw 11, mapy próbne 990/991: A2-34/35 to mur z cegieł, 46 ramka, 47 półka skalna - nie są gruntem do mieszania)
+    // (2026-11-05, on more maps: A2-20/21 are the pits with their own dark rim, drawn whole - blended they lost it and went pale)
+    const ALLOW_11 = new Set([0, 1, 3, 4, 5, 8, 9, 10, 11, 15, 23]);
+    const OVERLAY_9 = new Set([12, 13, 31]);
+    const OVERLAY_11 = new Set([12, 13]);   // soft overlays of the A2 sheet (flowers, the feather pieces): the ground is painted, the overlay's own pieces drawn again on top
     const TX = 4, CT = TW / TX, WT = CT * 3, RT = CT + 2;   // a texel 4 px, a cell 12 texels, the window 3 cells, the sampled ring 14 texels
     // blur radius in texels (twice), noise strength, the pixel speckle, the width of the feather at a line, and how much more a small patch's
     // edge pieces count (they are faint: else it melts away in the blur)
@@ -197,6 +201,7 @@
         const key = dataKey();
         if (ST && ST.key === key) { ST.map = $dataMap; return ST; }
         dropState();
+        const ALLOW = $gameMap.tilesetId() === 11 ? ALLOW_11 : ALLOW_9, OVERLAY = $gameMap.tilesetId() === 11 ? OVERLAY_11 : OVERLAY_9;
         const W = $gameMap.width(), H = $gameMap.height(), flags = $gameMap.tilesetFlags(), kind = new Uint8Array(W * H), rels = [];
         const ovs = new Uint16Array(W * H), can = new Uint8Array(W * H), k0s = new Uint8Array(W * H), k1s = new Uint8Array(W * H), shp = new Uint8Array(W * H), shape = id => (id - 2816) % 48;
         const kindIdx = r => { let k = rels.indexOf(r) + 1; if (!k) k = rels.push(r); return k; };
@@ -429,8 +434,9 @@
             const x = ci % W, y = (ci / W) | 0;
             if (x < x0 - RELEASE || x > x1 + RELEASE || y < y0 - RELEASE || y > y1 + RELEASE) { st.painted.delete(ci); st.free.push(slot); this.dropCell(ci); }
         }
-        // (what is seen: drawn; the rest of the kept cells off - a few hundred sprites would be walked by the renderer for nothing)
-        for (const [ci, s] of this._cells) { const x = ci % W, y = (ci / W) | 0; s.renderable = x >= x0 - 1 && x <= x1 + 1 && y >= y0 - 1 && y <= y1 + 1; }
+        // (what is seen: drawn; the rest of the kept cells off - a few hundred sprites would be walked by the renderer for nothing; 2026-11-05: visible, not
+        // renderable - a sprite only not drawn still had its matrix worked out on every frame)
+        for (const [ci, s] of this._cells) { const x = ci % W, y = (ci / W) | 0; s.visible = x >= x0 - 1 && x <= x1 + 1 && y >= y0 - 1 && y <= y1 + 1; }
     };
     Sprite_Ziemia.prototype.work = function(budget) {
         const st = ST;
@@ -446,7 +452,7 @@
             if (r >= 0) {
                 this.addCell(ci, r);
                 const s = this._cells.get(ci), x = ci % st.W, y = (ci / st.W) | 0;
-                s.renderable = x >= x0 - 1 && x <= x1 + 1 && y >= y0 - 1 && y <= y1 + 1;
+                s.visible = x >= x0 - 1 && x <= x1 + 1 && y >= y0 - 1 && y <= y1 + 1;
                 stat.cells++;
             }
             if (performance.now() - t0 > budget) break;
@@ -484,18 +490,21 @@
     // ------------------------------------------------------------------
     // 2. SHADE: contact shade at the foot of things
     // ------------------------------------------------------------------
-    const THING = /^!\$(Pine|Tree|Sapling|Rock|Boulder|Bush|Stump|Trunk|Logs|Zas_|Orzel_G|Mt_|Pod_|Zak_|Low_|Zi_|Big_Trees)/;
+    // (2026-11-05: not !$Big_Trees - their pictures have their dark round shadow in them, and a spot of it lay at the side of the trunk)
+    const THING = /^!\$(Pine|Tree|Sapling|Rock|Boulder|Bush|Stump|Trunk|Logs|Zas_|Orzel_G|Mt_|Pod_|Zak_|Low_|Zi_)/;
     const FLAT = /^!\$(Bush_(Clover|Grass|Fern|Flower|Snow|Bud)|Rock_Pebbles|Zas_(Kaluza|Plot)|Zi_(Len|Krwawnik|Ziele|Galaz|Galaz2|Kamien|Kamienie))/;   // (low plants and flat things: no foot to shade)
     const baseCache = {};
-    // the width and the place of a picture's foot: the opaque bottom rows of the frame (pattern 1, facing down)
-    function baseOf(name) {
-        if (baseCache[name] !== undefined) return baseCache[name];
+    // the width and the place of a picture's foot: the opaque bottom rows of the event's OWN frame (2026-11-05: always pattern 1 facing down - a sheet
+    // holding several things in its frames, a graveyard's wall, a gate, got a foot of something else, a dark spot on the wall or the road)
+    function baseOf(name, pattern, dir) {
+        const key = name + "|" + pattern + "|" + dir;
+        if (baseCache[key] !== undefined) return baseCache[key];
         const bm = ImageManager.loadCharacter(name);
         if (!bm || !bm.isReady()) return null;
         const fw = Math.floor(bm.width / 3), fh = Math.floor(bm.height / 4);
         let out = false;
         try {
-            const img = bm.context.getImageData(fw, 0, fw, fh).data;
+            const img = bm.context.getImageData(fw * pattern, fh * (dir / 2 - 1), fw, fh).data;
             let last = -1;
             for (let y = fh - 1; y >= 0 && last < 0; y--) for (let x = 0; x < fw; x++) if (img[(y * fw + x) * 4 + 3] > 100) { last = y; break; }
             if (last >= 0) {
@@ -504,7 +513,7 @@
                 out = { w: hi - lo + 1, off: (lo + hi) / 2 - fw / 2, up: fh - 1 - last, fw, fh };
             }
         } catch (e) { out = false; }
-        return (baseCache[name] = out);
+        return (baseCache[key] = out);
     }
     let blob = null;
     function blobBitmap() {
@@ -552,14 +561,14 @@
         for (const ev of $gameMap.events()) {
             const nm = ev.characterName();
             if (!nm || ev._erased || ev.isTransparent() || !THING.test(nm) || FLAT.test(nm)) continue;
-            const base = baseOf(nm);
+            const base = baseOf(nm, ev.pattern(), ev.direction());
             if (!base) continue;
-            const id = ev.eventId(), sig = nm + "|" + ev.x + "|" + ev.y, old = this._items.get(id);
+            const id = ev.eventId(), sig = nm + "|" + ev.x + "|" + ev.y + "|" + ev.pattern() + "|" + ev.direction(), old = this._items.get(id);
             seen.add(id);
             if (old && old.sig === sig) continue;
             if (old) this.removeChild(old.spr);
             // the foot: a tree's trunk is narrow (a wider spot than the trunk), a rock or a bush sits with its whole width
-            const tree = /^!\$(Pine|Tree|Sapling|Big_Trees)/.test(nm), rock = /^!\$(Rock|Boulder|Mt_)/.test(nm);
+            const tree = /^!\$(Pine|Tree|Sapling)/.test(nm), rock = /^!\$(Rock|Boulder|Mt_)/.test(nm);
             const w = Math.max(tree ? 46 : 28, Math.min(tree ? 84 : 160, base.w * (tree ? 2.2 : rock ? 1.25 : 1.15) + (tree ? 10 : 12)));
             const spr = this.shadeSprite((ev.x + 0.5) * TW + base.off, (ev.y + 1) * TW - base.up - 2, w, Math.max(10, w * (tree ? 0.4 : 0.34)), tree ? 0.8 : rock ? 0.75 : 0.65);
             this._items.set(id, { sig, spr });
@@ -596,12 +605,17 @@
         if (!show) { if (this._items.size || this._farm.length) this.clear(); this._age = 0; return; }   // (2026-10-31) _age 0: the shade is laid at the first update after the switch back on, not within 20 frames)
         const mk = $gameMap.mapId() + ":" + ($dataMap && $dataMap.events ? $dataMap.events.length : 0);
         if (mk !== this._mapKey) { this._mapKey = mk; this.clear(); this._age = 0; }
-        if (this._age++ % 20 === 0) { this.syncEvents(); this.syncFarm(); }
+        const synced = this._age++ % 20 === 0;
+        if (synced) { this.syncEvents(); this.syncFarm(); }
         const ox = Math.round(-$gameMap.displayX() * TW), oy = Math.round(-$gameMap.displayY() * TW);
         this.x = ox; this.y = oy;
         const r = T.view.rect();
         const cull = !(window.Wydajnosc && Wydajnosc.opts && Wydajnosc.opts.cull === false);
-        const test = s => { s.renderable = !cull || (s._box[2] + ox >= r.x0 && s._box[0] + ox <= r.x1 && s._box[3] + oy >= r.y0 && s._box[1] + oy <= r.y1); };
+        // (2026-11-05, on the bigger maps: only when the view moved or the things changed; visible, not renderable - hundreds of spots off the screen had their matrices worked out on every frame)
+        const seen = ox + "," + oy + "," + r.x0 + "," + r.y0 + "," + cull;
+        if (!synced && seen === this._seenView) return;
+        this._seenView = seen;
+        const test = s => { s.visible = !cull || (s._box[2] + ox >= r.x0 && s._box[0] + ox <= r.x1 && s._box[3] + oy >= r.y0 && s._box[1] + oy <= r.y1); };
         for (const it of this._items.values()) test(it.spr);
         for (const s of this._farm) test(s);
     };

@@ -72,7 +72,7 @@
     const T = window.Tawerna;
     if (!T) throw new Error("Wydajnosc.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     const PLUGIN = "Wydajnosc";
-    const opts = { leaf: true, filterArea: true, cull: true, idleFilters: true, lazy: true, night: true, outline: true, lightGpu: true, still: true };
+    const opts = { leaf: true, filterArea: true, cull: true, idleFilters: true, lazy: true, night: true, outline: true, lightGpu: true, still: true, sameSheets: true, quickFade: true, transferSnap: true };
     const stats = { culled: 0, frame: -1, drawing: -1, lazy: 0, lazyFrame: -1, idle: 0, idleFrame: -1 };
     // opts.dispatch: the character sprites' hooks run only for the sprites they are for (Tawerna.sprite, TawernaCore.js); false: every
     // hook for every sprite, as the chain of wrappers did
@@ -587,6 +587,49 @@
             reset() { auto.spriteset = null; auto.map = 0; auto.strikes = { high: 0, medium: 0 }; auto.log = []; auto.cameUp = null; autoReset(AUTO.settle); return true; }
         }
     };
+
+    // ---- a change of map (2026-11-03, the player: the maps should "super szybko się pojawiać"; tools/przejscia/pomiar.js: 1.3 s on average,
+    // 3.1 s on a computer 4x slower). The tilemap sent all its sheets to the graphics card again for every new map, though the same pictures
+    // were there from the last one (~90 ms, ~350 ms at CPU 4x): a slot that already holds the very picture is left as it is (the tileset
+    // bitmaps are cached by name and nothing draws on them; a new set of the renderer's textures - a lost context - starts empty). And the
+    // fades of a change of map are half the engine's (12 frames out, 12 in); the scenes' own fades (a talk, the prologue) keep theirs.
+    const QUICK_FADE = 12;
+    const _updateTextures = Tilemap.Renderer.prototype.updateTextures;
+    Tilemap.Renderer.prototype.updateTextures = function(renderer, images) {
+        if (!opts.sameSheets) { this._wySheets = null; return _updateTextures.call(this, renderer, images); }
+        if (this._wySheetsOf !== this._internalTextures || !this._wySheets) { this._wySheetsOf = this._internalTextures; this._wySheets = []; }
+        const had = this._wySheets, gl = renderer.gl;
+        for (let i = 0; i < images.length; i++) {
+            if (images[i] && had[i] === images[i]) continue;
+            // (the engine's own upload of one slot)
+            renderer.texture.bind(this._internalTextures[i >> 2], 0);
+            const x = 1024 * (i % 2), y = 1024 * ((i >> 1) % 2);
+            gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0);
+            gl.texSubImage2D(gl.TEXTURE_2D, 0, x, y, 1024, 1024, gl.RGBA, gl.UNSIGNED_BYTE, this._clearBuffer);
+            gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
+            gl.texSubImage2D(gl.TEXTURE_2D, 0, x, y, gl.RGBA, gl.UNSIGNED_BYTE, images[i]);
+            had[i] = images[i];
+        }
+    };
+    let quickNow = false;
+    for (const m of ["fadeInForTransfer", "fadeOutForTransfer"]) {
+        const f = Scene_Map.prototype[m];
+        Scene_Map.prototype[m] = function() { quickNow = opts.quickFade; try { return f.apply(this, arguments); } finally { quickNow = false; } };
+    }
+    const _mapFadeSpeed = Scene_Map.prototype.fadeSpeed;
+    Scene_Map.prototype.fadeSpeed = function() { return quickNow ? QUICK_FADE : _mapFadeSpeed.call(this); };
+    // (2026-11-06, the player: "jak drastycznie przyspieszyć wczytywanie mapy") the engine takes a picture of the whole screen as a map
+    // ends - the background a menu or a scene opened from the map shows behind it -, also when the next scene is only the next map
+    // (~11 ms, the picture read back from the graphics card): then it is skipped (opts.transferSnap); the scenes opened from the map
+    // (the menu, the dice, the names) still get theirs
+    let skipSnap = false;
+    const _mapTerminate = Scene_Map.prototype.terminate;
+    Scene_Map.prototype.terminate = function() {
+        skipSnap = opts.transferSnap && SceneManager.isNextScene(Scene_Map);
+        try { return _mapTerminate.apply(this, arguments); } finally { skipSnap = false; }
+    };
+    const _snapForBackground = SceneManager.snapForBackground;
+    SceneManager.snapForBackground = function() { if (skipSnap) return; return _snapForBackground.apply(this, arguments); };
 
     window.Wydajnosc = T.register(PLUGIN, { opts, stats, offTarget, settleFilters, gfx, quality });
 })();

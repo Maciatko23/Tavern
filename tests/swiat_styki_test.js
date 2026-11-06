@@ -11,7 +11,8 @@ const WYJATKI = [[13, 175], [175, 13], [175, 934], [934, 175], [175, 120], [120,
 kit.test({ port: Number(process.env.CDP_PORT) || 9396, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, minimap: false });
     await t.frames(10);
-    const ids = await t.json(`Object.keys(SwiatData.maps).map(Number)`);
+    // (2026-11-01) the test maps lie off the island on purpose (x0 >= 1500, tools/mapa_probna): not part of the world's contract
+    const ids = await t.json(`Object.keys(SwiatData.maps).map(Number).filter(k => SwiatData.maps[k][0] < 1500)`);
     t.check("każda mapa świata ma plik (żadna kratka nie prowadzi do mapy bez pliku)", await t.json(`Object.keys(SwiatData.maps).every(k => !!$dataMapInfos[k])`) && !ids.includes(936));
     t.check("nowe mapy 960-964 w świecie", [960, 961, 962, 963, 964].every(i => ids.includes(i)), ids);
     // ---- pomiar: żadnej niewidzialnej ściany ani lądu donikąd (po stronie mapy; sąsiad: statyczny swiat_styki.py)

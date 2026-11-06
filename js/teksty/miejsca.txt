@@ -334,3 +334,11 @@ mapa.963.opis = Trawa po kolana i cisza, w której słychać, jak daleko jest do
 mapa.964.pod = ostatni skrawek lądu na zachodzie
 mapa.964.opis = Dalej już tylko woda i mewy, które patrzą na ciebie tak, jakbyś był zagubiony.
 
+
+# 990 Mapa próbna A
+mapa.990.pod = próba pieczątek, zestaw 11
+mapa.990.opis = Kawałek po kawałku wszystko, co jest w świecie, z map wzorcowych.
+
+# 991 Mapa próbna B
+mapa.991.pod = próba pieczątek, zestaw 9
+mapa.991.opis = To samo w zestawie Kruczego Jaru; do porównania z mapą A.

@@ -137,6 +137,7 @@
         return $gameMap.mapId() + ":" + $gameMap.tilesetId() + ":" + W + "x" + H + ":" + h;
     }
     function dropGeo(g) {
+        endJob(g, true);
         for (const k in g.atlas || {}) for (const at of g.atlas[k]) at.bm.destroy();
         g.atlas = null; g.chunks = null;
     }
@@ -204,11 +205,12 @@
     //   - where the new line cuts into the old land the sea is drawn in (its own shading by the depth from the shore)
     // The tint and the foam follow the same line (wAt). Built in pieces over the first frames after the map is shown.
     // ------------------------------------------------------------------
-    const BRZEG_MAPS = [125, 155, 157, 159, 162, 165, 120, 175, 168, 17, 18, 960, 961, 962, 963, 964];   // (styki 2026-10-31: the new maps of the old holes)   // (the island's sea maps - none of them is the player's: docs/mapy/PRZEGLAD.md; 2026-10-30 the east / south ends 159, 120, 175, 168, 17, 18)
+    const BRZEG_MAPS = [990, 125, 155, 157, 159, 162, 165, 120, 175, 168, 17, 18, 960, 961, 962, 963, 964, 21, 900, 901, 910, 912, 914, 917, 918, 920, 922, 923, 931, 933, 934, 935, 950, 951, 20];   // (2026-11-05: every map with the island's sea, tools/laka/install_brzeg.py)   // (styki 2026-10-31: the new maps of the old holes)   // (the island's sea maps - none of them is the player's: docs/mapy/PRZEGLAD.md; 2026-10-30 the east / south ends 159, 120, 175, 168, 17, 18)
     const SHORE_GROW = 0.3;   // (the new line lies about 19 px out in the old water: nothing of the sea has to be drawn over the old land, and the square corners are covered)
     const SD_Q = 4, CH = 192, DMAX = 576, RING_W = 11, WP_W = 24;
     const brzegMap = () => has() && seaHere() && (BRZEG_MAPS.indexOf($gameMap.mapId()) >= 0 || !!window.BRZEG_ALL);
-    function buildField(g) {
+    // (2026-11-06) the field's maths only needs g.type / W / H / tw / th and the paintable mask P: pure, so a worker can run it as well
+    function buildFieldCore(g, P) {
         const tw = g.tw, th = g.th, TW = Math.ceil(g.W * tw / SD_Q), TH = Math.ceil(g.H * th / SD_Q), f = new Float32Array(TW * TH);
         for (let y = 0; y < TH; y++) {
             const cy = Math.min(g.H - 1, Math.floor((y + 0.5) * SD_Q / th));
@@ -236,11 +238,10 @@
         }
         const dW = chamfer(wm, TW, TH), dL = chamfer(lm, TW, TH), sd = new Float32Array(TW * TH);
         for (let i = 0; i < TW * TH; i++) sd[i] = (wm[i] ? -(dL[i] / 3 - 0.5) : (dW[i] / 3 - 0.5)) * SD_Q;
-        g.sd = sd; g.TW = TW; g.TH = TH;
         // the mask of the cells where the strip may be painted, blurred: the strip's edge by paths, hills and walls is a smooth curve
         // and the earth's field (the paths' and the bare ground's cells, blurred): earth or grass is chosen by the pixel, so their border
         // in the strip is a soft line, not the tiles' squares (2026-10-30, the player: "kanciaście")
-        const P = paintable(g), pm = new Float32Array(TW * TH), em = new Float32Array(TW * TH);
+        const pm = new Float32Array(TW * TH), em = new Float32Array(TW * TH);
         for (let y = 0; y < TH; y++) {
             const cy = Math.min(g.H - 1, Math.floor((y + 0.5) * SD_Q / th));
             for (let x = 0; x < TW; x++) {
@@ -251,7 +252,11 @@
         }
         boxBlur(pm, TW, TH, 5);
         boxBlur(em, TW, TH, 4);
-        g.pm = pm; g.em = em;
+        return { sd, TW, TH, pm, em };
+    }
+    function buildField(g) {
+        const r = buildFieldCore(g, paintable(g));
+        g.sd = r.sd; g.TW = r.TW; g.TH = r.TH; g.pm = r.pm; g.em = r.em;
     }
     const fieldAt = (g, s, px, py) => K.sample(s, g.TW, g.TH, SD_Q, px, py);
     const pmAt = (g, px, py) => fieldAt(g, g.pm, px, py);
@@ -377,8 +382,10 @@
     }
     // one chunk (CH x CH px) of the redrawn shore; null: nothing to draw there
     // (shared atlas bitmaps: a few big textures instead of hundreds of small ones keep the drawing in a few batches)
-    function paintChunk(g, T, ccx, ccy) {
-        const X0 = ccx * CH, Y0 = ccy * CH, img = new ImageData(CH, CH), d = img.data, P = paintable(g);
+    // (2026-11-06) paintCore is pure (g = the inputs: type, W, H, tw, th, paint, rim, deco, rimPx, tilePx, sd, TW, TH, pm, em), so the worker runs
+    // the very same code; it returns the pixels (CH x CH RGBA), null (nothing to draw) or undefined (a tile's pixels are missing)
+    function paintCore(g, T, ccx, ccy) {
+        const X0 = ccx * CH, Y0 = ccy * CH, d = new Uint8ClampedArray(CH * CH * 4), P = g.paint, WH = g.W * g.H;
         let any = false;
         const NB = [[12, 0], [-12, 0], [0, 12], [0, -12], [9, 9], [-9, -9], [9, -9], [-9, 9]];
         for (let y = 0; y < CH; y++) for (let x = 0; x < CH; x++) {
@@ -399,7 +406,7 @@
                 if (alpha > 0.02) col = landPixel(T, wx, wy, sd, ((((wy % 48) + 48) % 48) * 48 + (((wx % 48) + 48) % 48)) * 4, earthAt(g, wx + 0.5, wy + 0.5));
                 const rid = g.rim ? g.rim[c] : 0;
                 if (col && rid) {   // (a terrace's rim: its own stones over the painted ground - the raised ground's edge stays seen)
-                    const R = a5Pixels(rid);
+                    const R = g.rimPx[rid];
                     if (!R) return undefined;   // (its sheet is loading: tried again)
                     const q = ((((wy % 48) + 48) % 48) * 48 + (((wx % 48) + 48) % 48)) * 4;
                     if (rimStone(R, q, rimEarth(rid))) col = [R[q], R[q + 1], R[q + 2]];
@@ -409,13 +416,13 @@
         }
         if (!any) return null;
         // the ordinary decorations (layers 1-3, not the upper-layer ones) drawn again on the painted pixels
-        const flags = $gameMap.tilesetFlags(), tw = g.tw, th = g.th;
+        const tw = g.tw, th = g.th;
         for (let cy = Math.floor(Y0 / th); cy <= Math.min(g.H - 1, Math.floor((Y0 + CH - 1) / th)); cy++) for (let cx2 = Math.floor(X0 / tw); cx2 <= Math.min(g.W - 1, Math.floor((X0 + CH - 1) / tw)); cx2++) {
             if (!P[cy * g.W + cx2]) continue;
             for (let z = 1; z < 4; z++) {
-                const id = $gameMap.tileId(cx2, cy, z);
-                if (!(id > 0 && id < 2048) || (flags[id] & 0x10)) continue;
-                const ti = tileImage(id);
+                const id = g.deco[(z - 1) * WH + cy * g.W + cx2];   // (0: nothing, or an upper-layer tile)
+                if (!id) continue;
+                const ti = g.tilePx[id];
                 if (!ti) return undefined;   // (its sheet is loading: tried again)
                 for (let py = 0; py < th; py++) {
                     const y = cy * th + py - Y0;
@@ -432,9 +439,139 @@
                 }
             }
         }
+        return d;
+    }
+    // the decorations (layers 1-3, not the upper-layer ones) of the paintable cells, and the pixels of every tile the chunks read (the terrace
+    // rims, the decorations); false while a tileset sheet is still loading
+    function gatherTiles(g) {
+        if (g.tilePx) return true;
+        const W = g.W, H = g.H, WH = W * H, P = paintable(g), flags = $gameMap.tilesetFlags(), deco = new Uint16Array(3 * WH), tilePx = {}, rimPx = {};
+        for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+            const i = y * W + x;
+            if (!P[i]) continue;
+            for (let z = 1; z < 4; z++) {
+                const id = $gameMap.tileId(x, y, z);
+                if (id > 0 && id < 2048 && !(flags[id] & 0x10)) deco[(z - 1) * WH + i] = id;
+            }
+        }
+        for (let i = 0; i < 3 * WH; i++) { const id = deco[i]; if (id && !tilePx[id]) { const ti = tileImage(id); if (!ti) return false; tilePx[id] = ti; } }
+        if (g.rim) for (let i = 0; i < WH; i++) { const id = g.rim[i]; if (id && !rimPx[id]) { const R = a5Pixels(id); if (!R) return false; rimPx[id] = R; } }
+        g.deco = deco; g.rimPx = rimPx; g.tilePx = tilePx;
+        return true;
+    }
+    function paintChunk(g, T, ccx, ccy) {   // (the main-thread path: today's, and the fallback)
+        paintable(g);
+        if (!gatherTiles(g)) return undefined;   // (a sheet is loading: tried again)
+        const d = paintCore(g, T, ccx, ccy);
+        if (!d) return d;
         const sl = atlasSlot(g, "patch", CH, 1536);
-        sl.at.bm.context.putImageData(img, sl.sx, sl.sy);
+        sl.at.bm.context.putImageData(new ImageData(d, CH, CH), sl.sx, sl.sy);
         return sl;
+    }
+
+    // ------------------------------------------------------------------
+    // The shore's chunks in Web Workers (2026-11-06; the first entry onto a shore map blocked the main thread ~1.3 s, ~0.65 s of it in
+    // paintCore). A small pool of dedicated workers is made from a Blob whose source is built from the PURE functions above (toString), so
+    // no file has to be shipped and the worker runs the very same code (the pixels are identical). A job per shore map: the inputs go to
+    // every worker once (each builds the field itself), the chunks are dealt out a few at a time, the pixels come back as ArrayBuffers and
+    // are put into the atlas by the sprite, a few per frame. Without Worker / Blob, or on any error, the main-thread path runs as before.
+    // The jobs live in this closure and on the shore geometry (g.job), never on a Game_* object.
+    // ------------------------------------------------------------------
+    const pool = { list: null, dead: false, nextId: 1, jobs: {} };
+    const WINDOW = 3;   // chunks in flight per worker
+    function workerSource() {
+        const fn = (name, f) => "const " + name + " = " + String(f) + ";\n";
+        return '"use strict";\nconst SD_Q = ' + SD_Q + ', CH = ' + CH + ', DMAX = ' + DMAX + ', RING_W = ' + RING_W + ', SHORE_GROW = ' + SHORE_GROW + ';\n' +
+            fn("hash", hash) + fn("vnoise", vnoise) + fn("boxBlur", boxBlur) + fn("chamfer", chamfer) + fn("sample", K.sample) + "const K = { sample };\n" +
+            fn("lerp", lerp) + fn("rimStone", rimStone) + fn("rimGrass", rimGrass) + fn("rimEarth", rimEarth) +
+            fn("fieldAt", fieldAt) + fn("pmAt", pmAt) + fn("earthAt", earthAt) + fn("sdAt", sdAt) + fn("landPixel", landPixel) +
+            fn("buildFieldCore", buildFieldCore) + fn("paintCore", paintCore) +
+            "const ctxs = {};\n" +
+            "onmessage = function(e) {\n" +
+            "  const m = e.data;\n" +
+            "  try {\n" +
+            "    if (m.t === 'init') {\n" +
+            "      const g = { W: m.W, H: m.H, tw: m.tw, th: m.th, type: m.type, paint: m.P, rim: m.rim, deco: m.deco, rimPx: m.rimPx, tilePx: m.tilePx };\n" +
+            "      const f = buildFieldCore(g, m.P); g.sd = f.sd; g.TW = f.TW; g.TH = f.TH; g.pm = f.pm; g.em = f.em;\n" +
+            "      ctxs[m.id] = { g, T: m.T };\n" +
+            "    } else if (m.t === 'chunk') {\n" +
+            "      const c = ctxs[m.id]; if (!c) { postMessage({ t: 'chunk', id: m.id, n: m.n, buf: null, und: true }); return; }\n" +
+            "      const d = paintCore(c.g, c.T, m.cx, m.cy);\n" +
+            "      if (d) postMessage({ t: 'chunk', id: m.id, n: m.n, buf: d.buffer }, [d.buffer]); else postMessage({ t: 'chunk', id: m.id, n: m.n, buf: null, und: d === undefined });\n" +
+            "    } else if (m.t === 'drop') delete ctxs[m.id];\n" +
+            "  } catch (err) { postMessage({ t: 'err', msg: String(err && err.stack || err) }); }\n" +
+            "};\n";
+    }
+    function failPool(why) {   // any trouble: no more workers, the unfinished chunks are painted on the main thread
+        if (pool.dead) return;
+        pool.dead = true;
+        console.warn("CzerwonaWoda: workers off, main thread paints (" + why + ")");
+        for (const id in pool.jobs) { const g = pool.jobs[id].g; g.noWorker = true; g.job = null; for (const c of g.chunks || []) c.fl = false; }
+        pool.jobs = {};
+        for (const w of pool.list || []) { try { w.terminate(); } catch (e) {} }
+    }
+    function getPool() {
+        if (pool.dead || window.CW_NOWORKER) return null;
+        if (pool.list) return pool;
+        pool.list = [];
+        try {
+            if (typeof Worker === "undefined" || typeof Blob === "undefined" || !window.URL || !URL.createObjectURL) throw new Error("no Worker / Blob");
+            const url = URL.createObjectURL(new Blob([workerSource()], { type: "text/javascript" })), hc = navigator.hardwareConcurrency || 4, n = hc >= 6 ? 3 : hc >= 3 ? 2 : 1;
+            for (let i = 0; i < n; i++) {
+                const w = new Worker(url);
+                w.load = 0;
+                w.onmessage = e => onWorkerMessage(w, e.data);
+                w.onerror = e => failPool(String((e && e.message) || "worker error"));
+                pool.list.push(w);
+            }
+        } catch (e) { failPool(String(e && e.message || e)); return null; }
+        return pool;
+    }
+    function onWorkerMessage(w, m) {
+        if (m.t === "err") { failPool(m.msg); return; }
+        const job = pool.jobs[m.id];
+        w.load = Math.max(0, w.load - 1);
+        if (!job) return;   // (a dropped job)
+        job.inbox.push(m);
+        pump(job);
+    }
+    function pump(job) {   // deal out the chunks, WINDOW per worker
+        // (only the map on the screen: a map left before its chunks were done keeps them for later - its drain deals the rest when it
+        // is on the screen again - instead of keeping the workers and the memory busy while the next map loads)
+        if (job.g !== geo) return;
+        const list = pool.list;
+        while (job.next < job.order.length) {
+            let w = null;
+            for (const x of list) if (x.load < WINDOW && (!w || x.load < w.load)) w = x;
+            if (!w) return;
+            const n = job.order[job.next++], c = job.g.chunks[n];
+            c.fl = true; w.load++;
+            w.postMessage({ t: "chunk", id: job.id, n, cx: c.cx, cy: c.cy });
+        }
+    }
+    function endJob(g, drop) {
+        const job = g.job;
+        if (!job) return;
+        g.job = null;
+        pool.lastMs = Math.round(performance.now() - job.t0);
+        delete pool.jobs[job.id];
+        if (drop && pool.list) for (const w of pool.list) w.postMessage({ t: "drop", id: job.id });
+    }
+    // starts the job of a shore map: false = use the main thread, null = wait (a sheet is loading), true = running
+    function startJob(g, TX) {
+        const p = getPool();
+        if (!p) return false;
+        paintable(g);
+        if (!gatherTiles(g)) return null;
+        const id = p.nextId++, job = { id, g, inbox: [], at: 0, order: [], next: 0, left: 0, t0: performance.now() };
+        job.order = g.chunks.map((c, i) => i).filter(i => !g.chunks[i].done);
+        job.left = job.order.length;
+        job.order.sort((a, b) => g.chunks[a].pri - g.chunks[b].pri);
+        g.job = job; p.jobs[id] = job;
+        const msg = { t: "init", id, W: g.W, H: g.H, tw: g.tw, th: g.th, type: g.type, P: g.paint, rim: g.rim || null, deco: g.deco, rimPx: g.rimPx, tilePx: g.tilePx, T: TX };
+        try { for (const w of p.list) w.postMessage(msg); } catch (e) { failPool(String(e && e.message || e)); return false; }
+        pump(job);
+        return true;
     }
 
     // ------------------------------------------------------------------
@@ -627,6 +764,13 @@
             const k = Math.floor(y * g.th / CH) * 1000 + Math.floor(x * g.tw / CH);
             if (!seen.has(k)) { seen.add(k); list.push({ cx: Math.floor(x * g.tw / CH), cy: Math.floor(y * g.th / CH), slot: null, done: false }); }
         }
+        // (the chunks on the screen first: the worker route waits only for them before the screen opens)
+        const sx = $gameMap.displayX() * g.tw, sy = $gameMap.displayY() * g.th, sw = Graphics.width, sh = Graphics.height, M = 96;
+        for (const c of list) {
+            const x0 = c.cx * CH, y0 = c.cy * CH;
+            c.vis = x0 < sx + sw + M && x0 + CH > sx - M && y0 < sy + sh + M && y0 + CH > sy - M;
+            c.pri = Math.hypot(x0 + CH / 2 - (sx + sw / 2), y0 + CH / 2 - (sy + sh / 2));
+        }
         g.chunks = list; this._queue = g;
     };
     Sprite_RedWater.prototype.addChunk = function(c) {
@@ -638,6 +782,11 @@
         const T = textures(g);
         if (!T) return;   // (a sheet is still loading)
         const t0 = performance.now();
+        if (!g.noWorker && !g.job && !g.chunks.every(c => c.done)) {
+            const r = startJob(g, T);
+            if (r === null) return;
+        }
+        if (g.job) return this.drainChunks(g, budget || 3, t0);
         let all = true;
         for (const c of g.chunks) {
             if (c.done) continue;
@@ -650,6 +799,28 @@
         flushAtlas(g);
         if (all) this._queue = null;   // (finished: nothing more to do each frame)
     };
+    // the chunks the workers have finished: put into the atlas a few at a time (the sprites are made here)
+    Sprite_RedWater.prototype.drainChunks = function(g, budget, t0) {
+        const job = g.job;
+        pump(job);   // (back on a map whose job was paused: the rest dealt out again)
+        while (job.at < job.inbox.length) {
+            const m = job.inbox[job.at++], c = g.chunks[m.n];
+            c.fl = false;
+            if (m.und) { failPool("a chunk came back without pixels"); break; }
+            if (m.buf && window.__cwKeep) window.__cwKeep[c.cx + "," + c.cy] = new Uint8ClampedArray(m.buf.slice(0));
+            if (m.buf) {
+                const sl = atlasSlot(g, "patch", CH, 1536);
+                sl.at.bm.context.putImageData(new ImageData(new Uint8ClampedArray(m.buf), CH, CH), sl.sx, sl.sy);
+                c.slot = sl; this.addChunk(c);
+            }
+            c.done = true; job.left--;
+            if (performance.now() - t0 > budget) break;
+        }
+        if (job.at > 64) { job.inbox.splice(0, job.at); job.at = 0; }
+        flushAtlas(g);
+        if (g.job && job.left <= 0) { endJob(g, true); this._queue = null; }
+        else if (!g.job) this.workPatches(budget);   // (the workers failed: the rest on this thread)
+    };
     // the look's key: the map, the day, red or grey and how red
     const lookKey = () => $gameMap.mapId() + ":" + day() + ":" + (seaHere() ? (phase().grey ? "g" : "r") + ":" + phase().red : "-");
     // (2026-10-30, the player: "widać trawę przed nakładką, dopiero po chwili się pojawia") while the screen is still black: the shore's
@@ -658,7 +829,9 @@
         if (!has()) return true;
         if (lookKey() !== this._key) this.rebuild();
         if (this.visible && this._queue) this.workPatches(24);
-        return !this.visible || !this._queue;
+        if (!this.visible || !this._queue) return true;
+        const g = this._queue;
+        return !!(g.job && g.chunks.every(c => !c.vis || c.done));   // (the workers: only the chunks on the screen are waited for)
     };
     const _Scene_Map_isReady = Scene_Map.prototype.isReady;
     Scene_Map.prototype.isReady = function() {
@@ -814,5 +987,6 @@
         fishAt, deadCatch, poisoned, state: () => S0(), GREY_RAINS, POISON_HOURS, POISON_CAP, Sprite_RedWater,
         // the share of red days over a stretch of the calendar (for the tests and the report)
         redShare: (d0, d1) => { let r = 0; for (let d = d0; d <= d1; d++) if (!phase(d).grey) r++; return r / (d1 - d0 + 1); } };
+    window.__cwDebug = { pool, paintCore, textures, geo: () => geo, CH };
     window.CzerwonaWoda = T.register(PLUGIN, api);
 })();

@@ -207,8 +207,9 @@ kit.test({ port: 9554, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.until("!$gamePlayer.isTransferring() && " + t.onMap(125), 30);
     await t.frames(30);
     const dn = await t.json(`[$gamePlayer.x, $gamePlayer.y]`);
-    t.check("miejsce tylko z orła (Map125): odkrycie na miejscu, skrytka przemytników daje łup, stare liny sprowadzają na dół (81,68)",
-        ea.found && ea2.stash && (ea2.gold > ea.gold || ea2.lina > 0 || ea2.crate > 0) && dn.join() === "81,68", { ea, ea2, dn });
+    // (2026-11-03: the place stands on a scarp - tools/orle_skarpy - the rope goes down its face to 99,52; before, a corridor in the leaves to 81,68)
+    t.check("miejsce tylko z orła (Map125): odkrycie na miejscu, skrytka przemytników daje łup, stare liny sprowadzają pod skarpę (99,52)",
+        ea.found && ea2.stash && (ea2.gold > ea.gold || ea2.lina > 0 || ea2.crate > 0) && dn.join() === "99,52", { ea, ea2, dn });
 
     // ---------------------------------------------------------------- 7.5 nurkowanie nad ziołem z klifu (Map157)
     await go(157, 72, 7, 10);

@@ -718,7 +718,8 @@
                         }
                     }
                 } else {
-                    this._roomHoles.push({ shape: "circle", sprite: light, radius: marker.radius, soft: !!marker.soft });
+                    // (<LightEdges:soft> in the map's note: every light's hole fades out softly, no scalloped dark edges between lights; flicker and people's shadows as before)
+                    this._roomHoles.push({ shape: "circle", sprite: light, radius: marker.radius, soft: !!marker.soft, edge: /<LightEdges:\s*soft\s*>/i.test(($dataMap && $dataMap.note) || "") });
                 }
             }
         }
@@ -953,7 +954,7 @@
                     // with people in its light: the hole on its own canvas first, their shadows cut out of it, then out of the darkness
                     const cx = hole.sprite.x * k, cy = hole.sprite.y * k, rad = reach * k, size = Math.ceil(rad * 2) + 2;
                     const ox = cx - rad - 1, oy = cy - rad - 1, c = Sun.scratchCanvas(size, size);
-                    punchCircleHole(c, cx - ox, cy - oy, rad, w, hole.soft);
+                    punchCircleHole(c, cx - ox, cy - oy, rad, w, hole.soft || hole.edge);
                     Sun.cutLightShadows(c, hole._blockers, k, ox, oy);
                     context.save();
                     context.setTransform(1, 0, 0, 1, 0, 0);
@@ -962,7 +963,7 @@
                     context.restore();
                     continue;
                 }
-                punchCircleHole(context, hole.sprite.x, hole.sprite.y, reach, w, hole.soft);
+                punchCircleHole(context, hole.sprite.x, hole.sprite.y, reach, w, hole.soft || hole.edge);
             } else {
                 punchConeHole(context, hole.sprite.x, hole.sprite.y, hole.geom, w);
             }
@@ -1056,7 +1057,7 @@
             if (hole.shape === "circle") {
                 if (hole._blockers && hole._blockers.length) continue;   // (paintBlockedGpu)
                 const reach = s._flicker ? hole.radius * s._flicker.s : hole.radius;
-                placeHole(holes, LightGpu.holeTexture(hole.soft ? 1 : 0, w), s.x * k, s.y * k, reach * k, w);
+                placeHole(holes, LightGpu.holeTexture(hole.soft || hole.edge ? 1 : 0, w), s.x * k, s.y * k, reach * k, w);
             } else {
                 const c = coneHole(hole), sp = holes.next(c.tex);
                 sp.position.set(s.x * k + c.x, s.y * k + c.y);
@@ -1081,7 +1082,7 @@
             const ox = cx - rad - 1, oy = cy - rad - 1;
             g.sm.texture = LG.canvasTexture(Sun.lightShadowMask(size, size, hole._blockers, k, ox, oy));
             g.sm.position.set(ox, oy);
-            placeHole(g.sg, LG.holeTexture(hole.soft ? 1 : 0, w), cx, cy, rad, w);
+            placeHole(g.sg, LG.holeTexture(hole.soft || hole.edge ? 1 : 0, w), cx, cy, rad, w);
             g.sg.end();
             LG.render(g.scratch.root, g.scratch, true);
             LG.drawSolo(g, g.scratch.rt, 0, 0, 1, 1, LG.ERASE, 1);

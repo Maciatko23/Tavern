@@ -1153,7 +1153,7 @@
         "bagWater", "bagWaterWeight", "fillSkin", "plotAt", "isSoilTile", "groundIsSoil", "naturalFarmland", "rake", "till",
         "plant", "harvest", "uproot", "groundInfoAt", "hasObjectTile", "cropStage", "isRipe", "daysLeft", "growthRate", "dig",
         "digClay", "potDryness", "takePot", "putPotOnTable", "takeTablePot", "tablePotDry", "water", "wateredRecently", "stoneAt",
-        "stoneSpot", "pickStone", "gatherAt", "gatherSpot", "pickGather", "isWaterTile", "seaHere", "waterMenu", "fillCan", "drink",
+        "stoneSpot", "pickStone", "gatherAt", "gatherSpot", "withEventCells", "pickGather", "isWaterTile", "seaHere", "waterMenu", "fillCan", "drink",
         "goFishing", "rainWater", "canCharges", "gatherRev", "rationWell", "rationLeft", "rationOf"]);
     exportFrom(B, ["mapAllowsBuilding", "startFreePlacement", "placeFree", "hutShutsIn", "hutSanitize", "enterHut", "leaveHut",
         "upgradeBuilding", "roomFor", "build", "demolish", "collect", "rest", "readyProduce", "snares", "snareBait", "snareSprung",

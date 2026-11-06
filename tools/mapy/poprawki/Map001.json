@@ -1,0 +1,882 @@
+{
+ "mapa": 1,
+ "nazwa": "TAWERNA",
+ "ops": [
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 47,
+   "y": 8,
+   "stary": 617,
+   "nowy": 0
+  },
+  {
+   "op": "dodaj_zd",
+   "id": 423,
+   "nazwa": "Na stole: D 1,13",
+   "zd": {
+    "id": 423,
+    "name": "Na stole: D 1,13",
+    "note": "<Px:0,20>",
+    "pages": [
+     {
+      "conditions": {
+       "actorId": 1,
+       "actorValid": false,
+       "itemId": 1,
+       "itemValid": false,
+       "selfSwitchCh": "A",
+       "selfSwitchValid": false,
+       "switch1Id": 1,
+       "switch1Valid": false,
+       "switch2Id": 1,
+       "switch2Valid": false,
+       "variableId": 1,
+       "variableValid": false,
+       "variableValue": 0
+      },
+      "directionFix": true,
+      "image": {
+       "characterIndex": 0,
+       "characterName": "",
+       "direction": 2,
+       "pattern": 0,
+       "tileId": 617
+      },
+      "list": [
+       {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+       }
+      ],
+      "moveFrequency": 3,
+      "moveRoute": {
+       "list": [
+        {
+         "code": 0,
+         "parameters": []
+        }
+       ],
+       "repeat": true,
+       "skippable": false,
+       "wait": false
+      },
+      "moveSpeed": 3,
+      "moveType": 0,
+      "priorityType": 0,
+      "stepAnime": false,
+      "through": false,
+      "trigger": 0,
+      "walkAnime": false
+     }
+    ],
+    "x": 47,
+    "y": 8
+   }
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 6,
+   "y": 35,
+   "stary": 619,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 6,
+   "y": 36,
+   "stary": 0,
+   "nowy": 619
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 7,
+   "y": 35,
+   "stary": 602,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 7,
+   "y": 36,
+   "stary": 0,
+   "nowy": 602
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 19,
+   "y": 35,
+   "stary": 603,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 19,
+   "y": 36,
+   "stary": 0,
+   "nowy": 603
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 33,
+   "y": 35,
+   "stary": 603,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 33,
+   "y": 36,
+   "stary": 0,
+   "nowy": 603
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 87,
+   "y": 47,
+   "stary": 603,
+   "nowy": 0
+  },
+  {
+   "op": "dodaj_zd",
+   "id": 424,
+   "nazwa": "Na stole: D 3,11",
+   "zd": {
+    "id": 424,
+    "name": "Na stole: D 3,11",
+    "note": "<Px:0,20>",
+    "pages": [
+     {
+      "conditions": {
+       "actorId": 1,
+       "actorValid": false,
+       "itemId": 1,
+       "itemValid": false,
+       "selfSwitchCh": "A",
+       "selfSwitchValid": false,
+       "switch1Id": 1,
+       "switch1Valid": false,
+       "switch2Id": 1,
+       "switch2Valid": false,
+       "variableId": 1,
+       "variableValid": false,
+       "variableValue": 0
+      },
+      "directionFix": true,
+      "image": {
+       "characterIndex": 0,
+       "characterName": "",
+       "direction": 2,
+       "pattern": 0,
+       "tileId": 603
+      },
+      "list": [
+       {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+       }
+      ],
+      "moveFrequency": 3,
+      "moveRoute": {
+       "list": [
+        {
+         "code": 0,
+         "parameters": []
+        }
+       ],
+       "repeat": true,
+       "skippable": false,
+       "wait": false
+      },
+      "moveSpeed": 3,
+      "moveType": 0,
+      "priorityType": 0,
+      "stepAnime": false,
+      "through": false,
+      "trigger": 0,
+      "walkAnime": false
+     }
+    ],
+    "x": 87,
+    "y": 47
+   }
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 30,
+   "y": 48,
+   "stary": 626,
+   "nowy": 0
+  },
+  {
+   "op": "dodaj_zd",
+   "id": 425,
+   "nazwa": "Na stole: D 2,14",
+   "zd": {
+    "id": 425,
+    "name": "Na stole: D 2,14",
+    "note": "<Px:0,20>",
+    "pages": [
+     {
+      "conditions": {
+       "actorId": 1,
+       "actorValid": false,
+       "itemId": 1,
+       "itemValid": false,
+       "selfSwitchCh": "A",
+       "selfSwitchValid": false,
+       "switch1Id": 1,
+       "switch1Valid": false,
+       "switch2Id": 1,
+       "switch2Valid": false,
+       "variableId": 1,
+       "variableValid": false,
+       "variableValue": 0
+      },
+      "directionFix": true,
+      "image": {
+       "characterIndex": 0,
+       "characterName": "",
+       "direction": 2,
+       "pattern": 0,
+       "tileId": 626
+      },
+      "list": [
+       {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+       }
+      ],
+      "moveFrequency": 3,
+      "moveRoute": {
+       "list": [
+        {
+         "code": 0,
+         "parameters": []
+        }
+       ],
+       "repeat": true,
+       "skippable": false,
+       "wait": false
+      },
+      "moveSpeed": 3,
+      "moveType": 0,
+      "priorityType": 0,
+      "stepAnime": false,
+      "through": false,
+      "trigger": 0,
+      "walkAnime": false
+     }
+    ],
+    "x": 30,
+    "y": 48
+   }
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 30,
+   "y": 52,
+   "stary": 592,
+   "nowy": 0
+  },
+  {
+   "op": "kafel",
+   "z": 3,
+   "x": 30,
+   "y": 53,
+   "stary": 0,
+   "nowy": 592
+  }
+ ],
+ "log": [
+  {
+   "kod": "P2",
+   "x": 47,
+   "y": 8,
+   "problem": "kafel 617 (D 1,13) stoi za blatem (nad jego tylną krawędzią): 11 px od płaskiego wierzchu w (47,8)",
+   "poprawka": "kafel 617 w (47,8) jako zdarzenie 423 z obrazkiem kafla, +20 px w pionie (9 px od krawędzi)"
+  },
+  {
+   "kod": "P2",
+   "x": 6,
+   "y": 35,
+   "problem": "kafel 619 (D 3,13) stoi na brzegu mebla (półprzezroczysty cień / rama) w (6,35)",
+   "poprawka": "przesunięto kafel 619 z (6,35) do (6,36) (2 px od krawędzi)"
+  },
+  {
+   "kod": "P2",
+   "x": 7,
+   "y": 35,
+   "problem": "kafel 602 (D 2,11) stoi na brzegu mebla (półprzezroczysty cień / rama) w (7,35)",
+   "poprawka": "przesunięto kafel 602 z (7,35) do (7,36) (5 px od krawędzi)"
+  },
+  {
+   "kod": "P2",
+   "x": 19,
+   "y": 35,
+   "problem": "kafel 603 (D 3,11) stoi na tylnej krawędzi blatu: 5 px od płaskiego wierzchu w (19,35)",
+   "poprawka": "przesunięto kafel 603 z (19,35) do (19,36) (13 px od krawędzi)"
+  },
+  {
+   "kod": "P2",
+   "x": 33,
+   "y": 35,
+   "problem": "kafel 603 (D 3,11) stoi na tylnej krawędzi blatu: 5 px od płaskiego wierzchu w (33,35)",
+   "poprawka": "przesunięto kafel 603 z (33,35) do (33,36) (13 px od krawędzi)"
+  },
+  {
+   "kod": "P2",
+   "x": 87,
+   "y": 47,
+   "problem": "kafel 603 (D 3,11) stoi na tylnej krawędzi blatu: 1 px od płaskiego wierzchu w (87,47)",
+   "poprawka": "kafel 603 w (87,47) jako zdarzenie 424 z obrazkiem kafla, +20 px w pionie (10 px od krawędzi)"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 48,
+   "problem": "kafel 626 (D 2,14) stoi za blatem (nad jego tylną krawędzią): 12 px od płaskiego wierzchu w (30,48)",
+   "poprawka": "kafel 626 w (30,48) jako zdarzenie 425 z obrazkiem kafla, +20 px w pionie (4 px od krawędzi)"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 52,
+   "problem": "kafel 592 (D 0,10) stoi za blatem (nad jego tylną krawędzią): 8 px od płaskiego wierzchu w (30,52)",
+   "poprawka": "przesunięto kafel 592 z (30,52) do (30,53) (9 px od krawędzi)"
+  }
+ ],
+ "pominiete": [
+  {
+   "kod": "P2",
+   "x": 90,
+   "y": 8,
+   "dlaczego": "brak kandydatów"
+  },
+  {
+   "kod": "P2",
+   "x": 91,
+   "y": 8,
+   "dlaczego": "brak kandydatów"
+  },
+  {
+   "kod": "P2",
+   "x": 92,
+   "y": 8,
+   "dlaczego": "brak kandydatów"
+  },
+  {
+   "kod": "P2",
+   "x": 23,
+   "y": 14,
+   "dlaczego": "brak kandydatów"
+  },
+  {
+   "kod": "P2",
+   "x": 22,
+   "y": 30,
+   "dlaczego": "brak kandydatów"
+  },
+  {
+   "kod": "P2",
+   "x": 26,
+   "y": 30,
+   "dlaczego": "brak kandydatów"
+  },
+  {
+   "kod": "P2",
+   "x": 28,
+   "y": 30,
+   "dlaczego": "brak kandydatów"
+  },
+  {
+   "kod": "P2",
+   "x": 88,
+   "y": 31,
+   "dlaczego": "brak kandydatów"
+  },
+  {
+   "kod": "P2",
+   "x": 8,
+   "y": 47,
+   "dlaczego": "brak kandydatów"
+  },
+  {
+   "kod": "P2",
+   "x": 70,
+   "y": 47,
+   "dlaczego": "przesunięto kafel 598 z (70,47) do (71,48): nowe problemy: P2(71,48)"
+  },
+  {
+   "kod": "P2",
+   "x": 79,
+   "y": 47,
+   "dlaczego": "brak kandydatów"
+  },
+  {
+   "kod": "P2",
+   "x": 19,
+   "y": 49,
+   "dlaczego": "przesunięto zdarzenie 116 z (19,49) do (19,48): nowe problemy: P2(19,48); przesunięto zdarzenie 116 z (19,49) do (19,50): nowe problemy: P2(19,50); przesunięto zdarzenie 116 z (19,49) do (20,49): nowe problemy: P2(20,49); przesunięto zdarzenie 116 z (19,49) do (20,48): nowe problemy: P2(20,48)"
+  },
+  {
+   "kod": "P2",
+   "x": 68,
+   "y": 52,
+   "dlaczego": "przesunięto kafel 614 z (68,52) do (69,53): nowe problemy: P2(69,53)"
+  },
+  {
+   "kod": "P2",
+   "x": 70,
+   "y": 52,
+   "dlaczego": "brak kandydatów"
+  },
+  {
+   "kod": "P2",
+   "x": 72,
+   "y": 52,
+   "dlaczego": "przesunięto kafel 615 z (72,52) do (71,53): nowe problemy: P2(71,53)"
+  },
+  {
+   "kod": "P2",
+   "x": 85,
+   "y": 53,
+   "dlaczego": "brak kandydatów"
+  },
+  {
+   "kod": "P2",
+   "x": 88,
+   "y": 53,
+   "dlaczego": "brak kandydatów"
+  },
+  {
+   "kod": "P2",
+   "x": 89,
+   "y": 53,
+   "dlaczego": "brak kandydatów"
+  }
+ ],
+ "proby": [
+  {
+   "kod": "P2",
+   "x": 47,
+   "y": 8,
+   "kandydat": "kafel 617 w (47,8) jako zdarzenie 423 z obrazkiem kafla, -16 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 47,
+   "y": 8,
+   "kandydat": "kafel 617 w (47,8) jako zdarzenie 423 z obrazkiem kafla, -12 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 47,
+   "y": 8,
+   "kandydat": "kafel 617 w (47,8) jako zdarzenie 423 z obrazkiem kafla, -8 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 47,
+   "y": 8,
+   "kandydat": "kafel 617 w (47,8) jako zdarzenie 423 z obrazkiem kafla, -4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 47,
+   "y": 8,
+   "kandydat": "kafel 617 w (47,8) jako zdarzenie 423 z obrazkiem kafla, +4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 47,
+   "y": 8,
+   "kandydat": "kafel 617 w (47,8) jako zdarzenie 423 z obrazkiem kafla, +8 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 7,
+   "y": 35,
+   "kandydat": "przesunięto kafel 602 z (7,35) do (6,35)",
+   "odrzucony": "nowe problemy: P2(6,35)"
+  },
+  {
+   "kod": "P2",
+   "x": 19,
+   "y": 35,
+   "kandydat": "kafel 603 w (19,35) jako zdarzenie 424 z obrazkiem kafla, -12 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 19,
+   "y": 35,
+   "kandydat": "kafel 603 w (19,35) jako zdarzenie 424 z obrazkiem kafla, -8 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 19,
+   "y": 35,
+   "kandydat": "kafel 603 w (19,35) jako zdarzenie 424 z obrazkiem kafla, -4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 19,
+   "y": 35,
+   "kandydat": "kafel 603 w (19,35) jako zdarzenie 424 z obrazkiem kafla, +4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 33,
+   "y": 35,
+   "kandydat": "kafel 603 w (33,35) jako zdarzenie 424 z obrazkiem kafla, -12 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 33,
+   "y": 35,
+   "kandydat": "kafel 603 w (33,35) jako zdarzenie 424 z obrazkiem kafla, -8 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 33,
+   "y": 35,
+   "kandydat": "kafel 603 w (33,35) jako zdarzenie 424 z obrazkiem kafla, -4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 33,
+   "y": 35,
+   "kandydat": "kafel 603 w (33,35) jako zdarzenie 424 z obrazkiem kafla, +4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 70,
+   "y": 47,
+   "kandydat": "przesunięto kafel 598 z (70,47) do (71,48)",
+   "odrzucony": "nowe problemy: P2(71,48)"
+  },
+  {
+   "kod": "P2",
+   "x": 87,
+   "y": 47,
+   "kandydat": "przesunięto kafel 603 z (87,47) do (87,48)",
+   "odrzucony": "nowe problemy: P2(87,48)"
+  },
+  {
+   "kod": "P2",
+   "x": 87,
+   "y": 47,
+   "kandydat": "kafel 603 w (87,47) jako zdarzenie 424 z obrazkiem kafla, -20 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 87,
+   "y": 47,
+   "kandydat": "kafel 603 w (87,47) jako zdarzenie 424 z obrazkiem kafla, -16 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 87,
+   "y": 47,
+   "kandydat": "kafel 603 w (87,47) jako zdarzenie 424 z obrazkiem kafla, -12 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 87,
+   "y": 47,
+   "kandydat": "kafel 603 w (87,47) jako zdarzenie 424 z obrazkiem kafla, -8 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 87,
+   "y": 47,
+   "kandydat": "kafel 603 w (87,47) jako zdarzenie 424 z obrazkiem kafla, -4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 48,
+   "kandydat": "przesunięto kafel 626 z (30,48) do (30,49)",
+   "odrzucony": "nowe problemy: P2(30,49)"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 48,
+   "kandydat": "kafel 626 w (30,48) jako zdarzenie 425 z obrazkiem kafla, -20 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 48,
+   "kandydat": "kafel 626 w (30,48) jako zdarzenie 425 z obrazkiem kafla, -16 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 48,
+   "kandydat": "kafel 626 w (30,48) jako zdarzenie 425 z obrazkiem kafla, -12 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 48,
+   "kandydat": "kafel 626 w (30,48) jako zdarzenie 425 z obrazkiem kafla, -8 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 48,
+   "kandydat": "kafel 626 w (30,48) jako zdarzenie 425 z obrazkiem kafla, -4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 48,
+   "kandydat": "kafel 626 w (30,48) jako zdarzenie 425 z obrazkiem kafla, +4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 48,
+   "kandydat": "kafel 626 w (30,48) jako zdarzenie 425 z obrazkiem kafla, +8 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 48,
+   "kandydat": "kafel 626 w (30,48) jako zdarzenie 425 z obrazkiem kafla, +12 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 19,
+   "y": 49,
+   "kandydat": "przesunięto zdarzenie 116 z (19,49) do (19,48)",
+   "odrzucony": "nowe problemy: P2(19,48)"
+  },
+  {
+   "kod": "P2",
+   "x": 19,
+   "y": 49,
+   "kandydat": "przesunięto zdarzenie 116 z (19,49) do (19,50)",
+   "odrzucony": "nowe problemy: P2(19,50)"
+  },
+  {
+   "kod": "P2",
+   "x": 19,
+   "y": 49,
+   "kandydat": "przesunięto zdarzenie 116 z (19,49) do (20,49)",
+   "odrzucony": "nowe problemy: P2(20,49)"
+  },
+  {
+   "kod": "P2",
+   "x": 19,
+   "y": 49,
+   "kandydat": "przesunięto zdarzenie 116 z (19,49) do (20,48)",
+   "odrzucony": "nowe problemy: P2(20,48)"
+  },
+  {
+   "kod": "P2",
+   "x": 19,
+   "y": 49,
+   "kandydat": "przesunięto zdarzenie 116 z (19,49) do (20,50)",
+   "odrzucony": "nowe problemy: P2(20,50)"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 52,
+   "kandydat": "kafel 592 w (30,52) jako zdarzenie 426 z obrazkiem kafla, -8 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 52,
+   "kandydat": "kafel 592 w (30,52) jako zdarzenie 426 z obrazkiem kafla, -4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 52,
+   "kandydat": "kafel 592 w (30,52) jako zdarzenie 426 z obrazkiem kafla, +4 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 30,
+   "y": 52,
+   "kandydat": "kafel 592 w (30,52) jako zdarzenie 426 z obrazkiem kafla, +12 px w pionie",
+   "odrzucony": "problem nie zniknął"
+  },
+  {
+   "kod": "P2",
+   "x": 68,
+   "y": 52,
+   "kandydat": "przesunięto kafel 614 z (68,52) do (69,53)",
+   "odrzucony": "nowe problemy: P2(69,53)"
+  },
+  {
+   "kod": "P2",
+   "x": 72,
+   "y": 52,
+   "kandydat": "przesunięto kafel 615 z (72,52) do (71,53)",
+   "odrzucony": "nowe problemy: P2(71,53)"
+  }
+ ],
+ "przed": [
+  "D1 13,10",
+  "D1 15,38",
+  "D1 25,43",
+  "D1 29,11",
+  "D1 3,38",
+  "D1 41,8",
+  "D1 45,8",
+  "D1 49,8",
+  "D1 55,40",
+  "D1 70,53",
+  "G3 18,12",
+  "G4 32,18",
+  "G4 50,18",
+  "G4 50,25",
+  "G4 59,18",
+  "G4 68,18",
+  "G4 78,18",
+  "G4 9,12",
+  "G4 91,12",
+  "P2 19,35",
+  "P2 19,49",
+  "P2 22,30",
+  "P2 23,14",
+  "P2 26,30",
+  "P2 28,30",
+  "P2 30,48",
+  "P2 30,52",
+  "P2 33,35",
+  "P2 47,8",
+  "P2 6,35",
+  "P2 68,52",
+  "P2 7,35",
+  "P2 70,47",
+  "P2 70,52",
+  "P2 72,52",
+  "P2 79,47",
+  "P2 8,47",
+  "P2 85,53",
+  "P2 87,47",
+  "P2 88,31",
+  "P2 88,53",
+  "P2 89,53",
+  "P2 90,8",
+  "P2 91,8",
+  "P2 92,8",
+  "W1 17,16",
+  "W1 65,9",
+  "W1 71,9",
+  "Z2 44,9",
+  "Z2 46,9",
+  "Z2 55,8",
+  "Z2 57,8",
+  "Z2 59,8",
+  "Z2 61,8",
+  "Z2 63,8",
+  "Z3 43,9",
+  "Z3 45,9",
+  "Z3 47,9"
+ ],
+ "po": [
+  "D1 13,10",
+  "D1 15,38",
+  "D1 25,43",
+  "D1 29,11",
+  "D1 3,38",
+  "D1 41,8",
+  "D1 45,8",
+  "D1 49,8",
+  "D1 55,40",
+  "D1 70,53",
+  "G3 18,12",
+  "G4 32,18",
+  "G4 50,18",
+  "G4 50,25",
+  "G4 59,18",
+  "G4 68,18",
+  "G4 78,18",
+  "G4 9,12",
+  "G4 91,12",
+  "P2 19,49",
+  "P2 22,30",
+  "P2 23,14",
+  "P2 26,30",
+  "P2 28,30",
+  "P2 68,52",
+  "P2 70,47",
+  "P2 70,52",
+  "P2 72,52",
+  "P2 79,47",
+  "P2 8,47",
+  "P2 85,53",
+  "P2 88,31",
+  "P2 88,53",
+  "P2 89,53",
+  "P2 90,8",
+  "P2 91,8",
+  "P2 92,8",
+  "W1 17,16",
+  "W1 65,9",
+  "W1 71,9",
+  "Z2 44,9",
+  "Z2 46,9",
+  "Z2 55,8",
+  "Z2 57,8",
+  "Z2 59,8",
+  "Z2 61,8",
+  "Z2 63,8",
+  "Z3 43,9",
+  "Z3 45,9",
+  "Z3 47,9"
+ ],
+ "sha_data": "c8267de4db29d958c64137de3c80d0878fe07feee43f931f127da42a90a7214c"
+}

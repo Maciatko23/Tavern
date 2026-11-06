@@ -130,6 +130,7 @@ async function launch(opts = {}) {
     const ws = new WebSocket(page.webSocketDebuggerUrl);
     await new Promise((r, j) => { ws.onopen = r; ws.onerror = j; });
     let id = 0; const pending = new Map(); const logs = [];
+    const listeners = [];   // (on(method, f): the page's events for a tool - tools/przejscia/slad.js, Tracing)
     ws.onmessage = ev => {
         const m = JSON.parse(ev.data);
         if (m.id && pending.has(m.id)) { const p = pending.get(m.id); pending.delete(m.id); m.error ? p.rej(new Error(JSON.stringify(m.error))) : p.res(m.result); }
@@ -137,6 +138,7 @@ async function launch(opts = {}) {
         else if (m.method === "Runtime.exceptionThrown") logs.push("EXC: " + (m.params.exceptionDetails.exception?.description || m.params.exceptionDetails.text));
         else if (m.method === "Fetch.requestPaused") overlay(m.params);
         else if (cover && m.method === "Network.requestWillBeSent") { const rel = gamePath(m.params.request && m.params.request.url); if (rel) cover.urls[rel] = 1; }
+        if (m.method && listeners.length) for (const l of listeners) if (l.method === m.method) l.f(m.params);
     };
     function overlay(p) {
         const rel = decodeURIComponent(new URL(p.request.url).pathname).replace(/^\/+/, "");
@@ -194,6 +196,7 @@ async function launch(opts = {}) {
         try { proc.kill(); } catch (e) {}
         if (!opts.profile) for (let i = 0; i < 5; i++) { try { fs.rmSync(profile, { recursive: true, force: true }); break; } catch (e) { await sleep(300); } }
     };
-    return { send, evaluate, shot, close, logs, sleep };
+    const on = (method, f) => listeners.push({ method, f });
+    return { send, evaluate, shot, close, logs, sleep, on };
 }
 module.exports = { launch, sleep, PORT, OVERLAY, OVERLAY_JS, spawnBrowser, request, getJson };

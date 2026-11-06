@@ -187,6 +187,24 @@
         }
     };
 
+    // the cells the map's events stand on (a tree or a wide bush covers several - ChoppableTree.js's pos), asked once for all the cells
+    // (2026-11-03: eventsXy for every cell of the map went through all its events each time - ~260 ms of a change of map at CPU 4x)
+    function eventCells() {
+        const W = $gameMap.width(), H = $gameMap.height(), occ = new Uint8Array(W * H);
+        for (const e of $gameMap.events()) {
+            // ring by ring round the event (a footprint is one rectangle with the event in it: the first empty ring ends it)
+            for (let r = 0; r <= 12; r++) {
+                let hit = false;
+                for (let y = e.y - r; y <= e.y + r; y++) for (let x = e.x - r; x <= e.x + r; x++) {
+                    if ((Math.abs(x - e.x) !== r && Math.abs(y - e.y) !== r) || x < 0 || y < 0 || x >= W || y >= H) continue;
+                    if (e.pos(x, y)) { occ[y * W + x] = 1; hit = true; }
+                }
+                if (!hit && r > 0) break;
+            }
+        }
+        return { has: (x, y) => x >= 0 && y >= 0 && x < W && y < H && occ[y * W + x] === 1 };
+    }
+
     // Waits until the tileset images are loaded (Farming.groundInfoAt answers undefined until then).
     Sprite_GrassDetail.prototype.build = function() {
         const farming = window.Farming, share = grassShare();
@@ -194,11 +212,11 @@
         if (!GRASS_DETAIL || !polishOn() || share <= 0 || !farming || typeof farming.groundInfoAt !== "function") { this._built = true; return; }
         const mapId = $gameMap.mapId(), stored = (T.state("farm").plots || {})[mapId] || {};
         const density = GRASS_DENSITY * share, patchChance = PATCH_CHANCE * share;   // (the same tiles keep theirs at a lower share: the hash decides)
-        const built = [];
+        const built = [], evc = eventCells();
         for (let y = 0; y < $gameMap.height(); y++) {
             for (let x = 0; x < $gameMap.width(); x++) {
                 if (hash2(x, y, 51) >= density) continue;   // most tiles stay plain
-                if (stored[x + "," + y] || $gameMap.eventsXy(x, y).length > 0 || farming.hasObjectTile(x, y)) continue;
+                if (stored[x + "," + y] || evc.has(x, y) || farming.hasObjectTile(x, y)) continue;
                 if (!$gameMap.checkPassage(x, y, 0x0f)) continue;
                 const ground = farming.groundInfoAt(x, y);
                 if (ground === undefined) return;   // images not ready yet: try again next frame
@@ -228,7 +246,7 @@
                         if (dx === 0 && dy === 0) tint = ground.tint;
                     }
                 }
-                if (!ok || $gameMap.eventsXy(x, y).length > 0) continue;
+                if (!ok || evc.has(x, y)) continue;
                 const light = hash2(x, y, 72) < 0.62;
                 patches.push({ bitmap: patchBitmap(light ? "light" : "dark", Math.floor(hash2(x, y, 73) * 4), tint), wx: x * TILE + TILE / 2 - PATCH_W / 2, wy: y * TILE + TILE / 2 - PATCH_H / 2 });
             }

@@ -1,6 +1,6 @@
 # Przegląd statyczny zadań (tools/audyt/przejscie.js)
 
-Stan: 2026-10-29 18:24. Zadań 122, mieszkańców 84, map 126.
+Stan: 2026-11-05 12:17. Zadań 122, mieszkańców 84, map 149.
 
 Problemy: do sprawdzenia 1, uciążliwość 4, info 74
 

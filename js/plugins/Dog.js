@@ -519,18 +519,21 @@
     function findTile(g, kinds, center, radius, bad, food) {
         // (2026-10-30, wydajność: only the tiles where something may lie at all - Farming.gatherTiles, row by row as the whole-map walk
         // was, so a tie goes to the same tile - and only the box of the radius around the centre)
-        const tiles = F().gatherTiles();
+        // (2026-11-06: the tiles asked in one batch - the events' cells worked out once, Farming.withEventCells; the same answer)
+        const tiles = F().gatherTiles(), batch = F().withEventCells || (f => f());
         let best = null, bd = Infinity;
-        for (let i = 0; i < tiles.length; i += 3) {
-            const x = tiles[i], y = tiles[i + 1];
-            if (center && (Math.abs(x - center.x) > radius || Math.abs(y - center.y) > radius || Math.hypot(x - center.x, y - center.y) > radius)) continue;
-            if (bad && bad.has(x + "," + y)) continue;
-            const k = F().gatherAt(x, y);
-            if (!k || !kinds.includes(k)) continue;
-            if (food && k === "bush" && F().bushState(x, y) !== "full") continue;   // (a bare bush is no food)
-            const dd = Math.hypot(x - g._x, y - g._y);
-            if (dd < bd) { bd = dd; best = { x, y, k }; }
-        }
+        batch(() => {
+            for (let i = 0; i < tiles.length; i += 3) {
+                const x = tiles[i], y = tiles[i + 1];
+                if (center && (Math.abs(x - center.x) > radius || Math.abs(y - center.y) > radius || Math.hypot(x - center.x, y - center.y) > radius)) continue;
+                if (bad && bad.has(x + "," + y)) continue;
+                const k = F().gatherAt(x, y);
+                if (!k || !kinds.includes(k)) continue;
+                if (food && k === "bush" && F().bushState(x, y) !== "full") continue;   // (a bare bush is no food)
+                const dd = Math.hypot(x - g._x, y - g._y);
+                if (dd < bd) { bd = dd; best = { x, y, k }; }
+            }
+        });
         return best;
     }
     // water: a puddle, a clay pot or a bucket with rain water in it, a well - the nearest

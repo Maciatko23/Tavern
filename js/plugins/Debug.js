@@ -154,7 +154,10 @@
         { id: "wrak", map: 165, x: 78, y: 20, d: 4, low: true },
         { id: "cysterna", map: 167, x: 3, y: 20, d: 6 },
         { id: "chata", map: 111, x: 8, y: 81, d: 2 },
-        { id: "zagroda", map: 168, x: 98, y: 12, d: 4 }
+        { id: "zagroda", map: 168, x: 98, y: 12, d: 4 },
+        // (2026-11-01) mapy próbne A (zestaw 11) i B (zestaw 9), tools/mapa_probna: tylko do porównania wyglądu
+        { id: "probnaA", map: 990, x: 24, y: 34, d: 2 },
+        { id: "probnaB", map: 991, x: 29, y: 34, d: 2 }
     ];
     Watki.scal(ISLE_GO, "f9", "wyspa.miejsca", "id");
     // the rooms inside ("Wnętrze": ←→): { id, map, x, y, d } - the names: js/teksty/f9.txt, wyspa.wnetrza.<id>.nazwa

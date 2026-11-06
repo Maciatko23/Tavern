@@ -45,7 +45,7 @@
     const DEF = String(params.enabled === undefined || params.enabled === "" ? "false" : params.enabled) === "true";
     const MAP = 1;
     const HALL = { x0: 37, y0: 27, x1: 83, y1: 44 };   // sala, bar i scena (kratki)
-    const DARK_PLUS = 22;                                // o tyle ciemniejsza noc (0-255)
+    const DARK_PLUS = 0;                                 // o tyle ciemniejsza noc (0-255; 2026-11-05: 0, pomieszczenia bez lamp były czarne)
     const BARD_ID = 360, BARD_X = 70, BARD_Y = 29;       // zdarzenie grajka na scenie (Przytulna: nowe id w mapie)
     const BARD_FROM = 18, BARD_TO = 23.5;                // godziny gry grajka
     const SHEET = { grajek: "Przytulna_Grajek_Lutnia", borgar: "Przytulna_Borgar_Wyciera" };
@@ -54,6 +54,16 @@
     const SEATED_KEYS = ["Kowal", "Woziwoda", "Kupiec", "Soltys", "Garbarz", "Bartek", "Woznica", "Janek", "Rozbitek", "Pula_K", "Pula_M", "Pula_S", "Pula_Z", "Pula_K2", "Pula_K3", "Pula_M2", "Pula_M3", "Pula_S2", "Pula_Z2"];   // (uzupełnia siedzi.py --lista; patrz niżej)
     const SCELL = 88, SFEET = 76, TABLE_TILES = [416, 424, 432, 439, 447], TABLE_TILES2 = [842, 850, 859, 867, 863, 871, 844, 852];   // stoły: długie i małe (warstwa 3), okrągłe ze sceny (warstwa 2)
     const CELL = 84, FEET_Y = 74;                        // klatka PixelLab: 84x84, stopa w wierszu 74
+    // Borgar wyciera ladę (gracz 2026-11-05: „macha w powietrzu, powinien stać kratkę niżej”): ze swojego miejsca przechodzi za wolny kawałek lady obok doniczki.
+    // BAR_EDGE: o tyle pikseli poniżej stóp na jego zwykłym miejscu leży tylny brzeg blatu - co niżej, zasłania lada; BAR_LEAN: przy wycieraniu pochyla się nad nią
+    const BORGAR_HOME = { x: 52, y: 28 }, BORGAR_BAR = { x: 53, y: 29 }, BAR_EDGE = 32, BAR_LEAN = 8;
+    const borgarOver = ev => { const r = ev._realY - BORGAR_HOME.y; return r > 0 && r <= 1 ? Math.max(0, Math.round(r * $gameMap.tileHeight() - BAR_EDGE)) : 0; };
+    function borgarStep(ev, to) {
+        const h = to.x > ev.x ? 6 : 4, v = to.y > ev.y ? 2 : 8, th = ev.isThrough();
+        ev._directionFix = false;
+        ev.setDirection(h);
+        ev.setThrough(true); ev.moveDiagonally(h, v); ev.setThrough(th);
+    }
 
     // ------------------------------------------------------------------
     // Przełącznik (plik konfiguracji, nie zapis gry; window.PRZYTULNA nadpisuje - testy i zdjęcia)
@@ -89,11 +99,16 @@
         if (!window.$dataMap || $dataMap._przyt || skip("swiatlo")) return;
         $dataMap._przyt = true;
         $dataMap.note = String($dataMap.note || "").replace(/<DarkNight:(\d+)>/i, (m, n) => "<DarkNight:" + Math.min(250, Number(n) + DARK_PLUS) + ">");
+        // (2026-11-05) płomienie: światła dodają się do obrazu, więc za mocne przepalają podłogę i wchodzą w limonkę (czerwony na maksimum, rośnie zielony): słabiej i cieplej w całej tawernie
+        for (const e of $dataMap.events) {
+            if (!e || !e.note || !/^(Świeca|Latarnia|Lampa|Kaganek|Pochodnia)|randol/i.test(String(e.name || ""))) continue;
+            e.note = e.note.replace(/<Light:(\d+),(\d+),(\d+),(\d+)>/i, (m, r, a, b, c) => "<Light:" + r + "," + Math.round(a * 0.72) + "," + Math.round(b * 0.58) + "," + Math.round(c * 0.4) + ">");
+        }
         for (const e of $dataMap.events) {
             if (!e || !inHall(e.x, e.y) || !e.note) continue;
             const name = String(e.name || "");
-            if (/^wypelnienie/i.test(name)) e.note = e.note.replace(/<Light:(\d+),(\d+),(\d+),(\d+)>/i, (m, r, a, b, c) => "<Light:" + Math.round(r * 1.3) + "," + Math.round(a * 3.2) + "," + Math.round(b * 3.2) + "," + Math.round(c * 3.2) + ">");   // miękkie wypełnienie mocniejsze: bez ciemnych plam między kręgami świateł
-            else if (/^Kominek/i.test(name)) e.note = e.note.replace(/<Light:(\d+),(\d+),(\d+),(\d+)>/i, "<Light:330,185,98,30>");
+            if (/^wypelnienie/i.test(name)) e.note = e.note.replace(/<Light:(\d+),(\d+),(\d+),(\d+)>/i, (m, r, a, b, c) => "<Light:" + Math.round(r * 1.3) + "," + Math.round(a * 1.5) + "," + Math.round(b * 1.5) + "," + Math.round(c * 1.5) + ">");   // miękkie wypełnienie mocniejsze: bez ciemnych plam między kręgami świateł
+            else if (/^Kominek/i.test(name)) e.note = e.note.replace(/<Light:(\d+),(\d+),(\d+),(\d+)>/i, "<Light:330,120,58,14>");
             else if (/randol/i.test(name)) e.note = e.note.replace(/<Light:(\d+),(\d+),(\d+),(\d+)>/i, (m, r, a, b, c) => "<Light:" + Math.round(r * 0.68) + "," + a + "," + b + "," + c + ">");
             else if (e.x >= 65 && /^(Świeca|Latarnia)/i.test(name) && !/na stole/i.test(name)) e.note = e.note.replace(/<Light:(\d+),(\d+),(\d+),(\d+)>/i, (m, r, a, b, c) => "<Light:" + Math.round(r * 1.5) + "," + Math.round(a * 0.78) + "," + Math.round(b * 0.78) + "," + Math.round(c * 0.78) + ">");   // miękkie, szersze koła (bez twardych krawędzi)
         }
@@ -195,7 +210,7 @@
                 }
                 if (!g) continue;
                 const f = 0.5 + 0.5 * Math.sin(ST.t * 7 + g._ph) * Math.sin(ST.t * 3.1 + g._ph * 2);
-                g.x = o.x; g.y = o.y + 62; g.scale.set(2.7 + 0.15 * f, 1.7 + 0.1 * f); g.opacity = 70 + 50 * f;
+                g.x = o.x; g.y = o.y + 62; g.scale.set(2.7 + 0.15 * f, 1.7 + 0.1 * f); g.opacity = 45 + 30 * f;
                 if (Math.random() < dt * 7 && this.parts.length < 34) {
                     const s = new Sprite(this.bmps.spark); s.anchor.set(0.5, 0.5); s.blendMode = 1;
                     s._dx = rnd(-14, 14); s._dy = -8; s._vx = rnd(-10, 10); s._vy = rnd(-34, -70); s._life = 0; s._max = rnd(0.7, 1.5); s._ev = ev;
@@ -250,7 +265,7 @@
             }
             return sp || null;
         }
-        playAnim(key, ev, frame) {
+        playAnim(key, ev, frame, dy, over) {
             let a = this.anims.get(key);
             if (!a) {
                 const bmp = ImageManager.loadBitmap("img/characters/", SHEET[key]);
@@ -260,8 +275,10 @@
             }
             const cs = this.charSprite(ev);
             if (!a.bmp.isReady() || !cs) return false;
-            a.sp.setFrame(frame * CELL, 0, CELL, CELL);
-            a.sp.x = cs.x; a.sp.y = cs.y; a.sp.z = cs.z || 3; a.sp.visible = true;
+            const h = over > 0 ? FEET_Y - over : CELL;   // (over: tyle wierszy od stóp w górę zasłania lada)
+            a.sp.setFrame(frame * CELL, 0, CELL, h);
+            a.sp.anchor.y = FEET_Y / h;
+            a.sp.x = cs.x; a.sp.y = cs.y + (dy || 0); a.sp.z = cs.z || 3; a.sp.visible = true;
             a.sp.opacity = 255;
             cs._przytHide = true; cs._wyKeep = true; cs.opacity = 0;   // (zwykły sprite zdarzenia ukryty, gdy gra własna klatka)
             return true;
@@ -276,18 +293,37 @@
             if (h >= BARD_FROM && h < BARD_TO && !$gameMap.event(3023)) {
                 const n = 8, f = Math.floor(ST.t * 7) % n;
                 this.playAnim("grajek", ev, f + 1);
-            } else this.stopAnim("grajek", ev);
+                if (ev.isThrough()) ev.setThrough(false);
+            } else {
+                this.stopAnim("grajek", ev);
+                if (!ev.isThrough()) ev.setThrough(true);   // (poza jego godzinami na scenie nie ma nikogo: nie ma też niewidzialnej blokady)
+            }
         }
         updateBorgar(dt) {
             const ev = $gameMap.event(1); if (!ev) return;
-            if (!ST.wipe && ST.t >= ST.nextWipe && !$gameMessage.isBusy() && !ev.isMoving()) ST.wipe = { t0: ST.t, d: rnd(7, 11) };
+            if (ev.isTransparent() || ev._erased) { ST.wipe = null; this.stopAnim("borgar", ev); return; }   // (poza salą: scena, wątek)
+            const busy = $gameMessage.isBusy() || $gameMap.isEventRunning();
+            const at = p => ev.x === p.x && ev.y === p.y, hero = p => $gamePlayer.x === p.x && $gamePlayer.y === p.y;
+            if (!ST.wipe && at(BORGAR_HOME) && ST.t >= ST.nextWipe && !busy && !ev.isMoving()) {
+                if (hero(BORGAR_BAR)) ST.nextWipe = ST.t + 5;
+                else { ST.wipe = { t0: -1, d: rnd(7, 11) }; borgarStep(ev, BORGAR_BAR); }
+            }
             if (ST.wipe) {
+                if (ev.isMoving()) { this.stopAnim("borgar", ev); return; }   // idzie: zwykła postać, nogi znikają za ladą
+                if (!at(BORGAR_BAR)) { ST.wipe = null; ST.nextWipe = ST.t + rnd(12, 24); this.stopAnim("borgar", ev); return; }   // (przestawiła go scena)
+                if (ST.wipe.t0 < 0) { ST.wipe.t0 = ST.t; ev.setDirection(2); ev._directionFix = true; }
                 const k = ST.t - ST.wipe.t0;
-                if (k > ST.wipe.d || $gameMessage.isBusy()) { ST.wipe = null; ST.nextWipe = ST.t + rnd(12, 24); this.stopAnim("borgar", ev); return; }
+                if (k > ST.wipe.d || busy || ev._locked) { ST.wipe = null; ST.nextWipe = ST.t + rnd(12, 24); this.stopAnim("borgar", ev); return; }
                 // klatki 0-1 spokojnie, 2-8 przecieranie tam i z powrotem
-                const cyc = Math.floor(k * 6) % 12, f = cyc < 7 ? 2 + cyc : 2 + (12 - cyc);
-                this.playAnim("borgar", ev, k < 0.3 ? 1 : Math.min(8, f));
-            } else this.stopAnim("borgar", ev);
+                const cyc = Math.floor(k * 6) % 12, f = cyc < 7 ? 2 + cyc : 2 + (12 - cyc), dy = Math.round(Math.min(BAR_LEAN, k * 40));
+                this.playAnim("borgar", ev, k < 0.3 ? 1 : Math.min(8, f), dy, borgarOver(ev) + dy);
+                return;
+            }
+            this.stopAnim("borgar", ev);
+            if (ev.isMoving() || ev._locked) return;
+            // po wycieraniu (albo po wczytaniu zapisu z tej chwili): z powrotem na swoje miejsce, przodem do sali
+            if (at(BORGAR_BAR) && !hero(BORGAR_HOME) && !busy) borgarStep(ev, BORGAR_HOME);
+            else if (at(BORGAR_HOME) && !ev._directionFix) { ev.setDirection(2); ev._directionFix = true; }
         }
         // --- siedzący goście: stołek obok stołu (kafel stołu po lewej / prawej), własne klatki zamiast zwykłego sprite'a
         seatSide(x, y) {
@@ -305,6 +341,7 @@
                     const d = ev.event(); if (!d) continue;
                     const m = /<Siedzi:(\w+)>/i.exec(d.note || "");
                     const nm = ev.characterName();
+                    if (m && window.GoscieSala) continue;   // (the table guests live in Goscie_Sala.js: they get up, walk, sit; here the residents on their gosc_N places)
                     const key = m ? m[1] : (nm && nm.indexOf("$Npc_") === 0 ? nm.slice(5) : null);
                     if (key && SEATED_KEYS.includes(key)) this._seatCand.push({ ev, key, fig: !!m, sp: null, bmp: null, next: ST.t + rnd(2, 9), t0: -1, side: 0 });
                 }
@@ -316,10 +353,11 @@
             const evening = hour >= 17 || hour < 1;
             for (const c of this.seatCandidates()) {
                 const ev = c.ev, cs = this.charSprite(ev);
-                let ok = !!cs && !ev.isMoving() && !ev._erased && (!c.fig || evening) && inHall(ev.x, ev.y);
+                if (ev.isMoving()) c.moved = true;
+                let ok = !!cs && !ev.isMoving() && !ev._erased && (!c.fig || evening) && (c.fig || !ev.isTransparent()) && inHall(ev.x, ev.y);   // (a resident gone home is hidden on his chair: no picture of him, it would lie under the hero)
                 const side = ok ? this.seatSide(ev.x, ev.y) : 0;
-                ok = ok && side && (c.fig || ev.characterName() === "$Npc_" + c.key);
-                if (!ok) { if (c.sp && c.sp.visible) { c.sp.visible = false; if (cs && cs._przytHide) { cs._przytHide = false; cs._wyKeep = false; cs.opacity = 255; } } continue; }
+                ok = ok && side && (c.fig || (ev.characterName() === "$Npc_" + c.key && !$gameMap.checkPassage(ev.x, ev.y, 0x0f)));   // (a resident sits on a chair; waiting on his way beside a table he stands)
+                if (!ok) { if (!ev.isMoving()) c.moved = false; if (c.sp && c.sp.visible) { c.sp.visible = false; if (cs && cs._przytHide) { cs._przytHide = false; cs._wyKeep = false; cs.opacity = 255; } } continue; }
                 const ox = ev.screenX(), oy = ev.screenY();
                 if (!this.onScreen(ox, oy, 80)) { if (c.sp) c.sp.renderable = false; if (cs) { cs._przytHide = true; cs.opacity = 0; } continue; }
                 if (!c.sp) {
@@ -330,10 +368,17 @@
                 if (!c.bmp.isReady()) { if (cs) { cs._przytHide = false; } continue; }
                 const frames = Math.max(1, Math.floor(c.bmp.width / SCELL));
                 if (ST.t >= c.next && frames > 1 && c.t0 < 0) { c.t0 = ST.t; }
-                let f = 0;
-                if (c.t0 >= 0) { f = 1 + Math.floor((ST.t - c.t0) * 8); if (f > frames - 1) { c.t0 = -1; c.next = ST.t + rnd(4, 11); f = 0; } }
-                c.sp.setFrame(f * SCELL, (side === 6 ? 0 : 1) * SCELL, SCELL, SCELL);
-                c.sp.x = ox; c.sp.y = oy; c.sp.z = ev.screenZ ? ev.screenZ() : 3; c.sp.visible = true; c.sp.renderable = true; c.sp.opacity = 255;
+                let f = 0, row = side === 6 ? 0 : 1, dy = 0;
+                // (2026-11-05) a resident walks onto the stool and sits down there, gets up before he walks off: the sheet's rows 4-5
+                const hasT = !c.fig && c.bmp.height >= SCELL * 6, up = hasT && window.TownLife && TownLife.risingT ? TownLife.risingT(ev) : -1;
+                if (c.moved) { c.moved = false; if (hasT) c.down = 0; }
+                if (hasT && (up >= 0 || c.down >= 0)) {
+                    const k = Math.min(2, Math.floor((up >= 0 ? up : c.down) / 6));
+                    f = up >= 0 ? 2 - k : k; row += 4; dy = [4, 2, 1][f]; c.t0 = -1;
+                    if (up < 0 && ++c.down >= 18) c.down = -1;
+                } else if (c.t0 >= 0) { f = 1 + Math.floor((ST.t - c.t0) * 8); if (f > frames - 1) { c.t0 = -1; c.next = ST.t + rnd(4, 11); f = 0; } }
+                c.sp.setFrame(f * SCELL, row * SCELL, SCELL, SCELL);
+                c.sp.x = ox; c.sp.y = oy + dy; c.sp.z = ev.screenZ ? ev.screenZ() : 3; c.sp.visible = true; c.sp.renderable = true; c.sp.opacity = 255;
                 if (cs) { cs._przytHide = true; cs._wyKeep = true; cs.opacity = 0; }
             }
         }
@@ -376,5 +421,11 @@
         mugNow() { return ST.layer ? (ST.layer.raiseMug(), ST.mugs.length) : -1; },
         stats() { return { sparks: ST.layer ? ST.layer.parts.length : 0, mugs: ST.mugs.length, glow: ST.layer ? ST.layer.glow.size : 0, wipe: !!ST.wipe, seated: ST.layer && ST.layer._seatCand ? ST.layer._seatCand.filter(c => c.sp && c.sp.visible).length : 0, drinking: ST.layer && ST.layer._seatCand ? ST.layer._seatCand.filter(c => c.t0 >= 0).length : 0 }; }
     };
+    // idąc za ladę: co niżej tylnego brzegu blatu, jest za nią (ramka przycięta od dołu, stopy zostają w tym samym miejscu rysunku)
+    T.sprite.hook({ owner: PLUGIN, method: "updateFrame", when: s => s._character instanceof Game_Event && s._character.eventId() === 1, after(s) {
+        const over = here() && on() ? borgarOver(s._character) : 0, f = s._frame;
+        if (over > 0 && f.height > over) { const h = f.height; s.setFrame(f.x, f.y, f.width, h - over); s.anchor.y = h / (h - over); }
+        else if (s.anchor.y !== 1) s.anchor.y = 1;
+    } });
     window.Przytulna = T.register(PLUGIN, api);
 })();

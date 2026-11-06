@@ -208,18 +208,104 @@
     // already overlap never blocks, so nobody gets stuck inside something.
     // A new tile is crossed into by its edge towards the feet, and that edge must be open, as in the engine's step (2026-10-29: the
     // rim of an A4 wall top is shut only on its floor side - the feet walked onto it and then over the whole rock of the underground
-    // floors). The edge of the tile they leave is not asked: feet already in a wall (an old save, a push) always get out of it.
+    // floors). The edge of the tile they leave is not asked: feet already in a wall (an old save, a push) always get out of it -
+    // but a hill's rim (an A5 tile shut on some sides only) keeps them on the top, as the engine's step does (2026-11-03: off the
+    // top of Map990's hill over its left side down to the grass).
     Game_Player.prototype.freeBlocker = function(fx, fy, fromX, fromY) {
         const from = feetBox(fromX, fromY), to = feetBox(fx, fy);
         for (let y = to.y0; y <= to.y1; y++) {
             for (let x = to.x0; x <= to.x1; x++) {
-                if (x >= from.x0 && x <= from.x1 && y >= from.y0 && y <= from.y1) continue;
+                if (x >= from.x0 && x <= from.x1 && y >= from.y0 && y <= from.y1) {
+                    // (already in a piece of furniture's empty edge: no deeper than it; feet that are deep in something - an old save, a push - still get out)
+                    if (!this.isThrough() && !this.isDebugThrough() && onlyInEdges(x, y, fromX, fromY) && !onlyInEdges(x, y, fx, fy)) return { x: $gameMap.roundX(x), y: $gameMap.roundY(y) };
+                    continue;
+                }
                 const edge = x > from.x1 ? 4 : x < from.x0 ? 6 : y > from.y1 ? 8 : 2;   // (going right the feet come in by its left edge...)
-                if (this.freeTileBlocked(x, y, edge)) return { x: $gameMap.roundX(x), y: $gameMap.roundY(y) };
+                if (this.freeTileBlocked(x, y, edge) || rimKeeps(x, y, edge, from)) {
+                    if (edge !== 2 && !this.isThrough() && !this.isCollidedWithCharacters($gameMap.roundX(x), $gameMap.roundY(y)) && !rimKeeps(x, y, edge, from) && onlyInEdges(x, y, fx, fy)) continue;
+                    return { x: $gameMap.roundX(x), y: $gameMap.roundY(y) };
+                }
             }
         }
         return null;
     };
+    // ------------------------------------------------------------------
+    // Furniture's empty edges (2026-11-06, user: "przy stołach jest od góry jakby klatka blokująca, że się nie da dojść"): a table's tile is shut whole, but
+    // its picture often starts half a tile down. The feet may come into the empty band of such a tile (from above up to half a tile, from a side a little:
+    // the hero still stands on his own tile then - events, talks, tools see him there), never into what is drawn. Only a tile shut whole by a piece of the
+    // B-E sheets; a person in it, an A tile (a wall, a hill), a one-way edge: as before.
+    // ------------------------------------------------------------------
+    const edgeCache = new Map();
+    function tileEdges(t) {
+        const key = $gameMap.tilesetId() + ":" + t;
+        if (edgeCache.has(key)) return edgeCache.get(key);
+        const ts = $gameMap.tileset(), name = ts && ts.tilesetNames[5 + Math.floor(t / 256)];
+        if (!name) { edgeCache.set(key, null); return null; }
+        const bmp = ImageManager.loadTileset(name);
+        if (!bmp.isReady()) return null;   // (not kept: asked again once the sheet is in)
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), i = t % 256;
+        const col = (i % 8) + Math.floor(i / 128) * 8, row = Math.floor(i / 8) % 16;
+        let data = null;
+        try { data = bmp.context.getImageData(col * tw, row * th, tw, th).data; } catch (e) { data = null; }
+        if (!data) { edgeCache.set(key, null); return null; }
+        const solid = (x, y) => data[(y * tw + x) * 4 + 3] > 40;
+        const rowFull = y => { let n = 0; for (let x = 0; x < tw; x++) if (solid(x, y) && ++n >= 2) return true; return false; };
+        const colFull = x => { let n = 0; for (let y = 0; y < th; y++) if (solid(x, y) && ++n >= 2) return true; return false; };
+        let top = 0, left = 0, right = 0;
+        while (top < th && !rowFull(top)) top++;
+        while (left < tw && !colFull(left)) left++;
+        while (right < tw && !colFull(tw - 1 - right)) right++;
+        const e = top >= th ? { top: th, left: tw, right: tw } : { top, left, right };
+        edgeCache.set(key, e);
+        return e;
+    }
+    // the empty edges of a cell shut whole by furniture (null: not such a cell), as far as the feet may go into it
+    function furnitureEdges(x, y) {
+        if (!$gameMap.isValid(x, y)) return null;
+        const flags = $gameMap.tilesetFlags(), tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
+        const half = Math.max(1, Math.round(HIT_W * tw / 2));
+        let deciding = true, out = null;
+        // (in the engine's order: the tiles of tile events first - a cup on the table - then the layers from the top)
+        for (const t of $gameMap.tileEventsXy(x, y).map(ev => ev.tileId()).concat($gameMap.layeredTiles(x, y))) {
+            if (!t) continue;
+            const f = flags[t];
+            if (f & 0x10) continue;
+            const shut = (f & 0x0f) === 0x0f;
+            if (deciding) { if (!shut || t >= 1024) return null; deciding = false; }
+            if (!shut) continue;
+            if (t >= 1024) return null;
+            const e = tileEdges(t);
+            if (!e) return null;
+            out = out ? { top: Math.min(out.top, e.top), left: Math.min(out.left, e.left), right: Math.min(out.right, e.right) } : Object.assign({}, e);
+        }
+        if (!out) return null;
+        out.top = Math.min(out.top, Math.floor(th / 2) - 1);   // (from above: the feet stop before the middle - he stays on the tile above)
+        out.left = Math.min(out.left, half - 1);               // (from a side: his middle stays out of it)
+        out.right = Math.min(out.right, half - 1);
+        return out;
+    }
+    // do the feet at (fx, fy) touch the cell only in its empty edges?
+    function onlyInEdges(x, y, fx, fy) {
+        const e = furnitureEdges(x, y);
+        if (!e) return false;
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
+        const half = Math.max(1, Math.round(HIT_W * tw / 2)), high = Math.max(1, Math.round(HIT_H * th));
+        const cx = fx + Math.floor(tw / 2), px0 = cx - half, px1 = cx + half - 1, py0 = fy + th - high, py1 = fy + th - 1;
+        const X0 = x * tw, Y0 = y * th;
+        const ox0 = Math.max(px0, X0), ox1 = Math.min(px1, X0 + tw - 1), oy0 = Math.max(py0, Y0), oy1 = Math.min(py1, Y0 + th - 1);
+        if (ox0 > ox1 || oy0 > oy1) return true;
+        return oy1 < Y0 + e.top || ox1 < X0 + e.left || ox0 > X0 + tw - 1 - e.right;
+    }
+    // the tile the feet come from (the one beside the new tile, inside the feet's box), when it is a hill's rim: its side towards the new tile
+    const BACK_FROM = { 4: [-1, 0, 6], 6: [1, 0, 4], 8: [0, -1, 2], 2: [0, 1, 8] };   // edge -> the step back to it, the way out of it
+    function rimKeeps(x, y, edge, from) {
+        const [dx, dy, d] = BACK_FROM[edge], px = x + dx, py = y + dy;
+        if (px < from.x0 || px > from.x1 || py < from.y0 || py > from.y1 || !$gameMap.isValid(px, py)) return false;
+        const t = $gameMap.tileId(px, py, 0);
+        if (!Tilemap.isTileA5(t)) return false;
+        const shut = $gameMap.tilesetFlags()[t] & 0x0f;
+        return shut !== 0 && shut !== 0x0f && !$gameMap.isPassable(px, py, d);
+    }
 
     // ------------------------------------------------------------------
     // Movement

@@ -1,0 +1,1290 @@
+[
+ {
+  "mapa": 3,
+  "x": 25,
+  "y": 37,
+  "sprawdzenie": "c",
+  "powod": "Fałszywy alarm: krzak/trawa/ruina z kafli B-E, nie korona drzewa; zdarzenia-drzewa już stoją osobno (obrazek docs/krawedzie_poprawa/estetyka/c_Map003_25_37.png)"
+ },
+ {
+  "mapa": 8,
+  "x": 29,
+  "y": 6,
+  "sprawdzenie": "c",
+  "powod": "Fałszywy alarm: krzak/trawa/ruina z kafli B-E, nie korona drzewa; zdarzenia-drzewa już stoją osobno (obrazek docs/krawedzie_poprawa/estetyka/c_Map008_29_6.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 5,
+  "y": 0,
+  "sprawdzenie": "e",
+  "powod": "Fałszywy alarm: A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie (obrazek docs/krawedzie_poprawa/estetyka/e_Map013_5_0.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 7,
+  "y": 0,
+  "sprawdzenie": "e",
+  "powod": "Fałszywy alarm: A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie (obrazek docs/krawedzie_poprawa/estetyka/e_Map013_7_0.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 29,
+  "y": 0,
+  "sprawdzenie": "e",
+  "powod": "Fałszywy alarm: A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie (obrazek docs/krawedzie_poprawa/estetyka/e_Map013_29_0.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 31,
+  "y": 0,
+  "sprawdzenie": "e",
+  "powod": "Fałszywy alarm: A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie (obrazek docs/krawedzie_poprawa/estetyka/e_Map013_31_0.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 32,
+  "y": 8,
+  "sprawdzenie": "e",
+  "powod": "Fałszywy alarm: A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie (obrazek docs/krawedzie_poprawa/estetyka/e_Map013_32_8.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 35,
+  "y": 39,
+  "sprawdzenie": "e",
+  "powod": "Fałszywy alarm: A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie (obrazek docs/krawedzie_poprawa/estetyka/e_Map013_35_39.png)"
+ },
+ {
+  "mapa": 155,
+  "x": 45,
+  "y": 61,
+  "sprawdzenie": "e",
+  "powod": "Fałszywy alarm: A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie (obrazek docs/krawedzie_poprawa/estetyka/e_Map155_45_61.png)"
+ },
+ {
+  "mapa": 175,
+  "x": 54,
+  "y": 7,
+  "sprawdzenie": "e",
+  "powod": "Fałszywy alarm: A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie (obrazek docs/krawedzie_poprawa/estetyka/e_Map175_54_7.png)"
+ },
+ {
+  "mapa": 175,
+  "x": 59,
+  "y": 52,
+  "sprawdzenie": "e",
+  "powod": "Fałszywy alarm: A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie (obrazek docs/krawedzie_poprawa/estetyka/e_Map175_59_52.png)"
+ },
+ {
+  "mapa": 3,
+  "x": 13,
+  "y": 8,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map003_13_8.png)"
+ },
+ {
+  "mapa": 3,
+  "x": 5,
+  "y": 17,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map003_5_17.png)"
+ },
+ {
+  "mapa": 3,
+  "x": 40,
+  "y": 22,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map003_40_22.png)"
+ },
+ {
+  "mapa": 3,
+  "x": 59,
+  "y": 42,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map003_59_42.png)"
+ },
+ {
+  "mapa": 4,
+  "x": 78,
+  "y": 8,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map004_78_8.png)"
+ },
+ {
+  "mapa": 4,
+  "x": 76,
+  "y": 20,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map004_76_20.png)"
+ },
+ {
+  "mapa": 4,
+  "x": 2,
+  "y": 30,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map004_2_30.png)"
+ },
+ {
+  "mapa": 4,
+  "x": 21,
+  "y": 42,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map004_21_42.png)"
+ },
+ {
+  "mapa": 4,
+  "x": 56,
+  "y": 47,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map004_56_47.png)"
+ },
+ {
+  "mapa": 4,
+  "x": 58,
+  "y": 48,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map004_58_48.png)"
+ },
+ {
+  "mapa": 4,
+  "x": 17,
+  "y": 49,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map004_17_49.png)"
+ },
+ {
+  "mapa": 8,
+  "x": 103,
+  "y": 121,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map008_103_121.png)"
+ },
+ {
+  "mapa": 8,
+  "x": 78,
+  "y": 128,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map008_78_128.png)"
+ },
+ {
+  "mapa": 8,
+  "x": 92,
+  "y": 9,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map008_92_9.png)"
+ },
+ {
+  "mapa": 8,
+  "x": 41,
+  "y": 103,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map008_41_103.png)"
+ },
+ {
+  "mapa": 8,
+  "x": 90,
+  "y": 7,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map008_90_7.png)"
+ },
+ {
+  "mapa": 8,
+  "x": 54,
+  "y": 103,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map008_54_103.png)"
+ },
+ {
+  "mapa": 8,
+  "x": 66,
+  "y": 110,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map008_66_110.png)"
+ },
+ {
+  "mapa": 8,
+  "x": 24,
+  "y": 114,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map008_24_114.png)"
+ },
+ {
+  "mapa": 8,
+  "x": 54,
+  "y": 117,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map008_54_117.png)"
+ },
+ {
+  "mapa": 8,
+  "x": 103,
+  "y": 52,
+  "sprawdzenie": "d",
+  "powod": "Mur na krawędzi mapy gracza (Map008 E, Map020 N/E) istnieje od zawsze; nie nasza zmiana, a ruszać nie wolno (budynek/mur gracza); obrazek docs/krawedzie_poprawa/estetyka_b/d_Map008_103_52.png"
+ },
+ {
+  "mapa": 8,
+  "x": 103,
+  "y": 97,
+  "sprawdzenie": "d",
+  "powod": "Mur na krawędzi mapy gracza (Map008 E, Map020 N/E) istnieje od zawsze; nie nasza zmiana, a ruszać nie wolno (budynek/mur gracza); obrazek docs/krawedzie_poprawa/estetyka_b/d_Map008_103_97.png"
+ },
+ {
+  "mapa": 13,
+  "x": 28,
+  "y": 75,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_28_75.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 100,
+  "y": 0,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_100_0.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 89,
+  "y": 3,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_89_3.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 78,
+  "y": 19,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_78_19.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 113,
+  "y": 36,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_113_36.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 77,
+  "y": 40,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_77_40.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 31,
+  "y": 48,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_31_48.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 89,
+  "y": 57,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_89_57.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 30,
+  "y": 69,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_30_69.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 106,
+  "y": 4,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_106_4.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 70,
+  "y": 9,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_70_9.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 107,
+  "y": 13,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_107_13.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 23,
+  "y": 17,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_23_17.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 70,
+  "y": 28,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_70_28.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 34,
+  "y": 40,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_34_40.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 57,
+  "y": 64,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map013_57_64.png)"
+ },
+ {
+  "mapa": 13,
+  "x": 5,
+  "y": 0,
+  "sprawdzenie": "e",
+  "powod": "A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie; obrazek docs/krawedzie_poprawa/estetyka_b/e_Map013_5_0.png"
+ },
+ {
+  "mapa": 13,
+  "x": 7,
+  "y": 0,
+  "sprawdzenie": "e",
+  "powod": "A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie; obrazek docs/krawedzie_poprawa/estetyka_b/e_Map013_7_0.png"
+ },
+ {
+  "mapa": 13,
+  "x": 29,
+  "y": 0,
+  "sprawdzenie": "e",
+  "powod": "A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie; obrazek docs/krawedzie_poprawa/estetyka_b/e_Map013_29_0.png"
+ },
+ {
+  "mapa": 13,
+  "x": 49,
+  "y": 0,
+  "sprawdzenie": "e",
+  "powod": "A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie; obrazek docs/krawedzie_poprawa/estetyka_b/e_Map013_49_0.png"
+ },
+ {
+  "mapa": 13,
+  "x": 56,
+  "y": 0,
+  "sprawdzenie": "e",
+  "powod": "A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie; obrazek docs/krawedzie_poprawa/estetyka_b/e_Map013_56_0.png"
+ },
+ {
+  "mapa": 13,
+  "x": 115,
+  "y": 0,
+  "sprawdzenie": "e",
+  "powod": "A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie; obrazek docs/krawedzie_poprawa/estetyka_b/e_Map013_115_0.png"
+ },
+ {
+  "mapa": 13,
+  "x": 32,
+  "y": 8,
+  "sprawdzenie": "e",
+  "powod": "A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie; obrazek docs/krawedzie_poprawa/estetyka_b/e_Map013_32_8.png"
+ },
+ {
+  "mapa": 13,
+  "x": 35,
+  "y": 39,
+  "sprawdzenie": "e",
+  "powod": "A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie; obrazek docs/krawedzie_poprawa/estetyka_b/e_Map013_35_39.png"
+ },
+ {
+  "mapa": 17,
+  "x": 74,
+  "y": 10,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map017_74_10.png)"
+ },
+ {
+  "mapa": 17,
+  "x": 26,
+  "y": 30,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map017_26_30.png)"
+ },
+ {
+  "mapa": 17,
+  "x": 23,
+  "y": 41,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map017_23_41.png)"
+ },
+ {
+  "mapa": 18,
+  "x": 81,
+  "y": 20,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map018_81_20.png)"
+ },
+ {
+  "mapa": 18,
+  "x": 0,
+  "y": 30,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map018_0_30.png)"
+ },
+ {
+  "mapa": 18,
+  "x": 17,
+  "y": 39,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map018_17_39.png)"
+ },
+ {
+  "mapa": 18,
+  "x": 58,
+  "y": 47,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map018_58_47.png)"
+ },
+ {
+  "mapa": 18,
+  "x": 1,
+  "y": 52,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map018_1_52.png)"
+ },
+ {
+  "mapa": 20,
+  "x": 32,
+  "y": 10,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map020_32_10.png)"
+ },
+ {
+  "mapa": 20,
+  "x": 79,
+  "y": 0,
+  "sprawdzenie": "d",
+  "powod": "Mur na krawędzi mapy gracza (Map008 E, Map020 N/E) istnieje od zawsze; nie nasza zmiana, a ruszać nie wolno (budynek/mur gracza); obrazek docs/krawedzie_poprawa/estetyka_b/d_Map020_79_0.png"
+ },
+ {
+  "mapa": 20,
+  "x": 79,
+  "y": 0,
+  "sprawdzenie": "d",
+  "powod": "Mur na krawędzi mapy gracza (Map008 E, Map020 N/E) istnieje od zawsze; nie nasza zmiana, a ruszać nie wolno (budynek/mur gracza); obrazek docs/krawedzie_poprawa/estetyka_b/d_Map020_79_0.png"
+ },
+ {
+  "mapa": 21,
+  "x": 77,
+  "y": 8,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map021_77_8.png)"
+ },
+ {
+  "mapa": 21,
+  "x": 59,
+  "y": 23,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map021_59_23.png)"
+ },
+ {
+  "mapa": 22,
+  "x": 72,
+  "y": 10,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map022_72_10.png)"
+ },
+ {
+  "mapa": 22,
+  "x": 75,
+  "y": 29,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map022_75_29.png)"
+ },
+ {
+  "mapa": 22,
+  "x": 66,
+  "y": 22,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map022_66_22.png)"
+ },
+ {
+  "mapa": 22,
+  "x": 25,
+  "y": 41,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map022_25_41.png)"
+ },
+ {
+  "mapa": 22,
+  "x": 77,
+  "y": 46,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map022_77_46.png)"
+ },
+ {
+  "mapa": 22,
+  "x": 52,
+  "y": 52,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map022_52_52.png)"
+ },
+ {
+  "mapa": 23,
+  "x": 40,
+  "y": 5,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map023_40_5.png)"
+ },
+ {
+  "mapa": 23,
+  "x": 24,
+  "y": 48,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map023_24_48.png)"
+ },
+ {
+  "mapa": 23,
+  "x": 36,
+  "y": 54,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map023_36_54.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 28,
+  "y": 1,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_28_1.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 34,
+  "y": 2,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_34_2.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 33,
+  "y": 4,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_33_4.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 35,
+  "y": 4,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_35_4.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 30,
+  "y": 5,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_30_5.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 38,
+  "y": 10,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_38_10.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 33,
+  "y": 11,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_33_11.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 34,
+  "y": 13,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_34_13.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 35,
+  "y": 15,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_35_15.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 16,
+  "y": 21,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_16_21.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 27,
+  "y": 21,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_27_21.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 13,
+  "y": 26,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_13_26.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 24,
+  "y": 26,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_24_26.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 36,
+  "y": 28,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_36_28.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 3,
+  "y": 58,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_3_58.png)"
+ },
+ {
+  "mapa": 24,
+  "x": 36,
+  "y": 58,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map024_36_58.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 77,
+  "y": 12,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_77_12.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 18,
+  "y": 21,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_18_21.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 43,
+  "y": 41,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_43_41.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 10,
+  "y": 50,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_10_50.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 11,
+  "y": 55,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_11_55.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 18,
+  "y": 75,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_18_75.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 11,
+  "y": 29,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_11_29.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 64,
+  "y": 30,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_64_30.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 40,
+  "y": 41,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_40_41.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 39,
+  "y": 83,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_39_83.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 4,
+  "y": 92,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_4_92.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 83,
+  "y": 104,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_83_104.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 0,
+  "y": 105,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_0_105.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 91,
+  "y": 32,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_91_32.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 16,
+  "y": 6,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_16_6.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 32,
+  "y": 14,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_32_14.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 11,
+  "y": 21,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_11_21.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 50,
+  "y": 61,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_50_61.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 63,
+  "y": 71,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_63_71.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 28,
+  "y": 75,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_28_75.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 8,
+  "y": 88,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_8_88.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 89,
+  "y": 98,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_89_98.png)"
+ },
+ {
+  "mapa": 111,
+  "x": 26,
+  "y": 106,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map111_26_106.png)"
+ },
+ {
+  "mapa": 120,
+  "x": 41,
+  "y": 0,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map120_41_0.png)"
+ },
+ {
+  "mapa": 120,
+  "x": 35,
+  "y": 35,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map120_35_35.png)"
+ },
+ {
+  "mapa": 120,
+  "x": 54,
+  "y": 40,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map120_54_40.png)"
+ },
+ {
+  "mapa": 120,
+  "x": 59,
+  "y": 12,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map120_59_12.png)"
+ },
+ {
+  "mapa": 120,
+  "x": 71,
+  "y": 39,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map120_71_39.png)"
+ },
+ {
+  "mapa": 120,
+  "x": 86,
+  "y": 39,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map120_86_39.png)"
+ },
+ {
+  "mapa": 120,
+  "x": 53,
+  "y": 56,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map120_53_56.png)"
+ },
+ {
+  "mapa": 120,
+  "x": 49,
+  "y": 50,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map120_49_50.png)"
+ },
+ {
+  "mapa": 125,
+  "x": 15,
+  "y": 53,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map125_15_53.png)"
+ },
+ {
+  "mapa": 125,
+  "x": 21,
+  "y": 16,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map125_21_16.png)"
+ },
+ {
+  "mapa": 125,
+  "x": 21,
+  "y": 25,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map125_21_25.png)"
+ },
+ {
+  "mapa": 125,
+  "x": 60,
+  "y": 29,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map125_60_29.png)"
+ },
+ {
+  "mapa": 125,
+  "x": 123,
+  "y": 38,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map125_123_38.png)"
+ },
+ {
+  "mapa": 125,
+  "x": 119,
+  "y": 55,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map125_119_55.png)"
+ },
+ {
+  "mapa": 125,
+  "x": 42,
+  "y": 62,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map125_42_62.png)"
+ },
+ {
+  "mapa": 125,
+  "x": 77,
+  "y": 8,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map125_77_8.png)"
+ },
+ {
+  "mapa": 125,
+  "x": 121,
+  "y": 8,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map125_121_8.png)"
+ },
+ {
+  "mapa": 125,
+  "x": 53,
+  "y": 41,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map125_53_41.png)"
+ },
+ {
+  "mapa": 125,
+  "x": 76,
+  "y": 53,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map125_76_53.png)"
+ },
+ {
+  "mapa": 155,
+  "x": 83,
+  "y": 6,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map155_83_6.png)"
+ },
+ {
+  "mapa": 155,
+  "x": 23,
+  "y": 25,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map155_23_25.png)"
+ },
+ {
+  "mapa": 155,
+  "x": 45,
+  "y": 61,
+  "sprawdzenie": "e",
+  "powod": "A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie; obrazek docs/krawedzie_poprawa/estetyka_b/e_Map155_45_61.png"
+ },
+ {
+  "mapa": 157,
+  "x": 102,
+  "y": 19,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map157_102_19.png)"
+ },
+ {
+  "mapa": 157,
+  "x": 23,
+  "y": 36,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map157_23_36.png)"
+ },
+ {
+  "mapa": 157,
+  "x": 101,
+  "y": 42,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map157_101_42.png)"
+ },
+ {
+  "mapa": 157,
+  "x": 71,
+  "y": 47,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map157_71_47.png)"
+ },
+ {
+  "mapa": 157,
+  "x": 35,
+  "y": 58,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map157_35_58.png)"
+ },
+ {
+  "mapa": 157,
+  "x": 116,
+  "y": 0,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map157_116_0.png)"
+ },
+ {
+  "mapa": 157,
+  "x": 104,
+  "y": 17,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map157_104_17.png)"
+ },
+ {
+  "mapa": 159,
+  "x": 4,
+  "y": 27,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map159_4_27.png)"
+ },
+ {
+  "mapa": 159,
+  "x": 70,
+  "y": 40,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map159_70_40.png)"
+ },
+ {
+  "mapa": 159,
+  "x": 8,
+  "y": 32,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map159_8_32.png)"
+ },
+ {
+  "mapa": 162,
+  "x": 110,
+  "y": 43,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map162_110_43.png)"
+ },
+ {
+  "mapa": 162,
+  "x": 76,
+  "y": 5,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map162_76_5.png)"
+ },
+ {
+  "mapa": 162,
+  "x": 22,
+  "y": 40,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map162_22_40.png)"
+ },
+ {
+  "mapa": 162,
+  "x": 36,
+  "y": 59,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map162_36_59.png)"
+ },
+ {
+  "mapa": 162,
+  "x": 74,
+  "y": 61,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map162_74_61.png)"
+ },
+ {
+  "mapa": 162,
+  "x": 14,
+  "y": 62,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map162_14_62.png)"
+ },
+ {
+  "mapa": 162,
+  "x": 35,
+  "y": 9,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map162_35_9.png)"
+ },
+ {
+  "mapa": 162,
+  "x": 4,
+  "y": 40,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map162_4_40.png)"
+ },
+ {
+  "mapa": 162,
+  "x": 111,
+  "y": 55,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map162_111_55.png)"
+ },
+ {
+  "mapa": 162,
+  "x": 16,
+  "y": 56,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map162_16_56.png)"
+ },
+ {
+  "mapa": 162,
+  "x": 89,
+  "y": 50,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map162_89_50.png)"
+ },
+ {
+  "mapa": 162,
+  "x": 80,
+  "y": 74,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map162_80_74.png)"
+ },
+ {
+  "mapa": 162,
+  "x": 66,
+  "y": 78,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map162_66_78.png)"
+ },
+ {
+  "mapa": 162,
+  "x": 105,
+  "y": 80,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map162_105_80.png)"
+ },
+ {
+  "mapa": 168,
+  "x": 125,
+  "y": 3,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map168_125_3.png)"
+ },
+ {
+  "mapa": 168,
+  "x": 26,
+  "y": 14,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map168_26_14.png)"
+ },
+ {
+  "mapa": 168,
+  "x": 62,
+  "y": 28,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map168_62_28.png)"
+ },
+ {
+  "mapa": 168,
+  "x": 47,
+  "y": 40,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map168_47_40.png)"
+ },
+ {
+  "mapa": 168,
+  "x": 119,
+  "y": 71,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map168_119_71.png)"
+ },
+ {
+  "mapa": 168,
+  "x": 34,
+  "y": 72,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map168_34_72.png)"
+ },
+ {
+  "mapa": 168,
+  "x": 113,
+  "y": 8,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map168_113_8.png)"
+ },
+ {
+  "mapa": 168,
+  "x": 39,
+  "y": 0,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map168_39_0.png)"
+ },
+ {
+  "mapa": 175,
+  "x": 78,
+  "y": 0,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map175_78_0.png)"
+ },
+ {
+  "mapa": 175,
+  "x": 83,
+  "y": 51,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map175_83_51.png)"
+ },
+ {
+  "mapa": 175,
+  "x": 54,
+  "y": 7,
+  "sprawdzenie": "e",
+  "powod": "A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie; obrazek docs/krawedzie_poprawa/estetyka_b/e_Map175_54_7.png"
+ },
+ {
+  "mapa": 175,
+  "x": 59,
+  "y": 52,
+  "sprawdzenie": "e",
+  "powod": "A2 rodzaj 47 w zestawie 11 to żwir/kamienna posadzka (grunt, nie klif); plama kończy się naturalnie; obrazek docs/krawedzie_poprawa/estetyka_b/e_Map175_59_52.png"
+ },
+ {
+  "mapa": 901,
+  "x": 26,
+  "y": 36,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map901_26_36.png)"
+ },
+ {
+  "mapa": 950,
+  "x": 21,
+  "y": 4,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map950_21_4.png)"
+ },
+ {
+  "mapa": 960,
+  "x": 31,
+  "y": 25,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map960_31_25.png)"
+ },
+ {
+  "mapa": 960,
+  "x": 22,
+  "y": 36,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map960_22_36.png)"
+ },
+ {
+  "mapa": 961,
+  "x": 68,
+  "y": 0,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map961_68_0.png)"
+ },
+ {
+  "mapa": 961,
+  "x": 54,
+  "y": 11,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map961_54_11.png)"
+ },
+ {
+  "mapa": 963,
+  "x": 22,
+  "y": 23,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map963_22_23.png)"
+ },
+ {
+  "mapa": 963,
+  "x": 44,
+  "y": 19,
+  "sprawdzenie": "b",
+  "powod": "Heurystyka: organiczna plama/kratka dwóch bliskich odmian trawy lub ziemi (16/27/17), nie ucięcie; część to rysunek gracza sprzed dzisiejszych zmian, reszta to próbki obejrzane na obrazkach (docs/krawedzie_poprawa/estetyka_b/b_Map963_44_19.png)"
+ }
+]

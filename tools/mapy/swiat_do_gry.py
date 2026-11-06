@@ -17,7 +17,7 @@ LINKI = [
 # 13 <-> 175: BEZ przejścia piechotą: wspinaczka orła (Orzel_Data WAY_UP/WAY_DOWN) i zadania D29 / W13 zostają bez zmian.
 # Dalsze przejścia (ścieżki brzegowe do nowych map, 125 <-> 21) dopisuje tools/swiat/etap1/zbuduj.py do staging/ogon.json.
 def main():
-    STY = os.path.join(ROOT, "tools/swiat/styki/staging")      # styki: nowe mapy 960-964, układ bez 930/932/936, links z kafli
+    STY = os.path.abspath(os.environ["SWIAT_STY"]) if os.environ.get("SWIAT_STY") else os.path.join(ROOT, "tools/swiat/styki/staging")      # styki: nowe mapy 960-964, układ bez 930/932/936, links z kafli
     uk = os.path.join(STY, "swiat_uklad.json") if "--styki" in sys.argv else os.path.join(ROOT, "docs/mapy/swiat_uklad.json")
     sw = json.load(open(uk, encoding="utf-8"))
     maps = {}
@@ -28,7 +28,7 @@ def main():
         mt = re.search(r"maps: (\{.*?\}),\s*\n\s*links", open(lp, encoding="utf-8").read(), re.S)
         if mt: live = {int(k): v for k, v in json.loads(mt.group(1)).items()}
     def rozmiar_pliku(m):
-        for d in (["tools/swiat/styki/staging/data"] if "--styki" in sys.argv else []) + ["tools/swiat/etap3/staging/data", "tools/swiat/etap2/staging_b/data", "tools/swiat/etap2/staging/data", "data"]:
+        for d in ([os.path.join(STY, "data")] if "--styki" in sys.argv else []) + ["tools/swiat/etap3/staging/data", "tools/swiat/etap2/staging_b/data", "tools/swiat/etap2/staging/data", "data"]:
             pp = os.path.join(ROOT, d, "Map%03d.json" % m)
             if os.path.exists(pp):
                 j = json.load(open(pp, encoding="utf-8")); return j["width"], j["height"]

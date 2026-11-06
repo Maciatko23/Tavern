@@ -55,7 +55,9 @@ const SMOKE = [
 // not in "full": long runs that are not pass / fail tests (the marathon plays days and messages the phone), and the whole game in one
 // go (przejscie_ciagiem_test, ~10-15 min: the prologue to the Heart's chamber - only on request, with --timeout 1500), and the story
 // autopilot that plays it honestly (autopilot_fabula_test, 2-3 hours: --port 9751 --timeout 10800; the test stops itself after --minuty, default 150)
-const SKIP_FULL = ["marathon_test", "przejscie_ciagiem_test", "autopilot_fabula_test"];
+// (wzgorza_*: Wzgorza.js is switched off since 2026-11-03 - the player went back to the plain square hills; with the plugin from tools/wzgorza/staging they run by hand)
+// (za_wzgorzem_test: walking behind the hills' back edges, RegionLayers v1.1.0, taken back the same day - the player wants the default: on the hill, never behind it)
+const SKIP_FULL = ["marathon_test", "przejscie_ciagiem_test", "autopilot_fabula_test", "wzgorza_test", "wzgorza_ruch_test", "wzgorza_pora_test", "za_wzgorzem_test"];
 // turbo (tests/cdp.js TEST_TURBO): these run N game updates for each drawn frame - the same frames, the clock time divided (checked
 // green both ways, 2026-10-23); --turbo N: every test so (to try one before it goes on this list), --bez-turbo: none
 // (tried and left off: tavern_shift_test - P and the abort by the clock, heart_test - stops, creatures_test, birds_test - the aim's
@@ -81,7 +83,7 @@ const MEASURE = REFRESH || args.includes("mapa");
 const TIMEOUT = Number(opt("timeout", MEASURE ? 900 : 420));
 // the long tests: their own limit (s) when it is above the run's (2026-10-30: town_quests ~250 s in September, 393 on 10-17, ~420 now -
 // sixty quests walked through one after another, not a slower game)
-const LONG = { town_quests_test: 720 };
+const LONG = { town_quests_test: 720, goscie_sala_test: 720 };
 if (!args.length && !REFRESH) { console.log("usage: node tests/run.js smoke|full|unit|zmiany [files] [--od REF|znacznik[:name]]|znacznik [name]|mapa [names]|affected <Plugin...>|changed|<name...> [--odswiez-mape <names>] [--czesc k/n] [--port N] [--retry N] [--timeout S] [--list] [--reuse|--no-reuse]"); process.exit(2); }
 const ROOT = path.join(TESTS, "..");
 const LAST = path.join(TESTS, "last_results.json");

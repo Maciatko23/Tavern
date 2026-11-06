@@ -313,6 +313,31 @@
         bushCache.set(k, { stamp, solid });
         return solid;
     }
+    // (2026-11-06, faster changes of map - the player: "jak drastycznie przyspieszyć wczytywanie mapy") many tiles asked at once (the
+    // drawing layer's rebuild): the cells the events stand on worked out once for the whole batch - eventsXy walked all the map's events
+    // for every tile (~40 ms of a change of map, ~125 ms at CPU 4x); the same answer (a wide tree or bush covers several cells -
+    // ChoppableTree.js's pos -: the ring walk of GroundDetail.js). Outside a batch nothing changes.
+    let evBatch = null;
+    function eventCellsNow() {
+        const W = $gameMap.width(), H = $gameMap.height(), occ = new Uint8Array(W * H);
+        for (const e of $gameMap.events()) {
+            for (let r = 0; r <= 12; r++) {
+                let hit = false;
+                for (let y = e.y - r; y <= e.y + r; y++) for (let x = e.x - r; x <= e.x + r; x++) {
+                    if ((Math.abs(x - e.x) !== r && Math.abs(y - e.y) !== r) || x < 0 || y < 0 || x >= W || y >= H) continue;
+                    if (e.pos(x, y)) { occ[y * W + x] = 1; hit = true; }
+                }
+                if (!hit && r > 0) break;
+            }
+        }
+        return { W, H, occ };
+    }
+    function withEventCells(fn) {
+        if (evBatch) return fn();
+        evBatch = eventCellsNow();
+        try { return fn(); } finally { evBatch = null; }
+    }
+    const eventOn = (x, y) => (evBatch ? x >= 0 && y >= 0 && x < evBatch.W && y < evBatch.H && evBatch.occ[y * evBatch.W + x] === 1 : $gameMap.eventsXy(x, y).length > 0);
     // the kind that lies on a tile (in this season), false, or undefined while the ground pictures are still loading
     function gatherSpot(x, y) {
         const kind = gatherKindOf(x, y);
@@ -323,7 +348,7 @@
         if (!mapAllowsFarming() && !(br && $gameMap.regionId(x, y) === br && landOwned())) return false;
         if (BLOCK_REGION > 0 && $gameMap.regionId(x, y) === BLOCK_REGION) return false;
         if (!$gameMap.checkPassage(x, y, 0x0f)) return false;
-        if ($gameMap.eventsXy(x, y).length > 0 || hasObjectTile(x, y)) return false;
+        if (eventOn(x, y) || hasObjectTile(x, y)) return false;
         if ((farm().plots[$gameMap.mapId()] || {})[key(x, y)] || buildingAt(x, y)) return false;   // cleared or built-on ground has none
         const g = GATHER[kind];
         if (g.seasons && !g.seasons.includes(seasonIndex(today()))) return false;
@@ -1021,7 +1046,7 @@
     }
 
     P.plots = { isSoilTile, groundInfoAt, groundIsSoil, hasObjectTile, naturalFarmland, plotAt, claimGround, releaseGround,
-        gatherRev, gatherKindOf, gatherTiles, mushroomChance, mushroomBirth, bushState, bushSolid, gatherSpot, gatherAt, stoneSpot, stoneAt,
+        gatherRev, gatherKindOf, gatherTiles, mushroomChance, mushroomBirth, bushState, bushSolid, gatherSpot, gatherAt, withEventCells, stoneSpot, stoneAt,
         pickGather, pickStone, takeGatherFor, canCharges, isWaterTile, seaHere, fillCan, needsOn, drink, fillSkin, goFishing, wellEntries,
         rationWell, rationLeft, rationOf,
         rainHoursBetween, bucketSync, bucketUnits, takeBucketWater, stowVessel, unstowVessel, ownsBucket, bagWater, setBagWater,

@@ -527,7 +527,8 @@
 
     Sprite_StoneLayer.prototype.rebuild = function() {
         const found = [], tiles = Farming.gatherTiles();   // (the tiles where something may lie: most have nothing)
-        {
+        // (all of them asked in one batch: the events' cells worked out once - Farming_Plots withEventCells, 2026-11-06)
+        const ready = (Farming.withEventCells || (f => f()))(() => {
             for (let i = 0; i < tiles.length; i += 3) {
                 const x = tiles[i], y = tiles[i + 1];
                 const spot = Farming.gatherSpot(x, y);
@@ -542,7 +543,9 @@
                 if (!bitmap.isReady()) return false;   // the picture is still loading: try again next frame (nothing torn down yet)
                 found.push({ x, y, kind, bitmap });
             }
-        }
+            return true;
+        });
+        if (!ready) return false;
         const before = new Map(this._swaying.map(e => [e.key, e]));   // (a plant keeps its motion when the layer is rebuilt)
         for (const e of this._entries) this.removeChild(e.sprite);
         for (const e of this._swaying) e.sprite.destroy();   // the old meshes (not their pictures: those stay cached)

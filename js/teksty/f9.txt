@@ -44,6 +44,12 @@ wyspa.miejsca.chata.opis = Podgrodzie (Map111): przed drzwiami chaty pod lasem i
 # zagroda
 wyspa.miejsca.zagroda.nazwa = Spalona zagroda
 wyspa.miejsca.zagroda.opis = Map168: zgliszcza zagrody Ługów (zadanie D21). Lądujesz przy drodze ze Skraju lasu.
+# probnaA
+wyspa.miejsca.probnaA.nazwa = Mapa próbna A (zestaw 11)
+wyspa.miejsca.probnaA.opis = Map990: zatoka z brzegiem, półka ze schodami, wzgórze, plamy i rumowisko, zagroda z furtką, koniec muru. Styk z mapą B po wschodzie.
+# probnaB
+wyspa.miejsca.probnaB.nazwa = Mapa próbna B (zestaw 9)
+wyspa.miejsca.probnaB.opis = Map991: las, pole skał, wzgórze z wejściem, sad, zagroda z furtką. Styk z mapą A po zachodzie.
 
 # ======================================================================== Wyspa i fabuła - „Wnętrze: ...” (←→)
 # skryptorium
