@@ -7,8 +7,9 @@
 //   top left      (2026-10-23) the goal followed in the corner (label, icon, title, the step, what it needs with the counts now);
 //                 under it the needs as thin level bars one under another on a plate as wide as the goal's (health, stamina, food,
 //                 water - the breath a fifth one in the combat mode), with their icons and numbers; under them "Tryb walki", the premia
-//   top centre    the map's name as one comes in ("Kronika", 2026-10-23: the golden name, a line from a diamond, the place's words,
-//                 the first time one sentence about it - js/teksty/miejsca.txt), the notices, the banners
+//   top centre    the notices, the banners
+//   bottom left   the map's name as one comes in ("Kinowy": the place's words, the name and a gold line as one ready picture -
+//                 js/teksty/miejsca.txt, img/nazwy_map), shown whole and faded out
 //   top right     a round clock with hands and the sun right beside the round goal compass (CleanHUD_Compass.js), both of one size;
 //                 the compass's label under it, the day's line under them, the torch's gauge, the minimap only on M (hidden by
 //                 default); the load (41 / 120 and the bag) is hidden for now (SHOW_LOAD)
@@ -58,11 +59,10 @@
  *    oddech jako piąty pasek) z ikonkami i liczbami, a pod nim plakietka
  *    „Tryb walki” i premie. Bez celu paski stoją w samym rogu. Niska
  *    wartość: pasek czerwony, miga.
- *  - Góra, środek: nazwa miejsca po wejściu w stylu „Kronika” (złoty napis,
- *    ornament z rombem, podpis; przy pierwszej wizycie jedno zdanie
- *    o miejscu - teksty w js/teksty/miejsca.txt; we wnętrzach mniejsza,
- *    w podziemiach „Piętro N” i nazwa pasma) i komunikaty (doświadczenie,
- *    cele, „Poziom N!”, powitanie dnia).
+ *  - Lewy dolny róg: nazwa miejsca po wejściu (podpis, nazwa i złota kreska
+ *    jako jeden gotowy obrazek z img/nazwy_map - teksty w js/teksty/miejsca.txt;
+ *    we wnętrzach mniejsza, w podziemiach „Piętro N” i nazwa pasma).
+ *  - Góra, środek: komunikaty (doświadczenie, cele, „Poziom N!”, powitanie dnia).
  *    Notatka mapy <NazwaMapy:wnetrze> / <NazwaMapy:miejsce> - mała albo
  *    pełna nazwa mimo zestawu kafli; <NazwaMapy:off> - bez nazwy.
  *  - Prawy górny róg: okrągły zegar ze wskazówkami i słońcem tuż obok
@@ -117,11 +117,10 @@
 
     // the HUD's faces (fonts/: Alegreya Sans Regular and Bold, Alegreya Sans SC for the spaced small capitals - OFL, the
     // Alegreya Sans project like the Medium the game already uses): loaded once without FontManager (a missing file must not stop the
-    // game); a part drawn before they are ready draws again (its key has facesReady()). The map's name ("Kronika", below): Alegreya
-    // SC Bold for the name, EB Garamond for its sentence (OFL, fonts/ - the game's FontManager loads neither under a name of its own:
-    // TawernaUI's "QB Caps" is the same file, the title screen and the prologue load the Garamond under theirs)
+    // game); a part drawn before they are ready draws again (its key has facesReady()). The map's name (below): Alegreya
+    // SC Bold (OFL, fonts/ - the game's FontManager does not load it under a name of its own: TawernaUI's "QB Caps" is the same file)
     const FACES = { regular: ["TwAlegreyaSansReg", "AlegreyaSans-Regular.ttf"], bold: ["TwAlegreyaSansBold", "AlegreyaSans-Bold.ttf"], sc: ["TwAlegreyaSansSC", "AlegreyaSansSC-Medium.ttf"],
-        caps: ["TwAlegreyaSCBold", "AlegreyaSC-Bold.ttf"], serif: ["TwHudGaramond", "EBGaramond-Variable.ttf", { weight: "400 800" }] };
+        caps: ["TwAlegreyaSCBold", "AlegreyaSC-Bold.ttf"] };
     const faceState = {};
     function loadFaces() {
         for (const k in FACES) {
@@ -1052,47 +1051,17 @@
         this.y = H() - 44;
     };
 
-    // ---- the top centre, first: the map's name as one comes in - "Kronika" (the user's choice 2026-10-23: variant 2 of
-    // docs/ui_nazwa_mapy/POMYSLY.md, the mock-ups 2_kronika_*.png drawn by tools/ui_nazwa_mapy/makiety.py kronika()). The name big in
-    // gold (Alegreya SC: light gold at the top of the capitals to dark gold at their foot, a dark outline, a soft shadow, spaced),
-    // under it a golden line running both ways from a diamond and fading to its ends, two dots by the diamond; under the line the
-    // place's words in spaced cream capitals and, the first time, one sentence about the place (EB Garamond, muted); under all that,
-    // small, "M: pokaż mapę" (where the map has a minimap and it is hidden). Never over the corners' HUD: a name too long for the
-    // room between them is drawn smaller. Its own timeline (no longer the old window's fade), started where the game opens its old
-    // name window (Window_MapName.open - a map entered with its name to show: the same condition as before):
-    //   first      the first visit, ~5 s: the letters one after another rising a little (0.8 s), the line drawn from the diamond
-    //              outwards (0.4 s), the words and the sentence fading in, a glint running once over the letters; it stays till
-    //              4.4 s and goes in 0.6 s
-    //   again      a later visit, ~3 s: the name, the line and the words, no sentence, coming in quicker
-    //   inside     a room (Atmosphere's profile "interior" / "tavern": the tileset or <Ambience>), ~2.5 s: the name smaller (~30 px)
-    //              with its words, no sentence
-    //   floors     the underground: a generated floor is "Piętro N" with its band's name as the words (the band's sentence the
-    //              first time in the band - the first look of a band, the later floors of it "again"); a hand-made one its hall's
-    //              name with "piętro N · band"; every 10th floor (the guardians) the gold turns to red as it comes in
-    // Night outdoors: a warmer gold with a faint glow of fire round the letters. It goes at once when he leaves the map (a transfer,
-    // another scene) and fades out early when a message comes or the map's name is turned off (as the old window closed then).
-    // The words: js/teksty/miejsca.txt (mapa.<id>.pod, mapa.<id>.opis, pasmo.<n>.opis); a map without them: its name and the line.
+    // ---- the map's name as one comes in (the look: "Kinowy", further down). Which show: a room (<NazwaMapy:wnetrze>, else Atmosphere's
+    // profile "interior" / "tavern") its own, smaller one; any other place the same small one on every visit; the underground: a
+    // generated floor is "Piętro N" with its band's name as the words, a hand-made one its hall's name with "piętro N · band", every
+    // 10th floor (the guardians) red. Night outdoors: a warmer gold with a faint glow. It goes at once when he leaves the map and fades
+    // out early when a message comes or the map's name is turned off (as the old window closed then).
+    // The words: js/teksty/miejsca.txt (mapa.<id>.pod); a map without them: its name and the line.
     // The visits: Tawerna.state("nazwaMapy") - { odw: { mapId: visits }, pasma: { band: true }, gotowe }; an older save counts as
     // visited what the game already remembers (Combat's discoveries "odkrycie", Underground's floors, the raven's places, the map
-    // he stands on), so the long show never plays on the places he knows.
+    // he stands on).
     const TXM = window.Watki && Watki.teksty ? Watki.teksty("miejsca") : {};
     const placeWord = key => { let o = TXM; for (const p of String(key).split(".")) { if (!o || typeof o !== "object") return ""; o = o[p]; } return typeof o === "string" ? o : ""; };
-    const KR = {
-        place: { size: 48, sp: 6, half: 190, gap: 14, sub: 21, subSp: 3, opis: 22, min: 26, dot: 1 },
-        inside: { size: 30, sp: 4, half: 120, gap: 12, sub: 17, subSp: 2, opis: 0, min: 20, dot: 0.75 },
-        gold: [[255, 236, 150], [214, 160, 30]], night: [[255, 230, 172], [230, 146, 44]], red: [[255, 182, 156], [178, 30, 24]],
-        glint: "rgb(255,250,228)", glow: "rgba(255,146,52,0.55)", line: [255, 210, 63], redLine: [226, 86, 58], cream: "#f0e8d6", muted: "#aaa496",
-        // frames (60 a second): letters [start, the last one starts by, one letter's own], the diamond's start, the line [start,
-        // length], the words and the sentence [start, length], the glint [start, length], the red [start, length], hold: when it
-        // starts to go, out: how long it goes
-        times: {
-            first: { letters: [0, 48, 18], diamond: 34, line: [42, 24], sub: [58, 24], opis: [76, 30], glint: [104, 46], red: [50, 60], hold: 264, out: 36 },
-            again: { letters: [0, 22, 12], diamond: 12, line: [16, 15], sub: [24, 18], opis: null, glint: null, red: [24, 40], hold: 156, out: 24 },
-            inside: { letters: [0, 18, 10], diamond: 9, line: [12, 12], sub: [18, 16], opis: null, glint: null, red: [18, 30], hold: 126, out: 24 }
-        }
-    };
-    const easeOut = k => 1 - Math.pow(1 - clamp01(k), 3);
-    const easeBack = k => { const c = 1.70158, x = clamp01(k) - 1; return 1 + (c + 1) * x * x * x + c * x * x; };
     const rgbOf = c => "rgb(" + c.join(",") + ")";
 
     // the visits (the save): a new game has nothing to take over; an older save takes what the game already remembers
@@ -1128,7 +1097,7 @@
         const ts = $gameMap.tileset(), name = (ts && ts.name) || "";
         return /Wewn|Inside|Interior/i.test(name) && !/cave/i.test(String((T.mapTag("Ambience") || {}).raw || "")) ? "inside" : "place";
     }
-    // what the chronicle shows on this map now (before the visit is counted): { id, kind, title, sub, opis, first, floor, boss, band }
+    // what the map's name shows on this map now (before the visit is counted): { id, kind, title, sub, opis, first, floor, boss, band }
     function placeInfo() {
         const id = $gameMap.mapId(), s = visits(), first = !s.odw[id];
         const U = T.api("Underground"), UD = window.Underground_Data, f = U && U.floorOf && UD ? U.floorOf(id) : 0;
@@ -1149,7 +1118,7 @@
     function nameShown() {
         return !!window.$gameMap && !!$gameMap.displayName() && $gameMap.isNameDisplayEnabled() && T.mapFlag("NazwaMapy", true, "off") !== false;
     }
-    // a map entered: the visit counted (in either look), the chronicle started (the clean look draws it)
+    // a map entered: the visit counted (in either look), the map's name started (the clean look draws it)
     function startPlaceName(scene) {
         if (!window.$gameSystem || !nameShown()) return;
         let info;
@@ -1160,31 +1129,56 @@
         const s = visits();
         s.odw[info.id] = (s.odw[info.id] || 0) + 1;
         if (info.band) s.pasma[info.band] = true;
-        const top = scene && scene._cleanTop, chron = NAME_STYLE === "kinowy" ? scene && scene._cleanCinema : top && top._items ? top._items.name : null;
-        if (chron && chron.start) chron.start(info);
+        const name = scene && scene._cleanCinema;
+        if (name && name.start) name.start(info);
     }
     const _nameOpen = Window_MapName.prototype.open;
     Window_MapName.prototype.open = function() {
         _nameOpen.call(this);
         const scene = SceneManager._scene;
-        if (scene instanceof Scene_Map && scene._mapNameWindow === this) startPlaceName(scene);
+        if (!(scene instanceof Scene_Map && scene._mapNameWindow === this)) return;
+        if (window.$gameTemp && $gameTemp._hudScene) { nameWaits = $gameMap.mapId(); return; }   // (a scene's bars are in: after the scene)
+        startPlaceName(scene);
+    };
+    // ---- a scene's black bars (2026-11-07, the user: grandpa's first talk - "wyłączyć HUD i dać paski kinowe"): a plugin's scene turns
+    // them on and off (CleanHUD.sceneBars(on)); while on, the HUD goes (SurvivalHUD's fade reads $gameTemp._hudScene - Game_Temp, never
+    // saved), the top stack's notices stay on the bar, and the map's name waits for the end of the scene. Two plain black bars of
+    // SCENE_BAR px, faded in and out (alpha only); a scene that begins as the map is made has them at once.
+    const SCENE_BAR = 64, SCENE_FADE = 12;
+    let nameWaits = 0;
+    function sceneBars(on) {
+        if (!window.$gameTemp) return false;
+        $gameTemp._hudScene = !!on;
+        if (!on && nameWaits) {
+            const scene = SceneManager._scene, was = nameWaits;
+            nameWaits = 0;
+            if (scene instanceof Scene_Map && $gameMap.mapId() === was) startPlaceName(scene);
+        }
+        return !!on;
+    }
+    function Sprite_CleanBars() {
+        this.initialize(...arguments);
+    }
+    Sprite_CleanBars.prototype = Object.create(Sprite.prototype);
+    Sprite_CleanBars.prototype.constructor = Sprite_CleanBars;
+    Sprite_CleanBars.prototype.initialize = function() {
+        Sprite.prototype.initialize.call(this);
+        const bm = new Bitmap(4, 4);
+        bm.fillAll("rgba(0,0,0,0.94)");
+        this._top = new Sprite(bm);
+        this._bottom = new Sprite(bm);
+        for (const s of [this._top, this._bottom]) { s.scale.x = W() / 4; s.scale.y = SCENE_BAR / 4; this.addChild(s); }
+        this._bottom.y = H() - SCENE_BAR;
+        this.alpha = window.$gameTemp && $gameTemp._hudScene ? 1 : 0;   // (on as the map is made: there at once, the screen fades in anyway)
+        this.visible = this.alpha > 0;
+    };
+    Sprite_CleanBars.prototype.update = function() {
+        const want = window.$gameTemp && $gameTemp._hudScene ? 1 : 0;
+        if (this.alpha !== want) this.alpha = want > this.alpha ? Math.min(1, this.alpha + 1 / SCENE_FADE) : Math.max(0, this.alpha - 1 / SCENE_FADE);
+        this.visible = this.alpha > 0;
     };
     // Underground.js asks: does the map's name say the floor (and its band) here? Then no notice "Piętro N" under it
     const saysFloor = () => isClean() && nameShown();
-    // the room between the corners' HUD at the top (the left column's right edge, the clock's and the compass's left edge), as wide
-    // round the screen's middle as the nearer of the two allows
-    function chronicleRoom() {
-        const scene = SceneManager._scene, cx = W() / 2;
-        let left = 0, right = W();
-        const col = columnRect();
-        if (col.width > 0) left = col.x + col.width;
-        for (const p of [scene && scene._cleanClock, scene && scene._cleanCompass]) {
-            if (!p || !p.visible) continue;
-            const r = p.ownRect ? p.ownRect() : p.hudRect();
-            if (r.width > 0) right = Math.min(right, r.x);
-        }
-        return Math.max(260, Math.round(2 * Math.min(cx - left, right - cx) - 40));
-    }
     // one letter of the name: the glow (night), the soft shadow, the dark outline, the fill - `fill` a colour, or [top, foot]: the
     // capitals' top to the line (o.fillOnly: the fill alone - the glint and the red laid over the letter)
     // (o.into = { bmp, x, y }: drawn straight into that picture with its box's top left at x, y - no picture of its own; returns the box)
@@ -1224,8 +1218,8 @@
         b._pad = pad;
         return b;
     }
-    // the place's words: spaced capitals in the main face, centred in one picture, smaller when wider than maxW
-    // (capsFit measures - the picture's size -, capsDraw draws it into a picture at ox, oy)
+    // the place's words: spaced capitals in the main face, smaller when wider than maxW (capsFit measures - the picture's size -,
+    // capsDraw draws it into a picture at ox, oy)
     function capsFit(text, size, sp, maxW) {
         const s = String(text).toLocaleUpperCase("pl");
         let letters = Array.from(s), ws = [], tot = 0;
@@ -1245,294 +1239,23 @@
             x += f.ws[i] + f.sp;
         });
     }
-    function kronikaCaps(text, size, sp, colour, maxW) {
-        const f = capsFit(text, size, sp, maxW), b = new Bitmap(f.w, f.h);
-        capsDraw(b, f, colour, 0, 0);
-        b._baseTexture.update();
-        b._w = Math.ceil(f.tot);
-        return b;
-    }
-    // the sentence: EB Garamond, muted, smaller (then shortened) when wider than maxW (lineFit measures, lineDraw draws at ox, oy)
-    function lineFit(text, size, maxW) {
-        while (size > 17 && measure(text, size, "serif") > maxW) size--;
-        const t = fit(text, size, maxW, "serif"), w = measure(t, size, "serif");
-        return { t, size, tw: Math.ceil(w), w: Math.ceil(w) + 24, h: size + 16 };
-    }
-    function lineDraw(b, f, colour, ox, oy) {
-        textOut(b, f.t, ox, oy, f.w, f.h, "center", { size: f.size, face: "serif", color: colour, ow: 4, outline: "rgba(0,0,0,0.78)", shadow: 0.6, blur: 4 });
-    }
-    function kronikaLine(text, size, colour, maxW) {
-        const f = lineFit(text, size, maxW), b = new Bitmap(f.w, f.h);
-        lineDraw(b, f, colour, 0, 0);
-        b._w = f.tw;
-        return b;
-    }
-    // one half of the line: `half` px from the diamond outwards, the colour fading to its end, a dark hairline under it
-    function kronikaHalf(half, colour, toLeft) {
-        const b = new Bitmap(half, 3), ctx = b.context;
-        for (let i = 0; i < half; i++) {
-            const a = 0.9 * Math.pow(1 - i / half, 1.4), x = toLeft ? half - 1 - i : i;
-            ctx.fillStyle = "rgba(" + colour.join(",") + "," + a.toFixed(3) + ")";
-            ctx.fillRect(x, 0, 1, 1);
-            ctx.fillStyle = "rgba(0,0,0," + (a / 2).toFixed(3) + ")";
-            ctx.fillRect(x, 1, 1, 1);
-        }
-        b._baseTexture.update();
-        return b;
-    }
-    // the diamond with a dot either side (60 x 20, its middle at 30, 10)
-    function kronikaDiamond(colour) {
-        const b = new Bitmap(60, 20), ctx = b.context;
-        ctx.fillStyle = rgbOf(colour);
-        ctx.strokeStyle = "rgb(60,40,0)";
-        ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(30, 3); ctx.lineTo(37, 10); ctx.lineTo(30, 17); ctx.lineTo(23, 10); ctx.closePath();
-        ctx.fill(); ctx.stroke();
-        ctx.globalAlpha = 0.9;
-        for (const x of [8, 52]) { ctx.beginPath(); ctx.arc(x, 10, 2, 0, Math.PI * 2); ctx.fill(); }
-        b._baseTexture.update();
-        return b;
-    }
-    let lastShow = null;   // (the tests read how the last one went: its map, mode, frames, why it ended)
-
-    function Sprite_CleanChronicle() {
-        this.initialize(...arguments);
-    }
-    Sprite_CleanChronicle.prototype = Object.create(Sprite.prototype);
-    Sprite_CleanChronicle.prototype.constructor = Sprite_CleanChronicle;
-    Sprite_CleanChronicle.prototype.initialize = function() {
-        Sprite.prototype.initialize.call(this);
-        this._info = null;
-        this._t = -1;        // the frame of its timeline; -1: nothing shown
-        this._parts = null;  // the sprites, made on its first frame (the faces ready)
-        this._bitmaps = [];
-        this._h = 0;
-        this._box = null;
-        this.visible = false;
-    };
-    Sprite_CleanChronicle.prototype.start = function(info) {
-        this.clear("new");
-        this._info = info;
-        this._mode = info.kind === "inside" ? "inside" : info.first ? "first" : "again";
-        this._T = KR.times[this._mode];
-        this._mapId = $gameMap.mapId();
-        this._t = 0;
-        this._cut = Infinity;   // (a message, the name turned off: it fades from that frame)
-        this._wait = 0;
-    };
-    Sprite_CleanChronicle.prototype.duration = function() {
-        return this._T ? this._T.hold + this._T.out : 0;
-    };
-    Sprite_CleanChronicle.prototype.clear = function(why) {
-        if (this._t >= 0 && this._info) lastShow = { mapId: this._mapId, title: this._info.title, mode: this._mode, frames: this._t, why: why || "" };
-        this.removeChildren();
-        for (const b of this._bitmaps) b.destroy();
-        this._bitmaps = [];
-        this._parts = null;
-        this._t = -1;
-        this._h = 0;
-        this._box = null;
-        this.visible = false;
-    };
-    Sprite_CleanChronicle.prototype.update = function() {
-        Sprite.prototype.update.call(this);
-        if (this._t < 0) return;
-        // it goes at once when he leaves the map (a transfer, another scene - the menu too) or the look is the classic one
-        if (!isClean()) { this.clear("look"); return; }
-        if ($gameMap.mapId() !== this._mapId || $gamePlayer.isTransferring() || SceneManager.isSceneChanging()) { this.clear("map"); return; }
-        const tl = this._T;
-        if (this._cut === Infinity && ($gameMessage.isBusy() || !nameShown())) this._cut = Math.min(this._t, tl.hold);
-        if (!this._parts) {
-            if (!this.ready() && this._wait++ < 90) return;   // (the faces - the kinowy's picture - still loading: it waits for them, 1.5 s at most)
-            this.build();
-        }
-        const hint = this.hintText();
-        if (hint !== this._parts.hintText) this.buildHint(hint);
-        this.visible = true;
-        this.animate(this._t);
-        if (++this._t >= Math.min(tl.hold, this._cut) + tl.out) this.clear("end");
-    };
-    Sprite_CleanChronicle.prototype.ready = function() {
-        return facesReady();
-    };
-    // the small line under it all: the deepest floor (the underground, when he has been deeper), "M: pokaż mapę"
-    Sprite_CleanChronicle.prototype.hintText = function() {
-        const i = this._info, out = [];
-        if (i.floor > 0 && i.deepest > i.floor) out.push("najgłębiej: piętro " + i.deepest);
-        const mm = minimapHint(SceneManager._scene);
-        if (mm) out.push(mm);
-        return out.join("  ·  ");
-    };
-    Sprite_CleanChronicle.prototype.keep = function(b) {
-        this._bitmaps.push(b);
-        return b;
-    };
-    Sprite_CleanChronicle.prototype.build = function() {
-        const info = this._info, inside = this._mode === "inside", L = inside ? KR.inside : KR.place, room = chronicleRoom();
-        const S = T.api("Survival"), outdoors = !S || !S.isOutdoors || S.isOutdoors();
-        const night = !inside && !info.floor && outdoors && !!(T.time && T.time.isNight());
-        // the name: letter by letter, smaller when it does not fit between the corners
-        const caps = Array.from(String(info.title).toLocaleUpperCase("pl"));
-        let size = L.size, sp = L.sp, ws = [], tot = 0;
-        for (let i = 0; i < 5; i++) {
-            ws = caps.map(ch => measure(ch, size, "caps"));
-            tot = ws.reduce((a, b) => a + b, 0) + sp * Math.max(0, caps.length - 1);
-            if (tot <= room || size <= L.min) break;
-            size = Math.max(L.min, Math.floor(size * room / tot));
-            sp = Math.max(2, Math.round(L.sp * size / L.size));
-        }
-        const P = this._parts = { letters: [], centres: [], size, w: tot, room, night, half: L.half, gap: L.gap, rise: Math.round(size * 0.22), hintText: null };
-        const gold = night ? KR.night : KR.gold, glint = this._mode === "first";
-        let x = -tot / 2;
-        caps.forEach((ch, i) => {
-            if (ch.trim()) {
-                const b = this.keep(kronikaLetter(ch, size, gold, { glow: night ? KR.glow : null })), s = new Sprite(b);
-                s.x = Math.round(x) - b._pad;
-                s._y0 = -b._pad;
-                s.opacity = 0;
-                if (info.boss) { s._red = new Sprite(this.keep(kronikaLetter(ch, size, KR.red, { fillOnly: true }))); s._red.opacity = 0; s.addChild(s._red); }
-                if (glint) {
-                    s._glint = new Sprite(this.keep(kronikaLetter(ch, size, KR.glint, { fillOnly: true })));
-                    s._glint.blendMode = PIXI.BLEND_MODES.ADD;
-                    s._glint.opacity = 0;
-                    s.addChild(s._glint);
-                }
-                this.addChild(s);
-                P.letters.push(s);
-                P.centres.push(x + ws[i] / 2);
-            }
-            x += ws[i] + sp;
-        });
-        // the line and the diamond, a little under the name's foot
-        const lineY = P.lineY = Math.round(size * 1.02) + Math.round(size * 0.44), colour = info.boss ? KR.redLine : KR.line;
-        P.left = new Sprite(this.keep(kronikaHalf(L.half, colour, true)));
-        P.right = new Sprite(this.keep(kronikaHalf(L.half, colour, false)));
-        P.diamond = new Sprite(this.keep(kronikaDiamond(colour)));
-        P.diamond.anchor.set(0.5, 0.5);
-        P.diamond.y = lineY;
-        P.dScale = L.dot;
-        P.left.y = P.right.y = lineY;
-        P.right.x = L.gap;
-        for (const s of [P.left, P.right, P.diamond]) { s.opacity = 0; this.addChild(s); }
-        // the words, the sentence
-        let y = lineY + (inside ? 3 : 4), wide = Math.max(tot, 2 * (L.half + L.gap));
-        if (info.sub) {
-            P.sub = new Sprite(this.keep(kronikaCaps(info.sub, L.sub, L.subSp, KR.cream, room)));
-            P.sub.anchor.set(0.5, 0);
-            P.subY = y;
-            y += P.sub.bitmap.height - 2;
-            wide = Math.max(wide, P.sub.bitmap._w);
-        }
-        if (info.opis && this._T.opis && L.opis) {
-            P.opis = new Sprite(this.keep(kronikaLine(info.opis, L.opis, KR.muted, room)));
-            P.opis.anchor.set(0.5, 0);
-            P.opisY = y;
-            y += P.opis.bitmap.height;
-            wide = Math.max(wide, P.opis.bitmap._w);
-        }
-        for (const s of [P.sub, P.opis]) if (s) { s.opacity = 0; this.addChild(s); }
-        P.hintY = y + 2;
-        P.wide = wide;
-        this.buildHint(this.hintText());
-    };
-    // the small line ("M: pokaż mapę"): made again when it changes (the minimap shown or hidden); the chronicle's height with it
-    Sprite_CleanChronicle.prototype.buildHint = function(text) {
-        const P = this._parts;
-        if (P.hint) { this.removeChild(P.hint); this._bitmaps = this._bitmaps.filter(b => b !== P.hint.bitmap); P.hint.bitmap.destroy(); P.hint = null; }
-        P.hintText = text;
-        if (text) {
-            const w = Math.ceil(spacedWidth(text, 12)) + 24, b = this.keep(new Bitmap(w, 18));
-            spaced(b, text, w / 2, 0, 18, { size: 12, color: C.muted, align: "center", outline: true, ow: 3 });
-            b._baseTexture.update();
-            P.hint = new Sprite(b);
-            P.hint.anchor.set(0.5, 0);
-            P.hint.opacity = 0;
-            this.addChild(P.hint);
-        }
-        this._h = Math.round(P.hintY + (text ? 20 : 0));
-        this._box = { w: Math.round(Math.max(P.wide, P.hint ? P.hint.bitmap.width : 0) + 8), h: this._h };
-    };
-    Sprite_CleanChronicle.prototype.animate = function(t) {
-        const P = this._parts, tl = this._T, n = P.letters.length;
-        // the letters one after another, each rising a little as it comes
-        const [l0, lAll, lOne] = tl.letters, step = n > 1 ? (lAll - lOne) / (n - 1) : 0;
-        P.letters.forEach((s, i) => {
-            const k = easeOut((t - l0 - i * step) / lOne);
-            s.opacity = Math.round(255 * k);
-            s.y = s._y0 + Math.round((1 - k) * P.rise);
-        });
-        // the diamond comes, the line runs from it to both sides
-        const kd = clamp01((t - tl.diamond) / 10);
-        P.diamond.opacity = Math.round(255 * kd);
-        P.diamond.scale.x = P.diamond.scale.y = P.dScale * (0.3 + 0.7 * easeBack(kd));
-        const hw = Math.round(P.half * easeOut((t - tl.line[0]) / tl.line[1]));
-        P.left.opacity = P.right.opacity = hw > 0 ? 255 : 0;
-        P.left.setFrame(P.half - Math.max(1, hw), 0, Math.max(1, hw), 3);
-        P.left.x = -P.gap - Math.max(1, hw);
-        P.right.setFrame(0, 0, Math.max(1, hw), 3);
-        // the words, the sentence and the small line fade in rising a little
-        const fadeUp = (s, from, y0) => {
-            if (!s || !from) return;
-            const k = easeOut((t - from[0]) / from[1]);
-            s.opacity = Math.round(255 * k);
-            s.y = y0 + Math.round((1 - k) * 6);
-        };
-        fadeUp(P.sub, tl.sub, P.subY);
-        fadeUp(P.opis, tl.opis, P.opisY);
-        fadeUp(P.hint, tl.sub, P.hintY);
-        // the glint (the first visit): once over the letters, left to right
-        if (tl.glint && P.letters.length && P.letters[0]._glint) {
-            const k = (t - tl.glint[0]) / tl.glint[1], on = k >= 0 && k <= 1, sx = -P.w / 2 - 60 + (P.w + 120) * k, r = Math.max(30, P.size);
-            P.letters.forEach((s, i) => { s._glint.opacity = on ? Math.round(220 * Math.max(0, 1 - Math.abs(P.centres[i] - sx) / r)) : 0; });
-        }
-        // the guardians' floors: the gold turns red
-        if (this._info.boss) {
-            const kr = easeOut((t - tl.red[0]) / tl.red[1]);
-            for (const s of P.letters) if (s._red) s._red.opacity = Math.round(255 * kr);
-        }
-        // the end: all of it fades together
-        const cut = Math.min(tl.hold, this._cut);
-        this.opacity = t < cut ? 255 : Math.round(255 * clamp01(1 - (t - cut) / tl.out));
-    };
-    // what it shows now (the tests, the F9)
-    Sprite_CleanChronicle.prototype.info = function() {
-        const i = this._info, P = this._parts;
-        if (!i || this._t < 0) return null;
-        return { mapId: this._mapId, title: i.title, sub: i.sub, opis: P ? (P.opis ? i.opis : "") : i.opis, hint: P ? P.hintText : "", mode: this._mode, kind: i.kind,
-            first: !!i.first, floor: i.floor, boss: !!i.boss, night: !!(P && P.night), t: this._t, dur: this.duration(), visible: !!this.visible,
-            size: P ? P.size : 0, w: P ? Math.round(P.w) : 0, room: P ? P.room : 0, h: this._h, y: Math.round(this.y), opacity: this.opacity,
-            lettersIn: P ? P.letters.filter(s => s.opacity >= 250).length : 0, letters: P ? P.letters.length : 0,
-            red: P && P.letters[0] && P.letters[0]._red ? +(P.letters[0]._red.opacity / 255).toFixed(2) : 0,
-            box: this._box ? { x: Math.round(this.x - this._box.w / 2), y: Math.round(this.y), w: this._box.w, h: this._box.h } : null };
-    };
-
-    // ---- the map's name, "Kinowy" (the user 2026-10-23: "możemy przejść z kroniki na kinowy?", docs/ui_nazwa_mapy/3_kinowy_*.png):
-    // on the first visit black bars at the top and the bottom and the HUD goes (SurvivalHUD's fade: $gameTemp._hudCinema; the top
-    // stack's notices stay, on the bar), the place's words, its name, a gold line and a sentence in the bottom left corner; later
-    // visits and rooms: the same corner, smaller, no bars. The same visits, texts and timeline as the chronicle (its subclass).
-    // (2026-11-06, the user: "napis mapy i opis po prostu w całości się pojawia i przy końcu zanika, bez zbędnych animacji, wydajność
-    // ważniejsza", "po prostu miej gotowe obrazki", "chodzi priorytetowo o wydajność zawsze"): the words, the name, the line and the
-    // sentence are one picture made ahead by tools/nazwa_mapy/obrazki.js (img/nazwy_map/<key>.png, listed in spis.json), shown whole
-    // from its first frame - only its alpha moves at the end. No file for it (a new map, a changed text): drawn here once, into one
-    // picture, by the same code the tool draws with.
-    const NAME_STYLE = "kinowy";   // "kronika": the chronicle at the top centre (Sprite_CleanChronicle)
-    // the long first visit (the sentence, the black bars, the HUD hidden ~5 s): off since 2026-11-06 (the user: "niech zawsze będzie
-    // ten mniejszy opis, taki jak przy drugim wejściu na mapę") - every visit shows the small name; rooms keep their own, smaller still
-    const KN_FIRST_LONG = false;
-    const cinemaMode = info => (info.kind === "inside" ? "inside" : info.first && KN_FIRST_LONG ? "first" : "again");
+    // ---- the map's name as one comes in, "Kinowy" (the user 2026-10-23: "możemy przejść z kroniki na kinowy?"; 2026-11-06: "napis mapy
+    // po prostu w całości się pojawia i przy końcu zanika, bez zbędnych animacji, wydajność ważniejsza", "po prostu miej gotowe obrazki",
+    // "niech zawsze będzie ten mniejszy opis, taki jak przy drugim wejściu", "niech przy opisie nie będzie tego »pokaż mapę«"): in the
+    // bottom left corner the place's words in gold capitals, its name (44 px; a room's 32 px) and a gold line, as ONE picture made ahead
+    // by tools/nazwa_mapy/obrazki.js (img/nazwy_map/<key>.png, listed in spis.json), shown whole from its first frame and faded out at the
+    // end - only its alpha moves. No file for it (a new map, a changed text): drawn here once, into one picture, by the same code the
+    // tool draws with. Under it only the underground's "najgłębiej: piętro N". (2026-11-07: the old "Kronika" at the top centre and the
+    // long first visit with the black bars and the sentence taken out - a scene's bars are CleanHUD.sceneBars now.)
+    const cinemaMode = info => (info.kind === "inside" ? "inside" : "again");
     const KN = {
-        bar: 64, left: 70, foot: 22,
-        first: { size: 60, sp: 2, tag: 17, tagSp: 5, opis: 25, line: 120 },
-        again: { size: 44, sp: 2, tag: 15, tagSp: 4, opis: 0, line: 90 },
-        inside: { size: 32, sp: 2, tag: 14, tagSp: 3, opis: 0, line: 64 },
+        left: 70, foot: 22,
+        again: { size: 44, sp: 2, tag: 15, tagSp: 4, line: 90 },
+        inside: { size: 32, sp: 2, tag: 14, tagSp: 3, line: 64 },
         cream: [[252, 247, 234], [214, 204, 182]], night: [[255, 236, 200], [236, 170, 92]], red: [[255, 182, 156], [178, 30, 24]],
-        glow: "rgba(255,146,52,0.5)", line: [255, 210, 63], redLine: [226, 86, 58], text: "#dcd4c4", tagColour: "#ffd23f",
-        // frames: bars - the black bars and the HUD hidden (the first visit), opis - the sentence, hold: when it starts to go, out: how long it goes
-        times: {
-            first: { bars: true, opis: true, hold: 270, out: 36 },
-            again: { bars: false, opis: false, hold: 156, out: 24 },
-            inside: { bars: false, opis: false, hold: 126, out: 24 }
-        }
+        glow: "rgba(255,146,52,0.5)", line: [255, 210, 63], redLine: [226, 86, 58], tagColour: "#ffd23f",
+        // frames: hold - when it starts to go, out - how long it goes
+        times: { again: { hold: 156, out: 24 }, inside: { hold: 126, out: 24 } }
     };
     // the pictures made ahead: their folder, the look's version (a new one when the drawing below changes: every picture made again)
     const PIC = { dir: "img/nazwy_map/", ver: "kn1" };
@@ -1547,17 +1270,17 @@
             xhr.send();
         } catch (e) { picList = {}; }
     })();
-    // the picture's key: what it shows (its texts, the look, night, red) - a changed text has no file, so it is drawn here
+    // the picture's key: what it shows (its texts, the look, night, red) - a changed text has no file, so it is drawn here (the last
+    // field was the sentence of the long first visit: kept empty, so the pictures made keep their keys)
     function picKey(info, mode, night) {
-        const L = KN[mode], tl = KN.times[mode], opis = info.opis && tl.opis && L.opis ? info.opis : "";
-        const s = [PIC.ver, W(), H(), mode, night ? 1 : 0, info.boss ? 1 : 0, info.title || "", info.sub || "", opis].join("\u0001");
+        const s = [PIC.ver, W(), H(), mode, night ? 1 : 0, info.boss ? 1 : 0, info.title || "", info.sub || "", ""].join("\u0001");
         let a = 0x811c9dc5, b = 0x5bd1e995;
         for (let i = 0; i < s.length; i++) { const c = s.charCodeAt(i); a = Math.imul(a ^ c, 0x01000193); b = Math.imul(b ^ c, 0x5bd1e995) ^ (b >>> 13); }
         return (a >>> 0).toString(16).padStart(8, "0") + (b >>> 0).toString(16).padStart(8, "0");
     }
-    // where each part goes on the screen (measured only, nothing drawn): the words, the letters, the gold line, the sentence
+    // where each part goes on the screen (measured only, nothing drawn): the words, the letters, the gold line
     function cinemaLayout(info, mode, night) {
-        const L = KN[mode], tl = KN.times[mode], Wd = W(), Hd = H(), maxW = Wd - 2 * KN.left;
+        const L = KN[mode], Wd = W(), Hd = H(), maxW = Wd - 2 * KN.left;
         // the name: smaller when it does not fit
         const caps = Array.from(String(info.title));
         let size = L.size, ws = [], tot = 0;
@@ -1567,11 +1290,11 @@
             if (tot <= maxW || size <= 20) break;
             size = Math.max(20, Math.floor(size * maxW / tot));
         }
-        // the block from its foot up: the small line (always room for it), the sentence, the gold line, the name, the words
-        const tagH = info.sub ? L.tag + 10 : 0, nameH = Math.round(size * 1.28), opisH = info.opis && tl.opis && L.opis ? L.opis + 14 : 0;
-        const foot = Hd - (tl.bars ? KN.bar : 0) - KN.foot, blockH = tagH + nameH + 14 + opisH + 20;
+        // the block from its foot up: the small line (always room for it), the gold line, the name, the words
+        const tagH = info.sub ? L.tag + 10 : 0, nameH = Math.round(size * 1.28);
+        const foot = Hd - KN.foot, blockH = tagH + nameH + 14 + 20;
         let y = foot - blockH;
-        const lay = { size, tot, top0: y, blockH, night: !!night, parts: [], rects: {}, count: 0, tagW: 0, opisW: 0 };
+        const lay = { size, tot, top0: y, blockH, night: !!night, parts: [], rects: {}, count: 0, tagW: 0 };
         const put = (p, px, py, w, h) => { Object.assign(p, { x: px, y: py, w, h }); lay.parts.push(p); return { x: px, y: py, w, h }; };
         if (info.sub) {
             const f = capsFit(info.sub, L.tag, L.tagSp, maxW);
@@ -1597,15 +1320,9 @@
         y += nameH + 4;
         lay.rects.line = put({ k: "line", colour: info.boss ? KN.redLine : KN.line }, KN.left, y, L.line, 3);
         y += 10;
-        if (opisH) {
-            const f = lineFit(info.opis, L.opis, maxW);
-            lay.rects.opis = put({ k: "opis", f }, KN.left - 12, y, f.w, f.h);
-            lay.opisW = f.tw;
-            y += opisH;
-        }
         let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
         for (const p of lay.parts) { x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y); x1 = Math.max(x1, p.x + p.w); y1 = Math.max(y1, p.y + p.h); }
-        return Object.assign(lay, { x: x0, y: y0, w: Math.max(1, Math.ceil(x1 - x0)), h: Math.max(1, Math.ceil(y1 - y0)), hintY: y, wide: Math.max(tot, lay.tagW, lay.opisW) });
+        return Object.assign(lay, { x: x0, y: y0, w: Math.max(1, Math.ceil(x1 - x0)), h: Math.max(1, Math.ceil(y1 - y0)), hintY: y, wide: Math.max(tot, lay.tagW) });
     }
     // the picture: every part straight into one canvas (no picture of its own for each letter)
     function cinemaDraw(lay) {
@@ -1615,7 +1332,6 @@
             if (p.k === "tag") capsDraw(b, p.f, KN.tagColour, x, y);
             else if (p.k === "letter") kronikaLetter(p.ch, lay.size, p.fill, { glow, into: { bmp: b, x, y } });
             else if (p.k === "red") kronikaLetter(p.ch, lay.size, KN.red, { fillOnly: true, into: { bmp: b, x, y } });
-            else if (p.k === "opis") lineDraw(b, p.f, KN.text, x, y);
             else if (p.k === "line") {
                 const c = b.context;
                 c.fillStyle = rgbOf(p.colour);
@@ -1631,8 +1347,8 @@
     const r2 = v => Math.round(v * 100) / 100;
     const picMeta = lay => [lay.x, lay.y, lay.w, lay.h, lay.hintY, r2(lay.wide), lay.top0, lay.count, lay.size, r2(lay.tot), lay.blockH];
     const metaLay = m => ({ x: m[0], y: m[1], w: m[2], h: m[3], hintY: m[4], wide: m[5], top0: m[6], count: m[7], size: m[8], tot: m[9], blockH: m[10] });
-    // the shade under it, the bars, the small line: drawn once each and kept between the shows (a few kinds only)
-    const kept = { shade: new Map(), hint: new Map(), bar: null };
+    // the shade under it and the small line: drawn once each and kept between the shows (a few kinds only)
+    const kept = { shade: new Map(), hint: new Map() };
     function keptBitmap(map, key, make) {
         let b = map.get(key);
         if (b) return b;
@@ -1641,22 +1357,17 @@
         map.set(key, b);
         return b;
     }
-    function cinemaShade(bars, shadeH) {
-        // (the whole bottom with the bars; a soft corner otherwise: a quarter circle reaching exactly the picture's edges, stretched sideways)
-        return keptBitmap(kept.shade, (bars ? "b" : "c") + shadeH, () => {
-            const sh = new Bitmap(bars ? 8 : shadeH, shadeH), cx = sh.context;
-            const g = bars ? cx.createLinearGradient(0, 0, 0, shadeH) : cx.createRadialGradient(0, shadeH, 0, 0, shadeH, shadeH);
-            g.addColorStop(0, bars ? "rgba(0,0,0,0)" : "rgba(0,0,0,0.5)");
-            g.addColorStop(1, bars ? "rgba(0,0,0,0.55)" : "rgba(0,0,0,0)");
+    // (a soft corner: a quarter circle reaching exactly the picture's edges, stretched sideways)
+    function cinemaShade(shadeH) {
+        return keptBitmap(kept.shade, "c" + shadeH, () => {
+            const sh = new Bitmap(shadeH, shadeH), cx = sh.context, g = cx.createRadialGradient(0, shadeH, 0, 0, shadeH, shadeH);
+            g.addColorStop(0, "rgba(0,0,0,0.5)");
+            g.addColorStop(1, "rgba(0,0,0,0)");
             cx.fillStyle = g;
             cx.fillRect(0, 0, sh.width, shadeH);
             sh._baseTexture.update();
             return sh;
         });
-    }
-    function cinemaBar() {
-        if (!kept.bar) { kept.bar = new Bitmap(4, 4); kept.bar.fillAll("rgba(0,0,0,0.94)"); }
-        return kept.bar;
     }
     function cinemaHint(text) {
         return keptBitmap(kept.hint, text, () => {
@@ -1665,26 +1376,74 @@
             return b;
         });
     }
+    let lastShow = null;   // (the tests read how the last one went: its map, mode, frames, why it ended)
     function Sprite_CleanCinema() {
         this.initialize(...arguments);
     }
-    Sprite_CleanCinema.prototype = Object.create(Sprite_CleanChronicle.prototype);
+    Sprite_CleanCinema.prototype = Object.create(Sprite.prototype);
     Sprite_CleanCinema.prototype.constructor = Sprite_CleanCinema;
+    Sprite_CleanCinema.prototype.initialize = function() {
+        Sprite.prototype.initialize.call(this);
+        this._info = null;
+        this._t = -1;        // the frame of its show; -1: nothing shown
+        this._parts = null;  // its sprites, made on its first frame (the faces and its file ready)
+        this._bitmaps = [];
+        this._h = 0;
+        this._box = null;
+        this.visible = false;
+    };
     // (its look decided as it starts - night, the key -, its file asked for at once: it loads while the map fades in)
     Sprite_CleanCinema.prototype.start = function(info) {
-        Sprite_CleanChronicle.prototype.start.call(this, info);
+        this.clear("new");
+        this._info = info;
         this._mode = cinemaMode(info);
         this._T = KN.times[this._mode];
+        this._mapId = $gameMap.mapId();
+        this._t = 0;
+        this._cut = Infinity;   // (a message, the name turned off: it fades from that frame)
+        this._wait = 0;
         const S = T.api("Survival"), outdoors = !S || !S.isOutdoors || S.isOutdoors();
         this._night = this._mode !== "inside" && !info.floor && outdoors && !!(T.time && T.time.isNight());
         this._key = picKey(info, this._mode, this._night);
         const m = picList && picList[this._key];
         this._file = m ? { meta: m, bmp: this.keep(Bitmap.load(PIC.dir + this._key + ".png")), dec: 0 } : null;
     };
+    Sprite_CleanCinema.prototype.duration = function() {
+        return this._T ? this._T.hold + this._T.out : 0;
+    };
     Sprite_CleanCinema.prototype.clear = function(why) {
-        Sprite_CleanChronicle.prototype.clear.call(this, why);
+        if (this._t >= 0 && this._info) lastShow = { mapId: this._mapId, title: this._info.title, mode: this._mode, frames: this._t, why: why || "" };
+        this.removeChildren();
+        for (const b of this._bitmaps) b.destroy();
+        this._bitmaps = [];
+        this._parts = null;
         this._file = null;
-        if (window.$gameTemp) $gameTemp._hudCinema = false;
+        this._t = -1;
+        this._h = 0;
+        this._box = null;
+        this.visible = false;
+    };
+    Sprite_CleanCinema.prototype.keep = function(b) {
+        this._bitmaps.push(b);
+        return b;
+    };
+    Sprite_CleanCinema.prototype.update = function() {
+        Sprite.prototype.update.call(this);
+        if (this._t < 0) return;
+        // it goes at once when he leaves the map (a transfer, another scene - the menu too) or the look is the classic one
+        if (!isClean()) { this.clear("look"); return; }
+        if ($gameMap.mapId() !== this._mapId || $gamePlayer.isTransferring() || SceneManager.isSceneChanging()) { this.clear("map"); return; }
+        const tl = this._T;
+        if (this._cut === Infinity && ($gameMessage.isBusy() || !nameShown())) this._cut = Math.min(this._t, tl.hold);
+        if (!this._parts) {
+            if (!this.ready() && this._wait++ < 90) return;   // (the faces, its file still loading: it waits for them, 1.5 s at most)
+            this.build();
+        }
+        const hint = this.hintText();
+        if (hint !== this._parts.hintText) this.buildHint(hint);
+        this.visible = true;
+        this.animate(this._t);
+        if (++this._t >= Math.min(tl.hold, this._cut) + tl.out) this.clear("end");
     };
     // ready: the faces (the small line) and its file loaded and decoded off the main thread (a file that fails: drawn here instead)
     Sprite_CleanCinema.prototype.ready = function() {
@@ -1700,23 +1459,17 @@
         return facesReady() && (!f || f.dec === 2);
     };
     Sprite_CleanCinema.prototype.build = function() {
-        const info = this._info, mode = this._mode, tl = this._T, Wd = W(), Hd = H(), night = this._night;
+        const info = this._info, mode = this._mode, Wd = W(), Hd = H(), night = this._night;
         const f = this._file && this._file.bmp.isReady() ? this._file : null;
         const lay = f ? metaLay(f.meta) : cinemaLayout(info, mode, night);
-        const P = this._parts = { letters: [], hintText: null, night, L: KN[mode], lay: f ? null : lay, file: !!f, count: lay.count, size: lay.size, w: lay.tot,
+        const P = this._parts = { hintText: null, night, lay: f ? null : lay, file: !!f, count: lay.count, size: lay.size, w: lay.tot,
             top0: lay.top0, hintY: lay.hintY, wide: lay.wide };
         this.x = this.y = 0;
-        const foot = Hd - (tl.bars ? KN.bar : 0) - KN.foot, shadeH = lay.blockH + 120, sh = cinemaShade(!!tl.bars, shadeH);
+        const shadeH = lay.blockH + 120, sh = cinemaShade(shadeH);
         P.shade = new Sprite(sh);
-        P.shade.scale.x = tl.bars ? Wd / sh.width : Math.min(Wd, Math.round(lay.tot + 260)) / sh.width;
-        P.shade.y = foot + KN.foot - shadeH;
+        P.shade.scale.x = Math.min(Wd, Math.round(lay.tot + 260)) / sh.width;
+        P.shade.y = Hd - shadeH;
         this.addChild(P.shade);
-        if (tl.bars) {
-            P.top = new Sprite(cinemaBar());
-            P.bottom = new Sprite(cinemaBar());
-            for (const s of [P.top, P.bottom]) { s.scale.x = Wd / 4; s.scale.y = KN.bar / 4; this.addChild(s); }
-            P.bottom.y = Hd - KN.bar;
-        }
         // the picture: the file made ahead, or drawn here once
         P.pic = new Sprite(f ? f.bmp : this.keep(cinemaDraw(lay)));
         P.pic.x = lay.x;
@@ -1724,20 +1477,11 @@
         this.addChild(P.pic);
         this.buildHint(this.hintText());
     };
-    // the parts' boxes on the screen (the tests): measured again when the picture came from a file
-    // the small line under it: only the deepest floor (the underground) - no "M: pokaż mapę" (2026-11-06, the user: "niech przy opisie
-    // nie będzie tego »pokaż mapę«, wywal to")
+    // the small line under it: only the deepest floor (the underground)
     Sprite_CleanCinema.prototype.hintText = function() {
         const i = this._info;
         return i.floor > 0 && i.deepest > i.floor ? "najgłębiej: piętro " + i.deepest : "";
     };
-    Sprite_CleanCinema.prototype.rects = function() {
-        const P = this._parts;
-        if (!P) return null;
-        if (!P.lay) P.lay = cinemaLayout(this._info, this._mode, P.night);
-        return P.lay.rects;
-    };
-    // the small line (the deepest floor, "M: pokaż mapę"), left under the block
     Sprite_CleanCinema.prototype.buildHint = function(text) {
         const P = this._parts;
         if (P.hint) { this.removeChild(P.hint); P.hint = null; }
@@ -1748,31 +1492,36 @@
             P.hint.y = P.hintY;
             this.addChild(P.hint);
         }
-        this._h = 0;   // (not in the top stack)
+        this._h = 0;
         this._box = { w: Math.round(P.wide + 8), h: Math.round(P.hintY + 20 - P.top0) };
     };
-    // whole from its first frame; at the end all of it (the bars too) fades as one - the only thing that moves
+    // the parts' boxes on the screen (the tests): measured again when the picture came from a file
+    Sprite_CleanCinema.prototype.rects = function() {
+        const P = this._parts;
+        if (!P) return null;
+        if (!P.lay) P.lay = cinemaLayout(this._info, this._mode, P.night);
+        return P.lay.rects;
+    };
+    // whole from its first frame; at the end all of it fades as one - the only thing that moves
     Sprite_CleanCinema.prototype.animate = function(t) {
         const tl = this._T, cut = Math.min(tl.hold, this._cut);
-        if (tl.bars && window.$gameTemp) $gameTemp._hudCinema = t < cut;
         this.opacity = t < cut ? 255 : Math.round(255 * clamp01(1 - (t - cut) / tl.out));
     };
+    // what it shows now (the tests, the F9)
     Sprite_CleanCinema.prototype.info = function() {
-        const o = Sprite_CleanChronicle.prototype.info.call(this), P = this._parts, i = this._info;
-        if (o) {
-            o.style = "kinowy"; o.bars = !!this._T.bars; o.hud = !!(window.$gameTemp && $gameTemp._hudCinema);
-            o.opis = i.opis && this._T.opis && KN[this._mode].opis ? i.opis : "";
-            o.letters = o.lettersIn = P ? P.count : 0;   // (all of them there from its first frame)
-            o.red = P && i.boss ? 1 : 0;
-            o.file = !!(P && P.file);
-            o.key = this._key;
-        }
-        return o;
+        const i = this._info, P = this._parts;
+        if (!i || this._t < 0) return null;
+        const n = P ? P.count : 0;   // (all its letters there from its first frame)
+        return { style: "kinowy", mapId: this._mapId, title: i.title, sub: i.sub, opis: "", hint: P ? P.hintText : "", mode: this._mode, kind: i.kind,
+            first: !!i.first, floor: i.floor, boss: !!i.boss, night: !!(P && P.night), t: this._t, dur: this.duration(), visible: !!this.visible,
+            size: P ? P.size : 0, w: P ? Math.round(P.w) : 0, h: this._h, y: Math.round(this.y), opacity: this.opacity,
+            letters: n, lettersIn: n, red: P && i.boss ? 1 : 0, file: !!(P && P.file), key: this._key,
+            box: this._box ? { x: Math.round(this.x - this._box.w / 2), y: Math.round(this.y), w: this._box.w, h: this._box.h } : null };
     };
     // (for tools/nazwa_mapy/obrazki.js and the tests: the same layout, drawing and key as on the map)
     const nameArt = { dir: PIC.dir, ver: PIC.ver, mode: cinemaMode, key: picKey, layout: cinemaLayout, draw: cinemaDraw, meta: picMeta, list: () => picList, times: KN.times };
 
-    // ---- the top centre: the map's name as one comes in, the dog's stockpile strip, the level banner, the day's greeting, the
+    // ---- the top centre: the dog's stockpile strip, the level banner, the day's greeting, the
     // notices ("Tryb walki" is a pill in the top left corner, under the goal) - one under another, each sliding to its place (their timing is the old parts')
     const TOP = { gap: 4, slide: 0.25 };
     function Sprite_CleanTop() {
@@ -1783,10 +1532,9 @@
     Sprite_CleanTop.prototype.initialize = function() {
         Sprite.prototype.initialize.call(this);
         this._items = {};
-        for (const k of ["name", "dog", "level", "day", "notice"]) {
-            // (the map's name: the chronicle - its own sprites and timeline, see below; the rest: one picture each)
-            const s = k === "name" ? new Sprite_CleanChronicle() : new Sprite();
-            if (k !== "name") s.anchor.set(0.5, 0);
+        for (const k of ["dog", "level", "day", "notice"]) {
+            const s = new Sprite();   // (one picture each)
+            s.anchor.set(0.5, 0);
             s.visible = false;
             s._key = null;
             this._items[k] = s;
@@ -1803,7 +1551,7 @@
         const scene = SceneManager._scene;
         this.visible = isClean() && !!scene;
         if (!this.visible) return;
-        const I = this._items;   // (the map's name runs itself: Sprite_CleanChronicle.update, as a child of this)
+        const I = this._items;
         this.updateDog(scene, I.dog);
         this.updateLevel(scene, I.level);
         this.updateDay(scene, I.day);
@@ -1817,7 +1565,7 @@
             s.x = W() / 2;
             y += h + TOP.gap;
         };
-        for (const k of ["name", "dog", "level", "day", "notice"]) if (I[k].visible && (I[k].bitmap || I[k]._h)) place(I[k], I[k]._h || I[k].bitmap.height);
+        for (const k of ["dog", "level", "day", "notice"]) if (I[k].visible && I[k].bitmap) place(I[k], I[k].bitmap.height);
         for (const k in I) if (!I[k].visible) I[k]._placed = false;
     };
     // the dog's stockpile (Dog.js; the old strip is a panel): "Składowisko" and what lies there, icons and counts
@@ -1976,11 +1724,11 @@
         this._cleanWeapon = new Sprite_CleanWeapon();
         this._cleanSneak = new Sprite_CleanSneak();
         this._cleanTop = new Sprite_CleanTop();
-        this._cleanTop._cinemaKeep = true;   // (its notices stay while the name's bars hide the rest)
+        this._cleanTop._cinemaKeep = true;   // (its notices stay while a scene's bars hide the rest)
         this._cleanCinema = new Sprite_CleanCinema();   // (the map's name, "Kinowy": over all of it, not in the fade under the hero)
-        if (window.$gameTemp) $gameTemp._hudCinema = false;
-        // (the top stack over the name's bars: its notices are on the bar, not under it - 2026-10-24, clean_hud_test's shot)
-        for (const s of [this._cleanClock, this._cleanLoad, this._cleanGoal, this._cleanNeeds, this._cleanWeapon, this._cleanGains, this._cleanSneak, this._cleanCinema, this._cleanTop]) {
+        this._cleanBars = new Sprite_CleanBars();   // (a scene's black bars - CleanHUD.sceneBars)
+        // (the top stack over a scene's bars: its notices are on the bar, not under it)
+        for (const s of [this._cleanClock, this._cleanLoad, this._cleanGoal, this._cleanNeeds, this._cleanWeapon, this._cleanGains, this._cleanSneak, this._cleanCinema, this._cleanBars, this._cleanTop]) {
             this._cleanLayer.addChild(s);
         }
         const db = this._dayBanner;
@@ -2044,8 +1792,8 @@
             return isClean() ? list.concat(this.cleanHudParts().filter(p => !!p)) : list;
         };
     }
-    // the map's name window opens as one comes in: in the clean look it is not drawn, the chronicle at the top centre starts then
-    // (Window_MapName.open, above) and runs on its own timeline (SurvivalHUD hides the window in the fade list: fine, it is not drawn)
+    // the map's name window opens as one comes in: in the clean look it is not drawn, the name in the bottom left corner starts then
+    // (Window_MapName.open, above) and runs on its own (SurvivalHUD hides the window in the fade list: fine, it is not drawn)
 
     // ------------------------------------------------------------------
     // For the tests and the other parts: where everything is
@@ -2073,8 +1821,8 @@
             needs: (out.goal.needs || []).map(n => ({ name: n.name, have: n.have, need: n.need })), at: out.goal.at || "", count: out.goal.count || null };
         const top = scene._cleanTop;
         out.top = top ? Object.keys(top._items).filter(k => top._items[k].visible).map(k => ({ k, y: Math.round(top._items[k].y) })) : [];
-        const nameSprite = NAME_STYLE === "kinowy" ? scene._cleanCinema : top && top._items.name;
-        out.name = nameSprite && nameSprite.info ? nameSprite.info() : null;   // (the map's name now: Sprite_CleanCinema / Sprite_CleanChronicle .info)
+        const nameSprite = scene._cleanCinema;
+        out.name = nameSprite && nameSprite.info ? nameSprite.info() : null;   // (the map's name now: Sprite_CleanCinema.info)
         out.nameLast = lastShow ? Object.assign({}, lastShow) : null;
         if (scene._minimap) out.minimap = { visible: !!scene._minimap.visible, y: scene._minimap.y, hidden: $gameSystem._minimapHidden };
         return out;
@@ -2084,7 +1832,7 @@
         isClean, lookClean, setClean(on) { ConfigManager.uiClean = !!on; return ConfigManager.uiClean; },
         C, textOut, measure, fit, iconBitmap, drawIcon, thinBar, pl, hm, goalInfo, needValues, loadInfo, heroFeet, bottomCovered, debug,
         // (the map's name: what it would show here, the visits kept in the save, whether it says the floor - Underground.js asks)
-        placeInfo: () => (window.$gameMap && $gameMap.mapId() ? placeInfo() : null), visits: () => visits(), saysFloor, KR, nameArt,
+        placeInfo: () => (window.$gameMap && $gameMap.mapId() ? placeInfo() : null), visits: () => visits(), saysFloor, nameArt, sceneBars,
         Sprite_CleanPart, NEED_KEYS, NEED_ICONS,
         // (the HUD's pieces for the other parts and windows: MenuRing, CleanHUD_Compass)
         face, facesReady, spaced, spacedWidth, roundPath, rpanel, mix, drawClock

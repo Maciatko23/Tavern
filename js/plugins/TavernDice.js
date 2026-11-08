@@ -223,7 +223,7 @@
     const RESULT_VAR = num(params.resultVariable, 0);
     const NB = " ";   // (a no-break space: "15 G" never breaks)
 
-    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const clamp = Tawerna.util.clamp;
     const gold = n => n + NB + "G";
     function makeRng(seed) {   // mulberry32
         let a = (seed >>> 0) || 1;

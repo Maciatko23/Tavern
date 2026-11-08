@@ -150,11 +150,14 @@ const DRIVER = String.raw`
 
         // ================= 1. a new game: grandpa's house and the intro
         const started = await newStoryGame();
-        const st0 = await J("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, s: $gameSystem._story })");
-        check("a new game starts in grandpa's house (Map019, 2,5 - beside the hero's straw bed)", started && st0.map === 19 && st0.x === 2 && st0.y === 5, { map: st0.map, x: st0.x, y: st0.y });
+        const st0 = await J("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, s: $gameSystem._story, lying: Story.introLying(), bars: !!$gameTemp._hudScene, sees: window.Pokoje && Pokoje.sees ? Pokoje.sees(9, 5) : null })");
+        // (2026-11-07, the user: the first talk as a scene - the hero lies in his straw bed, black bars, no HUD, grandpa at his pot in the dark)
+        check("a new game starts in grandpa's house, the hero lying in his straw bed (Map019, 1,4), the scene's black bars in", started && st0.map === 19 && st0.x === 1 && st0.y === 4
+            && st0.lying === true && st0.bars === true, { map: st0.map, x: st0.x, y: st0.y, lying: st0.lying, bars: st0.bars });
         check("the story state: debt 2500, nothing paid, deadline day 60, not pending", st0.s && st0.s.debt === 2500 && st0.s.paid === 0 && st0.s.deadline === 60 && !st0.s.pending && Array.isArray(st0.s.payments), st0.s);
         const gp = await J("(function(){ const e = $gameMap.event(901); return e && { name: e.event().name, sheet: e.characterName(), index: e.characterIndex(), x: e.x, y: e.y, list: e.list().length }; })()");
-        check("grandpa Stach is in his house ($Npc_Dziadek - the hero's style, by his armchair)", gp && gp.name === "Dziadek Stach" && gp.sheet === "$Npc_Dziadek" && gp.index === 0 && gp.x === 10 && gp.y === 6, gp);   // (Story NPCS.grandpa.at: on the rug beside his rocking chair)
+        check("grandpa Stach is in his house ($Npc_Dziadek - the hero's style), at his pot by the hearth, out of the bed's sight", gp && gp.name === "Dziadek Stach" && gp.sheet === "$Npc_Dziadek" && gp.index === 0
+            && gp.x >= 8 && gp.x <= 10 && gp.y >= 5 && gp.y <= 6 && st0.sees === false, { gp, sees: st0.sees });   // (Story NPCS.grandpa.at: on the rug beside his rocking chair)
         // the intro starts by itself after the fade-in; the driver holds at the 3rd message for a screenshot
         await ev("window.__drv.on = true; window.__drv.picks = []; window.__drv.mark = window.__drv.log.length; window.__drv.holdAt = window.__drv.log.length + 3; 0");
         const introOn = await until("$gameMap.isEventRunning() && $gameSystem._story.intro === 1", 20);
@@ -162,8 +165,14 @@ const DRIVER = String.raw`
         await until("window.__drv.log.length >= window.__drv.holdAt && $gameMessage.hasText() && SceneManager._scene._messageWindow.isOpen()", 20);
         await frames(30);
         await b.shot(path.join(SHOTS, "fabula_1_dziadek.png"));
+        const atBed = await J("(function(){ const e = $gameMap.event(901); return { g: [e.x, e.y], hero: [$gamePlayer.x, $gamePlayer.y], lying: Story.introLying(), bars: !!$gameTemp._hudScene }; })()");
+        check("...grandpa came out of the dark to the bed: he talks standing beside it, the hero still lying, the bars in", Math.abs(atBed.g[0] - 1) + Math.abs(atBed.g[1] - 4) <= 2
+            && atBed.hero.join() === "1,4" && atBed.lying && atBed.bars, atBed);
         await ev("window.__drv.holdAt = -1; 0");
         await until(`$gameSystem._story.intro === 2 && ${calmMap}`, 60);
+        const after = await J("(function(){ const e = $gameMap.event(901); return { g: [e.x, e.y], hero: [$gamePlayer.x, $gamePlayer.y], lying: Story.introLying(), bars: !!$gameTemp._hudScene }; })()");
+        check("...after the talk grandpa went back to his pot, the hero got up beside his bed (2,5), the bars gone", after.g[0] >= 8 && after.g[0] <= 11 && after.g[1] >= 4 && after.g[1] <= 7
+            && after.hero.join() === "2,5" && !after.lying && !after.bars, after);
         const intro = await J("({ log: window.__drv.log.slice(window.__drv.mark), s: $gameSystem._story, soup: $gameParty.numItems($dataItems[131]), notes: $gameSystem._journal.notes.map(n => n.title) })");
         const introText = intro.log.map(l => l.t).join(" / ");
         check("the intro (since the prologue, 2026-10-12: the fisherman, the mother's letter, then the debt): grandpa and the hero talk in bubbles (grandpa over 901, the hero over 0), 18 messages (2026-10-22: + his wall line)", intro.log.length === 18 && intro.log[0].who === 901 && intro.log[1].who === 0 && intro.log.filter(l => l.who === 0).length === 5,

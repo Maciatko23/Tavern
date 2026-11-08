@@ -305,31 +305,10 @@
         };
         const goal = new Set(goals.map(([x, y]) => x + "," + y));
         const hdist = (x, y) => Math.min(...goals.map(([gx, gy]) => { const dx = Math.abs(gx - x), dy = Math.abs(gy - y); return Math.max(dx, dy) + 0.414 * Math.min(dx, dy); }));
-        const key = (x, y) => y * W + x, start = key(sx, sy);
-        const gs = new Map([[start, 0]]), from = new Map(), open = [[hdist(sx, sy), sx, sy]], closed = new Set();
-        let n = 0;
-        while (open.length && n++ < 2000) {
-            let bi = 0;
-            for (let i = 1; i < open.length; i++) if (open[i][0] < open[bi][0]) bi = i;
-            const [, x, y] = open.splice(bi, 1)[0], k = key(x, y);
-            if (closed.has(k)) continue;
-            closed.add(k);
-            if (goal.has(x + "," + y)) {
-                const out = [];
-                for (let c = k; c !== start; c = from.get(c)) out.unshift([c % W, Math.floor(c / W)]);
-                return out;
-            }
-            for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
-                if (!dx && !dy) continue;
-                const nx = x + dx, ny = y + dy;
-                if (blocked(nx, ny)) continue;
-                if (dx && dy && (blocked(x + dx, y) || blocked(x, y + dy))) continue;
-                const cost = (dx && dy ? 1.414 : 1) + (!isCat && L.doorZone(nx, ny) ? 6 : 0) + (!isCat && kit && kit.x === nx && kit.y === ny ? 3 : 0);   // (round the cat when he can)
-                const ng = gs.get(k) + cost, nk = key(nx, ny);
-                if (ng < (gs.has(nk) ? gs.get(nk) : Infinity)) { gs.set(nk, ng); from.set(nk, k); open.push([ng + hdist(nx, ny), nx, ny]); }
-            }
-        }
-        return null;
+        // (the search: Tawerna.grid.astar8 - 2026-11-07, one for all; here only his rules)
+        const cells = T.grid.astar8({ w: W, h: H, sx, sy, cap: 2000, open: (x, y) => !blocked(x, y), goal: (x, y) => goal.has(x + "," + y), est: hdist,
+            cost: (x, y, nx, ny, slant) => (slant ? 1.414 : 1) + (!isCat && L.doorZone(nx, ny) ? 6 : 0) + (!isCat && kit && kit.x === nx && kit.y === ny ? 3 : 0) });   // (round the cat when he can)
+        return cells && cells.slice(1).map(c => [c % W, Math.floor(c / W)]);
     }
     // one step to a neighbouring cell (straight or diagonal)
     function stepTo(ev, x, y) {
@@ -345,11 +324,7 @@
     // Grandpa's day
     // ------------------------------------------------------------------
     const POTTER = ["shelves", "window", "chest", "kredens"];
-    function hash(a, b) {
-        let h = (a * 374761393 + b * 668265263) | 0;
-        h = Math.imul(h ^ (h >>> 13), 1274126177);
-        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-    }
+    const hash = T.util.hash01;
     function potterOrder(d) {
         const L = layout(), list = POTTER.filter(k => L.st[k]);
         for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(hash(d, i) * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }

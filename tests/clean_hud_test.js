@@ -11,7 +11,7 @@
 // 2026-11-06 the small one on every visit: the words, the name 44 px and the gold line in the bottom left corner as one ready
 // picture (img/nazwy_map), no sentence, no bars, the HUD stays, nothing under it, ~3 s; a room 32 px ~2.5 s, an underground floor
 // with its band (red on a guardian's floor, "najgłębiej: piętro N" under it), cleared at once by a transfer, an older save; the
-// old "Kronika" (Sprite_CleanChronicle, still in the top stack) driven by hand once (docs/ui_nazwa_mapy);
+// (docs/ui_nazwa_mapy);
 // (2026-10-24) a town quest's step with several people: the list in the goal window (K5, D17, K19), at most 8 rows. CDP_PORT=9460.
 // The plugins are put into the page while they are not in js/plugins.js yet.
 "use strict";
@@ -92,12 +92,12 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // mapę«"): every visit - the first too - in the bottom left corner the words in gold capitals, the name 44 px, a gold line; no
     // sentence, no black bars, the HUD stays, nothing under the line; one picture made ahead (img/nazwy_map) shown whole from its
     // first frame, only fading at the end, 180 frames (~3 s); a room 32 px ~2.5 s; the underground's floors (red on a guardian's,
-    // "najgłębiej: piętro N" under it); a transfer while it shows clears it at once; the old "Kronika" by hand; an older save
+    // "najgłębiej: piętro N" under it); a transfer while it shows clears it at once; an older save
     // (at the end)
     const nm = () => t.json("(function(){ const d = CleanHUD.debug(); return d && d.name; })()");
     const word = k => t.json(`Watki.tekst("miejsca", ${JSON.stringify(k)}) || ""`);
     const toMap = (id, x, y) => t.eval(`$gamePlayer.reserveTransfer(${id}, ${x}, ${y}, 2, 0); 0`);
-    // the chronicle of map `id` up, at its frame `at` at least
+    // the name of map `id` up, at its frame `at` at least
     const nameOn = (id, at) => t.until(`(function(){ const d = ${t.onMap(id)} && CleanHUD.debug(); return !!(d && d.name && d.name.mapId === ${id} && d.name.t >= ${at || 0}); })()`, 30, 30);
     // its whole show over: how it ended (frames from its start, why)
     const nameEnd = async id => {
@@ -120,9 +120,9 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
             letters: r("letters"), tag: r("tag"), line: r("line"), opis: r("opis"), hint, lineRgb: [l[0], l[1], l[2]],
             tagGold: area(R.tag, (R_, G, B, A) => A > 200 && R_ > 225 && G > 175 && G < 235 && B < 120),
             bars: P.top ? { top: Math.round(P.top.scale.y * 4), bottom: Math.round(P.bottom.scale.y * 4), bottomY: Math.round(P.bottom.y) } : null }; })()`);
-    // the HUD's parts now: hidden by the name's bars ($gameTemp._hudCinema) or not; the top stack keeps itself, the name is not in the fade
+    // the HUD's parts now: hidden by the name's bars ($gameTemp._hudScene) or not; the top stack keeps itself, the name is not in the fade
     const hudA = () => t.json(`(function(){ const s = SceneManager._scene, a = p => p ? +p.alpha.toFixed(2) : null;
-        return { cinema: !!$gameTemp._hudCinema, clock: a(s._cleanClock), goal: a(s._cleanGoal), needs: a(s._cleanNeeds), compass: a(s._cleanCompass), top: a(s._cleanTop),
+        return { cinema: !!$gameTemp._hudScene, clock: a(s._cleanClock), goal: a(s._cleanGoal), needs: a(s._cleanNeeds), compass: a(s._cleanCompass), top: a(s._cleanTop),
             keep: !!(s._cleanTop && s._cleanTop._cinemaKeep), name: a(s._cleanCinema),
             onBar: !!s._cleanLayer && s._cleanLayer.children.indexOf(s._cleanTop) > s._cleanLayer.children.indexOf(s._cleanCinema) }; })()`);
     // (not hidden: no bars, these parts whole - the left column only where the hero stands clear of it)
@@ -131,8 +131,6 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const corner = c => !!c && c.line.x === 70 && c.letters.x >= 66 && c.letters.x <= 80 && c.letters.x + c.letters.w < 640 && c.letters.y > 360
         && c.letters.y + c.letters.h <= c.line.y + 2 && (!c.tag || c.tag.y + c.tag.h <= c.letters.y + 2) && (!c.opis || c.opis.y > c.line.y) && (!c.hint || c.hint.y > c.line.y);
     const GOLD = [255, 210, 63], RED = [226, 86, 58];
-    // (the old chronicle's box: between the left column and the clock / the compass)
-    const boxOk = (n, dd) => !!n.box && n.box.x >= dd.corner.x + dd.corner.w && n.box.x + n.box.w <= Math.min(dd.text.clock.x - dd.text.clock.r, dd.parts.compass.visible ? dd.parts.compass.x : 1280);
     let lastDbg = null;
     await toMap(20, 10, 12);
     t.check("podwórze dziadka: napis się pojawia", await nameOn(20, 1));
@@ -192,7 +190,7 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.eval("window.__kino = SceneManager._scene._cleanCinema; 0");
     await toMap(19, 4, 6);
     await t.frames(2);
-    const cut = await t.json("(function(){ const c = window.__kino; return { visible: c.visible, t: c._t, cinema: !!$gameTemp._hudCinema, last: CleanHUD.debug() && CleanHUD.debug().nameLast }; })()");
+    const cut = await t.json("(function(){ const c = window.__kino; return { visible: c.visible, t: c._t, cinema: !!$gameTemp._hudScene, last: CleanHUD.debug() && CleanHUD.debug().nameLast }; })()");
     t.check("przejście na inną mapę w trakcie pokazu (pierwsza wizyta, HUD widoczny): napis znika od razu (po 2 klatkach)", !!n22 && n22.first && n22.mode === "again" && !n22.bars && !h22.cinema
         && !cut.visible && cut.t < 0 && !cut.cinema && !!cut.last && cut.last.mapId === 22 && cut.last.why === "map", { n22, h22, cut });
     const own19 = await nameOn(19, 5), hBack = await hudA();
@@ -225,20 +223,6 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.eval("CleanCompass.refresh(); 0");
     await t.frames(20);
 
-    // the old look "Kronika" (NAME_STYLE = "kronika": Sprite_CleanChronicle at the top centre, still the top stack's first item) - the
-    // switch is a const inside the plugin, so the chronicle is started by hand here as startPlaceName starts it in that look
-    await t.eval(`(function(){ const s = SceneManager._scene; s._cleanCinema.clear("test");
-        s._cleanTop._items.name.start(Object.assign(CleanHUD.placeInfo(), { kind: "place", first: true, opis: "Zdanie na próbę." })); return 0; })()`);
-    const kOn = await t.until("(function(){ const i = SceneManager._scene._cleanTop._items.name.info(); return !!(i && i.t >= 130); })()", 15, 30);
-    const kr = await t.json(`(function(){ const k = SceneManager._scene._cleanTop._items.name, P = k._parts;
-        return { i: k.info(), orn: P ? [P.left, P.right, P.diamond].map(s => Math.round(s.opacity)) : null, cinema: !!$gameTemp._hudCinema }; })()`);
-    const dk = await dbg();
-    t.check("stara „Kronika” (Sprite_CleanChronicle) dalej działa: nazwa 48 px u góry na środku z ornamentem i zdaniem, w stosie u góry, między rogami, HUD nie gaśnie",
-        kOn && !!kr.i && kr.i.mode === "first" && !kr.i.style && kr.i.size === 48 && kr.i.y < 30 && kr.i.opis === "Zdanie na próbę." && kr.i.lettersIn === kr.i.letters && !!kr.orn && kr.orn.every(v => v === 255)
-        && dk.top.some(x => x.k === "name" && x.y < 30) && boxOk(kr.i, dk) && !kr.cinema, { kr, top: dk.top, corner: dk.corner });
-    await t.until(`(function(){ const l = CleanHUD.debug().nameLast; return !!(l && l.mapId === 19 && l.mode === "first" && l.why !== "new"); })()`, 20, 50);
-    end = await t.json("CleanHUD.debug().nameLast");
-    t.check("...trzyma się ok. 5 s (300 klatek) i znika ze stosu", end && end.why === "end" && end.frames >= 295 && end.frames <= 305 && !(await dbg()).top.some(x => x.k === "name"), end);
 
     // ---------------------------------------------------------------- a town quest followed: its step's person
     const tq = await t.json(`(function(){ if (!window.TownQuests) return null; TownQuests.start("K1"); TownQuests.track("K1"); $gameSystem.setDayNightHour(10);

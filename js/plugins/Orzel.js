@@ -79,8 +79,8 @@
     const CB = () => T.api("Combat");
     const item = id => (window.$dataItems && $dataItems[id]) || null;
     const count = id => (item(id) ? $gameParty.numItems(item(id)) : 0);
-    const rand = (a, b) => a + Math.random() * (b - a);
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const rand = T.util.rand;
+    const pick = T.util.pick;
     const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
     const { fill } = Watki.mowa;
     const TILE = () => ($gameMap ? $gameMap.tileWidth() : 48);

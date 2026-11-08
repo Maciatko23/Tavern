@@ -81,13 +81,13 @@
     const SBl = () => T.api("SpeechBubbles") || window.SpeechBubbles || null;
     const GZ = () => T.api("Garnizon") || window.Garnizon || null;
     const RA = () => window.RoamingActor || null;
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const pick = T.util.pick;
     const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
     const onMap = id => !!(window.$gameMap && $gameMap.mapId() === id);
     const report = (where, e) => console.error("[Ludzie] " + where + ":", e);
     const inRect = (z, x, y) => !!z && x >= z.x && x < z.x + z.w && y >= z.y && y < z.y + z.h;
     const inHours = (h, r) => (r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
-    const dist = (ax, ay, bx, by) => Math.hypot(ax - bx, ay - by);
+    const dist = T.util.distXY;
     const heroAt = (x, y) => dist($gamePlayer.x, $gamePlayer.y, x, y);
     function hash(a, b) {
         let h = (Math.imul(a | 0, 374761393) + Math.imul(b | 0, 668265263)) | 0;

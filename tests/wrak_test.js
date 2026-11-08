@@ -116,7 +116,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         sold.every(s => s && s[2]) && fine.fined > 0 && fine.gold === gold0 - 20 && pops.some(p => /Kara/.test(p)), { sold, fine, pops, gold0 });
 
     // ---------------------------------------------------------------- pod pokład: dziura w burcie
-    await t.go(165, 17, 16, 8);
+    await t.go(165, 28, 17, 8);   // (2026-11-07: the big wreck in three pieces - the breach at 28,16)
     await t.setHour(HIGH);
     await t.frames(10);
     await t.hold("up", 30);
@@ -124,7 +124,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await t.frames(40);
     const m166 = await t.json(`({ at: [$gamePlayer.x, $gamePlayer.y], name: $dataMap.displayName, rats: (Creatures.list || []).filter(c => c._tag === "wrak" && !c._dead).length,
         skel: (function(){ const e = $gameMap.events().find(e => /<Wrak:szkielet>/.test(e.event().note)); return e ? [e.eventId(), e.x, e.y, Wrak.floodedAt(e.x, e.y), e.opacity()] : null; })() })`);
-    t.check("dziura w burcie (17,15) prowadzi pod pokład (Map166, 4,11); w ładowni szczury (Creatures)",
+    t.check("dziura w burcie (28,16) prowadzi pod pokład (Map166, 4,11); w ładowni szczury (Creatures)",
         down && m166.at[0] === 4 && m166.at[1] === 11 && m166.rats >= 1, m166);
     await t.eval("Creatures.clear('wrak'); 0");
     t.check("w przypływie szkielet bosmana leży pod wodą (pole zamknięte, widać go przez wodę)", m166.skel && m166.skel[3] && m166.skel[4] < 255, m166.skel);

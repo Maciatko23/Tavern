@@ -17,11 +17,13 @@
 // 2-3 are pictures of 8 x 8 cells baked when they come near the screen (a small pool of bitmaps, given back when far), the screen's own before
 // the map shows. z 0.85 / 0.9: over the ground, Ziemia's soft edges (0.5) and GroundDetail's tufts (0.8); under the soil (1), the contact shade
 // (1.4), the things lying about (1.5), the sun's shadows (1.8) and every character (3) - so nothing of it is ever over a tree or a person.
+// (2026-11-07) The water's distance counts the neighbour maps' water beyond the edges too (Laka_Woda.js, tools/laka/woda_sasiadow.py):
+// the dry shore goes on over a border instead of stopping in a straight line on it.
 // Switches: Opcje "Łąka: odcienie i kwiaty (próba)"; Laka.set(false); for the tests window.LAKA = { off: true }.
 
 /*:
  * @target MZ
- * @plugindesc Łąka: odcienie trawy, sucho przy brzegu i bujnie w głębi lądu, rzadkie kwietne łany, igliwie i wysoka trawa przy drzewach. v1.1.0
+ * @plugindesc Łąka: odcienie trawy, sucho przy brzegu i bujnie w głębi lądu, rzadkie kwietne łany, igliwie i wysoka trawa przy drzewach; woda sąsiednich map też liczy się do suchego brzegu. v1.2.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -171,17 +173,28 @@
             }
             grass[i] = 1; rgb[i * 3] = ka.rgb[0]; rgb[i * 3 + 1] = ka.rgb[1]; rgb[i * 3 + 2] = ka.rgb[2];
         }
-        // cells off the water (4 ways; no water: far everywhere)
-        const dist = new Float32Array(N).fill(999), q = new Int32Array(N);
+        // cells off the water (4 ways; no water: far everywhere). (2026-11-07, the player at the island's map: "przejścia pomiędzy
+        // mapami mają być super naturalne i płynne") the NEIGHBOURS' water too (Laka_Woda.js, tools/laka/woda_sasiadow.py): worked
+        // out on the map grown by their strip and cut back, so the dry grass by a shore just over the border goes on over it (111 by
+        // 917's sea); inside the map, with no water beyond it, the same numbers as before
+        const nw = window.LakaWoda && window.LakaWoda[$gameMap.mapId()], gm = nw && nw.m && nw.w ? nw.m : [0, 0, 0, 0];
+        const L = gm[0], Tp = gm[1], EW = W + L + gm[2], EH = H + Tp + gm[3], EN = EW * EH;
+        const ed = new Float32Array(EN).fill(999), q = new Int32Array(EN);
         let qh = 0, qt = 0;
-        for (let i = 0; i < N; i++) if (water[i]) { dist[i] = 0; q[qt++] = i; }
-        while (qh < qt) {
-            const i = q[qh++], x = i % W, y = (i / W) | 0, nd = dist[i] + 1;
-            if (x > 0 && dist[i - 1] > nd) { dist[i - 1] = nd; q[qt++] = i - 1; }
-            if (x < W - 1 && dist[i + 1] > nd) { dist[i + 1] = nd; q[qt++] = i + 1; }
-            if (y > 0 && dist[i - W] > nd) { dist[i - W] = nd; q[qt++] = i - W; }
-            if (y < H - 1 && dist[i + W] > nd) { dist[i + W] = nd; q[qt++] = i + W; }
+        for (let i = 0; i < N; i++) if (water[i]) { const j = (((i / W) | 0) + Tp) * EW + (i % W) + L; ed[j] = 0; q[qt++] = j; }
+        for (const [y, x0, x1] of (nw && nw.m && nw.w) || []) {
+            if (y < -Tp || y >= H + gm[3]) continue;
+            for (let x = Math.max(x0, -L); x <= Math.min(x1, W + gm[2] - 1); x++) { const j = (y + Tp) * EW + x + L; if (ed[j] !== 0) { ed[j] = 0; q[qt++] = j; } }
         }
+        while (qh < qt) {
+            const i = q[qh++], x = i % EW, y = (i / EW) | 0, nd = ed[i] + 1;
+            if (x > 0 && ed[i - 1] > nd) { ed[i - 1] = nd; q[qt++] = i - 1; }
+            if (x < EW - 1 && ed[i + 1] > nd) { ed[i + 1] = nd; q[qt++] = i + 1; }
+            if (y > 0 && ed[i - EW] > nd) { ed[i - EW] = nd; q[qt++] = i - EW; }
+            if (y < EH - 1 && ed[i + EW] > nd) { ed[i + EW] = nd; q[qt++] = i + EW; }
+        }
+        let dist = ed;
+        if (EN !== N) { dist = new Float32Array(N); for (let y = 0; y < H; y++) dist.set(ed.subarray((y + Tp) * EW + L, (y + Tp) * EW + L + W), y * W); }
         const w = window.SwiatData && SwiatData.maps && SwiatData.maps[$gameMap.mapId()];   // (the world's coordinates: the same field on both sides of a map's edge)
         G = { key, data: d, tileset: $gameMap.tilesetId(), W, H, grass, obj, face, rgb, dist, feet: null, feetSig: "", tint: null, occ: new Uint8Array(N), ox: w ? w[0] * TW : 0, oy: w ? w[1] * TW : 0 };
         kept.push(G);

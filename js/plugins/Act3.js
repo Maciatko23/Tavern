@@ -92,9 +92,9 @@
     const CB = () => T.api("Combat");
     const TL = () => T.api("TownLife");
     const say = (ch, text, frames) => T.call("SpeechBubbles", "say", ch, text, frames || 220);
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const pick = T.util.pick;
     const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
-    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const clamp = T.util.clamp;
     const hour = () => T.time.hour();
     const day = () => T.time.day();
     const clockNow = () => day() * 24 + hour();

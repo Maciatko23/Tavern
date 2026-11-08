@@ -196,9 +196,11 @@
     // is, black; it falls after half the blows and gives charcoal instead of wood, and so does its stump.
     // (the self switch's key made once per event - 2026-10-24, wydajność: asked for every tree twice a frame; the same [map, event,
     // "D"] as before, kept, not a new one each time)
+    // (2026-11-07: the key as the text the engine makes of it - Game_SelfSwitches keeps "map,event,D" - read straight, no array turned
+    // into text twice a tree a frame; no plugin changes Game_SelfSwitches.value)
     const charredKeys = new WeakMap();
-    const charredKey = event => { let k = charredKeys.get(event); if (k === undefined) charredKeys.set(event, (k = [event._mapId, event._eventId, "D"])); return k; };
-    const isCharred = event => !!event && !!treeConfig(event) && $gameSelfSwitches.value(charredKey(event));
+    const charredKey = event => { let k = charredKeys.get(event); if (k === undefined) charredKeys.set(event, (k = event._mapId + "," + event._eventId + ",D")); return k; };
+    const isCharred = event => !!event && !!treeConfig(event) && !!$gameSelfSwitches._data[charredKey(event)];
     // a standing tree lightning can hit: an ordinary one (not a fruit tree), not felled, showing its picture
     function isStandingTree(event) {
         const cfg = treeConfig(event);

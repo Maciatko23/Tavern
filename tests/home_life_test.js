@@ -158,7 +158,10 @@ kit.test({ port: 9392, plugins: PLUGINS, bootCheck: "the game boots", errorCheck
         const started = await newGame(19, 2, 5);
         await frames(20);
         const g0 = await J("(function(){ const e = $gameMap.event(901); return e && { x: e.x, y: e.y, intro: Story.state().intro, key: HomeLife.grandpaState().key }; })()");
-        check("a new story game: grandpa at Story's spot (10,6) and still during the intro", started && g0 && g0.x === 10 && g0.y === 6 && g0.key === "intro", g0);
+        // (2026-11-07: the first talk is a scene - Story puts him under the pot on the hearth, the first free of its POT cells, and he
+        // walks to the bed and back; no more the rug's 10,6)
+        const POT = [[9, 5], [10, 6], [10, 5], [8, 5], [9, 6]];
+        check("a new story game: grandpa by the pot on the hearth (Story's intro scene) and still during the intro", started && g0 && POT.some(([x, y]) => g0.x === x && g0.y === y) && g0.key === "intro", g0);
         await ev("Story.skipIntro(); 0");
         await until(calmMap, 10);
         await ev(quiet);

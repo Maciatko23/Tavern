@@ -1,5 +1,5 @@
-# Line endings are already mixed on purpose across this project (some plugin files are
-# CRLF, some are LF; the patch scripts preserve whichever a file already uses). Tell git
-# to leave every file's bytes exactly as they are instead of normalizing on commit/checkout,
+# Code is LF: every plugin, test and tool script (2026-11-07: the last 83 CRLF ones turned to LF, nothing else changed in them;
+# the patch scripts still keep whatever a file uses, so one written CRLF by an editor stays as it is). The editor's data/*.json,
+# the docs and js/libs keep their own bytes. Git leaves every file exactly as it is instead of normalizing on commit/checkout,
 # so a checkout never silently rewrites a file the editor or a script wrote.
 * -text

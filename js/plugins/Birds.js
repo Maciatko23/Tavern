@@ -66,19 +66,15 @@
     const EAT_FRAMES = 540, SEED_FRAMES = 300;   // pecking one plant away (about 9 / 5 s)
     const SETTLE = 30;   // frames after landing in which a bird pays the player no heed: half a second of calm (user)
     const SCARECROW_RANGE = 3;
-    const rand = (a, b) => a + Math.random() * (b - a);
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const rand = T.util.rand;
+    const pick = T.util.pick;
     const pickWeighted = table => { let r = Math.random() * table.reduce((s, [, w]) => s + w, 0); for (const [v, w] of table) { if ((r -= w) <= 0) return v; } return table[0][0]; };
     const TILE = () => $gameMap.tileWidth();
     const hoursNow = () => T.time.day() * 24 + T.time.hour();
 
     // the saved state: Tawerna.state("birds") = $gameSystem._tw.birds (an older save's $gameSystem._birds is taken over)
     const store = T.state.define("birds", () => ({ maps: {}, kills: {}, eaten: 0 }), { version: 1, adopt: "_birds", owner: PLUGIN });
-    function hash(n, salt) {
-        let h = Math.imul(n | 0, 374761393) ^ Math.imul(salt | 0, 668265263);
-        h = Math.imul(h ^ (h >>> 13), 1274126177);
-        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-    }
+    const hash = T.util.hash;
     const outdoors = () => !!(window.Survival && Survival.isOutdoors && Survival.isOutdoors());
     function rainingAt(day, hour) {
         const plan = window.Survival && Survival.weatherPlan ? Survival.weatherPlan(day) : null;

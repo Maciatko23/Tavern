@@ -79,11 +79,11 @@
     const UG = () => T.api("Underground") || window.Underground || null;
     const SB = () => T.api("SpeechBubbles") || window.SpeechBubbles || null;
     const HU = () => T.api("Hunting") || window.Hunting || null;
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const pick = T.util.pick;
     const inHours = (h, r) => (r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
     const nightOf = () => (hour() < 12 ? day() - 1 : day());
     const clock = () => { const h = hour(); return h < 12 ? h + 24 : h; };   // (the night's clock: 22 ... 29)
-    const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+    const dist = T.util.dist;
     const onMap = id => !!(window.$gameMap && $gameMap.mapId() === id);
     const report = (where, e) => console.error("[Dwor] " + where + ":", e);
     const K = () => TX.kod;   // (the words of this file: js/teksty/dwor.txt, kod.*)

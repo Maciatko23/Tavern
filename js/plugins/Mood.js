@@ -390,7 +390,7 @@ void main(void) {
             vig: 0.62, vigIn: 0.32, vigCol: [0, 0.02, 0.012], bloom: 1.1, thr: 0.6, knee: 0.28, white: 0.4, flat: 0.15, bloomSat: 1.4 })
     };
     const KEYS = Object.keys(NEUTRAL);
-    const lerp = (a, b, t) => a + (b - a) * t;
+    const lerp = T.util.lerp;
     function mixLook(a, b, t) {
         const out = {};
         if (t <= 0) { for (const k of KEYS) out[k] = Array.isArray(a[k]) ? a[k].slice() : a[k]; return out; }

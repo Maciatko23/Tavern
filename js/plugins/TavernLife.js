@@ -263,17 +263,13 @@
     // ------------------------------------------------------------------
     // Small helpers (the parts get them through TavernLife.lib)
     // ------------------------------------------------------------------
-    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-    const lerp = (a, b, t) => a + (b - a) * t;
-    const ease = t => 1 - Math.pow(1 - clamp(t, 0, 1), 3);
+    const clamp = T.util.clamp;
+    const lerp = T.util.lerp;
+    const ease = T.util.easeOut;
     const U = () => T.api("UITheme") || { fill: "rgba(11,12,15,0.9)", solid: "#0b0c0f", line: "#3a3e46", accent: "#ffd23f", accentDim: "#c9a12a",
         text: "#eceef0", muted: "#8a9099", trough: "#16181c", panel: null, bar: null };
     const GOOD = "#9ff0a8", BAD = "#ff9f8f", WARM = "#ffe27a";
-    function hash(a, b) {
-        let h = Math.imul(a | 0, 374761393) ^ Math.imul(b | 0, 668265263);
-        h = Math.imul(h ^ (h >>> 13), 1274126177);
-        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-    }
+    const hash = T.util.hash;
     const pick = (list, rng) => list[Math.floor((rng ? rng() : Math.random()) * list.length) % list.length];
     const seLast = {};   // (one sound of a name at most every few frames: a fast game - the tests' turbo - would pile them up)
     // a sound through the core's safe pool (a missing file stays silent, never "Failed to load")
@@ -696,28 +692,13 @@
     }
     // tiles from (x0,y0) to a tile next to (tx,ty) (the target itself may be a chair or a tub, not walkable): [{x, y, d}] or null
     function pathTo(tx, ty, maxLen) {
-        const x0 = $gamePlayer.x, y0 = $gamePlayer.y, key = (x, y) => x + "," + y, prev = new Map([[key(x0, y0), null]]);
+        const x0 = $gamePlayer.x, y0 = $gamePlayer.y, w = $gameMap.width();
         const goal = (x, y) => Math.abs(x - tx) + Math.abs(y - ty) === 1;
         if (goal(x0, y0)) return [];
-        let front = [[x0, y0]], found = null;
-        for (let depth = 0; depth < (maxLen || 30) && front.length && !found; depth++) {
-            const next = [];
-            for (const [x, y] of front) {
-                for (const [dx, dy, d] of DIRS) {
-                    const nx = x + dx, ny = y + dy, k = key(nx, ny);
-                    if (prev.has(k) || !$gameMap.isValid(nx, ny) || !$gameMap.isPassable(x, y, d) || !$gameMap.isPassable(nx, ny, 10 - d) || blockedByEvent(nx, ny)) continue;
-                    prev.set(k, { x, y, d, nx, ny });
-                    if (goal(nx, ny)) { found = k; break; }
-                    next.push([nx, ny]);
-                }
-                if (found) break;
-            }
-            front = next;
-        }
-        if (!found) return null;
-        const out = [];
-        for (let k = found; prev.get(k); ) { const p = prev.get(k); out.unshift({ x: p.nx, y: p.ny, d: p.d }); k = key(p.x, p.y); }
-        return out;
+        // (the search: Tawerna.grid.bfs - 2026-11-07, one for all; here only his rules)
+        const r = T.grid.bfs({ w, h: $gameMap.height(), sx: x0, sy: y0, dirs: DIRS, atFind: true, depth: maxLen || 30, goal,
+            can: (x, y, nx, ny, d) => $gameMap.isPassable(x, y, d) && $gameMap.isPassable(nx, ny, 10 - d) && !blockedByEvent(nx, ny) });
+        return r && r.cells.slice(1).map((c, k) => ({ x: c % w, y: Math.floor(c / w), d: r.dirs[k] }));
     }
     function glideTo(ch, x, y) {
         ch._x = x;

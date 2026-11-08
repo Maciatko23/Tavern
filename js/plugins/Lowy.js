@@ -94,8 +94,8 @@
     const year = d => T.time.year(d === undefined ? day() : d);
     const mapId = () => (window.$gameMap ? $gameMap.mapId() : 0);
     const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
-    const pick = list => list[Math.floor(Math.random() * list.length)];
-    const dist = (ax, ay, bx, by) => Math.hypot(ax - bx, ay - by);
+    const pick = T.util.pick;
+    const dist = T.util.distXY;
     const heroDist = (x, y) => (window.$gamePlayer ? dist($gamePlayer.x, $gamePlayer.y, x, y) : 99);
     const inHours = (h, ranges) => ranges.some(([a, b]) => h >= a && h < b);
     const fill = (s, o) => String(s).replace(/\{(\w+)\}/g, (m, k) => (o && o[k] !== undefined ? o[k] : m));
@@ -120,7 +120,7 @@
     const qStep = id => { const r = qRec(id); return r && r.s === "active" ? r.step : -1; };
     const qDone = id => { const r = qRec(id); return !!r && r.s === "done"; };
     const opinion = (n, why) => T.call("TownQuests", "addOpinion", n, why);
-    const hash = (a, b) => { let h = Math.imul(a | 0, 374761393) ^ Math.imul(b | 0, 668265263); h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
+    const hash = T.util.hash;
     const animals = () => { const Hn = H(); return Hn ? Hn.animals || [] : []; };
     const removeAnimal = a => { const Hn = H(); if (Hn && Hn.removeAnimal && a && !a._dead) Hn.removeAnimal(a); };
     const passable = (x, y) => window.$gameMap && $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f);

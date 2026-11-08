@@ -88,7 +88,7 @@
     const TL = () => T.api("TownLife") || window.TownLife || null;
     const W = () => window.Wyspa || T.api("Wyspa") || null;
     const SKY = () => T.api("Sun") || window.Sky || null;
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const pick = T.util.pick;
     const inHours = (h, r) => (r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
     const onMap = id => !!window.$gameMap && $gameMap.mapId() === id;
     const ours = () => !!window.$gameMap && OURS.includes($gameMap.mapId());
@@ -914,11 +914,7 @@
         return (haloBmp = b);
     }
     // the fog banks: the recipe of Sky.js's morning mist (overlapping round puffs, blurred)
-    function hash01(a, b) {
-        let h = (a * 374761393 + b * 668265263) | 0;
-        h = Math.imul(h ^ (h >>> 13), 1274126177);
-        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-    }
+    const hash01 = T.util.hash01;
     let fogShapes = null;
     function fogBitmaps() {
         if (fogShapes) return fogShapes;

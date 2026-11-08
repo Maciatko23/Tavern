@@ -94,7 +94,7 @@
         [-10, [-22, -20, 26, 36]], [-6, [-15, -18, 30, 30]], [-3, [12, -20, 20, 20]], [0, [50, -14, -20, 8]], [3, [54, -6, -40, 0]],
         [8, [34, 6, -30, 0]], [14, [14, 4, -12, 0]], [22, [0, 0, 0, 0]]
     ];
-    const smooth = t => t * t * (3 - 2 * t);
+    const smooth = T.util.smooth;
     function skyAt(hour, day) {
         const season = T.time.season(day), { elev, morning } = sunElev(hour, season);
         const keys = morning ? SKY_MORNING : SKY_EVENING;
@@ -739,11 +739,7 @@
 
     // ---- the golden hour's sun rays and the morning mist (user 2026-10-01: "1 i 3"): two layers over the map, under the side light
     // and the dark of the night (so they take the sky's colour and dim with it). The mist under the rays: the light shines through it.
-    function hash01(a, b) {
-        let h = (a * 374761393 + b * 668265263) | 0;
-        h = Math.imul(h ^ (h >>> 13), 1274126177);
-        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-    }
+    const hash01 = T.util.hash01;
     const smooth01 = t => { const x = Math.max(0, Math.min(1, t)); return x * x * (3 - 2 * x); };
     const lerp3 = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
     const rgbInt = c => (c[0] << 16) | (c[1] << 8) | c[2];

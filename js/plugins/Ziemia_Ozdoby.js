@@ -3,7 +3,7 @@
 //=============================================================================
 // (2026-10-30) Part 4 of the trial of a prettier map (Ziemia.js): small groups of things on Kruczy Jar (Map003) laid as events (ids
 // 3100-3139, Tawerna.inject; the map file is not touched): details in groups, none alone and none repeated. The things that stand
-// (a chest, a bucket, a sack, a stump) block their one cell; flowers, stones and brushwood are walked over. All of them stand off the
+// (a bench, a stump) block their one cell; flowers, stones and brushwood are walked over. All of them stand off the
 // paths and off the ground the farm is built on in the middle of the plot (the strip by the south wall, the path's edge, the forest's
 // edge). Switched by Ziemia.on("decor") (the map is read again for the change).
 
@@ -23,10 +23,9 @@
     const PLUGIN = "Ziemia";
     // [id, image, x, y, blocks, name]
     const GROUPS = [
-        // by the south wall of the plot: a chest, a sack and a bucket in a row, pebbles beside
-        [3100, "!$Zi_Skrzynka", 14, 26, true, "Skrzynka z narzędziami"],
-        [3101, "!$Zi_Worek", 15, 26, true, "Worek przy murze"],
-        [3102, "!$Zi_Wiadro", 16, 26, true, "Wiadro przy murze"],
+        // by the south wall of the plot: pebbles and a bench (2026-11-07: the chest, the sack and the bucket that stood here, 3100-3102,
+        // taken away - they looked like the game's own things, given at the start; user: "usunąć je po prostu"; a saved game on the
+        // map loses them on loading, Tawerna.inject's fixSaved)
         [3103, "!$Zi_Kamienie", 13, 26, false, "Kamienie przy murze"],
         [3104, "!$Zi_Lawka", 18, 26, true, "Ławka przy murze"],
         // by the path: flax and yarrow in a drift, a pebble in the path's edge, a blue flower bush

@@ -75,8 +75,8 @@
     const HU = () => T.api("Hunting") || window.Hunting || null;
     const SB = () => T.api("SpeechBubbles") || window.SpeechBubbles || null;
     const RA = () => window.RoamingActor || null;
-    const pick = list => list[Math.floor(Math.random() * list.length)];
-    const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+    const pick = T.util.pick;
+    const dist = T.util.dist;
     const onMap = id => !!(window.$gameMap && $gameMap.mapId() === id);
     const report = (where, e) => console.error("[Rywal] " + where + ":", e);
     const fill = Watki.mowa.fill;

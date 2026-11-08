@@ -102,8 +102,8 @@
     const item = id => (window.$dataItems && $dataItems[id]) || null;
     const count = id => (item(id) ? $gameParty.numItems(item(id)) : 0);
     const iconOfItem = id => (item(id) ? item(id).iconIndex : 0);
-    const pick = list => list[Math.floor(Math.random() * list.length)];
-    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const pick = T.util.pick;
+    const clamp = T.util.clamp;
     // [a, b] (b < a: over midnight), or a list of such ranges
     const inHours = (h, r) => !r || (Array.isArray(r[0]) ? r.some(x => inHours(h, x)) : r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
     const isNight = h => h >= NIGHT_FROM || h < NIGHT_TO;
@@ -1369,7 +1369,7 @@
     // The quests' own handlers (named in the data: talk / ready / act / check / tick / fx)
     // ------------------------------------------------------------------
     const visible = key => !!residentEv(key);
-    const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+    const dist = T.util.dist;
     const nightOf = () => (hour() < 12 ? day() - 1 : day());   // (a night counts from the evening before)
     // a quest's place on this map, while it is shown (its page on)
     function spotEv(key) {

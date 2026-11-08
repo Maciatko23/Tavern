@@ -159,9 +159,9 @@
     // ==================================================================
     const ST = ui.style;
     const GOOD = "#8ee08a", BAD = "#ff7b6b", WARN = "#ffb347", GOLD_ICON = 313;
-    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-    const lerp = (a, b, t) => a + (b - a) * t;
-    const ease = t => 1 - Math.pow(1 - clamp(t, 0, 1), 3);
+    const clamp = Tawerna.util.clamp;
+    const lerp = Tawerna.util.lerp;
+    const ease = Tawerna.util.easeOut;
     const scoreColour = s => (s >= 85 ? ST().accent : s >= 60 ? GOOD : s >= 35 ? WARN : BAD);
     function shuffle(list, rng) {
         const a = list.slice();

@@ -41,7 +41,7 @@
     const data = () => C().data(), Rng = s => C().Rng(s), isReady = n => C().isReady(n), have = q => C().have(q), iconOf = id => C().iconOf(id),
         itemName = id => C().itemName(id), placeName = id => C().placeName(id), dniWord = n => C().dniWord(n), daysText = n => C().daysText(n),
         daysLeft = n => C().daysLeft(n), reqName = q => C().reqName(q), repTier = r => C().repTier(r);
-    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const clamp = T.util.clamp;
     const felixDebt = () => !!T.call("Story", "isOpen");   // (Feliks's pay may go onto grandpa's debt while it is open)
     const dieName = key => { const TD = T.api("TavernDice"), DT = TD && TD.DIE_TYPES && TD.DIE_TYPES[key]; return DT ? DT.name : null; };
 

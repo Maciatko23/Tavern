@@ -42,8 +42,8 @@
     const { TARGET, QUICK_STAKE, gold, score, store, dayNow, hourNow, vsOf, ownedCount, heroSet, targetFor } = P.core;
     const { DIE_TYPES, SPECIAL_ORDER, OPPONENTS, OPP_ORDER } = P.data;
 
-    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-    const lerp = (a, b, t) => a + (b - a) * t;
+    const clamp = Tawerna.util.clamp;
+    const lerp = Tawerna.util.lerp;
     const easeOut = t => 1 - Math.pow(1 - clamp(t, 0, 1), 3);
     const easeInOut = t => { t = clamp(t, 0, 1); return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
     const easeBack = t => { t = clamp(t, 0, 1); const c = 1.7; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); };

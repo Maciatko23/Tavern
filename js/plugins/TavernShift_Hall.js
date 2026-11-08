@@ -476,36 +476,9 @@
         path(fx, fy, gx, gy, walk) {
             walk = walk || ((x, y) => this.walkable(x, y));
             const s = this.tileOf(fx, fy), g = this.tileOf(gx, gy);
-            const key = (x, y) => y * RC + x;
-            const open = [{ x: s.tx, y: s.ty, g: 0, f: 0 }], from = {}, cost = { [key(s.tx, s.ty)]: 0 };
-            const done = new Set();
-            while (open.length) {
-                let bi = 0;
-                for (let i = 1; i < open.length; i++) if (open[i].f < open[bi].f) bi = i;
-                const n = open.splice(bi, 1)[0], nk = key(n.x, n.y);
-                if (done.has(nk)) continue;
-                done.add(nk);
-                if (n.x === g.tx && n.y === g.ty) {
-                    const pts = [];
-                    let k = nk;
-                    while (k !== undefined) { const x = k % RC, y = Math.floor(k / RC); pts.unshift(standPt(x, y)); k = from[k]; }
-                    return pts;
-                }
-                for (let dy = -1; dy <= 1; dy++) {
-                    for (let dx = -1; dx <= 1; dx++) {
-                        if (!dx && !dy) continue;
-                        const x = n.x + dx, y = n.y + dy;
-                        if (!walk(x, y)) continue;
-                        if (dx && dy && (!walk(n.x + dx, n.y) || !walk(n.x, n.y + dy))) continue;
-                        const c = n.g + (dx && dy ? 1.414 : 1), k = key(x, y);
-                        if (cost[k] !== undefined && cost[k] <= c) continue;
-                        cost[k] = c;
-                        from[k] = nk;
-                        open.push({ x, y, g: c, f: c + Math.hypot(g.tx - x, g.ty - y) });
-                    }
-                }
-            }
-            return null;
+            // (the search: Tawerna.grid.astar8 - 2026-11-07, one for all; the start is always a cell of the room)
+            const cells = window.Tawerna.grid.astar8({ w: RC, h: RR, sx: s.tx, sy: s.ty, own: true, open: walk, goal: (x, y) => x === g.tx && y === g.ty, est: (x, y) => Math.hypot(g.tx - x, g.ty - y) });
+            return cells && cells.map(c => standPt(c % RC, Math.floor(c / RC)));
         }
         // walkable tiles next to the given tiles (4 ways), as stand points
         standsAround(tiles) {

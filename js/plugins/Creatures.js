@@ -105,11 +105,11 @@
     const se = (name, volume, pitch, pan) => T.audio.se(name, { volume, pitch, pan: pan || 0 });
     const popup = (icon, text, color) => T.popup(text, { icon, color, menu: true });
     const say = (ch, text, frames) => T.call("SpeechBubbles", "say", ch, text, frames);
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const pick = T.util.pick;
     const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
     const perk = key => T.call("Combat", "perk", key) || 0;
     const day = () => T.time.day();
-    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const clamp = T.util.clamp;
     const easeInOut = t => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
     const STEP = { 1: [-1, 1], 2: [0, 1], 3: [1, 1], 4: [-1, 0], 6: [1, 0], 7: [-1, -1], 8: [0, -1], 9: [1, -1] };
     const OCT = { 0: 6, 1: 3, 2: 2, 3: 1, 4: 4, "-4": 4, "-3": 7, "-2": 8, "-1": 9 };   // octant of (dx, dy) (y down) -> numpad

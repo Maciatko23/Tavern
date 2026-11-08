@@ -70,7 +70,7 @@
     const TQ = () => T.api("TownQuests") || window.TownQuests || null;
     const TL = () => T.api("TownLife") || window.TownLife || null;
     const W = () => window.Wyspa || T.api("Wyspa") || null;
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const pick = T.util.pick;
     const inHours = (h, r) => (r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
     // (2026-10-23) the words: js/teksty/pustelnia.txt (D.TX; D.TX.kod - the words of this file)
     const fill = Watki.mowa.fill;

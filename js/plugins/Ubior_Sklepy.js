@@ -79,17 +79,13 @@
     const item = id => (window.$dataItems && $dataItems[id] && $dataItems[id].name ? $dataItems[id] : null);
     const count = id => (item(id) ? $gameParty.numItems(item(id)) : 0);
     const day = () => T.time.day(), hour = () => T.time.hour();
-    const pick = a => a[Math.floor(Math.random() * a.length)];
+    const pick = T.util.pick;
     const E = () => T.api("Equipment");
     const DU = () => T.api("Durability");
     const TQ = () => T.api("TownQuests");
     const TL = () => T.api("TownLife");
     const report = (where, e) => console.error("[Ubior_Sklepy] " + where + ":", e);
-    function hash(a, b) {
-        let h = Math.imul(a | 0, 374761393) ^ Math.imul(b | 0, 668265263);
-        h = Math.imul(h ^ (h >>> 13), 1274126177);
-        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-    }
+    const hash = T.util.hash;
     const store = T.state.define("ubiorSklepy", () => ({ uzywane: { day: 0, list: [], sold: {} }, opCarry: 0, kupione: 0, sprzedane: 0, naprawione: 0, farbowane: 0 }),
         { version: 1, owner: PLUGIN });
 

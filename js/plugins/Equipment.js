@@ -132,10 +132,19 @@
     const hand = () => { const C = Cb(); return C && C.hand ? C.hand() || "m0" : "m0"; };
 
     // ---- the bag and the parts kept in step: new things go on by themselves where the part is free, the gone ones come off
+    // (2026-11-07, wydajność: asked many times a frame - the walking hero's picture, the HUD -, it walked every wearable thing each
+    // time; the answer changes only when the bag does (gainItem: loseItem and consumeItem go through it) or the state is another one -
+    // a new game, a load - so the walk is done only then)
+    let bagRev = 0, ensuredRev = -1, ensuredStore = null, ensuredItems = null;
+    const _gainItem = Game_Party.prototype.gainItem;
+    // (counted after the change too: an answer worked out while the bag was changing - a wrapper asking in the middle - is not kept)
+    Game_Party.prototype.gainItem = function() { bagRev++; try { return _gainItem.apply(this, arguments); } finally { bagRev++; } };
     function ensure() {
         if (!window.$gameSystem || !window.$gameParty || !window.$dataItems) return null;
         readNotes();
         const s = store();
+        if (s === ensuredStore && ensuredRev === bagRev && ensuredItems === $gameParty._items) return s;
+        ensuredStore = s; ensuredRev = bagRev; ensuredItems = $gameParty._items;
         for (const key of Object.keys(WEARABLE)) {
             const id = Number(key), slot = WEARABLE[key];
             if (has(id)) {

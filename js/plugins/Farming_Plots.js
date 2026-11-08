@@ -318,26 +318,12 @@
     // for every tile (~40 ms of a change of map, ~125 ms at CPU 4x); the same answer (a wide tree or bush covers several cells -
     // ChoppableTree.js's pos -: the ring walk of GroundDetail.js). Outside a batch nothing changes.
     let evBatch = null;
-    function eventCellsNow() {
-        const W = $gameMap.width(), H = $gameMap.height(), occ = new Uint8Array(W * H);
-        for (const e of $gameMap.events()) {
-            for (let r = 0; r <= 12; r++) {
-                let hit = false;
-                for (let y = e.y - r; y <= e.y + r; y++) for (let x = e.x - r; x <= e.x + r; x++) {
-                    if ((Math.abs(x - e.x) !== r && Math.abs(y - e.y) !== r) || x < 0 || y < 0 || x >= W || y >= H) continue;
-                    if (e.pos(x, y)) { occ[y * W + x] = 1; hit = true; }
-                }
-                if (!hit && r > 0) break;
-            }
-        }
-        return { W, H, occ };
-    }
     function withEventCells(fn) {
         if (evBatch) return fn();
-        evBatch = eventCellsNow();
+        evBatch = T.eventCells();   // (TawernaCore.js: the ring walk of the events' footprints)
         try { return fn(); } finally { evBatch = null; }
     }
-    const eventOn = (x, y) => (evBatch ? x >= 0 && y >= 0 && x < evBatch.W && y < evBatch.H && evBatch.occ[y * evBatch.W + x] === 1 : $gameMap.eventsXy(x, y).length > 0);
+    const eventOn = (x, y) => (evBatch ? evBatch.has(x, y) : $gameMap.eventsXy(x, y).length > 0);
     // the kind that lies on a tile (in this season), false, or undefined while the ground pictures are still loading
     function gatherSpot(x, y) {
         const kind = gatherKindOf(x, y);

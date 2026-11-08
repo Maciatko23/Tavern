@@ -50,7 +50,7 @@
     const BOWL_PAL = { d: "#2c1c10", w: "#8a6038", b: "#6a4526", s: "#8c4a22", S: "#c07a38" };
 
     const rnd = (a, b) => a + Math.random() * (b - a);
-    const hash = (a, b) => { let h = Math.imul(a | 0, 374761393) ^ Math.imul(b | 0, 668265263); h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
+    const hash = T.util.hash;
     const P = () => T.api("Przytulna") || window.Przytulna;
     const on = () => { const p = P(); return !!(p && p.on && p.on()); };
     const here = () => !!(window.$gameMap && $gameMap.mapId() === MAP);

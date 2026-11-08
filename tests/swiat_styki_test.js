@@ -1,12 +1,12 @@
 // KONTRAKT KRAWĘDZI w grze (styki świata): pomiar każdej mapy świata (kratki krawędzi: chodliwe, w głównym obszarze, otwarte dla Krawedzie.js albo nie)
-// + prawdziwe przejścia klawiszami w obie strony na próbce styków (tools/swiat/styki/staging/ogon_styki.json), także przy nowych mapach 960-964.
+// + prawdziwe przejścia klawiszami w obie strony na próbce styków (tools/swiat/styki/ogon_styki.json - 2026-11-07: kept beside the tool, the staging folders go to the archive), także przy nowych mapach 960-964.
 // Statyczny odpowiednik: python tools/mapy/swiat_styki.py. Wyjątki fabularne: 13 -> 175 (wspinaczka), 162 <-> 165 (łacha), 175 <-> 934/120/962 (uszczelnione).
 // GAME_OVERLAY=tools/swiat/styki/staging GAME_OVERLAY_JS=1 CDP_PORT=9396 node tests/swiat_styki_test.js      Zdjęcia: docs/swiat_styki/
 const kit = require("./lib/kit.js");
 const fs = require("fs"), path = require("path");
 const OUT = path.join(__dirname, "..", "docs", "swiat_styki");
 fs.mkdirSync(OUT, { recursive: true });
-const LINKS = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "tools", "swiat", "styki", "staging", "ogon_styki.json"), "utf8")).linki;
+const LINKS = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "tools", "swiat", "styki", "ogon_styki.json"), "utf8")).linki;
 const WYJATKI = [[13, 175], [175, 13], [175, 934], [934, 175], [175, 120], [120, 175], [162, 165], [165, 162]];
 kit.test({ port: Number(process.env.CDP_PORT) || 9396, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, minimap: false });

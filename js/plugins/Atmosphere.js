@@ -152,8 +152,8 @@
     const AUTOSAVE = flag(params.autosaveOnSleep, true);
     const TAVERN_MAPS = String(params.tavernMaps || "1").split(",").map(s => Number(s.trim())).filter(n => n > 0);
 
-    const rand = (a, b) => a + Math.random() * (b - a);
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const rand = T.util.rand;
+    const pick = T.util.pick;
 
     // ------------------------------------------------------------------
     // Time and place

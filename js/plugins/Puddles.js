@@ -112,23 +112,8 @@
         return false;
     }
     const extentOf = lobes => Math.max(...lobes.map(l => Math.max(Math.abs(l.x) + l.rx, Math.abs(l.y) + l.ry)));
-    // the cells the map's events stand on (a tree or a wide bush covers several - ChoppableTree.js's pos), asked once for all the cells
-    // (2026-11-03: eventsXy for every cell of the map went through all its events each time - ~260 ms of a change of map at CPU 4x)
-    function eventCells() {
-        const W = $gameMap.width(), H = $gameMap.height(), occ = new Uint8Array(W * H);
-        for (const e of $gameMap.events()) {
-            // ring by ring round the event (a footprint is one rectangle with the event in it: the first empty ring ends it)
-            for (let r = 0; r <= 12; r++) {
-                let hit = false;
-                for (let y = e.y - r; y <= e.y + r; y++) for (let x = e.x - r; x <= e.x + r; x++) {
-                    if ((Math.abs(x - e.x) !== r && Math.abs(y - e.y) !== r) || x < 0 || y < 0 || x >= W || y >= H) continue;
-                    if (e.pos(x, y)) { occ[y * W + x] = 1; hit = true; }
-                }
-                if (!hit && r > 0) break;
-            }
-        }
-        return { has: (x, y) => x >= 0 && y >= 0 && x < W && y < H && occ[y * W + x] === 1 };
-    }
+    // the cells the map's events stand on, asked once for all the cells (Tawerna.eventCells, TawernaCore.js)
+    const eventCells = () => Tawerna.eventCells();
     function buildCandidates(mapId) {
         const W = $gameMap.width(), H = $gameMap.height(), out = [], evc = eventCells();
         for (let gy = 0; gy * CELL < H; gy++) for (let gx = 0; gx * CELL < W; gx++) {

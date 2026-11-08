@@ -76,8 +76,8 @@
     const TQ = () => T.api("TownQuests") || window.TownQuests || null;
     const TL = () => T.api("TownLife") || window.TownLife || null;
     const WY = () => T.api("Wyspa") || window.Wyspa || null;
-    const pick = list => list[Math.floor(Math.random() * list.length)];
-    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const pick = T.util.pick;
+    const clamp = T.util.clamp;
 
     // ------------------------------------------------------------------
     // The state (the save): the thread's (Wrak_Data.js); TownQuests' flags and things through the thread

@@ -64,6 +64,8 @@
         return breath;
     }
     const BREATH = { delay: 40, full: 110, windedUntil: 0.35 };
+    // (2026-11-07, F9 "Statystyki zawsze pełne" - Debug.js) the breath full again at once, not winded
+    function fillBreath() { breath = -1; winded = false; }
     // pays `cost`; false (nothing paid) when out of breath
     function spendBreath(cost) {
         if (winded || breathNow() < 1) { noBreath(); return false; }
@@ -1009,7 +1011,7 @@
     const heldStill = () => act.mode === "roll" || act.stun > 0;
     const mayRun = player => act.mode !== "block" && (player !== $gamePlayer || canRun());
 
-    P.fight = { act, ROLL, MELEE, MELEE_ORDER, SHIELDS, ARMORS, NO_SHIELD, COMBO_MULT, HEAVY, maxCombo, SNEAK, RUN, ROLL_KIND, KNOCK_KIND, FIST_ICON, px, py, easeOut, has, hand, handMelee, handIcon, switchHand,
+    P.fight = { fillBreath, act, ROLL, MELEE, MELEE_ORDER, SHIELDS, ARMORS, NO_SHIELD, COMBO_MULT, HEAVY, maxCombo, SNEAK, RUN, ROLL_KIND, KNOCK_KIND, FIST_ICON, px, py, easeOut, has, hand, handMelee, handIcon, switchHand,
         setHand, handChoices, shield, armor, weaponNow, refreshGear, gearChanged: () => { gearAt = -1; }, rangedItem, rangedKind, hasRanged, anyRanged, lackOf, sneakAttack, sneakMult, maxBreath, breathNow, spendBreath, isWinded: () => winded, canRun, pressAttack, pressDodge, hitPlayer, enemyHurtFx, hitstop, numberAt,
         sparksAt, shovePlayer, floaters, sparks, stopFrames: () => stopFrames, holdFrame, update, resetAct, heroSpeed, heldStill, mayRun, recoil, downPlayer,
         stunPlayer, drainBreath, slowMotion, SLOW, COUNTER, HIT_SE, surfaceOf, faceToward, facingVec, arrowsDir8, swingPastImpact, endSwing, buf, BUF, DIR8_VEC, isHeld: () => heldNow, slowNow: () => slowT };

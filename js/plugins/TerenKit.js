@@ -140,7 +140,7 @@
         const sx = ((Math.floor(id / 128) % 2) * 8 + id % 8) * 48, sy = (Math.floor((id % 256) / 8) % 16) * 48;
         return (tileCache[id] = bm.context.getImageData(sx, sy, 48, 48).data);
     }
-    const lerp = (a, b, t) => a + (b - a) * t;
+    const lerp = T.util.lerp;
 
     function atlasSlot(g, name, slot, size) {
         const a = g.atlas || (g.atlas = {}), list = a[name] || (a[name] = []), per = Math.floor(size / slot);

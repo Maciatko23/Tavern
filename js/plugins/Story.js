@@ -1060,11 +1060,13 @@
     // New game, loading, the first map
     // ------------------------------------------------------------------
     T.on("newGame", () => {
+        lying = false;
         keepOldName();
         setState(newState());   // (kept only when the game really begins in grandpa's house - see performTransfer)
         syncGoals();
     }, { owner: PLUGIN });
     T.on("load", () => {
+        lying = false;
         keepOldName();
         const s = state();
         if (s && s.intro === 1) s.intro = 0;   // (a talk cut off by a reload is told again)
@@ -1203,15 +1205,104 @@
     // ------------------------------------------------------------------
     // On the map: the intro, the Lord's hours, the letters, the deadline
     // ------------------------------------------------------------------
+    // ------------------------------------------------------------------
+    // The first talk as a scene (2026-11-07, the user: "wyłączyć HUD i dać paski kinowe i postać niech leży w łóżku (bo była schorowana)
+    // i przecież postać nie widzi środka domu bo cień, to stamtąd wychodzi dziadek, podchodzi do postaci, zaczyna się rozmowa, a potem
+    // dziadek po rozmowie wraca pod garnek"; "pamiętaj, że postać ma leżeć w łóżku i dziadek podchodzi"). From the house's first frame
+    // the hero lies in his bed - his own sprite cut to the head on the pillow, the bed's blanket up to the chin (his clothes and hat as
+    // he wears them) -, the black bars are in and the HUD is gone (CleanHUD.sceneBars). He lies on the bed's cell, so the line of sight
+    // (Pokoje.js) is the bed's and grandpa at his pot is in the dark: after a breath he walks to the bed, out of the dark, the talk, he
+    // walks back to the pot; then the hero gets up beside the bed, the bars go and the map's name shows. Nothing of it is saved: a
+    // reload during it tells it again (the load handler: intro 1 -> 0).
+    // ------------------------------------------------------------------
+    const BED = { x: 1, y: 4, standX: 2, standY: 5, sides: [[2, 5, 4], [2, 6, 4], [1, 6, 8]] };   // (sides: where grandpa stands, facing)
+    const POT = [[9, 5, 8], [10, 6, 8], [10, 5, 8], [8, 5, 8], [9, 6, 8]];   // (under the pot on the hearth - Map019's fireplace at 9,4 - facing it)
+    let lying = false;
+    // the hero in his bed: facing the screen, his frame cut below the chin (the head is the top ~34% of the frame - rows 2-21 of the
+    // 64 px walking sheet) and lifted so the chin lies on the blanket's edge
+    T.sprite.hook({ owner: PLUGIN, method: "update", when: s => s._character === $gamePlayer,
+        before(s) { if (lying && s._character === $gamePlayer && $gamePlayer.direction() !== 2) $gamePlayer.setDirection(2); },
+        after(s) {
+            if (!lying || s._character !== $gamePlayer) return;
+            const f = s._frame, rows = Math.round(f.height * 0.344);
+            if (f.height > rows) s.setFrame(f.x, f.y, f.width, rows);
+            s.y -= Math.round(f.height * 0.64);   // (the head on the pillow - the user 2026-11-07: "głowa może być wyżej, na poduszce")
+        } });
+    function lieDown() {
+        lying = true;
+        $gamePlayer.locate(BED.x, BED.y);
+        $gamePlayer.setDirection(2);
+        $gameTemp._sightHeroOnly = true;   // (Pokoje.js: the line of sight from the bed only, not from grandpa's place - he comes out of the dark)
+        T.call("CleanHUD", "sceneBars", true);
+    }
+    function getUp() {
+        if (!lying) return;
+        lying = false;
+        $gamePlayer.locate(BED.standX, BED.standY);
+        $gamePlayer.setDirection(6);
+        $gameTemp._sightHeroOnly = false;
+        T.call("CleanHUD", "sceneBars", false);
+    }
+    // the shortest walk on the tiles (four directions, as the character can pass now - round the cat too), or null
+    function stepsTo(ch, tx, ty) {
+        const W = $gameMap.width(), H = $gameMap.height(), start = ch.y * W + ch.x, goal = ty * W + tx;
+        if (tx < 0 || ty < 0 || tx >= W || ty >= H) return null;
+        if (start === goal) return [];
+        const prev = new Int32Array(W * H).fill(-1), dir = new Uint8Array(W * H), q = [start];
+        prev[start] = start;
+        for (let h = 0; h < q.length && prev[goal] < 0; h++) {
+            const i = q[h], x = i % W, y = (i / W) | 0;
+            for (const d of [2, 4, 6, 8]) {
+                const nx = x + (d === 6 ? 1 : d === 4 ? -1 : 0), ny = y + (d === 2 ? 1 : d === 8 ? -1 : 0);
+                if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+                const j = ny * W + nx;
+                if (prev[j] >= 0 || !ch.canPass(x, y, d)) continue;
+                prev[j] = i; dir[j] = d; q.push(j);
+            }
+        }
+        if (prev[goal] < 0) return null;
+        const out = [];
+        for (let j = goal; j !== start; j = prev[j]) out.push(dir[j]);
+        return out.reverse();
+    }
+    const MOVE = { 2: 1, 4: 2, 6: 3, 8: 4 }, TURN = { 2: 16, 4: 17, 6: 18, 8: 19 };
+    // grandpa's walk (a script command of the scene's list: the interpreter waits for it as for "Set Movement Route"): to the bed's
+    // side (the first free one) or back to his pot; no way there - he only turns (and talks from where he is)
+    function introWalk(interp, where) {
+        const g = npc("grandpa");
+        if (!g) return;
+        const targets = where === "bed" ? BED.sides : POT;
+        let steps = null, face = targets[0][2];
+        for (const [tx, ty, f] of targets) { steps = stepsTo(g, tx, ty); if (steps) { face = f; break; } }
+        const speed = g.moveSpeed(), list = [{ code: 29, parameters: [4] }];
+        for (const d of steps || []) list.push({ code: MOVE[d] });
+        list.push({ code: TURN[face] }, { code: 29, parameters: [speed] }, { code: 0 });
+        g.forceMoveRoute({ list, repeat: false, skippable: false, wait: true });
+        if (interp) { interp._character = g; interp.setWaitMode("route"); }
+    }
+    function introScene() {
+        const out = [C(230, [45]), C(355, ["Story.introWalk(this, \"bed\")"])];
+        for (const c of introList()) out.push(c);
+        out.push(C(355, ["Story.introWalk(this, \"pot\")"]), C(230, [10]), C(355, ["Story.introGetUp()"]));
+        return end(out);
+    }
     function startIntro() {
         const s = state(), g = npc("grandpa");
-        if (!s || !g) return false;
+        if (!s || !g || $gameMap._interpreter.isRunning()) return false;
         s.intro = 1;
-        g.setDirection(g.x < $gamePlayer.x ? 6 : g.x > $gamePlayer.x ? 4 : g.y < $gamePlayer.y ? 2 : 8);
-        $gamePlayer.setDirection(g.x < $gamePlayer.x ? 4 : g.x > $gamePlayer.x ? 6 : g.y < $gamePlayer.y ? 8 : 2);
-        $gameMap._interpreter.setup(end(introList()), g.eventId());
+        lieDown();
+        // (at his pot, his back to the bed: out of the hero's sight, so put there as the map is made)
+        const at = POT.find(([x, y]) => $gameMap.isPassable(x, y, 2) && !$gameMap.eventsXyNt(x, y).some(e => e !== g));
+        if (at) g.locate(at[0], at[1]);
+        g.setDirection(8);
+        $gameMap._interpreter.setup(introScene(), g.eventId());
         return true;
     }
+    // (the house made - before its first frame: the hero is in his bed from the start)
+    T.on("mapReady", () => {
+        const s = state();
+        if (active() && s && s.intro !== 2 && $gameMap.mapId() === MAP.house && npc("grandpa")) startIntro();
+    }, { owner: PLUGIN });
     function letterText(d) {
         const s = state(), n = daysLeft(), sum = left() + " G";
         if (d >= s.deadline) return Watki.wstaw(TK.kod.letterText[0], { sum: sum, "2": butler() });
@@ -1405,7 +1496,7 @@
 
     window.Story = T.register(PLUGIN, {
         NPCS, MAP, DEBT, DEADLINE, DAWN, LETTERS_BEFORE, PENDANT, CAST, CARRY_DAYS, BUYBACK, LOSE_ENDS, state, active, left, daysLeft, lastNight, isOpen, statusLine, newState, pay: payOutside, talk, pick,
-        introDone, thanks, thanksBack, chapterDone, startIntro, checkDeadline, showEnding, syncGoals, npc, doorEvent, borgarEvent, roleOf, doomed: () => doomed(), step,
+        introDone, introWalk, introGetUp: () => getUp(), introLying: () => lying, thanks, thanksBack, chapterDone, startIntro, checkDeadline, showEnding, syncGoals, npc, doorEvent, borgarEvent, roleOf, doomed: () => doomed(), step,
         // the field lost and bought back
         pastDue: () => pastDue(), fieldLost: () => fieldLost(), fieldLocked: () => fieldLocked(), fieldBack: () => fieldBack(), carryLeft: () => carryLeft(),
         buyLeft: () => buyLeft(), buyOpen: () => buyOpen(), chapterEnded: () => chapterEnded(), halfWay: () => halfWay(), lockAt: () => lockAt(),
@@ -1417,8 +1508,13 @@
         skipIntro() {
             const s = state();
             if (!s || s.intro === 2) return false;
-            if (s.intro === 1 && $gameMap && $gameMap.isEventRunning()) { $gameMap._interpreter.clear(); $gameMessage.clear(); const g = npc("grandpa"); if (g) g.unlock(); }
+            if (s.intro === 1 && $gameMap && $gameMap.isEventRunning()) {
+                $gameMap._interpreter.clear(); $gameMessage.clear();
+                const g = npc("grandpa");
+                if (g) { g.unlock(); if (g.isMoveRouteForcing()) { g._moveRouteForcing = false; g.restoreMoveRoute(); } }
+            }
             introDone();
+            getUp();   // (the scene's bed and bars: the hero beside the bed)
             return true;
         },
         get lastMenuLine() { return lastMenuLine; }, get lastMenuLabel() { return lastMenuLabel; }, Scene_StoryEnding

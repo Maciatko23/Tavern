@@ -149,7 +149,7 @@
 
     // smooth wavering 0..1 (sum of slow sines, no two alike): the light of a fire
     const waver = (t, a, b, c) => 0.5 + 0.22 * Math.sin(t * 0.071 + a) + 0.14 * Math.sin(t * 0.193 + b) + 0.09 * Math.sin(t * 0.47 + c) + 0.05 * Math.sin(t * 1.13 + a * 2);
-    const ease = k => 1 - Math.pow(1 - Math.max(0, Math.min(1, k)), 3);
+    const ease = T.util.easeOut;
     const rnd = (a, b) => a + Math.random() * (b - a);
 
     // ------------------------------------------------------------------

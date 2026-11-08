@@ -84,7 +84,7 @@
     const item = id => (window.$dataItems && $dataItems[id] && $dataItems[id].name ? $dataItems[id] : null);
     const count = id => (item(id) ? $gameParty.numItems(item(id)) : 0);
     const day = () => T.time.day(), hour = () => T.time.hour();
-    const pick = a => a[Math.floor(Math.random() * a.length)];
+    const pick = T.util.pick;
     const E = () => T.api("Equipment");
     const DU = () => T.api("Durability");
     const TQ = () => T.api("TownQuests");

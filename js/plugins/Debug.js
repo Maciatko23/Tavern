@@ -272,8 +272,29 @@
         return Watki.wstaw(TK.kod.crLabel[2], { "1": k.plural ? Watki.wstaw(TK.kod.crLabel[1], { plural: k.plural }) : k.name });
     };
     // every row of the menu, each with its tab: 0 the events, 1 the buildings, 2 the items
+    // ---- "Statystyki zawsze pełne" (2026-11-07, the user: "dodaj mi do menu F9 przełącznik, że wszystkie statystyki gracza są na full
+    // i nie maleją (życie, wytrzymałość, głód itd.)"): while on, every map frame puts back to full what fell - the hero's (and the
+    // party's) life, the strength (stamina), food and water (Needs.js), the breath of a fight (Combat_Fight.js) and the sleep (the
+    // hours awake: Farming's lastSleep, as a sleep does). Kept by the browser (localStorage), not in a save: it stays across loads.
+    const PELNE_KEY = "tawerna_f9_pelne";
+    let pelne = false;
+    try { pelne = localStorage.getItem(PELNE_KEY) === "1"; } catch (e) { pelne = false; }
+    const pelneLabel = () => TK.kod.pelne[pelne ? 1 : 0];
+    function keepFull() {
+        if (!pelne || !window.$gameParty || !window.$gameSystem) return;
+        for (const a of $gameParty.members()) if (a.isAlive() && a.hp < a.mhp) a.setHp(a.mhp);
+        if (typeof $gameSystem.setStamina === "function" && $gameSystem.stamina() < $gameSystem.maxStamina()) $gameSystem.setStamina($gameSystem.maxStamina());
+        const N = window.Tawerna.api("Needs"), n = N && N.state ? N.state() : null;
+        if (n) { if (n.food < 100) n.food = 100; if (n.water < 100) n.water = 100; }
+        const CP = window.Tawerna.api("Combat_parts");
+        if (CP && CP.fight && CP.fight.fillBreath) CP.fight.fillBreath();
+        const F = window.Farming;
+        if (F && F.farm && F.clockHours) { const f = F.farm(), now = F.clockHours(); if (f && f.lastSleep !== now) f.lastSleep = now; }
+    }
+    window.Tawerna.onMapUpdate(keepFull, { owner: "Debug", name: "pelne" });
     function allRows() {
         const rows = [
+            { tab: 0, kind: "pelne", label: pelneLabel(), icon: 84 },
             { tab: 0, kind: "hour", label: TK.kod.allRows[0], icon: 240 },
             { tab: 0, kind: "day", label: TK.kod.allRows[1], icon: 241 }
         ];
@@ -415,6 +436,8 @@
         head(TK.kod.isleRows[0]);
         ISLE_GO.forEach((g, i) => row("isleGo", g.nazwa, 190, g.opis, { go: i }));
         row("isleInside", isleLabel.inside(last.isle || 0), 189, TK.kod.isleRows[1], { pick: last.isle || 0 });
+        // (2026-11-07) the island's sketch (MapaWyspy.js, menu P „Mapa”): every place known, with its name - a switch
+        if (window.MapaWyspy && MapaWyspy.revealAll) row("isleMapa", TK.kod.mapa[MapaWyspy.revealAll() ? 1 : 0], 497, TK.kod.mapa[4]);
         head(TK.kod.isleRows[2]);
         row("isleTide", isleLabel.tide("low"), 70, TK.kod.isleRows[3], { tide: "low" });
         row("isleTide", isleLabel.tide("high"), 70, TK.kod.isleRows[4], { tide: "high" });
@@ -663,6 +686,13 @@
             if (this.onThreadOk(row)) return;     // (gone back to the map)
             if (this._tab === ISLE_TAB) this._list.setTab(this._tab, this._list.index());
             else this._list.redrawItem(this._list.index());
+        } else if (row.kind === "pelne") {   // the switch: on / off, its label read again
+            pelne = !pelne;
+            try { localStorage.setItem(PELNE_KEY, pelne ? "1" : "0"); } catch (e) {}
+            row.label = pelneLabel();
+            this._list.redrawItem(this._list.index());
+            keepFull();
+            $gameTemp.pushLootPopup(row.icon, TK.kod.pelne[pelne ? 2 : 3], "#9ff0a8");
         } else if (row.kind === "hour" || row.kind === "day") {
             $gameSystem.advanceDayNight(row.kind === "day" ? 24 : 1);
             $gameTemp.pushLootPopup(row.icon, row.label, "#9ff0a8");
@@ -761,6 +791,12 @@
                 return go(placeGo(g));
             }
             case "isleInside": return go(placeGo(ISLE_INSIDE[row.pick]));
+            case "isleMapa": {
+                const on = MapaWyspy.revealAll(!MapaWyspy.revealAll());
+                row.label = TK.kod.mapa[on ? 1 : 0];
+                say(row.icon, TK.kod.mapa[on ? 2 : 3]);
+                break;
+            }
             case "isleTide":
                 if (window.Wyspa && Wyspa.forceTide) Wyspa.forceTide(Wyspa.tideForced() === row.tide ? null : row.tide);
                 break;

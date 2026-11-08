@@ -44,7 +44,7 @@
     let data, hasState, failDue, checkCycle, activeList, accept, turnIn, abandon, track, isReady, rowDone, have, daysLeft, reqName, repTier,
         iconOf, cycleOf, today, TIERS, MAX_ACTIVE, REFRESH_DAYS, REP_ABANDON, BEASTS, BORGAR_BUST, TUTORIAL,
         L, F, U, spaced, inkText, star, img, drawIcon, drawReqIcon, wrap, PART, ASSETS, Sprite_QBCard, Sprite_QBTag, drawDetail;
-    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const clamp = T.util.clamp;
     function bind() {
         if (!P.core || !P.data || !P.art) throw new Error("QuestBoard_Scene.js: brak QuestBoard.js / QuestBoard_Data.js / QuestBoard_Art.js");
         ({ data, hasState, failDue, checkCycle, activeList, accept, turnIn, abandon, track, isReady, rowDone, have, daysLeft, reqName, repTier,

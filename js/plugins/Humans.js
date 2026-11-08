@@ -130,7 +130,7 @@
     const se = (name, volume, pitch, pan) => T.audio.se(name, { volume, pitch, pan: pan || 0 });
     const popup = (icon, text, color) => T.popup(text, { icon, color, menu: true });
     const say = (ch, text, frames) => T.call("SpeechBubbles", "say", ch, text, frames);
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const pick = T.util.pick;
     const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
     const perk = key => T.call("Combat", "perk", key) || 0;
     const hour = () => T.time.hour();

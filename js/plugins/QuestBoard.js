@@ -187,7 +187,7 @@
     const params = PluginManager.parameters(PLUGIN);
     const num = (v, d) => (v === undefined || v === null || v === "" || isNaN(Number(v)) ? d : Number(v));
     const span = (v, d) => { const m = /^\s*(\d+)\s*-\s*(\d+)\s*$/.exec(String(v || "")); return m ? [Number(m[1]), Number(m[2])] : d; };
-    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const clamp = T.util.clamp;
     const round5 = v => Math.max(5, Math.round(v / 5) * 5);
 
     const REFRESH_DAYS = Math.max(1, num(params.refreshDays, 3));

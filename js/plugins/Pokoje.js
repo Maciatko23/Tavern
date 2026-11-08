@@ -139,7 +139,9 @@
             if (shut || ax * ax + ay * ay > DOOR_NEAR * DOOR_NEAR) for (const c of d.cells) m.blocked[c] = 1;
         }
         out.push(look(m, ox, oy));
-        if ($gameMap.isEventRunning() || $gameMap.isScrolling()) {
+        // (a scene seen through the hero's own eyes - $gameTemp._sightHeroOnly, never saved; 2026-11-07: grandpa's first talk, the hero
+        // in his bed and grandpa coming out of the dark - looks only from him)
+        if (($gameMap.isEventRunning() || $gameMap.isScrolling()) && !(window.$gameTemp && $gameTemp._sightHeroOnly)) {
             const keep = m.blocked.slice();
             m.blocked.fill(0);
             const id = $gameMap._interpreter.eventId(), ev = id > 0 ? $gameMap.event(id) : null;

@@ -319,7 +319,7 @@
     // ------------------------------------------------------------------
     // The talks: Janek, Roch, the customs officer (TownLife's hook, first), the ferryman (an injected event)
     // ------------------------------------------------------------------
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const pick = T.util.pick;
     function janekTalk(ev) {
         const spk = { id: ev.eventId(), name: "Janek" }, f = flags(), out = [];
         if (!f.janekMet) return w.rozmowa("janekSpotkanie", { spk });

@@ -263,20 +263,22 @@
         exitsOf = { map: $gameMap.mapId(), data: $dataMap, list: out };
         return out;
     }
-    // (2026-10-31, the world in tiles: Swiat_Data.js) a seam open only as SwiatData.links (no transfer event in the map) is flown over too, into the
-    // SAME world tile of the neighbour - the way Krawedzie.js walks it. The story's closed ways are not in the links (13 -> 175 stays an event or nothing),
-    // so the flight opens no road to Orla Grań that the walk and the climb do not have. An event standing within BESPOKE tiles of the flight (a place's own way) wins.
+    // (2026-10-31, the world in tiles: Swiat_Data.js) over an edge the flight goes on into the SAME world tile of the neighbour.
+    // (2026-11-07, user: "jak lecę na ptaku, to zawsze mogę przejść na inną mapę, bo jestem w powietrzu - nie muszę względem krawędzi
+    // iść brzegu") in the air every edge with a map beyond it in the world leads on - over the sea, the cliffs, a sealed seam - not only
+    // where a walk crosses (SwiatData.links); only past the world's own end there is nothing (the sea of fog). An event standing within
+    // BESPOKE tiles of the flight (a place's own way) wins.
     const BESPOKE = 3;
     function worldExit(side, along) {
         const sw = window.SwiatData, me = sw && sw.enabled && sw.maps[$gameMap.mapId()];
         if (!me) return null;
         const [x0, y0, w, h] = me, ns = side === "N" || side === "S", a = Math.round(along);
         const wx = ns ? x0 + a : side === "W" ? x0 - 1 : x0 + w, wy = ns ? (side === "N" ? y0 - 1 : y0 + h) : y0 + a;
-        const wa = ns ? wx : wy, here = $gameMap.mapId();
+        const here = $gameMap.mapId();
         for (const id of Object.keys(sw.maps)) {
             const [bx, by, bw, bh] = sw.maps[id];
             if (+id === here || wx < bx || wx >= bx + bw || wy < by || wy >= by + bh) continue;
-            if (!sw.links.some(l => l.a === here && l.b === +id && l.side === side && wa >= l.from && wa <= l.to)) return null;
+            if (!window.$dataMapInfos || !$dataMapInfos[+id]) continue;   // (a map not in the game)
             const W = $gameMap.width(), H = $gameMap.height();
             return { x: ns ? a : side === "W" ? 0 : W - 1, y: ns ? (side === "N" ? 0 : H - 1) : a, map: +id, tx: wx - bx, ty: wy - by, dir: 0 };
         }

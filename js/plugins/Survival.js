@@ -139,11 +139,7 @@
     const wears = id => { const E = window.Equipment; return E && E.worn ? E.worn(id) : hasItem(id); };
     const nowHours = () => $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour();
 
-    function hash(day, salt) {
-        let h = Math.imul(day | 0, 374761393) ^ Math.imul(salt | 0, 668265263);
-        h = Math.imul(h ^ (h >>> 13), 1274126177);
-        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-    }
+    const hash = T.util.hash;
 
     // ------------------------------------------------------------------
     // The saved state: Tawerna.state "survival" - buffs (name -> the game hour it ends; made with the first one), healAcc (the HP

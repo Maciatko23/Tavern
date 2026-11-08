@@ -79,7 +79,7 @@
     const TL = () => T.api("TownLife") || window.TownLife || null;
     const WY = () => T.api("Wyspa") || window.Wyspa || null;
     const onMap = id => !!(window.$gameMap && $gameMap.mapId() === id);
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const pick = T.util.pick;
     const inHours = (h, a, b) => (a <= b ? h >= a && h < b : h >= a || h < b);
     const isNight = () => inHours(hour(), 22, 6);
 

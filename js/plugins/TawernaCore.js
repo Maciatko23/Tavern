@@ -79,7 +79,133 @@
     }
     function report(where, e) { console.error("[Tawerna] " + where + ":", e); }
     let seq = 0;   // registration order (stable sorts)
-    T.util = { num, flag, clamp01, warnOnce };
+    // (2026-11-07) the small ones the plugins wrote each for itself, exactly as they wrote them - one copy here; a plugin takes them
+    // under its own name (const clamp = T.util.clamp). Not the other forms: another hash would change what is saved as drawn.
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+    const pick = list => list[Math.floor(Math.random() * list.length)];   // (a random one of a list)
+    const rand = (a, b) => a + Math.random() * (b - a);                   // (a random number from a to b)
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const smooth = t => t * t * (3 - 2 * t);                              // (smoothstep of 0..1)
+    const easeOut = t => 1 - Math.pow(1 - Math.max(0, Math.min(1, t)), 3);   // (cubic, slows to the end; t held to 0..1)
+    const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);              // (two things with x, y)
+    const distXY = (x1, y1, x2, y2) => Math.hypot(x1 - x2, y1 - y2);
+    // two whole numbers -> 0..1, the same each time (two forms the plugins used: the saved and the seen randomness keep their own)
+    function hash(a, b) { let h = Math.imul(a | 0, 374761393) ^ Math.imul(b | 0, 668265263); h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; }
+    function hash01(a, b) { let h = (a * 374761393 + b * 668265263) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; }
+    T.util = { num, flag, clamp01, warnOnce, clamp, pick, rand, lerp, smooth, easeOut, dist, distXY, hash, hash01 };
+
+    // ------------------------------------------------------------------
+    // Searching a way over a grid of cells (2026-11-07, "jedno wspólne szukanie drogi"): the plugins that walk by rules of their own -
+    // grandpa and the cat (HomeLife), the hall of the shift (TavernShift_Hall), the hero to a table (TavernLife), the cast of the
+    // underground's scenes (Underground), the way on the tavern's plan (TavernLife_Plan) - keep only their rules; the search is here.
+    // (The animals, the dog, the people of the town and the creatures go by Hunting_Path.js's path8: its own grid of the map.)
+    // Both give exactly the ways those plugins' own copies gave: the same order of the neighbours, the same ties.
+    // ------------------------------------------------------------------
+    T.grid = (() => {
+        let seen = new Int32Array(0), closed = new Int32Array(0), from = new Int32Array(0), cost = new Float64Array(0), via = new Int8Array(0), stamp = 0;
+        function room(n) {   // (the buffers, kept from one search to the next: a stamp tells this search's marks from the old ones)
+            if (seen.length < n) { seen = new Int32Array(n); closed = new Int32Array(n); from = new Int32Array(n); cost = new Float64Array(n); via = new Int8Array(n); stamp = 0; }
+            if (++stamp > 2e9) { seen.fill(0); closed.fill(0); stamp = 1; }
+        }
+        function trail(end, start) {   // (the cells from the start to the end)
+            const out = [];
+            for (let i = end; i !== start; i = from[i]) out.push(i);
+            out.push(start);
+            return out.reverse();
+        }
+        // A* in 8 ways, no cutting a corner (a slant only where both straight cells beside it are open). o: w, h, sx, sy (the start,
+        // inside), open(x, y) (a cell one may step on; asked only inside), cost(x, y, nx, ny, slant) (a step's cost; default 1 and
+        // 1.414), goal(x, y), est(x, y) (the estimate of the way left), cap (cells taken from the list at most, the ones taken again counted too).
+        // own: a cell's steps count from the cost it was put on the list with (the hall's old way), not from the least one known (a
+        // cost a hair lower - the same steps added in another order - with the same estimate then leaves the first one taken first).
+        // The list gives the least estimate first, of equal ones the one put on it first. The neighbours: the row above, its own, the
+        // row below, each from the left. Returns the cells (y * w + x) from the start to the goal, or null.
+        function astar8(o) {
+            const w = o.w, open = o.open, goal = o.goal, est = o.est, cap = o.cap || Infinity;
+            const step = o.cost || ((x, y, nx, ny, slant) => (slant ? 1.414 : 1));
+            const inside = (x, y) => x >= 0 && y >= 0 && x < w && y < o.h;
+            room(w * o.h);
+            const HI = [], HF = [], HS = [], HG = [], own = !!o.own;
+            let hn = 0, order = 0, popG = 0;
+            const before = (fa, sa, fb, sb) => fa < fb || (fa === fb && sa < sb);
+            const push = (i, f, g) => {
+                let k = hn++;
+                const s = order++;
+                while (k > 0) {
+                    const p = (k - 1) >> 1;
+                    if (!before(f, s, HF[p], HS[p])) break;
+                    HI[k] = HI[p]; HF[k] = HF[p]; HS[k] = HS[p]; HG[k] = HG[p]; k = p;
+                }
+                HI[k] = i; HF[k] = f; HS[k] = s; HG[k] = g;
+            };
+            const pop = () => {
+                const top = HI[0], n = --hn, li = HI[n], lf = HF[n], ls = HS[n], lg = HG[n];
+                popG = HG[0];
+                let k = 0;
+                for (;;) {
+                    let c = 2 * k + 1;
+                    if (c >= n) break;
+                    if (c + 1 < n && before(HF[c + 1], HS[c + 1], HF[c], HS[c])) c++;
+                    if (!before(HF[c], HS[c], lf, ls)) break;
+                    HI[k] = HI[c]; HF[k] = HF[c]; HS[k] = HS[c]; HG[k] = HG[c]; k = c;
+                }
+                HI[k] = li; HF[k] = lf; HS[k] = ls; HG[k] = lg;
+                return top;
+            };
+            const start = o.sy * w + o.sx;
+            seen[start] = stamp; cost[start] = 0; from[start] = -1;
+            push(start, est(o.sx, o.sy), 0);
+            let count = 0;
+            while (hn > 0 && count++ < cap) {
+                const i = pop();
+                if (closed[i] === stamp) continue;
+                closed[i] = stamp;
+                const x = i % w, y = (i - x) / w, gi = own ? popG : cost[i];
+                if (goal(x, y)) return trail(i, start);
+                for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+                    if (!dx && !dy) continue;
+                    const nx = x + dx, ny = y + dy;
+                    if (!inside(nx, ny) || !open(nx, ny)) continue;
+                    if (dx && dy && (!inside(x + dx, y) || !open(x + dx, y) || !inside(x, y + dy) || !open(x, y + dy))) continue;
+                    const j = ny * w + nx, g = gi + step(x, y, nx, ny, !!(dx && dy));
+                    if (seen[j] === stamp && !(g < cost[j])) continue;
+                    seen[j] = stamp; cost[j] = g; from[j] = i;
+                    push(j, g + est(nx, ny), g);
+                }
+            }
+            return null;
+        }
+        // Breadth first in the given ways (o.dirs: [dx, dy, d] in the order tried). o: w, h, sx, sy (the start, inside),
+        // can(x, y, nx, ny, d) (the step goes; asked only inside, not for a cell already reached), goal(x, y), atFind (the goal looked
+        // for when a cell is first reached - not at the start; else when it is taken from the queue, the start too), depth (the steps
+        // of a way at most), seen (the cells reached at most: none taken from the queue once that many). Returns { cells: from the
+        // start to the goal, dirs: the d of each step } or null.
+        function bfs(o) {
+            const w = o.w, h = o.h, can = o.can, goal = o.goal, dirs = o.dirs, atFind = !!o.atFind;
+            const maxD = o.depth === undefined ? Infinity : o.depth, maxSeen = o.seen || Infinity;
+            room(w * h);
+            const start = o.sy * w + o.sx, q = [start];
+            const way = end => { const cells = trail(end, start); return { cells, dirs: cells.slice(1).map(c => via[c]) }; };
+            seen[start] = stamp; from[start] = -1; cost[start] = 0;
+            let reached = 1;
+            for (let qh = 0; qh < q.length && reached < maxSeen; qh++) {
+                const i = q[qh], x = i % w, y = (i - x) / w;
+                if (!atFind && goal(x, y)) return way(i);
+                if (cost[i] >= maxD) continue;
+                for (const [dx, dy, d] of dirs) {
+                    const nx = x + dx, ny = y + dy;
+                    if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+                    const j = ny * w + nx;
+                    if (seen[j] === stamp || !can(x, y, nx, ny, d)) continue;
+                    seen[j] = stamp; from[j] = i; via[j] = d; cost[j] = cost[i] + 1; reached++;
+                    if (atFind && goal(nx, ny)) return way(j);
+                    q.push(j);
+                }
+            }
+            return null;
+        }
+        return { astar8, bfs };
+    })();
 
     // ------------------------------------------------------------------
     // The view (2026-10-18, the white eagle's flight - Orzel_Lot.js): how much of the map WORLD the screen shows, in the world's own
@@ -370,6 +496,23 @@
     //   Tawerna.sprite.filter = false (Wydajnosc.opts.dispatch) every hook runs for every sprite, the tests compare the picture so.
     //   Tawerna.sprite.dirty(character): its hooks asked again (after a change of what `when` looked at); dirty(): all of them.
     // ------------------------------------------------------------------
+    // (2026-11-07, wydajność) one-picture sheets: a character picture named "!$1_..." (or "$1_...") is ONE frame - the whole file,
+    // not 3 x 4 frames. A big still object (the wreck's hull halves, 688 x 384) then needs a file of its own size, not a sheet of
+    // twelve copies (2064 x 1536: 12.7 MB of the GPU's memory each). Its direction and pattern do not change the frame.
+    const ONE_PICTURE = /^[!]*\$1_/;
+    const _setCharacterBitmap = Sprite_Character.prototype.setCharacterBitmap;
+    Sprite_Character.prototype.setCharacterBitmap = function() {
+        _setCharacterBitmap.apply(this, arguments);
+        this._onePicture = ONE_PICTURE.test(this._characterName || "");
+    };
+    const _patternWidth = Sprite_Character.prototype.patternWidth, _patternHeight = Sprite_Character.prototype.patternHeight;
+    const _patternX = Sprite_Character.prototype.characterPatternX, _patternY = Sprite_Character.prototype.characterPatternY;
+    Sprite_Character.prototype.patternWidth = function() { return this._onePicture && !(this._tileId > 0) ? this.bitmap.width : _patternWidth.call(this); };
+    Sprite_Character.prototype.patternHeight = function() { return this._onePicture && !(this._tileId > 0) ? this.bitmap.height : _patternHeight.call(this); };
+    Sprite_Character.prototype.characterPatternX = function() { return this._onePicture ? 0 : _patternX.call(this); };
+    Sprite_Character.prototype.characterPatternY = function() { return this._onePicture ? 0 : _patternY.call(this); };
+    T.onePicture = name => ONE_PICTURE.test(String(name || ""));
+
     const SPRITE_METHODS = ["update", "updateBitmap", "updateFrame", "updatePosition", "updateOther"];
     const spriteHooks = SPRITE_METHODS.map(() => []);
     const spriteBase = {};
@@ -932,6 +1075,25 @@
         }
         if (wins === "off") return off ? false : on ? true : dflt;
         return on ? true : off ? false : dflt;
+    };
+    // the cells the map's events stand on now, worked out once for a batch of cells: { has(x, y) } (a tree or a wide bush covers
+    // several - ChoppableTree.js's pos). eventsXy walks all the map's events for every cell asked (~260 ms of a change of map at CPU
+    // 4x when GroundDetail, Puddles and Farming each asked it per cell, 2026-11-03/06). The answer is for that moment: ask again for
+    // the next batch. (2026-11-07: one copy here instead of three)
+    T.eventCells = function() {
+        const W = $gameMap.width(), H = $gameMap.height(), occ = new Uint8Array(W * H);
+        for (const e of $gameMap.events()) {
+            // ring by ring round the event (a footprint is one rectangle with the event in it: the first empty ring ends it)
+            for (let r = 0; r <= 12; r++) {
+                let hit = false;
+                for (let y = e.y - r; y <= e.y + r; y++) for (let x = e.x - r; x <= e.x + r; x++) {
+                    if ((Math.abs(x - e.x) !== r && Math.abs(y - e.y) !== r) || x < 0 || y < 0 || x >= W || y >= H) continue;
+                    if (e.pos(x, y)) { occ[y * W + x] = 1; hit = true; }
+                }
+                if (!hit && r > 0) break;
+            }
+        }
+        return { has: (x, y) => x >= 0 && y >= 0 && x < W && y < H && occ[y * W + x] === 1 };
     };
 
     // ------------------------------------------------------------------

@@ -83,8 +83,8 @@
     const RUMBLES = ["Thunder9", "Thunder7", "Thunder11", "Thunder1", "Thunder4", "Thunder5"];
     const GUSTS = ["Wind10", "Wind11", "Wind9", "Wind6"];
 
-    const rand = (a, b) => a + Math.random() * (b - a);
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const rand = T.util.rand;
+    const pick = T.util.pick;
     const clamp01 = v => Math.max(0, Math.min(1, v));
 
     const state = {

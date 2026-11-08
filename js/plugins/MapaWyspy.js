@@ -11,7 +11,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Mapa wyspy: schemat odkrytych miejsc z drogami, bohaterem i celem; zakładka „Mapa” w menu P (O: karta miejsca) i wybór miejsca na schemacie. v1.0.0
+ * @plugindesc Mapa wyspy: schemat odkrytych miejsc z drogami, bohaterem i celem; zakładka „Mapa” w menu P (O: karta miejsca) i wybór miejsca na schemacie; E/Q prawdziwa mapa (x6, odwiedzone mapy, mgła, morze). v1.4.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -63,6 +63,7 @@
     for (const [a, b] of D.DROGI) {
         const ka = String(a), kb = String(b);
         if (!BY.has(ka) || !BY.has(kb)) continue;
+        if (BY.get(ka).maly || BY.get(kb).maly) continue;   // (2026-11-07: the small edge places - not the cart's ways, no "?" from them)
         (NEXT.get(ka) || NEXT.set(ka, []).get(ka)).push(kb);
         (NEXT.get(kb) || NEXT.set(kb, []).get(kb)).push(ka);
     }
@@ -84,8 +85,19 @@
     const hereId = () => (window.$gameMap && window.$gameSystem ? placeOf($gameMap.mapId()) : null);
     const visitsOf = () => { const c = CH(); const v = c && c.visits ? c.visits() : null; return (v && v.odw) || {}; };
     const deepest = () => { const U = T.api("Underground"); try { return U && U.deepest ? U.deepest() : 0; } catch (e) { return 0; } };
+    // (2026-11-07, F9 „Mapa wyspy: wszystko odkryte”, user: "dodaj do F9 odkrycie całej mapy z nazwami miejsc") every place shown
+    // known, with its name - only how the sketch is drawn: the visits (the banners' first visits, the journal) stay as they are.
+    // Kept by the browser (localStorage), not in a save, as F9's other switches.
+    const ALL_KEY = "tawerna_f9_mapa";
+    let showAll = false;
+    try { showAll = localStorage.getItem(ALL_KEY) === "1"; } catch (e) { showAll = false; }
+    function revealAll(on) {
+        if (on !== undefined) { showAll = !!on; try { localStorage.setItem(ALL_KEY, showAll ? "1" : "0"); } catch (e) {} }
+        return showAll;
+    }
     // known: the map visited, or one of its interiors, or the hero there now; the underground: a floor reached
     function discovered(id) {
+        if (showAll) return true;
         const key = String(id), odw = visitsOf();
         if (key === UND) return deepest() > 0 || !!odw[10] || !!odw[11] || hereId() === UND;
         if (odw[key]) return true;
@@ -108,11 +120,13 @@
         return ALL.map(p => {
             const target = !!tgt && String(tgt.id) === p.key;
             // (the goal's place not seen yet: a "?" with the diamond - the compass points there anyway)
-            const state = known.has(p.key) ? "known" : target || (NEXT.get(p.key) || []).some(k => known.has(k)) ? "hint" : "hidden";
-            return { id: p.id, key: p.key, name: p.nazwa, x: p.x, y: p.y, lab: p.lab, state, here: String(here) === p.key, target };
+            // (a small edge place - maly: seen once visited, never a "?"; at: its name's place in the atlas)
+            const state = known.has(p.key) ? "known" : target || (!p.maly && (NEXT.get(p.key) || []).some(k => known.has(k))) ? "hint" : "hidden";
+            return { id: p.id, key: p.key, name: p.nazwa, x: p.x, y: p.y, lab: p.lab, at: p.at || null, at6: p.at6 || null, maly: !!p.maly, state, here: String(here) === p.key, target };
         });
     }
-    const roads = () => D.DROGI.map(([a, b]) => [String(a), String(b)]).filter(([a, b]) => BY.has(a) && BY.has(b));
+    // (an old road through small places - [a, b, [through...]]: seen until all of them are known; then their own ways show)
+    const roads = () => D.DROGI.filter(r => !(Array.isArray(r[2]) && r[2].every(k => discovered(k)))).map(([a, b]) => [String(a), String(b)]).filter(([a, b]) => BY.has(a) && BY.has(b));
 
     // ------------------------------------------------------------------ the card of a place
     function residentsAt(id) {
@@ -177,7 +191,8 @@
         text: "rgb(236,238,240)", muted: "rgb(138,144,153)", dim: "rgb(98,103,111)", line: "rgb(58,62,70)", soft: "rgb(212,214,218)",
         panel: "rgba(11,12,15,0.93)", panel2: "rgb(20,21,25)", cell: "rgb(30,32,37)", acc: "rgb(255,210,63)", accDim: "rgb(92,76,24)", sel: "rgb(16,14,6)",
         gold: "rgb(255,214,96)", warn: "#ff9f8f", land: "rgb(31,37,33)", shore: "rgb(74,84,76)", road: "rgb(96,100,108)", sea: "rgb(14,18,22)",
-        forest: "rgba(64,80,68,0.65)", bed: "rgb(94,88,72)"
+        forest: "rgba(64,80,68,0.65)", bed: "rgb(94,88,72)",
+        lead: "rgba(226,229,234,0.85)", halo: "rgba(14,18,22,0.92)"   // (2026-11-07, the atlas: the names' leaders, the dark halo round a name)
     };
     // the island's box inside a rect (the atlas's aspect), centred
     function boxIn(rect) {
@@ -196,14 +211,18 @@
         }
         ctx.closePath();
     }
+    // (2026-11-07) o.box: the island's box itself (not fitted in the rect); o.real: the real map - no forest, riverbed, roads, only
+    // the places near the picture; o.under(ctx, box): drawn over the land, under the places
     // draw(bitmap, rect, o): the sea in the rect, the island, the roads, the places. o: { cursor, nodes (nodes()), selectable(key) -> bool
-    // (dimmed when false), labelOf(key) -> a second line, sea: false (no sea fill) }. Returns { box, nodes: [{ key, x, y, state, r }] }
+    // (dimmed when false), labelOf(key) -> a second line, sea: false (no sea fill), atlas: true (every known place named where its
+    // `at` says - beside its point or out on the sea with a leader; 2026-11-07), labelKeys: a Set - only these named (not the atlas) }. Returns { box, nodes: [{ key, x, y, state, r }] }
     function draw(b, rect, o) {
         o = o || {};
-        const ctx = b.context, c = CH(), list = o.nodes || nodes(), box = boxIn(rect), out = [];
+        const ctx = b.context, c = CH(), list = o.nodes || nodes(), box = o.box || boxIn(rect), out = [];
         ctx.save();
-        if (o.sea !== false) { ctx.fillStyle = K.sea; if (c && c.roundPath) { c.roundPath(ctx, rect.x, rect.y, rect.w, rect.h, 12); ctx.fill(); } else ctx.fillRect(rect.x, rect.y, rect.w, rect.h); }
-        for (const line of [null].concat(D.BRZEGI || [])) {   // (the island, then its islets)
+        if (o.seaFill) o.seaFill(ctx);   // (the real map: the sea's own picture)
+        else if (o.sea !== false) { ctx.fillStyle = K.sea; if (c && c.roundPath) { c.roundPath(ctx, rect.x, rect.y, rect.w, rect.h, 12); ctx.fill(); } else ctx.fillRect(rect.x, rect.y, rect.w, rect.h); }
+        for (const line of o.real ? [] : [null].concat(D.BRZEGI || [])) {   // (the island, then its islets; the real map: its pictures)
             shore(ctx, box, line);
             ctx.fillStyle = K.land;
             ctx.fill();
@@ -211,18 +230,19 @@
             ctx.strokeStyle = K.shore;
             ctx.stroke();
         }
-        if (D.LAS && D.LAS.length) {   // the trackless forest between the maps: a soft pattern of dots
+        if (o.under) o.under(ctx, box);   // (the real map: the visited maps' pictures over the land)
+        if (!o.real && D.LAS && D.LAS.length) {   // the trackless forest between the maps: a soft pattern of dots
             ctx.fillStyle = K.forest;
             for (const [fx, fy] of D.LAS) { const q = at(box, { x: fx, y: fy }); ctx.beginPath(); ctx.arc(q.x, q.y, 1.7, 0, Math.PI * 2); ctx.fill(); }
         }
-        if (D.KORYTO && D.KORYTO.length) {   // the dry riverbed: a thin broken line
+        if (!o.real && D.KORYTO && D.KORYTO.length) {   // the dry riverbed: a thin broken line
             ctx.lineWidth = 1.3; ctx.strokeStyle = K.bed; ctx.setLineDash([5, 4]);
             for (const part of D.KORYTO) { ctx.beginPath(); part.forEach(([kx, ky], i) => { const q = at(box, { x: kx, y: ky }); if (i) ctx.lineTo(q.x, q.y); else ctx.moveTo(q.x, q.y); }); ctx.stroke(); }
             ctx.setLineDash([]);
         }
         // the roads: both ends seen (a "?" end: dashed)
         const byKey = new Map(list.map(n => [n.key, n]));
-        for (const [a, b2] of roads()) {
+        for (const [a, b2] of o.real ? [] : roads()) {   // (the real map: its own ways are seen)
             const na = byKey.get(a), nb = byKey.get(b2);
             if (!na || !nb || na.state === "hidden" || nb.state === "hidden") continue;
             const pa = at(box, na), pb = at(box, nb);
@@ -235,13 +255,29 @@
             ctx.stroke();
         }
         ctx.setLineDash([]);
+        // (2026-11-07) a name of the atlas: its place from the data (at: [x, y, "l" | "r" | "c", leader]), the dark halo round it; the
+        // leader from the point's rim to the name's nearest edge
+        const atlasName = (n, A, p, r, on, can) => {
+            const size = n.maly ? 13 : 15, face = on || n.here ? "bold" : null, w = c && c.measure ? c.measure(n.name, size, face) : n.name.length * size * 0.5;
+            const q = at(box, { x: A[0], y: A[1] }), al = A[2], x0 = al === "l" ? q.x : al === "r" ? q.x - w : q.x - w / 2, hh = Math.ceil(size * 1.5);
+            if (A[3]) {
+                const ex = Math.min(Math.max(p.x, x0 - 2), x0 + w + 2), ey = Math.min(Math.max(p.y, q.y - size * 0.55), q.y + size * 0.55);
+                const L = Math.hypot(ex - p.x, ey - p.y) || 1;
+                ctx.beginPath(); ctx.moveTo(p.x + (ex - p.x) / L * (r + 1.5), p.y + (ey - p.y) / L * (r + 1.5)); ctx.lineTo(ex, ey);
+                ctx.lineWidth = on ? 1.5 : 1; ctx.strokeStyle = on ? K.acc : K.lead; ctx.stroke();   // (lighter and thinner than a road: a leader)
+                ctx.beginPath(); ctx.arc(ex, ey, 1.6, 0, Math.PI * 2); ctx.fillStyle = on ? K.acc : K.lead; ctx.fill();
+            }
+            const col = on ? K.acc : !can ? K.dim : n.maly ? K.soft : K.text;
+            if (c && c.textOut) c.textOut(b, n.name, Math.round(x0 - 4), Math.round(q.y - hh / 2), Math.ceil(w) + 8, hh, "center", { size, face, color: col, outline: K.halo, ow: 4, shadow: 0 });
+        };
         // the places
         const label = (text, x, y, size, col, face) => { if (c && c.textOut) c.textOut(b, text, Math.round(x - 150), Math.round(y), 300, Math.ceil(size * 1.5), "center", { size, color: col, face: face || null, plain: true }); };
         for (const n of list) {
             if (n.state === "hidden") continue;
             const p = at(box, n), on = o.cursor !== undefined && o.cursor !== null && String(o.cursor) === n.key;
+            if (o.real && (p.x < -260 || p.y < -60 || p.x > b.width + 260 || p.y > b.height + 60)) continue;   // (far off this part of the real map)
             const can = typeof o.selectable === "function" ? !!o.selectable(n.key) : n.state === "known";
-            const r = n.key === UND ? 7 : 6;
+            const r = n.key === UND ? 7 : n.maly ? 4 : 6;   // (a small edge place: a smaller point)
             if (on) {   // the cursor: a wide ring
                 ctx.beginPath(); ctx.arc(p.x, p.y, r + 9, 0, Math.PI * 2); ctx.fillStyle = "rgba(255,210,63,0.18)"; ctx.fill();
                 ctx.beginPath(); ctx.arc(p.x, p.y, r + 7, 0, Math.PI * 2); ctx.lineWidth = 2; ctx.strokeStyle = K.acc; ctx.stroke();
@@ -260,7 +296,9 @@
                 ctx.beginPath(); ctx.moveTo(p.x, p.y - r - 22); ctx.lineTo(p.x + 7, p.y - r - 14); ctx.lineTo(p.x, p.y - r - 6); ctx.lineTo(p.x - 7, p.y - r - 14); ctx.closePath();
                 ctx.fillStyle = K.gold; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = K.sel; ctx.stroke();
             }
-            if (n.state === "known") {
+            const A = n[o.atKey || "at"];   // (o.atKey "at3": the names of the zoomed sketch)
+            if (n.state === "known" && o.atlas && A) atlasName(n, A, p, r, on, can);
+            else if (n.state === "known" && (!o.labelKeys || o.labelKeys.has(n.key))) {
                 const side = n.lab || (n.y > 0.82 ? "n" : "s"), size = on ? 17 : 16, col = on ? K.acc : can ? K.text : K.dim, face = on ? "bold" : null;
                 const extra = typeof o.labelOf === "function" ? o.labelOf(n.key) : "";
                 if (side === "e" || side === "w") {   // (beside the point: the name, the stop's line under it)
@@ -356,6 +394,13 @@
 
     // ------------------------------------------------------------------ the P menu's tab (MenuRing.js gives its pieces: View, RX, tx...)
     const MAP_W = 700, COL_GAP = 30;
+    const ATLAS = { top: 26, bottom: 26 };
+    // (the atlas's rows over and under the sketch, px - tools/mapy/mapa_wyspy_atlas.py counts on them)
+    // (2026-11-07, the user: "a da się mapę prawdziwą zrobić - jakby oddaloną mocno, ale widać malutkie drzewa i inne rzeczy?" ->
+    // "Szkic, x6", "Tylko odwiedzone mapy") E: the REAL map - the world's maps as pictures (img/mapa_wyspy/<id>.png, PPT px a tile:
+    // tools/mapy/mapa_prawdziwa.py), only the visited ones; the rest of the island its dark land; the names (at6) over them
+    const PPT = 4, BOXW = D.SWIAT_BOX ? D.SWIAT_BOX[2] * PPT : 0, BOXH = D.SWIAT_BOX ? D.SWIAT_BOX[3] * PPT : 0;
+    const REAL = (D.MAPY_OBRAZY || []).map(String);   // (only these are asked for: a missing picture would stop the game)
     function menuView(P) {
         function MapaView(scene, def) {
             P.View.call(this, scene, def);
@@ -369,18 +414,18 @@
         MapaView.prototype.constructor = MapaView;
         MapaView.prototype.keys = function() {
             if (this._card) return [["P", word(TX, "klawisz.wroc") || "wróć"]];
-            return [["W/S/A/D", word(TX, "klawisz.miejsce") || "miejsce"], ["O", word(TX, "klawisz.karta") || "karta miejsca"], ["P", word(TX, "klawisz.wroc") || "wróć"]];
+            return [["W/S/A/D", word(TX, "klawisz.miejsce") || "miejsce"], ["E/Q", word(TX, "klawisz.zoom") || "przybliż / oddal"], ["O", word(TX, "klawisz.karta") || "karta miejsca"], ["P", word(TX, "klawisz.wroc") || "wróć"]];
         };
-        MapaView.prototype.known = function() { return (this._drawn ? this._drawn.nodes : []).filter(n => n.state === "known"); };
+        MapaView.prototype.known = function() { return (this._zoom && this._zoomNodes ? this._zoomNodes : this._drawn ? this._drawn.nodes : []).filter(n => n.state === "known"); };
         MapaView.prototype.enter = function() {
             const here = hereId();
             if (!this._cursor || !discovered(this._cursor)) this._cursor = here !== null && discovered(here) ? String(here) : (nodes().find(n => n.state === "known") || {}).key || null;
             this._card = false;
             P.View.prototype.enter.call(this);
         };
-        MapaView.prototype.leave = function() { this._card = false; this._mx = undefined; };
+        MapaView.prototype.leave = function() { this._card = false; this._mx = undefined; this.dropZoom(); };
         MapaView.prototype.cancel = function() {
-            if (!this._card) return false;
+            if (!this._card) return this.zoomOut();   // (2026-11-07: zoomed in - P first back to the whole island)
             SoundManager.playCancel();
             this._card = false;
             this.redraw();
@@ -389,37 +434,35 @@
         MapaView.prototype.redraw = function() {
             const b = this._bg.bitmap, ctx = b.context, R = P.RX(), list = nodes();
             b.clear();
+            if (this._zs) this._zs.visible = false;
+            if (this._ring) this._ring.visible = false;
             P.header(b, null, this.inside ? (this._card ? word(TX, "naglowek.karta") : word(TX, "naglowek.wybor")) : word(TX, "naglowek.podglad"));
             const here = hereId();
             if (!this.inside) this._cursor = here !== null && discovered(here) ? String(here) : this._cursor;
-            const top = R.y0 + 104, h = R.y1 - 16 - top, mw = Math.min(MAP_W, R.rx - R.lx - 360);
-            this._drawn = draw(b, { x: R.lx, y: top, w: mw, h }, { cursor: this.inside ? this._cursor : null, nodes: list });
-            // the right column: the legend and the chosen place, or its card
-            const cx = R.lx + mw + COL_GAP, cw = R.rx - cx;
-            P.vl(ctx, cx - COL_GAP / 2, top, R.y1 - 16);
+            const top = R.y0 + 104, h = R.y1 - 16 - top, cd = this._cursor ? card(this._cursor) : null;
             this._cardLines = null;
-            const cd = this._cursor ? card(this._cursor) : null;
-            if (this._card && cd) { this._cardLines = drawCard(b, P, cx, top, cw, h, cd); P.done(b); return; }
-            // the legend
-            let yy = top;
-            const known = list.filter(n => n.state === "known").length;
-            P.tx(b, wstaw(word(TX, "legenda.odkryte"), { n: known, wszystkich: list.length }), cx, yy, 17, { top: true, color: K.muted });
-            yy += 30;
-            const leg = (drawDot, text) => { drawDot(cx + 8, yy + 11); P.tx(b, text, cx + 24, yy, 16, { top: true, color: K.soft }); yy += 24; };
-            leg((x, y) => { ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fillStyle = K.acc; ctx.fill(); ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI * 2); ctx.lineWidth = 2; ctx.strokeStyle = K.text; ctx.stroke(); }, word(TX, "legenda.tu"));
-            leg((x, y) => { ctx.beginPath(); ctx.moveTo(x, y - 8); ctx.lineTo(x + 7, y); ctx.lineTo(x, y + 8); ctx.lineTo(x - 7, y); ctx.closePath(); ctx.fillStyle = K.gold; ctx.fill(); }, word(TX, "legenda.cel"));
-            leg((x, y) => { ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fillStyle = K.cell; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = K.muted; ctx.stroke(); P.tx(b, "?", x, y - 1, 13, { align: "center", face: "bold", color: K.muted }); }, word(TX, "legenda.nieznane"));
-            yy += 14;
-            P.hl(ctx, cx, R.rx, yy);
-            yy += 18;
-            if (cd) {
-                P.tx(b, cd.title, cx, yy, 24, { top: true, face: "bold", max: cw });
-                yy += 32;
-                if (cd.sub) { P.tx(b, cd.sub.toLocaleUpperCase("pl"), cx, yy, 15, { top: true, face: "sc", color: K.acc, max: cw }); yy += 24; }
-                if (cd.opis) for (const line of P.wrapWords(cd.opis, 17, cw, "regular").slice(0, 3)) { P.tx(b, line, cx, yy, 17, { top: true, face: "regular", color: K.soft }); yy += 22; }
-                const tgt = targetPlace();
-                if (tgt && String(tgt.id) === String(cd.id)) { yy += 6; P.tx(b, wstaw(word(TX, "karta.cel"), { co: tgt.name }), cx, yy, 16, { top: true, color: K.gold, max: cw }); yy += 22; }
+            if (this._card && cd) {   // the card: the sketch on the left (only the chosen place named), the card beside it
+                const mw = Math.min(MAP_W, R.rx - R.lx - 360), cx = R.lx + mw + COL_GAP, cw = R.rx - cx;
+                this._drawn = draw(b, { x: R.lx, y: top, w: mw, h }, { cursor: this._cursor, nodes: list, labelKeys: new Set([String(this._cursor)]) });
+                P.vl(ctx, cx - COL_GAP / 2, top, R.y1 - 16);
+                this._cardLines = drawCard(b, P, cx, top, cw, h, cd);
+                P.done(b);
+                return;
             }
+            // (2026-11-07, the user: "Atlas z odnośnikami", "byle było czytelnie i przejrzyście") the atlas: the sketch over the whole
+            // panel, every known place named; over it the count and the legend in one row, under it the place under the cursor
+            const c = CH(), wOf = (t, s) => (c && c.measure ? c.measure(t, s, null) : t.length * s * 0.5);
+            P.tx(b, wstaw(word(TX, "legenda.odkryte"), { n: list.filter(n => n.state === "known").length, wszystkich: list.length }), R.lx, top, 16, { top: true, color: K.muted });
+            const legend = [[(x, y) => { ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fillStyle = K.acc; ctx.fill(); ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI * 2); ctx.lineWidth = 2; ctx.strokeStyle = K.text; ctx.stroke(); }, word(TX, "legenda.tu")],
+                [(x, y) => { ctx.beginPath(); ctx.moveTo(x, y - 8); ctx.lineTo(x + 7, y); ctx.lineTo(x, y + 8); ctx.lineTo(x - 7, y); ctx.closePath(); ctx.fillStyle = K.gold; ctx.fill(); }, word(TX, "legenda.cel")],
+                [(x, y) => { ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fillStyle = K.cell; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = K.muted; ctx.stroke(); P.tx(b, "?", x, y - 1, 13, { align: "center", face: "bold", color: K.muted }); }, word(TX, "legenda.nieznane")]];
+            let lx = R.rx - legend.reduce((s, [, t]) => s + 24 + wOf(t, 15) + 22, 0) + 22;
+            for (const [dot, t] of legend) { dot(lx + 9, top + 11); P.tx(b, t, lx + 24, top + 1, 15, { top: true, color: K.soft }); lx += 24 + wOf(t, 15) + 22; }
+            this._field = { x: R.lx, y: top + ATLAS.top, w: R.rx - R.lx, h: h - ATLAS.top - ATLAS.bottom };
+            if (this._zoom) { this.ensureRegion(); this.place(); }   // (the real map: its own picture over the field)
+            else this._drawn = draw(b, this._field, { cursor: this.inside ? this._cursor : null, nodes: list, atlas: true });
+            const k = this.inside ? this._cursor : here, info = k !== null && k !== undefined && discovered(k) ? card(k) : null;
+            if (info) P.tx(b, info.title + (info.sub ? "  ·  " + info.sub : ""), R.lx, top + h - ATLAS.bottom + 6, 16, { top: true, color: K.soft, max: R.rx - R.lx });
             P.done(b);
         };
         MapaView.prototype.move = function(dir) {
@@ -436,14 +479,135 @@
             this.redraw();
             this.scene.drawKeys();
         };
+        // (2026-11-07) the real map's field: the cursor over the places (W/S/A/D as on the sketch), the field sliding after it. A part
+        // round the field's view and the view it slides to is drawn ONCE into a picture (draw() with the visited maps' pictures under
+        // the places); the slide moves only that picture's frame
+        let ringKept = null;
+        const ringBitmap = () => {
+            if (ringKept) return ringKept;
+            const bm = new Bitmap(40, 40), x = bm.context;
+            x.beginPath(); x.arc(20, 20, 14, 0, Math.PI * 2); x.fillStyle = "rgba(255,210,63,0.18)"; x.fill();
+            x.beginPath(); x.arc(20, 20, 12, 0, Math.PI * 2); x.lineWidth = 2; x.strokeStyle = K.acc; x.stroke();
+            bm._baseTexture.update();
+            return (ringKept = bm);
+        };
+        const zxy = n => ({ x: n.x * BOXW, y: n.y * BOXH });   // (a place's point on the real map)
+        // the maps' pictures (each asked once; one not ready yet is drawn when it comes): a visited map sharp, the others their FOG
+        // (2026-11-07, the user: "mapa ma być jak prostokąt; jak jest ciemno, wypełnij wodą, morzem" - img/mapa_wyspy/mgla/<id>.png:
+        // blurred, washed out, a soft rim FOG_PAD tiles round the map - tools/mapy/mapa_prawdziwa_mgla.py)
+        const FOG_PAD = 3;
+        const pic = (view, folder, name) => {
+            const bm = ImageManager.loadBitmap(folder, name);
+            if (!bm.isReady() && !bm._mwWait) { bm._mwWait = true; bm.addLoadListener(() => { bm._mwWait = false; view._zoomDirty = true; }); }
+            return bm;
+        };
+        MapaView.prototype.realPics = function() {
+            const out = [], R = window.SwiatData && window.SwiatData.maps;
+            if (!R) return out;
+            for (const id of REAL) {
+                if (!R[id]) continue;
+                const [x0, y0, w, h] = R[id], x = (x0 - D.SWIAT_BOX[0]) * PPT, y = (y0 - D.SWIAT_BOX[1]) * PPT;
+                if (discovered(id)) out.push({ bm: pic(this, "img/mapa_wyspy/", id), x, y, w: w * PPT, h: h * PPT, fog: false });
+                else out.push({ bm: pic(this, "img/mapa_wyspy/mgla/", id), x: x - FOG_PAD * PPT, y: y - FOG_PAD * PPT, w: (w + 2 * FOG_PAD) * PPT, h: (h + 2 * FOG_PAD) * PPT, fog: true });
+            }
+            out.sort((a, b) => a.fog - b.fog);   // (the fog over the sharp ones: its soft rim lies over a visited neighbour's edge)
+            return out;
+        };
+        // the field's view (its top-left on the real map) round a point, kept on the map
+        MapaView.prototype.viewAt = function(cx, cy) {
+            const f = this._field;
+            return { x: Math.round(Math.max(0, Math.min(BOXW - f.w, cx - f.w / 2))), y: Math.round(Math.max(0, Math.min(BOXH - f.h, cy - f.h / 2))) };
+        };
+        // the picture of the part round both views (a long jump: only the new one, no slide)
+        MapaView.prototype.renderReal = function(a, b) {
+            const f = this._field;
+            let x0 = Math.min(a.x, b.x), y0 = Math.min(a.y, b.y), x1 = Math.max(a.x, b.x) + f.w, y1 = Math.max(a.y, b.y) + f.h;
+            if ((x1 - x0) * (y1 - y0) > 3.2e6) { x0 = b.x; y0 = b.y; x1 = b.x + f.w; y1 = b.y + f.h; this._zc = { x: b.x + f.w / 2, y: b.y + f.h / 2 }; }
+            const w = x1 - x0, h = y1 - y0;
+            let bm = this._zs.bitmap;
+            if (!bm || bm.width !== w || bm.height !== h) { if (bm) bm.destroy(); bm = new Bitmap(w, h); this._zs.bitmap = bm; } else bm.clear();
+            const pics = this.realPics(), box = { x: -x0, y: -y0, w: BOXW, h: BOXH }, sea = pic(this, "img/mapa_wyspy/", "morze");
+            // the sea: its picture over the whole part, on the world's grid of tiles (it joins the maps' own water)
+            const seaFill = ctx => {
+                if (!sea.isReady()) { ctx.fillStyle = "rgb(76,142,147)"; ctx.fillRect(0, 0, w, h); return; }
+                const src = sea._canvas || sea._image, pat = ctx.createPattern(src, "repeat"), s = sea.width;
+                const ox = (((-x0) % s) + s) % s, oy = (((-y0) % s) + s) % s;
+                ctx.save(); ctx.translate(ox - s, oy - s); ctx.fillStyle = pat; ctx.fillRect(0, 0, w + 2 * s, h + 2 * s); ctx.restore();
+            };
+            draw(bm, box, { box, real: true, nodes: nodes(), atlas: true, atKey: "at6", cursor: null, seaFill,
+                under: () => { for (const q of pics) if (q.bm.isReady() && q.x + q.w > x0 && q.x < x1 && q.y + q.h > y0 && q.y < y1) bm.blt(q.bm, 0, 0, q.bm.width, q.bm.height, q.x - x0, q.y - y0, q.w, q.h); } });
+            bm._baseTexture.update();
+            this._region = { x: x0, y: y0, w, h };
+            this._zoomDirty = false;
+        };
+        // the picture holds where the field is and where it slides to (else drawn again)
+        MapaView.prototype.ensureRegion = function(force) {
+            const f = this._field, R = this._region, n = this._zoomNodes && this._zoomNodes.find(q => q.key === String(this._cursor));
+            const cur = this.viewAt(this._zc.x, this._zc.y), tgt = n ? this.viewAt(n.x, n.y) : cur;
+            const inside = v => !!R && v.x >= R.x && v.y >= R.y && v.x + f.w <= R.x + R.w && v.y + f.h <= R.y + R.h;
+            if (force || !inside(cur) || !inside(tgt)) this.renderReal(cur, tgt);
+        };
+        MapaView.prototype.zoomIn = function() {
+            const f = this._field;
+            if (this._zoom || !f || !BOXW) { if (this._zoom) SoundManager.playBuzzer(); return; }
+            if (!this._zs) { this._zs = new Sprite(); this.root.addChild(this._zs); this._ring = new Sprite(ringBitmap()); this._ring.anchor.set(0.5, 0.5); this.root.addChild(this._ring); }
+            this._zoom = true;
+            this._zoomNodes = nodes().map(q => Object.assign({}, q, zxy(q)));   // (the places on the real map: the cursor's moves)
+            const n = this._zoomNodes.find(q => q.key === String(this._cursor)), v = n ? this.viewAt(n.x, n.y) : this.viewAt(BOXW / 2, BOXH / 2);
+            this._zc = { x: v.x + f.w / 2, y: v.y + f.h / 2 };
+            this._region = null;
+            SoundManager.playCursor();
+            this.redraw();
+            this.scene.drawKeys();
+        };
+        MapaView.prototype.dropZoom = function() {
+            this._zoom = false;
+            this._zoomNodes = null;
+            this._region = null;
+            if (this._zs && this._zs.bitmap) { const bm = this._zs.bitmap; this._zs.bitmap = null; bm.destroy(); }
+            if (this._zs) this._zs.visible = false;
+            if (this._ring) this._ring.visible = false;
+        };
+        MapaView.prototype.zoomOut = function() {
+            if (!this._zoom) return false;
+            this.dropZoom();
+            SoundManager.playCancel();
+            this.redraw();
+            this.scene.drawKeys();
+            return true;
+        };
+        // the picture's frame at the slide's place, the cursor's ring over its place
+        MapaView.prototype.place = function() {
+            const f = this._field, bm = this._zs && this._zs.bitmap, R = this._region;
+            if (!this._zoom || !f || !bm || !this._zc || !R) return;
+            const v = this.viewAt(this._zc.x, this._zc.y);
+            this._zs.setFrame(Math.max(0, Math.min(R.w - f.w, v.x - R.x)), Math.max(0, Math.min(R.h - f.h, v.y - R.y)), f.w, f.h);
+            this._zs.x = f.x; this._zs.y = f.y;
+            this._zs.visible = !this._card;
+            const n = this._zoomNodes && this._zoomNodes.find(q => q.key === String(this._cursor)), rx = n ? n.x - v.x : -1, ry = n ? n.y - v.y : -1;
+            this._ring.visible = !!n && !this._card && rx >= 0 && rx <= f.w && ry >= 0 && ry <= f.h;
+            if (n) { this._ring.x = f.x + rx; this._ring.y = f.y + ry; }
+            this._view = [v.x, v.y];
+        };
         MapaView.prototype.update = function() {
             if (!this.ready()) return;
+            if (this._zoom && this._zc && !this._card) {
+                if (this._zoomDirty) { this.ensureRegion(true); this.place(); }   // (a picture came)
+                const n = this._zoomNodes && this._zoomNodes.find(q => q.key === String(this._cursor));
+                if (n) {   // the slide: a fifth of the way each frame, to the cursor's view
+                    const t = this.viewAt(n.x, n.y), f = this._field, tx = t.x + f.w / 2, ty = t.y + f.h / 2, dx = tx - this._zc.x, dy = ty - this._zc.y;
+                    if (Math.abs(dx) + Math.abs(dy) > 0.6) { this._zc.x += Math.abs(dx) < 1 ? dx : dx * 0.2; this._zc.y += Math.abs(dy) < 1 ? dy : dy * 0.2; this.place(); }
+                }
+            }
             if (this._card) return;
+            if (Input.isTriggered("pagedown")) { this.zoomIn(); return; }   // (E)
+            if (Input.isTriggered("pageup")) { this.zoomOut(); return; }    // (Q)
             if (this.mouseMoved()) { const p = P.touchAt(), n = this.nodeAt(p.x, p.y); if (n && n.key !== this._cursor) { this._cursor = n.key; this.redraw(); } }
             for (const [name, dir] of [["down", 2], ["left", 4], ["right", 6], ["up", 8]]) if (Input.isRepeated(name)) { this.move(dir); return; }
             if (Input.isTriggered("ok")) this.open();
         };
         MapaView.prototype.nodeAt = function(x, y) {
+            if (this._zoom && this._zoomNodes && this._view && this._field) { const zx = x - this._field.x + this._view[0], zy = y - this._field.y + this._view[1]; return this._zoomNodes.find(n => n.state === "known" && Math.hypot(n.x - zx, n.y - zy) <= 18) || null; }
             if (!this._drawn) return null;
             return this._drawn.nodes.find(n => n.state === "known" && Math.hypot(n.x - x, n.y - y) <= 18) || null;
         };
@@ -455,7 +619,7 @@
         };
         MapaView.prototype.info = function() {
             const list = this._drawn ? this._drawn.nodes : [], here = hereId(), tgt = targetPlace();
-            return { mapa: { cursor: this._cursor, card: this._card, here: here === null ? null : String(here), target: tgt ? String(tgt.id) : null,
+            return { mapa: { cursor: this._cursor, card: this._card, zoom: !!this._zoom, view: this._zoom ? this._view || null : null, here: here === null ? null : String(here), target: tgt ? String(tgt.id) : null,
                 known: list.filter(n => n.state === "known").map(n => n.key), hints: list.filter(n => n.state === "hint").map(n => n.key),
                 nodes: list.map(n => ({ key: n.key, x: n.x, y: n.y, state: n.state, here: n.here, target: n.target })), cardData: this._card && this._cursor ? card(this._cursor) : null, cardLines: this._cardLines } };
         };
@@ -490,7 +654,7 @@
             ctx.fillStyle = K.line; ctx.fillRect(px + 30, py + 64, pw - 60, 1);
             const list = nodes(), keys = new Set(this._items.map(i => i.key));
             const top = py + 80, h = ph - 80 - 70, mw = Math.min(MAP_W, pw - 420);
-            this._drawn = draw(b, { x: px + 30, y: top, w: mw, h }, { cursor: this._cursor, nodes: list, selectable: k => { const it = this.item(k); return !!it && it.enabled !== false; },
+            this._drawn = draw(b, { x: px + 30, y: top, w: mw, h }, { cursor: this._cursor, nodes: list, labelKeys: keys, selectable: k => { const it = this.item(k); return !!it && it.enabled !== false; },
                 labelOf: k => { const it = this.item(k); return it && it.enabled !== false ? it.note || "" : it ? it.why || "" : ""; } });
             // the right column: the items as rows
             const cx = px + 30 + mw + COL_GAP, cw = px + pw - 30 - cx;
@@ -561,7 +725,7 @@
 
     window.MapaWyspy = T.register(PLUGIN, {
         addHint: fn => { if (typeof fn === "function") HINTS.push(fn); },
-        PLACES: ALL, UND, K, place, nameOf, placeOf, hereId, discovered, nodes, roads, card, targetPlace, draw, next, tabIcon, menuView, drawCard,
+        PLACES: ALL, UND, K, place, nameOf, placeOf, hereId, discovered, revealAll, nodes, roads, card, targetPlace, draw, next, tabIcon, menuView, drawCard,
         choose, Scene_MapaWybor, choosing: () => { const s = SceneManager._scene; return s instanceof Scene_MapaWybor ? s.state() : null; },
         neighbours: key => (NEXT.get(String(key)) || []).slice()
     });

@@ -63,7 +63,7 @@
     const store = T.state.define("okolice", () => ({ found: {}, hinted: {}, track: null, revealed: false }), { version: 1, owner: PLUGIN });
     const day = () => T.time.day();
     const fill = (s, o) => String(s).replace(/\{(\w+)\}/g, (m, k) => (o[k] !== undefined ? o[k] : m));
-    const smooth = t => t * t * (3 - 2 * t);
+    const smooth = T.util.smooth;
     const mapName = id => { const m = window.$dataMapInfos && $dataMapInfos[id]; return m ? m.name : "Mapa " + id; };
     const OWNERS = new Set(["Okolice"].concat(Object.keys(D.PACKAGES).map(k => D.PACKAGES[k].owner)));
     const ownerOfPkg = pkg => (pkg === "0" ? "Okolice" : (D.PACKAGES[pkg] || {}).owner || "");

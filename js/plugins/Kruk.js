@@ -83,8 +83,8 @@
     const TL = () => T.api("TownLife") || window.TownLife || null;
     const W = () => window.Wyspa || T.api("Wyspa") || null;
     const F = () => window.Farming || null;
-    const rand = (a, b) => a + Math.random() * (b - a);
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const rand = T.util.rand;
+    const pick = T.util.pick;
     const inHours = (h, r) => (r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
     const TILE = () => $gameMap.tileWidth();
 

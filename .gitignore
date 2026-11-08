@@ -62,3 +62,16 @@ __pycache__/
 /tests/autopilot_fabula/stan*.json
 /tests/autopilot_fabula/*.png
 /tests/autopilot_fabula/raport_ogladanie.md
+
+# Work leftovers (2026-11-07: the old ones moved to ../Tawerna_archiwum_2026-11-07 by tools/porzadki/archiwum.py): the tools'
+# backups, staged copies and screenshots, and the docs' preview pictures - all made again by the tools; what is already in the
+# repository stays in it (a rule never untracks a file)
+**/kopie_zapasowe/
+tools/**/staging*/
+tools/**/zrzuty*/
+docs/**/*.png
+docs/**/*.gif
+docs/**/*.jpg
+docs/**/*.jpeg
+docs/**/*.webp
+docs/**/*.mp4

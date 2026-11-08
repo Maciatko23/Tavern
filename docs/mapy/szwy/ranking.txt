@@ -1,0 +1,87 @@
+Łączenia map świata, najgorsze pierwsze (tools/mapy/szwy_przeglad.py)
+ 1. 910 Sosnowy Klif               | 950 Zbocze pod Pustelnią       pion     7 kratek  wzrok  21.7  urwany teren   0%  ocena  21.7
+ 2. 962 Zachodni Stok Gór          | 175 Orla Grań                  pion    56 kratek  wzrok  19.7  urwany teren   0%  ocena  19.7
+ 3.  22 Polna droga                |  24 Posiadłość Lorda           poziom  80 kratek  wzrok  17.3  urwany teren   0%  ocena  17.3
+ 4. 960 Stok nad Garnizonem        | 111 Podgrodzie                 pion    11 kratek  wzrok  15.2  urwany teren   0%  ocena  15.2
+ 5. 175 Orla Grań                  | 934 Miedze za Osadą            pion    36 kratek  wzrok  14.3  urwany teren   0%  ocena  14.3
+ 6. 901 Sady pod dworem            | 125 Przystań                   poziom  28 kratek  wzrok  13.9  urwany teren   0%  ocena  13.9
+ 7.   8 Okolice Tawerny            | 901 Sady pod dworem            pion    42 kratek  wzrok  11.9  urwany teren   4%  ocena  13.0
+ 8. 962 Zachodni Stok Gór          |  13 Góry i kamieniołom         pion    24 kratek  wzrok  12.9  urwany teren   0%  ocena  12.9
+ 9. 918 Wysepka Samotnej Sosny     | 964 Zachodni Brzeg             poziom  20 kratek  wzrok  11.1  urwany teren   5%  ocena  12.3
+10. 935 Orla Iglica                | 962 Zachodni Stok Gór          poziom  39 kratek  wzrok  10.7  urwany teren   2%  ocena  11.3
+11.  24 Posiadłość Lorda           |   3 Kruczy Jar                 pion    60 kratek  wzrok  11.0  urwany teren   0%  ocena  11.0
+12. 111 Podgrodzie                 | 125 Przystań                   pion     7 kratek  wzrok   8.4  urwany teren  14%  ocena  10.9
+13. 162 Garnizon nad zatoką        | 111 Podgrodzie                 pion   100 kratek  wzrok  10.8  urwany teren   0%  ocena  10.8
+14. 165 Wrak na mieliźnie          | 162 Garnizon nad zatoką        pion    60 kratek  wzrok   9.7  urwany teren   5%  ocena  10.7
+15. 120 Osada Milczących           |   4 Łąka pod Gawrą             poziom  11 kratek  wzrok  10.5  urwany teren   0%  ocena  10.5
+16.  20 Dom dziadka - Podwórze     | 923 Kamień Rybaków             poziom  60 kratek  wzrok   9.1  urwany teren   1%  ocena   9.4
+17. 961 Przesieka pod Murami       | 111 Podgrodzie                 poziom 102 kratek  wzrok   9.2  urwany teren   0%  ocena   9.2
+18. 950 Zbocze pod Pustelnią       | 162 Garnizon nad zatoką        poziom  76 kratek  wzrok   9.1  urwany teren   0%  ocena   9.1
+19. 165 Wrak na mieliźnie          | 951 Skała Strażnicza           poziom  60 kratek  wzrok   9.0  urwany teren   0%  ocena   9.0
+20. 120 Osada Milczących           |  22 Polna droga                poziom  85 kratek  wzrok   9.0  urwany teren   0%  ocena   9.0
+21. 951 Skała Strażnicza           | 162 Garnizon nad zatoką        pion    40 kratek  wzrok   8.5  urwany teren   2%  ocena   8.9
+22.  18 Łąka menhirów              | 963 Łąka pod Klifem            pion    35 kratek  wzrok   8.9  urwany teren   0%  ocena   8.9
+23. 125 Przystań                   | 920 Wyspa Solna                poziom  12 kratek  wzrok   8.6  urwany teren   0%  ocena   8.6
+24.  17 Omszała łąka               | 933 Zatoka Kłód                pion    80 kratek  wzrok   7.8  urwany teren   5%  ocena   8.6
+25. 962 Zachodni Stok Gór          | 157 Urwisko Kruków             poziom  55 kratek  wzrok   7.9  urwany teren   3%  ocena   8.5
+26. 950 Zbocze pod Pustelnią       | 165 Wrak na mieliźnie          poziom  20 kratek  wzrok   8.1  urwany teren   0%  ocena   8.1
+27. 168 Spalona zagroda            | 933 Zatoka Kłód                poziom  80 kratek  wzrok   7.2  urwany teren   2%  ocena   7.6
+28.  23 Skraj lasu                 | 168 Spalona zagroda            pion    60 kratek  wzrok   6.7  urwany teren   5%  ocena   7.4
+29. 901 Sady pod dworem            |  20 Dom dziadka - Podwórze     pion    42 kratek  wzrok   7.4  urwany teren   0%  ocena   7.4
+30.  13 Góry i kamieniołom         |  22 Polna droga                pion    24 kratek  wzrok   7.2  urwany teren   0%  ocena   7.2
+31. 159 Przylądek z latarnią       | 900 Pola pod grzbietem         poziom  35 kratek  wzrok   7.1  urwany teren   0%  ocena   7.1
+32. 935 Orla Iglica                | 931 Grań nad szczytem          pion    36 kratek  wzrok   7.0  urwany teren   0%  ocena   7.0
+33. 963 Łąka pod Klifem            | 165 Wrak na mieliźnie          poziom  60 kratek  wzrok   7.0  urwany teren   0%  ocena   7.0
+34. 934 Miedze za Osadą            | 120 Osada Milczących           poziom  60 kratek  wzrok   6.6  urwany teren   1%  ocena   6.8
+35. 910 Sosnowy Klif               |  18 Łąka menhirów              poziom  50 kratek  wzrok   6.7  urwany teren   0%  ocena   6.7
+36.  20 Dom dziadka - Podwórze     |  17 Omszała łąka               pion    64 kratek  wzrok   5.8  urwany teren   6%  ocena   6.6
+37.  23 Skraj lasu                 |  17 Omszała łąka               poziom  80 kratek  wzrok   6.3  urwany teren   0%  ocena   6.3
+38. 960 Stok nad Garnizonem        | 961 Przesieka pod Murami       pion    33 kratek  wzrok   6.2  urwany teren   0%  ocena   6.2
+39.  24 Posiadłość Lorda           | 901 Sady pod dworem            poziom  80 kratek  wzrok   6.1  urwany teren   0%  ocena   6.1
+40. 910 Sosnowy Klif               | 155 Pustelnia na klifie        pion    72 kratek  wzrok   6.1  urwany teren   0%  ocena   6.1
+41. 155 Pustelnia na klifie        | 950 Zbocze pod Pustelnią       poziom  96 kratek  wzrok   6.0  urwany teren   0%  ocena   6.0
+42. 923 Kamień Rybaków             |  17 Omszała łąka               pion    32 kratek  wzrok   4.7  urwany teren  12%  ocena   5.9
+43.  22 Polna droga                |   4 Łąka pod Gawrą             pion    60 kratek  wzrok   5.9  urwany teren   0%  ocena   5.9
+44. 918 Wysepka Samotnej Sosny     |  18 Łąka menhirów              poziom  40 kratek  wzrok   5.8  urwany teren   0%  ocena   5.8
+45.   3 Kruczy Jar                 |  20 Dom dziadka - Podwórze     poziom  80 kratek  wzrok   5.8  urwany teren   0%  ocena   5.8
+46. 960 Stok nad Garnizonem        | 162 Garnizon nad zatoką        poziom  36 kratek  wzrok   5.7  urwany teren   0%  ocena   5.7
+47.   4 Łąka pod Gawrą             |   3 Kruczy Jar                 poziom  75 kratek  wzrok   5.6  urwany teren   0%  ocena   5.6
+48. 125 Przystań                   | 914 Zatoczka pod ogonem        poziom  20 kratek  wzrok   5.5  urwany teren   0%  ocena   5.5
+49. 125 Przystań                   | 922 Wyspa Przemytników         pion    40 kratek  wzrok   5.0  urwany teren   2%  ocena   5.3
+50.   4 Łąka pod Gawrą             | 900 Pola pod grzbietem         pion    60 kratek  wzrok   5.2  urwany teren   0%  ocena   5.2
+51. 912 Ugory za Spaloną Zagrodą   | 168 Spalona zagroda            poziom 120 kratek  wzrok   5.2  urwany teren   0%  ocena   5.2
+52.   8 Okolice Tawerny            | 125 Przystań                   poziom 104 kratek  wzrok   5.1  urwany teren   0%  ocena   5.1
+53. 963 Łąka pod Klifem            | 950 Zbocze pod Pustelnią       pion    35 kratek  wzrok   5.0  urwany teren   0%  ocena   5.0
+54. 159 Przylądek z latarnią       |   4 Łąka pod Gawrą             poziom  69 kratek  wzrok   5.0  urwany teren   0%  ocena   5.0
+55. 125 Przystań                   |  21 Leśna droga                poziom 100 kratek  wzrok   4.8  urwany teren   0%  ocena   4.8
+56. 111 Podgrodzie                 | 917 Wyspa Kormoranów           poziom 100 kratek  wzrok   4.7  urwany teren   0%  ocena   4.7
+57. 914 Zatoczka pod ogonem        |  21 Leśna droga                pion    80 kratek  wzrok   4.6  urwany teren   0%  ocena   4.6
+58. 910 Sosnowy Klif               | 963 Łąka pod Klifem            poziom  70 kratek  wzrok   4.5  urwany teren   0%  ocena   4.5
+59. 964 Zachodni Brzeg             |  18 Łąka menhirów              pion    76 kratek  wzrok   4.3  urwany teren   1%  ocena   4.4
+60.  21 Leśna droga                | 920 Wyspa Solna                pion    40 kratek  wzrok   4.2  urwany teren   0%  ocena   4.2
+61.  13 Góry i kamieniołom         | 120 Osada Milczących           pion    68 kratek  wzrok   3.9  urwany teren   0%  ocena   3.9
+62. 120 Osada Milczących           | 159 Przylądek z latarnią       pion    68 kratek  wzrok   3.9  urwany teren   0%  ocena   3.9
+63. 157 Urwisko Kruków             | 960 Stok nad Garnizonem        poziom  36 kratek  wzrok   3.7  urwany teren   0%  ocena   3.7
+64. 900 Pola pod grzbietem         |  23 Skraj lasu                 poziom  75 kratek  wzrok   3.7  urwany teren   0%  ocena   3.7
+65. 900 Pola pod grzbietem         | 168 Spalona zagroda            pion    44 kratek  wzrok   3.6  urwany teren   0%  ocena   3.6
+66. 155 Pustelnia na klifie        | 157 Urwisko Kruków             pion    70 kratek  wzrok   3.4  urwany teren   0%  ocena   3.4
+67.  13 Góry i kamieniołom         | 961 Przesieka pod Murami       poziom  16 kratek  wzrok   3.3  urwany teren   0%  ocena   3.3
+68. 157 Urwisko Kruków             |  13 Góry i kamieniołom         pion    72 kratek  wzrok   3.3  urwany teren   0%  ocena   3.3
+69. 931 Grań nad szczytem          | 175 Orla Grań                  poziom 104 kratek  wzrok   3.3  urwany teren   0%  ocena   3.3
+70.  17 Omszała łąka               | 168 Spalona zagroda            pion     4 kratek  wzrok   3.2  urwany teren   0%  ocena   3.2
+71. 157 Urwisko Kruków             | 961 Przesieka pod Murami       poziom  86 kratek  wzrok   3.1  urwany teren   0%  ocena   3.1
+72. 900 Pola pod grzbietem         | 912 Ugory za Spaloną Zagrodą   pion    16 kratek  wzrok   2.8  urwany teren   0%  ocena   2.8
+73. 934 Miedze za Osadą            | 159 Przylądek z latarnią       pion    12 kratek  wzrok   2.7  urwany teren   0%  ocena   2.7
+74. 922 Wyspa Przemytników         | 920 Wyspa Solna                poziom  48 kratek  wzrok   2.4  urwany teren   0%  ocena   2.4
+75.   3 Kruczy Jar                 |  23 Skraj lasu                 pion    60 kratek  wzrok   2.0  urwany teren   0%  ocena   2.0
+76. 950 Zbocze pod Pustelnią       | 960 Stok nad Garnizonem        pion    42 kratek  wzrok   2.0  urwany teren   0%  ocena   2.0
+77. 918 Wysepka Samotnej Sosny     | 910 Sosnowy Klif               pion    40 kratek  wzrok   1.9  urwany teren   0%  ocena   1.9
+78.   4 Łąka pod Gawrą             |  23 Skraj lasu                 poziom   5 kratek  wzrok   1.9  urwany teren   0%  ocena   1.9
+79. 155 Pustelnia na klifie        | 960 Stok nad Garnizonem        pion     2 kratek  wzrok   0.1  urwany teren   0%  ocena   0.1
+80. 961 Przesieka pod Murami       |   8 Okolice Tawerny            pion    33 kratek  wzrok  43.1  urwany teren   0%  ocena  43.1  [mur / urwisko na granicy - zamierzone, poza oceną]
+81.   8 Okolice Tawerny            |  24 Posiadłość Lorda           pion    60 kratek  wzrok  40.8  urwany teren   0%  ocena  40.8  [mur / urwisko na granicy - zamierzone, poza oceną]
+82.   8 Okolice Tawerny            |  22 Polna droga                pion    36 kratek  wzrok  38.4  urwany teren   0%  ocena  38.4  [mur / urwisko na granicy - zamierzone, poza oceną]
+83.  13 Góry i kamieniołom         |   8 Okolice Tawerny            poziom 104 kratek  wzrok  34.0  urwany teren   0%  ocena  34.0  [mur / urwisko na granicy - zamierzone, poza oceną]
+84. 111 Podgrodzie                 |   8 Okolice Tawerny            pion   105 kratek  wzrok  30.2  urwany teren   1%  ocena  31.3  [mur / urwisko na granicy - zamierzone, poza oceną]
+85.  22 Polna droga                |   3 Kruczy Jar                 poziom   5 kratek  wzrok  20.4  urwany teren   0%  ocena  20.4  [mur / urwisko na granicy - zamierzone, poza oceną]
+86. 175 Orla Grań                  |  13 Góry i kamieniołom         poziom 120 kratek  wzrok   5.4  urwany teren   0%  ocena   5.4  [mur / urwisko na granicy - zamierzone, poza oceną]

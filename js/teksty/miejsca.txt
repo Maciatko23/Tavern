@@ -122,6 +122,52 @@ mapa.176.opis = Powietrze stoi tu nieruszone od setek lat.
 mapa.177.pod = skład pod zatoczką przystani
 mapa.177.opis = Przypływ strzeże tego składu sumienniej niż strażnik.
 
+
+# (2026-11-07) wyspy i mapy brzegowe z nowymi nazwami
+# 910 Sosnowy Klif
+mapa.910.pod = sosny nad urwistym brzegiem
+mapa.910.opis = Wiatr od morza czesze korony sosen na samej krawędzi.
+
+# 912 Ugory za Spaloną Zagrodą
+mapa.912.pod = pola, których nikt już nie orze
+mapa.912.opis = Zdziczałe zagony i kłody po dawnym płocie.
+
+# 917 Wyspa Kormoranów
+mapa.917.pod = gniazda kormoranów na skałach
+mapa.917.opis = Przy odpływie wiedzie tu z brzegu mielizna; potem morze ją zabiera.
+
+# 918 Wysepka Samotnej Sosny
+mapa.918.pod = jedno drzewo pośrodku fal
+mapa.918.opis = Sosna rośnie tu sama, jakby ktoś posadził ją morzu na przekór.
+
+# 920 Wyspa Solna
+mapa.920.pod = biała sól na nadbrzeżnych głazach
+mapa.920.opis = Fale zostawiają na kamieniach sól, a sól na wyspie jest w cenie.
+
+# 922 Wyspa Przemytników
+mapa.922.pod = gęsty las i ukryta przystań
+mapa.922.opis = Między sosnami łatwo schować łódź i to, czego nie powinien zobaczyć celnik.
+
+# 923 Kamień Rybaków
+mapa.923.pod = kamienny kopiec za cyplem
+mapa.923.opis = Rybacy układali tu kamienie, prosząc morze o spokojny połów.
+
+# 933 Zatoka Kłód
+mapa.933.pod = wyrzucone na brzeg pnie
+mapa.933.opis = Morze znosi tu drewno ze wszystkich stron wyspy.
+
+# 934 Miedze za Osadą
+mapa.934.pod = skrawki pól za Osadą Milczących
+mapa.934.opis = Wąskie miedze, na których nikt nie zostawia śladów.
+
+# 935 Orla Iglica
+mapa.935.pod = skała, na którą wzlatują tylko orły
+mapa.935.opis = Z dołu widać tylko pióra krążące nad szczytem.
+
+# 951 Skała Strażnicza
+mapa.951.pod = skalna twierdza naprzeciw garnizonu
+mapa.951.opis = Stąd widać każdy żagiel, który wpływa do zatoki.
+
 # ======================================================================== Wnętrza (tylko podpis)
 # 1 Tawerna
 mapa.1.pod = karczma „Pod Złotym Kuflem”

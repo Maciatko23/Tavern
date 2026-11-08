@@ -102,7 +102,7 @@
     const tqState = () => w.qstate();
     const flag = k => w.flag(k);
     const mapId = () => (window.$gameMap ? $gameMap.mapId() : 0);
-    const hash = (a, b) => { let h = Math.imul(a | 0, 374761393) ^ Math.imul(b | 0, 668265263); h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
+    const hash = T.util.hash;
     const inHours = (h, r) => (r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
     const night = h => h >= 21 || h < 4;
     const note = (title, text) => T.call("Journal", "addNote", title, text);

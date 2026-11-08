@@ -246,7 +246,7 @@
         // the garrison's soldiers with their rescue boat (9-15, not in a storm): without the pass (flag glejtWrak) the fine
         SOLDIERS: { hours: [9, 15], see: 4.5, seeSneak: 2.2, fine: 20, favor: -10, sheet: "$Npc_Straznik", sheetKing: "$Npc_Zolnierz",
             boat: [23, 26], men: [[21, 18, 8], [25, 18, 4]] },
-        BREACH: [17, 15], UNDER_LANDING: [4, 11, 8], EDGE_LAND: [[78, 20], [78, 21]],   /* (2026-10-18: the wreck's map doubled to 80x60) */
+        BREACH: [28, 16], UNDER_LANDING: [4, 11, 8], EDGE_LAND: [[78, 20], [78, 21]],   /* (2026-10-18: the wreck's map doubled to 80x60) */
         RAT: { at: [14, 6], max: 3, level: 1 },
         STONES, W12_GOLD, W12_XP,
         RAID: { after: [5, 9], chance: 0.35 }

@@ -88,7 +88,7 @@
     const se = (name, vol, pitch) => T.audio.se(name, { volume: vol || 85, pitch: pitch || 100 });
     const flying = () => { const L = T.api("Orzel_Lot"); try { return !!(L && L.flying && L.flying()); } catch (e) { return false; } };
     const mapId = () => (window.$gameMap ? $gameMap.mapId() : 0);
-    const dist = (ax, ay, bx, by) => Math.hypot(ax - bx, ay - by);
+    const dist = T.util.distXY;
     const raining = () => {
         const F = T.api("Farming"), S0 = T.api("Survival");
         try {

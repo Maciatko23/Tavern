@@ -338,7 +338,7 @@
         }
         return out;
     }
-    const dist = (ax, ay, bx, by) => Math.hypot(ax - bx, ay - by);
+    const dist = T.util.distXY;
     // (2026-10-31) the answer is kept for a second and a half while the hero stays on the same tile and the goal does not change (the needle asks
     // a few times a second; the whole graph walked for a goal that cannot be reached cost ~10 ms a time); a "pending" answer is never kept
     const CACHE_FRAMES = 90;

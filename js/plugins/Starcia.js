@@ -106,7 +106,7 @@
     const GA = P.ai.Game_Animal, SP = P.core.SPECIES;
     const GH = () => (HM() || {}).Game_Human, GD = () => (DG() || {}).Game_Dog;
     const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const pick = T.util.pick;
     const say = (ch, text, frames) => T.call("SpeechBubbles", "say", ch, text, frames || 150);
     const popup = (text, icon, color) => T.popup(text, { icon: icon || 0, color: color || "#ffd98f" });
     const clock = () => T.time.day() * 24 + T.time.hour();

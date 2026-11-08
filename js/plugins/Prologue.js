@@ -86,7 +86,7 @@
     const font = (size, kind, weight) => (weight ? weight + " " : "") + size + "px " + face(kind);
     const heroName = () => (window.$gameActors && $gameActors.actor(1) ? $gameActors.actor(1).name() : "Reid");
     const names = s => String(s).replace(/\\N\[(\d+)\]/gi, (m, n) => ($gameActors && $gameActors.actor(Number(n)) ? $gameActors.actor(Number(n)).name() : ""));
-    const ease = k => 1 - Math.pow(1 - Math.max(0, Math.min(1, k)), 3);
+    const ease = T.util.easeOut;
     const rnd = (a, b) => a + Math.random() * (b - a);
 
     function rr(ctx, x, y, w, h, r) {

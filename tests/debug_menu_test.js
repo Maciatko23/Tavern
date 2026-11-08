@@ -45,7 +45,21 @@ const { launch, sleep } = require("./cdp.js");
         check("six tabs: Zdarzenia, Budowanie, Przedmioty, Rdzeń, Kot, Wyspa i fabuła", JSON.stringify(await J("SceneManager._scene._tabs._list.map(c => c.name)")) === '["Zdarzenia","Budowanie","Przedmioty","Rdzeń","Kot","Wyspa i fabuła"]');
         const rows = await J(`SceneManager._scene._list._rows.map(r => ({ kind: r.kind, label: r.label }))`);
         let t = await tabNow();
-        check("it opens on 'Zdarzenia': the two time rows, dawn / sunset / a misty morning, the four weather rows (storm, a strike, a strike on a tree, calm), the two bird rows, the three butterfly rows (Motyle.js: butterflies now, moths at a fire, the net), the boar, a wolf pack, a deer, a bear (stage 2), the men of stage 3 (a bandit, a knife bandit, an archer, a mercenary, an ambush, a camp, a raid on a sleeper - Humans.js), the beasts and the men (wolves at a camp, a boar and a bandit, a bear and a bandit - Starcia.js), the creatures of stage 4 (a creature, a boss - Creatures.js), +200 XP, the regions' colours (RegionLayers; the old hero's row is gone since 2026-10-28), the underground's rows (Underground.js: a floor, the grate, the locks, the lift; the Heart's endings, world and Lord - added by Underground.js itself) - nothing else", t.tab === 0 && t.sel === 0 && rows.map(r => r.kind).join().replace(/,act3_arm,act3_start,act3_reset$/, "").replace(/,underground,ugGate(,ugLocks,ugLifts(,heartEnd,heartWorld,heartLord)?)?$/, "") === "hour,day,dawn,dusk,mist,storm,strike,treestrike,calm,birds,raid,motyle,cmy,siatka,boar,wolves,deer,bear,h_bandit,h_knifer,h_archer,h_mercenary,h_ambush,h_camp,h_raid,st_camp,st_boar,st_bear,cr_kind,cr_boss,xp,layers" && rows[0].label === "+1 godzina", rows.map(r => r.kind));
+        check("it opens on 'Zdarzenia': the two time rows, dawn / sunset / a misty morning, the four weather rows (storm, a strike, a strike on a tree, calm), the two bird rows, the three butterfly rows (Motyle.js: butterflies now, moths at a fire, the net), the boar, a wolf pack, a deer, a bear (stage 2), the men of stage 3 (a bandit, a knife bandit, an archer, a mercenary, an ambush, a camp, a raid on a sleeper - Humans.js), the beasts and the men (wolves at a camp, a boar and a bandit, a bear and a bandit - Starcia.js), the creatures of stage 4 (a creature, a boss - Creatures.js), +200 XP, the regions' colours (RegionLayers; the old hero's row is gone since 2026-10-28), the underground's rows (Underground.js: a floor, the grate, the locks, the lift; the Heart's endings, world and Lord - added by Underground.js itself) - nothing else", t.tab === 0 && t.sel === 0 && rows.map(r => r.kind).join().replace(/,act3_arm,act3_start,act3_reset$/, "").replace(/,underground,ugGate(,ugLocks,ugLifts(,heartEnd,heartWorld,heartLord)?)?$/, "") === "pelne,hour,day,dawn,dusk,mist,storm,strike,treestrike,calm,birds,raid,motyle,cmy,siatka,boar,wolves,deer,bear,h_bandit,h_knifer,h_archer,h_mercenary,h_ambush,h_camp,h_raid,st_camp,st_boar,st_bear,cr_kind,cr_boss,xp,layers" && rows[1].label === "+1 godzina", rows.map(r => r.kind));
+        // the switch "Statystyki zawsze pełne" (2026-11-07, the first row): on - what fell is full again on the map; off again
+        const sw0 = await J("SceneManager._scene._list._rows[0].label");
+        await ev("(function(){ const s = SceneManager._scene; s._list.select(0); s.onOk(); return 0; })()");
+        const sw1 = await J("SceneManager._scene._list._rows[0].label");
+        await ev("SceneManager._scene.popScene(); 0");
+        for (let i = 0; i < 60 && !(await ev("SceneManager._scene.constructor === Scene_Map && !SceneManager.isSceneChanging()")); i++) await frames(5);
+        await ev("$gameParty.leader().setHp(10); $gameSystem.setStamina(5); Needs.state().food = 20; Needs.state().water = 20; 0");
+        await frames(10);
+        const full = await J("({ hp: $gameParty.leader().hp === $gameParty.leader().mhp, st: $gameSystem.stamina() === $gameSystem.maxStamina(), food: Needs.state().food, water: Needs.state().water })");
+        await key(F9); await frames(10);
+        await ev("(function(){ const s = SceneManager._scene; s._list.select(0); s.onOk(); return 0; })()");
+        const sw2 = await J("SceneManager._scene._list._rows[0].label");
+        check("the first row switches 'Statystyki zawsze pełne': on - life, strength, food and water full again on the map; off again", /WYŁ/.test(sw0) && /WŁ\./.test(sw1) && !/WYŁ/.test(sw1)
+            && full.hp && full.st && full.food === 100 && full.water === 100 && /WYŁ/.test(sw2), { sw0, sw1, sw2, full });
         await key(E); await frames(6);
         t = await tabNow();
         const builds = await J(`SceneManager._scene._list._rows.map(r => ({ kind: r.kind, type: r.type, label: r.label, icon: r.icon }))`);
@@ -121,7 +135,7 @@ const { launch, sleep } = require("./cdp.js");
             goNames.join("|") === "Przystań|Pustelnia na klifie|Urwisko Kruków|Przylądek z latarnią|Garnizon nad zatoką|Wrak na mieliźnie|Stara cysterna zakonu|Chata pod lasem|Spalona zagroda|Mapa próbna A (zestaw 11)|Mapa próbna B (zestaw 9)" &&   // (2026-11-01: the two test maps, tools/mapa_probna)
             isleKinds.includes("isleInside"), goNames);
         check("...the sea (low tide, high tide, a misty night, the water red / grey), the story (day 61 unpaid, pay the debt, +1000 G, the prologue, the texts read again - 2026-10-23), the people (the raven, the garrison's favour, the cistern), W5's chapters, W7's chapters, W9's rival (2026-10-17), the white eagle's eight rows (2026-10-18: the egg, the egg ready on the ridge, the stage, the bond, mount, land, the theft, to the ridge), the ferry's travellers' seven (2026-10-28: the next ferry, a traveller now, everyone off, the book cleared, renown, the seed, the landing scene), W15's and W16's chapters, W14's and stage 5's matters (2026-10-29)",
-            isleKinds.filter(k => k !== "isleGo" && k !== "isleOkolice").join() === "isleInside,isleTide,isleTide,isleFog,isleWater,isleLose,islePay,isleGold,isleXp,islePrologue,isleTexts,isleRaven,isleFavor,isleCistern,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleWatek:prom,isleWatek:przyplyn,isleWatek:odplyw,isleWatek:wyczysc,isleWatek:renoma,isleWatek:ziarno,isleWatek:scena,isleW15,isleW16,isleW14,isleP5,isleWatek:d45,isleWatek:d46,isleWatek:kroki,isleWatek:list,isleWatek:klucz,isleW4,isleW5,isleW7,isleW9,isleW9Meet,isleW10" &&
+            isleKinds.filter(k => k !== "isleGo" && k !== "isleOkolice").join() === "isleInside,isleMapa,isleTide,isleTide,isleFog,isleWater,isleLose,islePay,isleGold,isleXp,islePrologue,isleTexts,isleRaven,isleFavor,isleCistern,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleEagle,isleWatek:prom,isleWatek:przyplyn,isleWatek:odplyw,isleWatek:wyczysc,isleWatek:renoma,isleWatek:ziarno,isleWatek:scena,isleW15,isleW16,isleW14,isleP5,isleWatek:d45,isleWatek:d46,isleWatek:kroki,isleWatek:list,isleWatek:klucz,isleW4,isleW5,isleW7,isleW9,isleW9Meet,isleW10" &&
             /^Przychylność garnizonu: \d+ \/ 100/.test(isle.rows.find(r => r.kind === "isleFavor").label), isleKinds);
         check("...the new terrain's sections (Okolice.f9, 2026-10-21): each one a header with its rows (isleOkolice), the core's first",
             isle.okolice.length >= 1 && isle.okolice[0][0] === "Nowy teren (pakiet 0: Okolice):" && isle.okolice.every(([title, n]) => {
@@ -143,13 +157,14 @@ const { launch, sleep } = require("./cdp.js");
         // ---------------------------------------------------------------- +1 hour / +1 day (set to noon, day 1: no hour rollover to worry about)
         await ev("$gameSystem.setDayNightHour(12); $gameSystem._dayNightDay = 1; 0");
         const before = await J("({ h: $gameSystem.dayNightHour(), d: $gameSystem.dayNightDay() })");
-        await key(OK);   // row 0 is already selected: "+1 godzina"
+        await key(DOWN);   // row 1: "+1 godzina" (row 0 is the switch "Statystyki zawsze pełne", 2026-11-07)
+        await key(OK);
         await frames(6);
         const afterHour = await J("({ h: $gameSystem.dayNightHour(), d: $gameSystem.dayNightDay() })");
         check("'+1 godzina' advances the clock by about one hour", afterHour.d === before.d && afterHour.h - before.h > 0.9 && afterHour.h - before.h < 1.1, { before, afterHour });
         check("the menu stays open after granting (so you can do several in a row)", (await ev("SceneManager._scene.constructor.name")) === "Scene_Debug");
         await key(DOWN);
-        await key(OK);   // row 1: "+1 dzień"
+        await key(OK);   // row 2: "+1 dzień"
         await frames(6);
         const afterDay = await J("({ h: $gameSystem.dayNightHour(), d: $gameSystem.dayNightDay() })");
         check("'+1 dzień' advances the clock by 24 hours (a whole day later)", afterDay.d === afterHour.d + 1 && Math.abs(afterDay.h - afterHour.h) < 0.1, { afterHour, afterDay });
@@ -172,8 +187,8 @@ const { launch, sleep } = require("./cdp.js");
         // ---------------------------------------------------------------- "Burza teraz": back to the map, the storm gathering
         await key(E); await key(E); await key(E); await key(E); await frames(6);   // back to 'Zdarzenia' (past 'Rdzeń', 'Kot' and 'Wyspa i fabuła'): its cursor is where it was left (row 1, '+1 dzień')
         check("each tab remembers its row: 'Zdarzenia' is back on '+1 dzień'", (await tabNow()).tab === 0 && (await ev("SceneManager._scene._list.rowData().kind")) === "day");
-        for (let i = 0; i < 4; i++) await key(DOWN);   // row 5 (past the dawn, the sunset and the misty morning)
-        check("row 5 is 'Burza teraz'", (await ev("SceneManager._scene._list.rowData().kind")) === "storm");
+        for (let i = 0; i < 4; i++) await key(DOWN);   // row 6 (past the dawn, the sunset and the misty morning)
+        check("row 6 is 'Burza teraz'", (await ev("SceneManager._scene._list.rowData().kind")) === "storm");
         await key(OK);
         await frames(20);
         check("'Burza teraz' goes back to the map and a storm gathers", (await ev("SceneManager._scene.constructor.name")) === "Scene_Map" && (await ev("Storm.level()")) > 0 && (await ev("Storm.phase()")) === "gather");

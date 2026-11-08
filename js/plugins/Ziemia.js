@@ -490,8 +490,9 @@
     // ------------------------------------------------------------------
     // 2. SHADE: contact shade at the foot of things
     // ------------------------------------------------------------------
-    // (2026-11-05: not !$Big_Trees - their pictures have their dark round shadow in them, and a spot of it lay at the side of the trunk)
-    const THING = /^!\$(Pine|Tree|Sapling|Rock|Boulder|Bush|Stump|Trunk|Logs|Zas_|Orzel_G|Mt_|Pod_|Zak_|Low_|Zi_)/;
+    // (2026-11-05: not !$Big_Trees_green - its pictures have their dark round shadow in them, and a spot of it lay at the side of the
+    // trunk; 2026-11-07: !$Big_Trees_scinane - the big trees to chop, without the painted shadow, their shadow the sun's - yes)
+    const THING = /^!\$(Pine|Tree|Sapling|Rock|Boulder|Bush|Stump|Trunk|Logs|Big_Trees_scinane|Zas_|Orzel_G|Mt_|Pod_|Zak_|Low_|Zi_)/;
     const FLAT = /^!\$(Bush_(Clover|Grass|Fern|Flower|Snow|Bud)|Rock_Pebbles|Zas_(Kaluza|Plot)|Zi_(Len|Krwawnik|Ziele|Galaz|Galaz2|Kamien|Kamienie))/;   // (low plants and flat things: no foot to shade)
     const baseCache = {};
     // the width and the place of a picture's foot: the opaque bottom rows of the event's OWN frame (2026-11-05: always pattern 1 facing down - a sheet

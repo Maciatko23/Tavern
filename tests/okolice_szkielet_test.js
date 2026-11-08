@@ -85,10 +85,10 @@ kit.test({ port: 9550, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const g125 = await t.json(`(function(){ const w = Okolice.walk([27, 20]), cells = []; for (let y = 65; y <= 67; y++) for (let x = 15; x <= 19; x++) cells.push(w.has(x + "," + y));
         return { cells, wall: [[16,64],[17,64]].map(([x,y]) => [2,4,6,8].some(d => $gameMap.isPassable(x, y, d))) }; })()`);
     t.check("Map125: zatoczka x 15-19, y 65-67 dostępna pieszo od drogi; (16,64), (17,64) zostają ścianą (wylot jaskini)", g125.cells.every(Boolean) && !g125.wall.some(Boolean), g125);
-    await t.go(165, 20, 15);
+    await t.go(165, 28, 17);   // (2026-11-07: the big wreck's hull covers 20,15 - by the breach)
     // (Wrak.js reads the tide's level once a frame: a few frames after forcing it)
     const tide = async mode => { await t.eval(`Wyspa.forceTide(${JSON.stringify(mode)}); 0`); await t.frames(3);
-        return t.json(`(function(){ const w = Okolice.walk([20, 15]); return [[47,24],[62,18],[71,24]].map(([x,y]) => w.has(x + "," + y)); })()`); };
+        return t.json(`(function(){ const w = Okolice.walk([28, 17]); return [[47,24],[62,18],[71,24]].map(([x,y]) => w.has(x + "," + y)); })()`); };
     const low = await tide("low"), high = await tide("high");
     await t.eval("Wyspa.forceTide(null); 0");
     t.check("Map165: trzy płycizny suche i dostępne z łachy w odpływie, zalane w przypływie", low.every(Boolean) && !high.some(Boolean), { low, high });

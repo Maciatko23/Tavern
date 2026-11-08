@@ -72,7 +72,7 @@
     const T = window.Tawerna;
     if (!T) throw new Error("Wydajnosc.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     const PLUGIN = "Wydajnosc";
-    const opts = { leaf: true, filterArea: true, cull: true, idleFilters: true, lazy: true, night: true, outline: true, lightGpu: true, still: true, sameSheets: true, quickFade: true, transferSnap: true };
+    const opts = { leaf: true, filterArea: true, cull: true, idleFilters: true, lazy: true, night: true, outline: true, lightGpu: true, still: true, sameSheets: true, quickFade: true, transferSnap: true, startSet: true, idleEvery: 8 };
     const stats = { culled: 0, frame: -1, drawing: -1, lazy: 0, lazyFrame: -1, idle: 0, idleFrame: -1 };
     // opts.dispatch: the character sprites' hooks run only for the sprites they are for (Tawerna.sprite, TawernaCore.js); false: every
     // hook for every sprite, as the chain of wrappers did
@@ -216,10 +216,24 @@
         return same;
     }
     const busy = (c, sprite) => c._treeFallT >= 0 || c._breakT >= 0 || !!sprite._emberSpots || !!sprite._emberGlow || !!sprite._tqCap || !!sprite._wyKeep;
+    // (2026-11-07) a settled thing asleep far off is looked at again - has it changed, is the screen near - only every opts.idleEvery-th
+    // frame (spread over the things), not every frame: a map holds hundreds of trees (every tree can be felled now), and the look
+    // and the distance of each, asked every frame, cost more than the rest of their sleep. The margin round the screen is wider than
+    // the hero runs in those frames; a jump of the screen (a transfer on the map, a scene moving it) has all of them looked at at once.
+    let idleJump = { f: -1, all: true, x: 0, y: 0 };
+    function lookAllNow() {
+        const f = Graphics.frameCount;
+        if (idleJump.f !== f) {
+            const x = $gameMap.displayX(), y = $gameMap.displayY();
+            idleJump = { f, all: Math.abs(x - idleJump.x) + Math.abs(y - idleJump.y) > 0.5 || idleJump.f !== f - 1, x, y };
+        }
+        return idleJump.all;
+    }
     function lazyNow(sprite) {
         const c = sprite._character;
         if (!(c instanceof Game_Event) || (sprite._wySeen = (sprite._wySeen || 0) + 1) <= 2) return false;
         if (busy(c, sprite)) { sprite._wyFar = false; sprite._wyIdle = false; return false; }
+        if (sprite._wyFar && sprite._wyIdle && opts.still && opts.idleEvery > 1 && ((Graphics.frameCount + sprite.spriteId) % opts.idleEvery) !== 0 && !lookAllNow()) return true;
         if (sprite._wyFar && opts.still) {
             if (!lookIs(sprite, c, false)) { sprite._wyFar = false; sprite._wyIdle = false; return false; }   // (it changed: updated now)
             if (farAway(sprite, c)) { sprite._wyIdle = true; return true; }
@@ -308,6 +322,7 @@
     //   critters     the share of the birds of a flyover or of a flock on the ground (Birds.js - never a raid on the crops) and of the
     //                butterflies and moths at once (Motyle.js)
     //   lazyEvery    a map event far off the screen updated every n-th frame (above)
+    //   idleEvery    (opts, not gfx) a settled thing asleep far off looked at again every n-th frame (above); 1: every frame
     //   smallShadows the sun's shadows of the rocks, the bushes and the stumps (ChoppableTree_Render.js; the trees' and the people's stay)
     //   fireShadows  the things' shadows in the light of the fires at night outdoors (Farming_Render.js; the fires' light itself stays -
     //                "every light is a fire"); the lamps and the hearths in a room keep theirs (RoomLighting.js)
@@ -630,6 +645,37 @@
     };
     const _snapForBackground = SceneManager.snapForBackground;
     SceneManager.snapForBackground = function() { if (skipSnap) return; return _snapForBackground.apply(this, arguments); };
+
+    // ---- is an event starting? (2026-11-07) Game_Map.isEventRunning asks it, and dozens of places ask isEventRunning every frame
+    // (Tawerna.isCalm, the plugins' own checks): the engine walked all the map's events each time. The ones starting now are kept in
+    // a small set instead - an event is put in by start() (the engine's only place that sets _starting) and taken out by
+    // clearStartingFlag(); one that left the map (a spawned animal removed, a map changed) drops out when asked. _starting is in the
+    // save, so after a load the set is made again from the map's events, once. The same answer (opts.startSet false: the engine's walk).
+    const starting = new Set();
+    let startingMap = null;
+    const syncStarting = map => { starting.clear(); startingMap = map; for (const e of map.events()) if (e._starting) starting.add(e); };
+    const _eventStart = Game_Event.prototype.start, _clearStarting = Game_Event.prototype.clearStartingFlag;
+    Game_Event.prototype.start = function() {
+        _eventStart.apply(this, arguments);
+        if (this._starting) starting.add(this);
+    };
+    Game_Event.prototype.clearStartingFlag = function() {
+        _clearStarting.apply(this, arguments);
+        starting.delete(this);
+    };
+    const _anyStarting = Game_Map.prototype.isAnyEventStarting;
+    Game_Map.prototype.isAnyEventStarting = function() {
+        if (!opts.startSet) return _anyStarting.call(this);
+        if (startingMap !== this) syncStarting(this);
+        for (const e of starting) {
+            if (e._starting && this._events[e._eventId] === e) return true;
+            starting.delete(e);
+        }
+        return false;
+    };
+    const _mapSetup = Game_Map.prototype.setup;
+    Game_Map.prototype.setup = function() { _mapSetup.apply(this, arguments); syncStarting(this); };
+    T.on("load", () => { if (window.$gameMap) syncStarting($gameMap); }, { owner: PLUGIN });
 
     window.Wydajnosc = T.register(PLUGIN, { opts, stats, offTarget, settleFilters, gfx, quality });
 })();

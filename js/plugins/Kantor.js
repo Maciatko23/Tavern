@@ -80,11 +80,11 @@
     const HM = () => T.api("Humans") || window.Humans || null;
     const SB = () => T.api("SpeechBubbles") || window.SpeechBubbles || null;
     const RA = () => window.RoamingActor || null;
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const pick = T.util.pick;
     const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
     const inHours = (h, r) => (r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
     const nightOf = () => (hour() < 12 ? day() - 1 : day());   // (a night counts from the evening before)
-    const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+    const dist = T.util.dist;
     const onMap = id => !!(window.$gameMap && $gameMap.mapId() === id);
     const report = (where, e) => console.error("[Kantor] " + where + ":", e);
     const fill = Watki.mowa.fill;

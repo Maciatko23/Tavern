@@ -123,7 +123,7 @@
     const hourNow = () => ($gameSystem && typeof $gameSystem.dayNightHour === "function" ? $gameSystem.dayNightHour() : 12);
     const raining = () => { const w = $gameScreen.weatherType(); return (w === "rain" || w === "storm") && $gameScreen.weatherPower() > 0; };
     const isNight = h => h >= 21 || h < 5;
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const pick = T.util.pick;
     const dayNow = () => (T && T.time ? T.time.day() : 1);
 
     // ------------------------------------------------------------------

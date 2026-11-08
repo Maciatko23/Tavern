@@ -170,7 +170,7 @@
 
     const clamp01 = v => (v < 0 ? 0 : v > 1 ? 1 : v);
     const smooth = t => { t = clamp01(t); return t * t * (3 - 2 * t); };
-    const lerp = (a, b, t) => a + (b - a) * t;
+    const lerp = T.util.lerp;
     function hash(n) {
         const v = Math.sin(n * 12.9898 + 78.233) * 43758.5453;
         return v - Math.floor(v);

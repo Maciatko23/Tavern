@@ -75,7 +75,7 @@
         }
         return o;
     }
-    const rand = (a, b) => a + Math.random() * (b - a);
+    const rand = T.util.rand;
     const isFlowWater = (x, y) => {
         if (!$gameMap.isValid(x, y)) return false;
         for (let z = 0; z < 2; z++) {

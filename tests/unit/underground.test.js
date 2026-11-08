@@ -16,7 +16,7 @@ const ROOT = path.join(__dirname, "..", "..");
 const readJson = p => JSON.parse(fs.readFileSync(path.join(ROOT, p), "utf8"));
 
 unit.test(t => {
-    const w = unit.load(["TawernaCore", "Underground_Data", "Underground"]);
+    const w = unit.load(["TawernaCore", "Underground_Gen", "Underground_Data", "Underground"])   // (2026-11-07: the generator is Underground_Gen.js);
     const U = w.Underground, D = w.Underground_Data;
     const tilesets = readJson("data/Tilesets.json");
     t.check("tileset 10 and band 2's tileset 12 have their 8192 passage flags", tilesets[10].flags.length === 8192 && tilesets[12].flags.length === 8192,

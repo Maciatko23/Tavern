@@ -353,27 +353,10 @@
     // ------------------------------------------------------------------ the way (O): along the plan's walkable cells, floor by floor
     function planBfs(fi, from, goal) {
         const f = PLAN_DATA.floors[fi], W0 = f.w, H0 = f.h, walk = planWalk(fi);
-        const idx = (x, y) => y * W0 + x, prev = new Int32Array(W0 * H0).fill(-1);
-        const sx = clamp(Math.floor(from[0]), 0, W0 - 1), sy = clamp(Math.floor(from[1]), 0, H0 - 1), start = idx(sx, sy);
-        const q = [start];
-        prev[start] = start;
-        for (let h = 0; h < q.length; h++) {
-            const c = q[h], x = c % W0, y = (c - x) / W0;
-            if (goal(x, y)) {
-                const path = [];
-                for (let k = c; ; k = prev[k]) { path.push([k % W0, Math.floor(k / W0)]); if (k === start) break; }
-                return path.reverse();
-            }
-            for (const [dx, dy] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) {
-                const nx = x + dx, ny = y + dy;
-                if (nx < 0 || ny < 0 || nx >= W0 || ny >= H0) continue;
-                const n = idx(nx, ny);
-                if (prev[n] >= 0 || !walk[n]) continue;
-                prev[n] = c;
-                q.push(n);
-            }
-        }
-        return null;
+        const sx = clamp(Math.floor(from[0]), 0, W0 - 1), sy = clamp(Math.floor(from[1]), 0, H0 - 1);
+        // (the search: Tawerna.grid.bfs - 2026-11-07, one for all)
+        const r = T.grid.bfs({ w: W0, h: H0, sx, sy, dirs: [[0, 1, 0], [0, -1, 0], [1, 0, 0], [-1, 0, 0]], goal, can: (x, y, nx, ny) => !!walk[ny * W0 + nx] });
+        return r && r.cells.map(c => [c % W0, Math.floor(c / W0)]);
     }
     // the part of the way to `target` ({ floor, key }) that lies on floor fi: from him (or from where the stairs bring him) to the
     // room (or to the stairs that lead on)

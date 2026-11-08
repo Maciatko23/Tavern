@@ -51,6 +51,36 @@ def maska():
     return np.array(Image.open(os.path.join(ROOT, "docs", "mapy", "swiat_maska.png")).convert("L")) > 127
 
 
+# (2026-11-07) the islands in the sea of these maps (tools/wyspy/buduj.py): their land is not in the world's mask (made before them) -
+# it is read from the maps (a land piece not touching the map's edge = an island) and put on the sketch as islets; the place's point is
+# its island's middle; their roads are the real ways there (a sandbar, a boat), not the map's edge seams
+WYSPY_DROGI = {917: [111], 918: [18], 920: [125], 922: [125], 923: [20], 935: [], 951: [162]}
+def wyspy_lad(uk):
+    """{map: (set of world cells of its islands, (cx, cy) their middle)}"""
+    out = {}
+    for m in WYSPY_DROGI:
+        p = os.path.join(ROOT, "data", "Map%03d.json" % m)
+        if m not in uk or not os.path.exists(p): continue
+        d = json.load(open(p, encoding="utf-8")); W, H, a = d["width"], d["height"], d["data"]
+        n = W * H   # (a sandbar - region 61, under water but at low tide - is sea here: the island is the land beyond it)
+        land = {(x, y) for y in range(H) for x in range(W) if not (2048 <= a[y * W + x] < 2816) and a[5 * n + y * W + x] != 61}
+        seen, isl = set(), set()
+        for c in land:
+            if c in seen: continue
+            comp, st = [], [c]; seen.add(c)
+            while st:
+                x, y = st.pop(); comp.append((x, y))
+                for n in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                    if n in land and n not in seen: seen.add(n); st.append(n)
+            if not any(x in (0, W - 1) or y in (0, H - 1) for x, y in comp): isl |= set(comp)
+        if not isl: continue
+        r = uk[m]
+        cells = {(r["x0"] + x, r["y0"] + y) for x, y in isl}
+        cx = sum(c[0] for c in cells) / len(cells); cy = sum(c[1] for c in cells) / len(cells)
+        out[m] = (cells, (cx + 0.5, cy + 0.5))
+    return out
+
+
 def pary_swiat():
     t = open(os.path.join(ROOT, "js", "plugins", "Swiat_Data.js"), encoding="utf-8").read()      # (--styki też ŻYWY plik: DROGI to dawne drogi (3-kratkowe przejścia), nie setki odcinków styków z kafli)
     lk = re.search(r"links: (\[.*?\]),\s*\n\s*(//|later)", t, re.S)
@@ -76,7 +106,10 @@ def pary_zdarzenia(ids):
 
 
 def drogi(miejsca):
-    """pary miejsc połączonych w świecie: przejścia na krawędziach (Swiat_Data.links) + zdarzenia przejść + wyjątki; przez mapy bez miejsca przechodnio"""
+    """pary miejsc połączonych w świecie: przejścia na krawędziach (Swiat_Data.links) + zdarzenia przejść + wyjątki; przez mapy bez miejsca przechodnio
+    (the islands' maps lead on as before - nameless coast between the places -, and their own roads are WYSPY_DROGI)"""
+    wysp = {m for m in miejsca if m in WYSPY_DROGI}
+    miejsca = set(miejsca) - wysp
     uk = uklad()
     wszystkie = set(uk)
     par = pary_swiat() | pary_zdarzenia(wszystkie) | {tuple(sorted(p)) for p in WYJATKI_DROGI}
@@ -95,6 +128,8 @@ def drogi(miejsca):
                 if n in miejsca:
                     if n != a: out.add(tuple(sorted((a, n))))
                 else: st.append(n)
+    for m in wysp:
+        for n in WYSPY_DROGI[m]: out.add(tuple(sorted((m, n))))
     return sorted(out - POMIN_DROGI), g
 
 
@@ -157,6 +192,11 @@ def main():
     uk = uklad()
     M = maska()
     ys, xs = np.where(M)
+    wl = wyspy_lad(uk)
+    M = M.copy()
+    for m, (cells, _) in wl.items():
+        for (x, y) in cells:
+            if 0 <= y < M.shape[0] and 0 <= x < M.shape[1]: M[y, x] = True
     bx0, by0, bx1, by1 = xs.min() - PAD, ys.min() - PAD, xs.max() + PAD, ys.max() + PAD
     box = (bx0, by0, bx1 - bx0, by1 - by0)
     aspekt_swiata = box[2] / box[3]
@@ -165,7 +205,7 @@ def main():
     poz = {}
     for m, nm in nazwy.items():
         r = uk[m]
-        c = (r["x0"] + r["szer"] / 2.0, r["y0"] + r["wys"] / 2.0)
+        c = wl[m][1] if m in wl else (r["x0"] + r["szer"] / 2.0, r["y0"] + r["wys"] / 2.0)
         poz[m] = norm(c, box)
         miejsca[m] = nm
     c8 = uk[8]; pc = (c8["x0"] + c8["szer"] / 2.0 + PODZIEMIA_ODSUNIECIE[0], c8["y0"] + c8["wys"] / 2.0 + PODZIEMIA_ODSUNIECIE[1])

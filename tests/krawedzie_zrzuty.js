@@ -4,7 +4,7 @@ const kit = require("./lib/kit.js");
 const fs = require("fs"), path = require("path");
 const FAZA = process.env.FAZA || "po";
 const OUT = path.join(__dirname, "..", "docs", "krawedzie_poprawa", "gra", FAZA); fs.mkdirSync(OUT, { recursive: true });
-const P = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "tools", "krawedzie_poprawa", "staging", "punkty.json"), "utf8"));
+const P = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "tools", "krawedzie_poprawa", "punkty.json"), "utf8"));
 kit.test({ port: Number(process.env.CDP_PORT) || 9407, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, minimap: false });
     await t.frames(10);

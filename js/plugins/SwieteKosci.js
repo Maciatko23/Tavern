@@ -85,7 +85,7 @@
     }
     // the night of the sale: the arrival + 9 (day 22), or tonight (F9)
     const nocSprzedazy = () => (has() && S().noc ? S().noc : przyjazd() ? przyjazd() + D.CZAS.noc : 0);
-    const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+    const dist = T.util.dist;
     const evOf = key => { const L = TL(); const ev = L && L.eventOf ? L.eventOf(key) : null; return ev && !(ev._town && ev._town.hidden) && !ev.isTransparent() ? ev : null; };
     const punkty = o => Object.values(o || {}).reduce((a, v) => a + (v === true ? 1 : Number(v) || 0), 0);
     const dowodJest = () => punkty(S().dowod) >= 1;

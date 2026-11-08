@@ -22,7 +22,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Czerwona woda: w suszę morze przy wyspie zakwita (rdzawy odcień, piana, śnięte ryby), nie da się go pić ani przegotować; po deszczu szare i słone. Mapy z <Water:salt>. v1.1.0
+ * @plugindesc Czerwona woda: w suszę morze przy wyspie zakwita (rdzawy odcień, piana, śnięte ryby), nie da się go pić ani przegotować; po deszczu szare i słone. Mapy z <Water:salt>; odcień i pas brzegu płynnie przez granice map (szum w układzie świata). v1.5.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter Farming_Plots
@@ -166,6 +166,29 @@
             return dist;
         };
         const toLand = bfs(i => !sea[i]), toWater = bfs(i => !!water[i]);   // (toLand: from the real shore - a pier is no shore)
+        // (2026-11-07, the real map of the island: the red stopped in a straight line at a map's edge - the shore over the edge did not
+        // count) the tint's distance from the shore counts the neighbours' land too, RED_RANGE cells beyond the edges
+        // (CzerwonaWoda_Brzegi.js, tools/mapy/czerwona_brzegi.py): the red goes on smooth over the border
+        let tintLand = toLand, tintD = null;
+        const nb = window.CzerwonaWodaBrzegi && window.CzerwonaWodaBrzegi[$gameMap.mapId()], beyond = nb && (Array.isArray(nb) ? nb : nb.l);
+        if (beyond && beyond.length) {
+            const M = RED_RANGE + 1, EW = W + 2 * M, EH = H + 2 * M, d = new Int16Array(EW * EH).fill(-1), q = [];
+            const seed = (x, y) => { if (x < -M || y < -M || x >= W + M || y >= H + M) return; const i = (y + M) * EW + x + M; if (d[i] < 0) { d[i] = 0; q.push(i); } };
+            for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (!sea[y * W + x]) seed(x, y);
+            for (const [y, x0, x1] of beyond) for (let x = x0; x <= x1; x++) seed(x, y);
+            for (let h = 0; h < q.length; h++) {
+                const i = q[h], x = i % EW, y = (i / EW) | 0;
+                for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+                    const nx = x + dx, ny = y + dy;
+                    if (nx < 0 || ny < 0 || nx >= EW || ny >= EH) continue;
+                    const j = ny * EW + nx;
+                    if (d[j] < 0) { d[j] = d[i] + 1; q.push(j); }
+                }
+            }
+            tintLand = new Int16Array(W * H);
+            tintD = { d, M, EW };   // (the grown grid: the tint's cells just over the edges read it)
+            for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) tintLand[y * W + x] = d[(y + M) * EW + x + M];
+        }
         const eventAt = new Set(($dataMap.events || []).filter(Boolean).map(e => e.x + "," + e.y));
         const shore = [];
         for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
@@ -175,7 +198,46 @@
         }
         const type = new Uint8Array(W * H);   // (1 open water, 0 land, 2 the rest of the sea: a pier)
         for (let i = 0; i < W * H; i++) type[i] = water[i] ? 1 : sea[i] ? 2 : 0;
-        geo = { map: $dataMap, W, H, water, sea, toLand, toWater, shore, type, tw: $gameMap.tileWidth(), th: $gameMap.tileHeight(), sd: null, tex: null, paint: null, foam: {}, chunks: null };
+        // (2026-11-07, A2 - the player: "przejścia pomiędzy mapami mają być super naturalne i płynne") the shore's strip with the
+        // neighbours' water and land: the map grown by m[] cells (left, top, right, bottom) - a neighbour's cell its land (0) or water
+        // (1), a cell off every neighbour as the map's own edge (as before)
+        let ext = null;
+        if (nb && nb.m && nb.m.some(v => v > 0)) {
+            const [L, Tm, R, B] = nb.m, EW = W + L + R, EH = H + Tm + B, et = new Uint8Array(EW * EH), cov = new Uint8Array(EW * EH), lb = new Uint8Array(EW * EH);
+            for (const [x0, y0, x1, y1] of nb.r || []) for (let y = Math.max(y0, -Tm); y < Math.min(y1, H + B); y++) for (let x = Math.max(x0, -L); x < Math.min(x1, W + R); x++) cov[(y + Tm) * EW + x + L] = 1;
+            for (const [y, x0, x1] of nb.l || []) if (y >= -Tm && y < H + B) for (let x = Math.max(x0, -L); x <= Math.min(x1, W + R - 1); x++) lb[(y + Tm) * EW + x + L] = 1;
+            for (let y = -Tm; y < H + B; y++) for (let x = -L; x < W + R; x++) {
+                const i = (y + Tm) * EW + x + L;
+                if (x >= 0 && y >= 0 && x < W && y < H) et[i] = type[y * W + x];
+                else if (cov[i]) et[i] = lb[i] ? 0 : 1;
+                else et[i] = type[Math.max(0, Math.min(H - 1, y)) * W + Math.max(0, Math.min(W - 1, x))];
+            }
+            ext = { l: L, t: Tm, r: R, b: B, W: EW, H: EH, type: et };
+        }
+        // (A2) the land near a NEIGHBOUR's water gets its strip's chunks too: the distance from any open water, the neighbours' as well
+        let nearWater = toWater;
+        if (ext) {
+            const EW = ext.W, EH = ext.H, d = new Int16Array(EW * EH).fill(-1), q = [];
+            for (let y = 0; y < EH; y++) for (let x = 0; x < EW; x++) {
+                const ix = x - ext.l, iy = y - ext.t, inside = ix >= 0 && iy >= 0 && ix < W && iy < H;
+                if (inside ? water[iy * W + ix] : ext.type[y * EW + x] === 1) { d[y * EW + x] = 0; q.push(y * EW + x); }
+            }
+            for (let h = 0; h < q.length; h++) {
+                const i = q[h], x = i % EW, y = (i / EW) | 0;
+                for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+                    const nx = x + dx, ny = y + dy;
+                    if (nx < 0 || ny < 0 || nx >= EW || ny >= EH) continue;
+                    const j = ny * EW + nx;
+                    if (d[j] < 0) { d[j] = d[i] + 1; q.push(j); }
+                }
+            }
+            nearWater = new Int16Array(W * H);
+            for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) nearWater[y * W + x] = d[(y + ext.t) * EW + x + ext.l];
+        }
+        // (2026-11-07, B: the seams of the island's map) every noise of the look goes by the WORLD's coordinates (Swiat_Data.js): the
+        // shore's bends, the strip's earth / gravel / dry grass, the red's blots continue over a map's edge instead of starting anew
+        const swm = window.SwiatData && SwiatData.maps && SwiatData.maps[$gameMap.mapId()], wcx = swm ? swm[0] : 0, wcy = swm ? swm[1] : 0;
+        geo = { map: $dataMap, W, H, water, sea, toLand, tintLand, toWater, nearWater, shore, type, ext, tintD, nbf: nb && nb.n && nb.n.length ? nb.n : null, wcx, wcy, wox: wcx * $gameMap.tileWidth(), woy: wcy * $gameMap.tileHeight(), tw: $gameMap.tileWidth(), th: $gameMap.tileHeight(), sd: null, tex: null, paint: null, foam: {}, chunks: null };
         if (brzegMap()) {
             buildField(geo);
             geo.key = key;
@@ -208,10 +270,35 @@
     const BRZEG_MAPS = [990, 125, 155, 157, 159, 162, 165, 120, 175, 168, 17, 18, 960, 961, 962, 963, 964, 21, 900, 901, 910, 912, 914, 917, 918, 920, 922, 923, 931, 933, 934, 935, 950, 951, 20];   // (2026-11-05: every map with the island's sea, tools/laka/install_brzeg.py)   // (styki 2026-10-31: the new maps of the old holes)   // (the island's sea maps - none of them is the player's: docs/mapy/PRZEGLAD.md; 2026-10-30 the east / south ends 159, 120, 175, 168, 17, 18)
     const SHORE_GROW = 0.3;   // (the new line lies about 19 px out in the old water: nothing of the sea has to be drawn over the old land, and the square corners are covered)
     const SD_Q = 4, CH = 192, DMAX = 576, RING_W = 11, WP_W = 24;
+    // (2026-11-07, B - the seams of the island's map, 111 | 917) by a border where the neighbour is LAND WITH NO STRIP of its own
+    // (CzerwonaWoda_Brzegi.js n: a map off the sea - the suburb over the cape) the strip fades out within EDGE_FADE px (a noisy line)
+    // before the border, instead of ending in a straight line on it; the sea and the stones at the water stay as they are
+    const EDGE_FADE = 216;
+    function edgeNear(g, X0, Y0) {   // the fade stretches whose zone touches this chunk (null: none)
+        const E = g.nbf; if (!E) return null;
+        const MW = g.W * g.tw, MH = g.H * g.th, R = EDGE_FADE * 1.25, out = [];
+        for (const s of E) {
+            const v = s[0] === 0 || s[0] === 2, p0 = s[1] * (v ? g.th : g.tw) - R, p1 = (s[2] + 1) * (v ? g.th : g.tw) + R;
+            const a0 = v ? Y0 : X0, a1 = a0 + CH, q0 = s[0] === 0 ? X0 : s[0] === 1 ? Y0 : s[0] === 2 ? MW - X0 - CH : MH - Y0 - CH;
+            if (a1 > p0 && a0 < p1 && q0 < R) out.push(s);
+        }
+        return out.length ? out : null;
+    }
+    function edgeFade(g, E, x, y) {   // 0 on such a border .. 1 from EDGE_FADE (+-25% by noise) off it
+        const MW = g.W * g.tw, MH = g.H * g.th, lim = EDGE_FADE * (0.75 + 0.5 * vnoise(x + (g.wox || 0), y + (g.woy || 0), 120, 61));
+        let f = 1;
+        for (const s of E) {
+            const v = s[0] === 0 || s[0] === 2, along = v ? y : x, p0 = s[1] * (v ? g.th : g.tw), p1 = (s[2] + 1) * (v ? g.th : g.tw);
+            const perp = s[0] === 0 ? x : s[0] === 1 ? y : s[0] === 2 ? MW - x : MH - y, off = along < p0 ? p0 - along : along > p1 ? along - p1 : 0;
+            const dd = off ? Math.hypot(perp, off) : perp;
+            if (dd < lim) { const k = dd / lim; f = Math.min(f, k * k * (3 - 2 * k)); }
+        }
+        return f;
+    }
     const brzegMap = () => has() && seaHere() && (BRZEG_MAPS.indexOf($gameMap.mapId()) >= 0 || !!window.BRZEG_ALL);
     // (2026-11-06) the field's maths only needs g.type / W / H / tw / th and the paintable mask P: pure, so a worker can run it as well
     function buildFieldCore(g, P) {
-        const tw = g.tw, th = g.th, TW = Math.ceil(g.W * tw / SD_Q), TH = Math.ceil(g.H * th / SD_Q), f = new Float32Array(TW * TH);
+        const tw = g.tw, th = g.th, TW = Math.ceil(g.W * tw / SD_Q), TH = Math.ceil(g.H * th / SD_Q), f = new Float32Array(TW * TH), WOX = g.wox || 0, WOY = g.woy || 0;
         for (let y = 0; y < TH; y++) {
             const cy = Math.min(g.H - 1, Math.floor((y + 0.5) * SD_Q / th));
             for (let x = 0; x < TW; x++) f[y * TW + x] = g.type[cy * g.W + Math.min(g.W - 1, Math.floor((x + 0.5) * SD_Q / tw))] === 1 ? 1 : 0;
@@ -229,7 +316,8 @@
         for (let y = 0; y < TH; y++) for (let x = 0; x < TW; x++) {
             const px = (x + 0.5) * SD_Q, py = (y + 0.5) * SD_Q, i = y * TW + x;
             // (bays and capes: three scales of noise bend the line by about 14 px at most; the noise only works near the line)
-            const n = (vnoise(px, py, 150, 31) - 0.5) * 0.36 + (vnoise(px, py, 58, 37) - 0.5) * 0.28 + (vnoise(px, py, 22, 41) - 0.5) * 0.14;
+            const qx = px + WOX, qy = py + WOY;   // (the world's px: the bends go on over the map's edge)
+            const n = (vnoise(qx, qy, 150, 31) - 0.5) * 0.36 + (vnoise(qx, qy, 58, 37) - 0.5) * 0.28 + (vnoise(qx, qy, 22, 41) - 0.5) * 0.14;
             let e = Math.min(1, 4 * f[i] * (1 - f[i]));   // (the bend works only near the old line: no islands in the open sea, no change inland)
             let w;
             if (dP) { const cells = dP[i] / 3 * SD_Q / tw, k = Math.max(0, Math.min(1, (cells - 2) / 2)); if (k === 0) { wm[i] = tt[i] === 1 ? 1 : 0; lm[i] = wm[i] ? 0 : 1; continue; } e *= k; }
@@ -238,6 +326,51 @@
         }
         const dW = chamfer(wm, TW, TH), dL = chamfer(lm, TW, TH), sd = new Float32Array(TW * TH);
         for (let i = 0; i < TW * TH; i++) sd[i] = (wm[i] ? -(dL[i] / 3 - 0.5) : (dW[i] / 3 - 0.5)) * SD_Q;
+        // (2026-11-07, A2 - the player: "przejścia pomiędzy mapami mają być super naturalne i płynne") the land's distance from the
+        // NEIGHBOURS' water too, so the strip goes on over the border: worked out on the map's tiles grown by g.ext (a few thousand
+        // cells: no cost to speak of), sampled smooth at the field's cells near the grown sides; the map's own line stays as it was
+        const X = g.ext;
+        if (X) {
+            const EW = X.W, EH = X.H, nd = new Float32Array(EW * EH).fill(1e9), q = [];
+            for (let y = 0; y < EH; y++) for (let x = 0; x < EW; x++) {
+                const inside = x >= X.l && y >= X.t && x < X.l + g.W && y < X.t + g.H;
+                if (!inside && X.type[y * EW + x] === 1) { nd[y * EW + x] = 0; q.push(y * EW + x); }   // (a neighbour's water)
+            }
+            if (q.length) {
+                for (let pass = 0; pass < 2; pass++) {   // (chamfer 1 / 1.414 over the tiles, forwards and back)
+                    const order = pass ? -1 : 1;
+                    for (let k = 0; k < EW * EH; k++) {
+                        const i = pass ? EW * EH - 1 - k : k, x = i % EW, y = (i - x) / EW;
+                        let v = nd[i];
+                        for (const [dx, dy, c] of [[-1, 0, 1], [0, -1, 1], [-1, -1, 1.4142], [1, -1, 1.4142]]) {
+                            const nx = x + dx * order, ny = y + dy * order;
+                            if (nx < 0 || ny < 0 || nx >= EW || ny >= EH) continue;
+                            const w = nd[ny * EW + nx] + c;
+                            if (w < v) v = w;
+                        }
+                        nd[i] = v;
+                    }
+                }
+                // (only the field's cells within DMAX of a grown side; the corners' weights worked out once per column and per row)
+                const B = Math.ceil(DMAX / SD_Q) + 2, cx = (v, n) => (v < 0 ? 0 : v >= n ? n - 1 : v);
+                const xa = new Int32Array(TW), xb = new Int32Array(TW), wx = new Float32Array(TW), ya = new Int32Array(TH), yb = new Int32Array(TH), wy = new Float32Array(TH);
+                for (let x = 0; x < TW; x++) { const f2 = (x + 0.5) * SD_Q / tw - 0.5 + X.l, x0 = Math.floor(f2); xa[x] = cx(x0, EW); xb[x] = cx(x0 + 1, EW); wx[x] = f2 - x0; }
+                for (let y = 0; y < TH; y++) { const f2 = (y + 0.5) * SD_Q / th - 0.5 + X.t, y0 = Math.floor(f2); ya[y] = cx(y0, EH) * EW; yb[y] = cx(y0 + 1, EH) * EW; wy[y] = f2 - y0; }
+                const cell = (x, y) => {
+                    const i = y * TW + x;
+                    if (sd[i] <= 0) return;   // (the map's own water and line: as they were)
+                    const a = wx[x], b = wy[y], r0 = ya[y], r1 = yb[y];
+                    const d = (nd[r0 + xa[x]] * (1 - a) + nd[r0 + xb[x]] * a) * (1 - b) + (nd[r1 + xa[x]] * (1 - a) + nd[r1 + xb[x]] * a) * b;
+                    const px = (d - 0.5) * tw;   // (tiles from a water tile's middle -> px from its edge)
+                    if (px < sd[i]) sd[i] = px > 0.5 * SD_Q ? px : 0.5 * SD_Q;
+                };
+                for (let y = 0; y < TH; y++) {
+                    if ((X.t && y < B) || (X.b && y >= TH - B)) { for (let x = 0; x < TW; x++) cell(x, y); continue; }
+                    if (X.l) for (let x = 0; x < Math.min(B, TW); x++) cell(x, y);
+                    if (X.r) for (let x = Math.max(X.l ? B : 0, TW - B); x < TW; x++) cell(x, y);
+                }
+            }
+        }
         // the mask of the cells where the strip may be painted, blurred: the strip's edge by paths, hills and walls is a smooth curve
         // and the earth's field (the paths' and the bare ground's cells, blurred): earth or grass is chosen by the pixel, so their border
         // in the strip is a soft line, not the tiles' squares (2026-10-30, the player: "kanciaście")
@@ -261,7 +394,7 @@
     const fieldAt = (g, s, px, py) => K.sample(s, g.TW, g.TH, SD_Q, px, py);
     const pmAt = (g, px, py) => fieldAt(g, g.pm, px, py);
     // earth (not grass) under this pixel: the earth's field against a noisy threshold - a soft, uneven line
-    const earthAt = (g, px, py) => !!g.em && fieldAt(g, g.em, px, py) > 0.5 + (vnoise(px, py, 30, 17) - 0.5) * 0.45;
+    const earthAt = (g, px, py) => !!g.em && fieldAt(g, g.em, px, py) > 0.5 + (vnoise(px + (g.wox || 0), py + (g.woy || 0), 30, 17) - 0.5) * 0.45;
     const sdAt = (g, px, py) => K.sample(g.sd, g.TW, g.TH, SD_Q, px, py);
     function wAt(g, px, py) {   // is this pixel of the map water (the new shore line)?
         if (g.sd) return sdAt(g, px, py) < 0;
@@ -385,7 +518,7 @@
     // (2026-11-06) paintCore is pure (g = the inputs: type, W, H, tw, th, paint, rim, deco, rimPx, tilePx, sd, TW, TH, pm, em), so the worker runs
     // the very same code; it returns the pixels (CH x CH RGBA), null (nothing to draw) or undefined (a tile's pixels are missing)
     function paintCore(g, T, ccx, ccy) {
-        const X0 = ccx * CH, Y0 = ccy * CH, d = new Uint8ClampedArray(CH * CH * 4), P = g.paint, WH = g.W * g.H;
+        const X0 = ccx * CH, Y0 = ccy * CH, d = new Uint8ClampedArray(CH * CH * 4), P = g.paint, WH = g.W * g.H, E = edgeNear(g, X0, Y0), OX = g.wox || 0, OY = g.woy || 0;
         let any = false;
         const NB = [[12, 0], [-12, 0], [0, 12], [0, -12], [9, 9], [-9, -9], [9, -9], [-9, 9]];
         for (let y = 0; y < CH; y++) for (let x = 0; x < CH; x++) {
@@ -396,14 +529,15 @@
             if (sd < 0) {
                 // (the sea is the map's own)
             } else if (t === 1) {
-                col = landPixel(T, wx, wy, sd, ((((wy % 48) + 48) % 48) * 48 + (((wx % 48) + 48) % 48)) * 4, earthAt(g, wx + 0.5, wy + 0.5));
+                col = landPixel(T, wx + OX, wy + OY, sd, ((((wy % 48) + 48) % 48) * 48 + (((wx % 48) + 48) % 48)) * 4, earthAt(g, wx + 0.5, wy + 0.5));
             } else if (t === 0 && P[c] && sd < DMAX) {
                 // (2026-10-30, the player: "kanciaście" - every paintable cell of the strip is painted, none left as its own tile with the
                 // squares of its autotile; by walls, hills and other ground the paintable mask fades the strip out, and at its inland end
                 // it fades into the map's own tiles over two cells)
-                const pv = pmAt(g, wx + 0.5, wy + 0.5), hi = 0.78 + (vnoise(wx, wy, 34, 9) - 0.5) * 0.2;
+                const pv = pmAt(g, wx + 0.5, wy + 0.5), hi = 0.78 + (vnoise(wx + OX, wy + OY, 34, 9) - 0.5) * 0.2;
                 alpha = Math.min(1, Math.max(0, (pv - 0.5) / (hi - 0.5))) * Math.min(1, (DMAX - sd) / 96);
-                if (alpha > 0.02) col = landPixel(T, wx, wy, sd, ((((wy % 48) + 48) % 48) * 48 + (((wx % 48) + 48) % 48)) * 4, earthAt(g, wx + 0.5, wy + 0.5));
+                if (E && alpha > 0.02) alpha *= edgeFade(g, E, wx + 0.5, wy + 0.5);
+                if (alpha > 0.02) col = landPixel(T, wx + OX, wy + OY, sd, ((((wy % 48) + 48) % 48) * 48 + (((wx % 48) + 48) % 48)) * 4, earthAt(g, wx + 0.5, wy + 0.5));
                 const rid = g.rim ? g.rim[c] : 0;
                 if (col && rid) {   // (a terrace's rim: its own stones over the painted ground - the raised ground's edge stays seen)
                     const R = g.rimPx[rid];
@@ -481,17 +615,17 @@
     const WINDOW = 3;   // chunks in flight per worker
     function workerSource() {
         const fn = (name, f) => "const " + name + " = " + String(f) + ";\n";
-        return '"use strict";\nconst SD_Q = ' + SD_Q + ', CH = ' + CH + ', DMAX = ' + DMAX + ', RING_W = ' + RING_W + ', SHORE_GROW = ' + SHORE_GROW + ';\n' +
+        return '"use strict";\nconst SD_Q = ' + SD_Q + ', CH = ' + CH + ', DMAX = ' + DMAX + ', RING_W = ' + RING_W + ', SHORE_GROW = ' + SHORE_GROW + ', EDGE_FADE = ' + EDGE_FADE + ';\n' +
             fn("hash", hash) + fn("vnoise", vnoise) + fn("boxBlur", boxBlur) + fn("chamfer", chamfer) + fn("sample", K.sample) + "const K = { sample };\n" +
             fn("lerp", lerp) + fn("rimStone", rimStone) + fn("rimGrass", rimGrass) + fn("rimEarth", rimEarth) +
             fn("fieldAt", fieldAt) + fn("pmAt", pmAt) + fn("earthAt", earthAt) + fn("sdAt", sdAt) + fn("landPixel", landPixel) +
-            fn("buildFieldCore", buildFieldCore) + fn("paintCore", paintCore) +
+            fn("buildFieldCore", buildFieldCore) + fn("edgeNear", edgeNear) + fn("edgeFade", edgeFade) + fn("paintCore", paintCore) +
             "const ctxs = {};\n" +
             "onmessage = function(e) {\n" +
             "  const m = e.data;\n" +
             "  try {\n" +
             "    if (m.t === 'init') {\n" +
-            "      const g = { W: m.W, H: m.H, tw: m.tw, th: m.th, type: m.type, paint: m.P, rim: m.rim, deco: m.deco, rimPx: m.rimPx, tilePx: m.tilePx };\n" +
+            "      const g = { W: m.W, H: m.H, tw: m.tw, th: m.th, type: m.type, ext: m.ext || null, nbf: m.nbf || null, wox: m.wox || 0, woy: m.woy || 0, paint: m.P, rim: m.rim, deco: m.deco, rimPx: m.rimPx, tilePx: m.tilePx };\n" +
             "      const f = buildFieldCore(g, m.P); g.sd = f.sd; g.TW = f.TW; g.TH = f.TH; g.pm = f.pm; g.em = f.em;\n" +
             "      ctxs[m.id] = { g, T: m.T };\n" +
             "    } else if (m.t === 'chunk') {\n" +
@@ -568,7 +702,7 @@
         job.left = job.order.length;
         job.order.sort((a, b) => g.chunks[a].pri - g.chunks[b].pri);
         g.job = job; p.jobs[id] = job;
-        const msg = { t: "init", id, W: g.W, H: g.H, tw: g.tw, th: g.th, type: g.type, P: g.paint, rim: g.rim || null, deco: g.deco, rimPx: g.rimPx, tilePx: g.tilePx, T: TX };
+        const msg = { t: "init", id, W: g.W, H: g.H, tw: g.tw, th: g.th, type: g.type, ext: g.ext || null, nbf: g.nbf || null, wox: g.wox || 0, woy: g.woy || 0, P: g.paint, rim: g.rim || null, deco: g.deco, rimPx: g.rimPx, tilePx: g.tilePx, T: TX };
         try { for (const w of p.list) w.postMessage(msg); } catch (e) { failPool(String(e && e.message || e)); return false; }
         pump(job);
         return true;
@@ -602,24 +736,35 @@
         // each sea cell's strength (by its distance from the real shore, in patches), carried one cell onto the land so the gradient does
         // not fall off at the shore; then drawn smooth (bilinear between the cells' middles, S texels a cell) and only over the water
         const [r, gg, bb] = grey ? GREY_RGB : RED_RGB, A = grey ? GREY_A : RED_A, R = grey ? GREY_RANGE : RED_RANGE;
-        const W = g.W, H = g.H, val = new Float32Array(W * H);
-        for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-            const i = y * W + x;
-            if (!g.water[i]) continue;
-            const d = g.toLand[i];
-            const fall = Math.max(0, 1 - (d - 1) / R);
-            const blot = 0.75 + 0.5 * (0.5 * hash(x >> 1, y >> 1, 11, 13) + 0.5 * hash(x >> 2, y >> 2, 17, 19));
-            val[i] = Math.min(1, A * Math.pow(fall, 1.4) * blot);
+        // (2026-11-07, B: the seams) the cells' values on a grid ONE CELL BIGGER every way: just over an edge with a neighbour, its water
+        // and the shore's distance (g.ext, g.tintD) - the blend between the cells' middles then goes on to the edge instead of holding
+        // the last cell's value there (a step in the red on the border); with no neighbour the edge cell's own, as before
+        const W = g.W, H = g.H, W2 = W + 2, H2 = H + 2, val = new Float32Array(W2 * H2), X = g.ext, TD = g.tintD;
+        const cl = (v, n) => (v < 0 ? 0 : v >= n ? n - 1 : v);
+        const wet = (x, y) => {
+            if (x >= 0 && y >= 0 && x < W && y < H) return !!g.water[y * W + x];
+            if (X && x >= -X.l && y >= -X.t && x < W + X.r && y < H + X.b) return X.type[(y + X.t) * X.W + x + X.l] === 1;
+            return !!g.water[cl(y, H) * W + cl(x, W)];
+        };
+        const dist = (x, y) => {
+            if (x >= 0 && y >= 0 && x < W && y < H) return (g.tintLand || g.toLand)[y * W + x];   // (with the neighbours' shores over the edges)
+            if (TD) { const v = TD.d[(y + TD.M) * TD.EW + x + TD.M]; if (v >= 0) return v; }
+            return (g.tintLand || g.toLand)[cl(y, H) * W + cl(x, W)];
+        };
+        for (let y = -1; y <= H; y++) for (let x = -1; x <= W; x++) {
+            if (!wet(x, y)) continue;
+            const fall = Math.max(0, 1 - (dist(x, y) - 1) / R);
+            const bx = x + (g.wcx || 0), by = y + (g.wcy || 0), blot = 0.75 + 0.5 * (0.5 * hash(bx >> 1, by >> 1, 11, 13) + 0.5 * hash(bx >> 2, by >> 2, 17, 19));
+            val[(y + 1) * W2 + x + 1] = Math.min(1, A * Math.pow(fall, 1.4) * blot);
         }
         const ext = new Float32Array(val);
-        for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-            const i = y * W + x;
-            if (g.water[i]) continue;
+        for (let y = -1; y <= H; y++) for (let x = -1; x <= W; x++) {
+            if (wet(x, y)) continue;
             let m = 0;
-            for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const nx = x + dx, ny = y + dy; if (nx >= 0 && ny >= 0 && nx < W && ny < H) m = Math.max(m, val[ny * W + nx]); }
-            ext[i] = m;
+            for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const nx = x + dx + 1, ny = y + dy + 1; if (nx >= 0 && ny >= 0 && nx < W2 && ny < H2) m = Math.max(m, val[ny * W2 + nx]); }
+            ext[(y + 1) * W2 + x + 1] = m;
         }
-        const at = (x, y) => ext[Math.max(0, Math.min(H - 1, y)) * W + Math.max(0, Math.min(W - 1, x))];
+        const at = (x, y) => ext[(Math.max(-1, Math.min(H, y)) + 1) * W2 + Math.max(-1, Math.min(W, x)) + 1];
         // (cells whose 3 x 3 neighbourhood is all water or all land need no look at the redrawn line)
         const calm = new Uint8Array(W * H);
         if (g.sd) for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
@@ -760,7 +905,8 @@
         const list = [], seen = new Set(), P = paintable(g);
         for (let y = 0; y < g.H; y++) for (let x = 0; x < g.W; x++) {
             const i = y * g.W + x, t = g.type[i];
-            if (!((t === 0 && g.toWater[i] >= 0 && g.toWater[i] <= 13) || (t === 1 && g.toLand[i] >= 0 && g.toLand[i] <= 2))) continue;
+            const nw = (g.nearWater || g.toWater)[i];   // (A2: by the neighbours' water as well)
+            if (!((t === 0 && nw >= 0 && nw <= 13) || (t === 1 && g.toLand[i] >= 0 && g.toLand[i] <= 2))) continue;
             const k = Math.floor(y * g.th / CH) * 1000 + Math.floor(x * g.tw / CH);
             if (!seen.has(k)) { seen.add(k); list.push({ cx: Math.floor(x * g.tw / CH), cy: Math.floor(y * g.th / CH), slot: null, done: false }); }
         }

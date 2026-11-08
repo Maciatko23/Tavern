@@ -17,6 +17,7 @@ podziemia.pietro = piętro {n}
 podziemia.brak = jeszcze nie zszedłeś
 klawisz.miejsce = miejsce
 klawisz.karta = karta miejsca
+klawisz.zoom = przybliż / oddal
 klawisz.wroc = wróć
 
 # ======================================================================== Karta miejsca

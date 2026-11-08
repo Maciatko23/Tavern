@@ -42,7 +42,10 @@ kit.test({ port: 9701, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("znacznik celu: śledzony cel (działka dziadka) jest na mapie w swoim miejscu - jeszcze nieznanym, więc jako „?” z rombem", tgt && m.mapa.target === tgtPlace && tgtNode && tgtNode.state !== "hidden" && tgtNode.target, { tgt, target: m.mapa.target, node: tgtNode });
     await shot("menu_mapa");
     m = await key("O", 8);
-    t.check("O: w mapę (poziom 2), kursor na miejscu bohatera, klawisze W/S/A/D miejsce · O karta · P wróć", m.level === 2 && m.mapa.cursor === "20" && m.keyCaps.join() === "W/S/A/D,O,P" && m.keys[1] === "karta miejsca", m.keys);
+    // (2026-11-07: E/Q - the sketch zoomed three times, MapaWyspy.js v1.2.0)
+    t.check("O: w mapę (poziom 2), kursor na miejscu bohatera, klawisze W/S/A/D miejsce · E/Q przybliż / oddal · O karta · P wróć", m.level === 2 && m.mapa.cursor === "20" && m.keyCaps.join() === "W/S/A/D,E/Q,O,P" && m.keys[2] === "karta miejsca", m.keys);
+    m = await key("E", 10);
+    t.check("E: mapa przybliżona x3, kursor dalej na miejscu bohatera; Q: z powrotem cała wyspa", m.mapa.zoom === true && m.mapa.cursor === "20" && Array.isArray(m.mapa.view) && (await key("Q", 10)).mapa.zoom === false, m.mapa);
     m = await key("S", 8);
     t.check("S: kursor idzie w dół na Leśną drogę", m.mapa.cursor === "21", m.mapa.cursor);
     m = await key("W", 8);

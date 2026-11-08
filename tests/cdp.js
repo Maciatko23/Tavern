@@ -7,7 +7,7 @@ const os = require("os");
 
 const EDGE = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe";
 const PORT = Number(process.env.CDP_PORT) || 9333;   // (another port lets a long run - the marathon - go beside the other tests)
-// GAME_OVERLAY=<folder in the project>: its data/*.json and img/characters/*.png are served instead of (or beside) the game's own -
+// GAME_OVERLAY=<folder in the project>: its data/*.json, img/characters/*.png and img/mapa_wyspy/*.png (2026-11-07) are served instead of (or beside) the game's own -
 // a test of files not installed yet (e.g. tools/apply_tavern_interior.py --out tools/tavern/staging/install_preview).
 // GAME_OVERLAY_JS=1 (opts.overlayJs): its index.html and js/* too (a staged js/tawerna_wtyczki.js, another js/plugins.js -
 // tests/ladowacz_test.js)
@@ -169,7 +169,7 @@ async function launch(opts = {}) {
     }
     // (a tab of a shared browser: the game's saves and options of the tests before are gone, as in a fresh profile)
     if (attach) await send("Storage.clearDataForOrigin", { origin: GAME_ORIGIN, storageTypes: "all" }).catch(() => {});
-    if (OVERLAY) await send("Fetch.enable", { patterns: [{ urlPattern: "*/data/*", requestStage: "Request" }, { urlPattern: "*/img/characters/*", requestStage: "Request" }]
+    if (OVERLAY) await send("Fetch.enable", { patterns: [{ urlPattern: "*/data/*", requestStage: "Request" }, { urlPattern: "*/img/characters/*", requestStage: "Request" }, { urlPattern: "*/img/mapa_wyspy/*", requestStage: "Request" }]
         .concat(OVERLAY_WITH_JS ? [{ urlPattern: "*/index.html", requestStage: "Request" }, { urlPattern: "*/js/*", requestStage: "Request" }] : []) });
     // never the browser's cache: a kept profile (the watched game's) served old plugin files - the day 100-110 run played an old Dog.js
     await send("Network.enable"); await send("Network.setCacheDisabled", { cacheDisabled: true });

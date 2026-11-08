@@ -75,7 +75,7 @@
         return b && b.length ? b[b.length - 1].od : 0;
     }
     const nocD44 = () => (has() && S().d44.noc) || (przyjazd(KTO.erazm) ? przyjazd(KTO.erazm) + D44.noc : 0);
-    const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+    const dist = T.util.dist;
     const odswiez = () => { const q = TQ(); if (q && q.refreshMarkers) q.refreshMarkers(); };
     const sprawdz = () => { const q = TQ(); if (q && q.autoChecks) q.autoChecks(); odswiez(); };
     const note = key => { const p = w.pair(key); if (p) T.call("Journal", "addNote", p[0], p[1]); };

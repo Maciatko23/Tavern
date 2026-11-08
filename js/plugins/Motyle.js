@@ -69,17 +69,13 @@
     // ------------------------------------------------------------------
     // Small helpers
     // ------------------------------------------------------------------
-    const rand = (a, b) => a + Math.random() * (b - a);
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const rand = T.util.rand;
+    const pick = T.util.pick;
     const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
     const smooth = t => { const k = clamp(t, 0, 1); return k * k * (3 - 2 * k); };
     const TW = () => $gameMap.tileWidth(), TH = () => $gameMap.tileHeight();
     const day = () => T.time.day(), hour = () => T.time.hour(), season = d => T.time.season(d);
-    function hash(n, salt) {
-        let h = Math.imul(n | 0, 374761393) ^ Math.imul(salt | 0, 668265263);
-        h = Math.imul(h ^ (h >>> 13), 1274126177);
-        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-    }
+    const hash = T.util.hash;
     const h2 = (x, y, s) => hash(x * 7919 + y * 104729, s);
     function pickWeighted(table) {
         let sum = 0;

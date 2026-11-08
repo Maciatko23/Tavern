@@ -235,6 +235,17 @@ kod.ugLiftsLabel.1 = Podziemia: wszystkie przystanki windy{1}
 kod.crLabel.0 = Boss podziemi: {name} (piętro {floor})   ←→ zmień, OK przywołaj
 kod.crLabel.1 = {plural} (rój)
 kod.crLabel.2 = Stwór z ruin: {1}   ←→ zmień, OK przywołaj
+# pelne (przełącznik „statystyki zawsze pełne”: nazwa wiersza wył. / wł., komunikat po włączeniu / wyłączeniu)
+kod.pelne.0 = Statystyki zawsze pełne: WYŁ.   (OK włącza)
+kod.pelne.1 = Statystyki zawsze pełne: WŁ.   (życie, kondycja, sytość, woda, oddech, sen)
+kod.pelne.2 = Statystyki zawsze pełne: włączone
+kod.pelne.3 = Statystyki zawsze pełne: wyłączone
+# mapa (przełącznik „Mapa wyspy: wszystko odkryte” w zakładce Wyspa i fabuła: nazwa wył. / wł., komunikat po włączeniu / wyłączeniu, opis)
+kod.mapa.0 = Mapa wyspy: wszystko odkryte: WYŁ.
+kod.mapa.1 = Mapa wyspy: wszystko odkryte: WŁ.
+kod.mapa.2 = Mapa wyspy: wszystkie miejsca odkryte, z nazwami (menu P, Mapa)
+kod.mapa.3 = Mapa wyspy: znów tylko odwiedzone miejsca
+kod.mapa.4 = Na mapie wyspy (menu P, zakładka Mapa) widać każde miejsce z nazwą, także te, w których bohater jeszcze nie był. Odwiedziny się nie zmieniają.
 # allRows
 kod.allRows.0 = +1 godzina
 kod.allRows.1 = +1 dzień

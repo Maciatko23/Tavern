@@ -152,6 +152,7 @@ def pic_of(e):
 def is_tree(g): return any(k in g for k in TREE_PICS)
 def is_nature(g, ts): return any(g.startswith("!$" + k) or g.startswith(k) or ("$" + k) in g for k in NATURE_PICS) or g in NATURE_TILES.get(ts, set())
 N.EXTRA["!$Big_Trees_green"] = N.fp(left=1, right=1)   # (the same dict mtlib's MMap.free reads)
+N.EXTRA["!$Big_Trees_scinane"] = N.fp(left=1, right=1)   # (2026-11-07: the big trees to chop - tools/drzewa; run tools/drzewa/drzewa.py after building maps)
 EXTRA = N.EXTRA
 
 # ------------------------------------------------------------------ the maps (style, seed, cells kept free, extra exits made by code)

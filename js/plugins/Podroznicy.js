@@ -272,7 +272,7 @@
     function oblezenie() { const A = T.api("Act3"); try { return !!(A && A.phase && A.phase() === "siege"); } catch (e) { return false; } }
     function znaneMiejsca() {
         const M = T.api("MapaWyspy");
-        try { return M && M.nodes ? M.nodes().filter(n => n.state === "known").length : 0; } catch (e) { return 0; }
+        try { return M && M.nodes ? M.nodes().filter(n => n.state === "known" && !n.maly).length : 0; } catch (e) { return 0; }
     }
     function byl(mapId) {
         const M = T.api("MapaWyspy");
@@ -843,7 +843,7 @@
     // ==================================================================
     // 4. The talks: a traveller's first meeting and its menu; Borgar's book
     // ==================================================================
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const pick = T.util.pick;
     const spkOf = ev => ({ id: ev ? ev.eventId() : -1, name: ev && ev.event() ? String(ev.event().name || "").replace(/\s*\(.*\)\s*$/, "") : "" });
     const linie = (ev, lines) => Watki.mowa.linesTo([], spkOf(ev), lines, null, 0, AK);
     const isTraveller = key => RES_KEYS.has(String(key));

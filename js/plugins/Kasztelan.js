@@ -96,7 +96,7 @@
     const ST = () => T.api("Story") || window.Story || null;
     const UG = () => T.api("Underground") || window.Underground || null;
     const SB = () => T.api("SpeechBubbles") || window.SpeechBubbles || null;
-    const pick = list => list[Math.floor(Math.random() * list.length)];
+    const pick = T.util.pick;
     const inHours = (h, r) => (r[0] <= r[1] ? h >= r[0] && h < r[1] : h >= r[0] || h < r[1]);
     const onMap = id => !!(window.$gameMap && $gameMap.mapId() === id);
     const report = (where, e) => console.error("[Kasztelan] " + where + ":", e);

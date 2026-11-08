@@ -4,7 +4,7 @@ const kit = require("./lib/kit.js");
 const fs = require("fs"), path = require("path");
 const OUT = path.join(__dirname, "..", "docs", "swiat_etap3");
 fs.mkdirSync(OUT, { recursive: true });
-const LINKS = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "tools", "swiat", "etap3", "staging", "ogon3.json"), "utf8")).linki;
+const LINKS = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "tools", "swiat", "etap3", "ogon3.json"), "utf8")).linki;
 kit.test({ port: Number(process.env.CDP_PORT) || 9382, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     const at = () => t.json(`({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y })`);
     await t.newGame({ map: 111, x: 20, y: 30, day: 12, hour: 11, quiet: true, minimap: false });
