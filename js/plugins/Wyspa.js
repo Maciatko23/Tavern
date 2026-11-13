@@ -47,8 +47,10 @@
     // ------------------------------------------------------------------ "the place is built" (its package says so at load)
     const readyMaps = new Set();
     let forced = false;
-    const ready = mapId => { readyMaps.add(Number(mapId)); return true; };
-    const isReady = mapId => forced || readyMaps.has(Number(mapId));
+    // (the hermitage pocket 155-157 is switched off by WyspaData.HERMITAGE_OPEN - also against the F9 force)
+    const closed = mapId => !D.HERMITAGE_OPEN && D.HERMITAGE_MAPS.includes(Number(mapId));
+    const ready = mapId => { if (closed(mapId)) return false; readyMaps.add(Number(mapId)); return true; };
+    const isReady = mapId => !closed(mapId) && (forced || readyMaps.has(Number(mapId)));
 
     // ------------------------------------------------------------------ the ways in on the user's maps
     const BLANK_COND = { actorId: 1, actorValid: false, itemId: 1, itemValid: false, selfSwitchCh: "A", selfSwitchValid: false, switch1Id: 1,

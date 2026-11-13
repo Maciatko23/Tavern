@@ -385,12 +385,12 @@
         if (mapId === MAP) {
             const sp = spotsOf(data.events), h = hour();
             for (const sd of D.SOLDIERS) {
-                const e = entryAt(sd.plan, h), first = Array.isArray(e.where) ? e.where[0] : e.where, at = sp[first] || [36, 12, 2];
+                const e = entryAt(sd.plan, h), first = Array.isArray(e.where) ? e.where[0] : e.where, at = sp[first] || [58, 36, 2];
                 out.push(eventData(sd.id, sd.name, SHEETS[sd.sheet], at[0], at[1], at[2], "Garnizon.talk(this);",
                     "<Garnizon:zolnierz=" + sd.role + "><Bust:Zolnierz_Bust>"));
             }
             for (const [key, r] of Object.entries(D.RECRUITS)) {
-                const at = sp[r.spot] || [30, 22, 8];
+                const at = sp[r.spot] || [52, 46, 8];
                 out.push(eventData(r.id, Watki.wstaw(TK.kod.buildMap[0], { "1": RECRUIT_NAMES[key] }), RECRUIT_SHEETS[key], at[0], at[1] + 1, 8,
                     "Garnizon.talk(this);", "<Garnizon:rekrut=" + key + ">"));
             }
@@ -561,7 +561,10 @@
     const _Spriteset_Map_createTilemap = Spriteset_Map.prototype.createTilemap;
     Spriteset_Map.prototype.createTilemap = function() {
         _Spriteset_Map_createTilemap.call(this);
-        if ($gameMap.mapId() === MAP && this._tilemap) { this._garnLacha = new Sprite_Lacha(); this._tilemap.addChild(this._garnLacha); }
+        // (2026-11-12) the sandbar leads to the wreck (Map165): while the wreck is out of the world its wet sand would rise out of the open
+        // sea in the board's north-west corner - not drawn then
+        const W = window.SwiatData, wreckIn = !!W && ((W.maps && W.maps[165]) || (W.extra || []).includes(165));
+        if ($gameMap.mapId() === MAP && this._tilemap && wreckIn) { this._garnLacha = new Sprite_Lacha(); this._tilemap.addChild(this._garnLacha); }
     };
     // the water comes back while the hero stands on the bar: a word once
     let barWarned = false;

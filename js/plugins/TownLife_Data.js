@@ -1,7 +1,7 @@
 //=============================================================================
 // TownLife_Data.js
 //=============================================================================
-// The town's residents (Map008 "Okolice Tawerny"; since 2026-10-05 also Podgrodzie, Map111 - "map" in their data): who they are, their sheets, their day hour by hour, what they call out and what
+// The town's residents (Map008 "Kruczogród"; since 2026-10-05 also Podgrodzie, Map111 - "map" in their data): who they are, their sheets, their day hour by hour, what they call out and what
 // they say when spoken to (user 2026-10-04: "the town has a daily schedule; residents in the hero's style"). TownLife.js reads it.
 //
 // SPOTS: key -> [x, y, direction] on Map008. An event named "Miejsce: <key>" on the map moves the spot to it (the editor wins).
@@ -38,13 +38,15 @@
         piekarnia_drzwi: [38, 73, 8], kantor_drzwi: [18, 47, 8], kantor_przed: [16, 48, 2], kantor_rog: [20, 48, 4],
         ratusz_drzwi: [85, 48, 8], ratusz_przed: [83, 48, 2], dzwonnica: [85, 31, 8],
         schody_rzem: [51, 65, 2], ulica_rzem: [12, 64, 2], kowadlo: [8, 63, 8], kuznia_dom: [13, 61, 8], garbarnia: [15, 85, 8],
-        garbarz_dom: [6, 89, 8], woziwoda_dom: [59, 74, 8], brama_wsch: [100, 51, 4], brama_pld: [52, 92, 2],
-        dom_mieszczan: [36, 39, 8], pod_murem: [58, 90, 2], stodola: [48, 90, 2], rynek_rog: [71, 47, 2],
+        garbarz_dom: [6, 89, 8], woziwoda_dom: [59, 74, 8], brama_wsch: [116, 49, 4], brama_pld: [31, 109, 2],
+        dom_mieszczan: [36, 39, 8], pod_murem: [89, 98, 2], stodola: [79, 98, 2], rynek_rog: [71, 47, 2],
         ratusz_obok: [84, 48, 4], stragan1_obok: [31, 58, 6],
+        // (2026-11-11 questy_mapa) the fronts of the six new buildings (Map008 markers "Miejsce: <key>": tools/questy_mapa/markery_miasta.py)
+        wiatrak_przed: [97, 88, 2], cech_przed: [91, 88, 2], lazn_przed: [97, 74, 2], przytulek_przed: [97, 105, 2], garbarnia_przed: [114, 89, 2], sukiennice_przed: [51, 63, 2],
         // (2026-10-05, the quests' new people) Lucjan's dice by the right stall; the carter's cart on the street before the south gate
-        stragan_kosci: [35, 45, 4], woz_pld: [54, 90, 2],
+        stragan_kosci: [35, 45, 4], woz_pld: [35, 108, 2],
         // (2026-10-07, W6 "Ludzie z promu") Rafał's seat by the camp's fire under the wall (the fire: TownQuests' prop "w6_fire" 32,51)
-        w6_ognisko: [60, 90, 4]
+        w6_ognisko: [91, 98, 4]
     };
     const PATROL = ["brama_wsch", "ulica_rzem", "schody_rzem", "rynek_srodek", "brama_twierdzy", "przed_tawerna", "brama_twierdzy", "rynek_srodek", "schody_rzem", "brama_pld"];
     // the manor guard's night round in the west garden (Map024, its "Miejsce: straz_1..4" events - docs/miasta_miejsca_zadan.md)
@@ -324,9 +326,9 @@
         // ---------------- Podgrodzie (Map111): the poor suburb outside the west wall (2026-10-05) - its spots are its own
         // "Miejsce: <key>" events (docs/podgrodzie/MIEJSCA.md)
         {
-            key: "praczka", name: "", title: "", sheet: "$Npc_Praczka", map: 111,
-            plan: [[0, "inside", "praczka_drzwi"], [5, "work", "pranie"], [11, "wander", "plac"], [12.5, "work", "pranie"], [17, "wander", "studnia_sucha"],
-                   [19, "inside", "praczka_drzwi"]],
+            key: "praczka", name: "", title: "", sheet: "$Npc_Praczka", map: 111, indoor: { tawerna: "gosc_praczka" },
+            plan: [[0, "inside", "praczka_drzwi"], [5, "work", "pranie"], [11, "wander", "plac"], [12.5, "work", "pranie"], [16.5, "wander", "studnia_sucha"],
+                   [17.5, "inside", "tawerna"], [20, "inside", "praczka_drzwi"]],
             barks: {
                 work: [],
                 wander: [],
@@ -343,9 +345,9 @@
             }
         },
         {
-            key: "franek", name: "", title: "", sheet: "$Npc_Franek", map: 111, speed: 4,
+            key: "franek", name: "", title: "", sheet: "$Npc_Franek", map: 111, speed: 4, indoor: { tawerna: "gosc_franek" },
             plan: [[0, "inside", "praczka_drzwi"], [7, "wander", "zabawa"], [10, "wander", "kram"], [12, "wander", "pranie"], [14, "wander", "brama_zach"],
-                   [16, "wander", "zabawa"], [19.5, "inside", "praczka_drzwi"]],
+                   [16, "wander", "zabawa"], [17.5, "inside", "tawerna"], [19.5, "inside", "praczka_drzwi"]],
             barks: {
                 wander: [],
                 rain: [],
@@ -361,8 +363,8 @@
             }
         },
         {
-            key: "drwal", name: "", title: "", sheet: "$Npc_Drwal", map: 111,
-            plan: [[0, "inside", "drwal_drzwi"], [5, "work", "drewutnia"], [10, "inside", "skraj_lasu"], [15, "work", "drewutnia"], [19, "wander", "namioty"],
+            key: "drwal", name: "", title: "", sheet: "$Npc_Drwal", map: 111, indoor: { tawerna: "gosc_drwal" },
+            plan: [[0, "inside", "drwal_drzwi"], [5, "work", "drewutnia"], [10, "inside", "skraj_lasu"], [15, "work", "drewutnia"], [17.5, "inside", "tawerna"],
                    [21.5, "inside", "drwal_drzwi"]],
             // (2026-10-17) "inside skraj_lasu" at midday = gone to the forest for wood: away, not in his hut
             away: ["skraj_lasu"],
@@ -384,10 +386,10 @@
         {
             key: "klusownik", name: "", title: "", sheet: "$Npc_Klusownik", map: 111, speed: 4,
             plan: [[0, "inside", "skraj_lasu"], [4.5, "inside", "klusownik_drzwi"], [13, "wander", "plac"], [15, "wander", "kram"], [17, "wander", "namioty"],
-                   [20, "inside", "skraj_lasu"]],
+                   [19.5, "inside", "tawerna"], [22.5, "inside", "skraj_lasu"]],
             // (2026-10-17) "inside skraj_lasu" = in the woods at night, not in his hut: he crouches by his snares on Skraj lasu (Map023,
             // spot klusownik_las in SPOTS_BY_MAP below), and says his forest lines there (barks / talk "skraj_lasu")
-            indoor: { skraj_lasu: "klusownik_las" },
+            indoor: { skraj_lasu: "klusownik_las", tawerna: "gosc_klusownik" },
             barks: {
                 skraj_lasu: [],
                 wander: [],
@@ -406,9 +408,9 @@
             }
         },
         {
-            key: "znachorka", name: "", title: "", sheet: "$Npc_Znachorka", map: 111, speed: 2,
-            plan: [[0, "inside", "znachorka_drzwi"], [6, "work", "ziola"], [10, "wander", "kapliczka"], [12, "work", "ziola"], [16, "stand", "kapliczka"],
-                   [18, "inside", "znachorka_drzwi"]],
+            key: "znachorka", name: "", title: "", sheet: "$Npc_Znachorka", map: 111, speed: 2, indoor: { tawerna: "gosc_znachorka" },
+            plan: [[0, "inside", "znachorka_drzwi"], [6, "work", "ziola"], [10, "wander", "kapliczka"], [12, "work", "ziola"], [15.5, "stand", "kapliczka"],
+                   [18, "inside", "tawerna"], [21, "inside", "znachorka_drzwi"]],
             barks: {
                 work: [],
                 wander: [],
@@ -426,9 +428,9 @@
             }
         },
         {
-            key: "szmaciarz", name: "", title: "", sheet: "$Npc_Szmaciarz", map: 111,
+            key: "szmaciarz", name: "", title: "", sheet: "$Npc_Szmaciarz", map: 111, indoor: { tawerna: "gosc_szmaciarz" },
             plan: [[0, "inside", "szmaciarz_drzwi"], [7, "stand", "kram"], [12, "wander", "brama_zach"], [13, "stand", "kram"], [18, "wander", "plac"],
-                   [20, "inside", "szmaciarz_drzwi"]],
+                   [19, "inside", "tawerna"], [22, "inside", "szmaciarz_drzwi"]],
             barks: {
                 stand: [],
                 wander: [],
@@ -445,9 +447,9 @@
             }
         },
         {
-            key: "uchodzca", name: "", title: "", sheet: "$Npc_Uchodzca", map: 111,
+            key: "uchodzca", name: "", title: "", sheet: "$Npc_Uchodzca", map: 111, indoor: { tawerna: "gosc_uchodzca" },
             plan: [[0, "inside", "uchodzcy_drzwi"], [6, "wander", "namioty"], [8, "wander", "brama_zach"], [12, "work", "drewutnia"], [15, "wander", "plac"],
-                   [18, "stand", "namioty"], [22, "inside", "uchodzcy_drzwi"]],
+                   [17.5, "inside", "tawerna"], [21.5, "inside", "uchodzcy_drzwi"]],
             barks: {
                 wander: [],
                 work: [],
@@ -670,9 +672,9 @@
         {
             // the Lord's customs officer: the ledger, the port fee, the order to report every raven stone. At his desk in the customs house
             // (Map128) by day, on the pier on ferry days
-            key: "celnik", name: "", title: "", sheet: "$Npc_Celnik", map: 125, speed: 2,
+            key: "celnik", name: "", title: "", sheet: "$Npc_Celnik", map: 125, speed: 2, indoor: { tawerna: "gosc_celnik" },
             plan: [[0, "inside", "komora_drzwi"], [9, "stand", "molo_kontrola", () => !!(window.Przystan && Przystan.ferryNow())], [15, "inside", "komora_drzwi"],
-                   [18, "stand", "komora_przed"], [19.5, "wander", "nabrzeze"], [21, "inside", "komora_drzwi"]],
+                   [18, "stand", "komora_przed"], [19.5, "inside", "tawerna"], [21.5, "inside", "komora_drzwi"]],
             barks: {
                 stand: [],
                 wander: [],
@@ -774,7 +776,7 @@
             // Dorota, the seamstress: sews at home in the morning and after noon (her interior), to the stalls for cloth and thread,
             // the guard's mended tabards to the guardhouse before the evening
             key: "szwaczka", id: 2942, name: "", title: "", sheet: "$Npc_Szwaczka", speed: 3,
-            plan: [[0, "inside", "dom3_drzwi"], [9.5, "wander", "stragan_4"], [11, "wander", "plac_2"], [12, "inside", "dom3_drzwi"],
+            plan: [[0, "inside", "dom3_drzwi"], [9.5, "wander", "sukiennice_przed"], [11, "wander", "plac_2"], [12, "inside", "dom3_drzwi"],
                    [15.5, "wander", "plac_8"], [16.5, "wander", "straznica_warta"], [17.5, "inside", "dom3_drzwi"]],
             talk: {
                 morning: [],
@@ -1012,7 +1014,12 @@
     // markers win; 2026-10-12: the user's rebuilt garden has no straz_4 any more - the defaults keep the round: the orangery's corner,
     // the middle path, the south path, back by the orangery's terrace)
     // (Map023 Skraj lasu: Rysiek's night place by his snares, in the small clearing by the stones - 2026-10-17)
-    const SPOTS_BY_MAP = { 111: {}, 125: { tawerna: [53, 19, 6] }, 23: { klusownik_las: [20, 23, 4] }, 24: { straz_dzien: [15, 16, 2], straz_1: [10, 19, 6], straz_2: [19, 19, 2], straz_3: [19, 28, 4], straz_4: [10, 28, 8] } };
+    // (2026-11-11 dawcy_miasto) 111: "tawerna" = the way out to the town (the west gate); 162: the garrison's front gate; 1 = the tavern's hall: the
+    // places of the evening's visitors (resident.indoor.tawerna), all standing: the notice board's corner (Marta, Franek, Jadwiga), the hearth
+    // of the entrance hall (Józek, Zbych, Darin, Rysiek), the front of the bar (Sambor, Bazyli, Kłos); dir 8 = facing the board / fire / bar
+    const SPOTS_BY_MAP = { 111: { tawerna: [105, 51, 6] }, 125: { tawerna: [53, 19, 6] }, 162: { tawerna: [55, 34, 2] },
+        1: { gosc_praczka: [6, 50, 8], gosc_franek: [5, 50, 8], gosc_znachorka: [8, 50, 8], gosc_szmaciarz: [20, 51, 8], gosc_uchodzca: [22, 51, 8],
+             gosc_drwal: [23, 50, 8], gosc_klusownik: [23, 52, 8], gosc_celnik: [9, 31, 8], gosc_latarnik: [17, 31, 8], gosc_kwatermistrz: [19, 31, 8] }, 23: { klusownik_las: [20, 23, 4] }, 24: { straz_dzien: [35, 76, 2], straz_1: [30, 79, 6], straz_2: [39, 79, 2], straz_3: [39, 88, 4], straz_4: [30, 88, 8] } };
 
     // (2026-10-21) EXTRA_RANGE: the second range of ids for TownLifeExtra (the new terrain's packages, docs/rozszerzenia/PLAN.md)
     // (2026-10-22) EXTRA_RANGES: every range past 910-949 - the second one and the new Podgrodzie's third (TawernaCore's registry)

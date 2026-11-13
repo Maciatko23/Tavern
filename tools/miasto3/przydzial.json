@@ -1,0 +1,556 @@
+[
+ {
+  "adres": "Tawerna",
+  "drzwi": [
+   51,
+   16
+  ],
+  "kawalek": "gildia",
+  "arkusz": "B",
+  "prostokat": [
+   49,
+   7,
+   53,
+   16
+  ],
+  "status": "zbudowany",
+  "uwaga": "+ 2 x kamienica jako skrzydła",
+  "problemy": []
+ },
+ {
+  "adres": "Stajnia i wozownia (przeniesiona)",
+  "drzwi": [
+   74,
+   7
+  ],
+  "kawalek": "stajnia",
+  "arkusz": "D",
+  "prostokat": [
+   68,
+   4,
+   75,
+   7
+  ],
+  "status": "zbudowany",
+  "uwaga": "+ wozownia, siano; wnętrze Map181",
+  "problemy": []
+ },
+ {
+  "adres": "Kaplica",
+  "drzwi": [
+   8,
+   16
+  ],
+  "kawalek": "kosciol",
+  "arkusz": "B",
+  "prostokat": [
+   4,
+   5,
+   12,
+   16
+  ],
+  "status": "wstępny",
+  "uwaga": "wnętrze Map178; cmentarz obok",
+  "problemy": []
+ },
+ {
+  "adres": "Dom grabarza",
+  "drzwi": [
+   20,
+   12
+  ],
+  "kawalek": "chata_a",
+  "arkusz": "E",
+  "prostokat": [
+   18,
+   9,
+   21,
+   12
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Dom 1 (Agata)",
+  "drzwi": [
+   85,
+   12
+  ],
+  "kawalek": "dom_kwiaty",
+  "arkusz": "C",
+  "prostokat": [
+   83,
+   7,
+   87,
+   12
+  ],
+  "status": "wstępny",
+  "uwaga": "droga biegnie tuż pod drzwiami (y13-15)",
+  "problemy": []
+ },
+ {
+  "adres": "Kamienica (Dom 2)",
+  "drzwi": [
+   96,
+   28
+  ],
+  "kawalek": "dom_pietrowy",
+  "arkusz": "C",
+  "prostokat": [
+   94,
+   19,
+   97,
+   28
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Dzwonnica",
+  "drzwi": [
+   86,
+   31
+  ],
+  "kawalek": "dzwonnica",
+  "arkusz": "B",
+  "prostokat": [
+   84,
+   26,
+   89,
+   31
+  ],
+  "status": "wstępny",
+  "uwaga": "drzwi ev236 (86,31), znacznik (85,31)",
+  "problemy": []
+ },
+ {
+  "adres": "Dom mieszczan",
+  "drzwi": [
+   36,
+   38
+  ],
+  "kawalek": "dom_waski",
+  "arkusz": "D",
+  "prostokat": [
+   36,
+   31,
+   38,
+   38
+  ],
+  "status": "wstępny",
+  "uwaga": "pod murem zamku - plac wybrukować dopiero od y39",
+  "problemy": []
+ },
+ {
+  "adres": "Izba pod skałą",
+  "drzwi": [
+   39,
+   37
+  ],
+  "kawalek": "dom_wieza",
+  "arkusz": "D",
+  "prostokat": [
+   38,
+   30,
+   40,
+   37
+  ],
+  "status": "wstępny",
+  "uwaga": "KOLIZJA z murem zamku y29-32: niższy kawałek (chata_c) albo przyległa do muru",
+  "problemy": [
+   "kolizja z: Dom mieszczan"
+  ]
+ },
+ {
+  "adres": "Dom 15",
+  "drzwi": [
+   21,
+   33
+  ],
+  "kawalek": "chata_b",
+  "arkusz": "D",
+  "prostokat": [
+   19,
+   28,
+   22,
+   33
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Kantor (front)",
+  "drzwi": [
+   18,
+   46
+  ],
+  "kawalek": "sklep",
+  "arkusz": "C",
+  "prostokat": [
+   16,
+   37,
+   19,
+   46
+  ],
+  "status": "wstępny",
+  "uwaga": "dwoje drzwi: front tu, tylne (14,47) osobna przybudówka chata_e",
+  "problemy": []
+ },
+ {
+  "adres": "Kantor (tylne)",
+  "drzwi": [
+   14,
+   47
+  ],
+  "kawalek": "chata_e",
+  "arkusz": "C",
+  "prostokat": [
+   13,
+   42,
+   15,
+   47
+  ],
+  "status": "wstępny",
+  "uwaga": "ciche, od uliczki",
+  "problemy": []
+ },
+ {
+  "adres": "Szwaczka",
+  "drzwi": [
+   7,
+   48
+  ],
+  "kawalek": "dom_waski",
+  "arkusz": "D",
+  "prostokat": [
+   7,
+   41,
+   9,
+   48
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Kowal",
+  "drzwi": [
+   13,
+   60
+  ],
+  "kawalek": "chata_bale",
+  "arkusz": "D",
+  "prostokat": [
+   11,
+   55,
+   15,
+   60
+  ],
+  "status": "wstępny",
+  "uwaga": "kowadło (8,63) na zewnątrz - dopisać kawałek kuźni (City_TileB 8-15,0-8) w fazie 2",
+  "problemy": []
+ },
+ {
+  "adres": "Ratusz (kancelaria)",
+  "drzwi": [
+   85,
+   47
+  ],
+  "kawalek": "ratusz",
+  "status": "dopisać",
+  "uwaga": "City_TileC 1-7,9-15; dwoje drzwi (85,47) i (91,47)"
+ },
+ {
+  "adres": "Strażnica Lorda",
+  "drzwi": [
+   98,
+   47
+  ],
+  "kawalek": "dom_wieza",
+  "arkusz": "D",
+  "prostokat": [
+   97,
+   40,
+   99,
+   47
+  ],
+  "status": "wstępny",
+  "uwaga": "kamienna; chorągwie jako zdarzenia",
+  "problemy": []
+ },
+ {
+  "adres": "Dom 4 (Halina)",
+  "drzwi": [
+   84,
+   63
+  ],
+  "kawalek": "chata_c",
+  "arkusz": "E",
+  "prostokat": [
+   83,
+   59,
+   86,
+   63
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Dom 5 (dom kupca)",
+  "drzwi": [
+   95,
+   62
+  ],
+  "kawalek": "chata_d",
+  "arkusz": "C",
+  "prostokat": [
+   93,
+   57,
+   97,
+   62
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Piekarnia",
+  "drzwi": [
+   38,
+   72
+  ],
+  "kawalek": "sklep",
+  "arkusz": "C",
+  "prostokat": [
+   36,
+   63,
+   39,
+   72
+  ],
+  "status": "wstępny",
+  "uwaga": "okienko (38,73): sklep ma kram w oknie",
+  "problemy": []
+ },
+ {
+  "adres": "Dom 10",
+  "drzwi": [
+   31,
+   73
+  ],
+  "kawalek": "chata_e",
+  "arkusz": "C",
+  "prostokat": [
+   30,
+   68,
+   32,
+   73
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Dom 11",
+  "drzwi": [
+   45,
+   73
+  ],
+  "kawalek": "dom_szachulec",
+  "arkusz": "D",
+  "prostokat": [
+   44,
+   66,
+   47,
+   73
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Dom woziwody",
+  "drzwi": [
+   59,
+   73
+  ],
+  "kawalek": "chata_bale2",
+  "arkusz": "E",
+  "prostokat": [
+   58,
+   70,
+   63,
+   73
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Dom 13",
+  "drzwi": [
+   79,
+   74
+  ],
+  "kawalek": "chata_a",
+  "arkusz": "E",
+  "prostokat": [
+   77,
+   71,
+   80,
+   74
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Cieśla (Dom 6)",
+  "drzwi": [
+   33,
+   86
+  ],
+  "kawalek": "chata_bale",
+  "arkusz": "D",
+  "prostokat": [
+   31,
+   81,
+   35,
+   86
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Dom staruszków (Dom 7)",
+  "drzwi": [
+   42,
+   87
+  ],
+  "kawalek": "chata_c",
+  "arkusz": "E",
+  "prostokat": [
+   41,
+   83,
+   44,
+   87
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Dom 12",
+  "drzwi": [
+   45,
+   87
+  ],
+  "kawalek": "dom_kwiaty",
+  "arkusz": "C",
+  "prostokat": [
+   43,
+   82,
+   47,
+   87
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": [
+   "kolizja z: Dom staruszków (Dom 7)"
+  ]
+ },
+ {
+  "adres": "Szopa woźniców (dawna stajnia)",
+  "drzwi": [
+   61,
+   87
+  ],
+  "kawalek": "wozownia",
+  "arkusz": "D",
+  "prostokat": [
+   61,
+   83,
+   68,
+   87
+  ],
+  "status": "wstępny",
+  "uwaga": "bez wnętrza, bez drzwi",
+  "problemy": []
+ },
+ {
+  "adres": "Dom 14",
+  "drzwi": [
+   78,
+   88
+  ],
+  "kawalek": "chata_b",
+  "arkusz": "D",
+  "prostokat": [
+   76,
+   83,
+   79,
+   88
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Weteran (Dom 8)",
+  "drzwi": [
+   84,
+   88
+  ],
+  "kawalek": "dom_szachulec",
+  "arkusz": "D",
+  "prostokat": [
+   83,
+   81,
+   86,
+   88
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Izba do wynajęcia (Dom 9)",
+  "drzwi": [
+   95,
+   88
+  ],
+  "kawalek": "chata_d",
+  "arkusz": "C",
+  "prostokat": [
+   93,
+   83,
+   97,
+   88
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ },
+ {
+  "adres": "Garbarz",
+  "drzwi": [
+   6,
+   88
+  ],
+  "kawalek": "chata_bale2",
+  "arkusz": "E",
+  "prostokat": [
+   5,
+   85,
+   10,
+   88
+  ],
+  "status": "wstępny",
+  "uwaga": "",
+  "problemy": []
+ }
+]

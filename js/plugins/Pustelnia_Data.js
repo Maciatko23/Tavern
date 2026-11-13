@@ -32,6 +32,11 @@
     "use strict";
 
     const MAP = 155, INNER = 156;
+    // (2026-11-11) the hermitage is out of the world (WyspaData.HERMITAGE_OPEN = false): brother Kleofas lives by the chapel of Kruczogrod
+    // (Map008, the spots kaplica_drzwi / kaplica_lawka) and the steps that need him happen there. CHAPEL is read once at the load: it picks
+    // the words ("kaplica.*" of the text files - appended below); the resident's second home (alt) follows the flag live.
+    const CHAPEL_MAP = 8, CHAPEL_INNER = 178;   // (Map178 "Kaplica": the lectern of the chapel - D23's reading)
+    const CHAPEL = !(window.WyspaData && window.WyspaData.HERMITAGE_OPEN);
     const ITEM = { honey: 76, cones: 147, iron: 86, pendant: 172 };
     const P = () => window.Pustelnia || null;
     // TownLife's conditions (the engine answers them: the rain, the Night of the Question)
@@ -46,7 +51,7 @@
     // He never goes down to the town. "cela_drzwi" is away (asleep in the cell: shown in no interior).
     const RESIDENT = {
         key: "pustelnik", id: 944, sheet: "$Npc_Pustelnik", map: MAP, speed: 2,
-        away: ["cela_drzwi"],
+        away: ["cela_drzwi", "kaplica_drzwi"],
         plan: [[0, "inside", "cela_drzwi"], [0, "stand", "wieza", night],
                [5, "stand", "urwisko", dry], [5, "inside", "skryptorium_drzwi", rain],
                [7, "inside", "skryptorium_drzwi"],
@@ -60,9 +65,26 @@
         barks: {
         },
         talk: {
-        }
+        },
+        // while the hermitage is out of the world: he lives by the chapel of Kruczogrod (Map008) - at the door or on the bench all day (in the
+        // rain at the door, under the eaves), not out at all from 20 to 22:30 (asleep inside) except the Night of the Question, when he waits
+        // at the door. His words: mieszkaniec.alt.* of js/teksty/pustelnia.txt. The condition "pustelniaZamknieta": Pustelnia.js
+        alt: { map: CHAPEL_MAP, when: "pustelniaZamknieta",
+            plan: [[0, "inside", "kaplica_drzwi"], [0, "stand", "kaplica_drzwi", night],
+                   [6, "stand", "kaplica_drzwi"],
+                   [9, "stand", "kaplica_lawka", dry],
+                   [13, "stand", "kaplica_drzwi"],
+                   [15, "stand", "kaplica_lawka", dry],
+                   [19, "stand", "kaplica_drzwi"],
+                   [20, "inside", "kaplica_drzwi"],
+                   [22.5, "stand", "kaplica_drzwi", night]],
+            barks: {}, talk: {} }
     };
-    Watki.scal(RESIDENT, "pustelnia", "mieszkaniec");   // (its words: js/teksty/pustelnia.txt, mieszkaniec)
+    Watki.scal(RESIDENT, "pustelnia", "mieszkaniec");
+    // the words of the chapel version: "kaplica.<path>" in the text files below says the same path again for the time Kleofas lives by the
+    // chapel; merged into the file's own tree FIRST (this plugin stands above the data plugins), so the quests' words copied from it later
+    // are the chapel ones. Nothing is deleted: with the hermitage back (CHAPEL false) the files read as before.
+    if (CHAPEL) ["pustelnia", "w2", "orzel", "kasztelan", "latarnia", "swiete_kosci", "zakon", "podroznicy", "kruk", "cysterna"].forEach(f => Watki.scal(Watki.teksty(f), f, "kaplica"));   // (its words: js/teksty/pustelnia.txt, mieszkaniec)
     (window.TownLifeExtra = window.TownLifeExtra || []).push(RESIDENT);
     // default spots (the map's "Miejsce:" events win - tools/pustelnia/build.py puts them there)
     const TLD = window.TownLifeData;
@@ -131,11 +153,11 @@
         stan: { klucz: "pustelnia", wersja: 1, domyslne: () => ({ met: 0, read: {}, got: {}, asked: {}, rung: {}, honey: { day: 0, n: 0 }, chronN: 0, usualN: 0 }) },
         mowa: { akapity: true },
         zadania: {
-            K50: { kind: "K", giver: "pustelnik", icon: 147, offer: { cond: { hours: [5, 20], day: 6, flags: ["pustelnikMet"] } },
+            K50: { kind: "K", giver: "pustelnik", icon: 147, oferta: "pustelniaOtwarta", offer: { cond: { hours: [5, 20], day: 6, flags: ["pustelnikMet"] } },
                 kroki: [{ nazwa: "k50Atrament", type: "bring", to: "pustelnik", need: [[147, 4], [86, 1]], water: 1, hours: [5, 20] }],
                 reward: { gold: 15, xp: 40, items: [[76, 2]], flag: "kleofasCzyta" } },
             // the six cards read at the lectern (the marker over Kleofas: a card in the bag, in the reading hours)
-            D23: { kind: "D", giver: "pustelnik", icon: 189, offer: { cond: { hours: [7, 19] } },
+            D23: { kind: "D", giver: "pustelnik", icon: 189, oferta: "pustelniaOtwarta", offer: { cond: { hours: [7, 19] } },
                 kroki: [{ nazwa: "d23Karty", gotowe: "ile:read>=6", zmienne: "d23Zmienne", haki: { ready: "d23Znacznik" } }],
                 reward: { gold: 120, flag: "kleofasUfa" } }
         },
@@ -180,6 +202,6 @@
     });
     const K50 = w.Q.K50, D23 = w.Q.D23;
 
-    window.PustelniaData = { MAP, INNER, ITEM, IDS: [600, 609], HONEY_PRICE: 12, CARD_BUYBACK: 40, READ_HOURS: [7, 19], READ_TIME: 2,
+    window.PustelniaData = { MAP, INNER, CHAPEL, CHAPEL_MAP, CHAPEL_INNER, ITEM, IDS: [600, 609], HONEY_PRICE: 12, CARD_BUYBACK: 40, READ_HOURS: [7, 19], READ_TIME: 2,
         NIGHT: { from: 22.5, until: 1.5, bell: 0 }, RESIDENT, CARDS, QUESTIONS, TX, K50, D23, VITEMS, REMARKS };
 })();

@@ -1,0 +1,263 @@
+{
+ "opis": "Przepięcia Kruczogrodu v2 (miasto4): zastosowane w kopiach tools/miasto4/staging/js/plugins; warunek = dokładnie jedno trafienie starej wartości",
+ "zmiany": [
+  {
+   "plik": "js/plugins/Wrak_Data.js",
+   "linia": 56,
+   "stara": "rozbitek_rynek: [56, 51, 2],",
+   "nowa": "rozbitek_rynek: [65, 60, 2],",
+   "po_co": "rynek: plac przesunięty o (+9,+10)"
+  },
+  {
+   "plik": "js/plugins/Wrak_Data.js",
+   "linia": 58,
+   "stara": "rozbitek_studnia: [52, 50, 4]",
+   "nowa": "rozbitek_studnia: [61, 60, 4]",
+   "po_co": "studnia w środku placu: kratka obok zdarzenia wody"
+  },
+  {
+   "plik": "js/plugins/Underground_Data.js",
+   "linia": 586,
+   "stara": "key: \"rynek\", map: 8, cam: [53, 55],",
+   "nowa": "key: \"rynek\", map: 8, cam: [62, 62],",
+   "po_co": "epilog: rynek"
+  },
+  {
+   "plik": "js/plugins/Underground_Data.js",
+   "linia": 587,
+   "stara": "[\"soltys\", 53, 52, 4], [\"hanka\", 47, 49, 6], [\"kuba\", 51, 52, 8], [\"ambrozy\", 47, 52, 6]",
+   "nowa": "[\"soltys\", 62, 61, 4], [\"hanka\", 56, 60, 6], [\"kuba\", 60, 61, 8], [\"ambrozy\", 57, 61, 6]",
+   "po_co": "epilog: aktorzy na rynku"
+  },
+  {
+   "plik": "js/plugins/Dezerter_Data.js",
+   "linia": 216,
+   "stara": "krok: \"w16Tomek\", godzina: 6.2, idz: [MAP.miasto, 50, 53, 8]",
+   "nowa": "krok: \"w16Tomek\", godzina: 6.2, idz: [MAP.miasto, 61, 62, 8]",
+   "po_co": "W16: rynek"
+  },
+  {
+   "plik": "js/plugins/SwieteKosci_Data.js",
+   "linia": 220,
+   "stara": "krok: \"w15Kram\", godzina: 10, idz: [MAP.miasto, 46, 49, 8]",
+   "nowa": "krok: \"w15Kram\", godzina: 10, idz: [MAP.miasto, 58, 61, 8]",
+   "po_co": "W15: rynek przy studni"
+  },
+  {
+   "plik": "js/plugins/SwieteKosci_Data.js",
+   "linia": 221,
+   "stara": "krok: \"w15Falsz\", godzina: 10, idz: [MAP.miasto, 46, 49, 8]",
+   "nowa": "krok: \"w15Falsz\", godzina: 10, idz: [MAP.miasto, 58, 61, 8]",
+   "po_co": "W15: rynek przy studni"
+  },
+  {
+   "plik": "js/plugins/SwieteKosci_Data.js",
+   "linia": 224,
+   "stara": "krok: \"w15Skrzynka\", godzina: 10, idz: [MAP.miasto, 46, 49, 8]",
+   "nowa": "krok: \"w15Skrzynka\", godzina: 10, idz: [MAP.miasto, 58, 61, 8]",
+   "po_co": "W15: rynek przy studni"
+  },
+  {
+   "plik": "js/plugins/SwieteKosci_Data.js",
+   "linia": 225,
+   "stara": "krok: \"w15Komu\", godzina: 10, idz: [MAP.miasto, 46, 49, 8]",
+   "nowa": "krok: \"w15Komu\", godzina: 10, idz: [MAP.miasto, 58, 61, 8]",
+   "po_co": "W15: rynek przy studni"
+  },
+  {
+   "plik": "js/plugins/Kantor_Data.js",
+   "linia": 71,
+   "stara": "backDoor: [14, 47], backFront: [14, 48, 8], frontDoor: [18, 46],",
+   "nowa": "backDoor: [68, 48], backFront: [68, 49, 8], frontDoor: [72, 47],",
+   "po_co": "kantor: drzwi tylne i frontowe"
+  },
+  {
+   "plik": "js/plugins/Kantor_Data.js",
+   "linia": 281,
+   "stara": "krok: \"w5Poszlaki\", godzina: 10, idz: [MAP.town, 16, 49, 8]",
+   "nowa": "krok: \"w5Poszlaki\", godzina: 10, idz: [MAP.town, 70, 50, 8]",
+   "po_co": "W5: przy tylnych drzwiach"
+  },
+  {
+   "plik": "js/plugins/Kantor_Data.js",
+   "linia": 282,
+   "stara": "krok: \"w5Stuk\", godzina: 23.85, idz: [MAP.town, 10, 49, 2]",
+   "nowa": "krok: \"w5Stuk\", godzina: 23.85, idz: [MAP.town, 64, 50, 2]",
+   "po_co": "W5"
+  },
+  {
+   "plik": "js/plugins/Kantor_Data.js",
+   "linia": 283,
+   "stara": "krok: \"w5Najem\", godzina: 10, idz: [MAP.town, 16, 49, 8]",
+   "nowa": "krok: \"w5Najem\", godzina: 10, idz: [MAP.town, 70, 50, 8]",
+   "po_co": "W5"
+  },
+  {
+   "plik": "js/plugins/Kantor_Data.js",
+   "linia": 284,
+   "stara": "krok: \"w5Rejestr\", godzina: 22.05, idz: [MAP.town, 14, 49, 8]",
+   "nowa": "krok: \"w5Rejestr\", godzina: 22.05, idz: [MAP.town, 69, 50, 8]",
+   "po_co": "W5"
+  },
+  {
+   "plik": "js/plugins/Kantor_Data.js",
+   "linia": 285,
+   "stara": "krok: \"w5Komu\", godzina: 10, idz: [MAP.town, 16, 49, 8]",
+   "nowa": "krok: \"w5Komu\", godzina: 10, idz: [MAP.town, 70, 50, 8]",
+   "po_co": "W5"
+  },
+  {
+   "plik": "js/plugins/Kantor_Data.js",
+   "linia": 287,
+   "stara": "krok: \"w5Akt2\", godzina: 10, idz: [MAP.town, 16, 49, 8]",
+   "nowa": "krok: \"w5Akt2\", godzina: 10, idz: [MAP.town, 70, 50, 8]",
+   "po_co": "W5"
+  },
+  {
+   "plik": "js/plugins/Kantor_Data.js",
+   "linia": 297,
+   "stara": "{ w5_piwnica: [14, 48, 8], w5_lada: [18, 47, 8] }",
+   "nowa": "{ w5_piwnica: [68, 49, 8], w5_lada: [72, 48, 8] }",
+   "po_co": "W5: spoty"
+  },
+  {
+   "plik": "js/plugins/Garnizon_Data.js",
+   "linia": 276,
+   "stara": "klos: { id: 659, x: 13, y: 48, d: 6 }",
+   "nowa": "klos: { id: 659, x: 67, y: 49, d: 6 }",
+   "po_co": "Kłos przy tylnych drzwiach kantoru"
+  },
+  {
+   "plik": "js/plugins/Garnizon_Data.js",
+   "linia": 110,
+   "stara": "const add = { garnizon_werbownik: [24, 46, 2] };",
+   "nowa": "const add = { garnizon_werbownik: [32, 50, 2] };",
+   "po_co": "werbownik na ulicy głównej (izba stoi w starym miejscu)"
+  },
+  {
+   "plik": "js/plugins/Kasztelan_Data.js",
+   "linia": 182,
+   "stara": "krok: 2, godzina: 10, idz: [MAP.town, 9, 64, 4]",
+   "nowa": "krok: 2, godzina: 10, idz: [MAP.town, 25, 75, 4]",
+   "po_co": "W4: kowadło"
+  },
+  {
+   "plik": "js/plugins/TownQuests_Data.js",
+   "linia": 170,
+   "stara": "bakery_window: { map: 8, id: 951, x: 38, y: 73,",
+   "nowa": "bakery_window: { map: 8, id: 951, x: 43, y: 48,",
+   "po_co": "okienko piekarni"
+  },
+  {
+   "plik": "js/plugins/TownQuests_Data.js",
+   "linia": 172,
+   "stara": "notice_bakery: { map: 8, id: 953, x: 39, y: 73,",
+   "nowa": "notice_bakery: { map: 8, id: 953, x: 44, y: 48,",
+   "po_co": "kartka na piekarni"
+  },
+  {
+   "plik": "js/plugins/TownQuests_Data.js",
+   "linia": 173,
+   "stara": "notice_smithy: { map: 8, id: 954, x: 9, y: 62,",
+   "nowa": "notice_smithy: { map: 8, id: 954, x: 16, y: 78,",
+   "po_co": "kartka na kuźni"
+  },
+  {
+   "plik": "js/plugins/TownQuests_Data.js",
+   "linia": 174,
+   "stara": "notice_kantor: { map: 8, id: 955, x: 19, y: 47,",
+   "nowa": "notice_kantor: { map: 8, id: 955, x: 73, y: 48,",
+   "po_co": "kartka na kantorze"
+  },
+  {
+   "plik": "js/plugins/Act3_Data.js",
+   "linia": 47,
+   "stara": "bell: [85, 30], bellStand: [85, 31],",
+   "nowa": "bell: [96, 47], bellStand: [96, 48],",
+   "po_co": "dzwonnica: lina i miejsce dzwonnika"
+  },
+  {
+   "plik": "js/plugins/Okolice_Data.js",
+   "linia": 88,
+   "stara": "8: [54, 50], 13: [29, 49]",
+   "nowa": "8: [63, 61], 13: [29, 49]",
+   "po_co": "wejście testowe: plac"
+  },
+  {
+   "plik": "js/plugins/Orzel_Data.js",
+   "linia": 134,
+   "stara": "[30, 37, 73, 63]",
+   "nowa": "[45, 50, 79, 70]",
+   "po_co": "lądowisko orła: nowy plac (region 31)"
+  }
+ ],
+ "znaczniki_mapy": "Map008: wszystkie znaczniki 'Miejsce:' i drzwi mają nowe kratki w staging/data/Map008.json (zob. tools/miasto4/nowe.json); wyjścia wnętrz w staging/data/Map1xx.json",
+ "pominiete_domy": [
+  [
+   80,
+   "Drzwi: Dom staruszków",
+   42,
+   87
+  ],
+  [
+   124,
+   "EV124",
+   39,
+   37
+  ],
+  [
+   231,
+   "Drzwi: Dom 10",
+   31,
+   73
+  ],
+  [
+   250,
+   "Drzwi: Dom 12",
+   45,
+   87
+  ],
+  [
+   253,
+   "Drzwi: Dom 13",
+   79,
+   74
+  ],
+  [
+   254,
+   "Drzwi: Dom 14",
+   78,
+   88
+  ],
+  [
+   315,
+   "Miejsce: dom12_drzwi",
+   45,
+   88
+  ],
+  [
+   320,
+   "Miejsce: dom13_drzwi",
+   79,
+   75
+  ],
+  [
+   340,
+   "Miejsce: dom14_drzwi",
+   78,
+   89
+  ],
+  [
+   433,
+   "Miejsce: dom7_drzwi",
+   42,
+   88
+  ],
+  [
+   482,
+   "Miejsce: dom10_drzwi",
+   31,
+   74
+  ]
+ ]
+}

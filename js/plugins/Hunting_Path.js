@@ -53,23 +53,49 @@
     // per tile: pass - the map's passage of its four sides; ev - an event in the way stands there; bld - a building; s4a / s4d - the
     // straight steps (bits of PBIT) that go from it, for a wild animal (all of a building keeps it out: Game_Animal.isMapPassable)
     // and for the dog (only a building's solid cells, the map's passage of Farming.js)
-    const pgrid = { mapId: -1, w: 0, h: 0, pass: null, ev: null, bld: null, s4a: null, s4d: null, tilesAt: -1e9, eventsAt: -1e9, rev: -1 };
+    const pgrid = { mapId: -1, w: 0, h: 0, pass: null, ev: null, bld: null, s4a: null, s4d: null, tilesAt: -1e9, eventsAt: -1e9, rev: -1, passB: null, bldB: null, job: null, jobFrame: -1 };
+    // the tiles' part of rows y0..y1-1 into pass / bld (the map's passage of the four sides; a building)
+    function gridRows(pass, bld, y0, y1, w, F) {
+        for (let y = y0; y < y1; y++) for (let x = 0; x < w; x++) {
+            const i = y * w + x;
+            pass[i] = ($gameMap.isPassable(x, y, 2) ? 1 : 0) | ($gameMap.isPassable(x, y, 4) ? 2 : 0) | ($gameMap.isPassable(x, y, 6) ? 4 : 0) | ($gameMap.isPassable(x, y, 8) ? 8 : 0);
+            bld[i] = F && F.buildingAt(x, y) ? 1 : 0;
+        }
+    }
+    // (2026-11-12, wydajność) the tiles' part made again - every PATH.tiles frames, soon after the farm changed - a few rows a frame
+    // into the spare arrays while the old grid serves, then the two swapped; not the whole map at once: 15-30 ms (70-160 ms on a
+    // 4x slower processor) on a 120 x 120 map, every 10 s while any animal, creature, man or the dog looked for a way. The first build
+    // on a map (on entering it, Hunting.js resetGrid) stays whole.
+    const REBUILD_MS = 0.6;   // (a frame's share of it; one row a frame at the least)
     function pathGrid() {
         const now = Graphics.frameCount, w = $gameMap.width(), h = $gameMap.height(), mapId = $gameMap.mapId(), G = pgrid, n = w * h;
         if (G.mapId !== mapId || G.w !== w || G.h !== h) {
-            Object.assign(G, { mapId, w, h, pass: new Uint8Array(n), ev: new Uint8Array(n), bld: new Uint8Array(n), s4a: new Uint8Array(n), s4d: new Uint8Array(n), tilesAt: -1e9, eventsAt: -1e9, rev: -1 });
+            Object.assign(G, { mapId, w, h, pass: new Uint8Array(n), ev: new Uint8Array(n), bld: new Uint8Array(n), s4a: new Uint8Array(n), s4d: new Uint8Array(n), tilesAt: -1e9, eventsAt: -1e9, rev: -1,
+                passB: new Uint8Array(n), bldB: new Uint8Array(n), job: null, jobFrame: -1 });
         }
         const F = T.api("Farming"), rev = F && F.farm ? F.farm().rev : 0;
         let changed = false;
-        if (now - G.tilesAt > PATH.tiles || now < G.tilesAt || (rev !== G.rev && now - G.tilesAt > 30)) {   // (the farm changed - a building put up or taken down: soon)
-            for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-                const i = y * w + x;
-                G.pass[i] = ($gameMap.isPassable(x, y, 2) ? 1 : 0) | ($gameMap.isPassable(x, y, 4) ? 2 : 0) | ($gameMap.isPassable(x, y, 6) ? 4 : 0) | ($gameMap.isPassable(x, y, 8) ? 8 : 0);
-                G.bld[i] = F && F.buildingAt(x, y) ? 1 : 0;
-            }
+        if (G.tilesAt === -1e9 || now < G.tilesAt) {   // (the first build on the map - or the clock went back: whole, now)
+            gridRows(G.pass, G.bld, 0, h, w, F);
             G.tilesAt = now;
             G.rev = rev;
+            G.job = null;
             changed = true;
+        } else if (!G.job && (now - G.tilesAt > PATH.tiles || (rev !== G.rev && now - G.tilesAt > 30))) {   // (the farm changed - a building put up or taken down: soon)
+            G.job = { y: 0, rev };
+        }
+        if (G.job && G.jobFrame !== now) {   // (once a frame, however many ask)
+            G.jobFrame = now;
+            const J = G.job, t0 = performance.now();
+            do { gridRows(G.passB, G.bldB, J.y, J.y + 1, w, F); J.y++; } while (J.y < h && performance.now() - t0 < REBUILD_MS);
+            if (J.y >= h) {
+                const p = G.pass, b = G.bld;
+                G.pass = G.passB; G.bld = G.bldB; G.passB = p; G.bldB = b;
+                G.tilesAt = now;
+                G.rev = J.rev;   // (changed again meanwhile: another round soon)
+                G.job = null;
+                changed = true;
+            }
         }
         if (now - G.eventsAt > PATH.events || now < G.eventsAt) {   // (the events that keep a character out: Game_Map.eventsXyNt)
             G.ev.fill(0);

@@ -32,7 +32,7 @@
 
     // the places of the hero after an F9 jump: [map, x, y, direction]
     const MAP = { tavern: 1, town: 8, cellar: 9, floor10: 140, house: 19, cairn: 20 };
-    const AT_BAR = [MAP.tavern, 52, 31, 8];
+    const AT_BAR = [MAP.tavern, 16, 31, 8];
     // chapter 7 "tell him": the clues the hero speaks of (each only when he has it)
     const SLOWA = { lub: ["stan:clues.wpis", "stan:clues.przeor", "stan:clues.kleofas", "stan:clues.napis"] };
     // a clue told in a talk (Kleofas, grandpa): kept, its note, the experience (quiet), the notice, the quests' checks

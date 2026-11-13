@@ -41,7 +41,7 @@
     const BASE = { gather: 4, deliver: 6, craft: 8, hunt: 10, story: 8 };
     // what a piece of an item is worth in effort (the database prices are for Borgar's shop, not for work)
     const EV = { 64: 1.2, 77: 1, 92: 1.2, 147: 0.8, 61: 2.5, 102: 1.2, 103: 2, 104: 1.8, 149: 1, 150: 2, 151: 1.6, 139: 1.2, 140: 1.2, 164: 2.5, 85: 5,
-        96: 6, 163: 4, 146: 1.6, 94: 5, 157: 7, 159: 8, 161: 5, 95: 7, 158: 9, 71: 2.5, 72: 2.5, 73: 5, 74: 1.6, 75: 2.5, 76: 7, 123: 5, 111: 10,
+        96: 6, 163: 4, 146: 1.6, 94: 5, 157: 7, 159: 8, 161: 5, 95: 7, 158: 9, 173: 2.2, 177: 4, 71: 2.5, 72: 2.5, 73: 5, 74: 1.6, 75: 2.5, 76: 7, 123: 5, 111: 10,
         80: 4.5, 84: 3, 79: 3.5, 86: 12, 88: 0.9, 167: 12, 93: 4, 127: 0.8, 152: 5, 97: 12, 83: 6, 81: 8, 137: 18, 124: 16, 105: 12, 130: 14, 136: 14, 82: 3 };
     const KILL_EV = { rabbit: 6, deer: 12, wolf: 12, boar: 22 };
 
@@ -64,7 +64,13 @@
         bogdan: { pin: "nail", gift: [[127, 12]] },
         marianna: { pin: "brass", gift: [[75, 4], [67, 3]] },
         kazimierz: { pin: "nail", gift: [[88, 6]] },
-        jozek: { pin: "red", gift: [[102, 4], [139, 3]] }
+        jozek: { pin: "red", gift: [[102, 4], [139, 3]] },
+        // (2026-11-11 dawcy_miasto) people from outside the town who post a job on the board instead of coming: the harbour, the lighthouse, the garrison, the pasture, the kiln
+        janek: { pin: "nail", gift: [[106, 1]] },
+        bazyli: { pin: "brass", gift: [[177, 1]] },
+        klos: { pin: "brass", gift: [[79, 2]] },
+        wawrzyn: { pin: "nail", gift: [[111, 1]] },
+        zbych: { pin: "nail", gift: [[79, 2]] }
     };
     Watki.scal(GIVERS, "tablica", "zleceniodawcy");   // (its words: js/teksty/tablica.txt, zleceniodawcy)
 
@@ -239,7 +245,18 @@
         { id: "branches", type: "gather", giver: "jozek",
             req: [{ item: 77, n: [T(8, 10), T(12, 14), null, null, null] }] },
         { id: "cones", type: "gather", giver: "jozek",
-            req: [{ item: 147, n: [T(5, 6), T(8, 10), null, null, null] }] }
+            req: [{ item: 147, n: [T(5, 6), T(8, 10), null, null, null] }] },
+        // ---- the outside: Janek (harbour), Bazyli (lighthouse), Kłos (garrison), Wawrzyn (pasture), Zbych (kiln)
+        { id: "herring_janek", type: "gather", giver: "janek", from: 4,
+            req: [{ item: 173, n: [T(2, 3), T(4, 5), T(6, 8), null, null] }] },
+        { id: "tran_bazyli", type: "deliver", giver: "bazyli", from: 12,
+            req: [{ item: 177, n: [null, T(2, 3), T(4, 5), T(5, 6), null] }] },
+        { id: "wood_klos", type: "gather", giver: "klos", from: 8,
+            req: [{ item: 61, n: [null, null, T(10, 12), T(14, 18), T(20, 24)] }] },
+        { id: "wool_wawrzyn", type: "deliver", giver: "wawrzyn", from: 10, seasons: [0, 1, 2],
+            req: [{ item: 111, n: [null, T(2, 3), T(4, 5), T(5, 6), null] }] },
+        { id: "kiln_zbych", type: "gather", giver: "zbych",
+            req: [{ item: 61, n: [null, T(8, 10), T(12, 14), null, null] }] }
     ];
     Watki.scal(TEMPLATES, "tablica", "szablony", "id");   // (its words: js/teksty/tablica.txt, szablony, by the id)
     const TYPE_LABEL = {};

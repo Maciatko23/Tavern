@@ -37,7 +37,7 @@
 (() => {
     "use strict";
 
-    const MAP = { town: 8, kantor: 103, piwnica: 171, droga: 22, skraj: 23, przystan: 125, ratusz: 104 };
+    const MAP = { town: 8, kantor: 103, piwnica: 171, droga: 3, skraj: 3, przystan: 125, ratusz: 104 };   // (2026-11-11 plansza: Polna droga and Skraj lasu are places of Kruczy Jar now)
     const IDS = [730, 759];
     // the injected events, by map: Map103 the trapdoor, the stack by the back door, the town's honest counter (Act II); Map008 the
     // visitors of the night (the courier, a guest); Map171 Baltazar, Sławek, the pile, the night's things, the desk, the strongbox,
@@ -68,12 +68,12 @@
         piwnicaLand: [2, 4, 2], schody: [2, 4], baltazar: [16, 4, 2], biurko: [15, 6], szkatula: [17, 8], sterta: [8, 9], worki: [5, 9],
         kamienie: [3, 8], slawek: [9, 7, 8], siedzisko: [3, 6], gabinetDoor: [12, 8], gabinet: [12, 4, 17, 10],   // (x0, y0, x1, y1 - with its door)
         // Map008 (the town): the back door (event 94 of the user's map), the cell before it, where the visitors come from and go
-        backDoor: [14, 47], backFront: [14, 48, 8], frontDoor: [18, 46], gateIn: [52, 104], gateOut: [52, 105], east: [101, 50], tavern: [51, 18],
-        // Map023 (Skraj lasu): the smugglers' fire, its seats, the cart, the courier
-        ognisko: [33, 4], seats: [[32, 4, "sit"], [34, 4, "sit"], [33, 2, "sleep"], [32, 3, "sit"]], wozOboz: [35, 2], skrzynieOboz: [37, 3], kurierOboz: [35, 4, 4],
+        backDoor: [14, 47], backFront: [14, 48, 8], frontDoor: [18, 46], gateIn: [31, 118], gateOut: [32, 118], east: [117, 49], tavern: [51, 18],
+        // Kruczy Jar (Map003), the east edge of the forest (was Map023 Skraj lasu: the same shape moved by +63, +48): the smugglers' fire, its seats, the cart, the courier
+        ognisko: [96, 52], seats: [[95, 52, "sit"], [97, 52, "sit"], [96, 50, "sleep"], [95, 51, "sit"]], wozOboz: [98, 50], skrzynieOboz: [100, 51], kurierOboz: [98, 52, 4],
         listen: 3.4,                                                  // tiles from the fire the talk is heard from
-        // Map022 (Polna droga): the cart at the fork to the east, its guards, Rafał tied to it
-        wozProm: [29, 20], guards: [[28, 21, "idle"], [32, 19, "idle"]], rafal: [31, 21, 2], skrzynieProm: [27, 19], ogienProm: [32, 21]
+        // Kruczy Jar (Map003), the road north of the plot (was Map022 Polna droga: moved by +59, -4): the cart at the fork to the east, its guards, Rafał tied to it
+        wozProm: [88, 16], guards: [[87, 17, "idle"], [91, 15, "idle"]], rafal: [90, 17, 2], skrzynieProm: [86, 15], ogienProm: [91, 17]
     };
 
     // ------------------------------------------------------------------ the clock
@@ -95,7 +95,7 @@
     const CRATES = 3;         // crates a night
     const SHIFTS = 2;         // the porter's nights before the register's night (chapter 3)
     const STONES = { swap: 6, gain: 5 };   // plain stones (item 64) to swap the cargo; raven stones found in it
-    const RAID = { after: [3, 6], kinds: ["bandit", "knifer", "archer"], maps: [3, 21, 22, 23], hours: [21, 4] };
+    const RAID = { after: [3, 6], kinds: ["bandit", "knifer", "archer"], maps: [3, 4], hours: [21, 4] };
     // the shop of chapter 7: base prices (the honest kantor 10% lower; Baltazar in the hero's grip - half; Baltazar the enemy - double)
     const GOODS = [{ id: 86, n: 1, price: 18 }, { id: 143, n: 1, price: 50 }, { id: 88, n: 10, price: 2 }, { id: 93, n: 1, price: 6 }];
     const PRICE = { honest: 0.9, grip: 0.5, enemy: 2, normal: 1 };
@@ -283,7 +283,7 @@
                 3: { ch: 3, krok: "w5Najem", godzina: 10, idz: [MAP.town, 16, 49, 8] },
                 4: { ch: 4, krok: "w5Rejestr", godzina: 22.05, idz: [MAP.town, 14, 49, 8], zrob: [{ hak: "nowaNoc" }] },   // (tonight's shift and the register's night afresh)
                 5: { ch: 5, krok: "w5Komu", godzina: 10, idz: [MAP.town, 16, 49, 8] },
-                6: { ch: 6, krok: "w5Prom", godzina: 21.5, idz: [MAP.droga, 12, 2, 2] },
+                6: { ch: 6, krok: "w5Prom", godzina: 21.5, idz: [MAP.droga, 76, 8, 2] },
                 7: { ch: 7, krok: "w5Akt2", godzina: 10, idz: [MAP.town, 16, 49, 8] }
             }
         }

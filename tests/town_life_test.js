@@ -19,9 +19,10 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     // new town's houses, TownLife_Data.js 2940-2947 - away (hidden) while Map008 has no "Miejsce:" of their doors)
     // (2026-10-28: the ferry's travellers - Podroznicy_Data.js, ids 3020-3049 - live in the town while on the island: counted apart)
     const own = Object.keys(at10).filter(k => !(TL_TRAVEL.includes(k)));
-    t.check("30 residents in the town, each with its own sheet", own.filter(k => at10[k]).length === 30 && own.every(k => at10[k] && /^\$Npc_/.test(at10[k][3])), at10);
+    // (40 since 2026-11-12: + the guild's Ostap, Ludwik, Jaś (W22), the raven post's Gawron, Cyryl, Wicek (W20), brother Kleofas at the chapel, the tavern's two pool guests - the count grows with the threads: at least the 30 of the town)
+    t.check("every resident of the town (30 and the threads' own) at 10:00, each with its own sheet", own.filter(k => at10[k]).length >= 30 && own.every(k => at10[k] && /^\$Npc_/.test(at10[k][3])), at10);
     // (the water seller: the author's "Miejsce: studnia_rynek" on Map008 stands at 50,49 since 2026-10-28)
-    const want = { piekarka: [33, 59], woziwoda: [50, 49], kapral: [100, 51], kowal: [8, 63], soltys: [83, 48], kupiec: [16, 48], garbarz: [15, 85], feliks: [84, 48] };
+    const want = { piekarka: [33, 59], woziwoda: [50, 49], kapral: [116, 49], kowal: [8, 63], soltys: [83, 48], kupiec: [16, 48], garbarz: [15, 85], feliks: [84, 48] };
     t.check("at 10:00 each stands at its place (the baker at her stall, the water seller by the dry well, the corporal at the east gate...)",
         Object.entries(want).every(([k, [x, y]]) => at10[k][0] === x && at10[k][1] === y && at10[k][2] === "shown"), { at10 });
     // (judged by where his stroll goes: walking round a stall on the way he may be a cell or two further)

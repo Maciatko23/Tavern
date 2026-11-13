@@ -2,11 +2,11 @@
 // dwóch na jednym krześle nigdy; nie zajmują miejsc mieszkańców ani miejsca bohatera przy stole; koszt klatki w limicie.
 // Ze stagingu: GAME_OVERLAY=tools/tavern/siadanie/staging GAME_OVERLAY_JS=1 CDP_PORT=9413 node tests/goscie_sala_test.js   (ZRZUTY=folder: zrzuty)
 "use strict";
-const kit = require("./lib/kit.js");
+const kit = (function(){ try { return require("./lib/kit.js"); } catch (e) { return require("../../../../tests/lib/kit.js"); } })();
 const FRAME_LIMIT = 0.3;
 kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli", evalTimeout: 300000 }, async t => {
     t.check("wtyczka wczytana", await t.json("!!window.GoscieSala"));
-    await t.newGame({ map: 1, x: 50, y: 37, day: 12, hour: 20, quiet: true, minimap: false });
+    await t.newGame({ map: 1, x: 14, y: 37, day: 12, hour: 20, quiet: true, minimap: false });
     await t.frames(120);
     const list = () => t.json("GoscieSala.guests()");
     const noDupSeat = gs => { const k = gs.filter(x => x.seat).map(x => x.seat.join()); return new Set(k).size === k.length; };
@@ -40,12 +40,12 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     await t.until(`GoscieSala.guests().find(x => x.id === ${first}).state === "walk" || GoscieSala.guests().find(x => x.id === ${first}).state === "stand"`, 8);
     const w0 = (await list()).find(x => x.id === first);
     t.check("wstał: idzie albo już stoi, widać go jako chodzącą postać", ["walk", "stand"].includes(w0.state) && await t.json(`$gameMap.event(${first}).characterName().indexOf("$Npc_") === 0 && !$gameMap.event(${first}).isTransparent()`), w0);
-    await t.until(`GoscieSala.guests().find(x => x.id === ${first}).state === "stand"`, 30);
+    await t.until(`GoscieSala.guests().find(x => x.id === ${first}).state === "stand"`, 60);   // (2026-11-11: the world walks slower)
     const w1 = (await list()).find(x => x.id === first);
     t.check("doszedł na miejsce i stoi, nie na ścianie ani krześle", w1.state === "stand" && await t.json(`$gameMap.checkPassage(${w1.x}, ${w1.y}, 0x0f)`), w1);
     if (process.env.ZRZUTY) await t.shot(process.env.ZRZUTY + "/chodzi.png");
     await t.eval(`GoscieSala.force(${first}, "back"); 0`);
-    await t.until(`GoscieSala.guests().find(x => x.id === ${first}).state === "sit"`, 40);
+    await t.until(`GoscieSala.guests().find(x => x.id === ${first}).state === "sit"`, 80);
     const w2 = (await list()).find(x => x.id === first);
     t.check("wrócił i usiadł na wolnym krześle", w2.state === "sit" && w2.x === w2.seat[0] && w2.y === w2.seat[1], w2);
     // rozmowa: z siedzącym, przez przycisk, kwestie z pliku
@@ -94,7 +94,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     await t.eval("$gameMessage.onChoice(3); $gameMessage.clear(); 0"); await t.frames(30);
     for (let k = 0; k < 8 && (await t.json("$gameMap.isEventRunning()")); k++) await adv(1);
     await t.eval(`GoscieSala.force(${wk.id}, "back"); 0`);
-    await t.until(`GoscieSala.guests().find(x => x.id === ${wk.id}).state === "sit"`, 60);
+    await t.until(`GoscieSala.guests().find(x => x.id === ${wk.id}).state === "sit"`, 100);   // (2026-11-11: the world walks slower)
     t.check("po rozmowie idzie dalej i siada", (await list()).find(x => x.id === wk.id).state === "sit", (await list()).find(x => x.id === wk.id));
     // wszyscy mają wszystkie kwestie
     const braki = await t.json(`(() => { const out = []; for (const x of GoscieSala.guests()) { const k = Watki.teksty("goscie_sali").goscie["g" + x.id]; for (const f of ["witaj", "kim", "slychac", "rada"]) if (!k || !k[f] || !k[f].length) out.push(x.id + ":" + f); if (!k || !k.bye) out.push(x.id + ":bye"); } return out; })()`);
@@ -125,7 +125,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     t.check("po wczytaniu widać go i można go zaczepić", tkL);
     // poza wieczorem pusto; drzwi osiągalne
     await t.eval("GoscieSala.layOut(); 0");
-    const door = await t.json("$gameMap.checkPassage(50, 52, 0x0f)");
+    const door = await t.json("$gameMap.checkPassage(14, 52, 0x0f)");
     t.check("drzwi wejściowe gości to przechodnia kratka", door);
     // koszt
     // wielu naraz: wstają, idą, wracają; nigdy dwóch na jednym krześle, nikt nie stoi na ścianie
@@ -135,7 +135,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     await t.eval(`${JSON.stringify(ids)}.forEach(i => GoscieSala.force(i, "rise")); 0`);
     let dup = 0, stood = 0;
     const wstali = new Set(), wrocili = new Set();   // (siedząc, po chwili sami znów wstają: każdy ma raz wrócić, nie wszyscy naraz siedzieć)
-    for (let k = 0; k < 150; k++) {   // (przez całą salę to do 30 s w jedną stronę)
+    for (let k = 0; k < 260; k++) {   // (przez całą salę to do 50 s w jedną stronę - od 2026-11-11 świat chodzi wolniej)
         await t.frames(60);
         await t.setHour(20);
         const gs = await list();
@@ -154,7 +154,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     await t.setHour(19.0); await t.frames(30);
     const walkers = (await list()).filter(x => x.state === "walk");
     t.check("o 19 ci, których godzina właśnie mija, idą od drzwi", walkers.length > 0 && walkers.length <= 5, (await list()).map(x => x.state).join());
-    if (process.env.ZRZUTY) { await t.eval("$gamePlayer.locate(50, 45); 0"); await t.frames(60); await t.shot(process.env.ZRZUTY + "/wchodza.png"); }
+    if (process.env.ZRZUTY) { await t.eval("$gamePlayer.locate(14, 45); 0"); await t.frames(60); await t.shot(process.env.ZRZUTY + "/wchodza.png"); }
     await t.until(`GoscieSala.stats().walking === 0 && GoscieSala.stats().out < 23`, 60);
     t.check("doszli i siedzą", (await t.json("GoscieSala.stats()")).sit > 5, await t.json("GoscieSala.stats()"));
     // noc: wychodzą drzwiami
@@ -167,7 +167,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     const kowalPic = `(() => { const k = SceneManager._scene._spriteset._tilemap.children.find(s => s.visible !== false && s.bitmap && /Siedzi_Kowal/.test(s.bitmap.url || "")); return k ? { z: k.z, y: k.y } : null; })()`;
     await t.until(`!!(${kowalPic})`, 20);
     const kw1 = await t.json(kowalPic);
-    await t.eval(`$gamePlayer.locate(43, 32); $gamePlayer.setDirection(2); 0`); await t.frames(20);
+    await t.eval(`$gamePlayer.locate(7, 32); $gamePlayer.setDirection(2); 0`); await t.frames(20);
     const order = await t.json(`(() => { const set = SceneManager._scene._spriteset, kids = set._tilemap.children, pl = set._characterSprites.find(s => s._character === $gamePlayer), k = kids.find(s => s.visible !== false && s.bitmap && /Siedzi_Kowal/.test(s.bitmap.url || "")); return { pl: kids.indexOf(pl), k: kids.indexOf(k) }; })()`);
     t.check("bohater kratkę nad siedzącym jest za nim", kw1 && kw1.z === 3 && order.pl < order.k, { kw1, order });
     await t.setHour(22.7); await t.frames(30);
@@ -178,16 +178,16 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     await t.setHour(20); await t.eval("GoscieSala.layOut(); 0"); await t.frames(30);
     // nikt nie znika: mieszkaniec wstaje i wychodzi drzwiami; przychodzi od drzwi i siada (zegar idzie, bez skoku)
     const kw = `(() => { const e = $gameMap.event(910); return { x: e.x, y: e.y, hid: e.isTransparent(), mv: e.isMoving() }; })()`;
-    await t.eval(`$gamePlayer.locate(50, 37); 0`);
+    await t.eval(`$gamePlayer.locate(14, 37); 0`);
     await t.setHour(22.3); await t.frames(30);
     await t.until(`!!(${kowalPic})`, 20);
-    t.check("kowal o 22:20 siedzi na swoim krześle", (await t.json(kw)).x === 43 && !(await t.json(kw)).hid, await t.json(kw));
+    t.check("kowal o 22:20 siedzi na swoim krześle", (await t.json(kw)).x === 7 && !(await t.json(kw)).hid, await t.json(kw));
     await t.setHour(22.52);
     let path = [], last = await t.json(kw);
     for (let k = 0; k < 240 && !last.hid; k++) { await t.frames(15); last = await t.json(kw); path.push([last.x, last.y]); }
     const cells = new Set(path.map(c => c.join())).size;
     t.check("o 22:30 wstaje i idzie przez salę (nie znika na krześle)", cells >= 15, path.length + " pomiarów, kratek " + cells);
-    t.check("znika dopiero w drzwiach", last.hid && last.y === 54 && last.x >= 49 && last.x <= 51, last);
+    t.check("znika dopiero w drzwiach", last.hid && last.y === 54 && last.x >= 13 && last.x <= 15, last);
     await t.setHour(18.85); await t.frames(30);
     t.check("przed jego godziną go nie ma", (await t.json(kw)).hid, await t.json(kw));
     await t.setHour(19.02); await t.frames(4);
@@ -196,7 +196,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     let sat = false;
     for (let k = 0; k < 240 && !sat; k++) { await t.frames(15); sat = !!(await t.json(kowalPic)); }
     const in1 = await t.json(kw);
-    t.check("doszedł i siedzi na swoim krześle", sat && in1.x === 43 && in1.y === 33 && !in1.hid, in1);
+    t.check("doszedł i siedzi na swoim krześle", sat && in1.x === 7 && in1.y === 33 && !in1.hid, in1);
     // u siebie w domu tak samo: wchodzi drzwiami (Map105, kowal)
     await t.setHour(22.3);
     await t.go(105, 7, 8, 8); await t.frames(20);
@@ -207,7 +207,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     await t.frames(360);
     const h1 = await t.json(kw), spot = await t.json(`(() => { const d = $dataMap.events.find(e => e && /^Miejsce:\\s*kowal_wnetrze/i.test(e.name)); return [d.x, d.y]; })()`);
     t.check("doszedł na swoje miejsce w domu", h1.x === spot[0] && h1.y === spot[1], { h1, spot });
-    await t.go(1, 50, 37, 8); await t.setHour(20); await t.eval("GoscieSala.layOut(); 0"); await t.frames(30);
+    await t.go(1, 14, 37, 8); await t.setHour(20); await t.eval("GoscieSala.layOut(); 0"); await t.frames(30);
     // siadanie: na stołek wchodzi swoją normalną postacią i dopiero tam przechodzi w siedzenie; wstaje na stołku i schodzi z niego
     const klatka = id => `(() => { const g = GoscieSala.guests().find(x => x.id === ${id}), set = SceneManager._scene._spriteset, p = set._salaPics && set._salaPics.get(${id}), e = $gameMap.event(${id}); return { st: g.state, x: e.x, y: e.y, seat: g.seat, pic: !!(p && p.sp.visible), row: p ? Math.floor(p.sp._frame.y / 88) : -1, mv: e.isMoving() }; })()`;
     const sampl = async (id, until, n) => { const out = []; for (let k = 0; k < n; k++) { const s = await t.json(klatka(id)); out.push(s); if (s.st === until) break; await t.frames(4); } return out; };

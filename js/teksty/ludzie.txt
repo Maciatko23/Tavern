@@ -105,7 +105,7 @@ Plandeka na towar! Szybciej, osiołku, nie stój!
 Ognisko grzeje. Siadaj, jak chcesz, tylko nic nie ruszaj z wozu.
 
 [mieszkancy.1.talk.morning]
-Rano rozkładam towar. Cztery drogi, cztery postoje - Polna, Leśna, Łąka i Kruczy Jar przy działce twojego dziadka. Dzień tu, dzień tam.
+Rano rozkładam towar. Dwa postoje - Łąka i Kruczy Jar przy działce twojego dziadka. Dzień tu, dzień tam.
 Co dzień inny towar. Co mi wpadnie w ręce po drodze, to sprzedaję.
 
 [mieszkancy.1.talk.day]
@@ -219,12 +219,12 @@ zadania.K63.fail.text = Kowal nie doczekał się węgla.
 
 # ======================================================================== K64 (zadania.K64)
 zadania.K64.title = Zabłąkana owca
-zadania.K64.where = Łąka (koszar), Omszała łąka
+zadania.K64.where = Łąka (koszar i łąka za nim)
 zadania.K64.when = po burzy, 7–19
-zadania.K64.desc = Po burzy Wawrzynowi Owczarzowi brakuje owcy. Uciekła przed grzmotem na Omszałą łąkę. Trzeba ją znaleźć i przyprowadzić do koszaru.
+zadania.K64.desc = Po burzy Wawrzynowi Owczarzowi brakuje owcy. Uciekła przed grzmotem na łąkę za koszarem. Trzeba ją znaleźć i przyprowadzić do koszaru.
 [zadania.K64.offer.say]
 Pięć. Liczę i liczę - pięć. Siwa uciekła w burzę. Głupia, boi się grzmotu i leci przed siebie.
-Pewnie na Omszałej łące, tam zawsze ucieka. Ja nie mogę zostawić stada. Przyprowadzisz ją? Pójdzie za tobą, jak ją zawołasz.
+Pewnie gdzieś na łące za koszarem, tam zawsze ucieka. Ja nie mogę zostawić stada. Przyprowadzisz ją? Pójdzie za tobą, jak ją zawołasz.
 
 zadania.K64.offer.yes = Przyprowadzę Siwą.
 zadania.K64.offer.no = Nie mam czasu.
@@ -234,7 +234,7 @@ Dzięki ci! Podejdź do niej spokojnie, nie biegnij. Pójdzie.
 [zadania.K64.offer.decline]
 Trudno... wilki będą miały ucztę.
 
-zadania.K64.steps.0.text = Znajdź Siwą na Omszałej łące (pasterz mówi: {gdzie}) i podejdź do niej - przycisk akcji: pójdzie za tobą.
+zadania.K64.steps.0.text = Znajdź Siwą na łące za koszarem (pasterz mówi: {gdzie}) i podejdź do niej - przycisk akcji: pójdzie za tobą.
 zadania.K64.steps.1.text = Zaprowadź Siwą na Łąkę, na pastwisko pod koszarem. Idzie za tobą - nie biegnij.
 zadania.K64.steps.2.text = Powiedz Wawrzynowi, że Siwa wróciła.
 [zadania.K64.steps.2.say]
@@ -313,8 +313,8 @@ zadania.K66.fail.text = Patrol poszedł bez ciebie.
 
 # ======================================================================== D34 (zadania.D34)
 zadania.D34.title = Jaskinia pod zatoczką
-zadania.D34.where = Przystań: zatoczka przemytników, jaskinia (tylko w odpływie)
-zadania.D34.when = od W5 rozdz. 4
+zadania.D34.where = Tawerna (Sambor wieczorem); przystań: zatoczka przemytników, jaskinia (tylko w odpływie)
+zadania.D34.when = od W5 rozdz. 4; Sambor w tawernie 19:30–21:30
 zadania.D34.desc = Przemytnicy Baltazara mają skład w jaskini pod zatoczką. Wejść można tylko w odpływie, nocą pilnuje Sławek. Skrzynia przemytu - komu ją oddać?
 [zadania.D34.offer.say]
 Ty jesteś od Stacha. Słuchaj. Przemytnicy Baltazara trzymają towar w jaskini pod zatoczką. Wejście tylko w odpływie - dlatego nikt go nie pilnuje.
@@ -329,7 +329,7 @@ Uważaj na odpływ. Woda wraca szybko. I nocą jest tam Sławek - człowiek Balt
 Jak chcesz. Księga poczeka.
 
 zadania.D34.steps.0.text = Znajdź skład przemytników w jaskini pod zatoczką (przystań, na południowym zachodzie; wejście tylko w odpływie) i zabierz Skrzynię przemytu z niszy. Nocą pilnuje Sławek.
-zadania.D34.steps.1.text = Skrzynia przemytu jest ciężka. Oddaj ją celnikowi Samborowi (przystań){balt}.
+zadania.D34.steps.1.text = Skrzynia przemytu jest ciężka. Oddaj ją celnikowi Samborowi (wieczorem w tawernie){balt}.
 [zadania.D34.reward.note]
 Jaskinia przemytników
 Pod zatoczką przemytników, w skale nad przystanią, Baltazar miał skład. W odpływie można tam wejść suchą nogą.
@@ -368,7 +368,7 @@ Moi ludzie rozbili obóz kopaczy pod skałą. Szyb zasypany. Czarne Oczy kopały
 [owcaGdzie]
 przy starym dębie na zachodzie
 między krzakami w środku łąki
-na północnym wschodzie, pod lasem
+na zachodnim skraju łąki, pod lasem
 
 # ======================================================================== TX
 menu.buy = Pokaż towar.
@@ -694,7 +694,7 @@ odkrycia.lud_mielerz.text = Kopiec polan obłożony darnią przy Leśnej drodze.
 odkrycia.lud_koszar.name = Koszar pasterza
 odkrycia.lud_koszar.text = Wiklinowa zagroda na Łące. Wawrzyn Owczarz pasie tu sześć owiec, wieczorem zagania je za płot - wilki nocą nie przeskoczą plecionki. Co trzeci dzień pasie stado przy menhirach.
 odkrycia.lud_postoj.name = Postój wędrownego handlarza
-odkrycia.lud_postoj.text = Wóz pod plandeką, osiołek i ognisko przy Polnej drodze. Szymon Juczny krąży czterema postojami: Polna droga, Leśna droga, Łąka, Kruczy Jar - dzień tu, dzień tam. Sprzedaje to, czego w miasteczku nie ma, i słyszy, co gdzie leży.
+odkrycia.lud_postoj.text = Wóz pod plandeką, osiołek i ognisko przy drodze na Łące. Szymon Juczny krąży dwoma postojami: Łąka i Kruczy Jar - dzień tu, dzień tam. Sprzedaje to, czego w miasteczku nie ma, i słyszy, co gdzie leży.
 odkrycia.lud_oboz.name = Obóz kopaczy Czarnych Oczu
 odkrycia.lud_oboz.text = Dwa namioty pod skałą na wschodzie gór i szyb wykuty w kamieniu. Kopacze Czarnych Oczu drążą tu coś po cichu - za dnia pilnują, nocą śpią przy ognisku.
 odkrycia.lud_jaskinia.name = Jaskinia pod zatoczką
@@ -707,13 +707,13 @@ f9.tytul = Paczka C: Ludzie (mielerz, pasterz, handlarz, patrole, kopacze, jaski
 [f9.miejsca]  # wiersz „Miejsce”: miejsca, na które przenosi (kolejność jak w Ludzie.js, PLACES)
 Mielerz Zbycha (Leśna droga)
 Szałas węglarza
-Postój handlarza (Polna droga)
-Postój handlarza (Leśna droga)
+Postój handlarza (Łąka, przy ognisku)
+Postój handlarza (Kruczy Jar, przy ognisku)
 Postój handlarza (Łąka)
 Postój handlarza (Kruczy Jar)
 Koszar i pastwisko (Łąka)
 Pastwisko przy menhirach
-Omszała łąka (owca K64)
+Łąka za koszarem (owca K64)
 Juk K65 (Leśna droga)
 Obóz kopaczy (Góry)
 Szyb kopaczy

@@ -1,0 +1,60 @@
+PASS the game boots
+PASS Kopalnia on the plugin list, right after Orzel_Lot  ["Orzel","Orzel_Lot","Kopalnia","Okolice"]
+PASS Kopalnia is up (the API)
+PASS MapInfos: Map213 'Kopalnia pod Orlą Granią' under Góry i kamieniołom  {"name":"Kopalnia pod Orlą Granią","parent":13}
+PASS Map013: the mine's mouth at (54,31), rails out of it to the old cart (8 pieces), no tree over the mouth  {"mouth":[[54,31]],"climb":0,"injected":{"TownQuests":[951,952,954],"Zasoby":[2140,2141,2142,2143,2144,2145,2146,2147,2148,2149,2150],"Lowy":[2320,2321],"Ludzie":[2590,2591,2592,2593,2594,2596,2597,2595],"Zakon":[2700,2701,2702,2720,2721,2722,2723,2730,2731,2732]},"pine":0,"rails":8}
+PASS Map013: still no climb cells - the eagle's shelves stay eagle only (no Orzel way up injected here)  {"TownQuests":[951,952,954],"Zasoby":[2140,2141,2142,2143,2144,2145,2146,2147,2148,2149,2150],"Lowy":[2320,2321],"Ludzie":[2590,2591,2592,2593,2594,2596,2597,2595],"Zakon":[2700,2701,2702,2720,2721,2722,2723,2730,2731,2732]}
+PASS walking up into the mouth (54,31) -> Map213 (9,37) facing up
+PASS arrival on Map213 at (9,37) facing up  {"map":213,"x":9,"y":37,"d":8,"rx":9,"ry":37}
+PASS map 96 x 40, events index == id, the tileset the staged copy of 10 with the rails  {"main":[[7,31,"A"],[38,31,""],[38,22,""],[55,22,"H"],[58,22,"J"],[70,22,""],[70,12,""],[88,12,"B"]],"spur":[[58,22,"J"],[58,14,"S"]],"exits":{"A":{"x":7,"y":32,"dir":2},"H":{"x":55,"y":21,"dir":8},"B":{"x":88,"y":11,"dir":8},"S":{"x":59,"y":14,"dir":8}},"carts":{"A":5,"B":6,"M":7,"R":8},"lever":9,"idx":true,"w":96,"h":40,"ts":20,"ts_name":"Kopalnia: Dungeon z torami","visible":[["Wagonik A",false],["Wagonik B",false],["Wagonik (jazda)",true],["Wagonik (przód)",true]],"enemies":0,"lights":19}
+PASS the way: main A(7,31) ... H(55,22) J(58,22) ... B(88,12), the spur J -> S(58,14); exits of the four stops; the carts and the lever tagged  {"main":[[7,31,"A"],[38,31,""],[38,22,""],[55,22,"H"],[58,22,"J"],[70,22,""],[70,12,""],[88,12,"B"]],"spur":[[58,22,"J"],[58,14,"S"]],"exits":{"A":{"x":7,"y":32,"dir":2},"H":{"x":55,"y":21,"dir":8},"B":{"x":88,"y":11,"dir":8},"S":{"x":59,"y":14,"dir":8}},"carts":{"A":5,"B":6,"M":7,"R":8},"lever":9,"idx":true,"w":96,"h":40,"ts":20,"ts_name":"Kopalnia: Dungeon z torami","visible":[["Wagonik A",false],["Wagonik B",false],["Wagonik (jazda)",true],["Wagonik (przód)",true]],"enemies":0,"lights":19}
+PASS the two ends' carts stand, the moving cart and the rim are away  [["Wagonik A",false],["Wagonik B",false],["Wagonik (jazda)",true],["Wagonik (przód)",true]]
+PASS no enemies, a dozen lights from lanterns and braziers (every light a fire)  {"enemies":0,"lights":19}
+PASS on foot from the landing: station A, the halt, station B, the spur's end and its chamber, the lever, the stairs - nobody can get stuck (819 cells)  {"A":true,"H":true,"B":true,"S":true,"stairs":true,"chamber":true,"lever":true}
+PASS the carts do not block the landing cells
+PASS O at the cart of A: the menu 'Jedź na szczyt' / 'Zostań' (the lever on the line)  ["Jedź na szczyt","Zostań"]
+PASS the ride begins (A -> B), the hero rides  {"lever":0,"ride":{"from":"A","to":"B","s":0.29166666666666663,"v":1.666666666666666,"hero":true,"brake":false,"total":99.14159265358978,"frames":20},"rest":null}
+PASS mid-ride: the hero rides (cannot walk, saving and the menu refused), the camera on him  {"riding":true,"save":false,"canMove":false,"through":true,"px":20.099999999999973,"py":31,"dx":20.099999999999973,"dy":31,"menu":false}
+PASS one moving cart carries him, the rim over him (priority 2), the end's parked cart is away  {"m":{"x":20.099999999999973,"y":31,"erased":false,"pri":0,"dir":6},"r":{"x":20.099999999999973,"y":31,"erased":false,"pri":2,"dir":6},"a":{"x":7,"y":31,"erased":true,"pri":1,"dir":6}}
+PASS Esc during the ride: it brakes at the next station (the halt, H)
+PASS the ride ends at the halt H (stops, the hero steps out beside it)  {"lever":0,"ride":null,"rest":{"stop":"H","origin":"A"}}
+PASS at the halt: the cart rests at H, the hero on the exit cell (55,21), free, facing up  {"sh":{"lever":0,"ride":null,"rest":{"stop":"H","origin":"A"}},"hh":{"map":213,"x":55,"y":21,"d":8,"rx":55,"ry":21}}
+PASS the hero walks away from the resting cart: it goes back, both end carts stand again, nothing left at the halt  {"lever":0,"ride":null,"rest":null}
+PASS saving works again at the station
+PASS a station popup came up
+PASS at the halt the menu offers: on to the summit / back to the quarry / stay  ["Jedź na szczyt","Jedź do kamieniołomu","Zostań"]
+PASS the ride H -> B
+PASS it arrives at B within the time (the way ~44 tiles at 4 a second)
+PASS station B: the hero on (88,11) facing up, the cart rests on (88,12) (the end's cart: M)  {"hb":{"map":213,"x":88,"y":11,"d":8,"rx":88,"ry":11},"cb":{"x":88,"y":12,"erased":false,"pri":1,"dir":6}}
+PASS the exit cell is free of things, the rim is away
+PASS the ride B -> A (the main line, the lever on the main line does not matter from this side)  {"lever":0,"ride":{"from":"B","to":"A","s":0.29166666666666663,"v":1.666666666666666,"hero":true,"brake":false,"total":99.14159265358978,"frames":20},"rest":null}
+PASS it arrives at A
+PASS station A: the hero on (7,32), free, facing down (off the platform)  {"map":213,"x":7,"y":32,"d":2,"rx":7,"ry":32}
+PASS A -> B arrives (the whole way)  {"map":213,"x":88,"y":11,"d":8,"rx":88,"ry":11}
+PASS the whole A -> B takes about 25 seconds of game time (24-28)  {"seconds":25.333333333333332}
+PASS the stairs on B are gated (a popup, no transfer) while there is no reason to climb (no egg, not Act II, no D29)  {"map":213,"tr":false}
+PASS with a reason: up the stairs -> Orla Grań (20,28) facing up
+PASS arrival on Orla Grań at (20,28) facing up  {"map":175,"x":20,"y":28,"d":8,"rx":20,"ry":28}
+PASS Orla Grań: the shaft at (20,30), the way down on (19..21,30), the north edge's 144 / 152 / 155 gone, events index == id  {"shaft":[[20,30]],"down":[[19,30],[20,30],[21,30]],"edge":[0,0,0],"ids":true}
+PASS down the shaft -> the mine, under the stairs of B
+PASS back on Map213 at (84,9) / (85,9) facing down, a free cell  {"map":213,"x":85,"y":9,"d":2,"rx":85,"ry":9}
+PASS the lever (O): the junction turns to the spur, the lever's picture leans the other way, a popup says so  {"lever":1,"dir":2}
+PASS at A the menu now offers the spur  ["Jedź w odnogę z rudą","Zostań"]
+PASS the ride A -> S  {"lever":1,"ride":{"from":"A","to":"S","s":0.29166666666666663,"v":1.666666666666666,"hero":true,"brake":false,"total":67.35619449019234,"frames":20},"rest":null}
+PASS the ride to the spur's end ends
+PASS the spur's end: the hero on (59,14), the cart rests at S (58,14)  {"hs":{"map":213,"x":59,"y":14,"d":8,"rx":59,"ry":14},"ss":{"lever":1,"ride":null,"rest":{"stop":"S","origin":"A"}}}
+PASS an ore vein (the game's own iron ore picture) stands at the face  {"id":45,"x":57,"y":12}
+PASS the spur's ore mined with the pickaxe like any ore (iron ore in the bag)  {"before":0,"after":1}
+PASS the hero left the cart far behind: the empty cart rolls back by itself (an empty ride S -> A)  {"lever":1,"ride":{"from":"S","to":"A","s":0.0013888888888888887,"v":0.08333333333333333,"hero":false,"brake":false,"total":67.35619449019234,"frames":1},"rest":null}
+PASS the rolling cart has no rider and the hero can walk freely (not riding)
+PASS it reaches A: the two carts stand at the ends again (nothing left on the spur)  {"lever":1,"ride":null,"rest":null}
+PASS the hero walks back from the spur's end on foot (the whole mine connected)
+PASS the lever back: the main line
+PASS a game loads at the station: nobody riding, the ends' carts parked, the moving cart away  {"lever":0,"ride":null,"rest":null}
+PASS a ride: saving is refused (isSaveEnabled false)
+PASS the ride is over at the halt after the Esc
+PASS no leftovers: nothing riding at the end
+frame time at 4x CPU throttle: walking on Map014 avg 5.48 ms (p95 8.2, 179 frames), riding on Map213 avg 5.98 ms (p95 8.3, 179 frames)
+PASS frame time: riding (4x CPU throttle, best of 3) is not worse than walking on Map014 (+10%)  {"walk":{"n":179,"avg":5.4815643140057615,"p95":8.199999809265137},"ride":{"n":179,"avg":5.983798823543101,"p95":8.300000190734863}}
+PASS no errors in the console  []
+58/58 passed

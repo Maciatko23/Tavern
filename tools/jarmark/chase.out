@@ -1,0 +1,7 @@
+start {"x":36,"y":99,"roof":true,"u":0,"ph":"bieg","sx":41,"sy":97}
+po skoku 1 {"x":43,"y":96,"roof":true,"u":0,"ph":"bieg","sx":46,"sy":100}
+po skoku 2 {"x":47,"y":100,"roof":true,"u":0,"ph":"koniec","sx":46,"sy":100}
+meta {"x":47,"y":100,"roof":true,"u":0,"ph":"koniec","sx":46,"sy":100} {"ph":"koniec","busy":true,"run":true}
+PASS bez błędów  []
+1/1 passed
+EXIT 0

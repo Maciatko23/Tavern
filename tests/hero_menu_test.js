@@ -8,7 +8,7 @@
 const kit = require("./lib/kit.js");
 
 kit.test({ port: 9468, errorCheck: "bez błędów w konsoli" }, async t => {
-    t.check("a new game on grandpa's field (Map003)", await t.newGame({ map: 3, x: 22, y: 14, hour: 12, quiet: true }));
+    t.check("a new game on grandpa's field (Map003)", await t.newGame({ map: 3, x: 62, y: 45, hour: 12, quiet: true }));
     const J = e => t.json(e);
 
     t.check("the numbers: level 100 at most, attributes up to 60, 3 attribute points and 1 skill point a level; 10 trees, ~100 skills",

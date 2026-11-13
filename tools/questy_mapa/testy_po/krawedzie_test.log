@@ -1,0 +1,9 @@
+PASS gra się uruchamia
+PASS Krawedzie w grze, po FreeMovement, Homes i Orzel_Lot  {"k":true,"order":[35,135,189,197]}
+FAIL mur działki: przy murze (x 3), pod wzniesieniem (y 5), przy murze na dole (y 26) i z prawej (x 36) - nie wolno  {"corner":"To już nie działka dziadka.","rise":"To już nie działka dziadka.","riseOk":"To już nie działka dziadka.","mid":"To już nie działka dziadka.","east":"To już nie działka dziadka.","south":"To już nie działka dziadka.","gate":"To już nie działka dziadka."}
+PASS mur działki: w środku i 2 rzędy pod wzniesieniem (y 6) - mur nie przeszkadza (najwyżej inny powód)  {"corner":"To już nie działka dziadka.","rise":"To już nie działka dziadka.","riseOk":"To już nie działka dziadka.","mid":"To już nie działka dziadka.","east":"To już nie działka dziadka.","south":"To już nie działka dziadka.","gate":"To już nie działka dziadka."}
+FAIL nowa część Kruczego Jaru (region 9) dalej: „To już nie działka dziadka.”  null
+FAIL w Kruczym Jarze jest wolny brzeg z przejściem po tej stronie, z dala od ścieżki  null
+PASS brzeg bez przejścia po tej stronie (Omszała łąka): bohater zostaje na mapie  {"dead":{"side":"W","x":0,"y":0},"still":{"map":17,"tr":false}}
+PASS bez błędów w konsoli  []
+5/8 passed

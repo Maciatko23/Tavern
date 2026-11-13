@@ -65,9 +65,9 @@
             // event of Garnizon.js on Map008 (659), not a TownLife alt: an alt switching at night while the hero is in the town would
             // leave TownLife's resident without an event there
             key: "kwatermistrz", id: 946, sheet: "$Npc_Kwatermistrz", map: MAP, speed: 2,
-            away: ["namiot_kwat"],
+            away: ["namiot_kwat"], indoor: { tawerna: "gosc_kwatermistrz" },
             plan: [[0, "inside", "namiot_kwat"], [7, "work", "spichlerz"], [9, "stand", "skup"], [12, "stand", "kuchnia"], [13, "stand", "skup"],
-                   [16, "work", "spichlerz"], [18, "stand", "ognisko_2"], [22, "inside", "namiot_kwat"]],
+                   [16, "work", "spichlerz"], [17, "inside", "tawerna"], [19.5, "stand", "ognisko_2"], [22, "inside", "namiot_kwat"]],
             barks: {
             },
             talk: {
@@ -101,9 +101,9 @@
     if (TL) {
         TL.SPOTS_BY_MAP = TL.SPOTS_BY_MAP || {};
         TL.SPOTS_BY_MAP[MAP] = Object.assign(TL.SPOTS_BY_MAP[MAP] || {}, {
-            spi: [42, 18, 8], musztra: [30, 23, 2], kwatera_drzwi: [42, 18, 8], kuchnia: [38, 29, 6], brama_wew: [36, 12, 2], pomost: [14, 26, 4],
-            wieza: [49, 17, 8], ognisko: [39, 31, 8], brzeg: [17, 22, 4], spichlerz: [46, 31, 8], skup: [33, 29, 2], namiot_kwat: [32, 32, 8],
-            ognisko_2: [42, 31, 8], stol_werbownika: [30, 8, 2], koszary_drzwi: [29, 15, 8], przed_brama: [33, 10, 2]
+            spi: [64, 42, 8], musztra: [52, 47, 2], kwatera_drzwi: [64, 42, 8], kuchnia: [60, 53, 6], brama_wew: [58, 36, 2], pomost: [36, 50, 4],
+            wieza: [71, 41, 8], ognisko: [61, 55, 8], brzeg: [39, 46, 4], spichlerz: [68, 55, 8], skup: [55, 53, 2], namiot_kwat: [54, 56, 8],
+            ognisko_2: [64, 55, 8], stol_werbownika: [52, 32, 2], koszary_drzwi: [51, 39, 8], przed_brama: [55, 34, 2]
         });
         TL.SPOTS_BY_MAP[QUARTERS] = Object.assign(TL.SPOTS_BY_MAP[QUARTERS] || {}, { rotmistrz_wnetrze: [6, 4, 2] });
         if (TL.SPOTS) {
@@ -173,8 +173,8 @@
         mowa: { akapity: true, kto: key => w.hak("mowca", null, key) },
         zadania: {
             // K52: wood and charcoal for the field kitchen - then Kłos buys from the hero (Garnizon.js: the favour +20 on k52Skup)
-            K52: { kind: "K", giver: "kwatermistrz", icon: 61, offer: { cond: { hours: [8, 18], day: 5, flags: ["garnizonPoznany"] } },
-                kroki: [{ nazwa: "k52Drewno", type: "bring", to: "kwatermistrz", need: [[61, 10], [79, 4]], hours: [7, 22] }],
+            K52: { kind: "K", giver: "kwatermistrz", icon: 61, offer: { cond: { hours: [17, 19.5], day: 5, flags: ["garnizonPoznany"] } },
+                kroki: [{ nazwa: "k52Drewno", type: "bring", to: "kwatermistrz", need: [[61, 10], [79, 4]], hours: [17, 19.5] }],
                 reward: { gold: 20, xp: 50, flag: "k52Skup" },
                 rewardFxNote: "przychylność garnizonu +20 (Garnizon.js: flag k52Skup)" },
             // D26: the day after a wave (the recruiter wherever he is); the three of the list helped or warned (the step's talk with each of
@@ -273,7 +273,7 @@
     // the patrol on the road (favour under 10), event 652 on Map162
     const PATROL = { id: 652, x: 22, y: 5 };
     // Map008: the recruiter's list on the market (656); the search after D26 b (657-658); Map111: the search (660-661)
-    const TOWN_EVENTS = { list: { id: 656, x: 25, y: 47 }, search: [{ id: 657, x: 59, y: 89 }, { id: 658, x: 47, y: 89 }], klos: { id: 659, x: 13, y: 48, d: 6 } };
+    const TOWN_EVENTS = { list: { id: 656, x: 25, y: 47 }, search: [{ id: 657, x: 90, y: 97 }, { id: 658, x: 78, y: 97 }], klos: { id: 659, x: 13, y: 48, d: 6 } };
     const PODGRODZIE_EVENTS = [{ id: 660, x: 45, y: 21 }, { id: 661, x: 37, y: 14 }];
     // the captain's quarters (Map163): where the door of Map162 lands, where its doorway leads back
     const QUARTERS_LANDING = [6, 8], QUARTERS_EXIT = [42, 18];

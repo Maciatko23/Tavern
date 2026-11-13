@@ -1,0 +1,7 @@
+roofstale {"on":false,"zas":0}
+{"d":53,"h":12.202222222222218,"zajete":false,"run":false,"has":true}
+{"koniec":"F","z":1,"d":53,"h":12.202777777777772,"zajete":false,"run":false}
+{"koniec":"F","z":1,"h":12.225277777777704}
+PASS bez błędów  []
+1/1 passed
+EXIT 0

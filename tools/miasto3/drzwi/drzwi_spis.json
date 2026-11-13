@@ -1,0 +1,594 @@
+[
+ {
+  "id": 4,
+  "x": 91,
+  "y": 47,
+  "name": "Drzwi: Ratusz",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    749
+   ],
+   [
+    757
+   ],
+   [
+    765
+   ]
+  ]
+ },
+ {
+  "id": 22,
+  "x": 51,
+  "y": 16,
+  "name": "Drzwi tawerny -> Tawerna",
+  "pic": "",
+  "tiles": [
+   [
+    51,
+    986
+   ],
+   [
+    59,
+    994
+   ],
+   [
+    67,
+    1002
+   ]
+  ]
+ },
+ {
+  "id": 50,
+  "x": 8,
+  "y": 16,
+  "name": "Drzwi: Kaplica",
+  "pic": "!$Gate_Cathedral1",
+  "tiles": [
+   [
+    588
+   ],
+   [
+    596
+   ],
+   [
+    604
+   ]
+  ]
+ },
+ {
+  "id": 57,
+  "x": 19,
+  "y": 12,
+  "name": "Drzwi: Dom grabarza",
+  "pic": "",
+  "tiles": [
+   [
+    745,
+    749
+   ],
+   [
+    753,
+    757
+   ],
+   [
+    761,
+    765
+   ]
+  ]
+ },
+ {
+  "id": 63,
+  "x": 85,
+  "y": 12,
+  "name": "Drzwi: Dom Agaty",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    98
+   ],
+   [
+    106
+   ],
+   [
+    114
+   ]
+  ]
+ },
+ {
+  "id": 80,
+  "x": 42,
+  "y": 87,
+  "name": "Drzwi: Dom staruszków",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    746
+   ],
+   [
+    754
+   ],
+   [
+    762
+   ]
+  ]
+ },
+ {
+  "id": 84,
+  "x": 96,
+  "y": 28,
+  "name": "Drzwi: Kamienica",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    314
+   ],
+   [
+    322
+   ],
+   [
+    330
+   ]
+  ]
+ },
+ {
+  "id": 88,
+  "x": 38,
+  "y": 72,
+  "name": "Drzwi: Piekarnia",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    186
+   ],
+   [
+    194
+   ],
+   [
+    202
+   ]
+  ]
+ },
+ {
+  "id": 94,
+  "x": 14,
+  "y": 47,
+  "name": "Drzwi: Kantor „Towary z kontynentu”",
+  "pic": "!Fantasy_door3",
+  "tiles": [
+   [
+    542
+   ],
+   [
+    550
+   ],
+   [
+    558
+   ]
+  ]
+ },
+ {
+  "id": 95,
+  "x": 18,
+  "y": 46,
+  "name": "Drzwi: Kantor „Towary z kontynentu”",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    186
+   ],
+   [
+    194
+   ],
+   [
+    202
+   ]
+  ]
+ },
+ {
+  "id": 114,
+  "x": 85,
+  "y": 47,
+  "name": "Drzwi: Ratusz",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    489
+   ],
+   [
+    497
+   ],
+   [
+    505
+   ]
+  ]
+ },
+ {
+  "id": 121,
+  "x": 36,
+  "y": 38,
+  "name": "Drzwi: Dom mieszczan",
+  "pic": "!Fantasy_door2",
+  "tiles": [
+   [
+    746
+   ],
+   [
+    754
+   ],
+   [
+    762
+   ]
+  ]
+ },
+ {
+  "id": 124,
+  "x": 39,
+  "y": 37,
+  "name": "EV124",
+  "pic": "!Fantasy_door2",
+  "tiles": [
+   [
+    86
+   ],
+   [
+    94
+   ],
+   [
+    102
+   ]
+  ]
+ },
+ {
+  "id": 129,
+  "x": 7,
+  "y": 48,
+  "name": "Drzwi: Dom szwaczki",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    236
+   ],
+   [
+    244
+   ],
+   [
+    252
+   ]
+  ]
+ },
+ {
+  "id": 134,
+  "x": 13,
+  "y": 60,
+  "name": "EV134",
+  "pic": "!Fantasy_door2",
+  "tiles": [
+   [
+    413
+   ],
+   [
+    421
+   ],
+   [
+    429
+   ]
+  ]
+ },
+ {
+  "id": 137,
+  "x": 59,
+  "y": 73,
+  "name": "EV137",
+  "pic": "!Fantasy_door3",
+  "tiles": [
+   [
+    865
+   ],
+   [
+    873
+   ],
+   [
+    881
+   ]
+  ]
+ },
+ {
+  "id": 141,
+  "x": 6,
+  "y": 88,
+  "name": "EV141",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    865
+   ],
+   [
+    873
+   ],
+   [
+    881
+   ]
+  ]
+ },
+ {
+  "id": 152,
+  "x": 98,
+  "y": 47,
+  "name": "Drzwi: Strażnica Lorda",
+  "pic": "!Fantasy_door2",
+  "tiles": [
+   [
+    425
+   ],
+   [
+    433
+   ],
+   [
+    441
+   ]
+  ]
+ },
+ {
+  "id": 180,
+  "x": 84,
+  "y": 63,
+  "name": "Drzwi: Dom Haliny",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    749
+   ],
+   [
+    757
+   ],
+   [
+    765
+   ]
+  ]
+ },
+ {
+  "id": 197,
+  "x": 95,
+  "y": 62,
+  "name": "Drzwi: Stary dom kupca",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    670
+   ],
+   [
+    678
+   ],
+   [
+    686
+   ]
+  ]
+ },
+ {
+  "id": 204,
+  "x": 33,
+  "y": 86,
+  "name": "Drzwi: Dom cieśli",
+  "pic": "!Fantasy_door2",
+  "tiles": [
+   [
+    413
+   ],
+   [
+    421
+   ],
+   [
+    429
+   ]
+  ]
+ },
+ {
+  "id": 209,
+  "x": 69,
+  "y": 8,
+  "name": "Drzwi: Stajnia",
+  "pic": "!Fantasy_door2",
+  "tiles": [
+   [
+    622
+   ],
+   [
+    630
+   ],
+   [
+    638
+   ]
+  ]
+ },
+ {
+  "id": 216,
+  "x": 84,
+  "y": 88,
+  "name": "Drzwi: Dom weterana",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    173
+   ],
+   [
+    181
+   ],
+   [
+    189
+   ]
+  ]
+ },
+ {
+  "id": 218,
+  "x": 95,
+  "y": 88,
+  "name": "Drzwi: Izba do wynajęcia",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    670
+   ],
+   [
+    678
+   ],
+   [
+    686
+   ]
+  ]
+ },
+ {
+  "id": 231,
+  "x": 31,
+  "y": 73,
+  "name": "Drzwi: Dom 10",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    542
+   ],
+   [
+    550
+   ],
+   [
+    558
+   ]
+  ]
+ },
+ {
+  "id": 235,
+  "x": 45,
+  "y": 73,
+  "name": "Drzwi: Dom 11",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    173
+   ],
+   [
+    181
+   ],
+   [
+    189
+   ]
+  ]
+ },
+ {
+  "id": 236,
+  "x": 86,
+  "y": 31,
+  "name": "Drzwi: Dzwonnica",
+  "pic": "",
+  "tiles": [
+   [
+    835
+   ],
+   [
+    843
+   ],
+   [
+    851
+   ]
+  ]
+ },
+ {
+  "id": 245,
+  "x": 52,
+  "y": 49,
+  "name": "Studnia miejska: zejście",
+  "pic": "",
+  "tiles": [
+   [
+    702
+   ],
+   [],
+   [
+    718
+   ]
+  ]
+ },
+ {
+  "id": 246,
+  "x": 33,
+  "y": 12,
+  "name": "Płyta w ścieżce (ogród rycerzy)",
+  "pic": "",
+  "tiles": [
+   [],
+   [],
+   []
+  ]
+ },
+ {
+  "id": 250,
+  "x": 45,
+  "y": 87,
+  "name": "Drzwi: Dom 12",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    542
+   ],
+   [
+    550
+   ],
+   [
+    558
+   ]
+  ]
+ },
+ {
+  "id": 253,
+  "x": 79,
+  "y": 74,
+  "name": "Drzwi: Dom 13",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    746
+   ],
+   [
+    754
+   ],
+   [
+    762
+   ]
+  ]
+ },
+ {
+  "id": 254,
+  "x": 78,
+  "y": 88,
+  "name": "Drzwi: Dom 14",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    670
+   ],
+   [
+    678
+   ],
+   [
+    686
+   ]
+  ]
+ },
+ {
+  "id": 259,
+  "x": 21,
+  "y": 33,
+  "name": "Drzwi: Dom 15",
+  "pic": "!Fantasy_door1",
+  "tiles": [
+   [
+    670
+   ],
+   [
+    678
+   ],
+   [
+    686
+   ]
+  ]
+ }
+]

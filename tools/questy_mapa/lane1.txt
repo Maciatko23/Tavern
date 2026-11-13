@@ -1,0 +1,5 @@
+lowy_test rc=1 39 pass 7 fail; 39/46 passed
+w1_chapters_test rc=1 32 pass 4 fail; 32/36 passed
+pustelnia_test rc=1 0 pass 0 fail; Node.js v24.18.1
+kruk_test rc=1 0 pass 0 fail; Node.js v24.18.1
+debug_menu_test rc=0 83 pass 0 fail; 83/83 passed

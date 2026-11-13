@@ -86,7 +86,7 @@
     const D = window.TownQuestsData;
     if (!D) throw new Error("TownQuests.js: TownQuests_Data.js must stand above it in the plugin list");
     const PLUGIN = "TownQuests";
-    const TOWN = 8, ROAD = 22, MANOR = 24;   // the town, Polna droga, the Lord's manor (its garden and the orangery)
+    const TOWN = 8, ROAD = 3, MANOR = 24;   // the town, Kruczy Jar (the road behind the south gate; was Map022 Polna droga), the Lord's manor (its garden and the orangery)
     const QUESTS = D.QUESTS, Q = {};
     for (const q of QUESTS) Q[q.id] = q;
     const KIND = { K: "krótkie", D: "długie", W: "wątek" };
@@ -2538,9 +2538,13 @@
             for (const e of D.CALENDAR.events) if (e.day === d) out.push({ day: d, title: e.title, text: e.text, wait: e.wait });
             if (T.time.isEaster(d) && !T.time.isEaster(d - 1)) out.push({ day: d, title: "Wielkanoc", text: "Pisanki, święcone, a śmigus-dyngus bez wody - sołtys zakazał." });
             // (2026-10-16, W2 rozdz. 7) at midnight the bell of the scriptorium's tower on the cliff strikes seven - once its heart hangs there
+            // (2026-11-11) the hermitage out of the world: the bell of the chapel's tower in Kruczogrod
+            const klif = !!(window.WyspaData && window.WyspaData.HERMITAGE_OPEN);
             if (T.time.isWigilia(d) && !T.time.isWigilia(d - 1)) out.push({ day: d, title: "Wigilia", text: S().flags.sercePustelni
-                ? "Wspólna wieczerza. O północy dzwon w wieży skryptorium na klifie bije siedem razy - Noc Pytania u brata Kleofasa."
-                : "Wspólna wieczerza. Mówią, że dawniej o północy bił siedem razy dzwon w wieży skryptorium na klifie." });
+                ? (klif ? "Wspólna wieczerza. O północy dzwon w wieży skryptorium na klifie bije siedem razy - Noc Pytania u brata Kleofasa."
+                    : "Wspólna wieczerza. O północy dzwon w wieży kaplicy bije siedem razy - Noc Pytania u brata Kleofasa.")
+                : (klif ? "Wspólna wieczerza. Mówią, że dawniej o północy bił siedem razy dzwon w wieży skryptorium na klifie."
+                    : "Wspólna wieczerza. Mówią, że dawniej o północy bił siedem razy dzwon w wieży skryptorium na klifie. Teraz brat z klifu siedzi przy kaplicy.") });
         }
         return out;
     }
@@ -2679,7 +2683,7 @@
             if (SB && SB.say && who) SB.say(who, line, 160);
             const got = addOpinion(-3, "nocą w ogrodzie dworu");
             T.popup("Złapali cię w ogrodzie dworu", { top: true, color: "#ff9f8f", sub: "Wyrzucony za bramę dworu - spróbuj innej nocy" + (got ? "  ·  Opinia " + got : "") });
-            pendingOut = { at: Graphics.frameCount + 75, map: TOWN, x: 102, y: 51, dir: 4 };
+            pendingOut = { at: Graphics.frameCount + 75, map: TOWN, x: 117, y: 49, dir: 4 };
         },
         // (2026-10-06) two weeks after the deal Feliks's men wait on Polna droga: a real fight (Humans.ambush - combat stage 3). Two men
         // (a club and - if Humans.js has it - a knife), three (an archer too) once Feliks has paid 40 G. Beaten: the hero keeps the

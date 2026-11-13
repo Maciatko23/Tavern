@@ -195,3 +195,26 @@ kod.gutterEvent.0 = Rynna zakonu (zapchana) {n}
 rainShut = Zasuwa deszczowa: zardzewiała na amen.
 gutterLook = Rynna zakonu, wykuta w skale - zapchana gruzem i starym gniazdem.
 wellLow = Studnia prawie sucha - sołtys daje dziś jedno nabranie
+
+# ======================================================================== RYNNY NA MURACH KRUCZOGRODU (pustelnia poza światem, 2026-11-11)
+# Urwisko jest poza światem: krata przelewu stoi zasypana, a cztery rynny zakonu, którymi spływał deszcz do cysterny, są na starych murach twierdzy
+# w Kruczogrodzie. Klucze „kaplica.<ścieżka>” czyta się tylko wtedy (Pustelnia_Data.js).
+kaplica.grateBlocked = Za kratą kanał zasypany gruzem po osuwisku. Tędy nie wyjdziesz.
+kaplica.leverSub = Krata przelewu puściła - ale kanał za nią jest zasypany.
+kaplica.leverDone = Dźwignia opuszczona. Rygiel puszczony, kanał za kratą zasypany.
+kaplica.rainOpenSub = Deszcz ze starych murów twierdzy znów spłynie do cysterny.
+[kaplica.rainClogged]
+> Z kanału ledwo kapie. Rynny na starych murach muszą być zapchane.
+
+kaplica.rainLookN = Zasuwa deszczowa otwarta. Rynny na murach twierdzy: oczyszczone {n}/4.
+kaplica.gutterLook = Rynna zakonu, wykuta w kamieniu muru - zapchana gruzem i starym gniazdem.
+kaplica.zadania.D28.steps.2.text = Kanał przelewu kończy się kratą z krukiem. Otwórz ją dźwignią od środka (kanał na północnym wschodzie).
+kaplica.zadania.K53.where = Stara cysterna zakonu → mury twierdzy w Kruczogrodzie
+kaplica.zadania.K53.desc = Cysterna pije deszcz z rynien wykutych w starych murach twierdzy. Przez lata zapchały się gruzem i gniazdami, a zasuwa deszczowa zardzewiała. Deszcz spływa do ulic.
+kaplica.zadania.K53.steps.1.text = Oczyść cztery rynny zakonu na starych murach Kruczogrodu z gruzu i gniazd ({n}/4) - kilofem albo łopatą.
+[kaplica.zadania.K53.reward.note]
+Rynny zakonu
+Otworzyłem zasuwę deszczową w starej cysternie i oczyściłem cztery rynny zakonu na starych murach Kruczogrodu. Każdy deszcz znowu napełnia cysternę - trzy razy więcej niż przez zapchane rynny.
+
+[kaplica.uwagi.5.lines]
+Pada, a ja słyszę wodę pod wzgórzem. Jak za mojego mistrza. Ktoś oczyścił rynny na murach? ...Cztery i dwa, chłopcze. Woda idzie.

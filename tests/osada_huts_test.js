@@ -1,8 +1,8 @@
-// The four huts of Osada Milczących (Map120) and their interiors Map121-124 (tools/osada, docs/osada/CHATY.md; 2026-10-07):
-//   - each hut's front door on Map120: walking into it -> the interior's landing (the floor cell over the doorway), facing up;
+// The four huts of Osada Milczących (since 2026-11-11 on the east meadow of Laka pod Gawra (Map004), Map004) and their interiors Map121-124 (tools/osada, docs/osada/CHATY.md; 2026-10-07):
+//   - each hut's front door on Laka pod Gawra (Map004): walking into it -> the interior's landing (the floor cell over the doorway), facing up;
 //     the landing passable and not a trap; every free floor cell of the hut reached from it by the game's own walking rules
 //     (tile flags both ways, blocking events) - no closed pockets; every thing to look at and the resident reachable beside;
-//     the doorway -> back on Map120 in front of the door, facing down
+//     the doorway -> back on Laka pod Gawra (Map004) in front of the door, facing down
 //   - the Silent keep hours (tools/osada/osada_data.py RESIDENTS): at 13:00 the elder stands at the circle and the other three are
 //     at home (their figure in the hut, nobody at their place in the valley); at 23:00 all four at home, nobody outside
 //   - pressing the action button by a resident: a gesture in popups ("Milczy. ..."), no message window; the watch's roll and the
@@ -19,13 +19,13 @@ const META_DIR = path.join(__dirname, "fixtures", "osada");
 const SHOTS = path.join(__dirname, "..", "docs", "osada");
 const META = id => JSON.parse(fs.readFileSync(path.join(META_DIR, "Map" + id + "_meta.json"), "utf8"));
 
-// the contract (tools/osada/osada_data.py): door on Map120, the cell in front, the resident outside / inside, home at 13:00
+// the contract (tools/osada/osada_data.py): door on Laka pod Gawra (Map004) (the old Map120 coordinates + (46, 27)), the cell in front, the resident outside / inside, home at 13:00
 const HUTS = [
-    { id: 121, name: "Wspólna izba", door: "Drzwi chaty 1", front: [8, 17], out: "Milcząca przy grządce", in: "Milcząca ogrodniczka", home13: true },
-    { id: 122, name: "Chata tkaczki", door: "Drzwi chaty 2", front: [29, 15], out: "Milcząca przy ścianie", in: "Milcząca tkaczka", home13: true },
-    { id: 123, name: "Chata Najstarszego", door: "Drzwi chaty 3", front: [29, 26], out: "Najstarszy z Milczących", in: "Najstarszy z Milczących", home13: false,
+    { id: 121, name: "Wspólna izba", door: "Drzwi chaty 1", front: [54, 44], out: "Milcząca przy grządce", in: "Milcząca ogrodniczka", home13: true },
+    { id: 122, name: "Chata tkaczki", door: "Drzwi chaty 2", front: [75, 42], out: "Milcząca przy ścianie", in: "Milcząca tkaczka", home13: true },
+    { id: 123, name: "Chata Najstarszego", door: "Drzwi chaty 3", front: [75, 53], out: "Najstarszy z Milczących", in: "Najstarszy z Milczących", home13: false,
       note: "Rejestr straży" },
-    { id: 124, name: "Chata rzeźbiarza", door: "Drzwi chaty 4", front: [8, 26], out: "Milczący przy ścianie", in: "Milczący rzeźbiarz", home13: true,
+    { id: 124, name: "Chata rzeźbiarza", door: "Drzwi chaty 4", front: [54, 53], out: "Milczący przy ścianie", in: "Milczący rzeźbiarz", home13: true,
       note: "Deski rzeźbiarza" },
 ];
 const where = "[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $gamePlayer.direction()]";
@@ -45,7 +45,7 @@ const SEEN_AT = "(function(x, y){ return window.__seen.has(y * $gameMap.width() 
 
 kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
     fs.mkdirSync(SHOTS, { recursive: true });
-    await t.newGame({ map: 120, x: 20, y: 31, dir: 8, day: 3, hour: 13, quiet: true, minimap: false });
+    await t.newGame({ map: 4, x: 66, y: 58, dir: 8, day: 3, hour: 13, quiet: true, minimap: false });
     await t.frames(70);
     const out13 = {};
     for (const h of HUTS) out13[h.out] = await t.json(SEEN(h.out));
@@ -53,15 +53,15 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         out13["Najstarszy z Milczących"] === "here" && HUTS.filter(h => h.home13).every(h => out13[h.out] === "gone"), out13);
     const doors = await t.json(`$gameMap.events().filter(e => /^Drzwi chaty \\d$/.test(e.event().name)).map(e => [e.event().name, e.x, e.y,
         e.event().pages[0].trigger, (e.event().pages[0].list.find(c => c.code === 201) || {}).parameters])`);
-    t.check("Map120: four hut doors, touched -> Map121-124", doors.length === 4 && HUTS.every(h => doors.some(d => d[0] === h.door && d[3] === 1 && d[4] && d[4][1] === h.id)), doors);
+    t.check("Laka pod Gawra (Map004): four hut doors, touched -> Map121-124", doors.length === 4 && HUTS.every(h => doors.some(d => d[0] === h.door && d[3] === 1 && d[4] && d[4][1] === h.id)), doors);
     const side = await t.json(`$gameMap.events().filter(e => /^Boczne drzwi/.test(e.event().name)).map(e => e.event().pages[0].list.some(c => c.code === 201))`);
     t.check("hut 3's side door stays shut (no transfer)", side.length === 1 && side[0] === false, side);
 
     for (const h of HUTS) {
         const m = META(h.id), land = m.exits[0].landing, exitXY = [m.exits[0].x, m.exits[0].y];
-        t.check(`${h.name}: its staged exit goes back before ${h.door} (${h.front})`, JSON.stringify(m.exits[0].town) === JSON.stringify(h.front), m.exits[0]);
+        t.check(`${h.name}: its staged exit goes back before ${h.door} (${h.front})`, JSON.stringify([m.exits[0].town[0] + 46, m.exits[0].town[1] + 27]) === JSON.stringify(h.front), m.exits[0]);
         // ---- in through the door (walk into it)
-        if (!(await t.eval(t.onMap(120)))) await t.go(120, h.front[0], h.front[1], 8);
+        if (!(await t.eval(t.onMap(4)))) await t.go(4, h.front[0], h.front[1], 8);
         await t.setHour(13);
         await t.locate(h.front[0], h.front[1], 8);
         await t.until("!SceneManager._scene.isFading() && !$gameMap.isEventRunning()", 10, 100);
@@ -147,17 +147,17 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         await t.locate(land[0], land[1], 2);
         await t.frames(2);
         await t.hold("down", 40);
-        const outOk = await t.until(t.onMap(120), 20);
+        const outOk = await t.until(t.onMap(4), 20);
         await t.until("!$gamePlayer.isTransferring()", 10, 100);
         await t.frames(10);
         const b = await t.json(where);
-        t.check(`${h.name}: out through the doorway -> Map120 before ${h.door} (${h.front}) facing down`,
+        t.check(`${h.name}: out through the doorway -> Laka pod Gawra (Map004) before ${h.door} (${h.front}) facing down`,
             outOk && b[1] === h.front[0] && b[2] === h.front[1] && b[3] === 2, { b, want: h.front });
         await t.calm();
     }
 
     // ---- 23:00 in the valley: nobody outside
-    if (!(await t.eval(t.onMap(120)))) await t.go(120, 20, 31, 8);
+    if (!(await t.eval(t.onMap(4)))) await t.go(4, 66, 58, 8);
     await t.setHour(23);
     await t.frames(90);
     const out23 = {};
@@ -166,7 +166,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.setHour(13);
     await t.frames(90);
     t.check("...and at 13:00 the elder is back at the circle", (await t.json(SEEN("Najstarszy z Milczących"))) === "here");
-    await t.locate(29, 26, 8);
+    await t.locate(75, 53, 8);
     await t.frames(30);
     await t.shot(path.join(SHOTS, "gra_osada_chata3.png"));
 });

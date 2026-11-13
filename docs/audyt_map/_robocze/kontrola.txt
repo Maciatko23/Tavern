@@ -1,0 +1,119 @@
+Map008 'Kruczogród' (120x120, zestaw 11)
+  wejścia: 43 kratek startowych (przeniesienia na tę mapę), osiągalnych kratek: 8822
+  razem: D1 15, D3 1, D4 3, G1 2, G3 5, G4 2, O1 23, P2 1, Z2 1, Z3 3
+  [błąd] D3 przeniesienie z Map118:14 ląduje na zablokowanej kratce (52,50): zdarzenie 242 'Studnia miejska'
+  [uwaga] D1 nieosiągalne miejsce: 27 kratek od (16,5)
+  [uwaga] D1 nieosiągalne miejsce: 8 kratek od (29,34)
+  [uwaga] D1 nieosiągalne miejsce: 8 kratek od (39,34)
+  [uwaga] D1 nieosiągalne miejsce: 10 kratek od (57,34)
+  [uwaga] D1 nieosiągalne miejsce: 8 kratek od (69,34)
+  [uwaga] D1 nieosiągalne miejsce: 8 kratek od (110,80)
+  [uwaga] D1 nieosiągalne miejsce: 35 kratek od (98,95)
+  [uwaga] D1 nieosiągalne miejsce: 10 kratek od (2,115)
+  [uwaga] D1 nieosiągalne miejsce: 14 kratek od (14,115)
+  [uwaga] D1 nieosiągalne miejsce: 13 kratek od (35,115)
+  [uwaga] D1 nieosiągalne miejsce: 14 kratek od (50,115)
+  [uwaga] D1 nieosiągalne miejsce: 14 kratek od (66,115)
+  [uwaga] D1 nieosiągalne miejsce: 14 kratek od (82,115)
+  [uwaga] D1 nieosiągalne miejsce: 8 kratek od (98,115)
+  [uwaga] D1 nieosiągalne miejsce: 10 kratek od (108,115)
+  [uwaga] D4 zdarzenie 249 'EV142' z akcją jest nieosiągalne - bohater musi stać na tej samej kratce (priorytet pod postacią) (89,32)
+  [uwaga] D4 zdarzenie 142 'EV142' z akcją jest nieosiągalne - bohater musi stać na tej samej kratce (priorytet pod postacią) (7,62)
+  [uwaga] G1 kafel 403 (C 11,2) z gwiazdką nad wolną kratką: bohater wchodzi pod niego w (64,66)
+  [uwaga] G1 kafel 307 (C 3,6) z gwiazdką nad wolną kratką: bohater wchodzi pod niego w (25,105)
+  [uwaga] G3 obraz zdarzenia 414 'Brama cmentarza (otwarta)' (!$SF_Gate3|0|6|2) zajmuje 57% dołu wolnej kratki (7,32)
+  [uwaga] G3 obraz zdarzenia 414 'Brama cmentarza (otwarta)' (!$SF_Gate3|0|6|2) zajmuje 54% dołu wolnej kratki (9,32)
+  [uwaga] G3 obraz zdarzenia 244 'Brama zachodnia: skrzydło i cień' (!$West_Gate|0|4|1) zajmuje 100% dołu wolnej kratki (0,51)
+  [uwaga] G3 obraz zdarzenia 126 'EV126' (!Town_Props|2|8|0) zajmuje 50% dołu wolnej kratki (45,104)
+  [uwaga] G3 obraz zdarzenia 126 'EV126' (!Town_Props|2|8|0) zajmuje 50% dołu wolnej kratki (47,104)
+  [uwaga] G4 zdarzenie 244 'Brama zachodnia: skrzydło i cień' (!$West_Gate|0|4|1) rysowane pod postacią sięga kratki (0,50): bohater stanie na nim
+  [uwaga] G4 zdarzenie 244 'Brama zachodnia: skrzydło i cień' (!$West_Gate|0|4|1) rysowane pod postacią sięga kratki (1,50): bohater stanie na nim
+  [uwaga] O1 obiekt rozcięty: kafel 173 (B 13,5) - góra bez dołu (brak kafla 181 pod) w (13,4)
+  [uwaga] O1 obiekt rozcięty: kafel 425 (C 9,5) - dół bez góry (brak kafla 417 nad) w (94,25)
+  [uwaga] O1 obiekt rozcięty: kafel 426 (C 10,5) - dół bez góry (brak kafla 418 nad) w (95,25)
+  [uwaga] O1 obiekt rozcięty: kafel 404 (C 12,2) - góra bez dołu (brak kafla 412 pod) w (107,45)
+  [uwaga] O1 obiekt rozcięty: kafel 405 (C 13,2) - góra bez dołu (brak kafla 413 pod) w (108,45)
+  [uwaga] O1 obiekt rozcięty: kafel 425 (C 9,5) - dół bez góry (brak kafla 417 nad) w (12,55)
+  [uwaga] O1 obiekt rozcięty: kafel 426 (C 10,5) - dół bez góry (brak kafla 418 nad) w (13,55)
+  [uwaga] O1 obiekt rozcięty: kafel 573 (D 5,7) - dół bez góry (brak kafla 565 nad) w (98,59)
+  [uwaga] O1 obiekt rozcięty: kafel 403 (C 11,2) - góra bez dołu (brak kafla 411 pod) w (64,66)
+  [uwaga] O1 obiekt rozcięty: kafel 403 (C 11,2) - góra bez dołu (brak kafla 411 pod) w (99,98)
+  [uwaga] O1 obiekt rozcięty: kafel 103 (B 7,12) - dół bez góry (brak kafla 95 nad) w (60,101)
+  [uwaga] O1 obiekt rozcięty: kafel 477 (C 13,11) - dół bez góry (brak kafla 469 nad) w (77,104)
+  [uwaga] O1 obiekt rozcięty: kafel 478 (C 14,11) - dół bez góry (brak kafla 470 nad) w (78,104)
+  [uwaga] O1 obiekt rozcięty: kafel 479 (C 15,11) - dół bez góry (brak kafla 471 nad) w (79,104)
+  [uwaga] O1 obiekt rozcięty: kafel 477 (C 13,11) - dół bez góry (brak kafla 469 nad) w (89,104)
+  [uwaga] O1 obiekt rozcięty: kafel 478 (C 14,11) - dół bez góry (brak kafla 470 nad) w (90,104)
+  [uwaga] O1 obiekt rozcięty: kafel 479 (C 15,11) - dół bez góry (brak kafla 471 nad) w (91,104)
+  [uwaga] O1 obiekt rozcięty: kafel 472 (C 8,11) - góra bez dołu (brak kafla 480 pod) w (96,104)
+  [uwaga] O1 obiekt rozcięty: kafel 473 (C 9,11) - góra bez dołu (brak kafla 481 pod) w (97,104)
+  [uwaga] O1 obiekt rozcięty: kafel 404 (C 12,2) - góra bez dołu (brak kafla 412 pod) w (19,105)
+  [uwaga] O1 obiekt rozcięty: kafel 405 (C 13,2) - góra bez dołu (brak kafla 413 pod) w (20,105)
+  [uwaga] O1 obiekt rozcięty: kafel 307 (C 3,6) - góra bez dołu (brak kafla 315 pod) w (25,105)
+  [uwaga] O1 obiekt rozcięty: kafel 301 (C 5,5) - góra bez dołu (brak kafla 309 pod) w (61,105)
+  [uwaga] P2 zdarzenie 105 'EV105' (!Decoration|7|4|0) wisi w powietrzu za meblem / nad nim (2 px nad jego pikselami) w (81,43)
+  [uwaga] Z2 obszary zdarzeń 209 'Drzwi: Stajnia', 230 'Budynek: Stajnia' nachodzą na kratce (92,10)
+  [uwaga] Z3 zdarzenie 223 'Chorągiew Lorda Zaleskiego' (!Flags_banner|0|4|1) stoi na meblu z kafli 181 (118,47)
+  [uwaga] Z3 zdarzenie 224 'Chorągiew Lorda Zaleskiego' (!Flags_banner|0|4|1) stoi na meblu z kafli 182 (119,47)
+  [uwaga] Z3 zdarzenie 176 'Ozdoba' (!Roof_Windows|1|2|1) stoi na meblu z kafli 860 (82,59)
+  [info] D4 rzecz do zbierania 123 'EV123' stoi w nieosiągalnym miejscu (34,38)
+  (pominięto 7 drobnych zamkniętych kieszeni < 4 kratek bez zdarzeń)
+  obrazek: C:/Users/macie/OneDrive/Dokumenty/RMMZ/Tawerna/docs/mapy/kontrola_Map008.png
+
+Map111 'Podgrodzie' (120x120, zestaw 11)
+  wejścia: 19 kratek startowych (przeniesienia na tę mapę), osiągalnych kratek: 10252
+  razem: G3 13, G4 15, O1 1, P1 1
+  [uwaga] G3 obraz zdarzenia 23 'Posłanie' (!Town_Props|2|4|1) zajmuje 26% dołu wolnej kratki (62,44)
+  [uwaga] G3 obraz zdarzenia 26 'Posłanie pod daszkiem' (!Town_Props|2|4|1) zajmuje 26% dołu wolnej kratki (47,45)
+  [uwaga] G3 obraz zdarzenia 24 'Posłanie' (!Town_Props|2|4|1) zajmuje 26% dołu wolnej kratki (56,47)
+  [uwaga] G3 obraz zdarzenia 20 'Posłanie żebraka' (!Town_Props|2|4|1) zajmuje 26% dołu wolnej kratki (107,47)
+  [uwaga] G3 obraz zdarzenia 90 'Brama zachodnia: skrzydło i cień' (!$West_Gate|0|8|1) zajmuje 100% dołu wolnej kratki (119,51)
+  [uwaga] G3 obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 42% dołu wolnej kratki (109,55)
+  [uwaga] G3 obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 49% dołu wolnej kratki (110,55)
+  [uwaga] G3 obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 63% dołu wolnej kratki (111,55)
+  [uwaga] G3 obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 71% dołu wolnej kratki (113,55)
+  [uwaga] G3 obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 69% dołu wolnej kratki (114,55)
+  [uwaga] G3 obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 63% dołu wolnej kratki (115,55)
+  [uwaga] G3 obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 50% dołu wolnej kratki (116,55)
+  [uwaga] G3 obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 42% dołu wolnej kratki (117,55)
+  [uwaga] G4 zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (109,47): bohater stanie na nim
+  [uwaga] G4 zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (117,47): bohater stanie na nim
+  [uwaga] G4 zdarzenie 90 'Brama zachodnia: skrzydło i cień' (!$West_Gate|0|8|1) rysowane pod postacią sięga kratki (118,50): bohater stanie na nim
+  [uwaga] G4 zdarzenie 90 'Brama zachodnia: skrzydło i cień' (!$West_Gate|0|8|1) rysowane pod postacią sięga kratki (119,50): bohater stanie na nim
+  [uwaga] G4 zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (109,52): bohater stanie na nim
+  [uwaga] G4 zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (117,52): bohater stanie na nim
+  [uwaga] G4 zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (109,54): bohater stanie na nim
+  [uwaga] G4 zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (110,54): bohater stanie na nim
+  [uwaga] G4 zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (111,54): bohater stanie na nim
+  [uwaga] G4 zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (112,54): bohater stanie na nim
+  [uwaga] G4 zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (113,54): bohater stanie na nim
+  [uwaga] G4 zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (114,54): bohater stanie na nim
+  [uwaga] G4 zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (115,54): bohater stanie na nim
+  [uwaga] G4 zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (116,54): bohater stanie na nim
+  [uwaga] G4 zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (117,54): bohater stanie na nim
+  [uwaga] O1 obiekt rozcięty: kafel 491 (C 11,13) - dół bez góry (brak kafla 483 nad) w (78,65)
+  [uwaga] P1 zdarzenie 19 'Pochodnia na baszcie' (!Decoration|3|4|0) leży na kaflu 157 (B 13,3), który nie jest blatem (118,46)
+  (pominięto 13 drobnych zamkniętych kieszeni < 4 kratek bez zdarzeń)
+  obrazek: C:/Users/macie/OneDrive/Dokumenty/RMMZ/Tawerna/docs/mapy/kontrola_Map111.png
+
+Map024 'Posiadłość Lorda' (120x120, zestaw 11)
+  wejścia: 1 kratek startowych (przeniesienia na tę mapę), osiągalnych kratek: 10628
+  razem: G2 6, G5 2, O1 6, Z2 1
+  [uwaga] G2 górny kafel 270 (C 6,1) obiektu bez gwiazdki na wolnej kratce: bohater stanie na nim w (32,74)
+  [uwaga] G2 górny kafel 270 (C 6,1) obiektu bez gwiazdki na wolnej kratce: bohater stanie na nim w (33,74)
+  [uwaga] G2 górny kafel 270 (C 6,1) obiektu bez gwiazdki na wolnej kratce: bohater stanie na nim w (34,74)
+  [uwaga] G2 górny kafel 270 (C 6,1) obiektu bez gwiazdki na wolnej kratce: bohater stanie na nim w (46,74)
+  [uwaga] G2 górny kafel 270 (C 6,1) obiektu bez gwiazdki na wolnej kratce: bohater stanie na nim w (47,74)
+  [uwaga] G2 górny kafel 270 (C 6,1) obiektu bez gwiazdki na wolnej kratce: bohater stanie na nim w (48,74)
+  [uwaga] G5 zdarzenie 68 'Dym z komina' (!Fantasy_chimney|0|2|0) 'nad postacią' stoi na wolnej kratce: bohater wejdzie pod nie (38,61)
+  [uwaga] G5 zdarzenie 69 'Dym z komina' (!Fantasy_chimney|0|2|0) 'nad postacią' stoi na wolnej kratce: bohater wejdzie pod nie (42,61)
+  [uwaga] O1 obiekt rozcięty: kafel 744 (D 8,13) - dół bez góry (brak kafla 736 nad) w (20,60)
+  [uwaga] O1 obiekt rozcięty: kafel 745 (D 9,13) - dół bez góry (brak kafla 737 nad) w (21,60)
+  [uwaga] O1 obiekt rozcięty: kafel 754 (D 10,14) - dół bez góry (brak kafla 746 nad) w (22,61)
+  [uwaga] O1 obiekt rozcięty: kafel 141 (B 13,1) - dół bez góry (brak kafla 133 nad) w (13,115)
+  [uwaga] O1 obiekt rozcięty: kafel 141 (B 13,1) - dół bez góry (brak kafla 133 nad) w (91,115)
+  [uwaga] O1 obiekt rozcięty: kafel 141 (B 13,1) - dół bez góry (brak kafla 133 nad) w (108,115)
+  [uwaga] Z2 obszary zdarzeń 27 'Splot gałęzi', 29 'Wysoki suchy krzak' nachodzą na kratce (99,106)
+  (pominięto 5 drobnych zamkniętych kieszeni < 4 kratek bez zdarzeń)
+  obrazek: C:/Users/macie/OneDrive/Dokumenty/RMMZ/Tawerna/docs/mapy/kontrola_Map024.png
+

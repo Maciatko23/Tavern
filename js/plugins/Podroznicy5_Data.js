@@ -45,9 +45,9 @@
     const KTO = { erazm: "poborca", kompania: "kompania", hubert: "kompania_1", teofil: "kartograf" };
     const MAP = { miasto: 8, karczma: 1, pietro: 25 };
     const IDS = [3080, 3089], OWNER = "Poselstwo";
-    // D44: the night of the payment - Erazm's arrival + 2 (day 36); Feliks before the door of room 4 (68,48) 22:40-23:20, the wall
+    // D44: the night of the payment - Erazm's arrival + 2 (day 36); Feliks before the door of room 4 (37,15) 22:40-23:20, the wall
     // 23-24; the hero within `widzi` tiles sees him
-    const D44 = { noc: 2, feliks: { id: 3080, map: MAP.pietro, x: 68, y: 49, dir: 8, sheet: "$Npc_Feliks", godziny: [22.67, 23.34], widzi: 4 },
+    const D44 = { noc: 2, feliks: { id: 3080, map: MAP.pietro, x: 37, y: 16, dir: 8, sheet: "$Npc_Feliks", godziny: [22.67, 23.34], widzi: 4 },
         godziny: [23, 24], donos: 20, przychylnosc: 5, xp: 120 };
     // D47: the stakes, the hire, the yard (Map008 - the tavern's yard: the fight starts with the hero within `zasieg` of it), the noise
     const D47 = { stawka: 10, najem: 60, podworze: [51, 24], zasieg: 9, poziom: 5, burda: [1, 6], renoma: { spokoj: 4, wit: 2, burda: -1 }, xp: 120,
@@ -166,10 +166,10 @@
         skoki: {
             przed: [{ hak: "f9Przygotuj" }],
             lista: {
-                1: { ch: 1, krok: "d44Noc", godzina: 22.6, idz: [MAP.pietro, 61, 40, 6] },
-                2: { ch: 2, krok: "d44Raport", godzina: 14.5, idz: [MAP.pietro, 67, 41, 8] },
-                3: { ch: 1, krok: "d47Kompania", godzina: 10, idz: [MAP.pietro, 32, 60, 4] },
-                4: { ch: 1, krok: "d48Mapa", godzina: 16, idz: [MAP.pietro, 13, 9, 8] }
+                1: { ch: 1, krok: "d44Noc", godzina: 22.6, idz: [MAP.pietro, 30, 8, 6] },
+                2: { ch: 2, krok: "d44Raport", godzina: 14.5, idz: [MAP.pietro, 36, 8, 8] },
+                3: { ch: 1, krok: "d47Kompania", godzina: 10, idz: [MAP.pietro, 20, 19, 2] },
+                4: { ch: 1, krok: "d48Mapa", godzina: 16, idz: [MAP.pietro, 5, 30, 8] }
             }
         }
     });

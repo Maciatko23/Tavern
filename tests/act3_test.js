@@ -6,7 +6,7 @@
 // their fights with the men (Humans.setFoe), the outcomes held / costly / fallen (the bus, the flags, the rewards), the hero beaten
 // (robbed, the rest without him), the siege without the hero, a save and a load in the middle of it, the F9 rows.
 // CDP_PORT=9470 node tests/act3_test.js        (SHOTS=1: pictures into docs/akt3/)
-const kit = require("./lib/kit.js");
+const kit = (function(){ try { return require("./lib/kit.js"); } catch (e) { return require("../../../../tests/lib/kit.js"); } })();
 const SHOTS = !!process.env.SHOTS;
 
 kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
@@ -89,7 +89,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     await t.go(8, 51, 19, 8);
     await t.frames(60);
     const started = await S("({ ph: Act3.phase(), bus: __bus.filter(b => b.n === 'act3Start').length, rope: !!$gameMap.event(859), ropeAt: $gameMap.event(859) ? [$gameMap.event(859).x, $gameMap.event(859).y] : null })");
-    t.check("the night on the town map: the siege (act3Start); the bell's rope (event 859) under the bell", started.ph === "siege" && started.bus === 1 && started.rope && started.ropeAt.join() === "85,30", started);
+    t.check("the night on the town map: the siege (act3Start); the bell's rope (event 859) under the bell", started.ph === "siege" && started.bus === 1 && started.rope && started.ropeAt.join() === "45,103", started);
 
     // ================= 3. the bell: nobody trusts the hero - the rope and the mini-game; Opinia 30 - the doors stay shut =================
     await god(true);
@@ -160,13 +160,13 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     t.check("the defenders beat both waves outside by themselves (the hero aside)", out1, await siege());
 
     // ================= 6. inside: Borgar at the old door, the hero goes in =================
-    await t.go(1, 50, 52, 8, { calm: false });   // (not the kit's calm: it clears Humans.js's men - the wave coming in)
+    await t.go(1, 14, 52, 8, { calm: false });   // (not the kit's calm: it clears Humans.js's men - the wave coming in)
     await t.frames(30);
     const inside = await S("({ ev1: $gameMap.event(1).isTransparent(), ev3: $gameMap.event(3).isTransparent(), defs: Act3.defenders().map(d => d._id) })");
     t.check("in the tavern: Borgar (his event hidden, he fights) and Grum by the hero", inside.ev1 && inside.ev3 && inside.defs.includes("borgar") && inside.defs.includes("grum"), inside);
     await t.until("Act3.live().length > 0", 20);
     const L3 = await live();
-    t.check("wave 3 inside: through the kitchen, to the old door by the cellar (9,14)", L3.length >= 3 && L3.every(h => h.tag === "act3_w3") && L3.filter(h => h.hx === 9 && h.hy === 14).length >= 3, L3);
+    t.check("wave 3 inside: through the kitchen, to the old door by the pantry and cellar (32,20)", L3.length >= 3 && L3.every(h => h.tag === "act3_w3") && L3.filter(h => h.hx === 32 && h.hy === 20).length >= 3, L3);
     await shot("akt3_w_srodku.png");
     await clearWave();
     await t.until("Act3.siege() && Act3.siege().wave === 3 && Act3.live().some(h => !h._dead && h._tag === 'act3_w4')", 30);
@@ -183,7 +183,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
 
     // ================= 7. Grum on the faction's side, Rafał given away: they are among the men =================
     await fresh({ w8Faction: 1, rafalEnemy: 1 }, 30);
-    await t.go(1, 50, 52, 8);
+    await t.go(1, 14, 52, 8);
     await t.setHour(22);
     await t.eval("Act3.debugStart({ wave: 3 }); 0");
     await t.until("Act3.live().some(h => !h._dead && h._tag === 'act3_w4')", 30);
@@ -203,7 +203,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     t.check("Rafał given to the Lord (W6 rafalEnemy): he is a knife bandit in wave 2", L7b.some(h => h.name === "Rafał" && h.kind === "knifer"), L7b);
     // Grum sitting it out (no choice in W8): he stays at his table
     await fresh({}, 30);
-    await t.go(1, 50, 52, 8);
+    await t.go(1, 14, 52, 8);
     await t.eval("Act3.debugStart({ wave: 2 }); 0");
     await t.frames(60);
     const neutral = await S("({ ev3: !$gameMap.event(3).isTransparent(), defs: Act3.defenders().map(d => d._id), grum: Act3.ctx().grum })");
@@ -249,20 +249,20 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     // ================= 10. the siege without the hero: three nights away =================
     await t.eval("Act3.reset(); 0");
     await fresh({}, 30);
-    await t.go(19, 8, 6, 2);
+    await t.go(4, 60, 60, 2);   // (2026-11-12: not Map019 - the grandpa-left scene of "Wezwanie króla" runs there when days pass and holds the transfer back)
     await t.eval("Act3.arm(); 0");
     await t.eval("$gameSystem._dayNightDay = Act3.state().siegeDay + 3; $gameSystem.setDayNightHour(10); 0");
     await t.frames(60);
     const off = await S("Act3.outcome()");
     t.check("three nights away: they struck without him - fallen (only Borgar), offscreen", off && off.result === "fallen" && off.offscreen && off.defenders.join() === "borgar", off);
-    await t.go(1, 50, 52, 8);
+    await t.go(1, 14, 52, 8);
     await t.frames(40);
     const told = await S("({ told: Act3.state().told, tops: window.__kit.tops.slice(-3) })");
     t.check("told when he comes to the tavern (\"Kiedy cię nie było...\")", told.told && told.tops.some(x => /Kiedy cię nie było/.test(x)), told);
     await t.eval("Act3.reset(); 0");
     await fresh({ grumAlly: 1, ambrozyTrust: 1, marekSaved: 1, rafalAlly: 1, lordAlly: 1 }, 70);
     await t.eval("Act3.arm(); $gameSystem._dayNightDay = Act3.state().siegeDay + 3; 0");
-    await t.go(19, 8, 6, 2);
+    await t.go(4, 60, 60, 2);
     await t.frames(60);
     const off2 = await S("Act3.outcome()");
     t.check("...with every ally (Ambroży rings, the town comes): costly, not fallen", off2 && off2.result === "costly" && off2.offscreen, off2);
@@ -270,7 +270,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     // ================= 11. the costly outcome, F9 =================
     await t.eval("Act3.reset(); 0");
     await fresh({}, 30);
-    await t.go(1, 50, 52, 8);
+    await t.go(1, 14, 52, 8);
     await t.eval("Act3.debugStart({ wave: 3 }); Act3.damage(50); 0");
     await t.until("Act3.live().some(h => !h._dead)", 20);
     await clearWave();

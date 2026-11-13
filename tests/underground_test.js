@@ -193,7 +193,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const gid = await t.eval(`$gameMap.events().find(e => e.event().name === "Pusta zbroja strażnika").eventId()`);
     const hp0 = await t.eval("$gameParty.leader().hp");
     await t.locate(19, 16, 8);
-    await t.hold("up", 16);
+    await t.hold("up", 40);   // (2026-11-12: the barefoot walk is slower - 16 frames did not reach the line any more)
     const woke = await t.until("$gameMap.isEventRunning() && $gameMap._interpreter.eventId() === " + gid, 5, 50);
     t.check("stepping on the line in front of the tenth gate wakes the guardian (his talk starts)", woke, { gid });
     await t.finish();
@@ -515,9 +515,9 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const f9rows = await t.json(`(function(){ SceneManager.push(Scene_Debug); return true; })()`);
     await t.until("SceneManager._scene instanceof Scene_Debug && SceneManager._scene._started", 10);
     await t.frames(5);
-    const rows = await t.json(`(function(){ const s = SceneManager._scene; s.showTab(0); const out = s._list._rows.filter(r => /^ug|underground/.test(r.kind)).map(r => r.label);
+    const rows = await t.json(`(function(){ const s = SceneManager._scene; s.showTab(5); const out = s._list._rows.filter(r => /^ug|underground/.test(r.kind)).map(r => r.label);
         const i = s._list._rows.findIndex(r => r.kind === "underground"); s._list.select(i); const row = s._list._rows[i]; const keep = row.floor; row.floor = 99; s._list.changeQty(1); out.push(row.label); row.floor = 0; s._list.changeQty(-1); out.push(row.label); row.floor = keep; return out; })()`);
-    t.check("F9, first tab: 'Podziemia: piętro N' (0-100, the hand-made floors by name), the grate, the locks on trial, every stop of the lift",
+    t.check("F9, 'Fabuła i postacie' (was the first tab until 2026-11-11): 'Podziemia: piętro N' (0-100, the hand-made floors by name), the grate, the locks on trial, every stop of the lift",
         f9rows && rows.length === 6 && /Podziemia: piętro 1 /.test(rows[0]) && /zamki Serca/.test(rows[2]) && /przystanki windy/.test(rows[3]) &&
         /piętro 100 \(Komnata Serca\)/.test(rows[4]) && /piętro 100 \(Komnata Serca\)/.test(rows[5]), rows);
     await t.eval("SceneManager.pop(); 0");

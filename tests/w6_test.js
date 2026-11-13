@@ -8,7 +8,7 @@
 // (Ludmiła's kerchief, the diggers' cave Map014: he turns from the wall and follows; a word with the guard / the fight / seen -> the
 // alarm / beaten), out of the cave = marekSaved (W8 counts it), the reunion; the Wigilia in the camp (4 dishes) - W6 done.
 const path = require("path");
-const kit = require("./lib/kit.js");
+const kit = (function(){ try { return require("./lib/kit.js"); } catch (e) { return require("../../../../tests/lib/kit.js"); } })();
 const SHOTS = path.join(__dirname, "..", "docs", "w6");
 
 kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
@@ -24,7 +24,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const caveEv = name => `$gameMap.events().find(e => e.event() && e.event().name === '${name}' && !e._erased)`;
     const jtext = () => J("TownQuests.journalOps({ quest: TownQuests.Q.W6 }).map(o => o.text || '').join(' | ')");
 
-    await t.newGame({ map: 8, x: 58, y: 89, dir: 2, hour: 10, day: 12, quiet: true, minimap: false });
+    await t.newGame({ map: 8, x: 89, y: 97, dir: 2, hour: 10, day: 12, quiet: true, minimap: false });
     await at(12, 10, 30);
     // ------------------------------------------------------------------ the start and ch2 (the camp's trust)
     await t.eval("(function(){ TownQuests.start('K19'); TownQuests.finish('K19'); TownQuests.autoChecks(); return 0; })()");
@@ -62,7 +62,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         /POSZUKIWANY/.test(board.text) && /sto dwadzieścia groszy/.test(board.text) && /Kapral Wit Czerwień, z rozkazu dworu/.test(board.text) && onBoard && s4.step === 3 && s4.t.search === 16,
         { text: board.text.slice(0, 260), onBoard, step: s4.step, search: s4.t.search });
     t.check("...and a paper on the tavern's outer wall (the notice place's paper, 7 days)", (await J("TownQuests.state().flags.notice_notice_tavern")) === 13);
-    await t.go(8, 49, 89, 2);
+    await t.go(8, 80, 97, 2);
     await at(14, 5, 40);
     await t.saveTo(1);
 
@@ -76,7 +76,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.go(25, 39, 39, 6);
     await at(15, 12, 30);
     const hid = await prop(951);
-    t.check("...in room 1 upstairs (Map025) Rafał stands by the bed (the place 951, his sheet)", hid && hid.page && hid.img === "$Npc_Rafal" && hid.x === 40 && hid.y === 38, hid);
+    t.check("...in room 1 upstairs (Map025) Rafał stands by the bed (the place 951, his sheet)", hid && hid.page && hid.img === "$Npc_Rafal" && hid.x === 21 && hid.y === 8, hid);
     await t.shot(path.join(SHOTS, "w6_izdebka.png"));
     const hidTalk = await talkTo("$gameMap.event(951)", []);
     t.check("...and talks: 'Borgar przynosi mi zupę'", /Borgar przynosi mi zupę/.test(hidTalk.text), hidTalk.text.slice(0, 120));
@@ -88,7 +88,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const h3 = await J("({ r: TownQuests.rec('W6'), f: TownQuests.state().flags, gone: TownLife.gone('rafal') })");
     t.check("...day 21: Rafał back in the camp - rafalAlly (Act III: he fights with the hero); chapter 5", h3.r.step === 5 && h3.f.rafalAlly && !h3.gone && (await notes()).includes("Rafał ocalony"), { step: h3.r.step, ally: h3.f.rafalAlly, gone: h3.gone });
     await t.eval("TownQuests.w6Opts = null; 0");
-    await t.go(8, 57, 89, 2);
+    await t.go(8, 88, 97, 2);
     await at(21, 12, 30);
     const lr = await talkTo(res("ludmila"), []);
     t.check("...Ludmiła says it once: 'Rafał wrócił do obozu... Dziękuję ci'", /Rafał wrócił do obozu/.test(lr.text), lr.text.slice(0, 120));
@@ -163,7 +163,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     // the helpers on grandpa's field (the crops under a scarecrow: Birds' planned raids eat unguarded ones)
     await t.eval(`(function(){ const F = Farming.farm(); const p = F.plots[3] || (F.plots[3] = {}); p["10,20"] = { s: "tilled", crop: "potato", day: 1 }; p["12,20"] = { s: "tilled", crop: "carrot", day: 1 }; p["14,20"] = { s: "tilled", crop: "carrot", day: 26 };
         (F.buildings[3] || (F.buildings[3] = [])).push({ id: 9901, type: "scarecrow", x: 12, y: 18 }); F.rev++; return 0; })()`);
-    await t.go(3, 20, 24, 2);
+    await t.go(3, 60, 55, 2);
     await at(27, 9, 40);
     const help = { a: await prop(906), b: await prop(907) };
     t.check("...on grandpa's field (Map003) during the work week Bogdan and Halina stand by the crops (906, 907 - the tile under the first plots)",
@@ -186,11 +186,11 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await talkTo(res("soltys"), ["Zamknąć bramę"]);
     const cl = await J("({ f: TownQuests.state().flags, home: TownLife.homeOf(TownLife.RESIDENTS.find(r => r.key === 'ludmila')), w6: TownQuests.w6() })");
     t.check("ch5 the other way: 'Zamknąć bramę' - campOutside: Ludmiła now lives on Map111 (TownLife alt)", cl.f.campOutside && cl.home === 111 && cl.w6.camp === "outside", cl.w6);
-    await t.go(8, 57, 89, 2);
+    await t.go(8, 88, 97, 2);
     await at(26, 15, 40);
     const inTown = await J(`({ ludmila: !TownLife.state('ludmila') || TownLife.state('ludmila').hidden, tent: !!($gameMap.event(903) && $gameMap.event(903).page()) })`);
     t.check("...in the town she is away and the camp's tent is gone", inTown.ludmila && !inTown.tent, inTown);
-    await t.go(111, 39, 16, 8);
+    await t.go(111, 57, 49, 8);
     await at(26, 15, 60);
     const pod = await J(`({ ludmila: (function(){ const s = TownLife.state('ludmila'); return s && !s.hidden; })(), tent: !!($gameMap.event(903) && $gameMap.event(903).page()) })`);
     t.check("...in Podgrodzie: Ludmiła by the tents, the second wave's tent (903 on Map111)", pod.ludmila && pod.tent, pod);
@@ -268,7 +268,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
 
     // ---- at night the guard sits by the camp's fire, facing the way out
     await t.loadFrom(5, { quiet: true });
-    await t.go(13, 44, 8, 8);
+    await t.go(13, 44, 32, 8);
     await at(27, 23, 20);
     await t.go(14, 20, 27, 8);
     await t.frames(20);

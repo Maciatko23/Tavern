@@ -183,6 +183,15 @@
     Watki.scal(MAP_FIELD, "fabula", "pole");   // (its words: js/teksty/fabula.txt, pole)
     const MAP_NAMES = { get [MAP.field]() { return MAP_FIELD.name; } };
     const BORGAR_FACE = ["People3", 4];
+    // (2026-11-08, docs/STORY.md „Wezwanie króla”, the author's variant A: „postać względnie szybko traci możliwość nocowania u
+    // dziadka”) day 3: the king's messenger from the garrison summons grandpa to the mainland (the old raven keepers), the Lord's butler
+    // takes the house in pledge for the debt and seals it at dusk; grandpa leaves the hero a letter to Szczepan the carter, who keeps
+    // the inn's stable (Stajnia.js: the hay loft, the stable's work). The debt paid or the field bought back: the seal comes off and
+    // grandpa is home again two days later. Only games begun with it (newState's wez) - an older save keeps its story as it was.
+    const WEZ = { DAY: 3, FROM: 7, TO: 18, GIVE_UP: 5, SEAL_HOUR: 20, BACK_DAYS: 2, BACK_HOUR: 10, YARD: 20,
+        ID: { herald: 3240, butler: 3241, guard1: 3242, guard2: 3243, sign: 3244 },
+        DOOR: [9, 11], OUT: [9, 12], YARD_OUT: [46, 47], SIGN_AT: [45, 47],
+        SPOT: { grandpa: [10, 7], hero: [7, 8], herald: [10, 8], butler: [10, 9], guard1: [9, 10], guard2: [11, 10], bye: [8, 8] } };
     const KEY = "story";
 
     // ------------------------------------------------------------------
@@ -195,6 +204,18 @@
     // ------------------------------------------------------------------
     const XPG = 50;   // (a step done: what a goal of the journal gave - Combat's XP.goal)
     const got = key => ({ xp: XPG, za: { hak: "zaKrok", args: [key] } });
+    // „Wezwanie króla” in the journal: its own record (an older save never starts it - no wez in its state); before chapter 1's thread
+    // in the list, so it leads the goal window while it runs: home to grandpa (the messenger asked for him), the letter to Szczepan
+    const wz = Watki.watek({
+        id: "wezwanie", wtyczka: PLUGIN, teksty: "fabula",
+        mowa: { px: 540, twardaG: true, akapity: true },
+        start: "wezStart",
+        dziennik: { tytul: "wez.tytul", opis: "wez.opis", grupa: "story", ikona: GOLD_ICON, prowadzi: true },
+        kroki: [
+            { nazwa: "wezDom", tytul: "wez.krok.0", tekst: "wez.krok.1", gotowe: "wezByl", gdzie: { map: MAP.house, name: "Dom dziadka" }, nagroda: { xp: XPG } },
+            { nazwa: "wezList", tytul: "wez.krok.2", tekst: { hak: "wezListTekst" }, gotowe: "wezStajnia", gdzie: { hak: "wezGdzie" }, nagroda: { xp: XPG } }
+        ]
+    });
     const w = Watki.watek({
         id: "fabula", wtyczka: PLUGIN, teksty: "fabula",
         // Tawerna.state("story") = $gameSystem._tw.story; an older save's $gameSystem._story is taken over (see the state below)
@@ -270,7 +291,8 @@
     // ------------------------------------------------------------------
     function newState() {
         return { v: 1, pending: true, debt: DEBT, deadline: DEADLINE, paid: 0, payments: [], intro: 0, hint: 0,
-            flags: {}, letters: {}, shiftDay: -1, lastShift: null, done: 0, ended: 0, off: !END_ON_DEADLINE };
+            flags: {}, letters: {}, shiftDay: -1, lastShift: null, done: 0, ended: 0, off: !END_ON_DEADLINE,
+            wez: { called: 0, sealAt: 0, gone: false, letter: false, underDoor: false, freed: 0, backAt: 0, told: false } };
     }
     const store = () => w.S();
     const isStory = s => !!s && typeof s === "object" && s.debt !== undefined;
@@ -328,6 +350,7 @@
     function step(name) {
         if (!mark(name)) return false;
         tell(name);
+        if (name === "stajnia") wz.ownChecks();   // (Stajnia.js: Szczepan took the letter - the summons' last step)
         return true;
     }
     const U = () => T.api("UITheme") || { fill: "rgba(11,12,15,0.9)", line: "#3a3e46", accent: "#ffd23f", text: "#eceef0", muted: "#8a9099", panel: null, bar: null };
@@ -410,6 +433,10 @@
             }
             return out;
         } });
+    // Wezwanie króla: the scene's people in the house and the seal's sign on the yard (ids 3240-3249; a story game - in an older save
+    // without the summons nothing is put in)
+    T.inject([MAP.house, WEZ.YARD], { ids: [WEZ.ID.herald, WEZ.ID.herald + 9], owner: PLUGIN, fixSaved: false, when: () => !!state(),
+        build(data, mapId) { return !wez() ? [] : mapId === MAP.house ? wezActors() : [wezSign()]; } });
     // where they stand: grandpa by his armchair, the Lord beside the manor's door (found by its name: the door may be moved)
     function freeFor(ev, x, y) {
         if (!$gameMap.isValid(x, y) || !$gameMap.checkPassage(x, y, 0x0f)) return false;
@@ -436,6 +463,7 @@
         if (!active()) return;
         const g = npc("grandpa");
         if (g) { const [x, y] = NPCS.grandpa.at; placeNear(g, [[x, y], [x - 1, y], [x, y + 1]], x, y); }
+        if (g && grandpaAway()) g.erase();   // (Wezwanie króla: on the mainland till the seal comes off and two days more)
         const l = npc("lord"), d = doorEvent();
         if (l && d) placeNear(l, [[d.x + 1, d.y + 1], [d.x - 1, d.y + 1], [d.x + 2, d.y + 1], [d.x - 2, d.y + 1], [d.x + 1, d.y + 2], [d.x - 1, d.y + 2]], d.x, d.y + 1);
         syncLord();
@@ -797,7 +825,7 @@
             say(o, CAST.watch, Watki.wstaw(TK.kod.escortList[2], { "1": dni(CARRY_DAYS) }), null);
         } else say(o, -1, Watki.wstaw(TK.kod.escortList[3], { "1": dni(CARRY_DAYS) }), null);
         hSay(o, TK.kod.escortList[4]);
-        o.push(C(201, [0, 23, 1, 13, 6, 0]));   // (Skraj lasu, where the way from the field comes out)
+        o.push(C(201, [0, 3, 40, 47, 4, 0]));   // (Kruczy Jar, outside the west gate of the plot's fence; was Skraj lasu, Map023 (1,13))
         waitF(o, 20);
         script(o, "Tawerna.popup(\"Działka należy teraz do Lorda.\", { color: \"#ff9f8f\" })");
         return o;
@@ -1070,6 +1098,7 @@
         keepOldName();
         const s = state();
         if (s && s.intro === 1) s.intro = 0;   // (a talk cut off by a reload is told again)
+        if (s && s.wez && s.wez.called && !s.wez.gone) { s.wez.gone = true; s.wez.letter = true; }   // (the summons cut off: grandpa has left, the letter is the hero's)
         // (the field's scene cut off by a reload - its commands not running any more: it comes again on the field)
         if (s && s.lost && s.lost.scene === -1 && !($gameMap && $gameMap._interpreter && $gameMap._interpreter.isRunning())) s.lost.scene = 0;
         if (s) s.lastShift = null;
@@ -1201,6 +1230,14 @@
         wyniesienieTrwa: () => carryLeft() > 0,
         wyniesienieMasz: () => { const n = carryLeft(); return n === 1 ? TK.kod.lossFirstList[4] : Watki.wstaw(TK.kod.lossFirstList[5], { "1": dni(n) }); }
     });
+    wz.haki({
+        // begun: the messenger passed through (day 3) or the summons happened; done: the summons happened / Szczepan took the letter
+        wezStart: () => { const z = wez(); return !!z && active() && (!!z.told || !!z.called); },
+        wezByl: () => { const z = wez(); return !!z && !!z.called; },
+        wezStajnia: () => { const s = state(); return !!(s && s.flags && s.flags.stajnia); },
+        wezListTekst: () => { const z = wez(); return z && z.underDoor && !z.letter ? TK.wez.krok[4] : TK.wez.krok[3]; },
+        wezGdzie: () => { const z = wez(); return z && z.underDoor && !z.letter ? { map: WEZ.YARD, name: TK.wez.podworze } : { person: "kolodziej" }; }
+    });
 
     // ------------------------------------------------------------------
     // On the map: the intro, the Lord's hours, the letters, the deadline
@@ -1298,11 +1335,189 @@
         $gameMap._interpreter.setup(introScene(), g.eventId());
         return true;
     }
+    // (2026-11-08) "Szybka gra" on the title (TitleScreen.js: $gameTemp._twQuickStart): the talk as heard - grandpa back at his pot,
+    // the hero up beside the bed, what the talk gives (the soup, the journal's notes, the chapter's next step) given
+    function quickStart() {
+        $gameTemp._twQuickStart = false;
+        const g = npc("grandpa");
+        const at = POT.find(([x, y]) => $gameMap.isPassable(x, y, 2) && !$gameMap.eventsXyNt(x, y).some(e => e !== g));
+        if (g && at) g.locate(at[0], at[1]);
+        if (g) g.setDirection(8);
+        $gamePlayer.locate(BED.standX, BED.standY);
+        $gamePlayer.setDirection(6);
+        introDone();
+        return true;
+    }
     // (the house made - before its first frame: the hero is in his bed from the start)
     T.on("mapReady", () => {
         const s = state();
-        if (active() && s && s.intro !== 2 && $gameMap.mapId() === MAP.house && npc("grandpa")) startIntro();
+        if (active() && s && s.intro !== 2 && $gameMap.mapId() === MAP.house && npc("grandpa")) {
+            if ($gameTemp._twQuickStart) quickStart(); else startIntro();
+        }
     }, { owner: PLUGIN });
+    // ------------------------------------------------------------------
+    // Wezwanie króla (2026-11-08, docs/STORY.md): the summons, the seal, the letter, grandpa's way back (WEZ above)
+    // ------------------------------------------------------------------
+    const wez = () => { const s = state(); return s && s.wez ? s.wez : null; };
+    // the house under the Lord's seal: from dusk of the summons' day till the debt is paid or the field bought back
+    const sealed = () => { const z = wez(); return !!z && !!z.called && nowHours() >= z.sealAt && !z.freed; };
+    // grandpa on the mainland: from his leaving till two days after the seal came off
+    const grandpaAway = () => { const z = wez(); return !!z && !!z.gone && !(z.backAt && nowHours() >= z.backAt); };
+    const wezPage = (image, list, shown, extra) => page(image, list, Object.assign(shown ? { conditions: Object.assign({}, BLANK, { selfSwitchValid: true, selfSwitchCh: "A" }) } : {}, extra || {}));
+    const wezHidden = () => page({ tileId: 0, characterName: "", direction: 2, pattern: 0, characterIndex: 0 }, [C(0, [])], { priorityType: 0, through: true });
+    const wezSheet = role => (role === "herald" ? "$Npc_Werbownik" : role === "butler" ? (butler() === "Teodor" ? "$Npc_Kamerdyner" : "$Npc_Feliks") : "$Npc_Straznik");
+    // the scene's people in the house: nothing (through) till their self switch A shows them at the door
+    function wezActors() {
+        return ["herald", "butler", "guard1", "guard2"].map(role => ({ id: WEZ.ID[role], name: TK.wez.kto[role], note: "<Story:wez_" + role + ">",
+            x: WEZ.DOOR[0], y: WEZ.DOOR[1], pages: [wezHidden(), wezPage({ tileId: 0, characterName: wezSheet(role), direction: 8, pattern: 1, characterIndex: 0 }, [C(0, [])], true)] }));
+    }
+    // the seal's sign at grandpa's door on the yard (the Lord's banner, as on the lost field): shown while the house is sealed
+    function wezSign() {
+        return { id: WEZ.ID.sign, name: TK.wez.kto.sign, note: "<Story:wez_sign>", x: WEZ.SIGN_AT[0], y: WEZ.SIGN_AT[1],
+            pages: [wezHidden(), wezPage({ tileId: 0, characterName: "!$Lord_Sign", direction: 2, pattern: 1, characterIndex: 0 }, [C(355, ["Story.wezSignRead()"]), C(0, [])], true,
+                { directionFix: true, walkAnime: false })] };
+    }
+    const wezSelf = (mapId, id, on) => { if (!!$gameSelfSwitches.value([mapId, id, "A"]) !== !!on) $gameSelfSwitches.setValue([mapId, id, "A"], !!on); };
+    // a walk of the scene (the interpreter waits for it as for "Set Movement Route"): the shortest way on the tiles, else put there
+    function wezWalk(interp, who, x, y, face) {
+        const ch = who === 0 ? $gamePlayer : $gameMap.event(who);
+        if (!ch) return;
+        let steps = stepsTo(ch, x, y);
+        if (!steps) { ch.locate(x, y); steps = []; }
+        const list = [{ code: 29, parameters: [3] }];
+        for (const d of steps) list.push({ code: MOVE[d] });
+        if (TURN[face]) list.push({ code: TURN[face] });
+        list.push({ code: 29, parameters: [ch.moveSpeed()] }, { code: 0 });
+        ch.forceMoveRoute({ list, repeat: false, skippable: false, wait: true });
+        if (interp) { interp._character = ch; interp.setWaitMode("route"); }
+    }
+    function wezShow(role) {
+        const id = WEZ.ID[role], e = $gameMap.event(id);
+        if (!e) return;
+        e.locate(WEZ.DOOR[0], WEZ.DOOR[1]); e.setDirection(8);
+        wezSelf(MAP.house, id, true);
+    }
+    const wezHide = role => wezSelf(MAP.house, WEZ.ID[role], false);
+    // the stage (behind a short fade): grandpa by the hearth facing the door, the hero by the table; the bars of a scene
+    function wezStage() {
+        const g = npc("grandpa");
+        if (g) { g.locate(WEZ.SPOT.grandpa[0], WEZ.SPOT.grandpa[1]); g.setDirection(2); }
+        $gamePlayer.locate(WEZ.SPOT.hero[0], WEZ.SPOT.hero[1]); $gamePlayer.setDirection(6);
+        T.call("CleanHUD", "sceneBars", true);
+    }
+    // the scene as a list of commands (the words read now: the butler's name, the debt left, the deadline)
+    function wezScene() {
+        const G = NPCS.grandpa.id, H = WEZ.ID.herald, B = WEZ.ID.butler, S = WEZ.SPOT, t = TK.wez.scena, s = state();
+        const v = { butler: butler(), left: left(), deadline: s.deadline };
+        const o = [], js = x => o.push(C(355, [x])), wait = f => o.push(C(230, [f]));
+        const walk = (who, at, face) => js("Story.wezWalk(this, " + who + ", " + at[0] + ", " + at[1] + ", " + (face || 0) + ")");
+        const line = (who, i) => say(o, who, Watki.wstaw(t[i], v));
+        const out = (role, id) => { walk(id, WEZ.DOOR, 2); walk(id, WEZ.OUT, 2); js("Story.wezHide(\"" + role + "\")"); };
+        o.push(C(221, [])); js("Story.wezStage()"); wait(20); o.push(C(222, [])); wait(20);
+        js("AudioManager.playSe({ name: \"Knock\", volume: 90, pitch: 100, pan: 0 })"); wait(30);
+        js("Story.wezShow(\"herald\")"); walk(H, S.herald, 8);
+        line(H, 0); line(G, 1); line(H, 2); line(G, 3); line(H, 4); line(0, 5); line(G, 6); line(H, 7);
+        out("herald", H); wait(40);
+        js("Story.wezShow(\"butler\")"); walk(B, S.butler, 8);
+        js("Story.wezShow(\"guard1\")"); walk(WEZ.ID.guard1, S.guard1, 8);
+        js("Story.wezShow(\"guard2\")"); walk(WEZ.ID.guard2, S.guard2, 8);
+        line(B, 8); line(B, 9); line(G, 10); line(B, 11); line(0, 12); line(B, 13);
+        out("guard2", WEZ.ID.guard2); out("guard1", WEZ.ID.guard1); out("butler", B); wait(30);
+        walk(G, S.bye, 4);
+        line(G, 14); line(G, 15); js("Story.wezLetter()"); line(G, 16); line(0, 17); line(G, 18);
+        walk(G, WEZ.DOOR, 2); walk(G, WEZ.OUT, 2);
+        js("Story.wezGone()");
+        return end(o);
+    }
+    function startWezwanie() {
+        const z = wez(), g = npc("grandpa");
+        if (!z || !g || $gameMap._interpreter.isRunning()) return false;
+        z.called = day(); z.told = true; z.sealAt = day() * 24 + WEZ.SEAL_HOUR;
+        $gameMap._interpreter.setup(wezScene(), g.eventId());
+        return true;
+    }
+    // the letter to Szczepan: the hero's (grandpa's hand, or read under the door)
+    function wezLetter() {
+        const z = wez();
+        if (!z || z.letter) return;
+        z.letter = true;
+        T.popup(TK.wez.list[0], { color: U().accent, sub: TK.wez.list[1] });
+        T.call("Journal", "addNote", TK.wez.notka[0], TK.wez.notka[1]);
+        wz.ownChecks();
+    }
+    // grandpa out of the door: gone; the seal at dusk
+    function wezGone() {
+        const z = wez(), g = npc("grandpa");
+        if (g) g.erase();
+        if (z) z.gone = true;
+        T.call("CleanHUD", "sceneBars", false);
+        T.popup(TK.wez.zmrok[0], { top: true, color: U().accent, sub: TK.wez.zmrok[1] });
+        wz.ownChecks();
+    }
+    // day 5 and the hero never came home: grandpa sailed without a goodbye, his letter lies under the door, the house sealed
+    function wezNoGoodbye() {
+        const z = wez();
+        z.called = day(); z.told = true; z.gone = true; z.sealAt = nowHours(); z.underDoor = true;
+        T.popup(TK.wez.bez[0], { top: true, color: U().accent, sub: TK.wez.bez[1] });
+        wz.ownChecks();
+    }
+    function wezReadDoor() {
+        const o = [];
+        say(o, -1, TK.wez.podDrzwiami);
+        o.push(C(355, ["Story.wezLetter()"]));
+        $gameMap._interpreter.setup(end(o), 0);
+        wez().underDoor = false;
+        return true;
+    }
+    // dusk of the summons' day with the hero still inside: the butler's knock, out to the yard
+    function wezSealOut() {
+        const o = [];
+        say(o, -1, TK.wez.pieczec[1]);
+        o.push(C(355, ["Story.wezOut()"]));
+        $gameMap._interpreter.setup(end(o), 0);
+        return true;
+    }
+    // the debt paid or the field bought back: the seal comes off, grandpa is home two days later
+    function wezFree() {
+        const z = wez();
+        z.freed = day(); z.backAt = (day() + WEZ.BACK_DAYS) * 24 + WEZ.BACK_HOUR;
+        T.popup(TK.wez.wolny[0], { top: true, color: U().accent, sub: TK.wez.wolny[1] });
+        T.call("Journal", "addNote", TK.wez.notka[2], TK.wez.notka[3]);
+    }
+    // the calm update's checks (the frames n of this map scene)
+    function checkWezwanie(n) {
+        const s = state(), z = wez();
+        if (!z || s.intro !== 2) return false;
+        if (n % 30 === 0) { wezSelf(WEZ.YARD, WEZ.ID.sign, sealed()); wz.ownChecks(); }
+        const d = day(), h = hour(), here = $gameMap.mapId();
+        if (!z.called) {
+            if (d < WEZ.DAY || h < WEZ.FROM) return false;
+            if (here === MAP.house && n > 40 && h < WEZ.TO && npc("grandpa")) return startWezwanie();
+            if (!z.told && here !== MAP.house) { z.told = true; wz.ownChecks(); }   // (the messenger passed through: home)
+            if (d >= WEZ.GIVE_UP) wezNoGoodbye();
+            return false;
+        }
+        if (!z.freed && (s.done || fieldBack())) wezFree();
+        if (here === MAP.house && sealed() && n > 20) return wezSealOut();
+        if (here === WEZ.YARD && z.underDoor && !z.letter && n > 30) return wezReadDoor();
+        return false;
+    }
+    // the sealed door: no way in (a popup over the hero, a step back off the door)
+    let wezSaidAt = -999;
+    const _reserveTransferWez = Game_Player.prototype.reserveTransfer;
+    Game_Player.prototype.reserveTransfer = function(mapId, x, y, d, fadeType) {
+        if (mapId === MAP.house && sealed() && window.$gameMap && $gameMap.mapId() !== MAP.house) {
+            if (Graphics.frameCount - wezSaidAt > 60) { T.popup(TK.wez.pieczec[0], { color: "#ff9f8f" }); wezSaidAt = Graphics.frameCount; }
+            const onDoor = $gameMap.eventsXy(this.x, this.y).some(e => e.page() && e.page().list.some(c => c.code === 201));
+            if (onDoor) {
+                const back = { 2: 8, 4: 6, 6: 4, 8: 2 }[this.direction()] || 2, bx = $gameMap.roundXWithDirection(this.x, back), by = $gameMap.roundYWithDirection(this.y, back);
+                if ($gameMap.isValid(bx, by) && $gameMap.checkPassage(bx, by, 0x0f)) { this.locate(bx, by); this.setDirection(back); }
+            }
+            return;
+        }
+        return _reserveTransferWez.apply(this, arguments);
+    };
+
     function letterText(d) {
         const s = state(), n = daysLeft(), sum = left() + " G";
         if (d >= s.deadline) return Watki.wstaw(TK.kod.letterText[0], { sum: sum, "2": butler() });
@@ -1341,7 +1556,7 @@
         return false;
     }
     // (the chapter's thread checked at once on every map - begun, or an older save's caught up - not only every second)
-    T.on("mapReady", () => { syncGoals(); w.ownChecks(); }, { owner: PLUGIN });
+    T.on("mapReady", () => { syncGoals(); w.ownChecks(); wz.ownChecks(); }, { owner: PLUGIN });
     // calm: Tawerna.isCalm's "strict" (no talk, menu, build, mini-game, transfer, fade, day summary, rest or blow - when he is up)
     T.onMapUpdate(scene => {
         if (!active() || !$gameMap) return;
@@ -1349,6 +1564,7 @@
         if (n % 30 === 0 && $gameMap.mapId() === MAP.manor) syncLord();
         if (!T.isCalm(scene, "strict")) return;
         if (s.intro !== 2 && $gameMap.mapId() === MAP.house && n > 40 && npc("grandpa")) { startIntro(); return; }
+        if (checkWezwanie(n)) return;
         if (checkDeadline()) return;
         if (n > 20 && checkField()) return;
         if (n % 20 === 0) updateLetters();
@@ -1496,7 +1712,12 @@
 
     window.Story = T.register(PLUGIN, {
         NPCS, MAP, DEBT, DEADLINE, DAWN, LETTERS_BEFORE, PENDANT, CAST, CARRY_DAYS, BUYBACK, LOSE_ENDS, state, active, left, daysLeft, lastNight, isOpen, statusLine, newState, pay: payOutside, talk, pick,
-        introDone, introWalk, introGetUp: () => getUp(), introLying: () => lying, thanks, thanksBack, chapterDone, startIntro, checkDeadline, showEnding, syncGoals, npc, doorEvent, borgarEvent, roleOf, doomed: () => doomed(), step,
+        introDone, introWalk, introGetUp: () => getUp(), introLying: () => lying, quickStart, thanks,
+        // Wezwanie króla (Stajnia.js asks wezwanie(); the scene's commands call the rest)
+        wezwanie: () => { const z = wez(); return z ? { called: z.called, sealed: sealed(), away: grandpaAway(), letter: !!z.letter } : null; },
+        wezWalk, wezShow, wezHide, wezStage, wezLetter, wezGone, startWezwanie,
+        wezOut: () => { $gamePlayer.reserveTransfer(WEZ.YARD, WEZ.YARD_OUT[0], WEZ.YARD_OUT[1], 2, 0); wezSelf(WEZ.YARD, WEZ.ID.sign, true); },
+        wezSignRead: () => T.popup(TK.wez.znak, { color: U().accent }), thanksBack, chapterDone, startIntro, checkDeadline, showEnding, syncGoals, npc, doorEvent, borgarEvent, roleOf, doomed: () => doomed(), step,
         // the field lost and bought back
         pastDue: () => pastDue(), fieldLost: () => fieldLost(), fieldLocked: () => fieldLocked(), fieldBack: () => fieldBack(), carryLeft: () => carryLeft(),
         buyLeft: () => buyLeft(), buyOpen: () => buyOpen(), chapterEnded: () => chapterEnded(), halfWay: () => halfWay(), lockAt: () => lockAt(),

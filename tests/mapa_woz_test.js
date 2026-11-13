@@ -64,7 +64,7 @@ kit.test({ port: 9701, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("S z Polnej drogi: miasteczko", m.mapa.cursor === "8", m.mapa.cursor);
     m = await key("O", 8);
     const cd = m.mapa.cardData || {};
-    t.check("karta miasteczka: ludzie (Tadek Młot), sklepy i usługi (tawerna, kowal), 30+ wnętrz (Piekarnia)", cd.title === "Okolice Tawerny" && cd.ludzie.some(l => /Tadek Młot/.test(l)) && cd.sklepy.some(s => /Tawerna/.test(s)) && cd.sklepy.some(s => /Tadek Młot/.test(s)) && cd.wnetrza.length >= 30 && cd.wnetrza.includes("Piekarnia"), { ludzie: cd.ludzie && cd.ludzie.length, sklepy: cd.sklepy, wnetrza: cd.wnetrza && cd.wnetrza.length });
+    t.check("karta miasteczka: ludzie (Tadek Młot), sklepy i usługi (tawerna, kowal), 30+ wnętrz (Piekarnia)", cd.title === "Kruczogród" && cd.ludzie.some(l => /Tadek Młot/.test(l)) && cd.sklepy.some(s => /Tawerna/.test(s)) && cd.sklepy.some(s => /Tadek Młot/.test(s)) && cd.wnetrza.length >= 30 && cd.wnetrza.includes("Piekarnia"), { ludzie: cd.ludzie && cd.ludzie.length, sklepy: cd.sklepy, wnetrza: cd.wnetrza && cd.wnetrza.length });
     t.check("karta miasteczka wymienia postój wozu z godzinami", /wóz Wojciecha stoi tu: 7:00-8:00/.test(cd.woz || ""), cd.woz);
     await shot("karta_miejsca");
     m = await key("P", 8);
@@ -83,7 +83,7 @@ kit.test({ port: 9701, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         plan[6.5] === null && plan[7.5] === "miasto" && plan[8.2] === null && plan[9.8] === "przystan" && plan[12] === "miasto" && plan[14] === "lesna" && plan[16.5] === "jar" && plan[19] === "miasto" && plan[21.5] === "miasto" && plan[23] === null, plan);
     t.check("cena i czas: miasto -> Podgrodzie 4 G, pół godziny; -> Przystań 4 G, pół godziny (od 2026-10-30 bezpośrednia brama miasta -> Przystań); -> Kruczy Jar 6 G, 1 godz. (miasto -> dwór -> pole)", (await t.json("[Woz.hops('miasto','podgrodzie'), Woz.hops('miasto','przystan'), Woz.hops('miasto','jar'), Woz.priceOf(1), Woz.priceOf(2), Woz.priceOf(3), Woz.timeWords(Woz.timeOf(1)), Woz.timeWords(Woz.timeOf(2)), Woz.timeWords(Woz.timeOf(3))]")).join() === "1,1,2,4,6,8,30 min,1 godz.,1 godz. 30 min");
     await t.setHour(11.7);
-    await t.go(8, 50, 90, 6);
+    await t.go(8, 34, 108, 6);
     await t.frames(30);
     const town = await t.json(`(function(){ const ev = TownLife.eventOf("woznica"), cart = $gameMap.event(Woz.IDS.woz); return { where: Woz.where(), here: Woz.hereStop(), w: ev ? [ev.x, ev.y, !ev._town.hidden] : null, cart: cart ? [cart.x, cart.y, !cart.isTransparent(), cart.isNormalPriority()] : null, serving: Woz.serving() }; })()`);
     t.check("11:40 w miasteczku: Wojciech stoi przy bramie południowej (54,90), wóz pokazany obok (56,90), woźnica wozi", town.where === "miasto" && town.here === "miasto" && town.w && town.w[0] === 54 && town.w[1] === 90 && town.w[2] && town.cart && town.cart[0] === 56 && town.cart[2] && town.cart[3] && town.serving, town);

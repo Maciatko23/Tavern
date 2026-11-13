@@ -14,7 +14,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const gate = await t.json(`(function(){ const m = $dataMapInfos[111]; return m ? m.name : null; })()`);
     t.check("Map111 (Podgrodzie) is in the game", !!gate, gate);
     // start by the junk stall (its "Miejsce: kram" event)
-    await t.newGame({ map: 111, x: 43, y: 30, dir: 2, hour: 10, quiet: true, minimap: false });
+    await t.newGame({ map: 111, x: 61, y: 63, dir: 2, hour: 10, quiet: true, minimap: false });
     const kram = await t.json("TownLife.spot('kram')");
     await t.eval(`(function(){ const k = ${JSON.stringify(kram)}; if (k) $gamePlayer.locate(k[0], k[1] + 2); return 0; })()`);
     await t.frames(30);
@@ -64,7 +64,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("on Map008 the town's 30 residents (14 + the quests' four + Teodor, hidden till Feliks goes, + Marek, hidden till W6 brings him home, + Eryk Sowa the castaway, + Hieronim the gravedigger, + the new town's eight) and none of Podgrodzie's", town.town === 30 && !town.podgrodzie.length, town);
 
     // the night: back in Podgrodzie at 23:48 everyone is hidden (indoors, or the poacher in the forest)
-    await t.go(111, 43, 30, 2);
+    await t.go(111, 61, 63, 2);
     await t.eval(`(function(){ const k = ${JSON.stringify(kram)}; $gamePlayer.locate(k[0], k[1] + 2); return 0; })()`);
     await t.setHour(23.8);
     await t.frames(10);

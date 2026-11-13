@@ -41,8 +41,9 @@
     // the climbers' path on Map013: the face cells of the crest over the high shelf (crest bottom 2 at x 51-55: the face rows 3-6, the shelf
     // from row 7) - an action there takes the hero up; the landing on the ridge
     // (2026-10-18: Orla Grań doubled to 80x60, tools/powieksz - its way down is on the new south edge, row 59, the path carried on to it)
-    const WAY_UP = { map: GORY, cells: [[53, 6], [54, 6]], stand: [[53, 7], [54, 7]], to: MAP, land: [20, 57], dir: 8 };
-    const WAY_DOWN = { cells: [[19, 59], [20, 59], [21, 59]], to: GORY, land: [53, 7], dir: 2 };
+    // (plansza 3x3, 2026-11-08) the climb to Orla Grań is out for now (the ridge is not used): no cells
+    const WAY_UP = { map: 213, cells: [[84, 7]], stand: [], to: MAP, land: [20, 28], dir: 8 };   // (kopalnia: schody w ścianie stacji B na Map213 -> Orla Grań (20,28))
+    const WAY_DOWN = { cells: [[19, 30], [20, 30], [21, 30]], to: 213, land: [84, 9], dir: 2 };   // (szyb na Orlej Grani -> kopalnia, pod schodami stacji B)
 
     // ------------------------------------------------------------------ the stages (0 the egg .. 5 the adult)
     // care: the days of care it takes to grow to the next one (a day counts only when it was fed, watered and - egg, chick - warm);
@@ -130,7 +131,7 @@
     const LAND_REGION = 31;                // a painted region: the town's squares where the eagle may land
     // where it may land in the towns (the squares): map -> [[x0, y0, x1, y1], ...] - also without the region painted
     const TOWN_SQUARES = {
-        8: [[29, 17, 76, 27], [30, 37, 73, 63], [2, 89, 101, 92]],   // (2026-10-22 the new town) the tavern's yard, the market square, the street inside the south wall
+        8: [[29, 17, 76, 27], [30, 37, 73, 63], [2, 107, 117, 109]],   // (2026-10-22 the new town) the tavern's yard, the market square, the street inside the south wall
         111: [[4, 18, 84, 20], [36, 24, 55, 40], [17, 78, 36, 89]],   // (2026-10-22 the new Podgrodzie) the road through the settlement, the square, the field of the Chata pod lasem
         125: [[20, 26, 34, 34]]                                          // the quay square
     };
@@ -226,7 +227,7 @@
         }) },
         zadania: {
             // D29: Bazyli's, while the egg waits on the ridge (Act II, after a storm) and the hero has none; done - the egg taken
-            D29: { kind: "D", giver: "latarnik", icon: ITEM.jajo, offer: { cond: { hours: [14, 22], fn: "d29Pora" } }, oferta: ["jajoGotowe", "!stan:have"],
+            D29: { kind: "D", giver: "latarnik", icon: ITEM.jajo, offer: { cond: { hours: [14, 17.5], fn: "d29Pora" } }, oferta: ["jajoGotowe", "!stan:have"],
                 kroki: [{ nazwa: "d29Jajo", gotowe: "stan:have" }],
                 reward: { xp: 100, flag: "orzelJajo" } },
             // W13 starts by itself once the egg is the hero's; the words of its custom steps: the hook w13Zmienne

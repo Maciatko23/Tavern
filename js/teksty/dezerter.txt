@@ -9,7 +9,7 @@ zadania.W16.where = tawerna (pokój 5 na piętrze gości), rynek, obóz pod mure
 zadania.W16.when = od drugiej fali z promu (dzień 25) do odpływu łowczyni
 zadania.W16.desc = Z drugą falą uchodźców przypłynął chłopak, który mówi, że ma na imię Tomek. Podskakuje na dźwięk bębna i krzyczy przez sen. A ktoś płynie jego śladem.
 zadania.W16.fail.text = Tomek odpłynął, a jego sprawa została bez końca.
-zadania.W16.steps.0.text = Tomek z pokoju 5: kim jest? Poszlaki ({n} z 2): Rafał z obozu, Darin, werbownik Bęben, studnia o świcie (5-7), bęben na rynku ({beben}), ściana z pokojem 3 nocą.
+zadania.W16.steps.0.text = Tomek z pokoju 5: kim jest? Poszlaki ({n} z 2): Rafał z obozu, Darin, werbownik Bęben, studnia o świcie (5-7), bęben na rynku ({beben}), podsłuch pod drzwiami pokoju 5 nocą.
 zadania.W16.steps.1.text = {lowczyni}
 zadania.W16.steps.2.text = Porozmawiaj z Tomkiem po północy, w pokoju 5. Wtedy mówi. Szczerba odpływa {dzien}.
 zadania.W16.steps.3.text = {plan}
@@ -63,7 +63,7 @@ scena.beben.werbownik = Za króla, chłopcy! Żołd, buty i strawa!
 scena.beben.tymon = Bęben. Słyszysz? Nie mów nikomu, że się trzęsę.
 mysl.beben = (Tomek zbladł na dźwięk bębna. Cywil by się nie wzdrygnął.)
 
-# podsłuch (pokój 3 przez ścianę albo pod drzwiami piątki, nocą): „kto: tekst”, słowa kluczowe w {nawiasach}
+# podsłuch (pod drzwiami piątki, nocą): „kto: tekst”, słowa kluczowe w {nawiasach}
 [podsluch.sen]
 Tomek: Nie... nie każcie mi...
 Tomek: {Nie podpalę}! Słyszycie? {Nie podpalę}!

@@ -1,0 +1,477 @@
+# Teksty wątku W21 „Gorączka w przytułku” (wtyczki Goraczka_Data.js i Goraczka.js) - docs/zadania_nowe/goraczka.md.
+# Po drugiej fali uchodźców i głosowaniu w ratuszu w obozie zaczyna się gorączka. Siostra Stefa (przytułek), babka Jadwiga (znachorka),
+# brat Kleofas (kaplica), piekarka Hanka, woziwoda Kuba, kowal Tadek, garbarz Ignac, sołtys Bronisław, kapral Wit, nowy garbarz Wawrzyn Płowy
+# (uchodźca z drugiej fali). Bohater jest nastolatkiem: dorośli mówią do niego „chłopcze”. „> ” - mówi bohater; „@klucz: ” - mówi ta postać.
+
+# ======================================================================== zadanie W21 (dziennik: FABUŁA)
+zadania.W21.title = Gorączka w przytułku
+zadania.W21.where = przytułek, rynek, Czerpalnia wschodnia, Garbarnia, ratusz
+zadania.W21.when = od dnia 30, po głosowaniu w sprawie obozu - osiem dni
+zadania.W21.desc = W obozie zaczęła się gorączka. Siostra Stefa nie nadąża z chorymi, miasto zamknęło ulicę i wysłało nocny patrol. Ktoś albo coś zatruwa wodę, a ja mam tylko własny bukłak z deszczówką i parę rąk.
+zadania.W21.fail.text = Gorączka cofnęła się sama, beze mnie.
+zadania.W21.steps.0.text = {k1}
+zadania.W21.steps.1.text = {k2}
+zadania.W21.steps.2.text = {k3}
+zadania.W21.steps.3.text = {k4}
+zadania.W21.steps.4.text = {k5}
+
+# słowa kroków (zmienne dziennika)
+kroki.k1.start = Idź do przytułku do siostry Stefy: trzej chorzy. Przynieś jej wywar ziołowy i dwa łyki własnej wody z bukłaka.
+kroki.k1.ulica = Wywar podany. Wieczorem (od 18:30) miasto zamyka ulicę południową - bądź w pobliżu.
+kroki.k1.gotowe = Ulica zamknięta, po dwudziestej patrol. Siostra Stefa dała ci przepustkę.
+kroki.k2.tekst = Zbiórki {zb}/2 (babka Jadwiga: dziurawiec i kozłek; brat Kleofas: opatrunki; Hanka: wrzątek z pieca). Łóżka obsłużone {n}/3. {gawel}
+kroki.k2.gawelCzeka = Stary Gaweł potrzebuje wywaru przed 20:00 jutra.
+kroki.k2.gawelOk = Gaweł dostał wywar.
+kroki.k2.zmarl = Gaweł zmarł w nocy.
+kroki.k3.tekst = Chorują tylko ci, którzy piją z beczek Kuby. Zapytaj trzech ludzi ({lista}/3). {zapach} {s3}
+kroki.k3.zapachNie = Powąchaj wodę w beczce przy Czerpalni wschodniej.
+kroki.k3.zapachTak = Woda pachnie wapnem.
+kroki.k3.s3Nie = Po 17:00 tłum idzie pod garbarnię Ignaca.
+kroki.k3.s3Tak = Sprawa Ignaca rozstrzygnięta.
+kroki.k4.tekst = Dowody {n}/2: biały osad w rynnie przy Czerpalni, płyta rowu za Garbarnią (łopata). {wawrzyn}
+kroki.k4.wNie = Porozmawiaj z Wawrzynem przy kadziach (6:30-19).
+kroki.k4.wTak = Rozmowa z Wawrzynem za tobą.
+kroki.k5.start = Sołtys zwoła zebranie przed ratuszem.
+kroki.k5.zebranie = Zebranie dnia {dzien}, o 15:00 przed ratuszem. Przyjdź.
+kroki.k5.po = {wynik} Uratowanych: {n} z sześciu. Rano ulica się otworzy.
+kroki.k5.A = Wawrzyn ukarany.
+kroki.k5.B = Przenosimy kadzie, rów zasypany.
+kroki.k5.C = Nikt nic nie powiedział.
+
+# ======================================================================== napisy i imiona
+napis.zloto = +{n} G
+napis.opinia = Opinia +{n}
+napis.opiniaMinus = Opinia -{n}
+napis.start = W obozie zaczęła się gorączka.
+napis.brakWywaru = Potrzebujesz wywaru ziołowego
+napis.brakOkladu = Potrzebujesz opatrunku
+napis.brakWody = Potrzebujesz dwóch łyków wody w bukłaku
+napis.brakZiol = Brakuje: {n}x {a}
+napis.brakLopaty = Potrzebujesz łopaty
+napis.brakBudowy = Brakuje: {n}x {a}
+napis.gawel = Stary Gaweł zmarł w nocy.
+napis.policyjna = Ulica zamknięta. Od 20:00 patrol.
+napis.zapora = Wóz zapory. Ulicę pilnuje straż.
+napis.kociol = Kocioł siostry Stefy. Gotuje się wywar.
+napis.dowod = Dowód ({n}/2)
+napis.zebranie = Sołtys zwołuje zebranie: dzień {dzien}, 15:00, przed ratuszem.
+napis.chory = Gorączka bierze i ciebie. Dzień osłabienia.
+napis.zaMaloDowodow = Za mało dowodów, by stanąć za Ignacem.
+napis.ignacZamkniety = Ignac zamyka garbarnię.
+napis.milczenie = Nikt nic nie powiedział. Gorączka cofnęła się sama.
+napis.osadnik = Osadnik stoi. Rów zasypany wapnem.
+buff.nazwa = Osłabienie
+buff.opis = prace kosztują więcej sił - gorączka
+imie.gawel = Gaweł
+imie.ignac = Ignac
+imie.patrol = Patrol
+imie.stefa = Stefa
+opcja.inna = W innej sprawie.
+opcja.nic = Nic.
+drzwi.zamkniete = Przytułek. Siostra karmi chorych - zamknięte.
+drzwi.patrol = Straż: po dwudziestej wstęp tylko z przepustką.
+
+# myśli bohatera
+mysl.start = (W obozie leżą chorzy. Siostra Stefa jest w przytułku pod murem.)
+mysl.lista = (Chorują tylko ci, którzy piją z beczek Kuby. Skąd Kuba je napełnia?)
+mysl.ignacRada = (Wapno, którego tam nie powinno być. Tam, gdzie woda wchodzi do cysterny.)
+mysl.zb = (Zbiórka załatwiona. Razem {n}/3.)
+
+# ======================================================================== notatki dziennika
+[notatki.start]
+Gorączka w obozie
+Szymek i dzieci leżą w przytułku. Siostra Stefa nie ma ziół ani czystej wody.
+
+[notatki.wywar]
+Wywar z deszczówką
+Dałem siostrze Stefie własne dwa łyki wody i wywar. Pomogło tylko Szymkowi. Reszta słabnie.
+
+[notatki.ulica]
+Ulica zamknięta
+Sołtys i Wit zamknęli ulicę południową wozami. Po dwudziestej patrol. Mam przepustkę od siostry Stefy.
+
+[notatki.gawel]
+Gaweł nie żyje
+Nie zdążyłem z wywarem. Stary żebrak zmarł w nocy.
+
+[notatki.gawelDzwon]
+Dzwon dla Gawła
+Brat Kleofas przeczytał modlitwę, Ambroży uderzył raz w dzwon. Miasto zamilkło.
+
+[notatki.lista]
+Kto choruje, a kto nie
+Chorują ci, którzy piją z beczek Kuby: obóz, przytułek, dwie rodziny obok. Zdrowi są ci z rynkowej studni i Stefa z własnego kubka.
+
+[notatki.zapach]
+Woda z Czerpalni wschodniej
+Beczki Kuby pachną wapnem i czymś gorzkim. Cysterna przy wschodnim murze, a obok nowa Garbarnia.
+
+[notatki.chory]
+Poczułem się źle
+Spróbowałem wody z beczki. Dzień osłabienia. Nie rób tego więcej.
+
+[notatki.s3_stoj]
+Stanąłem za Ignacem
+Z listą chorych w ręku przekonałem sołtysa. Ignac zapamięta.
+
+[notatki.s3_sprawdz]
+Ignac pokazał kadź
+Ignac wąchał moją próbkę: wapno i ałun z cudzej kadzi. To nie jego robota.
+
+[notatki.s3_nic]
+Ignac stracił garbarnię na trzy dni
+Nie powiedziałem nic. Tłum wybił szyby, a Ignac zamknął warsztat.
+
+[notatki.wawrzyn]
+Wawrzyn przyznał się
+Wawrzyn Płowy nie chciał nikogo truć. Miał budynek bez zbiornika na ścieki i dwa dni na pierwszą dostawę dla wojska.
+
+[notatki.wybor_A]
+Wawrzyn ukarany
+Wawrzyn stał w dybach, garbarnia zamknięta na tydzień. Miasto spokojne, obóz chłodny.
+
+[notatki.wybor_B]
+Pomagam Wawrzynowi
+Przeniesiemy kadzie poza rów i zbudujemy osadnik.
+
+[notatki.wybor_C]
+Cisza
+Nikt nic nie powiedział. Gorączka cofnęła się sama, a sołtys obwinił Ignaca.
+
+[notatki.osadnik]
+Osadnik
+Kadzie stoją poza rowem, rów zasypany wapnem. Wawrzyn płaci pokutę i uczy mnie garbować bez wapna.
+
+[notatki.cisza]
+Cisza po gorączce
+Ulica otwarta, wozy zdjęte. Dzwon uderzył raz, wolno.
+
+# ======================================================================== Stefa (rozdz. 1)
+[stefa.intro1]
+@stefa: Dobrze, że jesteś, chłopcze. Szymek leży od rana, dwoje dzieci Haliny też, a stary Gaweł ledwie oddycha.
+@stefa: Mam jeden kocioł i garść ziół. Wody czystej nie mam wcale - rynkowa studnia jest dla mieszczan, a beczki Kuby nie pachną dobrze.
+
+[stefa.intro2]
+@stefa: Znasz wywar ziołowy: dwa krwawniki, dwie pokrzywy, czosnek i miód. Ugotuj, przynieś. I weź ze sobą bukłak - dolejemy twojej deszczówki, bo moja woda jest nic niewarta.
+
+stefa.opcja.wywar = Mam wywar i wodę.
+stefa.opcja.jak = Jak z chorymi?
+
+[stefa.wywar]
+@stefa: Dwa łyki deszczówki... Dobry z ciebie chłopak. Nalewamy trzem, po łyżce.
+@stefa: Szymek już się uspokaja. Staś i Gaweł... nie wiem. Za mało. Trzeba więcej niż jednego wywaru.
+
+[stefa.przepustka]
+@stefa: Weź to. Wit zamknie dziś ulicę, a po dwudziestej straż nikogo nie wpuszcza do przytułku. Z moją przepustką wejdziesz.
+@stefa: I masz tu dziesięć groszy na dolewkę. Nie za wiele, ale tyle mam.
+
+[stefa.jak0]
+@stefa: Trzech leży, nie wiem, co będzie rano. Przynieś wywar. Nie zwlekaj.
+
+[stefa.jak1]
+@stefa: Zbieraj zioła: babka Jadwiga ma dziurawiec, brat Kleofas opatrunki, Hanka wrzątek z pieca. Dwie z trzech spraw wystarczą. I noś chorym - {n} leży. {zmarly}
+
+[stefa.jak2]
+@stefa: Zauważyłam jedno, chłopcze. Chorują tylko ci, którzy piją z beczek Kuby. Nie ci, którzy kupują na rynku. Zapytaj ludzi. {zmarly}
+
+[stefa.jak3]
+@stefa: Leżących jeszcze {n}. Idź, szukaj. Skoro to woda, ktoś ją psuje. {zmarly}
+
+[stefa.potem]
+@stefa: Z sześciu uratowanych {uratowani}. Dzięki tobie, chłopcze. Ulica się otworzyła, patrol zszedł. {zmarly}
+
+stefa.zmarlGawel = Gawła nie uratowaliśmy.
+
+# ======================================================================== łóżka (rozdz. 2)
+lozko.opcja.wywar = Podaj wywar.
+lozko.opcja.oklad = Przyłóż okład (opatrunek).
+lozko.opcja.nic = Nic.
+
+[lozko.zmarly]
+@stefa: Przykryty. Brat Kleofas zaraz zmówi modlitwę.
+
+[lozko.szymek.0]
+@szymek: Pić... daj pić. Nie zadzieraj nosa, wiem, że kradłem. Daj pić.
+
+[lozko.szymek.dane]
+@szymek: Dziękuję... Powiedz siostrze, że pamiętam.
+
+[lozko.szymek.1]
+@szymek: Lepiej. Prawie widzę sufit.
+
+[lozko.stas.0]
+@stas: Mama? Mama, to ty?
+
+[lozko.stas.dane]
+@stas: Gorzkie. Ale ciepło mi.
+
+[lozko.stas.1]
+@stas: Śpię.
+
+[lozko.gawel.0]
+@gawel: Chłopcze... daj starcowi łyk. Dwadzieścia lat chodzę po tych ulicach i nikt nie dał mi łyka, od którego się żyje.
+
+[lozko.gawel.dane]
+@gawel: Dobry wywar. Pachnie miodem. Jak w domu, którego nie miałem.
+
+[lozko.gawel.1]
+@gawel: Pierwsza noc bez dreszczy.
+
+[lozko.mila.0]
+@mila: Ciocia? Boli mnie głowa. Boli, boli.
+
+[lozko.mila.dane]
+@mila: Mniej boli.
+
+[lozko.mila.1]
+@mila: Mniej, mniej.
+
+[lozko.rufin.0]
+@rufin: Wojskowi mówili, że gorączkę wypędza się jałowcem. Gadanina. Daj, co masz.
+
+[lozko.rufin.dane]
+@rufin: Ciepło. Dziękuję, panie.
+
+[lozko.rufin.1]
+@rufin: Lepiej. Ale jeszcze nie mogę wstać.
+
+[lozko.berta.0]
+@berta: Dzieci... Moje dzieci. Są bezpieczne?
+
+[lozko.berta.dane]
+@berta: Niech ci Bóg wynagrodzi.
+
+[lozko.berta.1]
+@berta: Dziękuję.
+
+# zbiórki (babka Jadwiga, brat Kleofas, Hanka)
+[zb.jadwiga.prosba]
+@jadwiga: Stefa się dopomina, wiem. Dam jej nalewkę, ale najpierw przynieś mi trzy dziurawce i dwa kozłki. Rosną na łące Omszałej i na skraju lasu.
+
+zb.jadwiga.opcja = Mam dziurawiec i kozłek.
+
+[zb.kleofas.prosba]
+@kleofas: Chorych trzeba okładać czystym płótnem, chłopcze. Przynieś mi trzy opatrunki, a ja zagotuję wodę przy kaplicy i namoczę je w naparze.
+
+zb.kleofas.opcja = Mam opatrunki.
+
+[zb.hanka.prosba]
+@hanka: Wrzątek? Piec jeszcze gorący od chleba. Weź kocioł i zanieś Stefie, dla chorych nie liczę ani szczapy.
+
+zb.hanka.opcja = Biorę wrzątek dla Stefy.
+
+# ======================================================================== rozdz. 3: kto pije
+pytanie.opcja = Kto u was choruje, a kto nie?
+
+[pytanie.woziwoda]
+@kuba: Chorują ci, którzy biorą z moich beczek. A moje beczki, chłopcze, nalewam na wschodzie, ze starej cysterny, bo na rynku racje się kończą.
+@kuba: Od trzech dni woda pachnie jakoś kwaśno. Myślałem, że to beczka.
+
+[pytanie.piekarka]
+@hanka: Obóz, przytułek, dwie rodziny obok. Mieszczanie z rynkowej studni zdrowi. I ja zdrowa, i piec, i mąka.
+
+[pytanie.kowal]
+@tadek: Moi pomocnicy zdrowi. Pijemy z rynku, bo żelazo wolało czystą. Ale u Kuby widzę beczki od wschodu - tam coś nie gra.
+
+[beczka.opis]
+Wózek z beczką stoi przy Czerpalni wschodniej, pod okrągłą wieżą cysterny. Woda w beczce jest mętna.
+
+beczka.opcja.wachaj = Powąchaj.
+beczka.opcja.sprobuj = Spróbuj łyk.
+
+[beczka.wacham]
+> Wapno... i coś gorzkiego. Jak w garbarni, tylko mocniej.
+
+[beczka.probuje]
+> (Łyk. Wapno, ałun i żelazo na języku. Aż skręca w żołądku.)
+
+[s3.mysl]
+(Przed garbarnią Ignaca zbiera się tłum.)
+
+[s3.soltys]
+@soltys: Ignac! Wychodź! Cała dzielnica choruje, a u ciebie kadzie śmierdzą od tygodnia.
+@soltys: A smród kto ma? Wapno kto ma? Ty masz, garbarzu!
+
+[s3.ignac]
+@ignac: Ja? Moja woda jest z przydziału, jak wasza. Wiecie, ile jej mam? Tyle, co na jedną kadź w tygodniu.
+
+[s3.kuba]
+@kuba: Ja tylko mówię, że od Czerpalni wschodniej woda... no, że pachnie. Nie wiem, czyja to sprawa.
+
+s3.opcja.stoj = Stań za Ignacem.
+s3.opcja.sprawdz = Pozwól im sprawdzić.
+s3.opcja.nic = Nic.
+
+[s3.stoj.soltys]
+@soltys: Lista chorych... Rzeczywiście. Kto pije z beczek, ten choruje, a nie kto ma garbarnię. Ustępuję.
+
+[s3.stoj.ignac]
+@ignac: Dziękuję, chłopcze. Zapamiętam. Szukaj wapna, którego tam nie powinno być. Tam, gdzie woda wchodzi do cysterny.
+
+[s3.sprawdz.ignac]
+@ignac: Proszę. Moja kadź. Wąchajcie. Różany garbnik i żelazo, nie wapno. To nie moje, to z cudzej kadzi: wapno i ałun.
+
+[s3.sprawdz.soltys]
+@soltys: Hm. Faktycznie nie to. No, rozejść się. Ale kto, to kto?
+
+[s3.nic.soltys]
+@soltys: Szyby wybite, a winnego brak. Zamknij garbarnię na trzy dni, Ignac, i niech ci się ułoży w głowie.
+
+[ignac.row.sojusznik]
+@ignac: Szukaj wapna, którego nie ma prawa tam być. Tam, gdzie woda wchodzi do cysterny. Nos mi to mówi.
+
+[ignac.row.sprawdzil]
+@ignac: Wapno i ałun z cudzej kadzi, chłopcze. Idź wzdłuż rynny od cysterny. Tam, gdzie biało, tam szukaj.
+
+[ignac.row.zly]
+@ignac: Po tym, co zrobiłeś, nie mam o czym rozmawiać. Ale nos mi mówi: wapno, ałun, wzdłuż rynny od cysterny.
+
+# ======================================================================== rozdz. 4: rów
+[osad.1]
+> (Biały osad na kamieniach rynny. Wapno.)
+
+[osad.2]
+> (Zbity biały osad. Rynna prowadzi ze wschodu, spod Garbarni.)
+
+[osad.3]
+> (Najgrubszy osad tuż przy cysternie. Ścieki wchodzą tu do wody.)
+
+osad.opcja.sloik = Zbierz osad do słoika.
+
+[osad.sloik]
+> (Łyżka osadu do słoika. Pokażę go Stefie albo Kleofasowi.)
+
+[plyta.juz]
+> (Odkopana płyta rowu. Pod nią zbity osad i rura z kadzi.)
+
+[plyta.kopiesz]
+> (Płyta za Garbarnią jest zasypana. Kopię.)
+
+[plyta.znalazles]
+> (Pod płytą rura z kadzi Wawrzyna. Osad zbity jak skała. Ścieki idą wprost do rowu i do cysterny.)
+
+[plyta.patrol]
+@wit: Stać! O tej porze nic tu nie robisz, chłopcze. Pouczam cię, ale ostatni raz.
+
+[wawrzyn.nic]
+@wawrzyn: Nie mam czasu na rozmowy. Skóry nie czekają.
+
+[wawrzyn.start]
+@wawrzyn: Wiem, po co przyszedłeś. Rynna, osad, rura. Powiedz to prosto.
+
+wawrzyn.opcja.spokojnie = Zapytaj spokojnie.
+wawrzyn.opcja.przycisnij = Przyciśnij go.
+wawrzyn.opcja.ignac = Poproś Ignaca o pomoc.
+
+[wawrzyn.spokojnie]
+> Wawrzynie, ścieki z twoich kadzi idą do cysterny. Powiedz, jak to jest.
+@wawrzyn: Nie miałem gdzie wylać. Dostałem budynek bez zbiornika i dwa dni na pierwszą dostawę dla wojska. Nikt nie dał mi osadnika.
+@wawrzyn: Nie chciałem nikogo truć, chłopcze. Naprawdę nie chciałem.
+
+[wawrzyn.przyciskasz]
+> Ludzie umierają, a ty wylewasz wapno do rowu!
+@wawrzyn: Co... Ja?! (Rzuca skórą i ucieka w stronę obozu.)
+@wawrzyn: Zostaw mnie! Wrócę z kapralem, to się wyjaśni!
+
+[wawrzyn.ignac]
+@ignac: Kadź z wapnem i ałunem. Robi się skórę szybko, ale robi się ją tu, gdzie woda nie ma gdzie iść. Zrobiłeś błąd, młody.
+@wawrzyn: Wiem. Wiem. Ale nie miałem gdzie wylać. Dostałem budynek bez zbiornika.
+
+[wawrzyn.czeka]
+@wawrzyn: Sołtys zwoła zebranie. Co mam powiedzieć?
+
+[wawrzyn.dzien]
+@wawrzyn: Praca, praca. Skóry dla wojska same się nie wyprawią.
+
+[wawrzyn.poA]
+@wawrzyn: Dyby, grzywna, tydzień bez warsztatu. Nie gniewam się na ciebie. Mówiłeś prawdę.
+
+[wawrzyn.poB]
+@wawrzyn: Kadzie stoją za rowem, osadnik działa. Dziękuję ci, chłopcze. Czysta woda, czysta skóra.
+
+[wawrzyn.poC]
+@wawrzyn: Nikt nic nie powiedział. Rów wysycha sam. Będę ostrożniejszy.
+
+[wawrzyn.osadnikProsba]
+@wawrzyn: Potrzebuję materiałów na osadnik: {lista}. Pomóż mi, a przeniosę kadzie.
+
+wawrzyn.opcja.materialy = Mam materiały.
+
+[wawrzyn.osadnikStart]
+@wawrzyn: Wystarczy. Za dwa dni stanie. Dziękuję, chłopcze.
+
+# ======================================================================== rozdz. 5: zebranie i wybór
+[s4.mysl]
+(Przed ratuszem staje półkole mieszkańców. Wawrzyn stoi z opuszczoną głową.)
+
+[s4.soltys]
+@soltys: Zebraliśmy się, bo nad miastem wisi gorączka. Chłopak mówi, że winna jest woda z cysterny, a woda to ścieki z Garbarni.
+@soltys: Wawrzynie, przyznajesz się? A ty, chłopcze, co proponujesz?
+
+[s4.ludmila]
+@ludmila: Wawrzyn to nasz człowiek. Gdyby miał gdzie wylać, nie wylewałby do rowu.
+
+[s4.wawrzyn]
+@wawrzyn: Przyznaję. Nie chciałem. Zrobię, co każecie.
+
+s4.opcja.A = Ukarz Wawrzyna (dyby, grzywna).
+s4.opcja.B = Pomóż mu przenieść warsztat.
+s4.opcja.C = Milcz.
+
+[wybor.A.soltys]
+@soltys: Dyby na rynku jeden dzień, Garbarnia zamknięta na siedem dni, grzywna dwadzieścia groszy. Miasto ci dziękuje, chłopcze.
+
+[wybor.B.wawrzyn]
+@wawrzyn: Przeniosę kadzie w głąb wschodniego skraju, za rów. Pomożesz mi z osadnikiem? Potrzebuję desek, kamieni, gwoździ i liny.
+
+[wybor.C.soltys]
+@soltys: Nikt nic nie mówi? Skoro nikt, to winnym będzie Ignac. Zamknąć mu garbarnię na tydzień.
+
+# ======================================================================== sceny
+[s1.mysl]
+(Wit i sołtys zamykają ulicę. Wozy toczą się od wschodu.)
+
+[s1.soltys]
+@soltys: Od dzisiaj ulica południowa zamknięta. Do rana nikt nie wchodzi i nie wychodzi.
+@soltys: Wit, wystaw patrol od dwudziestej. Niech ludzie siedzą w domach.
+
+[s1.wit]
+@wit: Ktoś pyta - mów, że kapral kazał. Szczególnie tym z obozu.
+
+[s2.mysl]
+(Rano po śmierci Gawła przytułek jest cichy.)
+
+[s2.stefa]
+@stefa: Przykryłam go kocem. Dwadzieścia lat chodził po ulicach i nikt nie pytał, jak mu na imię. Gaweł. Gaweł z Bramy.
+
+[s2.kleofas]
+@kleofas: Panie, przyjmij starca, który nie miał nic i dał wszystko, co mógł: dobre słowo. Niech spoczywa w pokoju.
+
+[s5.mysl]
+(Rano. Wit zdejmuje wozy z zapory.)
+
+[s5.wit]
+@wit: Ulica otwarta. Patrol schodzi. Wracajcie do domów, ludzie, wracajcie do pracy.
+
+[s5.stefa]
+@stefa: Uratowanych {n} z sześciu. Dzięki tobie, chłopcze. Dzieci wychodzą na próg w kocu. Okna otwieram. Dziękuję.
+
+# ======================================================================== F9
+f9.naglowek = Wątek W21 (Gorączka w przytułku):
+f9.etykieta = W21: rozdział {ch} - {nazwa}
+f9.opis = Przeskok do rozdziału {ch} wątku „Gorączka w przytułku”.
+f9.rozdz.1 = Pierwsi chorzy
+f9.rozdz.2 = Zioła i dzwon
+f9.rozdz.3 = Kto pije, ten choruje
+f9.rozdz.4 = Rów
+f9.rozdz.5 = Sąd i wybór
+f9.dzien = W21: skok dnia (+1)
+f9.dzienOpis = Dzień dalej, 8:30. Wątek rusza, jeśli go jeszcze nie ma.
+f9.chorzy = W21: wszyscy chorzy leżą
+f9.chorzyOpis = Sześciu chorych w łóżkach przytułku.
+f9.wynikA = W21: wynik A (ukarz)
+f9.wynikB = W21: wynik B (pomóż)
+f9.wynikC = W21: wynik C (milcz)
+f9.wynikOpis = Zamyka wątek wybranym zakończeniem.
+f9.zeruj = W21: wyzeruj
+f9.zerujOpis = Czyści stan wątku (nie czyści zadania).

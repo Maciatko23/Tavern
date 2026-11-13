@@ -1,0 +1,80 @@
+SDOOR = (69, 8)       # drzwi stajni (zajazd): wyjścia z Map181 lądują w (69, 9)
+TABLES = [(62, 22), (66, 22), (64, 25)]
+
+
+def tavern():
+    for y in range(11, 17): L.kind(0, [(49, y), (53, y)], 35)      # ciemny kamień pod szczelinami między gildią a skrzydłami (nie wyżej: dach)
+    L.kind(0, rectc(50, 16, 52, 16), 35)
+    L.put("gildia", 51, 16, anchor="door")
+    L.put("kamienica", 43, 8)
+    L.put("kamienica", 54, 8)
+    # przed drzwiami: miękki plac z okrągłego bruku (brzeg w trawie), stopień z cegły, aleja do bramy zamku (3 szerokości)
+    L.kind(0, blobc(51, 18.3, 8.5, 1.6, 12, 0.35) | rectc(49, 16, 53, 16), ROAD)
+    L.kind(1, rectc(49, 17, 53, 18) | rectc(50, 19, 52, 28), PAVE)
+    # ścieżka od alei do zajazdu (wschód): bruk okrągły z trawiastym brzegiem
+    L.kind(0, band([(53.5, 22), (58, 21), (61, 19.5), (62.5, 19)], 2.2, 0.25, 41), ROAD)
+
+
+def inn_yard():
+    """podwórze zajazdu: stajnia i wozownia wzdłuż północy, wspólne podwórze z ubitej ziemi, płot z bramami, wjazd od wschodniej luki muru"""
+    L.put("stajnia", 63, 5)
+    L.put("wozownia", 71, 4)
+    yard = blobc(71, 17, 8.8, 8.4, 31, 0.55) & rectc(63, 9, 79, 25)
+    L.kind(0, yard | band([(62, 19), (66, 18.5), (72, 17)], 2.4, 0.2, 7) | band([(72, 14), (79, 14)], 3, 0.2, 8), YARD)
+    # płot drewniany: zachód x62 (brama y18-19), południe y26; północ zamykają budynki, wschód mur zamku (luka y13-15 = brama wjazdowa)
+    fence = {(62, y) for y in range(5, 27) if y not in (18, 19)} | {(x, 26) for x in range(62, 80)} | {(79, y) for y in range(9, 13)} | {(79, y) for y in range(16, 26)}
+    L.kind(1, fence, 22)
+    # ogródek piwny na trawniku na południowy wschód od tawerny: nieregularna łata bruku w trawie
+    L.kind(0, blobc(64, 23.5, 4.6, 3.6, 33, 0.45) & rectc(59, 19, 69, 28), 32)
+
+
+def herb_garden():
+    L.put("kratki", 35, 25)
+
+
+def places_and_events():
+    for i in KEEP: keep(i)
+    for i in (22, 209):
+        for pg in EV[i]["pages"]: pg["image"].update({"characterName": "", "tileId": 0})
+    keep(209, SDOOR[0], SDOOR[1]); keep(446, SDOOR[0], SDOOR[1] + 1)
+    keep(415, 70, 12)
+    keep(323, 116, 49); keep(324, 31, 114); keep(412, 32, 114)
+    for i in (332, 334, 343, 344): keep(i, OLD[i]["x"] - 10, OLD[i]["y"] + 22)
+    keep(275, 66, 24)                                     # staw (praca woziwody): teraz w ogródku piwnym
+    # ogródek piwny: stoły w łuku, ławy, beczki wokół słupa z latarnią, donice z kwiatami
+    keep(150, *TABLES[0]); keep(165, *TABLES[1]); clone(150, *TABLES[2], name="Stół w ogródku piwnym")
+    for i in (153, 155, 167, 169, 170, 174, 181, 162, 163): EV.pop(i, None)
+    for (x, y) in TABLES:
+        clone(153, x, y - 1, name="Ława", direction=2, pattern=0); clone(153, x, y + 1, name="Ława", direction=2, pattern=0)
+    clone(48, 60, 23, name="Latarnia")
+    for (x, y) in ((59, 23), (61, 24), (60, 25)): clone(190, x, y, name="Beczka")
+    keep(189, 69, 20)
+    for (x, y) in ((60, 20), (68, 21), (68, 25)):
+        clone(71, x, y, name="Donica z kwiatami", characterName="!Tavern_Yard", characterIndex=3, direction=2, pattern=0)
+    tree("pear", 68, 27); tree("small", 59, 27)
+    # tawerna: posągi, banery, donice z kwiatami przy drzwiach (zamiast turkusowych krzewów)
+    keep(20, 45, 18); keep(21, 57, 18); keep(30, 53, 17); keep(31, 49, 17)
+    for x in (50, 52): clone(71, x, 19, name="Donica z kwiatami", characterName="!Tavern_Yard", characterIndex=3, direction=2, pattern=0)
+    keep(148, 31, 18)
+    # podwórze stajenne: stóg, wozy, skrzynie, beczki, poręcze do koni
+    clone(190, 77, 11, name="Stóg siana", note="<Occupy:left=1,right=1>", characterName="!Tavern_Yard", characterIndex=2, direction=4, pattern=2)
+    keep(149, 66, 15); clone(272, 74, 13, name="Wóz z sianem"); clone(272, 76, 22, name="Wóz z sianem")
+    clone(190, 66, 9, name="Skrzynie i beczka", characterName="!Tavern_Yard", characterIndex=1, direction=2, pattern=0)
+    clone(190, 72, 22, name="Beczki", note="<Occupy:left=1,right=1>", characterName="!Tavern_Yard", characterIndex=0, direction=8, pattern=1)
+    clone(190, 78, 20, name="Beczka"); clone(190, 63, 21, name="Beczka")
+    clone(148, 65, 18, name="Poręcz do wiązania koni"); clone(148, 73, 10, name="Poręcz do wiązania koni")
+    for (x, y) in ((79, 17), (62, 20), (70, 12)): clone(48, x, y, name="Latarnia")
+    # dziedziniec: grupy drzew z przerwami, ławki, rabaty, beczki i skrzynie przy bokach tawerny, latarnie przy ścieżkach (nie w siatce)
+    for (k, x, y) in (("big_g", 33, 26), ("pine_b", 31, 23), ("small", 36, 28), ("pear", 43, 26), ("small", 46, 25), ("pine_a", 41, 28), ("apple", 57, 26), ("small", 55, 28),
+                      ("small", 40, 5), ("small", 61, 6), ("pine_b", 40, 8), ("pine_b", 60, 5), ("pear", 41, 14), ("pine_a", 38, 19)):
+        tree(k, x, y)
+    for (x, y) in ((53, 21), (48, 24), (54, 26), (41, 21), (60, 18), (35, 19), (47, 27)): clone(48, x, y, name="Latarnia")
+    for (x, y) in ((46, 23), (56, 23), (36, 21)): clone(153, x, y, name="Ławka", direction=2, pattern=0)
+    clone(189, 41, 16, name="Beczki"); clone(190, 60, 14, name="Skrzynie i beczka", characterName="!Tavern_Yard", characterIndex=1, direction=2, pattern=0)
+    clone(190, 42, 10, name="Skrzynie", characterName="!Tavern_Yard", characterIndex=1, direction=4, pattern=0)
+    for (x, y) in ((34, 24), (44, 24), (58, 22)): clone(190, x, y, name="Kwiaty", characterName="!Tavern_Yard", characterIndex=3, direction=2, pattern=0)
+    # okna tawerny świecą nocą
+    for (x, y) in ((45, 12), (47, 12), (45, 14), (47, 14), (55, 12), (57, 12), (55, 14), (57, 14), (51, 12), (51, 14)):
+        clone(327, x, y, name="Okno tawerny (światło)", note="<Light:210,150,70,26><LightWhen:night>")
+
+

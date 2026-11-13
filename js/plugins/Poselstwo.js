@@ -25,7 +25,7 @@
 
 /*:
  * @target MZ
- * @plugindesc [W14] Łańcuch „Poselstwo” - silnik: kolacja do Złotego „w służbie”, narada w Wielkim salonie, Noc Kupały i kradzież listu, ślady, molo, list (poseł / Lord / kopia), echa w Akcie III. v1.0.0
+ * @plugindesc [W14] Łańcuch „Poselstwo” - silnik: kolacja do Złotego „w służbie”, narada w salonie Lorda, Noc Kupały i kradzież listu, ślady, molo, list (poseł / Lord / kopia), echa w Akcie III. v1.0.0
  * @author Claude
  * @base TawernaCore
  * @base Watki
@@ -42,7 +42,7 @@
  * Albin (pątnik) przypływa z trzecią falą (dzień 37), poseł Korony z
  * Ostapem trzy dni później (Apartament Złoty). Kolacja u Borgara 20:00-21:00
  * otwiera złotą kratę „w służbie” do 23:00. Narada nazajutrz o 21:00 w
- * Wielkim salonie (słychać ją z Jadalni). Noc Kupały: kradzież listu.
+ * salonie Lorda (słychać ją spod drzwi, z holu). Noc Kupały: kradzież listu.
  * F9 → „Wyspa i fabuła” → „Wątek W14”: przeskok do rozdziału.
  * W skryptach: Poselstwo.stan(), Poselstwo.opts = { kopia: 0-99 }.
  * ============================================================================
@@ -470,7 +470,7 @@
         if (!zarejestrowane.podsluch && p.podsluch && typeof p.podsluch.dodaj === "function") {
             zarejestrowane.podsluch = true;
             try {
-                p.podsluch.dodaj({ id: "w14Okno", plik: "poselstwo", mapa: D.MAP.pietro, pokoj: "15", godziny: CZ.okno, kwestie: "podsluch.okno", prog: 5, raz: true,
+                p.podsluch.dodaj({ id: "w14Okno", plik: "poselstwo", mapa: D.MAP.pietro, pokoj: "8", godziny: CZ.okno, kwestie: "podsluch.okno", prog: 5, raz: true,
                     gdy: () => albinTu() && day() === przyjazd(KTO.albin) + 1 && !S().tropy.okno });
                 p.podsluch.dodaj({ id: "w14Narada", plik: "poselstwo", mapa: D.MAP.apartamenty, pokoj: "salon", godziny: D.NARADA.godziny, kwestie: "podsluch.narada", prog: 5, raz: true,
                     gdy: () => has() && w.active("W14") && day() === naradaDzien() && !!wpis(KTO.posel) });
@@ -479,7 +479,7 @@
         if (!zarejestrowane.kroki && p.kroki && typeof p.kroki.dodaj === "function") {
             zarejestrowane.kroki = true;
             try {
-                p.kroki.dodaj({ id: "w14Albin", kto: KTO.albin, arkusz: "$Npc_Pielgrzym", mapa: D.MAP.pietro, start: [41, 24, 8], trasa: [[41, 22], [44, 19], [70, 18], [88, 18], [92, 17]],
+                p.kroki.dodaj({ id: "w14Albin", kto: KTO.albin, arkusz: "$Npc_Pielgrzym", mapa: D.MAP.pietro, start: [6, 49, 6], trasa: [[6, 52], [5, 53], [3, 52], [2, 50]],
                     godziny: [CZ.albin[0], CZ.kradziez], raz: true,
                     gdy: () => { const k = nocKradziezy(); return albinTu() && !!k && day() === k + 1 && !S().kradziez && !S().zapobiegl && !!wpis(KTO.posel); },
                     koniec: ok => { if (ok && has()) { S().widziany = day(); S().slady.kroki = 2; } } });
@@ -494,9 +494,9 @@
         if (!zarejestrowane.przeszukanie && p.przeszukanie && typeof p.przeszukanie.dodaj === "function") {
             zarejestrowane.przeszukanie = true;
             try {
-                p.przeszukanie.dodaj({ id: "w14Rozaniec", pokoj: "15", rzecz: "torba", kto: KTO.albin, plik: "poselstwo", klucz: "przeszukanie.rozaniec",
+                p.przeszukanie.dodaj({ id: "w14Rozaniec", pokoj: "8", rzecz: "torba", kto: KTO.albin, plik: "poselstwo", klucz: "przeszukanie.rozaniec",
                     gdy: () => albinTu() && !S().tropy.rozaniec && !S().kradziez, po: () => trop("rozaniec", 1) });
-                p.przeszukanie.dodaj({ id: "w14Notatki", pokoj: "15", rzecz: "kufer", kto: KTO.albin, plik: "poselstwo", klucz: "przeszukanie.notatki",
+                p.przeszukanie.dodaj({ id: "w14Notatki", pokoj: "8", rzecz: "kufer", kto: KTO.albin, plik: "poselstwo", klucz: "przeszukanie.notatki",
                     gdy: () => otwarta() && S().list === "albin" && !S().slady.notatki, po: () => slad("notatki", 2) });
             } catch (e) { report("przeszukanie", e); }
         }

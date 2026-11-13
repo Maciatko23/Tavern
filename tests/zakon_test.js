@@ -57,7 +57,7 @@ kit.test({ port: 9554, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     };
     const finish = () => t.finish(40);
 
-    await t.newGame({ map: 3, x: 25, y: 15, hour: 10, minimap: false });
+    await t.newGame({ map: 3, x: 65, y: 46, hour: 10, minimap: false });
     await t.eval(`(function(){ ${OFF} return 0; })()`);
     await t.eval(HELPERS);
 
@@ -87,7 +87,7 @@ kit.test({ port: 9554, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         art.per.length === 16 && art.per.every(n => n > 40) && art.bust > 100 && art.npc[0] === 192 && art.sheets.every(s => s[0] > 0), art);
 
     // ---------------------------------------------------------------- zdarzenia na polach z planu + kolizje
-    const MAPS = [22, 13, 157, 21, 4, 17, 23, 155, 18, 125, 168, 175, 8, 120, 165];
+    const MAPS = [3, 13, 157, 4, 155, 125, 168, 175, 8, 165];   // (2026-11-11 plansza: 22, 21, 17, 23, 18 are places of Kruczy Jar (3) and Łąka (4))
     const evBad = {}, col = {};
     for (const m of MAPS) {
         await go(m, undefined, undefined, 10);
@@ -106,17 +106,17 @@ kit.test({ port: 9554, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("kolizje miejsc paczki D: 0 (Okolice.checkMap na 15 mapach)", Object.keys(col).length === 0, col);
 
     // ---------------------------------------------------------------- 7.1 strażnica: płyta -> karta 4
-    await go(22, 73, 41, 10);
-    await t.eval(`__near(73, 39); 0`);
+    await go(3, 61, 18, 10);
+    await t.eval(`__near(61, 16); 0`);
     await t.frames(40);
     await act(["towerTake", "straznica_022"]);
     await finish();
     const tw = await t.json(`({ v: TownQuests.state().v.zak_karta_4 || 0, s: !!Zakon.state().towers.straznica_022, found: Okolice.isFound("straznica_022"),
-        sw: $gameSelfSwitches.value([22, 2701, "B"]) })`);
+        sw: $gameSelfSwitches.value([3, 2701, "B"]) })`);
     t.check("strażnica: pod płytą karta Zapisków strażnic 4 (przedmiot zadania), odkrycie, płyta „zbadana” (strona B)", tw.v === 1 && tw.s && tw.found, tw);
 
     // ---------------------------------------------------------------- 7.2 kapliczka: modlitwa, drugi raz, dar
-    await go(22, 72, 18, 10);
+    await go(3, 69, 16, 10);
     await t.eval("window.__kit.pops.length = 0; 0");
     await act(["pray", "kapliczka_022"]);
     await t.frames(5);
@@ -132,11 +132,11 @@ kit.test({ port: 9554, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         && sh.pops.some(p => /Już się tu dziś modliłeś/.test(p)) && !sh.msg, Object.assign({ left0 }, sh));
 
     // ---------------------------------------------------------------- 7.3 kopiec: 4 uderzenia rękami -> karta 1
-    await go(17, 50, 39, 10);
-    await t.eval(`__near(50, 37); 0`);
+    await go(3, 8, 81, 10);
+    await t.eval(`__near(8, 79); 0`);
     await work(["cairnWork", "kopiec_017"], 4);
     await t.frames(20);
-    const ca = await t.json(`({ v: TownQuests.state().v.zak_karta_1 || 0, s: !!Zakon.state().cairns.kopiec_017, sw: $gameSelfSwitches.value([17, 2751, "B"]), found: Okolice.isFound("kopiec_017") })`);
+    const ca = await t.json(`({ v: TownQuests.state().v.zak_karta_1 || 0, s: !!Zakon.state().cairns.kopiec_017, sw: $gameSelfSwitches.value([3, 2751, "B"]), found: Okolice.isFound("kopiec_017") })`);
     t.check("kopiec: 4 uderzenia rękami zdejmują szczyt - karta Zapisków strażnic 1, kamień z krukiem znika (strona B)", ca.v === 1 && ca.s && ca.sw && ca.found, ca);
 
     // ---------------------------------------------------------------- Kleofas czyta Zapiski
@@ -155,8 +155,8 @@ kit.test({ port: 9554, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("zagadka cieni: okno godzin, gdy cień Strażnika pada na dół, w każdej porze roku (późne popołudnie, 2+ h)",
         inWin(win.wiosna, 16.5, 20.5) && inWin(win.lato, 17.5, 21) && inWin(win["jesień"], 15.5, 19.5) && inWin(win.zima, 14.5, 18.5), win);
     await t.setDay(2, 12);
-    await go(18, 52, 45, 12);
-    await t.eval(`__near(52, 43); window.__kit.pops.length = 0; 0`);
+    await go(4, 79, 88, 12);   // (the ring: ZakonData RING, moved 2026-11-11 to the glade under the apple grove)
+    await t.eval(`__near(79, 86); window.__kit.pops.length = 0; 0`);
     await act(["hole"]);
     await t.frames(5);
     const noShovel = await t.json(`({ pops: window.__kit.pops.map(p => p.text), msg: $gameMessage.isBusy() })`);
@@ -168,17 +168,17 @@ kit.test({ port: 9554, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         noShovel.pops.some(p => /łopaty/.test(p)) && wrong.pops.some(p => /Strażnik nie patrzy/.test(p)) && !wrong.key && !wrong.msg && !noShovel.msg, { noShovel, wrong });
     const w2 = win.wiosna;
     await t.setHour((w2[0] + w2[1]) / 2);
-    await t.eval(`(function(){ Survival.calmWeather(); $gameScreen.clearWeather(); __near(52, 43); return 0; })()`);
+    await t.eval(`(function(){ Survival.calmWeather(); $gameScreen.clearWeather(); __near(79, 86); return 0; })()`);
     await t.frames(10);
     const now = await t.json(`({ hits: Zakon.shadowNow(), light: Sky.now().light })`);
     await work(["hole"], 3);
     await t.frames(20);
-    const dug = await t.json(`({ key: Zakon.state().key, n: $gameParty.numItems($dataItems[225]), disc: Okolice.isFound("cien_straznika"), sw: $gameSelfSwitches.value([18, 2769, "B"]) })`);
+    const dug = await t.json(`({ key: Zakon.state().key, n: $gameParty.numItems($dataItems[225]), disc: Okolice.isFound("cien_straznika"), sw: $gameSelfSwitches.value([4, 2769, "B"]) })`);
     t.check("dół w porze cienia: 3 uderzenia łopatą - Klucz Strażnika (225), odkrycie „Cień Strażnika”, dół wykopany", now.hits && dug.key && dug.n === 1 && dug.disc && dug.sw, { now, dug });
     await act(["plateKey"]);
     await finish();
     const sw27 = await t.json(`$gameSwitches.value(27)`);
-    await t.eval(`$gamePlayer.locate(53, 46); 0`);
+    await t.eval(`$gamePlayer.locate(80, 89); 0`);
     await act(["plateDown"]);
     const down = await t.until(t.onMap(176), 30);
     await t.frames(40);
@@ -193,8 +193,8 @@ kit.test({ port: 9554, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const ch2 = await t.json(`({ wall: Zakon.state().chamber.wall, chest: Zakon.state().chamber.chest, pioro: $gameParty.numItems($dataItems[226]) })`);
     t.check("komora: ściana z czterema wieżami obejrzana, w skrzyni Pióro Skrzydlatej Straży (226)", ch2.wall && ch2.chest === "pioro" && ch2.pioro === 1, ch2);
     await act(["chStairs"]);
-    const up = await t.until(t.onMap(18), 30);
-    t.check("schody komory wyprowadzają na Łąkę menhirów (53,46)", up && (await t.json(`[$gamePlayer.x, $gamePlayer.y]`)).join() === "53,46");
+    const up = await t.until(t.onMap(4), 30);
+    t.check("schody komory wyprowadzają na Łąkę menhirów (80,89)", up && (await t.json(`[$gamePlayer.x, $gamePlayer.y]`)).join() === "80,89");
 
     // ---------------------------------------------------------------- 7.5 miejsce tylko z orła: odkrycie, skrytka, zejście
     await go(125, 98, 45, 10);
@@ -245,35 +245,35 @@ kit.test({ port: 9554, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // ---------------------------------------------------------------- 7.7 cmentarz, grabarz, szubienica
     await go(8, 9, 30, 10);
     await t.frames(60);
-    const gr = await t.json(`(function(){ const e = $gameMap.event(2930); return { e: !!e, note: e ? e.event().note : null, walls: [2800, 2810, 2820, 2821].map(id => !!$gameMap.event(id)) }; })()`);
-    t.check("cmentarz: murek, lampka i groby stoją; grabarz Hieronim (2930) na Map008 za dnia", gr.e && /<Town:grabarz>/.test(gr.note || "") && gr.walls.every(Boolean), gr);
-    await t.eval(`__near(7, 24); 0`);
+    const gr = await t.json(`(function(){ const e = $gameMap.event(2930); return { e: !!e, note: e ? e.event().note : null, walls: [2821, 2822, 2830, 2836].map(id => !!$gameMap.event(id)), solid: [[4, 28], [8, 23], [5, 32]].every(c => !$gameMap.isPassable(c[0], c[1], 2)), gate: $gameMap.isPassable(8, 32, 2) }; })()`);
+    t.check("cmentarz: murek, lampka i groby stoją; grabarz Hieronim (2930) na Map008 za dnia", gr.e && /<Town:grabarz>/.test(gr.note || "") && gr.walls.every(Boolean) && gr.solid && gr.gate, gr);
+    await t.eval(`__near(6, 26); 0`);
     await work(["graveWork", 1], 4);
     await t.eval(`(function(){ const s = Zakon.state(); s.graves[2] = s.graves[2] || 1; return 0; })()`);
-    await t.eval(`__near(10, 26); 0`);
+    await t.eval(`__near(11, 28); 0`);
     await work(["graveWork", 3], 4);
     await t.frames(10);
     const gv = await t.json(`({ g: Zakon.state().graves, names: TownQuests.state().v.zak_imiona || 0, sw: $gameSelfSwitches.value([8, 2831, "B"]) })`);
     t.check("grób z krukiem: 4 uderzenia rękami odsłaniają imię; trzy groby = „Imiona z grobów z krukiem” dla Ambrożego", gv.g[1] && gv.g[3] && gv.names === 1 && gv.sw, gv);
     await t.setHour(23);
-    await t.eval(`$gamePlayer.locate(88, 126); 0`);
+    await t.eval(`$gamePlayer.locate(114, 100); 0`);
     await t.frames(240);
     const fog = await t.json(`Zakon.fog()`);
     t.check("szubienica nocą (22-3): mgła wokół niej", fog && fog.alpha > 0.3 && fog.visible, fog);
 
     // ---------------------------------------------------------------- 7.8 gaj Milczących
     await t.setHour(12);
-    await go(120, 57, 55, 12);
+    await go(4, 75, 31, 12);
     const set = await t.json(`Zakon.grove().sunset`);
     await t.setHour(set + 0.1);
-    await t.eval(`(function(){ $gamePlayer.locate(57, 54); return 0; })()`);
+    await t.eval(`(function(){ $gamePlayer.locate(75, 30); return 0; })()`);
     await t.frames(40);
     const g1 = await t.json(`({ run: !!Zakon.state().grove.run })`);
-    await t.eval(`$gamePlayer.locate(57, 59); 0`);
+    await t.eval(`$gamePlayer.locate(75, 35); 0`);
     await t.frames(10);
     const g2 = await t.json(`({ run: !!Zakon.state().grove.run, broken: Zakon.state().grove.broken, pops: window.__kit.pops.map(p => p.text).filter(p => /Milczący/.test(p)) })`);
     t.check("gaj: o zmierzchu w środku kręgu zaczyna się godzina ciszy; wyjście poza krąg ją łamie (dymek)", g1.run && !g2.run && g2.broken && g2.pops.length > 0, { g1, g2 });
-    await t.eval(`(function(){ Zakon.state().grove.broken = 0; $gamePlayer.locate(57, 54); return 0; })()`);
+    await t.eval(`(function(){ Zakon.state().grove.broken = 0; $gamePlayer.locate(75, 30); return 0; })()`);
     await t.frames(40);
     await t.eval(`$gameSystem.setDayNightHour($gameSystem.dayNightHour() + 1.05); 0`);
     await t.frames(20);

@@ -13,7 +13,7 @@
 //     there), and the cliff herbs picked in a dive (Map155, Map157)
 //   - the ruins of the Winged Guard's perches on the Orla Grań (Map175)
 //   - the old cemetery of Map008 with the graves of the Order's brothers, its gravedigger Hieronim (TownLife 2930) and the gallows hill
-//   - the grove of the Silent (Map120), the hour of silence
+//   - the grove of the Silent (Map004, north of the Silent's settlement), the hour of silence
 //   - the wild ravens on the rocks of Map155 / Map157 (drawn in the engine, read from Kruk.png)
 //   - the pieces of the wreck that the storms bring out of the sand of the shoals (Map165)
 // The thread "zakon" (Watki.js, 2026-10-28): the state "zakon", the quests K67-K70, D36-D38 (into window.TownQuestsPacks with the
@@ -62,8 +62,9 @@
         karta: 520, blogoslawienstwo: 521, spokoj: 522, kapliczka: 523, grob: 524, plyta: 525, gniazdo: 526, kruk: 527,
         stamina: 82, shovel: 379, gold: 313, food: 339, need: 82, eye: 439 };
     const SW = { komora: 27, rez: 28 };
-    const MAPS = { polna: 22, gory: 13, urwisko: 157, lesna: 21, laka: 4, omszala: 17, skraj: 23, pustelnia: 155, menhiry: 18,
-        komora: 176, przystan: 125, zagroda: 168, gran: 175, miasto: 8, osada: 120, wrak: 165 };
+    // (2026-11-11: the places of Polna droga, Leśna droga, Omszała łąka, Skraj lasu and the menhirs are on Kruczy Jar (3) and Łąka (4) now)
+    const MAPS = { polna: 3, gory: 13, urwisko: 157, lesna: 4, laka: 4, omszala: 3, skraj: 3, pustelnia: 155, menhiry: 4,
+        komora: 176, przystan: 125, zagroda: 168, gran: 175, miasto: 8, osada: 3, wrak: 165 };
     // what the ravens and the shrines take (raw fish and meat first; the shrine's offering: anything with <Food:...>)
     const RAVEN_FOOD = [98, 173, 174, 186, 94, 157, 159, 161, 168, 99, 106, 105, 95];
 
@@ -107,7 +108,7 @@
         murekV: ["!$Zak_Groby", 4, 2],                 // the low wall, a piece along (left / right)
         murekRog: ["!$Zak_Groby", 6, 0],               // a corner post
         furtka: ["!$Zak_Groby", 6, 1],                 // the open gate
-        lampa: ["!$Zak_Groby", 6, 2],                  // the lamp on a post (fire at night)
+        lampa: ["!lamp", 2, 0],                        // (the street lamp of the town)                  // the lamp on a post (fire at night)
         szubienica: ["!$Zak_Szubienica", 2, 0],        // the gallows on its mound (144x144)
         wrak1: ["!$Zak_Wrak", 2, 0],                   // the planks with iron fittings
         wrak2: ["!$Zak_Wrak", 2, 1],                   // the name board
@@ -123,35 +124,39 @@
     // ------------------------------------------------------------------ the places
     // Every event of the package: { id, map, x, y, kind, ... }. The ids are the same range on every map (PLAN.md 3.2: 2700-2899);
     // they are kept apart here anyway, so one id means one thing.
+    // (2026-11-11, questy_pustelnia) the hermitage pocket is out of the world: the foundation of the third tower stands east of the Garrison
+    // (Map162, outside the palisade: "the garrison was built on the Order's watchtower") and the cairn of the cliff on the platform of the Orla Gran (Map175, by the mine);
+    // with WyspaData.HERMITAGE_OPEN = true the old places (Map157, Map155)
+    const HERM = !!(window.WyspaData && window.WyspaData.HERMITAGE_OPEN);
     const TOWERS = [   // 7.1: the 6x6 foundations (x, y: the top left cell), the slab in the middle, Farming's random bushes under them
-        { key: "straznica_022", map: 22, x: 71, y: 36, card: true, ids: { ring: 2700, slab: 2701, blank: 2702 }, bushes: [[75, 36], [74, 40], [74, 41]] },
-        { key: "straznica_013", map: 13, x: 79, y: 20, card: true, ids: { ring: 2700, slab: 2701, blank: 2702 }, bushes: [[82, 22]] },
-        { key: "straznica_157", map: 157, x: 94, y: 52, card: true, ids: { ring: 2700, slab: 2701, blank: 2702 }, bushes: [] }
+        { key: "straznica_022", map: 3, x: 59, y: 13, card: true, ids: { ring: 2700, slab: 2701, blank: 2702 }, bushes: [] },   // (Kruczy Jar, the road north of the plot; 2026-11-11, was Map022 (71,36))
+        { key: "straznica_013", map: 13, x: 79, y: 44, card: true, ids: { ring: 2700, slab: 2701, blank: 2702 }, bushes: [[82, 46]] },
+        { key: "straznica_157", map: HERM ? 157 : 162, x: HERM ? 94 : 83, y: HERM ? 52 : 45, card: true, ids: { ring: 2700, slab: 2701, blank: 2702 }, bushes: [] }
     ];
     const SLAB_AT = [2, 3];   // the slab: the cell x+2, y+3 of a foundation (its middle, a little to the left)
     const SHRINES = [  // 7.2: the shrine stands on the bottom left cell of its 2x2 place (the road below)
-        { key: "kapliczka_022", map: 22, x: 72, y: 16, id: 2710, at: [72, 17], bushes: [] },
-        { key: "kapliczka_021", map: 21, x: 58, y: 12, id: 2710, at: [58, 13], bushes: [[58, 12]] },
+        { key: "kapliczka_022", map: 3, x: 69, y: 13, id: 2710, at: [69, 14], bushes: [] },   // (Kruczy Jar; was Map022 (72,16))
+        { key: "kapliczka_021", map: 4, x: 42, y: 14, id: 2712, at: [42, 15], bushes: [] },   // (Łąka, the north-west copses, just east of the old part; was Map021 (58,12); id 2712: Łąka has kapliczka_004 = 2710)
         { key: "kapliczka_004", map: 4, x: 66, y: 6, id: 2710, at: [66, 7], bushes: [] }
     ];
     const CAIRNS = [   // 7.3: the cairn (!$Rock_Cairn, its own list - never mined) and the raven stone on its top
-        { key: "kopiec_017", map: 17, x: 50, y: 36, ids: { cairn: 2750, stone: 2751 }, at: [50, 37] },
-        { key: "kopiec_023", map: 23, x: 58, y: 51, ids: { cairn: 2750, stone: 2751 }, at: [58, 52] },
-        { key: "kopiec_155", map: 155, x: 70, y: 40, ids: { cairn: 2750, stone: 2751 }, at: [70, 41] }
+        { key: "kopiec_017", map: 3, x: 8, y: 78, ids: { cairn: 2750, stone: 2751 }, at: [8, 79] },   // (Kruczy Jar, Omszała łąka in the south-west; was Map017 (50,36))
+        { key: "kopiec_023", map: 3, x: 92, y: 25, ids: { cairn: 2755, stone: 2756 }, at: [92, 26] },   // (Kruczy Jar, Skraj lasu in the east; was Map023 (58,51); ids 2755/2756: Kruczy Jar has kopiec_017 = 2750/2751)
+        { key: "kopiec_155", map: HERM ? 155 : 175, x: HERM ? 70 : 35, y: HERM ? 40 : 34, ids: { cairn: 2750, stone: 2751 }, at: HERM ? [70, 41] : [35, 35] }
     ];
     // 7.4: the ring of menhirs on Map018 - the Watchman (the tallest), the plate in the middle, the hole where the key lies
     const RING = {
-        map: 18, centre: [53, 45], r: 4,
-        stones: [[53, 41], [56, 42], [57, 45], [56, 48], [53, 49], [50, 48], [49, 45]], stoneIds: 2760,
-        watchman: { x: 50, y: 42, id: 2767, img: "!$Rock_Spire" }, stoneImg: "!$Rock_Column",
-        plate: { x: 53, y: 45, id: 2768 }, hole: { x: 52, y: 43, id: 2769 },
+        map: 4, centre: [80, 88], r: 4,   // (2026-11-11 evening: moved by (+30, +10) from the fence's corner (50,78) to the glade under the grove - the player; before: Map018 centre (53,45))
+        stones: [[80, 84], [83, 85], [84, 88], [83, 91], [80, 92], [77, 91], [76, 88]], stoneIds: 2760,
+        watchman: { x: 77, y: 85, id: 2767, img: "!$Rock_Spire" }, stoneImg: "!$Rock_Column",
+        plate: { x: 80, y: 88, id: 2768 }, hole: { x: 79, y: 86, id: 2769 },
         // the shadow of the Watchman (Okolice.shadowAt - Sky.js's formula; the drawn rock shadow of ChoppableTree_Render: its foot 14 px
         // over the cell's bottom, its height the frame's 92 px) must cover the hole's middle within half a tile, the sun's light >= 0.25,
         // no rain, no storm. The windows that gives (tests/zakon_test.js checks them): spring 17:21-19:48, summer 18:15-20:15,
         // autumn 16:18-18:48, winter 15:21-17:30 - the sun four fifths of its way (p 0.73-0.95), as the third card says
         shadow: { hPx: 92, footUp: 14, tol: 0.5, light: 0.25 },
         digHits: 3,
-        back: [53, 46]   // where the steps of the chamber come out
+        back: [80, 89]   // where the steps of the chamber come out
     };
     // 7.4: the chamber under the menhirs (Map176, built by tools/rozszerzenia/D/komora.py): the steps up, the sarcophagus of the first
     // watchman, the basin, the wall with the four towers, the chest
@@ -172,12 +177,12 @@
         { key: "orzel_125_b", map: 125, x: 105, y: 30, w: 4, h: 4, seed: [106, 30], rope: "lina",
           down: { id: 2784, at: [108, 34], to: [108, 37], dir: 2 },   // (2026-11-03: po ścianie skarpy w dół)
           things: [{ id: 2783, kind: "nest", x: 104, y: 33, feathers: 3 }] },
-        { key: "orzel_013_a", map: 13, x: 99, y: 38, w: 4, h: 4, seed: [99, 39], rope: "kolki",
-          down: { id: 2720, at: [99, 37], to: [97, 37], dir: 4 },
-          things: [{ id: 2721, kind: "nestOrder", x: 101, y: 43 }, { id: 2722, kind: "szarotka", x: 103, y: 40 }], bushes: [[100, 38]], blankId: 2723 },
-        { key: "orzel_013_b", map: 13, x: 33, y: 73, w: 4, h: 4, seed: [33, 73], rope: "kolki",
-          down: { id: 2730, at: [33, 73], to: [31, 73], dir: 4 },
-          things: [{ id: 2731, kind: "szarotka", x: 38, y: 74 }, { id: 2732, kind: "ravenStone", x: 39, y: 76 }] },
+        { key: "orzel_013_a", map: 13, x: 99, y: 62, w: 4, h: 4, seed: [99, 63], rope: "kolki",
+          down: { id: 2720, at: [99, 61], to: [97, 61], dir: 4 },
+          things: [{ id: 2721, kind: "nestOrder", x: 101, y: 67 }, { id: 2722, kind: "szarotka", x: 103, y: 64 }], bushes: [[100, 62]], blankId: 2723 },
+        { key: "orzel_013_b", map: 13, x: 33, y: 97, w: 4, h: 4, seed: [33, 97], rope: "kolki",
+          down: { id: 2730, at: [33, 97], to: [31, 97], dir: 4 },
+          things: [{ id: 2731, kind: "szarotka", x: 38, y: 98 }, { id: 2732, kind: "ravenStone", x: 39, y: 100 }] },
         { key: "orzel_168", map: 168, x: 51, y: 24, w: 4, h: 4, seed: [51, 24], rope: "kolki",
           down: { id: 2785, at: [54, 24], to: [54, 20], dir: 8 },
           things: [{ id: 2786, kind: "warzucha", x: 55, y: 27 }, { id: 2787, kind: "camp", x: 50, y: 27 }] }
@@ -198,24 +203,26 @@
         { n: 3, key: "orle_grzedy_3", map: 175, x: 67, y: 43, at: [68, 45], id: 2792, trace: { id: 2795, x: 69, y: 45, kind: "pioro" } }
     ];
     const PERCH_BOND = 5, PERCH_NEAR = 1.6;
-    // 7.7: the old cemetery on Map008 (x 5-12, y 23-28): the low wall round it, the gate below (8-9, 28), eight graves, three with
-    // the raven; the lamp on its post at the back wall; the gravedigger's places (TownLifeData.SPOTS - Map008 reads only those)
+    // 7.7: the old cemetery on Map008 (2026-11-10 one walled yard on the chapel's axis, x 8): the wall, the gate and the alley are the
+    // map's own tiles (tools/miasto5/build5.py); here the ground inside (x 5-11, y 25-30), the graves of its two upper rows (three with
+    // the raven), the two lamps by the gate; the gravedigger's places (TownLifeData.SPOTS - Map008 reads only those)
     const CEMETERY = {
-        map: 8, x: 5, y: 23, w: 8, h: 6,
-        wall: { from: 2800 },   // 2800-2820: the wall's 21 pieces (built by the engine round the rectangle, the gate's gap left open)
-        gate: [[8, 28], [9, 28]], lamp: { id: 2821, x: 9, y: 23 },
+        map: 8, x: 5, y: 25, w: 7, h: 6,
+        area: { x: 7, y: 26, w: 3, h: 6 },   // (the place to reach - Okolice: the alley inside the gate up to the statue, walkable all of it)
+        wall: null,
+        gate: [[7, 32], [8, 32], [9, 32]], lamp: { id: 2821, x: 6, y: 33 }, lamp2: { id: 2822, x: 10, y: 33 },
         graves: [
-            { id: 2830, x: 6, y: 24, img: "grob" }, { id: 2831, x: 7, y: 24, raven: 1 }, { id: 2832, x: 10, y: 24, img: "grob2" },
-            { id: 2833, x: 11, y: 24, raven: 2 }, { id: 2834, x: 6, y: 26, img: "grob2" }, { id: 2835, x: 7, y: 26, img: "grob" },
-            { id: 2836, x: 10, y: 26, raven: 3 }, { id: 2837, x: 11, y: 26, img: "grob" }
+            { id: 2830, x: 5, y: 26, img: "grob" }, { id: 2831, x: 6, y: 26, raven: 1 }, { id: 2833, x: 10, y: 26, raven: 2 },
+            { id: 2835, x: 11, y: 26, img: "grob" }, { id: 2834, x: 5, y: 28, img: "grob2" }, { id: 2837, x: 6, y: 28, img: "grob" },
+            { id: 2832, x: 10, y: 28, img: "grob" }, { id: 2836, x: 11, y: 28, raven: 3 }
         ],
         cleanHits: 4
     };
-    const GALLOWS = { map: 8, x: 87, y: 121, w: 3, h: 3, id: 2840, at: [88, 123], creak: [22, 3] };
-    // 7.8: the grove of the Silent on Map120 (Act II: switch 16 opens the settlement), the seven white stones round (57, 54)
+    const GALLOWS = { map: 8, x: 113, y: 96, w: 3, h: 3, id: 2840, at: [114, 98], creak: [22, 3] };
+    // 7.8: the grove of the Silent on Lake pod Gawra (Map004, on the meadow north of the Silent's settlement; 2026-11-11: was Map120 (57, 54)), the seven white stones round (75, 30)
     const GROVE = {
-        map: 120, x: 53, y: 51, w: 9, h: 7, centre: [57, 54], r: 3, ids: 2850, centreId: 2857,
-        stones: [[57, 51], [59, 52], [60, 54], [59, 56], [57, 57], [55, 56], [54, 53]],
+        map: 4, x: 71, y: 27, w: 9, h: 7, centre: [75, 30], r: 3, ids: 2850, centreId: 2857,
+        stones: [[75, 27], [77, 28], [78, 30], [77, 32], [75, 33], [73, 32], [72, 29]],
         // the rule: from dusk (the sun under the horizon, Sky.sunTimes) one hour of the game standing in the middle (within 1 to
         // start, never further than 3), not running, the weapon put away (no combat mode), no talk
         start: 1, keep: 3, hours: 1, late: 3
@@ -242,12 +249,12 @@
     for (const t of TOWERS) SPOTS.push({ key: t.key, map: t.map, kind: "found", mode: "reach", x: t.x, y: t.y, w: 6, h: 6 });
     for (const s of SHRINES) SPOTS.push({ key: s.key, map: s.map, kind: "shrine", mode: "reach", x: s.x, y: s.y, w: 2, h: 2 });
     for (const c of CAIRNS) SPOTS.push({ key: c.key, map: c.map, kind: "cairn", mode: "reach", x: c.x, y: c.y, w: 2, h: 2 });
-    SPOTS.push({ key: "menhiry_krag", map: 18, kind: "ring", mode: "reach",
+    SPOTS.push({ key: "menhiry_krag", map: RING.map, kind: "ring", mode: "reach",
         cells: RING.stones.concat([[RING.watchman.x, RING.watchman.y], RING.plate && [RING.plate.x, RING.plate.y], [RING.hole.x, RING.hole.y]]) });
     for (const p of PERCHES) SPOTS.push({ key: p.key, map: p.map, kind: "perch", mode: "reach", x: p.x, y: p.y, w: 3, h: 3 });
-    SPOTS.push({ key: "cmentarz", map: 8, kind: "cemetery", mode: "reach", x: CEMETERY.x, y: CEMETERY.y, w: CEMETERY.w, h: CEMETERY.h, allowOld: true });
+    SPOTS.push({ key: "cmentarz", map: 8, kind: "cemetery", mode: "reach", x: CEMETERY.area.x, y: CEMETERY.area.y, w: CEMETERY.area.w, h: CEMETERY.area.h, allowOld: true });
     SPOTS.push({ key: "szubienica", map: 8, kind: "gallows", mode: "reach", x: GALLOWS.x, y: GALLOWS.y, w: 3, h: 3 });
-    SPOTS.push({ key: "gaj_milczacych", map: 120, kind: "grove", mode: "reach", x: GROVE.x, y: GROVE.y, w: GROVE.w, h: GROVE.h });
+    SPOTS.push({ key: "gaj_milczacych", map: GROVE.map, kind: "grove", mode: "reach", x: GROVE.x, y: GROVE.y, w: GROVE.w, h: GROVE.h });
     for (const e of EAGLE) {
         SPOTS.push({ key: e.key, map: e.map, kind: "eagle", mode: "eagle", seed: e.seed, x: e.x, y: e.y, w: e.w, h: e.h });
         SPOTS.push({ key: e.key + "_rzeczy", map: e.map, kind: "eagle", mode: "eagle", seed: e.seed, cells: e.things.map(t => [t.x, t.y]) });
@@ -263,30 +270,30 @@
     // the discoveries (Okolice.discoverable; near: tiles, -1 only by the engine). The engine adds `when` where needed. Their words:
     // js/teksty/zakon.txt, odkrycia.<key> (name, text)
     const DISC = [
-        { key: "straznica_022", map: 22, x: 73, y: 38, near: 3, icon: ICON.plyta, xp: 30 },
-        { key: "straznica_013", map: 13, x: 81, y: 22, near: 3, icon: ICON.plyta, xp: 30 },
-        { key: "straznica_157", map: 157, x: 96, y: 54, near: 3, icon: ICON.plyta, xp: 30 },
-        { key: "kapliczka_022", map: 22, x: 72, y: 17, near: 2, icon: ICON.kapliczka, xp: 20 },
-        { key: "kapliczka_021", map: 21, x: 58, y: 13, near: 2, icon: ICON.kapliczka, xp: 20 },
+        { key: "straznica_022", map: 3, x: 61, y: 15, near: 3, icon: ICON.plyta, xp: 30 },
+        { key: "straznica_013", map: 13, x: 81, y: 46, near: 3, icon: ICON.plyta, xp: 30 },
+        { key: "straznica_157", map: HERM ? 157 : 162, x: HERM ? 96 : 85, y: HERM ? 54 : 47, near: 3, icon: ICON.plyta, xp: 30 },
+        { key: "kapliczka_022", map: 3, x: 69, y: 15, near: 2, icon: ICON.kapliczka, xp: 20 },
+        { key: "kapliczka_021", map: 4, x: 42, y: 16, near: 2, icon: ICON.kapliczka, xp: 20 },
         { key: "kapliczka_004", map: 4, x: 66, y: 7, near: 2, icon: ICON.kapliczka, xp: 20 },
-        { key: "kopiec_017", map: 17, x: 50, y: 37, near: 2, icon: ICON.kruk, xp: 20 },
-        { key: "kopiec_023", map: 23, x: 58, y: 52, near: 2, icon: ICON.kruk, xp: 20 },
-        { key: "kopiec_155", map: 155, x: 70, y: 41, near: 2, icon: ICON.kruk, xp: 20 },
-        { key: "menhiry_krag", map: 18, x: 53, y: 45, near: 4, icon: ICON.plyta, xp: 30 },
-        { key: "cien_straznika", map: 18, x: 52, y: 43, near: -1, icon: ICON.klucz, xp: 60 },
+        { key: "kopiec_017", map: 3, x: 8, y: 80, near: 2, icon: ICON.kruk, xp: 20 },
+        { key: "kopiec_023", map: 3, x: 92, y: 27, near: 2, icon: ICON.kruk, xp: 20 },
+        { key: "kopiec_155", map: HERM ? 155 : 175, x: HERM ? 70 : 35, y: HERM ? 41 : 36, near: 2, icon: ICON.kruk, xp: 20 },
+        { key: "menhiry_krag", map: 4, x: 80, y: 88, near: 4, icon: ICON.plyta, xp: 30 },
+        { key: "cien_straznika", map: 4, x: 79, y: 86, near: -1, icon: ICON.klucz, xp: 60 },
         { key: "komora", map: 176, x: 10, y: 6, near: -1, icon: ICON.plyta, xp: 60 },
         { key: "orzel_125_a", map: 125, x: 98, y: 45, near: 2, air: true, icon: ICON.gniazdo, xp: 40 },
         { key: "orzel_125_b", map: 125, x: 106, y: 31, near: 2, air: true, icon: ICON.gniazdo, xp: 40 },
-        { key: "orzel_013_a", map: 13, x: 100, y: 39, near: 2, air: true, icon: ICON.gniazdo, xp: 50 },
-        { key: "orzel_013_b", map: 13, x: 34, y: 74, near: 2, air: true, icon: ICON.szarotka, xp: 40 },
+        { key: "orzel_013_a", map: 13, x: 100, y: 63, near: 2, air: true, icon: ICON.gniazdo, xp: 50 },
+        { key: "orzel_013_b", map: 13, x: 34, y: 98, near: 2, air: true, icon: ICON.szarotka, xp: 40 },
         { key: "orzel_168", map: 168, x: 52, y: 25, near: 2, air: true, icon: ICON.gniazdo, xp: 40 },
         { key: "ziola_klif", map: 157, x: 72, y: 5, near: -1, air: true, icon: ICON.warzucha, xp: 40 },
         { key: "orle_grzedy_1", map: 175, x: 68, y: 13, near: 2, icon: ICON.gniazdo, xp: 30 },
         { key: "orle_grzedy_2", map: 175, x: 68, y: 26, near: 2, icon: ICON.gniazdo, xp: 30 },
         { key: "orle_grzedy_3", map: 175, x: 68, y: 45, near: 2, icon: ICON.gniazdo, xp: 30 },
-        { key: "cmentarz", map: 8, x: 9, y: 27, near: 3, icon: ICON.grob, xp: 25 },
-        { key: "szubienica", map: 8, x: 88, y: 124, near: 2, icon: ICON.grob, xp: 20 },
-        { key: "gaj", map: 120, x: 57, y: 54, near: 3, icon: ICON.kamien, xp: 40 },
+        { key: "cmentarz", map: 8, x: 8, y: 29, near: 3, icon: ICON.grob, xp: 25 },
+        { key: "szubienica", map: 8, x: 114, y: 99, near: 2, icon: ICON.grob, xp: 20 },
+        { key: "gaj", map: 4, x: 75, y: 30, near: 3, icon: ICON.kamien, xp: 40 },
         { key: "kruki_155", map: 155, x: 76, y: 47, near: 4, icon: ICON.kruk, xp: 20 },
         { key: "kruki_157", map: 157, x: 78, y: 37, near: 4, icon: ICON.kruk, xp: 20 },
         { key: "wrak_kawalki", map: 165, x: 62, y: 18, near: -1, icon: ICON.okucie, xp: 30 }
@@ -383,8 +390,8 @@
     (window.TownLifeExtra = window.TownLifeExtra || []).push(RESIDENT);
     // his places on Map008 (TownLife reads only TownLifeData.SPOTS on its own map - not SPOTS_BY_MAP[8])
     const SPOTS_TOWN = {
-        grabarz_groby: [7, 25, 8], grabarz_groby_2: [10, 25, 8], grabarz_kopie: [10, 27, 8], grabarz_furtka: [9, 29, 2],
-        grabarz_przerwa: [11, 25, 4], grabarz_lampa: [9, 24, 8], grabarz_chata: [20, 13, 2]
+        grabarz_groby: [6, 27, 8], grabarz_groby_2: [10, 27, 8], grabarz_kopie: [11, 27, 8], grabarz_furtka: [8, 33, 2],
+        grabarz_przerwa: [9, 30, 4], grabarz_lampa: [7, 33, 4], grabarz_chata: [20, 13, 2]
     };
     const TLD = window.TownLifeData;
     if (TLD && TLD.SPOTS) for (const [k, v] of Object.entries(SPOTS_TOWN)) if (!TLD.SPOTS[k]) TLD.SPOTS[k] = v;
@@ -452,7 +459,7 @@
             // the perches of the Winged Guard (Bazyli, after the egg; starts by itself at the first perch seen): three seen, the stirrup
             // to Kleofas
             K69: { kind: "K", giver: "latarnik", icon: ITEM.strzemie, start: ["flaga:orzelJajo", "ile:perches"],
-                offer: { cond: { hours: [14, 22], flags: ["orzelJajo"] } },
+                offer: { cond: { hours: [14, 17.5], flags: ["orzelJajo"] } },
                 kroki: [
                     { nazwa: "k69Grzedy", gotowe: "ile:perches>=3", zmienne: { n: { ile: "perches" } } },
                     { nazwa: "k69Strzemie", type: "bring", to: "pustelnik", need: [[ITEM.strzemie, 1]], hours: [7, 19] }

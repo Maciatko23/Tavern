@@ -820,7 +820,8 @@
         if (!look8On || !ch || ch._pose || ch === $gamePlayer) return null;   // (the dog lying / asleep: its old sheet)
         const look = LOOK8[ch.characterName()];
         if (!look) return null;
-        return look.run && (ch.realMoveSpeed() >= (look.runAt || 4.5) || ch._fleeing) ? look.run : look;
+        const runAt = look.runAt || 4.5, FM = window.FreeMovement;   // (the speeds are on the world's scale since 2026-11-11: the threshold too)
+        return look.run && (ch.realMoveSpeed() >= (FM && FM.worldSpeed ? FM.worldSpeed(runAt) : runAt) || ch._fleeing) ? look.run : look;
     }
     // one eighth of a turn from `cur` towards `want` (numpad ways, the shorter way round)
     const RING8 = [2, 1, 4, 7, 8, 9, 6, 3];

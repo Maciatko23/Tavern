@@ -42,7 +42,7 @@
         spice: 210, beer: 81, arrows: 127, rope: 93, amber: 382 };
     // where a boat lands (the cell by the boat, which floats beside it): the harbour's and the garrison's piers, the islands' shores
     // (923: the islet; 9230: the cove's shore of the same map, by the old boat)
-    const HARBOUR = { map: 125, land: [13, 8, 2] }, GARRISON = { map: 162, land: [5, 27, 2] };
+    const HARBOUR = { map: 125, land: [13, 8, 2] }, GARRISON = { map: 162, land: [27, 51, 2] };
     const LANDING = { 920: [37, 9, 2], 922: [15, 19, 6], 951: [37, 19, 4], 923: [22, 15, 2], 9230: [54, 3, 8] };
     const FLOOD_REGION = 61, FLOOD_MAPS = [917, 918];
     const REGROW = { nest: 4, salt: 3, cache: 7, eaglenest: 7 };

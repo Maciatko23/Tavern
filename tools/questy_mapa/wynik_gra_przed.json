@@ -1,0 +1,88 @@
+{
+ "checkMap": {
+  "3": "{\"spots\":8,\"problems\":[\"zagroda_chata (42,49): nieprzechodnie\",\"zagroda_chata (42,50): nieprzechodnie\",\"zagroda_chata (42,51): nieprzechodnie\"]}",
+  "4": "{\"spots\":7,\"problems\":[]}",
+  "8": "{\"spots\":5,\"problems\":[]}",
+  "13": "{\"spots\":18,\"problems\":[\"zyla_1 (115,102): nieprzechodnie\",\"szyb_czo (105,95): przechodnie (ma być ściana)\"]}",
+  "111": "{\"spots\":5,\"problems\":[]}",
+  "120": "{\"spots\":1,\"problems\":[]}",
+  "125": "{\"spots\":13,\"problems\":[]}",
+  "155": "{\"spots\":7,\"problems\":[]}",
+  "157": "{\"spots\":3,\"problems\":[]}",
+  "168": "{\"spots\":8,\"problems\":[]}"
+ },
+ "events": {
+  "3": "{\"2185\":[\"Ruina chaty Rzepków\",2,20],\"2186\":[\"Znacznik (Zasoby)\",44,50],\"2188\":[\"Zdziczały ogródek\",4,21],\"2189\":[\"Zdziczały ogródek\",5,21],\"2190\":[\"Zdziczały ogródek\",6,21],\"2191\":[\"Zdziczały ogródek\",4,22],\"2192\":[\"Zdziczały ogródek\",5,22],\"2193\":[\"Zdziczały ogródek\",6,22],\"2194\":[\"Studnia sąsiada\",7,22],\"2195\":[\"Resztki płotu\",39,52],\"2196\":[\"Dziki ul\",66,38],\"2197\":[\"Dziki ul\",76,48],\"2198\":[\"Dziki ul\",62,55],\"2570\":[\"Ludzie: Wóz handlarza\",60,10],\"2571\":[\"Ludzie: Osiołek handlarza\",62,9],\"2572\":[\"Ludzie: Ognisko\",62,11],\"3000\":[\"Wóz Wojciecha\",75,12],\"3001\":[\"Wojciech (woźnica)\",73,12],\"3060\":[\"\",21,46],\"3103\":[\"Kamienie przy murze\",13,26],\"3104\":[\"Ławka przy murze\",18,26],\"3110\":[\"Len przy ścieżce\",20,22],\"3111\":[\"Len przy ścieżce\",21,23],\"3112\":[\"Krwawnik przy ścieżce\",22,22],\"3113\":[\"Kamień przy ścieżce\",15,23],\"3114\":[\"Niebieskie kwiaty\",21,21],\"3120\":[\"Pień przy lesie\",5,15],\"3121\":[\"Chrust\",3,14],\"3122\":[\"Chrust\",7,14],\"3123\":[\"Ziele na skraju lasu\",4,15],\"3124\":[\"Kamień na skraju lasu\",8,15]}",
+  "4": "{\"2360\":[\"Lizawka\",73,51],\"2361\":[\"Zasiadka\",70,53],\"2362\":[\"Zrzucone poroże\",74,52],\"2540\":[\"Ludzie: Koszar\",52,43],\"2541\":[\"Ludzie: Płot koszaru\",50,40],\"2542\":[\"Ludzie: Płot koszaru\",51,40],\"2543\":[\"Ludzie: Płot koszaru\",52,40],\"2544\":[\"Ludzie: Płot koszaru\",53,40],\"2545\":[\"Ludzie: Płot koszaru\",54,40],\"2546\":[\"Ludzie: Płot koszaru\",50,41],\"2547\":[\"Ludzie: Płot koszaru\",54,41],\"2548\":[\"Ludzie: Płot koszaru\",50,42],\"2549\":[\"Ludzie: Płot koszaru\",54,42],\"2550\":[\"Ludzie: Płot koszaru\",50,43],\"2551\":[\"Ludzie: Płot koszaru\",51,43],\"2552\":[\"Ludzie: Płot koszaru\",53,43],\"2553\":[\"Ludzie: Płot koszaru\",54,43],\"2554\":[\"Ludzie: Wóz handlarza\",60,11],\"2555\":[\"Ludzie: Ognisko\",62,10],\"2556\":[\"Znacznik pastwiska (krzak)\",47,49],\"2710\":[\"Kapliczka z krukiem na Łące\",66,7],\"2910\":[\"Wawrzyn Owczarz (pasterz)\",47,45]}",
+  "8": "{\"229\":[\"Drogowskaz\",99,52],\"240\":[\"Drogowskaz (brama zachodnia)\",3,63],\"265\":[\"Miejsce: przed_tawerna\",58,19],\"296\":[\"Miejsce: kantor_przed\",16,48],\"307\":[\"Miejsce: ratusz_przed\",83,48],\"325\":[\"Brama północna: łuk, przyczółki i skrzydła\",25,5],\"327\":[\"Brama północna: latarnia (ogień)\",23,2],\"329\":[\"Brama północna: latarnia (ogień)\",27,2],\"422\":[\"Brama cmentarza (otwarta)\",8,32],\"2235\":[\"Pole mieszczan\",77,68],\"2236\":[\"Pole mieszczan\",79,68],\"2237\":[\"Pole mieszczan\",81,68],\"2238\":[\"Pole mieszczan\",83,68],\"2239\":[\"Pole mieszczan\",78,69],\"2240\":[\"Pole mieszczan\",80,69],\"2241\":[\"Pole mieszczan\",82,69],\"2242\":[\"Pole mieszczan\",77,70],\"2243\":[\"Pole mieszczan\",79,70],\"2244\":[\"Pole mieszczan\",81,70],\"2245\":[\"Pole mieszczan\",83,70],\"2246\":[\"Pole mieszczan\",78,71],\"2247\":[\"Pole mieszczan\",80,71],\"2248\":[\"Pole mieszczan\",82,71],\"2249\":[\"Pole mieszczan\",86,68],\"2250\":[\"Pole mieszczan\",88,68],\"2251\":[\"Pole mieszczan\",90,68],\"2252\":[\"Pole mieszczan\",87,69],\"2253\":[\"Pole mieszczan\",89,69],\"2254\":[\"Pole mieszczan\",91,69],\"2255\":[\"Pole mieszczan\",86,70],\"2256\":[\"Pole mieszczan\",88,70],\"2257\":[\"Pole mieszczan\",90,70],\"2258\":[\"Pole mieszczan\",87,71],\"2259\":[\"Pole mieszczan\",89,71],\"2260\":[\"Pole mieszczan\",91,71],\"2261\":[\"Pole mieszczan\",77,80],\"2262\":[\"Pole mieszczan\",79,80],\"2263\":[\"Pole mieszczan\",81,80],\"2264\":[\"Pole mieszczan\",83,80],\"2265\":[\"Pole mieszczan\",78,81],\"2266\":[\"Pole mieszczan\",80,81],\"2267\":[\"Pole mieszczan\",82,81],\"2268\":[\"Pole mieszczan\",77,82],\"2269\":[\"Pole mieszczan\",79,82],\"2270\":[\"Pole mieszczan\",81,82],\"2271\":[\"Pole mieszczan\",83,82],\"2272\":[\"Pole mieszczan\",78,83],\"2273\":[\"Pole mieszczan\",80,83],\"2274\":[\"Pole mieszczan\",82,83],\"2275\":[\"Pole mieszczan\",77,84],\"2276\":[\"Pole mieszczan\",79,84],\"2277\":[\"Pole mieszczan\",81,84],\"2278\":[\"Pole mieszczan\",83,84],\"2279\":[\"Znacznik (Zasoby)\",87,68],\"2280\":[\"Znacznik (Zasoby)\",78,82],\"2821\":[\"Lampka na słupie\",6,33],\"2822\":[\"Lampka na słupie\",10,33],\"2830\":[\"Stary grób\",5,26],\"2831\":[\"Grób z krukiem\",6,26],\"2832\":[\"Stary grób\",10,28],\"2833\":[\"Grób z krukiem\",10,26],\"2834\":[\"Stary grób\",5,28],\"2835\":[\"Stary grób\",11,26],\"2836\":[\"Grób z krukiem\",11,28],\"2837\":[\"Stary grób\",6,28],\"2840\":[\"Szubienica\",114,98],\"2930\":[\"Hieronim (grabarz)\",10,27],\"2940\":[\"Szczepan Kołodziej (woźnica)\",103,18],\"2941\":[\"Agata (przekupka)\",38,45],\"2942\":[\"Dorota Igła (szwaczka)\",67,48],\"2943\":[\"Halina (wdowa)\",60,47],\"2944\":[\"Kostek (syn Haliny)\",37,49],\"2945\":[\"Jagódka (córka Haliny)\",58,48],\"2946\":[\"Leon Dłuto (cieśla)\",70,45],\"2947\":[\"Wacław Siwy (stary żołnierz)\",38,47],\"3000\":[\"Wóz Wojciecha\",37,108],\"3020\":[\"Tobiasz Goniec (posłaniec z lądu)\",31,109],\"3021\":[\"Konstanty Mak (medyk z kontynentu)\",31,109],\"3022\":[\"Teofil Cyrkiel (kartograf)\",31,109],\"3023\":[\"Jędrek Dudarz (wędrowny grajek)\",31,109],\"3024\":[\"Zenon Sita (kupiec zbożowy)\",31,109],\"3025\":[\"Urszula z Olszynki (szuka syna)\",31,109],\"3026\":[\"Erazm Łaska (poborca Korony)\",31,109],\"3027\":[\"Albin (pątnik)\",31,109],\"3028\":[\"Gaspar Lis (handlarz relikwii)\",31,109],\"3029\":[\"brat Augustyn (wizytator z Lipnicy)\",31,109],\"3030\":[\"Tomek (uchodźca z promu)\",31,109],\"3032\":[\"Adam Wierzbięta (poseł Korony)\",31,109],\"3033\":[\"Ostap (gwardzista posła)\",31,109],\"3034\":[\"Hubert Szary (Wolna Kompania)\",31,109],\"3035\":[\"Jasiek Brzytwa (Wolna Kompania)\",31,109],\"3036\":[\"Kazik Kołek (Wolna Kompania)\",31,109],\"3037\":[\"Ruda Hela (Wolna Kompania)\",31,109],\"3038\":[\"Klara (matka z dzieckiem)\",31,109],\"3042\":[\"Ksenia Żuraw (wdowa po kupcu korzennym)\",31,109],\"3060\":[\"\",88,97],\"3260\":[\"Koń gniady\",86,13],\"3261\":[\"Koń siwy\",91,14],\"3262\":[\"Koń kary\",89,12],\"3263\":[\"Wodopój\",83,17],\"3264\":[\"Wodopój (bok)\",83,17],\"3265\":[\"Wodopój (bok)\",83,16],\"3266\":[\"Wodopój (bok)\",83,15],\"3267\":[\"Kręgi na wodzie\",83,15],\"3268\":[\"Kręgi na wodzie\",83,16],\"3270\":[\"Wodopój\",83,21],\"3271\":[\"Wodopój (bok)\",83,21],\"3272\":[\"Wodopój (bok)\",83,20],\"3273\":[\"Wodopój (bok)\",83,19],\"3274\":[\"Kręgi na wodzie\",83,19],\"3275\":[\"Kręgi na wodzie\",83,20],\"3276\":[\"Koń kasztanowaty\",93,22],\"3277\":[\"Koń srokaty\",95,16]}",
+  "13": "{\"6\":[\"Brama Milczących\",6,27],\"2140\":[\"Źródełko pod skałą\",110,77],\"2141\":[\"Omszałe kamienie\",111,78],\"2142\":[\"Omszałe kamienie\",109,78],\"2143\":[\"Ściana ciosowa\",107,105],\"2144\":[\"Ściana ciosowa\",109,105],\"2145\":[\"Ściana ciosowa\",111,105],\"2146\":[\"Żyła rudy\",114,78],\"2147\":[\"Żyła rudy\",104,88],\"2148\":[\"Żyła rudy\",111,87],\"2149\":[\"Znacznik (Zasoby)\",112,104],\"2150\":[\"Znacznik (Zasoby)\",111,106],\"2320\":[\"Gawra\",100,70],\"2321\":[\"Gawra (wylot)\",99,70],\"2590\":[\"Ludzie: Namiot kopaczy\",99,72],\"2591\":[\"Ludzie: Namiot kopaczy\",103,72],\"2592\":[\"Ludzie: Skrzynia dowódcy kopaczy\",101,73],\"2593\":[\"Ludzie: Ognisko\",100,75],\"2594\":[\"Ludzie: Szyb poszukiwawczy\",105,71],\"2595\":[\"Znacznik obozu (krzak)\",98,70],\"2596\":[\"Ludzie: Skrzynie kopaczy\",97,74],\"2597\":[\"Ludzie: Skrzynie kopaczy\",102,74],\"2700\":[\"Fundamenty strażnicy\",82,48],\"2701\":[\"Zawalona płyta z krukiem\",81,47],\"2702\":[\"Znacznik (Zakon)\",82,46],\"2720\":[\"Stare kołki w skale\",99,61],\"2721\":[\"Gniazdo zakonnych orłów\",101,67],\"2722\":[\"Szarotka na półce\",103,64],\"2723\":[\"Znacznik (Zakon)\",100,62],\"2730\":[\"Stare kołki w skale\",33,97],\"2731\":[\"Szarotka na półce\",38,98],\"2732\":[\"Kamień z krukiem\",39,100]}",
+  "111": "{\"67\":[\"Drogowskaz: Podgrodzie\",104,48],\"89\":[\"Brama zachodnia: dach i słupy\",119,52],\"90\":[\"Brama zachodnia: skrzydło i cień\",118,51],\"91\":[\"Brama zachodnia: światło latarni\",119,49],\"2205\":[\"Grządki\",61,10],\"2206\":[\"Grządki\",63,10],\"2207\":[\"Grządki\",62,12],\"2208\":[\"Grządki\",64,12],\"2209\":[\"Grządki\",66,10],\"2210\":[\"Grządki\",68,10],\"2211\":[\"Grządki\",67,12],\"2212\":[\"Grządki\",69,12],\"2213\":[\"Grządki\",71,10],\"2214\":[\"Grządki\",73,10],\"2215\":[\"Grządki\",72,12],\"2216\":[\"Grządki\",74,12],\"2217\":[\"Wysypisko\",90,103],\"2218\":[\"Wysypisko\",92,104],\"2219\":[\"Wysypisko\",88,101],\"2220\":[\"Glinianka\",48,71],\"2221\":[\"Znacznik (Zasoby)\",87,44],\"2222\":[\"Znacznik (Zasoby)\",93,104],\"2950\":[\"Mietek Kwaśniak (szynkarz)\",97,45],\"2951\":[\"Ciotka Stefa (opiekunka przytułku)\",68,49],\"2952\":[\"Wit Zduń (garncarz)\",67,84],\"2953\":[\"Tośka (dziecko z lepianki)\",68,46],\"3000\":[\"Wóz Wojciecha\",71,70],\"3001\":[\"Wojciech (woźnica)\",69,70],\"3060\":[\"\",40,12]}",
+  "120": "{\"338\":[\"Brama Milczących\",20,29],\"2850\":[\"Biały kamień milczenia\",57,51],\"2851\":[\"Biały kamień milczenia\",59,52],\"2852\":[\"Biały kamień milczenia\",60,54],\"2853\":[\"Biały kamień milczenia\",59,56],\"2854\":[\"Biały kamień milczenia\",57,57],\"2855\":[\"Biały kamień milczenia\",55,56],\"2856\":[\"Biały kamień milczenia\",54,53],\"2857\":[\"Środek gaju\",57,54]}",
+  "125": "{\"21\":[\"Drogowskaz\",41,20],\"88\":[\"Miejsce: komora_przed\",34,19],\"2225\":[\"Kałuża pływowa\",15,65],\"2226\":[\"Kałuża pływowa\",15,67],\"2227\":[\"Drewno dryfowe\",17,66],\"2228\":[\"Drewno dryfowe\",18,65],\"2610\":[\"Ludzie: Wylot jaskini\",16,64],\"2780\":[\"Skrytka przemytników\",97,48],\"2781\":[\"Warzucha w szczelinie\",101,46],\"2782\":[\"Strzęp liny\",99,49],\"2783\":[\"Stare gniazdo\",104,33],\"2784\":[\"Strzęp liny\",108,34],\"2912\":[\"Żołnierz z patrolu (patrol garnizonu (przylądek))\",62,68],\"2913\":[\"Żołnierz z patrolu (patrol garnizonu (przylądek))\",61,70],\"3000\":[\"Wóz Wojciecha\",34,7],\"3001\":[\"Wojciech (woźnica)\",32,7],\"3002\":[\"\",12,19],\"3003\":[\"\",12,19],\"3004\":[\"\",12,19],\"3005\":[\"\",12,19],\"3006\":[\"\",12,19],\"3007\":[\"\",12,19],\"3008\":[\"\",12,19],\"3012\":[\"\",15,17],\"3140\":[\"Łódki do wynajęcia\",13,9]}",
+  "155": "{\"2155\":[\"Źródełko w gąszczu\",59,66],\"2156\":[\"Omszałe kamienie\",60,67],\"2157\":[\"Omszałe kamienie\",58,67],\"2158\":[\"Drewno dryfowe\",3,52],\"2159\":[\"Drewno dryfowe\",3,56],\"2160\":[\"Drewno dryfowe\",4,60],\"2750\":[\"Kopiec z krukiem\",70,41],\"2751\":[\"Kamień z krukiem (kopiec)\",70,41],\"2752\":[\"Warzucha na klifie\",1,54],\"2753\":[\"Warzucha na klifie\",2,66],\"2754\":[\"Warzucha na klifie\",73,2]}",
+  "157": "{\"2700\":[\"Fundamenty strażnicy\",97,56],\"2701\":[\"Zawalona płyta z krukiem\",96,55],\"2740\":[\"Warzucha na klifie\",62,1],\"2741\":[\"Warzucha na klifie\",72,5],\"2742\":[\"Warzucha na klifie\",100,5]}",
+  "168": "{\"2165\":[\"Stare źródło Ługów\",46,54],\"2166\":[\"Omszałe kamienie\",47,55],\"2167\":[\"Znacznik (Zasoby)\",68,24],\"2168\":[\"Dziurawiec\",45,55],\"2169\":[\"Jabłonka Ługów\",61,21],\"2170\":[\"Jabłonka Ługów\",64,21],\"2171\":[\"Jabłonka Ługów\",67,21],\"2172\":[\"Jabłonka Ługów\",70,21],\"2173\":[\"Jabłonka Ługów\",61,24],\"2174\":[\"Jabłonka Ługów\",64,24],\"2175\":[\"Jabłonka Ługów\",67,24],\"2176\":[\"Jabłonka Ługów\",70,24],\"2177\":[\"Marta Ługowa\",65,23],\"2650\":[\"Ludzie: Stary krzyż Ługów\",88,26],\"2651\":[\"Ludzie: Stary krzyż Ługów\",89,26],\"2652\":[\"Ludzie: Stary krzyż Ługów\",90,26],\"2653\":[\"Ludzie: Ławka przy grobach\",88,27],\"2654\":[\"Ludzie: Marta Ługowa\",90,27],\"2785\":[\"Stare kołki w skale\",54,24],\"2786\":[\"Warzucha w szczelinie\",55,27],\"2787\":[\"Stare palenisko\",50,27]}"
+ },
+ "gates": {
+  "gory->osada": {
+   "into": [
+    13,
+    6,
+    28
+   ]
+  },
+  "przystan->pustelnia": {
+   "into": [
+    125,
+    101,
+    78
+   ]
+  },
+  "podgrodzie->zagroda": {
+   "into": [
+    111,
+    110,
+    3
+   ]
+  },
+  "osada->gory": {
+   "back": [
+    22,
+    46,
+    1
+   ]
+  },
+  "pustelnia->przystan": {
+   "back": [
+    950,
+    22,
+    1
+   ]
+  },
+  "zagroda->podgrodzie": {
+   "back": [
+    900,
+    73,
+    41
+   ]
+  }
+ },
+ "cells": {
+  "horseshoe": "{\"pass\":true,\"ev\":[]}",
+  "w5camp": "{\"pass\":true,\"ev\":[]}",
+  "w5cart": "{\"pass\":true,\"ev\":[]}",
+  "nora": "{\"pass\":true,\"ev\":[]}",
+  "czo": "{\"pass\":true,\"ev\":[]}",
+  "sheep1": "{\"pass\":true,\"ev\":[]}",
+  "sheep2": "{\"pass\":true,\"ev\":[]}",
+  "sheep3": "{\"pass\":true,\"ev\":[]}",
+  "juk1": "{\"pass\":true,\"ev\":[]}",
+  "juk2": "{\"pass\":true,\"ev\":[]}",
+  "juk3": "{\"pass\":true,\"ev\":[]}",
+  "kiln": "{\"pass\":true,\"ev\":[]}",
+  "shed": "{\"pass\":true,\"ev\":[]}",
+  "ring": "{\"pass\":true,\"ev\":[]}",
+  "glade": "{\"pass\":true,\"ev\":[]}",
+  "spring": "{\"pass\":true,\"ev\":[]}"
+ }
+}

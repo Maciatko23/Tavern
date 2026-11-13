@@ -120,7 +120,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9571, lightGpu: true, bootCheck
     await use(3161);
     t.check("wrak łodzi w zatoczce: lina, gwoździe, deski, raz", (await n(93)) >= 2 && !!(await t.json("Wyspy.state().wreck")));
     // ---- the garrison's boat
-    await t.newGame({ map: 162, x: 5, y: 27, day: 40, hour: 10, quiet: true, minimap: false });
+    await t.newGame({ map: 162, x: 27, y: 51, day: 40, hour: 10, quiet: true, minimap: false });
     await t.frames(60);
     await use(3141, 0);
     await t.frames(90);

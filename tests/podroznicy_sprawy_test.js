@@ -16,7 +16,7 @@
 //   - W10: po K71 Tobiasz bierze list bohatera do mamy (bez opłaty i celnika - decyzja 14)
 //   - K72: drugi przyjazd Tobiasza - oferta, list do brata Kleofasa (Lipnica), listy po 2 G
 // Uruchom: node tests/run.js podroznicy_sprawy_test --port 9762
-const kit = require("./lib/kit.js");
+const kit = (function(){ try { return require("./lib/kit.js"); } catch (e) { return require("../../../../tests/lib/kit.js"); } })();
 
 kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     const J = e => t.json(e);
@@ -74,26 +74,26 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         rowsT.includes("Zabierzesz list do mojej mamy?") && !!rep.r && rep.r.via === "tobiasz" && rep.gold === gL && /pocztą lądową Tobiasza/.test(rep.note), { rowsT, rep });
 
     // ---------------------------------------------------------------- I2: geometria (plan karczmy)
-    await t.go(1, 37, 42, 4);
+    await t.go(1, 52, 12, 8);
     const m1 = await J("Podroznicy.podsluch.miejsce()");
-    await t.go(25, 81, 52, 2);
+    await t.go(25, 58, 16, 8);
     const m2 = await J("Podroznicy.podsluch.miejsce()");
-    await t.go(25, 22, 40, 4);
+    await t.go(25, 13, 8, 6);
     const m3 = await J("Podroznicy.podsluch.miejsce()");
-    t.check("podsłuch - miejsce z planu karczmy: sala → Jadalnia prywatna (ściana), korytarz → pokój 12 (drzwi), pokój 3 → pokój 5 (ściana)",
-        m1 && m1.room === "jadalnia" && m1.mode === "sciana" && m2 && m2.room === "r12" && m2.mode === "drzwi" && m3 && m3.room === "r5" && m3.mode === "sciana", { m1, m2, m3 });
+    t.check("podsłuch - miejsce z planu karczmy: magazyn → Gabinet Borgara (ściana), korytarz → pokój 12 (drzwi), pokój 3 → pokój 1 (ściana)",
+        m1 && m1.room === "jadalnia" && m1.mode === "sciana" && m2 && m2.room === "r12" && m2.mode === "drzwi" && m3 && m3.room === "r1" && m3.mode === "sciana", { m1, m2, m3 });
 
     // ---------------------------------------------------------------- D42 „Zboże w suszę”: narada przez drzwi jadalni (Czujność 5, potem 7)
     await t.eval(`Podroznicy.przyplyn("zboze"); TownQuests.start("D42"); 0`);
     const od = (await st()).obecni.zboze.od;
     await at(od + 2, 20.25, 20);
-    await t.go(1, 37, 42, 4);
+    await t.go(1, 52, 12, 8);
     await t.frames(20);
     await t.press("ok");
     const startedLow = await t.until("Podroznicy.podsluch.trwa()", 5, 10);
     await t.until("!Podroznicy.podsluch.trwa()", 30, 60);
     const low = await J(`({ s: Podroznicy.podsluch.slyszane("d42Narada"), slady: Podroznicy.stan().d42.slady })`);
-    const nLow = (await notes()).filter(n => /^Podsłuchane: Jadalnia prywatna/.test(n));
+    const nLow = (await notes()).filter(n => /^Podsłuchane: Gabinet Borgara/.test(n));
     t.check("narada (dzień " + (od + 2) + ", 20:15): O twarzą do ściany jadalni - słuchanie; Czujność 5 < 6: niepełna, słowa kluczowe „...”; notatka, poszlaka D42",
         startedLow && low.s && low.s.pelna === false && !!low.slady.narada && nLow.length === 1 && /\.\.\./.test(nLow[0]) && !/chorągwi królewskiej/.test(nLow[0]), { low, note: nLow[0] });
     await per(7);
@@ -122,7 +122,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const d43a = await step("D43");
     const d0 = await J("$gameSystem.dayNightDay()");
     await at(d0 + 1, 10, 20);
-    await t.go(162, 25, 24, 8);
+    await t.go(162, 47, 48, 8);
     await t.frames(60);
     const antek = await J(`(function(){ const e = $gameMap.event(3009); return e ? { shown: !e.isTransparent(), x: e.x, y: e.y, sheet: e.characterName(), name: e.event().name } : null; })()`);
     t.check("D43: dwie poszlaki (rotmistrz, ludzie z promu) → krok Antka; garnizon 10:00 - Antek wśród rekrutów (zdarzenie 3009, rekrut)",
@@ -135,7 +135,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
 
     // ---------------------------------------------------------------- D40 „Mapa dla kartografa”: punkt widokowy, mapa z wraku, słowa na mapie
     await t.eval(`Podroznicy.przyplyn("kartograf"); TownQuests.start("D40"); 0`);
-    await t.go(13, 57, 12, 6);
+    await t.go(13, 57, 36, 6);
     await t.frames(40);
     const spot = await J(`({ want: !!TownQuests.spotWanted("d40_gory"), ev: (function(){ const e = $gameMap.event(954); return e ? { x: e.x, y: e.y } : null; })() })`);
     await t.talkTo(954, [], { secs: 15 });

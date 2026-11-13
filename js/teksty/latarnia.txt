@@ -266,8 +266,8 @@ Bazyli rozbił soczewkę o parapet. Latarnia świeci dalej, ale we mgle nikt ju�
 
 # ======================================================================== K49 (zadania.K49)
 zadania.K49.title = Tran dla latarni
-zadania.K49.where = przylądek z latarnią
-zadania.K49.when = od dnia 25
+zadania.K49.where = Tawerna (Bazyli po południu); przylądek z latarnią
+zadania.K49.when = od dnia 25, 14–17:30
 zadania.K49.desc = Od drugiej fali prom nie przywozi tranu. Bazylemu kończy się opał - bez niego latarnia zgaśnie, a statki pójdą na skały.
 [zadania.K49.offer.say]
 Słuchaj. Od drugiej fali prom nie przywozi tranu. Wojsko bierze wszystko, co się pali.
@@ -282,7 +282,7 @@ Ryby, kociołek, ogień. Smród na pół wyspy, ale się pali.
 [zadania.K49.offer.decline]
 To będę palił krzesłami.
 
-zadania.K49.steps.0.text = Przynieś Bazylemu 4× Tran i 6× Drewno (przylądek z latarnią). Tran: 3 surowe ryby w kociołku albo od Janka na przystani (6 G).
+zadania.K49.steps.0.text = Przynieś Bazylemu 4× Tran i 6× Drewno (tawerna, po południu 14–17:30; zawiezie na przylądek). Tran: 3 surowe ryby w kociołku albo od Janka na przystani (6 G).
 [zadania.K49.steps.0.remind]
 Cztery dzbanki tranu i sześć polan. Ogień nie czeka.
 
@@ -300,8 +300,8 @@ Przyniosłem Bazylemu tran i drewno. Latarnia na przylądku świeci dalej, a drz
 
 # ======================================================================== D22 (zadania.D22)
 zadania.D22.title = Księga mgieł
-zadania.D22.where = laterna na przylądku, mgliste noce
-zadania.D22.when = po pierwszej rozmowie z Bazylem
+zadania.D22.where = Tawerna (Bazyli po południu); laterna na przylądku, mgliste noce
+zadania.D22.when = po pierwszej rozmowie z Bazylem; oferta i rozmowa końcowa 14–17:30
 zadania.D22.desc = We mgle soczewka latarni pokazuje rzeczy, których nikt nie powinien wiedzieć. Bazyli wszystko zapisuje w Księdze mgieł.
 [zadania.D22.offer.say]
 Dziś w nocy przyjdzie mgła. Czuję ją w kolanie i w tym oku, co nie widzi.
@@ -317,7 +317,7 @@ Tylko raz na noc. Szkło nie lubi chciwych.
 Mgła wróci. Zawsze wraca.
 
 zadania.D22.steps.0.text = W mgliste noce spójrz w soczewkę latarni (laterna na szczycie wieży, nocą we mgle, raz na noc). Wizje: {n}/3.{kiedy}
-zadania.D22.steps.1.text = Bazyli pyta, co widziałeś. Powiedz mu - albo zachowaj to dla siebie.
+zadania.D22.steps.1.text = Bazyli pyta, co widziałeś (tawerna, po południu 14–17:30). Powiedz mu - albo zachowaj to dla siebie.
 # rozmowa kroku 2: mówi Bazyli (latarnik); d22.powiem / d22.zachowam - wybór bohatera
 [d22.pyta]
 Trzy mgły. Trzy razy patrzyłeś w szkło. (Bazyli otwiera Księgę mgieł na czystej stronie.)
@@ -475,3 +475,21 @@ kod.talk.13 = Nie teraz.
 kod.talk.14 = Zostaw je w latarni.
 kod.talk.15 = Rozbij je.
 kod.talk.16 = Sprzedam je Baltazarowi.
+
+# ======================================================================== PRZY KAPLICY (pustelnia poza światem, 2026-11-11)
+# Brat Kleofas zszedł z klifu i siedzi przy kaplicy w Kruczogrodzie (Map008), dopóki WyspaData.HERMITAGE_OPEN = false. Klucze „kaplica.<ścieżka>”
+# mówią tę samą ścieżkę jeszcze raz i nadpisują ją TYLKO wtedy (Pustelnia_Data.js); gdy pustelnia wróci, czyta się tekst z góry pliku.
+kaplica.zadania.W11.where = kantor Baltazara, przylądek z latarnią, kaplica w Kruczogrodzie
+kaplica.kod.vars.5 = Weź soczewkę od Bazylego i zanieś ją bratu Kleofasowi (przy kaplicy w Kruczogrodzie). Niech przeczyta w kronikach, czym jest.
+kaplica.kod.vars.6 = Zanieś soczewkę bratu Kleofasowi (przy kaplicy w Kruczogrodzie). Niech przeczyta w kronikach, czym jest.
+[kaplica.bazyliDefended]
+(Bazyli ociera krew z czoła.) Dobrze, że byłeś. Sam bym ich nie zatrzymał.
+Weź szkło do pustelnika przy kaplicy w Kruczogrodzie. Kroniki znają je lepiej niż ja. I przynieś z powrotem.
+
+[kaplica.bazyliGive]
+Weź szkło do pustelnika przy kaplicy w Kruczogrodzie. Niech przeczyta w kronikach, czym jest. I przynieś z powrotem.
+
+[kaplica.bazyliReads]
+(Bazyli otwiera Księgę mgieł na pierwszej stronie, pisanej ręką kogoś bardzo starego.)
+„Oko Strażnicy. Szlifowane z kryształu Pierwszych. We mgle odbija Serce jak przez łzy. Nie odpowiada - pokazuje.”
+Tyle wiem od tego, co był przede mną. Pustelnik od kaplicy wiedziałby więcej, gdyby go ktoś zapytał.

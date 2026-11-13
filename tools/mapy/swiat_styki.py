@@ -42,8 +42,10 @@ WYJATKI = {(13, 175), (175, 13), (175, 934), (934, 175), (175, 120), (120, 175),
 def swiat_data_zywe():
     txt = open(os.path.join(ROOT, "js", "plugins", "Swiat_Data.js"), encoding="utf-8").read()
     maps = json.loads(re.search(r"maps: (\{.*?\}),\s*\n\s*links", txt, re.S).group(1))
-    links = json.loads("[" + re.search(r"links: \[(.*?)\]\s*,\s*\n\s*//", txt, re.S).group(1) + "]")
-    later = json.loads(re.search(r"later: (\{.*?\})\s*\n", txt, re.S).group(1))
+    m = re.search(r"links: \[(.*?)\]\s*,\s*\n\s*//", txt, re.S) or re.search(r"links: \[(.*?)\n\s*\]", txt, re.S)   # (2026-11-10: the list may close the object)
+    links = json.loads("[" + m.group(1) + "]")
+    m2 = re.search(r"later: (\{.*?\})\s*\n", txt, re.S)
+    later = json.loads(m2.group(1)) if m2 else {}   # (the 3x3 board's data has no "later" maps)
     # (2026-11-01) mapy próbne leżą celowo poza wyspą (x0 >= POZA_WYSPA, tools/mapa_probna): nie należą do kontraktu świata
     maps = {k: v for k, v in maps.items() if v[0] < POZA_WYSPA}
     links = [l for l in links if str(l["a"]) in maps and str(l["b"]) in maps]

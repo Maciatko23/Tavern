@@ -17,7 +17,8 @@
 // The culls of the other plugins (the trees' strips and shadows, the people's shadows: ChoppableTree_Render.js, Sky.js,
 // CharacterPolish.js) ask Tawerna.view.sees (TawernaCore.js) - wrapped here so that opts.cull switches them all.
 // Other plugins: Tawerna.api("Wydajnosc") (also window.Wydajnosc) - opts { leaf, filterArea, cull, lazy, idleFilters, outline,
-// night, lightGpu } (true: on; the tests switch them off to compare the picture), stats { culled, lazy } (the last frame), settleFilters(root).
+// night, lightGpu, plainSkip } (true: on; the tests switch them off to compare the picture), stats { culled, lazy } (the
+// last frame), settleFilters(root).
 
 /*:
  * @target MZ
@@ -72,7 +73,7 @@
     const T = window.Tawerna;
     if (!T) throw new Error("Wydajnosc.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     const PLUGIN = "Wydajnosc";
-    const opts = { leaf: true, filterArea: true, cull: true, idleFilters: true, lazy: true, night: true, outline: true, lightGpu: true, still: true, sameSheets: true, quickFade: true, transferSnap: true, startSet: true, idleEvery: 8 };
+    const opts = { leaf: true, filterArea: true, cull: true, idleFilters: true, lazy: true, night: true, outline: true, lightGpu: true, still: true, sameSheets: true, quickFade: true, transferSnap: true, startSet: true, idleEvery: 8, plainSkip: true, stillAll: true };
     const stats = { culled: 0, frame: -1, drawing: -1, lazy: 0, lazyFrame: -1, idle: 0, idleFrame: -1 };
     // opts.dispatch: the character sprites' hooks run only for the sprites they are for (Tawerna.sprite, TawernaCore.js); false: every
     // hook for every sprite, as the chain of wrappers did
@@ -81,14 +82,22 @@
     // ---- the empty updates: MZ's Sprite.update calls update() on every child; a plain Sprite's update only does the same for its
     // own children - with none it does nothing. Such a child is passed over (the same children, in the same order, as before: the
     // list is read live, so a child that removes itself or another during its update is met the same way as by MZ's for...of)
+    // (2026-11-12, opts.plainSkip) a layer whose children are all plain pictures - the ground's things, the sun's shadows, Ziemia's
+    // cells: hundreds each - has nothing to update in any of them: its loop is skipped, looked at again when the count of its
+    // children changes and every PLAIN_RECHECK-th frame
+    const PLAIN_MIN = 16, PLAIN_RECHECK = 30;
     const SpriteUpdate = function() {
         const list = this.children;
         if (!opts.leaf) { for (const child of list) if (child.update) child.update(); return; }
+        const n = list.length, watch = opts.plainSkip && n >= PLAIN_MIN;
+        if (watch && this._wyPlainN === n && Graphics.frameCount - this._wyPlainF < PLAIN_RECHECK && Graphics.frameCount >= this._wyPlainF) return;
+        let plain = true;
         for (let i = 0; i < list.length; i++) {
             const child = list[i];
             if (child.update === SpriteUpdate && child.children.length === 0) continue;   // (a plain picture: nothing to do)
-            if (child.update) child.update();
+            if (child.update) { plain = false; child.update(); }
         }
+        if (watch) { if (plain && list.length === n) { this._wyPlainN = n; this._wyPlainF = Graphics.frameCount; } else this._wyPlainN = -1; }
     };
     Sprite.prototype.update = SpriteUpdate;
     Tilemap.prototype.update = function() {
@@ -195,12 +204,16 @@
     // beyond the margin, and what lies there is not on the screen. opts.still false: only the 4th-frame rule, as before.
     // (docs/WYDAJNOSC.md, rule 0: code that reads another event's sprite gets an old x and y of it while it is far off - read the
     // character, not the sprite; a sprite that must go on can set `sprite._wyKeep = true`)
+    // (2026-11-12, opts.stillAll - with opts.still) every other map event that neither walks on its own (a move route) nor steps in
+    // place (a step animation) too: the town's roofs, doors, crops, lamps, decorations, signs and its invisible triggers - ~500 of
+    // them far off in the town, 28-38% of a frame at 4x slower CPU when they were updated every 4th frame (docs/WYDAJNOSC_ETAP4.md).
+    // One moved by a plugin (a resident, a horse) or changed by its page wakes as above: its look is not the one of its last update.
     const chop = () => { const P = T.api("ChoppableTree_parts"); return P && P.objects; };
     const stillKinds = new WeakMap();
     function stillKind(c) {
         let v = stillKinds.get(c);
         if (v === undefined) { const O = chop(); v = !!O && !!O.anyHarvestConfig(c); stillKinds.set(c, v); }
-        return v;
+        return v || (opts.stillAll && c._moveType === 0 && !c._stepAnime);
     }
     // is the look of a character (as numbers) the one of the last update? (set: and note the new one) - the graphics' quality is a
     // part of it (a new level switches the rocks' and bushes' shadows: every settled thing takes it at once, not when it comes near)

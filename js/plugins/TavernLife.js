@@ -833,7 +833,9 @@
     // his head (the plate sorts under him: his head hides its lower rim, as a plate on a table seen past someone)
     function reachPlate(x, y, dir) {
         const [dx, dy] = dir === 6 ? [1, 0] : dir === 4 ? [-1, 0] : dir === 2 ? [0, 1] : [0, -1];
-        return { x: x + dx, y: y + dy, py: dir === 8 ? 2 : dir === 2 ? -8 : -4 };
+        // (2026-11-12, the player: „talerz na krawędzi stołu, jakby miał zaraz spaść” - beside the table it stands well on the top, not on
+        // its front edge: 10 px up from where it stood - first 18, then the player: „jakieś 8 niżej”)
+        return { x: x + dx, y: y + dy, py: dir === 8 ? 2 : dir === 2 ? -8 : -14 };
     }
     function counterPlate() {
         const c = spots("meal")[0];
@@ -1056,7 +1058,7 @@
         if (!bed) return (roomTiles[key] = null);
         const doors = new Set(spots("door").map(d => d.ev.x + "," + d.ev.y));
         const seen = new Set(), todo = [];
-        for (const [dx, dy] of [[0, 0], [0, 1], [1, 0], [-1, 0], [0, -1], [1, 1], [0, 2]]) todo.push([bed.ev.x + dx, bed.ev.y + dy]);
+        for (const [dx, dy] of [[0, 0], [0, 1], [1, 0], [-1, 0], [0, -1], [1, 1], [0, 2], [0, 3], [1, 2], [1, 3], [-1, 1], [-1, 2], [2, 0], [2, 1], [2, 2], [-1, 3], [2, 3]]) todo.push([bed.ev.x + dx, bed.ev.y + dy]);
         while (todo.length && seen.size < ROOM_TILES_MAX) {
             const [x, y] = todo.pop(), k = x + "," + y;
             if (seen.has(k) || doors.has(k) || !$gameMap.isValid(x, y)) continue;
@@ -1191,7 +1193,10 @@
         if (N && N.enabled && N.enabled()) { const n = N.state(); n.food = Math.min(100, n.food + bf.fed); n.water = Math.min(100, n.water + bf.water); }
         addBuff("hosted", bf.hosted);
         const bed = spots("bed").find(b => roomKey(b.a.room) === room);
-        if (bed) addFx({ kind: "tray", x: bed.ev.x, y: bed.ev.y + 0.75, life: 3600 });
+        if (bed) {   // (in the middle of the bed: a bed <Occupy:right=1> is two tiles wide)
+            const wide = /<Occupy:[^>]*right=(\d+)/i.exec((bed.ev.event() && bed.ev.event().note) || "");
+            addFx({ kind: "tray", x: bed.ev.x + (wide ? Number(wide[1]) / 2 : 0), y: bed.ev.y + 0.75, life: 3600 });
+        }
     }
     function* sleepSeq(room) {
         const r = S().rent;
@@ -1736,7 +1741,7 @@
     // The layout a game knows: the state's field layout (none: older than the rebuild) - it was $gameSystem._tavernLayout, the name
     // leads there
     // ------------------------------------------------------------------
-    const TAVERN_LAYOUT = 2, ENTRANCE = [50, 53, 8];
+    const TAVERN_LAYOUT = 3, ENTRANCE = [14, 53, 8];
     T.state.oldFields("tavernLife", { _tavernLayout: "layout" });
     const _DataManager_setupNewGame = DataManager.setupNewGame;
     DataManager.setupNewGame = function() {
@@ -1748,7 +1753,7 @@
         _Game_System_onAfterLoad.call(this);
         if (store().layout === TAVERN_LAYOUT) return;
         store().layout = TAVERN_LAYOUT;
-        if ($gameMap.mapId() !== 1 || $gamePlayer.isTransferring()) return;
+        if (![1, 25, 26].includes($gameMap.mapId()) || $gamePlayer.isTransferring()) return;
         $gamePlayer.setPosition(ENTRANCE[0], ENTRANCE[1]);   // (no map maths yet: the saved map is set up again by the transfer)
         $gamePlayer.reserveTransfer(1, ENTRANCE[0], ENTRANCE[1], ENTRANCE[2], 0);
         $gamePlayer.requestMapReload();

@@ -1,0 +1,15 @@
+[
+{"id":"f01_ciemny_las_krawedz","box":[66,34,86,62]},
+{"id":"f02_wschodni_brzeg","box":[90,26,108,64],"p":24},
+{"id":"f04_siedem_sosen","box":[0,48,30,62]},
+{"id":"f05_sciezka_zachod","box":[0,42,18,56]},
+{"id":"f06_hantle","box":[68,30,88,42]},
+{"id":"f07_droga_wasko","box":[12,58,34,84]},
+{"id":"f07b_droga_dol","box":[4,92,22,118]},
+{"id":"f08_pole_kamieni","box":[18,76,42,96]},
+{"id":"f09_plama_przy_murze","box":[0,64,14,80]},
+{"id":"f10_dwie_sosny","box":[2,42,18,60]},
+{"id":"f11_gaj","box":[62,58,98,88]},
+{"id":"f12_brama_muru","box":[0,8,12,26]},
+{"id":"przeglad","box":[0,0,119,119],"p":16}
+]

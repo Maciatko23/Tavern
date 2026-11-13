@@ -52,10 +52,12 @@ const { launch, sleep } = require("./cdp.js");
         let pond = await ev(`(function(){ for (let y = 2; y < $gameMap.height() - 2; y++) for (let x = 2; x < $gameMap.width() - 2; x++) if (Farming.isWaterTile(x, y) && Farming.isWaterTile(x + 1, y) && Farming.isWaterTile(x, y + 1) && Farming.isWaterTile(x - 1, y) && Farming.isWaterTile(x, y - 1)) return { x, y }; return null; })()`);
         const pretend = !pond;
         if (pretend) pond = await ev(`(function(){ const x = 10, y = 6; window.__isWater = Farming.isWaterTile; Farming.isWaterTile = (tx, ty) => Math.abs(tx - x) <= 2 && Math.abs(ty - y) <= 2; return { x, y }; })()`);
+        // (2026-11-12) the test map now lies by the sea (Farming.seaHere): the salt surf would win over the river, so the pond is a fresh one
+        if (pretend) await ev("(function(){ window.__seaHere = Farming.seaHere; Farming.seaHere = () => false; return 0; })()");
         await ev(`$gamePlayer.locate(${pond.x - 3}, ${pond.y}); 0`);
         d = await bed(12);
         check("next to water by day: the river bed" + (pretend ? " (a pretend pond: no map has water now)" : ""), d && d.name === "River", d);
-        if (pretend) await ev("Farming.isWaterTile = window.__isWater; 0");
+        if (pretend) await ev("Farming.isWaterTile = window.__isWater; Farming.seaHere = window.__seaHere; 0");
         await ev("$gamePlayer.locate(10, 13); 0");
 
         // ------------------------------------------------ the live bed: BGS really plays and changes with a fade
@@ -133,13 +135,13 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`$gamePlayer.locate(${lane.x}, ${lane.y}); Atmosphere.state.lastX = $gamePlayer._realX; Atmosphere.state.lastY = $gamePlayer._realY; Atmosphere.state.stepAcc = 0; Atmosphere.state.steps = 0; 0`);
         await frames(4);
         await ev("Input._currentState.right = true; 0");
-        await frames(100);
+        await frames(200);   // (2026-11-12: the barefoot walk is slower now, 3.0 units - 100 frames were only ~2 tiles)
         await ev("Input._currentState.right = false; 0");
         await frames(10);
         const walked = await ev("({ steps: Atmosphere.state.steps || 0, kind: Atmosphere.state.lastKind, moved: $gamePlayer._realX })");
         console.log("walk:", JSON.stringify(walked), "idle steps:", idle);
         check("standing still: no steps", idle === 0, idle);
-        check("walking right for ~100 frames makes several steps (about one per tile)", walked.steps >= 3 && walked.steps <= 12, walked);
+        check("walking right for ~200 frames makes several steps (about one per tile)", walked.steps >= 3 && walked.steps <= 12, walked);
 
         // ------------------------------------------------ the birds
         const bird = await ev(`(async function(){ const out = {}; for (const kind of ["tsit", "trill", "whistle", "owl"]) { const sr = 44100, oc = new OfflineAudioContext(1, sr * 1.5, sr); Atmosphere.birdCall(oc, oc.destination, 0.02, kind, 0); const buf = await oc.startRendering(); const ch = buf.getChannelData(0); let peak = 0, sum = 0; for (let i = 0; i < ch.length; i++) { peak = Math.max(peak, Math.abs(ch[i])); sum += ch[i] * ch[i]; } out[kind] = { peak: +peak.toFixed(2), rmsDb: +(10 * Math.log10(sum / ch.length + 1e-12)).toFixed(1) }; } return out; })()`);

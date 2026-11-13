@@ -29,13 +29,13 @@ const { launch, sleep } = require("./cdp.js");
         await frames(20);
         const S = () => J(`({ x: $gamePlayer._realX, dash: $gamePlayer.isDashing(), speed: $gamePlayer.realMoveSpeed(), breath: Math.round(Combat.breath * 10) / 10, winded: Combat.winded, stamina: $gameSystem.stamina(), can: Combat.canRun() })`);
 
-        // ---- the walk: a little slower than the engine's normal speed (4 -> 3.75: 84%)
+        // ---- the walk: barefoot at the engine's speed 3 (the player 2026-11-11/12; FreeMovement walkSpeed), the run 3.75 (runSpeed)
         const s0 = await S();
-        check("walking speed is 3.75 (the engine's normal 4, a little slower)", s0.speed === 3.75 && !s0.dash, s0);
+        check("walking speed is 3 (barefoot, the player's setting)", s0.speed === 3 && !s0.dash, s0);
         await keys(true, "right"); await frames(60); await keys(false, "right"); await frames(4);
         const w1 = await S();
         const walked = w1.x - s0.x;
-        check("60 frames of walking: about 60 x 2^3.75/256 = 3.2 tiles, and no breath is used", Math.abs(walked - 60 * Math.pow(2, 3.75) / 256) < 0.35 && w1.breath === s0.breath, { walked, breath: w1.breath });
+        check("60 frames of walking: about 60 x 2^3/256 = 1.9 tiles, and no breath is used", Math.abs(walked - 60 * Math.pow(2, 3) / 256) < 0.25 && w1.breath === s0.breath, { walked, breath: w1.breath });
 
         // ---- running: fast, costs breath (and nothing comes back meanwhile)
         await ev(`$gamePlayer.locate(${R.x + 1}, ${R.y}); 0`); await frames(4);
@@ -44,7 +44,7 @@ const { launch, sleep } = require("./cdp.js");
         const r1 = await S();
         await keys(false, "shift", "right"); await frames(4);
         const ran = r1.x - r0.x;
-        check("Shift: running - twice the engine's speed (5), more than 2x the walk", r1.dash && r1.speed === 5 && ran > walked * 2, { ran, walked, r1 });
+        check("Shift: running at 3.75 (barefoot), about 1.7x the walk (2^0.75)", r1.dash && r1.speed === 3.75 && ran > walked * 1.5, { ran, walked, r1 });
         check("running takes breath: 60 frames = about 15 of it", r0.breath - r1.breath >= 13 && r0.breath - r1.breath <= 16, { before: r0.breath, after: r1.breath });
         await frames(160);
         check("stopped: the breath comes back in a moment", (await S()).breath === r0.breath);
@@ -61,7 +61,7 @@ const { launch, sleep } = require("./cdp.js");
         await keys(true, "shift", "right"); await frames(40);
         const wd = await S();
         await keys(false, "shift", "right"); await frames(4);
-        check("the breath runs out while running: winded, no running any more, walking slower (2.75)", wd.winded && !wd.dash && wd.speed === 2.75 && !wd.can, wd);
+        check("the breath runs out while running: winded, no running any more, walking slower (2: never below)", wd.winded && !wd.dash && wd.speed === 2 && !wd.can, wd);
         check("...'Brak tchu!' over the player", (await J("window.__pops")).includes("Brak tchu!"), await J("window.__pops"));
         for (let i = 0; i < 40 && (await S()).winded; i++) await frames(10);
         check("after a breather he can run again", !(await S()).winded && (await S()).can);
@@ -72,14 +72,14 @@ const { launch, sleep } = require("./cdp.js");
         await keys(true, "shift", "right"); await frames(30);
         const tired = await S();
         await keys(false, "shift", "right"); await frames(4);
-        check("with no strength left Shift does not run (he walks - tired out, at half the speed)", !tired.dash && tired.speed === 2.75 && !tired.can, tired);
+        check("with no strength left Shift does not run (he walks - tired out, at half the speed)", !tired.dash && tired.speed === 2 && !tired.can, tired);
         check("...'Jesteś zbyt zmęczony, żeby biec' over the player", (await J("window.__pops")).includes("Jesteś zbyt zmęczony, żeby biec"), await J("window.__pops"));
         await ev("$gameSystem.setStamina(100); 0");
 
         // ---- walking to a clicked tile (or to a building spot) is walking, not running
         await ev(`$gamePlayer.locate(${R.x + 1}, ${R.y}); $gameTemp.setDestination(${R.x + 8}, ${R.y}); 0`); await frames(20);
         const dest = await S();
-        check("walking to a clicked tile does not run (walking speed)", !dest.dash && dest.speed === 3.75 && dest.x > R.x + 1.3, dest);
+        check("walking to a clicked tile does not run (walking speed)", !dest.dash && dest.speed === 3 && dest.x > R.x + 0.6, dest);
         await ev("$gameTemp.clearDestination(); 0");
     } catch (e) { console.log("ERR", e.message); results.push(false); }
     await ev("['shift','right','left'].forEach(k => Input._currentState[k] = false); 0").catch(() => 0);

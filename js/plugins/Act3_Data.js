@@ -44,16 +44,16 @@
             gate: [[51, 31], [52, 31], [51, 30], [52, 30], [50, 30], [53, 29], [50, 29], [51, 32], [52, 32]],
             guard: [[48, 18], [54, 18], [46, 19], [56, 19], [49, 28], [53, 28], [44, 18], [58, 18]],
             from: [[51, 32], [52, 32], [51, 31], [52, 31]],
-            bell: [85, 30], bellStand: [85, 31],
+            bell: [45, 103], bellStand: [45, 104],
             fires: [[48, 15, 0.9], [54, 15, 1.0], [45, 16, 0.75], [57, 16, 0.8], [51, 14, 0.7]]
         },
         1: {
-            door: [9, 14], doorTile: [9, 13],
-            kitchen: [[45, 11], [47, 11], [43, 12], [49, 12], [45, 13], [41, 12]],
-            front: [[50, 51], [49, 51], [51, 51], [50, 50], [48, 50], [52, 50]],
-            guard: [[10, 16], [8, 16], [11, 17], [7, 17]],
-            hall: [[50, 30], [47, 31], [53, 31]],
-            borgar: [52, 31], entry: [50, 53]
+            door: [32, 20], doorTile: [32, 19],
+            kitchen: [[3, 10], [7, 10], [10, 12], [14, 10], [5, 13], [15, 13]],
+            front: [[14, 51], [13, 51], [15, 51], [14, 50], [12, 50], [16, 50]],
+            guard: [[30, 21], [34, 21], [31, 22], [33, 22]],
+            hall: [[14, 32], [18, 32], [22, 32]],
+            borgar: [16, 31], entry: [14, 53]
         }
     };
     Watki.scal(SPOTS, "akt3", "miejsca");   // (its words: js/teksty/akt3.txt, miejsca)
@@ -151,7 +151,7 @@
         { key: "grum", sheet: "anim8/Merc_Walk8", atk: "Merc", maps: [1, 8], from: "here", hp: 200, dmg: 20, poise: 70, cd: [60, 90], speed: 4.1, armor: 0.3,
           follow: true, hideEvent: 3, swing: "#e8e8e8", when: c => c.grum === "ally",
           lines: {} },
-        { key: "rafal", sheet: "Npc_Rafal_Walk8", maps: [8], from: "gate", delay: 420, hp: 85, dmg: 10, poise: 24, cd: [80, 110], speed: 3.9,
+        { key: "rafal", sheet: "Npc_Rafal_Walk8", maps: [8], from: "gate", delay: 420, hp: 250, dmg: 10, poise: 24, cd: [80, 110], speed: 3.9,
           hide: ["rafal"], swing: "#b0a090", when: c => c.rafal === "ally",
           lines: {} },
         { key: "marek", sheet: "Npc_Marek_Walk8", maps: [8], from: "gate", delay: 480, hp: 95, dmg: 11, poise: 26, cd: [80, 110], speed: 3.8,
@@ -160,13 +160,13 @@
         { key: "tadek", sheet: "Npc_Kowal_Walk8", maps: [8], from: "gate", delay: 600, hp: 120, dmg: 14, poise: 32, cd: [85, 115], speed: 3.7,
           hide: ["kowal"], swing: "#c8c8d0", help: true, when: c => c.helpers || (c.bell && c.flags.tadekFriend),
           lines: {} },
-        { key: "ignac", sheet: "Npc_Garbarz_Walk8", maps: [8], from: "gate", delay: 720, hp: 85, dmg: 9, poise: 22, cd: [85, 120], speed: 3.7,
+        { key: "ignac", sheet: "Npc_Garbarz_Walk8", maps: [8], from: "gate", delay: 720, hp: 130, dmg: 9, poise: 22, cd: [85, 120], speed: 3.7,
           hide: ["garbarz"], swing: "#b0a090", help: true, when: c => c.helpers,
           lines: {} },
-        { key: "kuba", sheet: "Npc_Woziwoda_Walk8", maps: [8], from: "gate", delay: 780, hp: 80, dmg: 8, poise: 20, cd: [85, 120], speed: 3.8,
+        { key: "kuba", sheet: "Npc_Woziwoda_Walk8", maps: [8], from: "gate", delay: 780, hp: 120, dmg: 8, poise: 20, cd: [85, 120], speed: 3.8,
           hide: ["woziwoda"], swing: "#b0a090", help: true, when: c => c.helpers,
           lines: {} },
-        { key: "uchodzcy", sheet: "Npc_Uchodzca_Walk8", maps: [8], from: "gate", delay: 840, hp: 70, dmg: 7, poise: 18, cd: [90, 125], speed: 3.7,
+        { key: "uchodzcy", sheet: "Npc_Uchodzca_Walk8", maps: [8], from: "gate", delay: 840, hp: 105, dmg: 7, poise: 18, cd: [90, 125], speed: 3.7,
           swing: "#a89070", help: true, n: 2, when: c => c.helpers && c.camp,
           lines: {} },
         // (2026-10-17, W5) Kapral Wit Czerwień - he confessed his five groszy a week to the hero and stands with him (flag w5WitAlly)

@@ -261,7 +261,7 @@
 
     // ---- A1 springs (+ the stones, the wild herb) on five maps
     function springEvents(sp) {
-        const out = [objEvent(sp.id, sp.name, sp.sx, sp.sy, IMG.spring, { kind: "spring:" + sp.key, step: true })];
+        const out = [objEvent(sp.id, sp.name, sp.sx, sp.sy, IMG.spring, { kind: "spring:" + sp.key, step: true, note: "<Occupy:left=1,right=1>" })];
         reg(sp.map, sp.id, "spring", sp);
         const right = [sp.sx + 1, sp.sy + 1], left = [sp.sx - 1, sp.sy + 1];
         out.push(objEvent(sp.stones[0], TK.kod.springEvents[0], right[0], right[1], IMG.stones, { kind: "stones", noUse: true, through: true, pat: 0 }));
@@ -273,21 +273,22 @@
     }
     const springOf = map => D.SPRINGS.find(s => s.map === map) || null;
 
-    // ---- Map017: the spring, Jagna's glade, the fairy rings
-    T.inject(17, { ids: D.IDS[17], owner: PLUGIN, build: () => {
-        const out = springEvents(springOf(17));
+    // ---- Omszała łąka (2026-11-11 plansza: the south-west of Kruczy Jar, Map003): the spring, Jagna's glade, the fairy rings - built with Map003's events
+    const omszalaEvents = () => {
+        const out = springEvents(springOf(3));
         for (const h of D.GLADE.herbs) {
             out.push(objEvent(h.id, D.HERBS[h.kind].name, h.x, h.y, IMG.herb, { kind: "herb:" + h.kind, through: true }));
-            reg(17, h.id, "herb", { kind: h.kind, glade: true, x: h.x, y: h.y });
+            reg(3, h.id, "herb", { kind: h.kind, glade: true, x: h.x, y: h.y });
         }
         D.RINGS.forEach((r, ri) => r.cells.forEach(([x, y], i) => {
             const id = r.ids[i];
             out.push(objEvent(id, "Grzyb", x, y, IMG.mushroom, { kind: "mushroom", hide: true, through: true, dir: 2 + 2 * ((i + ri) % 2), pat: (i * 2 + ri) % 3 }));
-            reg(17, id, "mushroom", { ring: r.key, i, look: [2 + 2 * ((i + ri) % 2), (i * 2 + ri) % 3] });
+            reg(3, id, "mushroom", { ring: r.key, i, look: [2 + 2 * ((i + ri) % 2), (i * 2 + ri) % 3] });
         }));
-        return withBlanks(17, out);
-    } });
-    T.inject(21, { ids: D.IDS[21], owner: PLUGIN, build: () => withBlanks(21, springEvents(springOf(21))) });
+        return out;
+    };
+    // (Leśna droga's spring is on Łąka (4) now)
+    T.inject(4, { ids: D.IDS[4], owner: PLUGIN, build: () => withBlanks(4, springEvents(springOf(4))) });
 
     // ---- Map013: the spring, the block wall, the ore veins (ChoppableTree's mining, our own commands and note)
     T.inject(13, { ids: D.IDS[13], owner: PLUGIN, build: () => {
@@ -351,7 +352,7 @@
             out.push(objEvent(h.id, TK.kod.build[10], h.x, h.y, IMG.hive, { kind: "hive", step: true }));
             reg(3, h.id, "hive", h);
         }
-        return withBlanks(3, out);
+        return withBlanks(3, out.concat(omszalaEvents()));
     } });
 
     // ---- Map111: the gardens, the rubbish heap, the clay pit
@@ -1194,7 +1195,7 @@
     }, { owner: PLUGIN, name: "fog" });
     T.on("mapLeave", () => { fog = null; }, { owner: PLUGIN });
     T.onMapUpdate(() => {
-        if (!has() || mapId() !== 17 || !night(hour())) return;
+        if (!has() || mapId() !== 3 || !night(hour())) return;
         const nk = hour() >= 21 ? day() : day() - 1;   // (the night that began that evening)
         for (const r of D.RINGS) {
             if ($gamePlayer.x !== r.centre[0] || $gamePlayer.y !== r.centre[1] || S().fairy[r.key] === nk) continue;
@@ -1370,8 +1371,8 @@
     // F9 (Debug.js, the tab "Wyspa i fabuła"): go to each thing, the weather, the tide, the storm's end, the well, the orchard, D30
     // ------------------------------------------------------------------
     // the places to go to: the springs, then the others (their names: js/teksty/zasoby.txt, f9.idz.<key>)
-    const GO_TO = [["zagroda", 3, 42, 52, 8], ["studnia", 3, 47, 54, 8], ["ul", 3, 66, 39, 8], ["polanka", 17, 67, 16, 8],
-        ["krag", 17, 54, 45, 8], ["ogrodki", 111, 66, 15, 8], ["wysypisko", 111, 72, 66, 8], ["glinianka", 111, 48, 74, 8],
+    const GO_TO = [["zagroda", 3, 42, 52, 8], ["studnia", 3, 47, 54, 8], ["ul", 3, 66, 39, 8], ["polanka", 3, 20, 76, 8],
+        ["krag", 3, 43, 75, 8], ["ogrodki", 111, 66, 15, 8], ["wysypisko", 111, 72, 66, 8], ["glinianka", 111, 48, 74, 8],
         ["sciana", 13, 108, 82, 8], ["zyla", 13, 114, 79, 8], ["zatoczka", 125, 17, 67, 8], ["drewnoPustelnia", 155, 4, 53, 4],
         ["drewnoGarnizon", 162, 3, 47, 4], ["sad", 168, 62, 22, 2], ["pola", 8, 10, 108, 8]];
     const GO = () => [].concat(D.SPRINGS.map(s => [s.name, s.map, s.sx, s.sy + 1, 8]), GO_TO.map(([k, ...at]) => [TK.f9.idz[k]].concat(at)));

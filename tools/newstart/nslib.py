@@ -76,8 +76,14 @@ for _e in _base["events"]:
     if not _e: continue
     _g = _e["pages"][0]["image"]["characterName"] or ("tile%d" % _e["pages"][0]["image"]["tileId"])
     TMPL.setdefault(_g, _e)
-TRANSFER_TMPL = next(e for e in _base["events"] if e and not e["pages"][0]["image"]["characterName"] and not e["pages"][0]["image"]["tileId"]
-                     and any(c["code"] == 201 for c in e["pages"][0]["list"]))
+def _transfer_of(m):
+    return next((e for e in m["events"] if e and not e["pages"][0]["image"]["characterName"] and not e["pages"][0]["image"]["tileId"]
+                 and any(c["code"] == 201 for c in e["pages"][0]["list"])), None)
+# (2026-11-08: the 3x3 board took Map003's edge transfers away - the author's plain transfer is then taken from grandpa's house)
+TRANSFER_TMPL = _transfer_of(_base)
+for _f in ("Map019.json", "Map020.json", "Map008.json", "Map001.json"):
+    if TRANSFER_TMPL: break
+    TRANSFER_TMPL = _transfer_of(json.load(open(ROOT + "data/" + _f, encoding="utf-8")))
 BLANK_COND = copy.deepcopy(TRANSFER_TMPL["pages"][0]["conditions"])
 for _k in list(BLANK_COND):
     if _k.endswith("Valid"): BLANK_COND[_k] = False

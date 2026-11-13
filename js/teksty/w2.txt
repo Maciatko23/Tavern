@@ -134,3 +134,27 @@ Coś przyniosłeś? Widzę, że coś niesiesz...
 Czterdzieści lat pilnowałem warty, której nikt nie pamiętał. A ty przyniosłeś mi pamięć. Dziękuję, chłopcze. Nie wiem, jak ci się odwdzięczę... Może kiedyś będę wiedział.
 
 zadania.W2.steps.10.text = „Jedno pytanie” - {etap}
+
+# ======================================================================== PRZY KAPLICY (pustelnia poza światem, 2026-11-11)
+# Brat Kleofas zszedł z klifu i siedzi przy kaplicy w Kruczogrodzie (Map008), dopóki WyspaData.HERMITAGE_OPEN = false. Klucze „kaplica.<ścieżka>”
+# mówią tę samą ścieżkę jeszcze raz i nadpisują ją TYLKO wtedy (Pustelnia_Data.js); gdy pustelnia wróci, czyta się tekst z góry pliku.
+kaplica.zadania.W2.lines.stage1 = zanieś serce dzwonu bratu Kleofasowi, który przesiaduje przy kaplicy w Kruczogrodzie (za dnia).
+kaplica.zadania.W2.lines.stage2 = Noc Pytania: w Wigilię (dzień {wigilia}) o północy dzwon w wieży kaplicy uderzy siedem razy. Bądź wtedy przy kaplicy - Kleofas odpowie na jedno pytanie.
+kaplica.zadania.W2.lines.stage3 = pytanie zadane. Rozdział 8 „Alarm” czeka na Akt III. Następne pytanie u Kleofasa przy kaplicy: Wigilia roku {rok} (dzień {wigilia}).
+[kaplica.zadania.W2.lines.heart]
+Chłopcze. Chodź bliżej. (Ambroży wyjmuje z worka ciężki, czarny od starości kawał żelaza.) Serce dzwonu. Mój ród przechował je od upadku zakonu.
+Nie z mojego dzwonu. Z dzwonu w wieży kaplicy - tam, gdzie przysiadł brat pióra. Pustelnik zszedł z klifu i siedzi pod nią na ławce.
+Mój mistrz mówił: kiedy dzwon i pióro znów się spotkają, będzie można zapytać.
+> Zapytać? O co?
+O jedno. Raz w roku, w Wigilię, o północy. Siedem uderzeń - sygnał pytania. Zanieś mu to. Ja mam dzwonnicę, chłopcze, a ty nogi.
+
+[kaplica.zadania.W2.lines.heartNote]
+Serce dzwonu
+Ambroży dał mi serce dzwonu, które jego ród przechował od upadku zakonu. Należy do dzwonu w wieży kaplicy, przy której siedzi brat Kleofas. „Kiedy dzwon i pióro znów się spotkają, będzie można zapytać.”
+
+[kaplica.zadania.W2.lines.heartNoteKleofas]
+Noc Pytania
+Brat Kleofas zawiesi serce w dzwonie wieży kaplicy. W Wigilię o północy dzwon uderzy siedem razy - wtedy odpowie mi z kronik na jedno pytanie. Jedno na rok.
+
+[kaplica.zadania.W2.lines.heartAway]
+Serce dzwonu? Dla brata pióra, przy kaplicy. Ja mam dzwonnicę, chłopcze. Ty masz nogi.

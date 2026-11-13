@@ -1,0 +1,16 @@
+Estetyka map świata (staging C:\Users\macie\OneDrive\Dokumenty\RMMZ\Tawerna\tools\usterki\gory_przystan\staging):
+  mapa    a    b    c    d    e    f    g    h    i    j
+    13    0    1    0    0    4   39    0    0    0   18
+   125    0    0    0    0    0    8    1    0    4    2
+  razem   0    1    0    0    4   47    1    0    4   20   (wyjątki odjęte: {'b': 5})
+   a - pas liści: 0
+   b - ucięty/pojedynczy grunt: 1
+   c - drzewo z kafli bez gwiazdki: 0
+   d - mur bez zakończenia: 0
+   e - półka bez zakończenia: 4
+   f - wzgórze: schodkowa/zębata dolna linia, dziura, otwarta strona albo urwany kawałek obrysu: 47
+   g - drzewo za blisko wody / na gruncie brzegu: 1
+   h - rama innego gruntu pod/wokół płotu lub muru: 0
+   i - zaokrąglony koniec lica przy schodach: 4
+   j - kanciasta / prostokątna plama gruntu: 20
+WYNIK: BŁĄD (77)

@@ -5,7 +5,7 @@
 // img/titles1/Tawerna_Title_Kufel.png (no letters baked in) brought to life the way every light in the game is - fire: the hearth
 // flickers and its light wavers on the wall and the table, sparks rise from the logs, the candle's flame trembles, steam rises
 // over the cauldron and (faintly) over the tankard. The game's name, the line under it and the menu are drawn by the game, so
-// they stay sharp: "Tawerna" in gold gothic letters, "Ciepły kąt na krańcu świata", then Nowa gra / Kontynuuj (the last save's
+// they stay sharp: "Tawerna" in gold gothic letters, "Ciepły kąt na krańcu świata", then Nowa gra / Szybka gra / Kontynuuj (the last save's
 // day, season and place under it; grey and skipped without a save) / Opcje / Wyjdź - in the picture's own gold (the game's one
 // interface palette, UITheme.js, starts after the title: the file and options screens are MenuRing.js's).
 // Keys as everywhere: W/S or the arrows, O or Enter, P or Esc; the mouse points and clicks.
@@ -45,7 +45,8 @@
  * płomień świecy, para nad kociołkiem i kuflem; napis i menu wyłaniają się
  * z ciemności.
  *
- * Menu: Nowa gra, Kontynuuj (pod spodem ostatni zapis: dzień, pora roku,
+ * Menu: Nowa gra, Szybka gra (bez imienia i filmu: od razu w chacie dziadka,
+ * po pierwszej rozmowie), Kontynuuj (pod spodem ostatni zapis: dzień, pora roku,
  * miejsce; bez zapisu szare i pomijane - otwiera listę zapisów z
  * zaznaczonym najnowszym), Opcje, Wyjdź (zamyka grę).
  * Klawisze: W/S lub strzałki, O lub Enter wybiera; mysz.
@@ -79,7 +80,7 @@
         mug: { x: 800, y: 360, w: 70 },                   // the foam's top
         room: { x: 1050, y: 440 }                         // the middle of the fire's light on the wall and the table
     };
-    const L = { titleX: 64, titleY: 132, ruleY: 196, ruleX1: 70, ruleX2: 400, subY: 222, menuX: 88, rows: [340, 388, 454, 500], saveY: 412, keysY: 692 };
+    const L = { titleX: 64, titleY: 132, ruleY: 196, ruleX1: 70, ruleX2: 400, subY: 222, menuX: 88, rows: [340, 388, 436, 502, 548], saveY: 460, keysY: 692 };
     const C = {
         text: "#ece6da", muted: "#b8b0a2", off: "#6a645c", accent: "#e0a43a", sub: "#e8d4b0", rule: "#c99a3a",
         gold: ["#fff0b8", "#f0cc6a", "#c99a3a", "#f0cc6a", "#8a6420"], outline: "#1a0e06"
@@ -326,7 +327,7 @@
     };
 
     // ------------------------------------------------------------------
-    // The menu: four rows drawn from the (invisible) command window; a gold bar glides to the chosen one
+    // The menu: five rows drawn from the (invisible) command window; a gold bar glides to the chosen one
     // ------------------------------------------------------------------
     function saveLine() {
         if (!DataManager.isAnySavefileExists()) return { text: "brak zapisanej gry", ok: false };
@@ -348,7 +349,7 @@
         this._win = win;
         this._save = saveLine();
         this._key = "";
-        this._rows = new Sprite(new Bitmap(520, 220));
+        this._rows = new Sprite(new Bitmap(520, 280));
         this._rows.x = L.menuX - 28; this._rows.y = L.rows[0] - 40;
         this._bar = new Sprite(new Bitmap(4, 24));
         this._bar.bitmap.fillRect(0, 0, 3, 24, C.accent);
@@ -445,13 +446,14 @@
     Scene_Title.prototype.commandWindowRect = function() {
         // the rows' area, in the window layer's coordinates (the layer may sit a few pixels in from the screen's edge)
         const lx = (Graphics.width - Graphics.boxWidth) / 2, ly = (Graphics.height - Graphics.boxHeight) / 2;
-        return new Rectangle(L.menuX - 30 - lx, L.rows[0] - 26 - ly, 440, L.rows[3] - L.rows[0] + 52);
+        return new Rectangle(L.menuX - 30 - lx, L.rows[0] - 26 - ly, 440, L.rows[L.rows.length - 1] - L.rows[0] + 52);
     };
     const _createCommandWindow = Scene_Title.prototype.createCommandWindow;
     Scene_Title.prototype.createCommandWindow = function() {
         _createCommandWindow.call(this);
         const w = this._commandWindow;
         w.setHandler("exit", this.commandExit.bind(this));
+        w.setHandler("quickGame", this.commandQuickGame.bind(this));
         w.opacity = 0;
         w.backOpacity = 0;
         w.contentsOpacity = 0;
@@ -462,6 +464,16 @@
         // back from the save list or the options: everything is there at once; the first time it all comes out of the dark
         this._tsIntro = SceneManager.isPreviousScene(Scene_Load) || SceneManager.isPreviousScene(Scene_Options) ? 999 : 0;
         this.updateIntro();
+    };
+    // (2026-11-08, the user: "szybka gra" - the hero already past the prologue and grandpa's first talk) a new game without the name
+    // screen and the film (the hero keeps the database's name), on the map at once; Story.js sees the mark on the house's first frame
+    // and takes the talk as heard: the pendant, the soup, the journal's notes, grandpa back at his pot, the hero up beside the bed
+    Scene_Title.prototype.commandQuickGame = function() {
+        DataManager.setupNewGame();
+        $gameTemp._twQuickStart = true;
+        this._commandWindow.close();
+        this.startFadeOut(this.fadeSpeed(), false);
+        SceneManager.goto(Scene_Map);
     };
     Scene_Title.prototype.commandExit = function() {
         this._commandWindow.close();
@@ -492,11 +504,12 @@
     };
 
     // ------------------------------------------------------------------
-    // The command window: four commands, draws nothing (the menu sprite does), its rows where the sprite draws them; the grey
+    // The command window: five commands, draws nothing (the menu sprite does), its rows where the sprite draws them; the grey
     // "Kontynuuj" (no save yet) is skipped by the keys and the mouse
     // ------------------------------------------------------------------
     Window_TitleCommand.prototype.makeCommandList = function() {
         this.addCommand("Nowa gra", "newGame");
+        this.addCommand("Szybka gra", "quickGame");
         this.addCommand("Kontynuuj", "continue", this.isContinueEnabled());
         this.addCommand("Opcje", "options");
         this.addCommand("Wyjdź", "exit");
@@ -510,7 +523,8 @@
     // (the window's top is at L.rows[0] - 26 on the screen - commandWindowRect; "Kontynuuj" takes its save line in too)
     Window_TitleCommand.prototype.itemRect = function(index) {
         const cy = L.rows[index] !== undefined ? L.rows[index] : L.rows[0];
-        return new Rectangle(0, cy - 22 - (L.rows[0] - 26), this.innerWidth, index === 1 ? 56 : 44);
+        const cont = this._list && this._list[index] && this._list[index].symbol === "continue";
+        return new Rectangle(0, cy - 22 - (L.rows[0] - 26), this.innerWidth, cont ? 56 : 44);
     };
     Window_TitleCommand.prototype.drawItem = function() {};
     Window_TitleCommand.prototype.drawAllItems = function() {};

@@ -1,0 +1,61 @@
+PASS gra się uruchamia
+PASS wtyczka wczytana
+PASS 23 gości, wszyscy mają imię  []
+PASS o 20:00 siedzą (kilku może właśnie wchodzić)  {"guests":23,"sit":23,"out":0,"walking":0,"seats":68}
+   krzeseł 68, stats {"guests":23,"sit":23,"out":0,"walking":0,"seats":68}
+PASS krzesła znalezione przy stołach, z przejściem obok  68
+   wejście z boku: 68 z 68; z góry lub dołu: []
+PASS na każde krzesło, które ma wolny bok albo ukos, wchodzi się bokiem  []
+PASS żadne krzesło na liście nie ma cudzego zdarzenia (gosc_N, miejsce bohatera, Ozzy)  []
+PASS każdy siedzący na krześle z listy, dwóch na jednym nigdy  [[3,33],[5,33],[5,34],[7,34],[9,34],[19,33],[19,34],[21,34],[23,33],[32,34],[25,34],[2,38],[4,38],[8,38],[10,38],[30,34],[10,39],[30,38],[44,34],[46,34],[46,38],[2,31],[26,31]]
+PASS siedzących rysują arkusze Przytulna_Siedzi  {"n":23,"vis":23,"url":"img/characters/Przytulna_Siedzi_Pula_M.png","w":792,"h":528}
+PASS je: miska na stole, klatki (jedzenia, gdy arkusz je ma)  {"bowl":true,"row":2,"col":3}
+PASS pije: bez miski, klatki picia  {"bowl":false,"row":0,"col":3}
+PASS wstał: idzie albo już stoi, widać go jako chodzącą postać  {"id":400,"key":"Pula_M","state":"walk","act":"drink","x":2,"y":33,"seat":[3,33],"goal":[14,31],"imie":"Maciej"}
+PASS doszedł na miejsce i stoi, nie na ścianie ani krześle  {"id":400,"key":"Pula_M","state":"stand","act":"drink","x":14,"y":31,"seat":[3,33],"goal":null,"imie":"Maciej"}
+PASS wrócił i usiadł na wolnym krześle  {"id":400,"key":"Pula_M","state":"sit","act":"drink","x":3,"y":33,"seat":[3,33],"goal":null,"imie":"Maciej"}
+PASS przycisk przy siedzącym: mówi swoim imieniem  {"tk":{"busy":true,"run":true,"name":"Sobek","text":"Ahoj. Znaczy, dobry wieczór, tu się chyba tak\nmówi."},"pick":{"id":403,"key":"Pula_Z","state":"sit","act":"eat","x":7,"y":34,"seat":[7,34],"goal":null,"imie":"Sobek"}}
+PASS menu rozmowy: kim, co słychać, rada, bywaj  ["Kim jesteś?","Co słychać?","Masz dla mnie jakąś radę?","Bywaj."]
+PASS odpowiada na „Co słychać?”  {"busy":true,"name":"Sobek","text":"Morze czerwone jak rzeźnia, śnięte ryby przy\nbrzegu. Na lądzie bym powiedział, że to znak.\nTu mówią, że to susza. Nie wiem, co gorsze."}
+PASS po odpowiedzi znów menu
+PASS po „Bywaj” rozmowa się kończy
+PASS idący też rozmawia: przycisk przy nim, mówi swoim imieniem  {"wkTalk":{"busy":true,"name":"Tekla","st":"walk"},"wk":{"id":405,"key":"Pula_K2","state":"sit","act":"drink","x":19,"y":33,"seat":[19,33],"goal":null,"imie":"Tekla"}}
+PASS w czasie rozmowy stoi w miejscu  [[17,33],[17,33]]
+PASS po rozmowie idzie dalej i siada  {"id":405,"key":"Pula_K2","state":"sit","act":"drink","x":19,"y":33,"seat":[19,33],"goal":null,"imie":"Tekla"}
+PASS każdy z 23 ma: przywitanie, kim jest, co słychać, radę, pożegnanie  []
+   pola zdarzeń gości spoza zwykłego zdarzenia: {"_zakFlat":"boolean","_konie":"number","_p8":"object"}
+PASS zdarzenia gości nie trzymają sprite'ów ani obiektów (poza _p8: zwykły zapas drogi każdego chodzącego, liczby)  {"_zakFlat":"boolean","_konie":"number","_p8":"object"}
+PASS zapis działa, gdy goście żyją i ktoś idzie  338254
+PASS po wczytaniu goście są: siedzą albo idą, dwóch na krześle nigdy  {"guests":23,"sit":23,"out":0,"walking":0,"seats":68}
+PASS po wczytaniu sala rusza prawdziwymi zdarzeniami (siedzący stoi na swoim krześle)  {"lfAt":[3,33],"lf":{"id":400,"key":"Pula_M","state":"sit","act":"drink","x":3,"y":33,"seat":[3,33],"goal":null,"imie":"Maciej"}}
+PASS po wczytaniu wstaje i idzie (zdarzenie gry naprawdę się rusza)  [2,36]
+PASS po wczytaniu widać go i można go zaczepić
+PASS drzwi wejściowe gości to przechodnia kratka
+PASS dziesięciu wstaje naraz: chodzą i wszyscy wracają na krzesła  {"brak":[],"stan":[[400,"sit",3,33,null],[401,"sit",5,33,null],[402,"sit",5,34,null],[403,"sit",7,34,null],[404,"sit",9,34,null],[405,"sit",19,33,null],[406,"sit",19,34,null],[407,"sit",21,34,null],[408,"sit",23,33,null],[409,"sit",26,41,null]]}
+PASS nigdy dwóch na jednym krześle  0
+PASS przed wieczorem ich nie ma, a pusta kratka nie zaczyna rozmowy
+PASS o 19 ci, których godzina właśnie mija, idą od drzwi  "walk,sit,sit,sit,sit,walk,out,sit,walk,walk,sit,sit,sit,out,sit,out,sit,sit,sit,sit,out,sit,out"
+PASS doszli i siedzą  {"guests":23,"sit":23,"out":0,"walking":0,"seats":68}
+PASS po północy wszyscy wyszli  []
+PASS bohater kratkę nad siedzącym jest za nim  {"kw1":{"z":3,"y":330},"order":{"pl":347,"k":363}}
+PASS kowal poszedł do domu: nie ma go na krześle  null
+PASS każdy widoczny siedzący jest w warstwie postaci  [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
+PASS kowal o 22:20 siedzi na swoim krześle  {"x":7,"y":33,"hid":false,"mv":false}
+PASS o 22:30 wstaje i idzie przez salę (nie znika na krześle)  "60 pomiarów, kratek 27"
+PASS znika dopiero w drzwiach  {"x":13,"y":54,"hid":true,"mv":false}
+PASS przed jego godziną go nie ma  {"x":13,"y":54,"hid":true,"mv":false}
+PASS o 19 wchodzi drzwiami  {"x":13,"y":53,"hid":false,"mv":true}
+PASS doszedł i siedzi na swoim krześle  {"x":7,"y":33,"hid":false,"mv":false}
+PASS kowala nie ma w domu, póki jest w tawernie  {"x":9,"y":6,"hid":true,"mv":false}
+PASS o 22:30 wchodzi do domu drzwiami  {"x":7,"y":9,"hid":false,"mv":true}
+PASS doszedł na swoje miejsce w domu  {"h1":{"x":9,"y":6,"hid":false,"mv":false},"spot":[9,6]}
+PASS wstaje na stołku: klatki przejścia (wiersze 4-5), bez ruchu  [{"st":"rising","x":3,"y":33,"seat":[3,33],"pic":true,"row":0,"mv":false},{"st":"rising","x":3,"y":33,"seat":[3,33],"pic":true,"row":4,"mv":false},{"st":"rising","x":3,"y":33,"seat":[3,33],"pic":true,"row":4,"mv":false},{"st":"rising","x":3,"y":33,"seat":[3,33],"pic":true,"row":4,"mv":false},{"st":"rising","x":3,"y":33,"seat":[3,33],"pic":true,"row":4,"mv":false},{"st":"dismount","x":2,"y":33,"seat":[3,33],"pic":false,"row":4,"mv":true}]
+PASS schodzi ze stołka swoją normalną postacią, zdjęcie siedzącego schowane  [{"st":"dismount","x":2,"y":33,"seat":[3,33],"pic":false,"row":4,"mv":true},{"st":"dismount","x":2,"y":33,"seat":[3,33],"pic":false,"row":4,"mv":true},{"st":"dismount","x":2,"y":33,"seat":[3,33],"pic":false,"row":4,"mv":true}]
+PASS wchodzi na stołek swoją normalną postacią (nie sunie w pozie siedzącej)  [{"st":"mount","x":3,"y":33,"seat":[3,33],"pic":false,"row":4,"mv":true},{"st":"mount","x":3,"y":33,"seat":[3,33],"pic":false,"row":4,"mv":true},{"st":"mount","x":3,"y":33,"seat":[3,33],"pic":false,"row":4,"mv":true}]
+PASS na stołku przechodzi w siedzenie: stoi na krześle, klatki przejścia, potem siedzi  [{"st":"settle","x":3,"y":33,"seat":[3,33],"pic":true,"row":4,"mv":false},{"st":"settle","x":3,"y":33,"seat":[3,33],"pic":true,"row":4,"mv":false},{"st":"settle","x":3,"y":33,"seat":[3,33],"pic":true,"row":4,"mv":false}]
+PASS po siadaniu zwykłe wiersze siedzenia  {"st":"sit","x":3,"y":33,"seat":[3,33],"pic":true,"row":0,"mv":false}
+PASS mieszkaniec: najpierw wstaje na krześle (klatki przejścia)  {"resUp":2,"krow":4}
+   koszt życia sali na klatkę (CPU 4x): 0.024 ms
+PASS koszt życia sali na klatkę <= 0.3 ms (CPU 4x)  0.02433333396911621
+PASS bez błędów w konsoli  []
+56/56 passed

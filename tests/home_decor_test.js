@@ -169,49 +169,15 @@ kit.test({ port: 9394, plugins: ["TawernaCore", "TawernaUI", "HomeDecor"],   // 
     await ev("(function(){ $gameSystem._tavernShift.done = 0; $gameSystem._dice.wins = 0; HomeDecor.refresh(); return 0; })()");
     await t.frames(10);
     t.check("keepsakes stay once earned", (await looks()).polka === "polka_oba");
-    // ================= the action button (O) and the mouse
+    // ================= O in the house: no memory lines any more (the player 2026-11-11: „wywalić” - the decorations stay silent)
     await clearNotices();
     await ev("(function(){ $gameMap._interpreter.clear(); $gameMessage.clear(); return 0; })()");
     await t.locate(3, 4, 8);
     await t.frames(20);
     await t.key("O");
-    const l1 = await J("{ line: HomeDecor.lastLine, key: HomeDecor.lastKey }");
-    await t.frames(10);
-    await t.key("O");
-    const l2 = await J("{ line: HomeDecor.lastLine, key: HomeDecor.lastKey }");
-    const want = await J("[HomeDecor.LINES.kufel, HomeDecor.LINES.kosci]");
-    const bubble = await ev("!!(window.SpeechBubbles && SpeechBubbles.barks && SpeechBubbles.barks.length !== undefined ? SpeechBubbles.barks.length : true)");
-    t.check("O under his shelf: the tankard's (or the dice's) memory in his bubble, O again: the other one", [l1.line, l2.line].sort().join("|") === want.slice().sort().join("|") && bubble, { l1, l2 });
-    await t.frames(150);
-    await t.locate(3, 7, 8);
     await t.frames(20);
-    await t.key("O");
-    const l3 = await J("{ line: HomeDecor.lastLine, want: HomeDecor.LINES.skora }");
-    t.check("O at the wolf pelt: „" + l3.want + "”", l3.line === l3.want, l3);
-    await t.frames(150);
-    await t.locate(17, 6, 8);
-    await t.frames(20);
-    const order = await J("HomeDecor.candidates().map(c => c.b.key)");
-    let l4 = null;
-    for (let i = 0; i < order.length; i++) {
-        await t.key("O"); await t.frames(6);
-        const k = await ev("HomeDecor.lastKey");
-        if (k === "pokwitowanie") { l4 = await J("{ line: HomeDecor.lastLine, gp: HomeDecor.LINES.pokwitowanieDziadek, text: HomeDecor.LINES.pokwitowanie, grandpa: !!(Story.npc && Story.npc('grandpa')) }"); break; }
-    }
-    t.check("O at the receipt (from grandpa's alcove, O again to it): grandpa's words while he is in the room", !!l4 && (l4.grandpa ? l4.line === l4.gp : l4.line === l4.text), { order, l4 });
-    await t.frames(150);
-    // the mouse over the antlers: the line beside the cursor (the hero in his alcove: the camera shows its wall)
-    await t.locate(3, 5);
-    await t.frames(20);
-    const pos = await J(`(function(){ const b = HomeDecor.shownBoxes().find(q => q.look === "rogi"); const s = SceneManager._scene._spriteset._characterSprites.find(sp => sp._character === b.ev);
-        const p = s.worldTransform.apply(new PIXI.Point((b.px[0] + b.px[2]) / 2 - s.patternWidth() / 2, (b.px[1] + b.px[3]) / 2 - s.patternHeight())); return [p.x, p.y]; })()`);
-    await t.mouseMove(pos[0], pos[1]);
-    await t.frames(15);
-    const hov = await J("{ key: HomeDecor.hover && HomeDecor.hover.key, tip: !!(SceneManager._scene._decorTip && SceneManager._scene._decorTip.visible), text: SceneManager._scene._decorTip && SceneManager._scene._decorTip._text }");
-    t.check("the mouse over the antlers: its memory on a small plate by the cursor", hov.key === "rogi" && hov.tip && hov.text === (await ev("HomeDecor.LINES.rogi")), hov);
-    await t.mouseMove(640, 700);
-    await t.frames(15);
-    t.check("the plate goes when the mouse leaves", !(await ev("SceneManager._scene._decorTip.visible")));
+    const quiet = await J("{ msg: $gameMessage.hasText(), look: typeof HomeDecor.lookAround, tip: !!SceneManager._scene._decorTip }");
+    t.check("O under his shelf: no memory line (no message, no look, no mouse plate)", !quiet.msg && quiet.look === "undefined" && !quiet.tip, quiet);
     // ================= screenshots (the map's zoom 1.5): the seasons, the hero's alcove, the receipt
     await ev("(function(){ $gamePlayer.locate(9, 7); $gamePlayer.setDirection(2); $gamePlayer.setTransparent(false); return 0; })()");
     const hideTip = "(function(){ const t = SceneManager._scene._decorTip; if (t) t.visible = false; return 0; })()";

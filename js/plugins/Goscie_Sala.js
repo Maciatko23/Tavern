@@ -35,9 +35,9 @@
     const PLUGIN = "Goscie_Sala";
     const TK = Watki.teksty("goscie_sali");
     const MAP = 1, ID0 = 400, ID1 = 422;
-    const HALL = { x0: 37, y0: 27, x1: 83, y1: 44 };
+    const HALL = { x0: 1, y0: 27, x1: 47, y1: 44 };
     const CHAIR = 390, TABLE_TILES = [416, 424, 432, 439, 447], TABLE_TILES2 = [842, 850, 859, 867, 863, 871, 844, 852];   // (the chair; long and small tables on layer 3, round ones on layer 2)
-    const DOOR = { x: 50, y: 52 }, BAR = [[46, 31], [48, 31], [50, 31], [52, 31], [54, 31], [56, 31]], STAGE = [[71, 33], [73, 33], [75, 33], [77, 33]];
+    const DOOR = { x: 14, y: 52 }, BAR = [[10, 31], [12, 31], [14, 31], [16, 31], [18, 31], [20, 31]], STAGE = [[35, 33], [37, 33], [39, 33], [41, 33]];
     const CELL = 88, FEET = 76;                  // the sheets' cells; the row laid on the event's screenY (Przytulna's own format)
     // sitting down (user 2026-11-05: "idąc postacie wchodzą na stołek i wtedy przejście na siedzenie"): on foot onto the stool, there the
     // sheet's rows 4-5: standing, lowering, lower, then seated; getting up the other way round. DY: the walking figure's feet stand 4 px lower
@@ -102,6 +102,7 @@
     function arrivalOf(g) { return EVENING_FROM + hash(g.id, 11) * ARRIVE_SPREAD; }
     function departureOf(g) { return LEAVE_FROM + hash(g.id, 12) * LEAVE_SPREAD; }
     function present(g, h) {
+        if (window.Wesele && window.Wesele.sala && window.Wesele.sala()) return false;   // (W18: the hall is the wedding's - Wesele.js)
         const dep = departureOf(g), lateH = h < 12 ? h + 24 : h;   // (the night goes on past midnight)
         return lateH >= arrivalOf(g) && lateH < dep;
     }

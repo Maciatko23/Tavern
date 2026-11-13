@@ -1,0 +1,26 @@
+{
+ "topielec": {
+  "Walk8": 9,
+  "Atk8": 8,
+  "Die8": 7
+ },
+ "krab": {
+  "Walk8": 9,
+  "Atk8": 8,
+  "Die8": 7
+ },
+ "rybolak": {
+  "Walk8": 9,
+  "Atk8": 8,
+  "Die8": 7
+ },
+ "mglak": {
+  "Walk8": 9,
+  "Atk8": 8
+ },
+ "wiedzma": {
+  "Walk8": 9,
+  "Atk8": 8,
+  "Die8": 7
+ }
+}

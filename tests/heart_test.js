@@ -212,14 +212,14 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.eval(`(function(){ SceneManager.push(Scene_Debug); return 0; })()`);
     await t.until("SceneManager._scene instanceof Scene_Debug && SceneManager._scene._started", 10);
     await t.frames(5);
-    const f9 = await t.json(`(function(){ const s = SceneManager._scene, l = s._list; s.showTab(0); const rows = l._rows.filter(r => /^heart/.test(r.kind));
+    const f9 = await t.json(`(function(){ const s = SceneManager._scene, l = s._list; s.showTab(5); const rows = l._rows.filter(r => /^heart/.test(r.kind));
         const out = { kinds: rows.map(r => r.kind), labels: [] };
         const at = k => l._rows.findIndex(r => r.kind === k);
         l.select(at("heartEnd")); l.changeQty(1); out.labels.push(l.rowData().label);
         l.select(at("heartWorld")); l.changeQty(1); out.labels.push(l.rowData().label);
         l.select(at("heartLord")); l.changeQty(1); out.labels.push(l.rowData().label);
         out.after = l._rows[at("heartEnd") - 1].kind; return out; })()`);
-    t.check("F9 'Zdarzenia': after the lift's row - 'Serce: zakończenie' (←→ the six endings), 'Serce: świat' (as in the game / good / bad / mixed), 'Serce: Lord przy Sercu' (as in the game / ally / rival / absent)",
+    t.check("F9 'Fabuła i postacie' (2026-11-11: it was 'Zdarzenia'), section 'Podziemia i Serce': after the lift's row - 'Serce: zakończenie' (←→ the six endings), 'Serce: świat' (as in the game / good / bad / mixed), 'Serce: Lord przy Sercu' (as in the game / ally / rival / absent)",
         f9.kinds.join() === "heartEnd,heartWorld,heartLord" && f9.after === "ugLifts" && /Strażnik: ja/.test(f9.labels[0]) && /świat - dobry/.test(f9.labels[1]) && /Lord przy Sercu - sojusznik/.test(f9.labels[2]), f9);
     await t.shot(path.join(SHOTS, "serce_f9.png"));
     // OK on the ending's row: to the chamber, the Lord's scene (ally), then the ending - the hero's own watch, a year later someone asks

@@ -2,8 +2,8 @@
  "summary": {
   "zadania": 122,
   "mieszkancy": 84,
-  "mapy": 149,
-  "znaczniki": 332,
+  "mapy": 151,
+  "znaczniki": 351,
   "problemy": {
    "do sprawdzenia": 1,
    "uciążliwość": 4,
@@ -1993,7 +1993,7 @@
   {
    "key": "latarnik",
    "name": "Bazyli Krzesiwo",
-   "map": 159,
+   "map": 125,
    "reach": 71,
    "whys": [
     "poza mapą (izba_sen)"
@@ -2041,7 +2041,7 @@
   {
    "key": "jagna",
    "name": "Babka Jagna",
-   "map": 17,
+   "map": 3,
    "reach": 0,
    "whys": [
     "poza mapą (jagna_las)"
@@ -2071,7 +2071,7 @@
   {
    "key": "handlarz",
    "name": "Szymon Juczny",
-   "map": 22,
+   "map": 4,
    "reach": 65,
    "whys": [
     "poza mapą (handlarz_woz)"
@@ -2081,7 +2081,7 @@
   {
    "key": "patrol_latarnia_1",
    "name": "Żołnierz z patrolu",
-   "map": 159,
+   "map": 125,
    "reach": 50,
    "whys": [
     "poza mapą (lud_p159_noc)"
@@ -2091,7 +2091,7 @@
   {
    "key": "patrol_latarnia_2",
    "name": "Żołnierz z patrolu",
-   "map": 159,
+   "map": 125,
    "reach": 50,
    "whys": [
     "poza mapą (lud_p159_noc)"

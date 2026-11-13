@@ -1,0 +1,278 @@
+{
+ "mapa": 4,
+ "nazwa": "Łąka pod Gawrą",
+ "w": 120,
+ "h": 120,
+ "zestaw": 9,
+ "obszar": null,
+ "problemy": [
+  {
+   "kod": "O1",
+   "x": 0,
+   "y": 6,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 181 (B 13,6) - góra bez dołu (brak kafla 189 pod) w (0,6)"
+  },
+  {
+   "kod": "O1",
+   "x": 1,
+   "y": 6,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 182 (B 14,6) - góra bez dołu (brak kafla 190 pod) w (1,6)"
+  },
+  {
+   "kod": "O1",
+   "x": 0,
+   "y": 15,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 181 (B 13,6) - góra bez dołu (brak kafla 189 pod) w (0,15)"
+  },
+  {
+   "kod": "O1",
+   "x": 1,
+   "y": 15,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 182 (B 14,6) - góra bez dołu (brak kafla 190 pod) w (1,15)"
+  },
+  {
+   "kod": "O1",
+   "x": 0,
+   "y": 24,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 181 (B 13,6) - góra bez dołu (brak kafla 189 pod) w (0,24)"
+  },
+  {
+   "kod": "O1",
+   "x": 1,
+   "y": 24,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 182 (B 14,6) - góra bez dołu (brak kafla 190 pod) w (1,24)"
+  },
+  {
+   "kod": "O1",
+   "x": 0,
+   "y": 35,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 181 (B 13,6) - góra bez dołu (brak kafla 189 pod) w (0,35)"
+  },
+  {
+   "kod": "O1",
+   "x": 1,
+   "y": 35,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 182 (B 14,6) - góra bez dołu (brak kafla 190 pod) w (1,35)"
+  },
+  {
+   "kod": "O1",
+   "x": 0,
+   "y": 47,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 181 (B 13,6) - góra bez dołu (brak kafla 189 pod) w (0,47)"
+  },
+  {
+   "kod": "O1",
+   "x": 1,
+   "y": 47,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 182 (B 14,6) - góra bez dołu (brak kafla 190 pod) w (1,47)"
+  },
+  {
+   "kod": "O1",
+   "x": 0,
+   "y": 56,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 181 (B 13,6) - góra bez dołu (brak kafla 189 pod) w (0,56)"
+  },
+  {
+   "kod": "O1",
+   "x": 1,
+   "y": 56,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 182 (B 14,6) - góra bez dołu (brak kafla 190 pod) w (1,56)"
+  },
+  {
+   "kod": "O1",
+   "x": 0,
+   "y": 67,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 181 (B 13,6) - góra bez dołu (brak kafla 189 pod) w (0,67)"
+  },
+  {
+   "kod": "O1",
+   "x": 1,
+   "y": 67,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 182 (B 14,6) - góra bez dołu (brak kafla 190 pod) w (1,67)"
+  },
+  {
+   "kod": "O1",
+   "x": 0,
+   "y": 80,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 181 (B 13,6) - góra bez dołu (brak kafla 189 pod) w (0,80)"
+  },
+  {
+   "kod": "O1",
+   "x": 1,
+   "y": 80,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 182 (B 14,6) - góra bez dołu (brak kafla 190 pod) w (1,80)"
+  },
+  {
+   "kod": "O1",
+   "x": 0,
+   "y": 93,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 181 (B 13,6) - góra bez dołu (brak kafla 189 pod) w (0,93)"
+  },
+  {
+   "kod": "O1",
+   "x": 1,
+   "y": 93,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 182 (B 14,6) - góra bez dołu (brak kafla 190 pod) w (1,93)"
+  },
+  {
+   "kod": "O1",
+   "x": 0,
+   "y": 102,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 181 (B 13,6) - góra bez dołu (brak kafla 189 pod) w (0,102)"
+  },
+  {
+   "kod": "O1",
+   "x": 1,
+   "y": 102,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 182 (B 14,6) - góra bez dołu (brak kafla 190 pod) w (1,102)"
+  },
+  {
+   "kod": "O1",
+   "x": 0,
+   "y": 115,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 181 (B 13,6) - góra bez dołu (brak kafla 189 pod) w (0,115)"
+  },
+  {
+   "kod": "O1",
+   "x": 1,
+   "y": 115,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 182 (B 14,6) - góra bez dołu (brak kafla 190 pod) w (1,115)"
+  },
+  {
+   "kod": "Z2",
+   "x": 42,
+   "y": 58,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 136 'Wysoki suchy krzak', 137 'Sosna' nachodzą na kratce (42,58)"
+  },
+  {
+   "kod": "Z2",
+   "x": 43,
+   "y": 58,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 136 'Wysoki suchy krzak', 149 'Sosna (średnia)' nachodzą na kratce (43,58)"
+  },
+  {
+   "kod": "Z2",
+   "x": 38,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 120 'Splot gałęzi', 127 'Suchy krzaczek' nachodzą na kratce (38,59)"
+  },
+  {
+   "kod": "Z2",
+   "x": 43,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 136 'Wysoki suchy krzak', 147 'Pęknięty kamień' nachodzą na kratce (43,59)"
+  },
+  {
+   "kod": "Z2",
+   "x": 46,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 72 'Poszarpana skała', 154 'Sosna (niska)' nachodzą na kratce (46,59)"
+  },
+  {
+   "kod": "D4",
+   "x": 0,
+   "y": 43,
+   "waga": "info",
+   "opis": "rzecz do zbierania 356 'Pieniek' stoi w nieosiągalnym miejscu (0,43)"
+  },
+  {
+   "kod": "D4",
+   "x": 24,
+   "y": 83,
+   "waga": "info",
+   "opis": "rzecz do zbierania 250 'Ruda żelaza' stoi w nieosiągalnym miejscu (24,83)"
+  },
+  {
+   "kod": "D4",
+   "x": 25,
+   "y": 84,
+   "waga": "info",
+   "opis": "rzecz do zbierania 261 'Kamienny kopiec' stoi w nieosiągalnym miejscu (25,84)"
+  },
+  {
+   "kod": "D4",
+   "x": 26,
+   "y": 84,
+   "waga": "info",
+   "opis": "rzecz do zbierania 267 'Płaski kamień' stoi w nieosiągalnym miejscu (26,84)"
+  },
+  {
+   "kod": "D4",
+   "x": 26,
+   "y": 85,
+   "waga": "info",
+   "opis": "rzecz do zbierania 281 'Ruda żelaza' stoi w nieosiągalnym miejscu (26,85)"
+  },
+  {
+   "kod": "D4",
+   "x": 27,
+   "y": 85,
+   "waga": "info",
+   "opis": "rzecz do zbierania 282 'Kamienny kopiec' stoi w nieosiągalnym miejscu (27,85)"
+  },
+  {
+   "kod": "D4",
+   "x": 25,
+   "y": 86,
+   "waga": "info",
+   "opis": "rzecz do zbierania 296 'Płaski kamień' stoi w nieosiągalnym miejscu (25,86)"
+  },
+  {
+   "kod": "D4",
+   "x": 26,
+   "y": 86,
+   "waga": "info",
+   "opis": "rzecz do zbierania 298 'Splot gałęzi' stoi w nieosiągalnym miejscu (26,86)"
+  },
+  {
+   "kod": "D4",
+   "x": 23,
+   "y": 87,
+   "waga": "info",
+   "opis": "rzecz do zbierania 311 'Splot gałęzi' stoi w nieosiągalnym miejscu (23,87)"
+  },
+  {
+   "kod": "D4",
+   "x": 25,
+   "y": 87,
+   "waga": "info",
+   "opis": "rzecz do zbierania 312 'Ruda żelaza' stoi w nieosiągalnym miejscu (25,87)"
+  }
+ ],
+ "licznik": {
+  "O1": 22,
+  "Z2": 5,
+  "D4": 10
+ },
+ "png": "C:/Users/macie/OneDrive/Dokumenty/RMMZ/Tawerna/docs/mapy/kontrola_Map004.png",
+ "osiagalne": 11110,
+ "bez_wejsc": false,
+ "drobne_kieszenie": 6
+}

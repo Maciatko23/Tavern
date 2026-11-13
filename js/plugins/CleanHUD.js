@@ -813,6 +813,8 @@
         this._bars = [];
         this._bottom = 0;
         this._pills = null;
+        this._rowSprites = [];
+        this._rowKeys = [];
     };
     Sprite_CleanNeeds.prototype.ownRect = Sprite_CleanPart.prototype.hudRect;
     Sprite_CleanNeeds.prototype.hudRect = function() {
@@ -839,13 +841,32 @@
         const v = this._show ? needValues() : {}, shown = !$gameMessage.isBusy(), combat = shown && combatOn(), buffs = shown ? buffList() : [];
         this._pulse = (this._pulse + 1) % 60;
         const low = NEED_KEYS.filter(k => v[k] !== undefined && needLow(k, v[k]));
-        const blink = low.length ? (this._pulse < 30 ? "a" : "b") : "-";
-        const key = NEED_KEYS.map(k => (v[k] === undefined ? "x" : needNumber(k, v[k]) + ":" + Math.round(v[k] * 300))).join(",") + "|" + low.join(",") + blink + "|" + width + "|" + this.y + "|" + combat + "|" +
-            buffs.map(f => (f.icon || f.glyph) + f.text).join(",") + "|" + iconsReady() + facesReady();
-        if (key === this._key) return;
-        this._key = key;
-        this.redraw(v, low, blink === "a", width, combat, buffs);
+        const blinkOn = low.length > 0 && this._pulse < 30;
+        // (2026-11-12, wydajność) the plate is drawn whole only when its make-up changes - which bars, the width, the pills; each bar's
+        // row (its icon, track, fill and number) is a picture of its own, drawn again only when what it shows changes by a pixel or a
+        // digit. The stamina and the breath change nearly every frame in a fight and while resting after a run: the whole plate with
+        // all its text was drawn and sent to the GPU then.
+        const keys = NEED_KEYS.filter(k => v[k] !== undefined), barW = needBarW(width);
+        const key = keys.join(",") + "|" + width + "|" + this.y + "|" + combat + "|" + buffs.map(f => (f.icon || f.glyph) + f.text).join(",") + "|" + iconsReady() + facesReady();
+        if (key !== this._key) {
+            this._key = key;
+            this.redraw(v, low, blinkOn, width, combat, buffs);
+            return;
+        }
+        for (let i = 0; i < keys.length; i++) {
+            const k = keys[i];
+            if (needRowKey(k, v, low, blinkOn, barW) !== this._rowKeys[i]) this.drawRow(i, k, v, low, blinkOn, barW);
+            else if (this._bars[i]) this._bars[i].ratio = +clamp01(v[k]).toFixed(3);
+        }
     };
+    // a row's picture: the band of its bar with room above and below for a low bar's glow and the number's shadow
+    const ROW_PAD = 12;
+    const needBarW = width => Math.max(60, width - (BARS.w - BARS.barW));
+    // what a row shows: its number, its fill to the pixel, low (and the blink's phase while low)
+    function needRowKey(k, v, low, blinkOn, barW) {
+        const isLow = low.includes(k);
+        return needNumber(k, v[k]) + ":" + Math.round(barW * clamp01(v[k])) + ":" + (isLow ? (blinkOn ? "A" : "B") : "-");
+    }
     // the number by a bar: health in % of the most, the stamina, the food and the water as the game counts them, the breath in %
     function needNumber(k, v) {
         if (k === "stamina" && typeof $gameSystem.stamina === "function") return String(Math.round($gameSystem.stamina()));
@@ -858,40 +879,19 @@
         b.clear();
         this._rings = keys;
         this._bars = [];
+        this._rowKeys = [];
+        const rows = this._rowSprites;
+        while (rows.length > keys.length) { const s = rows.pop(); this.removeChild(s); s.bitmap.destroy(); }
         let right = 0, bottom = 0;
         if (keys.length) {
-            const n = keys.length, barW = Math.max(60, width - (BARS.w - BARS.barW)), ys = keys.map((k, i) => BARS.pad + BARS.step / 2 + i * BARS.step);
+            const n = keys.length, barW = needBarW(width);
             bottom = n * BARS.step + BARS.pad * 2;
             // (no plate behind the bars: the user, 2026-10-23 - the tracks are dark, the numbers outlined)
-            const ix = BARS.padX, bx = ix + BARS.icon + 6, vx = bx + barW + 8;
-            keys.forEach((k, i) => {
-                const y = ys[i], isLow = low.includes(k), col = isLow ? LOW_COLOUR : C[k], ratio = clamp01(v[k]), by = Math.round(y - BARS.barH / 2);
-                if (k === "breath") drawBreathGlyph(ctx, ix + BARS.icon / 2, y, isLow ? LOW_COLOUR : C.breath, 2);
-                else { const [icon, mode] = NEED_ICONS[k]; drawIcon(b, icon, ix, y - BARS.icon / 2, BARS.icon, mode); }
-                ctx.save();
-                ctx.fillStyle = "rgba(8,9,11,0.8)";   // the track: a dark edge, the dark inside
-                roundPath(ctx, bx - 1, by - 1, barW + 2, BARS.barH + 2, (BARS.barH + 2) / 2);
-                ctx.fill();
-                ctx.fillStyle = "rgba(52,54,60,0.95)";
-                roundPath(ctx, bx, by, barW, BARS.barH, BARS.barH / 2);
-                ctx.fill();
-                const fw = Math.round(barW * ratio);
-                if (fw > 0) {
-                    if (isLow && blinkOn) { ctx.shadowColor = col; ctx.shadowBlur = 8; }
-                    ctx.globalAlpha = isLow && !blinkOn ? 0.6 : 1;
-                    ctx.fillStyle = col;
-                    roundPath(ctx, bx, by, Math.max(BARS.barH, fw), BARS.barH, BARS.barH / 2);
-                    ctx.fill();
-                    ctx.shadowBlur = 0;
-                    ctx.globalAlpha = 1;
-                    ctx.fillStyle = "rgba(255,255,255,0.22)";   // a faint light on its top edge
-                    ctx.fillRect(bx + 2, by, Math.max(0, Math.max(BARS.barH, fw) - 4), 1);
-                }
-                ctx.restore();
-                textOut(b, needNumber(k, v[k]), vx, y - 10, BARS.valW, 20, "right", { size: 14, color: isLow ? LOW_COLOUR : C.text, ow: 3 });
-                // (the tests read what is drawn - on the screen)
-                this._bars.push({ key: k, x: this.x + bx, y: this.y + y, w: barW, h: BARS.barH, ratio: +ratio.toFixed(3), fill: fw, colour: col, low: isLow, number: needNumber(k, v[k]) });
-            });
+            for (let i = 0; i < n; i++) {
+                if (!rows[i]) { rows[i] = new Sprite(new Bitmap(b.width, BARS.step + ROW_PAD * 2)); this.addChild(rows[i]); }
+                rows[i].y = BARS.pad + i * BARS.step - ROW_PAD;   // (its band's middle where the bar's row was on the plate)
+                this.drawRow(i, keys[i], v, low, blinkOn, barW);
+            }
             right = width;
         }
         // the pills under the plate: "Tryb walki", then the premia
@@ -919,6 +919,40 @@
         this._pills = { pillY: this.y + py, combat: !!combat, buffs: buffs.length };
         const h = Math.max(bottom, pills ? py + ph + 2 : 0), w = Math.max(right, px);
         this._box = h > 0 && w > 0 ? { x: 0, y: 0, w, h } : null;
+    };
+    // one bar's row, on its own picture: the icon (the breath: its sign), the dark track, the fill, the number
+    Sprite_CleanNeeds.prototype.drawRow = function(i, k, v, low, blinkOn, barW) {
+        const s = this._rowSprites[i], b = s.bitmap, ctx = b.context;
+        const y = ROW_PAD + BARS.step / 2, isLow = low.includes(k), col = isLow ? LOW_COLOUR : C[k], ratio = clamp01(v[k]), by = Math.round(y - BARS.barH / 2);
+        const ix = BARS.padX, bx = ix + BARS.icon + 6, vx = bx + barW + 8;
+        b.clear();
+        if (k === "breath") drawBreathGlyph(ctx, ix + BARS.icon / 2, y, isLow ? LOW_COLOUR : C.breath, 2);
+        else { const [icon, mode] = NEED_ICONS[k]; drawIcon(b, icon, ix, y - BARS.icon / 2, BARS.icon, mode); }
+        ctx.save();
+        ctx.fillStyle = "rgba(8,9,11,0.8)";   // the track: a dark edge, the dark inside
+        roundPath(ctx, bx - 1, by - 1, barW + 2, BARS.barH + 2, (BARS.barH + 2) / 2);
+        ctx.fill();
+        ctx.fillStyle = "rgba(52,54,60,0.95)";
+        roundPath(ctx, bx, by, barW, BARS.barH, BARS.barH / 2);
+        ctx.fill();
+        const fw = Math.round(barW * ratio);
+        if (fw > 0) {
+            if (isLow && blinkOn) { ctx.shadowColor = col; ctx.shadowBlur = 8; }
+            ctx.globalAlpha = isLow && !blinkOn ? 0.6 : 1;
+            ctx.fillStyle = col;
+            roundPath(ctx, bx, by, Math.max(BARS.barH, fw), BARS.barH, BARS.barH / 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = "rgba(255,255,255,0.22)";   // a faint light on its top edge
+            ctx.fillRect(bx + 2, by, Math.max(0, Math.max(BARS.barH, fw) - 4), 1);
+        }
+        ctx.restore();
+        textOut(b, needNumber(k, v[k]), vx, y - 10, BARS.valW, 20, "right", { size: 14, color: isLow ? LOW_COLOUR : C.text, ow: 3 });
+        b._baseTexture.update();
+        this._rowKeys[i] = needRowKey(k, v, low, blinkOn, barW);
+        // (the tests read what is drawn - on the screen)
+        this._bars[i] = { key: k, x: this.x + bx, y: this.y + s.y + y, w: barW, h: BARS.barH, ratio: +ratio.toFixed(3), fill: fw, colour: col, low: isLow, number: needNumber(k, v[k]) };
     };
     // the breath's sign (no icon of its own): three gusts of air - a 7 x 6 pixel sign drawn `scale` x (3 by default), outlined
     const BREATH_GLYPH = ["#####..", ".....#.", "######.", ".......", "####...", "....#.."];

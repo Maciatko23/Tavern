@@ -252,7 +252,7 @@ akt3.najemnik = Najemnik Kompanii
 
 # ======================================================================== D48 „Mapa Kruczej Wyspy” (Teofil, druga wizyta)
 zadania.D48.title = Mapa Kruczej Wyspy
-zadania.D48.where = tawerna (Palarnia i czytelnia, pokój 22)
+zadania.D48.where = tawerna (pokój 6)
 zadania.D48.when = druga wizyta Teofila Cyrkla (od dnia 40)
 zadania.D48.desc = Teofil Cyrkiel wrócił z gotową mapą wyspy. I z pytaniem o siedem miejsc, gdzie „stare linie murów się schodzą”.
 zadania.D48.fail.text = Teofil odpłynął z mapą twierdzy.
@@ -268,7 +268,7 @@ Wiedziałem! Siadaj. Mapa nie kłamie - kłamią ci, którzy ją zamawiają.
 [zadania.D48.offer.decline]
 Nie teraz? Mapa poczeka. Mapy są cierpliwe.
 
-zadania.D48.steps.0.text = Teofil chce narysować dawną twierdzę Kruczych Skał - kupcy z lądu zapłacą za taką mapę. Pomóż mu (25 G), przekonaj, żeby stare mury ominął, albo zabierz mu szkic nocą z tuby (pokój 22).
+zadania.D48.steps.0.text = Teofil chce narysować dawną twierdzę Kruczych Skał - kupcy z lądu zapłacą za taką mapę. Pomóż mu (25 G), przekonaj, żeby stare mury ominął, albo zabierz mu szkic nocą z tuby (pokój 6).
 
 [d48.pyta]
 Siedem miejsc: tawerna, kamieniołom, latarnia, pustelnia, urwisko, kopiec, dwór. Wszystkie na liniach dawnych murów. Rysujemy twierdzę?
@@ -288,7 +288,7 @@ Ha! Twierdza Kruczych Skał - na papierze, po trzystu latach! Kupcy z lądu zap�
 Bez powodu? Mapa nie kłamie, chłopcze. Kłamią ci, którzy ją zamawiają.
 
 [d48.ukradnij]
-> (Szkic twierdzy leży w skórzanej tubie, w pokoju 22. Kiedy Teofila nie ma...)
+> (Szkic twierdzy leży w skórzanej tubie, w pokoju 6. Kiedy Teofila nie ma...)
 
 napis.mapa = Mapa Kruczej Wyspy - pamiątka od Teofila
 rzeczy.mapa_wyspy.name = Mapa Kruczej Wyspy (od Teofila)

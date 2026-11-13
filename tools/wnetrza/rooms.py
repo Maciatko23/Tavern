@@ -381,7 +381,7 @@ def chata_drwala(mp):
     rug_k(mp, 5, 6, 7, 7, RUG_BROWN)
     # ---- the charcoal corner (left)
     sacks(mp, 1, 4)
-    mp.tiles("D", 14, 3, 1, 2, 3, 3); mp.solid.add((3, 4))
+    mp.t("D", 14, 4, 3, 4); mp.solid.add((3, 4))        # (the crate above it stood on the wall - the user, 2026-11-12)
     mp.tiles("D", 11, 8, 2, 1, 1, 8); mp.solid |= {(1, 8), (2, 8)}
     mp.t("D", 9, 4, 3, 8); mp.solid.add((3, 8))
     barrel(mp, 1, 6, "water")

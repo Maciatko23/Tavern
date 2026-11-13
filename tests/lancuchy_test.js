@@ -13,7 +13,7 @@
 //     przysięga, Tymon w garnizonie); noc pod piątką (Szczerba pod drzwiami, zwłoka do promu, potem zabrany); wskazanie (60 G, wydany)
 //   - zapis i wczytanie: stan łańcuchów zostaje
 // Uruchom: node tests/run.js lancuchy_test --port 9791
-const kit = require("./lib/kit.js");
+const kit = (function(){ try { return require("./lib/kit.js"); } catch (e) { return require("../../../../tests/lib/kit.js"); } })();
 
 kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     const J = e => t.json(e);
@@ -107,7 +107,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     // ---------------------------------------------------------------- noc sprzedaży: kurier na piętrze gości
     await t.eval("SwieteKosci.stan().noc = $gameSystem.dayNightDay(); 0");
     await at(19, 22.2, 10);
-    await go(25, 78, 51, 6);
+    await go(25, 8, 17, 4);
     await t.frames(40);
     const ku = await J("(function(){ const e = $gameMap.event(3050); return e ? { x: e.x, y: e.y, shown: !e.isTransparent(), sheet: e.characterName(), widoczny: SwieteKosci.kurierWidoczny() } : null; })()");
     const kt = await gadaj(3050, []);
@@ -115,7 +115,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const w15e = await W("W15");
     const dw = await J("SwieteKosci.stan().dowod");
     t.check("22:12, piętro gości: kurier w kapturze pod drzwiami pokoju 12 (zdarzenie 3050); rozmowa - dowód, rozdz. 3 „Skrzynka Gaspara”",
-        !!ku && ku.shown && ku.x === 81 && ku.y === 52 && /Pan Vey płaci/.test(kt.text) && dw.kurier === 1 && w15e.name === "w15Skrzynka", { ku, kt: kt.text.slice(0, 120), dw, w15e });
+        !!ku && ku.shown && ku.x === 58 && ku.y === 16 && /Pan Vey płaci/.test(kt.text) && dw.kurier === 1 && w15e.name === "w15Skrzynka", { ku, kt: kt.text.slice(0, 120), dw, w15e });
 
     // ---------------------------------------------------------------- skrzynka na rynku (przy kapralu)
     const op0 = await J("TownQuests.opinion()"), re0 = await J("Podroznicy.renoma()");

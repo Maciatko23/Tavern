@@ -1,0 +1,4 @@
+2026-11-08 dzielnica: wzgórze zamkowe + mur + pas południowy (Błonia) zachowane z obecnej mapy; plac ze studnią w środku (59,57), 18 budynków (Winlu w stylu paczki + paczka), warsztaty (kuźnia, bednarz, garbarnia, cieśla, strażnica), ogrody i sady - pierwszy układ zbudowany, kontrola osiągalności 0 błędów
+2026-11-08 SZKIC GOTOWY: docs/miasto4/calosc_szkic.png (układ budynków, ulic i placu ze studnią (59,57); rekwizyty i przepięcia już w środku, kontrole na końcu)
+2026-11-08 dzielnica jądro (rząd północny + plac + rząd południowy z warsztatami) gotowe; ogrody/sady/pola/łąki wokół; pola Błoni wypełnione. Zdjęcia docs/miasto4/*.png
+2026-11-08 MIASTO GOTOWE: mały rynek (x50-70,y52-64) z 3 skupiskami straganów, test_miasto4 13/13 (drzwi 25/25 w pełnym przebiegu), konie 25/25; instalator: python tools/miasto4/zainstaluj.py [--wykonaj] przy zamkniętym edytorze

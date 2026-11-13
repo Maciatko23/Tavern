@@ -53,7 +53,7 @@ unit.test(t => {
     const switches = {}, gained = [];
     const globals = {
         Game_System, $dataItems: unit.data("Items"),
-        $gameSelfSwitches: { value: k => !!switches[k.join(",")], setValue: (k, v) => { switches[k.join(",")] = v; } },
+        $gameSelfSwitches: { _data: switches, value: k => !!switches[k.join(",")], setValue: (k, v) => { switches[k.join(",")] = v; } },   // (_data: ChoppableTree_Objects isCharred reads it directly)
         $gameParty: { gainItem: (item, n) => gained.push([item.id, n]), hasItem: () => false },
         $gameTemp: { pushLootPopup() {} }
     };

@@ -1,0 +1,709 @@
+[
+ {
+  "opis": "Tawerna 2 - room renumbering for the story code (slice B). Old -> new room of each traveller / story use. Hero rooms 1,2,3 (+komnata; 3 and Zloty only with furtka). Eryk 7 (POKOJ_ERYKA). Travellers' rooms: 4 rodzinny, 5 2-os., 6 2-os., 8 1-os., 9 2-os., 10 2-os., 11 rodzinny, 12 1-os. (old 13..24 are gone). 'miejsce' cells = the old room's miejsce shifted by the box move.",
+  "remap_pokoi": {
+   "poborca": "4 -> 4",
+   "dezerter": "5 -> 5",
+   "lowczyni": "6 -> 6",
+   "Eryk": "7 -> 7",
+   "kompania": "9,9,10,10 -> 9,9,10,10",
+   "medyk": "11 -> 11",
+   "relikwie": "12 -> 12",
+   "pielgrzym": "15 -> 8",
+   "wizytator": "16 -> 8",
+   "tobiasz": "23 -> 8",
+   "ksenia": "18 -> 11",
+   "grajek": "17 -> 11",
+   "zboze": "20 -> 4",
+   "kartograf": "22 -> 6",
+   "urszula": "21 -> 4",
+   "POKOJE": {
+    "4": [
+     "rodzinny",
+     [
+      35,
+      8,
+      8
+     ]
+    ],
+    "5": [
+     "2-os.",
+     [
+      49,
+      8,
+      2
+     ]
+    ],
+    "6": [
+     "2-os.",
+     [
+      5,
+      28,
+      4
+     ]
+    ],
+    "8": [
+     "1-os.",
+     [
+      5,
+      41,
+      4
+     ]
+    ],
+    "9": [
+     "2-os.",
+     [
+      54,
+      27,
+      4
+     ]
+    ],
+    "10": [
+     "2-os.",
+     [
+      21,
+      27,
+      2
+     ]
+    ],
+    "11": [
+     "rodzinny",
+     [
+      57,
+      40,
+      8
+     ]
+    ],
+    "12": [
+     "1-os.",
+     [
+      58,
+      8,
+      2
+     ]
+    ]
+   },
+   "Eryk_spot_room7": [
+    25,
+    40,
+    4
+   ]
+  }
+ },
+ {
+  "plik": "js/plugins/Podroznicy_Data.js",
+  "stare": "    const POKOJE = {\n        4: { typ: \"rodzinny\", miejsce: [67, 38, 8] }, 5: { typ: \"2-os.\", miejsce: [14, 38, 8] }, 6: { typ: \"2-os.\", miejsce: [84, 42, 2] },\n        8: { typ: \"1-os.\", miejsce: [92, 39, 4] }, 9: { typ: \"2-os.\", miejsce: [28, 63, 2] }, 10: { typ: \"2-os.\", miejsce: [68, 63, 2] },\n        11: { typ: \"rodzinny\", miejsce: [24, 63, 2] }, 12: { typ: \"2-os.\", miejsce: [72, 63, 2] }, 13: { typ: \"rodzinny\", miejsce: [11, 89, 2] },\n        14: { typ: \"rodzinny\", miejsce: [85, 65, 2] }, 15: { typ: \"1-os.\", miejsce: [39, 27, 4] }, 16: { typ: \"1-os.\", miejsce: [59, 27, 4] },\n        17: { typ: \"2-os.\", miejsce: [67, 27, 4] }, 18: { typ: \"rodzinny\", miejsce: [77, 27, 4] }, 19: { typ: \"rodzinny\", miejsce: [89, 27, 4] },\n        20: { typ: \"rodzinny\", miejsce: [31, 6, 4] }, 21: { typ: \"1-os.\", miejsce: [23, 8, 4] }, 22: { typ: \"2-os.\", miejsce: [13, 6, 4] },\n        23: { typ: \"1-os.\", miejsce: [5, 8, 4] }, 24: { typ: \"2-os.\", miejsce: [106, 70, 2] }\n    };\n",
+  "nowe": "    const POKOJE = {\n        4: { typ: \"rodzinny\", miejsce: [35, 8, 8] }, 5: { typ: \"2-os.\", miejsce: [49, 8, 2] }, 6: { typ: \"2-os.\", miejsce: [5, 28, 4] },\n        8: { typ: \"1-os.\", miejsce: [5, 41, 4] }, 9: { typ: \"2-os.\", miejsce: [54, 27, 4] }, 10: { typ: \"2-os.\", miejsce: [21, 27, 2] },\n        11: { typ: \"rodzinny\", miejsce: [57, 40, 8] }, 12: { typ: \"1-os.\", miejsce: [58, 8, 2] }\n    };\n",
+  "ile": 1,
+  "po": "Tawerna 2: 8 travellers' rooms (4,5,6,8,9,10,11,12); the places = the old rooms' places shifted with the boxes (verified passable)"
+ },
+ {
+  "plik": "js/plugins/Podroznicy_Data.js",
+  "stare": "pokoj: 23, profil: \"goniec\"",
+  "nowe": "pokoj: 8, profil: \"goniec\"",
+  "ile": 1,
+  "po": "OBSADA goniec: room 23 -> 8"
+ },
+ {
+  "plik": "js/plugins/Podroznicy_Data.js",
+  "stare": "pokoj: 20, profil: \"zboze\"",
+  "nowe": "pokoj: 4, profil: \"zboze\"",
+  "ile": 1,
+  "po": "OBSADA zboze: room 20 -> 4"
+ },
+ {
+  "plik": "js/plugins/Podroznicy_Data.js",
+  "stare": "pokoj: 22, profil: \"kartograf\"",
+  "nowe": "pokoj: 6, profil: \"kartograf\"",
+  "ile": 1,
+  "po": "OBSADA kartograf: room 22 -> 6"
+ },
+ {
+  "plik": "js/plugins/Podroznicy_Data.js",
+  "stare": "pokoj: 18, profil: \"ksenia\"",
+  "nowe": "pokoj: 11, profil: \"ksenia\"",
+  "ile": 1,
+  "po": "OBSADA ksenia: room 18 -> 11"
+ },
+ {
+  "plik": "js/plugins/Podroznicy_Data.js",
+  "stare": "pokoj: 16, profil: \"wizytator\"",
+  "nowe": "pokoj: 8, profil: \"wizytator\"",
+  "ile": 1,
+  "po": "OBSADA wizytator: room 16 -> 8"
+ },
+ {
+  "plik": "js/plugins/Podroznicy_Data.js",
+  "stare": "pokoj: 21, profil: \"urszula\"",
+  "nowe": "pokoj: 4, profil: \"urszula\"",
+  "ile": 1,
+  "po": "OBSADA urszula: room 21 -> 4"
+ },
+ {
+  "plik": "js/plugins/Podroznicy_Data.js",
+  "stare": "pokoj: 17, profil: \"grajek\"",
+  "nowe": "pokoj: 11, profil: \"grajek\"",
+  "ile": 1,
+  "po": "OBSADA grajek: room 17 -> 11"
+ },
+ {
+  "plik": "js/plugins/Podroznicy_Data.js",
+  "stare": "pokoj: 15, profil: \"pielgrzym\"",
+  "nowe": "pokoj: 8, profil: \"pielgrzym\"",
+  "ile": 1,
+  "po": "OBSADA pielgrzym: room 15 -> 8"
+ },
+ {
+  "plik": "js/plugins/Podroznicy_Data.js",
+  "stare": "pokoje 4-24, plany dnia",
+  "nowe": "pokoje 4-12, plany dnia",
+  "ile": 1,
+  "po": "plugin description"
+ },
+ {
+  "plik": "js/plugins/Podroznicy_Data.js",
+  "stare": "Pokoje gości 4-24 (bez 7 - Eryk Sowa)",
+  "nowe": "Pokoje gości 4-12 (bez 7 - Eryk Sowa)",
+  "ile": 1,
+  "po": "help text"
+ },
+ {
+  "plik": "js/plugins/Intrygi_Data.js",
+  "stare": "start: [20, 49, 6], trasa: [[44, 50], [48, 56], [48, 62]],",
+  "nowe": "start: [20, 16, 6], trasa: [[14, 19], [14, 32], [14, 46], [14, 53], [26, 53], [26, 48]],",
+  "ile": 1,
+  "po": "Ozzy's night walk: from C1 down the connector hall x11..17 to the stairs down (26,48)"
+ },
+ {
+  "plik": "js/plugins/Intrygi_Data.js",
+  "stare": "start: [16, 49, 6], trasa: [[44, 50], [48, 56], [48, 62]],",
+  "nowe": "start: [49, 16, 6], trasa: [[40, 17], [30, 17], [20, 17], [14, 19], [14, 32], [14, 46], [14, 53], [26, 53], [26, 48]],",
+  "ile": 1,
+  "po": "Tymon's night walk: starts in front of room 5's door (11,52), same route"
+ },
+ {
+  "plik": "js/plugins/Intrygi_Data.js",
+  "stare": "const LIST_GDZIE = { 1: [25, 38, 44], 2: [25, 58, 44], 3: [25, 28, 44], komnata: [25, 67, 12] };",
+  "nowe": "const LIST_GDZIE = { 1: [25, 18, 11], 2: [25, 27, 11], 3: [25, 7, 11], komnata: [25, 42, 44] };",
+  "ile": 1,
+  "po": "the letter inside the hero's room by its door (arrival cell of the door: x of the door, y44; komnata y12)"
+ },
+ {
+  "plik": "js/plugins/Intrygi_Data.js",
+  "stare": "pokoj: \"20\", kto: \"zboze\"",
+  "nowe": "pokoj: \"4\", kto: \"zboze\"",
+  "ile": 1,
+  "po": "d42Umowa search: Zenon's room 4 (Kufer ev363)"
+ },
+ {
+  "plik": "js/plugins/Intrygi_Data.js",
+  "stare": "pokoj: \"18\", kto: \"ksenia\"",
+  "nowe": "pokoj: \"11\", kto: \"ksenia\"",
+  "ile": 1,
+  "po": "d46Pokoj search: Ksenia's room 11"
+ },
+ {
+  "plik": "js/plugins/Intrygi_Data.js",
+  "stare": "sadza: [25, 29, 49]",
+  "nowe": "sadza: [25, 8, 16]",
+  "ile": 1,
+  "po": "soot by room 3's door (door 12,48; the cell right-below like before)"
+ },
+ {
+  "plik": "js/plugins/Podroznicy5_Data.js",
+  "stare": "Feliks before the door of room 4 (68,48) 22:40-23:20",
+  "nowe": "Feliks before the door of room 4 (37,15) 22:40-23:20",
+  "ile": 1,
+  "po": "comment"
+ },
+ {
+  "plik": "js/plugins/Podroznicy5_Data.js",
+  "stare": "x: 68, y: 49, dir: 8, sheet: \"$Npc_Feliks\"",
+  "nowe": "x: 37, y: 16, dir: 8, sheet: \"$Npc_Feliks\"",
+  "ile": 1,
+  "po": "Feliks in the south corridor before room 4's door (37,15)"
+ },
+ {
+  "plik": "js/plugins/Podroznicy5_Data.js",
+  "stare": "idz: [MAP.pietro, 61, 40, 6]",
+  "nowe": "idz: [MAP.pietro, 30, 8, 6]",
+  "ile": 1,
+  "po": "F9 jump: hero in room 2 at the wall of room 4 (wall x31)"
+ },
+ {
+  "plik": "js/plugins/Podroznicy5_Data.js",
+  "stare": "idz: [MAP.pietro, 67, 41, 8]",
+  "nowe": "idz: [MAP.pietro, 36, 8, 8]",
+  "ile": 1,
+  "po": "F9 jump: room 4 interior"
+ },
+ {
+  "plik": "js/plugins/Podroznicy5_Data.js",
+  "stare": "idz: [MAP.pietro, 32, 60, 4]",
+  "nowe": "idz: [MAP.pietro, 20, 19, 2]",
+  "ile": 1,
+  "po": "F9 jump: C1 in front of room 10's door (20,20)"
+ },
+ {
+  "plik": "js/plugins/Podroznicy5_Data.js",
+  "stare": "idz: [MAP.pietro, 13, 9, 8]",
+  "nowe": "idz: [MAP.pietro, 5, 30, 8]",
+  "ile": 1,
+  "po": "F9 jump: in Teofil's room 6 below his place (5,28)"
+ },
+ {
+  "plik": "js/plugins/Podroznicy5.js",
+  "stare": "id: \"d48Tuba\", pokoj: \"22\"",
+  "nowe": "id: \"d48Tuba\", pokoj: \"6\"",
+  "ile": 1,
+  "po": "D48 tube search: Teofil's room 6"
+ },
+ {
+  "plik": "js/plugins/Dezerter_Data.js",
+  "stare": "// room 5 on the guests' floor: its door (16,48) - Szczerba stands before it on her night (the corridor's cell below)\n    const DRZWI = { pokoj: \"5\", przed: [16, 49, 8] };",
+  "nowe": "// room 5 on the guests' floor: its door (49,15) - Szczerba stands before it on her night (the corridor's cell below)\n    const DRZWI = { pokoj: \"5\", przed: [49, 16, 8] };",
+  "ile": 1,
+  "po": "Tawerna 2: room 5's door is ev53 (49,15) on C1, front cell (49,16), facing up"
+ },
+ {
+  "plik": "js/plugins/Dezerter_Data.js",
+  "stare": "idz: [MAP.pietro, 14, 40, 8]",
+  "nowe": "idz: [MAP.pietro, 48, 16, 8]",
+  "ile": 1,
+  "po": "F9: hero listens at the door/wall of room 5 from the corridor (wall y53)"
+ },
+ {
+  "plik": "js/plugins/Dezerter_Data.js",
+  "stare": "idz: [MAP.pietro, 18, 51, 4]",
+  "nowe": "idz: [MAP.pietro, 51, 17, 4]",
+  "ile": 1,
+  "po": "F9: hero near Szczerba at the door"
+ },
+ {
+  "plik": "js/plugins/SwieteKosci_Data.js",
+  "stare": "before the door of room 12 (the door 81,53 - the corridor's cell above it),",
+  "nowe": "before the door of room 12 (the door 58,15 - the corridor's cell below it),",
+  "ile": 1,
+  "po": "comment"
+ },
+ {
+  "plik": "js/plugins/SwieteKosci_Data.js",
+  "stare": "x: 81, y: 52, dir: 2, sheet: \"$Npc_Kurier\"",
+  "nowe": "x: 58, y: 16, dir: 8, sheet: \"$Npc_Kurier\"",
+  "ile": 1,
+  "po": "courier before room 12's door (58,15) on the north corridor, facing up"
+ },
+ {
+  "plik": "js/plugins/SwieteKosci_Data.js",
+  "stare": "idz: [MAP.pietro, 74, 50, 6]",
+  "nowe": "idz: [MAP.pietro, 55, 16, 6]",
+  "ile": 1,
+  "po": "F9: hero in the north corridor 3 cells west of the courier"
+ },
+ {
+  "plik": "js/plugins/SwieteKosci_Data.js",
+  "stare": "room 16, two ferries after Gaspar",
+  "nowe": "room 8, two ferries after Gaspar",
+  "ile": 1,
+  "po": "comment"
+ },
+ {
+  "plik": "js/plugins/Poselstwo_Data.js",
+  "stare": "lord: { id: 3070, map: MAP.apartamenty, x: 32, y: 40, dir: 4,",
+  "nowe": "lord: { id: 3070, map: MAP.apartamenty, x: 24, y: 10, dir: 4,",
+  "ile": 1,
+  "po": "council in the Lord's salon: Lord at the east head of the long table (17..21,10..11)"
+ },
+ {
+  "plik": "js/plugins/Poselstwo_Data.js",
+  "stare": "feliks: { id: 3071, map: MAP.apartamenty, x: 30, y: 43, dir: 8,",
+  "nowe": "feliks: { id: 3071, map: MAP.apartamenty, x: 21, y: 12, dir: 8,",
+  "ile": 1,
+  "po": "Feliks between the chairs south of the table, facing it"
+ },
+ {
+  "plik": "js/plugins/Poselstwo_Data.js",
+  "stare": "albin: { id: 3072, map: MAP.apartamenty, x: 65, y: 29, dir: 2,",
+  "nowe": "albin: { id: 3072, map: MAP.apartamenty, x: 25, y: 24, dir: 2,",
+  "ile": 1,
+  "po": "Albin by the Zloty door (7,31) in the hall"
+ },
+ {
+  "plik": "js/plugins/Poselstwo_Data.js",
+  "stare": "wosk: { id: 3073, map: MAP.pietro, x: 45, y: 25 },",
+  "nowe": "wosk: { id: 3073, map: MAP.pietro, x: 8, y: 50 },",
+  "ile": 1,
+  "po": "wax on C1 beside the front cell of room 8's door (33,21)"
+ },
+ {
+  "plik": "js/plugins/Poselstwo_Data.js",
+  "stare": "krata: { id: 3074, map: MAP.pietro, x: 91, y: 17 }",
+  "nowe": "krata: { id: 3074, map: MAP.pietro, x: 3, y: 51 }",
+  "ile": 1,
+  "po": "prints at the gilded gate (50,16)"
+ },
+ {
+  "plik": "js/plugins/Poselstwo_Data.js",
+  "stare": "const NARADA = { posel: [28, 40], godziny: [21, 22.5] };",
+  "nowe": "const NARADA = { posel: [17, 10], godziny: [21, 22.5] };",
+  "ile": 1,
+  "po": "the envoy held at the west end of the council table"
+ },
+ {
+  "plik": "js/plugins/Poselstwo_Data.js",
+  "stare": "const MIEJSCA = { posel_wnetrze: [65, 40, 4], gwardzista_wnetrze: [66, 30, 2] };",
+  "nowe": "const MIEJSCA = { posel_wnetrze: [22, 31, 8], gwardzista_wnetrze: [26, 25, 2] };",
+  "ile": 1,
+  "po": "envoy before the Zloty fireplace (4..5,35), Ostap beside the door in the hall"
+ },
+ {
+  "plik": "js/plugins/Poselstwo_Data.js",
+  "stare": "idz: [MAP.karczma, 52, 33, 8]",
+  "nowe": "idz: [MAP.karczma, 12, 31, 8]",
+  "ile": 1,
+  "po": "F9: hall side of Borgar's bar (a cell other than A's AT_BAR)"
+ },
+ {
+  "plik": "js/plugins/Poselstwo_Data.js",
+  "stare": "idz: [MAP.apartamenty, 41, 40, 4]",
+  "nowe": "idz: [MAP.apartamenty, 20, 22, 8]",
+  "ile": 1,
+  "po": "F9: council - hall before the Lord's salon door (19,19)"
+ },
+ {
+  "plik": "js/plugins/Poselstwo_Data.js",
+  "stare": "idz: [MAP.apartamenty, 62, 28, 6]",
+  "nowe": "idz: [MAP.apartamenty, 23, 24, 6]",
+  "ile": 1,
+  "po": "F9: theft - hall, left of Albin (5,29)"
+ },
+ {
+  "plik": "js/plugins/Poselstwo_Data.js",
+  "stare": "idz: [MAP.pietro, 45, 27, 8]",
+  "nowe": "idz: [MAP.pietro, 8, 51, 8]",
+  "ile": 1,
+  "po": "F9: the wax (5,17)"
+ },
+ {
+  "plik": "js/plugins/Poselstwo_Data.js",
+  "stare": "idz: [MAP.apartamenty, 64, 29, 2]",
+  "nowe": "idz: [MAP.apartamenty, 27, 25, 8]",
+  "ile": 1,
+  "po": "F9: list - before the Zloty door"
+ },
+ {
+  "plik": "js/plugins/Poselstwo_Data.js",
+  "stare": "the traveller \"pielgrzym\", room 15)",
+  "nowe": "the traveller \"pielgrzym\", room 8)",
+  "ile": 1,
+  "po": "comment"
+ },
+ {
+  "plik": "js/plugins/Poselstwo_Data.js",
+  "stare": "the council in the Great\n// salon the next evening is heard through the dining room's wall,",
+  "nowe": "the council in the Lord's\n// salon the next evening is heard at its door from the hall,",
+  "ile": 1,
+  "po": "comment"
+ },
+ {
+  "plik": "js/plugins/Poselstwo.js",
+  "stare": "mapa: D.MAP.pietro, pokoj: \"15\", godziny: CZ.okno",
+  "nowe": "mapa: D.MAP.pietro, pokoj: \"8\", godziny: CZ.okno",
+  "ile": 1,
+  "po": "w14Okno: Albin's room is 8"
+ },
+ {
+  "plik": "js/plugins/Poselstwo.js",
+  "stare": "start: [41, 24, 8], trasa: [[41, 22], [44, 19], [70, 18], [88, 18], [92, 17]],",
+  "nowe": "start: [6, 49, 6], trasa: [[6, 52], [5, 53], [3, 52], [2, 50]],",
+  "ile": 1,
+  "po": "Albin's night route: from room 8's door (6,48) round the stair hall's south row to the gilded gate (2,49)"
+ },
+ {
+  "plik": "js/plugins/Poselstwo.js",
+  "stare": "id: \"w14Rozaniec\", pokoj: \"15\", rzecz: \"torba\"",
+  "nowe": "id: \"w14Rozaniec\", pokoj: \"8\", rzecz: \"torba\"",
+  "ile": 1,
+  "po": "room 8 has Torba ev88/ev364"
+ },
+ {
+  "plik": "js/plugins/Poselstwo.js",
+  "stare": "id: \"w14Notatki\", pokoj: \"15\", rzecz: \"kufer\"",
+  "nowe": "id: \"w14Notatki\", pokoj: \"8\", rzecz: \"kufer\"",
+  "ile": 1,
+  "po": "room 8"
+ },
+ {
+  "plik": "js/plugins/Poselstwo.js",
+  "stare": "narada w Wielkim salonie, Noc Kupały",
+  "nowe": "narada w salonie Lorda, Noc Kupały",
+  "ile": 1,
+  "po": "plugin description"
+ },
+ {
+  "plik": "js/plugins/Poselstwo.js",
+  "stare": "Wielkim salonie (słychać ją z Jadalni).",
+  "nowe": "salonie Lorda (słychać ją spod drzwi, z holu).",
+  "ile": 1,
+  "po": "help text"
+ },
+ {
+  "plik": "js/plugins/TownQuests_Data.js",
+  "stare": "w6_hide_tavern: { map: 25, id: 951, x: 40, y: 38,",
+  "nowe": "w6_hide_tavern: { map: 25, id: 951, x: 21, y: 8,",
+  "ile": 1,
+  "po": "Rafal hidden in hero room 1 (x21..28,y34..44)"
+ },
+ {
+  "plik": "js/plugins/Wrak_Data.js",
+  "stare": "const SPOT_ROOMS = [6, 38, 4];",
+  "nowe": "const SPOT_ROOMS = [25, 40, 4];",
+  "ile": 1,
+  "po": "Eryk's place in room 7 (x35..41,y22..32)"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "(pokój 23)",
+  "nowe": "(pokój 8)",
+  "ile": 1,
+  "po": "room number follows the remap"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "(pokój 22; w grze",
+  "nowe": "(pokój 6; w grze",
+  "ile": 1,
+  "po": "room number follows the remap"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "(pokój 17)",
+  "nowe": "(pokój 11)",
+  "ile": 1,
+  "po": "room number follows the remap"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "(pokój 20)",
+  "nowe": "(pokój 4)",
+  "ile": 1,
+  "po": "room number follows the remap"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "(pokój 21; w dni",
+  "nowe": "(pokój 4; w dni",
+  "ile": 1,
+  "po": "room number follows the remap"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "(pokój 15)",
+  "nowe": "(pokój 8)",
+  "ile": 1,
+  "po": "room number follows the remap"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "(pokój 16)",
+  "nowe": "(pokój 8)",
+  "ile": 1,
+  "po": "room number follows the remap"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "(pokój 18; D46",
+  "nowe": "(pokój 11; D46",
+  "ile": 1,
+  "po": "room number follows the remap"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "Tobiasz, pokój 23)",
+  "nowe": "Tobiasz, pokój 8)",
+  "ile": 1,
+  "po": "room number follows the remap"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "zadania.D42.where = Rynek, tawerna (Jadalnia prywatna), garnizon, przystań",
+  "nowe": "zadania.D42.where = Rynek, tawerna (pokój Borgara na zapleczu), garnizon, przystań",
+  "ile": 1,
+  "po": "D42 meeting is in Borgar's room"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "podsłuchaj jego narady w Jadalni prywatnej tawerny (dzień {narada}, 20-22:30, O przy drzwiach)",
+  "nowe": "podsłuchaj jego narady w pokoju Borgara na zapleczu tawerny - z sąsiedniego pokoju służby, przy wspólnej ścianie (dzień {narada}, 20-22:30, O twarzą do ściany)",
+  "ile": 1,
+  "po": "D42 eavesdrop from the kitchen"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "Narada w jadalni\n",
+  "nowe": "Narada na zapleczu\n",
+  "ile": 1,
+  "po": "title of the clue note"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "za drzwiami Jadalni prywatnej: cztery wozy",
+  "nowe": "w pokoju Borgara na zapleczu, za ścianą pokoju służby: cztery wozy",
+  "ile": 1,
+  "po": "note text"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "narada Zenona z Kłosem w Jadalni prywatnej (dzień",
+  "nowe": "narada Zenona z Kłosem w pokoju Borgara na zapleczu (dzień",
+  "ile": 1,
+  "po": "comment"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "tawerna (Teofil, Palarnia 15-19)",
+  "nowe": "tawerna (Teofil, sala 15-19)",
+  "ile": 1,
+  "po": "no Palarnia any more"
+ },
+ {
+  "plik": "js/teksty/podroznicy.txt",
+  "stare": "Oddaj szkice Teofilowi - Palarnia i czytelnia w tawernie (15-23).",
+  "nowe": "Oddaj szkice Teofilowi - w sali tawerny albo u niego w pokoju (15-23).",
+  "ile": 1,
+  "po": "no Palarnia any more"
+ },
+ {
+  "plik": "js/teksty/podroznicy5.txt",
+  "stare": "tawerna (Palarnia i czytelnia, pokój 22)",
+  "nowe": "tawerna (pokój 6)",
+  "ile": 1,
+  "po": "room follows the remap; no Palarnia"
+ },
+ {
+  "plik": "js/teksty/podroznicy5.txt",
+  "stare": "z tuby (pokój 22)",
+  "nowe": "z tuby (pokój 6)",
+  "ile": 1,
+  "po": "room follows the remap"
+ },
+ {
+  "plik": "js/teksty/podroznicy5.txt",
+  "stare": "w pokoju 22. Kiedy",
+  "nowe": "w pokoju 6. Kiedy",
+  "ile": 1,
+  "po": "room follows the remap"
+ },
+ {
+  "plik": "js/teksty/intrygi.txt",
+  "stare": "pokój 18",
+  "nowe": "pokój 11",
+  "ile": 1,
+  "po": "Ksenia's room 11"
+ },
+ {
+  "plik": "js/teksty/intrygi.txt",
+  "stare": "pokoju 18",
+  "nowe": "pokoju 11",
+  "ile": 4,
+  "po": "Ksenia's room 11"
+ },
+ {
+  "plik": "js/teksty/poselstwo.txt",
+  "stare": "podróżny „pielgrzym”, pokój 15)",
+  "nowe": "podróżny „pielgrzym”, pokój 8)",
+  "ile": 1,
+  "po": "Albin's room"
+ },
+ {
+  "plik": "js/teksty/poselstwo.txt",
+  "stare": "tawerna (pokój 15; piętro II: Apartament Złoty, Jadalnia, Wielki salon)",
+  "nowe": "tawerna (pokój 8; piętro II: Apartament Złoty, salon Lorda)",
+  "ile": 1,
+  "po": "no Jadalnia / Wielki salon"
+ },
+ {
+  "plik": "js/teksty/poselstwo.txt",
+  "stare": "rozmowa nocą w pokoju 15 (ściana",
+  "nowe": "rozmowa nocą w pokoju 8 (ściana",
+  "ile": 1,
+  "po": "Albin's room"
+ },
+ {
+  "plik": "js/teksty/poselstwo.txt",
+  "stare": "poseł i Lord w Wielkim salonie (piętro II). Zanieś kolację do Złotego (20:00) i zostań w Jadalni - ściana z salonem (O twarzą do ściany).",
+  "nowe": "poseł i Lord w salonie Lorda (piętro II). Zanieś kolację do Złotego (20:00) i zostań na holu pod drzwiami salonu (O twarzą do drzwi).",
+  "ile": 1,
+  "po": "council in the Lord's salon, heard at its door"
+ },
+ {
+  "plik": "js/teksty/poselstwo.txt",
+  "stare": "wosk na galerii przy pokoju 15,",
+  "nowe": "wosk na korytarzu przy pokoju 8,",
+  "ile": 1,
+  "po": "Albin's room"
+ },
+ {
+  "plik": "js/teksty/poselstwo.txt",
+  "stare": "nocna rozmowa w pokoju 15 (ściana",
+  "nowe": "nocna rozmowa w pokoju 8 (ściana",
+  "ile": 1,
+  "po": "comment"
+ },
+ {
+  "plik": "js/teksty/poselstwo.txt",
+  "stare": "przeszukanie pokoju 15 (etap 3)",
+  "nowe": "przeszukanie pokoju 8 (etap 3)",
+  "ile": 1,
+  "po": "comment"
+ },
+ {
+  "plik": "js/teksty/poselstwo.txt",
+  "stare": "Możesz posprzątać w jadalni, kiedy skończę.",
+  "nowe": "Możesz sprzątnąć ze stołu, kiedy skończę.",
+  "ile": 1,
+  "po": "no Jadalnia"
+ },
+ {
+  "plik": "js/teksty/poselstwo.txt",
+  "stare": "rozdz. 3: narada w Wielkim salonie (podsłuch z Jadalni)",
+  "nowe": "rozdz. 3: narada w salonie Lorda (podsłuch spod drzwi, z holu)",
+  "ile": 1,
+  "po": "comment"
+ },
+ {
+  "plik": "js/teksty/swiete_kosci.txt",
+  "stare": "(„wizytator”, pokój 16)",
+  "nowe": "(„wizytator”, pokój 8)",
+  "ile": 1,
+  "po": "room follows the remap"
+ },
+ {
+  "plik": "js/teksty/swiete_kosci.txt",
+  "stare": "nocą pokój 16)",
+  "nowe": "nocą pokój 8)",
+  "ile": 1,
+  "po": "room follows the remap"
+ },
+ {
+  "plik": "js/teksty/swiete_kosci.txt",
+  "stare": "bratu Augustynowi (pokój 16)",
+  "nowe": "bratu Augustynowi (pokój 8)",
+  "ile": 1,
+  "po": "room follows the remap"
+ },
+ {
+  "plik": "js/teksty/dezerter.txt",
+  "stare": "ściana z pokojem 3 nocą.",
+  "nowe": "podsłuch pod drzwiami pokoju 5 nocą.",
+  "ile": 1,
+  "po": "room 5 is no longer next to room 3"
+ },
+ {
+  "plik": "js/teksty/dezerter.txt",
+  "stare": "(pokój 3 przez ścianę albo pod drzwiami piątki, nocą)",
+  "nowe": "(pod drzwiami piątki, nocą)",
+  "ile": 1,
+  "po": "comment"
+ }
+]

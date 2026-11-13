@@ -1,0 +1,14 @@
+PASS gra startuje (nakładka miasto4)
+PASS Map008: zestaw 13, 120x120  {"id":8,"ts":13,"w":120,"h":120,"ev":600}
+PASS drzwi znalezione: 25 (wzgórze + nowe)  [4,22,50,57,63,84,88,94,95,114,121,129,134,137,141,152,180,197,204,209,216,218,235,236,259]
+PASS każde drzwi: wejście i wyjście przed te drzwi  []
+PASS miejsca TownLife (57) i znaczniki osiągalne w grze  []
+PASS brama N przy 144: 8 -> 24  {"loc":[24,1],"now":{"m":24,"x":24,"y":119}}
+PASS brama W przy 171: 8 -> 111  {"loc":[1,51],"now":{"m":111,"x":119,"y":51}}
+PASS brama W przy 226: 8 -> 111  {"loc":[1,106],"now":{"m":111,"x":119,"y":106}}
+PASS brama E przy 131: 8 -> 4  {"loc":[118,11],"now":{"m":4,"x":0,"y":11}}
+PASS brama E przy 169: 8 -> 4  {"loc":[118,49],"now":{"m":4,"x":0,"y":49}}
+PASS brama S przy 152: 8 -> 3  {"loc":[32,118],"now":{"m":3,"x":32,"y":0}}
+PASS doba: mieszkańcy miasta przemieszczają się między miejscami (15/17)  {"nie":["weteran","kapral"]}
+PASS bez błędów w konsoli  []
+13/13 passed

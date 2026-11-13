@@ -1,0 +1,51 @@
+PASS gra się uruchamia
+PASS wtyczki: Jarmark_Data pod Dezerter_Data i nad TownLife i TownQuests_Data; Jarmark pod Dezerter; Jarmark_Sceny pod Jarmark  ["Dezerter_Data","Jarmark_Data","Dezerter","Jarmark","Jarmark_Sceny"]
+PASS teksty jarmark.txt wczytane bez błędów (>= 250 kluczy); zadanie W17 (9 rozdziałów, wątek W); pasmo 4800-4999 zarezerwowane  {"list":["TawernaLoader","TawernaCore","Wydajnosc","ActorPictures","AltMenuScreen","AltSaveScreen","OptionEx","HDLayout","DustMotes","RoomLighting","DayNightCycle","CloudShadows","SwayingFoliage","Sky","MapZoom","ChoppableTree","ChoppableTree_Objects","ChoppableTree_Swing","ChoppableTree_Render","SurvivalHUD","Farming_Data","Farming","Farming_Plots","Farming_Build","Farming_Stations","Farming_UI","Farming_Render","Mood","TerenKit","Ziemia","CharacterPolish","GroundDetail","Laka_Woda","Laka","FreeMovement","RegionLayers","WaterFx","Fullscreen","Survival","UITheme","TawernaUI","Journal","Watki","Minimap","Atmosphere","Storm","Puddles","Durability","Spoilage","Hunting","Hunting_Path","Hunting_AI","Hunting_Weapons","Birds","Motyle_Data","Motyle","Forestry","Needs","Livestock","Dog","Skills_Data","Combat","Combat_Fight","Combat_UI","Combat_Feel","SpeechBubbles","Debug","MenuPanel","HeroLook","Torch","TavernShift","TavernShift_Hall","TavernShift_Parts","Story","QuestBoard_Data","QuestBoard","QuestBoard_Art","QuestBoard_Scene","TavernDice_Data","TavernDice","TavernDice_Art","TavernDice_Scene","TavernLife","TavernLife_Render","TavernLife_ArmWrestle","TavernLife_Darts","TavernLife_Plan","TavernLife_Regulars","Przytulna","HomeAmbience","HomeDecor","HomeLife","TownLife_Data","Wyspa_Data","Pustelnia_Data","Kruk_Data","Orzel_Data","Latarnia_Data","Garnizon_Data","Wrak_Data","Cysterna_Data","Kantor_Data","Dwor_Data","Okolice_Data","Zasoby_Data","Lowy_Data","Ludzie_Data","Zakon_Data","Podroznicy_Data","SwieteKosci_Data","Dezerter_Data","Jarmark_Data","Wesele_Data","Poczta_Data","Majster_Data","Poselstwo_Data","Morze_Data","Podroznicy5_Data","Historyjki_Data","Intrygi_Data","W1_Data","W2_Data","W3_Data","W6_Data","W8_Data","Przystan_Data","Rynek_Data","Straz_Data","Oboz_Data","Goscie_Data","Goscie_Sala","Pokoje","Widok","Cienie","W4_Data","W9_Data","TownLife","TownQuests_Data","TownQuests","Homes","Humans_Data","Humans","Underground_Gen","Underground_Data","Underground","Creatures_Data","Creatures","Act3_Data","Act3","Przystan","CzerwonaWoda_Brzegi","CzerwonaWoda","Wyspa","Pustelnia","Kruk","Latarnia","Garnizon","Wrak","Wyspy","Cysterna","Kantor","Rywal_Data","Rywal","Dwor","Kasztelan_Data","Kasztelan","Podroznicy","Podroznicy_Sprawy","Intrygi","SwieteKosci","Dezerter","Jarmark","Jarmark_Sceny","Wesele","Wesele_Gry","Poczta","Majster","Poselstwo","Morze_Potwory","Morze","Podroznicy5","Historyjki","CleanHUD","CleanHUD_Compass","MapaWyspy_Data","MapaWyspy","Woz","Stajnia","Stajnia_Zmiana","Konie","MenuRing_Rysunki","MenuRing_Strony","MenuRing","Equipment","Ubior_Data","Bron_Data","Ubior","Ubior_Bron","Drops","Starcia","Orzel","Orzel_Lot","Kopalnia","Okolice","Ziemia_Ozdoby","Zasoby","Lowy","Ludzie","Zakon","Swiat_Data","Krawedzie","Klimat_Miasta","Klimat_Ziemia","Klimat_Pogoda","Klimat_Detale","PoryRoku","Ubior_Sklepy","Bron","TitleScreen","Prologue"],"files":[{"name":"jarmark","url":"js/teksty/jarmark.txt","st":"ok","errors":[],"keys":261}],"steps":9,"kind":"W","reg":["4800-4999","4800-4999"]}
+PASS mapa 8: dwie nowe kamienice (dachy A3 i ściany na miejscu), dwa zamknięte wejścia, zdarzenia id == indeks, dwa zasłaniające drzewa zdjęte  {"roof1":60,"roof2":60,"wall1":true,"door1":true,"door2":true,"ids":true,"tree217":false,"tree283":false,"big":601}
+PASS zlecenie nie startuje bez warunków (Opinia, Renoma, W1)  null
+PASS dzień 47: wątek W17 aktywny, rozdział 1 „Zgłoszenie”  {"s":"active","step":0,"name":"w17Zgloszenie"}
+PASS sołtys: „Pomogę” - zlecenie przyjęte (z=1), rozdział 2 „Prace”  {"z":1,"w":{"s":"active","step":1,"name":"w17Prace"},"text":"Chłopcze! Dobrze, że jesteś. Za dwa dni jarmark. Raz w roku, pod koniec lata, całe miasto "}
+PASS Leon, Szczepan i Wit: sześć desek, cztery obręcze, osiem lampionów (przedmioty wirtualne)  {"d":6,"o":4,"l":8}
+PASS deski tylko raz (Leon: „Deski już masz”)  "Deski już masz. Reszta to stolarka, której ci nie oddam."
+PASS na rynku sześć żółtych romboczków na kramy (zdarzenia 4800-4805)  [4800,4801,4802,4803,4804,4805]
+PASS sześć kramów postawionych (deski zabrane, rombocki zniknęły, kramy stoją), nagroda za pracę (12 G)  {"kr":[4800,4801,4802,4803,4804,4805],"kramy":[0,1,2,3,4,5]}
+PASS beczki: obręcze oddane Borgarowi, cztery beczki na rynku (zdarzenia 4814-4817), praca zapłacona  {"g":12,"b":1}
+PASS lampiony: do piątej nie wiszą; osiem słupów-romboczków; pierwszy powieszony po 17:00  [4806,4807,4808,4809,4810,4811,4812,4813]
+PASS wszystkie osiem lampionów wisi; prace 3/3; rozdział 3 „Otwarcie”  {"w":{"s":"active","step":2,"name":"w17Otwarcie"},"lampy":[0,1,2,3,4,5,6,7]}
+PASS otwarcie (49, 14:30): pochód Lorda, dymki, jarmark otwarty (otw=1), rozdział 4 „Konkurs”  {"w":{"s":"active","step":3,"name":"w17Konkurs"},"otw":1}
+PASS plotka o sędzim (Hanka: „lubię słodkie”)  "Konkurs piwny? Ja jestem sędzią! Powiem ci coś: lubię słodkie. Miód to miód, chłopcze."
+PASS konkurs: czterech sędziów, cztery dodatki (miód, dym, coś ostrego, szyszka) - cztery głosy, wygrana Borgara, 40 G i Opinia  {"sk":{"dod":{"hanka":"miod","ambrozy":"dym","wit":"ostry","teodor":"szyszka"},"glosy":4,"fin":1,"wynik":"wygrana","znane":{"piekarka":1}},"miss":[]}
+PASS po konkursie sala jest czysta (sędziowie zeszli), rozdział 5 „Turniej”  {"w":{"s":"active","step":4,"name":"w17Turniej"},"vis":[]}
+PASS Wanda Ósemka jest rywalem TavernDice (dopisana w czasie ładowania, bez zmiany cudzego pliku); trzy mecze: Bartek, Ozzy, Wanda  {"ok":"bartek,ozzy,wanda","o":true}
+PASS wpisowe 20 G zabrane, turniej zapisany  {"g":-20}
+PASS mecz z Wandą rozgrywa się do końca bez błędu (symulacja silnika kości)  {"w":1,"e":0,"t":[600,3150]}
+PASS przed meczem z Wandą: „Pokaż kość” (OK) - kość fałszywa, Wanda słabsza w finale (oszust=1)  {"wpisal":50,"mecz":2,"oszust":1,"wygral":0,"fin":0,"kosc":0}
+PASS turniej wygrany: pula 120 G, Kość Kruczogrodu, rozdział 6 „Sztuka”  {"fin":1,"g":120,"w":{"s":"active","step":5,"name":"w17Sztuka"}}
+PASS pomoc trupie: kostiumy, żar i peruka (trzy dostawy), każda +1 Opinia  {"kostium":51,"zar":51,"peruka":51}
+PASS Ofelia i troupa stoją na rynku w dzień jarmarku (zdarzenia 4830-4836), scena (4820), poduszka z Krukiem (4821) i cztery pochodnie (4822-4825)  [4820,4821,4822,4823,4824,4825,4830,4831,4832,4833,4834,4835,4836]
+PASS sztuka: trzy akty, żonglerka i ogień, pochodnie zgasły, kradzież Kruka (kradziez=1), poduszka pusta, rozdział 7 „Śledztwo”  {"w":{"s":"active","step":6,"name":"w17Sledztwo"},"kr":1}
+PASS pięć żółtych romboczków śladów (4870-4874) po kradzieży  [4870,4871,4872,4873,4874]
+PASS sołtys: „Znalazłeś 0 z pięciu”  "Zamknąłem rynek, chłopcze. Do rana nikt nie wyjedzie. Pięć miejsc, pięć śladów: Sukiennice, Cech, ga"
+PASS trzy z pięciu śladów (gablota, rejestr cechu, łaźnia): w dzienniku, poszlaki 3, rombocki znikają  {"gablota":52,"cech":52,"laznia":52}
+PASS po 23:30 przy dzwonnicy czekają sołtys i kapral (zasadzka), rozmowa wystartuje pościg  {"ok":true,"vis":[4880,4881]}
+PASS poza pościgiem tryb dachów wyłączony (dachy miasta nie są przechodnie)  {"on":false,"blocked":true}
+PASS pościg wystartował: tryb dachów włączony, bohater na dachu dużego domu (36,99), Szept na dachu  {"on":true,"x":36,"y":99,"sz":true,"cells":56}
+PASS upadek: krok w powietrze = upadek na ulicę, +15 s, bez śmierci; po chwili bohater znów na dachu (ostatnia pewna kratka)  {"fall1":{"u":1,"c":19,"ph":"upadek"},"back":{"x":36,"y":99,"onRoof":true,"lock":0}}
+PASS skok OK + strzałki po skosie: z rogu dużego domu (41,97) na dach pierwszej kamienicy (42,96)  {"x":42,"y":96,"onRoof":true,"air":0}
+FAIL długi skok przez trzy pola ulicy (OK + strzałka w dół): z dachu kamienicy (47,96) na dach dzwonnicy (47,100), bez upadku  {"x":42,"y":96,"onRoof":true,"u":1}
+PASS meta pościgu: Szept zapędzony na dachu dzwonnicy, wybór „zostaje świadkiem”, Kruk i bilet z promu w torbie, tryb dachów wyłączony  {"pogon":{"faza":1,"upadki":1,"czas":33,"koniec":1,"bezFory":0},"szept":"swiadek","miss":[]}
+PASS po pościgu bohater stoi na ulicy przed dzwonnicą (nie na dachu)  {"x":46,"y":105}
+PASS poranek (53): sołtys pyta o Marcela - „Oskarżyć go przed Lordem” (dowody: 5 śladów, świadek Szept)  "oskarz"
+PASS zakończenie A „Pełny jarmark”: Marcel aresztowany, Szept ułaskawiony, 60 G + 100 G, zwrotka z Kruka, jarmark zamknięty (znika scena i kramy)  {"koniec":"A","g":160,"zw":"notatka"}
+PASS rozdział 9 zrobiony, wątek W17 ukończony; nagrody nie zawierają wody ani naczyń z wodą  "done"
+PASS po zamknięciu: scena, kramy i trupa znikają z rynku  []
+PASS zakończenie B „Złodziej bez zleceniodawcy” (mniej niż 3 poszlaki, Szept w dybach): 60 G  {"koniec":"B","how":"B","g":60,"marcel":"odplynal","szept":"dyby"}
+PASS zakończenie C „Litość” (Szept puszczony): 60 G - 40 G zdjęcia klątwy  {"koniec":"C","how":"C","g":20,"marcel":"wolny","szept":"wolny"}
+PASS zakończenie D „Szantaż”: 60 G + 80 G  {"koniec":"D","how":"D","g":140,"marcel":"szantaz","szept":"dyby"}
+FAIL zakończenie F: kruk nieodzyskany do południa 53 - jarmark odwołany, Opinia -5 (bez nagród złota)  {"koniec":""}
+FAIL F9: sekcja „Wątek W17 (Jarmark):” ze skokami do rozdziałów i trzema wierszami  {"head":"Wątek W17 (Jarmark):","rows":3}
+FAIL skok F9 do rozdziału 6: dzień 51, rynek, przygotowania zrobione  {"d":40,"m":8,"z":1}
+PASS zwykły dzień przed jarmarkiem (30): ani jednego zdarzenia jarmarku na mapie, kamienice stoją (kafle)  {"n":0,"ev":583}
+PASS bez błędów w konsoli  []
+45/49 passed
+EXIT 1

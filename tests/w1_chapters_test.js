@@ -87,7 +87,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         /nie kuł kowal, tylko zakon/.test(tadek.text) && /oranżerii/.test(tadek.text) && (await step()) === "active:5", tadek.text.slice(0, 300));
 
     // ------------------------------------------------------------------ ch. 5: the orangery at night - caught by the guard
-    await t.go(24, 1, 15, 6);
+    await t.go(24, 21, 75, 6);
     await at(4, 22.5, 30);
     const guard = await J("(function(){ const s = TownLife.state('straznik'); return s && { act: s.act, hidden: s.hidden, sheet: TownLife.eventOf('straznik').characterName() }; })()");
     t.check("the manor's guard (TownLife 'straznik', Map024) walks his round in the garden at night", guard && guard.act === "patrol" && !guard.hidden && guard.sheet === "$Npc_Straznik", guard);
@@ -103,7 +103,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
 
     // the next night: Feliks at the hatch behind the orangery 1:30-3:00 with Kuba and his barrels, watched unseen (sneaking). (2026-10-12:
     // the user's rebuilt garden - no back gate, no pump: the wooden hatch under the pine, 3,20; Kuba comes in by the main gate)
-    await t.go(24, 2, 26, 8);
+    await t.go(24, 22, 86, 8);
     await at(6, 2, 30);
     await t.eval("(function(){ Hunting.setSneak(true); TownLife.hold('straznik', true, null); const g = TownLife.eventOf('straznik'); g.locate(19, 19); g.setDirection(8); $gamePlayer.locate(2, 26); $gamePlayer.setDirection(8); return 0; })()");
     await t.frames(40);
@@ -172,7 +172,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.saveTo(8);
     // two weeks after the deal, on Polna droga: Feliks's men (Humans.js) - a real fight; won, one of them spared
     const band = async () => t.until("!!(window.Humans && Humans.band('w1Feliks'))", 20, 300);
-    const toRoad = async () => { await t.go(22, 12, 2, 2, { calm: false }); return band(); };   // (no calm(): QUIET would clear the men)
+    const toRoad = async () => { await t.go(3, 76, 8, 2, { calm: false }); return band(); };   // (no calm(): QUIET would clear the men)
     await at(22, 10, 20);
     await t.gold(100);
     const came = await toRoad();
@@ -185,7 +185,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const won = await J("({ r: TownQuests.rec('W1'), f: TownQuests.state().flags, v: TownQuests.vcount('rysunek') })");
     const wonNotes = await notes();
     t.check("...beaten (one spared - he blurts out who pays them): Feliks broke the deal, the drawing is still the hero's - the choice of chapter 6 comes back, with a witness",
-        won.f.w1AmbushWon && won.f.w1Confession && won.f.feliksBroke && won.v === 1 && won.r.step === 6 && wonNotes.includes("Napad na Polnej drodze") && wonNotes.includes("Człowiek Feliksa mówi"), won);
+        won.f.w1AmbushWon && won.f.w1Confession && won.f.feliksBroke && won.v === 1 && won.r.step === 6 && wonNotes.includes("Napad na Kruczym Jarze") && wonNotes.includes("Człowiek Feliksa mówi"), won);
     await t.go(8, 80, 48, 8);
     await at(23, 8, 30);
     const g3 = await t.gold();
@@ -207,7 +207,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.frames(40);
     const lost = await J("({ r: TownQuests.rec('W1'), f: TownQuests.state().flags, v: TownQuests.vcount('rysunek'), gold: $gameParty.gold() })");
     t.check("...or beaten by them: robbed as men rob (40% of the gold), the drawing taken too - no evidence: on to chapter 7 (Act II)",
-        robbed && lost.gold === 60 && lost.v === 0 && lost.f.w1Ambushed && lost.f.feliksBroke && lost.r.step === 9 && (await notes()).includes("Napad na Polnej drodze"), lost);
+        robbed && lost.gold === 60 && lost.v === 0 && lost.f.w1Ambushed && lost.f.feliksBroke && lost.r.step === 9 && (await notes()).includes("Napad na Kruczym Jarze"), lost);
 
     // ...or off the road mid-fight: they wait for him again
     await t.loadFrom(8, { quiet: true });
@@ -228,7 +228,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, minimap: false });
     await at(9, 9, 30);
     await t.eval("TownQuests.start('W1', 6); TownQuests.state().v.rysunek = 1; 0");
-    await t.go(24, 20, 15, 8);
+    await t.go(24, 40, 75, 8);
     await at(9, 9, 30);
     const paid0 = await J("Story.state().paid"), gl = await t.gold();
     const lordMark = await J("TownQuests.markers().lord");

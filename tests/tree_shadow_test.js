@@ -7,7 +7,7 @@ const SHOTS = path.join(__dirname, "..", "docs", "cienie");
 
 kit.test({ port: 9434, bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
     require("fs").mkdirSync(SHOTS, { recursive: true });
-    await t.newGame({ map: 3, x: 22, y: 14, day: 40, hour: 12, quiet: true, minimap: false });
+    await t.newGame({ map: 3, x: 62, y: 45, day: 40, hour: 12, quiet: true, minimap: false });
     // a standing choppable tree in the middle of the screen, and the view on it
     const tree = await t.json(`(function(){ const s = SceneManager._scene._spriteset._characterSprites.find(o => o._character instanceof Game_Event && o.isTreeSprite && o.isTreeSprite() && !o._character._treeGone && o._character.y > 6 && o._character.x > 6 && o._character.x < $gameMap.width() - 6);
         return s ? { id: s._character.eventId(), x: s._character.x, y: s._character.y, pic: s._characterName } : null; })()`);

@@ -25,14 +25,14 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9382, bootCheck: "gra się uruc
     await cross("pole_do_domu_dziadka", { map: 3, x: 9, y: 54 }, "down", 20, [9, 1], true);
     await cross("dom_dziadka_do_pola", { map: 20, x: 9, y: 3 }, "up", 3, [9, 58], true);
     await cross("pole_do_dworu", { map: 3, x: 5, y: 15 }, "left", 24, [78, 15], true);
-    await cross("dwor_do_pola", { map: 24, x: 78, y: 15 }, "right", 3, [1, 15], true);
+    await cross("dwor_do_pola", { map: 24, x: 98, y: 75 }, "right", 3, [1, 15], true);
     await cross("skraj_lasu_do_laki2", { map: 23, x: 40, y: 54 }, "down", 17, [40, 1], true);
     await cross("laka2_do_skraju_lasu", { map: 17, x: 40, y: 6 }, "up", 23, [40, 58], true);
     await cross("skraj_lasu_do_pol_pod_grzbietem", { map: 23, x: 24, y: 5 }, "up", 900, [19, 58], true);
     await cross("pola_do_skraju_lasu", { map: 900, x: 19, y: 54 }, "down", 23, [24, 1], true);
     // (tymczasowe przejście Sady 901 <-> Łąka#3 18 z etapu 2 usunięte w etapie 3: Łąka#3 stoi już na swoim miejscu w świecie)
     // z drzwi chaty dziadka da sie dojsc do wyjscia N (droga po zachodniej stronie)
-    await t.newGame({ map: 20, x: 15, y: 8, day: 12, hour: 11, quiet: true, minimap: false });
+    await t.newGame({ map: 20, x: 46, y: 47, day: 12, hour: 11, quiet: true, minimap: false });
     await t.frames(30);
     const reach = await t.json(`(function(){ const seen = new Set(), st = [[$gamePlayer.x, $gamePlayer.y]]; seen.add(st[0].join());
         const D = { 2: [0, 1], 4: [-1, 0], 6: [1, 0], 8: [0, -1] };

@@ -1,0 +1,3 @@
+  mapa 3 120x120 ekranów 50 22 s
+  mapa 20 120x120 ekranów 50 22 s
+  mapa 213 96x40 ekranów 12 7 s

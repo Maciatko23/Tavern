@@ -61,16 +61,15 @@
     // key: { map, woz: [x, y] the cart (its event: the bottom middle of the picture), woznica: [x, y, dir] the carter, land: [x, y, dir]
     // the hero getting off }. "miasto": the TownLife spot woz_pld (54,90) - the carter is the resident himself there.
     const POSTOJE = {
-        miasto: { map: 8, woz: [56, 90], woznica: [54, 90, 2], land: [52, 90, 6] },          // (the street along the wall, right of the gate's tower)
-        podgrodzie: { map: 111, woz: [53, 37], woznica: [51, 37, 2], land: [50, 37, 6] },   // (the square, east of the dry well)
+        miasto: { map: 8, woz: [37, 108], woznica: [35, 108, 2], land: [34, 108, 6] },          // (the street along the wall, right of the gate's tower)
+        podgrodzie: { map: 111, woz: [71, 70], woznica: [69, 70, 2], land: [68, 70, 6] },   // (the square, east of the dry well)
         jar: { map: 3, woz: [75, 12], woznica: [73, 12, 2], land: [72, 12, 6] },            // (the road in from Skraj lasu)
-        lesna: { map: 21, woz: [7, 20], woznica: [5, 20, 2], land: [4, 20, 6] },             // (the road in from Polna droga)
-        przystan: { map: 125, woz: [106, 17], woznica: [104, 17, 2], land: [103, 17, 6] }   // (the road in from Podgrodzie, before the trees)
+        przystan: { map: 125, woz: [34, 7], woznica: [32, 7, 2], land: [31, 7, 6] }          // (plansza 3x3, 2026-11-08: the road by the sheds - the old stop was in the cut part)
     };
     const KEYS = Object.keys(POSTOJE);
     // the day: [hour, stop | null (on the road)] - the last entry at or before the hour holds; before the first: nothing (night)
     const PLAN = [[7, "miasto"], [8, null], [8.5, "podgrodzie"], [9, null], [9.5, "przystan"], [10.5, null], [11.5, "miasto"], [12.5, null],
-        [13.5, "lesna"], [14.5, null], [16, "jar"], [17, null], [18.5, "miasto"], [19.5, null], [21.3, "miasto"], [22.7, null]];
+        [13.5, null], [14.5, null], [16, "jar"], [17, null], [18.5, "miasto"], [19.5, null], [21.3, "miasto"], [22.7, null]];
     const GODZINY = [7, 19.5];           // when he takes passengers
     const CENA = { baza: 2, mapa: 2 };   // G: the base and each map of the road
     const GODZIN_NA_MAPE = 0.5;          // game hours a map of the road takes
@@ -126,7 +125,8 @@
         }
         return n || 1;
     }
-    const priceOf = n => CENA.baza + CENA.mapa * n;
+    // (2026-11-08, Stajnia.js) at the carter Szczepan's full trust the rides are free (Stajnia.freeRide(); no Stajnia: the fare as before)
+    const priceOf = n => (T.call("Stajnia", "freeRide") ? 0 : CENA.baza + CENA.mapa * n);
     const timeOf = n => GODZIN_NA_MAPE * n;
     function timeWords(h) {
         const min = Math.round(h * 60), hh = Math.floor(min / 60), mm = min % 60, parts = [];

@@ -186,7 +186,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const fk = await talk(reg(2), ["Przy wszystkich", "Bywaj"]);
     const kd = await J("TownQuests.rec('W3').t.kupala");
     t.check("(a load) ch. 8 a: at the Kupała bonfire - day " + kd + " (the 14th of summer), by the south gate", kd === 42 && /Dzień 42/.test(fk.text) && (await step("W3")) === "active:4", fk.text.slice(0, 200));
-    await t.go(8, 51, 92, 8);
+    await t.go(8, 26, 109, 8);
     await at(42, 20.5, 40);
     const mel = await J("(function(){ const e = $gameMap.event(959); return e && e.page() ? [e.x, e.y, e.characterName(), e.event().note] : null; })()");
     await t.shot(path.join(SHOTS, "w3_noc_kupaly.png"));

@@ -1,0 +1,9 @@
+przystan_test rc=1 33 pass, 1 fail; 33/35 passed
+w1_chapters_test rc=1 23 pass, 4 fail; 23/28 passed
+pustelnia_test rc=1 36 pass, 1 fail; 36/37 passed
+kruk_test rc=1 27 pass, 1 fail; 27/29 passed
+debug_menu_test rc=0 79 pass, 4 fail; 79/83 passed
+mountain_places_test rc=1 5 pass, 17 fail; 5/22 passed
+osada_huts_test rc=0 44 pass, 0 fail; 44/44 passed
+krawedzie_test rc=1 5 pass, 3 fail; 5/8 passed
+w5_test rc=1 11 pass, 0 fail; 11/12 passed

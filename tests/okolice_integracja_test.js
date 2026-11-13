@@ -25,7 +25,7 @@ kit.test({ port: 9555, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // ---------------------------------------------------------------- Jagna buys the cliff herbs (A x D)
     const dry = await t.json(`(function(){ for (let d = 3; d < 80; d++) if (!Okolice.rainOn(d)) return d; return 3; })()`);
     await t.setDay(dry, 6);
-    await t.go(17, 66, 16);
+    await t.go(3, 20, 76);
     await t.frames(40);
     await t.eval(`(function(){ const j = Zasoby.state().jagna; j.met = j.met || Tawerna.time.day(); j.trust = Math.max(0, j.trust); j.ring = 1; j.taken = {}; j.buyDay = 0;
         $gameParty.gainItem($dataItems[228], 2); $gameParty.gainItem($dataItems[229], 1); window.__g0 = $gameParty.gold(); return 0; })()`);

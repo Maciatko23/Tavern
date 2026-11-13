@@ -57,8 +57,18 @@ const { launch, sleep } = require("./cdp.js");
         // the kennel and the stockpile, near a spot with ground items
         const spot = await J(`(function(){
             const free = (t, x, y) => !Farming.whyNotBuild(t, x, y, false, false);
-            for (let r = 0; r < 14; r++) for (let y = 14 - r; y <= 14 + r; y++) for (let x = 24 - r; x <= 24 + r; x++) {
-                if (free("stockpile", x, y) && free("doghouse", x + 4, y) && [0,1,2].every(k => $gameMap.checkPassage(x + k, y + 1, 0x0f)) && $gameMap.checkPassage(x + 4, y + 1, 0x0f)) return { x, y };
+            // (2026-11-12) the plot is in the middle of Kruczy Jar inside the field fence since 2026-11-09 and building needs cleared ground there: the search
+            // clears (as the game's own plots do: s "cleared") the 7x3 block of each candidate and takes the first inside the fence, the rest is put back
+            const plots = ($gameSystem._farm.plots[$gameMap.mapId()] = $gameSystem._farm.plots[$gameMap.mapId()] || {});
+            const cx = $gamePlayer.x, cy = $gamePlayer.y, cand = [];
+            for (let y = 2; y < $gameMap.height() - 3; y++) for (let x = 2; x < $gameMap.width() - 8; x++) cand.push([x, y, Math.abs(x - cx) + Math.abs(y - cy)]);
+            cand.sort((a, b) => a[2] - b[2]);
+            for (const [x, y] of cand) {
+                if (![0,1,2,3,4].every(k => $gameMap.checkPassage(x + k, y + 1, 0x0f))) continue;
+                const added = [];
+                for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 7; dx++) { const k = (x + dx) + "," + (y + dy); if (!plots[k]) { plots[k] = { s: "cleared" }; added.push(k); } }
+                if (free("stockpile", x, y) && free("doghouse", x + 4, y)) return { x, y };
+                for (const k of added) delete plots[k];
             }
             return null; })()`);
         check("found room for a kennel and a stockpile", !!spot, spot);

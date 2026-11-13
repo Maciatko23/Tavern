@@ -85,7 +85,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9505, lightGpu: true, bootCheck
     const inside = await t.json(`({ clouds: !!Tawerna.mapFlag("Clouds", false), stats: Cienie.stats, props: SceneManager._scene._spriteset._characterSprites.filter(s => s._cienShadow && s._cienShadow.visible).length })`);
     t.check("indoors (Map019): no building or prop shadows", inside.props === 0 && inside.stats.blocks === 0 && inside.stats.tiles === 0, inside);
     // ---- Podgrodzie and the harbour
-    for (const [map, x, y] of [[111, 43, 37], [125, 24, 14]]) {
+    for (const [map, x, y] of [[111, 61, 70], [125, 24, 14]]) {
         await t.newGame({ map, x, y, day: 40, hour: 11, quiet: true, minimap: false });
         await t.eval(NOCLOUDS);
         await t.frames(90);
@@ -93,7 +93,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9505, lightGpu: true, bootCheck
         t.check("map " + map + " by day: building / thing / prop shadows", info.blocks + info.tiles + info.props > 3, info);
     }
     // ---- the player's building: its sun shadow, the flat ellipse under it turned down
-    await t.newGame({ map: 3, x: 22, y: 14, day: 40, hour: 11, quiet: true, minimap: false });
+    await t.newGame({ map: 3, x: 62, y: 45, day: 40, hour: 11, quiet: true, minimap: false });
     await t.frames(30);
     const ok = await t.json("Farming.placeFree('well', $gamePlayer.x + 3, $gamePlayer.y + 2)");
     await t.frames(60);

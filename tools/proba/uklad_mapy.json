@@ -1,0 +1,104 @@
+{
+ "start": [
+  52,
+  53
+ ],
+ "w": 104,
+ "h": 56,
+ "posO": {
+  "tawerna": [
+   3,
+   4
+  ],
+  "kaplica": [
+   33,
+   4
+  ],
+  "stajnia": [
+   51,
+   4
+  ],
+  "kamienica": [
+   3,
+   23
+  ],
+  "dom_czerwony": [
+   16,
+   23
+  ],
+  "kuznia": [
+   28,
+   23
+  ],
+  "kantor": [
+   46,
+   23
+  ],
+  "dom_ciesli": [
+   61,
+   23
+  ],
+  "dom_wodziarza": [
+   3,
+   39
+  ],
+  "dom_slomiany": [
+   14,
+   39
+  ],
+  "dom_grabarza": [
+   25,
+   39
+  ],
+  "straznica": [
+   35,
+   39
+  ],
+  "piekarnia": [
+   45,
+   39
+  ],
+  "dzwonnica": [
+   55,
+   39
+  ]
+ },
+ "posN": {
+  "dom_szachulec": [
+   77,
+   4
+  ],
+  "dom_wieza": [
+   84,
+   4
+  ],
+  "dom_waski": [
+   90,
+   4
+  ],
+  "stajnia": [
+   77,
+   15
+  ],
+  "dom_kwiaty": [
+   88,
+   15
+  ],
+  "chata_bale": [
+   96,
+   15
+  ],
+  "chata_b": [
+   77,
+   24
+  ],
+  "chata_c": [
+   84,
+   24
+  ],
+  "izba": [
+   91,
+   24
+  ]
+ }
+}

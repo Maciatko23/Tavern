@@ -15,7 +15,7 @@
 //   - D48: druga wizyta Teofila - pamiątka i twierdza (25 G, mapaTwierdzy); przekonanie (Hart ducha 6); tuba (złapany / zabrana)
 //   - zapis i wczytanie: stan wątków zostaje
 // Uruchom: node tests/run.js poselstwo_test --port 9791
-const kit = require("./lib/kit.js");
+const kit = (function(){ try { return require("./lib/kit.js"); } catch (e) { return require("../../../../tests/lib/kit.js"); } })();
 
 kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     const J = e => t.json(e);
@@ -87,8 +87,8 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await t.eval("Tawerna.emit('podsluch', { id: 'w14Okno', pelna: true }); Poselstwo.trop('borgar', 1); 0");
     await t.frames(10);
     const p2 = await J("({ tropy: Poselstwo.stan().tropy })"), w14a = await W("W14");
-    t.check("F9 rozdz. 1: Albin na wyspie (pokój 15), W14 trwa; poszlaki: Ambroży, rozmowa pod oknem (podsłuch), Borgar - trzy, rozdz. 2 „Poseł Korony”",
-        !!p1.e && p1.e.pokoj === "15" && p1.w === "active" && am.ok && !!p2.tropy.ambrozy && p2.tropy.okno === 1 && p2.tropy.borgar === 1 && w14a.name === "w14Posel", { p1, am: am.text.slice(0, 120), p2, w14a });
+    t.check("F9 rozdz. 1: Albin na wyspie (a guest room, whichever the book gave), W14 trwa; poszlaki: Ambroży, rozmowa pod oknem (podsłuch), Borgar - trzy, rozdz. 2 „Poseł Korony”",
+        !!p1.e && !!p1.e.pokoj && p1.w === "active" && am.ok && !!p2.tropy.ambrozy && p2.tropy.okno === 1 && p2.tropy.borgar === 1 && w14a.name === "w14Posel", { p1, am: am.text.slice(0, 120), p2, w14a });
     const wi = await rozmowa("kapral", ["Zabierz go"]);
     const p3 = await J("({ s: Poselstwo.stan(), e: Podroznicy.stan().obecni.pielgrzym || null })"), f1 = await flags(), w14b = await W("W14");
     t.check("kapral Wit: „Zabierz go do wieży.” - Albin w wieży przed kradzieżą (pielgrzymZlapany, poza księgą), W14 - pożegnanie posła",
@@ -197,13 +197,13 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         d1.noc === d1.d && w44a.name === "d44Noc" && (await J("Podroznicy5.stan().d44.slyszal")) === 1 && w44b.name === "d44Raport", { d1, w44a, w44b });
     await skok("podroznicy5", 1);
     await t.setHour(22.75);
-    await go(25, 66, 49, 6);
+    await go(25, 43, 49, 6);
     await t.frames(60);
     const fe = await J("(function(){ const e = $gameMap.event(3080); return e ? { x: e.x, y: e.y, shown: !e.isTransparent(), sheet: e.characterName() } : null; })()");
     const ft = await gadaj(3080, []);
     const w44c = await W("D44");
     t.check("22:45 na korytarzu gości: Feliks pod czwórką (zdarzenie 3080), zauważony - „Nie stój w przejściu”; raport",
-        !!fe && fe.shown && fe.x === 68 && fe.y === 49 && fe.sheet === "$Npc_Feliks" && (await J("Podroznicy5.stan().d44.feliks")) > 0 && /Nie stój w przejściu/.test(ft.text) && w44c.name === "d44Raport", { fe, ft: ft.text, w44c });
+        !!fe && fe.shown && fe.x === 37 && fe.y === 16 && fe.sheet === "$Npc_Feliks" && (await J("Podroznicy5.stan().d44.feliks")) > 0 && /Nie stój w przejściu/.test(ft.text) && w44c.name === "d44Raport", { fe, ft: ft.text, w44c });
     const fv2 = await J("Garnizon.favor()");
     const ra = await rozmowa("poborca", ["To Feliks"]);
     const f7 = await flags(), w44d = await W("D44");
@@ -303,10 +303,11 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await rozmowa("kartograf", ["(Zabiorę"]);
     const r5 = await renoma();
     const tu = await J("({ plan: Podroznicy5.stan().d48.plan, dla: Podroznicy.przeszukanie.dla(Podroznicy.stan().obecni.kartograf.pokoj, 'kufer') })");
+    await t.setHour(1.0);   // (the hall now has a marker for Teofil's seat, so by day he sits there; in his room he is by night)
     await t.eval("Intrygi.szukajTak(null, 'd48Tuba'); 0");
     await t.frames(10);
     const w48e = await W("D48");
-    t.check("„Zabiorę mu ten szkic” - tuba w pokoju Teofila; przy nim w pokoju (16:00): złapany - Renoma -3, szkic idzie na ląd (mapaTwierdzy), D48 wykonane",
+    t.check("„Zabiorę mu ten szkic” - tuba w pokoju Teofila; przy nim w pokoju (nocą): złapany - Renoma -3, szkic idzie na ląd (mapaTwierdzy), D48 wykonane",
         tu.plan > 0 && tu.dla === "d48Tuba" && (await renoma()) === Math.max(0, r5 - 3) && (await J("Podroznicy5.stan().d48.koniec")) === "zlapany" && w48e.s === "done", { tu, w48e });
     await skok("podroznicy5", 4);
     await rozmowa("kartograf", ["(Zabiorę"]);

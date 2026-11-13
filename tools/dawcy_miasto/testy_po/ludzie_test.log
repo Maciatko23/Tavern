@@ -1,0 +1,72 @@
+PASS gra się uruchamia
+PASS wtyczki paczki C działają (dane + silnik), wersja nie-szkielet  {"data":true,"eng":true,"res":["pasterz:2910","handlarz:2911","patrol_latarnia_1:2912","patrol_latarnia_2:2913","patrol_garnizon_1:2914","patrol_garnizon_2:2915"],"zb":[4,"ludMielerz",true],"q":["K63","K64","K65","K66","D34","D35"],"fx":12,"spots":["mielerz","szalas_wegl","postoj_021","juk_021","postoj_handlarza","koszar","pastwisko","postoj_004","postoj_003","pastwisko_018","owca_017","oboz_kopaczy","szyb_czo","jaskinia_wejscie","grob_lugow","patrol_159","patrol_162"],"disc":["lud_mielerz","lud_koszar","lud_postoj","lud_oboz","lud_jaskinia","lud_groby"],"homes":[3,4,162],"busts":["Pasterz_Bust","Handlarz_Bust"],"items":["Przyprawy","Mapa okolic","Skrzynia przemytu","Dziennik kopacza","Wełniany koc"],"icons":[496,497,498,499,500],"f9":9}
+PASS mieszkańcy TownLife 2910-2915: pasterz, handlarz, patrol_latarnia_1/2, patrol_garnizon_1/2  ["pasterz:2910","handlarz:2911","patrol_latarnia_1:2912","patrol_latarnia_2:2913","patrol_garnizon_1:2914","patrol_garnizon_2:2915"]
+PASS Zbych Smolarz (drwal) ma „alt” na Łące (Map004) w dni mielerza (ludMielerz), szałas poza domem (away)  [4,"ludMielerz",true]
+PASS zadania K63-K66, D34, D35 w TownQuests i ich 12 FX  {"data":true,"eng":true,"res":["pasterz:2910","handlarz:2911","patrol_latarnia_1:2912","patrol_latarnia_2:2913","patrol_garnizon_1:2914","patrol_garnizon_2:2915"],"zb":[4,"ludMielerz",true],"q":["K63","K64","K65","K66","D34","D35"],"fx":12,"spots":["mielerz","szalas_wegl","postoj_021","juk_021","postoj_handlarza","koszar","pastwisko","postoj_004","postoj_003","pastwisko_018","owca_017","oboz_kopaczy","szyb_czo","jaskinia_wejscie","grob_lugow","patrol_159","patrol_162"],"disc":["lud_mielerz","lud_koszar","lud_postoj","lud_oboz","lud_jaskinia","lud_groby"],"homes":[3,4,162],"busts":["Pasterz_Bust","Handlarz_Bust"],"items":["Przyprawy","Mapa okolic","Skrzynia przemytu","Dziennik kopacza","Wełniany koc"],"icons":[496,497,498,499,500],"f9":9}
+PASS miejsca paczki C zarejestrowane (17, bez „jagna_miejsce” paczki A), 6 odkryć  {"data":true,"eng":true,"res":["pasterz:2910","handlarz:2911","patrol_latarnia_1:2912","patrol_latarnia_2:2913","patrol_garnizon_1:2914","patrol_garnizon_2:2915"],"zb":[4,"ludMielerz",true],"q":["K63","K64","K65","K66","D34","D35"],"fx":12,"spots":["mielerz","szalas_wegl","postoj_021","juk_021","postoj_handlarza","koszar","pastwisko","postoj_004","postoj_003","pastwisko_018","owca_017","oboz_kopaczy","szyb_czo","jaskinia_wejscie","grob_lugow","patrol_159","patrol_162"],"disc":["lud_mielerz","lud_koszar","lud_postoj","lud_oboz","lud_jaskinia","lud_groby"],"homes":[3,4,162],"busts":["Pasterz_Bust","Handlarz_Bust"],"items":["Przyprawy","Mapa okolic","Skrzynia przemytu","Dziennik kopacza","Wełniany koc"],"icons":[496,497,498,499,500],"f9":9}
+FAIL domy TownLife: postoje handlarza (3, 4), przylądek (159), garnizon (162)  [3,4,162]
+PASS popiersia: Pasterz_Bust, Handlarz_Bust  ["Pasterz_Bust","Handlarz_Bust"]
+PASS przedmioty 210-214 (Przyprawy, Mapa okolic, Skrzynia przemytu, Dziennik kopacza, Wełniany koc), ikony 496-500  {"data":true,"eng":true,"res":["pasterz:2910","handlarz:2911","patrol_latarnia_1:2912","patrol_latarnia_2:2913","patrol_garnizon_1:2914","patrol_garnizon_2:2915"],"zb":[4,"ludMielerz",true],"q":["K63","K64","K65","K66","D34","D35"],"fx":12,"spots":["mielerz","szalas_wegl","postoj_021","juk_021","postoj_handlarza","koszar","pastwisko","postoj_004","postoj_003","pastwisko_018","owca_017","oboz_kopaczy","szyb_czo","jaskinia_wejscie","grob_lugow","patrol_159","patrol_162"],"disc":["lud_mielerz","lud_koszar","lud_postoj","lud_oboz","lud_jaskinia","lud_groby"],"homes":[3,4,162],"busts":["Pasterz_Bust","Handlarz_Bust"],"items":["Przyprawy","Mapa okolic","Skrzynia przemytu","Dziennik kopacza","Wełniany koc"],"icons":[496,497,498,499,500],"f9":9}
+PASS F9: sekcja „Ludzie” z wierszami  9
+FAIL każde wstawione zdarzenie (38 na 7 mapach) ma numer 2500-2699 i stoi na polu miejsca paczki C  {"3":[],"4":[],"13":[[2590,99,72,true,false],[2591,103,72,true,false],[2592,101,73,true,false],[2593,100,75,true,false],[2594,105,71,true,false],[2596,97,74,true,false],[2597,102,74,true,false],[2595,98,70,true,false]],"125":[],"168":[]}
+PASS dzień 8 (cykl 2): mielerz się tli (wiersz 4 arkusza, dym), Ludzie.mielerzBurning() dla paczki B  {"st":"burn","burn":true,"core":true,"dir":4,"smoke":true,"home":4}
+PASS ...Zbych Smolarz mieszka wtedy na Leśnej drodze (alt, Łąka) i stoi przy kopcu  {"k":{"st":"burn","burn":true,"core":true,"dir":4,"smoke":true,"home":4},"zb":{"x":48,"y":24,"hidden":false,"map":4}}
+PASS nocą żar mielerza świeci jak ogień (światło w warstwie nocy)  2
+PASS węgiel od Zbycha po 4 G  {"c":1,"g":1996}
+PASS „Dam drewno na wypał”: 12 polan -> zamówienie (gotowe za 2 dni)  {"day":8,"ready":10,"got":0}
+PASS dzień 6 (cykl 0): mielerz zimny, bez dymu, Zbycha przy kopcu nie ma  {"st":"cold","dir":2,"smoke":true,"zb":true}
+PASS K63: 12 drewna Zbychowi (Podgrodzie) -> wypał od dziś wieczora, krok „noc wypału”  {"zb":{"x":31,"y":47,"hidden":false,"map":111},"k63":{"burn":10,"guarded":0,"ambush":0,"lost":0,"spoiled":0,"taken":0,"near":0},"r1":{"s":"active","step":1,"day":10,"sday":10,"sh":9.016388888888839,"t":{"done":{"0":10},"alt":-1},"times":0,"end":0},"text":"naście polan, suche. Dobre. Dziś wieczorem\nrozpalę mielerz przy Leśnej drodze. / Tylko... w noc wypału rabusie lubią rozkopać\nkopiec i wynieść węgiel, zanim ostygnie.\nPrzypilnujesz go ze mną tej nocy?"}
+PASS ...w noc wypału pod mielerzem: zasadzka 2 rabusiów (Humans, tag ludMielerz)  2
+PASS ...odparci (humansDone) -> krok „odbierz węgiel”  {"s":"active","step":2,"day":10,"sday":10,"sh":22.510000000000034,"t":{"done":{"0":10,"1":10},"alt":-1},"times":0,"end":0}
+PASS ...dzień 12: Zbych daje 10 worków węgla, krok „do kowala”  {"c":11,"r3":{"s":"active","step":3,"day":10,"sday":12,"sh":9.00999999999997,"t":{"done":{"0":10,"1":10,"2":12},"alt":-1},"times":0,"end":0}}
+PASS ...kowal: 40 G, zadanie wykonane, flaga ludKowalRabat  {"r4":{"s":"done","step":3,"day":10,"sday":12,"sh":9.00999999999997,"t":{"done":{"0":10,"1":10,"2":12,"3":12},"alt":-1},"times":1,"end":12},"g":40}
+PASS ...potem kowal sprzedaje stal za 50 G (raz na dzień)  {"stal":1}
+PASS handlarz krąży: dzień % 2 = 0 Łąka, 1 Kruczy Jar - stoi na postoju, wóz widać  [[12,4,4,true,true],[13,3,3,true,true],[14,4,4,true,true],[15,3,3,true,true]]
+PASS ...wieczorem ognisko przy wozie (płomień, światło nocą)
+PASS plotka: jedno nieodkryte miejsce trafia do „Okolic” (Okolice.hint)  {"known0":3,"known1":4}
+PASS towar dnia: mapa okolic + 5 rzeczy z listy  [[211,"Mapa okolic"],[127,"Strzały"],[200,"Bryła soli"],[70,"Nasiona jęczmienia"],[68,"Nasiona marchwi"],[93,"Lina"]]
+PASS Mapa okolic za 60 G: w torbie, wszystkie miejsca znane w „Okolicach”  {"n":1,"rev":true}
+PASS woda z beczki: łyk za 12 G (drożej w upał), drugi raz tego dnia - dymek „Dziś już piłeś”  {"g":12,"p":["Dziś już piłeś z mojej beczki. Jutro."]}
+PASS skup: wełna po 6 G (o 20% drożej niż w mieście)  12
+PASS K65: juk leży przy Leśnej drodze w jednym z 3 miejsc z planu  {"vis":[64,14,true],"at":[64,14]}
+PASS ...podniesiony (v:juk), krok „oddaj juk”  {"s":"active","step":1,"day":16,"sday":16,"sh":9.016944444444393,"t":{"done":{"0":16}},"times":0,"end":0}
+PASS ...oddany handlarzowi: zadanie wykonane, u niego taniej (flaga ludJukRabat)  {"r2":{"s":"done","step":1,"day":16,"sday":16,"sh":9.016944444444393,"t":{"done":{"0":16,"1":16},"alt":-1},"times":1,"end":16}}
+PASS dzień 9, 10:00: pasterz na Łące, 6 owiec na pastwisku (x 43-49, y 44-49)  {"a":{"n":6,"size":6,"inZone":true,"mode":"pasture"},"p":{"x":45,"y":47,"hidden":false,"map":4}}
+PASS 22:00: owce w koszarze (wnętrze za płotem z wikliny)  {"cells":["51,41","52,41","53,41","51,42","52,42","53,42"],"mode":"fold"}
+PASS płot koszaru blokuje (50,40), (50,43), (54,42), furtka (52,43) przechodnia  [[50,40,true],[50,43,true],[54,42,true],[52,43,false]]
+PASS co trzeci dzień (11): pasterz ze stadem na pastwisku przy menhirach (Łąka, drugie pastwisko)  {"c":{"n":6,"home":4},"p18":{"x":45,"y":61,"hidden":false,"map":4}}
+PASS pasterz sprzedaje wełniany koc (25 G)  -25
+PASS koc: odpoczynek na ziemi o połowę szybszy (około +30 zamiast +20 na godzinę)  {"withKoc":30,"without":20.000000000000142}
+PASS K64: po burzy w stadzie 5 owiec, pasterz daje zadanie  {"n5":[true,5,5],"text":"Pięć. Liczę i liczę - pięć. Siwa uciekła w\nburzę. Głupia, boi się grzmotu i leci przed\nsiebie. / Pewnie gdzieś na łące za koszarem, tam zawsze\nucieka. Ja nie mogę zostawić stada.\nPrzyprowadzisz ją? Pó"}
+PASS ...Siwa stoi na Omszałej łące w miejscu z planu  {"lost":[[62,45,"lost"]],"at":[62,45]}
+PASS ...przycisk akcji przy owcy: idzie za bohaterem, krok „zaprowadź na pastwisko”  {"f1":["follow"],"r1":{"s":"active","step":1,"day":21,"sday":21,"sh":10.038611111110994,"t":{"done":{"0":21}},"times":0,"end":0}}
+PASS ...przeszła z bohaterem na Łąkę, na pastwisku dołącza do stada  {"k2":{"spot":1,"found":21,"follow":false,"home":21},"r2":{"s":"active","step":2,"day":21,"sday":21,"sh":10.070277777777564,"t":{"done":{"0":21,"1":21}},"times":0,"end":0}}
+PASS ...pasterz: ser ×3, 30 G, zadanie wykonane (flaga ludOwcaRabat - taniej)  {"s":"done","step":2,"day":21,"sday":21,"sh":10.070277777777564,"t":{"done":{"0":21,"1":21,"2":21},"alt":-1},"times":1,"end":21}
+FAIL przylądek z latarnią 10:00: para żołnierzy na obchodzie (2912 prowadzi, 2913 idzie krok za nim)  {"l":false,"f":false,"held":false,"hid":[null,null]}
+PASS garnizon: druga para (2914, 2915) na obchodzie wybrzeża  {"l":true,"held":true}
+PASS przychylność garnizonu < 10: patrol przeszukuje torbę (opłata 5 G, raz na dzień - wspólnie z patrolem garnizonu)  {"p":["-5 G (opłata za przepustkę)"],"g":-5}
+FAIL K66: nocą (21-24) patrol wychodzi z latarnią; przy ścieżce (70,40) zasadzka: 2 bandytów i nożownik  {"pat":{"on":false,"light":0},"band":[]}
+PASS ...odparci: krok „zamelduj rotmistrzowi”  {"s":"active","step":1,"day":11,"sday":11,"sh":21.57888888888982,"t":{"done":{"0":11}},"times":0,"end":0}
+PASS ...rotmistrz: 30 G, przychylność garnizonu +5, zadanie wykonane  {"r2":{"s":"done","step":1,"day":11,"sday":11,"sh":21.57888888888982,"t":{"done":{"0":11,"1":12},"alt":-1},"times":1,"end":12},"f":5}
+PASS obóz kopaczy (W8 od rozdz. 3): namioty, ognisko, 4 kopaczy Czarnych Oczu śpi nocą  {"tents":[true,true],"men":[["sleep","Najemnik"],["sleep","Bandyta"],["sleep","Bandyta"],["sleep","Nożownik"]],"d35":null,"fire":true}
+FAIL ...D35 zaczyna się samo przy obozie  null
+PASS ...skrzynia dowódcy: Dziennik kopacza (213), krok „co z szybem”  {"s":"active","step":1,"day":13,"sday":13,"sh":23.044166666666815,"t":{"done":{"0":13}},"times":0,"end":0}
+PASS szyb bez piły: dymek „Potrzebujesz piły” (nie okno wiadomości)  ["Potrzebujesz piły"]
+PASS ...6 uderzeń (lina + piła): szyb zasypany, kopacze odchodzą, D35 wykonane  {"d35":{"journal":13,"how":"zasyp","end":13,"hits":6},"r2":{"s":"done","step":1,"day":13,"sday":13,"sh":23.044166666666815,"t":{"done":{"0":13,"1":13}},"times":1,"end":13},"after":{"dir":4,"men":0,"active":false}}
+PASS odkrycie „Obóz kopaczy Czarnych Oczu”
+PASS wylot jaskini: przed W5 rozdz. 4 zawalony, w przypływie zalany - dymki  {"p1":["Otwór zawalony głazami. Ktoś je tu ułożył - celowo."],"p2":["Wejście zalane. Trzeba odpływu."]}
+PASS w odpływie: wejście na mapę 177 „Jaskinia przemytników” (20x14, woda słona, nisza, wyjście)  {"id":177,"note":"<Dust:on>\n<Dark:on>\n<DayNight:off>\n<DarkDay:226>\n<DarkNight:226>\n<Ambience:cave>\n<Hunt:off>\n<Build:off>\n<Farm:off>\n<Minimap:off>\n<Water:salt>\n<Ludzie:jaskinia>","xy":[3,11],"w":20,"h":14,"niche":[2],"exit":true}
+PASS nocą skrzyni pilnuje Sławek (Humans)  ["Sławek"]
+PASS D34: skrzynia przemytu z niszy (ciężka, 212), zadanie samo się zaczęło, krok „komu oddać”  {"s":"active","step":1,"day":14,"sday":14,"sh":10,"t":{"done":{"0":14}},"times":0,"end":0}
+PASS wyjście z jaskini (3,12) prowadzi z powrotem do zatoczki (16,65)  [125,16,65]
+FAIL ...celnik: 40 G, zadanie wykonane, skrzynia oddana  {"r2":{"s":"active","step":1,"day":14,"sday":14,"sh":10,"t":{"done":{"0":14}},"times":0,"end":0},"g":0}
+FAIL Ludzie.stashFound() (skrytka orła paczki D): druga skrzynia, flaga ludObieSkrzynie (komentarz Rocha)  {"ludKowalRabat":12,"ludJukRabat":16,"ludOwcaRabat":21,"rochMet":1,"garnizonPoznany":1,"ludPatrolDone":12,"ludObieSkrzynie":14}
+PASS stary krzyż: 4 uderzenia rękami -> oczyszczony (wiersz 1 arkusza)  {"c":[4,0,0],"dir":4}
+PASS trzy krzyże czyste: flaga ludGroby (Marta podziękuje), odkrycie „Stare groby Ługów”  {"c":[4,4,4],"done":15}
+PASS odkrycia odwiedzonych miejsc w zakładce „Okolice”  [["lud_mielerz",true],["lud_koszar",true],["lud_postoj",true],["lud_jaskinia",true]]
+PASS braki tylko dymkami (okno wiadomości nie było potrzebne)  ["Dziś już piłeś z mojej beczki. Jutro.","-5 G (opłata za przepustkę)","Potrzebujesz piły","Otwór zawalony głazami. Ktoś je tu ułożył - celowo.","Wejście zalane. Trzeba odpływu."]
+PASS F9: wiersz „Miejsce” przenosi na miejsce paczki (mielerz, Łąka)  {"go":["Mielerz Zbycha (Leśna droga)",4,46,26,8]}
+PASS F9: „Dzień handlarza: Łąka” ustawia dzień postoju i przenosi do wozu  {"stop":{"o":{"go":["Postój handlarza (Łąka, przy ognisku)",4,62,13,8]},"stop":4},"here":{"x":62,"y":11,"hidden":false,"map":4}}
+PASS zapis i wczytanie zachowują stan paczki (Tawerna.state „ludzie”)  {"before":{"c":[4,4,2],"done":15},"after":{"c":[4,4,2],"done":15}}
+PASS bez błędów w konsoli  []
+64/71 passed

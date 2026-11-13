@@ -1,0 +1,553 @@
+{
+ "mapa": 20,
+ "nazwa": "Dom dziadka - Podwórze",
+ "w": 120,
+ "h": 120,
+ "zestaw": 9,
+ "obszar": null,
+ "problemy": [
+  {
+   "kod": "O1",
+   "x": 39,
+   "y": 48,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 560 (D 0,6) - dół bez góry (brak kafla 552 nad) w (39,48)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 37,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (37,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 38,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (38,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 39,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (39,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 40,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (40,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 41,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (41,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 43,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (43,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 44,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (44,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 45,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (45,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 46,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (46,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 47,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (47,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 48,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (48,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 49,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (49,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 50,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (50,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 51,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (51,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 52,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (52,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 53,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (53,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 54,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (54,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 55,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (55,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 39,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,39)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 39,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,39)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 40,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,40)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 40,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,40)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 41,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,41)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 41,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,41)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 42,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,42)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 42,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,42)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 43,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,43)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 43,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,43)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 44,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,44)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 44,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,44)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 45,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,45)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 45,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,45)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 46,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,46)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 46,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,46)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 47,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,47)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 47,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,47)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 48,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,48)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 48,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,48)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 49,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,49)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 49,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,49)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 50,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,50)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 50,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,50)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 51,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,51)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 51,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,51)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 52,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,52)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 52,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,52)"
+  },
+  {
+   "kod": "R1",
+   "x": 36,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (36,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 37,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (37,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 38,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (38,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 39,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (39,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 40,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (40,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 41,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (41,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 43,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (43,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 44,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (44,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 48,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (48,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 49,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (49,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 50,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (50,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 51,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (51,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 52,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (52,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 53,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (53,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 54,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (54,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 55,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (55,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,53)"
+  },
+  {
+   "kod": "W1",
+   "x": 51,
+   "y": 44,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 11 'EV011' (!Tavern_Yard|2|4|2) zajmuje 13% dołu wolnej kratki (51,44): przejście węższe niż kratka"
+  },
+  {
+   "kod": "W1",
+   "x": 53,
+   "y": 44,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 11 'EV011' (!Tavern_Yard|2|4|2) zajmuje 20% dołu wolnej kratki (53,44): przejście węższe niż kratka"
+  },
+  {
+   "kod": "Z2",
+   "x": 0,
+   "y": 48,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 205 'Splot gałęzi', 207 'Wysoki suchy krzak' nachodzą na kratce (0,48)"
+  },
+  {
+   "kod": "Z2",
+   "x": 79,
+   "y": 62,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 62 'Drzewo', 68 'Wysoki suchy krzak' nachodzą na kratce (79,62)"
+  },
+  {
+   "kod": "Z2",
+   "x": 78,
+   "y": 63,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 200 'Splot gałęzi', 215 'Splot gałęzi' nachodzą na kratce (78,63)"
+  },
+  {
+   "kod": "Z2",
+   "x": 79,
+   "y": 63,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 68 'Wysoki suchy krzak', 200 'Splot gałęzi' nachodzą na kratce (79,63)"
+  },
+  {
+   "kod": "D4",
+   "x": 0,
+   "y": 49,
+   "waga": "info",
+   "opis": "rzecz do zbierania 207 'Wysoki suchy krzak' stoi w nieosiągalnym miejscu (0,49)"
+  },
+  {
+   "kod": "D4",
+   "x": 50,
+   "y": 50,
+   "waga": "info",
+   "opis": "rzecz do zbierania 19 'EV019' stoi w nieosiągalnym miejscu (50,50)"
+  }
+ ],
+ "licznik": {
+  "O1": 1,
+  "R1": 67,
+  "W1": 2,
+  "Z2": 4,
+  "D4": 2
+ },
+ "png": "C:/Users/macie/OneDrive/Dokumenty/RMMZ/Tawerna/docs/mapy/kontrola_Map020.png",
+ "osiagalne": 8769,
+ "bez_wejsc": false,
+ "drobne_kieszenie": 1
+}

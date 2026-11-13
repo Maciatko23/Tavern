@@ -1,5 +1,5 @@
 // The story start (Story.js): a new game begins in grandpa's house with his talk about the debt (2500 G to Lord Zaleski by day 60),
-// the journal gets chapter 1, the way in to the tavern is walked (Polna droga -> Okolice Tawerny -> the door), Borgar hires the hero
+// the journal gets chapter 1, the way in to the tavern is walked (Polna droga -> Kruczogród -> the door), Borgar hires the hero
 // and gives a shift (TavernShift.js), the Lord takes the money (a part, then all: chapter 1 ends), letters come on the way, the debt
 // counts till dawn after the deadline (a late shift on the last day, the butler at night), an unpaid debt at dawn no longer ends the
 // game (2026-10-15): the field goes to the Lord - a letter away from the field, the Lord's men on it (not while the hero still sits
@@ -227,11 +227,11 @@ const DRIVER = String.raw`
             /Czasu jeszcze sporo, ale nie zwlekaj/.test(g2.text) && !/Idzie ci lepiej/.test(g2.text) && /Działka\s+jest\s+za\s+lasem/.test(g2.text) && g2.log.every(l => l.who === 901), g2.text);
 
         // ================= 2. the field, the tavern: Borgar
-        await go(3, 26, 14);
+        await go(3, 66, 45);
         await ev("Journal.evaluateGoals(); Watki.get('fabula').ownChecks(); 0");
         const fld = await J("({ f: $gameSystem._story.flags.field, done: Watki.rekordy().w.fabula.t.done[1] !== undefined, cur: Watki.krok('fabula'), line: (Journal.tracked() || {}).line, name: $gameMap.displayName() })");
         check("reaching grandpa's field (Map003, shown as 'Kruczy Jar') ticks 'Dojdź na działkę dziadka'; the chapter then says find the job", fld.f && fld.done && fld.cur === "praca" && fld.line === "Znajdź pracę w tawernie" && fld.name === "Kruczy Jar", fld);
-        // the way in, walked with the keys: Polna droga north -> Okolice Tawerny (Map008) -> the tavern's door -> the tavern (Map001), out and in again
+        // the way in, walked with the keys: Polna droga north -> Kruczogród (Map008) -> the tavern's door -> the tavern (Map001), out and in again
         await go(22, 6, 42, 4);   // (2026-10-30 the world: Polna droga -> the town through the east gate, not the old south gate)
         const to8 = await walkTo("left", 8);
         const at8 = await J("({ x: $gamePlayer.x, y: $gamePlayer.y, door: ($gameMap.events().find(e => /^Drzwi tawerny/.test(e.event().name)) || { x: -1 }).x })");
@@ -242,7 +242,7 @@ const DRIVER = String.raw`
         const out8 = await J("({ x: $gamePlayer.x, y: $gamePlayer.y })");
         await ev("(function(){ $gamePlayer.locate(51, 17); $gamePlayer.setDirection(8); return 0; })()");
         const in1 = await walkTo("up", 1);
-        check("the way in: Polna droga west (the east gate) -> Okolice Tawerny, its door -> the tavern with Borgar; the tavern's exit -> back in front of the door", to8 && at8.x >= 100 && at8.door === 51 && to1 && at1.borgar &&
+        check("the way in: Polna droga west (the east gate) -> Kruczogród, its door -> the tavern with Borgar; the tavern's exit -> back in front of the door", to8 && at8.x >= 100 && at8.door === 51 && to1 && at1.borgar &&
             back8 && out8.x === 51 && out8.y === 17 && in1, { to8, at8, to1, at1, back8, out8, in1 });
         await ev("$gameSystem.setDayNightHour(10); $gameSystem.setStamina(100); 0");
         const bor = await J("(function(){ const e = Story.borgarEvent(); return e && { id: e.eventId(), name: e.event().name, stub: e.list().length === 2 && e.list()[0].code === 355, atmo: $gameMap.events().filter(x => /Atmosfera - Borgar/.test(x.event().name)).map(x => Story.roleOf(x)) }; })()");
@@ -283,7 +283,7 @@ const DRIVER = String.raw`
         check("'Przepracuj zmianę u Borgara' is done", await ev("Watki.rekordy().w.fabula.t.done[3] !== undefined && Watki.krok('fabula') === 'dlug'"));
 
         // ================= 3. the Lord: a part, then all
-        await go(24, 1, 15, 6);
+        await go(24, 21, 75, 6);
         await ev("$gameSystem.setDayNightHour(10); 0");
         await frames(40);
         const lord = await J(`(function(){ const e = $gameMap.event(902), d = Story.doorEvent(); return e && d && { name: e.event().name, sheet: e.characterName(), index: e.characterIndex(), x: e.x, y: e.y, dx: e.x - d.x, dy: e.y - d.y, page: e._pageIndex, door: [d.x, d.y], doorStub: d.list()[0].code === 355 }; })()`);
@@ -411,7 +411,7 @@ const DRIVER = String.raw`
             /Dziś mija termin u Lorda, a brakuje jeszcze 2500 G! Zmiana skończy się po północy - potem prosto do dworu, kamerdyner przyjmuje pieniądze do świtu\./.test(said(late)), { text: said(late).slice(0, 500), choices: late.choices });
         check("back after midnight (day 61, before dawn) with the pay: no ending; Borgar says to run to the manor before dawn", late.done && lt.day === 61 && lt.hour < 6 && lt.gold > 0 && !lt.ended && lt.scene === "Scene_Map" && lt.save &&
             /o świcie mija termin u Lorda! Biegnij do dworu/.test(said(late)), { lt, last: late.log.slice(-1) });
-        await go(24, 1, 15, 6);
+        await go(24, 21, 75, 6);
         await frames(45);
         const earned = await ev("$gameParty.gold()");
         const nightPay = await talkTo("Story.doorEvent()", ["Oddaj wszystko"]);
@@ -456,7 +456,7 @@ const DRIVER = String.raw`
         check("Story.pay(2500) outside the talks: paid in full, chapter 1 done at once (top notice, receipt in the notes)", paidOut === 2500 && sp.s.paid === 2500 && sp.s.done === 70 &&
             sp.notices.some(t => /Rozdział 1 zakończony/.test(t)) && sp.notes.includes("Pokwitowanie od Lorda"), { paidOut, paid: sp.s.paid, done: sp.s.done, notices: sp.notices, notes: sp.notes });
         // the dawn loss waits while he sits resting: the debt open again, day 61 at 5:30 (not yet), a grass rest on the field runs past 6:00
-        await go(3, 26, 14);
+        await go(3, 66, 45);
         await ev("(function(){ const s = $gameSystem._story; s.paid = 0; s.done = 0; s.payments = []; $gameSystem._dayNightDay = 61; $gameSystem.setDayNightHour(5.5); Story.setDeadlineOn(true); return 0; })()");
         await frames(10);
         const before6 = await J("({ doomed: Story.doomed(), night: Story.lastNight(), name: $gameMap.displayName(), save: $gameSystem.isSaveEnabled() })");
@@ -496,7 +496,7 @@ const DRIVER = String.raw`
         await go(1, 50, 53);
         const oldB = await J("(function(){ const e = $gameMap.events().find(x => x.event().name === 'Borgar Kowal'); return { first: e.list()[0].code, text: e.list()[1].parameters[0] }; })()");
         check("...Borgar keeps his own commands", oldB.first === 101 && /Witaj, podróżniku/.test(oldB.text), oldB);
-        await go(24, 1, 15, 6);
+        await go(24, 21, 75, 6);
         const oldL = await J("(function(){ const d = $gameMap.events().find(x => /^Drzwi dworu/.test(x.event().name)); return { lord: !!$gameMap.event(902), data: !!$dataMap.events[902], door: d.list()[1] && d.list()[1].parameters[0] }; })()");
         check("...no Lord at the manor, its door is shut as before", !oldL.lord && !oldL.data && /zamknięte/.test(oldL.door || ""), oldL);
         await go(19, 8, 6);

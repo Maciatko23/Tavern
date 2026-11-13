@@ -7,7 +7,7 @@ const SHOTS = path.join(__dirname, "..", "docs", "cienie");
 
 kit.test({ port: 9447, bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
     require("fs").mkdirSync(SHOTS, { recursive: true });
-    await t.newGame({ map: 3, x: 22, y: 14, day: 40, hour: 12, quiet: true, minimap: false });
+    await t.newGame({ map: 3, x: 62, y: 45, day: 40, hour: 12, quiet: true, minimap: false });
     // a rock with a painted shadow and an ore rock, both standing
     const pick = re => t.json(`(function(){ const s = SceneManager._scene._spriteset._characterSprites.find(o => o._character instanceof Game_Event && ${re}.test(o._characterName || "") && o._character.x > 4 && o._character.y > 4);
         return s ? { id: s._character.eventId(), x: s._character.x, y: s._character.y, pic: s._characterName } : null; })()`);
@@ -36,7 +36,7 @@ kit.test({ port: 9447, bootCheck: "the game boots", errorCheck: "no errors in th
     const oreNoon = await at(ore.id, 12);
     t.check("an ore rock (no painted shadow) throws one too", oreNoon.visible && oreNoon.tipY > 0, oreNoon);
     // a thicket of bare branches: a lacy shadow (the branches sharp in it, lighter: light comes through), its painted shadow turned down too
-    const bush = await pick("/^!\\$Bush_Bare/");
+    const bush = (await pick("/^!\\$Bush_Bare_(Thicket|Tall|Big)/")) || (await pick("/^!\\$Bush_Bare/"));   // (a tall one: a low wide bush throws a stub too short to measure - 2026-11-12)
     const bushMorning = bush ? await at(bush.id, 7.5) : null;
     const lace = bush ? await t.json(`(function(){ const s = SceneManager._scene._spriteset._characterSprites.find(o => o._character === $gameMap.event(${bush.id})); return s._occluder ? +s._occluder.alpha.toFixed(2) : null; })()`) : null;
     t.check("a thicket of bare branches throws a lacy shadow too (morning: to the left; lighter - light comes through)", !!bush && bushMorning.visible && bushMorning.tipX < -5 && bushMorning.soft && lace > 0.8 && lace < 0.95, { bush, bushMorning, lace });

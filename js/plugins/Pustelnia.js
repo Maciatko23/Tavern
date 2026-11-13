@@ -119,6 +119,8 @@
         if (d === w0 + 1 && h < N.until) return { phase: "open", year: T.time.year(w0), wig: w0 };
         return null;
     }
+    // (2026-11-11) the hermitage out of the world: Kleofas lives by the chapel of Kruczogrod (Map008) - TownLife's alt home, see Pustelnia_Data
+    const chapel = () => !(window.WyspaData && window.WyspaData.HERMITAGE_OPEN);
     const heartHung = () => has() && flag("sercePustelni");
     const nightNow = () => has() && heartHung() && !!nightOf(day(), hour());
     // the next Night (its Wigilia day, its year) from today
@@ -141,7 +143,16 @@
         return ev && $gameMap.event(ev.eventId()) === ev ? ev : null;
     }
     const kleofasHere = () => { const ev = kleofasEv(); return !!ev && !(ev._town && ev._town.hidden); };
-    const spkK = () => { const ev = kleofasEv(); return { id: ev ? ev.eventId() : -1, name: D.RESIDENT.name }; };
+    // (2026-11-11, questy_pustelnia) the lectern of the chapel's interior (Map178 "Pulpit z księgą"): Kleofas, who stands outside by the door, steps in
+    // for the reading - his picture (the event "Kleofas przy pulpicie", note <Pustelnia:czytanie>) is shown only for it
+    const readerEv = () => ($gameMap.events().find(e => e && e.event() && /<Pustelnia:czytanie>/.test(e.event().note || "")) || null);
+    const inChapel = () => chapel() && $gameMap.mapId() === D.CHAPEL_INNER;
+    function reader(on) { const ev = readerEv(); if (!ev) return; ev.setTransparent(!on); if (on) ev.setOpacity(255); }
+    function kleofasAtChapel() {
+        const L = TL(), r = L && L.RESIDENTS ? L.RESIDENTS.find(x => x.key === KEY) : null;
+        return !!r && !L.gone(KEY) && L.homeOf(r) === D.CHAPEL_MAP && L.entryAt(r, hour()).act !== "inside";
+    }
+    const spkK = () => { const ev = kleofasEv() || (inChapel() ? readerEv() : null); return { id: ev ? ev.eventId() : -1, name: D.RESIDENT.name }; };
     function say(ev, text) {
         const SB = T.api("SpeechBubbles");
         if (SB && SB.say && ev) SB.say(ev, String(text).replace(/^> /, ""), 220); else T.popup(String(text).replace(/^> /, ""), { color: "#eceef0" });
@@ -208,7 +219,8 @@
     // why a card cannot be read now (null: it can) - { pop: popup text } or { say: Kleofas's lines }
     function readBlock() {
         if (!pendant()) return { need: D.TX.noPendant };
-        if ($gameMap.mapId() !== INNER || !kleofasHere()) return $gameMap.mapId() === INNER ? { pop: D.TX.noKleofas } : { say: D.TX.readWhere };
+        const ch = chapel(), there = $gameMap.mapId() === (ch ? D.CHAPEL_INNER : INNER);
+        if (!there || !(ch ? kleofasAtChapel() : kleofasHere())) return there ? { pop: D.TX.noKleofas } : { say: D.TX.readWhere };
         if (!isDone("K50")) return { say: D.TX.readNoInk };
         if (!isActive("D23") && !isDone("D23")) return { say: D.TX.readNoQuest };
         if (!inHours(hour(), D.READ_HOURS)) return { say: D.TX.readLate };
@@ -234,11 +246,15 @@
     // the lectern in the scriptorium (Map156): Pustelnia.lectern(this)
     function lectern(interp) {
         if (!has() || !interp) return;
+        if ($gameMap.mapId() === D.CHAPEL_INNER && !chapel()) return;   // (the hermitage open: the chapel's pulpit is only a book on a stand)
         const b = readBlock();
         if (b && b.need) { T.popup.need(pendantIcon(), b.need); return; }
         if (b && b.pop) { T.popup(b.pop, { color: "#ffe9a8" }); return; }
+        const ch = inChapel();
+        if (ch) reader(true);
         const out = b ? say_([], spkK(), b.say) : readChoice();
-        if (out.length) interp.setupChild(out.concat([C(0, [])]), interp.eventId());
+        if (out.length) { if (ch) act(out, ["readerOff"]); interp.setupChild(out.concat([C(0, [])]), interp.eventId()); }
+        else if (ch) reader(false);
     }
 
     // ------------------------------------------------------------------
@@ -305,12 +321,12 @@
         const n = nightOf(day(), hour());
         if (n && n.phase === "open" && !S().rung[n.year]) {
             S().rung[n.year] = day();
-            if ($gameMap.mapId() === MAP || $gameMap.mapId() === INNER) { bellLeft = 7; bellNext = Graphics.frameCount + 20; }
+            if ($gameMap.mapId() === MAP || $gameMap.mapId() === INNER || (chapel() && $gameMap.mapId() === D.CHAPEL_MAP)) { bellLeft = 7; bellNext = Graphics.frameCount + 20; }
             const ev = kleofasEv();
             if (ev && kleofasHere()) say(ev, K().siedem);
         }
         if (bellLeft > 0 && Graphics.frameCount >= bellNext) {
-            T.audio.se(BELL.name, { volume: $gameMap.mapId() === MAP ? BELL.volume : 55, pitch: BELL.pitch });
+            T.audio.se(BELL.name, { volume: $gameMap.mapId() === MAP || $gameMap.mapId() === D.CHAPEL_MAP ? BELL.volume : 55, pitch: BELL.pitch });
             bellLeft--;
             bellNext = Graphics.frameCount + 70;
         }
@@ -410,6 +426,8 @@
                 giveCard(a, b);
             } else if (what === "buyCard") {
                 buyCard(interp);
+            } else if (what === "readerOff") {
+                reader(false);
             } else if (what === "read") {
                 read(a);
             } else if (what === "pop") {
@@ -507,6 +525,9 @@
     // The hooks the thread's data names (Pustelnia_Data.js): D23, W2 rozdz. 7, the talks' conditions and actions
     // ------------------------------------------------------------------
     w.haki({
+        // K50, D23 are offered only while the hermitage is on (WyspaData.HERMITAGE_OPEN, Wyspa.isReady)
+        // (2026-11-11) the hermitage out of the world: K50 and D23 are offered at the chapel (Kleofas lives there, the lectern is in its interior)
+        pustelniaOtwarta: () => { const wy = W(); return chapel() || !!(wy && wy.isReady && wy.isReady(D.MAP)); },
         // D23: the step's words (what is read, what waits in the bag, where to look); the marker over Kleofas
         d23Zmienne: () => {
             const bag = inBag(), miss = D.CARDS.filter(c => !found(c.n) && !isRead(c.n));
@@ -546,7 +567,7 @@
     // TownLife's conditions by name (Pustelnia_Data's plan names them as functions too)
     (() => {
         const L = TL();
-        if (L && L.addCondition) { L.addCondition("pustelniaDeszcz", rain); L.addCondition("nocPytania", nightNow); }
+        if (L && L.addCondition) { L.addCondition("pustelniaDeszcz", rain); L.addCondition("nocPytania", nightNow); L.addCondition("pustelniaZamknieta", chapel); }
     })();
 
     // ------------------------------------------------------------------
@@ -577,7 +598,7 @@
         updateBell();
         if (++tick % 60 === 0) syncCards();
     }, { owner: PLUGIN, name: "hermitage" });
-    T.on("mapReady", () => { hookTalk(); syncCards(); }, { owner: PLUGIN });
+    T.on("mapReady", () => { hookTalk(); syncCards(); reader(false); }, { owner: PLUGIN });
 
     // ------------------------------------------------------------------
     // The API
@@ -585,7 +606,7 @@
     const api = {
         MAP, INNER, DATA: D, state: () => S(), act: actCall, lectern, look, edge, pick: pickCard, read, giveCard, syncCards,
         rain, nightNow, nightOf, wigDay, nextNight, heartHung, inBag, isRead, found, readCount, answer, ask, canAsk,
-        kleofasHere, readBlock, built: () => built
+        kleofasHere, readBlock, chapel, built: () => built
     };
     window.Pustelnia = T.register(PLUGIN, api);
 })();

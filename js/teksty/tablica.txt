@@ -476,6 +476,41 @@ Szyszki na wojnę
 [szablony.cones.text]
 Chłopaki z drugiego końca wsi wypowiedzieli nam wojnę na szyszki. Potrzebuję amunicji. Dużo amunicji.
 
+# herring_janek - pisze: Janek (przystań)
+[szablony.herring_janek.title]
+Śledzie do wędzarni
+
+[szablony.herring_janek.text]
+Wędzarnia pusta, a ławica poszła w drugą stronę. Przynieś śledzie do tawerny, to przy kuflu się rozliczymy - ja do miasta schodzę tylko wieczorem.
+
+# tran_bazyli - pisze: Bazyli (latarnia)
+[szablony.tran_bazyli.title]
+Tran do latarni
+
+[szablony.tran_bazyli.text]
+Światła nie zostawię, więc sam nie przyjdę. Przynieś tran do tawerny, Borgar mi go podeśle. Bez tranu latarnia jest tylko wysoką wieżą.
+
+# wood_klos - pisze: Kłos (garnizon)
+[szablony.wood_klos.title]
+Drewno dla kuchni polowej
+
+[szablony.wood_klos.text]
+Moi chłopcy rąbać nie umieją, tylko ciąć. Dostarcz drewno, wpiszę do księgi skupu. Gotówka od ręki - u Borgara, bo z garnizonu wozu nie wyślę.
+
+# wool_wawrzyn - pisze: Wawrzyn (pastwisko)
+[szablony.wool_wawrzyn.title]
+Wełna po strzyży
+
+[szablony.wool_wawrzyn.text]
+Owiec nie zostawię, więc kartkę wieszam tu. Potrzebna wełna - przynieś ją Borgarowi, a on mi przekaże zapłatę. Owce rozpoznają dobrą rękę.
+
+# kiln_zbych - pisze: Zbych (mielerz)
+[szablony.kiln_zbych.title]
+Drewno na wypał
+
+[szablony.kiln_zbych.text]
+Mielerz sam się nie napali. Drewna mi brakuje na ostatni wypał. Zostaw u Borgara, wieczorem odbiorę i się rozliczymy.
+
 # ======================================================================== Zleceniodawcy: name - pełne imię, short - podpis na kartce, role - zajęcie, line - zdanie o nich
 zleceniodawcy.borgar.name = Borgar Kowal
 zleceniodawcy.borgar.short = Borgar
@@ -537,6 +572,26 @@ zleceniodawcy.jozek.name = Mały Józek
 zleceniodawcy.jozek.short = Józek
 zleceniodawcy.jozek.role = chłopak na posyłki
 zleceniodawcy.jozek.line = Biega szybciej niż plotki. Prawie.
+zleceniodawcy.janek.name = Janek
+zleceniodawcy.janek.short = Janek
+zleceniodawcy.janek.role = rybak z przystani
+zleceniodawcy.janek.line = Morze daje i morze zabiera. Częściej to drugie.
+zleceniodawcy.bazyli.name = Bazyli Krzesiwo
+zleceniodawcy.bazyli.short = Bazyli
+zleceniodawcy.bazyli.role = latarnik
+zleceniodawcy.bazyli.line = Pilnuje światła, o którym nikt nie myśli, dopóki nie zgaśnie.
+zleceniodawcy.klos.name = Kwatermistrz Kłos
+zleceniodawcy.klos.short = Kłos
+zleceniodawcy.klos.role = kwatermistrz garnizonu
+zleceniodawcy.klos.line = Liczy worki, liczy dni, liczy cudze grosze.
+zleceniodawcy.wawrzyn.name = Wawrzyn Owczarz
+zleceniodawcy.wawrzyn.short = Wawrzyn
+zleceniodawcy.wawrzyn.role = pasterz
+zleceniodawcy.wawrzyn.line = Zna każdą owcę po imieniu i po charakterze.
+zleceniodawcy.zbych.name = Zbych Smolarz
+zleceniodawcy.zbych.short = Zbych
+zleceniodawcy.zbych.role = drwal i węglarz
+zleceniodawcy.zbych.line = Pachnie dymem nawet w niedzielę.
 
 # ======================================================================== Zwierzęta: one / few / many - 1, 2-4, 5 i więcej (zając, zające, zajęcy)
 zwierzeta.rabbit.one = zając
@@ -558,7 +613,7 @@ zwierzeta.boar.many = dzików
 na łące
 
 [miejsca.8]
-Okolice Tawerny
+Kruczogród
 koło tawerny
 
 [miejsca.20]

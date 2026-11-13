@@ -44,9 +44,9 @@
     const params = PluginManager.parameters(PLUGIN);
     const DEF = String(params.enabled === undefined || params.enabled === "" ? "false" : params.enabled) === "true";
     const MAP = 1;
-    const HALL = { x0: 37, y0: 27, x1: 83, y1: 44 };   // sala, bar i scena (kratki)
+    const HALL = { x0: 1, y0: 27, x1: 47, y1: 44 };   // sala, bar i scena (kratki)
     const DARK_PLUS = 0;                                 // o tyle ciemniejsza noc (0-255; 2026-11-05: 0, pomieszczenia bez lamp były czarne)
-    const BARD_ID = 360, BARD_X = 70, BARD_Y = 29;       // zdarzenie grajka na scenie (Przytulna: nowe id w mapie)
+    const BARD_ID = 360, BARD_X = 34, BARD_Y = 29;       // zdarzenie grajka na scenie (Przytulna: nowe id w mapie)
     const BARD_FROM = 18, BARD_TO = 23.5;                // godziny gry grajka
     const SHEET = { grajek: "Przytulna_Grajek_Lutnia", borgar: "Przytulna_Borgar_Wyciera" };
     // goście siedzą na stołkach przy stołach: klatki z img/characters/Przytulna_Siedzi_<Klucz>.png (komórki 88x88; wiersz 0 zwrot na wschód,
@@ -56,7 +56,7 @@
     const CELL = 84, FEET_Y = 74;                        // klatka PixelLab: 84x84, stopa w wierszu 74
     // Borgar wyciera ladę (gracz 2026-11-05: „macha w powietrzu, powinien stać kratkę niżej”): ze swojego miejsca przechodzi za wolny kawałek lady obok doniczki.
     // BAR_EDGE: o tyle pikseli poniżej stóp na jego zwykłym miejscu leży tylny brzeg blatu - co niżej, zasłania lada; BAR_LEAN: przy wycieraniu pochyla się nad nią
-    const BORGAR_HOME = { x: 52, y: 28 }, BORGAR_BAR = { x: 53, y: 29 }, BAR_EDGE = 32, BAR_LEAN = 8;
+    const BORGAR_HOME = { x: 16, y: 28 }, BORGAR_BAR = { x: 17, y: 29 }, BAR_EDGE = 32, BAR_LEAN = 8;
     const borgarOver = ev => { const r = ev._realY - BORGAR_HOME.y; return r > 0 && r <= 1 ? Math.max(0, Math.round(r * $gameMap.tileHeight() - BAR_EDGE)) : 0; };
     function borgarStep(ev, to) {
         const h = to.x > ev.x ? 6 : 4, v = to.y > ev.y ? 2 : 8, th = ev.isThrough();
@@ -110,7 +110,7 @@
             if (/^wypelnienie/i.test(name)) e.note = e.note.replace(/<Light:(\d+),(\d+),(\d+),(\d+)>/i, (m, r, a, b, c) => "<Light:" + Math.round(r * 1.3) + "," + Math.round(a * 1.5) + "," + Math.round(b * 1.5) + "," + Math.round(c * 1.5) + ">");   // miękkie wypełnienie mocniejsze: bez ciemnych plam między kręgami świateł
             else if (/^Kominek/i.test(name)) e.note = e.note.replace(/<Light:(\d+),(\d+),(\d+),(\d+)>/i, "<Light:330,120,58,14>");
             else if (/randol/i.test(name)) e.note = e.note.replace(/<Light:(\d+),(\d+),(\d+),(\d+)>/i, (m, r, a, b, c) => "<Light:" + Math.round(r * 0.68) + "," + a + "," + b + "," + c + ">");
-            else if (e.x >= 65 && /^(Świeca|Latarnia)/i.test(name) && !/na stole/i.test(name)) e.note = e.note.replace(/<Light:(\d+),(\d+),(\d+),(\d+)>/i, (m, r, a, b, c) => "<Light:" + Math.round(r * 1.5) + "," + Math.round(a * 0.78) + "," + Math.round(b * 0.78) + "," + Math.round(c * 0.78) + ">");   // miękkie, szersze koła (bez twardych krawędzi)
+            else if (e.x >= 29 && /^(Świeca|Latarnia)/i.test(name) && !/na stole/i.test(name)) e.note = e.note.replace(/<Light:(\d+),(\d+),(\d+),(\d+)>/i, (m, r, a, b, c) => "<Light:" + Math.round(r * 1.5) + "," + Math.round(a * 0.78) + "," + Math.round(b * 0.78) + "," + Math.round(c * 0.78) + ">");   // miękkie, szersze koła (bez twardych krawędzi)
         }
     }
     // ($dataMap bywa wczytany od nowa bez Game_Map.setup - przejście w obrębie tej samej mapy: łatamy też po wczytaniu sceny)
@@ -235,6 +235,7 @@
                 const d = ev.event(), name = ev.characterName();
                 if (!d || !name || name[0] === "!" || d.id <= 8 || d.id === BARD_ID || (name.indexOf("$Npc_") === 0 && SEATED_KEYS.includes(name.slice(5)))) continue;
                 if (!inHall(ev.x, ev.y) || ev.isMoving() || ev._erased || ev._opacity < 255 || ev.isThrough()) continue;
+                if (ev.direction() === 8) continue;   // (back to the hall - at the counter: a mug raised to the mouth would float over the back of the head - 2026-11-11)
                 const o = this.origin(ev); if (!this.onScreen(o.x, o.y, -10)) continue;
                 list.push(ev);
             }
@@ -242,14 +243,15 @@
         }
         raiseMug() {
             const ev = this.pickGuest(); if (!ev) return;
-            const s = new Sprite(this.bmps.mug); s.anchor.set(0.5, 1); s._ev = ev; s._t = 0; s._d = 2.1; s._side = Math.random() < 0.5 ? -1 : 1;
+            const d = ev.direction(), s = new Sprite(this.bmps.mug); s.anchor.set(0.5, 1); s._ev = ev; s._t = 0; s._d = 2.1; s._dir = d;
+            s._side = d === 4 ? -1 : d === 6 ? 1 : Math.random() < 0.5 ? -1 : 1;   // (turned sideways: the hand on the side he looks to)
             this.addChild(s); ST.mugs.push(s);
         }
         updateMugs(dt) {
             for (let i = ST.mugs.length - 1; i >= 0; i--) {
                 const s = ST.mugs[i]; s._t += dt;
                 const ev = s._ev;
-                if (s._t >= s._d || ev.isMoving() || ev._erased) { this.removeChild(s); ST.mugs.splice(i, 1); continue; }
+                if (s._t >= s._d || ev.isMoving() || ev._erased || ev.direction() !== s._dir) { this.removeChild(s); ST.mugs.splice(i, 1); continue; }   // (turned round: the mug goes with the drink)
                 const k = s._t / s._d, up = k < 0.2 ? k / 0.2 : k > 0.8 ? (1 - k) / 0.2 : 1, e = up * up * (3 - 2 * up);
                 const o = this.origin(ev);
                 s.x = o.x + s._side * (13 - 7 * e); s.y = o.y - (20 + 22 * e);

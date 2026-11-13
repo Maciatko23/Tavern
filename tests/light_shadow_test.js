@@ -64,7 +64,7 @@ kit.test({ port: 9442, bootCheck: "the game boots", errorCheck: "no errors in th
 
     // ---- the manor's lamps at night (<Light:170,90,60,22><LightWhen:night>, 4 tiles apart): each a warm pool of its own, dark
     // between them - not one patch in the day's colours (2026-10-05: at a fire's full strength and reach they ran together)
-    await t.newGame({ map: 24, x: 1, y: 15, dir: 6, hour: 22, quiet: true, minimap: false });
+    await t.newGame({ map: 24, x: 21, y: 75, dir: 6, hour: 22, quiet: true, minimap: false });
     await t.eval("$gameScreen.changeWeather('none', 0, 0); 0");
     await t.frames(20);
     // (2026-10-12: the author moved and took away manor lamps - the camera goes to the lamp the test looks at)

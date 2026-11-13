@@ -22,8 +22,15 @@ const kit = require("./lib/kit.js");
 const ROOT = path.join(__dirname, "..");
 const skeleton = /Wyspa:szkielet/.test(fs.readFileSync(path.join(ROOT, "data", "Map157.json"), "utf8"));
 const OVERLAY = process.env.GAME_OVERLAY || (skeleton ? "tools/miejsca_wyspy/staging_B" : null);
+// (2026-11-11/12: the hermitage and the Urwisko (Map155-157) are out of the world, WyspaData.HERMITAGE_OPEN = false - the Order's ravens live in the ravenry of
+// Kruczogród (Map008, the tower by the north-east, perch at 112,8). Default: the live world; the places that exist only on the Urwisko (its map, its
+// culvert grate, the diggers' camp) are checked with KRUK_OPEN=1, which forces the old open world before the plugins load - as questy_pustelnia_test does)
+const OPEN = process.env.KRUK_OPEN === "1";
+const FORCE_OPEN = `(function(){ let v; Object.defineProperty(window, 'WyspaData', { configurable: true, get() { return v; },
+    set(x) { if (x && typeof x === 'object') x.HERMITAGE_OPEN = true; v = x; } }); })();`;
+const RV = OPEN ? { map: 157, x: 28, y: 12, run: [24, 13] } : { map: 8, x: 112, y: 9, run: [110, 10] };   // (where the ravenry's perch is, and a spot to run past it)
 
-kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
+kit.test({ port: 9502, overlay: OVERLAY, beforeLoad: OPEN ? FORCE_OPEN : undefined, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     if (OVERLAY) console.log("NOTE nakładka: " + OVERLAY);
     const P = "Kruk.pet";
     const S = expr => t.json("(function(){ const s = Kruk.state(); return " + expr + "; })()");
@@ -34,8 +41,8 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
             packs: TownQuestsData.PACKS.filter(p => p.owner === 'Kruk').map(p => p.quests.join()),
             grz: B && { name: B.name, cost: B.cost.map(c => c.join('x')).join(), w: B.w, h: B.h, img: B.image, slots: B.slots, bowl: B.bowl },
             ready: Wyspa.isReady(157), built: Kruk.built(), ring: $dataItems[179] && $dataItems[179].name }; })()`);
-    t.check("Kruk.js i Kruk_Data.js działają: K51 i D24 (od dziadka) w zadaniach, paczka „Kruk”, miejsce gotowe (Wyspa.ready 157)",
-        base.api && base.data && base.k51 && base.d24 === "grandpa" && base.packs.join() === "K51,D24" && base.ready && base.built, base);
+    t.check("Kruk.js i Kruk_Data.js działają: K51 i D24 (od dziadka) w zadaniach, paczka „Kruk”, miejsce gotowe (Wyspa.ready 157 - tylko w KRUK_OPEN; w żywym świecie Urwisko jest poza światem)",
+        base.api && base.data && base.k51 && base.d24 === "grandpa" && base.packs.join() === "K51,D24" && base.ready === OPEN && base.built, base);
     t.check("Farming_Data.js: budynek „Grzęda kruka” (4× Gałęzie, 2× Deski, 1× Lina; 1x1; Farm_Grzeda; korytko i miseczka)",
         base.grz && base.grz.name === "Grzęda kruka" && base.grz.cost === "77x4,80x2,93x1" && base.grz.w === 1 && base.grz.h === 1 && base.grz.img === "Farm_Grzeda" && base.grz.slots === 2 && base.grz.bowl === 3, base.grz);
     const imgs = await t.json(`(function(){ const a = ImageManager.loadSystem('Kruk'), b = ImageManager.loadSystem('Farm_Grzeda'), c = ImageManager.loadSystem('Kruk_Grzeda_Stara'), d = ImageManager.loadCharacter('!$Urwisko_Gniazda');
@@ -48,52 +55,63 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, minimap: false });
     await t.eval("if (window.Creatures && Creatures.auto) Creatures.auto(false); 0");
     await t.setDay(6, 10);
-    await t.go(155, 93, 17, 6);   // (2026-10-18: the hermitage 96x72, its east edge x 95; the Urwisko 112x72 - tools/powieksz)
-    await t.eval("(function(){ const e = $gameMap.events().find(e => e.x === 95 && e.y === 17); $gamePlayer.locate(94, 17); e.start(); return 0; })()");
-    const came = await t.until(t.onMap(157), 30);
-    await t.frames(30);
-    const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $dataMap.width, $dataMap.height, $dataMap.tilesetId, $dataMap.note, $dataMap.displayName]");
-    t.check("prawa krawędź pustelni (95,17) prowadzi na Map157 „Urwisko Kruków” (1,19); 122 x 72 (od 2026-10-30), tileset 11, <Water:salt>, nie szkielet",
-        came && at[0] === 157 && at[1] === 1 && at[2] === 19 && (at[3] === 112 || at[3] === 122) && at[4] === 72 && at[5] === 11 && /<Water:salt>/.test(at[6]) && !/szkielet/.test(at[6]) && at[7] === "Urwisko Kruków", at);
-    await t.calm();
-    const ways = await t.json(`(function(){ const ev = $dataMap.events.filter(Boolean), tr = e => (e.pages[0].list.find(c => c.code === 201) || {}).parameters;
-        const g = ev.find(e => e.name === 'Przelew cysterny');
-        return { west: ev.filter(e => e.x === 0 && (e.y === 19 || e.y === 20)).map(e => tr(e) ? tr(e).slice(1, 4) : null),
-            east: ev.filter(e => e.x === 111 && (e.y === 19 || e.y === 20)).map(e => String(e.pages[0].list[0].parameters[0]).includes('isReady(159)')),
-            grate: g && { x: g.x, y: g.y, img: [g.pages[0].image.characterName, g.pages[0].image.characterIndex, g.pages[0].image.direction, g.pages[0].image.pattern],
-                p2: g.pages[1] && g.pages[1].conditions.switch1Valid && g.pages[1].conditions.switch1Id, to: g.pages[1] && /reserveTransfer\\(167, 33, 3/.test(g.pages[1].list[0].parameters[0]) },
-            rynny: ev.filter(e => /^Miejsce: rynna_/.test(e.name)).map(e => e.name.slice(9)).sort(),
-            rynnyObok: ev.filter(e => /^Miejsce: rynna_/.test(e.name)).every(e => [[0, 1], [0, -1], [1, 0], [-1, 0]].some(([dx, dy]) => $gameMap.isPassable(e.x + dx, e.y + dy, 2) && !$gameMap.eventsXy(e.x + dx, e.y + dy).some(o => o.isNormalPriority()))),
-            land: [[1, 19], [1, 20], [110, 19], [110, 20], [41, 16]].every(([x, y]) => $gameMap.isPassable(x, y, 2)) }; })()`);
-    t.check("przejścia z kontraktu: lewa krawędź (0,19-20) -> pustelnia (94,17-18), prawa (111,19-20) bez przejścia do przylądka (od 2026-10-30 świat: 157 E -> Góry); lądowania przechodnie",
-        ways.west.length === 2 && ways.west.every(w => w && w[0] === 155 && w[1] === 94) && ways.east.length === 0 && ways.land, ways);
-    t.check("krata przelewu (41,15): „Przelew cysterny”, !Quest_Places 0/2/0, strona 2 na przełączniku 17 -> cysterna 167 (33,3); znaczniki rynna_1..4 dla K53 (każdy z wolnym polem obok - pakiet F stawia tam gruz)",
-        ways.grate && ways.grate.x === 41 && ways.grate.y === 15 && ways.grate.img.join() === "!Quest_Places,0,2,0" && ways.grate.p2 === 17 && ways.grate.to
-        && ways.rynny.join() === "rynna_1,rynna_2,rynna_3,rynna_4" && ways.rynnyObok, ways);
-    // (2026-10-30, the world: the east edge (111,19-20) has no Wyspa way to the cape any more - 157 E leads to the mountains through Swiat_Data)
-    // the grate shut: a popup
-    await t.popups({ clear: true });
-    await t.locate(41, 16, 8);
-    await t.eval("$gameMap.events().find(e => e.event().name === 'Przelew cysterny').start(); 0");
-    await t.frames(20);
-    t.check("krata zamknięta (przełącznik 17 wyłączony): popup o kracie z krukiem", (await t.popups()).some(p => /Krata z krukiem|kratą z krukiem/.test(p)) && (await t.eval("$gameMap.mapId()")) === 157);
+    if (OPEN) {
+        await t.go(155, 93, 17, 6);   // (2026-10-18: the hermitage 96x72, its east edge x 95; the Urwisko 112x72 - tools/powieksz)
+        await t.eval("(function(){ const e = $gameMap.events().find(e => e.x === 95 && e.y === 17); $gamePlayer.locate(94, 17); e.start(); return 0; })()");
+        const came = await t.until(t.onMap(157), 30);
+        await t.frames(30);
+        const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $dataMap.width, $dataMap.height, $dataMap.tilesetId, $dataMap.note, $dataMap.displayName]");
+        t.check("prawa krawędź pustelni (95,17) prowadzi na Map157 „Urwisko Kruków” (1,19); 122 x 72 (od 2026-10-30), tileset 11, <Water:salt>, nie szkielet",
+            came && at[0] === 157 && at[1] === 1 && at[2] === 19 && (at[3] === 112 || at[3] === 122) && at[4] === 72 && at[5] === 11 && /<Water:salt>/.test(at[6]) && !/szkielet/.test(at[6]) && at[7] === "Urwisko Kruków", at);
+        await t.calm();
+        const ways = await t.json(`(function(){ const ev = $dataMap.events.filter(Boolean), tr = e => (e.pages[0].list.find(c => c.code === 201) || {}).parameters;
+            const g = ev.find(e => e.name === 'Przelew cysterny');
+            return { west: ev.filter(e => e.x === 0 && (e.y === 19 || e.y === 20)).map(e => tr(e) ? tr(e).slice(1, 4) : null),
+                east: ev.filter(e => e.x === 111 && (e.y === 19 || e.y === 20)).map(e => String(e.pages[0].list[0].parameters[0]).includes('isReady(159)')),
+                grate: g && { x: g.x, y: g.y, img: [g.pages[0].image.characterName, g.pages[0].image.characterIndex, g.pages[0].image.direction, g.pages[0].image.pattern],
+                    p2: g.pages[1] && g.pages[1].conditions.switch1Valid && g.pages[1].conditions.switch1Id, to: g.pages[1] && /reserveTransfer\\(167, 33, 3/.test(g.pages[1].list[0].parameters[0]) },
+                rynny: ev.filter(e => /^Miejsce: rynna_/.test(e.name)).map(e => e.name.slice(9)).sort(),
+                rynnyObok: ev.filter(e => /^Miejsce: rynna_/.test(e.name)).every(e => [[0, 1], [0, -1], [1, 0], [-1, 0]].some(([dx, dy]) => $gameMap.isPassable(e.x + dx, e.y + dy, 2) && !$gameMap.eventsXy(e.x + dx, e.y + dy).some(o => o.isNormalPriority()))),
+                land: [[1, 19], [1, 20], [110, 19], [110, 20], [41, 16]].every(([x, y]) => $gameMap.isPassable(x, y, 2)) }; })()`);
+        t.check("przejścia z kontraktu: lewa krawędź (0,19-20) -> pustelnia (94,17-18), prawa (111,19-20) bez przejścia do przylądka (od 2026-10-30 świat: 157 E -> Góry); lądowania przechodnie",
+            ways.west.length === 2 && ways.west.every(w => w && w[0] === 155 && w[1] === 94) && ways.east.length === 0 && ways.land, ways);
+        t.check("krata przelewu (41,15): „Przelew cysterny”, !Quest_Places 0/2/0, strona 2 na przełączniku 17 -> cysterna 167 (33,3); znaczniki rynna_1..4 dla K53 (każdy z wolnym polem obok - pakiet F stawia tam gruz)",
+            ways.grate && ways.grate.x === 41 && ways.grate.y === 15 && ways.grate.img.join() === "!Quest_Places,0,2,0" && ways.grate.p2 === 17 && ways.grate.to
+            && ways.rynny.join() === "rynna_1,rynna_2,rynna_3,rynna_4" && ways.rynnyObok, ways);
+        // (2026-10-30, the world: the east edge (111,19-20) has no Wyspa way to the cape any more - 157 E leads to the mountains through Swiat_Data)
+        // the grate shut: a popup
+        await t.popups({ clear: true });
+        await t.locate(41, 16, 8);
+        await t.eval("$gameMap.events().find(e => e.event().name === 'Przelew cysterny').start(); 0");
+        await t.frames(20);
+        t.check("krata zamknięta (przełącznik 17 wyłączony): popup o kracie z krukiem", (await t.popups()).some(p => /Krata z krukiem|kratą z krukiem/.test(p)) && (await t.eval("$gameMap.mapId()")) === 157);
+    } else {
+        // the live world: no Urwisko; the ravenry (zerdz_1, zerdz_2 markers) stands by the tower of Kruczogród
+        await t.go(8, 112, 10, 8);
+        await t.frames(20);
+        const town = await t.json(`({ marks: $gameMap.events().filter(e => /^Miejsce: zerdz_/.test(e.event().name)).map(e => e.event().name.slice(9)).sort(), open: !!WyspaData.HERMITAGE_OPEN, ready157: Wyspa.isReady(157) })`);
+        t.check("Urwisko poza światem (HERMITAGE_OPEN = false, Map157 nie jest gotowa); kruczarnia w Kruczogrodzie (Map008): znaczniki zerdz_1 i zerdz_2",
+            !town.open && !town.ready157 && town.marks.join() === "zerdz_1,zerdz_2", town);
+    }
 
     // ---------------------------------------------------------------- kruczarnia: młody kruk, stado, żerdzie
-    await t.locate(26, 13, 8);
+    await t.locate(RV.x - 2, RV.y + 1, 8);
     await t.frames(60);
     const rv = await t.json(`({ pet: ${P} && [${P}.x, ${P}.y, ${P}.z, ${P}.state, !!${P}.wild], flock: Kruk.flock.length, wp: Kruk.wildPlace(), perch: Kruk.legs().length })`);
-    t.check("kruczarnia za dnia: młody kruk na starej żerdzi (28,11; 63 px nad ziemią), wokół stado kruków (10+)",
-        rv.pet && Math.abs(rv.pet[0] - 28.5) < 0.1 && Math.abs(rv.pet[1] - 12) < 0.1 && rv.pet[2] === 63 && rv.pet[3] === "sit" && rv.pet[4] && rv.flock >= 10, rv);
+    t.check("kruczarnia za dnia: młody kruk na starej żerdzi (28,11 na Urwisku / 112,8 w Kruczogrodzie), wokół stado kruków (10+)",
+        rv.pet && (OPEN ? Math.abs(rv.pet[0] - 28.5) < 0.1 && Math.abs(rv.pet[1] - 12) < 0.1 && rv.pet[2] === 63 : Math.abs(rv.pet[0] - 112.5) < 0.6 && rv.pet[2] > 50) && rv.pet[3] === "sit" && rv.pet[4] && (!OPEN || rv.flock >= 10), rv);   // (the flock is the Urwisko's decoration - KRUK_OPEN only; the town's ravens are Klimat_Miasta's)
     await t.setHour(23);
     await t.frames(90);
     const nap = await t.json(`({ f: ${P} && Kruk.frameOf(${P}), flock: Kruk.flock.filter(b => b.nap > 30).length })`);
-    t.check("nocą kruki śpią na żerdziach i murach (nastroszone, łeb pod skrzydłem)", nap.f && nap.f[0] === 6 && nap.f[1] === 4 && nap.flock >= 5, nap);
+    t.check("nocą kruki śpią na żerdziach i murach (nastroszone, łeb pod skrzydłem)", nap.f && nap.f[0] === 6 && nap.f[1] === 4 && (!OPEN || nap.flock >= 5), nap);
     await t.setHour(10);
     await t.frames(20);
-    await t.popups({ clear: true });
-    await t.eval("$gameMap.events().find(e => e.event().name === 'Gruz z kamieniem z krukiem').start(); 0");
-    await t.frames(10);
-    t.check("kamień z krukiem w gruzie: popup i notatka w dzienniku", (await t.popups()).some(p => /kruk/.test(p)) && (await S("Object.keys(s.stones).length")) === 1);
+    if (OPEN) {   // (the stone with the raven in the Urwisko's rubble: no such thing in the town's ravenry)
+        await t.popups({ clear: true });
+        await t.eval("$gameMap.events().find(e => e.event().name === 'Gruz z kamieniem z krukiem').start(); 0");
+        await t.frames(10);
+        t.check("kamień z krukiem w gruzie: popup i notatka w dzienniku", (await t.popups()).some(p => /kruk/.test(p)) && (await S("Object.keys(s.stones).length")) === 1);
+    }
 
     // ---------------------------------------------------------------- K51: Roch, maszt o świcie, etapy
     await t.eval("(function(){ const s = TownQuests.state(); s.flags.rochMet = 2; return 0; })()");
@@ -111,31 +129,54 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.frames(10);
     const st1 = await t.json("({ leg: Kruk.state().k51.leg, step: TownQuests.rec('K51').step })");
     t.check("bohater podchodzi: kruk kracze i odlatuje (krok 1 zaliczony, etap 1)", st1.leg >= 1 && st1.step === 1, st1);
-    await t.locate(15, 5, 8);
-    await t.until("Kruk.state().k51.leg >= 2", 30);
-    t.check("kruk czeka przy górnej krawędzi przystani, potem leci nad klif (etap 2)", (await S("s.k51.leg")) >= 2);
-    await t.go(155, 24, 30, 8);
-    await t.frames(30);
-    const cairn = await t.json(`({ pet: ${P} && [${P}.x, ${P}.y, ${P}.z], leg: Kruk.state().k51.leg })`);
-    t.check("pustelnia: kruk siedzi na kopcu z krukiem", cairn.pet && Math.abs(cairn.pet[0] - 27.5) < 0.6 && cairn.leg === 2, cairn);
-    await t.locate(26, 21, 8);
-    await t.until("Kruk.state().k51.leg >= 3", 30);
-    t.check("bohater przy kopcu: kruk leci na wschód, ku Urwisku (etap 3)", (await S("s.k51.leg")) >= 3);
-    await t.go(157, 1, 19, 6);
-    await t.frames(30);
-    const pine = await t.json(`({ pet: ${P} && [${P}.x, ${P}.y, ${P}.z], leg: Kruk.state().k51.leg })`);
-    t.check("Urwisko: kruk czeka na sośnie przy ścieżce", pine.pet && Math.abs(pine.pet[0] - 3.5) < 0.2 && pine.pet[2] > 50 && pine.leg === 3, pine);
-    await t.locate(4, 20, 8);
-    await t.until("Kruk.state().k51.leg >= 4", 40);
-    await t.locate(27, 13, 8);
-    await t.until("TownQuests.isDone('K51')", 30);
+    if (OPEN) {
+        await t.locate(101, 97, 8);
+        await t.until("Kruk.state().k51.leg >= 2", 30);
+        t.check("kruk czeka przy bramie Ścieżki na klif (przystań), potem leci nad klif (etap 2)", (await S("s.k51.leg")) >= 2);
+        await t.go(155, 24, 30, 8);
+        await t.frames(30);
+        const cairn = await t.json(`({ pet: ${P} && [${P}.x, ${P}.y, ${P}.z], leg: Kruk.state().k51.leg })`);
+        t.check("pustelnia: kruk siedzi na kopcu z krukiem", cairn.pet && Math.abs(cairn.pet[0] - 27.5) < 0.6 && cairn.leg === 2, cairn);
+        await t.locate(26, 21, 8);
+        await t.until("Kruk.state().k51.leg >= 3", 30);
+        t.check("bohater przy kopcu: kruk leci na wschód, ku Urwisku (etap 3)", (await S("s.k51.leg")) >= 3);
+        await t.go(157, 1, 19, 6);
+        await t.frames(30);
+        const pine = await t.json(`({ pet: ${P} && [${P}.x, ${P}.y, ${P}.z], leg: Kruk.state().k51.leg })`);
+        t.check("Urwisko: kruk czeka na sośnie przy ścieżce", pine.pet && Math.abs(pine.pet[0] - 3.5) < 0.2 && pine.pet[2] > 50 && pine.leg === 3, pine);
+        await t.locate(4, 20, 8);
+        await t.until("Kruk.state().k51.leg >= 4", 40);
+        await t.locate(27, 13, 8);
+        await t.until("TownQuests.isDone('K51')", 30);
+    } else {
+        // the live world (the same legs as questy_pustelnia_test): the harbour's east road, Kruczy Jar by the town gate, the town's south gate, the ravenry
+        await t.locate(100, 67, 2);
+        await t.frames(30);
+        await t.locate(100, 68, 2);
+        await t.until("Kruk.state().k51.leg >= 2", 30);
+        t.check("kruk czeka na wschodniej drodze przystani (100,70), potem leci ku Kruczemu Jarowi (etap 2)", (await S("s.k51.leg")) >= 2);
+        await t.go(3, 20, 40, 8);
+        await t.frames(10);
+        await t.go(3, 36, 14, 8);
+        await t.frames(40);
+        await t.locate(35, 11, 8);
+        await t.until("Kruk.state().k51.leg >= 3", 30);
+        t.check("Kruczy Jar: kruk czeka przy drodze do bramy miasta (35,8), potem leci do miasta (etap 3)", (await S("s.k51.leg")) >= 3);
+        await t.go(8, 31, 114, 8);
+        await t.frames(40);
+        await t.locate(31, 109, 8);
+        await t.until("Kruk.state().k51.leg >= 4", 40);
+        await t.frames(300);
+        await t.go(8, 112, 10, 8);
+        await t.until("TownQuests.isDone('K51')", 30);
+    }
     const k51 = await t.json("({ done: TownQuests.isDone('K51'), d24: TownQuests.rec('D24'), leg: Kruk.state().k51.leg })");
     t.check("kruk siada na żerdzi w kruczarni: K51 wykonane, D24 „Oswojony kruk” zaczyna się samo", k51.done && k51.d24 && k51.d24.s === "active" && k51.d24.step === 0, k51);
 
     // ---------------------------------------------------------------- D24: karmienie
     await t.setDay(9, 12);
     await t.frames(40);
-    await t.locate(28, 12, 8);
+    await t.locate(RV.x, RV.y, 8);
     await t.frames(10);
     await t.eval("(function(){ for (const id of KrukData.FOOD) { const n = $gameParty.numItems($dataItems[id]); if (n) $gameParty.loseItem($dataItems[id], n); } return 0; })()");
     await t.popups({ clear: true });
@@ -160,19 +201,19 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // running near it: it flies off for an hour
     await t.setDay(10, 12);
     await t.frames(30);
-    await t.eval("(function(){ $gamePlayer.locate(24, 13); $gamePlayer.isDashing = () => true; $gamePlayer.isMoving = () => true; return 0; })()");
+    await t.eval("(function(){ $gamePlayer.locate(" + RV.run[0] + ", " + RV.run[1] + "); $gamePlayer.isDashing = () => true; $gamePlayer.isMoving = () => true; return 0; })()");
     await t.frames(40);
     await t.eval("(function(){ delete $gamePlayer.isDashing; delete $gamePlayer.isMoving; return 0; })()");
     const scared = await t.json("({ until: Kruk.state().scaredUntil, wp: Kruk.wildPlace() })");
     t.check("bieg przy kruku: płoszy się na godzinę (nie ma go w kruczarni)", scared.until > 0 && scared.wp === null, scared);
     await t.setDay(10, 14);
     await t.frames(60);
-    await t.locate(28, 12, 8);
+    await t.locate(RV.x, RV.y, 8);
     await t.eval("Kruk.feedYoung(); 0");
     await t.frames(240);
     await t.setDay(11, 9);
     await t.frames(60);
-    await t.locate(28, 12, 8);
+    await t.locate(RV.x, RV.y, 8);
     await t.frames(10);
     await t.eval("Kruk.feedYoung(); 0");
     await t.until("Kruk.state().stage === 'tame'", 20);
@@ -197,13 +238,15 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
 
     // ---------------------------------------------------------------- dziadek, grzęda
     await t.setDay(11, 14);
+    // (2026-11-08: the king's summons takes grandpa's house at dusk of day 3 - mark it over: grandpa back, the letter read, the seal off)
+    await t.eval("Object.assign(Story.state().wez, { called: 3, told: true, gone: true, letter: true, freed: 3, backAt: 1 }); 0");
     await t.go(19, 9, 7, 8);
     await t.frames(30);
     const gp = await t.talkTo(901, []);
     const d24g = await t.json("({ step: TownQuests.rec('D24').step, ring: $gameParty.numItems($dataItems[179]) })");
     t.check("dziadek rozpoznaje obrączkę: „długa historia” (Ród kruczarzy), obrączka zostaje; krok 3 - grzęda",
         d24g.step === 2 && d24g.ring === 1 && /trzymał kruki/.test(gp.text || ""), { d24g, text: (gp.text || "").slice(0, 200) });
-    await t.go(3, 20, 14, 2);
+    await t.go(3, 60, 45, 2);
     await t.frames(30);
     // (integration 2026-10-16) the perch is on the Q build list only once the raven is tame (Farming_Data needFlag "krukTame")
     const qList = async () => { await t.eval("Farming.openBuildKeyMenu(); 0"); await t.frames(6);
@@ -215,7 +258,7 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const listTame = await qList();
     t.check("„Grzęda kruka” w liście budowy (Q) dopiero po oswojeniu kruka (flaga krukTame)",
         !listWild.includes("Grzęda kruka") && listTame.includes("Grzęda kruka") && listWild.length > 3, { wild: listWild.length, tame: listTame.includes("Grzęda kruka") });
-    const spot = await t.json(`(function(){ for (let y = 8; y < 20; y++) for (let x = 6; x < 30; x++) {
+    const spot = await t.json(`(function(){ for (let y = 38; y < 56; y++) for (let x = 50; x < 76; x++) {   // (the field sits at Kruczy Jar's centre since 2026-11-09)
         if ($gameMap.checkPassage(x, y, 0x0f) && $gameMap.checkPassage(x, y + 1, 0x0f) && !$gameMap.eventsXy(x, y).length && !Farming.buildingAt(x, y) && !Farming.plotAt(x, y).crop) return { x, y }; } return null; })()`);
     await t.eval(`(function(){ const f = Farming.farm(), list = f.buildings[3] = f.buildings[3] || []; list.push({ id: f.nextId++, type: "grzeda", x: ${spot.x}, y: ${spot.y}, last: 1 }); f.rev++; return 0; })()`);
     await t.eval("TownQuests.autoChecks(); 0");
@@ -236,9 +279,13 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // to a spot near him and sits; then the hero goes far)
     const onShoulder = `(!!${P} && (${P}.state === "shoulder" || !!(${P}.target && ${P}.target.hero)))`;
     if (await t.eval(onShoulder)) {
-        await t.eval("(function(){ $gameSystem.setStamina(100); Input._currentState.shift = true; Input._currentState.right = true; return 0; })()");
-        await t.until(`!${onShoulder}`, 6, 30);
-        await t.eval("(function(){ Input._currentState.shift = false; Input._currentState.right = false; return 0; })()");
+        // (a run away from the shoulder: the first free direction - the hero may stand with a fence or a building at his right)
+        for (const key of ["right", "left", "down", "up"]) {
+            if (!(await t.eval(onShoulder))) break;
+            await t.eval(`(function(){ $gameSystem.setStamina(100); Input._currentState.shift = true; Input._currentState.${key} = true; return 0; })()`);
+            await t.until(`!${onShoulder}`, 4, 30);
+            await t.eval(`(function(){ Input._currentState.shift = false; Input._currentState.${key} = false; return 0; })()`);
+        }
         await t.until(`!!${P} && ${P}.state === "sit"`, 10, 30);
     }
     const far = await free(await t.eval("$gamePlayer.x") + 12, await t.eval("$gamePlayer.y"), 8);
@@ -388,14 +435,14 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.until(`!${P}`, 20);
     await t.frames(10);
     const fled = await t.json(`({ until: Kruk.state().fledUntil, now: $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour(), pet: !!${P}, place: Kruk.tamePlace() })`);
-    t.check("bohater powalony: kruk spłoszony odlatuje na Urwisko do rana", fled.until > fled.now && !fled.pet && fled.place === null, fled);
+    t.check("bohater powalony: kruk spłoszony odlatuje do kruczarni do rana", fled.until > fled.now && !fled.pet && fled.place === null, fled);
     await t.eval("(function(){ Kruk.state().fledUntil = 0; return 0; })()");
     await t.frames(200);
     await t.eval(`(function(){ const s = Kruk.state(); s.food = 0; s.zeroSince = $gameSystem.dayNightDay() - 3; s.clock = $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour() - 1;
         const p = Kruk.perch(); if (p && p.b.store) p.b.store = {}; Kruk.tickNeeds(); return 0; })()`);
     t.check("głodny trzy dni: kruk odlatuje na Urwisko", (await S("s.stage")) === "gone");
     await t.setDay(13, 10);
-    await t.go(157, 28, 12, 8);
+    await t.go(RV.map, RV.x, RV.y, 8);
     await t.frames(60);
     await t.give(98, 1);
     await t.eval("Kruk.feedYoung(); 0");
@@ -409,12 +456,14 @@ kit.test({ port: 9502, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     t.check("zapis i wczytanie: imię i oswojenie zostają", (await S("[s.name, s.stage].join()")) === "Węgielek,tame");
 
     // ---------------------------------------------------------------- nocny obóz kopaczy po D25
-    await t.eval("(function(){ TownQuests.state().flags.dziennikOkretu = 12; return 0; })()");
-    await t.eval("if (window.Humans && Humans.auto) Humans.auto(true); 0");
-    await t.setDay(14, 22);
-    await t.go(157, 40, 20, 6);
-    await t.frames(120);
-    const camp = await t.json("(function(){ const c = Humans.state().camps[157], b = Humans.band('kopaczeUrwisko'); return { tag: c && c.tag, x: c && c.x, n: b ? b.members.filter(m => !m._dead).length : 0, night: Kruk.campNight() }; })()");
-    t.check("nocą po D25 na Urwisku obóz obcych kopaczy (Humans.js, przy ognisku 47,22)", camp.tag === "kopaczeUrwisko" && camp.x === 47 && camp.n === 3, camp);
-    await t.eval("if (window.Humans) { Humans.auto(false); Humans.clear(); } 0");
+    if (OPEN) {   // (the Urwisko is out of the live world: its diggers' camp exists only with KRUK_OPEN=1)
+        await t.eval("(function(){ TownQuests.state().flags.dziennikOkretu = 12; return 0; })()");
+        await t.eval("if (window.Humans && Humans.auto) Humans.auto(true); 0");
+        await t.setDay(14, 22);
+        await t.go(157, 40, 20, 6);
+        await t.frames(120);
+        const camp = await t.json("(function(){ const c = Humans.state().camps[157], b = Humans.band('kopaczeUrwisko'); return { tag: c && c.tag, x: c && c.x, n: b ? b.members.filter(m => !m._dead).length : 0, night: Kruk.campNight() }; })()");
+        t.check("nocą po D25 na Urwisku obóz obcych kopaczy (Humans.js, przy ognisku 47,22)", camp.tag === "kopaczeUrwisko" && camp.x === 47 && camp.n === 3, camp);
+        await t.eval("if (window.Humans) { Humans.auto(false); Humans.clear(); } 0");
+    }
 });

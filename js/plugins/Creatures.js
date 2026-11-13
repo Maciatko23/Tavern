@@ -314,7 +314,7 @@
         this._modeLen = this._modeT;
         const fast = mode === "chase" || mode === "flee" || mode === "keep" || mode === "charge";
         this.setMoveSpeed(mode === "charge" ? 5.4 : fast ? k.chase : k.speed);
-        if (mode === "windup" || mode === "truth" || mode === "spit") this.setMoveSpeed(5);   // (the step it is in finished at once, not glided on)
+        if (mode === "windup" || mode === "truth" || mode === "spit") this.setMoveSpeed((window.FreeMovement && FreeMovement.rawFor ? FreeMovement.rawFor(5) : 5));   // (the step it is in finished at once, not glided on)
         this.updateSheet();
     };
     Game_Creature.prototype.sheetPart = function() {

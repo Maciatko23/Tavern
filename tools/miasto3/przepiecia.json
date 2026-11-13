@@ -1,0 +1,237 @@
+{
+ "opis": "Przepięcia fazy 1 (bramy + obóz pod murem + stajnia): zastosowane w kopiach tools/miasto3/staging/js/plugins",
+ "zmiany": [
+  {
+   "plik": "js/plugins/TownLife_Data.js",
+   "linia": null,
+   "stara": "brama_wsch: [100, 51, 4], brama_pld: [52, 92, 2]",
+   "nowa": "brama_wsch: [116, 49, 4], brama_pld: [31, 114, 2]",
+   "po_co": "bramy: wschodnia (y48-50) i południowa (x30-33) (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/TownLife_Data.js",
+   "linia": null,
+   "stara": "pod_murem: [58, 90, 2], stodola: [48, 90, 2]",
+   "nowa": "pod_murem: [48, 112, 2], stodola: [38, 112, 2]",
+   "po_co": "ulica pod murem południowym: x-10, y+22 (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/TownLife_Data.js",
+   "linia": null,
+   "stara": "woz_pld: [54, 90, 2]",
+   "nowa": "woz_pld: [44, 112, 2]",
+   "po_co": "postój woźnicy (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/TownLife_Data.js",
+   "linia": null,
+   "stara": "w6_ognisko: [60, 90, 4]",
+   "nowa": "w6_ognisko: [50, 112, 4]",
+   "po_co": "ognisko obozu W6 (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Podroznicy_Data.js",
+   "linia": null,
+   "stara": "podr_droga: [52, 92, 2], podr_przystan: [52, 92, 2], podr_dwor: [100, 51, 6]",
+   "nowa": "podr_droga: [31, 114, 2], podr_przystan: [31, 114, 2], podr_dwor: [116, 49, 6]",
+   "po_co": "podróżni w drodze / u dworu (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Dwor_Data.js",
+   "linia": null,
+   "stara": "out: [8, 102, 51, 4]",
+   "nowa": "out: [8, 117, 49, 4]",
+   "po_co": "wyrzucenie z ogrodu dworu: tuż za bramą wschodnią (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Dwor_Data.js",
+   "linia": null,
+   "stara": "town: { gate: [100, 51], f9: [50, 46, 8] }",
+   "nowa": "town: { gate: [116, 49], f9: [50, 46, 8] }",
+   "po_co": "myto przy bramie wschodniej (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Dwor_Data.js",
+   "linia": null,
+   "stara": "TLD.SPOTS.brama_wsch || [100, 51, 4]",
+   "nowa": "TLD.SPOTS.brama_wsch || [116, 49, 4]",
+   "po_co": "zapasowa wartość miejsca dwor (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/TownQuests.js",
+   "linia": null,
+   "stara": "map: TOWN, x: 102, y: 51, dir: 4",
+   "nowa": "map: TOWN, x: 117, y: 49, dir: 4",
+   "po_co": "pendingOut po wyrzuceniu z ogrodu dworu (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/TownQuests_Data.js",
+   "linia": null,
+   "stara": "south_gate: { map: 8, id: 956, x: 53, y: 93,",
+   "nowa": "south_gate: { map: 8, id: 956, x: 31, y: 117,",
+   "po_co": "ślady pod bramą południową (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/TownQuests_Data.js",
+   "linia": null,
+   "stara": "east_brazier: { map: 8, id: 958, x: 101, y: 49,",
+   "nowa": "east_brazier: { map: 8, id: 958, x: 117, y: 47,",
+   "po_co": "kosz żarowy przy bramie wschodniej (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/TownQuests_Data.js",
+   "linia": null,
+   "stara": "w6_tent1: { map: 8, id: 903, x: 58, y: 92,",
+   "nowa": "w6_tent1: { map: 8, id: 903, x: 48, y: 114,",
+   "po_co": "obóz W6 (x-10, y+22) (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/TownQuests_Data.js",
+   "linia": null,
+   "stara": "w6_fire: { map: 8, id: 905, x: 59, y: 90,",
+   "nowa": "w6_fire: { map: 8, id: 905, x: 49, y: 112,",
+   "po_co": "obóz W6 (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/TownQuests_Data.js",
+   "linia": null,
+   "stara": "w6_tent2: { map: 8, id: 904, x: 46, y: 90,",
+   "nowa": "w6_tent2: { map: 8, id: 904, x: 36, y: 112,",
+   "po_co": "obóz W6 (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/TownQuests_Data.js",
+   "linia": null,
+   "stara": "w6_bogdan: { map: 8, id: 906, x: 50, y: 90,",
+   "nowa": "w6_bogdan: { map: 8, id: 906, x: 40, y: 112,",
+   "po_co": "obóz W6 (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/TownQuests_Data.js",
+   "linia": null,
+   "stara": "w6_halina: { map: 8, id: 907, x: 56, y: 91,",
+   "nowa": "w6_halina: { map: 8, id: 907, x: 46, y: 113,",
+   "po_co": "obóz W6 (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Kantor_Data.js",
+   "linia": null,
+   "stara": "gateIn: [52, 104], gateOut: [52, 105], east: [101, 50]",
+   "nowa": "gateIn: [31, 118], gateOut: [32, 118], east: [117, 49]",
+   "po_co": "kurier od bramy południowej, gość od wschodniej (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Woz.js",
+   "linia": null,
+   "stara": "miasto: { map: 8, woz: [56, 90], woznica: [54, 90, 2], land: [52, 90, 6] }",
+   "nowa": "miasto: { map: 8, woz: [46, 112], woznica: [44, 112, 2], land: [42, 112, 6] }",
+   "po_co": "przystanek wozu przy bramie południowej (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Underground_Data.js",
+   "linia": null,
+   "stara": "{ ludmila: [57, 90, 6], ela: [58, 91, 8], marek: [59, 90, 4], rafal: [55, 90, 6] }",
+   "nowa": "{ ludmila: [47, 112, 6], ela: [48, 113, 8], marek: [49, 112, 4], rafal: [45, 112, 6] }",
+   "po_co": "epilog: obóz (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Dezerter_Data.js",
+   "linia": null,
+   "stara": "oboz: [MAP.miasto, 57, 89, 2]",
+   "nowa": "oboz: [MAP.miasto, 47, 111, 2]",
+   "po_co": "W16 obóz (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Garnizon_Data.js",
+   "linia": null,
+   "stara": "search: [{ id: 657, x: 59, y: 89 }, { id: 658, x: 47, y: 89 }]",
+   "nowa": "search: [{ id: 657, x: 49, y: 111 }, { id: 658, x: 37, y: 111 }]",
+   "po_co": "werbownicy przy obozie (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/TownLife_Data.js",
+   "linia": null,
+   "stara": "staw: [66, 10, 6],",
+   "nowa": "staw: [58, 28, 6],",
+   "po_co": "praca woziwody: ogródek piwny (staw nie istnieje) (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Zakon_Data.js",
+   "linia": null,
+   "stara": "const GALLOWS = { map: 8, x: 87, y: 121, w: 3, h: 3, id: 2840, at: [88, 123], creak: [22, 3] };",
+   "nowa": "const GALLOWS = { map: 8, x: 87, y: 108, w: 3, h: 3, id: 2840, at: [88, 110], creak: [22, 3] };",
+   "po_co": "szubienica wewnątrz mapy 120x120 (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Zakon_Data.js",
+   "linia": null,
+   "stara": "{ key: \"szubienica\", map: 8, x: 88, y: 124, near: 2,",
+   "nowa": "{ key: \"szubienica\", map: 8, x: 88, y: 111, near: 2,",
+   "po_co": "odkrycie szubienicy (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Zakon.js",
+   "linia": null,
+   "stara": "[TK.f9.szubienica, 8, 88, 125]",
+   "nowa": "[TK.f9.szubienica, 8, 88, 112]",
+   "po_co": "F9 do szubienicy (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Okolice_Data.js",
+   "linia": null,
+   "stara": "key: \"szubienica\", pkg: \"D\", map: 8, kind: \"gallows\", name: \"Wzgórze z szubienicą\", mode: \"reach\", x: 87, y: 121,",
+   "nowa": "key: \"szubienica\", pkg: \"D\", map: 8, kind: \"gallows\", name: \"Wzgórze z szubienicą\", mode: \"reach\", x: 87, y: 108,",
+   "po_co": "plan miejsc Okolic (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Okolice_Data.js",
+   "linia": null,
+   "stara": "key: \"pole_1\", pkg: \"A\", map: 8, kind: \"field\", name: \"Pole mieszczan\", mode: \"reach\", x: 6, y: 104,",
+   "nowa": "key: \"pole_1\", pkg: \"A\", map: 8, kind: \"field\", name: \"Pole mieszczan\", mode: \"reach\", x: 6, y: 108,",
+   "po_co": "pole 1 pod południowym murem (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Okolice_Data.js",
+   "linia": null,
+   "stara": "key: \"pole_2\", pkg: \"A\", map: 8, kind: \"field\", name: \"Pole mieszczan\", mode: \"reach\", x: 32, y: 118,",
+   "nowa": "key: \"pole_2\", pkg: \"A\", map: 8, kind: \"field\", name: \"Pole mieszczan\", mode: \"reach\", x: 74, y: 108,",
+   "po_co": "pole 2 wewnątrz mapy (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Okolice_Data.js",
+   "linia": null,
+   "stara": "key: \"pole_3\", pkg: \"A\", map: 8, kind: \"field\", name: \"Pole mieszczan\", mode: \"reach\", x: 62, y: 104,",
+   "nowa": "key: \"pole_3\", pkg: \"A\", map: 8, kind: \"field\", name: \"Pole mieszczan\", mode: \"reach\", x: 62, y: 108,",
+   "po_co": "pole 3 (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Zasoby_Data.js",
+   "linia": null,
+   "stara": "{ key: \"pole_1\", x: 6, y: 104, w: 8, h: 4,",
+   "nowa": "{ key: \"pole_1\", x: 6, y: 108, w: 8, h: 4,",
+   "po_co": "dniówka na polu 1 (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Zasoby_Data.js",
+   "linia": null,
+   "stara": "{ key: \"pole_2\", x: 32, y: 118, w: 8, h: 4,",
+   "nowa": "{ key: \"pole_2\", x: 74, y: 108, w: 8, h: 4,",
+   "po_co": "dniówka na polu 2 (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Zasoby_Data.js",
+   "linia": null,
+   "stara": "{ key: \"pole_3\", x: 62, y: 104, w: 8, h: 5,",
+   "nowa": "{ key: \"pole_3\", x: 62, y: 108, w: 8, h: 5,",
+   "po_co": "dniówka na polu 3 (już przepięte)"
+  },
+  {
+   "plik": "js/plugins/Orzel_Data.js",
+   "linia": null,
+   "stara": "8: [[29, 17, 76, 27], [30, 37, 73, 63], [2, 89, 101, 92]],",
+   "nowa": "8: [[29, 17, 60, 28], [30, 37, 73, 63], [2, 111, 116, 114]],",
+   "po_co": "lądowiska orła: dziedziniec bez zajazdu, ulica pod południowym murem (już przepięte)"
+  }
+ ],
+ "znaczniki_mapy": "Map008: brama_wsch 323 (100,51)->(116,49); brama_pld 324 (52,92)->(31,114); brama_pd 412 (52,91)->(32,114); pod_murem 332, stodola 334, woz_pld 343, w6_ognisko 344: x-10,y+22; stajnia_drzwi 446 (61,88)->(74,8); stajnia_woz 415 (69,86)->(72,12); drzwi stajni ev209 (61,87)->(74,7); Map181: wyjscia ev38/ev39 -> (74,8)"
+}

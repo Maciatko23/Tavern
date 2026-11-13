@@ -50,6 +50,9 @@ wyspa.miejsca.probnaA.opis = Map990: zatoka z brzegiem, półka ze schodami, wzg
 # probnaB
 wyspa.miejsca.probnaB.nazwa = Mapa próbna B (zestaw 9)
 wyspa.miejsca.probnaB.opis = Map991: las, pole skał, wzgórze z wejściem, sad, zagroda z furtką. Styk z mapą A po zachodzie.
+# probaBudynki
+wyspa.miejsca.probaBudynki.nazwa = Mapa testowa: budynki
+wyspa.miejsca.probaBudynki.opis = Map027: stare budynki Winlu (lewo) i nowe z paczki Fantastic Buildings (prawo) na bruku, do porównania w edytorze. Wyjście: dół mapy.
 
 # ======================================================================== Wyspa i fabuła - „Wnętrze: ...” (←→)
 # skryptorium
@@ -277,6 +280,10 @@ kod.allRows.26 = Dzik i bandyta
 kod.allRows.27 = Niedźwiedź i bandyta
 kod.allRows.28 = +200 doświadczenia
 kod.allRows.29 = Postaw: {name}
+
+# pora roku (wiersz w zakładce Zdarzenia)
+kod.pora.0 = Pora roku: {pora}   ←→ zmień, OK pokaż
+kod.pora.1 = z kalendarza ({pora})
 # coreRows
 kod.coreRows.0 = Brak TawernaCore.js - rdzeń nie jest wczytany
 # catRows
@@ -359,3 +366,132 @@ kod.onIsleOk.24 = Brak piętra {pick}
 kod.onIsleOk.25 = Brak Watki.js
 kod.onIsleOk.26 = Brak TownQuests.js
 kod.onIsleOk.27 = Cysterna otwarta (cisternOpen)
+
+# ======================================================================== Nowy układ (2026-11-11): sześć zakładek, sekcje, przenosiny, pływ, sztorm
+# Zakładki (nazwa i podpowiedź klawiszy nad listą, po kolei) - stare zakladki.* zostają w pliku, kod czyta karty.*
+karty.0.name = Szybkie
+karty.0.help = ↑↓ wybierz   ←→ zmień   OK wykonaj (przejścia wracają na mapę)   Q / E zakładka   Esc zamknij
+karty.1.name = Pogoda i morze
+karty.1.help = ↑↓ wybierz   ←→ zmień   OK wykonaj (pogoda wraca na mapę)   Q / E zakładka   Esc zamknij
+karty.2.name = Walka i zwierzęta
+karty.2.help = ↑↓ wybierz   ←→ zmień   OK wykonaj (zwierzęta i ludzie pojawiają się na mapie)   Q / E zakładka   Esc zamknij
+karty.3.name = Budowanie
+karty.3.help = ↑↓ wybierz   OK postaw (za darmo, od razu gotowe)   Q / E zakładka   Esc zamknij
+karty.4.name = Przedmioty
+karty.4.help = ↑↓ wybierz   ←→ ilość   OK dodaj   Tab / [ ] rodzaj   Q / E zakładka   Esc zamknij
+karty.5.name = Fabuła i postacie
+karty.5.help = ↑↓ wybierz   ←→ zmień   OK wykonaj (przejścia wracają na mapę)   Q / E zakładka   Esc zamknij
+
+# Nagłówki sekcji
+sekcje.czas = Czas, gracz i teksty:
+sekcje.tele = Przenieś mnie do:
+sekcje.podglad = Podgląd:
+sekcje.pogoda = Pogoda:
+sekcje.morze = Morze:
+sekcje.ptaki = Ptaki i motyle:
+sekcje.zwierzeta = Zwierzęta:
+sekcje.wrogowie = Ludzie-wrogowie:
+sekcje.starcia = Zwierzęta kontra ludzie:
+sekcje.ruiny = Ruiny i podziemia:
+sekcje.potwory = Potwory z morza:
+sekcje.lowy = Łowy (paczka B):
+sekcje.bron = Bronie i zbroje:
+sekcje.ubior = Ubiór (ubrania):
+sekcje.fabula = Fabuła:
+sekcje.podziemia = Podziemia i Serce:
+sekcje.akt3 = Akt III:
+sekcje.postacie = Postacie:
+sekcje.orzel = Biały orzeł:
+sekcje.kot = Kot Mruczek:
+sekcje.ludziePaczka = Ludzie (paczka C):
+sekcje.zasoby = Woda i zasoby (paczka A):
+sekcje.zakon = Tajemnice i zakon (paczka D):
+sekcje.miejsca = Miejsca z paczek:
+
+# Przenieś mnie do: dziewięć map planszy i sala tawerny (nazwa i linia pod nią)
+tele.kruczogrod.nazwa = Kruczogród
+tele.kruczogrod.opis = Map008: miasto, rynek ze studnią. Lądujesz na wolnym polu obok studni.
+tele.jar.nazwa = Kruczy Jar - działka dziadka
+tele.jar.opis = Map003: działka dziadka w środku mapy. Lądujesz na wolnym polu przy polu uprawnym.
+tele.dom.nazwa = Dom dziadka
+tele.dom.opis = Map020: podwórze przed drzwiami chaty (wejście do wnętrza: Map019).
+tele.laka.nazwa = Łąka pod Gawrą
+tele.laka.opis = Map004: środek łąk pod Gawrą.
+tele.dwor.nazwa = Posiadłość Lorda
+tele.dwor.opis = Map024: dziedziniec przed drzwiami dworu.
+tele.gory.nazwa = Góry i kamieniołom
+tele.gory.opis = Map013: kamieniołom pod ścieżką wspinaczy.
+tele.podgrodzie.nazwa = Podgrodzie
+tele.podgrodzie.opis = Map111: ubogie przedmieście, plac przy suchej studni.
+tele.garnizon.nazwa = Garnizon nad zatoką
+tele.garnizon.opis = Map162: plac musztry za palisadą.
+tele.przystan.nazwa = Przystań
+tele.przystan.opis = Map125: nabrzeże przy chacie Janka i pomoście.
+tele.tawerna.nazwa = Tawerna - sala
+tele.tawerna.opis = Map001: wielka sala karczmy, wolne pole pośrodku.
+
+# Pływ: jeden wiersz (z zegara / odpływ / przypływ)
+plyw.zegar = Pływ: z zegara (teraz: {1})   ←→ / OK zmień
+plyw.low = Pływ: odpływ wymuszony   ←→ / OK zmień
+plyw.high = Pływ: przypływ wymuszony   ←→ / OK zmień
+plyw.low2 = odpływ
+plyw.high2 = przypływ
+plyw.opis = ←→ albo OK po kolei: z zegara, odpływ od razu (łacha sucha, przełącznik 20 włączony, kałuże z krabami), przypływ od razu (płycizny pod wodą). Nie zapisuje się w zapisie gry.
+
+# Sztorm się skończył: jeden wiersz robi to, co robiły dwa (drewno z morza i kawałek wraku)
+burzaKoniec.label = Sztorm się skończył (drewno z morza i kawałek wraku)
+burzaKoniec.opis = Na brzegach leży nowe drewno (paczka A), a piasek odsłania następny kawałek wraku na płyciźnie (paczka D) - oba skutki naraz.
+
+# Wiersz paczki pod nowym imieniem
+wiersze.zatoczka.label = Idź do zatoczki z jaskinią (odpływ teraz)
+wiersze.zatoczka.desc = Odpływ wymuszony od razu (płycizny suche) i przeniesienie do zatoczki z wejściem do jaskini.
+
+# Linia pod wierszem tego pliku (opis.<rodzaj wiersza>): wiersze bez opisu od innych wtyczek też ją dostają, gdy znamy ich rodzaj
+opis.pelne = Przełącznik: życie, wytrzymałość, głód, pragnienie, oddech walki i sen wracają do pełna co klatkę. Zostaje także po wczytaniu gry.
+opis.hour = Zegar gry o godzinę dalej.
+opis.day = Zegar gry o dobę dalej.
+opis.dawn = Zegar na chwilę przed wschodem słońca, z powrotem na mapę - patrz, jak wschodzi.
+opis.dusk = Zegar na godzinę przed zachodem słońca, z powrotem na mapę.
+opis.season = ←→ z kalendarza / wiosna / lato / jesień / zima, OK pokazuje tę porę (dni się nie przesuwają, nie zapisuje się); mapa wczytuje się od nowa.
+opis.xp = Dwieście punktów doświadczenia (Combat.gainXp) - do prób poziomów.
+opis.layers = Regiony 1-3 namalowane kolorami na mapie (RegionLayers.js); menu zostaje.
+opis.mist = Dzisiejszy (a po południu jutrzejszy) ranek gęsto mglisty (Sky.js).
+opis.storm = Burza zbiera się od razu, na dwie godziny (Survival.js, Storm.js); z powrotem na mapę.
+opis.strike = Piorun uderza tuż obok bohatera, gdy mapa znów działa.
+opis.treestrike = Piorun trafia drzewo na ekranie - drzewo się zwęgla.
+opis.calm = Pogoda uspokojona do końca dnia: po burzy, deszczu i mgle.
+opis.birds = Stadko ptaków siada na ziemi w pobliżu bohatera (Birds.js).
+opis.raid = Nalot ptaków na pole - tylko gdy na mapie coś rośnie poza zasięgiem stracha na wróble.
+opis.motyle = Motyle jak na letniej łące po deszczu, od razu tu i teraz (także paw dzienny) - Motyle.js.
+opis.cmy = Ćmy przy ogniu w nocy (Motyle.js).
+opis.siatka = Siatka na motyle prosto do torby.
+opis.boar = Jeden dzik kilka pól od bohatera (Hunting.js).
+opis.wolves = Wataha trzech wilków kilka pól od bohatera.
+opis.deer = Jeleń kilka pól od bohatera, o każdej porze.
+opis.bear = Niedźwiedź 7-10 pól od bohatera, o każdej porze.
+opis.h_bandit = Bandyta kilka pól od bohatera (Humans.js).
+opis.h_knifer = Nożownik kilka pól od bohatera.
+opis.h_archer = Łucznik kilka pól od bohatera.
+opis.h_mercenary = Najemnik kilka pól od bohatera.
+opis.h_ambush = Dwóch bandytów i łucznik czyhają kilka pól dalej.
+opis.h_camp = Obóz bandytów 9-16 pól dalej (w dzień zegar idzie na 22:00).
+opis.h_raid = Grupa, która przyszłaby po śpiącego, od razu w walce.
+opis.st_camp = Obóz bandytów z ogniskiem i wataha, która pod niego podchodzi (w dzień zegar idzie na 22:00) - Starcia.js.
+opis.st_boar = Bandyta z dzikiem, który go zauważył - patrz z boku.
+opis.st_bear = Bandyta z niedźwiedziem, który go zauważył - patrz z boku.
+opis.cr_kind = ←→ wybiera rodzaj stwora z ruin, OK przywołuje go 4-7 pól od bohatera (Creatures.js).
+opis.cr_boss = ←→ wybiera bossa podziemi, OK przywołuje go 4-7 pól od bohatera (na piętrze 10: walka ze strażnikiem przy bramie).
+opis.underground = ←→ piętro 0-100 (Shift: o 10), OK przenosi na schody w górę tego piętra, bez względu na kratę i bossów.
+opis.ugGate = Otwiera albo zamyka kratę zejścia z piwnicy (przełącznik 11).
+opis.ugLocks = Klucz, dzwon i pieśń Serca znane bez zadań W2-W4 (do prób).
+opis.ugLifts = Winda staje na wszystkich piętrach 10-90.
+opis.heartEnd = ←→ zakończenie, OK gra je w świecie i z Lordem z dwóch wierszy niżej.
+opis.heartWorld = Świat, w którym zagrane jest zakończenie: jak w grze / dobry / zły / mieszany.
+opis.heartLord = Lord przy Sercu: jak w grze / sojusznik / rywal / nieobecny.
+opis.act3_arm = Ostrzeżenia i napad następnej nocy (Act3.js).
+opis.act3_start = Napad na tawernę od razu.
+opis.act3_reset = Czyści stan napadu.
+opis.cat = Rozkaz dla kota Mruczka; z powrotem na mapę, żeby popatrzeć (HomeLife.js).
+opis.catChoose = Kot sam wybiera, co robić dalej.
+opis.catPet = Pogłaszcz Mruczka: mruczy, serduszko, raz dziennie +5 wytrzymałości.
+opis.catHouse = Do domu dziadka (mapa 19), przy palenisku, gdzie mieszka kot.

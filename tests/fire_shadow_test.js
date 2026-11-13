@@ -7,7 +7,7 @@ const SHOTS = path.join(__dirname, "..", "docs", "cienie");
 
 kit.test({ port: 9438, bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
     require("fs").mkdirSync(SHOTS, { recursive: true });
-    await t.newGame({ map: 3, x: 22, y: 14, day: 40, hour: 23, quiet: true, minimap: false });
+    await t.newGame({ map: 3, x: 62, y: 45, day: 40, hour: 23, quiet: true, minimap: false });
     // open ground: 9 x 5 tiles with no event
     const B = await t.json(`(function(){ for (let y = 5; y < $gameMap.height() - 6; y++) for (let x = 5; x < $gameMap.width() - 10; x++) {
             let ok = true; for (let yy = y - 2; yy <= y + 2 && ok; yy++) for (let xx = x - 4; xx <= x + 4; xx++) if (!$gameMap.isPassable(xx, yy, 2) || $gameMap.eventsXy(xx, yy).length || Farming.buildingAt(xx, yy)) { ok = false; break; }

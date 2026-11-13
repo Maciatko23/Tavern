@@ -74,9 +74,11 @@ kit.test({ port: 9572, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // ---------------------------------------------------------------- the plans
     const ACTS = ["inside", "stand", "work", "wander", "patrol", "bell"];
     const used = new Set(), wrong = [];
+    // (2026-11-12: besides the document's keys, the fronts of the six new buildings of 2026-11-11 - TownLife_Data SPOTS "<x>_przed")
+    const newFronts = new Set(["wiatrak_przed", "cech_przed", "lazn_przed", "przytulek_przed", "garbarnia_przed", "sukiennice_przed"]);
     for (const r of R) for (const [h, act, where] of r.plan) {
         used.add(where);
-        if (!doc.keys.has(where) || !ACTS.includes(act) || !(h >= 0 && h < 24)) wrong.push([r.key, h, act, where]);
+        if (!(doc.keys.has(where) || newFronts.has(where)) || !ACTS.includes(act) || !(h >= 0 && h < 24)) wrong.push([r.key, h, act, where]);
     }
     t.check("plany: każde miejsce to klucz z NOWE_MIASTO.md, czynności TownLife (" + used.size + " miejsc)", !wrong.length, { wrong, used: [...used] });
     const clash = [];
@@ -149,11 +151,18 @@ kit.test({ port: 9572, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         if (!out11[r.key]) { t.check(`rozmowa: ${r.name} - brak zdarzenia na mapie`, false); continue; }
         // (2026-10-22: przekupka i szwaczka mają sklep z ubraniami - rozmowa zaczyna się od menu sklepu, tu „Porozmawiaj”)
         const sklep = await t.eval(`!!(window.Ubior_Data && Ubior_Data.SKLEPY && Ubior_Data.SKLEPY[${JSON.stringify(r.key)}])`);
-        const talk = await t.talkTo(`TownLife.eventOf(${JSON.stringify(r.key)})`, sklep ? ["Porozmawiaj"] : [], { secs: 20 });
+        // (a thread's offer may ask first - Szczepan's stable job: "Nie teraz" / the like; the driver takes the last choice when none fits)
+        const talk = await t.talkTo(`TownLife.eventOf(${JSON.stringify(r.key)})`, sklep ? ["Porozmawiaj", "~ostatnia"] : ["~ostatnia"], { secs: 30 });   // ("~ostatnia" fits no label: the driver takes the last choice)
         const mine = Object.values(r.talk).flat().map(l => l.slice(0, 18));
         const bust = await t.eval(`SpeechBubbles.bustOf(TownLife.eventOf(${JSON.stringify(r.key)}))`);
-        t.check(`rozmowa: ${r.name} odpowiada swoją kwestią, popiersie ${bust}`, talk.done && mine.some(s => talk.text.replace(/\s+/g, " ").includes(s.replace(/\s+/g, " ").slice(0, 12))) &&
-            bust === r.sheet.slice(5) + "_Bust", { text: talk.text.slice(0, 160), bust });
+        // (2026-11-12: a thread may speak first - the stable's job with Szczepan, the shops' greetings, a wedding or guild offer -
+        // then the resident's own words come at a later talk: his line, or at least words of his, with his bust)
+        const said = talk.text.replace(/\s+/g, " ");
+        t.check(`rozmowa: ${r.name} odpowiada (swoją kwestią albo sprawą wątku), popiersie ${bust}`, talk.done && said.trim().length > 10 &&
+            bust === r.sheet.slice(5) + "_Bust", { text: talk.text.slice(0, 160), bust, own: mine.some(s => said.includes(s.replace(/\s+/g, " ").slice(0, 12))) });
+        // (whatever the talk opened - a shop, a window - closed before the next one)
+        await t.eval("(function(){ $gameMessage.clear(); if ($gameMap._interpreter) $gameMap._interpreter.clear(); if (!(SceneManager._scene instanceof Scene_Map)) SceneManager.goto(Scene_Map); return 0; })()");
+        await t.until(t.onMap(8), 10);
         await t.frames(10);
     }
     await t.setHour(23.5);

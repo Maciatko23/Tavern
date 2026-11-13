@@ -363,7 +363,7 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         await t.frames(40);
         return t.json(`(function(){ const s = SceneManager._scene; return { clock: +s._cleanClock.alpha.toFixed(2), bars: +s._cleanNeeds.alpha.toFixed(2), goal: +s._cleanGoal.alpha.toFixed(2), compass: +s._cleanCompass.alpha.toFixed(2) }; })()`);
     };
-    await t.go(20, 10, 12, 2);
+    await t.go(20, 41, 51, 2);
     const tileOf = r => [Math.floor((r.x + r.w / 2) / 48), Math.floor((r.y + r.h / 2) / 48)];
     const pr = (await dbg()).parts, ckNow = (await dbg()).text.clock;
     const underGoal = await alphaAt(...tileOf(pr.goal)), underBars = await alphaAt(...tileOf(pr.needs));
@@ -440,7 +440,7 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("i z powrotem czysty widok", d.clean && d.parts.clock.visible && Object.values(d.old).every(v => v === false), d.parts.clock);
 
     // ---------------------------------------------------------------- (2026-10-31) the compass knows the seams of the world (Swiat_Data.js links: no transfer events)
-    // Map961 has no transfer event at all; Map111 N, Map13 S, Map157 S ... lead into it only by SwiatData.links
+    // (2026-11-12) the 3x3 board: 162 24 13 / 111 8 4 / 125 3 20; the old pockets 960/961/964 are parked, so the checks use board maps (their edges lead on only by SwiatData.links)
     const routeFrom = async (map, x, y, tgt) => {
         await toMap(map, x, y);
         await t.until(t.onMap(map), 40);
@@ -449,18 +449,18 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         for (let i = 0; i < 40; i++) { const r = await t.json(call); if (r && !r.pending) return r; await t.frames(15); }
         return t.json(call);
     };
-    const w1 = await routeFrom(111, 40, 6, { map: 961, x: 50, y: 10 });
-    t.check("kompas: cel w Map961 z Map111 - przez styk z links (mapa 961 nie ma zdarzeń przejść): strzałka na północną krawędź, przez 961",
-        w1 && w1.via === 961 && w1.y === 0 && w1.exit === "w961N" && w1.steps > 5, w1);
-    const w2 = await routeFrom(18, 20, 30, { map: 964, x: 10, y: 40 });
-    t.check("kompas: cel w Map964 z Map18 - przez styk z links na zachodniej krawędzi", w2 && w2.via === 964 && w2.x === 0 && w2.exit === "w964W", w2);
-    const w3 = await routeFrom(111, 40, 6, { map: 960, x: 10, y: 10 });
-    t.check("kompas: cel w Map960 z Map111 - droga znaleziona (styki z links na kilku mapach pod rząd), bez oczekiwania na dane map", w3 && w3.x !== undefined && !w3.pending && w3.steps > 20, w3);
+    const w1 = await routeFrom(111, 40, 6, { map: 162, x: 50, y: 100 });
+    t.check("kompas: cel w Map162 z Map111 - przez styk z links: strzałka na północną krawędź, przez 162",
+        w1 && w1.via === 162 && w1.y === 0 && w1.exit === "w162N" && w1.steps > 5, w1);
+    const w2 = await routeFrom(3, 20, 30, { map: 125, x: 10, y: 40 });
+    t.check("kompas: cel w Map125 z Map3 - przez styk z links na zachodniej krawędzi", w2 && w2.via === 125 && w2.x === 0 && w2.exit === "w125W", w2);
+    const w3 = await routeFrom(20, 40, 6, { map: 162, x: 10, y: 10 });
+    t.check("kompas: cel w Map162 z Map20 - droga znaleziona (styki z links na kilku mapach pod rząd), bez oczekiwania na dane map", w3 && w3.x !== undefined && !w3.pending && w3.steps > 20, w3);
     const closed = await t.json(`(function(){ const ids = m => CleanCompass.seamExits(m, 10, 10).map(e => e.to.map); return { 13: ids(13), 162: ids(162), 175: ids(175) }; })()`);
     t.check("kompas: wyjątki fabularne nie są drogą (13 -/-> 175, 162 -/-> 165; 175 nie wychodzi na 13 ani 934/120)",
         !closed[13].includes(175) && !closed[162].includes(165) && !closed[175].some(m => m === 13 || m === 934 || m === 120), closed);
     const cost = await t.json(`(function(){ const run = (tg, n) => { const t0 = performance.now(); for (let i = 0; i < n; i++) { $gamePlayer._realX = 30 + i * 0.5; CleanCompass.route(tg); } return (performance.now() - t0) / n; };   // (each call from another spot: no kept answer)
-        const hit = { map: 960, x: 10, y: 10 }, none = { map: 165, x: 5, y: 5 }; $gamePlayer.locate(50, 40); const on = run(hit, 100), worst = run(none, 100);
+        const hit = { map: 162, x: 10, y: 10 }, none = { map: 165, x: 5, y: 5 }; $gamePlayer.locate(50, 40); const on = run(hit, 100), worst = run(none, 100);
         SwiatData.enabled = false; const off = run(hit, 100); SwiatData.enabled = true;
         $gamePlayer.locate(50, 40); const t1 = performance.now(); for (let i = 0; i < 1000; i++) CleanCompass.route(none); const kept = (performance.now() - t1) / 1000;
         return { msEach: +on.toFixed(3), withoutSeams: +off.toFixed(3), worstWholeGraph: +worst.toFixed(3), keptAnswer: +kept.toFixed(4) }; })()`);

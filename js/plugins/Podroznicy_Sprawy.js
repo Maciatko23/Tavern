@@ -215,7 +215,8 @@
         opinia: (ctx, n) => { const q = TQ(); return !!q && q.opinion() >= Number(n); },
         przepisy: () => przepisy(),
         // D40
-        d40Oferta: () => pierwszaWizyta("kartograf"),
+        // (D40 needs five of six view points, two of them on 155 and 157: off while the hermitage is - WyspaData.HERMITAGE_OPEN)
+        d40Oferta: () => pierwszaWizyta("kartograf"),   // (2026-11-11: the two view points of the hermitage pocket stand elsewhere while it is out - Podroznicy_Data SPOTS)
         d40Chce: (ctx, q, r, st, key) => has() && !S().d40.szkice[key] && liczSzkice() < SP.d40.szkice,
         d40Szkic: (ctx, q, r, st, spot) => d40Szkic(spot),
         d40Zmienne: () => ({ n: liczSzkice(), z: SP.d40.szkice }),

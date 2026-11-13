@@ -13,7 +13,7 @@ domy.chata.what = chatę pod lasem na Podgrodziu
 domy.chata.where = Podgrodzie: za palisadą, przy lesie, na południe od osady - wyjdź południową bramą i idź ścieżką na zachód. Obok chaty ogrodzona działka (furtka od ścieżki).
 domy.zagroda.name = Zagroda Ługów
 domy.zagroda.what = spaloną zagrodę Ługów
-domy.zagroda.where = na wschód od Skraju lasu (ścieżka przy drogowskazie, nad drogą do Kruczego Jaru). Pole i podwórze wokół domu.
+domy.zagroda.where = za północno-wschodnim rogiem Podgrodzia (brama przy drogowskazie). Pole i podwórze wokół domu.
 
 # ======================================================================== ANIMALS (zwierzeta)
 [zwierzeta.cow]
@@ -67,21 +67,21 @@ Idź, idź. Ja tu jeszcze chwilę posiedzę.
 
 # ======================================================================== D21 (zadania.D21)
 zadania.D21.title = Spalona zagroda
-zadania.D21.where = Spalona zagroda (na wschód od Skraju lasu), Podgrodzie, ratusz
+zadania.D21.where = Spalona zagroda (za północno-wschodnim rogiem Podgrodzia), tawerna (wieczorem), ratusz
 zadania.D21.when = po obejrzeniu zgliszcz albo krzyża
-zadania.D21.desc = Za Skrajem lasu stoją zgliszcza zagrody. Pole zarosło, przy lesie stoi brzozowy krzyż. Czyja to ziemia - i czy da się tu jeszcze zamieszkać?
-zadania.D21.steps.0.text = Zapytaj Józka Łatę na Podgrodziu, czyja to zagroda - handlarz starzyzną wie wszystko o wszystkich.
+zadania.D21.desc = Za północno-wschodnim rogiem Podgrodzia stoją zgliszcza zagrody. Pole zarosło, przy lesie stoi brzozowy krzyż. Czyja to ziemia - i czy da się tu jeszcze zamieszkać?
+zadania.D21.steps.0.text = Zapytaj Józka Łatę (wieczorem w tawernie), czyja to zagroda - handlarz starzyzną wie wszystko o wszystkich.
 [zadania.D21.steps.0.say]
-> Józku, za Skrajem lasu stoi spalona zagroda. Czyja to?
+> Józku, za północno-wschodnim rogiem Podgrodzia stoi spalona zagroda. Czyja to?
 Spalona zagroda? Ługów. Jana Ługa. Sześć lat temu był suchy rok i Jan pożyczył od starego Zaleskiego na ziarno. Od ojca naszego Lorda.
 Nie oddał w terminie. Przyszli ludzie dworu, zmierzyli ziemię... a w nocy dom poszedł z dymem.
 Jan mówił, że to dworscy podpalili. Dwór mówił, że Jan sam, ze złości. Kto by tam dowiódł.
 Wdowa pierze teraz na Podgrodziu - Marta. Jan zmarł zeszłej zimy. Idź do niej, jak chcesz wiedzieć więcej. Tylko delikatnie.
 
-zadania.D21.steps.1.text = Porozmawiaj z Martą Ługową (praczka na Podgrodziu) o zagrodzie.
+zadania.D21.steps.1.text = Porozmawiaj z Martą Ługową (praczka, wieczorem w tawernie) o zagrodzie.
 [zadania.D21.steps.1.say]
 > Marto... byłem w zagrodzie za lasem. Józek mówi, że była wasza.
-(Marta długo wyżyma koszulę.) Była nasza. Jan postawił dom własnymi rękami, jak Franek się urodził.
+(Marta długo obraca w dłoniach pusty kubek.) Była nasza. Jan postawił dom własnymi rękami, jak Franek się urodził.
 Wrócić tam? Nie. Tam jest tylko popiół i grób. Franek nawet nie pamięta domu - miał dwa lata.
 Ale wiesz co... chciałabym, żeby ktoś tam znowu palił ogień. Żeby z komina szedł dym, jak za Jana.
 Ziemia jest zapisana na dwór. Sołtys trzyma księgę gruntów - on ci powie, czy da się coś zrobić.
@@ -111,7 +111,7 @@ Sto do księgi, a resztę zaniosę jej jeszcze dziś. Podpisze krzyżykiem i po 
 Masz akt. Ziemia twoja - i dobrze zrobiłeś, chłopcze.
 
 zadania.D21.steps.3.text = Uprzątnij zgliszcza domu Ługów (łopata albo siekiera; akcja przy zgliszczach).
-zadania.D21.steps.4.text = Zanieś Marcie osmalonego konika, którego znalazłeś w popiele (Podgrodzie).
+zadania.D21.steps.4.text = Zanieś Marcie osmalonego konika, którego znalazłeś w popiele (tawerna, wieczorem).
 [zadania.D21.steps.4.remind]
 Coś jeszcze?
 
@@ -170,7 +170,7 @@ kod.takeAnimals.0 = {1} idą z tobą - poczekają u dziadka na nową zagrodę.
 kod.soltysList.0 = Domy? Ratusz ma jedną chatę na sprzedaż. Chata pod lasem na Podgrodziu - za palisadą, przy lesie, na południe od osady. Wyjdź południową bramą i idź ścieżką na zachód.
 kod.soltysList.1 = Nowa, z bali. Postawił ją cieśla na sprzedaż i kupca się nie doczekał. Obok ogrodzona działka pod uprawę. {price} G.
 kod.soltysList.2 = Na swojej ziemi budujesz, co chcesz. Tylko studni nie obiecuję - wodę i tak dzielimy z rynku.
-kod.soltysList.3 = Jest jeszcze zagroda Ługów za Skrajem lasu, ale to ziemia dworu - i popiół. Jak ci na niej zależy, popytaj na Podgrodziu.
+kod.soltysList.3 = Jest jeszcze zagroda Ługów za północno-wschodnim rogiem Podgrodzia, ale to ziemia dworu - i popiół. Jak ci na niej zależy, popytaj na Podgrodziu.
 kod.soltysList.4 = W sprawie chaty? Ratusz słucha.
 kod.soltysList.5 = Kup {what} ({price} G)
 kod.soltysList.6 = Nic, dziękuję

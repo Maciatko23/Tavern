@@ -1,11 +1,12 @@
 // PAKIET D „Garnizon nad zatoką” (Map162, kwatera rotmistrza Map163; js/plugins/Garnizon_Data.js + Garnizon.js; tools/garnizon/;
 // docs/miejsca_wyspy/PAKIETY.md). Sprawdza:
 //   - mapy (rozmiar, <Water:salt>, palisada, przejścia z kontraktu), gotowość miejsca (Wyspa.ready(162) -> przejście z przystani)
-//   - drogę z przystani (Map125 dolna krawędź 21-23 <-> Map162 górna krawędź) w obie strony, pieszo
+//   - drogę z Podgrodzia (Map111 północna krawędź x 20-117 <-> Map162 południowa krawędź) w obie strony, pieszo (plansza 3x3 od 2026-11-08:
+//     Map162 120x120, dawna mapa 112x100 stoi przesunięta o (22,24) - wszystkie współrzędne niżej są nowe)
 //   - mieszkańców 945-947 (rotmistrz, kwatermistrz, werbownik) na swoich miejscach o swoich godzinach, kwaterę (Map163), żołnierzy 640-647
 //   - pierwsze spotkanie z rotmistrzem (bohater nie jest wcielany), K52 (drewno i węgiel -> skup, przychylność +20), skup (cena, fala x1,5,
 //     tydzień głodu: Opinia -1), glejt na wrak przy przychylności 40, kowala garnizonu przy 60, obrońców Aktu III przy 80, patrol poniżej 10
-//   - beczki z wodą: tylko dymek (żadnej wody), łachę: w przypływie woda, w odpływie piasek i przejście; koniec łachy -> wrak albo dymek
+//   - beczki z wodą: tylko dymek (żadnej wody); łacha do wraku jest poza światem (decyzja 2026-11-08, Swiat_Data: wrak nieużywany) - brak zdarzeń łachy, nie da się na nią wejść
 //   - D26 (pobór: pomoc, ostrzeżenie; rekruci w garnizonie, poszukiwania na Podgrodziu), D27 (zboże dla obozu: kupione od Kłosa nocą,
 //     Kłos wydany; kradzież ze spichlerza i noc w dybach)
 //   - werbownika na rynku w dzień po fali (Map008), kwatermistrza przy tylnych drzwiach kantoru w noc po promie
@@ -42,22 +43,22 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("miejsce gotowe: Wyspa.isReady(162) (mapa 162 z notatką <Garnizon:mapa>)", await t.eval("Wyspa.isReady(162)"));
 
     if (part("mapy")) {
-        // (2026-10-30, the world stage 3: the harbour does not touch the garrison - the way in is Podgrodzie's west trail (111, 0-19) -> the garrison's east edge)
-        await t.newGame({ map: 111, x: 2, y: 19, dir: 4, hour: 10, day: 6, quiet: true, minimap: false });
-        await t.hold("left", 70);
+        // (2026-11-08, the 3x3 board: Podgrodzie's north edge (x 20..117) meets the garrison's south edge; the old west trail and the harbour road are gone)
+        await t.newGame({ map: 111, x: 60, y: 1, dir: 8, hour: 10, day: 6, quiet: true, minimap: false });
+        await t.hold("up", 120);
         const went = await t.until(t.onMap(162), 60);
         await t.frames(20);
         const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $dataMap.width, $dataMap.height, $dataMap.note]");
-        t.check("pieszo z leśnej ścieżki Podgrodzia (0,19) do garnizonu: Map162 112x100, lądowanie przy wschodniej krawędzi (y 8)",
-            went && at[0] === 162 && at[1] >= 108 && at[2] >= 6 && at[2] <= 10 && at[3] === 112 && at[4] === 100, at);
+        t.check("pieszo z północnej krawędzi Podgrodzia (x 60) do garnizonu: Map162 120x120, lądowanie przy południowej krawędzi (x 59-61, y 117+)",
+            went && at[0] === 162 && at[1] >= 59 && at[1] <= 61 && at[2] >= 117 && at[3] === 120 && at[4] === 120, at);
         t.check("notatka mapy: <Water:salt> (czerwone, trujące morze), <Clouds:on>, <Farm:off>", /<Water:salt>/.test(at[5]) && /<Clouds:on>/.test(at[5]) && /<Farm:off>/.test(at[5]), at[5]);
         await t.calm();
-        await t.hold("right", 70);
+        await t.hold("down", 120);
         const back = await t.until(t.onMap(111), 60);
         await t.frames(20);
         const b2 = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]");
-        t.check("...i z powrotem: wschodnia krawędź garnizonu -> Podgrodzie (y 19)", back && b2[0] === 111 && b2[2] >= 17 && b2[2] <= 21, b2);
-        await t.go(162, 36, 12, 2);
+        t.check("...i z powrotem: południowa krawędź garnizonu -> północna Podgrodzia (x 59-61, y do 2)", back && b2[0] === 111 && b2[1] >= 59 && b2[1] <= 61 && b2[2] <= 2, b2);
+        await t.go(162, 80, 60, 2);
         const m = await t.json(`(function(){ const ev = $dataMap.events.filter(Boolean);
             const pal = ev.filter(e => /<Garnizon:palisada>/.test(e.note)).length;
             const tr = ev.filter(e => e.y === 0 && e.pages[0].list.some(c => c.code === 201 && c.parameters[1] === 125)).map(e => e.x);
@@ -65,14 +66,14 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
             const lights = ev.filter(e => /<Light:/.test(e.note)).map(e => { const m = /<Light:(\\d+),(\\d+),(\\d+)/.exec(e.note); return [e.name, +m[2], +m[3]]; });
             const water = ev.filter(e => /woda|wody/i.test(e.name) && e.pages[0].list.some(c => c.code === 355 && /Garnizon\\.look/.test(c.parameters[0]))).length;
             return { n: ev.length, pal, tr, lacha, lights, water, kw: ev.filter(e => /Drzwi: Kwatera/.test(e.name)).map(e => [e.x, e.y]) }; })()`);
-        t.check("palisada z pali (zdarzenia <Garnizon:palisada>), bez przejść do przystani (od 2026-10-30), koniec łachy (0,20-21), drzwi kwatery",
-            m.pal >= 30 && m.tr.length === 0 && m.lacha.map(c => c.join(":")).sort().join() === "0:20,0:21" && m.kw.length === 1, m);
+        t.check("palisada z pali (zdarzenia <Garnizon:palisada>), bez przejść do przystani (od 2026-10-30), bez zdarzeń łachy (łacha do wraku poza światem od 2026-11-08), drzwi kwatery (64,41)",
+            m.pal >= 30 && m.tr.length === 0 && m.lacha.length === 0 && m.kw.length === 1 && m.kw[0][0] === 64 && m.kw[0][1] === 41, m);
         t.check("każde światło to płomień (ciepła barwa: zielony i niebieski kanał niżej niż czerwony w tagu <Light:r,g,b>)",
             m.lights.length >= 5 && m.lights.every(l => l[1] <= 120 && l[2] <= 90), m.lights);
         // water barrels: a bubble, no water
         await t.eval("Needs.setEnabled(true); Needs.state().water = 40; 0");
         await t.popups({ clear: true });
-        await t.eval("$gamePlayer.locate(49, 31); $gamePlayer.setDirection(6); 0");
+        await t.eval("$gamePlayer.locate(71, 55); $gamePlayer.setDirection(6); 0");
         await t.frames(5);
         await t.press("ok");
         await t.frames(20);
@@ -84,25 +85,25 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     }
 
     if (part("ludzie")) {
-        await t.newGame({ map: 162, x: 36, y: 12, dir: 2, hour: 10, day: 6, quiet: true, minimap: false });
+        await t.newGame({ map: 162, x: 80, y: 60, dir: 2, hour: 10, day: 6, quiet: true, minimap: false });
         await t.frames(30);
         const where = await t.json(`(function(){ const o = {}; for (const k of ["rotmistrz", "kwatermistrz", "werbownik"]) { const e = TownLife.eventOf(k);
             o[k] = e ? [e.x, e.y, !!(e._town && e._town.hidden)] : null; }
             o.soldiers = [640,641,642,643,644,645,646,647].map(id => { const e = $gameMap.event(id); return e ? [id, e.x, e.y, !!(e._garn && e._garn.hidden), e.characterName()] : null; });
             return o; })()`);
-        t.check("o 10:00: kwatermistrz przy skupie (33,29), werbownik przy stole przed bramą (30,8), rotmistrz w kwaterze (ukryty)",
-            where.kwatermistrz && where.kwatermistrz[0] === 33 && where.kwatermistrz[1] === 29 && where.werbownik && where.werbownik[0] === 30 && where.werbownik[1] === 8
+        t.check("o 10:00: kwatermistrz przy skupie (55,53), werbownik przy stole przed bramą (52,32), rotmistrz w kwaterze (ukryty)",
+            where.kwatermistrz && where.kwatermistrz[0] === 55 && where.kwatermistrz[1] === 53 && where.werbownik && where.werbownik[0] === 52 && where.werbownik[1] === 32
             && where.rotmistrz && where.rotmistrz[2], where);
         const boat = await t.json(`$gameMap.events().filter(e => /<Garnizon:lodz>/.test(e.event().note)).map(e => !!(e._garn && e._garn.hidden))`);
-        t.check("żołnierze 640-647 na mapie (arkusze $Npc_Zolnierz i $Npc_Zolnierz_B), za dnia widoczni - poza wioślarzem łodzi ratowniczej (9-15 z łodzią przy wraku)",
-            where.soldiers.every(s => s && /Npc_Zolnierz/.test(s[4]) && s[3] === (s[0] === 642)) && boat.length === 1 && boat[0] === true, { s: where.soldiers, boat });
-        // into the quarters: the door 7-20
-        await t.eval("$gamePlayer.locate(42, 18); $gamePlayer.setDirection(8); 0");
-        await t.hold("up", 20);
+        t.check("żołnierze 640-647 na mapie (arkusze $Npc_Zolnierz i $Npc_Zolnierz_B), za dnia widoczni - poza wioślarzem 642 (łódź ratownicza przy wraku jest poza światem: brak zdarzenia łodzi)",
+            where.soldiers.every(s => s && /Npc_Zolnierz/.test(s[4]) && s[3] === (s[0] === 642)) && boat.length === 0, { s: where.soldiers, boat });   // (the rescue boat belonged to the wreck, out of the world since 2026-11-08: no boat event, its rower 642 stays hidden)
+        // into the quarters: the door 7-20 (64,41)
+        await t.eval("$gamePlayer.locate(64, 42); $gamePlayer.setDirection(8); 0");
+        await t.hold("up", 60);
         const inQ = await t.until(t.onMap(163), 10);
         await t.frames(30);
         const q = await t.json(`(function(){ const e = TownLife.eventOf("rotmistrz"); return [$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, e ? [e.x, e.y, !!(e._town && e._town.hidden)] : null]; })()`);
-        t.check("drzwi kwatery (7-20) prowadzą do Map163 na (6,8); rotmistrz za biurkiem (6,4)", inQ && q[0] === 163 && q[1] === 6 && q[2] === 8 && q[3] && q[3][0] === 6 && q[3][1] === 4 && !q[3][2], q);
+        t.check("drzwi kwatery (7-20; 64,41) prowadzą do Map163 na (6,8); rotmistrz za biurkiem (6,4)", inQ && q[0] === 163 && q[1] === 6 && q[2] === 8 && q[3] && q[3][0] === 6 && q[3][1] === 4 && !q[3][2], q);
         const meet = await quietTalk(ev("rotmistrz"), []);
         const f1 = await flags();
         t.check("pierwsze spotkanie z rotmistrzem Bełzą: „Ile masz lat? ...Jeszcze nie.” (bohater nie jest wcielany), flaga garnizonPoznany",
@@ -118,10 +119,10 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         const glejt = await quietTalk(ev("rotmistrz"), ["Wpuścicie mnie", "Bywaj"]);
         t.check("przy przychylności 40+: glejt garnizonu (flaga glejtWrak dla pakietu E)", !!(await flags()).glejtWrak && /Glejt/.test(glejt.text), glejt.text.slice(-200));
         // closed at night
-        await t.go(162, 42, 18, 8);
+        await t.go(162, 64, 42, 8);
         await t.setHour(21);
         await t.popups({ clear: true });
-        await t.hold("up", 20);
+        await t.hold("up", 60);
         await t.frames(20);
         const closed = await t.json("[$gameMap.mapId()]");
         const cp = await t.popups();
@@ -129,10 +130,12 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     }
 
     if (part("k52")) {
-        await t.newGame({ map: 162, x: 33, y: 30, dir: 8, hour: 10, day: 6, quiet: true, minimap: false });
+        await t.newGame({ map: 162, x: 55, y: 54, dir: 8, hour: 10, day: 6, quiet: true, minimap: false });
         await t.frames(30);
         await t.eval(`TownQuests.state().flags.garnizonPoznany = 1; Garnizon.state().met.rotmistrz = 1; 0`);
-        await quietTalk(ev("kwatermistrz"), []);   // (the first meeting)
+        await quietTalk(ev("kwatermistrz"), []);   // (the first meeting, at the garrison)
+        // (2026-11-11 dawcy_miasto: K52 is offered and handed in at the tavern in the early evening, 17-19:30, where Kłos stops off)
+        await t.setHour(18.2); await t.go(1, 14, 50, 8); await t.frames(40);
         const offer = await quietTalk(ev("kwatermistrz"), ["Przyniosę"]);
         const r0 = await rec("K52");
         t.check("K52 „Drewno dla garnizonu” u kwatermistrza (od dnia 5, po spotkaniu z rotmistrzem): przyjęte", r0 && r0.s === "active", { r0, text: offer.text.slice(0, 200) });
@@ -144,6 +147,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         await t.frames(40);
         const fv2 = await favor();
         t.check("...i przychylność garnizonu +20 (20 -> 40)", fv0 === 20 && fv2 === 40, { fv0, fv1, fv2 });
+        await t.setHour(10); await t.go(162, 55, 54, 8); await t.frames(40);   // (back to the garrison for the buying)
 
         if (part("skup")) {
             await t.give(74, 5);
@@ -194,24 +198,22 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     }
 
     if (part("laca")) {
-        await t.newGame({ map: 162, x: 13, y: 20, dir: 4, hour: 10, day: 6, quiet: true, minimap: false });
-        // a high and a low water hour of day 6
+        // (2026-11-08, the 3x3 board: the sandbar to the wreck (Map165) is out of the world - Swiat_Data: "the wreck is not used for now". The old
+        // checks (tide hides / shows the bar, the walk along it to the wreck) became: no bar events, no way onto its old rows, the wreck not reachable)
+        await t.newGame({ map: 162, x: 80, y: 60, dir: 4, hour: 10, day: 6, quiet: true, minimap: false });
         const hrs = await t.json(`(function(){ let hi = null, lo = null; for (let h = 0; h < 24; h += 0.25) { const td = Wyspa.tide(6, h); if (td.level > 0.8 && hi === null) hi = h; if (td.low && lo === null) lo = h; } return [hi, lo]; })()`);
-        await t.setHour(hrs[0]);
-        await t.frames(70);
-        const high = await t.json("[$gameMap.isPassable(6, 20, 4), Garnizon.barOpen(), $gameSwitches.value(20), SceneManager._scene._spriteset._garnLacha ? SceneManager._scene._spriteset._garnLacha.alpha : -1]");
-        t.check("w przypływie łacha pod wodą: nie da się wejść (pole 6,20 nieprzechodnie), piasku nie widać", !high[0] && !high[1] && !high[2] && high[3] < 0.2, { hrs, high });
-        await t.setHour(hrs[1]);
-        await t.frames(160);
-        const low = await t.json("[$gameMap.isPassable(6, 20, 4), Garnizon.barOpen(), $gameSwitches.value(20), SceneManager._scene._spriteset._garnLacha.alpha]");
-        t.check("w odpływie (przełącznik 20) łacha wychodzi z wody: piasek widać, da się po niej iść", low[0] && low[1] && low[2] && low[3] > 0.8, { hrs, low });
-        await t.popups({ clear: true });
-        await t.hold("left", 300);
-        await t.frames(30);
-        const end = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, Wyspa.isReady(165)]");
-        const pops = await t.popups();
-        t.check("po łasze na zachód: na końcu (0,20) - wrak (Map165), gdy gotowy; inaczej dymek, że dalej głęboka woda",
-            (end[3] && end[0] === 165) || (!end[3] && end[0] === 162 && end[1] <= 1 && pops.some(p => /głębokiej wodzie/.test(p))), { end, pops });
+        const barState = async () => t.json(`(function(){ const n = $gameMap.events().filter(e => /<Garnizon:lacha>/.test(e.event().note)).length;
+            const toWreck = $gameMap.events().filter(e => e.event().pages.some(p => p.list.some(c => c.code === 201 && c.parameters[1] === 165))).length;
+            return { n, toWreck, ready165: Wyspa.isReady(165), reach: (function(){ const W = $gameMap.width(), H = $gameMap.height(), seen = new Uint8Array(W * H), q = [[$gamePlayer.x, $gamePlayer.y]]; seen[$gamePlayer.y * W + $gamePlayer.x] = 1;
+                while (q.length) { const [x, y] = q.pop(); for (const [dx, dy, d] of [[0, 1, 2], [-1, 0, 4], [1, 0, 6], [0, -1, 8]]) { const nx = x + dx, ny = y + dy;
+                    if (nx < 0 || ny < 0 || nx >= W || ny >= H || seen[ny * W + nx] || !$gameMap.isPassable(x, y, d) || !$gameMap.isPassable(nx, ny, 10 - d)) continue; seen[ny * W + nx] = 1; q.push([nx, ny]); } }
+                let bar = 0; for (let y = 20; y <= 21; y++) for (let x = 0; x <= 11; x++) bar += seen[y * W + x]; return bar; })() }; })()`);
+        await t.setHour(hrs[0]); await t.frames(60);
+        const hi = await barState();
+        await t.setHour(hrs[1]); await t.frames(160);
+        const lo = await barState();
+        t.check("łacha do wraku poza światem (od 2026-11-08): ani w przypływie, ani w odpływie nie ma zdarzeń łachy ani przejścia do Map165, na jej dawne rzędy nie da się dojść pieszo",
+            hi.n === 0 && lo.n === 0 && hi.toWreck === 0 && lo.toWreck === 0 && hi.reach === 0 && lo.reach === 0, { hrs, hi, lo });
     }
 
     if (part("d26")) {
@@ -235,7 +237,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
             await t.eval(`TownQuests.act(null, ["D26", "fx", "d26Ludzie", { key: "bartek", how: "warn" }]); 0`);
             t.check("Bartek ostrzeżony (przez act - nie stał w miasteczku o tej porze)", await t.eval(`TownLife.gone("bartek")`));
         }
-        await t.go(111, 13, 15, 8);
+        await t.go(111, 31, 48, 8);
         await t.setHour(16);
         await t.frames(40);
         const g0 = await t.gold();
@@ -249,20 +251,20 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
             { g0, g1, r1, z: z.text.slice(-120), d: d.text.slice(-120) });
         // the search in Podgrodzie the next day; the recruits drilling in the garrison
         await t.setDay(12, 10);
-        await t.go(111, 43, 30, 2);
+        await t.go(111, 61, 63, 2);
         await t.frames(40);
         const se = await t.json(`[660, 661].map(id => { const e = $gameMap.event(id); return e ? !(e._garn && e._garn.hidden) : null; })`);
         t.check("dzień po ostrzeżeniu: żołnierze przeszukują Podgrodzie (660-661)", se.every(Boolean), se);
-        await t.go(162, 30, 24, 8);
+        await t.go(162, 52, 48, 8);
         await t.frames(40);
         const rk = await t.json(`[648, 649, 650].map(id => { const e = $gameMap.event(id); return e ? !(e._garn && e._garn.hidden) : null; })`);
         t.check("rekruci (Zbych, Darin) ćwiczą w garnizonie; Bartek (ukryty) - nie", rk[0] === false && rk[1] === true && rk[2] === true, rk);
     }
 
     if (part("d27")) {
-        await t.newGame({ map: 8, x: 58, y: 89, dir: 8, hour: 10, day: 30, quiet: true, minimap: false });
+        await t.newGame({ map: 8, x: 89, y: 97, dir: 8, hour: 10, day: 30, quiet: true, minimap: false });
         await t.eval("$gamePlayer.requestMapReload(); 0");
-        await t.go(8, 58, 89, 8);
+        await t.go(8, 89, 97, 8);
         await t.frames(40);
         const lud = await t.eval(`!!TownLife.eventOf("ludmila") && !TownLife.eventOf("ludmila")._town.hidden`);
         let off = null;
@@ -272,7 +274,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         const r0 = await rec("D27");
         t.check("D27 „Zboże dla obozu”: Ludmiła prosi o 4 worki (po rekwizycji, dzień 30)", r0 && r0.s === "active", { r0, off: off && off.text.slice(0, 200) });
         // the night: Kłos sells four sacks "at the price for friends"
-        await t.go(162, 33, 30, 8);
+        await t.go(162, 55, 54, 8);
         await t.eval(`TownQuests.state().flags.garnizonPoznany = 1; Object.assign(Garnizon.state().met, { rotmistrz: 1, kwatermistrz: 1 }); TownQuests.finish("K52"); 0`);
         await t.setHour(10);
         await t.frames(30);
@@ -286,7 +288,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         const r1 = await rec("D27");
         t.check("nocą Kłos sprzedaje 4 worki za 60 G: krok 2 (zanieść Ludmile)", (await t.gold()) === 40 && r1.step === 1 && (await t.eval("TownQuests.vcount('worek_zboza')")) === 4,
             { r1, gold: await t.gold(), t: night.text.slice(-200) });
-        await t.go(8, 58, 89, 8);
+        await t.go(8, 89, 97, 8);
         await t.setHour(10);
         await t.frames(30);
         if (lud) await quietTalk(ev("ludmila"), []);
@@ -304,7 +306,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
             r3.s === "done" && !!f.klosWydany && gone && (await favor()) - fvA === 15, { r3, gone, fvA, favor: await favor(), t: acc.text.slice(-200) });
 
         // the other way: the granary at night, caught by the sentry -> a night in the stocks
-        await t.newGame({ map: 162, x: 46, y: 32, dir: 8, hour: 23, day: 31, quiet: true, minimap: false });
+        await t.newGame({ map: 162, x: 68, y: 56, dir: 8, hour: 23, day: 31, quiet: true, minimap: false });
         await t.eval(`TownQuests.start("D27"); 0`);
         await t.frames(60);
         // a sentry right beside the door
@@ -317,7 +319,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         t.check("złapany przy spichlerzu: noc w dybach - rano 7:00 przy dybach, worki zostają, przychylność -15",
             st[0] === 32 && st[1] === 7 && st[2] === 46 && st[3] === 19 && st[4] === 5 && st[5] === 0 && st[6] === 1, st);
         // favour under 10: the patrol on the road
-        await t.go(162, 22, 2, 2);
+        await t.go(162, 44, 26, 2);
         await t.setHour(10);
         await t.frames(60);
         const pt = await t.json(`(function(){ const e = $gameMap.event(652); return e ? !(e._garn && e._garn.hidden) : null; })()`);

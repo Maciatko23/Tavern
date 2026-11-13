@@ -1,0 +1,2 @@
+w1_chapters_test rc=0 32 pass 4 fail; 32/36 passed
+mountain_places_test rc=0 6 pass 16 fail; 6/22 passed

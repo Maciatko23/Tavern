@@ -41,7 +41,7 @@ async function knock(t, d) {
         await t.locate(d.town[0], d.town[1], 8);
         await t.frames(3);
         await t.eval("window.__doorRan = false; 0");
-        await t.hold("up", 20);
+        await t.hold("up", 45);   // (2026-11-12: the hero walks at 2.75 now - a step into the door takes longer)
         if (await t.until(`window.__doorRan || $gameMap.isEventRunning() || $gamePlayer.isTransferring() || !${t.onMap(8)}`, 2, 50)) return true;
     }
     return false;
@@ -87,7 +87,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
                 d: e.event().pages[0].image.direction, prio: e.event().pages[0].priorityType, through: e.event().pages[0].through, list: e.event().pages[0].list.length }))`);
             const want = meta.residents.map(r => ({ n: "Miejsce: " + r.key + "_wnetrze", x: r.x, y: r.y, d: r.dir }));
             t.check(`${d.name}: the residents' spots ${want.map(w => w.n.slice(9)).join(", ") || "(none)"} are there, invisible and out of the way`,
-                want.length === spots.length && want.every(w => spots.some(s => s.n === w.n && s.x === w.x && s.y === w.y && s.d === w.d && s.prio === 0 && s.through && s.list === 1)),
+                want.length === spots.filter(s => /_wnetrze$/.test(s.n)).length && want.every(w => spots.some(s => s.n === w.n && s.x === w.x && s.y === w.y && s.d === w.d && s.prio === 0 && s.through && s.list === 1)),
                 { want, spots });
             await t.frames(20);
             fs.mkdirSync(SHOTS, { recursive: true });
@@ -96,7 +96,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         // ---- out: walk down onto the doorway
         await t.locate(d.landing[0], d.landing[1], 2);
         await t.frames(2);
-        await t.hold("down", 40);
+        await t.hold("down", 45);
         const outOk = await t.until(t.onMap(8), 20);
         await t.frames(10);
         const back = await t.json("[$gamePlayer.x, $gamePlayer.y, $gamePlayer.direction()]");

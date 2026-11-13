@@ -1,37 +1,32 @@
-// The new tavern interior (Map001 101x84 ground floor, Map025/Map026 upper floors, tileset 8 flags): every room reachable
-// from the entrance, the doors out to the yard (Map008) and back through the gate, the loose brick to the cellar (Map009)
-// and back, the stairs up and down, the gameplay hook events, Borgar's talk with his bust, no console errors.
-//   node tests/tavern_interior_test.js                    (after tools/apply_tavern_interior.py installed it)
-//   GAME_OVERLAY=tools/tavern/staging/install_preview node tests/tavern_interior_test.js
-//                                                           (before: the files the install would write, served over data/)
-const kit = require("./lib/kit.js");
-const path = require("path");
-const OUT = path.join(__dirname, "..", "tools", "tavern", "staging", "renders");
+// The rebuilt tavern (tools/tawerna2): Map001 63x55 ground floor, Map025 63x55 guest floor, Map026 63x55 suites: every room reachable
+// from the entrance (14,53), the doorway out to the yard (Map008) and back through the gate, the loose brick (ev9, pantry) to the cellar
+// (Map009) and back, the stairs up and down, the hook events, Borgar's talk with his bust, no console errors.
+//   GAME_OVERLAY=tools/tawerna2/staging GAME_OVERLAY_JS=1 node tests/tavern_interior_test.js     (before the install)
+//   node tests/tavern_interior_test.js                                                          (after it)
+// Coordinate-light: events are found by name / tag, rooms are loose rectangles (tools/tawerna2/uklad.txt).
+let kit; try { kit = require("./lib/kit.js"); } catch (e) { kit = require("../../../../tests/lib/kit.js"); }
 
-// the rooms of the ground floor (tools/tavern/v2/v2layout.py ROOMS_MAP: floor rectangles; the second build, 2026-10-05: the old
-// 101x84 frame's empty top 29 rows cut off, the map is 101x55)
 const ROOMS = {
-    "Stare mury": [5, 5, 13, 10], "Skład": [3, 14, 15, 22], "Browar": [17, 8, 27, 16], "Spiżarnia": [29, 8, 35, 16], "Kuchnia": [37, 8, 53, 16],
-    "Piekarnia": [55, 8, 63, 16], "Wędzarnia": [65, 8, 71, 16], "Pokój służby": [73, 8, 83, 16], "Gabinet Borgara": [87, 5, 95, 10], "Magazyn": [85, 14, 97, 22],
-    "Korytarz": [17, 20, 83, 22], "Pokój myśliwski": [3, 27, 15, 38], "Sala biesiadna": [17, 27, 35, 38], "Wielka sala": [37, 27, 63, 44], "Sala ze sceną": [65, 27, 83, 38],
-    "Pokój gier": [85, 27, 97, 38], "Łaźnia": [3, 43, 23, 53], "Jadalnia prywatna": [25, 43, 35, 53], "Palarnia i czytelnia": [65, 43, 75, 53], "Sala rzutek": [77, 43, 97, 53],
-    "Sień": [37, 49, 63, 53]
+    "Kuchnia": [0, 0, 18, 17], "Piekarnia": [18, 0, 28, 17], "Spiżarnia": [28, 0, 36, 17], "Pokój służby": [36, 0, 48, 17],
+    "Pokój Borgara": [48, 0, 62, 11], "Magazyn": [48, 11, 62, 23], "Korytarz": [0, 17, 48, 23],
+    "Wielka sala": [1, 27, 27, 44], "Scena": [29, 27, 47, 38], "Pokój gier": [48, 24, 62, 38], "Rzutki i palarnia": [28, 40, 62, 53]
 };
-const LANDING = [50, 53];
-const HOOKS = ["board", "dice", "darts", "arm", "bath", "stage", "meal", "mealtable", "attendant"];
+const LANDING = [14, 53];
+const HOOKS = ["board", "dice", "darts", "arm", "stage", "meal", "mealtable"];
 
 kit.test({ bootCheck: "the game boots", errorCheck: "no console errors" }, async t => {
-    await t.newGame({ map: 8, x: 51, y: 17, dir: 8, quiet: true });   // (in front of the tavern's gate, the hall since 2026-10-04)
-    // the transfer an event would make (its first Transfer Player command, any page) - followed as the event would
+    await t.newGame({ map: 8, x: 51, y: 17, dir: 8, quiet: true });   // (in front of the tavern's gate)
     const transferOf = eid => t.json(`(function(){ const e = $dataMap.events[${eid}]; if (!e) return null; for (const p of e.pages) for (const c of p.list) if (c.code === 201 && c.parameters[0] === 0) return c.parameters; return null; })()`);
     const follow = async eid => { const tr = await transferOf(eid); if (!tr) return null; const ok = await t.go(tr[1], tr[2], tr[3], tr[4]); return { to: tr.slice(1, 5), ok }; };
+    const byName = re => t.json(`$dataMap.events.filter(e => e && ${re}.test(e.name)).map(e => [e.id, e.x, e.y])`);
 
     // ---- in through the gate (Map008 event 22): the vestibule, facing up
     let r = await follow(22);
     const at = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction(), w: $dataMap.width, h: $dataMap.height })");
-    t.check("the yard's gate (Map008 event 22) leads into the vestibule (Map001 50,53, facing up)", r && r.ok && at.map === 1 && at.x === LANDING[0] && at.y === LANDING[1] && at.d === 8 && at.w === 101 && at.h === 55, { r, at });
+    t.check("the yard's gate (Map008 event 22) leads into the vestibule (Map001 14,53, facing up; map 63x55)", r && r.ok && at.map === 1 && at.x === LANDING[0] && at.y === LANDING[1] && at.d === 8 && at.w === 63 && at.h === 55, { r, at });
 
-    // ---- every room reachable on foot from the entrance (tiles + blocking events, 4 ways)
+    // ---- the places the walk must reach: the events found by name / tag
+    const brick = (await byName("/Luźna cegła/"))[0], stairs = await byName("/^Schody/"), exits = await byName("/^Wyjście/");
     const reach = await t.json(`(function(){
         const W = $gameMap.width(), H = $gameMap.height(), seen = new Uint8Array(W * H), q = [[${LANDING[0]}, ${LANDING[1]}]];
         const blocked = (x, y) => $gameMap.eventsXyNt(x, y).some(e => e.isNormalPriority() && !e.isThrough());
@@ -45,62 +40,79 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no console errors" }, async
         for (const n in rooms) { const [x0, y0, x1, y1] = rooms[n]; let c = 0, all = 0;
             for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { all++; if (seen[y * W + x]) c++; } out[n] = [c, all]; }
         const cell = (x, y) => !!seen[y * W + x];
-        return { rooms: out, total: seen.reduce((a, v) => a + v, 0), brick: cell(9, 5), stairsW: [37, 38, 39].map(x => cell(x, 48)), stairsE: [61, 62, 63].map(x => cell(x, 48)),
-            exits: [49, 50, 51].map(x => cell(x, 54)), fromAbove: [61, 62, 63].map(x => cell(x, 53)), counter: cell(52, 31) && cell(48, 31) };
+        // a place is reached when it or a tile beside it is (an event in a wall, a counter, a door)
+        const near = (x, y) => cell(x, y) || cell(x - 1, y) || cell(x + 1, y) || cell(x, y - 1) || cell(x, y + 1);
+        return { rooms: out, total: seen.reduce((a, v) => a + v, 0),
+            brick: near(${brick ? brick[1] : 0}, ${brick ? brick[2] : 0}),
+            stairs: ${JSON.stringify(stairs)}.map(s => near(s[1], s[2])), exits: ${JSON.stringify(exits)}.map(s => near(s[1], s[2])) };
     })()`);
-    const poor = Object.entries(reach.rooms).filter(([n, [c, all]]) => c < all * 0.35).map(([n, v]) => n + " " + v.join("/"));
-    t.check("every room of the ground floor can be walked into from the entrance (at least a third of its floor open)", poor.length === 0 && reach.total > 2000, { poor, total: reach.total });
-    t.check("...the loose brick's front, both staircases, the doorway, the landing from above and both sides of Borgar's counter (his talk, a meal)",
-        reach.brick && reach.stairsW.every(Boolean) && reach.stairsE.every(Boolean) && reach.exits.every(Boolean) && reach.fromAbove.every(Boolean) && reach.counter, reach);
+    const poor = Object.entries(reach.rooms).filter(([n, [c, all]]) => c < all * 0.2).map(([n, v]) => n + " " + v.join("/"));
+    t.check("every room of the ground floor can be walked into from the entrance (at least a fifth of its rectangle open)", poor.length === 0 && reach.total > 800, { poor, rooms: reach.rooms, total: reach.total });
+    t.check("...the loose brick, all six stair events and the three doorway events are reachable", !!brick && reach.brick && stairs.length === 6 && reach.stairs.every(Boolean) && exits.length === 3 && reach.exits.every(Boolean), { brick, stairs, exits, reach });
 
     // ---- the gameplay hooks (TavernLife / TavernDice / QuestBoard read them by their tag)
     const hooks = await t.json(`(function(){ const out = {}; for (const e of $dataMap.events) { if (!e) continue; for (const c of e.pages[0].list) { const m = c.code === 108 && /<Tavern:\\s*([A-Za-z]+)/.exec(c.parameters[0]); if (m) { (out[m[1]] = out[m[1]] || []).push([e.x, e.y]); break; } } } return out; })()`);
     const missing = HOOKS.filter(h => !hooks[h]);
-    t.check("the hook events are all there: " + HOOKS.join(", "), missing.length === 0 && hooks.mealtable.length >= 4 && hooks.dice.length >= 2 && hooks.bath.length >= 2, { missing, counts: Object.fromEntries(Object.entries(hooks).map(([k, v]) => [k, v.length])) });
+    t.check("the hook events are all there: " + HOOKS.join(", "), missing.length === 0 && hooks.mealtable.length >= 4 && hooks.dice.length >= 2, { missing, counts: Object.fromEntries(Object.entries(hooks).map(([k, v]) => [k, v.length])) });
 
-    // ---- Borgar: his talk with his bust
-    await t.locate(52, 31, 8);
+    // ---- Borgar: his talk with his bust (event 1, across the counter)
+    const bx = await t.json("(function(){ const e = $gameMap.event(1); return e ? [e.x, e.y] : null; })()");
+    t.check("Borgar (event 1) stands in the hall", !!bx && bx[1] >= 24, bx);
+    await t.locate(bx[0], bx[1] + 1, 8);
     await t.frames(10);
     const bust = await t.eval("window.SpeechBubbles && SpeechBubbles.bustOf ? SpeechBubbles.bustOf($gameMap.event(1)) : null");
     await t.eval("$gameMap.event(1).start(); 0");
     await t.frames(60);
-    // (his bust in the other speaker's corner, SpeechBubbles.NPC_SIDE - an older plugin without it: the right one)
-    const talk = await t.json(`(function(){ const L = SceneManager._scene._talkBusts, side = (window.SpeechBubbles && SpeechBubbles.NPC_SIDE) || "right", R = L && L._sides && L._sides[side]; return { running: $gameMap.isEventRunning(), msg: $gameMessage.isBusy(), side, shown: !!(R && R.sprite && R.sprite.visible), name: R && R.name || (R && R.sprite && R.sprite.bitmap && R.sprite.bitmap.url) || null }; })()`);
-    t.check("talking to Borgar across the counter: a talk with his bust (People3_5)", bust === "People3_5" && talk.running && talk.msg && talk.shown, { bust, talk });
-    await t.shot(path.join(OUT, "test_borgar.png"));
-    await t.eval("$gameMap._interpreter.clear(); $gameMessage.clear(); 0"); await t.frames(30);   // (the talk put away)
+    const talk = await t.json(`(function(){ const L = SceneManager._scene._talkBusts, side = (window.SpeechBubbles && SpeechBubbles.NPC_SIDE) || "right", R = L && L._sides && L._sides[side]; return { running: $gameMap.isEventRunning(), msg: $gameMessage.isBusy(), side, shown: !!(R && R.sprite && R.sprite.visible) }; })()`);
+    t.check("talking to Borgar: a talk with his bust (People3_5)", bust === "People3_5" && talk.running && talk.msg && talk.shown, { bust, talk });
+    await t.eval("$gameMap._interpreter.clear(); $gameMessage.clear(); 0"); await t.frames(30);
 
-    // ---- out through the doorway (events 10..12) to the yard, and back in
+    // ---- out through the doorway (3 events in the south wall) to the yard, and back in
     const outs = [];
-    for (const eid of [10, 11, 12]) outs.push(await transferOf(eid));
-    r = await follow(10);
-    const yard = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, pass: $gameMap.isPassable($gamePlayer.x, $gamePlayer.y, 2) })");
-    t.check("the doorway (events 10..12 at 49..51,54) leads out in front of the gate (Map008 50..52,17)", outs.every(o => o && o[1] === 8 && o[3] === 17) && yard.map === 8 && yard.x === 50 && yard.y === 17, { outs, yard });
+    for (const e of exits) outs.push(await transferOf(e[0]));
+    r = await follow(exits[0][0]);
+    const yard = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y })");
+    t.check("the doorway (3 events at y=54) leads out in front of the gate (Map008 y=17)", outs.every(o => o && o[1] === 8 && o[3] === 17) && yard.map === 8 && yard.y === 17, { outs, yard });
     r = await follow(22);
     t.check("...and the gate leads back in", r && r.ok && (await t.eval("$gameMap.mapId()")) === 1, r);
 
-    // ---- the loose brick (event 9) down to the cellar and back up in front of it
-    const down = await transferOf(9);
-    r = await follow(9);
+    // ---- the loose brick (ev9, in the pantry) down to the cellar and back
+    const down = await transferOf(brick[0]);
+    r = await follow(brick[0]);
     const cellar = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y })");
-    const up = await transferOf(1);
-    t.check("the loose brick (event 9) leads down to the cellar (Map009 10,8)", down && down[1] === 9 && cellar.map === 9 && cellar.x === 10 && cellar.y === 8, { down, cellar });
-    r = await follow(1);
-    const back = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction(), brick: $gameMap.eventsXy(9, 4).some(e => e.eventId() === 9), free: $gameMap.isPassable(9, 5, 8) })");
-    t.check("...and the cellar's stairs (Map009 event 1) back up in front of the brick (9,5), facing down", up && up[1] === 1 && up[2] === 9 && up[3] === 5 && back.map === 1 && back.x === 9 && back.y === 5 && back.brick && back.free, { up, back });
+    t.check("the loose brick leads down to the cellar (Map009 10,8)", down && down[1] === 9 && cellar.map === 9 && cellar.x === 10 && cellar.y === 8, { down, cellar });
+    const upEv = await t.json("$dataMap.events.filter(e => e && /Schody do tawerny|Wejście do piwnicy/i.test(e.name)).map(e => e.id)");
+    let up = null; for (const id of upEv) { const tr = await transferOf(id); if (tr && tr[1] === 1) { up = tr; await t.go(tr[1], tr[2], tr[3], tr[4]); break; } }
+    const back = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction() })");
+    t.check("...and the cellar's stairs lead back up in the pantry below the brick, facing down", !!up && back.map === 1 && back.x === brick[1] && back.y === brick[2] + 1 && back.d === 2, { up, back, brick });
 
-    // ---- the stairs: up from the vestibule to the guest rooms, down again below the east staircase
-    const stairs = await t.json(`$gameMap.events().filter(e => /Schody/.test(e.event().name)).map(e => [e.eventId(), e.x, e.y])`);
-    const upT = stairs.length ? await transferOf(stairs.find(s => s[1] === 62)[0]) : null;
-    r = stairs.length ? await follow(stairs.find(s => s[1] === 62)[0]) : null;
-    const upper = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, name: $gameMap.displayName(), w: $dataMap.width })");
-    t.check("six stair events on the top steps (37..39 and 61..63, 47); up leads to Map025 (48,62)", stairs.length === 6 && upT && upT[1] === 25 && upper.map === 25 && upper.x === 48 && upper.y === 62, { stairs: stairs.length, upT, upper });
-    const downs = await t.json(`(function(){ const out = []; for (const e of $dataMap.events) { if (!e) continue; for (const p of e.pages) for (const c of p.list) if (c.code === 201 && c.parameters[0] === 0 && c.parameters[1] === 1) out.push([e.id, c.parameters.slice(2, 5)]); } return out; })()`);
+    // ---- the stairs: up from the ground floor to Map025, and down again
+    const s0 = stairs[0], upT = await transferOf(s0[0]);
+    r = await follow(s0[0]);
+    const upper = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, w: $dataMap.width, h: $dataMap.height })");
+    t.check("six stair events; up leads to Map025 (63x55)", stairs.length === 6 && upT && upT[1] === 25 && upper.map === 25 && upper.w === 63 && upper.h === 55, { stairs: stairs.length, upT, upper });
+    const downs = await byName("/^Schody -> Tawerna/");
+    const dT = downs.length ? await transferOf(downs[0][0]) : null;
     r = downs.length ? await follow(downs[0][0]) : null;
     const below = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction() })");
-    t.check("...and Map025's stairs lead down below the east staircase (61..63,53), facing down", downs.length > 0 && downs.every(([id, d]) => d[0] >= 61 && d[0] <= 63 && d[1] === 53) && below.map === 1 && below.y === 53 && below.d === 2, { downs, below });
-    await t.shot(path.join(OUT, "test_down.png"));
-    // (Map026, the suites: it loads)
-    const suites = await t.go(26, 40, 40, 2);
-    t.check("Map026 (Apartamenty) loads", suites && (await t.eval("$dataMap.width")) > 0);
+    t.check("...and Map025's stairs lead down to the ground floor (east staircase y=53), facing down", downs.length === 3 && dT && dT[1] === 1 && below.map === 1 && below.y === 53 && below.d === 2, { downs: downs.length, dT, below });
+    // ---- Map025 -> Map026 and back; Map026 loads
+    r = await follow(stairs[0][0]);   // (back up: Map025 at the west stairs box (1,53))
+    const gateEv = (await byName("/Złota krata/"))[0];
+    const gateNear = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y })");
+    const gShut = await t.json("[0,1,2,3,4].every(x => $gameMap.eventsXyNt(x, 49).some(e => e.isNormalPriority() && !e.isThrough()))");
+    t.check("the golden gate (Map025 ev " + (gateEv && gateEv[0]) + " at 2,49) blocks the whole width x0..4 while shut", !!gateEv && gShut === true, { gateEv, gShut, gateNear });
+    await t.eval("Tawerna.api('TavernLife').addGatePass(() => true)");   // (the gate's own pass hook: what renown 80 would do)
+    await t.wait(300);
+    const gOpen = await t.json("[0,1,2,3,4].map(x => !$gameMap.eventsXyNt(x, 49).some(e => e.isNormalPriority() && !e.isThrough()))");
+    t.check("...and opens (TavernLife's gate pass, as at renown 80)", gOpen.every(Boolean), { gOpen });
+    await t.go(25, 2, 48, 8);
+    const ups = await byName("/^Schody -> Apartamenty/");
+    const aT = ups.length ? await transferOf(ups[0][0]) : null;
+    r = ups.length ? await follow(ups[0][0]) : null;
+    const suites = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, w: $dataMap.width, h: $dataMap.height })");
+    t.check("Map025's west stairs go up through the open gate to Map026 (63x55, 53 row), which loads", ups.length === 3 && aT && aT[1] === 26 && aT[3] === 53 && suites.map === 26 && suites.w === 63 && suites.h === 55, { ups: ups.length, aT, suites });
+    const s26 = await byName("/^Schody -> Pokoje/");
+    r = s26.length ? await follow(s26[0][0]) : null;
+    t.check("...and Map026's stairs lead back down to Map025 (x,53 facing down)", s26.length === 6 && r && r.ok && (await t.eval("$gameMap.mapId()")) === 25, { n: s26.length, r });
 });

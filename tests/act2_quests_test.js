@@ -110,7 +110,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("...and Ludmiła has heard: Hanka sends the camp a loaf every morning (a remark, once)", /przysyła nam co rano bochenek/.test(lud.text), lud.text.slice(0, 160));
 
     // the Lord (at his door, before his story talk): kept
-    await t.go(24, 20, 15, 8);
+    await t.go(24, 40, 75, 8);
     await at(41, 10, 30);
     const lord = await talkTo("$gameMap.event(902)", ["Przemilcz.", "Odejdź"]);
     t.check("the Lord (before his story talk): his truth kept - he talks on about the weather and the wax", /ciszy we dworze/.test(lord.text) && /Nic nie mówisz/.test(lord.text) && (await flags()).truthKept_lord, lord.text.slice(0, 240));

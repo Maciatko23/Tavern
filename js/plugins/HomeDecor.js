@@ -82,10 +82,7 @@
  *
  * ZAWSZE: wycinanki łowickie pod czterema oknami, haftowany ręcznik na
  * obrazku Matki Boskiej, malowana skrzynia dziadka, chodnik przy jego łóżku.
- *
- * Najechanie myszą na ozdobę pokazuje jej wspomnienie; przycisk akcji (O)
- * w stronę ozdoby - bohater mówi je w dymku (kolejne O - następna ozdoba
- * w tę stronę). Przejścia, dywan przed paleniskiem i drzwi zostają wolne.
+ * Przejścia, dywan przed paleniskiem i drzwi zostają wolne.
  *
  * Korzysta z TawernaCore.js (musi stać wyżej na liście): stan w zapisie
  * (Tawerna.state, dawny $gameSystem._homeDecor przechodzi sam), wstawianie
@@ -115,7 +112,6 @@
     // <decor-data> (tools/house/decor/make_decor.py writes this line - do not edit by hand)
     const DECOR_ART = {"rogi":["!House_Decor",0,2,0,1,2,[56,64,88,109],[]],"kiel":["!House_Decor",0,2,1,1,2,[67,69,77,91],[]],"kiel_rog":["!House_Decor",0,2,2,1,2,[54,80,64,100],[]],"list":["!House_Decor",1,2,0,4,5,[65,89,80,109],[]],"polka_kufel":["!House_Decor",1,2,1,3,2,[53,72,91,101],[["kufel",65,72,81,89]]],"polka_kosci":["!House_Decor",1,2,2,3,2,[53,79,91,101],[["kosci",66,80,81,89]]],"polka_oba":["!House_Decor",2,2,0,3,2,[53,72,91,101],[["kufel",56,72,72,89],["kosci",75,80,90,89]]],"skora":["!House_Decor",2,2,1,3,6,[6,64,90,113],[]],"gwozdz":["!House_Decor",2,2,2,17,2,[72,73,74,75],[]],"pokwitowanie":["!House_Decor",3,2,0,17,2,[55,71,89,102],[]],"pokwitowanie_zima":["!House_Decor",3,2,1,17,2,[52,59,92,102],[]],"recznik":["!House_Decor",3,2,2,15,2,[49,68,95,114],[]],"recznik_zima":["!House_Decor",0,4,0,15,2,[49,59,95,114],[]],"chodnik":["!House_Decor",0,4,1,16,6,[17,107,127,133],[]],"wyc_2":["!House_Decor",0,4,2,2,3,[63,86,82,112],[]],"wyc_16":["!House_Decor",1,4,0,16,3,[63,86,82,112],[]],"wyc_7":["!House_Decor",1,4,1,7,3,[60,87,85,112],[]],"wyc_11":["!House_Decor",1,4,2,11,3,[60,87,85,112],[]],"ziola":["!House_Decor",2,4,0,9,2,[55,96,90,126],[]],"wieniec":["!House_Decor",2,4,1,9,2,[52,54,92,112],[]],"bazie":["!House_Decor",2,4,2,4,10,[49,71,70,102],[]],"kwiaty":["!House_Decor",3,4,0,4,10,[47,69,71,102],[]],"pisanki":["!House_Decor",3,4,1,2,10,[68,74,96,102],[]],"jablka":["!House_Decor",3,4,2,2,10,[69,78,96,102],[]],"wigilia":["!$House_Decor_Big",0,2,0,2,11,[72,124,171,183],[]],"dynie_l":["!House_Decor",0,6,0,8,11,[51,100,93,139],[]],"dynie_r":["!House_Decor",0,6,1,10,11,[51,100,93,139],[]],"snop":["!House_Decor",0,6,2,17,7,[54,86,91,140],[]],"skrzynia":["!House_Decor",1,6,0,17,8,[48,85,95,121],[]]};
     // </decor-data>
-    const FRAME = { "!House_Decor": [144, 144], "!$House_Decor_Big": [288, 192] };
 
     // ------------------------------------------------------------------
     // The slots: one event each (ids 980..998 on the house map). prio: 0 below the characters, 1 like them (it blocks);
@@ -161,18 +157,6 @@
     function imageOf(e) { const p = e.pages && e.pages[0]; return p && p.image ? p.image.characterName : ""; }
     function hasEvent(d, x, y, test) { return (d.events || []).some(e => e && e.x === x && e.y === y && test(e)); }
 
-    // the memory lines (hover / the action button)
-    const LINES = {
-        list: () => { const t = state().noticeTitle; return t ? "Moje pierwsze zlecenie: „" + t + "”. Wisi na pamiątkę." : "Moje pierwsze zlecenie z tablicy w tawernie. Wisi na pamiątkę."; }
-    };
-    Watki.scal(LINES, "dom_dziadka", "wspomnienia");   // (the lines by the look: js/teksty/dom_dziadka.txt, wspomnienia)
-    // the line of a look (a part of it: the shelf's tankard or dice)
-    const LOOK_LINE = { rogi: "rogi", kiel: "kiel", kiel_rog: "kiel", skora: "skora", list: "list", polka_kufel: "kufel", polka_kosci: "kosci",
-        polka_oba: "kufel", pokwitowanie: "pokwitowanie", pokwitowanie_zima: "pokwitowanie", gwozdz: "gwozdz", recznik: "recznik",
-        recznik_zima: "recznik_zima", wyc_2: "leluja", wyc_16: "leluja", wyc_7: "gwiazda", wyc_11: "gwiazda", chodnik: "chodnik",
-        ziola: "ziola", wieniec: "wieniec", bazie: "bazie", kwiaty: "kwiaty", pisanki: "pisanki", jablka: "jablka", dynie_l: "dynie",
-        dynie_r: "dynie", wigilia: "wigilia", snop: "snop", skrzynia: "skrzynia" };
-    const lineOf = k => { const v = LINES[k]; return typeof v === "function" ? v() : v || ""; };
     // the keepsakes and the notice when one comes
     const EARNED_NOTE = Watki.scal({}, "dom_dziadka", "pamiatki");   // (by the keepsake: js/teksty/dom_dziadka.txt, pamiatki)
 
@@ -432,13 +416,9 @@
     T.onMapUpdate(() => {
         if (onHouse()) refreshHouse(false);
     }, { owner: PLUGIN, name: "refresh", every: 30 });
-    T.onMapUpdate(scene => {
-        if (onHouse()) updateHover(scene);
-        else if (scene._decorTip) scene._decorTip.visible = false;
-    }, { owner: PLUGIN, name: "hover" });
 
     // the sheets come with the map (the first look does not wait for them)
-    T.onMapData(() => { for (const f of Object.keys(FRAME)) ImageManager.loadCharacter(f); }, { owner: PLUGIN });
+    T.onMapData(() => { for (const f of ["!House_Decor", "!$House_Decor_Big"]) ImageManager.loadCharacter(f); }, { owner: PLUGIN });   // (the sheets of FRAME below)
 
     // ------------------------------------------------------------------
     // New game, loading (the state itself is made / taken over by the core)
@@ -454,10 +434,11 @@
     }, { owner: PLUGIN });
 
     // ------------------------------------------------------------------
-    // Where a decoration is: its picture's box on the map (tiles) and on the screen
+    // For other plugins and the tests
     // ------------------------------------------------------------------
-    // -> [{ ev, look, key (line), x0, y0, x1, y1 }] in map tiles: every part of every shown decoration (the shelf: its tankard
-    //    and its dice), then the whole picture
+    // -> [{ ev, look, x0, y0, x1, y1, px }] in map tiles: the picture box of every shown decoration and of its parts (the shelf's
+    //    tankard and dice) - for the tests: nothing stands on the hearth rug, the runner or the doorway
+    const FRAME = { "!House_Decor": [144, 144], "!$House_Decor_Big": [288, 192] };
     function shownBoxes() {
         const out = [];
         if (!onHouse()) return out;
@@ -468,151 +449,20 @@
             if (!a) continue;
             const [fw, fh] = FRAME[a[0]] || [144, 144];
             const ox = ev._realX * 48 + 24 - fw / 2, oy = (ev._realY + 1) * 48 - fh;
-            const box = (b, key) => ({ ev, look, key, x0: (ox + b[0]) / 48, y0: (oy + b[1]) / 48, x1: (ox + b[2]) / 48, y1: (oy + b[3]) / 48,
-                px: [b[0], b[1], b[2], b[3]] });
-            for (const p of a[7] || []) out.push(Object.assign(box(p.slice(1), p[0]), { part: true }));
-            out.push(box(a[6], LOOK_LINE[look]));
+            const box = b => ({ ev, look, x0: (ox + b[0]) / 48, y0: (oy + b[1]) / 48, x1: (ox + b[2]) / 48, y1: (oy + b[3]) / 48, px: [b[0], b[1], b[2], b[3]] });
+            for (const p of a[7] || []) out.push(Object.assign(box(p.slice(1)), { part: true }));
+            out.push(box(a[6]));
         }
         return out;
     }
-    // the line to say / show for a box (the receipt: grandpa's words when he is in the room)
-    function lineFor(b, forLook) {
-        if (b.key === "pokwitowanie" && forLook) {
-            const g = safe(() => T.call("Story", "npc", "grandpa") || null, null);
-            if (g && !g.isTransparent() && g.characterName()) return { who: g, text: LINES.pokwitowanieDziadek };
-        }
-        if (b.look === "polka_oba" && !b.part) return { who: $gamePlayer, text: lineOf("kufel") + " " + lineOf("kosci") };
-        return { who: $gamePlayer, text: lineOf(b.key) };
-    }
-
-    // ---- the action button: the decoration the hero faces (a cone in front of him); pressed again soon - the next one that way
-    const look = { last: null, at: 0, pos: "", line: "", key: "" };   // (the last one looked at: O again soon, same spot -> the next)
-    // the decorations in front of the hero, the likeliest first: how far ahead the box's near edge is, plus (heavier) how far it
-    // lies to the side of the line he looks along (0 when the box spans that line); a cone that widens with the distance
-    function candidates() {
-        const p = $gamePlayer, hx = p._realX + 0.5, hy = p._realY + 0.5, d = p.direction();
-        const list = [], seen = new Set();
-        for (const b of shownBoxes()) {
-            const id = b.ev.eventId() + ":" + (b.part ? b.key : "*");
-            if (seen.has(id)) continue;
-            if (!b.part && ((artOf(b.look) || [])[7] || []).length) continue;   // (the shelf's things are looked at one by one)
-            let fwd, lat;
-            if (d === 8 || d === 2) {
-                fwd = d === 8 ? hy - b.y1 : b.y0 - hy;
-                lat = hx < b.x0 ? b.x0 - hx : hx > b.x1 ? hx - b.x1 : 0;
-            } else {
-                fwd = d === 4 ? hx - b.x1 : b.x0 - hx;
-                lat = hy < b.y0 ? b.y0 - hy : hy > b.y1 ? hy - b.y1 : 0;
-            }
-            const flat = (slotOf(b.ev) || {}).z !== undefined;
-            if (fwd < (flat ? 0.2 : -0.3) || fwd > 4.8 || lat > 0.6 + fwd * 0.9) continue;   // (a rug he stands on is not what he looks at)
-            seen.add(id);
-            list.push({ b, id, score: Math.max(0, fwd) + lat * 2.5 });
-        }
-        list.sort((a, c) => a.score - c.score);
-        return list;
-    }
-    function lookAround() {
-        if (!onHouse() || !T.isCalm(SceneManager._scene, "input")) return false;
-        const list = candidates();
-        if (!list.length) return false;
-        const now = Graphics.frameCount;
-        let pick = list[0];
-        if (look.last && now - look.at < 240 && look.pos === $gamePlayer.x + "," + $gamePlayer.y + "," + $gamePlayer.direction()) {
-            const i = list.findIndex(c => c.id === look.last);
-            if (i >= 0) pick = list[(i + 1) % list.length];
-        }
-        look.last = pick.id; look.at = now; look.pos = $gamePlayer.x + "," + $gamePlayer.y + "," + $gamePlayer.direction();
-        const l = lineFor(pick.b, true);
-        look.line = l.text; look.key = pick.b.key;
-        const SB = T.api("SpeechBubbles");
-        if (SB && SB.say) SB.say(l.who, l.text);
-        else $gameMessage.add(l.text);
-        return true;
-    }
-    const _Game_Player_triggerButtonAction = Game_Player.prototype.triggerButtonAction;
-    Game_Player.prototype.triggerButtonAction = function() {
-        if (_Game_Player_triggerButtonAction.call(this)) return true;
-        if (Input.isTriggered("ok") && onHouse()) return lookAround();
-        return false;
-    };
-
-    // ---- the mouse: a small plate with the line beside the cursor while it is over a decoration
-    function Sprite_DecorTip() { this.initialize(...arguments); }
-    Sprite_DecorTip.prototype = Object.create(Sprite.prototype);
-    Sprite_DecorTip.prototype.constructor = Sprite_DecorTip;
-    Sprite_DecorTip.prototype.initialize = function() {
-        Sprite.prototype.initialize.call(this, new Bitmap(420, 44));
-        this.visible = false;
-        this._text = "";
-    };
-    Sprite_DecorTip.prototype.setText = function(text) {
-        if (text === this._text) return;
-        this._text = text;
-        const b = this.bitmap, U = window.UIStyle;
-        b.clear();
-        b.fontSize = 18;
-        if ($gameSystem) b.fontFace = $gameSystem.mainFontFace();
-        const w = Math.min(416, Math.ceil(b.measureTextWidth(text)) + 24);
-        if (U && U.panel) U.panel(b.context, 1, 1, w, 34, { cut: 4 });
-        else { b.fillRect(1, 1, w, 34, "rgba(11,12,15,0.9)"); }
-        b.textColor = U ? U.text : "#eceef0";
-        b.outlineWidth = 0;
-        b.drawText(text, 12, 3, w - 20, 30, "left");
-        if (b._baseTexture && b._baseTexture.update) b._baseTexture.update();
-        this._w = w;
-    };
-    let hoverBox = null;
-    function spriteOf(scene, ev) {
-        const ss = scene._spriteset;
-        return ss && ss._characterSprites ? ss._characterSprites.find(s => s._character === ev) || null : null;
-    }
-    // the decoration under the mouse (the smallest box first: the tankard before the shelf)
-    function decorAtScreen(scene, mx, my) {
-        let best = null;
-        for (const b of shownBoxes()) {
-            const sp = spriteOf(scene, b.ev);
-            if (!sp || !sp.worldTransform || !sp.visible) continue;
-            const fw = sp.patternWidth ? sp.patternWidth() : 144, fh = sp.patternHeight ? sp.patternHeight() : 144;
-            const p0 = sp.worldTransform.apply(new PIXI.Point(b.px[0] - fw / 2, b.px[1] - fh));
-            const p1 = sp.worldTransform.apply(new PIXI.Point(b.px[2] - fw / 2, b.px[3] - fh));
-            if (mx >= Math.min(p0.x, p1.x) && mx < Math.max(p0.x, p1.x) && my >= Math.min(p0.y, p1.y) && my < Math.max(p0.y, p1.y)) {
-                const area = (b.x1 - b.x0) * (b.y1 - b.y0);
-                if (!best || area < best.area) best = { b, area };
-            }
-        }
-        return best ? best.b : null;
-    }
-    function updateHover(scene) {
-        if (!scene._decorTip) {
-            scene._decorTip = new Sprite_DecorTip();
-            scene.addChild(scene._decorTip);
-        }
-        const tip = scene._decorTip;
-        if (!T.isCalm(scene)) { tip.visible = false; hoverBox = null; return; }
-        if (TouchInput.isHovered() || TouchInput.isMoved() || Graphics.frameCount % 10 === 0) {
-            const inside = TouchInput.x > 0 || TouchInput.y > 0;
-            hoverBox = inside ? decorAtScreen(scene, TouchInput.x, TouchInput.y) : null;
-        }
-        if (!hoverBox) { tip.visible = false; return; }
-        tip.setText(lineFor(hoverBox, false).text);
-        tip.visible = true;
-        tip.x = Math.min(Graphics.width - tip._w - 6, TouchInput.x + 16);
-        tip.y = Math.max(6, TouchInput.y - 44);
-    }
-
-    // ------------------------------------------------------------------
-    // For other plugins and the tests
-    // ------------------------------------------------------------------
     // the cells the decorations close now (the pumpkins, the sheaf): nobody should be sent through them
     function blockedCells() {
         if (!onHouse()) return [];
         return $gameMap.events().filter(ev => { const s = slotOf(ev); return s && s.prio === 1 && ev._decorShown && !ev.isThrough(); }).map(ev => [ev.x, ev.y]);
     }
     window.HomeDecor = T.register(PLUGIN, {
-        MAP_ID, SLOTS, LINES, DECOR_ART, state, earn, checkEarned, seedPast, lookOf, season, dayOfSeason, isEaster, isWigilia,
-        refresh: () => { dirty = true; checkEarned(); refreshHouse(true); }, blockedCells, shownBoxes, candidates, lookAround,
-        lineOf, get lastLine() { return look.line; }, get lastKey() { return look.key; }, get hover() { return hoverBox; },
-        decorAtScreen: (x, y) => decorAtScreen(SceneManager._scene, x, y), tableCleared: () => !!(cleared && cleared.list.length)
+        MAP_ID, SLOTS, DECOR_ART, state, earn, checkEarned, seedPast, lookOf, season, dayOfSeason, isEaster, isWigilia,
+        refresh: () => { dirty = true; checkEarned(); refreshHouse(true); }, blockedCells, shownBoxes,
+        tableCleared: () => !!(cleared && cleared.list.length)
     });
 })();

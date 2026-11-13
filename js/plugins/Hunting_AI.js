@@ -372,7 +372,7 @@
         this.setMoveSpeed(mode === "charge" || mode === "overshoot" ? sp.charge : running ? sp.flee : (mode === "approach" || mode === "chase") && sp.trot ? sp.trot : sp.speed);
         // the bear plants its feet for a blow or a leap: the step it was in the middle of is finished at once (a quick step in), not
         // glided a whole tile on under the still frames of the pose (2026-10-06; it ends where it would have, so the reach is the same)
-        if (sp.bear && (mode === "swipeWind" || mode === "pinWind")) this.setMoveSpeed(5);
+        if (sp.bear && (mode === "swipeWind" || mode === "pinWind")) this.setMoveSpeed((window.FreeMovement && FreeMovement.rawFor ? FreeMovement.rawFor(5) : 5));   // (a snap: 5 on the old scale)
         this._modeLen = this._modeT;   // (the whole of a timed mode: a pose's frame goes by how much of it is gone - look8Col)
     };
     // its balance is back after reeling: a boar snorts and comes again, a wolf goes back to the ring, a bear comes on

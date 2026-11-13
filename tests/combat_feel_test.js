@@ -503,7 +503,7 @@ kit.test({ port: 9491 }, async t => {
 
     // ---- C11b: the dummy is in the Q build list on grandpa's field (Map003)
     await clear();
-    t.check("C11b to grandpa's field (Map003)", await t.go(3, 22, 14, 2));
+    t.check("C11b to grandpa's field (Map003)", await t.go(3, 62, 45, 2));
     const qList = await t.json(`(function(){ const scene = SceneManager._scene; let got = null; const _o = scene.openFarmMenu; scene.openFarmMenu = function(tt, en) { got = en.map(x => x.name); }; Farming.openBuildKeyMenu(); scene.openFarmMenu = _o; return got; })()`);
     t.check("C11b Q (build): 'Manekin treningowy' is on the list", Array.isArray(qList) && qList.includes("Manekin treningowy"), qList);
 

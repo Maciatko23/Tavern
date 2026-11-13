@@ -1,0 +1,59 @@
+[
+ {
+  "id": "kieszen_osada",
+  "map": 120,
+  "box": [
+   36,
+   52,
+   58,
+   68
+  ],
+  "p": 32,
+  "people": true,
+  "marks": [
+   {
+    "x": 46,
+    "y": 65,
+    "t": "lądowanie z bramy z Gór"
+   }
+  ]
+ },
+ {
+  "id": "kieszen_pustelnia",
+  "map": 155,
+  "box": [
+   8,
+   58,
+   38,
+   72
+  ],
+  "p": 28,
+  "people": true,
+  "marks": [
+   {
+    "x": 22,
+    "y": 70,
+    "t": "lądowanie z bramy z Przystani"
+   }
+  ]
+ },
+ {
+  "id": "kieszen_zagroda",
+  "map": 168,
+  "box": [
+   0,
+   16,
+   20,
+   34
+  ],
+  "p": 32,
+  "people": true,
+  "marks": [
+   {
+    "x": 1,
+    "y": 25,
+    "t": "lądowanie z bramy z Podgrodzia"
+   }
+  ]
+ }
+]

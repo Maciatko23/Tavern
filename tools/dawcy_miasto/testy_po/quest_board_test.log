@@ -1,0 +1,35 @@
+PASS the game boots
+PASS QuestBoard.js loads into the page (and Journal.js has the tab / tracker hooks)
+PASS ...in its four files: the tables, the pictures and the scene are there  {"data":true,"art":true,"scene":true,"order":["QuestBoard_Data","QuestBoard","QuestBoard_Art","QuestBoard_Scene"],"plugins":{"TawernaCore":"registered","QuestBoard_Data":"registered","QuestBoard":"registered","QuestBoard_Art":"registered","QuestBoard_Scene":"registered"}}
+PASS a new game starts
+PASS every template names real items, animals and givers, sane counts and short texts  []
+PASS all kinds of work are there: deliver, craft, gather, hunt, bounty, story (76 templates, 20 givers)  {"deliver":20,"gather":21,"craft":21,"story":2,"hunt":9,"bounty":3}
+PASS the same seed gives the same notices
+PASS generated notices are sensible: tier within 2 of the board's, real items, gold/xp/terms inside the tier's band, season and first day kept, one urgent and one bounty at most, one torn corner  []
+PASS the pay grows with the tier (average G per tier 15 / 22 / 34 / 50 / 69), up to about 120 G  {"same":true,"bad":[],"avg":[15,22,34,50,69],"urgentMax":125,"bounty":37,"perBoard":[6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],"days":{}}
+PASS wanted posters appear at the higher tiers  37
+PASS reputation tiers at 0/20/40/60/80: Nowy w okolicy > Znajoma twarz > Swój chłop > Pewna ręka > Chluba tawerny  [0,0,1,1,2,2,3,3,4,4]
+PASS the day caps the tier (95 reputation: tier 1 on day 5, tier 2 on day 12) and reputation stays in 0-100  {"r":[0,0,1,1,2,2,3,3,4,4],"early":1,"mid":2,"capHi":100,"capLo":0,"names":["Nowy w okolicy","Znajoma twarz","Swój chłop","Pewna ręka","Chluba tawerny"]}
+PASS a board has 4-6 notices in different slots  {"n":4,"slots":[3,1,0,5],"uniq":4,"cycle":3,"want":3}
+PASS three contracts can be accepted, the fourth is refused with a reason  {"r":[{"ok":true},{"ok":true},{"ok":true},{"ok":false,"why":"Masz już 3 zlecenia. Najpierw któreś oddaj albo porzuć."}],"active":3,"due":[10,4,13],"again":false}
+PASS an accepted contract gets its term: accepted day + days - 1, and cannot be taken twice  [10,4,13]
+PASS three days later the board has new notices and the contracts in hand stay pinned  {"active":["q6","q7","q8"],"board":[["q6","active"],["q7","active"],["q8","active"],["q10","open"],["q11","open"]],"cycle":4,"notice":"+5 dośw.  (nowe: Kapuśniak)"}
+PASS giving up a contract takes it off the board and costs reputation (3, 5 if urgent)  {"r0":30,"r1":27,"loss":3,"gone":true,"stats":1,"urgent":false}
+PASS turning in before the goods are there does nothing
+PASS turning in takes the goods from the bag (the rest stays)  {"notYet":null,"res":{"id":"q12","gold":25,"xp":45,"rep":5,"repBefore":30,"repAfter":35,"gift":[152,2],"die":null,"toDebt":0,"tierUp":null},"n":3,"left":2,"gold":25,"xp":50,"rep":5,"gift":2,"state":"done","got":["q12"],"hist":true,"note":1,"noteTitle":"Zlecenie: Skóra za skórę","expect":{"gold":25,"xp":45,"rep":5},"bus":[["q12","deliver",25,"Skóra za skórę"]],"quest":["q12","deliver",25,"Skóra za skórę"]}
+PASS the pay: gold, experience (Combat), reputation and the gift  {"notYet":null,"res":{"id":"q12","gold":25,"xp":45,"rep":5,"repBefore":30,"repAfter":35,"gift":[152,2],"die":null,"toDebt":0,"tierUp":null},"n":3,"left":2,"gold":25,"xp":50,"rep":5,"gift":2,"state":"done","got":["q12"],"hist":true,"note":1,"noteTitle":"Zlecenie: Skóra za skórę","expect":{"gold":25,"xp":45,"rep":5},"bus":[["q12","deliver",25,"Skóra za skórę"]],"quest":["q12","deliver",25,"Skóra za skórę"]}
+PASS done: the notice is WYKONANE, the history keeps it, a journal note, onComplete listeners hear it  {"notYet":null,"res":{"id":"q12","gold":25,"xp":45,"rep":5,"repBefore":30,"repAfter":35,"gift":[152,2],"die":null,"toDebt":0,"tierUp":null},"n":3,"left":2,"gold":25,"xp":50,"rep":5,"gift":2,"state":"done","got":["q12"],"hist":true,"note":1,"noteTitle":"Zlecenie: Skóra za skórę","expect":{"gold":25,"xp":45,"rep":5},"bus":[["q12","deliver",25,"Skóra za skórę"]],"quest":["q12","deliver",25,"Skóra za skórę"]}
+PASS ...and the Tawerna bus hears it once: 'questDone' { id, kind, gold, title }  {"bus":[["q12","deliver",25,"Skóra za skórę"]],"quest":["q12","deliver",25,"Skóra za skórę"]}
+PASS Feliks's pay can go straight onto grandpa's debt (Story.pay), the purse stays as it was  {"toDebt":15,"gold":0,"paid":15,"pay":15,"giver":"feliks"}
+PASS a wolf killed anywhere counts for 'Wilki pod wsią', a rabbit does not, a wolf on another map does not count for a named place  [1,0,"Wilki pod wsią: Wilki upolowane 1/3"]
+PASS on the named map it counts  {"r1":[1,0,"Wilki pod wsią: Wilki upolowane 1/3"],"anyGot":2,"namedGot":1,"n":3,"ids":["q14","q15"]}
+PASS the last kill makes it ready and says so at the top  {"ready":true,"said":"Zlecenie gotowe: Wataha: Łąka"}
+FAIL the wanted wolf comes on its map at night: named, stronger, bigger, with a companion, and a notice says so  null
+FAIL its name hangs over it on the map
+ERR TypeError: Cannot read properties of undefined (reading 'bearOver')
+    at Object.kill (http://127.0.0.1:8765/js/plugins/Hunting_Weapons.js:434:34)
+    at Object.kill (http://127.0.0.1:8765/js/plugins/Hunting.js:939:71)
+    at <anonymous>:1:267
+    at <anonymous>:1:344
+PASS no errors in the console  []
+27/30 passed

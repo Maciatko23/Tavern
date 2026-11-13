@@ -1,0 +1,49 @@
+[
+ {
+  "temat": "las",
+  "obserwacja": "Lasy to dwie skrajności: gęsta sosnowa ściana (Map003 w działce, Map004 północ) albo owalne kępy 25-35 drzew na pustej łące (Map004 70-90/64-81, Map003 93-110/70-85, Map020 dwa gaje). Brzeg gaju jest ostry, bez podszytu, bez przejścia, jednolita gęstość - wygląda na stempel 'kępa'.",
+  "jak": "Gęstość malejąca od środka ku brzegowi, młode drzewka i krzaki na obrzeżu, ciemniejszy grunt pod koronami, pnie/kłody, ścieżka zwierzęca do gaju.",
+  "przyklady": [
+   "docs/audyt_map/Map004/11.png",
+   "docs/audyt_map/Map003/10.png",
+   "docs/audyt_map/Map020/16.png"
+  ]
+ },
+ {
+  "temat": "las",
+  "obserwacja": "Dwa gatunki sosny w kilku rozmiarach i jedna jabłoń/grusza rozrzucone równomiernie; brak brzóz, dębów, drzew martwych/powalonych, runa (paprocie, jagodniki), polan i dużych pni jako punktów orientacyjnych. Drzewa tego samego rozmiaru w równych odstępach (szeregi sosen: Map004 y 54-57).",
+  "jak": "Dodać 3-4 gatunki, grupować po 2-5, zostawić polany, dodać martwe drzewo/pniak jako landmark.",
+  "przyklady": [
+   "docs/audyt_map/Map004/04.png",
+   "docs/audyt_map/Map003/09.png"
+  ]
+ },
+ {
+  "temat": "pola/łąki",
+  "obserwacja": "Duże połacie (Map004 y 60-120, Map003 y 60-95 i x 85-120, Map020 y 58-90) to jednolita płaska trawa z pojedynczymi sosnami i kamykami co kilkanaście kratek - rozrzut jednostajny jak z generatora, brak ścieżek, zagród, wzgórz, strumieni.",
+  "jak": "Podzielić łąkę na strefy (pastwisko z płotem, nieużytek, kępa krzaków, rów), dodać poziomy koloru trawy (Laka) i drobny detal (kwiaty, kamienie) skupiony w grupach.",
+  "przyklady": [
+   "docs/audyt_map/Map004/03.png",
+   "docs/audyt_map/Map003/09.png"
+  ]
+ },
+ {
+  "temat": "plamy gruntu",
+  "obserwacja": "Plamy ciemnej trawy to prostokąty lub płaty o schodkowym obrysie (Map020 38-53 i pas y 44-49; Map004 granica lasu x=74), brązowe plamy gliny w kształcie prostokątów/wstęg bez związku z drogami, szare smugi (Map003). Wyglądają na artefakty losowego malowania, a nie ślady użytkowania.",
+  "jak": "Obrysy organiczne, plamy gliny tylko przy drogach/studni/zagrodach, usunąć szare smugi.",
+  "przyklady": [
+   "docs/audyt_map/Map020/02.png",
+   "docs/audyt_map/Map020/03.png",
+   "docs/audyt_map/Map003/05.png"
+  ]
+ },
+ {
+  "temat": "pola uprawne / działka",
+  "obserwacja": "Działka dziadka na Map003 to dziki las i kamieniołom w płocie, a na Map020 maleńkie poletko 3x2 z rabatkami przy chacie; brak pola z bruzdami, rzędów upraw, strachu na wróble, wiadra/studni - tożsamość miejsca (gospodarstwo) nie jest czytelna.",
+  "jak": "Na Map020 dorobić pole z równymi rzędami, studnię i drogę do bramy; na Map003 wyraźne wejście i ścieżkę do pola.",
+  "przyklady": [
+   "docs/audyt_map/Map020/07.png",
+   "docs/audyt_map/Map003/03.png"
+  ]
+ }
+]

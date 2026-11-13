@@ -5,7 +5,7 @@
 # Bohater jest nastolatkiem: podróżni mówią do niego „chłopcze”, „synku”, „dzieciaku”. Wody nikt nie daje.
 
 # ======================================================================== obsada
-# tobiasz - Tobiasz Goniec, posłaniec z lądu (pokój 23)
+# tobiasz - Tobiasz Goniec, posłaniec z lądu (pokój 8)
 obsada.tobiasz.imie = Tobiasz Goniec
 obsada.tobiasz.tytul = posłaniec z lądu
 obsada.tobiasz.przybycie = Poczta! Poczta lądowa!
@@ -51,7 +51,7 @@ Wasza babka Jadwiga gada do ziół. Zioła jej słuchają, przyznaję.
 
 obsada.medyk.odjazd = Pij przegotowaną. I myj ręce.
 
-# kartograf - Teofil Cyrkiel, kartograf (pokój 22; w grze jest już kamerdyner Teodor)
+# kartograf - Teofil Cyrkiel, kartograf (pokój 6; w grze jest już kamerdyner Teodor)
 obsada.kartograf.imie = Teofil Cyrkiel
 obsada.kartograf.tytul = kartograf
 obsada.kartograf.przybycie = Ląd! Krzywy, nierówny, piękny ląd.
@@ -74,7 +74,7 @@ Ten róg nie trzyma kąta.
 
 obsada.kartograf.odjazd = Wrócę z mapą. Twoja wyspa zasługuje na porządną mapę.
 
-# grajek - Jędrek Dudarz, wędrowny grajek (pokój 17)
+# grajek - Jędrek Dudarz, wędrowny grajek (pokój 11)
 obsada.grajek.imie = Jędrek Dudarz
 obsada.grajek.tytul = wędrowny grajek
 obsada.grajek.przybycie = Dudy dopłynęły! I ja z nimi!
@@ -97,7 +97,7 @@ Dudy nie lubią deszczu. Ja też nie.
 
 obsada.grajek.odjazd = Zagraj coś czasem. Choćby na grzebieniu.
 
-# zboze - Zenon Sita, kupiec zbożowy (pokój 20)
+# zboze - Zenon Sita, kupiec zbożowy (pokój 4)
 obsada.zboze.imie = Zenon Sita
 obsada.zboze.tytul = kupiec zbożowy
 obsada.zboze.przybycie = Ostrożnie z workami! To nie piasek, to pieniądze.
@@ -119,7 +119,7 @@ Uprzejmie, uprzejmie...
 
 obsada.zboze.odjazd = Interesy, młodzieńcze. Zawsze interesy.
 
-# urszula - Urszula z Olszynki, kobieta szukająca syna (pokój 21; w dni promu 9-15 na molo)
+# urszula - Urszula z Olszynki, kobieta szukająca syna (pokój 4; w dni promu 9-15 na molo)
 obsada.urszula.imie = Urszula z Olszynki
 obsada.urszula.tytul = szuka syna
 obsada.urszula.przybycie = Antek...? Nie. Nie on.
@@ -165,7 +165,7 @@ Pióro skrzypi. Dobrze.
 
 obsada.poborca.odjazd = Raport pójdzie. Taki, jaki wyjdzie z liczb.
 
-# pielgrzym - Albin, pątnik (pokój 15)
+# pielgrzym - Albin, pątnik (pokój 8)
 obsada.pielgrzym.imie = Albin
 obsada.pielgrzym.tytul = pątnik
 obsada.pielgrzym.przybycie = Chwała niech będzie. Ziemia pod stopami.
@@ -210,7 +210,7 @@ Kto dotknie, ten zdrowszy!
 
 obsada.relikwie.odjazd = Niech was błogosławi... ktokolwiek zechce.
 
-# wizytator - brat Augustyn, wizytator z klasztoru w Lipnicy (pokój 16)
+# wizytator - brat Augustyn, wizytator z klasztoru w Lipnicy (pokój 8)
 obsada.wizytator.imie = brat Augustyn
 obsada.wizytator.tytul = wizytator z Lipnicy
 obsada.wizytator.przybycie = Spokojnie, spokojnie. Stare nogi, stary trap.
@@ -318,7 +318,7 @@ Z drogi.
 
 obsada.gwardzista.odjazd = Z drogi.
 
-# ksenia - Ksenia Żuraw, wdowa po kupcu korzennym (pokój 18; D46 - etap 3)
+# ksenia - Ksenia Żuraw, wdowa po kupcu korzennym (pokój 11; D46 - etap 3)
 obsada.ksenia.imie = Ksenia Żuraw
 obsada.ksenia.tytul = wdowa po kupcu korzennym
 obsada.ksenia.przybycie = Ostrożnie z kuferkiem! W środku są rzeczy, których nie da się kupić drugi raz.
@@ -840,7 +840,7 @@ przepis.desc = Włókno i krwawnik, zwinięte ciasno, jak pokazał Konstanty Mak
 
 # ======================================================================== K71 „Listy z lądu” (Tobiasz, pierwsza wizyta)
 zadania.K71.title = Listy z lądu
-zadania.K71.where = Rynek, Podgrodzie, dwór Lorda; tawerna (Tobiasz, pokój 23)
+zadania.K71.where = Rynek, Podgrodzie, dwór Lorda; tawerna (Tobiasz, pokój 8)
 zadania.K71.when = pierwsza wizyta Tobiasza (prom dnia 4)
 zadania.K71.desc = Tobiasz Goniec, posłaniec z lądu, ma więcej adresów niż czasu do promu. Cztery listy do ludzi z wyspy - dwa grosze od listu.
 [zadania.K71.offer.say]
@@ -1076,7 +1076,7 @@ Flisak leżał w szopie przy pochylni i zdrowiał dłużej. Konstanty był chło
 
 # ======================================================================== D40 „Mapa dla kartografa” (Teofil Cyrkiel, wizyta 1)
 zadania.D40.title = Mapa dla kartografa
-zadania.D40.where = Punkty widokowe wyspy; tawerna (Teofil, Palarnia 15-19)
+zadania.D40.where = Punkty widokowe wyspy; tawerna (Teofil, sala 15-19)
 zadania.D40.when = pierwsza wizyta kartografa
 zadania.D40.desc = Teofil Cyrkiel, kartograf z lądu, rysuje wybrzeże wyspy. Brakuje mu widoków z miejsc, do których nie dojdzie ze sznurem mierniczym. Pięć szkiców.
 [zadania.D40.offer.say]
@@ -1093,7 +1093,7 @@ Nie trzeba umieć. Trzeba patrzeć. Stań, gdzie widać najdalej, i rysuj, co wi
 Każdy umie rysować. Nie każdy umie patrzeć. Szkoda.
 
 zadania.D40.steps.0.text = Szkice z punktów widokowych ({n}/{z}): klif pustelni, baszta kruków, latarnia, wieża garnizonu, nad kamieniołomem, róg nabrzeża przystani - na miejscu O przy znaczku.
-zadania.D40.steps.1.text = Oddaj szkice Teofilowi - Palarnia i czytelnia w tawernie (15-23).
+zadania.D40.steps.1.text = Oddaj szkice Teofilowi - w sali tawerny albo u niego w pokoju (15-23).
 zadania.D40.fail.text = Teofil odpłynął bez szkiców wyspy.
 
 d40.szkicNapis = Szkic: {miejsce}
@@ -1248,7 +1248,7 @@ d41.kupala = > (Przy ognisku Kupały Jędrek gra na dudach, a Melia śpiewa. Ta�
 
 # ======================================================================== D42 „Zboże w suszę” (Hanka; Zenon Sita)
 zadania.D42.title = Zboże w suszę
-zadania.D42.where = Rynek, tawerna (Jadalnia prywatna), garnizon, przystań
+zadania.D42.where = Rynek, tawerna (pokój Borgara na zapleczu), garnizon, przystań
 zadania.D42.when = pobyt Zenona Sity (prom dnia 10)
 zadania.D42.desc = Hanka mówi, że kupiec zbożowy z lądu, Zenon Sita, skupuje zboże od biednych z Podgrodzia po groszu, a mąka drożeje. Komu on to sprzedaje?
 [zadania.D42.offer.say]
@@ -1264,7 +1264,7 @@ Uważaj na niego. Uśmiecha się jak waga - zawsze trochę na swoją korzyść.
 [zadania.D42.offer.decline]
 Sołtysa. No tak. Sołtys je mój chleb i milczy.
 
-zadania.D42.steps.0.text = Dowiedz się, komu Zenon sprzedaje zboże ({n}/2 poszlaki): podsłuchaj jego narady w Jadalni prywatnej tawerny (dzień {narada}, 20-22:30, O przy drzwiach), idź za nim o 11 do garnizonu albo zajrzyj do księgi celnika na przystani.
+zadania.D42.steps.0.text = Dowiedz się, komu Zenon sprzedaje zboże ({n}/2 poszlaki): podsłuchaj jego narady w pokoju Borgara na zapleczu tawerny - z sąsiedniego pokoju służby, przy wspólnej ścianie (dzień {narada}, 20-22:30, O twarzą do ściany), idź za nim o 11 do garnizonu albo zajrzyj do księgi celnika na przystani.
 zadania.D42.steps.1.text = Wiesz, komu Zenon sprzedaje. Wróć do Hanki i zdecydujcie, co dalej (piekarnia, 6-19).
 zadania.D42.steps.2.text = Ujawnij Zenona przed sołtysem (ratusz, 8-19).
 zadania.D42.steps.3.text = Wymuś na Zenonie cztery worki zboża dla obozu pod murem.
@@ -1277,8 +1277,8 @@ d42.sladPod = poszlaki {n}/2
 > (Zenon przy wadze kwatermistrza. Kłos wpisuje worki do księgi, Zenon liczy pieczęcie z feniksem. Wojsko kupuje od niego zboże.)
 
 [d42.notatka.slad.narada]
-Narada w jadalni
-Zenon Sita i kwatermistrz Kłos za drzwiami Jadalni prywatnej: cztery wozy zboża dla chorągwi królewskiej, piąty dla kantoru Veya. Woda w beczkach tylko dla wojska.
+Narada na zapleczu
+Zenon Sita i kwatermistrz Kłos w pokoju Borgara na zapleczu, za ścianą pokoju służby: cztery wozy zboża dla chorągwi królewskiej, piąty dla kantoru Veya. Woda w beczkach tylko dla wojska.
 
 [d42.notatka.slad.sledzenie]
 Zenon w garnizonie
@@ -1356,7 +1356,7 @@ d42.sprzedaj.etykieta = Sprzedaj jęczmień (po {cena} G, jeszcze {zostalo} work
 d42.sprzedaj.brak = Nie masz jęczmienia.
 d42.sprzedaj.ok = Kupię twój jęczmień. {n} worków... {zloto} groszy. Dla przyjaciela.
 
-# podsłuch: narada Zenona z Kłosem w Jadalni prywatnej (dzień przyjazdu Zenona + 2, 20-22:30)
+# podsłuch: narada Zenona z Kłosem w pokoju Borgara na zapleczu (dzień przyjazdu Zenona + 2, 20-22:30)
 [podsluch.narada]
 Zenon: Cztery wozy, panie kwatermistrzu. Dla {chorągwi królewskiej}, jak w umowie.
 Kłos: A piąty?
@@ -1498,3 +1498,13 @@ podsluch.kartki = (Ktoś przewraca kartki.)
 podsluch.nic = (Nic.)
 podsluch.notatka = Podsłuchane: {co}
 podsluch.niepelna = (Nie wszystko zrozumiałem - część słów zginęła za ścianą.)
+
+# ======================================================================== PRZY KAPLICY (pustelnia poza światem, 2026-11-11)
+# Brat Kleofas zszedł z klifu i siedzi przy kaplicy w Kruczogrodzie (Map008), dopóki WyspaData.HERMITAGE_OPEN = false. Klucze „kaplica.<ścieżka>”
+# mówią tę samą ścieżkę jeszcze raz i nadpisują ją TYLKO wtedy (Pustelnia_Data.js); gdy pustelnia wróci, czyta się tekst z góry pliku.
+kaplica.k72.kto.pustelnik = brat Kleofas (przy kaplicy)
+
+# (2026-11-11, questy_pustelnia) D40: dwa punkty widokowe pustelni zastąpione: schody dzwonnicy i stopa wieży kruczarni
+kaplica.miejsca.d40_pustelnia.name = Punkt widokowy: schody dzwonnicy
+kaplica.miejsca.d40_urwisko.name = Punkt widokowy: pod wieżą kruczarni
+kaplica.zadania.D40.steps.0.text = Szkice z punktów widokowych ({n}/{z}): schody dzwonnicy, wieża kruczarni, latarnia, wieża garnizonu, nad kamieniołomem, róg nabrzeża przystani - na miejscu O przy znaczku.

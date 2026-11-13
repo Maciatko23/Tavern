@@ -1,0 +1,5 @@
+PASS gra
+  mapa 1 63x55 ekranów 15 8 s
+PASS zdjęte mapy: 1
+PASS bez błędów w konsoli  []
+3/3 passed

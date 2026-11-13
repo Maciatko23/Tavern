@@ -1,0 +1,1 @@
+MAPY GOTOWE (druga metoda: wyciete kawalki starych map; zdjecia docs/tawerna2/mapa001_24px.png, mapa025_24px.png, mapa026_24px.png). Teraz: przepiecia, testy, instalator.

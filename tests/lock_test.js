@@ -6,7 +6,7 @@
 const kit = require("./lib/kit.js");
 
 kit.test({ width: 1280, height: 720 }, async t => {
-    await t.newGame({ map: 3, x: 22, y: 14, hour: 12, quiet: true });
+    await t.newGame({ map: 3, x: 62, y: 45, hour: 12, quiet: true });
     await t.give(63, 1);   // the stone pickaxe
     await t.give(60, 1);   // the stone axe
 

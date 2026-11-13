@@ -63,17 +63,19 @@ const SAME = keys => `(function(){
             culledTrees: trees.filter(s => s._treeCulled).length, outlined: set._characterSprites.filter(s => near(s) && s._outlineSprite && s._outlineSprite._on).length };
     };
     const off = draw(false), on = draw(true), again = draw(false);
-    let diff = 0, over1 = 0, over8 = 0, max = 0, noise = 0;
+    // (maxStable, 2026-11-12: the most a byte is off among the bytes that two drawings with the same switches agree on - what moves
+    // by itself between drawings, the harbour's water and foam, put the plain max 21-29 round the lights' 24 from run to run)
+    let diff = 0, over1 = 0, over8 = 0, max = 0, noise = 0, maxStable = 0;
     for (let i = 0; i < off.px.length; i++) {
-        const d = Math.abs(off.px[i] - on.px[i]);
-        if (d) { diff++; if (d > 1) over1++; if (d > 8) over8++; if (d > max) max = d; }
-        if (off.px[i] !== again.px[i]) noise++;
+        const d = Math.abs(off.px[i] - on.px[i]), still = off.px[i] === again.px[i];
+        if (d) { diff++; if (d > 1) over1++; if (d > 8) over8++; if (d > max) max = d; if (still && d > maxStable) maxStable = d; }
+        if (!still) noise++;
     }
     Object.assign(W.opts, saved);
     W.settleFilters(scene);
     if (mk) mk.update = mkUpdate;
     app.ticker.start();
-    return { keys: keys.join(","), bytes: off.px.length, diff, over1, over8, max, noise, culled: on.culled, idle: on.idle, idleOff: off.idle, trees: on.trees, culledTrees: on.culledTrees, culledTreesOff: off.culledTrees,
+    return { keys: keys.join(","), bytes: off.px.length, diff, over1, over8, max, maxStable, noise, culled: on.culled, idle: on.idle, idleOff: off.idle, trees: on.trees, culledTrees: on.culledTrees, culledTreesOff: off.culledTrees,
         outlined: on.outlined };
 })()`;
 const EXACT = ["leaf", "filterArea", "cull", "lazy", "outline", "still", "dispatch"];
@@ -99,7 +101,7 @@ kit.test({ port: 9493, lightGpu: true, bootCheck: "the game boots", errorCheck: 
     };
 
     // ---- Kruczy Jar at noon: 335 trees, rocks, bushes (the heaviest map) - the same picture with the speed-ups off and on
-    await t.newGame({ map: 3, x: 22, y: 14, day: 40, hour: 12, quiet: true, minimap: true });
+    await t.newGame({ map: 3, x: 62, y: 45, day: 40, hour: 12, quiet: true, minimap: true });
     await t.frames(60);
     const same = await t.json(SAME(EXACT));
     console.log("   the frozen frame:", JSON.stringify(same));
@@ -137,8 +139,8 @@ kit.test({ port: 9493, lightGpu: true, bootCheck: "the game boots", errorCheck: 
     const lightSame = async what => {
         const s = await t.json(SAME(["lightGpu"]));
         console.log("   " + what + ", the card against the canvases:", JSON.stringify(s));
-        t.check(what + ": the lights on the card = the canvases to the eye (a frozen frame: no byte off by more than " + LIGHT_MAX + "/255, under " + LIGHT_OVER8 * 100 + "% of them by more than 8)",
-            s.max <= LIGHT_MAX && s.over8 <= s.bytes * LIGHT_OVER8, s);
+        t.check(what + ": the lights on the card = the canvases to the eye (a frozen frame: no steady byte off by more than " + LIGHT_MAX + "/255, under " + LIGHT_OVER8 * 100 + "% of them by more than 8)",
+            s.maxStable <= LIGHT_MAX && s.over8 <= s.bytes * LIGHT_OVER8, s);
     };
     await lightSame("the harbour at night");
 
@@ -162,7 +164,7 @@ kit.test({ port: 9493, lightGpu: true, bootCheck: "the game boots", errorCheck: 
     t.check("the farm, walking: a frame under " + BUDGET.farma + " ms at 4x slower CPU (before the speed-ups ~51)", farm.frame < BUDGET.farma, farm);
 
     // ---- the storm on Kruczy Jar (rain, leaves, bolts; as pomiar.js burza), walking
-    await t.newGame({ map: 3, x: 22, y: 14, day: 40, hour: 14, calm: false });
+    await t.newGame({ map: 3, x: 62, y: 45, day: 40, hour: 14, calm: false });
     await t.eval("Survival.forceStorm(2); $gameSystem.setDayNightHour($gameSystem._stormForce.start + 0.6); 0");
     await t.frames(400);
     const storm = await measure("burza", true);

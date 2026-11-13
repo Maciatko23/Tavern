@@ -1,5 +1,5 @@
 # Teksty łańcucha W15 „Święte kości” (wtyczki SwieteKosci_Data.js i SwieteKosci.js) - docs/PODROZNI.md 2.9, 2.10, 4.2, etap 4.
-# Gaspar Lis, handlarz relikwii (podróżny „relikwie”, pokój 12), brat Augustyn, wizytator z Lipnicy („wizytator”, pokój 16),
+# Gaspar Lis, handlarz relikwii (podróżny „relikwie”, pokój 12), brat Augustyn, wizytator z Lipnicy („wizytator”, pokój 8),
 # Baltazar Vey i jego kurier. Bohater jest nastolatkiem: dorośli mówią do niego „chłopcze”, „synu”.
 # „> ” - mówi bohater; bez tego - postać, z którą się rozmawia. {nazwa} - wstawia gra.
 
@@ -19,12 +19,12 @@ zadania.W15.steps.6.text = Brat Augustyn odpływa promem {dzien}. Pożegnaj się
 
 # słowa kroków (zmienne)
 kroki.augustyn.czeka = Gaspar handluje dalej. Na wyspę płynie ktoś, kto zna jego towar - wypatruj podróżnych z następnego promu.
-kroki.augustyn.jest = Brat Augustyn, wizytator z klasztoru w Lipnicy, pyta o Gaspara. Porozmawiaj z nim (rano kaplica, po południu ogród zakonu, wieczorem tawerna, nocą pokój 16).
+kroki.augustyn.jest = Brat Augustyn, wizytator z klasztoru w Lipnicy, pyta o Gaspara. Porozmawiaj z nim (rano kaplica, po południu ogród zakonu, wieczorem tawerna, nocą pokój 8).
 kroki.dowod.przed = w nocy {dzien} (22-24) Gaspar ma gościa.
 kroki.dowod.po = noc {dzien} minęła.
 kroki.komu.oba = Kamień z krukiem: komu? Bratu Kleofasowi (pustelnia), Ambrożemu (dzwonnica), Baltazarowi (kantor, 80 G) albo celnikowi (przystań, 5 G). Spis z Lipnicy: bratu Augustynowi albo Kleofasowi.
 kroki.komu.kamien = Kamień z krukiem: komu? Bratu Kleofasowi (pustelnia), Ambrożemu (dzwonnica), Baltazarowi (kantor, 80 G) albo celnikowi (przystań, 5 G).
-kroki.komu.spis = Spis z Lipnicy: bratu Augustynowi (pokój 16) albo bratu Kleofasowi (pustelnia).
+kroki.komu.spis = Spis z Lipnicy: bratu Augustynowi (pokój 8) albo bratu Kleofasowi (pustelnia).
 kroki.komu.nic = Kamień i spis są już u swoich ludzi.
 
 # napisy nad bohaterem i u góry
@@ -307,3 +307,15 @@ f9.nazwy.4 = noc kuriera
 f9.nazwy.5 = skrzynka Gaspara
 f9.nazwy.6 = kamień i spis
 f9.nazwy.7 = pożegnanie Augustyna
+
+# ======================================================================== PRZY KAPLICY (pustelnia poza światem, 2026-11-11)
+# Brat Kleofas zszedł z klifu i siedzi przy kaplicy w Kruczogrodzie (Map008), dopóki WyspaData.HERMITAGE_OPEN = false. Klucze „kaplica.<ścieżka>”
+# mówią tę samą ścieżkę jeszcze raz i nadpisują ją TYLKO wtedy (Pustelnia_Data.js); gdy pustelnia wróci, czyta się tekst z góry pliku.
+kaplica.zadania.W15.where = rynek, tawerna (pokój 12 na piętrze gości), kaplica, Podgrodzie, kantor, przystań
+kaplica.zadania.W15.steps.1.text = Fałszywe kości? Poszlaki ({n} z 2): Ignac zna się na kościach (garbarnia), Tadek na srebrze (pokaż mu medalik Gaspara), brat Kleofas na zakonie (przy kaplicy), Melia na balladach (tawerna).
+kaplica.kroki.komu.oba = Kamień z krukiem: komu? Bratu Kleofasowi (kaplica), Ambrożemu (dzwonnica), Baltazarowi (kantor, 80 G) albo celnikowi (przystań, 5 G). Spis z Lipnicy: bratu Augustynowi albo Kleofasowi.
+kaplica.kroki.komu.kamien = Kamień z krukiem: komu? Bratu Kleofasowi (kaplica), Ambrożemu (dzwonnica), Baltazarowi (kantor, 80 G) albo celnikowi (przystań, 5 G).
+kaplica.kroki.komu.spis = Spis z Lipnicy: bratu Augustynowi (pokój 8) albo bratu Kleofasowi (kaplica).
+[kaplica.notatki.kamienKleofas]
+Kamień u Kleofasa
+Kamień z krukiem ze skrzynki Gaspara został u brata Kleofasa przy kaplicy. Mnich go nie sprzeda.

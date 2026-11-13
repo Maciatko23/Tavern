@@ -188,7 +188,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("...w rozmowie popiersie rozbitka (Rozbitek_Bust)", meet.log.some(l => l.who === ery[0] && l.bust) && /Rozbitek_Bust/.test(JSON.stringify(bustOk)), { bustOk, log: meet.log.slice(0, 3) });
 
     // ---------------------------------------------------------------- poszlaka u Józka Łaty (Podgrodzie)
-    await t.go(111, 43, 30, 2);
+    await t.go(111, 61, 63, 2);
     await t.setHour(11);
     await t.frames(40);
     const jozekTalk = await t.talkTo(`TownLife.eventOf("szmaciarz")`, ["Nie"], { secs: 30 });

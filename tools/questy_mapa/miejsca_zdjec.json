@@ -1,0 +1,389 @@
+[
+ {
+  "id": "przystan_brama",
+  "map": 125,
+  "box": [
+   84,
+   88,
+   110,
+   102
+  ],
+  "marks": [
+   {
+    "x": 101,
+    "y": 95,
+    "t": "brama: Ścieżka na klif -> Pustelnia"
+   },
+   {
+    "x": 104,
+    "y": 96,
+    "t": "drogowskaz"
+   }
+  ]
+ },
+ {
+  "id": "gory_brama",
+  "map": 13,
+  "box": [
+   0,
+   22,
+   16,
+   34
+  ],
+  "marks": [
+   {
+    "x": 6,
+    "y": 27,
+    "t": "Brama Milczących -> Osada"
+   }
+  ]
+ },
+ {
+  "id": "podgrodzie_brama",
+  "map": 111,
+  "box": [
+   100,
+   12,
+   117,
+   26
+  ],
+  "marks": [
+   {
+    "x": 110,
+    "y": 20,
+    "t": "brama -> Spalona zagroda"
+   },
+   {
+    "x": 112,
+    "y": 21,
+    "t": "drogowskaz"
+   }
+  ]
+ },
+ {
+  "id": "laka_menhiry",
+  "map": 4,
+  "box": [
+   40,
+   58,
+   60,
+   88
+  ],
+  "p": 24,
+  "marks": [
+   {
+    "x": 50,
+    "y": 78,
+    "t": "płyta (D36)"
+   },
+   {
+    "x": 47,
+    "y": 63,
+    "t": "pastwisko przy menhirach"
+   }
+  ]
+ },
+ {
+  "id": "jar_polna_droga",
+  "map": 3,
+  "box": [
+   54,
+   8,
+   80,
+   22
+  ],
+  "p": 28,
+  "marks": [
+   {
+    "x": 74,
+    "y": 18,
+    "t": "K3 podkowa"
+   },
+   {
+    "x": 69,
+    "y": 14,
+    "t": "kapliczka 022 (K67)"
+   },
+   {
+    "x": 61,
+    "y": 16,
+    "t": "strażnica 022 (K68)"
+   }
+  ]
+ },
+ {
+  "id": "jar_prom",
+  "map": 3,
+  "box": [
+   80,
+   10,
+   98,
+   22
+  ],
+  "p": 32,
+  "marks": [
+   {
+    "x": 88,
+    "y": 16,
+    "t": "W5 wóz promu (nocą)"
+   },
+   {
+    "x": 90,
+    "y": 17,
+    "t": "Rafał"
+   },
+   {
+    "x": 91,
+    "y": 17,
+    "t": "ogień"
+   }
+  ]
+ },
+ {
+  "id": "jar_skraj_lasu",
+  "map": 3,
+  "box": [
+   86,
+   22,
+   104,
+   56
+  ],
+  "p": 22,
+  "marks": [
+   {
+    "x": 95,
+    "y": 30,
+    "t": "K59 nora"
+   },
+   {
+    "x": 92,
+    "y": 26,
+    "t": "kopiec 023 (K68)"
+   },
+   {
+    "x": 96,
+    "y": 42,
+    "t": "D33 obóz CzO"
+   },
+   {
+    "x": 96,
+    "y": 52,
+    "t": "W5 obóz przemytników"
+   }
+  ]
+ },
+ {
+  "id": "jar_omszala_laka",
+  "map": 3,
+  "box": [
+   4,
+   66,
+   56,
+   86
+  ],
+  "p": 18,
+  "marks": [
+   {
+    "x": 20,
+    "y": 75,
+    "t": "D30 polanka Jagny"
+   },
+   {
+    "x": 8,
+    "y": 79,
+    "t": "kopiec 017 (K68)"
+   },
+   {
+    "x": 40,
+    "y": 79,
+    "t": "źródełko 017"
+   },
+   {
+    "x": 43,
+    "y": 74,
+    "t": "krąg grzybów 1"
+   },
+   {
+    "x": 52,
+    "y": 74,
+    "t": "krąg grzybów 2"
+   }
+  ]
+ },
+ {
+  "id": "laka_lesna_droga",
+  "map": 4,
+  "box": [
+   38,
+   8,
+   70,
+   34
+  ],
+  "p": 22,
+  "marks": [
+   {
+    "x": 46,
+    "y": 24,
+    "t": "K63 mielerz"
+   },
+   {
+    "x": 42,
+    "y": 15,
+    "t": "kapliczka 021 (K67)"
+   },
+   {
+    "x": 42,
+    "y": 28,
+    "t": "źródełko 021"
+   },
+   {
+    "x": 52,
+    "y": 15,
+    "t": "K65 juk 1"
+   },
+   {
+    "x": 64,
+    "y": 14,
+    "t": "K65 juk 2"
+   },
+   {
+    "x": 66,
+    "y": 16,
+    "t": "K65 juk 3"
+   }
+  ]
+ },
+ {
+  "id": "laka_owce_oboz",
+  "map": 4,
+  "box": [
+   26,
+   36,
+   92,
+   58
+  ],
+  "p": 14,
+  "marks": [
+   {
+    "x": 40,
+    "y": 50,
+    "t": "K64 owca 1"
+   },
+   {
+    "x": 62,
+    "y": 45,
+    "t": "K64 owca 2"
+   },
+   {
+    "x": 31,
+    "y": 54,
+    "t": "K64 owca 3"
+   },
+   {
+    "x": 89,
+    "y": 37,
+    "t": "obóz rabusiów"
+   }
+  ]
+ },
+ {
+  "id": "miasto_wiatrak_cech",
+  "map": 8,
+  "box": [
+   84,
+   76,
+   102,
+   92
+  ],
+  "p": 28,
+  "people": true,
+  "marks": [
+   {
+    "x": 97,
+    "y": 88,
+    "t": "wiatrak_przed"
+   },
+   {
+    "x": 91,
+    "y": 88,
+    "t": "cech_przed"
+   }
+  ]
+ },
+ {
+  "id": "miasto_lazn",
+  "map": 8,
+  "box": [
+   88,
+   68,
+   104,
+   78
+  ],
+  "p": 32,
+  "people": true,
+  "marks": [
+   {
+    "x": 97,
+    "y": 74,
+    "t": "lazn_przed"
+   }
+  ]
+ },
+ {
+  "id": "miasto_przytulek",
+  "map": 8,
+  "box": [
+   88,
+   98,
+   104,
+   108
+  ],
+  "p": 32,
+  "people": true,
+  "marks": [
+   {
+    "x": 97,
+    "y": 105,
+    "t": "przytulek_przed (Stefa)"
+   }
+  ]
+ },
+ {
+  "id": "miasto_garbarnia",
+  "map": 8,
+  "box": [
+   106,
+   78,
+   119,
+   93
+  ],
+  "p": 32,
+  "people": true,
+  "marks": [
+   {
+    "x": 114,
+    "y": 89,
+    "t": "garbarnia_przed (Ignac)"
+   }
+  ]
+ },
+ {
+  "id": "miasto_sukiennice",
+  "map": 8,
+  "box": [
+   44,
+   56,
+   60,
+   67
+  ],
+  "p": 32,
+  "people": true,
+  "marks": [
+   {
+    "x": 51,
+    "y": 63,
+    "t": "sukiennice_przed (szwaczka)"
+   }
+  ]
+ }
+]

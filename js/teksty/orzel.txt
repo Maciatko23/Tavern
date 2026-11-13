@@ -165,7 +165,7 @@ epilogue.any = {imie} krąży o świcie nad tawerną.
 
 # ======================================================================== D29 (zadania.D29)
 zadania.D29.title = Jajo z grani
-zadania.D29.where = przylądek z latarnią → Góry → Orla Grań
+zadania.D29.where = Tawerna (Bazyli po południu) → Góry → Orla Grań
 zadania.D29.when = Akt II, po burzy
 zadania.D29.desc = W noc burzy Bazyli widział z laterny białe skrzydła nad granią w górach - i pochodnie. Orły nie latają w burzę bez powodu.
 [zadania.D29.offer.say]
@@ -412,3 +412,13 @@ noSaveAir = Najpierw wyląduj
 panelKeys = WASD / strzałki: lot   Shift: szybciej   Spacja: nurkuj   Q: wyżej / niżej   L: ląduj   M: lot daleki
 nestFood = Miska: jedzenie
 wayUp = Ścieżka wspinaczy prowadzi na grań
+
+# ======================================================================== PRZY KAPLICY (pustelnia poza światem, 2026-11-11)
+# Brat Kleofas zszedł z klifu i siedzi przy kaplicy w Kruczogrodzie (Map008), dopóki WyspaData.HERMITAGE_OPEN = false. Klucze „kaplica.<ścieżka>”
+# mówią tę samą ścieżkę jeszcze raz i nadpisują ją TYLKO wtedy (Pustelnia_Data.js); gdy pustelnia wróci, czyta się tekst z góry pliku.
+kaplica.zadania.W13.where = dom, Orla Grań, kaplica w Kruczogrodzie, dwór Lorda
+kaplica.zadania.W13.steps.2.text = Zanieś pióro białego orła bratu Kleofasowi (siedzi przy kaplicy w Kruczogrodzie). Pióra zrzuca podrostek.
+
+# orzelKleofas, mówi: pustelnik
+[kaplica.uwagi.1.lines]
+Jeździec Skrzydlatej Straży. W kronikach ostatni był trzysta lat temu. ...Tylko nie lataj nad kaplicą. Gołębie się denerwują, a ja z nimi.

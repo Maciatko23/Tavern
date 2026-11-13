@@ -12,7 +12,7 @@
 //     do schodów - K73; drugi raz za blisko - zobaczył
 //   - I5: rano po nocy w wynajętym pokoju list pod drzwiami (pokój 1) - czytanie, notatka
 // Uruchom: node tests/run.js intrygi_test --port 9763
-const kit = require("./lib/kit.js");
+const kit = (function(){ try { return require("./lib/kit.js"); } catch (e) { return require("../../../../tests/lib/kit.js"); } })();
 
 kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     const J = e => t.json(e);
@@ -42,21 +42,21 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await t.gold(200);
     await t.eval(`Podroznicy.przyplyn("trojka"); 0`);
     const guard = await J(`({ g: TavernLife.roomGuard("3"), ksiega: Podroznicy.stan().ksiega["3"], rent: TavernLife.rentRoom(3), rented: TavernLife.rentedRoom(),
-        info: (TavernLife.plan.info(1, "r23") || { sections: [] }).sections.map(s => s.lines.map(l => l.text).join("; ")).join(" / ") })`);
+        info: (TavernLife.plan.info(1, "r8") || { sections: [] }).sections.map(s => s.lines.map(l => l.text).join("; ")).join(" / ") })`);
     const pops = await t.popups();
-    t.check("„trójka” w pokoju 3: furtka TavernLife - wynajem odmówiony popupem nad bohaterem („zajęte do dnia”); plan karczmy przy pokoju 23: Tobiasz i do kiedy",
-        !!guard.g && guard.ksiega === "trojka" && guard.rent === false && !guard.rented && pops.some(p => /zajęte do dnia/.test(p)) && /Tobiasz Goniec.*do dnia 7/.test(guard.info), { guard, pops: pops.slice(-3) });
+    t.check("„trójka” w pokoju 3: furtka TavernLife - wynajem odmówiony popupem nad bohaterem („zajęte do dnia”); plan karczmy przy pokoju 8: Tobiasz i do kiedy",
+        !!guard.g && guard.ksiega === "trojka" && guard.rent === false && !guard.rented && pops.some(p => /zajęte do dnia/.test(p)) && /(Tobiasz Goniec|gość z lądu).*do dnia 7/.test(guard.info), { guard, pops: pops.slice(-3) });
     const ceny = await J(`(function(){ const s = Podroznicy.stan(), r0 = s.renoma; s.renoma = 30; const a = TavernLife.roomPrice(1); s.renoma = 80; const b = TavernLife.roomPrice(1); s.renoma = r0; return { a, b }; })()`);
     t.check("Renoma 80: pokoje bohatera 20% taniej (pokój 1)", ceny.b === Math.max(1, Math.round(ceny.a * 0.8)) && ceny.b < ceny.a, ceny);
 
     // ---------------------------------------------------------------- drzwi zajętego pokoju (Tobiasz, pokój 23 - drzwi 1 na Map025)
-    await t.go(25, 4, 18, 8);
+    await t.go(25, 33, 20, 2);
     await at(4, 23.5, 30);
     const nocDrzwi = await listText(1);
     await at(5, 10, 30);
     const ranoDrzwi = await listText(1);
     const kto = await J(`Intrygi.wPokoju("tobiasz")`);
-    t.check("drzwi pokoju 23: nocą zamknięte („Zamknięte. Ktoś tu mieszka.”, Zapukaj); rano w czasie sprzątania, gdy Tobiasza nie ma - przejście jak dawniej",
+    t.check("drzwi pokoju 8: nocą zamknięte („Zamknięte. Ktoś tu mieszka.”, Zapukaj); rano w czasie sprzątania, gdy Tobiasza nie ma - przejście jak dawniej",
         /Ktoś tu mieszka/.test(nocDrzwi) && !/^201/.test(nocDrzwi) && /201:/.test(ranoDrzwi) && !kto, { nocDrzwi, ranoDrzwi, kto });
 
     // ---------------------------------------------------------------- przeszukanie: D42 (pokój 20), potem przyłapany (pokój 23)
@@ -71,7 +71,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const d42 = await J(`Podroznicy.stan().d42.slady`);
     t.check("przeszukanie: kufer Zenona w pokoju 20 (9:36, sprząta pokojówka, Zenona nie ma) - „Przeszukać?”; umowa - poszlaka D42 „pokój”",
         /Intrygi\.szukaj/.test(kufer) && !!d42.pokoj, { kufer, d42 });
-    await t.eval(`Podroznicy.przeszukanie.dodaj({ id: "test23", pokoj: "23", kto: "tobiasz", gdy: () => true, klucz: "szukanie.nic" }); 0`);
+    await t.eval(`Podroznicy.przeszukanie.dodaj({ id: "test23", pokoj: "8", kto: "tobiasz", gdy: () => true, klucz: "szukanie.nic" }); 0`);
     await at(5, 22.8, 10);
     const r0 = (await J("Podroznicy.stan().renoma"));
     await t.eval(`Intrygi.szukajTak(null, "test23"); 0`);
@@ -89,14 +89,14 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     // ---------------------------------------------------------------- D45 „Gość spod trójki”
     const od = await J(`Podroznicy.stan().obecni.trojka.od`);
     await at(od + 1, 7, 30);
-    await t.go(25, 30, 49, 4);
+    await t.go(25, 8, 17, 8);
     await t.frames(60);
     const d45a = await J(`({ r: TownQuests.rec("D45"), sadza: (function(){ const e = $gameMap.event(3011); return e ? { x: e.x, y: e.y, on: !e.isTransparent(), img: e.characterName() } : null; })() })`);
     await t.talkTo(3011, [], { secs: 15 });
     await t.go(9, 4, 11, 8);
     await t.frames(40);
     await t.talkTo(3017, [], { secs: 15 });
-    await t.go(25, 35, 40, 4);
+    await t.go(25, 15, 8, 4);
     await at(od + 1, 23, 10);
     await at(od + 2, 1.5, 20);
     const miejsce = await J("Podroznicy.podsluch.miejsce()");
@@ -114,7 +114,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
 
     // ---------------------------------------------------------------- D46 „Skradziona szkatułka” (wariant A)
     await t.eval(`(function(){ const row = Watki.f9.sekcje().find(s => s.watek === "intrygi").rows.find(r => r.kind === "isleWatek:d46"); Watki.f9.ok(row); return 0; })()`);
-    await t.go(25, 74, 23, 8);
+    await t.go(25, 26, 17, 8);
     await t.frames(40);
     const d46a = await J(`({ r: TownQuests.rec("D46"), w: ${W}.S().d46.wariant })`);
     await t.eval(`Intrygi.d46Slad("zamek"); 0`);
@@ -134,7 +134,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await t.gold(200);
     const dn = 4;
     await at(dn, 22, 10);
-    await t.go(25, 38, 40, 2);
+    await t.go(25, 24, 38, 2);
     await t.frames(30);
     await t.eval("Intrygi.auto(true); 0");   // (the tests' quiet mode - newGame / calm - turns the wakes off)
     await t.eval(`TavernLife.rentRoom(1); 0`);
@@ -182,11 +182,11 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const dl = await J("$gameSystem.dayNightDay()");
     await at(dl + 1, 7, 10);
     await t.eval(`(function(){ const s = TavernLife.state(); s.rent = { room: "1", name: "Pokój 1", price: 8, day: $gameSystem.dayNightDay() - 1, until: ($gameSystem.dayNightDay()) * 24 + 10, slept: true }; IntrygiData.watek.S().listy.dzien = 0; return 0; })()`);
-    await t.go(25, 38, 42, 2);
+    await t.go(25, 18, 17, 8);
     await t.frames(60);
     const lp = await J(`(function(){ const e = $gameMap.event(3014); return e ? { on: !e.isTransparent(), x: e.x, y: e.y, img: e.characterName(), dzis: Podroznicy.listy.dzis() } : null; })()`);
     await t.talkTo(3014, [], { secs: 15 });
     const lr = await J(`({ s: ${W}.S().listy, note: (Journal.data().notes || []).some(n => /List od Urszuli/.test(n.title)) })`);
     t.check("rano po nocy w wynajętym pokoju 1: list pod drzwiami (3014 w pokoju przy drzwiach), O - czytanie i notatka",
-        !!lp && lp.on && lp.x === 38 && lp.y === 44 && lp.img === "!$Podr_List" && lr.note && !!lr.s.byly.test, { lp, lr });
+        !!lp && lp.on && lp.x === 18 && lp.y === 11 && lp.img === "!$Podr_List" && lr.note && !!lr.s.byly.test, { lp, lr });
 });

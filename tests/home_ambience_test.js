@@ -303,7 +303,7 @@ const SHOTS = path.join(__dirname, "..", "docs", "dom_dziadka");
         check("rain: Atmosphere.js plays the rain on the roof, this adds only the drips (no second rain)", bed(bRain, "drips").playing && !bed(bRain, "rain").playing &&
             ((atmo.bed && /^Rain/.test(atmo.bed.name)) || (atmo.want && /^Rain/.test(atmo.want.name))), { drips: bed(bRain, "drips"), rain: bed(bRain, "rain"), atmo });
         // out of the house and back
-        const out = await go(20, 15, 8);
+        const out = await go(20, 46, 47);
         await frames(150);
         const bOut = await J("HomeAmbience.beds()");
         const outFx = await J("({ fx: !!HomeAmbience.fx(), active: HomeAmbience.isActive(), home: !!SceneManager._scene._spriteset._home })");

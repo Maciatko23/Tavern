@@ -71,7 +71,7 @@ kit.test({ port: 9398, beforeLoad: ORDER, plugins: ["TawernaCore", "TawernaUI", 
     let E = await J("window.__ev.map(e => e[0])");
     t.check("newGame, mapLeave, mapEnter and mapReady come in that order on a new game", ["newGame", "mapLeave", "mapEnter", "mapReady"].every((n, i, a) => E.indexOf(n) >= 0 && (i === 0 || E.indexOf(a[i - 1]) < E.indexOf(n))), E);
     await ev("window.__ev.length = 0; 0");
-    t.check("a transfer to the meadow (Map004) and back", (await t.go(4, 10, 10)) && (await t.go(3, 22, 14)));
+    t.check("a transfer to the meadow (Map004) and back", (await t.go(4, 10, 10)) && (await t.go(3, 62, 45)));
     E = await J("window.__ev");
     const leave = E.find(e => e[0] === "mapLeave"), enter = E.find(e => e[0] === "mapEnter");
     t.check("a transfer: mapLeave { mapId: 3, to 4 }, then mapEnter { mapId: 4, from: 3 }, mapReady", !!leave && leave[1] === 3 && !!enter && enter[1] === 4 && enter[2] === 3 &&
@@ -189,7 +189,7 @@ kit.test({ port: 9398, beforeLoad: ORDER, plugins: ["TawernaCore", "TawernaUI", 
         return out; })()`);
     t.check("id ranges: an overlap with another owner is refused (also a reserved range: Story 901-902, Forestry 1000-1999, the package Zasoby 2100-2299), the same owner again and a free range are fine",
         /overlap/.test(inj.overlap) && /Story/.test(inj.reserved) && /Forestry/.test(inj.forestry) && /Zasoby/.test(inj.packages) && inj.same === "ok" && inj.free === "ok", inj);
-    t.check("a transfer onto Map003 again", await t.go(4, 10, 10) && await t.go(3, 22, 14));
+    t.check("a transfer onto Map003 again", await t.go(4, 10, 10) && await t.go(3, 62, 45));
     const put = await J(`(function(){ const e = id => $gameMap.event(id); const own = ${inj.own};
         return { a: !!e(780) && !!e(781), out: !!e(795) || !!$dataMap.events[795], note: e(780) && e(780).event().note, meta: e(780) && e(780).event().meta,
             own: $dataMap.events[own] && $dataMap.events[own].name, when: !!$dataMap.events[798], injected: Tawerna.injected(3) }; })()`);
@@ -199,13 +199,13 @@ kit.test({ port: 9398, beforeLoad: ORDER, plugins: ["TawernaCore", "TawernaUI", 
     // (2026-10-07) when() goes false while its event is live, then a transfer within the same map: the engine keeps the live events
     // but reloads the data - the event keeps its old data till the map is set up again (else a live event without data: a crash)
     await t.eval("window.__ctWhen = true; 0");
-    t.check("... when() true: the event comes in", await t.go(4, 10, 10) && await t.go(3, 22, 14) && await t.eval("!!$gameMap.event(798) && !!$dataMap.events[798]"));
+    t.check("... when() true: the event comes in", await t.go(4, 10, 10) && await t.go(3, 62, 45) && await t.eval("!!$gameMap.event(798) && !!$dataMap.events[798]"));
     await t.eval("window.__ctWhen = false; $gamePlayer.reserveTransfer(3, 23, 14, 2, 2); 0");
     await t.until("!$gamePlayer.isTransferring() && SceneManager._scene instanceof Scene_Map && !SceneManager.isSceneChanging()", 20, 50);
     await t.frames(10);
     const same = await J(`(function(){ const e = $gameMap.event(798); return { live: !!e, data: !!$dataMap.events[798], note: e && e.event() ? e.event().note : null, at: [$gamePlayer.x, $gamePlayer.y] }; })()`);
     t.check("... when() false, then a transfer within the same map: the live event keeps its data (no event without data)", same.live && same.data && /CoreTest:x=798/.test(same.note || ""), same);
-    t.check("... and leaving the map and coming back: it is gone", await t.go(4, 10, 10) && await t.go(3, 22, 14) && await t.eval("!$gameMap.event(798) && !$dataMap.events[798]"));
+    t.check("... and leaving the map and coming back: it is gone", await t.go(4, 10, 10) && await t.go(3, 62, 45) && await t.eval("!$gameMap.event(798) && !$dataMap.events[798]"));
     // an older save: made before 781 existed (it is not among the saved events) and with 782 that the data no longer has
     const old = await J(`(function(){
         const c = JsonEx.parse(JsonEx.stringify(DataManager.makeSaveContents()));

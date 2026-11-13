@@ -8,6 +8,8 @@ potem to). Ze zdjęć 8 px na kratkę (tools/mapy/zrzuty_prawdziwa) robi wszystk
   python tools/mapy/mapa_prawdziwa_obrazy.py              (do tools/mapy/staging_mapa/img/mapa_wyspy)
   python tools/mapy/mapa_prawdziwa_obrazy.py --wykonaj    (do img/mapa_wyspy)
   [--zrzuty <folder>]  zdjęcia z innego folderu niż tools/mapy/zrzuty_prawdziwa (mapy, których tam nie ma - z zrzuty_prawdziwa)
+  [--uklad <json>] [--dane <MapaWyspy_Data.js>] [--mapy-z <folder z MapXXX.json>] [--do <folder>]  inny świat (plansza 3x3:
+      tools/plansza/staging); bez mapy 910 w układzie kafel morza zostaje, jaki jest
 Mur raz (gracz 2026-11-07, wariant A): mapy z kopią muru sąsiadki zdejmuj z ich wersji bez kopii - python tools/mapy/kopie_murow.py,
 potem GAME_OVERLAY=tools/mapy/staging_bez_kopii MAPY=<mapy, które wypisze> node tools/mapy/mapa_prawdziwa_zrzuty.js."""
 import json, os, re, sys
@@ -23,17 +25,21 @@ SHOTS1 = sys.argv[sys.argv.index("--zrzuty") + 1] if "--zrzuty" in sys.argv else
 def shot_path(mid):
     p = os.path.join(SHOTS1, "%d.png" % mid) if SHOTS1 else None
     return p if p and os.path.exists(p) else os.path.join(SHOTS0, "%d.png" % mid)
-OUT = os.path.join(ROOT, "img", "mapa_wyspy") if "--wykonaj" in sys.argv else os.path.join(HERE, "staging_mapa", "img", "mapa_wyspy")
+def arg(k, d):
+    return sys.argv[sys.argv.index(k) + 1] if k in sys.argv else d
+OUT = arg("--do", os.path.join(ROOT, "img", "mapa_wyspy") if "--wykonaj" in sys.argv else os.path.join(HERE, "staging_mapa", "img", "mapa_wyspy"))
 os.makedirs(os.path.join(OUT, "mgla"), exist_ok=True)
 PPT, FEATHER, PAD, FPPT = 4, 10, 3, 2
 HAZE = np.array([196, 208, 214], float)
-uk = {int(k): v for k, v in json.load(open(os.path.join(ROOT, "docs", "mapy", "swiat_uklad.json"), encoding="utf-8"))["mapy"].items()}
-data = open(os.path.join(ROOT, "js", "plugins", "MapaWyspy_Data.js"), "rb").read().decode("utf-8")
+uk = {int(k): v for k, v in json.load(open(arg("--uklad", os.path.join(ROOT, "docs", "mapy", "swiat_uklad.json")), encoding="utf-8"))["mapy"].items()}
+data = open(arg("--dane", os.path.join(ROOT, "js", "plugins", "MapaWyspy_Data.js")), "rb").read().decode("utf-8")
+MAPY_Z = arg("--mapy-z", None)
 ids = [int(v) for v in re.search(r"const MAPY_OBRAZY = \[([^\]]*)\];", data).group(1).split(",")]
 
 
 def tiles(m):
-    d = json.load(open(os.path.join(ROOT, "data", "Map%03d.json" % m), encoding="utf-8"))
+    q = os.path.join(MAPY_Z, "Map%03d.json" % m) if MAPY_Z else None
+    d = json.load(open(q if q and os.path.exists(q) else os.path.join(ROOT, "data", "Map%03d.json" % m), encoding="utf-8"))
     return d["width"], d["height"], d["data"]
 
 
@@ -73,6 +79,8 @@ for mid in ids:
     p = os.path.join(OUT, "mgla", "%d.png" % mid)
     Image.fromarray(np.dstack([np.clip(big, 0, 255), mask * 255]).astype(np.uint8), "RGBA").save(p, optimize=True); total += os.path.getsize(p)
 # the sea's tile
+if 910 not in uk:
+    print("obrazy: %d map + mgła (kafel morza bez zmian), %.1f MB -> %s" % (len(ids), total / 1048576.0, OUT)); raise SystemExit(0)
 W, H, t = tiles(910); n = W * H
 water = np.array([[2048 <= t[y * W + x] < 2816 and not any(t[z * n + y * W + x] for z in (1, 2, 3)) for x in range(W)] for y in range(H)])
 deep = set(zip(*np.where(cv2.distanceTransform(water.astype(np.uint8), cv2.DIST_L1, 3) >= 10)[::-1]))

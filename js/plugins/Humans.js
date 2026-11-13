@@ -308,7 +308,7 @@
         const fast = mode === "chase" || mode === "flee" || mode === "backoff" || mode === "flank";
         this.setMoveSpeed(fast ? k.chase : mode === "leave" ? k.speed - 0.2 : k.speed);
         // (planting his feet for a blow or a shot: the step he is in is finished at once, not glided on under a still pose)
-        if (mode === "windup" || mode === "draw" || mode === "guard") this.setMoveSpeed(5);
+        if (mode === "windup" || mode === "draw" || mode === "guard") this.setMoveSpeed((window.FreeMovement && FreeMovement.rawFor ? FreeMovement.rawFor(5) : 5));   // (a snap: 5 on the old scale - FreeMovement world speed)
         this.updateSheet();
     };
     Game_Human.prototype.sheetPart = function() {

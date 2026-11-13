@@ -1,0 +1,18 @@
+{
+ "tiles": [
+  13,
+  6
+ ],
+ "center_col": 6,
+ "door_col": 8,
+ "frame": [
+  96,
+  96
+ ],
+ "occupy": {
+  "left": 6,
+  "right": 5,
+  "up": 2
+ },
+ "note": "building 12 wide from the left edge (col 12 empty); walls = bottom 2 rows (stalls), roof above"
+}

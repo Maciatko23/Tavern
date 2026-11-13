@@ -121,12 +121,12 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // ---- the camp: heard (sneaking, from behind the crates of the cart)
     await setTime(night1 + 1, 22);
     await E("Humans.clear(); Kantor.opts.talkGap = 40; 0");
-    await go(23, 24, 1, 2);
+    await go(3, 87, 49, 2);
     await t.frames(40);
     const camp = await J("({ men: Kantor.campMen().map(h => [h._kind, h._mode, h._x, h._y]), fire: !!$gameMap.event(753) && !$gameMap.event(753).isTransparent(), cart: !!$gameMap.event(750) && !$gameMap.event(750).isTransparent(), courier: !!$gameMap.event(752) && !$gameMap.event(752).isTransparent(), light: /Light:/.test($gameMap.event(753).event().note) })");
-    t.check("obóz przemytników na Skraju lasu (Map023, noc): ognisko z ogniem i światłem, wóz, kurier, czterech ludzi Baltazara przy ognisku (siedzą i śpią)",
+    t.check("obóz przemytników na Skraju lasu (Kruczy Jar, noc): ognisko z ogniem i światłem, wóz, kurier, czterech ludzi Baltazara przy ognisku (siedzą i śpią)",
         camp.fire && camp.light && camp.cart && camp.courier && camp.men.length === 4 && camp.men.some(m => m[1] === "sit") && camp.men.some(m => m[1] === "sleep"), camp);
-    await E("Hunting.setSneak(true); $gamePlayer.locate(30, 4); $gamePlayer.setDirection(6); 0");
+    await E("Hunting.setSneak(true); $gamePlayer.locate(93, 52); $gamePlayer.setDirection(6); 0");
     await t.frames(60);
     await shot("oboz_przemytnikow.png");
     await t.until("Kantor.state().camp.heard > 0 || Kantor.campMen().some(h => h._engaged)", 40);
@@ -140,7 +140,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.loadFrom(1, { quiet: true });
     await E("Humans.auto(false); Humans.clear(); 0");
     await setTime(night1 + 1, 22);
-    await go(23, 24, 1, 2);
+    await go(3, 87, 49, 2);
     await t.frames(30);
     await E("Kantor.campMen()[0].engage(false); 0");
     await t.frames(20);
@@ -154,7 +154,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.loadFrom(1, { quiet: true });
     await E("Humans.auto(false); Humans.clear(); 0");
     await setTime(night1 + 1, 22);
-    await go(23, 24, 1, 2);
+    await go(3, 87, 49, 2);
     await t.frames(30);
     await E("(function(){ const h = Kantor.campMen()[0]; h.engage(false); Humans.beatenBy(h); return 0; })()");
     await t.until("Kantor.state().camp.beaten === TownQuests.nightOf()", 15);
@@ -349,7 +349,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // the raid: the enemy's men on a road at night
     await E("(function(){ const s = Kantor.state(); s.raid.day = $gameSystem.dayNightDay(); return 0; })()");
     await setTime(dDeal, 22);
-    await go(22, 12, 2, 2);
+    await go(3, 76, 8, 2);
     await t.until("Humans.humans().some(h => h._tag === 'w5Napad')", 10);
     t.check("...nocny napad ludzi Baltazara na drodze (Humans.js: „Pozdrowienia od kupca!”)", await E("Humans.humans().filter(h => h._tag === 'w5Napad').length >= 3"));
     await E("Humans.clear(); 0");
@@ -360,12 +360,12 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await flagOn("rafalTaken");
     const fd = await E("Kantor.ferryDay()");
     await setTime(fd, 21.5);
-    await go(22, 12, 2, 2);
+    await go(3, 76, 8, 2);
     await t.frames(30);
     const p0 = await J("({ cart: !$gameMap.event(754).isTransparent(), rafal: !$gameMap.event(755).isTransparent(), men: Kantor.promMen().map(h => h._kind) })");
     t.check("rozdz. 6: w noc promu na Polnej drodze wóz z ładunkiem, dwóch ludzi Baltazara (pałka i łuk) i związany Rafał (W6: zabrany przez dwór)",
         p0.cart && p0.rafal && p0.men.length === 2, p0);
-    await E("$gamePlayer.locate(25, 20); Kantor.promMen()[0].engage(false); 0");
+    await E("$gamePlayer.locate(84, 16); Kantor.promMen()[0].engage(false); 0");
     await t.until("!!Kantor.state().ferry.ambush", 5);
     await t.frames(20);
     const amb = await J("({ n: Kantor.promMen().length, eng: Kantor.promMen().filter(h => h._engaged).length })");
@@ -374,9 +374,9 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     t.check("...straż widzi bohatera - zasadzka: z krzaków wyskakuje dwóch kolejnych", amb.n >= 4 && amb.eng >= 2 && !!(await E("Kantor.state().ferry.ambush")), amb);
     await E("for (const h of Kantor.promMen().slice()) Humans.kill(h); 0");
     await t.frames(20);
-    await E("$gamePlayer.locate(31, 22); $gamePlayer.setDirection(8); 0");
+    await E("$gamePlayer.locate(90, 18); $gamePlayer.setDirection(8); 0");
     await use(755);
-    await E("$gamePlayer.locate(29, 19); $gamePlayer.setDirection(2); 0");
+    await E("$gamePlayer.locate(88, 15); $gamePlayer.setDirection(2); 0");
     await use(754);
     s = await st();
     t.check("...pobici: ładunek zdobyty - 5 kamieni z krukiem w torbie, rozdz. 7", s.s.ferry.state === "seized" && (s.v.kamien_kruk || 0) >= 5 && s.step === "w5Akt2", { ferry: s.s.ferry, v: s.v, step: s.step });
@@ -387,9 +387,9 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await E("Humans.auto(false); Humans.clear(); 0");
     await setTime(fd, 21.5);
     await t.give(64, 6);
-    await go(22, 12, 2, 2);
+    await go(3, 76, 8, 2);
     await t.frames(20);
-    await E("Hunting.setSneak(true); $gamePlayer.locate(29, 19); $gamePlayer.setDirection(2); 0");
+    await E("Hunting.setSneak(true); $gamePlayer.locate(88, 15); $gamePlayer.setDirection(2); 0");
     r = await use(754, ["Podmień."]);
     s = await st();
     t.check("...albo po cichu: zwykłe kamienie zamiast kamieni z krukiem (6 kamieni), nikt nie zauważył",
@@ -398,7 +398,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.loadFrom(5, { quiet: true });
     await E("Humans.auto(false); Humans.clear(); 0");
     await setTime(fd, 21.5);
-    await go(22, 12, 2, 2);
+    await go(3, 76, 8, 2);
     await t.frames(30);
     await E("(function(){ const h = Kantor.promMen()[0]; h.engage(false); Humans.beatenBy(h); return 0; })()");
     await t.until("Kantor.state().ferry.state === 'beaten'", 15);
@@ -416,7 +416,7 @@ kit.test({ port: 9508, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await E("Humans.auto(false); Humans.clear(); 0");
     const fd2 = await E("Kantor.ferryDay()");
     await setTime(fd2, 21.5);
-    await go(22, 12, 2, 2);
+    await go(3, 76, 8, 2);
     await t.frames(20);
     const g4 = (await st()).gold;
     await E("__standBy(757); 0");

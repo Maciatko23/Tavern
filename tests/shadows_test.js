@@ -62,7 +62,7 @@ const HELPERS = String.raw`(function(){
 
 kit.test({ port: 9489, bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
     require("fs").mkdirSync(SHOTS, { recursive: true });
-    await t.newGame({ map: 3, x: 13, y: 12, day: 10, hour: 23, quiet: true, minimap: false });
+    await t.newGame({ map: 3, x: 53, y: 43, day: 10, hour: 23, quiet: true, minimap: false });
     const calm = () => t.eval("(function(){ Survival.calmWeather(); $gameScreen.clearWeather(); for (const c of SceneManager._scene._spriteset._cloudSprites || []) { c._baseOpacity = 0; c.opacity = 0; } return 0; })()");
     await calm();
     await t.eval(HELPERS);
@@ -71,8 +71,9 @@ kit.test({ port: 9489, bootCheck: "the game boots", errorCheck: "no errors in th
     const view = (x, y) => t.eval(`(function(){ $gamePlayer.updateScroll = function(){}; $gameMap.setDisplayPos(${x}, ${y}); return 0; })()`);
 
     // ---- a campfire among the pines of the wood (Map003) and the hero with a lit torch: every thing standing in the light
-    await view(1, 4);
-    await camp(16, 12);
+    // (2026-11-12: the pines stand thick where the hero starts, in the middle of Kruczy Jar - the old place at the top left has four)
+    await view(40, 34);
+    await camp(55, 42);
     await t.eval(`(function(){ $gameParty.gainItem($dataItems[59], 1); const a = $gameParty.leader(), it = $dataItems[59]; a.useItem(it); const act = new Game_Action(a); act.setItemObject(it); act.applyGlobal(); return 0; })()`);
     await t.until("Torch.isLit()", 10);
     await t.frames(40);
@@ -128,7 +129,10 @@ kit.test({ port: 9489, bootCheck: "the game boots", errorCheck: "no errors in th
 
     // ---- a man's shadow on a building (Farming's hut): it climbs the wall only where it reaches the wall's foot, not over the roof
     const hutSpot = await t.json(`(function(){ const free = (x, y) => $gameMap.isPassable(x, y, 2) && !$gameMap.eventsXy(x, y).length;
-        for (let y = 8; y < 26; y++) for (let x = 4; x < 32; x++) { let ok = true;
+        // (2026-11-12: the plot is in the middle of Kruczy Jar since 2026-11-09, no more at the top left: the whole map, the nearest to the hero first)
+        const cand = []; for (let y = 4; y < $gameMap.height() - 5; y++) for (let x = 4; x < $gameMap.width() - 6; x++) cand.push([x, y, Math.abs(x - $gamePlayer.x) + Math.abs(y - $gamePlayer.y)]);
+        cand.sort((a, b) => a[2] - b[2]);
+        for (const [x, y] of cand) { let ok = true;
             for (let yy = y - 3; yy <= y + 4 && ok; yy++) for (let xx = x - 3; xx <= x + 5; xx++) if (!free(xx, yy)) { ok = false; break; }
             if (ok) return { x, y }; } return null; })()`);
     t.check("open ground for a hut with a campfire in front of it", !!hutSpot, hutSpot);
@@ -187,8 +191,9 @@ kit.test({ port: 9489, bootCheck: "the game boots", errorCheck: "no errors in th
 
     // ---- the cost: the night layer in the wood with a campfire and a torch, keeping the shadows off what stands and not
     await t.setHour(23);
-    await view(1, 4);
-    await camp(16, 12);
+    // (2026-11-12: the pines stand thick where the hero starts, in the middle of Kruczy Jar - the old place at the top left has four)
+    await view(40, 34);
+    await camp(55, 42);
     await t.eval(`(function(){ $gamePlayer.locate(13, 12); $gameParty.gainItem($dataItems[59], 1); const a = $gameParty.leader(), it = $dataItems[59]; a.useItem(it); const act = new Game_Action(a); act.setItemObject(it); act.applyGlobal(); return 0; })()`);
     await t.until("Torch.isLit()", 10);
     await t.frames(30);

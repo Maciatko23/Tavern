@@ -80,7 +80,7 @@ kit.test({ port: 9494, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("śmieci w zapisie -> domyślne (Automatycznie, Wysoka)", cfg.bad.get === "auto" && cfg.bad.level === "high", cfg.bad);
 
     // ---------------------------------------------------------------- Kruczy Jar at noon in the rain: what each level switches, at once
-    t.check("nowa gra: Kruczy Jar, dzień 40, południe", await t.newGame({ map: 3, x: 22, y: 14, day: 40, hour: 12, quiet: true, minimap: true }));
+    t.check("nowa gra: Kruczy Jar, dzień 40, południe", await t.newGame({ map: 3, x: 62, y: 45, day: 40, hour: 12, quiet: true, minimap: true }));
     // (the test's own rain: not Survival's - day 1 of a new game rains from 9:00, and when no Survival tick fell between the kit's
     // calm and the jump to day 40, Survival still thought the screen's rain its own and ended it on the dry day 40: a race, 43/47)
     await t.eval("$gameSystem._weatherOwn = false; $gameScreen.changeWeather('rain', 5, 0); 0");
@@ -136,7 +136,7 @@ kit.test({ port: 9494, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("Średnia: cienie od ognia zostają, noc w 1/3 ekranu", nMd.night.info.things === nHi.night.info.things && nMd.night.k === 3 && nMd.night.w === Math.ceil(1280 / 3), nMd.night);
 
     // ---------------------------------------------------------------- Automatycznie: down under a slow frame, never up on the same map, up after a change, strikes
-    await t.go(3, 22, 14, 2);
+    await t.go(3, 62, 45, 2);
     await t.frames(30);
     const tuned = await t.json("Wydajnosc.quality.auto.tune({ window: 30, slow: 3, settle: 1, upWindows: 2 })");
     const defaults = { window: 60, clamp: 50, fps: 55, slow: 4, settle: 2, upWindows: 3, upFps: 58, upWork: 9, strikes: 2 };
@@ -172,7 +172,7 @@ kit.test({ port: 9494, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const a6 = await t.json("Wydajnosc.quality.auto.state()");
     t.check("Średnia nie utrzymała się na tej mapie: z powrotem Niska, Średnia ma 1 kreskę", down3 && a6.strikes.medium === 1 && a6.log.length === 4, { strikes: a6.strikes, log: a6.log });
     await t.eval("window.__slow = 0; 0");
-    await t.go(3, 22, 14, 2);
+    await t.go(3, 62, 45, 2);
     const up2 = await t.until("Wydajnosc.quality.level() === 'medium'", 15);
     await t.eval("window.__slow = 30; 0");
     const down4 = await t.until("Wydajnosc.quality.level() === 'low'", 20);
@@ -187,7 +187,7 @@ kit.test({ port: 9494, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.json(`(function(){ SceneManager.updateMain = window.__um; Wydajnosc.quality.auto.tune(${JSON.stringify(defaults)}); Wydajnosc.quality.auto.reset(); Wydajnosc.quality.set("auto", { auto: "high" }); return 0; })()`);
 
     // ---------------------------------------------------------------- Opcje by the keys: the first row, A / D, O, the line of text passed over
-    await t.go(3, 22, 14, 2);
+    await t.go(3, 62, 45, 2);
     await t.eval("window.dispatchEvent(new Event('pointerdown')); 0");
     await t.frames(20);
     const info = () => t.json("MenuRing.info()");

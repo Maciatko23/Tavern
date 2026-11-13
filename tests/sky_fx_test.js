@@ -8,7 +8,7 @@ const SHOTS = path.join(__dirname, "..", "docs", "niebo");
 
 kit.test({ port: 9451, bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
     require("fs").mkdirSync(SHOTS, { recursive: true });
-    await t.newGame({ map: 3, x: 34, y: 9, day: 1, hour: 12, quiet: true, minimap: false });   // (spring: sunrise 5:30, sunset 20:30)
+    await t.newGame({ map: 3, x: 74, y: 40, day: 1, hour: 12, quiet: true, minimap: false });   // (spring: sunrise 5:30, sunset 20:30)
     await t.eval(`(function(){ $gamePlayer.center(34, 9); Sky.forceMist(1, 1); return 0; })()`);
     const at = async h => { await t.setHour(h); await t.frames(8);
         return t.json(`(function(){ const s = SceneManager._scene._spriteset, fx = s._skyFx || {}, ray = s._rayLayer.children.find(c => c.visible), mist = s._mistLayer.children.find(c => c.visible);

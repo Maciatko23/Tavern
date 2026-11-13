@@ -14,7 +14,7 @@ mapa.3.opis = Sucha ziemia za kamiennym murem i dług, który na niej ciąży.
 mapa.4.pod = pastwisko przy starej drodze
 mapa.4.opis = Owce, świerszcze i trawa, która faluje jak morze.
 
-# 8 Okolice Tawerny
+# 8 Kruczogród
 mapa.8.pod = miasteczko pod zamkowym tarasem
 mapa.8.opis = Studnia na rynku daje mało, za to plotek nigdy nie brakuje.
 

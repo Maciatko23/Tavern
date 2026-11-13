@@ -47,14 +47,14 @@
     const KTO = { tymon: "dezerter", szczerba: "lowczyni" };   // (the travellers' keys: Podroznicy_Data's cast = TownLife's residents)
     const MAP = { miasto: 8, pietro: 25, karczma: 1, garnizon: 162, podgrodzie: 111, dzwonnica: 108, dziadek: 19, jar: 3 };
     const IDS = [3060, 3069], OWNER = "Lancuchy";
-    // room 5 on the guests' floor: its door (16,48) - Szczerba stands before it on her night (the corridor's cell below)
-    const DRZWI = { pokoj: "5", przed: [16, 49, 8] };
+    // room 5 on the guests' floor: its door (49,15) - Szczerba stands before it on her night (the corridor's cell below)
+    const DRZWI = { pokoj: "5", przed: [49, 16, 8] };
     // Tymon outside the tavern's book (event 3060): [map, x, y, direction] - the hiding places (the belfry, grandpa's house, Kruczy
     // Jar between the leaning rocks), the garrison (by the drill ground), the camp (under the wall - or in Podgrodzie when the town
     // shut its gate on it)
     const TYMON = { id: 3060, sheet: "$Npc_Dezerter", index: 0,
         miejsca: { dzwonnica: [MAP.dzwonnica, 6, 5, 2], dziadek: [MAP.dziadek, 16, 7, 2], jar: [MAP.jar, 21, 46, 4],
-            garnizon: [MAP.garnizon, 32, 23, 2], oboz: [MAP.miasto, 57, 89, 2], obozPoza: [MAP.podgrodzie, 40, 12, 2] } };
+            garnizon: [MAP.garnizon, 32, 23, 2], oboz: [MAP.miasto, 88, 97, 2], obozPoza: [MAP.podgrodzie, 40, 12, 2] } };
     // the days: the drum on the market the day after his ferry (the recruiter's day after a wave: 26), Szczerba's night - her arrival
     // + 3 (31) or the night the hero showed her the room; the hours of the well (his bandage), midnight's talk, her night at the door,
     // the search on her last day
@@ -215,8 +215,8 @@
             lista: {
                 1: { ch: 1, krok: "w16Tomek", godzina: 6.2, idz: [MAP.miasto, 50, 53, 8] },
                 2: { ch: 2, krok: "w16Lowczyni", godzina: 10, idz: [MAP.miasto, 51, 31, 8] },
-                3: { ch: 2, krok: "w16Tymon", godzina: 0.5, idz: [MAP.pietro, 14, 40, 8] },
-                4: { ch: 2, krok: "w16Tymon", godzina: 23.1, idz: [MAP.pietro, 18, 51, 4] },
+                3: { ch: 2, krok: "w16Tymon", godzina: 0.5, idz: [MAP.pietro, 48, 16, 8] },
+                4: { ch: 2, krok: "w16Tymon", godzina: 23.1, idz: [MAP.pietro, 51, 17, 4] },
                 5: { ch: 3, krok: "w16Plan", godzina: 13.5, idz: [MAP.garnizon, 33, 21, 2] },
                 6: { ch: 3, krok: "w16Plan", godzina: 10, idz: [MAP.miasto, 16, 50, 8] },
                 7: { ch: 3, krok: "w16Plan", godzina: 7.9, idz: [MAP.miasto, 51, 31, 8] }

@@ -1,0 +1,14 @@
+PASS gra się uruchamia
+PASS wtyczki: Kantor_Data pod Cysterna_Data i nad TownLife/TownQuests, Kantor pod Cysterna i nad CleanHUD  [100,101,131,133,154,155,169]
+PASS mapa 171 „Piwnica kantoru” pod Kantorem (103), numery 730-759 właściciela Kantor, zadanie W5 w TownQuests  {"n":[100,101,131,133,154,155,169],"map":["Piwnica kantoru",103],"reg":["730-759","730-759"],"w5":true,"plan":3,"alt":125}
+PASS plan Baltazara: trzy wpisy nocnej zmiany (w5Shift) i przeprowadzka na przystań (alt: mapa 125)  {"n":[100,101,131,133,154,155,169],"map":["Piwnica kantoru",103],"reg":["730-759","730-759"],"w5":true,"plan":3,"alt":125}
+PASS rozdz. 1: przed dniem 10 wątek się nie zaczyna (jedna poszlaka: skrzynia K15)  ""
+PASS ...od dnia 10 zaczyna się sam: „Dziwny kupiec” - poszlaki 1 z 2  {"step":"w5Poszlaki","clues":["skrzynia"]}
+PASS hak D27: kwatermistrz Kłos nocą po promie przy tylnych drzwiach kantoru - poszlaka „nocni goście”, druga poszlaka kończy rozdz. 1  {"ev":true,"at":[13,48],"clue":10,"step":"w5Stuk"}
+PASS rozdz. 2: kurier w kapturze widzi bohatera na swojej drodze - „Ktoś tu jest... Nie dziś.” - i zawraca (nie puka)  {"seen":0,"night":-1,"spooked":10}
+PASS ...z ukrycia (C): kurier puka trzy razy w tylne drzwi kantoru, bohater to widzi - rozdz. 2 dalej: obóz przemytników  {"knock":{"seen":12,"night":11,"spooked":10},"step":"w5Oboz"}
+PASS ...po północy Ambroży dzwoni „trzy i jeden” (sygnał W2 „obcy w murach” zapisany w dzienniku)  {"bells":["3+1"],"q":4}
+ERR TypeError: Cannot read properties of undefined (reading 'event')
+    at <anonymous>:1:334
+PASS bez błędów w konsoli  []
+11/12 passed

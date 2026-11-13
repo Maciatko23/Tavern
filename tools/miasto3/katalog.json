@@ -1,0 +1,101 @@
+[
+ {
+  "arkusz": "City_TileB",
+  "id": "CityB_00",
+  "x0": 0,
+  "y0": 0,
+  "x1": 15,
+  "y1": 15,
+  "w": 16,
+  "h": 16,
+  "pokrycie": 0.99
+ },
+ {
+  "arkusz": "City_TileC",
+  "id": "CityC_00",
+  "x0": 0,
+  "y0": 0,
+  "x1": 15,
+  "y1": 15,
+  "w": 16,
+  "h": 16,
+  "pokrycie": 0.96
+ },
+ {
+  "arkusz": "City_TileD",
+  "id": "CityD_00",
+  "x0": 0,
+  "y0": 0,
+  "x1": 15,
+  "y1": 15,
+  "w": 16,
+  "h": 16,
+  "pokrycie": 0.98
+ },
+ {
+  "arkusz": "City_TileE",
+  "id": "CityE_00",
+  "x0": 0,
+  "y0": 0,
+  "x1": 15,
+  "y1": 15,
+  "w": 16,
+  "h": 16,
+  "pokrycie": 0.87
+ },
+ {
+  "arkusz": "City_TileE-2",
+  "id": "CityE2_00",
+  "x0": 0,
+  "y0": 0,
+  "x1": 13,
+  "y1": 15,
+  "w": 14,
+  "h": 16,
+  "pokrycie": 0.88
+ },
+ {
+  "arkusz": "Rural_TileB",
+  "id": "RuralB_00",
+  "x0": 0,
+  "y0": 0,
+  "x1": 15,
+  "y1": 15,
+  "w": 16,
+  "h": 16,
+  "pokrycie": 0.89
+ },
+ {
+  "arkusz": "Rural_TileC",
+  "id": "RuralC_00",
+  "x0": 0,
+  "y0": 0,
+  "x1": 15,
+  "y1": 15,
+  "w": 16,
+  "h": 16,
+  "pokrycie": 0.98
+ },
+ {
+  "arkusz": "Rural_TileD",
+  "id": "RuralD_00",
+  "x0": 0,
+  "y0": 0,
+  "x1": 15,
+  "y1": 15,
+  "w": 16,
+  "h": 16,
+  "pokrycie": 0.92
+ },
+ {
+  "arkusz": "Rural_TileE",
+  "id": "RuralE_00",
+  "x0": 0,
+  "y0": 0,
+  "x1": 15,
+  "y1": 15,
+  "w": 16,
+  "h": 16,
+  "pokrycie": 0.96
+ }
+]

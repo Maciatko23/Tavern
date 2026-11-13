@@ -291,9 +291,9 @@ zadania.D3.steps.4.choice.options.1.label = Zostaw je sobie na leczenie.
 
 # D5, „Wataha pod bramą”
 zadania.D5.title = Wataha pod bramą
-zadania.D5.where = brama południowa + Polna droga + Skraj lasu
+zadania.D5.where = brama południowa + Kruczy Jar + Łąka
 zadania.D5.when = 3 noce
-zadania.D5.desc = Wilki podchodzą pod mur, a straż ma z dworu rozkaz nie wychodzić. Ślady o świcie, dwa wilki zwiadowcy na Polnej drodze, a potem przewodnik watahy na Skraju lasu.
+zadania.D5.desc = Wilki podchodzą pod mur, a straż ma z dworu rozkaz nie wychodzić. Ślady o świcie, dwa wilki zwiadowcy na Kruczym Jarze, a potem przewodnik watahy na Łące.
 [zadania.D5.offer.say]
 Wilki podchodzą pod mur. Nocą słychać je aż na rynku. A ja mam z dworu rozkaz: straż nie wychodzi za bramy.
 Ty nie jesteś strażą. Obejrzyj o świcie ślady pod bramą południową. Weź strzały - przydadzą się.
@@ -311,10 +311,10 @@ zadania.D5.steps.0.text = O świcie (5–9) obejrzyj tropy pod bramą południow
 Tropy najlepiej widać o świcie, po rosie.
 
 [zadania.D5.steps.0.say]
-> Tropy. Duże. Trzy, może cztery wilki... Jeden ślad większy od reszty. Idą od Polnej drogi.
+> Tropy. Duże. Trzy, może cztery wilki... Jeden ślad większy od reszty. Idą od strony Kruczego Jaru.
 
-zadania.D5.steps.1.text = Nocą (21–5) zabij 2 wilki zwiadowców na Polnej drodze.
-zadania.D5.steps.2.text = Nocą zabij przewodnika watahy na Skraju lasu (największy wilk).
+zadania.D5.steps.1.text = Nocą (21–5) zabij 2 wilki zwiadowców na Kruczym Jarze.
+zadania.D5.steps.2.text = Nocą zabij przewodnika watahy na Łące (największy wilk).
 zadania.D5.steps.3.text = Wróć do kaprala Wita (brama wschodnia, 6–18).
 [zadania.D5.steps.3.say]
 Słyszałem. Przewodnik watahy, mówią. Sam?
@@ -720,7 +720,7 @@ Finał. Tylko ty i ja. Nie oszczędzaj mnie. Ja ciebie nie będę.
 
 # D20, „Kuter na pochylni”
 zadania.D20.title = Kuter na pochylni
-zadania.D20.where = Przystań (plaża, pochylnia), Podgrodzie
+zadania.D20.where = Przystań (plaża, pochylnia), tawerna (wieczorem), Podgrodzie
 zadania.D20.when = od spotkania z Rochem
 zadania.D20.desc = Roch chce połatać rozbity kuter, którym przywiózł bohatera z lądu. Deski, gwoździe, smoła, żagiel - i noc, w którą trzeba wypłynąć przed nosem celnika.
 [zadania.D20.offer.say]
@@ -735,7 +735,7 @@ Wiedziałem. Pogadaj z Jankiem. Mnie się boi, ciebie lubi.
 [zadania.D20.offer.decline]
 Kuter nie ucieknie. Leży, jak leżał.
 
-zadania.D20.steps.0.text = Poproś Janka o pomoc przy wraku (przystań).
+zadania.D20.steps.0.text = Poproś Janka o pomoc przy wraku (tawerna, wieczorem).
 [zadania.D20.steps.0.say]
 > Roch chce połatać kuter. Pomożesz ściągnąć wrak z plaży na pochylnię?
 Roch, mówisz... (Janek drapie się po zaroście.) Ja tam nic nie wiem o żadnym Rochu. Ale wrak to wrak, a pochylnia stoi pusta.
@@ -764,7 +764,7 @@ Osiem desek i dwadzieścia gwoździ. Burta sama się nie zrośnie.
 Porządne deski. Burtę zrobię w dwa dni. Teraz smoła - bez smoły kuter to sito.
 Zbych z Podgrodzia pędzi smołę z karpiny. Smolarz, to i nazwisko ma. Zanieś mu drewna, zrobi.
 
-zadania.D20.steps.3.text = Zanieś Zbychowi Smolarzowi 6× Drewno - napędzi smoły (Podgrodzie, drewutnia).
+zadania.D20.steps.3.text = Zanieś Zbychowi Smolarzowi 6× Drewno - napędzi smoły (tawerna, wieczorem).
 [zadania.D20.steps.3.remind]
 Smoła? Z karpiny się pędzi. Daj sześć polan, to ci napędzę.
 
@@ -774,7 +774,7 @@ Smoła? Z karpiny się pędzi. Daj sześć polan, to ci napędzę.
 [zadania.D20.steps.3.done]
 Roch, powiadasz? Nie znam. ...Ale smołę znam. Masz, dwa garnki. Smarować na ciepło.
 
-zadania.D20.steps.4.text = Zanieś praczce Marcie 10× Włókno - uszyje żagiel (Podgrodzie).
+zadania.D20.steps.4.text = Zanieś praczce Marcie 10× Włókno - uszyje żagiel (tawerna, wieczorem).
 [zadania.D20.steps.4.remind]
 Żagiel? Z czego, z powietrza? Dziesięć garści lnu, to uszyję.
 

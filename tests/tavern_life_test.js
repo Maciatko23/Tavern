@@ -1,4 +1,4 @@
-// Tavern life (TavernLife.js) on the installed tavern: Map001 "Pod Złotym Kuflem" (101 x 55 since 2026-10-05), Map025 "Pokoje gości", Map026
+// Tavern life (TavernLife.js) on the installed tavern: Map001 "Pod Złotym Kuflem" (63 x 55 since the rebuild of 2026-11-09; the bath and Wanda are on Map025 now), Map025 "Pokoje gości", Map026
 // "Apartamenty", with the builders' <Tavern:...> events (tools/tavern/links.json "tags"). Borgar's card of dishes and a meal at a
 // real table, a room for the night (rented at Borgar, up the stairs to Map025, its door opened by self switch A, in through the door,
 // the candle, a full and safe sleep, breakfast, out again, the door shut after 10:00 - never with him inside), the bath with Wanda,
@@ -9,19 +9,21 @@
 // does not have them. The mini-games run on Tawerna.ui.Scene_MiniGame (TawernaUI.js). Screenshots: docs/tawerna_zycie/uslugi_*.png
 //   CDP_PORT=9384 node tests/tavern_life_test.js
 process.env.CDP_PORT = process.env.CDP_PORT || "9384";
-const { launch, sleep } = require("./cdp.js");
 const fs = require("fs");
 const path = require("path");
-const SHOTS = path.join(__dirname, "..", "docs", "tawerna_zycie");
+// (runs from tests/ and from the staging copy tools/tawerna_zycie/staging/tests/)
+const ROOT = [path.join(__dirname, ".."), path.join(__dirname, "..", "..", "..", "..")].find(d => fs.existsSync(path.join(d, "tests", "cdp.js")));
+const { launch, sleep } = require(path.join(ROOT, "tests", "cdp.js"));
+const SHOTS = path.join(ROOT, "docs", "tawerna_zycie");
 
 // the events of the installed maps (tools/tavern/links.json "tags")
 const MAP = { hall: 1, rooms: 25, suites: 26 };
 const EV = {
-    borgar: 1, melia: 2, grum: 3, ozzy: 4, counter: 38, stage: 110, arm: 148, darts: 174, tub: 159, wanda: 172,
+    borgar: 1, melia: 2, grum: 3, ozzy: 4, counter: 38, stage: 110, arm: 148, darts: 174, tub: 365, wanda: 367,
     door1: 35, door2: 37, door3: 33, bed1: 136, bed2: 143, candle1: 132, komnataDoor: 9, komnataBed: 264, gate: 298,
-    zlotyDoor: 21, zlotyBed: 103, suiteDoor: 1
+    zlotyDoor: 21, zlotyBed: 135, suiteDoor: 3
 };
-const MEALTABLES = [60, 61, 77, 78, 188, 189];
+const MEALTABLES = [60, 61, 77, 78];
 
 // the driver: presses O on messages and answers a choice with the next label from `picks` (a prefix)
 const DRIVER = String.raw`
@@ -168,11 +170,11 @@ const DRIVER = String.raw`
         await ev("Object.assign($dataSystem, { startMapId: 19, startX: 2, startY: 5 }); /* (a story game in grandpa's cottage, whatever data/System.json says) */ DataManager.setupNewGame(); SceneManager.goto(Scene_Map); 0");
         await until(onMap(19), 40);
         await ev("Story.skipIntro(); Story.setDeadlineOn(false); $gameSystem._story.flags.hired = true; $gameSystem._story.flags.field = true; QuestBoard.state().rep = 0; 0");
-        const inTavern = await go(MAP.hall, 49, 70, 8);
+        const inTavern = await go(MAP.hall, 14, 31, 8);
         await setClock(3, 10);
         await ev("TavernLife.TL.waitScale = 0.35; $gameSystem._combatMode = false; 0");
-        const map1 = await J("({ w: $gameMap.width(), h: $gameMap.height(), tags: ['meal','mealtable','bath','stage','arm','darts','attendant'].map(k => k + ':' + TavernLife.spots(k).length) })");
-        check("the installed tavern (Map001, 101 x 55) with the builders' tagged places", inTavern && map1.w === 101 && map1.h === 55 && map1.tags.join() === "meal:1,mealtable:6,bath:4,stage:1,arm:1,darts:2,attendant:1", map1);
+        const map1 = await J("({ w: $gameMap.width(), h: $gameMap.height(), tags: ['meal','mealtable','stage','arm','darts'].map(k => k + ':' + TavernLife.spots(k).length) })");
+        check("the rebuilt tavern (Map001, 63 x 55) with its tagged places (the bath and Wanda are upstairs on Map025)", inTavern && map1.w === 63 && map1.h === 55 && map1.tags.join() === "meal:1,mealtable:4,stage:1,arm:1,darts:2", map1);
         const npcs = await J("['borgar','melia','grum','ozzy'].map(r => { const e = TavernLife.npc(r); return e ? e.eventId() : 0; })");
         check("Borgar, Melia, Grum and Ozzy are found by name (events 1-4), their parallel 'Atmosfera' events are not", npcs.join() === "1,2,3,4", npcs);
 
@@ -255,20 +257,20 @@ const DRIVER = String.raw`
         check("room 1 rented at Borgar: 8 G, till 10:00 tomorrow; its door on Map025 opened (self switch A), room 2's not", 100 - rented.gold === 8 && rented.rent && String(rented.rent.room) === "1" && rented.rent.until === 4 * 24 + 10 &&
             rented.d1 === true && rented.d2 === false, rented);
         check("Borgar's word after renting", /Pokój nr 1 twój do rana/.test(rent.flat), rent.flat.slice(-120));
-        // up the west staircase (its top steps are touch events -> Map025)
-        await ev("$gamePlayer.locate(38, 50); $gamePlayer.setDirection(8); 0");
+        // up the east staircase (its top steps are touch events -> Map025)
+        await ev("$gamePlayer.locate(26, 50); $gamePlayer.setDirection(8); 0");
         await frames(6);
         const upstairs = await walk("up", onMap(MAP.rooms), 20);
         await ev(quiet);
         const land = await J("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y })");
-        check("up the stairs: Map025 'Pokoje gości', the landing (48,62)", upstairs && land.map === 25 && land.x === 48 && land.y === 62, land);
+        check("up the stairs: Map025 'Pokoje gości', the landing (26,53)", upstairs && land.map === 25 && land.x === 26 && land.y === 53, land);
         const door1 = await J(`(function(){ const e = $gameMap.event(${EV.door1}); return { page: e._pageIndex, a: $gameSelfSwitches.value([25, ${EV.door1}, "A"]), candles: TavernLife.litCandles(), other: $gameMap.event(${EV.door2})._pageIndex }; })()`);
         check("upstairs: room 1's door is on its open page, room 2's on the locked one; room 1's candle is lit", door1.page === 1 && door1.a && door1.other === 0 && door1.candles.map(String).includes("1"), door1);
-        await ev(`$gamePlayer.locate(38, 49); $gamePlayer.setDirection(8); 0`);
+        await ev(`$gamePlayer.locate(18, 17); $gamePlayer.setDirection(8); 0`);
         await frames(6);
-        const inRoom = await walk("up", "$gamePlayer.x === 38 && $gamePlayer.y === 44 && !$gameMap.isEventRunning()", 15);
-        check("in through the door: its own page takes him inside (38,44)", inRoom, await J("[$gamePlayer.x, $gamePlayer.y]"));
-        await ev(`$gamePlayer.locate(39, 40); $gamePlayer.setDirection(8); 0`);
+        const inRoom = await walk("up", "$gamePlayer.x === 18 && $gamePlayer.y === 11 && !$gameMap.isEventRunning()", 25);
+        check("in through the door: its own page takes him inside (18,11)", inRoom, await J("[$gamePlayer.x, $gamePlayer.y]"));
+        await ev(`$gamePlayer.locate(18, 7); $gamePlayer.setDirection(8); 0`);
         await frames(30);
         await b.shot(path.join(SHOTS, "uslugi_4_pokoj_swieca.png"));
         await popups();
@@ -291,9 +293,9 @@ const DRIVER = String.raw`
         const again = await popups();
         check("once a night: the bed says he has slept already", again.some(t => /Już się wyspałeś/.test(t)), again);
         // out through the room's own exit, then past 10:00 the door shuts
-        await ev(`$gamePlayer.locate(38, 44); $gamePlayer.setDirection(2); 0`);
+        await ev(`$gamePlayer.locate(18, 11); $gamePlayer.setDirection(2); 0`);
         await frames(6);
-        const out = await walk("down", "$gamePlayer.x === 38 && $gamePlayer.y === 49 && !$gameMap.isEventRunning()", 15);
+        const out = await walk("down", "$gamePlayer.x === 18 && $gamePlayer.y === 16 && !$gameMap.isEventRunning()", 25);
         await setClock(4, 9.5);
         await frames(40);
         const stillOpen = await ev(`$gameSelfSwitches.value([25, ${EV.door1}, "A"])`);
@@ -303,25 +305,29 @@ const DRIVER = String.raw`
         check("out through the room's exit; the door stays open till 10:00, then shuts (self switch A off, the locked page), the candle goes out", out && stillOpen === true && shut.a === false && shut.page === 0 && !shut.rent && !shut.candles.length, { out, stillOpen, shut });
         // with him inside when the rent ends, the door waits till he is out (the room's floor, found from its bed, walls all round)
         await ev("TavernLife.rentRoom(2); 0");
-        await ev(`$gamePlayer.locate(58, 44); 0`);
+        await ev(`$gamePlayer.locate(27, 8); 0`);
         await frames(40);
         const inside0 = await ev(`$gameSelfSwitches.value([25, ${EV.door2}, "A"])`);
         await setClock(5, 11);
         await frames(40);
         const inside1 = await ev(`$gameSelfSwitches.value([25, ${EV.door2}, "A"])`);
-        await ev(`$gamePlayer.locate(58, 49); 0`);
+        await ev(`$gamePlayer.locate(27, 17); 0`);
         await frames(40);
         const inside2 = await ev(`$gameSelfSwitches.value([25, ${EV.door2}, "A"])`);
         check("the rent over with him in room 2: the door stays open until he has left", inside0 === true && inside1 === true && inside2 === false, [inside0, inside1, inside2]);
         const twiceRent = await J("TavernLife.state().rooms");
         check("two rents counted", twiceRent === 2, twiceRent);
+        await go(MAP.rooms, 26, 50, 8);
+        const downstairs = await walk("up", onMap(MAP.hall), 25);
+        const dland = await J("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y })");
+        check("down the stairs: Map025's east stairs lead back to the tavern, Map001 at the stairs' foot (26,53)", downstairs && dland.map === 1 && dland.x === 26 && dland.y === 53, dland);
         // an Apartamenty door without a bed to rent: words only, the plugin leaves it alone
-        await go(MAP.suites, 16, 21, 8);
+        await go(MAP.suites, 3, 24, 8);
         const suite = await talkTo(EV.suiteDoor, [], 20);
-        check("Map026: a suite's door (room=suite1, no bed): only its own words, its self switch untouched", /Zamknięte\. Apartament można wynająć u Borgara/.test(suite.flat) && !(await ev(`$gameSelfSwitches.value([26, ${EV.suiteDoor}, "A"])`)), suite.flat);
+        check("Map026: a suite's door (room=lordsuite, no bed): only its own words, its self switch untouched", /Zamknięte\. Apartament zarezerwowany dla gości Lorda/.test(suite.flat) && !(await ev(`$gameSelfSwitches.value([26, ${EV.suiteDoor}, "A"])`)), suite.flat);
 
         // ================= the bath with Wanda
-        await go(MAP.hall, 6, 59, 8);
+        await go(MAP.rooms, 40, 26, 8);
         await setClock(5, 14);
         await setGold(30);
         await ev("$gameSystem.setStamina(60); delete $gameSystem.buffs().clean; 0");
@@ -339,7 +345,7 @@ const DRIVER = String.raw`
         const bathed = await J("({ gold: $gameParty.gold(), clean: $gameSystem.hasBuff('clean'), h: $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour(), baths: TavernLife.stats().baths, bathing: TavernLife.bathing, x: $gamePlayer.x, y: $gamePlayer.y, note: Journal.data().notes.some(n => n.title === 'Łaźnia') })");
         check("the bath: 6 G paid, an hour passed, 'Czysty' on, a note the first time", bath.done && bathed.gold === 24 && Math.abs(bathed.h - h0 - 1) < 0.1 && bathed.clean && bathed.baths === 1 && bathed.note, bathed);
         check("in the tub: he sits in the water at the tub (the water drawn round him), steam rises; afterwards back where he stood", inTub && tub && inTub.x === tub.x && inTub.y === tub.y && inTub.water && !bathed.bathing && bath.at && bathed.x === bath.at[0] && bathed.y === bath.at[1], { inTub, tub, after: [bathed.x, bathed.y], from: bath.at });
-        check("Wanda (event 172, <Tavern:attendant>) speaks from her bust: the offer, then a funny word afterwards", bath.log.filter(l => l.who === EV.wanda && l.bust).length >= 2 && /Kąpiel\?/.test(bath.log[0].t), bath.log.map(l => [l.who, l.bust, l.t.slice(0, 40)]));
+        check("Wanda (event 367, <Tavern:attendant>) speaks from her bust: the offer, then a funny word afterwards", bath.log.filter(l => l.who === EV.wanda && l.bust).length >= 2 && /Kąpiel\?/.test(bath.log[0].t), bath.log.map(l => [l.who, l.bust, l.t.slice(0, 40)]));
         await setGold(4);
         await popups();
         const poorBath = await talkTo(EV.tub, ["Wykąp się"], 20);
@@ -347,12 +353,13 @@ const DRIVER = String.raw`
         check("no money for the bath: 'Brakuje ci 2 G' over the player, no bath", poorBath.done && (await gold()) === 4 && pbp.some(t => /Brakuje ci 2 G/.test(t)) && (await ev("TavernLife.stats().baths")) === 1, pbp);
 
         // ================= Melia's song on the stage
-        await go(MAP.hall, 72, 36, 8);
+        await go(MAP.hall, 38, 36, 8);
         await setGold(20);
         await setClock(5, 15);
         const early = await talkTo(EV.stage, [], 20);
         check("before 18:00 Melia only says when she sings", /Śpiewam wieczorami, od 18:00/.test(early.flat) && !early.choices.length, early.flat);
         await setClock(5, 19);
+        await ev("Combat.hero().xp = 0; 0");
         const xp0 = await J("({ lv: Combat.hero().level, xp: Combat.hero().xp })");
         let singingShot = false;
         const song = await talkTo(EV.stage, ["Wrzuć"], 60, { during: async () => {
@@ -386,7 +393,7 @@ const DRIVER = String.raw`
         check("a tip without the money: 'Pusta sakiewka? Nie szkodzi' - she sings anyway, 4 hours, nothing taken", /Pusta sakiewka\? Nie szkodzi/.test(song3.flat) && sung3.gold === 1 && Math.abs(sung3.left - 4) < 0.3, { text: song3.flat.slice(0, 80), sung3 });
 
         // ================= arm-wrestling with Grum (seeded bots)
-        await go(MAP.hall, 92, 39, 8);
+        await go(MAP.hall, 58, 36, 8);
         const armBot = mode => ev(`(function(){ window.__bt = 0; window.__endOk = true; TavernLife.onTick = function(scene) { const I = Input._currentState; I.ok = false; const s = scene.state(); window.__bt++;
             if (s.phase === "card" || (s.phase === "summary" && window.__endOk)) { if (window.__bt % 8 === 0) I.ok = true; return; }
             if (s.phase === "pull" && ${JSON.stringify(mode)} === "good") I.ok = s.n < (s.lo + s.hi) / 2 - 0.015; }; return 0; })()`);
@@ -430,7 +437,7 @@ const DRIVER = String.raw`
         await ev("TavernLife.onTick = null; 0");
 
         // ================= darts (seeded bots)
-        await go(MAP.hall, 89, 59, 8);
+        await go(MAP.hall, 51, 50, 8);
         const dartBot = mode => ev(`(function(){ window.__bt = 0; window.__endOk = true; TavernLife.onTick = function(scene) { const I = Input._currentState; I.ok = false; I.left = false; const s = scene.state(); window.__bt++;
             if (s.phase === "card" || (s.phase === "summary" && window.__endOk)) { if (window.__bt % 8 === 0) I.ok = true; return; }
             if (s.phase !== "aim") return;
@@ -483,12 +490,12 @@ const DRIVER = String.raw`
         const noKomnata = await ev("TavernLife.rentRoom('komnata')");
         const nkPops = await popups();
         check("below 60 the chamber cannot be rented: 'tylko dla stałych, zaufanych gości (sława „Pewna ręka”)'", noKomnata === false && (await gold()) === 300 && nkPops.some(t => /tylko dla stałych, zaufanych gości \(sława „Pewna ręka”\)/.test(t)), nkPops);
-        await go(MAP.rooms, 67, 18, 8);
+        await go(MAP.rooms, 42, 50, 8);
         const kDoor = await talkTo(EV.komnataDoor, [], 20);
         check("Map025, the chamber's door below the reputation: „Komnatę wynajmujemy tylko stałym, zaufanym gościom.”", /Komnatę wynajmujemy tylko stałym, zaufanym gościom/.test(kDoor.flat) && !(await ev(`$gameSelfSwitches.value([25, ${EV.komnataDoor}, "A"])`)), kDoor.flat);
         const gate0 = await talkTo(EV.gate, [], 20);
         check("the gilded gate below 80: „Apartamenty tylko dla dostojnych gości.” and it stays shut", /Apartamenty tylko dla dostojnych gości/.test(gate0.flat) && !(await ev(`$gameSelfSwitches.value([25, ${EV.gate}, "A"])`)), gate0.flat);
-        await go(MAP.hall, 49, 70, 8);
+        await go(MAP.hall, 14, 31, 8);
         await setRep(45);
         const m45 = await talkTo(EV.counter, ["Zjedz coś"], 30, { card: "close" });
         const p45 = await J("({ d: TavernLife.repDiscount(), g: TavernLife.priceOf(TavernLife.DISHES[0]) })");
@@ -505,9 +512,9 @@ const DRIVER = String.raw`
         check("reputation 65 (Pewna ręka): Borgar's word; the chamber on the card for 27 G (30 crossed out), the Apartament Złoty greyed", k65.log.some(l => /Pewna ręka/.test(l.t)) &&
             kEntries.some(e => /Komnata/.test(e.name) && e.enabled && e.right === "27 G" && e.oldRight === "30 G") && kEntries.some(e => /Apartament Złoty/.test(e.name) && !e.enabled), kEntries.map(e => [e.name, e.right, e.oldRight, e.enabled]));
         check("the chamber rented: 27 G, its door on Map025 opened, the Apartament's on Map026 not; Borgar: the fire lit, the bear shaken out", gold65 - kk.gold === 27 && kk.rent && kk.rent.room === "komnata" && kk.a === true && kk.zlotyA === false && /wytrzepać niedźwiedzia/.test(k65.flat), { gold: [gold65, kk.gold], rent: kk.rent, a: kk.a });
-        await go(MAP.rooms, 67, 17, 8);
-        const inKomnata = await walk("up", "$gamePlayer.x === 67 && $gamePlayer.y === 12 && !$gameMap.isEventRunning()", 15);
-        check("upstairs the chamber's door lets him in (67,12)", inKomnata, await J("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]"));
+        await go(MAP.rooms, 42, 50, 8);
+        const inKomnata = await walk("up", "$gamePlayer.x === 42 && $gamePlayer.y === 44 && !$gameMap.isEventRunning()", 25);
+        check("upstairs the chamber's door lets him in (42,44)", inKomnata, await J("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]"));
         const perk0 = await ev("Combat.perk('sleep.rest')");
         const bread1 = await ev("$gameParty.numItems($dataItems[83])"), cheese1 = await ev("$gameParty.numItems($dataItems[124])");
         const kNight = await talkTo(EV.komnataBed, ["Śpij do rana"], 60);
@@ -518,9 +525,10 @@ const DRIVER = String.raw`
         // 85: the gate on Map025 opens by itself, with a welcome when he comes by
         await setClock(13, 11);
         await setRep(85);
-        await go(MAP.rooms, 92, 18, 8);
+        await ev("window.__gateBarks = []; const _say = SpeechBubbles.say; SpeechBubbles.say = function(ch, text) { if (/Witamy/.test(String(text))) window.__gateBarks.push(String(text)); return _say.apply(this, arguments); }; 0");
+        await go(MAP.rooms, 2, 52, 8);
         await frames(60);
-        const g85 = await J(`({ a: $gameSelfSwitches.value([25, ${EV.gate}, "A"]), page: $gameMap.event(${EV.gate})._pageIndex, barks: SpeechBubbles.log.slice(-4), note: Journal.data().notes.some(n => n.title === 'Apartamenty'), notice: window.__notices.find(t => /Apartamenty/.test(t)) || '' })`);
+        const g85 = await J(`({ a: $gameSelfSwitches.value([25, ${EV.gate}, "A"]), page: $gameMap.event(${EV.gate})._pageIndex, barks: window.__gateBarks, note: Journal.data().notes.some(n => n.title === 'Apartamenty'), notice: window.__notices.find(t => /Apartamenty/.test(t)) || '' })`);
         check("reputation 85 (Chluba tawerny): the gilded gate opens by itself and stays open, with a welcome (the bell, a word, a note)", g85.a === true && g85.page === 1 && g85.barks.some(t => /Witamy w Apartamentach/.test(t)) && g85.note && /Apartamenty/.test(g85.notice), g85);
         const upToSuites = await walk("up", onMap(MAP.suites), 25);
         check("...through the open gate and up the stairs to Map026 'Apartamenty'", upToSuites, await J("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]"));
@@ -530,10 +538,10 @@ const DRIVER = String.raw`
         const gold85 = await gold();
         const zRent = await ev("TavernLife.rentRoom('zloty')");
         check("the Apartament Złoty rented at 85: 43 G (50 − 15%); its door opens", zRent === true && gold85 - (await gold()) === 43 && (await ev(`$gameSelfSwitches.value([26, ${EV.zlotyDoor}, "A"])`)), { gold: [gold85, await gold()] });
-        await ev(`$gamePlayer.locate(67, 29); $gamePlayer.setDirection(2); 0`);
+        await ev(`$gamePlayer.locate(27, 24); $gamePlayer.setDirection(2); 0`);
         await frames(20);
-        const inZloty = await walk("down", "$gamePlayer.x === 67 && $gamePlayer.y === 35 && !$gameMap.isEventRunning()", 15);
-        check("in through the Apartament's door (67,35)", inZloty, await J("[$gamePlayer.x, $gamePlayer.y]"));
+        const inZloty = await walk("down", "$gamePlayer.x === 27 && $gamePlayer.y === 30 && !$gameMap.isEventRunning()", 25);
+        check("in through the Apartament's door (27,30)", inZloty, await J("[$gamePlayer.x, $gamePlayer.y]"));
         const zNight = await talkTo(EV.zlotyBed, ["Śpij do rana"], 60);
         await until("$gameScreen.brightness() >= 255", 10);
         await frames(30);
@@ -543,7 +551,7 @@ const DRIVER = String.raw`
         await frames(20);
         await b.shot(path.join(SHOTS, "uslugi_12_apartament_sniadanie.png"));
         await ev("Needs.setEnabled(false); 0");
-        await go(MAP.hall, 6, 59, 8);
+        await go(MAP.rooms, 40, 26, 8);
         await setClock(14, 15);
         const bath85 = await talkTo(EV.tub, ["Nie teraz"], 20);
         check("the bath at 85: 'Wykąp się (5 G zamiast 6 G)'", (bath85.choices[0] || [])[0] === "Wykąp się (5 G zamiast 6 G)", bath85.choices);

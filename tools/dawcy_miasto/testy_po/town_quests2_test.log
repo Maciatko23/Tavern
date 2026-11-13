@@ -1,0 +1,25 @@
+PASS the game boots
+PASS market day 7, 10:12: Szymek, Lucjan Kość (at his dice by the right stall) and Bartek Kmieć are in the town, each with his own sheet; the carter is out on his round (hidden)  {"m":{"zlodziej":[70,49,"shown","$Npc_Zlodziej"],"gracz":[35,45,"shown","$Npc_Gracz"],"bartek":[71,47,"shown","$Npc_Bartek"],"woznica":[31,109,"hidden","$Npc_Woznica"]},"spot":{"dice":[35,45,4],"cart":[35,108,2]}}
+PASS ...the next day (no market) Lucjan is not there at all (hidden all day)  {"gracz":[35,45,"hidden","$Npc_Gracz"]}
+PASS K26: Zosia offers 'Pierścionek w studni'  "active:0"
+PASS down on Map118 the ring glints in the puddle (event 951 on 'pierscionek' 5,6: !Quest_Places 0, dir 2, pattern 2)  [5,6,"!Quest_Places",0,2,2]
+PASS ...in the rain the shaft pours water (a popup), at night it is too dark (a popup) - no message window, the ring stays  {"wet":["W deszcz z szybu leje się woda - nic nie widać."],"dark":["Na dnie ciemno choć oko wykol. Zejdę za dnia."]}
+PASS by day: the ring found - and over the puddle the walled-up canal with the raven (a W1 clue: W1 starts)  {"text":"(W płytkiej kałuży coś błyska. Cienki srebrny pierścionek z niebieskim oczkiem.) / (Nad kałużą, w ścianie, zamurowany łu","v":1,"clue":true,"w1":{"s":"active","step":0,"day":10,"sday":10,"sh":10.00277777777777,"t":{"done":{},"n":1},"times":0,"end":0}}
+PASS ...back up, the ring to Zosia: 'Pierścionek mamy!' - opinion +3  "Twój pierścionek. Leżał w kałuży na samym dnie. / Pierścionek mamy! Dziękuję, dziękuję! ...Nie mów jej, dobrze? To będzi"
+PASS K15: at 21:40 the carter Wojciech waits with his cart before the south gate  {"woznica":[35,108,"shown","$Npc_Woznica"]}
+PASS ...the crate handed to him ('Od Veya? Postaw z tyłu'), put on the cart - the pay tomorrow  "Skrzynia od Baltazara. Na wóz. / Od Veya? Postaw z tyłu, na słomie. Ja przytrzymam konie. / (Stawiasz skrzynię na słomie.) / Dobrze. Idź już, chłopcze. Nikt cię"
+PASS ...the next day Baltazar pays 20 G
+PASS K37: a market day by Feliks at the stalls - 'Złodziej! Sakiewka jaśnie pana!', the thief beside him runs off (taken over from his plan)  {"z0":{"z":[35,46],"f":[33,45],"held":true},"z1":[42,53]}
+PASS ...nobody chases him: he gets away into the camp - the quest is lost  {"s":"failed","step":0,"day":14,"sday":14,"sh":8.569444444444382,"t":{"done":{},"chase":{"leg":0,"pause":0}},"times":0,"end":14}
+PASS ...caught ('Puść!'): it is Szymek, a hungry boy from the camp; he gives the purse back  "Mam cię. Oddawaj sakiewkę. / (Chłopak ma może trzynaście lat. Chudy jak tyczka.) Puść... Ja nie dla siebie. W obozie nie ma co jeść. Ela płacze z głodu po nocach. / (Szymek oddaje sakiewkę i patrzy w "
+PASS ...to Feliks: 50 G 'na poczet długu' (no story here: paid out) - done, Szymek back to his day  "Sakiewka dworu. Złodziejaszek już jej nie ma. / Sakiewka! Cała? (liczy) Cała. Jaśnie pan się dowie, kto mu ją oddał. / Pięćdziesiąt na poczet długu pana dziadka"
+PASS ...or let go: done, the camp trusts the hero (flags szymekFree, campTrust)  {"k15Clean":10,"campTrust":14,"szymekFree":14}
+FAIL K39: Bartek Kmieć sits in the tavern in the afternoon (Map001, 'Miejsce: gosc_6')  {"bartek":[21,35,"shown","$Npc_Bartek"]}
+PASS ...and asks the hero to watch the market's dice player  "active:0"
+PASS a game with Lucjan at Czujność 5: lost or won, nothing seen ('Czujność 10') - the step stays  {"r":{"s":"active","step":0,"day":15,"sday":15,"sh":15.011111111111077,"t":{"done":{},"games":1},"times":0,"end":0},"log":["Z drogi!","Puść! Puść, nic nie zrobiłem!","Kości, panowie! Pięć groszy, a może wygrasz dziesięć!","(Szczęście jak diabeł... Patrzyłem mu na ręce, ale nic nie widać.)"]}
+PASS ...at Czujność 10 the swap is seen: a heavier die from his sleeve  ["Słyszałeś? Prom znowu przywiózł obcych!","(Ktoś bystrzejszy może by coś zauważył. Czujność 10.)","(Teraz! Sięgając po kubek, Lucjan zgarnął jedną kość rękawem - a na stół wróciła inna, cięższa.)"]
+PASS ...unmasked before everyone: Lucjan leaves the market for good, opinion +4  "Widziałem rękaw, Lucjanie. I cięższą kość. / (Lucjan przestaje się uśmiechać.) Ciii! ...Mój drogi, po co od razu krzyczeć? Dogadajmy się. / Ludzie! Ten człowiek"
+PASS ...Bartek in the tavern: 'Pięć groszy. Ostatnie' - +5 G, done  "Lucjan grał oszukaną kością. Wyrzuciłem go z targu. / Oszukaną?! Wiedziałem! ...To znaczy, nie wiedziałem, ale czułem. / Masz. Pięć groszy. Ostatnie, jakie mam,"
+PASS the drought: none of the new quests gives water
+PASS no errors in the console  []
+23/24 passed

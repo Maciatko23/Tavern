@@ -1,0 +1,189 @@
+[
+ {
+  "kat": 3,
+  "x0": 56,
+  "y0": 36,
+  "x1": 59,
+  "y1": 53,
+  "co": "Brukowana droga środkiem placu urywa się prostą linią w połowie dziedzińca (y=53), nie dochodzi do południowego płotu; u góry też nie wychodzi za bramę.",
+  "jak": "Domknąć drogę: przedłużyć do południowego płotu (z bramą) albo zakończyć okrągłym placykiem/obrzeżem; dołożyć drogę przez wyłom w płocie.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map162/01.png"
+ },
+ {
+  "kat": 3,
+  "x0": 56,
+  "y0": 32,
+  "x1": 60,
+  "y1": 35,
+  "co": "Wyłom w północnym płocie (x=57-59) bez bramy i słupów: palisada kończy się ciętymi końcami.",
+  "jak": "Dostawić słupy bramne/łuk bramy lub zamknąć wyłom i zrobić bramę z kafli płotu.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map162/02.png"
+ },
+ {
+  "kat": 5,
+  "x0": 60,
+  "y0": 34,
+  "x1": 67,
+  "y1": 42,
+  "co": "Kamienny budynek (61-66,35-41): przy lewej ścianie wisi zielony pasek (bluszcz) oderwany od muru, prawy bluszcz i dach urywają się ostro; obrazek wygląda na ucięty.",
+  "jak": "Zamienić obraz na pełny albo obciąć bluszcz do ściany; usunąć oderwany pasek na (60,35-37).",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map162/03.png"
+ },
+ {
+  "kat": 3,
+  "x0": 61,
+  "y0": 41,
+  "x1": 66,
+  "y1": 50,
+  "co": "Wóz i stos kłód (62-64,41-45) ucięte prostą krawędzią po prawej oraz beczki (63-64,46-49) z urwaną górą/dołem (kontrola O1).",
+  "jak": "Zastąpić pełnymi obrazkami (cały wóz, cały stos) albo dopasować komplet kafli góra+dół.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map162/04.png"
+ },
+ {
+  "kat": 5,
+  "x0": 63,
+  "y0": 44,
+  "x1": 71,
+  "y1": 55,
+  "co": "Dom z czerwonym dachem (65-70,45-54): za szczytem dachu wystaje płot z żerdzi (63-69,45) przecięty dachem, dach jest asymetryczny względem ściany.",
+  "jak": "Usunąć żerdzie za domem albo przesunąć dom; wyrównać oś dachu do osi ściany.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map162/05.png"
+ },
+ {
+  "kat": 6,
+  "x0": 65,
+  "y0": 45,
+  "x1": 70,
+  "y1": 54,
+  "co": "Dom z czerwonym dachem rysowany z lekką perspektywą (szczyt z przodu, kratownica), gdy reszta zabudowy (koszary, kamienny budynek) jest płaska z góry.",
+  "jak": "Przerysować prosto z góry w stylu koszar albo zastąpić domem z kafli.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map162/06.png"
+ },
+ {
+  "kat": 1,
+  "x0": 46,
+  "y0": 50,
+  "x1": 56,
+  "y1": 56,
+  "co": "Obóz namiotowy: trzy małe namioty i jeden duży w nierównym ciągu, między nimi samotne kamienie, żerdź ze słomą i skrzynia; przypadkowe rozrzucenie.",
+  "jak": "Ułożyć namioty w równy rząd wokół ogniska, drobiazgi zgrupować przy ognisku.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map162/07.png"
+ },
+ {
+  "kat": 2,
+  "x0": 48,
+  "y0": 43,
+  "x1": 55,
+  "y1": 49,
+  "co": "Manekiny (49,44),(51,44),(53,44) mają odstęp 2, a tarcze (50,48),(53,48) odstęp 3: dwa rzędy nie są w jednej osi.",
+  "jak": "Ustawić tarcze w osiach manekinów albo oba rzędy na tym samym rozstawie.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map162/08.png"
+ },
+ {
+  "kat": 4,
+  "x0": 61,
+  "y0": 41,
+  "x1": 61,
+  "y1": 41,
+  "co": "Mała choinka (61,41) przy kamiennym budynku to kafel z gwiazdką: bohater wchodzi pod nią i jest zasłonięty (kontrola G1 kafel 598).",
+  "jak": "Zdjąć gwiazdkę z niskiej sadzonki albo zablokować przejście.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map162/09.png"
+ },
+ {
+  "kat": 4,
+  "x0": 52,
+  "y0": 51,
+  "x1": 54,
+  "y1": 53,
+  "co": "Kafel z gwiazdką nad wolną kratką (53,52) przy żerdzi ze słomą: bohater wchodzi pod niski przedmiot (kontrola G1 kafel 487).",
+  "jak": "Zdjąć gwiazdkę lub zablokować kratkę.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map162/10.png"
+ },
+ {
+  "kat": 5,
+  "x0": 21,
+  "y0": 23,
+  "x1": 32,
+  "y1": 31,
+  "co": "Zatoczka (22-31,24-30) wcięta w morze z brązowym brzegiem w schodki i wodą w innym odcieniu: kanciasta, niedopasowana do linii wybrzeża.",
+  "jak": "Usunąć albo przerobić na zwykłą zatokę z miękkim brzegiem.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map162/11.png"
+ },
+ {
+  "kat": 1,
+  "x0": 84,
+  "y0": 56,
+  "x1": 119,
+  "y1": 100,
+  "co": "Wschodnia połowa: mozaika brązowych i zielonych płatów o prostokątnych brzegach, losowe szare place bruku i ciemne kałuże; brak logiki (ścieżki, pola).",
+  "jak": "Uporządkować: kilka dużych miękkich płatów lub wyraźna ścieżka; usunąć rozproszone szare i ciemne plamy.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map162/12.png"
+ },
+ {
+  "kat": 1,
+  "x0": 103,
+  "y0": 44,
+  "x1": 113,
+  "y1": 56,
+  "co": "Dwa osamotnione szare place bruku (110-112,46-48) i (104-108,53-55) pośrodku łąki, bez budynku ani drogi.",
+  "jak": "Usunąć albo przerobić na ścieżkę prowadzącą do czegoś.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map162/13.png"
+ },
+ {
+  "kat": 1,
+  "x0": 13,
+  "y0": 64,
+  "x1": 31,
+  "y1": 96,
+  "co": "Duża pusta, nudna łąka na zachodzie (15-30,66-95): trawa, pojedyncze kamienie i krzaki.",
+  "jak": "Dodać grupy drzew/zarośli, ścieżkę, polanę.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map162/14.png"
+ },
+ {
+  "kat": 1,
+  "x0": 56,
+  "y0": 100,
+  "x1": 100,
+  "y1": 119,
+  "co": "Południowa łąka (60-100,100-119): jednolita zieleń z rzadko rozsianymi sosnami, bez zagrupowania.",
+  "jak": "Zgrupować drzewa w kępy, dodać polanę/strumień/ścieżkę.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map162/15.png"
+ },
+ {
+  "kat": 3,
+  "x0": 103,
+  "y0": 98,
+  "x1": 111,
+  "y1": 119,
+  "co": "Dróżka południowa (105-110,100-119) zaczyna się tępym zaokrąglonym końcem na środku łąki i zwęża się nagle w (106-108,117).",
+  "jak": "Poprowadzić dróżkę do celu i zakończyć miękko; wyrównać szerokość.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map162/16.png"
+ },
+ {
+  "kat": 5,
+  "x0": 80,
+  "y0": 68,
+  "x1": 101,
+  "y1": 74,
+  "co": "Cienkie zielone obwódki wokół brązowych wysepek (80-100,69-73) i (115-118,83-86): kontury autokafla bez wypełnienia, jak pętle.",
+  "jak": "Wypełnić ziemią lub zlać z sąsiednim płatem; usunąć pętle.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map162/17.png"
+ }
+]

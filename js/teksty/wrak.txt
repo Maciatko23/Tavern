@@ -53,7 +53,7 @@ Morze w deszcz wygląda jak w domu. Prawie.
 
 # ======================================================================== D25 (zadania.D25)
 zadania.D25.title = Mapa z wraku
-zadania.D25.where = Wrak na mieliźnie (łódź Janka z przystani albo łacha od garnizonu w odpływie)
+zadania.D25.where = Wrak na mieliźnie (łódź Janka z przystani)
 zadania.D25.when = od dnia 15
 zadania.D25.desc = Na mieliźnie w zatoce leży „Biała Źrenica” - okręt Czarnych Oczu, rozbity tej samej nocy co kuter Rocha. Roch mówi, że w kajucie kapitana muszą być mapy.
 [zadania.D25.offer.say]
@@ -64,12 +64,12 @@ Taki okręt nie pływa bez map. A ich mapy to mapy kamieni z krukiem. Kto wie, c
 zadania.D25.offer.yes = Popłynę na wrak.
 zadania.D25.offer.no = Nie teraz.
 [zadania.D25.offer.accept]
-Janek cię podwiezie, za dnia. Albo idź po łasze od garnizonu, kiedy morze odejdzie. Tylko nie daj się złapać żołnierzom bez glejtu.
+Janek cię podwiezie, za dnia, z przystani. Tylko nie siedź tam do zmroku - woda wraca szybko.
 
 [zadania.D25.offer.decline]
 Wrak nie ucieknie. Chyba że morze go zabierze.
 
-zadania.D25.steps.0.text = Dostań się na wrak na mieliźnie: łodzią Janka (przystań, za dnia) albo pieszo po łasze od garnizonu, w odpływie.
+zadania.D25.steps.0.text = Dostań się na wrak na mieliźnie: łodzią Janka (przystań, za dnia).
 zadania.D25.steps.1.text = Zejdź pod pokład przez dziurę w burcie i znajdź klucz bosmana. Dolna ładownia jest sucha tylko przy niskiej wodzie.
 zadania.D25.steps.2.text = Otwórz kluczem kajutę kapitana i przeszukaj biurko i skrzynię.
 zadania.D25.steps.3.text = Pięć kamieni z krukiem: zgłoś je celnikowi (przystań, 5 G za sztukę), sprzedaj Baltazarowi (kantor, 15 G za sztukę) albo zatrzymaj i pokaż dziadkowi.
@@ -147,7 +147,7 @@ poszlaki.kartograf.text = Teofil Cyrkiel, kartograf z lądu, obejrzał mapę z w
 Na wrak? (Janek zerka na mieliznę za cyplem.) Mogę cię podrzucić. Za dnia, póki morze spokojne.
 Poczekam dwie godziny, nie dłużej. Woda tam chodzi pod piachem jak kot pod kocem.
 
-janekTide = Odpływ dziś koło {t}. Wtedy łacha od garnizonu wychodzi z wody.
+janekTide = Odpływ dziś koło {t}. Wtedy mielizna przy wraku wychodzi z wody.
 [janekNoK47]
 Na wrak? Najpierw pokaż, że umiesz trzymać wędkę, a nie tylko wiosło. Złów ze mną pierwszą rybę, to cię zawiozę.
 
@@ -165,7 +165,7 @@ Trzymaj się burty. (Janek wiosłuje w stronę przystani.)
 Jeszcze chwila. Tylko nie każ mi czekać do nocy.
 
 janekLeaving = Jeszcze kwadrans i odpływam! Nie będę nocował na mieliźnie!
-janekGone = Janek odpłynął. Zostaje łacha w odpływie... albo czekanie.
+janekGone = Janek odpłynął. Zostaje czekać na niego na przystani.
 [soldierCatch]
 Stój! A ty kto? Kto pozwolił łazić po królewskim łupie?
 Bez glejtu rotmistrza? Dwadzieścia groszy kary. I zmykaj z mielizny.
@@ -177,7 +177,7 @@ Pod pokład? Nie, dziękuję. Tam są szczury wielkie jak psy. I woda chodzi.
 Z garnizonu, z chorągwi króla. A ty skąd?
 
 arrive = Wrak na mieliźnie. Następny odpływ około {t}.
-lowEnding = Woda zaczyna wracać. Łacha do garnizonu zaraz zniknie.
+lowEnding = Woda zaczyna wracać. Mielizna przy wraku zaraz zniknie.
 flooded = Łacha zniknęła pod wodą. Następny odpływ około {t}.
 [skeleton]
 > (Szkielet w podartym granatowym kubraku. Na szyi, na rzemieniu, mosiężny klucz.)

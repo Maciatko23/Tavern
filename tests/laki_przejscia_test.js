@@ -18,7 +18,7 @@ const WALKS = [
 const KEY = { 2: "down", 4: "left", 6: "right", 8: "up" }, STEP = { 2: [0, 1], 4: [-1, 0], 6: [1, 0], 8: [0, -1] };
 
 kit.test({ port: 9541 }, async t => {
-    t.check("nowa gra w Kruczym Jarze (Map003), południe", await t.newGame({ map: 3, x: 9, y: 26, hour: 12, quiet: true, minimap: false }));
+    t.check("nowa gra w Kruczym Jarze (Map003), południe", await t.newGame({ map: 3, x: 49, y: 57, hour: 12, quiet: true, minimap: false }));
     await t.eval("(function(){ if (window.Hunting) Hunting.auto(false); if (window.Birds) Birds.auto(false); if (window.Needs && Needs.setEnabled) Needs.setEnabled(false); return 0; })()");
 
     // the data: the paths reach the edges, the empty maps are gone from the tree

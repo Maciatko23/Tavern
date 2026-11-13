@@ -127,8 +127,8 @@ Nowa gra zaczyna się w domu dziadka bohatera, po prologu (Prologue.js). Stare z
     nowa na własnej ziemi. Po trzecim świcie straż zamyka działkę (strażnik
     przy wejściach ze Skraju lasu i z Łąki, dymek „Działka należy teraz do
     Lorda.”); to, co zostało, należy do Lorda, ale nie znika.
-  - **Gdzie mieszkać potem:** dom dziadka nie był w zastawie (posłanie
-    czeka), pokój w tawernie, namiot albo leśne legowisko — i dwa domy z
+  - **Gdzie mieszkać potem:** (od 2026-11-08 dom dziadka JEST w zastawie od 3. dnia — „Wezwanie króla” niżej; zostaje
+    zapieczętowany do odkupu) stryszek w stajni zajazdu, pokój w tawernie, namiot albo leśne legowisko — i dwa domy z
     ziemią, dla każdego gracza, także po spłacie (w miasteczku domu nie ma:
     „gdzie tam miejsce na pole z tyłu”):
     - **Chata pod lasem na Podgrodziu** (600 G u sołtysa, 8–16, przed
@@ -160,6 +160,32 @@ Nowa gra zaczyna się w domu dziadka bohatera, po prologu (Prologue.js). Stare z
     jak po spłacie, Lordowski akt odkupu wisi w ramce.
   - Dziadek po stracie: smutny, ale ciepły — „Dom nie był w zastawie…
     Jesteś cały i zdrowy - to więcej, niż śmiałem prosić.” Nikogo nie obwinia.
+- **Wezwanie króla (wariant A - decyzja autora 2026-11-08: „postać względnie szybko traci możliwość nocowania u dziadka”, potem
+  stajnia w Kruczogrodzie, potem namiot).** Tylko nowe gry (stare zapisy grają po staremu).
+  - **Dzień 3, rano** (albo pierwsza wizyta bohatera w domu lub na podwórzu dziadka od tej chwili): do domu przychodzi **królewski
+    posłaniec z Garnizonu nad zatoką** (list przyszedł promem). Korona potrzebuje na wojnie starych **kruczych strażników** — ludzi,
+    którzy znają kruki wyspy i umieją słać nimi wieści; Stach jest jednym z ostatnich (stąd wisiorek z krukiem). Ma odpłynąć
+    jeszcze tego dnia wieczornym promem, „na rok wojny albo do końca”. Dziadek się nie wykręca: „Kruki nie pytają, czyja wojna”.
+  - **Tego samego dnia przychodzi Feliks** z dwoma strażnikami w barwach Lorda: dłużnik wyjeżdża, a dług niespłacony, więc dom idzie
+    **w zastaw** — pieczęć na drzwiach o zmroku (20:00), do tej pory bohater może wynieść swoje rzeczy. **Pole zostaje** (dziadek
+    zostawia je wnukowi, zastawem jest dom), dług bez zmian: 2500 G do dnia 60. Na drzwiach znak Lorda, na klamce pieczęć; drzwi
+    się nie otwierają („Pieczęć Lorda Zaleskiego. Dom w zastawie za dług.”). Nic w domu nie znika.
+  - **Pożegnanie:** dziadek daje **list do Szczepana Kołodzieja — woźnicy, który trzyma stajnię zajazdu w Kruczogrodzie** („był mi winien przysługę —
+    przyjmie cię na siano za robotę”) i każe pozdrowić Borgara. Odchodzi drogą do Przystani; prom odpływa wieczorem. Gdy bohatera nie było w
+    domu od dnia 3 do 5, dziadek odpływa bez pożegnania, a list leży pod drzwiami (dzień 5).
+  - **Noclegi potem:** **stryszek z sianem w stajni zajazdu** (Kruczogród; bezpiecznie — w mieście nie ma wilków; odpoczynek lepszy niż
+    na ziemi, gorszy niż w łóżku); za darmo, gdy bohater odrobił dzień w stajni, inaczej 5 G za noc u Szczepana → **namiot** (już w grze:
+    wszędzie, ale noc w dziczy groźna) → własny dom (Chata pod lasem, Spalona zagroda) albo **dom dziadka odzyskany**.
+  - **Praca stajennego** (zmiana w stajni, jak zmiana w tawernie: krótkie zadania, płaca + napiwki): obrządek (zgrzebło, grzywa),
+    karmienie i pojenie (porcja każdego konia na tabliczce boksu; woda wiadrem ze studni na rynku — woda jest rzadka), gnój i słoma
+    (gnój = nawóz na pole), konie podróżnych z promu (przyjąć, zapamiętać boks, oddać osiodłanego - napiwek), z koniem do kowala
+    (podkucie), kursy wozem z woźnicą (Przystań, dwór); z zaufaniem Szczepana wóz za darmo = szybkie przejazdy.
+  - **Zajazd:** stajnia z wozownią stoi przy tawernie (podwórze zajazdu z bramą od ulicy: wozy podróżnych, koryto, stóg siana) —
+    tawerna przyjmuje przyjezdnych z końmi.
+  - **Powrót dziadka:** dług spłacony → Feliks zdejmuje pieczęć, list do dziadka idzie promem, **dziadek wraca po 2 dniach** i dziękuje
+    (dawne podziękowanie). Strata działki (dzień 61) → dom zostaje zapieczętowany; **odkup (3000 G) zwraca działkę i dom**, dziadek wraca
+    tak samo. Póki go nie ma: jego rozmowy (także te o zadaniach) czekają na powrót; co ~10 dni list od niego z promu (wieści z wojny,
+    rada). Do ustalenia przy budowie: D24 „Oswojony kruk” (daje go dziadek) i kryjówka „u dziadka” w W6, póki dom jest zapieczętowany.
 - **Haczyk (propozycja, do potwierdzenia):** przy ostatniej spłacie Lord
   (albo Feliks) wspomina rodzinną bajkę: dwór postawiono z kamieni dawnej
   Twierdzy Kruczych Skał, najstarsze leżą pod tawerną, a „pod Kruczymi
@@ -384,6 +410,15 @@ w tawernie pojawiają się nowi goście z nowymi sprawami.
   na rynku daje mniej i miasto szemrze. Zamknięcie gałęzi dworskiej (D28) to znowu „woda dla siebie czy dla innych”: ogród Lorda
   usycha, a Lord - nawet sojusznik - robi się chłodny i przy Sercu staje się rywalem. Susza zostaje: cysterna to późna, mała nagroda za
   zejście w głąb, a morze dalej jest słone.
+- **Zimowy zapas Borgara - cysterna zamkowa pod tawerną** (decyzja gracza 2026-11-08, przy przebudowie wyspy na planszę 3x3 z miastem
+  **Kruczogród** w środku; do wdrożenia w kroku 5 przebudowy): skąd karczmarz ma wodę, kiedy wszędzie jej brak. Tawerna stoi na dawnym
+  zamku, a każdy zamek miał cysternę: za piwnicą tawerny jest górna, zamkowa część zbiornika zakonu. Zimą deszcz i roztopy spływają do niej
+  starymi rynnami z murów zamku (dawniej z Urwiska - rynny przechodzą na mury Kruczogrodu), a Borgar co zimę ją napełnia i całe lato żyje
+  z tego zapasu. Zapas jest skończony i to widać: z każdym dniem suszy wody ubywa, Borgar o tym mówi, woda i piwo drożeją, a pod koniec lata
+  musi wybierać - woda dla ludzi czy na piwo. Studnia na rynku jest racjonowana przez Lorda, więc ludzie przychodzą po wodę do karczmy:
+  tawerna jest sercem wyspy. Lord chce przejąć cysternę (dźwignia na Borgara, łączy się z długiem dziadka). Bohater zarabia wodę pracą w
+  tawernie albo przynosząc deszczówkę w garnkach - nigdy darmowo, susza zostaje. Z dna zamkowej cysterny prowadzi zejście do głębokiego
+  zbiornika zakonu (wyżej) i dalej w podziemia: generowane piętra zaczynają się w tawernie.
 - **Osada Milczących** (ukryta dolina w górach) - ludzie, którzy kiedyś „wiedzieli za dużo” (dotknęli prawdy) i odeszli od ludzi. Ciężkie
   miejsce na Akt II: żywy dowód, co Serce robi z człowiekiem.
 - **Sześć miejsc wyspy w finale** (od 2026-10-16): Akt III czyta to, co bohater zrobił na wyspie - rozbitek-sojusznik ostrzega, którędy

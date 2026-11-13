@@ -210,7 +210,8 @@
             out.push(eventData(EV.wozOboz, K().nazwy.wozOboz, P.wozOboz[0], P.wozOboz[1], { key: "wozOboz", img: ART.woz, fix: true, walk: false, note: "<Occupy:right=1>" }));
             out.push(eventData(EV.skrzynieOboz, K().nazwy.skrzynie, P.skrzynieOboz[0], P.skrzynieOboz[1], { key: "skrzynieOboz", img: ART.stos2, fix: true, walk: false }));
             out.push(eventData(EV.kurierOboz, K().nazwy.kurier, P.kurierOboz[0], P.kurierOboz[1], { key: "kurierOboz", img: [ART.kurier[0], 0, P.kurierOboz[2], 1] }));
-        } else if (mapId === M.droga) {
+        }
+        if (mapId === M.droga) {
             // (the men by the cart keep a small fire - every light a flame; its light only when the map comes up on the ferry night)
             out.push(eventData(EV.ogienProm, K().nazwy.ogienProm, P.ogienProm[0], P.ogienProm[1], { key: "ogienProm", img: ["!Decoration", 2, 4, 0], step: true, fix: true, walk: false, note: has() && at("w5Prom") && ferryNow() ? FIRE_LIGHT : "" }));
             out.push(eventData(EV.wozProm, K().nazwy.wozProm, P.wozProm[0], P.wozProm[1], { key: "wozProm", img: ART.wozWorki, fix: true, walk: false, note: "<Occupy:right=1>" }));

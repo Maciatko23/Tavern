@@ -627,7 +627,7 @@
     (function seat() {
         const L = TL(), TLD = window.TownLifeData;
         if (!L || !L.RESIDENTS || !TLD || !TLD.SPOTS_BY_MAP || !TLD.SPOTS_BY_MAP[TAVERN]) return;
-        const guests = L.RESIDENTS.filter(r => r.plan.some(p => p[2] === "tawerna")).map(r => r.key);
+        const guests = L.RESIDENTS.filter(r => !(r.indoor && r.indoor.tawerna) && r.plan.some(p => p[2] === "tawerna")).map(r => r.key);   // (2026-11-11 dawcy_miasto: as TownLife's GUESTS)
         const n = guests.indexOf(D.RES.key) + 1, sb = TLD.SPOTS_BY_MAP[TAVERN];
         if (n > 0 && n !== 9 && sb.gosc_9 === D.SPOT_TAVERN && !sb["gosc_" + n]) { sb["gosc_" + n] = D.SPOT_TAVERN; delete sb.gosc_9; }
     })();

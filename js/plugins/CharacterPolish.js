@@ -244,10 +244,15 @@
         const key = id + ":" + (src._url || "") + ":" + f.x + "," + f.y + "," + f.width + "," + f.height;
         let out = outlineBitmaps.get(key);
         if (out) return out;
-        const w = f.width, h = f.height, tmp = new Bitmap(w, h);
-        tmp.blt(src, f.x, f.y, w, h, 0, 0);
-        const d = tmp.context.getImageData(0, 0, w, h).data;
-        tmp.destroy();
+        const w = f.width, h = f.height, Sk = T.api("Sun");
+        // the frame's pixels from the sheet read once (Sky.js sheetPixels: no bitmap and no read-back per frame); the old way while the sheet is not ready
+        let d = Sk && Sk.sheetRect ? Sk.sheetRect(src, f.x, f.y, w, h) : null;
+        if (!d) {
+            const tmp = new Bitmap(w, h);
+            tmp.blt(src, f.x, f.y, w, h, 0, 0);
+            d = tmp.context.getImageData(0, 0, w, h).data;
+            tmp.destroy();
+        }
         const alpha = (x, y) => (x < 0 || y < 0 || x >= w || y >= h ? 0 : d[(y * w + x) * 4 + 3]);
         out = new Bitmap(w + 2, h + 2);
         const img = out.context.createImageData(w + 2, h + 2), o = img.data, R = Math.round(OUTLINE_RGB[0] * 255), G = Math.round(OUTLINE_RGB[1] * 255),
@@ -267,11 +272,14 @@
         outlineBitmaps.set(key, out);
         return out;
     }
+    if (!T.api("Outline")) T.register("Outline", { bitmap: outlineBitmap });   // (for tests: the picture of a frame's outline)
     const outlineBySprite = () => { const W = T.api("Wydajnosc"); return !!(W && W.opts && W.opts.outline !== false); };
     // the figure is drawn by its own frame alone, at its size, upright
     function plainFigure(spr) {
         const c = spr._character, f = spr._frame;
-        if (!c || c === $gamePlayer || c.isCreature || !spr.bitmap || spr.bitmap._ubior || !f || f.width <= 0 || f.height <= 0) return false;
+        // (2026-11-12, wydajność: the creatures too - each kept a filter pass of its own every frame; a scaled one - a boss, a sinking
+        // drowned one, a charge's stretch - still keeps the filter below)
+        if (!c || c === $gamePlayer || !spr.bitmap || spr.bitmap._ubior || !f || f.width <= 0 || f.height <= 0) return false;
         if (Math.abs(spr.scale.x) !== 1 || Math.abs(spr.scale.y) !== 1 || spr.rotation !== 0) return false;
         for (const ch of spr.children) {
             if (ch === spr._outlineSprite || !ch.visible || ch.renderable === false || !(ch.alpha > 0)) continue;
@@ -335,5 +343,7 @@
         else if (ol._sortY !== undefined) delete ol._sortY;
     };
 
-    window.CharacterPolish = { sharedOutlineFilter };
+    // outlineFrame(bitmap, x, y, w, h): a frame's outline made beforehand (a coming creature's sheets, a few frames at a time - its
+    // first frames in the fight then cost nothing)
+    window.CharacterPolish = { sharedOutlineFilter, outlineFrame: (src, x, y, w, h) => (src && src.isReady() ? outlineBitmap(src, { x, y, width: w, height: h }) : null) };
 })();

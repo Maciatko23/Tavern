@@ -1,0 +1,145 @@
+[
+ {
+  "kat": 5,
+  "x0": 41,
+  "y0": 32,
+  "x1": 57,
+  "y1": 38,
+  "co": "Północny płot działki (y 34, x 42-77): korony i pnie sosen stoją dokładnie na linii płotu (x 43-56) - drzewa wrośnięte w płot, część słupków zasłonięta.",
+  "jak": "Odsunąć drzewa o 1-2 kratki od płotu albo wyciąć dla nich lukę w płocie.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map003/01.png"
+ },
+ {
+  "kat": 3,
+  "x0": 62,
+  "y0": 34,
+  "x1": 68,
+  "y1": 46,
+  "co": "Prostokątny las wewnątrz działki kończy się pionową, prostą krawędzią na x=64-65 (y 35-47) - ślad po zamianie prostokątów; za linią równa trawa.",
+  "jak": "Rozluźnić brzeg lasu: pojedyncze drzewa i kępy wychodzące na polanę, poszarpany obrys.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map003/02.png"
+ },
+ {
+  "kat": 1,
+  "x0": 62,
+  "y0": 46,
+  "x1": 76,
+  "y1": 59,
+  "co": "Skupisko kamieni, rud i splotów gałęzi (x 63-75, y 48-58): elementy nachodzą na siebie, trzy rodzaje śmieci w jednym kłębie, plama ciemnej trawy z prostym brzegiem pod spodem.",
+  "jak": "Zrobić 2-3 czytelne kopce (głazy razem, gałęzie razem), między nimi ścieżka/czysta trawa; plamę trawy rozmyć.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map003/03.png"
+ },
+ {
+  "kat": 1,
+  "x0": 63,
+  "y0": 45,
+  "x1": 67,
+  "y1": 49,
+  "co": "Ciemnoszara plamka (x 64-65, y 46-47) przy ścieżce - jak dziura w mapie / niedokończona kałuża.",
+  "jak": "Usunąć albo zrobić jako kałużę/dziurę z obramowaniem.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map003/04.png"
+ },
+ {
+  "kat": 1,
+  "x0": 99,
+  "y0": 19,
+  "x1": 108,
+  "y1": 41,
+  "co": "Kilka ciemnoszarych, postrzępionych smug na pustej łące (x 100-103,y 20-23; x 103-106,y 35-40; x 106-107,y 44-46; także x 7-10,y 70-74) - wyglądają jak błędy tła.",
+  "jak": "Zamienić na kałuże/błoto z gładkim brzegiem lub usunąć.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map003/05.png"
+ },
+ {
+  "kat": 3,
+  "x0": 75,
+  "y0": 10,
+  "x1": 84,
+  "y1": 17,
+  "co": "Wschodni koniec drogi (x 76-82, y 12-15) rozpada się na poszarpane okruchy i kończy donikąd w pustej łące.",
+  "jak": "Doprowadzić drogę do celu albo zakończyć zaokrąglonym placykiem.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map003/06.png"
+ },
+ {
+  "kat": 5,
+  "x0": 39,
+  "y0": 2,
+  "x1": 50,
+  "y1": 7,
+  "co": "Fragment muru na górze (x 40-47, y 3-4) wystaje w dół jak urwane półkole, ze stojącą na nim sosną - wygląda na ułamany kawałek.",
+  "jak": "Wyrównać do linii muru (y 2) albo dokończyć jako basztę z narożnikami; sosnę odsunąć.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map003/07.png"
+ },
+ {
+  "kat": 5,
+  "x0": 21,
+  "y0": 34,
+  "x1": 34,
+  "y1": 53,
+  "co": "Ruina-krater (x 22-32, y 35-51): obrys skarpy ma poszarpane schodki i cienką ciemną obwódkę, prawy bok to prosta pionowa ściana, na dole pojedynczy czarny kafel (30,49) - składane z kawałków, które się nie zgrywają.",
+  "jak": "Przebudować jednym spójnym kształtem klifu (narożniki, schodki co 1 kratkę), usunąć czarny kafel, dorobić dojście od drogi.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map003/08.png"
+ },
+ {
+  "kat": 1,
+  "x0": 30,
+  "y0": 62,
+  "x1": 60,
+  "y1": 90,
+  "co": "Cały obszar na południe od działki (y 60-95, x 0-120) to pusta trawa z samotnymi sosnami - bardzo nudny, 'wygenerowany' wygląd.",
+  "jak": "Dodać kępy drzew z podszytem, polanę, kamienie, ścieżkę/zagrodę; usunąć pojedyncze sosny w równej siatce.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map003/09.png"
+ },
+ {
+  "kat": 1,
+  "x0": 91,
+  "y0": 68,
+  "x1": 112,
+  "y1": 87,
+  "co": "Gaj (x 93-110, y 70-85) to owalna kępa sosen na pustej łące, bez podszytu i bez zmiany podłoża, z ostrym brzegiem.",
+  "jak": "Dodać podszyt, ciemniejszą trawę, kilka pni/kłód, nieregularny obrys.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map003/10.png"
+ },
+ {
+  "kat": 5,
+  "x0": 74,
+  "y0": 40,
+  "x1": 80,
+  "y1": 48,
+  "co": "Wschodnia bramka płotu (x 77, y 41-46): luka w płocie bez słupków bramnych, a droga kończy się poszarpanym kikutem przed linią płotu.",
+  "jak": "Dodać słupy bramne i dokończyć drogę przez bramę na zewnątrz.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map003/11.png"
+ },
+ {
+  "kat": 5,
+  "x0": 40,
+  "y0": 44,
+  "x1": 47,
+  "y1": 51,
+  "co": "Zachodnia luka w płocie działki (x 42, y 46-49): płot urywa się bez słupków bramnych; droga wchodzi w bok.",
+  "jak": "Dodać słupy bramne po obu stronach i wyrównać drogę przez lukę.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map003/12.png"
+ },
+ {
+  "kat": 6,
+  "x0": 73,
+  "y0": 33,
+  "x1": 79,
+  "y1": 60,
+  "co": "Płot działki: pionowe odcinki (x 42 i x 77) to cienkie pojedyncze słupki, a poziome mają grube dwuprzęsłowe belki - dwa różne wyglądy płotu w jednym ogrodzeniu.",
+  "jak": "Użyć jednego typu płotu (narożniki + boki z tej samej rodziny kafli).",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map003/13.png"
+ }
+]

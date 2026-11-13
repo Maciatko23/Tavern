@@ -1,6 +1,6 @@
 # Przegląd statyczny zadań (tools/audyt/przejscie.js)
 
-Stan: 2026-11-05 12:17. Zadań 122, mieszkańców 84, map 149.
+Stan: 2026-11-11 16:41. Zadań 122, mieszkańców 84, map 151.
 
 Problemy: do sprawdzenia 1, uciążliwość 4, info 74
 
@@ -263,17 +263,17 @@ Problemy: do sprawdzenia 1, uciążliwość 4, info 74
 | garncarz | Wit Zduń | 111 | 100 |  |
 | dziecko | Tośka | 111 | 100 |  |
 | pustelnik | Brat Kleofas | 155 | 54 | poza mapą (cela_drzwi) |
-| latarnik | Bazyli Krzesiwo | 159 | 71 | poza mapą (izba_sen) |
+| latarnik | Bazyli Krzesiwo | 125 | 71 | poza mapą (izba_sen) |
 | rotmistrz | Rotmistrz Bełza | 162 | 67 | poza mapą (spi) |
 | kwatermistrz | Kwatermistrz Kłos | 162 | 63 | poza mapą (namiot_kwat) |
 | werbownik | Werbownik Bęben | 162 | 63 | poza mapą (koszary_drzwi) |
 | rozbitek | Eryk Sowa | 8 | 100 |  |
-| jagna | Babka Jagna | 17 | 0 | poza mapą (jagna_las) |
+| jagna | Babka Jagna | 3 | 0 | poza mapą (jagna_las) |
 | gajowy | Gajowy Gniewko Bór | 24 | 58 | poza mapą (lesniczowka) |
 | pasterz | Wawrzyn Owczarz | 4 | 63 | poza mapą (koszar_brama) |
-| handlarz | Szymon Juczny | 22 | 65 | poza mapą (handlarz_woz) |
-| patrol_latarnia_1 | Żołnierz z patrolu | 159 | 50 | poza mapą (lud_p159_noc) |
-| patrol_latarnia_2 | Żołnierz z patrolu | 159 | 50 | poza mapą (lud_p159_noc) |
+| handlarz | Szymon Juczny | 4 | 65 | poza mapą (handlarz_woz) |
+| patrol_latarnia_1 | Żołnierz z patrolu | 125 | 50 | poza mapą (lud_p159_noc) |
+| patrol_latarnia_2 | Żołnierz z patrolu | 125 | 50 | poza mapą (lud_p159_noc) |
 | patrol_garnizon_1 | Żołnierz z patrolu | 162 | 50 | poza mapą (koszary_drzwi) |
 | patrol_garnizon_2 | Żołnierz z patrolu | 162 | 50 | poza mapą (koszary_drzwi) |
 | grabarz | Hieronim | 8 | 50 | poza mapą (grabarz_chata) |

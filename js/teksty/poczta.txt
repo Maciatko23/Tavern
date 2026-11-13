@@ -1,0 +1,648 @@
+# Teksty wątku W20 „Kruczy listonosz” (wtyczki Poczta_Data.js i Poczta.js) - docs/zadania_nowe/kruczy_listonosz.md.
+# Mistrz Gawron (stary kruczarz o drewnianej nodze), Wicek (jego uczeń, 15 lat - w grze „Tymon” z projektu nosi imię Wicek, bo Tymon
+# to Tomek z W16), Cyryl Atrament (pisarz Ratusza, sympatyczny zdrajca), człowiek w kapturze (agent Czarnych Oczu).
+# Bohater jest nastolatkiem: dorośli mówią do niego „chłopcze”. „> ” - mówi bohater; „@klucz: ” - mówi ta postać. {nazwa} - wstawia gra.
+
+# ======================================================================== zadanie W20 (dziennik: FABUŁA)
+zadania.W20.title = Kruczy listonosz
+zadania.W20.where = kruczarnia (wieża w północno-wschodnim rogu miasta), miasto, tawerna
+zadania.W20.when = od dnia 12, po oswojeniu kruka - pięć tygodni
+zadania.W20.desc = Dziadek i inni kruczarze są na wojnie. W kruczarni został stary, kulawy Mistrz Gawron i kilkanaście kruków, które wracają z listami. Na mojej szyi wisi znak posłańca. Rano i wieczorem odbieram listy, w dzień chodzę z nimi po mieście. Ktoś zdejmuje pieczęcie i zalewa je na nowo.
+zadania.W20.fail.text = Listy poszły inną drogą.
+zadania.W20.steps.0.text = {k1}
+zadania.W20.steps.1.text = {k2}
+zadania.W20.steps.2.text = {k3}
+zadania.W20.steps.3.text = {k4}
+zadania.W20.steps.4.text = {k5}
+
+# słowa kroków (zmienne dziennika)
+kroki.k1.start = Idź do kruczarni w północno-wschodnim rogu miasta (6-20): czeka Mistrz Gawron.
+kroki.k1.torba = Roznoś listy z kruczarni (6:30 i 17:30). Doręczone {n}/5. {torba}
+kroki.k1.dziadek = Pięć listów doręczonych. Kruk Stacha przylatuje do kruczarni o 17:30.
+kroki.k2.torba = Listy z frontu: Grum i Melia wieczorem w tawernie, Hanka rano. {torba} {zmarly}
+kroki.k2.zmarly = List do zmarłej Gryty: grób, Kleofas, sąsiadka albo odesłanie.
+kroki.k2.bez = List bez adresata: znajdź, komu należy.
+kroki.k3.start = Kto otwiera listy? Poszlaki {n}/3: Wicek, Sambor, Baltazar, Cyryl. {noc}
+kroki.k3.noc = Warta w kruczarni po 23:00.
+kroki.k3.po = Zdrajca zgubił {rzecz}. Szukaj dalej, zbierz trzy poszlaki.
+kroki.k4.start = Napisz trzy listy-przynęty przy stole w kruczarni i roześlij je.
+kroki.k4.czekaj = Przynęty rozesłane. Czekaj w nocy pod wieżą {dzien}.
+kroki.k4.noc = Dziś w nocy bądź pod wieżą kruczarni po 23:00.
+kroki.k5.start = Zdrajcą jest Cyryl. Czekaj na niego w kruczarni o 3:00.
+kroki.k5.wybor = Cyryl wyznał: wydać, przestawić czy puścić.
+kroki.k5.koniec = Kruczarnia ma nowego mistrza. Kruk niesie, nie czyta.
+
+# napisy
+napis.zloto = +{n} G
+napis.opinia = Opinia +{n}
+napis.opiniaMinus = Opinia -{n}
+napis.poszlaka = Poszlaka ({n}/3)
+napis.torba = Torba listonosza: {n}/6
+napis.listy = Kruki wróciły z listami: {n}
+napis.listyRano = Kruki wróciły o świcie.
+napis.listyWieczor = Kruki wróciły o zmierzchu.
+napis.pelna = Torba pełna - sześć listów to dość.
+napis.zaufanie = Gawron traci do ciebie zaufanie.
+napis.kruk = Kruk poleciał z listem.
+napis.stalaPoczta = Poczta kruków na stałe: 5 G za list
+
+# ======================================================================== pierwsze spotkanie w kruczarni
+[drzwi.zamkniete]
+Kruczarnia. Kruki śpią - zamknięte.
+
+[drzwi.czeka]
+Drzwi kruczarni są uchylone, ale nie wchodzisz bez zaproszenia. Wróć w ciągu dnia (6-20).
+
+[spotkanie.1]
+@gawron: Stój. Kruki nie lubią obcych.
+@gawron: (Mistrz Gawron staje w drzwiach na drewnianej nodze i patrzy na twoją szyję.)
+@gawron: Wisiorek. Dziadek Stach wspominał. Wejdź, chłopcze, zanim kruki dostaną od ciebie zawału.
+@gawron: Jestem Gawron. Prowadzę pocztę, odkąd królewski posłaniec zabrał moich ludzi razem z krukami. Zostało mi tych kilkanaście. I ta noga.
+
+[spotkanie.2]
+@gawron: Rano o 6:30 i wieczorem o 17:30 kruki wracają z listami: z frontu, ze wsi, z Zakonu. Kładę je na stole. Ty bierzesz sześć naraz i roznosisz.
+@gawron: Ja nie dojdę z listem z jednego końca miasta na drugi. Ty masz nogi i wisiorek. Każdy adresat ma swoje godziny, więc patrz, kiedy kto stoi gdzie.
+@gawron: Za każdy doręczony list dostaniesz parę groszy od adresata. Spóźniony list też można zanieść, ale ludzie się gniewają.
+@gawron: Jest jedna zasada, jedyna: kruk niesie, nie czyta. Przysięgasz?
+
+spotkanie.opcja.przysiegam = Przysięgam.
+spotkanie.opcja.postaram = Postaram się.
+
+[spotkanie.przysiegam]
+> Przysięgam. Kruk niesie, nie czyta.
+@gawron: Dobrze. Pieczęć to pieczęć. Kto ją zdejmuje, zdejmuje człowiekowi dach z głowy.
+
+[spotkanie.postaram]
+> Postaram się.
+@gawron: (Mruży oko.) Uczciwie. Wolę „postaram się” od przysięgi, którą ktoś łamie na drugi dzień. Ale policzę.
+
+[spotkanie.koniec]
+@gawron: Stół jest tam. Listy leżą w przegródkach, tylko ich nie wymieszaj. Rano i wieczorem.
+
+# ======================================================================== stół do sortowania
+[stol.pusty]
+Na stole leży tylko wosk, świeca i pusta torba. Kruki jeszcze nie wróciły z listami. Rano o 6:30 i wieczorem o 17:30.
+
+[stol.pelna]
+Torba jest pełna. Najpierw roznieś, co niesiesz.
+
+stol.opcja.wez = Weź listy do torby
+stol.opcja.torba = Zobacz torbę
+stol.opcja.zalej = Zalej pieczęć na nowo (wosk)
+stol.opcja.kruk = Wyślij kruka z listem
+stol.opcja.napisz = Napisz listy-przynęty
+stol.opcja.odeslij = Odeślij list nadawcy
+stol.opcja.nic = Nic.
+
+[stol.wzialem]
+(Zbierasz listy z przegródek i wkładasz do torby.)
+
+[torba.pusta]
+Torba listonosza jest pusta.
+
+[zalej.nic]
+Żaden list w torbie nie ma otwartej pieczęci.
+
+[zalej.zrobione]
+(Grzejesz wosk nad świecą i zalewasz pieczęć na nowo. Kruk na żerdzi patrzy na ciebie z naganą.)
+
+# przegródki
+[przegrodki.1]
+Przegródki z imionami: piekarka, kowal, dzwonnik, kapral, sołtys. Każdy list ma swoje miejsce i swoją godzinę.
+
+[przegrodki.2]
+Karteczki z godzinami doręczeń przypięte do półek. Grum 19-22, Melia 17-21:30, Hanka 5-12. Ktoś to wszystko pilnuje.
+
+# kruki na żerdziach
+[kruk.1]
+Kruk na żerdzi przechyla głowę i kracze. Ma brudne stopy i gruby zwitek w obrączce.
+
+[kruk.2]
+Kruk wyskubuje kartkę z gniazda i patrzy na ciebie z urazą.
+
+[kruk.3]
+Stary kruk śpi, schowany w skrzydłach. Jeden jego pióro leży na posadzce.
+
+[kruk.4]
+Kruk skacze po żerdzi i zrzuca ziarno na podłogę. Gawron mruczy z daleka coś o niewdzięcznikach.
+
+[kruk.5]
+Kruk z białą plamą na skrzydle ocenia cię uważnie. Chyba cię zapamiętał.
+
+# ======================================================================== rozdz. 1: pierwsza torba
+[bag.pierwsza]
+@gawron: Pierwsza torba. Pięć łatwych listów: piekarka, kowal, dzwonnik, kapral i sołtys. Rano i wieczorem się uczysz, gdzie kto stoi.
+@gawron: A, i uważaj: jeden z nich może mieć pieczęć zalaną innym woskiem. Powiedz mi, jak zobaczysz.
+
+[haczyk.gawron]
+@gawron: Pokaż pieczęć. (Gawron obraca list w palcach i marszczy czoło.)
+@gawron: Ten wosk ma inny odcień. Ciemniejszy, z domieszką tłuszczu. To trzeci taki w tym miesiącu.
+@gawron: Ktoś otwiera listy i zalewa je na nowo. Nie mów nikomu. Patrz i słuchaj.
+
+poszlaka.wosk = Wosk z domieszką tłuszczu, ciemniejszy niż u Gawrona.
+
+# dziadek (piąty dzień, 17:30)
+[dziadek.gawron]
+@gawron: Kruk Stacha przyleciał. Z obozu pod górami. Trzymaj, chłopcze. To dla ciebie.
+@gawron: (Gawron podaje ci list z pieczęcią w kształcie kruka i odwraca się, żebyś miał spokój.)
+
+# ======================================================================== rozdz. 2: listy z frontu
+[grum.list]
+@grum: List? Do mnie? (Grum wyciera rękę o koszulę, żeby nie zostawić śladu na papierze.)
+@grum: (Czyta długo. Poruszają się tylko jego wargi.) Kruczek... Dwa lata razem w lesie. Dwa lata w jednym płaszczu.
+@grum: Nie żyje. Pisze Marcin, że nie żyje.
+
+[grum.kolejka]
+@grum: (Wstaje powoli, odsuwa krzesło i spogląda w stronę baru.) Borgar! Kolejka dla każdego! Za Kruczka!
+@borgar: (Nalewa, jak zawsze, bez słowa. Tym razem krócej.) Za Kruczka.
+
+[melia.list]
+@melia: List? (Melia wyciera ręce w fartuch i odbiera go jak coś kruchego.)
+@melia: Od siostry. Z kontynentu. Pisze o pieśni „Kruk nad kopcem”. Ma jedną zwrotkę, której tu nie znam.
+@melia: Zaśpiewam ją kiedyś, chłopcze. Jak będzie okazja. Dziękuję.
+
+[ozzy.list]
+@ozzy: List? Od starego przyjaciela? (Ozzy mruga powoli, jakby budził się z drzemki.) Daj. Dziękuję, chłopcze. Zawsze coś w nim jest, czego nie rozumiem. Dno cysterny... Hm.
+
+[gryta.pytam]
+> (List do Gryty. Ale Gryta umarła z pragnienia przed tygodniem. Komu go oddać?)
+
+gryta.opcja.grob = Przeczytaj na grobie
+gryta.opcja.kleofas = Zanieś Kleofasowi
+gryta.opcja.sasiadka = Oddaj sąsiadce
+gryta.opcja.odeslij = Odeślij nadawcy
+gryta.opcja.nie = Nie teraz.
+
+[gryta.sasiadka]
+@wdowa: List do Gryty? Od jej syna? (Wdowa spuszcza głowę.) Jej już nie ma, chłopcze. Daj, zachowam. Przeczytam, kiedy będę miała siłę.
+@wdowa: Tylko że on pisze, że wraca. A ona... (Odwraca się.) Nie chciałabym go znowu zawieść.
+
+[gryta.kleofas]
+@pustelnik: List do zmarłej. (Kleofas bierze go w obie ręce.) Zapiszę w księdze zmarłych: Gryta, matka, list od syna - nieodebrany, ale doręczony. Niech trafi tam, gdzie ma trafić.
+
+[gryta.odeslij]
+(Gawron pisze na wierzchu: „Adresat nie żyje”. Kruk bierze list w szpony i wylatuje.)
+@gawron: Żołnierz się zdziwi. I zapyta w następnym liście. Ale prawda to prawda.
+
+# scena S4: list na grobie
+[grob.tekst]
+> (Stajesz przy grobie Gryty na starym cmentarzu. Wiatr kołysze trawą. Ambroży dzwoni raz, jakby wiedział.)
+> Droga mamo. Piszę, że wracam. Nie wiem jeszcze kiedy, ale wracam. Zjadłem kasztany, które mi dałaś w woreczku. Ostatnie zostawiłem na pamiątkę.
+> Pozdrów sąsiadkę. Powiedz, że dziękuję za lampę. Twój Janek.
+(Kruk siada na krzyżu obok i nie odlatuje.)
+
+[bez.adresata]
+@gawron: Co to? Bez nazwiska. Tylko tusz kruka z białym okiem w rogu. (Gawron chowa dłoń z listem za plecami, potem wyciąga ją z powrotem.)
+@gawron: Nie wyszedł z mojego stołu. Nie otwieraj. Znajdź, komu należy.
+
+# ======================================================================== rozdz. 3: kto czyta
+[poszlaki.wicek]
+@wicek: Ręce w atramencie? Przepisuję listy za grosz dla tych, co nie umieją pisać. Hanka, Ozzy, połowa rynku.
+@wicek: Nie czytam cudzych listów, panie. Przepisuję. To co innego. A nie śpię, bo noce są cichsze niż dnie i ręka mniej drży.
+
+poszlaka.wicek = Wicek ma ręce w atramencie, bo przepisuje listy dla niepiśmiennych. Nie otwiera cudzych.
+
+[poszlaki.sambor]
+@celnik: Listy z promu czytam, bo mi wolno. Taka moja praca. Ale w mieście? Nie moja sprawa. Pytaj kogo innego.
+@celnik: (Patrzy na ciebie, jakby ważył, czy dodać więcej.) Wosk na listach z promu bywa czerwony. Ratuszowy. Zielony, jak u Baltazara, to zupełnie inna sprawa.
+
+poszlaka.sambor = Celnik czyta listy z promu legalnie. W mieście jest czysty.
+
+[poszlaki.baltazar]
+@kupiec: Listy? (Baltazar uśmiecha się.) Kupuję tylko te, które kruki same mi zostawiają. Za błyskotkę, nie za sekret.
+@kupiec: Mój wosk jest zielony, chłopcze. Zielony. Czerwony niech sobie ktoś inny kłamie.
+
+poszlaka.baltazar = Baltazar używa zielonego wosku. Otwarte listy mają czerwony.
+
+[poszlaki.cyryl]
+@cyryl: A, nasz młody listonosz! Szukasz adresu? Pomogę, czemu nie.
+@cyryl: (Rysuje na kartce prosty plan dzielnic i podaje ci ją, jak dobry znajomy.) Hanka od rana przy straganie, kowal do południa, kapral przy bramie. Ratusz czerwonym woskiem pieczętuje wszystko. Wiem to najlepiej, bo to ja nalewam.
+@cyryl: Kruczarnia? Zaglądam tam co dzień na chwilę, porządkować listy urzędowe. Gawron mi na to pozwala. Dobry człowiek.
+
+poszlaka.cyryl = Cyryl zagląda do kruczarni codziennie, ma czerwony wosk ratuszowy i jest bardzo uprzejmy. Zbyt uprzejmy.
+
+# scena S5: noc w kruczarni
+[noc.wejscie]
+(Siedzisz w izbie kruczarni. Jedna świeca, kruki śpią na żerdziach. Cisza.)
+> (3:10. Skrzypnięcie. Ktoś wchodzi bocznym wejściem...)
+
+[noc.kaptur]
+(Zakapturzona postać zdejmuje pieczęć nożem rozgrzanym nad świecą.)
+> Stój!
+(Zdrajca zrywa się, przewraca stołek i ucieka w ulice.)
+
+[noc.rzecz.zielony]
+(Na podłodze zostaje świeca z zielonym woskiem. Tak, jak u Baltazara. Zbyt łatwo.)
+
+poszlaka.zielony = Świeca z zielonym woskiem zostawiona w kruczarni. Zbyt wygodna wskazówka na Baltazara.
+
+[noc.rzecz.plama]
+(Na stołku zostaje strzęp rękawa z plamą atramentu. Czarny, tłusty, pisarski.)
+
+poszlaka.plama = Strzęp rękawa z atramentową plamą - jak u kogoś, kto dużo pisze.
+
+[noc.pogon.koniec]
+(Zakapturzona postać znika wśród nocnych strażników na rynku. Nie ma dowodu.)
+
+# ======================================================================== rozdz. 4: pułapka
+[bez.czytanie]
+@gawron: Pismo prostych, pochylonych liter. Papier z klasztoru na lądzie, wypłowiały. Oko w zagięciu: Czarne Oczy.
+@gawron: Przeczytaj po cichu. Zrobię wyjątek, tylko ten jeden raz.
+> „Dziś jak zawsze. W piątek wyślij nazwiska tych, którzy noszą kruka na szyi. Jeśli stary zauważył - zrób to ty, nie on.”
+@gawron: Adresatem jest ten, kto czyta. Jeden z nas czyta nasze listy.
+
+[bez.notatka]
+List bez adresata
+„Dziś jak zawsze. W piątek wyślij nazwiska tych, którzy noszą kruka na szyi. Jeśli stary zauważył - zrób to ty, nie on.” Czarne Oczy szukają nosicieli wisiorków.
+
+
+[przynety.wstep]
+@gawron: Trzy listy-przynęty. Każdy o kamieniu z krukiem w innym miejscu: studnia na rynku, krata w piwnicy tawerny, kruczarnia.
+@gawron: Każdy trafi do innego podejrzanego jako „pomyłka w torbie”: Wicek, Sambor, Cyryl. Kto się pojawi w nocy, ten przeczytał.
+
+[przynety.napisane]
+(Piszesz trzy listy. Melia podsuwa pióro i ceruje ci ucho: „Za szybko pisze, jak ktoś, kto ma prawdę”. Gawron zalewa pieczęcie.)
+
+przynety.melia = Melia podsuwa pióro i dopisuje trzy zdania ładniejszym pismem.
+
+[przynety.noc.studnia]
+(Rano na rynku: ślady przy studni. Ktoś sprawdził, a potem się rozmyślił. Kruk bohatera patrzył z góry.)
+
+[przynety.noc.krata]
+(Rano w piwnicy tawerny: pyłek na kracie rozmazany. Ktoś był, ale niczego nie wziął.)
+
+[przynety.noc.kruczarnia]
+(Rano w kruczarni nic nie zginęło. Gawron mówi, że spał spokojnie. Kruki też.)
+
+# scena S6: trzecia noc
+[przynieta.noc]
+(Przez trzy noce kruk patrzył z góry. Dziś w nocy: kaptur w uliczce pod kruczarnią.)
+@kaptur: Jest kamień?
+@cyryl: (Szeptem.) Jutro. Dziś Gawron nie śpi. Paczka. Reszta w piątek.
+(Cyryl oddaje człowiekowi w kapturze zawiniątko. Obaj spoglądają w stronę kruczarni, ale nie widzą, że stoisz w cieniu.)
+@kaptur: Za dużo czasu. Czarne Oczy nie czekają.
+
+[przynieta.cyryl]
+> To Cyryl. Pisarz z Ratusza. Oddaje paczkę.
+
+[cyryl.notatka]
+Zdrajca: Cyryl
+Zdrajcą jest Cyryl Atrament, pisarz z Ratusza. Listy kruków idą do ludzi w kapturach, a ci szukają nosicieli wisiorków.
+
+
+# ======================================================================== rozdz. 5: kruk niesie, nie czyta
+[finaly.gawron]
+@gawron: Cyryl wchodzi o 3:00 jak co noc. Siedzimy cicho. Trzy kruki patrzą.
+
+[finaly.cyryl]
+@cyryl: (Wchodzi, zapala świecę. Zatrzymuje się.) Gawronie. I ty, młody. (Uśmiecha się. Nie z radości.)
+@cyryl: Nie będę wybuchał. Moja siostra Lena jest na kontynencie, w obozie. „Oni” mają jej listy. Czytali moje, więc kazali mi czytać wasze.
+@cyryl: Powiedziałem im o jednym. Ostrożnie. Nie powiedziałem, gdzie jest kamień z krukiem w gruzie. Przysięgam.
+@gawron: (Milczy. Kruk na żerdzi odlatuje przez okno. Potem drugi. Potem trzeci.)
+
+[finaly.pytanie]
+@gawron: Ty tu jesteś młody i ty decydujesz, chłopcze. Ja mam tylko jedną nogę i dwa kruki.
+
+finaly.opcja.wydaj = Wydaj Witowi.
+finaly.opcja.przestaw = Przestaw go.
+finaly.opcja.uciekaj = Niech ucieka promem.
+
+[finaly.wydaj]
+> Kapral Wit czeka przy posterunku. Idziemy, Cyrylu.
+@cyryl: (Spuszcza głowę. Idzie bez słowa.) Lena zostanie sama.
+@gawron: Dobrze zrobiłeś, chłopcze. I źle. Jedno i drugie naraz, jak to bywa.
+
+[finaly.przestaw]
+> Zostajesz na stanowisku, Cyrylu. Ale nie piszesz już tego, co oni chcą. Piszesz to, co my chcemy.
+@cyryl: Fałszywe nazwiska. Fałszywe kryjówki. (Kiwa głową.) Co tydzień. Jeśli ty zawiedziesz, Lena zginie.
+@gawron: Za duże ryzyko. Ale odważnie, chłopcze.
+
+[finaly.uciekaj]
+> Idź na prom, Cyrylu. Nim wzejdzie słońce. Powiem, że przepadłeś.
+@cyryl: Dlaczego? (Cichy śmiech.) Bo jesteś lepszy, niż myślałem. Dziękuję.
+@gawron: (Do ciebie.) Wicie powiem, że nic nie widziałem. Kłamać umiem gorzej niż ty.
+
+# epilog S8
+[epilog.gawron]
+@gawron: Świta. Kruki lecą z paczkami w każdą stronę.
+@gawron: Od jutra kruczarnia jest twoja, chłopcze. Klucze. I odznaka: kruk z wygrawerowaną datą.
+@gawron: List od Stacha. „Dostałem. Dobrze zrobiłeś.” Tyle. Krótko, jak on.
+
+[epilog.koniec]
+@gawron: Kruk niesie, nie czyta. Pamiętaj.
+
+napis.odznaka = Odznaka kruczego listonosza
+
+# ======================================================================== notatki dziennika (listy)
+[notatki.listonosz]
+Zostałem kruczym listonoszem
+Rano i wieczorem listy z kruczarni, w ciągu dnia obchód po mieście. Kruk niesie, nie czyta.
+
+[notatki.dziadek]
+List od dziadka
+Stach żyje, jest w obozie pod górami. Kruki nie giną. Pozdrawia i prosi: pilnuj działki.
+
+[notatki.bez]
+Bez adresata
+W torbie znalazłem list bez adresata. Ktoś go tam wsunął. Tusz kruka z białym okiem w rogu.
+
+[notatki.zdrajca]
+Ktoś czyta nasze listy
+Ktoś odpieczętowuje listy i zalewa je woskiem. To nie jest ktoś obcy.
+
+[notatki.koniec]
+Kruczarnia ma nowego mistrza
+Kruk niesie, nie czyta.
+
+# myśli bohatera
+mysl.start = (Wisiorek na mojej szyi to znak posłańca. Gawron czeka w kruczarni.)
+mysl.torba = (Rano o 6:30 i wieczorem o 17:30 kruki wracają z listami. Zajrzyj do kruczarni.)
+mysl.noc = (Dziś w nocy w kruczarni. Zapal świecę i czekaj.)
+
+# ======================================================================== listy (okno listu: nadawca i treść; adresat, gdzie szukać)
+list.dostawa = Doręczone: {to}. {reakcja}
+reakcja.domyslna = (Adresat kiwa głową i szybko chowa list.) Dziękuję, chłopcze. Trzymaj, za fatygę.
+reakcja.spozniony = (Adresat marszczy czoło.) Późno. Wolałbym mieć go rano. No, trudno.
+reakcja.pieczec = (Adresat ogląda pieczęć dłużej, niż trzeba.) Ktoś go już otwierał?
+reakcja.otwarty = (Adresat patrzy na pieczęć, potem na ciebie.) Pieczęć zalana inaczej. Czytałeś?
+
+[okno.tytul]
+List
+
+okno.od = Od
+okno.do = Do
+okno.zamknij = Esc - zamknij   O - dalej
+
+[torba.naglowek]
+Torba listonosza
+
+torba.wiersz = {do}  -  {okno}  -  {gdzie}
+torba.zamkniete = (pieczęć nienaruszona)
+torba.otwarte = (pieczęć otwarta!)
+torba.pytanie = Przeczytać w tajemnicy list do {kto}?
+torba.pytanie2 = Na pewno? Kruk niesie, nie czyta. Gawron to zauważy.
+torba.opcja.czytaj = Przeczytaj w tajemnicy
+torba.opcja.nie = Nie.
+torba.opcja.tak = Tak, na pewno.
+
+[gawron.zaufanie]
+@gawron: Trzy pieczęcie. (Gawron odkłada list i patrzy na ciebie jak na obcego.) Kruk niesie, nie czyta.
+@gawron: Nie powiem nikomu. Ale ja pamiętam, chłopcze.
+
+[gawron.zaufanieKoniec]
+@gawron: Zaufanie zawiedzione. Teraz będzie trudniej.
+
+# dostawa (rozmowa z adresatem)
+dostawa.opcja = Masz list.
+dostawa.nie = Nie, w innej sprawie.
+szlak.opcja = Wypytaj o otwarte listy
+przynety.pomylka = To nie do mnie... ale dobrze, że przyniosłeś. Pomyłka w torbie, co? Dziękuję.
+
+# ======================================================================== adresaci: gdzie szukać
+gdzie.piekarka = Hanka, piekarka: rano przy straganie na rynku, po 12 na ławce.
+gdzie.kowal = Tadek, kowal: przy kowadle, do południa i po 13.
+gdzie.dzwonnik = Ambroży, dzwonnik: w dzwonnicy.
+gdzie.kapral = kapral Wit: przy wschodniej bramie, wieczorem patroluje.
+gdzie.soltys = sołtys: w Ratuszu, 8-16.
+gdzie.garbarz = Ignac, garbarz: w garbarni.
+gdzie.grum = Grum: w tawernie, wieczorem.
+gdzie.melia = Melia: w tawernie, wieczorem.
+gdzie.ozzy = Ozzy: w tawernie, wieczorem.
+gdzie.kupiec = Baltazar: w kantorze, 8-18.
+gdzie.celnik = Sambor, celnik: na przystani. Albo wyślij kruka.
+gdzie.zosia = Zosia: na rynku.
+gdzie.praczka = praczka: nad potokiem i na rynku.
+gdzie.ela = Ela: w obozie pod murem.
+gdzie.ludmila = Ludmiła: w obozie pod murem.
+gdzie.pustelnik = brat Kleofas: przy kaplicy. Albo wyślij kruka.
+gdzie.rotmistrz = rotmistrz Bełza: w garnizonie. Albo wyślij kruka.
+gdzie.wicek = Wicek: w kruczarni rano, na rynku wieczorem.
+gdzie.cyryl = Cyryl: w Ratuszu 8-16, w kruczarni 16-18.
+gdzie.bohater = (dla ciebie)
+gdzie.wdowa = sąsiadka Gryty: w mieście.
+
+# imiona adresatów
+imie.piekarka = Hanka
+imie.kowal = Tadek
+imie.dzwonnik = Ambroży
+imie.kapral = Wit
+imie.soltys = sołtys
+imie.garbarz = Ignac
+imie.grum = Grum
+imie.melia = Melia
+imie.ozzy = Ozzy
+imie.kupiec = Baltazar
+imie.celnik = Sambor
+imie.zosia = Zosia
+imie.praczka = praczka
+imie.ela = Ela
+imie.ludmila = Ludmiła
+imie.pustelnik = Kleofas
+imie.rotmistrz = Bełza
+imie.wicek = Wicek
+imie.cyryl = Cyryl
+imie.bohater = ty
+imie.wdowa = Gryta (nie żyje)
+
+# ======================================================================== treści listów (od, treść w oknie)
+list.l1_hanka.od = Michał, mąż
+
+[list.l1_hanka.tresc]
+Hanko moja,
+żyję. Jest ciężko i głodno, ale kruki nosimy w kieszeniach i ludzie dzielą się chlebem.
+Piecz, jak piekłaś. Wrócę, jak się tylko da.
+Michał
+
+list.l1_tadek.od = Bartosz, brat
+
+[list.l1_tadek.tresc]
+Tadek,
+wojsko potrzebuje podków. Setki. Kujesz, ile zdążysz, a my przyjedziemy z wozem.
+Bartosz
+
+list.l1_ambrozy.od = Stary kolega z dzwonnicy
+
+[list.l1_ambrozy.tresc]
+Ambroży,
+dzwonić cztery i jeden, kiedy przypłyną. Dwa razy cztery, jeden raz pięć. Kto zna, ten zrozumie.
+
+list.l1_wit.od = Dowództwo
+
+[list.l1_wit.tresc]
+Kapralu Wit,
+wzmocnić mury od wschodu przed zimą. Drewno ze wsi, ludzie z miasta. Meldować tygodniowo.
+
+list.l1_soltys.od = Starosta
+
+[list.l1_soltys.tresc]
+Sołtysie,
+zboże na zimę trzeba policzyć dwa razy i ukryć jedną trzecią. Wojsko bierze wszystko, co zobaczy.
+
+list.l1_garbarz.od = Cech skór
+
+[list.l1_garbarz.tresc]
+Ignacu,
+zaległa składka za pół roku. Skóry po cenie wojennej. Prosimy odpisać do końca miesiąca.
+
+list.l1_dziadek.od = Stach
+
+[list.l1_dziadek.tresc]
+Chłopcze,
+żyję. Jesteśmy w obozie pod górami. Kruki nie giną, a ja mam się dobrze.
+Pozdrawiam. Pilnuj działki.
+Stach
+
+list.l2_grum.od = Marcin
+
+[list.l2_grum.tresc]
+Grum,
+Kruczek nie żyje. Padł pod Brzozową Wolą. Dwa lata chodziliśmy razem. Pomyślałem, że powinieneś wiedzieć od nas.
+Marcin
+
+list.l2_melia.od = Siostra
+
+[list.l2_melia.tresc]
+Meliu,
+pieśń „Kruk nad kopcem” ma jeszcze jedną zwrotkę. Przyślę ci ją z następnym kruk. Pamiętaj o dłoni na strunie.
+
+list.l2_hanka.od = Michał, mąż
+
+[list.l2_hanka.tresc]
+Hanko,
+jesteśmy pod Skałą. Obóz stoi, jest mokro i zimno, ale żyjemy. Tęsknię za twoim chlebem.
+Michał
+
+list.l2_gryta.od = Janek, syn
+
+[list.l2_gryta.tresc]
+Droga mamo,
+piszę, że wracam. Nie wiem jeszcze kiedy, ale wracam. Zjadłem kasztany, które mi dałaś w woreczku.
+Twój Janek
+
+list.l2_zosia.od = Ojciec
+
+[list.l2_zosia.tresc]
+Zosiu,
+kruki na wsi znikają. Podobno wojsko je zabiera. Nie wychodź wieczorem. Nikomu nie ufaj.
+Ojciec
+
+list.l2_kleofas.od = Pustelnik z Urwiska
+
+[list.l2_kleofas.tresc]
+Bracie Kleofasie,
+skrzynka z zeszytami jest bezpieczna. Zabrałem ją z Urwiska. Gdybyś potrzebował, wiesz, gdzie.
+
+list.l2_bez.od = (brak nadawcy)
+
+[list.l2_bez.tresc]
+(Na kopercie nie ma nazwiska, tylko tusz kruka z białym okiem w rogu.)
+Dziś jak zawsze.
+W piątek wyślij nazwiska tych, którzy noszą kruka na szyi.
+Jeśli stary zauważył - zrób to ty, nie on.
+
+list.l3_baltazar.od = Zielarka z Podgrodzia
+
+[list.l3_baltazar.tresc]
+Panie Baltazarze,
+rachunek za zioła: dwanaście groszy. Płatne do końca miesiąca.
+
+list.l3_soltys.od = Lord
+
+[list.l3_soltys.tresc]
+Sołtysie,
+upomnienie: podatek nie zapłacony. Dwa tygodnie, potem komornik.
+
+list.l3_sambor.od = Kapitan statku
+
+[list.l3_sambor.tresc]
+Sambor,
+proszę o kamienie z wraku. Przywiozę w piątek. Nie pytaj, po co.
+
+list.l3_ozzy.od = Stary przyjaciel
+
+[list.l3_ozzy.tresc]
+Ozzy,
+widziałem, jak wygląda dno cysterny. Nie lubię tego, co tam leży. Powiem ci, jak przyjadę.
+
+list.l3_praczka.od = Syn
+
+[list.l3_praczka.tresc]
+Mamo,
+jestem cały. Piszę z koszar. Wrócę na wiosnę, jeśli się da.
+
+list.l3_garbarz.od = Cech skór
+
+[list.l3_garbarz.tresc]
+Ignacu,
+ponawiamy: składka zaległa. Tym razem prosimy odpowiedzieć na piśmie.
+
+list.l4_zosia.od = Ojciec
+
+[list.l4_zosia.tresc]
+Zosiu,
+zostań z miastem. Wiosna będzie lepsza. Pisz do mnie, jak możesz.
+
+list.l4_ela.od = Rafał (z nagłówka obozu)
+
+[list.l4_ela.tresc]
+Elu, Ludmiło,
+obóz pod murem się rozrasta. Ludzie z promu śpią w namiotach. Kto może, pomaga.
+
+list.l4_ludmila.od = Rafał (z nagłówka obozu)
+
+[list.l4_ludmila.tresc]
+Ludmiło,
+mąka kończy się w piątek. Czy kantor ma zapas?
+
+list.l4_kleofas.od = Brat zakonny
+
+[list.l4_kleofas.tresc]
+Kleofasie,
+księgi zakonu w kaplicy są bezpieczne. Wysłałem kolejny zeszyt.
+
+list.l5_belza.od = Dowództwo
+
+[list.l5_belza.tresc]
+Rotmistrzu Bełza,
+wiadomości od dowództwa: wzmocnić garnizon, zebrać zboże, czekać na rozkazy.
+
+list.l5_dziadek.od = Stach
+
+[list.l5_dziadek.tresc]
+Chłopcze,
+dostałem. Dobrze zrobiłeś.
+Stach
+
+# przynęty: treść (hero + Melia)
+list.p_wicek.od = Anonim
+
+[list.p_wicek.tresc]
+Kamień z krukiem leży przy studni na rynku, pod trzecim kamieniem od lewej.
+
+list.p_sambor.od = Anonim
+
+[list.p_sambor.tresc]
+Kamień z krukiem leży za kratą w piwnicy tawerny.
+
+list.p_cyryl.od = Anonim
+
+[list.p_cyryl.tresc]
+Kamień z krukiem leży w kruczarni, pod żerdzią.
+
+# ======================================================================== F9
+f9.naglowek = Wątek W20 (Kruczy listonosz):
+f9.etykieta = W20: rozdział {ch} - {nazwa}
+f9.opis = Przeskok do rozdziału {ch} wątku „Kruczy listonosz”.
+f9.rozdz.1 = Pierwsza torba
+f9.rozdz.2 = Listy z frontu
+f9.rozdz.3 = Kto czyta?
+f9.rozdz.4 = Pułapka z listów
+f9.rozdz.5 = Kruk niesie, nie czyta
+f9.torba = Torba: 6 listów
+f9.czas = Czas: 6:30 (kruki wracają)
+f9.zdrajca = Zdrajca ujawniony
+f9.listy = Dodaj listy tygodnia
+
+# nazwy
+nazwa.torba = Torba listonosza
+nazwa.odznaka = Odznaka kruczego listonosza

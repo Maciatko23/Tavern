@@ -78,7 +78,7 @@ kit.test({ port: 9489, beforeLoad: "window.ZIEMIA = { off: true };", bootCheck: 
         && cfg.got.join() === "false,40,false,true,false" && cfg.dflt.join() === "true,100,true,true,true", cfg);
 
     // ---------------------------------------------------------------- on the map: the filter on the world only
-    await t.newGame({ map: 3, x: 28, y: 12, dir: 6, day: 10, hour: 12, quiet: true, minimap: false });
+    await t.newGame({ map: 3, x: 68, y: 43, dir: 6, day: 10, hour: 12, quiet: true, minimap: false });
     // (2026-10-24) the first visit to Kruczy Jar: the map's name "Kinowy" (CleanHUD) hides the HUD behind black bars for ~5 s - the
     // HUD's pixels are counted once it is over and the HUD is back
     await t.until("!(window.CleanHUD && CleanHUD.debug() && CleanHUD.debug().name) && !$gameTemp._hudScene", 15, 100);
@@ -213,14 +213,14 @@ kit.test({ port: 9489, beforeLoad: "window.ZIEMIA = { off: true };", bootCheck: 
     px = await t.json("__px()");
     t.check("Mroczny Las w dzień: świat na ekranie wyraźnie ciemniejszy niż bez efektów, HUD bez zmian", px.lumOn < px.lumOff * 0.88 && px.uiDiff === 0, px);
     const dfTag = await t.json(`(function(){ const n = $dataMap.note; $dataMap.note = n + " <Mood:darkforest>"; const k = Mood.refresh(); $dataMap.note = n; Mood.refresh(); return k; })()`);
-    await t.go(3, 28, 12, 2);
+    await t.go(3, 68, 43, 2);
     const dfTag3 = await t.json(`(function(){ const n = $dataMap.note; $dataMap.note = n + " <Mood:darkforest>"; const k = Mood.refresh(); $dataMap.note = n; const back = Mood.refresh(); return { k, back }; })()`);
     t.check("Mroczny Las: tag <Mood:darkforest> działa też na innej mapie (Map003), bez niego zwykły las", dfTag === "darkforest" && dfTag3.k === "darkforest" && dfTag3.back === "outdoor", { dfTag, dfTag3 });
     await t.setHour(23);
     t.check("po przejściach między mapami filtr dalej tylko w świecie", (await t.json("__outside()")).length === 0 && (await t.json("Mood.info().inSpriteset")));
 
     // ---------------------------------------------------------------- the options: the menu P's Opcje and the title's options screen
-    await t.go(3, 28, 12, 2);
+    await t.go(3, 68, 43, 2);
     const inMenu = "SceneManager._scene instanceof Scene_Menu && !SceneManager.isSceneChanging()";
     await t.key("P");
     t.check("menu P: P otwiera menu", await t.until(inMenu, 10));

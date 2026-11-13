@@ -925,7 +925,7 @@
             if (!pos) continue;
             const d = new Game_Defender(e.def, e.n, pos[0], pos[1], s.level, saved);
             d._spot = spot ? [spot[0], spot[1], 2] : null;
-            if (e.def.guard === "door" && m === D.TAVERN) d._spot = [guard[0][0], guard[0][1], 8];
+            if (e.def.guard === "door" && m === D.TAVERN) d._spot = [guard[0][0], guard[0][1], 6];
             runtime.defenders.push(d);
             RoamingActor.addSprite(d);
             if (!s.defenders[e.id]) s.defenders[e.id] = { hp: 1, down: false, fought: false, present: true };
@@ -1208,7 +1208,11 @@
     // the defenders: the green bar and the name over each, lying when down, a flash when hit, the swing of a blow
     Sprite_Act3Layer.prototype.updateDefenders = function() {
         const seen = new Set(), sw = this._swings.bitmap, ctx = sw.context;
-        sw.clear();
+        // (2026-11-12, wydajność: the swings' picture is as big as the screen - cleared and sent to the GPU again only when an arc is
+        // drawn on it now or was the frame before; it was every frame on every map, with nothing on it)
+        const arcs = runtime.defenders.some(d => d._swingT > 0 && !d._def.atk && d._sprite && d._sprite.parent), touch = arcs || !!this._swingsDrawn;
+        this._swingsDrawn = arcs;
+        if (touch) sw.clear();
         for (const d of runtime.defenders) {
             const sp = d._sprite;
             if (!sp || !sp.parent) continue;
@@ -1248,7 +1252,7 @@
             }
         }
         for (const [d, bar] of this._bars) if (!seen.has(d)) { this.removeChild(bar); this._bars.delete(d); }
-        sw._baseTexture.update();
+        if (touch) sw._baseTexture.update();
     };
     // the fires' light at night (the town's night layer - Farming_Render.js) - warm and flickering, as every light in the game
     function fireLights() {

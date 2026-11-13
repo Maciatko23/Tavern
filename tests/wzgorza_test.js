@@ -22,7 +22,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     const st = () => t.json("Wzgorza.stats()");
     const vis = () => t.json("!!SceneManager._scene._spriteset._wzgorza.visible");
     // 1. tylko mapy pilota
-    await t.newGame({ map: 3, x: 22, y: 14, day: 12, hour: 11, quiet: true, minimap: false });
+    await t.newGame({ map: 3, x: 62, y: 45, day: 12, hour: 11, quiet: true, minimap: false });
     await t.frames(120);
     let s = await st();
     t.check("Kruczy Jar (nie pilot): nakładka nieaktywna, żadnych rogów", !(await t.json("Wzgorza.active()")) && s.pieces === 0, s);
@@ -152,7 +152,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
         console.log("   " + label + ": klatka (chodzenie, CPU " + THROTTLE + "x wolniejszy) " + m.toFixed(2) + " ms, serie " + runs.map(r => r.toFixed(2)).join(" / "));
         return m;
     };
-    for (const [map, x, y] of [[13, 24, 59], [990, 40, 22]]) {
+    for (const [map, x, y] of [[13, 24, 83], [990, 40, 22]]) {
         const res = {};
         for (const mode of ["bez", "z"]) {
             await t.eval(`window.WZGORZA = ${mode === "bez" ? "{ off: true }" : "undefined"}; Wzgorza.redo(); 0`);

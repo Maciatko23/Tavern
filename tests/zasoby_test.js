@@ -49,21 +49,21 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         base.quests.join() === "dzwonnik,znachorka,grandpa,praczka,jagna,szmaciarz" && base.pack === "K55,K56,K57,K58,D30,D31", { q: base.quests, pack: base.pack });
     t.check("tablica: ogłoszenia zas_dziki_miod (melia), zas_ziola_rzadkie (jagna), zas_bloki (kazimierz), zas_kraby (borgar)",
         base.qb.join() === "zas_dziki_miod:melia,zas_ziola_rzadkie:jagna,zas_bloki:kazimierz,zas_kraby:borgar", base.qb);
-    t.check("Babka Jagna: mieszkanka TownLife 2900 na Map017 ($Npc_Jagna), popiersie Jagna_Bust", JSON.stringify(base.jagna) === JSON.stringify([[2900, 17, "$Npc_Jagna"]]) && base.bust === "Jagna_Bust", base);
+    t.check("Babka Jagna: mieszkanka TownLife 2900 na Map003 (Omszała łąka) ($Npc_Jagna), popiersie Jagna_Bust", JSON.stringify(base.jagna) === JSON.stringify([[2900, 3, "$Npc_Jagna"]]) && base.bust === "Jagna_Bust", base);
     await t.eval("['!$Zas_Zrodlo','!$Zas_Ruina','!$Zas_Studnia','!$Zas_DzikiUl','!$Zas_SadSpalony','!Zas_Uprawy','$Npc_Jagna'].forEach(n => ImageManager.loadCharacter(n)); ImageManager.loadPicture('Jagna_Bust'); 0");
     await t.frames(30);
     const pics = await Z("['!$Zas_Zrodlo','!$Zas_Ruina','!$Zas_Studnia','!$Zas_DzikiUl','!$Zas_SadSpalony','!Zas_Uprawy','$Npc_Jagna'].map(n => { const b = ImageManager.loadCharacter(n); return n + ':' + b.width + 'x' + b.height; }).concat([ImageManager.loadPicture('Jagna_Bust').width])");
     t.check("grafika: arkusze !$Zas_* (3 x 4 komórki), !Zas_Uprawy (8 postaci), $Npc_Jagna 192x256, popiersie 330 px", pics.slice(0, 7).every(s => !/:0x0$/.test(s)) && pics[6] === "$Npc_Jagna:192x256" && pics[7] === 330, pics);
 
     // ---------------------------------------------------------------- nowa gra; zdarzenia na mapach (numery i pola z planu)
-    await t.newGame({ map: 3, x: 25, y: 15, hour: 12, quiet: true, minimap: false });
+    await t.newGame({ map: 3, x: 65, y: 46, hour: 12, quiet: true, minimap: false });
     await run("for (const id of [60, 62, 63, 66, 87, 89, 90, 91, 115, 116, 142]) $gameParty.loseItem($dataItems[id], 99, true);");   // (no tools: the popups first)
     await t.setDay(30, 12);   // (lato)
     await weather([-1]);
     const EXPECT = `(function(){ const D = ZasobyData, out = [];
         for (const s of D.SPRINGS) { out.push([s.map, s.id, s.sx, s.sy]); out.push([s.map, s.stones[0], s.sx + 1, s.sy + 1]); if (s.herb) out.push([s.map, s.herb.id, s.sx - 1, s.sy + 1]); else out.push([s.map, s.stones[1], s.sx - 1, s.sy + 1]); }
-        for (const h of D.GLADE.herbs) out.push([17, h.id, h.x, h.y]);
-        for (const r of D.RINGS) r.cells.forEach((c, i) => out.push([17, r.ids[i], c[0], c[1]]));
+        for (const h of D.GLADE.herbs) out.push([3, h.id, h.x, h.y]);
+        for (const r of D.RINGS) r.cells.forEach((c, i) => out.push([3, r.ids[i], c[0], c[1]]));
         D.QUARRY.ids.forEach((id, i) => out.push([13, id, D.QUARRY.at[i][0], D.QUARRY.at[i][1]]));
         for (const v of D.VEINS) out.push([13, v.id, v.x, v.y]);
         for (const m of Object.keys(D.DRIFT)) for (const d of D.DRIFT[m]) out.push([Number(m), d.id, d.x, d.y]);
@@ -78,7 +78,7 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         for (const c of Zasoby.FIELD_CELLS) out.push([8, c.id, c.x, c.y]);
         return out; })()`;
     const expect = await t.json(EXPECT);
-    const MAPS = [17, 21, 13, 155, 168, 3, 111, 125, 162, 8];
+    const MAPS = [4, 13, 155, 168, 3, 111, 125, 162, 8];   // (2026-11-11: Map017 is built with Map003, Map021's spring is on Map004)
     const placed = {}, bad = [];
     for (const m of MAPS) {
         const e = await t.json(`OkoliceData.ENTRY[${m}]`);
@@ -99,7 +99,7 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         bad.length === 0 && expect.length >= 130, bad.length ? bad.slice(0, 12) : placed);
 
     // ---------------------------------------------------------------- A1 źródełka
-    await t.go(17, 71, 55, 8);
+    await t.go(3, 40, 80, 8);
     await weather([-1]);
     await t.frames(30);
     const sp0 = await Z(`{ max: Zasoby.springMax($gameSystem.dayNightDay()), left: Zasoby.springLeft('zrodlo_017'), found: Okolice.isFound('zrodlo_017') }`);
@@ -133,16 +133,16 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // ---------------------------------------------------------------- A4 kręgi grzybów, A5 zioła i Jagna
     await run("Zasoby.sync();");
     await t.frames(25);
-    const ring = await Z(`{ born: Zasoby.ringBorn(), shown: ZasobyData.RINGS[0].ids.map(id => $gameSelfSwitches.value([17, id, 'A'])).filter(Boolean).length }`);
+    const ring = await Z(`{ born: Zasoby.ringBorn(), shown: ZasobyData.RINGS[0].ids.map(id => $gameSelfSwitches.value([3, id, 'A'])).filter(Boolean).length }`);
     t.check("dzień po deszczu: krąg 8 grzybów stoi", ring.born > 0 && ring.shown === 8, ring);
-    await t.locate(54, 42, 8);
+    await t.locate(43, 72, 8);
     const m0 = await t.count(103);
     await use(2107);
     await t.frames(70);
-    const ring2 = await Z(`{ shown: $gameSelfSwitches.value([17, 2107, 'A']), picked: Zasoby.state().rings.grzyby_krag1.picked }`);
+    const ring2 = await Z(`{ shown: $gameSelfSwitches.value([3, 2107, 'A']), picked: Zasoby.state().rings.grzyby_krag1.picked }`);
     t.check("grzyb z kręgu zerwany: +1 Grzyby, znika z kręgu", (await t.count(103)) === m0 + 1 && !ring2.shown && ring2.picked.includes(0), ring2);
     await t.setHour(22);
-    await t.locate(54, 44, 2);
+    await t.locate(43, 74, 2);
     await t.frames(30);
     const fairy = await Z(`{ found: Okolice.isFound('grzyby_krag1'), night: Zasoby.state().fairy.grzyby_krag1 }`);
     t.check("noc w środku kręgu: mgła, szept i odkrycie „Czarci krąg”", fairy.found && fairy.night > 0, fairy);
@@ -152,15 +152,15 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const before = await t.count(190);
     await use(2104);
     await t.frames(70);
-    const herb = await Z(`{ n: $gameParty.numItems($dataItems[190]), taken: Zasoby.state().jagna.taken[190] || 0, state: Zasoby.herbState(17, 2104, 'arcydziegiel') }`);
+    const herb = await Z(`{ n: $gameParty.numItems($dataItems[190]), taken: Zasoby.state().jagna.taken[190] || 0, state: Zasoby.herbState(3, 2104, 'arcydziegiel') }`);
     t.check("zioło z polanki Jagny pod jej nieobecność: zerwane (+1 Arcydzięgiel), zapisane jako zabrane, kępa odrasta", herb.n === before + 1 && herb.taken === 1 && herb.state === "picked", herb);
     // Jagna at her glade: the morning of a day without rain
     await weather([-2]);
     await t.setHour(6);
-    await t.go(17, 67, 17, 8);
+    await t.go(3, 20, 76, 8);
     await t.frames(40);
     const jg = await Z(`(function(){ const e = TownLife.eventOf('jagna'); return e ? { x: e.x, y: e.y, hidden: !!(e._town && e._town.hidden) } : null; })()`);
-    t.check("Jagna rano w dzień bez deszczu stoi przy swojej polance (67,15)", !!jg && jg.x === 67 && jg.y === 15 && !jg.hidden, jg);
+    t.check("Jagna rano w dzień bez deszczu stoi przy swojej polance (20,75)", !!jg && jg.x === 20 && jg.y === 75 && !jg.hidden, jg);
     await t.locate(68, 14, 8);
     await popsSince();
     await run("Zasoby.state().herbs = {};");
@@ -183,7 +183,7 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // ---------------------------------------------------------------- A2 zagroda Rzepków: ruina, ogródek, studnia
     await weather([-1]);
     await t.setHour(12);
-    await t.go(3, 42, 53, 8);
+    await t.go(3, 2, 22, 8);
     await t.frames(30);
     t.check("zagroda Rzepków odkryta przy podejściu", await Z("Okolice.isFound('zagroda')"));
     const rope0 = await t.count(93);
@@ -261,12 +261,12 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- A6 Podgrodzie
     await t.setHour(8);
-    await t.go(111, 66, 15, 8);
+    await t.go(111, 84, 48, 8);
     await t.frames(30);
     const cab0 = await t.count(73), op0 = await Z("TownQuests.opinion()");
     await finishWork("plot:ogrodek_1");
     t.check("ogródek: pomoc rano motyką - 2 warzywa (kapusta) i Opinia +1", (await t.count(73)) === cab0 + 2 && (await Z("TownQuests.opinion()")) === op0 + 1);
-    await t.go(111, 72, 72, 8);
+    await t.go(111, 90, 105, 8);
     await t.frames(30);
     t.check("wysypisko odkryte przy podejściu", await Z("Okolice.isFound('wysypisko')"));
     await use(2217);
@@ -280,7 +280,7 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         dump1.hero > 0 && dump1.n === 2 && dumpPops.some(p => /Na dziś dość grzebania/.test(p)), { dump1, dumpPops });
     await run("TownQuests.start('D31'); const s = TownQuests.state(); s.v.zas_medalik = 1; s.v.zas_klucz = 1; s.v.zas_moneta_kruk = 1;");
     t.check("D31: trzy rzeczy z wysypiska spełniają krok „Znalezione: 3/3”", await Z("TownQuests.FX.d31Rzeczy.check() && TownQuests.FX.d31Rzeczy.vars().n === 3"));
-    await t.go(111, 48, 72, 8);
+    await t.go(111, 66, 105, 8);
     await t.frames(20);
     await run("$gameParty.loseItem($dataItems[62], 9);");
     await use(2220);
@@ -299,7 +299,7 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         !!cm && noShovel2.some(p => /Potrzebna łopata/.test(p)) && (await t.count(164)) === clay0 + 2 && muddy.some(p => /Mętna, z gliną/.test(p)) && !(await msgBusy()), { cm, noShovel2, muddy });
 
     // ---------------------------------------------------------------- A7 góry: ściana ciosowa, żyły rudy
-    await t.go(13, 108, 82, 8);
+    await t.go(13, 108, 106, 8);
     await t.frames(30);
     await popsSince();
     await use(2143);
@@ -310,8 +310,8 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("ściana ciosowa: bez kilofa dymek „Potrzebny kilof.”; kilofem Blok kamienny, zostaje 5 z 6 na tydzień",
         noPick.some(p => /Potrzebny kilof/.test(p)) && (await t.count(188)) === 1 && (await Z("Zasoby.quarryLeft()")) === 5, noPick);
     await run("$gameSelfSwitches.setValue([13, 2146, 'A'], true); Zasoby.state().veins[2146] = $gameSystem.dayNightDay() - 8;");
-    await t.go(21, 20, 15);
-    await t.go(13, 108, 82, 8);
+    await t.go(4, 20, 15);
+    await t.go(13, 108, 106, 8);
     const vein = await Z("[$gameSelfSwitches.value([13, 2146, 'A']), !!$gameMap.event(2146) && $gameMap.event(2146).findProperPageIndex() >= 0, /drop=85/.test($gameMap.event(2146).event().note)]");
     t.check("żyła rudy wykopana 8 dni temu odrasta, kiedy bohater wraca na mapę (Ruda 1-5: własna notatka)", vein[0] === false && vein[1] && vein[2], vein);
 
@@ -384,7 +384,7 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- A10 pola mieszczan (wiosna, dzień 3 pory: siew)
     await t.setDay(3, 8);
-    await t.go(8, 10, 109, 8);
+    await t.go(8, 80, 73, 8);
     await t.frames(30);
     const gold0 = await t.gold(), barley0 = await t.count(74);
     await finishWork("field:pole_1");

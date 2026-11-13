@@ -1,0 +1,156 @@
+[
+ {
+  "kat": 5,
+  "x0": 105,
+  "y0": 37,
+  "x1": 113,
+  "y1": 46,
+  "co": "Dom z przybudówką: elewacja ze schodkiem (lewa połowa piętro wyżej niż prawa), szare łaty w złączu, przybudówka z dachem urwanym; ten sam wzorzec też w (17,98)-(26,106) [dodatkowo ciemnozielony prostokątny cień obok przybudówki nie pasuje do jej kształtu] i (41,64)-(50,74).",
+  "jak": "Złożyć dom z jednej poziomej elewacji (bez schodka), przybudówkę dokończyć dachem do ziemi, cień przesunąć pod jej obrys.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map008/01.png"
+ },
+ {
+  "kat": 1,
+  "x0": 81,
+  "y0": 4,
+  "x1": 97,
+  "y1": 23,
+  "co": "Ogromny pusty, klepiskowo-brązowy dziedziniec stajni (17x20) bez rekwizytów - nudna płaska plama.",
+  "jak": "Podzielić płotkami/wybiegi, dodać poidła, żłoby, stóg siana; albo zmniejszyć plac i dać trawę.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map008/02.png"
+ },
+ {
+  "kat": 3,
+  "x0": 0,
+  "y0": 47,
+  "x1": 4,
+  "y1": 53,
+  "co": "Zachodnia brama: daszek bramki ucięty przez wieżę przy krawędzi mapy, pod nim ciemny prostokąt i urwane belki - wygląda jak ułamek budowli.",
+  "jak": "Dorysować pełną bramę albo wyciąć szczątki i zrobić zwykły otwór w murze.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map008/03.png"
+ },
+ {
+  "kat": 3,
+  "x0": 4,
+  "y0": 97,
+  "x1": 9,
+  "y1": 107,
+  "co": "Niedokończony ogródek: ramka płotu w kształcie odwróconego U (brak dolnego boku), 3 kapusty w pionie, obok luźne sosny.",
+  "jak": "Zamknąć płot ze wszystkich stron z furtką, zagęścić grządki w prostokąt.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map008/04.png"
+ },
+ {
+  "kat": 2,
+  "x0": 105,
+  "y0": 94,
+  "x1": 118,
+  "y1": 103,
+  "co": "Sad: górne dwa rzędy mają tylko 2 drzewa (po lewej), dolny rząd 4 drzewa o nierównych odstępach; prawa połowa pusta, wygląda na niedokończony.",
+  "jak": "Posadzić regularną siatkę 4x3 drzew, równe odstępy.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map008/05.png"
+ },
+ {
+  "kat": 2,
+  "x0": 2,
+  "y0": 61,
+  "x1": 25,
+  "y1": 73,
+  "co": "Trzy ogrodzone grządki kapusty: górny płot trzeciej działki o kratkę niżej niż dwóch pozostałych (krok w (18,62)), furtki w dolnych płotach w różnych miejscach.",
+  "jak": "Wyrównać górne płoty do jednej linii, furtki w tym samym miejscu.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map008/06.png"
+ },
+ {
+  "kat": 5,
+  "x0": 116,
+  "y0": 36,
+  "x1": 120,
+  "y1": 110,
+  "co": "Wewnętrzna krawędź wschodniego muru ma przerywany pas białych kresek (artefakt łączenia kafla) na całej długości.",
+  "jak": "Sprawdzić autokafel/okładzinę muru, zastąpić ciągłym kaflem krawędzi.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map008/07.png"
+ },
+ {
+  "kat": 1,
+  "x0": 39,
+  "y0": 97,
+  "x1": 48,
+  "y1": 106,
+  "co": "Ciemne rozmyte plamy trawy wokół studni-kapliczki wyglądają jak brudne smugi, nie jak cień.",
+  "jak": "Usunąć plamy lub zastąpić jednolitym cieniem budynku.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map008/08.png"
+ },
+ {
+  "kat": 1,
+  "x0": 60,
+  "y0": 43,
+  "x1": 76,
+  "y1": 56,
+  "co": "Prawa (i lewa) połowa rynku to płaska pusta bruk-plansza bez elementów poza straganami po bokach.",
+  "jak": "Dodać ławki, beczki, kwietniki, lampy w równych odstępach.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map008/09.png"
+ },
+ {
+  "kat": 1,
+  "x0": 1,
+  "y0": 91,
+  "x1": 30,
+  "y1": 106,
+  "co": "Duży trawnik z pojedynczymi sosnami i drzewem rozsianymi bez ładu (nierówne odstępy), obok luźny kamień i kępki.",
+  "jak": "Posadzić regularny szpaler lub grupę, usunąć pojedyncze kamienie.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map008/10.png"
+ },
+ {
+  "kat": 1,
+  "x0": 75,
+  "y0": 65,
+  "x1": 93,
+  "y1": 88,
+  "co": "Duże puste ugory (4 prostokąty klepiska bez roślin, tylko jedna działka obsadzona) - nudne brązowe płaszczyzny.",
+  "jak": "Obsadzić wszystkie działki rzędami albo dać trawę/kopce.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map008/11.png"
+ },
+ {
+  "kat": 3,
+  "x0": 116,
+  "y0": 112,
+  "x1": 120,
+  "y1": 119,
+  "co": "Narożnik SE muru: kawałek muru (118,115-119) urwany przy wieży, płot bez zakończenia.",
+  "jak": "Dokończyć narożnik wieżą i zamknięciem płotu.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map008/12.png"
+ },
+ {
+  "kat": 1,
+  "x0": 16,
+  "y0": 17,
+  "x1": 25,
+  "y1": 21,
+  "co": "Płat ciemniejszego bruku (17-23,18-19) na tle jasnego chodnika przed katedrą - dziwna łata koloru.",
+  "jak": "Ujednolicić bruk albo obrysować krawężnikiem.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map008/13.png"
+ },
+ {
+  "kat": 5,
+  "x0": 68,
+  "y0": 0,
+  "x1": 73,
+  "y1": 6,
+  "co": "Drzewo wyrasta z czoła murów przy tawernie (pień ucięty linią muru).",
+  "jak": "Przenieść drzewo na plac lub usunąć.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map008/14.png"
+ }
+]

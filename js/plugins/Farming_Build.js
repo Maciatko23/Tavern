@@ -750,6 +750,11 @@
             // (a wolf of a pack that hunts him counts while it is anywhere near - it circles off and comes back)
             if (a.playerDistance() < (a._engaged ? 16 : 8)) return sp.name;
         }
+        // the sea's creatures (W23, Morze_Potwory.js): one within 8 tiles that is not going back to the water
+        const sea = T.api("Creatures");
+        for (const c of (sea && sea.creatures ? sea.creatures() : [])) {
+            if (c && c._def && c._def.sea && !c._dead && !c._dying && !c._retreat && c._mode !== "flee" && c.playerDistance() < 8) return c.name();
+        }
         // people fighting him (Humans.js, combat stage 3: a bandit, an archer, a mercenary) - not one who gave up or ran
         const people = T.api("Humans");
         for (const h of (people && people.humans ? people.humans() : [])) {
@@ -807,7 +812,7 @@
             const d = hutDoorCell(h);
             $gamePlayer.reserveTransfer(h.mapId, d.x, d.y + 1, 2, 0);
         } else {
-            $gamePlayer.reserveTransfer(3, 8, 10, 2, 0);   // the hut is gone: back to the farm
+            $gamePlayer.reserveTransfer(3, 48, 41, 2, 0);   // the hut is gone: back to the farm
         }
         return true;
     }

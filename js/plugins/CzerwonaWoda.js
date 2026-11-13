@@ -267,7 +267,7 @@
     //   - where the new line cuts into the old land the sea is drawn in (its own shading by the depth from the shore)
     // The tint and the foam follow the same line (wAt). Built in pieces over the first frames after the map is shown.
     // ------------------------------------------------------------------
-    const BRZEG_MAPS = [990, 125, 155, 157, 159, 162, 165, 120, 175, 168, 17, 18, 960, 961, 962, 963, 964, 21, 900, 901, 910, 912, 914, 917, 918, 920, 922, 923, 931, 933, 934, 935, 950, 951, 20];   // (2026-11-05: every map with the island's sea, tools/laka/install_brzeg.py)   // (styki 2026-10-31: the new maps of the old holes)   // (the island's sea maps - none of them is the player's: docs/mapy/PRZEGLAD.md; 2026-10-30 the east / south ends 159, 120, 175, 168, 17, 18)
+    const BRZEG_MAPS = [990, 125, 155, 157, 159, 162, 165, 120, 175, 168, 17, 18, 960, 961, 962, 963, 964, 21, 900, 901, 910, 912, 914, 917, 918, 920, 922, 923, 931, 933, 934, 935, 950, 951, 20, 3, 4, 13, 24, 111];   // (2026-11-05: every map with the island's sea, tools/laka/install_brzeg.py)   // (styki 2026-10-31: the new maps of the old holes)   // (the island's sea maps - none of them is the player's: docs/mapy/PRZEGLAD.md; 2026-10-30 the east / south ends 159, 120, 175, 168, 17, 18)
     const SHORE_GROW = 0.3;   // (the new line lies about 19 px out in the old water: nothing of the sea has to be drawn over the old land, and the square corners are covered)
     const SD_Q = 4, CH = 192, DMAX = 576, RING_W = 11, WP_W = 24;
     // (2026-11-07, B - the seams of the island's map, 111 | 917) by a border where the neighbour is LAND WITH NO STRIP of its own
@@ -1006,8 +1006,9 @@
         // frame at 4x slower CPU) only the ones on the screen are drawn and breathe (renderable, docs/WYDAJNOSC.md; Wydajnosc.opts.cull)
         const px = this._patch.x, py = this._patch.y, fx = this._foam.x, fy = this._foam.y, m = 2 * $gameMap.tileWidth();
         const cull = !(window.Wydajnosc && Wydajnosc.opts && Wydajnosc.opts.cull === false);
-        for (const s of this._patch.children) s.renderable = !cull || T.view.sees(px + s.x - m, py + s.y - m, px + s.x + CH + m, py + s.y + CH + m);
-        for (const s of this._foam.children) s.renderable = !cull || T.view.sees(fx + s._cx - m, fy + s._cy - m, fx + s._cx + m, fy + s._cy + m);
+        // (2026-11-12: visible too - a piece only not drawn still had its matrix made by PIXI every frame)
+        for (const s of this._patch.children) s.visible = s.renderable = !cull || T.view.sees(px + s.x - m, py + s.y - m, px + s.x + CH + m, py + s.y + CH + m);
+        for (const s of this._foam.children) s.visible = s.renderable = !cull || T.view.sees(fx + s._cx - m, fy + s._cy - m, fx + s._cx + m, fy + s._cy + m);
         if (this._age & 1) for (const s of this._foam.children) {
             if (!s.renderable) continue;
             const w = Math.sin(this._age / 40 + s._ph);

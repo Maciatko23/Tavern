@@ -18,7 +18,8 @@ except Exception: pass
 PLUG = os.path.join(ROOT, "js", "plugins")
 STG = os.path.join(HERE, "staging_czerwona", "js")
 M = 13   # (DMAX 576 px = 12 tiles of the strip, and one more)
-uk = {int(k): v for k, v in json.load(open(os.path.join(ROOT, "docs", "mapy", "swiat_uklad.json"), encoding="utf-8"))["mapy"].items()}
+UKLAD = sys.argv[sys.argv.index("--uklad") + 1] if "--uklad" in sys.argv else os.path.join(ROOT, "docs", "mapy", "swiat_uklad.json")   # (plansza 3x3: tools/plansza/staging/swiat_uklad.json)
+uk = {int(k): v for k, v in json.load(open(UKLAD, encoding="utf-8"))["mapy"].items()}
 maps = {}
 
 
@@ -38,7 +39,7 @@ def land(d, x, y):
     return not (water_id(t[y * W + x]) or water_id(t[n + y * W + x]))
 
 
-_cw = open(os.path.join(PLUG, "CzerwonaWoda.js"), "rb").read().decode("utf-8")
+_cw = open(sys.argv[sys.argv.index("--cw") + 1] if "--cw" in sys.argv else os.path.join(PLUG, "CzerwonaWoda.js"), "rb").read().decode("utf-8")   # (--cw: a staged CzerwonaWoda.js with its BRZEG_MAPS)
 BRZEG = [int(v) for v in re.search(r"const BRZEG_MAPS = \[([^\]]*)\]", _cw).group(1).split(",")]
 def strip_map(n):   # (does CzerwonaWoda.js draw the shore's strip on map n: <Water:salt> and in BRZEG_MAPS)
     return n in BRZEG and bool(re.search(r"<Water:\s*salt\s*>", mapa(n).get("note") or "", re.I))

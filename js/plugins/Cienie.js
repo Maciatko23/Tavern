@@ -54,10 +54,13 @@
     const AMBIENT = 0.4;                        // what is left of the flat ellipse under a player's building when the sun shadow is laid
     const CLOUD_DIM = 0.85;                     // as the trees: a cloud over a shadow takes this much of it
     const BUILDS_PER_FRAME = 4;                 // new silhouettes (a picture's frame read once) per frame: a screen of props does not stall
-    let budgetFrame = -1, budget = 0;
+    // (2026-11-12, wydajność) ...and no more than BUILD_MS of a frame once the first is made: a big building's silhouette costs a few
+    // ms, four of them were a 10-20 ms frame while walking. They are made as a thing comes near the screen, so a frame later is unseen.
+    const BUILD_MS = 2;
+    let budgetFrame = -1, budget = 0, budgetStart = 0;
     const spend = () => {
-        if (budgetFrame !== Graphics.frameCount) { budgetFrame = Graphics.frameCount; budget = BUILDS_PER_FRAME; }
-        if (budget <= 0) return false;
+        if (budgetFrame !== Graphics.frameCount) { budgetFrame = Graphics.frameCount; budget = BUILDS_PER_FRAME; budgetStart = performance.now(); }
+        if (budget <= 0 || (budget < BUILDS_PER_FRAME && performance.now() - budgetStart > BUILD_MS)) return false;
         budget--;
         return true;
     };
@@ -141,12 +144,19 @@
         for (const q of out) { q.fx = Math.max(0, PAD + q.x0 - q.e); q.fw = Math.min(pw + 2 * PAD, PAD + q.x1 + q.e) - q.fx; }
         return out;
     }
+    let silScratch = null;
     function silhouette(src, sx, sy, pw, ph, feet) {
         const key = (src._url || "") + "," + sx + "," + sy + "," + pw + "," + ph + (feet ? ",f" : "");
         if (silCache.has(key)) return silCache.get(key);
-        const tmp = new Bitmap(pw, ph);
-        tmp.blt(src, sx, sy, pw, ph, 0, 0);
-        const img = tmp.context.getImageData(0, 0, pw, ph), d = img.data;
+        // the frame's pixels from the sheet read once (Sky.js sheetRect, 2026-11-12: no bitmap and no read-back per frame); the old way while it is not ready
+        const Sk = Sun();
+        let d = Sk && Sk.sheetRect ? Sk.sheetRect(src, sx, sy, pw, ph) : null, tmp = null, img = null;
+        if (!d) {
+            tmp = new Bitmap(pw, ph);
+            tmp.blt(src, sx, sy, pw, ph, 0, 0);
+            img = tmp.context.getImageData(0, 0, pw, ph);
+            d = img.data;
+        }
         let footRow = -1;
         const mark = feet ? new Int16Array(pw).fill(-1) : null;
         for (let i = 0; i < d.length; i += 4) {
@@ -161,11 +171,13 @@
             for (let y = Math.max(0, footRow - 5); y <= footRow; y++) {
                 for (let x = 0; x < pw; x++) if (d[(y * pw + x) * 4 + 3] > 128) { if (x < left) left = x; if (x > right) right = x; }
             }
-            tmp.context.putImageData(img, 0, 0);
+            const cv = tmp ? tmp.canvas : (silScratch || (silScratch = document.createElement("canvas")));
+            if (cv.width !== pw || cv.height !== ph) { cv.width = pw; cv.height = ph; }
+            cv.getContext("2d").putImageData(img || new ImageData(d, pw, ph), 0, 0);
             out = new Bitmap(pw + 2 * PAD, ph + 2 * PAD);
             const ctx = out.context;
             ctx.filter = "blur(" + (ph > 80 ? 2 : 1.2) + "px)";
-            ctx.drawImage(tmp.canvas, PAD, PAD);
+            ctx.drawImage(cv, PAD, PAD);
             ctx.filter = "none";
             out._baseTexture.update();
             out.smooth = true;
@@ -185,7 +197,7 @@
                 out._strips = stripsOf(ft, pw);
             }
         }
-        tmp.destroy();
+        if (tmp) tmp.destroy();
         silCache.set(key, out);
         return out;
     }
@@ -287,6 +299,12 @@
                 kind[i] = t < 5888 ? (lo < 8 ? K_ROOF : K_WALL) : lo >= 8 ? K_SIDE : (flags[t] & 15) === 15 ? K_TOP : K_WALK;
                 ak[i] = a;
             }
+        }
+        // (2026-11-11) <CienieBez:x0,y0,x1,y1> in the map's note (any number): tile buildings in these cells throw no shadow (the Silent's huts on
+        // Laka pod Gawra: an A3 roof band over an A4 face is one hard box; the B-E things there are left out of "things" too)
+        const bez = new Uint8Array(n), reBez = /<CienieBez:(\d+),(\d+),(\d+),(\d+)>/g;
+        for (let q; (q = reBez.exec($dataMap.note || ""));) {
+            for (let y = +q[2]; y <= +q[4] && y < H; y++) for (let x = +q[1]; x <= +q[3] && x < W; x++) { kind[y * W + x] = 0; bez[y * W + x] = 1; }
         }
         // a tile drawn over the characters (a "star" B-E tile: a roof of the roofs' sheet, a chimney, a crown) lies on the cell
         const starAt = i => { for (let z = 2; z < 4; z++) { const t = d[z * n + i]; if (t > 0 && t < 1024 && (flags[t] & 0x10)) return true; } return false; };
@@ -414,7 +432,7 @@
         const things = m.things;
         for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
             const i = y * W + x;
-            if (comp[i] >= 0 || extra[i]) continue;
+            if (comp[i] >= 0 || extra[i] || bez[i]) continue;
             const t = topBE(i);
             if (!t || (flags[t] & 0x10) || (flags[t] & 15) !== 15) continue;
             const ids = [t];
@@ -677,7 +695,7 @@
     // 3. The standing "!" events
     // ------------------------------------------------------------------
     // parts of a wall or a roof (their wall throws the shadow) and things that only look like a thing
-    const EXCLUDE = /^!\$?(Fantasy_door|Roof_Windows|Fantasy_chimney|Flame|Wall_decoration|Mt_Cave|Weapon)/;
+    const EXCLUDE = /^!\$?(Drzwi_K_|Fantasy_door|Roof_Windows|Fantasy_chimney|Flame|Wall_decoration|Mt_Cave|Weapon)/;
     function isProp(s) {
         const ch = s._character;
         if (!(ch instanceof Game_Event) || !outdoor()) return false;
@@ -756,4 +774,5 @@
     };
     // (for the tests and the screenshots: the solids of the map now)
     A.solids = () => blocksFor();
+    A.silhouette = silhouette;   // (for tests)
 })();

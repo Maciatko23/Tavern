@@ -5,8 +5,8 @@
 # ======================================================================== QUESTS (zadania)
 # W10, „List do matki”
 zadania.W10.title = List do matki
-zadania.W10.where = Przystań: prom albo kuter Rocha
-zadania.W10.when = od dnia 4
+zadania.W10.where = Tawerna (Janek wieczorem); przystań: prom albo kuter Rocha
+zadania.W10.when = od dnia 4, rozmowa o liście 19–22:30
 zadania.W10.desc = Matka obiecała przypłynąć następnym promem. Prom przypływa co trzy dni - a jej nie ma.
 [zadania.W10.offer.say]
 Twoja matka obiecała przypłynąć następnym promem, mówiłeś? Prom był... i nikogo.

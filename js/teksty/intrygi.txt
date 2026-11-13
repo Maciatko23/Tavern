@@ -159,10 +159,10 @@ Gość: Jeszcze jedna noc. Potem {prom}.
 
 # ======================================================================== D46 „Skradziona szkatułka” (I3)
 zadania.D46.title = Skradziona szkatułka
-zadania.D46.where = Tawerna: piętro gości (pokój 18), przystań
+zadania.D46.where = Tawerna: piętro gości (pokój 11), przystań
 zadania.D46.when = pobyt pani Kseni Żuraw
-zadania.D46.desc = W nocy z pokoju 18 zniknęła szkatułka pani Kseni Żuraw, wdowy po kupcu korzennym. „Karczmarz odpowiada za rzeczy gości.” Jeśli szkatułka się nie znajdzie do jej promu, Borgar zapłaci sześćdziesiąt groszy.
-zadania.D46.steps.0.text = Kto ukradł szkatułkę? ({n} poszlaki) Obejrzyj zamek pokoju 18, rozejrzyj się w pokoju, popytaj (Gaspar, Szymek, Janek z przystani), posłuchaj nocą pod drzwiami. Potem powiedz Borgarowi, kto. Pani Ksenia odpływa w dniu {do} o 14:00.
+zadania.D46.desc = W nocy z pokoju 11 zniknęła szkatułka pani Kseni Żuraw, wdowy po kupcu korzennym. „Karczmarz odpowiada za rzeczy gości.” Jeśli szkatułka się nie znajdzie do jej promu, Borgar zapłaci sześćdziesiąt groszy.
+zadania.D46.steps.0.text = Kto ukradł szkatułkę? ({n} poszlaki) Obejrzyj zamek pokoju 11, rozejrzyj się w pokoju, popytaj (Gaspar, Szymek, Janek z przystani), posłuchaj nocą pod drzwiami. Potem powiedz Borgarowi, kto. Pani Ksenia odpływa w dniu {do} o 14:00.
 zadania.D46.steps.1.text = Flisak odpływa ze szkatułką w worku. Znajdź jego worek na molo przed promem (dzień {do}, 9-14).
 zadania.D46.fail.text = Pani Ksenia odpłynęła bez szkatułki. Borgar zapłacił jej sześćdziesiąt groszy.
 [d46.krzyk]
@@ -190,7 +190,7 @@ d46.slad.zamek.B = Na klamce osiemnastki czerwona nitka - jak z czapki Gaspara.
 d46.slad.zamek.C = Zamek osiemnastki podważony nożem, na progu smoła.
 d46.slad.pokoj.A = W kominku pani Kseni stopiony wosk i popiół z papieru - ktoś spalił spis.
 d46.slad.pokoj.B = W pokoju pani Kseni zapach kadzidła - jak przy kramie Gaspara.
-d46.slad.pokoj.C = Na podłodze pokoju 18 smugi smoły - jak na butach flisaków.
+d46.slad.pokoj.C = Na podłodze pokoju 11 smugi smoły - jak na butach flisaków.
 d46.slad.gaspar.A = Gaspar: „Pani Ksenia jest mi winna za relikwiarz. I nie spieszy się z zapłatą.”
 d46.slad.szymek.B = Szymek widział o drugiej w nocy „pana w fioletach” na schodach.
 d46.slad.janek.C = Janek: flisak z promu pytał, który pokój ma „ta bogata pani”.
@@ -302,7 +302,7 @@ f9.klucz = Klucz Borgara (godzina)
 f9.kluczOpis = Drzwi pokoi gości otwarte na godzinę, gdy gościa nie ma.
 f9.nie = Nie da się (brak miejsca w księdze?).
 f9.ok.d45 = Gość spod trójki jest w pokoju 3.
-f9.ok.d46 = Pani Ksenia w pokoju 18, wariant {w}.
+f9.ok.d46 = Pani Ksenia w pokoju 11, wariant {w}.
 f9.ok.kroki = 1:06 - piętro gości.
 f9.ok.list = List może leżeć jutro rano.
 f9.ok.klucz = Klucz Borgara na godzinę.

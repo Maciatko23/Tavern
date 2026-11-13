@@ -200,7 +200,23 @@
             if (set.isReady()) b.blt(set, (i % 16) * 32, Math.floor(i / 16) * 32, 32, 32, x, y, size, size);
         }
     }
+    // (2026-11-12, the player: „czy ten posiłek może wyglądać ładniej, profesjonalniej, ostrzej... i skos top-down odpowiedni”) the
+    // tavern's dishes as ready pictures in Winlu's own top-down slant (img/system/Tav_Talerze.png, tools/talerze/zbuduj.py: the plates,
+    // bowls and the tankard cut from Fantasy_Inside_Shops' food tables), 4 states a dish: full, a third eaten, two thirds, empty
+    const TALERZE = "Tav_Talerze", TALERZ_ROW = { pieczen: 0, placek: 1, chleb: 2, gulasz: 3, kapusniak: 4, piwo: 5, miod: 6 };
+    ImageManager.loadSystem(TALERZE);
+    const plateState = eaten => (eaten >= 0.98 ? 3 : eaten >= 0.6 ? 2 : eaten >= 0.25 ? 1 : 0);
+    // -> true when drawn from the sheet (it is ready and has the dish)
+    function paintPlateSheet(b, dish, eaten) {
+        const row = TALERZ_ROW[dish.id], sheet = ImageManager.loadSystem(TALERZE);
+        if (row === undefined || !sheet.isReady()) return false;
+        b.clear();
+        b.blt(sheet, plateState(eaten) * 32, row * 32, 32, 32, Math.round((b.width - 32) / 2), b.height - 34);
+        dirty(b);
+        return true;
+    }
     function paintPlate(b, dish, eaten) {
+        if (paintPlateSheet(b, dish, eaten)) return;
         const ctx = b.context, w = b.width, h = b.height;
         b.clear();
         ctx.imageSmoothingEnabled = false;
@@ -257,6 +273,18 @@
         if (s.z === undefined) s.z = 3;
         return s;
     }
+    // the bottom edge (screen px) of the lowest picture event (a bed, a chest) covering the tile of (x, y), by its <Occupy:...> - what a thing lying on it must come after
+    function coverBottom(x, y) {
+        const tx = Math.round(x), ty = Math.round(y);
+        let bottom = 0;
+        for (const e of $gameMap.events()) {
+            if (!e.characterName() || e.isThrough() || !e.isNormalPriority()) continue;
+            const m = /<Occupy:([^>]*)>/i.exec((e.event() && e.event().note) || ""), o = { left: 0, right: 0, up: 0, down: 0 };
+            if (m) for (const part of m[1].split(",")) { const [k, v] = part.split("=").map(t => t.trim()); if (k in o) o[k] = Number(v) || 0; }
+            if (tx >= e.x - o.left && tx <= e.x + o.right && ty >= e.y - o.up && ty <= e.y + o.down) bottom = Math.max(bottom, e.screenY());
+        }
+        return bottom;
+    }
     // every map frame: move what moves, draw what changed, take away what is over
     function updateFx() {
         const tm = tilemap();
@@ -273,7 +301,11 @@
             const k = o.life ? o.t / o.life : 0;
             switch (o.kind) {
                 case "plate":
-                    if (s._eaten !== o.eaten) { s._eaten = o.eaten; paintPlate(s.bitmap, o.dish, o.eaten); }
+                    {   // (a dish of the sheet is drawn again only when its state changes - the old drawing went every frame)
+                        const sheetDish = TALERZ_ROW[o.dish.id] !== undefined && ImageManager.loadSystem(TALERZE).isReady();
+                        const key = sheetDish ? "s" + plateState(o.eaten) : o.eaten;
+                        if (s._eaten !== key) { s._eaten = key; paintPlate(s.bitmap, o.dish, o.eaten); }
+                    }
                     s.x = p.x + (o.px || 0);
                     s.y = p.y + (o.py || 0) + 12 - Math.round(10 * Math.max(0, 1 - o.t / 8) * Math.max(0, 1 - o.t / 8));   // (it is put down: drops in)
                     s.z = 3;
@@ -303,7 +335,7 @@
                     break;
                 case "tray":
                     s.x = p.x; s.y = p.y - 6; s.z = 3;
-                    s._sortY = s.y + 40;   // (on the blanket: over the bed)
+                    s._sortY = Math.max(s.y + 40, coverBottom(o.x, o.y) + 1);   // (on the blanket: over the bed - and over its picture, which may stand a row below the bed's tag)
                     s.opacity = Math.round(255 * Math.min(1, o.t / 20, (o.life - o.t) / 40));
                     break;
                 case "bubble":

@@ -4,7 +4,7 @@
 //     24 mieszkańców podróżnych w czwartym zakresie TownLife (3020-3049), rejestr numerów (Podroznicy 3002-3019)
 //   - W6 po poprawkach (rozdz. 5): fale 10/25/37/52 (dni promu), Ludmiła i Ela dopiero od fali 1 (dzień 10, od południa), K5 przed falą
 //     z Kubą zamiast Ludmiły
-//   - nowa gra: stan (ziarno, prom dnia 1 zaplanowany), dzień 4 - Tobiasz Goniec przypływa (pokój 23, do dnia 7), jest w księdze,
+//   - nowa gra: stan (ziarno, prom dnia 1 zaplanowany), dzień 4 - Tobiasz Goniec przypływa (pokój 8, do dnia 7), jest w księdze,
 //     w drodze do południa, po południu chodzi po miasteczku; pierwsza rozmowa i menu („Skąd płyniesz?”); księga gości u Borgara (opcja)
 //   - noc: Tobiasz w swoim pokoju na piętrze (bez znaczników sali na Map001 - zapas: pokój)
 //   - zapis i wczytanie w środku pobytu: te same osoby, pokoje, ziarno
@@ -13,7 +13,7 @@
 //   - stary zapis (fixture day40_farm): nikt „wstecz”; najbliższy prom - jeden spóźniony z obsady (Tobiasz)
 //   - F9: sekcja „Podróżni z promu” (Watki.f9) z wierszami; „Przypłyń teraz” działa
 // Uruchom: node tests/run.js podroznicy_test --port 9761 (albo CDP_PORT=9761 node tests/podroznicy_test.js)
-const kit = require("./lib/kit.js");
+const kit = (function(){ try { return require("./lib/kit.js"); } catch (e) { return require("../../../../tests/lib/kit.js"); } })();
 
 kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     const J = e => t.json(e);
@@ -52,8 +52,8 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await at(4, 7, 30);
     const s4 = await st();
     const tob = s4.obecni.tobiasz;
-    t.check("dzień 4, 7:00: Tobiasz przypłynął - pokój 23, do dnia 7, w księdze; pokoje 1, 2 i 7 nie w księdze",
-        !!tob && tob.od === 4 && tob.do === 7 && tob.pokoj === "23" && s4.ksiega["23"] === "tobiasz" && !s4.ksiega["1"] && !s4.ksiega["2"] && !s4.ksiega["7"], s4);
+    t.check("dzień 4, 7:00: Tobiasz przypłynął - pokój 8, do dnia 7, w księdze; pokoje 1, 2 i 7 nie w księdze",
+        !!tob && tob.od === 4 && tob.do === 7 && tob.pokoj === "8" && s4.ksiega["8"] === "tobiasz" && !s4.ksiega["1"] && !s4.ksiega["2"] && !s4.ksiega["7"], s4);
     const way = await J(`(function(){ const e = TownLife.eventOf("tobiasz"), s = e && TownLife.state("tobiasz"); return { ev: !!e, hidden: s ? s.hidden : null, plan: TownLife.entryAt(TownLife.RESIDENTS.find(r => r.key === "tobiasz"), 7.5) }; })()`);
     t.check("...do południa „w drodze” (ukryty w miasteczku, plan: podr_droga)", way.ev && way.hidden === true && way.plan.where === "podr_droga", way);
     await at(4, 14.5, 60);
@@ -67,14 +67,14 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const menu = await t.talkTo("TownLife.eventOf('tobiasz')", ["Skąd płyniesz"], { secs: 25 });
     t.check("...potem jego menu: „Skąd płyniesz?” - z Brzozowej Woli", /Brzozowej Woli/.test(menu.text) && (menu.choices || []).some(c => /Skąd płyniesz/.test(JSON.stringify(c))), { text: menu.text.slice(0, 200), choices: menu.choices });
     const book = await J(`({ lines: Podroznicy.ksiegaLinie(), opt: Tawerna.talk.options("borgar").map(o => o.id) })`);
-    t.check("księga gości: opcja u Borgara; wiersz „Pokój 23: Tobiasz Goniec, posłaniec z lądu - do dnia 7”, renoma i utarg",
-        book.opt.includes("Podroznicy:ksiega") && book.lines.some(l => /^Pokój 23: Tobiasz Goniec, posłaniec z lądu - do dnia 7$/.test(l)) && book.lines.some(l => /^Renoma karczmy: 30/.test(l)) && book.lines.some(l => /^Utarg z pokoi/.test(l)), book);
+    t.check("księga gości: opcja u Borgara; wiersz „Pokój 8: Tobiasz Goniec, posłaniec z lądu - do dnia 7”, renoma i utarg",
+        book.opt.includes("Podroznicy:ksiega") && book.lines.some(l => /^Pokój 8: Tobiasz Goniec, posłaniec z lądu - do dnia 7$/.test(l)) && book.lines.some(l => /^Renoma karczmy: 30/.test(l)) && book.lines.some(l => /^Utarg z pokoi/.test(l)), book);
 
     // ---------------------------------------------------------------- noc: w swoim pokoju na piętrze (zapas bez znaczników sali)
-    await t.go(25, 48, 62, 8);
+    await t.go(25, 30, 28, 8);
     await at(4, 23.5, 30);
     const room = await J(`(function(){ const e = TownLife.eventOf("tobiasz"); return e ? { x: e.x, y: e.y, hidden: e._town.hidden, sala: Podroznicy.wnetrze("tobiasz") } : null; })()`);
-    t.check("23:30, piętro gości (Map025): Tobiasz u siebie - pokój 23 przy kufrze (5,8)", !!room && room.x === 5 && room.y === 8 && room.hidden === false, room);
+    t.check("23:30, piętro gości (Map025): Tobiasz u siebie - pokój 8 (5,41)", !!room && room.x === 5 && room.y === 41 && room.hidden === false, room);
 
     // ---------------------------------------------------------------- zapis i wczytanie w środku pobytu
     // (migawka tuż przed zapisem: o 15:00 dnia 4 ktoś z puli mógł już odpłynąć)

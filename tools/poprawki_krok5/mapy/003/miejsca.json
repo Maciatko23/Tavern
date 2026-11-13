@@ -1,0 +1,7 @@
+[{"id":"przeglad","box":[0,0,119,119],"p":16},
+ {"id":"przeglad_poludnie","box":[0,58,119,100],"p":16},
+ {"id":"z1_szlak_zachodni_polana","box":[4,61,44,88],"p":28},
+ {"id":"z2_szlak_srodkowy_martwe_drzewo","box":[42,61,82,88],"p":28},
+ {"id":"z3_kepa_i_trojka","box":[68,62,98,88],"p":32},
+ {"id":"z4_gaj_wschodni","box":[86,64,116,88],"p":32},
+ {"id":"z5_skaly_zachod","box":[4,70,28,88],"p":36}]

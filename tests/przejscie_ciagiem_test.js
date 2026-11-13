@@ -58,7 +58,7 @@ kit.test({ port: 9684, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.frames(20);
     const s0 = await J("Story.state()");
     t.check("rozdział 1: intro dziadka przeszło samo - dług 2500 do dnia 60, nic nie spłacone", introDone && s0 && s0.intro === 2 && s0.debt === 2500 && s0.paid === 0 && s0.deadline === 60, s0 && { intro: s0.intro, debt: s0.debt, paid: s0.paid, deadline: s0.deadline });
-    await t.go(3, 26, 17, 2);
+    await t.go(3, 66, 48, 2);
     await t.frames(40);
     t.check("działka dziadka (Map003 „Kruczy Jar”): krok „field” odhaczony", !!(await J("Story.state().flags.field")));
     await t.go(1, 52, 31, 8);
@@ -83,7 +83,7 @@ kit.test({ port: 9684, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("trzy wieczorne zmiany u Borgara (dni 2-4) zagrane i zapłacone (TavernShift)", shifts === 3 && earned > 0, { shifts, earned, lastShift });
     // the other ~35 shifts: a shortcut of time - their gold straight into the purse; the payment itself is the real one
     await t.eval("$gameParty.gainGold(2500); 0");
-    await t.go(24, 1, 15, 6);
+    await t.go(24, 21, 75, 6);
     await at(30, 10, 40);
     await t.eval("(function(){ const e = $gameMap.event(902); $gamePlayer.locate(e.x - 1, e.y + 3); $gamePlayer.setDirection(8); return 0; })()");
     const pay = await talk("$gameMap.event(902)", ["Spłać cały dług"], { secs: 90 });   // (with the whole sum in the purse the row says "Spłać cały dług (2500 G)")
@@ -99,7 +99,7 @@ kit.test({ port: 9684, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await at(31, 11, 30);
     const b1 = await talk("$gameMap.event(1)", ["Zapytaj o stare kamienie", "Nie teraz"]);
     t.check("a. Borgar przy barze: pół klucza znad baru „na szczęście”", (await J("TownQuests.vcount('klucz_borgar')")) === 1 && (await step("W4")) === "active:1", { step: await step("W4"), text: b1.text.slice(0, 200) });
-    await t.go(20, 8, 7, 8);
+    await t.go(20, 39, 46, 8);
     await at(31, 13, 30);
     await t.give(62, 1);   // (the stone spade - normally the workbench's)
     const dig = await talk("$gameMap.event(951)", [], { place: false });

@@ -87,7 +87,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
         g1.done && /Dom nie był w zastawie/.test(g1.text) && /chatę pod lasem/i.test(g1.text) && /zagroda Ługów/.test(g1.text) && !/twoja wina/i.test(g1.text) && (await J("Story.state().flags.grandpaLost")) === true, g1.text.slice(0, 400));
 
     // ================= B. the first walk onto the field: the Lord's men measure it, the sign
-    await t.go(3, 30, 13, 4);
+    await t.go(3, 70, 44, 4);
     const sceneOn = await t.until("$gameMap.isEventRunning()", 10);
     const n0 = (await J("window.__fl.log")).length;
     let shotSign = false;
@@ -137,26 +137,25 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     await t.setDay(64, 6.1);
     const escort = await t.until("$gameMap.isEventRunning()", 10);
     await through(40);
-    await t.until(t.onMap(23), 20);
+    await t.until(t.onMap(3), 20);
     await t.frames(40);
-    const D = await J(`({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, locked: Story.state().lost.locked, guard: ${shown(23, 704)}, inside: (Farming.farm().buildings[100] || []).length,
+    const D = await J(`({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, locked: Story.state().lost.locked, guard: ${shown(3, 704)}, inside: (Farming.farm().buildings[100] || []).length,
         held: ((Farming.farm().buildings[3] || []).find(b => b.type === 'hut') || {}).held, hutOf: Farming.hutOf(), dog: Dog.state(), carryDone: (Watki.get('fabula').ownChecks(), Watki.rekordy().w.fabula.t.done[5] !== undefined),
         held3: Farming.landHeld(3) })`);
     const escText = await logFrom(n1), pop1 = await t.popups({ clear: true });
-    t.check("D1 dawn of day 64 on the field: the guard sees him out ('Minęły 3 dni') to Skraj lasu (1,13); 'Działka należy teraz do Lorda.' over the hero",
-        escort && D.map === 23 && D.x === 1 && D.y === 13 && D.locked === 64 && /Minęły 3 dni/.test(escText) && pop1.includes("Działka należy teraz do Lorda."), { D: { map: D.map, x: D.x, y: D.y, locked: D.locked }, escText, pop1 });
+    t.check("D1 dawn of day 64 on the field: the guard sees him out ('Minęły 3 dni') out of the plot onto Kruczy Jar (40,47); 'Działka należy teraz do Lorda.' over the hero",
+        escort && D.map === 3 && D.x === 40 && D.y === 47 && D.locked === 64 && /Minęły 3 dni/.test(escText) && pop1.includes("Działka należy teraz do Lorda."), { D: { map: D.map, x: D.x, y: D.y, locked: D.locked }, escText, pop1 });
     t.check("D2 a guard of the Lord at the way in; the carrying-out goal ticked off", D.guard && D.carryDone, { guard: D.guard, carry: D.carryDone });
     t.check("D3 the hut's furniture stays in the hut with the field (Map100 empty for a new hut), the field held: no hut of the hero's now", D.inside === 0 && Array.isArray(D.held) && D.held.length === before.inside && D.hutOf === null && D.held3, { inside: D.inside, held: D.held && D.held.length, hutOf: D.hutOf });
-    t.check("D4 the dog comes along (its kennel stays on the field): following the hero on Skraj lasu", D.dog.map === 23 && D.dog.mode === "follow", { map: D.dog.map, mode: D.dog.mode });
+    t.check("D4 the dog comes along (its kennel stays on the field): following the hero on Skraj lasu", D.dog.map === 3 && D.dog.mode === "follow", { map: D.dog.map, mode: D.dog.mode });
     await t.frames(70);
-    await t.eval("$gamePlayer.reserveTransfer(3, 78, 13, 4, 0); 0");   // (2026-10-18: the field doubled to 80x60)
-    await t.frames(20);
-    await t.eval("$gamePlayer.locate(1, 13); $gameMap.event(99).start(); 0");
+    await t.go(8, 60, 60, 2);   // (2026-11-11: only the plot is refused now - a transfer from another map onto a cell inside its fence)
+    await t.eval("$gamePlayer.reserveTransfer(3, 60, 45, 8, 0); 0");
     await t.frames(30);
     const pop2 = await t.popups({ clear: true });
-    t.check("D5 the way onto the field refused (a transfer and the passage event): still Skraj lasu, the popup over the hero", (await t.eval("$gameMap.mapId()")) === 23 && !(await t.eval("$gamePlayer.isTransferring()")) &&
+    t.check("D5 the way onto the plot refused (a transfer onto a cell inside the fence): still the town, the popup over the hero", (await t.eval("$gameMap.mapId()")) === 8 && !(await t.eval("$gamePlayer.isTransferring()")) &&
         pop2.includes("Działka należy teraz do Lorda."), pop2);
-    await t.locate(2, 13, 4);
+    await t.go(3, 40, 47, 4);
     await t.frames(20);
     await t.shot(path.join(SHOTS, "pole_zamkniete.png"));
 
@@ -184,7 +183,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     t.check("E2 bought for 600 G: the key, the bed and the chest in the room (fixed), the deed in the journal, the goal 'a new roof' done, nothing more for sale",
         E1.own && E1.gold === 2400 && E1.furn.join() === "bed!,chest_s!" && E1.roof && E1.notes.includes("Akt kupna: Chata pod lasem") && /klucz/i.test(s2.text) && E1.forSale.length === 0, E1);
     // the hut on Podgrodzie's new rows: its door -> the room, and back
-    t.check("E3 Podgrodzie is 92 x 112 now (20 rows added at the bottom, then doubled 2026-10-18 by tools/powieksz), <BuildRegion:8>", await t.go(111, 8, 81, 8) &&
+    t.check("E3 Podgrodzie is 92 x 112 now (20 rows added at the bottom, then doubled 2026-10-18 by tools/powieksz), <BuildRegion:8>", await t.go(111, 26, 114, 8) &&
         ["92x112 8", "102x112 8"].includes(await J("$gameMap.width() + 'x' + $gameMap.height() + ' ' + Farming.buildRegion()")));   // (2026-10-30 world stage 1: 10 columns of the moat before the wall)
     await t.eval("$gameMap.events().find(e => /Chata pod lasem/.test(e.event().name)).start(); 0");
     const inHut = await t.until(t.onMap(154), 20);
@@ -215,18 +214,18 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     await t.frames(30);
     await t.shot(path.join(SHOTS, "chata_pod_lasem.png"));
 
-    // ---- the burnt farm: the way from Skraj lasu, the ruin, the quest D21
-    await t.go(23, 77, 28, 6);   // (2026-10-30, the world: the burnt farm lies EAST of Skraj lasu - the way is on the east edge, rows 27-29)
-    const way = await J("({ sign: ($gameMap.event(709) || { characterName: () => '' }).characterName(), way: [706, 707, 708].map(id => { const e = $gameMap.event(id); return e ? e.x + ',' + e.y : null; }) })");
-    await t.locate(78, 28, 6);
+    // ---- the burnt farm: the way from Podgrodzie, the ruin, the quest D21
+    await t.go(111, 110, 22, 8);   // (2026-10-30, the world: the burnt farm lies EAST of Skraj lasu - the way is on the east edge, rows 27-29)
+    const way = await J("(function(){ const f = re => $gameMap.events().find(e => e.event() && re.test(e.event().name)); const s = f(/^Drogowskaz: Spalona/), g = f(/^Brama: Spalona/); return { sign: s ? s.characterName() : '', gate: g ? [g.x, g.y] : null, gid: g ? g.eventId() : 0 }; })()");
+    await t.locate(110, 21, 8);
     await t.frames(10);
     await t.shot(path.join(SHOTS, "zagroda_wejscie.png"));
-    await t.eval("$gameMap.event(707).start(); 0");
+    await t.eval(`$gameMap.event(${way.gid}).start(); 0`);
     const onFarm = await t.until(t.onMap(168), 20);
     await t.frames(40);
     const Z0 = await J("(function(){ const e = $gameMap.events().find(x => /^<Zagroda:dom>/.test(x.event().note)); return { x: $gamePlayer.x, y: $gamePlayer.y, pic: e.characterName(), d: e.direction(), p: e.pattern(), id: e.eventId(), allows: Farming.mapAllowsBuilding(), smoke: $gameSelfSwitches.value([168, 711, 'A']) }; })()");
-    t.check("E7 Skraj lasu's east edge (rows 27-29, Homes' events with the signpost) -> the burnt farm (Map168, 1,72 - its west edge, the world): the house a ruin (stage 0), no smoke; not his land",
-        way.sign === "!$Drogowskaz" && way.way.join() === "79,27,79,28,79,29" && onFarm && Z0.x === 1 && Z0.y === 72 && Z0.pic === "!$Zagroda_Dom" && Z0.d === 2 && Z0.p === 0 && !Z0.smoke && !Z0.allows, { way, Z0 });
+    t.check("E7 the gate in the north-east corner of Podgrodzie (110,20, with the signpost) -> the burnt farm (Map168, 1,25 - its west edge): the house a ruin (stage 0), no smoke; not his land",
+        way.sign === "!$Drogowskaz" && way.gate.join() === "110,20" && onFarm && Z0.x === 1 && Z0.y === 25 && Z0.pic === "!$Zagroda_Dom" && Z0.d === 2 && Z0.p === 0 && !Z0.smoke && !Z0.allows, { way, Z0 });
     await t.locate(20, 12, 8);
     await t.frames(30);
     await t.shot(path.join(SHOTS, "zagroda_przed.png"));
@@ -241,7 +240,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     t.check("E8 the ruin looked at: a popup over the hero, the quest D21 'Spalona zagroda' starts by itself (Józek Łata first)",
         popRuin.some(p => /Zgliszcza domu/.test(p)) && !!d21a && d21a.s === "active" && d21a.step === 0 && ntRuin.some(n => /Spalona zagroda/.test(n)), { popRuin, d21a, ntRuin });
     // Józek, Marta, the sołtys
-    await t.go(111, 43, 30, 2);
+    await t.go(111, 61, 63, 2);
     await t.setHour(10);
     await t.frames(60);
     const jo = await t.talkTo("TownLife.eventOf('szmaciarz')", []);
@@ -292,7 +291,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
         menu0 && menu0.entries[0].name === "Uprzątnij zgliszcza" && began && w3 && w3.done === 3 && w3.need === 30 && S1.stage === 1 && S1.d === 2 && S1.p === 1 &&
         S1.items[0] === items0[0] + 12 && S1.items[1] === items0[1] + 6 && S1.items[2] === items0[2] + 6 && S1.konik === 1 && S1.step === 4, { menu0: menu0 && menu0.entries.map(e => e.name), began, w3, S1, items0 });
     // the toy back to Marta
-    await t.go(111, 43, 30, 2);
+    await t.go(111, 61, 63, 2);
     await t.frames(40);
     const op1 = await J("TownQuests.opinion()");
     const ma2 = await t.talkTo("TownLife.eventOf('praczka')", []);
@@ -384,7 +383,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     t.check("F2 the Heart's world: the field lost and not bought back - the Lord a rival", W.lost && !W.back && W.stance === "rival", W);
 
     // ================= G. the buyback
-    await t.go(24, 26, 15, 8);
+    await t.go(24, 46, 75, 8);
     await t.setHour(10);
     await t.calm();
     await t.frames(60);
@@ -400,14 +399,14 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console", 
     const got = await J("Story.pay(2500)");
     await t.frames(20);
     const back = await J(`({ done: Story.state().buy.done, back: Story.fieldBack(), lost: Story.fieldLost(), inside: (Farming.farm().buildings[100] || []).length, field: (Farming.farm().buildings[3] || []).length,
-        boarded: (Farming.farm().buildings[3] || []).some(b => b.boarded), hutOf: Farming.hutOf() && Farming.hutOf().mapId, sign: $gameSelfSwitches.value([3, 703, 'A']), guard: $gameSelfSwitches.value([23, 704, 'A']),
+        boarded: (Farming.farm().buildings[3] || []).some(b => b.boarded), hutOf: Farming.hutOf() && Farming.hutOf().mapId, sign: $gameSelfSwitches.value([3, 703, 'A']), guard: $gameSelfSwitches.value([3, 704, 'A']),
         notes: Journal.data().notes.map(n => n.title), goal: (Watki.get('fabula').ownChecks(), Watki.rekordy().w.fabula.s === "done" && Watki.rekordy().w.fabula.t.done[8] !== undefined), world: Underground.world().fieldBack })`);
     const backNotices = await t.notices();
     t.check("G2 the last 2500 G: the field back - every building left on it there again, the hut's furniture back inside, the hut the hero's",
         got === 2500 && back.done && back.back && !back.lost && back.field === hutCount && back.inside === before.inside && !back.boarded && back.hutOf === 3, back);
     t.check("G3 the sign and the guards gone, the deed 'Akt odkupu działki', the goal done, the top notice; the Heart's world: bought back",
         !back.sign && !back.guard && back.notes.includes("Akt odkupu działki") && back.goal && back.world && backNotices.some(n => /Działka dziadka znowu wasza/.test(n)), { back, backNotices });
-    t.check("G4 the way onto the field open again", await t.go(23, 2, 13, 4) && (await t.go(3, 37, 13, 4)));
+    t.check("G4 the way onto the field open again", await t.go(3, 40, 47, 4) && (await t.go(3, 77, 44, 4)));
     await t.go(19, 8, 7, 8);
     await t.setHour(12);
     const soup0 = await t.count(131);

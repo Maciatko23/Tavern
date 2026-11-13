@@ -35,7 +35,7 @@ kit.test({ port: 9586, bootCheck: "gra się uruchamia", plugins: ["Bron_Data", "
         for (const id of Object.keys(notes)) { const it = $dataItems[id]; if (it.note.indexOf(notes[id]) < 0) it.note = it.note ? it.note + "\\n" + notes[id] : notes[id]; DataManager.extractMetadata(it); }
         Equipment.readNotes(); Combat.refreshGear(true); Bron.wire();
         return { len: $dataItems.length, last: $dataItems[$dataItems.length - 1].name }; })()`);
-    t.check("staging w $dataItems (300-" + (299 + ITEMS.length) + ")", loaded.len === 300 + ITEMS.length, loaded);
+    t.check("staging w $dataItems (300-" + (299 + ITEMS.length) + ")", loaded.len >= 300 + ITEMS.length, loaded);   // (later threads add their own items after 408: Młotek majstra 409...)
     await t.eval(`(function(){ const old = ImageManager.loadSystem("IconSet"), add = Bitmap.load("tools/bron/staging/IconSet_nowe.png");
         window.__iconsDone = false;
         const join = () => { if (!old.isReady() || !add.isReady()) return setTimeout(join, 50);
@@ -79,7 +79,7 @@ kit.test({ port: 9586, bootCheck: "gra się uruchamia", plugins: ["Bron_Data", "
         { old: data.old, order: data.order, sh155: data.sh155 });
 
     // ---- a new game: the town square, a strong hero (no level's lack) - the target in front of him
-    const ok = await t.newGame({ map: 3, x: 22, y: 14, dir: 6, hour: 10, day: 35, quiet: true, minimap: false });
+    const ok = await t.newGame({ map: 3, x: 62, y: 45, dir: 6, hour: 10, day: 35, quiet: true, minimap: false });
     t.check("nowa gra", ok);
     if (!ok) return;
     await t.eval(`(function(){ Combat.hero().level = 30; Combat.hero().rev = (Combat.hero().rev || 0) + 1; $gameSystem.setStamina(250); Bron.wire(); Bron.refresh();
@@ -216,7 +216,7 @@ kit.test({ port: 9586, bootCheck: "gra się uruchamia", plugins: ["Bron_Data", "
     } else t.check("Tadek w miasteczku", false, { town, tadek });
 
     // ---- Kłos's deputy (D27: Kłos handed over): the soldier by the barrels sells the same, from the same favour
-    const gz = await t.go(162, 42, 18, 2);
+    const gz = await t.go(162, 64, 42, 2);
     await t.setHour(10);
     await t.frames(20);
     await t.eval("(function(){ TownQuests.state().flags.klosWydany = 35; Garnizon.state().favor = 30; return 0; })()");
@@ -266,7 +266,7 @@ kit.test({ port: 9586, bootCheck: "gra się uruchamia", plugins: ["Bron_Data", "
         return { at1, at8, all, tan, wb }; })()`);
     t.check("kuźnia: na poziomie 1 tylko okuta tarcza (poziom 4), na 8 żelazny sztylet i miecz (poziom 9-12, bez stali), na 30 wszystkie 26; garbarnia 7, warsztat 6",
         JSON.stringify(forge.at1) === "[375]" && forge.at8.includes(301) && forge.at8.includes(305) && !forge.at8.includes(308) && forge.all === 26 && forge.tan === 7 && forge.wb === 6, forge);
-    await t.go(3, 22, 14, 2);
+    await t.go(3, 62, 45, 2);
     const made = await t.json(`(function(){ $gameParty.loseItem($dataItems[305], 9); $gameParty.gainItem($dataItems[86], 3); $gameParty.gainItem($dataItems[79], 2); $gameParty.gainItem($dataItems[97], 1);
         const r = Farming.BUILDINGS.forge.recipes.find(x => x.id === "bron_305"); return { ok: Farming.craftManual(null, r) }; })()`);
     await t.until("$gameParty.numItems($dataItems[305]) > 0", 8, 50);

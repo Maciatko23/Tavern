@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "C:\Users\macie\OneDrive\Dokumenty\RMMZ\Tawerna\tools\mapy\estetyka.py", line 509, in <module>
+    sys.exit(main(sys.argv[1:]))
+             ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\macie\OneDrive\Dokumenty\RMMZ\Tawerna\tools\mapy\estetyka.py", line 481, in main
+    sw = S.Swiat(); wyj = wyjatki()
+         ^^^^^^^^^
+  File "C:\Users\macie\OneDrive\Dokumenty\RMMZ\Tawerna\tools\mapy\swiat_styki.py", line 64, in __init__
+    maps, links, later = swiat_data_zywe()
+                         ^^^^^^^^^^^^^^^^^
+  File "C:\Users\macie\OneDrive\Dokumenty\RMMZ\Tawerna\tools\mapy\swiat_styki.py", line 45, in swiat_data_zywe
+    links = json.loads("[" + re.search(r"links: \[(.*?)\]\s*,\s*\n\s*//", txt, re.S).group(1) + "]")
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'group'

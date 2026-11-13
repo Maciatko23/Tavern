@@ -159,7 +159,7 @@
     }
     const mielerzBurning = () => kilnState() === "burn";
     const kilnCycle = () => Math.floor((workDay(D.CYCLE.kiln.dawn) - D.CYCLE.kiln.work[0]) / D.CYCLE.kiln.every);
-    const stopIndex = () => ((workDay(D.CYCLE.dawn) % 4) + 4) % 4;
+    const stopIndex = () => ((workDay(D.CYCLE.dawn) % D.CYCLE.stops.length) + D.CYCLE.stops.length) % D.CYCLE.stops.length;
     const stopMap = () => D.CYCLE.stops[stopIndex()];
     const stopName = m => ({ 22: TK.kod.stopName[0], 21: TK.kod.stopName[1], 4: TK.kod.stopName[2], 3: TK.kod.stopName[3] })[m === undefined ? stopMap() : m] || "";
     function pasterz018() {
@@ -167,8 +167,9 @@
         const p = D.CYCLE.pasture018, h = hour();
         return day() % p.every === p.at && h >= p.hours[0] && h < p.hours[1];
     }
-    // where the flock is now: 18 (by the menhirs) or 4; "pasture" / "fold"
-    const flockMap = () => (pasterz018() ? M.menhiry : M.laka);
+    // where the flock is now: always Łąka (4); on the shepherd's third day on the second pasture by the menhirs; "pasture" / "fold"
+    const flockMap = () => M.laka;
+    const pastureNow = () => D.PASTURE[pasterz018() ? M.menhiry : M.laka];
     const flockOut = () => { const h = hour(); return h >= D.CYCLE.flock.out && h < D.CYCLE.flock.home; };
     const campActive = () => has() && !S().camp.gone && (S().force.camp || arcCh("W8") >= 3);
     const caveOpen = () => has() && (S().force.cave || arcCh("W5") >= 4);
@@ -238,11 +239,10 @@
             // (tools/ludzie/dym_mielerza.py: !Fantasy_chimney's smoke without the stone stack)
             out.push(eventData(EV.dym, TK.kod.build[0], D.KILN_AT.x, D.KILN_AT.y - 2, { key: "dym", img: ["!$Dym_Mielerz", 0, 2, 1], priority: 2, through: true, step: true, list: [C(0, [])] }));
             out.push(eventData(EV.szalas, TK.kod.build[1], D.SHED_AT.x, D.SHED_AT.y, { key: "szalas", img: ["!$Lud_Szalas", 0, 2, 1], note: BIG }));
-            out.push(fireEv(EV.ogien021, D.STOPS[21].ogien, "ogien"));
-            out.push(eventData(EV.tobol021, TK.kod.build[2], D.STOPS[21].tobol[0], D.STOPS[21].tobol[1], { key: "tobol", img: ["!$Lud_Juk", 0, 2, 1] }));
             const k = has() ? S().k65 : null, j = D.JUK_SPOTS[k && k.spot >= 0 ? k.spot : 0];
             out.push(eventData(EV.juk, TK.kod.build[3], j[0], j[1], { key: "juk", img: ["!$Lud_Juk", 0, 2, 1] }));
-        } else if (mapId === M.polna || mapId === M.laka || mapId === M.domek) {
+        }
+        if (mapId === M.polna || mapId === M.laka || mapId === M.domek) {   // (Łąka has the kiln AND the pedlar's stop since 2026-11-11)
             const st = D.STOPS[mapId], ids = { 22: [EV.woz022, EV.osiol022, EV.ogien022], 4: [EV.woz004, 0, EV.ogien004], 3: [EV.woz003, EV.osiol003, EV.ogien003] }[mapId];
             out.push(eventData(ids[0], TK.kod.build[4], st.woz[0], st.woz[1], { key: "woz", img: ["!$Lud_Woz", 0, 2, 1], note: BIG }));
             if (ids[1] && st.osiol) out.push(eventData(ids[1], TK.kod.build[5], st.osiol[0], st.osiol[1], { key: "osiol", img: ["!$Lud_Osiol", 0, 2, 0], step: true, speed: 2 }));
@@ -316,12 +316,11 @@
             showEv(kiln, ks === "burn" ? 4 : ks === "ready" ? 6 : 2, ks === "burn" ? Math.floor(Graphics.frameCount / 14) % 3 : 1);
             setShown(evOf(EV.dym), ks === "burn");
             showEv(evOf(EV.szalas));
-            setShown(evOf(EV.ogien021), stop === M.droga && night);
-            setShown(evOf(EV.tobol021), stop === M.droga);
             const k = S().k65, juk = evOf(EV.juk), on = onStep("ludJuk") && !!k && !k.picked;
             if (on && juk) { const j = D.JUK_SPOTS[k.spot || 0]; if (juk.x !== j[0] || juk.y !== j[1]) juk.locate(j[0], j[1]); }
             setShown(juk, on);
-        } else if (D.STOPS[id] && id !== M.droga) {
+        }
+        if (D.STOPS[id]) {
             const here = stop === id;
             const ids = { 22: [EV.woz022, EV.osiol022, EV.ogien022], 4: [EV.woz004, 0, EV.ogien004], 3: [EV.woz003, EV.osiol003, EV.ogien003] }[id];
             setShown(evOf(ids[0]), here);
@@ -453,7 +452,7 @@
         }
         return null;
     }
-    let sheep = [], flockMode = "", sheepMap = 0;
+    let sheep = [], flockMode = "", sheepMap = 0, flockZone = null;
     function addSheep(x, y, o, set) {
         const a = new Game_LudSheep(x, y, o);
         sheep.push(a);
@@ -478,11 +477,9 @@
     }
     // what the flock does here now: "pasture" | "fold" | "" (not here)
     function flockWanted() {
-        const id = $gameMap.mapId(), fm = flockMap();
-        if (id === M.menhiry) return fm === M.menhiry ? "pasture" : "";
-        if (id !== M.laka) return "";
-        if (fm === M.menhiry) return "";
-        return flockOut() ? "pasture" : "fold";
+        const id = $gameMap.mapId();
+        if (id !== flockMap()) return "";
+        return flockOut() || pasterz018() ? "pasture" : "fold";
     }
     function spawnSheep(set) {
         if (!has()) return;
@@ -490,7 +487,8 @@
         sheepMap = $gameMap.mapId();
         const want = flockWanted();
         if (want) {
-            const n = flockSize(), z = D.PASTURE[sheepMap], cells = want === "pasture" ? zoneCells(z) : D.FOLD.cells.slice();
+            const n = flockSize(), z = pastureNow(), cells = want === "pasture" ? zoneCells(z) : D.FOLD.cells.slice();
+            flockZone = z;
             for (let i = 0; i < n && cells.length; i++) {
                 const c = want === "pasture" ? cells.splice(rnd(0, cells.length - 1), 1)[0] : cells[i];
                 if (!c) break;
@@ -514,11 +512,12 @@
     function flockTick() {
         if ($gameMap.mapId() !== sheepMap) return;
         const want = flockWanted();
-        if (want === flockMode) return;
+        if (want === flockMode && (want !== "pasture" || flockZone === pastureNow())) return;   // (the shepherd's third day: the flock walks over to the second pasture)
         const flock = sheep.filter(a => a._lud.role === "flock");
         if (!want) { for (const a of flock) { const R = RA(); if (R) R.dropSprite(a); } sheep = sheep.filter(a => a._lud.role !== "flock"); flockMode = ""; return; }
         if (!flockMode) { const keep = sheep.filter(a => a._lud.role !== "flock"); sheep = keep; spawnSheep(); return; }
-        const z = D.PASTURE[sheepMap], cells = want === "pasture" ? zoneCells(z) : D.FOLD.cells.slice();
+        const z = pastureNow(), cells = want === "pasture" ? zoneCells(z) : D.FOLD.cells.slice();
+        flockZone = z;
         flock.forEach((a, i) => {
             const c = want === "pasture" ? cells.splice(rnd(0, Math.max(0, cells.length - 1)), 1)[0] : cells[i];
             if (!c) return;
@@ -1339,12 +1338,12 @@
     // ------------------------------------------------------------------
     // [name, map, x, y, direction] - the names: js/teksty/ludzie.txt, f9.miejsca (each row's [0] read from the words)
     const PLACES = [
-        [21, 49, 21, 8], [21, 53, 23, 8], [22, 52, 23, 8],
-        [21, 54, 18, 8], [4, 62, 12, 8], [3, 61, 12, 8],
-        [4, 52, 45, 8], [18, 68, 34, 8], [17, 60, 40, 8],
-        [21, 55, 13, 8], [13, 101, 77, 8], [13, 105, 73, 8],
+        [4, 46, 26, 8], [4, 50, 26, 8], [4, 62, 13, 8],
+        [3, 62, 13, 8], [4, 62, 12, 8], [3, 61, 12, 8],
+        [4, 52, 45, 8], [4, 47, 64, 8], [4, 62, 46, 8],
+        [4, 52, 16, 8], [13, 101, 101, 8], [13, 105, 97, 8],
         [125, 16, 66, 8], [177, 3, 11, 8], [168, 89, 28, 8],
-        [159, 53, 46, 2], [162, 60, 46, 2]
+        [125, 60, 70, 2], [162, 82, 70, 2]
     ].map((p, i) => Watki.zTekstu([""].concat(p), { 0: "f9.miejsca." + i }, "ludzie"));
     let f9Place = 0, f9Stop = 0;
     const placeLabel = i => Watki.wstaw(TK.kod.placeLabel[0], { "1": i + 1, length: PLACES.length, "3": PLACES[i][0] });
@@ -1375,21 +1374,21 @@
         },
         pick(row, delta) {
             if (row.what === "go") { f9Place = row.pick = ((row.pick || 0) + delta + PLACES.length) % PLACES.length; row.label = placeLabel(row.pick); }
-            if (row.what === "stop") { f9Stop = row.pick = ((row.pick || 0) + delta + 4) % 4; row.label = stopLabel(row.pick); }
+            if (row.what === "stop") { f9Stop = row.pick = ((row.pick || 0) + delta + D.CYCLE.stops.length) % D.CYCLE.stops.length; row.label = stopLabel(row.pick); }
         },
         ok(row) {
             if (!has()) return { say: TK.kod.ok[0], bad: true };
             const s = S();
             if (row.what === "go") { const p = PLACES[row.pick || 0]; if (p[1] === M.przystan || p[1] === M.jaskinia) { const W = T.api("Wyspa") || window.Wyspa; if (W && W.forceTide) W.forceTide("low"); } return { go: p }; }
-            if (row.what === "kiln") { jumpDay(d => ((d % 6) + 6) % 6 === 2, 10); return { go: ["Mielerz", 21, 49, 21, 8] }; }
-            if (row.what === "stop") { const i = row.pick || 0, m = D.CYCLE.stops[i]; jumpDay(d => ((d % 4) + 4) % 4 === i, 10); const p = PLACES.find(x => x[1] === m && /Postój/.test(x[0])); return { go: p || [TK.kod.ok[1], m, 50, 20, 2] }; }
-            if (row.what === "p018") { jumpDay(d => d % D.CYCLE.pasture018.every === D.CYCLE.pasture018.at, 10); return { go: [TK.kod.ok[2], 18, 68, 34, 8] }; }
+            if (row.what === "kiln") { jumpDay(d => ((d % 6) + 6) % 6 === 2, 10); return { go: ["Mielerz", 4, 46, 26, 8] }; }
+            if (row.what === "stop") { const i = row.pick || 0, m = D.CYCLE.stops[i]; jumpDay(d => ((d % D.CYCLE.stops.length) + D.CYCLE.stops.length) % D.CYCLE.stops.length === i, 10); const p = PLACES.find(x => x[1] === m && /Postój/.test(x[0])); return { go: p || [TK.kod.ok[1], m, 62, 13, 2] }; }
+            if (row.what === "p018") { jumpDay(d => d % D.CYCLE.pasture018.every === D.CYCLE.pasture018.at, 10); return { go: [TK.kod.ok[2], 4, 47, 64, 8] }; }
             if (row.what === "patrol") {
                 const q = TQ();
                 if (q && q.start && !isActive("K66")) q.start("K66");
                 if (s.k66) s.k66.night = day();
                 $gameSystem.setDayNightHour(20.9);
-                return { go: [TK.kod.ok[3], 159, 53, 46, 2] };
+                return { go: [TK.kod.ok[3], 125, 60, 70, 2] };
             }
             if (row.what === "camp") { s.force.camp = !s.force.camp; s.camp.gone = 0; return s.force.camp ? { go: [TK.kod.ok[4], 13, 101, 77, 8] } : { say: TK.kod.ok[5] }; }
             if (row.what === "tide") { const W = T.api("Wyspa") || window.Wyspa; if (W && W.forceTide) W.forceTide("low"); return { go: [TK.kod.ok[6], 125, 16, 66, 8] }; }

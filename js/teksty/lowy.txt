@@ -206,8 +206,8 @@ Na strzelnicy garnizonu pokonałem sierżanta Bełta. Kwatermistrz postawił pi�
 
 # ======================================================================== Q_K62 (zadania.K62)
 zadania.K62.title = Krasula i kury Ługów
-zadania.K62.where = Spalona zagroda: wschodnie łąki
-zadania.K62.when = za dnia
+zadania.K62.where = Tawerna (Marta wieczorem) → Spalona zagroda: wschodnie łąki
+zadania.K62.when = zlecenie 17:30–20, praca za dnia
 zadania.K62.desc = Po pożarze zwierzęta Ługów rozbiegły się po łąkach na wschód od zagrody: krowa Krasula, owca i dwie kury. Marta prosi, żeby wróciły do domu.
 [zadania.K62.offer.cond.done]
 D21

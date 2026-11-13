@@ -1,0 +1,19 @@
+PASS the game boots
+NOTE the new game's map 8 did not come up (scene Scene_Map)
+FAIL walking up through the town's north gate (8: x 24-26) -> Map013 'Góry i kamieniołom' (40..42, 95; the held key may have moved him one step), facing up  {"map":128,"x":4,"y":4,"d":6}
+FAIL Map013: all 12 markers 'Miejsce: <key>' are there (below the hero, through, no picture) and reachable on foot from the way in from the town (41, 95)  {"n13":0,"r13":{"gory_wejscie":"missing","grum_przewodnik_start":"missing","gory_schody":"missing","nocleg":"missing","kamieniolom":"missing","kamieniolom_znak":"missing","blok_kruk":"missing","dzwig":"missing","staw_suchy":"missing","kamieniolom_schody":"missing","punkt_widokowy":"missing","jaskinia_wejscie":"missing"}}
+PASS Map013: no water tile anywhere (the drought; the quarry pond is dry mud)  0
+FAIL the quarry: the raven in the wall, the crane's ruin, cut blocks, the dry pond, iron ore to mine; both flights of steps walkable  {"raven":false,"crane":false,"blocks":0,"pond":false,"ore":0,"steps":[false,false]}
+ERR TypeError: Cannot read properties of null (reading 'width')
+    at Game_Map.width (http://127.0.0.1:8765/js/rmmz_objects.js:6344:21)
+    at Game_Map.isValid (http://127.0.0.1:8765/js/rmmz_objects.js:6589:31)
+    at Game_Map.isBush (http://127.0.0.1:8765/js/rmmz_objects.js:6663:17)
+    at Game_CharacterBase.isOnBush (http://127.0.0.1:8765/js/rmmz_objects.js:7328:21)
+    at Game_CharacterBase.refreshBushDepth (http://127.0.0.1:8765/js/rmmz_objects.js:7312:14)
+    at Game_CharacterBase.locate (http://127.0.0.1:8765/js/rmmz_objects.js:7153:10)
+    at Game_Player.locate (http://127.0.0.1:8765/js/rmmz_objects.js:8248:37)
+    at Game_Player.locate (http://127.0.0.1:8765/js/plugins/FreeMovement.js:509:17)
+    at <anonymous>:1:26
+    at <anonymous>:1:83
+PASS no errors in the console  []
+3/7 passed

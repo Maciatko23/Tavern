@@ -1,0 +1,226 @@
+{
+ "24": [
+  [
+   42,
+   "Sosna",
+   99,
+   117
+  ],
+  [
+   43,
+   "Sosna",
+   97,
+   117
+  ],
+  [
+   44,
+   "Omszały kamień",
+   62,
+   119
+  ],
+  [
+   220,
+   "Drzewo w ogrodzie Lorda",
+   73,
+   116
+  ],
+  [
+   238,
+   "Sosna",
+   88,
+   117
+  ],
+  [
+   320,
+   "Małe drzewo",
+   62,
+   117
+  ]
+ ],
+ "3": [
+  [
+   135,
+   "Sosna (niska)",
+   101,
+   2
+  ],
+  [
+   136,
+   "Sosna",
+   97,
+   3
+  ],
+  [
+   199,
+   "Sosna (średnia)",
+   70,
+   2
+  ],
+  [
+   204,
+   "Sosna (średnia)",
+   72,
+   0
+  ],
+  [
+   270,
+   "Płaski kamień",
+   47,
+   2
+  ],
+  [
+   274,
+   "Sosna",
+   58,
+   1
+  ],
+  [
+   281,
+   "Małe drzewo",
+   40,
+   0
+  ],
+  [
+   287,
+   "Skała",
+   64,
+   3
+  ],
+  [
+   299,
+   "Suchy krzaczek",
+   46,
+   1
+  ],
+  [
+   343,
+   "Wysoki suchy krzak",
+   55,
+   1
+  ],
+  [
+   409,
+   "Poszarpana skała",
+   50,
+   0
+  ],
+  [
+   438,
+   "Ruda żelaza",
+   59,
+   0
+  ],
+  [
+   460,
+   "Ruda żelaza",
+   59,
+   1
+  ],
+  [
+   461,
+   "Ruda żelaza",
+   43,
+   0
+  ],
+  [
+   462,
+   "Ruda żelaza",
+   56,
+   3
+  ],
+  [
+   477,
+   "Skalna iglica",
+   49,
+   1
+  ]
+ ],
+ "4": [
+  [
+   14,
+   "Sosna (niska)",
+   1,
+   2
+  ],
+  [
+   24,
+   "Sosna (średnia)",
+   0,
+   5
+  ],
+  [
+   36,
+   "Sosna (niska)",
+   0,
+   6
+  ],
+  [
+   37,
+   "Sosna",
+   0,
+   28
+  ],
+  [
+   217,
+   "Sosna",
+   0,
+   32
+  ],
+  [
+   270,
+   "Wielki splot gałęzi",
+   1,
+   55
+  ],
+  [
+   356,
+   "Pieniek",
+   0,
+   43
+  ]
+ ],
+ "111": [
+  [
+   19,
+   "Pochodnia na baszcie",
+   118,
+   46
+  ],
+  [
+   30,
+   "Most: latarenka (ogień)",
+   117,
+   47
+  ],
+  [
+   32,
+   "Most: latarenka (ogień)",
+   117,
+   52
+  ],
+  [
+   89,
+   "Brama zachodnia: dach i słupy",
+   119,
+   52
+  ],
+  [
+   90,
+   "Brama zachodnia: skrzydło i cień",
+   118,
+   51
+  ],
+  [
+   91,
+   "Brama zachodnia: światło latarni",
+   119,
+   49
+  ],
+  [
+   111,
+   "Drzewo",
+   118,
+   117
+  ]
+ ]
+}

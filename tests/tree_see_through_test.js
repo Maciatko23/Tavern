@@ -10,7 +10,7 @@ kit.test({ port: 9422, bootCheck: "the game boots", errorCheck: "no errors in th
         return s ? +(${part === "body" ? "s._treeBody ? s._treeBody.alpha : -1" : "s.alpha"}).toFixed(2) : -1; })()`);
 
     // ---- a choppable tree on grandpa's field
-    await t.newGame({ map: 3, x: 5, y: 5, hour: 12, quiet: true });
+    await t.newGame({ map: 3, x: 45, y: 36, hour: 12, quiet: true });
     const tree = await t.json(`(function(){ const s = SceneManager._scene._spriteset._characterSprites.find(o => o._character instanceof Game_Event && o.isTreeSprite && o.isTreeSprite() && !o._character._treeGone && o._character.y > 3);
         return s ? { id: s._character.eventId(), x: s._character.x, y: s._character.y } : null; })()`);
     t.check("a standing choppable tree on Map003", !!tree, tree);

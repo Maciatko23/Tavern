@@ -1,0 +1,55 @@
+PASS gra się uruchamia
+PASS wtyczki: Kantor_Data pod Cysterna_Data i nad TownLife/TownQuests, Kantor pod Cysterna i nad CleanHUD  [100,101,131,133,154,155,169]
+PASS mapa 171 „Piwnica kantoru” pod Kantorem (103), numery 730-759 właściciela Kantor, zadanie W5 w TownQuests  {"n":[100,101,131,133,154,155,169],"map":["Piwnica kantoru",103],"reg":["730-759","730-759"],"w5":true,"plan":3,"alt":125}
+PASS plan Baltazara: trzy wpisy nocnej zmiany (w5Shift) i przeprowadzka na przystań (alt: mapa 125)  {"n":[100,101,131,133,154,155,169],"map":["Piwnica kantoru",103],"reg":["730-759","730-759"],"w5":true,"plan":3,"alt":125}
+PASS rozdz. 1: przed dniem 10 wątek się nie zaczyna (jedna poszlaka: skrzynia K15)  ""
+PASS ...od dnia 10 zaczyna się sam: „Dziwny kupiec” - poszlaki 1 z 2  {"step":"w5Poszlaki","clues":["skrzynia"]}
+PASS hak D27: kwatermistrz Kłos nocą po promie przy tylnych drzwiach kantoru - poszlaka „nocni goście”, druga poszlaka kończy rozdz. 1  {"ev":true,"at":[13,48],"clue":10,"step":"w5Stuk"}
+PASS rozdz. 2: kurier w kapturze widzi bohatera na swojej drodze - „Ktoś tu jest... Nie dziś.” - i zawraca (nie puka)  {"seen":0,"night":-1,"spooked":10}
+PASS ...z ukrycia (C): kurier puka trzy razy w tylne drzwi kantoru, bohater to widzi - rozdz. 2 dalej: obóz przemytników  {"knock":{"seen":12,"night":11,"spooked":10},"step":"w5Oboz"}
+PASS ...po północy Ambroży dzwoni „trzy i jeden” (sygnał W2 „obcy w murach” zapisany w dzienniku)  {"bells":["3+1"],"q":4}
+PASS obóz przemytników na Skraju lasu (Map023, noc): ognisko z ogniem i światłem, wóz, kurier, czterech ludzi Baltazara przy ognisku (siedzą i śpią)  {"men":[["bandit","sit",32,4],["archer","sit",34,4],["bandit","sleep",33,2],["knifer","sit",32,3]],"fire":true,"cart":true,"courier":true,"light":true}
+PASS ...podkradziony po cichu słyszy rozmowę przy ognisku (sztab chce kamieni z krukiem, zboże z rekwizycji, „drzwi pod skałą”, księga kupca) - rozdz. 3  {"camp":{"heard":12,"fought":0,"beaten":-1,"night":12,"fled":-1},"step":"w5Najem","engaged":0}
+PASS ...zauważony: cała grupa rzuca się na bohatera, kurier ucieka do lasu; pobici - w worku list przewozowy z pieczęcią kantoru, rozdz. 3  {"eng":{"n":3,"courier":true},"camp":{"heard":0,"fought":12,"beaten":-1,"night":12,"fled":12},"v":{"list_przewozowy":1}}
+PASS ...pobity: obrabowany jak przez każdych ludzi, obóz znika na tę noc, rozdział czeka na następną  {"heard":0,"fought":0,"beaten":12,"night":12,"fled":-1}
+PASS rozdz. 3: Baltazar (zaufanie - skrzynia K15 nieotwarta) najmuje bohatera do nocnej roboty: 20 G za noc, tylne drzwi od 22  {"step":"w5Zmiany","text":"Przyjacielu. Ty umiesz nie zadawać pytań - to\nrzadki towar. / Potrzebuję silnych rąk nocą. Skrzynie z\npiwnicy pod tylne drzwi. Dwadzieścia groszy za\nnoc. / Od dziesiątej, tylnymi drzwiami. Nie spóźnia","missing":[]}
+PASS hak D23: karta 1 kronik leży w szkatule Baltazara - za dnia nie da się jej odkupić (Pustelnia: brak „Biorę (40 G)”)  [["Przyjdę.","Nie dziś."]]
+PASS pierwsza noc: tylne drzwi wpuszczają do zaplecza, klapa prowadzi do piwnicy; Baltazar przy biurku, Sławek przy beczkach, sterta skrzyń, worki zboża z pieczęcią dworu  {"b":true,"sl":true,"pile":true,"sacks":true,"stones":false,"shown":true}
+PASS ...skrzynia ciężka (wolniejszy chód), trzy skrzynie pod tylnymi drzwiami - 20 G, noc 1 z 2  {"speed":[2.75,1],"shifts":1,"gold":20}
+PASS ...w nocy Baltazara nie ma za ladą kantoru (jest w piwnicy - TownLife w5Shift)  {"b":true,"sl":true,"pile":true,"sacks":true,"stones":false,"shown":true}
+PASS druga noc: w skrzyniach kamienie z krukiem (flaga w5Kamienie) - po dwóch nocach rozdz. 4 „Rejestr”  {"cel":{"b":true,"sl":true,"pile":true,"sacks":true,"stones":true,"shown":true},"shifts":2,"step":"w5Rejestr"}
+PASS rozdz. 4: trzecia noc - nic nie nosisz, zwoje map wyspy w gabinecie; „Poczekam” - do wpół do pierwszej  {"maps":true,"h1":0.43,"text":"Dziś nic nie nosisz. Czekamy na wóz - o wpół\ndo pierwszej idę na górę go przyjąć. / Posiedź tu. Pilnuj skrzyń razem ze\nS"}
+PASS ...Baltazar wychodzi na górę; rejestr z biurka w torbie (imiona i kwoty: K.W., F., G.Ż.P., P.K., kamienie z krukiem do sztabu Straży Pewności)  {"v":{"rejestr":1,"karta_1":1},"regText":"K.W. - 5 G na tydzień. Za ciemność przy bramie. F. - dwie beczki wody na tydzień, o północy, tylna furtka dworu. G.Ż.P. - żołd z lądu, 40 G na miesiąc. Rozkaz: drzwi pod skałą, za każdą cenę. P.K. (garnizon) - 4 worki zboża z rekwizycji na każdy prom. Zboże z rekwizycji dworu (D.) - przez bramę wschodnią, nocą. Kamienie z krukiem - do sztabu Straży Pewności (białe oko). Płacić do 15 G za sztukę. Chłopak od Stacha - 5 kamieni z wraku, 75 G. Chłopak od Stacha - kroniki zakonu, 300 G. Na prom. Oko z latarni - 400 G. Sztab zapłaci tysiąc. Czekamy na drzwi pod skałą."}
+PASS hak D25 i W11: w rejestrze „5 kamieni z wraku, 75 G” i „Oko z latarni - 400 G”  "K.W. - 5 G na tydzień. Za ciemność przy bramie. F. - dwie beczki wody na tydzień, o północy, tylna furtka dworu. G.Ż.P. - żołd z lądu, 40 G na miesiąc. Rozkaz: drzwi pod skałą, za każdą cenę. P.K. (garnizon) - 4 worki zboża z rekwizycji na każdy prom. Zboże z rekwizycji dworu (D.) - przez bramę wschodnią, nocą. Kamienie z krukiem - do sztabu Straży Pewności (białe oko). Płacić do 15 G za sztukę. Chłopak od Stacha - 5 kamieni z wraku, 75 G. Chłopak od Stacha - kroniki zakonu, 300 G. Na prom. Oko z latarni - 400 G. Sztab zapłaci tysiąc. Czekamy na drzwi pod skałą."
+PASS hak D23: w szkatule luźna karta z kronik zakonu (karta 1 - Pustelnia)  {"f1":18,"v":1}
+PASS ...Baltazar wraca po dwudziestu minutach, bohater poza gabinetem - 20 G, rozdz. 5 „Komu to dać”  {"step":"w5Komu","gold":20,"reg":{"night":17,"state":"back","back":24.833333333333332,"caught":0,"done":18,"took":"take","card":18,"lastCaught":-1,"alarm":0}}
+PASS ...przyłapany w gabinecie: Baltazar odbiera rejestr i wyrzuca bez zapłaty na ulicę; rejestr czeka na następną noc  {"map":8,"v":{},"reg":{"night":17,"state":"caught","back":24.833333333333332,"caught":1,"done":0,"took":"","card":0,"lastCaught":17,"alarm":0},"step":"w5Rejestr"}
+PASS ...Sławek widzi bohatera przy gabinecie: „Szefie!” - Baltazar wraca od razu  {"night":17,"state":"returning","back":24.538611111111116,"caught":0,"done":0,"took":"","card":0,"lastCaught":-1,"alarm":1}
+PASS rozdz. 5 a: Wit (dłużnik z D5) przyznaje się do 5 G na tydzień; razem do sołtysa: kantor zamknięty, Wit sojusznikiem, Baltazar znika  {"outcome":"closed","komu":"wit","step":"w5Prom","text":"Kapralu. To rejestr Baltazara. Imiona, kwoty.\nTwoje też. / (Wit czyta długo. Przy pierwszej linijce\nzamyka oczy.) „K.W. - pięć groszy na tydzień.”\nTo ja. Brałem"}
+PASS ...drzwi kantoru: „Kantor zamknięty z rozkazu sołtysa.”  ["Kantor zamknięty z rozkazu sołtysa."]
+PASS rozdz. 5 a (bez zaufania): Wit pali rejestr w koszu żarowym, noc w wartowni (rano następnego dnia), Baltazar wrogiem, napad zaplanowany  {"outcome":"enemy","day":19,"hour":7,"raid":{"day":24,"done":0}}
+PASS rozdz. 5 b: sołtys bierze rejestr - zebranie w ratuszu jutro w południe  {"komu":"soltys","z":19,"step":"w5Zebranie"}
+PASS ...zebranie: sołtys czyta rejestr na głos - kantor zamknięty, Opinia +12, Baltazar odpływa (rozdz. 6)  {"op":12,"step":"w5Prom","text":"(W ratuszu tłoczno. Sołtys czyta rejestr na\ngłos - linijka po linijce.) / Zboże z rekwizycji: tylnymi drzwiami do\nkantoru. Kamienie z krukiem: na ląd, do\njakieg"}
+PASS rozdz. 5 c: podwójna gra - Baltazar odbiera oryginał, bohater jego wspólnikiem (frakcja patrzy na kroki w podziemiach)  {"outcome":"double","step":"w5Prom","v":{"karta_1":1}}
+PASS ...po tygodniu Baltazar płaci wspólnikowi 30 G działki  {"gold":30,"text":"Twoja działka, wspólniku. Trzydzieści groszy.\nZa milczenie."}
+PASS rozdz. 5 d: szantaż - 50 G, Baltazar wrogiem: ceny x2 (Kantor.priceMul), nocny napad za 3-6 dni  {"outcome":"enemy","gold":50,"raid":{"day":24,"done":0}}
+PASS hak W11: odkup soczewki u wroga kosztuje dwa razy tyle („Biorę (300 G)”)  [["Biorę (300 G).","Nie teraz."]]
+PASS ...nocny napad ludzi Baltazara na drodze (Humans.js: „Pozdrowienia od kupca!”)
+PASS rozdz. 6: w noc promu na Polnej drodze wóz z ładunkiem, dwóch ludzi Baltazara (pałka i łuk) i związany Rafał (W6: zabrany przez dwór)  {"cart":true,"rafal":true,"men":["bandit","archer"]}
+PASS ...straż widzi bohatera - zasadzka: z krzaków wyskakuje dwóch kolejnych  {"n":4,"eng":4}
+PASS ...pobici: ładunek zdobyty - 5 kamieni z krukiem w torbie, rozdz. 7  {"ferry":{"day":22,"state":"seized","ambush":22,"rafal":"free","stateDay":22,"cleared":22},"v":{"karta_1":1,"kamien_kruk":5},"step":"w5Akt2"}
+PASS ...Rafał uwolniony: wraca do obozu (W6: rafalAlly)  {"f":[22,22]}
+PASS ...albo po cichu: zwykłe kamienie zamiast kamieni z krukiem (6 kamieni), nikt nie zauważył  {"ferry":{"day":22,"state":"swapped","ambush":0,"rafal":"","stateDay":22,"cleared":0},"step":"w5Akt2"}
+PASS ...pobity przy wozie: obrabowany, ładunek płynie na ląd  {"day":22,"state":"beaten","ambush":0,"rafal":"","stateDay":22,"cleared":0}
+PASS ...przegapiona noc promu: wóz pojechał bez bohatera  {"day":22,"state":"gone","ambush":0,"rafal":"","stateDay":23,"cleared":0}
+PASS ...wspólnik (podwójna gra): ludzie Baltazara witają swojego, wóz puszczony - 30 G  {"ferry":{"day":19,"state":"letgo","ambush":0,"rafal":"","stateDay":19,"cleared":0},"gold":30}
+PASS rozdz. 7 (Akt II): Baltazar wraca - na przystań, ze składu portowego (alt mapa 125)  {"back":22,"gone":false,"harbour":true,"home":125}
+PASS ...sołtys: kto weźmie pusty kantor? Ludmiła z obozu - uczciwy kantor, wątek W5 skończony  {"honest":"ludmila","text":"Kantor stoi pusty od zebrania. Szkoda budynku\n- i ludzie chcą soli, żelaza, gwoździ. / Kto ma go prowadzić? Ludmiła z ob"}
+PASS ...Ludmiła stoi za ladą kantoru miejskiego za dnia (9-15, TownLife: miejsce ludmila_lada na mapie 103)  {"x":12,"y":5,"hidden":false,"entry":"w5_lada"}
+PASS ...rozmowa z Ludmiłą: krótkie słowo i towar - żelazo o dziesiątą część taniej (16 G zamiast 18)  {"text":"Ela liczy gwoździe. Myli się tylko na swoją\nniekorzyść.","choices":[["Pokaż towar.","Broń z kontynentu","Co słychać w obozie?","Bywaj."],["Żelazo ×1 - 16 G","Stal ×1 - 45 G","Gwoździe ×10 - 18 G","Lina ×1 - 5 G","Odświętna koszula z haftem ×1 - 54 G","Nic."]]}
+PASS ...po trzeciej Ludmiła wraca do obozu, na ladzie cennik i skrzynka: dalej 16 G  {"lu2":true,"text":"(Na ladzie cennik i skrzynka na monety.\nLudmiła stoi tu od dziewiątej do trzeciej.)"}
+PASS rozdz. 7 c: wspólnik - żelazo i stal za pół ceny („Żelazo ×1 - 9 G”), W5 skończony  [["Pokaż towar.","Broń z kontynentu","Bywaj."],["Żelazo ×1 - 9 G","Stal ×1 - 25 G","Gwoździe ×10 - 10 G","Lina ×1 - 3 G","Odświętna koszula z haftem ×1 - 30 G","Nic."]]
+PASS hak Akt III: kapral Wit broni tawerny (w5WitAlly), najemnik Baltazara w drugiej fali (w5BaltazarWrog)  {"wit":true,"merc":["Najemnik Baltazara"],"none":0}
+PASS F9 „W5: rozdział 4”: wątek na początku rozdz. 4 (najęty, dwie noce za nim, 22:00), przejście pod tylne drzwi kantoru  {"g":[8,14,49,8],"step":"w5Rejestr","shifts":2,"hour":22.05}
+PASS bez błędów w konsoli  []
+54/54 passed

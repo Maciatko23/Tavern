@@ -33,7 +33,7 @@
 (() => {
     "use strict";
 
-    const MAP = 159, IZBA = 160, LATERNA = 161;
+    const MAP = 125, IZBA = 160, LATERNA = 161;   // (plansza 3x3, 2026-11-08: the lighthouse on Przystań's cape)
     const ITEM = { tran: 177, wood: 61, charcoal: 79, pendant: 172, rope: 0, herring: 173, cod: 174, tar: 176 };
     const L = () => window.Latarnia || null;
 
@@ -43,10 +43,10 @@
     // fire up in the lantern room (in a fog he rings the fog bell every hour - its rope runs down from the gallery). The hours of
     // dawn and dusk are the sun's of the day: Latarnia.js puts them into this same array each day (Sky.sunTimes).
     const PLAN = [[0, "inside", "laterna"], [6.4, "inside", "izba"], [8, "inside", "izba_sen"],
-                  [15, "work", "drewutnia"], [17, "inside", "izba"], [20.3, "inside", "laterna"]];
+                  [14, "inside", "tawerna"], [17.5, "inside", "izba"], [20.3, "inside", "laterna"]];   // (2026-11-11 dawcy_miasto: 14-17:30 at the tavern for tran, ale and talk)
     const RESIDENT = {
         key: "latarnik", id: 943, sheet: "$Npc_Latarnik", map: MAP, speed: 2,
-        away: ["izba_sen"],
+        away: ["izba_sen"], indoor: { tawerna: "gosc_latarnik" },
         plan: PLAN,
         barks: {
         },
@@ -61,7 +61,7 @@
     const INDOOR = { 160: { place: "izba", at: [5, 7, 8] }, 161: { place: "laterna", at: [6, 5, 4] } };
     const TLD = window.TownLifeData;
     if (TLD && TLD.SPOTS_BY_MAP) {
-        TLD.SPOTS_BY_MAP[MAP] = Object.assign({ laterna: [22, 12, 8], izba: [15, 19, 8], izba_sen: [15, 19, 8], drewutnia: [25, 19, 6] },
+        TLD.SPOTS_BY_MAP[MAP] = Object.assign({ laterna: [92, 103, 8], izba: [79, 99, 8], izba_sen: [79, 99, 8], drewutnia: [83, 96, 6] },
             TLD.SPOTS_BY_MAP[MAP] || {});
         for (const [mid, o] of Object.entries(INDOOR)) {
             const spots = TLD.SPOTS_BY_MAP[mid] = TLD.SPOTS_BY_MAP[mid] || {};
@@ -132,15 +132,15 @@
         zadania: {
             // K49: from day 25 (the ferry brings no oil since the second wave - its ferry, docs/PODROZNI.md 5.1) - the oil and the wood on
             // the hand: the nights of fire
-            K49: { kind: "K", giver: "latarnik", icon: 176, offer: { cond: { day: 25, flags: ["latarnikMet"] } },
-                kroki: [{ nazwa: "k49Paliwo", type: "bring", to: "latarnik", need: [[177, 4], [61, 6]], haki: { hand: "k49Paliwo" } }],
+            K49: { kind: "K", giver: "latarnik", icon: 176, offer: { cond: { day: 25, hours: [14, 17.5], flags: ["latarnikMet"] } },
+                kroki: [{ nazwa: "k49Paliwo", type: "bring", to: "latarnik", need: [[177, 4], [61, 6]], hours: [14, 17.5], haki: { hand: "k49Paliwo" } }],
                 reward: { gold: 30, xp: 60, flag: "latarniaUfa" } },
             // D22: offered in a fog, or the afternoon before a fog night; three visions in the lens, then Bazyli asks what was seen
-            D22: { kind: "D", giver: "latarnik", icon: 189, offer: { cond: { flags: ["latarnikMet"], fn: "d22Ready" } },
+            D22: { kind: "D", giver: "latarnik", icon: 189, offer: { cond: { hours: [14, 17.5], flags: ["latarnikMet"], fn: "d22Ready" } },
                 oferta: ["stan:met", { lub: ["mglaTeraz", { i: ["mglaDzis", { godziny: [12, 24] }] }] }],
                 kroki: [
                     { nazwa: "d22Wizje", gotowe: "ile:visions>=" + VISIONS.length, zmienne: { n: { ile: "visions" }, kiedy: { hak: "kiedyMgla" } } },
-                    { nazwa: "d22Koniec", rozmowy: [{ kto: "latarnik", tresc: ["d22.pyta", { wybor: [
+                    { nazwa: "d22Koniec", rozmowy: [{ kto: "latarnik", gdy: [{ godziny: [14, 17.5] }], tresc: ["d22.pyta", { wybor: [
                         { etykieta: "d22.powiem", tresc: ["d22.powiedzial", { zrob: "d22Powiem" }] },
                         { etykieta: "d22.zachowam", tresc: ["d22.zachowal", { zrob: "d22Zachowam" }] }
                     ], anuluj: -1 }] }] }
@@ -227,5 +227,5 @@
         // the lighthouse's fire on the tower's picture (tools/latarnia/art/art.json: px right of / above the middle of its foot; 2026-10-29 the tower is 2x: 288x512 cell, flame k = 1.6)
         FIRE: { x: 0, y: 354, w: 24, k: 1.6 }, TOWER: [22, 11], IZBA_DOOR: [15, 18], LANDING: { 160: [6, 8], 161: [5, 7] },
         // the beams seen from afar at night on the maps around: from beyond the right edge of the screen, sy = its height (a share)
-        FAR: { 13: { side: "right", sy: 0.2 }, 157: { side: "right", sy: 0.3 } } };
+        FAR: {} };   // (the beams far off beyond an edge: none on the board for now)
 })();

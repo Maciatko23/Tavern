@@ -1,0 +1,3519 @@
+{
+ "mapa": 3,
+ "nazwa": "Kruczy Jar",
+ "w": 120,
+ "h": 120,
+ "zestaw": 9,
+ "obszar": null,
+ "problemy": [
+  {
+   "kod": "D1",
+   "x": 34,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 35,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 36,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 37,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 38,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 39,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 40,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 41,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 42,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 43,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 44,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 45,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 46,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 47,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 48,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 49,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 50,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 51,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 52,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 53,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 54,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 55,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 56,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 57,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 58,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 59,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 60,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 61,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 62,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 63,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 64,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 65,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 66,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 67,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 68,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 69,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 70,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 71,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 72,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 73,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 74,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 75,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 76,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 77,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 78,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 79,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 80,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 81,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 82,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 83,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 84,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 85,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 86,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 87,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 88,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 89,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 90,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 91,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 92,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 93,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 94,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 95,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 96,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 97,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 100,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 101,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 102,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 103,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 104,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 105,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 106,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 107,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 108,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 109,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 110,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 111,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 112,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 113,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 114,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 115,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 116,
+   "y": 0,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 34,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 35,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 36,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 37,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 38,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 39,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 40,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 41,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 42,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 43,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 44,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 45,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 46,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 47,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 48,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 49,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 50,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 51,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 52,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 53,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 54,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 55,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 56,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 57,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 58,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 59,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 60,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 61,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 62,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 63,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 64,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 65,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 66,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 67,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 68,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 69,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 70,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 71,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 72,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 73,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 74,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 75,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 76,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 77,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 78,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 79,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 80,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 81,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 82,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 83,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 84,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 85,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 86,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 87,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 88,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 89,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 90,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 91,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 92,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 93,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 94,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 95,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 96,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 97,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 100,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 101,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 102,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 103,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 104,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 105,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 106,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 107,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 108,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 109,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 110,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 111,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 112,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 113,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 114,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 115,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 116,
+   "y": 1,
+   "waga": "uwaga",
+   "grupa": [
+    34,
+    0
+   ],
+   "opis": "nieosiągalne miejsce: 166 kratek od (34,0)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 42,
+   "y": 3,
+   "waga": "uwaga",
+   "grupa": [
+    42,
+    3
+   ],
+   "opis": "nieosiągalne miejsce: 6 kratek od (42,3)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 43,
+   "y": 3,
+   "waga": "uwaga",
+   "grupa": [
+    42,
+    3
+   ],
+   "opis": "nieosiągalne miejsce: 6 kratek od (42,3)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 44,
+   "y": 3,
+   "waga": "uwaga",
+   "grupa": [
+    42,
+    3
+   ],
+   "opis": "nieosiągalne miejsce: 6 kratek od (42,3)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 45,
+   "y": 3,
+   "waga": "uwaga",
+   "grupa": [
+    42,
+    3
+   ],
+   "opis": "nieosiągalne miejsce: 6 kratek od (42,3)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 46,
+   "y": 3,
+   "waga": "uwaga",
+   "grupa": [
+    42,
+    3
+   ],
+   "opis": "nieosiągalne miejsce: 6 kratek od (42,3)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 47,
+   "y": 3,
+   "waga": "uwaga",
+   "grupa": [
+    42,
+    3
+   ],
+   "opis": "nieosiągalne miejsce: 6 kratek od (42,3)",
+   "ukryj": true
+  },
+  {
+   "kod": "O1",
+   "x": 25,
+   "y": 46,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 660 (D 12,2) - góra bez dołu (brak kafla 668 pod) w (25,46)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 43,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (43,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 44,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (44,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 45,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (45,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 46,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (46,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 47,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (47,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 48,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (48,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 49,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (49,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 50,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (50,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 51,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (51,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 52,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (52,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 53,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (53,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 54,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (54,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 55,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (55,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 57,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (57,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 58,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (58,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 59,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (59,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 60,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (60,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 61,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (61,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 62,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (62,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 63,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (63,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 64,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (64,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 65,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (65,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 66,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (66,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 67,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (67,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 72,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (72,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 73,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (73,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 74,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (74,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 75,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (75,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 76,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (76,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 34,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,34)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 35,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,35)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 35,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,35)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 36,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,36)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 36,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,36)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 37,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,37)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 37,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,37)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 38,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,38)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 39,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,39)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 39,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,39)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 40,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,40)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 40,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,40)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 41,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,41)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 41,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,41)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 42,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,42)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 42,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,42)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 43,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,43)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 44,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,44)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 45,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,45)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 47,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,47)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 48,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,48)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 49,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,49)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 49,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,49)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 50,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,50)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 50,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,50)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 51,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,51)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 51,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,51)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 52,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,52)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 52,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,52)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,53)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,54)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,54)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,55)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,55)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 56,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,56)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 56,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,56)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 57,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,57)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 57,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,57)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 58,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,58)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 58,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,58)"
+  },
+  {
+   "kod": "R1",
+   "x": 42,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 216 (B 8,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (42,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 43,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (43,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 44,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (44,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 45,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (45,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 46,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (46,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 47,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (47,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 52,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (52,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 53,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (53,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 54,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (54,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 55,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (55,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 56,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (56,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 57,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (57,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 58,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (58,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 59,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (59,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 60,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (60,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 61,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (61,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 62,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (62,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 63,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (63,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 64,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (64,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 65,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (65,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 66,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (66,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 67,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (67,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 68,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (68,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 69,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (69,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 70,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (70,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 71,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (71,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 72,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (72,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 73,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (73,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 74,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (74,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 75,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 209 (B 9,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (75,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 76,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 208 (B 8,10) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (76,59)"
+  },
+  {
+   "kod": "R1",
+   "x": 77,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "kafel 217 (B 9,11) to obiekt z kafli - na mapie plenerowej ma być zdarzeniem (77,59)"
+  },
+  {
+   "kod": "Z2",
+   "x": 62,
+   "y": 6,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 313 'Wielki splot gałęzi', 460 'Ruda żelaza' nachodzą na kratce (62,6)"
+  },
+  {
+   "kod": "Z2",
+   "x": 1,
+   "y": 36,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 188 'Splot gałęzi', 190 'Splot gałęzi' nachodzą na kratce (1,36)"
+  },
+  {
+   "kod": "Z2",
+   "x": 2,
+   "y": 36,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 190 'Splot gałęzi', 191 'Sosna (średnia)' nachodzą na kratce (2,36)"
+  },
+  {
+   "kod": "Z2",
+   "x": 1,
+   "y": 39,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 200 'Dwie oparte skały', 207 'Drzewo (sosna)' nachodzą na kratce (1,39)"
+  },
+  {
+   "kod": "Z2",
+   "x": 2,
+   "y": 41,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 210 'Sosna (średnia)', 221 'Wysoki suchy krzak' nachodzą na kratce (2,41)"
+  },
+  {
+   "kod": "Z2",
+   "x": 0,
+   "y": 46,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 228 'Splot gałęzi', 229 'Wysoki suchy krzak' nachodzą na kratce (0,46)"
+  },
+  {
+   "kod": "Z2",
+   "x": 47,
+   "y": 48,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 99 'Splot gałęzi', 122 'Splot gałęzi', 134 'Wysoki suchy krzak' nachodzą na kratce (47,48)"
+  },
+  {
+   "kod": "Z2",
+   "x": 70,
+   "y": 48,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 50 'Ruda żelaza', 97 'Wielki splot gałęzi' nachodzą na kratce (70,48)"
+  },
+  {
+   "kod": "Z2",
+   "x": 1,
+   "y": 49,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 237 'Dwie oparte skały', 349 'Splot gałęzi' nachodzą na kratce (1,49)"
+  },
+  {
+   "kod": "Z2",
+   "x": 69,
+   "y": 49,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 59 'Ruda żelaza', 97 'Wielki splot gałęzi', 113 'Wysoki suchy krzak' nachodzą na kratce (69,49)"
+  },
+  {
+   "kod": "Z2",
+   "x": 71,
+   "y": 49,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 96 'Pęknięty kamień', 97 'Wielki splot gałęzi' nachodzą na kratce (71,49)"
+  },
+  {
+   "kod": "Z2",
+   "x": 1,
+   "y": 50,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 238 'Splot gałęzi', 244 'Małe drzewo' nachodzą na kratce (1,50)"
+  },
+  {
+   "kod": "Z2",
+   "x": 68,
+   "y": 50,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 56 'Splot gałęzi', 111 'Wielki splot gałęzi' nachodzą na kratce (68,50)"
+  },
+  {
+   "kod": "Z2",
+   "x": 69,
+   "y": 50,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 56 'Splot gałęzi', 111 'Wielki splot gałęzi', 113 'Wysoki suchy krzak' nachodzą na kratce (69,50)"
+  },
+  {
+   "kod": "Z2",
+   "x": 70,
+   "y": 50,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 77 'Sterta kamieni', 111 'Wielki splot gałęzi' nachodzą na kratce (70,50)"
+  },
+  {
+   "kod": "Z2",
+   "x": 71,
+   "y": 50,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 48 'Ruda żelaza', 91 'Skalna iglica' nachodzą na kratce (71,50)"
+  },
+  {
+   "kod": "Z2",
+   "x": 73,
+   "y": 50,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 45 'Ruda żelaza', 105 'Splot gałęzi' nachodzą na kratce (73,50)"
+  },
+  {
+   "kod": "Z2",
+   "x": 67,
+   "y": 51,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 66 'Ruda żelaza', 112 'Wielki splot gałęzi' nachodzą na kratce (67,51)"
+  },
+  {
+   "kod": "Z2",
+   "x": 68,
+   "y": 51,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 64 'Ruda żelaza', 66 'Ruda żelaza', 111 'Wielki splot gałęzi' nachodzą na kratce (68,51)"
+  },
+  {
+   "kod": "Z2",
+   "x": 69,
+   "y": 51,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 64 'Ruda żelaza', 111 'Wielki splot gałęzi' nachodzą na kratce (69,51)"
+  },
+  {
+   "kod": "Z2",
+   "x": 70,
+   "y": 51,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 108 'Splot gałęzi', 111 'Wielki splot gałęzi' nachodzą na kratce (70,51)"
+  },
+  {
+   "kod": "Z2",
+   "x": 71,
+   "y": 51,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 91 'Skalna iglica', 108 'Splot gałęzi' nachodzą na kratce (71,51)"
+  },
+  {
+   "kod": "Z2",
+   "x": 72,
+   "y": 51,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 80 'Kamienny kopiec', 115 'Wysoki suchy krzak' nachodzą na kratce (72,51)"
+  },
+  {
+   "kod": "Z2",
+   "x": 75,
+   "y": 51,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 79 'Kamienny kopiec', 106 'Splot gałęzi' nachodzą na kratce (75,51)"
+  },
+  {
+   "kod": "Z2",
+   "x": 67,
+   "y": 52,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 104 'Zasiek z gałęzi', 112 'Wielki splot gałęzi' nachodzą na kratce (67,52)"
+  },
+  {
+   "kod": "Z2",
+   "x": 68,
+   "y": 52,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 92 'Menhir', 104 'Zasiek z gałęzi', 112 'Wielki splot gałęzi' nachodzą na kratce (68,52)"
+  },
+  {
+   "kod": "Z2",
+   "x": 69,
+   "y": 52,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 93 'Stos płaskich kamieni', 104 'Zasiek z gałęzi' nachodzą na kratce (69,52)"
+  },
+  {
+   "kod": "Z2",
+   "x": 70,
+   "y": 52,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 54 'Splot gałęzi', 75 'Wysoka skała' nachodzą na kratce (70,52)"
+  },
+  {
+   "kod": "Z2",
+   "x": 71,
+   "y": 52,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 54 'Splot gałęzi', 78 'Skalna płyta', 114 'Wysoki suchy krzak' nachodzą na kratce (71,52)"
+  },
+  {
+   "kod": "Z2",
+   "x": 72,
+   "y": 52,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 78 'Skalna płyta', 115 'Wysoki suchy krzak' nachodzą na kratce (72,52)"
+  },
+  {
+   "kod": "Z2",
+   "x": 67,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 67 'Ruda żelaza', 103 'Kłąb pnączy' nachodzą na kratce (67,53)"
+  },
+  {
+   "kod": "Z2",
+   "x": 68,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 92 'Menhir', 98 'Gęste zarośla', 103 'Kłąb pnączy' nachodzą na kratce (68,53)"
+  },
+  {
+   "kod": "Z2",
+   "x": 69,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 57 'Ruda żelaza', 98 'Gęste zarośla' nachodzą na kratce (69,53)"
+  },
+  {
+   "kod": "Z2",
+   "x": 70,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 75 'Wysoka skała', 83 'Ogromny głaz' nachodzą na kratce (70,53)"
+  },
+  {
+   "kod": "Z2",
+   "x": 71,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 83 'Ogromny głaz', 114 'Wysoki suchy krzak' nachodzą na kratce (71,53)"
+  },
+  {
+   "kod": "Z2",
+   "x": 72,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 82 'Płaski kamień', 83 'Ogromny głaz' nachodzą na kratce (72,53)"
+  },
+  {
+   "kod": "Z2",
+   "x": 73,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 109 'Splot gałęzi', 110 'Wielki splot gałęzi' nachodzą na kratce (73,53)"
+  },
+  {
+   "kod": "Z2",
+   "x": 74,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 51 'Ruda żelaza', 109 'Splot gałęzi', 110 'Wielki splot gałęzi' nachodzą na kratce (74,53)"
+  },
+  {
+   "kod": "Z2",
+   "x": 75,
+   "y": 53,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 85 'Pęknięty głaz', 110 'Wielki splot gałęzi' nachodzą na kratce (75,53)"
+  },
+  {
+   "kod": "Z2",
+   "x": 68,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 98 'Gęste zarośla', 103 'Kłąb pnączy' nachodzą na kratce (68,54)"
+  },
+  {
+   "kod": "Z2",
+   "x": 69,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 94 'Ostry odłamek', 98 'Gęste zarośla' nachodzą na kratce (69,54)"
+  },
+  {
+   "kod": "Z2",
+   "x": 70,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 65 'Splot gałęzi', 83 'Ogromny głaz' nachodzą na kratce (70,54)"
+  },
+  {
+   "kod": "Z2",
+   "x": 71,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 65 'Splot gałęzi', 83 'Ogromny głaz' nachodzą na kratce (71,54)"
+  },
+  {
+   "kod": "Z2",
+   "x": 72,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 49 'Ruda żelaza', 83 'Ogromny głaz' nachodzą na kratce (72,54)"
+  },
+  {
+   "kod": "Z2",
+   "x": 73,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 89 'Skupisko skał', 110 'Wielki splot gałęzi' nachodzą na kratce (73,54)"
+  },
+  {
+   "kod": "Z2",
+   "x": 74,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 89 'Skupisko skał', 110 'Wielki splot gałęzi' nachodzą na kratce (74,54)"
+  },
+  {
+   "kod": "Z2",
+   "x": 69,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 63 'Ruda żelaza', 86 'Poszarpana skała' nachodzą na kratce (69,55)"
+  },
+  {
+   "kod": "Z2",
+   "x": 70,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 63 'Ruda żelaza', 87 'Dwie oparte skały' nachodzą na kratce (70,55)"
+  },
+  {
+   "kod": "Z2",
+   "x": 71,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 55 'Splot gałęzi', 87 'Dwie oparte skały', 88 'Długa płyta' nachodzą na kratce (71,55)"
+  },
+  {
+   "kod": "Z2",
+   "x": 72,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 55 'Splot gałęzi', 88 'Długa płyta' nachodzą na kratce (72,55)"
+  },
+  {
+   "kod": "Z2",
+   "x": 73,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 88 'Długa płyta', 107 'Splot gałęzi' nachodzą na kratce (73,55)"
+  },
+  {
+   "kod": "D1",
+   "x": 0,
+   "y": 31,
+   "waga": "info",
+   "grupa": [
+    0,
+    31
+   ],
+   "opis": "nieosiągalne miejsce: 4 kratek od (0,31) - za zdarzeniem 165 'Sosna (średnia)' (może się otwiera)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 0,
+   "y": 32,
+   "waga": "info",
+   "grupa": [
+    0,
+    31
+   ],
+   "opis": "nieosiągalne miejsce: 4 kratek od (0,31) - za zdarzeniem 165 'Sosna (średnia)' (może się otwiera)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 0,
+   "y": 33,
+   "waga": "info",
+   "grupa": [
+    0,
+    31
+   ],
+   "opis": "nieosiągalne miejsce: 4 kratek od (0,31) - za zdarzeniem 165 'Sosna (średnia)' (może się otwiera)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 0,
+   "y": 34,
+   "waga": "info",
+   "grupa": [
+    0,
+    31
+   ],
+   "opis": "nieosiągalne miejsce: 4 kratek od (0,31) - za zdarzeniem 165 'Sosna (średnia)' (może się otwiera)",
+   "ukryj": true
+  },
+  {
+   "kod": "D4",
+   "x": 0,
+   "y": 35,
+   "waga": "info",
+   "opis": "rzecz do zbierania 180 'Drzewo (sosna)' stoi w nieosiągalnym miejscu (0,35)"
+  },
+  {
+   "kod": "D4",
+   "x": 0,
+   "y": 47,
+   "waga": "info",
+   "opis": "rzecz do zbierania 229 'Wysoki suchy krzak' stoi w nieosiągalnym miejscu (0,47)"
+  },
+  {
+   "kod": "D4",
+   "x": 0,
+   "y": 48,
+   "waga": "info",
+   "opis": "rzecz do zbierania 232 'Sosna' stoi w nieosiągalnym miejscu (0,48)"
+  },
+  {
+   "kod": "D4",
+   "x": 1,
+   "y": 48,
+   "waga": "info",
+   "opis": "rzecz do zbierania 426 'Ruda żelaza' stoi w nieosiągalnym miejscu (1,48)"
+  },
+  {
+   "kod": "D4",
+   "x": 0,
+   "y": 49,
+   "waga": "info",
+   "opis": "rzecz do zbierania 237 'Dwie oparte skały' stoi w nieosiągalnym miejscu (0,49)"
+  },
+  {
+   "kod": "D4",
+   "x": 69,
+   "y": 49,
+   "waga": "info",
+   "opis": "rzecz do zbierania 59 'Ruda żelaza' stoi w nieosiągalnym miejscu (69,49)"
+  },
+  {
+   "kod": "D4",
+   "x": 71,
+   "y": 49,
+   "waga": "info",
+   "opis": "rzecz do zbierania 96 'Pęknięty kamień' stoi w nieosiągalnym miejscu (71,49)"
+  },
+  {
+   "kod": "D4",
+   "x": 0,
+   "y": 50,
+   "waga": "info",
+   "opis": "rzecz do zbierania 238 'Splot gałęzi' stoi w nieosiągalnym miejscu (0,50)"
+  },
+  {
+   "kod": "D4",
+   "x": 1,
+   "y": 50,
+   "waga": "info",
+   "opis": "rzecz do zbierania 244 'Małe drzewo' stoi w nieosiągalnym miejscu (1,50)"
+  },
+  {
+   "kod": "D4",
+   "x": 69,
+   "y": 50,
+   "waga": "info",
+   "opis": "rzecz do zbierania 113 'Wysoki suchy krzak' stoi w nieosiągalnym miejscu (69,50)"
+  },
+  {
+   "kod": "D4",
+   "x": 70,
+   "y": 50,
+   "waga": "info",
+   "opis": "rzecz do zbierania 77 'Sterta kamieni' stoi w nieosiągalnym miejscu (70,50)"
+  },
+  {
+   "kod": "D4",
+   "x": 71,
+   "y": 50,
+   "waga": "info",
+   "opis": "rzecz do zbierania 48 'Ruda żelaza' stoi w nieosiągalnym miejscu (71,50)"
+  },
+  {
+   "kod": "D4",
+   "x": 0,
+   "y": 51,
+   "waga": "info",
+   "opis": "rzecz do zbierania 250 'Omszały kamień' stoi w nieosiągalnym miejscu (0,51)"
+  },
+  {
+   "kod": "D4",
+   "x": 70,
+   "y": 51,
+   "waga": "info",
+   "opis": "rzecz do zbierania 108 'Splot gałęzi' stoi w nieosiągalnym miejscu (70,51)"
+  },
+  {
+   "kod": "D4",
+   "x": 71,
+   "y": 51,
+   "waga": "info",
+   "opis": "rzecz do zbierania 91 'Skalna iglica' stoi w nieosiągalnym miejscu (71,51)"
+  },
+  {
+   "kod": "D4",
+   "x": 72,
+   "y": 51,
+   "waga": "info",
+   "opis": "rzecz do zbierania 80 'Kamienny kopiec' stoi w nieosiągalnym miejscu (72,51)"
+  },
+  {
+   "kod": "D4",
+   "x": 73,
+   "y": 51,
+   "waga": "info",
+   "opis": "rzecz do zbierania 76 'Płaski kamień' stoi w nieosiągalnym miejscu (73,51)"
+  },
+  {
+   "kod": "D4",
+   "x": 0,
+   "y": 52,
+   "waga": "info",
+   "opis": "rzecz do zbierania 257 'Małe drzewo' stoi w nieosiągalnym miejscu (0,52)"
+  },
+  {
+   "kod": "D4",
+   "x": 68,
+   "y": 52,
+   "waga": "info",
+   "opis": "rzecz do zbierania 104 'Zasiek z gałęzi' stoi w nieosiągalnym miejscu (68,52)"
+  },
+  {
+   "kod": "D4",
+   "x": 69,
+   "y": 52,
+   "waga": "info",
+   "opis": "rzecz do zbierania 93 'Stos płaskich kamieni' stoi w nieosiągalnym miejscu (69,52)"
+  },
+  {
+   "kod": "D4",
+   "x": 70,
+   "y": 52,
+   "waga": "info",
+   "opis": "rzecz do zbierania 54 'Splot gałęzi' stoi w nieosiągalnym miejscu (70,52)"
+  },
+  {
+   "kod": "D4",
+   "x": 71,
+   "y": 52,
+   "waga": "info",
+   "opis": "rzecz do zbierania 78 'Skalna płyta' stoi w nieosiągalnym miejscu (71,52)"
+  },
+  {
+   "kod": "D4",
+   "x": 72,
+   "y": 52,
+   "waga": "info",
+   "opis": "rzecz do zbierania 115 'Wysoki suchy krzak' stoi w nieosiągalnym miejscu (72,52)"
+  },
+  {
+   "kod": "D4",
+   "x": 73,
+   "y": 52,
+   "waga": "info",
+   "opis": "rzecz do zbierania 46 'Ruda żelaza' stoi w nieosiągalnym miejscu (73,52)"
+  },
+  {
+   "kod": "D4",
+   "x": 74,
+   "y": 52,
+   "waga": "info",
+   "opis": "rzecz do zbierania 81 'Kamienny kopiec' stoi w nieosiągalnym miejscu (74,52)"
+  },
+  {
+   "kod": "D4",
+   "x": 75,
+   "y": 52,
+   "waga": "info",
+   "opis": "rzecz do zbierania 142 'Ruda żelaza' stoi w nieosiągalnym miejscu (75,52)"
+  },
+  {
+   "kod": "D4",
+   "x": 68,
+   "y": 53,
+   "waga": "info",
+   "opis": "rzecz do zbierania 92 'Menhir' stoi w nieosiągalnym miejscu (68,53)"
+  },
+  {
+   "kod": "D4",
+   "x": 69,
+   "y": 53,
+   "waga": "info",
+   "opis": "rzecz do zbierania 57 'Ruda żelaza' stoi w nieosiągalnym miejscu (69,53)"
+  },
+  {
+   "kod": "D4",
+   "x": 70,
+   "y": 53,
+   "waga": "info",
+   "opis": "rzecz do zbierania 75 'Wysoka skała' stoi w nieosiągalnym miejscu (70,53)"
+  },
+  {
+   "kod": "D4",
+   "x": 71,
+   "y": 53,
+   "waga": "info",
+   "opis": "rzecz do zbierania 114 'Wysoki suchy krzak' stoi w nieosiągalnym miejscu (71,53)"
+  },
+  {
+   "kod": "D4",
+   "x": 72,
+   "y": 53,
+   "waga": "info",
+   "opis": "rzecz do zbierania 82 'Płaski kamień' stoi w nieosiągalnym miejscu (72,53)"
+  },
+  {
+   "kod": "D4",
+   "x": 73,
+   "y": 53,
+   "waga": "info",
+   "opis": "rzecz do zbierania 109 'Splot gałęzi' stoi w nieosiągalnym miejscu (73,53)"
+  },
+  {
+   "kod": "D4",
+   "x": 74,
+   "y": 53,
+   "waga": "info",
+   "opis": "rzecz do zbierania 51 'Ruda żelaza' stoi w nieosiągalnym miejscu (74,53)"
+  },
+  {
+   "kod": "D4",
+   "x": 68,
+   "y": 54,
+   "waga": "info",
+   "opis": "rzecz do zbierania 98 'Gęste zarośla' stoi w nieosiągalnym miejscu (68,54)"
+  },
+  {
+   "kod": "D4",
+   "x": 69,
+   "y": 54,
+   "waga": "info",
+   "opis": "rzecz do zbierania 94 'Ostry odłamek' stoi w nieosiągalnym miejscu (69,54)"
+  },
+  {
+   "kod": "D4",
+   "x": 70,
+   "y": 54,
+   "waga": "info",
+   "opis": "rzecz do zbierania 65 'Splot gałęzi' stoi w nieosiągalnym miejscu (70,54)"
+  },
+  {
+   "kod": "D4",
+   "x": 71,
+   "y": 54,
+   "waga": "info",
+   "opis": "rzecz do zbierania 83 'Ogromny głaz' stoi w nieosiągalnym miejscu (71,54)"
+  },
+  {
+   "kod": "D4",
+   "x": 72,
+   "y": 54,
+   "waga": "info",
+   "opis": "rzecz do zbierania 49 'Ruda żelaza' stoi w nieosiągalnym miejscu (72,54)"
+  },
+  {
+   "kod": "D4",
+   "x": 73,
+   "y": 54,
+   "waga": "info",
+   "opis": "rzecz do zbierania 89 'Skupisko skał' stoi w nieosiągalnym miejscu (73,54)"
+  },
+  {
+   "kod": "D4",
+   "x": 71,
+   "y": 55,
+   "waga": "info",
+   "opis": "rzecz do zbierania 55 'Splot gałęzi' stoi w nieosiągalnym miejscu (71,55)"
+  },
+  {
+   "kod": "D4",
+   "x": 72,
+   "y": 55,
+   "waga": "info",
+   "opis": "rzecz do zbierania 88 'Długa płyta' stoi w nieosiągalnym miejscu (72,55)"
+  }
+ ],
+ "licznik": {
+  "D1": 3,
+  "O1": 1,
+  "R1": 105,
+  "Z2": 51,
+  "D4": 41
+ },
+ "png": "C:/Users/macie/OneDrive/Dokumenty/RMMZ/Tawerna/docs/mapy/kontrola_Map003.png",
+ "osiagalne": 10631,
+ "bez_wejsc": false,
+ "drobne_kieszenie": 5
+}

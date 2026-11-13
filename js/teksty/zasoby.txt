@@ -235,8 +235,8 @@ Masz trzydzieści groszy. I dziękuję - w imieniu schodów dzwonnicy.
 
 # ======================================================================== Q_K56 (zadania.K56)
 zadania.K56.title = Ogródki Podgrodzia
-zadania.K56.where = Podgrodzie, ogródki na północy
-zadania.K56.when = 6-12, trzy dni w tygodniu
+zadania.K56.where = Tawerna (zlecenie Jadwigi, wieczorem); ogródki Podgrodzia na północy (praca rano)
+zadania.K56.when = zlecenie 18–21; praca 6-12, trzy dni w tygodniu
 zadania.K56.desc = Ogródki pod murem schną, a ręce do pracy w Podgrodziu stare. Babka Jadwiga prosi o trzy dni pomocy przy grządkach w ciągu tygodnia.
 [zadania.K56.offer.say]
 Ogródki pod murem schną, dziecko, a ręce u nas stare. Marta pierze, Franek mały, a ja ledwo się schylam.
@@ -280,8 +280,8 @@ Studnia w zagrodzie Rzepków znowu stoi. Wody w niej nie ma - zbiera tylko deszc
 
 # ======================================================================== Q_K58 (zadania.K58)
 zadania.K58.title = Sad Ługów
-zadania.K58.where = Podgrodzie → Spalona zagroda, sad
-zadania.K58.when = po odbudowie zagrody (D21)
+zadania.K58.where = Spalona zagroda, sad (praca); Marta w tawernie (wieczorem)
+zadania.K58.when = po odbudowie zagrody (D21); Marta 17:30–20
 zadania.K58.desc = Za domem Ługów był sad: osiem jabłonek, które sadził Jan. Spłonęły razem z domem. Marta prosi, żeby spróbować je odratować.
 [zadania.K58.offer.say]
 Za naszym domem był sad. Osiem jabłonek - Jan sadził je, jak się pobraliśmy. Spłonęły razem z domem.
@@ -296,7 +296,7 @@ Babka Jagna z łąki zna maść do drzew. Glina i wosk - tak mówiła moja matka
 Rozumiem. Sad poczekał tyle lat, poczeka i dłużej.
 
 zadania.K58.steps.0.text = Odratuj spalony sad Ługów (Spalona zagroda): przytnij, opatrz maścią szczepiarską, podlej w trzech dniach. Gotowe drzewa: {n}/8.
-zadania.K58.steps.1.text = Powiedz Marcie, że sad żyje (Podgrodzie).
+zadania.K58.steps.1.text = Powiedz Marcie, że sad żyje (tawerna, wieczorem).
 [zadania.K58.steps.1.hero]
 > Marto... sad Ługów żyje. Wszystkie osiem drzew.
 
@@ -366,8 +366,8 @@ Maść szczepiarska: Mokra glina + Wosk pszczeli (Wytwórz..., ręcznie) - na ra
 
 # ======================================================================== Q_D31 (zadania.D31)
 zadania.D31.title = Skarby wysypiska
-zadania.D31.where = Podgrodzie, wysypisko za chatami
-zadania.D31.when = 7-20, od dnia 3
+zadania.D31.where = Tawerna (Józek wieczorem); wysypisko za chatami na Podgrodziu
+zadania.D31.when = 19–22, od dnia 3
 zadania.D31.desc = Józek Łata szuka na wysypisku trzech rzeczy: swojego medalika, starego klucza z kółkiem i „czegoś z kruczym znakiem”.
 [zadania.D31.offer.say]
 Wysypisko za chatami to moja kopalnia! Ludzie wyrzucają skarby i nawet nie wiedzą.
@@ -382,7 +382,7 @@ Grzebać możesz raz na dzień, bo potem sąsiedzi się drą. Łopatą idzie lep
 Śmieci nie lubią ciebie, ty nie lubisz śmieci. Sprawiedliwie.
 
 zadania.D31.steps.0.text = Szukaj na wysypisku Podgrodzia: medalik, stary klucz, coś z kruczym znakiem. Znalezione: {n}/3.
-zadania.D31.steps.1.text = Zanieś Józkowi znaleziska z wysypiska (kram starzyzny w Podgrodziu).
+zadania.D31.steps.1.text = Zanieś Józkowi znaleziska z wysypiska (tawerna, wieczorem).
 [zadania.D31.steps.1.remind]
 Medalik, klucz i to z krukiem. Trzy rzeczy. Liczę na palcach, żeby nie pomylić.
 

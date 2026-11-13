@@ -1,0 +1,178 @@
+[
+ {
+  "kat": 3,
+  "x0": 29,
+  "y0": 0,
+  "x1": 35,
+  "y1": 6,
+  "co": "Wędzarnia Janka (30-34,2-5): ściana z desek ma płaski górny brzeg bez dachu, komin wisi w powietrzu.",
+  "jak": "Dodać dach z okapem (jak chata Janka) lub przesunąć budynek w dół.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map125/01.png"
+ },
+ {
+  "kat": 3,
+  "x0": 33,
+  "y0": 0,
+  "x1": 38,
+  "y1": 4,
+  "co": "Ciemna skała (34-36,0-3) przy górnej krawędzi mapy ucięta krawędzią.",
+  "jak": "Przedłużyć skałę z ciągłością lub usunąć.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map125/02.png"
+ },
+ {
+  "kat": 6,
+  "x0": 29,
+  "y0": 0,
+  "x1": 34,
+  "y1": 3,
+  "co": "Jaskrawa wielobarwna plama kwiatów (30-33,0-1) i druga (95-98,0-3): inna grafika niż kafle.",
+  "jak": "Zastąpić kwiatami w stylu kafli lub usunąć.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map125/03.png"
+ },
+ {
+  "kat": 5,
+  "x0": 82,
+  "y0": 95,
+  "x1": 96,
+  "y1": 111,
+  "co": "Wzgórze latarni (84-94,97-109): tylko południowa ściana i schody, boki to cienka obwódka; latarnia stoi na krawędzi obwódki.",
+  "jak": "Zrobić pełny klif z narożnikami i schodami.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map125/04.png"
+ },
+ {
+  "kat": 5,
+  "x0": 83,
+  "y0": 97,
+  "x1": 89,
+  "y1": 100,
+  "co": "Pływająca deska (84-87,98) obok stosu drewna, wisi na trawie bez powiązania.",
+  "jak": "Usunąć albo zrobić z niej pomost.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map125/05.png"
+ },
+ {
+  "kat": 5,
+  "x0": 94,
+  "y0": 42,
+  "x1": 103,
+  "y1": 52,
+  "co": "Prostokątna cienka obwódka (95-102,43-50) ze ścianą południową; w środku sosna stoi na obwódce.",
+  "jak": "Zrobić pełny klif lub usunąć.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map125/06.png"
+ },
+ {
+  "kat": 5,
+  "x0": 102,
+  "y0": 27,
+  "x1": 111,
+  "y1": 36,
+  "co": "Prostokątny płaskowyż (104-109,29-34) ze ścianą dolną i cienkimi bokami.",
+  "jak": "Domknąć klifem lub usunąć.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map125/07.png"
+ },
+ {
+  "kat": 3,
+  "x0": 12,
+  "y0": 7,
+  "x1": 17,
+  "y1": 26,
+  "co": "Brukowane nabrzeże (13-15,8-24) zaczyna się i kończy prostą linią przy znaku i przy wraku.",
+  "jak": "Zakończyć łukiem lub schodami.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map125/08.png"
+ },
+ {
+  "kat": 2,
+  "x0": 44,
+  "y0": 18,
+  "x1": 79,
+  "y1": 31,
+  "co": "Płoty działek (45-77,20-29): krótkie kikuty żerdzi nad domami, słupki w różnych odstępach, brak ciągłości; ogrodzenia nie zamykają działek.",
+  "jak": "Przeprowadzić jednolity płot wokół każdej działki z równym rozstawem.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map125/09.png"
+ },
+ {
+  "kat": 1,
+  "x0": 73,
+  "y0": 19,
+  "x1": 79,
+  "y1": 29,
+  "co": "Pojedyncze wózki (75-76,21), (77,26) i lampa przy ostatniej działce rozproszone bez kontekstu.",
+  "jak": "Zgrupować przy stercie drewna.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map125/10.png"
+ },
+ {
+  "kat": 1,
+  "x0": 26,
+  "y0": 38,
+  "x1": 62,
+  "y1": 76,
+  "co": "Szeroka pusta łąka (28-60,40-75): prawie nic poza pojedynczymi krzakami i plamami.",
+  "jak": "Dodać ścieżkę, grupy drzew lub pola.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map125/11.png"
+ },
+ {
+  "kat": 1,
+  "x0": 86,
+  "y0": 86,
+  "x1": 95,
+  "y1": 93,
+  "co": "Samotna szara plama bruku (88-93,88-91) na trawie nad latarnią.",
+  "jak": "Usunąć lub zrobić ścieżkę do latarni.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map125/12.png"
+ },
+ {
+  "kat": 3,
+  "x0": 0,
+  "y0": 0,
+  "x1": 11,
+  "y1": 5,
+  "co": "Północno-zachodni róg: plama bruku (3-7,1-2) ucięta kwadratem przy wodzie.",
+  "jak": "Zmiękczyć brzeg lub doprowadzić do pomostu.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map125/13.png"
+ },
+ {
+  "kat": 6,
+  "x0": 8,
+  "y0": 2,
+  "x1": 22,
+  "y1": 27,
+  "co": "Łodzie: żaglówka (10-17,23-26) i łódki wiosłowe (7-14,3-9) widziane z boku, reszta (barka 10-20,20-21) z góry.",
+  "jak": "Narysować łodzie w widoku z góry jak barkę.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map125/14.png"
+ },
+ {
+  "kat": 4,
+  "x0": 19,
+  "y0": 2,
+  "x1": 22,
+  "y1": 6,
+  "co": "Kafel z gwiazdką (20,4) nad wolną kratką przy beczkach: bohater wchodzi pod niski przedmiot (kontrola G1 kafel 381).",
+  "jak": "Zdjąć gwiazdkę lub zablokować kratkę.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map125/15.png"
+ },
+ {
+  "kat": 4,
+  "x0": 34,
+  "y0": 15,
+  "x1": 37,
+  "y1": 18,
+  "co": "Chorągiew Lorda stoi na meblu (35,17), lampa komory celnej (34,17) na kaflu niebędącym blatem (kontrola Z3/P1).",
+  "jak": "Postawić chorągiew na ziemi lub na blacie.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map125/16.png"
+ }
+]

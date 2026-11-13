@@ -1,0 +1,81 @@
+{
+ "mapa": 162,
+ "nazwa": "Garnizon nad zatoką",
+ "w": 120,
+ "h": 120,
+ "zestaw": 11,
+ "obszar": null,
+ "problemy": [
+  {
+   "kod": "G1",
+   "x": 61,
+   "y": 41,
+   "waga": "uwaga",
+   "opis": "kafel 598 (D 6,10) z gwiazdką nad wolną kratką: bohater wchodzi pod niego w (61,41)"
+  },
+  {
+   "kod": "G1",
+   "x": 53,
+   "y": 52,
+   "waga": "uwaga",
+   "opis": "kafel 487 (C 15,12) z gwiazdką nad wolną kratką: bohater wchodzi pod niego w (53,52)"
+  },
+  {
+   "kod": "O1",
+   "x": 54,
+   "y": 31,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 368 (C 0,14) - góra bez dołu (brak kafla 376 pod) w (54,31)"
+  },
+  {
+   "kod": "O1",
+   "x": 49,
+   "y": 41,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 301 (C 5,5) - góra bez dołu (brak kafla 309 pod) w (49,41)"
+  },
+  {
+   "kod": "O1",
+   "x": 64,
+   "y": 43,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 437 (C 13,6) - dół bez góry (brak kafla 429 nad) w (64,43)"
+  },
+  {
+   "kod": "O1",
+   "x": 63,
+   "y": 46,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 350 (C 6,11) - dół bez góry (brak kafla 342 nad) w (63,46)"
+  },
+  {
+   "kod": "O1",
+   "x": 64,
+   "y": 46,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 349 (C 5,11) - dół bez góry (brak kafla 341 nad) w (64,46)"
+  },
+  {
+   "kod": "O1",
+   "x": 52,
+   "y": 51,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 350 (C 6,11) - dół bez góry (brak kafla 342 nad) w (52,51)"
+  },
+  {
+   "kod": "O1",
+   "x": 52,
+   "y": 52,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 349 (C 5,11) - dół bez góry (brak kafla 341 nad) w (52,52)"
+  }
+ ],
+ "licznik": {
+  "G1": 2,
+  "O1": 7
+ },
+ "png": "C:/Users/macie/OneDrive/Dokumenty/RMMZ/Tawerna/docs/mapy/kontrola_Map162.png",
+ "osiagalne": 9955,
+ "bez_wejsc": false,
+ "drobne_kieszenie": 1
+}

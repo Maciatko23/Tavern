@@ -186,7 +186,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.eval(`$gameSelfSwitches.setValue([8, ${slab.id}, "A"], false); 0`);
 
     // ================================================================ the orangery (Map024)
-    await t.go(24, 1, 15, 6);
+    await t.go(24, 21, 75, 6);
     await t.calm();
     const m24 = await t.json(MARKERS);
     await t.eval(REACH(1, 15));

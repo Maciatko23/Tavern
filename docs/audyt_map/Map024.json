@@ -1,0 +1,112 @@
+[
+ {
+  "kat": 1,
+  "x0": 0,
+  "y0": 20,
+  "x1": 120,
+  "y1": 58,
+  "co": "Wielka pusta zielona równina na północ od posiadłości (120x38) - tylko kilka kęp drzew i szarych plam, żadnej treści.",
+  "jak": "Dodać las, pola, drogę dojazdową, ogrodzone łąki albo przyciąć mapę.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map024/01.png"
+ },
+ {
+  "kat": 3,
+  "x0": 0,
+  "y0": 12,
+  "x1": 120,
+  "y1": 22,
+  "co": "Kanciasty schodkowy brzeg morza na północy - proste kąty, ostre stopnie.",
+  "jak": "Zaokrąglić brzeg (Shore chunks) lub dać klif/skarpę.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map024/02.png"
+ },
+ {
+  "kat": 1,
+  "x0": 0,
+  "y0": 88,
+  "x1": 40,
+  "y1": 114,
+  "co": "Południowo-zachodni trawnik: szare plamy gruzu, ciemne rozlane zielone łaty i pojedyncze sosny bez układu.",
+  "jak": "Uporządkować: usunąć plamy, zrobić zagajnik lub sad.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map024/03.png"
+ },
+ {
+  "kat": 3,
+  "x0": 19,
+  "y0": 88,
+  "x1": 25,
+  "y1": 115,
+  "co": "Wolno leżące kawałki bruku (20-24,89-91; 20-23,97-98; 20-22,102-103; 20-23,113-114) na trawie - urwane fragmenty ścieżki.",
+  "jak": "Dorysować pełną ścieżkę/chodnik albo usunąć.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map024/04.png"
+ },
+ {
+  "kat": 2,
+  "x0": 23,
+  "y0": 96,
+  "x1": 29,
+  "y1": 106,
+  "co": "Droga ma przewężenie (25-27,101-103) i nierówne ścianki.",
+  "jak": "Wyprostować drogę do stałej szerokości.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map024/05.png"
+ },
+ {
+  "kat": 1,
+  "x0": 48,
+  "y0": 75,
+  "x1": 58,
+  "y1": 89,
+  "co": "Przybudówka/studnia z wozem, drewutnią i płotami: drzewa (czerwone, sosna) wchodzą na dach szopy, urwane odcinki płotu - ciasno, bez ładu.",
+  "jak": "Odsunąć drzewa, zamknąć płot, ułożyć w prostokątny dziedziniec.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map024/06.png"
+ },
+ {
+  "kat": 5,
+  "x0": 47,
+  "y0": 52,
+  "x1": 60,
+  "y1": 82,
+  "co": "Jaśniejszy prostokątny płat trawy z ostrymi bokami na wschód od posiadłości - sztuczna łata koloru.",
+  "jak": "Rozmyć/usunąć płat lub nadać naturalny kształt.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map024/07.png"
+ },
+ {
+  "kat": 3,
+  "x0": 18,
+  "y0": 57,
+  "x1": 27,
+  "y1": 67,
+  "co": "Ruina muru: poszarpane, urwane szczątki ścian z czarnym otworem, wygląda na ucięte.",
+  "jak": "Dokończyć ruinę kompletnym narożnikiem z gruzem wokół.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map024/08.png"
+ },
+ {
+  "kat": 1,
+  "x0": 3,
+  "y0": 31,
+  "x1": 25,
+  "y1": 46,
+  "co": "Zagajniki: sosny i jabłonie wymieszane w ciasne kępy, drzewa nachodzą na siebie.",
+  "jak": "Rozdzielić gatunki, zachować odstępy.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map024/09.png"
+ },
+ {
+  "kat": 1,
+  "x0": 63,
+  "y0": 63,
+  "x1": 93,
+  "y1": 83,
+  "co": "Kępki kwiatów w kształtach krzyżyków rozrzucone pasami, wyglądają jak losowy szum.",
+  "jak": "Zebrać w kilka zwartych rabat.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map024/10.png"
+ }
+]

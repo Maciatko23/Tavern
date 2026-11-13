@@ -1,0 +1,134 @@
+[
+ {
+  "kat": 3,
+  "x0": 72,
+  "y0": 38,
+  "x1": 77,
+  "y1": 58,
+  "co": "Ciemny grunt lasu urywa się pionową, prostą krawędzią na x=74-75 przez ok. 20 kratek (y 38-58); kontrast z jasną łąką jak cięcie nożem.",
+  "jak": "Poszarpać krawędź plamami przejściowymi (jasno-ciemne kępy trawy, kilka drzew i krzaków na granicy), zamiast prostej linii.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map004/01.png"
+ },
+ {
+  "kat": 3,
+  "x0": 94,
+  "y0": 30,
+  "x1": 103,
+  "y1": 60,
+  "co": "Wschodni brzeg lądu (x 96-102, y 0-120) to ostre schodki pod kątem prostym - kanciaste, zamiast obłego brzegu; długie proste odcinki co kilka kratek.",
+  "jak": "Wygładzić linię brzegu: łagodne zatoki/cyple, odcinki skośne 2:1, pas piasku/kamieni i trzcin; unikać schodków o równej długości.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map004/02.png"
+ },
+ {
+  "kat": 1,
+  "x0": 30,
+  "y0": 62,
+  "x1": 60,
+  "y1": 90,
+  "co": "Ogromny pusty, jednolity płat łąki (ok. 90x60 kratek na południu/środku) - kilka samotnych sosen i kamyków, żadnego punktu orientacyjnego, nuda i wrażenie 'niedokończonej' mapy.",
+  "jak": "Dodać krajobraz: kępy drzew z podszytem, strumyk/staw, ścieżkę do czegoś, stóg, pastwisko z płotem, głaz-landmark, zróżnicowanie kolorów trawy.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map004/03.png"
+ },
+ {
+  "kat": 2,
+  "x0": 3,
+  "y0": 53,
+  "x1": 27,
+  "y1": 58,
+  "co": "Siedem sosen stoi w jednej poziomej linii (y 54-57, x 4-26), nierówne odstępy: wygląda na szereg posadzony przez generator, nie las.",
+  "jak": "Rozrzucić naturalnie (grupy 2-4 drzew różnej wielkości) albo zrobić świadomy równy szpaler z równymi odstępami.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map004/04.png"
+ },
+ {
+  "kat": 3,
+  "x0": 0,
+  "y0": 46,
+  "x1": 11,
+  "y1": 51,
+  "co": "Ścieżka z zachodniej bramy (y 47-49) kończy się w polu na x=9 kwadratowym kikutem - dojście donikąd.",
+  "jak": "Poprowadzić ją dalej i połączyć z główną drogą (x 11-23) albo zakończyć placykiem/ławką.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map004/05.png"
+ },
+ {
+  "kat": 3,
+  "x0": 73,
+  "y0": 34,
+  "x1": 81,
+  "y1": 39,
+  "co": "Plama ścieżki w kształcie hantli (x 74-80, y 35-37) z rzędem gałęzi, urwana w środku łąki, bez początku i końca.",
+  "jak": "Usunąć albo przedłużyć do drogi; krzaki rozproszyć, nie w prostym rzędzie.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map004/06.png"
+ },
+ {
+  "kat": 5,
+  "x0": 19,
+  "y0": 66,
+  "x1": 26,
+  "y1": 73,
+  "co": "Szeroka (4 kratki) prosta droga w dół (x 21-24, y 60-80) ma przewężenie do 1 kratki na y 68-70 - dwa kawałki autotile nie pasują; to samo na (11,98) i (11,113).",
+  "jak": "Wyrównać szerokość drogi; połączyć w jedną krawędź, dodać lekki zakręt zamiast prostej rury.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map004/07.png"
+ },
+ {
+  "kat": 1,
+  "x0": 23,
+  "y0": 81,
+  "x1": 37,
+  "y1": 91,
+  "co": "Pole kamieni i gałęzi (x 24-36, y 82-90): rzędy krzaków w idealnie prostych liniach i rozsypane głazy bez grupowania - wygląda jak wzorek, nie rumowisko.",
+  "jak": "Zgrupować głazy w 2-3 kopce, krzaki wokół nich, resztę oczyścić; dodać trawę/ścieżkę wokół.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map004/08.png"
+ },
+ {
+  "kat": 1,
+  "x0": 0,
+  "y0": 69,
+  "x1": 5,
+  "y1": 76,
+  "co": "Ciemnoszara, nieregularna plama przy murze (x 1-3, y 70-74) - nie wiadomo co to (kałuża? błoto?), wygląda jak błąd rysunku.",
+  "jak": "Zamienić na kałużę z brzegiem, ścieżkę lub trawę.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map004/09.png"
+ },
+ {
+  "kat": 1,
+  "x0": 7,
+  "y0": 45,
+  "x1": 13,
+  "y1": 57,
+  "co": "Dwie wysokie sosny jedna nad drugą (x 10, y 47-53) stykają się pniem w koronę - wyglądają jak jedno krzywe drzewo.",
+  "jak": "Rozsunąć o min. 2 kratki albo zrobić jedno drzewo i dodać obok.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map004/10.png"
+ },
+ {
+  "kat": 1,
+  "x0": 66,
+  "y0": 62,
+  "x1": 92,
+  "y1": 84,
+  "co": "Gaj sosen (x 70-90, y 64-81) jak owalna plama w pustej łące: gęsty w środku, ostry brzeg bez podszytu, krzaków i zmiany koloru ziemi.",
+  "jak": "Dać podszyt (paprocie, krzaki, ciemniejsza trawa pod koronami), nieregularny brzeg i polanę w środku.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map004/11.png"
+ },
+ {
+  "kat": 3,
+  "x0": 0,
+  "y0": 13,
+  "x1": 4,
+  "y1": 20,
+  "co": "Brama w zachodnim murze (y 15-17): wieża nad i pod przerwą jest ucięta (dolna połowa kafla wieży na y 15, górna na y 18), przejście zaczyna się od przeciętych bastei.",
+  "jak": "Zakończyć mur pełnymi wieżami po obu stronach bramy (kafle wież kompletne), dodać obramowanie bramy.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map004/12.png"
+ }
+]

@@ -749,6 +749,7 @@
         out.smooth = src.smooth;
         out._url = src._url;          // (the same picture for everything that asks which it is)
         out._softShade = true;
+        out._softOf = src;            // (the picture it was made from: PoryRoku.js knows its own season's sheet under it)
         softenedCache.set(key, out);
         return out;
     }
@@ -770,7 +771,13 @@
             this._rockKind = this._rockPic ? groundShadowKind(name) : null;
         }
         const f = this._frame, rock = this._rockPic && this.bitmap && this.bitmap.isReady() && this.parent && f && f.width > 0;
-        if (rock && !this.bitmap._softShade) this.bitmap = withSoftShade(this.bitmap);   // (set once: the sprite keeps it while the picture is the same)
+        if (rock && !this.bitmap._softShade) {   // (set once: the sprite keeps it while the picture is the same)
+            // a new bitmap resets the frame to the WHOLE sheet as it loads (MZ's Sprite) and this runs after updateFrame: the frame is
+            // kept, or a 3x4 sheet (a bush) is drawn whole - twelve bushes for one (2026-11-11, grandpa's garden in spring)
+            const fx = f.x, fy = f.y, fw = f.width, fh = f.height;
+            this.bitmap = withSoftShade(this.bitmap);
+            this.setFrame(fx, fy, fw, fh);
+        }
         const kind = rock ? this._rockKind : null;
         const bmp = rock && this.visible && this.opacity > 0 ? silhouetteOf(this, this.bitmap, f.x, f.y, f.width, f.height, false, kind.blur) : null;
         if (!bmp) {

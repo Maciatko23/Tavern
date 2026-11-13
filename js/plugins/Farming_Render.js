@@ -515,6 +515,10 @@
 
     // the stem bent by e.bend px at the tip: the rows of the mesh move along a curve (the foot row stays), the tip dips a little
     Sprite_StoneLayer.prototype.bendPlant = function(e, flutter) {
+        // (2026-11-12, wydajność) moved by less than a twentieth of a pixel since its mesh was last bent: kept as it is - no upload of
+        // its vertices to the graphics card (on a calm day most plants, most frames); the difference is made up at the next bend
+        if (e._bentB !== undefined && Math.abs(e.bend - e._bentB) < 0.05 && Math.abs(flutter - e._bentF) < 0.05) return;
+        e._bentB = e.bend; e._bentF = flutter;
         const buffer = e.sprite.geometry.getBuffer("aVertexPosition"), v = buffer.data, n = SWAY_ROWS;
         for (let i = 0; i <= n; i++) {
             const u = 1 - i / n;   // 0 at the foot .. 1 at the tip
@@ -576,19 +580,37 @@
             this.addChild(sprite);
         }
         this._swaying = this._entries.filter(e => e.sway);
+        this._placed = false;   // (the things' places on the map: put by the next reposition)
         return true;
     };
 
-    // (2026-10-24, wydajność: what lies off the screen is not drawn - renderable; a few hundred stones and plants on a big map,
-    // a screenful of them seen; the plants' sway leaves those off the screen alone already, updateSway)
+    // (2026-10-24, wydajność: what lies off the screen is not drawn; a few hundred stones and plants on a big map, a screenful of them
+    // seen; the plants' sway leaves those off the screen alone already, updateSway)
+    // (2026-11-12, wydajność) the layer lies in the map's px: a scroll moves the layer alone (it moved each of ~970 things on every
+    // frame of a walk); and only the things near the screen are its children - PIXI went through all ~970 of them twice a frame (the
+    // matrices, the drawing) to skip the ones off the screen. Which ones those are is worked out again when the view has moved into
+    // another tile (a tile more of margin round the screen for that), in the entries' order (the drawing's order as before).
     Sprite_StoneLayer.prototype.reposition = function() {
         const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), ox = $gameMap.displayX() * tw, oy = $gameMap.displayY() * th;
-        const sees = T.view && T.view.sees;
+        this.x = Math.round(-ox);
+        this.y = Math.round(-oy);
+        const v = T.view && T.view.rect ? T.view.rect() : null, sees = T.view && T.view.sees;
+        const key = Math.floor(ox / tw) + "," + Math.floor(oy / th) + (v ? "," + v.x0 + "," + v.y0 + "," + v.x1 + "," + v.y1 : "");
+        if (this._placed && key === this._seenKey) return;
+        this._seenKey = key;
+        const place = !this._placed;
+        this._placed = true;
+        const shown = [];
         for (const e of this._entries) {
             const s = e.sprite;
-            s.x = Math.round(e.px - ox);
-            s.y = Math.round(e.py - oy);
-            s.renderable = !sees || sees(s.x - 64, s.y - 64, s.x + 128, s.y + 128);
+            if (place) { s.x = e.px; s.y = e.py; }
+            const x = e.px + this.x, y = e.py + this.y;   // (its place on the screen now)
+            if (!sees || sees(x - 64 - tw, y - 64 - th, x + 128 + tw, y + 128 + th)) shown.push(s);
+        }
+        const now = this.children;
+        if (place || shown.length !== now.length || shown.some((s, i) => now[i] !== s)) {
+            this.removeChildren();
+            for (const s of shown) { s.visible = true; this.addChild(s); }
         }
     };
 
@@ -915,7 +937,8 @@
             for (const m of eventLights()) {
                 const ev = $gameMap.event(m.id);
                 if (!ev || m.when === "day") continue;
-                out.push({ x: ev.screenX(), y: ev.screenY() - th / 2, r: m.r, i: m.i, id: 6000 + m.id, gx: ev.screenX(), gy: ev.screenY(), hf: m.hf, glow: m.glow });
+                const sy = ev.screenY(), cy = m.up ? sy - Math.max(th / 2, Math.round(m.up * 0.55)) : sy - th / 2;
+                out.push({ x: ev.screenX(), y: cy, fy: m.up ? sy - m.up : undefined, r: m.r, i: m.i, id: 6000 + m.id, gx: ev.screenX(), gy: sy, hf: m.hf, glow: m.glow });
             }
         }
         // the embers of a tree struck by lightning (ChoppableTree_Render.js) glow in the dark a little too
@@ -994,7 +1017,7 @@
             const flick = 0.93 + 0.05 * Math.sin(this._age * 0.21 + l.id * 1.7) + 0.03 * Math.sin(this._age * 0.53 + l.id);
             const x = l.x / S, y = l.y / S, r = (l.r / S) * (0.97 + 0.03 * flick);
             if (x + r < 0 || y + r < 0 || x - r > w || y - r > h) continue;
-            if (l.glow) glows.push({ x, y, r, a: l.i * fireGlowAlpha(this._age + l.id * 17) });
+            if (l.glow) glows.push({ x, y: l.fy !== undefined ? l.fy / S : y, r, a: l.i * fireGlowAlpha(this._age + l.id * 17) });
             warms.push({ x, y, r, a: l.i * flick });
             const blockers = l.gy !== undefined && things.length ? Sun.lightBlockers(l, things, this._age, flick) : [];
             this._nightInfo.blockers += blockers.length;
@@ -1300,7 +1323,7 @@
             const flick = 0.93 + 0.05 * Math.sin(this._age * 0.21 + l.id * 1.7) + 0.03 * Math.sin(this._age * 0.53 + l.id);
             const x = l.x / S, y = l.y / S, r = (l.r / S) * (0.97 + 0.03 * flick);
             if (x + r < 0 || y + r < 0 || x - r > w || y - r > h) continue;
-            if (l.glow) { g.gx[gn] = x; g.gy[gn] = y; g.gr[gn] = r; g.ga[gn] = l.i * fireGlowAlpha(this._age + l.id * 17); gn++; }
+            if (l.glow) { g.gx[gn] = x; g.gy[gn] = l.fy !== undefined ? l.fy / S : y; g.gr[gn] = r; g.ga[gn] = l.i * fireGlowAlpha(this._age + l.id * 17); gn++; }
             g.x[wn] = x; g.y[wn] = y; g.r[wn] = r; g.a[wn] = l.i * flick; wn++;
             const blockers = l.gy !== undefined && things.length ? Sun.lightBlockers(l, things, this._age, flick) : null;
             if (blockers && blockers.length) {
@@ -1382,6 +1405,27 @@
     // radius - at full strength and reach the four lamps by the manor (4 tiles apart, r 170) ran together into one patch in the day's
     // colours whose edges were the grass, the path and the tower (2026-10-05).
     const LAMP_I = 0.5, LAMP_I_COLOUR = 0.65, LAMP_I_MAX = 0.85, LAMP_REACH = 0.7;
+    // (2026-11-09, the user: „źródło światła nie powinno pochodzić z lampy?” - a street lamp's glow sat at the post's foot) where the
+    // flame is in each light's graphic: px above the frame's bottom (tools/klimat/plomienie.py measures the warm pixels; <LightAt:N> in
+    // a note wins). The glow is drawn there, the hole in the dark between the foot and the flame (the ground round the post and the
+    // lamp itself both lit); the shadows still start at the foot
+    const FLAME_UP = {"!$Altar|0|2|0": 52, "!$Chandelier|0|4|0": 86, "!$Fireplace|0|4|0": 55, "!$Fireplace1|0|4|0": 68, "!$Fireplace2|0|4|0": 69, "!$Fireplace4|0|4|0": 66, "!$Fireplace_kitchen|0|2|0": 42, "!$Fireplace_kitchen|0|4|0": 35, "!$Fireplace_kitchen|0|6|0": 44, "!$Latarnia_Slup|0|2|0": 55, "!$Pod_Kociol|0|2|0": 33, "!$Pod_Piec|0|2|0": 49, "!$Tavern_Props_Upper_Big|0|8|0": 66, "!$Ug_Heart|0|2|0": 55, "!Decoration|0|2|0": 38, "!Decoration|0|2|1": 39, "!Decoration|0|2|2": 38, "!Decoration|2|4|0": 31, "!Decoration|2|6|0": 26, "!Decoration|3|4|0": 49, "!Decoration|7|2|0": 55, "!Decoration|7|4|0": 55, "!Decoration|7|4|1": 55, "!Decoration|7|6|0": 54, "!Decoration2|0|2|0": 53, "!Decoration2|1|2|0": 24, "!Decoration2|1|6|0": 45, "!Decoration2|1|6|1": 45, "!Decoration2|4|2|0": 69, "!Decoration2|4|4|0": 69, "!Decoration2|4|6|0": 69, "!Flame|1|2|0": 25, "!Flame|2|2|0": 17, "!House_Props|0|2|0": 44, "!House_Props|1|2|0": 53, "!House_Town|0|2|0": 22, "!Podgrodzie2_Wnetrza|0|2|0": 26, "!Quest_Places|2|4|2": 50, "!Tavern_Props|0|2|0": 68, "!Tavern_Props|1|2|0": 80, "!Tavern_Props_Upper|0|2|0": 27, "!Tavern_Props_Upper|0|4|0": 24, "!Tavern_Props_Upper|0|6|0": 43, "!lamp|0|2|0": 118};
+    // pictures that are a fire themselves, with no <Light> note (gracz 2026-11-09: „ogień też powinien rzucać światło”): the forge
+    // !$Smith (its rows 0 and 2 - directions 2 and 6 - burn, 4 and 8 are cold); the flame px above the frame's bottom
+    const FIRE_PICTURES = { "!$Smith": { dirs: [2, 6], r: 170, i: 0.95, up: 80, hf: 26 } };
+    // a fire basket's flames (Winlu's !Decoration, index 0, facing down: three flame frames) burn on every map: animated whatever the
+    // event says (the four by the town's well stood still - gracz 2026-11-09 „przy studni ogień nie ma żadnej ładnej animacji”),
+    // a frame every 7 updates like a flame, not the walk's slow step
+    const ANIMATED_FIRES = { "!Decoration": [0] };
+    const isAnimatedFire = ev => { const f = ANIMATED_FIRES[ev.characterName()]; return !!f && f.includes(ev.characterIndex()) && ev.direction() === 2 && !ev._erased; };
+    const _setupPageSettings = Game_Event.prototype.setupPageSettings;
+    Game_Event.prototype.setupPageSettings = function() {
+        _setupPageSettings.call(this);
+        this._twFire = isAnimatedFire(this);
+        if (this._twFire) this.setStepAnime(true);
+    };
+    const _animationWait = Game_CharacterBase.prototype.animationWait;
+    Game_CharacterBase.prototype.animationWait = function() { return this._twFire ? 7 : _animationWait.call(this); };
     let eventLightsOf = null, eventLightsList = [];
     function eventLights() {
         if (eventLightsOf === $dataMap) return eventLightsList;
@@ -1389,13 +1433,17 @@
         eventLightsList = [];
         for (const e of ($dataMap && $dataMap.events) || []) {
             const m = e && e.note && e.note.match(/<Light(?::([^>]*))?>/i);
+            const fp = !m && e && e.pages && e.pages[0] && FIRE_PICTURES[e.pages[0].image.characterName];
+            if (fp && fp.dirs.includes(e.pages[0].image.direction)) { eventLightsList.push({ id: e.id, r: fp.r, i: fp.i, when: null, hf: fp.hf, up: fp.up, glow: true }); continue; }
             if (!m || /<LightSoft>/i.test(e.note)) continue;
             const parts = m[1] ? m[1].split(",").map(s => Number(s.trim())) : [];
             const r = parts[0] || 150, rgb = parts.length >= 4 && parts.slice(1, 4).every(v => !isNaN(v)) ? parts.slice(1, 4) : null;
             const w = e.note.match(/<LightWhen:\s*(night|day)>/i), when = w ? w[1].toLowerCase() : null, h = e.note.match(/<LightHeight:\s*(\d+)>/i);
             const hf = h ? Number(h[1]) : when !== "night" ? 22 : r <= 130 ? 30 : 56;
-            if (when === "night" && rgb) eventLightsList.push({ id: e.id, r: r * LAMP_REACH, i: Math.min(LAMP_I_MAX, LAMP_I + (LAMP_I_COLOUR * Math.max(...rgb)) / 255), when, hf, glow: true });
-            else eventLightsList.push({ id: e.id, r, i: 1, when, hf, glow: true });
+            const img = e.pages && e.pages[0] && e.pages[0].image, la = e.note.match(/<LightAt:\s*(\d+)>/i);
+            const up = la ? Number(la[1]) : img && img.characterName ? FLAME_UP[img.characterName + "|" + img.characterIndex + "|" + img.direction + "|" + img.pattern] || 0 : 0;
+            if (when === "night" && rgb) eventLightsList.push({ id: e.id, r: r * LAMP_REACH, i: Math.min(LAMP_I_MAX, LAMP_I + (LAMP_I_COLOUR * Math.max(...rgb)) / 255), when, hf, up, glow: true });
+            else eventLightsList.push({ id: e.id, r, i: 1, when, hf, up, glow: true });
         }
         return eventLightsList;
     }

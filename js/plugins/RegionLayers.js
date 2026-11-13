@@ -122,15 +122,29 @@
     // ------------------------------------------------------------------
     // Drawing: a region 3 cell sends its lifted tiles to the tilemap's upper layer (over the characters)
     // ------------------------------------------------------------------
+    // ... and a region 2 cell draws the free-standing props of Winlu's C sheet that the tileset marks ☆ (drawn over everyone) level
+    // with the people, under them: a barrel stands on the ground - the hero walking past it must not go under it (gracz 2026-11-09:
+    // „gracz pod elementem” - the apple barrel by the carpenter's house). Region 2 keeps anyone off its own cell anyway.
+    const LEVEL_PROPS = new Set([256 + 67, 256 + 68, 256 + 125]);   // (Fantasy_Outside_C: open barrel, closed barrel, barrel of apples)
+    let propsSheetOk = null;
+    const propsSheet = () => {
+        const ts = $gameMap && $gameMap.tileset && $gameMap.tileset();
+        if (!ts) return false;
+        if (!propsSheetOk || propsSheetOk.ts !== ts) propsSheetOk = { ts, ok: /Fantasy_Outside_C$/.test(ts.tilesetNames[6] || "") };
+        return propsSheetOk.ok;
+    };
     const _Tilemap_addSpot = Tilemap.prototype._addSpot;
     Tilemap.prototype._addSpot = function(startX, startY, x, y) {
-        this._liftSpot = ABOVE > 0 && this._readMapData(startX + x, startY + y, 5) === ABOVE;
+        const r = this._readMapData(startX + x, startY + y, 5);
+        this._liftSpot = ABOVE > 0 && r === ABOVE;
+        this._levelSpot = LEVEL > 0 && r === LEVEL;
         _Tilemap_addSpot.call(this, startX, startY, x, y);
-        this._liftSpot = false;
+        this._liftSpot = this._levelSpot = false;
     };
     const _Tilemap_addSpotTile = Tilemap.prototype._addSpotTile;
     Tilemap.prototype._addSpotTile = function(tileId, dx, dy) {
         if (this._liftSpot && lifts(tileId)) this._addTile(this._upperLayer, tileId, dx, dy);
+        else if (this._levelSpot && LEVEL_PROPS.has(tileId) && propsSheet()) this._addTile(this._lowerLayer, tileId, dx, dy);
         else _Tilemap_addSpotTile.call(this, tileId, dx, dy);
     };
 

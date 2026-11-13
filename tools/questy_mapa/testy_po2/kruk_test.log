@@ -1,0 +1,33 @@
+PASS gra się uruchamia
+NOTE nakładka: tools/questy_mapa/staging_snap2
+PASS Kruk.js i Kruk_Data.js działają: K51 i D24 (od dziadka) w zadaniach, paczka „Kruk”, miejsce gotowe (Wyspa.ready 157)  {"api":true,"data":true,"k51":true,"d24":"grandpa","packs":["K51,D24"],"grz":{"name":"Grzęda kruka","cost":"77x4,80x2,93x1","w":1,"h":1,"img":"Farm_Grzeda","slots":2,"bowl":3},"ready":true,"built":true,"ring":"Obrączka z krukiem"}
+PASS Farming_Data.js: budynek „Grzęda kruka” (4× Gałęzie, 2× Deski, 1× Lina; 1x1; Farm_Grzeda; korytko i miseczka)  {"name":"Grzęda kruka","cost":"77x4,80x2,93x1","w":1,"h":1,"img":"Farm_Grzeda","slots":2,"bowl":3}
+PASS grafika: arkusz kruka 432x336 (komórki 48, 7 wierszy), grzęda 56x100, stara żerdź, gniazda 192x256  {"imgs":[[0,0],[0,0],[0,0],[0,0]],"imgs2":[[432,336],[56,100],[55,65],[192,256]]}
+PASS prawa krawędź pustelni (95,17) prowadzi na Map157 „Urwisko Kruków” (1,19); 122 x 72 (od 2026-10-30), tileset 11, <Water:salt>, nie szkielet  [157,1,19,122,72,11,"<Clouds:on>\n<Farm:off>\n<Water:salt>\n<Camp:off>\n<Urwisko:mapa>","Urwisko Kruków"]
+PASS przejścia z kontraktu: lewa krawędź (0,19-20) -> pustelnia (94,17-18), prawa (111,19-20) bez przejścia do przylądka (od 2026-10-30 świat: 157 E -> Góry); lądowania przechodnie  {"west":[[155,94,17],[155,94,18]],"east":[],"grate":{"x":41,"y":15,"img":["!Quest_Places",0,2,0],"p2":17,"to":true},"rynny":["rynna_1","rynna_2","rynna_3","rynna_4"],"rynnyObok":true,"land":true}
+PASS krata przelewu (41,15): „Przelew cysterny”, !Quest_Places 0/2/0, strona 2 na przełączniku 17 -> cysterna 167 (33,3); znaczniki rynna_1..4 dla K53 (każdy z wolnym polem obok - pakiet F stawia tam gruz)  {"west":[[155,94,17],[155,94,18]],"east":[],"grate":{"x":41,"y":15,"img":["!Quest_Places",0,2,0],"p2":17,"to":true},"rynny":["rynna_1","rynna_2","rynna_3","rynna_4"],"rynnyObok":true,"land":true}
+PASS krata zamknięta (przełącznik 17 wyłączony): popup o kracie z krukiem
+PASS kruczarnia za dnia: młody kruk na starej żerdzi (28,11; 63 px nad ziemią), wokół stado kruków (10+)  {"pet":[28.5,11.979166666666666,63,"sit",true],"flock":11,"wp":{"at":{"x":28.5,"y":11.979166666666666,"z":63},"ravenry":true},"perch":5}
+PASS nocą kruki śpią na żerdziach i murach (nastroszone, łeb pod skrzydłem)  {"f":[6,4],"flock":10}
+PASS kamień z krukiem w gruzie: popup i notatka w dzienniku
+PASS K51: Roch daje zadanie od dnia 8 rano (po pierwszym spotkaniu)  true
+PASS o świcie kruk siedzi na złamanym maszcie wraku kutra (przystań)  {"pet":[14.1875,35.98,111,"sit"],"mast":{"x":14.1875,"y":35.98,"z":111,"high":true,"facing":1},"step":0}
+PASS bohater podchodzi: kruk kracze i odlatuje (krok 1 zaliczony, etap 1)  {"leg":1,"step":1}
+PASS kruk czeka przy bramie Ścieżki na klif (przystań), potem leci nad klif (etap 2)
+PASS pustelnia: kruk siedzi na kopcu z krukiem  {"pet":[27.5,19.98,34],"leg":2}
+PASS bohater przy kopcu: kruk leci na wschód, ku Urwisku (etap 3)
+PASS Urwisko: kruk czeka na sośnie przy ścieżce  {"pet":[3.5,18.98,127],"leg":3}
+PASS kruk siada na żerdzi w kruczarni: K51 wykonane, D24 „Oswojony kruk” zaczyna się samo  {"done":true,"d24":{"s":"active","step":0,"day":8,"sday":8,"sh":5.982222222222298,"t":{"done":{}},"times":0,"end":0},"leg":5}
+PASS bez mięsa: popup nad bohaterem „Potrzebujesz mięsa albo ryby”
+PASS pies przy nodze: kruk nie zejdzie (popup)
+PASS karmienie 1: kruk zeskakuje po mięso, je i wraca na żerdź (1/3)  {"feeds":1,"meat":4,"pet":[28.5,11.979166666666666,63,"sit"],"d24":0}
+PASS drugi raz tego samego dnia: „już dziś jadł”
+PASS bieg przy kruku: płoszy się na godzinę (nie ma go w kruczarni)  {"until":253.00916666666663,"wp":null}
+PASS trzecie karmienie: kruk na ramieniu, potem ekran imienia (scena z prologu, własne teksty)  "Scene_RavenName"
+PASS oswojony: imię z polską literą („Węgielek”), obrączka 179 w torbie, flagi krukTame i kronikaKarta6, D24 krok 2 (dziadek)  {"name":"Węgielek","stage":"tame","ring":1,"tame":true,"k6":true,"d24":1,"pet":"shoulder"}
+PASS karta kroniki 6 trafia do torby (Pustelnia.js czyta flagę kronikaKarta6)
+ERR TypeError: Cannot read properties of undefined (reading 'eventId')
+    at <anonymous>:2:56
+    at <anonymous>:2:91
+PASS bez błędów w konsoli  []
+28/29 passed

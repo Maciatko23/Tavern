@@ -172,10 +172,10 @@
         notice_bakery: { map: 8, id: 953, x: 39, y: 73, name: "Ściana piekarni", wall: true, deco: "paper", owner: "piekarka" },
         notice_smithy: { map: 8, id: 954, x: 9, y: 62, name: "Ściana kuźni", wall: true, deco: "paper", owner: "kowal" },
         notice_kantor: { map: 8, id: 955, x: 19, y: 47, name: "Ściana kantoru", wall: true, deco: "paper", owner: "kupiec" },
-        south_gate: { map: 8, id: 956, x: 53, y: 93, name: "Pod bramą południową", deco: "tracks" },
+        south_gate: { map: 8, id: 956, x: 32, y: 110, name: "Pod bramą południową", deco: "tracks" },
         watch_post: { map: 8, id: 957, x: 53, y: 28, name: "Posterunek przy bramie twierdzy" },
-        east_brazier: { map: 8, id: 958, x: 101, y: 49, name: "Kosz żarowy", wall: true, deco: "doused" },
-        horseshoe: { map: 22, id: 951, x: 20, y: 14, name: "Polna droga", deco: "glint" },
+        east_brazier: { map: 8, id: 958, x: 117, y: 47, name: "Kosz żarowy", wall: true, deco: "doused" },
+        horseshoe: { map: 3, id: 951, x: 74, y: 18, name: "Droga za bramą południową", deco: "glint" },   // (2026-11-11 plansza: was Map022 (20,14))
         // (2026-10-05) the places another agent built for these quests (docs/miasta_miejsca_zadan.md - on their "Miejsce:" markers):
         // Map118 "Dno studni", Map024 the orangery of the manor's garden, Map119 "Archiwum zakonu". img: [sheet, index, direction,
         // pattern] - a picture on the place's page (the ring's glint; Feliks and Kuba at the back gate at night); solid: it blocks (a
@@ -187,24 +187,24 @@
         // under the pine (the user's event at 3,20 - the raven is on its bolt), the orange tree's planter by the orangery's door (8,24 - a
         // loose board, the drawing under it), Feliks and Kuba by the hatch at night (Kuba is let in through the main gate - Wit takes his
         // cut). Own coordinates, no markers: the hero stands on the place (O) or faces it
-        w1_pump: { map: 24, id: 951, x: 3, y: 21, name: "Właz z krukiem" },
-        w1_drawer: { map: 24, id: 952, x: 8, y: 25, name: "Skrzynia drzewka pomarańczy" },
-        w1_feliks: { map: 24, id: 953, x: 2, y: 20, name: "Feliks", img: ["$Npc_Feliks", 0, 6, 1], solid: true, nomark: true },
-        w1_kuba: { map: 24, id: 954, x: 3, y: 19, name: "Kuba Woziwoda", img: ["$Npc_Woziwoda", 0, 2, 1], solid: true, nomark: true },
+        w1_pump: { map: 24, id: 951, x: 23, y: 81, name: "Właz z krukiem" },
+        w1_drawer: { map: 24, id: 952, x: 28, y: 85, name: "Skrzynia drzewka pomarańczy" },
+        w1_feliks: { map: 24, id: 953, x: 22, y: 80, name: "Feliks", img: ["$Npc_Feliks", 0, 6, 1], solid: true, nomark: true },
+        w1_kuba: { map: 24, id: 954, x: 23, y: 79, name: "Kuba Woziwoda", img: ["$Npc_Woziwoda", 0, 2, 1], solid: true, nomark: true },
         w2_book: { map: 119, id: 951, x: 6, y: 6, name: "Księga sygnałów" },
         w2_chron: { map: 119, id: 952, x: 10, y: 5, name: "Kroniki zakonu" },
         // (2026-10-06) W3 a: Melia by the Kupała bonfire before the south gate (only that night; bust: her own)
         // (2026-10-06) W4: where the other half of the key lies - at the foot of the stone cairn in grandpa's yard (Map020, the cairn 8,5)
-        w4_dig: { map: 20, id: 951, x: 8, y: 6, name: "Kopiec z krukiem", deco: "dig" },
-        w3_kupala: { map: 8, id: 959, x: 51, y: 90, name: "Melia Srebrogłosa", img: ["$Npc_Melia", 0, 2, 1], solid: true, nomark: true, bust: "People2_8" },
+        w4_dig: { map: 20, id: 951, x: 39, y: 45, name: "Kopiec z krukiem", deco: "dig" },
+        w3_kupala: { map: 8, id: 959, x: 26, y: 107, name: "Melia Srebrogłosa", img: ["$Npc_Melia", 0, 2, 1], solid: true, nomark: true, bust: "People2_8" },
         // (2026-10-06) W8 in the mountains: on the maps agent's markers ("Miejsce: <marker>" - docs/miasta_miejsca_zadan.md "Góry"; dx/dy
         // shift; x/y only a fallback) - Grum as a picture with his bust at each place, the commander's crate in the diggers' camp
-        w8_start: { map: 13, id: 951, marker: "grum_przewodnik_start", x: 4, y: 38, name: "Grum", img: ["$Npc_Grum", 0, 4, 1], solid: true, bust: "Actor2_5" },
-        w8_quarry: { map: 13, id: 952, marker: "kamieniolom_znak", dx: 1, x: 41, y: 18, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
-        w8_gate: { map: 120, id: 953, marker: "osada_brama", dx: 1, x: 21, y: 30, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
+        w8_start: { map: 13, id: 951, marker: "grum_przewodnik_start", x: 4, y: 62, name: "Grum", img: ["$Npc_Grum", 0, 4, 1], solid: true, bust: "Actor2_5" },
+        w8_quarry: { map: 13, id: 952, marker: "kamieniolom_znak", dx: 1, x: 41, y: 42, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
+        w8_gate: { map: 4, id: 956, marker: "osada_brama", dx: 1, x: 67, y: 57, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
         w8_cave: { map: 14, id: 951, marker: "marek", dx: -2, dy: 1, x: 28, y: 6, name: "Grum", img: ["$Npc_Grum", 0, 6, 1], solid: true, bust: "Actor2_5" },
         w8_crate: { map: 14, id: 952, marker: "list_kryjowka", x: 27, y: 11, name: "Skrzynia dowódcy" },
-        w8_osada: { map: 120, id: 951, marker: "osada_grum", x: 21, y: 25, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
+        w8_osada: { map: 4, id: 957, marker: "osada_grum", x: 67, y: 52, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
         // (2026-10-07) W6 "Ludzie z promu". Ids 903-909 (TownQuests' second range - Map008's 951-959 are all taken): the props of the
         // ferry people's camp - shown while FX[show].show() says so (no quest step needed, no diamond): the first wave's tent and fire
         // under the wall (from day 10, while the camp is in the town), the second wave (day 25 - its ferry): a tent more and Bogdan and Halina
@@ -213,21 +213,21 @@
         // event's note (Occupy - the tent's footprint); light: added only while shown when the map loads (the camp's fire: a flame);
         // step: an animated picture. talkFx: what the action button says (FX[talkFx].spot). The hiding places of Rafał (W6 rozdz. 4 a)
         // are ordinary quest places (951) on the guest rooms (Map025), grandpa's house (Map019) and the bell tower (Map108).
-        w6_tent1: { map: 8, id: 903, x: 58, y: 92, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 1], solid: true, nomark: true, show: "w6Camp", talkFx: "w6Prop",
+        w6_tent1: { map: 8, id: 903, x: 89, y: 100, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 1], solid: true, nomark: true, show: "w6Camp", talkFx: "w6Prop",
             note: "<Occupy:left=1,right=1,up=1>" },
-        w6_fire: { map: 8, id: 905, x: 59, y: 90, name: "Ognisko obozu", img: ["!Decoration", 2, 4, 0], solid: true, nomark: true, step: true, show: "w6Camp", talkFx: "w6Prop",
+        w6_fire: { map: 8, id: 905, x: 90, y: 98, name: "Ognisko obozu", img: ["!Decoration", 2, 4, 0], solid: true, nomark: true, step: true, show: "w6Camp", talkFx: "w6Prop",
             light: "<Light:190,255,150,70><LightFlicker:0.18,255,110,40><LightHeight:20>" },
-        w6_tent2: { map: 8, id: 904, x: 46, y: 90, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 0], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop",
+        w6_tent2: { map: 8, id: 904, x: 77, y: 98, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 0], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop",
             note: "<Occupy:left=1,right=1,up=1>" },
-        w6_bogdan: { map: 8, id: 906, x: 50, y: 90, name: "Bogdan", img: ["$Npc_Bogdan", 0, 4, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
-        w6_halina: { map: 8, id: 907, x: 56, y: 91, name: "Halina", img: ["$Npc_Halina", 0, 6, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
-        w6_tent2_o: { map: 111, id: 903, x: 42, y: 11, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 0], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop",
+        w6_bogdan: { map: 8, id: 906, x: 81, y: 98, name: "Bogdan", img: ["$Npc_Bogdan", 0, 4, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
+        w6_halina: { map: 8, id: 907, x: 87, y: 99, name: "Halina", img: ["$Npc_Halina", 0, 6, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
+        w6_tent2_o: { map: 111, id: 903, x: 60, y: 44, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 0], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop",
             note: "<Occupy:left=1,right=1,up=1>" },
-        w6_bogdan_o: { map: 111, id: 906, x: 38, y: 12, name: "Bogdan", img: ["$Npc_Bogdan", 0, 2, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
-        w6_halina_o: { map: 111, id: 907, x: 42, y: 14, name: "Halina", img: ["$Npc_Halina", 0, 4, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
-        w6_help1: { map: 3, id: 906, x: 20, y: 26, at: "w6Helper", name: "Bogdan", img: ["$Npc_Bogdan", 0, 2, 1], solid: true, nomark: true, show: "w6Work", talkFx: "w6Prop" },
-        w6_help2: { map: 3, id: 907, x: 22, y: 26, at: "w6Helper", name: "Halina", img: ["$Npc_Halina", 0, 2, 1], solid: true, nomark: true, show: "w6Work", talkFx: "w6Prop" },
-        w6_hide_tavern: { map: 25, id: 951, x: 40, y: 38, name: "Rafał", img: ["$Npc_Rafal", 0, 4, 1], solid: true, nomark: true },
+        w6_bogdan_o: { map: 111, id: 906, x: 56, y: 45, name: "Bogdan", img: ["$Npc_Bogdan", 0, 2, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
+        w6_halina_o: { map: 111, id: 907, x: 60, y: 47, name: "Halina", img: ["$Npc_Halina", 0, 4, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
+        w6_help1: { map: 3, id: 906, x: 60, y: 57, at: "w6Helper", name: "Bogdan", img: ["$Npc_Bogdan", 0, 2, 1], solid: true, nomark: true, show: "w6Work", talkFx: "w6Prop" },
+        w6_help2: { map: 3, id: 907, x: 62, y: 57, at: "w6Helper", name: "Halina", img: ["$Npc_Halina", 0, 2, 1], solid: true, nomark: true, show: "w6Work", talkFx: "w6Prop" },
+        w6_hide_tavern: { map: 25, id: 951, x: 21, y: 8, name: "Rafał", img: ["$Npc_Rafal", 0, 4, 1], solid: true, nomark: true },
         w6_hide_grandpa: { map: 19, id: 951, x: 17, y: 6, name: "Rafał", img: ["$Npc_Rafal", 0, 2, 1], solid: true, nomark: true },
         w6_hide_belfry: { map: 108, id: 951, x: 8, y: 5, name: "Rafał", img: ["$Npc_Rafal", 0, 2, 1], solid: true, nomark: true },
         // (2026-10-14) the harbour (Map125, tools/przystan): D20 - the cutter's wreck on the beach, dragged onto the slipway at dawn
@@ -470,7 +470,7 @@
             K32: {
                 kind: "K", giver: "grandpa", icon: 0,
                 offer: {
-                    cond: { day: 5, until: 20, story: true },
+                    cond: { day: 2, until: 20, story: true },   // (2026-11-12: day 2 - from day 3 grandpa is called away by the king (Story wez); day 5 never came in a new game)
                     auto: true, vgives: { list: 1 }
                 },
                 kroki: [
@@ -506,20 +506,20 @@
             K40: {
                 kind: "K", giver: "praczka", icon: 138,
                 offer: {
-                    cond: { hours: [5, 17], day: 2 }
+                    cond: { hours: [17.5, 20], day: 2 }
                 },
                 kroki: [
-                    { nazwa: "k40Przynies", type: "bring", to: "praczka", water: 2, hours: [5, 22] }
+                    { nazwa: "k40Przynies", type: "bring", to: "praczka", water: 2, hours: [17.5, 20] }
                 ],
                 reward: { gold: 8, xp: 40, opinion: 2 }
             },
             K41: {
                 kind: "K", giver: "znachorka", icon: 150,
                 offer: {
-                    cond: { hours: [6, 18] }
+                    cond: { hours: [18, 21] }
                 },
                 kroki: [
-                    { nazwa: "k41Przynies", type: "bring", to: "znachorka", need: [[150, 3], [149, 2]], hours: [6, 22] }
+                    { nazwa: "k41Przynies", type: "bring", to: "znachorka", need: [[150, 3], [149, 2]], hours: [18, 21] }
                 ],
                 reward: { xp: 50, opinion: 2, items: [[152, 2]] }
             },
@@ -536,40 +536,40 @@
             K43: {
                 kind: "K", giver: "uchodzca", icon: 61,
                 offer: {
-                    cond: { hours: [17, 22] }
+                    cond: { hours: [17.5, 21.5] }
                 },
                 kroki: [
-                    { nazwa: "k43Przynies", type: "bring", to: "uchodzca", need: [[61, 6]], hours: [6, 23] }
+                    { nazwa: "k43Przynies", type: "bring", to: "uchodzca", need: [[61, 6]], hours: [17.5, 21.5] }
                 ],
                 reward: { xp: 40, opinion: 3 }
             },
             K44: {
                 kind: "K", giver: "drwal", icon: 93,
                 offer: {
-                    cond: { hours: [15, 21.5] }
+                    cond: { hours: [17.5, 21.5] }
                 },
                 kroki: [
-                    { nazwa: "k44Przynies", type: "bring", to: "drwal", need: [[93, 2]], hours: [5, 22] }
+                    { nazwa: "k44Przynies", type: "bring", to: "drwal", need: [[93, 2]], hours: [17.5, 21.5] }
                 ],
                 reward: { xp: 40, opinion: 2, items: [[79, 3]] }
             },
             K45: {
                 kind: "K", giver: "klusownik", icon: 92,
                 offer: {
-                    cond: { hours: [13, 20], day: 2 }
+                    cond: { hours: [19.5, 22.5], day: 2 }
                 },
                 kroki: [
-                    { nazwa: "k45Przynies", type: "bring", to: "klusownik", need: [[92, 6]], hours: [5, 22] }
+                    { nazwa: "k45Przynies", type: "bring", to: "klusownik", need: [[92, 6]], hours: [19.5, 22.5] }
                 ],
                 reward: { xp: 40, opinion: 1, items: [[94, 2]] }
             },
             K46: {
                 kind: "K", giver: "franek", icon: 83,
                 offer: {
-                    cond: { hours: [7, 19] }
+                    cond: { hours: [17.5, 19.5] }
                 },
                 kroki: [
-                    { nazwa: "k46Przynies", type: "bring", to: "franek", need: [[83, 1]], hours: [6, 22] }
+                    { nazwa: "k46Przynies", type: "bring", to: "franek", need: [[83, 1]], hours: [17.5, 19.5] }
                 ],
                 reward: { xp: 20, opinion: 2 }
             },
@@ -600,8 +600,8 @@
                 },
                 kroki: [
                     { nazwa: "d5Miejsce", type: "spot", spot: "south_gate", hours: [5, 9] },
-                    { nazwa: "d5Upoluj", type: "kill", kind: "wolf", map: 22, n: 2, night: true, spawn: 2 },
-                    { nazwa: "d5Upoluj2", type: "kill", kind: "wolf", map: 23, n: 1, leader: true, night: true, spawn: 3 },
+                    { nazwa: "d5Upoluj", type: "kill", kind: "wolf", map: 3, n: 2, night: true, spawn: 2 },
+                    { nazwa: "d5Upoluj2", type: "kill", kind: "wolf", map: 4, n: 1, leader: true, night: true, spawn: 3 },
                     { nazwa: "d5Rozmowa", type: "talk", to: "kapral", hours: H_WIT,
                         choice: { ask: [], options: [
                             { flag: "witOwes", reward: { gold: 80 } },

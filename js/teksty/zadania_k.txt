@@ -74,22 +74,22 @@ Sześć gwoździ, kute dziś rano. Trzymaj.
 
 # K3, „Podkowa w słońcu”
 zadania.K3.title = Podkowa w słońcu
-zadania.K3.where = kuźnia → Polna droga
+zadania.K3.where = kuźnia → droga za bramą południową (Kruczy Jar)
 zadania.K3.when = w południe (11–14), przy słońcu
-zadania.K3.desc = Z wozu Wieśka wypadła podkowa dla konia Lorda. W samo południe błyska w słońcu między kamieniami na Polnej drodze - szukasz błysku, nie podkowy.
+zadania.K3.desc = Z wozu Wieśka wypadła podkowa dla konia Lorda. W samo południe błyska w słońcu między kamieniami na drodze za bramą południową - szukasz błysku, nie podkowy.
 [zadania.K3.offer.say]
-Wiesiek wiózł mi podkowy dla konia Lorda i jedną zgubił na Polnej drodze. Lord już o nią pytał. Dwa razy.
+Wiesiek wiózł mi podkowy dla konia Lorda i jedną zgubił na drodze za bramą południową. Lord już o nią pytał. Dwa razy.
 Szukaj w samo południe, przy słońcu - podkowa błyska między kamieniami. Szukaj błysku, nie podkowy.
 
 zadania.K3.offer.yes = Poszukam.
 zadania.K3.offer.no = Nie teraz.
 [zadania.K3.offer.accept]
-Polna droga, między kamieniami. Od jedenastej do drugiej, póki słońce stoi wysoko.
+Droga za bramą południową, między kamieniami. Od jedenastej do drugiej, póki słońce stoi wysoko.
 
 [zadania.K3.offer.decline]
 Ech. Lord zapyta trzeci raz.
 
-zadania.K3.steps.0.text = Znajdź podkowę na Polnej drodze: w południe (11–14), przy słońcu, błyska między kamieniami.
+zadania.K3.steps.0.text = Znajdź podkowę na drodze za bramą południową: w południe (11–14), przy słońcu, błyska między kamieniami.
 [zadania.K3.steps.0.say]
 > (Coś błysnęło w słońcu.) Jest! Nowa podkowa, z herbem Lorda wybitym na pręcie.
 
@@ -622,7 +622,7 @@ zadania.K31.fail.text = Imieniny minęły bez twojego prezentu.
 # K32, „List od dziadka”
 zadania.K32.title = List od dziadka
 zadania.K32.where = dom dziadka → drzwi dworu
-zadania.K32.when = dni 5–20, Lord 8–20
+zadania.K32.when = dni 2–20, Lord 8–20
 zadania.K32.desc = Dziadek prosi w liście o zwłokę w spłacie długu. Zwłoki nie będzie - ale Lord zada dziwne pytanie.
 [zadania.K32.offer.say]
 Wnuku... napisałem do Lorda. Proszę o zwłokę. Wiem, wiem - nic to nie da. Ale ojciec mnie uczył: proś, zanim zaczniesz się kłócić.
@@ -1010,8 +1010,8 @@ Koszyki od Feliksa? Postaw tu. ...Wnuk Stacha nosi koszyki dla dworu. Twój dzia
 zadania.K30.fail.text = Śniadanie jaśnie pana wystygło.
 # K40, „Woda na pranie”
 zadania.K40.title = Woda na pranie
-zadania.K40.where = Podgrodzie, sznury z praniem
-zadania.K40.when = 5–17, od dnia 2
+zadania.K40.where = Tawerna, kącik przy tablicy zleceń (wieczorem); pranie na Podgrodziu
+zadania.K40.when = 17:30–20, od dnia 2
 zadania.K40.desc = Marta nosi wodę z miasta, z przydziału przy studni - dwa wiadra na dzień to za mało na prześcieradła z dworu. Prosi o dwie porcje twojej deszczówki.
 [zadania.K40.offer.say]
 Prześcieradła z dworu... Feliks chce je na jutro, a ja z przydziału mam ledwie na namoczenie.
@@ -1020,12 +1020,12 @@ Masz może deszczówkę? Dwie porcje starczyłyby mi na płukanie. Zapłacę, il
 zadania.K40.offer.yes = Przyniosę deszczówkę.
 zadania.K40.offer.no = Sam mam mało.
 [zadania.K40.offer.accept]
-Niech ci Bóg wynagrodzi. Będę przy sznurach.
+Niech ci Bóg wynagrodzi. Siedzę tu przy tablicy, aż skończę rachunek z Borgarem za obrusy.
 
 [zadania.K40.offer.decline]
 Rozumiem. Każdy liczy każdą kroplę.
 
-zadania.K40.steps.0.text = Daj Marcie 2 porcje swojej deszczówki (wiadro albo bukłak; Podgrodzie, przy praniu).
+zadania.K40.steps.0.text = Daj Marcie 2 porcje swojej deszczówki (wiadro albo bukłak; tawerna, wieczorem, kącik przy tablicy zleceń).
 [zadania.K40.steps.0.remind]
 Dwie porcje, kochaneczku. Choćby z bukłaka.
 
@@ -1037,8 +1037,8 @@ Czysta jak łza... Dworskie prześcieradła będą białe. Masz, weź te grosze.
 
 # K41, „Zioła dla babki Jadwigi”
 zadania.K41.title = Zioła dla babki Jadwigi
-zadania.K41.where = Podgrodzie, ogródek ziół
-zadania.K41.when = 6–18
+zadania.K41.where = Tawerna, stolik przy tablicy zleceń (wieczorem); ogródek ziół na Podgrodziu
+zadania.K41.when = 18–21
 zadania.K41.desc = Babka Jadwiga robi opatrunki dla całego Podgrodzia, a krwawnik w jej ogródku zżółkł od suszy.
 [zadania.K41.offer.say]
 Krwawnik mi uschnął, dziecko. A ludzie się ranią - przy drewnie, przy sidłach, przy murze.
@@ -1052,7 +1052,7 @@ Krwawnik ma białe baldachy, pokrzywa parzy. Nie pomylisz.
 [zadania.K41.offer.decline]
 Idź z Bogiem.
 
-zadania.K41.steps.0.text = Przynieś babce Jadwidze 3× Krwawnik i 2× Pokrzywa (Podgrodzie).
+zadania.K41.steps.0.text = Przynieś babce Jadwidze 3× Krwawnik i 2× Pokrzywa (tawerna, wieczorem).
 [zadania.K41.steps.0.remind]
 Trzy krwawniki, dwie pokrzywy. Stara Jadwiga nie zapomina.
 
@@ -1091,8 +1091,8 @@ Stoi! Jak nowy! No, prawie jak nowy. Masz, dwie liny - mocne, z portu. Prawie ni
 
 # K43, „Drewno na ognisko”
 zadania.K43.title = Drewno na ognisko
-zadania.K43.where = Podgrodzie, obóz uchodźców
-zadania.K43.when = 17–22
+zadania.K43.where = Tawerna, przy kominku w sieni (wieczorem); obóz uchodźców na Podgrodziu
+zadania.K43.when = 17:30–21:30
 zadania.K43.desc = Ognisko w obozie uchodźców przygasa, a w nocy przy murze zimno. Darin prosi o drewno.
 [zadania.K43.offer.say]
 Ogień nam przygasa. W nocy przy murze jest zimno, a dzieci śpią pod gołym niebem.
@@ -1106,7 +1106,7 @@ Dziękuję, wyspiarzu.
 [zadania.K43.offer.decline]
 Rozumiem. Każdy ma swoje ognisko.
 
-zadania.K43.steps.0.text = Przynieś Darinowi 6× Drewno na ognisko (obóz uchodźców w Podgrodziu).
+zadania.K43.steps.0.text = Przynieś Darinowi 6× Drewno na ognisko (tawerna, wieczorem; zaniesie je do obozu uchodźców).
 [zadania.K43.steps.0.remind]
 Sześć polan, dobrze? Ogień czeka.
 
@@ -1125,8 +1125,8 @@ Darin słyszał od oficerów na kontynencie, że Serce, o które walczą królow
 
 # K44, „Lina dla Zbycha”
 zadania.K44.title = Lina dla Zbycha
-zadania.K44.where = Podgrodzie, drewutnia
-zadania.K44.when = 15–21
+zadania.K44.where = Tawerna, przy kominku w sieni (wieczorem); drewutnia na Podgrodziu
+zadania.K44.when = 17:30–21:30
 zadania.K44.desc = Zbychowi pękła lina do wiązania drewna, a nowej nie ma za co kupić.
 [zadania.K44.offer.say]
 Pękła mi lina. Drewno wiążę teraz łykiem i rozłazi się po drodze.
@@ -1135,12 +1135,12 @@ Dwie liny, chłopcze. Za to dostaniesz węgiel z mielerza - kowal płaci za taki
 zadania.K44.offer.yes = Przyniosę liny.
 zadania.K44.offer.no = Nie teraz.
 [zadania.K44.offer.accept]
-Dobrze. Rąbię do zmroku.
+Dobrze. Rąbię od świtu do zmroku, a wieczorem mnie tu znajdziesz.
 
 [zadania.K44.offer.decline]
 Ech. To jeszcze trochę łyka.
 
-zadania.K44.steps.0.text = Przynieś Zbychowi 2× Lina (drewutnia w Podgrodziu).
+zadania.K44.steps.0.text = Przynieś Zbychowi 2× Lina (tawerna, wieczorem).
 [zadania.K44.steps.0.remind]
 Dwie liny. Łyko już się kończy.
 
@@ -1152,8 +1152,8 @@ Mocne! Masz, trzy worki węgla. Z mojego mielerza, najlepszy w okolicy.
 
 # K45, „Włókno na pętle”
 zadania.K45.title = Włókno na pętle
-zadania.K45.where = Podgrodzie
-zadania.K45.when = 13–20
+zadania.K45.where = Tawerna, ciemny kąt przy kominku (wieczorem); sidła na Podgrodziu i w lesie
+zadania.K45.when = 19:30–22:30
 zadania.K45.desc = Rysiek robi pętle na zające z włókna lnu, bo drutu nikt mu nie sprzeda.
 [zadania.K45.offer.say]
 Psst. Potrzebuję włókna. Sześć garści. Na pętle.
@@ -1167,7 +1167,7 @@ Mądry chłopak. I cichy, mam nadzieję.
 [zadania.K45.offer.decline]
 Jak chcesz. Ale głodny będziesz ty, nie ja.
 
-zadania.K45.steps.0.text = Przynieś Ryśkowi 6× Włókno na pętle (Podgrodzie).
+zadania.K45.steps.0.text = Przynieś Ryśkowi 6× Włókno na pętle (tawerna, wieczorem).
 [zadania.K45.steps.0.remind]
 Sześć garści włókna. Ciszej mów.
 
@@ -1183,8 +1183,8 @@ Rysiek: „Pusta pętla nic nie złapie. Zawsze daj przynętę.” Sidła łapi�
 
 # K46, „Suchar dla Franka”
 zadania.K46.title = Suchar dla Franka
-zadania.K46.where = Podgrodzie
-zadania.K46.when = 7–19
+zadania.K46.where = Tawerna, przy mamie w kąciku przy tablicy (wieczorem)
+zadania.K46.when = 17:30–19:30
 zadania.K46.desc = Franek od rana nic nie jadł, a mama pierze do wieczora.
 [zadania.K46.offer.say]
 Masz coś do jedzenia? Mama pierze, a ja od rana nic... Choćby kawałek chleba.
@@ -1197,7 +1197,7 @@ Naprawdę? Będę tu! Albo tam. Gdzieś będę!
 [zadania.K46.offer.decline]
 Aha...
 
-zadania.K46.steps.0.text = Przynieś Frankowi 1× Chleb (Podgrodzie).
+zadania.K46.steps.0.text = Przynieś Frankowi 1× Chleb (tawerna, wieczorem, przy mamie).
 [zadania.K46.steps.0.remind]
 Chleb? Masz już?
 
@@ -1301,8 +1301,8 @@ Czapka Ozzy'ego leżała na głowie posągu w zamkniętym ogrodzie rycerzy - dok
 
 # K47, „Pierwszy połów”
 zadania.K47.title = Pierwszy połów
-zadania.K47.where = Przystań, pomost rybacki
-zadania.K47.when = 8–20
+zadania.K47.where = Tawerna (Janek wieczorem); pomost rybacki na przystani
+zadania.K47.when = 19–22:30
 zadania.K47.desc = Janek uczy łowić w morzu: dwa śledzie z pomostu, a potem patroszenie.
 [zadania.K47.offer.say]
 Chcesz się nauczyć łowić w morzu? Morska ryba to nie ta ze stawu. Śledź idzie ławicą o świcie i o zmierzchu, dorsz siedzi przy dnie.
@@ -1320,7 +1320,7 @@ zadania.K47.offer.options.2.label = Nie teraz.
 [zadania.K47.offer.options.2.say]
 Morze poczeka. Ono zawsze czeka.
 
-zadania.K47.steps.0.text = Złów w morzu 2 śledzie (z pomostu albo z brzegu przystani) i przynieś je Jankowi.
+zadania.K47.steps.0.text = Złów w morzu 2 śledzie (z pomostu albo z brzegu przystani) i przynieś je Jankowi do tawerny (wieczorem).
 [zadania.K47.steps.0.remind]
 Dwa śledzie. Najlepiej biorą o świcie i o zmierzchu. I morskiej wody nie pij, choćby nie wiem co.
 
@@ -1337,8 +1337,8 @@ Janek: „Śledź idzie ławicą o świcie i o zmierzchu, dorsz siedzi przy dnie
 
 # K48, „Sieci po sztormie”
 zadania.K48.title = Sieci po sztormie
-zadania.K48.where = Przystań
-zadania.K48.when = 9–20, po „Pierwszym połowie”
+zadania.K48.where = Tawerna (Janek wieczorem); sieci na przystani
+zadania.K48.when = 19–22:30, po „Pierwszym połowie”
 zadania.K48.desc = Sztorm, który przyniósł bohatera, porwał Jankowi sieci.
 [zadania.K48.offer.cond.done]
 K47
@@ -1355,7 +1355,7 @@ Dobry z ciebie chłopak. Stach może być dumny.
 [zadania.K48.offer.decline]
 Jak znajdziesz chwilę, to wiesz, gdzie mnie szukać.
 
-zadania.K48.steps.0.text = Przynieś Jankowi 6× Włókno i 2× Lina na sieci (przystań).
+zadania.K48.steps.0.text = Przynieś Jankowi 6× Włókno i 2× Lina na sieci (tawerna, wieczorem).
 [zadania.K48.steps.0.remind]
 Sześć garści włókna i dwie liny. Bez nich sieć to same dziury.
 

@@ -413,3 +413,74 @@ kod.glowna.0 = Rejestr straży
 [honeyAsk]
 Miód z moich uli. Dwanaście groszy słoik. Dla posłańca nie ma zniżek. Posłańcy płacą jak wszyscy.
 
+
+# ======================================================================== PRZY KAPLICY (pustelnia poza światem, 2026-11-11)
+# Brat Kleofas zszedł z klifu i siedzi przy kaplicy w Kruczogrodzie (Map008), dopóki WyspaData.HERMITAGE_OPEN = false. Klucze „kaplica.<ścieżka>”
+# mówią tę samą ścieżkę jeszcze raz i nadpisują ją TYLKO wtedy (Pustelnia_Data.js); gdy pustelnia wróci, czyta się tekst z góry pliku.
+# mieszkaniec przy kaplicy (talk / barks drugiego domu: RESIDENT.alt)
+[mieszkaniec.alt.barks.stand]
+(Kleofas mruczy psalm pod nosem. Fałszuje.)
+Zszedłem z klifu na jakiś czas. Kaplica ciasna, ale nie wieje.
+Morze jak krew... W kronikach trzy razy przez trzysta lat. A teraz co roku.
+Chleb z miodem. Miód został na klifie. Pszczoły mnie tu nie znajdą. Tym lepiej dla nich.
+
+[mieszkaniec.alt.barks.rain]
+Deszcz! Pod okap, prędko - atrament mi rozmoczy!
+
+[mieszkaniec.alt.barks.night]
+Siedem uderzeń. Siedem. Pamiętaj.
+
+[mieszkaniec.alt.talk.morning]
+Godzinki odmówione, ławka na miejscu. Można pisać.
+Wstaję o czwartej. Mój mistrz wstawał o trzeciej. Dlatego umarł przede mną.
+
+[mieszkaniec.alt.talk.day]
+Przepisuję kroniki, bo papier gnije, a pamięć jeszcze szybciej. Tu przynajmniej ktoś mi przeszkadza.
+Miasto hałasuje. Ja wolę ciszę, ale ławka pod kaplicą to i tak więcej, niż mi trzeba.
+
+[mieszkaniec.alt.talk.evening]
+Słońce schodzi za mur. Kronikarze zapisywali każdy zachód, który był czerwony. Brakło im atramentu.
+Wieczorem czyta się najgorzej, a myśli najlepiej.
+
+[mieszkaniec.alt.talk.night]
+Po nocy chodzą tylko złodzieje i głupcy. Którym jesteś?
+
+[mieszkaniec.alt.talk.rain]
+Deszcz! Cicho bądź i słuchaj, jak bębni o gonty. Najlepsza muzyka pod okapem.
+
+# pierwsze spotkanie, notatka do dziennika
+[kaplica.meet]
+...Czego tu szukasz? Kaplica dla wszystkich otwarta, ale ławka jest moja.
+> Nie wiedziałem, że ktoś tu siedzi. Skąd pan?
+Z klifu nad przystanią. Jesienna burza zwaliła ścieżkę i do pustelni nie dojdzie dziś nawet koza. Księgi zakonu zniosłem tu, do kaplicy, w trzech workach. Tyle się dało unieść.
+> A kruki? Podobno zakon trzymał kruki.
+Kruki były mądrzejsze ode mnie. Zakon miał kruczarnię także w mieście: wieża z izbą przy północno-wschodnim murze. Tam się przeniosły, na stare żerdzie. Znajdziesz je bez trudu - kraczą jak sołtys. (Kleofas patrzy na twoją szyję.) Pokaż to.
+> Wisiorek? Matka dała mi go na drogę. Był jej ojca, dziadka Stacha.
+Stacha... Hm. To by się zgadzało. To nie ozdoba, chłopcze. To znak posłańca. Kruki nie biorą się znikąd.
+Jestem Kleofas. Przepisuję tu rzeczy, których nikt już nie czyta. Jak przyniesiesz atrament, może ci coś przeczytam.
+
+[kaplica.meetNote]
+Pustelnik przy kaplicy
+Przy kaplicy w Kruczogrodzie siedzi brat Kleofas - ostatni kronikarz zakonu. Jesienna burza zerwała ścieżkę na klif, więc zniósł księgi zakonu do kaplicy, a kruki zakonu przeniosły się do kruczarni - wieży z izbą w północno-wschodnim rogu miasta. Na mój wisiorek Kleofas powiedział: „To nie ozdoba. To znak posłańca.”
+
+[kaplica.readWhere]
+Nie tutaj. Szyfr czyta się przy pulpicie - w kaplicy, przy dobrym świetle. Idź przodem, przyjdę za tobą. Za dnia.
+
+kaplica.kod.nocPytaniaSub = Wigilia, dzień {dzien}, o północy - przy kaplicy
+
+# co mówią o nim inni
+[kaplica.uwagi.0.lines]
+Spotkałeś brata pióra? Przy kaplicy? ...Mój mistrz mówił, że gdzieś tam siedzi ostatni kronikarz. Myślałem, że to bajka dla uczniów.
+
+[kaplica.uwagi.1.lines]
+Mnich przy kaplicy? Wiem, wiem. Podatku nie płaci, bo nie ma z czego. Zszedł z klifu, to i kłopotu nie robi.
+
+[kaplica.uwagi.2.lines]
+Słyszałem, że chodzisz do starego mnicha przy kaplicy. Gdyby miał jakieś księgi na sprzedaż... wiesz, gdzie mnie szukać, przyjacielu.
+
+# (2026-11-11, questy_pustelnia) K50 i D23 przy kaplicy: atrament oddajesz Kleofasowi pod kaplicą, karty czytacie przy pulpicie w kaplicy
+kaplica.zadania.K50.where = brat Kleofas przy kaplicy w Kruczogrodzie
+kaplica.zadania.K50.steps.0.text = Przynieś bratu Kleofasowi 4× Szyszki, 1× Żelazo i 1 porcję własnej deszczówki (przy kaplicy w Kruczogrodzie, za dnia).
+kaplica.zadania.D23.where = pulpit w kaplicy w Kruczogrodzie + karty po całej wyspie
+kaplica.zadania.D23.steps.0.text = Znajdź karty kroniki i odczytaj je z bratem Kleofasem przy pulpicie w kaplicy w Kruczogrodzie (7–19, potrzebny wisiorek). Odczytane: {n}/6.{wtorbie}{gdzie}
+kaplica.karty.5.where = zwitek w obrączce kruka z kruczarni w Kruczogrodzie

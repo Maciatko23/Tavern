@@ -1,0 +1,45 @@
+PASS the game boots
+PASS TavernLife.js (with its parts) and QuestBoard.js are in the game
+FAIL the installed tavern (Map001, 101 x 55) with the builders' tagged places  {"w":63,"h":55,"tags":["meal:1","mealtable:4","bath:0","stage:1","arm:1","darts:2","attendant:0"]}
+PASS Borgar, Melia, Grum and Ozzy are found by name (events 1-4), their parallel 'Atmosfera' events are not  [1,2,3,4]
+PASS Survival.defineBuff registers the premia: Czysty, Natchniony, Ugoszczony, Wypoczęty  {"fn":"function","names":["Czysty","Natchniony","Ugoszczony","Wypoczęty"],"cost":0.9}
+PASS Czysty: work costs 10% less strength (costFactor x0.9: 20 costs 18)  {"f0":1,"f1":0.9,"left":82}
+PASS Story's Borgar menu has 'Zjedz coś' and 'Wynajmij pokój' (before 'Pogadaj' and 'Nie teraz'; no shift in the morning)  {"labels":["Sprzedaj towar","Zjedz coś","Wynajmij pokój","Księga gości","Pogadaj","Nie teraz"],"done":true}
+PASS ...Borgar speaks from his bust (the talk busts of SpeechBubbles)  [[1,true]]
+PASS the dish of the day is cheaper (-30%)  {"name":"Placek z serem","full":9,"now":6}
+PASS the card opens with the 7 dishes and drinks, prices, the day's dish marked  ["Gulasz 16 G","Kapuśniak 12 G","Pieczeń z kaszą 18 G","Placek z serem 6 G","Chleb ze smalcem 5 G","Kufel piwa 4 G","Miód pitny 8 G"]
+PASS Gulasz ordered: its price taken  {"before":200,"after":184,"price":16}
+PASS ...and told on the Tawerna bus: 'served' { service: meal, price, dish: gulasz }  [{"service":"meal","price":16,"dish":"gulasz"}]
+PASS he sat at the nearest free table (a real <Tavern:mealtable>) facing its way, the plate on the tile he faces (within reach)  {"seated":{"x":18,"y":40,"d":6,"plate":[[19,40,"gulasz"]]},"expectSeat":{"id":77,"x":18,"y":40,"dir":6,"px":19,"py":40}}
+PASS about 30 minutes passed  0.500555555555593
+PASS the food worked: +65 stamina, hunger and thirst down, Najedzony + Rozgrzany, and Ugoszczony on top  {"gold":184,"st":95,"food":99.9996888888889,"water":64.74812500000029,"h":82.50333333333336,"hosted":true,"sated":true,"warm":true,"meals":1,"x":17,"y":40,"pass":true,"note":true}
+PASS afterwards he stands on a free tile beside the chair; a note 'Karczma Borgara' the first time  {"at":[17,40],"seat":{"id":77,"x":18,"y":40,"dir":6,"px":19,"py":40}}
+PASS Borgar's lines came in his bubbles (event 1)  [[1,"Zmiany są po południu i wieczorem, od 16"],[1,"Śniadanko? Kuchnia już grzeje. Dziś dani"],[1,"Wybierasz z karty, płacisz, siadasz przy"],[1,"Gulasz! Siadaj, już nakładam - z samego "]]
+PASS Ugoszczony: 4 hours take 30% less hunger and thirst  {"withIt":[4.480000000000004,7],"without":[6.400000000000006,10]}
+PASS without the money: no meal, the gold untouched, 'Brakuje ci ... G' pops up over the player  ["Brakuje ci 13 G"]
+PASS on the card the dishes too dear are greyed out; choosing one only buzzes (the card stays, then closes with P)  [["Gulasz",false],["Kapuśniak",false],["Pieczeń z kaszą",false],["Placek z serem",false],["Chleb ze smalcem",true],["Kufel piwa",true],["Miód pitny",false]]
+PASS the counter <Tavern:meal> (event 38) offers the meal and the room  [["Zjedz coś","Wynajmij pokój","Nic, dzięki"]]
+PASS no money for the room: no rent, 'Brakuje ci 3 G' over the player  ["Brakuje ci 3 G"]
+PASS the rooms come from the beds' tags on Map025 / Map026: 1 (8 G), 2 (15), 3 (20), the chamber (30, from 60), the Apartament Złoty (50, from 80)  ["1:8:0","2:15:0","3:20:0","komnata:30:60","zloty:50:80"]
+PASS before renting the doors on Map025 are shut (self switch A off)  [false,false]
+PASS the rooms card lists the real rooms (the chamber and the Apartament greyed at reputation 0), the bed's name said once  [["Pokój nr 1","8 G",true,"śniadanie: pajda chleba"],["Pokój nr 2","15 G",true,"śniadanie: pajda chleba i kubek mleka"],["Pokój nr 3","20 G",true,"śniadanie: pajda chleba i kawałek sera"],["Komnata z kominkiem","30 G",false,"sława „Pewna ręka” - dla stałych gości"],["Apartament Złoty","50 G",false,"sława „Chluba tawerny” - dla dostojnych gości"]]
+PASS room 1 rented at Borgar: 8 G, till 10:00 tomorrow; its door on Map025 opened (self switch A), room 2's not  {"gold":92,"rent":{"room":"1","name":"Pokój nr 1","price":8,"day":3,"until":106,"slept":false},"d1":true,"d2":false}
+PASS Borgar's word after renting  "niadanie. / Pokój nr 1 twój do rana. Schody na górę - drzwi już otwarte, świeca się pali. Śniadanie zostawię przy łóżku."
+FAIL up the stairs: Map025 'Pokoje gości', the landing (48,62)  {"map":1,"x":38,"y":43}
+FAIL upstairs: room 1's door is on its open page, room 2's on the locked one; room 1's candle is lit  {"page":0,"a":true,"candles":[],"other":0}
+PASS in through the door: its own page takes him inside (38,44)  [38,44]
+FAIL the bed of room 2: 'To nie twój pokój' pops up over the player  []
+FAIL the bed asks 'Położyć się spać?' and he sleeps till the morning (day 4, 7:00) in his room  {"text":"","morning":{"map":1,"day":3,"hour":21.38527777777907,"st":20,"hp":10,"mhp":100,"bread":0,"raids":0,"wolves":0,"banner":"","slept":false}}
+FAIL a full rest: stamina and health full; safe: no raid asked, no wolves  {"map":1,"day":3,"hour":21.38527777777907,"st":20,"hp":10,"mhp":100,"bread":0,"raids":0,"wolves":0,"banner":"","slept":false}
+FAIL breakfast: a slice of bread by the bed, 'Borgar zostawił ci pajdę chleba'  {"map":1,"day":3,"hour":21.38527777777907,"st":20,"hp":10,"mhp":100,"bread":0,"raids":0,"wolves":0,"banner":"","slept":false}
+FAIL once a night: the bed says he has slept already  []
+FAIL out through the room's exit; the door stays open till 10:00, then shuts (self switch A off, the locked page), the candle goes out  {"out":false,"stillOpen":true,"shut":{"a":true,"page":0,"rent":null,"candles":[]}}
+FAIL the rent over with him in room 2: the door stays open until he has left  [true,true,true]
+PASS two rents counted  2
+FAIL Map026: a suite's door (room=suite1, no bed): only its own words, its self switch untouched  ""
+ERROR TypeError: Cannot read properties of undefined (reading 'start')
+    at <anonymous>:2:66
+    at <anonymous>:2:89
+
+STATE {"scene":"Scene_TavernDice","map":1,"x":16,"y":29,"running":true,"msg":false,"busy":false,"ev":0,"wait":""}
+28/40 passed

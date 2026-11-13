@@ -94,7 +94,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
 
     // ---------------------------------------------------------------- Kłos in the garrison: his lines and menu stay, the shop is one row
     await t.until("Wyspa.isReady(162)", 20);
-    await t.newGame({ map: 162, x: 33, y: 30, dir: 8, hour: 10, day: 6, quiet: true, minimap: false });
+    await t.newGame({ map: 162, x: 55, y: 54, dir: 8, hour: 10, day: 6, quiet: true, minimap: false });
     await t.frames(30);
     await t.eval(`(function(){ const f = TownQuests.state().flags; f.garnizonPoznany = 1; f.k52Skup = 1; Object.assign(Garnizon.state().met, { rotmistrz: 1, kwatermistrz: 1 }); Garnizon.state().favor = 40;
         const q = TownQuests; window.__qkeep = { remarkFor: q.remarkFor, talkFor: q.talkFor, markers: q.markers, offerable: q.offerable };

@@ -1,0 +1,8 @@
+PASS gra się uruchamia
+PASS Okolice.track: tylko do znanego miejsca, { ifNone } nie zabiera wyboru gracza, null kończy prowadzenie  {"unknown":false,"set":true,"now":"menhiry_krag","other":false,"where":4,"label":"OKOLICE","off":true,"after":null}
+PASS Babka Jagna (paczka A) skupuje szarotkę z klifu (paczka D): 2 × 20 G, warzucha zostaje w torbie  {"jev":true,"choices":[["Szarotka skalna ×2 - 40 G","Warzucha nadmorska ×1 - 6 G","Nie teraz."]],"jr":{"gold":40,"szarotka":0,"warzucha":1}}
+PASS wędrowny handlarz (paczka C) skupuje okucia z wraku (230, paczka D); Jagna: 228 i 229  {"okucie":{"id":230,"price":15},"jagna":[{"id":228,"price":20},{"id":229,"price":6}]}
+PASS epilog po Sercu: źródełka (A), przyjazna wataha i zwierzyniec bez kłusownictwa / z zezwoleniem (B), groby Ługów i jaskinia (C), komora i gaj (D) - i tylko gdy zrobione  {"have":[true,true,true,true,true,true,true],"permit":true,"gone":true,"n":12}
+PASS Map165: płycizny pakietu 0 i kawałki wraku paczki D - 0 kolizji (bez fałszywego alarmu)  []
+PASS bez błędów w konsoli  []
+7/7 passed

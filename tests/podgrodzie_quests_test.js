@@ -5,7 +5,7 @@ const kit = require("./lib/kit.js");
 const OURS = ["K40", "K41", "K42", "K43", "K44", "K45", "K46"];
 
 kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
-    await t.newGame({ map: 111, x: 43, y: 30, dir: 2, day: 4, hour: 10, quiet: true, minimap: false });
+    await t.newGame({ map: 111, x: 61, y: 63, dir: 2, day: 4, hour: 10, quiet: true, minimap: false });
     await t.frames(30);
     const data = await t.json(`(function(){ const Q = TownQuests.QUESTS.filter(q => ${JSON.stringify(OURS)}.includes(q.id));
         const water = [138, 165, 166, 167];   // (the bucket, pots: never handed out)
@@ -14,10 +14,15 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("7 errands, one from each resident of Podgrodzie, none of them hands out water", data.n === 7 && data.residents && !data.wet.length, data);
     await t.eval("TownQuests.refreshMarkers(); 0");
     const marks = await t.json("TownQuests.markers()");
-    t.check("at 10:00 on day 4 the washerwoman, the healer, the junk dealer and Franek have an errand to offer ('!')",
-        ["praczka", "znachorka", "szmaciarz", "franek"].every(k => marks[k] === "new"), marks);
+    t.check("at 10:00 on day 4 only Józek (the stall, K42) has an errand to offer at Podgrodzie; the others come to the tavern in the evening",
+        marks.szmaciarz === "new" && !["praczka", "znachorka", "franek"].some(k => marks[k] === "new"), marks);
 
-    // Franek: a loaf of bread
+    // Franek: a loaf of bread (2026-11-11 dawcy_miasto: in the tavern, in the evening, with his mother)
+    const eveMarks = await t.json("(function(){ $gameSystem.setDayNightHour(18.8); TownQuests.refreshMarkers(); return TownQuests.markers(); })()");
+    t.check("at 18:50 the washerwoman, the healer, the junk dealer and Franek have an errand to offer ('!') - the evening visitors of the tavern",
+        ["praczka", "znachorka", "szmaciarz", "franek"].every(k => eveMarks[k] === "new"), eveMarks);
+    await t.go(1, 14, 50, 8);
+    await t.frames(40);
     const offer = await t.talkTo("TownLife.eventOf('franek')", ["Przyniosę ci chleb."]);
     t.check("Franek asks for something to eat; 'Przyniosę ci chleb.' takes the errand", offer.done && /coś do jedzenia/.test(offer.text) && await t.json("TownQuests.isActive('K46')"), offer.text);
     await t.eval("$gameParty.gainItem($dataItems[83], 1); 0");
@@ -25,7 +30,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const k46 = await t.json(`({ done: TownQuests.isDone("K46"), bread: $gameParty.numItems($dataItems[83]) })`);
     t.check("...the bread given, he tells about Kuba's barrels at night (a note) and the errand is done", k46.done && k46.bread === 0 && /Kuba woziwoda/.test(give.text), { k46, text: give.text });
 
-    // Józek: the stall's roof (boards, nails, the hammer shown)
+    // Józek: the stall's roof (boards, nails, the hammer shown) - the stall is on Podgrodzie, so the stall and its daytime
+    await t.setHour(10); await t.go(111, 61, 63, 2); await t.frames(40);
     const jo = await t.talkTo("TownLife.eventOf('szmaciarz')", ["Zbiję."]);
     t.check("Józek asks to mend his stall's roof; 'Zbiję.' takes it", /daszek/i.test(jo.text) && await t.json("TownQuests.isActive('K42')"), jo.text);
     await t.eval("$gameParty.gainItem($dataItems[80], 2); $gameParty.gainItem($dataItems[88], 4); $gameParty.gainItem($dataItems[89], 1); 0");

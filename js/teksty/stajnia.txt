@@ -1,0 +1,307 @@
+# Teksty stajni zajazdu w Kruczogrodzie (wtyczki Stajnia.js i Stajnia_Zmiana.js): rozmowa Szczepana Kołodzieja, stryszek, zmiana w stajni.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz stajnia
+
+# ======================================================================== Rozmowa Szczepana (woźnica, stajnia)
+menu.zmiana = Chcę wziąć zmianę w stajni.
+menu.nocleg = Co z noclegiem?
+menu.bywaj = Bywaj.
+
+# z listem od dziadka (pierwsze spotkanie)
+[rozmowa.list]
+> Szczepan Kołodziej? Mam list od Stacha.
+Od Stacha? ...Daj tu. Poczekaj, przeczytam.
+Stach był mi winien przysługę. Nie, to ja jemu. On o tym nie pamięta, a ja pamiętam.
+Wezwanie króla, kruki, wojna... A dom ci zapieczętowali, tak? Pieczęć Lorda to jedno, a mój stryszek to drugie.
+Stryszek nad boksami jest twój. W dni, kiedy robisz w stajni, za darmo. Inne noce - pięć groszy, interes to interes.
+A rano przychodź do roboty. Konie, woda, gnój, podróżni z promu. Zapłacę, ile mogę.
+> Dziękuję, panie Kołodziej.
+Nie dziękuj. Konie nie dziękują, a robią więcej niż ludzie. Pozdrów Borgara, jak go zobaczysz.
+
+# bez listu (stara gra, pierwsze spotkanie)
+[rozmowa.pierwsza]
+Szczepan Kołodziej, woźnica. Stajnia i wozownia przy zajeździe - moja. Czego chcesz?
+> Słyszałem, że przyda się tu ręka do roboty.
+Przyda się, przyda. Siano, woda, gnój - tego nie ubywa. Płacę mało, ale uczciwie.
+A jak ci brak dachu nad głową: na stryszku jest siano. Pięć groszy za noc. W dni, kiedy robisz u mnie, za darmo.
+
+# kolejne rozmowy, gdy dziś nie było zmiany (po kolei)
+[rozmowa.znow]
+Siwek dziś kaszle. Jak ma kaszleć, niech kaszle przy tobie, nie przy mnie.
+Woda dla koni to mój największy kłopot. Ludzie mają studnię, a koń ma Szczepana.
+Z promu przyjeżdżają coraz dziwniejsi ludzie. Ale konie wszystkie wyglądają tak samo, na szczęście.
+Jak masz siłę, robota czeka. Nie masz - stryszek też czeka.
+
+# kolejne rozmowy, gdy dziś zmiana już była
+[rozmowa.dzis]
+Dziś już się narobiłeś, chłopcze. Stryszek masz za darmo, jak obiecałem.
+Dobra robota dziś była. Siwek jeszcze żuje twoje siano.
+Odpocznij. Jutro rano znów będzie co robić.
+
+# po wybraniu "Chcę wziąć zmianę" (gdy można)
+[oferta]
+Dobrze. Konie głodne, boksy brudne, a z promu ktoś na pewno przyjedzie.
+Zgrzebło, grzywa, owies, siano i woda - tylko z wodą ostrożnie, bo każda miarka jest droga. Potem gnój i słoma. Do roboty.
+
+odmowa.rano = Robotę rozdaję rano, od {od} do {do}. Po południu konie śpią i ja też.
+odmowa.zrobione = Dziś już swoje zrobiłeś. Jutro rano będzie to samo - konie same się nie nakarmią.
+odmowa.zmeczony = Wyglądasz jak z krzyża zdjęty. Odpocznij, bo jeszcze konia mi przewrócisz.
+
+# "Co z noclegiem?"
+[nocleg.list]
+Stryszek jest twój, od kiedy przyniosłeś list od Stacha. Drabina przy ścianie, siano świeże.
+
+[nocleg.bez]
+Stryszek nad boksami: siano, dach i brak wilków. Drabina przy ścianie.
+
+nocleg.darmo = Dziś robiłeś w stajni, więc noc masz za darmo.
+nocleg.platny = Dziś nie robiłeś w stajni, więc noc kosztuje {cena} G. Zrobisz zmianę rano - będzie za darmo.
+[zaufanie.opis]
+Znam cię dopiero od wczoraj. Zrób parę zmian, to pogadamy o zaufaniu. (zaufanie: {punkty})
+Powoli się uczysz. Konie cię już nie kopią tak często. (zaufanie: {punkty})
+Dobry z ciebie stajenny. Konie cię znają, goście zostawiają ci napiwki. (zaufanie: {punkty})
+Ufam ci jak własnej ręce. Mój wóz jedzie dla ciebie za darmo - tylko powiedz Wojciechowi, że ja pozwoliłem. (zaufanie: {punkty})
+
+zaufanie.poziom.1 = Szczepan: „Nie kopią cię już tak często.”
+zaufanie.poziom.2 = Szczepan: „Dobry z ciebie stajenny.” (większe napiwki)
+zaufanie.poziom.3 = Zaufanie Szczepana: wóz Wojciecha jeździ dla ciebie za darmo!
+
+popup.przyjety = Szczepan przyjął cię na stryszek
+popup.zmeczony = Jesteś za zmęczony na zmianę w stajni
+popup.brak_sceny = Zmiana w stajni jest teraz niedostępna
+popup.pytaj = Stryszek jest Szczepana - zapytaj go o zgodę
+
+# ======================================================================== Stryszek
+zdarzenie.stryszek = Stryszek
+zdarzenie.tablica = Tablica zmian
+loft.pytanie = Stryszek nad boksami. Siano pachnie latem, a w mieście nie ma wilków. Przespać tu noc?
+loft.cena.darmo = Dziś robiłeś w stajni: noc za darmo.
+loft.cena.platna = Noc kosztuje {cena} G.
+loft.tak = Prześpij noc
+loft.nie = Nie teraz
+loft.ranoDarmo = Spałeś na sianie, za darmo. Plecy trochę bolą, ale sił odzyskałeś sporo.
+loft.ranoPlatne = Spałeś na sianie za pięć groszy. Plecy trochę bolą, ale sił odzyskałeś sporo.
+popup.nie_spac = Tu się nie da spać
+popup.za_wczesnie = Jeszcze za wcześnie na sen
+popup.zagrozenie = Nie zaśniesz - w pobliżu {kto}!
+popup.brak_zlota = Brakuje {brak} G na nocleg ({cena} G)
+popup.zaplacono = Nocleg: {cena} G
+
+tablica.pytanie = Tablica robót stajni: dziś do wzięcia zmiana. Zacząć?
+tablica.tak = Zaczynam zmianę
+tablica.nie = Nie teraz
+
+# ======================================================================== Zmiana w stajni (scena)
+czesci.groom.tytul = Obrządek
+czesci.groom.podtytul = zgrzebło i grzywa
+czesci.feed.tytul = Karmienie i pojenie
+czesci.feed.podtytul = owies, siano, woda
+czesci.muck.tytul = Gnój i słoma
+czesci.muck.podtytul = taczka i widły
+czesci.guests.tytul = Konie podróżnych
+czesci.guests.podtytul = przyjąć, zapamiętać, oddać
+
+oceny.1.nazwa = Do poprawki
+oceny.1.powiedzenie = Konie ci wybaczą. Ja jeszcze się zastanowię.
+oceny.2.nazwa = Słabo
+oceny.2.powiedzenie = Dużo do nauki. Ale łopata sama się nie zapamięta.
+oceny.3.nazwa = Może być
+oceny.3.powiedzenie = Zrobione. Nie pięknie, ale zrobione. Konie żyją.
+oceny.4.nazwa = Dobrze
+oceny.4.powiedzenie = Dobra robota. Siwek ci to wypomni dobrym słowem.
+oceny.5.nazwa = Wzorowo
+oceny.5.powiedzenie = Tak to ma wyglądać! Stajnia lśni, a konie same wyciągają do ciebie łby.
+
+scena.klawisze.ruch = ruch
+scena.klawisze.szybciej = szybciej
+scena.klawisze.akcja = akcja
+scena.klawisze.pauza = pauza
+scena.zadania = "Zadania: "
+scena.porcje = "Porcje: "
+scena.podrozni = "Podróżni: "
+
+scena.pauza.tytul = Pauza
+[scena.pauza.opcje]
+Wracam do roboty
+Przerwij zmianę
+
+scena.hud.czesc = Część {nr} z {z}
+scena.hud.napiwki = Napiwki: {ile} G
+scena.hud.zmiana = {prawa} · zmiana nr {nr}
+
+scena.baner.gotowe = {tytul} - gotowe
+scena.baner.wynik = Wynik części
+scena.baner.ladnie = Ładnie poszło.
+scena.baner.slabo = Mogło być lepiej.
+scena.baner.dalej = O - dalej
+scena.baner.koniec = O - podsumowanie
+
+scena.karta.kim = woźnica
+scena.karta.stopka.start = O - zaczynamy · P - pauza
+scena.karta.stopka.dalej = O - do roboty
+scena.karta.poziom = · poziom {L}
+scena.karta.czesc = Część {nr} z {z}
+scena.karta.intro.kicker = Zmiana w stajni nr {nr} {poziom}
+scena.karta.intro.tytul = Rano w stajni
+scena.karta.intro.podtytul = cztery części, około trzech minut
+scena.karta.intro.powiedzenie = Konie czekają. Robimy po kolei: zgrzebło, karmienie, gnój, a potem goście z promu.
+scena.karta.intro.klawisze = pauza i przerwanie zmiany
+scena.karta.groom.powiedzenie = Trzy konie, trzy zgrzebła. Trzymaj O przy koniu, a jak się płoszy, puść - bo kopie.
+[scena.karta.groom.linie]
+Przytrzymaj O przy koniu: zgrzebło, potem grzywa.
+Koń się płoszy (wykrzyknik, drży): puść O!
+Kto kopnie, ten traci kawał roboty.
+
+scena.karta.groom.klawisz = zgrzebło i grzywa (trzymaj)
+scena.karta.feed.powiedzenie = Porcje każdego konia masz na tabliczce. Owies z worka, siano ze stogu, woda z beczki. Wody mało!
+[scena.karta.feed.linie]
+Bierzesz do dwóch porcji jednego rodzaju naraz.
+Nie daj koniowi więcej, niż jest na tabliczce.
+Z wiadrem nie biegnij: woda się wylewa, a jest droga.
+
+scena.karta.feed.klawisz = weź / daj
+scena.karta.muck.powiedzenie = Weź taczkę, wyrzuć gnój na stertę przy bramie, a potem rozłóż świeżą słomę.
+[scena.karta.muck.linie]
+Taczka mieści trzy kopy. Z nią chodzisz wolniej.
+Gnój (przytrzymaj O) na taczkę, taczką na stertę.
+Odstaw taczkę, weź słomę ze stogu i rozłóż w czystych miejscach.
+
+scena.karta.muck.klawisz = widły, taczka, słoma
+scena.karta.guests.powiedzenie = Z promu przyjadą podróżni. Weź konia, daj do wolnego boksu i zapamiętaj numer. Gdy wrócą - oddaj osiodłanego.
+[scena.karta.guests.linie]
+Boks po zamknięciu ma tylko numer. Zapamiętaj, który koń gdzie.
+Gdy podróżny prosi o konia: siodło, właściwy boks, brama.
+Szybko i bez pomyłek - większy napiwek.
+
+scena.karta.guests.klawisz = weź konia, boks, siodło
+
+scena.groom.hud = "Do końca: "
+scena.groom.bok = Obrządek
+scena.groom.zgrzeblo = zgrzebło
+scena.groom.grzywa = grzywa
+scena.groom.wskazowka = Płoszy się? Puść O, zanim kopnie.
+[scena.groom.cel]
+Zgrzebło: {kto} (przytrzymaj)
+Grzywa: {kto} (przytrzymaj)
+
+scena.groom.kop = Kopnął!
+scena.groom.zgrzebloGotowe = Czysty!
+scena.groom.grzywaGotowa = Uczesany!
+scena.groom.wszystko = Wszystkie konie gotowe!
+scena.groom.dobre.wszystko = Konie wyczyszczone i uczesane - {sek} s zapasu.
+scena.groom.dobre.bezKopniakow = Ani jednego kopniaka.
+scena.groom.zle.niedokonczone = Nie dokończono pracy przy koniach: {ile}.
+scena.groom.zle.kopniaki = Kopniaki: {ile}.
+
+scena.feed.hud = "Do końca: "
+scena.feed.deska = Tabliczki koni
+scena.feed.woda = Woda w beczce
+scena.feed.woda2 = Każda miarka jest droga. Nie rozlej.
+scena.feed.wskazowka = Do dwóch porcji jednego rodzaju. Z wiadrem nie biegnij.
+scena.feed.pusta = Beczka pusta!
+scena.feed.pelne = Ręce pełne
+scena.feed.zajete = Masz już coś innego
+[scena.feed.nazwy]
+owies
+siano
+woda
+[scena.feed.cel]
+Weź: {co}
+Daj: {co} - {kto}
+{kto} już ma dość!
+
+scena.feed.wszystko = Wszystkie konie nakarmione i napojone!
+scena.feed.rozlane = Rozlana woda!
+scena.feed.nie = {kto} tego nie chce!
+scena.feed.dobre.wszystko = Każdy koń dostał swoją porcję.
+scena.feed.dobre.woda = Ani kropli wody na marne (zapas: {ile}).
+scena.feed.zle.brak = Zabrakło porcji: {ile}.
+scena.feed.zle.woda = Zmarnowana woda: {ile}.
+scena.feed.zle.pomylki = Pomyłki przy karmieniu: {ile}.
+
+scena.muck.hud = "Do końca: "
+scena.muck.bok = Gnój i słoma
+scena.muck.wiersz.gnoj = gnój z boksów
+scena.muck.wiersz.wysypane = na stercie
+scena.muck.wiersz.sloma = świeża słoma
+scena.muck.taczka = "Taczka: "
+scena.muck.wskazowka = Najpierw taczka i widły, potem słoma.
+scena.muck.tacz = Taczka {ile} / {max}
+[scena.muck.cel]
+Weź taczkę
+Najpierw wysyp gnój
+Odstaw taczkę
+Najpierw weź taczkę
+Taczka pełna
+Gnój na taczkę (przytrzymaj)
+Rozłóż słomę
+Wysyp na stertę
+Ręce pełne
+Weź słomę
+
+scena.muck.wszystko = Stajnia czysta i słoma świeża!
+scena.muck.dobre.wszystko = Boksy czyste, słoma świeża - {sek} s zapasu.
+scena.muck.dobre.gnoj = Na stercie: {ile} kop gnoju.
+scena.muck.zle.gnoj = Niewyczyszczone miejsca: {ile}.
+scena.muck.zle.sloma = Bez świeżej słomy: {ile}.
+
+scena.guests.hud = "Do końca: "
+scena.guests.bok = Podróżni
+[scena.guests.nazwy]
+Kupiec z lądu
+Posłaniec
+Podróżna dama
+Handlarz suknem
+Żołnierz z przepustką
+
+scena.guests.wskazowka = Zapamiętaj numer boksu - po zamknięciu został tylko numer.
+[scena.guests.cel]
+Weź konia: {kto} ({kon})
+Do boksu {nr}
+Oddaj konia: {kto}
+Weź siodło
+Wyprowadź z boksu {nr}
+Najpierw siodło
+
+scena.guests.przyjechal = {kto}: koń {kon}
+scena.guests.odjechal = {kto} nie doczekał się i odjechał!
+scena.guests.poszedl = {kto} poszedł zły.
+scena.guests.prosi = {kto} prosi o konia: {kon}!
+scena.guests.prowadzisz = Prowadzisz konia: {kon}
+scena.guests.boks = {kon} - boks {nr}
+scena.guests.osiodlany = Osiodłany!
+scena.guests.napiwek = Napiwek: {kwota} G
+scena.guests.nieTen = To nie ten koń!
+scena.guests.stan.czeka = czeka z koniem
+scena.guests.stan.prowadzisz = prowadzisz jego konia
+scena.guests.stan.zapamietaj = ZAPAMIĘTAJ: boks {nr}
+scena.guests.stan.wBoksie = koń w boksie (który?)
+scena.guests.stan.prosi = prosi o konia!
+scena.guests.stan.odbiera = odbiera konia
+scena.guests.stan.poszedl = poszedł
+scena.guests.dobre.wszyscy = Wszyscy podróżni obsłużeni.
+scena.guests.dobre.bezPomylek = Ani jednej pomyłki z końmi.
+scena.guests.dobre.napiwki = Napiwki od podróżnych: {ile} G.
+scena.guests.zle.stracone = Nieobsłużeni podróżni: {ile}.
+scena.guests.zle.pomylki = Pomylone konie: {ile}.
+
+scena.wynik.przerwana = Zmianę przerwano.
+scena.wynik.przerwanaNazwa = Przerwana
+scena.wynik.przerwanaNaglowek = ZMIANA PRZERWANA
+scena.wynik.przerwanaSlowo = Wyszedłeś w połowie roboty. Konie to widziały.
+scena.wynik.podpis = - Szczepan
+scena.wynik.naglowek = ZMIANA W STAJNI NR {nr}
+scena.wynik.punkty = Ocena {ocena} z 5 · {pkt} pkt {poziom}
+scena.wynik.dniowka = Dniówka
+scena.wynik.premie = Premie za części
+scena.wynik.potracenia = Potrącenia
+scena.wynik.dodatek = Za wzorową robotę
+scena.wynik.minimum = Do minimum
+scena.wynik.napiwki = Napiwki
+scena.wynik.razem = Razem
+scena.wynik.dobrze = Poszło dobrze
+scena.wynik.zle = Do poprawy
+scena.wynik.nicZle = Nic.
+scena.wynik.stopka = Od {od} do {do} · wytrzymałość -{wytrz} · zarobek {razem} G
+scena.wynik.ok = O - wracam
+scena.wynik.zaufanie = Zaufanie Szczepana: {pkt} pkt

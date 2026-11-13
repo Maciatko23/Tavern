@@ -15,7 +15,7 @@ const MEASURE = (n) => `new Promise(res => {
         res(JSON.stringify({ frame: +(mean(0) + mean(1)).toFixed(2) })); };
 })`;
 kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli", evalTimeout: 300000 }, async t => {
-    for (const [id, x, y] of [[990, 24, 34], [991, 29, 34], [3, 22, 14]]) {
+    for (const [id, x, y] of [[990, 24, 34], [991, 29, 34], [3, 62, 45]]) {
         await t.newGame({ map: id, x, y, day: 40, hour: 12, quiet: true, minimap: true });
         await t.frames(420);
         await t.b.send("Emulation.setCPUThrottlingRate", { rate: THROTTLE });

@@ -1,0 +1,11 @@
+PASS gra
+  mapa 1 wycinków 11
+  mapa 8 wycinków 128
+  mapa 24 wycinków 37
+  mapa 118 wycinków 1
+  mapa 125 wycinków 68
+  mapa 175 wycinków 11
+  mapa 213 wycinków 6
+PASS wycinki: 262
+PASS bez błędów w konsoli  []
+3/3 passed

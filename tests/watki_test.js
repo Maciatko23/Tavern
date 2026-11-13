@@ -53,15 +53,18 @@ kit.test({ port: 9625, overlay: "tests/watki/nakladka", overlayJs: true, bootChe
 
     // the save: W4 in the cellar's night - saved, loaded, the same
     await J("Kasztelan.debugJump(8)");
-    await t.setDay(62, 23.6);
+    await J("(function(){ if (window.Story && Story.pay) { $gameParty.gainGold(2500); Story.pay(2500); } return 0; })()");   // (day 62: the debt paid - the field-loss scene must not start on the load)
+    await t.go(8, 60, 60, 2);   // (saved in the town: on day 62 grandpa is gone (the summons) - a night in his house may put the hero out on the yard as the save loads)
+    await t.setDay(62, 23.2);   // (not too near midnight: the clock runs through the save and the load)
     const s0 = await J("({ step: Kasztelan.step(), r: TownQuests.rec('W4').step, k: Kasztelan.state(), v: Tawerna.state.version('kasztelan'), night: Kasztelan.cellarNight() })");
     await t.saveTo(1);
-    const loaded = await t.loadFrom(1);
+    const loaded = await t.loadFrom(1, { timeout: 120 });
     await t.frames(20);
-    const s1 = await J("({ step: Kasztelan.step(), r: TownQuests.rec('W4').step, k: Kasztelan.state(), tw: Object.keys($gameSystem._tw || {}), own: Object.keys((($gameSystem._tw || {}).watki || {}).w || {}), night: Kasztelan.cellarNight(), text: TownQuests.Q.W4.steps[8].text })");
-    t.check("zapis i wczytanie: W4 w nocy w piwnicy (krok 8 „w4Piwnica”), stan Kasztelan taki sam (klucz kasztelan, wersja 1), z silnika w zapisie tylko rekord rozdziału 1",
+    const s1 = await J("({ map: $gameMap.mapId(), step: Kasztelan.step(), r: TownQuests.rec('W4').step, k: Kasztelan.state(), tw: Object.keys($gameSystem._tw || {}), own: Object.keys((($gameSystem._tw || {}).watki || {}).w || {}), night: Kasztelan.cellarNight(), text: TownQuests.Q.W4.steps[8].text })");
+    t.check("zapis i wczytanie: W4 w nocy w piwnicy (krok 8 „w4Piwnica”), stan Kasztelan taki sam (klucz kasztelan, wersja 1), z silnika w zapisie tylko rekordy rozdziału 1 i wezwania",
         loaded && s0.step === "w4Piwnica" && s1.step === "w4Piwnica" && s1.r === 8 && JSON.stringify(s1.k) === JSON.stringify(s0.k) && s0.v === 1 &&
-        s1.tw.includes("kasztelan") && s1.own.every(k => k === "fabula") && /czeka w piwnicy przy kracie/.test(s1.text), { s0, s1 });
+        s1.tw.includes("kasztelan") && s1.own.every(k => k === "fabula" || k === "wezwanie") &&   // (2026-11-08: the king's summons is the engine's too)
+        /czeka w piwnicy przy kracie/.test(s1.text), { s0, s1 });
 
     // the old saves of tests/fixtures (made before the engine): load and play, nothing of the engine in them
     for (const name of ["new_story_day1", "tavern_evening", "day40_farm"]) {

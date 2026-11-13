@@ -50,14 +50,23 @@
  * @type boolean
  * @default true
  *
- * @param walkSlowdown
- * @text Wolniejszy chód
- * @desc O ile wolniej od zwykłej prędkości RPG Makera chodzi postać (bieg bez zmian). 0 = zwykła prędkość, 0.25 = ok. 16% wolniej, 1 = o połowę.
+ * @param walkSpeed
+ * @text Chód boso (szybkość silnika)
+ * @desc Szybkość chodu bohatera boso, bez kar, w jednostkach RPG Makera (4 = zwykła; 1 w górę = 2x szybciej). Buty, pancerz, zmęczenie i skradanie zmieniają ją jak dotąd.
  * @type number
  * @decimals 2
- * @min 0
- * @max 1
- * @default 0.25
+ * @min 1
+ * @max 6
+ * @default 3
+ *
+ * @param runSpeed
+ * @text Bieg boso (szybkość silnika)
+ * @desc Szybkość biegu bohatera boso (Shift), bez kar, w jednostkach RPG Makera.
+ * @type number
+ * @decimals 2
+ * @min 1
+ * @max 6
+ * @default 3.75
  *
  * @param disableSwitch
  * @text Przełącznik wyłączający ruch swobodny
@@ -139,7 +148,14 @@
     const HIT_H = Math.max(0.2, Math.min(1, num(params.hitboxHeight, 0.5)));
     const OFF_SWITCH = Math.max(0, Math.floor(num(params.disableSwitch, 0)));
     const MARKER = params.targetMarker !== "false";
-    const WALK_SLOWDOWN = Math.max(0, Math.min(1, num(params.walkSlowdown, 0.25)));   // (speed is a power of two: -0.25 = 84% of it)
+    // (2026-11-11, the player: "chód na boso 2,75, a bieg 3,5 - szybkość w silniku"; before: the walk 3.75 = 3.15 tiles a second, the
+    // run 5 = 7.5; now 2.75 = 1.58 and 3.5 = 2.65 - the engine's speed is a power of two: 2^speed / 256 tiles a frame). What the hero's
+    // own speed (4) and the dash (+1) give is lowered to these; every other change (boots, armour, tired, sneaking, web) still works
+    // on top of it as before.
+    // (2026-11-12, the player: „prędkość poruszania się postaci i innych ludzi i jednostek trzeba trochę jednak przyspieszyć” - one
+    // small step up for everyone: walk 2.75 -> 3, run 3.5 -> 3.75; the others follow by worldSpeed)
+    const WALK_SPEED = num(params.walkSpeed, 3), RUN_SPEED = num(params.runSpeed, 3.75);
+    const WALK_SLOWDOWN = 4 - WALK_SPEED, RUN_SLOWDOWN = 5 - RUN_SPEED;
 
     // numpad direction -> [dx, dy]
     const DIR_VECTOR = { 1: [-1, 1], 2: [0, 1], 3: [1, 1], 4: [-1, 0], 6: [1, 0], 7: [-1, -1], 8: [0, -1], 9: [1, -1] };
@@ -360,11 +376,27 @@
         }
     };
 
-    // The walk is a little slower than the engine's normal speed (user); running keeps its speed.
+    // The walk and the run at the player's engine speeds (walkSpeed / runSpeed above).
     const _realMoveSpeed = Game_Player.prototype.realMoveSpeed;
     Game_Player.prototype.realMoveSpeed = function() {
         const s = _realMoveSpeed.call(this);
-        return this.isDashing() ? s : s - WALK_SLOWDOWN;
+        return this.isDashing() ? s - RUN_SLOWDOWN : s - WALK_SLOWDOWN;
+    };
+
+    // (2026-11-11, the player: "te zwierzęta trzeba dostosować i trochę zwolnić" + "mieszkańców też") every OTHER character - the
+    // animals, the dog, the residents, the guests, the enemies - goes through the same scale as the hero: the hero's old walk (3.75)
+    // is his new walk, his old run (5) his new run, everything between and round them in proportion (the engine's speed is a power of
+    // two, so the scale is a straight line on it). Who was faster or slower than the hero walking or running still is. The hero's own
+    // chain above took the engine's function before this (his speeds are the two numbers themselves).
+    const WORLD_SCALE = (RUN_SPEED - WALK_SPEED) / (5 - 3.75);
+    const worldSpeed = s => WALK_SPEED + (s - 3.75) * WORLD_SCALE;
+    // the number to give setMoveSpeed for a speed that must stay what it was on the old scale (a step finished at once as a fighter
+    // plants his feet for a blow - a snap, not a pace)
+    const rawFor = v => 3.75 + (v - WALK_SPEED) / WORLD_SCALE;
+    const _baseRealMoveSpeed = Game_CharacterBase.prototype.realMoveSpeed;
+    Game_CharacterBase.prototype.realMoveSpeed = function() {
+        const s = _baseRealMoveSpeed.call(this);
+        return this === $gamePlayer || this instanceof Game_Follower ? s : worldSpeed(s);   // (a follower takes the hero's real speed as its own)
     };
 
     // The wanted direction: keys and pad first, then the clicked destination.
@@ -611,5 +643,5 @@
         this._tilemap.addChild(this._targetMarker);
     };
 
-    window.FreeMovement = { feetBox, freeMoveOn, worthMarking };
+    window.FreeMovement = { feetBox, freeMoveOn, worthMarking, worldSpeed, rawFor, WALK_SPEED, RUN_SPEED };   // (worldSpeed: an old speed number -> what it is now, for checks like an animal's run sheet)
 })();

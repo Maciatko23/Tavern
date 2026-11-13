@@ -5,7 +5,7 @@
 // engine: SwieteKosci.js, the words: js/teksty/swiete_kosci.txt. Gaspar Lis the relic seller (the traveller "relikwie", room 12, on
 // the island from the ferry of day 13) preaches at the market with a "saint's bone", sells to the town, and at night sells the
 // library list of the Lipnica monastery to Baltazar's courier; brother Augustyn the visitor of Lipnica (the traveller "wizytator",
-// room 16, two ferries after Gaspar) knows the goods. Stands in the plugin list under Podroznicy_Data (its cast and its rooms) and
+// room 8, two ferries after Gaspar) knows the goods. Stands in the plugin list under Podroznicy_Data (its cast and its rooms) and
 // above TownLife and TownQuests_Data, so that:
 //   - the thread "swiete_kosci" (Watki.js) is made before TownQuests_Data: its state (Tawerna.state "swieteKosci", version 1), the
 //     quest W15 (seven steps, chapters 1-5: the stall, the false bones, the visitor, the proof, Gaspar's box, the stone and the list,
@@ -47,9 +47,9 @@
     const KTO = { gaspar: "relikwie", augustyn: "wizytator" };     // (the travellers' keys: Podroznicy_Data's cast = TownLife's residents)
     const MAP = { miasto: 8, pietro: 25, karczma: 1 };
     const IDS = [3050, 3059], OWNER = "Lancuchy";
-    // Baltazar's courier on the guests' floor (Map025) before the door of room 12 (the door 81,53 - the corridor's cell above it),
+    // Baltazar's courier on the guests' floor (Map025) before the door of room 12 (the door 58,15 - the corridor's cell below it),
     // on the night of the sale 22:00-23:30; the hero within `widzi` tiles notices him
-    const KURIER = { id: 3050, map: MAP.pietro, x: 81, y: 52, dir: 2, sheet: "$Npc_Kurier", index: 0, godziny: [22, 23.5], widzi: 2.6 };
+    const KURIER = { id: 3050, map: MAP.pietro, x: 58, y: 16, dir: 8, sheet: "$Npc_Kurier", index: 0, godziny: [22, 23.5], widzi: 2.6 };
     // the days (from Gaspar's arrival G): the sermon on the first market day after it (G+1..G+7: day 14), the night of the sale G+9 (22)
     const CZAS = { kazanie: [9, 12], kazanieOd: 1, kazanieDo: 7, noc: 9, nocGodziny: [22, 24] };
     // the money (docs/PODROZNI.md 1.6: 25 G sure from Augustyn; the greedy ones - 80 G from Baltazar, 30 G from Gaspar)
@@ -220,7 +220,7 @@
                 1: { ch: 1, krok: "w15Kram", godzina: 10, idz: [MAP.miasto, 46, 49, 8] },
                 2: { ch: 1, krok: "w15Falsz", godzina: 10, idz: [MAP.miasto, 46, 49, 8] },
                 3: { ch: 2, krok: "w15Augustyn", godzina: 10, idz: [MAP.miasto, 15, 24, 8] },
-                4: { ch: 2, krok: "w15Dowod", godzina: 21.9, idz: [MAP.pietro, 74, 50, 6] },
+                4: { ch: 2, krok: "w15Dowod", godzina: 21.9, idz: [MAP.pietro, 55, 16, 6] },
                 5: { ch: 3, krok: "w15Skrzynka", godzina: 10, idz: [MAP.miasto, 46, 49, 8] },
                 6: { ch: 4, krok: "w15Komu", godzina: 10, idz: [MAP.miasto, 46, 49, 8] },
                 7: { ch: 5, krok: "w15Pozegnanie", godzina: 10, idz: [MAP.miasto, 15, 24, 8] }

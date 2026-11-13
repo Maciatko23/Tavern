@@ -3,7 +3,7 @@ const kit = require("./lib/kit.js");
 
 kit.test({ width: 2560, height: 1440, dpr: 0.5, evalTimeout: 25000 }, async t => {
     // (Needs on - it is what is tested; no storm plan switched off either)
-    await t.newGame({ map: 3, x: 22, y: 14, hour: 10, calm: false, needsOff: false });
+    await t.newGame({ map: 3, x: 62, y: 45, hour: 10, calm: false, needsOff: false });
     await t.eval("if (window.Hunting && Hunting.RAID) Hunting.RAID.perHour = 0; $gameScreen.clearWeather(); 0");
     const ev = e => t.eval(e);
     const near = (a, b2, tol) => Math.abs(a - b2) <= tol;
@@ -156,6 +156,9 @@ kit.test({ width: 2560, height: 1440, dpr: 0.5, evalTimeout: 25000 }, async t =>
     await t.give(83, 1);
 
     // ================= 6. water: the pond, the well, the waterskin =================
+    // (2026-11-12: every board map with water is a sea map now (<Water:salt>, CzerwonaWoda's menu) - the fresh-water menu is tested
+    // as on a map of fresh water: the note set aside for this part, put back after it)
+    await ev("(function(){ window.__note0 = $dataMap.note; $dataMap.note = ''; return 0; })()");
     await set(100, 40);
     const menu = await ev("Farming.waterMenu().entries.map(e => e.name + (e.enabled === false ? '(x)' : ''))");
     t.check("the pond menu: fishing, drink, fill the flask, fill the can, fill the bucket", menu.join() === "Zarzuć wędkę(x),Napij się,Napełnij bukłak(x),Napełnij konewkę(x),Napełnij wiadro(x)", menu);
@@ -204,6 +207,7 @@ kit.test({ width: 2560, height: 1440, dpr: 0.5, evalTimeout: 25000 }, async t =>
     const drawn = await ev(`(function(){ const list = new Window_ItemList(new Rectangle(0, 0, 500, 300)); let seen = ""; list.drawText = function(s) { seen = s; }; list.drawItemNumber($dataItems[129], 0, 0, 200); const w = new Window_Help(new Rectangle(0, 0, 700, 130)); w.setItem($dataItems[129]); return [seen, w._text]; })()`);
     t.check("the item list shows '2/4' and the help says how many sips are left", drawn[0] === "2/4" && /Woda: 2 z 4 łyków/.test(drawn[1]), drawn);
 
+    await ev("(function(){ $dataMap.note = window.__note0; return 0; })()");
     // ================= 7. switch off, journal, save =================
     await set(0, 0);
     await ev("Needs.setEnabled(false); $gameSystem.setStamina(100); 0");

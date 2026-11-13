@@ -1,0 +1,189 @@
+[
+ {
+  "kat": 3,
+  "x0": 5,
+  "y0": 25,
+  "x1": 13,
+  "y1": 35,
+  "co": "Północny klif kamieniołomu (8-60,27-32) kończy się na lewym końcu (x=8) prostą pionową ścianą bez narożnika.",
+  "jak": "Dodać zewnętrzne narożniki klifu lub zbocze/rampę na końcu.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map013/01.png"
+ },
+ {
+  "kat": 3,
+  "x0": 54,
+  "y0": 25,
+  "x1": 62,
+  "y1": 34,
+  "co": "Prawy koniec północnego klifu (x=59-60, y 28-32) urywa się prostą linią w trawie.",
+  "jak": "Zakończyć narożnikiem lub zejściem.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map013/02.png"
+ },
+ {
+  "kat": 5,
+  "x0": 8,
+  "y0": 88,
+  "x1": 46,
+  "y1": 107,
+  "co": "Płaskowyż klifowy: tylko południowa ściana, boki to cienka obwódka, ściany mają poszarpane ucięte końce i nie łączą się w jedną krawędź (15-44,90-105).",
+  "jak": "Zrobić zamknięty pierścień klifu z narożnikami albo zmiękczyć do kamiennej krawędzi.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map013/03.png"
+ },
+ {
+  "kat": 5,
+  "x0": 44,
+  "y0": 101,
+  "x1": 63,
+  "y1": 113,
+  "co": "Płaskowyż (45-60,103-112): ściana południowa z zębatą górną krawędzią, boki jako cienka linia, brak narożników.",
+  "jak": "Domknąć narożnikami klifu lub usunąć.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map013/04.png"
+ },
+ {
+  "kat": 5,
+  "x0": 75,
+  "y0": 97,
+  "x1": 88,
+  "y1": 109,
+  "co": "Ruiny klifu (77-85,99-107): kawałki ścian bez styku, boki ucięte.",
+  "jak": "Połączyć odcinki w jedną ścianę z narożnikami.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map013/05.png"
+ },
+ {
+  "kat": 5,
+  "x0": 91,
+  "y0": 91,
+  "x1": 110,
+  "y1": 106,
+  "co": "Płaskowyż (95-107,93-105): półokrągła ściana ucięta u góry, boki jako cienka linia.",
+  "jak": "Domknąć łuk klifu albo usunąć.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map013/06.png"
+ },
+ {
+  "kat": 5,
+  "x0": 94,
+  "y0": 60,
+  "x1": 110,
+  "y1": 73,
+  "co": "Klif (97-107,62-71) tworzy owal z kafli ścian, lewy bok wcięty a prawy cienki; brak ciągłej ściany po bokach.",
+  "jak": "Dopasować narożniki i boki klifu.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map013/07.png"
+ },
+ {
+  "kat": 5,
+  "x0": 20,
+  "y0": 73,
+  "x1": 34,
+  "y1": 94,
+  "co": "Ruina (22-31,76-92): cienka obwódka z ucięciami i poszarpany dolny mur; kontur kończy się nagle.",
+  "jak": "Dokończyć mur lub usunąć obrys.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map013/08.png"
+ },
+ {
+  "kat": 5,
+  "x0": 13,
+  "y0": 29,
+  "x1": 19,
+  "y1": 57,
+  "co": "Cienka pionowa linia kafli (x=16, y 32-54) przez cały las: wygląda jak ułamany mur bez początku i końca.",
+  "jak": "Usunąć albo zamienić na prawdziwy niski mur z zakończeniami.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map013/09.png"
+ },
+ {
+  "kat": 5,
+  "x0": 1,
+  "y0": 23,
+  "x1": 7,
+  "y1": 29,
+  "co": "Samotna drewniana brama (3-4,25-26) bez murów i płotu; droga przechodzi obok.",
+  "jak": "Dostawić płot/mur po bokach lub usunąć bramę.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map013/10.png"
+ },
+ {
+  "kat": 3,
+  "x0": 29,
+  "y0": 38,
+  "x1": 46,
+  "y1": 52,
+  "co": "Pionowy klif (31-33,41-49) kończy się u dołu zaokrąglonym zakończeniem bez ściany bocznej; poprzeczna ściana (33-40,40-42) kończy się prosto.",
+  "jak": "Dodać narożniki i połączenie ścian.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map013/11.png"
+ },
+ {
+  "kat": 5,
+  "x0": 43,
+  "y0": 38,
+  "x1": 61,
+  "y1": 49,
+  "co": "Dwie ściany klifu (53-59,40-43) i (45-52,44-47) tworzą schodek bez narożnika; schody (55-56,41-42) wchodzą w ścianę z krótkim kikutem.",
+  "jak": "Połączyć ściany narożnikiem i dopasować schody.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map013/12.png"
+ },
+ {
+  "kat": 5,
+  "x0": 53,
+  "y0": 42,
+  "x1": 60,
+  "y1": 56,
+  "co": "Cienka zielona obwódka ścieżki (55-58,44-54) bez wypełnienia: pętla w kształcie U.",
+  "jak": "Wypełnić autokaflem ścieżki lub usunąć.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map013/13.png"
+ },
+ {
+  "kat": 1,
+  "x0": 0,
+  "y0": 31,
+  "x1": 15,
+  "y1": 63,
+  "co": "Gęsty, przypadkowo rozrzucony las sosnowy na zachód od drogi (0-14,32-62): drzewa w kupie bez ładu.",
+  "jak": "Rozrzedzić, zgrupować w kępy z polankami.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map013/14.png"
+ },
+ {
+  "kat": 1,
+  "x0": 60,
+  "y0": 62,
+  "x1": 113,
+  "y1": 118,
+  "co": "Łąki z rozrzuconymi szarymi plamami bruku, ciemnymi kałużami i pojedynczymi głazami (60-113,62-118): losowa plamistość, nuda.",
+  "jak": "Zredukować rozproszone plamy do kilku celowych miejsc.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map013/15.png"
+ },
+ {
+  "kat": 3,
+  "x0": 111,
+  "y0": 71,
+  "x1": 119,
+  "y1": 84,
+  "co": "Linia morza przy prawej krawędzi ma pionowy uskok (114,73-81) i kwadratowy narożnik wody w (113,118).",
+  "jak": "Wygładzić linię wybrzeża jak w reszcie świata.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map013/16.png"
+ },
+ {
+  "kat": 1,
+  "x0": 13,
+  "y0": 55,
+  "x1": 62,
+  "y1": 61,
+  "co": "Szare paski bruku (14-60,58-59) rozsiane poziomo jak odłamki, bez drogi.",
+  "jak": "Usunąć lub złożyć w drogę.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map013/17.png"
+ }
+]

@@ -130,7 +130,7 @@ kit.test({ port: 9582, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("popiersia: SpeechBubbles.BUSTS[$Npc_<Klucz>:0] = <Klucz>_Bust, plik jest", busts.every((b, i) => b.b === b.s.slice(5) + "_Bust" && b.has && bfiles[i]), { busts, bfiles });
 
     // ---------------------------------------------------------------- Podgrodzie: the new map or the old one
-    await t.newGame({ map: 111, x: 20, y: 18, dir: 2, hour: 17, quiet: true, minimap: false, timeout: 180 });
+    await t.newGame({ map: 111, x: 38, y: 51, dir: 2, hour: 17, quiet: true, minimap: false, timeout: 180 });
     await t.until(t.onMap(111), 120);
     await t.setHour(17);
     const onMap = await t.json(`(function(){ const keys = ${JSON.stringify([...used])}; return { has: keys.filter(k => !!TownLife.spot(k)), miss: keys.filter(k => !TownLife.spot(k)) }; })()`);

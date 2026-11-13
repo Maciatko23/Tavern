@@ -187,7 +187,7 @@
     const ev = (id, name, x, y, pages, note) => OK().event(id, name, x, y, pages, (note || "") + "<Lowy:" + id + ">");
     const look = what => scr("Lowy.look(this, " + JSON.stringify(what) + ")");
     const BUILD = {
-        23: () => [
+        3: () => [
             ev(IDS.nora, TK.kod.n23[0], NORA.x, NORA.y, [page({ image: img("!$Low_Nora"), list: look("nora") })], "<Occupy:left=1,right=1,up=1>"),
             ev(IDS.czoNamiot, TK.kod.n23[1], OBOZY.czo.tent[0], OBOZY.czo.tent[1], [hidden(), pageW("campCzo", { image: img("!$Mt_Tent"), list: look("namiot") })])
         ],
@@ -196,14 +196,15 @@
             ev(IDS.gawraBok, TK.kod.n13[0], GAWRA.side[0], GAWRA.side[1], [page({ list: look("gawra") })])
         ],
         21: () => [
-            ev(IDS.bloto, TK.kod.n21[0], BLOTO.ev[0], BLOTO.ev[1], [page({ image: img("!$Low_Bloto"), priority: 0, through: true, list: look("bloto") })]),
-            ev(IDS.rabNamiot, TK.kod.n21[1], OBOZY.rabusie.tent[0], OBOZY.rabusie.tent[1], [hidden(), pageW("campRab", { image: img("!$Mt_Tent"), list: look("namiotRab") })])
+            ev(IDS.bloto, TK.kod.n21[0], BLOTO.ev[0], BLOTO.ev[1], [page({ image: img("!$Low_Bloto"), priority: 0, through: true, list: look("bloto") })])
         ],
         4: () => [
             ev(IDS.lizawka, "Lizawka", LIZAWKA.x, LIZAWKA.y, [page({ image: img("!$Low_Lizawka", 2), list: look("lizawka") }),
                 pageW("lickOn", { image: img("!$Low_Lizawka", 4), list: look("lizawka") })]),
             ev(IDS.zasiadka, "Zasiadka", LIZAWKA.hide[0], LIZAWKA.hide[1], [page({ image: img("!$Low_Zasiadka"), priority: 2, through: true })]),
-            ev(IDS.poroze, TK.kod.n4[0], LIZAWKA.antler[0], LIZAWKA.antler[1], [hidden(), pageW("antler", { image: img("!$Low_Poroze"), list: scr("Lowy.pickAntler(this)") })])
+            ev(IDS.poroze, TK.kod.n4[0], LIZAWKA.antler[0], LIZAWKA.antler[1], [hidden(), pageW("antler", { image: img("!$Low_Poroze"), list: scr("Lowy.pickAntler(this)") })]),
+            // (2026-11-11 plansza: the robbers' camp is on Łąka now, was Map021)
+            ev(IDS.rabNamiot, TK.kod.n21[1], OBOZY.rabusie.tent[0], OBOZY.rabusie.tent[1], [hidden(), pageW("campRab", { image: img("!$Mt_Tent"), list: look("namiotRab") })])
         ],
         24: () => {
             const sw = { switch1Valid: true, switch1Id: D.SW_WYLOM };
@@ -1418,9 +1419,9 @@
     let f9Place = 0, f9Poach = 0;
     // the places to go to (their names: js/teksty/lowy.txt, f9.idz.<key>)
     const F9_AT = {
-        nora: [23, 65, 55, 8], gawra: [13, 99, 49, 8], blotnisko: [21, 66, 50, 8], lizawka: [4, 70, 53, 6],
-        oboz_rabusiow: [21, 60, 45, 8], oboz_czo: [23, 66, 24, 8], zwierzyniec: [24, 7, 31, 2],
-        zblakane: [168, 85, 32, 8], strzelnica: [162, 74, 52, 6]
+        nora: [3, 95, 34, 8], gawra: [13, 99, 73, 8], blotnisko: [21, 66, 50, 8], lizawka: [4, 70, 53, 6],
+        oboz_rabusiow: [4, 87, 43, 8], oboz_czo: [3, 96, 46, 8], zwierzyniec: [24, 27, 91, 2],
+        zblakane: [168, 85, 32, 8], strzelnica: [162, 96, 76, 6]
     };
     const goTo = k => (F9_AT[k] ? [TK.f9.idz[k]].concat(F9_AT[k]) : undefined);
     const placeLabel = i => { const d = D.DISCOVER[i]; return Watki.wstaw(TK.kod.placeLabel[0], { "1": i + 1, length: D.DISCOVER.length, name: d.name }); };

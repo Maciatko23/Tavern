@@ -51,8 +51,9 @@
     const VERSION = "1.1.0";
 
     // ------------------------------------------------------------------ the maps and the event ids (2500-2699, ~20 a map)
-    const MAP = { droga: 21, polna: 22, laka: 4, domek: 3, menhiry: 18, omszala: 17, gory: 13, przystan: 125, jaskinia: 177, zagroda: 168,
-        przyladek: 159, garnizon: 162, miasto: 8, podgrodzie: 111 };
+    // (2026-11-11 plansza: the kiln, the pedlar's home stop and the lost sheep are on Łąka (4); menhiry 18 is only the key of the second pasture)
+    const MAP = { droga: 4, polna: 4, laka: 4, domek: 3, menhiry: 18, omszala: 4, gory: 13, przystan: 125, jaskinia: 177, zagroda: 168,
+        przyladek: 125, garnizon: 162, miasto: 8, podgrodzie: 111 };
     const EV = {
         mielerz: 2500, dym: 2501, szalas: 2502, ogien021: 2503, tobol021: 2504, juk: 2505,
         woz022: 2520, osiol022: 2521, ogien022: 2522,
@@ -67,32 +68,32 @@
     // the same as the plan's (OkoliceData.PLAN_SPOTS, pkg C), checked again 2026-10-21; "jagna_miejsce" is package A's (Jagna) - not here.
     // Their names: js/teksty/ludzie.txt, miejsca.<key>.name (Ludzie.js registers them once the words are in - Okolice copies them)
     const SPOTS = [
-        { key: "mielerz", map: 21, kind: "kiln", mode: "reach", x: 48, y: 17, w: 3, h: 3 },
-        { key: "szalas_wegl", map: 21, kind: "shed", mode: "reach", x: 52, y: 20, w: 3, h: 2 },
-        { key: "postoj_021", map: 21, kind: "wagon", mode: "reach", x: 54, y: 16, w: 2, h: 2 },
-        { key: "juk_021", map: 21, kind: "pack", mode: "reach", cells: [[55, 12], [61, 11], [67, 8]] },
-        { key: "postoj_handlarza", map: 22, kind: "wagon", mode: "reach", x: 49, y: 19, w: 6, h: 4 },
+        { key: "mielerz", map: 4, kind: "kiln", mode: "reach", x: 45, y: 22, w: 3, h: 3 },
+        { key: "szalas_wegl", map: 4, kind: "shed", mode: "reach", x: 49, y: 23, w: 3, h: 2 },
+        { key: "postoj_021", map: 21, kind: "wagon", mode: "reach", x: 54, y: 16, w: 2, h: 2 },   // (parked since 2026-11-11: the pedlar keeps two stops, Łąka and Kruczy Jar; its words stay)
+        { key: "juk_021", map: 4, kind: "pack", mode: "reach", cells: [[52, 15], [64, 14], [66, 16]] },
+        { key: "postoj_handlarza", map: 22, kind: "wagon", mode: "reach", x: 49, y: 19, w: 6, h: 4 },   // (parked, as above)
         { key: "koszar", map: 4, kind: "fold", mode: "reach", x: 50, y: 40, w: 5, h: 4 },
         { key: "pastwisko", map: 4, kind: "pasture", mode: "zone", x: 43, y: 44, w: 7, h: 6 },
         { key: "postoj_004", map: 4, kind: "wagon", mode: "reach", x: 59, y: 10, w: 4, h: 2 },
         { key: "postoj_003", map: 3, kind: "wagon", mode: "reach", x: 59, y: 9, w: 4, h: 3 },
-        { key: "pastwisko_018", map: 18, kind: "pasture", mode: "reach", x: 65, y: 29, w: 7, h: 5 },
-        { key: "owca_017", map: 17, kind: "sheep", mode: "reach", cells: [[40, 40], [60, 38], [72, 30]] },
-        { key: "oboz_kopaczy", map: 13, kind: "camp", mode: "reach", x: 97, y: 70, w: 8, h: 6 },
-        { key: "szyb_czo", map: 13, kind: "shaft", mode: "wall", cells: [[105, 71]] },
+        { key: "pastwisko_018", map: 4, kind: "pasture", mode: "reach", x: 44, y: 61, w: 7, h: 5 },
+        { key: "owca_017", map: 4, kind: "sheep", mode: "reach", cells: [[40, 50], [62, 45], [31, 54]] },
+        { key: "oboz_kopaczy", map: 13, kind: "camp", mode: "reach", x: 97, y: 94, w: 8, h: 6 },
+        { key: "szyb_czo", map: 13, kind: "shaft", mode: "wall", cells: [[105, 95]] },
         { key: "jaskinia_wejscie", map: 125, kind: "cave", mode: "wall", cells: [[16, 64], [17, 64]] },
         { key: "grob_lugow", map: 168, kind: "grave", mode: "reach", x: 88, y: 26, w: 3, h: 2 },
-        { key: "patrol_159", map: 159, kind: "patrol", mode: "reach", cells: [[53, 45], [70, 40], [80, 53], [60, 61], [50, 70]] },
-        { key: "patrol_162", map: 162, kind: "patrol", mode: "reach", cells: [[60, 45], [91, 45], [95, 65], [65, 70]] }
+        { key: "patrol_159", map: 125, kind: "patrol", mode: "reach", cells: [[60, 70], [75, 62], [88, 80], [70, 88], [55, 84]] },
+        { key: "patrol_162", map: 162, kind: "patrol", mode: "reach", cells: [[82, 69], [113, 69], [117, 89], [87, 94]] }
     ];
     Watki.scal(SPOTS, "ludzie", "miejsca", "key");   // (its words: js/teksty/ludzie.txt, miejsca)
 
     // ------------------------------------------------------------------ the discoveries (Okolice.discoverable; 25 PD each)
     const DISCOVER = [
-        { key: "lud_mielerz", map: 21, x: 49, y: 20, near: 2, icon: 334 },
+        { key: "lud_mielerz", map: 4, x: 46, y: 25, near: 2, icon: 334 },
         { key: "lud_koszar", map: 4, x: 52, y: 44, near: 2, icon: 367 },
-        { key: "lud_postoj", map: 22, x: 51, y: 21, near: 2, icon: 496 },
-        { key: "lud_oboz", map: 13, x: 100, y: 73, near: 3, icon: 499 },
+        { key: "lud_postoj", map: 4, x: 61, y: 13, near: 2, icon: 496 },
+        { key: "lud_oboz", map: 13, x: 100, y: 97, near: 3, icon: 499 },
         { key: "lud_jaskinia", map: 125, x: 16, y: 65, near: 1, icon: 498 },
         { key: "lud_groby", map: 168, x: 89, y: 27, near: 1, icon: 190 }
     ];
@@ -101,7 +102,7 @@
     // ------------------------------------------------------------------ the cycles
     const CYCLE = {
         kiln: { every: 6, work: [2, 3], dawn: 5 },               // Zbych at the kiln: days d % 6 = 2, 3 (a "day" from 5:00)
-        stops: [22, 21, 4, 3], dawn: 6,                          // the pedlar: d % 4 -> the map (a "day" from 6:00)
+        stops: [4, 3], dawn: 6,                                  // the pedlar: d % 2 -> the map (a "day" from 6:00); 2026-11-11: Polna droga and Leśna droga are gone
         pasture018: { every: 3, at: 2, hours: [7.5, 17.5] },    // the shepherd with the flock by the menhirs
         flock: { size: 6, out: 7, home: 18.5 }                   // the sheep: out at 7, into the fold at 18:30
     };
@@ -126,7 +127,7 @@
             plan: [[0, "inside", "koszar_brama"], [6, "stand", "koszar_brama"], [7, "wander", "pastwisko"], [12, "stand", "pastwisko_cien"],
                    [13, "wander", "pastwisko"], [18.5, "stand", "pastwisko_brzeg"], [19.5, "stand", "koszar_brama"], [21, "inside", "koszar_brama"]],
             alt: {
-                map: MAP.menhiry, when: "ludPasterz018",
+                map: MAP.laka, when: "ludPasterz018",
                 plan: [[0, "wander", "pastwisko_018"], [12, "stand", "pastwisko_018_kamien"], [13, "wander", "pastwisko_018"]],
                 barks: { },
                 talk: { }
@@ -201,15 +202,13 @@
     }
     // the places of our residents on their maps (no "Miejsce:" events of ours on the user's maps; a user's event of the same name wins)
     const SPOTS_BY_MAP = {
-        21: { mielerz_praca: [51, 19, 4], mielerz_obchod: [50, 21, 8], szalas_przed: [53, 22, 2], szalas_drzwi: [53, 22, 8],
-              handlarz_lada: [54, 17, 2], handlarz_sen: [54, 16, 6], handlarz_woz: [54, 16, 6] },
-        22: { handlarz_lada: [53, 21, 2], handlarz_sen: [54, 22, 4], handlarz_woz: [52, 21, 8] },
-        4: { koszar_brama: [52, 44, 8], pastwisko: [46, 46, 2], pastwisko_cien: [44, 44, 2], pastwisko_brzeg: [50, 45, 4],
+        4: { mielerz_praca: [48, 24, 4], mielerz_obchod: [47, 26, 8], szalas_przed: [50, 26, 2], szalas_drzwi: [50, 26, 8],   // (the kiln, 2026-11-11: was Map021 (51,19))
+             pastwisko_018: [47, 63, 2], pastwisko_018_kamien: [45, 62, 6],   // (the second pasture by the menhirs, Łąka (44,61))
+             koszar_brama: [52, 44, 8], pastwisko: [46, 46, 2], pastwisko_cien: [44, 44, 2], pastwisko_brzeg: [50, 45, 4],
              handlarz_lada: [62, 11, 2], handlarz_sen: [62, 11, 8], handlarz_woz: [62, 11, 8] },
         3: { handlarz_lada: [61, 11, 2], handlarz_sen: [61, 11, 6], handlarz_woz: [61, 11, 8] },
-        18: { pastwisko_018: [68, 31, 2], pastwisko_018_kamien: [66, 30, 6] },
-        159: { lud_p159_1: [53, 45, 2], lud_p159_2: [70, 40, 6], lud_p159_3: [80, 53, 2], lud_p159_4: [60, 61, 4], lud_p159_5: [50, 70, 8], lud_p159_noc: [30, 77, 2] },
-        162: { lud_p162_1: [60, 45, 6], lud_p162_2: [91, 45, 2], lud_p162_3: [95, 65, 4], lud_p162_4: [65, 70, 8] }
+        125: Object.assign({ lud_p159_1: [60, 70, 2], lud_p159_2: [75, 62, 6], lud_p159_3: [88, 80, 2], lud_p159_4: [70, 88, 4], lud_p159_5: [55, 84, 8], lud_p159_noc: [84, 94, 2] }, {}),
+        162: { lud_p162_1: [82, 69, 6], lud_p162_2: [113, 69, 2], lud_p162_3: [117, 89, 4], lud_p162_4: [87, 94, 8] }
     };
     if (TLD) {
         TLD.SPOTS_BY_MAP = TLD.SPOTS_BY_MAP || {};
@@ -320,11 +319,11 @@
                 fail: { opinion: 0 } },
             // the smugglers' crate (starts by itself in the cave - W5 ch. 4): to the customs officer or to Baltazar
             D34: { kind: "D", giver: "celnik", icon: 212, autoStart: "ludD34Start", start: ["mapa:" + MAP.jaskinia, "jaskiniaOtwarta"],
-                offer: { cond: { hours: [8, 18], fn: "ludJaskiniaOtwarta" } }, oferta: "jaskiniaOtwarta",
+                offer: { cond: { hours: [19.5, 21.5], fn: "ludJaskiniaOtwarta" } }, oferta: "jaskiniaOtwarta",
                 kroki: [
                     { nazwa: "ludSkrzynia", gotowe: ["ile:d34.taken+d34.opened+d34.stash", { lub: ["stan:d34.opened", "maSkrzynie"] }] },
                     { nazwa: "ludKomuSkrzynia", zmienne: "d34Zmienne", rozmowy: [
-                        { kto: "celnik", gdy: "maSkrzynie", tresc: [{ rozmowa: "skrzynia", ustaw: { komu: "celnik" } }] },
+                        { kto: "celnik", gdy: ["maSkrzynie", { godziny: [19.5, 21.5] }], tresc: [{ rozmowa: "skrzynia", ustaw: { komu: "celnik" } }] },
                         { kto: "kupiec", gdy: ["baltazarOk", "maSkrzynie"], tresc: [{ rozmowa: "skrzynia", ustaw: { komu: "baltazar" } }] }
                     ] }
                 ],
@@ -365,17 +364,15 @@
     const { K63, K64, K65, K66, D34, D35 } = w.Q;
 
     // ------------------------------------------------------------------ the camps and places of the quests
-    const JUK_SPOTS = [[55, 12], [61, 11], [67, 8]];
-    const SHEEP_SPOTS = [[40, 40], [60, 38], [72, 30]];
+    const JUK_SPOTS = [[52, 15], [64, 14], [66, 16]];   // (Łąka, east of the kiln; was Map021)
+    const SHEEP_SPOTS = [[40, 50], [62, 45], [31, 54]];   // (Łąka, round the fold; was Map017)
     const SHEEP_WHERE = [];
     Watki.scal(SHEEP_WHERE, "ludzie", "owcaGdzie");   // (its words: js/teksty/ludzie.txt, owcaGdzie)
-    const PASTURE = { 4: { x: 43, y: 44, w: 7, h: 6 }, 18: { x: 65, y: 29, w: 7, h: 5 } };
+    const PASTURE = { 4: { x: 43, y: 44, w: 7, h: 6 }, 18: { x: 44, y: 61, w: 7, h: 5 } };   // (18: the second pasture on Łąka (44,61), by the menhirs; the key is only a name)
     const FOLD = { cells: [[51, 41], [52, 41], [53, 41], [51, 42], [52, 42], [53, 42]], gate: [52, 43], fence: [[50, 40], [51, 40], [52, 40], [53, 40], [54, 40],
         [50, 41], [54, 41], [50, 42], [54, 42], [50, 43], [51, 43], [53, 43], [54, 43]] };
-    const KILN_AT = { x: 49, y: 19 }, SHED_AT = { x: 53, y: 21 };
+    const KILN_AT = { x: 46, y: 24 }, SHED_AT = { x: 50, y: 24 };   // (Łąka; was Map021 (49,19), (53,21))
     const STOPS = {
-        22: { woz: [51, 20], osiol: [49, 20], ogien: [53, 22] },
-        21: { ogien: [55, 16], tobol: [55, 17] },
         4: { woz: [60, 11], ogien: [62, 10] },
         3: { woz: [60, 10], osiol: [62, 9], ogien: [62, 11] }
     };
@@ -387,8 +384,8 @@
     const CAVE = { mouth: [16, 64], front: [16, 65], back: [16, 65], landing: [3, 11], exit: [3, 12], niche: [13, 2], table: [9, 5], seat: [10, 6],
         slawek: { kind: "bandit", look: "Bandit", hours: [22, 4] } };
     const GRAVES = { crosses: [[88, 26], [89, 26], [90, 26]], bench: [88, 27], marta: [90, 27], blows: 4 };
-    const PATROL_AMBUSH = { map: 159, at: [70, 40], r: 4, kinds: ["bandit", "bandit", "knifer"], hours: [21, 24] };
-    const KILN_AMBUSH = { map: 21, r: 14, kinds: ["bandit", "bandit"], hours: [22, 2], wait: 600 };
+    const PATROL_AMBUSH = { map: 125, at: [75, 62], r: 4, kinds: ["bandit", "bandit", "knifer"], hours: [21, 24] };
+    const KILN_AMBUSH = { map: 4, r: 14, kinds: ["bandit", "bandit"], hours: [22, 2], wait: 600 };
     const SHAFT = { rope: 93, saw: 118, blows: 6 };
 
     // ------------------------------------------------------------------ the texts

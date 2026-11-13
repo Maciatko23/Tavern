@@ -15,7 +15,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Podróżni z promu - dane: obsada (okna przybycia, pobyt, pokoje), pula losowa, pokoje 4-24, plany dnia, Renoma, scena przybycia; mieszkańcy TownLife 3020-3049. v1.0.0
+ * @plugindesc Podróżni z promu - dane: obsada (okna przybycia, pobyt, pokoje), pula losowa, pokoje 4-12, plany dnia, Renoma, scena przybycia; mieszkańcy TownLife 3020-3049. v1.0.0
  * @author Claude
  * @base TawernaCore
  * @base Watki
@@ -28,7 +28,7 @@
  * Same dane - silnik: Podroznicy.js. Teksty: js/teksty/podroznicy.txt.
  * Obsada: kto, kiedy (okno: najwcześniej, warunek, najpóźniej), na ile
  * (promy), który pokój. Pula: 16 typów zwykłych podróżnych na zastępczych
- * arkuszach. Pokoje gości 4-24 (bez 7 - Eryk Sowa); pokoje 1 i 2 zawsze
+ * arkuszach. Pokoje gości 4-12 (bez 7 - Eryk Sowa); pokoje 1 i 2 zawsze
  * dla bohatera, 3 i Złoty tylko z furtką TavernLife (etap 3).
  * Miejsca w sali (Map001) stawia gracz: zdarzenia „Miejsce: podrozny_1”
  * ... „podrozny_6”, „kompania_1..4”, „grajek”, „medyk” - bez nich podróżni
@@ -61,13 +61,9 @@
     // Eryk Sowa's (the castaway, Wrak_Data.js)
     const CENY = { "1-os.": 8, "2-os.": 15, rodzinny: 20 };
     const POKOJE = {
-        4: { typ: "rodzinny", miejsce: [67, 38, 8] }, 5: { typ: "2-os.", miejsce: [14, 38, 8] }, 6: { typ: "2-os.", miejsce: [84, 42, 2] },
-        8: { typ: "1-os.", miejsce: [92, 39, 4] }, 9: { typ: "2-os.", miejsce: [28, 63, 2] }, 10: { typ: "2-os.", miejsce: [68, 63, 2] },
-        11: { typ: "rodzinny", miejsce: [24, 63, 2] }, 12: { typ: "2-os.", miejsce: [72, 63, 2] }, 13: { typ: "rodzinny", miejsce: [11, 65, 2] },
-        14: { typ: "rodzinny", miejsce: [85, 65, 2] }, 15: { typ: "1-os.", miejsce: [39, 27, 4] }, 16: { typ: "1-os.", miejsce: [59, 27, 4] },
-        17: { typ: "2-os.", miejsce: [67, 27, 4] }, 18: { typ: "rodzinny", miejsce: [77, 27, 4] }, 19: { typ: "rodzinny", miejsce: [89, 27, 4] },
-        20: { typ: "rodzinny", miejsce: [31, 6, 4] }, 21: { typ: "1-os.", miejsce: [23, 8, 4] }, 22: { typ: "2-os.", miejsce: [13, 6, 4] },
-        23: { typ: "1-os.", miejsce: [5, 8, 4] }, 24: { typ: "2-os.", miejsce: [86, 10, 2] }
+        4: { typ: "rodzinny", miejsce: [35, 8, 8] }, 5: { typ: "2-os.", miejsce: [49, 8, 2] }, 6: { typ: "2-os.", miejsce: [5, 28, 4] },
+        8: { typ: "1-os.", miejsce: [5, 41, 4] }, 9: { typ: "2-os.", miejsce: [54, 27, 4] }, 10: { typ: "2-os.", miejsce: [21, 27, 2] },
+        11: { typ: "rodzinny", miejsce: [57, 40, 8] }, 12: { typ: "1-os.", miejsce: [58, 8, 2] }
     };
     // the hero's rooms: never a traveller's (1, 2); 3 and the Gold suite only for a traveller whose data says so (wymaga: "furtka")
     const POKOJE_BOHATERA = { 1: true, 2: true, 3: "furtka", zloty: "furtka" };
@@ -87,22 +83,22 @@
     // miejsce: the hall's place it would like (Map001 "Miejsce: podrozny_<n>"). kobieta: the words of a woman ("odpłynęła").
     // zadania: the quests of its matter (stage 2: "K71"...) - while one is going on at its departure, it stays a ferry longer, once
     const OBSADA = [
-        { key: "tobiasz", id: 3020, arkusz: "$Npc_Tobiasz", pokoj: 23, profil: "goniec", miejsce: 1, zadania: ["K71", "K72"],
+        { key: "tobiasz", id: 3020, arkusz: "$Npc_Tobiasz", pokoj: 8, profil: "goniec", miejsce: 1, zadania: ["K71", "K72"],
             wizyty: [{ od: 4, do: 7, gdy: "miasteczko", promy: 1 }, { od: 13, do: 16, promy: 1 }, { od: 25, do: 28, promy: 1 },
                 { od: 37, do: 40, promy: 1 }, { od: 46, do: 49, promy: 1 }, { od: 55, do: 58, promy: 1 }] },
         { key: "medyk", id: 3021, arkusz: "$Npc_Medyk", pokoj: 11, profil: "medyk", miejsce: 5, zadania: ["D39"],
             wizyty: [{ od: 7, do: 7, promy: 2 }, { od: 52, do: 58, promy: 2 }] },
-        { key: "zboze", id: 3024, arkusz: "$Npc_Zboze", pokoj: 20, profil: "zboze", miejsce: 6, zadania: ["D42"],
+        { key: "zboze", id: 3024, arkusz: "$Npc_Zboze", pokoj: 4, profil: "zboze", miejsce: 6, zadania: ["D42"],
             wizyty: [{ od: 10, do: 10, promy: 2 }, { od: 46, do: 52, gdy: "!flaga:zbozeZdemaskowany", promy: 2 }] },
         { key: "relikwie", id: 3028, arkusz: "$Npc_Relikwie", pokoj: 12, profil: "relikwie", miejsce: 3,
             wizyty: [{ od: 13, do: 16, doDnia: 25 }, { od: 61, do: 120, gdy: "akt2&!flaga:gasparZdemaskowany", promy: 2 }] },
-        { key: "kartograf", id: 3022, arkusz: "$Npc_Kartograf", pokoj: 22, profil: "kartograf", miejsce: 2, zadania: ["D40"],
+        { key: "kartograf", id: 3022, arkusz: "$Npc_Kartograf", pokoj: 6, profil: "kartograf", miejsce: 2, zadania: ["D40"],
             wizyty: [{ od: 10, do: 19, gdy: "kartograf", promy: 2 }, { od: 40, do: 46, promy: 2 }] },
-        { key: "ksenia", id: 3042, arkusz: "$Npc_Ksenia", pokoj: 18, profil: "ksenia", miejsce: 4, kobieta: true,
+        { key: "ksenia", id: 3042, arkusz: "$Npc_Ksenia", pokoj: 11, profil: "ksenia", miejsce: 4, kobieta: true,
             wizyty: [{ od: 16, do: 22, gdy: "zmiany:3", promy: 2 }] },
-        { key: "wizytator", id: 3029, arkusz: "$Npc_Wizytator", pokoj: 16, profil: "wizytator", miejsce: 2,
+        { key: "wizytator", id: 3029, arkusz: "$Npc_Wizytator", pokoj: 8, profil: "wizytator", miejsce: 2,
             wizyty: [{ po: { kto: "relikwie", dni: 6 }, do: 22, gdy: "obecny:relikwie|byl:relikwie", promy: 3 }] },
-        { key: "urszula", id: 3025, arkusz: "$Npc_Urszula", pokoj: 21, profil: "urszula", miejsce: 6, przystan: true, kobieta: true, zadania: ["D43"],
+        { key: "urszula", id: 3025, arkusz: "$Npc_Urszula", pokoj: 4, profil: "urszula", miejsce: 6, przystan: true, kobieta: true, zadania: ["D43"],
             wizyty: [{ od: 19, do: 22, gdy: "janek", promy: 3 }] },
         { key: "dezerter", id: 3030, arkusz: "$Npc_Dezerter", pokoj: 5, profil: "dezerter", miejsce: 4,
             wizyty: [{ od: 25, do: 25, doDnia: 37 }] },
@@ -110,11 +106,11 @@
             wizyty: [{ po: { kto: "dezerter", dni: 3 }, gdy: "obecny:dezerter", promy: 2 }] },
         { key: "kompania", grupa: ["kompania_1", "kompania_2", "kompania_3", "kompania_4"], pokoje: [9, 9, 10, 10], profil: "kompania", kobieta: true,
             wizyty: [{ od: 28, do: 31, gdy: "w8|dzien:31", promy: 3 }] },
-        { key: "grajek", id: 3023, arkusz: "$Npc_Grajek", pokoj: 17, profil: "grajek", miejsce: 1, zadania: ["D41"],
+        { key: "grajek", id: 3023, arkusz: "$Npc_Grajek", pokoj: 11, profil: "grajek", miejsce: 1, zadania: ["D41"],
             wizyty: [{ od: 22, do: 34, gdy: "w3|dzien:31", doDnia: 43 }] },
         { key: "poborca", id: 3026, arkusz: "$Npc_Poborca", pokoj: 4, profil: "poborca", miejsce: 3,
             wizyty: [{ od: 34, do: 34, promy: 2 }] },
-        { key: "pielgrzym", id: 3027, arkusz: "$Npc_Pielgrzym", pokoj: 15, profil: "pielgrzym", miejsce: 2,
+        { key: "pielgrzym", id: 3027, arkusz: "$Npc_Pielgrzym", pokoj: 8, profil: "pielgrzym", miejsce: 2,
             wizyty: [{ od: 37, do: 37, promy: 3 }, { od: 61, do: 120, gdy: "akt2&!flaga:pielgrzymZlapany&!flaga:pielgrzymZdemaskowany", promy: 2 }] },
         { key: "posel", grupa: ["posel", "gwardzista"], pokoje: ["zloty", "zloty"], profil: "posel", wymaga: "furtka",
             wizyty: [{ od: 40, do: 43, gdy: "obecny:pielgrzym", promy: 2 }] },
@@ -201,7 +197,7 @@
     // the town's spots of the travellers (Map008; never one of the town's own keys): the tavern's gate (the hall, the room) and the
     // ways off the town (the south gate - to Podgrodzie and the harbour; the east gate - to the manor)
     const SPOTS_MIASTA = { podr_sala: [51, 17, 8], podr_pokoj: [51, 17, 8], podr_medyk: [51, 17, 8], podr_grajek: [51, 17, 8],
-        podr_droga: [52, 92, 2], podr_przystan: [52, 92, 2], podr_dwor: [100, 51, 6] };
+        podr_droga: [31, 109, 2], podr_przystan: [31, 109, 2], podr_dwor: [116, 49, 6] };
     const W_DRODZE = ["podr_droga", "podr_przystan", "podr_dwor"];   // (TownLife's away: "inside" there = gone, in no interior)
 
     // ------------------------------------------------------------------ the harbour (Map125): the ferry comes at 9 - the scene of
@@ -242,8 +238,8 @@
         // the actors at the garrison (Map162; ids of Podroznicy's actors): Antek among the recruits (D43, 7-19), Zenon at Kłos's scales
         // (D42, his walk 11-13:30)
         aktorzy: {
-            antek: { id: 3009, mapa: 162, x: 25, y: 22, dir: 2, arkusz: "$Npc_Zolnierz_B", indeks: 0, godziny: [7, 19], bust: "none" },   // (the soldiers' bust is a grown man - none for a boy of 16)
-            zenon: { id: 3008, mapa: 162, x: 34, y: 29, dir: 4, arkusz: "$Npc_Zboze", indeks: 0, godziny: [11, 13.5] }
+            antek: { id: 3009, mapa: 162, x: 47, y: 46, dir: 2, arkusz: "$Npc_Zolnierz_B", indeks: 0, godziny: [7, 19], bust: "none" },   // (the soldiers' bust is a grown man - none for a boy of 16)
+            zenon: { id: 3008, mapa: 162, x: 56, y: 53, dir: 4, arkusz: "$Npc_Zboze", indeks: 0, godziny: [11, 13.5] }
         }
     };
     // the letters and the things carried (their words: rzeczy.*)
@@ -259,11 +255,15 @@
     Watki.scal(REMARKS, "podroznicy", "uwagi");
     // D40: the view points of the sketches (TownQuests' places, shown while the step wants them; 5 of these 6)
     const SPOTS = {
-        d40_pustelnia: { map: 155, id: 951, marker: "urwisko", dx: 1, x: 8, y: 7, deco: "glint" },
-        d40_urwisko: { map: 157, id: 951, marker: "kruczarnia", dy: 1, x: 26, y: 13, deco: "glint" },
-        d40_latarnia: { map: 159, id: 951, marker: "laterna", dx: 1, x: 23, y: 12, deco: "glint" },
-        d40_garnizon: { map: 162, id: 951, marker: "wieza", dx: 1, x: 50, y: 17, deco: "glint" },
-        d40_gory: { map: 13, id: 954, marker: "punkt_widokowy", dx: 1, x: 58, y: 12, deco: "glint" },
+        // (2026-11-11, questy_pustelnia: the hermitage pocket out of the world - the stairs of the bell tower (Map108, the way up) and the foot of the
+        // ravenry's tower (Map008) instead of the cliff and the tower of the ravens; the keys stay, with the hermitage open the old places)
+        d40_pustelnia: (window.WyspaData && window.WyspaData.HERMITAGE_OPEN) ? { map: 155, id: 951, marker: "urwisko", dx: 1, x: 8, y: 7, deco: "glint" }
+            : { map: 108, id: 952, marker: "widok_dzwonnica", x: 5, y: 4, deco: "glint" },
+        d40_urwisko: (window.WyspaData && window.WyspaData.HERMITAGE_OPEN) ? { map: 157, id: 951, marker: "kruczarnia", dy: 1, x: 26, y: 13, deco: "glint" }
+            : { map: 8, id: 908, marker: "widok_kruczarnia", x: 106, y: 9, deco: "glint" },
+        d40_latarnia: { map: 125, id: 951, marker: "laterna", dx: 1, x: 93, y: 103, deco: "glint" },
+        d40_garnizon: { map: 162, id: 951, marker: "wieza", dx: 1, x: 72, y: 41, deco: "glint" },
+        d40_gory: { map: 13, id: 954, marker: "punkt_widokowy", dx: 1, x: 58, y: 36, deco: "glint" },
         d40_przystan: { map: 125, id: 952, marker: "nabrzeze_rog", dx: 1, x: 21, y: 10, deco: "glint" }
     };
     Watki.scal(SPOTS, "podroznicy", "miejsca");   // (name: miejsca.<key>.name)

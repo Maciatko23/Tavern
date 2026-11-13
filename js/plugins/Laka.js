@@ -127,7 +127,18 @@
         return n ? [r / n, g / n, b / n] : null;
     }
     const greenRgb = c => !!c && c[1] > c[0] + 12 && c[1] > c[2] + 6;
-    function kindOf(id) {   // { green, rgb } of an A2 kind or the A5 grass top; undefined while the sheet loads; null: neither
+    // (2026-11-09, PoryRoku.js: in autumn / winter the drawn sheet is the season's - not green; WHAT a tile is (grass or not) is read
+    // from the plain summer sheet, its colour from the drawn one: the meadow's tufts, needles and flowers stay in every season)
+    function kindOf(id) {
+        const P = window.PoryRoku;
+        if (!(P && P.plain && P.swapped && P.swapped())) return kindRaw(id);
+        const k0 = P.plain(() => kindRaw(id));
+        if (k0 === undefined || k0 === null) return k0;
+        const k1 = kindRaw(id);
+        if (k1 === undefined) return undefined;
+        return { green: k0.green, rgb: k1 ? k1.rgb : k0.rgb };
+    }
+    function kindRaw(id) {   // { green, rgb } of an A2 kind or the A5 grass top; undefined while the sheet loads; null: neither
         const names = $gameMap.tileset().tilesetNames || [];
         const isA2 = id >= 2816 && id < 4352, key = isA2 ? names[1] + ":" + Math.floor((id - 2816) / 48) : names[4] + ":" + id;
         if (kindCache[key] !== undefined) return kindCache[key];
@@ -147,7 +158,7 @@
         const d = $dataMap.data, n = $dataMap.width * $dataMap.height * 4;
         let h = 0;
         for (let i = 0; i < n; i++) h = (Math.imul(h, 31) + d[i]) | 0;
-        return $gameMap.mapId() + ":" + $gameMap.tilesetId() + ":" + $dataMap.width + "x" + $dataMap.height + ":" + h;
+        return $gameMap.mapId() + ":" + $gameMap.tilesetId() + ":" + $dataMap.width + "x" + $dataMap.height + ":" + h + ":" + T.time.season();   // (the season: its own pictures)
     }
     function geometry() {
         const d = $dataMap.data;
@@ -328,8 +339,9 @@
                 const d = distAt(g, px, py), dry = smooth(DRY_FAR, DRY_NEAR, d), lush = smooth(LUSH_FROM, LUSH_FULL, d), wx = px + g.ox, wy = py + g.oy;
                 const n = Math.max(-1, Math.min(1, (0.65 * noise(wx, wy, 11, 7) + 0.35 * noise(wx, wy, 4.5, 8)) * 3.2 - 1.6));
                 const sun = Math.max(0, n) * (1 - dry), cool = Math.max(0, -n) * (1 - dry) * (0.6 + 0.4 * lush);
-                mr = 1 - 0.17 * cool; mg = 1 - 0.08 * cool; mb = (1 - 0.11 * cool) * (1 - 0.10 * sun);
-                ar = 7 * sun; ag = 11 * sun;
+                // (2026-11-08, the look „B” - the grass muted toward Fantastic Buildings: less green pushed in by the sun and the cool shade)
+                mr = 1 - 0.12 * cool; mg = 1 - 0.07 * cool; mb = (1 - 0.11 * cool) * (1 - 0.10 * sun);
+                ar = 7 * sun; ag = 6 * sun;
                 mg *= 1 - 0.03 * dry; mb *= 1 - 0.17 * dry; ar += 11 * dry; ag += 2 * dry;   // (the dry grass: yellower - less blue, more red; 2026-11-05: with blue added to it it went grey, dirty)
             }
             im.data[o] = Math.round(mr * 255); im.data[o + 1] = Math.round(mg * 255); im.data[o + 2] = Math.round(mb * 255); im.data[o + 3] = 255;

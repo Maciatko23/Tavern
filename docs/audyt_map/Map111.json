@@ -1,0 +1,134 @@
+[
+ {
+  "kat": 1,
+  "x0": 22,
+  "y0": 0,
+  "x1": 100,
+  "y1": 29,
+  "co": "Gigantyczna pusta łąka na północy: tylko losowe szare plamy gruzu o dziwnych kształtach, brązowe łaty, pojedyncze sosny/krzaki i urwane kawałki płotu (35-37,23-28).",
+  "jak": "Zagospodarować (pola, sad, pastwisko z płotem) albo uprościć: usunąć plamy i luźne rekwizyty, zostawić dwie grupy drzew.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map111/01.png"
+ },
+ {
+  "kat": 1,
+  "x0": 30,
+  "y0": 98,
+  "x1": 110,
+  "y1": 119,
+  "co": "Południowy ugór: rozlane brązowe/ciemnozielone plamy bez kształtu, pojedyncze beczki, koła, kamienie, łopata - chaos i pustka.",
+  "jak": "Wyrównać, dodać ścieżkę, pola lub las; usunąć losowe plamy.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map111/02.png"
+ },
+ {
+  "kat": 3,
+  "x0": 34,
+  "y0": 109,
+  "x1": 56,
+  "y1": 119,
+  "co": "Wybieg/pole na południu: płot ma tylko górę i prawy bok, lewy z dziurą (y116-117), brak dolnego boku - ogrodzenie urwane.",
+  "jak": "Domknąć płot z czterech stron z furtką.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map111/03.png"
+ },
+ {
+  "kat": 3,
+  "x0": 106,
+  "y0": 34,
+  "x1": 119,
+  "y1": 42,
+  "co": "Początek fosy urywa się nagle prostokątnym wycięciem: ciemne pobocza zaczynają się w y=37, brązowa łata w rogu (115-117,35-37), droga wpada wprost w fosę.",
+  "jak": "Zakończyć fosę zaokrąglonym czołem/skarpą i poprowadzić drogę do mostu.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map111/04.png"
+ },
+ {
+  "kat": 3,
+  "x0": 106,
+  "y0": 98,
+  "x1": 119,
+  "y1": 108,
+  "co": "Koniec fosy: wypełnienie kończy się nierówno w y=106, ciemne pobocze urywa się w y=105, mur z przerwą (117,105-107).",
+  "jak": "Zamknąć fosę równą krawędzią, uzupełnić mur.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map111/05.png"
+ },
+ {
+  "kat": 1,
+  "x0": 109,
+  "y0": 40,
+  "x1": 118,
+  "y1": 100,
+  "co": "Fosa to płaska brązowa równina 8x60 z kilkoma chwastami - bardzo pusta i nudna.",
+  "jak": "Dodać wodę/błoto, trzcinę, kamienie albo zasypać część.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map111/06.png"
+ },
+ {
+  "kat": 5,
+  "x0": 107,
+  "y0": 58,
+  "x1": 111,
+  "y1": 72,
+  "co": "Skarpa fosy: do y~63 ciemnozielona kamienna, niżej brązowa - dwa różne style krawędzi.",
+  "jak": "Ujednolicić pobocza fosy.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map111/07.png"
+ },
+ {
+  "kat": 2,
+  "x0": 17,
+  "y0": 33,
+  "x1": 22,
+  "y1": 95,
+  "co": "Szpaler sosen przy zachodnim płocie: nierówne odstępy (luki 43-57), drzewa nachodzą na siebie (65-68), brak osi względem płotu.",
+  "jak": "Posadzić drzewa równo co 3 kratki wzdłuż płotu.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map111/08.png"
+ },
+ {
+  "kat": 3,
+  "x0": 12,
+  "y0": 30,
+  "x1": 26,
+  "y1": 66,
+  "co": "Kanciasty schodkowy brzeg morza (prostokątne stopnie co 1-3 kratki) z ciemnym obrysem.",
+  "jak": "Zaokrąglić brzeg większymi łukami (Shore chunks) lub poprowadzić prosto.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map111/09.png"
+ },
+ {
+  "kat": 2,
+  "x0": 103,
+  "y0": 0,
+  "x1": 112,
+  "y1": 32,
+  "co": "Droga północna ma przewężenia (talie) w y=10-12 i 25-27 i nierówną szerokość.",
+  "jak": "Wyprostować drogę do stałej szerokości.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map111/10.png"
+ },
+ {
+  "kat": 1,
+  "x0": 32,
+  "y0": 21,
+  "x1": 48,
+  "y1": 30,
+  "co": "Luźne kawałki płotu (35-37,23-28 i 43,25) bez celu oraz pojedynczy krzak i kamienie.",
+  "jak": "Usunąć lub dokończyć w pełny płot.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map111/11.png"
+ },
+ {
+  "kat": 5,
+  "x0": 36,
+  "y0": 70,
+  "x1": 41,
+  "y1": 78,
+  "co": "Cienie budynków jako ostro zakończone ciemne prostokąty obok ścian (także (89,42)).",
+  "jak": "Zastąpić miękkim cieniem (Cienie.js) lub usunąć.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map111/12.png"
+ }
+]

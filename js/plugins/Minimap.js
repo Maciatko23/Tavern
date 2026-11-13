@@ -118,23 +118,38 @@
         return { set, x: bx * TILE + ox, y: by * TILE + oy };
     }
     const colourCache = {};
+    // (2026-11-12, wydajność) a tileset's sheet read back once, whole - not one read-back of the graphics card per kind of tile
+    // (each one stopped the drawing; ~10 ms frames on entering a map). Kept for the current tileset only.
+    const sheetPixels = { tileset: -1, map: new Map() };
+    function pixelsOf(bmp) {
+        if (sheetPixels.tileset !== $gameMap.tilesetId()) { sheetPixels.tileset = $gameMap.tilesetId(); sheetPixels.map.clear(); }
+        let d = sheetPixels.map.get(bmp);
+        if (d === undefined) {
+            try { d = bmp.context.getImageData(0, 0, bmp.width, bmp.height).data; } catch (e) { d = null; }
+            sheetPixels.map.set(bmp, d);
+            clearTimeout(sheetPixels.timer);   // (the sheets' pixels let go a moment after the last one is read: the colours stay)
+            sheetPixels.timer = setTimeout(() => sheetPixels.map.clear(), 3000);
+        }
+        return d;
+    }
     // null while the picture is still loading
     function tileColour(id, bitmaps) {
         if (colourCache[id] !== undefined && colourCache[id].tileset === $gameMap.tilesetId()) return colourCache[id].c;
         const s = tileSample(id), bmp = bitmaps[s.set];
         if (!bmp) { colourCache[id] = { tileset: $gameMap.tilesetId(), c: false }; return false; }
         if (!bmp.isReady()) return null;
-        let data;
-        try {
-            data = bmp.context.getImageData(Math.max(0, Math.min(bmp.width - TILE, s.x)), Math.max(0, Math.min(bmp.height - TILE, s.y)), TILE, TILE).data;
-        } catch (e) {
+        const all = pixelsOf(bmp);
+        if (!all || bmp.width < TILE || bmp.height < TILE) {
             colourCache[id] = { tileset: $gameMap.tilesetId(), c: false };
             return false;
         }
+        const x0 = Math.max(0, Math.min(bmp.width - TILE, s.x)), y0 = Math.max(0, Math.min(bmp.height - TILE, s.y)), W = bmp.width;
         let r = 0, g = 0, b = 0, a = 0;
-        for (let i = 0; i < data.length; i += 4) {
-            const al = data[i + 3];
-            r += data[i] * al; g += data[i + 1] * al; b += data[i + 2] * al; a += al;
+        for (let y = 0; y < TILE; y++) {
+            for (let i = ((y0 + y) * W + x0) * 4, end = i + TILE * 4; i < end; i += 4) {
+                const al = all[i + 3];
+                r += all[i] * al; g += all[i + 1] * al; b += all[i + 2] * al; a += al;
+            }
         }
         const c = a > 0 ? { r: Math.round(r / a), g: Math.round(g / a), b: Math.round(b / a), a: a / (TILE * TILE * 255) } : false;
         colourCache[id] = { tileset: $gameMap.tilesetId(), c };

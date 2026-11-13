@@ -71,6 +71,11 @@
     const w = Watki.get("kruk");
     if (!w) throw new Error("Kruk.js: brak wątku „kruk” (Kruk_Data.js / Watki.js)");
     const MAP = D.MAP, HARBOUR = D.HARBOUR, HERMITAGE = D.HERMITAGE;
+    // (2026-11-11, questy_pustelnia) the Urwisko is out of the world (WyspaData.HERMITAGE_OPEN = false): the Order's ravens moved to the ravenry of
+    // Kruczogrod (Map008, a tower with a room in the north-east; the old perches on the markers zerdz_1 / zerdz_2 there) and K51's raven leads there
+    const TOWN = 8, KRUCZY_JAR = 3;
+    const closedHermitage = () => !(window.WyspaData && window.WyspaData.HERMITAGE_OPEN);
+    const RMAP = () => (closedHermitage() ? TOWN : MAP);   // (the map of the ravenry)
     const SH = D.SHEET, R = D.RAVEN, TX = D.TX;
     const { C, fill } = Watki.mowa;
     const day = () => T.time.day(), hour = () => T.time.hour();
@@ -313,7 +318,7 @@
     let oldPerches = [];
     function drawOldPerches() {
         const tm = tilemap();
-        if (!tm || $gameMap.mapId() !== MAP) { oldPerches = []; return; }
+        if (!tm || $gameMap.mapId() !== RMAP()) { oldPerches = []; return; }
         if (!oldPerches.length || oldPerches.some(o => o.s.parent !== tm)) {
             for (const o of oldPerches) if (o.s.parent) o.s.parent.removeChild(o.s);
             oldPerches = [];
@@ -353,9 +358,19 @@
         const cairn = () => { const e = eventNamed(/^Kopiec z krukiem/); return e ? { x: e._realX + 0.5, y: e._realY + 0.98, z: 34, high: true } : { x: 27.5, y: 19.98, z: 34, high: true }; };
         const pine = () => { const e = $gameMap.events().find(ev => ev && ev.x === 3 && ev.y === 18); const sp = e ? spriteOfChar(e) : null;
             return { x: 3.5, y: 18.98, z: sp && sp.patternHeight ? Math.round(sp.patternHeight() * 0.72) : 100, high: true }; };
+        // the way to the town's ravenry: the mast (Przystan) -> the east road of Przystan -> the road of Kruczy Jar by the town gate -> the town's
+        // south gate (Kruczogrod) -> the perch of the young raven by the tower (a free flight over the town)
+        if (closedHermitage()) return [
+            { map: HARBOUR, at: mastPoint, near: 4.5, go: () => ({ x: 100.5, y: 70.9, z: 0 }), dawn: true },
+            { map: HARBOUR, at: () => ({ x: 100.5, y: 70.9, z: 0 }), near: 4, go: () => ({ x: 126, y: 66, z: 90, off: true }) },
+            { map: KRUCZY_JAR, at: () => ({ x: 35.5, y: 8.9, z: 0 }), near: 5, go: () => ({ x: 35.5, y: -5, z: 90, off: true }) },
+            { map: TOWN, at: () => ({ x: 31.5, y: 107.9, z: 0 }), near: 5, go: () => oldPerchPoint("zerdz_2") },
+            { map: TOWN, at: () => oldPerchPoint("zerdz_2"), near: 3.2, end: true }
+        ];
         return [
-            { map: HARBOUR, at: mastPoint, near: 4.5, go: () => ({ x: 15.5, y: 2.6, z: 0 }), dawn: true },
-            { map: HARBOUR, at: () => ({ x: 15.5, y: 2.6, z: 0 }), near: 4, go: () => ({ x: 15.5, y: -3, z: 90, off: true }) },
+            // (2026-11-11 questy_mapa: the way to Pustelnia is the gate of the cliff path beside the lighthouse hill, Przystań (101,95))
+            { map: HARBOUR, at: mastPoint, near: 4.5, go: () => ({ x: 101.5, y: 96.7, z: 0 }), dawn: true },
+            { map: HARBOUR, at: () => ({ x: 101.5, y: 96.7, z: 0 }), near: 4, go: () => ({ x: 101.5, y: 90, z: 90, off: true }) },
             { map: HERMITAGE, at: cairn, near: 6, go: () => ({ x: 50, y: 17.5, z: 80, off: true }), kleofas: true },
             { map: MAP, at: pine, near: 6, go: () => oldPerchPoint("zerdz_2") },
             { map: MAP, at: () => oldPerchPoint("zerdz_2"), near: 3.2, end: true }
@@ -365,13 +380,13 @@
     // the wild (or the hungry, gone) raven's place: null - not on this map
     function wildPlace() {
         const mapId = $gameMap.mapId(), s = S();
-        if (!built) return null;   // (the Urwisko not built yet - package 0's stub: no raven anywhere)
+        if (!built && !closedHermitage()) return null;   // (the Urwisko not built yet - package 0's stub: no raven anywhere)
         if (k51On() && s.k51.leg >= 1) {
             const L = legs()[Math.min(s.k51.leg, 4)], at = L.map === mapId ? L.at() : null;
             return at ? { leg: s.k51.leg, at } : null;
         }
         if (s.stage === "wild" && inHours(hour(), R.wildMast) && !isDone("K51")) return mapId === HARBOUR ? { leg: 0, at: mastPoint() } : null;
-        if (mapId !== MAP || clock() < s.scaredUntil) return null;
+        if (mapId !== RMAP() || clock() < s.scaredUntil) return null;
         const at = oldPerchPoint("zerdz_2");
         return at ? { at, ravenry: true } : null;
     }
@@ -1514,9 +1529,10 @@
     // K51, D24 - the data's (Kruk_Data.js); what their conditions, words and actions ask of the game
     // ------------------------------------------------------------------
     w.haki({
-        miejsceGotowe: (ctx, id) => !!(W() && W().isReady && W().isReady(id)),
+        // (the hermitage pocket out of the world: its places stand for the town's ravenry - K51 is offered, the raven leads to Kruczogrod)
+        miejsceGotowe: (ctx, id) => !!(W() && W().isReady && W().isReady(id)) || (closedHermitage() && (id === MAP || id === HERMITAGE)),
         // K51's second step: where the raven waits now (by its leg)
-        k51Gdzie: () => { const leg = S().k51.leg; return leg <= 1 ? TK.kod.vars[0] : leg === 2 ? TK.kod.vars[1] : TK.kod.vars[2]; },
+        k51Gdzie: () => { const leg = S().k51.leg, V = TK.kod.vars; return closedHermitage() ? V[[0, 0, 1, 2, 3][Math.min(leg, 4)]] || V[0] : leg <= 1 ? V[0] : leg === 2 ? V[1] : V[2]; },
         bezObraczki: () => count(D.ITEM.ring) < 1,
         grzedaStoi: () => perches().length > 0,
         imieKruka: () => ravenName(),

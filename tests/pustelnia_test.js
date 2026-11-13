@@ -20,7 +20,9 @@ const ROOT = path.join(__dirname, "..");
 const skeleton = /Wyspa:szkielet/.test(fs.readFileSync(path.join(ROOT, "data", "Map155.json"), "utf8"));
 const OVERLAY = process.env.GAME_OVERLAY || (skeleton ? "tools/miejsca_wyspy/staging_A" : null);
 
-kit.test({ port: 9501, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
+// (2026-11-11: the hermitage is out of the world for now - Wyspa_Data HERMITAGE_OPEN = false; this test forces it open so the way back stays guarded)
+const FORCE_OPEN = `(function(){ let v; Object.defineProperty(window, 'WyspaData', { configurable: true, get() { return v; }, set(x) { if (x && typeof x === 'object') x.HERMITAGE_OPEN = true; v = x; } }); })();`;
+kit.test({ port: 9501, beforeLoad: FORCE_OPEN, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     if (OVERLAY) console.log("NOTE nakładka: " + OVERLAY);
     const K = "TownLife.eventOf('pustelnik')";
 
@@ -48,8 +50,8 @@ kit.test({ port: 9501, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
             east: ev.filter(e => e.x === 95 && (e.y === 17 || e.y === 18)).map(e => e.y),
             door: ev.filter(e => e.name === 'Drzwi: Skryptorium').map(e => [e.x, e.y, (e.pages[0].list.find(c => c.code === 201) || {}).parameters]),
             spots: ev.filter(e => /^Miejsce: /.test(e.name)).map(e => e.name.slice(9)).sort() }; })()`);
-    t.check("przejścia: dół (21-23, 71) -> Zbocze pod Pustelnią 950 (od 2026-10-30, nie do przystani), prawa krawędź (95, 17-18) -> Urwisko; drzwi skryptorium -> Map156",
-        ways.south.every(s => s[1] && s[1][0] === 950) && ways.east.join() === "17,18"
+    t.check("przejścia: dół (21-23, 71) -> przystań, brama Ścieżki na klif (2026-11-11 kieszeń), prawa krawędź (95, 17-18) -> Urwisko; drzwi skryptorium -> Map156",
+        ways.south.every(s => s[1] && s[1][0] === 125) && ways.east.join() === "17,18"
         && ways.door.length === 1 && ways.door[0][2][1] === 156, ways);
     t.check("miejsca Kleofasa na mapie: cela, ławka, ogródek, skryptorium, ule, urwisko, wieża",
         ways.spots.join() === "cela_drzwi,lawka,ogrodek,skryptorium_drzwi,ule,urwisko,wieza", ways.spots);

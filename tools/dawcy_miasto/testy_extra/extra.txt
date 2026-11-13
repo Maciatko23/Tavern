@@ -1,0 +1,8 @@
+podgrodzie_quests_test po rc=1 5 pass 3 fail
+podgrodzie_life_test po rc=1 16 pass 1 fail
+podgrodzie_mieszkancy_test po rc=0 23 pass 0 fail
+przystan amended rc=1 33 pass 1 fail
+garnizon amended rc=1 31 pass 16 fail
+podgrodzie_quests amended rc=0 9 pass 0 fail
+ludzie amended rc=1 66 pass 5 fail
+wrak final rc=1 30 pass 1 fail

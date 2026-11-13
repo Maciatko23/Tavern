@@ -597,6 +597,8 @@
     // The id registry. Ids are game-wide (one id = one owner on every map). The old-style injectors are reserved here until they
     // move to Tawerna.inject; the editor's own events stay far below (the biggest map, Map025, ends at 354).
     const reserved = [
+        // (2026-11-12) W17 "Jarmark Kruczogrodu" (Jarmark*.js): stalls, lamps, stage, troupe, clues, chase (Map008), the hall's judges (Map001)
+        { owner: "Jarmark", from: 4800, to: 4999, what: "W17 Jarmark: kramy, lampiony, scena trupy, trupa, ślady, pościg (mapa 8), sędziowie konkursu (mapa 1)" },
         // (2026-10-16) the six island places (docs/miejsca_wyspy/PAKIETY.md): one owner per package, the same name in its Tawerna.inject
         { owner: "Pustelnia", from: 600, to: 609, what: "pustelnia na klifie i skryptorium (mapy 155, 156)" },
         { owner: "Kruk", from: 610, to: 629, what: "Urwisko Kruków, kruczarnia, oswojony kruk (mapa 157 i inne)" },
@@ -643,9 +645,22 @@
         { owner: "Podroznicy", from: 3002, to: 3019, what: "podróżni z promu: aktorzy scen na przystani (3002-3008), trap i rekwizyty (3010-3017)" },
         { owner: "TownLife", from: 3020, to: 3049, what: "podróżni z promu jako mieszkańcy (czwarty zakres: obsada 3020-3033, Kompania 3034-3037, pula 3038-3041, Ksenia 3042, trójka 3043)" },
         // (2026-10-30) the trial of a prettier map: small groups of things on Kruczy Jar (Ziemia_Ozdoby.js)
+        // (2026-11-08) chapter 1's "Wezwanie króla" (docs/STORY.md): the king's messenger, Feliks and the Lord's two guards in grandpa's house, the Lord's seal sign at its door
+        { owner: "Story", from: 3240, to: 3249, what: "wezwanie króla: posłaniec, Feliks i straż w domu dziadka (mapa 19), znak pieczęci przy drzwiach (mapa 20)" },
+        // (2026-11-11) the Silent's settlement on the east meadow of Laka pod Gawra (Osada.js): doors, residents, stones, palisade, gate (Map004)
+        { owner: "Osada", from: 5300, to: 5399, what: "Osada Milczących na łące Kruczego Jaru (mapa 4): drzwi chat, mieszkańcy, kamienie, palisada, brama" },
         { owner: "Ziemia", from: 3100, to: 3139, what: "ozdoby Kruczego Jaru: grupy przedmiotów przy murze, ścieżce i skraju lasu (mapa 3; próba ładniejszej mapy)" },
         { owner: "Lancuchy", from: 3050, to: 3069, what: "łańcuchy podróżnych: W15 „Święte kości” - kurier Baltazara na piętrze gości (3050; SwieteKosci.js), W16 „Dezerter” - Tymon w kryjówce, garnizonie, obozie (3060; Dezerter.js)" },
-        { owner: "Poselstwo", from: 3070, to: 3089, what: "podróżni etap 5: W14 „Poselstwo” - Lord i Feliks na naradzie, Albin pod Złotym (Map026), wosk i ślady przy kracie (Map025) 3070-3074 (Poselstwo.js); D44 - Feliks na korytarzu gości (3080; Podroznicy5.js)" }
+        { owner: "Stajnia", from: 3250, to: 3259, what: "stajnia zajazdu (mapa 181): stryszek z sianem 3250, tablica zmian 3251 (Stajnia.js)" },
+        // (2026-11-08) the stable yard of Kruczogród (Map008): three walking horses and the water trough (Konie.js)
+        { owner: "Konie", from: 3260, to: 3279, what: "konie na wybiegu stajni (Map008): trzy konie 3260-3262, dwa wodopoje 3263-3268 i 3270-3275 (obraz, 3 blokady, 2 kręgi na wodzie) (Konie.js)" },
+        { owner: "Poselstwo", from: 3070, to: 3089, what: "podróżni etap 5: W14 „Poselstwo” - Lord i Feliks na naradzie, Albin pod Złotym (Map026), wosk i ślady przy kracie (Map025) 3070-3074 (Poselstwo.js); D44 - Feliks na korytarzu gości (3080; Podroznicy5.js)" },
+        // (2026-11-12) W21 "Gorączka w przytułku" (Goraczka.js): Wawrzyn Płowy jako mieszkaniec (TownLife, zakres własny), chorzy w łóżkach przytułku (mapy 216, 202),
+        // wozy zapory, kocioł Stefy, osad w rynnie i płyta rowu (mapa 8)
+        { owner: "TownLife", from: 4600, to: 4609, what: "W21: Wawrzyn Płowy (piąty zakres mieszkańców)" },
+        { owner: "Goraczka", from: 4610, to: 4699, what: "W21 Gorączka w przytułku: chorzy w łóżkach (4610-4615), wozy zapory (4620-4621), kocioł (4622), osad w rynnie (4630-4632), płyta rowu (4633)" },
+        // (2026-11-12) W19 "Sygnały z młyna" (Mlyn.js): the lookout, the cove's boat and people (Map125), the book page (Map119); TownLife 2960-2969 are the miller and his helper
+        { owner: "Mlyn", from: 2970, to: 2999, what: "W19: wypatrywacz (mapa 8), łódź, szyper i zasadzka w zatoczce (mapa 125), strona księgi (mapa 119) (Mlyn.js)" }
     ];
     const injectors = [];     // { owner, from, to, maps(id), mapsText, build, when, fixSaved, editorWins }
     const dataHooks = [];     // { fn, owner }
@@ -758,6 +773,21 @@
             try { h.fn(data, mapId); } catch (e) { report("onMapData" + (h.owner ? " (" + h.owner + ")" : ""), e); }
         }
     }
+    // (2026-11-12, wydajność) the map's live events in an array made at its full length at once: the engine fills an empty [] by id,
+    // and a jump of more than ~1024 past what the array holds (the injected bands: 950, 2000+, 3000+, 4400+) turns it into a slow
+    // dictionary in V8 - every $gameMap.events() then costs 5-17x more (the tavern: 33 µs a call, scanned many times a frame). Same
+    // events, same ids; only the array is allocated whole. Later additions within the length stay fast.
+    Game_Map.prototype.setupEvents = function() {
+        const list = $dataMap.events || [];
+        this._events = new Array(list.length);
+        this._commonEvents = [];
+        for (let i = 0; i < list.length; i++) {
+            const event = list[i];
+            if (event) this._events[event.id] = new Game_Event(this._mapId, event.id);
+        }
+        for (const commonEvent of this.parallelCommonEvents()) this._commonEvents.push(new Game_CommonEvent(commonEvent.id));
+        this.refreshTileEvents();
+    };
     const _DataManager_loadMapData = DataManager.loadMapData;
     DataManager.loadMapData = function(mapId) {
         loadingMapId = mapId;
@@ -800,6 +830,12 @@
             }
         }
     }
+    // (2026-11-12) a live event whose data is gone (an old save's orphan, the frame before fixSaved takes it away) has no page
+    // instead of throwing in findProperPageIndex (core_test: a save taken in while the map still updated)
+    const _Game_Event_findProperPageIndex = Game_Event.prototype.findProperPageIndex;
+    Game_Event.prototype.findProperPageIndex = function() {
+        return this.event() ? _Game_Event_findProperPageIndex.call(this) : -1;
+    };
     const _Scene_Map_onMapLoaded_inner = Scene_Map.prototype.onMapLoaded;
     Scene_Map.prototype.onMapLoaded = function() {
         if (!this._transfer && window.$gameMap && window.$dataMap && Array.isArray($dataMap.events)) fixSaved($gameMap.mapId());
@@ -873,29 +909,39 @@
     // The map's frame runner: Tawerna.onMapUpdate(fn, { name, owner, calm, every, priority })
     // ------------------------------------------------------------------
     const updaters = [];
+    // (2026-11-12, wydajność: the list copied for the frame's run only when it changed - not every frame; an updater's time measured
+    // on every 4th of its calls - two clock reads for each of ~100 updaters every frame were a few % of a frame at 4x slower CPU)
+    let updVer = 0, updSnap = [], updSnapVer = -1;
     T.onMapUpdate = function(fn, opts) {
         if (typeof fn !== "function") throw new Error("Tawerna.onMapUpdate: not a function");
         const o = opts || {};
         const u = { fn, name: o.name || fn.name || "update", owner: o.owner || "", calm: o.calm || false, every: Math.max(1, Math.floor(num(o.every, 1))),
             priority: num(o.priority, 0), n: seq++, count: 0, calls: 0, ms: 0, max: 0, errors: 0, on: true };
-        u.off = () => { const i = updaters.indexOf(u); if (i >= 0) updaters.splice(i, 1); };
+        u.off = () => { const i = updaters.indexOf(u); if (i >= 0) { updaters.splice(i, 1); updVer++; } };
         updaters.push(u);
         updaters.sort((a, b) => a.priority - b.priority || a.n - b.n);
+        updVer++;
         return u;
     };
-    // (the calm ones skip the frame; `every` counts the frames an updater could run; one that throws is told and turned off)
+    // (the calm ones skip the frame; `every` counts the frames an updater could run; one that throws is told and turned off; one
+    // added or taken off during the run counts from the next frame, as with the copy the run went over before)
     function runUpdaters(scene) {
-        for (const u of updaters.slice()) {
+        if (updSnapVer !== updVer) { updSnap = updaters.slice(); updSnapVer = updVer; }
+        const list = updSnap;
+        for (let i = 0; i < list.length; i++) {
+            const u = list[i];
             if (!u.on) continue;
             if (u.calm && !T.isCalm(scene, u.calm === true ? undefined : u.calm)) continue;
             if (++u.count % u.every !== 0) continue;
-            const t0 = performance.now();
+            const timed = (u.calls & 3) === 0, t0 = timed ? performance.now() : 0;
             try { u.fn(scene, u.count); }
             catch (e) { u.errors++; u.on = false; report("map updater " + (u.owner ? u.owner + "." : "") + u.name + " (turned off)", e); }
-            const ms = performance.now() - t0;
+            if (timed) {
+                const ms = performance.now() - t0;
+                u.ms += (ms - u.ms) / Math.min((u.calls >> 2) + 1, 60);
+                u.max = Math.max(u.max * 0.98, ms);
+            }
             u.calls++;
-            u.ms += (ms - u.ms) / Math.min(u.calls, 60);
-            u.max = Math.max(u.max * 0.995, ms);
         }
     }
 
@@ -913,7 +959,11 @@
             if (!seasonLen) seasonLen = Math.max(1, num(PluginManager.parameters("Farming").seasonLength, 28));
             return seasonLen;
         },
-        season: d => Math.floor(((Math.max(1, d === undefined ? time.day() : d) - 1) / time.seasonLength()) % 4),
+        season: d => (time.forced !== null ? time.forced : Math.floor(((Math.max(1, d === undefined ? time.day() : d) - 1) / time.seasonLength()) % 4)),
+        // (2026-11-09, the F9 menu: „możliwość zmian pór roku”) a season shown instead of the calendar's - for looking at the seasons'
+        // pictures; the days do not move (the debt's deadline, the crops), nothing saved: null = the calendar again
+        forced: null,
+        forceSeason(s) { time.forced = s === null || s === undefined ? null : ((s % 4) + 4) % 4; T.emit && T.emit("seasonForced", time.forced); return time.forced; },
         seasonName: d => SEASONS[time.season(d)],
         dayOfSeason: d => ((Math.max(1, d === undefined ? time.day() : d) - 1) % time.seasonLength()) + 1,
         year: d => Math.floor((Math.max(1, d === undefined ? time.day() : d) - 1) / (time.seasonLength() * 4)) + 1,
@@ -1245,7 +1295,8 @@
     //   top: the notice at the top centre; menu: in a menu scene the help window says it (the item menu); gain: into the gains list
     T.popup = function(text, opts) {
         const o = typeof opts === "number" ? { icon: opts } : opts || {};
-        const color = o.color || COLORS[o.kind] || null;
+        const color = (o.color && COLORS[o.color]) || o.color || COLORS[o.kind] || null;   // (a kind's name given as the colour - the town's
+                                                                                          //  locked doors' "info" - drew black text, 2026-11-09)
         const tmp = window.$gameTemp, scene = SceneManager._scene;
         if (!tmp || !text) return false;
         if (o.top) {

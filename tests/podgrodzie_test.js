@@ -32,12 +32,18 @@ const point = what => {
     if (!p) throw new Error("tools/podgrodzie2/mapowanie.json: brak punktu " + what);
     return p.nowe;
 };
+// (2026-11-08, the 3x3 board: Swiat_Data SHIFT "111": [18, 33] - every coordinate below (the stage-1 map's) stands 18 columns and 33 rows further on the 120x120
+// Map111; the town's west gate meets Podgrodzie's east edge by the board's seams (Map008 x 0 rows 50-51 <-> Map111 x 119 rows 50-51), no transfer events)
+const BX = 18, BY = 33;
 // (2026-10-30, the world stage 1: Map111 got 10 columns before the wall: the wall, its gate and the transfers stand 10 columns further east;
 // on the staging: GAME_OVERLAY=tools/swiat/etap1/staging. After the installation Swiat_Data.js has enabled: true and the shift is 10 without the overlay.)
 const SHIFT = (/swiat[\/]etap1/.test(process.env.GAME_OVERLAY || "") || /enabled: true/.test(fs.readFileSync(path.join(__dirname, "..", "js", "plugins", "Swiat_Data.js"), "utf8"))) ? 10 : 0;
-const IN_GATE = point("Map008 ev237").map((v, i) => i === 0 ? v + SHIFT : v), IN_GATE2 = point("Map008 ev238").map((v, i) => i === 0 ? v + SHIFT : v);
-const WALL = JSON.parse(JSON.stringify(MAPOWANIE.d_strefy.mur_miasta)), PAL = MAPOWANIE.d_strefy.palisada;
+const IN_GATE = point("Map008 ev237").map((v, i) => i === 0 ? v + SHIFT + BX : i === 1 ? v + BY : v), IN_GATE2 = point("Map008 ev238").map((v, i) => i === 0 ? v + SHIFT + BX : i === 1 ? v + BY : v);
+const WALL = JSON.parse(JSON.stringify(MAPOWANIE.d_strefy.mur_miasta)), PAL = JSON.parse(JSON.stringify(MAPOWANIE.d_strefy.palisada));
 if (SHIFT) { WALL.x = WALL.x.map(v => v + SHIFT); if (WALL.brama) WALL.brama = WALL.brama.map(c => [c[0] + SHIFT, c[1]]); }
+WALL.x = WALL.x.map(v => v + BX); if (WALL.brama) WALL.brama = WALL.brama.map(c => [c[0] + BX, c[1] + BY]);
+const onBoard = c => [c[0] + BX, c[1] + BY].concat(c.slice(2));
+PAL.pierscien = PAL.pierscien.map((v, i) => i === 0 ? v + BX : v); PAL.bramy.zach = PAL.bramy.zach.map(onBoard);
 const SPOT_KEYS = Object.keys(MAPOWANIE.c_miejsca.stare_miejsca).concat(Object.keys(MAPOWANIE.c_miejsca.nowe_miejsca));
 // the old cabins' residents: their "Miejsce: <key>_wnetrze" inside (data/Map112-117)
 const OLD_RESIDENTS = { 112: ["praczka", "franek"], 113: ["drwal"], 114: ["klusownik"], 115: ["znachorka"], 116: ["szmaciarz"], 117: ["uchodzca"] };
@@ -45,7 +51,7 @@ const doors = BUD.filter(b => b.wnetrze && b.klucz !== "chata_pod_lasem").map(b 
     const m = META[String(b.wnetrze)];
     const residents = m ? Object.entries(m.miejsca || {}).map(([k, v]) => ({ n: "Miejsce: " + k, x: v.x, y: v.y }))
         : (OLD_RESIDENTS[b.wnetrze] || []).map(k => ({ n: "Miejsce: " + k + "_wnetrze" }));
-    return { map: b.wnetrze, name: b.nazwa, door: b.drzwi_id, at: b.drzwi, town: b.przed_drzwiami, landing: b.wnetrze_xy,
+    return { map: b.wnetrze, name: b.nazwa, door: b.drzwi_id, at: onBoard(b.drzwi), town: onBoard(b.przed_drzwiami), landing: b.wnetrze_xy,
         always: !!b.zawsze_otwarte || !b.godziny, residents };
 });
 
@@ -59,13 +65,13 @@ async function knock(t, d) {
         await t.locate(d.town[0], d.town[1], 8);
         await t.frames(3);
         await t.eval("window.__doorRan = false; 0");
-        await t.hold("up", 20);
+        await t.hold("up", 60);
         if (await t.until(`window.__doorRan || $gameMap.isEventRunning() || $gamePlayer.isTransferring() || !${t.onMap(111)}`, 2, 50)) return true;
     }
     return false;
 }
 
-kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
+kit.test({ overlay: process.env.GAME_OVERLAY, bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
     const walkOut = async (key, map) => {
         await t.eval(`(function(){ Input.clear(); Input._currentState["${key}"] = true; return 0; })()`);
         await t.until("$gamePlayer.isTransferring() || $gameMap.mapId() !== " + map, 10, 30);
@@ -82,10 +88,10 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     // ---- the west gate on the town map
     const gate = await t.json(`(function(){ const p = (x, y) => [2, 4, 6, 8].some(d => $gameMap.isPassable(x, y, d));
         return { gate: [p(0, 50), p(1, 50), p(0, 51), p(1, 51), p(2, 50), p(2, 51)], towers: [p(0, 49), p(1, 49), p(0, 52), p(1, 52)],
-                 exits: $gameMap.events().filter(e => /Podgrodzie/.test(e.event().name)).map(e => [e.x, e.y]),
+                 exits: $gameMap.events().filter(e => /Podgrodzie/.test(e.event().name) && e.x <= 1).map(e => [e.x, e.y]),
                  sign: $gameMap.events().filter(e => /Drogowskaz \\(brama zachodnia\\)/.test(e.event().name)).length }; })()`);
     t.check("Map008's west gate: its cells and the street before it free, the towers beside it closed", gate.gate.every(Boolean) && !gate.towers.some(Boolean), gate);
-    t.check("two exits at the town's west edge (0,50..51) and the signpost", JSON.stringify(gate.exits) === "[[0,50],[0,51]]" && gate.sign === 1, gate);
+    t.check("no exit events at the town's west edge (0,50..51) any more - the board's seam leads on; the signpost stands", gate.exits.length === 0 && gate.sign === 1, gate);
     await t.locate(4, 51, 4);
     await t.frames(20);
     await t.shot(path.join(SHOTS, "gra_brama_od_miasta.png"));
@@ -95,8 +101,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await walkOut("left", 8);
     const out = await t.until(t.onMap(111), 10);
     const at111 = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction() })");
-    t.check(`walking left through the gate leads to Podgrodzie (Map111 ${IN_GATE}, the town wall's gate, facing left)`,
-        out && at111.x === IN_GATE[0] && at111.y === IN_GATE[1] && at111.d === 4, at111);
+    t.check(`walking left through the gate leads to Podgrodzie (Map111, its east edge 119,50 - one cell beyond the town wall's gate ${IN_GATE}, facing left)`,
+        out && at111.map === 111 && at111.x === 119 && at111.y === 50 && at111.d === 4, at111);
     await t.eval(RESIDENTS_OFF);
     await atSpot("brama_zach", 4);
     await t.frames(20);
@@ -110,20 +116,21 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         const start = ${JSON.stringify(IN_GATE)}, seen = new Set([key(start[0], start[1])]), todo = [start.slice(0, 2)];
         while (todo.length) { const [x, y] = todo.pop(); for (const d of [2, 4, 6, 8]) { const n = step(x, y, d); if (n && !seen.has(key(...n))) { seen.add(key(...n)); todo.push(n); } } }
         const spots = {}; for (const e of $gameMap.events()) { const m = /^Miejsce: (\\S+)$/.exec(e.event().name); if (m) spots[m[1]] = { x: e.x, y: e.y, prio: e.event().pages[0].priorityType, through: e.event().pages[0].through, n: (spots[m[1]] ? spots[m[1]].n : 0) + 1 }; }
-        const doors = ${JSON.stringify(BUD.map(b => ({ n: b.nazwa, id: b.drzwi_id, at: b.drzwi, front: b.przed_drzwiami })))}.map(b => {
+        const doors = ${JSON.stringify(BUD.map(b => ({ n: b.nazwa, id: b.drzwi_id, at: onBoard(b.drzwi), front: onBoard(b.przed_drzwiami) })))}.map(b => {
             const e = $gameMap.event(b.id);
             return { n: b.n, id: b.id, ok: !!e && e.x === b.at[0] && e.y === b.at[1] && /^Drzwi/.test(e.event().name), front: seen.has(key(b.front[0], b.front[1])) }; });
-        const exits = $gameMap.events().filter(e => /^Przejście/.test(e.event().name)).map(e => ({ n: e.event().name, x: e.x, y: e.y, reached: seen.has(key(e.x, e.y)) }));
-        let water = 0; for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (Farming.isWaterTile && Farming.isWaterTile(x, y)) water++;
-        const RL = window.RegionLayers, WALL = ${JSON.stringify(WALL)}, PAL = ${JSON.stringify(PAL)}, drwal = ${JSON.stringify((BUD.find(b => b.klucz === "drwal") || BUD[0]).drzwi)};
+        // (the board's seams are the exits: the east edge rows 50-51 to the town, the south edge x 56..113 to the harbour, the north edge x 20..117 to the garrison)
+        const exits = [["to the town", 119, 50], ["to the town", 119, 51], ["to the harbour", 60, 119], ["to the garrison", 60, 0]].map(([n, x, y]) => ({ n, x, y, reached: seen.has(key(x, y)) }));
+        let water = 0; for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (x >= ${BX + 4} && Farming.isWaterTile && Farming.isWaterTile(x, y)) water++;   // (x <= 21 is the board's west sea, not the suburb's)
+        const RL = window.RegionLayers, WALL = ${JSON.stringify(WALL)}, PAL = ${JSON.stringify(PAL)}, drwal = ${JSON.stringify(onBoard((BUD.find(b => b.klucz === "drwal") || BUD[0]).drzwi))};
         let lines = 0, linesAbove = 0;
         if (RL) for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if ($gameMap.regionId(x, y) === 3) { lines++; if (RL.kindAt(x, y) === "above") linesAbove++; }
         return { reached: seen.size, spots, doors, exits, water,
                  spotReached: Object.fromEntries(Object.entries(spots).map(([k, s]) => [k, seen.has(key(s.x, s.y))])),
-                 regions: RL ? { wall: RL.kindAt(WALL.x[0], 5), gate: RL.kindAt(WALL.brama[0][0], WALL.brama[0][1]), palisade: RL.kindAt(PAL.pierscien[0], 10),
+                 regions: RL ? { wall: RL.kindAt(WALL.x[0], 5 + ${BY}), gate: RL.kindAt(WALL.brama[0][0], WALL.brama[0][1]), palisade: RL.kindAt(PAL.pierscien[0], 10 + ${BY}),
                                  palGate: RL.kindAt(PAL.bramy.zach[1][0], PAL.bramy.zach[1][1]), roof: RL.kindAt(drwal[0], drwal[1] - 2), lines, linesAbove } : null }; })()`);
     t.check(`Podgrodzie has no water tile of its own (Farming.isWaterTile) - ${R.reached} cells walkable from the gate`, R.water === 0, R.water);
-    t.check("every exit (to the town, to the harbour) reached from the gate", R.exits.length >= 3 && R.exits.every(e => e.reached), R.exits);
+    t.check("every exit (the seams to the town, the harbour and the garrison) reached from the gate", R.exits.length >= 3 && R.exits.every(e => e.reached), R.exits);
     const missingSpots = SPOT_KEYS.filter(k => !R.spots[k] || R.spots[k].n !== 1 || R.spots[k].prio !== 0 || !R.spots[k].through);
     t.check(`all ${SPOT_KEYS.length} TownLife spots are there once, below the characters and walk-through`, missingSpots.length === 0, missingSpots);
     const farSpots = SPOT_KEYS.filter(k => R.spots[k] && !R.spotReached[k]);
@@ -140,11 +147,11 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check(`MapInfos: the ${Object.keys(META).length} new interiors under Podgrodzie (111) with the names of wnetrza/meta.json`, badInfos.length === 0, { badInfos, infos });
 
     // ---- back into the town over the east edge
-    await t.locate(IN_GATE2[0], IN_GATE2[1], 6);
+    await t.locate(118, 51, 6);
     await walkOut("right", 111);
     const back = await t.until(t.onMap(8), 10);
     const at8 = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction() })");
-    t.check("walking right off Podgrodzie's east edge lands in the town's west gate (Map008 1,51, facing right)", back && at8.x === 1 && at8.y === 51 && at8.d === 6, at8);
+    t.check("walking right off Podgrodzie's east edge lands in the town's west gate (Map008 x 0-1, row 51, facing right)", back && at8.x <= 1 && at8.y === 51 && at8.d === 6, at8);
 
     // ---- the doors by day: in and out
     const shot = {};
@@ -171,7 +178,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         }
         await t.locate(d.landing[0], d.landing[1], 2);
         await t.frames(2);
-        await t.hold("down", 40);
+        await walkOut("down", d.map);   // (held only until the transfer starts: at the hero's pace of 2.75 a fixed hold would carry him on past the door's front)
         const outOk = await t.until(t.onMap(111), 20);
         await t.frames(10);
         const b = await t.json("[$gamePlayer.x, $gamePlayer.y, $gamePlayer.direction()]");

@@ -366,3 +366,8 @@ f9.brak = Gra bez fabuły albo brak zadania W4
 kod.build.0 = Kosz z żarem Borgara
 kod.build.1 = Ognisko Borgara
 kod.build.2 = Kosz Borgara
+
+# ======================================================================== PRZY KAPLICY (pustelnia poza światem, 2026-11-11)
+# Brat Kleofas zszedł z klifu i siedzi przy kaplicy w Kruczogrodzie (Map008), dopóki WyspaData.HERMITAGE_OPEN = false. Klucze „kaplica.<ścieżka>”
+# mówią tę samą ścieżkę jeszcze raz i nadpisują ją TYLKO wtedy (Pustelnia_Data.js); gdy pustelnia wróci, czyta się tekst z góry pliku.
+kaplica.where = Szukaj w zapiskach zakonu w podziemiach, w kronikach z Archiwum, u brata Kleofasa przy kaplicy (pokaż mu klucz) i u dziadka Stacha.

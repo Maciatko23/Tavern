@@ -7,24 +7,26 @@ const kit = require("./lib/kit.js");
 const SHOTS = path.join(__dirname, "..", "docs", "dwor");
 
 kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
-    await t.newGame({ map: 24, x: 1, y: 15, dir: 6, hour: 11, quiet: true, minimap: false });
+    // (the 2026-11-08 board: Map024 is 120x120 and the old manor map sits at an offset of +20,+60: the road's end is 21,75, the door 40,72)
+    const OX = 20, OY = 60;
+    await t.newGame({ map: 24, x: 21, y: 75, dir: 6, hour: 11, quiet: true, minimap: false });
     const m = await t.json(`(function(){ const door = $gameMap.events().find(e => /^Drzwi dworu/.test(e.event().name));
         return { tileset: $gameMap.tilesetId(), old: $gameMap.events().filter(e => /Manor_Lord/.test(e.characterName())).length,
                  door: door && [door.x, door.y, door.characterName()] }; })()`);
-    t.check("the manor is built from tileset 11, the old picture is gone, the door stands on the cathedral gate (20,12)",
-        m.tileset === 11 && m.old === 0 && JSON.stringify(m.door) === '[20,12,"!$Gate_Cathedral1"]', m);
+    t.check("the manor is built from tileset 11, the old picture is gone, the door stands on the cathedral gate (20,12 + the board offset 20,60)",
+        m.tileset === 11 && m.old === 0 && JSON.stringify(m.door) === JSON.stringify([20 + OX, 12 + OY, "!$Gate_Cathedral1"]), m);
 
     // on foot from the road's end (tiles + blocking events, 4 ways)
     const reach = await t.json(`(function(){
-        const W = $gameMap.width(), H = $gameMap.height(), seen = new Uint8Array(W * H), q = [[1, 15]];
+        const W = $gameMap.width(), H = $gameMap.height(), seen = new Uint8Array(W * H), q = [[1 + ${OX}, 15 + ${OY}]];
         const blocked = (x, y) => $gameMap.eventsXyNt(x, y).some(e => e.isNormalPriority() && !e.isThrough());
-        seen[15 * W + 1] = 1;
+        seen[(15 + ${OY}) * W + 1 + ${OX}] = 1;
         while (q.length) { const [x, y] = q.pop();
             for (const [dx, dy, d] of [[0, 1, 2], [-1, 0, 4], [1, 0, 6], [0, -1, 8]]) { const nx = x + dx, ny = y + dy;
                 if (nx < 0 || ny < 0 || nx >= W || ny >= H || seen[ny * W + nx]) continue;
                 if (!$gameMap.isPassable(x, y, d) || !$gameMap.isPassable(nx, ny, 10 - d) || blocked(nx, ny)) continue;
                 seen[ny * W + nx] = 1; q.push([nx, ny]); } }
-        const at = (x, y) => !!seen[y * W + x];
+        const at = (x, y) => !!seen[(y + ${OY}) * W + x + ${OX}];
         return { doorFront: at(20, 13), lordSpots: at(21, 13) && at(19, 13), plaza: at(20, 26), east: at(36, 20),
                  intoWing: at(14, 11) || at(26, 11), intoTower: at(10, 10) || at(30, 10), intoMiddle: at(20, 8) }; })()`);
     t.check("on foot from the road: the door's front, the cells beside it (the Lord), the garden's plaza and the east lawn",
@@ -32,8 +34,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("...but not into the wings, the towers or the middle", !reach.intoWing && !reach.intoTower && !reach.intoMiddle, reach);
 
     // pictures: the manor and its forecourt
-    await t.locate(20, 16, 8);
-    await t.eval("$gameMap.setDisplayPos(6, 0); 0");
+    await t.locate(20 + OX, 16 + OY, 8);
+    await t.eval(`$gameMap.setDisplayPos(${6 + OX}, ${OY}); 0`);
     await t.frames(30);
     await t.shot(path.join(SHOTS, "dwor_dzien.png"));
     await t.setHour(22);

@@ -1,20 +1,20 @@
 # Teksty łańcucha W14 „Poselstwo” (wtyczki Poselstwo_Data.js i Poselstwo.js) - docs/PODROZNI.md 2.8, 2.13, I6, 4.1, 4.4, etap 5.
-# Albin, „pątnik” (naprawdę Ragnar Holm, zwiadowca Czarnych Oczu - podróżny „pielgrzym”, pokój 15), poseł Korony Adam Wierzbięta
+# Albin, „pątnik” (naprawdę Ragnar Holm, zwiadowca Czarnych Oczu - podróżny „pielgrzym”, pokój 8), poseł Korony Adam Wierzbięta
 # i gwardzista Ostap („posel”, „gwardzista” - Apartament Złoty na piętrze II), Lord Zaleski, Feliks, Borgar, kapral Wit.
 # Bohater jest nastolatkiem: dorośli mówią do niego „chłopcze”, „synu”. „> ” - mówi bohater; bez tego - postać, z którą się
 # rozmawia. {nazwa} - wstawia gra.
 
 # ======================================================================== zadanie W14 (dziennik: FABUŁA)
 zadania.W14.title = Poselstwo
-zadania.W14.where = tawerna (pokój 15; piętro II: Apartament Złoty, Jadalnia, Wielki salon), dzwonnica, mury, przystań, dwór
+zadania.W14.where = tawerna (pokój 8; piętro II: Apartament Złoty, salon Lorda), dzwonnica, mury, przystań, dwór
 zadania.W14.when = od trzeciej fali z promu (dzień 37) do odpływu posła Korony
 zadania.W14.desc = Z trzecią falą przypłynął łagodny pątnik, który za bardzo lubi stare kamienie. Trzy dni później Korona przysyła do Lorda posła z listem, który jest wart więcej niż cała wyspa.
 zadania.W14.fail.text = List posła odpłynął z pątnikiem.
-zadania.W14.steps.0.text = Kim jest pątnik? Poszlaki ({n} z 3): Ambroży (dzwonnica), Borgar (przy barze), dłoń Albina (Czujność 6), Eryk Sowa - jeśli to sojusznik, rozmowa nocą w pokoju 15 (ściana albo drzwi, 23-24). Z trzema - kapral Wit.
+zadania.W14.steps.0.text = Kim jest pątnik? Poszlaki ({n} z 3): Ambroży (dzwonnica), Borgar (przy barze), dłoń Albina (Czujność 6), Eryk Sowa - jeśli to sojusznik, rozmowa nocą w pokoju 8 (ściana albo drzwi, 23-24). Z trzema - kapral Wit.
 zadania.W14.steps.1.text = {posel}
-zadania.W14.steps.2.text = Narada: dzień {narada}, 21:00 - poseł i Lord w Wielkim salonie (piętro II). Zanieś kolację do Złotego (20:00) i zostań w Jadalni - ściana z salonem (O twarzą do ściany).
+zadania.W14.steps.2.text = Narada: dzień {narada}, 21:00 - poseł i Lord w salonie Lorda (piętro II). Zanieś kolację do Złotego (20:00) i zostań na holu pod drzwiami salonu (O twarzą do drzwi).
 zadania.W14.steps.3.text = Noc Kupały ({noc}): Ostap idzie pić do ogniska. Po północy ktoś może sięgnąć po list posła - pilnuj drzwi Złotego (piętro II) albo bądź przy ognisku.
-zadania.W14.steps.4.text = {ostap}Śledztwo: kto ukradł list posła? Ślady ({n} z 2): wosk na galerii przy pokoju 15, ślady przy złotej kracie, kreda na sandałach Albina, odźwierny (Borgar). Potem Albin i jego kij. Pątnik chce odpłynąć dziś promem o 15:00.
+zadania.W14.steps.4.text = {ostap}Śledztwo: kto ukradł list posła? Ślady ({n} z 2): wosk na korytarzu przy pokoju 8, ślady przy złotej kracie, kreda na sandałach Albina, odźwierny (Borgar). Potem Albin i jego kij. Pątnik chce odpłynąć dziś promem o 15:00.
 zadania.W14.steps.5.text = {list}
 zadania.W14.steps.6.text = {spokoj}
 
@@ -63,7 +63,7 @@ Albin? Dwa razy pytał o piwnicę. Raz, czy głęboka. Drugi raz, czy drzwi star
 (Ansgar blednie.) To Holm. Ragnar Holm. Zwiadowca. Płynął drugim statkiem, kiedy ja płynąłem pierwszym.
 On nie modli się przy murach. On je liczy. Uważaj na niego.
 
-# podsłuch: nocna rozmowa w pokoju 15 (ściana albo drzwi z korytarza, 23-24): „kto: tekst”, słowa kluczowe w {nawiasach}
+# podsłuch: nocna rozmowa w pokoju 8 (ściana albo drzwi z korytarza, 23-24): „kto: tekst”, słowa kluczowe w {nawiasach}
 [podsluch.okno]
 Albin: Siedem miejsc. Trzy już {policzone}.
 Głos spod okna: A {piwnica}?
@@ -75,7 +75,7 @@ Albin: Wezmę go w noc {ognisk}. Ludzie będą przy ogniu.
 Kim jest pątnik
 Albin nie jest pątnikiem: liczy mury, pyta o piwnicę i sygnały dzwonu, ma na palcach ślad cięciwy. Ktoś pod oknem mówi z nim o liście posła - i o nocy ognisk.
 
-# list pod drzwiami (I5 - etap 3: rano po nocy w wynajętym pokoju) i przeszukanie pokoju 15 (etap 3)
+# list pod drzwiami (I5 - etap 3: rano po nocy w wynajętym pokoju) i przeszukanie pokoju 8 (etap 3)
 [list.albin]
 List bez podpisu
 „O drugiej pod drzwiami piwnicy. Sam. Przyjaciel zakonu.” Pismo staranne, jak u mnicha. Ktoś bardzo chce wiedzieć, co jest pod tawerną - i co ja o tym wiem.
@@ -112,13 +112,13 @@ Nie gadaj za dużo. Posłowie lubią ciszę. I nie zjedz po drodze.
 > (Ostap otwiera drzwi tylko na szerokość tacy.)
 Postaw tam, chłopcze. Ostrożnie - na stole leżą rzeczy warte więcej niż wasza wyspa.
 > (Na stole: teczka z czerwonymi pieczęciami Korony.)
-Możesz posprzątać w jadalni, kiedy skończę. Borgar mówi, że jesteś zwinny i nie gadasz.
+Możesz sprzątnąć ze stołu, kiedy skończę. Borgar mówi, że jesteś zwinny i nie gadasz.
 
 [notatki.kolacja]
 Kolacja dla posła
 Zaniosłem posłowi kolację do Apartamentu Złotego. Na stole leżała teczka z pieczęciami Korony. Ostap pilnuje drzwi - w dzień i w nocy.
 
-# ======================================================================== rozdz. 3: narada w Wielkim salonie (podsłuch z Jadalni)
+# ======================================================================== rozdz. 3: narada w salonie Lorda (podsłuch spod drzwi, z holu)
 [podsluch.narada]
 Poseł: Korona nie przyjechała negocjować, panie Zaleski. Przyjechała pomóc panu {zrozumieć}.
 Lord: Mój dziad trzymał tę wyspę bez łaski Korony.

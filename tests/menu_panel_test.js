@@ -8,7 +8,7 @@
 const kit = require("./lib/kit.js");
 
 kit.test({ port: 9473, errorCheck: "bez błędów w konsoli" }, async t => {
-    t.check("nowa gra na Kruczym Jarze (Map003)", await t.newGame({ map: 3, x: 22, y: 14, hour: 11, quiet: true }));
+    t.check("nowa gra na Kruczym Jarze (Map003)", await t.newGame({ map: 3, x: 62, y: 45, hour: 11, quiet: true }));
     await t.eval("window.dispatchEvent(new Event('pointerdown')); 0");   // (Fullscreen.js's one-shot request used up: Esc not eaten)
     const inMenu = "SceneManager._scene instanceof Scene_Menu && !SceneManager.isSceneChanging() && !!MenuRing.info()";
     const api = await t.json(`(function(){ const M = window.MenuPanel; return { keys: Object.keys(M).sort(), panel: !!M.Sprite_MenuPanel, feet: M.feet() }; })()`);

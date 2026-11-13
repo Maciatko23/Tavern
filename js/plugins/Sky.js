@@ -212,13 +212,78 @@
 
     // a frame of a picture as a soft dark silhouette; its foot: the lowest solid row (_footRow) and the middle of the lowest rows
     // (_footX). skipPainted: none (null) for a picture that has a ground shadow painted in (translucent dark pixels at its foot)
+    // (2026-11-12, wydajność: every new frame of every figure used to read its own pixels back - a bitmap, a blt, a getImageData, 2-4 ms
+    // each, several at once when people came on screen) The pixels of a whole sheet, read ONCE: one getImageData of the sheet (its own
+    // canvas as it is, or the image drawn 1:1), kept under the bitmap and its texture's dirtyId (a bitmap drawn on later is read again).
+    // LRU by bytes, and an entry unused for SHEET_IDLE ms goes (a tree sheet can be big). Returns { data, w, h } (RGBA, as a canvas
+    // gives it) or null while the bitmap is not ready. Callers only read it.
+    const SHEET_MAX_BYTES = 48 * 1024 * 1024, SHEET_IDLE = 20000;
+    const sheetCache = new Map();   // bitmap -> { id, w, h, data, bytes, used }; the Map's order is the use order (oldest first)
+    let sheetBytes = 0, sheetSwept = 0, sheetScratch = null;
+    function sheetPixels(bmp) {
+        const now = performance.now();
+        if (now - sheetSwept > 2000) {
+            sheetSwept = now;
+            for (const [k, e] of sheetCache) if (now - e.used > SHEET_IDLE) { sheetCache.delete(k); sheetBytes -= e.bytes; }
+        }
+        const img = bmp && (bmp._canvas || bmp._image);
+        if (!img) return null;
+        const w = img.width, h = img.height, bt = bmp._baseTexture, id = (bt && bt.dirtyId) || 0;
+        if (!(w > 0 && h > 0) || (!bmp._canvas && !(bmp._image.complete && bmp._image.naturalWidth > 0))) return null;
+        let e = sheetCache.get(bmp);
+        if (e && e.id === id && e.w === w && e.h === h) {
+            e.used = now;
+            sheetCache.delete(bmp);
+            sheetCache.set(bmp, e);
+            return e;
+        }
+        if (e) { sheetCache.delete(bmp); sheetBytes -= e.bytes; }
+        let data;
+        try {
+            if (bmp._canvas) data = bmp._canvas.getContext("2d").getImageData(0, 0, w, h).data;
+            else {
+                const c = sheetScratch || (sheetScratch = document.createElement("canvas"));
+                c.width = w; c.height = h;   // (also clears it)
+                const ctx = c.getContext("2d", { willReadFrequently: true });
+                ctx.globalCompositeOperation = "source-over";
+                ctx.drawImage(bmp._image, 0, 0);
+                data = ctx.getImageData(0, 0, w, h).data;
+                c.width = c.height = 0;
+            }
+        } catch (err) { return null; }
+        e = { id, w, h, data, bytes: data.length, used: now };
+        while (sheetBytes + e.bytes > SHEET_MAX_BYTES && sheetCache.size) {
+            const k = sheetCache.keys().next().value;
+            sheetBytes -= sheetCache.get(k).bytes;
+            sheetCache.delete(k);
+        }
+        sheetCache.set(bmp, e);
+        sheetBytes += e.bytes;
+        return e;
+    }
+    // a copy of a rectangle's RGBA, pw x ph (what lies outside the sheet is clear, as a drawImage clipped to it leaves it)
+    function sheetRect(bmp, sx, sy, pw, ph) {
+        const s = sheetPixels(bmp);
+        if (!s) return null;
+        const d = s.data, out = new Uint8ClampedArray(pw * ph * 4);
+        const x0 = Math.max(0, -sx), x1 = Math.min(pw, s.w - sx);
+        if (x1 > x0) for (let y = Math.max(0, -sy), y1 = Math.min(ph, s.h - sy); y < y1; y++) {
+            const a = ((sy + y) * s.w + sx + x0) * 4;
+            out.set(d.subarray(a, a + (x1 - x0) * 4), (y * pw + x0) * 4);
+        }
+        return out;
+    }
     const silhouetteCache = new Map();
+    let silScratch = null;
     function silhouetteBitmap(src, sx, sy, pw, ph, skipPainted, blurPx) {
         const key = (src._url || "") + "," + sx + "," + sy + "," + pw + "," + ph + (skipPainted ? ",p" : "") + (blurPx !== undefined ? ",b" + blurPx : "");
         if (silhouetteCache.has(key)) return silhouetteCache.get(key);
-        const tmp = new Bitmap(pw, ph);
-        tmp.blt(src, sx, sy, pw, ph, 0, 0);
-        const img = tmp.context.getImageData(0, 0, pw, ph), d = img.data;
+        let d = sheetRect(src, sx, sy, pw, ph), tmp = null;
+        if (!d) {   // (not ready / unreadable: the old way, a bitmap and a blt)
+            tmp = new Bitmap(pw, ph);
+            tmp.blt(src, sx, sy, pw, ph, 0, 0);
+            d = tmp.context.getImageData(0, 0, pw, ph).data;
+        }
         let painted = 0, footRow = -1;
         for (let y = 0; y < ph; y++) {
             for (let x = 0; x < pw; x++) {
@@ -233,12 +298,15 @@
             for (let y = Math.max(0, footRow - 5); y <= footRow; y++) {
                 for (let x = 0; x < pw; x++) if (d[(y * pw + x) * 4 + 3] > 128) { left = Math.min(left, x); right = Math.max(right, x); }
             }
-            for (let i = 0; i < d.length; i += 4) { d[i] = d[i + 1] = d[i + 2] = 0; }
-            tmp.context.putImageData(img, 0, 0);
+            const black = new Uint8ClampedArray(d.length);   // (the picture's alpha, black)
+            for (let i = 3; i < d.length; i += 4) black[i] = d[i];
+            const cv = tmp ? tmp.canvas : (silScratch || (silScratch = document.createElement("canvas")));
+            if (cv.width !== pw || cv.height !== ph) { cv.width = pw; cv.height = ph; }
+            cv.getContext("2d").putImageData(new ImageData(black, pw, ph), 0, 0);
             out = new Bitmap(pw + 2 * SHADOW_PAD, ph + 2 * SHADOW_PAD);
             const ctx = out.context;
             ctx.filter = "blur(" + (blurPx !== undefined ? blurPx : ph > 80 ? 2 : 1.2) + "px)";   // a person's shadow a little sharper than a tree's
-            ctx.drawImage(tmp.canvas, SHADOW_PAD, SHADOW_PAD);
+            ctx.drawImage(cv, SHADOW_PAD, SHADOW_PAD);
             ctx.filter = "none";
             out._baseTexture.update();
             out.smooth = true;
@@ -246,7 +314,7 @@
             out._footX = (left + right + 1) / 2;
             out._key = key;                          // (which picture and frame: for tests)
         }
-        tmp.destroy();
+        if (tmp) tmp.destroy();
         silhouetteCache.set(key, out);
         return out;
     }
@@ -319,7 +387,14 @@
         const U = m.ty + Math.min(bx0, bx1) + Math.min(dy0, dy1), D = m.ty + Math.max(bx0, bx1) + Math.max(dy0, dy1);
         shadow.renderable = !T.view.sees || T.view.sees(L - VIEW_PAD, U - VIEW_PAD, R + VIEW_PAD, D + VIEW_PAD);
         if (shadow.renderable) setLocalMatrix(shadow, m);   // (the sprite's own matrix only when it is drawn: the next frame on the screen puts it in)
+        if (shadow.updateTransform !== shadowTransform) shadow.updateTransform = shadowTransform;
         return shadow.renderable;
+    }
+    // (2026-11-12, wydajność) a shadow not drawn (wholly off the screen: renderable false, still visible - "shown") needs no world
+    // matrix either: PIXI made one for each of ~430 trees' shadows off the screen every frame. On the screen again: laid above
+    // (setLocalMatrix) and made in the same frame's pass, before it is drawn.
+    function shadowTransform() {
+        if (this.renderable) Sprite.prototype.updateTransform.call(this);
     }
     // the sprite's own matrix put in as it is (it was transform.setFromMatrix: taken apart into a position, a scale, a skew and a
     // rotation, which PIXI put together again with sines and cosines on the next frame - the same matrix, the long way round). Only
@@ -680,7 +755,7 @@
         return blockers.map(b => Math.round(b.o.fx) + "," + Math.round(b.o.fy) + "," + (b.o.bmp._key || "") + "," + b.o.alpha.toFixed(2)).join(";");
     }
     const SunApi = T.api("Sun") || T.register("Sun", { now: sunNow, shadows: true });
-    Object.assign(SunApi, { now: sunNow, cloudCover, layer: sunShadowLayer, layerAlpha, silhouette: silhouetteBitmap, silhouetteOf, occluder: makeOccluder,
+    Object.assign(SunApi, { now: sunNow, cloudCover, layer: sunShadowLayer, layerAlpha, silhouette: silhouetteBitmap, silhouetteOf, sheetPixels, sheetRect, occluder: makeOccluder,
         matrix: shadowMatrix, lay: laySunShadow, occluders, soft: softSilhouette, FLAT: SHADOW_FLAT, sky: skyAt, elevation: sunElev, NIGHT_TONE,
         lightBlockers, cutLightShadows, lightShadowMask, scratchCanvas, blockersKey, standing, standOfSprite, standOfOccluder, keepOffStanding, drawLightShadows,
         shadeOf, shadeAt, maskCanvas, standOrder });

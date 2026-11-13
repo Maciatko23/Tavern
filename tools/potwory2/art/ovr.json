@@ -1,0 +1,66 @@
+{
+ "palka|palka_walk|south": [
+  "palka_walk_s",
+  1
+ ],
+ "palka|palka_walk|north": [
+  "palka_walk_n",
+  1
+ ],
+ "miecz|miecz_walk|south": [
+  "miecz_walk_s",
+  1
+ ],
+ "miecz|miecz_walk|north": [
+  "miecz_walk_n",
+  1
+ ],
+ "miecz|miecz_walk|south-east": [
+  "miecz_walk_se",
+  1
+ ],
+ "miecz|miecz_atk|east": [
+  "miecz_atk_e",
+  0
+ ],
+ "wlocznia|wlocznia_walk|east": [
+  "wlocznia_walk_c",
+  1
+ ],
+ "mlot|mlot_walk|north": [
+  "mlot_walk_n",
+  1
+ ],
+ "mlot|mlot_walk|east": [
+  "mlot_walk_e",
+  1
+ ],
+ "wlocznia|wlocznia_walk|south-east": [
+  "wlocznia_walk_se",
+  1
+ ],
+ "kapitan|kapitan_walk|south": [
+  "kapitan_walk_s",
+  1
+ ],
+ "kapitan|kapitan_walk|south-east": [
+  "kapitan_walk_se",
+  1
+ ],
+ "kapitan|kapitan_walk|east": [
+  "kapitan_walk_e",
+  1
+ ],
+ "kapitan|kapitan_walk|north-east": [
+  "kapitan_walk_ne",
+  1
+ ],
+ "kapitan|kapitan_walk|north": [
+  "kapitan_walk_n",
+  1
+ ],
+ "kapitan|kapitan_atk|south": [
+  "kapitan_atk_s",
+  0
+ ]
+}

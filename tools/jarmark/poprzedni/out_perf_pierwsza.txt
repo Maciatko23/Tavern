@@ -1,0 +1,3 @@
+PASS gra się uruchamia
+PERF base rynek, zwykły dzień 27: 35.2 fps (best of 3: 35.2, 32.7, 28.3)
+PERF base rynek w południe dnia jarmarku (scena, kramy, lampy, trupa): 38.7 fps (best of 3: 34.1, 38.7, 37.9)

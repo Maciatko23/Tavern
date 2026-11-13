@@ -39,7 +39,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("the grate now: the raven on its lock is the one on Borgar's half - which goes in only halfway", /taki sam jak na kluczu znad baru Borgara/.test(g1.text) && /tylko do połowy/.test(g1.text) && !(await J("Underground.isOpen()")), g1.text);
 
     // the dig at the cairn
-    await t.go(20, 8, 7, 8);
+    await t.go(20, 39, 46, 8);
     await at(20, 13, 30);
     const spot = await J("(function(){ const e = $gameMap.event(951); return e && e.page() ? [e.x, e.y] : null; })()");
     await t.shot(path.join(SHOTS, "w4_kopiec_z_krukiem.png"));

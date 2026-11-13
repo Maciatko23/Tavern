@@ -59,7 +59,7 @@ kit.test({ port: 9552, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         return out;
     };
 
-    await t.newGame({ map: 3, x: 25, y: 15, hour: 10, minimap: false });
+    await t.newGame({ map: 3, x: 65, y: 46, hour: 10, minimap: false });
     await t.eval(`(function(){ ${OFF} return 0; })()`);
     await t.eval(HELPERS);
 
@@ -68,10 +68,10 @@ kit.test({ port: 9552, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         const sp = Okolice.spots().filter(s => s.pkg === "B"), disc = Okolice.discoverables().filter(d => d.pkg === "B");
         const res = TownLife.RESIDENTS.find(r => r.key === "gajowy");
         return { ready: !!(window.Lowy && Lowy.ready && LowyData.ready), it, spots: sp.length, want: LowyData.SPOTS.length, disc: disc.map(d => d.key),
-            pup: !!Hunting.SPECIES.wolfPup, fixed: [!!Humans.fixedCamp(21), !!Humans.fixedCamp(23)], res: res ? [res.id, res.map, res.sheet] : null,
+            pup: !!Hunting.SPECIES.wolfPup, fixed: [!!Humans.fixedCamp(4), !!Humans.fixedCamp(3)], res: res ? [res.id, res.map, res.sheet] : null,
             bust: SpeechBubbles.BUSTS["$Npc_Gajowy:0"], fx: ["lowK59", "lowK60Sol", "lowK61", "lowK62", "lowD32Sidla", "lowD33Koniec"].every(k => !!TownQuests.FX[k]),
             quests: ["K59", "K60", "K61", "K62", "D32", "D33"].every(id => !!TownQuests.Q[id]), board: QuestBoard.TEMPLATES.some(x => x.id === "low_oboz_021") && !!QuestBoard.BEASTS.bandit }; })()`);
-    t.check("wtyczki paczki B gotowe, gatunek „Wilczę”, stałe obozy na Map021 i Map023 (Humans.fixedCamp), FX zadań, wzory tablicy",
+    t.check("wtyczki paczki B gotowe, gatunek „Wilczę”, stałe obozy na Łące (4) i Kruczym Jarze (3) (Humans.fixedCamp), FX zadań, wzory tablicy",
         base.ready && base.pup && base.fixed.every(Boolean) && base.fx && base.quests && base.board, base);
     t.check("przedmioty 200-206 nazwane, z ikonami 480-486", base.it.every(([i, n, ic]) => n && ic === 280 + i), base.it);
     t.check("miejsca paczki B zarejestrowane (" + base.want + ") i 9 odkryć", base.spots === base.want && base.disc.length === 9, base);
@@ -85,8 +85,8 @@ kit.test({ port: 9552, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- zdarzenia na polach z planu + kolizje
     const EXPECT = {
-        23: [[2300, 65, 50], [2301, 68, 19]], 13: [[2320, 100, 46], [2321, 99, 46]], 21: [[2340, 67, 48], [2341, 62, 39]],
-        4: [[2360, 73, 51], [2361, 70, 53], [2362, 74, 52]], 24: [[2380, 7, 29], [2381, 8, 29], [2382, 61, 4], [2383, 60, 22], [2384, 20, 46], [2385, 45, 38], [2386, 66, 12], [2387, 46, 38]],
+        3: [[2300, 95, 30], [2301, 98, 41]], 13: [[2320, 100, 46], [2321, 99, 46]], 21: [[2340, 67, 48]],
+        4: [[2341, 89, 37], [2360, 73, 51], [2361, 70, 53], [2362, 74, 52]], 24: [[2380, 7, 29], [2381, 8, 29], [2402, 121, 4], [2383, 60, 22], [2384, 20, 46], [2385, 45, 38], [2386, 66, 12], [2387, 46, 38]],
         162: [[2440, 79, 51], [2441, 81, 53], [2442, 82, 51], [2443, 73, 50], [2444, 75, 50], [2445, 75, 54], [2446, 79, 51], [2447, 81, 53], [2448, 82, 51]], 168: []
     };
     const evBad = [], col = {};
@@ -104,8 +104,8 @@ kit.test({ port: 9552, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- B1 nora: wataha, szczenięta, rozbicie
     await t.eval("(function(){ const s = Lowy.state(); s.den.forcePups = Tawerna.time.day(); return 0; })()");
-    await go(23, 10);
-    await t.eval("__put(65, 55, 4, 7); 0");
+    await go(3, 10);
+    await t.eval("__put(95, 35, 4, 7); 0");
     await t.frames(40);
     await t.eval("TownQuests.autoChecks(); 0");
     const den = await t.json(`(function(){ const a = Lowy.den.adults(), p = Lowy.den.pups();
@@ -120,10 +120,10 @@ kit.test({ port: 9552, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- B1 nora: mięso trzy dni -> wataha przyjazna
     await t.eval("(function(){ const d = Lowy.state().den; d.emptyUntil = 0; d.choice = null; d.friendly = false; d.betrayed = false; d.meat = [Tawerna.time.day() - 2, Tawerna.time.day() - 1]; return 0; })()");
-    await go(23, 10);
-    await t.eval("(function(){ __put(64, 51, 1, 3); $gamePlayer.setDirection(8); $gameParty.gainItem($dataItems[94], 1); Drops.drop(94, 1); return 0; })()");
+    await go(3, 10);
+    await t.eval("(function(){ __put(94, 31, 1, 3); $gamePlayer.setDirection(8); $gameParty.gainItem($dataItems[94], 1); Drops.drop(94, 1); return 0; })()");
     await t.frames(10);
-    await t.eval("__put(65, 50, 7, 10); 0");
+    await t.eval("__put(95, 30, 7, 10); 0");
     await t.frames(70);
     const fr = await t.json(`({ friendly: Lowy.state().den.friendly, choice: Lowy.state().den.choice, meat: Lowy.state().den.meat.length, bundles: Lowy.den.bundles().length,
         adults: Lowy.den.adults().length, isFriend: Lowy.den.adults().every(w => Lowy.den.isFriend(w)) })`);
@@ -136,7 +136,7 @@ kit.test({ port: 9552, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("przyjazna wataha: wilk tuż obok nie atakuje (żaden nie walczy, życie bez zmian)", !calm.engaged && calm.hp === calm.hp0, calm);
     await t.eval("(function(){ const d = Lowy.state().den; d.giftDay = -99; return 0; })()");
     await t.frames(40);
-    const gift = await t.json("({ day: Lowy.state().den.giftDay === Tawerna.time.day(), carcass: Hunting.carcasses().some(c => c.kind === 'rabbit' && Math.hypot(c.x - 66.5, c.y - 52.5) < 1) })");
+    const gift = await t.json("({ day: Lowy.state().den.giftDay === Tawerna.time.day(), carcass: Hunting.carcasses().some(c => c.kind === 'rabbit' && Math.hypot(c.x - 96.5, c.y - 32.5) < 1) })");
     t.check("dar watahy: raz w tygodniu przy norze leży zając", gift.day && gift.carcass, gift);
 
     // ---------------------------------------------------------------- B2 gawra
@@ -170,10 +170,11 @@ kit.test({ port: 9552, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.frames(40);
     const mud = await t.json("({ buff: $gameSystem.hasBuff('ubloceny'), sneak: Combat.perk('sneak') })");
     t.check("w błocie: premia „Ubłocony” (2 h), zwierzęta wyczują później (sneak +0,3)", mud.buff && Math.abs(mud.sneak - s0 - 0.3) < 1e-6, { s0, mud });
-    await t.eval("(function(){ Lowy.state().camps.forceRab = Tawerna.time.day(); $gameSystem.setDayNightHour(22); __put(60, 46, 5, 8); Humans.auto(true); Humans.campCheck(); return 0; })()");
+    await go(4, 6);
+    await t.eval("(function(){ Lowy.state().camps.forceRab = Tawerna.time.day(); $gameSystem.setDayNightHour(22); __put(87, 44, 5, 8); Humans.auto(true); Humans.campCheck(); return 0; })()");
     await t.frames(40);
     const rab = await t.json("(function(){ const c = Humans.campHere(); return c ? { fixed: !!c.fixed, x: c.x, y: c.y, n: c.members.length, tent: !!($gameMap.event(2341) && $gameMap.event(2341).characterName()) } : null; })()");
-    t.check("obóz rabusiów na swoim miejscu (60,41) nocą, 2-4 ludzi, namiot widać", rab && rab.fixed && rab.x === 60 && rab.y === 41 && rab.n >= 2 && rab.n <= 4 && rab.tent, rab);
+    t.check("obóz rabusiów na swoim miejscu (87,39) nocą, 2-4 ludzi, namiot widać", rab && rab.fixed && rab.x === 87 && rab.y === 39 && rab.n >= 2 && rab.n <= 4 && rab.tent, rab);
     await t.eval("(function(){ Humans.auto(false); Humans.clear(); return 0; })()");
 
     // ---------------------------------------------------------------- B4 lizawka, zasiadka, pies
@@ -209,15 +210,15 @@ kit.test({ port: 9552, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- B5 obóz myśliwych Czarnych Oczu + D33
     await t.eval("(function(){ Lowy.state().camps.forceCzo = Tawerna.time.day(); return 0; })()");
-    await go(23, 10);
-    await t.eval("(function(){ __put(66, 26, 5, 8); Humans.auto(true); Humans.campCheck(); return 0; })()");
+    await go(3, 10);
+    await t.eval("(function(){ __put(96, 47, 5, 8); Humans.auto(true); Humans.campCheck(); return 0; })()");
     await t.frames(40);
     const czo = await t.json(`(function(){ const c = Humans.campHere(), men = Lowy.camps.czoMen(); const sack = Humans.drops().find(d => d.kind === "sack");
         return c ? { fixed: !!c.fixed, x: c.x, y: c.y, names: men.map(h => h.name()), looks: men.map(h => h._look), arrow: !!(sack && sack.items.some(([id]) => id === 205)),
             tent: !!$gameMap.event(2301).characterName() } : null; })()`);
-    t.check("obóz myśliwych Czarnych Oczu za dnia na (66,21): łucznicy z nazwą, w worku strzała z białym okiem, namiot", czo && czo.fixed && czo.x === 66 && czo.y === 21
+    t.check("obóz myśliwych Czarnych Oczu za dnia na (96,42): łucznicy z nazwą, w worku strzała z białym okiem, namiot", czo && czo.fixed && czo.x === 96 && czo.y === 42
         && czo.names.every(n => n === "Myśliwy Czarnych Oczu") && czo.looks.every(l => l === "Archer") && czo.arrow && czo.tent, czo);
-    await t.eval("(function(){ TownQuests.start('D33'); __put(66, 21, 2, 4); return 0; })()");
+    await t.eval("(function(){ TownQuests.start('D33'); __put(96, 42, 2, 4); return 0; })()");
     await t.frames(40);
     const talk = await drive(["Wynoście się"]);
     const d33a = await t.json("({ choice: Lowy.state().czo.choice, step: (TownQuests.rec('D33') || {}).step, engaged: Lowy.camps.czoMen().some(h => h._engaged) })");

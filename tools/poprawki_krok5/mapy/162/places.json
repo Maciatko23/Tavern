@@ -1,0 +1,102 @@
+[
+ {
+  "id": "z1_polnoc_laka_sianokosna",
+  "box": [
+   76,
+   57,
+   117,
+   72
+  ],
+  "p": 32
+ },
+ {
+  "id": "z2_strzelnica_i_wybieg",
+  "box": [
+   84,
+   66,
+   117,
+   99
+  ],
+  "p": 32
+ },
+ {
+  "id": "z3_poludnie_laka_ze_stogami",
+  "box": [
+   56,
+   96,
+   117,
+   117
+  ],
+  "p": 32
+ },
+ {
+  "id": "z4_zachod_zagajnik_na_opal",
+  "box": [
+   14,
+   62,
+   40,
+   98
+  ],
+  "p": 32
+ },
+ {
+  "id": "z5_szlak_srodek",
+  "box": [
+   32,
+   58,
+   76,
+   99
+  ],
+  "p": 32
+ },
+ {
+  "id": "z6_poludniowy_zachod",
+  "box": [
+   32,
+   98,
+   70,
+   117
+  ],
+  "p": 32
+ },
+ {
+  "id": "z7_zachod_palisady",
+  "box": [
+   14,
+   33,
+   46,
+   64
+  ],
+  "p": 32
+ },
+ {
+  "id": "z8_polnocny_wschod",
+  "box": [
+   78,
+   27,
+   118,
+   58
+  ],
+  "p": 32
+ },
+ {
+  "id": "z9_pas_przy_zatoczce",
+  "box": [
+   14,
+   94,
+   40,
+   108
+  ],
+  "p": 32
+ },
+ {
+  "id": "przeglad",
+  "box": [
+   0,
+   0,
+   119,
+   119
+  ],
+  "p": 16
+ }
+]

@@ -309,7 +309,7 @@
         if (!zarejestrowane.przeszukanie && p.przeszukanie && typeof p.przeszukanie.dodaj === "function") {
             zarejestrowane.przeszukanie = true;
             try {
-                p.przeszukanie.dodaj({ id: "d48Tuba", pokoj: "22", rzecz: "dowolna", kto: KTO.teofil, plik: "podroznicy5", klucz: "przeszukanie.tuba",
+                p.przeszukanie.dodaj({ id: "d48Tuba", pokoj: "6", rzecz: "dowolna", kto: KTO.teofil, plik: "podroznicy5", klucz: "przeszukanie.tuba",
                     gdy: () => otwartaD48() && !!S().d48.plan, po: () => d48Koniec("szkic") });
             } catch (e) { report("przeszukanie", e); }
         }

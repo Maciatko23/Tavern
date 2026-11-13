@@ -96,6 +96,12 @@
  * @text Mapy z gwarem tawerny (numery po przecinku)
  * @default 1
  *
+ * @param seCache
+ * @text Pamięć podręczna efektów dźwiękowych (SE)
+ * @desc Rozkodowane efekty zostają w pamięci, więc kolejne odtworzenie nie pobiera i nie dekoduje pliku.
+ * @type boolean
+ * @default true
+ *
  * @help
  * ============================================================================
  * Atmosphere.js
@@ -643,8 +649,125 @@
         }
     };
 
+    // ------------------------------------------------------------------
+    // Sound-effect cache (performance)
+    // ------------------------------------------------------------------
+    // Stock MZ builds a new WebAudio for every SE play: fetch() + Ogg decode again for the same
+    // few files (hits in a fight, footsteps...). Here the decoded AudioBuffer of an SE is kept by
+    // URL (LRU, bounded) and a new WebAudio for a cached URL gets it at once - no fetch, no decode,
+    // isReady() true straight away. A second play of a file still loading waits for the first load
+    // instead of fetching again. Failed or partly decoded loads are never cached. BGM/BGS/ME are
+    // untouched (they stream). Off switch: plugin parameter seCache = false (SE_CACHE below).
+    const SE_CACHE = flag(params.seCache, true);
+    const SE_CACHE_MAX_BYTES = 24 * 1024 * 1024;   // total decoded size kept
+    const SE_CACHE_MAX_FILES = 80;
+    const seCache = new Map();     // url -> { buffer, sampleRate, loopStart, loopLength, bytes } (Map order = LRU order)
+    const sePending = new Map();   // url -> { leader, followers: [WebAudio] } while the first load runs
+    let seCacheBytes = 0;
+    const seBytes = b => b.length * b.numberOfChannels * 4;
+    const isSeUrl = u => typeof u === "string" && u.indexOf("audio/se/") >= 0;
+    function seCacheStore(url, w) {
+        const buffer = w._buffers[0];
+        const bytes = seBytes(buffer);
+        if (bytes > SE_CACHE_MAX_BYTES / 4) return null;   // a long file: not worth the memory
+        const old = seCache.get(url);
+        if (old) { seCacheBytes -= old.bytes; seCache.delete(url); }
+        const e = { buffer, sampleRate: w._sampleRate, loopStart: w._loopStart, loopLength: w._loopLength, bytes };
+        seCache.set(url, e);
+        seCacheBytes += bytes;
+        while (seCache.size > SE_CACHE_MAX_FILES || seCacheBytes > SE_CACHE_MAX_BYTES) {
+            const k = seCache.keys().next().value;
+            seCacheBytes -= seCache.get(k).bytes;
+            seCache.delete(k);
+        }
+        return e;
+    }
+    // give a WebAudio the cached data exactly as _onDecode would have left it
+    function seCacheApply(w, e) {
+        w._buffers = [e.buffer];
+        w._totalTime = e.buffer.duration;
+        w._sampleRate = e.sampleRate;
+        w._loopStart = e.loopStart;
+        w._loopLength = e.loopLength;
+        if (w._loopLength > 0 && w._sampleRate > 0) {
+            w._loopStartTime = w._loopStart / w._sampleRate;
+            w._loopLengthTime = w._loopLength / w._sampleRate;
+        } else {
+            w._loopStartTime = 0;
+            w._loopLengthTime = w._totalTime;
+        }
+        w._isLoaded = true;
+        w._isError = false;
+    }
+    function seCacheRelease(url, pend) {   // the first load did not produce a cache entry: followers load for themselves
+        if (sePending.get(url) !== pend) return;
+        sePending.delete(url);
+        for (const f of pend.followers) if (f._seWaiting) { f._seWaiting = false; f._seCacheStart(); }
+    }
+    if (SE_CACHE && typeof WebAudio === "function") {
+        const proto = WebAudio.prototype;
+        const origStart = proto._startLoading, origUpdate = proto._updateBuffer, origDecode = proto._onDecode, origError = proto._onError;
+        proto._seCacheStart = origStart;
+        proto._startLoading = function() {
+            const url = this._url;
+            this._sePend = null;
+            this._seWaiting = false;
+            if (!WebAudio._context || !isSeUrl(url) || this._shouldUseDecoder()) return origStart.apply(this, arguments);
+            const hit = seCache.get(url);
+            if (hit) {
+                seCache.delete(url); seCache.set(url, hit);   // most recently used
+                this._lastUpdateTime = WebAudio._currentTime() - 0.5;
+                seCacheApply(this, hit);
+                return;
+            }
+            const pend = sePending.get(url);
+            if (pend) {   // same file already loading: wait for it
+                this._seWaiting = true;
+                this._isError = false;
+                this._isLoaded = false;
+                pend.followers.push(this);
+                return;
+            }
+            const mine = { leader: this, followers: [] };
+            sePending.set(url, mine);
+            this._sePend = mine;
+            this._seUpdates = 0;
+            return origStart.apply(this, arguments);
+        };
+        proto._updateBuffer = function() {
+            if (this._sePend) this._seUpdates++;
+            return origUpdate.apply(this, arguments);
+        };
+        proto._onDecode = function() {
+            const r = origDecode.apply(this, arguments);
+            const pend = this._sePend;
+            if (pend && this._isLoaded && sePending.get(this._url) === pend) {
+                if (this._seUpdates === 1 && this._buffers.length === 1) {
+                    const e = seCacheStore(this._url, this);
+                    sePending.delete(this._url);
+                    for (const f of pend.followers) {
+                        if (!f._seWaiting) continue;
+                        f._seWaiting = false;
+                        seCacheApply(f, e || { buffer: this._buffers[0], sampleRate: this._sampleRate, loopStart: this._loopStart, loopLength: this._loopLength });
+                        f._onLoad();
+                    }
+                } else {
+                    seCacheRelease(this._url, pend);
+                }
+            }
+            return r;
+        };
+        proto._onError = function() {
+            const pend = this._sePend;
+            const r = origError.apply(this, arguments);
+            if (pend) seCacheRelease(this._url, pend);
+            return r;
+        };
+    }
+
     window.Atmosphere = T.register(pluginName, {
         periodAt, profileOf, desiredBed, groundKindAt, kindFromColour, footstep, birdCall, STEP, BIRD, playStep, afterRest, audioContext, bus,
-        state, TRACKS, wantsTimeMusic, musicTick, applyBed
+        state, TRACKS, wantsTimeMusic, musicTick, applyBed,
+        seCache: { on: SE_CACHE, map: seCache, pending: sePending, bytes: () => seCacheBytes, maxBytes: SE_CACHE_MAX_BYTES, maxFiles: SE_CACHE_MAX_FILES }
     });
 })();

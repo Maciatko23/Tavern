@@ -1,0 +1,230 @@
+{
+ "mapa": 111,
+ "nazwa": "Podgrodzie",
+ "w": 120,
+ "h": 120,
+ "zestaw": 11,
+ "obszar": null,
+ "problemy": [
+  {
+   "kod": "G3",
+   "x": 62,
+   "y": 44,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 23 'Posłanie' (!Town_Props|2|4|1) zajmuje 26% dołu wolnej kratki (62,44)"
+  },
+  {
+   "kod": "G3",
+   "x": 47,
+   "y": 45,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 26 'Posłanie pod daszkiem' (!Town_Props|2|4|1) zajmuje 26% dołu wolnej kratki (47,45)"
+  },
+  {
+   "kod": "G3",
+   "x": 56,
+   "y": 47,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 24 'Posłanie' (!Town_Props|2|4|1) zajmuje 26% dołu wolnej kratki (56,47)"
+  },
+  {
+   "kod": "G3",
+   "x": 107,
+   "y": 47,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 20 'Posłanie żebraka' (!Town_Props|2|4|1) zajmuje 26% dołu wolnej kratki (107,47)"
+  },
+  {
+   "kod": "G3",
+   "x": 119,
+   "y": 51,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 90 'Brama zachodnia: skrzydło i cień' (!$West_Gate|0|8|1) zajmuje 100% dołu wolnej kratki (119,51)"
+  },
+  {
+   "kod": "G3",
+   "x": 109,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 42% dołu wolnej kratki (109,55)"
+  },
+  {
+   "kod": "G3",
+   "x": 110,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 49% dołu wolnej kratki (110,55)"
+  },
+  {
+   "kod": "G3",
+   "x": 111,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 63% dołu wolnej kratki (111,55)"
+  },
+  {
+   "kod": "G3",
+   "x": 113,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 71% dołu wolnej kratki (113,55)"
+  },
+  {
+   "kod": "G3",
+   "x": 114,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 69% dołu wolnej kratki (114,55)"
+  },
+  {
+   "kod": "G3",
+   "x": 115,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 63% dołu wolnej kratki (115,55)"
+  },
+  {
+   "kod": "G3",
+   "x": 116,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 50% dołu wolnej kratki (116,55)"
+  },
+  {
+   "kod": "G3",
+   "x": 117,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) zajmuje 42% dołu wolnej kratki (117,55)"
+  },
+  {
+   "kod": "G4",
+   "x": 109,
+   "y": 47,
+   "waga": "uwaga",
+   "opis": "zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (109,47): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 117,
+   "y": 47,
+   "waga": "uwaga",
+   "opis": "zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (117,47): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 118,
+   "y": 50,
+   "waga": "uwaga",
+   "opis": "zdarzenie 90 'Brama zachodnia: skrzydło i cień' (!$West_Gate|0|8|1) rysowane pod postacią sięga kratki (118,50): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 119,
+   "y": 50,
+   "waga": "uwaga",
+   "opis": "zdarzenie 90 'Brama zachodnia: skrzydło i cień' (!$West_Gate|0|8|1) rysowane pod postacią sięga kratki (119,50): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 109,
+   "y": 52,
+   "waga": "uwaga",
+   "opis": "zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (109,52): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 117,
+   "y": 52,
+   "waga": "uwaga",
+   "opis": "zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (117,52): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 109,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (109,54): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 110,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (110,54): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 111,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (111,54): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 112,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (112,54): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 113,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (113,54): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 114,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (114,54): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 115,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (115,54): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 116,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (116,54): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 117,
+   "y": 54,
+   "waga": "uwaga",
+   "opis": "zdarzenie 28 'Most kamienny: obraz (wariant A)' (!$Most_A|0|2|1) rysowane pod postacią sięga kratki (117,54): bohater stanie na nim"
+  },
+  {
+   "kod": "O1",
+   "x": 78,
+   "y": 65,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 491 (C 11,13) - dół bez góry (brak kafla 483 nad) w (78,65)"
+  },
+  {
+   "kod": "P1",
+   "x": 118,
+   "y": 46,
+   "waga": "uwaga",
+   "opis": "zdarzenie 19 'Pochodnia na baszcie' (!Decoration|3|4|0) leży na kaflu 157 (B 13,3), który nie jest blatem (118,46)"
+  }
+ ],
+ "licznik": {
+  "G3": 13,
+  "G4": 15,
+  "O1": 1,
+  "P1": 1
+ },
+ "png": "C:/Users/macie/OneDrive/Dokumenty/RMMZ/Tawerna/docs/mapy/kontrola_Map111.png",
+ "osiagalne": 10252,
+ "bez_wejsc": false,
+ "drobne_kieszenie": 13
+}

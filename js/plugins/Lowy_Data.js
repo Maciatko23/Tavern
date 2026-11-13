@@ -71,9 +71,10 @@
 
     // ------------------------------------------------------------------ B1 the wolves' den (Map023), Szary Kieł's place
     const NORA = {
-        map: 23, x: 65, y: 50, cells: { x: 64, y: 49, w: 3, h: 2 }, zone: 6, rest: [65, 52], restNear: 2.5,
-        bounty: [66, 51], gift: [66, 52], dayHours: [5, 20], adults: 2, pups: [2, 3], pupScale: 0.55,
-        meatR: 3, meatDays: 3, emptyDays: 28, giftEvery: 7, friendMaps: [21, 23], discoverNear: 8
+        // (2026-11-11 plansza: Skraj lasu is the east edge of Kruczy Jar - the den was Map023 (65,50), moved by +30, -20)
+        map: 3, x: 95, y: 30, cells: { x: 94, y: 29, w: 3, h: 2 }, zone: 6, rest: [95, 32], restNear: 2.5,
+        bounty: [96, 31], gift: [96, 32], dayHours: [5, 20], adults: 2, pups: [2, 3], pupScale: 0.55,
+        meatR: 3, meatDays: 3, emptyDays: 28, giftEvery: 7, friendMaps: [3, 4], discoverNear: 8
     };
     // the wolf cub: the wolf's sheet made small (QuestBoard's _qbScale), a grazer (no `aggressive`, no `pack`: it runs from the hero)
     // and no YIELD entry: nothing to dress
@@ -82,7 +83,7 @@
 
     // ------------------------------------------------------------------ B2 the bear's den (Map013)
     const GAWRA = {
-        map: 13, home: [99, 47], ev: [100, 46], side: [99, 46], mouth: { x: 99, y: 45, w: 2, h: 2 }, front: { x: 99, y: 47, w: 2, h: 1 },
+        map: 13, home: [99, 71], ev: [100, 70], side: [99, 70], mouth: { x: 99, y: 69, w: 2, h: 2 }, front: { x: 99, y: 71, w: 2, h: 1 },
         seasons: [0, 1, 2], hours: [4, 22], snoreR: 6, rageSec: 60, rageMul: 1.2, calmR: 12, oneR: 22
     };
 
@@ -96,22 +97,22 @@
 
     // ------------------------------------------------------------------ B5 the fixed camps (Humans.fixedCamp)
     const OBOZY = {
-        rabusie: { map: 21, x: 60, y: 41, area: { x: 58, y: 39, w: 6, h: 5 }, tent: [62, 39], tag: "camp", every: 4, mielerz: [50, 21],
+        rabusie: { map: 4, x: 87, y: 39, area: { x: 85, y: 37, w: 6, h: 5 }, tent: [89, 37], tag: "camp", every: 4, mielerz: [46, 26],
             size: [2, 4], knife: 0.35 },
-        czo: { map: 23, x: 66, y: 21, area: { x: 64, y: 18, w: 6, h: 5 }, tent: [68, 19], tag: "lowCzo", hours: [6, 20],
+        czo: { map: 3, x: 96, y: 42, area: { x: 94, y: 40, w: 6, h: 5 }, tent: [98, 41], tag: "lowCzo", hours: [6, 20],
             kinds: ["archer", "bandit"], looks: ["Archer", "Archer"], sack: [[205, 1], [127, 6], [96, 2]] }
     };
     Watki.scal(OBOZY, "lowy", "obozy");   // (the hunters' name: js/teksty/lowy.txt, obozy.czo.name)
 
     // ------------------------------------------------------------------ B6 the Lord's game park (Map024)
     const ZWIERZYNIEC = {
-        map: 24, gap: [[7, 29], [8, 29]], inside: [7, 31],
+        map: 24, gap: [[27, 89], [28, 89]], inside: [27, 91],
         // the park: the whole new part of the map (x 0-78 below the hedge's row 29, x 40-78 above it)
         areas: [{ x0: 0, y0: 30, x1: 78, y1: 57 }, { x0: 40, y0: 0, x1: 78, y1: 29 }],
-        hut: [61, 4], hutCells: { x: 59, y: 2, w: 5, h: 3 }, door: [61, 5], feeder: [60, 22], feederCells: { x: 59, y: 22, w: 2, h: 1 },
-        snares: [[20, 46], [45, 38], [66, 12]], patrol: [[13, 40], [30, 50], [53, 45], [71, 20], [61, 5]],
+        hut: [81, 64], hutCells: { x: 79, y: 62, w: 5, h: 3 }, door: [81, 65], feeder: [80, 82], feederCells: { x: 79, y: 82, w: 2, h: 1 },
+        snares: [[40, 106], [65, 98], [86, 72]], patrol: [[33, 100], [50, 110], [73, 105], [91, 80], [81, 65]],
         deer: [4, 6], boars: 2, sight: 7, findR: 2.5, findHours: 2, fines: [40, 60, 80], opinion: -3, closeDays: 7, permitDays: 7,
-        rysiek: [46, 38], ambushHours: [22, 3]
+        rysiek: [66, 98], ambushHours: [22, 3]
     };
 
     // ------------------------------------------------------------------ B7 the strays of the Ług farm (Map168)
@@ -129,51 +130,51 @@
 
     // ------------------------------------------------------------------ B8 the soldiers' range (Map162)
     const STRZELNICA = {
-        map: 162, area: { x: 73, y: 50, w: 12, h: 5 }, line: [73, 74], stand: [74, 53], rack: [73, 50],
-        targets: [{ x: 79, y: 51, d: 6 }, { x: 81, y: 53, d: 8 }, { x: 82, y: 51, d: 9 }], radius: 0.5, faceY: -0.05,
+        map: 162, area: { x: 95, y: 74, w: 12, h: 5 }, line: [95, 98], stand: [96, 77], rack: [95, 74],
+        targets: [{ x: 101, y: 75, d: 6 }, { x: 103, y: 77, d: 8 }, { x: 104, y: 75, d: 9 }], radius: 0.5, faceY: -0.05,
         shots: 5, ring: { center: 6, mid: 14 }, score: { center: 10, mid: 5, edge: 2 }, practice: 5,
         rivals: [{ score: 24 }, { score: 30 }, { score: 36 }],
         prizes: [25, 40, 60], favor: [3, 5, 8], contestDay: d => d % 7 === 3, contestHours: [10, 12], drill: [9, 12],
-        soldiers: [[75, 50], [75, 54]]
+        soldiers: [[97, 74], [97, 78]]
     };
     Watki.scal(STRZELNICA, "lowy", "strzelnica");   // (the rivals' names: js/teksty/lowy.txt, strzelnica.rivals)
 
     // ------------------------------------------------------------------ the places (Okolice.registerSpots("B", ...); the collision test) -
     // their names: js/teksty/lowy.txt, miejsca.<key> (Lowy.js registers them once the words are in)
     const SPOTS = [
-        { key: "nora_wilcza", map: 23, kind: "den", mode: "reach", x: 64, y: 49, w: 3, h: 2 },
-        { key: "szary_kiel", map: 23, kind: "bounty", mode: "reach", cells: [[66, 51]] },
-        { key: "oboz_czo", map: 23, kind: "camp", mode: "reach", x: 64, y: 18, w: 6, h: 5 },
-        { key: "oboz_bandytow", map: 21, kind: "camp", mode: "reach", x: 58, y: 39, w: 6, h: 5 },
+        { key: "nora_wilcza", map: 3, kind: "den", mode: "reach", x: 94, y: 29, w: 3, h: 2 },
+        { key: "szary_kiel", map: 3, kind: "bounty", mode: "reach", cells: [[96, 31]] },
+        { key: "oboz_czo", map: 3, kind: "camp", mode: "reach", x: 94, y: 40, w: 6, h: 5 },
+        { key: "oboz_bandytow", map: 4, kind: "camp", mode: "reach", x: 85, y: 37, w: 6, h: 5 },
         { key: "blotnisko", map: 21, kind: "wallow", mode: "reach", x: 65, y: 46, w: 4, h: 3 },
-        { key: "gawra_wejscie", map: 13, kind: "den", mode: "wall", x: 99, y: 45, w: 2, h: 2 },
-        { key: "gawra_pole", map: 13, kind: "den", mode: "reach", x: 99, y: 47, w: 2, h: 1 },
+        { key: "gawra_wejscie", map: 13, kind: "den", mode: "wall", x: 99, y: 69, w: 2, h: 2 },
+        { key: "gawra_pole", map: 13, kind: "den", mode: "reach", x: 99, y: 71, w: 2, h: 1 },
         { key: "lizawka", map: 4, kind: "lick", mode: "reach", x: 73, y: 51, w: 1, h: 1 },
         { key: "zasiadka", map: 4, kind: "hide", mode: "reach", x: 70, y: 53, w: 1, h: 1 },
         { key: "poroze_zrzut", map: 4, kind: "antler", mode: "reach", x: 74, y: 52, w: 1, h: 1 },
-        { key: "wylom_zywoplot", map: 24, kind: "gap", mode: "reach", x: 7, y: 29, w: 2, h: 1, allowOld: true },
-        { key: "lesniczowka", map: 24, kind: "hut", mode: "reach", x: 59, y: 2, w: 5, h: 3 },
-        { key: "pasnik", map: 24, kind: "feeder", mode: "reach", x: 59, y: 22, w: 2, h: 1 },
-        { key: "sidla_zwierzyniec", map: 24, kind: "snares", mode: "reach", cells: [[20, 46], [45, 38], [66, 12]] },
-        { key: "patrol_gajowego", map: 24, kind: "patrol", mode: "reach", cells: [[13, 40], [30, 50], [53, 45], [71, 20], [61, 5]] },
-        { key: "rysiek_zasadzka", map: 24, kind: "npc", mode: "reach", cells: [[46, 38]] },
+        { key: "wylom_zywoplot", map: 24, kind: "gap", mode: "reach", x: 27, y: 89, w: 2, h: 1, allowOld: true },
+        { key: "lesniczowka", map: 24, kind: "hut", mode: "reach", x: 79, y: 62, w: 5, h: 3 },
+        { key: "pasnik", map: 24, kind: "feeder", mode: "reach", x: 79, y: 82, w: 2, h: 1 },
+        { key: "sidla_zwierzyniec", map: 24, kind: "snares", mode: "reach", cells: [[40, 106], [65, 98], [86, 72]] },
+        { key: "patrol_gajowego", map: 24, kind: "patrol", mode: "reach", cells: [[33, 100], [50, 110], [73, 105], [91, 80], [81, 65]] },
+        { key: "rysiek_zasadzka", map: 24, kind: "npc", mode: "reach", cells: [[66, 98]] },
         { key: "zblakane_start", map: 168, kind: "animals", mode: "reach", x: 84, y: 28, w: 3, h: 3 },
-        { key: "strzelnica", map: 162, kind: "range", mode: "reach", x: 73, y: 50, w: 12, h: 5 }
+        { key: "strzelnica", map: 162, kind: "range", mode: "reach", x: 95, y: 74, w: 12, h: 5 }
     ];
     Watki.scal(SPOTS, "lowy", "miejsca", "key");   // (its words: js/teksty/lowy.txt, miejsca, by the key)
 
     // ------------------------------------------------------------------ the discoveries (Okolice.discoverable; the tab "Okolice") - their
     // words: js/teksty/lowy.txt, odkrycia.<key>
     const DISCOVER = [
-        { key: "nora", map: 23, x: 65, y: 51, near: 8, icon: 481, xp: 30, day: true },
-        { key: "gawra", map: 13, x: 99, y: 47, near: 6, icon: 483, xp: 30 },
+        { key: "nora", map: 3, x: 95, y: 31, near: 8, icon: 481, xp: 30, day: true },
+        { key: "gawra", map: 13, x: 99, y: 71, near: 6, icon: 483, xp: 30 },
         { key: "blotnisko", map: 21, x: 66, y: 47, near: 4, icon: 482, xp: 25 },
         { key: "lizawka", map: 4, x: 73, y: 51, near: 4, icon: 480, xp: 25 },
-        { key: "oboz_rabusiow", map: 21, x: 60, y: 41, near: 7, icon: 156, xp: 20, camp: "rabusie" },
-        { key: "oboz_czo", map: 23, x: 66, y: 21, near: 8, icon: 485, xp: 30, camp: "czo" },
-        { key: "zwierzyniec", map: 24, x: 7, y: 31, near: 2, icon: 484, xp: 25 },
+        { key: "oboz_rabusiow", map: 4, x: 87, y: 39, near: 7, icon: 156, xp: 20, camp: "rabusie" },
+        { key: "oboz_czo", map: 3, x: 96, y: 42, near: 8, icon: 485, xp: 30, camp: "czo" },
+        { key: "zwierzyniec", map: 24, x: 27, y: 91, near: 2, icon: 484, xp: 25 },
         { key: "zblakane", map: 168, x: 85, y: 29, near: 6, icon: 349, xp: 20 },
-        { key: "strzelnica", map: 162, x: 76, y: 52, near: 5, icon: 486, xp: 20 }
+        { key: "strzelnica", map: 162, x: 98, y: 76, near: 5, icon: 486, xp: 20 }
     ];
     Watki.scal(DISCOVER, "lowy", "odkrycia", "key");   // (its words: js/teksty/lowy.txt, odkrycia, by the key)
 
@@ -193,7 +194,7 @@
     Watki.scal(GAJOWY, "lowy", "mieszkaniec");   // (its words: js/teksty/lowy.txt, mieszkaniec)
     const GAJ_SPOTS = {
         lesniczowka: [61, 5, 2], gaj_lesniczowka: [62, 6, 2], gaj_pasnik: [60, 23, 8],
-        gaj_1: [13, 40, 2], gaj_2: [30, 50, 2], gaj_3: [53, 45, 2], gaj_4: [71, 20, 2], gaj_5: [61, 5, 2]
+        gaj_1: [33, 100, 2], gaj_2: [50, 110, 2], gaj_3: [73, 105, 2], gaj_4: [91, 80, 2], gaj_5: [81, 65, 2]
     };
     (window.TownLifeExtra = window.TownLifeExtra || []).push(GAJOWY);
     const TL = window.TownLifeData;
@@ -266,7 +267,7 @@
                 kroki: [{ nazwa: "lowK61", gotowe: "stan:range.beatBest" }],
                 reward: { gold: 50, xp: 120 } },
             // K62: the four strays brought home (the farm of the Ługs or the hero's own yard)
-            K62: { kind: "K", giver: "praczka", icon: 123, offer: { cond: { hours: [6, 19] } },
+            K62: { kind: "K", giver: "praczka", icon: 123, offer: { cond: { hours: [17.5, 20] } },
                 kroki: [{ nazwa: "lowK62", gotowe: "ile:strays.done>=" + ZBLAKANE.list.length, zmienne: { n: { ile: "strays.done" } } }],
                 reward: { gold: 30, xp: 100, flag: "lowMlekoMarty" } },
             // D32: offered once the park is found - the three snares, the night by them (Rysiek), back to the gamekeeper
@@ -334,9 +335,9 @@
     Watki.scal(BEASTS, "lowy", "bestie");   // (its words: js/teksty/lowy.txt, bestie)
     const TEMPLATES = {
         oboz: { id: "low_oboz_021", type: "hunt", giver: "wit", 
-            req: [{ kill: "bandit", maps: [21], n: [null, T2(2, 2), T2(2, 3), T2(3, 3), T2(3, 4)] }] },
+            req: [{ kill: "bandit", maps: [4], n: [null, T2(2, 2), T2(2, 3), T2(3, 3), T2(3, 4)] }] },
         czo: { id: "low_czo_023", type: "hunt", giver: "bogdan", 
-            req: [{ kill: "archer", maps: [23], n: [null, null, T2(1, 1), T2(1, 1), T2(1, 1)] }] },
+            req: [{ kill: "archer", maps: [3], n: [null, null, T2(1, 1), T2(1, 1), T2(1, 1)] }] },
         poroze: { id: "low_poroze", type: "deliver", giver: "bogdan", 
             req: [{ item: 201, n: [null, T2(1, 1), T2(1, 1), T2(1, 2), T2(2, 2)] }] }
     };

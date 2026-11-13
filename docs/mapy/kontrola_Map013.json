@@ -1,0 +1,1109 @@
+{
+ "mapa": 13,
+ "nazwa": "Góry i kamieniołom",
+ "w": 120,
+ "h": 120,
+ "zestaw": 11,
+ "obszar": null,
+ "problemy": [
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 61,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 100,
+   "y": 61,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 101,
+   "y": 61,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 62,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 62,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 100,
+   "y": 62,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 101,
+   "y": 62,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 102,
+   "y": 62,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 97,
+   "y": 63,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 63,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 63,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 100,
+   "y": 63,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 101,
+   "y": 63,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 102,
+   "y": 63,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 103,
+   "y": 63,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 97,
+   "y": 64,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 64,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 64,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 100,
+   "y": 64,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 101,
+   "y": 64,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 102,
+   "y": 64,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 103,
+   "y": 64,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 65,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 65,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 100,
+   "y": 65,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 101,
+   "y": 65,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 102,
+   "y": 65,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 103,
+   "y": 65,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 66,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 66,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 100,
+   "y": 66,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 101,
+   "y": 66,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 102,
+   "y": 66,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 67,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 100,
+   "y": 67,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 101,
+   "y": 67,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 102,
+   "y": 67,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 68,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 100,
+   "y": 68,
+   "waga": "info",
+   "grupa": [
+    99,
+    61
+   ],
+   "opis": "nieosiągalne miejsce: 39 kratek od (99,61) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 33,
+   "y": 97,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 34,
+   "y": 97,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 35,
+   "y": 97,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 36,
+   "y": 97,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 37,
+   "y": 97,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 38,
+   "y": 97,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 39,
+   "y": 97,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 31,
+   "y": 98,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 32,
+   "y": 98,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 33,
+   "y": 98,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 34,
+   "y": 98,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 35,
+   "y": 98,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 36,
+   "y": 98,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 37,
+   "y": 98,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 38,
+   "y": 98,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 39,
+   "y": 98,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 30,
+   "y": 99,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 31,
+   "y": 99,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 32,
+   "y": 99,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 33,
+   "y": 99,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 34,
+   "y": 99,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 35,
+   "y": 99,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 36,
+   "y": 99,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 37,
+   "y": 99,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 38,
+   "y": 99,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 39,
+   "y": 99,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 40,
+   "y": 99,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 41,
+   "y": 99,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 29,
+   "y": 100,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 30,
+   "y": 100,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 31,
+   "y": 100,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 32,
+   "y": 100,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 33,
+   "y": 100,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 34,
+   "y": 100,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 35,
+   "y": 100,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 36,
+   "y": 100,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 37,
+   "y": 100,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 38,
+   "y": 100,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 39,
+   "y": 100,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 40,
+   "y": 100,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 41,
+   "y": 100,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 30,
+   "y": 101,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 32,
+   "y": 101,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 33,
+   "y": 101,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 34,
+   "y": 101,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 35,
+   "y": 101,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 36,
+   "y": 101,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 37,
+   "y": 101,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 38,
+   "y": 101,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 39,
+   "y": 101,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 40,
+   "y": 101,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 36,
+   "y": 102,
+   "waga": "info",
+   "grupa": [
+    33,
+    97
+   ],
+   "opis": "nieosiągalne miejsce: 52 kratek od (33,97) - miejsce tylko z orła (Okolice_Data.js, celowo nieosiągalne pieszo)",
+   "ukryj": true
+  }
+ ],
+ "licznik": {
+  "D1": 2
+ },
+ "png": "C:/Users/macie/OneDrive/Dokumenty/RMMZ/Tawerna/docs/mapy/kontrola_Map013.png",
+ "osiagalne": 9578,
+ "bez_wejsc": false,
+ "drobne_kieszenie": 3
+}

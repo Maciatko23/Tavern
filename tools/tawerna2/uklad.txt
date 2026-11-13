@@ -1,0 +1,98 @@
+UKLAD NOWYCH MAP (druga metoda: wyciete kawalki starych map). Pliki: tools/tawerna2/staging/data/Map001|025|026.json, polozenia.json, layout025.json, layout026.json.
+Map001 63x55. Stary blok x36..98,y23..54 przesuniety o -36 w x (y bez zmian): wejscie z miasta: ladowanie (14,53) kier 8; wyjscia (13..15,54); wielka sala (stare 37..63,27..44) = x1..27,y27..44; bar z Borgarem; scena (stare 65..83) = x29..47,y27..38; pokoj gier (kosci/silowanie) x48..62,y24..38; rzutki/palarnia x28..62,y40..53; schody w gore: zachodnie (1..3,47), wschodnie (25..27,47) -> Map025 (48,52,8).
+Gorny rzad: kuchnia (stara piekarnia? nie: stara kuchnia) x0..18,y0..17; piekarnia x18..28; SPIZARNIA x28..36 y0..17 (drzwi x32, obrazek 'Stare drzwi' ev209 (32,19), cegla ev9 w spizarni); sluzba x36..48; magazyn x48..62,y11..23; POKOJ BORGARA (stary gabinet) x48..62,y0..11 (wejscie z magazynu); korytarz y17..23 x0..48.
+  Map001 ev1 Borgar Kowal (16,28) []
+  Map001 ev2 Melia Srebrogłosa (38,29) []
+  Map001 ev3 Grum Żelazna Pięść (59,31) []
+  Map001 ev4 Dziadek Ozzy (11,39) []
+  Map001 ev9 Luźna cegła (32,5) []
+  Map001 ev10 Wyjście -> Kruczogród (13,54) []
+  Map001 ev11 Wyjście -> Kruczogród (14,54) []
+  Map001 ev12 Wyjście -> Kruczogród (15,54) []
+  Map001 ev13 Schody -> Pokoje gości (1,47) []
+  Map001 ev14 Schody -> Pokoje gości (2,47) []
+  Map001 ev15 Schody -> Pokoje gości (3,47) []
+  Map001 ev16 Schody -> Pokoje gości (25,47) []
+  Map001 ev17 Schody -> Pokoje gości (26,47) []
+  Map001 ev18 Schody -> Pokoje gości (27,47) []
+  Map001 ev19 tablica zleceń (7,49) []
+  Map001 ev21 Tablica zleceń (7,49) ['<Tavern:board>']
+  Map001 ev38 Tavern:meal (zamówienie posiłku) (13,29) ['<Tavern:meal>']
+  Map001 ev52 Lada - rozmowa z Borgarem (14,29) []
+  Map001 ev60 Tavern:mealtable (miejsce przy stole) (2,42) ['<Tavern:mealtable dir=6 plate=1,-1>']
+  Map001 ev61 Tavern:mealtable (miejsce przy stole) (5,42) ['<Tavern:mealtable dir=4 plate=-1,-1>']
+  Map001 ev77 Tavern:mealtable (miejsce przy stole) (18,40) ['<Tavern:mealtable dir=6 plate=1,-1>']
+  Map001 ev78 Tavern:mealtable (miejsce przy stole) (21,40) ['<Tavern:mealtable dir=4 plate=-1,-1>']
+  Map001 ev110 Tavern:stage (miejsce słuchacza) (38,33) ['<Tavern:stage>']
+  Map001 ev140 Tavern:dice (miejsce gracza) (50,31) ['<Tavern:dice>']
+  Map001 ev143 Tavern:dice (miejsce gracza) (56,31) ['<Tavern:dice:grum>']
+  Map001 ev148 Tavern:arm (siłowanie na rękę) (58,32) ['<Tavern:arm>']
+  Map001 ev174 Tavern:darts (linia rzutu) (48,48) ['<Tavern:darts>']
+  Map001 ev176 Tavern:darts (linia rzutu) (54,48) ['<Tavern:darts>']
+  Map001 ev209 Stare drzwi (32,19) []
+  Map001 ev349 Plan karczmy (9,49) ['<Tavern:plan>']
+  Map001 ev360 Grajek na scenie (Przytulna) (34,29) []
+  Map001 ev440 Miejsce: podrozny_1 (13,42) []
+  Map001 ev441 Miejsce: podrozny_2 (10,32) []
+  Map001 ev442 Miejsce: podrozny_3 (16,34) []
+  Map001 ev443 Miejsce: podrozny_4 (16,39) []
+  Map001 ev444 Miejsce: podrozny_5 (23,30) []
+  Map001 ev445 Miejsce: podrozny_6 (13,33) []
+  Map001 ev446 Miejsce: kompania_1 (18,32) []
+  Map001 ev447 Miejsce: kompania_2 (6,29) []
+  Map001 ev448 Miejsce: kompania_3 (14,37) []
+  Map001 ev449 Miejsce: kompania_4 (2,36) []
+  Map001 ev450 Miejsce: grajek (14,28) []
+  Map001 ev451 Miejsce: medyk (11,35) []
+  Map001 'Gosc stolowy': 23 zdarzen ids [400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422]
+Map025 63x55 (pietro gosci) = ten sam prostokat co Map001; prostokaty wnetrz pokoi: {  "r3": [   1,   1,   13,   11  ],  "r1": [   15,   1,   22,   11  ],  "r2": [   24,   1,   30,   11  ],  "r4": [   32,   1,   43,   11  ],  "r5": [   45,   1,   53,   11  ],  "r12": [   55,   1,   61,   11  ],  "r6": [   1,   21,   9,   31  ],  "r10": [   19,   21,   28,   31  ],  "bath": [   35,   21,   49,   31  ],  "r9": [   51,   21,   61,   31  ],  "r8": [   1,   33,   9,   44  ],  "r7": [   19,   33,   28,   44  ],  "chamber": [   35,   33,   50,   44  ],  "r11": [   52,   33,   61,   44  ],  "hall1": [   11,   20,   17,   44  ],  "hall2": [   30,   20,   33,   49  ],  "nc": [   1,   13,   61,   19  ],  "sc": [   5,   46,   61,   53  ],  "stairs_w": [   1,   46,   3,   52  ],  "stairs_e": [   25,   46,   27,   52  ] }
+  Szkielet: pasmo N1 (drzwi w dol, y0..12): pokoje 3,1,2,4,5,12; korytarz C1 y12..20 (podloga y17..19); S1 (drzwi w gore, y20..32): 6 | 10 | lazienka,9 (halle laczace x11..17 i x30..33); N2 (drzwi w dol, y32..45): 8 | 7 | komnata,11; dol: hol schodowy x0..28 (skrzynie schodowe x0..4 i x24..28, y45..53) + korytarz wschodni x28..62 y45..54. Schody: Map001 gora (1..3,47)/(25..27,47) -> Map025 (x,53); Map025 zach. skrzynia (1..3,47) = w gore do Map026 (zlota krata (2,49)), wsch. skrzynia (25..27,47) = w dol do Map001 (x,53,2); Map026 obie skrzynie w dol do Map025 (x,53,2).
+  Map025 ev1 Drzwi -> Pokój 8 (6,48) 
+  Map025 ev3 Drzwi -> Pokój 5 (49,15) 
+  Map025 ev5 Drzwi -> Pokój 12 (58,15) 
+  Map025 ev7 Drzwi -> Pokój 11 (57,48) 
+  Map025 ev9 Drzwi -> Komnata (42,48) 
+  Map025 ev13 Wejście -> Łazienka (42,20) 
+  Map025 ev23 Wejście -> Pokój 6 (2,20) 
+  Map025 ev29 Drzwi -> Pokój 7 (23,48) 
+  Map025 ev33 Drzwi -> Pokój 3 (7,15) 
+  Map025 ev35 Drzwi -> Pokój 1 (18,15) 
+  Map025 ev37 Drzwi -> Pokój 2 (27,15) 
+  Map025 ev39 Drzwi -> Pokój 4 (37,15) 
+  Map025 ev49 Wejście -> Pokój 9 (60,20) 
+  Map025 ev51 Wejście -> Pokój 10 (20,20) 
+  Map025 ev288 Schody -> Tawerna (parter) (25,47) 
+  Map025 ev289 Schody -> Tawerna (parter) (26,47) 
+  Map025 ev290 Schody -> Tawerna (parter) (27,47) 
+  Map025 ev293 Schody -> Apartamenty (1,47) 
+  Map025 ev294 Schody -> Apartamenty (2,47) 
+  Map025 ev295 Schody -> Apartamenty (3,47) 
+  Map025 ev298 Złota krata (schody do Apartamentów) (2,49) <Occupy:left=2,right=2>
+  Map025 ev360 Na stole: D 3,14 (20,42) <Px:0,12>
+  Map025 ev361 Na stole: D 3,11 (4,9) <Px:0,16>
+  Map025 ev362 Na stole: D 0,13 (16,9) <Px:0,12>
+  Map025 ev363 Kufer podróżny (32,11) 
+  Map025 ev364 Torba podróżna (8,36) 
+  Map025 ev365 Tavern:bath (kąpiel) (37,28) 
+  Map025 ev366 Tavern:bath (kąpiel) (46,28) 
+  Map025 ev367 Łaziebna Wanda (39,24) <Bust:People1_6>
+Map026 63x55: N1 (y0..18) lordb,lorda,lib,s2a,s2b; C1 y18..26; S1 (y26..45) s3a | s4a(Zloty salonik),s4b(sypialnia),salon; hol schodowy i taras na dole. {  "terrace_a": [   29,   46,   39,   53  ],  "terrace_b": [   41,   46,   61,   53  ],  "lordb": [   1,   1,   11,   17  ],  "lorda": [   13,   1,   28,   17  ],  "lib": [   30,   1,   40,   17  ],  "s2a": [   42,   1,   50,   17  ],  "s2b": [   52,   1,   61,   17  ],  "s3a": [   1,   27,   9,   44  ],  "s4a": [   19,   27,   28,   44  ],  "s4b": [   30,   27,   40,   44  ],  "salon": [   42,   27,   61,   44  ],  "hall": [   11,   26,   17,   44  ],  "nc": [   1,   19,   61,   25  ],  "stairs_w": [   1,   46,   3,   52  ],  "stairs_e": [   25,   46,   27,   52  ] }
+  Map026 ev3 Drzwi -> Apartament Lorda — sypialnia (3,21)
+  Map026 ev5 Drzwi -> Apartament Lorda — salon (20,21)
+  Map026 ev7 Drzwi -> Biblioteka (38,21)
+  Map026 ev9 Drzwi -> Apartament Błękitny — salonik (46,21)
+  Map026 ev11 Wejście -> Apartament Zielony — salonik (2,26)
+  Map026 ev12 Drzwi (wyjście): Apartament Zielony — salonik (2,29)
+  Map026 ev13 Wejście -> Wielki salon (46,26)
+  Map026 ev14 Drzwi (wyjście): Wielki salon (46,29)
+  Map026 ev15 Wejście -> Wielki salon (57,26)
+  Map026 ev16 Drzwi (wyjście): Wielki salon (57,29)
+  Map026 ev21 Wejście -> Apartament Złoty — salonik (27,26)
+  Map026 ev22 Drzwi (wyjście): Apartament Złoty — salonik (27,29)
+  Map026 ev159 Schody -> Pokoje gości (1,47)
+  Map026 ev160 Schody -> Pokoje gości (2,47)
+  Map026 ev161 Schody -> Pokoje gości (3,47)
+  Map026 ev162 Schody -> Pokoje gości (25,47)
+  Map026 ev163 Schody -> Pokoje gości (26,47)
+  Map026 ev164 Schody -> Pokoje gości (27,47)
+polozenia.json: {  "kufer_r4": [   32,   11  ],  "torba_r8": [   8,   36  ],  "wanda": [   39,   24  ],  "brick": [   32,   5  ],  "podrozny_spots": {   "podrozny_1": [    13,    42   ],   "podrozny_2": [    10,    32   ],   "podrozny_3": [    16,    34   ],   "podrozny_4": [    16,    39   ],   "podrozny_5": [    23,    30   ],   "podrozny_6": [    13,    33   ],   "kompania_1": [    18,    32   ],   "kompania_2": [    6,    29   ],   "kompania_3": [    14,    37   ],   "kompania_4": [    2,    36   ],   "grajek": [    14,    28   ],   "medyk": [    11,    35   ]  } }

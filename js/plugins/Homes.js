@@ -112,7 +112,11 @@
     const params = PluginManager.parameters(PLUGIN);
     const num = (v, d) => (v === undefined || v === null || v === "" || isNaN(Number(v)) ? d : Number(v));
 
-    const FIELD = 3, HUT_MAP = 100, EDGE = 23, MEADOW = 4, PODGRODZIE = 111, ZAGRODA = 168;
+    // (2026-11-11 plansza: EDGE is Podgrodzie (111) now - the gate to the burnt farm is in its north-east corner; the two guards of the shut field stand
+    // at the gates of the plot's fence on Kruczy Jar (PLOT), not on Skraj lasu / Łąka any more)
+    const FIELD = 3, HUT_MAP = 100, EDGE = 111, MEADOW = 4, PODGRODZIE = 111, ZAGRODA = 168;
+    const PLOT = { rect: [42, 34, 77, 59], guardN: [67, 33], guardS: [47, 60], out: [40, 47] };
+    const inPlot = (x, y) => x >= PLOT.rect[0] && y >= PLOT.rect[1] && x <= PLOT.rect[2] && y <= PLOT.rect[3];
     const IDS = [700, 729];
     const CAST = { butler: 700, measurer: 701, watch: 702 };
     const SIGN = 703, GUARD_EDGE = 704, GUARD_MEADOW = 705;
@@ -292,32 +296,23 @@
         const taken = fieldCellsTaken();
         return SIGN_SPOTS.find(([x, y]) => !taken.has(x + "," + y)) || SIGN_SPOTS[0];
     }
-    T.inject([FIELD], { ids: [CAST.butler, SIGN], owner: PLUGIN, when: () => storyGame(), build() {
+    T.inject([FIELD], { ids: [CAST.butler, GUARD_MEADOW], owner: PLUGIN, when: () => storyGame(), build() {
         const b = butlerName(), [sx, sy] = signSpot();
         return [
             shownOnA(CAST.butler, b, 37, 12, { characterName: b === "Teodor" ? "$Npc_Kamerdyner" : "$Npc_Feliks" }, null, { through: true }),
             shownOnA(CAST.measurer, TK.kod.build[0], 37, 13, { characterName: "$Npc_Straznik" }, null, { through: true }),
             shownOnA(CAST.watch, TK.kod.build[0], 37, 14, { characterName: "$Npc_Straznik" }, stub("Story.talk(this, \"watch\")")),
             shownOnA(SIGN, TK.kod.build[1], sx, sy, { characterName: "!$Lord_Sign", direction: 2, pattern: 1 },
-                stub("Tawerna.popup(" + JSON.stringify(WORDS.znak) + ", { color: \"info\" })"), { stepAnime: true, walkAnime: false, moveSpeed: 2, moveFrequency: 2 })
+                stub("Tawerna.popup(" + JSON.stringify(WORDS.znak) + ", { color: \"info\" })"), { stepAnime: true, walkAnime: false, moveSpeed: 2, moveFrequency: 2 }),
+            // the guards of the shut field, at the gates of the plot's fence (shown from the dawn that shuts it)
+            shownOnA(GUARD_EDGE, TK.kod.build[0], PLOT.guardN[0], PLOT.guardN[1], { characterName: "$Npc_Straznik", direction: 2 }, stub(GUARD_TALK)),
+            shownOnA(GUARD_MEADOW, TK.kod.build[0], PLOT.guardS[0], PLOT.guardS[1], { characterName: "$Npc_Straznik", direction: 8 }, stub(GUARD_TALK))
         ];
     } });
-    // the guards at the two ways onto the field (shown once it is shut)
+    // the guards at the gates of the plot (shown once the field is shut; they are built with the field's events above)
     const GUARD_TALK = "Tawerna.call(\"Homes\", \"guardTalk\", this)";
-    T.inject([MEADOW], { ids: [GUARD_MEADOW, GUARD_MEADOW], owner: PLUGIN, when: () => storyGame(), build: () => [
-        // (2026-10-18) Łąka (Map004) doubled to 80x60: its south exit to the field moved from row 29 to row 59 - he stands beside it
-        shownOnA(GUARD_MEADOW, TK.kod.build[0], 27, 58, { characterName: "$Npc_Straznik", direction: 4 }, stub(GUARD_TALK))] });
-    // Skraj lasu: the guard (story), the way west to the burnt farm (its west edge above the way onto the field: the open grass of
-    // rows 6-8, the user's tiles untouched) and the signpost by it (everyone)
-    T.inject([EDGE], { ids: [GUARD_EDGE, SIGNPOST], owner: PLUGIN, build() {
-        const out = WAY.map((id, i) => ({ id, name: TK.kod.build[2], note: "", x: 79, y: 27 + i,
-            // (2026-10-18: the burnt farm doubled to 100x72 - its east edge is x 99, one inside it 98)
-            pages: [page({ characterName: "" }, [C(201, [0, ZAGRODA, 1, 71 + i, 6, 0]), C(0, [])], { priorityType: 0, trigger: 1, walkAnime: false })] }));
-        out.push({ id: SIGNPOST, name: TK.kod.build[3], note: "", x: 78, y: 26,
-            pages: [page({ characterName: "!$Drogowskaz", direction: 2, pattern: 1 }, stub("Tawerna.call(\"Homes\", \"signpost\")"), { directionFix: true, walkAnime: false })] });
-        if (storyGame()) out.push(shownOnA(GUARD_EDGE, TK.kod.build[0], 1, 11, { characterName: "$Npc_Straznik", direction: 2 }, stub(GUARD_TALK)));
-        return out;
-    } });
+    // (2026-11-11 plansza) the way to the burnt farm is a pocket (Map168, its other exits are closed) through ONE gate in the north-east corner of
+    // Podgrodzie: the gate, its posts and the signpost are EVENTS OF Map111 (tools/questy_mapa/zastosuj.py; so the compass knows the way), not injected
     // the burnt farm: the chimney's smoke once the house is rebuilt, Marta at the cross (her husband's grave) some afternoons
     // (2026-10-23, the user: chimney smoke badly placed) the rebuilt house draws its own chimney: smoke only (no second stone block),
     // its base at the chimney's opening (the house 20,9: the opening at x 901, y 271 in the map's pixels)
@@ -443,7 +438,7 @@
         sw(FIELD, SIGN, true);
         if (!onField()) sw(FIELD, CAST.watch, false);   // (on the field he says the last words himself; he goes with the map)
         sw(FIELD, CAST.butler, false); sw(FIELD, CAST.measurer, false);
-        sw(EDGE, GUARD_EDGE, true); sw(MEADOW, GUARD_MEADOW, true);
+        sw(FIELD, GUARD_EDGE, true); sw(FIELD, GUARD_MEADOW, true);
         if (window.$gameMap) $gameMap.requestRefresh();
         // the hut's furniture stays in the hut, with the field (Map100 empty for a new hut on the hero's own land)
         const f = F(), hut = fieldHut();
@@ -456,7 +451,7 @@
         // the dog: its kennel stays on the field - it comes along with the hero
         const D = T.api("Dog"), d = D && D.state ? D.state() : null;
         if (d && d.tame && (d.map === FIELD || d.map === HUT_MAP)) {
-            const here = window.$gameMap ? $gameMap.mapId() : 0, there = here === FIELD || here === HUT_MAP ? EDGE : here;
+            const here = window.$gameMap ? $gameMap.mapId() : 0, there = here === FIELD || here === HUT_MAP ? FIELD : here;
             d.map = there; d.x = -1; d.y = -1; d.mode = "follow";
             if (here !== FIELD && here !== HUT_MAP) T.popup(TK.kod.glowna[0], { icon: 431, color: "#cfe6a8" });
         }
@@ -464,7 +459,7 @@
     // the field bought back: the sign and the guards go, the hut's furniture comes back (or the old hut is boarded up while a new one stands)
     T.on("fieldBack", () => {
         for (const id of [CAST.butler, CAST.measurer, CAST.watch, SIGN]) sw(FIELD, id, false);
-        sw(EDGE, GUARD_EDGE, false); sw(MEADOW, GUARD_MEADOW, false);
+        sw(FIELD, GUARD_EDGE, false); sw(FIELD, GUARD_MEADOW, false);
         if (window.$gameMap) $gameMap.requestRefresh();
         const f = F();
         if (!f || !f.farm) return;
@@ -487,8 +482,8 @@
     // the way onto the shut field: no (a popup over the hero, a step back); out of the old hut's room: to the forest's edge
     const _reserveTransfer = Game_Player.prototype.reserveTransfer;
     Game_Player.prototype.reserveTransfer = function(mapId, x, y, d, fadeType) {
-        if (mapId === FIELD && fieldLocked() && !($gameTemp && $gameTemp._homesLetIn) && window.$gameMap && $gameMap.mapId() !== FIELD) {
-            if ($gameMap.mapId() === HUT_MAP) return _reserveTransfer.call(this, EDGE, 1, 13, 6, fadeType);
+        if (mapId === FIELD && fieldLocked() && !($gameTemp && $gameTemp._homesLetIn) && window.$gameMap && $gameMap.mapId() !== FIELD && inPlot(x, y)) {
+            if ($gameMap.mapId() === HUT_MAP) return _reserveTransfer.call(this, FIELD, PLOT.out[0], PLOT.out[1], 4, fadeType);
             popupOnce(TK.kod.reserveTransfer[0], { color: "#ff9f8f" });
             stepBack(this);
             return;
@@ -928,8 +923,8 @@
         zadania: {
             D21: { kind: "D", giver: null, icon: 61, start: "zagrodaWidziana",
                 kroki: [
-                    { nazwa: "d21Jozek", type: "talk", to: "szmaciarz", hours: [7, 20] },
-                    { nazwa: "d21Marta", type: "talk", to: "praczka", hours: [6, 21] },
+                    { nazwa: "d21Jozek", type: "talk", to: "szmaciarz", hours: [19, 22] },
+                    { nazwa: "d21Marta", type: "talk", to: "praczka", hours: [17.5, 20] },
                     // ({price} of the sołtys's step: TownQuests fills it; the deed - either choice - is the step's pick)
                     { nazwa: "d21Soltys", type: "talk", to: "soltys", hours: [8, 16], gold: num(params.priceFarm, 350), zmienne: "cenaZagrody",
                         haki: { pick: "akt" },
@@ -939,7 +934,7 @@
                                 { flag: "d21Marta", fx: "d21Soltys", reward: { opinion: 5 } }
                             ] } },
                     { nazwa: "d21Clear", gotowe: { hak: "etapZagrody", args: [1] } },
-                    { nazwa: "d21Konik", type: "bring", to: "praczka", need: [["v:konik", 1]], hours: [6, 21], reward: { opinion: 2 } },
+                    { nazwa: "d21Konik", type: "bring", to: "praczka", need: [["v:konik", 1]], hours: [17.5, 20], reward: { opinion: 2 } },
                     { nazwa: "d21Built", gotowe: { hak: "etapZagrody", args: [5] } }
                 ],
                 reward: { xp: 200 } }

@@ -54,9 +54,9 @@
         hol: { land: [11, 13, 8], fromBib: [3, 4, 2], fromGab: [19, 4, 2], lord: [12, 12, 4], lordKruki: [16, 5, 8], bibDoor: [3, 4], gabDoor: [19, 3] },
         bib: { land: [8, 10, 8], lord: [7, 7, 6], kronika: [8, 7] },
         gab: { land: [7, 9, 8], trapLand: [11, 8, 4], trap: [12, 8], feliks: [12, 9, 8], listy: [2, 4], exitTo: [19, 4, 2] },
-        manor: { door: [20, 12], doorLand: [20, 13, 2], hatch: [3, 20], hatchLand: [3, 21, 2], feliksNoc: [2, 20, 6], kubaNoc: [3, 19, 2],
-            garden: { x1: 21, y0: 17 }, out: [8, 102, 51, 4], f9: [20, 14, 8] },
-        town: { gate: [100, 51], f9: [50, 46, 8] }
+        manor: { door: [40, 72], doorLand: [40, 73, 2], hatch: [23, 80], hatchLand: [23, 81, 2], feliksNoc: [22, 80, 6], kubaNoc: [23, 79, 2],
+            garden: { x1: 21, y0: 17 }, out: [8, 117, 49, 4], f9: [40, 74, 8] },
+        town: { gate: [116, 49], f9: [50, 46, 8] }
     };
 
     // ------------------------------------------------------------------ the clock
@@ -249,7 +249,7 @@
     const HOME_BARKS = { feliks: [], kamerdyner: [] };
     Watki.scal(HOME_BARKS, "dwor", "wHolu");   // (its words: js/teksty/dwor.txt, wHolu)
     if (TLD) {
-        if (TLD.SPOTS && !TLD.SPOTS.dwor) TLD.SPOTS.dwor = (TLD.SPOTS.brama_wsch || [100, 51, 4]).slice();
+        if (TLD.SPOTS && !TLD.SPOTS.dwor) TLD.SPOTS.dwor = (TLD.SPOTS.brama_wsch || [116, 49, 4]).slice();
         for (const key of ["feliks", "kamerdyner"]) {
             const r = (TLD.RESIDENTS || []).find(x => x.key === key);
             if (!r || r._w7) continue;

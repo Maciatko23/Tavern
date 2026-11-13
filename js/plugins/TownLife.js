@@ -215,12 +215,12 @@
     // indoors on other maps: the tavern's guests stand on "Miejsce: gosc_N" (Map001; N = the order of the residents with a
     // "tawerna" entry in their plans) and the residents at home on "Miejsce: <key>_wnetrze" (their interior's map) - put on
     // every map that has such a spot, shown only while the plan has them in there
-    const GUESTS = RES.filter(r => r.plan.some(p => p[2] === "tawerna")).map(r => r.key);
+    const GUESTS = RES.filter(r => !(r.indoor && r.indoor.tawerna) && r.plan.some(p => p[2] === "tawerna")).map(r => r.key);   // (2026-11-11 dawcy_miasto: a visitor with its own place - indoor.tawerna - is not counted)
     // (2026-10-14) away: the spots where "inside" means gone off somewhere else, not home (Janek out at sea, Roch on a night run) -
     // shown in no interior then
     // (v1.5.0: res.indoor - an inside place that is not home: its own indoor spot, e.g. a counter in someone else's house)
-    const indoorName = (res, e) => (res.away && res.away.includes(e.where) ? null : e.where === "tawerna" ? "gosc_" + (GUESTS.indexOf(res.key) + 1)
-        : res.indoor && res.indoor[e.where] ? res.indoor[e.where] : res.key + "_wnetrze");
+    const indoorName = (res, e) => (res.away && res.away.includes(e.where) ? null : res.indoor && res.indoor[e.where] ? res.indoor[e.where]
+        : e.where === "tawerna" ? "gosc_" + (GUESTS.indexOf(res.key) + 1) : res.key + "_wnetrze");
     function eventSpot(events, name) {
         for (const ev of events || []) {
             if (!ev || !new RegExp("^Miejsce:\\s*" + name + "\\s*$", "i").test(ev.name || "")) continue;

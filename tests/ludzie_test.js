@@ -40,24 +40,24 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
             fx: ["ludK63Drewno", "ludK63Noc", "ludK63Wegiel", "ludPoBurzy", "ludOwcaIdzie", "ludJuk", "ludPatrolNoc", "ludJaskiniaOtwarta", "ludKomuSkrzynia", "ludSzybKomu", "ludD34Start", "ludD35Start"].filter(k => TownQuests.FX[k]).length,
             spots: Okolice.spots().filter(s => s.pkg === "C").map(s => s.key),
             disc: Okolice.discoverables().filter(x => x.pkg === "C").map(x => x.key),
-            homes: [3, 4, 18, 21, 22, 159, 162].filter(m => TownLife.HOMES.has(m)),
+            homes: [3, 4, 18, 21, 22, 159, 162].filter(m => TownLife.HOMES.has(m)),   // (2026-11-11: the pedlar stops on 4 and 3 only)
             busts: [SpeechBubbles.BUSTS["$Npc_Pasterz:0"], SpeechBubbles.BUSTS["$Npc_Handlarz:0"]],
             items: [210, 211, 212, 213, 214].map(i => $dataItems[i].name), icons: [210, 211, 212, 213, 214].map(i => $dataItems[i].iconIndex),
             f9: (Okolice.f9.sections().find(s => s.owner === "Ludzie") || { rows: [] }).rows.length })`);
         t.check("wtyczki paczki C działają (dane + silnik), wersja nie-szkielet", d.data && d.eng, d);
         t.check("mieszkańcy TownLife 2910-2915: pasterz, handlarz, patrol_latarnia_1/2, patrol_garnizon_1/2",
             d.res.join() === "pasterz:2910,handlarz:2911,patrol_latarnia_1:2912,patrol_latarnia_2:2913,patrol_garnizon_1:2914,patrol_garnizon_2:2915", d.res);
-        t.check("Zbych Smolarz (drwal) ma „alt” na Map021 w dni mielerza (ludMielerz), szałas poza domem (away)", JSON.stringify(d.zb) === JSON.stringify([21, "ludMielerz", true]), d.zb);
+        t.check("Zbych Smolarz (drwal) ma „alt” na Łące (Map004) w dni mielerza (ludMielerz), szałas poza domem (away)", JSON.stringify(d.zb) === JSON.stringify([4, "ludMielerz", true]), d.zb);
         t.check("zadania K63-K66, D34, D35 w TownQuests i ich 12 FX", d.q.length === 6 && d.fx === 12, d);
         t.check("miejsca paczki C zarejestrowane (17, bez „jagna_miejsce” paczki A), 6 odkryć", d.spots.length === 17 && !d.spots.includes("jagna_miejsce") && d.disc.length === 6, d);
-        t.check("domy TownLife: postoje handlarza (3, 4, 21, 22), menhiry (18), przylądek (159), garnizon (162)", d.homes.length === 7, d.homes);
+        t.check("domy TownLife: postoje handlarza (3, 4), przylądek (159), garnizon (162)", d.homes.length === 4, d.homes);
         t.check("popiersia: Pasterz_Bust, Handlarz_Bust", d.busts.join() === "Pasterz_Bust,Handlarz_Bust", d.busts);
         t.check("przedmioty 210-214 (Przyprawy, Mapa okolic, Skrzynia przemytu, Dziennik kopacza, Wełniany koc), ikony 496-500",
             d.items.join() === "Przyprawy,Mapa okolic,Skrzynia przemytu,Dziennik kopacza,Wełniany koc" && d.icons.join() === "496,497,498,499,500", d);
         t.check("F9: sekcja „Ludzie” z wierszami", d.f9 >= 9, d.f9);
     }
 
-    await t.newGame({ map: 3, x: 25, y: 15, hour: 10, day: 2, quiet: true, minimap: false });
+    await t.newGame({ map: 3, x: 65, y: 46, hour: 10, day: 2, quiet: true, minimap: false });
     await t.gold(2000);
     await pops();
 
@@ -66,7 +66,7 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         const out = {};
         let bad = 0, n = 0;
         await t.eval("Ludzie.state().force.camp = true; 0");
-        for (const m of [21, 22, 4, 3, 13, 125, 168]) {
+        for (const m of [4, 3, 13, 125, 168]) {
             const e = await t.json(`OkoliceData.ENTRY[${m}]`);
             await t.go(m, e[0], e[1]);
             const r = await t.json(`(function(){ const ids = Tawerna.injected(${m}).Ludzie || [], cells = new Set();
@@ -83,13 +83,13 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // ---------------------------------------------------------------- C1 mielerz
     if (part("mielerz")) {
         await t.setDay(8, 10);
-        await t.go(21, 51, 21, 8);
+        await t.go(4, 48, 26, 8);
         await t.frames(30);
         const k = await t.json(`({ st: Ludzie.kilnState(), burn: Ludzie.mielerzBurning(), core: Tawerna.call("Ludzie", "mielerzBurning"), dir: $gameMap.event(2500)._direction,
             smoke: !$gameMap.event(2501).isTransparent(), home: TownLife.homeOf(TownLife.RESIDENTS.find(r => r.key === "drwal")) })`);
         const zb = await resHere("drwal");
         t.check("dzień 8 (cykl 2): mielerz się tli (wiersz 4 arkusza, dym), Ludzie.mielerzBurning() dla paczki B", k.st === "burn" && k.burn && k.core && k.dir === 4 && k.smoke, k);
-        t.check("...Zbych Smolarz mieszka wtedy na Leśnej drodze (alt) i stoi przy kopcu", k.home === 21 && zb && !zb.hidden && zb.map === 21, { k, zb });
+        t.check("...Zbych Smolarz mieszka wtedy na Leśnej drodze (alt, Łąka) i stoi przy kopcu", k.home === 4 && zb && !zb.hidden && zb.map === 4, { k, zb });
         await t.setHour(23);
         await t.frames(25);
         const light = await t.json(`Ludzie.lightsNow().length`);
@@ -104,7 +104,7 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         const o = (await S()).order;
         t.check("„Dam drewno na wypał”: 12 polan -> zamówienie (gotowe za 2 dni)", !!o && o.ready === 10 && (await t.count(61)) === 0, o);
         await t.setDay(6, 10);
-        await t.go(21, 51, 21, 8);
+        await t.go(4, 48, 26, 8);
         const cold = await t.json(`({ st: Ludzie.kilnState(), dir: $gameMap.event(2500)._direction, smoke: $gameMap.event(2501).isTransparent(), zb: (function(){ const e = TownLife.eventOf("drwal"); return e ? !!(e._town && e._town.hidden) : "brak"; })() })`);
         t.check("dzień 6 (cykl 0): mielerz zimny, bez dymu, Zbycha przy kopcu nie ma", cold.st === "cold" && cold.dir === 2 && cold.smoke && cold.zb !== false, cold);
     }
@@ -114,14 +114,14 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         await t.setDay(10, 9);
         await t.eval(`TownQuests.start("K63"); Ludzie.opts.kilnWait = 20; 0`);
         await t.give(61, 12);
-        await t.go(111, 41, 30);
+        await t.go(111, 59, 63);
         await t.frames(20);
         const zb = await resHere("drwal");
         const h = await talk(ev("drwal"), []);
         const s1 = await S(), r1 = await rec("K63");
         t.check("K63: 12 drewna Zbychowi (Podgrodzie) -> wypał od dziś wieczora, krok „noc wypału”", !!zb && s1.k63 && s1.k63.burn === 10 && r1.step === 1, { zb, k63: s1.k63, r1, text: h.text.slice(-200) });
         await t.setHour(22.5);
-        await t.go(21, 50, 21, 8, { calm: false });
+        await t.go(4, 47, 26, 8, { calm: false });
         await t.until(`!!Humans.band("ludMielerz")`, 15);
         const band = await t.json(`(function(){ const b = Humans.band("ludMielerz"); return b ? b.members.length : 0; })()`);
         t.check("...w noc wypału pod mielerzem: zasadzka 2 rabusiów (Humans, tag ludMielerz)", band === 2, band);
@@ -129,7 +129,7 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         const r2 = await rec("K63");
         t.check("...odparci (humansDone) -> krok „odbierz węgiel”", r2.step === 2 && !!(await S()).k63.guarded, r2);
         await t.setDay(12, 9);
-        await t.go(111, 41, 30);
+        await t.go(111, 59, 63);
         const c0 = await t.count(79);
         await talk(ev("drwal"), []);
         const r3 = await rec("K63");
@@ -150,16 +150,16 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- C3 handlarz: cztery postoje
     if (part("handlarz")) {
-        const stops = [[12, 22, [52, 23]], [13, 21, [54, 19]], [14, 4, [62, 13]], [15, 3, [61, 13]]], seen = [];
+        const stops = [[12, 4, [62, 13]], [13, 3, [61, 13]], [14, 4, [62, 13]], [15, 3, [61, 13]]], seen = [];
         for (const [d, m, at] of stops) {
             await t.setDay(d, 10);
             await t.go(m, at[0], at[1], 8);
             await t.frames(30);
             const r = await resHere("handlarz"), stop = await t.eval("Ludzie.stopMap()");
-            const wagon = m === 21 ? true : await shown({ 22: 2520, 4: 2554, 3: 2570 }[m]);
+            const wagon = await shown({ 4: 2554, 3: 2570 }[m]);
             seen.push([d, m, stop, !!r && !r.hidden, wagon]);
         }
-        t.check("handlarz krąży: dzień % 4 = 0 Polna droga, 1 Leśna droga, 2 Łąka, 3 Kruczy Jar - stoi na postoju, wóz widać",
+        t.check("handlarz krąży: dzień % 2 = 0 Łąka, 1 Kruczy Jar - stoi na postoju, wóz widać",
             seen.every(([d, m, stop, here, wagon]) => stop === m && here && wagon), seen);
         await t.setHour(21);
         await t.frames(25);
@@ -195,15 +195,15 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     if (part("k65")) {
         await t.setDay(16, 9);
         await t.eval(`TownQuests.start("K65"); 0`);
-        const k = (await S()).k65, spots = [[55, 12], [61, 11], [67, 8]], at = spots[k.spot];
-        await t.go(21, at[0], at[1] + 1, 8);
+        const k = (await S()).k65, spots = [[52, 15], [64, 14], [66, 16]], at = spots[k.spot];
+        await t.go(4, at[0], at[1] + 1, 8);
         await t.frames(25);
         const vis = await t.json(`(function(){ const e = $gameMap.event(2505); return e ? [e.x, e.y, !e.isTransparent()] : null; })()`);
         t.check("K65: juk leży przy Leśnej drodze w jednym z 3 miejsc z planu", vis && vis[0] === at[0] && vis[1] === at[1] && vis[2], { vis, at });
         await startEv(2505, 20);
         const r1 = await rec("K65");
         t.check("...podniesiony (v:juk), krok „oddaj juk”", r1.step === 1 && (await t.json("TownQuests.vcount('juk')")) === 1, r1);
-        const m = await t.eval("Ludzie.stopMap()"), spot = { 22: [52, 23], 21: [54, 19], 4: [62, 13], 3: [61, 13] }[m];
+        const m = await t.eval("Ludzie.stopMap()"), spot = { 4: [62, 13], 3: [61, 13] }[m];
         await t.go(m, spot[0], spot[1], 8);
         await t.frames(20);
         await talk(ev("handlarz"), []);
@@ -231,11 +231,11 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         let d18 = day + 1;
         while (d18 % 3 !== 2) d18++;
         await t.setDay(d18, 10);
-        await t.go(18, 68, 34, 8);
+        await t.go(4, 47, 64, 8);
         await t.frames(30);
         const c = await t.json(`({ n: Ludzie.sheep().length, home: TownLife.homeOf(TownLife.RESIDENTS.find(r => r.key === "pasterz")) })`);
         const p18 = await resHere("pasterz");
-        t.check("co trzeci dzień (" + d18 + "): pasterz ze stadem na pastwisku przy menhirach (Map018)", c.home === 18 && c.n >= 5 && p18 && !p18.hidden, { c, p18 });
+        t.check("co trzeci dzień (" + d18 + "): pasterz ze stadem na pastwisku przy menhirach (Łąka, drugie pastwisko)", c.home === 4 && c.n >= 5 && p18 && !p18.hidden, { c, p18 });
         // trade + the blanket
         await t.setDay(day, 10);
         await t.go(4, 52, 46, 8);
@@ -281,9 +281,9 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         const n5 = await t.json("[Ludzie.lostNow(), Ludzie.flockSize(), Ludzie.sheep().length]");
         const off = await talk(ev("pasterz"), ["Przyprowadzę Siwą"]);
         t.check("K64: po burzy w stadzie 5 owiec, pasterz daje zadanie", n5[0] && n5[1] === 5 && (await rec("K64")) && (await rec("K64")).s === "active", { n5, text: off.text.slice(0, 200) });
-        const k = (await S()).k64, at = [[40, 40], [60, 38], [72, 30]][k.spot];
-        const e17 = await t.json("OkoliceData.ENTRY[17]");
-        await t.go(17, e17[0], e17[1], 8);
+        const k = (await S()).k64, at = [[40, 50], [62, 45], [31, 54]][k.spot];
+        const e17 = await t.json("OkoliceData.ENTRY[4]");
+        await t.go(4, e17[0], e17[1], 8);
         await t.frames(30);
         const lost = await t.json(`Ludzie.sheep().filter(s => s._lud.role === "lost").map(s => [s.x, s.y, s._lud.mode])`);
         t.check("...Siwa stoi na Omszałej łące w miejscu z planu", lost.length === 1 && lost[0][0] === at[0] && lost[0][1] === at[1] && lost[0][2] === "lost", { lost, at });
@@ -315,7 +315,7 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         const a = await t.json(`({ l: !!TownLife.eventOf("patrol_latarnia_1"), f: !!TownLife.eventOf("patrol_latarnia_2"), held: TownLife.held("patrol_latarnia_2"),
             hid: [TownLife.eventOf("patrol_latarnia_1"), TownLife.eventOf("patrol_latarnia_2")].map(e => e && e._town && e._town.hidden) })`);
         t.check("przylądek z latarnią 10:00: para żołnierzy na obchodzie (2912 prowadzi, 2913 idzie krok za nim)", a.l && a.f && a.held && !a.hid[0] && !a.hid[1], a);
-        await t.go(162, 60, 47, 8);
+        await t.go(162, 82, 71, 8);
         await t.frames(120);
         const b = await t.json(`({ l: !!TownLife.eventOf("patrol_garnizon_1"), held: TownLife.held("patrol_garnizon_2") })`);
         t.check("garnizon: druga para (2914, 2915) na obchodzie wybrzeża", b.l && b.held, b);
@@ -345,7 +345,7 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         const r1 = await rec("K66");
         t.check("...odparci: krok „zamelduj rotmistrzowi”", r1.step === 1, r1);
         await t.setDay(12, 10);
-        await t.go(162, 36, 12, 2);
+        await t.go(162, 58, 36, 2);
         await t.frames(20);
         const f0 = await t.eval("Garnizon.favor()"), g0 = await t.gold();
         await t.go(163, 6, 7, 8);
@@ -359,7 +359,7 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     if (part("oboz")) {
         await t.setDay(13, 23);
         await t.eval("Ludzie.state().force.camp = true; 0");
-        await t.go(13, 101, 76, 8, { calm: false });
+        await t.go(13, 101, 100, 8, { calm: false });
         await t.frames(80);
         const a = await t.json(`({ tents: [2590, 2591].map(id => !$gameMap.event(id).isTransparent()), men: Humans.humans().filter(h => h._tag === "ludKopacze" && !h._dead).map(h => [h._mode, h._def ? h._def.name || "" : ""]),
             d35: TownQuests.rec("D35"), fire: !$gameMap.event(2593).isTransparent() })`);
@@ -426,8 +426,9 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         await t.frames(20);
         const back = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]");
         t.check("wyjście z jaskini (3,12) prowadzi z powrotem do zatoczki (16,65)", outOk && back.join() === "125,16,65", back);
-        await t.setHour(18.4);
-        await t.go(125, 27, 20);
+        // (2026-11-11 dawcy_miasto: D34's crate goes to Sambor in the tavern in the evening, 19:30-21:30, where he sits after duty)
+        await t.setHour(20.4);
+        await t.go(1, 14, 50, 8);
         await t.frames(40);
         const g0 = await t.gold();
         await talk(ev("celnik"), ["Oddaj skrzynię celnikowi"]);
@@ -460,9 +461,11 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         t.check("braki tylko dymkami (okno wiadomości nie było potrzebne)", allPops.length > 0, allPops.slice(0, 8));
         const row = await t.json(`(function(){ const s = Okolice.f9.sections().find(x => x.owner === "Ludzie"); const r = s.rows.find(x => x.what === "go"); return Okolice.f9.ok(Object.assign({ owner: "Ludzie" }, r)); })()`);
         await t.go(row.go[1], row.go[2], row.go[3], row.go[4]);
-        t.check("F9: wiersz „Miejsce” przenosi na miejsce paczki (mielerz, Map021)", row.go[1] === 21 && (await t.eval("$gameMap.mapId()")) === 21, row);
+        t.check("F9: wiersz „Miejsce” przenosi na miejsce paczki (mielerz, Łąka)", row.go[1] === 4 && (await t.eval("$gameMap.mapId()")) === 4, row);
         const stop = await t.json(`(function(){ const s = Okolice.f9.sections().find(x => x.owner === "Ludzie"); const r = Object.assign({ owner: "Ludzie" }, s.rows.find(x => x.what === "stop")); Okolice.f9.pick(r, 2); const o = Okolice.f9.ok(r); return { o, stop: Ludzie.stopMap() }; })()`);
+        await t.go(8, 60, 60, 2);
         await t.go(stop.o.go[1], stop.o.go[2], stop.o.go[3], stop.o.go[4]);
+        await t.frames(40);
         const here = await resHere("handlarz");
         t.check("F9: „Dzień handlarza: Łąka” ustawia dzień postoju i przenosi do wozu", stop.stop === 4 && here && !here.hidden, { stop, here });
     }

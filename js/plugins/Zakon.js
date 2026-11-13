@@ -229,6 +229,7 @@
         // 7.7 the cemetery and the gallows
         if (map === D.CEMETERY.map) {
             const G = D.CEMETERY, x1 = G.x + G.w - 1, y1 = G.y + G.h - 1, gate = new Set(G.gate.map(c => c[0] + "," + c[1]));
+            if (G.wall) {   // (2026-11-10: the wall is in the map's tiles now - no pieces to lay)
             let id = G.wall.from;
             for (let x = G.x; x <= x1; x++) for (const y of [G.y, y1]) {
                 if (gate.has(x + "," + y) || (x === G.lamp.x && y === G.lamp.y)) continue;
@@ -236,7 +237,9 @@
                 out.push(thing(id++, TK.kod.buildMap[26], x, y, corner ? IMG.murekRog : IMG.murekH, null));
             }
             for (let y = G.y + 1; y < y1; y++) for (const x of [G.x, x1]) out.push(thing(id++, TK.kod.buildMap[26], x, y, IMG.murekV, null));
+            }
             out.push(thing(G.lamp.id, TK.kod.buildMap[27], G.lamp.x, G.lamp.y, IMG.lampa, ["lamp"], { note: LIGHT.lamp }));
+            if (G.lamp2) out.push(thing(G.lamp2.id, TK.kod.buildMap[27], G.lamp2.x, G.lamp2.y, IMG.lampa, ["lamp"], { note: LIGHT.lamp }));
             for (const g of G.graves) {
                 if (g.raven) out.push(thing(g.id, TK.kod.buildMap[28], g.x, g.y, IMG.grobKruk, ["grave", g.raven], { lookB: IMG.grobKrukCzysty }));
                 else out.push(thing(g.id, TK.kod.buildMap[29], g.x, g.y, IMG[g.img], ["graveOld"]));
@@ -1208,10 +1211,10 @@
         D.TOWERS.map(t => [t.name, t.map, t.x + 2, t.y + 4]),
         D.SHRINES.map(s => [s.name, s.map, s.at[0], s.at[1] + 1]),
         D.CAIRNS.map(c => [Watki.wstaw(TK.f9.kopiec, { n: c.key.replace("kopiec_", "") }), c.map, c.at[0], c.at[1] + 1]),
-        [[TK.f9.krag, 18, 52, 44], [TK.f9.komora, 176, D.CHAMBER.entry[0], D.CHAMBER.entry[1]]],
+        [[TK.f9.krag, D.RING.map, D.RING.plate.x - 1, D.RING.plate.y - 1], [TK.f9.komora, 176, D.CHAMBER.entry[0], D.CHAMBER.entry[1]]],
         D.EAGLE.map(e => [Watki.wstaw(TK.f9.orzel, { name: e.name }), e.map, e.x + 1, e.y + 1]),
         D.PERCHES.map(p => [Watki.wstaw(TK.f9.grzeda, { n: p.n }), p.map, p.at[0], p.at[1] + 1]),
-        [[TK.f9.cmentarz, 8, 9, 27], [TK.f9.szubienica, 8, 88, 125], [TK.f9.gaj, 120, 57, 54], [TK.f9.krukiPustelnia, 155, 76, 49], [TK.f9.krukiUrwisko, 157, 78, 39],
+        [[TK.f9.cmentarz, 8, 8, 29], [TK.f9.szubienica, 8, 114, 100], [TK.f9.gaj, D.GROVE.map, D.GROVE.centre[0], D.GROVE.centre[1]], [TK.f9.krukiPustelnia, 155, 76, 49], [TK.f9.krukiUrwisko, 157, 78, 39],
          [TK.f9.wrak, 165, 62, 19]]);
     let f9Spot = 0;
     const f9Label = i => { const g = GO(); return Watki.wstaw(TK.kod.f9Label[0], { "1": i + 1, length: g.length, "3": g[i][0], "4": g[i][1] }); };
@@ -1268,7 +1271,7 @@
                     autoChecks();
                     return { say: ss ? TK.kod.ok[12] : TK.kod.ok[13] };
                 }
-                if (row.what === "grove") { $gameSystem.setDayNightHour(Math.round(sunset(day()) * 100) / 100); return { go: [TK.kod.ok[14], 120, D.GROVE.centre[0], D.GROVE.centre[1] + 1, 8] }; }
+                if (row.what === "grove") { $gameSystem.setDayNightHour(Math.round(sunset(day()) * 100) / 100); return { go: [TK.kod.ok[14], D.GROVE.map, D.GROVE.centre[0], D.GROVE.centre[1] + 1, 8] }; }
                 return null;
             } });
     })();

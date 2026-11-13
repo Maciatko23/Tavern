@@ -13,7 +13,7 @@ Zupa jak zupa. Na wojnie każda dobra.
 
 [mieszkancy.0.barks.patrol]
 Wartownik! Co na wodzie? ...Nic? To patrz dalej.
-Ta łacha w odpływie... Kto chce, przejdzie do wraku suchą nogą. Pilnować.
+Ten wrak na mieliźnie... Kto chce, dopłynie do niego łodzią z przystani. Pilnować.
 
 [mieszkancy.0.barks.rain]
 Deszcz. Prochu i tak nie mamy, to nie zamoknie.
@@ -123,8 +123,8 @@ W deszcz nikt się nie zapisuje. Ludzie wolą suche nogi od chwały.
 
 # ======================================================================== Q_K52 (zadania.K52)
 zadania.K52.title = Drewno dla garnizonu
-zadania.K52.where = Garnizon nad zatoką: kuchnia polowa
-zadania.K52.when = od dnia 5, 8-18
+zadania.K52.where = Tawerna (Kłos wieczorem); garnizon nad zatoką: kuchnia polowa
+zadania.K52.when = od dnia 5, 17–19:30
 zadania.K52.desc = Kuchnia polowa garnizonu zjada drwa jak smok. Kwatermistrz Kłos potrzebuje drewna i węgla - a potem chętnie coś od ciebie kupi.
 [zadania.K52.offer.say]
 Ty jesteś ten od rotmistrza? Wnuk Stacha? To słuchaj. Kuchnia polowa zjada drwa jak smok, a moi chłopcy rąbać nie umieją, tylko ciąć.
@@ -138,7 +138,7 @@ Dziesięć i cztery! Liczydło nie zapomni, ja też nie.
 [zadania.K52.offer.decline]
 Drwa poczekają. Zupa nie.
 
-zadania.K52.steps.0.text = Przynieś kwatermistrzowi Kłosowi 10× Drewno i 4× Węgiel drzewny (garnizon nad zatoką).
+zadania.K52.steps.0.text = Przynieś kwatermistrzowi Kłosowi 10× Drewno i 4× Węgiel drzewny (tawerna, wieczorem; wozem pojedzie do garnizonu).
 [zadania.K52.steps.0.remind]
 Dziesięć polan i cztery worki węgla. Liczydło czeka.
 
@@ -422,7 +422,7 @@ Beczki z promu. Liczone. Odejdź, mówię.
 Łódź ratownicza. Rotmistrz każe pływać do wraku od dziewiątej do trzeciej. Potem fala.
 
 [soldier.wieza]
-Z wieży widać wrak. W odpływie łacha wychodzi z wody aż pod jego burtę. Rotmistrz nie pozwala chodzić - chyba że masz glejt.
+Z wieży widać wrak. Rotmistrz nie pozwala do niego pływać - chyba że masz glejt.
 Nocą na wraku coś błyska. Rotmistrz mówi, że to księżyc w szkle. Ja tam nie wiem.
 
 [soldier.cwiczy]

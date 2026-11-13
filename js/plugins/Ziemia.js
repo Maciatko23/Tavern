@@ -189,7 +189,7 @@
     function dataKey() {
         let h = 0; const d = $dataMap.data || [];
         for (let i = 0; i < d.length; i++) h = (Math.imul(h, 31) + d[i]) | 0;
-        return $gameMap.mapId() + ":" + $gameMap.tilesetId() + ":" + $gameMap.width() + "x" + $gameMap.height() + ":" + h;
+        return $gameMap.mapId() + ":" + $gameMap.tilesetId() + ":" + $gameMap.width() + "x" + $gameMap.height() + ":" + h + ":" + T.time.season();   // (PoryRoku: the season's own colours)
     }
     function dropState() {
         if (!ST) return;
@@ -613,10 +613,11 @@
         const r = T.view.rect();
         const cull = !(window.Wydajnosc && Wydajnosc.opts && Wydajnosc.opts.cull === false);
         // (2026-11-05, on the bigger maps: only when the view moved or the things changed; visible, not renderable - hundreds of spots off the screen had their matrices worked out on every frame)
-        const seen = ox + "," + oy + "," + r.x0 + "," + r.y0 + "," + cull;
+        // (2026-11-12: when the view moved into another tile - not at every pixel of a walk -, with a tile more of margin for that)
+        const seen = Math.floor(ox / TW) + "," + Math.floor(oy / TW) + "," + r.x0 + "," + r.y0 + "," + r.x1 + "," + r.y1 + "," + cull;
         if (!synced && seen === this._seenView) return;
         this._seenView = seen;
-        const test = s => { s.visible = !cull || (s._box[2] + ox >= r.x0 && s._box[0] + ox <= r.x1 && s._box[3] + oy >= r.y0 && s._box[1] + oy <= r.y1); };
+        const test = s => { s.visible = !cull || (s._box[2] + ox >= r.x0 - TW && s._box[0] + ox <= r.x1 + TW && s._box[3] + oy >= r.y0 - TW && s._box[1] + oy <= r.y1 + TW); };
         for (const it of this._items.values()) test(it.spr);
         for (const s of this._farm) test(s);
     };

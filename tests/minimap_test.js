@@ -22,7 +22,7 @@ const OUT = __dirname + "/";
                 goal: { visible: t.visible, x: t.x, y: t.y, w: t.bitmap.width }, rect: Minimap.rect(), menuBtn: s._menuButton ? { x: s._menuButton.x + s._windowLayer.x, y: s._menuButton.y + s._windowLayer.y, w: s._menuButton.width, h: s._menuButton.height, visible: s._menuButton.visible } : null }; })()`);
         let st = await info();
         console.log(JSON.stringify(st));
-        check("the minimap is shown on the big field map (80x60 since 2026-10-18), scale 2 -> 160x120", st.mini.visible && st.mini.scale === 2 && st.mini.w === 160 && st.mini.h === 120, st.mini);
+        check("the minimap is shown on the 120x120 field map (3x3 board since 2026-11-08), scale min(208/120,150/120) = 1 -> 120x120", st.mini.visible && st.mini.scale === 1 && st.mini.w === 120 && st.mini.h === 120, st.mini);
         check("its terrain was painted", st.mini.painted);
         check("it sits in the top right corner", st.mini.x + 216 <= 1280 - 8 && st.mini.x > 1280 - 216 - 30 && st.mini.y <= 80, { x: st.mini.x, y: st.mini.y });
         check("it does not cover the menu button", !st.menuBtn || st.mini.y >= st.menuBtn.y + st.menuBtn.h - 2 || st.mini.x + 216 <= st.menuBtn.x, st.menuBtn);

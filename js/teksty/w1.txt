@@ -200,8 +200,8 @@ Zaniosłem rysunek śluzy Lordowi. O Feliksie wiedział już z jego listów ({fa
 > (Kiedy wstajesz, sakiewka jest lżejsza. Feliks już nie zapłaci.)
 
 [zadania.W1.lines.noteAmbush]
-Napad na Polnej drodze
-Dwa tygodnie po umowie z Feliksem napadli mnie na Polnej drodze jego ludzie w kapturach - „pozdrowienia od kamerdynera”. Pobili mnie, zabrali pieniądze i rysunek śluzy. Feliks więcej nie płaci, a dowodu już nie mam.
+Napad na Kruczym Jarze
+Dwa tygodnie po umowie z Feliksem napadli mnie na Kruczym Jarze jego ludzie w kapturach - „pozdrowienia od kamerdynera”. Pobili mnie, zabrali pieniądze i rysunek śluzy. Feliks więcej nie płaci, a dowodu już nie mam.
 
 zadania.W1.lines.manName = Człowiek Feliksa
 zadania.W1.lines.ambushShout = Pozdrowienia od kamerdynera!
@@ -227,15 +227,15 @@ zadania.W1.lines.ambushShout = Pozdrowienia od kamerdynera!
 > (Uciekłem z drogi. Ale oni wiedzą, którędy chodzę - będą czekać znowu.)
 
 [zadania.W1.lines.noteAmbushWon]
-Napad na Polnej drodze
-Dwa tygodnie po umowie z Feliksem napadli mnie na Polnej drodze jego ludzie - „pozdrowienia od kamerdynera”. Pobiłem ich. Feliks więcej nie płaci, ale rysunek śluzy wciąż mam: mogę go jeszcze pokazać sołtysowi albo Lordowi.
+Napad na Kruczym Jarze
+Dwa tygodnie po umowie z Feliksem napadli mnie na Kruczym Jarze jego ludzie - „pozdrowienia od kamerdynera”. Pobiłem ich. Feliks więcej nie płaci, ale rysunek śluzy wciąż mam: mogę go jeszcze pokazać sołtysowi albo Lordowi.
 
 [zadania.W1.lines.noteConfession]
 Człowiek Feliksa mówi
-Jeden z ludzi, którzy napadli mnie na Polnej drodze, błagał o litość - puściłem go, a on się wygadał: kamerdyner płaci im po dziesięć groszy i kazał zabrać mi „papier”. Mam świadka.
+Jeden z ludzi, którzy napadli mnie na Kruczym Jarze, błagał o litość - puściłem go, a on się wygadał: kamerdyner płaci im po dziesięć groszy i kazał zabrać mi „papier”. Mam świadka.
 
 [zadania.W1.lines.withWitness]
-> I jeszcze jedno: ludzie Feliksa napadli mnie na Polnej drodze. Jeden z nich przyznał, kto im płaci.
+> I jeszcze jedno: ludzie Feliksa napadli mnie na Kruczym Jarze. Jeden z nich przyznał, kto im płaci.
 
 [zadania.W1.lines.sluiceSeen]
 > „CZTERY I DWA. Otwiera ją sygnał wody z dzwonu na górze, nie ręka.”
@@ -302,6 +302,6 @@ Feliks zapłacił mi wtedy podwójnie. Żebym zapomniał. No to zapomniałem. Do
 zadania.W1.steps.5.text = Zakradnij się nocą (21:00–4:30) do oranżerii w ogrodzie dworu (za bramą wschodnią). Strażnik obchodzi ogród - skradaj się (C) i nie wchodź mu w oczy. Obejrzyj właz z krukiem za oranżerią (pod sosną) i skrzynię drzewka pomarańczy przy drzwiach oranżerii.
 zadania.W1.steps.6.text = Rysunek śluzy to dowód. Co z nim zrobisz? Ujawnij go z sołtysem na rynku w dzień targowy (8–14), zanieś po cichu Lordowi (drzwi dworu, 8–20), postrasz nim Feliksa (rano przy straganach) - albo powiedz sołtysowi, że nic nie masz, i milcz.
 zadania.W1.steps.7.text = Feliks płaci ci 20 G co tydzień za milczenie (rano przy straganach). Uważaj na drogach.
-zadania.W1.steps.8.text = Feliks przestał płacić. Jego ludzie czekali na ciebie na Polnej drodze - uciekłeś, ale będą czekać znowu. Pobij ich albo daj się złapać.
+zadania.W1.steps.8.text = Feliks przestał płacić. Jego ludzie czekali na ciebie na Kruczym Jarze - uciekłeś, ale będą czekać znowu. Pobij ich albo daj się złapać.
 zadania.W1.steps.9.text = W Akcie II: kanał spod studni na rynku prowadzi do cysterny zakonu pod wzgórzem. Zejdź do podziemi i znajdź w Wielkiej cysternie (piętro 30) jej Zasuwę główną.
 zadania.W1.steps.10.text = Na Zasuwie głównej wykuto: „CZTERY I DWA. Otwiera ją sygnał wody z dzwonu na górze, nie ręka.” Porozmawiaj z Ambrożym (za dnia, 6–21): cztery i dwa - zadzwonisz sam albo on.

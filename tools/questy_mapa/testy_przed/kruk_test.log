@@ -1,0 +1,11 @@
+PASS gra się uruchamia
+PASS Kruk.js i Kruk_Data.js działają: K51 i D24 (od dziadka) w zadaniach, paczka „Kruk”, miejsce gotowe (Wyspa.ready 157)  {"api":true,"data":true,"k51":true,"d24":"grandpa","packs":["K51,D24"],"grz":{"name":"Grzęda kruka","cost":"77x4,80x2,93x1","w":1,"h":1,"img":"Farm_Grzeda","slots":2,"bowl":3},"ready":true,"built":true,"ring":"Obrączka z krukiem"}
+PASS Farming_Data.js: budynek „Grzęda kruka” (4× Gałęzie, 2× Deski, 1× Lina; 1x1; Farm_Grzeda; korytko i miseczka)  {"name":"Grzęda kruka","cost":"77x4,80x2,93x1","w":1,"h":1,"img":"Farm_Grzeda","slots":2,"bowl":3}
+PASS grafika: arkusz kruka 432x336 (komórki 48, 7 wierszy), grzęda 56x100, stara żerdź, gniazda 192x256  {"imgs":[[0,0],[0,0],[0,0],[0,0]],"imgs2":[[432,336],[56,100],[55,65],[192,256]]}
+FAIL prawa krawędź pustelni (95,17) prowadzi na Map157 „Urwisko Kruków” (1,19); 122 x 72 (od 2026-10-30), tileset 11, <Water:salt>, nie szkielet  [155,7,8,96,72,11,"<Clouds:on>\n<Farm:off>\n<Water:salt>","Pustelnia na klifie"]
+FAIL przejścia z kontraktu: lewa krawędź (0,19-20) -> pustelnia (94,17-18), prawa (111,19-20) bez przejścia do przylądka (od 2026-10-30 świat: 157 E -> Góry); lądowania przechodnie  {"west":[],"east":[],"rynny":[],"rynnyObok":true,"land":false}
+FAIL krata przelewu (41,15): „Przelew cysterny”, !Quest_Places 0/2/0, strona 2 na przełączniku 17 -> cysterna 167 (33,3); znaczniki rynna_1..4 dla K53 (każdy z wolnym polem obok - pakiet F stawia tam gruz)  {"west":[],"east":[],"rynny":[],"rynnyObok":true,"land":false}
+ERR TypeError: Cannot read properties of undefined (reading 'start')
+    at <anonymous>:1:67
+PASS bez błędów w konsoli  []
+5/9 passed

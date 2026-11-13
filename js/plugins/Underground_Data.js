@@ -537,7 +537,7 @@
         // steps: as above. An actor key may be "butler" (Teodor or Feliks - whoever serves the Lord now).
         SHOTS: [
             {
-                key: "dwor", map: 24, cam: [20, 15], when: w => w.story,
+                key: "dwor", map: 24, cam: [40, 75], when: w => w.story,
                 actors: (w, e) => {
                     const l = w.lord, gate = l.stance === "rival" && l.choice === "refuse";
                     return gate ? [["guard", 20, 14, 2]] : [["lord", 20, 14, 2], ["butler", 22, 14, 2]].concat(l.stance === "rival" ? [["guard", 17, 15, 6]] : []);
@@ -617,7 +617,7 @@
                 key: "oboz", map: w => (w.camp === "outside" ? 111 : 8), cam: w => (w.camp === "outside" ? [39, 15] : [57, 89]),
                 actors: (w, e) => {
                     const at = w.camp === "outside" ? { ludmila: [38, 15, 6], ela: [39, 16, 8], marek: [40, 15, 4], rafal: [42, 16, 4] }
-                        : { ludmila: [57, 90, 6], ela: [58, 91, 8], marek: [59, 90, 4], rafal: [55, 90, 6] };
+                        : { ludmila: [88, 98, 6], ela: [89, 99, 8], marek: [90, 98, 4], rafal: [86, 98, 6] };
                     const out = [["ludmila"].concat(at.ludmila), ["ela"].concat(at.ela)];
                     if (w.marek) out.push(["marek"].concat(at.marek));
                     if (w.rafal === "ally") out.push(["rafal"].concat(at.rafal));
@@ -665,13 +665,13 @@
                 }
             },
             {
-                key: "tawerna", map: 1, cam: [52, 31], last: true,
+                key: "tawerna", map: 1, cam: [16, 31], last: true,
                 actors: (w, e) => {
-                    const out = [["borgar", 52, 28, 2], ["ozzy", 49, 30, 6], ["melia", 55, 30, 4]];
-                    if (!w.grum || w.grum === "ally") out.push(["grum", 58, 31, 4]);
+                    const out = [["borgar", 16, 28, 2], ["ozzy", 13, 31, 6], ["melia", 19, 31, 4]];
+                    if (!w.grum || w.grum === "ally") out.push(["grum", 22, 31, 4]);
                     return out;
                 },
-                hero: (w, e) => (e.guardian === "hero" ? null : [52, 31, 8]),
+                hero: (w, e) => (e.guardian === "hero" ? null : [16, 31, 8]),
                 steps: (w, e) => {
                     const out = [], hero = e.guardian === "hero";
                     if (e.kind === "zniszczyc") out.push(
@@ -724,7 +724,7 @@
                             [null, TK.sceny.steps[102]]);
                     }
                     // the end: the hero at the bar (or, for the hero who stayed below, his one day a year)
-                    if (hero) out.push([null, TK.sceny.steps[103]], { heroIn: [52, 31, 8] },
+                    if (hero) out.push([null, TK.sceny.steps[103]], { heroIn: [16, 31, 8] },
                         { balloon: ["borgar", 1] }, ["borgar", TK.sceny.steps[104]]);
                     else out.push(["borgar", e.kind === "uwolnic" ? TK.sceny.steps[105]
                         : TK.sceny.steps[106]]);

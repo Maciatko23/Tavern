@@ -8,7 +8,7 @@ małe, średnie i duże”). Po każdym budowaniu / powiększaniu map uruchomić
   - wielkość: małe ~25% / średnie ~35% / duże ~40%, stała dla miejsca (hash mapy i pola); uderzenia i drewno jak u dużego (liczby
     gracza z 2026-09-24/26), razy wielkość; szyszki zrzuca tylko duża sosna (ChoppableTree: skala >= 0.9)
   python tools/drzewa/drzewa.py                  (kopie zmienionych map do tools/drzewa/staging/data, raport; nic w grze)
-  python tools/drzewa/drzewa.py --wykonaj        (zapis do data/ - TYLKO przy zamkniętym edytorze; kopie: tools/drzewa/kopie_zapasowe)"""
+  python tools/drzewa/drzewa.py [--mapy 3,4,8] --wykonaj   (zapis do data/ - TYLKO przy zamkniętym edytorze; kopie: tools/drzewa/kopie_zapasowe)"""
 import collections, copy, datetime, glob, json, os, re, shutil, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
@@ -106,6 +106,8 @@ for path in sorted(glob.glob(os.path.join(DATA, "Map[0-9]*.json"))):
             if re.search(r"Pine|Tree_|Big_Trees", name): report["zapora (zostaje)"] += 1
             continue
         size = size_of(map_id, e["x"], e["y"])
+        fixed = re.search(r"<TreeSize:([012])>", note)   # (a size the map asks for: mirrored garden trees must match - tools/miasto5)
+        if fixed: size = int(fixed.group(1))
         before = dump(e)
         if name in ("!$Tree_Apple", "!$Tree_Pear"):
             if "<Tree" not in note: continue
@@ -130,6 +132,9 @@ for path in sorted(glob.glob(os.path.join(DATA, "Map[0-9]*.json"))):
     if touched:
         changed_maps.append((path, raw, map_text(m).encode("utf-8")))
 
+if "--mapy" in sys.argv:          # (only these maps, e.g. --mapy 3,4,8,24,111 after one area's rebuild)
+    only = {int(v) for v in sys.argv[sys.argv.index("--mapy") + 1].split(",")}
+    changed_maps = [c for c in changed_maps if int(re.search(r"Map(\d+)", c[0]).group(1)) in only]
 print("map do zmiany: %d" % len(changed_maps))
 for k, v in sorted(report.items()): print("  %-40s %d" % (k, v))
 if "--wykonaj" in sys.argv:
@@ -139,6 +144,20 @@ if "--wykonaj" in sys.argv:
         open(os.path.join(kop, os.path.basename(path)), "wb").write(raw)
         open(path, "wb").write(new)
     print("zapisane do data/; kopie:", kop)
+    # (2026-11-11) a new project version, as the editor gives on each save: a save made on a changed map then reloads that map when
+    # loaded (Scene_Load.reloadMapIfUpdated) - without it the save kept the old places of the trees and things over the new ground
+    # (the player could not pick up a cone: something of the old layout stood on its tile). Every map install ends with this script.
+    sp = os.path.join(ROOT, "data", "System.json")
+    sraw = open(sp, "rb").read()
+    mv = re.search(rb'"versionId":(\d+)', sraw)
+    if mv:
+        import random
+        ver = random.randint(10000000, 99999999)
+        while ver == int(mv.group(1)): ver = random.randint(10000000, 99999999)
+        sout = sraw[:mv.start(1)] + str(ver).encode() + sraw[mv.end(1):]
+        json.loads(sout.decode("utf-8"))
+        open(sp, "wb").write(sout)
+        print("nowa wersja projektu (System.json versionId): %s -> %d" % (mv.group(1).decode(), ver))
 else:
     shutil.rmtree(STG, ignore_errors=True)
     os.makedirs(STG, exist_ok=True)

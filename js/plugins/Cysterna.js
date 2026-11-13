@@ -524,7 +524,10 @@
         }
         return out;
     }
-    T.inject([URW], { ids: D.IDS, owner: PLUGIN, build: data => gutterEvents(data) });
+    // (2026-11-11, questy_pustelnia) the Urwisko is out of the world: the four gutters of the Order are on the old walls of Kruczogrod (Map008, the
+    // markers "Miejsce: rynna_1..4" there); the grate of the overflow channel stays shut ("kanal zasypany" - the landslide)
+    const townGutters = () => !(window.WyspaData && window.WyspaData.HERMITAGE_OPEN);
+    T.inject([URW, TOWN], { ids: D.IDS, owner: PLUGIN, build: (data, mapId) => ((mapId === TOWN) === townGutters() ? gutterEvents(data) : []) });
     function gutter(interp, n) {
         if (!has() || S().gutters[n]) return false;
         const tools = [D.ITEM.steelPick, D.ITEM.ironPick, D.ITEM.pickaxe, D.ITEM.shovel].filter(Boolean);
@@ -546,7 +549,7 @@
     // ------------------------------------------------------------------
     w.haki({
         zbudowana: () => built,
-        urwiskoGotowe: () => !!W() && W().isReady(URW),
+        urwiskoGotowe: () => townGutters() || (!!W() && W().isReady(URW)),
         zamknijGalaz: () => closeBranch()
     });
     // the ladle's wedge out once D28 is done (the hero is in the cistern: the last step is taken by the manor branch)

@@ -18,7 +18,8 @@ try: sys.stdout.reconfigure(encoding="utf-8")
 except Exception: pass
 PLUG = os.path.join(ROOT, "js", "plugins")
 M = 18   # (Laka.js: the lush grass is full LUSH_FULL = 17 cells off the water, and one more)
-uk = {int(k): v for k, v in json.load(open(os.path.join(ROOT, "docs", "mapy", "swiat_uklad.json"), encoding="utf-8"))["mapy"].items()}
+UKLAD = sys.argv[sys.argv.index("--uklad") + 1] if "--uklad" in sys.argv else os.path.join(ROOT, "docs", "mapy", "swiat_uklad.json")   # (plansza 3x3: tools/plansza/staging/swiat_uklad.json)
+uk = {int(k): v for k, v in json.load(open(UKLAD, encoding="utf-8"))["mapy"].items()}
 lista = open(os.path.join(ROOT, "js", "tawerna_wtyczki.js"), "rb").read().decode("utf-8")
 laka = json.loads(re.search(r'^(\{"name":"Laka",.*\}),?\r?$', lista, re.M).group(1))
 MAPS = [int(v) for v in re.split(r"[^0-9]+", laka["parameters"].get("maps", "")) if v]

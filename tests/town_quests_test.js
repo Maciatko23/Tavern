@@ -275,15 +275,15 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.talkTo("$gameMap.event(956)", [], { place: false });
     t.check("D5: six arrows from Wit; the tracks at the south gate at dawn", (await t.count(127)) === ar0 + 6 && (await step("D5")) === "active:1", await rec("D5"));
     await at(dw + 1, 22);
-    await t.go(22, 18, 13, 2);
+    await t.go(3, 60, 30, 2);   // (since the board: the scouts on Kruczy Jar (Map003), the pack's leader on Łąka (Map004) - TownQuests_Data D5)
     await t.eval("Hunting.auto(false); TownQuests.rec('D5').t.spawned = null; 0");
     const wolves = await t.until("Hunting.animals.filter(a => a.kind() === 'wolf').length >= 2", 15, 300);
-    t.check("on Polna droga at night the two scouts come (spawned for the quest)", wolves, await J("Hunting.animals.map(a => a.kind())"));
-    await t.eval("for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); for (let i = 0; i < 2; i++) Tawerna.emit('kill', { kind: 'wolf', by: 'hero', mapId: 22, animal: {} }); 0");
-    await t.eval("Tawerna.emit('kill', { kind: 'wolf', by: 'hero', mapId: 23, animal: {} }); 0");
+    t.check("on Kruczy Jar at night the two scouts come (spawned for the quest)", wolves, await J("Hunting.animals.map(a => a.kind())"));
+    await t.eval("for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); for (let i = 0; i < 2; i++) Tawerna.emit('kill', { kind: 'wolf', by: 'hero', mapId: 3, animal: {} }); 0");
+    await t.eval("Tawerna.emit('kill', { kind: 'wolf', by: 'hero', mapId: 4, animal: {} }); 0");
     const notLeader = await step("D5");
-    await t.eval("Tawerna.emit('kill', { kind: 'wolf', by: 'hero', mapId: 23, animal: { _tqLeader: true } }); 0");
-    t.check("two wolves on Polna droga move it on; on Skraj lasu only the pack's leader counts", notLeader === "active:2" && (await step("D5")) === "active:3", notLeader);
+    await t.eval("Tawerna.emit('kill', { kind: 'wolf', by: 'hero', mapId: 4, animal: { _tqLeader: true } }); 0");
+    t.check("two wolves on Kruczy Jar move it on; on Łąka only the pack's leader counts", notLeader === "active:2" && (await step("D5")) === "active:3", notLeader);
     await t.go(8, 98, 51, 6);
     await at(dw + 2, 9);
     const g5w = await t.gold(), o5 = await opinion();
@@ -360,18 +360,18 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
 
     // ------------------------------------------------------------------ a story game: grandpa's letter (K32), the Lord's name day (K31)
     await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, minimap: false });
-    await at(5, 9, 30);
+    await at(2, 9, 30);   // (2026-11-12: K32 from day 2 - on day 3 the king's summons takes grandpa away)
     const k32 = await t.talkTo("$gameMap.event(901)", []);
-    t.check("K32: on day 5 grandpa hands over his letter (no choice in his talk - his own talk goes on after)", (await step("K32")) === "active:0" && (await J("TownQuests.vcount('list')")) === 1 && /napisałem do Lorda/.test(k32.text) && k32.done, k32.text.slice(0, 200));
-    await t.go(24, 20, 14, 8);
-    await at(5, 9, 30);
+    t.check("K32: on day 2 grandpa hands over his letter (no choice in his talk - his own talk goes on after)", (await step("K32")) === "active:0" && (await J("TownQuests.vcount('list')")) === 1 && /napisałem do Lorda/.test(k32.text) && k32.done, k32.text.slice(0, 200));
+    await t.go(24, 40, 74, 8);
+    await at(2, 9, 30);
     const lord = await t.talkTo("$gameMap.event(902)", ["Odejdź"]);
     t.check("K32: the Lord takes the letter, asks about the stones with a raven - then his own talk about the debt", (await step("K32")) === "done:0" && /kamienie\?\s+Z\s+wyrytym\s+krukiem/.test(lord.text) && lord.done, lord.text.slice(0, 300));
     await t.go(8, 34, 59, 8);
     await at(30, 7.5, 30);
     await accept("feliks", "Zaniosę prezent.", "K31");
     await t.give(137, 2); await t.give(136, 1);
-    await t.go(24, 20, 14, 8);
+    await t.go(24, 40, 74, 8);
     await at(33, 9, 30);
     await t.gold(100);
     const paid0 = await J("Story.state().paid");

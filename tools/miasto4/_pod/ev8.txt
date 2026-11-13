@@ -1,0 +1,339 @@
+4 | Drzwi: Ratusz | 91 47 | !$Drzwi_K_4 | <Town:door=ratusz> ->M104(17,11) 1
+9 | Latarnia | 58 24 | !lamp | <Light:150,110,76,28><LightWhen:night>  1
+13 | Donica z kwiatami | 54 22 | !Tavern_Yard |   1
+15 | Donica z kwiatami | 54 26 | !Tavern_Yard |   1
+16 | Drzewo | 54 28 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+17 | Drzewo | 61 27 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+18 | Donica z kwiatami | 50 19 | !Tavern_Yard |   1
+19 | Donica z kwiatami | 52 19 | !Tavern_Yard |   1
+20 | EV020 | 45 18 | !Statue |   1
+21 | EV021 | 57 18 | !Statue |   1
+22 | Drzwi tawerny -> Tawerna | 51 16 | !$Drzwi_K_22 |  ->M1(50,53) 1
+26 | Wóz z sianem | 63 12 | !House_Town | <Occupy:right=1>  1
+30 | EV030 | 53 17 | !Tavern_Props |   1
+31 | EV031 | 49 17 | !Tavern_Props |   1
+35 | Porêcz do wi¹zania koni | 77 15 | !Tavern_Yard |   1
+36 | Porêcz do wi¹zania koni | 63 10 | !Tavern_Yard |   1
+39 | Furtka ogrodu rycerzy | 33 15 | !$SF_Gate3 | <Occupy:left=1,right=1,up=1>  2
+41 | EV041 | 41 42 | !Town_Props |   1
+42 | Stragan | 44 44 | !Town_Props |   1
+43 | EV043 | 32 9 | !Statue |   1
+44 | EV044 | 34 9 | !Statue |   1
+45 | EV045 | 33 9 | !Weapon |   1
+46 | Stragan | 40 46 | !Town_Props |   1
+47 | Pos¹g przed kaplic¹ | 5 17 | !Statue |   1
+49 | Pos¹g przed kaplic¹ | 11 17 | !Statue |   1
+50 | Drzwi: Kaplica | 8 16 | !$Drzwi_K_50 | <Town:door=kaplica> ->M178(7,13) 1
+51 | Drzewo | 33 26 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+52 | Drzewo | 31 23 | !$Tree_Apple | <Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropm  4
+53 | Drzewo | 43 26 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+54 | Drzewo | 46 25 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+55 | Drzewo | 41 28 | !$Tree_Apple | <Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropm  4
+56 | Tablica og³oszeñ | 58 40 | !Tavern_Yard |   1
+57 | Drzwi: Dom grabarza | 19 12 | !$Drzwi_K_57 | <Town:door=dom_grabarza> ->M179(5,8) 1
+58 | Drzewo | 44 4 | !$Tree_Apple | <Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropm  4
+59 | Drzewo | 83 5 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+60 | Drzewo | 42 8 | !$Tree_Apple | <Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropm  4
+61 | Drzewo | 81 5 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+62 | Drzewo | 43 18 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+63 | Drzwi: Dom Agaty | 85 12 | !$Drzwi_K_63 | <Town:door=dom1> ->M182(6,8) 1
+64 | Drzewo | 38 19 | !$Tree_Apple | <Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropm  4
+65 | Latarnia | 53 21 | !lamp | <Light:150,110,76,28><LightWhen:night>  1
+66 | Latarnia | 48 24 | !lamp | <Light:150,110,76,28><LightWhen:night>  1
+67 | Latarnia | 54 26 | !lamp | <Light:150,110,76,28><LightWhen:night>  1
+68 | Latarnia | 41 21 | !lamp | <Light:150,110,76,28><LightWhen:night>  1
+69 | Latarnia | 60 18 | !lamp | <Light:150,110,76,28><LightWhen:night>  1
+70 | Latarnia | 35 19 | !lamp | <Light:150,110,76,28><LightWhen:night>  1
+71 | Latarnia | 47 27 | !lamp | <Light:150,110,76,28><LightWhen:night>  1
+72 | £awka | 46 23 | !Tavern_Yard |   1
+74 | £awka | 36 21 | !Tavern_Yard |   1
+75 | Beczki | 41 16 | !Tavern_Yard | <Occupy:left=1,right=1>  1
+77 | Skrzynie | 42 10 | !Tavern_Yard |   1
+78 | Okno tawerny (œwiat³o) | 45 12 |  | <Light:210,150,70,26><LightWhen:night>  1
+79 | Okno tawerny (œwiat³o) | 47 12 |  | <Light:210,150,70,26><LightWhen:night>  1
+80 | Drzwi: Dom staruszków | 42 87 | !$Drzwi_K_80 | <Town:door=dom7> ->M188(6,8) 1
+82 | Okno tawerny (œwiat³o) | 45 14 |  | <Light:210,150,70,26><LightWhen:night>  1
+83 | Okno tawerny (œwiat³o) | 47 14 |  | <Light:210,150,70,26><LightWhen:night>  1
+84 | Drzwi: Kamienica | 96 28 | !$Drzwi_K_84 | <Town:door=dom2> ->M183(10,10) 1
+85 | Okno tawerny (œwiat³o) | 55 12 |  | <Light:210,150,70,26><LightWhen:night>  1
+86 | Okno tawerny (œwiat³o) | 57 12 |  | <Light:210,150,70,26><LightWhen:night>  1
+87 | Okno tawerny (œwiat³o) | 55 14 |  | <Light:210,150,70,26><LightWhen:night>  1
+88 | Drzwi: Piekarnia | 38 72 | !$Drzwi_K_88 | <Town:door=piekarnia> ->M102(8,10) 1
+89 | Okno tawerny (œwiat³o) | 57 14 |  | <Light:210,150,70,26><LightWhen:night>  1
+90 | Okno tawerny (œwiat³o) | 51 12 |  | <Light:210,150,70,26><LightWhen:night>  1
+91 | Okno tawerny (œwiat³o) | 51 14 |  | <Light:210,150,70,26><LightWhen:night>  1
+92 | Latarnia | 48 45 | !lamp | <Light:150,110,76,28><LightWhen:night>  1
+93 | Latarnia | 55 54 | !lamp | <Light:150,110,76,28><LightWhen:night>  1
+94 | Drzwi: Kantor „Towary z kontynentu | 14 47 | !$Drzwi_K_94 | <Town:door=kantor> ->M103(3,10) 1
+95 | Drzwi: Kantor „Towary z kontynentu | 18 46 | !$Drzwi_K_95 | <Town:door=kantor> ->M103(12,10) 1
+96 | Donica z kwiatami | 49 54 | !Tavern_Yard |   1
+97 | Donica z kwiatami | 54 45 | !Tavern_Yard |   1
+98 | Skrzynie | 42 44 | !Tavern_Yard |   1
+99 | Worki | 39 47 | !Tavern_Yard |   1
+100 | Beczka | 43 47 | !Tavern_Yard |   1
+101 | EV101 | 60 43 | !Town_Props |   1
+102 | Skrzynie | 62 43 | !Tavern_Yard |   1
+103 | Beczka | 61 45 | !Tavern_Yard |   1
+104 | Worki | 63 52 | !Tavern_Yard |   1
+105 | Worki | 49 58 | !Tavern_Yard |   1
+106 | Skrzynie | 48 56 | !Tavern_Yard |   1
+107 | Beczka | 58 57 | !Tavern_Yard |   1
+108 | Worki | 61 55 | !Tavern_Yard |   1
+109 | Wóz kupca | 56 57 | !House_Town | <Occupy:right=1>  1
+110 | £awka | 48 49 | !Tavern_Yard |   1
+111 | £awka | 55 49 | !Tavern_Yard |   1
+112 | £awka | 49 53 | !Tavern_Yard |   1
+113 | £awka | 54 53 | !Tavern_Yard |   1
+114 | Drzwi: Ratusz | 85 47 | !$Drzwi_K_114 | <Town:door=ratusz> ->M104(7,11) 1
+115 | £awka | 47 51 | !Tavern_Yard |   1
+116 | Lipa | 40 41 | !$Tree_Apple | <Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropm  4
+117 | Lipa | 63 41 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+118 | Stojak z broni¹ | 95 46 | !Town_Props |   1
+119 | Stojak z broni¹ | 103 46 | !Town_Props |   1
+120 | Porêcz do wi¹zania koni | 97 41 | !Tavern_Yard |   1
+121 | Drzwi: Dom mieszczan | 36 38 | !$Drzwi_K_121 | <Town:door=dom_mieszczan> ->M109(8,9) 1
+122 | Beczka | 94 44 | !Tavern_Yard |   1
+123 | Beczka | 104 44 | !Tavern_Yard |   1
+124 | EV124 | 39 37 | !$Drzwi_K_124 |  ->M110(6,8) 1
+125 | KadŸ garbarska | 16 84 | !Tavern_Yard |   1
+126 | KadŸ garbarska | 17 85 | !Tavern_Yard |   1
+127 | KadŸ garbarska | 18 83 | !Tavern_Yard |   1
+128 | Suszarnia skór | 14 85 | !Town_Props |   1
+129 | Drzwi: Dom szwaczki | 7 48 | !$Drzwi_K_129 | <Town:door=dom3> ->M184(5,9) 1
+131 | Suszarnia skór | 19 85 | !Town_Props |   1
+132 | Stos desek | 36 90 | !Tavern_Yard |   1
+133 | Stos desek | 37 90 | !Tavern_Yard |   1
+134 | EV134 | 13 60 | !$Drzwi_K_134 |  ->M105(7,9) 1
+135 | Stos desek | 38 90 | !Tavern_Yard |   1
+136 | Beczka z wod¹ | 61 76 | !Tavern_Yard |   1
+137 | EV137 | 59 73 | !$Drzwi_K_137 |  ->M107(7,8) 1
+138 | Chor¹giew na stra¿nicy | 99 41 | !Flags_banner |   1
+139 | Beczka z wod¹ | 62 76 | !Tavern_Yard |   1
+140 | Beczka z wod¹ | 60 76 | !Tavern_Yard |   1
+141 | EV141 | 6 88 | !$Drzwi_K_141 |  ->M106(8,9) 1
+142 | EV142 | 10 62 | !$Smith |   2
+148 | Porêcz do wi¹zania koni | 31 18 | !Tavern_Yard |   1
+151 | Stos drewna | 4 40 | !Tavern_Yard |   1
+152 | Drzwi: Stra¿nica Lorda | 98 47 | !$Drzwi_K_152 | <Town:door=straznica> ->M180(6,10) 1
+154 | Stos drewna | 24 53 | !Tavern_Yard |   1
+156 | Pranie | 5 63 | !Town_Props |   1
+157 | Stos drewna | 20 72 | !Tavern_Yard |   1
+158 | Pranie | 24 75 | !Town_Props |   1
+159 | Stos drewna | 22 88 | !Tavern_Yard |   1
+160 | Pranie | 27 87 | !Town_Props |   1
+161 | Stos drewna | 101 63 | !Tavern_Yard |   1
+164 | Drzewo | 81 79 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+166 | Stos drewna | 91 17 | !Tavern_Yard |   1
+168 | Stos drewna | 65 61 | !Tavern_Yard |   1
+171 | Stos drewna | 3 51 | !Tavern_Yard |   1
+172 | Beczka | 5 51 | !Tavern_Yard |   1
+173 | Stos drewna | 16 51 | !Tavern_Yard |   1
+175 | Beczka | 18 51 | !Tavern_Yard |   1
+176 | Stos drewna | 19 62 | !Tavern_Yard |   1
+177 | Beczka | 21 62 | !Tavern_Yard |   1
+178 | Stos drewna | 26 60 | !Tavern_Yard |   1
+179 | Beczka | 28 60 | !Tavern_Yard |   1
+180 | Drzwi: Dom Haliny | 84 63 | !$Drzwi_K_180 | <Town:door=dom4> ->M185(5,9) 1
+182 | Stos drewna | 10 76 | !Tavern_Yard |   1
+183 | Beczka | 14 76 | !Tavern_Yard |   1
+184 | Stos drewna | 23 75 | !Tavern_Yard |   1
+185 | Beczka | 26 75 | !Tavern_Yard |   1
+186 | Beczka | 8 91 | !Tavern_Yard |   1
+187 | Stos drewna | 31 89 | !Tavern_Yard |   1
+188 | Stos drewna | 76 50 | !Tavern_Yard |   1
+191 | Beczka | 78 50 | !Tavern_Yard |   1
+192 | Stos drewna | 79 52 | !Tavern_Yard |   1
+193 | Beczka | 84 52 | !Tavern_Yard |   1
+194 | Stos drewna | 89 50 | !Tavern_Yard |   1
+195 | Taczka grabarza | 16 10 | !House_Town | <Occupy:right=1>  1
+196 | £opata | 17 11 | !House_Town |   1
+197 | Drzwi: Stary dom kupca | 95 62 | !$Drzwi_K_197 | <Town:door=dom5> ->M186(5,9) 1
+198 | Beczka | 92 50 | !Tavern_Yard |   1
+199 | Stos drewna | 104 50 | !Tavern_Yard |   1
+200 | Beczka | 106 50 | !Tavern_Yard |   1
+201 | Stos drewna | 107 49 | !Tavern_Yard |   1
+202 | Beczka | 111 49 | !Tavern_Yard |   1
+203 | Stos drewna | 113 50 | !Tavern_Yard |   1
+204 | Drzwi: Dom cieœli | 33 86 | !$Drzwi_K_204 | <Town:door=dom6> ->M187(5,9) 1
+206 | Beczka | 89 64 | !Tavern_Yard |   1
+207 | Stos drewna | 90 64 | !Tavern_Yard |   1
+208 | Beczka | 93 64 | !Tavern_Yard |   1
+209 | Drzwi: Stajnia | 75 13 | !$Drzwi_K_209 | <Town:door=stajnia> ->M181(11,11) 1
+210 | Beczka | 98 63 | !Tavern_Yard |   1
+211 | Stos drewna | 114 60 | !Tavern_Yard |   1
+212 | Beczka | 116 60 | !Tavern_Yard |   1
+213 | Stos drewna | 54 91 | !Tavern_Yard |   1
+214 | Beczka | 59 91 | !Tavern_Yard |   1
+215 | Stos drewna | 62 90 | !Tavern_Yard |   1
+216 | Drzwi: Dom weterana | 84 88 | !$Drzwi_K_216 | <Town:door=dom8> ->M189(6,9) 1
+217 | Beczka | 65 90 | !Tavern_Yard |   1
+218 | Drzwi: Izba do wynajêcia | 95 88 | !$Drzwi_K_218 | <Town:door=dom9> ->M190(4,8) 1
+219 | Stos drewna | 66 89 | !Tavern_Yard |   1
+220 | Stojak z broni¹ | 95 41 | !Town_Props |   1
+221 | Beczka | 70 89 | !Tavern_Yard |   1
+222 | Stos drewna | 72 89 | !Tavern_Yard |   1
+223 | Beczka | 74 89 | !Tavern_Yard |   1
+224 | Stos drewna | 76 91 | !Tavern_Yard |   1
+225 | Beczka | 81 91 | !Tavern_Yard |   1
+226 | Beczka | 86 89 | !Tavern_Yard |   1
+227 | Stos drewna | 89 89 | !Tavern_Yard |   1
+228 | Beczka | 93 89 | !Tavern_Yard |   1
+229 | Beczka | 97 89 | !Tavern_Yard |   1
+230 | Stos drewna | 98 89 | !Tavern_Yard |   1
+231 | Drzwi: Dom 10 | 31 73 | !$Drzwi_K_231 | <Town:door=dom10> ->M193(3,8) 1
+232 | Beczka | 102 89 | !Tavern_Yard |   1
+233 | Stos drewna | 103 87 | !Tavern_Yard |   1
+234 | Beczka | 105 87 | !Tavern_Yard |   1
+235 | Drzwi: Dom 11 | 45 73 | !$Drzwi_K_235 | <Town:door=dom11> ->M194(4,10) 1
+236 | Drzwi: Dzwonnica | 86 31 | !$Drzwi_K_236 | <Town:door=dzwonnica> ->M108(5,11) 1
+237 | Stos drewna | 112 87 | !Tavern_Yard |   1
+238 | Beczka | 114 87 | !Tavern_Yard |   1
+239 | Stos drewna | 98 14 | !Tavern_Yard |   1
+240 | Beczka | 100 14 | !Tavern_Yard |   1
+241 | Studnia miejska | 51 50 |  | <Studnia:2>  1
+242 | Studnia miejska | 52 50 |  | <Studnia:2>  1
+243 | Stos drewna | 101 17 | !Tavern_Yard |   1
+244 | Beczka | 103 17 | !Tavern_Yard |   1
+245 | Studnia miejska: zejœcie | 52 49 |  |  ->M118(7,6) 1
+246 | P³yta w œcie¿ce (ogród rycerzy) | 33 12 |  |  ->M119(2,4) 2
+247 | Miejsce: plyta | 33 12 |  |   1
+248 | Stos drewna | 106 17 | !Tavern_Yard |   1
+249 | Beczka | 110 17 | !Tavern_Yard |   1
+250 | Drzwi: Dom 12 | 45 87 | !$Drzwi_K_250 | <Town:door=dom12> ->M195(4,8) 1
+251 | Stos drewna | 111 15 | !Tavern_Yard |   1
+252 | Beczka | 114 15 | !Tavern_Yard |   1
+253 | Drzwi: Dom 13 | 79 74 | !$Drzwi_K_253 | <Town:door=dom13> ->M196(7,9) 1
+254 | Drzwi: Dom 14 | 78 88 | !$Drzwi_K_254 | <Town:door=dom14> ->M197(6,9) 1
+255 | Stojak z broni¹ | 103 41 | !Town_Props |   1
+256 | Kuk³a do æwiczeñ | 99 47 | !Town_Props |   1
+257 | Stos drewna | 90 28 | !Tavern_Yard |   1
+258 | Beczka | 92 28 | !Tavern_Yard |   1
+259 | Drzwi: Dom 15 | 21 33 | !$Drzwi_K_259 | <Town:door=dom15> ->M198(9,9) 1
+260 | Stos drewna | 54 59 | !Tavern_Yard |   1
+261 | Beczka | 57 59 | !Tavern_Yard |   1
+262 | Miejsce: tawerna | 51 17 |  |   1
+263 | Stos drewna | 36 75 | !Tavern_Yard |   1
+264 | Beczka | 39 75 | !Tavern_Yard |   1
+265 | Miejsce: przed_tawerna | 58 19 |  |   1
+266 | Stos drewna | 53 77 | !Tavern_Yard |   1
+267 | Miejsce: brama_twierdzy | 51 29 |  |   1
+268 | Beczka | 55 77 | !Tavern_Yard |   1
+269 | Miejsce: ogrod_zakonu | 33 17 |  |   1
+270 | Stos drewna | 34 91 | !Tavern_Yard |   1
+271 | Beczka | 39 91 | !Tavern_Yard |   1
+272 | Wóz z sianem | 15 61 | !House_Town | <Occupy:right=1>  1
+273 | Stos drewna | 43 58 | !Tavern_Yard |   1
+274 | Beczka | 48 58 | !Tavern_Yard |   1
+276 | Miejsce: stragan1 | 41 58 |  |   1
+277 | Stos drewna | 58 58 | !Tavern_Yard |   1
+278 | Beczka | 61 58 | !Tavern_Yard |   1
+279 | Stos drewna | 72 50 | !Tavern_Yard |   1
+280 | Beczka | 74 50 | !Tavern_Yard |   1
+281 | Miejsce: stragan2 | 41 44 |  |   1
+282 | Stos drewna | 80 41 | !Tavern_Yard |   1
+283 | Beczka | 83 41 | !Tavern_Yard |   1
+284 | Miejsce: studnia_rynek | 49 50 |  |   1
+285 | Stos drewna | 67 50 | !Tavern_Yard |   1
+286 | Beczka | 71 50 | !Tavern_Yard |   1
+287 | Miejsce: rynek_srodek | 53 52 |  |   1
+288 | Miejsce: rynek_lawka | 48 46 |  |   1
+289 | Miejsce: piekarnia_drzwi | 38 73 |  |   1
+290 | Drzewo | 17 30 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+291 | Drzewo | 45 98 | !$Tree_Small | <Tree:hits=10,sway=0.8,dropmin=2,dropmax=3>  3
+292 | Miejsce: kantor_drzwi | 18 47 |  |   1
+293 | Drzewo | 67 99 | !$Pine_A | <Tree:hits=20,sway=0.8>  3
+294 | Drzewo | 93 73 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+295 | Drzewo | 109 73 | !$Tree_Apple | <Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropm  4
+296 | Miejsce: kantor_przed | 16 48 |  |   1
+297 | Drzewo | 33 100 | !$Tree_Small | <Tree:hits=10,sway=0.8,dropmin=2,dropmax=3>  3
+298 | Drzewo | 110 59 | !$Tree_Apple | <Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropm  4
+299 | Miejsce: dom11_drzwi | 45 74 |  |   1
+300 | Drzewo | 29 57 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+301 | Drzewo | 69 78 | !$Tree_Apple | <Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropm  4
+302 | Drzewo | 103 26 | !$Tree_Apple | <Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropm  4
+303 | Drzewo | 51 104 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+304 | Miejsce: kantor_rog | 20 48 |  |   1
+305 | Drzewo | 38 91 | !$Tree_Apple | <Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropm  4
+306 | Miejsce: ratusz_drzwi | 85 48 |  |   1
+307 | Miejsce: ratusz_przed | 83 48 |  |   1
+308 | Miejsce: dzwonnica | 85 31 |  |   1
+309 | Drzewo | 6 20 | !$Pine_A | <Tree:hits=20,sway=0.8>  3
+310 | Miejsce: schody_rzem | 51 65 |  |   1
+311 | Drzewo | 73 71 | !$Tree_Apple | <Tree:fruit=139,sway=1.0,scale=0.6,dropmin=2,dropm  4
+312 | Miejsce: ulica_rzem | 12 64 |  |   1
+313 | Miejsce: kowadlo | 8 63 |  |   1
+314 | Miejsce: kuznia_dom | 13 61 |  |   1
+315 | Miejsce: dom12_drzwi | 45 88 |  |   1
+316 | Drzewo | 13 76 | !$Tree_Pear | <Tree:fruit=140,sway=1.0,scale=0.6,dropmin=2,dropm  4
+317 | Miejsce: garbarnia | 15 85 |  |   1
+318 | Drzewo | 20 98 | !$Pine_B | <Tree:hits=16,sway=0.9,dropmin=4,dropmax=6>  3
+319 | Drzewo | 15 102 | !$Pine_A | <Tree:hits=20,sway=0.8>  3
+320 | Miejsce: dom13_drzwi | 79 75 |  |   1
+321 | Miejsce: garbarz_dom | 6 89 |  |   1
+322 | Miejsce: woziwoda_dom | 59 74 |  |   1
+323 | Miejsce: brama_wsch | 116 49 |  |   1
+324 | Miejsce: brama_pld | 31 114 |  |   1
+325 | Drzewo | 23 103 | !$Pine_A | <Tree:hits=20,sway=0.8>  3
+326 | Miejsce: dom_mieszczan | 36 39 |  |   1
+327 | Drzewo | 15 98 | !$Pine_B | <Tree:hits=16,sway=0.9,dropmin=4,dropmax=6>  3
+328 | Drzewo | 24 99 | !$Pine_B | <Tree:hits=16,sway=0.9,dropmin=4,dropmax=6>  3
+329 | Drzewo | 55 100 | !$Pine_A | <Tree:hits=20,sway=0.8>  3
+330 | Drzewo | 56 105 | !$Pine_B | <Tree:hits=16,sway=0.9,dropmin=4,dropmax=6>  3
+331 | Drzewo | 59 103 | !$Pine_A | <Tree:hits=20,sway=0.8>  3
+332 | Miejsce: pod_murem | 48 112 |  |   1
+333 | Drzewo | 52 106 | !$Pine_A | <Tree:hits=20,sway=0.8>  3
+334 | Miejsce: stodola | 38 112 |  |   1
+335 | Miejsce: rynek_rog | 62 50 |  |   1
+336 | Drzewo | 51 100 | !$Pine_A | <Tree:hits=20,sway=0.8>  3
+337 | Drzewo | 8 98 | !$Pine_B | <Tree:hits=16,sway=0.9,dropmin=4,dropmax=6>  3
+338 | Miejsce: ratusz_obok | 84 48 |  |   1
+339 | Miejsce: stragan1_obok | 40 57 |  |   1
+340 | Miejsce: dom14_drzwi | 78 89 |  |   1
+341 | Miejsce: stragan_kosci | 44 45 |  |   1
+343 | Miejsce: woz_pld | 44 112 |  |   1
+344 | Miejsce: w6_ognisko | 50 112 |  |   1
+345 | Miejsce: plac_studnia | 50 51 |  |   1
+346 | Miejsce: plac_tablica | 57 41 |  |   1
+348 | Miejsce: plac_1 | 41 47 |  |   1
+349 | Miejsce: dom15_drzwi | 21 34 |  |   1
+355 | Miejsce: plac_2 | 62 47 |  |   1
+356 | Miejsce: plac_3 | 41 54 |  |   1
+360 | Miejsce: plac_4 | 62 54 |  |   1
+373 | Miejsce: plac_5 | 45 47 |  |   1
+375 | Miejsce: plac_6 | 58 47 |  |   1
+376 | Miejsce: plac_7 | 45 54 |  |   1
+379 | Miejsce: plac_8 | 58 54 |  |   1
+383 | Miejsce: plac_9 | 42 43 |  |   1
+384 | Miejsce: plac_10 | 61 43 |  |   1
+387 | Miejsce: plac_11 | 43 55 |  |   1
+388 | Miejsce: plac_12 | 61 56 |  |   1
+392 | Miejsce: stragan_1 | 43 45 |  |   1
+393 | Miejsce: stragan_2 | 60 45 |  |   1
+396 | Miejsce: stragan_3 | 62 45 |  |   1
+397 | Miejsce: stragan_4 | 43 57 |  |   1
+401 | Miejsce: stragan_5 | 60 57 |  |   1
+406 | Miejsce: stragan_6 | 60 58 |  |   1
+411 | Miejsce: skwer | 70 71 |  |   1
+412 | Miejsce: brama_pd | 32 114 |  |   1
+415 | Miejsce: stajnia_woz | 70 12 |  |   1
+418 | Miejsce: straznica_warta | 99 50 |  |   1
+419 | Miejsce: kaplica_lawka | 14 22 |  |   1
+421 | Miejsce: ciesla_warsztat | 33 89 |  |   1
+426 | Miejsce: kaplica_drzwi | 8 17 |  |   1
+427 | Miejsce: dom_grabarza_drzwi | 19 13 |  |   1
+430 | Miejsce: dom1_drzwi | 85 13 |  |   1
+433 | Miejsce: dom7_drzwi | 42 88 |  |   1
+434 | Miejsce: dom2_drzwi | 96 29 |  |   1
+438 | Miejsce: dom3_drzwi | 7 49 |  |   1
+441 | Miejsce: straznica_drzwi | 98 48 |  |   1
+442 | Miejsce: dom4_drzwi | 84 64 |  |   1
+444 | Miejsce: dom5_drzwi | 95 63 |  |   1
+445 | Miejsce: dom6_drzwi | 33 87 |  |   1
+446 | Miejsce: stajnia_drzwi | 75 14 |  |   1
+451 | Miejsce: dom8_drzwi | 84 89 |  |   1
+452 | Miejsce: dom9_drzwi | 95 89 |  |   1
+482 | Miejsce: dom10_drzwi | 31 74 |  |   1
+495 | Stragan | 47 57 | !Town_Props |   1
+496 | Stragan | 59 55 | !Town_Props |   1
+497 | Stragan | 62 57 | !Town_Props |   1
+499 | Stragan | 63 50 | !Town_Props |   1

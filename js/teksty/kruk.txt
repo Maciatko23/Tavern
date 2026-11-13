@@ -456,3 +456,43 @@ hungry = {imie} jest głodny
 k51Ravenry = (Kruk siada na starej żerdzi w ruinie baszty, między innymi krukami. Na nóżce błyska mu mosiężna obrączka.)
 letterBackOpt = Oddaj: {co}
 kod.talkHook.0 = To chyba twoje. Kruk przyniósł.
+
+# ======================================================================== KRUCZARNIA W MIEŚCIE (pustelnia poza światem, 2026-11-11)
+# Urwisko Kruków jest poza światem: kruki zakonu przeniosły się do kruczarni w Kruczogrodzie (wieża z izbą w północno-wschodnim rogu miasta, żerdzie
+# pod wieżą). Klucze „kaplica.<ścieżka>” czyta się tylko wtedy (Pustelnia_Data.js).
+kaplica.ravenryLook = Wieża kruczarni. Na starych żerdziach zakonu siedzą kruki. Jeden młody, z mosiężną obrączką na nóżce, patrzy prosto na ciebie.
+kaplica.ravenryEmpty = Wieża kruczarni, stare żerdzie zakonu. Kruka z obrączką teraz tu nie ma.
+kaplica.towerLook = Stare żerdzie zakonu pod wieżą kruczarni. Kilka kruków kracze na murze, reszta w wieży. Zapach jak z kurnika, tylko gorzej.
+kaplica.leftHungry = {imie} odleciał do kruczarni. Głodny.
+kaplica.fled = {imie} spłoszony odlatuje do kruczarni. Wróci rano.
+kaplica.k51Ravenry = (Kruk siada na starej żerdzi pod wieżą kruczarni, między innymi krukami. Na nóżce błyska mu mosiężna obrączka.)
+kaplica.listy.3.name = Brat Kleofas (przy kaplicy)
+kaplica.kod.vars.0 = Kruk poleciał z masztu na wschód, wzdłuż drogi z przystani ku Kruczemu Jarowi.
+kaplica.kod.vars.1 = Kruk przysiadł na drodze w Kruczym Jarze, niedaleko bramy miasta.
+kaplica.kod.vars.2 = Kruk czeka w Kruczogrodzie, za południową bramą.
+kaplica.kod.vars.3 = Kruk poleciał do kruczarni, w północno-wschodni róg miasta.
+kaplica.kod.openYoungMenu.3 = Wrócił do kruczarni, bo był głodny. Nakarm go, to wróci z tobą.
+kaplica.zadania.K51.where = przystań → Kruczy Jar → Kruczogród → kruczarnia
+[kaplica.zadania.K51.reward.note]
+Kruczarnia w mieście
+Kruk z masztu zaprowadził mnie wschodnią drogą z przystani, przez Kruczy Jar i bramę południową do Kruczogrodu - do kruczarni zakonu, wieży z izbą w północno-wschodnim rogu miasta. Kruk z mosiężną obrączką siedzi tam na starej żerdzi.
+
+kaplica.zadania.D24.where = kruczarnia w Kruczogrodzie → dom dziadka → działka
+kaplica.zadania.D24.desc = Młody kruk z obrączką zakonu siedzi w kruczarni w Kruczogrodzie. Kruki nie biorą jedzenia z byle ręki - trzeba przychodzić, dzień po dniu.
+kaplica.zadania.D24.steps.0.text = Nakarm kruka w kruczarni w Kruczogrodzie trzy razy, każdy raz innego dnia (surowe mięso albo ryba). Nie biegaj przy nim, psa zostaw w domu. Karmienia: {n}/3.
+[kaplica.zadania.D24.steps.1.say]
+> Dziadku. Kruk z kruczarni siada mi na ramieniu. Miał na nóżce to. (Pokazujesz obrączkę.)
+
+[kaplica.zadania.D24.steps.1.done]
+(Dziadek bierze obrączkę i długo obraca ją w palcach.) Skąd to masz? ...Siadaj.
+Mój dziad trzymał kruki. Tam, w mieście, w wieży przy murze, zanim na górze postawili karczmę. Mówił, że nasza rodzina nosi listy, których nikt nie powinien czytać. Śmiałem się z niego.
+Twój ojciec też się śmiał. A potem dał ci ten kamień na szyję.
+(Dziadek milknie. Oddaje ci obrączkę.) Dbaj o tego ptaka. I postaw mu grzędę na działce. Kruk musi mieć swoje miejsce, jak każdy.
+
+[kaplica.zadania.D24.steps.1.reward.note]
+Ród kruczarzy
+Dziadek rozpoznał obrączkę kruka. Jego dziad trzymał kruki w kruczarni w mieście, zanim na górze postawiono karczmę - „nasza rodzina nosi listy, których nikt nie powinien czytać”. Dziadek mówi, że sam się z tego śmiał, dopóki jego ojciec nie dał mu wisiorka z krukiem - tego samego, który potem dał mojej matce, a ona mnie.
+
+[kaplica.zadania.D24.reward.note]
+Oswojony kruk
+Kruk z kruczarni mieszka teraz na grzędzie na działce. Lata ze mną, nosi listy po wyspie (nie przez morze), leci na zwiad, pilnuje pola przed ptakami, a czasem coś przynosi. Na noc wraca na grzędę.

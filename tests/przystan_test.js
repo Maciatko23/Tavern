@@ -1,6 +1,7 @@
 // The harbour (Map125 "Przystań", tools/przystan, js/plugins/Przystan.js; the user 2026-10-14: the harbour with the fisherman Janek
 // and the smuggler of the prologue). Checks:
-//   - the way in and out: Podgrodzie's forest trail (Map111 0,19) <-> the harbour's east edge (55,19), walked both ways
+//   - the way in and out: on the 3x3 board (2026-11-08) Podgrodzie (Map111) and the harbour (Map125, 120x120) meet along Podgrodzie's
+//     south edge / the harbour's north edge (Swiat_Data seams), walked both ways; no transfer events are left on Podgrodzie for it
 //   - the sea is salt: facing it, a popup over the hero says so and there is nothing to drink, fill or water from it (Needs on: the
 //     thirst stays); with a rod the menu has only "Zarzuć wędkę" and the catch is herring / cod; a plank of the pier is no water
 //   - the new items: Śledź / Dorsz roast and smoke ("any raw fish"), Chusta matki is a keepsake (the bag's "Pamiątki", never dropped)
@@ -26,20 +27,22 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         && new Set([173, 174, 175, 176].map(i => items[i][1])).size === 4, items);
 
     // ---------------------------------------------------------------- the way in from Podgrodzie, walked
-    await t.newGame({ map: 111, x: 1, y: 19, dir: 4, hour: 10, day: 2, quiet: true, minimap: false });
-    await t.hold("left", 50);
+    // (the board: the old Przejście events and edge exits are gone; the seam is the world's: Podgrodzie's south edge x 56..113 <-> the harbour's north edge)
+    await t.newGame({ map: 111, x: 60, y: 118, dir: 2, hour: 10, day: 2, quiet: true, minimap: false });
+    await t.hold("down", 120);
     const inHarbour = await t.until(t.onMap(125), 20);
     await t.frames(30);
     const landed = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $gamePlayer.direction()]");
-    // (2026-10-30, the world stage 1: the harbour is 132x80, its (111,19) edge exit is gone - Podgrodzie joins the harbour through the town; the landing
-    // of Podgrodzie's west exit is the free reachable tile nearest to the old spot: tools/swiat/etap1/zbuduj.py)
-    // (2026-10-30, the world stage 3: Podgrodzie's west trail leads to the garrison (162), not to the harbour)
-    t.check("walking west off Podgrodzie's forest trail (0,19) leads to the garrison (Map162, east side, 110,8 - the world stage 3)", inHarbour === false || landed[0] === 162, landed);
+    t.check("walking south off Podgrodzie's south edge (x 60) leads to the harbour (Map125, its north edge, x 59-61), facing down", inHarbour && landed[0] === 125 && landed[1] >= 59 && landed[1] <= 61 && landed[2] <= 3 && landed[3] === 2, landed);
+    await t.hold("up", 120);
+    const backUp = await t.until(t.onMap(111), 20);
+    const landed2 = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $gamePlayer.direction()]");
+    t.check("...and north off the harbour's north edge back onto Podgrodzie (Map111, its south edge), facing up", backUp && landed2[1] >= 59 && landed2[1] <= 61 && landed2[2] >= 116 && landed2[3] === 8, landed2);
     await t.calm();
-    await t.newGame({ map: 111, x: 5, y: 19, dir: 4, hour: 10, day: 2, quiet: true, minimap: false });
+    await t.newGame({ map: 111, x: 23, y: 52, dir: 4, hour: 10, day: 2, quiet: true, minimap: false });
     await t.frames(20);
-    const tiles111 = await t.json(`(function(){ return $dataMap.events.filter(e => e && e.x === 0 && e.y === 19 && !(e.id >= 910 && e.id <= 949) && !/^Miejsce:/.test(e.name)).map(e => e.name); })()`);
-    t.check("on Podgrodzie only the one transfer event stands at (0,19)", tiles111.length === 1 && /Przejście/.test(tiles111[0]), tiles111);
+    const tiles111 = await t.json(`(function(){ return $dataMap.events.filter(e => e && e.pages.some(p => p.list.some(c => c.code === 201 && (c.parameters[1] === 125 || c.parameters[1] === 162)))).map(e => e.name); })()`);
+    t.check("on Podgrodzie no transfer event is left to the harbour or the garrison (the seams do it)", tiles111.length === 0, tiles111);
 
     // ---------------------------------------------------------------- the sea is salt
     await t.go(125, 20, 12, 4);
@@ -98,10 +101,18 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         return { n: $gameParty.numItems(it), keep: !!(MP && MP.isKeepsake(it)), drop: D ? D.refuse(it) : "", met: !!TownQuests.state().flags.janekMet }; })()`);
     t.check("...and gives back the mother's scarf: Chusta matki in the bag, a keepsake („Pamiątki”) that cannot be thrown away",
         scarf.n === 1 && scarf.keep && /pamiątka/i.test(scarf.drop) && scarf.met, scarf);
+    // (2026-11-11 dawcy_miasto: K47 is offered in the tavern in the evening, 19-22:30, where Janek sits - not at the pier by day)
+    const k47day = await t.json("TownQuests.offerable('K47')");
+    await t.setHour(20);
+    await t.go(1, 14, 50, 8);
+    await t.frames(40);
     const k47 = await t.json("TownQuests.offerable('K47')");
-    t.check("...and then has his quest for the hero (K47 „Pierwszy połów”)", k47, k47);
+    t.check("...and then has his quest for the hero (K47 „Pierwszy połów”) - in the evening, in the tavern, not by day at the pier", k47 && !k47day, { k47, k47day });
     const offer = await t.talkTo("TownLife.eventOf('janek')", ["Nie teraz"]);
-    t.check("...offered first when he is spoken to (declined for today)", offer.done && /dwa śledzie/.test(offer.text), offer.text);
+    t.check("...offered first when he is spoken to in the tavern (declined for today)", offer.done && /dwa śledzie/.test(offer.text), offer.text);
+    await t.setHour(13.5);
+    await t.go(125, 20, 7, 8);
+    await t.frames(30);
     await t.give(173, 3); await t.give(174, 1);
     const g0 = await t.gold();
     const sell = await t.talkTo("TownLife.eventOf('janek')", ["Sprzedam ryby"]);
@@ -176,7 +187,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     // ---------------------------------------------------------------- the other way: the customs house (a new game)
     await t.newGame({ map: 125, x: 32, y: 19, dir: 8, hour: 10, day: 6, quiet: true, minimap: false });
     await t.eval("TownQuests.state().flags.rochMet = 1; TownQuests.state().flags.d20Gotowy = 1; TownQuests.start('D20', 6); 0");
-    await t.hold("up", 30);
+    await t.hold("up", 110);
     const inCustoms = await t.until(t.onMap(128), 15);
     await t.frames(30);
     t.check("the customs house's door opens by day and leads in (Map128)", inCustoms, await t.json("$gameMap.mapId()"));
@@ -210,7 +221,11 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const flat = o => Object.assign(o, { text: String(o.text || "").replace(/\s+/g, " ") });   // (the bubbles break the lines)
     const declineRoch = () => t.eval("(function(){ const s = TownQuests.state(), d = Tawerna.time.day(); for (const q of TownQuestsData.QUESTS) if (q.giver === 'przemytnik') s.declined[q.id] = d; Przystan.state().newsGiven = Math.max(Przystan.state().newsGiven, Przystan.lastRunBack()); return 0; })()");
     // (the story begins only in grandpa's house, Map019 - then off to the harbour)
-    await t.newGame({ story: true, skipIntro: true, hour: 10, day: 10, quiet: true, minimap: false });
+    // (2026-11-08: the king's summons (Story.js wezwanie) takes the house at dusk of day 3 - a game that jumps to day 10 would start inside that scene;
+    // so: start on day 2, mark the summons as over - grandpa back home, the letter read, the seal off - and only then jump to day 10)
+    await t.newGame({ story: true, skipIntro: true, deadline: false, hour: 10, day: 2, quiet: true, minimap: false });
+    await t.eval("Object.assign(Story.state().wez, { called: 3, told: true, gone: true, letter: true, freed: 3, backAt: 1 }); 0");
+    await t.setDay(10, 10);
     await t.go(125, 30, 19, 2);
     await t.eval(`(function(){ const f = TownQuests.state().flags; f.janekMet = 2; f.rochMet = 2; f.w10Prom = 6; f.w10Wiesc = 10;
         Przystan.state().letterDay = 6; TownQuests.start('W10', 2, true); return 0; })()`);
@@ -285,26 +300,29 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     // the answer to it by the cutter, with a parcel; the epilogue's line
     await t.give(105, 2); await t.give(124, 1);
     await declineRoch();
+    // (2026-11-12: Morze.js - on the first talk Roch shows the wet tracks, the sea-monster thread's opening, before anything else; hear that out first)
+    const clue = flat(await t.talkTo("TownLife.eventOf('przemytnik')", []));
+    if (!/Ślady/.test(clue.text)) console.log("NOTE no sea-monster clue from Roch before the letter's answer:", clue.text.slice(0, 80));
     const rep3 = flat(await t.talkTo("TownLife.eventOf('przemytnik')", ["Zawieziesz list do mamy", "List i paczka"]));
     const r3 = await t.json(`({ rep: Przystan.letters().replies[1] || null, left: [$gameParty.numItems($dataItems[105]), $gameParty.numItems($dataItems[124])], ep: Przystan.epilogue(),
         ul: (window.Underground && Underground.epilogueLines) ? Underground.epilogueLines("zniszczyc") : null })`);
     t.check("...answered by Roch's cutter with a parcel (3 things that keep, taken from the bag); the Heart's epilogue gets the letters' line (she wrote, he wrote back and helped)",
         rep3.done && !!r3.rep && r3.rep.to === 3 && r3.rep.via === "kuter" && r3.rep.food === 3 && r3.left[0] === 0 && r3.left[1] === 0
-        && /przeprowadziło ją przez zimę/.test(r3.ep || "") && Array.isArray(r3.ul) && r3.ul.includes(r3.ep), { r3, text: rep3.text.slice(0, 300) });
+        && /przeprowadziło ją przez zimę/.test(r3.ep || "") && Array.isArray(r3.ul) && r3.ul.includes(r3.ep), { r3, text: rep3.text.slice(0, 300), choices: rep3.choices, missing: rep3.missing });
 
-    // F9 „Wyspa i fabuła”: the row (a game without the story - grandpa's step passed by)
-    await t.newGame({ map: 3, x: 22, y: 14, dir: 2, hour: 10, day: 12, quiet: true, minimap: false });
+    // F9 „Fabuła i postacie”: the row (a game without the story - grandpa's step passed by)
+    await t.newGame({ map: 3, x: 62, y: 45, dir: 2, hour: 10, day: 12, quiet: true, minimap: false });
     await t.eval("SceneManager.push(Scene_Debug); 0");
     await t.until("SceneManager._scene instanceof Scene_Debug && !SceneManager.isSceneChanging()", 20);
     await t.frames(6);
-    const f9 = await t.json(`(function(){ const s = SceneManager._scene; s.goTo(s._tabs._list.findIndex(c => c.name === "Wyspa i fabuła"), 0);
+    const f9 = await t.json(`(function(){ const s = SceneManager._scene; s.goTo(s._tabs._list.findIndex(c => c.name === "Fabuła i postacie"), 0);
         const rows = s._list._rows, i = rows.findIndex(r => r.kind === "isleW10");
-        return { head: rows.some(r => r.head && r.label === "Wątek W10 (list do matki):"), last: rows[rows.length - 1].kind, label: i >= 0 ? rows[i].label : null }; })()`);
+        return { head: rows.some(r => r.head && r.label === "Wątek W10 (list do matki):"), last: i > 0 && rows[i - 1].head && rows[i - 1].label === "Wątek W10 (list do matki):" && rows[i + 1].head && rows.findIndex(r => r.label === "Postacie:") > i ? "isleW10" : "elsewhere", label: i >= 0 ? rows[i].label : null }; })()`);
     await t.eval("(function(){ const s = SceneManager._scene, l = s._list; l.select(l._rows.findIndex(r => r.kind === 'isleW10')); s.onOk(); return 0; })()");
     await t.until(t.onMap(125), 30);
     await t.until("$gameMessage.isBusy()", 20);
     await t.finish(80);
     const f9b = await t.json("({ map: $gameMap.mapId(), got: Przystan.letters().got.length, step: TownQuests.rec('W10') ? TownQuests.rec('W10').step : -1, force: Przystan.letters().force, ep: Przystan.epilogue() === Przystan.TX.epilog.silent })");
-    t.check("F9 „Wyspa i fabuła”: the row „W10: przyślij list od matki (1. z 3)” - OK takes the hero to the harbour and the letter is read at once; without the story grandpa's step is passed by; unanswered, the epilogue's line says so",
+    t.check("F9 „Fabuła i postacie” (was „Wyspa i fabuła”; the row now sits under its own thread heading, among the threads and before „Postacie:”): the row „W10: przyślij list od matki (1. z 3)” - OK takes the hero to the harbour and the letter is read at once; without the story grandpa's step is passed by; unanswered, the epilogue's line says so",
         f9.head && f9.last === "isleW10" && f9.label === "W10: przyślij list od matki (1. z 3)" && f9b.map === 125 && f9b.got === 1 && f9b.step === 4 && f9b.force === 0 && f9b.ep, { f9, f9b });
 });

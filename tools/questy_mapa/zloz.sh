@@ -1,0 +1,1 @@
+cd "$(dirname "$0")" && cat czesci/00_rdzen.py czesci/05_hash.py czesci/20_ludzie.py czesci/30_zakon.py czesci/40_zasoby.py czesci/50_lowy.py czesci/60_homes.py czesci/70_swiat.py czesci/80_mapy.py czesci/85_miasto.py czesci/90_teksty.py czesci/95_testy.py czesci/96_testy2.py czesci/99_koniec.py > zastosuj.py

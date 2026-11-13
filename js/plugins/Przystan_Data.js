@@ -51,7 +51,7 @@
             // K47 "Pierwszy połów": two herrings from the sea (no rod: Janek gives his - the offer's option, k47Rod below)
             K47: { kind: "K", giver: "janek", icon: 173,
                 offer: {
-                    cond: { hours: [8, 20], flags: ["janekMet"] },
+                    cond: { hours: [19, 22.5], flags: ["janekMet"] },
                     options: [
                         { then: "accept" },
                         { then: "accept", fx: "k47Rod" },
@@ -59,16 +59,16 @@
                     ]
                 },
                 kroki: [
-                    { nazwa: "k47Sledzie", type: "bring", to: "janek", need: [[173, 2]], hours: [5, 21] }
+                    { nazwa: "k47Sledzie", type: "bring", to: "janek", need: [[173, 2]], hours: [19, 22.5] }
                 ],
                 reward: { xp: 40, items: [[106, 2]], flag: "rybackaRada" } },
             // K48 "Sieci po sztormie"
             K48: { kind: "K", giver: "janek", icon: 92,
                 offer: {
-                    cond: { hours: [9, 20], flags: ["janekMet"] }
+                    cond: { hours: [19, 22.5], flags: ["janekMet"] }
                 },
                 kroki: [
-                    { nazwa: "k48Sieci", type: "bring", to: "janek", need: [[92, 6], [93, 2]], hours: [6, 21] }
+                    { nazwa: "k48Sieci", type: "bring", to: "janek", need: [[92, 6], [93, 2]], hours: [19, 22.5] }
                 ],
                 reward: { gold: 20, xp: 40, items: [[106, 2]] } },
             // D20 "Kuter na pochylni": the wreck onto the slipway at dawn, the boards, the tar, the sail - and the night it sails (the
@@ -78,12 +78,12 @@
                     cond: { hours: [6, 21], flags: ["rochMet"] }
                 },
                 kroki: [
-                    { nazwa: "d20Janek", type: "talk", to: "janek", hours: [8, 20] },
+                    { nazwa: "d20Janek", type: "talk", to: "janek", hours: [19, 22.5] },
                     { nazwa: "d20Wrak", type: "spot", spot: "przystan_wrak", hours: [5, 10], need: [[93, 2]],
                         reward: { flag: "d20Pochylnia" } },
                     { nazwa: "d20Burta", type: "bring", to: "przemytnik", need: [[80, 8], [88, 20]], hours: [6, 22] },
-                    { nazwa: "d20Smola", type: "bring", to: "drwal", need: [[61, 6]], hours: [6, 21], gives: [[176, 2]] },
-                    { nazwa: "d20Zagiel", type: "bring", to: "praczka", need: [[92, 10]], hours: [6, 18], vgives: { zagiel: 1 } },
+                    { nazwa: "d20Smola", type: "bring", to: "drwal", need: [[61, 6]], hours: [17.5, 21.5], gives: [[176, 2]] },
+                    { nazwa: "d20Zagiel", type: "bring", to: "praczka", need: [[92, 10]], hours: [17.5, 20], vgives: { zagiel: 1 } },
                     { nazwa: "d20Kuter", type: "bring", to: "przemytnik", need: [[176, 2], ["v:zagiel", 1]], hours: [6, 22],
                         reward: { flag: "d20Gotowy" } },
                     // the night: the hero helped Roch sail, or gave him away
@@ -93,7 +93,7 @@
             // W10 "List do matki"
             W10: { kind: "W", giver: "janek", icon: 175,
                 offer: {
-                    cond: { hours: [8, 20], flags: ["janekMet"], day: 4 }
+                    cond: { hours: [19, 22.5], flags: ["janekMet"], day: 4 }
                 },
                 kroki: [
                     // the letter sent (by the ferry or the cutter), the news from the mainland

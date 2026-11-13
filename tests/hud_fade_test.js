@@ -5,7 +5,7 @@ const kit = require("./lib/kit.js");
 
 kit.test({ port: 9440, bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
     await t.eval("ConfigManager.uiClean = false; 0");   // (the classic look: this test checks the old panels' places - CleanHUD.js's clean look is tests/clean_hud_test.js)
-    await t.newGame({ map: 3, x: 22, y: 14, day: 1, hour: 12, quiet: true, minimap: false });
+    await t.newGame({ map: 3, x: 62, y: 45, day: 1, hour: 12, quiet: true, minimap: false });
     const alphas = () => t.json(`(function(){ const s = SceneManager._scene, a = el => el ? +el.alpha.toFixed(2) : null;
         return { hud: a(s._survivalHud), goal: a(s._goalTracker), goalShown: !!(s._goalTracker && s._goalTracker.visible), xp: a(s._xpBar), xpShown: !!(s._xpBar && s._xpBar.visible) }; })()`);
     // the hero at a spot of the screen (tiles from the top-left of the view), the view held still at the map's top-left

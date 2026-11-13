@@ -45,7 +45,7 @@ const { launch, sleep } = require("./cdp.js");
 
         await frames(60);
         const s0 = await S();
-        check("rested (100%): not tired, the usual speeds, nothing said", !s0.tired && s0.walk === 3.75 && s0.work === 1 && s0.said === 0, s0);
+        check("rested (100%): not tired, the usual speeds, nothing said", !s0.tired && s0.walk === 3 && s0.work === 1 && s0.said === 0, s0);
         const d0 = await walk();
         const r0 = await roll();
 
@@ -54,7 +54,7 @@ const { launch, sleep } = require("./cdp.js");
         const s1 = await S();
         check("below 20% (15): 'Zmęczyłem się...' in a bubble over him", s1.tired && s1.said === 1, s1);
         await b.shot("tired.png");
-        check("...he walks at half the speed (3.75 -> 2.75) and works at half the speed", s1.walk === 2.75 && s1.work === 0.5, s1);
+        check("...he walks at half the speed (3 -> 2) and works at half the speed", s1.walk === 2 && s1.work === 0.5, s1);
         const d1 = await walk();
         check("...really: 60 frames of walking take him half as far", Math.abs(d1 - d0 / 2) < 0.2, { rested: d0, tired: d1 });
         await ev("$gameSystem.setStamina(15); 0");
@@ -66,7 +66,7 @@ const { launch, sleep } = require("./cdp.js");
         await ev("$gameSystem.setStamina(50); 0");
         await frames(20);
         const s2 = await S();
-        check("rested again (50%): the usual speeds", !s2.tired && s2.walk === 3.75 && s2.work === 1, s2);
+        check("rested again (50%): the usual speeds", !s2.tired && s2.walk === 3 && s2.work === 1, s2);
         await ev("$gameSystem.setStamina(10); 0");
         await frames(20);
         check("tired out once more: he says it again", (await S()).said === 2);

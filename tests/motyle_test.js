@@ -63,6 +63,9 @@ kit.test({ port: 9541, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("w dzień w pokoju ćmy odlatują", (await M("Motyle.moths.filter(m => m.state !== 'go').length")) === 0, await M("Motyle.moths.map(m => m.state)"));
 
     // ---------------------------------------------------------------- gra: łąka #1 (Map004), lato, 11:00
+    // (2026-11-12: in the story the sealed house at dusk of day >= 3 has the Lord's butler knock - a message that blocks every transfer;
+    // the night room check above triggers it, so confirm it away first)
+    for (let i = 0; i < 12 && !(await t.eval(t.idle)); i++) { await t.tapOk(); await t.frames(10); }
     await t.setDay(SUMMER, 11);
     await t.go(4, 20, 15, 2);
     await t.eval("Survival.calmWeather(); $gameScreen.clearWeather(); 0");
@@ -425,8 +428,9 @@ kit.test({ port: 9541, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.frames(3);
     await t.eval("Input._onKeyUp({ keyCode: 120 }); 0");
     await t.until("SceneManager._scene && SceneManager._scene.constructor.name === 'Scene_Debug' && !!SceneManager._scene._list", 10);
+    await M("(function(){ const s = SceneManager._scene; s.goTo(s._tabs._list.findIndex(c => c.name === 'Pogoda i morze'), 0); return 0; })()");
     const f9 = await M("SceneManager._scene._list._rows.filter(r => ['motyle','cmy','siatka'].includes(r.kind)).map(r => r.kind + ':' + r.label)");
-    t.check("F9, „Zdarzenia”: wiersze „Motyle teraz (łąka, lato, po deszczu)”, „Ćmy przy ogniu (noc)”, „Daj siatkę na motyle”",
+    t.check("F9, „Pogoda i morze” (until 2026-11-11 „Zdarzenia”): wiersze „Motyle teraz (łąka, lato, po deszczu)”, „Ćmy przy ogniu (noc)”, „Daj siatkę na motyle”",
         f9.join("|") === "motyle:Motyle teraz (łąka, lato, po deszczu)|cmy:Ćmy przy ogniu (noc)|siatka:Daj siatkę na motyle", f9);
     await t.eval("(function(){ const s = SceneManager._scene, l = s._list, i = l._rows.findIndex(r => r.kind === 'motyle'); l.select(i); s.onOk(); return 0; })()");
     await t.until(t.onMap(4), 10);

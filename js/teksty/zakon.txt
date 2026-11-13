@@ -333,7 +333,7 @@ Pod kręgiem menhirów leży pierwszy strażnik warty. Na ścianie jego komory w
 
 # ======================================================================== K69 (zadania.K69)
 zadania.K69.title = Grzędy Straży
-zadania.K69.where = Orla Grań → pustelnia na klifie
+zadania.K69.where = Tawerna (Bazyli po południu) → Orla Grań → pustelnia na klifie
 zadania.K69.when = po „Jaju z grani” (D29)
 zadania.K69.desc = Na Orlej Grani stoją ruiny kamiennych grzęd Skrzydlatej Straży. Bazyli widział je z laterny: „trzy słupy jak palce”.
 [zadania.K69.offer.say]
@@ -766,3 +766,19 @@ kod.grabarzTalk.0 = Ambroży cię przysłał? Do tych z krukiem? Dwa w północn
 kod.grabarzTalk.1 = Czyść rękami, nie łopatą. Ojciec mówił: kamień brata zakonu dotyka się jak chleba.
 kod.ansgarTalk.1 = (Eryk widzi deskę w twojej torbie i blednie.) Skąd... To z dziobu. Sam ją przybijałem w porcie, zanim wypłynęliśmy.
 kod.ansgarTalk.2 = „Biała Źrenica”. Straż Pewności. Schowaj to, chłopcze. Jak zobaczy to ktoś z garnizonu, zacznie pytać. A jak zobaczy ktoś z naszych... nie zapyta.
+
+# ======================================================================== PRZY KAPLICY (pustelnia poza światem, 2026-11-11)
+# Brat Kleofas zszedł z klifu i siedzi przy kaplicy w Kruczogrodzie (Map008), dopóki WyspaData.HERMITAGE_OPEN = false. Klucze „kaplica.<ścieżka>”
+# mówią tę samą ścieżkę jeszcze raz i nadpisują ją TYLKO wtedy (Pustelnia_Data.js); gdy pustelnia wróci, czyta się tekst z góry pliku.
+kaplica.zadania.K68.where = kopce z krukiem i fundamenty strażnic → brat Kleofas przy kaplicy
+kaplica.zadania.K68.steps.1.text = Daj bratu Kleofasowi przeczytać wszystkie Zapiski strażnic (przeczytane {r}/6; za dnia, przy kaplicy).
+
+# (2026-11-11, questy_pustelnia) kopiec z klifu stoi na Orlej Grani, fundament trzeciej strażnicy obok garnizonu (Map162)
+kaplica.zadania.K68.steps.0.text = Znajdź wszystkie Zapiski strażnic: trzy w kopcach z krukiem (Omszała łąka, Skraj lasu, szczyt Orlej Grani) i trzy pod płytami strażnic (Polna droga, Góry, ziemia obok garnizonu) ({n}/6).
+[kaplica.zadania.K68.offer.accept]
+Kopce stoją przy starych drogach: na Omszałej łące, na Skraju lasu i na szczycie Orlej Grani, nad kamieniołomem. Wieże... z wież zostały fundamenty. Jedna stała nad zatoką, tam gdzie dziś garnizon - żołnierze postawili palisadę na jej kamieniach, a fundamenty zostały tuż obok. Szukaj płyt z krukiem.
+
+kaplica.odkrycia.straznica_157.name = Fundamenty strażnicy przy garnizonie
+kaplica.odkrycia.straznica_157.text = Pod trawą za palisadą garnizonu leżą fundamenty wieży zakonu. Garnizon postawiono obok, na jej kamieniach. Płyta z krukiem została.
+kaplica.odkrycia.kopiec_155.name = Kopiec z krukiem na Orlej Grani
+kaplica.odkrycia.kopiec_155.text = Kopiec na szczycie Orlej Grani, nad kamieniołomem, zwrócony do morza. Kamień z krukiem na wierzchu wytarty od wiatru.

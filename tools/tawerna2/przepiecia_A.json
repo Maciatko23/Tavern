@@ -1,0 +1,229 @@
+[
+ {
+  "opis": "Agent A (hall + plan side). PLAN_DATA is not an entry: python tools/tawerna2/przepinaj.py && python tools/tawerna2/przepinaj_plan.py (the second script swaps the single PLAN_DATA line of the staged TavernLife_Plan.js for tools/tawerna2/plan/plan_data.json, built by tools/tawerna2/plan/make_plan.py + make_board.py from the staged maps; pictures go to staging/img). Second layout: Map001 63x55 = old hall block x-36 (hall x1..47 y27..44, entrance landing (14,53)), seats ev400-422 unchanged."
+ },
+ {
+  "plik": "js/plugins/Goscie_Sala.js",
+  "stare": "const HALL = { x0: 37, y0: 27, x1: 83, y1: 44 };",
+  "nowe": "const HALL = { x0: 1, y0: 27, x1: 47, y1: 44 };",
+  "ile": 1,
+  "po": "new hall rectangle"
+ },
+ {
+  "plik": "js/plugins/Goscie_Sala.js",
+  "stare": "const DOOR = { x: 50, y: 52 }, BAR = [[46, 31], [48, 31], [50, 31], [52, 31], [54, 31], [56, 31]], STAGE = [[71, 33], [73, 33], [75, 33], [77, 33]];",
+  "nowe": "const DOOR = { x: 14, y: 52 }, BAR = [[10, 31], [12, 31], [14, 31], [16, 31], [18, 31], [20, 31]], STAGE = [[35, 33], [37, 33], [39, 33], [41, 33]];",
+  "ile": 1,
+  "po": "the old block shifted -36 in x: entry (14,52) above the landing (14,53), the old bar/stage cells -36; all checked reachable"
+ },
+ {
+  "plik": "js/plugins/Przytulna.js",
+  "stare": "const HALL = { x0: 37, y0: 27, x1: 83, y1: 44 };",
+  "nowe": "const HALL = { x0: 1, y0: 27, x1: 47, y1: 44 };",
+  "ile": 1,
+  "po": "new hall rectangle (lights, fires, mugs)"
+ },
+ {
+  "plik": "js/plugins/Przytulna.js",
+  "stare": "const BARD_ID = 360, BARD_X = 70, BARD_Y = 29;",
+  "nowe": "const BARD_ID = 360, BARD_X = 34, BARD_Y = 29;",
+  "ile": 1,
+  "po": "bard on the new stage"
+ },
+ {
+  "plik": "js/plugins/Przytulna.js",
+  "stare": "const BORGAR_HOME = { x: 52, y: 28 }, BORGAR_BAR = { x: 53, y: 29 }",
+  "nowe": "const BORGAR_HOME = { x: 16, y: 28 }, BORGAR_BAR = { x: 17, y: 29 }",
+  "ile": 1,
+  "po": "Borgar ev1 stands at (16,28); (17,29) is the free cell beside him (old (52,28)/(53,29) -36)"
+ },
+ {
+  "plik": "js/plugins/Przytulna.js",
+  "stare": "else if (e.x >= 65 && /^(Świeca|Latarnia)/i.test(name)",
+  "nowe": "else if (e.x >= 29 && /^(Świeca|Latarnia)/i.test(name)",
+  "ile": 1,
+  "po": "the old stage half was x>=65 (-36 = 29)"
+ },
+ {
+  "plik": "js/plugins/TavernLife.js",
+  "stare": "const TAVERN_LAYOUT = 2, ENTRANCE = [50, 53, 8];",
+  "nowe": "const TAVERN_LAYOUT = 3, ENTRANCE = [14, 53, 8];",
+  "ile": 1,
+  "po": "old saves go to the new entrance"
+ },
+ {
+  "plik": "js/plugins/TavernLife.js",
+  "stare": "if ($gameMap.mapId() !== 1 || $gamePlayer.isTransferring()) return;",
+  "nowe": "if (![1, 25, 26].includes($gameMap.mapId()) || $gamePlayer.isTransferring()) return;",
+  "ile": 1,
+  "po": "old saves upstairs (Map025/026 changed size too) also land at the new entrance"
+ },
+ {
+  "plik": "js/plugins/TavernLife.js",
+  "stare": "for (const [dx, dy] of [[0, 0], [0, 1], [1, 0], [-1, 0], [0, -1], [1, 1], [0, 2]]) todo.push",
+  "nowe": "for (const [dx, dy] of [[0, 0], [0, 1], [1, 0], [-1, 0], [0, -1], [1, 1], [0, 2], [0, 3], [1, 2], [1, 3], [-1, 1], [-1, 2], [2, 0], [2, 1], [2, 2], [-1, 3], [2, 3]]) todo.push",
+  "ile": 1,
+  "po": "the new beds are 2x3 tiles of blocked furniture: the old 7 seeds all lay inside it (room 3 and the komnata got a 7-cell 'floor'); more seeds reach the room floor (then >=120 -> the radius rule, like the suites)"
+ },
+ {
+  "plik": "js/plugins/Act3_Data.js",
+  "stare": "door: [9, 14], doorTile: [9, 13],",
+  "nowe": "door: [32, 20], doorTile: [32, 19],",
+  "ile": 1,
+  "po": "pantry door picture 'Stare drzwi' ev209 at (32,19); the men work from the corridor cell in front (32,20)"
+ },
+ {
+  "plik": "js/plugins/Act3_Data.js",
+  "stare": "kitchen: [[45, 11], [47, 11], [43, 12], [49, 12], [45, 13], [41, 12]],",
+  "nowe": "kitchen: [[3, 10], [7, 10], [10, 12], [14, 10], [5, 13], [15, 13]],",
+  "ile": 1,
+  "po": "kitchen floor x1..17 y4..16 (free cells checked)"
+ },
+ {
+  "plik": "js/plugins/Act3_Data.js",
+  "stare": "front: [[50, 51], [49, 51], [51, 51], [50, 50], [48, 50], [52, 50]],",
+  "nowe": "front: [[14, 51], [13, 51], [15, 51], [14, 50], [12, 50], [16, 50]],",
+  "ile": 1,
+  "po": "the old front cells -36 (above the entrance (14,53))"
+ },
+ {
+  "plik": "js/plugins/Act3_Data.js",
+  "stare": "guard: [[10, 16], [8, 16], [11, 17], [7, 17]],",
+  "nowe": "guard: [[30, 21], [34, 21], [31, 22], [33, 22]],",
+  "ile": 1,
+  "po": "defenders flank the pantry corridor (x32) in the corridor y20..22; guard[0] (30,21) stands by it"
+ },
+ {
+  "plik": "js/plugins/Act3_Data.js",
+  "stare": "hall: [[50, 30], [47, 31], [53, 31]],",
+  "nowe": "hall: [[14, 32], [18, 32], [22, 32]],",
+  "ile": 1,
+  "po": "free hall cells"
+ },
+ {
+  "plik": "js/plugins/Act3_Data.js",
+  "stare": "borgar: [52, 31], entry: [50, 53]",
+  "nowe": "borgar: [16, 31], entry: [14, 53]",
+  "ile": 1,
+  "po": "the hero's AT_BAR cell; entry"
+ },
+ {
+  "plik": "js/plugins/Act3.js",
+  "stare": "d._spot = [guard[0][0], guard[0][1], 8];",
+  "nowe": "d._spot = [guard[0][0], guard[0][1], 6];",
+  "ile": 1,
+  "po": "the door guard faces east, toward the pantry door"
+ },
+ {
+  "plik": "js/plugins/Kasztelan_Data.js",
+  "stare": "const AT_BAR = [MAP.tavern, 52, 31, 8];",
+  "nowe": "const AT_BAR = [MAP.tavern, 16, 31, 8];",
+  "ile": 1,
+  "po": "in front of the bar"
+ },
+ {
+  "plik": "js/plugins/Underground.js",
+  "stare": "$gamePlayer.reserveTransfer(1, 52, 31, 8, 0);",
+  "nowe": "$gamePlayer.reserveTransfer(1, 16, 31, 8, 0);",
+  "ile": 1,
+  "po": "end of the game: the hero at the bar"
+ },
+ {
+  "plik": "js/plugins/Underground_Data.js",
+  "stare": "key: \"tawerna\", map: 1, cam: [52, 31], last: true,",
+  "nowe": "key: \"tawerna\", map: 1, cam: [16, 31], last: true,",
+  "ile": 1,
+  "po": "camera at the bar"
+ },
+ {
+  "plik": "js/plugins/Underground_Data.js",
+  "stare": "const out = [[\"borgar\", 52, 28, 2], [\"ozzy\", 49, 30, 6], [\"melia\", 55, 30, 4]];",
+  "nowe": "const out = [[\"borgar\", 16, 28, 2], [\"ozzy\", 13, 31, 6], [\"melia\", 19, 31, 4]];",
+  "ile": 1,
+  "po": "Borgar behind the counter, Ozzy/Melia on free cells y21 either side of the hero"
+ },
+ {
+  "plik": "js/plugins/Underground_Data.js",
+  "stare": "out.push([\"grum\", 58, 31, 4]);",
+  "nowe": "out.push([\"grum\", 22, 31, 4]);",
+  "ile": 1,
+  "po": "Grum on a free cell y21"
+ },
+ {
+  "plik": "js/plugins/Underground_Data.js",
+  "stare": "hero: (w, e) => (e.guardian === \"hero\" ? null : [52, 31, 8]),",
+  "nowe": "hero: (w, e) => (e.guardian === \"hero\" ? null : [16, 31, 8]),",
+  "ile": 1,
+  "po": "hero at the bar"
+ },
+ {
+  "plik": "js/plugins/Underground_Data.js",
+  "stare": "{ heroIn: [52, 31, 8] },",
+  "nowe": "{ heroIn: [16, 31, 8] },",
+  "ile": 1,
+  "po": "hero at the bar"
+ },
+ {
+  "plik": "js/plugins/Wrak_Data.js",
+  "stare": "SPOT_TAVERN = [61, 33, 4];",
+  "nowe": "SPOT_TAVERN = [19, 32, 4];",
+  "ile": 1,
+  "po": "gosc_9: free hall cell by a table"
+ },
+ {
+  "plik": "js/plugins/TavernLife_Plan.js",
+  "stare": "1: { x: 46, y: 78, w: 101, h: 84, sheet: \"!$Tavern_Plan\", dir: 2, note: \"<Occupy:left=1,right=1>\", cells: [[45, 78], [46, 78], [47, 78]] },",
+  "nowe": "1: { x: 9, y: 49, w: 63, h: 55, sheet: \"!$Tavern_Plan\", dir: 2, note: \"<Occupy:right=1>\", cells: [[9, 49], [10, 49]] },",
+  "ile": 1,
+  "po": "Map001 63x55: the manual easel ev349 (9,49) <Tavern:plan> stands (the injection yields to it); these are its numbers if it is ever missing"
+ },
+ {
+  "plik": "js/plugins/TavernLife_Plan.js",
+  "stare": "25: { x: 53, y: 61, w: 97, h: 71, sheet: \"!$Tavern_Plan_Small\", dir: 2, note: \"\", cells: [[53, 61]] },",
+  "nowe": "25: { x: 9, y: 49, w: 63, h: 55, sheet: \"!$Tavern_Plan_Small\", dir: 2, note: \"\", cells: [[9, 49]] },",
+  "ile": 1,
+  "po": "Map025 63x55: stair hall at the bottom, free floor (checked)"
+ },
+ {
+  "plik": "js/plugins/TavernLife_Plan.js",
+  "stare": "26: { x: 44, y: 23, w: 81, h: 57, sheet: \"!$Tavern_Plan_Small\", dir: 4, note: \"\", cells: [[44, 23]] }",
+  "nowe": "26: { x: 9, y: 49, w: 63, h: 55, sheet: \"!$Tavern_Plan_Small\", dir: 4, note: \"\", cells: [[9, 49]] }",
+  "ile": 1,
+  "po": "Map026 63x55: stair hall at the bottom, free floor (checked)"
+ },
+ {
+  "plik": "js/plugins/TavernLife_Plan.js",
+  "stare": "            case \"1:jadalnia\":\n                price.push(L_(\"kitchen\", TK.kod.planInfo[31]));\n                break;",
+  "nowe": "            case \"1:jadalnia\":\n                who.push(L_(\"bar\", TK.kod.planInfo[31]));\n                break;",
+  "ile": 1,
+  "po": "the key 'jadalnia' is now Borgar's room (eavesdropping room of D42), not a dining room"
+ },
+ {
+  "plik": "js/plugins/TavernLife_Plan.js",
+  "stare": "case \"1:laznia\":",
+  "nowe": "case \"25:bath\":",
+  "ile": 1,
+  "po": "the tubs (Tavern:bath) and Wanda are upstairs now: the bath panel belongs to the Map025 room keyed bath"
+ },
+ {
+  "plik": "js/teksty/plan_karczmy.txt",
+  "stare": "opisy.1.spizarnia = Półki z serami, słojami i chlebem — między kuchnią a piekarnią.",
+  "nowe": "opisy.1.spizarnia = Chłodna spiżarnia: półki z serami i słojami, beczki i skrzynie, a w kącie rupiecie, których Borgar nie ma serca wyrzucić.",
+  "ile": 1,
+  "po": "pantry now between the bakery and the servants"
+ },
+ {
+  "plik": "js/teksty/plan_karczmy.txt",
+  "stare": "opisy.1.jadalnia = Stół bankietowy dla gości, którzy wolą zjeść w spokoju.",
+  "nowe": "opisy.1.jadalnia = Biurko z księgą rachunków i klucze do pokoi. Tu Borgar liczy utarg i rozmawia po cichu.",
+  "ile": 1,
+  "po": "key jadalnia = Borgar's room"
+ },
+ {
+  "plik": "js/teksty/plan_karczmy.txt",
+  "stare": "kod.planInfo.31 = Tu też podają posiłki — zamówisz u Borgara",
+  "nowe": "kod.planInfo.31 = Prywatny gabinet Borgara — wstęp tylko dla niego i jego ludzi",
+  "ile": 1,
+  "po": "Borgar's room"
+ }
+]

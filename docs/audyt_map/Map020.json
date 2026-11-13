@@ -1,0 +1,178 @@
+[
+ {
+  "kat": 3,
+  "x0": 31,
+  "y0": 42,
+  "x1": 36,
+  "y1": 55,
+  "co": "Przy zachodnim płocie działki (x 31-36, y 43-55) leży płat innej, grubo teksturowanej ciemnej trawy z blokowymi, schodkowymi krawędziami - ostro odcina się od gładkiej trawy w środku działki i nie pasuje do jej stylu.",
+  "jak": "Zastąpić tą samą trawą co w środku albo zmiękczyć obrys kępami i krzakami; płat nie powinien dochodzić do samego płotu.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map020/01.png"
+ },
+ {
+  "kat": 3,
+  "x0": 55,
+  "y0": 40,
+  "x1": 70,
+  "y1": 55,
+  "co": "Wschodnia granica działki: ciemny kwadratowy płat trawy (x 58-68, y 38-53) ma proste kanty, jedna krawędź idealnie wzdłuż płotu x=57 - bardzo kanciasty.",
+  "jak": "Zaokrąglić obrys płata, przerwać go kępami innej trawy, dodać krzaki na brzegu.",
+  "waga": 3,
+  "obraz": "docs/audyt_map/Map020/02.png"
+ },
+ {
+  "kat": 3,
+  "x0": 0,
+  "y0": 42,
+  "x1": 31,
+  "y1": 51,
+  "co": "Pas ciemnej trawy (x 0-30, y 44-49): górna krawędź to prosta pozioma linia na całej długości - wygląda jak prostokąt.",
+  "jak": "Zrobić nieregularny obrys, pozrywać pas na kilka płatów.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map020/03.png"
+ },
+ {
+  "kat": 5,
+  "x0": 34,
+  "y0": 34,
+  "x1": 49,
+  "y1": 41,
+  "co": "Sosny rosną na linii północnego płotu (x 37-38 y 38-40 i x 45-46 y 36-38) - pnie wchodzą w płot, korona zasłania słupki.",
+  "jak": "Przesunąć drzewa poza płot lub usunąć fragmenty płotu pod koronami.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map020/04.png"
+ },
+ {
+  "kat": 5,
+  "x0": 53,
+  "y0": 42,
+  "x1": 58,
+  "y1": 48,
+  "co": "Sosna (x 54-56, y 43-47) stoi przy samym płocie wschodnim i przy zagrodzie na siano - ściśnięte, zasłania zagrodę i płot.",
+  "jak": "Przesunąć sosnę o 2-3 kratki na zewnątrz ogrodzenia.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map020/05.png"
+ },
+ {
+  "kat": 5,
+  "x0": 38,
+  "y0": 50,
+  "x1": 45,
+  "y1": 58,
+  "co": "Sosna (x 40-41, y 52-56) stoi na południowym płocie i zasłania poprzeczki; pod nią dużo rozproszonych kwiatków i pieńków - bałagan.",
+  "jak": "Przesunąć drzewo, kwiaty zgrupować w jedną rabatę.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map020/06.png"
+ },
+ {
+  "kat": 2,
+  "x0": 53,
+  "y0": 50,
+  "x1": 59,
+  "y1": 56,
+  "co": "Południowo-wschodni róg ogrodzenia: dolny płot kończy się na x=55, a pionowy słupek wschodni sięga y=53 - narożnik się nie domyka (szpara ok. 1 kratki).",
+  "jak": "Dodać narożny słupek/przęsło, żeby płoty się stykały.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map020/07.png"
+ },
+ {
+  "kat": 2,
+  "x0": 34,
+  "y0": 50,
+  "x1": 39,
+  "y1": 56,
+  "co": "Południowo-zachodni róg: pionowy płot schodzi do y=53, a dolny zaczyna się dopiero od x=37 - krzywy, niedomknięty narożnik.",
+  "jak": "Dodać narożnik i wyrównać długość płotów.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map020/08.png"
+ },
+ {
+  "kat": 5,
+  "x0": 44,
+  "y0": 48,
+  "x1": 49,
+  "y1": 56,
+  "co": "Wąski, jednokratkowy pasek kamiennej ścieżki (x 46, y 50-53) odchodzi od chaty do furtki: cienka kropkowana linia niepasująca do szerokiej gliniastej drogi.",
+  "jak": "Zastąpić normalną ścieżką tej samej szerokości lub usunąć.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map020/09.png"
+ },
+ {
+  "kat": 6,
+  "x0": 36,
+  "y0": 39,
+  "x1": 44,
+  "y1": 48,
+  "co": "Zagroda lewa (x 37-42, y 41-46): rozłożyste liściaste drzewo w jaśniejszej, innej palecie niż ciemne sosny i ściany chaty; do tego stos kamieni i kłoda w zagrodzie - styl i skala odstają.",
+  "jak": "Zamienić na drzewo z tego samego zestawu (jabłoń/sosna) lub dopasować kolory; uprościć wnętrze zagrody.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map020/10.png"
+ },
+ {
+  "kat": 1,
+  "x0": 63,
+  "y0": 59,
+  "x1": 73,
+  "y1": 69,
+  "co": "Okruchy ścieżki bez połączenia (x 65-71, y 60-68) i drugi kawałek (x 83-88, y 62-68) - luźne plamy gliny bez początku i końca.",
+  "jak": "Połączyć w drogę lub usunąć.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map020/11.png"
+ },
+ {
+  "kat": 1,
+  "x0": 13,
+  "y0": 13,
+  "x1": 18,
+  "y1": 23,
+  "co": "Cienki pionowy pasek ścieżki (x 15, y 15-21) obok szerokiej drogi - wygląda jak zadrapanie.",
+  "jak": "Usunąć albo zlać z szeroką drogą.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map020/12.png"
+ },
+ {
+  "kat": 3,
+  "x0": 32,
+  "y0": 13,
+  "x1": 40,
+  "y1": 22,
+  "co": "Prostokątna plama gliny (x 34-38, y 15-20) z prostymi bokami, wyrwana z kontekstu.",
+  "jak": "Zaokrąglić, dodać ślady do ścieżki lub zamienić na trawę.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map020/13.png"
+ },
+ {
+  "kat": 1,
+  "x0": 75,
+  "y0": 7,
+  "x1": 84,
+  "y1": 13,
+  "co": "Pozioma, 'falbaniasta' plama gliny (x 76-82, y 9-11) - wstęga w środku łąki bez sensu.",
+  "jak": "Usunąć albo zamienić na zaokrąglony placyk.",
+  "waga": 1,
+  "obraz": "docs/audyt_map/Map020/14.png"
+ },
+ {
+  "kat": 3,
+  "x0": 92,
+  "y0": 30,
+  "x1": 101,
+  "y1": 58,
+  "co": "Wschodni brzeg (x 97, y 30-60) to idealnie pionowa linia na 30 kratek - bez zatoczek; południowo-wschodni narożnik to równe schodki.",
+  "jak": "Powyginać linię brzegu, dodać cyple/zatoki i pas piasku.",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map020/15.png"
+ },
+ {
+  "kat": 1,
+  "x0": 5,
+  "y0": 68,
+  "x1": 28,
+  "y1": 87,
+  "co": "Dwa gaje (x 8-25, y 70-85 oraz x 52-70, y 68-83) to owalne kępy sosen w pustej łące; reszta południa (y 58-90) pusta i jednolita.",
+  "jak": "Dodać podszyt i polany, rozrzedzić brzegi gajów, wypełnić łąkę elementami (kamienie, krzaki, ścieżka).",
+  "waga": 2,
+  "obraz": "docs/audyt_map/Map020/16.png"
+ }
+]

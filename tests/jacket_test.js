@@ -7,7 +7,7 @@ const kit = require("./lib/kit.js");
 const SHOTS = !!process.env.SHOTS;
 
 kit.test({ port: 9464 }, async t => {
-    t.check("a new game on grandpa's field (Map003), noon", await t.newGame({ map: 3, x: 22, y: 14, hour: 12, quiet: true }));
+    t.check("a new game on grandpa's field (Map003), noon", await t.newGame({ map: 3, x: 62, y: 45, hour: 12, quiet: true }));
     await t.eval("$gameSystem.setStamina(250); 0");
 
     // ================= 1. the item =================

@@ -1,0 +1,11 @@
+  c Map008 (29,6) korona z 23 kafli bez gwiazdki, 23 kratek chodliwych pod nią (kafle [697])   [wyjątek: Fałszywy alarm: krzak/trawa/ruina z kafli B-E, nie korona drzewa; zdarzenia-drzewa już stoją osobno (obrazek docs/krawedzie_poprawa/estetyka/c_Map008_29_6.png)]
+Estetyka map świata (staging C:\Users\macie\OneDrive\Dokumenty\RMMZ\Tawerna\tools\usterki\miasto\staging):
+  mapa    a    b    c    d    e
+     8    0    0    0    0    0
+  razem   0    0    0    0    0   (wyjątki odjęte: {'c': 1})
+   a - pas liści: 0
+   b - ucięty/pojedynczy grunt: 0
+   c - drzewo z kafli bez gwiazdki: 0
+   d - mur bez zakończenia: 0
+   e - półka bez zakończenia: 0
+WYNIK: OK

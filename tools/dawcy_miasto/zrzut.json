@@ -1,0 +1,8469 @@
+{
+ "quests": {
+  "K1": {
+   "kind": "K",
+   "title": "Węgiel do paleniska",
+   "giver": "kowal",
+   "offer": {
+    "cond": {
+     "hours": [
+      5.5,
+      17
+     ],
+     "day": 2
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "kowal",
+     "spot": null,
+     "hours": [
+      5.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K2": {
+   "kind": "K",
+   "title": "Woda do hartowania",
+   "giver": "kowal",
+   "offer": {
+    "cond": {
+     "hours": [
+      5.5,
+      17
+     ],
+     "day": 3,
+     "dry": 3
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "kowal",
+     "spot": null,
+     "hours": [
+      5.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K3": {
+   "kind": "K",
+   "title": "Podkowa w słońcu",
+   "giver": "kowal",
+   "offer": {
+    "cond": {
+     "hours": [
+      5.5,
+      17
+     ],
+     "day": 2
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "spot",
+     "to": null,
+     "spot": "horseshoe",
+     "hours": [
+      11,
+      14
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "kowal",
+     "spot": null,
+     "hours": [
+      5.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K4": {
+   "kind": "K",
+   "title": "Chleb przed świtem",
+   "giver": "piekarka",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      14
+     ],
+     "day": 2
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "spot",
+     "to": null,
+     "spot": "bakery_window",
+     "hours": [
+      3.5,
+      5
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K5": {
+   "kind": "K",
+   "title": "Bochenki do dziewiątej",
+   "giver": "piekarka",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      8.5
+     ]
+    },
+    "auto": false
+   },
+   "repeat": "daily",
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "piekarka",
+     "spot": null,
+     "hours": [
+      6,
+      14
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K6": {
+   "kind": "K",
+   "title": "Jęczmień do żaren",
+   "giver": "piekarka",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      14
+     ],
+     "season": [
+      1,
+      2
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "piekarka",
+     "spot": null,
+     "hours": [
+      6,
+      14
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K8": {
+   "kind": "K",
+   "title": "Pęknięta beczka",
+   "giver": "woziwoda",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      14
+     ],
+     "day": 2
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "woziwoda",
+     "spot": null,
+     "hours": [
+      7,
+      14
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K9": {
+   "kind": "K",
+   "title": "Kłótnia w kolejce",
+   "giver": "woziwoda",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      8.5
+     ],
+     "dry": 3,
+     "day": 3
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": []
+  },
+  "K10": {
+   "kind": "K",
+   "title": "Smak wody",
+   "giver": "garbarz",
+   "offer": {
+    "cond": {
+     "hours": [
+      6.5,
+      17
+     ],
+     "done": [
+      "K8"
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "garbarz",
+     "spot": null,
+     "hours": [
+      6.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K11": {
+   "kind": "K",
+   "title": "Myto przy bramie",
+   "giver": "kapral",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      18
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "kapral",
+     "spot": null,
+     "hours": [
+      6,
+      18
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K12": {
+   "kind": "K",
+   "title": "Łój do latarni",
+   "giver": "kapral",
+   "offer": {
+    "cond": {
+     "hours": [
+      18,
+      23
+     ],
+     "day": 2
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "kapral",
+     "spot": null,
+     "hours": [
+      18,
+      23
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K13": {
+   "kind": "K",
+   "title": "Sznur dzwonu",
+   "giver": "dzwonnik",
+   "offer": {
+    "cond": {
+     "hours": [
+      6.3,
+      11.5
+     ],
+     "day": 2
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "dzwonnik",
+     "spot": null,
+     "hours": [
+      6.3,
+      12.3
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K14": {
+   "kind": "K",
+   "title": "Dzwonnik ma chore kolana",
+   "giver": "dzwonnik",
+   "offer": {
+    "cond": {
+     "hours": [
+      17.5,
+      18.25
+     ],
+     "opinion": 20,
+     "day": 3
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K15": {
+   "kind": "K",
+   "title": "Ostrożnie, kruche",
+   "giver": "kupiec",
+   "offer": {
+    "cond": {
+     "hours": [
+      21.5,
+      22.2
+     ],
+     "day": 3
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "woznica",
+     "spot": null,
+     "hours": [
+      21.5,
+      22.5
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K16": {
+   "kind": "K",
+   "title": "Grzyby po dwakroć",
+   "giver": "kupiec",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      18
+     ],
+     "afterFerry": true
+    },
+    "auto": false
+   },
+   "repeat": "trade",
+   "steps": []
+  },
+  "K17": {
+   "kind": "K",
+   "title": "Obwieszczenie o racjach",
+   "giver": "soltys",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      18
+     ],
+     "day": 2
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": [
+      6,
+      20
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "soltys",
+     "spot": null,
+     "hours": [
+      8,
+      18
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K20": {
+   "kind": "K",
+   "title": "Pierwsza skóra",
+   "giver": "garbarz",
+   "offer": {
+    "cond": {
+     "hours": [
+      6.5,
+      17
+     ],
+     "has": [
+      [
+       96,
+       1
+      ]
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": []
+  },
+  "K21": {
+   "kind": "K",
+   "title": "Garbnik z lasu",
+   "giver": "garbarz",
+   "offer": {
+    "cond": {
+     "hours": [
+      6.5,
+      13
+     ],
+     "day": 2
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "garbarz",
+     "spot": null,
+     "hours": [
+      6.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K31": {
+   "kind": "K",
+   "title": "Imieniny Lorda",
+   "giver": "feliks",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      10.5
+     ],
+     "day": 26,
+     "until": 33,
+     "story": true
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "lord",
+     "spot": null,
+     "hours": [
+      8,
+      20
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K32": {
+   "kind": "K",
+   "title": "List od dziadka",
+   "giver": "grandpa",
+   "offer": {
+    "cond": {
+     "day": 5,
+     "until": 20,
+     "story": true
+    },
+    "auto": true
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "lord",
+     "spot": null,
+     "hours": [
+      8,
+      20
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K38": {
+   "kind": "K",
+   "title": "Nocna warta",
+   "giver": "kapral",
+   "offer": {
+    "cond": {
+     "hours": [
+      18,
+      23
+     ],
+     "opinion": 20,
+     "day": 3
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "spot",
+     "to": null,
+     "spot": "watch_post",
+     "hours": [
+      0.75,
+      1.5
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "kapral",
+     "spot": null,
+     "hours": [
+      18,
+      23
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K26": {
+   "kind": "K",
+   "title": "Pierścionek w studni",
+   "giver": "zosia",
+   "offer": {
+    "cond": {
+     "hours": [
+      [
+       8.2,
+       12
+      ],
+      [
+       13.2,
+       18.5
+      ]
+     ],
+     "day": 3,
+     "clear": true
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "spot",
+     "to": null,
+     "spot": "k26_ring",
+     "hours": [
+      6,
+      20
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "zosia",
+     "spot": null,
+     "hours": [
+      [
+       8.2,
+       12
+      ],
+      [
+       13.2,
+       18.5
+      ]
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K37": {
+   "kind": "K",
+   "title": "Sakiewka Lorda",
+   "giver": "feliks",
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "feliks",
+     "spot": null,
+     "hours": [
+      7,
+      10.5
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K39": {
+   "kind": "K",
+   "title": "Kości z targu",
+   "giver": "bartek",
+   "offer": {
+    "cond": {
+     "hours": [
+      14,
+      21
+     ],
+     "day": 7
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "bartek",
+     "spot": null,
+     "hours": [
+      14,
+      21
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K19": {
+   "kind": "K",
+   "title": "Spis obozu",
+   "giver": "soltys",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      18
+     ],
+     "day": 10
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "soltys",
+     "spot": null,
+     "hours": [
+      8,
+      18
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K27": {
+   "kind": "K",
+   "title": "Konik dla Eli",
+   "giver": "ludmila",
+   "offer": {
+    "cond": {
+     "hours": [
+      6.5,
+      20
+     ],
+     "day": 10,
+     "fn": "w6NotHated"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "ela",
+     "spot": null,
+     "hours": [
+      6.6,
+      20
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K28": {
+   "kind": "K",
+   "title": "Kocioł dla obozu",
+   "giver": "ludmila",
+   "offer": {
+    "cond": {
+     "hours": [
+      6.5,
+      20
+     ],
+     "day": 11,
+     "fn": "w6NotHated"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "ludmila",
+     "spot": null,
+     "hours": [
+      6.5,
+      20
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K29": {
+   "kind": "K",
+   "title": "Rana Rafała",
+   "giver": "rafal",
+   "offer": {
+    "cond": {
+     "hours": [
+      [
+       4.5,
+       6.5
+      ],
+      [
+       21,
+       23.5
+      ]
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "rafal",
+     "spot": null,
+     "hours": [
+      [
+       4.5,
+       6.5
+      ],
+      [
+       21,
+       23.5
+      ]
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K30": {
+   "kind": "K",
+   "title": "Koszyki dla dworu",
+   "giver": "feliks",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      8.5
+     ],
+     "market": true,
+     "story": true
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "lord",
+     "spot": null,
+     "hours": [
+      8,
+      9
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D4": {
+   "kind": "D",
+   "title": "Złodziej o świcie",
+   "giver": "piekarka",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      12
+     ],
+     "day": 11
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "ela",
+     "spot": null,
+     "hours": [
+      6.6,
+      20
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "piekarka",
+     "spot": null,
+     "hours": [
+      6,
+      14
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D10": {
+   "kind": "D",
+   "title": "Gorączka Eli",
+   "giver": "ludmila",
+   "offer": {
+    "cond": {
+     "hours": [
+      6.5,
+      20
+     ],
+     "day": 11,
+     "season": [
+      0,
+      1
+     ],
+     "fn": "w6NotHated"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "ludmila",
+     "spot": null,
+     "hours": [
+      6.5,
+      20
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "wait",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "ludmila",
+     "spot": null,
+     "hours": [
+      6.5,
+      20
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D18": {
+   "kind": "D",
+   "title": "Płaszcze przed zimą",
+   "giver": "garbarz",
+   "offer": {
+    "cond": {
+     "hours": [
+      6.5,
+      17
+     ],
+     "day": 70,
+     "season": [
+      2
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "garbarz",
+     "spot": null,
+     "hours": [
+      6.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "garbarz",
+     "spot": null,
+     "hours": [
+      6.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K40": {
+   "kind": "K",
+   "title": "Woda na pranie",
+   "giver": "praczka",
+   "offer": {
+    "cond": {
+     "hours": [
+      5,
+      17
+     ],
+     "day": 2
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "praczka",
+     "spot": null,
+     "hours": [
+      5,
+      22
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K41": {
+   "kind": "K",
+   "title": "Zioła dla babki Jadwigi",
+   "giver": "znachorka",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      18
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "znachorka",
+     "spot": null,
+     "hours": [
+      6,
+      22
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K42": {
+   "kind": "K",
+   "title": "Kram Józka",
+   "giver": "szmaciarz",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      20
+     ],
+     "day": 3
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "szmaciarz",
+     "spot": null,
+     "hours": [
+      7,
+      22
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K43": {
+   "kind": "K",
+   "title": "Drewno na ognisko",
+   "giver": "uchodzca",
+   "offer": {
+    "cond": {
+     "hours": [
+      17,
+      22
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "uchodzca",
+     "spot": null,
+     "hours": [
+      6,
+      23
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K44": {
+   "kind": "K",
+   "title": "Lina dla Zbycha",
+   "giver": "drwal",
+   "offer": {
+    "cond": {
+     "hours": [
+      15,
+      21.5
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "drwal",
+     "spot": null,
+     "hours": [
+      5,
+      22
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K45": {
+   "kind": "K",
+   "title": "Włókno na pętle",
+   "giver": "klusownik",
+   "offer": {
+    "cond": {
+     "hours": [
+      13,
+      20
+     ],
+     "day": 2
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "klusownik",
+     "spot": null,
+     "hours": [
+      5,
+      22
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K46": {
+   "kind": "K",
+   "title": "Suchar dla Franka",
+   "giver": "franek",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      19
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "franek",
+     "spot": null,
+     "hours": [
+      6,
+      22
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D1": {
+   "kind": "D",
+   "title": "Buty od szewca",
+   "giver": "garbarz",
+   "offer": {
+    "cond": {
+     "hours": [
+      6.5,
+      17
+     ],
+     "day": 5
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "garbarz",
+     "spot": null,
+     "hours": [
+      6.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "kowal",
+     "spot": null,
+     "hours": [
+      5.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "garbarz",
+     "spot": null,
+     "hours": [
+      7,
+      8
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "garbarz",
+     "spot": null,
+     "hours": [
+      6.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D3": {
+   "kind": "D",
+   "title": "Ręka kowala",
+   "giver": "kowal",
+   "offer": {
+    "cond": {
+     "hours": [
+      5.5,
+      14
+     ],
+     "day": 6,
+     "done": [
+      "K1"
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "kowal",
+     "spot": null,
+     "hours": [
+      5.5,
+      16
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "kapral",
+     "spot": null,
+     "hours": [
+      6,
+      17.5
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "soltys",
+     "spot": null,
+     "hours": [
+      8,
+      18
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "garbarz",
+     "spot": null,
+     "hours": [
+      6.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "kowal",
+     "spot": null,
+     "hours": [
+      5.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D5": {
+   "kind": "D",
+   "title": "Wataha pod bramą",
+   "giver": "kapral",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      18
+     ],
+     "day": 8
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "spot",
+     "to": null,
+     "spot": "south_gate",
+     "hours": [
+      5,
+      9
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "kill",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": 3,
+     "where": null
+    },
+    {
+     "type": "kill",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": 4,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "kapral",
+     "spot": null,
+     "hours": [
+      6,
+      18
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D11": {
+   "kind": "D",
+   "title": "Ognie na murach",
+   "giver": "kapral",
+   "offer": {
+    "cond": {
+     "hours": [
+      18,
+      23
+     ],
+     "day": 6
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "spot",
+     "to": null,
+     "spot": "east_brazier",
+     "hours": [
+      21,
+      2
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D14": {
+   "kind": "D",
+   "title": "Zboże na wojnę",
+   "giver": "kapral",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      18
+     ],
+     "day": 25
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "kapral",
+     "spot": null,
+     "hours": [
+      6,
+      18
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D16": {
+   "kind": "D",
+   "title": "Uczeń dzwonnika",
+   "giver": "dzwonnik",
+   "offer": {
+    "cond": {
+     "hours": [
+      6.3,
+      17.7
+     ],
+     "opinion": 40,
+     "day": 7
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D17": {
+   "kind": "D",
+   "title": "Petycja do Lorda",
+   "giver": "soltys",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      18
+     ],
+     "day": 20,
+     "story": true
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "lord",
+     "spot": null,
+     "hours": [
+      8,
+      20
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "soltys",
+     "spot": null,
+     "hours": [
+      8,
+      18
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W1": {
+   "kind": "W",
+   "title": "Woda spod Kruczych Skał",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "spot",
+     "to": null,
+     "spot": "w1_grate",
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "kowal",
+     "spot": null,
+     "hours": [
+      5.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W2": {
+   "kind": "W",
+   "title": "Kod dzwonu",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "dzwonnik",
+     "spot": null,
+     "hours": [
+      6.3,
+      17.7
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "dzwonnik",
+     "spot": null,
+     "hours": [
+      17.7,
+      18.3
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "dzwonnik",
+     "spot": null,
+     "hours": [
+      6,
+      18.3
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K22": {
+   "kind": "K",
+   "title": "Struna dla Melii",
+   "giver": "melia",
+   "offer": {
+    "cond": {
+     "hours": [
+      10,
+      17
+     ],
+     "day": 2
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "garbarz",
+     "spot": null,
+     "hours": [
+      6.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K33": {
+   "kind": "K",
+   "title": "Czapka Ozzy'ego",
+   "giver": "ozzy",
+   "offer": {
+    "cond": {
+     "hours": [
+      17,
+      23
+     ],
+     "day": 3
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "ozzy",
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D13": {
+   "kind": "D",
+   "title": "Zakład Ozzy'ego",
+   "giver": "ozzy",
+   "offer": {
+    "cond": {
+     "hours": [
+      18,
+      23.5
+     ],
+     "day": 5,
+     "fn": "d13Offer"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D6": {
+   "kind": "D",
+   "title": "Siłacz z targu",
+   "giver": "kowal",
+   "offer": {
+    "cond": {
+     "hours": [
+      5.5,
+      17
+     ],
+     "day": 4
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W3": {
+   "kind": "W",
+   "title": "Pieśń o Kruczych Skałach",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W8": {
+   "kind": "W",
+   "title": "Żelazna Pięść",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W4": {
+   "kind": "W",
+   "title": "Krew kasztelana",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "spot",
+     "to": null,
+     "spot": "w4_dig",
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "kowal",
+     "spot": null,
+     "hours": [
+      5.5,
+      17
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W9": {
+   "kind": "W",
+   "title": "Serce Twierdzy",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "pause",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W6": {
+   "kind": "W",
+   "title": "Ludzie z promu",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K47": {
+   "kind": "K",
+   "title": "Pierwszy połów",
+   "giver": "janek",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      20
+     ],
+     "flags": [
+      "janekMet"
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "janek",
+     "spot": null,
+     "hours": [
+      5,
+      21
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K48": {
+   "kind": "K",
+   "title": "Sieci po sztormie",
+   "giver": "janek",
+   "offer": {
+    "cond": {
+     "hours": [
+      9,
+      20
+     ],
+     "flags": [
+      "janekMet"
+     ],
+     "done": [
+      "K47"
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "janek",
+     "spot": null,
+     "hours": [
+      6,
+      21
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D20": {
+   "kind": "D",
+   "title": "Kuter na pochylni",
+   "giver": "przemytnik",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      21
+     ],
+     "flags": [
+      "rochMet"
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "talk",
+     "to": "janek",
+     "spot": null,
+     "hours": [
+      8,
+      20
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "spot",
+     "to": null,
+     "spot": "przystan_wrak",
+     "hours": [
+      5,
+      10
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "przemytnik",
+     "spot": null,
+     "hours": [
+      6,
+      22
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "drwal",
+     "spot": null,
+     "hours": [
+      6,
+      21
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "praczka",
+     "spot": null,
+     "hours": [
+      6,
+      18
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "przemytnik",
+     "spot": null,
+     "hours": [
+      6,
+      22
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W10": {
+   "kind": "W",
+   "title": "List do matki",
+   "giver": "janek",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      20
+     ],
+     "flags": [
+      "janekMet"
+     ],
+     "day": 4
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "grandpa",
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K54": {
+   "kind": "K",
+   "title": "Motyl z oczkami",
+   "giver": "ela",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      19
+     ],
+     "day": 3,
+     "fn": "k54Pora"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "ela",
+     "spot": null,
+     "hours": [
+      6,
+      21
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K50": {
+   "kind": "K",
+   "title": "Atrament dla pustelnika",
+   "giver": "pustelnik",
+   "offer": {
+    "cond": {
+     "hours": [
+      5,
+      20
+     ],
+     "day": 6,
+     "flags": [
+      "pustelnikMet"
+     ],
+     "fn": "k50Oferta"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "pustelnik",
+     "spot": null,
+     "hours": [
+      5,
+      20
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D23": {
+   "kind": "D",
+   "title": "Zaszyfrowane kroniki",
+   "giver": "pustelnik",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      19
+     ],
+     "fn": "d23Oferta",
+     "done": [
+      "K50"
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K51": {
+   "kind": "K",
+   "title": "Kruk z masztu",
+   "giver": "przemytnik",
+   "offer": {
+    "cond": {
+     "day": 8,
+     "hours": [
+      5,
+      13
+     ],
+     "flags": [
+      "rochMet"
+     ],
+     "fn": "k51Ready"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D24": {
+   "kind": "D",
+   "title": "Oswojony kruk",
+   "giver": "grandpa",
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "grandpa",
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D29": {
+   "kind": "D",
+   "title": "Jajo z grani",
+   "giver": "latarnik",
+   "offer": {
+    "cond": {
+     "hours": [
+      14,
+      22
+     ],
+     "fn": "d29Pora"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W13": {
+   "kind": "W",
+   "title": "Skrzydlata Straż",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "grandpa",
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "pustelnik",
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "lord",
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K49": {
+   "kind": "K",
+   "title": "Tran dla latarni",
+   "giver": "latarnik",
+   "offer": {
+    "cond": {
+     "day": 25,
+     "flags": [
+      "latarnikMet"
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "latarnik",
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D22": {
+   "kind": "D",
+   "title": "Księga mgieł",
+   "giver": "latarnik",
+   "offer": {
+    "cond": {
+     "flags": [
+      "latarnikMet"
+     ],
+     "fn": "d22Ready"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W11": {
+   "kind": "W",
+   "title": "Soczewka",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K52": {
+   "kind": "K",
+   "title": "Drewno dla garnizonu",
+   "giver": "kwatermistrz",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      18
+     ],
+     "day": 5,
+     "flags": [
+      "garnizonPoznany"
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "kwatermistrz",
+     "spot": null,
+     "hours": [
+      7,
+      22
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D26": {
+   "kind": "D",
+   "title": "Lista poborowa",
+   "giver": "werbownik",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      16
+     ],
+     "fn": "d26Dzien"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D27": {
+   "kind": "D",
+   "title": "Zboże dla obozu",
+   "giver": "ludmila",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      20
+     ],
+     "fn": "d27Gotowe"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "ludmila",
+     "spot": null,
+     "hours": [
+      6,
+      22
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D25": {
+   "kind": "D",
+   "title": "Mapa z wraku",
+   "giver": "przemytnik",
+   "offer": {
+    "cond": {
+     "day": 15,
+     "hours": [
+      6,
+      21
+     ],
+     "flags": [
+      "rochMet"
+     ],
+     "noFlags": [
+      "d20Wydany"
+     ],
+     "fn": "d25Ready"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W12": {
+   "kind": "W",
+   "title": "Rozbitek",
+   "giver": "rozbitek",
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D28": {
+   "kind": "D",
+   "title": "Zapas zakonu",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K53": {
+   "kind": "K",
+   "title": "Rynny zakonu",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W5": {
+   "kind": "W",
+   "title": "Towary z kontynentu",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W7": {
+   "kind": "W",
+   "title": "Dwór z kamieni twierdzy",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K55": {
+   "kind": "K",
+   "title": "Świece dla dzwonnika",
+   "giver": "dzwonnik",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      18
+     ],
+     "day": 3
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "dzwonnik",
+     "spot": null,
+     "hours": [
+      6,
+      21
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K56": {
+   "kind": "K",
+   "title": "Ogródki Podgrodzia",
+   "giver": "znachorka",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      18
+     ],
+     "day": 4
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K57": {
+   "kind": "K",
+   "title": "Studnia sąsiada",
+   "giver": "grandpa",
+   "offer": {
+    "cond": {
+     "day": 3,
+     "story": true
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K58": {
+   "kind": "K",
+   "title": "Sad Ługów",
+   "giver": "praczka",
+   "offer": {
+    "cond": {
+     "hours": [
+      5,
+      17
+     ],
+     "fn": "k58Gotowe"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "praczka",
+     "spot": null,
+     "hours": [
+      5,
+      22
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D30": {
+   "kind": "D",
+   "title": "Zioła Jagny",
+   "giver": "jagna",
+   "offer": {
+    "cond": {
+     "hours": [
+      5,
+      20
+     ],
+     "fn": "d30Gotowe"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "jagna",
+     "spot": null,
+     "hours": [
+      5,
+      21
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "jagna",
+     "spot": null,
+     "hours": [
+      5,
+      21
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "jagna",
+     "spot": null,
+     "hours": [
+      5,
+      21
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D31": {
+   "kind": "D",
+   "title": "Skarby wysypiska",
+   "giver": "szmaciarz",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      20
+     ],
+     "day": 3
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "szmaciarz",
+     "spot": null,
+     "hours": [
+      7,
+      22
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K59": {
+   "kind": "K",
+   "title": "Nora pod korzeniami",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K60": {
+   "kind": "K",
+   "title": "Sól dla jeleni",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K61": {
+   "kind": "K",
+   "title": "Zawody strzeleckie",
+   "giver": "kwatermistrz",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      18
+     ],
+     "fn": "lowK61Offer"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K62": {
+   "kind": "K",
+   "title": "Krasula i kury Ługów",
+   "giver": "praczka",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      19
+     ],
+     "done": [
+      "D21"
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D32": {
+   "kind": "D",
+   "title": "Gajowy i kłusownik",
+   "giver": "gajowy",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      20
+     ],
+     "fn": "lowD32Offer"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "gajowy",
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D33": {
+   "kind": "D",
+   "title": "Gawra pod granią",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K63": {
+   "kind": "K",
+   "title": "Węgiel dla kowala",
+   "giver": "kowal",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      18
+     ],
+     "day": 4
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "drwal",
+     "spot": null,
+     "hours": [
+      6,
+      20
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "kowal",
+     "spot": null,
+     "hours": [
+      6,
+      21
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K64": {
+   "kind": "K",
+   "title": "Zabłąkana owca",
+   "giver": "pasterz",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      19
+     ],
+     "fn": "ludPoBurzy"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "pasterz",
+     "spot": null,
+     "hours": [
+      6,
+      22
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K65": {
+   "kind": "K",
+   "title": "Zgubiony juk",
+   "giver": "handlarz",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      18
+     ],
+     "day": 3
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "handlarz",
+     "spot": null,
+     "hours": [
+      6,
+      21
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K66": {
+   "kind": "K",
+   "title": "Nocny patrol",
+   "giver": "rotmistrz",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      20
+     ],
+     "day": 6,
+     "flags": [
+      "garnizonPoznany"
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "rotmistrz",
+     "spot": null,
+     "hours": [
+      6,
+      22
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D34": {
+   "kind": "D",
+   "title": "Jaskinia pod zatoczką",
+   "giver": "celnik",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      18
+     ],
+     "fn": "ludJaskiniaOtwarta"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D35": {
+   "kind": "D",
+   "title": "Szyb pod Orlą Granią",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K67": {
+   "kind": "K",
+   "title": "Trzy kruki przy drogach",
+   "giver": "dzwonnik",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      20
+     ],
+     "day": 4
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "dzwonnik",
+     "spot": null,
+     "hours": [
+      6,
+      21
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K68": {
+   "kind": "K",
+   "title": "Zapiski strażnic",
+   "giver": "pustelnik",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      19
+     ],
+     "fn": "k68Pora"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D36": {
+   "kind": "D",
+   "title": "Cień Strażnika",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K69": {
+   "kind": "K",
+   "title": "Grzędy Straży",
+   "giver": "latarnik",
+   "offer": {
+    "cond": {
+     "hours": [
+      14,
+      22
+     ],
+     "flags": [
+      "orzelJajo"
+     ]
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "pustelnik",
+     "spot": null,
+     "hours": [
+      7,
+      19
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K70": {
+   "kind": "K",
+   "title": "Kawałki wraku",
+   "giver": "rozbitek",
+   "offer": {
+    "cond": {
+     "fn": "k70Pora"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D37": {
+   "kind": "D",
+   "title": "Groby z krukiem",
+   "giver": "dzwonnik",
+   "offer": {
+    "cond": {
+     "hours": [
+      7,
+      20
+     ],
+     "day": 6
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "dzwonnik",
+     "spot": null,
+     "hours": [
+      6,
+      21
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D38": {
+   "kind": "D",
+   "title": "Godzina milczenia",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K71": {
+   "kind": "K",
+   "title": "Listy z lądu",
+   "giver": "tobiasz",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      22
+     ],
+     "fn": "k71Oferta"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "tobiasz",
+     "spot": null,
+     "hours": [
+      7,
+      23
+     ],
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K72": {
+   "kind": "K",
+   "title": "Poczta z lądu",
+   "giver": "tobiasz",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      22
+     ],
+     "fn": "k72Oferta"
+    },
+    "auto": false
+   },
+   "repeat": "daily",
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D39": {
+   "kind": "D",
+   "title": "Gorączka z promu",
+   "giver": "medyk",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      21
+     ],
+     "fn": "d39Oferta"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "bring",
+     "to": "medyk",
+     "spot": null,
+     "hours": [
+      7,
+      23
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "medyk",
+     "spot": null,
+     "hours": [
+      7,
+      23
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D40": {
+   "kind": "D",
+   "title": "Mapa dla kartografa",
+   "giver": "kartograf",
+   "offer": {
+    "cond": {
+     "hours": [
+      9,
+      22
+     ],
+     "fn": "d40Oferta"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D41": {
+   "kind": "D",
+   "title": "Pieśń z lądu",
+   "giver": "grajek",
+   "offer": {
+    "cond": {
+     "hours": [
+      10,
+      23.5
+     ],
+     "fn": "d41Oferta"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D42": {
+   "kind": "D",
+   "title": "Zboże w suszę",
+   "giver": "piekarka",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      18
+     ],
+     "fn": "d42Oferta"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D43": {
+   "kind": "D",
+   "title": "Matka szuka syna",
+   "giver": "urszula",
+   "offer": {
+    "cond": {
+     "hours": [
+      8,
+      20
+     ],
+     "fn": "d43Oferta"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W15": {
+   "kind": "W",
+   "title": "Święte kości",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W16": {
+   "kind": "W",
+   "title": "Dezerter",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "W14": {
+   "kind": "W",
+   "title": "Poselstwo",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D44": {
+   "kind": "D",
+   "title": "Podatek wojenny",
+   "giver": "poborca",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      24
+     ],
+     "fn": "d44Oferta"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D47": {
+   "kind": "D",
+   "title": "Wolna Kompania",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D48": {
+   "kind": "D",
+   "title": "Mapa Kruczej Wyspy",
+   "giver": "kartograf",
+   "offer": {
+    "cond": {
+     "hours": [
+      6,
+      24
+     ],
+     "fn": "d48Oferta"
+    },
+    "auto": false
+   },
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D45": {
+   "kind": "D",
+   "title": "Gość spod trójki",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D46": {
+   "kind": "D",
+   "title": "Skradziona szkatułka",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "K73": {
+   "kind": "K",
+   "title": "Nocne kroki",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  },
+  "D21": {
+   "kind": "D",
+   "title": "Spalona zagroda",
+   "giver": null,
+   "offer": null,
+   "repeat": null,
+   "steps": [
+    {
+     "type": "talk",
+     "to": "szmaciarz",
+     "spot": null,
+     "hours": [
+      7,
+      20
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "praczka",
+     "spot": null,
+     "hours": [
+      6,
+      21
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "talk",
+     "to": "soltys",
+     "spot": null,
+     "hours": [
+      8,
+      16
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "bring",
+     "to": "praczka",
+     "spot": null,
+     "hours": [
+      6,
+      21
+     ],
+     "map": null,
+     "where": null
+    },
+    {
+     "type": "custom",
+     "to": null,
+     "spot": null,
+     "hours": null,
+     "map": null,
+     "where": null
+    }
+   ]
+  }
+ },
+ "res": [
+  {
+   "key": "kowal",
+   "name": "Tadek Młot",
+   "title": "kowal",
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "kuznia_dom",
+     null
+    ],
+    [
+     5.5,
+     "work",
+     "kowadlo",
+     null
+    ],
+    [
+     12,
+     "wander",
+     "stragan1",
+     null
+    ],
+    [
+     13,
+     "work",
+     "kowadlo",
+     null
+    ],
+    [
+     17,
+     "wander",
+     "ulica_rzem",
+     null
+    ],
+    [
+     19,
+     "inside",
+     "tawerna",
+     null
+    ],
+    [
+     22.5,
+     "inside",
+     "kuznia_dom",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "piekarka",
+   "name": "Hanka Mączna",
+   "title": "piekarka",
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "piekarnia_drzwi",
+     null
+    ],
+    [
+     6,
+     "stand",
+     "stragan1",
+     null
+    ],
+    [
+     12,
+     "wander",
+     "rynek_lawka",
+     null
+    ],
+    [
+     14,
+     "inside",
+     "piekarnia_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "woziwoda",
+   "name": "Kuba Woziwoda",
+   "title": "woziwoda",
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "woziwoda_dom",
+     null
+    ],
+    [
+     1.8,
+     "work",
+     "staw",
+     "w1Water"
+    ],
+    [
+     3.2,
+     "inside",
+     "woziwoda_dom",
+     null
+    ],
+    [
+     7,
+     "stand",
+     "studnia_rynek",
+     null
+    ],
+    [
+     14,
+     "wander",
+     "rynek_srodek",
+     null
+    ],
+    [
+     16,
+     "inside",
+     "tawerna",
+     null
+    ],
+    [
+     20.5,
+     "inside",
+     "woziwoda_dom",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "kapral",
+   "name": "Kapral Wit Czerwień",
+   "title": "straż Lorda",
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "brama_wsch",
+     null
+    ],
+    [
+     6,
+     "stand",
+     "brama_wsch",
+     null
+    ],
+    [
+     18,
+     "patrol",
+     "[]",
+     null
+    ],
+    [
+     23,
+     "inside",
+     "brama_wsch",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "dzwonnik",
+   "name": "Ambroży",
+   "title": "dzwonnik",
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "dzwonnica",
+     null
+    ],
+    [
+     2.8,
+     "bell",
+     "dzwonnica",
+     null
+    ],
+    [
+     3.2,
+     "inside",
+     "dzwonnica",
+     null
+    ],
+    [
+     5.7,
+     "bell",
+     "dzwonnica",
+     null
+    ],
+    [
+     6.3,
+     "wander",
+     "rynek_lawka",
+     null
+    ],
+    [
+     11.7,
+     "bell",
+     "dzwonnica",
+     null
+    ],
+    [
+     12.3,
+     "stand",
+     "ogrod_zakonu",
+     null
+    ],
+    [
+     17.7,
+     "bell",
+     "dzwonnica",
+     null
+    ],
+    [
+     18.3,
+     "inside",
+     "dzwonnica",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "kupiec",
+   "name": "Baltazar Vey",
+   "title": "kupiec z kontynentu",
+   "map": 8,
+   "when": null,
+   "alt": {
+    "map": 125,
+    "when": "w5Harbour"
+   },
+   "plan": [
+    [
+     0,
+     "inside",
+     "kantor_drzwi",
+     null
+    ],
+    [
+     0.02,
+     "inside",
+     "w5_piwnica",
+     "w5Shift"
+    ],
+    [
+     8,
+     "stand",
+     "kantor_przed",
+     null
+    ],
+    [
+     12,
+     "wander",
+     "stragan2",
+     null
+    ],
+    [
+     14,
+     "stand",
+     "kantor_przed",
+     null
+    ],
+    [
+     18,
+     "inside",
+     "tawerna",
+     null
+    ],
+    [
+     21.5,
+     "stand",
+     "kantor_rog",
+     null
+    ],
+    [
+     21.9,
+     "inside",
+     "w5_piwnica",
+     "w5Shift"
+    ],
+    [
+     23,
+     "inside",
+     "kantor_drzwi",
+     null
+    ],
+    [
+     23.02,
+     "inside",
+     "w5_piwnica",
+     "w5Shift"
+    ]
+   ]
+  },
+  {
+   "key": "soltys",
+   "name": "Sołtys Bronisław",
+   "title": "sołtys",
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "ratusz_drzwi",
+     null
+    ],
+    [
+     8,
+     "stand",
+     "ratusz_przed",
+     null
+    ],
+    [
+     12,
+     "wander",
+     "rynek_srodek",
+     null
+    ],
+    [
+     13,
+     "inside",
+     "ratusz_drzwi",
+     null
+    ],
+    [
+     16,
+     "wander",
+     "studnia_rynek",
+     null
+    ],
+    [
+     18,
+     "inside",
+     "tawerna",
+     null
+    ],
+    [
+     21,
+     "inside",
+     "ratusz_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "garbarz",
+   "name": "Ignac",
+   "title": "garbarz i szewc",
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "garbarz_dom",
+     null
+    ],
+    [
+     6.5,
+     "work",
+     "garbarnia",
+     null
+    ],
+    [
+     17,
+     "wander",
+     "ulica_rzem",
+     null
+    ],
+    [
+     19,
+     "inside",
+     "tawerna",
+     null
+    ],
+    [
+     22,
+     "inside",
+     "garbarz_dom",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "feliks",
+   "name": "Feliks",
+   "title": "kamerdyner Lorda",
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "brama_wsch",
+     null
+    ],
+    [
+     6,
+     "wander",
+     "stragan1",
+     null
+    ],
+    [
+     8.5,
+     "stand",
+     "stragan2",
+     null
+    ],
+    [
+     9.5,
+     "stand",
+     "ratusz_obok",
+     null
+    ],
+    [
+     10.5,
+     "inside",
+     "dwor",
+     null
+    ],
+    [
+     20,
+     "inside",
+     "brama_wsch",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "bronek",
+   "name": "Bronek",
+   "title": "chłopak z miasteczka",
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "dom_mieszczan",
+     null
+    ],
+    [
+     8,
+     "wander",
+     "rynek_srodek",
+     null
+    ],
+    [
+     12,
+     "inside",
+     "dom_mieszczan",
+     null
+    ],
+    [
+     13,
+     "wander",
+     "rynek_rog",
+     null
+    ],
+    [
+     18.5,
+     "inside",
+     "dom_mieszczan",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "zosia",
+   "name": "Zosia",
+   "title": "dziewczynka z miasteczka",
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "dom_mieszczan",
+     null
+    ],
+    [
+     8.2,
+     "wander",
+     "rynek_lawka",
+     null
+    ],
+    [
+     12,
+     "inside",
+     "dom_mieszczan",
+     null
+    ],
+    [
+     13.2,
+     "wander",
+     "rynek_srodek",
+     null
+    ],
+    [
+     18.5,
+     "inside",
+     "dom_mieszczan",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "ludmila",
+   "name": "Ludmiła",
+   "title": "uchodźczyni z kontynentu",
+   "map": 8,
+   "when": "w6Obecni",
+   "alt": {
+    "map": 111,
+    "when": "campOutside"
+   },
+   "plan": [
+    [
+     0,
+     "inside",
+     "pod_murem",
+     null
+    ],
+    [
+     6.5,
+     "wander",
+     "pod_murem",
+     null
+    ],
+    [
+     9,
+     "stand",
+     "stragan1_obok",
+     null
+    ],
+    [
+     9.01,
+     "inside",
+     "w5_lada",
+     "w5Lada"
+    ],
+    [
+     11,
+     "wander",
+     "rynek_rog",
+     null
+    ],
+    [
+     11.01,
+     "inside",
+     "w5_lada",
+     "w5Lada"
+    ],
+    [
+     15,
+     "stand",
+     "ratusz_przed",
+     null
+    ],
+    [
+     17,
+     "wander",
+     "pod_murem",
+     null
+    ],
+    [
+     20,
+     "inside",
+     "pod_murem",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "ela",
+   "name": "Ela",
+   "title": "córeczka Ludmiły",
+   "map": 8,
+   "when": "w6Obecni",
+   "alt": {
+    "map": 111,
+    "when": "campOutside"
+   },
+   "plan": [
+    [
+     0,
+     "inside",
+     "pod_murem",
+     null
+    ],
+    [
+     6.6,
+     "wander",
+     "pod_murem",
+     null
+    ],
+    [
+     9.2,
+     "wander",
+     "stragan1",
+     null
+    ],
+    [
+     11.2,
+     "wander",
+     "rynek_rog",
+     null
+    ],
+    [
+     15.2,
+     "wander",
+     "ratusz_przed",
+     null
+    ],
+    [
+     17.2,
+     "wander",
+     "pod_murem",
+     null
+    ],
+    [
+     20,
+     "inside",
+     "pod_murem",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "rafal",
+   "name": "Rafał",
+   "title": "obcy w podartym kaftanie",
+   "map": 8,
+   "when": null,
+   "alt": {
+    "map": 111,
+    "when": "campOutside"
+   },
+   "plan": [
+    [
+     0,
+     "inside",
+     "stodola",
+     null
+    ],
+    [
+     4.5,
+     "wander",
+     "stodola",
+     null
+    ],
+    [
+     6.5,
+     "inside",
+     "stodola",
+     null
+    ],
+    [
+     20.5,
+     "stand",
+     "w6_ognisko",
+     "w6Fire"
+    ],
+    [
+     21,
+     "wander",
+     "ulica_rzem",
+     "!w6Fire"
+    ],
+    [
+     23.5,
+     "inside",
+     "stodola",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "praczka",
+   "name": "Marta Ługowa",
+   "title": "praczka",
+   "map": 111,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "praczka_drzwi",
+     null
+    ],
+    [
+     5,
+     "work",
+     "pranie",
+     null
+    ],
+    [
+     11,
+     "wander",
+     "plac",
+     null
+    ],
+    [
+     12.5,
+     "work",
+     "pranie",
+     null
+    ],
+    [
+     17,
+     "wander",
+     "studnia_sucha",
+     null
+    ],
+    [
+     19,
+     "inside",
+     "praczka_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "franek",
+   "name": "Franek",
+   "title": "syn praczki",
+   "map": 111,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "praczka_drzwi",
+     null
+    ],
+    [
+     7,
+     "wander",
+     "zabawa",
+     null
+    ],
+    [
+     10,
+     "wander",
+     "kram",
+     null
+    ],
+    [
+     12,
+     "wander",
+     "pranie",
+     null
+    ],
+    [
+     14,
+     "wander",
+     "brama_zach",
+     null
+    ],
+    [
+     16,
+     "wander",
+     "zabawa",
+     null
+    ],
+    [
+     19.5,
+     "inside",
+     "praczka_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "drwal",
+   "name": "Zbych Smolarz",
+   "title": "drwal i węglarz",
+   "map": 111,
+   "when": null,
+   "alt": {
+    "map": 4,
+    "when": "ludMielerz"
+   },
+   "plan": [
+    [
+     0,
+     "inside",
+     "drwal_drzwi",
+     null
+    ],
+    [
+     5,
+     "work",
+     "drewutnia",
+     null
+    ],
+    [
+     10,
+     "inside",
+     "skraj_lasu",
+     null
+    ],
+    [
+     15,
+     "work",
+     "drewutnia",
+     null
+    ],
+    [
+     19,
+     "wander",
+     "namioty",
+     null
+    ],
+    [
+     21.5,
+     "inside",
+     "drwal_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "klusownik",
+   "name": "Rysiek Sidło",
+   "title": "kłusownik",
+   "map": 111,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "skraj_lasu",
+     null
+    ],
+    [
+     4.5,
+     "inside",
+     "klusownik_drzwi",
+     null
+    ],
+    [
+     13,
+     "wander",
+     "plac",
+     null
+    ],
+    [
+     15,
+     "wander",
+     "kram",
+     null
+    ],
+    [
+     17,
+     "wander",
+     "namioty",
+     null
+    ],
+    [
+     20,
+     "inside",
+     "skraj_lasu",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "znachorka",
+   "name": "Babka Jadwiga",
+   "title": "znachorka",
+   "map": 111,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "znachorka_drzwi",
+     null
+    ],
+    [
+     6,
+     "work",
+     "ziola",
+     null
+    ],
+    [
+     10,
+     "wander",
+     "kapliczka",
+     null
+    ],
+    [
+     12,
+     "work",
+     "ziola",
+     null
+    ],
+    [
+     16,
+     "stand",
+     "kapliczka",
+     null
+    ],
+    [
+     18,
+     "inside",
+     "znachorka_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "szmaciarz",
+   "name": "Józek Łata",
+   "title": "handlarz starzyzną",
+   "map": 111,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "szmaciarz_drzwi",
+     null
+    ],
+    [
+     7,
+     "stand",
+     "kram",
+     null
+    ],
+    [
+     12,
+     "wander",
+     "brama_zach",
+     null
+    ],
+    [
+     13,
+     "stand",
+     "kram",
+     null
+    ],
+    [
+     18,
+     "wander",
+     "plac",
+     null
+    ],
+    [
+     20,
+     "inside",
+     "szmaciarz_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "uchodzca",
+   "name": "Darin z Kontynentu",
+   "title": "uchodźca",
+   "map": 111,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "uchodzcy_drzwi",
+     null
+    ],
+    [
+     6,
+     "wander",
+     "namioty",
+     null
+    ],
+    [
+     8,
+     "wander",
+     "brama_zach",
+     null
+    ],
+    [
+     12,
+     "work",
+     "drewutnia",
+     null
+    ],
+    [
+     15,
+     "wander",
+     "plac",
+     null
+    ],
+    [
+     18,
+     "stand",
+     "namioty",
+     null
+    ],
+    [
+     22,
+     "inside",
+     "uchodzcy_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "zebrak",
+   "name": "Stary Gaweł",
+   "title": "żebrak",
+   "map": 111,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "zebrak_noc",
+     null
+    ],
+    [
+     6.5,
+     "stand",
+     "zebrak",
+     null
+    ],
+    [
+     12,
+     "wander",
+     "plac",
+     null
+    ],
+    [
+     13.5,
+     "stand",
+     "zebrak",
+     null
+    ],
+    [
+     19,
+     "wander",
+     "namioty",
+     null
+    ],
+    [
+     21.5,
+     "inside",
+     "zebrak_noc",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "zlodziej",
+   "name": "Szymek",
+   "title": "chłopak spod murów",
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "pod_murem",
+     null
+    ],
+    [
+     6.5,
+     "wander",
+     "pod_murem",
+     null
+    ],
+    [
+     8.3,
+     "wander",
+     "rynek_rog",
+     null
+    ],
+    [
+     12,
+     "wander",
+     "stragan1_obok",
+     null
+    ],
+    [
+     14,
+     "wander",
+     "schody_rzem",
+     null
+    ],
+    [
+     17.5,
+     "wander",
+     "pod_murem",
+     null
+    ],
+    [
+     20.5,
+     "inside",
+     "pod_murem",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "gracz",
+   "name": "Lucjan Kość",
+   "title": "wędrowny gracz w kości",
+   "map": 8,
+   "when": "market",
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "brama_pld",
+     null
+    ],
+    [
+     9.7,
+     "stand",
+     "stragan_kosci",
+     null
+    ],
+    [
+     14,
+     "inside",
+     "brama_pld",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "bartek",
+   "name": "Bartek Kmieć",
+   "title": "chłop spod Młynówki",
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "brama_pld",
+     null
+    ],
+    [
+     9.5,
+     "wander",
+     "rynek_rog",
+     null
+    ],
+    [
+     14,
+     "inside",
+     "tawerna",
+     null
+    ],
+    [
+     21,
+     "inside",
+     "brama_pld",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "woznica",
+   "name": "Wojciech",
+   "title": "woźnica",
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "stand",
+     "woz_pld",
+     "wozMiasto"
+    ],
+    [
+     0,
+     "inside",
+     "brama_pld",
+     "!wozMiasto"
+    ],
+    [
+     12.5,
+     "inside",
+     "tawerna",
+     "!wozMiasto"
+    ],
+    [
+     13.5,
+     "inside",
+     "brama_pld",
+     "!wozMiasto"
+    ],
+    [
+     21.3,
+     "stand",
+     "woz_pld",
+     null
+    ],
+    [
+     22.7,
+     "inside",
+     "brama_pld",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "straznik",
+   "name": "Strażnik dworu",
+   "title": "straż Lorda",
+   "map": 24,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "patrol",
+     "[]",
+     null
+    ],
+    [
+     5,
+     "stand",
+     "straz_dzien",
+     null
+    ],
+    [
+     21,
+     "patrol",
+     "[]",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "kamerdyner",
+   "name": "Teodor",
+   "title": "kamerdyner Lorda",
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "brama_wsch",
+     null
+    ],
+    [
+     6,
+     "wander",
+     "stragan1",
+     null
+    ],
+    [
+     8.5,
+     "stand",
+     "stragan2",
+     null
+    ],
+    [
+     9.5,
+     "stand",
+     "ratusz_obok",
+     null
+    ],
+    [
+     10.5,
+     "inside",
+     "dwor",
+     null
+    ],
+    [
+     20,
+     "inside",
+     "brama_wsch",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "marek",
+   "name": "Marek",
+   "title": "mąż Ludmiły",
+   "map": 8,
+   "alt": {
+    "map": 111,
+    "when": "campOutside"
+   },
+   "plan": [
+    [
+     0,
+     "inside",
+     "pod_murem",
+     null
+    ],
+    [
+     6.8,
+     "wander",
+     "pod_murem",
+     null
+    ],
+    [
+     10,
+     "stand",
+     "w6_ognisko",
+     null
+    ],
+    [
+     13,
+     "wander",
+     "pod_murem",
+     null
+    ],
+    [
+     17,
+     "stand",
+     "w6_ognisko",
+     null
+    ],
+    [
+     20,
+     "inside",
+     "pod_murem",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "janek",
+   "name": "Janek",
+   "title": "rybak",
+   "map": 125,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "janek_drzwi",
+     null
+    ],
+    [
+     4,
+     "work",
+     "lodz",
+     null
+    ],
+    [
+     5,
+     "inside",
+     "na_morze",
+     null
+    ],
+    [
+     8.5,
+     "work",
+     "pomost",
+     null
+    ],
+    [
+     9.5,
+     "work",
+     "wedzarnia",
+     null
+    ],
+    [
+     12,
+     "stand",
+     "lawka",
+     null
+    ],
+    [
+     13,
+     "work",
+     "sieci",
+     null
+    ],
+    [
+     15,
+     "stand",
+     "stol_ryb",
+     null
+    ],
+    [
+     17,
+     "wander",
+     "nabrzeze",
+     null
+    ],
+    [
+     19,
+     "inside",
+     "tawerna",
+     null
+    ],
+    [
+     22.5,
+     "inside",
+     "janek_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "przemytnik",
+   "name": "Roch",
+   "title": "łata sieci na przystani",
+   "map": 125,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "szopa_drzwi",
+     null
+    ],
+    [
+     0,
+     "inside",
+     "pochylnia",
+     "fn"
+    ],
+    [
+     6,
+     "stand",
+     "wrak",
+     null
+    ],
+    [
+     9,
+     "work",
+     "pochylnia",
+     null
+    ],
+    [
+     9,
+     "work",
+     "molo",
+     "fn"
+    ],
+    [
+     13,
+     "stand",
+     "nabrzeze_rog",
+     null
+    ],
+    [
+     13,
+     "work",
+     "molo",
+     "fn"
+    ],
+    [
+     15,
+     "stand",
+     "nabrzeze_rog",
+     null
+    ],
+    [
+     16,
+     "work",
+     "beczka_ogien",
+     null
+    ],
+    [
+     21,
+     "wander",
+     "plaza",
+     null
+    ],
+    [
+     21,
+     "inside",
+     "pochylnia",
+     "fn"
+    ],
+    [
+     23.5,
+     "inside",
+     "szopa_drzwi",
+     null
+    ],
+    [
+     23.5,
+     "inside",
+     "pochylnia",
+     "fn"
+    ]
+   ]
+  },
+  {
+   "key": "celnik",
+   "name": "Sambor Kwit",
+   "title": "celnik Lorda",
+   "map": 125,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "komora_drzwi",
+     null
+    ],
+    [
+     9,
+     "stand",
+     "molo_kontrola",
+     "fn"
+    ],
+    [
+     15,
+     "inside",
+     "komora_drzwi",
+     null
+    ],
+    [
+     18,
+     "stand",
+     "komora_przed",
+     null
+    ],
+    [
+     19.5,
+     "wander",
+     "nabrzeze",
+     null
+    ],
+    [
+     21,
+     "inside",
+     "komora_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "straznik_przystan",
+   "name": "Strażnik przystani",
+   "title": "straż Lorda",
+   "map": 125,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "patrol",
+     "[]",
+     null
+    ],
+    [
+     6,
+     "stand",
+     "szlaban",
+     null
+    ],
+    [
+     22,
+     "patrol",
+     "[]",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "kolodziej",
+   "name": "Szczepan Kołodziej",
+   "title": "woźnica",
+   "id": 2940,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "stajnia_drzwi",
+     null
+    ],
+    [
+     5,
+     "work",
+     "stajnia_woz",
+     null
+    ],
+    [
+     7,
+     "inside",
+     "brama_pd",
+     null
+    ],
+    [
+     10.5,
+     "work",
+     "stajnia_woz",
+     null
+    ],
+    [
+     12,
+     "wander",
+     "plac_studnia",
+     null
+    ],
+    [
+     13,
+     "stand",
+     "stragan_2",
+     null
+    ],
+    [
+     14,
+     "inside",
+     "brama_pd",
+     null
+    ],
+    [
+     17.5,
+     "work",
+     "stajnia_woz",
+     null
+    ],
+    [
+     19,
+     "wander",
+     "plac_5",
+     null
+    ],
+    [
+     20.5,
+     "inside",
+     "stajnia_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "przekupka",
+   "name": "Agata",
+   "title": "przekupka",
+   "id": 2941,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "dom1_drzwi",
+     null
+    ],
+    [
+     5.5,
+     "wander",
+     "plac_studnia",
+     null
+    ],
+    [
+     6.5,
+     "work",
+     "stragan_1",
+     null
+    ],
+    [
+     10,
+     "wander",
+     "plac_3",
+     null
+    ],
+    [
+     11,
+     "work",
+     "stragan_1",
+     null
+    ],
+    [
+     13,
+     "wander",
+     "plac_tablica",
+     null
+    ],
+    [
+     14,
+     "work",
+     "stragan_1",
+     null
+    ],
+    [
+     17,
+     "wander",
+     "plac_9",
+     null
+    ],
+    [
+     18.5,
+     "inside",
+     "dom1_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "szwaczka",
+   "name": "Dorota Igła",
+   "title": "szwaczka",
+   "id": 2942,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "dom3_drzwi",
+     null
+    ],
+    [
+     9.5,
+     "wander",
+     "sukiennice_przed",
+     null
+    ],
+    [
+     11,
+     "wander",
+     "plac_2",
+     null
+    ],
+    [
+     12,
+     "inside",
+     "dom3_drzwi",
+     null
+    ],
+    [
+     15.5,
+     "wander",
+     "plac_8",
+     null
+    ],
+    [
+     16.5,
+     "wander",
+     "straznica_warta",
+     null
+    ],
+    [
+     17.5,
+     "inside",
+     "dom3_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "wdowa",
+   "name": "Halina",
+   "title": "wdowa",
+   "id": 2943,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "dom4_drzwi",
+     null
+    ],
+    [
+     6,
+     "stand",
+     "plac_studnia",
+     null
+    ],
+    [
+     7.5,
+     "inside",
+     "dom4_drzwi",
+     null
+    ],
+    [
+     9,
+     "wander",
+     "plac_6",
+     null
+    ],
+    [
+     12,
+     "inside",
+     "dom4_drzwi",
+     null
+    ],
+    [
+     13.5,
+     "wander",
+     "skwer",
+     null
+    ],
+    [
+     16,
+     "stand",
+     "plac_studnia",
+     null
+    ],
+    [
+     17,
+     "wander",
+     "plac_6",
+     null
+    ],
+    [
+     18.5,
+     "inside",
+     "dom4_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "kostek",
+   "name": "Kostek",
+   "title": "syn Haliny",
+   "id": 2944,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "dom4_drzwi",
+     null
+    ],
+    [
+     6.1,
+     "wander",
+     "plac_studnia",
+     null
+    ],
+    [
+     7.5,
+     "inside",
+     "dom4_drzwi",
+     null
+    ],
+    [
+     9,
+     "wander",
+     "plac_6",
+     null
+    ],
+    [
+     10.5,
+     "wander",
+     "plac_1",
+     null
+    ],
+    [
+     12,
+     "inside",
+     "dom4_drzwi",
+     null
+    ],
+    [
+     13.5,
+     "wander",
+     "skwer",
+     null
+    ],
+    [
+     15,
+     "wander",
+     "stajnia_woz",
+     null
+    ],
+    [
+     16.5,
+     "wander",
+     "plac_6",
+     null
+    ],
+    [
+     18.5,
+     "inside",
+     "dom4_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "jagodka",
+   "name": "Jagódka",
+   "title": "córka Haliny",
+   "id": 2945,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "dom4_drzwi",
+     null
+    ],
+    [
+     6.2,
+     "wander",
+     "plac_studnia",
+     null
+    ],
+    [
+     7.5,
+     "inside",
+     "dom4_drzwi",
+     null
+    ],
+    [
+     9.1,
+     "wander",
+     "plac_6",
+     null
+    ],
+    [
+     12,
+     "inside",
+     "dom4_drzwi",
+     null
+    ],
+    [
+     13.6,
+     "wander",
+     "skwer",
+     null
+    ],
+    [
+     16.1,
+     "wander",
+     "plac_studnia",
+     null
+    ],
+    [
+     17.1,
+     "wander",
+     "plac_6",
+     null
+    ],
+    [
+     18.3,
+     "inside",
+     "dom4_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "ciesla",
+   "name": "Leon Dłuto",
+   "title": "cieśla",
+   "id": 2946,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "dom6_drzwi",
+     null
+    ],
+    [
+     6,
+     "work",
+     "ciesla_warsztat",
+     null
+    ],
+    [
+     9.5,
+     "wander",
+     "plac_4",
+     null
+    ],
+    [
+     10.5,
+     "work",
+     "stragan_3",
+     null
+    ],
+    [
+     12,
+     "inside",
+     "dom6_drzwi",
+     null
+    ],
+    [
+     13,
+     "work",
+     "ciesla_warsztat",
+     null
+    ],
+    [
+     16,
+     "wander",
+     "kaplica_lawka",
+     null
+    ],
+    [
+     17,
+     "work",
+     "ciesla_warsztat",
+     null
+    ],
+    [
+     18.5,
+     "wander",
+     "plac_10",
+     null
+    ],
+    [
+     20,
+     "inside",
+     "dom6_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "weteran",
+   "name": "Wacław Siwy",
+   "title": "stary żołnierz",
+   "id": 2947,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "dom8_drzwi",
+     null
+    ],
+    [
+     8,
+     "stand",
+     "plac_1",
+     null
+    ],
+    [
+     11.5,
+     "wander",
+     "plac_studnia",
+     null
+    ],
+    [
+     12.5,
+     "inside",
+     "dom8_drzwi",
+     null
+    ],
+    [
+     14,
+     "stand",
+     "plac_1",
+     null
+    ],
+    [
+     17,
+     "wander",
+     "straznica_warta",
+     null
+    ],
+    [
+     18,
+     "stand",
+     "plac_1",
+     null
+    ],
+    [
+     20.5,
+     "inside",
+     "dom8_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "szynkarz",
+   "name": "Mietek Kwaśniak",
+   "title": "szynkarz",
+   "id": 2950,
+   "map": 111,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "szynk_drzwi",
+     null
+    ],
+    [
+     7.5,
+     "work",
+     "szynk_lawy",
+     null
+    ],
+    [
+     10,
+     "inside",
+     "szynk_drzwi",
+     null
+    ],
+    [
+     11.5,
+     "wander",
+     "placyk_1",
+     null
+    ],
+    [
+     12.5,
+     "work",
+     "szynk_lawy",
+     null
+    ],
+    [
+     14,
+     "inside",
+     "brama_zach",
+     null
+    ],
+    [
+     16,
+     "work",
+     "szynk_lawy",
+     null
+    ],
+    [
+     23,
+     "inside",
+     "szynk_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "opiekunka",
+   "name": "Ciotka Stefa",
+   "title": "opiekunka przytułku",
+   "id": 2951,
+   "map": 111,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "przytulek_drzwi",
+     null
+    ],
+    [
+     5.5,
+     "work",
+     "przytulek_kociol",
+     null
+    ],
+    [
+     7.5,
+     "inside",
+     "brama_zach",
+     null
+    ],
+    [
+     9,
+     "work",
+     "przytulek_kociol",
+     null
+    ],
+    [
+     12,
+     "wander",
+     "namioty",
+     null
+    ],
+    [
+     13,
+     "wander",
+     "ziola",
+     null
+    ],
+    [
+     14,
+     "inside",
+     "przytulek_drzwi",
+     null
+    ],
+    [
+     16,
+     "work",
+     "przytulek_kociol",
+     null
+    ],
+    [
+     18.5,
+     "wander",
+     "zebrak",
+     null
+    ],
+    [
+     19.5,
+     "inside",
+     "przytulek_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "garncarz",
+   "name": "Wit Zduń",
+   "title": "garncarz",
+   "id": 2952,
+   "map": 111,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "garncarnia_drzwi",
+     null
+    ],
+    [
+     5,
+     "work",
+     "glinianka",
+     null
+    ],
+    [
+     8,
+     "work",
+     "garncarnia_lawy",
+     null
+    ],
+    [
+     10,
+     "inside",
+     "garncarnia_drzwi",
+     null
+    ],
+    [
+     13,
+     "work",
+     "placyk_3",
+     null
+    ],
+    [
+     16,
+     "work",
+     "garncarnia_lawy",
+     null
+    ],
+    [
+     19,
+     "wander",
+     "szynk_lawy",
+     null
+    ],
+    [
+     21,
+     "inside",
+     "garncarnia_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "dziecko",
+   "name": "Tośka",
+   "title": "dziecko z lepianki",
+   "id": 2953,
+   "map": 111,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "lepianka1_drzwi",
+     null
+    ],
+    [
+     6.5,
+     "wander",
+     "wybieg",
+     null
+    ],
+    [
+     8,
+     "wander",
+     "zabawa",
+     null
+    ],
+    [
+     10,
+     "wander",
+     "garncarnia_lawy",
+     null
+    ],
+    [
+     11,
+     "wander",
+     "przytulek_kociol",
+     null
+    ],
+    [
+     12,
+     "wander",
+     "placyk_5",
+     null
+    ],
+    [
+     14,
+     "wander",
+     "brama_zach",
+     null
+    ],
+    [
+     16,
+     "wander",
+     "zabawa",
+     null
+    ],
+    [
+     18.5,
+     "inside",
+     "lepianka1_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "pustelnik",
+   "name": "Brat Kleofas",
+   "title": "pustelnik, kronikarz zakonu",
+   "id": 944,
+   "map": 155,
+   "when": null,
+   "alt": {
+    "map": 8,
+    "when": "pustelniaZamknieta"
+   },
+   "plan": [
+    [
+     0,
+     "inside",
+     "cela_drzwi",
+     null
+    ],
+    [
+     0,
+     "stand",
+     "wieza",
+     "fn"
+    ],
+    [
+     5,
+     "stand",
+     "urwisko",
+     "fn"
+    ],
+    [
+     5,
+     "inside",
+     "skryptorium_drzwi",
+     "fn"
+    ],
+    [
+     7,
+     "inside",
+     "skryptorium_drzwi",
+     null
+    ],
+    [
+     12,
+     "stand",
+     "lawka",
+     "fn"
+    ],
+    [
+     13,
+     "work",
+     "ogrodek",
+     "fn"
+    ],
+    [
+     14.5,
+     "work",
+     "ule",
+     "fn"
+    ],
+    [
+     16,
+     "inside",
+     "skryptorium_drzwi",
+     null
+    ],
+    [
+     19,
+     "stand",
+     "lawka",
+     "fn"
+    ],
+    [
+     20,
+     "inside",
+     "cela_drzwi",
+     null
+    ],
+    [
+     22.5,
+     "stand",
+     "wieza",
+     "fn"
+    ]
+   ]
+  },
+  {
+   "key": "latarnik",
+   "name": "Bazyli Krzesiwo",
+   "title": "latarnik",
+   "id": 943,
+   "map": 125,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "laterna",
+     null
+    ],
+    [
+     6.15,
+     "inside",
+     "izba",
+     null
+    ],
+    [
+     8,
+     "inside",
+     "izba_sen",
+     null
+    ],
+    [
+     15,
+     "work",
+     "drewutnia",
+     null
+    ],
+    [
+     17,
+     "inside",
+     "izba",
+     null
+    ],
+    [
+     20.2,
+     "inside",
+     "laterna",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "rotmistrz",
+   "name": "Rotmistrz Bełza",
+   "title": "rotmistrz chorągwi królewskiej",
+   "id": 945,
+   "map": 162,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "spi",
+     null
+    ],
+    [
+     6,
+     "stand",
+     "musztra",
+     null
+    ],
+    [
+     7,
+     "inside",
+     "kwatera_drzwi",
+     null
+    ],
+    [
+     12,
+     "stand",
+     "kuchnia",
+     null
+    ],
+    [
+     13,
+     "patrol",
+     "[]",
+     null
+    ],
+    [
+     16,
+     "inside",
+     "kwatera_drzwi",
+     null
+    ],
+    [
+     20,
+     "stand",
+     "ognisko",
+     null
+    ],
+    [
+     22,
+     "inside",
+     "spi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "kwatermistrz",
+   "name": "Kwatermistrz Kłos",
+   "title": "kwatermistrz garnizonu",
+   "id": 946,
+   "map": 162,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "namiot_kwat",
+     null
+    ],
+    [
+     7,
+     "work",
+     "spichlerz",
+     null
+    ],
+    [
+     9,
+     "stand",
+     "skup",
+     null
+    ],
+    [
+     12,
+     "stand",
+     "kuchnia",
+     null
+    ],
+    [
+     13,
+     "stand",
+     "skup",
+     null
+    ],
+    [
+     16,
+     "work",
+     "spichlerz",
+     null
+    ],
+    [
+     18,
+     "stand",
+     "ognisko_2",
+     null
+    ],
+    [
+     22,
+     "inside",
+     "namiot_kwat",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "werbownik",
+   "name": "Werbownik Bęben",
+   "title": "werbownik chorągwi królewskiej",
+   "id": 947,
+   "map": 162,
+   "when": null,
+   "alt": {
+    "map": 8,
+    "when": "garnizonRynek"
+   },
+   "plan": [
+    [
+     0,
+     "inside",
+     "koszary_drzwi",
+     null
+    ],
+    [
+     7,
+     "wander",
+     "przed_brama",
+     null
+    ],
+    [
+     8,
+     "stand",
+     "stol_werbownika",
+     null
+    ],
+    [
+     12,
+     "wander",
+     "przed_brama",
+     null
+    ],
+    [
+     13,
+     "stand",
+     "stol_werbownika",
+     null
+    ],
+    [
+     16,
+     "wander",
+     "musztra",
+     null
+    ],
+    [
+     19,
+     "stand",
+     "ognisko",
+     null
+    ],
+    [
+     22,
+     "inside",
+     "koszary_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "rozbitek",
+   "name": "Eryk Sowa",
+   "title": "kupiec suknem z lądu",
+   "id": 948,
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "rozbitek_noc",
+     null
+    ],
+    [
+     8,
+     "inside",
+     "tawerna",
+     null
+    ],
+    [
+     10,
+     "wander",
+     "rozbitek_rynek",
+     null
+    ],
+    [
+     13,
+     "inside",
+     "tawerna",
+     null
+    ],
+    [
+     17,
+     "stand",
+     "rozbitek_mury",
+     null
+    ],
+    [
+     19,
+     "inside",
+     "tawerna",
+     null
+    ],
+    [
+     22,
+     "work",
+     "rozbitek_studnia",
+     null
+    ],
+    [
+     23,
+     "inside",
+     "rozbitek_noc",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "jagna",
+   "name": "Babka Jagna",
+   "title": "zielarka",
+   "id": 2900,
+   "map": 3,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "jagna_las",
+     null
+    ],
+    [
+     5,
+     "work",
+     "jagna_polanka",
+     "zasRosa"
+    ],
+    [
+     10,
+     "inside",
+     "jagna_las",
+     null
+    ],
+    [
+     18,
+     "stand",
+     "jagna_krag",
+     "zasPoDeszczu"
+    ],
+    [
+     20,
+     "inside",
+     "jagna_las",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "gajowy",
+   "name": "Gajowy Gniewko Bór",
+   "title": "gajowy zwierzyńca Lorda",
+   "id": 2905,
+   "map": 24,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "lesniczowka",
+     null
+    ],
+    [
+     6,
+     "work",
+     "gaj_lesniczowka",
+     null
+    ],
+    [
+     7,
+     "patrol",
+     "[]",
+     null
+    ],
+    [
+     12,
+     "stand",
+     "gaj_pasnik",
+     null
+    ],
+    [
+     13,
+     "patrol",
+     "[]",
+     null
+    ],
+    [
+     20,
+     "inside",
+     "lesniczowka",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "pasterz",
+   "name": "Wawrzyn Owczarz",
+   "title": "pasterz",
+   "id": 2910,
+   "map": 4,
+   "when": null,
+   "alt": {
+    "map": 4,
+    "when": "ludPasterz018"
+   },
+   "plan": [
+    [
+     0,
+     "inside",
+     "koszar_brama",
+     null
+    ],
+    [
+     6,
+     "stand",
+     "koszar_brama",
+     null
+    ],
+    [
+     7,
+     "wander",
+     "pastwisko",
+     null
+    ],
+    [
+     12,
+     "stand",
+     "pastwisko_cien",
+     null
+    ],
+    [
+     13,
+     "wander",
+     "pastwisko",
+     null
+    ],
+    [
+     18.5,
+     "stand",
+     "pastwisko_brzeg",
+     null
+    ],
+    [
+     19.5,
+     "stand",
+     "koszar_brama",
+     null
+    ],
+    [
+     21,
+     "inside",
+     "koszar_brama",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "handlarz",
+   "name": "Szymon Juczny",
+   "title": "wędrowny handlarz",
+   "id": 2911,
+   "map": 4,
+   "when": null,
+   "alt": {
+    "map": 4,
+    "when": "ludHandlarzW"
+   },
+   "plan": [
+    [
+     0,
+     "inside",
+     "handlarz_woz",
+     null
+    ],
+    [
+     6.5,
+     "stand",
+     "handlarz_lada",
+     null
+    ],
+    [
+     8,
+     "work",
+     "handlarz_lada",
+     null
+    ],
+    [
+     18,
+     "wander",
+     "handlarz_lada",
+     null
+    ],
+    [
+     19.5,
+     "stand",
+     "handlarz_sen",
+     null
+    ],
+    [
+     22,
+     "inside",
+     "handlarz_woz",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "patrol_latarnia_1",
+   "name": "Żołnierz z patrolu",
+   "title": "patrol garnizonu (przylądek)",
+   "id": 2912,
+   "map": 125,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "lud_p159_noc",
+     null
+    ],
+    [
+     7,
+     "patrol",
+     "[]",
+     null
+    ],
+    [
+     19,
+     "inside",
+     "lud_p159_noc",
+     null
+    ],
+    [
+     21,
+     "patrol",
+     "[]",
+     "ludNocnyPatrol"
+    ]
+   ]
+  },
+  {
+   "key": "patrol_latarnia_2",
+   "name": "Żołnierz z patrolu",
+   "title": "patrol garnizonu (przylądek)",
+   "id": 2913,
+   "map": 125,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "lud_p159_noc",
+     null
+    ],
+    [
+     7,
+     "patrol",
+     "[]",
+     null
+    ],
+    [
+     19,
+     "inside",
+     "lud_p159_noc",
+     null
+    ],
+    [
+     21,
+     "patrol",
+     "[]",
+     "ludNocnyPatrol"
+    ]
+   ]
+  },
+  {
+   "key": "patrol_garnizon_1",
+   "name": "Żołnierz z patrolu",
+   "title": "patrol garnizonu (wybrzeże)",
+   "id": 2914,
+   "map": 162,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "koszary_drzwi",
+     null
+    ],
+    [
+     7,
+     "patrol",
+     "[]",
+     null
+    ],
+    [
+     19,
+     "inside",
+     "koszary_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "patrol_garnizon_2",
+   "name": "Żołnierz z patrolu",
+   "title": "patrol garnizonu (wybrzeże)",
+   "id": 2915,
+   "map": 162,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "koszary_drzwi",
+     null
+    ],
+    [
+     7,
+     "patrol",
+     "[]",
+     null
+    ],
+    [
+     19,
+     "inside",
+     "koszary_drzwi",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "grabarz",
+   "name": "Hieronim",
+   "title": "grabarz",
+   "id": 2930,
+   "map": 8,
+   "when": null,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "grabarz_chata",
+     null
+    ],
+    [
+     6,
+     "work",
+     "grabarz_groby",
+     null
+    ],
+    [
+     8.5,
+     "work",
+     "grabarz_kopie",
+     null
+    ],
+    [
+     10,
+     "stand",
+     "grabarz_furtka",
+     null
+    ],
+    [
+     11,
+     "work",
+     "grabarz_groby_2",
+     null
+    ],
+    [
+     12.5,
+     "stand",
+     "grabarz_przerwa",
+     null
+    ],
+    [
+     13.5,
+     "work",
+     "grabarz_kopie",
+     null
+    ],
+    [
+     15.5,
+     "wander",
+     "grabarz_groby",
+     null
+    ],
+    [
+     17.5,
+     "stand",
+     "grabarz_lampa",
+     null
+    ],
+    [
+     18,
+     "inside",
+     "grabarz_chata",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "tobiasz",
+   "name": "Tobiasz Goniec",
+   "title": "posłaniec z lądu",
+   "id": 3020,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "medyk",
+   "name": "Konstanty Mak",
+   "title": "medyk z kontynentu",
+   "id": 3021,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "zboze",
+   "name": "Zenon Sita",
+   "title": "kupiec zbożowy",
+   "id": 3024,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "relikwie",
+   "name": "Gaspar Lis",
+   "title": "handlarz relikwii",
+   "id": 3028,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "kartograf",
+   "name": "Teofil Cyrkiel",
+   "title": "kartograf",
+   "id": 3022,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "ksenia",
+   "name": "Ksenia Żuraw",
+   "title": "wdowa po kupcu korzennym",
+   "id": 3042,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "wizytator",
+   "name": "brat Augustyn",
+   "title": "wizytator z Lipnicy",
+   "id": 3029,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "urszula",
+   "name": "Urszula z Olszynki",
+   "title": "szuka syna",
+   "id": 3025,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "dezerter",
+   "name": "Tomek",
+   "title": "uchodźca z promu",
+   "id": 3030,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "lowczyni",
+   "name": "Szczerba",
+   "title": "łowczyni nagród",
+   "id": 3031,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "grajek",
+   "name": "Jędrek Dudarz",
+   "title": "wędrowny grajek",
+   "id": 3023,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "poborca",
+   "name": "Erazm Łaska",
+   "title": "poborca Korony",
+   "id": 3026,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "pielgrzym",
+   "name": "Albin",
+   "title": "pątnik",
+   "id": 3027,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "trojka",
+   "name": "Gość spod trójki",
+   "title": "nikt go nie widzi",
+   "id": 3043,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "kompania_1",
+   "name": "Hubert Szary",
+   "title": "Wolna Kompania",
+   "id": 3034,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "kompania_2",
+   "name": "Jasiek Brzytwa",
+   "title": "Wolna Kompania",
+   "id": 3035,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "kompania_3",
+   "name": "Kazik Kołek",
+   "title": "Wolna Kompania",
+   "id": 3036,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "kompania_4",
+   "name": "Ruda Hela",
+   "title": "Wolna Kompania",
+   "id": 3037,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "posel",
+   "name": "Adam Wierzbięta",
+   "title": "poseł Korony",
+   "id": 3032,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "gwardzista",
+   "name": "Ostap",
+   "title": "gwardzista posła",
+   "id": 3033,
+   "map": -1,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "pula_1",
+   "name": "",
+   "title": "",
+   "id": 3038,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "pula_2",
+   "name": "",
+   "title": "",
+   "id": 3039,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "pula_3",
+   "name": "",
+   "title": "",
+   "id": 3040,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  },
+  {
+   "key": "pula_4",
+   "name": "",
+   "title": "",
+   "id": 3041,
+   "map": 8,
+   "alt": null,
+   "plan": [
+    [
+     0,
+     "inside",
+     "podr_droga",
+     null
+    ]
+   ]
+  }
+ ]
+}

@@ -1828,7 +1828,7 @@
     function ev(id, name, x, y, pages, note) { return { id, name, note: note || "", pages, x, y }; }
     const eggReady = () => (actTwo() && S().stormAfterAct2 > 0) || !!(S().flags && S().flags.f9Egg);
     // the way up on the mountains' map (the user's Map013 stays as it is: put in as it loads)
-    T.inject(D.GORY, { ids: [500, 509], owner: PLUGIN, build(data) {
+    T.inject(D.WAY_UP.map, { ids: [500, 509], owner: PLUGIN, build(data) {
         const out = [];
         D.WAY_UP.cells.forEach(([x, y], k) => {
             if (x >= data.width || y >= data.height) return;
@@ -1859,7 +1859,7 @@
         return out;
     } });
     function wayUp() {
-        if (!actTwo() && !S().have && !isActive("D29") && !eggReady()) { T.popup(TX.wayUpLocked, { color: "info" }); return; }
+        if (!actTwo() && !S().have && !isActive("D29") && !eggReady()) { T.popup(D.WAY_UP.map === 213 ? "Schody pną się w górę, w mrok i chłód. Na razie nie masz po co się tam wspinać." : TX.wayUpLocked, { color: "info" }); return; }
         T.audio.se("Equip1", { volume: 60, pitch: 80 });
         $gamePlayer.reserveTransfer(D.MAP, D.WAY_UP.land[0], D.WAY_UP.land[1], D.WAY_UP.dir, 0);
     }

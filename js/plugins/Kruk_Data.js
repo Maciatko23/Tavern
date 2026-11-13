@@ -73,7 +73,7 @@
         { key: "janek", flag: "janekMet" },
         { key: "przemytnik", flag: "rochMet" },
         { key: "pustelnik", flag: "pustelnikMet" },
-        { key: "latarnik", ready: 159 },
+        { key: "latarnik", ready: 125 },
         { key: "dzwonnik" },
         { key: "kowal" },
         { key: "piekarka" },

@@ -3,15 +3,19 @@
 // Ze stagingu: GAME_OVERLAY=tools/tavern/pokoje/staging GAME_OVERLAY_JS=1 CDP_PORT=9430 node tests/pokoje_mapy_test.js
 "use strict";
 const fs = require("fs"), path = require("path");
-const kit = require("./lib/kit.js");
-const DATA = path.join(__dirname, "..", "data");
+const kit = (function(){ try { return require("./lib/kit.js"); } catch (e) { return require("../../../../tests/lib/kit.js"); } })();
+// (with GAME_OVERLAY the staged copy of a map is read, as the game is served it: the maps the overlay does not hold come from data/)
+const DATA0 = fs.existsSync(path.join(__dirname, "..", "data", "MapInfos.json")) ? path.join(__dirname, "..", "data") : path.join(__dirname, "..", "..", "..", "..", "data");
+const OVER = process.env.GAME_OVERLAY ? [path.resolve(__dirname, "..", process.env.GAME_OVERLAY, "data"), path.resolve(process.cwd(), process.env.GAME_OVERLAY, "data")].find(d => fs.existsSync(d)) || null : null;
+const DATA = { join: (_d, f) => (OVER && fs.existsSync(path.join(OVER, f)) ? path.join(OVER, f) : path.join(DATA0, f)) };
+const path0 = path;
 const INTERIOR = 8;
 const wejscia = {}, tytuly = {};
-const info = JSON.parse(fs.readFileSync(path.join(DATA, "MapInfos.json"), "utf8"));
+const info = JSON.parse(fs.readFileSync(DATA.join(0, "MapInfos.json"), "utf8"));
 const mapy = [];
 for (const it of info) {
     if (!it) continue;
-    const p = path.join(DATA, "Map" + String(it.id).padStart(3, "0") + ".json");
+    const p = DATA.join(0, "Map" + String(it.id).padStart(3, "0") + ".json");
     if (!fs.existsSync(p)) continue;
     const m = JSON.parse(fs.readFileSync(p, "utf8"));
     tytuly[it.id] = it.name;

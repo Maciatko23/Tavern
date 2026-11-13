@@ -108,7 +108,8 @@ kit.test({ port: 9465, beforeLoad: missingBands.length ? TRAP : "" }, async t =>
     t.check("rats: a swarm of four round the hero, at most two biting at once, and they bite", rats.n === 4 && rats.swarm && most >= 1 && most <= 2 && rats.hits >= 1, Object.assign(rats, { most }));
     await shot("stwory_szczury.png");
     const ratKill = await t.json(`(function(){ const c = Creatures.list[0], xp0 = Combat.hero().xp + Combat.hero().level * 100000; Creatures.hit(c, 40, 'melee', { poise: 20 }); return { dying: !!c._dying, xp0 }; })()`);
-    await t.frames(40);
+    await t.until("Creatures.list.length === 3", 5);   // (its fall waits for the step it is in: slower since the world walks slower, 2026-11-11)
+    await t.frames(10);
     const ratEnd = await t.json("({ kill: __bus.filter(e => e.n === 'kill' && e.kind === 'szczur' && e.creature).length, left: Creatures.list.length, xp: Combat.hero().xp + Combat.hero().level * 100000, remains: Creatures.drops().filter(d => d.kind === 'rat').length })");
     t.check("a rat dies of one blow: 'kill' on the bus (a creature), experience, a body left", ratKill.dying && ratEnd.kill === 1 && ratEnd.left === 3 && ratEnd.xp > ratKill.xp0 && ratEnd.remains === 1, Object.assign(ratEnd, ratKill));
 

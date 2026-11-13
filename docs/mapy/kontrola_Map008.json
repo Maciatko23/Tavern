@@ -1,0 +1,2725 @@
+{
+ "mapa": 8,
+ "nazwa": "Kruczogród",
+ "w": 120,
+ "h": 120,
+ "zestaw": 11,
+ "obszar": null,
+ "problemy": [
+  {
+   "kod": "D3",
+   "x": 52,
+   "y": 50,
+   "waga": "błąd",
+   "opis": "przeniesienie z Map118:14 ląduje na zablokowanej kratce (52,50): zdarzenie 242 'Studnia miejska'"
+  },
+  {
+   "kod": "D1",
+   "x": 16,
+   "y": 5,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 18,
+   "y": 5,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 14,
+   "y": 6,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 15,
+   "y": 6,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 16,
+   "y": 6,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 17,
+   "y": 6,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 18,
+   "y": 6,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 19,
+   "y": 6,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 14,
+   "y": 7,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 16,
+   "y": 7,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 18,
+   "y": 7,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 14,
+   "y": 8,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 14,
+   "y": 9,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 15,
+   "y": 9,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 16,
+   "y": 9,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 14,
+   "y": 10,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 15,
+   "y": 10,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 16,
+   "y": 10,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 14,
+   "y": 11,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 15,
+   "y": 11,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 16,
+   "y": 11,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 14,
+   "y": 12,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 15,
+   "y": 12,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 16,
+   "y": 12,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 14,
+   "y": 13,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 15,
+   "y": 13,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 16,
+   "y": 13,
+   "waga": "uwaga",
+   "grupa": [
+    16,
+    5
+   ],
+   "opis": "nieosiągalne miejsce: 27 kratek od (16,5)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 29,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    29,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (29,34)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 30,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    29,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (29,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 31,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    29,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (29,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 32,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    29,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (29,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 33,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    29,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (29,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 34,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    29,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (29,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 35,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    29,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (29,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 36,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    29,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (29,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 39,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    39,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (39,34)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 40,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    39,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (39,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 41,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    39,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (39,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 42,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    39,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (39,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 43,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    39,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (39,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 44,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    39,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (39,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 45,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    39,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (39,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 46,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    39,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (39,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 57,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    57,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (57,34)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 58,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    57,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (57,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 59,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    57,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (57,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 60,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    57,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (57,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 61,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    57,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (57,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 62,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    57,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (57,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 63,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    57,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (57,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 64,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    57,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (57,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 65,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    57,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (57,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 66,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    57,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (57,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 69,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    69,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (69,34)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 70,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    69,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (69,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 71,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    69,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (69,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 72,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    69,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (69,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 73,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    69,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (69,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 74,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    69,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (69,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 75,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    69,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (69,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 76,
+   "y": 34,
+   "waga": "uwaga",
+   "grupa": [
+    69,
+    34
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (69,34)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 110,
+   "y": 80,
+   "waga": "uwaga",
+   "grupa": [
+    110,
+    80
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (110,80)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 111,
+   "y": 80,
+   "waga": "uwaga",
+   "grupa": [
+    110,
+    80
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (110,80)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 110,
+   "y": 81,
+   "waga": "uwaga",
+   "grupa": [
+    110,
+    80
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (110,80)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 111,
+   "y": 81,
+   "waga": "uwaga",
+   "grupa": [
+    110,
+    80
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (110,80)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 111,
+   "y": 82,
+   "waga": "uwaga",
+   "grupa": [
+    110,
+    80
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (110,80)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 111,
+   "y": 83,
+   "waga": "uwaga",
+   "grupa": [
+    110,
+    80
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (110,80)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 111,
+   "y": 84,
+   "waga": "uwaga",
+   "grupa": [
+    110,
+    80
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (110,80)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 111,
+   "y": 85,
+   "waga": "uwaga",
+   "grupa": [
+    110,
+    80
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (110,80)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 95,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 95,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 96,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 96,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 97,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 97,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 94,
+   "y": 98,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 95,
+   "y": 98,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 96,
+   "y": 98,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 97,
+   "y": 98,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 98,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 94,
+   "y": 99,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 96,
+   "y": 99,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 97,
+   "y": 99,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 99,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 99,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 94,
+   "y": 100,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 95,
+   "y": 100,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 96,
+   "y": 100,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 97,
+   "y": 100,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 100,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 94,
+   "y": 101,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 95,
+   "y": 101,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 96,
+   "y": 101,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 101,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 101,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 94,
+   "y": 102,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 96,
+   "y": 102,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 97,
+   "y": 102,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 102,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 102,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 94,
+   "y": 103,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 95,
+   "y": 103,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 103,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 103,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    95
+   ],
+   "opis": "nieosiągalne miejsce: 35 kratek od (98,95)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 2,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    2,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (2,115)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 3,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    2,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (2,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 4,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    2,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (2,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 5,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    2,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (2,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 6,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    2,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (2,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 7,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    2,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (2,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 8,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    2,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (2,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 9,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    2,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (2,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 10,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    2,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (2,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 11,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    2,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (2,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 14,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    14,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (14,115)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 15,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    14,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (14,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 16,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    14,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (14,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 17,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    14,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (14,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 18,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    14,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (14,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 19,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    14,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (14,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 20,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    14,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (14,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 21,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    14,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (14,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 22,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    14,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (14,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 23,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    14,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (14,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 24,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    14,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (14,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 25,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    14,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (14,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 26,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    14,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (14,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 27,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    14,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (14,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 35,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    35,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 13 kratek od (35,115)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 36,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    35,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 13 kratek od (35,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 37,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    35,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 13 kratek od (35,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 38,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    35,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 13 kratek od (35,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 39,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    35,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 13 kratek od (35,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 40,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    35,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 13 kratek od (35,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 41,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    35,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 13 kratek od (35,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 42,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    35,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 13 kratek od (35,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 43,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    35,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 13 kratek od (35,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 44,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    35,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 13 kratek od (35,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 45,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    35,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 13 kratek od (35,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 46,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    35,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 13 kratek od (35,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 47,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    35,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 13 kratek od (35,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 50,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    50,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (50,115)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 51,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    50,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (50,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 52,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    50,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (50,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 53,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    50,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (50,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 54,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    50,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (50,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 55,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    50,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (50,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 56,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    50,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (50,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 57,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    50,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (50,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 58,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    50,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (50,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 59,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    50,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (50,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 60,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    50,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (50,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 61,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    50,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (50,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 62,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    50,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (50,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 63,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    50,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (50,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 66,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    66,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (66,115)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 67,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    66,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (66,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 68,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    66,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (66,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 69,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    66,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (66,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 70,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    66,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (66,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 71,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    66,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (66,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 72,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    66,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (66,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 73,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    66,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (66,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 74,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    66,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (66,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 75,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    66,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (66,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 76,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    66,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (66,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 77,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    66,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (66,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 78,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    66,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (66,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 79,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    66,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (66,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 82,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    82,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (82,115)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 83,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    82,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (82,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 84,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    82,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (82,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 85,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    82,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (82,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 86,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    82,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (82,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 87,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    82,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (82,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 88,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    82,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (82,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 89,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    82,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (82,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 90,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    82,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (82,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 91,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    82,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (82,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 92,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    82,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (82,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 93,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    82,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (82,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 94,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    82,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (82,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 95,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    82,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 14 kratek od (82,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 98,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (98,115)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 99,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (98,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 100,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (98,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 101,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (98,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 102,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (98,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 103,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (98,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 104,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (98,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 105,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    98,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 8 kratek od (98,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 108,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    108,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (108,115)",
+   "ukryj": false
+  },
+  {
+   "kod": "D1",
+   "x": 109,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    108,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (108,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 110,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    108,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (108,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 111,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    108,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (108,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 112,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    108,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (108,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 113,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    108,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (108,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 114,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    108,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (108,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 115,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    108,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (108,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 116,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    108,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (108,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D1",
+   "x": 117,
+   "y": 115,
+   "waga": "uwaga",
+   "grupa": [
+    108,
+    115
+   ],
+   "opis": "nieosiągalne miejsce: 10 kratek od (108,115)",
+   "ukryj": true
+  },
+  {
+   "kod": "D4",
+   "x": 89,
+   "y": 32,
+   "waga": "uwaga",
+   "opis": "zdarzenie 249 'EV142' z akcją jest nieosiągalne - bohater musi stać na tej samej kratce (priorytet pod postacią) (89,32)"
+  },
+  {
+   "kod": "D4",
+   "x": 7,
+   "y": 62,
+   "waga": "uwaga",
+   "opis": "zdarzenie 142 'EV142' z akcją jest nieosiągalne - bohater musi stać na tej samej kratce (priorytet pod postacią) (7,62)"
+  },
+  {
+   "kod": "G1",
+   "x": 64,
+   "y": 66,
+   "waga": "uwaga",
+   "opis": "kafel 403 (C 11,2) z gwiazdką nad wolną kratką: bohater wchodzi pod niego w (64,66)"
+  },
+  {
+   "kod": "G1",
+   "x": 25,
+   "y": 105,
+   "waga": "uwaga",
+   "opis": "kafel 307 (C 3,6) z gwiazdką nad wolną kratką: bohater wchodzi pod niego w (25,105)"
+  },
+  {
+   "kod": "G3",
+   "x": 7,
+   "y": 32,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 414 'Brama cmentarza (otwarta)' (!$SF_Gate3|0|6|2) zajmuje 57% dołu wolnej kratki (7,32)"
+  },
+  {
+   "kod": "G3",
+   "x": 9,
+   "y": 32,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 414 'Brama cmentarza (otwarta)' (!$SF_Gate3|0|6|2) zajmuje 54% dołu wolnej kratki (9,32)"
+  },
+  {
+   "kod": "G3",
+   "x": 0,
+   "y": 51,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 244 'Brama zachodnia: skrzydło i cień' (!$West_Gate|0|4|1) zajmuje 100% dołu wolnej kratki (0,51)"
+  },
+  {
+   "kod": "G3",
+   "x": 45,
+   "y": 104,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 126 'EV126' (!Town_Props|2|8|0) zajmuje 50% dołu wolnej kratki (45,104)"
+  },
+  {
+   "kod": "G3",
+   "x": 47,
+   "y": 104,
+   "waga": "uwaga",
+   "opis": "obraz zdarzenia 126 'EV126' (!Town_Props|2|8|0) zajmuje 50% dołu wolnej kratki (47,104)"
+  },
+  {
+   "kod": "G4",
+   "x": 0,
+   "y": 50,
+   "waga": "uwaga",
+   "opis": "zdarzenie 244 'Brama zachodnia: skrzydło i cień' (!$West_Gate|0|4|1) rysowane pod postacią sięga kratki (0,50): bohater stanie na nim"
+  },
+  {
+   "kod": "G4",
+   "x": 1,
+   "y": 50,
+   "waga": "uwaga",
+   "opis": "zdarzenie 244 'Brama zachodnia: skrzydło i cień' (!$West_Gate|0|4|1) rysowane pod postacią sięga kratki (1,50): bohater stanie na nim"
+  },
+  {
+   "kod": "O1",
+   "x": 13,
+   "y": 4,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 173 (B 13,5) - góra bez dołu (brak kafla 181 pod) w (13,4)"
+  },
+  {
+   "kod": "O1",
+   "x": 94,
+   "y": 25,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 425 (C 9,5) - dół bez góry (brak kafla 417 nad) w (94,25)"
+  },
+  {
+   "kod": "O1",
+   "x": 95,
+   "y": 25,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 426 (C 10,5) - dół bez góry (brak kafla 418 nad) w (95,25)"
+  },
+  {
+   "kod": "O1",
+   "x": 107,
+   "y": 45,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 404 (C 12,2) - góra bez dołu (brak kafla 412 pod) w (107,45)"
+  },
+  {
+   "kod": "O1",
+   "x": 108,
+   "y": 45,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 405 (C 13,2) - góra bez dołu (brak kafla 413 pod) w (108,45)"
+  },
+  {
+   "kod": "O1",
+   "x": 12,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 425 (C 9,5) - dół bez góry (brak kafla 417 nad) w (12,55)"
+  },
+  {
+   "kod": "O1",
+   "x": 13,
+   "y": 55,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 426 (C 10,5) - dół bez góry (brak kafla 418 nad) w (13,55)"
+  },
+  {
+   "kod": "O1",
+   "x": 98,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 573 (D 5,7) - dół bez góry (brak kafla 565 nad) w (98,59)"
+  },
+  {
+   "kod": "O1",
+   "x": 64,
+   "y": 66,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 403 (C 11,2) - góra bez dołu (brak kafla 411 pod) w (64,66)"
+  },
+  {
+   "kod": "O1",
+   "x": 99,
+   "y": 98,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 403 (C 11,2) - góra bez dołu (brak kafla 411 pod) w (99,98)"
+  },
+  {
+   "kod": "O1",
+   "x": 60,
+   "y": 101,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 103 (B 7,12) - dół bez góry (brak kafla 95 nad) w (60,101)"
+  },
+  {
+   "kod": "O1",
+   "x": 77,
+   "y": 104,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 477 (C 13,11) - dół bez góry (brak kafla 469 nad) w (77,104)"
+  },
+  {
+   "kod": "O1",
+   "x": 78,
+   "y": 104,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 478 (C 14,11) - dół bez góry (brak kafla 470 nad) w (78,104)"
+  },
+  {
+   "kod": "O1",
+   "x": 79,
+   "y": 104,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 479 (C 15,11) - dół bez góry (brak kafla 471 nad) w (79,104)"
+  },
+  {
+   "kod": "O1",
+   "x": 89,
+   "y": 104,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 477 (C 13,11) - dół bez góry (brak kafla 469 nad) w (89,104)"
+  },
+  {
+   "kod": "O1",
+   "x": 90,
+   "y": 104,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 478 (C 14,11) - dół bez góry (brak kafla 470 nad) w (90,104)"
+  },
+  {
+   "kod": "O1",
+   "x": 91,
+   "y": 104,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 479 (C 15,11) - dół bez góry (brak kafla 471 nad) w (91,104)"
+  },
+  {
+   "kod": "O1",
+   "x": 96,
+   "y": 104,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 472 (C 8,11) - góra bez dołu (brak kafla 480 pod) w (96,104)"
+  },
+  {
+   "kod": "O1",
+   "x": 97,
+   "y": 104,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 473 (C 9,11) - góra bez dołu (brak kafla 481 pod) w (97,104)"
+  },
+  {
+   "kod": "O1",
+   "x": 19,
+   "y": 105,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 404 (C 12,2) - góra bez dołu (brak kafla 412 pod) w (19,105)"
+  },
+  {
+   "kod": "O1",
+   "x": 20,
+   "y": 105,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 405 (C 13,2) - góra bez dołu (brak kafla 413 pod) w (20,105)"
+  },
+  {
+   "kod": "O1",
+   "x": 25,
+   "y": 105,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 307 (C 3,6) - góra bez dołu (brak kafla 315 pod) w (25,105)"
+  },
+  {
+   "kod": "O1",
+   "x": 61,
+   "y": 105,
+   "waga": "uwaga",
+   "opis": "obiekt rozcięty: kafel 301 (C 5,5) - góra bez dołu (brak kafla 309 pod) w (61,105)"
+  },
+  {
+   "kod": "P2",
+   "x": 81,
+   "y": 43,
+   "waga": "uwaga",
+   "opis": "zdarzenie 105 'EV105' (!Decoration|7|4|0) wisi w powietrzu za meblem / nad nim (2 px nad jego pikselami) w (81,43)"
+  },
+  {
+   "kod": "Z2",
+   "x": 92,
+   "y": 10,
+   "waga": "uwaga",
+   "opis": "obszary zdarzeń 209 'Drzwi: Stajnia', 230 'Budynek: Stajnia' nachodzą na kratce (92,10)"
+  },
+  {
+   "kod": "Z3",
+   "x": 118,
+   "y": 47,
+   "waga": "uwaga",
+   "opis": "zdarzenie 223 'Chorągiew Lorda Zaleskiego' (!Flags_banner|0|4|1) stoi na meblu z kafli 181 (118,47)"
+  },
+  {
+   "kod": "Z3",
+   "x": 119,
+   "y": 47,
+   "waga": "uwaga",
+   "opis": "zdarzenie 224 'Chorągiew Lorda Zaleskiego' (!Flags_banner|0|4|1) stoi na meblu z kafli 182 (119,47)"
+  },
+  {
+   "kod": "Z3",
+   "x": 82,
+   "y": 59,
+   "waga": "uwaga",
+   "opis": "zdarzenie 176 'Ozdoba' (!Roof_Windows|1|2|1) stoi na meblu z kafli 860 (82,59)"
+  },
+  {
+   "kod": "D4",
+   "x": 34,
+   "y": 38,
+   "waga": "info",
+   "opis": "rzecz do zbierania 123 'EV123' stoi w nieosiągalnym miejscu (34,38)"
+  }
+ ],
+ "licznik": {
+  "D3": 1,
+  "D1": 15,
+  "D4": 3,
+  "G1": 2,
+  "G3": 5,
+  "G4": 2,
+  "O1": 23,
+  "P2": 1,
+  "Z2": 1,
+  "Z3": 3
+ },
+ "png": "C:/Users/macie/OneDrive/Dokumenty/RMMZ/Tawerna/docs/mapy/kontrola_Map008.png",
+ "osiagalne": 8822,
+ "bez_wejsc": false,
+ "drobne_kieszenie": 7
+}

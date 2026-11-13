@@ -57,8 +57,8 @@
         rozbitek_mury: [30, 19, 4],        // under the west wall, looking towards the sea
         rozbitek_studnia: [52, 50, 4]     // the market well at night (the sleeve rolled up - W12's clue)
     };
-    const SPOT_TAVERN = [61, 33, 4];      // Map001: the free stool at the right-hand table (gosc_9 - Map001 unchanged)
-    const SPOT_ROOMS = [6, 38, 4];        // Map025: room 7, by the narrow bed (Map025 unchanged)
+    const SPOT_TAVERN = [19, 32, 4];      // Map001: the free stool at the right-hand table (gosc_9 - Map001 unchanged)
+    const SPOT_ROOMS = [25, 40, 4];        // Map025: room 7, by the narrow bed (Map025 unchanged)
 
     const resident = {
         key: RES.key, id: RES.id, sheet: "$Npc_Rozbitek", speed: 3,
@@ -107,12 +107,12 @@
     // (item 178): the white eyes. `ready`: a place of another package - only once Wyspa.isReady(map)
     const MARKS = [
         { key: "tawerna", map: 8, x: 51, y: 18 },
-        { key: "kamieniolom", map: 13, x: 40, y: 18 },
-        { key: "latarnia", map: 159, ready: 159 },
+        { key: "kamieniolom", map: 13, x: 40, y: 42 },
+        { key: "latarnia", map: 125, ready: 125 },
         { key: "pustelnia", map: 155, ready: 155 },
         { key: "urwisko", map: 157, ready: 157 },
-        { key: "kopiec", map: 20, x: 8, y: 7 },
-        { key: "dwor", map: 24, x: 20, y: 13 }
+        { key: "kopiec", map: 20, x: 39, y: 46 },
+        { key: "dwor", map: 24, x: 40, y: 73 }
     ];
     Watki.scal(MARKS, "wrak", "znaki");   // (its words: js/teksty/wrak.txt, znaki)
 

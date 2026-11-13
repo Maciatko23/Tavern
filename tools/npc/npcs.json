@@ -3334,5 +3334,328 @@
     "scale": null,
     "height_px": 60,
     "notes": "Podróżni z promu (docs/PODROZNI.md 2.13), łańcuch W14. W = lustro E (szablonowy W miał bordowe plamy i gubił teczkę). Chód N bez rozłożonej peleryny z rotacji (węższy płaszcz) - zostawione."
+  },
+  {
+    "key": "Ostap",
+    "name": "Ostap Lemiesz",
+    "pixellab_id": "955226de-d713-4e15-a9d0-d585bfcd39d8",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "38c3fc76-ab6f-40c0-b819-23f8d51dfef6",
+    "animation": "walking",
+    "description": "old guild master armourer, grey beard, navy guild vest, leather apron, cane",
+    "gens_used": 20,
+    "sheet": "$Npc_Ostap",
+    "walk8": "Npc_Ostap_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east",
+        "south-west": "south-east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 1,
+      "west": 1,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 1,
+      "south-east": 1
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": ""
+  },
+  {
+    "key": "Ludwik",
+    "name": "Ludwik Zareba",
+    "pixellab_id": "fd2e735f-eef8-48e5-9276-f67d40a848cb",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "a857b692-a912-4e8c-9a7c-a99bb6fbc77e",
+    "animation": "walking-8-frames",
+    "description": "clean young journeyman armourer, navy guild coat, silver chain, boots",
+    "gens_used": 20,
+    "sheet": "$Npc_Ludwik",
+    "walk8": "Npc_Ludwik_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east",
+        "south-west": "south-east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 1,
+      "south-west": 1,
+      "west": 1,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 1,
+      "south-east": 1
+    },
+    "scale": null,
+    "height_px": 59,
+    "notes": ""
+  },
+  {
+    "key": "Jas",
+    "name": "Jas",
+    "pixellab_id": "89224edb-c6fd-457c-8208-aa4a53d48c45",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "9fb74b9b-3491-4616-a558-64cb55fb81d7",
+    "animation": "walking-8-frames",
+    "description": "boy apprentice, oversized apron, barefoot",
+    "gens_used": 20,
+    "sheet": "$Npc_Jas",
+    "walk8": "Npc_Jas_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east",
+        "south-west": "south-east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 1,
+      "west": 1,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 1,
+      "south-east": 1
+    },
+    "scale": {
+      "body": 0.75,
+      "head": 0.88
+    },
+    "height_px": 45,
+    "notes": ""
+  },
+  {
+    "key": "Wawrzyn",
+    "name": "Wawrzyn Płowy",
+    "pixellab_id": "c0e4a132-62e0-4e59-b4ff-92aca8818e4c",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "e6158494-6114-4af4-bf55-4d51965faa54",
+    "animation": "walk",
+    "description": "thin poor refugee tanner, about 40 years old, tired narrow face with short brown hair and stubble, sleeves rolled up with white lime stains on the forearms, worn brown leather apron over a torn grey linen shirt, rope belt, baggy dark patched trousers, barefoot, a bundle of raw hides on his back, empty hands, no weapon, full body, standing, facing the viewer",
+    "gens_used": 16,
+    "sheet": "$Npc_Wawrzyn",
+    "walk8": "Npc_Wawrzyn_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {},
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 1,
+      "west": 1,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 1,
+      "south-east": 1
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": "W21 Gorączka: garbarz-uchodźca; 8 kierunków chodu (8 gen), bez luster"
+  },
+  {
+    "key": "Walenty",
+    "name": "Walenty Mączka",
+    "pixellab_id": "9340818b-e299-480e-8da2-1487f0cad819",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "",
+    "animation": "walking-8-frames-b",
+    "description": "miller, round, floury smock, grey strands",
+    "gens_used": 22,
+    "sheet": "$Npc_Walenty",
+    "walk8": "Npc_Walenty_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east",
+        "south-west": "south-east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 1,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 1,
+      "south-east": 0
+    },
+    "scale": null,
+    "height_px": 61,
+    "notes": ""
+  },
+  {
+    "key": "Jasiek",
+    "name": "Jasiek Worek",
+    "pixellab_id": "447fd230-41cc-490f-b615-f1ca828c91d0",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "",
+    "animation": "walking-8-frames-b",
+    "description": "miller's helper, boy",
+    "gens_used": 22,
+    "sheet": "$Npc_Jasiek",
+    "walk8": "Npc_Jasiek_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east",
+        "south-west": "south-east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 0,
+      "west": 1,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 1,
+      "south-east": 0
+    },
+    "scale": {
+      "body": 0.75,
+      "head": 0.88
+    },
+    "height_px": 45,
+    "notes": ""
+  },
+  {
+    "key": "Lasica",
+    "name": "Łasica",
+    "pixellab_id": "0ea00e3c-c760-4a30-bd68-e0d6a8cc5e65",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "",
+    "animation": "walking-8-frames-b",
+    "description": "hooded lookout",
+    "gens_used": 22,
+    "sheet": "$Npc_Lasica",
+    "walk8": "Npc_Lasica_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east",
+        "south-west": "south-east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 1,
+      "west": 1,
+      "north-west": 0,
+      "north": 0,
+      "north-east": 0,
+      "east": 1,
+      "south-east": 1
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": ""
+  },
+  {
+    "key": "Szyper",
+    "name": "Ostoja Rafa",
+    "pixellab_id": "f2c52b8e-65d1-490d-84da-caf18cee39f5",
+    "style_character_id": "bf29bbe1-35e0-4a01-b0e8-f8b502b9f196",
+    "mode": "pro, 64x64, 8 directions, low top-down",
+    "animation_group_id": "",
+    "animation": "walking-8-frames",
+    "description": "sea skipper",
+    "gens_used": 14,
+    "sheet": "$Npc_Szyper",
+    "walk8": "Npc_Szyper_Walk8",
+    "steps": [
+      2,
+      6
+    ],
+    "fixes": {
+      "from": {},
+      "mirror": {
+        "west": "east",
+        "south-west": "south-east"
+      },
+      "mirror_walk": {},
+      "flip_frames": {},
+      "recolor": ""
+    },
+    "feet_dy": {
+      "south": 0,
+      "south-west": 1,
+      "west": 1,
+      "north-west": 1,
+      "north": 0,
+      "north-east": 1,
+      "east": 1,
+      "south-east": 1
+    },
+    "scale": null,
+    "height_px": 60,
+    "notes": ""
   }
 ]

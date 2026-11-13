@@ -30,7 +30,7 @@
 
     // ------------------------------------------------------------------ the maps (155-167; 158 and 164 kept free)
     const MAPS = {
-        pustelnia: 155, skryptorium: 156, urwisko: 157, przyladek: 159, izbaLatarnika: 160, laterna: 161,
+        pustelnia: 155, skryptorium: 156, urwisko: 157, przyladek: 125, izbaLatarnika: 160, laterna: 161,
         garnizon: 162, kwatera: 163, wrak: 165, podPokladem: 166, cysterna: 167,
         // the maps of the game they touch (no tiles of these are changed by the packages)
         tawerna: 1, miasteczko: 8, gory: 13, pokojeGosci: 25, podgrodzie: 111, przystan: 125, pietro30: 147
@@ -41,7 +41,7 @@
     const PACKAGES = {
         A: { owner: "Pustelnia", maps: [155, 156], ids: [600, 609], residents: { pustelnik: 944 }, quests: ["K50", "D23"], also: ["W2 rozdz. 7"], port: 9501 },
         B: { owner: "Kruk", maps: [157], ids: [610, 629], residents: {}, quests: ["K51", "D24"], port: 9502 },
-        C: { owner: "Latarnia", maps: [159, 160, 161], ids: [630, 639], residents: { latarnik: 943 }, quests: ["K49", "D22", "W11"], port: 9503 },
+        C: { owner: "Latarnia", maps: [125, 160, 161], ids: [630, 639], residents: { latarnik: 943 }, quests: ["K49", "D22", "W11"], port: 9503 },
         D: { owner: "Garnizon", maps: [162, 163], ids: [640, 669], residents: { rotmistrz: 945, kwatermistrz: 946, werbownik: 947 }, quests: ["K52", "D26", "D27"], port: 9504 },
         E: { owner: "Wrak", maps: [165, 166], ids: [670, 679], residents: { rozbitek: 948 }, quests: ["D25", "W12"], port: 9505 },
         F: { owner: "Cysterna", maps: [167], ids: [680, 689], residents: {}, quests: ["D28", "K53"], port: 9506 }
@@ -60,12 +60,11 @@
     // the ways back and between the new maps are events of the new maps themselves (their package puts them in its map): the cells
     // every package keeps (docs/miejsca_wyspy/PAKIETY.md "Kontrakty")
     const LINKS = [
+        // (plansza 3x3, 2026-11-08) the sandbar 162 <-> 165 (the wreck) is out: the wreck is not used for now
         // (2026-10-30, the world) 155 S -> 125 removed: Pustelnia's south neighbour is 950
         { from: 155, cells: [[95, 17], [95, 18]], to: 157, land: [[1, 19], [1, 20]], dir: 6 },
         { from: 157, cells: [[0, 19], [0, 20]], to: 155, land: [[94, 17], [94, 18]], dir: 4 },
         // (2026-10-30, the world) 157 E -> 159, 159 W -> 157, 159 S -> 13, 162 N -> 125 removed: the maps meet their neighbours of the world (Swiat_Data.js)
-        { from: 162, cells: [[0, 20], [0, 21]], to: 165, land: [[78, 20], [78, 21]], dir: 4, tide: "low" },
-        { from: 165, cells: [[79, 20], [79, 21]], to: 162, land: [[1, 20], [1, 21]], dir: 6, tide: "low" },
         { from: 167, cells: [[33, 2]], to: 157, land: [[41, 16]], dir: 2, gate: "krataUrwisko" },
         { from: 157, cells: [[41, 15]], to: 167, land: [[33, 3]], dir: 2, gate: "krataUrwisko" },
         { from: 147, cells: [[19, 5], [20, 5], [21, 5]], to: 167, land: [[3, 20]], dir: 6, gate: "zasuwaCysterny", note: "a page of the sluice's events (code), Map147 unchanged" },
@@ -122,6 +121,12 @@
     // (level 0 low ... 1 high; "low" while the level is under LOW: about 3 hours)
     const TIDE = { period: 12.42, offset: 3.5, low: 0.15 };
 
-    window.WyspaData = { MAPS, FREE_MAPS, PACKAGES, SHARED_IDS, RESIDENT_SPARE, EDGES, LINKS, QUESTS, QUEST_TITLES, FLAGS, SWITCHES, SWITCH_BY,
+    // (2026-11-11 user: "wywalamy to z mapy, na razie bez pustelni") THE switch of the hermitage pocket (Pustelnia 155, Skryptorium 156, Urwisko
+    // Krukow 157): false - Wyspa.ready()/isReady() refuse these maps, so everything that asks "is the place built" (K50, D23, K51, D24, K53,
+    // the cistern's grate, W11's lens at Kleofas, D40's view points) acts as if it were not built. true brings it back (also the gate event
+    // on Map125 and 155/156/157 in Swiat_Data.js's extra).
+    const HERMITAGE_OPEN = false, HERMITAGE_MAPS = [155, 156, 157];
+
+    window.WyspaData = { HERMITAGE_OPEN, HERMITAGE_MAPS, MAPS, FREE_MAPS, PACKAGES, SHARED_IDS, RESIDENT_SPARE, EDGES, LINKS, QUESTS, QUEST_TITLES, FLAGS, SWITCHES, SWITCH_BY,
         ITEMS, ITEM_BY, ICONS, TIDE };
 })();

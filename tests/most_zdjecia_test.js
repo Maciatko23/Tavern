@@ -5,7 +5,7 @@ const path = require("path");
 const OUT = path.join(__dirname, "..", "docs", "swiat_etap1");
 kit.test({ port: Number(process.env.CDP_PORT) || 9382, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     for (const [tag, hour] of [["dzien", 11], ["noc", 21]]) {
-        await t.newGame({ map: 111, x: 92, y: 18, day: 12, hour, quiet: true, minimap: false });
+        await t.newGame({ map: 111, x: 110, y: 51, day: 12, hour, quiet: true, minimap: false });
         await t.frames(40);
         for (const v of (process.env.MOST_V || "ABC").split("")) {
             await t.eval(`(function(){ const ev = $gameMap.events().find(e => /^Most kamienny: obraz/.test(e.event().name)); ev.setImage("!$Most_${v}", 0); return 0; })()`);

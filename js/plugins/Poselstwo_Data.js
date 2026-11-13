@@ -3,10 +3,10 @@
 //=============================================================================
 // The chain W14 "Poselstwo" of the ferry's travellers (docs/PODROZNI.md 2.8, 2.13, I6, 4.1, 4.4 - stage 5, 2026-10-29) - the DATA;
 // the engine: Poselstwo.js, the words: js/teksty/poselstwo.txt. Albin the "pilgrim" (really Ragnar Holm, a scout of the Black Eyes
-// - the traveller "pielgrzym", room 15) comes with the third wave (day 37); the Crown's envoy Adam Wierzbięta and his guardsman Ostap
+// - the traveller "pielgrzym", room 8) comes with the third wave (day 37); the Crown's envoy Adam Wierzbięta and his guardsman Ostap
 // (the group "posel": the Gold suite on floor II, Map026 - only once TavernLife can refuse the hero a room taken) three days later
-// with a letter for the Lord. The dinner carried to the Gold suite at 20:00 is the way up ("w służbie"), the council in the Great
-// salon the next evening is heard through the dining room's wall, on the Kupała night Albin takes the letter - unless someone
+// with a letter for the Lord. The dinner carried to the Gold suite at 20:00 is the way up ("w służbie"), the council in the Lord's
+// salon the next evening is heard at its door from the hall, on the Kupała night Albin takes the letter - unless someone
 // watches the suite's door. Stands in the plugin list under Podroznicy_Data (its cast) and above TownLife and TownQuests_Data, so that:
 //   - the thread "poselstwo" (Watki.js) is made before TownQuests_Data: its state (Tawerna.state "poselstwo", version 1), the quest W14
 //     (seven steps, chapters 1-5: who is the pilgrim, the envoy and the dinner, the council, the Kupała night, the inquiry, the letter,
@@ -52,15 +52,15 @@
     // the injected events: the council's Lord and Feliks in the Great salon, Albin by the Gold suite's door on the Kupała night (Map026);
     // the envoy's wax on the gallery by room 15 and the sandals' prints at the gilded gate (Map025) - the morning after the theft
     const AKTORZY = {
-        lord: { id: 3070, map: MAP.apartamenty, x: 32, y: 40, dir: 4, sheet: "$Npc_Lord", index: 0 },
-        feliks: { id: 3071, map: MAP.apartamenty, x: 30, y: 43, dir: 8, sheet: "$Npc_Feliks", index: 0 },
-        albin: { id: 3072, map: MAP.apartamenty, x: 65, y: 29, dir: 2, sheet: "$Npc_Pielgrzym", index: 0 },
-        wosk: { id: 3073, map: MAP.pietro, x: 45, y: 25 },
-        krata: { id: 3074, map: MAP.pietro, x: 91, y: 17 }
+        lord: { id: 3070, map: MAP.apartamenty, x: 24, y: 10, dir: 4, sheet: "$Npc_Lord", index: 0 },
+        feliks: { id: 3071, map: MAP.apartamenty, x: 21, y: 12, dir: 8, sheet: "$Npc_Feliks", index: 0 },
+        albin: { id: 3072, map: MAP.apartamenty, x: 25, y: 24, dir: 2, sheet: "$Npc_Pielgrzym", index: 0 },
+        wosk: { id: 3073, map: MAP.pietro, x: 8, y: 50 },
+        krata: { id: 3074, map: MAP.pietro, x: 3, y: 51 }
     };
     // the envoy held in the salon for the council (TownLife.hold); his and Ostap's places on floor II
-    const NARADA = { posel: [28, 40], godziny: [21, 22.5] };
-    const MIEJSCA = { posel_wnetrze: [65, 40, 4], gwardzista_wnetrze: [66, 30, 2] };
+    const NARADA = { posel: [17, 10], godziny: [21, 22.5] };
+    const MIEJSCA = { posel_wnetrze: [22, 31, 8], gwardzista_wnetrze: [26, 25, 2] };
     // the days (from the envoy's arrival P): the council P+1 (41), the theft on the Kupała night (summer's 14th day - 42) when it falls
     // inside his stay, else P+2; Albin by the door 0:30-2:00 after its midnight, the theft at 1:30 when nobody watches; the morning 6:00
     const CZAS = { narada: 1, noc: 2, albin: [0.5, 2], kradziez: 1.5, rano: 6, kolacja: [19.5, 21], sluzba: [19.5, 23], okno: [23, 24], kopia: [21, 4] };
@@ -194,12 +194,12 @@
             przed: [{ hak: "f9Przygotuj" }],
             lista: {
                 1: { ch: 1, krok: "w14Patnik", godzina: 10, idz: [MAP.miasto, 33, 19, 8] },
-                2: { ch: 2, krok: "w14Posel", godzina: 19.6, idz: [MAP.karczma, 52, 33, 8] },
-                3: { ch: 3, krok: "w14Narada", godzina: 20.95, idz: [MAP.apartamenty, 41, 40, 4] },
-                4: { ch: 4, krok: "w14Kradziez", godzina: 23.9, idz: [MAP.apartamenty, 62, 28, 6] },
-                5: { ch: 4, krok: "w14Sledztwo", godzina: 9, idz: [MAP.pietro, 45, 27, 8] },
+                2: { ch: 2, krok: "w14Posel", godzina: 19.6, idz: [MAP.karczma, 12, 31, 8] },
+                3: { ch: 3, krok: "w14Narada", godzina: 20.95, idz: [MAP.apartamenty, 20, 22, 8] },
+                4: { ch: 4, krok: "w14Kradziez", godzina: 23.9, idz: [MAP.apartamenty, 23, 24, 6] },
+                5: { ch: 4, krok: "w14Sledztwo", godzina: 9, idz: [MAP.pietro, 8, 51, 8] },
                 6: { ch: 4, krok: "w14Sledztwo", godzina: 14.2, idz: [MAP.przystan, 20, 16, 4] },
-                7: { ch: 5, krok: "w14List", godzina: 10, idz: [MAP.apartamenty, 64, 29, 2] }
+                7: { ch: 5, krok: "w14List", godzina: 10, idz: [MAP.apartamenty, 27, 25, 8] }
             }
         }
     });

@@ -74,12 +74,15 @@ const { launch, sleep } = require("./cdp.js");
         await ev("Dog.state().tame = false; Dog.removeDog(); 0");
 
         // 4. no raid: a whole night, to the morning
-        await ev(`Hunting.RAID.perHour = 0; $gameSystem.setDayNightHour(21.5); $gameSystem.setStamina(10); 0`);
+        await ev(`Hunting.RAID.perHour = 0; $gameSystem.setDayNightHour(21.5); $gameSystem.setStamina(10); window.__raidD = null; 0`);
         const day0 = await ev("$gameSystem.dayNightDay()");
         await lieDown();
         await waitSleep();
-        const quiet = await J("({ hour: $gameSystem.dayNightHour(), day: $gameSystem.dayNightDay(), wolves: Hunting.animals.filter(a => a.kind() === 'wolf').length })");
-        check("no pack: the whole night, up at 7:00 the next day, no wolves", Math.abs(quiet.hour - 7) < 0.2 && quiet.day === day0 + 1 && quiet.wolves === 0, quiet);
+        const quiet = await J(`({ hour: $gameSystem.dayNightHour(), day: $gameSystem.dayNightDay(), raid: window.__raidD,
+            wolves: Hunting.animals.filter(a => a.kind() === 'wolf').map(a => ({ d: +Math.hypot(a.x - $gamePlayer.x, a.y - $gamePlayer.y).toFixed(1), engaged: !!a._engaged, mode: a._mode, home: a._home || null, den: a._den || a._denId || null })) })`);
+        // (the map's own wolves - a pair roaming round its home far off, since the maps were doubled - are not a pack that came for him)
+        check("no pack: the whole night, up at 7:00 the next day, no wolves near him", Math.abs(quiet.hour - 7) < 0.2 && quiet.day === day0 + 1 && !quiet.raid &&
+            quiet.wolves.every(w => w.d > 25 && !w.engaged), quiet);
 
         // 5. dawn: a pack still after him stops the hunt and runs off
         for (let i = 0; i < 20 && (await ev("SceneManager._scene.constructor.name")) !== "Scene_Map"; i++) { await ev("if (!SceneManager.isSceneChanging()) SceneManager.pop(); 0"); await frames(15); }   // (the day's summary closed)

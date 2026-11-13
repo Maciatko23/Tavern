@@ -6,7 +6,7 @@
 const kit = require("./lib/kit.js");
 
 kit.test({ port: 9561, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
-    await t.newGame({ map: 3, x: 20, y: 15, day: 12, hour: 11, quiet: true, minimap: false });
+    await t.newGame({ map: 3, x: 60, y: 46, day: 12, hour: 11, quiet: true, minimap: false });
     await t.frames(30);
     const api = await t.json("({ k: !!window.Krawedzie, order: (function(){ const ix = n => $plugins.findIndex(p => p.name === n && p.status); return [ix('FreeMovement'), ix('Homes'), ix('Orzel_Lot'), ix('Krawedzie')]; })() })");
     t.check("Krawedzie w grze, po FreeMovement, Homes i Orzel_Lot", api.k && api.order[3] > api.order[0] && api.order[3] > api.order[1] && api.order[3] > api.order[2], api);

@@ -1,5 +1,6 @@
-// Ekran tytułowy „Kufel przy kominku” (TitleScreen.js): tło, cztery pozycje, szare „Kontynuuj” bez zapisu i aktywne z zapisem (z
-// opisem zapisu i listą zapisów), Opcje i powrót, Wyjdź, nowa gra myszą, żywe tło (iskry, płomień świecy, blask ognia, para).
+// Ekran tytułowy „Kufel przy kominku” (TitleScreen.js): tło, pięć pozycji, szare „Kontynuuj” bez zapisu i aktywne z zapisem (z
+// opisem zapisu i listą zapisów), Opcje i powrót, Wyjdź, nowa gra myszą, żywe tło (iskry, płomień świecy, blask ognia, para),
+// „Szybka gra” (bez imienia i filmu: od razu w chacie dziadka po pierwszej rozmowie).
 //   CDP_PORT=9470 node tests/title_test.js
 "use strict";
 const kit = require("./lib/kit.js");
@@ -24,17 +25,21 @@ kit.test({ port: 9470, errorCheck: "bez błędów w konsoli" }, async t => {
     t.check("ekran tytułowy z nowym tłem (Tawerna_Title_Kufel, 1280 x 720)", !!s && /Tawerna_Title_Kufel\.png$/.test(s.image) && s.ready && s.size[0] === 1280 && s.size[1] === 720, s && s.image);
     t.check("stary ekran UITheme nie działa obok (brak jego efektów)", await t.eval("!SceneManager._scene._titleFx"));
     t.check("napis narysowany własnymi czcionkami", s.named && s.fonts.gothic === "ok" && s.fonts.serif === "ok", JSON.stringify(s.fonts));
-    t.check("4 pozycje: Nowa gra, Kontynuuj, Opcje, Wyjdź", JSON.stringify(s.items.map(i => i.label)) === JSON.stringify(["Nowa gra", "Kontynuuj", "Opcje", "Wyjdź"]), s.items.map(i => i.label));
-    t.check("bez zapisu „Kontynuuj” jest szare (nieaktywne) i ma podpis „brak zapisanej gry”", s.items[1].enabled === false && s.save.ok === false && /brak/.test(s.save.text), s.save);
+    t.check("5 pozycji: Nowa gra, Szybka gra, Kontynuuj, Opcje, Wyjdź", JSON.stringify(s.items.map(i => i.label)) === JSON.stringify(["Nowa gra", "Szybka gra", "Kontynuuj", "Opcje", "Wyjdź"]), s.items.map(i => i.label));
+    t.check("bez zapisu „Kontynuuj” jest szare (nieaktywne) i ma podpis „brak zapisanej gry”", s.items[2].enabled === false && s.save.ok === false && /brak/.test(s.save.text), s.save);
     t.check("na starcie wybrane „Nowa gra”", s.symbol === "newGame");
     t.check("napis i menu wyłoniły się z ciemności", s.nameOpacity === 255 && s.menuOpacity === 255, [s.nameOpacity, s.menuOpacity]);
 
-    // klawisze: S przeskakuje szare „Kontynuuj”, W wraca
+    // klawisze: S na „Szybka gra”, S przeskakuje szare „Kontynuuj”, W wraca
+    await t.key("S"); await t.frames(6);
+    t.check("S (w dół) na „Szybka gra”", (await info()).symbol === "quickGame", (await info()).symbol);
     await t.key("S"); await t.frames(6);
     s = await info();
     t.check("S (w dół) przeskakuje szare „Kontynuuj” na „Opcje”", s.symbol === "options", s.symbol);
     await t.frames(20);
-    t.check("miedziana kreska dojechała do „Opcje”", (await info()).barY === s.rows[2], (await info()).barY);
+    t.check("miedziana kreska dojechała do „Opcje”", (await info()).barY === s.rows[3], (await info()).barY);
+    await t.key("W"); await t.frames(6);
+    t.check("W (w górę) przeskakuje szare „Kontynuuj” na „Szybka gra”", (await info()).symbol === "quickGame", (await info()).symbol);
     await t.key("W"); await t.frames(6);
     t.check("W (w górę) wraca na „Nowa gra”", (await info()).symbol === "newGame");
 
@@ -74,7 +79,7 @@ kit.test({ port: 9470, errorCheck: "bez błędów w konsoli" }, async t => {
     await t.until(`${onTitle} && TitleScreen.info() && TitleScreen.info().named`, 20);
     await t.frames(100);
     s = await info();
-    t.check("z zapisem „Kontynuuj” jest aktywne i wybrane", s.items[1].enabled === true && s.symbol === "continue", [s.items[1], s.symbol]);
+    t.check("z zapisem „Kontynuuj” jest aktywne i wybrane", s.items[2].enabled === true && s.symbol === "continue", [s.items[2], s.symbol]);
     t.check("pod „Kontynuuj” opis zapisu: dzień, pora roku, miejsce", s.save.ok && s.save.text.startsWith("Dzień " + day) && s.save.text.split(" · ").length >= 3, s.save.text);
     await t.key("O");
     t.check("Kontynuuj otwiera listę zapisów", await t.until("SceneManager._scene instanceof Scene_Load && !SceneManager.isSceneChanging()", 10));
@@ -87,7 +92,7 @@ kit.test({ port: 9470, errorCheck: "bez błędów w konsoli" }, async t => {
     // mysz: najechanie wybiera, kliknięcie „Nowa gra” zaczyna grę
     await t.until("TitleScreen.info() && TitleScreen.info().open && TitleScreen.info().active", 10);   // (the mouse works once the menu is open)
     const rows = (await info()).rows;
-    await t.mouseMove(130, rows[2]);
+    await t.mouseMove(130, rows[3]);
     await t.frames(4);
     t.check("mysz nad „Opcje” je wybiera", (await info()).symbol === "options", (await info()).symbol);
     await t.mouseMove(130, rows[0]);   // (najpierw najechanie - zaznacza; kliknięcie w tej samej klatce co ruch MZ bierze tylko za wybór)
@@ -101,4 +106,30 @@ kit.test({ port: 9470, errorCheck: "bez błędów w konsoli" }, async t => {
     const named = await t.until("SceneManager._scene && SceneManager._scene.constructor.name === 'Scene_HeroName' && !SceneManager.isSceneChanging()", 30);
     t.check("kliknięcie „Nowa gra” zaczyna nową grę (ekran imienia przed prologiem)", named, named ? "" : await t.json("({ scene: SceneManager._scene.constructor.name, info: window.TitleScreen.info() && [TitleScreen.info().symbol, TitleScreen.info().open, TitleScreen.info().active], tx: [TouchInput.x, TouchInput.y] })"));
     t.check("w nowej grze ekran tytułowy już nie rysuje (info = null)", (await info()) === null);
+
+    // „Szybka gra”: bez imienia i filmu, od razu w chacie dziadka - rozmowa jak wysłuchana (klawisz O na surowo i czekanie w ms:
+    // nowa gra cofa Graphics.frameCount do 0)
+    t.check("powrót na ekran tytułowy (przed szybką grą)", await t.toTitle());
+    await t.until(`${onTitle} && TitleScreen.info() && TitleScreen.info().open && TitleScreen.info().active`, 20);
+    t.check("wybrana „Szybka gra”", (await pick("Szybka gra")) === "Szybka gra");
+    await t.eval(`(function(){ window.__sc = []; const g = SceneManager.__gotoOrig = SceneManager.goto; SceneManager.goto = function(c){ window.__sc.push(c ? c.name : "-"); return g.apply(this, arguments); }; return 1; })()`);
+    await t.b.send("Input.dispatchKeyEvent", { type: "rawKeyDown", windowsVirtualKeyCode: 79, nativeVirtualKeyCode: 79, code: "KeyO", key: "o" });
+    await t.wait(80);
+    await t.b.send("Input.dispatchKeyEvent", { type: "keyUp", windowsVirtualKeyCode: 79, nativeVirtualKeyCode: 79, code: "KeyO", key: "o" });
+    const onMap = await t.until("SceneManager._scene instanceof Scene_Map && !SceneManager.isSceneChanging() && $gameMap.mapId() === 19 && Story.state() && Story.state().intro === 2", 30);
+    const q = await t.json(`(function(){ const s = Story.state(), g = Story.npc("grandpa"), J = window.Journal && Journal.data ? Journal.data() : null;
+        return { map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, d: $gamePlayer.direction(), intro: s && s.intro, lying: Story.introLying(),
+            pendant: $gameParty.hasItem($dataItems[Story.PENDANT]), soup: $gameParty.numItems($dataItems[131]), name: $gameActors.actor(1).name(),
+            grandpa: g ? [g.x, g.y, g.direction()] : null, running: $gameMap.isEventRunning(), bars: !!$gameTemp._hudScene, quick: !!$gameTemp._twQuickStart,
+            notes: J ? (J.notes || []).length : -1, debt: s && s.debt, deadline: s && s.deadline }; })()`);
+    t.check("„Szybka gra” od razu na mapie: chata dziadka (19), rozmowa wysłuchana", onMap && q.map === 19 && q.intro === 2, q);
+    const sc = await t.json("window.__sc");
+    await t.eval("SceneManager.goto = SceneManager.__gotoOrig; 0");
+    t.check("bez ekranu imienia i filmu (imię z bazy)", sc.join() === "Scene_Map" && q.name === "Reid", [sc, q.name]);
+    t.check("bohater wstał: przy łóżku (2,5), twarzą w prawo, bez pasków sceny", q.x === 2 && q.y === 5 && q.d === 6 && !q.lying && !q.bars && !q.running, q);
+    // (Story.quickStart puts him at his pot; his own life in the house may take him a few steps on before this reading)
+    t.check("dziadek wrócił do paleniska (przy garnku albo kilka kroków dalej)", !!q.grandpa && q.grandpa[1] >= 4 && q.grandpa[1] <= 7 && q.grandpa[0] >= 7 && q.grandpa[0] <= 13, q.grandpa);
+    t.check("to, co daje rozmowa: wisiorek, zupa, notatki w dzienniku, dług z terminem", q.pendant && q.soup >= 1 && q.notes >= 2 && q.debt > 0 && q.deadline > 0 && !q.quick, q);
+    await t.frames(120);
+    t.check("rozmowa nie rusza drugi raz", (await t.json("[Story.state().intro, $gameMap.isEventRunning(), Story.introLying()]")).join() === "2,false,false", await t.json("[Story.state().intro, $gameMap.isEventRunning(), Story.introLying()]"));
 });

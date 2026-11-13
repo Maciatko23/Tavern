@@ -8,7 +8,7 @@ const SHOTS = path.join(__dirname, "..", "docs", "cienie");
 
 kit.test({ port: 9436, bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
     require("fs").mkdirSync(SHOTS, { recursive: true });
-    await t.newGame({ map: 3, x: 22, y: 14, day: 40, hour: 12, quiet: true, minimap: false });
+    await t.newGame({ map: 3, x: 62, y: 45, day: 40, hour: 12, quiet: true, minimap: false });
     // an open spot: a passable tile with no event within 2 tiles
     const spot = await t.json(`(function(){ for (let y = 6; y < $gameMap.height() - 6; y++) for (let x = 6; x < $gameMap.width() - 6; x++) {
             let ok = $gameMap.isPassable(x, y, 2) && $gameMap.isPassable(x + 1, y, 6) && $gameMap.isPassable(x + 2, y, 6);

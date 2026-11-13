@@ -34,7 +34,7 @@ kit.test({ port: 9550, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("...i wszystkie się ładują", pl.loaded.every(Boolean), pl.loaded);
 
     // ---------------------------------------------------------------- rejestr numerów
-    await t.newGame({ map: 3, x: 25, y: 15, hour: 12, quiet: true, minimap: false });
+    await t.newGame({ map: 3, x: 65, y: 46, hour: 12, quiet: true, minimap: false });
     const reg = await t.json(`(function(){ const T = Tawerna, tryIt = ids => { try { T.inject(3, { ids, owner: "Obcy", build: () => [] }); return "ok"; } catch (e) { return e.message; } };
         return { list: T.inject.list().map(r => r.owner + " " + r.ids), a: tryIt([2150, 2151]), b: tryIt([2350, 2350]), c: tryIt([2550, 2550]), d: tryIt([2750, 2750]),
             o: tryIt([2050, 2050]), tl: tryIt([2910, 2910]), f: tryIt([1500, 1500]), woz: tryIt([3000, 3000]), free: tryIt([3900, 3901]) }; })()`);
@@ -65,7 +65,7 @@ kit.test({ port: 9550, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // ---------------------------------------------------------------- Forestry: numer z 1000-1999 także przy zdarzeniu 2000+
     await t.eval(`(function(){ Tawerna.inject(3, { ids: [2050, 2050], owner: "Okolice", build: () => [Okolice.blank(2050, 5, 5, "test Forestry")] }); return 0; })()`);
     await t.go(4, 20, 15);
-    await t.go(3, 25, 15);
+    await t.go(3, 65, 46);
     const fo = await t.json(`({ len: $dataMap.events.length, ev: !!$dataMap.events[2050], next: Forestry.nextId(3), range: [Forestry.FIRST_ID, Forestry.LAST_ID] })`);
     t.check("Forestry: na mapie ze zdarzeniem 2050 nowa sosna dostaje pierwszy wolny numer z 1000-1999", fo.ev && fo.len > 2000 && fo.next >= 1000 && fo.next <= 1999 && fo.range[1] === 1999, fo);
 
@@ -77,7 +77,7 @@ kit.test({ port: 9550, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("TownLife: mieszkaniec z numerem 2949 (drugi zakres) stoi na swojej mapie (Map004)", tl.e && /<Town:okolice_test>/.test(tl.note) && tl.res, tl);
 
     // ---------------------------------------------------------------- kafle pakietu 0
-    await t.go(24, 7, 28);
+    await t.go(24, 27, 88);
     const g24 = await t.json(`(function(){ const w = Okolice.walk([20, 15]); return { gap: [[7,29],[8,29]].map(([x,y]) => [2,8].every(d => $gameMap.isPassable(x, y, d))),
         park: w.has("7,31") && w.has("61,5") && w.has("53,45"), n: w.size }; })()`);
     t.check("Map024: wyłom w żywopłocie (7,29), (8,29) przechodni, ze dworu dojdziesz do zwierzyńca (leśniczówka, obchód gajowego)", g24.gap.every(Boolean) && g24.park, g24);
@@ -147,7 +147,7 @@ kit.test({ port: 9550, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         return { titles: secs.map(s => s.title), check: r, pick: sp ? sp.label : null, go: sp ? Okolice.f9.ok(sp) : null,
         }; })()`);
     const dbg = fs.readFileSync(path.join(__dirname, "..", "js", "plugins", "Debug.js"), "utf8");
-    f9.hook = /row\("isleOkolice"/.test(dbg) && /case "isleOkolice"/.test(dbg) && /row\.kind === "isleOkolice"/.test(dbg);
+    f9.hook = /kind: "isleOkolice"/.test(dbg) && /case "isleOkolice"/.test(dbg) && /row\.kind === "isleOkolice"/.test(dbg);
     t.check("F9: sekcja pakietu 0 (miejsca planu, kolizje na mapie), Debug.js ma hak „isleOkolice”", f9.hook && f9.titles.length >= 1 && f9.check && /^Kolizje: 0/.test(f9.check.say) && f9.go && f9.go.go, f9);
 
     // ---------------------------------------------------------------- poprawka Orzel.js (nazwa strażników klatki)
