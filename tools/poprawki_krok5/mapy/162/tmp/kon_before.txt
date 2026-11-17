@@ -1,6 +1,0 @@
-Map162 'Garnizon nad zatoką' (120x120, zestaw 11)
-  wejścia: 6 kratek startowych (przeniesienia na tę mapę), osiągalnych kratek: 9964
-  razem: O1 1
-  [uwaga] O1 obiekt rozcięty: kafel 368 (C 0,14) - góra bez dołu (brak kafla 376 pod) w (54,31)
-  (pominięto 1 drobnych zamkniętych kieszeni < 4 kratek bez zdarzeń)
-

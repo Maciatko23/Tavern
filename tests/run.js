@@ -38,8 +38,6 @@ const UNIT = path.join(TESTS, "unit");
 
 // the quick set: boot + new game + save/load (fixtures), story start, farming/building, hunting/combat, needs, journal, menu,
 // tavern interior, a mini-game, bubbles/busts, grandpa's house
-// (2026-11-17: wolves_test and quest_board_test left the quick set - they played on the removed old maps 004 / 022; back when
-// rewritten for the new world - tests/stary_swiat.txt)
 const SMOKE = [
     "smoke/fixtures",          // boot, every fixture loads and plays, save -> load round trip
     "smoke/story",             // a new story game in grandpa's house, the intro, the journal's chapter, the way out
@@ -124,12 +122,8 @@ function testsFor(plugins) {
     return out;
 }
 
-// the old world's suites (tests/stary_swiat.txt, 2026-11-14): things that still live only on the old maps - not in "full" unless
-// --stary; `node tests/run.js stary` runs just them. A suite leaves the list when its subject has moved to the new world.
-const OLD_WORLD_FILE = path.join(TESTS, "stary_swiat.txt");
-const OLD_WORLD = fs.existsSync(OLD_WORLD_FILE) ? fs.readFileSync(OLD_WORLD_FILE, "utf8").split(/\r?\n/).map(l => l.trim()).filter(l => l && !l.startsWith("#")) : [];
-const WITH_OLD = flag("stary");
-const e2eAll = () => fs.readdirSync(TESTS).filter(f => /_test\.js$/.test(f)).map(f => f.replace(/\.js$/, "")).filter(n => !SKIP_FULL.includes(n) && (WITH_OLD || !OLD_WORLD.includes(n))).sort();
+// (2026-11-17: the old world's suites - tests/stary_swiat.txt - were removed with the old maps; every suite here plays the new world)
+const e2eAll = () => fs.readdirSync(TESTS).filter(f => /_test\.js$/.test(f)).map(f => f.replace(/\.js$/, "")).filter(n => !SKIP_FULL.includes(n)).sort();
 const unitAll = () => (fs.existsSync(UNIT) ? fs.readdirSync(UNIT).filter(f => /\.test\.js$/.test(f)).sort().map(f => "unit/" + f.replace(/\.js$/, "")) : []);
 const smokeAll = () => (fs.existsSync(path.join(TESTS, "smoke")) ? fs.readdirSync(path.join(TESTS, "smoke")).filter(f => f.endsWith(".js")).sort().map(f => "smoke/" + f.replace(/\.js$/, "")) : []);
 // a test's usual time (the last run, else the map's measurement): for the estimate and for --czesc
@@ -197,12 +191,11 @@ function resolve(n) {
 }
 let names = [];
 const FULL = args.includes("full");
-const KEYWORDS = ["smoke", "full", "unit", "affected", "changed", "zmiany", "mapa", "znacznik", "stary"];
+const KEYWORDS = ["smoke", "full", "unit", "affected", "changed", "zmiany", "mapa", "znacznik"];
 for (let i = 0; i < args.length; i++) {
     const a = args[i];
     if (a === "smoke") names.push(...SMOKE);
     else if (a === "full") names.push(...e2eAll());
-    else if (a === "stary") names.push(...OLD_WORLD.filter(n => fs.existsSync(path.join(TESTS, n + ".js"))));
     else if (a === "unit") names.push(...unitAll());
     else if (a === "affected" || a === "changed") {
         let plugins = [];
@@ -215,7 +208,7 @@ for (let i = 0; i < args.length; i++) {
     else if (a === "zmiany") {
         const files = [];
         while (i + 1 < args.length && !KEYWORDS.includes(args[i + 1]) && isChangeArg(args[i + 1])) files.push(args[++i]);
-        names.push(...pickForChanges(files));
+        names.push(...pickForChanges(files).filter(n => resolve(n).file));   // (the map may still name a suite removed since)
     }
     else if (a === "znacznik") {   // (the files as they are now: zmiany --od znacznik[:name] later)
         const name = i + 1 < args.length && !KEYWORDS.includes(args[i + 1]) ? args[++i] : null;
@@ -398,7 +391,6 @@ function status(r, p) {
     const total = `SUITES: ${clean} clean, ${rows.length - clean} with a FAIL/ERR line`;
     const took = `time: ${Math.floor(secs / 60)} min ${secs % 60} s`;
     console.log("\n" + table.join("\n") + "\n\n" + total + "  (" + took + ")");
-    if (FULL && !WITH_OLD && OLD_WORLD.length) console.log("(stary świat: " + OLD_WORLD.length + " zestawów poza przebiegiem - tests/stary_swiat.txt; `node tests/run.js stary` albo `full --stary`)");
     fs.writeFileSync(path.join(TESTS, "results" + PORT_TAG + ".txt"), sections.join("\n") + "\n" + total + "\n\n" + table.join("\n") + "\n" + took + "\nALL DONE\n");
     process.exit(clean === rows.length ? 0 : 1);
 })();

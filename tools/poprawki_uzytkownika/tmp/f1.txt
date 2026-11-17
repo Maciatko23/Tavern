@@ -1,6 +1,0 @@
-PASS gra
-  zdjecie m3_zach
-  zdjecie m3_zrodlo
-PASS zdjecia (after)
-PASS bez bledow w konsoli  []
-3/3 passed

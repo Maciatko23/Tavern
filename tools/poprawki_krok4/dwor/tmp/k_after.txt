@@ -1,8 +1,0 @@
-  [uwaga] O1 obiekt rozcięty: kafel 224 (B 8,12) - dół bez góry (brak kafla 216 nad) w (55,77)
-  [uwaga] O1 obiekt rozcięty: kafel 141 (B 13,1) - dół bez góry (brak kafla 133 nad) w (13,115)
-  [uwaga] O1 obiekt rozcięty: kafel 141 (B 13,1) - dół bez góry (brak kafla 133 nad) w (91,115)
-  [uwaga] O1 obiekt rozcięty: kafel 141 (B 13,1) - dół bez góry (brak kafla 133 nad) w (108,115)
-  [uwaga] Z1 zdarzenia 168 'Drzewo w ogrodzie Lorda' i 228 'Drzewo w ogrodzie Lorda' na jednej kratce (49,94)
-  [uwaga] Z2 obszary zdarzeń 27 'Splot gałęzi', 29 'Wysoki suchy krzak' nachodzą na kratce (99,106)
-  (pominięto 2 drobnych zamkniętych kieszeni < 4 kratek bez zdarzeń)
-

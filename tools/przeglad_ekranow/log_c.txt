@@ -1,7 +1,0 @@
-PASS gra
-  mapa 111 120x120 ekranów 50 23 s
-  mapa 125 120x120 ekranów 50 23 s
-  mapa 162 120x120 ekranów 50 22 s
-PASS zdjęte mapy: 3
-PASS bez błędów w konsoli  []
-3/3 passed

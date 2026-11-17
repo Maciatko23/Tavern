@@ -1,8 +1,0 @@
-  [uwaga] O1 obiekt rozcięty: kafel 745 (D 9,13) - dół bez góry (brak kafla 737 nad) w (21,60)
-  [uwaga] O1 obiekt rozcięty: kafel 754 (D 10,14) - dół bez góry (brak kafla 746 nad) w (22,61)
-  [uwaga] O1 obiekt rozcięty: kafel 141 (B 13,1) - dół bez góry (brak kafla 133 nad) w (13,115)
-  [uwaga] O1 obiekt rozcięty: kafel 141 (B 13,1) - dół bez góry (brak kafla 133 nad) w (91,115)
-  [uwaga] O1 obiekt rozcięty: kafel 141 (B 13,1) - dół bez góry (brak kafla 133 nad) w (108,115)
-  [uwaga] Z2 obszary zdarzeń 27 'Splot gałęzi', 29 'Wysoki suchy krzak' nachodzą na kratce (99,106)
-  (pominięto 5 drobnych zamkniętych kieszeni < 4 kratek bez zdarzeń)
-

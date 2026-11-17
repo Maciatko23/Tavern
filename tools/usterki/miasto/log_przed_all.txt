@@ -1,4 +1,0 @@
-PASS gra
-PASS shots 50
-PASS bez błędów w konsoli  []
-3/3 passed

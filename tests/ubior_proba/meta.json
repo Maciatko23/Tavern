@@ -640,12 +640,12 @@
  },
  "problems": {
   "Hero_Walk": {
-   "median": 0.76,
+   "median": 0.68,
    "list": [],
    "cells": 72
   },
   "Hero_Axe": {
-   "median": 0.76,
+   "median": 0.72,
    "list": [
     {
      "where": "Hero_Axe wiersz 0 (S) klatka 7",
@@ -674,7 +674,7 @@
    "cells": 68
   },
   "Hero_AxeSide": {
-   "median": 0.76,
+   "median": 0.71,
    "list": [
     {
      "where": "Hero_AxeSide wiersz 1 (W) klatka 5",
@@ -697,129 +697,147 @@
  "stats": [
   {
    "sheet": "Hero_Walk",
-   "outfit": "|koszula_lniana_biala|||||",
-   "ms": 2.3,
-   "w": 576,
-   "h": 512
-  },
-  {
-   "sheet": "Hero_Axe",
-   "outfit": "|koszula_lniana_biala|||||",
-   "ms": 4.1,
-   "w": 1632,
-   "h": 384
-  },
-  {
-   "sheet": "Hero_AxeSide",
-   "outfit": "|koszula_lniana_biala|||||",
-   "ms": 3.8,
-   "w": 1632,
-   "h": 384
-  },
-  {
-   "sheet": "Hero_Walk",
-   "outfit": "|kaftan_czerwony|||||",
-   "ms": 2.3,
-   "w": 576,
-   "h": 512
-  },
-  {
-   "sheet": "Hero_Axe",
-   "outfit": "|kaftan_czerwony|||||",
-   "ms": 4,
-   "w": 1632,
-   "h": 384
-  },
-  {
-   "sheet": "Hero_AxeSide",
-   "outfit": "|kaftan_czerwony|||||",
-   "ms": 4.8,
-   "w": 1632,
-   "h": 384
-  },
-  {
-   "sheet": "Hero_Walk",
-   "outfit": "|kurta_zielona|||||",
+   "outfit": "|koszula_lniana_biala||||||",
    "ms": 2.4,
    "w": 576,
-   "h": 512
+   "h": 512,
+   "partial": false
   },
   {
    "sheet": "Hero_Axe",
-   "outfit": "|kurta_zielona|||||",
-   "ms": 3.8,
+   "outfit": "|koszula_lniana_biala||||||",
+   "ms": 4.3,
    "w": 1632,
-   "h": 384
+   "h": 384,
+   "partial": false
   },
   {
    "sheet": "Hero_AxeSide",
-   "outfit": "|kurta_zielona|||||",
-   "ms": 5.3,
+   "outfit": "|koszula_lniana_biala||||||",
+   "ms": 4.2,
    "w": 1632,
-   "h": 384
+   "h": 384,
+   "partial": false
   },
   {
    "sheet": "Hero_Walk",
-   "outfit": "|||buty_brazowe|||",
-   "ms": 3.1,
+   "outfit": "|kaftan_czerwony||||||",
+   "ms": 2.5,
    "w": 576,
-   "h": 512
-  },
-  {
-   "sheet": "Hero_AxeSide",
-   "outfit": "|||buty_brazowe|||",
-   "ms": 5.5,
-   "w": 1632,
-   "h": 384
+   "h": 512,
+   "partial": false
   },
   {
    "sheet": "Hero_Axe",
-   "outfit": "|||buty_brazowe|||",
-   "ms": 6.1,
+   "outfit": "|kaftan_czerwony||||||",
+   "ms": 4.3,
    "w": 1632,
-   "h": 384
+   "h": 384,
+   "partial": false
+  },
+  {
+   "sheet": "Hero_AxeSide",
+   "outfit": "|kaftan_czerwony||||||",
+   "ms": 4.1,
+   "w": 1632,
+   "h": 384,
+   "partial": false
   },
   {
    "sheet": "Hero_Walk",
-   "outfit": "kapelusz_slomkowy||||||",
-   "ms": 1.9,
+   "outfit": "|kurta_zielona||||||",
+   "ms": 2.4,
    "w": 576,
-   "h": 512
-  },
-  {
-   "sheet": "Hero_AxeSide",
-   "outfit": "kapelusz_slomkowy||||||",
-   "ms": 3.7,
-   "w": 1632,
-   "h": 384
+   "h": 512,
+   "partial": false
   },
   {
    "sheet": "Hero_Axe",
-   "outfit": "kapelusz_slomkowy||||||",
-   "ms": 3.3,
+   "outfit": "|kurta_zielona||||||",
+   "ms": 4.4,
    "w": 1632,
-   "h": 384
+   "h": 384,
+   "partial": false
+  },
+  {
+   "sheet": "Hero_AxeSide",
+   "outfit": "|kurta_zielona||||||",
+   "ms": 4.1,
+   "w": 1632,
+   "h": 384,
+   "partial": false
   },
   {
    "sheet": "Hero_Walk",
-   "outfit": "kapelusz_slomkowy|kaftan_czerwony||buty_brazowe|||",
+   "outfit": "|||buty_brazowe||||",
+   "ms": 1.4,
+   "w": 576,
+   "h": 512,
+   "partial": false
+  },
+  {
+   "sheet": "Hero_Axe",
+   "outfit": "|||buty_brazowe||||",
+   "ms": 2.8,
+   "w": 1632,
+   "h": 384,
+   "partial": false
+  },
+  {
+   "sheet": "Hero_AxeSide",
+   "outfit": "|||buty_brazowe||||",
+   "ms": 2.6,
+   "w": 1632,
+   "h": 384,
+   "partial": false
+  },
+  {
+   "sheet": "Hero_Walk",
+   "outfit": "kapelusz_slomkowy|||||||",
+   "ms": 3.6,
+   "w": 576,
+   "h": 512,
+   "partial": false
+  },
+  {
+   "sheet": "Hero_Axe",
+   "outfit": "kapelusz_slomkowy|||||||",
+   "ms": 5.1,
+   "w": 1632,
+   "h": 384,
+   "partial": false
+  },
+  {
+   "sheet": "Hero_AxeSide",
+   "outfit": "kapelusz_slomkowy|||||||",
    "ms": 5,
+   "w": 1632,
+   "h": 384,
+   "partial": false
+  },
+  {
+   "sheet": "Hero_Walk",
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||buty_brazowe||||",
+   "ms": 5.5,
    "w": 576,
-   "h": 512
+   "h": 512,
+   "partial": false
   },
   {
    "sheet": "Hero_Axe",
-   "outfit": "kapelusz_slomkowy|kaftan_czerwony||buty_brazowe|||",
-   "ms": 7.8,
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||buty_brazowe||||",
+   "ms": 10.6,
    "w": 1632,
-   "h": 384
+   "h": 384,
+   "partial": false
   },
   {
    "sheet": "Hero_AxeSide",
-   "outfit": "kapelusz_slomkowy|kaftan_czerwony||buty_brazowe|||",
-   "ms": 7.8,
+   "outfit": "kapelusz_slomkowy|kaftan_czerwony||buty_brazowe||||",
+   "ms": 8.2,
    "w": 1632,
-   "h": 384
+   "h": 384,
+   "partial": false
   }
  ]
 }

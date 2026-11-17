@@ -1000,7 +1000,7 @@
   }
  ],
  "talk": {
-  "kit": false,
+  "kit": true,
   "shown": false
  },
  "card": {
@@ -1009,59 +1009,53 @@
   "key": "l:Hero_Walk:czapka_filc_zielona|kaftan_czerwony|spodnie_welniane_brazowe|buty_brazowe||rekawice_brazowe|plecak|:1:0"
  },
  "ms": {
+  "Hero_AxeSide": {
+   "n": 68,
+   "min": 4.8,
+   "max": 16,
+   "avg": 7.5
+  },
+  "Hero_Bow": {
+   "n": 64,
+   "min": 4.5,
+   "max": 12.1,
+   "avg": 6.5
+  },
   "Hero_Sit": {
    "n": 68,
    "min": 7.3,
-   "max": 24.2,
-   "avg": 12
+   "max": 24.5,
+   "avg": 12.2
   },
   "Hero_LieDown": {
-   "n": 65,
-   "min": 7,
-   "max": 24.9,
-   "avg": 10.7
+   "n": 64,
+   "min": 7.4,
+   "max": 14.9,
+   "avg": 11
   },
   "Hero_Walk": {
    "n": 66,
    "min": 0.9,
-   "max": 9.7,
+   "max": 13.7,
    "avg": 2.9
   },
   "Hero_TorchWalk": {
-   "n": 63,
-   "min": 2.4,
-   "max": 10.9,
-   "avg": 4
-  },
-  "Hero_AxeSide": {
-   "n": 66,
-   "min": 4.4,
-   "max": 19.2,
-   "avg": 7.1
-  },
-  "Hero_Bow": {
-   "n": 63,
-   "min": 4.1,
-   "max": 13.2,
-   "avg": 6.3
+   "n": 62,
+   "min": 3,
+   "max": 11.5,
+   "avg": 4.4
   },
   "Hero_Crouch": {
    "n": 8,
-   "min": 12.4,
-   "max": 20.8,
-   "avg": 17.8
+   "min": 11.1,
+   "max": 21.9,
+   "avg": 18.3
   },
   "Hero_Bust": {
    "n": 4,
-   "min": 2,
-   "max": 5.4,
-   "avg": 3.9
-  },
-  "Hero_Punch": {
-   "n": 1,
-   "min": 14,
-   "max": 14,
-   "avg": 14
+   "min": 1.9,
+   "max": 5.5,
+   "avg": 3.8
   }
  }
 }

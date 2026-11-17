@@ -9,11 +9,11 @@
   "hand": true
  },
  "OLD": {
-  "kol": "Kolczuga",
-  "kar": "{\"plik\":\"Karwasze\",\"miejsce\":\"rece\",\"natywny\":\"skora\",\"glowny\":\"cieply\",\"lo\":0.153,\"hi\":0.703,\"reszta\":\"akcent\",\"lo2\":0.6,\"hi2\":0.92}",
-  "nag": "Nagolenniki",
-  "but": "Buty",
-  "nos": "{\"plik\":\"Nosal\",\"w\":24,\"h\":28,\"anchor\":[11,6],\"natywny\":\"zelazo\",\"glowny\":\"szary\",\"lo\":0.227,\"hi\":0.93,\"reszta\":\"natywny\"}"
+  "kol": "KolczugaZ2",
+  "kar": "{\"plik\":\"KarwaszeZ2\",\"miejsce\":\"rece\",\"natywny\":\"zelazo\",\"glowny\":\"szary\",\"lo\":0.148,\"hi\":0.871,\"reszta\":\"natywny\"}",
+  "nag": "NagolennikiZ2",
+  "but": "ButyZ2",
+  "nos": "{\"plik\":\"SpangenZ2\",\"w\":24,\"h\":24,\"anchor\":[11,3],\"natywny\":\"zelazo\",\"glowny\":\"szary\",\"lo\":0.195,\"hi\":0.827,\"reszta\":\"natywny\"}"
  },
  "poses": [
   {

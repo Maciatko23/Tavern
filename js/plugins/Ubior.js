@@ -1384,6 +1384,8 @@
 
     // ---- the live sheets: one Bitmap per sheet, redrawn when the outfit changes; the compositions kept (sheet + outfit)
     const live = {};
+    let deferring = 0;   // (the map being made: sheets asked for ahead wait in dressQueue - sheetFor)
+    const dressQueue = new Map();   // name -> folder
     const kept = new Map();
     const KEEP = 16;
     function composed(name, src, o, k, lay) {
@@ -1461,6 +1463,11 @@
         }
         // (dressed without its PixelLab pictures while they loaded: dressed again in full once they are in - checked every 6th frame)
         if (L.partial && L.key === k && !(Graphics.frameCount % 6) && !plPending(name, m.o, lay, L.maskFile)) L.key = null;
+        // (2026-11-17, the player: „jak zmienia ekwipunek, to chwilę trwa, jakby wyjście z menu”) the map's start asks for every hero
+        // sheet ahead (ChoppableTree, HeroLook and Torch warm the swings) - each was dressed there and then: 28 sheets, 0.5-1 s in one
+        // frame after the menu. Asked while the map is being made, a sheet to dress waits in a queue (its last look - or the plain sheet
+        // - meanwhile) and is dressed a few frames later, one at a time; the sheet a sprite shows (asked in its update) at once.
+        if ((L.key !== k || L.src !== src) && deferring && !empty) { dressQueue.set(name, folder); return L.key === null ? null : L.bmp; }
         if (L.key !== k || L.src !== src) {
             const cv = empty ? (src._canvas || src._image) : composed(name, src, m.o, k, lay);
             if (!cv) return L.key === null ? null : L.bmp;   // (a picture of an overlay still loading: the last look a frame longer)
@@ -1715,9 +1722,23 @@
     // ---- the masks and the overlays load with the map; the hooks into the others once they are all there
     const _Scene_Map_create = Scene_Map.prototype.create;
     Scene_Map.prototype.create = function() {
-        _Scene_Map_create.call(this);
+        deferring++;
+        try { _Scene_Map_create.call(this); } finally { deferring--; }
         preload();
     };
+    // the waiting sheets: dressed only where a frame of 10-50 ms is not seen - the screen dark (a map's change fading out and in) or a
+    // talk's window open - one a frame; (2026-11-17, the player: one every 4th frame still made the game "wyraźnie spowalnia" for two
+    // seconds after the menu). A sheet shown before that (the hero starts a swing) is dressed at once by its sprite's own ask - one
+    // frame, once per sheet.
+    if (T && T.onMapUpdate) T.onMapUpdate(() => {
+        if (!dressQueue.size) return;
+        const quiet = (window.$gameScreen && $gameScreen.brightness() < 16) || (window.$gameMessage && $gameMessage.isBusy()) || (window.$gamePlayer && $gamePlayer.isTransferring());
+        if (!quiet) return;
+        const shown = window.$gamePlayer ? $gamePlayer.characterName() : "";
+        const name = dressQueue.has(shown) ? shown : dressQueue.keys().next().value, folder = dressQueue.get(name);
+        dressQueue.delete(name);
+        sheetFor(name, folder);
+    }, { owner: PLUGIN, name: "dressQueue" });
     const _Scene_Base_create = Scene_Base.prototype.create;
     Scene_Base.prototype.create = function() {
         _Scene_Base_create.call(this);

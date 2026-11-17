@@ -1,4 +1,0 @@
-  mapa 24 120x120 ekranów 50 23 s
-  mapa 120 96x68 ekranów 24 13 s
-  mapa 168 130x108 ekranów 54 24 s
-  mapa 175 156x60 ekranów 35 17 s
