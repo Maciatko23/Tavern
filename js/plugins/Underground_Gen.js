@@ -408,6 +408,146 @@
             return false;
         };
     }
+    // the place of a lift's stop on a generated floor (2026-11-17): in the stairs-up hall a few steps from the stairs (one coming down
+    // sees it), best by its north wall - the cage's body hangs in front of the wall as on floor 10 (Map140), the windlass two cells
+    // aside on the floor row under the wall -, else standing free in the hall; a hall too full for it (crates, tables, beds, doors on
+    // every side): the nearest other hall. The hero lands in front of the cage. The cage and the windlass on bare floor (no event,
+    // nothing drawn), over the cage's body and the lever's stick nothing drawn or standing (no torch, no window, no table), never in a
+    // hall's doorway nor by the stairs, both reached from the hall's way in, and never a way closed: the open cells round each stay
+    // one group (whatever went through the cell goes round it - nothing on the floor is cut off), every thing beside them that one
+    // searches or reads keeps a side to stand at. Chosen without the floor's `r` (the rest of the floor stays as older saves have it);
+    // salt: which side when both are as good. null: no such place on the floor.
+    // where the windlass stands from the cage [dx, dy, worse]: two cells aside on the row above (floor 10), on its row (floor 20),
+    // further, right beside it
+    const LIFT_KEYS = [[2, -1, 0], [-2, -1, 0], [2, 0, 0.5], [-2, 0, 0.5], [3, -1, 1], [-3, -1, 1], [3, 0, 1.5], [-3, 0, 1.5], [1, 0, 2], [-1, 0, 2]];
+    const LIFT_RING = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]];
+    const LIFT_STEP = [[0, 1, 1, 8], [-1, 0, 2, 4], [1, 0, 4, 2], [0, -1, 8, 1]];
+    function liftPlace(W, H, data, events, rooms, up, down, carved, isWall, flags, salt) {
+        const N = W * H, [ux, uy] = up;
+        const busy = new Uint8Array(N), blocked = new Uint8Array(N), things = [];
+        for (const e of events) {
+            if (!e) continue;
+            busy[e.y * W + e.x] = 1;
+            const p = e.pages[0];
+            if (p.priorityType === 1 && !p.through) { blocked[e.y * W + e.x] = 1; things.push([e.x, e.y]); }
+        }
+        const pass = flags ? makePassage(W, H, data, flags) : null;
+        const ins = (x, y) => x >= 0 && y >= 0 && x < W && y < H;
+        const bare = (x, y) => ins(x, y) && !busy[y * W + x] && !data[(2 * H + y) * W + x] && !data[(3 * H + y) * W + x];
+        const openMemo = new Int8Array(N).fill(-1);
+        const open = (x, y) => {
+            if (!ins(x, y)) return false;
+            const k = y * W + x;
+            if (openMemo[k] < 0) openMemo[k] = !isWall(x, y) && !blocked[k] && (!pass || (pass(x, y, 1) && pass(x, y, 2) && pass(x, y, 4) && pass(x, y, 8))) ? 1 : 0;
+            return openMemo[k] === 1;
+        };
+        const face = (x, y) => ins(x, y) && isWall(x, y) && bare(x, y);
+        // a cell taken (the other one taken too) closes no way: its open neighbours (4 ways; a corner joins two sides) one group
+        const ring = new Uint8Array(8);
+        const loose = (x, y, ox, oy) => {
+            for (let i = 0; i < 8; i++) { const nx = x + LIFT_RING[i][0], ny = y + LIFT_RING[i][1]; ring[i] = !(nx === ox && ny === oy) && open(nx, ny) ? 1 : 0; }
+            let groups = 0;
+            for (let i = 0; i < 8; i += 2) if (ring[i] && !(ring[(i + 6) % 8] && ring[(i + 7) % 8])) groups++;
+            return groups <= 1;
+        };
+        // a thing one searches or reads beside the two cells still has a free side
+        const served = (x, y, kx, ky, cx, cy) => [[0, 1], [0, -1], [1, 0], [-1, 0]].some(([dx, dy]) => {
+            const nx = x + dx, ny = y + dy;
+            return !(nx === kx && ny === ky) && !(nx === cx && ny === cy) && open(nx, ny);
+        });
+        const stairsNear = (x, y, n) => (Math.abs(x - ux) < n && Math.abs(y - uy) < n) || (!!down && Math.abs(x - down[0]) < n && Math.abs(y - down[1]) < n);
+        const prefer = salt & 1 ? 1 : -1;
+        const centre = rm => [rm.x + rm.chunk.w / 2, rm.y + rm.chunk.h / 2];
+        const order = rooms.slice().sort((a, b) => (b.start ? 1 : 0) - (a.start ? 1 : 0) ||
+            Math.hypot(centre(a)[0] - ux, centre(a)[1] - uy) - Math.hypot(centre(b)[0] - ux, centre(b)[1] - uy));
+        // the tries [hall, care]: the stairs-up hall with its doorways kept free two cells deep and a ring round (care 2), the same hall
+        // with only a door's own cells and one more kept (1), the other halls nearest first (2), and - a floor whose halls are all too
+        // full, one in some thousands - every hall once more with the cage's body allowed over a drawn thing, never over an event (0)
+        const tries = [[0, 2], [0, 1]], reached = [];
+        for (let rank = 1; rank < order.length; rank++) tries.push([rank, 2]);
+        for (let rank = 0; rank < order.length; rank++) tries.push([rank, 0]);
+        for (const [rank, care] of tries) {
+            const room = order[rank], c = room.chunk, x0 = room.x, y0 = room.y, w = c.w, h = c.h;
+            // the hall's floor reached from its way in (the stairs' landing; another hall: its doors - each reached from the stairs,
+            // the floor's own check) without leaving the hall
+            const known = reached[rank], reach = known || new Uint8Array(w * h), q = [];
+            reached[rank] = reach;
+            const seed = (x, y) => { if (x >= x0 && y >= y0 && x < x0 + w && y < y0 + h && !reach[(y - y0) * w + x - x0]) { reach[(y - y0) * w + x - x0] = 1; q.push([x, y]); } };
+            if (known) { /* (this hall walked already) */ } else if (room.start) seed(ux, uy);
+            else for (const side of ["N", "S", "E", "W"]) for (const [dx, dy] of c.doors[side]) { seed(x0 + dx, y0 + dy); seed(x0 + dx + (side === "N" || side === "S" ? 1 : 0), y0 + dy + (side === "W" || side === "E" ? 1 : 0)); }
+            for (let i = 0; i < q.length; i++) {
+                const [x, y] = q[i];
+                for (const [dx, dy, out, back] of LIFT_STEP) {
+                    const nx = x + dx, ny = y + dy;
+                    if (nx < x0 || ny < y0 || nx >= x0 + w || ny >= y0 + h || reach[(ny - y0) * w + nx - x0] || blocked[ny * W + nx]) continue;
+                    if (pass ? !pass(x, y, out) || !pass(nx, ny, back) : !open(nx, ny)) continue;
+                    reach[(ny - y0) * w + nx - x0] = 1; q.push([nx, ny]);
+                }
+            }
+            const inside = (x, y) => x > x0 && y > y0 && x < x0 + w - 1 && y < y0 + h - 1;
+            // the doorways: a door's mark stands on the hall's first floor cell inside its opening (two cells: N / S side by side, W / E
+            // one over the other) - kept free: the way through the wall and `deep` cells into the hall, a ring of `g` round
+            const doorway = new Set();
+            const mark = (ax, ay, bx, by) => { for (let y = ay; y <= by; y++) for (let x = ax; x <= bx; x++) doorway.add(y * W + x); };
+            const g = care === 2 ? 1 : 0, deep = care === 2 ? 2 : 1;
+            for (const [dx, dy] of c.doors.N) mark(x0 + dx - g, y0 + dy - 3, x0 + dx + 1 + g, y0 + dy + deep);
+            for (const [dx, dy] of c.doors.S) mark(x0 + dx - g, y0 + dy - deep, x0 + dx + 1 + g, y0 + dy + 3);
+            for (const [dx, dy] of c.doors.W) mark(x0 + dx - 3, y0 + dy - g, x0 + dx + deep, y0 + dy + 1 + g);
+            for (const [dx, dy] of c.doors.E) mark(x0 + dx - deep, y0 + dy - g, x0 + dx + 3, y0 + dy + 1 + g);
+            const over = care ? bare : (x, y) => ins(x, y) && !busy[y * W + x];
+            const ok = (x, y) => inside(x, y) && reach[(y - y0) * w + x - x0] && open(x, y) && !busy[y * W + x] && !carved.has(y * W + x) &&
+                !doorway.has(y * W + x) && !stairsNear(x, y, 2);
+            const [ax, ay] = room.start ? up : centre(room);
+            let best = null;
+            for (let cy = y0 + 2; cy < y0 + h - 2; cy++) for (let cx = x0 + 1; cx < x0 + w - 1; cx++) {
+                // the cage: its shadow on bare floor, its body two and three cells higher over nothing, open floor under it and before it
+                if (!bare(cx, cy) || !over(cx, cy - 2) || !over(cx, cy - 3) || stairsNear(cx, cy, 3)) continue;
+                if (!ok(cx, cy) || !ok(cx, cy - 1) || !ok(cx, cy + 1)) continue;
+                const far = Math.abs(cx - ax) + Math.abs(cy - ay), body = face(cx, cy - 2);
+                for (const [ox, oy, worse] of LIFT_KEYS) {
+                    const kx = cx + ox, ky = cy + oy, wall = body && face(kx, ky - 1);
+                    const cost = Math.abs(far - (room.start ? 4 : 0)) + (wall ? 0 : 6) + worse + (Math.sign(ox) === prefer ? 0 : 0.25);
+                    if (best && cost >= best.cost) continue;
+                    if (!bare(kx, ky) || !over(kx, ky - 1) || !ok(kx, ky)) continue;
+                    if (!loose(cx, cy, kx, ky) || !loose(kx, ky, cx, cy)) continue;
+                    if (things.some(([x, y]) => Math.abs(x - cx) + Math.abs(y - cy) <= 1 || Math.abs(x - kx) + Math.abs(y - ky) <= 1 ? !served(x, y, kx, ky, cx, cy) : false)) continue;
+                    best = { windlass: [kx, ky], cage: [cx, cy], wall, hall: rank, care, cost };
+                }
+            }
+            if (best) { best.torch = liftLight(best); return best; }
+        }
+        return null;
+        // (2026-11-17, the player: a torch by the lift) the fire beside the cage that always burns - the stop is seen on the dark floors
+        // (75-95) too: a torch on the nearest wall face (a wall cell with open floor under it, nothing drawn or standing on it; up to
+        // the row over the cage's top), never the cage's own column nor over the lever, the side away from the windlass first; or -
+        // when it is nearer than any such wall (a cage standing free in the hall) - a fire basket on the floor beside the cage (nothing
+        // drawn or standing on it and on the cell over it, out of the cage's landing and of the windlass's front, every way kept open
+        // and every thing served, as for the cage itself). null: no place for either.
+        function liftLight(best) {
+            const [cx, cy] = best.cage, [kx, ky] = best.windlass, away = Math.sign(cx - kx) || 1;
+            let at = null, low = Infinity;
+            for (let ty = cy - 5; ty <= cy; ty++) for (let tx = cx - 3; tx <= cx + 3; tx++) {
+                if (tx === cx || (tx === kx && ty >= ky - 2) || !ins(tx, ty + 1) || !isWall(tx, ty) || isWall(tx, ty + 1) || !bare(tx, ty)) continue;
+                const cost = Math.abs(tx - cx) + Math.abs(ty - (cy - 2)) * 0.5 + (Math.sign(tx - cx) === away ? 0 : 1.5);
+                if (cost < low) { low = cost; at = [tx, ty]; }
+            }
+            let kind = at ? "wall" : null;
+            const room = order[best.hall], x0 = room.x, y0 = room.y, w = room.chunk.w, h = room.chunk.h, reach = reached[best.hall];
+            blocked[cy * W + cx] = 1; blocked[ky * W + kx] = 1; openMemo.fill(-1);   // (the cage and the windlass stand now)
+            for (let by = cy - 1; by <= cy + 1; by++) for (let bx = cx - 2; bx <= cx + 2; bx++) {
+                if (bx === cx || (bx === kx && by >= ky - 1 && by <= ky + 1)) continue;
+                if (bx <= x0 || by <= y0 || bx >= x0 + w - 1 || by >= y0 + h - 1 || !reach[(by - y0) * w + bx - x0]) continue;
+                if (!bare(bx, by) || !bare(bx, by - 1) && !isWall(bx, by - 1) || !open(bx, by) || carved.has(by * W + bx) || stairsNear(bx, by, 2)) continue;
+                const cost = 1 + Math.abs(bx - cx) + Math.abs(by - cy) * 0.5 + (Math.sign(bx - cx) === away ? 0 : 1.5);   // (a wall first)
+                if (cost >= low || !loose(bx, by, -1, -1)) continue;
+                if (!served(kx, ky, bx, by, -1, -1) || !served(cx, cy, bx, by, -1, -1)) continue;
+                if (things.some(([x, y]) => Math.abs(x - bx) + Math.abs(y - by) <= 1 && !served(x, y, bx, by, -1, -1))) continue;
+                low = cost; at = [bx, by]; kind = "fire";
+            }
+            blocked[cy * W + cx] = 0; blocked[ky * W + kx] = 0; openMemo.fill(-1);
+            return at ? { kind, at } : null;
+        }
+    }
     // a chunk event of each container kind of a library (its pictures for the containers of the blind ends)
     const templatesOf = new WeakMap();
     function lootTemplates(chunks) {
@@ -686,6 +826,21 @@
             placed.push([x, y]);
             addTorch(x, y, r.chance(band.torchLit));
         }
+        // ---- a stop of the lift (Underground_Data.LIFT.stops - every 5th floor since 2026-11-17): the castellan's cage and its windlass
+        const lift = d.LIFT && d.LIFT.stops.indexOf(floor) >= 0 && spots.up ? liftPlace(W, H, data, events, plan.rooms, spots.up, spots.down, carved, isWall, o.flags, hash(seed >>> 0, "lift", floor)) : null;
+        if (lift) {
+            const [kx, ky] = lift.windlass, [cx, cy] = lift.cage, turn = [scriptCmd("Underground.windlass(this)")];
+            evd(TK.kod.liftOn[0], kx, ky, "", [page({ image: art(d.ART.windlass), priority: 1, list: turn }),
+                page({ cond: { selfSwitchValid: true, selfSwitchCh: "A" }, image: art(d.ART.windlassOn), priority: 1, list: turn })]);
+            evd(TK.kod.generate[2], cx, cy, "", [page({ image: art(d.ART.cage), priority: 1, list: [scriptCmd("Underground.cage(this)")] })]);
+            spots.lift = [cx, cy + 1, 2];
+            // (2026-11-17, the player: a torch by the lift) its fire that always burns (liftPlace's liftLight): a torch on the wall
+            // beside the cage, or a fire basket on the floor (the Truth Layer: a blue candelabrum) by a cage that stands free
+            const lt = lift.torch;
+            if (lt && lt.kind === "wall") addTorch(lt.at[0], lt.at[1], true);
+            else if (lt) evd(blue ? "Świecznik" : "Kosz z ogniem", lt.at[0], lt.at[1], blue ? d.BLUE_LIGHT : d.BRAZIER_LIGHT,
+                [page({ image: art(blue ? d.ART.candelabrumBlue : d.ART.brazier), priority: 1, step: true })]);
+        }
         // ---- the map object (like $dataMap); a river's sound when a hall has water (band 3), the band's own sound otherwise
         const level = band.level + Math.floor((floor - band.from) / 2);
         const water = plan.rooms.some(rm => rm.chunk.water > 0);
@@ -702,7 +857,7 @@
         const info = { floor, band: band.id, bandName: band.name, seed: seed >>> 0, width: W, height: H, spots, spawns, loot, traps, notes,
             whispers, visions, water,
             rooms: plan.rooms.map(rm => ({ key: rm.key, chunk: rm.chunk.name, x: rm.x, y: rm.y, w: rm.chunk.w, h: rm.chunk.h, start: rm.start, end: rm.end })),
-            links, corridorCells: corridorCells.length, level, deadEnds,
+            links, corridorCells: corridorCells.length, level, deadEnds, lift,
             maze: { cols: plan.cols, rows: plan.rows, nodes: plan.nodes.length, main: mainSet.size, branch: corridorCells.length - mainSet.size,
                 loops: plan.loops, torches: placed.length, tries: plan.attempt + 1 } };
         if (o.flags) info.check = verifyMap(map, info, o.flags);

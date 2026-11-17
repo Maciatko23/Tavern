@@ -831,18 +831,29 @@
   "wybrana": 1
  },
  "93": {
-  "name": "Lina",
-  "prompt": "RPG inventory item icon: coiled brown hemp rope, centered",
-  "job": "0e54d04b-9442-42d5-84b6-3c7d2b035f5d",
-  "tries": 1,
+  "name": "Sznurek",
+  "prompt": "RPG inventory item icon: a small round ball of thin pale beige flax twine, neatly wound string lines, one loose end of string hanging down, light tan and cream colours, centered",
+  "job": "b4096683-1cca-422f-b3aa-dd66dca4fb67",
+  "tries": 3,
   "proby": [
    {
     "n": 1,
     "job": "0e54d04b-9442-42d5-84b6-3c7d2b035f5d",
     "prompt": "RPG inventory item icon: coiled brown hemp rope, centered"
+   },
+   {
+    "n": 2,
+    "job": "a75c2603-1d41-401c-b498-06287a722297",
+    "prompt": "RPG inventory item icon: a small ball of thin twisted flax twine with a loose end, centered"
+   },
+   {
+    "n": 3,
+    "job": "b4096683-1cca-422f-b3aa-dd66dca4fb67",
+    "prompt": "RPG inventory item icon: a small round ball of thin pale beige flax twine, neatly wound string lines, one loose end of string hanging down, light tan and cream colours, centered"
    }
   ],
-  "wybrana": 1
+  "wybrana": 3,
+  "uwaga": "2026-11-17: 93 to teraz Sznurek - nowa ikona (próba 3); próba 1 (zwinięta lina) przeszła do nowej Liny 492"
  },
  "94": {
   "name": "Surowe mięso zająca",
@@ -6651,5 +6662,20 @@
    }
   ],
   "wybrana": 1
+ },
+ "492": {
+  "name": "Lina",
+  "prompt": "RPG inventory item icon: coiled brown hemp rope, centered",
+  "job": "0e54d04b-9442-42d5-84b6-3c7d2b035f5d",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "0e54d04b-9442-42d5-84b6-3c7d2b035f5d",
+    "prompt": "RPG inventory item icon: coiled brown hemp rope, centered"
+   }
+  ],
+  "wybrana": 1,
+  "uwaga": "2026-11-17: dawna ikona przedmiotu 93 (Lina - teraz Sznurek); komórka IconSet 742"
  }
 }

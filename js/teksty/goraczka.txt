@@ -422,7 +422,7 @@ s4.opcja.C = Milcz.
 @soltys: Dyby na rynku jeden dzień, Garbarnia zamknięta na siedem dni, grzywna dwadzieścia groszy. Miasto ci dziękuje, chłopcze.
 
 [wybor.B.wawrzyn]
-@wawrzyn: Przeniosę kadzie w głąb wschodniego skraju, za rów. Pomożesz mi z osadnikiem? Potrzebuję desek, kamieni, gwoździ i liny.
+@wawrzyn: Przeniosę kadzie w głąb wschodniego skraju, za rów. Pomożesz mi z osadnikiem? Potrzebuję desek, kamieni, gwoździ i sznurka.
 
 [wybor.C.soltys]
 @soltys: Nikt nic nie mówi? Skoro nikt, to winnym będzie Ignac. Zamknąć mu garbarnię na tydzień.

@@ -158,7 +158,7 @@ obce.7.text = „Jaśnie Panie. Podatek z Podgrodzia będzie... (skreślone) ...
 # ======================================================================== TRINKET (blyskotki)
 blyskotki.thingWords.0 = Kruk przyniósł gwoździe. Pewnie z kuźni.
 blyskotki.thingWords.1 = Na grzędzie leżą czyjeś pióra. Kruk się nimi chwali.
-blyskotki.thingWords.2 = Kawałek liny. Ktoś na przystani będzie jej szukał.
+blyskotki.thingWords.2 = Kawałek sznurka. Ktoś na przystani będzie go szukał.
 blyskotki.thingWords.3 = Zardzewiała podkowa. Kruk przytaszczył ją z daleka.
 
 # ======================================================================== TX
@@ -307,7 +307,7 @@ Twój ojciec też się śmiał. A potem dał ci ten kamień na szyję.
 Ród kruczarzy
 Dziadek rozpoznał obrączkę kruka. Jego dziad trzymał kruki na Urwisku, zanim na górze postawiono karczmę - „nasza rodzina nosi listy, których nikt nie powinien czytać”. Dziadek mówi, że sam się z tego śmiał, dopóki jego ojciec nie dał mu wisiorka z krukiem - tego samego, który potem dał mojej matce, a ona mnie.
 
-zadania.D24.steps.2.text = Postaw grzędę na działce - {imie} potrzebuje swojego miejsca (budowanie: Q - 4× Gałęzie, 2× Deski, 1× Lina).
+zadania.D24.steps.2.text = Postaw grzędę na działce - {imie} potrzebuje swojego miejsca (budowanie: Q - 4× Gałęzie, 2× Deski, 1× Sznurek).
 [zadania.D24.reward.note]
 Oswojony kruk
 Kruk z Urwiska mieszka teraz na grzędzie na działce. Lata ze mną, nosi listy po wyspie (nie przez morze), leci na zwiad, pilnuje pola przed ptakami, a czasem coś przynosi. Na noc wraca na grzędę.

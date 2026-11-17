@@ -1,5 +1,5 @@
 // The town's quests, part 2 (TownQuests.js 2026-10-05): the new residents (TownLife: Szymek, Lucjan Kość only on market days,
-// Bartek Kmieć, the carter Wojciech, the manor's guard on Map024), K26 "Pierścionek w studni" (down the market well on 2× Lina, the
+// Bartek Kmieć, the carter Wojciech, the manor's guard on Map024), K26 "Pierścionek w studni" (down the market well on 2× Sznurek, the
 // ring's glint on Map118, by day and not in the rain; the walled-up canal with the raven - a W1 clue), K37 "Sakiewka Lorda" (a market
 // day: Szymek cuts the manor's purse from Feliks and runs - a chase; caught: give it back (50 G off the debt) / let him go / keep it;
 // not caught: he is gone), K39 "Kości z targu" (Bartek in the tavern, Lucjan at the market: the dice mini-game, the swap seen only

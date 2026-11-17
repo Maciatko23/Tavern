@@ -82,10 +82,10 @@
         90: { life: 30, unit: "use", g: "m", fix: [[64, 1], [92, 1]] },               // nóż kamienny
         91: { life: 70, unit: "use", g: "m", fix: [[86, 1]] },                         // nóż żelazny
         118: { life: 90, unit: "cut", g: "f", fix: [[86, 1]] },                        // piła
-        125: { life: 60, unit: "shot", g: "f", fix: [[93, 1], [92, 1]] },             // proca: lina + len
-        126: { life: 80, unit: "shot", g: "m", fix: [[93, 1], [77, 1]] },             // łuk: lina + gałąź
-        154: { life: 50, unit: "jab", g: "m", fix: [[64, 1], [93, 1]] },              // oszczep: kamień (grot) + lina
-        155: { life: 40, unit: "block", g: "f", fix: [[61, 1], [93, 1]] },            // drewniana tarcza: drewno + lina (zużywa ją każdy przyjęty cios)
+        125: { life: 60, unit: "shot", g: "f", fix: [[93, 1], [92, 1]] },             // proca: sznurek + len
+        126: { life: 80, unit: "shot", g: "m", fix: [[93, 1], [77, 1]] },             // łuk: sznurek + gałąź
+        154: { life: 50, unit: "jab", g: "m", fix: [[64, 1], [93, 1]] },              // oszczep: kamień (grot) + sznurek
+        155: { life: 40, unit: "block", g: "f", fix: [[61, 1], [93, 1]] },            // drewniana tarcza: drewno + sznurek (zużywa ją każdy przyjęty cios)
         156: { life: 80, unit: "blow", g: "f", fix: [[92, 1]] },                       // pałka: len na uchwyt
         171: { life: 60, unit: "block", g: "f", fix: [[97, 1], [163, 1]] }           // skórzana kurtka: łata z wyprawionej skóry, ścięgna (zużywa ją każdy cios, który dojdzie)
     };

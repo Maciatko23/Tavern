@@ -1150,6 +1150,7 @@
         band.engaged = false;
         T.emit("humansDone", Object.assign({ tag: band.tag, killed: 0, spared: 0, robbed: 0, fled: 0 }, band.tally));
         if (band.camp) {
+            band.camp.cleared = true;   // (it stands till dawn - its sack, its fire - but its men no longer raid a sleeper: raidChance)
             S().cleared[band.camp.mapId] = day();
             T.emit("campCleared", { mapId: band.camp.mapId });
         }
@@ -1641,7 +1642,8 @@
     function raidChance(d, fire) {
         if (!RAID) return 0;
         const k = d <= RAID.calmDays ? RAID.calm : d >= RAID.fullDay ? 1 : RAID.calm + (1 - RAID.calm) * (d - RAID.calmDays) / (RAID.fullDay - RAID.calmDays);
-        return raidRate() * k * (fire ? RAID.fire : 1) * (campHere() ? RAID.camp : 1);
+        const c = campHere();   // (2026-11-17: a camp the hero has cleared tonight no longer makes a raid likelier)
+        return raidRate() * k * (fire ? RAID.fire : 1) * (c && !c.cleared ? RAID.camp : 1);
     }
     function nightRaid(from, to, opts) {
         if (!auto || robbery || !(raidRate() > 0)) return null;

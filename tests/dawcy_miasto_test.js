@@ -18,7 +18,7 @@ const SPEC = [
     { id: "K40", key: "praczka", win: [17.5, 20], at: [6, 50], yes: "Przyniosę deszczówkę", day: 3, hand: { water: 2 } },
     { id: "K41", key: "znachorka", win: [18, 21], at: [8, 50], yes: "Nazbieram", day: 3, hand: { items: [[150, 3], [149, 2]] } },
     { id: "K43", key: "uchodzca", win: [17.5, 21.5], at: [22, 51], yes: "Przyniosę drewno", day: 3, hand: { items: [[61, 6]] } },
-    { id: "K44", key: "drwal", win: [17.5, 21.5], at: [23, 50], yes: "Przyniosę liny", day: 4, hand: { items: [[93, 2]] } },
+    { id: "K44", key: "drwal", win: [17.5, 21.5], at: [23, 50], yes: "Przyniosę sznurki", day: 4, hand: { items: [[93, 2]] } },
     { id: "K45", key: "klusownik", win: [19.5, 22.5], at: [23, 52], yes: "Przyniosę włókno", day: 3, hand: { items: [[92, 6]] } },
     { id: "K46", key: "franek", win: [17.5, 19.5], at: [5, 50], yes: "Przyniosę ci chleb", day: 3, hand: { items: [[83, 1]] } },
     { id: "K47", key: "janek", win: [19, 22.5], at: null, yes: "Spróbuję", day: 6, pre: FIRST + "f.janekMet = 1; return 0; })()", hand: { items: [[173, 2]] } },

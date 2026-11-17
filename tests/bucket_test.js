@@ -19,7 +19,7 @@ const { launch, sleep } = require("./cdp.js");
         const setN = async (id, n) => { await ev(`$gameParty.gainItem($dataItems[${id}], ${n} - $gameParty.numItems($dataItems[${id}])); 0`); };
         await ev("window.__pop = []; const o = $gameTemp.pushLootPopup.bind($gameTemp); $gameTemp.pushLootPopup = (i, t, c) => { window.__pop.push(t); return o(i, t, c); }; 0");
         const pops = () => J("window.__pop.splice(0)");
-        const IT = { planks: 80, nails: 88, stone: 64, iron: 86, hammer: 89, rope: 93, bucket: 138, can: 87, skin: 129, potato: 71 };
+        const IT = { planks: 80, nails: 88, stone: 64, iron: 86, hammer: 89, rope: 93, lina: 492, bucket: 138, can: 87, skin: 129, potato: 71 };
 
         // ---------------------------------------------------------------- data
         const item = await J("(function(){ const i = $dataItems[138]; return i ? [i.name, i.iconIndex, i.consumable, i.itypeId, i.price, i.description.length > 20] : null; })()");
@@ -33,7 +33,7 @@ const { launch, sleep } = require("./cdp.js");
             !!def.forge && JSON.stringify(def.forge.in) === JSON.stringify([[IT.planks, 3], [IT.iron, 1]]) && JSON.stringify(def.forge.out) === "[138,1]" && def.forge.manual && !def.forge.unique, def.forge);
         check("Wiadro is put down ready: it costs only the bucket item, no hammer, packs back into item 138, holds 6 portions of rain",
             JSON.stringify(def.cost) === "[[138,1]]" && def.pack === 138 && def.instant === true && def.w === 1 && def.rain.max === 6, def);
-        check("the well now needs a bucket (and gives it back when pulled down); wells built before need none", JSON.stringify(def.wellCost) === JSON.stringify([[64, 12], [80, 3], [93, 2], [138, 1]]) && JSON.stringify(def.wellRefund).includes("138") && JSON.stringify(def.oldWell) === JSON.stringify([[64, 12], [80, 3], [93, 2]]) && JSON.stringify(def.v2Well) === JSON.stringify([[64, 12], [80, 3], [93, 2]]) && def.v2Refund === null, def);
+        check("the well now needs a bucket and (2026-11-17) one Lina instead of 2 strings (the bucket comes back when pulled down, the rope does not); wells built before need no bucket", JSON.stringify(def.wellCost) === JSON.stringify([[64, 12], [80, 3], [492, 1], [138, 1]]) && JSON.stringify(def.wellRefund) === JSON.stringify([[64, 6], [80, 1], [138, 1]]) && JSON.stringify(def.oldWell) === JSON.stringify([[64, 12], [80, 3], [492, 1]]) && JSON.stringify(def.v2Well) === JSON.stringify([[64, 12], [80, 3], [492, 1]]) && JSON.stringify(def.v2Refund) === JSON.stringify([[64, 6], [80, 1]]), def);
 
         // ---------------------------------------------------------------- an open place
         const B = await ev(`(function(){
@@ -229,9 +229,9 @@ const { launch, sleep } = require("./cdp.js");
         for (const [dx, dy] of [[0, 0], [1, 0], [0, -1], [1, -1]]) {
             for (let hit = 0; hit < 3; hit++) { await ev(`Farming.dig(${wx} + ${dx}, ${wy} + ${dy}); 0`); await frames(15); }
         }
-        for (const [id, n] of [[64, 12], [80, 3], [93, 2]]) await setN(id, n);
+        for (const [id, n] of [[64, 12], [80, 3], [IT.lina, 1]]) await setN(id, n);
         await setN(IT.bucket, 0); await setN(IT.hammer, 1);
-        check("stone, planks and rope alone are not enough for a well: 'Brakuje materiałów.'", (await ev(`Farming.placementProblem("well", ${wx}, ${wy})`)) === "Brakuje materiałów.");
+        check("stone, planks and the Lina alone are not enough for a well: 'Brakuje materiałów.'", (await ev(`Farming.placementProblem("well", ${wx}, ${wy})`)) === "Brakuje materiałów.");
         await setN(IT.bucket, 1);
         await ev(`$gamePlayer.locate(${wx + 1}, ${wy + 1}); $gameSystem.setStamina(100); 0`);
         check("with a bucket in the bag (and the pit already dug out) it can be placed", (await ev(`Farming.placementProblem("well", ${wx}, ${wy})`)) === null);
@@ -241,14 +241,14 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`Farming.cancelSite(Farming.buildingAt(${wx}, ${wy})); 0`);
         check("giving the site up returns the bucket too", (await count(IT.bucket)) === 1 && (await count(64)) === 12);
         // a finished well pulled down: half of the materials and the bucket
-        for (const id of [64, 80, 93, IT.bucket]) await setN(id, 0);
+        for (const id of [64, 80, 93, IT.lina, IT.bucket]) await setN(id, 0);
         await ev(`(function(){ const f = $gameSystem._farm; f.buildings[3].push({ id: f.nextId++, type: "well", x: ${wx}, y: ${wy}, last: 1, v: 3 }); f.rev++; })(); 0`);
         await ev(`Farming.demolish(Farming.buildingAt(${wx}, ${wy})); 0`);
-        check("a new well pulled down gives back 6 stones, 1 plank, 1 rope and the bucket", (await count(64)) === 6 && (await count(80)) === 1 && (await count(93)) === 1 && (await count(IT.bucket)) === 1, { stone: await count(64), planks: await count(80), rope: await count(93), bucket: await count(IT.bucket) });
-        for (const id of [64, 80, 93, IT.bucket]) await setN(id, 0);
+        check("a new well pulled down gives back 6 stones, 1 plank and the bucket - no rope (2026-11-17)", (await count(64)) === 6 && (await count(80)) === 1 && (await count(93)) === 0 && (await count(IT.lina)) === 0 && (await count(IT.bucket)) === 1, { stone: await count(64), planks: await count(80), rope: await count(93), lina: await count(IT.lina), bucket: await count(IT.bucket) });
+        for (const id of [64, 80, 93, IT.lina, IT.bucket]) await setN(id, 0);
         await ev(`(function(){ const f = $gameSystem._farm; f.buildings[3].push({ id: f.nextId++, type: "well", x: ${wx}, y: ${wy}, last: 1 }); f.rev++; })(); 0`);   // an old one (no version)
         await ev(`Farming.demolish(Farming.buildingAt(${wx}, ${wy})); 0`);
-        check("an old well (built before) gives back only what it cost (half, no bucket)", (await count(64)) === 6 && (await count(80)) === 1 && (await count(93)) === 1 && (await count(IT.bucket)) === 0);
+        check("an old well (built before) gives back half of the stones and planks (no bucket, no rope)", (await count(64)) === 6 && (await count(80)) === 1 && (await count(93)) === 0 && (await count(IT.lina)) === 0 && (await count(IT.bucket)) === 0);
 
         // ---------------------------------------------------------------- the journal
         await frames(30);

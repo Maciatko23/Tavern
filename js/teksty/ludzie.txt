@@ -86,7 +86,7 @@ Deszcz to dla mnie święto. Trawa odrośnie.
 mieszkancy.1.name = Szymon Juczny
 mieszkancy.1.title = wędrowny handlarz
 [mieszkancy.1.barks.work]
-Przyprawy z kontynentu! Lina, gwoździe, strzały!
+Przyprawy z kontynentu! Sznurek, gwoździe, strzały!
 Kupuję skóry i wełnę, płacę lepiej niż w mieście!
 Mapa okolic, jedyna taka! Kto kupi?
 
@@ -340,7 +340,7 @@ zadania.D35.where = Góry i kamieniołom: obóz kopaczy na wschodzie
 zadania.D35.when = W8 od rozdz. 3
 zadania.D35.desc = Kopacze Czarnych Oczu drążą szyb w skale na wschodzie gór. Dziennik ich dowódcy powie po co. Potem: zasypać szyb, powiedzieć Grumowi - albo rotmistrzowi.
 zadania.D35.steps.0.text = Obóz kopaczy Czarnych Oczu (Góry, na wschodzie): w skrzyni dowódcy przy namiotach leży jego dziennik. Zabierz go po cichu - nocą kopacze śpią.
-zadania.D35.steps.1.text = „Kopią ku piętru pięćdziesiątemu od góry…” Co z szybem? Zasyp go (Lina i piła, przy szybie){grum}, albo powiedz rotmistrzowi (garnizon nad zatoką).
+zadania.D35.steps.1.text = „Kopią ku piętru pięćdziesiątemu od góry…” Co z szybem? Zasyp go (Sznurek i piła, przy szybie){grum}, albo powiedz rotmistrzowi (garnizon nad zatoką).
 
 # ======================================================================== VITEMS (rzeczy)
 rzeczy.juk.name = Juk handlarza
@@ -442,7 +442,7 @@ camp.chestEmpty = Pusta skrzynia. Dziennik już zabrałeś.
 camp.chestTaken = W skrzyni pod kocem - gruby notes w skórzanej oprawie. Dziennik dowódcy.
 camp.shaft = Szyb wykuty w skale, obity belkami. W dole czarno. Kopią ku podziemiom.
 camp.shaftDone = Szyb zasypany. Belki zawalone, wejście pełne kamieni.
-camp.shaftNeed = Żeby podciąć stemple, trzeba piły. I liny, żeby zwalić belki.
+camp.shaftNeed = Żeby podciąć stemple, trzeba piły. I sznurka, żeby zwalić belki.
 [journalNote]
 Dziennik kopacza
 „Kopią ku piętru pięćdziesiątemu od góry. Kamień miękki, sztolnia idzie szybko. Białe oko każe się śpieszyć - zanim zakon się obudzi.” - z dziennika dowódcy kopaczy Czarnych Oczu (obóz pod skałą, Góry).
@@ -602,7 +602,7 @@ kod.eventAct.1 = Tobołek handlarza, ściągnięty rzemieniem.
 kod.eventAct.2 = Juk handlarza
 kod.eventAct.3 = Dziennik kopacza
 kod.eventAct.4 = Potrzebujesz piły
-kod.eventAct.5 = Potrzebujesz liny
+kod.eventAct.5 = Potrzebujesz sznurka
 kod.eventAct.6 = Marta Ługowa
 # gravesDone
 kod.gravesDone.0 = Groby Ługów

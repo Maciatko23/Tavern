@@ -1,20 +1,20 @@
 # Autopilot fabuły - raport
 
-Data: 2026-11-17 13:01 · start: zapis „po_pietrze10” · szybkość ×10 · czas 60 min · polityka wyborów: uczciwie i pomocnie
+Data: 2026-11-17 15:39 · start: zapis „po_pietrze10” · szybkość ×10 · czas 50.4 min · polityka wyborów: uczciwie i pomocnie
 
 ## Podsumowanie
 
-- Doszedł do: **Podziemia: piętra 11-50** (dzień 63, 20:28, Podziemia - piętro 11); ostatnio: Schodzę niżej (piętro 12) - Podziemia: do piętra 50 (najgłębiej 16)
-- Koniec przebiegu: limit czasu (60 min)
-- Dni gry: 1 → 63 · czas rzeczywisty 60 min
+- Doszedł do: **Podziemia: piętra 11-50** (dzień 58, 12:41, Podgrodzie); ostatnio: Na działce: zbieram Zioła - opatrunki
+- Koniec przebiegu: strona nie odpowiada: evaluate timeout: Promise.resolve(Object.assign(FAB.status(), { scene: SceneManager._scene && SceneManager._scene.cons
+- Dni gry: 1 → 58 · czas rzeczywisty 50.4 min
 - Dług: spłacone 2500/2500 G - **spłacony w dniu 21** (21:08)
-- Zmiany u Borgara: 25, zarobek ze zmian 3276 G (średnio 131 G)
-- Śmierci: 14 · utknięcia: 3 · niejasności celu: 5 · wybory: 146 · obejścia błędów gry: 16 (rodzajów: 2)
+- Zmiany u Borgara: 24, zarobek ze zmian 3114 G (średnio 130 G)
+- Śmierci: 9 · utknięcia: 3 · niejasności celu: 4 · wybory: 1313 · obejścia błędów gry: 12 (rodzajów: 2)
 
 ## Etapy budowy
 
 1. **Prolog → rozdział 1 (dług):** zrobione - dług spłacony w dniu 21 (20 zmian)
-2. **W4 (klucz, krata) → piętro 10 → piętro 50 → Akt III:** W4 zrobione (dzień 32); najgłębiej piętro 17; Akt III nie ruszył
+2. **W4 (klucz, krata) → piętro 10 → piętro 50 → Akt III:** W4 zrobione (dzień 32); najgłębiej piętro 16; Akt III nie ruszył
 3. **Księga sygnałów (W2) → Komnata Serca → zakończenie:** nie osiągnięte
 
 ## Czas na rozdział
@@ -27,8 +27,8 @@ Data: 2026-11-17 13:01 · start: zapis „po_pietrze10” · szybkość ×10 · 
 | W4: Krew kasztelana (klucz i krata) | dzień 21 21:13 | 10 d 11 h | 13 min |
 | Podziemia: piętra 1-10 | dzień 32 7:53 | 0 d 0 h | 205 min |
 | Podziemia: piętra 1-10 | dzień 32 8:03 | 8 d 22 h | 13 min |
-| Podziemia: piętra 11-50 | dzień 41 5:43 | 0 d 0 h | 56 min |
-| Podziemia: piętra 11-50 | dzień 41 5:48 | 22 d 15 h | 60 min |
+| Podziemia: piętra 11-50 | dzień 41 5:43 | 0 d 0 h | 224 min |
+| Podziemia: piętra 11-50 | dzień 41 5:48 | 17 d 7 h | 50 min |
 
 ## Krzywa złota i długu
 
@@ -76,29 +76,23 @@ d 38 ##################################################  2716 G (spł. 2500, sak
 d 39 ##################################################  2716 G (spł. 2500, sakiewka 216)
 d 40 ##################################################  2716 G (spł. 2500, sakiewka 216)
 d 41 ##################################################  2716 G (spł. 2500, sakiewka 216)
-d 42 ##################################################  2654 G (spł. 2500, sakiewka 154)
-d 43 ##################################################  2526 G (spł. 2500, sakiewka 26)
-d 44 ##################################################  2526 G (spł. 2500, sakiewka 26)
-d 45 ##################################################  2526 G (spł. 2500, sakiewka 26)
-d 46 ##################################################  2526 G (spł. 2500, sakiewka 26)
-d 47 ##################################################  2526 G (spł. 2500, sakiewka 26)
-d 48 ##################################################  2526 G (spł. 2500, sakiewka 26)
-d 49 ##################################################  2526 G (spł. 2500, sakiewka 26)
-d 50 ##################################################  2586 G (spł. 2500, sakiewka 86)
-d 51 ##################################################  2586 G (spł. 2500, sakiewka 86)
-d 52 ##################################################  2586 G (spł. 2500, sakiewka 86)
-d 53 ##################################################  2586 G (spł. 2500, sakiewka 86)
-d 54 ##################################################  2663 G (spł. 2500, sakiewka 163)
-d 55 ##################################################  2523 G (spł. 2500, sakiewka 23)
-d 56 ##################################################  2523 G (spł. 2500, sakiewka 23)
-d 57 ##################################################  2650 G (spł. 2500, sakiewka 150)
-d 58 ##################################################  2532 G (spł. 2500, sakiewka 32)
-d 59 ##################################################  2532 G (spł. 2500, sakiewka 32)
-d 60 ##################################################  2532 G (spł. 2500, sakiewka 32)
-d 61 ##################################################  2647 G (spł. 2500, sakiewka 147)
-d 62 ##################################################  2570 G (spł. 2500, sakiewka 70)
-d 63 ##################################################  2570 G (spł. 2500, sakiewka 70)
-d 64 ##################################################  2570 G (spł. 2500, sakiewka 70)
+d 42 ##################################################  2716 G (spł. 2500, sakiewka 216)
+d 43 ##################################################  2668 G (spł. 2500, sakiewka 168)
+d 44 ##################################################  2520 G (spł. 2500, sakiewka 20)
+d 45 ##################################################  2520 G (spł. 2500, sakiewka 20)
+d 46 ##################################################  2520 G (spł. 2500, sakiewka 20)
+d 47 ##################################################  2520 G (spł. 2500, sakiewka 20)
+d 48 ##################################################  2520 G (spł. 2500, sakiewka 20)
+d 49 ##################################################  2520 G (spł. 2500, sakiewka 20)
+d 50 ##################################################  2677 G (spł. 2500, sakiewka 177)
+d 51 ##################################################  2677 G (spł. 2500, sakiewka 177)
+d 52 ##################################################  2765 G (spł. 2500, sakiewka 265)
+d 53 ##################################################  2527 G (spł. 2500, sakiewka 27)
+d 54 ##################################################  2527 G (spł. 2500, sakiewka 27)
+d 55 ##################################################  2527 G (spł. 2500, sakiewka 27)
+d 56 ##################################################  2527 G (spł. 2500, sakiewka 27)
+d 57 ##################################################  2527 G (spł. 2500, sakiewka 27)
+d 58 ##################################################  2527 G (spł. 2500, sakiewka 27)
 ```
 # = spłacone, + = w sakiewce, | = tempo 2500/60 dni
 
@@ -146,30 +140,24 @@ d 64 ##################################################  2570 G (spł. 2500, sak
 | 38 | Podziemia: piętra 1-10 | 46 | 2500 | 0 | 7:00 Robię opatrunki na drogę (zioła, krwawnik, włókno); 7:00 Na działce: zbieram Zioła; 7:12 Na działce: zbieram Krwawnik; 7:47 Robię opatrunek; 8:05 Na działce: zbieram Zioła; 8:05 Na działce: zbieram Krwawnik; 8:11 Robię opatrunek; 8:30 Na działce: zbieram Zioła; 8:35 Na działce: zbieram Krwawnik; 9:00 Robię opatrunek; 9:18 Na działce: zbieram Zioła; 9:24 Robię opatrunek; 9:41 Przygotowuję się: garbarz Ignac (Tarcza obciągnięta skórą); 9:41 Przygotowuję się: kupuję u: garbarz Ignac - Tarcza obciągnięta skórą; 9:54 Przygotowuję się: garbarz Ignac (Tarcza obciągnięta skórą); 9:54 Przygotowuję się: kupuję u: garbarz Ignac - Tarcza obciągnięta skórą; 10:05 Przygotowuję się: garbarz Ignac (Tar |
 | 39 | Podziemia: piętra 1-10 | 216 | 2500 | 0 | 7:00 Jem; 7:00 Jem: Marchew; 7:00 Do kapuśniaku 59 min - w tym czasie: buduję na działce (Warsztat) (Podgrodzie); 7:05 Do kapuśniaku 53 min - w tym czasie: Na działce: Ognisko; 7:30 Kupuję lepszą zbroję: garbarz Ignac (Skórznia); 7:30 Przygotowuję się: kupuję u: garbarz Ignac - Skórznia; 7:42 Kupuję lepszą zbroję: garbarz Ignac (Skórznia); 7:42 Przygotowuję się: kupuję u: garbarz Ignac - Skórznia; 7:54 Kupuję lepszą zbroję: garbarz Ignac (Skórznia); 7:54 Przygotowuję się: kupuję u: garbarz Ignac - Skórznia; 8:05 Kupuję lepszą zbroję: garbarz Ignac (Skórznia); 8:05 Przygotowuję się: kupuję u: garbarz Ignac - Skórznia; 8:18 Biorę kapuśniak na drogę; 8:35 Idę do podziemi (piwnica tawerny, krata |
 | 40 | Podziemia: piętra 1-10 | 216 | 2500 | 4 | 8:30 Szukam schodów w dół (piętro 7); 9:48 Walczę: pajak; 9:48 Szukam schodów w dół (piętro 7); 10:00 Schodzę niżej (piętro 8); 10:00 Jem; 10:00 Jem: Marchew; 10:05 Piję (jedzenie z wodą); 10:05 Jem: Jagody; 10:05 Piję (jedzenie z wodą); 10:05 Jem: Jagody; 10:05 Schodzę: piętro 8 → 9; 10:05 Szukam schodów w dół (piętro 8); 10:18 Walczę: pajak; 10:24 Szukam schodów w dół (piętro 8); 10:41 Walczę: szczur; 10:48 Szukam schodów w dół (piętro 8); 11:35 Walczę: szczur; 11:41 Szukam schodów w dół (piętro 8); 12:05 Walczę: szczur; 12:05 Szukam schodów w dół (piętro 8); 12:18 Walczę: szczur; 12:24 Szukam schodów w dół (piętro 8); 12:30 Walczę: szczur; 12:30 Szukam schodów w dół (piętro 8); 13:00 Walc |
-| 41 | Podziemia: piętra 1-10 | 216 | 2500 | 9 | 1:48 Walczę: pajak; 1:53 Szukam schodów w dół (piętro 9); 2:23 Walczę: pajak; 2:23 Walczę: szczur; 2:23 Walczę: pajak; 2:23 Walczę: szczur; 2:30 Szukam schodów w dół (piętro 9); 5:30 Walczę: szczur; 5:35 Schodzę niżej (piętro 10); 5:42 Piję (jedzenie z wodą); 5:42 Jem: Jagody; 5:42 Piję (jedzenie z wodą); 5:42 Jem: Jagody; 5:47 Strażnik dziesiątej bramy - słowa kasztelana; 6:30 Kręcę kołowrotem windy (piętro 10); 6:35 Schodzę: piętro 10 → 11; 6:35 Walczę: pajak; 6:42 Schodzę: piętro 10 → 11; 7:00 Piję (jedzenie z wodą); 7:00 Jem: Jagody; 7:05 Odpoczywam pod ziemią (rany się goją); 10:05 Piję (jedzenie z wodą); 10:05 Jem: Jagody; 10:05 Odpoczywam pod ziemią (rany się goją); 13:18 Piję (jedzen |
-| 42 | Podziemia: piętra 11-50 | 216 | 2500 | 10 | 7:00 Piję ze studni miejskiej; 8:18 Robię opatrunki na drogę (zioła, krwawnik, włókno); 8:41 Na działce: zbieram Zioła; 9:11 Na działce: zbieram Krwawnik; 9:35 Robię opatrunek; 9:48 Na działce: zbieram Krwawnik; 10:18 Na działce: zbieram Włókno; 10:24 Robię opatrunek; 10:41 Przygotowuję się: kowal Tadek (Brązowa łuska, Okuta tarcza); 11:30 Przygotowuję się: kupuję u: kowal Tadek - Brązowa łuska, Okuta tarcza; 11:48 Piję ze studni miejskiej; 12:00 Przygotowuję się: kowal Tadek (Brązowa łuska, Okuta tarcza); 12:00 Przygotowuję się: kupuję u: kowal Tadek - Brązowa łuska, Okuta tarcza; 12:11 Przygotowuję się: szwaczka Dorota (Czepiec pikowany); 12:11 Przygotowuję się: kupuję u: szwaczka Dorota - |
-| 43 | Podziemia: piętra 11-50 | 154 | 2500 | 10 | 7:00 Jem; 7:00 Jem: Marchew; 7:00 Jem; 7:00 Jem: Marchew; 7:00 Do kapuśniaku 58 min - w tym czasie: sadzę sosny z szyszek (drewno na później) (Podgrodzie); 7:05 Do kapuśniaku 55 min - w tym czasie: Sadzę sosnę z szyszki (5/8); 7:17 Do kapuśniaku 40 min - w tym czasie: Sadzę sosnę z szyszki (6/8); 7:30 Sadzę sosny z szyszek na działce; 7:30 Sadzę sosnę z szyszki (6/8); 7:30 Sadzę sosnę z szyszki (7/8); 7:35 Sadzę sosnę z szyszki (8/8); 7:42 Przygotowuję się: kowal Tadek (Brązowy hełm z nosalem, Ćwiekowane nagolenniki, Brązowe karwasze); 8:35 Przygotowuję się: kupuję u: kowal Tadek - Brązowy hełm z nosalem, Ćwiekowane nagolenniki, Brązowe karwasze; 8:54 Piję ze studni miejskiej; 9:05 Przygotow |
-| 44 | Podziemia: piętra 11-50 | 26 | 2500 | 10 | 7:00 Do kapuśniaku 1 h - w tym czasie: buduję na działce (Warsztat) (Podgrodzie); 7:05 Do kapuśniaku 57 min - w tym czasie: Na działce: Ognisko; 7:30 Robię bukłak (garbarnia, skóra, len); 7:30 Piję ze studni przed zejściem; 7:30 Piję ze studni miejskiej; 8:41 Biorę kapuśniak na drogę; 10:05 Jem; 10:05 Jem: Jagody; 10:05 Idę do podziemi (piwnica tawerny, krata); 11:48 Zjeżdżam windą na piętro 10; 12:00 Schodzę: piętro 10 → 11; 12:00 Schodzę niżej (piętro 11); 12:05 Schodzę: piętro 11 → 12; 12:05 Szukam schodów w dół (piętro 11); 12:05 Walczę: szczur; 12:11 Szukam schodów w dół (piętro 11); 12:30 Walczę: zbroja; 12:54 Szukam schodów w dół (piętro 11); 13:24 Walczę: zbroja; 13:48 Szukam schodów |
-| 45 | Podziemia: piętra 11-50 | 26 | 2500 | 12 | 13:18 Rozdaję punkty: Zręczność +1, Czujność +1, Siła +1; Płynne kombo; 13:18 Jem; 13:18 Jem: Jagody; 13:18 Jem; 13:18 Jem: Jagody; 13:18 Jem; 13:18 Jem: Jagody; 13:18 Jem; 13:18 Jem: Jagody; 13:18 Opatruję ranę; 13:18 Schodzę: piętro 13 → 14; 13:18 Szukam schodów w dół (piętro 13); 14:24 Schodzę niżej (piętro 14); 14:30 Schodzę: piętro 14 → 15; 14:30 Szukam schodów w dół (piętro 14); 14:35 Walczę: pajak; 14:41 Szukam schodów w dół (piętro 14); 16:00 Walczę: pajak; 16:06 Szukam schodów w dół (piętro 14); 16:36 Walczę: szczur; 16:41 Szukam schodów w dół (piętro 14); 17:11 Schodzę niżej (piętro 15); 17:18 Jem; 17:18 Jem: Dzikie jabłka; 17:18 Schodzę: piętro 15 → 16; 17:18 Szukam schodów w dół  |
-| 46 | Podziemia: piętra 11-50 | 26 | 2500 | 16 | 3:42 Jem; 3:42 Jem: Ziemniak; 3:42 Mało wody na drogę powrotną - wracam na górę do studni; 9:35 Jem; 9:35 Jem: Ziemniak; 9:35 Jem; 9:35 Jem: Dzikie gruszki; 9:41 Z Ruin wracam na górę (życie 41%, siły 60, woda 50) |
-| 47 | Podziemia: piętra 11-50 | 26 | 2500 | 16 | 7:00 Jem; 7:00 Jem: Dzikie gruszki; 7:00 Jem; 7:00 Jem: Dzikie gruszki; 7:00 Do kapuśniaku 58 min - w tym czasie: zbieram jedzenie (jagody, grzyby, dzikie warzywa); 7:00 Do kapuśniaku 58 min - w tym czasie: zbieram jedzenie (jagody, grzyby, dzikie warzywa) (Podgrodzie); 7:30 Sadzę sosny z szyszek na działce; 7:30 Sadzę sosnę z szyszki (4/8); 7:35 Idę po rudę żelaza w Krucze Turnie; 9:54 Krucze Turnie: kopię rudę żelaza (1/2); 20:18 Kuję żelazną włócznię (kuźnia na działce); 22:23 Śpię na działce |
-| 48 | Podziemia: piętra 11-50 | 26 | 2500 | 16 | 7:00 Kuję żelazną włócznię (kuźnia na działce); 7:12 Na działce: żelazo na włócznię; 12:24 Na działce: Kamienna siekiera; 13:35 Na działce: żelazo na włócznię |
-| 49 | Podziemia: piętra 11-50 | 26 | 2500 | 16 | 8:11 Idę po rudę żelaza w Krucze Turnie; 13:05 Krucze Turnie: kopię rudę żelaza (1/2); 18:30 Kuję żelazną włócznię (kuźnia na działce); 20:23 Na działce: Kamienny kilof; 20:30 Kuję żelazną włócznię (kuźnia na działce); 21:18 Śpię na działce |
-| 50 | Podziemia: piętra 11-50 | 26 | 2500 | 16 | 7:00 Kuję żelazną włócznię (kuźnia na działce); 7:00 Na działce: Kamienny kilof; 8:05 Na działce: żelazo na włócznię; 8:05 Idę po rudę żelaza w Krucze Turnie; 10:24 Krucze Turnie: kopię rudę żelaza (1/2); 21:06 Kuję żelazną włócznię (kuźnia na działce) |
-| 51 | Podziemia: piętra 11-50 | 86 | 2500 | 16 | 0:12 Śpię na działce; 7:00 Idę po rudę żelaza w Krucze Turnie; 9:18 Krucze Turnie: kopię rudę żelaza (1/2) |
-| 52 | Podziemia: piętra 11-50 | 86 | 2500 | 16 | 4:17 Idę spać do domu dziadka |
-| 53 | Podziemia: piętra 11-50 | 86 | 2500 | 16 | 7:00 Czekam na kapuśniak (od 8:00); 8:00 Biorę kapuśniak z kotła dziadka; 8:05 Piję ze studni miejskiej; 9:24 Kuję żelazną włócznię (kuźnia na działce); 10:48 Na działce: żelazo na włócznię; 10:48 Idę po drewno do lasu; 11:18 Słony Brzeg: ścinam drzewo (1/8 drewna); 11:24 Słony Brzeg: ścinam drzewo (5/8 drewna); 16:18 Kuję żelazną włócznię (kuźnia na działce); 20:00 Na działce: żelazo na włócznię |
-| 54 | Podziemia: piętra 11-50 | 86 | 2500 | 16 | 7:42 Kuję: żelazna włócznia; 9:41 Sadzę sosny z szyszek na działce; 9:41 Sadzę sosnę z szyszki (4/8); 9:48 Robię opatrunki na drogę (zioła, krwawnik, włókno); 9:48 Na działce: zbieram Zioła; 10:00 Na działce: zbieram Krwawnik; 10:35 Robię opatrunek; 10:54 Na działce: zbieram Zioła; 10:54 Robię opatrunek; 11:11 Kupuję lepszą zbroję: kowal Tadek (Żelazne karwasze); 11:48 Przygotowuję się: kupuję u: kowal Tadek - Żelazne karwasze; 12:18 Kupuję lepszą zbroję: kowal Tadek (Żelazne karwasze); 12:18 Przygotowuję się: kupuję u: kowal Tadek - Żelazne karwasze; 12:18 Robię bukłak (garbarnia, skóra, len); 13:35 Biorę kapuśniak na drogę; 14:00 Idę do podziemi (piwnica tawerny, krata); 15:35 Zjeżdżam win |
-| 55 | Podziemia: piętra 11-50 | 36 | 2500 | 16 | 0:00 Walczę: zbroja; 0:00 Walczę: szczur; 0:06 Walczę: zbroja; 0:06 Walczę: szczur; 0:06 Walczę: zbroja; 0:06 Walczę: szczur; 0:06 Walczę: zbroja; 0:30 Szukam schodów w dół (piętro 16); 0:48 Walczę: szczur; 0:48 Szukam schodów w dół (piętro 16); 2:47 Walczę: szczur; 2:53 Szukam schodów w dół (piętro 16); 3:47 Walczę: pajak; 3:53 Szukam schodów w dół (piętro 16); 5:47 Schodzę niżej (piętro 17); 5:47 Opatruję ranę; 5:47 Mało wody na drogę powrotną - wracam na górę do studni; 7:47 Ranny - wracam na górę odpocząć; 7:47 Walczę: pajak; 7:00 Do kapuśniaku 1 h - w tym czasie: zbieram jedzenie (jagody, grzyby, dzikie warzywa); 7:00 Do kapuśniaku 1 h - w tym czasie: zbieram jedzenie (jagody, grzyby, d |
-| 56 | Podziemia: piętra 11-50 | 23 | 2500 | 16 | 7:00 Czekam na kapuśniak (od 8:00); 8:00 Biorę kapuśniak z kotła dziadka; 8:05 Piję ze studni miejskiej; 9:35 Robię opatrunki na drogę (zioła, krwawnik, włókno); 10:18 Na działce: zbieram Zioła; 10:35 Na działce: zbieram Krwawnik; 10:54 Na działce: zbieram Włókno; 10:54 Robię opatrunek; 11:11 Odpoczywam przed zejściem (sen u dziadka) |
-| 57 | Podziemia: piętra 11-50 | 23 | 2500 | 16 | 23:06 Jem: Jagody; 23:06 Schodzę: piętro 17 → 18; 23:06 Szukam schodów w dół (piętro 17); 24:00 Walczę: pajak; 7:30 Idę do podziemi (piwnica tawerny, krata); 9:05 Zjeżdżam windą na piętro 10; 9:18 Schodzę: piętro 10 → 11; 9:18 Schodzę niżej (piętro 11); 9:24 Schodzę: piętro 11 → 12; 9:24 Schodzę niżej (piętro 12); 10:41 Schodzę: piętro 12 → 13; 10:41 Schodzę niżej (piętro 13); 11:41 Schodzę: piętro 13 → 14; 11:41 Schodzę niżej (piętro 14); 13:05 Schodzę: piętro 14 → 15; 13:05 Schodzę niżej (piętro 15); 13:54 Schodzę: piętro 15 → 16; 13:54 Schodzę niżej (piętro 16); 14:41 Jem; 14:41 Jem: Jagody; 14:41 Schodzę: piętro 16 → 17; 14:41 Szukam schodów w dół (piętro 16); 15:54 Walczę: szczur; 16:00 |
-| 58 | Podziemia: piętra 11-50 | 23 | 2500 | 17 | 1:53 Walczę: pajak; 1:53 Rozdaję punkty: Kondycja +2, Siła +1; Mocny blok 1/2; 1:53 Opatruję ranę; 2:00 Schodzę: piętro 17 → 18; 2:00 Szukam schodów w dół (piętro 17); 2:17 Walczę: zbroja; 2:42 Opatruję ranę; 2:42 Odpoczywam pod ziemią (rany się goją); 10:05 Jem; 10:05 Jem: Jagody; 10:05 Schodzę: piętro 17 → 18; 10:05 Szukam schodów w dół (piętro 17); 11:30 Walczę: pajak; 11:41 Szukam schodów w dół (piętro 17); 11:48 Walczę: szczur; 11:54 Walczę: zbroja; 11:54 Jem; 11:54 Jem: Jagody; 11:54 Uciekam przed zbroją po schodach w górę (życie 26%); 11:54 Walczę: zbroja; 13:05 Uciekam po schodach w górę (mało życia, bez opatrunków); 7:00 Jem; 7:00 Jem: Marchew; 7:00 Do kapuśniaku 59 min - w tym czas |
-| 59 | Podziemia: piętra 11-50 | 32 | 2500 | 16 | 3:17 Jem; 3:17 Jem: Jagody; 3:17 Ćwiczę na piętrze 13 (doświadczenie przed niższymi); 8:18 Jem; 8:18 Jem: Jagody; 8:18 Ćwiczę na piętrze 13 (doświadczenie przed niższymi); 13:18 Jem; 13:18 Jem: Jagody; 13:18 Ćwiczę na piętrze 13 (doświadczenie przed niższymi); 13:48 Schodzę: piętro 13 → 14; 13:48 Schodzę niżej (piętro 14); 14:30 Schodzę: piętro 14 → 15; 14:30 Schodzę niżej (piętro 15); 15:18 Mało wody na drogę powrotną - wracam na górę do studni; 19:48 Jem; 19:48 Jem: Jagody; 19:48 Z Ruin wracam na górę (życie 50%, siły 60, woda 43) |
-| 60 | Podziemia: piętra 11-50 | 32 | 2500 | 16 | 7:00 Jem; 7:00 Jem: Jagody; 7:00 Do kapuśniaku 59 min - w tym czasie: buduję na działce (Warsztat) (Podgrodzie); 7:05 Do kapuśniaku 52 min - w tym czasie: Na działce: Buda; 7:24 Do kapuśniaku 33 min - w tym czasie: Na działce: Ławka; 7:30 Odpoczywam przed zejściem (sen u dziadka) |
-| 61 | Podziemia: piętra 11-50 | 32 | 2500 | 16 | 7:00 Do kapuśniaku 1 h - w tym czasie: zbieram jedzenie (jagody, grzyby, dzikie warzywa); 7:00 Do kapuśniaku 1 h - w tym czasie: zbieram jedzenie (jagody, grzyby, dzikie warzywa) (Podgrodzie); 7:30 Robię bukłak (garbarnia, skóra, len); 7:30 Piję ze studni przed zejściem; 7:30 Piję ze studni miejskiej; 8:41 Biorę kapuśniak na drogę; 10:00 Idę do podziemi (piwnica tawerny, krata); 11:35 Zjeżdżam windą na piętro 10; 11:48 Schodzę: piętro 10 → 11; 11:48 Schodzę niżej (piętro 11); 11:48 Schodzę: piętro 11 → 12; 11:48 Schodzę niżej (piętro 12); 13:00 Schodzę: piętro 12 → 13; 13:00 Schodzę niżej (piętro 13); 14:00 Schodzę: piętro 13 → 14; 14:00 Schodzę niżej (piętro 14); 15:18 Schodzę: piętro 14 →  |
-| 62 | Podziemia: piętra 11-50 | 32 | 2500 | 16 | 10:48 Jem; 10:48 Jem: Jagody; 10:48 Schodzę Wielkimi schodami (piętro 1); 10:54 Schodzę: piętro 1 → 2; 10:54 Schodzę niżej (piętro 2); 11:48 Schodzę: piętro 2 → 3; 11:48 Schodzę niżej (piętro 3); 12:54 Schodzę: piętro 3 → 4; 12:54 Schodzę niżej (piętro 4); 14:00 Opatruję ranę; 14:00 Schodzę: piętro 4 → 5; 14:00 Schodzę niżej (piętro 5); 15:05 Schodzę: piętro 5 → 6; 15:05 Schodzę niżej (piętro 6); 16:11 Jem; 16:11 Jem: Jagody; 16:11 Schodzę: piętro 6 → 7; 16:11 Schodzę niżej (piętro 7); 17:06 Opatruję ranę; 17:06 Schodzę: piętro 7 → 8; 17:06 Schodzę niżej (piętro 8); 17:48 Opatruję ranę; 17:53 Schodzę: piętro 8 → 9; 17:53 Schodzę niżej (piętro 9); 18:53 Ćwiczę na piętrze 9 (doświadczenie prze |
-| 63 | Podziemia: piętra 11-50 | 102 | 2500 | 16 | 1:36 Jem; 1:36 Jem: Dzikie jabłka; 1:36 Ćwiczę na piętrze 15 (doświadczenie przed niższymi); 6:35 Jem; 6:35 Jem: Dzikie gruszki; 6:42 Ćwiczę na piętrze 15 (doświadczenie przed niższymi); 10:18 Jem; 10:18 Jem: Dzikie gruszki; 10:24 Ćwiczę na piętrze 15 (doświadczenie przed niższymi); 15:30 Schodzę: piętro 15 → 16; 15:30 Schodzę niżej (piętro 16); 16:11 Schodzę: piętro 16 → 17; 16:11 Szukam schodów w dół (piętro 16); 17:18 Walczę: szczur; 17:23 Walczę: pajak; 17:30 Szukam schodów w dół (piętro 16); 18:53 Walczę: szczur; 18:53 Szukam schodów w dół (piętro 16); 19:36 Walczę: szczur; 19:41 Szukam schodów w dół (piętro 16); 21:00 Walczę: szczur; 21:00 Szukam schodów w dół (piętro 16); 21:53 Walczę |
-| 64 | Podziemia: piętra 11-50 | 102 | 2500 | 17 | 0:12 Szukam schodów w dół (piętro 17); 0:36 Walczę: szczur; 0:42 Szukam schodów w dół (piętro 17); 0:54 Walczę: pajak; 1:00 Szukam schodów w dół (piętro 17); 1:23 Walczę: szczur; 1:23 Szukam schodów w dół (piętro 17); 1:30 Walczę: pajak; 1:36 Szukam schodów w dół (piętro 17); 2:36 Walczę: szczur; 2:42 Walczę: zbroja; 3:06 Opatruję ranę; 3:06 Schodzę: piętro 17 → 18; 3:06 Schodzę niżej (piętro 18); 3:12 Schodzę: piętro 18 → 19; 3:12 Szukam schodów w dół (piętro 18); 3:12 Walczę: szczur; 3:17 Walczę: pajak; 3:17 Walczę: szczur; 3:17 Walczę: pajak; 3:23 Szukam schodów w dół (piętro 18); 4:17 Walczę: zbroja; 4:24 Walczę: pajak; 4:24 Walczę: zbroja; 4:24 Uciekam przed zbroją po schodach w górę (ż |
+| 41 | Podziemia: piętra 1-10 | 216 | 2500 | 9 | 1:48 Walczę: pajak; 1:53 Szukam schodów w dół (piętro 9); 2:23 Walczę: pajak; 2:23 Walczę: szczur; 2:23 Walczę: pajak; 2:23 Walczę: szczur; 2:30 Szukam schodów w dół (piętro 9); 5:30 Walczę: szczur; 5:35 Schodzę niżej (piętro 10); 5:42 Piję (jedzenie z wodą); 5:42 Jem: Jagody; 5:42 Piję (jedzenie z wodą); 5:42 Jem: Jagody; 5:47 Strażnik dziesiątej bramy - słowa kasztelana; 6:30 Walczę: pajak; 6:30 Strażnik dziesiątej bramy - słowa kasztelana; 7:00 Piję (jedzenie z wodą); 7:00 Jem: Jagody; 7:00 Strażnik dziesiątej bramy - słowa kasztelana; 10:11 Piję (jedzenie z wodą); 10:11 Jem: Jagody; 10:11 Strażnik dziesiątej bramy - słowa kasztelana; 10:11 Kręcę kołowrotem windy (piętro 10); 10:24 Schodz |
+| 42 | Podziemia: piętra 11-50 | 216 | 2500 | 11 | 7:00 Czekam na kapuśniak (od 8:00); 8:00 Biorę kapuśniak z kotła dziadka; 8:05 Piję ze studni miejskiej; 9:30 Robię opatrunki na drogę (zioła, krwawnik, włókno); 10:00 Na działce: zbieram Zioła; 10:24 Na działce: zbieram Krwawnik; 10:35 Na działce: zbieram Włókno; 10:41 Robię opatrunek; 11:00 Na działce: zbieram Zioła; 11:11 Robię opatrunek; 11:30 Na działce: zbieram Krwawnik; 12:30 Na działce: zbieram Włókno; 12:35 Robię opatrunek; 12:54 Na działce: zbieram Zioła; 13:18 Na działce: zbieram Włókno; 13:24 Robię opatrunek; 13:41 Na działce: zbieram Zioła; 14:05 Na działce: zbieram Krwawnik; 14:30 Na działce: zbieram Włókno; 14:30 Robię opatrunek; 19:06 Na działce: zbieram Zioła; 19:11 Na dział |
+| 43 | Podziemia: piętra 11-50 | 216 | 2500 | 11 | 7:00 Do kapuśniaku 1 h - w tym czasie: zbieram jedzenie (jagody, grzyby, dzikie warzywa); 7:00 Do kapuśniaku 1 h - w tym czasie: zbieram jedzenie (jagody, grzyby, dzikie warzywa) (Podgrodzie); 7:30 Sadzę sosny z szyszek na działce; 7:30 Sadzę sosnę z szyszki (1/8); 7:35 Sadzę sosnę z szyszki (2/8); 7:42 Sadzę sosnę z szyszki (3/8); 7:42 Sadzę sosnę z szyszki (4/8); 7:47 Przygotowuję się: kowal Tadek (Brązowa łuska, Okuta tarcza); 8:41 Przygotowuję się: kupuję u: kowal Tadek - Brązowa łuska, Okuta tarcza; 9:00 Przygotowuję się: kowal Tadek (Brązowa łuska, Okuta tarcza); 9:00 Przygotowuję się: kupuję u: kowal Tadek - Brązowa łuska, Okuta tarcza; 9:00 Przygotowuję się: szwaczka Dorota (Czepiec  |
+| 44 | Podziemia: piętra 11-50 | 168 | 2500 | 11 | 7:00 Do kapuśniaku 1 h - w tym czasie: sadzę sosny z szyszek (drewno na później) (Podgrodzie); 7:05 Do kapuśniaku 57 min - w tym czasie: Sadzę sosnę z szyszki (1/8); 7:12 Kupuję lepszą zbroję: kowal Tadek (Brązowy hełm z nosalem, Ćwiekowane nagolenniki, Brązowe karwasze); 7:54 Przygotowuję się: kupuję u: kowal Tadek - Brązowy hełm z nosalem, Ćwiekowane nagolenniki, Brązowe karwasze; 8:18 Piję ze studni miejskiej; 8:30 Kupuję lepszą zbroję: kowal Tadek (Brązowy hełm z nosalem, Ćwiekowane nagolenniki, Brązowe karwasze); 8:30 Przygotowuję się: kupuję u: kowal Tadek - Brązowy hełm z nosalem, Ćwiekowane nagolenniki, Brązowe karwasze; 8:35 Kupuję lepszą zbroję: szwaczka Dorota (Filcowe buty); 8:35 |
+| 45 | Podziemia: piętra 11-50 | 20 | 2500 | 11 | 7:00 Jem; 7:00 Jem: Marchew; 7:00 Jem; 7:00 Jem: Marchew; 7:00 Do kapuśniaku 58 min - w tym czasie: zbieram jedzenie (jagody, grzyby, dzikie warzywa); 7:05 Do kapuśniaku 56 min - w tym czasie: zbieram gałęzie, kamienie i włókno (na narzędzia i naprawy); 7:05 Czekam na kapuśniak (od 8:00); 8:05 Biorę kapuśniak z kotła dziadka; 8:11 Robię bukłak (garbarnia, skóra, len); 8:11 Idę do podziemi (piwnica tawerny, krata); 9:48 Zjeżdżam windą na piętro 10; 10:00 Schodzę: piętro 10 → 11; 10:00 Schodzę niżej (piętro 11); 10:00 Schodzę: piętro 11 → 12; 10:00 Szukam schodów w dół (piętro 11); 10:11 Walczę: szczur; 10:11 Walczę: zbroja; 10:30 Szukam schodów w dół (piętro 11); 10:41 Walczę: zbroja; 11:00 S |
+| 46 | Podziemia: piętra 11-50 | 20 | 2500 | 11 | 2:23 Jem; 2:23 Jem: Kapuśniak; 2:23 Schodzę: piętro 11 → 12; 2:23 Szukam schodów w dół (piętro 11); 5:24 Schodzę niżej (piętro 12); 5:24 Schodzę: piętro 12 → 13; 5:24 Szukam schodów w dół (piętro 12); 6:12 Walczę: szczur; 6:12 Szukam schodów w dół (piętro 12); 6:17 Walczę: pajak; 6:24 Szukam schodów w dół (piętro 12); 8:24 Walczę: szczur; 8:30 Szukam schodów w dół (piętro 12); 9:35 Walczę: zbroja; 9:48 Szukam schodów w dół (piętro 12); 10:35 Walczę: szczur; 10:35 Szukam schodów w dół (piętro 12); 10:48 Schodzę niżej (piętro 13); 10:54 Opatruję ranę; 10:54 Mało wody na drogę powrotną - wracam na górę do studni; 13:05 Piję (jedzenie z wodą); 13:05 Jem: Dzikie gruszki; 13:11 Zjeżdżam windą na p |
+| 47 | Podziemia: piętra 11-50 | 20 | 2500 | 13 | 7:00 Robię opatrunki na drogę (zioła, krwawnik, włókno); 7:00 Na działce: zbieram Zioła; 7:12 Na działce: zbieram Krwawnik; 7:47 Na działce: zbieram Włókno; 8:00 Robię opatrunek; 8:18 Robię bukłak (garbarnia, skóra, len); 8:18 Piję ze studni przed zejściem; 8:18 Piję ze studni miejskiej; 12:24 Jem; 12:24 Jem: Marchew; 12:24 Piję ze studni miejskiej; 17:23 Jem; 17:23 Jem: Marchew; 17:23 Piję ze studni miejskiej; 21:18 Idę spać do domu dziadka |
+| 48 | Podziemia: piętra 11-50 | 20 | 2500 | 13 | 7:00 Jem; 7:00 Jem: Marchew; 7:00 Czekam na kapuśniak (od 8:00); 8:00 Biorę kapuśniak z kotła dziadka; 8:05 Jem; 8:05 Jem: Kapuśniak; 8:11 Piję ze studni miejskiej; 9:18 Robię bukłak (garbarnia, skóra, len); 9:48 Piję ze studni przed zejściem; 9:48 Piję ze studni miejskiej; 10:11 Idę do podziemi (piwnica tawerny, krata); 10:48 Zjeżdżam windą na piętro 10; 11:00 Schodzę: piętro 10 → 11; 11:00 Schodzę niżej (piętro 11); 11:00 Schodzę: piętro 11 → 12; 11:00 Schodzę niżej (piętro 12); 12:18 Schodzę: piętro 12 → 13; 12:18 Schodzę niżej (piętro 13); 13:11 Schodzę: piętro 13 → 14; 13:11 Szukam schodów w dół (piętro 13); 13:18 Walczę: szczur; 13:18 Szukam schodów w dół (piętro 13); 13:35 Walczę: szc |
+| 49 | Podziemia: piętra 11-50 | 20 | 2500 | 14 | 0:42 Walczę: szczur; 0:54 Szukam schodów w dół (piętro 14); 1:06 Schodzę niżej (piętro 15); 1:06 Opatruję ranę; 1:06 Schodzę: piętro 15 → 16; 1:06 Szukam schodów w dół (piętro 15); 1:11 Walczę: szczur; 1:11 Szukam schodów w dół (piętro 15); 3:36 Schodzę niżej (piętro 16); 3:36 Rozdaję punkty: Zręczność +1, Czujność +1, Siła +1; Płynne kombo; 3:36 Mało wody na drogę powrotną - wracam na górę do studni; 9:05 Z Ruin wracam na górę (życie 70%, siły 60, woda 28); 9:35 Piję ze studni miejskiej; 10:00 Robię opatrunki na drogę (zioła, krwawnik, włókno); 10:30 Na działce: zbieram Zioła; 10:54 Na działce: zbieram Włókno; 10:54 Robię opatrunek; 11:11 Na działce: zbieram Zioła; 11:18 Na działce: zbieram |
+| 50 | Podziemia: piętra 11-50 | 20 | 2500 | 16 | 16:23 Przygotowuję się: kupuję u: kowal Tadek - ; 16:23 Przygotowuję się: kowal Tadek (naprawa); 16:23 Przygotowuję się: kupuję u: kowal Tadek - ; 16:23 Przygotowuję się: kowal Tadek (naprawa); 16:23 Przygotowuję się: kupuję u: kowal Tadek - ; 16:30 Przygotowuję się: kowal Tadek (naprawa); 16:30 Przygotowuję się: kupuję u: kowal Tadek - ; 16:30 Przygotowuję się: kowal Tadek (naprawa); 16:30 Przygotowuję się: kupuję u: kowal Tadek - ; 16:30 Przygotowuję się: kowal Tadek (naprawa); 16:30 Przygotowuję się: kupuję u: kowal Tadek - ; 16:30 Przygotowuję się: kowal Tadek (naprawa); 16:30 Przygotowuję się: kupuję u: kowal Tadek - ; 16:30 Przygotowuję się: kowal Tadek (naprawa); 16:30 Przygotowuję si |
+| 51 | Podziemia: piętra 11-50 | 20 | 2500 | 16 | 3:23 Schodzę: piętro 6 → 7; 3:23 Schodzę niżej (piętro 7); 4:17 Schodzę: piętro 7 → 8; 4:17 Schodzę niżej (piętro 8); 5:05 Opatruję ranę; 5:05 Schodzę: piętro 8 → 9; 5:05 Schodzę niżej (piętro 9); 6:05 Ćwiczę na piętrze 9 (doświadczenie przed niższymi); 6:12 Walczę: szczur; 6:12 Ćwiczę na piętrze 9 (doświadczenie przed niższymi); 6:30 Walczę: pajak; 6:35 Ćwiczę na piętrze 9 (doświadczenie przed niższymi); 7:00 Walczę: szczur; 7:00 Ćwiczę na piętrze 9 (doświadczenie przed niższymi); 7:24 Walczę: szczur; 7:24 Walczę: pajak; 7:24 Walczę: szczur; 7:24 Walczę: pajak; 7:30 Ćwiczę na piętrze 9 (doświadczenie przed niższymi); 7:35 Walczę: szczur; 7:35 Ćwiczę na piętrze 9 (doświadczenie przed niższym |
+| 52 | Podziemia: piętra 11-50 | 177 | 2500 | 16 | 11:18 Kupuję lepszą zbroję: kowal Tadek (Brązowy napierśnik); 11:18 Przygotowuję się: kupuję u: kowal Tadek - Brązowy napierśnik; 11:30 Kupuję lepszą zbroję: kowal Tadek (Brązowy napierśnik); 11:30 Przygotowuję się: kupuję u: kowal Tadek - Brązowy napierśnik; 11:41 Robię bukłak (garbarnia, skóra, len); 11:41 Biorę kapuśniak na drogę; 12:35 Jem; 12:35 Jem: Kapuśniak; 12:35 Idę do podziemi (piwnica tawerny, krata); 14:18 Zjeżdżam windą na piętro 10; 14:30 Schodzę: piętro 10 → 11; 14:30 Schodzę niżej (piętro 11); 14:35 Schodzę: piętro 11 → 12; 14:35 Schodzę niżej (piętro 12); 15:54 Opatruję ranę; 15:54 Schodzę: piętro 12 → 13; 15:54 Schodzę niżej (piętro 13); 16:53 Schodzę: piętro 13 → 14; 16:5 |
+| 53 | Podziemia: piętra 11-50 | 177 | 2500 | 16 | 0:12 Walczę: szczur; 0:18 Szukam schodów w dół (piętro 16); 1:36 Walczę: szczur; 1:36 Walczę: zbroja; 1:42 Walczę: szczur; 1:42 Walczę: zbroja; 1:53 Szukam schodów w dół (piętro 16); 3:36 Schodzę niżej (piętro 17); 3:36 Mało wody na drogę powrotną - wracam na górę do studni; 7:54 Ranny - wracam na górę odpocząć; 7:54 Walczę: szczur; 7:00 Do kapuśniaku 1 h - w tym czasie: buduję na działce (Warsztat) (Podgrodzie); 7:05 Do kapuśniaku 54 min - w tym czasie: Na działce: Ognisko; 7:24 Kupuję lepszą zbroję: kowal Tadek (Brązowy napierśnik, Brązowy hełm z nosalem, Ćwiekowane nagolenniki); 8:05 Przygotowuję się: kupuję u: kowal Tadek - Brązowy napierśnik, Brązowy hełm z nosalem, Ćwiekowane nagolenni |
+| 54 | Podziemia: piętra 11-50 | 27 | 2500 | 16 | 7:00 Do kapuśniaku 1 h - w tym czasie: buduję na działce (Warsztat) (Podgrodzie); 7:05 Do kapuśniaku 53 min - w tym czasie: Na działce: Ognisko; 7:17 Do kapuśniaku 44 min - w tym czasie: Na działce: Kamienna siekiera; 7:30 Robię bukłak (garbarnia, skóra, len); 7:30 Idę do podziemi (piwnica tawerny, krata); 9:05 Zjeżdżam windą na piętro 10; 9:18 Schodzę: piętro 10 → 11; 9:18 Schodzę niżej (piętro 11); 9:18 Ćwiczę na piętrze 11 (doświadczenie przed niższymi); 9:24 Walczę: zbroja; 9:30 Walczę: szczur; 9:30 Walczę: zbroja; 9:30 Walczę: szczur; 9:30 Walczę: zbroja; 9:35 Walczę: szczur; 9:35 Walczę: zbroja; 9:48 Ćwiczę na piętrze 11 (doświadczenie przed niższymi); 11:00 Walczę: szczur; 11:00 Ćwicz |
+| 55 | Podziemia: piętra 11-50 | 27 | 2500 | 16 | 1:18 Piję (jedzenie z wodą); 1:18 Jem: Jagody; 1:18 Ćwiczę na piętrze 11 (doświadczenie przed niższymi); 4:35 Piję (jedzenie z wodą); 4:35 Jem: Jagody; 4:35 Ćwiczę na piętrze 11 (doświadczenie przed niższymi); 7:47 Piję (jedzenie z wodą); 7:47 Jem: Jagody; 7:47 Ćwiczę na piętrze 11 (doświadczenie przed niższymi); 9:24 Opatruję ranę; 9:24 Schodzę: piętro 11 → 12; 9:24 Schodzę niżej (piętro 12); 10:41 Mało wody na drogę powrotną - wracam na górę do studni; 12:05 Piję (jedzenie z wodą); 12:05 Jem: Jagody; 12:05 Zjeżdżam windą na piętro 10; 12:05 Opatruję ranę; 12:05 Schodzę: piętro 10 → 11; 12:05 Schodzę niżej (piętro 11); 12:11 Schodzę: piętro 11 → 12; 12:11 Schodzę niżej (piętro 12); 13:24 Ma |
+| 56 | Podziemia: piętra 11-50 | 27 | 2500 | 16 | 7:00 Piję ze studni miejskiej; 8:24 Idę po rudę żelaza w Krucze Turnie; 9:30 Krucze Turnie: kopię rudę żelaza (1/2); 20:00 Kuję żelazną włócznię (kuźnia na działce); 22:00 Śpię na działce |
+| 57 | Podziemia: piętra 11-50 | 27 | 2500 | 16 | 7:00 Sadzę sosny z szyszek na działce; 7:00 Sadzę sosnę z szyszki (2/8); 7:05 Kuję żelazną włócznię (kuźnia na działce); 7:17 Na działce: żelazo na włócznię |
+| 58 | Podziemia: piętra 11-50 | 27 | 2500 | 16 | 7:12 Kuję: żelazna włócznia; 9:11 Piję ze studni miejskiej; 10:30 Robię opatrunki na drogę (zioła, krwawnik, włókno); 11:54 Na działce: zbieram Zioła; 11:54 Na działce: zbieram Krwawnik; 12:35 Na działce: zbieram Włókno; 12:41 Na działce: zbieram Zioła |
 
 ## Przygotowania przed podziemiami
 
@@ -183,106 +171,1336 @@ d 64 ##################################################  2570 G (spł. 2500, sak
 - dzień 39 8:18: u: garbarz Ignac: kupione nic (4. raz dziś - do jutra bez kowala)
 - dzień 39 20:11: Rozdaję punkty: Kondycja +2, Siła +1; Twarda garda
 - dzień 40 16:30: Rozdaję punkty: Zręczność +1, Czujność +1, Siła +1; Hart ciała 3/3
-- dzień 42 11:50: u: kowal Tadek: kupione nic; naprawa: 0
-- dzień 42 12:14: u: kowal Tadek: kupione Brązowa łuska, Okuta tarcza; naprawa: 1
-- dzień 42 12:20: u: szwaczka Dorota: kupione Czepiec pikowany
-- dzień 43 8:52: u: kowal Tadek: kupione nic
-- dzień 43 9:13: u: kowal Tadek: kupione Brązowy hełm z nosalem, Ćwiekowane nagolenniki, Brązowe karwasze
-- dzień 44 18:29: Rozdaję punkty: Kondycja +2, Siła +1; Mocna ręka 3/3
-- dzień 45 13:16: Rozdaję punkty: Zręczność +1, Czujność +1, Siła +1; Płynne kombo
-- dzień 54 12:17: u: kowal Tadek: kupione nic
-- dzień 54 12:17: u: kowal Tadek: kupione Żelazne karwasze
-- dzień 55 8:41: PRZYGOTOWANIE: zginął 2× na piętrze 14
-- dzień 54 15:02: u: kowal Tadek: kupione nic; naprawa: 2
-- dzień 54 20:21: przygotowanie skończone - wraca pod ziemię
-- dzień 55 8:09: u: kowal Tadek: kupione nic
-- dzień 55 8:09: u: kowal Tadek: kupione Brązowy napierśnik
-- dzień 58 1:55: Rozdaję punkty: Kondycja +2, Siła +1; Mocny blok 1/2
-- dzień 58 11:54: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 58 11:55: ucieczka przed zbroją na piętrze 17 (życie 26%, zbroja 91%)
-- dzień 57 17:42: ucieczka przed zbroją na piętrze 16 (życie 36%, zbroja 80%)
-- dzień 57 19:28: PRZYGOTOWANIE: zginął 3× na piętrze 14 - najpierw ćwiczenie na piętrze 13
-- dzień 57 20:41: przygotowanie skończone - wraca pod ziemię (najpierw ćwiczenie na piętrze 13)
-- dzień 58 8:37: u: kowal Tadek: kupione Brązowy hełm z nosalem, Ćwiekowane nagolenniki
-- dzień 58 8:47: u: szwaczka Dorota: kupione Filcowe buty
-- dzień 59 13:46: ćwiczenie na piętrze 13 skończone (poziom 9)
-- dzień 62 3:19: Rozdaję punkty: Zręczność +1, Czujność +1, Siła +1; Mocny blok 1/2
-- dzień 62 6:05: PRZYGOTOWANIE: zginął 2× na piętrze 16 - najpierw ćwiczenie na piętrze 15
-- dzień 62 6:05: PRZYGOTOWANIE: zginął 3× na piętrze 16 - najpierw ćwiczenie na piętrze 15
-- dzień 61 11:00: u: kowal Tadek: kupione nic; naprawa: 3
-- dzień 61 20:19: przygotowanie skończone - wraca pod ziemię (najpierw ćwiczenie na piętrze 15)
-- dzień 62 8:06: u: kowal Tadek: kupione nic
-- dzień 62 8:06: u: kowal Tadek: kupione Brązowe trzewiki
-- dzień 63 15:22: ćwiczenie na piętrze 15 skończone (poziom 9)
-- dzień 63 22:34: Rozdaję punkty: Kondycja +2, Siła +1; Mocny blok 1/2
-- dzień 64 4:25: ucieczka przed zbroją na piętrze 18 (życie 37%, zbroja 66%)
-- dzień 64 7:24: PRZYGOTOWANIE: zginął 2× na piętrze 15 - najpierw ćwiczenie na piętrze 14
-- dzień 62 10:14: u: kowal Tadek: kupione nic; naprawa: 1
-- dzień 62 10:14: przygotowanie skończone - wraca pod ziemię (najpierw ćwiczenie na piętrze 14)
-- dzień 63 14:39: ćwiczenie na piętrze 14 skończone (poziom 9)
-- dzień 63 21:39: Rozdaję punkty: Zręczność +1, Czujność +1, Siła +1; Mocny blok 1/2
-- dzień 63 6:43: Rozdaję punkty: Kondycja +2, Siła +1; Mocny blok 1/2
-- dzień 63 14:18: ucieczka przed zbroją na piętrze 19 (życie 35%, zbroja 77%)
-- dzień 63 17:08: PRZYGOTOWANIE: zginął 4× na piętrze 16 - najpierw ćwiczenie na piętrze 15
-- dzień 62 10:14: przygotowanie skończone - wraca pod ziemię (najpierw ćwiczenie na piętrze 15)
-- dzień 63 15:32: ćwiczenie na piętrze 15 skończone (poziom 9)
-- dzień 63 22:18: Rozdaję punkty: Zręczność +1, Czujność +1, Siła +1; Mocny blok 1/2
-- dzień 64 13:39: PRZYGOTOWANIE: zginął 2× na piętrze 11 - najpierw ćwiczenie na piętrze 9
-- dzień 62 10:14: przygotowanie skończone - wraca pod ziemię (najpierw ćwiczenie na piętrze 9)
-- dzień 63 18:52: ćwiczenie na piętrze 9 skończone (poziom 9)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:28: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:29: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 41 10:30: ucieczka przed zbroją na piętrze 11 (życie 48%, zbroja 100%)
+- dzień 43 8:57: u: kowal Tadek: kupione nic; naprawa: 0
+- dzień 43 8:58: u: kowal Tadek: kupione Brązowa łuska, Okuta tarcza; naprawa: 1
+- dzień 43 9:07: u: szwaczka Dorota: kupione Czepiec pikowany
+- dzień 44 8:16: u: kowal Tadek: kupione nic
+- dzień 44 8:37: u: kowal Tadek: kupione Brązowy hełm z nosalem, Ćwiekowane nagolenniki, Brązowe karwasze
+- dzień 44 8:48: u: szwaczka Dorota: kupione Filcowe buty
+- dzień 45 12:54: Rozdaję punkty: Kondycja +2, Siła +1; Mocna ręka 3/3
+- dzień 49 3:36: Rozdaję punkty: Zręczność +1, Czujność +1, Siła +1; Płynne kombo
+- dzień 51 7:28: PRZYGOTOWANIE: zginął 2× na piętrze 11
+- dzień 50 9:33: u: kowal Tadek: kupione nic; naprawa: 0
+- dzień 50 9:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:36: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:38: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:38: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:42: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:42: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:44: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:44: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:47: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:51: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:53: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:57: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:59: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 9:59: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:02: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:02: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:06: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:06: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:08: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:12: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:14: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:17: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:17: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:21: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:21: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:23: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:23: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:27: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:27: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:29: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:32: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:32: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:36: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:36: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:38: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:38: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:42: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:42: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:44: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:44: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:47: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:47: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:51: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:51: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:53: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:53: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:57: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:57: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:59: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 10:59: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:02: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:02: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:06: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:06: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:08: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:08: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:12: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:12: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:14: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:14: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:17: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:21: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:23: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:23: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:27: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:27: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:29: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:29: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:32: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:36: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:38: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:42: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:44: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:44: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:47: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:47: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:51: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:51: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:53: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:57: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 11:59: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:02: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:02: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:06: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:06: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:08: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:08: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:12: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:12: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:14: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:17: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:17: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:21: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:21: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:23: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:23: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:27: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:27: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:29: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:29: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:32: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:32: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:36: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:36: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:38: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:38: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:42: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:42: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:44: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:44: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:47: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:47: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:51: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:51: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:53: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:53: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:57: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:57: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:59: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 12:59: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:02: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:06: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:08: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:08: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:12: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:12: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:14: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:14: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:17: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:21: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:23: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:27: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:29: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:29: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:32: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:32: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:36: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:36: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:38: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:42: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:44: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:47: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:47: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:51: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:51: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:53: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:53: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:57: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:57: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 13:59: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:02: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:02: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:06: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:06: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:08: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:08: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:12: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:12: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:14: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:14: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:17: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:17: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:21: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:21: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:23: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:23: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:27: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:27: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:29: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:29: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:32: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:32: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:36: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:36: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:38: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:38: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:42: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:42: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:44: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:44: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:47: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:51: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:53: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:53: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:57: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:57: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:59: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 14:59: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:02: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:06: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:08: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:12: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:14: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:14: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:17: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:17: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:21: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:21: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:23: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:27: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:29: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:31: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:32: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:32: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:33: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:34: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:35: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:36: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:36: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:37: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:38: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:38: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:39: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:40: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:41: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:42: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:42: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:43: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:44: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:45: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:46: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:47: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:47: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:48: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:49: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:50: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:51: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:51: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:52: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:53: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:53: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:54: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:55: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:56: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:57: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:57: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:58: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:59: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 15:59: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:00: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:01: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:02: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:02: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:03: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:04: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:05: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:06: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:06: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:06: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:06: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:07: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:08: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:08: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:08: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:08: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:09: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:10: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:11: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:12: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:12: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:13: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:14: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:14: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:15: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:16: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:17: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:17: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:18: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:19: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:20: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:21: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:21: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:21: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:21: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:22: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:23: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:23: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:23: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:24: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:25: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:26: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:27: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:27: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:28: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:29: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:29: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 16:30: u: kowal Tadek: kupione nic; naprawa: 6
+- dzień 50 21:10: przygotowanie skończone - wraca pod ziemię
+- dzień 51 18:10: PRZYGOTOWANIE: zginął 3× na piętrze 11 - najpierw ćwiczenie na piętrze 9
+- dzień 51 17:37: PRZYGOTOWANIE: zginął 4× na piętrze 11 - najpierw ćwiczenie na piętrze 9
+- dzień 50 21:10: przygotowanie skończone - wraca pod ziemię (najpierw ćwiczenie na piętrze 9)
+- dzień 52 6:11: ćwiczenie na piętrze 9 skończone (poziom 9)
+- dzień 52 10:46: PRZYGOTOWANIE: zginął 2× na piętrze 5 - najpierw ćwiczenie na piętrze 4
+- dzień 50 21:10: przygotowanie skończone - wraca pod ziemię (najpierw ćwiczenie na piętrze 4)
+- dzień 52 1:15: ćwiczenie na piętrze 4 skończone (poziom 9)
+- dzień 52 11:04: u: kowal Tadek: kupione nic
+- dzień 52 11:41: u: kowal Tadek: kupione nic (4. raz dziś - do jutra bez kowala)
+- dzień 53 7:59: PRZYGOTOWANIE: zginął 2× na piętrze 12 - najpierw ćwiczenie na piętrze 11
+- dzień 52 20:12: przygotowanie skończone - wraca pod ziemię (najpierw ćwiczenie na piętrze 11)
+- dzień 53 8:26: u: kowal Tadek: kupione nic
+- dzień 53 8:26: u: kowal Tadek: kupione Brązowy napierśnik, Brązowy hełm z nosalem, Ćwiekowane nagolenniki
+- dzień 55 9:22: ćwiczenie na piętrze 11 skończone (poziom 9)
 
-Zgony przed pierwszym przygotowaniem (do dzień 55 8:41): **2**, po nim: **12**.
+Zgony przed pierwszym przygotowaniem (do dzień 51 7:28): **1**, po nim: **8**.
 
 ## Bezczynność i wolny czas
 
-Czekanie na termin (wpisy „Czekam…”, minuty gry; noc się nie liczy) - razem **4600 min**.
+Czekanie na termin (wpisy „Czekam…”, minuty gry; noc się nie liczy) - razem **4585 min**.
 - Rozdział 1 (20 dni): 3831 min, średnio **192 min/dzień**
-- Dalej (44 dni): 769 min, średnio 17 min/dzień
-- Czekam w tawernie na zmianę: 3863 min
-- Przygotowuję się: czekam na zmianę u Borgara: 434 min
-- Czekam na kapuśniak: 274 min
+- Dalej (38 dni): 754 min, średnio 20 min/dzień
+- Czekam w tawernie na zmianę: 3853 min
+- Czekam na kapuśniak: 390 min
+- Przygotowuję się: czekam na zmianę u Borgara: 314 min
 - Czekam na Szczepana w stajni: 18 min
 - Czekam, aż ruszy W4: 10 min
 
-Wolny czas użyty na robotę: 70 razy, razem 5521 min:
-- buduję na działce: 2973 min
-- zbieram jedzenie: 2412 min
+Wolny czas użyty na robotę: 62 razy, razem 5035 min:
+- buduję na działce: 2843 min
+- zbieram jedzenie: 1972 min
+- sadzę sosny z szyszek: 111 min
 - zbieram gałęzie, kamienie i włókno: 93 min
-- sadzę sosny z szyszek: 27 min
 - zbieram zioła, krwawnik i włókno - opatrunki na podziemia: 16 min
 
 ## Śmierci
 
 - dzień 16 2:23, mapa 218: Śpię na działce (noc (1:01), leśne legowisko) - wczytany zapis: tak
-- dzień 55 8:41, mapa 1014 (piętro 14): Mało wody na drogę powrotną - wracam na górę do studni (Podziemia: do piętra 50 (najgłębiej 17) (woda 28, na powrót z piętra 17 trzeba ~53; pod ziemią wody nie ma do piętra 50)) - wczytany zapis: tak
-- dzień 55 8:41, mapa 1014 (piętro 14): Walczę: pajak (Podziemia: do piętra 50 (najgłębiej 17)) - wczytany zapis: tak
-- dzień 58 13:16, mapa 1016 (piętro 16): Walczę: zbroja (Podziemia: do piętra 50 (najgłębiej 17)) - wczytany zapis: tak
-- dzień 58 15:03, mapa 1015 (piętro 15): Uciekam po schodach w górę (mało życia, bez opatrunków) (Podziemia: do piętra 50 (najgłębiej 17)) - wczytany zapis: tak
-- dzień 57 19:28, mapa 1014 (piętro 14): Uciekam przed zbroją po schodach w górę (życie 36%) (Podziemia: do piętra 50 (najgłębiej 16)) - wczytany zapis: tak
-- dzień 62 6:05, mapa 1016 (piętro 16): Ranny bez opatrunku - wracam na górę (Podziemia: do piętra 50 (najgłębiej 17), życie 41%) - wczytany zapis: tak
-- dzień 62 6:05, mapa 1016 (piętro 16): Idę piętro wyżej (ćwiczenie na piętrze 15) (Podziemia: do piętra 50 (najgłębiej 17)) - wczytany zapis: tak
-- dzień 64 7:04, mapa 1015 (piętro 15): Uciekam przed zbroją po schodach w górę (życie 37%) (Podziemia: do piętra 50 (najgłębiej 18)) - wczytany zapis: tak
-- dzień 64 7:24, mapa 1015 (piętro 15): Walczę: pajak (Podziemia: do piętra 50 (najgłębiej 18)) - wczytany zapis: tak
-- dzień 64 0:36, mapa 1017 (piętro 17): Odpoczywam pod ziemią (rany się goją) (Podziemia: do piętra 50 (najgłębiej 17), życie 47%) - wczytany zapis: tak
-- dzień 63 17:08, mapa 1016 (piętro 16): Uciekam przed zbroją po schodach w górę (życie 35%) (Podziemia: do piętra 50 (najgłębiej 19)) - wczytany zapis: tak
-- dzień 64 13:39, mapa 1011 (piętro 11): Mało wody na drogę powrotną - wracam na górę do studni (Podziemia: do piętra 50 (najgłębiej 17) (woda 49, na powrót z piętra 17 trzeba ~53; pod ziemią wody nie ma do piętra 50)) - wczytany zapis: tak
-- dzień 64 13:39, mapa 1011 (piętro 11): Walczę: pajak (Podziemia: do piętra 50 (najgłębiej 17)) - wczytany zapis: tak
+- dzień 51 8:02, mapa 1011 (piętro 11): Mało wody na drogę powrotną - wracam na górę do studni (Podziemia: do piętra 50 (najgłębiej 17) (woda 36, na powrót z piętra 17 trzeba ~53; pod ziemią wody nie ma do piętra 50)) - wczytany zapis: tak
+- dzień 51 7:28, mapa 1011 (piętro 11): Walczę: szczur (Podziemia: do piętra 50 (najgłębiej 17)) - wczytany zapis: tak
+- dzień 51 18:10, mapa 1011 (piętro 11): Mało wody na drogę powrotną - wracam na górę do studni (Podziemia: do piętra 50 (najgłębiej 17) (woda 44, na powrót z piętra 17 trzeba ~53; pod ziemią wody nie ma do piętra 50)) - wczytany zapis: tak
+- dzień 51 17:37, mapa 1011 (piętro 11): Idę piętro wyżej (ćwiczenie na piętrze 9) (Podziemia: do piętra 50 (najgłębiej 17)) - wczytany zapis: tak
+- dzień 52 11:21, mapa 135 (piętro 5): Mało wody na drogę powrotną - wracam na górę do studni (Podziemia: do piętra 50 (najgłębiej 16) (woda 0, na powrót z piętra 9 trzeba ~60; pod ziemią wody nie ma do piętra 50)) - wczytany zapis: tak
+- dzień 52 10:46, mapa 135 (piętro 5): Walczę: szczur (Podziemia: do piętra 50 (najgłębiej 16)) - wczytany zapis: tak
+- dzień 53 7:58, mapa 1012 (piętro 12): Mało wody na drogę powrotną - wracam na górę do studni (Podziemia: do piętra 50 (najgłębiej 17) (woda 41, na powrót z piętra 17 trzeba ~53; pod ziemią wody nie ma do piętra 50)) - wczytany zapis: tak
+- dzień 53 7:59, mapa 1012 (piętro 12): Walczę: szczur (Podziemia: do piętra 50 (najgłębiej 17)) - wczytany zapis: tak
 
 ## Wybory
 
@@ -290,7 +1508,7 @@ Każdy wybór w rozmowach (powtarzalne zliczone).
 
 | pierwszy raz | kto | opcje | wybrane | dlaczego | ile razy |
 |---|---|---|---|---|---|
-| dzień 1 16:10 |  | Weź zmianę / Sprzedaj towar / Zjedz coś / Wynajmij pokój / Księga gości / Pogadaj / Nie teraz | **Weź zmianę** | plan | 20 |
+| dzień 1 16:10 |  | Weź zmianę / Sprzedaj towar / Zjedz coś / Wynajmij pokój / Księga gości / Pogadaj / Nie teraz | **Weź zmianę** | plan | 21 |
 | dzień 3 22:52 |  | Oddaj 100 G / Oddaj wszystko, co masz (301 G) / Odejdź | **Oddaj 100 G** | plan | 23 |
 | dzień 4 20:38 | Szczepan | Chcę wziąć zmianę w stajni. / Co z noclegiem? / Bywaj. | **Bywaj.** | koniec rozmowy | 1 |
 | dzień 4 21:21 |  | Prześpij noc / Nie teraz | **Prześpij noc** | plan | 2 |
@@ -301,22 +1519,22 @@ Każdy wybór w rozmowach (powtarzalne zliczone).
 | dzień 32 7:19 |  | Sprzedaj towar / Zjedz coś / Wynajmij pokój / Księga gości / Pogadaj / Nie teraz | **Pogadaj** | plan | 1 |
 | dzień 32 7:19 |  | Zapytaj o historię tawerny / Zapytaj o gości / Zamów piwo, nie drąż / Zapytaj wprost o zamek / To wszystko, dzięki | **Zapytaj wprost o zamek** | plan | 1 |
 | dzień 32 7:19 |  | Zapytaj o historię tawerny / Zapytaj o gości / Zamów piwo, nie drąż / Zapytaj wprost o zamek / To wszystko, dzięki | **To wszystko, dzięki** | koniec rozmowy | 1 |
-| dzień 32 7:30 |  | Zejść na dół / Zostać na górze | **Zejść na dół** | plan | 14 |
+| dzień 32 7:30 |  | Zejść na dół / Zostać na górze | **Zejść na dół** | plan | 10 |
 | dzień 32 7:53 |  | Sprzedaj towar / Zjedz coś / Wynajmij pokój / Krata w piwnicy jest otwarta. / Księga gości / Pogadaj / Nie teraz | **Krata w piwnicy jest otwarta.** | plan | 1 |
-| dzień 34 0:50 |  | Spać / Jeszcze nie | **Spać** | plan | 13 |
+| dzień 34 0:50 |  | Spać / Jeszcze nie | **Spać** | plan | 11 |
 | dzień 38 16:04 |  | Weź zmianę / Sprzedaj towar / Zjedz coś / Wynajmij pokój / Ta Kompania... / Księga gości / Pogadaj / Nie teraz | **Weź zmianę** | plan | 2 |
-| dzień 41 6:28 |  | Prawdy. / Drogi na górę. / Nie pytam o to, czego nie chcę wiedzieć. | **Nie pytam o to, czego nie chcę wiedzieć.** | plan | 1 |
-| dzień 41 6:37 |  | Zakręcić / Zostawić | **Zakręcić** | plan | 1 |
-| dzień 41 16:32 |  | Ruiny Zamku (na górę) / Zostać | **Ruiny Zamku (na górę)** | plan | 4 |
-| dzień 42 11:49 | Tadek Młot | Przyniosę węgiel. / Nie teraz. | **Nie teraz.** | koniec rozmowy | 7 |
-| dzień 42 11:49 | Tadek Młot | Przyniosę dwie porcje. / Nie mogę - sam ledwo mam. / Nie teraz. | **Nie teraz.** | koniec rozmowy | 5 |
-| dzień 42 11:49 | Tadek Młot | Poszukam. / Nie teraz. | **Nie teraz.** | koniec rozmowy | 7 |
-| dzień 42 11:50 | Tadek Młot | Stanę do turnieju. / Nie mam krzepy. | **Nie mam krzepy.** | odmowa (zadania poboczne poza planem autopilota) | 7 |
-| dzień 42 11:50 | Tadek Młot | Załatwię węgiel. / Nie teraz. | **Nie teraz.** | koniec rozmowy | 7 |
-| dzień 42 12:13 | Tadek Młot | Pokaż broń i zbroje / Sprzedaj broń i zbroje / Napraw broń i zbroje / Porozmawiaj / Nic, dziękuję | **Pokaż broń i zbroje** | plan | 9 |
-| dzień 42 12:20 | Dorota Igła | Pokaż ubrania / Sprzedaj ubrania / Napraw / Ufarbuj / Przeszywanice / Porozmawiaj / Nic, dziękuję | **Przeszywanice** | plan | 2 |
-| dzień 44 11:59 |  | Piętro 10 - Strażnica / Zostać | **Piętro 10 - Strażnica** | plan | 11 |
-| dzień 57 16:05 |  | Weź zmianę / Sprzedaj towar / Zjedz coś / Wynajmij pokój / Ten pątnik z piętnastki... / Księga gości / Pogadaj / Nie teraz | **Weź zmianę** | plan | 2 |
+| dzień 41 10:14 |  | Prawdy. / Drogi na górę. / Nie pytam o to, czego nie chcę wiedzieć. | **Nie pytam o to, czego nie chcę wiedzieć.** | plan | 1 |
+| dzień 41 10:20 |  | Zakręcić / Zostawić | **Zakręcić** | plan | 1 |
+| dzień 41 10:39 |  | Ruiny Zamku (na górę) / Zostać | **Ruiny Zamku (na górę)** | plan | 6 |
+| dzień 42 21:16 |  | Sprzedaj towar / Zjedz coś / Wynajmij pokój / Ta Kompania... / Księga gości / Pogadaj / Nie teraz | **Nie teraz** | koniec rozmowy | 1 |
+| dzień 43 8:56 | Tadek Młot | Przyniosę węgiel. / Nie teraz. | **Nie teraz.** | koniec rozmowy | 4 |
+| dzień 43 8:56 | Tadek Młot | Przyniosę dwie porcje. / Nie mogę - sam ledwo mam. / Nie teraz. | **Nie teraz.** | koniec rozmowy | 4 |
+| dzień 43 8:56 | Tadek Młot | Poszukam. / Nie teraz. | **Nie teraz.** | koniec rozmowy | 4 |
+| dzień 43 8:56 | Tadek Młot | Stanę do turnieju. / Nie mam krzepy. | **Nie mam krzepy.** | odmowa (zadania poboczne poza planem autopilota) | 4 |
+| dzień 43 8:57 | Tadek Młot | Załatwię węgiel. / Nie teraz. | **Nie teraz.** | koniec rozmowy | 4 |
+| dzień 43 8:58 | Tadek Młot | Pokaż broń i zbroje / Sprzedaj broń i zbroje / Napraw broń i zbroje / Porozmawiaj / Nic, dziękuję | **Pokaż broń i zbroje** | plan | 1196 |
+| dzień 43 9:07 | Dorota Igła | Pokaż ubrania / Sprzedaj ubrania / Napraw / Ufarbuj / Przeszywanice / Porozmawiaj / Nic, dziękuję | **Przeszywanice** | plan | 2 |
+| dzień 45 9:56 |  | Piętro 10 - Strażnica / Zostać | **Piętro 10 - Strażnica** | plan | 8 |
 
 ## Utknięcia
 
@@ -340,52 +1558,52 @@ Każdy wybór w rozmowach (powtarzalne zliczone).
         d23 7:01 ▶ Na działce: wytop żelaza (kuźnia) - W4 Krew kasztelana: połówki do Tadka (żelazo, węgiel)
         d23 7:01 ▶ Na działce: czekam na piec / kuźnię - W4 Krew kasztelana: połówki do Tadka (żelazo, węgiel)
 
-### 1. dzień 52 0:00 - Krucze Turnie: kopię rudę żelaza (1/2)
+### 1. dzień 52 0:00 - Ćwiczę na piętrze 4 (doświadczenie przed niższymi)
 
-- Mapa: Krucze Turnie (222), pole 68,53 · cel w dzienniku: „Krew kasztelana” · kompas: Brat Kleofas (mapa 220)
+- Mapa: Podziemia: piętro 4 (134), pole 52,40 · cel w dzienniku: „Krew kasztelana” · kompas: Brat Kleofas (mapa 220)
 - Zrzut: utkniecie_od_po_pietrze10_nowy_1.png · obejście: od nowa (mózg zaczyna od nowa)
 - Podejrzana przyczyna: nieznana - patrz zrzut i ostatnie akcje
 - Ostatnie akcje:
 
-        d51 AP zjadł Jagody x1
-        d51 AP zjadł Jagody x1
-        d51 AP zjadł Jagody x1
-        d51 AP +1 bush
-        d51 AP +4 bush
-        d51 AP najadł się i napił
-        d51 AP zjadł Jagody x1
-        d51 AP zjadł Jagody x1
-        d51 AP zjadł Jagody x1
-        d51 AP zjadł Jagody x1
-        d51 AP odpoczywa tam, gdzie stoi - Z (wytrzymałość 4 -> 48)
-        d52 AP wstał (50, 2 godz.)
+        d51 22:27 nic nie wychodzi: Ćwiczę na piętrze 4 (doświadczenie przed niższymi) - chwila przerwy
+        d51 22:37 nic nie wychodzi: Ćwiczę na piętrze 4 (doświadczenie przed niższymi) - chwila przerwy
+        d51 22:47 nic nie wychodzi: Ćwiczę na piętrze 4 (doświadczenie przed niższymi) - chwila przerwy
+        d51 22:57 nic nie wychodzi: Ćwiczę na piętrze 4 (doświadczenie przed niższymi) - chwila przerwy
+        d51 23:07 nic nie wychodzi: Ćwiczę na piętrze 4 (doświadczenie przed niższymi) - chwila przerwy
+        d51 23:17 nic nie wychodzi: Ćwiczę na piętrze 4 (doświadczenie przed niższymi) - chwila przerwy
+        d51 23:27 nic nie wychodzi: Ćwiczę na piętrze 4 (doświadczenie przed niższymi) - chwila przerwy
+        d51 23:37 nic nie wychodzi: Ćwiczę na piętrze 4 (doświadczenie przed niższymi) - chwila przerwy
+        d51 23:47 nic nie wychodzi: Ćwiczę na piętrze 4 (doświadczenie przed niższymi) - chwila przerwy
+        d51 23:57 nic nie wychodzi: Ćwiczę na piętrze 4 (doświadczenie przed niższymi) - chwila przerwy
+        d52 0:07 nic nie wychodzi: Ćwiczę na piętrze 4 (doświadczenie przed niższymi) - chwila przerwy
+        d52 0:17 nic nie wychodzi: Ćwiczę na piętrze 4 (doświadczenie przed niższymi) - chwila przerwy
 
-### 2. dzień 59 0:00 - Ćwiczę na piętrze 13 (doświadczenie przed niższymi)
+### 2. dzień 55 0:00 - Ćwiczę na piętrze 11 (doświadczenie przed niższymi)
 
-- Mapa: Podziemia - piętro 13 (1013), pole 35,5 · cel w dzienniku: „Krew kasztelana” · kompas: Brat Kleofas (mapa 220)
+- Mapa: Podziemia - piętro 11 (1011), pole 75,24 · cel w dzienniku: „Krew kasztelana” · kompas: Brat Kleofas (mapa 220)
 - Zrzut: utkniecie_od_po_pietrze10_nowy_2.png · obejście: od nowa (mózg zaczyna od nowa)
 - Podejrzana przyczyna: nieznana - patrz zrzut i ostatnie akcje
 - Ostatnie akcje:
 
-        d58 22:15 ▶ Jem - sytość 50
-        d58 22:15 ▶ Jem: Jagody - głód
-        d58 AP zjadł Jagody x1
-        d58 22:16 ▶ Ćwiczę na piętrze 13 (doświadczenie przed niższymi) - po zgonach na piętrze 14, do poziomu 10
-        d59 3:17 ▶ Jem - sytość 50
-        d59 3:17 ▶ Jem: Jagody - głód
-        d59 AP zjadł Jagody x1
-        d59 3:17 ▶ Ćwiczę na piętrze 13 (doświadczenie przed niższymi) - po zgonach na piętrze 14, do poziomu 10
-        d59 8:18 ▶ Jem - sytość 50
-        d59 8:18 ▶ Jem: Jagody - głód
-        d59 AP zjadł Jagody x1
-        d59 8:19 ▶ Ćwiczę na piętrze 13 (doświadczenie przed niższymi) - po zgonach na piętrze 14, do poziomu 10
+        d54 12:57 ▶ Walczę: szczur - ćwiczenie
+        d54 12:57 ▶ Ćwiczę na piętrze 11 (doświadczenie przed niższymi) - po zgonach na piętrze 12, do poziomu 10
+        d54 13:03 ▶ Walczę: szczur - ćwiczenie
+        d54 13:04 ▶ Ćwiczę na piętrze 11 (doświadczenie przed niższymi) - po zgonach na piętrze 12, do poziomu 10
+        d54 15:11 ▶ Walczę: szczur - ćwiczenie
+        d54 15:15 ▶ Ćwiczę na piętrze 11 (doświadczenie przed niższymi) - po zgonach na piętrze 12, do poziomu 10
+        d54 15:25 ▶ Walczę: pajak - ćwiczenie
+        d54 15:31 ▶ Ćwiczę na piętrze 11 (doświadczenie przed niższymi) - po zgonach na piętrze 12, do poziomu 10
+        d55 1:20 ▶ Piję (jedzenie z wodą) - woda 25
+        d55 1:20 ▶ Jem: Jagody - pragnienie
+        d55 AP zjadł Jagody x1
+        d55 1:20 ▶ Ćwiczę na piętrze 11 (doświadczenie przed niższymi) - po zgonach na piętrze 12, do poziomu 10
 
 
 ## Obejścia błędów gry (to NIE są ruchy gracza)
 
 Miejsca, w których gra uczciwie nie dała się przejść (błąd mapy) - autopilot je obszedł, żeby sprawdzić resztę (wyłącza to `--bez-obejsc`):
 
-- dzień 32 7:08: OBEJŚCIE BŁĘDU MAPY: „Luźna cegła” (TAWERNA 31,2) stoi w ścianie - nie da się przy nim stanąć; zdarzenie uruchomione z najbliższego pola 31,14 (W4 Krew kasztelana: krata w piwnicy) - ×15
+- dzień 32 7:08: OBEJŚCIE BŁĘDU MAPY: „Luźna cegła” (TAWERNA 31,2) stoi w ścianie - nie da się przy nim stanąć; zdarzenie uruchomione z najbliższego pola 31,14 (W4 Krew kasztelana: krata w piwnicy) - ×11
 - dzień 32 7:42: OBEJŚCIE BŁĘDU MAPY: przejście z mapy Piwnica Tawerny wysadziło bohatera w zamkniętym pomieszczeniu (TAWERNA 31,3, 234 pól, bez wyjścia) - przestawiony na najbliższe pole poza nim 31,14 (W4 Krew kasztelana: powiedz Borgarowi)
 
 ## Gdzie nie wiadomo, co dalej
@@ -396,73 +1614,72 @@ Chwile, gdy krok fabuły szedł gdzie indziej, niż wskazywał dziennik / kompas
 - dzień 20 15:10: brak drogi do TAWERNA (Borgar)
 - dzień 21 20:05: kompas bez celu (cel: „Skradziona szkatułka”)
 - dzień 32 7:08: krok W4 „Zejdź do piwnicy tawerny (za luźną cegłą)”: cegła nie otwiera się, dopóki Borgar w „Pogadaj” nie usłyszy „Zapytaj wprost o zamek” - krok o tym nie mówi (W4 Krew kasztelana: krata w piwnicy)
-- dzień 61 21:33: sen u dziadka: „Posłanie (sen)” nie dało spać o 21:33
 
 ## Mielenie
 
-- Zmiany u Borgara: 25 (oceny: 4×1, 5×24) - średnio 131 G, napiwki razem 1519 G
+- Zmiany u Borgara: 24 (oceny: 4×2, 5×22) - średnio 130 G, napiwki razem 1448 G
 - Od początku rozdziału 1 do spłaty: 20 dni gry, w tym 20 zmian
 - Dni z czekaniem w tawernie na zmianę: 24
 
 ## Ostatnie wpisy autopilota
 
-    d62 15:06 ▶ Schodzę: piętro 5 → 6 - Podziemia: do piętra 50 (najgłębiej 16)
-    d62 15:06 ▶ Schodzę niżej (piętro 6) - Podziemia: do piętra 50 (najgłębiej 16)
-    d62 16:13 ▶ Jem - sytość 49
-    d62 16:13 ▶ Jem: Jagody - głód
-    d62 AP zjadł Jagody x1
-    d62 16:13 ▶ Schodzę: piętro 6 → 7 - Podziemia: do piętra 50 (najgłębiej 16)
-    d62 16:13 ▶ Schodzę niżej (piętro 7) - Podziemia: do piętra 50 (najgłębiej 16)
-    d62 17:03 ▶ Opatruję ranę - Podziemia: do piętra 50 (najgłębiej 16), życie 70%
-    d62 17:04 opatrunek założony (życie 90%)
-    d62 17:04 ▶ Schodzę: piętro 7 → 8 - Podziemia: do piętra 50 (najgłębiej 16)
-    d62 17:04 ▶ Schodzę niżej (piętro 8) - Podziemia: do piętra 50 (najgłębiej 16)
-    d62 17:50 ▶ Opatruję ranę - Podziemia: do piętra 50 (najgłębiej 16), życie 78%
-    d62 17:50 opatrunek założony (życie 98%)
-    d62 17:51 ▶ Schodzę: piętro 8 → 9 - Podziemia: do piętra 50 (najgłębiej 16)
-    d62 17:51 ▶ Schodzę niżej (piętro 9) - Podziemia: do piętra 50 (najgłębiej 16)
-    d62 18:52 ▶ Ćwiczę na piętrze 9 (doświadczenie przed niższymi) - po zgonach na piętrze 11, do poziomu 10
-    d62 18:52 ▶ Walczę: szczur - ćwiczenie
-    d62 18:55 ▶ Walczę: pajak - ćwiczenie
-    d62 18:58 ▶ Ćwiczę na piętrze 9 (doświadczenie przed niższymi) - po zgonach na piętrze 11, do poziomu 10
-    d62 19:51 ▶ Walczę: szczur - ćwiczenie
-    d62 19:54 ▶ Ćwiczę na piętrze 9 (doświadczenie przed niższymi) - po zgonach na piętrze 11, do poziomu 10
-    d62 20:08 ▶ Walczę: pajak - ćwiczenie
-    d62 20:09 ▶ Walczę: szczur - ćwiczenie
-    d62 20:11 ▶ Walczę: pajak - ćwiczenie
-    d62 20:17 ▶ Ćwiczę na piętrze 9 (doświadczenie przed niższymi) - po zgonach na piętrze 11, do poziomu 10
-    d62 20:25 ▶ Walczę: szczur - ćwiczenie
-    d62 20:26 ▶ Ćwiczę na piętrze 9 (doświadczenie przed niższymi) - po zgonach na piętrze 11, do poziomu 10
-    d62 20:42 ▶ Jem - sytość 50
-    d62 20:42 ▶ Jem: Dzikie jabłka - głód
-    d62 AP zjadł Dzikie jabłka x1
-    d62 20:43 ▶ Ćwiczę na piętrze 9 (doświadczenie przed niższymi) - po zgonach na piętrze 11, do poziomu 10
-    d62 21:09 ▶ Walczę: pajak - ćwiczenie
-    d62 21:18 nie dosięgnę: pajak - zostawiam
-    d62 21:18 ▶ Ćwiczę na piętrze 9 (doświadczenie przed niższymi) - po zgonach na piętrze 11, do poziomu 10
-    d62 21:21 ▶ Walczę: pajak - ćwiczenie
-    d62 21:29 ▶ Ćwiczę na piętrze 9 (doświadczenie przed niższymi) - po zgonach na piętrze 11, do poziomu 10
-    d62 22:18 ▶ Walczę: szczur - ćwiczenie
-    d62 22:20 ▶ Ćwiczę na piętrze 9 (doświadczenie przed niższymi) - po zgonach na piętrze 11, do poziomu 10
-    d62 23:07 ▶ Walczę: pajak - ćwiczenie
-    d62 23:10 ▶ Ćwiczę na piętrze 9 (doświadczenie przed niższymi) - po zgonach na piętrze 11, do poziomu 10
-    d63 1:37 ▶ Jem - sytość 50
-    d63 1:37 ▶ Jem: Dzikie jabłka - głód
-    d63 AP zjadł Dzikie jabłka x1
-    d63 1:37 ▶ Ćwiczę na piętrze 9 (doświadczenie przed niższymi) - po zgonach na piętrze 11, do poziomu 10
-    d63 6:38 ▶ Jem - sytość 50
-    d63 6:38 ▶ Jem: Dzikie gruszki - głód
-    d63 AP zjadł Dzikie gruszki x1
-    d63 6:39 ▶ Ćwiczę na piętrze 9 (doświadczenie przed niższymi) - po zgonach na piętrze 11, do poziomu 10
-    d63 10:20 ▶ Jem - sytość 50
-    d63 10:20 ▶ Jem: Dzikie gruszki - głód
-    d63 AP zjadł Dzikie gruszki x1
-    d63 10:20 ▶ Ćwiczę na piętrze 9 (doświadczenie przed niższymi) - po zgonach na piętrze 11, do poziomu 10
-    d63 18:52 ▶ Opatruję ranę - Podziemia: do piętra 50 (najgłębiej 16), życie 100%
-    d63 18:53 opatrunek założony (życie 100%)
-    d63 18:53 ▶ Schodzę: piętro 9 → 10 - Podziemia: do piętra 50 (najgłębiej 16)
-    d63 18:53 ▶ Schodzę niżej (piętro 10) - Podziemia: do piętra 50 (najgłębiej 16)
-    d63 19:37 ▶ Schodzę: piętro 10 → 11 - Podziemia: do piętra 50 (najgłębiej 16)
-    d63 19:37 ▶ Schodzę niżej (piętro 11) - Podziemia: do piętra 50 (najgłębiej 16)
-    d63 19:56 ▶ Schodzę: piętro 11 → 12 - Podziemia: do piętra 50 (najgłębiej 16)
-    d63 19:56 ▶ Schodzę niżej (piętro 12) - Podziemia: do piętra 50 (najgłębiej 16)
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 AP nie ma już: herb
+    d58 12:39 idę: Podgrodzie → Kruczogród (cel: Krucze Turnie)

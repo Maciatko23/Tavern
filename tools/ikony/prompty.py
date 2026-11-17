@@ -641,3 +641,8 @@ PROMPTY.update({
     386: "large flat round grey stone amulet with a black raven carved on it, hanging on a short cord, front view",
     487: "one single wolf fang: a long curved pointed ivory-white tooth, slightly yellowed at the root, isolated object, diagonal",
 })
+# ---- 2026-11-17 (the user): item 93 is the string (Sznurek) - a new twine icon; the coiled rope went to the new Lina (492)
+PROMPTY.update({
+    93: "a small round ball of thin pale beige flax twine, neatly wound string lines, one loose end of string hanging down, light tan and cream colours",
+    492: "coiled brown hemp rope",
+})

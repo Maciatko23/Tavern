@@ -278,7 +278,7 @@
  * JAK SIĘ Z TYM PRACUJE (przycisk akcji, twarzą do kratki)
  *   Oczyszczona ziemia: po kolei "Odpocznij" (tylko na trawie), "Wytwórz...", "Wykop ziemię",
  *                       "Zagrab ziemię" (grabie) i na końcu "Postaw...".
- *                       "Wytwórz..." to młotek i lina bez budynku (wszystkie inne narzędzia powstają w warsztacie);
+ *                       "Wytwórz..." to młotek, sznurek i lina bez budynku (wszystkie inne narzędzia powstają w warsztacie);
  *                       "Postaw..." to namiot, wiadro i leśne legowisko - stają od razu, bez młotka.
  *                       Prawdziwe budynki (młotek + plac budowy) są tylko pod klawiszem Q, nie w menu ziemi.
  *   Zagrabiona ziemia:  "Wytwórz...", "Wykop ziemię", "Zaoraj ziemię" (motyka), "Postaw...".
@@ -434,7 +434,7 @@
  *   do 40%; w tablicy BUILDINGS: sleepRestore, sleepBad). Rozbierz zwraca 3 gałęzie i len.
  *
  * NAMIOT (spanie w terenie)
- *   Garbarnia szyje namiot (skóry, lina, drewno; można mieć tylko jeden). Namiot to
+ *   Garbarnia szyje namiot (skóry, sznurek, drewno; można mieć tylko jeden). Namiot to
  *   przedmiot: w menu ziemi "Postaw..." > Namiot stawiasz go od razu, bez młotka
  *   i placu budowy. Przy rozstawionym namiocie (przycisk akcji) jest "Prześpij noc":
  *   ekran gaśnie, czas leci do rana (godzina z wtyczki SurvivalHUD), wracają wszystkie
@@ -576,7 +576,8 @@
         honey: 76, cabbage: 73, stew: 130, cabbageSoup: 131, mushroomSoup: 132, porridge: 133, grilledMushrooms: 134, bakedCheese: 135, berryPie: 136, mead: 137, bucket: 138, cauldronItem: 141, shears: 142, steel: 143, tongs: 144, bird: 145, feathers: 146,
         cone: 147, pineSeed: 148, nettle: 149, yarrow: 150, garlic: 151, bandage: 152, nettleSoup: 153, spear: 154, shield: 155, club: 156, rawDeer: 157, roastDeer: 158, rawBoar: 159, roastBoar: 160, rawWolf: 161, roastWolf: 162, sinew: 163, wildApple: 139, wildPear: 140, clay: 164, rawPot: 165, dryPot: 166, firedPot: 167,
         rawBear: 168, roastBear: 169, bearHide: 170, jacket: 171,   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
-        herring: 173, cod: 174   // (2026-10-14) the sea fish of the harbour (Map125, <Water:salt>): Przystan.js, Farming_Plots.goFishing
+        herring: 173, cod: 174,   // (2026-10-14) the sea fish of the harbour (Map125, <Water:salt>): Przystan.js, Farming_Plots.goFishing
+        lina: 492   // (2026-11-17, the user) 93 is the string (Sznurek, "rope" in the code); ten strings braid the thick rope (Lina) for the well
     };
     // icon indices used in popup()/complain() calls that are not tied to a specific item (SurvivalHUD's stamina icon, Needs' thirst/hunger icons)
     const ICON = { stamina: 82, thirst: 391, hunger: 390 };
@@ -971,6 +972,21 @@
     const RAW_FISH = () => [ITEM.fish, ITEM.herring, ITEM.cod];
     const FISH_LABEL = "surowa ryba (dowolna)";
     const fishCount = () => RAW_FISH().reduce((t, id) => t + countOf(id), 0);
+    // (2026-11-17, the user: "sznurek można robić z lnu lub pokrzywy lub z kombinacji") a recipe's r.any: groups of items that stand in
+    // for one another, [{ ids, n, name, icon }] - any mix of the ids pays the n pieces; spent in the order of ids (the string: the
+    // nettle first, it wilts - then the flax fibre). name: the cost line's words, icon: the item whose icon the line shows
+    const anyGroups = r => (r && r.any) || [];
+    const anyCount = g => g.ids.reduce((t, id) => t + countOf(id), 0);
+    const anyIcon = g => g.icon || g.ids[0];
+    function spendAny(g, n) {
+        for (const id of g.ids) {
+            const take = Math.min(n, countOf(id));
+            if (take > 0) { $gameParty.loseItem(itemOf(id), take, false); n -= take; }
+            if (n <= 0) break;
+        }
+    }
+    // the cost rows of a recipe's groups (k of the recipe at once), like costRows: [icon, amount, in the bag, name]
+    const anyRows = (r, k) => anyGroups(r).map(g => [itemOf(anyIcon(g)).iconIndex, g.n * (k || 1), anyCount(g), g.name]);
     const QUEUE_MAX = 9;
     // "2 godz. 15 min", "40 min" (rounded up to 5 minutes)
     function clockText(hours) {
@@ -1175,9 +1191,9 @@
         fx, later, lockPlayer, swingThen, NO_BUILD, missingOf, menuHooks, hasClock, clockHours, FUEL_MAX, FUEL_START,
         FUEL_PER_WOOD, FUEL_PER_BRANCH, SMOULDER_HOURS, weatherHere, rainingHere, RAW_MEATS, MEAT_LABEL, meatCount, QUEUE_MAX,
         RAW_FISH, FISH_LABEL, fishCount, clockText, hoursText, IMPROVE, costRows, targetTile, MENU_MARGIN, hash2, BUILD_RANGE,
-        landHeld, landRefusal, noBuildText, landOwned, buildRegion };
+        landHeld, landRefusal, noBuildText, landOwned, buildRegion, anyGroups, anyCount, anyIcon, spendAny, anyRows };
     const API = window.Farming = T.register("Farming", { plainPlot, addMenuHook: fn => menuHooks.push(fn), addLandRule, landHeld, landRefusal, noBuildText, landOwned, buildRegion, GATHER, QUEUE_MAX, BUILD_MAPS,
-        NO_BUILD, IMPROVE, RAW_MEATS, meatCount, MEAT_LABEL, RAW_FISH, fishCount, FISH_LABEL, BUSH_SHARE, MUSHROOM_POOL, MUSHROOM_LIFE, BUCKET_REACH, HUT_MAP,
+        NO_BUILD, IMPROVE, RAW_MEATS, meatCount, MEAT_LABEL, RAW_FISH, fishCount, FISH_LABEL, anyGroups, anyCount, BUSH_SHARE, MUSHROOM_POOL, MUSHROOM_LIFE, BUCKET_REACH, HUT_MAP,
         HUT_ROOM, hutOf, hutDoorAt, isHutInterior, geoOf, cellsOfGeo, isSolidCell, yardInterior, solidAt, CROPS, BUILDINGS,
         buildingAt, canMax, clockHours, seasonIndex, seasonOf, SEASON_NAMES, ITEM, hash2, HAND_RECIPES, BUILD_RANGE, CROP_LIFT,
         TILE, farm, itemOf, key, mirrorGeo, onRing, today, SMOULDER_HOURS, rainingHere });

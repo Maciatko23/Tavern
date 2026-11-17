@@ -27,8 +27,8 @@ const OUT = __dirname + "/";
         const iconsDrawn = await ev(`new Promise(res => { const bmp = ImageManager.loadSystem("IconSet"); const chk = () => { if (!bmp.isReady()) return setTimeout(chk, 50); const out = []; for (let i = 409; i <= 416; i++) { let n = 0; const d = bmp.context.getImageData((i % 16) * 32, Math.floor(i / 16) * 32, 32, 32).data; for (let k = 3; k < d.length; k += 4) if (d[k] > 0) n++; out.push(n); } res(out); }; chk(); })`);
         check("the 8 new icons are drawn in the IconSet", iconsDrawn.every(n => n > 60), iconsDrawn);
         const recipes = await J(`({ hand: Farming.HAND_RECIPES.map(r => r.id), bench: Farming.BUILDINGS.workbench.recipes.map(r => r.id), pot: Farming.BUILDINGS.cauldron.recipes.map(r => r.id) })`);
-        check("by hand: a bandage, nettle fibre (no shelling of pine seeds since 2026-11-16); the workbench makes the spear; the cauldron cooks nettle soup",
-            ["bandage", "nettle_fiber"].every(id => recipes.hand.includes(id)) && !recipes.hand.includes("pine_seeds") && recipes.bench.includes("spear") && recipes.pot.includes("nettle_soup"), recipes);
+        check("by hand: a bandage, no nettle fibre (2026-11-17: the nettle goes into the string itself) and no shelling of pine seeds (2026-11-16); the workbench makes the spear; the cauldron cooks nettle soup",
+            recipes.hand.includes("bandage") && !recipes.hand.includes("nettle_fiber") && !recipes.hand.includes("pine_seeds") && recipes.bench.includes("spear") && recipes.pot.includes("nettle_soup"), recipes);
 
         // ================= 2. cones under the pines, herbs by season =================
         const cones = await J(`(function(){
@@ -66,11 +66,11 @@ const OUT = __dirname + "/";
         check("yarrow, herbs and flax make a bandage", await ev(`Farming.craftManual(null, ${hand("bandage")})`));
         await frames(120);
         check("  +1 bandage", (await count(152)) === 1);
-        const f0 = await count(92);
-        await give(149, 3);
-        check("nettle stalks give fibre", await ev(`Farming.craftManual(null, ${hand("nettle_fiber")})`));
+        const [s0, n0b] = [await count(93), await count(149)];
+        await give(149, 4);
+        check("nettle stalks twist into a string (2026-11-17: 'Skręć sznurek' takes flax and nettle in any mix)", await ev(`Farming.craftManual(null, ${hand("rope")})`));
         await frames(120);
-        check("  +2 fibre", (await count(92)) === f0 + 2);
+        check("  +1 string, the 4 nettles spent", (await count(93)) === s0 + 1 && (await count(149)) === n0b, { str: await count(93), nettle: await count(149) });
 
         // ================= 4. planting =================
         await ev("$gameSystem._dayNightDay = 40; $gameSystem.setStamina(100); 0");

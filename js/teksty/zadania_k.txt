@@ -357,12 +357,12 @@ Kapral Wit: „Po północy to nie ja jestem w tym mieście najdziwniejszy. Kto�
 zadania.K13.title = Sznur dzwonu
 zadania.K13.where = rynek → dzwonnica
 zadania.K13.when = rano, do 12:00
-zadania.K13.desc = Sznur dzwonu się przetarł. Dwie liny przed południem - inaczej pierwszy raz w historii miasta nie zadzwoni południe.
+zadania.K13.desc = Sznur dzwonu się przetarł. Dwa sznurki przed południem - inaczej pierwszy raz w historii miasta nie zadzwoni południe.
 [zadania.K13.offer.say]
 Sznur się przetarł. Jeszcze jedno szarpnięcie i pęknie. A w południe trzeba dzwonić. Zawsze trzeba.
-Przynieś mi dwie liny przed dwunastą. Proszę.
+Przynieś mi dwa sznurki przed dwunastą. Spletę z nich nowy sznur. Proszę.
 
-zadania.K13.offer.yes = Przyniosę liny.
+zadania.K13.offer.yes = Przyniosę sznurki.
 zadania.K13.offer.no = Nie zdążę.
 [zadania.K13.offer.accept]
 Przed dwunastą. Pamiętaj.
@@ -370,12 +370,12 @@ Przed dwunastą. Pamiętaj.
 [zadania.K13.offer.decline]
 Wytrzyma. Musi.
 
-zadania.K13.steps.0.text = Przynieś Ambrożemu 2× Lina przed 12:00 (ławka na rynku, przed południem przy dzwonnicy).
+zadania.K13.steps.0.text = Przynieś Ambrożemu 2× Sznurek przed 12:00 (ławka na rynku, przed południem przy dzwonnicy).
 [zadania.K13.steps.0.remind]
-Dwie liny, chłopcze. Słońce idzie w górę.
+Dwa sznurki, chłopcze. Słońce idzie w górę.
 
 [zadania.K13.steps.0.hero]
-> Dwie liny. Zdążyłem?
+> Dwa sznurki. Zdążyłem?
 
 [zadania.K13.steps.0.done]
 Zdążyłeś. Południe zadzwoni, jak zawsze. Jak od trzystu lat.
@@ -687,10 +687,10 @@ Spokój to dobra wiadomość. Masz piętnaście groszy.
 zadania.K26.title = Pierścionek w studni
 zadania.K26.where = studnia na rynku → dno studni (Map118)
 zadania.K26.when = za dnia, nie w deszcz
-zadania.K26.desc = Zosia wrzuciła do studni na rynku pierścionek matki - „chciałam zobaczyć, czy plusknie”. Trzeba zejść na dno po dwóch linach (z boku studni, od wschodu).
+zadania.K26.desc = Zosia wrzuciła do studni na rynku pierścionek matki - „chciałam zobaczyć, czy plusknie”. Trzeba zejść na dno po linie (z boku studni, od wschodu).
 [zadania.K26.offer.say]
 (Zosia ma czerwone oczy.) Wrzuciłam do studni pierścionek mamy. Chciałam zobaczyć, czy plusknie... Nie pluskło.
-Mama jeszcze nie wie. Zejdziesz po niego? Tata mówi, że studnia głęboka na dwie liny.
+Mama jeszcze nie wie. Zejdziesz po niego? Tata mówi, że bez porządnej liny nie ma co tam schodzić.
 
 zadania.K26.offer.yes = Zejdę po niego.
 zadania.K26.offer.no = Nie teraz.
@@ -700,7 +700,7 @@ Naprawdę? Z boku studni są kamienie, tam się wiąże linę. Tylko nie mów ma
 [zadania.K26.offer.decline]
 ...Dobrze. Może sam wypłynie.
 
-zadania.K26.steps.0.text = Zejdź na dno studni na rynku (2× Lina; z boku studni, stojąc na wschód od niej) i znajdź pierścionek - za dnia, nie w deszcz.
+zadania.K26.steps.0.text = Zejdź na dno studni na rynku (1× Lina; z boku studni, stojąc na wschód od niej) i znajdź pierścionek - za dnia, nie w deszcz.
 [zadania.K26.steps.0.early]
 Na dnie ciemno choć oko wykol. Zejdę za dnia.
 
@@ -1087,7 +1087,7 @@ Deski, gwoździe, młotek. Daszek czeka. Ja też.
 > Deski, gwoździe. I młotek. Przytrzymaj.
 
 [zadania.K42.steps.0.done]
-Stoi! Jak nowy! No, prawie jak nowy. Masz, dwie liny - mocne, z portu. Prawie nieużywane.
+Stoi! Jak nowy! No, prawie jak nowy. Masz, dwa sznurki - mocne, z portu. Prawie nieużywane.
 
 # K43, „Drewno na ognisko”
 zadania.K43.title = Drewno na ognisko
@@ -1123,16 +1123,16 @@ Tak mówili oficerowie. Dlatego tu przypływają statki z ludźmi, którzy nie w
 Opowieść Darina
 Darin słyszał od oficerów na kontynencie, że Serce, o które walczą królowie, leży pod twierdzą na wyspie - pod twierdzą, która czegoś strzegła. Tawerna stoi na dawnym zamku...
 
-# K44, „Lina dla Zbycha”
-zadania.K44.title = Lina dla Zbycha
+# K44, „Sznurek dla Zbycha”
+zadania.K44.title = Sznurek dla Zbycha
 zadania.K44.where = Tawerna, przy kominku w sieni (wieczorem); drewutnia na Podgrodziu
 zadania.K44.when = 17:30–21:30
-zadania.K44.desc = Zbychowi pękła lina do wiązania drewna, a nowej nie ma za co kupić.
+zadania.K44.desc = Zbychowi pękł sznurek do wiązania drewna, a nowego nie ma za co kupić.
 [zadania.K44.offer.say]
-Pękła mi lina. Drewno wiążę teraz łykiem i rozłazi się po drodze.
-Dwie liny, chłopcze. Za to dostaniesz węgiel z mielerza - kowal płaci za taki uczciwie.
+Pękł mi sznurek. Drewno wiążę teraz łykiem i rozłazi się po drodze.
+Dwa sznurki, chłopcze. Za to dostaniesz węgiel z mielerza - kowal płaci za taki uczciwie.
 
-zadania.K44.offer.yes = Przyniosę liny.
+zadania.K44.offer.yes = Przyniosę sznurki.
 zadania.K44.offer.no = Nie teraz.
 [zadania.K44.offer.accept]
 Dobrze. Rąbię od świtu do zmroku, a wieczorem mnie tu znajdziesz.
@@ -1140,12 +1140,12 @@ Dobrze. Rąbię od świtu do zmroku, a wieczorem mnie tu znajdziesz.
 [zadania.K44.offer.decline]
 Ech. To jeszcze trochę łyka.
 
-zadania.K44.steps.0.text = Przynieś Zbychowi 2× Lina (tawerna, wieczorem).
+zadania.K44.steps.0.text = Przynieś Zbychowi 2× Sznurek (tawerna, wieczorem).
 [zadania.K44.steps.0.remind]
-Dwie liny. Łyko już się kończy.
+Dwa sznurki. Łyko już się kończy.
 
 [zadania.K44.steps.0.hero]
-> Liny. Dwie.
+> Sznurki. Dwa.
 
 [zadania.K44.steps.0.done]
 Mocne! Masz, trzy worki węgla. Z mojego mielerza, najlepszy w okolicy.
@@ -1345,7 +1345,7 @@ K47
 
 [zadania.K48.offer.say]
 Ten sztorm, co i ciebie przyniósł, porwał mi sieci na strzępy. Łatam, łatam, a dziur coraz więcej.
-Sześć garści włókna i dwie liny. Załatam i znowu pójdą w morze.
+Sześć garści włókna i dwa sznurki. Załatam i znowu pójdą w morze.
 
 zadania.K48.offer.yes = Przyniosę.
 zadania.K48.offer.no = Nie teraz.
@@ -1355,12 +1355,12 @@ Dobry z ciebie chłopak. Stach może być dumny.
 [zadania.K48.offer.decline]
 Jak znajdziesz chwilę, to wiesz, gdzie mnie szukać.
 
-zadania.K48.steps.0.text = Przynieś Jankowi 6× Włókno i 2× Lina na sieci (tawerna, wieczorem).
+zadania.K48.steps.0.text = Przynieś Jankowi 6× Włókno i 2× Sznurek na sieci (tawerna, wieczorem).
 [zadania.K48.steps.0.remind]
-Sześć garści włókna i dwie liny. Bez nich sieć to same dziury.
+Sześć garści włókna i dwa sznurki. Bez nich sieć to same dziury.
 
 [zadania.K48.steps.0.hero]
-> Włókno i liny, na sieci.
+> Włókno i sznurki, na sieci.
 
 [zadania.K48.steps.0.done]
 Ha! Teraz to będzie sieć. Masz, za fatygę. I wędzonkę na drogę, prosto z mojej wędzarni.

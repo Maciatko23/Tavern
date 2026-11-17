@@ -34,7 +34,7 @@ prints = Świeże ślady butów w kurzu. Kilku ludzi, ciężkie, okute buty.
 campCold = Wygasłe ognisko. Popiół zimny - spali tu i poszli w dół.
 campLeft = Ich ognisko. Jeszcze ciepłe.
 bed = Posłanie z wełnianego koca. Zostawili je.
-rope = Porzucona lina. Komuś się już nie przydała.
+rope = Porzucony zwój sznurka. Komuś się już nie przydał.
 [noteCamp]
 Zimne ognisko w ruinach
 Na piętrze {f} wygasłe ognisko i posłanie. Spali tu - i poszli dalej w dół.
@@ -460,7 +460,7 @@ kod.buildRuins.2 = Białe oko kredą
 kod.buildFloor.0 = Ślady butów
 kod.buildFloor.1 = Proporczyk z czarnym koniem
 kod.buildFloor.2 = Białe oko kredą
-kod.buildFloor.3 = Porzucona lina
+kod.buildFloor.3 = Porzucony sznurek
 kod.buildFloor.4 = Linka z dzwonkami
 # buildGate
 kod.buildGate.0 = Ślady butów
@@ -470,7 +470,7 @@ kod.buildGate.2 = Białe oko kredą
 kod.buildHeart.0 = Wygasłe ognisko
 
 # (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
-ropeTaken = Lina ×1
+ropeTaken = Sznurek ×1
 f9Names.gra = z gry
 f9Names.baltazar = ludzie Baltazara
 f9Names.grum = Grum z najemnikami

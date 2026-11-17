@@ -86,7 +86,7 @@
                 { id: "knife", name: "Zrób nóż kamienny", inputs: [[ITEM.wood, 1], [ITEM.stone, 2], [ITEM.branch, 1]], output: [ITEM.knifeStone, 1], manual: true, unique: true, also: [ITEM.knifeIron],
                     hours: 1, stamina: 3, startSe: "Hammer", desc: "Łupany kamień na drewnianej rękojeści. Do oprawiania zwierzyny." },
                 { id: "rod", name: "Zrób wędkę", inputs: [[ITEM.wood, 2], [ITEM.rope, 2], [ITEM.branch, 1]], output: [ITEM.rod, 1], manual: true, unique: true,
-                    hours: 1, stamina: 3, startSe: "Hammer", desc: "Długi kij, żyłka z liny i haczyk z drzazgi. Do łowienia w stawie." },
+                    hours: 1, stamina: 3, startSe: "Hammer", desc: "Długi kij, żyłka ze sznurka i haczyk z drzazgi. Do łowienia w stawie." },
                 { id: "saw", name: "Zmontuj piłę", inputs: [[ITEM.sawBlade, 1], [ITEM.wood, 2], [ITEM.rope, 1]], output: [ITEM.saw, 1], manual: true, unique: true,
                     hours: 1, stamina: 4, startSe: "Hammer", desc: "Żelazne ostrze na drewnianej rączce. W tartaku tnie deski szybciej i daje ich więcej." },
                 { id: "axe_iron", name: "Zmontuj żelazną siekierę", inputs: [[ITEM.axeHead, 1], [ITEM.planks, 1]], output: [ITEM.ironAxe, 1], manual: true, unique: true,
@@ -96,17 +96,17 @@
                 { id: "sling", name: "Zrób procę", inputs: [[ITEM.rope, 1], [ITEM.fiber, 2], [ITEM.branch, 2]], output: [ITEM.sling, 1], manual: true, unique: true,
                     hours: 1, stamina: 3, startSe: "Item1", desc: "Sznur z lnianą kieszonką na kamień. Ustrzelisz nią zająca, a ze skóry zrobisz legowisko. Strzelasz w trybie walki (Tab) klawiszem O, a amunicją są kamienie." },
                 { id: "bow", name: "Zrób łuk", inputs: [[ITEM.wood, 2], [ITEM.rope, 1], [ITEM.sinew, 2], [ITEM.rawHide, 1]], output: [ITEM.bow, 1], manual: true, unique: true,
-                    hours: 2, stamina: 5, startSe: "Hammer", desc: "Giętkie drewno, cięciwa ze ścięgien i lina, skórzany uchwyt. Bije dalej i mocniej niż proca, także w jelenia. Potrzebuje strzał." },
+                    hours: 2, stamina: 5, startSe: "Hammer", desc: "Giętkie drewno, cięciwa ze ścięgien i sznurek, skórzany uchwyt. Bije dalej i mocniej niż proca, także w jelenia. Potrzebuje strzał." },
                 { id: "arrows", name: "Zrób strzały", inputs: [[ITEM.branch, 3], [ITEM.stone, 2], [ITEM.fiber, 2]], output: [ITEM.arrows, 6], manual: true,
                     hours: 1, stamina: 3, startSe: "Item1", desc: "Proste gałązki z kamiennym grotem i lnianym opierzeniem. Sześć sztuk naraz." },
                 { id: "arrows_feather", name: "Zrób strzały z lotkami", inputs: [[ITEM.branch, 3], [ITEM.stone, 2], [ITEM.feathers, 3]], output: [ITEM.arrows, 12], manual: true,
                     hours: 1, stamina: 3, startSe: "Item1", desc: "Te same gałązki i groty, ale z lotkami z prawdziwych piór (ptaki z procy): dwanaście sztuk naraz." },
                 { id: "spear", name: "Zrób oszczep", inputs: [[ITEM.wood, 1], [ITEM.stone, 2], [ITEM.rope, 1]], output: [ITEM.spear, 1], manual: true, unique: true,
-                    hours: 1, stamina: 4, startSe: "Hammer", desc: "Długie drzewce z ostrym kamiennym grotem przywiązanym liną. Broń z najdłuższym zasięgiem: w trybie walki (Tab) szybkie pchnięcia klawiszem O (ponad 2 pola), przytrzymany O - mocne pchnięcie." },
+                    hours: 1, stamina: 4, startSe: "Hammer", desc: "Długie drzewce z ostrym kamiennym grotem przywiązanym sznurkiem. Broń z najdłuższym zasięgiem: w trybie walki (Tab) szybkie pchnięcia klawiszem O (ponad 2 pola), przytrzymany O - mocne pchnięcie." },
                 { id: "club", name: "Zrób pałkę", inputs: [[ITEM.wood, 1], [ITEM.fiber, 1]], output: [ITEM.club, 1], manual: true, unique: true,
                     hours: 1, stamina: 3, startSe: "Hammer", desc: "Gruba, sękata gałąź z uchwytem owiniętym lnem. Najprostsza broń: słabsza od siekiery, ale szybka i lekka - w trybie walki (Tab) atak klawiszem O, seria ciosów, przytrzymany O - mocny cios." },
                 { id: "shield", name: "Zrób drewnianą tarczę", inputs: [[ITEM.wood, 2], [ITEM.branch, 2], [ITEM.rope, 2]], output: [ITEM.shield, 1], manual: true, unique: true,
-                    hours: 2, stamina: 5, startSe: "Hammer", desc: "Grube deski związane liną, z uchwytem. Wystarczy mieć ją w torbie: w trybie walki (Tab) klawisz P zasłania (przyjmuje trzy czwarte ciosu i mniej męczy), P tuż przed ciosem odbija atak." }
+                    hours: 2, stamina: 5, startSe: "Hammer", desc: "Grube deski związane sznurkiem, z uchwytem. Wystarczy mieć ją w torbie: w trybie walki (Tab) klawisz P zasłania (przyjmuje trzy czwarte ciosu i mniej męczy), P tuż przed ciosem odbija atak." }
             ],
             repairs: true,   // plus one "Napraw: ..." line for every tool that has been used (Durability.js)
             desc: "Stół, na którym powstają, są montowane i naprawiane wszystkie narzędzia: kamienne od razu, a żelazne z części wykutych w kuźni." },
@@ -125,7 +125,7 @@
         campfire: { name: "Ognisko", camp: true, anywhere: true, cost: [[ITEM.wood, 6], [ITEM.stone, 6]], w: 1, stamina: 5, hits: 5, image: "Farm_Campfire_L", rest: 40, vent: 48,
             fire: { y: 13, size: 1.25, glow: 2.2, light: 340, smoke: true },   // animated flames (y: px above the foot of the picture), steady smoke, a big glow
             upgrade: { to: "tripod", dx: 0, name: "Dobuduj trójnóg", cost: [[ITEM.branch, 3], [ITEM.rope, 1]], stamina: 3, done: "Dobudowano trójnóg",
-                help: "Trzy kijki związane liną staną nad ogniem. Zawiesisz na haczyku jedzenie i możesz odejść: piecze się samo. Nie trzeba młotka." },
+                help: "Trzy kijki związane sznurkiem staną nad ogniem. Zawiesisz na haczyku jedzenie i możesz odejść: piecze się samo. Nie trzeba młotka." },
             recipes: [
                 { id: "roast_deer", name: "Upiecz mięso jelenia", doing: "Trwa pieczenie", inputs: [[ITEM.rawDeer, 1]], output: [ITEM.roastDeer, 1], hours: 0.75, stamina: 1, startSe: "Fire2", desc: "Kawał dziczyzny nad żarem, trzy kwadranse przy ogniu. Syci dłużej niż zając." },
                 { id: "roast_boar", name: "Upiecz mięso dzika", doing: "Trwa pieczenie", inputs: [[ITEM.rawBoar, 1]], output: [ITEM.roastBoar, 1], hours: 0.75, stamina: 1, startSe: "Fire2", desc: "Tłusty kawał dzika nad żarem, trzy kwadranse przy ogniu. Syci najdłużej." },
@@ -148,7 +148,7 @@
             fire: { y: 13, size: 1.25, glow: 2.2, light: 340, smoke: true }, hang: { y: 51, x: 0, rope: 59 },   // the food hangs on a short rope from the hook (px above the foot of the picture: the top of the icon, the top of the rope)
             upgrade: { to: "cauldron", dx: 1, name: "Zawieś kociołek", cost: [[ITEM.cauldronItem, 1]], stamina: 3, done: "Zawieszono kociołek",
                 help: "Wieszasz na trójnogu kociołek, który niesiesz w plecaku (wykuwa się w kuźni). Potrzebne miejsce 3 × 2 pola wokół ogniska. Kociołek gotuje zupy, gulasz, owsiankę i wywary, ale zajmuje cały ogień: mięsa na patyku już przy nim nie upieczesz (do tego zbuduj drugie ognisko)." },
-            desc: "Trzy kijki i lina nad ogniem. Zawieszasz jedzenie na haczyku i możesz odejść: piecze się samo, a gotowe odbierasz z ognia (albo czekasz obok, siedząc). Później zawiesisz na nim żelazny kociołek." },
+            desc: "Trzy kijki związane sznurkiem nad ogniem. Zawieszasz jedzenie na haczyku i możesz odejść: piecze się samo, a gotowe odbierasz z ognia (albo czekasz obok, siedząc). Później zawiesisz na nim żelazny kociołek." },
         scarecrow: { name: "Strach na wróble", cost: [[ITEM.wood, 3]], w: 1, stamina: 4, hits: 3, image: "Farm_Scarecrow",
             desc: "Rośliny w promieniu 2 kratek rosną o 25% szybciej." },
         // the training dummy (2026-10-14, Combat_Feel.js): in the combat mode it "strikes" slowly, with the warning, so the parry and the
@@ -322,7 +322,7 @@
                 { id: "backpack", name: "Zszyj plecak", inputs: [[ITEM.hide, 3], [ITEM.rope, 2]], output: [ITEM.backpack, 1], manual: true, unique: true, hours: 3, stamina: 5, startSe: "Item1", desc: "Skórzany plecak: zmieścisz w nim więcej." },
                 { id: "cloak", name: "Uszyj płaszcz", inputs: [[ITEM.hide, 2], [ITEM.wool, 4], [ITEM.rope, 1]], output: [ITEM.cloak, 1], manual: true, unique: true, hours: 3, stamina: 5, startSe: "Item1", desc: "Ciepły płaszcz. Zimą nie marzniesz." },
                 { id: "tent", name: "Zszyj namiot", inputs: [[ITEM.hide, 4], [ITEM.rope, 3], [ITEM.wood, 4]], output: [ITEM.tent, 1], manual: true, unique: true, alsoBuilt: "tent", hours: 4, stamina: 8, startSe: "Item1",
-                    desc: "Skóry napięte na czterech żerdziach i zszyte liną. Rozstawisz go tam, gdzie chcesz spać, a rano złożysz i zabierzesz ze sobą." },
+                    desc: "Skóry napięte na czterech żerdziach i zszyte sznurkiem. Rozstawisz go tam, gdzie chcesz spać, a rano złożysz i zabierzesz ze sobą." },
                 // the armour (stage 2 of the fight): worn as the shield is - in the bag (Combat_Fight.js ARMORS), worn out by the blows (Durability.js)
                 { id: "jacket", name: "Uszyj skórzaną kurtkę", inputs: [[ITEM.hide, 3], [ITEM.sinew, 2], [ITEM.rope, 1]], output: [ITEM.jacket, 1], manual: true, unique: true, hours: 3, stamina: 5, startSe: "Item1",
                     desc: "Gruba kurtka z trzech wyprawionych skór, szwy zaciągnięte ścięgnami. Wystarczy mieć ją w torbie: każdy cios, który do ciebie dojdzie, jest o 20% słabszy. Zużywa się od ciosów - naprawisz ją w warsztacie." },
@@ -372,10 +372,12 @@
         barrel: { name: "Beczka na deszczówkę", anywhere: true, action: "Postaw beczkę", cost: [[ITEM.planks, 8], [ITEM.nails, 6]], w: 1, stamina: 6, hits: 12, image: "Farm_Barrel", imageFull: "Farm_Barrel_Full",
             rain: { max: 12, rate: 1.5, in: "w beczce", empty: "Beczka jest pusta" },
             desc: "Duża beczka z desek spiętych obręczami na gwoździach. Stoi na dworze i zbiera deszczówkę: szeroki otwór łapie więcej niż wiadro (półtorej porcji za godzinę deszczu), a mieści 12 porcji. Napijesz się z niej, napełnisz bukłak, konewkę i wiadro albo podlejesz rośliny w pobliżu. Drewno nie przecieka i nie pęka." },
-        well: { name: "Studnia", cost: [[ITEM.stone, 12], [ITEM.planks, 3], [ITEM.rope, 2], [ITEM.bucket, 1]], w: 2, h: 2, stamina: 12, hits: 50, image: "Farm_Well_L", refund: [[ITEM.stone, 6], [ITEM.planks, 1], [ITEM.rope, 1], [ITEM.bucket, 1]],
-            v2: { cost: [[ITEM.stone, 12], [ITEM.planks, 3], [ITEM.rope, 2]], refund: undefined },   // wells put up before the bucket was needed
-            legacy: { w: 2, h: 1, image: "Farm_Well", cost: [[ITEM.stone, 12], [ITEM.planks, 3], [ITEM.rope, 2]], refund: undefined }, water: true,
-            desc: "Czysta woda: napełnisz konewkę albo się napijesz. Do budowy potrzebne jest wiadro." },
+        // (2026-11-17, the user: "z dziesięciu sznurków robi się linę i używa do budowy studni") the well hangs its bucket on the thick
+        // rope (Lina, braided by hand from ten strings), not on two strings; pulled down it gives back no rope (it is cut on the windlass)
+        well: { name: "Studnia", cost: [[ITEM.stone, 12], [ITEM.planks, 3], [ITEM.lina, 1], [ITEM.bucket, 1]], w: 2, h: 2, stamina: 12, hits: 50, image: "Farm_Well_L", refund: [[ITEM.stone, 6], [ITEM.planks, 1], [ITEM.bucket, 1]],
+            v2: { cost: [[ITEM.stone, 12], [ITEM.planks, 3], [ITEM.lina, 1]], refund: [[ITEM.stone, 6], [ITEM.planks, 1]] },   // wells put up before the bucket was needed
+            legacy: { w: 2, h: 1, image: "Farm_Well", cost: [[ITEM.stone, 12], [ITEM.planks, 3], [ITEM.lina, 1]], refund: [[ITEM.stone, 6], [ITEM.planks, 1]] }, water: true,
+            desc: "Czysta woda: napełnisz konewkę albo się napijesz. Do budowy potrzebne są wiadro i lina (spleciona z dziesięciu sznurków: Q, „Spleć linę”)." },
         // the last step of the campfire: only ever made by hanging a forged cauldron on a tripod (noBuild: not on the Q build list)
         cauldron: { name: "Kociołek", cost: [[ITEM.iron, 2], [ITEM.planks, 2], [ITEM.stone, 4]], w: 3, h: 2, stamina: 10, image: "Farm_Cauldron_XL", v2: { image: "Farm_Cauldron_L", ventX: -17, fire: null }, legacy: { w: 2, h: 1, image: "Farm_Cauldron", vent: 46, fire: null },
             vent: 59, ventX: -1, smokes: true, rest: 40, fire: { y: 15, size: 0.9, glow: 1.1, light: 290 }, noBuild: true,
@@ -444,21 +446,25 @@
     for (const r of BUILDINGS.campfire.recipes) r.roast = true;   // sat by the fire with the food on a stick (or hung on the tripod's hook)
 
     // Recipes that need no building: what a person can make with bare hands from what lies on the ground: the hammer (every building
-    // is put up with it, the workbench first), the forest bed, the waterskin, rope, and from the forest floor pine seeds, a bandage and
-    // nettle fibre. All the other tools are made at the workbench. Menu of a free plot > "Wytwórz...".
+    // is put up with it, the workbench first), the waterskin, the string (Sznurek, id "rope" - the saves and the journal know it so), the
+    // thick rope (Lina) braided of ten strings, and from the forest floor a bandage. All the other tools are made at the workbench.
+    // Menu of a free plot > "Wytwórz..." and the Q list's "Budowa" tab.
     const HAND_RECIPES = [
         { id: "hammer", name: "Zrób młotek", inputs: [[ITEM.branch, 5], [ITEM.stone, 2], [ITEM.fiber, 3]], output: [ITEM.hammer, 1], manual: true, unique: true, swing: "crouch",
             hours: 5 / 60, stamina: 3, startSe: "Hammer", desc: "Kamień przywiązany lnem do gałęzi. Bez niego nie postawisz żadnej budowli." },
         { id: "waterskin", name: "Zrób bukłak", inputs: [[ITEM.hide, 1], [ITEM.fiber, 3]], output: [ITEM.skin, 1], manual: true, unique: true, swing: "crouch",
             hours: 1, stamina: 2, startSe: "Item1", desc: "Wyprawiona skóra (z garbarni) zszyta lnem w worek z korkiem. Mieści 4 łyki wody: napełnisz go przy stawie albo studni, a napijesz się klawiszem G lub z menu Przedmioty." },
-        { id: "rope", name: "Skręć linę", inputs: [[ITEM.fiber, 4]], output: [ITEM.rope, 1], manual: true,
-            hours: 1, stamina: 2, startSe: "Item1", desc: "Włókna dzikiego lnu skręcone w mocny sznur." },
-        // from the forest floor: a bandage for a wound (Survival.js), fibre out of nettle stalks (2026-11-16, the user: no shelling of pine
-        // seeds any more - a cone is kindling, or goes into the ground whole: Forestry.js; the forest bed is built at once: BUILDINGS.bedroll)
+        // (2026-11-17, the user: "sznurek można robić z lnu lub pokrzywy lub z kombinacji") 4 pieces of flax fibre and nettle in any mix
+        // (r.any, Farming.js: the nettle goes first - it wilts); the nettle-to-fibre recipe is gone
+        { id: "rope", name: "Skręć sznurek", inputs: [], any: [{ ids: [ITEM.nettle, ITEM.fiber], n: 4, name: "Włókno lub pokrzywa", icon: ITEM.fiber }], output: [ITEM.rope, 1], manual: true,
+            hours: 1, stamina: 2, startSe: "Item1", desc: "Włókna lnu albo łodygi pokrzywy (same albo pomieszane, razem cztery sztuki) skręcone w cienki, mocny sznurek. Do sideł, wędki, wiązań i szycia." },
+        // (2026-11-17, the user) ten strings braided into the thick rope: the well needs it
+        { id: "lina", name: "Spleć linę", inputs: [[ITEM.rope, 10]], output: [ITEM.lina, 1], manual: true,
+            hours: 1, stamina: 3, startSe: "Item1", desc: "Dziesięć sznurków splecionych w grubą, ciężką linę. Uniesie wiadro pełne wody: bez niej nie zbudujesz studni." },
+        // from the forest floor: a bandage for a wound (Survival.js) (2026-11-16, the user: no shelling of pine seeds any more - a cone is
+        // kindling, or goes into the ground whole: Forestry.js; the forest bed is built at once: BUILDINGS.bedroll)
         { id: "bandage", name: "Zrób opatrunek", inputs: [[ITEM.fiber, 2], [ITEM.herb, 2], [ITEM.yarrow, 2]], output: [ITEM.bandage, 1], manual: true, swing: "crouch",
-            hours: 0.25, stamina: 1, startSe: "Item1", desc: "Rozgniecione ziele krwawnika z ziołami, przewiązane lnem. Tamuje krew: leczy ranę (na przykład od dzika). Użyjesz go z menu Przedmioty." },
-        { id: "nettle_fiber", name: "Wyskub włókno z pokrzyw", inputs: [[ITEM.nettle, 3]], output: [ITEM.fiber, 2], manual: true, swing: "crouch",
-            hours: 0.5, stamina: 1, startSe: "Item1", desc: "Łodygi pokrzywy wymoczone i rozdarte na długie włókna. Równie dobre jak len." }
+            hours: 0.25, stamina: 1, startSe: "Item1", desc: "Rozgniecione ziele krwawnika z ziołami, przewiązane lnem. Tamuje krew: leczy ranę (na przykład od dzika). Użyjesz go z menu Przedmioty." }
     ];
 
     // The maps the player may build on (the user's, 2026-09-27: "Gracz może budować tylko na polu dziadka, ale zbierać rzeczy może z

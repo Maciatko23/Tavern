@@ -108,6 +108,40 @@
         }
     }
 
+    // ------------------------------------------------------------------ złoto według źródeł (2026-11-17): każda zmiana sakiewki i skąd przyszła
+    // (Game_Party.gainGold - loseGold goes through it too). The source: the plan's own word (FAB.goldCtx: a shift, the debt, a camp),
+    // else the scene (the quest board, a shop), the bandits' robbery, the underground, a talk or a quest's event. A save loaded after a
+    // death takes back what was earned since it: counted apart (FAB.rep.ledger.reload).
+    function goldSource(d) {
+        if (FAB.goldCtx) return FAB.goldCtx;
+        const sc = SceneManager._scene, n = sc ? sc.constructor.name : "";
+        if (n === "Scene_TavernShift") return "zmiany";
+        if (n === "Scene_QuestBoard") return "zlecenia";
+        if (n === "Scene_BronSklep") return d > 0 ? "sprzedaż" : "zakupy";
+        if (window.Humans && Humans.robbery) return "obrabowany";
+        if (window.Underground && Underground.isUnderground && Underground.isUnderground(mapId())) return "podziemia";
+        if (busy()) return d > 0 ? "zadania i rozmowy" : "wydatki w rozmowach";
+        return d > 0 ? "inne" : "inne wydatki";
+    }
+    const ledger = () => (FAB.rep.ledger = FAB.rep.ledger || { since: { day: day(), hour: +hour().toFixed(2) }, in: {}, out: {}, n: {}, reload: 0, log: [] });
+    FAB.onGold = function(d) {
+        if (!d || FAB.loadingSave) return;
+        const lg = ledger(), src = goldSource(d), side = d > 0 ? lg.in : lg.out;
+        side[src] = (side[src] || 0) + Math.abs(d);
+        lg.n[src] = (lg.n[src] || 0) + 1;
+        lg.log.push([day(), +hour().toFixed(2), src, d, mapId()]);
+        if (lg.log.length > 400) lg.log.splice(0, 100);
+    };
+    if (!FAB.goldHooked) {
+        FAB.goldHooked = true;
+        const _gainGold = Game_Party.prototype.gainGold;
+        Game_Party.prototype.gainGold = function(amount) {
+            const g0 = this._gold, r = _gainGold.apply(this, arguments);
+            try { if (window.FAB && FAB.onGold && this === $gameParty) FAB.onGold(this._gold - g0); } catch (e) { /* (only the counting) */ }
+            return r;
+        };
+    }
+
     // ------------------------------------------------------------------ polityka wyborów: uczciwie i pomocnie
     const LEAVE = /^(Nie teraz|Bywaj|Odejdź|Nic, dzięki|Jeszcze nie|Zostaw|Zostać|Nie, jeszcze nie|Wróć|Anuluj|To wszystko)/;
     const PREFER = [/^Puść go wolno/, /^Zanieś je/, /^Nie sprzedam/, /całą prawdę/i, /^Nie pytam o to, czego nie chcę wiedzieć/, /^Pomogę/, /^Będę przychodził/,
@@ -521,9 +555,9 @@
         if (!window.FoodTable) return out;
         for (const it of $gameParty.items()) {
             if (!it || it.id === ROTTEN) continue;
-            const r = FoodTable.get(it.id);
-            if (!r || !r.eat || r.raw) continue;
-            out.push({ id: it.id, fed: r.fed || 0, water: r.water || 0, stamina: r.stamina || 0, n: $gameParty.numItems(it) });
+            const r = FoodTable.get(it.id), held = AP.hold ? AP.hold(it.id) : 0;   // (a contract's goods: not eaten - qbHold)
+            if (!r || !r.eat || r.raw || $gameParty.numItems(it) <= held) continue;
+            out.push({ id: it.id, fed: r.fed || 0, water: r.water || 0, stamina: r.stamina || 0, n: $gameParty.numItems(it) - held });
         }
         return out;
     }
@@ -534,7 +568,12 @@
         setDoing("Jem: " + $dataItems[list[0].id].name, k === "stamina" ? "siły" : thirsty ? "pragnienie" : "głód");
         return (yield* L.eat(list[0].id, 1)) > 0;
     }
-    function wellLeft() {
+    // (2026-11-17, the player: "a gracz robi wiadra, beczki, garnki i zbiera wodę?") his own well on the plot (Farming "well": 12 stone,
+    // 3 planks, a Lina and a forged bucket over a dug 2x2 pit - AP.PLAN "Studnia", buildWell): no ration there - he drinks his fill
+    // and fills the skin before every trip down; the town's well (2 draws a day) only when he is in town anyway
+    const ownWell = () => builtOn(MAP.field).find(b => b.type === "well") || null;
+    const wellLeft = () => (ownWell() ? 99 : townWellLeft());
+    function townWellLeft() {
         try {
             const R = (Farming.farm().rations) || {}, rk = Object.keys(R).find(k => k.indexOf(MAP.town + ":") === 0 && /Studnia/.test(k));
             const rec = rk ? R[rk] : null;
@@ -569,6 +608,8 @@
             if (!(yield* goMap(MAP.field, why))) return false;
             yield* AP.TASKS.collectJobs();
             if (count(97) < 1) {
+                // (a raw hide: the snares on the plot - bait in, the rabbit out and dressed - and any carcass lying near)
+                if (count(96) < 1) { setDoing("Doglądam wnyków (skóra na bukłak)", why); yield* AP.TASKS.tend(); yield* AP.TASKS.dressCarcasses(); }
                 if (count(96) < 1) { say("bukłak: nie mam surowej skóry (wnyki, pies, upolowane zwierzę)"); return false; }
                 setDoing("Wyprawiam skórę w garbarni (na bukłak)", why);
                 yield* AP.TASKS.craft("tannery", "Wyprawiaj skórę");
@@ -585,6 +626,7 @@
     }
     function* drinkWell(entry) {
         entry = entry || "Napij się";
+        if (ownWell() && !((mapId() === MAP.town || mapId() === MAP.tavern) && townWellLeft() > 0)) return yield* drinkOwnWell(entry);
         setDoing(entry === "Napij się" ? "Piję ze studni miejskiej" : "Napełniam bukłak przy studni miejskiej", "woda " + Math.round(needs().water) + ", bukłak " + skinSips() + "/" + skinMax() + " (2 nabrania dziennie)");
         if (!(yield* goMap(MAP.town, "woda"))) return false;
         const wells = $gameMap.events().filter(e => /<Studnia:/i.test((e.event() && e.event().note) || ""));
@@ -600,6 +642,54 @@
         FAB.well.n++;
         say(entry !== "Napij się" ? (ok ? "napełnił bukłak przy studni (" + skinSips() + "/" + skinMax() + ")" : "studnia nie napełniła bukłaka") : ok ? "napił się ze studni (woda " + Math.round(needs().water) + ")" : "studnia nie dała wody");
         return ok;
+    }
+    function* drinkOwnWell(entry) {
+        const drink = entry === "Napij się";
+        setDoing(drink ? "Piję z własnej studni (działka)" : "Napełniam bukłak przy własnej studni (działka)", "woda " + Math.round(needs().water) + ", bukłak " + skinSips() + "/" + skinMax() + " (bez przydziału)");
+        if (!(yield* goMap(MAP.field, "woda ze studni na działce"))) return false;
+        const b = ownWell();
+        if (!b) return false;
+        yield* combatOff();
+        const tiles = Farming.tilesOfBuilding(b.type, b.x, b.y).map(t => [t.x, t.y]);
+        const w0 = needs().water, s0 = skinSips();
+        for (let n = 0; n < (drink ? 3 : 1); n++) {   // (a drink is +40: to the full in two or three)
+            if (!(yield* approach(tiles))) break;
+            const w1 = needs().water;
+            yield* L.press("ok");
+            const ok = yield* L.choose(entry);
+            yield* L.wait(drink ? 20 : 60);
+            yield* L.closeMenus();
+            if (!ok || !drink || needs().water <= w1 || needs().water >= 90) break;
+        }
+        const ok = drink ? needs().water > w0 : skinSips() > s0;
+        say(drink ? (ok ? "napił się z własnej studni (woda " + Math.round(needs().water) + ")" : "własna studnia nie dała wody") : ok ? "napełnił bukłak przy własnej studni (" + skinSips() + "/" + skinMax() + ")" : "własna studnia nie napełniła bukłaka");
+        return ok;
+    }
+    // the own well, as the player would: AP.PLAN's "Studnia" (the shovel's pit, the bucket from the forge, the Lina of ten strings,
+    // stone and planks - obtained the plan's way); once a day before the trips down, given up after 6 days without it
+    function* buildOwnWell(why) {
+        FAB.wellDay = day();
+        const ok = yield* fieldWork(["Studnia"], () => !!ownWell() || hour() >= 20.5 || hour() < 5.5, why);
+        if (ownWell()) { note("notes", { what: "zbudował własną studnię na działce - woda bez przydziału" }); say("studnia na działce stoi"); return true; }
+        FAB.wellFails = (FAB.wellFails || 0) + 1;
+        if (FAB.wellFails >= 6) { FAB.wellGaveUp = true; note("unclear", { what: "własna studnia: 6 dni bez skutku (" + ((AP.PLAN || []).find(g => g.n === "Studnia") || {}).fails + " nieudanych prób planu)" }); }
+        return ok;
+    }
+    // the bigger skin (the tannery: a tanned hide and two sinews - 8 sips instead of 4): once a day when the things are there or near
+    // (the plot's snares, a carcass); the skin stays the same item
+    const skinBig = () => { try { return !!Needs.skinBig(); } catch (e) { return true; } };
+    function* enlargeSkin(why) {
+        FAB.skinBigDay = day();
+        if (!(yield* goMap(MAP.field, why))) return false;
+        yield* AP.TASKS.collectJobs();
+        if (count(163) < 2 || count(97) < 1 && count(96) < 1) { yield* AP.TASKS.tend(); yield* AP.TASKS.dressCarcasses(); }
+        if (count(97) < 1 && count(96) > 0) { yield* AP.TASKS.craft("tannery", "Wyprawiaj skórę"); yield* AP.TASKS.collectJobs(); }
+        if (count(97) < 1 || count(163) < 2) { say("większy bukłak: brak " + (count(97) < 1 ? "wyprawionej skóry" : "") + (count(97) < 1 && count(163) < 2 ? " i " : "") + (count(163) < 2 ? "2 ścięgien" : "")); return false; }
+        setDoing("Powiększam bukłak w garbarni (8 łyków)", why);
+        yield* AP.TASKS.craft("tannery", "Powiększ bukłak");
+        yield* AP.TASKS.collectJobs();
+        if (skinBig()) { note("notes", { what: "powiększył bukłak: " + skinMax() + " łyków - woda na dłuższe zejścia" }); say("bukłak powiększony (" + skinMax() + " łyków)"); }
+        return skinBig();
     }
     function* takeSoup() {
         const before = count(SOUP);
@@ -778,7 +868,9 @@
         setDoing("Biorę zmianę u Borgara", shiftWhy);
         installShiftBot();
         const g0 = gold(), n0 = (TavernShift.stats() || {}).done || 0;
-        const r = yield* talkTo(borgarCounter, { tiles: [COUNTER], picks: ["Weź zmianę"], leave: true });
+        let r;
+        FAB.goldCtx = "zmiany";
+        try { r = yield* talkTo(borgarCounter, { tiles: [COUNTER], picks: ["Weź zmianę"], leave: true }); } finally { FAB.goldCtx = null; }
         const n1 = (TavernShift.stats() || {}).done || 0;
         FAB.shiftTried = day();
         if (n1 > n0) {
@@ -808,7 +900,9 @@
             const pick = payPick();
             if (!pick) break;
             const s = S(), p0 = s.paid;
-            const r = yield* talkTo(lordEvent, { picks: [pick], leave: true, strict: true });
+            let r;
+            FAB.goldCtx = "spłata długu";
+            try { r = yield* talkTo(lordEvent, { picks: [pick], leave: true, strict: true }); } finally { FAB.goldCtx = null; }
             if (S().paid > p0) say("spłata: " + (S().paid - p0) + " G (razem " + debtLine() + ")");
             else { say("spłata nie przeszła: " + r.text.slice(-160)); break; }
             if (S().done || S().paid >= S().debt) break;
@@ -858,7 +952,9 @@
                 if (now() - (FAB.failReset || 0) >= 2) { FAB.failReset = now(); AP.PLAN.forEach(g => { g.fails = 0; }); }   // (a job done meanwhile: try again)
                 const g = AP.PLAN.find(g => names.includes(g.n) && !g.done() && (g.fails || 0) < 3);
                 if (!g) {
-                    if (extra) { const v = yield* extra(); if (v === "dalej") continue; return v; }
+                    // (one frame a pass: 2026-11-17 runs - autumn, no herbs, gather() found nothing and gave back at once, 400 passes of
+                    // whole-map scans went in one frame, the page stood a minute and timeboxed's clock was never asked)
+                    if (extra) { const v = yield* extra(); if (v === "dalej") { yield; continue; } return v; }
                     return true;
                 }
                 setDoing("Na działce: " + g.n, why);
@@ -888,7 +984,7 @@
                 for (let k = 0; k < 12; k++) { const got = yield* AP.TASKS.forage(3); if (!got) { setBarren(mapId(), "food"); return true; } }
                 return true;
             } },
-            { id: "bandage", name: "zbieram zioła, krwawnik i włókno - opatrunki na podziemia", where: "field", want: () => FAB.done1 && deepNow < UNDER_GOAL && count(152) < BANDAGES && !FAB.bandageGaveUp, run: function* () {
+            { id: "bandage", name: "zbieram zioła, krwawnik i włókno - opatrunki na podziemia", where: "field", want: () => FAB.done1 && deepNow < UNDER_GOAL && count(152) < BANDAGES && !FAB.bandageGaveUp && bandageSeason(), run: function* () {
                 for (let k = 0; k < 6 && count(152) < BANDAGES; k++) {
                     for (const [id, kind] of [[104, "herb"], [150, "yarrow"], [92, "fiber"]]) if (count(id) < 2) yield* AP.TASKS.gather([kind], 2 - count(id));
                     if (count(104) >= 2 && count(150) >= 2 && count(92) >= 2) yield* AP.TASKS.handCraft("Zrób opatrunek"); else { setBarren(mapId(), "bandage"); return true; }
@@ -896,6 +992,8 @@
                 return true;
             } },
             { id: "crops", name: "zbieram plony z grządek", where: "field", want: () => ripeCrops(), run: () => AP.TASKS.harvestCrops() },
+            // (2026-11-17) a contract from the quest board in hand: its goods gathered / made, its hunt on its map in its animal's hours
+            { id: "contract", name: "zlecenie z tablicy: " + qbWorkName(), where: qbWorkWhere(), want: () => !!qbWorkNext(), run: () => qbWork("wolny czas: zlecenie z tablicy") },
             // (the player 2026-11-17: "gracz może względnie wcześniej zasadzić kilka drzew" - run 10 stood a whole day by the forge with
             // "nie ma drzew": every tree of the plot cut. A cone goes into the ground whole (Forestry.js, 10 days to a full pine))
             { id: "pines", name: "sadzę sosny z szyszek (drewno na później)", where: "field",
@@ -933,13 +1031,17 @@
         ];
     }
     // a plan for the free time before `deadline` (an hour of today) at map `target`, or null (too little time / nothing to do)
-    function freeTimePlan(deadline, target, label, minOnSite) {
+    // (only: one job's id - the contract window between the trips down)
+    function freeTimePlan(deadline, target, label, minOnSite, only) {
         const h = hour(), margin = 0.3, minSite = minOnSite || 0.5;
         if (stamina() < 40 || needUrgent() || inUnder()) return null;
         if (deadline - h - travelH(target) - margin < minSite) return null;
-        const jobs = freeJobs().filter(j => j.want());
+        const jobs = freeJobs().filter(j => (!only || j.id === only) && j.want());
         if (!jobs.length) return null;
-        const places = [...new Set([mapId(), MAP.field, MAP.yard, 222, 219])]   // (+ Skraj lasu, Polna droga, Leśna droga: the wild things by the way).filter(m => !inUnder() && m !== MAP.house && m !== MAP.tavern && m !== MAP.town && m !== MAP.manor);
+        // (the plot, the coast, the mountains: the wild things by the way; a job of one map - the hunt's - its map too. 2026-11-17: the
+        // filter had slipped into the comment of this line, so the tavern or the town counted as a place to gather in)
+        const places = [...new Set([mapId(), MAP.field, MAP.yard, 222, 219].concat(jobs.filter(j => typeof j.where === "number").map(j => j.where)))]
+            .filter(m => !inUnder() && m !== MAP.house && m !== MAP.tavern && m !== MAP.town && m !== MAP.manor);
         let best = null;
         for (const j of jobs) {
             for (const m of places) {
@@ -1190,7 +1292,7 @@
             const th = foesNear(8);
             if (!th.length) break;
             const t = th[0], a = t.a;
-            if (a !== foe) { foe = a; foeT = AP.frame; best = 99; bestT = AP.frame; hp0 = a._hp; setDoing("Walczę: " + (a.kindName ? a.kindName() : a.kind ? a.kind() : a._kind || "wróg"), why || FAB.why); }
+            if (a !== foe) { foe = a; foeT = AP.frame; best = 99; bestT = AP.frame; hp0 = a._hp; setDoing("Walczę: " + (a.isHuman && a.isHuman() && a.name ? a.name() : a.kindName ? a.kindName() : a.kind ? a.kind() : a._kind || "wróg"), why || FAB.why); }
             // (no closer and no blow landed for 8 s: out of reach - left alone for a minute of the game)
             if (t.d < best - 0.2) { best = t.d; bestT = AP.frame; }
             if (a._hp < hp0) { hp0 = a._hp; bestT = AP.frame; }
@@ -1229,7 +1331,8 @@
             // player would; the guardian and the bosses are fought to the end - their own plans. 2026-11-17 run 12: at 40% he died on the
             // stairs 4 times out of 5 - 35-37% left was too little to reach them)
             if (plated && !a._boss && inUnder() && hpRatio() < 0.55 && a._maxHp && a._hp > a._maxHp * 0.35) {
-                FAB.fleeAt = AP.frame; say("zbroja za mocna (życie " + Math.round(hpRatio() * 100) + "%) - uciekam w górę"); note("prep", { what: "ucieczka przed zbroją na piętrze " + floorNow() + " (życie " + Math.round(hpRatio() * 100) + "%, zbroja " + Math.round(a._hp / a._maxHp * 100) + "%)" });
+                const fresh = !(FAB.fleeAt && AP.frame - FAB.fleeAt < 600);
+                FAB.fleeAt = AP.frame; if (fresh) say("zbroja za mocna (życie " + Math.round(hpRatio() * 100) + "%) - uciekam w górę"); if (fresh) note("prep", { what: "ucieczka przed zbroją na piętrze " + floorNow() + " (życie " + Math.round(hpRatio() * 100) + "%, zbroja " + Math.round(a._hp / a._maxHp * 100) + "%)" });
                 break;
             }
             // (2026-11-17, the user: "zobacz, czy ta pusta zbroja ma redukcję obrażeń całkowitą, czy trzeba ją z konkretnej strony
@@ -1334,7 +1437,8 @@
     const liftStops = () => { try { return UG().liftStops(); } catch (e) { return []; } };
     // the water to get back up to the well from floor f (2026-11-17 run 11: 4 of 6 deaths walking up dry from floors 13-16): under 25
     // thirst caps the strength (Needs.js), each floor to the nearest lift stop above is about 2 game hours at 2.5 water an hour
-    const waterBack = f => { const st = liftStops().filter(x => x <= f), top = st.length ? Math.max(...st) : 0; return Math.min(60, 25 + 4 * Math.max(0, f - top)); };
+    // (run 13: back from floor 17 with 36 water he died on floor 11 - the climb takes longer than 2 hours a floor: 30 + 6 a floor, at most 80)
+    const waterBack = f => { const st = liftStops().filter(x => x <= f), top = st.length ? Math.max(...st) : 0; return Math.min(80, 30 + 6 * Math.max(0, f - top)); };
     const bossCleared = f => { try { return UG().bossCleared(f); } catch (e) { return true; } };
     const UNDER_GOAL = 50;   // Akt III: piętro 50 uzbraja napad na tawernę
     const BANDAGES = 6;      // (2026-11-17) opatrunki na każde zejście (run 12: two deaths wounded with none left at 4 - now 6)
@@ -1383,13 +1487,23 @@
                 return up ? yield* takeStairs(up) : false;
             } };
             if (f >= goalFloor) return null;
+            // (2026-11-17 run from po_pietrze10: at 59% of life, no bandage, water 28, the step below gave up at once - "nic nie
+            // wychodzi" for hours on floor 10, the water and wound steps further down never asked. Hurt before the gate: a rest here
+            // while the water lasts; wounded with a bandage: the bandage step below; hurt and dry: through the gate all the same - it
+            // is a talk, not a fight - to the windlass behind it: the lift up instead of ten floors on foot without water)
+            const gateShut = f === 10 && !$gameSwitches.value(14), gateHurt = gateShut && hpRatio() < 0.6 && !foesNear(9).length;
+            const gateWet = needs().water + skinWater() > waterBack(f) + 5, gateBandage = !!($gameSystem.isWounded && $gameSystem.isWounded() && count(152) > 0);
+            if (gateHurt && gateWet && !gateBandage) return { what: "Odpoczywam przed strażnikiem dziesiątej bramy", why: why + ", życie " + Math.round(hpRatio() * 100) + "%", run: function* () {
+                for (let n = 0; n < 60 * 60 * 30 && hpRatio() < 0.9 && !foesNear(7).length && needs().water + skinWater() > waterBack(f); n += 60) yield* idle(60);
+                return true;
+            } };
             // the tenth gate's guardian: the words of the castellan (never in the combat mode - he fights then)
-            if (f === 10 && !$gameSwitches.value(14)) return { what: "Strażnik dziesiątej bramy - słowa kasztelana", why, run: function* () {
+            if (gateShut && !(gateHurt && gateBandage)) return { what: "Strażnik dziesiątej bramy - słowa kasztelana", why, run: function* () {
                 // (never in the combat mode and never O at him: a blow starts the fight - 300+ HP of armour; the threshold line before the
                 // gate wakes him and he asks - the answer by the castellan's words from Borgar)
                 // (the rats first: a talk that starts by itself - the rival by his fire, the guardian - leaves him standing while they bite)
                 for (let k = 0; k < 6 && foesNear(9).length; k++) yield* fightFoes(60 * 60, why);
-                if (hpRatio() < 0.6) return false;   // (healed first - the plan's rest)
+                if (hpRatio() < 0.6 && needs().water + skinWater() > waterBack(f) + 5) return false;   // (healed first - the rest before the gate; dry: on to the lift)
                 if (window.Combat && Combat.combatMode && Combat.combatMode()) { yield* L.press("tab"); yield* L.wait(6); }
                 if (!(yield* L.walkTo(19, 17))) yield* L.walkTo(18, 17);
                 for (let n = 0; n < 90 && !busy(); n++) {
@@ -1401,7 +1515,7 @@
                 return $gameSwitches.value(14);
             } };
             // a stop of the lift on this floor: its windlass turned (later the cage brings him back here)
-            if (f % 10 === 0 && f < 100 && !liftStops().includes(f) && evNamed(/^Kołowrót/)) return { what: "Kręcę kołowrotem windy (piętro " + f + ")", why, run: function* () {
+            if (f % 5 === 0 && f < 100 && !gateShut && !liftStops().includes(f) && evNamed(/^Kołowrót/)) return { what: "Kręcę kołowrotem windy (piętro " + f + ")", why, run: function* () {   // (floor 10's windlass is behind the gate)
                 const w = evNamed(/^Kołowrót/);
                 return (yield* talkTo(w.eventId(), { picks: ["Zakręcić"], leave: true })).ok;
             } };
@@ -1439,8 +1553,10 @@
     // up: the lift from a stop, else the stairs up, back to the Ruins and the cellar
     function* goUp(why, flee) {
         for (let k = 0; k < 120 && inUnder(); k++) {
-            // (fleeing: no fight unless one stands right in the way)
-            if (flee ? foesNear(1.3).length : foesNear(5).length) { yield* fightFoes(flee ? 60 * 5 : 60 * 30, why); continue; }
+            // (fleeing: no fight unless one stands right in the way - and never the plated one it runs from: run 13 flipped between
+            // "uciekam" and "walczę: zbroja" in the same minute and never reached the stairs)
+            const inWay = flee ? foesNear(1.3).filter(t => { const a = t.a, kd = a._kind || (a.kind && a.kind()) || ""; return kd !== "zbroja" && !a._boss; }) : foesNear(5);   // (foesNear gives { a, d, tell })
+            if (inWay.length) { yield* fightFoes(flee ? 60 * 5 : 60 * 30, why); continue; }
             const f = floorNow();
             const cageEv = evNamed(/^Winda kasztelana/);
             if (cageEv && liftStops().includes(f)) { yield* talkTo(cageEv.eventId(), { picks: ["Ruiny"], leave: true }); yield* L.wait(30); continue; }
@@ -1455,7 +1571,19 @@
     // i robi to, co gracz - punkty w walkę, lepszy ekwipunek u Tadka (kupiony za złoto ze zmian), naprawa, zapasy; gdy dalej ginie - ćwiczy
     // piętro wyżej. Wszystko widać na pasku („Przygotowuję się: ...”, „Rozdaję punkty: ...”).
     const ATTR_NAME = { str: "Siła", dex: "Zręczność", con: "Kondycja", per: "Czujność", wil: "Hart ducha" };
-    const ATTR_PLAN = ["str", "con", "str", "con", "dex", "per"];   // (damage and life first, then the roll and the parry)
+    // (2026-11-17, the user: "sam ustal") a point of Siła: +3.5% damage, +4.5% to break a foe's balance; of Kondycja: +5 life, +2 breath,
+    // -1.4% chance of a wound (the spiders' bites); of Zręczność almost nothing at these levels; Czujność: a little crit, 12 opens
+    // "Czujne oko"; Hart ducha: +3% against fear and the "truths" (the wraiths and shadows from floor 20). So: damage and life, more life,
+    // perception to 12; from level 15 will to 15; past those marks their turn goes to Siła / Kondycja
+    const ATTR_EARLY = ["str", "con", "str", "con", "con", "per"];
+    const ATTR_LATE = ["con", "str", "con", "wil", "str", "per"];
+    const ATTR_CAP = { per: 12, wil: 15 };
+    function nextAttr(h, add, i) {
+        const plan = h.level < 15 ? ATTR_EARLY : ATTR_LATE;
+        let a = plan[i % plan.length];
+        if (ATTR_CAP[a] && (h.attr[a] || 0) + (add[a] || 0) >= ATTR_CAP[a]) a = a === "per" ? "str" : "con";
+        return a;
+    }
     // the skills for a fighter: life, damage, the thick skin, the guard, healing and bandages, the roll, the heavy hand...
     const SKILL_PLAN = ["d_body", "m_power", "thickskin", "d_body", "m_power", "s_heal", "guard", "d_body", "m_power", "s_band", "s_heal", "d_roll", "m_power2",
         "d_body2", "m_power2", "d_body2", "combo4", "keen", "s_band", "d_roll", "acrobat", "d_block", "d_block", "m_breath", "m_breath", "secondwind", "d_knock", "d_knock"];
@@ -1464,7 +1592,7 @@
         const h = Combat.hero(), said = [];
         if (h.points > 0) {
             const add = {};
-            for (let i = 0; i < h.points; i++) { const a = ATTR_PLAN[(FAB.attrI = ((FAB.attrI || 0) + 1)) % ATTR_PLAN.length]; add[a] = (add[a] || 0) + 1; }
+            for (let i = 0; i < h.points; i++) { const a = nextAttr(h, add, (FAB.attrI = ((FAB.attrI || 0) + 1))); add[a] = (add[a] || 0) + 1; }
             if (Combat.spendPoints(add)) said.push(Object.entries(add).map(([k, n]) => ATTR_NAME[k] + " +" + n).join(", "));
         }
         for (let guard = 0; h.skillPoints > 0 && guard < 10; guard++) {
@@ -1524,7 +1652,9 @@
         return all.reduce((s, w) => s + w.cost, 0);
     }
     // the shop window (Bron's Scene_BronSklep) by its keys: ↑↓ the row, ←→ the tab, O buy / mend, P out
-    FAB.offMapDriver = function(sc, n) {
+    // (2026-11-17: the quest board's scene has its driver too - boardDriver, with the contracts)
+    FAB.offMapDriver = (sc, n) => shopDriver(sc, n) || boardDriver(sc, n);
+    function shopDriver(sc, n) {
         if (!sc || sc.constructor.name !== "Scene_BronSklep") return false;
         const I = Input._currentState, job = FAB.shopJob;
         if (job) job.opened = true;
@@ -1545,14 +1675,24 @@
         }
         if (job.repair && (job.repairs || 0) < 6 && (sc._tabs || []).includes("napraw")) {
             if (sc._tab !== "napraw") { I.right = true; return true; }
-            const rows = (sc._rows || []).filter(r => r && r.act === "napraw" && r.cost <= $gameParty.gold());
-            if (rows.length && !job.repairPressed) { if (sc._list.index !== 0) { I.up = true; return true; } I.ok = true; job.repairPressed = true; job.repairs = (job.repairs || 0) + 1; return true; }
-            if (rows.length && job.repairPressed) { job.repairPressed = false; return true; }
+            // (2026-11-17 run: O always on the first row - often one he could not pay for, "Potrzebujesz N G": nothing mended, and back to
+            // Tadek again and again) the first row he can pay for; a row still there after its O is not pressed again
+            const all = sc._rows || [];
+            if (job.repairPressed) {
+                job.repairPressed = false;
+                if (all.some(r => r && r.act === "napraw" && r.id === job.repairId)) (job.repairFailed = job.repairFailed || []).push(job.repairId);
+                return true;
+            }
+            const i = all.findIndex(r => r && r.act === "napraw" && r.cost <= $gameParty.gold() && !(job.repairFailed || []).includes(r.id));
+            if (i >= 0) {
+                if (sc._list.index !== i) { I[sc._list.index < i ? "down" : "up"] = true; return true; }
+                I.ok = true; job.repairPressed = true; job.repairId = all[i].id; job.repairs = (job.repairs || 0) + 1; return true;
+            }
             job.repair = false;
         }
         I.cancel = true;
         return true;
-    };
+    }
     function equipBought(ids) {
         for (const id of ids) {
             const p = BD() && BD().przedmiot(id), slot = p && slotOf(p);
@@ -1576,7 +1716,11 @@
         FAB.shopJob = null;
         equipBought(ids.filter(id => count(id) > 0));
         // (a visit for nothing - the shop did not open or had nothing of the list: counted, at most 4 a day; noted once, not every visit)
-        const none = !job.bought.length && !(job.repairs > 0);
+        // (2026-11-17 run: "naprawa: 6" on every visit and the gear still worn - 656 talks with Tadek in one day: a mending that left it
+        // worn is a visit for nothing too, so the cap of 4 a day holds)
+        const none = !job.bought.length && (!(job.repairs > 0) || !!(repair && wornOut()));
+        // (a mending that left the gear worn - too dear for the purse now: no more mending today, the visits stop)
+        if (repair && wornOut()) { FAB.noMend = day(); note("prep", { what: "naprawa u kowala nie wyszła (" + $gameParty.gold() + " G w sakiewce) - do jutra bez naprawy" }); }
         if (none) { FAB.shopNone = FAB.shopNone && FAB.shopNone.day === day() ? FAB.shopNone : { day: day(), n: 0 }; FAB.shopNone.n++; }
         if (!none || FAB.shopNone.n === 1 || FAB.shopNone.n === 4)
             note("prep", { what: "u: " + S.name + ": kupione " + (job.bought.join(", ") || "nic") + (job.skipped.length ? "; nie: " + job.skipped.join(", ") : "") + (repair ? "; naprawa: " + (job.repairs || 0) : "") + (none && FAB.shopNone.n === 4 ? " (4. raz dziś - do jutra bez kowala)" : "") });
@@ -1585,6 +1729,7 @@
     // (worn below 35% AND on Tadek's mending tab with the gold for it - he mends metal only; a wooden spear or leather is not his:
     // without this the hero walked to him again and again for a mend that never came)
     const wornOut = () => { try {
+        if (FAB.noMend === day()) return false;
         const du = window.Durability; if (!du || !du.left || !du.TOOLS) return false;
         const mendable = new Set((window.Bron && Bron.oferta ? Bron.oferta("kowal", "napraw") : []).filter(r => r && r.act === "napraw" && !r.short).map(r => r.id));
         for (const id of [Combat.handMelee(), ...["torso", "head", "left", "legs", "hands", "feet"].map(wornIn)]) if (id && du.TOOLS[id] && mendable.has(id) && du.left(id) / Math.max(1, du.lifeOf(id)) < 0.35) return true;
@@ -1628,6 +1773,587 @@
             if (h >= 16.5 && FAB.prep) return { what: "Przygotowuję się: do jutra (rano kowal, wieczorem zmiana)", why: why + " - brakuje " + Math.max(0, target - $gameParty.gold() + 20) + " G", run: sleepHome };
         }
         return null;
+    }
+
+    // ------------------------------------------------------------------ zlecenia z tablicy (2026-11-17, gracz: uczciwe złoto poza zmianami)
+    // The quest board (QuestBoard.js) hangs in the tavern's hall (Map001, the event at 7,36) and in Kruczogród (Map220, 54,35) - one
+    // board, the same notices. The autopilot reads it as a player does: O before it, the arrows to a card, O, „Przyjmij” (the scene's
+    // own keys - boardDriver). It takes only what it can do safely - goods it has or can gather / make, a hunt it can win (its level and
+    // gear against the animal; a named beast only far above it) - and works on it in its free time only: before a shift (freeJobs
+    // "contract") or a few hours a day on the surface between the trips down (qbWindow, QB_DAY_H). Turned in at the board when he
+    // passes it (or by a short way to it); one running out of time is given up there (-3 fame instead of -6). Every notice passed over
+    // is noted once with the reason (FAB.rep.contracts).
+    const QB = () => window.QuestBoard;
+    const QB_MAPS = [MAP.tavern, MAP.town];
+    const QB_MAX = 2;          // contracts in hand at once (the board allows 3)
+    const QB_DAY_H = 2.5;      // game hours a day for contracts on the surface, outside the time before a shift
+    // the ground's kinds that give a thing (ap.js gather), and what he keeps of a thing for himself (tools, mending, bandages,
+    // charcoal) - a delivery is made from what is over that. (Not the wild potatoes and carrots: one tile in 250 - a contract for
+    // them only with them in the bag already)
+    const QB_GATHER = { 64: ["stone"], 77: ["branch"], 92: ["fiber"], 102: ["berries", "bush"], 103: ["mushroom"], 104: ["herb"], 147: ["cone"],
+        149: ["nettle"], 150: ["yarrow"], 151: ["garlic"] };
+    const QB_KEEP = { 64: 10, 77: 10, 92: 10, 61: 6, 80: 4, 93: 1, 104: 2, 150: 2, 152: BANDAGES, 85: 4, 86: 2, 79: 2, 147: 2 };
+    const HUNT_MAP = { wolf: 222, boar: 221 };      // (the new world's: the wolves in Krucze Turnie at night, a boar by the weir)
+    const HUNT_LV = { wolf: 6, boar: 8 };           // the hero's level for a plain hunt (a pack's leaps, a boar's charges)
+    const PLACE_LV = { 222: 5, 29: 5 };             // (the maps' <Poziom:N> notes: the level of the animals and the men there)
+    const seasonNow = () => { try { return Tawerna.time.season(); } catch (e) { return 0; } };
+    const gatherable = id => (QB_GATHER[id] || []).some(k => { const g = window.Farming && Farming.GATHER && Farming.GATHER[k]; return !!g && (!g.seasons || g.seasons.includes(seasonNow())); });
+    const hasAxe = () => count(60) > 0 || count(115) > 0;
+    const qbMakeable = id => (id === 61 ? hasAxe() : id === 80 ? hasAxe() && builtOn(MAP.field).some(b => b.type === "sawmill") : id === 93 ? count(92) >= 4 || gatherable(92) : false);
+    const heroLevel = () => { try { return Combat.hero().level || 1; } catch (e) { return 1; } };
+    const armedNow = () => bestWeapon() > 0 || !!(window.Combat && Combat.handMelee && Combat.handMelee() > 0);
+    const woundedNow = () => !!($gameSystem.isWounded && $gameSystem.isWounded());
+    const placeLv = m => (m === mapId() && window.Combat && Combat.placeLevel ? Combat.placeLevel() : PLACE_LV[m] || 1);
+    const huntHours = kind => { try { return Hunting.SPECIES[kind].hours || [[0, 24]]; } catch (e) { return [[0, 24]]; } };
+    const inHours = (hrs, h) => hrs.some(([a, b]) => h >= a && h < b);
+    const qbDaysLeft = n => (n.due || 0) - day() + 1;
+    // a bandage from the ground: 2 herbs, 2 yarrow, 2 fibre - each in the bag or growing this season
+    const bandageSeason = () => [104, 150, 92].every(id => count(id) >= 2 || gatherable(id));
+    const itemName = id => ($dataItems[id] ? $dataItems[id].name : "#" + id);
+    const bountyName = key => { try { return QB().BOUNTIES[key].name || key; } catch (e) { return key; } };
+    // the goods of the contracts in hand are held in the bag (ap.js AP.hold: not eaten, not put in the pantry or a chest)
+    function qbHold(id) {
+        const Q = QB();
+        if (!Q || !Q.active || !window.$gameSystem) return 0;
+        let n = 0;
+        for (const c of Q.active()) for (const q of c.req) if (q.k === "item" && q.id === id) n += q.n;
+        return n;
+    }
+    AP.hold = qbHold;
+    const qbReq = n => n.req.map(q => (q.k === "item" ? itemName(q.id) + " ×" + q.n : q.k === "bounty" ? "POSZUKIWANY " + bountyName(q.key) : q.kind + " ×" + q.n + (q.map ? " (" + mapName(q.map) + ")" : ""))).join(", ");
+    function huntOk(kind) {
+        if (kind === "rabbit" || kind === "deer") return { ok: false, why: (kind === "rabbit" ? "zające" : "jelenie") + " uciekają - autopilot nie poluje z łuku" };
+        // (run 2026-11-17: "Wilki pod wsią" taken and run out - the wolves come out at night only (20-5, Krucze Turnie), and his
+        // contract hours are the day's free time; nights are for sleep and the camps)
+        if (!inHours(huntHours(kind), 7) && !inHours(huntHours(kind), 12)) return { ok: false, why: (kind === "wolf" ? "wilki" : kind) + " wychodzą tylko nocą - zlecenia robi za dnia" };
+        const lv = heroLevel(), need = HUNT_LV[kind] || 99, what = kind === "wolf" ? "wilki" : kind === "boar" ? "dzik" : kind;
+        if (!armedNow()) return { ok: false, why: what + " - bez broni w ręce" };
+        if (lv < need) return { ok: false, why: what + " - za słaby (poziom " + lv + ", trzeba " + need + ")" };
+        if (count(152) < 2) return { ok: false, why: what + " - za mało opatrunków (" + count(152) + "/2)" };
+        return { ok: true };
+    }
+    // a named beast (POSZUKIWANY): its level on its map, its life and its pack against the hero's level - only well above it
+    function bountyOk(key) {
+        const B = ((QB() && QB().BOUNTIES) || {})[key];
+        if (!B) return { ok: false, why: "nieznany list gończy " + key };
+        const blv = placeLv(B.map) + (B.lv || 0), lv = heroLevel(), need = blv + 3 + (B.pack || 0) + (B.kind === "boar" ? 1 : 0);
+        const what = bountyName(key) + " (poziom ~" + blv + ", życie ×" + B.hp + (B.pack ? ", wilki przy nim: " + B.pack : "") + ")";
+        if (!armedNow()) return { ok: false, why: what + " - bez broni" };
+        if (lv < need) return { ok: false, why: what + " - przegrałby: poziom " + lv + ", trzeba " + need };
+        if (!inHours(huntHours(B.kind), 7) && !inHours(huntHours(B.kind), 12)) return { ok: false, why: what + " - wychodzi tylko nocą, zlecenia robi za dnia" };
+        if (count(152) < 3) return { ok: false, why: what + " - za mało opatrunków (" + count(152) + "/3)" };
+        return { ok: true };
+    }
+    // can he do this notice safely, and what does it want ({ item id: how many in the bag before it is turned in }, the hunts)
+    function qbJudge(n) {
+        if (n.state === "open" && n.days < 2) return { ok: false, why: "termin " + n.days + " dzień - za krótki" };
+        const need = {}, hunts = [];
+        for (const q of n.req) {
+            if (q.k === "item") {
+                const want = q.n + (QB_KEEP[q.id] || 0);
+                if (count(q.id) >= want) continue;
+                if (gatherable(q.id) || qbMakeable(q.id)) { need[q.id] = want; continue; }
+                const how = QB_GATHER[q.id] ? "nie ta pora roku" : (q.id === 61 || q.id === 80) && !hasAxe() ? "bez siekiery" : q.id === 80 ? "bez tartaku" : "tego autopilot nie zbiera ani nie robi";
+                return { ok: false, why: itemName(q.id) + " ×" + q.n + " - nie ma skąd wziąć (" + how + ")" };
+            }
+            const j = q.k === "bounty" ? bountyOk(q.key) : huntOk(q.kind);
+            if (!j.ok) return j;
+            hunts.push({ kind: q.kind, n: q.n, map: q.map || HUNT_MAP[q.kind], bounty: q.k === "bounty" });
+        }
+        return { ok: true, need, hunts };
+    }
+    // in hand and ready: turned in when all its goods are there with his own share left over - or on its last day as it is
+    function qbReadyList() {
+        const Q = QB();
+        if (!Q || !Q.active) return [];
+        return Q.active().filter(n => Q.isReady(n.id) && (qbDaysLeft(n) <= 1 || n.req.every(q => q.k !== "item" || count(q.id) >= q.n + (QB_KEEP[q.id] || 0))));
+    }
+    // in hand on its last day, not ready, no way to finish it today: given up at the board (-3 fame; run out it costs -6)
+    function qbDropList() {
+        const Q = QB();
+        if (!Q || !Q.active) return [];
+        return Q.active().filter(n => !Q.isReady(n.id) && qbDaysLeft(n) <= 1 && (hour() >= 15 || (FAB.qbStuck || {})[n.id] === day()));
+    }
+    // what to take now: the doable open notices, the best paid first, as many as there is room for
+    function qbPick() {
+        const Q = QB(), take = [], skip = [];
+        if (!Q || !Q.board) return { take, more: [], skip };
+        for (const n of Q.board()) {
+            if (n.state !== "open") continue;
+            const j = qbJudge(n);
+            if (j.ok) take.push(n); else skip.push({ n, why: j.why });
+        }
+        take.sort((a, b) => b.gold - a.gold || b.days - a.days);
+        const room = Math.max(0, Math.min(QB_MAX, Q.MAX_ACTIVE || 3) - Q.active().length + qbReadyList().length);
+        return { take: take.slice(0, room), more: take.slice(room), skip };
+    }
+    // the next thing to do for a contract in hand (the soonest due first): goods short of what it wants, or its hunt in the animal's hours
+    function qbWorkNext() {
+        const Q = QB();
+        if (!Q || !Q.active) return null;
+        const h = hour(), list = Q.active().slice().sort((a, b) => a.due - b.due);
+        for (const n of list) {
+            if ((FAB.qbStuck || {})[n.id] === day()) continue;
+            const items = {};
+            let hunt = null;
+            for (const q of n.req) {
+                if (q.k === "item") { const want = q.n + (QB_KEEP[q.id] || 0); if (count(q.id) < want && (gatherable(q.id) || qbMakeable(q.id))) items[q.id] = want; }
+                else if ((q.got || 0) < q.n && inHours(huntHours(q.kind), h)) hunt = { kind: q.kind, map: q.map || HUNT_MAP[q.kind], bounty: q.k === "bounty" ? n.id : null };
+            }
+            if (Object.keys(items).length || hunt) return { n, items, hunt };
+        }
+        return null;
+    }
+    function qbWorkName() { const w = qbWorkNext(); return w ? "„" + w.n.title + "” (" + qbReq(w.n) + ")" : "-"; }
+    function qbWorkWhere() { const w = qbWorkNext(); return !w ? "any" : w.hunt ? w.hunt.map : w.items[80] ? "field" : "any"; }
+    // the work: the goods short gathered here (nothing of it on this map today: another place next time) or made (ap.js obtain:
+    // wood, planks, rope), then the hunt
+    function* qbWork(why) {
+        const w = qbWorkNext();
+        if (!w) return true;
+        const n = w.n;
+        for (const id of Object.keys(w.items).map(Number)) {
+            const want = w.items[id];
+            if (count(id) >= want) continue;
+            setDoing("Zlecenie „" + n.title + "”: " + itemName(id) + " " + count(id) + "/" + want, why);
+            const before = count(id);
+            // (stones, branches, fibre: his chests on the plot first, then the ground - ap.js obtain; the rest picked off the ground here)
+            if ([64, 77, 92].includes(id)) yield* AP.TASKS.obtain({ [id]: want });
+            else if (QB_GATHER[id] && gatherable(id)) yield* AP.TASKS.gather(QB_GATHER[id], want - count(id));
+            else {
+                if (id === 80 && mapId() !== MAP.field && !(yield* goMap(MAP.field, why))) return false;
+                yield* AP.TASKS.obtain({ [id]: want });
+            }
+            if (count(id) <= before) {
+                if (QB_GATHER[id]) setBarren(mapId(), "contract");
+                else (FAB.qbStuck = FAB.qbStuck || {})[n.id] = day();
+                say("zlecenie „" + n.title + "”: brak " + itemName(id) + " (" + mapName(mapId()) + ")");
+                return true;
+            }
+            say("zlecenie „" + n.title + "”: " + itemName(id) + " " + count(id) + "/" + want);
+        }
+        if (w.hunt) yield* qbHunt(n, w.hunt, why);
+        return true;
+    }
+    // a hunt: on its map in its animal's hours; wolves and boars come at him - the reflexes (ap.js fightPack / fight) and fightFoes do
+    // the fight; one that keeps off is walked up to; a named beast shows itself after a while (QuestBoard: 11-16 tiles off)
+    function* qbHunt(n, hu, why) {
+        if (mapId() !== hu.map && !(yield* goMap(hu.map, why))) return false;
+        const t0 = now(), Q = QB();
+        for (let k = 0; k < 300; k++) {
+            if (Q.isReady(n.id) || !inHours(huntHours(hu.kind), hour()) || now() - t0 > 3) break;
+            if (hpRatio() < 0.5) { say("polowanie: życie " + Math.round(hpRatio() * 100) + "% - koniec na dziś"); (FAB.qbStuck = FAB.qbStuck || {})[n.id] = day(); break; }
+            if (foesNear(9).length) { yield* fightFoes(60 * 60, why); continue; }
+            const a = ((window.Hunting && Hunting.animals) || []).filter(x => x && !x._dead && x._hp > 0 && x._kind === hu.kind && (!hu.bounty || x._qbBounty === hu.bounty))
+                .sort((p, q) => p.playerDistance() - q.playerDistance())[0];
+            if (!a) { setDoing("Zlecenie „" + n.title + "”: wypatruję zwierzęcia (" + mapName(mapId()) + ")", why); yield* idle(180); continue; }
+            if (a.playerDistance() > 3.5) {
+                setDoing("Zlecenie „" + n.title + "”: podchodzę (" + (a._qbName || a._kind) + ")", why);
+                if (!(yield* L.walkTo(Math.round(a._realX), Math.round(a._realY) + 1))) yield* idle(60);
+                continue;
+            }
+            yield* idle(30);   // (close by: it comes at him - the reflexes take over)
+        }
+        return true;
+    }
+    // to the board (the event with <Tavern:board>), O; the scene is driven by boardDriver from FAB.boardJob; noted afterwards
+    function* qbVisit(why) {
+        const Q = QB();
+        if (!Q || !Q.isBoardEvent) return false;
+        const e = $gameMap.events().find(ev => ev && !ev._erased && Q.isBoardEvent(ev));
+        if (!e) { note("unclear", { what: "brak tablicy zleceń na mapie " + mapName(mapId()) }); FAB.qbNext = now() + 6; return false; }
+        yield* combatOff();
+        const tiles = evTiles(e), spot = yield* approach(tiles);
+        if (!spot) { say("nie dojdę do tablicy zleceń"); FAB.qbNext = now() + 3; return false; }
+        if (!spot.counter) faceTiles(tiles);
+        // what he does there - from what the board shows as he stands before it
+        const pick = qbPick(), turn = qbReadyList(), drop = qbDropList();
+        const job = FAB.boardJob = { turnIn: turn.map(n => n.id), abandon: drop.map(n => n.id), accept: pick.take.map(n => n.id), opened: false,
+            done: { turnIn: [], abandon: [], accept: [] }, failed: [], moves: 0, tries: 0 };
+        setDoing("Tablica zleceń: " + ([turn.length ? "oddaję " + turn.length : "", drop.length ? "porzucam " + drop.length : "", pick.take.length ? "biorę " + pick.take.length : ""].filter(Boolean).join(", ") || "czytam ogłoszenia"), why);
+        try {
+            yield* L.wait(2);
+            yield* L.press("ok");
+            for (let k = 0; k < 90 && !job.opened; k++) yield;   // (the board's scene: the generator stands still until it is closed)
+            if (!job.opened) { say("tablica zleceń się nie otworzyła"); FAB.qbNext = now() + 2; return false; }
+            for (let k = 0; k < 900 && !(SceneManager._scene instanceof Scene_Map && onMapReady()); k++) yield;
+            yield* drive({});
+        } finally { FAB.boardJob = null; L.key("ok", false); }
+        FAB.qbLook = { day: day(), h: now(), cycle: Q.cycleOf(day()), more: pick.more.length };
+        for (const id of job.done.turnIn) { const n = Q.find(id); note("contracts", { what: "oddane", id, title: n ? n.title : id, gold: n ? n.gold : 0, xp: n ? n.xp : 0 }); say("zlecenie oddane: „" + (n ? n.title : id) + "” +" + (n ? n.gold : "?") + " G"); }
+        for (const id of job.done.abandon) { const n = drop.find(x => x.id === id); note("contracts", { what: "porzucone", id, title: n ? n.title : id, why: "ostatni dzień, nie zdąży" }); say("zlecenie porzucone: „" + (n ? n.title : id) + "”"); }
+        for (const id of job.done.accept) { const n = Q.find(id); if (!n) continue; note("contracts", { what: "przyjęte", id, title: n.title, gold: n.gold, due: n.due, req: qbReq(n) }); say("przyjął zlecenie: „" + n.title + "” (" + qbReq(n) + ", " + n.gold + " G, do dnia " + n.due + ")"); }
+        for (const f of job.failed) note("contracts", { what: "nie wyszło", why: f });
+        FAB.qbSkipSeen = FAB.qbSkipSeen || {};
+        for (const s of pick.skip) if (!FAB.qbSkipSeen[s.n.id]) { FAB.qbSkipSeen[s.n.id] = 1; note("contracts", { what: "pominięte", id: s.n.id, title: s.n.title, gold: s.n.gold, type: s.n.type, why: s.why }); }
+        if (Object.keys(FAB.qbSkipSeen).length > 300) FAB.qbSkipSeen = {};
+        return true;
+    }
+    FAB.qbVisit = qbVisit;
+    // the board in the tavern / the town: a contract to turn in or give up, or a look at the notices (a new set every 3 days; again
+    // after half a day while there is room and it showed more he could do) - when he is there anyway; a short way to it only for one
+    // ready (or running out). Not just before an evening shift.
+    function qbBoardPlan() {
+        const Q = QB();
+        if (!Q || !Q.board || inUnder()) return null;
+        // (a contract run out - the game's own term - noted once, -6 fame)
+        FAB.qbFailSeen = FAB.qbFailSeen || {};
+        for (const hh of (Q.state().history || []).slice(0, 6)) if (hh.state === "failed" && !FAB.qbFailSeen[hh.id]) { FAB.qbFailSeen[hh.id] = 1; note("contracts", { what: "po terminie", id: hh.id, title: hh.title, why: "nie zdążył (" + hh.rep + " sławy)" }); }
+        const h = hour();
+        if (h < 6 || h >= 20.5 || (FAB.qbNext || 0) > now()) return null;
+        if (shiftOpen() && h >= shiftLeave() - 0.25 && h < 21) return null;
+        const due = qbReadyList().length + qbDropList().length;
+        if (!QB_MAPS.includes(mapId())) {
+            if (!due) return null;
+            const m = QB_MAPS.slice().sort((a, b) => travelH(a) - travelH(b))[0];
+            if (travelH(m) > 0.75) return null;
+            return { what: "Niosę zlecenie do tablicy (" + mapName(m) + ")", why: "zlecenia: " + due + " do oddania / porzucenia", run: function* () {
+                FAB.qbNext = now() + 1;
+                if (yield* goMap(m, "tablica zleceń")) yield* qbVisit("zlecenia: oddaję");
+            } };
+        }
+        const look = FAB.qbLook || {}, room = Q.active().length < QB_MAX;
+        const fresh = look.cycle !== Q.cycleOf(day()) || (look.more > 0 && now() - (look.h || 0) >= 12);
+        if (!due && !(room && fresh)) return null;
+        return { what: "Patrzę na tablicę zleceń (" + mapName(mapId()) + ")", why: "zlecenia: uczciwe złoto poza zmianami (w toku " + Q.active().length + "/" + QB_MAX + ")",
+            run: function* () { FAB.qbNext = now() + 0.5; yield* qbVisit("tablica zleceń"); } };
+    }
+    // the contracts between the trips down: a few hours a day (QB_DAY_H) in the daytime, the work timeboxed as the free time is
+    function qbWindow() {
+        const h = hour();
+        if (h < 6.5 || h >= 16 || inUnder()) return null;
+        const used = FAB.qbDay && FAB.qbDay.day === day() ? FAB.qbDay.h : 0, left = QB_DAY_H - used;
+        if (left < 0.5 || !qbWorkNext()) return null;
+        const fp = freeTimePlan(Math.min(17.5, h + left), MAP.tavern, "Zlecenie", 0.4, "contract");
+        if (!fp) return null;
+        const run = fp.run;
+        fp.run = function* () { const t0 = now(); try { return yield* run(); } finally { FAB.qbDay = { day: day(), h: used + Math.max(0.25, now() - t0) }; } };
+        return fp;
+    }
+    // the board's scene (QuestBoard_Scene.js) by its keys, as a player: ↑↓←→ to a card (the nearest one that way - the scene's own
+    // rule), O opens its buttons, ←→ to „Przyjmij” / „Oddaj” / „Porzuć” (and „Tak”), O; P back and out. The first visit: Borgar
+    // explains the board - O through it. What to do: FAB.boardJob (qbVisit)
+    function boardDriver(sc, n) {
+        if (!sc || sc.constructor.name !== "Scene_QuestBoard") return false;
+        const I = Input._currentState, job = FAB.boardJob;
+        for (const k of ["ok", "up", "down", "left", "right", "cancel"]) I[k] = false;
+        if (job) job.opened = true;
+        if (n < 30 || n % 5 !== 0 || !sc._cards) return true;   // (the cards fly in first)
+        if (sc.anim || sc.mode === "anim" || (sc.isBusy && sc.isBusy())) return true;   // (the coins fly to the purse)
+        if (sc.mode === "tutorial") { I.ok = true; return true; }
+        if (!job) { I.cancel = true; return true; }
+        let t = null;
+        for (const want of ["turnIn", "abandon", "accept"]) if (job[want].length) { t = { id: job[want][0], want, list: job[want] }; break; }
+        if (!t) { I.cancel = true; return true; }   // (a card's buttons open: P shuts them; the board: P leaves it)
+        const card = sc._cards.find(c => c.n && c.n.id === t.id), cn = card ? card.n : null;
+        const next = () => { t.list.shift(); job.moves = 0; job.tries = 0; job.lastFocus = null; job.flip = false; };
+        const fail = why => { job.failed.push("„" + (cn ? cn.title : t.id) + "” (" + t.want + "): " + why); next(); };
+        const done = t.want === "accept" ? !!cn && cn.state === "active" : t.want === "turnIn" ? !!cn && cn.state === "done" : !card;
+        if (done) { job.done[t.want].push(t.id); next(); return true; }
+        if (!card) { fail("kartki nie ma na tablicy"); return true; }
+        if (sc.focus !== card) {
+            if (sc.mode === "choice") { I.cancel = true; return true; }
+            if (++job.moves > 40) { fail("strzałki nie trafiają w kartkę"); return true; }
+            const pos = e => [e.baseX !== undefined ? e.baseX : e.x, e.baseY !== undefined ? e.baseY : e.y + (e.h || 0) / 2];
+            const [fx, fy] = pos(sc.focus || sc._tag), [tx, ty] = pos(card), dx = tx - fx, dy = ty - fy;
+            // (the same card in focus after a press: nothing that way - the other arrows)
+            if (job.lastFocus === sc.focus && job.moves > 1) job.flip = !job.flip;
+            job.lastFocus = sc.focus;
+            let across = Math.abs(dx) >= Math.abs(dy);
+            if (job.flip) across = !across;
+            if (across && Math.abs(dx) > 12) I[dx > 0 ? "right" : "left"] = true;
+            else if (Math.abs(dy) > 12) I[dy > 0 ? "down" : "up"] = true;
+            else I[dx > 0 ? "right" : "left"] = true;
+            return true;
+        }
+        if (sc.mode === "browse") { if (++job.tries > 8) fail("kartka się nie otwiera"); else I.ok = true; return true; }
+        const wantId = t.want === "abandon" ? (sc._confirm ? "abandonYes" : "abandon") : t.want;
+        const list = sc.choices || [], i = list.findIndex(c => c.id === wantId);
+        if (i < 0 || list[i].enabled === false) { fail(i < 0 ? "brak przycisku" : "przycisk nieczynny"); I.cancel = true; return true; }
+        if (sc.choiceIndex !== i) { I.right = true; return true; }
+        if (++job.tries > 14) { fail("przycisk nie działa"); I.cancel = true; return true; }
+        I.ok = true;
+        return true;
+    }
+
+    // ------------------------------------------------------------------ obozy bandytów (2026-11-17, gracz: uczciwe złoto poza zmianami)
+    // Night camps (Humans.js): Słony Brzeg (Map219, 25% a night), Krucze Turnie (Map222, 30%), Krucza Grań (Map029, 25%) - rolled once a
+    // night for the map the hero is on, from 21:00, from day 4: 2-4 men (asleep, one or two awake by the fire, an archer, a knife, from
+    // day 8 a mercenary with a shield) and a sack with 6-22 gold and supplies. Their blows never kill - a beaten hero is robbed of 40% of
+    // his purse. He goes for one only when strong enough (BANDIT_FIT: level, life, no wound, bandages, a weapon) and the camp is small
+    // (3 men at most, no mercenary below level 10, none far above him): up to the fire's light, sneaking (C) to a sleeper, a blow from
+    // hiding, the fight; the ones who beg are spared (the honest choice), the beaten searched, the sack taken; under half his life (two
+    // bandages used) he runs. An evening for it: Słony Brzeg next to grandpa's plot, every other day at most once the debt is paid - or
+    // wherever he happens to be on a camp map at night (the ore trips to Krucze Turnie).
+    const HM = () => window.Humans;
+    const BANDIT_MAPS = [219, 222, 29];
+    const BANDIT_FIT = { level: 6, hp: 0.8, bandages: 2, stamina: 45, men: 3, mercLevel: 10, flee: 0.5, heals: 2, every: 2 };
+    const nightKeyNow = () => (hour() >= 12 ? day() : day() - 1);
+    const banditMen = camp => ((HM() && HM().list) || []).filter(h => h && !h._dead && h._campRef && camp.members.includes(h._campRef));
+    const menNear = r => foesNear(r).filter(t => t.a.isHuman && t.a.isHuman());
+    const sneakingNow = () => !!(window.Hunting && Hunting.sneaking && Hunting.sneaking());
+    function banditFit() {
+        const lv = heroLevel(), nd = needs();
+        if (lv < BANDIT_FIT.level) return { ok: false, why: "poziom " + lv + " (trzeba " + BANDIT_FIT.level + ")" };
+        if (!armedNow()) return { ok: false, why: "bez broni w ręce" };
+        if (woundedNow()) return { ok: false, why: "ranny" };
+        if (hpRatio() < BANDIT_FIT.hp) return { ok: false, why: "życie " + Math.round(hpRatio() * 100) + "% (trzeba " + Math.round(BANDIT_FIT.hp * 100) + "%)" };
+        if (count(152) < BANDIT_FIT.bandages) return { ok: false, why: "opatrunki " + count(152) + "/" + BANDIT_FIT.bandages };
+        if (stamina() < BANDIT_FIT.stamina) return { ok: false, why: "siły " + Math.round(stamina()) };
+        if (nd.food < 35 || nd.water < 35) return { ok: false, why: "głód / pragnienie (" + Math.round(nd.food) + "/" + Math.round(nd.water) + ")" };
+        return { ok: true };
+    }
+    // the camp as seen by its fire: the men still there, their kinds and levels
+    function banditJudge(camp) {
+        const men = (camp.members || []).filter(m => m.state === "alive"), lv = heroLevel(), K = (HM() && HM().KINDS) || {};
+        const txt = men.length + " (" + men.map(m => ((K[m.kind] || {}).name || m.kind) + (m.level ? " poz. " + m.level : "")).join(", ") + ")";
+        if (!men.length) return { ok: false, why: "obóz pusty", txt };
+        if (men.length > BANDIT_FIT.men) return { ok: false, why: "za dużo ludzi: " + txt, txt };
+        if (men.some(m => m.kind === "mercenary") && lv < BANDIT_FIT.mercLevel) return { ok: false, why: "najemnik z tarczą - dopiero od poziomu " + BANDIT_FIT.mercLevel + " (jest " + lv + "): " + txt, txt };
+        const top = Math.max(...men.map(m => m.level || 1));
+        if (top > lv + 1) return { ok: false, why: "za silni (poziom " + top + " przy jego " + lv + "): " + txt, txt };
+        return { ok: true, txt };
+    }
+    // the decide's step: a camp by his fire tonight (attack or pass it by, noted), an evening on its way (to the map, waiting for the
+    // night's roll), or a new evening planned at 19-20:30
+    // (an evening with no trip to a camp: why, counted once a day at 19-20:30 - FAB.rep.campNoEve for the report)
+    function noEvening(why) {
+        if (FAB.banditWhyDay === day() || hour() < 19 || hour() >= 20.6) return null;
+        FAB.banditWhyDay = day();
+        const m = FAB.rep.campNoEve = FAB.rep.campNoEve || {};
+        m[why] = (m[why] || 0) + 1;
+        return null;
+    }
+    function banditPlan() {
+        const H = HM();
+        if (!H || !H.campHere) return null;
+        if (inUnder()) return noEvening("pod ziemią");
+        const h = hour(), m = mapId(), key = nightKeyNow(), night = h >= 21 || h < 5;
+        const ev = FAB.banditEve && FAB.banditEve.key === key ? FAB.banditEve : null;
+        FAB.banditSeen = FAB.banditSeen || {};
+        const camp = BANDIT_MAPS.includes(m) && night ? H.campHere() : null;
+        // (an attack cut short - the brain started anew in its middle: its end - the fight if any, the loot, the record)
+        const cur = FAB.banditCur;
+        if (camp && cur && cur.id === camp.id && !cur.noted && FAB.banditSeen[camp.id] === "atak") return { what: "Obóz bandytów: dokańczam (pobici, worek)", why: "przerwany atak na obóz", run: function* () {
+            if (foesNear(10).length) { yield* menFight("obóz bandytów"); if (hpRatio() < BANDIT_FIT.flee) cur.rec.result = "ucieczka (życie " + Math.round(hpRatio() * 100) + "%)"; }
+            return yield* banditFinish(camp);
+        } };
+        if (camp && !FAB.banditSeen[camp.id]) {
+            const fit = banditFit(), j = banditJudge(camp);
+            if (!fit.ok || !j.ok) {
+                FAB.banditSeen[camp.id] = "pominięty";
+                note("camps", { what: "pominięty", men: j.txt, why: !fit.ok ? "za słaby: " + fit.why : j.why });
+                say("obóz bandytów (" + mapName(m) + "): pomijam - " + (!fit.ok ? fit.why : j.why));
+                if (ev) ev.done = true;
+                FAB.campNo[m] = now() + 10;   // (no tent by their fire: the night elsewhere)
+                return null;
+            }
+            return { what: "Obóz bandytów (" + mapName(m) + "): " + j.txt, why: "złoto z worka i od pobitych (poziom " + heroLevel() + ", życie " + Math.round(hpRatio() * 100) + "%, opatrunki " + count(152) + ")", run: () => banditAttack(camp) };
+        }
+        if (ev && !ev.done) {
+            // (tired only: a sit by the way mends it - run 2026-11-17: the evening dropped at 19:12 for "siły 35" after the waiting's work)
+            const fit = banditFit(), tiredOnly = !fit.ok && /^siły/.test(fit.why);
+            if ((!fit.ok && !tiredOnly) || (h >= 23.5 || h < 5)) { ev.done = true; note("camps", { what: "wieczór przerwany", why: !fit.ok ? fit.why : "późna noc, obozu nie znalazł" }); return null; }
+            if (m !== ev.map) return { what: "Idę na wieczór do obozów bandytów: " + mapName(ev.map), why: "ogniska płoną nocą od 21:00", run: function* () { if (!(yield* goMap(ev.map, "obóz bandytów"))) ev.done = true; } };
+            const st = (H.state().camps || {})[m];
+            if (night && st && st.night === H.nightKey() && (st.none || st.over)) {
+                ev.done = true;
+                FAB.campNo[m] = now() + 10;
+                note("camps", { what: "brak obozu", why: "tej nocy nie ma ogniska na mapie " + mapName(m) });
+                say("tej nocy nie ma obozu na " + mapName(m) + " - wracam spać");
+                return null;
+            }
+            // (before the night: hungry or thirsty - a bite from the bag; time to spare - the free time's work near by, back by 21:00)
+            const nd = needs();
+            if (nd.food < 50 && bagFoods().some(f => f.fed > 0)) return { what: "Jem przed nocą przy obozach", why: "sytość " + Math.round(nd.food), run: () => eatBest(false) };
+            if (nd.water < 50 && bagFoods().some(f => f.water > 0)) return { what: "Piję przed nocą przy obozach", why: "woda " + Math.round(nd.water), run: () => eatBest(true) };
+            if (stamina() < 70 && L.staminaCap() >= 70 && (FAB.restDay || 0) !== day() * 24 + Math.floor(h)) return { what: "Odpoczywam przed nocą przy obozach (siadam - Z)", why: "siły " + Math.round(stamina()) + " - na walkę", run: function* () {
+                FAB.restDay = day() * 24 + Math.floor(hour());
+                yield* AP.TASKS.rest();
+                return true;
+            } };
+            if (!night && h < 20 && stamina() >= 75) { const fp = freeTimePlan(20.95, m, "Do nocy (obóz)", 0.5); if (fp) return fp; }
+            return { what: "Czekam na noc (" + mapName(m) + "): ogniska od 21:00", why: "wieczór na obóz bandytów", run: () => idle(240) };
+        }
+        // a new evening: the debt paid, every other day at most, strong enough, no shift tonight (from 16:30: on the surface between
+        // the trips down the hero is seldom up at 19:00 - run 2026-11-17 from po_pietrze10: every evening under the ground)
+        if (ev || h < 16.5 || h >= 20.6) return null;
+        if (!FAB.done1) return noEvening("rozdział 1: wieczorem zmiana");
+        if (FAB.shiftTried === day()) return noEvening("dziś zmiana u Borgara");
+        if (day() <= 3 || day() - (FAB.banditLast || -99) < BANDIT_FIT.every) return noEvening("obóz był wczoraj (co drugi dzień)");
+        const fitNow = banditFit();
+        if (!fitNow.ok) return noEvening("nie gotów: " + fitNow.why.replace(/\s*[\d(].*$/, ""));   // ("życie 62% (trzeba 80%)" -> "życie")
+        {
+            const rest = (H.CAMP && H.CAMP.rest) || 2, cleared = (H.state().cleared || {});
+            const maps = BANDIT_MAPS.filter(cm => !(cleared[cm] !== undefined && day() - cleared[cm] < rest) && travelH(cm) <= 1.25)
+                .sort((a, b) => (b === 219) - (a === 219) || travelH(a) - travelH(b));
+            if (!maps.length) return noEvening("obozy rozbite niedawno albo za daleko");
+            FAB.banditEve = { key, map: maps[0], done: false };
+            FAB.banditLast = day();
+            note("camps", { what: "wieczór na obóz", map: maps[0], why: "poziom " + heroLevel() + ", życie " + Math.round(hpRatio() * 100) + "%, opatrunki " + count(152) });
+            return { what: "Idę na wieczór do obozów bandytów: " + mapName(maps[0]), why: "uczciwe złoto: worek z łupem i sakiewki pobitych", run: () => goMap(maps[0], "obóz bandytów") };
+        }
+        return null;
+    }
+    // up beside a man (approach: the nearest free side), facing him, the blow (the combat mode's "shoot")
+    function* banditStrike(h, why, sneak) {
+        setDoing(sneak ? "Obóz: skradam się do śpiącego (" + h.name() + ")" : "Obóz: idę na " + h.name(), why);
+        for (let k = 0; k < 3 && !h._dead && !h._surrendered; k++) { if (yield* approach([[h._x, h._y]])) break; yield* L.wait(20); }
+        if (h._dead || h._surrendered || h.playerDistance() > 1.9) return false;
+        yield* combatOn();
+        const dx = h.centerX() - (P()._realX + 0.5), dy = h.centerY() - (P()._realY + 0.5);
+        L.setMove(L.keysToward(dx, dy)); yield;
+        L.setMove([]);
+        P().setDirection(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 6 : 4) : (dy > 0 ? 2 : 8));
+        L.key("shoot", true); yield; yield; L.key("shoot", false);
+        yield* L.wait(12);
+        return true;
+    }
+    // away from the fire and the men: the open tile 5-13 steps off farthest from them, running (Shift), until none is after him (their
+    // leash: some 20 tiles from their place)
+    function* banditFlee(fx, fy, why) {
+        setDoing("Uciekam od bandytów (życie " + Math.round(hpRatio() * 100) + "%)", why);
+        for (let r = 0; r < 12; r++) {
+            if (HM() && HM().robbery) break;
+            const th = menNear(12);
+            if (!th.length && Math.hypot(P().x - fx, P().y - fy) > 14) break;
+            const f = L.field(P().x, P().y), foe = th[0] ? th[0].a : null;
+            let best = null;
+            for (let y = P().y - 11; y <= P().y + 11; y++) for (let x = P().x - 11; x <= P().x + 11; x++) {
+                if (!$gameMap.isValid(x, y)) continue;
+                const c = f.at(x, y);
+                if (!isFinite(c) || c < 5 || c > 13) continue;
+                const s = Math.hypot(x - fx, y - fy) + (foe ? 0.7 * Math.hypot(x + 0.5 - foe.centerX(), y + 0.5 - foe.centerY()) : 0) - 0.3 * c;
+                if (!best || s > best.s) best = { x, y, s };
+            }
+            if (!best) break;
+            yield* combatOff();
+            L.key("shift", true);
+            yield* L.walkTo(best.x, best.y, f);
+            L.key("shift", false);
+        }
+        L.key("shift", false);
+    }
+    // after the fight: the kneeling ones (up to him - the game asks; the policy spares him), the beaten searched, the sack taken (O on it)
+    function* banditLoot(camp, why) {
+        // (2026-11-17 test: once the camp beaten and its sack left lying - one try a drop, 16 rounds: now two tries each, more rounds;
+        // the second try comes from beside it, not onto its cell)
+        const H = HM(), tried = new Map(), asked = new Set();
+        for (let k = 0; k < 30; k++) {
+            if (busy()) { yield* drive({}); continue; }
+            if (foesNear(9).length) { yield* timeboxed(fightFoes(60 * 30, why), () => hpRatio() < BANDIT_FIT.flee); if (hpRatio() < BANDIT_FIT.flee) return; continue; }
+            const kneel = (H.list || []).find(h => h && !h._dead && h._surrendered && !h._defeated && !asked.has(h));
+            if (kneel) {
+                asked.add(kneel);
+                setDoing("Obóz: " + kneel.name() + " błaga o litość - podchodzę", why);
+                yield* combatOff();
+                // (run 2026-11-17: the walk to a kneeling knifer stood a minute in place - ap.js's watchdog started the brain anew and
+                // the sack was never taken: the walk time-boxed, the camp's end resumed by banditPlan when it happens all the same)
+                const f0 = AP.frame;
+                yield* timeboxed(approach([[kneel._x, kneel._y]]), () => AP.frame - f0 > 900);
+                AP.saidAt = AP.frame;
+                for (let n = 0; n < 150 && !busy(); n++) yield;   // (the game asks what to do with him)
+                if (busy()) yield* drive({});
+                continue;
+            }
+            const near = d => Math.hypot(d.x - camp.x, d.y - camp.y) < 16;
+            const drops = (H.drops() || []).filter(d => (tried.get(d.id) || 0) < 2 && near(d) && ((d.kind === "sack" && d.camp === camp.id) || (d.kind === "body" && (d.gold > 0 || (d.items || []).length))));
+            if (!drops.length) break;
+            const px = P()._realX + 0.5, py = P()._realY + 0.5, d = drops.sort((a, b) => Math.hypot(a.x - px, a.y - py) - Math.hypot(b.x - px, b.y - py))[0];
+            const again = (tried.get(d.id) || 0) > 0;
+            tried.set(d.id, (tried.get(d.id) || 0) + 1);
+            yield* combatOff();
+            const tx = Math.floor(d.x), ty = Math.floor(d.y), g1 = gold();
+            setDoing(d.kind === "sack" ? "Obóz: biorę worek z łupem" : "Obóz: przeszukuję pobitego", why);
+            const f1 = AP.frame, slow = () => AP.frame - f1 > 900;
+            if (!(P().x === tx && P().y === ty) && (again || (yield* timeboxed(L.walkTo(tx, ty), slow)) !== true) && !(yield* timeboxed(approach([[tx, ty]]), slow))) continue;
+            AP.saidAt = AP.frame;
+            const ddx = d.x - (P()._realX + 0.5), ddy = d.y - (P()._realY + 0.5);
+            if (Math.hypot(ddx, ddy) > 0.3) P().setDirection(Math.abs(ddx) >= Math.abs(ddy) ? (ddx > 0 ? 6 : 4) : (ddy > 0 ? 2 : 8));
+            yield* L.wait(2);
+            yield* L.press("ok");
+            yield* L.wait(50);
+            yield* L.waitFree(120);
+            say((d.kind === "sack" ? "worek z łupem" : "przeszukał pobitego") + ": +" + (gold() - g1) + " G");
+        }
+    }
+    function* banditAttack(camp) {
+        const H = HM(), m = mapId(), why = "obóz bandytów (" + mapName(m) + ")", g0 = gold(), b0 = count(152), beaten0 = H.state().beaten || 0;
+        const rec = { what: "atak", map: m, men: banditJudge(camp).txt, result: "", gold: 0, hp0: Math.round(hpRatio() * 100), level: heroLevel() };
+        FAB.banditCur = { id: camp.id, rec, g0, b0, noted: false };
+        (FAB.banditSeen = FAB.banditSeen || {})[camp.id] = "atak";
+        FAB.campNo[m] = now() + 12;   // (the night at home afterwards: not by their fire, where the raids come)
+        let heals = 0;
+        FAB.goldCtx = "obozy";
+        try {
+            yield* combatOff();
+            // 1. to the edge of the fire's light (it shows from afar at night), then sneaking (C)
+            setDoing("Obóz bandytów: idę do ogniska (widać je z daleka)", why);
+            const f = L.field(P().x, P().y);
+            let edge = null;
+            for (let y = camp.y - 9; y <= camp.y + 9; y++) for (let x = camp.x - 9; x <= camp.x + 9; x++) {
+                if (!$gameMap.isValid(x, y)) continue;
+                const d = Math.hypot(x - camp.x, y - camp.y), c = f.at(x, y);
+                if (d < 6 || d > 8.5 || !isFinite(c)) continue;
+                if (!edge || c < edge.c) edge = { x, y, c };
+            }
+            if (edge && Math.hypot(P().x - camp.x, P().y - camp.y) > 8.5) yield* L.walkTo(edge.x, edge.y, f);
+            if (!sneakingNow()) { yield* L.press("sneak"); yield* L.wait(4); }
+            // 2. a sleeper first (a blow from hiding breaks his balance - he reels), else the nearest
+            const men0 = banditMen(camp).sort((a, b) => a.playerDistance() - b.playerDistance());
+            const first = men0.find(h => h._mode === "sleep") || men0[0];
+            if (first) yield* banditStrike(first, why, true);
+            if (sneakingNow()) yield* L.press("sneak");
+            // 3. the fight: all who stand; under half his life a bandage (twice at most), then away
+            for (let k = 0; k < 40; k++) {
+                if (H.robbery || (H.state().beaten || 0) > beaten0) { rec.result = "pobity i obrabowany"; break; }
+                const standing = banditMen(camp).filter(h => !h._surrendered && h._mode !== "flee" && h._mode !== "leave");
+                if (!standing.length) break;
+                if (hpRatio() < BANDIT_FIT.flee) {
+                    if (count(152) > 0 && heals < BANDIT_FIT.heals && !foesNear(3).some(x => x.tell && x.tell.t < 40)) { heals++; yield* combatOn(); L.key("heal", true); yield; yield; L.key("heal", false); yield* L.wait(40); continue; }
+                    rec.result = "ucieczka (życie " + Math.round(hpRatio() * 100) + "%)";
+                    yield* banditFlee(camp.x, camp.y, why);
+                    break;
+                }
+                if (foesNear(10).length) { yield* timeboxed(fightFoes(60 * 30, why), () => hpRatio() < BANDIT_FIT.flee || !!H.robbery); continue; }
+                yield* banditStrike(standing.sort((a, b) => a.playerDistance() - b.playerDistance())[0], why, false);   // (one not fighting yet: up to him)
+            }
+            if (!rec.result) rec.result = banditMen(camp).some(h => !h._surrendered && h._mode !== "flee" && h._mode !== "leave") ? "nie dokończony" : "rozbity";
+        } finally { FAB.goldCtx = null; L.releaseAll(); }
+        return yield* banditFinish(camp);
+    }
+    // the camp's end: the kneeling ones spared, the beaten searched, the sack taken (not after a flight or a robbery), then the record.
+    // (FAB.banditCur keeps the attack's start: a brain started anew in between - ap.js's watchdog - comes back here by banditPlan)
+    function* banditFinish(camp) {
+        const H = HM(), cur = FAB.banditCur, rec = cur.rec, why = "obóz bandytów (" + mapName(mapId()) + ")";
+        if (!rec.result) rec.result = banditMen(camp).some(h => !h._surrendered && h._mode !== "flee" && h._mode !== "leave") ? "nie dokończony" : "rozbity";
+        FAB.goldCtx = "obozy";
+        try { if (!/pobity|ucieczka/.test(rec.result)) yield* banditLoot(camp, why); } finally { FAB.goldCtx = null; L.releaseAll(); }
+        if (sneakingNow()) yield* L.press("sneak");
+        Object.assign(rec, { gold: gold() - cur.g0, bandages: cur.b0 - count(152), hp: Math.round(hpRatio() * 100), sack: !(H.drops() || []).some(d => d.kind === "sack" && d.camp === camp.id) });
+        if (!cur.noted) { cur.noted = true; note("camps", rec); }
+        say("obóz bandytów: " + rec.result + ", złoto " + (rec.gold >= 0 ? "+" : "") + rec.gold + " G, worek " + (rec.sack ? "wzięty" : "nie") + ", życie " + rec.hp + "%");
+        if (FAB.banditEve) FAB.banditEve.done = true;
+        return true;
+    }
+    // (2026-11-17) men after him on the surface - a camp's band, a raid on his sleep, an ambush on the road: he fights (their blows never
+    // kill; a beaten hero is robbed), a bandage under half his life, then away; the kneeling spared and the beaten searched afterwards
+    function* menFight(why) {
+        const x0 = P().x, y0 = P().y;
+        let heals = 0;
+        for (let k = 0; k < 30 && menNear(10).length; k++) {
+            if (HM() && HM().robbery) break;
+            if (hpRatio() < BANDIT_FIT.flee) {
+                if (count(152) > 0 && heals < BANDIT_FIT.heals && !foesNear(3).some(x => x.tell && x.tell.t < 40)) { heals++; yield* combatOn(); L.key("heal", true); yield; yield; L.key("heal", false); yield* L.wait(40); continue; }
+                const t = menNear(10)[0];
+                note("camps", { what: "ucieczka przed bandytami", why: "życie " + Math.round(hpRatio() * 100) + "%" });
+                yield* banditFlee(t ? t.a.centerX() : P().x, t ? t.a.centerY() : P().y, why);
+                return true;
+            }
+            yield* timeboxed(fightFoes(60 * 30, why), () => hpRatio() < BANDIT_FIT.flee || !!(HM() && HM().robbery));
+        }
+        if (!(HM() && HM().robbery)) { const g0 = gold(); FAB.goldCtx = "obozy"; try { yield* banditLoot({ id: -1, x: x0, y: y0 }, why); } finally { FAB.goldCtx = null; } if (gold() > g0) say("łup po napadzie: +" + (gold() - g0) + " G"); }
+        return true;
     }
 
     // ------------------------------------------------------------------ Akt III: noc napadu na tawernę
@@ -1743,6 +2469,10 @@
         const bellNight = FAB.done2 && qstep("W2") < 0 && h >= 21 && h < 23.3;   // (etap 3: W2 begins with the night bell heard in town)
         const a3 = window.Act3 ? Act3.phase() : "idle";
         const siegeNight = a3 === "siege" || (a3 === "armed" && Act3.state().siegeDay && day() >= Act3.state().siegeDay);   // (Akt III: the night of the raid he stays by the tavern)
+        // 0. men after him on the surface (a camp's band, a raid on his sleep, an ambush): the fight first (2026-11-17)
+        if (!inUnder() && a3 !== "siege" && menNear(10).length) return { what: "Bandyci! Bronię się", why: "ludzie z pałkami i łukami (ich ciosy nie zabijają - pobity zostaje obrabowany)", run: () => menFight("napad bandytów") };
+        // 0a. a bandit camp tonight: its fire attacked or passed by, an evening on its way (2026-11-17, uczciwe złoto poza zmianami)
+        if (!lastNight && !bellNight && !siegeNight && a3 !== "armed") { const bp = banditPlan(); if (bp) return bp; }
         if ((h >= 21.25 || h < 5.5) && !(lastNight && gold() > 0) && !inUnder() && !bellNight && !siegeNight) {
             if (mapId() === MAP.field && hasBedroll()) return { what: "Śpię na działce", why: "noc (" + clock() + "), leśne legowisko", run: sleepField };
             const camp = campOk() ? campHere() : null, sealed = homeSealed(), stableOk = !!(s.flags && s.flags.stajnia), far = m => travelH(m) > 1.25;
@@ -1780,6 +2510,9 @@
         if (n.water < 60 && wellLeft() > 0 && !inUnder() && (mapId() === MAP.town || mapId() === MAP.tavern || n.water < 35)) return { what: "Piję ze studni miejskiej", why: "woda " + Math.round(n.water) + " (2 nabrania dziennie)", run: drinkWell };
         if (n.water < 25 && bagFoods().some(f => f.water > 0)) return { what: "Piję (jedzenie z wodą)", why: "woda " + Math.round(n.water), run: () => eatBest(true) };
         if (stamina() < 30 && inUnder() && bagFoods().some(f => f.stamina > 0) && !foesNear(8).length) return { what: "Jem dla sił", why: "siły " + Math.round(stamina()), run: () => eatBest("stamina") };
+        // 2c. the quest board in the tavern / the town (2026-11-17): a contract turned in or given up, new ones looked at - a few minutes
+        // when he is there anyway (QB_MAPS), a short way only for a ready one
+        if (!inUnder() && !needUrgent()) { const qp = qbBoardPlan(); if (qp) return qp; }
         // 2a. pines from cones on the plot (the player 2026-11-17: "gracz może względnie wcześniej zasadzić kilka drzew" - the plot's
         // trees all cut by the time the forge wants charcoal): once a day while he is on the plot in the daytime with cones in the bag
         if (!inUnder() && mapId() === MAP.field && count(CONE) > 0 && plantedPines() < PINES_WANT && FAB.pineDay !== day() && h >= 6 && h < 18 && stamina() > 30 && !needUrgent())
@@ -1855,6 +2588,8 @@
         const deep = UG() ? UG().deepest() : 0;
         const A = A3(), ph = A ? A.phase() : "idle";
         if (ph === "armed" || ph === "siege") { const p = act3Plan("Akt III: napad na tawernę"); if (p) return p; }
+        // (2026-11-17) contracts from the board between the trips down: QB_DAY_H hours a day at most, in the daytime, on the surface
+        if (!inUnder() && deep < UNDER_GOAL) { const cw = qbWindow(); if (cw) return cw; }
         // a weapon before the underground: the iron spear from his own forge (Bron: „Wykuj: żelazna włócznia” - 2 iron, 1 coal, 2 wood),
         // else the oak staff from the workbench; put in hand as in the equipment window
         const weapon = bestWeapon();
@@ -1885,7 +2620,8 @@
         equipBest();
         // bandages before going down (the only thing that heals a wound - +20% life; „Zrób opatrunek”: fibre, herbs, yarrow from the field)
         // (2026-11-17 balance with the player: 4 bandages - a spider's bite wounds; herbs off the plot too when it has none left)
-        if (count(152) < BANDAGES && !inUnder() && !FAB.bandageGaveUp && deep < UNDER_GOAL) return { what: "Robię opatrunki na drogę (zioła, krwawnik, włókno)", why: "przed podziemiami: rany goją się tylko opatrunkiem albo snem", run: function* () {
+        // (the herbs and the yarrow have their seasons - Farming GATHER: out of season no bandage is made from the ground)
+        if (count(152) < BANDAGES && !inUnder() && !FAB.bandageGaveUp && deep < UNDER_GOAL && bandageSeason()) return { what: "Robię opatrunki na drogę (zioła, krwawnik, włókno)", why: "przed podziemiami: rany goją się tylko opatrunkiem albo snem", run: function* () {
             const r = yield* fieldWork([], () => count(152) >= BANDAGES || hour() >= 20.5 || hour() < 5.5 || (FAB.bandageField || 0) > 5, "opatrunki na podziemia", function* () {
                 FAB.bandageField = (FAB.bandageField || 0) + 1;
                 for (const [id, kind] of [[104, "herb"], [150, "yarrow"], [92, "fiber"]]) if (count(id) < 2) { setDoing("Na działce: zbieram " + $dataItems[id].name, "opatrunki"); yield* AP.TASKS.gather([kind], 2 - count(id)); }
@@ -1929,6 +2665,15 @@
                         return { what: "Kupuję lepszą zbroję: " + SELLERS[seller].name + " (" + list.map(w => w.name).join(", ") + ")", why: "na górze, w sakiewce " + $gameParty.gold() + " G", run: () => shopAtTadek(list, false, "zbroja przed zejściem", seller) };
                     }
                 }
+                // (2026-11-17 runs from po_pietrze10: life 100%, strength 30 at 9:48 - to bed until the next morning, a whole day and a
+                // "stall". Only tired in the daytime: a seated rest (Z, an hour a second) - the bed for the wounds and the night)
+                if (hpRatio() >= 0.7 && stamina() < 55 && L.staminaCap() >= 60 && hour() >= 6 && hour() < 18 && (FAB.restDay || 0) !== day() * 24 + Math.floor(hour())) return { what: "Odpoczywam przed zejściem (siadam - Z)", why: "siły " + Math.round(stamina()) + ", życie " + Math.round(hpRatio() * 100) + "%", run: function* () {
+                    FAB.restDay = day() * 24 + Math.floor(hour());   // (one sit an hour: when it does not help, the bed below)
+                    const s0 = stamina();
+                    yield* AP.TASKS.rest();
+                    say("odpoczął siedząc: siły " + Math.round(s0) + " → " + Math.round(stamina()));
+                    return true;
+                } };
                 if (hpRatio() < 0.7 || stamina() < 55) return { what: "Odpoczywam przed zejściem (sen u dziadka)", why: "życie " + Math.round(hpRatio() * 100) + "%, siły " + Math.round(stamina()), run: sleepHome };
                 // (no skin: its way once a day before a trip down - the tannery, a tanned hide, 3 fibre; else down without it)
                 if (!skinOwned() && !FAB.skinGaveUp && FAB.skinDay !== day() && hour() >= 6 && hour() < 17) return { what: "Robię bukłak (garbarnia, skóra, len)", why: "woda na drogę pod ziemię - 4 łyki po 35", run: function* () {
@@ -1937,15 +2682,20 @@
                     if (!ok) { FAB.skinFails = (FAB.skinFails || 0) + 1; if (FAB.skinFails > 8) { FAB.skinGaveUp = true; note("unclear", { what: "bukłak: 8 dni bez skutku (garbarnia / surowa skóra / len)" }); } }
                     return true;
                 } };
-                if (skinOwned() && skinSips() < skinMax() && wellLeft() > 0) return { what: "Napełniam bukłak przed zejściem", why: "bukłak " + skinSips() + "/" + skinMax() + " (pod ziemią wody nie ma do piętra 50)", run: fillSkinWell };
-                if (nn.water < 70 && wellLeft() > 0) return { what: "Piję ze studni przed zejściem", why: "woda " + Math.round(nn.water) + " (pod ziemią wody nie ma do piętra 50)", run: drinkWell };
+                // (2026-11-17: water for the deeper floors - his own well on the plot, no ration; then the skin made bigger, 8 sips)
+                if (!ownWell() && !FAB.wellGaveUp && FAB.wellDay !== day() && deep >= 10 && hour() >= 6 && hour() < 15) return { what: "Buduję własną studnię na działce", why: "studnia miejska daje 2 nabrania dziennie - za mało na zejścia poniżej 10. piętra", run: () => buildOwnWell("własna studnia: woda bez przydziału") };
+                if (skinOwned() && !skinBig() && tanneryUp() && FAB.skinBigDay !== day() && hour() >= 6 && hour() < 17 && (count(163) >= 2 || builtOn(MAP.field).some(b => b.type === "snare"))) return { what: "Powiększam bukłak (garbarnia: skóra i 2 ścięgna)", why: "8 łyków zamiast " + skinMax() + " - woda na powrót z głębszych pięter", run: () => enlargeSkin("większy bukłak") };
+                if (skinOwned() && skinSips() < skinMax() && wellLeft() > 0) return { what: "Napełniam bukłak przed zejściem", why: "bukłak " + skinSips() + "/" + skinMax() + " (pod ziemią wody nie ma do piętra 50)" + (ownWell() ? ", własna studnia" : ""), run: fillSkinWell };
+                if (nn.water < (ownWell() ? 85 : 70) && wellLeft() > 0) return { what: "Piję ze studni przed zejściem" + (ownWell() ? " (własna, na działce)" : ""), why: "woda " + Math.round(nn.water) + " (pod ziemią wody nie ma do piętra 50)", run: drinkWell };
                 // (the well's two draws used up and too little water for a trip down: the night first, tomorrow's draws)
                 if (nn.water < 50 && wellLeft() === 0) return { what: "Czekam do jutra na wodę (studnia: koniec przydziału)", why: "woda " + Math.round(nn.water) + " - za mało na wyprawę pod ziemię", run: sleepHome };
                 if (count(SOUP) < 2 && FAB.soupDay !== day() && hour() >= 8 && hour() < 18) return { what: "Biorę kapuśniak na drogę", why: "jedzenie pod ziemię", run: function* () { if (yield* goMap(MAP.house, "kapuśniak")) yield* takeSoup(); } };
             }
             // training: dying again after a preparing - the floor above first, a few hours of its creatures (experience), then deeper
             // (on the training floor itself - from a deeper one he goes up first, underPlan; until one level more, a day at most)
-            if (FAB.trainCap && inUnder() && floorNow() === FAB.trainCap) {
+            // (run 13: he trained on floor 9 until the water was 0 - no training while the water for the way back runs short: underPlan
+            // takes him up to the well first)
+            if (FAB.trainCap && inUnder() && floorNow() === FAB.trainCap && needs().water + skinWater() >= waterBack(floorNow())) {
                 const lv = Combat.hero ? Combat.hero().level : 0;
                 if (!FAB.trainUntil) { FAB.trainUntil = now() + 24; FAB.trainLevel = lv + 1; }
                 if (now() < FAB.trainUntil && lv < FAB.trainLevel) return { what: "Ćwiczę na piętrze " + floorNow() + " (doświadczenie przed niższymi)", why: "po zgonach na piętrze " + (FAB.trainFrom || FAB.trainCap + 1) + ", do poziomu " + FAB.trainLevel, run: function* () {
@@ -2058,6 +2808,7 @@
         if (s) deb = { paid: s.paid, debt: s.debt, left: Math.max(0, s.debt - s.paid), done: !!s.done, daysLeft: window.Story && Story.daysLeft ? Story.daysLeft() : null };
         return { doing: FAB.doing, why: FAB.why, stage: FAB.stage, day: day(), hour: +hour().toFixed(2), clock: clock(), gold: gold(), debt: deb, speed: FAB.speed, paused: !!FAB.paused,
             stuck: FAB.stuck, map: mapId(), mapName: mapName(mapId()), x: P().x, y: P().y, deaths: FAB.rep.deaths.length, shifts: FAB.rep.shifts.length,
+            contracts: (FAB.rep.contracts || []).filter(c => c.what === "oddane").length, camps: (FAB.rep.camps || []).filter(c => c.what === "atak").length,
             deepest: window.Underground && Underground.deepest ? Underground.deepest() : 0 };
     };
     if (FAB.guard) clearInterval(FAB.guard);
@@ -2131,9 +2882,15 @@
                 if (FAB.badSlots[i] && FAB.badSlots[i] === info[i].timestamp) continue;
                 if (info[i].timestamp > ts) { ts = info[i].timestamp; best = i; }
             }
+            // (2026-11-17 run from po_pietrze10: dead on floor 10 in its first minutes, before any autosave or safe save - no slot, no
+            // reload, and the guard noted the same death 775 times. Then the newest save there is: the checkpoint the run began from)
+            if (best < 0) for (let i = 0; i < info.length; i++) if (info[i] && info[i].timestamp > ts) { ts = info[i].timestamp; best = i; }
             if (best < 0) return false;
+            // (the gold earned since that save is gone with the load: counted apart in the ledger, not taken off its sources)
+            const g0 = $gameParty.gold();
             await DataManager.loadGame(best);
             $gameSystem.onAfterLoad();
+            try { ledger().reload += $gameParty.gold() - g0; } catch (e) { /* (only the counting) */ }
             $gamePlayer.reserveTransfer($gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $gamePlayer.direction(), 0);
             $gamePlayer.requestMapReload();
             SceneManager.goto(Scene_Map);
@@ -2168,7 +2925,15 @@
     // (for tests/sosny_autopilot_test.js: the pines on their own - AP.run([["fab_plant", n]]))
     AP.TASKS.fab_plant = function* (n) { return yield* plantPines(n || 4); };
     AP.TASKS.fab_skin = function* (what) { return what === "fill" ? yield* fillSkinWell() : what === "sip" ? yield* sipSkin() : yield* makeSkin("test"); };
+    // (for tests/woda_autopilot_test.js: the own well, a drink / the skin there, the bigger skin - AP.run([["fab_water", what]]))
+    AP.TASKS.fab_water = function* (what) { return what === "well" ? yield* buildOwnWell("test") : what === "big" ? yield* enlargeSkin("test") : yield* drinkWell(what === "fill" ? "Napełnij bukłak" : "Napij się"); };
     FAB.trees = { pineSpot, plantedPines, PINES_WANT };
+    // (for tests/autopilot_kontrakty_test.js and tests/autopilot_oboz_test.js: the board, a contract's work, a camp - on their own)
+    AP.TASKS.fab_board = function* (m) { if (m && !(yield* goMap(m, "test: tablica"))) return false; return yield* qbVisit("test: tablica zleceń"); };
+    AP.TASKS.fab_contract = function* (m) { if (m && !(yield* goMap(m, "test: zlecenie"))) return false; return yield* qbWork("test: zlecenie"); };
+    AP.TASKS.fab_camp = function* () { const c = HM() && HM().campHere(); return c ? yield* banditAttack(c) : false; };
+    FAB.qb = { judge: qbJudge, pick: qbPick, ready: qbReadyList, drop: qbDropList, next: qbWorkNext, huntOk, bountyOk, plan: qbBoardPlan };
+    FAB.bandits = { fit: banditFit, judge: banditJudge, plan: banditPlan, FIT: BANDIT_FIT };
     FAB.unstickWalk = function() { AP.stop(); AP.restartWith = [["fabula"]]; AP.run([["fabula_unstick"], ["fabula"]]); FAB.on = true; return true; };
     FAB.stop = function() { FAB.on = false; AP.stop(); L.releaseAll(); return true; };
     return "ok v" + VERSION;

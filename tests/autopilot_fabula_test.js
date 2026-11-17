@@ -117,7 +117,7 @@ kit.test({ port: 9751, bootCheck: "gra się uruchamia", errorCheck: false, evalT
         if (s.err) { stopWhy = "błąd gry: " + s.err.slice(0, 200); await t.shot(path.join(OUT, "blad_gry" + TAG + ".png")); break; }
         if (s.day !== lastDay) {
             lastDay = s.day;
-            console.log(`  dzień ${s.day} ${s.clock} · ${s.stage} · złoto ${s.gold}` + (s.debt ? ` · spłacone ${s.debt.paid}/${s.debt.debt}` : "") + ` · zmiany ${s.shifts} · zgony ${s.deaths} · ${mins()} min`);
+            console.log(`  dzień ${s.day} ${s.clock} · ${s.stage} · złoto ${s.gold}` + (s.debt ? ` · spłacone ${s.debt.paid}/${s.debt.debt}` : "") + ` · zmiany ${s.shifts}` + (s.contracts !== undefined ? ` · zlecenia ${s.contracts} · obozy ${s.camps}` : "") + ` · zgony ${s.deaths} · ${mins()} min`);
         }
         if (s.stage !== lastStage) { lastStage = s.stage; console.log("  >> " + s.stage + " (dzień " + s.day + " " + s.clock + ", " + mins() + " min)"); }
         if (Date.now() - lastSave > 60000) { lastSave = Date.now(); try { fs.writeFileSync(path.join(OUT, "stan" + TAG + ".json"), JSON.stringify(await J("FAB.rep"))); } catch (e) {} }

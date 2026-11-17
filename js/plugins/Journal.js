@@ -142,7 +142,7 @@
         { id: "branches", ch: 0, title: "Nazbieraj gałęzi", item: 77, after: [], done: () => has(77),
             text: "Suche gałęzie (brązowe patyki) leżą na trawie. Podnosisz je przyciskiem akcji, tak jak kamienie. Zrobisz z nich młotek, warsztat i pierwsze narzędzia." },
         { id: "flax", ch: 0, title: "Zbierz len", item: 92, after: [], done: () => has(92),
-            text: "Len rośnie na łące (niebieskie kwiatki, od wiosny do jesieni). Podnosisz go przyciskiem akcji. Wiążesz nim kamień z gałęzią, a z czterech sztuk skręcisz linę." },
+            text: "Len rośnie na łące (niebieskie kwiatki, od wiosny do jesieni). Podnosisz go przyciskiem akcji. Wiążesz nim kamień z gałęzią, a z czterech sztuk (także razem z pokrzywą) skręcisz sznurek." },
         { id: "drink", ch: 0, title: "Napij się wody", item: 129, after: [], done: () => (T.state("needs").drinks || 0) > 0,
             text: "Pod ikoną wytrzymałości są dwa paski: sytość i nawodnienie. Gdy spadają, wszystko kosztuje więcej sił. Stań przed stawem albo studnią i wybierz „Napij się”. W deszczu na dworze nawodnienie rośnie samo." },
         { id: "hammer", ch: 0, title: "Zrób młotek", item: 89, recipe: ["hand", "hammer"], after: ["stone", "branches", "flax"], done: () => has(89),
@@ -215,8 +215,8 @@
 
         { id: "knife", ch: 4, title: "Zrób nóż", item: 90, recipe: ["workbench", "knife"], after: ["wood", "stone", "branches"], done: () => hasAny([90, 91]),
             text: "Bez noża nie oprawisz zwierzyny. Kamienny zrobisz w warsztacie, żelazny wykujesz w kuźni (daje więcej mięsa)." },
-        { id: "rope", ch: 4, title: "Skręć linę", item: 93, recipe: ["hand", "rope"], after: ["flax"], done: () => has(93),
-            text: "Cztery sztuki lnu dają jedną linę (menu ziemi, „Wytwórz...”). Lina potrzebna jest do pułapki, wędki, garbarni i studni." },
+        { id: "rope", ch: 4, title: "Skręć sznurek", item: 93, recipe: ["hand", "rope"], after: ["flax"], done: () => has(93),
+            text: "Cztery sztuki lnu albo pokrzywy - same albo pomieszane - dają jeden sznurek (Q, zakładka „Budowa”, albo menu ziemi, „Wytwórz...”). Sznurek potrzebny jest do pułapki, wędki, garbarni i trójnogu, a z dziesięciu splecie się linę." },
         { id: "snare", ch: 4, title: "Postaw pułapkę", item: 101, build: "snare", after: ["rope", "branches"], done: () => isBuilt("snare"),
             text: "Sama pułapka nic nie złapie: załóż w niej przynętę (marchew, kapusta, dzikie jabłka, gruszki, jagody). Zając, który ją zwęszy, podejdzie i może wpaść. Odbierasz go przyciskiem akcji." },
         { id: "meat", ch: 4, title: "Zdobądź mięso", item: 94, after: ["snare", "knife"], done: () => hasAny([94, 157, 159, 161, 168]),
@@ -224,25 +224,28 @@
         { id: "roast", ch: 4, title: "Upiecz posiłek na ognisku", item: 95, after: ["meat", "campfire"], done: () => hasAny([95, 158, 160, 162, 169, 99, 107, 108]),
             text: "Menu ogniska ma przepisy: mięso (zająca, jelenia, dzika, wilka), ryba, ziemniaki i jajecznica. Siadasz z jedzeniem na patyku i czekasz, aż się upiecze (mięso i ryba pół godziny gry). Jeśli wstaniesz wcześniej (Esc albo ruch), nic się nie upiecze." },
         { id: "tripod", ch: 4, title: "Dobuduj trójnóg do ogniska", item: 77, after: ["roast", "rope"], done: () => isBuilt("tripod") || isBuilt("cauldron"),
-            text: "W menu ogniska wybierz „Dobuduj trójnóg”: 3 gałęzie i lina staną nad ogniem. Mięso zawiesisz na haczyku i możesz odejść, bo piecze się samo (gotowe odbierzesz z ognia). Na patyku, bez trójnogu, trzeba siedzieć przy ogniu aż do końca." },
+            text: "W menu ogniska wybierz „Dobuduj trójnóg”: 3 gałęzie i sznurek staną nad ogniem. Mięso zawiesisz na haczyku i możesz odejść, bo piecze się samo (gotowe odbierzesz z ognia). Na patyku, bez trójnogu, trzeba siedzieć przy ogniu aż do końca." },
         { id: "cauldron", ch: 4, title: "Zawieś kociołek nad ogniem", item: 141, after: ["tripod", "iron"], done: () => isBuilt("cauldron"),
             text: "W kuźni wykuj kociołek („Wykuj kociołek”, 3 żelaza), a potem w menu ogniska z trójnogiem wybierz „Zawieś kociołek” - wystarczy mieć go w plecaku (wokół potrzeba miejsca 3 × 2 pola). W kociołku ugotujesz zupę, gulasz, kapuśniak, owsiankę i wywar. Kociołek zajmuje cały ogień, więc mięso na patyku upieczesz już tylko na drugim ognisku." },
         { id: "eat", ch: 4, title: "Zjedz posiłek", item: 95, after: ["roast"], done: () => data().eaten > 0,
             text: "Jesz z menu Przedmioty. Posiłek syci (pasek sytości pod wytrzymałością), odnawia siły i daje premię: Najedzony (tańsze czynności) albo Rozgrzany (odporność na zimno). Głodny traci więcej sił przy pracy." },
         { id: "rod", ch: 4, title: "Zrób wędkę", item: 100, recipe: ["workbench", "rod"], after: ["rope", "wood"], done: () => has(100),
-            text: "Wędkę zrobisz w warsztacie z drewna, liny i gałęzi." },
+            text: "Wędkę zrobisz w warsztacie z drewna, sznurka i gałęzi." },
         { id: "fish", ch: 4, title: "Złów rybę", item: 98, after: ["rod"], done: () => hasAny([98, 173, 174]),
             text: "Stań przy stawie, naciśnij przycisk akcji i wybierz „Zarzuć wędkę”. Ryby biorą najlepiej o świcie i o zmierzchu, a także w deszcz." },
         { id: "bucket", ch: 4, title: "Wykuj wiadro", item: 138, recipe: ["forge", "bucket_item"], after: ["planks", "iron"], done: () => isBuilt("bucket") || has(138),
             text: "Wiadro wykuwasz w kuźni z desek i żelaza, a stawiasz je gotowe w menu pola „Postaw…” (bez młotka). Postawione na dworze zbiera deszczówkę: napijesz się z niego, podlejesz nią rośliny albo napełnisz konewkę i bukłak. Zabierzesz je do plecaka razem z wodą, a zupy w kociołku bez tej wody się nie ugotują." },
-        { id: "well", ch: 4, title: "Zbuduj studnię", item: 87, build: "well", after: ["rope", "stone", "bucket"], done: () => isBuilt("well"),
-            text: "Do budowy studni potrzebujesz wiadra (zabierz je z ziemi do plecaka) i wykopanego na pełną głębokość dołu 2 × 2 pod studnią (łopatą, trzy uderzenia w każdej z czterech kratek). W studni napełnisz konewkę i napijesz się." },
+        // (2026-11-17, the user: "z dziesięciu sznurków robi się linę i używa do budowy studni") - opens with the bucket, right before the well
+        { id: "lina", ch: 4, title: "Spleć linę", item: 492, recipe: ["hand", "lina"], after: ["rope", "bucket"], done: () => has(492) || isBuilt("well"),
+            text: "Dziesięć sznurków splecionych razem daje grubą linę (Q, zakładka „Budowa”, albo „Wytwórz...”). Bez liny nie zbudujesz studni: na niej wisi wiadro." },
+        { id: "well", ch: 4, title: "Zbuduj studnię", item: 87, build: "well", after: ["lina", "stone", "bucket"], done: () => isBuilt("well"),
+            text: "Do budowy studni potrzebujesz liny (splecionej z dziesięciu sznurków), wiadra (zabierz je z ziemi do plecaka) i wykopanego na pełną głębokość dołu 2 × 2 pod studnią (łopatą, trzy uderzenia w każdej z czterech kratek). W studni napełnisz konewkę i napijesz się." },
         { id: "tannery", ch: 4, title: "Zbuduj garbarnię", item: 97, build: "tannery", after: ["meat"], done: () => isBuilt("tannery"),
             text: "W garbarni wyprawisz skóry, a z nich uszyjesz płaszcz, buty i plecak." },
         { id: "cloak", ch: 4, title: "Uszyj płaszcz przed zimą", item: 112, recipe: ["tannery", "cloak"], after: ["tannery"], done: () => has(112),
             text: "Zima zaczyna się w dniu 85. Bez płaszcza, ogniska lub ciepłego posiłku marzniesz i każda czynność kosztuje więcej sił." },
         { id: "tent", ch: 4, title: "Uszyj namiot", item: 121, recipe: ["tannery", "tent"], after: ["tannery", "rope", "wood"], done: () => has(121),
-            text: "Namiot zszywasz w garbarni ze skór, liny i żerdzi. To twój dom w drodze: rozstawiasz go, gdzie chcesz, śpisz w nim do rana i składasz z powrotem." },
+            text: "Namiot zszywasz w garbarni ze skór, sznurka i żerdzi. To twój dom w drodze: rozstawiasz go, gdzie chcesz, śpisz w nim do rana i składasz z powrotem." },
         { id: "tentnight", ch: 4, title: "Prześpij noc w namiocie", item: 121, after: ["tent"], done: () => (farmData().tentNights || 0) > 0,
             text: "Rozstaw namiot (menu ziemi, „Postaw...”), stań przed nim i wybierz „Prześpij noc”. Rano dostaniesz podsumowanie dnia, a gra zapisze się sama. Namiot złożysz i zabierzesz ze sobą." },
         { id: "smokehouse", ch: 4, title: "Zbuduj wędzarnię", item: 105, build: "smokehouse", after: ["nails", "meat"], done: () => isBuilt("smokehouse"),
@@ -261,7 +264,7 @@
             text: "Nocą (od 20 do 5) na łąkach i w lesie krążą watahy wilków. Otaczają cię i atakują po jednym: wilk kuca i szczeka (\"!\"), a potem skacze. Przetocz się Spacją albo odbij go klawiszem P (tryb walki), a gdy stoi po skoku - uderz. Zabij przewodnika (największy), a reszta ucieknie." },
         // (stage 2 of the fight, 2026-10-05: the leather jacket from the tannery, and the bear - lived through: it went home, ran off or died)
         { id: "jacket", ch: 4, title: "Uszyj skórzaną kurtkę", item: 171, recipe: ["tannery", "jacket"], after: ["tannery"], done: () => has(171),
-            text: "W garbarni z trzech wyprawionych skór, dwóch ścięgien i liny uszyjesz skórzaną kurtkę. Wystarczy mieć ją w torbie: każdy cios, który do ciebie dojdzie, jest o 20% słabszy. Zużywa się od ciosów - naprawisz ją w warsztacie. Widać ją w menu P → Ekwipunek." },
+            text: "W garbarni z trzech wyprawionych skór, dwóch ścięgien i sznurka uszyjesz skórzaną kurtkę. Wystarczy mieć ją w torbie: każdy cios, który do ciebie dojdzie, jest o 20% słabszy. Zużywa się od ciosów - naprawisz ją w warsztacie. Widać ją w menu P → Ekwipunek." },
         { id: "bear", ch: 4, title: "Przeżyj spotkanie z niedźwiedziem", item: 170, after: ["wolves"],
             done: () => { const h = T.state("hunt"); return ((h.bears || {}).survived || 0) > 0 || ((h.kills || {}).bear || 0) > 0; },
             text: "Niedźwiedź czasem wychodzi z lasu do Kruczego Jaru, na łąki i leśne drogi. Gdy cię zobaczy, staje na tylnych łapach i ryczy: cofnij się wtedy, a da ci spokój. Jeśli podejdziesz albo go uderzysz, ruszy na ciebie. Jego łapy (\"!\" i cios) ani przygniecenia (staje dęba i skacze) nie zatrzyma tarcza ani parowanie - tylko przewrót (Spacja) albo krok w bok. Po każdym ataku stoi chwilę: wtedy bij. Zatacza się tylko od ciężkiego ciosu albo od ataku z ukrycia. Raz rozjuszony walczy do końca, ale daleko za tobą nie pójdzie." },
@@ -470,17 +473,21 @@
     // (2026-10-14) "any raw fish" (a recipe's r.fish: the smokehouse) - the pond's fish and the sea's herring and cod
     const rawFish = () => { const F = Farm(); return F && F.RAW_FISH ? F.RAW_FISH() : [98]; };
     const fishHave = () => rawFish().reduce((t, id) => t + countOf(id), 0);
-    const recipeRows = r => costRows(r.inputs).concat(r.meat ? [{ k: "cost", icon: iconOfItem(94), name: "Surowe mięso (dowolne)", have: meatHave(), need: r.meat, note: meatHave() < r.meat ? shortSource(94) : "" }] : [])
+    // (2026-11-17) a recipe's r.any (Farming.js): a group of items in any mix - the string: flax fibre or nettle
+    const anyGroups = r => (r && r.any) || [];
+    const anyHave = g => g.ids.reduce((t, id) => t + countOf(id), 0);
+    const anyRows = r => anyGroups(r).map(g => ({ k: "cost", icon: iconOfItem(g.icon || g.ids[0]), name: g.name, have: anyHave(g), need: g.n, note: anyHave(g) < g.n ? shortSource(g.icon || g.ids[0]) : "" }));
+    const recipeRows = r => costRows(r.inputs).concat(anyRows(r)).concat(r.meat ? [{ k: "cost", icon: iconOfItem(94), name: "Surowe mięso (dowolne)", have: meatHave(), need: r.meat, note: meatHave() < r.meat ? shortSource(94) : "" }] : [])
         .concat(r.fish ? [{ k: "cost", icon: iconOfItem(98), name: "Surowa ryba (dowolna)", have: fishHave(), need: r.fish, note: fishHave() < r.fish ? shortSource(98) : "" }] : []);
-    const usesItem = (r, id) => r.inputs.some(([i]) => i === id) || (!!r.meat && rawMeats().includes(id)) || (!!r.fish && rawFish().includes(id));
+    const usesItem = (r, id) => r.inputs.some(([i]) => i === id) || anyGroups(r).some(g => g.ids.includes(id)) || (!!r.meat && rawMeats().includes(id)) || (!!r.fish && rawFish().includes(id));
 
     function materialIds() {
         const F = Farm(), ids = new Set();
         if (F) {
-            for (const r of F.HAND_RECIPES || []) { for (const [i] of r.inputs) ids.add(i); ids.add(r.output[0]); }
+            for (const r of F.HAND_RECIPES || []) { for (const [i] of r.inputs) ids.add(i); for (const g of anyGroups(r)) for (const i of g.ids) ids.add(i); ids.add(r.output[0]); }
             for (const def of Object.values(F.BUILDINGS)) {
                 for (const [i] of def.cost) ids.add(i);
-                for (const r of def.recipes || []) { for (const [i] of r.inputs) ids.add(i); if (r.meat) for (const m of rawMeats()) ids.add(m); if (r.fish) for (const m of rawFish()) ids.add(m); ids.add(r.output[0]); }
+                for (const r of def.recipes || []) { for (const [i] of r.inputs) ids.add(i); for (const g of anyGroups(r)) for (const i of g.ids) ids.add(i); if (r.meat) for (const m of rawMeats()) ids.add(m); if (r.fish) for (const m of rawFish()) ids.add(m); ids.add(r.output[0]); }
                 if (def.produce) ids.add(def.produce.item);
             }
             for (const c of Object.values(F.CROPS)) { ids.add(c.seed); ids.add(c.produce); }
@@ -983,7 +990,7 @@
     }
     function recipeItems() {
         return allRecipes().map(e => {
-            const out = e.r.output[0], made = has(out), ready = stationBuilt(e.type) && e.r.inputs.every(([id, n]) => countOf(id) >= n) && (!e.r.meat || meatHave() >= e.r.meat) && (!e.r.fish || fishHave() >= e.r.fish);
+            const out = e.r.output[0], made = has(out), ready = stationBuilt(e.type) && e.r.inputs.every(([id, n]) => countOf(id) >= n) && anyGroups(e.r).every(g => anyHave(g) >= g.n) && (!e.r.meat || meatHave() >= e.r.meat) && (!e.r.fish || fishHave() >= e.r.fish);
             return { label: e.r.name, icon: iconOfItem(out), mark: made ? "done" : ready ? "ready" : "todo", right: e.def.name, dim: !made && !ready, entry: e };
         });
     }
@@ -1739,6 +1746,8 @@
         else if (g.recipe && F) pairs = recipeRef(g.recipe).r.inputs;
         if (pairs) {
             const lack = pairs.filter(([id, n]) => countOf(id) < n);
+            const groups = g.recipe && F ? anyGroups(recipeRef(g.recipe).r).filter(x => anyHave(x) < x.n) : [];   // (r.any: the string's flax or nettle)
+            if (groups.length) return groups.map(x => x.name + " " + anyHave(x) + "/" + x.n).concat(lack.map(([id, n]) => dataItem(id).name + " " + countOf(id) + "/" + n)).slice(0, 3).join("  ·  ");
             if (lack.length === 0) return g.build ? "Masz wszystko. Wybierz miejsce w menu budowy." : g.recipe[0] === "hand" ? "Masz składniki: menu ziemi > Wytwórz... > " + recipeRef(g.recipe).r.name : "Masz składniki. Idź do budynku.";
             return lack.slice(0, 3).map(([id, n]) => dataItem(id).name + " " + countOf(id) + "/" + n).join("  ·  ");
         }

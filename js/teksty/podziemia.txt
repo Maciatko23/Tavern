@@ -1202,6 +1202,7 @@ kod.addTrap.0 = Pułapka: kolce
 # generate
 kod.generate.0 = Zapiski: {title}
 kod.generate.1 = stwór
+kod.generate.2 = Winda kasztelana
 # stairs
 kod.stairs.0 = strażnik piętra
 # liftOn

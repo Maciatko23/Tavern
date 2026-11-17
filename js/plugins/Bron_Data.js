@@ -107,7 +107,7 @@
         refleksyjny: { nazwa: "róg i ścięgna", naprawa: "", fix: [[ITEM.sciegna, 1], [ITEM.lina, 1]], kolor: ["#1e1712", "#3b2c20", "#5c4632", "#8a6c4a", "#b99a6f", "#e2cfa4"] },
         mysliwski: { nazwa: "jesion i ścięgna", naprawa: "", fix: [[ITEM.sciegna, 1], [ITEM.lina, 1]], kolor: ["#2e1d10", "#4a2f19", "#684425", "#875b33", "#a57444", "#c19059"] },
         wojenny: { nazwa: "drewno, róg i ścięgna", naprawa: "", fix: [[ITEM.sciegna, 1], [ITEM.lina, 1]], kolor: ["#1a120c", "#2f2116", "#4a3522", "#6a4f34", "#94744f", "#c4a678"] },
-        prosta: { nazwa: "lina", naprawa: "", fix: [[ITEM.lina, 1], [ITEM.wlokno, 1]], kolor: ["#3a2f20", "#574631", "#756044", "#93795a", "#b09473", "#c9b08f"] },
+        prosta: { nazwa: "sznurek", naprawa: "", fix: [[ITEM.lina, 1], [ITEM.wlokno, 1]], kolor: ["#3a2f20", "#574631", "#756044", "#93795a", "#b09473", "#c9b08f"] },
         skorzana: { nazwa: "skóra", naprawa: "garbarz", fix: [[ITEM.lina, 1], [ITEM.skora, 1]], kolor: ["#24150c", "#3b2414", "#55341d", "#704628", "#8b5a33", "#a6703f"] },
         rzemienna: { nazwa: "rzemień", naprawa: "garbarz", fix: [[ITEM.sciegna, 1], [ITEM.skora, 1]], kolor: ["#1c120c", "#2f1d13", "#462b1b", "#5f3b24", "#7a4e30", "#97663f"] }
     };

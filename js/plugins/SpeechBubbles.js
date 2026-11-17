@@ -972,6 +972,9 @@
     };
     Sprite_Barks.prototype.update = function() {
         Sprite.prototype.update.call(this);
+        // (2026-11-17) a talk or a question on the screen: the passers-by's cries step back (a quick fade), never drawn over its bubble
+        const want = $gameMessage.isBusy() ? 0 : 1;
+        if (this.alpha !== want) this.alpha = want > this.alpha ? Math.min(1, this.alpha + 0.1) : Math.max(0, this.alpha - 0.15);
         for (const b of barks.slice()) {
             b.t++;
             // (a character that is not an event - a man of Humans.js, a creature of Creatures.js - speaks while it lives on this map)

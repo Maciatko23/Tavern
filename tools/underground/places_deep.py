@@ -29,6 +29,9 @@ UNLIT_BOWL = ("!Decoration", 0, 4, 0)
 HEART_LIGHT = "<Light:165,255,236,200><LightFlicker:0.05,255,220,165><LightHeight:64>"
 
 
+# (2026-11-17) the blue flame beside a lift's cage on floors 80 / 90: a wider light than the other blue sconces (the cage is seen)
+LIFT_BLUE_LIGHT = "<Light:150,150,190,245><LightFlicker:0.12,110,150,240><LightHeight:44>"
+
 class HM(DMap):
     """a hand-made floor: rooms cut out of the rock, its stairs, its lift stop, its boss, its notes"""
 
@@ -128,8 +131,8 @@ class HM(DMap):
         light = BLUE_LIGHT if blue else CANDELABRUM_LIGHT if big else CANDLE_LIGHT
         self.ev(x, y, *art, name="Świecznik" if big else "Świeca", priority=1 if big else 0, through=not big, step=True, note=light)
 
-    def bluetorch(self, x, y):
-        self.ev(x, y, "!Decoration2_blue", 3, 4, 0, name="Niebieski płomień", priority=0, through=True, step=True, note=BLUE_LIGHT)
+    def bluetorch(self, x, y, light=None):
+        self.ev(x, y, "!Decoration2_blue", 3, 4, 0, name="Niebieski płomień", priority=0, through=True, step=True, note=light or BLUE_LIGHT)
 
     def relief(self, x, y, idx):
         self.ev(x, y, RELIEFS, idx, 2, 0, name="Płaskorzeźba", priority=0, through=True)
@@ -195,6 +198,8 @@ def floor20():
     mp.lift(7, 18, 9, 18)
     mp.piece("skrzynie_wysokie", 2, 18); mp.piece("skrzynka_zamknieta", 3, 22)
     torch(mp, 3, 16)
+    # (2026-11-17, the player: a torch by the lift) the fire beside the cage, added last (the events' numbers as installed)
+    torch(mp, 10, 17)
     return mp
 
 
@@ -246,6 +251,8 @@ def floor30():
     mp.chest(36, 10, [(152, 2), (59, 2)], 45, "Skrzynia brata od zasuwy: dwa opatrunki, dwie pochodnie i stare monety.", name="Skrzynia brata od zasuwy")
     mp.lift(34, 19, 36, 19)
     mp.piece("skrzynka_plotno", 32, 23)
+    # (2026-11-17, the player: a torch by the lift) the fire beside the cage, added last (the events' numbers as installed)
+    torch(mp, 32, 18)
     return mp
 
 
@@ -290,6 +297,8 @@ def floor40():
     mp.note(31, 19, "40b", "kartki", "Winda zwiadowców")
     mp.piece("stalagmit_br3", 23, 20); mp.piece("glaz_brazowy", 31, 16)
     mp.film(FILM_DIRT, {(23, 17), (24, 17), (29, 18), (34, 16)})
+    # (2026-11-17, the player: a torch by the lift) the fire beside the cage, added last (the events' numbers as installed)
+    brazier(mp, 32, 20)
     return mp
 
 
@@ -345,6 +354,8 @@ def floor50():
     mp.add(37, 11, {"name": "Zawał", "note": "<Zapiski:50c>", "pages": [page(priority=1, cmds=script('Underground.read("50c")'))]})
     mp.film(FILM_DIRT, {(18, 12), (21, 11), (25, 11), (29, 10), (31, 11)})
     mp.film(FILM_MOSS, {(6, 17), (10, 18), (14, 18), (20, 17), (26, 18), (12, 8)})
+    # (2026-11-17, the player: a torch by the lift) the fire beside the cage, added last (the events' numbers as installed)
+    brazier(mp, 4, 13)
     return mp
 
 
@@ -388,6 +399,8 @@ def floor60():
     torch(mp, 11, 3)
     # ---- the lift
     mp.lift(29, 16, 31, 16)
+    # (2026-11-17, the player: a torch by the lift) the fire beside the cage, added last (the events' numbers as installed)
+    torch(mp, 27, 15)
     return mp
 
 
@@ -422,6 +435,8 @@ def floor70():
     mp.stairs_down(34, 16); torch(mp, 29, 16)
     mp.chest(28, 20, [(152, 3), (143, 1)], 90, "Skrzynia uczonych: opatrunki, stal i monety bez herbu.", name="Skrzynia uczonych", art=("!Dungeon_chest", 7))
     mp.piece("kolumna_lezaca2", 33, 19)
+    # (2026-11-17, the player: a torch by the lift) the fire beside the cage, added last (the events' numbers as installed)
+    torch(mp, 4, 16)
     return mp
 
 
@@ -460,6 +475,8 @@ def floor80():
     mp.lift(5, 17, 7, 17)
     mp.chest(3, 21, [(152, 3), (59, 2)], 110, "Skrzynia bez zamka: opatrunki, pochodnie, monety. Nikt jej nie pilnował.", name="Skrzynia bez zamka")
     mp.bluetorch(9, 16)
+    # (2026-11-17, the player: a torch by the lift) the fire beside the cage, added last (the events' numbers as installed)
+    mp.bluetorch(3, 16, LIFT_BLUE_LIGHT)
     return mp
 
 
@@ -498,6 +515,8 @@ def floor90():
     mp.vision(32, 10)
     mp.lift(6, 17, 8, 17)
     mp.chest(2, 21, [(152, 3), (59, 3)], 80, "Skrzynia ostatniej straży: opatrunki, pochodnie i ostatnie monety zakonu.", name="Skrzynia ostatniej straży")
+    # (2026-11-17, the player: a torch by the lift) the fire beside the cage, added last (the events' numbers as installed)
+    mp.bluetorch(8, 15, LIFT_BLUE_LIGHT)   # (on the face over the windlass: the west wall is three cells off)
     return mp
 
 

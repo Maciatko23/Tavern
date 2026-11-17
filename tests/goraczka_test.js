@@ -149,7 +149,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9450, overlay: process.env.GAME
     t.check("wybór B: koniec B, Wawrzyn prosi o materiały na osadnik, uratowanych 6 (pełne zbiórki, Gaweł żyje)", (await t.json(`${S}.koniec`)) === "B" && (await t.json(`${S}.saved`)) === 5 || (await t.json(`${S}.saved`)) === 6);
     for (const [id, n] of [[80, 12], [64, 8], [88, 6], [93, 2]]) await t.eval(`$gameParty.gainItem($dataItems[${id}], ${n}); 0`);
     await t.eval("Goraczka.osadnik(); 0"); await tick(20); await t.finish();
-    t.check("materiały na osadnik oddane (12 desek, 8 kamieni, 6 gwoździ, 2 liny), budowa trwa 2 dni", (await t.json(`${S}.osadnik`)) === 1 && (await t.count(80)) === 0);
+    t.check("materiały na osadnik oddane (12 desek, 8 kamieni, 6 gwoździ, 2 sznurki), budowa trwa 2 dni", (await t.json(`${S}.osadnik`)) === 1 && (await t.count(80)) === 0);
     await t.setDay(z + 3, 8); await tick(60); await t.eval("Goraczka.dayTick(); 0"); await tick(20);
     t.check("po dwóch dniach osadnik stoi: nagroda B (Opinia +6, 40 G)", !!(await t.json(`${S}.osadnikGotowy`)));
     await t.setDay(z + 3, 7); await go(218, 46, 57, 8); await t.setHour(7); await tick(250);

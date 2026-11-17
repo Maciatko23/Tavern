@@ -739,14 +739,14 @@ zadania.D20.steps.0.text = Poproś Janka o pomoc przy wraku (tawerna, wieczorem)
 [zadania.D20.steps.0.say]
 > Roch chce połatać kuter. Pomożesz ściągnąć wrak z plaży na pochylnię?
 Roch, mówisz... (Janek drapie się po zaroście.) Ja tam nic nie wiem o żadnym Rochu. Ale wrak to wrak, a pochylnia stoi pusta.
-Jutro o świcie, przy wraku. Przynieś dwie liny - moje są w sieciach.
+Jutro o świcie, przy wraku. Przynieś dwa sznurki - moje są w sieciach.
 
-zadania.D20.steps.1.text = O świcie (5–10) przyjdź do wraku na plaży z 2 linami.
+zadania.D20.steps.1.text = O świcie (5–10) przyjdź do wraku na plaży z 2 sznurkami.
 [zadania.D20.steps.1.early]
 > O świcie, mówił Janek. Jeszcze nie pora.
 
 [zadania.D20.steps.1.say]
-@janek: Jest i nasz pomocnik! Liny tu, pod dziób. Roch, łap za rufę!
+@janek: Jest i nasz pomocnik! Sznurki tu, pod dziób. Roch, łap za rufę!
 @przemytnik: Na trzy. Raz... dwa... ciągnij!
 > (Kadłub zgrzyta po kamieniach, ale idzie. Krok po kroku, aż na deski pochylni.)
 

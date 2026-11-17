@@ -282,7 +282,7 @@ Na sygnał cztery i dwa z wieży dzwonnicy zasuwa w Wielkiej cysternie zakonu pu
 zadania.W1.steps.0.text = Zbieraj poszlaki o wodzie Kuby ({n}/3): „Pęknięta beczka”, „Smak wody”, „Łój do latarni”, „Nocna warta”, „Pierścionek w studni”.
 zadania.W1.steps.1.text = Kuba chodzi gdzieś nocą. Wyjdź za nim po cichu (C - skradanie), kiedy po pierwszej w nocy wyjdzie z domu na tarasie rzemieślników. Nie daj się zobaczyć.
 zadania.W1.steps.2.text = Porozmawiaj z Kubą o tym, co widziałeś nocą przy stawie (studnia na rynku, 7–14).
-zadania.W1.steps.3.text = Zejdź na dno studni na rynku (2× Lina; zejście z boku studni, od wschodu) i posłuchaj przy kracie z krukiem.
+zadania.W1.steps.3.text = Zejdź na dno studni na rynku (1× Lina; zejście z boku studni, od wschodu) i posłuchaj przy kracie z krukiem.
 [zadania.W1.steps.3.say]
 > (Krata z krukiem. Za nią ciemność i chłód. Przykładasz ucho do żelaza.)
 > (Gdzieś w głębi szumi woda. Dużo wody. Płynie... ale nie tutaj.)

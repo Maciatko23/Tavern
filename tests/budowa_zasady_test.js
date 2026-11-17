@@ -1,6 +1,7 @@
 // Zasady budowania i wytwarzania w nowym świecie (gracz 2026-11-16):
 //   - lista Q ma dwie zakładki: „Budowa” i „Akcja”;
-//   - „Budowa”: rzeczy robione ręcznie, bez stołu i budynku (młotek, bukłak, lina, opatrunek, włókno z pokrzyw) - na każdej mapie;
+//   - „Budowa”: rzeczy robione ręcznie, bez stołu i budynku (młotek, bukłak, sznurek, lina, opatrunek) - na każdej mapie;
+//     (2026-11-17: sznurek z 4 sztuk lnu i pokrzywy w dowolnej mieszance - najpierw pokrzywa; lina z 10 sznurków; włókna z pokrzyw już nie ma)
 //     budynki: wszystkie tylko wtedy, gdy bohater stoi na działce dziadka (Map218, w płocie); poza nią tylko ognisko, pułapka i
 //     leśne legowisko (robione raz, od razu na miejscu - nie składa się go);
 //   - „Akcja”: to, co się nosi i stawia - rozłóż namiot, postaw garnek / gliniany garnek / beczkę / wiadro;
@@ -11,7 +12,7 @@ const path = require("path");
 const kit = require("./lib/kit.js");
 const SHOTS = path.join(__dirname, "..", "docs", "budowa_zasady");
 
-const HAND = ["Zrób bukłak", "Skręć linę", "Zrób opatrunek", "Wyskub włókno z pokrzyw"];   // (+ "Zrób młotek", the first line while there is none)
+const HAND = ["Zrób bukłak", "Skręć sznurek", "Spleć linę", "Zrób opatrunek"];   // (+ "Zrób młotek", the first line while there is none)
 const OFF_PLOT = ["Ognisko", "Pułapka", "Leśne legowisko"];
 const ACTION = ["Rozłóż namiot", "Postaw garnek", "Postaw gliniany garnek", "Postaw beczkę", "Postaw wiadro"];
 const BIG = ["Warsztat", "Płot", "Kuźnia", "Kurnik", "Studnia", "Chatka", "Tartak"];
@@ -40,8 +41,8 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const I = await J("Farming.ITEM");
     await t.eval(`for (const [id, n] of [[${I.branch}, 10], [${I.fiber}, 14], [${I.tent}, 1], [${I.wood}, 12], [${I.stone}, 12]]) $gameParty.gainItem($dataItems[id], n); 0`);
     const hand = await J("Farming.HAND_RECIPES.map(r => r.id)");
-    t.check("ręcznie, bez stołu i budynku: młotek, bukłak, lina, opatrunek, włókno z pokrzyw (bez łuskania nasion sosny; legowisko buduje się od razu)",
-        hand.join() === "hammer,waterskin,rope,bandage,nettle_fiber", hand);
+    t.check("ręcznie, bez stołu i budynku: młotek, bukłak, sznurek, lina, opatrunek (bez łuskania nasion sosny i bez włókna z pokrzyw; legowisko buduje się od razu)",
+        hand.join() === "hammer,waterskin,rope,lina,bandage", hand);
 
     // ---- on the plot
     await t.go(218, 33, 14, 6);
@@ -53,11 +54,57 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("...„Akcja”: rozłóż namiot, postaw garnek, gliniany garnek, beczkę, wiadro - i nic więcej", same(tab(on, "Akcja"), ACTION), tab(on, "Akcja"));
     t.check("...i budynek da się tam postawić (płot)", (await why("fence", 34, 14)) === null, await why("fence", 34, 14));
 
+    // ---- (2026-11-17, the user) the string: 4 of flax and nettle in any mix (the nettle first), the thick rope of 10 strings, the well on the Lina
+    const cnt = id => J(`$gameParty.numItems($dataItems[${id}])`);
+    const qEntry = name => `(function(){ const scene = SceneManager._scene; const _o = scene.openFarmMenu; let tabs = null; scene.openFarmMenu = function(title, en, kind, index, tb) { tabs = tb; };
+        Farming.openBuildKeyMenu(); scene.openFarmMenu = _o; return tabs[0].entries.find(e => e.name === ${JSON.stringify(name)}); })()`;
+    await t.eval(`$gameParty.gainItem($dataItems[${I.nettle}], 2); 0`);
+    const both = (await cnt(I.fiber)) + (await cnt(I.nettle));
+    const line = await J(`(function(){ const e = ${qEntry("Skręć sznurek")}; return e ? { costs: e.costs, enabled: e.enabled } : null; })()`);
+    t.check("„Skręć sznurek” na liście Q: jedna linia kosztu „4× Włókno lub pokrzywa” (w torbie: len + 2 pokrzywy razem), dostępna",
+        !!line && line.enabled && line.costs.length === 1 && line.costs[0][1] === 4 && line.costs[0][2] === both && line.costs[0][3] === "Włókno lub pokrzywa", [line, both]);
+    const [rope0, fib0, net0] = [await cnt(I.rope), await cnt(I.fiber), await cnt(I.nettle)];
+    await t.eval(`(${qEntry("Skręć sznurek")}).run(); 0`);
+    await t.until(`$gameParty.numItems($dataItems[${I.rope}]) > ${rope0}`, 30);
+    t.check("Q -> „Budowa” -> „Skręć sznurek”: sznurek powstaje ręcznie, bez budynku - najpierw idą 2 pokrzywy (więdną), potem 2 lnu",
+        (await cnt(I.rope)) === rope0 + 1 && (await cnt(I.nettle)) === net0 - 2 && (await cnt(I.fiber)) === fib0 - 2, { rope: [rope0, await cnt(I.rope)], nettle: [net0, await cnt(I.nettle)], fibre: [fib0, await cnt(I.fiber)] });
+    // only nettle: 4 nettle make a string too; then with 3 pieces in all the line is dimmed and says what is short
+    await t.frames(30);
+    await t.eval(`$gameParty.loseItem($dataItems[${I.fiber}], 99); $gameParty.gainItem($dataItems[${I.nettle}], 4); 0`);
+    const rope1 = await cnt(I.rope);
+    await t.eval(`(${qEntry("Skręć sznurek")}).run(); 0`);
+    await t.until(`$gameParty.numItems($dataItems[${I.rope}]) > ${rope1}`, 30);
+    t.check("...same pokrzywy (4) też dają sznurek", (await cnt(I.rope)) === rope1 + 1 && (await cnt(I.nettle)) === 0);
+    await t.frames(30);
+    await t.eval(`$gameParty.gainItem($dataItems[${I.nettle}], 1); $gameParty.gainItem($dataItems[${I.fiber}], 2); 0`);
+    const short = await J(`(function(){ const e = ${qEntry("Skręć sznurek")}; return { enabled: e.enabled, help: e.help, ok: Farming.craftManual(null, Farming.HAND_RECIPES.find(r => r.id === "rope")) }; })()`);
+    t.check("...z 3 sztukami (1 pokrzywa + 2 lnu) linia jest wygaszona: „Brakuje: Włókno lub pokrzywa (3/4)”, nic nie powstaje",
+        short.enabled === false && /Brakuje: Włókno lub pokrzywa \(3\/4\)/.test(short.help) && short.ok === false, short);
+    // the thick rope: 10 strings braided by hand
+    await t.eval(`$gameParty.gainItem($dataItems[${I.rope}], 10); 0`);
+    const [lina0, str0] = [await cnt(I.lina), await cnt(I.rope)];
+    const lline = await J(`(function(){ const e = ${qEntry("Spleć linę")}; return e ? { costs: e.costs, enabled: e.enabled } : null; })()`);
+    t.check("„Spleć linę” na liście Q zaraz po „Skręć sznurek”: koszt 10× Sznurek, dostępna",
+        !!lline && lline.enabled && lline.costs.length === 1 && lline.costs[0][1] === 10 && lline.costs[0][3] === "Sznurek" &&
+        (await J(`(function(){ const n = Farming.HAND_RECIPES.map(r => r.name); return n.indexOf("Spleć linę") === n.indexOf("Skręć sznurek") + 1; })()`)), lline);
+    await t.eval(`(${qEntry("Spleć linę")}).run(); 0`);
+    await t.until(`$gameParty.numItems($dataItems[${I.lina}]) > ${lina0}`, 30);
+    t.check("Q -> „Spleć linę”: z 10 sznurków powstaje 1 lina", (await cnt(I.lina)) === lina0 + 1 && (await cnt(I.rope)) === str0 - 10, { lina: [lina0, await cnt(I.lina)], str: [str0, await cnt(I.rope)] });
+
+    const wellQ = await J(`(function(){ const e = ${qEntry("Studnia")}; return e ? e.costs.map(c => c[3] + " x" + c[1]) : null; })()`);
+    t.check("„Studnia” na liście Q (działka): w koszcie 1× Lina, sznurka już nie", !!wellQ && wellQ.includes("Lina x1") && !wellQ.some(c => /^Sznurek/.test(c)), wellQ);
+    const jl = await J(`(function(){ const g = id => Journal.GOALS.find(x => x.id === id); const l = g("lina"), w = g("well"), r = g("rope"); return { lina: !!l && l.title + "|" + l.recipe.join("/") + "|" + l.after.join(), ref: !!(l && Journal.recipeRef(l.recipe)), well: w.after.join(), rope: r.title }; })()`);
+    t.check("dziennik: cel „Skręć sznurek”, nowy cel „Spleć linę” (po wiadrze, przed studnią), studnia po linie",
+        jl.rope === "Skręć sznurek" && jl.lina === "Spleć linę|hand/lina|rope,bucket" && jl.ref && jl.well === "lina,stone,bucket", jl);
+    // (the bag back as the sections below expect it: 14 flax, no nettle, no string, no rope)
+    await t.frames(30);
+    await t.eval(`for (const id of [${I.fiber}, ${I.nettle}, ${I.rope}, ${I.lina}]) $gameParty.loseItem($dataItems[id], 999); $gameParty.gainItem($dataItems[${I.fiber}], 14); 0`);
+
     // ---- Podgrodzie outside the fence
     await t.go(218, 44, 21, 2);
     await t.frames(20);
     const off = await q();
-    t.check("Q na Podgrodziu poza płotem: „Budowa” = młotek, bukłak, lina, opatrunek, włókno + ognisko, pułapka, leśne legowisko; „Akcja” jak wszędzie",
+    t.check("Q na Podgrodziu poza płotem: „Budowa” = młotek, bukłak, sznurek, lina, opatrunek + ognisko, pułapka, leśne legowisko; „Akcja” jak wszędzie",
         same(tab(off, "Budowa"), ["Zrób młotek"].concat(HAND, OFF_PLOT)) && same(tab(off, "Akcja"), ACTION), off.tabs);
     t.check("...budynku nie postawisz („Tu nie twoja ziemia”), ognisko i legowisko tak", /nie twoja ziemia/.test(await why("workbench", 44, 23)) && (await why("campfire", 44, 23)) === null && (await why("bedroll", 44, 23)) === null,
         [await why("workbench", 44, 23), await why("campfire", 44, 23), await why("bedroll", 44, 23)]);
@@ -97,14 +144,13 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("w tawernie (pod dachem): rzeczy ręczne są na liście, ale nic się nie postawi („Pod dachem tego nie postawisz.”)",
         HAND.every(n => tab(inn, "Budowa").includes(n)) && (await why("campfire", 14, 35)) === "Pod dachem tego nie postawisz." && (await why("tent", 14, 35)) === "Pod dachem tego nie postawisz.", [inn.tabs, await why("campfire", 14, 35)]);
 
-    // ---- hand crafting straight from the Q list, anywhere: a rope out of flax on the town's market
+    // ---- hand crafting straight from the Q list, anywhere: a string out of flax on the town's market
     await t.go(220, 50, 42, 2);
     await t.frames(20);
-    const rope0 = await J(`$gameParty.numItems($dataItems[${I.rope}])`);
-    await t.eval(`(function(){ const scene = SceneManager._scene; const _o = scene.openFarmMenu; let tabs = null; scene.openFarmMenu = function(title, en, kind, index, tb) { tabs = tb; };
-        Farming.openBuildKeyMenu(); scene.openFarmMenu = _o; tabs[0].entries.find(e => e.name === "Skręć linę").run(); return 0; })()`);
-    await t.until(`$gameParty.numItems($dataItems[${I.rope}]) > ${rope0}`, 30);
-    t.check("Q -> „Budowa” -> „Skręć linę” na rynku Kruczogrodu: lina powstaje ręcznie, bez budynku", (await J(`$gameParty.numItems($dataItems[${I.rope}])`)) === rope0 + 1);
+    const ropeT = await cnt(I.rope);
+    await t.eval(`(${qEntry("Skręć sznurek")}).run(); 0`);
+    await t.until(`$gameParty.numItems($dataItems[${I.rope}]) > ${ropeT}`, 30);
+    t.check("Q -> „Budowa” -> „Skręć sznurek” na rynku Kruczogrodu: sznurek powstaje ręcznie, bez budynku", (await cnt(I.rope)) === ropeT + 1);
 
     // ---- the keys: Q opens "Budowa", right goes to "Akcja", left back
     await t.frames(30);

@@ -278,7 +278,7 @@
         P(291, "chodaki", "Chodaki", 8, { bonus: { chod: 0.06 }, material: "skora", rodzaj: "p", trwalosc: 50, rysunek: "buty",
             opis: "Drewniane podeszwy ze skórzanym wierzchem. Trwalsze od łapci - i stukają." }),
         P(292, "kosz_wiklinowy", "Wiklinowy kosz na plecy", 10, { bonus: { udzwig: 25 }, material: "wiklina", rodzaj: "m", trwalosc: null, rysunek: "kosz",
-            opis: "Kosz pleciony z wikliny, na szelkach z liny." }),
+            opis: "Kosz pleciony z wikliny, na szelkach ze sznurka." }),
         P(293, "plaszcz_lniany", "Lniana peleryna", 15, { bonus: { pragnienie_upal: 0.15, zimno: 0.1 }, material: "plotno", rodzaj: "f", trwalosc: 30, rysunek: "plaszcz",
             opis: "Lekka lniana peleryna z kapturem: własny cień w skwarze." }),
         P(294, "plaszcz_zwiadowcy", "Płaszcz zwiadowcy", 80, { bonus: { skradanie: 0.1, zimno: 0.5 }, waga: 2, material: "sukno", rodzaj: "m", trwalosc: 60, rysunek: "plaszcz",

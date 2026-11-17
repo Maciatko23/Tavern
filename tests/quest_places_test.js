@@ -1,6 +1,6 @@
 // The places of the town's quest threads (tools/quest_places, docs/miasta_miejsca_zadan.md; 2026-10-05) - maps and ways in and out,
 // no quest logic:
-//   - the market well (Map008): "Studnia miejska: zejście" (25,34) refuses without 2x Lina (a popup over the hero, no message
+//   - the market well (Map008): "Studnia miejska: zejście" (25,34) refuses without 2x Sznurek (a popup over the hero, no message
 //     window), with two asks and lets one down to Map118 "Dno studni" (7,6); the water ration events 241/242 stay; at the bottom
 //     no water tile anywhere (the puddle is a picture), the markers lina / pierscionek / krata_kruk, the light of the shaft by
 //     day; the rope takes one back up beside the well (26,34)
@@ -61,11 +61,11 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         return { pops: await t.popups({ clear: true }), map: await t.json("$gameMap.mapId()"), msg: await t.json("$gameMessage.isBusy()") };
     };
     const r0 = await refuse();
-    t.check("without a rope: facing the well from the east, OK -> the popup 'Potrzebujesz 2× Lina...' over the hero, no message, still in town",
-        r0.pops.some(p => /Potrzebujesz 2× Lina, żeby zejść do studni/.test(p)) && r0.map === 8 && !r0.msg, r0);
+    t.check("without a rope: facing the well from the east, OK -> the popup 'Potrzebujesz 2× Sznurek...' over the hero, no message, still in town",
+        r0.pops.some(p => /Potrzebujesz 2× Sznurek, żeby zejść do studni/.test(p)) && r0.map === 8 && !r0.msg, r0);
     await t.give(LINA, 1);
     const r1 = await refuse();
-    t.check("...with one rope the same", r1.pops.some(p => /2× Lina/.test(p)) && r1.map === 8 && !r1.msg, r1);
+    t.check("...with one rope the same", r1.pops.some(p => /2× Sznurek/.test(p)) && r1.map === 8 && !r1.msg, r1);
     await t.give(LINA, 1);
     await t.frames(240);                                   // (the popups and the gain notes fade first: the picture)
     await t.locate(53, 49, 4);
@@ -79,7 +79,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.frames(30);
     const bottom = await t.json(`({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, ropes: $gameParty.numItems($dataItems[${LINA}]),
         name: $dataMap.displayName, tileset: $gameMap.tilesetId() })`);
-    t.check("with 2x Lina: a question with a choice ('Zejść' / 'Zostać'), then down to Map118 'Dno studni' below the rope (7,6)",
+    t.check("with 2x Sznurek: a question with a choice ('Zejść' / 'Zostać'), then down to Map118 'Dno studni' below the rope (7,6)",
         Array.isArray(q) && q[0] === "Zejść" && down && bottom.map === 118 && bottom.x === 7 && bottom.y === 6 && bottom.name === "Dno studni", { q, bottom });
     await t.calm();
     const dry = await t.json(`(function(){ const W = $gameMap.width(), H = $gameMap.height(); let a1 = 0, wet = 0;
@@ -119,7 +119,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const up = await t.until(t.onMap(8), 20);
     await t.frames(20);
     const top = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y })");
-    t.check("the rope: OK -> 'Wspiąć się po linie na górę?' -> back in town beside the well (26,34)",
+    t.check("the rope: OK -> 'Wspiąć się po sznurkach na górę?' -> back in town beside the well (26,34)",
         Array.isArray(q2) && q2[0] === "Wspiąć się" && up && top.map === 8 && top.x === 53 && top.y === 50, { q2, top });
 
     // ================================================================ the slab in the knights' garden

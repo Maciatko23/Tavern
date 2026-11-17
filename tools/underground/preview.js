@@ -7,7 +7,7 @@
 const fs = require("fs"), path = require("path");
 const ROOT = path.join(__dirname, "..", "..");
 const sandbox = require(path.join(ROOT, "tests", "lib", "sandbox.js"));
-const w = sandbox.loadPlugins(["TawernaCore", "Underground_Data", "Underground"]);
+const w = sandbox.loadPlugins(["TawernaCore", "Underground_Gen", "Underground_Data", "Underground"]);
 const U = w.Underground, D = w.Underground_Data;
 const [seed, libPath, flagsPath, outDir, bandArg, floorsArg] = process.argv.slice(2);
 const lib = JSON.parse(fs.readFileSync(libPath, "utf8"));

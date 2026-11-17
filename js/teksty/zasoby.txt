@@ -65,7 +65,7 @@ farm.letterTitle = List Wojciecha Rzepki
 [farm.letter]
 „Kto to znajdzie - my poszli do miasta. Ziemia nie rodzi, studnia wyschła, a dzieci płaczą z pragnienia.
 Studnia była dobra, kamienna, ojciec ją kopał. Zasypałem ją, żeby bydło nie wpadło. Może kiedyś deszcz wróci.
-Lina i gwoździe w skrzyni pod oknem - weź, komu potrzeba. Wojciech Rzepka.”
+Sznurek i gwoździe w skrzyni pod oknem - weź, komu potrzeba. Wojciech Rzepka.”
 
 farm.gardenMenu = Zdziczały ogródek
 farm.weed = Wypiel ogródek
@@ -272,7 +272,7 @@ Studnia nie ucieknie. Woda już uciekła.
 
 zadania.K57.steps.0.text = Znajdź opuszczoną zagrodę Rzepków (Kruczy Jar, na południe od działki, za lasem).
 zadania.K57.steps.1.text = Oczyść zasypaną studnię Rzepków łopatą.
-zadania.K57.steps.2.text = Zdobądź materiał na naprawę: Blok kamienny {b}/4 (ściana ciosowa w górach), Lina {l}/2, Deski {d}/2.
+zadania.K57.steps.2.text = Zdobądź materiał na naprawę: Blok kamienny {b}/4 (ściana ciosowa w górach), Sznurek {l}/2, Deski {d}/2.
 zadania.K57.steps.3.text = Napraw studnię Rzepków młotkiem.
 [zadania.K57.reward.note]
 Studnia Rzepków

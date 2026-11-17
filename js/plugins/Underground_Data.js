@@ -80,8 +80,10 @@
         100: { map: 11, up: [4, 6, 2], down: null, lift: null }
     };
     Watki.scal(FLOORS, "podziemia", "pietra");   // (its words: js/teksty/podziemia.txt, pietra)
-    // the lift's stops (0 = Ruiny Zamku): a cage on every hand-made floor 10-90; a stop works once its windlass was turned
-    const LIFT = { stops: [10, 20, 30, 40, 50, 60, 70, 80, 90] };
+    // the lift's stops (0 = Ruiny Zamku): every 5th floor (2026-11-17, the player: "co 5 poziomów") - the hand-made floors 10-90 have
+    // their cage and windlass drawn on the map, the generated 5, 15 ... 95 get them from the generator (Underground_Gen.js generate:
+    // in the stairs-up hall, by its north wall beside the stairs); a stop works once its windlass was turned
+    const LIFT = { stops: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95] };
 
     // ------------------------------------------------------------------ the maze of a generated floor (2026-10-23, Underground.js planMaze)
     // As big as Kruczy Jar (grandpa's plot, Map003: 80x60). The junctions of its lattice: a 2x2 floor at (x0 + px*k, y0 + py*w) -
@@ -185,11 +187,17 @@
         chest: ["!Dungeon_chest", 6, 2, 0], chestOpen: ["!Dungeon_chest", 6, 8, 0],
         crate: ["!Dungeon_chest", 2, 2, 1], crateOpen: ["!Dungeon_chest", 2, 8, 1],
         barrel: ["!Decoration_static_2", 0, 2, 1], barrelOpen: ["!Decoration_static_2", 3, 2, 0],
-        spikes: ["!Fantasy_dungeon_traps", 4, 8, 0]
+        spikes: ["!Fantasy_dungeon_traps", 4, 8, 0],
+        // the lift's stop on a generated floor (the same pictures as the hand-made floors' cage and windlass, Map140)
+        cage: ["!Fantasy_hanging_cage", 0, 2, 0],           // the castellan's cage on its chain (its shadow on its own tile)
+        windlass: ["!Fantasy_switches2", 0, 2, 0], windlassOn: ["!Fantasy_switches2", 0, 6, 0],   // the lever up / down (turned)
+        // (2026-11-17) the fire by a cage that stands free in its hall: a fire basket, on the Truth Layer a blue candelabrum
+        brazier: ["!Decoration", 0, 2, 0], candelabrumBlue: ["!Decoration2_blue", 4, 2, 0]
     };
     // the wall torch's light (every light a flame: warm, flickering); the Truth Layer's blue flame (eerie, but a flame too)
     const TORCH_LIGHT = "<Light:150,255,160,90><LightFlicker:0.13,255,130,55><LightHeight:40>";
     const BLUE_LIGHT = "<Light:130,150,190,245><LightFlicker:0.14,110,150,240><LightHeight:40>";
+    const BRAZIER_LIGHT = "<Light:170,255,150,70><LightFlicker:0.16,255,110,40><LightHeight:26>";   // (the fire basket by a free cage)
     // spikes: frames of !Fantasy_dungeon_traps index 4 (a dense bed) by height (direction 8 = only the holes ... 2 = all the way up)
     const SPIKE_STEPS = [8, 6, 4, 2];
     const SPIKES = { period: 150, up: 46, damage: 10, perFloor: 1, poise: 6, knock: 0.35 };
@@ -911,7 +919,7 @@
 
     // ------------------------------------------------------------------ F9 (Debug.js's first tab "Zdarzenia" - the thread engine Watki.js)
     // the floor to go to (←→ 0-100, Shift: by 10; OK - to its stairs up, the grate and the bosses do not matter), the cellar's grate
-    // (switch 11) open / shut, the Heart's three locks known without W2-W4, every stop of the lift (10-90), an ending of the Heart
+    // (switch 11) open / shut, the Heart's three locks known without W2-W4, every stop of the lift (5-95), an ending of the Heart
     // (←→ which; OK plays it) and the world and the Lord it is played with (←→ or OK). The words: js/teksty/podziemia.txt (f9.*,
     // kod.heartEnd / heartWorld / heartLord); what ←→ and OK do: Underground.js's hooks (f9Zmienne - the {x}, f9Wybierz, f9Ok)
     Watki.watek({
@@ -927,6 +935,6 @@
         ].map(r => Object.assign({ zmienne: "f9Zmienne", wybierz: "f9Wybierz", ok: "f9Ok" }, r)) }
     });
 
-    window.Underground_Data = { VERSION: "2.2.0", MAPS, SWITCHES, IDS, SPOTS, FLOORS, LIFT, MAZE, BANDS, FLOOR_NOTE, ART, TORCH_LIGHT, BLUE_LIGHT,
+    window.Underground_Data = { VERSION: "2.2.0", MAPS, SWITCHES, IDS, SPOTS, FLOORS, LIFT, MAZE, BANDS, FLOOR_NOTE, ART, TORCH_LIGHT, BLUE_LIGHT, BRAZIER_LIGHT,
         SPIKE_STEPS, SPIKES, LOOT, LOOT_NAMES, GOLD_ICON, BOSSES, LOCKS, TEXT: T, ENDINGS, EPILOGUE, HEART, WHISPERS, APPARITIONS, TRUTH_WHO, NOTES };
 })();

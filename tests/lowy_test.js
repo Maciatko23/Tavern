@@ -295,7 +295,7 @@ kit.test({ port: 9552, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.give(93, 1);
     await t.eval("Lowy.strays.rope('krasula'); 0");
     const rope1 = await t.json("({ led: Lowy.state().strays.led, mode: Lowy.strays.list().find(a => a._key === 'krasula')._mode, rope: $gameParty.numItems($dataItems[93]) })");
-    t.check("powróz: bez liny dymek (nie okno), z liną Krasula idzie za bohaterem (lina zużyta)", rope0.pops.some(x => /lin/.test(x)) && !rope0.led && !rope0.msg
+    t.check("powróz: bez sznurka dymek (nie okno), ze sznurkiem Krasula idzie za bohaterem (sznurek zużyty)", rope0.pops.some(x => /sznur/.test(x)) && !rope0.led && !rope0.msg
         && rope1.led === "krasula" && rope1.mode === "led" && rope1.rope === 0, { rope0, rope1 });
     await t.eval(`(function(){ Homes.setStage(3); const c = __put(22, 12, 1, 3); const cow = Lowy.strays.list().find(a => a._key === "krasula"); if (c) cow.locate(c[0], c[1] + 1); return 0; })()`);
     await t.frames(40);

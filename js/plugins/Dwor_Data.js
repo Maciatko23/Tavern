@@ -73,7 +73,7 @@
     };
     const OBS = { rano: 300, dzien: 240, noc: 300, near: 7, close: 2.5, hall: 6, hatch: 8, need: 3 };
     const PAY = { truthDebt: 250, truthBuyback: 1000, truthElse: 100, week: 100, toll: 5 };
-    const GEAR = [[59, 3], [93, 2], [152, 2], [127, 10]];      // the manor's armoury: torches, ropes, bandages, arrows
+    const GEAR = [[59, 3], [93, 2], [152, 2], [127, 10]];      // the manor's armoury: torches, strings (93), bandages, arrows
     const KAZIMIERZ = "Kazimierz";
 
     // ------------------------------------------------------------------ the words (js/teksty/dwor.txt; Dwor.js reads them as D.TX)

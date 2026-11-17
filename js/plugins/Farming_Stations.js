@@ -43,7 +43,8 @@
         BUILDINGS, farm, buildingsOf, changed, geoOf, itemOf, countOf, popup, complain, spaceFor, complainNoSpace, playSe,
         spendStamina, perk, perkRoll, useTool, requireItem, fx, later, lockPlayer, swingThen, missingOf, hasClock, clockHours,
         FUEL_MAX, FUEL_START, FUEL_PER_WOOD, FUEL_PER_BRANCH, SMOULDER_HOURS, weatherHere, rainingHere, RAW_MEATS, MEAT_LABEL,
-        meatCount, QUEUE_MAX, clockText, hoursText, IMPROVE, costRows, RAW_FISH, FISH_LABEL, fishCount } = P.core;
+        meatCount, QUEUE_MAX, clockText, hoursText, IMPROVE, costRows, RAW_FISH, FISH_LABEL, fishCount, anyGroups, anyCount, anyIcon,
+        spendAny, anyRows } = P.core;
     const [ownsBucket, bagWater, setBagWater] =
         link(PL, ["ownsBucket", "bagWater", "setBagWater"]);
     const [manualEntry] =
@@ -195,6 +196,7 @@
         const missing = missingOf(r.inputs.map(([id, k]) => [id, k * n]));
         if (r.meat && meatCount() < r.meat * n) missing.push([ITEM.rawMeat, r.meat * n, "meat"]);   // (the third field: "any raw meat")
         if (r.fish && fishCount() < r.fish * n) missing.push([ITEM.fish, r.fish * n, "fish"]);       // (2026-10-14: "any raw fish")
+        for (const g of anyGroups(r)) if (anyCount(g) < g.n * n) missing.push([anyIcon(g), g.n * n, "any", g]);   // (2026-11-17: r.any - a group in any mix)
         return missing;
     }
     // "any raw meat" (r.meat pieces): the soups, the stew and the smokehouse take the meat of whatever animal; the kinds there is
@@ -214,8 +216,8 @@
             if (n <= 0) break;
         }
     }
-    const missingName = pair => pair[2] === "meat" ? MEAT_LABEL : pair[2] === "fish" ? FISH_LABEL : itemOf(pair[0]).name;
-    const missingHave = pair => pair[2] === "meat" ? meatCount() : pair[2] === "fish" ? fishCount() : countOf(pair[0]);
+    const missingName = pair => pair[2] === "meat" ? MEAT_LABEL : pair[2] === "fish" ? FISH_LABEL : pair[2] === "any" ? pair[3].name : itemOf(pair[0]).name;
+    const missingHave = pair => pair[2] === "meat" ? meatCount() : pair[2] === "fish" ? fishCount() : pair[2] === "any" ? anyCount(pair[3]) : countOf(pair[0]);
     // recipes that need water (the cauldron's soups): null when fine, else the reason for a popup/help line
     function waterProblem(r, n) {
         if (!r.water) return null;
@@ -226,7 +228,7 @@
     }
     function costRowsWithWater(r, n) {
         n = n || 1;
-        const rows = costRows(r.inputs.map(([id, k]) => [id, k * n]));
+        const rows = costRows(r.inputs.map(([id, k]) => [id, k * n])).concat(anyRows(r, n));
         if (r.meat) rows.push([itemOf(ITEM.rawMeat).iconIndex, r.meat * n, meatCount(), MEAT_LABEL]);
         if (r.fish) rows.push([itemOf(ITEM.fish).iconIndex, r.fish * n, fishCount(), FISH_LABEL]);
         if (r.water) rows.push([itemOf(ITEM.bucket).iconIndex, r.water * n, bagWater(), "woda"]);
@@ -247,6 +249,7 @@
         for (const [id, need] of r.inputs) n = Math.min(n, Math.floor(countOf(id) / need));
         if (r.meat) n = Math.min(n, Math.floor(meatCount() / r.meat));
         if (r.fish) n = Math.min(n, Math.floor(fishCount() / r.fish));
+        for (const g of anyGroups(r)) n = Math.min(n, Math.floor(anyCount(g) / g.n));
         if (r.water) n = Math.min(n, ownsBucket() ? Math.floor(bagWater() / r.water) : 0);
         return Math.max(0, n);
     }
@@ -262,8 +265,9 @@
     }
     // Oszczędny: now and then one of the materials comes back
     function giveBackOne(r) {
-        if (!r.inputs.length || !perkRoll("craft.save")) return;
-        const [id] = r.inputs[Math.floor(Math.random() * r.inputs.length)];
+        const pool = r.inputs.map(([id]) => id).concat(anyGroups(r).map(anyIcon));   // (a group gives back its icon's item: the flax fibre)
+        if (!pool.length || !perkRoll("craft.save")) return;
+        const id = pool[Math.floor(Math.random() * pool.length)];
         $gameParty.gainItem(itemOf(id), 1);
     }
     // Podwójna robota / Większe porcje: a double batch - never of a tool or of something one has once (key items)
@@ -286,6 +290,7 @@
         if (missing.length > 0) { complain(itemOf(missing[0][0]).iconIndex, "Brakuje: " + missingName(missing[0])); return false; }
         if (!spendStamina(r.stamina || 0)) return false;
         for (const [id, k] of r.inputs) $gameParty.loseItem(itemOf(id), k * n, false);
+        for (const g of anyGroups(r)) spendAny(g, g.n * n);
         if (r.meat) spendMeat(r.meat * n);
         if (r.fish) spendFish(r.fish * n);
         if (r.water) setBagWater(bagWater() - r.water * n);
@@ -479,6 +484,7 @@
         if (!r.repair && !r.improve && !spaceFor(out, r.output[1])) { complainNoSpace(out); return false; }
         if (!spendStamina(r.stamina || 0)) return false;
         for (const [id, n] of r.inputs) $gameParty.loseItem(itemOf(id), n, false);
+        for (const g of anyGroups(r)) spendAny(g, g.n);   // (r.any: the nettle first, then the flax)
         if (!r.repair && !r.improve) giveBackOne(r);
         const se = r.startSe || (b && BUILDINGS[b.type] && BUILDINGS[b.type].startSe) || SE.build;
         swingThen(craftSwing(r), () => {
@@ -799,5 +805,5 @@
         smoulderOf, feedFireEntries, recipeOf, missingInputs, queueMax, jobHours, startJob, giveUpRoast, collectJob,
         takeReadyFirst, isChest, chestStacks, chestKinds, chestHolds, packStacks, isFood, whyNotMove, putInChest, takeFromChest,
         openChest, ownedOutput, toolMissing, improved, resultText, craftManual, recipeEntry, stationEntries, fireNote,
-        Window_ChestList, Scene_Chest };
+        missingName, missingHave, Window_ChestList, Scene_Chest };
 })();

@@ -11,7 +11,7 @@
 //   - oswojony kruk: lot za bohaterem (drzewo / ziemia / ramię), menu (K), listy (raz dziennie, nie do matki, odpowiedź), zwiad (raport
 //     od razu po powrocie, notatka w dzienniku, ostrzeżenie; prawdziwy: zwierzyna, jagody, grzyby, nocny obóz), błyskotki i cudzy list (oddany właścicielowi - Opinia), pilnowanie pola (żywe i pod nieobecność), ostrzeżenie przed
 //     wilkiem, głód -> powrót na Urwisko i odzyskanie, zapis i wczytanie
-//   - grzęda w Farming_Data.js (4× Gałęzie, 2× Deski, 1× Lina, 1x1) i obóz kopaczy nocą po D25
+//   - grzęda w Farming_Data.js (4× Gałęzie, 2× Deski, 1× Sznurek, 1x1) i obóz kopaczy nocą po D25
 // Przed instalacją mapy: nakładka tools/miejsca_wyspy/staging_B (sama się włącza, gdy data/Map157.json to jeszcze szkielet).
 // Zrzuty do dokumentacji: tools/urwisko/shots.js.
 // Uruchom: CDP_PORT=9502 node tests/kruk_test.js (serwer: node tools/serve.js)
@@ -43,7 +43,7 @@ kit.test({ port: 9502, overlay: OVERLAY, beforeLoad: OPEN ? FORCE_OPEN : undefin
             ready: Wyspa.isReady(157), built: Kruk.built(), ring: $dataItems[179] && $dataItems[179].name }; })()`);
     t.check("Kruk.js i Kruk_Data.js działają: K51 i D24 (od dziadka) w zadaniach, paczka „Kruk”, miejsce gotowe (Wyspa.ready 157 - tylko w KRUK_OPEN; w żywym świecie Urwisko jest poza światem)",
         base.api && base.data && base.k51 && base.d24 === "grandpa" && base.packs.join() === "K51,D24" && base.ready === OPEN && base.built, base);
-    t.check("Farming_Data.js: budynek „Grzęda kruka” (4× Gałęzie, 2× Deski, 1× Lina; 1x1; Farm_Grzeda; korytko i miseczka)",
+    t.check("Farming_Data.js: budynek „Grzęda kruka” (4× Gałęzie, 2× Deski, 1× Sznurek; 1x1; Farm_Grzeda; korytko i miseczka)",
         base.grz && base.grz.name === "Grzęda kruka" && base.grz.cost === "77x4,80x2,93x1" && base.grz.w === 1 && base.grz.h === 1 && base.grz.img === "Farm_Grzeda" && base.grz.slots === 2 && base.grz.bowl === 3, base.grz);
     const imgs = await t.json(`(function(){ const a = ImageManager.loadSystem('Kruk'), b = ImageManager.loadSystem('Farm_Grzeda'), c = ImageManager.loadSystem('Kruk_Grzeda_Stara'), d = ImageManager.loadCharacter('!$Urwisko_Gniazda');
         return [a, b, c, d].map(x => [x.width, x.height]); })()`);

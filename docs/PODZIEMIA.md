@@ -209,10 +209,18 @@ Każde ma schody w górę (przyjście: pole pod nimi), schody w dół, **przysta
 
 ## Winda kasztelana
 
-Klatka wisi na każdym ręcznym piętrze 10-90 i w szybie Ruin Zamku. Przystanek działa, gdy na tym piętrze poruszy się
-**kołowrót** (`Underground.windlass(this)`: „Zakręcić kołowrotem?” → przystanek na zawsze, przełącznik 12, doświadczenie). Klatka
-(`Underground.cage(this)`) pyta „Dokąd jechać?” i pokazuje Ruiny Zamku oraz wszystkie działające przystanki poza obecnym
-(„Piętro 40 - Bród Milczącej”). Do Komnaty Serca winda nie zjeżdża: od piętra 90 dziewięć pięter trzeba przejść pieszo.
+Winda staje **co 5 pięter** (2026-11-17, `Underground_Data.LIFT.stops` = 5, 10, 15 ... 95) i w szybie Ruin Zamku. Na ręcznych
+piętrach 10-90 klatka i kołowrót są narysowane na mapie; na generowanych 5, 15, 25 ... 95 stawia je generator
+(`Underground_Gen.js`, `liftPlace`): w sali ze schodami w górę, kilka kroków od schodów, najlepiej przy północnej ścianie (klatka
+wisi przed ścianą jak na piętrze 10, kołowrót dwa pola obok, rząd wyżej), inaczej wolno w sali; nigdy w drzwiach sali, przy
+schodach, na skrzyni ani pod pochodnią, nie zwęża przejścia i niczego nie odcina. Sala za ciasna (skrzynie, stoły, łóżka) -
+najbliższa inna sala. Piętro z ziarna zapisu jest zawsze takie samo, więc miejsce przed klatką (`info.spots.lift`) jest znane,
+zanim się tam pojedzie. Zdarzenia windy idą na koniec listy zdarzeń piętra i nie biorą liczb losowych piętra - reszta piętra
+(skrzynie, ich numery, przeszukane) zostaje jak w starszych zapisach.
+Przystanek działa, gdy na tym piętrze poruszy się **kołowrót** (`Underground.windlass(this)`: „Zakręcić kołowrotem?” → przystanek
+na zawsze, przełącznik 12, doświadczenie). Klatka (`Underground.cage(this)`) pyta „Dokąd jechać?” i pokazuje Ruiny Zamku oraz
+wszystkie działające przystanki poza obecnym, od góry („Piętro 5”, „Piętro 40 - Bród Milczącej”). Do Komnaty Serca winda nie
+zjeżdża: od piętra 95 pięć pięter trzeba przejść pieszo.
 
 ## Woda w podziemiach (susza zostaje)
 
@@ -430,7 +438,7 @@ Szyna: `undergroundFloor`, `undergroundDeeper`, `undergroundLoot`, `undergroundN
 - „Podziemia: piętro N (nazwa)” - ←→ wybiera 0-100 (z Shiftem o 10), OK przenosi przed schody w górę tego piętra;
 - „Podziemia: zejście z piwnicy otwarte/zamknięte” - przełącznik 11;
 - „Podziemia: zamki Serca na próbę” - klucz, dzwon i pieśń znane bez questów (do sprawdzania piętra 100);
-- „Podziemia: wszystkie przystanki windy” - kołowroty 10-90 poruszone.
+- „Podziemia: wszystkie przystanki windy” - kołowroty 5-95 poruszone (co 5 pięter).
 
 ## Narzędzia (tools/underground/)
 
@@ -478,6 +486,12 @@ Szyna: `undergroundFloor`, `undergroundDeeper`, `undergroundLoot`, `undergroundN
   dzienniku), piętro 100 (zamki bez questów zamknięte; klucz W4 i Księga sygnałów W2 ze stanu TownQuests otwierają dwa zamki →
   drzwi; Serce i wybór; „Zapieczętować” → epilog → tawerna; potem pieczęć w komnacie), twórca stworów na piętrze ręcznym, F9.
 
+- `node tests/run.js winda_co5_test --port 9561` (15 sprawdzeń, 2026-11-17) - winda co 5 pięter: klatka i kołowrót na piętrze 5
+  (Map135) i 25 (mapa 1025) tam, gdzie mówi piętro, kołowroty 5, 15, 25 poruszone (przystanek na zawsze, dźwignia w dół), menu w
+  szybie Ruin od góry, zjazd z Ruin na 15 i z 25 na 5 - bohater przed klatką; zrzuty `winda_co5_*.png`. Bez gry:
+  `tests/unit/underground.test.js` sprawdza przystanki wszystkich pasm wielu ziaren i to, że piętro z przystankiem jest tym samym
+  piętrem co w starszym zapisie (plus dwa zdarzenia na końcu).
+
 - `CDP_PORT=9466 node tests/run.js heart_test` - świat (flagi questów, Akt III i jego zapas z flag, postawa Lorda), Lord nieobecny /
   sojusznik (pozwolić) / rywal (odmówić) / zapytać za niego (połowa prawdy), cztery zakończenia w różnych światach (zniszczyć - dobry,
   strażnik Borgar - zły, uwolnić - mieszany, strażnik ja - z F9), co zostaje w komnacie, wiersze F9, brak autozapisu w scenie; zrzuty
@@ -495,6 +509,9 @@ Szyna: `undergroundFloor`, `undergroundDeeper`, `undergroundLoot`, `undergroundN
 - Z gry: `gra_piwnica_krata.png`, `gra_ruiny_zamku.png`, `gra_pietro1.png`, `gra_pietro10.png`, `gra_straznik.png`,
   `gra_ruiny_winda.png`, `gra_pietro11.png`, `gra_pietro20.png` ... `gra_pietro90.png`, `gra_pietro57.png`,
   `gra_pietro85_zjawa.png`, `gra_pietro100.png`, `gra_komnata_drzwi.png`, `gra_serce_wybor.png`, `gra_serce_zapieczetowane.png`.
+- Winda co 5 pięter (2026-11-17, ziarno 12345): `winda_co5_pietro5.png` (klatka przy ścianie obok schodów, kołowrót poruszony),
+  `winda_co5_pietro25.png` (klatka wolno w sali cel), `winda_co5_menu.png` (szyb w Ruinach: przystanki od góry),
+  `winda_co5_przyjazd15.png`, `winda_co5_przyjazd5.png` (bohater przed klatką po zjeździe).
 - Lord i zakończenia (tests/heart_test.js): `serce_lord_sojusznik.png`, `serce_lord_odpowiedz.png`, `serce_lord_rywal.png`,
   `serce_lord_straznik.png`, `serce_zniszczone_cisza.png`, `serce_koniec_*.png` (dwór, obóz, dom, tawerna, rynek, Podgrodzie...),
   `serce_straznik_borgar.png`, `serce_borgar_na_lawie.png`, `serce_uwolnione.png`, `serce_straznik_ja.png`, `serce_rok_pozniej.png`,

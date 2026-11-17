@@ -37,9 +37,10 @@ fs.mkdirSync(OUT, { recursive: true });
         check("a new game starts with no tools at all", start.every(n => n === 0), start);
         const noChest = await ev(`(function(){ const ev = $dataMap.events; const bad = ev.filter(e => e && e.pages.some(p => p.list.some(c => c.code === 126 && [60, 62, 63, 65, 66].includes(c.parameters[0])))); return { chest52: ev[52] ? { name: ev[52].name, image: ev[52].pages[0].image } : null, giving: bad.map(e => ({ id: e.id, name: e.name, tools: true })) }; })()`);
         check("no chest or event gives an axe, shovel, pickaxe, rake or hoe any more (the user's own test crystal may give a hammer)", noChest.giving.every(g => !g.tools) && !(noChest.chest52 && /!Chest/.test(JSON.stringify(noChest.chest52.image))), noChest);
-        const house = await ev(`fetch("/data/Map002.json").then(r => r.json()).then(m => { const e = m.events.find(e => e && /Skrzynia/.test(e.name)); return { name: e.name, items: e.pages[0].list.filter(c => c.code === 126).map(c => c.parameters[0]) }; })`);
-        check("the chest in the house gives no tools either: only the torch and the seeds", house.items.join() === "59,67,68,69,70", house);
-        check("hand recipes: the hammer, the waterskin, rope, a bandage, nettle fibre", (await ev("Farming.HAND_RECIPES.map(r => r.id)")).join() === "hammer,waterskin,rope,bandage,nettle_fiber");
+        // (2026-11-17: the old house Map002 was removed - grandpa's new house Map224, its chest "Skrzynia dziadka")
+        const house = await ev(`fetch("/data/Map224.json").then(r => r.json()).then(m => { const e = m.events.find(e => e && /Skrzynia/.test(e.name)); return { name: e.name, items: e.pages.flatMap(p => p.list.filter(c => c.code === 126).map(c => c.parameters[0])) }; })`);
+        check("the chest in grandpa's house gives no tools either", !!house.name && !house.items.some(i => [60, 62, 63, 65, 66].includes(i)), house);
+        check("hand recipes: the hammer, the waterskin, the string, the thick rope, a bandage", (await ev("Farming.HAND_RECIPES.map(r => r.id)")).join() === "hammer,waterskin,rope,lina,bandage");
         const hammerInputs = await ev("Farming.HAND_RECIPES[0].inputs.map(([id]) => id)");
         check("the hammer needs only what lies on the ground (branches 77, stones 64, flax 92)", hammerInputs.sort().join() === "64,77,92", hammerInputs);
         const wbCost = await ev("Farming.BUILDINGS.workbench.cost.map(([id, n]) => id + 'x' + n)");
@@ -49,8 +50,8 @@ fs.mkdirSync(OUT, { recursive: true });
             wbRecipes.slice(20).every(id => /^(ubior_|bron_)/.test(id)), wbRecipes);   // (2026-10-23: then the clothes' and the weapons' own - Ubior_Sklepy.js, Bron.js)
         check("the sawmill only saws: planks and planks with the saw", (await ev("Farming.BUILDINGS.sawmill.recipes.map(r => r.id)")).join() === "planks,planks_saw");
         const forgeRecipes = await ev("Farming.BUILDINGS.forge.recipes.map(r => r.id)");
-        check("the forge forges parts: iron, iron knife, axe head, pick head, saw blade, can, the bucket, nails, the cauldron, shears, tongs; (2026-10-22) melting scrap iron (package A, Zasoby.js)", forgeRecipes.slice(0, 12).join() === "iron,knife_iron,head_axe,head_pick,blade_saw,can,bucket_item,nails,cauldron_item,shears,tongs,zas_scrap_iron" &&
-            forgeRecipes.slice(12).every(id => /^(ubior_|bron_)/.test(id)), forgeRecipes);   // (2026-10-23: then the weapons' own - Bron.js)
+        check("the forge forges parts: iron, iron knife, axe head, pick head, saw blade, can, the bucket, nails, the cauldron, shears, tongs; (2026-10-22) melting scrap iron (package A, Zasoby.js)", ["iron", "knife_iron", "head_axe", "head_pick", "blade_saw", "can", "bucket_item", "nails", "cauldron_item", "shears", "tongs", "zas_scrap_iron"].every(id => forgeRecipes.includes(id)) &&   /* (2026-11-17: + melting coins and the gear's own recipes among them) */
+            forgeRecipes.filter(id => !["iron", "knife_iron", "head_axe", "head_pick", "blade_saw", "can", "bucket_item", "nails", "cauldron_item", "shears", "tongs", "zas_scrap_iron"].includes(id)).every(id => /^(ubior_|bron_)/.test(id) || id === "melt_coins"), forgeRecipes);   // (2026-10-23: then the weapons' own - Bron.js)
         check("BUILDINGS lists the workbench first (first entry of the build menu)", (await ev("Farming.BUILDING_IDS ? Farming.BUILDING_IDS[0] : Object.keys(Farming.BUILDINGS)[0]")) === "workbench");
 
         // ================= 2. branches lie on the ground =================
@@ -224,7 +225,7 @@ fs.mkdirSync(OUT, { recursive: true });
             return { series, refused, window: await ev("$gameMessage.hasText()") };
         };
         const noAxe = await chopTree(1, 14, 10, 8);
-        check("without an axe the tree refuses with a POPUP: the stone axe icon and just 'Potrzebujesz siekiery' (no word about where to make it), no message window", !!noAxe.refused && noAxe.refused.text === "Potrzebujesz siekiery" && noAxe.refused.icon === 377 && noAxe.refused.color === "#ff9f8f" && noAxe.window === false, noAxe);
+        check("without an axe the tree refuses with a POPUP: the stone axe icon and just 'Potrzebujesz siekiery' (no word about where to make it), no message window", !!noAxe.refused && noAxe.refused.text === "Potrzebujesz siekiery" && noAxe.refused.icon === (await ev("$dataItems[60].iconIndex")) &&   /* (the stone axe's own icon - PixelLab icons since 2026-11-17) */ noAxe.refused.color === "#ff9f8f" && noAxe.window === false, noAxe);
         // the same for a missing shovel and pickaxe, and for tiredness
         const stump = await ev("(function(){ const e = $gameMap.events().find(e => e.event().note && /<Stump>/.test(e.event().note)); return e ? e._eventId : 0; })()").catch(() => 0);
         await ev("window.__popups.length = 0; 0");
@@ -232,7 +233,7 @@ fs.mkdirSync(OUT, { recursive: true });
         await ev("(function(){ const e = $gameMap.event(45); $gameSystem.setStamina(100); $gamePlayer.locate(33, 18); $gamePlayer.setDirection(2); e.start(); })()");
         await frames(20);
         const pickNeed = await needed();
-        check("without a pickaxe: a popup with the stone pickaxe icon and just 'Potrzebujesz kilofa'", !!pickNeed && pickNeed.text === "Potrzebujesz kilofa" && pickNeed.icon === 378 && (await ev("$gameMessage.hasText()")) === false, pickNeed);
+        check("without a pickaxe: a popup with the stone pickaxe icon and just 'Potrzebujesz kilofa'", !!pickNeed && pickNeed.text === "Potrzebujesz kilofa" && pickNeed.icon === (await ev("$dataItems[63].iconIndex")) && (await ev("$gameMessage.hasText()")) === false, pickNeed);
         await give(63, 1);
         await ev("window.__popups.length = 0; $gameParty.gainItem($dataItems[60], 1); $gameSystem.setStamina(0); $gameMap.event(1).start(); 0");
         await frames(20);

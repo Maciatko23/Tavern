@@ -289,7 +289,7 @@ kit.test({ port: 9510, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const first = await lordTalk(["Powiem panu wszystko", "Odejdź"]);
     s = await st();
     const after = await J(`({ gear: [59, 93, 152, 127].map(i => $gameParty.numItems($dataItems[i])), stance: Underground.lordStance(Underground.world()) })`);
-    t.check("rozdz. 6: „Powiem panu wszystko” - sto groszy, ekwipunek ze zbrojowni (pochodnie, liny, opatrunki, strzały), w7LordFirst",
+    t.check("rozdz. 6: „Powiem panu wszystko” - sto groszy, ekwipunek ze zbrojowni (pochodnie, sznurki, opatrunki, strzały), w7LordFirst",
         /ród Stacha ma honor/.test(first.text) && s.gold === g0 + 100 && after.gear.every(n => n > 0) && !!s.f.w7LordFirst && s.step === "w7Serce", { gold: [g0, s.gold], gear: after.gear, step: s.step });
     t.check("...Lord przy Sercu: sojusznik (Underground.lordStance)", after.stance === "ally", after);
     const rv = await J(`(function(){ try { return Rywal.who(true); } catch (e) { return String(e); } })()`);

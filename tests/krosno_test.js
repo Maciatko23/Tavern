@@ -21,7 +21,7 @@ kit.test({ port: 9482, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         return { name: L.name, cost: L.cost, w: L.w, h: L.h, indoor: !!L.indoor, image: L.image, up: L.upgrade && L.upgrade.to, upCost: L.upgrade && L.upgrade.cost,
             rec: L.recipes.filter(r => !r.bron).map(r => [r.id, r.inputs, r.output, r.hours]), wheel: W && { image: W.image, noBuild: !!W.noBuild, rec: W.recipes.filter(r => !r.bron).map(r => [r.id, r.inputs, r.output, r.hours]) },
             melt: (F.recipes.find(r => r.id === "melt_coins") || {}).inputs, items: [483, 484, 485, 486, 487, 488, 489, 490, 491, 284, 299, 419, 482].map(i => $dataItems[i] && $dataItems[i].name) }; })()`);
-    t.check("krosno: 6 desek, 2 drewna, 4 liny, 4 gwoździe; 3 x 2; stoi też w chatce; własny obrazek (Farm_Loom_L, z kołowrotkiem Farm_LoomWheel_L); rozbudowa na krosno z kołowrotkiem (2 deski, lina, 2 gwoździe)",
+    t.check("krosno: 6 desek, 2 drewna, 4 sznurki, 4 gwoździe; 3 x 2; stoi też w chatce; własny obrazek (Farm_Loom_L, z kołowrotkiem Farm_LoomWheel_L); rozbudowa na krosno z kołowrotkiem (2 deski, sznurek, 2 gwoździe)",
         def.name === "Krosno" && JSON.stringify(def.cost) === "[[80,6],[61,2],[93,4],[88,4]]" && def.w === 3 && def.h === 2 && def.indoor && def.image === "Farm_Loom_L" && def.wheel && def.wheel.image === "Farm_LoomWheel_L" &&
         def.up === "loom_wheel" && JSON.stringify(def.upCost) === "[[80,2],[93,1],[88,2]]" && def.wheel && def.wheel.noBuild, def);
     t.check("tkanie: płótno z 6 włókien (3 h), sukno z 2 wełny (4 h); z kołowrotkiem płótno z 4 (2 h), sukno 3 h; kuźnia: przetop 4 monet + węgiel; nowe przedmioty w bazie",

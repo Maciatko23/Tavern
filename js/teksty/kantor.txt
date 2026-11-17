@@ -347,7 +347,7 @@ Ale wiesz, jak to jest ze wspólnikami. Ty wiesz o mnie wszystko... a ja o tobie
 
 [noteHonest]
 Uczciwy kantor
-Kantor znów otwarty - uczciwy. Żelazo, stal, gwoździe i lina o dziesiątą część taniej niż u Baltazara.
+Kantor znów otwarty - uczciwy. Żelazo, stal, gwoździe i sznurek o dziesiątą część taniej niż u Baltazara.
 
 [noteGrip]
 Baltazar w garści

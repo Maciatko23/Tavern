@@ -32,6 +32,29 @@ unit.test(t => {
     }
     for (const r of F.HAND_RECIPES) { items(r.inputs, "hand/" + r.id + " in"); if (r.output) items([r.output], "hand/" + r.id + " out"); }
     t.check("every building (" + Object.keys(F.BUILDINGS).length + ") and hand recipe (" + F.HAND_RECIPES.length + "): real items in the costs, inputs and outputs, a size", bad.length === 0, bad.slice(0, 8));
+    // (2026-11-17) a recipe's r.any: a group of items in any mix - at least two real items, a count, the words of its cost line
+    const allRecipes = F.HAND_RECIPES.concat(...Object.values(F.BUILDINGS).map(b => b.recipes || []));
+    const badAny = allRecipes.filter(r => (r.any || []).some(g => !(Array.isArray(g.ids) && g.ids.length >= 2 && g.ids.every(real) && g.n > 0 && g.name && real(g.icon || g.ids[0]))));
+    t.check("every recipe's group of interchangeable items (r.any) names real items, a count and its words", badAny.length === 0, badAny.map(r => r.id));
+
+    // ---- (2026-11-17, the user: "niech to, co się nazywa lina, nazywa się sznurek ... z dziesięciu sznurków robi się linę i używa do budowy
+    // studni"; "usuń opcję przerabiania pokrzywy na włókno; sznurek można robić z lnu lub pokrzywy lub z kombinacji")
+    t.eq("item 93 is now 'Sznurek' (a new twine icon), the new item 492 'Lina' has the old coiled rope's icon 742 and weighs 3",
+        [$dataItems[93].name, $dataItems[93].iconIndex !== 742 && $dataItems[93].iconIndex >= 688, $dataItems[492].name, $dataItems[492].iconIndex, $dataItems[492].note, F.ITEM.lina, F.ITEM.rope],
+        ["Sznurek", true, "Lina", 742, "<Weight:3>", 492, 93]);
+    t.eq("the hand recipes: hammer, waterskin, the string, the thick rope, bandage (no nettle-to-fibre any more)", F.HAND_RECIPES.map(r => r.id), ["hammer", "waterskin", "rope", "lina", "bandage"]);
+    const rope = F.HAND_RECIPES.find(r => r.id === "rope"), lina = F.HAND_RECIPES.find(r => r.id === "lina");
+    t.eq("'Skręć sznurek' (id 'rope' kept for the saves): 4 of flax fibre 92 and nettle 149 in any mix (the nettle spent first) -> 1 string",
+        [rope.name, rope.inputs.length, rope.any.map(g => [g.ids, g.n, g.icon]), rope.output, rope.manual], ["Skręć sznurek", 0, [[[149, 92], 4, 92]], [93, 1], true]);
+    t.eq("'Spleć linę': 10 strings -> 1 Lina, by hand (about an hour, a few stamina)", [lina.name, lina.inputs, lina.output, lina.manual, lina.hours, lina.stamina], ["Spleć linę", [[93, 10]], [492, 1], true, 1, 3]);
+    const well = F.BUILDINGS.well, has = (list, id) => (list || []).some(([i]) => i === id);
+    t.check("the well needs 1 Lina and no string (also its older versions); pulled down it gives back no rope",
+        well.cost.some(([i, n]) => i === 492 && n === 1) && !has(well.cost, 93) && [well.v2.cost, well.legacy.cost].every(c => c.some(([i, n]) => i === 492 && n === 1) && !has(c, 93)) &&
+        [well.refund, well.v2.refund, well.legacy.refund].every(r => Array.isArray(r) && !has(r, 93) && !has(r, 492)) && has(well.refund, 138) && !has(well.v2.refund, 138),
+        { cost: well.cost, refund: well.refund, v2: well.v2, legacy: well.legacy });
+    t.check("nothing else asks for the Lina (only the well) and the string stays in the other recipes (the snare, the rod, the tripod...)",
+        Object.entries(F.BUILDINGS).filter(([k, b]) => k !== "well" && (has(b.cost, 492) || (b.recipes || []).some(r => has(r.inputs, 492)))).length === 0 &&
+        has(F.BUILDINGS.snare.cost, 93) && has(F.BUILDINGS.workbench.recipes.find(r => r.id === "rod").inputs, 93) && has(F.BUILDINGS.tripod.cost, 93));
     const inOne = Object.entries(F.BUILDINGS).map(([k, b]) => [k, (b.recipes || []).map(r => r.id)]).filter(([k, l]) => new Set(l).size !== l.length);
     t.check("recipe ids are unique within each building (the same dish may be cooked at two stations)", inOne.length === 0, inOne.map(x => x[0]));
 

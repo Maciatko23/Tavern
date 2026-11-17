@@ -41,7 +41,8 @@
     const SCENE = {};   // the methods Farming.js puts on Scene_Map (their bodies)
     const { PL, B, S, link, ITEM, ICON, STAMINA, canMax, SEASON_NAMES, seasonIndex, seasonOf, GROUND_REST, CROPS, BUILDINGS,
         HAND_RECIPES, CROP_IDS, BUILDING_IDS, today, isHutInterior, hutOf, geoOf, buildingAt, solidAt, itemOf, countOf, complain,
-        lockPlayer, NO_BUILD, menuHooks, rainingHere, hoursText, IMPROVE, costRows, targetTile, MENU_MARGIN, landRefusal, noBuildText } = P.core;
+        lockPlayer, NO_BUILD, menuHooks, rainingHere, hoursText, IMPROVE, costRows, targetTile, MENU_MARGIN, landRefusal, noBuildText,
+        anyRows } = P.core;
     // the words when building is refused here (Homes.js: the field now the Lord's, "only on your own land" once there is some)
     const noBuild = () => (landRefusal && landRefusal()) || (noBuildText ? noBuildText() : NO_BUILD);
     const [plotAt, canCharges, needsOn, wellEntries, bucketUnits, bucketFor, bucketEntries, wateredRecently, isRipe, daysLeft,
@@ -59,10 +60,10 @@
             "noRestHelp", "groundRate", "lieDown", "enterHut", "startPlacement"]);
     const [jobHoursLeft, jobPaused, jobReady, jobCount, jobFinished, jobCollectable, fireLit, fireOutText, feedFireEntries,
         recipeOf, missingInputs, chestKinds, openChest, ownedOutput, toolMissing, improved, resultText, craftManual,
-        stationEntries, fireNote] =
+        stationEntries, fireNote, missingName, missingHave] =
         link(S, ["jobHoursLeft", "jobPaused", "jobReady", "jobCount", "jobFinished", "jobCollectable", "fireLit", "fireOutText",
             "feedFireEntries", "recipeOf", "missingInputs", "chestKinds", "openChest", "ownedOutput", "toolMissing", "improved",
-            "resultText", "craftManual", "stationEntries", "fireNote"]);
+            "resultText", "craftManual", "stationEntries", "fireNote", "missingName", "missingHave"]);
 
     // ------------------------------------------------------------------
     // What the action button offers on a tile: { title, entries } where an entry
@@ -86,11 +87,11 @@
         if (own) help = "Masz już: " + itemOf(own).name + ".";
         else if (done) help = IMPROVE[r.improve].doneText + ".";
         else if (noTool) help = "Potrzebujesz: " + noTool + ".";
-        else if (missing.length > 0) help = "Brakuje: " + missing.map(([id, n]) => itemOf(id).name + " (" + countOf(id) + "/" + n + ")").join(", ") + ".";
+        else if (missing.length > 0) help = "Brakuje: " + missing.map(p => missingName(p) + " (" + missingHave(p) + "/" + p[1] + ")").join(", ") + ".";
         else help = resultText(r, out) + ". Ręcznie: " + hoursText(r.hours) + ", -" + (r.stamina || 0) + " wytrzymałości.\n" + r.desc;
         const facts = ["Czas: " + hoursText(r.hours) + ", -" + (r.stamina || 0) + " wytrzymałości (praca ręczna)"];
         if (r.tool) facts.push("Wymaga: " + itemOf(r.tool).name + (noTool ? " (nie masz)" : " (masz)"));
-        return { name: r.name, costs: costRows(r.inputs), enabled: !own && !done && !noTool && missing.length === 0, help,
+        return { name: r.name, costs: costRows(r.inputs).concat(anyRows(r)), enabled: !own && !done && !noTool && missing.length === 0, help,
             tip: (own ? "Masz już: " + itemOf(own).name + ".\n" : done ? IMPROVE[r.improve].doneText + ".\n" : "") + resultText(r, out) + ".\n" + r.desc, facts,
             run: () => craftManual(b, r) };
     }
@@ -150,8 +151,8 @@
     function buildEntries(x, y) { return buildTabs(x, y).all; }
     // (2026-11-16, the user) the Q list has two tabs:
     //   "Budowa" - the buildings (all of them on the hero's own ground, else only what goes up anywhere: the campfire, the snare, the
-    //     forest bed) and the things made by hand with no table and no building (the hammer, the waterskin, the rope, the bandage,
-    //     the nettle fibre) - on every map;
+    //     forest bed) and the things made by hand with no table and no building (the hammer, the waterskin, the string, the thick
+    //     rope, the bandage) - on every map;
     //   "Akcja" - what he carries and sets down: the tent, the pots, the barrel, the bucket (BUILDINGS[type].action is the line).
     // In each tab what can be done right now comes first, the rest after it; with no hammer "Zrób młotek" is the first line.
     function buildTabs(x, y) {

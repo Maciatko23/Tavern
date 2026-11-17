@@ -408,8 +408,10 @@
         if (!info && !(Needs.FEED || {})[id]) return [0, 0];
         return Needs.foodValues ? Needs.foodValues(it, info || {}) : (Needs.FEED[id] || [0, 0]);
     }
+    // what another brain holds back in the bag (AP.hold(id) -> n: the story autopilot's contract goods - not eaten, not put away)
+    const holdOf = id => (AP.hold ? AP.hold(id) || 0 : 0);
     // the ids of the foods in the bag (worth eating for hunger or thirst)
-    const bagFoods = () => $gameParty.items().map(it => it.id).filter(id => { const f = feedOf(id); return f[0] > 0 || f[1] > 0; });
+    const bagFoods = () => $gameParty.items().map(it => it.id).filter(id => { const f = feedOf(id); return (f[0] > 0 || f[1] > 0) && count(id) > holdOf(id); });
     AP.feedOf = feedOf;
     function* feedUpInner() {
         if (!needsCapped()) return true;
@@ -425,7 +427,7 @@
             const thirsty = Needs.state().water < Needs.state().food;   // (the need that is worse first: watery food while thirsty)
             const foods = bagFoods().sort((a, b) => thirsty ? (FEED[b][1] - FEED[a][1]) || (FEED[b][0] - FEED[a][0]) : (FEED[b][0] + FEED[b][1]) - (FEED[a][0] + FEED[a][1]));
             for (const id of foods) {
-                while (count(id) > 0 && ((FEED[id][0] > 0 && Needs.state().food < 60) || (FEED[id][1] > 0 && Needs.state().water < 60))) {
+                while (count(id) > holdOf(id) && ((FEED[id][0] > 0 && Needs.state().food < 60) || (FEED[id][1] > 0 && Needs.state().water < 60))) {
                     if (!(yield* eat(id, 1))) break;
                 }
             }
@@ -463,7 +465,7 @@
             const n = Math.min(count(i.id), PANTRY_KEEP - kept);
             if (n > 0) { keep[i.id] = n; kept += n; }
         }
-        const put = perish.map(i => [i, count(i.id) - (keep[i.id] || 0)]).filter(([, n]) => n > 0);
+        const put = perish.map(i => [i, count(i.id) - (keep[i.id] || 0) - holdOf(i.id)]).filter(([, n]) => n > 0);
         const total = put.reduce((t, [, n]) => t + n, 0);
         if (!total || (!force && total < 3 && !put.some(([i]) => leftH(i.id) < 24))) return false;   // (one or two: not worth the walk yet)
         if (!(yield* goFace(Farming.tilesOfBuilding(b.type, b.x, b.y), null, true))) return false;
@@ -520,14 +522,14 @@
     function* storeChests(force) {
         const cs = chestsB();
         if (!cs.length || $gameMap.mapId() !== HOME_MAP) return false;
-        const put = $gameParty.items().filter(chestable);
-        if (!put.length || (!force && put.reduce((t, i) => t + count(i.id), 0) < 5)) return false;
+        const put = $gameParty.items().filter(i => chestable(i) && count(i.id) > holdOf(i.id));
+        if (!put.length || (!force && put.reduce((t, i) => t + count(i.id) - holdOf(i.id), 0) < 5)) return false;
         const done = [];
         for (const c of cs) {
-            const left = put.filter(i => count(i.id) > 0);
+            const left = put.filter(i => count(i.id) > holdOf(i.id));
             if (!left.length) break;
             if (!(yield* goFace(Farming.tilesOfBuilding(c.type, c.x, c.y), null, true))) continue;
-            for (const i of left) { const m = Farming.putInChest(c, i, count(i.id)); if (m > 0) done.push(i.name + " ×" + m); }
+            for (const i of left) { const m = Farming.putInChest(c, i, count(i.id) - holdOf(i.id)); if (m > 0) done.push(i.name + " ×" + m); }
         }
         if (done.length) { say("odłożył do skrzyni: " + done.join(", ")); yield* wait(20); }
         return done.length > 0;
@@ -556,11 +558,11 @@
         if (s && Needs.state().water < 40 && count(102) + count(139) + count(140) === 0) yield* pickFruit();
         if (s && Needs.state().water < 50) {
             const wet = bagFoods().filter(id => feedOf(id)[1] > 0).sort((a, b) => feedOf(b)[1] - feedOf(a)[1]);
-            for (const id of wet) while (count(id) > 0 && Needs.state().water < 80) { if (!(yield* eat(id, 1))) break; }
+            for (const id of wet) while (count(id) > holdOf(id) && Needs.state().water < 80) { if (!(yield* eat(id, 1))) break; }
         }
         for (let t = 0; t < 2 && s && Needs.state().food < 50; t++) {
             const foods = bagFoods().filter(id => feedOf(id)[0] > 0).sort((a, b) => feedOf(b)[0] - feedOf(a)[0]);
-            for (const id of foods) while (count(id) > 0 && Needs.state().food < 70) { if (!(yield* eat(id, 1))) break; }
+            for (const id of foods) while (count(id) > holdOf(id) && Needs.state().food < 70) { if (!(yield* eat(id, 1))) break; }
             if (Needs.state().food >= 40 || t || !(yield* fromPantry(false))) break;   // (the pantry: a walk - below 40)
         }
         if (stamina() < Math.min(AP.reserve, staminaCap() - 5)) yield* restFast(AP.restTo);
@@ -723,7 +725,7 @@
         return got;
     }
     const myBuildings = type => ((Farming.farm().buildings || {})[$gameMap.mapId()] || []).filter(b => b && (!type || b.type === type));
-    function* handCraft(name, times = 1) {   // a recipe from the Q list (Zrób młotek, Zrób leśne legowisko, Skręć linę...)
+    function* handCraft(name, times = 1) {   // a recipe from the Q list (Zrób młotek, Zrób leśne legowisko, Skręć sznurek, Spleć linę...)
         let made = 0;
         for (let i = 0; i < times; i++) {
             yield* closeMenus();
@@ -1055,9 +1057,17 @@
                 continue;
             }
             if (id === 78) { if (!count(62) || !(yield* digSoil())) return false; continue; }
-            if (id === 93) {
-                if (count(92) < 4 && !(yield* obtain({ 92: 4 }))) return false;
-                if (!(yield* handCraft("Skręć linę"))) return false;
+            if (id === 93) {   // the string (2026-11-17): 4 of flax fibre and nettle in any mix - the nettle in the bag counts, the rest is flax
+                if (count(92) + count(149) < 4 && !(yield* obtain({ 92: 4 - count(149) }))) {
+                    if (count(92) + count(149) < 4 && !(yield* collect({ 149: 4 - count(92) }))) return false;   // (no flax anywhere: nettle)
+                }
+                if (count(92) + count(149) < 4) return false;
+                if (!(yield* handCraft("Skręć sznurek"))) return false;
+                continue;
+            }
+            if (id === 492) {   // the thick rope (2026-11-17): braided by hand from ten strings - the well needs it
+                if (count(93) < 10 && !(yield* obtain({ 93: 10 }))) return false;
+                if (!(yield* handCraft("Spleć linę"))) return false;
                 continue;
             }
             if (id === 84) {
@@ -1792,7 +1802,7 @@
     const TASKS = {
         enterHut, leaveHut, furnish, sleepInHut,
         play, obtain, sleep: sleepNight, place: (t, x, y) => build(t, x, y, true), camp: (t, x, y) => build(t, x === undefined ? P().x : x, y === undefined ? P().y - 2 : y, true, true), useEntry, dig: digSoil, pottery, drinkVessel, restFast, collectJobs,
-        walk: walkTo, gather, collect, goHome, goToMap, survive, forage, plantSeeds, harvestCrops, storePantry, fromPantry, compostRot, feedUp, buildWell, drinkWell, groundAction, feedDog, reflexes, tameDog, manageDog, dressCarcasses, mineOre, obtain, chop, harvest, build, craft, handCraft, rest, eat,
+        tend, walk: walkTo, gather, collect, goHome, goToMap, survive, forage, plantSeeds, harvestCrops, storePantry, fromPantry, compostRot, feedUp, buildWell, drinkWell, groundAction, feedDog, reflexes, tameDog, manageDog, dressCarcasses, mineOre, obtain, chop, harvest, build, craft, handCraft, rest, eat,
         wait: function* (frames) { yield* wait(frames); return true; },
         say: function* (text) { say(text); return true; },
         // repeat a list of tasks until the item counts are reached: ["until", {61: 6}, [["chop", 1], ["harvest", "Log", 1]]]

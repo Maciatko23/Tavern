@@ -53,6 +53,9 @@
  *     nie mają plików - wczytują wspólną skorupę (Map145) jako mapa 1000+N;
  *   - co 10. piętro jest zrobione ręcznie (Map140, Map146-153, Map011):
  *     zapiski zakonu, boss (etap 4 walki), przystanek windy;
+ *   - winda kasztelana staje co 5 pięter (5, 10, 15 ... 95): na piętrach
+ *     ręcznych klatka i kołowrót stoją na mapie, na generowanych (5, 15 ... 95)
+ *     stawia je generator - w sali ze schodami w górę, przy ścianie obok schodów;
  *   - wejście: stara krata w piwnicy tawerny (Map009) - zamknięta, dopóki
  *     fabuła nie włączy przełącznika 11 „Podziemia_Zejscie” (Akt II);
  *     za nią Ruiny Zamku (Map010) ze schodami na piętro 1 i windą.
@@ -337,6 +340,13 @@
             truth.reset(mapId);
             if (!f || !d) return;
             if (mapId === d.MAPS.heart) syncDoor();
+            // the windlass of a working stop shows its lever down (also a stop turned on by F9, or a floor made anew since: its self switch A)
+            if (d.LIFT.stops.indexOf(f) >= 0 && liftStops().indexOf(f) >= 0) {
+                for (const ev of $gameMap.events()) {
+                    const key = [mapId, ev.eventId(), "A"];
+                    if (ev.event() && ev.event().name === TK.kod.liftOn[0] && !$gameSelfSwitches.value(key)) $gameSelfSwitches.setValue(key, true);
+                }
+            }
             const s = state(), band = bandOf(f), first = !s.visited[f];
             s.visited[f] = (s.visited[f] || 0) + 1;
             const deeper = f > (s.deepest || 0);
@@ -361,10 +371,12 @@
         const mid = mapOf(floor);
         if (!mid) return null;
         if (!isGenerated(mid)) {
-            const hm = d.FLOORS[floor] || {}, sp = (side === "down" ? hm.down : hm.up) || hm.up;
+            const hm = d.FLOORS[floor] || {}, sp = (side === "down" ? hm.down : side === "lift" ? hm.lift : hm.up) || hm.up;
             return sp ? [mid].concat(sp) : null;
         }
-        const got = floorData(floor), sp = got && got.info.spots[side];
+        // (a generated floor is the same for the save's seed: its lift's place is known before one goes there - in front of its cage;
+        // a floor the generator found no place for - none so far in thousands of seeds - its stairs up)
+        const got = floorData(floor), sp = got && (got.info.spots[side] || (side === "lift" ? got.info.spots.up : null));
         return sp ? [mid].concat(sp) : null;
     }
     function travel(to, se) {
@@ -408,7 +420,8 @@
         return !!v;
     };
 
-    // ---- the lift: a cage on every hand-made floor 10-90 and in Ruiny Zamku; a stop works once its windlass was turned
+    // ---- the lift: a cage on every 5th floor 5-95 (the hand-made 10-90 drawn, the generated 5, 15 ... 95 from the generator) and in
+    // Ruiny Zamku; a stop works once its windlass was turned
     function liftStops() {
         const s = state(), d = D();
         return d.LIFT.stops.filter(f => s.lifts[f] || (f === 10 && sw("lift") && !Object.keys(s.lifts).length));
@@ -426,23 +439,21 @@
         T.emit("undergroundLift", { on: true, floor: f });
         return true;
     }
-    // the choices of the cage (from an event's script: Underground.liftMenu(this)); where one is now is left out
+    // the choices of the cage (from an event's script: Underground.liftMenu(this)); where one is now is left out; the stops top down
+    // (the place in front of a generated floor's cage is worked out only for the stop chosen - the floor made then, once)
     function liftMenu(interp) {
         const d = D(), here = floorOf($gameMap.mapId());
         const dest = [];
-        if ($gameMap.mapId() !== d.MAPS.ruins) dest.push({ label: d.TEXT.liftRuins, to: [d.MAPS.ruins].concat(d.SPOTS.ruinsLift) });
-        for (const f of liftStops()) if (f !== here) {
-            const hm = d.FLOORS[f];
-            if (hm && hm.lift) dest.push({ label: d.TEXT.liftStop(f), to: [hm.map].concat(hm.lift) });
-        }
+        if ($gameMap.mapId() !== d.MAPS.ruins) dest.push({ label: d.TEXT.liftRuins, to: () => [d.MAPS.ruins].concat(d.SPOTS.ruinsLift) });
+        for (const f of liftStops()) if (f !== here && mapOf(f)) dest.push({ label: d.TEXT.liftStop(f), to: () => landing(f, "lift") });
         const names = dest.map(o => o.label).concat([d.TEXT.liftStay]);
         $gameMessage.add("\\SPK[0]" + d.TEXT.liftAsk);
         $gameMessage.setChoices(names, 0, names.length - 1);
         $gameMessage.setChoiceCallback(n => {
-            const o = dest[n];
-            if (!o) return;
-            travel(o.to, "Chain");
-            T.emit("undergroundLift", { ride: true, to: o.to[0] });
+            const o = dest[n], to = o && o.to();
+            if (!to) return;
+            travel(to, "Chain");
+            T.emit("undergroundLift", { ride: true, to: to[0] });
         });
         if (interp && interp.setWaitMode) interp.setWaitMode("message");
         return dest.length;
@@ -1696,7 +1707,7 @@
                 if (row.co === "pietro") { const hm = D().FLOORS[row.floor]; return { f: row.floor, nazwa: row.floor === 0 ? t("f9.ruiny") : hm ? Watki.wstaw(t("f9.pietroNazwa"), { nazwa: hm.name }) : "" }; }
                 if (row.co === "krata") return { stan: t(sw("gate") ? "f9.krataOtwarta" : "f9.krataZamknieta") };
                 if (row.co === "zamki") return { stan: t(state().forceLocks.all ? "f9.zamkiWlaczone" : "f9.zamkiWylaczone") };
-                if (row.co === "winda") return { juz: liftStops().length >= 9 ? t("f9.windaJuz") : "" };
+                if (row.co === "winda") return { juz: liftStops().length >= D().LIFT.stops.length ? t("f9.windaJuz") : "" };
                 if (row.co === "koniec") { const [k, who] = g.endings[f9Pick.koniec]; return { "1": g.endingName(k, who) }; }
                 if (row.co === "swiat" || row.co === "lord") return { name: f9List(row.co)[f9Pick[row.co]].name };
                 return {};

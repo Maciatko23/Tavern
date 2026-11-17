@@ -282,10 +282,10 @@ Droga do młyna ma więcej dziur niż sito. Przynieś kamienie, a wieś ci podzi
 
 # rope - pisze: sołtys Bartłomiej
 [szablony.rope.title]
-Lina do studni
+Sznurki na linę do studni
 
 [szablony.rope.text]
-Wiadro w studni urwało się razem z liną. Wiadro wyłowimy, linę trzeba nową. A najlepiej dwie, na zapas.
+Wiadro w studni urwało się razem z liną. Wiadro wyłowimy, a nową linę splotę sam - przynieś tylko sznurki. Najlepiej z zapasem.
 
 # bricks - pisze: sołtys Bartłomiej
 [szablony.bricks.title]

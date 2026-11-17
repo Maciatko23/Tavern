@@ -193,7 +193,7 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.frames(30);
     const letter = await Z("$gameMessage.allText()");
     await t.finish();
-    t.check("ruina: przeszukanie raz - list Wojciecha Rzepki, Lina i Gwoździe", !!rm && /Przeszukaj/.test(rm[0]) && /Rzepk|wyschła/.test(letter) && (await t.count(93)) === rope0 + 1 && (await Z("Zasoby.state().ruin")) > 0, { rm, letter });
+    t.check("ruina: przeszukanie raz - list Wojciecha Rzepki, Sznurek i Gwoździe", !!rm && /Przeszukaj/.test(rm[0]) && /Rzepk|wyschła/.test(letter) && (await t.count(93)) === rope0 + 1 && (await Z("Zasoby.state().ruin")) > 0, { rm, letter });
     await t.locate(47, 54, 8);
     await popsSince();
     await use(2194);
@@ -212,7 +212,7 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await runEntry(0);
     await finishWork("well:fix");
     const well = await Z(`{ stage: Zasoby.state().well.stage, blocks: $gameParty.numItems($dataItems[188]), sw: $gameSwitches.value(21), units: Zasoby.wellUnits() }`);
-    t.check("studnia naprawiona (4 bloki, 2 liny, 2 deski, młotek): etap 2, przełącznik 21 Zas_Studnia, bez wody na start", well.stage === 2 && well.blocks === 0 && well.sw && well.units === 0, well);
+    t.check("studnia naprawiona (4 bloki, 2 sznurki, 2 deski, młotek): etap 2, przełącznik 21 Zas_Studnia, bez wody na start", well.stage === 2 && well.blocks === 0 && well.sw && well.units === 0, well);
     await popsSince();
     await use(2194);
     const dryWell = await popsSince();

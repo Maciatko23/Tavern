@@ -158,7 +158,7 @@ kit.test({ port: 9509, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const rope0 = await t.count(93);
     const ropeEv = (await ours()).find(e => e.id === 833);
     if (ropeEv) { await E("__standBy(833) || 0").catch(() => 0); await E(kit.DRIVER + "; __standBy(833); $gameMap.event(833).start(); 0"); await t.frames(20); }
-    t.check("piętro 2: porzucona lina - podniesiona: +1 Lina, znika", !!ropeEv && (await t.count(93)) === rope0 + 1 && (await E("$gameMap.event(833).isTransparent()")), { ropeEv, before: rope0, after: await t.count(93) });
+    t.check("piętro 2: porzucony sznurek - podniesiony: +1 Sznurek, znika", !!ropeEv && (await t.count(93)) === rope0 + 1 && (await E("$gameMap.event(833).isTransparent()")), { ropeEv, before: rope0, after: await t.count(93) });
     await goFloor(3);
     const camp3 = await ours();
     t.check("piętro 3 (już za nimi): wygasłe ognisko i posłanie po ich obozie", camp3.some(e => e.id === 831 && /Wygasłe/.test(e.name)) && camp3.some(e => e.id === 832), camp3);
@@ -187,7 +187,7 @@ kit.test({ port: 9509, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.locate(tr8[0], tr8[1]);
     await t.frames(30);
     await E("Hunting.setSneak(false); 0");
-    t.check("piętro 8: skradając się (C) bohater widzi linkę w porę - przecina ją: bez ciosu, +1 Lina", (await J("Rywal.state().traps"))[8] === "cut" && (await t.count(93)) === rope1 + 1 && (await E("$gameParty.leader().hp")) === hp2, { trap: tr8 });
+    t.check("piętro 8: skradając się (C) bohater widzi linkę w porę - przecina ją: bez ciosu, +1 Sznurek", (await J("Rywal.state().traps"))[8] === "cut" && (await t.count(93)) === rope1 + 1 && (await E("$gameParty.leader().hp")) === hp2, { trap: tr8 });
     // the torn notes: floors 6-8 passed before the hero read them
     const torn = await J("Rywal.state().torn");
     await E("Underground.read(7); 0");

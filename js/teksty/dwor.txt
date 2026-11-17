@@ -270,7 +270,7 @@ optLord = Powiem panu wszystko - co piętro, co znajdę.
 optLie = Nic tam nie ma, panie. Kurz i szczury.
 optSilent = Tego nie powiem nikomu. Także panu.
 [sayLord]
-Wiedziałem, że ród Stacha ma honor. Sto groszy na tydzień - za każde słowo. I weź coś ze zbrojowni: pochodnie, liny, opatrunki, strzały.
+Wiedziałem, że ród Stacha ma honor. Sto groszy na tydzień - za każde słowo. I weź coś ze zbrojowni: pochodnie, sznurki, opatrunki, strzały.
 Moi ludzie pójdą za tobą. Nie przeszkadzać - pilnować, żebyś wrócił. I żeby nikt inny nie był pierwszy.
 
 [sayLie]

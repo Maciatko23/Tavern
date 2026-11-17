@@ -193,7 +193,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     // ------------------------------------------------------------------ K13 missed: the noon bell is silent
     const d13 = d16 + 5;
     await at(d13, 9);
-    await accept("dzwonnik", "Przyniosę liny.", "K13");
+    await accept("dzwonnik", "Przyniosę sznurki.", "K13");
     await t.eval("window.__bell3 = 0; if (!window.__cb) { window.__cb = AudioManager.createBuffer; AudioManager.createBuffer = function(f, n) { if (n === 'Bell3') window.__bell3++; return window.__cb.apply(this, arguments); }; } 0");
     await at(d13, 11.97, 2);
     await t.until("$gameSystem.dayNightHour() >= 12.2", 60, 300);

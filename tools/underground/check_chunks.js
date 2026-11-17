@@ -6,7 +6,7 @@
 const fs = require("fs"), path = require("path");
 const ROOT = path.join(__dirname, "..", "..");
 const sandbox = require(path.join(ROOT, "tests", "lib", "sandbox.js"));
-const w = sandbox.loadPlugins(["TawernaCore", "Underground_Data", "Underground"]);
+const w = sandbox.loadPlugins(["TawernaCore", "Underground_Gen", "Underground_Data", "Underground"]);
 const U = w.Underground;
 const lib = JSON.parse(fs.readFileSync(process.argv[2] || path.join(__dirname, "staging", "Map130.json"), "utf8"));
 const tsId = Number(process.argv[4]) || lib.tilesetId || 10;

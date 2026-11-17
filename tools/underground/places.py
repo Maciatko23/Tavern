@@ -265,7 +265,7 @@ def straznica():
     chest_open = page(image={"characterName": "!Dungeon_chest", "characterIndex": 0, "direction": 8, "pattern": 0}, priority=1, trigger=0,
                       cond=self_cond("A"), cmds=text(["Pusta."]))
     mp.add(15, 6, {"name": "Skrzynia straży", "note": "", "pages": [chest, chest_open]})
-    torch(mp, 17, 2); torch(mp, 22, 2, lit=False)
+    torch(mp, 17, 2); torch(mp, 22, 2)   # (2026-11-17: the torch beside the lift's cage burns - every stop has its fire)
     mp.spot("arrive", *F10_ARRIVE, 2)
     mp.spot("up", *F10_ARRIVE, 2)
     mp.spot("lift", *F10_LIFT, 2)

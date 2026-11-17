@@ -71,7 +71,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const down = await t.talkTo("$gameMap.event(245)", ["Zejść"], { place: false });
     const onWell = await t.until(t.onMap(118), 20);
     await t.frames(30);
-    t.check("ch. 4: 2× Lina, beside the market well: down to the well's bottom (Map118)", onWell, { text: down.text, map: await J("$gameMap.mapId()") });
+    t.check("ch. 4: 2× Sznurek, beside the market well: down to the well's bottom (Map118)", onWell, { text: down.text, map: await J("$gameMap.mapId()") });
     const grate = await J("(function(){ const e = $gameMap.event(952); return e ? { x: e.x, y: e.y, page: !!e.page(), mark: (TownQuests.spotWanted('w1_grate') || {}).ready } : null; })()");
     t.check("...the grate's place (event 952 on 'krata_kruk' 5,4) is on, a yellow diamond over it", grate && grate.x === 5 && grate.y === 4 && grate.page && grate.mark, grate);
     await t.locate(5, 5, 8);

@@ -63,7 +63,7 @@ const { launch, sleep } = require("./cdp.js");
         const doHand = async id => { const ok = await ev(`Farming.craftManual(null, Farming.HAND_RECIPES.find(r => r.id === "${id}"))`); await frames(130); return ok; };
         const doManual = async (pos, type, id) => { const i = await recipeIndex(type, id); const ok = await ev(`Farming.craftManual(Farming.buildingAt(${pos}), Farming.BUILDINGS.${type}.recipes[${i}])`); await frames(130); return ok; };
         await ev("$gameSystem.changeStamina(100); 0");
-        check("rope: 4 flax fibre -> 1 rope (hand work, no building)", (await doHand("rope")) === true && (await count(93)) === 1 && (await count(92)) >= 2 - 0, { rope: await count(93), fibre: await count(92) });
+        check("string: 4 flax fibre -> 1 string (hand work, no building)", (await doHand("rope")) === true && (await count(93)) === 1 && (await count(92)) >= 2 - 0, { rope: await count(93), fibre: await count(92) });
         await give(92, 4);
         await doHand("rope"); await give(92, 4); await doHand("rope");
         check("stone knife (workbench): 1 wood + 2 stone + 1 branch (unique)", (await doManual("22, 5", "workbench", "knife")) === true && (await count(90)) === 1 && (await doManual("22, 5", "workbench", "knife")) === false);

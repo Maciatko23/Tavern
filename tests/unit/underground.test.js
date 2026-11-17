@@ -7,7 +7,8 @@
 // outside the halls, the blind ends' guards of the band's contract, under 500 events, quick (a floor well under 100 ms). The
 // hand-made floors (Map140, Map146-153, Map011): from the stairs up one walks to the stairs down, the lift, every note; floor 100's
 // Heart only through the door of three locks. Floors map to their maps and back (1-9 own shells, 11-99 the ids 1000+N, every 10th
-// hand-made).
+// hand-made). (2026-11-17) The lift stops every 5th floor: on the generated 5, 15 ... 95 a cage and a windlass in the stairs-up hall
+// (the last two events, reached, never by the stairs), the floor otherwise the same as before the stops came.
 "use strict";
 const fs = require("fs");
 const path = require("path");
@@ -82,7 +83,8 @@ unit.test(t => {
     const isFloorK = (m, x, y) => { const id = m.data[y * m.width + x], k = kindOf(id); return id > 0 && (id < 2048 || k < 48); };
     const times = [];
     for (const b of bands) {
-        const bad = [], rooms = [], noNote = [], shapes = [], holes = [], ids = [], size = [], halls = [], narrow = [], ends = [], faces = [], guards = [];
+        const bad = [], rooms = [], noNote = [], shapes = [], holes = [], ids = [], size = [], halls = [], narrow = [], ends = [], faces = [], guards = [], lifts = [];
+        let liftFloors = 0, liftNear = 0;
         const floors = [];
         for (let f = b.from; f <= b.to; f++) if (!(b.handmade && b.handmade[f])) floors.push(f);
         const seeds = b.id === 1 ? 25 : 8;
@@ -141,6 +143,25 @@ unit.test(t => {
                     if ((!isSideK(ka) && !isTopK(ka)) || (isTopK(ka) && !isSideK(kb) && !isTopK(kb))) { faces.push(tag + " " + x + "," + y); break; }
                 }
                 for (const sp of i.spawns) if (sp.room === "zaulek" && !(CONTRACT[b.id] || []).includes(sp.kind)) guards.push(tag + " " + sp.kind);
+                // (2026-11-17) a stop of the lift every 5th floor: the cage and the windlass (the hand-made floors' pictures and scripts), the
+                // last two events (before its fire, 2026-11-17); the hero lands in front of the cage, reached from the stairs up as the
+                // windlass's side; no stairs beside them
+                const cage = m.events.filter(e => e && e.name === "Winda kasztelana"), wl = m.events.filter(e => e && e.name === "Kołowrót windy");
+                if (!D.LIFT.stops.includes(f)) { if (cage.length || wl.length || i.lift) lifts.push(tag + ": a lift on a floor without a stop"); }
+                else {
+                    liftFloors++;
+                    const L = i.spots.lift, c0 = cage[0], w0 = wl[0], last = m.events.length - 1 - (i.lift && i.lift.torch ? 1 : 0);
+                    const sideOk = w0 && [[0, 1], [0, -1], [1, 0], [-1, 0]].some(([dx, dy]) => prev.has((w0.y + dy) * W + w0.x + dx));
+                    const near = (e, s) => s && Math.max(Math.abs(e.x - s[0]), Math.abs(e.y - s[1])) < 2;
+                    if (!i.lift || cage.length !== 1 || wl.length !== 1 || !L) lifts.push(tag + ": no lift " + JSON.stringify(i.lift));
+                    else if (m.events[last] !== c0 || m.events[last - 1] !== w0) lifts.push(tag + ": the lift's events not the last two");
+                    else if (c0.pages[0].image.characterName !== "!Fantasy_hanging_cage" || !/Underground\.cage\(this\)/.test(c0.pages[0].list[0].parameters[0]) ||
+                        w0.pages.length !== 2 || w0.pages[0].image.characterName !== "!Fantasy_switches2" || w0.pages[1].image.direction !== 6 || !w0.pages[1].conditions.selfSwitchValid ||
+                        !/Underground\.windlass\(this\)/.test(w0.pages[0].list[0].parameters[0]) || c0.pages[0].priorityType !== 1 || w0.pages[0].priorityType !== 1) lifts.push(tag + ": the lift's look or script");
+                    else if (L[0] !== c0.x || L[1] !== c0.y + 1 || !prev.has(L[1] * W + L[0]) || !sideOk) lifts.push(tag + ": the place in front of the cage / the windlass not reached " + L);
+                    else if (near(c0, i.spots.up) || near(w0, i.spots.up) || near(c0, i.spots.down) || near(w0, i.spots.down)) lifts.push(tag + ": the lift by the stairs");
+                    else if (i.lift.hall === 0) liftNear++;
+                }
             }
         }
         const label = "band " + b.id + ", floors " + floors[0] + "-" + floors[floors.length - 1] + " of " + seeds + " seeds";
@@ -152,6 +173,9 @@ unit.test(t => {
             narrow.length === 0 && ends.length === 0 && guards.length === 0, { narrow: narrow.slice(0, 5), ends: ends.slice(0, 5), guards: guards.slice(0, 5) });
         t.check(label + ": ...every autotile has a valid shape (walls 16, waterfalls 4, floors 48), no ground cell is empty, outside the halls every wall face has its top (two rows)",
             shapes.length === 0 && holes.length === 0 && faces.length === 0, { shapes: shapes.slice(0, 5), holes: holes.slice(0, 5), faces: faces.slice(0, 5) });
+        if (liftFloors) t.check(label + ": ...the lift's stops (" + floors.filter(f => D.LIFT.stops.includes(f)).join(", ") + "): a cage and a windlass on each (the last two events, floor 10's pictures and scripts), the hero lands in front of the cage, both reached from the stairs up, never by the stairs; most in the stairs-up hall (" + liftNear + " of " + liftFloors + ")",
+            lifts.length === 0 && liftNear >= liftFloors * 0.8, { lifts: lifts.slice(0, 5), near: liftNear, of: liftFloors });
+        else t.check(label + ": ...no lift on its floors (no stop in the band but the hand-made ones)", lifts.length === 0, lifts.slice(0, 5));
     }
     times.sort((a, b) => a - b);
     const avg = times.reduce((a, b) => a + b, 0) / times.length, p99 = times[Math.floor(times.length * 0.99)];
@@ -166,6 +190,33 @@ unit.test(t => {
     t.check("a band-3 floor with the river's water sounds it (bgs River) and every truth of band 5 is about someone",
         river && river.map.bgs.name === "River" && river.map.autoplayBgs && Object.keys(D.NOTES).filter(k => Number(k) >= 76 && Number(k) <= 99).every(k => D.NOTES[k].who),
         river && river.map.bgs);
+
+    // ---- the lift (2026-11-17, the player: "co 5 poziomów"): its stops 5, 10 ... 95 - the hand-made ones with their drawn cage, the
+    // generated ones made by the generator; its events come last and draw nothing from the floor's random numbers: a floor with a stop
+    // is the floor of an older save plus the two events (same tiles, same events and their numbers - searched containers stay searched)
+    t.eq("the lift stops every 5th floor: 5, 10, 15 ... 95", D.LIFT.stops, Array.from({ length: 19 }, (_, k) => 5 + k * 5));
+    t.check("...the hand-made stops (10-90) have their cage's place, the others are generated floors",
+        D.LIFT.stops.every(f => (U.handmadeOf(f) ? !!(D.FLOORS[f] && D.FLOORS[f].lift) : U.bandOf(f) && !!U.bandOf(f).chunkMap && f % 10 === 5)));
+    const stops = D.LIFT.stops.slice(), same5 = [], dark = [];
+    for (const f of [5, 15, 35, 55, 85, 95]) for (const seed of [7, 4242, 99991]) {
+        const bb = D.BANDS.find(o => f >= o.from && f <= o.to), l = libs[bb.id];
+        const withLift = U.generate(f, seed, l.chunks, { flags: l.flags });
+        D.LIFT.stops = [];
+        const before = U.generate(f, seed, l.chunks, { flags: l.flags });
+        D.LIFT.stops = stops;
+        const ev = withLift.map.events, ev0 = before.map.events;
+        // (2026-11-17) + its fire: a torch on the wall beside the cage or a fire basket / blue candelabrum by a free cage
+        const lt = withLift.info.lift && withLift.info.lift.torch, fire = lt && ev[ev.length - 1];
+        if (!fire || fire.x !== lt.at[0] || fire.y !== lt.at[1] || !/<Light/.test(fire.note) || Math.abs(lt.at[0] - withLift.info.lift.cage[0]) > 3) dark.push(f + "/" + seed);
+        const ok = JSON.stringify(withLift.map.data) === JSON.stringify(before.map.data) && ev.length === ev0.length + 2 + (lt ? 1 : 0) &&
+            JSON.stringify(ev.slice(0, ev0.length)) === JSON.stringify(ev0) && JSON.stringify(withLift.info.loot) === JSON.stringify(before.info.loot) &&
+            JSON.stringify(withLift.info.spawns) === JSON.stringify(before.info.spawns);
+        if (!ok) same5.push(f + "/" + seed);
+        if (JSON.stringify(U.generate(f, seed, l.chunks, { flags: l.flags }).info.lift) !== JSON.stringify(withLift.info.lift)) same5.push(f + "/" + seed + " (not the same twice)");
+    }
+    t.check("a floor with a stop is the same floor as before the stops came (tiles, every older event with its number, loot, creatures) plus the cage, the windlass and its fire at its end; the same seed puts them on the same place",
+        same5.length === 0, same5);
+    t.check("...every such stop has its fire with a light (a wall torch or a fire basket) at most 3 cells aside of the cage", dark.length === 0, dark);
 
     // ---- the maps of the floors
     t.check("floors map to their maps and back: 1 -> 131, 9 -> 139, 10 -> 140, 11 -> 1011, 55 -> 1055, 99 -> 1099, 20 -> 146, 90 -> 153, 100 -> 11",

@@ -88,7 +88,7 @@ found = Gajowy znalazł ścierwo w zwierzyńcu.
 legal = Zezwolenie: ten jeleń jest twój, legalnie.
 snareFound = Sidła kłusownika ({n}/3)
 roped = {name} idzie za tobą na powrozie.
-ropeNeed = Potrzebna lina na powróz.
+ropeNeed = Potrzebny sznurek na powróz.
 henCaught = Złapałeś kurę!
 henMissed = Kura uciekła z gdakaniem.
 delivered = {name} wróciła do zagrody.
@@ -219,12 +219,12 @@ Po pożarze Krasula uciekła. I owca, i kury. Mówią, że chodzą dzikie po ł�
 zadania.K62.offer.yes = Przyprowadzę je.
 zadania.K62.offer.no = Nie teraz.
 [zadania.K62.offer.accept]
-Krasula idzie za tym, kto ma linę i dobre słowo. Kury... kury trzeba łapać. Powodzenia.
+Krasula idzie za tym, kto ma sznurek i dobre słowo. Kury... kury trzeba łapać. Powodzenia.
 
 [zadania.K62.offer.decline]
 Rozumiem. Może kiedyś.
 
-zadania.K62.steps.0.text = Odprowadź zwierzęta Ługów do zagrody (przy domu) albo do swojej zagrody: krowę i owcę na powrozie (lina), kury złap rękami. Wróciło: {n}/4.
+zadania.K62.steps.0.text = Odprowadź zwierzęta Ługów do zagrody (przy domu) albo do swojej zagrody: krowę i owcę na powrozie (sznurek), kury złap rękami. Wróciło: {n}/4.
 [zadania.K62.reward.note]
 Krasula wróciła
 Krasula, owca i kury Ługów wróciły do domu. Marta co tydzień ma dla mnie dwa dzbanki mleka.
@@ -477,7 +477,7 @@ kod.strayAction.1 = Prowadź dalej
 kod.strayAction.2 = Prowadzisz już zwierzę.
 kod.strayAction.3 = Krowa patrzy na ciebie spokojnie.
 kod.strayAction.4 = Owca drepcze w miejscu.
-kod.strayAction.5 = Załóż powróz (lina)
+kod.strayAction.5 = Załóż powróz (sznurek)
 # startRound
 kod.startRound.0 = Strzelaj z łuku (F) do trzech tarcz. Środek 10, pierścień 5, brzeg 2.
 # endRound
@@ -546,7 +546,7 @@ kod.f9Rows.14 = ←→ ile razy już złapany; OK ustawia (następne złapanie l
 kod.f9Rows.15 = Zawody strzeleckie dziś
 kod.f9Rows.16 = Dziś zawody, godzina 10:30, przenosi na linię strzału.
 kod.f9Rows.17 = Zbłąkane zwierzęta Ługów
-kod.f9Rows.18 = Przenosi na łąki Spalonej zagrody (lina w torbie).
+kod.f9Rows.18 = Przenosi na łąki Spalonej zagrody (sznurek w torbie).
 # f9Pick
 kod.f9Pick.0 = Kłusownictwo: {pick} razy (OK ustawia)   ←→
 # f9Ok

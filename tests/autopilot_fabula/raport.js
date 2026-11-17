@@ -36,6 +36,10 @@ function write(fin, o) {
     L.push(`- Dni gry: ${rep.start ? rep.start.day : "?"} → ${st.day} · czas rzeczywisty ${o.realMin} min`);
     if (st.debt) L.push(`- Dług: spłacone ${st.debt.paid}/${st.debt.debt} G` + (debtPaid ? ` - **spłacony w dniu ${debtPaid.day}** (${h2(debtPaid.hour)})` : st.debt.done ? " - spłacony" : ` - zostało ${st.debt.left} G, dni do terminu: ${st.debt.daysLeft}`));
     L.push(`- Zmiany u Borgara: ${rep.shifts.length}, zarobek ze zmian ${earned} G (średnio ${rep.shifts.length ? Math.round(earned / rep.shifts.length) : 0} G)`);
+    const lg = rep.ledger, con = rep.contracts || [], camps = rep.camps || [];
+    if (lg) L.push(`- Złoto według źródeł (od dnia ${lg.since.day}): ` + (sourcesLine(lg.in) || "brak przychodów") + (lg.reload ? ` · cofnięte wczytaniem zapisów po śmierci: ${lg.reload} G` : ""));
+    L.push(`- Zlecenia z tablicy: przyjęte ${con.filter(c => c.what === "przyjęte").length}, oddane ${con.filter(c => c.what === "oddane").length} (${con.filter(c => c.what === "oddane").reduce((s, c) => s + (c.gold || 0), 0)} G), porzucone ${con.filter(c => c.what === "porzucone").length}, po terminie ${con.filter(c => c.what === "po terminie").length}, pominięte ${con.filter(c => c.what === "pominięte").length}`);
+    L.push(`- Obozy bandytów: wieczorów ${camps.filter(c => c.what === "wieczór na obóz").length}, ataków ${camps.filter(c => c.what === "atak").length} (rozbite ${camps.filter(c => c.what === "atak" && c.result === "rozbity").length}, złoto ${camps.filter(c => c.what === "atak").reduce((s, c) => s + (c.gold || 0), 0)} G), pominięte ${camps.filter(c => c.what === "pominięty").length}, nocy bez obozu ${camps.filter(c => c.what === "brak obozu").length}`);
     L.push(`- Śmierci: ${rep.deaths.length} · utknięcia: ${rep.stalls.length} · niejasności celu: ${new Set(rep.unclear.map(u => u.what)).size} · wybory: ${rep.choices.length} · obejścia błędów gry: ${(rep.workarounds || []).length} (rodzajów: ${new Set((rep.workarounds || []).map(w => String(w.what).replace(/\d+/g, "N"))).size})`);
     L.push("");
 
@@ -114,6 +118,43 @@ function write(fin, o) {
     }
     L.push("");
 
+    // gold by its source (2026-11-17: the shifts, the sales, the contracts, the camps, the underground - FAB.rep.ledger)
+    L.push("## Złoto według źródeł", "");
+    if (!lg) L.push("Brak licznika (starszy zapis).");
+    else {
+        L.push(`Każda zmiana sakiewki od dnia ${lg.since.day} ${h2(lg.since.hour || 0)} (początek liczenia w tym przebiegu), według tego, skąd przyszła.`, "");
+        L.push("| przychód | złoto | razy |", "|---|---|---|");
+        for (const [k, v] of Object.entries(lg.in).sort((a, b) => b[1] - a[1])) L.push(`| ${esc(SOURCE[k] || k)} | ${v} G | ${(lg.n || {})[k] || 0} |`);
+        L.push(`| **razem** | **${Object.values(lg.in).reduce((s, v) => s + v, 0)} G** | |`, "");
+        L.push("| wydatek / strata | złoto | razy |", "|---|---|---|");
+        for (const [k, v] of Object.entries(lg.out).sort((a, b) => b[1] - a[1])) L.push(`| ${esc(SOURCE[k] || k)} | ${v} G | ${(lg.n || {})[k] || 0} |`);
+        L.push(`| **razem** | **${Object.values(lg.out).reduce((s, v) => s + v, 0)} G** | |`);
+        if (lg.reload) L.push("", `Wczytania zapisów po śmierci zmieniły sakiewkę o ${lg.reload} G (zarobione i wydane po zapisie przepada - nie odjęte od źródeł).`);
+        L.push("");
+    }
+
+    L.push("## Zlecenia z tablicy", "");
+    if (!con.length) L.push("Brak - autopilot nie był przy tablicy albo nic się nie nadawało.");
+    for (const c of con.filter(c => c.what !== "pominięte")) L.push(`- ${when(c)}, ${esc(c.what)}: „${esc(c.title || "")}”` + (c.req ? ` (${esc(c.req)})` : "") + (c.gold ? ` - ${c.gold} G` : "") + (c.due ? `, do dnia ${c.due}` : "") + (c.why ? ` - ${esc(c.why)}` : ""));
+    const skipped = new Map();
+    for (const c of con.filter(c => c.what === "pominięte")) { const k = String(c.why || "").replace(/\d+/g, "N"); const g = skipped.get(k); if (g) g.n++; else skipped.set(k, { c, n: 1 }); }
+    if (skipped.size) {
+        L.push("", "Pominięte ogłoszenia (powód; ile razy):", "");
+        for (const { c, n } of skipped.values()) L.push(`- „${esc(c.title)}” (${c.gold} G): ${esc(c.why)}${n > 1 ? " - ×" + n : ""}`);
+    }
+    L.push("");
+
+    L.push("## Obozy bandytów", "");
+    if (!camps.length) L.push("Brak - żadnego wieczoru na obóz (za słaby, zmiana wieczorem, pod ziemią) i żadnego ogniska po drodze.");
+    for (const c of camps) L.push(`- ${when(c)}, ${esc(c.what)}` + (c.map ? ` (mapa ${c.map})` : "") + (c.men ? `: ludzie ${esc(c.men)}` : "") + (c.result ? ` → **${esc(c.result)}**` : "") +
+        (c.what === "atak" ? `, złoto ${c.gold >= 0 ? "+" : ""}${c.gold} G, worek ${c.sack ? "wzięty" : "nie"}, życie ${c.hp0}% → ${c.hp}%, opatrunki -${c.bandages || 0}, poziom ${c.level}` : "") + (c.why ? ` - ${esc(c.why)}` : ""));
+    const noEve = rep.campNoEve || {};
+    if (Object.keys(noEve).length) {
+        L.push("", "Wieczory (19-20:30) bez wyprawy na obóz - powód: ile dni", "");
+        for (const [k, n] of Object.entries(noEve).sort((a, b) => b[1] - a[1])) L.push(`- ${esc(k)}: ${n}`);
+    }
+    L.push("");
+
     L.push("## Śmierci", "");
     if (!rep.deaths.length) L.push("Brak.");
     for (const d of rep.deaths) L.push(`- ${when(d)}, mapa ${d.map}${d.floor ? " (piętro " + d.floor + ")" : ""}: ${esc(d.doing)} ${d.why ? "(" + esc(d.why) + ")" : ""} - wczytany zapis: ${d.reloaded ? "tak" : "nie"}`);
@@ -173,6 +214,15 @@ function write(fin, o) {
     L.push("## Ostatnie wpisy autopilota", "", ...fin.log.map(l => "    " + l), "");
     if (rep.errors && rep.errors.length) L.push("## Wyjątki strażnika", "", ...rep.errors.slice(-10).map(e => "    " + e), "");
     return L.join("\n");
+}
+// the ledger's sources (fab.js goldSource) as the report names them
+const SOURCE = { "zmiany": "zmiany u Borgara", "zlecenia": "zlecenia z tablicy", "obozy": "obozy i napady bandytów (worki, pobici)", "podziemia": "podziemia",
+    "sprzedaż": "sprzedaż", "zadania i rozmowy": "zadania i rozmowy (nagrody wątków)", "inne": "inne", "spłata długu": "spłata długu", "zakupy": "zakupy (zbroje, broń, naprawy)",
+    "obrabowany": "obrabowany przez bandytów", "wydatki w rozmowach": "wydatki w rozmowach", "inne wydatki": "inne wydatki" };
+function sourcesLine(m) {
+    // (the five the player asked about always, 0 G too; the rest when there is some)
+    const main = ["zmiany", "sprzedaż", "zlecenia", "obozy", "podziemia"], m2 = m || {};
+    return main.concat(Object.keys(m2).filter(k => !main.includes(k))).filter(k => main.includes(k) || m2[k]).map(k => k + " " + (m2[k] || 0) + " G").join(", ");
 }
 function countBy(a) { const m = {}; for (const x of a) m[x] = (m[x] || 0) + 1; return Object.entries(m).map(([k, n]) => k + "×" + n).join(", ") || "-"; }
 function guessCause(s) {

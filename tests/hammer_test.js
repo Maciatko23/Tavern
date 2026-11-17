@@ -29,7 +29,7 @@ const OUT = __dirname + "/";
         const sawmill = await ev("Farming.BUILDINGS.sawmill.recipes.map(r => r.id)");
         check("the sawmill only saws: planks, and planks with the real saw (tools moved to the workbench)", sawmill.join() === "planks,planks_saw", sawmill);
         const hand = await ev("Farming.HAND_RECIPES.map(r => r.id)");
-        check("the hand recipes: hammer, waterskin, rope, bandage, nettle fibre (the other tools are made at the workbench)", hand.join() === "hammer,waterskin,rope,bandage,nettle_fiber", hand);
+        check("the hand recipes: hammer, waterskin, the string, the thick rope, bandage (the other tools are made at the workbench)", hand.join() === "hammer,waterskin,rope,lina,bandage", hand);
 
         // ---- the plot menu has ONE short entry, the list opens through the real UI
         let list = await names("24, 16");
@@ -89,7 +89,7 @@ const OUT = __dirname + "/";
             check("hand recipe " + id + " works", ok === true);
         }
         const tools = { shovel: await count(62), rake: await count(65), hoe: await count(66), knife: await count(90), rope: await count(93), fibre: await count(92) };
-        check("the rope is in the bag (4 flax became 1 rope), and no other tool came out of the hand menu", tools.shovel === 0 && tools.rake === 0 && tools.hoe === 0 && tools.knife === 0 && tools.rope === 1 && tools.fibre === 5, tools);
+        check("the string is in the bag (4 flax became 1 string), and no other tool came out of the hand menu", tools.shovel === 0 && tools.rake === 0 && tools.hoe === 0 && tools.knife === 0 && tools.rope === 1 && tools.fibre === 5, tools);
         const again = await ev(`Farming.craftManual(null, Farming.HAND_RECIPES.find(r => r.id === "hammer"))`);
         check("a second hammer is refused (unique)", again === false && (await count(89)) === 1);
         await ev("$gameParty.gainItem($dataItems[92], 4); $gamePlayer.locate(24, 17); $gamePlayer.setDirection(8); 0");
@@ -99,7 +99,7 @@ const OUT = __dirname + "/";
         for (let i = 0; i < idx; i++) await press("down");
         await press("ok"); await frames(20);
         list = await menuNames();
-        check("owned tools stay on the list, dimmed; the rope (repeatable) stays enabled while there is flax", list[0] === "Zrób młotek(x)" && list[3] === "Skręć linę", list);
+        check("owned tools stay on the list, dimmed; the string (repeatable) stays enabled while there is flax", list[0] === "Zrób młotek(x)" && list.includes("Skręć sznurek"), list);
         await b.shot(OUT + "hm_hand_owned.png");
         await press("cancel"); await frames(10);
 
@@ -122,7 +122,7 @@ const OUT = __dirname + "/";
         const rec = await ev("Journal.allRecipes().filter(e => e.type === 'hand').map(e => e.r.name)");
         check("journal: the recipes tab lists every hand recipe under 'Bez budynku'", rec.length === (await ev("Farming.HAND_RECIPES.length")), rec);
         const src = await ev("Journal.sourceLines(93)");
-        check("journal: the rope's source mentions hand crafting", src.some(t => /Wytwórz/.test(t)), src);
+        check("journal: the string's source mentions hand crafting", src.some(t => /Wytwórz/.test(t)), src);
     } catch (e) { console.log("ERR", e.message); }
     console.log("console errors:", b.logs.filter(l => /EXC|rror/.test(l)).slice(-4));
     console.log(results.filter(Boolean).length + "/" + results.length + " passed");

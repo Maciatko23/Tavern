@@ -989,9 +989,10 @@
         if (!useCount) {
             useCount = {};
             const add = list => { for (const [i] of list || []) useCount[i] = (useCount[i] || 0) + 1; };
+            const addRecipe = r => { add(r.inputs); for (const g of r.any || []) add(g.ids.map(i => [i])); };   // (r.any: the string's flax or nettle)
             const F = T.api("Farming");
-            if (F && F.BUILDINGS) for (const b of Object.values(F.BUILDINGS)) { add(b.cost); for (const r of b.recipes || []) add(r.inputs); }
-            if (F && F.HAND_RECIPES) for (const r of F.HAND_RECIPES) add(r.inputs);
+            if (F && F.BUILDINGS) for (const b of Object.values(F.BUILDINGS)) { add(b.cost); for (const r of b.recipes || []) addRecipe(r); }
+            if (F && F.HAND_RECIPES) for (const r of F.HAND_RECIPES) addRecipe(r);
         }
         return useCount[id] || 0;
     }

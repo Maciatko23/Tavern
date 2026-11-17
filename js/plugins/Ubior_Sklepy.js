@@ -233,7 +233,7 @@
         const lapcie = d.poWzorze("lapcie");
         if (wb && Array.isArray(wb.recipes) && lapcie && item(lapcie.id) && !wb.recipes.some(r => r.id === "ubior_lapcie")) {
             wb.recipes.push({ id: "ubior_lapcie", name: "Upleć łapcie z łyka", inputs: [[92, 4], [93, 1]], output: [lapcie.id, 1], manual: true, hours: 1, stamina: 2,
-                startSe: "Hammer", desc: "Pasy włókna splecione w łapcie, podeszwa przeszyta liną. Lekkie, chodzisz trochę szybciej niż boso - ale szybko się rozpadają." });
+                startSe: "Hammer", desc: "Pasy włókna splecione w łapcie, podeszwa przeszyta sznurkiem. Lekkie, chodzisz trochę szybciej niż boso - ale szybko się rozpadają." });
         }
         // F9 (Debug.js, the tab "Wyspa i fabuła"): the rows through Okolice.f9 - all the clothes, money for the shops, everything off
         const OK = T.api("Okolice");

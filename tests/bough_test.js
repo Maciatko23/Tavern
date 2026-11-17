@@ -44,7 +44,7 @@ fs.mkdirSync(OUT, { recursive: true });
         const def = await ev("(function(){ const t = Farming.BUILDINGS.bedroll; return { name: t.name, instant: t.instant, sleep: t.sleep, restore: t.sleepRestore, bad: t.sleepBad, cost: t.cost, rest: t.rest }; })()");
         check("the bedroll is now 'Leśne legowisko': laid out at once, sleeps a night, 60% (40% in bad weather), made of 10 branches and 10 flax on the spot, no nap", def.name === "Leśne legowisko" && def.instant === true && def.sleep === true && def.restore === 0.6 && def.bad === 0.4 && JSON.stringify(def.cost) === "[[77,10],[92,10]]" && def.rest === undefined, def);
         const hand = await ev("Farming.HAND_RECIPES.map(r => r.id)");
-        check("the hand menu makes: hammer, waterskin, rope, a bandage, nettle fibre (2026-11-16: the forest bed is built at once, no shelling of pine seeds)", hand.join() === "hammer,waterskin,rope,bandage,nettle_fiber", hand);
+        check("the hand menu makes: hammer, waterskin, the string, the thick rope, a bandage (2026-11-16: the forest bed is built at once, no shelling of pine seeds; 2026-11-17: no nettle fibre)", hand.join() === "hammer,waterskin,rope,lina,bandage", hand);
         check("its picture loads (96x64)", await ev(`new Promise(res => { const bm = ImageManager.loadSystem("Farm_Bedroll"); bm.addLoadListener(() => res(bm.width === 96 && bm.height === 64)); })`));
         const hint = await ev("Farming.menuFor(0, 0) === null ? '' : ''").catch(() => "");
 
@@ -71,7 +71,7 @@ fs.mkdirSync(OUT, { recursive: true });
         for (let i = 0; i < idx; i++) await press("down");
         await press("ok"); await frames(20);
         const handList = await ev("SceneManager._scene._farmMenu._entries.map(e => e.name + (e.enabled === false ? '(x)' : ''))");
-        check("the hand menu lists the rope and no forest bed (it is built at once from the Q list)", handList.some(n => /^Skręć linę/.test(n)) && !handList.some(n => /legowisko/.test(n)), handList);
+        check("the hand menu lists the string and the thick rope and no forest bed (it is built at once from the Q list)", handList.some(n => /^Skręć sznurek/.test(n)) && handList.some(n => /^Spleć linę/.test(n)) && !handList.some(n => /legowisko/.test(n)), handList);
         await b.shot(OUT + "hand_menu.png");
         await press("cancel"); await frames(10); await press("cancel"); await frames(10);
         await give(77, 10); await give(92, 10);
