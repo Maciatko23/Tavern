@@ -14,7 +14,7 @@ const unit = require("../lib/unit.js");
 const W = require("../lib/wtyczki.js");
 
 const ORDER = W.lista().map(p => p.name);
-const FILES = ["TawernaCore", "DayNightCycle", "Sky", "Mood", "Survival", "Underground_Data", "Underground"].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));
+const FILES = ["TawernaCore", "DayNightCycle", "Sky", "Mood", "Survival", "Underground_Gen", "Underground_Data", "Underground"].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));
 const noteOf = id => JSON.parse(fs.readFileSync(path.join(__dirname, "..", "..", "data", "Map" + String(id).padStart(3, "0") + ".json"), "utf8")).note || "";
 
 unit.test(t => {
@@ -99,10 +99,12 @@ unit.test(t => {
         clamp.join() === "100,true" && junk === 0 && dflt.join() === "true,100,true,true,true", { saved, got, clamp, junk, dflt });
 
     // ---------------------------------------------------------------- the kinds of places
-    const kinds = { tavern: onMap(1), cellar: onMap(9), heart: onMap(11), darkForest: onMap(12), cave: onMap(14), house: onMap(19), hut: onMap(100), town: onMap(8), harbour: onMap(125) };
-    t.check("the places from the game's notes: the tavern (Map001), grandpa's house (19) and the hut (100) interiors; the cellar (9) and Jaskinia (14) caves; the Heart's chamber (11) below; Mroczny Las (12, no tag) by its id; the town and the harbour outdoors",
+    // (2026-11-17: the old maps 8, 12, 125 removed - the town and the coast of the new world: Kruczogród 220, Słony Brzeg 219; Mroczny Las by its
+    // name is checked below on a made-up map)
+    const kinds = { tavern: onMap(1), cellar: onMap(9), heart: onMap(11), cave: onMap(14), house: onMap(19), hut: onMap(100), town: onMap(220), harbour: onMap(219) };
+    t.check("the places from the game's notes: the tavern (Map001), grandpa's house (19) and the hut (100) interiors; the cellar (9) and Jaskinia (14) caves; the Heart's chamber (11) below; the new world's town (220) and coast (219) outdoors",
         kinds.tavern === "interior" && kinds.house === "interior" && kinds.hut === "interior" && kinds.cellar === "cave" && kinds.cave === "cave" && kinds.heart === "underground" &&
-        kinds.darkForest === "darkforest" && kinds.town === "outdoor" && kinds.harbour === "outdoor", kinds);
+        kinds.town === "outdoor" && kinds.harbour === "outdoor", kinds);
     env.$dataMapInfos = [];
     env.$dataMapInfos[50] = { id: 50, name: "Mroczny  Las (północ)" };
     const tagged = { name: onMap(50, ""), cave: onMap(3, "<Clouds:on><Mood:cave>"), off: onMap(3, "<Clouds:on><Mood:off>"), unknown: onMap(3, "<Clouds:on><Mood:bajka>"), bare: onMap(60, "") };
@@ -112,13 +114,15 @@ unit.test(t => {
         tagged.name === "darkforest" && tagged.cave === "cave" && tagged.off === "off" && tagged.unknown === "outdoor" && tagged.bare === "outdoor" &&
         JSON.stringify(offLook) === JSON.stringify(M.LOOKS.neutral), tagged);
     sys.hour = 12;
-    const lookOn = id => { onMap(id); return M.target().look; };
+    const lookOn = (id, note) => { onMap(id, note); return M.target().look; };
+    // (Mroczny Las: the removed Map012 was the dark forest by its id - now a made-up map 50 named so, $dataMapInfos above)
+    const DF = 50;
     const tav = lookOn(1), cave = lookOn(14), deep = lookOn(11);
     t.check("the places' looks: the tavern warm amber (lights warmer), the cave heavier corners than the tavern, the Heart's chamber green-grey darks and the heaviest corners",
         tav.high[0] > 1.03 && tav.high[2] < 0.95 && cave.vig > tav.vig && deep.shadow[1] > deep.shadow[0] && deep.vig > cave.vig, { tav: tav.high, vig: [tav.vig, cave.vig, deep.vig], deep: deep.shadow });
-    const outDay = lookOn(3), dfDay = lookOn(12);
+    const outDay = lookOn(3), dfDay = lookOn(DF, "");
     sys.hour = 23.5;
-    const dfNight = lookOn(12), outNight = lookOn(3);
+    const dfNight = lookOn(DF, ""), outNight = lookOn(3);
     t.check("Mroczny Las: by day darker, more muted and colder in the darks than outdoors, heavy corners also by day; the lights stay warm, the glow at least 0.5; at night still gloomier than outdoors",
         dfDay.gain < outDay.gain && dfDay.satLo < outDay.satLo && dfDay.shadow[0] < outDay.shadow[0] && dfDay.vig >= 0.48 && outDay.vig < 0.3 && dfDay.high[0] >= 1 && dfDay.bloom >= 0.5 &&
         dfNight.vig >= outNight.vig && dfNight.satLo < outNight.satLo, { dfDay, outDay: { gain: outDay.gain, satLo: outDay.satLo, vig: outDay.vig } });

@@ -234,9 +234,15 @@
     // the streaks on the screen now: [{ X, Y (the top, px), L (length px), wd, a, col, ph }] - drawn in the tilemap UNDER the people
     // (gracz 2026-11-09: „jest nad graczem, a powinno być pod graczem”) and cut out of the night's dark (the night layer's lights: a
     // row of small holes down each streak), so the wet stones show them in the dark like the lit windows
+    // (gracz 2026-11-13: „na przystani wywalić odbicie światła latarni”) no streaks on the maps of NO_REFL_MAPS; a map note <Odbicia:off> / on wins
+    const NO_REFL_MAPS = [219];
+    function reflOff() {
+        const tag = T.mapFlag("Odbicia", null, "first");
+        return tag !== null ? !tag : NO_REFL_MAPS.includes($gameMap.mapId());
+    }
     function reflList(v) {
         const out = [], a0 = cur.wet * Math.max(0, 1 - cur.snow * 3) * night();
-        if (a0 <= 0.03) return out;
+        if (a0 <= 0.03 || reflOff()) return out;
         const fc = Graphics.frameCount;
         const use = (x, y, len, a, wd, col, ph, gap) => {
             if (x < v.x0 - 1 || x > v.x1 + 1 || y < v.y0 - 1 || y > v.y1 + 1) return;
@@ -319,6 +325,9 @@
                 st.acc = 0;
                 const fx = ch._realX + 0.5, fy = ch._realY + 0.84, g = groundAt(fx, fy);
                 if (!g) continue;
+                // (gracz 2026-11-13: „jak się idzie pod mostem i deszcz pada, to się potrafią ślady stóp na moście pojawić”) none on a bridge's cells
+                // (Mosty.js): under it they would show on the deck once he is out, on the deck the planks keep no mud
+                if (window.Mosty && Mosty.at(Math.floor(fx), Math.floor(fy))) continue;
                 const mode = snowy ? "snow" : (g === G_EARTH || g === G_GRASS || (g === G_STONE && cur.wet > 0.75)) ? "mud" : null;
                 if (!mode) continue;
                 const ang = Math.atan2(dx, -dy), dir8 = ((Math.round(ang / (Math.PI / 4)) % 8) + 8) % 8;

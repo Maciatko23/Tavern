@@ -8,9 +8,15 @@ const { launch, sleep } = require("./cdp.js");
     try {
         await b.send("Page.navigate", { url: "http://127.0.0.1:8765/index.html" });
         for (let i = 0; i < 120; i++) { if (await ev("!!(window.SceneManager && SceneManager._scene && SceneManager._scene.constructor.name==='Scene_Title')").catch(() => false)) break; await sleep(500); }
-        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
+        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 60, 47, 2, 0); SceneManager.goto(Scene_Map); })()`);
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
+        // (2026-11-14) grandpa's plot is full of trees and stones now: the ground round the test's spot bared (things erased, the
+        // land stored as cleared) - the test is about building, not about finding room
+        await ev(`(function(){ const p = $gamePlayer, R = 12, cells = [];
+            for (const e of $gameMap.events()) if (Math.abs(e.x - p.x) <= R && Math.abs(e.y - p.y) <= R && e.isNormalPriority()) { e.erase(); e.setThrough(true); }
+            for (let y = p.y - R; y <= p.y + R; y++) for (let x = p.x - R; x <= p.x + R; x++) if ($gameMap.isValid(x, y)) cells.push({ x, y });
+            $gameSystem.clearLand($gameMap.mapId(), cells); return 0; })()`);
         await ev("SceneManager._scene.startFadeIn(1,false); if (window.Hunting && Hunting.RAID) Hunting.RAID.perHour = 0; if (window.Needs) Needs.setEnabled(false); if (window.Hunting) Hunting.auto(false); if (window.Livestock) Livestock.auto(false); $gameSystem.setDayNightHour(12); $gameScreen.clearWeather(); 0");
         await sleep(600);
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
@@ -233,7 +239,9 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`Farming.demolish(Farming.buildingAt(${hx}, ${hy})); 0`);
         await frames(10);
         check("it gives back half: 25 planks, 30 nails, 20 stones, 5 iron", (await count(IT.planks)) === 25 && (await count(IT.nails)) === 30 && (await count(IT.stone)) === 20 && (await count(IT.iron)) === 5, { planks: await count(IT.planks), nails: await count(IT.nails), stone: await count(IT.stone), iron: await count(IT.iron) });
-        check("and a new one may be built again", (await ev(`Farming.whyNotBuild("hut", ${hx}, ${hy})`)) === null && (await ev("Farming.hutOf()")) === null);
+        const again = await ev(`Farming.whyNotBuild("hut", ${hx}, ${hy})`);
+        const blockers = again ? await ev(`JSON.stringify((function(){ const out = []; for (let y = ${hy} - 4; y <= ${hy} + 1; y++) for (let x = ${hx} - 1; x <= ${hx} + 6; x++) { const es = $gameMap.eventsXy(x, y).filter(e => e.isNormalPriority()).map(e => [e.eventId(), e.event().name, e.characterName()]); if (es.length) out.push([x, y, es]); if ($gamePlayer.x === x && $gamePlayer.y === y) out.push([x, y, "hero"]); } return out; })())`) : null;
+        check("and a new one may be built again", again === null && (await ev("Farming.hutOf()")) === null, { again, blockers });
         // the door of an orphaned room still leads somewhere: back to the farm
         await ev(`$gamePlayer.reserveTransfer(100, 3, 4, 2, 0); 0`);
         await waitMap(100);

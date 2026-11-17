@@ -1,0 +1,9 @@
+PASS gra
+   laka_poludnie: {"upd":6.69,"rnd":5.52,"frame":12.21,"fps":76.3} przebiegi [ 12.21, 17.22, 17.65 ]
+   kepa: {"upd":7.35,"rnd":5.99,"frame":13.33,"fps":70.8} przebiegi [ 13.33, 16.51, 17.42 ]
+   gaj: {"upd":9.79,"rnd":8.79,"frame":18.58,"fps":34.1} przebiegi [ 18.58, 19.52, 21.2 ]
+   zagroda: {"upd":8.53,"rnd":6.69,"frame":15.22,"fps":62.1} przebiegi [ 15.22, 19.05, 19.93 ]
+   zagajnik2: {"upd":6.22,"rnd":5.99,"frame":12.21,"fps":77.3} przebiegi [ 12.21, 13.57, 17.46 ]
+WYNIK after {"laka_poludnie":12.21,"kepa":13.33,"gaj":18.58,"zagroda":15.22,"zagajnik2":12.21}
+PASS bez błędów w konsoli  []
+2/2 passed

@@ -343,12 +343,12 @@
         // buildings stand on the natural ground: no soil patch (and no paving) under or behind them
         const covered = new Set();
         for (const b of Farming.farm().buildings[mapId] || []) for (const c of Farming.cellsOfGeo(Farming.geoOf(b), b.x, b.y)) covered.add(Farming.key(c.x, c.y));
-        const has = (x, y) => !!plots[Farming.key(x, y)] && !covered.has(Farming.key(x, y));
+        const has = (x, y) => { const p = plots[Farming.key(x, y)]; return !!p && !Farming.plainPlot(p) && !covered.has(Farming.key(x, y)); };
         const crops = ImageManager.loadSystem("Farm_Crops");
         const pitQuads = mergedPitQuads(plots, covered);
         for (const k of Object.keys(plots)) {
             const [x, y] = k.split(",").map(Number), plot = plots[k];
-            if (covered.has(k)) continue;
+            if (covered.has(k) || Farming.plainPlot(plot)) continue;   // (plain: where a rock / log / bush was broken - the ground as it was)
             let n = 0;
             [[0, -1, 1], [1, 0, 2], [0, 1, 4], [-1, 0, 8], [1, -1, 16], [1, 1, 32], [-1, 1, 64], [-1, -1, 128]].forEach(([dx, dy, bit]) => {
                 if (has(x + dx, y + dy)) n |= bit;
@@ -1426,10 +1426,13 @@
     };
     const _animationWait = Game_CharacterBase.prototype.animationWait;
     Game_CharacterBase.prototype.animationWait = function() { return this._twFire ? 7 : _animationWait.call(this); };
-    let eventLightsOf = null, eventLightsList = [];
+    // (read again when the map changes, or when a plugin changed an event's light note on this map: Tawerna.lightsVer goes up -
+    // e.g. Jarmark.js hangs a lantern or puts the stage's torches out)
+    let eventLightsOf = null, eventLightsList = [], eventLightsVer = -1;
     function eventLights() {
-        if (eventLightsOf === $dataMap) return eventLightsList;
-        eventLightsOf = $dataMap;
+        const ver = T.lightsVer || 0;
+        if (eventLightsOf === $dataMap && eventLightsVer === ver) return eventLightsList;
+        eventLightsOf = $dataMap; eventLightsVer = ver;
         eventLightsList = [];
         for (const e of ($dataMap && $dataMap.events) || []) {
             const m = e && e.note && e.note.match(/<Light(?::([^>]*))?>/i);

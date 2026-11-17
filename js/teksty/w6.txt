@@ -5,7 +5,7 @@
 # ======================================================================== QUESTS (zadania)
 # W6, „Ludzie z promu”
 zadania.W6.title = Ludzie z promu
-zadania.W6.where = obóz pod murem (albo za murem, na Podgrodziu), tablica zleceń w tawernie, ratusz, działka dziadka, Jaskinia nad kamieniołomem (Akt II)
+zadania.W6.where = obóz pod murem (albo za murem, na Podgrodziu), tablica zleceń w tawernie, ratusz, działka dziadka, obóz kopaczy w Sztolni Kruczych Turni (Akt II)
 zadania.W6.when = od pierwszej fali (dzień 10) do Aktu II
 zadania.W6.desc = Wojna przypływa falami. Pod murem śpią ludzie z promu: Ludmiła z małą Elą czeka na męża, Marka, a Rafał chowa się przed kapralem - to dezerter. Komu pomożesz, kogo wydasz i czy miasto zamknie przed nimi bramę?
 zadania.W6.steps.0.text = Obóz pod murem patrzy na ciebie nieufnie. Zaufanie obozu: {trust}/3 (pomóż im: konik dla Eli, kocioł zupy, gorączka Eli, chleb Eli, spis obozu, Szymek...). Rafał: {rafal}.
@@ -192,7 +192,7 @@ zadania.W6.lines.optAbstain = Nie zabieram głosu.
 
 zadania.W6.lines.tally = Za zamknięciem: {close}. Za wpuszczeniem: {open}.
 [zadania.W6.lines.resultClose]
-Brama zamknięta dla nowych. Obóz wyprowadzi się za mur, na Podgrodzie. Niech Bóg ma ich w opiece. I nas.
+Brama zamknięta dla nowych. Obóz zostaje na łące w Podgrodziu, do miasta nikt z nich nie wejdzie. Niech Bóg ma ich w opiece. I nas.
 > (Ludmiła w drzwiach spuszcza głowę.)
 
 [zadania.W6.lines.resultOpen]
@@ -201,7 +201,7 @@ Wpuszczamy. Ale nie za darmo: tydzień pracy, kto ma ręce. Dwoje pójdzie na dz
 
 [zadania.W6.lines.noteClose]
 Brama zamknięta
-Zebranie w ratuszu: miasto zamknęło bramę przed nowymi z promu. Obóz Ludmiły przeniósł się za mur, na Podgrodzie, do namiotów Darina. Nocą podchodzą tam wilki.
+Zebranie w ratuszu: miasto zamknęło bramę przed nowymi z promu. Obóz Ludmiły zostaje na łące w Podgrodziu, ale do Kruczogrodu nikt z nich nie wejdzie.
 
 [zadania.W6.lines.noteOpen]
 Obóz w mieście
@@ -215,8 +215,8 @@ zadania.W6.lines.hubWigDone = Wigilia: zjedzona razem ✓.
 zadania.W6.lines.hubWigMissed = Wigilia minęła beze mnie.
 zadania.W6.lines.hubMarek0 = Marek (Akt II - po rozdziale 1: spłacie długu albo stracie działki): mąż Ludmiły kopał w drużynie Rafała.
 zadania.W6.lines.hubMarekAsk = Akt II. Powiedz Ludmile, czego się dowiedziałeś o Marku (obóz, za dnia).
-zadania.W6.lines.hubMarek1 = Marek stoi w niszy obozu kopaczy w Jaskini nad kamieniołomem (Góry, za Leśną drogą) - twarzą do ściany. Masz chustę Ludmiły.
-zadania.W6.lines.hubMarek2 = Marek idzie za tobą. Wyprowadź go z Jaskini (wyjście na dole): nocą po cichu (C), siłą albo dogadaj się ze strażnikiem obozu.
+zadania.W6.lines.hubMarek1 = Marek stoi w kącie obozu kopaczy w Sztolni Kruczych Turni (kopalnia w Kruczych Turniach: zachodni chodnik, za rumowiskiem) - twarzą do ściany. Masz chustę Ludmiły.
+zadania.W6.lines.hubMarek2 = Marek idzie za tobą. Wyprowadź go ze Sztolni (starym chodnikiem na północ, do Kruczych Turni): nocą po cichu (C), siłą albo dogadaj się ze strażnikiem obozu.
 zadania.W6.lines.hubMarek3 = Marek jest wolny. Ludmiła i Ela czekają w obozie (za dnia, 6:30–20).
 zadania.W6.lines.hubMarekDone = Marek wrócił do rodziny ✓.
 zadania.W6.lines.campIn = pod murem
@@ -267,14 +267,14 @@ Wigilia z obozem
 Wigilię zjedliśmy razem - ludzie z promu i miasto. Ugotowałem cztery kociołki. Ludmiła życzyła mi, żebym zawsze miał do kogo wracać.
 
 [zadania.W6.lines.chustaKnow]
-> Ludmiło. Widziałem Marka. W górach, w jaskini nad starym kamieniołomem. Żyje.
+> Ludmiło. Widziałem Marka. W Kruczych Turniach, w obozie kopaczy w starej sztolni. Żyje.
 (Ludmiła chwyta cię za ręce.) Żyje? Żyje! Gdzie? Dlaczego nie przyszedł? ...Dlaczego nie przyszedł?
 > Stoi twarzą do skały. Nie mówi. Kopacze mówią, że czegoś dotknął.
 (Ludmiła długo milczy. Potem zdejmuje z szyi chustę.) Ela wyszyła na niej konika. Krzywo, pierwszy raz w życiu. Marek się śmiał, że to krowa.
 Daj mu to. Jeśli jeszcze coś pamięta... to pozna. Przyprowadź mi go. Proszę.
 
 [zadania.W6.lines.chustaRumour]
-> Ludmiło. Rafał mówił, że Marek kopał w jego drużynie. W górach, w jaskini nad starym kamieniołomem. Pójdę go szukać.
+> Ludmiło. Rafał mówił, że Marek kopał w jego drużynie. W Kruczych Turniach, w obozie kopaczy w starej sztolni. Pójdę go szukać.
 (Ludmiła chwyta cię za ręce.) Marek? W górach? ...On żyje? Rafał wiedział i nic nie mówił?
 (Długo milczy. Potem zdejmuje z szyi chustę.) Ela wyszyła na niej konika. Krzywo, pierwszy raz w życiu. Marek się śmiał, że to krowa.
 Daj mu to. Jeśli jeszcze coś pamięta... to pozna. Przyprowadź mi go. Proszę.
@@ -340,7 +340,7 @@ zadania.W6.lines.rafalShout = Pamiętasz mnie? Za sto dwadzieścia groszy!
 
 [zadania.W6.lines.noteOut]
 Marek wyprowadzony
-Wyprowadziłem Marka z obozu kopaczy w Jaskini. Odwrócił się od ściany, kiedy pokazałem mu chustę Ludmiły z koniem wyszytym przez Elę. Mówi mało - pojedyncze słowa. Idzie do rodziny.
+Wyprowadziłem Marka z obozu kopaczy w Sztolni. Odwrócił się od ściany, kiedy pokazałem mu chustę Ludmiły z koniem wyszytym przez Elę. Mówi mało - pojedyncze słowa. Idzie do rodziny.
 
 [zadania.W6.lines.reunion]
 (Ludmiła widzi go pierwsza. Upuszcza wiadro. Nie krzyczy - tylko stoi, z ręką na ustach.)

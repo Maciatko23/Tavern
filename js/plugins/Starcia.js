@@ -385,6 +385,7 @@
         const sp = SP[a.kind()], by = o.by || "human", from = o.from || null;
         if (o.fire) dmg += CFG.fire.burn;
         a._hp -= dmg;
+        a._provoked = true;   // (a boar left alone attacks nobody - Hunting_AI.js thinkBoar)
         if (!o.steady) a._poiseT = 0;   // (o.steady: a blow that does not shake its balance - the eagle's quick ones, Orzel.js)
         a._wounded = true;
         soundAt(a, () => {
@@ -830,6 +831,7 @@
             return;
         }
         if (a._mode !== "roam" || a._aware >= 0.7) return;   // (busy with the hero, or about to be)
+        if (!a._provoked && !window.__dzikiJakDawniej) return;   // (2026-11-16, the user: a boar nobody has hurt attacks no man and no dog)
         const t = nearestOf(a, victims(a), CFG.boar.notice);
         if (t) { a._clash = t; a._aware = 1; a._alarm = Math.max(a._alarm || 0, 60); T.emit("clash", { a, b: t, kind: "start" }); }   // (_alarm: its brain warns at it next)
     }
@@ -1299,6 +1301,7 @@
             a._home = { x: s.x, y: s.y };
             a._clash = h;
             a._aware = 1;
+            a._provoked = true;   // (the F9 summons: a beast set on a man)
             if (p === "bear") a.bearRear(); else a.setMode("warn", 40);
             a.turnTowardCharacter(h);
             popup(p === "bear" ? TK.kod.summon[4] : TK.kod.summon[5], 0, "#ffd98f");

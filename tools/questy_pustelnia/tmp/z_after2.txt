@@ -1,0 +1,7 @@
+PASS gra
+  zdjecie 04_kruk_kruczy_jar
+  zdjecie 10_widok_dzwonnica
+  zdjecie 11_widok_kruczarnia
+PASS zdjecia (after)
+PASS bez bledow w konsoli  []
+3/3 passed

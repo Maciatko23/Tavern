@@ -113,7 +113,9 @@ const REGISTERED = process.env.REGISTERED ? `(function(){
         for (let i = 0; i < 30 && (await ev("__boar._hp")) === boar0.hp; i++) await frames(2);
         const hit1 = await J("({ hp: __boar._hp, breath: Combat.breath, mode: Combat.act.mode, swinging: $gamePlayer.isToolSwinging() })");
         const dmg1 = boar0.hp - hit1.hp;
-        check("F: the stone axe swings and hits: 17 x Siła 6 (x1.035) x Mocna ręka (x1.05) = 18 (or a critical 30), 16 breath spent", (dmg1 === 18 || dmg1 === 30) && hit1.breath <= 104 - 16 + 1, { dmg1, ...hit1 });
+        // (2026-11-17, the user's: a blow's damage is the base x 0.9-1.1 - Bron_Data.ROZRZUT - so a hit is within that range of 18 / 30, not the number itself)
+        const inRange = (got, want) => got >= Math.round(want * 0.9) - 1 && got <= Math.round(want * 1.1) + 1;
+        check("F: the stone axe swings and hits: 17 x Siła 6 (x1.035) x Mocna ręka (x1.05) = 18 ±10% (or a critical 30 ±10%), 16 breath spent", (inRange(dmg1, 18) || inRange(dmg1, 30)) && hit1.breath <= 104 - 16 + 1, { dmg1, ...hit1 });
         await frames(3);   // (the combat layer shows the bar on its next update)
         check("the bar over the boar shows (hurt)", await ev("(function(){ const l = SceneManager._scene._spriteset._combatLayer; return l._bars.has(__boar); })()"));
         await frames(60);
@@ -225,7 +227,7 @@ const REGISTERED = process.env.REGISTERED ? `(function(){
         const clubSwing = await J("({ kind: $gamePlayer._swingEvent && $gamePlayer._swingEvent._swingKind, sheet: $gamePlayer._swingEvent ? ChoppableTree.swingKind($gamePlayer._swingEvent._swingKind).sheet : null, frames: $gamePlayer._swingEvent ? ChoppableTree.swingKind($gamePlayer._swingEvent._swingKind).frames : 0 })");
         for (let i = 0; i < 30 && (await ev("__boar._hp")) === clubHp; i++) await frames(2);
         const clubHit = await J(`({ dmg: ${clubHp} - __boar._hp, want: Math.round(13 * Combat.strMult() * (1 + Combat.perk("melee.dmg"))), crit: Math.round(13 * Combat.strMult() * (1 + Combat.perk("melee.dmg")) * 1.6), spent: ${clubBreath} - Combat.breath })`);
-        check("the club (\\ to it): its own quick swing (Swing_Club, 22 frames), 13 x Siła (or a critical), 10 breath", /^(Swing|Hero)_Club$/.test(clubSwing.sheet) && clubSwing.frames === 22 && (clubHit.dmg === clubHit.want || clubHit.dmg === clubHit.crit) && Math.round(clubHit.spent) === 10, { clubSwing, clubHit });
+        check("the club (\\ to it): its own quick swing (Swing_Club, 22 frames), 13 x Siła (or a critical), 10 breath", /^(Swing|Hero)_Club$/.test(clubSwing.sheet) && clubSwing.frames === 22 && (inRange(clubHit.dmg, clubHit.want) || inRange(clubHit.dmg, clubHit.crit)) && Math.round(clubHit.spent) === 10   /* (±10%: Bron_Data.ROZRZUT) */, { clubSwing, clubHit });
         // the fists: the last choice of \\ (with nothing else, the only one)
         await frames(30);
         await ev("Combat.resetAct(); __boar._stun = 0; __boar._poise = __boar._maxPoise; 0");   // (a boar still reeling from the club takes more)

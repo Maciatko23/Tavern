@@ -1,0 +1,9 @@
+manor_test before exit 1
+manor_test after exit 1
+lowy_test before exit 1
+lowy_test after exit 1
+okolice_integracja_test before exit 0
+okolice_integracja_test after exit 0
+okolice_szkielet_test before exit 1
+okolice_szkielet_test after exit 1
+DONE

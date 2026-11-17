@@ -35,7 +35,7 @@ kit.test({ port: 9684, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const titleReady = "(SceneManager._scene instanceof Scene_Title && window.TitleScreen && TitleScreen.info() && TitleScreen.info().open && TitleScreen.info().active)";
     const onName = "(window.Prologue && Prologue.info() && Prologue.info().screen === 'name')";
     const onFilm = "(window.Prologue && Prologue.info() && Prologue.info().screen === 'film')";
-    const onHouse = "(SceneManager._scene instanceof Scene_Map && SceneManager._scene._started && !SceneManager.isSceneChanging() && $gameMap.mapId() === 19)";
+    const onHouse = "(SceneManager._scene instanceof Scene_Map && SceneManager._scene._started && !SceneManager.isSceneChanging() && $gameMap.mapId() === 224)";   // (2026-11-16 the new world: grandpa's hut in Podgrodzie)
     await t.until(titleReady, 30);
     await t.frames(20);
     await keyMs(79, "KeyO", "o");   // „Nowa gra”
@@ -49,7 +49,7 @@ kit.test({ port: 9684, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.eval("window.__drv.on = true; window.__drv.picks = []; 0");   // (the talks that start by themselves - the intro - go on)
     const landed = await t.until(onHouse, 300);
     const run = await J("window.Prologue ? Prologue.lastRun : null");
-    t.check("prolog: „Nowa gra” → imię (puste = Reid) → film sześciu scen → dom dziadka (Map019)",
+    t.check("prolog: „Nowa gra” → imię (puste = Reid) → film sześciu scen → chata dziadka (Map224)",
         named && film && landed && run && JSON.stringify(run.log) === JSON.stringify(["kronika", "wies", "chata", "port", "sztorm", "plaza"]) && (await t.eval("$gameActors.actor(1).name()")) === "Reid", { named, film, landed, log: run && run.log });
 
     // ===================================================================== 1. rozdział 1: intro, działka, Borgar, zmiany, spłata
@@ -58,10 +58,10 @@ kit.test({ port: 9684, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.frames(20);
     const s0 = await J("Story.state()");
     t.check("rozdział 1: intro dziadka przeszło samo - dług 2500 do dnia 60, nic nie spłacone", introDone && s0 && s0.intro === 2 && s0.debt === 2500 && s0.paid === 0 && s0.deadline === 60, s0 && { intro: s0.intro, debt: s0.debt, paid: s0.paid, deadline: s0.deadline });
-    await t.go(3, 66, 48, 2);
+    await t.go(218, 30, 17, 2);
     await t.frames(40);
-    t.check("działka dziadka (Map003 „Kruczy Jar”): krok „field” odhaczony", !!(await J("Story.state().flags.field")));
-    await t.go(1, 52, 31, 8);
+    t.check("działka dziadka (ogrodzona, w Podgrodziu - Map218): krok „field” odhaczony", !!(await J("Story.state().flags.field")));
+    await t.go(1, 14, 20, 8);
     await at(2, 10, 30);
     const hire = await talk("Story.borgarEvent()", []);
     t.check("tawerna o 10:00: Borgar najmuje bohatera (flaga hired)", hire.done && !!(await J("Story.state().flags.hired")), hire.text.slice(0, 160));
@@ -83,7 +83,7 @@ kit.test({ port: 9684, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("trzy wieczorne zmiany u Borgara (dni 2-4) zagrane i zapłacone (TavernShift)", shifts === 3 && earned > 0, { shifts, earned, lastShift });
     // the other ~35 shifts: a shortcut of time - their gold straight into the purse; the payment itself is the real one
     await t.eval("$gameParty.gainGold(2500); 0");
-    await t.go(24, 21, 75, 6);
+    await t.go(221, 40, 26, 8);   // (the manor Dwór nad Jazem)
     await at(30, 10, 40);
     await t.eval("(function(){ const e = $gameMap.event(902); $gamePlayer.locate(e.x - 1, e.y + 3); $gamePlayer.setDirection(8); return 0; })()");
     const pay = await talk("$gameMap.event(902)", ["Spłać cały dług"], { secs: 90 });   // (with the whole sum in the purse the row says "Spłać cały dług (2500 G)")
@@ -95,16 +95,16 @@ kit.test({ port: 9684, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.eval("TownQuests.autoChecks(); 0");
     await t.frames(30);
     t.check("W4 „Krew kasztelana” rusza sam po spłacie", (await step("W4")) === "active:0", await step("W4"));
-    await t.go(1, 52, 31, 8);
+    await t.go(1, 14, 20, 8);
     await at(31, 11, 30);
     const b1 = await talk("$gameMap.event(1)", ["Zapytaj o stare kamienie", "Nie teraz"]);
     t.check("a. Borgar przy barze: pół klucza znad baru „na szczęście”", (await J("TownQuests.vcount('klucz_borgar')")) === 1 && (await step("W4")) === "active:1", { step: await step("W4"), text: b1.text.slice(0, 200) });
-    await t.go(20, 39, 46, 8);
+    await t.go(218, 21, 17, 8);   // (the cairn by grandpa's hut in Podgrodzie: TownQuests_Data w4_dig 952 at 21,16)
     await at(31, 13, 30);
     await t.give(62, 1);   // (the stone spade - normally the workbench's)
-    const dig = await talk("$gameMap.event(951)", [], { place: false });
-    t.check("b. kopiec z krukiem na podwórzu dziadka: druga połowa klucza wykopana", (await J("TownQuests.vcount('klucz_kopiec')")) === 1 && (await step("W4")) === "active:2", { step: await step("W4"), text: dig.text.slice(0, 160) });
-    await t.go(8, 9, 64, 4);
+    const dig = await talk("$gameMap.event(952)", [], { place: false });
+    t.check("b. kopiec z krukiem przy chacie dziadka: druga połowa klucza wykopana", (await J("TownQuests.vcount('klucz_kopiec')")) === 1 && (await step("W4")) === "active:2", { step: await step("W4"), text: dig.text.slice(0, 160) });
+    await t.go(220, 31, 38, 8);   // (by Tadek's forge in Kruczogród)
     await at(32, 10, 40);
     await t.eval("(function(){ const s = TownQuests.state(); for (const q of TownQuests.QUESTS) if (q.giver === 'kowal' && !s.q[q.id]) s.q[q.id] = { s: 'done', step: 0, day: 1, sday: 1, end: 1, t: { done: {} }, times: 1 }; return 0; })()");   // (Tadek's own offers out of the way)
     await t.give(86, 1);
@@ -118,7 +118,7 @@ kit.test({ port: 9684, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const g2 = await talk("$gameMap.event(7)", [], { place: false });
     const open = await J("({ open: Underground.isOpen(), sw: $gameSwitches.value(11) })");
     t.check("BRAMKA 2: klucz kasztelana otwiera kratę w piwnicy tawerny (Underground.open, przełącznik 11)", open.open && open.sw && (await step("W4")) === "active:5", { open, step: await step("W4"), text: g2.text.slice(-160) });
-    await t.go(1, 52, 31, 8);
+    await t.go(1, 14, 20, 8);
     await at(33, 12, 30);
     const b2 = await talk("$gameMap.event(1)", ["Krata w piwnicy", "Nie teraz"]);
     t.check("d. Borgar: „Nie pytam o to, czego nie chcę wiedzieć” - hasło strażnika (borgarSaying), W4 idzie w rozdział 6", !!(await J("TownQuests.state().flags.borgarSaying")) && /Nie pytam o to, czego nie chcę wiedzieć/.test(b2.text), b2.text.slice(-200));
@@ -129,7 +129,7 @@ kit.test({ port: 9684, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.frames(20);
     const gid = await t.eval(`$gameMap.events().find(e => e.event().name === "Pusta zbroja strażnika").eventId()`);
     await t.locate(19, 16, 8);
-    await t.hold("up", 16);
+    await t.hold("up", 44);   // (one tile up onto the threshold: the barefoot walk since 2026-11-12 takes ~32 frames a tile)
     const woke = await t.until("$gameMap.isEventRunning() && $gameMap._interpreter.eventId() === " + gid, 8, 50);
     await t.finish();
     const right = await talk(gid, ["Nie pytam"]);
@@ -145,7 +145,7 @@ kit.test({ port: 9684, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.eval(`(function(){ window.__bus = []; for (const n of ['act3Armed', 'act3Start', 'act3Done']) Tawerna.on(n, e => __bus.push(Object.assign({ n }, e)), { owner: 'Ciag' });
         Act3.auto(true); Combat.gainXp(6000, 'test'); $gameParty.leader().recoverAll(); Act3.DATA.PACE.gap = 40; Act3.DATA.PACE.firstGap = 30;
         if (window.TownQuests) TownQuests.bellOpts = { bot: 'target' }; return 0; })()`);
-    await t.go(8, 51, 19, 8);
+    await t.go(220, 43, 37, 8);   // (before the tavern's door in Kruczogród)
     await t.frames(80);
     const armed = await J("({ ph: Act3.phase(), sd: Act3.state().siegeDay, d: $gameSystem.dayNightDay(), n: __bus.filter(b => b.n === 'act3Armed').length })");
     t.check("BRAMKA 4: po piętrze 50 w miasteczku - Akt III uzbrojony (act3Armed), napad zaplanowany na następną noc", armed.ph === "armed" && armed.sd === armed.d + 1 && armed.n === 1, armed);
@@ -159,7 +159,7 @@ kit.test({ port: 9684, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.frames(200);
     await t.eval("Act3.bellRope(); 0");
     const rung = await t.until("Act3.siege() && Act3.siege().bell === 'hero'", 60);
-    await t.until(t.onMap(8), 20);
+    await t.until(t.onMap(220), 20);
     t.check("dzwon „trzy i jeden” zabity przez bohatera (mini-gra dzwonu z liny)", rung, await J("Act3.siege() && Act3.siege().bell"));
     const clearWave = async () => {
         await t.until("(function(){ const s = Act3.siege(); if (!s) return true; const W = s.waves[s.wave]; return !W || W.state !== 'pending' && (W.spawned || W.state !== 'live') && Act3.members(s.wave).length > 0 || (W && W.state === 'breached'); })()", 90);
@@ -170,7 +170,7 @@ kit.test({ port: 9684, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await clearWave();
     const outside = await t.until("Act3.siege() && Act3.siege().wave >= 2", 60);
     t.check("dwie fale na mapie miasta pokonane - napastnicy idą do środka", outside, await J("Act3.siege() && { wave: Act3.siege().wave, damage: Math.round(Act3.siege().damage) }"));
-    await t.go(1, 50, 52, 8, { calm: false });   // (not the kit's calm: it clears Humans.js's men - the wave coming in)
+    await t.go(1, 14, 30, 8, { calm: false });   // (not the kit's calm: it clears Humans.js's men - the wave coming in)
     await t.frames(30);
     await clearWave();
     await clearWave();

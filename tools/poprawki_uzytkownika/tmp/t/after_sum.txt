@@ -1,0 +1,7 @@
+after zasoby: 60/60 passed
+after questy_mapa: 16/17 passed
+after zakon: 33/33 passed
+after field_loss: 50/54 passed
+after przystan: 33/35 passed
+after pustelnia: 11/16 passed
+after debug_menu: 83/83 passed

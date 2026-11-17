@@ -73,7 +73,7 @@ Chluba tawerny
 # Borgar raz na każdy próg z rabatem ({rabat} - rabat progu, np. 10%)
 slawa.mowa.2 = Słyszę, co robisz dla ludzi z tablicy. Swój chłop z ciebie! Od dziś liczę ci wszystko {rabat} taniej - jedzenie, pokój i łaźnię.
 slawa.mowa.3 = Pewna ręka - tak o tobie mówią w całej okolicy. Takim gościom liczę {rabat} mniej. I komnata z kominkiem na górze stoi dla ciebie otworem.
-slawa.mowa.4 = Chluba tawerny we własnej osobie! {rabat} taniej, najlepszy kufel z beczki, a na piętrze złocona krata otworzy się przed tobą. Apartamenty czekają.
+slawa.mowa.4 = Chluba tawerny we własnej osobie! {rabat} taniej, najlepszy kufel z beczki, a odźwierny przy schodach na piętrze sam ci się ukłoni. Apartamenty czekają.
 
 # ======================================================================== Pokoje na piętrze: nazwy
 pokoje.nazwy.1 = Izdebka przy schodach
@@ -278,13 +278,13 @@ kod.rentRoom.1 = Borgar wynajmuje pokoje na piętrze na jedną noc ({1}). Drzwi 
 kod.rentRoom.2 = Apartament Złoty na piętrze Apartamentów wynajmuje się tylko Chlubie tawerny. Po nocy w nim śniadanie podają do łóżka, a przez {zloty} godz. jestem Wypoczęty: odpoczynek daje {2} więcej sił.
 kod.rentRoom.3 = Komnatę z kominkiem Borgar wynajmuje tylko stałym, zaufanym gościom. Po nocy w niej przez {komnata} godz. jestem Wypoczęty: odpoczynek daje {2} więcej sił.
 # welcomeGate
-kod.welcomeGate.0 = Dzyń, dzyń! Witamy w Apartamentach, szanowny gościu!
+kod.welcomeGate.0 = Proszę na górę! Witamy w Apartamentach, szanowny gościu!
 kod.welcomeGate.1 = Apartamenty stoją przed tobą otworem
-kod.welcomeGate.2 = Sława: {1} - złocona krata na piętrze jest otwarta
-kod.welcomeGate.3 = Złocona krata na piętrze otworzyła się przede mną: sława „{1}”. Za nią Apartament Złoty - Borgar wynajmuje go na noc. Śniadanie podają tam do łóżka.
+kod.welcomeGate.2 = Sława: {1} - odźwierny wpuszcza cię do Apartamentów
+kod.welcomeGate.3 = Odźwierny przy schodach na piętrze wpuszcza mnie na górę: sława „{1}”. Tam Apartament Złoty - Borgar wynajmuje go na noc. Śniadanie podają tam do łóżka.
 # lockedTalk
-kod.lockedTalk.0 = Złocona krata, a przy niej mosiężny dzwonek. Na tabliczce: „Apartamenty tylko dla dostojnych gości.”
-kod.lockedTalk.1 = Dzwonię... cisza. Trzeba by być chlubą tej tawerny, żeby mi tu otworzyli.
+kod.lockedTalk.0 = Odźwierny zastępuje mi drogę. „Na górę tylko dostojni goście Apartamentów.”
+kod.lockedTalk.1 = Ani drgnie. Trzeba by być chlubą tej tawerny, żeby mnie tu wpuścił.
 kod.lockedTalk.2 = Na drzwiach złota tabliczka: „Apartament Złoty. Wstęp tylko dla dostojnych gości.”
 kod.lockedTalk.3 = Komnatę
 kod.lockedTalk.4 = Ten pokój

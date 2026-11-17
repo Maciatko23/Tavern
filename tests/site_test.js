@@ -24,19 +24,27 @@ const { QUIET } = require("./lib/kit.js");
         // after OK in the placer he walks up to the spot first (Farming: walk-to-place); this waits until he is there
         const arrive = async () => { for (let i = 0; i < 80; i++) { if (await ev("!($gameTemp._buildMode && $gameTemp._buildMode.walk)")) break; await frames(5); } await frames(3); };
         const B = await ev(`(function(){
+            // (2026-11-14) building goes only inside grandpa's wall, and he keeps trees and stones there: the block of 10 x 6 inside
+            // the wall with the most bare ground, what stands on it taken away for the test
+            const wf = Farming.walledField && Farming.walledField(), inF = (x, y) => !wf || wf.has(x + "," + y);
+            let best = null;
             for (let by = 2; by < $gameMap.height() - 8; by++) for (let bx = 2; bx < $gameMap.width() - 12; bx++) {
-                let ok = true;
-                for (let y = by; y < by + 6 && ok; y++) for (let x = bx; x < bx + 10; x++) { if (!Farming.naturalFarmland(x, y)) { ok = false; break; } }
-                if (ok) return { bx, by };
+                let n = 0, ok = true;
+                for (let y = by - 2; y < by + 8 && ok; y++) for (let x = bx - 2; x < bx + 12; x++) { if (!inF(x, y)) { ok = false; break; } if (x >= bx && x < bx + 10 && y >= by && y < by + 6 && Farming.naturalFarmland(x, y)) n++; }   // (two tiles inside the field all round: big things reach past the block)
+                if (ok && (!best || n > best.n)) best = { bx, by, n };
             }
-            return null; })()`);
+            if (!best) return null;
+            for (const e of $gameMap.events()) if (e.x >= best.bx - 1 && e.x <= best.bx + 10 && e.y >= best.by - 1 && e.y <= best.by + 6) { e.erase(); e.setThrough(true); }
+            const cells = []; for (let y = best.by - 1; y <= best.by + 6; y++) for (let x = best.bx - 1; x <= best.bx + 10; x++) cells.push({ x, y });
+            $gameSystem.clearLand($gameMap.mapId(), cells);   // (cleared ground everywhere in it: bushes and tufts would refuse a building)
+            return { bx: best.bx, by: best.by, bare: best.n }; })()`);
         check("found an open meadow", !!B, B);
         const { bx, by } = B;
         await ev(`$gamePlayer.locate(${bx + 2}, ${by + 3}); $gamePlayer.setDirection(6); $gameMap.setDisplayPos(${bx + 2} - 13, ${by + 3} - 7); $gameParty.gainItem($dataItems[80], 12); $gameSystem.changeStamina(100); 0`);
         await frames(4);
 
         // ---- the tool chest gives a hammer
-        check("the hammer exists (item 89, key item, icon 345) (the chest of Domek - Wnętrze gives it; the one on the meadow was edited by the user)", await ev("$dataItems[89].name === 'Młotek' && $dataItems[89].itypeId === 2 && $dataItems[89].iconIndex === 345 && true"));
+        check("the hammer exists (item 89, key item, its PixelLab icon) (the chest of Domek - Wnętrze gives it; the one on the meadow was edited by the user)", await ev("$dataItems[89].name === 'Młotek' && $dataItems[89].itypeId === 2 && $dataItems[89].iconIndex >= 688 && true"));
 
         // ---- choose a place: it becomes a marked building site, no crouching
         await ev(`Farming.startPlacement("bench", ${bx + 3}, ${by + 3}); 0`);

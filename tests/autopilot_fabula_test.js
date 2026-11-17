@@ -69,10 +69,10 @@ kit.test({ port: 9751, bootCheck: "gra się uruchamia", errorCheck: false, evalT
             await keyRaw("rawKeyDown", 80, "KeyP", "p");
             await t.wait(2600);
             await keyRaw("keyUp", 80, "KeyP", "p");
-            landed = await t.until(t.onMap(19), 8);
+            landed = await t.until(t.onMap(224), 8);   // (2026-11-16 the new world: grandpa's hut in Podgrodzie)
         }
         const run = await J("window.Prologue ? Prologue.lastRun : null");
-        t.check("prolog: „Nowa gra” → imię (puste = Reid) → film pominięty klawiszem P → dom dziadka (Map019)", named && film && landed,
+        t.check("prolog: „Nowa gra” → imię (puste = Reid) → film pominięty klawiszem P → chata dziadka (Map224)", named && film && landed,
             { named, film, landed, skippedAll: run && run.all, scenes: run && run.log });
         if (!landed) return;
     }

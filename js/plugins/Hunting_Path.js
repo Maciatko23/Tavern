@@ -56,11 +56,15 @@
     const pgrid = { mapId: -1, w: 0, h: 0, pass: null, ev: null, bld: null, s4a: null, s4d: null, tilesAt: -1e9, eventsAt: -1e9, rev: -1, passB: null, bldB: null, job: null, jobFrame: -1 };
     // the tiles' part of rows y0..y1-1 into pass / bld (the map's passage of the four sides; a building)
     function gridRows(pass, bld, y0, y1, w, F) {
-        for (let y = y0; y < y1; y++) for (let x = 0; x < w; x++) {
-            const i = y * w + x;
-            pass[i] = ($gameMap.isPassable(x, y, 2) ? 1 : 0) | ($gameMap.isPassable(x, y, 4) ? 2 : 0) | ($gameMap.isPassable(x, y, 6) ? 4 : 0) | ($gameMap.isPassable(x, y, 8) ? 8 : 0);
-            bld[i] = F && F.buildingAt(x, y) ? 1 : 0;
-        }
+        const M = window.Mosty, br = !!(M && M.npcGrid);   // (2026-11-13: the bridges' deck for those who walk by this grid - Mosty.js)
+        if (br) M.npcGrid(true);
+        try {
+            for (let y = y0; y < y1; y++) for (let x = 0; x < w; x++) {
+                const i = y * w + x;
+                pass[i] = ($gameMap.isPassable(x, y, 2) ? 1 : 0) | ($gameMap.isPassable(x, y, 4) ? 2 : 0) | ($gameMap.isPassable(x, y, 6) ? 4 : 0) | ($gameMap.isPassable(x, y, 8) ? 8 : 0);
+                bld[i] = F && F.buildingAt(x, y) ? 1 : 0;
+            }
+        } finally { if (br) M.npcGrid(false); }
     }
     // (2026-11-12, wydajność) the tiles' part made again - every PATH.tiles frames, soon after the farm changed - a few rows a frame
     // into the spare arrays while the old grid serves, then the two swapped; not the whole map at once: 15-30 ms (70-160 ms on a

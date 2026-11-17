@@ -81,19 +81,40 @@ body {
     left: 0px;
     right: 0px;
     bottom: 0px;
-    width: 120px;
-    height: 120px;
+    width: 408px;
+    height: 408px;
     z-index: 10;
 }
 #loadingSpinnerImage {
-    margin: 0px;
+    /* (2026-11-14) the loading sign: a tankard filling up (img/system/Kufel_Laduje*.png) instead of the engine's ring */
+    position: relative;
+    margin: 12px;
     padding: 0px;
-    border-radius: 50%;
-    width: 96px;
-    height: 96px;
-    border: 12px solid rgba(255, 255, 255, 0.25);
-    border-top: 12px solid rgba(255, 255, 255, 1);
-    animation: fadein 2s ease, spin 1.5s linear infinite;
+    width: 384px;
+    height: 384px;
+    background: url("../img/system/Kufel_Laduje_Pusty.png") no-repeat center;
+    animation: fadein 1.2s ease;
+}
+#loadingSpinnerImage::after {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 384px;
+    height: 384px;
+    background: url("../img/system/Kufel_Laduje.png") no-repeat center;
+    animation: kufel 1.8s ease-in-out infinite;
+}
+@keyframes kufel {
+    0% {
+        clip-path: inset(90% 0 0 0);
+    }
+    70% {
+        clip-path: inset(0 0 0 0);
+    }
+    100% {
+        clip-path: inset(0 0 0 0);
+    }
 }
 @keyframes fadein {
     0% {

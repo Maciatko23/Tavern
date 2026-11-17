@@ -1,0 +1,6 @@
+peleryna=34074e1d-c615-4599-8670-46e58af0b9b1
+plaszcz_futrzany=4d32490f-dc78-4322-b6ee-988c3df609f4
+szal=ae9480a7-2c35-412a-810c-6767bfb75eb7
+torba=fa0ddcf7-682f-43bd-9533-380cd1cb2989
+plecak=05bf70b9-9897-4045-927d-73353fb81ce3
+amulet=c59c2103-d592-4c1b-8ee3-5d461e67ceab

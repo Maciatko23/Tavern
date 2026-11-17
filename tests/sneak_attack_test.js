@@ -20,7 +20,8 @@ kit.test({ port: 9464 }, async t => {
     t.check("an open strip on the meadow", !!room, room);
     const cx = room.x, cy = room.y;
     await t.give(156, 1);   // the club: 13 a blow, no combo multiplier on the first one
-    // no crits in the sums (Math.random held at 0.5 while a blow lands), the animals blind (they never notice him by themselves)
+    // no crits in the sums (Math.random held at 0.5 while a blow lands - 2026-11-17: that is also the middle of the damage's roll, x1.0 of
+    // Bron_Data.ROZRZUT's 0.9-1.1, so the sums stay exact), the animals blind (they never notice him by themselves)
     await t.eval("window.__rand = Math.random; for (const k of ['deer', 'bear', 'boar']) Hunting.SPECIES[k].sight = 0.01; Combat.hero().ready = true; 0");
     // one blow at an animal 1 tile to his right: { dmg, word ("Atak z ukrycia!" over it), sneaks (the blows from hiding counted) }
     const blowAt = async (kind, o = {}) => {

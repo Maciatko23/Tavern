@@ -37,6 +37,26 @@ function build() {
             });
         }
     }
+    // (2026-11-16, the new world) the seams: the maps of js/plugins/Swiat_Data_Nowy.js meet edge to edge - walking off an edge goes on
+    // to the neighbour (no event). Every third cell of a shared stretch is an exit "seam" (trig "seam"; side: the way to push off)
+    try {
+        const box = { SwiatData: { maps: {}, links: [] } };
+        new Function("window", fs.readFileSync(path.join(DATA, "..", "js", "plugins", "Swiat_Data_Nowy.js"), "utf8"))(box);
+        const S = box.SwiatData;
+        for (const l of S.links) {
+            const A = S.maps[l.a], B = S.maps[l.b];
+            if (!A || !B) continue;
+            for (let w = l.from; w <= l.to; w += 3) {
+                let x, y, tx, ty;
+                if (l.side === "E") { x = A[2] - 1; y = w - A[1]; tx = 0; ty = w - B[1]; }
+                else if (l.side === "W") { x = 0; y = w - A[1]; tx = B[2] - 1; ty = w - B[1]; }
+                else if (l.side === "S") { y = A[3] - 1; x = w - A[0]; ty = 0; tx = w - B[0]; }
+                else { y = 0; x = w - A[0]; ty = B[3] - 1; tx = w - B[0]; }
+                exits.push({ m: Number(l.a), id: "seam" + l.side + w, name: "krawędź " + l.side, x, y, p: 0, trig: "seam", side: l.side, prio: 1, cond: {},
+                    to: Number(l.b), tx, ty, br: 0, w: A[2], h: A[3] });
+            }
+        }
+    } catch (e) { /* (no new world: no seams) */ }
     return { made: new Date().toISOString(), names, exits };
 }
 

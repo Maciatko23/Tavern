@@ -166,3 +166,48 @@ tasak = `["Hero_Sword", "Hero_Club"]`, `NATIVE.Hero_Sword = "miecz"` (żelazny m
    `sword: () => { const k = swingKindOf("sword"); return k >= 0 ? { combo: [k, k, k], heavy: k, hold: 8 } : SWING.club(); },`
    (`hold: 8` - klatka z mieczem wzniesionym do ciosu, trzymana przy ładowaniu ciężkiego ciosu).
 Do tego czasu miecze dalej tną na zamachu pałki (z nowymi rysunkami broni z bron.py) - nic się nie psuje.
+
+## 9. Cały ekwipunek w szczegółach PixelLab (2026-11-17)
+
+Zlecenie: „postać nosząca różne przedmioty też ładnie, bardzo szczegółowo w PixelLab” - metoda pilota (komplet żelazny, zatwierdzony)
+na wszystkie rodziny kształtów. Jeden stan postaci „Wiesniak I pro” na rodzinę kształtów (kilka rodzajów naraz), materiały i kolory
+ubrań przemalowuje gra (`Ubior.js` `PL` / `PL_HELM`; `wzor: true` - rampa samego wzoru ubrania zamiast materiału).
+
+| stan (tools/ubior/pixellab/) | id | rodzaje w grze |
+|---|---|---|
+| zelazo2 „Komplet zelazny” (pilot) | b511763a-d8aa-4303-aa7e-a3ece2b38958 | kolczuga, karwasze i nagolenniki z brązu / żelaza, buty okute (brąz, żelazo), hełm z nosalem (spangenhelm) |
+| skora2 „Komplet skorzany 2” | 493f36e6-43d2-4b68-b4ff-7378bb6bad33 | skórznia, skórzany hełm (`helm_otwarty_skora`), karwasze i nagolenniki skórzane, buty skórzane (buty_brazowe, buty łowcy) |
+| pikowany „Komplet pikowany” | b31b1571-359a-43f1-89a4-93dec2b94b21 | przeszywanica (z rękawami), czepiec pikowany, pikowane rękawice (`karwasze_len`), nogawice (`nagolenniki_len`), filcowe buty |
+| stalowy „Komplet stalowy” | 076ebc7a-2486-4faa-9de7-6b13f02a88ae | napierśnik (na kolczudze), hełm otwarty, stal / zakon: karwasze (rękawice płytowe), nagolenniki, buty okute |
+| brygantyna | ad231375-0163-49cd-82a8-c2e86875b308 | brygantyna (`zbroja_brygantyna_<m>`), skórzane rękawice, spodnie wełniane, buty z cholewami (buty_czarne) |
+| chlop | 2c2d1032-7c9e-4343-ae5c-21de023b3542 | słomkowy kapelusz, lniana koszula, pas skórzany, płócienne spodnie, łapcie |
+| mieszczanin | bcee0d34-ffaf-41a3-bd27-a31f8ba89dd1 | filcowa czapka, kaftan (z rękawami) |
+| odswietny | 0a5a95cd-e287-402c-9974-e033696ef66d | koszula odświętna (czerwony haft przez rampę haftu), chusta, pas z sakiewką |
+| kurta | a587a396-f33d-4457-b79e-316428fcfb1f | skórzana kurta, skórzane spodnie |
+| plaszcz | 2f060534-9bc7-47c7-830d-d72a9debede0 | płaszcz (nowe miejsce `plaszcz` = część „Płaszcz” Equipment; 112 -> `plaszcz_welniany`) |
+| plaszcz_futro / peleryna | 636334a0-7a27-48f8-9dfb-a5ff73bd44cc / b2bcb533-c2f5-4338-bbb6-ae3ef9800de2 | plaszcz_futrzany (295) / plaszcz_lniany (293); zwiadowcy i zakonny - płaszcz zielony przemalowany |
+| kozuszek / fartuch / zupan | 07d6558b-73ba-415c-acbd-ca8bc257bb7e / 634dd6eb-7cee-4c6d-8982-3f07509fc3b7 / 785d5ec5-1a9f-44d1-904e-a6b95dd7c8f1 | kozuszek (284), fartuch_kowalski (285), zupan_sukienny (286) |
+| tarcza_plecionka / tarcza_krab / tarcza_pawez | 45168efe-9d31-42ff-ac07-5d3aa1e3cc63 / ed2082b8-84bb-41f2-899a-6e92fe5ebf9c / 34fc39f0-a789-46cd-abc9-91c66e917c47 | własne rysunki 445, 448, 449 (plecionka: widoki z boku odbite - PixelLab dał ją na prawej ręce) |
+| tarcza_okragla / tarcza_migdalowa / tarcza_herbowa / puklerz | 137aac76-d64f-4c30-a388-6a21309742aa / 3c11902a-1cdd-469f-b66b-10a59952df2f / 90797e3a-4bee-40fa-8ad0-8ed764551bc9 / 5e8fb09a-01d5-48b8-a8fb-67de300d39a6 | tarcza na lewym przedramieniu (Ubior_Bron.js): okrągła (drewniana, okuta, umbo, plecionka, krab), migdałowa (migdałowa, pawęż), herbowa (żelazna, zakonna, Skrzydlatej Straży), puklerz |
+
+Z października zostają: kaptur, kapalin, czepiec kolczy, hełm zakonny (też `helm_garnczkowy_*`), łuska. Kształt wg materiału: karwasze,
+nagolenniki, buty okute - skóra / brąz-żelazo (Z2) / stal-zakon (płyty); hełm otwarty - skóra (skórzany hełm) / metal. Ubrania z
+`Ubior_Data.js` dostają rodzaj PL po początku klucza (`PL_CLOTHES`: koszula_lniana_*, kaftan_*, kurta_*, spodnie_*, lapcie, buty_*,
+rekawice_*, pas_*, plaszcz_*); kapelusz, czapka, chusta - obrazki hełmów PixelLab (leżąc schowane jak rysowane). Opaska zostaje rysowana
+(ciemna opaska ginie we włosach - nie do wycięcia). Nowe rzeczy 284-299: koszula_przewiewna -> koszula, portki_latane -> płócienne spodnie
+(łatane kolana), rekawiczki_welniane -> rękawice, chodaki -> filcowe buty w kolorze skóry, pas_ladownica -> pas z sakiewką, pas_tragarza i
+pas_okuty_braz -> pas skórzany (rampa), kapelusz_filcowy -> słomkowy kapelusz w kolorze filcu, kosz_wiklinowy - nakładka plecaka (jak dotąd).
+Kształt tarczy wg klucza: `UbiorBron.SHAPE_KEY` (własne rysunki), potem rodzaj (`SHAPE_OF`); tarcza_drewniana_skora - okrągła z drewnem w
+rampie skóry (farba z Ubior_Data). Łuki `mysliwski`, `wojenny` - rampy w Ubior_Bron.js MATERIALY.
+
+Tarcza: Ubior_Bron.js 1.1, warstwa `tarcza` (img/system/Ubior_PL_Tarcza<Kształt>_<arkusz>.png) na chodach, biegu, skradaniu (też z
+pochodnią), pałce, mieczu, pięściach, pochodni i włóczni; na pracy obiema rękami, siedząc i leżąc - bez tarczy. Przed ciałem przodem i
+w lewo, za ciałem tyłem i w prawo (alfa 252: tylko na pustym). W gardzie (przodem / z boku) rysunek gardy jak dotąd, tarcza z ramienia
+wtedy znika (nie dwie). Siedzenie po turecku: nagolenniki i buty czystą fakturą (`paint_crossed`), płaszcz bez tuniki ze stanu.
+
+Zrzuty z gry: `node tests/run.js ubior_komplety_shot --port 9483`, zestawienia `python tools/ubior/zloz_komplety.py` ->
+`docs/ekwipunek/mapa/komplety_1.png`, `komplety_2.png`, `komplety_3.png` (15 kompletów x 9 póz), siedzenie przed / po:
+`docs/ekwipunek/mapa/siedzi_przed_po.png`. Siedząc i kucając przodem / tyłem (`CROSS_SHEETS`, najniższy piksel nóg najwyżej 39 px pod
+środkiem głowy) nogawice, nagolenniki i buty czystą fakturą. Skóra w poprzek tułowia bez dłoni (ręka zgięta przed piersią przy zamachu nad
+głową, brzuch spod uniesionej tuniki, dziury w tunice), z koszulą nad sobą i koszulą / pasem / nogawką pod sobą, należy do tułowia: zbroja i
+ubranie tułowia ją zakrywają (zbroja_pl.py `Pose._belly`).

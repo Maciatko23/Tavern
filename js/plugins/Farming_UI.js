@@ -50,10 +50,10 @@
         link(PL, ["plotAt", "canCharges", "needsOn", "wellEntries", "bucketUnits", "bucketFor", "bucketEntries", "wateredRecently",
             "isRipe", "daysLeft", "rake", "till", "plant", "harvest", "uproot", "water", "dig", "potDryness", "potHoursLeft",
             "tablePots", "tablePotDry", "tablePotHoursLeft", "tableEntries", "potEntries", "clayEntry"]);
-    const [mapAllowsBuilding, buildsAnywhere, tileIsFree, missingMaterials, siteHits, hitCost, upgradeEntry, packUp, wakeHour,
+    const [mapAllowsBuilding, standsOnOwnLand, builtAnywhere, buildsAnywhere, tileIsFree, missingMaterials, siteHits, hitCost, upgradeEntry, packUp, wakeHour,
         sleepInTent, siteMenu, demolishBlock, demolish, readyProduce, daysToProduce, collect, snareSprung, snareBait,
         snareBaitEntry, rest, restDanger, sleepy, sleepyNote, whyNoRest, noRestHelp, groundRate, lieDown, enterHut, startPlacement] =
-        link(B, ["mapAllowsBuilding", "buildsAnywhere", "tileIsFree", "missingMaterials", "siteHits", "hitCost", "upgradeEntry",
+        link(B, ["mapAllowsBuilding", "standsOnOwnLand", "builtAnywhere", "buildsAnywhere", "tileIsFree", "missingMaterials", "siteHits", "hitCost", "upgradeEntry",
             "packUp", "wakeHour", "sleepInTent", "siteMenu", "demolishBlock", "demolish", "readyProduce", "daysToProduce",
             "collect", "snareSprung", "snareBait", "snareBaitEntry", "rest", "restDanger", "sleepy", "sleepyNote", "whyNoRest",
             "noRestHelp", "groundRate", "lieDown", "enterHut", "startPlacement"]);
@@ -103,15 +103,16 @@
             help: "Rzeczy, które zrobisz sam, bez budynku: " + handNames() + ". Resztę narzędzi zrobisz w warsztacie.",
             tip: "Rzeczy, które zrobisz sam, z gałęzi, kamieni i lnu z ziemi, bez żadnego budynku: " + handNames() + ".\nMłotek jest potrzebny do budowy warsztatu, a w nim powstają wszystkie inne narzędzia." };
     }
-    function openHandMenu(x, y) {
+    // back: where "Wróć" leads (the Q list opened it: back to that list; else the ground's menu)
+    function openHandMenu(x, y, back) {
         const entries = HAND_RECIPES.map(handRecipeEntry);
-        entries.push({ name: "Wróć", help: "", run: () => openMenu(x, y) });
+        entries.push({ name: "Wróć", help: "", run: back || (() => openMenu(x, y)) });
         showMenu("Wytwarzanie ręczne", entries);
     }
     // the entry of the plot menu that opens the "pitch it straight away" menu (tent, bucket, forest bedroll)
     function placeMenuEntry(x, y) {
         // (away from the grandfather's field nothing of it may stand: the entry says so with the popup)
-        if (!mapAllowsBuilding() && !BUILDING_IDS.some(t => BUILDINGS[t].instant && buildsAnywhere(BUILDINGS[t]))) {
+        if (!standsOnOwnLand() && !BUILDING_IDS.some(t => BUILDINGS[t].instant && buildsAnywhere(BUILDINGS[t]))) {
             return { name: "Postaw...", icon: itemOf(ITEM.tent).iconIndex, run: () => complain(itemOf(ITEM.tent).iconIndex, noBuild()),
                 help: noBuild() + ": " + placeNames() + " postawisz tylko tam.", tip: noBuild() + ": " + placeNames() + " postawisz tylko tam." };
         }
@@ -125,31 +126,50 @@
     // a building with needFlag (a TownQuests flag) shows up on the list only once that flag is set (the raven's perch: krukTame)
     const flagOk = def => { if (!def.needFlag) return true; const s = T.call("TownQuests", "state"); return !!(s && s.flags && s.flags[def.needFlag]); };
     function buildingEntryList(x, y, filter) {
-        const indoors = isHutInterior(), here = mapAllowsBuilding();   // (away from the grandfather's field: only what goes up anywhere - the snare)
+        const indoors = isHutInterior(), here = standsOnOwnLand();   // (off his own ground: only what goes up anywhere - the camp's things, the snare)
         return BUILDING_IDS.filter(type => !BUILDINGS[type].noBuild && flagOk(BUILDINGS[type]) && (indoors ? BUILDINGS[type].indoor : !BUILDINGS[type].indoorOnly) && (here || buildsAnywhere(BUILDINGS[type])) && filter(BUILDINGS[type])).map(type => {
             const def = BUILDINGS[type];
             const missing = missingMaterials(type);
-            const built = !!def.single && !!hutOf();
+            const built = !!def.single && !!hutOf(), one = !!def.one && builtAnywhere(type);
             const how = def.instant ? "Wybierzesz miejsce, a stawia się od razu, bez młotka." : "Wybierzesz miejsce, a potem z młotkiem uderzasz w plac budowy.";
             let help = def.desc + "\nKoszt: " + costText(type) + ". " + how;
             if (missing.length > 0) help = "Brakuje: " + missing.map(([id, n]) => itemOf(id).name + " (" + countOf(id) + "/" + n + ")").join(", ") + ".\n" + def.desc;
             if (built) help = "Masz już chatkę: drugiej nie potrzeba.\n" + def.desc;
+            if (one) help = "Masz już " + def.name.toLowerCase() + ": stoi tam, gdzie je zrobiłeś.\n" + def.desc;
             const facts = [def.instant ? "Rozstawiasz od razu (-" + def.stamina + " wytrzymałości), bez młotka" : "Uderzeń młotkiem: " + siteHits(def) + " (po " + hitCost() + " wytrzymałości)"];
             if (def.w > 1 || (def.h || 1) > 1) facts.push("Zajmuje " + def.w + " × " + (def.h || 1) + " pól" + (def.yard ? " (ogrodzony wybieg)" : ""));
-            return { name: def.name, costs: costsOf(type), help, enabled: missing.length === 0 && !built, run: () => startPlacement(type, x, y),
-                tip: def.desc + "\n" + (def.instant ? "Wybierasz miejsce, a namiot stoi od razu." : "Najpierw wybierasz miejsce, potem młotkiem uderzasz w plac budowy."), facts };
+            // (2026-11-16, the user: "ikony powinny być do każdej budowy i czynności") what is carried and set down shows its item's
+            // icon; a building its own picture, made small (thumb: Window_FarmList draws it in the icon's place)
+            const carried = def.instant && def.cost.length === 1 && def.cost[0][1] === 1;
+            return { type, icon: carried ? itemOf(def.cost[0][0]).iconIndex : 0, thumb: carried ? "" : def.image || (type === "fence" ? "fence" : ""), name: def.name, costs: costsOf(type), help, enabled: missing.length === 0 && !built && !one, run: () => startPlacement(type, x, y),
+                tip: def.desc + "\n" + (def.instant ? "Wybierasz miejsce i stawiasz od razu, bez młotka." : "Najpierw wybierasz miejsce, potem młotkiem uderzasz w plac budowy."), facts };
         });
     }
     // real buildings: hammer + a construction site (the Q list; the ground menu has no "Zbuduj..." any more). Indoors
     // (equipping the hut) this still lists every piece of furniture regardless of instant/site, since "Wyposaż chatkę" is its own single, already-unified list.
-    function buildEntries(x, y) {
-        const indoors = isHutInterior();
-        const list = buildingEntryList(x, y, def => indoors || !def.instant);
-        // what can be built right now (the materials are in the bag) comes first, the rest after it; each part in the usual order (user)
-        const entries = list.filter(e => e.enabled !== false).concat(list.filter(e => e.enabled === false));
-        if (hammerMissing()) entries.unshift(handRecipeEntry(HAND_RECIPES.find(r => r.id === "hammer")));   // no hammer yet: the way to make one comes first, always
-        return entries;
+    function buildEntries(x, y) { return buildTabs(x, y).all; }
+    // (2026-11-16, the user) the Q list has two tabs:
+    //   "Budowa" - the buildings (all of them on the hero's own ground, else only what goes up anywhere: the campfire, the snare, the
+    //     forest bed) and the things made by hand with no table and no building (the hammer, the waterskin, the rope, the bandage,
+    //     the nettle fibre) - on every map;
+    //   "Akcja" - what he carries and sets down: the tent, the pots, the barrel, the bucket (BUILDINGS[type].action is the line).
+    // In each tab what can be done right now comes first, the rest after it; with no hammer "Zrób młotek" is the first line.
+    function buildTabs(x, y) {
+        const list = buildingEntryList(x, y, () => true);
+        const firstOn = l => l.filter(e => e.enabled !== false).concat(l.filter(e => e.enabled === false));
+        if (isHutInterior()) {   // (the hut's furniture: one list, as it was - and the hand's work under it)
+            const all = firstOn(list.concat(HAND_RECIPES.map(handRecipeEntry)));
+            return { all, tabs: null };
+        }
+        const acts = list.filter(e => BUILDINGS[e.type].action).map(e => Object.assign({}, e, { name: BUILDINGS[e.type].action }));
+        const hand = HAND_RECIPES.filter(r => !(r.id === "hammer" && hammerMissing())).map(handRecipeEntry);
+        const build = firstOn(list.filter(e => !BUILDINGS[e.type].action).concat(hand));
+        if (hammerMissing()) build.unshift(handRecipeEntry(HAND_RECIPES.find(r => r.id === "hammer")));   // no hammer yet: the way to make one comes first, always
+        const ORDER = ["tent", "pot", "clay_pot", "barrel", "bucket"];   // (the user's order: the tent, the pots, the barrel, the bucket)
+        const action = acts.slice().sort((a, b) => ORDER.indexOf(a.type) - ORDER.indexOf(b.type));
+        return { all: build.concat(action), tabs: [{ name: "Budowa", entries: build }, { name: "Akcja", entries: action }] };
     }
+
     // things pitched straight from the bag: no hammer, no construction site (tent, bucket, forest bedroll)
     const placeNames = () => { const n = BUILDING_IDS.filter(t => BUILDINGS[t].instant).map(t => BUILDINGS[t].name.toLowerCase()); return n.length > 1 ? n.slice(0, -1).join(", ") + " i " + n[n.length - 1] : n.join(); };
     function placeEntries(x, y, direct) {
@@ -288,7 +308,7 @@
             if (plot.natural && !puddle) {   // resting comes first: sit down on the grass
                 const no = whyNoRest(), rate = groundRate(), wet = rate < GROUND_REST;
                 entries.push({ name: "Odpocznij", icon: 82, right: "+" + rate + "/godz.", enabled: !no,
-                    help: no ? noRestHelp(no) : "Siadasz na trawie i odpoczywasz: co sekundę mija godzina i wraca " + rate + " wytrzymałości" +
+                    help: no ? noRestHelp(no) : "Siadasz na trawie i odpoczywasz (wszędzie pod gołym niebem także klawiszem Z): co sekundę mija godzina i wraca " + rate + " wytrzymałości" +
                         (wet ? " (w deszczu na mokrej trawie tylko połowa)" : "") + ". Wstajesz sam, gdy wypoczniesz, albo kiedy chcesz (strzałki, O, Esc). W tym czasie głodniejesz i chce ci się pić." +
                         (sleepy() ? "\n" + sleepyNote() : ""),
                     run: () => lieDown(x, y) });
@@ -297,7 +317,7 @@
             if (!puddle) entries.push(digEntry(x, y));
             entries.push({ name: "Zagrab ziemię", icon: itemOf(ITEM.rake).iconIndex, right: "-" + STAMINA.rake, help: plot.natural ? "Grabie. Zrywa darń i przygotowuje ziemię pod orkę." : "Grabie. Przygotowuje ziemię pod orkę.", run: () => rake(x, y) });
             // with pine seeds in the bag: plant a tree here (Forestry.js)
-            if (T.api("Forestry") && countOf(ITEM.pineSeed) > 0) entries.push(T.api("Forestry").plantEntry(x, y));
+            if (T.api("Forestry") && countOf(ITEM.cone) > 0) entries.push(T.api("Forestry").plantEntry(x, y));
             entries.push(placeMenuEntry(x, y));
             return { title: puddle ? "Kałuża" : plot.natural ? "Nieuprawiana ziemia" : "Oczyszczona ziemia", entries };
         }
@@ -358,8 +378,8 @@
     function openBuildKeyMenu() {
         let t = targetTile();
         if (!$gameMap.isValid(t.x, t.y)) t = { x: $gamePlayer.x, y: $gamePlayer.y };
-        if (!mapAllowsBuilding()) complain(itemOf(ITEM.hammer).iconIndex, noBuild());   // (the list keeps what may stand anywhere: the snare)
-        showMenu(isHutInterior() ? "Wyposaż chatkę" : "Budowa", buildEntries(t.x, t.y), "build");
+        const q = buildTabs(t.x, t.y);
+        showMenu(isHutInterior() ? "Wyposaż chatkę" : "Budowa", q.all, "build", undefined, q.tabs || undefined);
         return true;
     }
 
@@ -479,7 +499,11 @@
         if (!this._tabs || tab < 0 || tab >= this._tabs.length || tab === this._tab) return false;
         this._tab = tab;
         this._entries = this._tabs[tab].entries;
+        // (2026-11-16: a long list scrolled down, then a short tab: it showed empty rows - the new tab starts from its top)
         this.refresh();
+        this._scrollX = 0; this._scrollY = 0; this._scrollTargetX = 0; this._scrollTargetY = 0; this._scrollDuration = 0;
+        this.updateOrigin();
+        this.paint();
         this.select(0);
         this.callHandler("tab");
         this.callUpdateHelp();
@@ -501,6 +525,7 @@
 
     Window_FarmList.prototype.drawItem = function(index) {
         const entry = this._entries[index], rect = this.itemLineRect(index);
+        if (!entry) return;
         this.changePaintOpacity(entry.enabled !== false);
         let x = rect.x, right = rect.x + rect.width;
         if (entry.costs) {
@@ -521,9 +546,30 @@
         if (entry.icon) {
             this.drawIcon(entry.icon, x, rect.y + 2);
             x += ImageManager.iconWidth + 4;
+        } else if (entry.thumb) {
+            this.drawThumb(entry.thumb, x, rect.y + 2, index);
+            x += ImageManager.iconWidth + 4;
         }
         this.drawText(entry.name, x, rect.y, Math.max(0, right - x), "left");
         this.changePaintOpacity(true);
+    };
+
+    // a building's own picture (img/system) made small, in the place of an icon: the whole picture fitted into the icon's square,
+    // smoothed (a tall kiln and a wide yard both fit); a picture still loading draws its line again once it is there
+    Window_FarmList.prototype.drawThumb = function(name, x, y, index) {
+        // (the fence has no picture file: its post with a rail to each side, as the map draws it)
+        const bm = name === "fence" ? (window.Farming && Farming.fenceTexture ? Farming.fenceTexture(2 | 8) : null) : ImageManager.loadSystem(name), size = ImageManager.iconWidth;
+        if (!bm) return;
+        if (!bm.isReady()) {
+            bm.addLoadListener(() => { if (this.contents && this._entries && this._entries[index] && this._entries[index].thumb === name) this.redrawItem(index); });
+            return;
+        }
+        if (!bm.width || !bm.height) return;
+        const k = Math.min(size / bm.width, size / bm.height), w = Math.max(1, Math.round(bm.width * k)), h = Math.max(1, Math.round(bm.height * k));
+        const ctx = this.contents.context, was = ctx.imageSmoothingEnabled, q = ctx.imageSmoothingQuality;
+        ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high";
+        this.contents.blt(bm, 0, 0, bm.width, bm.height, x + Math.floor((size - w) / 2), y + Math.floor((size - h) / 2), w, h);
+        ctx.imageSmoothingEnabled = was; ctx.imageSmoothingQuality = q;
     };
 
     // The help window does not wrap lines by itself, and the hand-work texts are long.
@@ -900,7 +946,8 @@
     // Q (build) and E (food) on the map; while one of these two menus is open the same key closes it and the other key switches to the other menu
     SCENE.onFarmKey = function(kind) {
         const now = this._farmKind, menu = this._farmMenu;
-        if (menu._tabs) {   // a station's menu: Q / E switch its tabs, like in the journal
+        // (the Q list has tabs too since 2026-11-16 - there Q still closes it and E goes to the food list: its tabs are on left / right)
+        if (menu._tabs && now !== "build" && now !== "food") {   // a station's menu: Q / E switch its tabs, like in the journal
             if (menu.switchTab(menu._tab + (kind === "build" ? -1 : 1))) SoundManager.playCursor();
             return;
         }

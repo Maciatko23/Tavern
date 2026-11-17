@@ -14,7 +14,7 @@ const path = require("path");
 const fs = require("fs");
 const kit = require("./lib/kit.js");
 
-const OVERLAY = process.env.KOP_OVERLAY === "none" ? undefined : "tools/kopalnia/staging";
+const OVERLAY = process.env.KOP_OVERLAY && process.env.KOP_OVERLAY !== "none" ? process.env.KOP_OVERLAY : undefined;   // (2026-11-15: the installed game by default)
 const SHOTS = path.join(__dirname, "kopalnia");
 
 const REACH = (x, y) => `(function(){

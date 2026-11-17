@@ -1,0 +1,8 @@
+watki_test: przed 11/11 passed | po 11/11 passed
+town_life_test: przed 10/10 passed | po 10/10 passed
+miasto_mieszkancy_test: przed 25/25 passed | po 25/25 passed
+w2_archive_test: przed 13/13 passed | po 13/13 passed
+zakon_test: przed 33/33 passed | po 33/33 passed
+przystan_test: przed 44/44 passed | po 44/44 passed
+ladowacz_test: przed 43/43 passed | po 43/43 passed
+KONIEC

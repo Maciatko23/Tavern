@@ -112,7 +112,9 @@
     // archer / mercenary: the chance one of the band is an archer (a mercenary from day mercFrom). Not in the town, not on grandpa's field.
     // ---------------------------------------------------------------------------------------------------------------------------
     const CAMP = {
-        maps: { 21: 0.3, 22: 0.25, 23: 0.35, 5: 0.25, 6: 0.2, 12: 0.3, 4: 0.12, 17: 0.12, 18: 0.15 },
+        // (2026-11-17, the user: the camps on the new world - not the manor 221, the town 220, grandpa's plot 218 or the eagle's ridge 030;
+        // the old maps 4-23 were removed)
+        maps: { 219: 0.25, 222: 0.3, 29: 0.25 },
         from: 21, to: 5, calmDays: 3, rest: 2, size: [2, 4], far: 14, archer: 0.45, mercenary: 0.3, mercFrom: 8, knife: 0.3, knifeFrom: 5, awake: [1, 2],
         sack: { gold: [6, 22], loot: [[ITEM.bread, 0.6, 2], [ITEM.rope, 0.4, 2], [ITEM.arrows, 0.35, 5], [ITEM.beer, 0.3, 2], [ITEM.smoked, 0.3, 1], [ITEM.iron, 0.15, 1], [ITEM.bandage, 0.25, 1]] }
     };

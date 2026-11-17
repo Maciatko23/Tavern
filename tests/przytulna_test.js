@@ -9,7 +9,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no console errors" }, async
     const off = await t.json("({ note: $dataMap.note, patched: !!$dataMap._przyt, stats: Przytulna.stats(), on: Przytulna.on() })");
     t.check("wyłączona: mapa bez łat, żadnych iskier ani kufli", !off.on && !off.patched && /DarkNight:185/.test(off.note) && off.stats.sparks === 0 && off.stats.mugs === 0, off);
     await t.eval("window.PRZYTULNA = true; 0");
-    await t.go(1, 14, 34, 8);
+    await t.go(1, 14, 21, 8);
     await t.eval("Przytulna.set(true); 0");
     await t.frames(240);
     const on = await t.json(`({ note: $dataMap.note, patched: !!$dataMap._przyt, stats: Przytulna.stats(), fill: $dataMap.events.filter(e => e && /^wypelnienie/.test(e.name) && e.x > 1 && e.x < 47 && e.y > 27 && e.y < 44).map(e => e.note)[0],
@@ -32,16 +32,16 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no console errors" }, async
         t.check("chorągwie z krukiem", on.banner === "!$Przytulna_Kruk", on);
     }
     // Borgar wyciera przy ladzie, nie w powietrzu: przechodzi za wolny kawałek lady, nogi za blatem, potem wraca na miejsce
-    await t.eval("$gamePlayer.locate(14, 34); Przytulna.ST.wipe = null; Przytulna.ST.nextWipe = 0; 0");
-    await t.until("(() => { const e = $gameMap.event(1); return e.x === 17 && e.y === 29 && !e.isMoving() && Przytulna.ST.wipe && Przytulna.ST.wipe.t0 >= 0; })()", 20);
+    await t.eval("$gamePlayer.locate(14, 21); Przytulna.ST.wipe = null; Przytulna.ST.nextWipe = 0; 0");
+    await t.until("(() => { const e = $gameMap.event(1); return e.x === 17 && e.y === 16 && !e.isMoving() && Przytulna.ST.wipe && Przytulna.ST.wipe.t0 >= 0; })()", 20);
     await t.frames(40);
-    const wy = await t.json("(() => { const a = Przytulna.ST.layer.anims.get('borgar'), e = $gameMap.event(1); return { vis: a.sp.visible, h: a.sp._frame.height, x: e.x, y: e.y, dir: e.direction(), fix: e._directionFix, bottom: a.sp.y + a.sp._frame.height * (1 - a.sp.anchor.y), edge: $gameMap.adjustY(29) * 48 + 26 }; })()");
-    t.check("wyciera stojąc za ladą, obok doniczki (17,29), przodem do sali", wy.vis && wy.x === 17 && wy.y === 29 && wy.dir === 2 && wy.fix === true, wy);
+    const wy = await t.json("(() => { const a = Przytulna.ST.layer.anims.get('borgar'), e = $gameMap.event(1); return { vis: a.sp.visible, h: a.sp._frame.height, x: e.x, y: e.y, dir: e.direction(), fix: e._directionFix, bottom: a.sp.y + a.sp._frame.height * (1 - a.sp.anchor.y), edge: $gameMap.adjustY(16) * 48 + 26 }; })()");
+    t.check("wyciera stojąc za ladą, obok doniczki (17,16), przodem do sali", wy.vis && wy.x === 17 && wy.y === 16 && wy.dir === 2 && wy.fix === true, wy);
     t.check("to, co niżej tylnego brzegu blatu, jest schowane", wy.h < 74 && Math.abs(wy.bottom - wy.edge) <= 2, wy);
     const zapis = await t.json("(() => { try { return JsonEx.stringify(DataManager.makeSaveContents()).length; } catch (e) { return String(e); } })()");
     t.check("zapis działa, gdy wyciera", typeof zapis === "number", zapis);
     await t.eval("Przytulna.ST.wipe.d = 0; 0");
-    await t.until("(() => { const e = $gameMap.event(1); return e.x === 16 && e.y === 28 && !e.isMoving() && e._directionFix; })()", 20);
+    await t.until("(() => { const e = $gameMap.event(1); return e.x === 16 && e.y === 15 && !e.isMoving() && e._directionFix; })()", 20);
     await t.frames(4);
     const dom = await t.json("(() => { const s = SceneManager._scene._spriteset._characterSprites.find(c => c._character === $gameMap.event(1)); return { anchor: s.anchor.y, op: s.opacity, h: s._frame.height, dir: $gameMap.event(1).direction() }; })()");
     t.check("po wycieraniu wraca na swoje miejsce, cały, przodem do sali", dom.anchor === 1 && dom.op === 255 && dom.dir === 2 && dom.h === 64, dom);

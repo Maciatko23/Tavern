@@ -59,7 +59,7 @@ unit.test(t => {
     const choices = E.choices("right").map(c => c.hand + ":" + c.worn), torso = E.choices("torso").map(c => c.id + ":" + c.worn);
     t.check("the choices: the right hand - the spear, the club, the fists (worn), the torso - the jacket and the mail (worn); each with its words",
         choices.join() === "m154:false,m156:false,m0:true" && torso.join() === "171:false,353:true" && E.choices("torso").every(c => c.name && c.note) &&
-        /obrażenia 13/.test(E.choices("right")[1].note), { choices, torso });
+        /obrażenia 12-14/.test(E.choices("right")[1].note), { choices, torso });   // (2026-11-17: the club's 13 as the range ±10% - Bron_Data.zakres)
 
     // ---- the card
     const card = E.slots(), row = id => card.find(r => r.id === id);

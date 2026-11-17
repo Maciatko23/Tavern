@@ -30,6 +30,13 @@
 //     boots, the leather hood and the kettle hat drawn by PixelLab: a state of the hero wearing them, moved offline onto every frame of
 //     every sheet (tools/ubior/zbroja_pl.py -> img/system/Ubior_PL_<kind>_<sheet>.png, the helmets Ubior_HelmPL_<kind>.png, 8 views);
 //     the other materials repaint its colours (PL, PL_HELM). The other kinds: as before.
+//   - (2026-11-17, docs/ekwipunek/PLAN_BRON_ZBROJE.md section 9) Everything worn in rich PixelLab detail, one state of the hero per family
+//     of shapes: the iron set (mail, bracers, greaves, shod boots, the spangenhelm for the nasal helm), the leather, quilted and plate
+//     sets (each material its own shape: leather / iron-bronze / steel-Order), the brigantine, the clothes (shirt, kaftan, jacket, feast
+//     shirt, trousers, bast shoes, boots, gloves; their patterns' own ramps - wzor), the belts, the hats (straw hat, felt cap, kerchief:
+//     helmet pictures that hide lying, like the drawn ones) and the cloak (plaszcz - Equipment's "cloak": whole, also outside the
+//     figure; alpha 252 = behind the body, put only where the frame is empty). The sitting cross-legged frames: a clean fill of the
+//     greaves and the boots (tools/ubior/zbroja_pl.py paint_crossed). The shield on the arm: Ubior_Bron.js.
 
 /*:
  * @target MZ
@@ -110,8 +117,9 @@
     const FRONT = { S: true, SW: true, SE: true };
 
     // ---- the places on the body (the note's miejsce) -> Equipment.js's parts, and the part of the mask a ramp repaints
-    const PLACES = { glowa: "head", tors: "torso", nogi: "legs", stopy: "feet", pas: "belt", rece: "hands", plecy: "back" };
-    const ORDER = ["glowa", "tors", "nogi", "stopy", "pas", "rece", "plecy"];
+    // (2026-11-17: plaszcz - the cloak, Equipment's "cloak")
+    const PLACES = { glowa: "head", tors: "torso", nogi: "legs", stopy: "feet", pas: "belt", rece: "hands", plecy: "back", plaszcz: "cloak" };
+    const ORDER = ["glowa", "tors", "nogi", "stopy", "pas", "rece", "plecy", "plaszcz"];
     const PART_FOR = { tors: P.koszula, nogi: P.spodnie, pas: P.pas, rece: P.dlonie, stopy: P.stopy };
     // the brightness (luma 0..1) each part has on the plain sheets (the 3rd-97th percentile over all masks): the ramp spans it
     const RANGE = { [P.koszula]: [0.26, 0.62], [P.spodnie]: [0.12, 0.40], [P.pas]: [0.19, 0.80], [P.dlonie]: [0.41, 0.86], [P.stopy]: [0.37, 0.86],
@@ -160,10 +168,13 @@
         torba_plocienna: { miejsce: "plecy", nakladka: "torba", rampa: ["#4a3e2c", "#6e5e44", "#928060", "#b2a07c", "#cdbd98", "#e0d3b2"],
             pasek: ["#3a2c1c", "#6a5436"] },
         torba_skorzana: { miejsce: "plecy", nakladka: "torba", rampa: ["#24150c", "#3b2414", "#55341d", "#704628", "#8b5a33", "#a6703f"],
-            pasek: ["#24150c", "#5a3a22"] }
+            pasek: ["#24150c", "#5a3a22"] },
+        // (2026-11-17: the cloak 112 - PixelLab's own dark green wool; new cloaks: plaszcz_<...> with their ramp; the felt boots 442)
+        plaszcz_welniany: { miejsce: "plaszcz", pl: "plaszcz" },
+        buty_filcowe: { miejsce: "stopy", rampa: ["#26272a", "#36383c", "#484a4f", "#5b5e63", "#707378", "#878a8f"] }
     };
     // what Equipment.js has worn without a <Ubior:...> note (the items the game had before Ubior_Data.js)
-    const FROM_ITEM = { 113: "buty_brazowe", 171: "kurta_brazowa", 114: "plecak" };
+    const FROM_ITEM = { 113: "buty_brazowe", 171: "kurta_brazowa", 114: "plecak", 112: "plaszcz_welniany" };
     // the pictures of the overlays: frame w x h, anchor = the pixel put on the middle of the top of the hair (head things) or the
     // middle of the shoulders' line (back things), cut = rows from the picture's top where the hair it does not cover is taken away
     const PICTURES = {
@@ -200,9 +211,11 @@
         kapalin: { cut: 21, materialy: ["zelazo", "stal", "braz", "zakon"], akcent: "skora" },
         otwarty: { cut: 21, materialy: ["skora", "braz", "zelazo", "stal"], akcent: "jasny" },
         nosal: { cut: 21, materialy: ["braz", "zelazo", "stal", "zakon"], akcent: "jasny" },
-        zakonny: { cut: 32, materialy: ["zelazo", "stal", "zakon"], akcent: "jasny" }
+        zakonny: { cut: 32, materialy: ["zelazo", "stal", "zakon"], akcent: "jasny" },
+        // (2026-11-17: the pot helm - 425 Stalowy hełm garnczkowy: the great helm's pictures)
+        garnczkowy: { cut: 32, materialy: ["zelazo", "stal", "zakon"], akcent: "jasny", plik: "Zakonny" }
     };
-    for (const k of Object.keys(HELMY)) PICTURES["helm_" + k] = { file: "Ubior_Helm_" + k[0].toUpperCase() + k.slice(1), w: 32, h: 32, anchor: [16, 10],
+    for (const k of Object.keys(HELMY)) PICTURES["helm_" + k] = { file: "Ubior_Helm_" + (HELMY[k].plik || k[0].toUpperCase() + k.slice(1)), w: 32, h: 32, anchor: [16, 10],
         views: 5, cut: HELMY[k].cut, template: true, helm: k };
     // the armour on the shirt (tors: the shirt's ramp + a texture), the bracers (rece), the greaves (nogi), the shod boots (stopy)
     const ZBROJE = {
@@ -210,9 +223,13 @@
         skorznia: { materialy: ["skora", "skora_czarna"], faktura: "skora" },
         kolczuga: { materialy: ["zelazo", "stal", "zakon"], faktura: "kolczuga" },
         luska: { materialy: ["braz", "zelazo", "stal", "zakon"], faktura: "luska" },
-        napiersnik: { materialy: ["braz", "zelazo", "stal", "zakon"], faktura: "blacha" }
+        napiersnik: { materialy: ["braz", "zelazo", "stal", "zakon"], faktura: "blacha" },
+        // (2026-11-17: the brigantine - its own PixelLab drawing; 355 / 432 wear it with the key zbroja_brygantyna_<m>)
+        brygantyna: { materialy: ["welna", "skora", "zelazo", "stal", "zakon"], faktura: "pikowana" }
     };
-    const KARWASZE = ["skora", "skora_czarna", "braz", "zelazo", "stal", "zakon"], NAGOLENNIKI = ["skora", "braz", "zelazo", "stal", "zakon"], OKUTE = ["zelazo", "stal", "zakon"];
+    // (2026-11-17 len: the quilted gloves and leggings - 435, 438; braz: the bronze shoes 444)
+    const KARWASZE = ["len", "skora", "skora_czarna", "braz", "zelazo", "stal", "zakon"], NAGOLENNIKI = ["len", "skora", "braz", "zelazo", "stal", "zakon"],
+        OKUTE = ["braz", "zelazo", "stal", "zakon"];
     // ---- the armour from PixelLab (2026-10-23, docs/ekwipunek/METODA.md "Zbroja z PixelLab", tools/ubior/zbroja_pl.py): a kind drawn from a
     // PixelLab state of the hero (the same figure wearing it) and moved offline onto every frame of every sheet, part by part - per sheet
     // a layer img/system/Ubior_PL_<plik>_<sheet>.png (the sheets without their weapon: _BezBroni_<sheet>) in the state's own colours; the
@@ -221,32 +238,88 @@
     // colours (glowny: "cieply" - leather, "szary" - metal) through the material's ramp by brightness (lo..hi: that family's brightness in
     // the state), the other family (rivets, straps, the belt): reszta "akcent" - the material's accent ramp (lo2..hi2), "natywny" - as it is.
     // A kind not here (or its file missing) is drawn the old way (a texture on the shirt, the bands of the bracers and greaves, a picture).
+    // (2026-11-17, docs/ekwipunek/PLAN_BRON_ZBROJE.md section 9: everything worn in rich PixelLab detail - one state per family of
+    // shapes, the materials and the clothes' colours repainted here. A shape of its own per material where it differs: iron / bronze
+    // bracers, greaves, shod boots = the iron set (Z2), steel / the Order's = the plate set, leather = the leather set. wzor: the
+    // pattern's own ramp (the clothes: koszula_lniana_*, kaftan_*...) instead of a material's; akcent "czerwony": the red embroidery
+    // through the pattern's haft ramp. The October layers of the same kinds (Skorznia, Kolczuga...) stay on disk, unused.)
     const PL = {
-        skorznia: { plik: "Skorznia", miejsce: "tors", natywny: "skora", glowny: "cieply", lo: 0.153, hi: 0.764, reszta: "akcent", lo2: 0.615, hi2: 0.917 },
-        kolczuga: { plik: "Kolczuga", miejsce: "tors", natywny: "zelazo", glowny: "szary", lo: 0.286, hi: 0.682, reszta: "natywny" },
-        karwasze: { plik: "Karwasze", miejsce: "rece", natywny: "skora", glowny: "cieply", lo: 0.153, hi: 0.703, reszta: "akcent", lo2: 0.6, hi2: 0.92 },
-        nagolenniki: { plik: "Nagolenniki", miejsce: "nogi", natywny: "zelazo", glowny: "szary", lo: 0.149, hi: 0.809, reszta: "natywny" },
-        buty_okute: { plik: "Buty", miejsce: "stopy", natywny: "zelazo", glowny: "szary", lo: 0.149, hi: 0.809, reszta: "natywny" },
-        // (the second stage, 2026-10-23: the rest of the torso kinds; "oba": the linen's warm shadows and grey lights both - the material)
-        przeszywanica: { plik: "Przeszywanica", miejsce: "tors", natywny: "len", glowny: "oba", lo: 0.354, hi: 0.924 },
+        skorznia: { plik: "Skorznia2", miejsce: "tors", natywny: "skora", glowny: "cieply", lo: 0.115, hi: 0.628, reszta: "natywny" },
+        kolczuga: { plik: "KolczugaZ2", miejsce: "tors", natywny: "zelazo", glowny: "szary", lo: 0.148, hi: 0.753, reszta: "natywny" },
+        przeszywanica: { plik: "Przeszywanica2", miejsce: "tors", natywny: "len", glowny: "oba", lo: 0.3, hi: 0.914 },
         luska: { plik: "Luska", miejsce: "tors", natywny: "zelazo", glowny: "szary", lo: 0.144, hi: 0.754, reszta: "natywny" },
-        napiersnik: { plik: "Napiersnik", miejsce: "tors", natywny: "stal", glowny: "szary", lo: 0.229, hi: 0.979, reszta: "natywny" }
+        napiersnik: { plik: "Napiersnik2", miejsce: "tors", natywny: "stal", glowny: "szary", lo: 0.129, hi: 0.975, reszta: "natywny" },
+        brygantyna: { plik: "Brygantyna", miejsce: "tors", natywny: "stal", glowny: "cieply", lo: 0.099, hi: 0.631, reszta: "natywny" },
+        koszula: { plik: "Koszula", miejsce: "tors", wzor: true, glowny: "oba", lo: 0.3, hi: 0.935 },
+        koszula_odswietna: { plik: "KoszulaOdswietna", miejsce: "tors", wzor: true, glowny: "oba", akcent: "czerwony", lo: 0.3, hi: 0.98 },
+        kaftan: { plik: "Kaftan", miejsce: "tors", wzor: true, glowny: "szary", lo: 0.13, hi: 0.333, reszta: "natywny" },
+        kurta: { plik: "Kurta", miejsce: "tors", wzor: true, glowny: "cieply", lo: 0.116, hi: 0.504, reszta: "natywny" },
+        kozuszek: { plik: "Kozuszek", miejsce: "tors", wzor: true, glowny: "cieply", lo: 0.215, hi: 0.948, reszta: "natywny" },
+        fartuch: { plik: "Fartuch", miejsce: "tors", wzor: true, glowny: "cieply", lo: 0.121, hi: 0.676, reszta: "natywny" },
+        zupan: { plik: "Zupan", miejsce: "tors", wzor: true, glowny: "szary", lo: 0.116, hi: 0.235, reszta: "natywny" },
+        karwasze: { plik: "KarwaszeZ2", miejsce: "rece", natywny: "zelazo", glowny: "szary", lo: 0.148, hi: 0.871, reszta: "natywny" },
+        karwasze_skora: { plik: "KarwaszeSkora", miejsce: "rece", natywny: "skora", glowny: "cieply", lo: 0.115, hi: 0.578, reszta: "natywny" },
+        karwasze_plyta: { plik: "KarwaszePlyta", miejsce: "rece", natywny: "stal", glowny: "szary", lo: 0.109, hi: 0.879, reszta: "natywny" },
+        rekawice: { plik: "RekawiceSkorzane", miejsce: "rece", wzor: true, glowny: "cieply", lo: 0.125, hi: 0.573, reszta: "natywny" },
+        rekawice_pikowane: { plik: "RekawicePikowane", miejsce: "rece", natywny: "len", wzor: true, glowny: "oba", lo: 0.219, hi: 0.933 },
+        nagolenniki: { plik: "NagolennikiZ2", miejsce: "nogi", natywny: "zelazo", glowny: "szary", lo: 0.097, hi: 0.827, reszta: "natywny" },
+        nagolenniki_skora: { plik: "NagolennikiSkora", miejsce: "nogi", natywny: "skora", glowny: "cieply", lo: 0.132, hi: 0.369, reszta: "natywny" },
+        nagolenniki_plyta: { plik: "NagolennikiPlyta", miejsce: "nogi", natywny: "stal", glowny: "szary", lo: 0.107, hi: 0.796, reszta: "natywny" },
+        nogawice_pikowane: { plik: "NogawicePikowane", miejsce: "nogi", natywny: "len", wzor: true, glowny: "oba", lo: 0.131, hi: 0.914 },
+        spodnie: { plik: "SpodniePlocienne", miejsce: "nogi", wzor: true, glowny: "cieply", lo: 0.226, hi: 0.745, reszta: "natywny" },
+        spodnie_welniane: { plik: "SpodnieWelniane", miejsce: "nogi", wzor: true, glowny: "szary", lo: 0.102, hi: 0.248, reszta: "natywny" },
+        spodnie_skorzane: { plik: "SpodnieSkorzane", miejsce: "nogi", wzor: true, glowny: "cieply", lo: 0.095, hi: 0.282, reszta: "natywny" },
+        buty_okute: { plik: "ButyZ2", miejsce: "stopy", natywny: "zelazo", glowny: "szary", lo: 0.335, hi: 0.914, reszta: "natywny" },
+        buty_plyta: { plik: "ButyPlyta", miejsce: "stopy", natywny: "stal", glowny: "szary", lo: 0.314, hi: 0.927, reszta: "natywny" },
+        buty_skorzane: { plik: "ButySkorzane", miejsce: "stopy", wzor: true, glowny: "cieply", lo: 0.164, hi: 0.391, reszta: "natywny" },
+        buty_jezdzieckie: { plik: "ButyJezdzieckie", miejsce: "stopy", wzor: true, glowny: "szary", lo: 0.102, hi: 0.29, reszta: "natywny" },
+        buty_filcowe: { plik: "ButyFilcowe", miejsce: "stopy", wzor: true, glowny: "szary", lo: 0.199, hi: 0.408, reszta: "natywny" },
+        lapcie: { plik: "Lapcie", miejsce: "stopy", wzor: true, glowny: "cieply", lo: 0.098, hi: 0.746, reszta: "natywny" },
+        pas: { plik: "PasSkorzany", miejsce: "pas", wzor: true, glowny: "cieply", lo: 0.142, hi: 0.544, reszta: "natywny" },
+        pas_sakiewka: { plik: "PasSakiewka", miejsce: "pas", wzor: true, glowny: "cieply", lo: 0.14, hi: 0.411, reszta: "natywny" },
+        // (the cloak: whole, also outside the figure - in front of him where it covers the body, behind him where it hangs)
+        plaszcz: { plik: "Plaszcz", miejsce: "plaszcz", wzor: true, glowny: "cieply", lo: 0.121, hi: 0.302, reszta: "natywny" },
+        plaszcz_futro: { plik: "PlaszczFutro", miejsce: "plaszcz", wzor: true, glowny: "cieply", lo: 0.101, hi: 0.361, reszta: "natywny" },
+        peleryna: { plik: "Peleryna", miejsce: "plaszcz", wzor: true, glowny: "oba", lo: 0.348, hi: 0.845 }
     };
-    // (the helmets: the picture's frame w x h, anchor = the top of the hair - tools/ubior/zbroja_pl.py prints them)
+    // (the helmets: the picture's frame w x h, anchor = the top of the hair - tools/ubior/zbroja_pl.py prints them; czapka: a hat or a cap
+    // - hidden lying and rolling, like the drawn ones)
     const PL_HELM = {
         kaptur: { plik: "Kaptur", w: 26, h: 24, anchor: [12, 2], natywny: "skora", glowny: "cieply", lo: 0.188, hi: 0.413, reszta: "natywny" },
         kapalin: { plik: "Kapalin", w: 28, h: 24, anchor: [13, 3], natywny: "zelazo", glowny: "szary", lo: 0.149, hi: 0.809, reszta: "natywny" },
-        // (the second stage: the coif - quilted for the soft materials, mail for the metals -, the nasal, the open helm, the Order's helm)
-        czepiec: { plik: "Czepiec", w: 26, h: 25, anchor: [12, 2], natywny: "len", glowny: "oba", lo: 0.52, hi: 0.924 },
+        czepiec: { plik: "CzepiecPikowany", w: 26, h: 25, anchor: [12, 2], natywny: "len", glowny: "oba", lo: 0.369, hi: 0.957 },
         czepiec_kolczy: { plik: "CzepiecKolczy", helm: "czepiec", w: 24, h: 24, anchor: [11, 2], natywny: "zelazo", glowny: "szary", lo: 0.205, hi: 0.809, reszta: "natywny" },
-        nosal: { plik: "Nosal", w: 24, h: 28, anchor: [11, 6], natywny: "zelazo", glowny: "szary", lo: 0.227, hi: 0.93, reszta: "natywny" },
-        otwarty: { plik: "Otwarty", w: 24, h: 25, anchor: [11, 3], natywny: "stal", glowny: "szary", lo: 0.189, hi: 0.979, reszta: "natywny" },
-        zakonny: { plik: "Zakonny", w: 24, h: 25, anchor: [11, 3], natywny: "zelazo", glowny: "szary", lo: 0.271, hi: 0.848, reszta: "natywny" }
+        nosal: { plik: "SpangenZ2", w: 24, h: 24, anchor: [11, 3], natywny: "zelazo", glowny: "szary", lo: 0.195, hi: 0.827, reszta: "natywny" },
+        otwarty: { plik: "Otwarty2", w: 28, h: 25, anchor: [14, 3], natywny: "stal", glowny: "szary", lo: 0.152, hi: 0.99, reszta: "natywny" },
+        otwarty_skora: { plik: "HelmSkorzany", helm: "otwarty", w: 24, h: 23, anchor: [11, 2], natywny: "skora", glowny: "cieply", lo: 0.102, hi: 0.578, reszta: "natywny" },
+        zakonny: { plik: "Zakonny", w: 24, h: 25, anchor: [11, 3], natywny: "zelazo", glowny: "szary", lo: 0.271, hi: 0.848, reszta: "natywny" },
+        garnczkowy: { plik: "Zakonny", w: 24, h: 25, anchor: [11, 3], natywny: "zelazo", glowny: "szary", lo: 0.271, hi: 0.848, reszta: "natywny" },
+        kapelusz: { plik: "Kapelusz", w: 34, h: 20, anchor: [16, 4], czapka: true, wzor: true, glowny: "cieply", lo: 0.156, hi: 0.746, reszta: "natywny" },
+        czapka: { plik: "Czapka", w: 28, h: 20, anchor: [13, 4], czapka: true, wzor: true, glowny: "cieply", lo: 0.181, hi: 0.385, reszta: "natywny" },
+        chusta: { plik: "Chusta", w: 28, h: 23, anchor: [13, 2], czapka: true, wzor: true, glowny: "cieply", lo: 0.13, hi: 0.377, reszta: "natywny" }
     };
     for (const [k, h] of Object.entries(PL_HELM)) PICTURES["helmpl_" + k] = { file: "Ubior_HelmPL_" + h.plik, w: h.w, h: h.h, anchor: h.anchor, views: 8,
-        cut: h.h, template: false, helm: h.helm || k, pl: h };
-    // the PixelLab picture of a helmet's kind in a material (the coif: mail for the metals, quilted for the rest); null - the drawn one
-    const plHelmOf = (k, m) => (k === "czepiec" && METAL[m] && PL_HELM.czepiec_kolczy ? "helmpl_czepiec_kolczy" : PL_HELM[k] ? "helmpl_" + k : null);
+        cut: h.h, template: false, helm: h.helm || k, pl: h, czapka: !!h.czapka };
+    // the PixelLab picture of a helmet's kind in a material (the coif: mail for the metals, quilted for the rest; the open helm: hardened
+    // leather for the soft ones); null - the drawn one
+    const plHelmOf = (k, m) => (k === "czepiec" && METAL[m] && PL_HELM.czepiec_kolczy ? "helmpl_czepiec_kolczy"
+        : k === "otwarty" && !METAL[m] && PL_HELM.otwarty_skora ? "helmpl_otwarty_skora" : PL_HELM[k] ? "helmpl_" + k : null);
+    // the shape of the bracers, the greaves, the shod boots by the material: leather, iron / bronze (Z2), steel / the Order's (plate)
+    const PLATE = { stal: true, zakon: true };
+    const SOFT = { len: true, welna: true, jedwab: true };
+    const plLimb = (base, m) => (PLATE[m] ? base + "_plyta" : METAL[m] ? base : SOFT[m] ? (base === "karwasze" ? "rekawice_pikowane" : "nogawice_pikowane") : base + "_skora");
+    // the clothes (Ubior_Data.js WZORY) on PixelLab: the key's beginning -> the PL kind (a head thing: its overlay -> a PL picture)
+    // (2026-11-17 the new things of Ubior_Data.js 284-299: koszula_przewiewna, portki_latane, rekawiczki_welniane, chodaki, the belts, the
+    // cloaks - each on the nearest family; kozuszek, fartuch_kowalski, zupan_sukienny, the fur cloak and the linen cape - their own)
+    const PL_CLOTHES = [[/^koszula_lniana|^koszula_przewiewna/, "koszula"], [/^kaftan_/, "kaftan"], [/^kurta_/, "kurta"], [/^kozuszek/, "kozuszek"],
+        [/^fartuch/, "fartuch"], [/^zupan/, "zupan"], [/^spodnie_welniane/, "spodnie_welniane"], [/^portki/, "spodnie"], [/^chodaki/, "buty_filcowe"],
+        [/^rekawiczki/, "rekawice"], [/^pas_ladownica/, "pas_sakiewka"], [/^plaszcz_futrzany/, "plaszcz_futro"], [/^plaszcz_lniany/, "peleryna"],
+        [/^spodnie_skorzane/, "spodnie_skorzane"],
+        [/^spodnie_/, "spodnie"], [/^lapcie/, "lapcie"], [/^buty_filc/, "buty_filcowe"], [/^buty_czarne/, "buty_jezdzieckie"],
+        [/^buty_(?!okute)/, "buty_skorzane"], [/^rekawice_pik/, "rekawice_pikowane"], [/^rekawice_/, "rekawice"], [/^nogawice_pik/, "nogawice_pikowane"],
+        [/^koszula_odswietna/, "koszula_odswietna"], [/^pas_sakiewka/, "pas_sakiewka"], [/^pas_skorzany/, "pas"], [/^pas_/, "pas"],
+        [/^(?:zbroja_)?brygantyna/, "brygantyna"], [/^plaszcz/, "plaszcz"]];
+    const PL_HAT = { kapelusz: "helmpl_kapelusz", czapka: "helmpl_czapka", chusta: "helmpl_chusta" };
     function armourPatterns() {
         const out = {}, akc = (kind, m) => kind === "jasny" ? MATERIALY[m].rampa.slice(3) : kind ? MATERIALY[kind].akcent : MATERIALY[m].akcent;
         for (const [k, h] of Object.entries(HELMY)) {
@@ -260,10 +333,10 @@
                 pl: PL[k] ? k : null };
         }
         for (const m of KARWASZE) out["karwasze_" + m] = { miejsce: "rece", nakladka: "karwasze", rampa: MATERIALY[m].rampa, material: m,
-            rampaDloni: METAL[m] ? MATERIALY.skora.rampa : null, pl: "karwasze" };
+            rampaDloni: METAL[m] ? MATERIALY.skora.rampa : null, pl: plLimb("karwasze", m) };
         for (const m of NAGOLENNIKI) out["nagolenniki_" + m] = { miejsce: "nogi", nakladka: "nagolenniki", rampa: MATERIALY[m].rampa, material: m, polysk: MATERIALY[m].polysk || 0,
-            pl: "nagolenniki" };
-        for (const m of OKUTE) out["buty_okute_" + m] = { miejsce: "stopy", nakladka: "buty", rampa: MATERIALY.skora.rampa, okucie: MATERIALY[m].rampa, material: m, pl: "buty_okute" };
+            pl: plLimb("nagolenniki", m) };
+        for (const m of OKUTE) out["buty_okute_" + m] = { miejsce: "stopy", nakladka: "buty", rampa: MATERIALY.skora.rampa, okucie: MATERIALY[m].rampa, material: m, pl: PLATE[m] ? "buty_plyta" : "buty_okute" };
         return out;
     }
     Object.assign(WZORY_GRAFIKI, armourPatterns());
@@ -291,7 +364,8 @@
         for (const tab of [theirs, armour]) {
             if (!tab) continue;
             for (const k of Object.keys(tab)) {
-                const w = theirs[k] || {}, mine = out[k] || {};
+                // (the armour's own entries here win - its looks are drawn here; a key only Ubior_Data.js has is taken from it)
+                const w = (tab === armour ? (out[k] ? {} : tab[k]) : tab[k]) || {}, mine = out[k] || {};
                 const rampa = w.rampa || w.ramp || w.kolory || mine.rampa;
                 out[k] = Object.assign({}, mine, w, { rampa, nakladka: kindOf(w.nakladka || w.overlay) || mine.nakladka, miejsce: w.miejsce || w.slot || mine.miejsce });
             }
@@ -310,6 +384,9 @@
             if (Array.isArray(w.rampaAkcentu)) w._akcent = w.rampaAkcentu.map(hex);
             if (Array.isArray(w.rampaDloni)) w._hands = w.rampaDloni.map(hex);
             if (Array.isArray(w.okucie)) w._iron = w.okucie.map(hex);
+            // (2026-11-17: the clothes on PixelLab - by the key's beginning; a hat / a cap: its PixelLab picture)
+            if (!w.pl) { const hit = PL_CLOTHES.find(([re, pk]) => re.test(k) && PL[pk]); if (hit) w.pl = hit[1]; }
+            if (w.nakladka && PL_HAT[w.nakladka]) w.plHat = PL_HAT[w.nakladka];
         }
         patternsFrom = theirs;
         patternsCache = out;
@@ -463,12 +540,20 @@
     // ---- the PixelLab armour in another material (PL, PL_HELM): null - its own colours; else a colour -> colour of the material
     let plOff = false;   // (Ubior.pl(false): the old look, for comparing)
     const plLuts = new Map();
-    function plLut(def, material) {
-        if (!material || material === def.natywny || !MATERIALY[material]) return null;
-        const ck = def.plik + ":" + material;
+    // (2026-11-17: a pattern without a material - the clothes - through its own ramp when the kind says wzor; w: the pattern)
+    function plLut(def, w) {
+        const material = w ? w.material : null;
+        let main, acc, ck;
+        if (material && MATERIALY[material]) {
+            if (material === def.natywny) return null;
+            const M = MATERIALY[material];
+            main = M.rampa.map(hex); acc = (M.akcent || M.rampa.slice(3)).map(hex); ck = def.plik + ":" + material;
+        } else if (def.wzor && w && w._ramp) {
+            main = w._ramp; acc = w._haft || w._akcent || main; ck = def.plik + "#" + w.key;
+        } else return null;
         let f = plLuts.get(ck);
         if (f) return f;
-        const M = MATERIALY[material], main = M.rampa.map(hex), acc = (M.akcent || M.rampa.slice(3)).map(hex), seen = new Map();
+        const seen = new Map();
         const at = (ramp, l, lo, hi) => ramp[Math.round(Math.max(0, Math.min(1, (l - lo) / Math.max(0.01, hi - lo))) * (ramp.length - 1))];
         f = (r, g, b) => {
             const k = (r << 16) | (g << 8) | b;
@@ -476,7 +561,9 @@
             if (c) return c;
             const l = luma(r, g, b), mx = Math.max(r, g, b), mn = Math.min(r, g, b);
             const warm = mx > 0 && (mx - mn) / mx >= 0.18 && r >= b;
+            const red = def.akcent === "czerwony" && mx > 0 && (mx - mn) / mx >= 0.42 && r > g + 45 && r > b + 45;
             if (l <= 0.09) c = [r, g, b];                                              // (the outline)
+            else if (red) c = w && w._haft ? at(w._haft, l, 0.12, 0.5) : [r, g, b];    // (the red embroidery: the pattern's own)
             else if (def.glowny === "oba" || (def.glowny === "cieply") === warm) c = at(main, l, def.lo, def.hi);
             else if (def.reszta === "akcent") c = at(acc, l, def.lo2 || 0.3, def.hi2 || 0.9);
             else c = [r, g, b];
@@ -488,8 +575,10 @@
     }
     // the layer of a PL kind on a sheet (its mask's file tells the sheet without its weapon): the picture, null while it loads, false - none
     const plFile = (def, name, maskFile) => "Ubior_PL_" + def.plik + "_" + (maskFile && maskFile.indexOf("Ubior_Maska_BezBroni_") === 0 ? "BezBroni_" + name : name);
-    const PL_PART = { tors: P.koszula, nogi: P.spodnie, stopy: P.stopy, rece: P.skora };
-    const PL_ORDER = ["tors", "nogi", "stopy", "rece"];   // (the bracers last: over the jerkin's sleeves)
+    const PL_PART = { tors: P.koszula, pas: P.pas, nogi: P.spodnie, stopy: P.stopy, rece: P.skora, plaszcz: P.koszula };
+    // (the bracers over the jerkin's sleeves; the belt over the torso; the cloak last - over the armour, behind the body where it hangs)
+    const PL_ORDER = ["tors", "pas", "nogi", "stopy", "rece", "plaszcz"];
+    const BEHIND = 252;   // (a layer's pixel behind the body - the cloak, the shield: put only where the frame is empty)
     const plOf = w => (!plOff && w && w.pl && PL[w.pl]) || null;
 
     // ---- a head not over the body: the angle of the picture (0 = upright, the way to the head from the body, snapped to a quarter when
@@ -943,7 +1032,7 @@
         const [frame, mirror] = views[turn ? turn.view : ci.dir] || views.S;
         const cs = Math.cos(-th), sn = Math.sin(-th), A = def.anchor, fw = def.w, fh = def.h, pd = pic.data, pw = pic.w, fx = frame * fw;
         const ramp = w._ramp, n = ramp.length, acc = w._akcent || ramp.slice(-4), tex = FAKTURY[w.faktura] || null;
-        const plDef = def.pl || null, plL = plDef ? plLut(plDef, w.material) : null;
+        const plDef = def.pl || null, plL = plDef ? plLut(plDef, w) : null;
         // (a PixelLab picture: the lowest solid row of each column of this view - the helmet's lower edge; a column without any: the
         // nearest one's)
         let plBottom = null;
@@ -1187,10 +1276,18 @@
         // the trousers / the feet / the forearm
         const plDone = {};
         for (const { place, w, pdef, pic } of plLay) {
-            const lut = plLut(pdef, w.material), pd = pic.data, part = PL_PART[place];
+            const lut = plLut(pdef, w), pd = pic.data, part = PL_PART[place];
             for (let i = 0, N = W * H; i < N; i++) {
                 const p = i * 4;
                 if (!pd[p + 3]) continue;
+                if (pd[p + 3] === BEHIND) {
+                    if (d[p + 3]) continue;
+                    const c = lut ? lut(pd[p], pd[p + 1], pd[p + 2]) : null;
+                    if (c) { d[p] = c[0]; d[p + 1] = c[1]; d[p + 2] = c[2]; } else { d[p] = pd[p]; d[p + 1] = pd[p + 1]; d[p + 2] = pd[p + 2]; }
+                    d[p + 3] = 255;
+                    parts[i] = P.inne;
+                    continue;
+                }
                 // (alpha 254: the state's tunic under the breastplate - as it is in every material)
                 const c = lut && pd[p + 3] === 255 ? lut(pd[p], pd[p + 1], pd[p + 2]) : null;
                 if (c) { d[p] = c[0]; d[p + 1] = c[1]; d[p + 2] = c[2]; } else { d[p] = pd[p]; d[p + 1] = pd[p + 1]; d[p + 2] = pd[p + 2]; }
@@ -1208,30 +1305,32 @@
         }
         // 2. the overlays, cell by cell
         const head = o.glowa && Wz[o.glowa], feet = o.stopy && Wz[o.stopy], back = o.plecy && Wz[o.plecy], belt = o.pas && Wz[o.pas];
-        const helm = head && PICTURES[head.nakladka] && PICTURES[head.nakladka].helm ? head : null;
-        // (a PixelLab helmet with Ubior.pl(false): the old drawn picture of its kind)
-        const headKind = head ? (plOff && PICTURES[head.nakladka] && PICTURES[head.nakladka].pl ? "helm_" + PICTURES[head.nakladka].helm : head.nakladka) : null;
+        // (a PixelLab helmet with Ubior.pl(false): the old drawn picture of its kind; a hat / a cap with PixelLab on: its PixelLab picture)
+        const headKind = head ? (plOff && PICTURES[head.nakladka] && PICTURES[head.nakladka].pl ? "helm_" + PICTURES[head.nakladka].helm
+            : !plOff && head.plHat && pictureOf(PICTURES[head.plHat].file) ? head.plHat : head.nakladka) : null;
+        // (a hat drawn by PixelLab hides lying and rolling, like the drawn one; a helmet turns with the head)
+        const helm = head && PICTURES[headKind] && PICTURES[headKind].helm ? head : null, hatPL = !!(helm && PICTURES[headKind].czapka);
         const rep = [];
         for (const ci of cells) {
             if (greaves && !plDone.nogi) (ci.upright ? greaveBand(d, parts, W, ci, cell, greaves) : boots(d, parts, W, ci, cell, greaves, { rows: 7, feet: false, shine: !!greaves.polysk }));
             if (feet && feet.nakladka === "buty" && feet._ramp && !plDone.stopy) boots(d, parts, W, ci, cell, feet);
             if (ci.none || !ci.upright) {
                 // (lying, rolling: a helmet turns with the head; the hats and the back things hide)
-                if (helm && !ci.none && ci.turn) {
+                if (helm && !hatPL && !ci.none && ci.turn) {
                     const r = helmet(d, parts, W, ci, cell, helm, headKind);
                     rep.push(Object.assign({ c: ci.c, r: ci.r, dir: ci.dir, x: ci.turn.ax, y: ci.turn.ay, hx: ci.hx, hy: ci.hy, top: ci.top, fixed: false, kind: headKind }, r || {}));
                 } else if (head || back) rep.push({ c: ci.c, r: ci.r, dir: ci.dir, none: ci.none, off: true });
                 continue;
             }
-            if (belt) buckle(d, parts, W, ci, cell, belt);
-            if (belt && belt.nakladka === "sakiewka") pouch(d, parts, W, ci, cell, belt);
+            if (belt && !plDone.pas) buckle(d, parts, W, ci, cell, belt);
+            if (belt && belt.nakladka === "sakiewka" && !(plDone.pas && belt.pl === "pas_sakiewka")) pouch(d, parts, W, ci, cell, belt);
             if (back && back.nakladka === "plecak") backpack(d, parts, W, ci, cell, back);
             if (back && back.nakladka === "torba") bag(d, parts, W, ci, cell, back);
             if (head) {
                 const kind = headKind;
                 let r = null;
-                if (kind === "kapelusz" || kind === "czapka") r = headPicture(d, parts, W, ci, cell, head, kind);
-                else if (helm) r = helmet(d, parts, W, ci, cell, head, kind);
+                if (helm) r = helmet(d, parts, W, ci, cell, head, kind);
+                else if (kind === "kapelusz" || kind === "czapka") r = headPicture(d, parts, W, ci, cell, head, kind);
                 else if (kind === "chusta" && head._ramp) r = kerchief(d, parts, W, ci, cell, head);
                 else if (kind === "opaska" && head._ramp) r = headband(d, parts, W, ci, cell, head);
                 rep.push(Object.assign({ c: ci.c, r: ci.r, dir: ci.dir, x: ci.ax, y: ci.ay, hx: ci.hx, hy: ci.hy, top: ci.top, fixed: ci.fixed, kind }, r || {}));
@@ -1307,23 +1406,40 @@
             const w = o[place] && Wz[o[place]], pd = w && w.nakladka && PICTURES[w.nakladka];
             if (pd && !pictureOf(pd.file)) return null;
             if (pd && pd.pl && plOff && !pictureOf(PICTURES["helm_" + pd.helm].file)) return null;
-            // (a PixelLab layer still loading: wait; missing - false: the old way)
-            const pdef = plOf(w);
-            if (pdef && pictureOf(plFile(pdef, name, maskFile)) === null) return null;
         }
-        for (const { L, key } of lay || []) if (L.ready && !L.ready(name, key)) return null;
+        // (a layer still loading: wait - a soft one, the shield on the arm: left out for now)
+        for (const { L, key } of lay || []) if (L.ready && !L.ready(name, key) && !L.soft) return null;
+        // (2026-11-17: the PixelLab pictures still loading - left out for now: the clothes' ramps, the drawn armour show, the sheet is
+        // dressed at once and again in full when they are in - sheetFor; missing ones - false: the old way for good)
+        const partial = plPending(name, o, lay, maskFile);
         const t0 = performance.now();
         const res = compose(name, base, mask, o, lay);
         const cv = res.cv;
         cv._ubiorStrip = res.strip;
-        stats.push({ sheet: name, outfit: k, ms: +(performance.now() - t0).toFixed(2), w: src.width, h: src.height });
+        cv._partial = partial;
+        cv._maskFile = maskFile;
+        stats.push({ sheet: name, outfit: k, ms: +(performance.now() - t0).toFixed(2), w: src.width, h: src.height, partial });
         if (stats.length > 400) stats.shift();
+        if (partial) return cv;
         kept.set(ck, { cv, src, used: Graphics.frameCount });
         if (kept.size > KEEP) {
             const old = [...kept.entries()].sort((a, b) => a[1].used - b[1].used);
             for (const [key] of old.slice(0, kept.size - KEEP)) kept.delete(key);
         }
         return cv;
+    }
+    // the PixelLab pictures of the outfit (and the soft layers) on a sheet still loading
+    function plPending(name, o, lay, maskFile) {
+        const Wz = patterns();
+        for (const place of ORDER) {
+            const w = o[place] && Wz[o[place]];
+            if (!w) continue;
+            if (w.plHat && !plOff && pictureOf(PICTURES[w.plHat].file) === null) return true;
+            const pdef = plOf(w);
+            if (pdef && pictureOf(plFile(pdef, name, maskFile)) === null) return true;
+        }
+        for (const { L, key } of lay || []) if (L.soft && L.ready && !L.ready(name, key)) return true;
+        return false;
     }
     // the sheet to show for `name` now (null: the plain one - not ready yet, without HeroLook.js, nothing ever worn on this sheet)
     function sheetFor(name, folder) {
@@ -1343,6 +1459,8 @@
             L.bmp.smooth = src.smooth;
             L.bmp._ubiorStrip = { bmp: null, on: false, cell: def.cell };
         }
+        // (dressed without its PixelLab pictures while they loaded: dressed again in full once they are in - checked every 6th frame)
+        if (L.partial && L.key === k && !(Graphics.frameCount % 6) && !plPending(name, m.o, lay, L.maskFile)) L.key = null;
         if (L.key !== k || L.src !== src) {
             const cv = empty ? (src._canvas || src._image) : composed(name, src, m.o, k, lay);
             if (!cv) return L.key === null ? null : L.bmp;   // (a picture of an overlay still loading: the last look a frame longer)
@@ -1361,6 +1479,8 @@
             st.on = !!sv;
             L.key = k;
             L.src = src;
+            L.partial = !empty && !!cv._partial;
+            L.maskFile = empty ? null : cv._maskFile || null;
             L.bmp._ubiorDressed = !empty;
         }
         return L.bmp;
@@ -1501,8 +1621,8 @@
     // the helmets (tools/ubior/helmy.py): the hood, the coif and the great helm take all the hair they do not cover - but the fringe in
     // the hood's and the coif's opening (an ellipse: cx, cy, rx, ry)
     const BUST_OPEN = { helm_kaptur: [155, 142, 51, 60], helm_czepiec: [155, 142, 48, 58] };
-    for (const [k, cut] of Object.entries({ kaptur: 350, czepiec: 350, kapalin: 108, otwarty: 98, nosal: 98, zakonny: 350 })) {
-        BUST_HEAD["helm_" + k] = "Ubior_Bust_Helm_" + k[0].toUpperCase() + k.slice(1);
+    for (const [k, cut] of Object.entries({ kaptur: 350, czepiec: 350, kapalin: 108, otwarty: 98, nosal: 98, zakonny: 350, garnczkowy: 350 })) {
+        BUST_HEAD["helm_" + k] = "Ubior_Bust_Helm_" + (HELMY[k].plik || k[0].toUpperCase() + k.slice(1));
         BUST_CUT["helm_" + k] = cut;
     }
     // (the PixelLab helmets: the bust keeps the drawn picture of the kind)
@@ -1617,6 +1737,18 @@
         }
     }
 
+    // (2026-11-17) one sheet's pictures for what is worn now - its mask, the PixelLab layers (bez: the sheet without its weapon) - loaded
+    // ahead (Ubior_Bron.js: the swing of the weapon in hand when the combat mode starts - the first blow dressed at once)
+    function preloadSheet(name, bez) {
+        if (!SHEETS[name] || !window.$gameSystem) return;
+        const o = outfitNow(), Wz = patterns(), mf = bez ? "Ubior_Maska_BezBroni_" + name : null;
+        _loadSystem.call(ImageManager, mf || "Ubior_Maska_" + name);
+        for (const place of PL_ORDER) {
+            const d = plOf(o[place] && Wz[o[place]]);
+            if (d) _loadSystem.call(ImageManager, plFile(d, name, mf));
+        }
+    }
+
     // ---- frames where the head thing sits badly: no hair found, cut by the cell's edge, its place jumps (more than the head does),
     // hardly over the hair; and the ones where it is hidden (lying, upside down)
     function problems(name) {
@@ -1651,7 +1783,9 @@
         patterns, wear, takeOff, set,
         outfit: () => outfitNow(), sheet: name => (SHEETS[name] ? sheetFor(name, SHEETS[name].folder) || plain(name) : null), tryOn, itemLook, cellWithHead,
         bust: () => bustFor() || _loadPicture.call(ImageManager, BUST), bustKey: () => (bustLive ? bustLive.key : null),
-        key: () => keyOf(outfitNow()), liveKey: name => (live[name] ? outfitPart(live[name].key) : null), liveFullKey: name => (live[name] ? live[name].key : null),
+        // (a live sheet dressed without its PixelLab pictures yet: its key ends with "~" - the same look once they are in)
+        key: () => keyOf(outfitNow()), liveKey: name => (live[name] && live[name].key !== null ? outfitPart(live[name].key) + (live[name].partial ? "~" : "") : null),
+        liveFullKey: name => (live[name] && live[name].key !== null ? live[name].key + (live[name].partial ? "~" : "") : null),
         sheetKey: name => keyOf(outfitNow()) + layerKey(layersOn(name)), stats: () => stats.slice(), problems,
         cells: name => (cellCache[name] ? cellCache[name].map(c => Object.assign({}, c)) : null),
         // (for Ubior_Bron.js: its layer, the masks, the pictures, the ramps; the strip of a live sheet)
@@ -1659,7 +1793,7 @@
         strip: name => (live[name] && live[name].bmp._ubiorStrip.on ? live[name].bmp._ubiorStrip.bmp : null), Sprite_UbiorHead,
         changed, clear: () => { kept.clear(); bustKept.clear(); for (const k of Object.keys(live)) live[k].key = null; if (bustLive) bustLive.key = null; changed(); },
         // (2026-10-23: the armour from PixelLab - PL, PL_HELM; pl(false): the old look, for comparing - pl() says which is on)
-        PL, PL_HELM, plFile,
+        PL, PL_HELM, plFile, preloadSheet,
         pl: on => { if (on !== undefined) { plOff = !on; kept.clear(); for (const k of Object.keys(live)) live[k].key = null; changed(); } return !plOff; } };
     window.Ubior = T && T.register ? T.register(PLUGIN, api) : api;
 })();

@@ -1,0 +1,343 @@
+# Teksty wątku W18 „Wesele w Złotym Kuflu” (wtyczki Wesele_Data.js, Wesele.js, Wesele_Gry.js) - docs/zadania_nowe/wesele.md.
+# Woźnica Wojciech i szwaczka Dorota Igła biorą ślub w tawernie. Ton: pogodny i śmieszny. Bohater jest nastolatkiem: dorośli mówią do
+# niego „chłopcze”, „dzieciaku”. „> ” - mówi bohater; bez tego - postać, z którą się rozmawia. {nazwa} - wstawia gra.
+
+# ======================================================================== zadanie W18 (dziennik: FABUŁA)
+zadania.W18.title = Wesele w Złotym Kuflu
+zadania.W18.where = tawerna (sala, kuchnia, piętra), rynek, piekarnia, kapliczka brata Kleofasa
+zadania.W18.when = dni 19-22, poranek dnia 23
+zadania.W18.desc = Woźnica Wojciech i szwaczka Dorota biorą ślub - i chcą wesela w „Złotym Kuflu”. Borgar nie umie odmówić, więc cały ciężar spada na ciebie: jedzenie, muzyka, ozdoby, goście przy stołach, ksiądz.
+zadania.W18.fail.text = Wesele odbyło się bez ciebie: stoły ustawił Borgar, a pan młody zniknął i sam wrócił rano.
+zadania.W18.steps.0.text = Borgar ma do ciebie sprawę (przy barze, dni 19-20, 9-18): „Wesele?”.
+zadania.W18.steps.1.text = Wesele odbędzie się {dzien} dnia 22, o 15:00. Lista Borgara: {lista}
+zadania.W18.steps.2.text = Ślub i uczta: dzień 22, od 15:00, w sali tawerny. Ślub, toast, trzy dania z kuchni na stoły (17:00, 18:30, 20:00), pierwszy taniec.
+zadania.W18.steps.3.text = Pan młody zniknął po toaście, a w sali wybuchła bójka. Uspokój gości.
+zadania.W18.steps.4.text = Znajdź Wojciecha: browar, kuchnia, sala gier, palarnia, piętro gości, taras apartamentów. Szukaj do 4:00. Ślady: {slady}.
+zadania.W18.steps.5.text = Rano na tarasie apartamentów (dzień 23, 6-12): pojednanie, pierścień na palec, napiwki.
+
+# słowa kroków
+kroki.lista.jedzenie = jedzenie ({dania}/3 dania, tort: {tort})
+kroki.lista.muzyka = muzyka Melii ({muzyka})
+kroki.lista.ozdoby = ozdoby sali ({ozdoby})
+kroki.lista.goscie = goście (plan stołów: {plan}, plotki {plotki}/4)
+kroki.lista.ksiadz = uroczystość ({ksiadz})
+kroki.tak = zrobione
+kroki.nie = jeszcze nie
+kroki.sam = zrobione, ale po swojemu
+kroki.dzien.dzis = dziś
+kroki.dzien.za = za {n} dni
+
+# ======================================================================== Borgar: zlecenie
+temat.borgar = Borgarze, coś ci chodzi po głowie?
+[borgar.prosba]
+Chłopcze. Siadaj. Nie, stój, bo jeszcze uciekniesz. Woźnica Wojciech i szwaczka Dorota biorą ślub. Za trzy dni. U mnie.
+„W Złotym Kuflu, bo gdzie indziej?” - powiedzieli, a ja nie umiem odmówić. Ty umiesz coś zorganizować. Wesele, chłopcze.
+
+borgar.opcja.tak = Dobra, zajmę się.
+borgar.opcja.co = Co to znaczy „zajmę się”?
+borgar.opcja.nie = Nie mam czasu.
+borgar.co = Jedzenie, muzyka Melii, ozdoby sali, goście przy stołach tak, żeby rody nie wylały sobie zupy na głowy, i ksiądz. Pięć punktów, każdy pilniejszy od poprzedniego.
+borgar.nie = Rozumiem. Zrobię to sam. Stoły ustawię jak popadnie i będziemy się modlić. Bez ciebie to będzie wesele skromne. I oby nikt się nie obraził.
+[borgar.tak]
+Wiedziałem. Masz tu dwie pochodnie do świec i listę prac. Jedzenie, muzyka, ozdoby, goście, uroczystość. Ślub w dniu 22, o piętnastej, w sali. Powodzenia, chłopcze.
+A, i nie pytaj mnie o nic. Ja nie lubię pytać i nie lubię odpowiadać.
+
+
+# ======================================================================== Melia: pieśni
+temat.regular = Wesele Wojciecha i Doroty.
+melia.obrazona = Zagram dwie pieśni i ani jednej więcej. Nie życzę sobie, żeby traktowano moje struny jak kocioł Borgara.
+melia.gotowe = Zagram, co ustaliliśmy. Toast, taniec, kołysanka. Nie zapominaj o strunach, chłopcze. I o tym, że stoję tu od wczoraj.
+melia.struny = Z takimi strunami to ja mogę najwyżej Borgarowi do kotła zagrać. Znajdź mi nowe. Ignac ma ich pełno, wiem.
+melia.intro = Wesele! Ach. Pieśni mam pięć. Wybierz trzy: toast, taniec i kołysankę. Ale uważaj, jedna jest na nic.
+melia.toast = Na toast: co zagram?
+melia.taniec = Na pierwszy taniec: co zagram?
+melia.kolysanka = Na koniec, kołysanka dla gości: co zagram?
+melia.smutna = To na pogrzeb, dziecko. Nie na wesele. Wybierz coś, od czego ludzie nie płaczą w zupę.
+melia.opcja.pozniej = Wrócę do tego.
+piesn.kufel = „Kufel i rumianek” - wesoła
+piesn.wianek = „Wianek z polnych kwiatów” - czuła
+piesn.mlyn = „Dzień, w którym ruszył młyn” - taneczna
+piesn.kowal = „Pieśń o wiernym kowalu” - marszowa
+piesn.prom = „Gdy odpłynął ostatni prom” - smutna
+melia.strunyPyta = Struny. Osiem złotych u Ignaca i dostaniesz je wieczorem na stole. Albo ja zagram na kotle.
+melia.opcja.kup = Kupię ci struny ({cena} G).
+melia.strunyDzieki = Dobry z ciebie chłopak. Nawet jak nie pytasz.
+melia.probaStart = No to próba. Cisza, proszę!
+melia.piesnProba.1 = Pieśń na toast.
+melia.piesnProba.2 = A na taniec? To wiruje, kochana.
+melia.piesnProba.3 = Kołysanka. Ambroży już śpi.
+melia.proba.koniec = Gotowe. Zagram, co zagram. Reszta zależy od ciebie.
+
+# ======================================================================== Hanka: tort
+hanka.zamowienie = Tort weselny? Z miodem i jagodami? Przynieś dwa miody i trzy jagody, mąkę mam od siebie. Jutro będzie.
+hanka.zamowione = Zamówione. Wpadnij jutro rano po tort.
+hanka.czeka = Tort piecze się. Jak się nie pali, to jutro rano.
+hanka.odbior = Tort gotowy. Nie ruszaj paluchami, bo Borgar się rozpłacze.
+hanka.brak = Tort weselny? Dla Wojciecha? Dla niego zrobię, ale potrzebuję dwóch miodów i trzech jagód. Mąkę dam sama.
+hanka.placek = A jak nie przyniesiesz, dostaniesz placek weselny z tego, co mam. Wiesz, jak to jest.
+
+# ======================================================================== Halina: wianki
+halina.potrzeba = Wianki na wesele? Z ziół i polnych kwiatów? Przynieś mi sześć pęków ziół, upleciemy sześć wianków. Zwiędłe nie pasują.
+halina.plecie = Sześć pęków. No to plotę. Mój Leon zawsze mówił, że wianek to jak małżeństwo: im więcej kwiatków, tym mniej widać, jak się trzyma.
+halina.dzieki = Gotowe. Sześć wianków. Powieś je w sali, tylko nie na tej ścianie, gdzie wieje.
+halina.gotowe = Wianki już masz. Powieś je w sali, wszędzie, gdzie żółty romb.
+
+# ======================================================================== Dorota: szarfy i plotka
+dorota.szarfy = Szarfy? Mam cztery, z własnych resztek. Weź. Mówiłam Wojciechowi, że wesele to nie bitwa, ale on chciał flagi.
+dorota.rody = Rody? Mój i jego? Szwaczki i woźnice, chłopcze, nikt nie siada z nikim. Wiesia z rodziny Wojciecha obraziła Basię, a Marcin to wuj Wojciecha, który nie słucha. Usadź ich osobno, a będziesz bohaterem.
+dorota.nic = Wszystko u mnie dobrze. To znaczy, nic dobrze nie jest, ale będzie.
+
+# ======================================================================== Kleofas i sołtys
+kleofas.prosba = Brat Kleofas. Wesele Wojciecha i Doroty, dzień dwudziesty drugi, o piętnastej, w sali tawerny. Kaplica ma dziurawy dach, jak powiedział Borgar, więc: czy zszedłbyś z klifu?
+kleofas.opcja.tak = Czy poprowadzisz ślub?
+kleofas.opcja.pozniej = Wrócę później.
+kleofas.tak = Poprowadzę. Ślub jest ślubem, nawet w karczmie. I nie pytaj mnie, co sądzę o dachu.
+soltys.prosba = Wesele w Kuflu? Wiem. Kleofasa ci nie chciało się szukać, co? No dobrze. Pytaj.
+soltys.opcja.tak = Czy poprowadzisz ślub, sołtysie?
+soltys.opcja.pozniej = Wrócę później.
+soltys.tak = Poprowadzę. Ale krótko i bez wzruszeń. Ja się nie wzruszam, chłopcze, to wy się wzruszacie.
+
+# ======================================================================== plotki: kto z kim nie siada
+plotka.opiekunka.1 = Ciotka Stefa. Kto z kim nie siada? Ha! Halinę posadź z dala ode mnie, ona wie dlaczego. A Wiesię i Basię z rodziny Doroty - od wujów z rodziny Wojciecha. Woźnice i szwaczki. Wojna.
+plotka.kowal.1 = Tadek. Z Kubą? Ja z Kubą nigdy. Raz mi zjadł kiełbasę i do dziś patrzy mi w oczy. Posadź nas osobno.
+plotka.piekarka.1 = A Agatę posadź na drugim końcu sali, od mojej Hanki. Hanka mówi, że Agata jej ciasto nazwała „cegłą”. Wojna do pierwszej śmierci.
+plotka.kapral.1 = Kapral Wit. Mietek Kwaśniak? Ten, co kłócił się ze mną o fajkę. Nie siadam z nim. Chyba że z kordonem.
+plotka.bartek.1 = Bartek. Ignac? Ma u mnie dług. Dwa dni z rzędu mi go wypomina. Nie sadzaj nas razem.
+plotka.szwaczka.1 = Dorota. Ciotki, wujowie... trzymaj ich osobno, to nie będzie wesele roku, ale nikt nie zginie.
+plotka.znane = Już to wiem.
+
+# ======================================================================== kuchnia: lada
+lada.nic = Pusta lada w kuchni. Nikt jej jeszcze nie prosił o wesele.
+lada.pytanie = Lada w kuchni. Tu kładziesz dania weselne (trzy różne) i tort. Co kładziesz?
+lada.opcja.danie = Położ danie
+lada.opcja.tort = Położ tort
+lada.opcja.zostaw = Zostaw
+lada.opcja.zapas = Ile mam? ({n}/3)
+lada.polozone = Położono: {nazwa}.
+lada.polozoneTort = Położono tort weselny.
+lada.zaduzo = Na ladzie są już trzy dania.
+lada.brakDania = Nie masz żadnej z potraw w torbie (gulasz, kapuśniak, zupa grzybowa, owsianka, grzyby, ser, placek, miód pitny).
+lada.brakTortu = Nie masz tortu. Hanka go piecze.
+lada.juz = To danie już leży na ladzie.
+lada.wybierz = Które danie?
+lada.opcja.nie = Nie kładę nic.
+danie.130 = Gulasz
+danie.131 = Kapuśniak
+danie.132 = Zupa grzybowa
+danie.133 = Owsianka jęczmienna
+danie.134 = Grzyby z ogniska
+danie.135 = Pieczony ser
+danie.136 = Placek jagodowy
+danie.137 = Miód pitny
+lada.podajPora = Jeszcze nie pora na następne danie (17:00, 18:30, 20:00).
+lada.podaj = Podajesz: {nazwa}. Goście przyjmują z uśmiechem.
+lada.podajTort = Podajesz tort. Hanka ociera oczy.
+lada.pusta = Lada jest pusta.
+
+# ======================================================================== tablica z planem stołów
+tablica.nic = Tablica ze skórzanymi uchwytami. Czeka na kartę gości.
+tablica.pyta = Tablica „Plan stołów”. Cztery stoły po sześć miejsc, osiemnaście kart gości.
+tablica.opcja.plan = Układaj gości
+tablica.opcja.zostaw = Zostaw
+tablica.zatwierdzony = Plan zatwierdzony. Iskier: nikt nie wie, wynik wyjdzie przy uczcie.
+
+# ======================================================================== ozdoby i świece
+ozdoby.wianek = Wieszasz wianek.
+ozdoby.szarfa = Wieszasz szarfę.
+ozdoby.brak = Nie masz czym ozdobić tego miejsca (wianek lub szarfa).
+ozdoby.gotowe = Sala pachnie łąką.
+swieca.zapalona = Świeca zapalona.
+swieca.brak = Potrzebujesz zapalonej pochodni (Q), żeby zapalić świece.
+swieca.gotowe = Wszystkie dziesięć świec płonie. Sala jest ubrana.
+
+# ======================================================================== kawalerski
+kaw.grum = Grum. Ostatni wieczór pana młodego! Chodź, chłopcze, siadaj. Wojciech za trzy dni nie będzie już wolnym człowiekiem.
+kaw.opcja.zart = Żart: „Ostatni wieczór”.
+kaw.opcja.dyskretnie = Odpowiedz dyskretnie.
+kaw.zart = A Wojciech: „Przestańcie. Dorota może nie wiedzieć”. Grum ryczy ze śmiechu.
+kaw.dyskretnie = Grum klaszcze w stół. „Dobry chłopak. Nie wypłynie”.
+kaw.pierscien = A teraz kości. Pan młody stawia pierścień „na szczęście”. Bartek chce go wygrać. Grasz pierwszą turę, chłopcze?
+kaw.opcja.gram = Gram pierwszą turę.
+kaw.opcja.odciagam = Odciągam Bartka rozmową.
+kaw.opcja.nic = Nie wtrącam się.
+kaw.odciagam = Odciągasz Bartka. „A co tam u Ignaca?”. Bartek zdążył opowiedzieć o długu, i pierścień zostaje u Wojciecha.
+kaw.nic = Bartek wygrywa pierścień. Wojciech blednie. „Nie szkodzi”, mówi. Szkodzi.
+kaw.wygrana = Wygrałeś pierścień! Pan młody odetchnął.
+kaw.przegrana = Bartek wygrał pierścień. Wojciech blednie. „Nie szkodzi”, mówi. Szkodzi.
+
+# ======================================================================== scena S1: ślub
+scena.slub.kleofas.1 = Zebraliśmy się tutaj, w karczmie, bo kaplica ma dziurawy dach.
+scena.slub.kleofas.2 = A kto ma z tym problem, niech mówi teraz albo nigdy.
+scena.slub.borgar = Ja nie mam.
+scena.slub.wojciech = Ja... ja, ja, ja... biorę.
+scena.slub.dorota = Ja też. Spokojnie, Wojciech.
+scena.slub.kleofas.3 = I niech nikt nie pyta o to, czego nie chce wiedzieć. Ogłaszam was mężem i żoną.
+scena.slub.hanka = Kto ma obrączkę? Kto ma obrączkę?
+scena.slub.mysl = (Zaciśnij kciuki: O.)
+scena.slub.ambrozy = Dzwoni Ambroży, trzy razy, z zewnątrz.
+scena.slub.ok = Zacisnąłeś kciuki.
+
+# ======================================================================== S2: toasty
+toast.borgar = Wstaję. Mówię krótko, bo mówić nie lubię: za Wojciecha, za Dorotę, i żeby kufel się nie kończył!
+toast.pyta = Chłopcze, wstań. Ludzie czekają. Powiedz kilka słów.
+toast.opcja.czula = Przemowa czuła
+toast.opcja.dowcipna = Przemowa dowcipna
+toast.opcja.niezgrabna = Przemowa niezgrabna
+toast.czula.mowa = > Dorota, Wojciechu. Spotkaliście się przy koniach i igle, i wiem jedno: kto potrafi się zająknąć na całą salę i nie uciec, ten potrafi kochać.
+toast.dowcipna.mowa = > Wojciech zawsze woził ludzi tam, dokąd chcieli. Dziś pierwszy raz sam wiezie siebie. Mam nadzieję, że koń zna drogę.
+toast.niezgrabna.mowa = > Eee. No. Wesele. Dorota, Wojciech. Zupa dobra. Na zdrowie.
+toast.grum = Na zdrowie!
+toast.ambrozy = Dzwoni łyżką o kubek.
+toast.tlum = Sala klaszcze.
+
+# ======================================================================== S3: pierwszy taniec
+taniec.melia = Teraz pierwszy taniec! Wojciech, poprowadź Dorotę. Ale on, zdaje się, jest zbyt sztywny. Chłopcze, pomóż.
+taniec.wojciech = Ja... ja nie umiem.
+taniec.dorota = Ja umiem. Poprowadź mnie, chłopcze, a on niech się uczy.
+taniec.piekny = Piękny taniec! Sala klaszcze.
+taniec.zly = Troche się potykamy, ale wszyscy się śmieją. Taniec jak taniec.
+taniec.tytul = Pierwszy taniec
+taniec.pomoc = Strzałką pokazaną na ekranie, w rytm. Okno 0,6 s. Osiem strzałek, sześć trafień to piękny taniec.
+taniec.pauza = Gramy dalej
+taniec.wyjdz = Przerwij taniec
+
+# ======================================================================== S4: zniknięcie pana młodego
+znik.wojciech = Wrócę.
+znik.dorota = Wojciech? Wojciech!
+znik.stefa = Ciotka Stefa mierzy salę wzrokiem. Nikt nie wychodzi bez jej zgody.
+znik.gosc.1 = Gdzie on?
+znik.gosc.2 = Pan młody wyszedł!
+znik.gosc.3 = Szklanka się stłukła!
+znik.borgar = Chłopcze, zajmij się tym. Ja zajmę się szklanką.
+
+# ======================================================================== S5: bójka
+bojka.pyta = W sali wybucha bójka. Co robisz?
+bojka.opcja.dzwonek = Dzwonek Borgara (kocioł i chochla)
+bojka.opcja.piesn = Pieśń Melii
+bojka.opcja.ryk = Ryk Gruma
+bojka.opcja.prawda = „Wiem, gdzie on jest!”
+bojka.opcja.nic = Nie robię nic
+bojka.krzyk.1 = Nie bij moją ciotkę!
+bojka.krzyk.2 = To mój kufel!
+bojka.krzyk.3 = Wujek Marcin, przestań!
+bojka.krzyk.4 = Pożałujesz tego placka!
+bojka.krzyk.5 = Ja nie stałem tak blisko!
+bojka.krzyk.6 = Kto rzucił ławką?!
+bojka.dzwonek = Borgar bije chochlą w kocioł. Sala zamiera. Jeszcze dwa uderzenia, i wszyscy siadają jak dzieci.
+bojka.piesn.melia = Melia gra pierwsze takty „Wianka”. Bójka milknie. Ktoś zaczyna płakać, ktoś nuci.
+bojka.ryk.grum = Grum staje na stole i ryczy. Szyby drżą. Wszyscy zamierają.
+bojka.prawda.bohater = > Wiem, gdzie on jest! Szukamy go razem!
+bojka.prawda.dorota = Naprawdę? No to idziemy.
+bojka.sama.wit = Kapral Wit wchodzi. „Wy, wy i wy. Aresztowani.” Ambroży śpi wśród zwycięzców.
+bojka.koniec = Jest cisza. Szkody wpisano do rachunku Borgara.
+bojka.borgar = Rachunek Borgara: {szkody} G.
+
+# ======================================================================== S6: szukanie
+szuka.start = Ślady: wianek przy beczce, odcisk buta w mące, wstążka, płatki. Gdzie on jest? W całej tawernie nie ma tylu kątów.
+miejsce.beczka.1 = Z beczki wyskakuje kot Borgara. To nie pan młody, to mruczący wąsacz.
+miejsce.beczka.kot = Miau.
+miejsce.beczka.mysl = (Przy beczce leży wianek. Pan młody tu był.)
+miejsce.kuchnia.hanka.1 = Pan młody? W kuchni? Mam tu bochenek w kształcie pana młodego. Popatrz, nawet jakby podobny.
+miejsce.kuchnia.hanka.2 = Ale to chleb. A odcisk buta w mące jest jeden i prowadzi w stronę schodów.
+miejsce.kuchnia.mysl = (Odcisk buta w mące. Wojciech uciekał schodami.)
+miejsce.gry.ozzy.1 = Zzz... Chrrr... Ach. Chłopcze, widzę. Gwiazdy. Słychać gwiazdy.
+miejsce.gry.ozzy.2 = On jest tam, gdzie słychać gwiazdy. A teraz daj mi spać.
+miejsce.gry.mysl = (Gdzie słychać gwiazdy? Taras. Piętro najwyższe.)
+miejsce.palarnia.wit = Kapral Wit: „To moja fajka!”.
+miejsce.palarnia.mietek = Mietek: „Już nie!”.
+miejsce.palarnia.dym = W dymie ktoś w niedzielnej kurtce. To krewny, nie Wojciech.
+miejsce.palarnia.mysl = (Dym, fajka i cudza kurtka. Pan młody gdzie indziej.)
+miejsce.drzwi.glos = Z drzwi: „Cicho, kocham spać!”. To podróżny. Nikt nie wchodzi w czyjeś pokoje.
+miejsce.drzwi.mysl = (Pod drzwiami leży wstążka. Pan młody poszedł wyżej.)
+miejsce.platki.1 = Na posadzce garść płatków. Pan młody ukrywał się tu chwilę, potem poszedł wyżej.
+miejsce.platki.mysl = (Płatki prowadzą wyżej, schodami na piętro apartamentów.)
+miejsce.stefa = Ciotka Stefa dyszy: „Znaleziony?”.
+miejsce.znal = Znalazłeś pana młodego.
+
+# ======================================================================== taras: pan młody
+pan.taras = Chłopcze... patrzę w gwiazdy. W ręku zgnieciona kartka z przemową. Nie boję się ślubu. Boję się mówić do ludzi. A po toaście... uciekłem.
+pan.opcja.przemowa = Czego się boisz najbardziej?
+pan.opcja.pierscien = A pierścień?
+pan.opcja.wracaj = Wracaj, wszyscy czekają.
+pan.przemowa = Że się zająknę. Że Dorota zobaczy, jaki jestem. Tak naprawdę boję się, że mnie wyśmieją.
+pan.pierscienStracony = Pierścień. Bartek go wygrał w kości. Dorota nie wie. Nie mogę wrócić bez pierścienia.
+pan.opcja.wykup = Wykupię go od Bartka (30 G).
+pan.opcja.rewanz = Zagram z Bartkiem o niego.
+pan.wykup = Wykupiłeś pierścień od Bartka. Pan młody wzdycha z ulgą.
+pan.rewanz = Poszedłeś do Bartka i zagrałeś. Pierścień wrócił.
+pan.jestOk = Pierścień mam. Przepraszam. Boję się tylko mowy.
+pan.wracaj = Dobrze. Idę. Tylko... pójdź ze mną, bo sam nie dam rady.
+pan.zgnieciona = Zgnieciona kartka: „Droga Doroto. Jestem tylko woźnicą, ale...”
+
+# ======================================================================== S7 + poranek
+poranek.dorota = Wojciech wrócił. Dorota patrzy na ciebie: „Wiem, że ktoś go szukał. Powiedz mi prawdę: co robił?”
+poranek.opcja.prawda = Powiedz prawdę: bał się przemowy.
+poranek.opcja.klamstwo = Skłam po swojemu: „Poszedł po gwiazdy dla ciebie”.
+poranek.prawda = Dorota śmieje się i płacze. „Mój głuptas. Dobrze, będę mówić za nas oboje.”
+poranek.klamstwo = Dorota patrzy na ciebie i uśmiecha się. „Kłamiesz fatalnie. Ale ładnie.”
+poranek.pierscien = Wojciech wkłada pierścień. Dorota zdejmuje mu wianek z głowy.
+poranek.ozzy = Będzie deszcz. (Nie będzie. Jest susza.)
+poranek.borgar = Wesele się skończyło. Prawie na pewno.
+poranek.napiwki = Napiwki gości: {n} G.
+poranek.dar = Dar od pary: {n} G.
+
+# ======================================================================== zakończenia
+koniec.A = „Wesele roku”. Wojciech i Dorota będą ci dziękować do końca życia, a Borgar pierwszy raz od dawna uśmiechnął się.
+koniec.B = „Bójka, ale szczęśliwa”. Rachunek Borgara spłacony z napiwków.
+koniec.C = „Wielka awantura”. Borgar milczy dwa dni. Dorota śmieje się mimo to.
+koniec.D = „Bez ślubu”. Borgar sam znalazł pana młodego. Dorota daje ci minimalną pensję.
+koniec.bez = Wesele odbyło się bez ciebie.
+
+# ======================================================================== popupy
+napis.zloto = +{n} G
+napis.piesni = Melia ułożyła pieśni
+napis.tort = Tort zamówiony
+napis.wianki = Sześć wianków
+napis.szarfy = Cztery szarfy
+napis.plan = Plan stołów zatwierdzony
+napis.plotka = Plotka: kto z kim nie siada ({n}/4)
+napis.potrzeba = Potrzebujesz: {co}
+napis.odebrany = Tort odebrany
+napis.wesele = Wesele
+napis.nastroj = Nastrój sali: {n}/100
+napis.iskry = Iskier w planie: {n}
+napis.renoma = Renoma karczmy +{n}
+napis.pierscien = Pierścień odzyskany
+
+# ======================================================================== notatki dziennika (tytuł + treść)
+[notatki.zlecenie]
+Wesele w Złotym Kuflu
+Borgar poprosił, żebym zajął się weselem Wojciecha i Doroty. Za trzy dni, o piętnastej, w sali tawerny. Lista: jedzenie, muzyka, ozdoby, goście, uroczystość.
+
+[notatki.slub]
+Ślub w sali
+Kleofas udzielił ślubu przy kominku, bo kaplica ma dziurawy dach. Wojciech się zająknął, Dorota się roześmiała.
+
+[notatki.znik]
+Pan młody zniknął
+Po toaście Wojciech powiedział „wrócę” i wyszedł. W sali wybuchła bójka. Trzeba go znaleźć.
+
+[notatki.noc]
+Gdzie on jest?
+Szukam Wojciecha po całej tawernie. Ślady prowadzą wyżej, aż na taras.
+
+[notatki.poranek]
+Wesele się skończyło
+Wojciech i Dorota są małżeństwem. Prawie wszystko poszło dobrze. Prawie.
+
+# ======================================================================== F9
+f9.naglowek = Wątek W18 (Wesele):
+f9.etykieta = W18: rozdział {ch} - {nazwa}
+f9.opis = ◀ ▶ rozdział, O - przeskok (dzień, godzina i miejsce; przygotowania zrobione na tyle, na ile trzeba)
+f9.brak = Nie da się tam przeskoczyć
+f9.nazwy.1 = zlecenie Borgara
+f9.nazwy.2 = przygotowania (dzień 20)
+f9.nazwy.3 = plan stołów (dzień 21)
+f9.nazwy.4 = ślub (dzień 22, 14:54)
+f9.nazwy.5 = bójka (dzień 22, 21:54)
+f9.nazwy.6 = noc poszukiwań
+f9.nazwy.7 = poranek
+f9.iskry.etykieta = Iskry w planie stołów: {n}
+f9.iskry.opis = ◀ ▶ 0 / 3 / 6 iskier (bójka żadna / mała / duża)
+f9.pierscien.etykieta = Pierścień: {n}
+f9.pierscien.opis = ◀ ▶ zachowany / przegrany w kości

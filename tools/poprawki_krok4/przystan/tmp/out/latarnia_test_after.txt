@@ -1,0 +1,16 @@
+PASS gra się uruchamia
+NOTE nakładka: tools/poprawki_krok4/przystan/staging
+FAIL Latarnia.js i Latarnia_Data.js działają: Bazyli (943, mapa 159, $Npc_Latarnik), K49, D22, W11 w zadaniach, miejsce gotowe (Wyspa.ready 159)  {"api":true,"data":true,"res":[943,125,"$Npc_Latarnik"],"q":[true,true,true],"ready":false,"packs":["K49,D22,W11"],"rec":[3,[177,1]],"buff":true}
+PASS przepis „Wytop tran” w kociołku (3 ryby -> Tran 177) dopisany do Farming.BUILDINGS; premia „Ciężka głowa” zdefiniowana  {"api":true,"data":true,"res":[943,125,"$Npc_Latarnik"],"q":[true,true,true],"ready":false,"packs":["K49,D22,W11"],"rec":[3,[177,1]],"buff":true}
+PASS Map159 „Przylądek z latarnią”: mapa 104 x 80, tileset 11, notatka z <Water:salt>, nie szkielet  [159,7,8,104,80,11,"<Clouds:on>\n<Farm:off>\n<Water:salt>","Przylądek z latarnią"]
+PASS przejścia: dół (29-31, 79) i lewa krawędź (0, 33-34) bez przejść Wyspy (od 2026-10-30 przejścia robi świat); izba i wieża latarni  {"south":[],"west":[],"izba":[[15,18]],"tower":[[22,11,"!$Latarnia_Wieza"]],"spots":["drewutnia","izba","izba_sen","lat_dzwon","lat_napad","lat_oboz","laterna"]}
+PASS miejsca Bazylego i pakietu na mapie: drewutnia, izba, izba_sen, laterna, lat_dzwon, lat_napad, lat_oboz  ["drewutnia","izba","izba_sen","lat_dzwon","lat_napad","lat_oboz","laterna"]
+PASS plan Bazylego za słońcem: wejście na górę o zmierzchu - latem (dzień 40) później niż zimą (dzień 100)  [[40,20.7,20.700000000000163,5.65],[100,18.2,18.200000000000127,7.4]]
+FAIL o 16 Bazyli rąbie drewno przy drewutni  {"s":null,"sp":[25,19,6]}
+FAIL o 11 śpi w izbie (ukryty, „izba_sen”), drzwi zaryglowane: popup o chrapaniu, bez przejścia  {"sleep":null,"bolt":[]}
+FAIL wieczorem drzwi izby prowadzą do Map160 (6,8); Bazyli jest w izbie, Księga mgieł na stole  {"at":[15,19],"b":null,"book":false}
+ERR TypeError: Cannot read properties of null (reading 'eventId')
+    at <anonymous>:2:65
+    at <anonymous>:2:100
+PASS bez błędów w konsoli  []
+7/12 passed

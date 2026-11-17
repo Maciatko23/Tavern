@@ -186,40 +186,42 @@
     const hidden = () => page({ priority: 0, through: true });
     const ev = (id, name, x, y, pages, note) => OK().event(id, name, x, y, pages, (note || "") + "<Lowy:" + id + ">");
     const look = what => scr("Lowy.look(this, " + JSON.stringify(what) + ")");
-    const BUILD = {
-        3: () => [
-            ev(IDS.nora, TK.kod.n23[0], NORA.x, NORA.y, [page({ image: img("!$Low_Nora"), list: look("nora") })], "<Occupy:left=1,right=1,up=1>"),
-            ev(IDS.czoNamiot, TK.kod.n23[1], OBOZY.czo.tent[0], OBOZY.czo.tent[1], [hidden(), pageW("campCzo", { image: img("!$Mt_Tent"), list: look("namiot") })])
-        ],
-        13: () => [
-            ev(IDS.gawra, "Gawra", GAWRA.ev[0], GAWRA.ev[1], [page({ image: img("!$Low_Gawra"), list: look("gawra") })]),
-            ev(IDS.gawraBok, TK.kod.n13[0], GAWRA.side[0], GAWRA.side[1], [page({ list: look("gawra") })])
-        ],
-        21: () => [
-            ev(IDS.bloto, TK.kod.n21[0], BLOTO.ev[0], BLOTO.ev[1], [page({ image: img("!$Low_Bloto"), priority: 0, through: true, list: look("bloto") })])
-        ],
-        4: () => [
-            ev(IDS.lizawka, "Lizawka", LIZAWKA.x, LIZAWKA.y, [page({ image: img("!$Low_Lizawka", 2), list: look("lizawka") }),
-                pageW("lickOn", { image: img("!$Low_Lizawka", 4), list: look("lizawka") })]),
-            ev(IDS.zasiadka, "Zasiadka", LIZAWKA.hide[0], LIZAWKA.hide[1], [page({ image: img("!$Low_Zasiadka"), priority: 2, through: true })]),
-            ev(IDS.poroze, TK.kod.n4[0], LIZAWKA.antler[0], LIZAWKA.antler[1], [hidden(), pageW("antler", { image: img("!$Low_Poroze"), list: scr("Lowy.pickAntler(this)") })]),
-            // (2026-11-11 plansza: the robbers' camp is on Łąka now, was Map021)
-            ev(IDS.rabNamiot, TK.kod.n21[1], OBOZY.rabusie.tent[0], OBOZY.rabusie.tent[1], [hidden(), pageW("campRab", { image: img("!$Mt_Tent"), list: look("namiotRab") })])
-        ],
-        24: () => {
-            const sw = { switch1Valid: true, switch1Id: D.SW_WYLOM };
+    // (2026-11-13 nowy świat) the events by the map each place is on (its data's map), not by the old map ids: several places can share a map
+    const BUILD = {};
+    const at = (map, fn) => { const prev = BUILD[map]; BUILD[map] = prev ? () => prev().concat(fn()) : fn; };
+    at(NORA.map, () => [ev(IDS.nora, TK.kod.n23[0], NORA.x, NORA.y, [page({ image: img("!$Low_Nora"), list: look("nora") })], "<Occupy:left=1,right=1,up=1>")]);
+    at(OBOZY.czo.map, () => [ev(IDS.czoNamiot, TK.kod.n23[1], OBOZY.czo.tent[0], OBOZY.czo.tent[1], [hidden(), pageW("campCzo", { image: img("!$Mt_Tent"), list: look("namiot") })])]);
+    at(GAWRA.map, () => [
+        ev(IDS.gawra, "Gawra", GAWRA.ev[0], GAWRA.ev[1], [page({ image: img("!$Low_Gawra"), list: look("gawra") })]),
+        ev(IDS.gawraBok, TK.kod.n13[0], GAWRA.side[0], GAWRA.side[1], [page({ list: look("gawra") })])
+    ]);
+    at(BLOTO.map, () => [ev(IDS.bloto, TK.kod.n21[0], BLOTO.ev[0], BLOTO.ev[1], [page({ image: img("!$Low_Bloto"), priority: 0, through: true, list: look("bloto") })])]);
+    at(LIZAWKA.map, () => [
+        ev(IDS.lizawka, "Lizawka", LIZAWKA.x, LIZAWKA.y, [page({ image: img("!$Low_Lizawka", 2), list: look("lizawka") }),
+            pageW("lickOn", { image: img("!$Low_Lizawka", 4), list: look("lizawka") })]),
+        ev(IDS.zasiadka, "Zasiadka", LIZAWKA.hide[0], LIZAWKA.hide[1], [page({ image: img("!$Low_Zasiadka"), priority: 2, through: true })]),
+        ev(IDS.poroze, TK.kod.n4[0], LIZAWKA.antler[0], LIZAWKA.antler[1], [hidden(), pageW("antler", { image: img("!$Low_Poroze"), list: scr("Lowy.pickAntler(this)") })])
+    ]);
+    // (2026-11-11 plansza: the robbers' camp is on Łąka now, was Map021)
+    at(OBOZY.rabusie.map, () => [ev(IDS.rabNamiot, TK.kod.n21[1], OBOZY.rabusie.tent[0], OBOZY.rabusie.tent[1], [hidden(), pageW("campRab", { image: img("!$Mt_Tent"), list: look("namiotRab") })])]);
+    {
+        const parkEvents = () => {
+            const sw = { switch1Valid: true, switch1Id: D.SW_WYLOM }, gp = PARK.gapPic;
+            // (a gap of its own picture - the new world's hole in a fence, upright: no open-gap decal, only the thorns when shut)
             const out = [
                 ev(IDS.wylomL, TK.kod.n24[0], PARK.gap[0][0], PARK.gap[0][1], [hidden(), page({ cond: sw, list: look("ciernie") })]),
-                ev(IDS.wylomP, TK.kod.n24[1], PARK.gap[1][0], PARK.gap[1][1], [page({ image: img("!$Low_Wylom", 2), priority: 0, through: true }),
-                    page({ cond: sw, image: img("!$Low_Wylom", 4), list: look("ciernie") })]),
+                ev(IDS.wylomP, TK.kod.n24[1], PARK.gap[1][0], PARK.gap[1][1], [gp ? page({ priority: 0, through: true }) : page({ image: img("!$Low_Wylom", 2), priority: 0, through: true }),
+                    page({ cond: sw, image: gp ? img(gp, 2) : img("!$Low_Wylom", 4), list: look("ciernie") })]),
                 ev(IDS.lesniczowka, TK.kod.n24[2], PARK.hut[0], PARK.hut[1], [page({ image: img("!$Low_Lesniczowka"), list: look("lesniczowka") })], "<Occupy:left=2,right=2,up=2>"),
                 ev(IDS.pasnik, TK.kod.n24[3], PARK.feeder[0], PARK.feeder[1], [page({ image: img("!$Low_Pasnik"), list: look("pasnik") })], "<Occupy:left=1>"),
                 ev(IDS.rysiek, TK.kod.n24[4], PARK.rysiek[0], PARK.rysiek[1], [hidden(), pageW("rysiek", { image: img("$Npc_Klusownik", 4, 1), list: scr("Lowy.rysiekTalk(this)") })])
             ];
             PARK.snares.forEach(([x, y], i) => out.push(ev(IDS.sidla[i], TK.kod.n24[5], x, y, [hidden(), pageW("sidlo" + i, { image: img("!$Low_Sidla"), list: scr("Lowy.takeSnare(this, " + i + ")") })])));
             return out;
-        },
-        162: () => {
+        };
+        at(PARK.map, parkEvents);
+    }
+    at(RANGE.map, () => {
             // a target: its picture below the characters (an arrow flies through to its face) and an empty blocking event on the same
             // cell (the hero does not walk through it; Hunting's arrows stop only at events with a picture)
             const out = [];
@@ -231,8 +233,7 @@
             RANGE.soldiers.forEach(([x, y], i) => out.push(ev(IDS.zolnierze[i], TK.kod.n162[2], x, y,
                 [hidden(), pageW("drill", { image: img(i ? "$Npc_Zolnierz_B" : "$Npc_Zolnierz", 6, 1), directionFix: true, list: look("zolnierz") })])));
             return out;
-        }
-    };
+    });
     T.inject(Object.keys(BUILD).map(Number), { ids: D.IDS_RANGE, owner: PLUGIN, build: (data, id) => (BUILD[id] ? BUILD[id]() : []) });
 
     const WHEN = {
@@ -762,7 +763,7 @@
         const p = S().park;
         spawnPark();
         // the first time through the gap
-        if (!p.seen && $gamePlayer.y >= 30 && $gamePlayer.y <= 33 && $gamePlayer.x <= 10) { p.seen = true; say($gamePlayer, TX.parkFirst, 260); }
+        if (!p.seen && (PARK.first || []).some(r => $gamePlayer.x >= r.x0 && $gamePlayer.x <= r.x1 && $gamePlayer.y >= r.y0 && $gamePlayer.y <= r.y1)) { p.seen = true; say($gamePlayer, TX.parkFirst, 260); }
         // the gamekeeper on his round finds a carcass within 2 hours
         const g = gajowyEv();
         p.pending = p.pending.filter(q => clock() - q.clock <= PARK.findHours && carcassNear(q.x, q.y));
@@ -795,7 +796,10 @@
         const p = S().park;
         p.shutUntil = day() + PARK.closeDays;
         $gameSwitches.setValue(D.SW_WYLOM, true);
-        if (escort && mapId() === PARK.map && inPark($gamePlayer.x, $gamePlayer.y)) { $gamePlayer.locate(PARK.gap[0][0], PARK.gap[0][1] - 1); $gamePlayer.setDirection(8); }
+        if (escort && mapId() === PARK.map && inPark($gamePlayer.x, $gamePlayer.y)) {
+            const o = PARK.out || [PARK.gap[0][0], PARK.gap[0][1] - 1];   // (outside the gap: the new world's hole is in a fence going north-south)
+            $gamePlayer.locate(o[0], o[1]); $gamePlayer.setDirection(o[0] < PARK.gap[0][0] ? 4 : 8);
+        }
         popup(fill(TX.parkShut, { n: PARK.closeDays }), { top: true, color: "#ff9f8f" });
     }
     function gapTick() {

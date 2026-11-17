@@ -1,0 +1,5 @@
+questy_mapa_test exit 0
+osada_huts_test exit 0
+zakon_test exit 0
+w8_mountains_test exit 0
+mountain_places_test exit 1

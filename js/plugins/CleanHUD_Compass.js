@@ -207,6 +207,13 @@
         if (!st) return null;
         if (st.spot) return questSpot(st.spot);
         if (st.to) return person(st.to);
+        // (2026-11-16) a step of its own (a talk with Borgar at the bar, a questioning): the person it waits for now - the one with the
+        // green tick; the nearest such on this map first
+        if (TQ.whoFor) {
+            const here = $gameMap ? $gameMap.mapId() : 0, all = [];
+            for (const k of TQ.whoFor(id) || []) { const p = person(k); if (p) all.push(p); }
+            return all.find(p => p.map === here) || all[0] || null;
+        }
         return null;
     }
     // a contract of the quest board ready to hand in: the board in the tavern
@@ -218,14 +225,16 @@
         const ev = findEvent(TAVERN, /<Tavern:\s*board/i);
         return { map: TAVERN, x: ev ? ev.x : undefined, y: ev ? ev.y : undefined, name: "Tablica ogłoszeń" };
     }
-    // a building of the field (Farming.js): where it stands; a building in the hut - the hut
-    const FIELD = 3, HUT_MAP = 100;
+    // a building of the field (Farming.js): where it stands; a building in the hut - the hut (FIELD: when Homes.js cannot say - the
+    // new world's plot, Podgrodzie, Map218; it was the old world's Kruczy Jar, Map003, till 2026-11-17)
+    const FIELD = 218, HUT_MAP = 100;
     // the hero's land: grandpa's field, or - the field lost to the Lord (2026-10-15, Homes.js) - the yard of a house he bought
     function landNow() {
         const H = T.api("Homes"), m = H && H.homeLand ? H.homeLand() : FIELD;
         return m || null;
     }
-    const landName = m => (m === FIELD ? "Działka dziadka" : mapName(m) || "Twoja ziemia");
+    const fieldMap = () => { const H = T.api("Homes"); try { return (H && H.land && H.land().field) || FIELD; } catch (e) { return FIELD; } };
+    const landName = m => (m === fieldMap() ? "Działka dziadka" : mapName(m) || "Twoja ziemia");
     function buildingPlace(type) {
         const F = T.api("Farming"), farm = F && F.farm ? F.farm() : null, list = farm && farm.buildings ? farm.buildings : {};
         const def = F && F.BUILDINGS ? F.BUILDINGS[type] : null, name = def ? def.name : "";

@@ -1,0 +1,28 @@
+# Kelnerka Jagna w sali tawerny (Kelnerka.js): nosi miski z kuchni do stołów.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz kelnerka
+# Każda linijka w bloku to jedna kwestia; gra losuje jedną.
+
+imie = Jagna
+
+# ======================================================================== mówi do gościa, stawiając miskę (dymek nad głową)
+[podaje]
+Proszę, gorące, prosto z pieca.
+Gulasz dla pana. Smacznego.
+Uwaga, parzy.
+Jeszcze chleba? Zaraz doniosę.
+Na zdrowie.
+
+# ======================================================================== rozmowa z bohaterem
+[rozmowa]
+Jagna jestem. Jak chcesz zjeść, mów Borgarowi przy ladzie - ja tylko noszę.
+Od świtu do północy na nogach. Dobrze, że izba służby zaraz przy łaźni.
+Kucharka gotuje, ja noszę, Borgar liczy. I tak się to kręci.
+Siadaj gdzie wolno. Jak Borgar da znać, przyniosę.
+
+[zajeta]
+Nie teraz, miska stygnie!
+Z drogi, gorące niosę.
+
+[noc]
+Zamykamy kuchnię. Idę spać, nogi mi odpadają.

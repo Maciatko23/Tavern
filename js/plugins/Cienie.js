@@ -117,6 +117,14 @@
     // a frame of a picture as a soft dark silhouette, as Sky.js makes it, but without a shadow painted into the picture (pure black,
     // see-through pixels: Winlu's barrels, carts, lamp posts have one) - the sun's shadow is the real one. Cached by the picture and
     // the frame; remembered on the asking sprite as long as it asks for the same.
+    // pictures that always take their "<name>_Cien" mask, whatever the event's note says (the lighthouse tower: its shadow starts
+    // along the round base, not from one straight line under its lowest stone - the user 2026-11-14)
+    const MASKED = new Set(["!$Latarnia_Wieza"]);
+    // ... and round ones stand on a disc, not on a line: the px of ground their base takes from back to front (the ellipse's height).
+    // A flat silhouette leaned by a low sun thins to a sliver (19:00: a tower 140 px wide threw a 30 px strip); laid a few times
+    // across the disc (narrower towards its back and front rims) the shadow keeps the base's width whatever the sun's side.
+    const ROUND_BASE = new Map([["!$Latarnia_Wieza", 46]]);
+    const ROUND_T = [-0.92, -0.62, -0.31, 0, 0.31, 0.62, 0.92];
     const silCache = new Map();
     // feet (a mask, <Cienie:maska>): in each column the row where the thing meets the ground is marked red (255, 0, 0) - tools/
     // wrak_duzy/grunt.py; the columns with no mark get the nearest marked ones' (a rag, a rope over the ground); out._strips: the
@@ -733,7 +741,7 @@
         // "<name>_Cien" (only the ship - the planks, the masts, the sails; not the sand painted under it - that is its own event below
         // the characters, under the shadows), the same size as the frame, its feet marked (silhouette); laid in strips, each from its
         // own foot - the shadow starts along the hull's round bottom, not from one straight line under its lowest point
-        if (s._cienMask === undefined) s._cienMask = /<Cienie:maska>/i.test((ch.event && ch.event().note) || "") ? 1 : 0;
+        if (s._cienMask === undefined) s._cienMask = /<Cienie:maska>/i.test((ch.event && ch.event().note) || "") || MASKED.has(ch.characterName()) ? 1 : 0;
         let src = bm, sx0 = f.x, sy0 = f.y;
         if (s._cienMask) {
             const mb = ImageManager.loadCharacter(ch.characterName() + "_Cien");
@@ -745,7 +753,8 @@
         const layer = S.layer(parent), box = rootOf(layer).props;
         let sh = s._cienShadow;
         const st = bmp._strips;
-        if (!sh) sh = s._cienShadow = st ? new PIXI.Container() : new Sprite();
+        const round = st ? 0 : (ROUND_BASE.get(ch.characterName()) || 0);
+        if (!sh) sh = s._cienShadow = st || round ? new PIXI.Container() : new Sprite();
         if (sh.parent !== box) box.addChild(sh);
         if (st) {
             const [ox, oy] = offsetOf(ls, S, Math.abs(sy));   // (per px of height: the same lean for every strip)
@@ -756,8 +765,14 @@
                 if (q) layMatrix(spr, bmp, 0, PAD + q.h, sx, 0, -ox, -oy, mx + (q.fx - PAD - f.width / 2) * sx, my - (f.height - q.h + LIFT) * sy, false, [q.fx, q.fw]);
             }
         } else {
-            const h = bmp._footRow + 1;
-            layLeaned(sh, bmp, mx + (bmp._footX - f.width / 2) * sx, my - (f.height - h + LIFT) * sy, sx, sy, ls, S, false);
+            const h = bmp._footRow + 1, fx0 = mx + (bmp._footX - f.width / 2) * sx, fy0 = my - (f.height - h + LIFT) * sy;
+            if (round) {
+                while (sh.children.length < ROUND_T.length) sh.addChild(new Sprite());
+                for (let i = 0; i < ROUND_T.length; i++) {
+                    const t = ROUND_T[i];
+                    layLeaned(sh.children[i], bmp, fx0, fy0 + t * round / 2 * Math.abs(sy), sx * Math.sqrt(1 - t * t), sy, ls, S, false);
+                }
+            } else layLeaned(sh, bmp, fx0, fy0, sx, sy, ls, S, false);
         }
         sh.alpha = cloudAlpha(sun, S, layer, (ch._realX + 0.5) * tw, (ch._realY + 1) * th) * (s.opacity / 255);
         sh.visible = sh.alpha > 0.005;

@@ -1,0 +1,2 @@
+before questy_mapa: 15/15 passed
+after questy_mapa: 15/15 passed

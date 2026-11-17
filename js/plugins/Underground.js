@@ -1364,7 +1364,7 @@
     function afterEnding() {
         film.end();
         $gamePlayer.setTransparent(false);
-        $gamePlayer.reserveTransfer(1, 16, 31, 8, 0);
+        $gamePlayer.reserveTransfer(1, 16, 18, 8, 0);
         $gamePlayer.requestMapReload();
         $gameScreen.startTint([0, 0, 0, 0], 1);
         $gameScreen.startFadeIn(30);

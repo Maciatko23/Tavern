@@ -1861,3 +1861,617 @@ Pada! Język na wierzch!
 [mieszkancy.dziecko.zaczepki.dom]
 Mama, a kiedy tata wróci?
 Ciii... brat śpi. Nareszcie.
+
+# ======================================================================== (2026-11-13) nowy świat: nowi mieszkańcy Podgrodzia (Map218)
+# nowy_mlynarz - nowy młynarz (wiatrak na wzgórzu)
+mieszkancy.nowy_mlynarz.name = Ambroży Siwiec
+mieszkancy.nowy_mlynarz.title = młynarz
+[mieszkancy.nowy_mlynarz.talk.morning]
+Ambroży Siwiec, młynarz. Nowy, owszem. Stary wiatrak stał pusty, to wziąłem. Ktoś musi mleć, póki jest co.
+Rano wiatr od morza najrówniejszy. Skrzydła idą jak w zegarku.
+
+[mieszkancy.nowy_mlynarz.talk.day]
+Ziarna mało, wody mało, mąki mało. Ale ludzie i tak przychodzą. Chleb trzeba jeść nawet w suszy.
+Skąd jestem? Zza wody. Jak połowa tej wyspy. Nie pytaj więcej, nie odpowiem lepiej.
+
+[mieszkancy.nowy_mlynarz.talk.evening]
+Po południu wożę mąkę do Kruczogrodu. Piekarz płaci uczciwie. Rządca mniej.
+
+[mieszkancy.nowy_mlynarz.talk.night]
+O tej porze młyn śpi. I ja też powinienem. Idź już.
+
+[mieszkancy.nowy_mlynarz.talk.rain]
+Deszcz to dobra rzecz, tylko kamienie mokną. Dziś nie mielę.
+
+[mieszkancy.nowy_mlynarz.zaczepki.rano]
+Skrzydła idą. Dobry wiatr.
+Kto pierwszy z workiem, ten pierwszy mieli.
+
+[mieszkancy.nowy_mlynarz.zaczepki.dzien]
+Mąka! Kto chce mąki, póki jest?
+Nie stój pod skrzydłami, chłopcze.
+
+[mieszkancy.nowy_mlynarz.zaczepki.wieczor]
+Czas do miasta, worki same nie pójdą.
+Wiatr siada. Dzień się kończy.
+
+[mieszkancy.nowy_mlynarz.zaczepki.deszcz]
+Kamienie mokną. Dziś nic z mielenia.
+
+[mieszkancy.nowy_mlynarz.zaczepki.noc]
+Czego tu szukasz o tej porze?
+
+[mieszkancy.nowy_mlynarz.zaczepki.dom]
+Zamknięte. Wracaj za dnia.
+
+# rybaczka - Hela, siostra rybaka Jana
+mieszkancy.rybaczka.name = Hela
+mieszkancy.rybaczka.title = rybaczka, siostra Jana
+[mieszkancy.rybaczka.talk.morning]
+Hela jestem, siostra Jana. To on cię wyciągnął z morza, wiesz? Mówi, że ważyłeś tyle, co mokry worek.
+O świcie idę z Janem na brzeg. Co złowimy, to sprzedam w południe na placu.
+
+[mieszkancy.rybaczka.talk.day]
+Ryba na placu idzie szybko. Ludzie wolą rybę niż nic. A na nic stać ich częściej.
+Solona ryba poleży, świeża do wieczora. Soli też nie ma za darmo.
+
+[mieszkancy.rybaczka.talk.evening]
+Po południu znów na brzeg. Wieczorem sieci do suszenia i do łóżka.
+
+[mieszkancy.rybaczka.talk.night]
+Ryby śpią i ja chcę. Jutro rano.
+
+[mieszkancy.rybaczka.talk.rain]
+W deszcz ryba bierze lepiej, tylko człowiek mokry jak ona.
+
+[mieszkancy.rybaczka.zaczepki.rano]
+Na brzeg, na brzeg!
+Sieć cała? Cała.
+
+[mieszkancy.rybaczka.zaczepki.dzien]
+Ryby! Świeże ryby!
+Śledź, dorsz, co morze dało!
+
+[mieszkancy.rybaczka.zaczepki.wieczor]
+Jeszcze raz na brzeg, póki widno.
+Ręce pachną rybą do śmierci.
+
+[mieszkancy.rybaczka.zaczepki.deszcz]
+Mokro jak w sieci.
+
+[mieszkancy.rybaczka.zaczepki.noc]
+Ciii, Jan śpi po drugiej stronie ściany.
+
+[mieszkancy.rybaczka.zaczepki.dom]
+Sieci łatam. Wejdź, tylko nie depcz.
+
+# weglarz - węglarz przy mielerzu
+mieszkancy.weglarz.name = Zdzich Kopeć
+mieszkancy.weglarz.title = węglarz
+[mieszkancy.weglarz.talk.morning]
+Zdzich Kopeć, węglarz. Czarny od rana do wieczora, ale ciepły - bo przy mielerzu zawsze ciepło.
+Mielerz trzeba pilnować dzień i noc. Za dużo powietrza i zostanie popiół zamiast węgla.
+
+[mieszkancy.weglarz.talk.day]
+Drewno biorę, skąd się da. Wyrzucone przez morze, połamane, stare płoty. Las jest Lorda.
+Węgiel drzewny pali się czysto i długo. Pod kocioł jak znalazł. Ktoś, kto chce wodę z morza gotować, będzie go potrzebował dużo.
+
+[mieszkancy.weglarz.talk.evening]
+Wieczorem wiozę worki do kowala w Kruczogrodzie. Tadek bierze wszystko, co mam.
+
+[mieszkancy.weglarz.talk.night]
+Mielerz dymi, ja drzemię. Nie budź ani jednego, ani drugiego.
+
+[mieszkancy.weglarz.talk.rain]
+Deszcz na mielerz to jak kubeł wody na głowę. Muszę go przykryć.
+
+[mieszkancy.weglarz.zaczepki.rano]
+Dymi równo. Dobrze.
+Nie podchodź, buchnie.
+
+[mieszkancy.weglarz.zaczepki.dzien]
+Węgiel! Pali się czysto i długo!
+Czarny jestem, ale uczciwy.
+
+[mieszkancy.weglarz.zaczepki.wieczor]
+Worki na wóz i do miasta.
+Kowal czeka.
+
+[mieszkancy.weglarz.zaczepki.deszcz]
+Przykryć mielerz, prędko!
+
+[mieszkancy.weglarz.zaczepki.noc]
+Pilnuję dymu. Idź spać.
+
+[mieszkancy.weglarz.zaczepki.dom]
+Nie siadaj na workach, zabrudzisz się na zawsze.
+
+# tkaczka - tkaczka z owcami
+mieszkancy.tkaczka.name = Halszka
+mieszkancy.tkaczka.title = tkaczka
+[mieszkancy.tkaczka.talk.morning]
+Halszka, tkaczka. Rano owce, potem krosno. Owce dają wełnę, ja daję płótno, a ludzie dają za mało.
+Owiec mam trzy. Każda ma imię. Nie powiem jakie, bo się będziesz śmiał.
+
+[mieszkancy.tkaczka.talk.day]
+Na krośnie siedzę do południa. Płótno na koszule, worki, a czasem coś ładniejszego dla dworu.
+Moja córka biega do dworu z płótnem. Za często biega. Ktoś tam jej się spodobał, czuję to.
+
+[mieszkancy.tkaczka.talk.evening]
+Wieczorem ogródek, potem kapliczka. Za córkę się modlę. Na wszelki wypadek.
+
+[mieszkancy.tkaczka.talk.night]
+Krosno stoi, owce śpią. Przyjdź jutro.
+
+[mieszkancy.tkaczka.talk.rain]
+W deszcz wełna śmierdzi, ale lepiej się przędzie. Dziwne, prawda?
+
+[mieszkancy.tkaczka.zaczepki.rano]
+Owce, chodźcie, chodźcie...
+Wełna w tym roku cienka.
+
+[mieszkancy.tkaczka.zaczepki.dzien]
+Płótno! Mocne płótno!
+Ładna koszula za dwa grosze.
+
+[mieszkancy.tkaczka.zaczepki.wieczor]
+Gdzie ta dziewczyna znowu polazła?
+Jeszcze rządek i koniec.
+
+[mieszkancy.tkaczka.zaczepki.deszcz]
+Owce pod dach!
+
+[mieszkancy.tkaczka.zaczepki.noc]
+Późno już. Krosno nie lubi świecy.
+
+[mieszkancy.tkaczka.zaczepki.dom]
+Uważaj na nici, poplączesz.
+
+# wodziarz - sprzedawca wody
+mieszkancy.wodziarz.name = Teodor Żuraw
+mieszkancy.wodziarz.title = wodziarz
+[mieszkancy.wodziarz.talk.morning]
+Teodor Żuraw. Sprzedaję wodę. Ktoś musi, skoro rzeka nie chce.
+Skąd ją biorę? Z daleka. Przed świtem wychodzę, przed południem jestem z powrotem. Więcej nie musisz wiedzieć.
+
+[mieszkancy.wodziarz.talk.day]
+Kubek za trzy grosze. Drogo? W suszy nic nie jest drogie, jeśli bez tego umrzesz.
+Kuba nosi wodę z rynku, tanio. Niech nosi. Na rynku jej mało, a u mnie zawsze jest.
+
+[mieszkancy.wodziarz.talk.evening]
+Wieczorem kozy, potem spać. Wcześnie wstaję. Woda sama nie przyjdzie.
+
+[mieszkancy.wodziarz.talk.night]
+Nie sprzedaję po nocy. Nawet tobie.
+
+[mieszkancy.wodziarz.talk.rain]
+Deszcz. Najgorszy dzień w roku. Każdy ma wodę za darmo.
+
+[mieszkancy.wodziarz.zaczepki.rano]
+Wiadra pełne. Dobry początek.
+Nie pytaj, skąd. Pij.
+
+[mieszkancy.wodziarz.zaczepki.dzien]
+Woda! Czysta woda! Trzy grosze kubek!
+Kto ma pragnienie, ten ma u mnie przyjaciela.
+
+[mieszkancy.wodziarz.zaczepki.wieczor]
+Na dziś wystarczy.
+Jutro znowu drożej.
+
+[mieszkancy.wodziarz.zaczepki.deszcz]
+Psia krew, deszcz...
+
+[mieszkancy.wodziarz.zaczepki.noc]
+Zamknięte. Rano.
+
+[mieszkancy.wodziarz.zaczepki.dom]
+Ręce precz od beczek.
+
+# kozia_wdowa - wdowa z kozą
+mieszkancy.kozia_wdowa.name = Wdowa Pelagia
+mieszkancy.kozia_wdowa.title = wdowa z kozą
+[mieszkancy.kozia_wdowa.talk.morning]
+Pelagia. Wdowa. A to Bela, moja koza. Cały mój majątek, chłopcze, i jedyna, co mnie słucha.
+Bela daje kubek mleka na dzień. Czasem dwa, jak ją pochwalić.
+
+[mieszkancy.kozia_wdowa.talk.day]
+Mąż umarł w wielką suszę. Wtedy twój dziadek nosił nam wodę, wiesz? Nikt inny nie przyszedł. Tylko on.
+Bela ucieka, jak tylko płot się ruszy. Znajdziesz ją kiedyś w cudzym ogródku - to przyprowadź, dobrze?
+
+[mieszkancy.kozia_wdowa.talk.evening]
+Wieczorem kapliczka. Za męża, za Belę i za twojego dziadka.
+
+[mieszkancy.kozia_wdowa.talk.night]
+Stara jestem, wcześnie śpię. Bela też.
+
+[mieszkancy.kozia_wdowa.talk.rain]
+Bela nie znosi deszczu. Ja też nie. Obie siedzimy pod daszkiem i narzekamy.
+
+[mieszkancy.kozia_wdowa.zaczepki.rano]
+Bela, chodź tu, łobuzico!
+Mleczko, mleczko...
+
+[mieszkancy.kozia_wdowa.zaczepki.dzien]
+Ktoś widział moją kozę?
+Ach, te kolana...
+
+[mieszkancy.kozia_wdowa.zaczepki.wieczor]
+Bela, do domu!
+Pozdrów dziadka ode mnie.
+
+[mieszkancy.kozia_wdowa.zaczepki.deszcz]
+Pod dach, Bela, pod dach!
+
+[mieszkancy.kozia_wdowa.zaczepki.noc]
+Śpij, dziecko. Późno.
+
+[mieszkancy.kozia_wdowa.zaczepki.dom]
+Siadaj, siadaj. Mleka nie ma, ale woda się znajdzie. Trochę.
+
+# ======================================================================== (2026-11-13) nowy świat: Słony Brzeg (Map219)
+# hanna - Hanna, żona rybaka Janka, warzy sól
+mieszkancy.hanna.name = Hanna
+mieszkancy.hanna.title = warzy sól, żona Janka
+[mieszkancy.hanna.talk.morning]
+Hanna, żona Janka. To ja cię wycierałam, jak cię przyniósł z plaży. Siny byłeś jak śledź.
+Rano zbieram solankę z płycizny. Morze tu słone jak łzy, cała wyspa na tym stoi.
+
+[mieszkancy.hanna.talk.day]
+W południe kocioł. Woda paruje, sól zostaje. Drewna idzie na to masa, a drewna nie ma. Morze trochę wyrzuca, resztę trzeba zbierać.
+Sól to pieniądz. Solona ryba nie gnije, solone mięso też. Kupiec w Kruczogrodzie bierze, ile mam.
+
+[mieszkancy.hanna.talk.evening]
+Popołudniami chodzę na wrak. Znam w nim każdą deskę. Co zostało, wyciągam, zanim zgnije albo zanim ktoś inny wyciągnie.
+Janek wieczorem idzie do miasta. Niech idzie. Ja wolę ciszę i szum morza.
+
+[mieszkancy.hanna.talk.night]
+Późno. Ogień pod kotłem wygasł, ja też gasnę. Jutro.
+
+[mieszkancy.hanna.talk.rain]
+Deszcz! Beczki pod rynnę! Słodka woda za darmo, nie ma nic lepszego.
+
+[mieszkancy.hanna.zaczepki.rano]
+Solanka, solanka...
+Mewy, precz od koszy!
+
+[mieszkancy.hanna.zaczepki.dzien]
+Kocioł paruje, sól się robi.
+Nie podchodź, gorące!
+
+[mieszkancy.hanna.zaczepki.wieczor]
+Na wrak, póki widno.
+Ta deska jeszcze się przyda.
+
+[mieszkancy.hanna.zaczepki.deszcz]
+Beczki pod rynnę, prędko!
+
+[mieszkancy.hanna.zaczepki.noc]
+Ciii. Janek śpi.
+
+[mieszkancy.hanna.zaczepki.dom]
+Siadaj. Zupa rybna, jak zawsze.
+
+# ==================================================================== nowy świat: nowi mieszkańcy Kruczogrodu (Map220), 2026-11-14
+# staruszek - stary z domu przy wschodniej bramie
+mieszkancy.staruszek.name = Maciej Sitarz
+mieszkancy.staruszek.title = stary sitarz
+[mieszkancy.staruszek.talk.morning]
+Maciej jestem. Sita robiłem całe życie, teraz tylko siedzę i patrzę, kto wjeżdża bramą.
+Twój dziadek? Znam go, odkąd obaj mieliśmy czarne włosy. Porządny człowiek, tylko uparty.
+
+[mieszkancy.staruszek.talk.day]
+W tamtą suszę ludzie pili z kałuż. Twój dziadek woził wodę beczkami. Za darmo. Pytałeś go kiedyś, skąd ją miał?
+Lord mówi, że woda jest jego. Moja babka mówiła, że woda jest boska. Jedno z nich kłamie.
+
+[mieszkancy.staruszek.talk.evening]
+Stara woła na kolację. Jak nie pójdę, przyjdzie po mnie z chochlą.
+
+[mieszkancy.staruszek.talk.night]
+Starzy nie śpią, starzy słuchają. Idź spać, młody.
+
+[mieszkancy.staruszek.talk.rain]
+Deszcz! Wystaw wszystko, co ma dno. Wiadro, garnek, czapkę.
+
+[mieszkancy.staruszek.zaczepki.rano]
+Kości mówią: będzie sucho.
+Kto to jedzie? Nie widzę już tak daleko.
+
+[mieszkancy.staruszek.zaczepki.dzien]
+Kiedyś rzeka szumiała aż tutaj.
+Za moich czasów studnia była pełna.
+
+[mieszkancy.staruszek.zaczepki.wieczor]
+Idę, idę, już idę.
+
+[mieszkancy.staruszek.zaczepki.deszcz]
+Pada! Stara, beczkę wystaw!
+
+[mieszkancy.staruszek.zaczepki.noc]
+Cicho dziś przy bramie.
+
+[mieszkancy.staruszek.zaczepki.dom]
+Siadaj, tylko nie na moim stołku.
+
+# staruszka - jego żona
+mieszkancy.staruszka.name = Barbara Sitarzowa
+mieszkancy.staruszka.title = sitarzowa
+[mieszkancy.staruszka.talk.morning]
+Barbara. Ten stary pod bramą to mój. Od pięćdziesięciu lat mówię mu, żeby włożył czapkę.
+Rano idę do studni pierwsza. Kto pierwszy, ten ma czystą wodę. Kto ostatni, ten ma muł.
+
+[mieszkancy.staruszka.talk.day]
+Wnuki biegają po rynku jak kozy. Bronek ma nogi po dziadku, a Zosia język po mnie.
+O długu twojego dziadka każdy tu wie i każdy milczy. Wstyd im, bo to ich woda była.
+
+[mieszkancy.staruszka.talk.evening]
+Wieczorem kapliczka, potem zupa. W tej kolejności, bo po zupie chce się spać.
+
+[mieszkancy.staruszka.talk.night]
+O tej porze? Idź do domu, dziecko.
+
+[mieszkancy.staruszka.talk.rain]
+Niech pada. Kapusta w ogródku od tygodnia prosi.
+
+[mieszkancy.staruszka.zaczepki.rano]
+Zosia! Bronek! Śniadanie!
+Czapkę włóż, stary!
+
+[mieszkancy.staruszka.zaczepki.dzien]
+Wszystko drożeje, tylko starość za darmo.
+A kogo to niesie od bramy?
+
+[mieszkancy.staruszka.zaczepki.wieczor]
+Zupa stygnie!
+
+[mieszkancy.staruszka.zaczepki.deszcz]
+Pranie! Moje pranie!
+
+[mieszkancy.staruszka.zaczepki.noc]
+Kto tam chodzi po nocy?
+
+[mieszkancy.staruszka.zaczepki.dom]
+Buty wytrzyj. Dopiero zamiatałam.
+
+# pisarz - pisarz miejski
+mieszkancy.pisarz.name = Bonifacy Kałamarz
+mieszkancy.pisarz.title = pisarz miejski
+[mieszkancy.pisarz.talk.morning]
+Bonifacy, pisarz miejski. Jeśli coś w tym mieście zapisano, to moją ręką albo ręką mojego ojca.
+Rano wieszam ogłoszenia. Nikt nie czyta, wszyscy pytają mnie, co tam stoi.
+
+[mieszkancy.pisarz.talk.day]
+Archiwum ratusza to trzy skrzynie i jedna mysz. Mysz czyta więcej niż rajcy.
+Jest gdzieś stary przywilej o wodzie dla miasta. Widziałem go jako chłopak. Potem zniknął. Dziwne, prawda?
+
+[mieszkancy.pisarz.talk.evening]
+Świeca kosztuje, więc o zmroku zamykam księgi. Rządca pisze dłużej. Jego stać.
+
+[mieszkancy.pisarz.talk.night]
+Ratusz zamknięty. Skargi przyjmuję od rana.
+
+[mieszkancy.pisarz.talk.rain]
+W deszcz dach ratusza cieknie prosto na akta z zeszłego stulecia. Może to i lepiej.
+
+[mieszkancy.pisarz.zaczepki.rano]
+Ogłoszenie! Nowe ogłoszenie!
+Gdzie ja położyłem pieczęć...
+
+[mieszkancy.pisarz.zaczepki.dzien]
+Bez podpisu nieważne.
+Atrament znów podrożał.
+
+[mieszkancy.pisarz.zaczepki.wieczor]
+Dość liter na dziś.
+
+[mieszkancy.pisarz.zaczepki.deszcz]
+Akta! Ktoś zamknął okno?
+
+[mieszkancy.pisarz.zaczepki.noc]
+Jutro, jutro, wszystko jutro.
+
+[mieszkancy.pisarz.zaczepki.dom]
+Niczego nie dotykaj. Wszystko leży w porządku, tylko ja go znam.
+
+# rzadca - rządca Lorda
+mieszkancy.rzadca.name = Seweryn Liczyk
+mieszkancy.rzadca.title = rządca Lorda
+[mieszkancy.rzadca.talk.morning]
+Seweryn Liczyk, rządca. Prowadzę księgi Jaśnie Pana: kto ile winien i kto ile wypił.
+Twój dziadek ma u nas stronę. Długą stronę. Radzę ją czytać od końca.
+
+[mieszkancy.rzadca.talk.day]
+Woda z jazu jest policzona co do wiadra. Jeśli komuś brakuje, to znaczy, że źle liczył. On, nie ja.
+Pytasz, czy księga może się mylić? Księga nie. Ludzie tak.
+
+[mieszkancy.rzadca.talk.evening]
+Wracam do dworu. Jaśnie Pan lubi wiedzieć przed kolacją, ile przybyło.
+
+[mieszkancy.rzadca.talk.night]
+O tej porze nie przyjmuję. O żadnej porze nie przyjmuję bez pieniędzy.
+
+[mieszkancy.rzadca.talk.rain]
+Deszcz. Ludzie łapią wodę do beczek i myślą, że to za darmo. Zobaczymy.
+
+[mieszkancy.rzadca.zaczepki.rano]
+Termin mija w piątek.
+Liczby nie kłamią.
+
+[mieszkancy.rzadca.zaczepki.dzien]
+Z drogi, mam rachunki.
+Kto płaci, ten pije.
+
+[mieszkancy.rzadca.zaczepki.wieczor]
+Zamykam księgę.
+
+[mieszkancy.rzadca.zaczepki.deszcz]
+Księgi pod płaszcz.
+
+[mieszkancy.rzadca.zaczepki.noc]
+Nie teraz.
+
+[mieszkancy.rzadca.zaczepki.dom]
+Czego tu szukasz?
+
+# studzienny - pilnuje studni na rynku
+mieszkancy.studzienny.name = Bogusz Kubeł
+mieszkancy.studzienny.title = studzienny
+[mieszkancy.studzienny.talk.morning]
+Bogusz, studzienny. Pilnuję, żeby każdy brał swoje wiadro i ani kropli więcej.
+Kolejka od świtu. Kto się wpycha, ten idzie na koniec. Takie prawo, moje własne.
+
+[mieszkancy.studzienny.talk.day]
+Woda stoi coraz niżej. Sznur dowiązywałem już dwa razy tego lata.
+Mówią, że sprzedaję wodę po znajomości. Kłamią. Znajomym sprzedaję drożej.
+
+[mieszkancy.studzienny.talk.evening]
+O zmroku zakładam kłodę na studnię. Kto nie zdążył, niech rano wstanie wcześniej.
+
+[mieszkancy.studzienny.talk.night]
+Studnia zamknięta. Idź pić do tawerny, tam jeszcze leją.
+
+[mieszkancy.studzienny.talk.rain]
+Jak pada, mam wolne. Nikt nie stoi w kolejce, wszyscy stoją pod rynną.
+
+[mieszkancy.studzienny.zaczepki.rano]
+Po jednym wiadrze! Po jednym!
+Kolejka, mówię, kolejka!
+
+[mieszkancy.studzienny.zaczepki.dzien]
+Nie rozlewaj, to nie twoje.
+Sznur znów za krótki.
+
+[mieszkancy.studzienny.zaczepki.wieczor]
+Zamykam! Ostatnie wiadro!
+
+[mieszkancy.studzienny.zaczepki.deszcz]
+Dziś niebo leje za mnie.
+
+[mieszkancy.studzienny.zaczepki.noc]
+Zamknięte, mówiłem.
+
+[mieszkancy.studzienny.zaczepki.dom]
+Wiadra stoją pod ścianą. Żadne nie jest twoje.
+
+# piwowar - mistrz cechu, browar cechowy
+mieszkancy.piwowar.name = Gotfryd Chmiel
+mieszkancy.piwowar.title = piwowar, mistrz cechu
+[mieszkancy.piwowar.talk.morning]
+Gotfryd Chmiel, mistrz cechu. Moje piwo pije całe miasto, tylko nalewa je kto inny.
+Piwo to woda, słód i cierpliwość. Wody brak, słód drożeje, a cierpliwość mi się kończy.
+
+[mieszkancy.piwowar.talk.day]
+Karczmarz bierze ode mnie beczki i sprzedaje kuflami. Policz sobie, kto na tym zarabia.
+Jakby tawerna zmieniła gospodarza, nikt by nie płakał. No, może jeden.
+
+[mieszkancy.piwowar.talk.evening]
+Lubię popatrzeć na szyld tawerny przed wieczorem. Ładny szyld. Mógłby wisieć gdzie indziej.
+
+[mieszkancy.piwowar.talk.night]
+Browar śpi, piwo pracuje. Nie przeszkadzaj mu.
+
+[mieszkancy.piwowar.talk.rain]
+Deszczówka na piwo? Bluźnierstwo. Chociaż w tym roku kto wie.
+
+[mieszkancy.piwowar.zaczepki.rano]
+Beczki na wóz!
+Słód, gdzie mój słód?
+
+[mieszkancy.piwowar.zaczepki.dzien]
+Najlepsze piwo na wyspie!
+Kto warzy, ten rządzi.
+
+[mieszkancy.piwowar.zaczepki.wieczor]
+Pełna tawerna... moim piwem pełna.
+
+[mieszkancy.piwowar.zaczepki.deszcz]
+Kadzie przykryć!
+
+[mieszkancy.piwowar.zaczepki.noc]
+Cicho, piwo dojrzewa.
+
+[mieszkancy.piwowar.zaczepki.dom]
+Nie stukaj w beczki. One tego nie lubią.
+
+# kucharka - kuchnia tawerny
+mieszkancy.kucharka.name = Jadzia Rondel
+mieszkancy.kucharka.title = kucharka z tawerny
+[mieszkancy.kucharka.talk.morning]
+Jadzia, z kuchni tawerny. Zupa zaczyna się od wody, a wody zawsze za mało.
+O świcie biegnę do studni, zanim Bogusz zacznie liczyć wiadra.
+
+[mieszkancy.kucharka.talk.day]
+Jakbyś miał czystą wodę na zbyciu, to wiesz, gdzie są kuchenne drzwi. Zapłacę miską gorącego.
+Gulasz bez cebuli to nie gulasz. Zapamiętaj, przyda ci się w życiu.
+
+[mieszkancy.kucharka.talk.evening]
+Wieczorem nie mam czasu na gadanie. Pełna sala, trzy garnki i jedna ja.
+
+[mieszkancy.kucharka.talk.night]
+Kuchnia zamknięta. Został chleb, weź i idź.
+
+[mieszkancy.kucharka.talk.rain]
+Pada? Garnki na podwórze! Każda kropla to łyżka zupy.
+
+[mieszkancy.kucharka.zaczepki.rano]
+Woda, woda, gdzie ta woda...
+Cebula znów podrożała!
+
+[mieszkancy.kucharka.zaczepki.dzien]
+Nie stój w drzwiach, niosę gorące!
+Kto zjadł mój ser?
+
+[mieszkancy.kucharka.zaczepki.wieczor]
+Zaraz podaję, zaraz!
+
+[mieszkancy.kucharka.zaczepki.deszcz]
+Garnki na deszcz!
+
+[mieszkancy.kucharka.zaczepki.noc]
+Jeszcze tylko pozmywać.
+
+[mieszkancy.kucharka.zaczepki.dom]
+Z kuchni nic nie wynosić!
+
+# dziadek - dziadek Stach w swojej chatce w Podgrodziu (nowy świat, 2026-11-14)
+mieszkancy.dziadek.name = Dziadek Stach
+mieszkancy.dziadek.title = dziadek
+[mieszkancy.dziadek.talk.morning]
+Wstałeś? Dobrze. Drewno samo się nie porąbie, ale najpierw zjedz, co jest w kotle.
+Chatka mała, wiem. Mnie wystarcza. Łóżko jest twoje, ja i tak wolę fotel przy ogniu.
+
+[mieszkancy.dziadek.talk.day]
+Działka za płotem jest nasza. Stawiaj tam, co chcesz, byle kratkę od płotu, żeby furtka się otwierała.
+Wody szkoda na mycie podłogi. Zamieć i wystarczy.
+
+[mieszkancy.dziadek.talk.evening]
+Siądź przy ogniu. Zupa cienka, ale ciepła. Bogatsi jedzą tłuściej i śpią gorzej.
+O długu pogadamy, jak będzie o czym. Na razie rób swoje.
+
+[mieszkancy.dziadek.talk.night]
+Śpij, wnuku. Ja jeszcze posiedzę. Starzy mało śpią.
+
+[mieszkancy.dziadek.talk.rain]
+Pada! Wystaw beczkę pod okap i wszystko, co ma dno. Takiej wody nikt nam nie policzy.
+
+[mieszkancy.dziadek.zaczepki.rano]
+Siekiera tępa jak ja o świcie.
+Dzień dobry, sąsiedzie.
+
+[mieszkancy.dziadek.zaczepki.dzien]
+Jeszcze ta szczapa i dość.
+Kolana mówią, że będzie zmiana.
+
+[mieszkancy.dziadek.zaczepki.wieczor]
+Dobry wieczór na ławkę.
+Ogień sam się nie rozpali.
+
+[mieszkancy.dziadek.zaczepki.deszcz]
+Beczka! Gdzie ja postawiłem beczkę?
+
+[mieszkancy.dziadek.zaczepki.noc]
+Cicho dziś w Podgrodziu.
+
+[mieszkancy.dziadek.zaczepki.dom]
+Zamknij drzwi, ciepło ucieka.
+Dorzuć do ognia, jak wstaniesz.

@@ -32,7 +32,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         base.res.length === 24 && JSON.stringify(base.ranges).includes("[3020,3049]") && base.reg.some(r => /^3002-30(17|19)$/.test(r)) && base.waves.join() === "10,25,37,52", base);
 
     // ---------------------------------------------------------------- nowa gra w miasteczku: stan, prom dnia 1
-    await t.newGame({ map: 8, x: 53, y: 55, dir: 8, hour: 10, quiet: true, minimap: false });
+    await t.newGame({ map: 220, x: 47, y: 43, dir: 8, hour: 10, quiet: true, minimap: false });
     await t.frames(20);
     const s1 = await st();
     t.check("nowa gra: ziarno puli, prom dnia 1 zaplanowany (last 1), renoma 30, pokoje bohatera wolne", s1.seed > 0 && s1.last === 1 && s1.renoma === 30 && !s1.ksiega["1"] && !s1.ksiega["2"], s1);
@@ -42,18 +42,21 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const w6a = await J(`({ lud: TownLife.absent("ludmila"), ela: TownLife.absent("ela"), k5: TownQuests.Q.K5.steps[0].targetsBefore.targets, k27: TownQuests.offerable("K27") })`);
     await at(10, 11, 20);
     const w6b = await J(`({ lud: TownLife.absent("ludmila") })`);
+    // (2026-11-15 the camp of W6 stands on Podgrodzie's meadow: from noon they are there - in Kruczogród they stay away)
+    await t.go(218, 45, 45, 8);
     await at(10, 12.5, 20);
     const w6c = await J(`({ lud: TownLife.absent("ludmila"), ela: TownLife.absent("ela") })`);
-    t.check("W6: dzień 5 - Ludmiły i Eli jeszcze nie ma (K27 bez oferty, K5 - czwarty bochen dla Kuby); dzień 10 rano na molo, od południa w miasteczku",
+    t.check("W6: dzień 5 - Ludmiły i Eli jeszcze nie ma (K27 bez oferty, K5 - czwarty bochen dla Kuby); dzień 10 rano na molo, od południa w obozie w Podgrodziu",
         w6a.lud && w6a.ela && w6a.k5.includes("woziwoda") && !w6a.k27 && w6b.lud && !w6c.lud && !w6c.ela, { w6a, w6b, w6c });
 
     // ---------------------------------------------------------------- dzień 4: Tobiasz Goniec (nowa gra od początku, jak u gracza)
-    await t.newGame({ map: 8, x: 53, y: 55, dir: 8, hour: 10, quiet: true, minimap: false });
+    await t.newGame({ map: 220, x: 47, y: 43, dir: 8, hour: 10, quiet: true, minimap: false });
     await at(4, 7, 30);
     const s4 = await st();
     const tob = s4.obecni.tobiasz;
-    t.check("dzień 4, 7:00: Tobiasz przypłynął - pokój 8, do dnia 7, w księdze; pokoje 1, 2 i 7 nie w księdze",
-        !!tob && tob.od === 4 && tob.do === 7 && tob.pokoj === "8" && s4.ksiega["8"] === "tobiasz" && !s4.ksiega["1"] && !s4.ksiega["2"] && !s4.ksiega["7"], s4);
+    const PodroznicyPokoje = await J("PodroznicyData.POKOJE");
+    t.check("dzień 4, 7:00: Tobiasz przypłynął - ma pokój gościnny, do dnia 7, w księdze; pokoje 1, 2 i 7 nie w księdze",
+        !!tob && tob.od === 4 && tob.do === 7 && !!PodroznicyPokoje[tob.pokoj] && s4.ksiega[tob.pokoj] === "tobiasz" && !s4.ksiega["1"] && !s4.ksiega["2"] && !s4.ksiega["7"], s4);
     const way = await J(`(function(){ const e = TownLife.eventOf("tobiasz"), s = e && TownLife.state("tobiasz"); return { ev: !!e, hidden: s ? s.hidden : null, plan: TownLife.entryAt(TownLife.RESIDENTS.find(r => r.key === "tobiasz"), 7.5) }; })()`);
     t.check("...do południa „w drodze” (ukryty w miasteczku, plan: podr_droga)", way.ev && way.hidden === true && way.plan.where === "podr_droga", way);
     await at(4, 14.5, 60);
@@ -68,13 +71,13 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("...potem jego menu: „Skąd płyniesz?” - z Brzozowej Woli", /Brzozowej Woli/.test(menu.text) && (menu.choices || []).some(c => /Skąd płyniesz/.test(JSON.stringify(c))), { text: menu.text.slice(0, 200), choices: menu.choices });
     const book = await J(`({ lines: Podroznicy.ksiegaLinie(), opt: Tawerna.talk.options("borgar").map(o => o.id) })`);
     t.check("księga gości: opcja u Borgara; wiersz „Pokój 8: Tobiasz Goniec, posłaniec z lądu - do dnia 7”, renoma i utarg",
-        book.opt.includes("Podroznicy:ksiega") && book.lines.some(l => /^Pokój 8: Tobiasz Goniec, posłaniec z lądu - do dnia 7$/.test(l)) && book.lines.some(l => /^Renoma karczmy: 30/.test(l)) && book.lines.some(l => /^Utarg z pokoi/.test(l)), book);
+        book.opt.includes("Podroznicy:ksiega") && book.lines.some(l => new RegExp("^Pokój " + tob.pokoj + ": Tobiasz Goniec, posłaniec z lądu - do dnia 7$").test(l)) && book.lines.some(l => /^Renoma karczmy: 30/.test(l)) && book.lines.some(l => /^Utarg z pokoi/.test(l)), book);
 
     // ---------------------------------------------------------------- noc: w swoim pokoju na piętrze (zapas bez znaczników sali)
     await t.go(25, 30, 28, 8);
     await at(4, 23.5, 30);
     const room = await J(`(function(){ const e = TownLife.eventOf("tobiasz"); return e ? { x: e.x, y: e.y, hidden: e._town.hidden, sala: Podroznicy.wnetrze("tobiasz") } : null; })()`);
-    t.check("23:30, piętro gości (Map025): Tobiasz u siebie - pokój 8 (5,41)", !!room && room.x === 5 && room.y === 41 && room.hidden === false, room);
+    t.check("23:30, piętro gości (Map025): Tobiasz u siebie - w swoim pokoju", !!room && room.x === PodroznicyPokoje[tob.pokoj].miejsce[0] && room.y === PodroznicyPokoje[tob.pokoj].miejsce[1] && room.hidden === false, { room, pokoj: tob.pokoj });
 
     // ---------------------------------------------------------------- zapis i wczytanie w środku pobytu
     // (migawka tuż przed zapisem: o 15:00 dnia 4 ktoś z puli mógł już odpłynąć)
@@ -85,17 +88,19 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("zapis i wczytanie: te same osoby, pokoje i ziarno", JSON.stringify(s5.obecni) === JSON.stringify(s4z.obecni) && s5.seed === s4z.seed && JSON.stringify(s5.ksiega) === JSON.stringify(s4z.ksiega), { s4: s4z.obecni, s5: s5.obecni });
 
     // ---------------------------------------------------------------- dzień 7: odpływ Tobiasza, przypływ Konstantego
-    await t.go(8, 53, 55, 8);
+    await t.go(220, 47, 43, 8);
     await at(7, 15.5, 40);
     const s7 = await st();
-    t.check("dzień 7, 15:30: Tobiasz odpłynął (byli 4-7), Konstanty Mak przypłynął (pokój 11); nikt w pokojach 1 i 2",
-        !s7.obecni.tobiasz && (s7.byli.tobiasz || []).some(v => v.od === 4 && v.do === 7) && !!s7.obecni.medyk && s7.obecni.medyk.pokoj === "11" && !s7.ksiega["1"] && !s7.ksiega["2"], s7);
+    // (his room is 11 - when a traveller of the pool took it first, the book gives him the nearest free one: five guest rooms since 2026-11-16)
+    const r11 = Object.entries(s7.obecni).find(([k, e]) => e && e.pokoj === "11" && k !== "medyk");
+    t.check("dzień 7, 15:30: Tobiasz odpłynął (byli 4-7), Konstanty Mak przypłynął (pokój 11, a gdy zajęty - inny wolny); nikt w pokojach 1 i 2",
+        !s7.obecni.tobiasz && (s7.byli.tobiasz || []).some(v => v.od === 4 && v.do === 7) && !!s7.obecni.medyk && (s7.obecni.medyk.pokoj === "11" || (!!r11 && !!s7.obecni.medyk.pokoj)) && !s7.ksiega["1"] && !s7.ksiega["2"], s7);
     t.check("utarg Borgara z nocy podróżnych (noc 5, 6, 7 Tobiasza w 1-os.: 8 G za noc)", s7.utarg >= 24, s7.utarg);
 
     // ---------------------------------------------------------------- przystań: scena przybycia (dzień 10, fala 1, Zenon)
     await at(10, 8.97, 5);
     await t.eval("Podroznicy.auto(true); 0");   // (after the calm: the tests' quiet mode turns the scene off)
-    await t.go(125, 20, 16, 4, { calm: false });
+    await t.go(219, 32, 47, 4, { calm: false });
     const started = await t.until("Podroznicy.scena.trwa()", 30, 200);
     await t.frames(90);
     const sc = await J(`({ s: Podroznicy.scena.stan() ? { kino: Podroznicy.scena.stan().kino, cast: Podroznicy.scena.stan().cast.map(c => c.rk) } : null, ev: $gameMap.isEventRunning() })`);

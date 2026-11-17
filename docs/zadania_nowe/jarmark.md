@@ -2,6 +2,17 @@
 
 Stan: 2026-11-11, **sam projekt** (żadnych zmian w kodzie ani danych). Siostrzany wątek: `wesele.md` (W18, „Wesele w Złotym Kuflu”) - rozdz. 9 mówi, jak się mają do siebie.
 
+> **2026-11-16 - przeniesione do nowego Kruczogrodu (Map220); poniższy projekt opisuje stare miasto (Map008).** Gracz wybrał:
+> jarmark „na łące na południowym wschodzie” i pościg „uliczkami”. Łąkę zajmuje pole jęczmienia (x 50..65, y 55..62) i wiatrak
+> (45,60) - zostają, jarmark stoi wokół nich: dwa kramy przy placyku młyna, cztery pod polem frontem do dolnej drogi, scena w rogu
+> (62,65) z widownią na drodze, beczki przy scenie, pochód Lorda schodzi od dworu przez wschodni mostek. Ślady: gablota w ratuszu,
+> Cech (warsztat 19,58), studnia na rynku (klucz `laznia`), garbarnia i przytułek w Podgrodziu (Map218). Konkurs w mniejszej sali
+> (rząd sędziów y 27). **Pościg (J10) jest biegiem po ziemi**: Szept wychodzi zza dzwonnicy i biegnie odcinkami (między domami,
+> schodami do koryta, uliczkami dolnego miasta, drogą, ścieżką młyna) - odcinek, gdy bohater blisko albo po 4 s; zgubiony z oczu
+> na 3 s = +15 s; w wąskim przejściu (25,33) przewraca beczki; poddaje się pod wiatrakiem. W noc zasadzki potwory z morza nie
+> wchodzą do miasta (Morze.js pyta `Jarmark_Sceny.nocStrzezona`). Dane i współrzędne: `js/plugins/Jarmark_Data.js`; kratki
+> układu i trasy sprawdza `python tools/jarmark/uklad_220.py [podglad.png]`; test `tests/jarmark_test.js` (52/52).
+
 ## 1. Pitch, długość, start, związek z fabułą
 
 **Pitch.** Raz w roku, pod koniec lata, Kruczogród urządza Jarmark: kramy pod arkadami Sukiennic, kupcy z promu, beczki z browaru

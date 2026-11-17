@@ -233,7 +233,7 @@ kit.test({ port: 9486, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         await t.frames(10);
         const dq = await dbg(), g = dq.goal, ct = await t.json("CleanCompass.info()");
         t.check("zadanie z miasteczka w lewym górnym rogu pod paskami (K1, kowal)", g && g.source === "town" && g.id === "K1" && dq.parts.goal.visible && dq.parts.goal.x === 12 && dq.parts.goal.y >= dq.parts.needs.y + dq.parts.needs.h, g);
-        t.check("kompas: krok zadania zna osobę - kowal w miasteczku (mapa 8)", ct.target && ct.target.map === 8 && /Tadek/.test(ct.target.name) && ct.target.x !== undefined, ct.target);
+        t.check("kompas: krok zadania zna osobę - kowal w Kruczogrodzie (mapa 220)", ct.target && ct.target.map === 220 && /Tadek/.test(ct.target.name) && ct.target.x !== undefined, ct.target);
         const coal = await t.eval("$gameParty.numItems($dataItems[79])");
         t.check("okienko zadania: MIASTECZKO, bieżący krok („Przynieś…”) i rzecz z kroku z ilością mam/potrzeba (bez listy osób - jak dawniej)",
             dq.goalBox && dq.goalBox.label === "MIASTECZKO" && /^Przynieś/.test(dq.goalBox.sub) && dq.goalBox.needs.length === 1 && dq.goalBox.needs[0].name === "Węgiel drzewny" && dq.goalBox.needs[0].need === 5 && dq.goalBox.needs[0].have === Math.min(5, coal) && !dq.goalBox.needs[0].ok

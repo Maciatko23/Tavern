@@ -9,7 +9,7 @@ import os, sys, json, re
 HERE = os.path.dirname(os.path.abspath(__file__))
 T2 = os.path.abspath(os.path.join(HERE, ".."))
 ROOT = os.path.abspath(os.path.join(T2, "..", ".."))
-STAGE_DATA = os.path.join(T2, "staging", "data")
+STAGE_DATA = os.environ.get("TAWERNA_PLAN_DATA") or os.path.join(T2, "staging", "data")   # (2026-11-16: the installed maps when asked - the smaller ground floor)
 TAV = os.path.join(ROOT, "tools", "tavern")
 sys.path.insert(0, TAV)
 
@@ -76,22 +76,37 @@ def rooms001(K):
     # Tawerna 2 ground floor 63 x 55 (second method, tools/tawerna2/uklad.txt): the old hall block cut as it was (x-36); the top row of small
     # rooms; Borgar's room (key "jadalnia": the eavesdropping room of D42) is reached through the storeroom
     return [
-        Room("sala", "Sala", "guest", [(1, 27, 27, 44), (0, 30, 0, 35), (28, 30, 28, 35), (0, 43, 0, 43)], label="Sala"),
-        Room("scena", "Scena", "guest", [(29, 27, 47, 38)], label="Scena"),
-        Room("gry", "Pokój gier", "guest", [(49, 27, 61, 38)], label="Pokój" + chr(10) + "gier"),
-        Room("palarnia", "Palarnia", "guest", [(29, 43, 39, 53), (40, 46, 40, 48)], label="Palarnia"),
-        Room("rzutki", "Sala rzutek", "guest", [(41, 43, 61, 53), (59, 39, 60, 42)], label="Sala" + chr(10) + "rzutek"),
-        Room("sien", "Sień", "hall", [(1, 53, 27, 53), (5, 49, 23, 52), (12, 45, 16, 48)], label="Sień"),
-        Room("korytarz", "Korytarz", "hall", [(1, 20, 48, 22), (13, 17, 15, 19), (23, 17, 23, 19), (32, 17, 32, 19), (42, 17, 42, 19)], label="Korytarz"),
-        Room("kuchnia", "Kuchnia", "service", [(1, 4, 17, 16), (0, 9, 0, 14)], label="Kuchnia"),
-        Room("piekarnia", "Piekarnia", "service", [(19, 4, 27, 16)], label="Piekarnia"),
-        Room("spizarnia", "Spiżarnia", "service", [(29, 4, 35, 16)], label="Spiżarnia"),
-        Room("sluzba", "Pokój służby", "private", [(37, 4, 47, 16)], label="Pokój" + chr(10) + "służby"),
-        Room("magazyn", "Magazyn", "service", [(49, 14, 61, 22)], label="Magazyn"),
-        Room("jadalnia", "Gabinet Borgara", "private", [(49, 4, 61, 10), (56, 11, 56, 13)], label="Gabinet" + chr(10) + "Borgara"),
+        # (2026-11-16, tools/tawerna/mniejsza.py: the smaller ground floor 49 x 42 - the kitchen right behind the bar, the store with the way
+        # to the cellar, the stage, one games room with the darts; the hall as it was, 13 rows higher)
+        Room("sala", "Sala", "guest", [(1, 14, 27, 31), (0, 17, 0, 22), (28, 17, 28, 22), (0, 30, 0, 30)], label="Sala"),
+        Room("scena", "Scena", "guest", [(29, 14, 47, 25)], label="Scena"),
+        Room("gry", "Pokój gier", "guest", [(29, 30, 47, 40), (28, 30, 28, 30)], label="Pokój gier"),
+        Room("sien", "Sień", "hall", [(1, 40, 27, 40), (5, 36, 23, 39), (12, 32, 16, 35)], label="Sień"),
+        Room("kuchnia", "Kuchnia", "service", [(1, 4, 17, 9), (18, 9, 18, 9), (14, 10, 14, 13)], label="Kuchnia"),
+        Room("piekarnia", "Piekarnia", "service", [(19, 4, 27, 9)], label="Piekarnia"),
+        Room("skladzik", "Składzik", "private", [(29, 3, 47, 9), (28, 7, 28, 7)], label="Składzik"),
     ]
 
 def rooms025(K):
+    # (2026-11-16, tools/tawerna/pietro1.py: the smaller first floor 49 x 42 - eight rooms of five cells in the north band, the corridor,
+    # room 6 | hall | room 10 | bath | room 9, the stair hall with the two stairwells; room 7 and the chamber are gone from this floor)
+    out = []
+    north = [("r3", 1), ("r1", 7), ("r2", 13), ("r4", 19), ("r5", 25), ("r12", 31), ("r8", 37), ("r11", 43)]
+    for key, x0 in north:
+        n = key[1:]
+        out.append(Room(key, "Pokój %s" % n, "guest" if key in ("r1", "r2", "r3") else "private", [fit(K, (x0, 1, x0 + 4, 12))], label=n, sub="1-os."))
+    for key, rect, sub in (("r6", (1, 21, 9, 31), "2-os."), ("r10", (19, 21, 27, 31), "2-os."), ("r9", (43, 21, 47, 31), "1-os.")):
+        # (2026-11-16, the user: „pokój na piętrze dla Borgara, ale też dla służby”) room 10 is the innkeeper's, room 9 the servants'
+        own = {"r10": ("Pokój Borgara", "Borgar", "karczmarz"), "r9": ("Izba służby", "Służba", "")}.get(key)
+        if own: out.append(Room(key, own[0], "service", [fit(K, rect)], label=own[1], sub=own[2])); continue
+        out.append(Room(key, "Pokój %s" % key[1:], "private", [fit(K, rect)], label=key[1:], sub=sub))
+    out.append(Room("bath", "Łaźnia gości", "guest", [fit(K, (29, 21, 41, 31))], label="Łaźnia"))
+    out.append(Room("hall1", "Hall", "hall", [(11, 20, 17, 31), (12, 32, 15, 35)], label="Hall"))
+    out.append(Room("nc", "Korytarz północny", "hall", [(1, 16, 47, 19)], label="Korytarz"))
+    out.append(Room("sc", "Korytarz południowy", "hall", [(1, 40, 47, 40), (9, 36, 23, 39), (33, 36, 47, 39)], label="Korytarz"))
+    return out
+
+def rooms025_old(K):
     # Tawerna 2, third layout (63 x 55): bands of rooms, two vertical halls (hall1, hall2), the stair hall at the bottom
     import json as _j
     L = _j.load(open(os.path.join(T2, "staging", "layout025.json"), encoding="utf-8"))
@@ -117,30 +132,23 @@ def rooms025(K):
     return out
 
 def rooms026(K):
-    import json as _j
-    L = _j.load(open(os.path.join(T2, "staging", "layout026.json"), encoding="utf-8"))
-    out = []
-    SPECIAL = {"hall": [(11, 26, 17, 44), (12, 45, 16, 48), (1, 53, 27, 53), (5, 49, 23, 52)], "nc": [(1, 22, 61, 25)]}
-    for key, rect in L.items():
-        if key in ("stairs_w", "stairs_e"): continue
-        if key in SPECIAL:
-            out.append(Room(key, "Galeria apartamentów" if key == "nc" else "Hall", "hall", SPECIAL[key], label="Galeria" if key == "nc" else "Hall")); continue
-        r = fit(K, tuple(rect))
-        if key.startswith(("lord", "s4")):
-            grp = "lord" if key.startswith("lord") else "s4"
-            nm = "Apartament Lorda" if grp == "lord" else "Apartament Złoty"
-            part = "sypialnia" if key.endswith("b") else ("salon" if key == "lorda" else "salonik")
-            out.append(Room(key, nm, "guest" if grp == "s4" else "private", [r], label=nm.split(" ", 1)[1], sub=part, group=grp))
-        elif key.startswith(("s2", "s3")):
-            grp = key[:2]
-            out.append(Room(key, "Apartament " + ("Błękitny" if grp == "s2" else "Zielony"), "private", [r], label=("Błękitny" if grp == "s2" else "Zielony"), sub="salonik" if key.endswith("a") else "sypialnia", group=grp))
-        elif key.startswith("terrace"):
-            if key == "terrace_b": r = (40, r[1], r[2], r[3])
-            out.append(Room(key, "Taras", "hall", [r], label="Taras", group="terrace"))
-        else:
-            nm = {"lib": "Biblioteka", "salon": "Wielki salon"}[key]
-            out.append(Room(key, nm, "private", [r], label=nm))
-    return out
+    # (2026-11-16, tools/tawerna/pietro2.py: the smaller second floor 49 x 42 - the Lord's suite | library | Blue | the chamber with
+    # the fireplace (from floor 1) in the north band, the gallery, Green | hall | Gold suite | Great salon, the stair hall, the balcony)
+    R = lambda *a, **k: Room(*a, **k)
+    return [
+        R("lordb", "Apartament Lorda", "private", [fit(K, (1, 1, 9, 12))], label="Lorda", sub="sypialnia", group="lord"),
+        R("lorda", "Apartament Lorda", "private", [fit(K, (11, 1, 19, 12))], label="Lorda", sub="salon", group="lord"),
+        R("lib", "Biblioteka", "private", [fit(K, (21, 1, 27, 12))], label="Biblioteka"),
+        R("s2a", "Apartament Błękitny", "private", [fit(K, (29, 1, 37, 12))], label="Błękitny", group="s2"),
+        R("chamber", "Komnata z kominkiem", "guest", [fit(K, (39, 1, 47, 12))], label="Komnata"),
+        R("s3a", "Apartament Zielony", "private", [fit(K, (1, 21, 9, 31))], label="Zielony", group="s3"),
+        R("s4a", "Apartament Złoty", "guest", [fit(K, (19, 21, 26, 31))], label="Złoty", sub="salonik", group="s4"),
+        R("s4b", "Apartament Złoty", "guest", [fit(K, (28, 21, 36, 31))], label="Złoty", sub="sypialnia", group="s4"),
+        R("salon", "Wielki salon", "private", [fit(K, (38, 21, 47, 31))], label="Wielki salon"),
+        R("terrace_b", "Balkon", "hall", [fit(K, (34, 33, 47, 40))], label="Balkon", group="terrace"),
+        R("hall", "Hall", "hall", [(11, 20, 17, 31), (12, 32, 16, 35), (1, 40, 32, 40), (9, 36, 27, 39), (1, 36, 3, 39)], label="Hall"),
+        R("nc", "Galeria apartamentów", "hall", [(1, 16, 47, 19)], label="Galeria"),
+    ]
 
 FLOORS = [
     {"map": 1, "name": "Parter", "title": "Parter", "rooms": rooms001, "axis": 14},

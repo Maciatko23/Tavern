@@ -1,0 +1,17 @@
+PASS gra
+  zdjecie 01_kaplica_pulpit
+  zdjecie 02_kruczarnia_zerdz
+  zdjecie 03_kruk_przystan_droga
+  zdjecie 04_kruk_kruczy_jar
+  zdjecie 05_kruk_brama_miasta
+  zdjecie 06_rynna_1
+  zdjecie 07_rynna_2
+  zdjecie 08_rynna_3
+  zdjecie 09_rynna_4
+  zdjecie 10_widok_dzwonnica
+  zdjecie 11_widok_kruczarnia
+  zdjecie 12_kopiec_orla_gran
+  zdjecie 13_fundament_stajnia
+PASS zdjecia (after)
+PASS bez bledow w konsoli  []
+3/3 passed

@@ -1,5 +1,6 @@
 // Wolves (Hunting.js + Combat.js): a pack at night, the ring round the hero, one attacker at a time (bark -> leap -> bite -> stands),
-// a roll through the leap, a parry, XP for a wolf, the pack running when its leader dies.
+// a roll through the leap, a parry, XP for a wolf, the pack running when its leader dies. On the new world's wolf ground: Krucze Turnie
+// (Map222, <Hunt:...,wolf=4>; till 2026-11-17 the old world's meadow Map004).
 const { launch, sleep } = require("./cdp.js");
 const OUT = process.argv[2] || "";
 (async () => {
@@ -11,8 +12,8 @@ const OUT = process.argv[2] || "";
     try {
         await b.send("Page.navigate", { url: "http://127.0.0.1:8765/index.html" });
         for (let i = 0; i < 120; i++) { if (await ev("!!(window.SceneManager && SceneManager._scene && SceneManager._scene.constructor.name==='Scene_Title')").catch(() => false)) break; await sleep(500); }
-        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(4, 24, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
-        for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===4").catch(() => false)) break; await sleep(500); }
+        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(222, 40, 40, 2, 0); SceneManager.goto(Scene_Map); })()`);
+        for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===222").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
         await ev("SceneManager._scene.startFadeIn(1,false); if (window.Needs) Needs.setEnabled(false); if (window.Birds) Birds.auto(false); Hunting.auto(false); $gameSystem.setDayNightHour(22); $gameSystem.setStamina(100); for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); 0");
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
@@ -24,17 +25,20 @@ const OUT = process.argv[2] || "";
         // ================= 1. the pictures, where they live =================
         const sizes = await ev(`new Promise(res => { const out = {}, list = ["$Animal_Wolf", "$Animal_Wolf_Run", "$Animal_Wolf_Stalk", "$Animal_Wolf_Bark"]; let left = list.length; for (const n of list) { const bmp = ImageManager.loadCharacter(n); bmp.addLoadListener(() => { out[n] = [bmp.width, bmp.height]; if (--left === 0) res(out); }); } })`);
         check("the four wolf sheets load (3 x 4 cells of 68)", Object.values(sizes).every(s => s[0] === 204 && s[1] === 272), sizes);
-        check("wolves: out at night (20-5), in packs of 2-4; three on the meadow (Map004)", (await J("Hunting.SPECIES.wolf.hours")).join() === "20,24,0,5" && (await J("Hunting.SPECIES.wolf.pack")).join() === "2,4" && (await J("Hunting.mapTargets()")).wolf === 3);
+        check("wolves: out at night (20-5), in packs of 2-4; four in Krucze Turnie (Map222)", (await J("Hunting.SPECIES.wolf.hours")).join() === "20,24,0,5" && (await J("Hunting.SPECIES.wolf.pack")).join() === "2,4" && (await J("Hunting.mapTargets()")).wolf === 4);
 
         // ================= 2. a pack =================
+        // (the mountain meadow of Krucze Turnie has a stone or a bush here and there: the most open 9 x 7 field, at most one cell taken -
+        // flowers and tufts below the characters do not count)
         const room = await J(`(function(){
+            let best = null;
             for (let y = 8; y < $gameMap.height() - 8; y++) for (let x = 8; x < $gameMap.width() - 8; x++) {
-                let ok = true;
-                for (let dx = -4; dx <= 4 && ok; dx++) for (let dy = -3; dy <= 3; dy++) { if (!$gameMap.checkPassage(x + dx, y + dy, 0x0f) || $gameMap.eventsXy(x + dx, y + dy).length > 0 || Farming.hasObjectTile(x + dx, y + dy) || Farming.buildingAt(x + dx, y + dy)) { ok = false; break; } }
-                if (ok) return { x, y };
+                let n = 0;
+                for (let dx = -4; dx <= 4; dx++) for (let dy = -3; dy <= 3; dy++) if ($gameMap.checkPassage(x + dx, y + dy, 0x0f) && !$gameMap.eventsXy(x + dx, y + dy).some(e => e.isNormalPriority() && !e.isThrough()) && !Farming.hasObjectTile(x + dx, y + dy) && !Farming.buildingAt(x + dx, y + dy)) n++;
+                if (n >= 62 && $gameMap.checkPassage(x, y, 0x0f) && (!best || n > best.n)) best = { x, y, n };
             }
-            return null; })()`);
-        check("found an open field 9 x 7", !!room, room);
+            return best; })()`);
+        check("found an open field 9 x 7 (at most one cell taken)", !!room, room);
         const { x: cx, y: cy } = room;
         await ev(`$gamePlayer.locate(${cx}, ${cy}); $gameMap.setDisplayPos(${cx} - 13, ${cy} - 7); $gameParty.leader().recoverAll(); Combat.resetAct(); $gameParty.gainItem($dataItems[115], 1); $gameSystem._combatMode = true; 0`);
         await ev(`window.__pack = Hunting.spawnPack(${cx + 4}, ${cy}, 3); for (const w of __pack.members) w._frozen = true; 0`);

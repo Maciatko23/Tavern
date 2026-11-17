@@ -120,7 +120,8 @@ unit.test(t => {
     }).map(p => p.id);
     t.check("Bron.js wired: every new weapon, armour piece and shield has its wear (" + added + " more): life, unit and mending of its material; " +
         "armour of metal 'się rozpadła', of leather or cloth 'się podarł', weapons the usual word; the trinkets none, the old tools as they were",
-        wrong.length === 0 && added === 93 && Object.keys(DU.TOOLS).length === 18 + 93 && BD.PRZEDMIOTY.filter(p => p.typ === "dodatek").every(p => !DU.TOOLS[p.id]) && DU.lifeOf(60) === 70 &&
+        wrong.length === 0 && added === 147 && Object.keys(DU.TOOLS).length === 18 + 147 &&   // (2026-11-17: + 54 of NOWE_80.md 419-482 without the trinkets)
+        BD.PRZEDMIOTY.filter(p => p.typ === "dodatek").every(p => !DU.TOOLS[p.id]) && DU.lifeOf(60) === 70 &&
         DU.lifeOf(155) === 40, wrong);
     b.give(353);
     b.give(331);

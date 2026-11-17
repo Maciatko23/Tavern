@@ -422,7 +422,7 @@
         const desc = it ? String(it.description || "").replace(/\s+/g, " ").trim() : sl && sl.hand === "m0" ? "Gołe pięści: szybkie, ale słabe. Broń wybierasz też w trybie walki ([ ])." : "";
         for (const line of wrapWords(desc, 17, iw, "regular").slice(0, 4)) out.push({ t: line, c: K.soft, f: "regular", s: 17 });
         const does = cap1(row ? row.note || "" : (sl && sl.note) || "");
-        if (does) for (const line of wrapWords(does, 18, iw).slice(0, 3)) out.push({ t: line, c: K.good, s: 18 });
+        if (does) for (const line of wrapWords(does, 18, iw).slice(0, 6)) out.push({ t: line, c: K.good, s: 18 });   // (2026-11-17: a weapon's traits too - Bron_Cechy)
         let wear = null;
         if (id && D && D.TOOLS && D.TOOLS[id] && D.lifeOf) {
             const left = Math.max(0, Math.round(D.left(id))), life = D.lifeOf(id), unit = D.TOOLS[id].unit === "wear" ? "dni" : D.unitWord ? D.unitWord(id, left) : "";

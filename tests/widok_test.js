@@ -78,7 +78,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9435, lightGpu: true, bootCheck
     console.log("   koszt w mieście przy CPU 4x: spojrzenie " + koszt.look.toFixed(3) + " ms, rysowanie " + koszt.draw.toFixed(3) + " ms");
     t.check("spojrzenie <= 1.2 ms, rysowanie <= 0.3 ms (CPU 4x)", koszt.look <= 1.2 && koszt.draw <= 0.3, koszt);
     // gdzie nie działa
-    await t.go(1, 50, 35, 8); await t.frames(20);
+    await t.go(1, 36, 37, 8); await t.frames(20);
     t.check("we wnętrzu nie działa (tam Pokoje.js)", !(await t.json("Widok.active()")));
     await t.go(130, 10, 10, 2); await t.frames(20);
     t.check("w podziemiach nie działa", !(await t.json("Widok.active()")));

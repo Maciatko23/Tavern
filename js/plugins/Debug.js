@@ -98,24 +98,27 @@
     // (nazwa) and the line under it (opis): js/teksty/f9.txt, tele.<id>. (Gone with the world's change: Pustelnia 155, Urwisko 157,
     // the cape 159, the wreck 165, the cistern 167, the burnt farm 168, the test maps 990 / 991 / 027 - no way leads there any more.)
     const ISLE_GO = [
-        { id: "kruczogrod", map: 8, x: 51, y: 53, d: 2 },
-        { id: "jar", map: 3, x: 60, y: 61, d: 2 },
-        { id: "dom", map: 20, x: 46, y: 48, d: 8 },
-        { id: "laka", map: 4, x: 60, y: 60, d: 2 },
-        { id: "dwor", map: 24, x: 40, y: 75, d: 8 },
-        { id: "gory", map: 13, x: 44, y: 50, d: 2 },
-        { id: "podgrodzie", map: 111, x: 60, y: 62, d: 2 },
-        { id: "garnizon", map: 162, x: 52, y: 49, d: 2 },
-        { id: "przystan", map: 125, x: 20, y: 7, d: 2 },
-        { id: "tawerna", map: 1, x: 31, y: 28, d: 2 }
+        // (2026-11-14, the user: „dodaj do F9 teleport na nasze 5 map”) the new world's five maps, west to east, on their main road
+        { id: "nSlonyBrzeg", map: 219, x: 40, y: 46, d: 2 },
+        { id: "nPodgrodzie", map: 218, x: 44, y: 43, d: 2 },
+        { id: "nKruczogrod", map: 220, x: 48, y: 44, d: 2 },
+        { id: "nDwor", map: 221, x: 40, y: 41, d: 2 },
+        { id: "nTurnie", map: 222, x: 40, y: 41, d: 2 },
+        // (2026-11-17: the old world's maps removed - tools/mapy/usun_stare.py; their teleports went with them)
+        { id: "tawerna", map: 1, x: 14, y: 38, d: 8 },
+        // (2026-11-16, the user: „dodaj w F9 teleport na piętro pierwsze i piętro 2 tawerny”) the foot of the hall on each floor
+        { id: "tawernaPietro1", map: 25, x: 14, y: 38, d: 8 },
+        { id: "tawernaPietro2", map: 26, x: 14, y: 38, d: 8 }
     ];
     Watki.scal(ISLE_GO, "f9", "tele", "id");
+    // (2026-11-17: only the maps that exist - a row to a removed map would stop the game with "Failed to load data/MapXXX.json")
+    const mapThere = g => !window.$dataMapInfos || !!$dataMapInfos[g.map];
     // the rooms inside ("Wnętrze": ←→): { id, map, x, y, d } - the names: js/teksty/f9.txt, wyspa.wnetrza.<id>.nazwa. Only the rooms one can still
     // enter in the world (a door on the harbour, the garrison, Podgrodzie, the town's counting-house, the manor); left out: the scriptorium (155),
     // the wreck's hold (166), the Ługs' house (169) - their outdoor maps are not in the world
     const ISLE_INSIDE = [
-        { id: "izbaLatarnika", map: 160, x: 6, y: 8, d: 8 }, { id: "laterna", map: 161, x: 5, y: 7, d: 8 },
-        { id: "kwatera", map: 163, x: 6, y: 8, d: 8 }, { id: "chata", map: 154, x: 4, y: 8, d: 8 },
+        { id: "izbaLatarnika", map: 160, x: 4, y: 8, d: 8 }, { id: "laterna", map: 161, x: 5, y: 7, d: 8 },
+        { id: "chata", map: 154, x: 4, y: 8, d: 8 },
         { id: "piwnicaKantoru", map: 171, x: 2, y: 4, d: 2 },
         // (2026-10-17) W7: the manor's rooms (Dwor.js, maps 172-174)
         { id: "dworHol", map: 172, x: 11, y: 13, d: 8 }, { id: "dworBiblioteka", map: 173, x: 8, y: 10, d: 8 },
@@ -389,7 +392,7 @@
         if (window.Combat) add(Q, "czas", "xp", K.allRows[28], 87);   // Combat.js: to try the levels
         add(Q, "czas", "isleXp", K.isleRows[12], 87, K.isleRows[13]);
         add(Q, "czas", "isleTexts", "", 189, K.isleRows[16], { fresh: r => { r.label = isleLabel.texts(); } });
-        ISLE_GO.forEach((g, i) => add(Q, "tele", "isleGo", g.nazwa, 190, g.opis, { go: i }));
+        ISLE_GO.forEach((g, i) => { if (mapThere(g)) add(Q, "tele", "isleGo", g.nazwa, 190, g.opis, { go: i }); });
         add(Q, "tele", "isleInside", "", 189, K.isleRows[1], { pick: 0, fresh: r => { r.pick = last.isle || 0; r.label = isleLabel.inside(r.pick); } });
         // (2026-11-07) the island's sketch (MapaWyspy.js, menu P „Mapa”): every place known, with its name - a switch
         if (window.MapaWyspy && MapaWyspy.revealAll) add(Q, "podglad", "isleMapa", "", 497, K.mapa[4], { fresh: r => { r.label = K.mapa[MapaWyspy.revealAll() ? 1 : 0]; } });
@@ -830,9 +833,10 @@
             else if (row.kind === "catChoose") HomeLife.catChoose();
             else HomeLife.pet();
             this.popScene();
-        } else if (row.kind === "catHouse") {   // to grandpa's house, by the hearth
-            $gamePlayer.reserveTransfer(HomeLife.MAP, 9, 7, 2, 0);
-            this.popScene();
+        } else if (row.kind === "catHouse") {   // to grandpa's house, by the hearth (2026-11-17: the hut Map224 - its spot from HomeLife)
+            const at = (HomeLife.HOUSE && HomeLife.HOUSE.visit) || [5, 6];
+            if ($dataMapInfos[HomeLife.MAP]) { $gamePlayer.reserveTransfer(HomeLife.MAP, at[0], at[1], 8, 0); this.popScene(); }
+            else $gameTemp.pushLootPopup(row.icon, Watki.wstaw(TK.kod.go[0], { "1": HomeLife.MAP }), "#ffb4a0");
         } else if (row.kind === "info") {   // a head: the tab read again
             this._list.setTab(this._list._tab, this._list.index());
         } else if (/^isle/.test(row.kind)) {   // the rows of the story's kind (the places, the sea, the people, the packages)

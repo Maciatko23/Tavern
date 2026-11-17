@@ -52,7 +52,7 @@ kit.test({ port: 9916, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         await t.go(8, 50, 40, 2);
         await t.setDay(day, hour);
         await t.frames(10);
-        await t.go(1, 14, 52, 8);
+        await t.go(1, 14, 39, 8);
         await t.frames(30);
     };
     const finish = async () => { for (let i = 0; i < 12; i++) { await t.frames(15); if (!(await t.eval("$gameMap.isEventRunning()"))) break; await t.press("ok"); } };

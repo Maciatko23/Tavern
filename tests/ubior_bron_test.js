@@ -204,14 +204,17 @@ kit.test({ port: 9585, plugins: ["Ubior_Bron"], evalTimeout: 120000 }, async t =
     meta.busts = [];
     for (const h of ["helm_kaptur_skora", "helm_czepiec_zelazo", "helm_kapalin_stal", "helm_otwarty_braz", "helm_nosal_zelazo", "helm_zakonny_zakon"]) {
         await t.eval(`Ubior.set(${JSON.stringify(Object.assign({}, NONE, { glowa: h, tors: h === "helm_zakonny_zakon" ? "zbroja_napiersnik_zakon" : "zbroja_kolczuga_zelazo" }))}); 0`);
-        const want = [h, h === "helm_zakonny_zakon" ? "zbroja_napiersnik_zakon" : "zbroja_kolczuga_zelazo", "", "", "", "", ""].join("|");
+        // (2026-11-17: the outfit's key has a field per place of Ubior.ORDER - the cloak's added)
+        const want = await t.eval(`Ubior.ORDER.map(p => ({ glowa: ${JSON.stringify(h)}, tors: ${JSON.stringify(h === "helm_zakonny_zakon" ? "zbroja_napiersnik_zakon" : "zbroja_kolczuga_zelazo")} })[p] || "").join("|")`);
         const okB = await t.until(`(function(){ const b = Ubior.bust(); return !!(b && b.isReady() && Ubior.bustKey() === ${JSON.stringify(want)}); })()`, 20, 100);
         await t.frames(2);
         save(`p_${h}.png`, await t.eval("Ubior.bust().canvas.toDataURL('image/png')"));
         meta.busts.push({ key: h, file: `p_${h}.png`, ok: okB });
     }
     t.check("popiersie w każdym rodzaju hełmu", meta.busts.every(b => b.ok), meta.busts.map(b => b.ok));
-    await t.eval(`Ubior.set(${JSON.stringify(Object.assign({}, NONE, { glowa: "helm_nosal_stal", tors: "zbroja_kolczuga_stal", nogi: "nagolenniki_stal", stopy: "buty_okute_stal", rece: "karwasze_stal" }))}); 0`);
+    // (2026-11-17: the PixelLab helmets sit within the walk's cell - the spangenhelm's top is the cell's first row; the strip over the head
+    // is shown with the old drawn nasal helm, taller: Ubior.pl(false) for the card, on again after it)
+    await t.eval(`Ubior.pl(false); Ubior.set(${JSON.stringify(Object.assign({}, NONE, { glowa: "helm_nosal_stal", tors: "zbroja_kolczuga_stal", nogi: "nagolenniki_stal", stopy: "buty_okute_stal", rece: "karwasze_stal" }))}); 0`);
     await t.frames(5);
     await t.eval(`(function(){ $gameTemp._menuTab = "equip"; $gameTemp._menuLevel = 2; SceneManager.push(Scene_Menu); return 0; })()`);
     await t.until("SceneManager._scene instanceof Scene_Menu && SceneManager._scene._started && !SceneManager.isSceneChanging()", 20, 100);
@@ -226,7 +229,7 @@ kit.test({ port: 9585, plugins: ["Ubior_Bron"], evalTimeout: 120000 }, async t =
         const r = await t.b.send("Page.captureScreenshot", { format: "png", clip: { x: card.x, y: card.y, width: card.w, height: card.h, scale: 1 } });
         fs.writeFileSync(path.join(SHOTS, "karta_figura.png"), Buffer.from(r.data, "base64"));
     }
-    await t.eval("SceneManager.goto(Scene_Map); 0");
+    await t.eval("Ubior.pl(true); SceneManager.goto(Scene_Map); 0");
     await t.until(t.onMap(3), 20);
 
     // ---- the cost

@@ -35,9 +35,9 @@
     const PLUGIN = "Goscie_Sala";
     const TK = Watki.teksty("goscie_sali");
     const MAP = 1, ID0 = 400, ID1 = 422;
-    const HALL = { x0: 1, y0: 27, x1: 47, y1: 44 };
+    const HALL = { x0: 1, y0: 14, x1: 47, y1: 31 };
     const CHAIR = 390, TABLE_TILES = [416, 424, 432, 439, 447], TABLE_TILES2 = [842, 850, 859, 867, 863, 871, 844, 852];   // (the chair; long and small tables on layer 3, round ones on layer 2)
-    const DOOR = { x: 14, y: 52 }, BAR = [[10, 31], [12, 31], [14, 31], [16, 31], [18, 31], [20, 31]], STAGE = [[35, 33], [37, 33], [39, 33], [41, 33]];
+    const DOOR = { x: 14, y: 39 }, BAR = [[10, 18], [12, 18], [14, 18], [16, 18], [18, 18], [20, 18]], STAGE = [[35, 20], [37, 20], [39, 20], [41, 20]];   // (2026-11-16: the smaller ground floor - 13 rows higher)
     const CELL = 88, FEET = 76;                  // the sheets' cells; the row laid on the event's screenY (Przytulna's own format)
     // sitting down (user 2026-11-05: "idąc postacie wchodzą na stołek i wtedy przejście na siedzenie"): on foot onto the stool, there the
     // sheet's rows 4-5: standing, lowering, lower, then seated; getting up the other way round. DY: the walking figure's feet stand 4 px lower

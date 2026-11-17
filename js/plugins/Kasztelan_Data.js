@@ -31,8 +31,8 @@
     if (!W) { console.warn("Kasztelan_Data.js: brak Watki.js - wątek W4 rozdz. 6-8 wyłączony"); return; }
 
     // the places of the hero after an F9 jump: [map, x, y, direction]
-    const MAP = { tavern: 1, town: 8, cellar: 9, floor10: 140, house: 19, cairn: 20 };
-    const AT_BAR = [MAP.tavern, 16, 31, 8];
+    const MAP = { tavern: 1, town: 220, cellar: 9, floor10: 140, house: 224, cairn: 218 };   // (2026-11-15 nowy świat: Kruczogród, the hut, the stone pile by the plot in Podgrodzie)
+    const AT_BAR = [MAP.tavern, 16, 18, 8];   // (2026-11-16: the smaller ground floor - the hall 13 rows higher)
     // chapter 7 "tell him": the clues the hero speaks of (each only when he has it)
     const SLOWA = { lub: ["stan:clues.wpis", "stan:clues.przeor", "stan:clues.kleofas", "stan:clues.napis"] };
     // a clue told in a talk (Kleofas, grandpa): kept, its note, the experience (quiet), the notice, the quests' checks
@@ -178,12 +178,12 @@
             przed: [{ gdy: "!rozdzial1", hak: "zamknijRozdzial1" }],
             lista: {
                 1: { ch: 1, krok: 0, godzina: 11, idz: AT_BAR, zrob: [RESET] },
-                2: { ch: 2, krok: 1, godzina: 12, idz: [MAP.cairn, 8, 7, 8], zrob: [{ v: ["klucz_borgar", 1] }, { przedmiot: [62, 1] }, RESET] },
-                3: { ch: 3, krok: 2, godzina: 10, idz: [MAP.town, 9, 64, 4],
+                2: { ch: 2, krok: 1, godzina: 12, idz: [MAP.cairn, 21, 17, 8], zrob: [{ v: ["klucz_borgar", 1] }, { przedmiot: [62, 1] }, RESET] },
+                3: { ch: 3, krok: 2, godzina: 10, idz: [MAP.town, 33, 36, 8],
                     zrob: [{ v: ["klucz_borgar", 1] }, { v: ["klucz_kopiec", 1] }, { przedmiot: [86, 1] }, { przedmiot: [79, 2] }, RESET] },
                 4: { ch: 4, krok: 4, godzina: 12, idz: [MAP.cellar, 15, 3, 8], zrob: [KEY, { hak: "krata", args: ["zamknij"] }, RESET] },
                 5: { ch: 5, krok: 5, godzina: 12, idz: AT_BAR, zrob: [KEY, { hak: "krata", args: ["otworz"] }, RESET] },
-                6: { ch: 6, krok: "w4Rod", godzina: 10, idz: [MAP.house, 10, 7, 8], zrob: [KEY, { hak: "krata", args: ["otworz"] }, { flaga: "borgarSaying" }, RESET] },
+                6: { ch: 6, krok: "w4Rod", godzina: 10, idz: [MAP.house, 5, 6, 8], zrob: [KEY, { hak: "krata", args: ["otworz"] }, { flaga: "borgarSaying" }, RESET] },
                 7: { ch: 7, krok: "w4Konfrontacja", godzina: 23.5, idz: AT_BAR,
                     zrob: [KEY, { hak: "krata", args: ["otworz"] }, { flaga: "borgarSaying" }, { hak: "zapiski" }, RESET] },
                 8: { ch: 7, krok: "w4Piwnica", godzina: 23.5, idz: [MAP.cellar, 14, 4, 6],

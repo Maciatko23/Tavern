@@ -838,7 +838,7 @@
         if (typeof $gameSystem.clearLand !== "function") return;
         const objects = O();
         for (const event of this.events()) {
-            if (objects.isDestroyedHarvest(event)) objects.clearLandUnder(event, true);
+            if (objects.isDestroyedHarvest(event)) { objects.clearLandUnder(event, true); objects.logLeavesNothing(event); }
         }
     };
 

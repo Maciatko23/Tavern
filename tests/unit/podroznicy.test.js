@@ -83,16 +83,20 @@ unit.test(t => {
     const s1 = fresh(4242), env1 = envOf(), run1 = play(s1, 1, 61, env1);
     const firstDay = k => { const x = run1.log.find(l => l.przybyli.includes(k)); return x ? x.d : null; };
     const when = Object.fromEntries(D.OBSADA.map(c => [c.key, firstDay(c.key)]));
-    t.eq("chapter 1, a usual game: the cast comes as the doc's timeline - Tobiasz 4, Konstanty 7, Zenon 10, Gaspar 13, Teofil and Ksenia 16, Augustyn 19, Urszula 22, Tymon 25, Szczerba and the Company 28, Jędrek 31, Erazm 34, Albin 37; the gated (poseł, room three) never",
-        when, { tobiasz: 4, medyk: 7, zboze: 10, relikwie: 13, kartograf: 16, ksenia: 16, wizytator: 19, urszula: 22, dezerter: 25, lowczyni: 28, kompania: 28, grajek: 31, poborca: 34, pielgrzym: 37, posel: null, trojka: null });
+    // (2026-11-17: the smaller first floor of 2026-11-16 has 6 guest rooms, not 20 - the busy days run out of ROOMS (the Company
+    // takes the two family ones), so the later ones wait for a bed: the Company 31, Jędrek 34, Erazm 43, Albin 49 - the doc's
+    // timeline was for the old floor; the gated ones still come in their windows, see below)
+    t.eq("chapter 1, a usual game: the cast comes in the doc's order - Tobiasz 4, Konstanty 7, Zenon 10, Gaspar 13, Teofil and Ksenia 16, Augustyn 19, Urszula 22, Tymon 25, Szczerba 28, the Company 31, Jędrek 34, Erazm 43, Albin 49 (the 6 rooms of the smaller floor); the gated (poseł, room three) never",
+        when, { tobiasz: 4, medyk: 7, zboze: 10, relikwie: 13, kartograf: 16, ksenia: 16, wizytator: 19, urszula: 22, dezerter: 25, lowczyni: 28, kompania: 31, grajek: 34, poborca: 43, pielgrzym: 49, posel: null, trojka: null });
     t.check("chapter 1: never more than 4 on the island (a group one place), 1-3 new a ferry, rooms never 1, 2, 3, 7 or the Gold suite, no room twice", !run1.bad.length, run1.bad.slice(0, 6));
     const stays = Object.fromEntries(["tobiasz", "medyk", "relikwie", "dezerter", "grajek", "urszula"].map(k => [k, (s1.byli[k] || []).map(v => v.od + "-" + v.do)]));
-    t.eq("stays: Tobiasz one ferry and back every 9-12 days (4-7, 13-16, 25-28, 37-40, 46-49, 55-58), Konstanty 7-13 and back with the 4th wave (52-58), Gaspar 13-25, Tymon 25-37, Jędrek 31-43, Urszula 22-31",
-        stays, { tobiasz: ["4-7", "13-16", "25-28", "37-40", "46-49", "55-58"], medyk: ["7-13", "52-58"], relikwie: ["13-25"], dezerter: ["25-37"], grajek: ["31-43"], urszula: ["22-31"] });
+    t.eq("stays: Tobiasz one ferry and back every 9-12 days (4-7, 13-16, 25-28, 37-40, 46-49, 55-58), Konstanty 7-13 and back with the 4th wave (52-58), Gaspar 13-25, Tymon 25-37, Jędrek 34-43 (a bed from 34), Urszula 22-31",
+        stays, { tobiasz: ["4-7", "13-16", "25-28", "37-40", "46-49", "55-58"], medyk: ["7-13", "52-58"], relikwie: ["13-25"], dezerter: ["25-37"], grajek: ["34-43"], urszula: ["22-31"] });
     const counts = run1.log.map(l => l.n), new3 = run1.log.filter(l => l.przybyli.length >= 1).length;
     // (day 40 has 3: the envoy and his guard wait for TavernLife's gate - the Gold suite, stage 5)
-    t.check("every ferry of chapter 1 brings someone (" + new3 + " of " + run1.log.length + "), the island 4 full in the densest days (19-22, 28-34, 37, 43)",
-        new3 >= run1.log.length - 3 && [19, 22, 28, 31, 34, 37, 43].every(d => (run1.log.find(l => l.d === d) || {}).n === 4), run1.log.map(l => l.d + ":" + l.n + "(" + l.przybyli.join(",") + ")").join(" "));
+    // (the smaller floor: the rooms, not the island's 4, are the limit on most busy days - full on 19, 25, 43)
+    t.check("every ferry of chapter 1 brings someone (" + new3 + " of " + run1.log.length + "), never more than 4, the island 4 full in the densest days (19, 25, 43)",
+        new3 >= run1.log.length - 3 && run1.log.every(l => l.n <= 4) && [19, 25, 43].every(d => (run1.log.find(l => l.d === d) || {}).n === 4), run1.log.map(l => l.d + ":" + l.n + "(" + l.przybyli.join(",") + ")").join(" "));
     // the pool is the seed's
     const run1b = play(fresh(4242), 1, 61, env1), poolOf = r => r.log.map(l => l.przybyli.filter(p => /^p/.test(p)).length).join("");
     const s2 = fresh(777), run2 = play(s2, 1, 61, env1);
@@ -129,9 +133,10 @@ unit.test(t => {
         !!tro && tro.d >= 46 && tro.d <= 52 && !!pos && pos.d >= 40 && pos.d <= 43, { tro, pos });
 
     // ================================================================ the rooms
-    const taken = new Set(["22", "7"]);
-    t.eq("a room: its own when free; taken - the nearest of its kind (22: 2-os. -> 24); 1 and 2 never; 3 only with the gate", [
-        L.pokojDla(23, new Set(["7"])), L.pokojDla(22, taken), L.pokojDla(1, taken), L.pokojDla(2, taken), L.pokojDla(3, taken), L.pokojDla(3, taken, { furtka: true })], ["23", "24", null, null, null, "3"]);
+    // (2026-11-17: the smaller first floor - guest rooms 4, 5, 6, 8, 11, 12 only)
+    const taken = new Set(["5", "8"]);
+    t.eq("a room: its own when free; taken - the nearest of its kind (5: 2-os. -> 6); 1 and 2 never; 3 only with the gate", [
+        L.pokojDla(12, new Set(["8"])), L.pokojDla(5, taken), L.pokojDla(1, taken), L.pokojDla(2, taken), L.pokojDla(3, taken), L.pokojDla(3, taken, { furtka: true })], ["12", "6", null, null, null, "3"]);
 
     // ================================================================ the day's plans (the residents' getters with a state of the game)
     const S = P.stan();
@@ -150,7 +155,7 @@ unit.test(t => {
             "inside podr_przystan", "inside podr_sala", "inside podr_pokoj"]);
     const inside = P.wnetrze("dezerter");
     t.check("indoors without the user's places on Map001: the hall's place is its room upstairs (pokoj_5), the night its room too",
-        inside.podr_sala === "pokoj_5" && inside.podr_pokoj === "pokoj_5" && P.mapa("dezerter") === 8 && P.mapa("posel") === -1 && P.jest("dezerter") && !P.jest("posel"), inside);
+        inside.podr_sala === "pokoj_5" && inside.podr_pokoj === "pokoj_5" && P.mapa("dezerter") === D.MIASTO && P.mapa("posel") === -1 && P.jest("dezerter") && !P.jest("posel"), inside);
     P.wstaw({ events: [null, { id: 5, name: "Miejsce: podrozny_4", x: 10, y: 10 }] }, 1);
     t.check("...and with the user's „Miejsce: podrozny_4” on Map001: the hall's place podrozny_4 (read as the map loads)", P.wnetrze("dezerter").podr_sala === "podrozny_4", P.wnetrze("dezerter"));
     t.check("the book's names: the cast with its title, the pool's „gość z lądu” till met", /^Tomek, uchodźca z promu$/.test(P.nazwa("dezerter", true)), P.nazwa("dezerter", true));

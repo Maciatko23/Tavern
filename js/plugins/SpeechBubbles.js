@@ -102,13 +102,15 @@
     const NPC_SIDE = HERO_SIDE === "left" ? "right" : "left";
     const sideName = side => (side === HERO_SIDE ? talk.hero : talk.npc);   // (the bust shown on a side now)
     const TALK = {
-        height: 273,                 // the busts on the screen: 330 x 350 files at 0.78 (any file is scaled to this height)
+        height: 256,                 // the busts on the screen: the PixelLab busts are 256 x 256 files (2026-11-17) - shown 1:1, crisp
+                                     // (any file is scaled to this height; the old painted ones were 330 x 350 at 0.78 = 273)
         top: 250,                    // a bubble's top at most this far above the screen's bottom (a taller one goes higher)
         text: 540,                   // lines too long for the room between the busts are broken to this width (px; Story's lines
                                      // are as wide) - wider only when that keeps the text to one bubble
         lines: 4,                    // lines in a bubble (more: the next page)
         gap: 8,                      // px between a bubble and its bust
-        mouth: { x: 90, y: 158 },    // where the tail points: px of the file from the bust's inner edge and from its top
+        mouth: { x: 92, y: 148 },    // where the tail points: px of the file from the bust's inner edge and from its top (the PixelLab
+                                     // busts all share the hero base's framing - his mouth at 46,74 of 128)
         tail: 22,                    // the tail's base (px)
         slide: 12, fade: 8,          // frames: a bust slides in / out; the bright-dim swap and the cross-fade to another bust
         dim: 0.45,                   // the listener's brightness
@@ -126,7 +128,43 @@
         "Janek", "Przemytnik", "Celnik",
         // (2026-10-16) the six island places: Kleofas, Bazyli, the garrison's three and its soldier, Ansgar (the packages used to add them at load)
         "Pustelnik", "Latarnik", "Rotmistrz", "Kwatermistrz", "Werbownik", "Zolnierz", "Rozbitek"].forEach(k => { BUSTS["$Npc_" + k + ":0"] = k + "_Bust"; });
-    BUSTS["$Npc_Zolnierz_B:0"] = "Zolnierz_B_Bust";   // (the garrison's second soldier: the same man recoloured - tools/garnizon/art/recolor.py)
+    BUSTS["$Npc_Zolnierz_B:0"] = "Zolnierz_B_Bust";
+    // (2026-11-17, the user: "popiersia WSZYSTKICH ludzi w grze" in PixelLab - tools/busts_pl, every person's map sheet with its bust,
+    // 29 of them new: the fair's people, the wedding couple, the Silent ones...; a sheet some plugin maps already keeps its entry)
+    const PL_BUSTS = {
+        "$Npc_Borgar:0": "Borgar_Bust", "$Npc_Melia:0": "Melia_Bust", "$Npc_Grum:0": "Grum_Bust", "$Npc_Ozzy:0": "Ozzy_Bust",
+        "$Npc_Wanda:0": "Wanda_Bust", "$Npc_Jagna:0": "Jagna_Bust", "$Npc_Pula_K:0": "Pula_K_Bust", "$Npc_Pula_M2:0": "Pula_M2_Bust",
+        "$Npc_Pula_K3:0": "Pula_K3_Bust", "$Npc_Pula_K2:0": "Pula_K2_Bust", "$Npc_Dziadek:0": "Stach_Bust", "$Npc_Lord:0": "Lord_Bust",
+        "$Npc_Kamerdyner:0": "Kamerdyner_Bust", "$Npc_Kapral:0": "Kapral_Bust", "$Npc_Straznik:0": "Straznik_Bust", "$Npc_Rotmistrz:0": "Rotmistrz_Bust",
+        "$Npc_Kwatermistrz:0": "Kwatermistrz_Bust", "$Npc_Zolnierz:0": "Zolnierz_Bust", "$Npc_Zolnierz_B:0": "Zolnierz_B_Bust", "$Npc_Dezerter:0": "Dezerter_Bust",
+        "$Npc_Werbownik:0": "Werbownik_Bust", "$Npc_Marek:0": "Marek_Bust", "$Npc_Rafal:0": "Rafal_Bust", "$Npc_Latarnik:0": "Latarnik_Bust",
+        "$Npc_Posel:0": "Posel_Bust", "$Npc_Gwardzista:0": "Gwardzista_Bust", "$Npc_Poborca:0": "Poborca_Bust", "$Npc_Pustelnik:0": "Pustelnik_Bust",
+        "$Npc_Rozbitek:0": "Rozbitek_Bust", "$Npc_Kowal:0": "Kowal_Bust", "$Npc_Piekarka:0": "Piekarka_Bust", "$Npc_Woziwoda:0": "Woziwoda_Bust",
+        "$Npc_Dzwonnik:0": "Dzwonnik_Bust", "$Npc_Kupiec:0": "Kupiec_Bust", "$Npc_Soltys:0": "Soltys_Bust", "$Npc_Garbarz:0": "Garbarz_Bust",
+        "$Npc_Feliks:0": "Feliks_Bust", "$Npc_Bronek:0": "Bronek_Bust", "$Npc_Zosia:0": "Zosia_Bust", "$Npc_Ludmila:0": "Ludmila_Bust",
+        "$Npc_Ela:0": "Ela_Bust", "$Npc_Praczka:0": "Praczka_Bust", "$Npc_Franek:0": "Franek_Bust", "$Npc_Drwal:0": "Drwal_Bust",
+        "$Npc_Klusownik:0": "Klusownik_Bust", "$Npc_Znachorka:0": "Znachorka_Bust", "$Npc_Szmaciarz:0": "Szmaciarz_Bust", "$Npc_Uchodzca:0": "Uchodzca_Bust",
+        "$Npc_Zebrak:0": "Zebrak_Bust", "$Npc_Zlodziej:0": "Zlodziej_Bust", "$Npc_Gracz:0": "Gracz_Bust", "$Npc_Bartek:0": "Bartek_Bust",
+        "$Npc_Woznica:0": "Woznica_Bust", "$Npc_Janek:0": "Janek_Bust", "$Npc_Przemytnik:0": "Przemytnik_Bust", "$Npc_Celnik:0": "Celnik_Bust",
+        "$Npc_Kolodziej:0": "Kolodziej_Bust", "$Npc_Przekupka:0": "Przekupka_Bust", "$Npc_Szwaczka:0": "Szwaczka_Bust", "$Npc_Wdowa:0": "Wdowa_Bust",
+        "$Npc_Kostek:0": "Kostek_Bust", "$Npc_Jagodka:0": "Jagodka_Bust", "$Npc_Ciesla:0": "Ciesla_Bust", "$Npc_Weteran:0": "Weteran_Bust",
+        "$Npc_Szynkarz:0": "Szynkarz_Bust", "$Npc_Opiekunka:0": "Opiekunka_Bust", "$Npc_Garncarz:0": "Garncarz_Bust", "$Npc_Dziecko:0": "Dziecko_Bust",
+        "$Npc_Pula_M:0": "Pula_M_Bust", "$Npc_Pula_M3:0": "Pula_M3_Bust", "$Npc_Pula_S:0": "Pula_S_Bust", "$Npc_Pula_S2:0": "Pula_S2_Bust",
+        "$Npc_Pula_Z:0": "Pula_Z_Bust", "$Npc_Pula_Z2:0": "Pula_Z2_Bust", "$Npc_Ksenia:0": "Ksenia_Bust", "$Npc_Trojka:0": "Trojka_Bust",
+        "$Npc_Tobiasz:0": "Tobiasz_Bust", "$Npc_Medyk:0": "Medyk_Bust", "$Npc_Kartograf:0": "Kartograf_Bust", "$Npc_Grajek:0": "Grajek_Bust",
+        "$Npc_Zboze:0": "Zboze_Bust", "$Npc_Urszula:0": "Urszula_Bust", "$Npc_Relikwie:0": "Relikwie_Bust", "$Npc_Wizytator:0": "Wizytator_Bust",
+        "$Npc_Lowczyni:0": "Lowczyni_Bust", "$Npc_Pielgrzym:0": "Pielgrzym_Bust", "$Npc_Kompania_1:0": "Kompania_1_Bust", "$Npc_Kompania_2:0": "Kompania_2_Bust",
+        "$Npc_Kompania_3:0": "Kompania_3_Bust", "$Npc_Kompania_4:0": "Kompania_4_Bust", "$Npc_Handlarz:0": "Handlarz_Bust", "$Npc_Gajowy:0": "Gajowy_Bust",
+        "$Npc_Grabarz:0": "Grabarz_Bust", "$Npc_Pasterz:0": "Pasterz_Bust", "$Npc_Jarmark_Ania:0": "Jarmark_Ania_Bust", "$Npc_Jarmark_Bonawentura:0": "Jarmark_Bonawentura_Bust",
+        "$Npc_Jarmark_Marcel:0": "Jarmark_Marcel_Bust", "$Npc_Jarmark_Ofelia:0": "Jarmark_Ofelia_Bust", "$Npc_Jarmark_Pimpek:0": "Jarmark_Pimpek_Bust", "$Npc_Jarmark_Szept:0": "Jarmark_Szept_Bust",
+        "$Npc_Jarmark_Wanda:0": "Jarmark_Wanda_Bust", "$Npc_Jarmark_Zar:0": "Jarmark_Zar_Bust", "$Npc_Jas:0": "Jas_Bust", "$Npc_Jasiek:0": "Jasiek_Bust",
+        "$Npc_Lasica:0": "Lasica_Bust", "$Npc_Ludwik:0": "Ludwik_Bust", "$Npc_Ostap:0": "Ostap_Bust", "$Npc_Szyper:0": "Szyper_Bust",
+        "$Npc_Walenty:0": "Walenty_Bust", "$Npc_Wawrzyn:0": "Wawrzyn_Bust", "$Npc_Bogdan:0": "Bogdan_Bust", "$Npc_Cyryl:0": "Cyryl_Bust",
+        "$Npc_Halina:0": "Halina_Bust", "$Npc_Kurier:0": "Kurier_Bust", "$Npc_Gawron:0": "Gawron_Bust", "$Npc_Kopacz:0": "Kopacz_Bust",
+        "$Npc_Wicek:0": "Wicek_Bust", "$Npc_PanMlody:0": "PanMlody_Bust", "$Npc_PannaMloda:0": "PannaMloda_Bust", "$Npc_Milczacy1:0": "Milczacy1_Bust",
+        "$Npc_Milczacy3:0": "Milczacy3_Bust", "$Npc_Milczaca2:0": "Milczaca2_Bust", "$Npc_Milczaca4:0": "Milczaca4_Bust"
+    };
+    for (const [k, v] of Object.entries(PL_BUSTS)) if (!BUSTS[k]) BUSTS[k] = v;   // (the garrison's second soldier: the same man recoloured - tools/garnizon/art/recolor.py)
     // the tavern regulars' RTP busts did not look like their map sheets ($Npc_Borgar...): drawn anew (tools/busts/make_<key>.py,
     // 2026-10-07). Their old names stay the keys (event tags, the plugins' data, the tests); the picture loaded for one is the new
     // file once it is found there (Tawerna.ui.loadBust asks bustFile; a file not there - the RTP picture as before)
@@ -279,6 +317,10 @@
         if (!T.isCalm(null, ON_MAP) || !$gameMap || !$gamePlayer) return null;
         if (sp.forced !== undefined) return sp.forced < 0 ? null : sp.forced === 0 ? $gamePlayer : $gameMap.event(sp.forced) || null;
         const face = $gameMessage.faceName(), lead = $gameParty.leader();
+        // (2026-11-16, the user at Wanda's own words: „chyba zła osoba mówi”) words with no face but signed with someone's name are that
+        // event's own (a figure on the map), not the hero's
+        const signed = !face ? String($gameMessage.speakerName() || "").trim() : "";
+        if (signed && sp.eventId > 0 && !(lead && lead.name() === signed)) { const e = $gameMap.event(sp.eventId); if (e && e.characterName()) return e; }
         if (!face || (lead && lead.faceName() === face && lead.faceIndex() === $gameMessage.faceIndex())) return $gamePlayer;
         return sp.eventId > 0 ? $gameMap.event(sp.eventId) || null : null;
     }

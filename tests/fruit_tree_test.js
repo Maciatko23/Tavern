@@ -44,7 +44,7 @@ const path = require("path");
 
         // ---------------------------------------------------------------- 1. the items and their art
         const items = await J("[139, 140].map(id => { const it = $dataItems[id]; return [it.name, it.iconIndex, it.note]; })");
-        check("139 Dzikie jabłka / 140 Dzikie gruszki exist with <Food> notes and their own icons", items[0][0] === "Dzikie jabłka" && items[0][1] === 401 && /water=18/.test(items[0][2]) && items[1][0] === "Dzikie gruszki" && items[1][1] === 402 && /water=20/.test(items[1][2]), items);
+        check("139 Dzikie jabłka / 140 Dzikie gruszki exist with <Food> notes and their own icons", items[0][0] === "Dzikie jabłka" && items[0][1] >= 688 && /water=18/.test(items[0][2]) && items[1][0] === "Dzikie gruszki" && items[1][1] >= 688 && /water=20/.test(items[1][2]), items);
         for (const name of ["!$Tree_Apple", "!$Tree_Pear", "!$Tree_FruitBare"]) {
             const info = await ev(`new Promise(res => { const bmp = ImageManager.loadCharacter(${JSON.stringify(name)}); bmp.addLoadListener(() => { const w = bmp.width/3, h = bmp.height/4; const cells = []; for (let cy=0; cy<4; cy++) for (let cx=0; cx<3; cx++) { const d = bmp.context.getImageData(cx*w, cy*h, w, h).data; let s=0; for (let i=0;i<d.length;i+=4) s=(s*31+d[i]+d[i+1]*3+d[i+2]*7+d[i+3])%1000003; cells.push(s); } res({ w, h, same: new Set(cells).size===1, hasPixels: d0(bmp) }); function d0(bmp){ const d=bmp.context.getImageData(0,0,bmp.width,bmp.height).data; for(let i=3;i<d.length;i+=4) if(d[i]>0) return true; return false; } }); })`);
             check(name + ": a 3x4 sheet of 12 identical cells with real pixels", info.same && info.hasPixels, info);

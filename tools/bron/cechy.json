@@ -1,0 +1,370 @@
+{
+ "300": {
+  "krytyk_mocniej": 1.7
+ },
+ "301": {
+  "krytyk_mocniej": 1.7
+ },
+ "302": {
+  "krytyk_mocniej": 1.8,
+  "szybkosc": 0.15
+ },
+ "303": {
+  "krytyk_mocniej": 1.9,
+  "przebicie": 0.3,
+  "stwory": 0.15
+ },
+ "304": {
+  "parowanie": 0.1
+ },
+ "305": {
+  "parowanie": 0.12
+ },
+ "306": {
+  "krwawienie": {
+   "szansa": 0.1,
+   "dps": 2,
+   "s": 4
+  }
+ },
+ "307": {
+  "szybkosc": 0.1
+ },
+ "308": {
+  "parowanie": 0.15,
+  "obrazenia": 3
+ },
+ "309": {
+  "zasieg": 0.2,
+  "parowanie": 0.15
+ },
+ "310": {
+  "parowanie": 0.18,
+  "obrazenia": 4,
+  "postrach": 0.05
+ },
+ "311": {
+  "parowanie": 0.2,
+  "obrazenia": 5,
+  "stwory": 0.15
+ },
+ "312": {},
+ "313": {
+  "ogluszenie": {
+   "szansa": 0.08,
+   "s": 1.0
+  }
+ },
+ "314": {
+  "ogluszenie": {
+   "szansa": 0.08,
+   "s": 1.0
+  }
+ },
+ "315": {
+  "ogluszenie": {
+   "szansa": 0.1,
+   "s": 1.5
+  }
+ },
+ "316": {
+  "ogluszenie": {
+   "szansa": 0.08,
+   "s": 1.0
+  }
+ },
+ "317": {
+  "ogluszenie": {
+   "szansa": 0.1,
+   "s": 1.5
+  }
+ },
+ "318": {
+  "ogluszenie": {
+   "szansa": 0.12,
+   "s": 1.5
+  },
+  "obrazenia": 3
+ },
+ "319": {
+  "ogluszenie": {
+   "szansa": 0.15,
+   "s": 2.0
+  },
+  "obrazenia": 5,
+  "stwory": 0.15
+ },
+ "320": {
+  "krwawienie": {
+   "szansa": 0.08,
+   "dps": 1,
+   "s": 4
+  }
+ },
+ "321": {
+  "krwawienie": {
+   "szansa": 0.1,
+   "dps": 2,
+   "s": 4
+  }
+ },
+ "322": {
+  "przebicie": 0.15
+ },
+ "323": {
+  "krwawienie": {
+   "szansa": 0.12,
+   "dps": 2,
+   "s": 4
+  },
+  "obrazenia": 3
+ },
+ "324": {
+  "zasieg": 0.2,
+  "krwawienie": {
+   "szansa": 0.12,
+   "dps": 2,
+   "s": 4
+  }
+ },
+ "325": {
+  "krwawienie": {
+   "szansa": 0.15,
+   "dps": 3,
+   "s": 4
+  },
+  "obrazenia": 5,
+  "stwory": 0.15
+ },
+ "326": {},
+ "327": {
+  "ogluszenie": {
+   "szansa": 0.1,
+   "s": 1.5
+  }
+ },
+ "328": {
+  "ogluszenie": {
+   "szansa": 0.12,
+   "s": 1.5
+  },
+  "odrzut": 1
+ },
+ "329": {
+  "ogluszenie": {
+   "szansa": 0.15,
+   "s": 2.0
+  },
+  "odrzut": 1,
+  "stwory": 0.15
+ },
+ "330": {
+  "zasieg": 0.1
+ },
+ "331": {
+  "zasieg": 0.15
+ },
+ "332": {
+  "zasieg": 0.15
+ },
+ "333": {
+  "zasieg": 0.2,
+  "przebicie": 0.2
+ },
+ "334": {
+  "zasieg": 0.25,
+  "przebicie": 0.3,
+  "stwory": 0.15
+ },
+ "335": {
+  "przebijajaca_strzala": 2
+ },
+ "336": {
+  "szybkosc": 0.15,
+  "obrazenia": 3
+ },
+ "337": {
+  "przebijajaca_strzala": 2,
+  "szybkosc": 0.2,
+  "stwory": 0.15
+ },
+ "338": {
+  "ogluszajacy_kamien": {
+   "szansa": 0.1,
+   "s": 1.0
+  }
+ },
+ "339": {
+  "ogluszajacy_kamien": {
+   "szansa": 0.12,
+   "s": 1.0
+  }
+ },
+ "396": {
+  "parowanie": 0.2,
+  "obrazenia": 5,
+  "krew_za_krew": 0.02,
+  "stwory": 0.15
+ },
+ "398": {
+  "odrzut": 1,
+  "ogluszenie": {
+   "szansa": 0.15,
+   "s": 2.0
+  },
+  "krew_za_krew": 0.02
+ },
+ "399": {
+  "zasieg": 0.25,
+  "parowanie": 0.2,
+  "postrach": 0.05,
+  "krew_za_krew": 0.02
+ },
+ "402": {
+  "szybkosc": 0.2,
+  "krwawienie": {
+   "szansa": 0.15,
+   "dps": 3,
+   "s": 4
+  },
+  "oddech": 2
+ },
+ "403": {
+  "krytyk_mocniej": 1.9,
+  "szybkosc": 0.2,
+  "postrach": 0.05
+ },
+ "406": {
+  "szybkosc": 0.2,
+  "przebijajaca_strzala": 2,
+  "obrazenia": 5
+ },
+ "407": {
+  "trwalosc": 0.25
+ },
+ "408": {
+  "trwalosc": 0.25
+ },
+ "452": {},
+ "453": {
+  "odrzut": 1
+ },
+ "454": {
+  "ogluszenie": {
+   "szansa": 0.08,
+   "s": 1.0
+  }
+ },
+ "455": {
+  "krwawienie": {
+   "szansa": 0.08,
+   "dps": 1,
+   "s": 4
+  }
+ },
+ "456": {
+  "ogluszenie": {
+   "szansa": 0.08,
+   "s": 1.0
+  }
+ },
+ "457": {
+  "ogluszenie": {
+   "szansa": 0.1,
+   "s": 1.5
+  }
+ },
+ "458": {
+  "zasieg": 0.15
+ },
+ "459": {
+  "zasieg": 0.15
+ },
+ "460": {
+  "zasieg": 0.15
+ },
+ "461": {
+  "zasieg": 0.2,
+  "przebicie": 0.2
+ },
+ "462": {
+  "krwawienie": {
+   "szansa": 0.12,
+   "dps": 2,
+   "s": 4
+  },
+  "obrazenia": 3
+ },
+ "463": {
+  "szybkosc": 0.15,
+  "krwawienie": {
+   "szansa": 0.12,
+   "dps": 2,
+   "s": 4
+  }
+ },
+ "464": {
+  "ogluszenie": {
+   "szansa": 0.12,
+   "s": 1.5
+  },
+  "przebicie": 0.2
+ },
+ "465": {
+  "przebicie": 0.2,
+  "ogluszenie": {
+   "szansa": 0.12,
+   "s": 1.5
+  }
+ },
+ "466": {
+  "zasieg": 0.2,
+  "obrazenia": 3
+ },
+ "467": {
+  "krwawienie": {
+   "szansa": 0.15,
+   "dps": 3,
+   "s": 4
+  },
+  "obrazenia": 5,
+  "stwory": 0.15
+ },
+ "468": {
+  "przebicie": 0.3,
+  "ogluszenie": {
+   "szansa": 0.15,
+   "s": 2.0
+  },
+  "stwory": 0.15
+ },
+ "469": {
+  "zasieg": 0.25,
+  "parowanie": 0.2,
+  "stwory": 0.15
+ },
+ "470": {
+  "zasieg": 0.25,
+  "krwawienie": {
+   "szansa": 0.15,
+   "dps": 3,
+   "s": 4
+  },
+  "stwory": 0.15
+ },
+ "471": {
+  "szybkosc": 0.08
+ },
+ "472": {
+  "przebijajaca_strzala": 2,
+  "szybkosc": 0.15
+ },
+ "156": {},
+ "60": {},
+ "115": {},
+ "63": {},
+ "116": {},
+ "154": {},
+ "126": {},
+ "125": {}
+}

@@ -1,0 +1,19 @@
+PASS gra się uruchamia
+NOTE nakładka: tools/poprawki_uzytkownika/staging
+FAIL Pustelnia.js i Pustelnia_Data.js działają: Kleofas (944, mapa 155, $Npc_Pustelnik), K50 i D23 w zadaniach, W2 kończy się krokiem „w2Pytanie”, miejsce gotowe (Wyspa.ready 155)  {"api":true,"data":true,"res":[944,155,"$Npc_Pustelnik"],"k50":true,"d23":true,"w2":"w2Pytanie","ready":false,"packs":["K50,D23"]}
+PASS Map155 „Pustelnia na klifie”: mapa 96 x 72, tileset 11, notatka z <Water:salt>, nie szkielet  [155,24,70,96,72,11,"<Clouds:on>\n<Farm:off>\n<Water:salt>","Pustelnia na klifie"]
+PASS przejścia: dół (21-23, 71) -> przystań, brama Ścieżki na klif (2026-11-11 kieszeń), prawa krawędź (95, 17-18) -> Urwisko; drzwi skryptorium -> Map156  {"south":[[23,[125,101,96]]],"east":[17,18],"door":[[14,9,[0,156,6,8,8,0]]],"spots":["cela_drzwi","lawka","ogrodek","skryptorium_drzwi","ule","urwisko","wieza"]}
+PASS miejsca Kleofasa na mapie: cela, ławka, ogródek, skryptorium, ule, urwisko, wieża  ["cela_drzwi","lawka","ogrodek","skryptorium_drzwi","ule","urwisko","wieza"]
+PASS Urwisko (157) jeszcze nie gotowe: na prawej krawędzi popup nad bohaterem, bez przejścia  ["Ścieżka urywa się nad przepaścią. Dalej, na wschód, nie przejdziesz."]
+PASS w południe Kleofas jest przy ławce nad urwiskiem (chleb z miodem)  {"s":[9,6,false,"stand"],"sp":[9,6,4]}
+PASS w nocy śpi w celi (ukryty)  [true,"inside"]
+PASS pierwsza rozmowa: „To nie ozdoba... znak posłańca”, flaga pustelnikMet, notatka „Pustelnik na klifie”  "...Czego tu szukasz? Do miasta jest w drugą\nstronę. / Szedłem wzdłuż klifu. Nie wiedziałem, że ktoś\ntu mieszka. / Mało kto wie. I dobrze. (Kleofas patrzy na\ntwoją szyję.) Pokaż to. / Wisiorek? Matka dała mi go na drogę. Był jej\nojca, dziadka Stacha. / Stacha... Hm. To by się zgadzało. To nie\nozdoba,"
+PASS Kleofas ma własne popiersie (Pustelnik_Bust) i arkusz $Npc_Pustelnik  [["Pustelnik_Bust","$Npc_Pustelnik"],"Pustelnik_Bust"]
+FAIL K50 „Atrament dla pustelnika” od dnia 6: oferta i przyjęcie  "Hm?"
+FAIL ...oddane: 4 szyszki, żelazo i JEDNA porcja własnej deszczówki zabrane; nagroda 15 G i 2× Miód, flaga kleofasCzyta  [{"done":false,"water":2,"cones":4},"Hm?"]
+FAIL D23 „Zaszyfrowane kroniki” po K50: oferta (wisiorek to klucz do tarczy) i przyjęcie  "Hm?"
+PASS miód z uli Kleofasa: 12 G za słoik  [1,18]
+ERR TypeError: Cannot read properties of undefined (reading 'start')
+    at <anonymous>:1:20
+PASS bez błędów w konsoli  []
+11/16 passed

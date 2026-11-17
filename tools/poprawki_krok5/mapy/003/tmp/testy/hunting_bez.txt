@@ -1,0 +1,36 @@
+PASS the animal sheets load (3 columns x 4 rows of frames)  {"$Animal_Rabbit":[162,172],"$Animal_Deer":[225,300]}
+PASS the shot is O in the combat mode (Combat.js: O has its own name, Tab switches the mode)
+PASS Hunting in four files (the data and the hooks, the way, the animals, the weapons and the prey), each in the page once - the parts put in by Hunting.js  {"parts":["core","path","ai","weapons"],"scripts":[1,1,1,1],"order":["Spoilage","Hunting","Hunting_Path","Hunting_AI","Hunting_Weapons","Birds"],"api":true}
+PASS Map003 is a hunting ground with 3 rabbits  {"rabbit":3,"boar":1,"wolf":2}
+PASS by day 3 rabbits graze on the meadow  ["rabbit","rabbit","rabbit"]
+PASS they are drawn (sprites in the tilemap) and are not map events
+PASS none spawned right next to the player
+PASS at night the rabbits are gone (burrowed; only a wolf pack may be out)
+PASS and they are back in the morning (the 3 rabbits; at dawn the boar may be out too)
+PASS deer are not out at noon (only dawn and dusk)
+PASS found a straight open lane of 12 tiles  {"x":78,"y":6}
+PASS a rabbit 3 tiles away notices the player, then runs off (the distance grows)  {"aware0":0.24729411764705878,"d0":3,"d1":22}
+PASS without a weapon: popup 'Potrzebujesz procy, łuku albo oszczepu' (icon + short text)  ["Potrzebujesz procy, łuku albo oszczepu"]
+PASS a sling but no stones: 'Potrzebujesz kamieni'  ["Potrzebujesz kamieni"]
+PASS a bow but no arrows and no stones: 'Potrzebujesz strzał'  ["Potrzebujesz strzał"]
+PASS F fires: a stone flew (or already hit), one stone and 2 stamina are spent  {"flying":1}
+PASS the stone kills the rabbit: gone from the map, its carcass lies there, the hunt is counted  {"animals":0,"carcasses":1}
+PASS ...and Hunting tells it on the Tawerna bus: 'kill' { kind: rabbit, by: hero, how: shot, mapId: 3, x, y, animal }  [{"kind":"rabbit","by":"hero","how":"shot","mapId":3,"x":82.5,"y":6.5,"animal":true}]
+PASS the weapon wears by one shot
+PASS the sling does not reach 8 tiles (the rabbit stays, a stone is lost)  {"n":1,"stones":3}
+PASS ...and each stone's flight tells the bus 'shot' { weapon, hit, kind }: the rabbit hit, then a miss  [{"weapon":"sling","hit":true,"kind":"rabbit"},{"weapon":"sling","hit":false,"kind":""}]
+PASS the bow (arrows first) reaches 8 tiles and kills it; one arrow used  {"arrows":2}
+PASS what was shot today does not come back before dawn (2 of 3 killed on Map003)
+PASS the map is refilled only up to what remains (1 rabbit)  1
+PASS the sling takes the same bite off a deer each hit until it is dead (40+ life: 3-4 stones), the wounded one is announced (a popup; with Combat.js its life bar instead)  {"deerMax":40,"hits":[26,12,0]}
+PASS the deer lies there (its carcass)  {"carD":2,"now":3}
+PASS the bow needs only 2 hits for a deer  {"car1":3,"now":4}
+PASS a shot scares the animals within 7 tiles (alarm set on the survivor)  [214]
+PASS three animals stand on the map, each with a picture in the tilemap  "3:3"
+PASS after the main menu the animals are still there AND still drawn  "3:3"
+PASS after the journal the animals are still there AND still drawn  "3:3"
+PASS the day summary was shown after the night
+PASS ...and afterwards the animals are still there and drawn (they do not vanish with the summary)  "3:3"
+console errors: []
+33/33 passed
+exit 0

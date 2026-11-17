@@ -87,10 +87,12 @@
     Watki.scal(PLACES, "tablica", "miejsca");   // (its words: js/teksty/tablica.txt, miejsca)
 
     // wanted animals: kind, where, how much stronger and bigger, a tint; pack: wolves beside it
+    // (2026-11-17, the new world: Szary Kieł with the wolves of Krucze Turnie (222), Czarny Ryj in the fields by the weir (221),
+    // Trójłap after the hens of Podgrodzie (218) - they were on the old world's roads 21-23)
     const BOUNTIES = {
-        szary_kiel: { kind: "wolf", map: 23, hp: 2.4, lv: 3, scale: 1.32, tone: [52, 52, 58, 90], pack: 2, die: "szczesciarz" },
-        czarny_ryj: { kind: "boar", map: 21, hp: 2.2, lv: 3, scale: 1.3, tone: [-70, -70, -62, 40], pack: 0, die: "wdowa" },
-        trojlap: { kind: "wolf", map: 22, hp: 1.8, lv: 2, scale: 1.16, tone: [46, 16, -14, 30], pack: 1, die: "grusza" }
+        szary_kiel: { kind: "wolf", map: 222, hp: 2.4, lv: 3, scale: 1.32, tone: [52, 52, 58, 90], pack: 2, die: "szczesciarz" },
+        czarny_ryj: { kind: "boar", map: 221, hp: 2.2, lv: 3, scale: 1.3, tone: [-70, -70, -62, 40], pack: 0, die: "wdowa" },
+        trojlap: { kind: "wolf", map: 218, hp: 1.8, lv: 2, scale: 1.16, tone: [46, 16, -14, 30], pack: 1, die: "grusza" }
     };
     Watki.scal(BOUNTIES, "tablica", "poszukiwani");   // (its words: js/teksty/tablica.txt, poszukiwani)
 
@@ -212,7 +214,7 @@
         { id: "wolf_meat", type: "deliver", giver: "bogdan",
             req: [{ item: 161, n: [null, null, T(3, 4), null, null] }] },
         { id: "wolves_map", type: "hunt", giver: "bogdan",
-            req: [{ kill: "wolf", maps: [21, 22, 23, 4], n: [null, null, T(2, 3), T(3, 3), T(4, 4)] }] },
+            req: [{ kill: "wolf", maps: [222], n: [null, null, T(2, 3), T(3, 3), T(4, 4)] }] },   // (the new world's wolves: Krucze Turnie)
         { id: "deer", type: "hunt", giver: "bogdan",
             req: [{ kill: "deer", n: [null, T(1, 1), T(2, 2), null, null] }] },
         { id: "b_trojlap", type: "bounty", giver: "bogdan",

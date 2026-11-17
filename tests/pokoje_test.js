@@ -92,7 +92,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9428, lightGpu: true, bootCheck
     t.check("w piwnicy (zestaw lochów) brak zakrycia", !(await t.json("Pokoje.active()")));
     await t.go(3, 60, 51, 2); await t.frames(20);
     t.check("na dworze brak zakrycia", !(await t.json("Pokoje.active()")));
-    await t.go(1, 14, 35, 8); await t.frames(20);
+    await t.go(1, 14, 22, 8); await t.frames(20);
     t.check("po powrocie działa", await t.json("Pokoje.active()"));
     await t.eval("window.POKOJE = false; 0"); await t.frames(5);
     t.check("window.POKOJE = false wyłącza", (await t.json("SceneManager._scene._spriteset._pokoje.sp.visible")) === false);

@@ -77,6 +77,8 @@
     const C = (code, parameters, indent) => ({ code, indent: indent || 0, parameters });
     const has = () => !!window.$gameSystem && !!window.$gameParty && !!window.$dataItems;
     const item = id => (window.$dataItems && $dataItems[id] && $dataItems[id].name ? $dataItems[id] : null);
+    // a piece's icon: the item's own (the PixelLab icons since 2026-11-17), the data's old number only when the item is missing
+    const iconOf = p => (p && item(p.id) ? item(p.id).iconIndex : 0) || (p && p.ikona) || 0;
     const count = id => (item(id) ? $gameParty.numItems(item(id)) : 0);
     const day = () => T.time.day(), hour = () => T.time.hour();
     const pick = T.util.pick;
@@ -92,7 +94,7 @@
     // ------------------------------------------------------------------
     // What is worn (Equipment.js) - worked out again only when a part changes
     // ------------------------------------------------------------------
-    const PARTS = ["head", "torso", "legs", "feet", "belt", "hands", "back"];
+    const PARTS = ["head", "torso", "legs", "feet", "belt", "hands", "back", "cloak"];   // (2026-11-17: + the cloaks 293-296)
     let cache = { key: null, sys: null, list: [] };
     function worn() {
         const e = E(), d = D();
@@ -246,7 +248,7 @@
 
     // ---- F9 rows (the user's check of the clothes in the game)
     function f9Rows() {
-        const d = D(), p = d && d.poWzorze("koszula_lniana_biala"), icon = p ? p.ikona : COIN_ICON;
+        const d = D(), p = d && d.poWzorze("koszula_lniana_biala"), icon = p ? iconOf(p) || COIN_ICON : COIN_ICON;
         return [
             { owner: PLUGIN, label: "Ubiór: daj wszystkie ubrania", icon, what: "all",
                 desc: "Każdy wariant ubrania 250+ po jednej sztuce do torby (te, których nie masz). Na wolne części zakładają się same; resztę zmienisz w menu P → Ekwipunek." },
@@ -305,7 +307,7 @@
         if (back <= 0) return;
         $gameParty.gainGold(back);
         const w = worn().find(x => x.p.bonus.rabunek);
-        T.popup("Sakiewka pod pasem ocalała: +" + back + " G", { icon: w ? w.p.ikona || COIN_ICON : COIN_ICON, kind: "gold" });
+        T.popup("Sakiewka pod pasem ocalała: +" + back + " G", { icon: w ? iconOf(w.p) || COIN_ICON : COIN_ICON, kind: "gold" });
     }, { owner: PLUGIN });
     // the opinion: a neat shirt makes every gain a part bigger (the parts gathered until they make a whole point)
     const NEAT_WHY = "Schludny strój";
@@ -658,7 +660,7 @@
         rebuild(index) {
             const d = D();
             this._rows = oferta(this._key, this._tab);
-            const items = this._rows.map(r => ({ icon: r.p.ikona || (item(r.id) ? item(r.id).iconIndex : 0), text: r.name,
+            const items = this._rows.map(r => ({ icon: iconOf(r.p) || (item(r.id) ? item(r.id).iconIndex : 0), text: r.name,
                 right: r.act === "sprzedaj" ? "+" + r.gold + " G" : r.cost + " G", color: r.short ? "#8a9099" : undefined }));
             if (!items.length) items.push({ icon: 0, text: d.TEKSTY.pusto[this._tab], disabled: true });
             this._list.set(items, Math.min(index || 0, Math.max(0, items.length - 1)));
@@ -704,7 +706,7 @@
             }
             const p = r.p, du = DU();
             const shown = r.act === "farbuj" ? r.target : p;   // (dyeing: the thing as it will be)
-            ui.icon(b, shown.ikona || (item(shown.id) ? item(shown.id).iconIndex : 0), x, y, 64);
+            ui.icon(b, iconOf(shown), x, y, 64);
             ui.text(b, shown.nazwa, x + 80, y + 2, W - x - 100, { size: 24, color: S.accent, bold: true });
             const m = d.MIEJSCA[p.miejsce], mat = d.MATERIALY[p.material] || "";
             ui.text(b, (m ? m.nazwa : "") + (mat ? "  ·  " + mat : "") + (p.waga ? "  ·  waga " + p.waga : ""), x + 80, y + 36, W - x - 100, { size: 17, color: S.muted });

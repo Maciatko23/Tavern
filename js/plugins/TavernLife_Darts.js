@@ -65,10 +65,11 @@
         return ORDER[Math.floor(deg / 18) % 20];
     }
     // (2026-10-06) Wiesiek's bust: RTP People2_7 (a weathered carter with road goggles on his brow) - unused anywhere else since the
-    // arm-wrestling's carter got Woznica_Bust; People1_5 was the Sołtys bust's face
+    // arm-wrestling's carter got Woznica_Bust; People1_5 was the Sołtys bust's face. 2026-11-17: drawn anew in PixelLab like every bust
+    // (Rzutki_Wiesiek_Bust - the same man, turned left)
     const OPPONENTS = {
         ozzy: { role: "ozzy", sway: 50, scatter: 15, lucky: 0.16, aim: "bull" },
-        wiesiek: { role: null, bust: "People2_7", face: ["People2", 6], sway: 38, scatter: 10, lucky: 0.05, aim: "twenty" }
+        wiesiek: { role: null, bust: "Rzutki_Wiesiek_Bust", face: ["People2", 6], sway: 38, scatter: 10, lucky: 0.05, aim: "twenty" }
     };
     Watki.scal(OPPONENTS, "rzutki", "rywale");   // (its words: js/teksty/rzutki.txt, rywale)
     function dartBoardBitmap() {

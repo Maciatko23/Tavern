@@ -77,7 +77,7 @@
     const PLUGIN = "Kasztelan";
     const W = window.Watki, w = W && W.get ? W.get("kasztelan") : null;
     if (!w) { console.warn("Kasztelan.js: brak Watki.js albo Kasztelan_Data.js - wątek W4 rozdz. 6-8 wyłączony"); return; }
-    const MAP = { tavern: 1, town: 8, cellar: 9, ruins: 10, floor10: 140, house: 19, cairn: 20 };
+    const MAP = { tavern: 1, town: 220, cellar: 9, ruins: 10, floor10: 140, house: 224, cairn: 218 };   // (2026-11-16 the new world, as Kasztelan_Data's)
     const IDS = [540, 559];
     const EV = { cellarBorgar: 540, cellarFire: 541, postBorgar: 542, postFire: 543, postBasket: 544 };
     // the places: the cellar - Borgar right of the grate (15,2), his fire basket left of it (the grate's own tile 15,3 stays free);
@@ -298,7 +298,7 @@
         return ev._w4counter;
     };
     const grateOf = ev => { const d = ev.event(); return !!d && /^Stara krata zakonu/.test(d.name || ""); };
-    const doorOf = ev => { const d = ev.event(); return !!d && /^Drzwi tawerny/.test(d.name || ""); };
+    const doorOf = ev => { const d = ev.event(); return !!d && (/^Drzwi tawerny/.test(d.name || "") || /<Town:door=tawerna>/.test(d.note || "")); };   // (the new town: its door is known by the note)
     let grateGo = false;   // (the warning answered "Zejdź": the original commands once)
     // (2026-10-23) the core's one list hook (Tawerna.onEventList): "closed" - the first asked (as the old wrapper, the outermost of the
     // plugin list): the bar shut over Story's Borgar and TavernLife's counter, the tavern's door, the grate over TownQuests' W4 stub

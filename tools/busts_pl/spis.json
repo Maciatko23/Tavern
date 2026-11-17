@@ -1,0 +1,759 @@
+{
+ "_opis": "Popiersia NPC 128x128 w stylu bazy bohatera (zwrócone w lewo). Metoda: edit_image_pro_flash na tools/popiersie_pl/hero_baza.png z obrazkiem-wzorem = przednia klatka arkusza $Npc x2 (method=reference) i opisem postaci. Pliki: staging/<Key>_Bust.png.",
+ "grupy": {
+  "karczma": [
+   {
+    "klucz": "Borgar",
+    "plik": "staging/Borgar_Bust.png",
+    "arkusz": "$Npc_Borgar",
+    "uwaga": null
+   },
+   {
+    "klucz": "Melia",
+    "plik": "staging/Melia_Bust.png",
+    "arkusz": "$Npc_Melia",
+    "uwaga": null
+   },
+   {
+    "klucz": "Grum",
+    "plik": "staging/Grum_Bust.png",
+    "arkusz": "$Npc_Grum",
+    "uwaga": null
+   },
+   {
+    "klucz": "Ozzy",
+    "plik": "staging/Ozzy_Bust.png",
+    "arkusz": "$Npc_Ozzy",
+    "uwaga": null
+   },
+   {
+    "klucz": "Wanda",
+    "plik": "staging/Wanda_Bust.png",
+    "arkusz": "$Npc_Wanda",
+    "uwaga": null
+   },
+   {
+    "klucz": "Jagna",
+    "plik": "staging/Jagna_Bust.png",
+    "arkusz": "$Npc_Jagna",
+    "uwaga": null
+   },
+   {
+    "klucz": "Pula_K",
+    "plik": "staging/Pula_K_Bust.png",
+    "arkusz": "$Npc_Pula_K",
+    "uwaga": "kucharka (TownLife kucharka) ma ten arkusz"
+   },
+   {
+    "klucz": "Pula_M2",
+    "plik": "staging/Pula_M2_Bust.png",
+    "arkusz": "$Npc_Pula_M2",
+    "uwaga": "odźwierni na Map025"
+   },
+   {
+    "klucz": "Pula_K3",
+    "plik": "staging/Pula_K3_Bust.png",
+    "arkusz": "$Npc_Pula_K3",
+    "uwaga": "arkusz Kelnerka.js"
+   },
+   {
+    "klucz": "Pula_K2",
+    "plik": "staging/Pula_K2_Bust.png",
+    "arkusz": "$Npc_Pula_K2",
+    "uwaga": "arkusz Pokojowka.js"
+   }
+  ],
+  "fabula": [
+   {
+    "klucz": "Stach",
+    "plik": "staging/Stach_Bust.png",
+    "arkusz": "$Npc_Dziadek",
+    "uwaga": null
+   },
+   {
+    "klucz": "Lord",
+    "plik": "staging/Lord_Bust.png",
+    "arkusz": "$Npc_Lord",
+    "uwaga": null
+   },
+   {
+    "klucz": "Kamerdyner",
+    "plik": "staging/Kamerdyner_Bust.png",
+    "arkusz": "$Npc_Kamerdyner",
+    "uwaga": null
+   },
+   {
+    "klucz": "Kapral",
+    "plik": "staging/Kapral_Bust.png",
+    "arkusz": "$Npc_Kapral",
+    "uwaga": null
+   },
+   {
+    "klucz": "Straznik",
+    "plik": "staging/Straznik_Bust.png",
+    "arkusz": "$Npc_Straznik",
+    "uwaga": null
+   },
+   {
+    "klucz": "Rotmistrz",
+    "plik": "staging/Rotmistrz_Bust.png",
+    "arkusz": "$Npc_Rotmistrz",
+    "uwaga": null
+   },
+   {
+    "klucz": "Kwatermistrz",
+    "plik": "staging/Kwatermistrz_Bust.png",
+    "arkusz": "$Npc_Kwatermistrz",
+    "uwaga": null
+   },
+   {
+    "klucz": "Zolnierz",
+    "plik": "staging/Zolnierz_Bust.png",
+    "arkusz": "$Npc_Zolnierz",
+    "uwaga": null
+   },
+   {
+    "klucz": "Zolnierz_B",
+    "plik": "staging/Zolnierz_B_Bust.png",
+    "arkusz": "$Npc_Zolnierz_B",
+    "uwaga": null
+   },
+   {
+    "klucz": "Dezerter",
+    "plik": "staging/Dezerter_Bust.png",
+    "arkusz": "$Npc_Dezerter",
+    "uwaga": "druga wersja (pierwsza zbyt podobna do bohatera) - poprzednia w surowe/Dezerter_v1.png"
+   },
+   {
+    "klucz": "Werbownik",
+    "plik": "staging/Werbownik_Bust.png",
+    "arkusz": "$Npc_Werbownik",
+    "uwaga": null
+   },
+   {
+    "klucz": "Marek",
+    "plik": "staging/Marek_Bust.png",
+    "arkusz": "$Npc_Marek",
+    "uwaga": null
+   },
+   {
+    "klucz": "Rafal",
+    "plik": "staging/Rafal_Bust.png",
+    "arkusz": "$Npc_Rafal",
+    "uwaga": null
+   },
+   {
+    "klucz": "Latarnik",
+    "plik": "staging/Latarnik_Bust.png",
+    "arkusz": "$Npc_Latarnik",
+    "uwaga": null
+   },
+   {
+    "klucz": "Posel",
+    "plik": "staging/Posel_Bust.png",
+    "arkusz": "$Npc_Posel",
+    "uwaga": null
+   },
+   {
+    "klucz": "Gwardzista",
+    "plik": "staging/Gwardzista_Bust.png",
+    "arkusz": "$Npc_Gwardzista",
+    "uwaga": null
+   },
+   {
+    "klucz": "Poborca",
+    "plik": "staging/Poborca_Bust.png",
+    "arkusz": "$Npc_Poborca",
+    "uwaga": null
+   },
+   {
+    "klucz": "Pustelnik",
+    "plik": "staging/Pustelnik_Bust.png",
+    "arkusz": "$Npc_Pustelnik",
+    "uwaga": null
+   },
+   {
+    "klucz": "Rozbitek",
+    "plik": "staging/Rozbitek_Bust.png",
+    "arkusz": "$Npc_Rozbitek",
+    "uwaga": null
+   },
+   {
+    "klucz": "Matka",
+    "plik": "staging/Matka_Bust.png",
+    "arkusz": null,
+    "uwaga": "bez arkusza na mapie: z opisu tools/busts/make_matka.py (bez obrazka-wzoru)"
+   }
+  ],
+  "mieszkancy": [
+   {
+    "klucz": "Kowal",
+    "plik": "staging/Kowal_Bust.png",
+    "arkusz": "$Npc_Kowal",
+    "uwaga": null
+   },
+   {
+    "klucz": "Piekarka",
+    "plik": "staging/Piekarka_Bust.png",
+    "arkusz": "$Npc_Piekarka",
+    "uwaga": null
+   },
+   {
+    "klucz": "Woziwoda",
+    "plik": "staging/Woziwoda_Bust.png",
+    "arkusz": "$Npc_Woziwoda",
+    "uwaga": null
+   },
+   {
+    "klucz": "Dzwonnik",
+    "plik": "staging/Dzwonnik_Bust.png",
+    "arkusz": "$Npc_Dzwonnik",
+    "uwaga": null
+   },
+   {
+    "klucz": "Kupiec",
+    "plik": "staging/Kupiec_Bust.png",
+    "arkusz": "$Npc_Kupiec",
+    "uwaga": null
+   },
+   {
+    "klucz": "Soltys",
+    "plik": "staging/Soltys_Bust.png",
+    "arkusz": "$Npc_Soltys",
+    "uwaga": null
+   },
+   {
+    "klucz": "Garbarz",
+    "plik": "staging/Garbarz_Bust.png",
+    "arkusz": "$Npc_Garbarz",
+    "uwaga": null
+   },
+   {
+    "klucz": "Feliks",
+    "plik": "staging/Feliks_Bust.png",
+    "arkusz": "$Npc_Feliks",
+    "uwaga": null
+   },
+   {
+    "klucz": "Bronek",
+    "plik": "staging/Bronek_Bust.png",
+    "arkusz": "$Npc_Bronek",
+    "uwaga": null
+   },
+   {
+    "klucz": "Zosia",
+    "plik": "staging/Zosia_Bust.png",
+    "arkusz": "$Npc_Zosia",
+    "uwaga": null
+   },
+   {
+    "klucz": "Ludmila",
+    "plik": "staging/Ludmila_Bust.png",
+    "arkusz": "$Npc_Ludmila",
+    "uwaga": null
+   },
+   {
+    "klucz": "Ela",
+    "plik": "staging/Ela_Bust.png",
+    "arkusz": "$Npc_Ela",
+    "uwaga": null
+   },
+   {
+    "klucz": "Praczka",
+    "plik": "staging/Praczka_Bust.png",
+    "arkusz": "$Npc_Praczka",
+    "uwaga": null
+   },
+   {
+    "klucz": "Franek",
+    "plik": "staging/Franek_Bust.png",
+    "arkusz": "$Npc_Franek",
+    "uwaga": null
+   },
+   {
+    "klucz": "Drwal",
+    "plik": "staging/Drwal_Bust.png",
+    "arkusz": "$Npc_Drwal",
+    "uwaga": null
+   },
+   {
+    "klucz": "Klusownik",
+    "plik": "staging/Klusownik_Bust.png",
+    "arkusz": "$Npc_Klusownik",
+    "uwaga": null
+   },
+   {
+    "klucz": "Znachorka",
+    "plik": "staging/Znachorka_Bust.png",
+    "arkusz": "$Npc_Znachorka",
+    "uwaga": null
+   },
+   {
+    "klucz": "Szmaciarz",
+    "plik": "staging/Szmaciarz_Bust.png",
+    "arkusz": "$Npc_Szmaciarz",
+    "uwaga": null
+   },
+   {
+    "klucz": "Uchodzca",
+    "plik": "staging/Uchodzca_Bust.png",
+    "arkusz": "$Npc_Uchodzca",
+    "uwaga": null
+   },
+   {
+    "klucz": "Zebrak",
+    "plik": "staging/Zebrak_Bust.png",
+    "arkusz": "$Npc_Zebrak",
+    "uwaga": null
+   },
+   {
+    "klucz": "Zlodziej",
+    "plik": "staging/Zlodziej_Bust.png",
+    "arkusz": "$Npc_Zlodziej",
+    "uwaga": null
+   },
+   {
+    "klucz": "Gracz",
+    "plik": "staging/Gracz_Bust.png",
+    "arkusz": "$Npc_Gracz",
+    "uwaga": null
+   },
+   {
+    "klucz": "Bartek",
+    "plik": "staging/Bartek_Bust.png",
+    "arkusz": "$Npc_Bartek",
+    "uwaga": null
+   },
+   {
+    "klucz": "Woznica",
+    "plik": "staging/Woznica_Bust.png",
+    "arkusz": "$Npc_Woznica",
+    "uwaga": null
+   },
+   {
+    "klucz": "Janek",
+    "plik": "staging/Janek_Bust.png",
+    "arkusz": "$Npc_Janek",
+    "uwaga": null
+   },
+   {
+    "klucz": "Przemytnik",
+    "plik": "staging/Przemytnik_Bust.png",
+    "arkusz": "$Npc_Przemytnik",
+    "uwaga": null
+   },
+   {
+    "klucz": "Celnik",
+    "plik": "staging/Celnik_Bust.png",
+    "arkusz": "$Npc_Celnik",
+    "uwaga": null
+   },
+   {
+    "klucz": "Kolodziej",
+    "plik": "staging/Kolodziej_Bust.png",
+    "arkusz": "$Npc_Kolodziej",
+    "uwaga": null
+   },
+   {
+    "klucz": "Przekupka",
+    "plik": "staging/Przekupka_Bust.png",
+    "arkusz": "$Npc_Przekupka",
+    "uwaga": null
+   },
+   {
+    "klucz": "Szwaczka",
+    "plik": "staging/Szwaczka_Bust.png",
+    "arkusz": "$Npc_Szwaczka",
+    "uwaga": null
+   },
+   {
+    "klucz": "Wdowa",
+    "plik": "staging/Wdowa_Bust.png",
+    "arkusz": "$Npc_Wdowa",
+    "uwaga": null
+   },
+   {
+    "klucz": "Kostek",
+    "plik": "staging/Kostek_Bust.png",
+    "arkusz": "$Npc_Kostek",
+    "uwaga": null
+   },
+   {
+    "klucz": "Jagodka",
+    "plik": "staging/Jagodka_Bust.png",
+    "arkusz": "$Npc_Jagodka",
+    "uwaga": null
+   },
+   {
+    "klucz": "Ciesla",
+    "plik": "staging/Ciesla_Bust.png",
+    "arkusz": "$Npc_Ciesla",
+    "uwaga": null
+   },
+   {
+    "klucz": "Weteran",
+    "plik": "staging/Weteran_Bust.png",
+    "arkusz": "$Npc_Weteran",
+    "uwaga": null
+   },
+   {
+    "klucz": "Szynkarz",
+    "plik": "staging/Szynkarz_Bust.png",
+    "arkusz": "$Npc_Szynkarz",
+    "uwaga": null
+   },
+   {
+    "klucz": "Opiekunka",
+    "plik": "staging/Opiekunka_Bust.png",
+    "arkusz": "$Npc_Opiekunka",
+    "uwaga": null
+   },
+   {
+    "klucz": "Garncarz",
+    "plik": "staging/Garncarz_Bust.png",
+    "arkusz": "$Npc_Garncarz",
+    "uwaga": null
+   },
+   {
+    "klucz": "Dziecko",
+    "plik": "staging/Dziecko_Bust.png",
+    "arkusz": "$Npc_Dziecko",
+    "uwaga": null
+   }
+  ],
+  "reszta": [
+   {
+    "klucz": "Pula_M",
+    "plik": "staging/Pula_M_Bust.png",
+    "arkusz": "$Npc_Pula_M",
+    "uwaga": null
+   },
+   {
+    "klucz": "Pula_M3",
+    "plik": "staging/Pula_M3_Bust.png",
+    "arkusz": "$Npc_Pula_M3",
+    "uwaga": null
+   },
+   {
+    "klucz": "Pula_S",
+    "plik": "staging/Pula_S_Bust.png",
+    "arkusz": "$Npc_Pula_S",
+    "uwaga": null
+   },
+   {
+    "klucz": "Pula_S2",
+    "plik": "staging/Pula_S2_Bust.png",
+    "arkusz": "$Npc_Pula_S2",
+    "uwaga": null
+   },
+   {
+    "klucz": "Pula_Z",
+    "plik": "staging/Pula_Z_Bust.png",
+    "arkusz": "$Npc_Pula_Z",
+    "uwaga": null
+   },
+   {
+    "klucz": "Pula_Z2",
+    "plik": "staging/Pula_Z2_Bust.png",
+    "arkusz": "$Npc_Pula_Z2",
+    "uwaga": null
+   },
+   {
+    "klucz": "Ksenia",
+    "plik": "staging/Ksenia_Bust.png",
+    "arkusz": "$Npc_Ksenia",
+    "uwaga": null
+   },
+   {
+    "klucz": "Trojka",
+    "plik": "staging/Trojka_Bust.png",
+    "arkusz": "$Npc_Trojka",
+    "uwaga": null
+   },
+   {
+    "klucz": "Tobiasz",
+    "plik": "staging/Tobiasz_Bust.png",
+    "arkusz": "$Npc_Tobiasz",
+    "uwaga": null
+   },
+   {
+    "klucz": "Medyk",
+    "plik": "staging/Medyk_Bust.png",
+    "arkusz": "$Npc_Medyk",
+    "uwaga": null
+   },
+   {
+    "klucz": "Kartograf",
+    "plik": "staging/Kartograf_Bust.png",
+    "arkusz": "$Npc_Kartograf",
+    "uwaga": null
+   },
+   {
+    "klucz": "Grajek",
+    "plik": "staging/Grajek_Bust.png",
+    "arkusz": "$Npc_Grajek",
+    "uwaga": null
+   },
+   {
+    "klucz": "Zboze",
+    "plik": "staging/Zboze_Bust.png",
+    "arkusz": "$Npc_Zboze",
+    "uwaga": null
+   },
+   {
+    "klucz": "Urszula",
+    "plik": "staging/Urszula_Bust.png",
+    "arkusz": "$Npc_Urszula",
+    "uwaga": null
+   },
+   {
+    "klucz": "Relikwie",
+    "plik": "staging/Relikwie_Bust.png",
+    "arkusz": "$Npc_Relikwie",
+    "uwaga": null
+   },
+   {
+    "klucz": "Wizytator",
+    "plik": "staging/Wizytator_Bust.png",
+    "arkusz": "$Npc_Wizytator",
+    "uwaga": null
+   },
+   {
+    "klucz": "Lowczyni",
+    "plik": "staging/Lowczyni_Bust.png",
+    "arkusz": "$Npc_Lowczyni",
+    "uwaga": null
+   },
+   {
+    "klucz": "Pielgrzym",
+    "plik": "staging/Pielgrzym_Bust.png",
+    "arkusz": "$Npc_Pielgrzym",
+    "uwaga": null
+   },
+   {
+    "klucz": "Kompania_1",
+    "plik": "staging/Kompania_1_Bust.png",
+    "arkusz": "$Npc_Kompania_1",
+    "uwaga": null
+   },
+   {
+    "klucz": "Kompania_2",
+    "plik": "staging/Kompania_2_Bust.png",
+    "arkusz": "$Npc_Kompania_2",
+    "uwaga": null
+   },
+   {
+    "klucz": "Kompania_3",
+    "plik": "staging/Kompania_3_Bust.png",
+    "arkusz": "$Npc_Kompania_3",
+    "uwaga": null
+   },
+   {
+    "klucz": "Kompania_4",
+    "plik": "staging/Kompania_4_Bust.png",
+    "arkusz": "$Npc_Kompania_4",
+    "uwaga": null
+   },
+   {
+    "klucz": "Handlarz",
+    "plik": "staging/Handlarz_Bust.png",
+    "arkusz": "$Npc_Handlarz",
+    "uwaga": null
+   },
+   {
+    "klucz": "Gajowy",
+    "plik": "staging/Gajowy_Bust.png",
+    "arkusz": "$Npc_Gajowy",
+    "uwaga": null
+   },
+   {
+    "klucz": "Grabarz",
+    "plik": "staging/Grabarz_Bust.png",
+    "arkusz": "$Npc_Grabarz",
+    "uwaga": null
+   },
+   {
+    "klucz": "Pasterz",
+    "plik": "staging/Pasterz_Bust.png",
+    "arkusz": "$Npc_Pasterz",
+    "uwaga": null
+   }
+  ],
+  "bez_popiersia_dotad": [
+   {
+    "klucz": "Jarmark_Ania",
+    "plik": "staging/Jarmark_Ania_Bust.png",
+    "arkusz": "$Npc_Jarmark_Ania",
+    "uwaga": null
+   },
+   {
+    "klucz": "Jarmark_Bonawentura",
+    "plik": "staging/Jarmark_Bonawentura_Bust.png",
+    "arkusz": "$Npc_Jarmark_Bonawentura",
+    "uwaga": null
+   },
+   {
+    "klucz": "Jarmark_Marcel",
+    "plik": "staging/Jarmark_Marcel_Bust.png",
+    "arkusz": "$Npc_Jarmark_Marcel",
+    "uwaga": null
+   },
+   {
+    "klucz": "Jarmark_Ofelia",
+    "plik": "staging/Jarmark_Ofelia_Bust.png",
+    "arkusz": "$Npc_Jarmark_Ofelia",
+    "uwaga": null
+   },
+   {
+    "klucz": "Jarmark_Pimpek",
+    "plik": "staging/Jarmark_Pimpek_Bust.png",
+    "arkusz": "$Npc_Jarmark_Pimpek",
+    "uwaga": null
+   },
+   {
+    "klucz": "Jarmark_Szept",
+    "plik": "staging/Jarmark_Szept_Bust.png",
+    "arkusz": "$Npc_Jarmark_Szept",
+    "uwaga": null
+   },
+   {
+    "klucz": "Jarmark_Wanda",
+    "plik": "staging/Jarmark_Wanda_Bust.png",
+    "arkusz": "$Npc_Jarmark_Wanda",
+    "uwaga": null
+   },
+   {
+    "klucz": "Jarmark_Zar",
+    "plik": "staging/Jarmark_Zar_Bust.png",
+    "arkusz": "$Npc_Jarmark_Zar",
+    "uwaga": null
+   },
+   {
+    "klucz": "Jas",
+    "plik": "staging/Jas_Bust.png",
+    "arkusz": "$Npc_Jas",
+    "uwaga": null
+   },
+   {
+    "klucz": "Jasiek",
+    "plik": "staging/Jasiek_Bust.png",
+    "arkusz": "$Npc_Jasiek",
+    "uwaga": null
+   },
+   {
+    "klucz": "Lasica",
+    "plik": "staging/Lasica_Bust.png",
+    "arkusz": "$Npc_Lasica",
+    "uwaga": null
+   },
+   {
+    "klucz": "Ludwik",
+    "plik": "staging/Ludwik_Bust.png",
+    "arkusz": "$Npc_Ludwik",
+    "uwaga": null
+   },
+   {
+    "klucz": "Ostap",
+    "plik": "staging/Ostap_Bust.png",
+    "arkusz": "$Npc_Ostap",
+    "uwaga": null
+   },
+   {
+    "klucz": "Szyper",
+    "plik": "staging/Szyper_Bust.png",
+    "arkusz": "$Npc_Szyper",
+    "uwaga": null
+   },
+   {
+    "klucz": "Walenty",
+    "plik": "staging/Walenty_Bust.png",
+    "arkusz": "$Npc_Walenty",
+    "uwaga": null
+   },
+   {
+    "klucz": "Wawrzyn",
+    "plik": "staging/Wawrzyn_Bust.png",
+    "arkusz": "$Npc_Wawrzyn",
+    "uwaga": null
+   },
+   {
+    "klucz": "Bogdan",
+    "plik": "staging/Bogdan_Bust.png",
+    "arkusz": "$Npc_Bogdan",
+    "uwaga": null
+   },
+   {
+    "klucz": "Cyryl",
+    "plik": "staging/Cyryl_Bust.png",
+    "arkusz": "$Npc_Cyryl",
+    "uwaga": null
+   },
+   {
+    "klucz": "Halina",
+    "plik": "staging/Halina_Bust.png",
+    "arkusz": "$Npc_Halina",
+    "uwaga": null
+   },
+   {
+    "klucz": "Kurier",
+    "plik": "staging/Kurier_Bust.png",
+    "arkusz": "$Npc_Kurier",
+    "uwaga": null
+   },
+   {
+    "klucz": "Gawron",
+    "plik": "staging/Gawron_Bust.png",
+    "arkusz": "$Npc_Gawron",
+    "uwaga": null
+   },
+   {
+    "klucz": "Kopacz",
+    "plik": "staging/Kopacz_Bust.png",
+    "arkusz": "$Npc_Kopacz",
+    "uwaga": null
+   },
+   {
+    "klucz": "Wicek",
+    "plik": "staging/Wicek_Bust.png",
+    "arkusz": "$Npc_Wicek",
+    "uwaga": null
+   },
+   {
+    "klucz": "PanMlody",
+    "plik": "staging/PanMlody_Bust.png",
+    "arkusz": "$Npc_PanMlody",
+    "uwaga": null
+   },
+   {
+    "klucz": "PannaMloda",
+    "plik": "staging/PannaMloda_Bust.png",
+    "arkusz": "$Npc_PannaMloda",
+    "uwaga": null
+   },
+   {
+    "klucz": "Milczacy1",
+    "plik": "staging/Milczacy1_Bust.png",
+    "arkusz": "$Npc_Milczacy1",
+    "uwaga": null
+   },
+   {
+    "klucz": "Milczacy3",
+    "plik": "staging/Milczacy3_Bust.png",
+    "arkusz": "$Npc_Milczacy3",
+    "uwaga": null
+   },
+   {
+    "klucz": "Milczaca2",
+    "plik": "staging/Milczaca2_Bust.png",
+    "arkusz": "$Npc_Milczaca2",
+    "uwaga": null
+   },
+   {
+    "klucz": "Milczaca4",
+    "plik": "staging/Milczaca4_Bust.png",
+    "arkusz": "$Npc_Milczaca4",
+    "uwaga": null
+   }
+  ]
+ }
+}

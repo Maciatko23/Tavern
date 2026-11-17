@@ -138,7 +138,9 @@
     Input.keyMapper[83] = "down";    // S
     Input.keyMapper[68] = "right";   // D
     // O and P instead of Z and X: O = OK / action, P = cancel (Enter, Space, Esc, Insert and the numpad keys still work)
-    delete Input.keyMapper[90];      // Z
+    // (2026-11-16, the user: "możesz dać z jako bazowy odpoczynek") Z = rest: he sits down where he stands, anywhere under the sky
+    // (Farming.js, restKey)
+    Input.keyMapper[90] = "rest";    // Z
     delete Input.keyMapper[88];      // X
     Input.keyMapper[79] = "ok";      // O
     Input.keyMapper[80] = "escape";  // P

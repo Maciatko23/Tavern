@@ -61,13 +61,13 @@
     // Eryk Sowa's (the castaway, Wrak_Data.js)
     const CENY = { "1-os.": 8, "2-os.": 15, rodzinny: 20 };
     const POKOJE = {
-        4: { typ: "rodzinny", miejsce: [35, 8, 8] }, 5: { typ: "2-os.", miejsce: [49, 8, 2] }, 6: { typ: "2-os.", miejsce: [5, 28, 4] },
-        8: { typ: "1-os.", miejsce: [5, 41, 4] }, 9: { typ: "2-os.", miejsce: [54, 27, 4] }, 10: { typ: "2-os.", miejsce: [21, 27, 2] },
-        11: { typ: "rodzinny", miejsce: [57, 40, 8] }, 12: { typ: "1-os.", miejsce: [58, 8, 2] }
+        4: { typ: "rodzinny", miejsce: [21, 8, 8] }, 5: { typ: "2-os.", miejsce: [27, 8, 2] }, 6: { typ: "2-os.", miejsce: [5, 28, 4] },   // (2026-11-16: the smaller first floor, tools/tawerna/pietro1.py)
+        8: { typ: "1-os.", miejsce: [38, 9, 4] },   // (2026-11-16: rooms 9 and 10 are the servants' and Borgar's own - no traveller gets them)
+        11: { typ: "rodzinny", miejsce: [46, 8, 8] }, 12: { typ: "1-os.", miejsce: [34, 8, 2] }
     };
     // the hero's rooms: never a traveller's (1, 2); 3 and the Gold suite only for a traveller whose data says so (wymaga: "furtka")
     const POKOJE_BOHATERA = { 1: true, 2: true, 3: "furtka", zloty: "furtka" };
-    const POKOJ_ERYKA = 7;
+    const POKOJ_ERYKA = 8;   // (2026-11-16: room 7 is gone from the smaller floor - Eryk Sowa has room 8 for good)
     const POKOJ_RAFALA = 1;   // (W6: Rafał hidden in the tavern - "krewniak Borgara" in the book)
     const MIEJSCA_W_SALI = 6; // the user's "Miejsce: podrozny_1..6" on Map001
 
@@ -104,7 +104,7 @@
             wizyty: [{ od: 25, do: 25, doDnia: 37 }] },
         { key: "lowczyni", id: 3031, arkusz: "$Npc_Lowczyni", pokoj: 6, profil: "lowczyni", miejsce: 5, kobieta: true,
             wizyty: [{ po: { kto: "dezerter", dni: 3 }, gdy: "obecny:dezerter", promy: 2 }] },
-        { key: "kompania", grupa: ["kompania_1", "kompania_2", "kompania_3", "kompania_4"], pokoje: [9, 9, 10, 10], profil: "kompania", kobieta: true,
+        { key: "kompania", grupa: ["kompania_1", "kompania_2", "kompania_3", "kompania_4"], pokoje: [4, 4, 11, 11], profil: "kompania", kobieta: true,   // (2026-11-17: 9 and 10 are the servants' and Borgar's now - the two family rooms)
             wizyty: [{ od: 28, do: 31, gdy: "w8|dzien:31", promy: 3 }] },
         { key: "grajek", id: 3023, arkusz: "$Npc_Grajek", pokoj: 11, profil: "grajek", miejsce: 1, zadania: ["D41"],
             wizyty: [{ od: 22, do: 34, gdy: "w3|dzien:31", doDnia: 43 }] },
@@ -198,19 +198,27 @@
     // ways off the town (the south gate - to Podgrodzie and the harbour; the east gate - to the manor)
     const SPOTS_MIASTA = { podr_sala: [51, 17, 8], podr_pokoj: [51, 17, 8], podr_medyk: [51, 17, 8], podr_grajek: [51, 17, 8],
         podr_droga: [31, 109, 2], podr_przystan: [31, 109, 2], podr_dwor: [116, 49, 6] };
+    // (2026-11-16) the new world's town (Map220): the travellers' own places and the old town's place names their days still use, each on
+    // a free cell of the new map - the tavern's door, the west gate (the road to the coast and the ferry), the east gate (the manor)
+    const MIASTO = 220;
+    const SPOTS_220 = { podr_sala: [43, 35, 8], podr_pokoj: [43, 35, 8], podr_medyk: [43, 35, 8], podr_grajek: [43, 35, 8],
+        podr_droga: [5, 41, 4], podr_przystan: [5, 41, 4], podr_dwor: [74, 41, 6],
+        przed_tawerna: [43, 36, 2], brama_twierdzy: [47, 36, 2], plyta: [52, 41, 2], pod_murem: [20, 17, 2], stodola: [63, 35, 2], dom_mieszczan: [72, 39, 8],
+        skwer: [54, 44, 2], stragan_2: [39, 37, 4], stragan_5: [57, 37, 6], kantor_przed: [54, 22, 8], kantor_rog: [52, 22, 8], ogrod_zakonu: [9, 27, 2],
+        plac_3: [44, 42, 2], plac_5: [50, 41, 2], plac_6: [46, 43, 2], plac_7: [52, 43, 2], plac_9: [56, 40, 2], plac_11: [42, 42, 2], plac_12: [49, 39, 2] };
     const W_DRODZE = ["podr_droga", "podr_przystan", "podr_dwor"];   // (TownLife's away: "inside" there = gone, in no interior)
 
     // ------------------------------------------------------------------ the harbour (Map125): the ferry comes at 9 - the scene of
     // the landing (docs/PODROZNI.md 8.1, example 1); the actors 3002-3008 stand on the pier 9-11 (the arrived), 14-15 (the leaving),
     // 9-15 on the ferry days (who watches the faces); the gangway 3010
     const SCENA = {
-        mapa: 125,
-        trap: [12, 18],                                  // the gangway's prop (the ferry lies at 11,21)
-        zejscie: [12, 19],                               // where one comes off the ferry
-        molo: [[14, 17, 6], [15, 17, 6], [16, 17, 6], [13, 16, 2], [14, 16, 2]],   // where the arrived stand till 11:00
-        odjazd: [[13, 17, 4], [14, 17, 4], [15, 17, 4], [16, 17, 4], [13, 16, 2]],  // the leaving at 14-15 (facing the ferry)
-        straz: [[17, 17, 8], [16, 16, 2]],               // who watches (Urszula; later Szczerba)
-        kamera: [14, 18],                                // the cell the camera looks at
+        mapa: 219,                                       // (2026-11-16: the pier of Słony Brzeg; the old harbour's cells + (12, 31))
+        trap: [25, 49],                                  // the gangway's prop (the ferry ship lies at 23,51, its far rail against the pier)
+        zejscie: [25, 50],                               // where one comes off the ferry
+        molo: [[26, 48, 6], [27, 48, 6], [28, 48, 6], [25, 47, 2], [26, 47, 2]],   // where the arrived stand till 11:00
+        odjazd: [[25, 48, 4], [26, 48, 4], [27, 48, 4], [28, 48, 4], [25, 47, 2]],  // the leaving at 14-15 (facing the ferry)
+        straz: [[29, 48, 8], [28, 47, 2]],               // who watches (Urszula; later Szczerba)
+        kamera: [26, 49],                                // the cell the camera looks at
         celnik: "celnik", przewoznik: 760,               // Sambor (TownLife) and the ferryman (Przystan's 760)
         fala: [761, 762],                                // Przystan's people of a wave (on day 10: Ludmiła and Ela)
         klatki: { kamera: 70, krok: 14, dymek: 150, przerwa: 40, trzymaj: 72, zwloka: 90 }   // (zwloka: frames on the map before it may start)
@@ -261,10 +269,10 @@
             : { map: 108, id: 952, marker: "widok_dzwonnica", x: 5, y: 4, deco: "glint" },
         d40_urwisko: (window.WyspaData && window.WyspaData.HERMITAGE_OPEN) ? { map: 157, id: 951, marker: "kruczarnia", dy: 1, x: 26, y: 13, deco: "glint" }
             : { map: 8, id: 908, marker: "widok_kruczarnia", x: 106, y: 9, deco: "glint" },
-        d40_latarnia: { map: 125, id: 951, marker: "laterna", dx: 1, x: 93, y: 103, deco: "glint" },
+        d40_latarnia: { map: 219, id: 951, marker: "latarnia", dx: 1, x: 17, y: 21, deco: "glint" },
         d40_garnizon: { map: 162, id: 951, marker: "wieza", dx: 1, x: 72, y: 41, deco: "glint" },
         d40_gory: { map: 13, id: 954, marker: "punkt_widokowy", dx: 1, x: 58, y: 36, deco: "glint" },
-        d40_przystan: { map: 125, id: 952, marker: "nabrzeze_rog", dx: 1, x: 21, y: 10, deco: "glint" }
+        d40_przystan: { map: 219, id: 952, marker: "jan_praca", dx: 1, x: 21, y: 47, deco: "glint" }
     };
     Watki.scal(SPOTS, "podroznicy", "miejsca");   // (name: miejsca.<key>.name)
     const D40_SPOTS = Object.keys(SPOTS);
@@ -272,7 +280,7 @@
     // number upstairs, a key of the plan: "jadalnia"); gdy: a hook; kwestie: the words ("kto: tekst", {keywords}); prog: the Czujność
     // that hears the keywords (the hero starts with 5 - D42's talk wants a point more)
     const PODSLUCH = [
-        { id: "d42Narada", mapa: 1, pokoj: "jadalnia", godziny: SPRAWY.d42.narada.godziny, kwestie: "podsluch.narada", prog: 6, raz: true, gdy: "d42Narada" }
+        { id: "d42Narada", mapa: 1, pokoj: "skladzik", godziny: SPRAWY.d42.narada.godziny, kwestie: "podsluch.narada", prog: 6, raz: true, gdy: "d42Narada" }
     ];
     const K72_ROZMOWY = SPRAWY.k72.adresaci.map(k => ({ kto: k, gdy: { hak: "k72Dla", args: [k] }, tresc: ["k72.do." + k, { zrob: "k72List", args: [k] }] }));
 
@@ -515,7 +523,7 @@
         get("name", e => e.imie(key), slowo("imie"));
         get("title", e => e.tytul(key), slowo("tytul"));
         get("sheet", e => e.arkusz(key), arkusz);
-        get("map", e => e.mapa(key), 8);            // (8 while on the island - the town is its home; -1 else: no event anywhere)
+        get("map", e => e.mapa(key), MIASTO);       // (the town while on the island - its home; -1 else: no event anywhere)
         get("plan", e => e.plan(key), z.plan);
         get("indoor", e => e.wnetrze(key), z.indoor);
         get("barks", e => e.okrzyki(key), PUSTE);
@@ -536,6 +544,7 @@
         const up = {};
         for (const [n, p] of Object.entries(POKOJE)) { up["pokoj_" + n] = p.miejsce; up["pokoj_" + n + "_2"] = [p.miejsce[0] + (p.miejsce[2] === 6 ? -1 : 1), p.miejsce[1], p.miejsce[2]]; }
         TLD.SPOTS_BY_MAP[25] = Object.assign({}, up, TLD.SPOTS_BY_MAP[25] || {});
+        TLD.SPOTS_BY_MAP[MIASTO] = Object.assign({}, SPOTS_220, TLD.SPOTS_BY_MAP[MIASTO] || {});
     }
     // the actors of the harbour's scenes and props (3002-3017): put in by the engine - this one stands above TownLife on the list, so
     // its build comes first on every map: the engine notes the hall's places (Map001's "Miejsce:" events) before TownLife's residents ask
@@ -549,7 +558,7 @@
     }
 
     window.PodroznicyData = {
-        IDS, LIMIT, NOWYCH_NA_PROM, PULA_NA_PROM, ZLOTO_PRZYSLUG, GODZINY, RENOMA, CENY, POKOJE, POKOJE_BOHATERA, POKOJ_ERYKA, POKOJ_RAFALA,
+        MIASTO, IDS, LIMIT, NOWYCH_NA_PROM, PULA_NA_PROM, ZLOTO_PRZYSLUG, GODZINY, RENOMA, CENY, POKOJE, POKOJE_BOHATERA, POKOJ_ERYKA, POKOJ_RAFALA,
         MIEJSCA_W_SALI, OBSADA, CZLONKOWIE, CIALA, PULA, SLOTY_PULI, POBYT_PULI, PLANY, SPOTS_MIASTA, W_DRODZE, SCENA, ETAPY_WOJNY,
         RESIDENTS, TX: w.tx, watek: w, baza, SPRAWY, VITEMS, REMARKS, SPOTS, PODSLUCH, Q: w.Q
     };

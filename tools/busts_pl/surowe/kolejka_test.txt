@@ -1,0 +1,6 @@
+Kowal_m1_portret=ff033aa2-6128-4f36-aad0-6887d887a5d8 (portrait job)
+Kowal_m2_lewo=7a28b634-2d0f-4886-b5bf-6a96b6f703c9 (portrait job)
+Borgar_m1_portret=b67e2584-0121-45c5-be65-5a2ff1326b48 (portrait job)
+Borgar_m2_lewo=ba4617fa-07e8-4ec0-adf3-8067ffac2f9e (portrait job)
+Kowal_m3_ref=5ead5402-2480-4b47-a369-0a3f3bb0af5f
+Borgar_m3_ref=362baf23-5b3a-4ce3-be4c-37e6f57571a8

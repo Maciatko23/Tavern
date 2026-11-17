@@ -37,9 +37,12 @@
     if (!T || !window.Watki) throw new Error("Poczta_Data.js: brak TawernaCore.js / Watki.js - muszą być wyżej na liście wtyczek");
 
     // ------------------------------------------------------------------ where, when, how much
-    const MAP = { miasto: 8, kruczarnia: 214, ratusz: 104, tawerna: 1 };
+    // (2026-11-16) the new world: the Kruczarnia stands on Krucza Grań (Map029, above the mine of Krucze Turnie); the town (the old
+    // cemetery with Gryta's grave, the town hall, the tavern) is Kruczogród (Map220)
+    const MAP = { miasto: 220, gran: 29, kruczarnia: 214, ratusz: 104, tawerna: 1 };
     const IDS = [4400, 4499], OWNER = "Poczta";
-    const DRZWI = { id: 364, x: 112, y: 13, przed: [112, 14, 8] };   // "Drzwi: Kruczarnia" on Map008; the cell in front of it
+    const DRZWI = { id: 7, x: 15, y: 20, przed: [15, 21, 8] };       // "Drzwi: Kruczarnia" on Krucza Grań; the cell in front of it
+    const POGON = [[20, 22], [30, 23], [40, 24], [40, 14], [40, 10]];  // the night thief's way from the door: along the path and into the mine's mouth
     const OD_DNIA = 12;                                              // the thread starts from this day (after K51 / D24)
     const GODZINY = [6, 20];                                         // Gawron receives from 6 to 20
     const PRZYLOT = [6.5, 17.5];                                     // the ravens come home: morning, evening
@@ -49,7 +52,8 @@
     const FINAL = { godzina: 3, plata: 60, xp: 150, przychylnosc: 10 };
     const POCZTA_STALA = { cena: 5 };
     const XP = { start: 20, k1: 40, k2: 40, k3: 40, k4: 40, k5: 150 };
-    const GRYTA = { grob: [10, 29, 6] };                             // the grave in the old cemetery (Map008): on the cross grave by the alley (2026-11-12: was (8,27), an invisible block in the alley the Order's place needs)
+    const GRYTA = { grob: [9, 11, 6] };   // (2026-11-16: a grave of the town's cemetery on Map220; the old one below)
+    //                             // the grave in the old cemetery (Map008): on the cross grave by the alley (2026-11-12: was (8,27), an invisible block in the alley the Order's place needs)
     const KAPTUR = { id: 4400, sheet: "$Npc_Kurier" };   // (the W5 hooded courier with the white eye brooch - the Black Eyes' look: no new art)
     const OPINIA = { wydal: 5, uciekl: -2 };
 
@@ -102,10 +106,10 @@
     // on the market bench); Cyryl (8-16 at the town hall's desk, 16-18 in the Kruczarnia "tidying the official letters", the evening
     // at the market, the night at home - in the town hall). The Kruczarnia's door is "kruczarnia_drzwi" (the cell in front of it)
     const RESIDENTS = [
-        { key: "gawron", id: 2957, name: "", title: "", sheet: "$Npc_Gawron", speed: 2, plan: [[0, "inside", "kruczarnia_drzwi"]], barks: {}, talk: {} },
-        { key: "wicek", id: 2958, name: "", title: "", sheet: "$Npc_Wicek", speed: 3,
-            plan: [[0, "inside", "kruczarnia_drzwi"], [16, "wander", "rynek_lawka"], [19.5, "inside", "kruczarnia_drzwi"]], barks: {}, talk: {} },
-        { key: "cyryl", id: 2959, name: "", title: "", sheet: "$Npc_Cyryl", speed: 3,
+        { key: "gawron", id: 2957, map: MAP.gran, name: "", title: "", sheet: "$Npc_Gawron", speed: 2, plan: [[0, "inside", "kruczarnia_drzwi"]], barks: {}, talk: {} },
+        { key: "wicek", id: 2958, map: MAP.gran, name: "", title: "", sheet: "$Npc_Wicek", speed: 3,   // (his evenings: the look-out of the ridge, not the market's bench)
+            plan: [[0, "inside", "kruczarnia_drzwi"], [16, "wander", "widok_grani"], [19.5, "inside", "kruczarnia_drzwi"]], barks: {}, talk: {} },
+        { key: "cyryl", id: 2959, map: MAP.miasto, name: "", title: "", sheet: "$Npc_Cyryl", speed: 3,   // (16-18 he is up in the Kruczarnia: out by the town's east gate)
             indoor: { kruczarnia_drzwi: "cyryl_w_kruczarni" },
             plan: [[0, "inside", "ratusz_drzwi"], [8, "inside", "ratusz_drzwi"], [16, "inside", "kruczarnia_drzwi"], [18, "wander", "rynek_rog"], [21, "inside", "ratusz_drzwi"]],
             barks: {}, talk: {} }
@@ -117,8 +121,9 @@
     (window.TownLifeExtra = window.TownLifeExtra || []).push(...RESIDENTS);
     const TLD = window.TownLifeData;
     if (TLD && TLD.SPOTS) {   // (the cell in front of the Kruczarnia's door: where the residents go in and come out)
-        TLD.SPOTS.kruczarnia_drzwi = DRZWI.przed.slice();
         TLD.SPOTS_BY_MAP = TLD.SPOTS_BY_MAP || {};
+        TLD.SPOTS_BY_MAP[MAP.gran] = Object.assign({ kruczarnia_drzwi: DRZWI.przed.slice(), widok_grani: [67, 41, 2] }, TLD.SPOTS_BY_MAP[MAP.gran] || {});
+        TLD.SPOTS_BY_MAP[MAP.miasto] = Object.assign({ kruczarnia_drzwi: [74, 41, 6] }, TLD.SPOTS_BY_MAP[MAP.miasto] || {});   // (Cyryl's way up: the east gate)
         TLD.SPOTS_BY_MAP[MAP.kruczarnia] = Object.assign({ gawron_wnetrze: [5, 6, 2], wicek_wnetrze: [3, 5, 2], cyryl_w_kruczarni: [8, 6, 6] }, TLD.SPOTS_BY_MAP[MAP.kruczarnia] || {});
     }
 
@@ -201,6 +206,6 @@
         }
     });
     // the regulars' talks of the steps are filled by Poczta.js (it knows the letters); the text keys of the F9 rows and the chapters
-    window.PocztaData = { MAP, IDS, OWNER, DRZWI, OD_DNIA, GODZINY, PRZYLOT, TORBA, ZAUFANIE_PROG, NOC, FINAL, POCZTA_STALA, XP, GRYTA, KAPTUR, OPINIA,
+    window.PocztaData = { MAP, IDS, OWNER, DRZWI, POGON, OD_DNIA, GODZINY, PRZYLOT, TORBA, ZAUFANIE_PROG, NOC, FINAL, POCZTA_STALA, XP, GRYTA, KAPTUR, OPINIA,
         LISTY, PRZYNETY, SZLAKI, BYWALCY, RESIDENTS, TX: w.tx, W20: w.Q.W20, watek: w };
 })();

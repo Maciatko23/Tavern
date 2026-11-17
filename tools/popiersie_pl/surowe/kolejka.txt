@@ -1,0 +1,12 @@
+kapelusz_slomkowy=45b40f71-a325-46de-81cc-4be0c1c2d650
+kapelusz_filcowy=6137e0ab-9202-436f-9d01-8c1b2009760f
+chusta=89cec7f8-89a4-44bc-b925-92e1e67aac7e
+czapka_filcowa=07ff2568-8bd2-470a-89b5-fa583c8d5722
+opaska=8b0b47b7-5dd4-4a9e-a7f3-e68afe7343a9
+kaptur_sukienny=80e791f2-0bb0-45d3-8653-8ab9d3db6aa0
+kaptur_skorzany=79f92bf0-c841-4dc9-9f29-313391069588
+kaptur_futrzany=22eaf0b5-8f7d-4f5a-aba8-ca154f985333
+czepiec_pikowany=41551733-845e-42ff-8556-c53f35b2588c
+czepiec_kolczy=d1f67215-80ba-4ddc-9005-626fd6dcff8f
+kapalin=fe811eeb-733c-4e2c-91f8-d721147aa06f
+helm_otwarty=69898e33-5167-46f0-90ab-79b34f6e4ebc

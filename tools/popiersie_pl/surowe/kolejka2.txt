@@ -1,0 +1,10 @@
+szyszak=8d5c1510-589d-4948-ba92-87756c576785
+helm_zamkniety=e8623bd6-6a74-4970-9a87-9d3aaea7e670
+koszula_lniana=49df7874-c6f2-407d-a895-29ef6bd1ce1e
+koszula_odswietna=5c78420e-8bd8-4a1a-bace-7eba361d268b
+kaftan=6f1dd233-de58-4aa0-9b83-a743c3e75225
+kurta=5923cb3f-57b1-4ad5-9715-d85cd2a4b8b2
+kozuszek=98461da1-5d6b-4602-a28c-9d8362002737
+zupan=ef9149b2-0f73-4646-b9a8-939dbf908f52
+fartuch_kowalski=5515bc5e-11f6-4cb9-abdf-396830e86dd4
+przeszywanica=8118e50e-c5b9-4589-af1f-78de979b3500

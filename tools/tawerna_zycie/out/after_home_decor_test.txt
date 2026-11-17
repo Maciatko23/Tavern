@@ -1,0 +1,40 @@
+PASS the game boots
+PASS HomeDecor.js is in the game (registered)
+PASS a new story game starts in grandpa's house
+PASS the generated art is in the plugin (29 looks)  29
+PASS all 19 decoration events (980-998) are on the map where the slots say  []
+PASS the folk touches: four wycinanki, the towel on the picture, the rag rug, the painted chest  {"rogi":null,"kiel":null,"list":null,"polka":null,"skora":null,"rama":"gwozdz","recznik":"recznik","wyc_2":"wyc_2","wyc_7":"wyc_7","wyc_11":"wyc_11","wyc_16":"wyc_16","chodnik":"chodnik","komin":null,"stol_p":"bazie","stol_l":null,"wigilia":null,"dynie_l":null,"dynie_r":null,"snop":null,"skrzynia":"!House_Decor/skrzynia"}
+PASS before the debt is paid: an empty nail where the receipt will hang  "gwozdz"
+PASS no keepsake yet in a new game  {"rogi":null,"kiel":null,"list":null,"polka":null,"skora":null,"rama":"gwozdz","recznik":"recznik","wyc_2":"wyc_2","wyc_7":"wyc_7","wyc_11":"wyc_11","wyc_16":"wyc_16","chodnik":"chodnik","komin":null,"stol_p":"bazie","stol_l":null,"wigilia":null,"dynie_l":null,"dynie_r":null,"snop":null,"skrzynia":"!House_Decor/skrzynia"}
+PASS day 3 - spring: its things (and the folk touches)  {"rogi":null,"kiel":null,"list":null,"polka":null,"skora":null,"rama":"gwozdz","recznik":"recznik","wyc_2":"wyc_2","wyc_7":"wyc_7","wyc_11":"wyc_11","wyc_16":"wyc_16","chodnik":"chodnik","komin":null,"stol_p":"bazie","stol_l":null,"wigilia":null,"dynie_l":null,"dynie_r":null,"snop":null,"skrzynia":"!House_Decor/skrzynia"}
+PASS day 14 - spring (Easter): its things (and the folk touches)  {"rogi":null,"kiel":null,"list":null,"polka":null,"skora":null,"rama":"gwozdz","recznik":"recznik","wyc_2":"wyc_2","wyc_7":"wyc_7","wyc_11":"wyc_11","wyc_16":"wyc_16","chodnik":"chodnik","komin":null,"stol_p":"bazie","stol_l":"pisanki","wigilia":null,"dynie_l":null,"dynie_r":null,"snop":null,"skrzynia":"!House_Decor/skrzynia"}
+PASS day 35 - summer: its things (and the folk touches)  {"rogi":null,"kiel":null,"list":null,"polka":null,"skora":null,"rama":"gwozdz","recznik":"recznik","wyc_2":"wyc_2","wyc_7":"wyc_7","wyc_11":"wyc_11","wyc_16":"wyc_16","chodnik":"chodnik","komin":"ziola","stol_p":"kwiaty","stol_l":null,"wigilia":null,"dynie_l":null,"dynie_r":null,"snop":null,"skrzynia":"!House_Decor/skrzynia"}
+PASS day 60 - autumn: its things (and the folk touches)  {"rogi":null,"kiel":null,"list":null,"polka":null,"skora":null,"rama":"gwozdz","recznik":"recznik","wyc_2":"wyc_2","wyc_7":"wyc_7","wyc_11":"wyc_11","wyc_16":"wyc_16","chodnik":"chodnik","komin":"wieniec","stol_p":null,"stol_l":"jablka","wigilia":null,"dynie_l":"dynie_l","dynie_r":"dynie_r","snop":null,"skrzynia":"!House_Decor/skrzynia"}
+PASS day 88 - winter: its things (and the folk touches)  {"rogi":null,"kiel":null,"list":null,"polka":null,"skora":null,"rama":"gwozdz","recznik":"recznik_zima","wyc_2":"wyc_2","wyc_7":"wyc_7","wyc_11":"wyc_11","wyc_16":"wyc_16","chodnik":"chodnik","komin":null,"stol_p":null,"stol_l":null,"wigilia":null,"dynie_l":null,"dynie_r":null,"snop":null,"skrzynia":"!House_Decor/skrzynia"}
+PASS day 98 - winter (Christmas Eve): its things (and the folk touches)  {"rogi":null,"kiel":null,"list":null,"polka":null,"skora":null,"rama":"gwozdz","recznik":"recznik_zima","wyc_2":"wyc_2","wyc_7":"wyc_7","wyc_11":"wyc_11","wyc_16":"wyc_16","chodnik":"chodnik","komin":null,"stol_p":null,"stol_l":null,"wigilia":"wigilia","dynie_l":null,"dynie_r":null,"snop":"snop","skrzynia":"!House_Decor/skrzynia"}
+PASS day 115 - spring again (year 2): its things (and the folk touches)  {"rogi":null,"kiel":null,"list":null,"polka":null,"skora":null,"rama":"gwozdz","recznik":"recznik","wyc_2":"wyc_2","wyc_7":"wyc_7","wyc_11":"wyc_11","wyc_16":"wyc_16","chodnik":"chodnik","komin":null,"stol_p":"bazie","stol_l":null,"wigilia":null,"dynie_l":null,"dynie_r":null,"snop":null,"skrzynia":"!House_Decor/skrzynia"}
+PASS Easter: days 13-16 of spring only  [13,14,15,16]
+PASS Christmas Eve: days 12-16 of winter only (96-100, next year 208-212)  [96,97,98,99,100,208,209,210,211,212]
+PASS Christmas Eve: the sheaf is the only thing standing in the way (17,7, in the corner behind grandpa's chest)  ["17,7"]
+PASS the free floor stays one piece: every cell reachable before is reachable now (but the sheaf's)  {"free":96,"now":95,"blocked":["17,7"],"lost":[],"door":true,"landing":true}
+PASS the door and the landing are reachable  {"free":96,"now":95,"blocked":["17,7"],"lost":[],"door":true,"landing":true}
+PASS no dishes on the table (the map has none now): on Christmas Eve nothing is taken off, nothing put back  {"plateOff":[0,false],"plateBack":[0,false]}
+PASS autumn: the pumpkins stand beside the landing (8,11 and 10,11), never on it or in the doorway  ["8,11","10,11"]
+PASS no rug, pumpkin or sheaf over the hearth rug, the runner, the landing or the doorway (any season)  []
+PASS Story.pay(2500): the debt is paid and the Lord's receipt hangs framed in grandpa's alcove (by itself, no refresh called)  {"done":20,"paid":2500,"got":20}
+PASS in winter the receipt and the Holy Mother have spruce twigs over them  {"rogi":null,"kiel":null,"list":null,"polka":null,"skora":null,"rama":"pokwitowanie_zima","recznik":"recznik_zima","wyc_2":"wyc_2","wyc_7":"wyc_7","wyc_11":"wyc_11","wyc_16":"wyc_16","chodnik":"chodnik","komin":null,"stol_p":null,"stol_l":null,"wigilia":null,"dynie_l":null,"dynie_r":null,"snop":null,"skrzynia":"!House_Decor/skrzynia"}
+PASS the dog's wolf is not the hero's trophy  {"dead":true,"got":0,"kills":0}
+PASS the hero's first wolf: its pelt lies by his bed  {"wolf":{"dead":true,"got":20,"kills":1},"skora":"skora"}
+PASS the first boar: its tusk hangs on a nail (no antlers yet)  {"boar":{"dead":true,"got":20,"kills":1},"kiel":"kiel"}
+PASS the first deer: the antlers over his bed, the tusk moves onto them  {"deer":{"dead":true,"got":20,"kills":1},"rogi":"rogi","kiel":"kiel_rog"}
+PASS the first Borgar shift: a pewter tankard on his shelf  "polka_kufel"
+PASS the first dice win: his dice beside the tankard  "polka_oba"
+PASS the first contract done: its notice pinned by his bed (with its title)  "Wilki pod lasem"
+PASS every keepsake is kept with the day it came  {"receipt":20,"wolf":20,"boar":20,"deer":20,"tankard":20,"dice":20,"notice":20}
+PASS keepsakes stay once earned
+PASS O under his shelf: no memory line (no message, no look, no mouse plate)  {"msg":false,"look":"undefined","tip":false}
+PASS screenshots: ozdoby_wiosna, ozdoby_lato, ozdoby_jesien, ozdoby_jesien_drzwi, ozdoby_zima_wigilia, ozdoby_wneka_bohatera, ozdoby_pokwitowanie
+PASS an older save (no HomeDecor state, no decoration events): the events are added on load  {"old":{"had":0},"after":{"events":19,"got":{"wolf":35,"receipt":35,"tankard":35,"notice":35},"seeded":1,"skora":"skora","polka":"polka_kufel","rama":"pokwitowanie"}}
+PASS ... and its past counts at once: the wolf tally -> the pelt, Borgar's shifts -> the tankard, the paid debt -> the receipt  {"events":19,"got":{"wolf":35,"receipt":35,"tankard":35,"notice":35},"seeded":1,"skora":"skora","polka":"polka_kufel","rama":"pokwitowanie"}
+PASS no console errors  []
+39/39 passed

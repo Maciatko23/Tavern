@@ -32,7 +32,9 @@
     "use strict";
 
     // ------------------------------------------------------------------ the maps, the ids, the items, the icons
-    const MAP = 175;              // "Orla Grań" (tools/orzel/gran.py) - over the mountains (Map013), the way up injected at runtime
+    // (2026-11-16) the new world: Orla Grań is Map030 (tools/nowy_swiat/orla_gran.py), the highest level of the mountains - above Krucza
+    // Grań (Map029), reached only by the climbers' rope on its north wall; the old Map175 is out of use
+    const MAP = 30;
     const GORY = 13;              // the mountains: the climbers' path up to the ridge (Orzel.js puts it in as the map loads - Map013 stays as it is)
     const IDS = [500, 539];       // Tawerna.inject: 500-509 the way up on Map013, 510-529 the ridge's things on Map175, 530-539 the thieves' camp
     const ITEM = { jajo: 182, rekawica: 183, pioro: 184 };
@@ -42,8 +44,10 @@
     // from row 7) - an action there takes the hero up; the landing on the ridge
     // (2026-10-18: Orla Grań doubled to 80x60, tools/powieksz - its way down is on the new south edge, row 59, the path carried on to it)
     // (plansza 3x3, 2026-11-08) the climb to Orla Grań is out for now (the ridge is not used): no cells
-    const WAY_UP = { map: 213, cells: [[84, 7]], stand: [], to: MAP, land: [20, 28], dir: 8 };   // (kopalnia: schody w ścianie stacji B na Map213 -> Orla Grań (20,28))
-    const WAY_DOWN = { cells: [[19, 30], [20, 30], [21, 30]], to: 213, land: [84, 9], dir: 2 };   // (szyb na Orlej Grani -> kopalnia, pod schodami stacji B)
+    const WAY_UP = { map: 29, cells: [[66, 7], [67, 7]], stand: [], to: MAP, land: [20, 38], dir: 8, pic: "!$1_Drabina_Linowa" };   // (the rope on Krucza Grań's north wall; was the mine's station B on Map213)
+    //   // (kopalnia: schody w ścianie stacji B na Map213 -> Orla Grań (20,28))
+    const WAY_DOWN = { cells: [[19, 40], [20, 40], [21, 40]], to: 29, land: [66, 9], dir: 2 };   // (the rock chimney on the ridge -> under the rope on Krucza Grań)
+    //   // (szyb na Orlej Grani -> kopalnia, pod schodami stacji B)
 
     // ------------------------------------------------------------------ the stages (0 the egg .. 5 the adult)
     // care: the days of care it takes to grow to the next one (a day counts only when it was fed, watered and - egg, chick - warm);
@@ -133,7 +137,9 @@
     const TOWN_SQUARES = {
         8: [[29, 17, 76, 27], [30, 37, 73, 63], [2, 107, 117, 109]],   // (2026-10-22 the new town) the tavern's yard, the market square, the street inside the south wall
         111: [[4, 18, 84, 20], [36, 24, 55, 40], [17, 78, 36, 89]],   // (2026-10-22 the new Podgrodzie) the road through the settlement, the square, the field of the Chata pod lasem
-        125: [[20, 26, 34, 34]]                                          // the quay square
+        125: [[20, 26, 34, 34]],                                          // the quay square
+        // (2026-11-16) the new world: Kruczogród's market square, Podgrodzie's square by the dry well and the meadow of the camp
+        220: [[38, 37, 58, 45]], 218: [[40, 38, 56, 45], [46, 10, 70, 20]]
     };
     // the maps' sides for the flight over the edge (tools/orzel/krawedzie.py: EDGES and ISLAND_EDGES of tools/newstart/layout.py and the
     // edge transfers found in the maps) - map -> { side: target map } (N up, S down, W left, E right; the target's opposite side)
@@ -145,6 +151,9 @@
         23: { N: 900, S: 17, W: 3 }, 24: { W: 8, E: 3, S: 901 }, 900: { S: 23, E: 168 }, 901: { N: 24 }, 111: { E: 8, W: 162 }, 125: { N: 8 }, 155: { E: 157, S: 950 },
         157: { W: 155, E: 13, N: 930 }, 159: { W: 120 }, 120: { S: 22, E: 159, N: 934 }, 934: { S: 120 }, 162: { E: 111, W: 165 }, 165: { E: 162 }, 168: { W: 900, N: 912 }, 912: { S: 168 }, 175: { S: 13 }
     };
+    // (2026-11-16, the user: „dorosły orzeł może tam wlecieć”) the levels of the mountains lie one above the other, outside the flat world of
+    // Swiat_Data: in the air the north edge climbs to the level above, the south edge comes down to the one below (the same column)
+    const NAD = { 222: { N: 29 }, 29: { S: 222, N: 30 }, 30: { S: 29 } };
     // maps where the eagle never lands (and never comes down to on foot): the inside ones are found by Survival.isOutdoors
     const NO_LAND = [1, 14, 120];
 
@@ -253,6 +262,6 @@
     });
     const D29 = w.Q.D29, W13 = w.Q.W13;
 
-    window.OrzelData = { MAP, GORY, IDS, ITEM, ICON, KEY, WAY_UP, WAY_DOWN, STAGES, STAGE_AT, CARE, FIGHT, FLY, LAND_REGION, TOWN_SQUARES, SIDES,
+    window.OrzelData = { MAP, GORY, IDS, ITEM, ICON, KEY, WAY_UP, WAY_DOWN, STAGES, STAGE_AT, CARE, FIGHT, FLY, LAND_REGION, TOWN_SQUARES, SIDES, NAD,
         NO_LAND, SHEETS, AIR, ROWS, POSE_SPEED, NESTS, IDLE, TX, D29, W13, REMARKS };
 })();

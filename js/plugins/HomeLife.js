@@ -33,21 +33,26 @@
  *
  * @help
  * ============================================================================
- * HomeLife.js - życie w chacie dziadka (mapa 19, „Dom dziadka - Wnętrze”)
+ * HomeLife.js - życie w chacie dziadka (mapa 224, „Chata dziadka”)
  * ============================================================================
  * DZIADEK STACH (tylko w grze z fabułą - Story.js; w starej grze go nie ma)
  *   Ma swój dzień, a między miejscami chodzi spokojnie, w 8 kierunkach:
  *    6-9    przy kotle, miesza kapuśniak (nad kotłem para - HomeAmbience.js),
- *    9-10   ubija masło w maselnicy (tłuczek chodzi w górę i w dół),
- *    10-12  krząta się: półka ze spiżarką, okno, skrzynia, kredens,
- *    12-13  przędzie przy kołowrotku, siedząc w fotelu (koło się kręci),
+ *    9-10   ubija masło w maselnicy (gdy w chacie jest maselnica; inaczej
+ *           dalej przy kotle),
+ *    10-12  krząta się: kołki z rzeczami wnuka pod oknem, skrzynia,
+ *    12-13  przędzie przy kołowrotku, siedząc w fotelu (gdy jest kołowrotek;
+ *           inaczej buja się w fotelu),
  *    13-18  buja się w fotelu (fotel i dziadek bujają się razem),
  *    18-22  z fajką w fotelu: kłęby dymu i od czasu do czasu kółka z dymu
- *           (fajkę bierze ze stolika i wieczorem ją tam odkłada),
- *    22-6   śpi w swoim łóżku pod kołdrą z łatek; nad łóżkiem „Zzz”,
- *           a gdy bohater stoi blisko - ciche chrapanie.
+ *           (gdy w chacie stoi stolik z fajką - bierze ją stamtąd),
+ *    22-6   chata ma jedno łóżko - oddał je wnukowi: dziadek drzemie
+ *           w fotelu przy ogniu (fotel buja się ledwie, ledwie); nad nim
+ *           „Zzz”, a gdy bohater stoi blisko - ciche chrapanie. (W domu
+ *           z kołdrą dziadka - zdarzenie „Kołdra” - śpi w swoim łóżku.)
  *   Rozmowa (Story.js) działa wszędzie: przycisk akcji na dziadku, na fotelu
- *   albo kołowrotku, gdy w nim siedzi, i na łóżku, gdy śpi. W czasie
+ *   albo przed nim, gdy w nim siedzi (także gdy drzemie), i na łóżku, gdy
+ *   śpi. W czasie
  *   rozmowy i wstępu dziadek stoi. Nigdy nie staje w drzwiach; gdy bohater
  *   stoi mu na drodze, czeka albo obchodzi go.
  *   Czasem, gdy bohater wchodzi do domu, dziadek coś rzuci: o pogodzie,
@@ -87,7 +92,20 @@
     const num = (v, d) => (v === undefined || v === null || v === "" || isNaN(Number(v)) ? d : Number(v));
     const PURR_VOL = num(params.purrVolume, 30), SNORE_VOL = num(params.snoreVolume, 22);
 
-    const MAP = 19;
+    // (2026-11-17, the new world: grandpa's tiny hut in Podgrodzie, Map224 - the old whitewashed cottage Map019 is gone with the old
+    // world) what the house's events do not say, per house map: stands - the places of his pottering that are tiles, not events
+    // [x, y, facing] (the hut: the pegs with the grandson's things under the window); catHearth - the cat's warm spot by the hearth
+    // (the hut: right of the fire, out of the way of the chair's front, where one stands to talk to him); door - how far the doorway's
+    // keep-clear zone reaches (side: tiles left / right of the door, up: tiles into the room); visit - where F9 puts the hero;
+    // cook - where he stirs the pot [x, y, facing, mirrored] (the hut: in front of his chair, left of the pot - right of it he would
+    // shut the cat's warm corner off from the room)
+    const HOUSES = {
+        // (the chest: from the corner above it - beside it, by the wall, the autumn's pumpkins stand; on Christmas Eve, when the sheaf
+        // takes the corner, from beside it)
+        224: { stands: { shelves: [3, 4, 8], chest: [1, 6, 2] }, cook: [4, 5, 9, true], catHearth: [6, 4], door: { side: 0, up: 1 }, visit: [5, 6] }
+    };
+    const MAP = 224;
+    const HOUSE = HOUSES[MAP] || {};
     const GRANDPA = 901;            // Story.js's grandpa (a story game only)
     const CAT = 960;                // the cat (ours: 960-979)
     const SOUP = 131, SOUP_FROM = 8;
@@ -101,7 +119,8 @@
     // ($Npc_Dziadek is lifted 6 px like every character, the chair - an object - is not: +6 puts his feet on the chair's, +2 in front)
     const SEAT_DY = 8;
     const MOUTH = [-1, -38.5], BOWL = [5.5, -41];   // on his seated frame, from his feet
-    const ROCK = { rock: 0.042, smoke: 0.018, period: 170 };   // radians of the chair's swing; frames there and back
+    const ROCK = { rock: 0.042, smoke: 0.018, doze: 0.009, period: 170 };   // radians of the chair's swing; frames there and back
+    const DOZE_HEAD = [3, -50];     // dozing in the chair: his head on the seated frame, from his feet (where the "Zzz" rise from)
     const SMOKE = { cycle: 360, draw: 60, rest: 100, out: 170 };  // the pipe: draws on it, rests, breathes out, rests
     const CAT_SLEEP = "!$Animal_Cat_Sleep", CC = 68;
     const SILL_DY = -15;            // ...on the sill: its paws on the ledge under the glass (at -3 it hung on the wall below it - user 2026-10-01)
@@ -178,7 +197,7 @@
     // (ours: 960-979; a game saved in the house before the cat came gets it as it loads - the core's)
     T.inject(MAP, { ids: [960, 979], owner: PLUGIN, build(data) {
         const h = data.events.find(e => e && hearthRe.test(e.name || ""));
-        const at = h ? [h.x - 1, h.y + 1] : [Math.floor(data.width / 2), Math.floor(data.height / 2)];
+        const at = HOUSE.catHearth || (h ? [h.x - 1, h.y + 1] : [Math.floor(data.width / 2), Math.floor(data.height / 2)]);
         return [catData(at[0], at[1])];
     } });
 
@@ -224,20 +243,21 @@
             return solid;
         };
         const ok = (x, y) => x >= 0 && y >= 0 && x < W && y < H && walk[y][x] && !solidNow().has(x + "," + y);
-        const door = ev.door ? [ev.door.x, ev.door.y] : null;
-        const doorZone = (x, y) => !!door && Math.abs(x - door[0]) <= 1 && y >= door[1] - 2 && y <= door[1];
+        const door = ev.door ? [ev.door.x, ev.door.y] : null, dz = HOUSE.door || { side: 1, up: 2 };
+        const doorZone = (x, y) => !!door && Math.abs(x - door[0]) <= dz.side && y >= door[1] - dz.up && y <= door[1];
         const L = { gm: $gameMap, map: $gameMap.mapId(), W, H, walk, ok, doorZone, ev, st: {}, cat: {}, windows: [] };
         const free = (x, y) => ok(x, y) && !doorZone(x, y);
         const stand = (key, x, y, dir, pose, extra) => { if (free(x, y)) L.st[key] = Object.assign({ key, kind: "stand", x, y, dir, pose }, extra || {}); };
         const h = ev.hearth;
         if (h) {
             L.ladle = [h.x, h.y + 1];
-            if (free(h.x + 1, h.y + 1)) stand("cook", h.x + 1, h.y + 1, 7, "stir");
+            if (HOUSE.cook) stand("cook", HOUSE.cook[0], HOUSE.cook[1], HOUSE.cook[2], "stir", HOUSE.cook[3] ? { mirror: true } : null);
+            else if (free(h.x + 1, h.y + 1)) stand("cook", h.x + 1, h.y + 1, 7, "stir");
             else if (free(h.x - 1, h.y + 1)) stand("cook", h.x - 1, h.y + 1, 9, "stir", { mirror: true });
         }
         if (ev.churn) stand("churn", ev.churn.x, ev.churn.y + 1, 8, "churn");
-        stand("shelves", 13, 5, 8, "fiddle");   // (the pantry shelf and the dresser are tiles, not events)
-        stand("kredens", 5, 5, 8, "fiddle");
+        // (the pantry shelf, the dresser, the pegs are tiles or mere pictures, not events: the house's own list)
+        for (const [key, [x, y, dir]] of Object.entries(HOUSE.stands || {})) stand(key, x, y, dir, "fiddle");
         const nearHeroBed = (x, y) => !!ev.heroBed && Math.abs(x - ev.heroBed.x) <= 2 && Math.abs(y - ev.heroBed.y) <= 2;
         for (const w of propsOf(/^okno/i)) {
             for (let y = w.y + 1; y < H; y++) {
@@ -254,7 +274,7 @@
                 if (free(e.x + dx, e.y + dy)) { stand(key, e.x + dx, e.y + dy, d, pose); return; }
             }
         };
-        beside(ev.chest, "chest", "fiddle");
+        if (!L.st.chest) beside(ev.chest, "chest", "fiddle");
         beside(ev.pipe, "pipeTable", "fiddle");
         if (ev.chair) {
             const c = ev.chair, exits = [[c.x + 1, c.y], [c.x - 1, c.y], [c.x, c.y + 1]].filter(([x, y]) => free(x, y));
@@ -266,7 +286,8 @@
         }
         // the cat's places
         if (h) {
-            if (free(h.x - 1, h.y + 1)) L.cat.hearth = { x: h.x - 1, y: h.y + 1 };
+            const ch = HOUSE.catHearth || [h.x - 1, h.y + 1];
+            if (free(ch[0], ch[1])) L.cat.hearth = { x: ch[0], y: ch[1] };
             if (free(h.x, h.y + 2)) L.cat.rug = { x: h.x, y: h.y + 2 };
         }
         if (!L.cat.hearth) L.cat.hearth = { x: $gameMap.event(CAT) ? $gameMap.event(CAT).x : 9, y: $gameMap.event(CAT) ? $gameMap.event(CAT).y : 6 };
@@ -342,11 +363,12 @@
         if (h >= 10 && h < 13) return L.chair ? (L.ev.wheel ? "spin" : "rock") : "stay";   // (no wheel in the house: he rocks)
         if (h >= 13 && h < 18) return L.chair ? "rock" : "stay";
         if (h >= 18 && h < BED_AT) return L.chair ? "pipe" : "stay";
-        return L.bed ? "sleep" : "stay";
+        return L.bed ? "sleep" : L.chair ? "doze" : "stay";   // (the hut's one bed is the grandson's: he dozes in his chair by the fire)
     }
+    const CHAIR_POSE = { spin: "sit", rock: "rock", pipe: "smoke", doze: "doze" };
     function targetOf(key) {
         const L = layout();
-        if (key === "spin" || key === "rock" || key === "pipe") return L.chair ? Object.assign({ pose: key === "spin" ? "sit" : key === "rock" ? "rock" : "smoke" }, L.chair) : null;
+        if (CHAIR_POSE[key]) return L.chair ? Object.assign({ pose: CHAIR_POSE[key] }, L.chair) : null;
         if (key === "sleep") return L.bed ? Object.assign({ pose: "sleep" }, L.bed) : null;
         if (L.st[key]) return L.st[key];
         const Sy = T.api("Story"), [x, y] = Sy && Sy.NPCS ? Sy.NPCS.grandpa.at : [10, 6];
@@ -359,7 +381,7 @@
         if (!c) gctl.set(ev, c = { key: null, steps: [], snap: true, last: clock(), seat: null, path: null, blocked: 0, stuck: 0, barked: 0 });
         return c;
     }
-    const SHEET_POSES = { stir: 1, sitdown: 1, standup: 1, shuffle: 1, sit: 1, rock: 1, smoke: 1 };
+    const SHEET_POSES = { stir: 1, sitdown: 1, standup: 1, shuffle: 1, sit: 1, rock: 1, smoke: 1, doze: 1 };
     function setPose(ev, k, extra) {
         T.sprite.dirty(ev);
         if (!k) { ev._homePose = null; delete ev._pose; return; }
@@ -367,8 +389,9 @@
         if (SHEET_POSES[k] || k === "sleep" || k === "liedown" || k === "getup") ev._pose = "home"; else delete ev._pose;
     }
     const poseOf = ev => (ev && ev._homePose ? ev._homePose.k : null);
-    const asleep = g => !!g && (poseOf(g) === "sleep" || poseOf(g) === "liedown");
-    const seated = g => !!g && ["sit", "rock", "smoke"].includes(poseOf(g));
+    const asleep = g => !!g && (poseOf(g) === "sleep" || poseOf(g) === "liedown" || poseOf(g) === "doze");
+    const seated = g => !!g && ["sit", "rock", "smoke", "doze"].includes(poseOf(g));
+    const snoring = g => !!g && (poseOf(g) === "sleep" || poseOf(g) === "doze");
 
     // straight to what he does now (a new visit, a load, the clock jumping - a night's sleep, the debug menu)
     function snap(g, c) {
@@ -401,7 +424,8 @@
     function planFor(c, key) {
         const L = layout(), st = [], t = targetOf(key), wantPipe = key === "pipe";
         if (!t) return st;
-        if (c.seat === "chair" && t.kind === "chair" && S().pipe === wantPipe) { st.push({ t: "pose", k: t.pose }); return st; }
+        // (in the chair already: only the pose changes - also the pipe, when the house has no table for it: it stays in his pocket)
+        if (c.seat === "chair" && t.kind === "chair" && (S().pipe === wantPipe || !L.st.pipeTable)) { S().pipe = wantPipe; st.push({ t: "pose", k: t.pose }); return st; }
         if (c.seat === "chair") st.push({ t: "anim", k: "standup", n: 30 }, { t: "out", cells: L.chair.exits });
         if (c.seat === "bed") st.push({ t: "getup", cells: L.bed.exits });
         if (S().pipe !== wantPipe && L.st.pipeTable) {
@@ -811,7 +835,7 @@
     let steamWas;   // (undefined: not asked yet on this visit - the level kept in the save may be an old one)
     function updateProps(g) {
         const k = poseOf(g);
-        props.rot = g && G(g).seat === "chair" ? (k === "rock" ? rockAngle(ROCK.rock) : k === "smoke" ? rockAngle(ROCK.smoke) : 0) : 0;
+        props.rot = g && G(g).seat === "chair" ? (k === "rock" ? rockAngle(ROCK.rock) : k === "smoke" ? rockAngle(ROCK.smoke) : k === "doze" ? rockAngle(ROCK.doze) : 0) : 0;
         props.wheel = !!g && k === "sit";
         props.churn = !!g && k === "churn";
         props.pipe = !!g && S().pipe;
@@ -824,7 +848,7 @@
     }
     let snoreT = 0;
     function updateSnore(g) {
-        if (!g || poseOf(g) !== "sleep" || g._locked) { snoreT = 0; return; }
+        if (!snoring(g) || g._locked) { snoreT = 0; return; }
         if (--snoreT > 0) return;
         snoreT = 60 * (7 + rand(6));
         const dist = Math.hypot($gamePlayer._realX - g._realX, $gamePlayer._realY - g._realY);
@@ -873,6 +897,7 @@
             case "standup": { const i = Math.max(0, 4 - Math.floor(t / 6)); return { sheet: HOME, cw: GC, ch: GC, col: i, row: 0, dy: Math.round(SEAT_DY * i / 4) }; }
             case "sit": return { sheet: HOME, cw: GC, ch: GC, col: 0, row: 1, dy: SEAT_DY };
             case "rock": return { sheet: HOME, cw: GC, ch: GC, col: 0, row: 1, dy: SEAT_DY, rot: props.rot };
+            case "doze": return { sheet: HOME, cw: GC, ch: GC, col: 0, row: 1, dy: SEAT_DY, rot: props.rot };   // (asleep in the chair: his seated frame, barely rocking)
             case "smoke": return { sheet: HOME, cw: GC, ch: GC, col: smokeCol(t), row: 1, dy: SEAT_DY, rot: props.rot };
             case "churn": return { dy: churnLift(t) >= 4 ? 1 : 0 };
             case "fiddle": { const q = t % 300; return { dy: q > 200 && q < 212 ? 1 : 0 }; }
@@ -970,6 +995,8 @@
         return [fx0 + off[0] * Math.cos(a) - off[1] * Math.sin(a), fy0 + off[0] * Math.sin(a) + off[1] * Math.cos(a)];
     }
     function headPoint() {
+        const g = grandpa();
+        if (g && poseOf(g) === "doze") return seatedPoint(g, DOZE_HEAD);   // (dozing in his chair)
         const q = layout().ev.quilt;
         return q ? [(q._realX + 0.5) * TW + HEAD[0], (q._realY + 1) * TW + HEAD[1]] : null;
     }
@@ -977,12 +1004,14 @@
     function spawnZ(big) {
         const h = headPoint();
         if (!h) return;
-        spawn("z", h[0] + 12, h[1] + 4, { vx: 0.16, vy: -0.3, life: 170, s0: big ? 0.95 : 0.75, s1: big ? 1.6 : 1.35, sway: 1.6, txt: big ? "Z" : "z" });
+        // (dozing in the chair beside the fire: they drift up to the left, away from the pot - not out of the flames)
+        const g = grandpa(), side = g && poseOf(g) === "doze" ? -1 : 1;
+        spawn("z", h[0] + 12 * side, h[1] + 4, { vx: 0.16 * side, vy: -0.3, life: 170, s0: big ? 0.95 : 0.75, s1: big ? 1.6 : 1.35, sway: 1.6, txt: big ? "Z" : "z" });
     }
     function updateEmitters(g) {
         if (!g) return;
         const k = poseOf(g);
-        if (k === "sleep" && !g._locked) {
+        if (snoring(g) && !g._locked) {
             if (--zT <= 0) { zT = 70 + rand(30); spawnZ(false); }
         } else zT = 20;
         if (k === "smoke") {
@@ -1115,7 +1144,7 @@
     // For other plugins, the debug menu and the tests
     // ------------------------------------------------------------------
     window.HomeLife = T.register(PLUGIN, {
-        MAP, GRANDPA, CAT, SOUP, BED_AT, ROCK, SMOKE, SEAT_DY, ARRIVE,
+        MAP, HOUSE, GRANDPA, CAT, SOUP, BED_AT, ROCK, SMOKE, SEAT_DY, ARRIVE,
         state: S, layout, activityAt: (h, d) => activityAt(h === undefined ? hour() : h, d === undefined ? day() : d), targetOf,
         cauldron, pet: () => pet(), findPath,
         // straight to what they do now (as on coming in)

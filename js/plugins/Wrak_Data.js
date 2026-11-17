@@ -52,16 +52,18 @@
     // ------------------------------------------------------------------ the castaway
     const RES = { key: "rozbitek", id: 948 };
     const SPOTS_TOWN = {   // Map008 (the town's spots; new keys only)
-        rozbitek_noc: [51, 17, 8],        // (the tavern's gate: he goes in to sleep upstairs)
-        rozbitek_rynek: [56, 51, 2],      // the market, the far side from the money changer's
-        rozbitek_mury: [30, 19, 4],        // under the west wall, looking towards the sea
-        rozbitek_studnia: [52, 50, 4]     // the market well at night (the sleeve rolled up - W12's clue)
+        // (2026-11-16) Kruczogród of the new world, Map220
+        rozbitek_noc: [43, 35, 8],        // (the tavern's door: he goes in to sleep upstairs)
+        rozbitek_rynek: [52, 43, 2],      // the market, the far side from the money changer's
+        rozbitek_mury: [6, 40, 4],        // by the west gate, looking towards the sea
+        rozbitek_studnia: [48, 41, 4],    // the market well at night (the sleeve rolled up - W12's clue)
+        tawerna: [43, 35, 8]              // (his days in the tavern: in by its door)
     };
-    const SPOT_TAVERN = [19, 32, 4];      // Map001: the free stool at the right-hand table (gosc_9 - Map001 unchanged)
-    const SPOT_ROOMS = [25, 40, 4];        // Map025: room 7, by the narrow bed (Map025 unchanged)
+    const SPOT_TAVERN = [19, 19, 4];      // Map001: the free stool at the right-hand table (gosc_9 - Map001 unchanged)
+    const SPOT_ROOMS = [38, 9, 4];         // Map025: room 8 (2026-11-16: room 7 went with the smaller floor; Podroznicy_Data.POKOJ_ERYKA = 8)
 
     const resident = {
-        key: RES.key, id: RES.id, sheet: "$Npc_Rozbitek", speed: 3,
+        key: RES.key, id: RES.id, map: 220, sheet: "$Npc_Rozbitek", speed: 3,
         plan: [[0, "inside", "rozbitek_noc"], [8, "inside", "tawerna"], [10, "wander", "rozbitek_rynek"], [13, "inside", "tawerna"],
                [17, "stand", "rozbitek_mury"], [19, "inside", "tawerna"], [22, "work", "rozbitek_studnia"], [23, "inside", "rozbitek_noc"]],
         barks: {
@@ -73,8 +75,8 @@
     (window.TownLifeExtra = window.TownLifeExtra || []).push(resident);
     const TLD = window.TownLifeData;
     if (TLD) {
-        if (TLD.SPOTS) for (const [k, v] of Object.entries(SPOTS_TOWN)) if (!TLD.SPOTS[k]) TLD.SPOTS[k] = v;
         TLD.SPOTS_BY_MAP = TLD.SPOTS_BY_MAP || {};
+        TLD.SPOTS_BY_MAP[220] = Object.assign({}, SPOTS_TOWN, TLD.SPOTS_BY_MAP[220] || {});
         // (gosc_9: the tavern's next guest seat - Wrak.js checks the number once TownLife has counted its guests)
         TLD.SPOTS_BY_MAP[1] = Object.assign({}, { gosc_9: SPOT_TAVERN }, TLD.SPOTS_BY_MAP[1] || {});
         TLD.SPOTS_BY_MAP[25] = Object.assign({}, TLD.SPOTS_BY_MAP[25] || {}, { rozbitek_wnetrze: SPOT_ROOMS });
@@ -106,13 +108,15 @@
     // ------------------------------------------------------------------ the seven marks of the chart from the captain's cabin
     // (item 178): the white eyes. `ready`: a place of another package - only once Wyspa.isReady(map)
     const MARKS = [
-        { key: "tawerna", map: 8, x: 51, y: 18 },
-        { key: "kamieniolom", map: 13, x: 40, y: 42 },
-        { key: "latarnia", map: 125, ready: 125 },
-        { key: "pustelnia", map: 155, ready: 155 },
-        { key: "urwisko", map: 157, ready: 157 },
-        { key: "kopiec", map: 20, x: 39, y: 46 },
-        { key: "dwor", map: 24, x: 40, y: 73 }
+        // (2026-11-16) the new world: one mark on each of its seven outdoor maps (the old island's hermitage and raven cliff are now the two
+        // ridges over the mountains)
+        { key: "tawerna", map: 220, x: 43, y: 36 },
+        { key: "kamieniolom", map: 222, x: 36, y: 31 },
+        { key: "latarnia", map: 219, x: 17, y: 21 },
+        { key: "pustelnia", map: 29, x: 15, y: 22 },
+        { key: "urwisko", map: 30, x: 20, y: 22 },
+        { key: "kopiec", map: 218, x: 14, y: 22 },
+        { key: "dwor", map: 221, x: 40, y: 41 }
     ];
     Watki.scal(MARKS, "wrak", "znaki");   // (its words: js/teksty/wrak.txt, znaki)
 

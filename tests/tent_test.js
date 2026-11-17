@@ -24,7 +24,7 @@ fs.mkdirSync(OUT, { recursive: true });
 
         // ================= 1. data =================
         const item = await ev("(function(){ const i = $dataItems[121]; return i ? [i.name, i.iconIndex, i.itypeId, i.price] : null; })()");
-        check("item 121 Namiot: key item, icon 380", JSON.stringify(item) === JSON.stringify(["Namiot", 380, 2, 0]), item);
+        check("item 121 Namiot: key item, its PixelLab icon (688+)", !!item && item[1] >= 688 && JSON.stringify([item[0], item[2], item[3]]) === JSON.stringify(["Namiot", 2, 0]), item);
         const icon = await ev(`new Promise(res => { const bmp = ImageManager.loadSystem("IconSet"); const chk = () => { if (!bmp.isReady()) return setTimeout(chk, 50); let n = 0; const d = bmp.context.getImageData((380 % 16) * 32, Math.floor(380 / 16) * 32, 32, 32).data; for (let k = 3; k < d.length; k += 4) if (d[k] > 0) n++; res(n); }; chk(); })`);
         check("icon 380 is drawn", icon > 250, icon);
         const def = await ev("(function(){ const t = Farming.BUILDINGS.tent; return { instant: t.instant, pack: t.pack, sleep: t.sleep, w: t.w, h: t.h, image: t.image, cost: t.cost }; })()");
@@ -54,7 +54,7 @@ fs.mkdirSync(OUT, { recursive: true });
         const tentRow = placeList && placeList.find(e => e.name === "Namiot");
         check("'Postaw...' has the tent, dimmed while there is none, and points at the tannery", !!tentRow && tentRow.enabled === false && /garbarni/.test(tentRow.help), tentRow);
         const buildListNoTent = await ev(`(function(){ const scene = SceneManager._scene; let got = null; const _o = scene.openFarmMenu; scene.openFarmMenu = function(t, en) { got = en.map(x => x.name); }; Farming.openBuildKeyMenu(); scene.openFarmMenu = _o; return got; })()`);
-        check("the Q build list (real buildings) does NOT list the tent", !buildListNoTent.includes("Namiot"), buildListNoTent);
+        check("the Q list has the tent as 'Rozłóż namiot' (its tab 'Akcja', 2026-11-16), not among the buildings", buildListNoTent.includes("Rozłóż namiot") && !buildListNoTent.includes("Namiot"), buildListNoTent);
         const groundNames = await ev(`Farming.menuFor(${bx + 5}, ${by + 3}).entries.map(e => e.name)`);
         check("the ground menu has no 'Zbuduj...' (building is on Q) and ends with 'Postaw...'", !groundNames.includes("Zbuduj...") && groundNames[groundNames.length - 1] === "Postaw...", groundNames);
         check("no hammer in the bag (the tent must not need one)", (await count(89)) === 0);

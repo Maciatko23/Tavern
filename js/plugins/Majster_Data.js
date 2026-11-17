@@ -38,11 +38,11 @@
     if (!TLD) throw new Error("Majster_Data.js: brak TownLife_Data.js - musi stać wyżej na liście wtyczek");
 
     // ------------------------------------------------------------------ where, when, how much
-    const MAP = { miasto: 8, cech: 215, tawerna: 1 };
+    const MAP = { miasto: 220, cech: 215, tawerna: 1 };   // (2026-11-15: Kruczogród of the new world; the tribune on its market, east of the well)
     const OWNER = "Majster", IDS = [4510, 4599], RES_RANGE = [4500, 4509];
     const ID = { ostap: 4500, ludwik: 4501, jas: 4502, nocLudwik: 4510, nocOstap: 4511, trybuna: 4520 };   // (4520-4529: the tribune's props)
     // the door of Map008 (event 194; the cell in front of it - TownLife's spot "cech_przed" 91,88)
-    const DRZWI = { id: 194, x: 91, y: 87, godziny: [8, 17], wchodzi: [MAP.cech, 7, 17, 8] };
+    const DRZWI = { id: 70, x: 19, y: 58, godziny: [8, 17], wchodzi: [MAP.cech, 7, 17, 8] };
     // the start: day >= 12, Opinion >= 20 (Bywalec), an iron thing made by the hero; the entry 20 G
     const START = { dzien: 12, opinia: 20, wpisowe: 20 };
     // the pieces (item ids of Bron_Data / the workbench): rank I (the three hands), rank II (the guard's set), rank III / IV by the trade
@@ -70,13 +70,13 @@
     const MLOTEK = { notka: "mlotek", kuznia: 0.15, narzedzia: 0.15 };
     // the exam's tribune on the market (Map008): the props and where the commission and the crowd stand
     const TRYBUNA = {
-        rekwizyty: [{ sheet: "!House_Town", index: 0, dir: 6, pat: 2, x: 58, y: 47, name: "Kowadło próbne" },
-            { sheet: "!House_Town", index: 0, dir: 6, pat: 0, x: 62, y: 47, name: "Skóra na ramie (próba)" },
-            { sheet: "!Town_Props", index: 2, dir: 6, pat: 1, x: 60, y: 45, name: "Stół komisji" },
-            { sheet: "!House_Town", index: 2, dir: 2, pat: 1, x: 60, y: 44, name: "Chorągiew cechu" }],
-        ludzie: { ostap: [60, 47, 2], kowal: [59, 46, 2], garbarz: [61, 46, 2], ciesla: [62, 46, 2], ludwik: [58, 48, 6], soltys: [64, 48, 4],
-            piekarka: [57, 51, 8], woziwoda: [63, 51, 8], dzwonnik: [60, 52, 8] },
-        godzinaStart: 11, hero: [60, 49, 8]
+        rekwizyty: [{ sheet: "!House_Town", index: 0, dir: 6, pat: 2, x: 52, y: 41, name: "Kowadło próbne" },
+            { sheet: "!House_Town", index: 0, dir: 6, pat: 0, x: 56, y: 41, name: "Skóra na ramie (próba)" },
+            { sheet: "!Town_Props", index: 2, dir: 6, pat: 1, x: 54, y: 39, name: "Stół komisji" },
+            { sheet: "!House_Town", index: 2, dir: 2, pat: 1, x: 54, y: 38, name: "Chorągiew cechu" }],
+        ludzie: { ostap: [54, 41, 2], kowal: [53, 40, 2], garbarz: [55, 40, 2], ciesla: [56, 40, 2], ludwik: [52, 42, 6], soltys: [58, 42, 4],
+            piekarka: [51, 45, 8], woziwoda: [57, 45, 8], dzwonnik: [54, 45, 8] },
+        godzinaStart: 11, hero: [54, 43, 8]
     };
     // the places the plans use (TownLife's SPOTS, only added: nothing here replaces a spot)
     const SPOTY = { ostap_dom: [91, 88, 2], jas_dom: [91, 88, 2], ludwik_dom: [68, 106, 2] };

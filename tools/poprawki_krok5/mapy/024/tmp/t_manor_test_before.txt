@@ -1,0 +1,6 @@
+PASS the game boots
+FAIL the manor is built from tileset 11, the old picture is gone, the door stands on the cathedral gate (20,12)  {"tileset":11,"old":0,"door":[40,72,"!$Gate_Cathedral1"]}
+FAIL on foot from the road: the door's front, the cells beside it (the Lord), the garden's plaza and the east lawn  {"doorFront":false,"lordSpots":false,"plaza":false,"east":false,"intoWing":false,"intoTower":false,"intoMiddle":false}
+PASS ...but not into the wings, the towers or the middle  {"doorFront":false,"lordSpots":false,"plaza":false,"east":false,"intoWing":false,"intoTower":false,"intoMiddle":false}
+PASS no errors in the console  []
+3/5 passed

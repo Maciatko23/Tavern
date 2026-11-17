@@ -27,7 +27,7 @@ ikony.bath = Łaźnia
 ikony.stage = Scena · Melia
 ikony.stairs = Schody
 ikony.room = Pokój na noc
-ikony.gate = Złocona krata
+ikony.gate = Odźwierny przy schodach
 ikony.fire = Kominek
 
 # ======================================================================== PLAN_KIND_DESC (opisyRodzajow)
@@ -52,7 +52,8 @@ opisy.1.piekarnia = Piec chlebowy i dzieże z ciastem. Chleb i placki idą przez
 opisy.1.mysliwski = Kamienny kominek, poroża i łby dzików na ścianach, długi stół myśliwych.
 opisy.1.biesiadna = Dwa długie stoły na wesela i biesiady, chorągwie i zbroje w kątach.
 opisy.1.scena = Scena z czerwonymi kotarami, stoliki przy świecach, kapelusz na napiwki.
-opisy.1.gry = Stoły do kości, stół do siłowania na rękę, karty, warcaby i kredowa tablica wyników.
+opisy.1.gry = Stoły do kości, stół do siłowania na rękę, karty, szachy, a w rogu dwie tarcze do rzutek i linia rzutu.
+opisy.1.skladzik = Beczki piwa, skrzynie i zapasy na zimę. Za spiżarnią z piecami chlebowymi; Borgar nie lubi, gdy ktoś tu myszkuje.
 opisy.1.rzutki = Tarcze do rzutek na ścianie i linia rzutu.
 opisy.1.laznia = Cztery balie z gorącą wodą za parawanami, szare mydło i szorstkie ręczniki.
 opisy.1.sala = Serce karczmy: lada w kształcie L, dwa kamienne kominki i długie stoły z ławami.
@@ -151,7 +152,7 @@ kod.planInfo.51 = Masz już pokój na tę noc
 kod.planInfo.52 = Wolny na tę noc
 kod.planInfo.53 = " — dla gości o sławie „{1}” ({minrep})"
 kod.planInfo.54 = " — dla dostojnych gości"
-kod.planInfo.55 = Złocona krata z dzwonkiem{1}
+kod.planInfo.55 = Odźwierny pilnuje schodów na górę{1}
 kod.planInfo.56 = Krata otwarta — Apartamenty czekają
 kod.planInfo.57 = " — potrzebna sława {minrep}"
 kod.planInfo.58 = Krata zamknięta{1}

@@ -41,7 +41,10 @@
     if (!T || !window.Watki) throw new Error("Goraczka_Data.js: brak TawernaCore.js / Watki.js - muszą być wyżej na liście wtyczek");
 
     // ------------------------------------------------------------------ where, when, how much
-    const MAP = { miasto: 8, przytulek: 216, podgrodzie: 202, podgrodzieMiasto: 111 };
+    // (2026-11-16) the new world: the whole thread plays in Podgrodzie (Map218) - the shelter (its inside: Map202), the tannery, the dry
+    // riverbed, the square by the dry well. "miasto" = the map of its scenes; the town's people come down as the scenes' guests (GOSCIE).
+    const MAP = { miasto: 218, przytulek: 202, podgrodzie: 202, podgrodzieMiasto: 218 };
+    const GOSCIE = { wejscie: [78, 38, 4], ids: [4640, 4649] };   // where the town's people walk in from (the road to Kruczogród) and their stand-in events
     const IDS = [4610, 4699], OWNER = "Goraczka", RES_RANGE = [4600, 4609];
     const OD_DNIA = 30;                                            // the thread starts from this day (and after the vote on the camp)
     const DRZWI = { przytulek: 435, garbarnia: 437, beczka: 368 };   // the events of Map008 the patch hooks: the doors and the barrel cart
@@ -62,22 +65,27 @@
     };
     // the places (Map008) of the scenes and the clues; the ditch's gutter in front of the Cistern (the round stone building at x108-112)
     const MIEJSCA = {
-        zapora: [[92, 91], [92, 93]],              // the two carts across the southern street (the gap between them stays open)
-        kociol: [96, 105],
-        stefa: [96, 106, 8], stefaWewnatrz: [10, 8, 8],                  // Stefa by the cauldron by day / in the hall at night                         // the cauldron before the poorhouse door (97,104)
-        przytulekPrzed: [97, 105],
-        osad: [[111, 76], [114, 76], [117, 76]],   // the white crust in the gutter between the Cistern and the Garbarnia
-        plyta: [117, 80],                          // the ditch's slab behind the Garbarnia
-        garbarniaPrzed: [114, 89],
-        garbarniaIgnaca: [14, 86],                 // Ignac's tannery (the crowd's place)
-        ratuszPrzed: [83, 48],
-        s1Kamera: [92, 92]
+        zapora: [[47, 54], [47, 56]],              // the two carts across the lane east of the shelter (the gap between them stays open)
+        s1Soltys: [49, 55, 4], s1Wit: [48, 54, 4], // where the reeve and the corporal stand as the lane is shut
+        s1Skad: [58, 55, 4],                       // ...and where they come from (just out of sight up the lane)
+        kociol: [44, 54],                          // the shelter's own cauldron stands on the map ("Kocioł z zupą", 44,53): ours is only the cell before it
+        kociolNaMapie: true,
+        stefa: [46, 54, 4], stefaWewnatrz: [10, 8, 8],                  // Stefa by the cauldron by day / in the hall at night
+        przytulekPrzed: [41, 54],
+        s2Kleofas: [42, 55, 8],                    // brother Kleofas before the shelter the morning after Gaweł's death
+        osad: [[47, 62], [43, 62], [36, 62]],      // the white crust on the stones of the dry riverbed: from the tannery's side down to the water hole
+        dol: [35, 63], beczka: [33, 63],           // the hole in the riverbed where water gathers; Kuba's cart with the barrel beside it
+        plyta: [66, 63],                           // the ditch's slab behind the Garbarnia
+        garbarniaPrzed: [69, 70],
+        garbarniaIgnaca: [67, 70],                 // Ignac's tannery (the crowd's place)
+        ratuszPrzed: [47, 41],                     // (the meeting: on Podgrodzie's square by the dry well - "what the water did to us")
+        s1Kamera: [46, 55]
     };
-    const SPOTS_DODANE = { garbarnia_wsch: [114, 89, 2], zebranie_hero: [83, 49, 8] };
+    const SPOTS_DODANE = { garbarnia_wsch: [70, 70, 2], zebranie_hero: [47, 41, 2] };
     // the crowd of S3 (hold places by Ignac's tannery) and of S4 (the half circle before the town hall)
-    const TLUM_S3 = { soltys: [13, 87, 6], woziwoda: [12, 88, 6], piekarka: [14, 88, 8], kowal: [15, 88, 4] };
-    const TLUM_S4 = { soltys: [83, 50, 8], woziwoda: [81, 50, 6], piekarka: [85, 50, 4], kowal: [81, 52, 6], dzwonnik: [85, 52, 4], kapral: [80, 51, 6], ludmila: [86, 51, 4], ela: [87, 52, 4], garbarz: [82, 52, 8] };
-    const WAWRZYN_S4 = [83, 52, 8];
+    const TLUM_S3 = { soltys: [66, 71, 6], woziwoda: [65, 72, 6], piekarka: [67, 72, 8], kowal: [68, 72, 4] };
+    const TLUM_S4 = { soltys: [47, 42, 8], woziwoda: [45, 42, 6], piekarka: [49, 42, 4], kowal: [45, 44, 6], dzwonnik: [49, 44, 4], kapral: [44, 43, 6], ludmila: [50, 43, 4], ela: [51, 44, 4], garbarz: [46, 44, 8] };
+    const WAWRZYN_S4 = [47, 44, 8];
     const LISTA_PYTAN = ["woziwoda", "piekarka", "kowal"];         // the three to ask in chapter 3 (Kuba first)
     const OPINIA_PRZEPUSTKA = 20;
     const SPRITES = { chory: "!$Chory_", przykryty: "!$Chory_przykryty", puste: "", woz: ["!House_Town", 0, 4, 1], kociol: ["!Decoration", 2, 6, 0],
@@ -88,7 +96,7 @@
     // (12-13 a meal in the camp); campOutside: away at night (beyond the east gate - the pass from Wit), the same day at the vats.
     // Stefa: see the engine (while the camp is inside she is sent away from Podgrodzie and stands in the town as an actor).
     const RESIDENTS = [
-        { key: "wawrzyn", id: 4600, name: "", title: "", sheet: SPRITES.wawrzyn, speed: 3, when: "gorWawrzyn", away: ["brama_wsch"],
+        { key: "wawrzyn", id: 4600, map: MAP.miasto, name: "", title: "", sheet: SPRITES.wawrzyn, speed: 3, when: "gorWawrzyn", away: ["brama_wsch"],
             plan: [[0, "inside", "pod_murem", "!campOutside"], [0, "inside", "brama_wsch", "campOutside"],
                    [6.5, "work", "garbarnia_wsch"], [12, "inside", "pod_murem", "!campOutside"], [12, "wander", "garbarnia_wsch", "campOutside"],
                    [13, "work", "garbarnia_wsch"], [19, "inside", "pod_murem", "!campOutside"], [19, "inside", "brama_wsch", "campOutside"]],
@@ -101,7 +109,8 @@
     (window.TownLifeExtra = window.TownLifeExtra || []).push(...RESIDENTS);
     const TLD = window.TownLifeData;
     if (TLD) {
-        if (TLD.SPOTS) for (const [k, v] of Object.entries(SPOTS_DODANE)) if (!TLD.SPOTS[k]) TLD.SPOTS[k] = v.slice();
+        TLD.SPOTS_BY_MAP = TLD.SPOTS_BY_MAP || {};
+        TLD.SPOTS_BY_MAP[MAP.miasto] = Object.assign({}, SPOTS_DODANE, TLD.SPOTS_BY_MAP[MAP.miasto] || {});
         if (Array.isArray(TLD.EXTRA_RANGES) && !TLD.EXTRA_RANGES.some(r => r[0] === RES_RANGE[0])) TLD.EXTRA_RANGES.push(RES_RANGE.slice());
     }
 
@@ -157,14 +166,14 @@
         skoki: {
             przed: [{ hak: "f9Przygotuj" }],
             lista: {
-                1: { ch: 1, krok: "w21Chorzy", godzina: 8.5, idz: [MAP.miasto, 97, 106, 8], zrob: [{ hak: "f9Rozdzial", args: [1] }] },
-                2: { ch: 2, krok: "w21Ziola", godzina: 8.5, idz: [MAP.miasto, 97, 106, 8], zrob: [{ hak: "f9Rozdzial", args: [2] }] },
-                3: { ch: 3, krok: "w21Kto", godzina: 8.5, idz: [MAP.miasto, 97, 106, 8], zrob: [{ hak: "f9Rozdzial", args: [3] }] },
-                4: { ch: 4, krok: "w21Row", godzina: 8.5, idz: [MAP.miasto, 112, 76, 2], zrob: [{ hak: "f9Rozdzial", args: [4] }] },
-                5: { ch: 5, krok: "w21Sad", godzina: 14.5, idz: [MAP.miasto, 83, 49, 8], zrob: [{ hak: "f9Rozdzial", args: [5] }] }
+                1: { ch: 1, krok: "w21Chorzy", godzina: 8.5, idz: [MAP.miasto, 41, 54, 8], zrob: [{ hak: "f9Rozdzial", args: [1] }] },
+                2: { ch: 2, krok: "w21Ziola", godzina: 8.5, idz: [MAP.miasto, 41, 54, 8], zrob: [{ hak: "f9Rozdzial", args: [2] }] },
+                3: { ch: 3, krok: "w21Kto", godzina: 8.5, idz: [MAP.miasto, 41, 54, 8], zrob: [{ hak: "f9Rozdzial", args: [3] }] },
+                4: { ch: 4, krok: "w21Row", godzina: 8.5, idz: [MAP.miasto, 30, 61, 2], zrob: [{ hak: "f9Rozdzial", args: [4] }] },
+                5: { ch: 5, krok: "w21Sad", godzina: 14.5, idz: [MAP.miasto, 47, 43, 8], zrob: [{ hak: "f9Rozdzial", args: [5] }] }
             }
         }
     });
-    window.GoraczkaData = { domyslne, MAP, IDS, OWNER, RES_RANGE, OD_DNIA, DRZWI, LOZKA, CHORZY, OD_POCZATKU, CZAS, WODA, WYWAR, OPATRUNEK, LOPATA, MIOD, ZIOLA, ZBIORKA, BUDOWA,
+    window.GoraczkaData = { domyslne, MAP, GOSCIE, IDS, OWNER, RES_RANGE, OD_DNIA, DRZWI, LOZKA, CHORZY, OD_POCZATKU, CZAS, WODA, WYWAR, OPATRUNEK, LOPATA, MIOD, ZIOLA, ZBIORKA, BUDOWA,
         NAGRODY, MIEJSCA, TLUM_S3, TLUM_S4, WAWRZYN_S4, LISTA_PYTAN, OPINIA_PRZEPUSTKA, SPRITES, RESIDENTS, TX: w.tx, W21: w.Q.W21, watek: w };
 })();

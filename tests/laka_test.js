@@ -51,7 +51,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
         }
     }
     // 5. koszt (CPU 4x): wejście na mapę (budowa + pieczenie ekranu) i własny koszt na klatkę
-    await t.go(1, 17, 20, 2); await t.frames(30);
+    await t.go(1, 14, 33, 2); await t.frames(30);
     await t.eval("Laka.redo(); Laka.resetStats(); 0");
     await t.b.send("Emulation.setCPUThrottlingRate", { rate: THROTTLE });
     await t.go(990, 30, 40, 2);
@@ -61,7 +61,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     console.log("   wejście na mapę A (CPU 4x): budowa " + s.geoMs + " ms, odcienie " + s.tintMs + " ms, kawałki " + s.baked + " w " + s.bakeMs + " ms, MB " + s.mb);
     t.check("wejście: budowa + odcienie + pieczenie ekranu <= " + LOAD_LIMIT + " ms (CPU 4x)", s.geoMs + s.tintMs + s.bakeMs <= LOAD_LIMIT, s);
     // (największa mapa: miasteczko; powrót na znaną mapę nic nie liczy od nowa)
-    await t.go(1, 17, 20, 2); await t.frames(30);
+    await t.go(1, 14, 33, 2); await t.frames(30);
     await t.eval("Laka.resetStats(); 0");
     await t.b.send("Emulation.setCPUThrottlingRate", { rate: THROTTLE });
     await t.go(990, 30, 40, 2);

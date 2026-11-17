@@ -110,8 +110,24 @@
         }
         return BUILD_MAPS.includes(mapId);
     }
-    const buildsAnywhere = def => !!def && !!(def.anywhere || def.lure);
+    // (2026-11-13, the user: on the coast map the campfire may be built too - with the tent and the forest bed, which go up anywhere, that
+    // makes a camp; nothing else) a building marked camp goes up on the maps of CAMP_MAPS, or where the note says <Obozowisko:on> (off forbids)
+    const CAMP_MAPS = [219];
+    const campHere = () => { const tag = T.mapFlag("Obozowisko", null, "first"); return tag !== null ? !!tag : CAMP_MAPS.includes($gameMap.mapId()); };
+    const buildsAnywhere = def => !!def && !!(def.anywhere || def.lure || (def.camp && campHere()));
     const mayBuildHere = type => buildsAnywhere(BUILDINGS[type]) || mapAllowsBuilding();
+    // (2026-11-16, the user: "budować wszystkie budynki może tylko na działce dziadka i w menu budowy będą wszystkie budynki, jak stoi
+    // na działce; poza działką tylko legowisko, namiot, garnki, beczki i ognisko") the whole build list only while the hero STANDS on his
+    // own ground: on a map with <BuildRegion:N> (grandpa's fenced plot of Podgrodzie, land bought from the sołtys) that is the region
+    // under his feet or before him - elsewhere on that map only what goes up anywhere, as on every other map
+    function standsOnOwnLand() {
+        if (!mapAllowsBuilding()) return false;
+        const br = buildRegion ? buildRegion() : 0;
+        if (!br) return true;
+        const p = $gamePlayer, d = p.direction();
+        const fx = $gameMap.roundXWithDirection(p.x, d), fy = $gameMap.roundYWithDirection(p.y, d);
+        return $gameMap.regionId(p.x, p.y) === br || $gameMap.regionId(fx, fy) === br;
+    }
     function tilesOfBuilding(type, x, y) {
         return cellsOfGeo(BUILDINGS[type], x, y);
     }
@@ -120,7 +136,9 @@
     // buildings go up only inside the ring of wall tiles (the A3 wall autotiles the user painted on the lower layers; the new land's
     // A4 cliffs are not it), at least WALL_GAP free tiles from the wall and from the gates. Read from the map's own tiles as it loads, so a
     // wall the user moves later moves the rule with it.
-    const WALLED_FIELD_MAP = 3, WALL_GAP = 2, FENCE_TILES = new Set([208, 209, 216, 217]);
+    const WALLED_FIELD_MAP = 3, WALL_GAP = 1;   // (2026-11-14, the user: one tile from the wall / fence is enough - it was 2)
+    const FENCED_PLOT_MAP = 218;                // (the new world: grandpa's plot in Podgrodzie, the map's <BuildRegion:N> inside its fence)
+    const FENCE_TILES = new Set([208, 209, 216, 217]);
     let walledFor = null, walledSet = null;
     function walledField() {
         if ($gameMap.mapId() !== WALLED_FIELD_MAP || !$dataMap) return null;
@@ -203,14 +221,25 @@
         }
         const plot = plotAt(x, y);
         const br = buildRegion ? buildRegion() : 0;
-        if (br && $gameMap.regionId(x, y) !== br && !free) return "Tu nie twoja ziemia.";   // (a map with bought land: only on it)
+        // (2026-11-16, the user: the camp's things - the forest bed, the tent, the pots, the barrel, the campfire - go up everywhere) what
+        // goes up anywhere needs no ground of the hero's own and no cleared plot: only open ground under the sky (below: a cell one
+        // can walk on, with no tree, rock or thing on it)
+        const loose = !!free || buildsAnywhere(BUILDINGS[type]);
+        if (br && $gameMap.regionId(x, y) !== br && !loose) return "Tu nie twoja ziemia.";   // (a map with bought land: only on it)
+        if (!plot && !free && loose && !isHutInterior() && T.mapFlag("Dark", false)) return "Pod dachem tego nie postawisz.";
         // (2026-10-18) the field doubled to 80x60 (tools/powieksz): the new land round grandpa's old field is region 9 - not his
         if (!free && OUTSIDE_FIELD_REGION > 0 && $gameMap.regionId(x, y) === OUTSIDE_FIELD_REGION && !buildsAnywhere(BUILDINGS[type])) return "To już nie działka dziadka.";
         if (!free && !buildsAnywhere(BUILDINGS[type])) {
             const wf = walledField();
-            if (wf && !wf.has(x + "," + y)) return "Buduj w obrębie muru, 2 kratki od niego.";
+            if (wf && !wf.has(x + "," + y)) return "Buduj w obrębie muru, 1 kratkę od niego.";
+            // the fenced plot of the new world: its region runs right up to the fence - the cells along it (and by the gates) stay free
+            if (br && $gameMap.mapId() === FENCED_PLOT_MAP) {
+                for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+                    if ($gameMap.regionId(x + dx, y + dy) !== br) return "Buduj w obrębie płotu, 1 kratkę od niego.";
+                }
+            }
         }
-        if (!plot && !free) return "Trzeba oczyszczonej ziemi.";
+        if (!plot && !loose) return "Trzeba oczyszczonej ziemi.";
         if (!plot && (!$gameMap.checkPassage(x, y, 0x0f) || hasObjectTile(x, y))) return "Tu nic nie stanie.";
         if (plot && plot.s === "tilled") return "Zaoranej ziemi nie zabudujesz.";
         if (plot && plot.dug && type !== "well" && !free) return "Najpierw zagrab dół.";
@@ -228,10 +257,13 @@
         }
         return false;
     }
+    // one of its kind in the whole world (the forest bed): does it stand somewhere already
+    const builtAnywhere = type => Object.values(farm().buildings || {}).some(list => (list || []).some(b => b.type === type));
     function whyNotBuild(type, x, y, flip, free) {
         const def = flip ? mirrorGeo(BUILDINGS[type]) : BUILDINGS[type];
         if (!free && !mayBuildHere(type)) return ((landRefusal && landRefusal()) || (noBuildText ? noBuildText() : NO_BUILD)) + ".";
         if (def.single && hutOf()) return "Masz już chatkę.";
+        if (def.one && builtAnywhere(type)) return "Masz już " + def.name.toLowerCase() + ".";
         if (isHutInterior() && !def.indoor) return "Tego nie postawisz w chatce.";
         if (isHutInterior() && hutShutsIn(type, x, y)) return "Zablokowałbyś sobie wyjście.";
         if (def.indoorOnly && !isHutInterior()) return "To stawia się tylko w chatce.";
@@ -308,9 +340,10 @@
         return true;
     }
     // room for a building around an existing one (its own tile is not counted): free, passable ground, nothing sown or ploughed
-    function roomFor(type, x, y, ignoreX, ignoreY) {
+    function roomFor(type, x, y, ignoreX, ignoreY, self) {
         for (const t of tilesOfBuilding(type, x, y)) {
             if (t.x === ignoreX && t.y === ignoreY) continue;
+            if (self && buildingAt(t.x, t.y) === self) continue;   // (a building grown in place: its own cells)
             const plot = plotAt(t.x, t.y);
             if (!$gameMap.isValid(t.x, t.y) || !$gameMap.checkPassage(t.x, t.y, 0x0f) || buildingAt(t.x, t.y) || !tileIsFree(t.x, t.y) || hasObjectTile(t.x, t.y)) return false;
             if (plot && (plot.s === "tilled" || plot.crop)) return false;
@@ -321,13 +354,14 @@
     function upgradeBuilding(b) {
         const up = (geoOf(b) || {}).upgrade;
         if (!up) return false;
-        const target = BUILDINGS[up.to], first = itemOf(up.cost[0][0]);
-        if (b.job && !jobReady(b)) { complain(first.iconIndex, "Najpierw zbierz z ognia"); return false; }   // (still cooking)
+        const target = BUILDINGS[up.to], first = itemOf(up.cost[0][0]), fire = !!(geoOf(b) || {}).fire;
+        if (b.job && !jobReady(b)) { complain(first.iconIndex, fire ? "Najpierw zbierz z ognia" : "Najpierw skończ to, co się robi"); return false; }   // (still cooking / weaving)
         const missing = up.cost.filter(([id, n]) => countOf(id) < n);
         if (missing.length > 0) { complain(itemOf(missing[0][0]).iconIndex, "Potrzebujesz: " + itemOf(missing[0][0]).name); return false; }
         if (up.tool && !requireItem(up.tool)) return false;
         const ax = b.x - up.dx, ay = b.y;   // the fire is the tile up.dx from the left end of the bottom row of what is built around it
-        if (!roomFor(up.to, ax, ay, b.x, b.y)) { complain(itemOf(ITEM.stone).iconIndex, "Za mało miejsca wokół ogniska"); return false; }
+        // (2026-11-17: the loom -> the loom with the spinning wheel, the same 3 x 2 - the building's own cells do not count as taken)
+        if (!roomFor(up.to, ax, ay, b.x, b.y, b)) { complain(itemOf(ITEM.stone).iconIndex, fire ? "Za mało miejsca wokół ogniska" : "Za mało miejsca"); return false; }
         if (!takeReadyFirst(b)) return false;   // (what is done on the fire: into the bag first)
         if (!spendStamina(up.stamina)) return false;
         for (const [id, n] of up.cost) $gameParty.loseItem(itemOf(id), n, false);
@@ -812,9 +846,21 @@
             const d = hutDoorCell(h);
             $gamePlayer.reserveTransfer(h.mapId, d.x, d.y + 1, 2, 0);
         } else {
-            $gamePlayer.reserveTransfer(3, 48, 41, 2, 0);   // the hut is gone: back to the farm
+            // (2026-11-17) the hut is gone for the way out (boarded up, or its land the Lord's now): out before its door, where it stood
+            // on the hero's own land - its land held, out of the plot's gate (Homes: the world's plot, Map218); no hut at all: the same
+            // gate (it was the old world's Map003 before)
+            const any = anyHut(), held = any && P.core.landHeld && P.core.landHeld(any.mapId);
+            const out = T.call("Homes", "fieldOut") || [218, 27, 26, 4];
+            if (any && !held) { const d = hutDoorCell(any); $gamePlayer.reserveTransfer(any.mapId, d.x, d.y + 1, 2, 0); }
+            else $gamePlayer.reserveTransfer(out[0], out[1], out[2], out[3] || 2, 0);
         }
         return true;
+    }
+    // any hut record, boarded or on held land too (hutOf gives only the one in use): { b, mapId }
+    function anyHut() {
+        const all = farm().buildings || {};
+        for (const mapId of Object.keys(all)) for (const b of all[mapId] || []) if (b.type === "hut" && !b.site) return { b, mapId: Number(mapId) };
+        return null;
     }
     // ------------------------------------------------------------------
     // Placing a building: after choosing it in the build menu a grid appears around the player and a
@@ -1009,8 +1055,8 @@
     };
 
 
-    P.build = { SCENE, hutShutsIn, hutSanitize, mapAllowsBuilding, buildsAnywhere, tilesOfBuilding, tileIsFree, tileWhyNot,
-        whyNotBuild, missingMaterials, build, siteHits, hitCost, pitchInstant, roomFor, upgradeBuilding, upgradeEntry, packUp,
+    P.build = { SCENE, hutShutsIn, hutSanitize, mapAllowsBuilding, standsOnOwnLand, builtAnywhere, buildsAnywhere, tilesOfBuilding, tileIsFree, tileWhyNot,
+        whyNotBuild, walledField, missingMaterials, build, siteHits, hitCost, pitchInstant, roomFor, upgradeBuilding, upgradeEntry, packUp,
         wakeHour, sleepInTent, placeSite, placeFree, strikeSite, cancelSite, siteMenu, demolishBlock, demolish, readyProduce,
         daysToProduce, collect, snares, snareSprung, snareBait, snareCatch, snareEatBait, baitSnare, snareBaitEntry, rest,
         restDanger, awakeHours, sleepy, restCap, sleepyNote, whyNoRest, noRestHelp, groundRate, lieDown, enterHut, leaveHut,

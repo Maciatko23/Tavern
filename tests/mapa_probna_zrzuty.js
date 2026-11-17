@@ -9,7 +9,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9412, beforeLoad: process.env.Z
     await t.frames(10);
     const maps = await t.json("SwiatData.maps");
     t.check("A i B są w świecie", !!maps["990"] && !!maps["991"], maps["990"]);
-    const XS = [13, 32, 50], YS = [7, 22, 37, 52];
+    const XS = [13, 32, 74], YS = [7, 22, 37, 52];
     for (const id of [990, 991]) {
         await t.newGame({ map: id, x: 24, y: 34, day: 12, hour: 11, quiet: true, minimap: false });
         await t.frames(420);   // (tabliczka z nazwą mapy znika po ok. 5 s)

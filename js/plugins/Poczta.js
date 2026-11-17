@@ -489,7 +489,7 @@
         if (!onTable().length) return;
         S().arrivals[key] = 1;
         T.popup(tx(slot === "r" ? "napis.listyRano" : "napis.listyWieczor"), { top: true, color: "#ffd866" });
-        if (onMap(D.MAP.miasto) && T.isCalm(SceneManager._scene)) przelot();
+        if ((onMap(D.MAP.miasto) || onMap(D.MAP.gran)) && T.isCalm(SceneManager._scene)) przelot();
     }
 
     // ---- S3: Grum reads (the tavern goes quiet for a moment)
@@ -538,7 +538,7 @@
         return false;
     }
     let chase = null;
-    const CHASE = [[112, 18], [108, 22], [100, 30], [92, 40], [80, 46], [70, 50], [60, 50]];
+    const CHASE = D.POGON;   // (2026-11-16: on Krucza Grań - from the loft's door along the path into the mine's mouth)
     function scenaNoc() {
         const s = S();
         if (s.noc || !onMap(D.MAP.kruczarnia) || busy()) return;
@@ -575,7 +575,7 @@
         if (!k) { chase = null; return; }
         if (!chase.armed && Graphics.frameCount > chase.expires) { chase = null; return; }
         if (!chase.armed) {
-            if (!onMap(D.MAP.miasto)) return;
+            if (!onMap(D.MAP.gran)) return;
             chase.armed = true; chase.i = 0; chase.t = 0;
             show(k, D.KAPTUR.sheet, D.DRZWI.przed[0], D.DRZWI.przed[1] + 1, 2);
             k.setMoveSpeed(5);
@@ -593,11 +593,11 @@
     // ---- S6: the third night - the bait, the parcel
     function scenaPrzynieta() {
         const s = S();
-        if (s.s6 || !onMap(D.MAP.miasto) || busy()) return;
+        if (s.s6 || !onMap(D.MAP.gran) || busy()) return;
         s.s6 = day();
         const k = actor(D.KAPTUR.id), c = actor(CYRYL_ACTOR);
         if (!k || !c) return;
-        show(k, D.KAPTUR.sheet, 113, 14, 4); show(c, "$Npc_Cyryl", 111, 14, 6);
+        show(k, D.KAPTUR.sheet, D.DRZWI.przed[0] + 1, D.DRZWI.przed[1], 4); show(c, "$Npc_Cyryl", D.DRZWI.przed[0] - 1, D.DRZWI.przed[1], 6);
         k.setMoveSpeed(3);
         graj([{ czekaj: 30, mysl: tx("przynieta.noc")[0] },
             { kto: k, tekst: "Jest kamień?", czekaj: 120 },
@@ -777,7 +777,7 @@
         if (co === "noc") { const g = hour() < D.NOC.czuwanie[1] || hour() >= D.NOC.czuwanie[0]; if (g) setTimeout(scenaNoc, 50); }
         else if (co === "przynieta") {
             $gameScreen.startFadeOut(30);
-            setTimeout(() => { $gamePlayer.reserveTransfer(D.MAP.miasto, 112, 17, 8, 0); $gameSystem.setDayNightHour(23.5); }, 500);
+            setTimeout(() => { $gamePlayer.reserveTransfer(D.MAP.gran, D.DRZWI.przed[0], D.DRZWI.przed[1] + 3, 8, 0); $gameSystem.setDayNightHour(23.5); }, 500);
             s.wait6 = 1;
         } else if (co === "prawda") setTimeout(scenaPrawda, 50);
     }
@@ -804,7 +804,7 @@
         list: cmds || [C(0, [])], moveFrequency: 3, moveRoute: { list: [C(0, [])], repeat: true, skippable: false, wait: false }, moveSpeed: 4, moveType: 0, priorityType: 1,
         stepAnime: false, through: true, trigger: 0, walkAnime: true }, o || {});
     const actorEv = (id, name, sheet) => ({ id, name, note: "", x: 0, y: 0, pages: [page(null, { image: { tileId: 0, characterName: sheet, direction: 2, pattern: 1, characterIndex: 0 } })] });
-    T.inject([D.MAP.miasto, D.MAP.kruczarnia], { ids: D.IDS, owner: D.OWNER, build: (data, mapId) => {
+    T.inject([D.MAP.miasto, D.MAP.gran, D.MAP.kruczarnia], { ids: D.IDS, owner: D.OWNER, build: (data, mapId) => {
         const list = [actorEv(D.KAPTUR.id, "Człowiek w kapturze", D.KAPTUR.sheet), actorEv(CYRYL_ACTOR, "Cyryl (scena)", "$Npc_Cyryl")];
         if (mapId === D.MAP.miasto) {
             const g = D.GRYTA.grob;
@@ -887,7 +887,7 @@
     }, { owner: PLUGIN, name: "poczta" });
     // the third night's wait: the hero is under the tower - the scene plays
     T.onMapUpdate(() => {
-        if (!has() || !S().wait6 || !onMap(D.MAP.miasto) || busy()) return;
+        if (!has() || !S().wait6 || !onMap(D.MAP.gran) || busy()) return;
         if (isModal() || $gameMap.isEventRunning()) return;
         S().wait6 = 0;
         $gameScreen.startFadeIn(40);

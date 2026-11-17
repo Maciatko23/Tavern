@@ -143,6 +143,15 @@
     }
     // set a pose at once (no turn) or by a turn; L = null: back to the town's own turning
     function poza(L, bezObrotu) {
+        // (2026-11-15, nowy świat) the windmill of Podgrodzie has no sails event: its sails are Wiatrak.js's turning picture - a
+        // pose stops them at its angle (frame f of the old sheets = 22.5 + 7.5 f degrees), null lets them turn with the wind again
+        const W = window.Wiatrak;
+        if (mapId() === D.MAP.miasto && !skrzydla() && W && typeof W.hold === "function") {
+            if ((api.pose || null) !== (L || null) && L) { try { T.audio.se("Wood1", { volume: 55, pitch: 70 }); } catch (e) { /* no audio */ } }
+            api.pose = L || null; api.anim = null;
+            W.hold(L ? (22.5 + 7.5 * kat(L)) * Math.PI / 180 : null, !!bezObrotu);
+            return true;
+        }
         const ev = skrzydla();
         if (!ev) { api.pose = L || null; return false; }
         if (!L) {
@@ -254,7 +263,20 @@
     }
     // the characters without a menu of their own (Roch, Wit, Ozzy): a takeover of the "errand" level while there is something to ask, with the
     // way out "w innej sprawie" which lets the rest of the talk speak (as Majster.js's masters do)
+    // (nowy świat, 2026-11-15) the new miller himself: once Jasiek has talked, the hero may ask Ambroży about the sails - he denies it
+    // coldly and warns him off (a note in the journal; nothing else changes: the proof is the boat's night)
+    const ambrozyOpcja = () => aktywny() && !!S().ch4.jasiek && !S().amb && !S().koniec;
+    function ambrozyPyta() {
+        const s = S(), out = [], sp = spkOf("nowy_mlynarz");
+        linie(out, HERO, "ambrozy.pytam");
+        linie(out, sp, "ambrozy.odpowiada");
+        linie(out, HERO, "ambrozy.mysl");
+        s.amb = day();
+        note("notatki.ambrozy");
+        return out;
+    }
     const MENU = {
+        nowy_mlynarz: { when: () => ambrozyOpcja(), label: () => tx1("ambrozy.opcja"), run: () => ambrozyPyta(), key: "nowy_mlynarz" },
         przemytnik: { when: () => rochOpcja(), label: () => tx1("roch.opcja"), run: () => rochPyta(), key: "przemytnik" },
         kapral: { when: () => aktywny() && rozdzial() === 4 && !!S().ch4.walenty && !S().ch4.soj, label: () => tx1("wit.opcja"), run: () => witPyta(), key: "kapral" },
     };
@@ -971,6 +993,8 @@
         n = Number(n);
         const R = [null, D.NAGRODY.sambor, D.NAGRODY.sam, D.NAGRODY.targ][n];
         s.koniec = n; s.wyjscie = ["", "sambor", "sam", "targ"][n]; s.ch5.stan = 6;
+        // (nowy świat) the smugglers taken: the new miller Ambroży, who gave the orders, is gone the same night (a bargain with the skipper: he stays)
+        if ((n === 1 || n === 2) && TL() && TL().setGone) { try { TL().setGone("nowy_mlynarz", true); } catch (e) { /* (no such resident) */ } }
         zlato(R.zloto);
         opinia(R.opinia);
         xp(R.xp);

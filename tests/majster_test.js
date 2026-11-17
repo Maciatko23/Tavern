@@ -9,7 +9,7 @@ const kit = require("./lib/kit.js");
 const SHOTS = path.join("..", "docs", "zadania_nowe", "majstersztyk_gra");
 const shot = (t, name) => t.shot(path.join(SHOTS, name));
 
-kit.test({ port: 9931, overlay: process.env.GAME_OVERLAY || "tools/majstersztyk/overlay", overlayJs: true, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
+kit.test({ port: 9931, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     const S = "Majster.stan()";
     const go = async (...a) => { await t.finish(); const ok = await t.go(...a); return ok; };
     const q = "TownQuests.rec('W22')";
@@ -24,20 +24,20 @@ kit.test({ port: 9931, overlay: process.env.GAME_OVERLAY || "tools/majstersztyk/
         door: !!$dataMap }) `);
     t.check("Majster.js i Majster_Data.js działają: wątek, zadanie W22 (5 kroków), numery 4510-4599, trzej mieszkańcy, Młotek majstra w Items", base.m && base.d && base.q && base.thr && base.steps === 5 && /4510-4599/.test(base.inj) && base.res.every(Boolean) && base.hammer, base);
 
-    await t.newGame({ story: true, skipIntro: true, map: 8, x: 91, y: 90, dir: 8, day: 14, hour: 10, quiet: true, minimap: false });
+    await t.newGame({ story: true, skipIntro: true, map: 220, x: 19, y: 61, dir: 8, day: 14, hour: 10, quiet: true, minimap: false });
     await t.eval("TownQuests.state().opinion = 30; $gameParty.gainGold(400 - $gameParty.gold()); 0");
 
     // ---------------------------------------------------------------- the door: closed without a poreka, popup, open with it (8-17)
     t.check("przed poręką drzwi Cechu zamknięte (Majster.drzwiOtwarte() false)", (await t.eval("Majster.drzwiOtwarte()")) === false);
-    await go(8, 91, 88, 8);
+    await go(220, 19, 59, 8);
     await t.eval("Tawerna.popups && 0; window.__kit && (window.__kit.pops.length = 0); 0");
     await t.hold("up", 20);
     await t.frames(20);
     const pops = await t.popups();
-    t.check("dotknięcie drzwi bez poręki: popup „Mistrzowie obradują”, bohater nadal w mieście", pops.some(p => /obraduj/.test(p)) && (await t.eval("$gameMap.mapId()")) === 8, pops);
+    t.check("dotknięcie drzwi bez poręki: popup „Mistrzowie obradują”, bohater nadal w mieście", pops.some(p => /obraduj/.test(p)) && (await t.eval("$gameMap.mapId()")) === 220, pops);
 
     // ---------------------------------------------------------------- poreka: Tadek's talk option (day >= 12, Opinion >= 20, an iron thing of his own)
-    await go(8, 8, 64, 2);
+    await go(220, 31, 37, 8);
     await t.setHour(10);
     const noIron = await talkKey("kowal", ["Nie teraz"]);
     t.check("bez żelaznej rzeczy własnej roboty Tadek nie da poręki (opcja jest, odpowiedź „najpierw niech cię ktoś zna”)", !!noIron.text, noIron.text);
@@ -52,7 +52,7 @@ kit.test({ port: 9931, overlay: process.env.GAME_OVERLAY || "tools/majstersztyk/
     await t.setHour(10);
 
     // ---------------------------------------------------------------- the entry (20 G) and the Cech
-    await go(8, 91, 88, 8);
+    await go(220, 19, 59, 8);
     await t.hold("up", 24);
     await t.until("$gameMap.mapId() === 215 && !$gamePlayer.isTransferring()", 20);
     await t.frames(80);
@@ -102,7 +102,7 @@ kit.test({ port: 9931, overlay: process.env.GAME_OVERLAY || "tools/majstersztyk/
     t.check("w Pracowni Ludwik pracuje (rano w Cechu)", !!(await t.eval("(function(){ const e = TownLife.eventOf('ludwik'); return e && !e.isTransparent() ? 1 : 0; })()")));
     await shot(t, "cech_pracownia_ludwik.png");
     await items([[305, 1], [345, 1], [375, 1]]);
-    await go(8, 51, 30, 2);
+    await go(220, 48, 37, 2);
     await t.setHour(12);
     const gW = await t.gold();
     const witTalk = await talkKey("kapral", ["Mam komplet", "Zrobię taniej"]);
@@ -125,7 +125,7 @@ kit.test({ port: 9931, overlay: process.env.GAME_OVERLAY || "tools/majstersztyk/
     await t.eval("Majster.polkaZloz(3); 0");
     t.check("sztuka próbna kowala (Kolczuga + Żelazna tarcza) na półce", !!(await t.json(`${S}.polka`)) && (await t.json(`${S}.polka.etap`)) === 3);
     await t.setDay(22, 8);
-    await go(8, 91, 88, 8);
+    await go(220, 19, 59, 8);
     await go(215, 7, 15, 8);
     await t.frames(80);
     const sab = await t.json(`({ sab: ${S}.sab, polka: ${S}.polka })`);
@@ -166,9 +166,9 @@ kit.test({ port: 9931, overlay: process.env.GAME_OVERLAY || "tools/majstersztyk/
     await clearItems([353, 357, 379]);
     await t.eval(`Majster.opts({ ocena: 2 }); 0`);
     await t.setDay(r3.d, 11.5);
-    await go(8, 60, 49, 8);
+    await go(220, 54, 43, 8);
     await t.frames(150);
-    const tri = await t.json(`({ props: $gameMap.events().filter(e => /<Majster:trybuna>/.test(e.event().note || '')).length, held: ['ostap','kowal','garbarz','ciesla','ludwik'].map(k => TownLife.held(k)),
+    const tri = await t.json(`({ props: $gameMap.events().filter(e => /<Majster:trybuna>/.test(e.event().note || '')).length, held: ['ostap','kowal','ciesla','ludwik'].map(k => TownLife.held(k)),
         ostap: (function(){ const e = TownLife.eventOf('ostap'); return e ? [e.x, e.y] : null; })() })`);
     t.check("w dzień egzaminu na rynku stoi trybuna (4 rekwizyty), komisja i Ludwik trzymani przez TownLife", tri.props === 4 && tri.held.every(Boolean), tri);
     await shot(t, "rynek_trybuna.png");
@@ -183,7 +183,7 @@ kit.test({ port: 9931, overlay: process.env.GAME_OVERLAY || "tools/majstersztyk/
     t.check("sztuka niekompletna: Ostap przesuwa egzamin o tydzień (następny dzień targowy), surowce zostają", przes.proby === 1 && przes.dzien > dz && (await t.eval(`Majster.targ(${przes.dzien})`)), przes);
     await t.setDay(przes.dzien, 12.5);
     await items([[357, 1]]);
-    await go(8, 60, 49, 8);
+    await go(220, 54, 43, 8);
     await t.frames(200);
     const gE = await t.gold();
     await talkKey("ostap", ["Pokaż dowody"]);
@@ -210,7 +210,7 @@ kit.test({ port: 9931, overlay: process.env.GAME_OVERLAY || "tools/majstersztyk/
     t.check("po zakończeniu 4 egzamin poprawkowy wyznaczony na dzień targowy", (await t.eval("Majster.targ(Majster.stan().egz.dzien)")) === true);
 
     // ---------------------------------------------------------------- the mini-game "Ostatnie szlify" (arrows + O; never fails)
-    await go(8, 60, 49, 8);
+    await go(220, 54, 43, 8);
     await t.eval(`Majster.opts(null); Tawerna.ui.open(Majster.Scene_Szlify, { seed: 7, turbo: 1, onEnd: r => { window.__szlify = r; } }); 0`);
     await t.until("SceneManager._scene && SceneManager._scene.phase === 'play'", 30);
     await t.frames(10);

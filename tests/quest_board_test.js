@@ -37,6 +37,7 @@ kit.test({ plugins: PARTS, beforeLoad: REGISTERED, bootCheck: "the game boots", 
         fam.data && fam.art && fam.scene && PARTS.every(n => t.plugins[n] !== "failed") && (!REGISTERED || fam.order.join() === PARTS.join()), Object.assign(fam, { plugins: t.plugins }));
     // (a story game in grandpa's cottage, whatever data/System.json says)
     t.check("a new game starts", await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true }));
+    await t.eval("(function(){ if (Story.state()) delete Story.state().wez; return 0; })()");   // (no royal summons: its scenes on Podgrodzie would hold the map - not this test's subject)
     await t.eval("ConfigManager.uiClean = false; 0");   // (the classic look: J opens the old journal screen - in Grafit it opens the P menu on Dziennik, tests/menu_lista_test.js)
     await t.frames(30);
 
@@ -203,19 +204,19 @@ kit.test({ plugins: PARTS, beforeLoad: REGISTERED, bootCheck: "the game boots", 
     t.check("Feliks's pay can go straight onto grandpa's debt (Story.pay), the purse stays as it was", fel.giver === "feliks" && fel.toDebt === fel.pay && fel.paid === fel.pay && fel.gold === 0, fel);
 
     // ---------------------------------------------------------------- kills counted through Hunting.onKill
-    await t.go(22, 20, 15, 2);
+    await t.go(222, 40, 40, 2);   // (2026-11-17: the new world's wolf ground, Krucze Turnie - it was the old Polna droga, Map022)
     await setDay(14, 12);
     const kills = await t.json(`(function(){
         const any = QuestBoard.post("wolves", 2, 31), named = QuestBoard.post("wolves_map", 2, 32);
-        QuestBoard.accept(any.id); QuestBoard.accept(named.id);
-        named.req[0].map = 21;   // (elsewhere than here, Polna droga)
+        const acc = [QuestBoard.accept(any.id), QuestBoard.accept(named.id)].map(a => !!(a && a.ok)), hand = QuestBoard.state().board.filter(n => n.state === "active").map(n => n.tpl);
+        named.req[0].map = 219;   // (elsewhere than here: Słony Brzeg)
         const kill = kind => { const p = $gamePlayer, a = Hunting.spawn(kind, p.x + 3, p.y); Hunting.kill(a); };
         kill("wolf"); kill("rabbit");
         const said = ($gameTemp._topNotices || []).map(n => n.text).concat([$gameTemp._lastTopNotice]).filter(Boolean);   // (HomeDecor's keepsake notice may come last)
         const r1 = [any.req[0].got, named.req[0].got, said.find(x => /Wilki/.test(x)) || said.join(" | ")];
-        named.req[0].map = 22;
+        named.req[0].map = 222;
         kill("wolf");
-        return { r1, anyGot: any.req[0].got, namedGot: named.req[0].got, n: any.req[0].n, ids: [any.id, named.id] };
+        return { r1, anyGot: any.req[0].got, namedGot: named.req[0].got, n: any.req[0].n, ids: [any.id, named.id], acc, hand, map: $gameMap.mapId() };
     })()`);
     t.check("a wolf killed anywhere counts for 'Wilki pod wsią', a rabbit does not, a wolf on another map does not count for a named place",
         kills.r1[0] === 1 && kills.r1[1] === 0 && /Wilki/.test(kills.r1[2] || ""), kills.r1);
@@ -224,7 +225,8 @@ kit.test({ plugins: PARTS, beforeLoad: REGISTERED, bootCheck: "the game boots", 
     t.check("the last kill makes it ready and says so at the top", killDone.ready && /Zlecenie gotowe/.test(killDone.said), killDone);
     await t.eval(`(function(){ for (const id of ${JSON.stringify(kills.ids)}) QuestBoard.abandon(id); return 0; })()`);
 
-    // ---------------------------------------------------------------- a wanted animal: Trójłap on Polna droga, at night
+    // ---------------------------------------------------------------- a wanted animal: Trójłap on Podgrodzie (Map218), at night
+    await t.go(218, 30, 18, 2);
     await setDay(14, 22);
     const bid = await t.eval(`(function(){ const d = QuestBoard.state(); d.rep = 60; const n = QuestBoard.post("b_trojlap", 3, 77); QuestBoard.accept(n.id); for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); SceneManager._scene._qbT = 0; return n.id; })()`);
     const came = await t.until(`Hunting.animals.some(a => a._qbBounty === "${bid}")`, 25);
@@ -247,7 +249,7 @@ kit.test({ plugins: PARTS, beforeLoad: REGISTERED, bootCheck: "the game boots", 
     t.check("the bounty pays 85-120 G and gives its special die (TavernDice.giveDie)", dice.die === "grusza" && JSON.stringify(dice.got) === JSON.stringify(["grusza"]) && dice.gold >= 85 && dice.gold <= 120, dice);
 
     // ---------------------------------------------------------------- a missed term
-    await t.go(19, 5, 6, 2);
+    await t.go(224, 5, 6, 2);
     await setDay(20, 10);
     const due = await t.json(`(function(){ const d = QuestBoard.state(); d.rep = 50; const n = QuestBoard.post("stones", 0, 9); n.urgent = false; QuestBoard.accept(n.id); window.__due = n.id; return { id: n.id, due: n.due, rep: d.rep }; })()`);
     await setDay(due.due + 1, 7);
@@ -291,7 +293,7 @@ kit.test({ plugins: PARTS, beforeLoad: REGISTERED, bootCheck: "the game boots", 
     await t.press("ok");
     t.check("two pages of it, then the board is free", await t.eval("SceneManager._scene.mode === 'browse' && QuestBoard.state().tutorial === true"));
     await t.eval("SceneManager.pop(); 0");
-    await t.until(t.onMap(19), 15);
+    await t.until(t.onMap(224), 15);
     // a fresh, rich board for the pictures (day 30, reputation 64: the upper tiers, a wanted poster)
     await setDay(30, 18);
     await t.eval(`(function(){
@@ -358,7 +360,7 @@ kit.test({ plugins: PARTS, beforeLoad: REGISTERED, bootCheck: "the game boots", 
     const one = await t.json("({ goal: Journal.data().pinned, now: Journal.pinnedNow() })");
     t.check("following a contract unpins the journal's pinned goal (one thing at a time)", !!gPin && one.goal === null && one.now && one.now.owner === "board" && one.now.id === second.id, { gPin, one });
     await t.press("cancel");
-    t.check("P leaves the board", await t.until(t.onMap(19), 15));
+    t.check("P leaves the board", await t.until(t.onMap(224), 15));
     await t.frames(20);
     await t.shot(path.join(SHOTS, "tablica_okienko_celu.png"));
 
@@ -383,7 +385,7 @@ kit.test({ plugins: PARTS, beforeLoad: REGISTERED, bootCheck: "the game boots", 
     await t.eval("(function(){ const s = SceneManager._scene; s._list.select(0); s.onListOk(); return 0; })()");
     t.check("OK on it in the journal stops following it", await t.eval("QuestBoard.state().track === null"));
     await t.eval("SceneManager.pop(); 0");
-    await t.until(t.onMap(19), 15);
+    await t.until(t.onMap(224), 15);
 
     // ---------------------------------------------------------------- save round trip
     const rt = await t.json(`(function(){

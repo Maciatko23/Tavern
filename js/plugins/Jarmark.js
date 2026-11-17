@@ -99,6 +99,12 @@
     function spec(id) {
         if (!has()) return null;
         const s = S(), d = day(), h = hour(), M = mapNow();
+        if (idIn(id, D.ID.slad0, 5)) {
+            const sl = D.SLADY[id - D.ID.slad0];
+            if (!sl || s.slady[sl.k] || (sl.map || D.MAP.miasto) !== M) return null;
+            const on = s.przed.kradziez === 1 && (d > D.DNI.sztuka || h >= 19.7) && s.zasadzka !== 1 && d <= D.DNI.pogon && fairHour(sl.godz);
+            return on ? { name: "Ślad: " + sl.k, x: sl.x, y: sl.y, sheet: "!$Wesele_Znak", index: 0, dir: 2, pat: 1, trigger: 0, through: true, say: "slad", k: sl.k } : null;
+        }
         if (M === D.MAP.miasto) {
             if (idIn(id, D.ID.kram0, 6)) {
                 const i = id - D.ID.kram0, p = D.KRAMY[i];
@@ -148,13 +154,7 @@
             }
             if (id === D.ID.ambrozy) {
                 const play = d === D.DNI.sztuka && h >= 18.5 && h < 20 && s.przed.kradziez !== 1, close = d === D.DNI.rozstrzygniecie && h >= 11.5 && h < 12.5 && !zamkniety();
-                return play || close ? { name: tx1("imiona.ambrozy"), x: 69, y: 50, sheet: "$Npc_Dzwonnik", index: 0, dir: 2, pat: 1, through: false } : null;
-            }
-            if (idIn(id, D.ID.slad0, 5)) {
-                const sl = D.SLADY[id - D.ID.slad0];
-                if (!sl || s.slady[sl.k]) return null;
-                const on = s.przed.kradziez === 1 && (d > D.DNI.sztuka || h >= 19.7) && s.zasadzka !== 1 && d <= D.DNI.pogon && fairHour(sl.godz);
-                return on ? { name: "Ślad: " + sl.k, x: sl.x, y: sl.y, sheet: "!$Wesele_Znak", index: 0, dir: 2, pat: 1, trigger: 0, through: true, say: "slad", k: sl.k } : null;
+                return play || close ? { name: tx1("imiona.ambrozy"), x: D.SCENA.ambrozy[0], y: D.SCENA.ambrozy[1], sheet: "$Npc_Dzwonnik", index: 0, dir: 2, pat: 1, through: false } : null;
             }
             if (idIn(id, D.ID.pochod0, 10)) return api.pochod && api.pochod[id - D.ID.pochod0] ? api.pochod[id - D.ID.pochod0] : null;
             if (idIn(id, D.ID.noc0, 6)) {
@@ -174,14 +174,18 @@
             if (id === D.ID.soltysHala) return api.sala ? { name: tx1("imiona.soltys"), x: D.HALA.soltys[0], y: D.HALA.soltys[1], sheet: "$Npc_Soltys", index: 0, dir: 2, pat: 1, through: false } : null;
             if (id === D.ID.wanda) {   // Wanda Ósemka by the dice table of the game room, days 50-51, 14-23, until the tournament is won (she leaves in disgrace)
                 const on = (d === 50 || d === 51) && h >= 14 && h < 23 && s.z !== 0 && s.turniej.fin !== 1 && !s.turniej.wygral && jarmark();
-                return on || api.wanda ? { name: tx1("imiona.wanda"), x: 52, y: 33, sheet: "$Npc_Jarmark_Wanda", index: 0, dir: 8, pat: 1, through: false, trigger: 0, say: "rozmowa", kto: "wanda" } : null;
+                return on || api.wanda ? { name: tx1("imiona.wanda"), x: D.HALA.wanda[0], y: D.HALA.wanda[1], sheet: "$Npc_Jarmark_Wanda", index: 0, dir: D.HALA.wanda[2], pat: 1, through: false, trigger: 0, say: "rozmowa", kto: "wanda" } : null;
             }
         }
         return null;
     }
+    // the note of an event: the solid size stays from the start (a stall is 3 cells wide, the stage 7 x 3 - ChoppableTree reads it
+    // once), the light follows the state (zastosuj writes it into the map's data and tells the lights: Tawerna.lightsVer)
+    const STALA = id => idIn(id, D.ID.kram0, 6) ? "<Occupy:left=1,right=1>" : id === D.ID.scena ? "<Occupy:left=3,right=3,up=2>" : "";
+    const notatka = (id, sp) => STALA(id) + (sp && sp.note && !/<Occupy/i.test(sp.note) ? sp.note : "");
     function dane(id, sp) {
         const x = sp ? sp.x : 0, y = sp ? sp.y : 0;
-        return { id, name: sp ? sp.name : "Jarmark", note: sp && sp.note ? sp.note : "", x, y, pages: [{ conditions: Object.assign({}, BLANK), directionFix: !!(sp && (sp.fix || sp.say === "kram" || sp.dir === undefined ? 0 : 0)),
+        return { id, name: sp ? sp.name : "Jarmark", note: notatka(id, sp), x, y, pages: [{ conditions: Object.assign({}, BLANK), directionFix: !!(sp && (sp.fix || sp.say === "kram" || sp.dir === undefined ? 0 : 0)),
             image: { tileId: 0, characterName: sp ? sp.sheet : "", direction: sp ? sp.dir : 2, pattern: sp ? sp.pat : 1, characterIndex: sp ? sp.index : 0 },
             list: [C(355, ["Jarmark.dotknij(this);"]), C(0)], moveFrequency: 3,
             moveRoute: { list: [{ code: 0, parameters: [] }], repeat: true, skippable: false, wait: false }, moveSpeed: 3, moveType: 0, priorityType: 1,
@@ -192,6 +196,7 @@
     for (let i = D.ID.pochod0; i < D.ID.noc0 + 6; i++) ALL_IDS.push(i);
     // the ids a day can need (the rest are not made: a map with fewer events updates faster)
     function potrzebne(id, mapId) {
+        if (mapId === D.MAP.podgrodzie) return true;
         if (mapId !== D.MAP.miasto) return true;
         const d = has() ? day() : 0;
         if (id < D.ID.scena) return true;                                     // stalls, lamps, barrels
@@ -204,8 +209,10 @@
     }
     const MIASTO_IDS = ALL_IDS.filter(i => i < D.ID.sedzia0 || i >= D.ID.pochod0);   // (4800-4849 and 4860-4889)
     const KARCZMA_IDS = [D.ID.sedzia0, D.ID.sedzia0 + 1, D.ID.sedzia0 + 2, D.ID.sedzia0 + 3, D.ID.mietek, D.ID.wanda, D.ID.soltysHala];
-    T.inject([D.MAP.miasto, D.MAP.karczma], { ids: D.IDS, owner: D.OWNER, when: () => jarmark() || api.scena, build: (data, mapId) => {
-        const out = [], ids = mapId === D.MAP.miasto ? MIASTO_IDS : KARCZMA_IDS;
+    const PODGRODZIE_IDS = D.SLADY.map((sl, i) => sl.map === D.MAP.podgrodzie ? D.ID.slad0 + i : 0).filter(Boolean);   // (the clues lying in Podgrodzie)
+    const idsOf = M => M === D.MAP.miasto ? MIASTO_IDS : M === D.MAP.karczma ? KARCZMA_IDS : M === D.MAP.podgrodzie ? PODGRODZIE_IDS : null;
+    T.inject([D.MAP.miasto, D.MAP.karczma, D.MAP.podgrodzie], { ids: D.IDS, owner: D.OWNER, when: () => jarmark() || api.scena, build: (data, mapId) => {
+        const out = [], ids = idsOf(mapId) || [];
         for (const id of ids) if (potrzebne(id, mapId)) out.push(dane(id, spec(id)));   // (a hidden one is an empty, through event at 0,0: shown later by the clock)
         return out;
     } });
@@ -213,13 +220,17 @@
     function evOf(id) { return $gameMap && $gameMap.event ? $gameMap.event(id) || null : null; }
     let lastApply = "";
     function zastosuj(ev, id) {
-        const sp = spec(id);
-        if (!sp) { if (!ev._jarHid) { ev._jarHid = true; ev._jarFree = false; ev.setTransparent(true); ev.setThrough(true); ev._trigger = -1; ev.locate(0, 0); } return; }
+        const sp = spec(id), dn = ev.event(), want = notatka(id, sp);
+        if (dn && dn.note !== want) { const light = /<Light/i.test(dn.note + want); dn.note = want; if (light) T.lightsVer = (T.lightsVer || 0) + 1; }
+        if (!sp) { if (!ev._jarHid) { ev._jarHid = true; ev._jarFree = false; ev._jarMove = false; ev.setTransparent(true); ev.setThrough(true); ev._trigger = -1; ev.locate(0, 0); } return; }
         const was = ev._jarHid;
+        if (sp.move && ev._jarMove && !was) return;
+        ev._jarMove = !!sp.move;
         ev._jarHid = false;
         ev.setTransparent(false); ev.setThrough(!!sp.through);
         ev.setImage(sp.sheet, sp.index);
-        ev.setDirectionFix(false); ev.setDirection(sp.dir); ev.setPattern(sp.pat); ev.setDirectionFix(true);
+        ev.setDirectionFix(false); ev.setDirection(sp.dir); ev.setPattern(sp.pat); ev.setDirectionFix(!sp.move);
+        if (sp.move) ev.setWalkAnime(true);
         ev._trigger = sp.say ? (sp.trigger !== undefined ? sp.trigger : 0) : -1;
         ev.setStepAnime(!!sp.anim);
         ev._jarFree = !!sp.free || (ev._jarFree && !!sp.keep);
@@ -228,9 +239,8 @@
     }
     function odswiezMape(force) {
         if (!has()) return;
-        const M = mapNow();
-        if (M !== D.MAP.miasto && M !== D.MAP.karczma) return;
-        const ids = M === D.MAP.miasto ? MIASTO_IDS : KARCZMA_IDS;
+        const ids = idsOf(mapNow());
+        if (!ids) return;
         for (const id of ids) {
             const ev = evOf(id);
             if (!ev) continue;
@@ -242,7 +252,7 @@
     }
     const tickState = { sig: "" };
     function eventsTick() {
-        if (!has() || (mapNow() !== D.MAP.miasto && mapNow() !== D.MAP.karczma) || api.noTick) return;
+        if (!has() || !idsOf(mapNow()) || api.noTick) return;
         const s = S();
         const sig = mapNow() + "|" + [day(), Math.floor(hour() * 2), s.z, s.prace.kramy.length, s.prace.lampy.length, s.prace.beczki, s.prace.deski, s.prace.lampiony, s.przed.kradziez, s.przed.cien,
             s.zamkniecie, Object.keys(s.slady).length, s.zasadzka, s.marcel, s.otw, !!api.sala, !!api.wanda, !!api.crowd].join(",");

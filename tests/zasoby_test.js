@@ -40,7 +40,7 @@ kit.test({ port: 9551, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const at = n => base.order.indexOf(n);
     t.check("Zasoby_Data pod Okolice_Data i nad TownLife, Zasoby pod Okolice; obie gotowe",
         base.data && base.api && at("Okolice_Data") < at("Zasoby_Data") && at("Zasoby_Data") < at("TownLife") && at("Okolice") < at("Zasoby"), { data: base.data, api: base.api });
-    t.check("przedmioty 185-196 zainstalowane z nazwami, ikony 464-475", base.items.every(([i, n, ic]) => n && ic === 464 + (i - 185)), base.items);
+    t.check("przedmioty 185-196 zainstalowane z nazwami, ikony z PixelLab (688+)", base.items.every(([i, n, ic]) => n && ic >= 688), base.items);
     t.check("jedzenie: surowy krab psuje się w 24 h, pieczony krab 18 sił / 48 h, napar z kozłka daje premię „gleboki_sen”",
         JSON.stringify(base.food) === JSON.stringify([[24, 0, ""], [48, 18, ""], [240, 6, "gleboki_sen"]]) && base.life[0] === 24 && base.life[1] === 48, base.food);
     t.check("premie: użądlenie (prace x1.15, zła), głęboki sen", base.buffs[0] && base.buffs[1] === 1.15 && base.buffs[2], base.buffs);

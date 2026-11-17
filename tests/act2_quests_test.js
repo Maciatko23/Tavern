@@ -116,7 +116,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("the Lord (before his story talk): his truth kept - he talks on about the weather and the wax", /ciszy we dworze/.test(lord.text) && /Nic nie mówisz/.test(lord.text) && (await flags()).truthKept_lord, lord.text.slice(0, 240));
 
     // the tavern: Melia's topic, Borgar's topic at the bar
-    await t.go(1, 52, 31, 8);
+    await t.go(1, 38, 33, 8);
     await at(41, 12, 30);
     const trust0 = await J("TavernLife.trust('melia')");
     const mel = await talkTo("$gameMap.event(2)", ["Mam ci coś", "Powiedz prawdę.", "Bywaj"]);
@@ -136,6 +136,6 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const wb = await J("({ bust: TavernLife.OPPONENTS.wiesiek.bust, face: TavernLife.OPPONENTS.wiesiek.face, soltys: 'Soltys_Bust' })");
     await t.eval("window.__wb = ImageManager.loadPicture(TavernLife.OPPONENTS.wiesiek.bust); 0");
     await t.until("window.__wb.isReady()", 10, 100);
-    t.check("darts: Furman Wiesiek has his own bust (RTP People2_7, a weathered carter) - not People1_5, the Sołtys bust's face",
-        wb.bust === "People2_7" && wb.face[0] === "People2" && wb.face[1] === 6 && (await J("__wb.width > 0")), wb);
+    t.check("darts: Furman Wiesiek has his own bust (PixelLab Rzutki_Wiesiek_Bust, a weathered carter) - not People1_5, the Sołtys bust's face",
+        wb.bust === "Rzutki_Wiesiek_Bust" && wb.face[0] === "People2" && wb.face[1] === 6 && (await J("__wb.width > 0")), wb);
 });

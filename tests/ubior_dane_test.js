@@ -35,6 +35,16 @@ const PLAN_KEYS = {
     rece: ["rekawice_brazowe", "rekawice_szare"],
     plecy: ["plecak", "torba_plocienna", "torba_skorzana"]
 };
+// (2026-11-17, docs/ekwipunek/NOWE_80.md) + the new clothes 284-299 (the cloaks on the part "Płaszcz") and the felt boots of the armour 442 - in data/Items.json
+// already (tools/ekwipunek_nowy/instaluj.py), not in tools/ubior/staging
+const NOWE_KEYS = {
+    glowa: ["kapelusz_filcowy"], tors: ["kozuszek", "fartuch_kowalski", "zupan_sukienny", "koszula_przewiewna"], nogi: ["portki_latane"], stopy: ["chodaki", "buty_filcowe"],
+    pas: ["pas_ladownica", "pas_tragarza", "pas_okuty_braz"], rece: ["rekawiczki_welniane"], plecy: ["kosz_wiklinowy"],
+    plaszcz: ["plaszcz_lniany", "plaszcz_zwiadowcy", "plaszcz_futrzany", "plaszcz_zakonny"]
+};
+const ALL_KEYS = {};
+for (const m of Object.keys(PLAN_KEYS).concat(["plaszcz"])) ALL_KEYS[m] = (PLAN_KEYS[m] || []).concat(NOWE_KEYS[m] || []);
+const NOWE = 16;
 
 kit.test({ port: 9576, plugins: ["Equipment", "Ubior_Data", "Ubior_Sklepy"] }, async t => {
     t.check("Ubior_Data i Ubior_Sklepy w stronie", ["injected", "registered"].includes(t.plugins.Ubior_Data) && ["injected", "registered"].includes(t.plugins.Ubior_Sklepy), t.plugins);
@@ -71,14 +81,14 @@ kit.test({ port: 9576, plugins: ["Equipment", "Ubior_Data", "Ubior_Sklepy"] }, a
             if (it.meta.Ubior !== p.miejsce + "," + p.wzor) bad.push(p.id + ": notatka " + it.meta.Ubior);
             if (E.WEARABLE[p.id] !== D.MIEJSCA[p.miejsce].eq) bad.push(p.id + ": Equipment " + E.WEARABLE[p.id]);
             if (!E.SLOTS.find(s => s.id === D.MIEJSCA[p.miejsce].eq).items.includes(p.id)) bad.push(p.id + ": nie w SLOTS");
-            if (p.id >= 250 && (it.iconIndex !== 528 + p.id - 250 || it.name !== p.nazwa || it.price !== p.cena)) bad.push(p.id + ": ikona / nazwa / cena");
+            if (p.id >= 250 && ((p.id < 284 ? it.iconIndex !== 528 + p.id - 250 : !(it.iconIndex > 0)) || it.name !== p.nazwa || it.price !== p.cena)) bad.push(p.id + ": ikona / nazwa / cena");
             if (p.id >= 250 && !/<Weight:\\d+>/.test(it.note)) bad.push(p.id + ": waga"); }
         for (const k of Object.keys(D.SKLEPY)) for (const w of D.SKLEPY[k].sprzedaje.concat(D.SKLEPY[k].uzywane ? D.SKLEPY[k].uzywane.z : [])) {
             const p = D.poWzorze(w); if (!p || !p.cena || !$dataItems[p.id]) bad.push(k + ": " + w); }
         const keys = {}; for (const w of Object.keys(D.WZORY)) (keys[D.WZORY[w].miejsce] = keys[D.WZORY[w].miejsce] || []).push(w);
         return { bad, keys, n: D.PRZEDMIOTY.length, old: [113, 114, 171].map(id => E.WEARABLE[id]) }; })()`);
-    t.check("dane: każdy przedmiot ma poprawny wzór (rampa od ciemnego) i miejsce, notatkę, część w Equipment", data.bad.length === 0 && data.n === ITEMS.length + 3, data.bad.slice(0, 8));
-    t.check("klucze wzorów jak w PLAN.md (sekcja 5)", JSON.stringify(Object.keys(PLAN_KEYS).map(m => (data.keys[m] || []).slice().sort())) === JSON.stringify(Object.keys(PLAN_KEYS).map(m => PLAN_KEYS[m].slice().sort())), data.keys);
+    t.check("dane: każdy przedmiot ma poprawny wzór (rampa od ciemnego) i miejsce, notatkę, część w Equipment", data.bad.length === 0 && data.n === ITEMS.length + 3 + NOWE, data.bad.slice(0, 8));
+    t.check("klucze wzorów jak w PLAN.md (sekcja 5) i NOWE_80.md", JSON.stringify(Object.keys(ALL_KEYS).map(m => (data.keys[m] || []).slice().sort())) === JSON.stringify(Object.keys(ALL_KEYS).map(m => ALL_KEYS[m].slice().sort())), data.keys);
     t.check("stare 113 / 114 / 171 na swoich miejscach", JSON.stringify(data.old) === JSON.stringify(["feet", "back", "torso"]), data.old);
 
     // ---- a new game: the hero in rags
@@ -226,7 +236,7 @@ kit.test({ port: 9576, plugins: ["Equipment", "Ubior_Data", "Ubior_Sklepy"] }, a
         await t.key("O");
         const s1 = await t.json("SceneManager._scene.state()");
         const g1 = await t.gold();
-        t.check("okno: strzałka w dół i O kupuje ciemny kapelusz (12 G), napis w oknie", s0.rows.length === 2 && s1.index === 1 && g0 - g1 === 12 && /Kupione/.test(s1.msg), { s0, s1, g0, g1 });
+        t.check("okno: strzałka w dół i O kupuje ciemny kapelusz (12 G), napis w oknie", s0.rows.length === 6 && s1.index === 1 && g0 - g1 === 12 && /Kupione/.test(s1.msg), { s0, s1, g0, g1 });
         await t.key("ArrowRight");
         const s2 = await t.json("SceneManager._scene.state()");
         await t.shot(path.join(OUT, "sklep_przekupka_sprzedaz.png"));

@@ -281,7 +281,7 @@ class Test extends Report {
     // fade (false: the scene's own fade-in)
     async newGame(o = {}) {
         const story = !!o.story;
-        const map = o.map || (story ? 19 : 3), x = o.x !== undefined ? o.x : story ? 2 : 22, y = o.y !== undefined ? o.y : story ? 5 : 14, dir = o.dir || 2;
+        const map = o.map || (story ? 224 : 218), x = o.x !== undefined ? o.x : story ? 2 : 30, y = o.y !== undefined ? o.y : story ? 5 : 18, dir = o.dir || 2;   // (2026-11-15: the new world - the hut, grandpa's plot in Podgrodzie)
         this.settings = Object.assign({ calm: true, needsOff: true }, o);
         if (!(await this.eval("SceneManager._scene instanceof Scene_Title"))) await this.toTitle();
         // (the story's start set in the page: data/System.json starts in the tavern on purpose)

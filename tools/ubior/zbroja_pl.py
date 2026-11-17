@@ -21,6 +21,15 @@
 #      Ubior.js kładzie na górze włosów w każdej klatce jak dotychczasowe hełmy (pasek nad głową, obrót leżąc). Ubior.js: materiały
 #      inne niż natywny = przemalowanie palety (rampy MATERIALY, zakresy jasności z --palety).
 #
+#   5. (2026-11-17, cały ekwipunek) Jeden stan PixelLab na rodzinę kształtów (ZESTAWY), z każdego kilka rodzajów (RODZAJE, flagi tamże):
+#      rękawy rodzaju tułowia (przedramię - ta sama warstwa), rękawice (dłonie), wysokie cholewy (wys), nogawice od dołu tuniki, sam pas
+#      (pas: wąski pasek w wierszach pasa bazy, inny od odzieży wokół + sakwy pod nim), płaszcz (cały, poza sylwetką też: piksel nad ciałem
+#      bazy - przed ciałem, reszta alfa 252 - za ciałem, tylko na pustym; przeniesiony sztywno z pozą tułowia), tarcza (plama zmienionych
+#      pikseli przy lewej dłoni, przesuwana za tą dłonią w każdej klatce chodów i zamachów jedną ręką - SHIELD_SHEETS; przed / za ciałem
+#      wg tego, czy w stanie zasłania ciało bazy). Siedząc po turecku (CROSS_SHEETS, przodem / tyłem): nagolenniki i buty czystą fakturą
+#      (paint_crossed) zamiast odległości od podeszwy, która tam robiła paski. Stan dopasowany do bazy z karą za odejście od środka
+#      płótna (tyłem w pełnej zbroi przesunięcie o 3-4 px wygrywało o kilka pikseli).
+#
 #   python tools/ubior/zbroja_pl.py                         -> wszystkie rodzaje, wszystkie arkusze (+ hełmy)
 #   python tools/ubior/zbroja_pl.py --rodzaj skorznia Hero_Walk Hero_Axe
 #   python tools/ubior/zbroja_pl.py --podglad KATALOG       -> do tego podglądy (arkusz | z zbroją, x2)
@@ -64,6 +73,31 @@ ZESTAWY = {
     'napiersnik': dict(stan='7299a467-558a-4987-900d-e5c08221712e', nazwa='Napiersnik'),
     'zakonny': dict(stan='c2d16ef1-6fef-4949-8dad-27f0acdb86c8', nazwa='Helm zakonny'),
     'czepiec_kolczy': dict(stan='7d735706-f6f2-4418-872e-98ef2fe12d5c', nazwa='Czepiec kolczy'),
+    # (2026-11-17 pilot nowego ekwipunku: pełny komplet żelazny, bardziej szczegółowy - kolczuga do pół uda z pasem, spangenhelm z nosalem,
+    # karwasze, nagolenniki z nakolannikami, okute buty)
+    'zelazo2': dict(stan='b511763a-d8aa-4303-aa7e-a3ece2b38958', nazwa='Komplet zelazny'),
+    # (2026-11-17, cały ekwipunek w szczegółach PixelLab: jeden stan na rodzinę kształtów - materiały przemalowuje gra)
+    'skora2': dict(stan='493f36e6-43d2-4b68-b4ff-7378bb6bad33', nazwa='Komplet skorzany 2'),
+    'pikowany': dict(stan='b31b1571-359a-43f1-89a4-93dec2b94b21', nazwa='Komplet pikowany'),
+    'stalowy': dict(stan='076ebc7a-2486-4faa-9de7-6b13f02a88ae', nazwa='Komplet stalowy'),
+    'brygantyna': dict(stan='ad231375-0163-49cd-82a8-c2e86875b308', nazwa='Brygantyna'),
+    'chlop': dict(stan='2c2d1032-7c9e-4343-ae5c-21de023b3542', nazwa='Chlop'),
+    'mieszczanin': dict(stan='bcee0d34-ffaf-41a3-bd27-a31f8ba89dd1', nazwa='Mieszczanin'),
+    'odswietny': dict(stan='0a5a95cd-e287-402c-9974-e033696ef66d', nazwa='Odswietny'),
+    'kurta': dict(stan='a587a396-f33d-4457-b79e-316428fcfb1f', nazwa='Kurta'),
+    'plaszcz': dict(stan='2f060534-9bc7-47c7-830d-d72a9debede0', nazwa='Plaszcz'),
+    'tarcza_okragla': dict(stan='137aac76-d64f-4c30-a388-6a21309742aa', nazwa='Tarcza okragla'),
+    'tarcza_migdalowa': dict(stan='3c11902a-1cdd-469f-b66b-10a59952df2f', nazwa='Tarcza migdalowa'),
+    'tarcza_herbowa': dict(stan='90797e3a-4bee-40fa-8ad0-8ed764551bc9', nazwa='Tarcza herbowa'),
+    'puklerz': dict(stan='5e8fb09a-01d5-48b8-a8fb-67de300d39a6', nazwa='Puklerz'),
+    'plaszcz_futro': dict(stan='636334a0-7a27-48f8-9dfb-a5ff73bd44cc', nazwa='Plaszcz futrzany'),
+    'peleryna': dict(stan='b2bcb533-c2f5-4338-bbb6-ae3ef9800de2', nazwa='Peleryna'),
+    'tarcza_plecionka': dict(stan='45168efe-9d31-42ff-ac07-5d3aa1e3cc63', nazwa='Tarcza plecionka'),
+    'tarcza_krab': dict(stan='ed2082b8-84bb-41f2-899a-6e92fe5ebf9c', nazwa='Tarcza krab'),
+    'tarcza_pawez': dict(stan='34fc39f0-a789-46cd-abc9-91c66e917c47', nazwa='Pawez'),
+    'fartuch': dict(stan='634dd6eb-7cee-4c6d-8982-3f07509fc3b7', nazwa='Fartuch kowalski'),
+    'kozuszek': dict(stan='07d6558b-73ba-415c-acbd-ca8bc257bb7e', nazwa='Kozuszek'),
+    'zupan': dict(stan='785d5ec5-1a9f-44d1-904e-a6b95dd7c8f1', nazwa='Zupan'),
 }
 RODZAJE = {
     'kaptur': dict(zestaw='skora', grupa=G_HEAD, plik='Kaptur'),
@@ -83,9 +117,74 @@ RODZAJE = {
     # (hełm zakonny zasłania całą twarz: na twarzy wszystko, co nie jest skórą - też ciemna szczelina wzroku i otwory)
     'zakonny': dict(zestaw='zakonny', grupa=G_HEAD, plik='Zakonny', twarz=True),
     'czepiec_kolczy': dict(zestaw='czepiec_kolczy', grupa=G_HEAD, plik='CzepiecKolczy'),
+    # (pilot 2026-11-17: pliki z końcówką Z2 - gra ich jeszcze nie używa)
+    'kolczuga_z2': dict(zestaw='zelazo2', grupa=G_TORSO, plik='KolczugaZ2', spodnica=True),
+    'karwasze_z2': dict(zestaw='zelazo2', grupa=G_ARM, plik='KarwaszeZ2'),
+    'nagolenniki_z2': dict(zestaw='zelazo2', grupa=G_LEG, plik='NagolennikiZ2'),
+    'buty_z2': dict(zestaw='zelazo2', grupa=G_FOOT, plik='ButyZ2'),
+    'spangen_z2': dict(zestaw='zelazo2', grupa=G_HEAD, plik='SpangenZ2'),
+    # (2026-11-17: reszta rodzin kształtów. Flagi: rekawy - rodzaj tułowia ma długie rękawy (przedramię też jego warstwą); dlonie -
+    # rękawice z przedramieniem (dłonie też); tylko_dlonie - same rękawice; wys - stopy: ile wierszy nad ziemią (cholewy); spodnie - nogawice
+    # od dołu tuniki; pas - sam pas (wąski pasek tułowia + sakwy); plaszcz - płaszcz (cały, poza sylwetką też: przed / za ciałem);
+    # tarcza - tarcza na lewym przedramieniu)
+    'helm_skorzany': dict(zestaw='skora2', grupa=G_HEAD, plik='HelmSkorzany'),
+    'skorznia2': dict(zestaw='skora2', grupa=G_TORSO, plik='Skorznia2', spodnica=True),
+    'karwasze_skora2': dict(zestaw='skora2', grupa=G_ARM, plik='KarwaszeSkora'),
+    'nagolenniki_skora2': dict(zestaw='skora2', grupa=G_LEG, plik='NagolennikiSkora'),
+    'buty_skorzane': dict(zestaw='skora2', grupa=G_FOOT, plik='ButySkorzane', wys=8),
+    'czepiec_pikowany': dict(zestaw='pikowany', grupa=G_HEAD, plik='CzepiecPikowany'),
+    'przeszywanica2': dict(zestaw='pikowany', grupa=G_TORSO, plik='Przeszywanica2', spodnica=True, rekawy=True),
+    'rekawice_pikowane': dict(zestaw='pikowany', grupa=G_ARM, plik='RekawicePikowane', tylko_dlonie=True),
+    'nogawice_pikowane': dict(zestaw='pikowany', grupa=G_LEG, plik='NogawicePikowane'),
+    'buty_filcowe': dict(zestaw='pikowany', grupa=G_FOOT, plik='ButyFilcowe', wys=5),
+    'otwarty2': dict(zestaw='stalowy', grupa=G_HEAD, plik='Otwarty2'),
+    'napiersnik2': dict(zestaw='stalowy', grupa=G_TORSO, plik='Napiersnik2', spodnica=True),
+    'karwasze_plyta': dict(zestaw='stalowy', grupa=G_ARM, plik='KarwaszePlyta', dlonie=True),
+    'nagolenniki_plyta': dict(zestaw='stalowy', grupa=G_LEG, plik='NagolennikiPlyta'),
+    'buty_plyta': dict(zestaw='stalowy', grupa=G_FOOT, plik='ButyPlyta'),
+    'brygantyna': dict(zestaw='brygantyna', grupa=G_TORSO, plik='Brygantyna', spodnica=True, rekawy=True),
+    'rekawice_skorzane': dict(zestaw='brygantyna', grupa=G_ARM, plik='RekawiceSkorzane', tylko_dlonie=True),
+    'spodnie_welniane': dict(zestaw='brygantyna', grupa=G_LEG, plik='SpodnieWelniane', spodnie=True),
+    'buty_jezdzieckie': dict(zestaw='brygantyna', grupa=G_FOOT, plik='ButyJezdzieckie', wys=9),
+    'kapelusz': dict(zestaw='chlop', grupa=G_HEAD, plik='Kapelusz'),
+    'koszula': dict(zestaw='chlop', grupa=G_TORSO, plik='Koszula', bez_pasa=True),
+    'pas_skorzany': dict(zestaw='chlop', grupa=G_TORSO, plik='PasSkorzany', pas=True),
+    'spodnie_plocienne': dict(zestaw='chlop', grupa=G_LEG, plik='SpodniePlocienne', spodnie=True),
+    'lapcie': dict(zestaw='chlop', grupa=G_FOOT, plik='Lapcie', wys=5),
+    'czapka': dict(zestaw='mieszczanin', grupa=G_HEAD, plik='Czapka'),
+    'koszula_odswietna': dict(zestaw='odswietny', grupa=G_TORSO, plik='KoszulaOdswietna', rekawy=True, bez_pasa=True),
+    'chusta': dict(zestaw='odswietny', grupa=G_HEAD, plik='Chusta'),
+    'pas_sakiewka': dict(zestaw='odswietny', grupa=G_TORSO, plik='PasSakiewka', pas=True),
+    'kurta': dict(zestaw='kurta', grupa=G_TORSO, plik='Kurta', bez_pasa=True),
+    # (opaska i szeroki pas z tego stanu: ciemna opaska ginie we włosach, pas w kolorze kurty - nie do wycięcia; zostają rysowane / pas_skorzany)
+    'spodnie_skorzane': dict(zestaw='kurta', grupa=G_LEG, plik='SpodnieSkorzane', spodnie=True),
+    'plaszcz': dict(zestaw='plaszcz', grupa=G_TORSO, plik='Plaszcz', plaszcz=True),
+    'plaszcz_futro': dict(zestaw='plaszcz_futro', grupa=G_TORSO, plik='PlaszczFutro', plaszcz=True),
+    'peleryna': dict(zestaw='peleryna', grupa=G_TORSO, plik='Peleryna', plaszcz=True),
+    'tarcza_plecionka': dict(zestaw='tarcza_plecionka', grupa=G_TORSO, plik='TarczaPlecionka', tarcza=True, lustro_bokow=True),
+    'tarcza_krab': dict(zestaw='tarcza_krab', grupa=G_TORSO, plik='TarczaKrab', tarcza=True),
+    'tarcza_pawez': dict(zestaw='tarcza_pawez', grupa=G_TORSO, plik='TarczaPawez', tarcza=True),
+    'fartuch': dict(zestaw='fartuch', grupa=G_TORSO, plik='Fartuch', spodnica=True, dlugi=12),
+    'kozuszek': dict(zestaw='kozuszek', grupa=G_TORSO, plik='Kozuszek', spodnica=True),
+    'zupan': dict(zestaw='zupan', grupa=G_TORSO, plik='Zupan', spodnica=True, rekawy=True, dlugi=10),
+    'tarcza_okragla': dict(zestaw='tarcza_okragla', grupa=G_TORSO, plik='TarczaOkragla', tarcza=True),
+    'tarcza_migdalowa': dict(zestaw='tarcza_migdalowa', grupa=G_TORSO, plik='TarczaMigdalowa', tarcza=True),
+    'tarcza_herbowa': dict(zestaw='tarcza_herbowa', grupa=G_TORSO, plik='TarczaHerbowa', tarcza=True),
+    'puklerz': dict(zestaw='puklerz', grupa=G_TORSO, plik='TarczaPuklerz', tarcza=True),
+    'kaftan': dict(zestaw='mieszczanin', grupa=G_TORSO, plik='Kaftan', spodnica=True, rekawy=True),
 }
-WARSTWY = [r for r, R in RODZAJE.items() if R['grupa'] != G_HEAD]
+# (październikowe rodzaje zastąpione 2026-11-17 nowymi stanami - gra ich już nie używa, pliki usunięte z img/system, kopia w archiwum;
+# bez --rodzaj nie są budowane)
+STARE = ('skorznia', 'karwasze', 'kolczuga', 'nagolenniki', 'buty', 'czepiec', 'przeszywanica', 'nosal', 'otwarty', 'napiersnik')
+# (rękawy rodzaju tułowia: osobny rodzaj wewnętrzny - przedramiona bez dłoni, rysowany do tej samej warstwy)
+for _k, _R in list(RODZAJE.items()):
+    if _R.get('rekawy'):
+        RODZAJE[_k + '#rekaw'] = dict(zestaw=_R['zestaw'], grupa=G_ARM, plik=None, rekaw=True)
+# (rodzaje ze stanów, których jeszcze nie ma na dysku - pominięte)
+RODZAJE = {k: R for k, R in RODZAJE.items() if os.path.exists(os.path.join(PL, R['zestaw'], 'south.png'))}
+WARSTWY = [r for r, R in RODZAJE.items() if R['grupa'] != G_HEAD and R.get('plik') and not R.get('tarcza')]
 HELMY = [r for r, R in RODZAJE.items() if R['grupa'] == G_HEAD]
+TARCZE = [r for r, R in RODZAJE.items() if R.get('tarcza')]
 CHANGED = 34          # odległość koloru (suma |dR|+|dG|+|dB|), od której piksel stanu to "zmieniony" (zbroja)
 NEAR_SKIN = 30        # ... do najbliższego koloru skóry bazy: tyle - to wciąż skóra (twarz, dłoń narysowane od nowa)
 RING = {G_TORSO: 2, G_ARM: 1, G_LEG: 1, G_FOOT: 1}   # o ile px zbroja może wyjść poza sylwetkę klatki
@@ -185,6 +284,22 @@ def labelled_geodesic(m, seeds):
     return lab, d
 
 
+def flood_out(m):
+    """piksele osiągalne z rogu płótna poza m (4-sąsiedztwo): reszta poza m to dziury w m"""
+    H, W = m.shape
+    out = np.zeros((H, W), bool)
+    q = deque([(0, 0)])
+    out[0, 0] = True
+    while q:
+        y, x = q.popleft()
+        for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+            yy, xx = y + dy, x + dx
+            if 0 <= yy < H and 0 <= xx < W and not out[yy, xx] and not m[yy, xx]:
+                out[yy, xx] = True
+                q.append((yy, xx))
+    return out | m
+
+
 def dilate(m, r=1):
     out = m.copy()
     for _ in range(r):
@@ -246,6 +361,11 @@ class Pose:
             arm |= skin & (down < (tc - hc) @ -up)
             G[skin & arm] = G_ARM
             G[skin & ~arm] = G_LEG
+            # (skóra w poprzek tułowia - ręka zgięta przed piersią przy zamachu nad głową, brzuch spod uniesionej tuniki - bez dłoni,
+            # z koszulą nad sobą i koszulą / pasem / nogawkami pod sobą: tułów - zbroja i ubranie tułowia ją zakrywają, nie zostaje
+            # pasek gołej skóry między pancerzem a pasem)
+            if not neck:
+                G[self._belly(lab, skin, comp, hands)] = G_TORSO
         other = (lab > 0) & (G == 0) & (lab != KOD['narzedzie']) & (lab != KOD['inne'])
         if other.any():
             near, _ = nearest_fill(G, G > 0)
@@ -265,6 +385,31 @@ class Pose:
         self.ok = True
         self.arms = self._arms()
         self.legs = self._legs()
+
+    @staticmethod
+    def _belly(lab, skin, comp, hands):
+        H, W = lab.shape
+        out = np.zeros((H, W), bool)
+        shirt_k = lambda v: v in (KOD['koszula'], KOD['kontur_koszuli'])
+        under_k = lambda v: v in (KOD['koszula'], KOD['kontur_koszuli'], KOD['pas'], KOD['spodnie'])
+        sc, n = MK.components(skin)
+        for i in range(1, n + 1):
+            m = sc == i
+            if set(np.unique(comp[m]).tolist()) & hands:
+                continue
+            ys, xs = np.nonzero(m)
+            cols = np.unique(xs)
+            ok = 0
+            for x in cols:
+                y0, y1 = ys[xs == x].min(), ys[xs == x].max()
+                # (pierwszy piksel nad i pod skórą, z pominięciem konturu: koszula nad, koszula / pas / nogawka pod - kolano w dziurze
+                # nogawki ma nad sobą nogawkę)
+                up = next((lab[y, x] for y in range(y0 - 1, max(-1, y0 - 4), -1) if lab[y, x] != KOD['kontur']), 0)
+                dn = next((lab[y, x] for y in range(y1 + 1, min(H, y1 + 4)) if lab[y, x] != KOD['kontur']), 0)
+                ok += bool(shirt_k(up) and under_k(dn))
+            if ok >= max(2, 0.5 * len(cols)):
+                out |= m
+        return out
 
     def torso(self, use_belt):
         a = self.belt if use_belt else self.tc
@@ -353,8 +498,9 @@ def align_state(B, S):
     oy0 = int(yb.max() - ys.max())
     ox0 = int(round((xb.min() + xb.max()) / 2 - (xs.min() + xs.max()) / 2))
     best = None
-    for oy in range(oy0 - 4, oy0 + 5):
-        for ox in range(ox0 - 6, ox0 + 7):
+    py, px = PAD - (h - 64) // 2, PAD - (w - 64) // 2
+    for oy in range(min(oy0, py) - 4, max(oy0, py) + 5):
+        for ox in range(min(ox0, px) - 6, max(ox0, px) + 7):
             if ox < 0 or oy < 0 or ox + w > REF or oy + h > REF:
                 continue
             Sp = np.zeros((REF, REF, 4), np.uint8)
@@ -362,8 +508,11 @@ def align_state(B, S):
             both = ab & (Sp[:, :, 3] > 0)
             dist = np.abs(Bp[:, :, :3].astype(int) - Sp[:, :, :3].astype(int)).sum(2)
             score = int((both & (dist < 12)).sum())
-            if best is None or score > best[0]:
-                best = (score, ox, oy)
+            # (PixelLab kładzie postać zawsze w środku płótna: odejście od tego miejsca kosztuje - tyłem w pełnej zbroi zgodnych
+            # pikseli jest mało i przesunięcie o 3-4 px potrafi wygrać o kilka)
+            pen = 3 * (abs(ox - (PAD - (w - 64) // 2)) + abs(oy - (PAD - (h - 64) // 2)))
+            if best is None or score - pen > best[3]:
+                best = (score, ox, oy, score - pen)
     return best[1], best[2], best[0]
 
 
@@ -406,6 +555,25 @@ def near_palette(rgb, pal, lim):
     return d <= lim
 
 
+_cloak = {}
+
+
+def cloak_palette(zestaw):
+    """kolory płaszcza: zmienione piksele widoku z tyłu (płaszcz zasłania tam prawie wszystko) - po 3+ razy"""
+    if zestaw not in _cloak:
+        B, L = base_rotation('north')
+        S = load_rgba(os.path.join(PL, zestaw, 'north.png'))
+        ox, oy, _ = align_state(B, S)
+        Bp = np.zeros((REF, REF, 4), np.uint8); Bp[PAD:PAD + 64, PAD:PAD + 64] = B
+        Sp = np.zeros((REF, REF, 4), np.uint8); Sp[oy:oy + S.shape[0], ox:ox + S.shape[1]] = S
+        Lp = np.zeros((REF, REF), np.uint8); Lp[PAD:PAD + 64, PAD:PAD + 64] = L
+        dist = np.abs(Bp[:, :, :3].astype(int) - Sp[:, :, :3].astype(int)).sum(2)
+        ch = (Sp[:, :, 3] > 0) & ((Bp[:, :, 3] == 0) | (dist > CHANGED)) & ~np.isin(Lp, HAIR + FACE) & (luma(Sp[:, :, :3]) > OUT_DARK)
+        u, n = np.unique(Sp[ch][:, :3].astype(int), axis=0, return_counts=True)
+        _cloak[zestaw] = u[n >= 3]
+    return _cloak[zestaw]
+
+
 class Ref:
     """jeden kierunek jednego zestawu w płótnie odniesienia: baza B, maska L, poza P (grupy), stan S, zmienione C, grupa piksela stanu GS"""
 
@@ -439,6 +607,35 @@ class Ref:
         self.segs = {}
         self.keep = {}
 
+    def _shield_own(self, rodzaj):
+        """tarcza wycięta z obrazka tego widoku: największa spójna plama zmienionych pikseli poza głową i skórą (z kawałkami w jej
+        obrysie i dziurami w kolorze ciała bazy pod nią) i punkt zaczepienia - dłoń bazy najbliższa jej środkowi"""
+        key = '_tarcza_' + rodzaj
+        if key in self.__dict__:
+            return self.__dict__[key]
+        C, GS = self.C, self.GS
+        m = C & ~self.skin & (GS != G_HEAD) & (self.S[:, :, 3] > 0)
+        comp, n = MK.components(m)
+        seg = np.zeros((REF, REF), bool)
+        if n:
+            sizes = [int((comp == i).sum()) for i in range(1, n + 1)]
+            big = comp == (1 + int(np.argmax(sizes)))
+            yy, xx = np.nonzero(big)
+            box = np.zeros((REF, REF), bool)
+            box[yy.min():yy.max() + 1, xx.min():xx.max() + 1] = True
+            seg = big | (m & box)
+            seg |= ~flood_out(seg) & (self.S[:, :, 3] > 0)
+        hc, nh = MK.components(self.L == KOD['dlonie'])
+        c = centroid(seg) if seg.any() else np.array([REF / 2, REF / 2])
+        best = None
+        for i in range(1, nh + 1):
+            hcen = centroid(hc == i)
+            dd = math.hypot(*(hcen - c))
+            if best is None or dd < best[0]:
+                best = (dd, hcen)
+        self.__dict__[key] = dict(seg=seg, S=self.S, anchor=best[1] if best else c)
+        return self.__dict__[key]
+
     def plate(self, seg):
         """płyta na tunice: zmienione piksele tułowia domknięte (2 x 3 x 3) i z wypełnionymi dziurami - stal napierśnika bywa tak
         szara jak tunika, więc sama różnica dziurawi płytę"""
@@ -468,19 +665,106 @@ class Ref:
         ys = np.arange(REF)[:, None] * np.ones((1, REF), int)
         lower = (GS == G_LEG) | (GS == G_FOOT)
         seg = np.zeros((REF, REF), bool)
-        if gr == G_TORSO:
+        hand = dilate((self.L == KOD['dlonie']) & (GS == G_ARM), 2) & (GS == G_ARM)
+        boot_top = self.ground - R.get('wys', 3)
+        if R.get('pas'):
+            seg = self.belt(rodzaj)
+        elif R.get('tarcza'):
+            # (tarcza: wycięta w tym widoku - albo, gdy PixelLab dał ją z boku na prawej ręce, odbita z widoku z drugiej strony)
+            if R.get('lustro_bokow') and self.d in ('east', 'west'):
+                o = ref(self.zestaw, 'west' if self.d == 'east' else 'east')._shield_own(rodzaj)
+                seg, S_ = o['seg'][:, ::-1].copy(), o['S'][:, ::-1].copy()
+                anc = np.array([REF - 1 - o['anchor'][0], o['anchor'][1]])
+                # (punkt zaczepienia: dłoń bazy tego widoku najbliżej odbitego)
+                hc, nh = MK.components(self.L == KOD['dlonie'])
+                for i in range(1, nh + 1):
+                    hcen = centroid(hc == i)
+                    if math.hypot(*(hcen - anc)) <= 6:
+                        anc = hcen
+                        break
+                self.shield_anchor, self.shield_S = anc, S_
+            else:
+                o = self._shield_own(rodzaj)
+                seg, self.shield_anchor, self.shield_S = o['seg'], o['anchor'], o['S']
+            # przed ciałem przodem, w lewo (też ukosem w dół i w lewo-górę: lewa ręka po stronie widza), za ciałem tyłem i w prawo -
+            # PixelLab bywa tu niekonsekwentny, więc z kierunku, nie z obrazka
+            self.shield_front = self.d in ('south', 'south-west', 'west', 'north-west', 'south-east')
+        elif R.get('plaszcz'):
+            # (płaszcz: wszystko zmienione poza głową, skórą i dłońmi - też poza sylwetką bazy - w kolorach płaszcza: tunika i nogawice
+            # narysowane przez PixelLab od nowa to nie płaszcz - siedząc padłyby na kolana)
+            seg = C & ~self.skin & (GS != G_HEAD) & (self.S[:, :, 3] > 0)
+            pal = cloak_palette(self.zestaw)
+            ys_, xs_ = np.nonzero(seg)
+            keep = near_palette(self.S[ys_, xs_, :3].astype(int), pal, 24) | (luma(self.S[ys_, xs_, :3]) <= OUT_DARK)
+            seg = np.zeros((REF, REF), bool)
+            seg[ys_[keep], xs_[keep]] = True
+            # (okruchy w kolorach płaszcza na tunice i nogawkach - plamki poniżej 8 px - to nie płaszcz)
+            comp, n = MK.components(seg)
+            if n > 1:
+                sizes = np.bincount(comp.ravel())
+                sizes[0] = 0
+                seg &= sizes[comp] >= 8
+        elif gr == G_TORSO:
             seg = (GS == G_TORSO) & (self.S[:, :, 3] > 0)
             if R.get('na_tunice'):
                 self.keep[rodzaj] = seg & ~self.plate(seg)
             if R.get('spodnica'):
                 seg |= C & lower & (ys < self.greave_top) & ~self.skin
+            if R.get('dlugi'):
+                # (długi: dół do dlugi px nad ziemią - tylko w kolorach góry, nie nogawki narysowane od nowa)
+                top = seg & (ys < self.hem)
+                pal = np.unique(self.S[top][:, :3].astype(int), axis=0)
+                cand = C & lower & (ys >= self.greave_top) & (ys < self.ground - R['dlugi']) & ~self.skin
+                cy, cx = np.nonzero(cand)
+                ok = near_palette(self.S[cy, cx, :3].astype(int), pal, 20) if len(pal) else np.zeros(len(cy), bool)
+                seg[cy[ok], cx[ok]] = True
+            if R.get('bez_pasa'):
+                seg &= ~self.belt(rodzaj)
         elif gr == G_ARM:
             seg = C & (GS == G_ARM) & ~self.skin
+            if R.get('tylko_dlonie'):
+                seg &= hand
+            elif R.get('rekaw'):
+                seg &= self.L != KOD['dlonie']
         elif gr == G_LEG:
-            seg = C & lower & (ys >= self.greave_top) & (ys < self.boot_top) & ~self.skin
+            top = self.hem - 1 if R.get('spodnie') else self.greave_top
+            seg = C & lower & (ys >= top) & (ys < self.boot_top) & ~self.skin
         elif gr == G_FOOT:
-            seg = C & lower & (ys >= self.boot_top) & ~self.skin
+            seg = C & lower & (ys >= boot_top) & ~self.skin
         self.segs[rodzaj] = seg
+        return seg
+
+    def belt(self, rodzaj):
+        """sam pas: zmienione piksele w wierszach pasa bazy (+-1), ciemniejsze od odzieży wokół (skóra pasa, sprzączka), i to, co z nich
+        zwisa (sakwy, sakiewka - do 8 wierszy niżej, spójne z pasem)"""
+        C, GS, S = self.C, self.GS, self.S
+        pb = np.nonzero((self.L == KOD['pas']).sum(1) >= 2)[0]
+        if len(pb) < 2:
+            # (z boku pas bazy schowany za ręką: wiersze pasa z widoku z przodu - obroty mają tę samą skalę)
+            _, Ls = base_rotation('south')
+            pb = np.nonzero((Ls == KOD['pas']).sum(1) >= 2)[0] + PAD
+        if not len(pb):
+            return np.zeros((REF, REF), bool)
+        y0, y1 = int(pb.min()) - 1, int(pb.max()) + 1
+        ys = np.arange(REF)[:, None] * np.ones((1, REF), int)
+        body = (GS == G_TORSO) | (GS == G_LEG)
+        lum = luma(S[:, :, :3])
+        band = C & ~self.skin & body & (ys >= y0) & (ys <= y1) & (S[:, :, 3] > 0)
+        # (odzież nad i pod pasem: jej jasność; pas = to, co wyraźnie ciemniejsze albo szare jak sprzączka)
+        cloth = C & ~self.skin & (GS == G_TORSO) & ((ys == y0 - 2) | (ys == y0 - 3))
+        cl = float(np.median(lum[cloth])) if cloth.any() else 0.6
+        # (pas = wyraźnie ciemniejszy od odzieży wokół albo w innych kolorach - ćwieki, sprzączka na skórzanej kurcie)
+        cp = np.unique(S[cloth][:, :3].astype(int), axis=0) if cloth.any() else np.zeros((0, 3), int)
+        by, bx = np.nonzero(band)
+        other = ~near_palette(S[by, bx, :3].astype(int), cp, 45) if len(cp) else np.ones(len(by), bool)
+        seg = np.zeros((REF, REF), bool)
+        seg[by[other], bx[other]] = True
+        seg |= band & (lum < cl - 0.22)
+        hang = C & ~self.skin & (GS != G_HEAD) & (ys > y1) & (ys <= y1 + 8) & (lum < cl - 0.12) & (S[:, :, 3] > 0)
+        if hang.any():
+            comp, n = MK.components(hang | seg)
+            keep = set(np.unique(comp[seg]).tolist()) - {0}
+            seg = seg | (hang & np.isin(comp, list(keep)))
         return seg
 
     def helmet(self, rodzaj):
@@ -530,6 +814,14 @@ class Ref:
         dark = head & as_ & (faceB | hairB) & (luma(S[:, :, :3]) <= 0.10) & dilate(solid, 1) & ((out[:, :, 3] == 64) | (faceB & C))
         out[dark, :3] = S[dark, :3]
         out[dark, 3] = 255
+        # (okruchy oderwane od hełmu - pojedyncze ciemne piksele na twarzy i szyi: precz; zostaje największa plama i plamy od 6 px)
+        comp, n = MK.components(out[:, :, 3] > 0)
+        if n > 1:
+            sizes = np.bincount(comp.ravel())
+            sizes[0] = 0
+            big = int(np.argmax(sizes))
+            drop = (comp > 0) & (comp != big) & (sizes[comp] < 6)
+            out[drop] = 0
         # punkt zaczepienia = góra włosów bazy (jak Ubior.js cellsOf: pierwszy wiersz z 6+ pikselami włosów, środek 5 wierszy)
         rows = hairB.sum(1)
         top = int(np.nonzero(rows >= 6)[0][0]) if (rows >= 6).any() else int(np.nonzero(rows)[0][0])
@@ -711,8 +1003,11 @@ def paint_kind(rodzaj, img, lab, Pf, rf, out):
     if gr == G_TORSO:
         region = Gf == G_TORSO
         fill = region.copy()
-        if R.get('spodnica'):
+        if R.get('spodnica') or R.get('pas'):
             region = region | ((Gf == G_LEG) & (lab != KOD['stopy']))
+        if R.get('bez_pasa'):
+            region = region & (lab != KOD['pas'])
+            fill = fill & (lab != KOD['pas'])
         pairs.append((region, fill, ftor, rtor, parts[0], True))
     else:
         lst = Pf.arms if gr == G_ARM else Pf.legs
@@ -746,6 +1041,10 @@ def paint_kind(rodzaj, img, lab, Pf, rf, out):
         fr = img[ys, xs, :3]
         dark = luma(fr) <= OUT_DARK
         dofill = ~exact & ~isring & fill[ys, xs] & ~dark & band
+        if R.get('pas'):
+            # (sam pas: dopełnia tylko tuż przy pasie pozy stojącej - reszta tułowia zostaje)
+            ny, nx = e['near']
+            dofill &= (np.abs(ny[qy, qx] - qy) <= 1) & (np.abs(nx[qy, qx] - qx) <= 1) & inside
         # najbliższy piksel zbroi o tej samej parzystości (x, y) co źródło: wzór (kolczuga, nity) się nie rozmywa
         fy_, fx_ = qy.copy(), qx.copy()
         if dofill.any():
@@ -839,16 +1138,23 @@ def limb_ref(rf, rodzaj):
 def paint_limb(rodzaj, img, lab, Pf, rf, out):
     """przedramiona, łydki, stopy: każdy piksel kończyny w klatce bierze piksel zbroi pozy stojącej z tej samej odległości od
     podeszwy / dłoni (skala: długość kończyny) o najbliższej jasności względnej - cień i światło klatki wybierają odcień zbroi"""
-    gr = RODZAJE[rodzaj]['grupa']
+    RR = RODZAJE[rodzaj]
+    gr = RR['grupa']
     R = limb_ref(rf, rodzaj)
     if not R['any']:
         return 0
+    if gr in (G_LEG, G_FOOT) and crossed(Pf):
+        return paint_crossed(rodzaj, img, lab, Pf, rf, out)
     src, area = limb_sources(Pf, gr)
     if not src.any():
         return 0
     d = MK.geodesic(area, src)
     if gr == G_ARM:
-        area = area & (lab != KOD['dlonie'])
+        hands = lab == KOD['dlonie']
+        if RR.get('tylko_dlonie'):
+            area = area & dilate(hands, 1)
+        elif not RR.get('dlonie'):
+            area = area & ~hands
     ys, xs = np.nonzero(area & (d >= 0))
     if not len(ys):
         return 0
@@ -888,6 +1194,161 @@ def paint_limb(rodzaj, img, lab, Pf, rf, out):
             out[ys[i], xs[i], :3] = rcol[j]
             out[ys[i], xs[i], 3] = 255
             painted += 1
+    return painted
+
+
+HEADS = (KOD['wlosy'], KOD['kontur_wlosow'], KOD['twarz_szyja'], KOD['oczy_usta'])
+BEHIND = 252          # alfa piksela "za ciałem" (płaszcz, tarcza): gra kładzie go tylko tam, gdzie klatka jest pusta
+
+
+def paint_cloak(rodzaj, img, lab, Pf, rf, out):
+    """płaszcz: cały (też poza sylwetką) przeniesiony sztywno z pozą tułowia (oś pas -> głowa, dopasowanie jak zbroi tułowia); piksel,
+    który w pozie stojącej zasłania ciało bazy - przed ciałem (nie na głowie, dłoniach, broni), reszta za ciałem (tylko na pustym);
+    nie niżej niż stopy klatki; leżąc i w przewrocie - nic"""
+    if not Pf.ok or not rf.P.ok or Pf.up[1] > -0.6:
+        return 0
+    seg = rf.segment(rodzaj)
+    if not seg.any():
+        return 0
+    H, W = lab.shape
+    fi, ri = fit_torso(Pf, rf)
+    YY, XX = np.mgrid[0:H, 0:W]
+    pts = np.stack([XX.ravel(), YY.ravel()], 1).astype(float)
+    q, _ = limb_map(pts, fi, ri, True)
+    qx, qy = np.round(q[:, 0]).astype(int), np.round(q[:, 1]).astype(int)
+    ok = (qx >= 0) & (qy >= 0) & (qx < REF) & (qy < REF)
+    hit = np.zeros(len(pts), bool)
+    hit[ok] = seg[qy[ok], qx[ok]]
+    op = img[:, :, 3] > 0
+    yb = int(np.nonzero(op.any(1))[0].max())
+    painted = 0
+    for i in np.nonzero(hit)[0]:
+        x, y = int(pts[i, 0]), int(pts[i, 1])
+        if y > yb:
+            continue
+        front = rf.B[qy[i], qx[i], 3] > 0
+        L = lab[y, x]
+        if front and (L in HEADS or L == KOD['dlonie'] or L == KOD['narzedzie']):
+            continue
+        if not front and op[y, x]:
+            continue
+        out[y, x, :3] = rf.S[qy[i], qx[i], :3]
+        out[y, x, 3] = 255 if front else BEHIND
+        painted += 1
+    return painted
+
+
+def paint_shield(rodzaj, img, lab, Pf, rf, out):
+    """tarcza na lewym przedramieniu: obrazek z pozy stojącej przesunięty za dłonią (ta po tej samej stronie osi tułowia co dłoń, przy
+    której tarcza jest w pozie stojącej; bez dłoni w klatce - za tułowiem); przed ciałem w widokach, w których zasłania ciało bazy
+    (przodem, w lewo), za ciałem w pozostałych (tyłem, w prawo); nie na twarzy i broni; leżąc - nic"""
+    if not Pf.ok or not rf.P.ok or Pf.up[1] > -0.6:
+        return 0
+    seg = rf.segment(rodzaj)
+    if not seg.any():
+        return 0
+    H, W = lab.shape
+    anc = rf.shield_anchor
+    rt, ft = rf.P.torso(False), Pf.torso(False)
+    s_ref = rf.P.side(anc, rt)
+    hand = None
+    if Pf.arms:
+        cands = [(abs(Pf.side(a['a'], ft) - s_ref), a['a']) for a in Pf.arms]
+        dd, hp = min(cands, key=lambda c: c[0])
+        if dd <= 6:
+            hand = hp
+    if hand is None:
+        # (dłoni nie widać: punkt z pozy stojącej przez dopasowanie tułowia, odwrotnie)
+        fi, ri = fit_torso(Pf, rf)
+        s = min(1.33, max(0.75, ri['L'] / fi['L']))
+        d = anc - ri['a']
+        a, b = (d @ ri['u']) / s, d @ perp(ri['u'])
+        hand = fi['a'] + a * fi['u'] + b * perp(fi['u'])
+    sy, sx = np.nonzero(seg)
+    fy = np.round(sy - anc[1] + hand[1]).astype(int)
+    fx = np.round(sx - anc[0] + hand[0]).astype(int)
+    front = rf.shield_front
+    op = img[:, :, 3] > 0
+    painted = 0
+    for k in range(len(sy)):
+        y, x = fy[k], fx[k]
+        if y < 0 or x < 0 or y >= H or x >= W:
+            continue
+        L = lab[y, x]
+        if front and (L in HEADS or L == KOD['narzedzie']):
+            continue
+        if not front and op[y, x]:
+            continue
+        out[y, x, :3] = rf.shield_S[sy[k], sx[k], :3]
+        out[y, x, 3] = 255 if front else BEHIND
+        painted += 1
+    return painted
+
+
+# arkusze z tarczą na lewym przedramieniu (lewa ręka wolna: chód, bieg, skradanie, z pochodnią, zamachy jedną ręką); na pracy obiema
+# rękami, siedząc, leżąc - bez tarczy
+SHIELD_SHEETS = ('Hero_Walk', 'Hero_Run', 'Hero_Sneak', 'Hero_TorchWalk', 'Hero_TorchRun', 'Hero_TorchSneak', 'Hero_Club', 'Hero_Sword',
+                 'Hero_Punch', 'Hero_Torch', 'Hero_Spear')
+
+
+# skrzyżowane nogi (siedzi po turecku: przodem / tyłem) - arkusze, na których to bywa; CUR: arkusz i kierunek składanej klatki
+CROSS_SHEETS = ('Hero_Sit', 'Hero_Roast', 'Hero_Crouch', 'Hero_TorchCrouch')
+CUR = {'sheet': '', 'dir': 'S'}
+
+
+def crossed(Pf):
+    if CUR['sheet'].replace('BezBroni_', '') not in CROSS_SHEETS:
+        return False
+    zone = (Pf.G == G_LEG) | (Pf.G == G_FOOT)
+    if zone.sum() < 8:
+        return False
+    # (przodem / tyłem i siedząc: najniższy piksel nóg najwyżej 39 px pod środkiem głowy - stojąc 47-49, wstając 42+; szerokość nóg
+    # i stóp myli: patyk z mięsem na wysokości bioder, stopy tyłem schowane)
+    ys, xs = np.nonzero(zone)
+    return CUR['dir'] in ('S', 'N') and ys.max() - Pf.hc[1] <= 39
+
+
+def paint_crossed(rodzaj, img, lab, Pf, rf, out):
+    """nogi skrzyżowane (siedzi po turecku, przodem / tyłem): golenie leżą poziomo, stopy wystają po bokach. Odległość od podeszwy tu
+    zawodzi (cała skrzyżowana goleń to w masce "stopa": paski cholewy, rzemieni i nosków na przemian), więc czysta faktura: kolory głównej
+    rodziny zbroi wg jasności klatki, w tym samym udziale odcieni co w pozie stojącej; buty tylko na końcach (stopy po bokach, 4 dolne
+    wiersze), nagolenniki na reszcie; kontur klatki - najciemniejszy kolor zbroi"""
+    gr = RODZAJE[rodzaj]['grupa']
+    pal = palette(rodzaj)
+    H, W = lab.shape
+    zone = ((Pf.G == G_LEG) | (Pf.G == G_FOOT)) & (img[:, :, 3] > 0)
+    ys, xs = np.nonzero(zone)
+    x0, x1, y1 = int(xs.min()), int(xs.max()), int(ys.max())
+    w = x1 - x0 + 1
+    YY, XX = np.mgrid[0:H, 0:W]
+    ends = zone & ((XX <= x0 + 0.24 * w) | (XX >= x1 - 0.24 * w)) & (YY >= y1 - 3)
+    sel = ends if gr == G_FOOT else zone & ~ends
+    fams = sorted(pal['fam'].values(), key=lambda f: -f['count'])
+    f = fams[0]
+    if not f['count']:
+        return 0
+    rep = np.repeat(f['cols'], f['n'], axis=0)
+    rc = limb_ref(rf, rodzaj)['col']
+    darkest = rc[np.argmin(luma(rc))] if len(rc) else np.array([10, 9, 8])
+    py, px = np.nonzero(sel)
+    if not len(py):
+        return 0
+    t = tnorm(img[py, px, :3], lab[py, px])
+    body = np.nonzero(t >= 0)[0]
+    order = body[np.argsort(t[body], kind='stable')]
+    painted = 0
+    # (bez skrajnych odcieni: najjaśniejsze błyski i najgłębsze cienie zbroi zostają dla pozy stojącej - tu robiłyby paski)
+    lo_q, hi_q = 0.3, 0.7
+    for n, i in enumerate(order):
+        q = lo_q + (hi_q - lo_q) * (n + 0.5) / len(order)
+        c = rep[min(len(rep) - 1, int(q * len(rep)))]
+        out[py[i], px[i], :3] = c
+        out[py[i], px[i], 3] = 255
+        painted += 1
+    for i in np.nonzero(t < 0)[0]:
+        out[py[i], px[i], :3] = darkest
+        out[py[i], px[i], 3] = 255
+        painted += 1
     return painted
 
 
@@ -935,6 +1396,7 @@ def build_sheet(name, kinds, prev=None):
     t0 = time.time()
     for r in range(H // cell):
         d = DIR_OF[rows[r]]
+        CUR['sheet'], CUR['dir'] = name, rows[r]
         for c in range(W // cell):
             sl = (slice(r * cell, (r + 1) * cell), slice(c * cell, (c + 1) * cell))
             ci, cl = img[sl], lab[sl]
@@ -944,12 +1406,23 @@ def build_sheet(name, kinds, prev=None):
             if not Pf.ok:
                 continue
             for k in kinds:
-                rf = ref(RODZAJE[k]['zestaw'], d)
+                R = RODZAJE[k]
+                rf = ref(R['zestaw'], d)
                 o = np.zeros((cell, cell, 4), np.uint8)
-                paint_kind(k, ci, cl, Pf, rf, o)
+                if R.get('plaszcz'):
+                    paint_cloak(k, ci, cl, Pf, rf, o)
+                elif R.get('tarcza'):
+                    if name.replace('BezBroni_', '') in SHIELD_SHEETS:
+                        paint_shield(k, ci, cl, Pf, rf, o)
+                else:
+                    paint_kind(k, ci, cl, Pf, rf, o)
+                    if R.get('rekawy'):
+                        paint_kind(k + '#rekaw', ci, cl, Pf, rf, o)
                 outline_fix(o, ci)
                 outs[k][sl] = o
     for k in kinds:
+        if RODZAJE[k].get('tarcza') and name.replace('BezBroni_', '') not in SHIELD_SHEETS:
+            continue
         path = os.path.join(SYS, 'Ubior_PL_%s_%s.png' % (RODZAJE[k]['plik'], name))
         Image.fromarray(outs[k], 'RGBA').save(path, optimize=True)
     print('%-24s %s  %.1f s' % (name, ' '.join(kinds), time.time() - t0), flush=True)
@@ -1001,19 +1474,23 @@ def build_helmet(rodzaj):
     return dict(w=fw, h=fh, anchor=[AX, AY])
 
 
-def palety():
+def palety(only=None):
     out = {}
     for r in RODZAJE:
+        if not RODZAJE[r].get('plik') or (only and r not in only):
+            continue
         p = palette(r)
         out[r] = {k: dict(lo=round(f['lo'], 3), hi=round(f['hi'], 3), n=f['count'], kolorow=len(f['cols'])) for k, f in p['fam'].items()}
         print(r, json.dumps(out[r]))
     return out
 
 
-def ref_preview(out_dir):
+def ref_preview(out_dir, only=None):
     os.makedirs(out_dir, exist_ok=True)
     cols = {G_HEAD: (220, 60, 60), G_TORSO: (60, 160, 230), G_ARM: (240, 200, 40), G_LEG: (80, 200, 90), G_FOOT: (200, 90, 220)}
     for zestaw in ZESTAWY:
+        if (only and zestaw not in only) or not os.path.exists(os.path.join(PL, zestaw, 'south.png')):
+            continue
         rows = []
         for d in DIRS:
             rf = ref(zestaw, d)
@@ -1051,22 +1528,23 @@ def ref_preview(out_dir):
 
 def main(argv):
     if '--odniesienie' in argv:
-        ref_preview(argv[argv.index('--odniesienie') + 1])
+        i = argv.index('--odniesienie')
+        ref_preview(argv[i + 1], argv[i + 2].split(',') if len(argv) > i + 2 else None)
         return
     if '--palety' in argv:
-        palety()
+        palety(argv[argv.index('--palety') + 1].split(',') if len(argv) > argv.index('--palety') + 1 else None)
         return
     prev = None
     if '--podglad' in argv:
         i = argv.index('--podglad'); prev = argv[i + 1]; argv = argv[:i] + argv[i + 2:]
-    kinds = list(RODZAJE)
+    kinds = [k for k in RODZAJE if RODZAJE[k].get('plik') and k not in STARE]
     if '--rodzaj' in argv:
         i = argv.index('--rodzaj'); kinds = argv[i + 1].split(','); argv = argv[:i] + argv[i + 2:]
     names = argv or all_sheets()
     for k in kinds:
         if k in HELMY:
             build_helmet(k)
-    lay = [k for k in kinds if k in WARSTWY]
+    lay = [k for k in kinds if k in WARSTWY or k in TARCZE]
     if lay:
         for name in names:
             build_sheet(name, lay, prev)

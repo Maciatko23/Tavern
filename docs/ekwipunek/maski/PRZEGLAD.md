@@ -7,34 +7,34 @@ problem z kapeluszem.
 
 | arkusz | klatki | poprawki ręczne | kapelusz schowany | problemy kapelusza | składanie (ms) |
 |---|---:|---:|---|---|---:|
-| Hero_Walk | 72 | 0 | - | 0 | 3.9-8.6 |
-| Hero_Run | 72 | 0 | - | 0 | 2.4-6.1 |
-| Hero_Sneak | 56 | 0 | - | 0 | 1.2-4.2 |
-| Hero_TorchWalk | 72 | 0 | - | 0 | 2.3-6.3 |
-| Hero_TorchRun | 72 | 0 | - | 0 | 2.6-5.8 |
-| Hero_TorchSneak | 56 | 0 | - | 0 | 1.7-4.1 |
-| Hero_Axe | 68 | 2 | - | 0 | 4.4-12.8 |
-| Hero_AxeSide | 68 | 0 | - | 0 | 3.2-14.3 |
-| Hero_Pick | 68 | 0 | - | 0 | 3.2-17.7 |
-| Hero_Shovel | 68 | 0 | - | 0 | 3.6-12.2 |
-| Hero_Rake | 68 | 0 | - | 1 | 3.2-14.7 |
-| Hero_Hoe | 68 | 2 | - | 0 | 3.3-13.0 |
-| Hero_Hammer | 68 | 0 | - | 0 | 3.6-12.0 |
-| Hero_Rod | 68 | 0 | - | 0 | 3.0-10.8 |
-| Hero_Sling | 68 | 0 | - | 0 | 3.9-11.6 |
-| Hero_Bow | 68 | 0 | - | 0 | 3.8-10.9 |
-| Hero_Spear | 68 | 0 | - | 2 | 3.3-9.4 |
-| Hero_Club | 68 | 0 | - | 1 | 4.1-12.8 |
-| Hero_Punch | 68 | 0 | - | 0 | 3.0-9.0 |
-| Hero_Crouch | 132 | 0 | - | 0 | 6.7-13.8 |
-| Hero_Sit | 132 | 0 | - | 0 | 6.9-18.4 |
-| Hero_Roast | 132 | 0 | - | 0 | 6.7-19.0 |
-| Hero_LieDown | 132 | 0 | w0: 12-20; w1: 13-19; w2: 13-19; w3: 10-22 | 0 | 6.3-30.2 |
-| Hero_Roll | 52 | 0 | w0: 5-6; w1: 5-7; w2: 5-7; w3: 5-6 | 0 | 2.6-12.8 |
-| Hero_Torch | 68 | 0 | - | 0 | 3.2-14.1 |
-| Hero_TorchCrouch | 132 | 0 | - | 0 | 6.0-24.2 |
-| Hero_Net | 68 | 8 | - | 2 | 3.5-11.1 |
-| Hero_Sword | 68 | 1 | - | 0 | 3.5-8.9 |
+| Hero_Walk | 72 | 0 | - | 0 | 4.4-15.3 |
+| Hero_Run | 72 | 0 | - | 0 | 1.9-8.8 |
+| Hero_Sneak | 56 | 0 | - | 0 | 1.2-5.5 |
+| Hero_TorchWalk | 72 | 0 | - | 0 | 2.6-7.9 |
+| Hero_TorchRun | 72 | 0 | - | 0 | 1.9-6.2 |
+| Hero_TorchSneak | 56 | 0 | - | 0 | 1.6-4.9 |
+| Hero_Axe | 68 | 2 | - | 0 | 3.8-12.6 |
+| Hero_AxeSide | 68 | 0 | - | 0 | 3.9-12.0 |
+| Hero_Pick | 68 | 0 | - | 0 | 3.4-22.4 |
+| Hero_Shovel | 68 | 0 | - | 0 | 3.4-12.8 |
+| Hero_Rake | 68 | 0 | - | 1 | 4.2-13.4 |
+| Hero_Hoe | 68 | 2 | - | 0 | 3.6-8.9 |
+| Hero_Hammer | 68 | 0 | - | 0 | 4.0-10.9 |
+| Hero_Rod | 68 | 0 | - | 0 | 3.5-9.8 |
+| Hero_Sling | 68 | 0 | - | 0 | 3.7-9.7 |
+| Hero_Bow | 68 | 0 | - | 0 | 3.2-10.0 |
+| Hero_Spear | 68 | 0 | - | 2 | 3.2-10.4 |
+| Hero_Club | 68 | 0 | - | 1 | 3.8-12.1 |
+| Hero_Punch | 68 | 0 | - | 0 | 3.8-12.3 |
+| Hero_Crouch | 132 | 0 | - | 0 | 6.6-18.7 |
+| Hero_Sit | 132 | 0 | - | 0 | 7.3-17.7 |
+| Hero_Roast | 132 | 0 | - | 0 | 6.3-14.4 |
+| Hero_LieDown | 132 | 0 | w0: 12-20; w1: 13-19; w2: 13-19; w3: 10-22 | 0 | 6.0-23.8 |
+| Hero_Roll | 52 | 0 | w0: 5-6; w1: 5-7; w2: 5-7; w3: 5-6 | 0 | 3.4-10.1 |
+| Hero_Torch | 68 | 0 | - | 0 | 4.3-8.8 |
+| Hero_TorchCrouch | 132 | 0 | - | 0 | 6.0-17.1 |
+| Hero_Net | 68 | 8 | - | 2 | 3.6-10.2 |
+| Hero_Sword | 68 | 1 | - | 0 | 4.0-8.6 |
 
 ## Uwagi i problemy kapelusza (poza schowanymi)
 

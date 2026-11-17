@@ -491,10 +491,18 @@
             Object.assign(s, { plan: "", gdzie: "", noc: 0, zwloka: 0, wskazal: 0, kubek: 0, belzaNie: 0, koniec: "", szukala: 0, los: -1, przysiega: 0 });
             if (L && L.setGone) L.setGone(KTO.tymon, false);
             trzymaj(KTO.szczerba, false);
+            // (an ending reached before - the guard, the camp, smuggled, given up, taken - is undone: a jump starts the matter again)
+            const fl = w.flags();
+            for (const k of ["tymonGarnizon", "tymonOboz", "tymonPrzemyt", "tymonBaltazar", "tymonRoch", "tymonWydany", "tymonZabrany"]) delete fl[k];
             // (both stay at least three days from now - a jump never lands on their leaving)
             const q = TQ(), prom = d => { for (let x = d; x < d + 6; x++) if (q && q.isFerry ? q.isFerry(x) : (x - 1) % 3 === 0) return x; return d; };
             const zostan = key => { const e = wpis(key); if (e && e.do < day() + 3) Object.assign(e, { do: prom(day() + 3), zostal: 0 }); };
-            if (!wpis(KTO.tymon)) p.przyplyn(KTO.tymon);
+            // (his room 5 is the night's door: a guest in it sails - the floor has five guest rooms since 2026-11-16, a jump may find all taken)
+            if (!wpis(KTO.tymon)) {
+                const ob = (p.stan && p.stan().obecni) || {};
+                for (const [k, e] of Object.entries(ob)) if (e && e.pokoj === D.DRZWI.pokoj && k !== KTO.tymon && k !== KTO.szczerba && p.odplyn) p.odplyn(k);
+                p.przyplyn(KTO.tymon);
+            }
             zostan(KTO.tymon);
             if (k >= 2) {
                 if (!wpis(KTO.szczerba)) p.przyplyn(KTO.szczerba);

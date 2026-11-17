@@ -125,7 +125,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     t.check("po wczytaniu widać go i można go zaczepić", tkL);
     // poza wieczorem pusto; drzwi osiągalne
     await t.eval("GoscieSala.layOut(); 0");
-    const door = await t.json("$gameMap.checkPassage(14, 52, 0x0f)");
+    const door = await t.json("$gameMap.checkPassage(14, 39, 0x0f)");
     t.check("drzwi wejściowe gości to przechodnia kratka", door);
     // koszt
     // wielu naraz: wstają, idą, wracają; nigdy dwóch na jednym krześle, nikt nie stoi na ścianie
@@ -154,7 +154,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     await t.setHour(19.0); await t.frames(30);
     const walkers = (await list()).filter(x => x.state === "walk");
     t.check("o 19 ci, których godzina właśnie mija, idą od drzwi", walkers.length > 0 && walkers.length <= 5, (await list()).map(x => x.state).join());
-    if (process.env.ZRZUTY) { await t.eval("$gamePlayer.locate(14, 45); 0"); await t.frames(60); await t.shot(process.env.ZRZUTY + "/wchodza.png"); }
+    if (process.env.ZRZUTY) { await t.eval("$gamePlayer.locate(14, 32); 0"); await t.frames(60); await t.shot(process.env.ZRZUTY + "/wchodza.png"); }
     await t.until(`GoscieSala.stats().walking === 0 && GoscieSala.stats().out < 23`, 60);
     t.check("doszli i siedzą", (await t.json("GoscieSala.stats()")).sit > 5, await t.json("GoscieSala.stats()"));
     // noc: wychodzą drzwiami
@@ -167,7 +167,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     const kowalPic = `(() => { const k = SceneManager._scene._spriteset._tilemap.children.find(s => s.visible !== false && s.bitmap && /Siedzi_Kowal/.test(s.bitmap.url || "")); return k ? { z: k.z, y: k.y } : null; })()`;
     await t.until(`!!(${kowalPic})`, 20);
     const kw1 = await t.json(kowalPic);
-    await t.eval(`$gamePlayer.locate(7, 32); $gamePlayer.setDirection(2); 0`); await t.frames(20);
+    await t.eval(`$gamePlayer.locate(7, 19); $gamePlayer.setDirection(2); 0`); await t.frames(20);
     const order = await t.json(`(() => { const set = SceneManager._scene._spriteset, kids = set._tilemap.children, pl = set._characterSprites.find(s => s._character === $gamePlayer), k = kids.find(s => s.visible !== false && s.bitmap && /Siedzi_Kowal/.test(s.bitmap.url || "")); return { pl: kids.indexOf(pl), k: kids.indexOf(k) }; })()`);
     t.check("bohater kratkę nad siedzącym jest za nim", kw1 && kw1.z === 3 && order.pl < order.k, { kw1, order });
     await t.setHour(22.7); await t.frames(30);
@@ -178,7 +178,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     await t.setHour(20); await t.eval("GoscieSala.layOut(); 0"); await t.frames(30);
     // nikt nie znika: mieszkaniec wstaje i wychodzi drzwiami; przychodzi od drzwi i siada (zegar idzie, bez skoku)
     const kw = `(() => { const e = $gameMap.event(910); return { x: e.x, y: e.y, hid: e.isTransparent(), mv: e.isMoving() }; })()`;
-    await t.eval(`$gamePlayer.locate(14, 37); 0`);
+    await t.eval(`$gamePlayer.locate(14, 24); 0`);
     await t.setHour(22.3); await t.frames(30);
     await t.until(`!!(${kowalPic})`, 20);
     t.check("kowal o 22:20 siedzi na swoim krześle", (await t.json(kw)).x === 7 && !(await t.json(kw)).hid, await t.json(kw));
@@ -187,16 +187,16 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     for (let k = 0; k < 240 && !last.hid; k++) { await t.frames(15); last = await t.json(kw); path.push([last.x, last.y]); }
     const cells = new Set(path.map(c => c.join())).size;
     t.check("o 22:30 wstaje i idzie przez salę (nie znika na krześle)", cells >= 15, path.length + " pomiarów, kratek " + cells);
-    t.check("znika dopiero w drzwiach", last.hid && last.y === 54 && last.x >= 13 && last.x <= 15, last);
+    t.check("znika dopiero w drzwiach", last.hid && last.y === 41 && last.x >= 13 && last.x <= 15, last);
     await t.setHour(18.85); await t.frames(30);
     t.check("przed jego godziną go nie ma", (await t.json(kw)).hid, await t.json(kw));
     await t.setHour(19.02); await t.frames(4);
     const in0 = await t.json(kw);
-    t.check("o 19 wchodzi drzwiami", !in0.hid && in0.y >= 53, in0);
+    t.check("o 19 wchodzi drzwiami", !in0.hid && in0.y >= 40, in0);
     let sat = false;
     for (let k = 0; k < 240 && !sat; k++) { await t.frames(15); sat = !!(await t.json(kowalPic)); }
     const in1 = await t.json(kw);
-    t.check("doszedł i siedzi na swoim krześle", sat && in1.x === 7 && in1.y === 33 && !in1.hid, in1);
+    t.check("doszedł i siedzi na swoim krześle", sat && in1.x === 7 && in1.y === 20 && !in1.hid, in1);
     // u siebie w domu tak samo: wchodzi drzwiami (Map105, kowal)
     await t.setHour(22.3);
     await t.go(105, 7, 8, 8); await t.frames(20);
@@ -207,7 +207,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     await t.frames(360);
     const h1 = await t.json(kw), spot = await t.json(`(() => { const d = $dataMap.events.find(e => e && /^Miejsce:\\s*kowal_wnetrze/i.test(e.name)); return [d.x, d.y]; })()`);
     t.check("doszedł na swoje miejsce w domu", h1.x === spot[0] && h1.y === spot[1], { h1, spot });
-    await t.go(1, 14, 37, 8); await t.setHour(20); await t.eval("GoscieSala.layOut(); 0"); await t.frames(30);
+    await t.go(1, 14, 24, 8); await t.setHour(20); await t.eval("GoscieSala.layOut(); 0"); await t.frames(30);
     // siadanie: na stołek wchodzi swoją normalną postacią i dopiero tam przechodzi w siedzenie; wstaje na stołku i schodzi z niego
     const klatka = id => `(() => { const g = GoscieSala.guests().find(x => x.id === ${id}), set = SceneManager._scene._spriteset, p = set._salaPics && set._salaPics.get(${id}), e = $gameMap.event(${id}); return { st: g.state, x: e.x, y: e.y, seat: g.seat, pic: !!(p && p.sp.visible), row: p ? Math.floor(p.sp._frame.y / 88) : -1, mv: e.isMoving() }; })()`;
     const sampl = async (id, until, n) => { const out = []; for (let k = 0; k < n; k++) { const s = await t.json(klatka(id)); out.push(s); if (s.st === until) break; await t.frames(4); } return out; };

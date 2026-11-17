@@ -1093,6 +1093,25 @@
             else if (!want && on && !playerInside(room)) $gameSelfSwitches.setValue(key, false);
         }
     }
+    // (2026-11-16, the user: „po wyjściu ze schodów bohater pojawia się na górze, tam skąd przyszedł”) the tavern's stairs put him at the top
+    // of the flight he came out of, facing down. A player still holding "up" would walk straight back into the stairs: after such an
+    // arrival "up" does nothing until it is let go once.
+    const STAIR_MAPS = [1, 25, 26];
+    let stairHold = false;
+    const _tlPerformTransfer = Game_Player.prototype.performTransfer;
+    Game_Player.prototype.performTransfer = function() {
+        const was = this.isTransferring() && $gameMap ? $gameMap.mapId() : 0, to = this._newMapId, y = this._newY;
+        _tlPerformTransfer.call(this);
+        if (was && was !== to && STAIR_MAPS.includes(was) && STAIR_MAPS.includes(to) && y === 35) stairHold = true;
+    };
+    const _tlSignY = Input._signY;
+    Input._signY = function() {
+        if (stairHold) {
+            if (!this.isPressed("up")) stairHold = false;
+            else return this.isPressed("down") ? 1 : 0;
+        }
+        return _tlSignY.call(this);
+    };
     // the gilded gate of the Apartamenty (<Tavern:gate minrep=80>): opens for good once the reputation is there (self switch A), with a
     // welcome the first time he is by it
     const gateKey = (mapId, id) => mapId + ":" + id;
@@ -1113,7 +1132,9 @@
             const k = gateKey(here, g.ev.eventId()), key = [here, g.ev.eventId(), "A"];
             if (!s.gates[k] && rep >= num(g.a.minrep, 80)) s.gates[k] = "new";
             // (a pass: open while it lasts, shut again after - the gate's own page)
-            if (!s.gates[k]) { if (!!$gameSelfSwitches.value(key) !== pass) $gameSelfSwitches.setValue(key, pass); continue; }
+            // (2026-11-16: the doorman guards the way UP only - whoever stands on the flight above him comes down freely)
+            const open = pass || $gamePlayer.y <= g.ev.y;
+            if (!s.gates[k]) { if (!!$gameSelfSwitches.value(key) !== open) $gameSelfSwitches.setValue(key, open); continue; }
             if (!$gameSelfSwitches.value(key)) $gameSelfSwitches.setValue(key, true);
             if (s.gates[k] === "new") { s.gates[k] = true; welcomeGate(g.ev); }
         }
@@ -1741,7 +1762,7 @@
     // The layout a game knows: the state's field layout (none: older than the rebuild) - it was $gameSystem._tavernLayout, the name
     // leads there
     // ------------------------------------------------------------------
-    const TAVERN_LAYOUT = 3, ENTRANCE = [14, 53, 8];
+    const TAVERN_LAYOUT = 3, ENTRANCE = [14, 40, 8];   // (2026-11-16: the smaller ground floor - the hall 13 rows higher)
     T.state.oldFields("tavernLife", { _tavernLayout: "layout" });
     const _DataManager_setupNewGame = DataManager.setupNewGame;
     DataManager.setupNewGame = function() {

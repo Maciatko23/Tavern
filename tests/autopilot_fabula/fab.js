@@ -41,7 +41,10 @@
     const onMapReady = () => SceneManager._scene instanceof Scene_Map && SceneManager._scene._started && !SceneManager.isSceneChanging() && !$gamePlayer.isTransferring();
     const mapName = id => { const G = FAB.graph; return (G && G.names && G.names[id]) || ($dataMapInfos[id] && $dataMapInfos[id].name) || ("mapa " + id); };
     const dist = (ax, ay, bx, by) => Math.hypot(ax - bx, ay - by);
-    const MAP = { house: 19, yard: 20, field: 3, town: 8, tavern: 1, manor: 24, cellar: 9 };
+    // (2026-11-16 the new world: grandpa's hut Map224 in Podgrodzie Map218 - his plot is on it -, Kruczogród Map220, the manor Map221;
+    // the maps meet edge to edge: graf.js gives the seams as exits "seam")
+    const MAP = { house: 224, yard: 218, field: 218, town: 220, tavern: 1, manor: 221, cellar: 9 };
+    const KETTLE = /Palenisko z kotłem|Kocioł/i, BED = /^Posłanie \(sen\)/, COUNTER = [14, 17];
     const SOUP = 131, ROTTEN = 122;
     const KEEP = 30;          // złoto, które zostaje w sakiewce przy spłatach (jedzenie w tawernie)
     const PAY_AT = 300;       // od tylu złota idzie do dworu z ratą (mniej do stracenia, gdy obrabują w nocy na drodze)
@@ -305,6 +308,20 @@
         if (set.size >= 600) return false;
         const near = (x, y) => [[0, 0], [0, 1], [0, -1], [1, 0], [-1, 0]].some(([dx, dy]) => set.has((y + dy) * W + x + dx));
         if (liveExits().some(x => x.to !== from && near(x.x, x.y))) return false;
+        // (2026-11-17: the tavern's store behind the loose brick opens into the kitchen, whose doormat 14,10 leads to the hall 14,14 - a
+        // door within the same map is the way out of such a "room", not a fault: he walks out through it like a player)
+        const inner = $gameMap.events().find(e => { const pg = e.page(); return pg && near(e.x, e.y) && pg.list.some(c => c.code === 201 && c.parameters[0] === 0 && c.parameters[1] === mapId()); });
+        if (inner) {
+            const trig = inner.page().trigger, name = (inner.event() && inner.event().name) || String(inner.eventId());
+            say("wychodzę przez: " + name + " (" + inner.x + "," + inner.y + ")");
+            if (yield* approach([[inner.x, inner.y]])) {
+                if (trig === 0) yield* L.press("ok");
+                else { for (let n = 0; n < 90 && !P().isTransferring() && !busy(); n++) { L.setMove(L.keysToward(inner.x - P()._realX, inner.y - P()._realY)); yield; } L.setMove([]); }
+                for (let n = 0; n < 180 && (P().isTransferring() || $gameMap.isEventRunning()); n++) yield;
+                yield* L.wait(10);
+                if (regionFrom(P().x, P().y, 600).size >= 600) return true;
+            }
+        }
         // the main part of the map: the region by an exit that does not lead back
         let main = null;
         for (const x of liveExits().filter(x => x.to !== from)) {
@@ -365,6 +382,8 @@
             out.push({ m: here, id: e.eventId(), x: e.x, y: e.y, trig: pg.trigger, prio: pg.priorityType, to: c.parameters[1], tx: c.parameters[2], ty: c.parameters[3],
                 br: c.indent > 0 ? 1 : 0, name: e.event().name || "" });
         }
+        // (the new world's seams of this map: only the edge cells one can stand on)
+        for (const x of byMap(here)) if (x.trig === "seam" && $gameMap.isValid(x.x, x.y) && [2, 4, 6, 8].some(d => $gameMap.isPassable(x.x, x.y, d))) out.push(x);
         return out;
     }
     const blockKey = x => x.m + ":" + x.id;
@@ -438,7 +457,13 @@
     function* takeExit(x) {
         const from = mapId();
         yield* combatOff();
-        if (x.trig === 0) {   // a door on the action button (the loose brick...)
+        if (x.trig === "seam") {   // (the new world: to the edge cell, then on off the edge - the neighbour map takes over)
+            const spot = yield* approach([[x.x, x.y]]);
+            if (!spot) { say("nie dojdę do krawędzi (" + x.x + "," + x.y + ")"); FAB.blocked[blockKey(x)] = now() + 0.5; return false; }
+            const key = { E: "right", W: "left", N: "up", S: "down" }[x.side];
+            for (let n = 0; n < 240 && mapId() === from && !P().isTransferring() && !busy(); n++) { L.setMove([key]); yield; }
+            L.setMove([]);
+        } else if (x.trig === 0) {   // a door on the action button (the loose brick...)
             yield* talkTo(x.id, { tiles: [[x.x, x.y]], picks: ["Zejść", "Wejść"], remote: true, tries: 3 });
         } else {
             const spot = yield* approach([[x.x, x.y]]);
@@ -453,7 +478,9 @@
     }
     // to another map over the real exits (each hop: the path to the exit, the step onto it, the new map)
     function* goMap(target, why) {
+        if (mapId() === ((window.Farming && Farming.HUT_MAP) || 100) && target !== mapId()) yield* AP.TASKS.leaveHut();   // (his own hut: out over the doormat first)
         const r0 = mapId() !== target ? routeInfo(target) : null, t0 = now(), f0 = FAB.rep.choices.length;
+        let waited = false;
         for (let hop = 0; hop < 40; hop++) {
             if (mapId() === target) {
                 const dt = now() - t0;
@@ -465,6 +492,15 @@
             }
             if (busy()) { yield* drive({ leave: true }); continue; }
             const r = planRoute(target);
+            // (2026-11-16: day 20 "brak drogi do TAWERNA" - the tavern's door had not let him through a moment before - someone in it -
+            // and was held shut for two hours) an exit held shut after a failed try: a quarter of an hour aside, then all exits again
+            if (!r && !waited && Object.keys(FAB.blocked).some(k => FAB.blocked[k] > now())) {
+                waited = true;
+                say("przejście chwilę nie puszcza (ktoś w drzwiach?) - kwadrans i próbuję znowu");
+                for (let n = 0, until = now() + 0.25; n < 300 && now() < until; n++) yield* idle(60);   // (a quarter of the game's hour)
+                FAB.blocked = {};
+                continue;
+            }
             if (!r) { say("nie znam drogi z " + mapName(mapId()) + " do " + mapName(target)); note("unclear", { what: "brak drogi do " + mapName(target), why: why || FAB.why }); return false; }
             if (r.here) return true;
             say("idę: " + mapName(mapId()) + " → " + mapName(r.to) + " (cel: " + mapName(target) + ")");
@@ -500,15 +536,56 @@
     }
     function wellLeft() {
         try {
-            const rec = ((Farming.farm().rations) || {})["8:Studnia miejska"];
+            const R = (Farming.farm().rations) || {}, rk = Object.keys(R).find(k => k.indexOf(MAP.town + ":") === 0 && /Studnia/.test(k));
+            const rec = rk ? R[rk] : null;
             const today = Farming.today ? Farming.today() : day();
             // (and his own count of attempts: a draw that gave nothing used to loop well <-> tavern for hours)
             const mine = FAB.well.day === day() ? FAB.well.n : 0;
             return Math.min(rec && rec.day === today ? Math.max(0, 2 - rec.n) : 2, Math.max(0, 2 - mine));
         } catch (e) { return FAB.well.day === day() ? Math.max(0, 2 - FAB.well.n) : 2; }
     }
-    function* drinkWell() {
-        setDoing("Piję ze studni miejskiej", "woda " + Math.round(needs().water) + " (2 nabrania dziennie)");
+    // the waterskin (the player 2026-11-17: "to musi bukłak napełniony nosić"): Needs' skin, 4 sips of 35 water; one draw of the town's
+    // well fills it whole; drunk with G down there
+    const SKIN = 129, skinOwned = () => count(SKIN) > 0, skinSips = () => { try { return Needs.skinCharges(); } catch (e) { return 0; } },
+        skinMax = () => { try { return Needs.SKIN.max; } catch (e) { return 4; } }, skinWater = () => skinSips() * ((window.Needs && Needs.SKIN && Needs.SKIN.sip) || 35);
+    function* fillSkinWell() { return yield* drinkWell("Napełnij bukłak"); }
+    // a sip from the skin, as a player: the G key (Needs: drink)
+    function* sipSkin() {
+        const n0 = skinSips();
+        L.key("drink", true); yield; yield; L.key("drink", false);
+        for (let n = 0; n < 30 && skinSips() === n0; n++) yield;
+        say(skinSips() < n0 ? "napił się z bukłaka (woda " + Math.round(needs().water) + ", zostało " + skinSips() + ")" : "bukłak nie dał wody");
+        return skinSips() < n0;
+    }
+    // the skin's way (no shop sells one): the tannery on the plot, a raw hide (the snares, the dog, a carcass) tanned there, 3 fibre, by hand
+    const tanneryUp = () => builtOn(MAP.field).some(b => b.type === "tannery");
+    function* makeSkin(why) {
+        if (!tanneryUp()) {
+            setDoing("Stawiam garbarnię (na bukłak)", why);
+            yield* fieldWork(["Garbarnia"], () => tanneryUp() || hour() >= 20.5 || hour() < 5.5, why);
+            if (!tanneryUp()) return false;
+        }
+        if (count(97) < 1) {
+            if (!(yield* goMap(MAP.field, why))) return false;
+            yield* AP.TASKS.collectJobs();
+            if (count(97) < 1) {
+                if (count(96) < 1) { say("bukłak: nie mam surowej skóry (wnyki, pies, upolowane zwierzę)"); return false; }
+                setDoing("Wyprawiam skórę w garbarni (na bukłak)", why);
+                yield* AP.TASKS.craft("tannery", "Wyprawiaj skórę");
+                yield* AP.TASKS.collectJobs();
+            }
+            if (count(97) < 1) { say("bukłak: skóra się wyprawia - odbiorę ją później"); return false; }
+        }
+        if (count(92) < 3) yield* AP.TASKS.collect({ 92: 3 }, 20);
+        if (count(92) < 3) { say("bukłak: brak 3 włókien lnu"); return false; }
+        setDoing("Robię bukłak (skóra i len)", why);
+        yield* AP.TASKS.handCraft("Zrób bukłak");
+        if (skinOwned()) { say("zrobił bukłak"); note("notes", { what: "zrobił bukłak (" + skinMax() + " łyki) - woda na podziemia" }); }
+        return skinOwned();
+    }
+    function* drinkWell(entry) {
+        entry = entry || "Napij się";
+        setDoing(entry === "Napij się" ? "Piję ze studni miejskiej" : "Napełniam bukłak przy studni miejskiej", "woda " + Math.round(needs().water) + ", bukłak " + skinSips() + "/" + skinMax() + " (2 nabrania dziennie)");
         if (!(yield* goMap(MAP.town, "woda"))) return false;
         const wells = $gameMap.events().filter(e => /<Studnia:/i.test((e.event() && e.event().note) || ""));
         if (!wells.length) { note("unclear", { what: "brak studni na mapie miasta" }); return false; }
@@ -516,17 +593,18 @@
         const spot = yield* approach(wells.map(e => [e.x, e.y]));
         if (!spot) return false;
         yield* L.press("ok");
-        const ok = yield* L.choose("Napij się");
-        yield* L.wait(20);
+        const ok = yield* L.choose(entry);
+        yield* L.wait(entry === "Napij się" ? 20 : 60);
         yield* L.closeMenus();
         if (FAB.well.day !== day()) FAB.well = { day: day(), n: 0 };
         FAB.well.n++;
-        say(ok ? "napił się ze studni (woda " + Math.round(needs().water) + ")" : "studnia nie dała wody");
+        say(entry !== "Napij się" ? (ok ? "napełnił bukłak przy studni (" + skinSips() + "/" + skinMax() + ")" : "studnia nie napełniła bukłaka") : ok ? "napił się ze studni (woda " + Math.round(needs().water) + ")" : "studnia nie dała wody");
         return ok;
     }
     function* takeSoup() {
         const before = count(SOUP);
-        yield* talkTo(3, { tiles: [[9, 4]] });
+        const kettle = $gameMap.events().find(e => KETTLE.test((e.event() && e.event().name) || ""));
+        yield* talkTo(kettle ? kettle.eventId() : 1, {});   // (2026-11-17: the event's own tiles - "tiles" are the event's, the old 5,5 made him face the floor)
         FAB.soupDay = day();
         say(count(SOUP) > before ? "kapuśniak w plecaku (" + count(SOUP) + ")" : "kocioł nie dał kapuśniaku");
         return true;
@@ -534,13 +612,43 @@
     // (the night's hours do not count towards "stuck": the clock of no progress moves on by them - the morning's wait was the one
     // that tipped it over the 16 hours each day)
     function sleptOff(hrs) { if (hrs > 1 && hrs < 30 && FAB.lastKeyAt !== null) FAB.lastKeyAt += hrs; }
-    function* sleepHome() {
-        if (!(yield* goMap(MAP.house, "sen"))) return false;
+    // (2026-11-16 the new world's "Wezwanie króla": on day 3 grandpa is summoned before his hut, the hut is sealed from dusk, and with
+    // grandpa's letter Szczepan Kołodziej takes the hero into the stable's hay loft - Map181, the loft event 3250, "Prześpij noc")
+    const STABLE = 181, LOFT = 3250;
+    const wezNow = () => (window.Story && Story.wezwanie ? Story.wezwanie() : null);
+    const homeSealed = () => { const z = wezNow(); return !!(z && z.sealed); };
+    function* sleepStable() {
+        if (!(yield* goMap(STABLE, "sen na stryszku"))) return false;
         const d0 = day(), t0 = now();
-        const r = yield* talkTo(22, { tiles: [[1, 4], [1, 5]], picks: ["Spać"] });
+        const loft = $gameMap.event(LOFT);
+        if (!loft) { note("unclear", { what: "brak stryszka w stajni (zdarzenie " + LOFT + ")" }); return false; }
+        const r = yield* talkTo(LOFT, { picks: ["Prześpij noc"] });
         for (let n = 0; n < 600 && !(SceneManager._scene instanceof Scene_Map && onMapReady()); n++) yield;
         yield* drive({});
         sleptOff(now() - t0);
+        say("spał na stryszku w stajni (dzień " + d0 + " → " + day() + ", " + clock() + ")");
+        FAB.safeSave();
+        return r.ok;
+    }
+    function* sleepHome() {
+        if (!(yield* goMap(MAP.house, "sen"))) return false;
+        const d0 = day(), t0 = now();
+        // (2026-11-17 run: the bed is the events 10/11 at 1,4 / 1,5 - the old tiles 2,4 / 2,5 were the floor beside it, he pressed O at
+        // nothing and "slept" every 5 minutes for 87 hours awake) the bed's own tiles; slept = the clock jumped
+        const beds = $gameMap.events().filter(e => BED.test((e.event() && e.event().name) || ""));
+        const bedTiles = beds.length ? beds.map(e => [e.x, e.y]) : [[1, 4], [1, 5]];
+        const r = yield* talkTo(() => beds[0] || $gameMap.event(10), { tiles: bedTiles, picks: ["Spać"] });
+        for (let n = 0; n < 600 && !(SceneManager._scene instanceof Scene_Map && onMapReady()); n++) yield;
+        yield* drive({});
+        const slept = now() - t0 > 2;
+        sleptOff(now() - t0);
+        if (!slept) {
+            FAB.homeBedNo = now() + 12;
+            say("łóżko dziadka nie dało spać (" + clock() + ") - inny nocleg");
+            note("unclear", { what: "sen u dziadka: „Posłanie (sen)” nie dało spać o " + clock() });
+            if (hasBedroll() && (yield* goMap(MAP.field, "sen"))) return yield* sleepField();
+            return yield* campSleep("sen");
+        }
         say("spał (dzień " + d0 + " → " + day() + ", " + clock() + ", wytrzymałość " + Math.round(stamina()) + ")");
         FAB.safeSave();
         return r.ok;
@@ -550,7 +658,7 @@
     const borgarCounter = () => ($gameMap.mapId() === MAP.tavern ? $gameMap.event(52) || (window.Story && Story.borgarEvent()) : null);
     function* toCounter() {
         if (!(yield* goMap(MAP.tavern, "Borgar"))) return false;
-        return !!(yield* approach([[50, 29]]));
+        return !!(yield* approach([COUNTER]));
     }
     function shiftOpen() {
         const s = S();
@@ -670,7 +778,7 @@
         setDoing("Biorę zmianę u Borgara", shiftWhy);
         installShiftBot();
         const g0 = gold(), n0 = (TavernShift.stats() || {}).done || 0;
-        const r = yield* talkTo(borgarCounter, { tiles: [[50, 29]], picks: ["Weź zmianę"], leave: true });
+        const r = yield* talkTo(borgarCounter, { tiles: [COUNTER], picks: ["Weź zmianę"], leave: true });
         const n1 = (TavernShift.stats() || {}).done || 0;
         FAB.shiftTried = day();
         if (n1 > n0) {
@@ -726,7 +834,11 @@
     // the field (Map003, inside grandpa's wall): ap.js's plan entries by name, in its order - what a player builds there to make the
     // tools and the forge (only what the story's step needs)
     const PLAN_SPADE = ["Młotek", "Warsztat", "Kamienna siekiera", "Leśne legowisko", "Kamienna łopata"];
-    const PLAN_IRON = PLAN_SPADE.concat(["Piec ziemny", "Kamienny kilof", "Tartak", "Cegielnia", "Kuźnia"]);
+    // (2026-11-17, the player: "zawsze może budować skrzynie i tam przechowywać rzeczy, a jedzenie do spiżarni") the pantry and a chest
+    // as soon as the sawmill gives planks - the bag never fills with food and seeds again
+    const PLAN_STORE = ["Mała skrzynia", "Spiżarnia"];
+    const PLAN_IRON = PLAN_SPADE.concat(["Piec ziemny", "Kamienny kilof", "Tartak"], PLAN_STORE, ["Cegielnia", "Kuźnia"]);
+    const PLAN_FARM = () => PLAN_IRON.concat((AP.PLAN || []).map(g => g.n).filter(n => !PLAN_IRON.includes(n)));   // (the whole homestead, W4's first)
     function* fieldWork(names, until, why, extra) {
         if (!(yield* goMap(MAP.field, why))) return false;
         if (AP.day !== day()) { AP.day = day(); AP.PLAN.forEach(g => { g.fails = 0; }); }
@@ -735,6 +847,14 @@
                 // (the plan is for the field: gathering by the edge took him over it once - Krawedzie - and the meadow is no place to build)
                 if (mapId() !== MAP.field) { say("poza działką (" + mapName(mapId()) + ") - wracam"); if (!(yield* goMap(MAP.field, why))) return false; }
                 yield* AP.TASKS.reflexes();
+                // (2026-11-16 run: worn out, the workbench said "Jesteś zbyt zmęczony" to every tool for a day and a half - the axe never
+                // came, so no wood, no charcoal, no iron, and he only waited by the kiln) tired: a rest first, too tired still - the brain
+                // takes over (food, water, sleep)
+                if (stamina() < 15) {
+                    setDoing("Na działce: odpoczywam (siły " + Math.round(stamina()) + ")", why);
+                    yield* AP.TASKS.rest();
+                    if (stamina() < 15) { say("za mało sił na pracę (" + Math.round(stamina()) + ") - najpierw jedzenie, woda, sen"); return false; }
+                }
                 if (now() - (FAB.failReset || 0) >= 2) { FAB.failReset = now(); AP.PLAN.forEach(g => { g.fails = 0; }); }   // (a job done meanwhile: try again)
                 const g = AP.PLAN.find(g => names.includes(g.n) && !g.done() && (g.fails || 0) < 3);
                 if (!g) {
@@ -768,17 +888,42 @@
                 for (let k = 0; k < 12; k++) { const got = yield* AP.TASKS.forage(3); if (!got) { setBarren(mapId(), "food"); return true; } }
                 return true;
             } },
-            { id: "bandage", name: "zbieram zioła, krwawnik i włókno - opatrunki na podziemia", where: "field", want: () => FAB.done1 && deepNow < UNDER_GOAL && count(152) < 4 && !FAB.bandageGaveUp, run: function* () {
-                for (let k = 0; k < 6 && count(152) < 4; k++) {
+            { id: "bandage", name: "zbieram zioła, krwawnik i włókno - opatrunki na podziemia", where: "field", want: () => FAB.done1 && deepNow < UNDER_GOAL && count(152) < BANDAGES && !FAB.bandageGaveUp, run: function* () {
+                for (let k = 0; k < 6 && count(152) < BANDAGES; k++) {
                     for (const [id, kind] of [[104, "herb"], [150, "yarrow"], [92, "fiber"]]) if (count(id) < 2) yield* AP.TASKS.gather([kind], 2 - count(id));
                     if (count(104) >= 2 && count(150) >= 2 && count(92) >= 2) yield* AP.TASKS.handCraft("Zrób opatrunek"); else { setBarren(mapId(), "bandage"); return true; }
                 }
                 return true;
             } },
             { id: "crops", name: "zbieram plony z grządek", where: "field", want: () => ripeCrops(), run: () => AP.TASKS.harvestCrops() },
-            // (the tools and the forge W4 needs - what a player builds on the field in the free hours; later W4 does not wait for them)
-            { id: "build", name: "buduję na działce (" + ((AP.PLAN || []).find(g => PLAN_IRON.includes(g.n) && !g.done()) || {}).n + ")", where: "field",
-                want: () => fieldOk && (AP.PLAN || []).some(g => PLAN_IRON.includes(g.n) && !g.done() && (g.fails || 0) < 3), run: () => fieldWork(PLAN_IRON, () => false, "wolny czas: narzędzia i kuźnia na W4") },
+            // (the player 2026-11-17: "gracz może względnie wcześniej zasadzić kilka drzew" - run 10 stood a whole day by the forge with
+            // "nie ma drzew": every tree of the plot cut. A cone goes into the ground whole (Forestry.js, 10 days to a full pine))
+            { id: "pines", name: "sadzę sosny z szyszek (drewno na później)", where: "field",
+                want: () => fieldOk && count(CONE) > 0 && plantedPines() < PINES_WANT && stamina() > 30, run: function* () {
+                if (!(yield* plantPines(4))) setBarren(mapId(), "pines");
+                return true;
+            } },
+            // (the player 2026-11-16: "pomiędzy czekaniem na zmianę może pracować na działce i budować") the whole farm of AP.PLAN in the
+            // free hours - the tools and the forge W4 needs first, then the rest of the homestead (bedroll, campfire, kiln, sawmill, well...)
+            { id: "build", name: "buduję na działce (" + ((AP.PLAN || []).find(g => PLAN_FARM().includes(g.n) && !g.done() && (g.fails || 0) < 3) || {}).n + ")", where: "field",
+                want: () => fieldOk && (AP.PLAN || []).some(g => !g.done() && (g.fails || 0) < 3), run: () => fieldWork(PLAN_FARM(), () => false, "wolny czas: gospodarstwo na działce (najpierw narzędzia i kuźnia na W4)") },
+            // (iron for the homestead - the nails, the hut's 10 iron, the iron tools: the ore is in Krucze Turnie only)
+            { id: "ore", name: "kopię rudę żelaza w Kruczych Turniach (żelazo na gospodarstwo)", where: 222,
+                want: () => fieldOk && (count(63) > 0 || count(116) > 0) && builtOn(MAP.field).some(b => b.type === "forge") && count(85) < 4 &&
+                    (AP.PLAN || []).some(g => !g.done() && Object.keys(g.need || {}).some(id => [86, 88, 117, 119, 120].includes(+id))), run: function* () {
+                for (let k = 0; k < 12 && count(85) < 8; k++) {
+                    if (stamina() < 15) { yield* AP.TASKS.rest(); if (stamina() < 15) break; }
+                    if (!(yield* AP.TASKS.mineOre())) { setBarren(mapId(), "ore"); break; }
+                }
+                return true;
+            } },
+            // (a tent for the bag: a bed anywhere - sewn in the tannery once the dog and the snares have brought four hides)
+            { id: "tent", name: "szyję namiot w garbarni (nocleg gdziekolwiek)", where: "field",
+                want: () => fieldOk && builtOn(MAP.field).some(b => b.type === "tannery") && count(TENT) === 0 && !builtAnywhere("tent") && count(HIDE) >= 4, run: function* () {
+                if (!(yield* AP.TASKS.obtain({ 93: 3, 61: 4 }))) return true;
+                yield* AP.TASKS.craft("tannery", "Zszyj namiot");
+                return true;
+            } },
             { id: "sow", name: "sieję na grządkach", where: "field", want: () => count(65) > 0 && count(66) > 0 && stamina() > 40, run: () => AP.TASKS.plantSeeds() },
             { id: "mats", name: "zbieram gałęzie, kamienie i włókno (na narzędzia i naprawy)", where: "any", want: () => count(77) < 20 || count(64) < 20 || count(92) < 20, run: function* () {
                 const got = yield* AP.TASKS.collect({ 77: 20, 64: 20, 92: 20 }, 30);
@@ -794,11 +939,12 @@
         if (deadline - h - travelH(target) - margin < minSite) return null;
         const jobs = freeJobs().filter(j => j.want());
         if (!jobs.length) return null;
-        const places = [...new Set([mapId(), MAP.field, MAP.yard, 23, 22, 21])]   // (+ Skraj lasu, Polna droga, Leśna droga: the wild things by the way).filter(m => !inUnder() && m !== MAP.house && m !== MAP.tavern && m !== MAP.town && m !== MAP.manor);
+        const places = [...new Set([mapId(), MAP.field, MAP.yard, 222, 219])]   // (+ Skraj lasu, Polna droga, Leśna droga: the wild things by the way).filter(m => !inUnder() && m !== MAP.house && m !== MAP.tavern && m !== MAP.town && m !== MAP.manor);
         let best = null;
         for (const j of jobs) {
             for (const m of places) {
                 if (j.where === "field" && m !== MAP.field) continue;
+                if (typeof j.where === "number" && m !== j.where) continue;   // (a job of one map: the ore in the mountains)
                 if (barren(m, j.id)) continue;
                 const go = m === mapId() ? 0 : travelH(m), back = travelH(target, { m });
                 const onSite = deadline - margin - h - go - back;
@@ -833,12 +979,44 @@
         const t0 = now();
         const ok = yield* AP.TASKS.sleep();
         sleptOff(now() - t0);
-        if (!ok) return yield* sleepHome();
+        if (!ok) return homeSealed() ? yield* campSleep("sen") : yield* sleepHome();
+        return ok;
+    }
+    // ---- a camp anywhere (2026-11-16, the player: "jak nie ma gdzie spać to może zebrać materiały na namiot i go gdziekolwiek postawić
+    // i się przespać"): the tent from the bag (sewn in the tannery, packed again in the morning), else a forest bed of branches and fibre
+    // made where he stands - the tent and the forest bed go up anywhere under the sky (Farming_Data: anywhere)
+    const TENT = 121, FOREST_BED = 128, HIDE = 96;
+    const builtOn = m => { try { return ((Farming.farm().buildings || {})[m] || []).filter(b => b && !b.site); } catch (e) { return []; } };
+    const builtAnywhere = type => { try { return Object.values(Farming.farm().buildings || {}).some(l => (l || []).some(b => b && b.type === type && !b.site)); } catch (e) { return false; } };
+    const campHere = () => { const l = builtOn(mapId()); return l.find(b => b.type === "tent") || (mapId() !== MAP.field ? l.find(b => b.type === "bedroll") : null) || null; };
+    FAB.campNo = FAB.campNo || {};
+    const campOk = () => !((FAB.campNo[mapId()] || 0) > now());
+    function* campSleep(why) {
+        let bed = campHere();
+        if (!bed && count(TENT) > 0) { setDoing("Rozkładam namiot (" + mapName(mapId()) + ")", why); yield* AP.TASKS.camp("tent"); bed = campHere(); }
+        if (!bed && !builtAnywhere("bedroll")) {   // (one forest bed in the world: the game's rule)
+            if (!count(FOREST_BED) && (count(77) < 10 || count(92) < 10)) { setDoing("Zbieram gałęzie i włókno na leśne legowisko", why); yield* AP.TASKS.collect({ 77: 10, 92: 10 }, 20); }
+            if (!count(FOREST_BED) && count(77) >= 10 && count(92) >= 10) yield* AP.TASKS.handCraft("Zrób leśne legowisko");
+            setDoing("Kładę leśne legowisko (" + mapName(mapId()) + ")", why);
+            yield* AP.TASKS.camp("bedroll");
+            bed = campHere();
+        }
+        if (!bed) {
+            FAB.campNo[mapId()] = now() + 8;
+            say("nie da się tu rozbić obozu (" + mapName(mapId()) + ")");
+            note("notes", { what: "nocleg: nie rozbił obozu na mapie " + mapName(mapId()) + (count(TENT) ? " (namiot w plecaku)" : "") });
+            return false;
+        }
+        const t0 = now(), d0 = day();
+        const ok = yield* AP.TASKS.sleep();
+        sleptOff(now() - t0);
+        if (ok) { say("spał w " + (bed.type === "tent" ? "namiocie" : "leśnym legowisku") + " (" + mapName(mapId()) + ", dzień " + d0 + " → " + day() + ")"); FAB.safeSave(); }
+        else FAB.campNo[mapId()] = now() + 2;
         return ok;
     }
     function* borgarTalk(picks) {
         if (!(yield* toCounter())) return false;
-        return yield* talkTo(borgarCounter, { tiles: [[50, 29]], picks, leave: true });
+        return yield* talkTo(borgarCounter, { tiles: [COUNTER], picks, leave: true });
     }
     const tadek = () => (window.TownLife && TownLife.eventOf ? TownLife.eventOf("kowal") : null);
     function* talkTadek(why) {
@@ -861,6 +1039,78 @@
             note("notes", { what: "przypięty w dzienniku: " + id });
         } catch (e) { /* (no journal pin) */ }
     }
+    // ---- iron ore (2026-11-16/17 runs: "nie ma rudy żelaza w zasięgu" for days by the forge): the new world's ore is in the mountains
+    // only - Krucze Turnie (Map222, the quarry's veins); with the forge up and a pickaxe, a day trip there for `want` ore
+    const ORE_MAP = 222;
+    const oreTripOk = () => (count(63) > 0 || count(116) > 0) && builtOn(MAP.field).some(b => b.type === "forge") && hour() >= 5.5 && hour() < 15 && !inUnder();
+    function oreTrip(why, want) {
+        return { what: "Idę po rudę żelaza w Krucze Turnie", why: why + " - na Podgrodziu nie ma rudy, żyły są w górach", run: function* () {
+            if (!(yield* goMap(ORE_MAP, why))) return false;
+            for (let k = 0; k < 12 && count(85) < want && hour() < 18; k++) {
+                if (stamina() < 15) { setDoing("Krucze Turnie: odpoczywam (siły " + Math.round(stamina()) + ")", why); yield* AP.TASKS.rest(); if (stamina() < 15) break; }
+                setDoing("Krucze Turnie: kopię rudę żelaza (" + count(85) + "/" + want + ")", why);
+                if (!(yield* AP.TASKS.mineOre())) break;
+            }
+            say("ruda żelaza w plecaku: " + count(85));
+            if (count(85) < Math.min(2, want)) note("notes", { what: "Krucze Turnie: tylko " + count(85) + " rudy żelaza (chciał " + want + ")" });
+            return count(85) > 0;
+        } };
+    }
+    // ---- pines from cones on the plot (see freeJobs "pines") and wood from the woods when the plot has no standing tree left
+    const CONE = 147, PINES_WANT = 8;
+    const plantedPines = () => { try { return (Forestry.treesOf(MAP.field) || []).length; } catch (e) { return 0; } };
+    // a player's spot: free ground right by a stump of a felled tree (where the wood was), no building within 2 tiles, the nearest walk
+    function pineSpot() {
+        if (mapId() !== MAP.field || !window.Forestry) return null;
+        const f = L.field(P().x, P().y), bad = FAB.pineBad || {}, seen = new Set();
+        const nearBuilding = (x, y) => { for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) if (Farming.buildingAt(x + dx, y + dy)) return true; return false; };
+        const reach = (x, y) => Math.min(...[[0, 1], [0, -1], [1, 0], [-1, 0]].map(([dx, dy]) => f.at(x + dx, y + dy)));
+        const stumps = $gameMap.events().filter(e => ChoppableTree.isTree(e) && $gameSelfSwitches.value([mapId(), e.eventId(), "A"]) && !$gameSelfSwitches.value([mapId(), e.eventId(), "B"]));
+        let best = null;
+        const tryTile = (x, y, extra) => {
+            const k = x + "," + y;
+            if (seen.has(k)) return; seen.add(k);
+            if (!$gameMap.isValid(x, y) || bad[k] === day() || Forestry.whyNot(x, y) || nearBuilding(x, y)) return;
+            const c = reach(x, y) + extra;
+            if (isFinite(c) && (!best || c < best.c)) best = { x, y, c };
+        };
+        for (const e of stumps) for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) if (Math.max(Math.abs(dx), Math.abs(dy)) === 2) tryTile(e.x + dx, e.y + dy, 0);
+        if (!best) for (let dy = -10; dy <= 10; dy++) for (let dx = -10; dx <= 10; dx++) tryTile(P().x + dx, P().y + dy, 20);
+        return best;
+    }
+    // up to n pines from cones at pineSpot()s, as a player: the ground menu's "Posadź sosnę" (false: no spot for one)
+    function* plantPines(n) {
+        for (let k = 0; k < n && count(CONE) > 0 && plantedPines() < PINES_WANT; k++) {
+            const s = pineSpot();
+            if (!s) { say("sosny: nie ma gdzie posadzić (wolna ziemia przy pniakach, z dala od budowli)"); return false; }
+            const n0 = plantedPines();
+            setDoing("Sadzę sosnę z szyszki (" + (n0 + 1) + "/" + PINES_WANT + ")", "drewno na później");
+            yield* AP.TASKS.groundAction(s.x, s.y, "Posadź sosnę");
+            yield* idle(30);
+            if (plantedPines() > n0) { say("posadził sosnę (" + s.x + "," + s.y + "), na działce rośnie ich " + plantedPines()); note("notes", { what: "posadzona sosna (" + s.x + "," + s.y + "), razem " + plantedPines() }); }
+            else (FAB.pineBad = FAB.pineBad || {})[s.x + "," + s.y] = day();
+        }
+        return true;
+    }
+    const WOOD_MAPS = [219, 222];
+    const woodTripOk = () => (count(60) > 0 || count(115) > 0) && hour() >= 5.5 && hour() < 15 && !inUnder();
+    function woodTrip(why, want) {
+        return { what: "Idę po drewno do lasu", why: why + " - na działce nie ma już drzew do ścięcia", run: function* () {
+            for (const m of WOOD_MAPS) {
+                if (count(61) >= want || hour() >= 18) break;
+                if (!(yield* goMap(m, why))) continue;
+                for (let k = 0; k < 14 && count(61) < want && hour() < 18; k++) {
+                    if (stamina() < 15) { setDoing(mapName(m) + ": odpoczywam (siły " + Math.round(stamina()) + ")", why); yield* AP.TASKS.rest(); if (stamina() < 15) break; }
+                    setDoing(mapName(m) + ": ścinam drzewo (" + count(61) + "/" + want + " drewna)", why);
+                    if (!(yield* AP.TASKS.chop(1))) break;
+                }
+            }
+            FAB.fieldNoTrees = 0;
+            say("drewno w plecaku: " + count(61));
+            if (count(61) < want) note("notes", { what: "las: tylko " + count(61) + " drewna (chciał " + want + ")" });
+            return count(61) > 0;
+        } };
+    }
     function w4Plan(st) {
         const h = hour(), why = "W4 Krew kasztelana: " + (["Borgar i stare kamienie", "kopiec z krukiem (łopata)", "połówki do Tadka (żelazo, węgiel)", "odbiór klucza od Tadka", "krata w piwnicy", "powiedz Borgarowi"][st] || "krok " + st);
         if (st === 0) return { what: "Pytam Borgara o stare kamienie pod tawerną", why, run: function* () { checkGoal("w4_0", MAP.tavern); yield* borgarTalk(["Zapytaj o stare kamienie"]); } };
@@ -871,11 +1121,14 @@
             } };
             return { what: "Kopię pod kopcem z krukiem (podwórze dziadka)", why, run: function* () {
                 if (!(yield* goMap(MAP.yard, why))) return false;
-                yield* talkTo(() => $gameMap.event(951) || null, { tiles: [[8, 6]], leave: true });
+                yield* talkTo(() => $gameMap.event(952) || null, { tiles: [[21, 16]], leave: true });   // (the dig spot under the raven cairn on Podgrodzie: TownQuests_Data w4_dig 21,16 - "tiles" are the EVENT's tiles, the hero stands beside them)
                 return true;
             } };
         }
         if (st === 2) {
+            // (2026-11-16 run: "nie ma rudy żelaza w zasięgu" for days by the forge) the new world's iron ore is in the mountains only -
+            // Krucze Turnie (Map222, the quarry's veins): with the forge up and a pickaxe, a day trip there for the ore first
+            if (count(86) < 1 && count(85) < 2 && oreTripOk()) return oreTrip(why, 4);
             if (count(86) < 1 || count(79) < 2) return { what: "Robię żelazo i węgiel na działce (kuźnia)", why: why + " - żelaza nie ma w sklepach, jest z rudy w kuźni", run: function* () {
                 checkGoal("w4_2", MAP.town);
                 yield* fieldWork(PLAN_IRON, () => (count(86) >= 1 && count(79) >= 2) || hour() >= 20.5 || hour() < 5.5, why, function* () {
@@ -901,7 +1154,7 @@
             if ($gameVariables.value(1) < 1) {
                 if (!FAB.brickTried) return { what: "Szukam luźnej cegły w tawernie", why, run: function* () {
                     if (!(yield* goMap(MAP.tavern, why))) return false;
-                    const r = yield* talkTo(9, { tiles: [[9, 4]], picks: ["Zejść"], leave: true, remote: true, tries: 3 });
+                    const r = yield* talkTo(9, { tiles: [[31, 2]], picks: ["Zejść"], leave: true, remote: true, tries: 3 });   // (the loose brick in the store, Map001 31,2 - in the wall, reached from 31,3)
                     FAB.brickTried = true;
                     if (mapId() === MAP.tavern) note("unclear", { what: "krok W4 „Zejdź do piwnicy tawerny (za luźną cegłą)”: cegła nie otwiera się, dopóki Borgar w „Pogadaj” nie usłyszy „Zapytaj wprost o zamek” - krok o tym nie mówi", why });
                     return r.ok;
@@ -972,16 +1225,26 @@
             // (a plated foe - the empty armour - or a boss: a light blow from the front only rings; a heavy one - O held - while it recovers
             // from its own blow, else a light one)
             const kind = a._kind || (a.kind && a.kind()) || "", plated = kind === "zbroja" || !!a._boss;
-            // (a losing fight with the empty armour: under 40% of life while it still has more than a third - away up the stairs, as a
-            // player would; the guardian and the bosses are fought to the end - their own plans)
-            if (plated && !a._boss && inUnder() && hpRatio() < 0.4 && a._maxHp && a._hp > a._maxHp * 0.35) {
+            // (a losing fight with the empty armour: under 55% of life while it still has more than a third - away up the stairs, as a
+            // player would; the guardian and the bosses are fought to the end - their own plans. 2026-11-17 run 12: at 40% he died on the
+            // stairs 4 times out of 5 - 35-37% left was too little to reach them)
+            if (plated && !a._boss && inUnder() && hpRatio() < 0.55 && a._maxHp && a._hp > a._maxHp * 0.35) {
                 FAB.fleeAt = AP.frame; say("zbroja za mocna (życie " + Math.round(hpRatio() * 100) + "%) - uciekam w górę"); note("prep", { what: "ucieczka przed zbroją na piętrze " + floorNow() + " (życie " + Math.round(hpRatio() * 100) + "%, zbroja " + Math.round(a._hp / a._maxHp * 100) + "%)" });
                 break;
             }
-            if (plated && ["recover", "stagger", "lie", "down", "stun"].includes(a._mode || "")) {
+            // (2026-11-17, the user: "zobacz, czy ta pusta zbroja ma redukcję obrażeń całkowitą, czy trzeba ją z konkretnej strony
+            // atakować") the empty armour: a light blow from the front only rings (15%, Creatures_Data plate.light) - a heavy one, one in
+            // the back, a shot count in full; felled the first time it falls apart and rises with 40% unless the pile is hit ONCE
+            if (plated && a._mode === "collapsed") { L.key("shoot", true); yield; yield; L.key("shoot", false); yield; yield; say("rozbił leżącą zbroję - już nie wstanie"); }
+            else if (plated && ["recover", "stagger", "lie", "down", "stun"].includes(a._mode || "")) {
                 L.key("shoot", true);
                 for (let n = 0; n < 26; n++) { const c = foesNear(4).find(x => x.a === a); if (c && c.tell && c.tell.t < 8) break; yield; }
                 L.key("shoot", false); yield; yield;
+            } else if (plated && !a._boss) {
+                // (its front lets half through now (the user, 2026-11-17): jabs from just out of its sword's reach (1.85-1.95) - the
+                // spear's is longer; the heavy one while it recovers, the roll when its blow comes)
+                if (d < 1.85 && reach > 2) { for (let n = 0; n < 6; n++) { L.setMove(L.keysToward(-dx, -dy)); yield; } L.setMove([]); }
+                else { L.key("shoot", true); yield; yield; L.key("shoot", false); yield; yield; }
             } else if (!plated || d > 1.3) { L.key("shoot", true); yield; yield; L.key("shoot", false); yield; yield; }
             else yield* L.wait(4);
             hits++;
@@ -1052,10 +1315,12 @@
         const f0 = floorNow(), m0 = mapId();
         for (let k = 0; k < 600 && mapId() === m0; k++) {
             if (busy()) { yield* drive({ leave: true }); continue; }
-            if (foesNear(7).length) { yield* fightFoes(60 * 60, why); if (FAB.fleeAt && AP.frame - FAB.fleeAt < 120) return "ucieczka"; continue; }
-            if (hpRatio() < 0.5 && !foesNear(8).length) return "słabo";
             const seen = seenFn();
             const st = stairsDown().filter(e => !seen || seen(e.x, e.y) || seen(e.x, e.y + 1));
+            // (2026-11-17 with the player: not the whole floor - the stairs seen and no foe right on him: down them; he fights what blocks)
+            const blocking = foesNear(2.5).length > 0;
+            if (foesNear(7).length && (blocking || !st.length || hpRatio() < 0.5)) { yield* fightFoes(60 * 60, why); if (FAB.fleeAt && AP.frame - FAB.fleeAt < 120) return "ucieczka"; continue; }
+            if (hpRatio() < 0.5 && !foesNear(8).length) return "słabo";
             if (st.length) { setDoing("Schodzę niżej (piętro " + (f0 + 1) + ")", why); if (yield* takeStairs(st[0])) return true; yield* L.wait(30); continue; }
             if (!seen) { const all = stairsDown(); if (all.length) { if (yield* takeStairs(all[0])) return true; } return false; }
             setDoing("Szukam schodów w dół (piętro " + f0 + ")", why);
@@ -1067,8 +1332,12 @@
     FAB.floorDown = floorDown;
     const evNamed = re => $gameMap.events().find(e => e && !e._erased && re.test((e.event() && e.event().name) || "")) || null;
     const liftStops = () => { try { return UG().liftStops(); } catch (e) { return []; } };
+    // the water to get back up to the well from floor f (2026-11-17 run 11: 4 of 6 deaths walking up dry from floors 13-16): under 25
+    // thirst caps the strength (Needs.js), each floor to the nearest lift stop above is about 2 game hours at 2.5 water an hour
+    const waterBack = f => { const st = liftStops().filter(x => x <= f), top = st.length ? Math.max(...st) : 0; return Math.min(60, 25 + 4 * Math.max(0, f - top)); };
     const bossCleared = f => { try { return UG().bossCleared(f); } catch (e) { return true; } };
     const UNDER_GOAL = 50;   // Akt III: piętro 50 uzbraja napad na tawernę
+    const BANDAGES = 6;      // (2026-11-17) opatrunki na każde zejście (run 12: two deaths wounded with none left at 4 - now 6)
     const WEAPONS = [331, 317, 326, 312, 154];   // żelazna włócznia, buzdygan, kamienny młot, dębowy kostur, oszczep
     const bestWeapon = () => WEAPONS.find(id => count(id) > 0) || 0;
     function equipBest() {
@@ -1144,7 +1413,7 @@
             } };
             // wounds: 3% of health an hour heals by itself (Survival.js), not while "wounded" - waiting where no foe is, else up to sleep
             const wounded = $gameSystem.isWounded && $gameSystem.isWounded();
-            if ((wounded || hpRatio() < 0.4) && hpRatio() < 0.7 && count(152) > 0 && !foesNear(6).length) return { what: "Opatruję ranę", why: why + ", życie " + Math.round(hpRatio() * 100) + "%", run: function* () {
+            if ((wounded || hpRatio() < 0.4) && (wounded || hpRatio() < 0.7) && count(152) > 0 && !foesNear(6).length) return { what: "Opatruję ranę", why: why + ", życie " + Math.round(hpRatio() * 100) + "%", run: function* () {
                 const n0 = count(152);
                 yield* combatOn();
                 L.key("heal", true); yield; yield; L.key("heal", false);
@@ -1152,14 +1421,17 @@
                 say(count(152) < n0 ? "opatrunek założony (życie " + Math.round(hpRatio() * 100) + "%)" : "opatrunek nie wszedł");
                 return true;
             } };
-            if (hpRatio() < 0.55 && !wounded && !foesNear(9).length && needs().water > 12) return { what: "Odpoczywam pod ziemią (rany się goją)", why: why + ", życie " + Math.round(hpRatio() * 100) + "%", run: function* () {
-                for (let n = 0; n < 60 * 60 * 30 && hpRatio() < 0.9 && !foesNear(7).length && needs().water > 10; n += 60) { yield* idle(60); }
+            if (hpRatio() < 0.55 && !wounded && !foesNear(9).length && needs().water > waterBack(f) + 5) return { what: "Odpoczywam pod ziemią (rany się goją)", why: why + ", życie " + Math.round(hpRatio() * 100) + "%", run: function* () {
+                for (let n = 0; n < 60 * 60 * 30 && hpRatio() < 0.9 && !foesNear(7).length && needs().water > waterBack(f); n += 60) { yield* idle(60); }
                 return true;
             } };
             if (hpRatio() < 0.25 && count(152) === 0) return { what: "Uciekam po schodach w górę (mało życia, bez opatrunków)", why, run: function* () { yield* goUp(why, true); yield* sleepHome(); } };
+            // (2026-11-17 with the player: a wound and no bandage - up at once, not at 30% of life)
+            if (wounded && count(152) === 0 && !foesNear(4).length) return { what: "Ranny bez opatrunku - wracam na górę", why: why + ", życie " + Math.round(hpRatio() * 100) + "%", run: function* () { yield* goUp(why); yield* sleepHome(); } };
             if (hpRatio() < 0.3 || (wounded && hpRatio() < 0.6)) return { what: "Ranny - wracam na górę odpocząć", why, run: function* () { yield* goUp(why); yield* sleepHome(); } };
             if (stamina() < 12 && !foesNear(8).length) return { what: "Wyczerpany - wracam na górę spać", why, run: function* () { yield* goUp(why); yield* sleepHome(); } };
-            if (needs().water < 12 && !foesNear(8).length) return { what: "Bez wody - wracam na górę do studni", why: why + " (pod ziemią wody nie ma do piętra 50)", run: () => goUp(why) };
+            if (needs().water < 55 && skinSips() > 0 && !foesNear(5).length) return { what: "Piję z bukłaka", why: "woda " + Math.round(needs().water) + ", w bukłaku " + skinSips() + "/" + skinMax(), run: sipSkin };
+            if (needs().water + skinWater() < waterBack(f) && !foesNear(8).length) return { what: "Mało wody na drogę powrotną - wracam na górę do studni", why: why + " (woda " + Math.round(needs().water) + ", na powrót z piętra " + f + " trzeba ~" + waterBack(f) + "; pod ziemią wody nie ma do piętra 50)", run: () => goUp(why) };
             return { what: "Schodzę: piętro " + f + " → " + (f + 1), why, run: () => floorDown(why) };
         }
         return { what: "Idę do podziemi (piwnica tawerny, krata)", why: why + " (najgłębiej: " + deep + ")", run: function* () { FAB.safeSave(); return yield* goMap(10, why); } };
@@ -1221,8 +1493,12 @@
     function shopWishlist(budget) {
         const out = [];
         if (!window.Bron || !Bron.oferta || !BD()) return out;
+        // (2026-11-17 with the player: Tadek sells no torso armour - the gambeson is the seamstress's, the leather the tanner's)
         let rows = [];
-        try { rows = Bron.oferta("kowal", "kup").filter(r => r && r.act === "kup" && !r.locked && r.p); } catch (e) { return out; }
+        for (const who of Object.keys(SELLERS)) {
+            try { rows = rows.concat(Bron.oferta(who, "kup").filter(r => r && r.act === "kup" && !r.locked && r.p).map(r => Object.assign({ who }, r))); } catch (e) { /* (not selling now) */ }
+        }
+        if (!rows.length) return out;
         const lvl = Bron.level ? Bron.level() : 1;
         for (const slot of ["torso", "left", "head", "legs", "hands", "feet", "right"]) {
             const now = wornIn(slot), nowP = now ? BD().przedmiot(now) : null;
@@ -1230,12 +1506,18 @@
             const cands = rows.filter(r => slotOf(r.p) === slot && r.p.poziom <= lvl + 1 && r.cost <= budget && valueOfItem(r.p) > nowV * (slot === "right" ? 1.15 : 1.0) + 0.0001 && !count(r.id));
             if (!cands.length) continue;
             cands.sort((a, b) => valueOfItem(b.p) - valueOfItem(a.p) || a.cost - b.cost);
-            out.push({ id: cands[0].id, name: cands[0].p.nazwa, cost: cands[0].cost, slot });
+            out.push({ id: cands[0].id, name: cands[0].p.nazwa, cost: cands[0].cost, slot, who: cands[0].who });
             budget -= cands[0].cost;
         }
         return out;
     }
     FAB.shopWishlist = shopWishlist;
+    // the armour sellers: the map, the person (TownLife's key) and the row of their talk that opens the shop
+    const SELLERS = {
+        kowal: { map: () => MAP.town, who: () => tadek(), pick: "Pokaż broń", name: "kowal Tadek" },
+        garbarz: { map: () => 218, who: () => (window.TownLife && TownLife.eventOf ? TownLife.eventOf("garbarz") : null), pick: "Skórzane zbroje", name: "garbarz Ignac" },
+        szwaczka: { map: () => MAP.town, who: () => (window.TownLife && TownLife.eventOf ? TownLife.eventOf("szwaczka") : null), pick: "Przeszywanice", name: "szwaczka Dorota" }
+    };
     // the cheapest good set to aim for (the shifts pay it): the torso, a shield, the head
     function gearTarget() {
         const all = shopWishlist(99999).filter(w => ["torso", "left", "head"].includes(w.slot));
@@ -1253,7 +1535,7 @@
             if (sc._tab !== "kup") { I.left = true; return true; }
             const want = job.buy[0], i = (sc._rows || []).findIndex(r => r && r.act === "kup" && r.id === want.id);
             if (job.pressed) {
-                if (count(want.id) > job.c0) { job.bought.push(want.name); say("kupione u Tadka: " + want.name + " (" + want.cost + " G)"); }
+                if (count(want.id) > job.c0) { job.bought.push(want.name); say("kupione u: " + (job.seller || "Tadek") + ": " + want.name + " (" + want.cost + " G)"); }
                 else { job.skipped.push(want.name); say("nie kupione: " + want.name); }
                 job.buy.shift(); job.pressed = false; return true;
             }
@@ -1278,13 +1560,18 @@
             try { if (slot === "right") { if (Combat.setHand("m" + id)) say("bierze do ręki: " + p.nazwa); } else if (Equipment.equip(slot, id)) say("zakłada: " + p.nazwa + " (jak w oknie Ekwipunek)"); } catch (e) { /* (no such slot) */ }
         }
     }
-    function* shopAtTadek(list, repair, why) {
-        if (!(yield* goMap(MAP.town, why))) return false;
-        FAB.shopJob = { buy: list.slice(), bought: [], skipped: [], repair };
+    function* shopAtTadek(list, repair, why, seller) {
+        const S = SELLERS[seller || "kowal"];
+        if (!(yield* goMap(S.map(), why))) return false;
+        FAB.shopJob = { buy: list.slice(), bought: [], skipped: [], repair: repair && (seller || "kowal") === "kowal", seller: S.name };
         const ids = list.map(w => w.id);
-        setDoing("Przygotowuję się: kupuję u Tadka " + list.map(w => w.name).join(", "), why);
+        setDoing("Przygotowuję się: kupuję u: " + S.name + " - " + list.map(w => w.name).join(", "), why);
         // (his quests and offers speak first - a talk or two before the shop's row; talked to again until the shop opens)
-        for (let k = 0; k < 5 && !FAB.shopJob.opened; k++) yield* talkTo(tadek, { picks: ["Pokaż broń"], leave: true });
+        for (let k = 0; k < 5 && !FAB.shopJob.opened; k++) {
+            const e = S.who();
+            if (!e || e.isTransparent() || (e._town && e._town.hidden)) { setDoing("Czekam na: " + S.name, why); yield* idle(300); continue; }
+            yield* talkTo(S.who, { picks: [S.pick], leave: true });
+        }
         const job = FAB.shopJob;
         FAB.shopJob = null;
         equipBought(ids.filter(id => count(id) > 0));
@@ -1292,7 +1579,7 @@
         const none = !job.bought.length && !(job.repairs > 0);
         if (none) { FAB.shopNone = FAB.shopNone && FAB.shopNone.day === day() ? FAB.shopNone : { day: day(), n: 0 }; FAB.shopNone.n++; }
         if (!none || FAB.shopNone.n === 1 || FAB.shopNone.n === 4)
-            note("prep", { what: "u Tadka: kupione " + (job.bought.join(", ") || "nic") + (job.skipped.length ? "; nie: " + job.skipped.join(", ") : "") + (repair ? "; naprawa: " + (job.repairs || 0) : "") + (none && FAB.shopNone.n === 4 ? " (4. raz dziś - do jutra bez kowala)" : "") });
+            note("prep", { what: "u: " + S.name + ": kupione " + (job.bought.join(", ") || "nic") + (job.skipped.length ? "; nie: " + job.skipped.join(", ") : "") + (repair ? "; naprawa: " + (job.repairs || 0) : "") + (none && FAB.shopNone.n === 4 ? " (4. raz dziś - do jutra bez kowala)" : "") });
         return job.bought.length > 0;
     }
     // (worn below 35% AND on Tadek's mending tab with the gold for it - he mends metal only; a wooden spear or leather is not his:
@@ -1323,7 +1610,10 @@
         const wish = shopWishlist($gameParty.gold() - 20);
         const repair = wornOut();
         const shopTired = FAB.shopNone && FAB.shopNone.day === day() && FAB.shopNone.n >= 4;
-        if ((wish.length || repair) && h >= 6.2 && h < 16.5 && !shopTired) return { what: "Przygotowuję się: kowal Tadek (" + (wish.length ? wish.map(w => w.name).join(", ") : "naprawa") + ")", why, run: () => shopAtTadek(wish, repair, why) };
+        if ((wish.length || repair) && h >= 6.2 && h < 16.5 && !shopTired) {
+            const seller = wish.length ? wish[0].who || "kowal" : "kowal", list = wish.filter(w => (w.who || "kowal") === seller);
+            return { what: "Przygotowuję się: " + SELLERS[seller].name + " (" + (list.length ? list.map(w => w.name).join(", ") : "naprawa") + ")", why, run: () => shopAtTadek(list, repair, why, seller) };
+        }
         // not enough gold for the torso / the shield / the head: the evening shifts at Borgar's (at most 4 a preparing)
         const target = gearTarget();
         if (target > $gameParty.gold() - 20 && (FAB.prepShifts || 0) < 4) {
@@ -1353,7 +1643,7 @@
             return { what: "Oblężenie: bronię tawerny (fala " + ((sg && sg.wave) || 0) + ")", why, run: function* () {
                 if (foesNear(14).length) { yield* fightFoes(60 * 120, why); return true; }
                 // the wave not here yet: towards the tavern's door (Map008) / the hall (Map001)
-                if (mapId() === MAP.town) yield* L.walkTo(51, 20); else yield* L.walkTo(50, 40);
+                if (mapId() === MAP.town) yield* L.walkTo(43, 37); else yield* L.walkTo(14, 30);
                 yield* idle(120);
                 return true;
             } };
@@ -1362,7 +1652,7 @@
             const night = st.siegeDay && day() >= st.siegeDay && (h >= 20.5 || h < 4);
             if (night) {
                 if (mapId() !== MAP.town && mapId() !== MAP.tavern) return { what: "Noc napadu: wracam pod tawernę", why, run: () => goMap(MAP.town, why) };
-                return { what: "Noc napadu: czekam pod tawerną", why, run: function* () { yield* L.walkTo(51, 20); yield* idle(300); } };
+                return { what: "Noc napadu: czekam pod tawerną", why, run: function* () { yield* L.walkTo(43, 37); yield* idle(300); } };
             }
             if (st.siegeDay && day() >= st.siegeDay && h >= 17) return { what: "Noc napadu tuż-tuż: idę do miasta", why, run: () => goMap(MAP.town, why) };
             return { what: "Akt III uzbrojony - napad dnia " + st.siegeDay, why, run: () => idle(600) };
@@ -1455,7 +1745,26 @@
         const siegeNight = a3 === "siege" || (a3 === "armed" && Act3.state().siegeDay && day() >= Act3.state().siegeDay);   // (Akt III: the night of the raid he stays by the tavern)
         if ((h >= 21.25 || h < 5.5) && !(lastNight && gold() > 0) && !inUnder() && !bellNight && !siegeNight) {
             if (mapId() === MAP.field && hasBedroll()) return { what: "Śpię na działce", why: "noc (" + clock() + "), leśne legowisko", run: sleepField };
+            const camp = campOk() ? campHere() : null, sealed = homeSealed(), stableOk = !!(s.flags && s.flags.stajnia), far = m => travelH(m) > 1.25;
+            if (camp) return { what: "Śpię w obozie (" + mapName(mapId()) + ")", why: "noc (" + clock() + "), " + (camp.type === "tent" ? "namiot" : "leśne legowisko") + " tutaj", run: () => campSleep("noc") };
+            // (far from every bed with the tent in the bag: pitched where he stands)
+            if (count(TENT) > 0 && campOk() && (sealed ? (!hasBedroll() || far(MAP.field)) && (!stableOk || far(STABLE)) : far(MAP.house)))
+                return { what: "Rozkładam namiot tutaj i śpię (" + mapName(mapId()) + ")", why: "noc (" + clock() + "), do posłania daleko - namiot z plecaka", run: () => campSleep("noc") };
+            if (sealed) {
+                if (hasBedroll()) return { what: "Idę spać na działkę", why: "noc (" + clock() + "), chata zapieczętowana - leśne legowisko", run: function* () { if (yield* goMap(MAP.field, "sen")) return yield* sleepField(); return false; } };
+                if (stableOk || !campOk()) return { what: "Idę spać na stryszek w stajni", why: "noc (" + clock() + "), chata dziadka zapieczętowana - Szczepan daje siano", run: sleepStable };
+                return { what: "Nie mam gdzie spać - robię nocleg tutaj (" + mapName(mapId()) + ")", why: "noc (" + clock() + "), chata zapieczętowana, stryszku u Szczepana jeszcze nie ma - " + (count(TENT) ? "namiot" : "leśne legowisko z gałęzi i włókna"), run: () => campSleep("noc") };
+            }
             return { what: "Idę spać do domu dziadka", why: "noc (" + clock() + "), posłanie u dziadka za darmo", run: sleepHome };
+        }
+        // (the morning: the tent packed back into the bag - the next night it goes up wherever he is)
+        const pitched = campHere();
+        if (pitched && pitched.type === "tent" && h >= 5.5 && h < 21 && !((FAB.packNo || 0) > now())) {
+            return { what: "Składam namiot do plecaka", why: "rano - namiot idzie ze mną na następną noc", run: function* () {
+                const ok = yield* AP.TASKS.useEntry(pitched, "Złóż namiot");
+                if (!ok) FAB.packNo = now() + 3;
+                return ok;
+            } };
         }
         // 2. jedzenie i picie (hunger and thirst never kill - they cap the strength; the town's well gives 2 draws a day)
         if (n.food < 50 && bagFoods().some(f => f.fed > 0)) return { what: "Jem", why: "sytość " + Math.round(n.food), run: () => eatBest(false) };
@@ -1471,6 +1780,39 @@
         if (n.water < 60 && wellLeft() > 0 && !inUnder() && (mapId() === MAP.town || mapId() === MAP.tavern || n.water < 35)) return { what: "Piję ze studni miejskiej", why: "woda " + Math.round(n.water) + " (2 nabrania dziennie)", run: drinkWell };
         if (n.water < 25 && bagFoods().some(f => f.water > 0)) return { what: "Piję (jedzenie z wodą)", why: "woda " + Math.round(n.water), run: () => eatBest(true) };
         if (stamina() < 30 && inUnder() && bagFoods().some(f => f.stamina > 0) && !foesNear(8).length) return { what: "Jem dla sił", why: "siły " + Math.round(stamina()), run: () => eatBest("stamina") };
+        // 2a. pines from cones on the plot (the player 2026-11-17: "gracz może względnie wcześniej zasadzić kilka drzew" - the plot's
+        // trees all cut by the time the forge wants charcoal): once a day while he is on the plot in the daytime with cones in the bag
+        if (!inUnder() && mapId() === MAP.field && count(CONE) > 0 && plantedPines() < PINES_WANT && FAB.pineDay !== day() && h >= 6 && h < 18 && stamina() > 30 && !needUrgent())
+            return { what: "Sadzę sosny z szyszek na działce", why: "drewno na później - rośnie ich " + plantedPines() + "/" + PINES_WANT, run: function* () { FAB.pineDay = day(); yield* plantPines(4); return true; } };
+        // 2b. Wezwanie króla (the new world): be before the hut on day 3 (7-18) for the summons; the letter under the door when it waits
+        // there; the letter to Szczepan in the stable (then the hay loft is his bed)
+        const wz = wezNow();
+        if (wz && !inUnder()) {
+            if (!wz.called && day() >= 3 && h >= 7 && h < 15.5) return { what: "Wezwanie króla: czekam przed chatą dziadka", why: "dzień " + day() + " - goniec Lorda przychodzi po dziadka", run: function* () {
+                if (!(yield* goTile(MAP.yard, 14, 22, "wezwanie"))) return false;
+                yield* idle(240);
+                return true;
+            } };
+            if (wz.called && !wz.letter && h >= 6 && h < 20) return { what: "Wezwanie króla: list dziadka pod drzwiami chaty", why: "dziadek odpłynął - list czeka", run: function* () {
+                if (!(yield* goTile(MAP.yard, 14, 22, "list"))) return false;
+                yield* idle(120);
+                return true;
+            } };
+            // (Szczepan is not always in his stable: a look in, half an hour at most, then again in three hours - the day goes on meanwhile)
+            if (wz.letter && !(s.flags && s.flags.stajnia) && h >= 6 && h < 20.5 && (FAB.letterNext || 0) <= now()) return { what: "Niosę list dziadka Szczepanowi (stajnia)", why: "Wezwanie króla: nocleg w stajni", run: function* () {
+                if (!(yield* goMap(STABLE, "list do Szczepana"))) return false;
+                const kol = () => (window.TownLife && TownLife.eventOf ? TownLife.eventOf("kolodziej") : null);
+                for (let k = 0; k < 3; k++) {
+                    const e = kol();
+                    if (!e || e.isTransparent() || (e._town && e._town.hidden) || (window.$gameMap && $gameMap.event(e.eventId()) !== e)) { setDoing("Czekam na Szczepana w stajni", "Wezwanie króla"); yield* idle(120); continue; }
+                    const r = yield* talkTo(kol, { leave: true });
+                    if (r.ok) return true;
+                }
+                FAB.letterNext = now() + 3;
+                say("Szczepana nie ma w stajni - zajrzę za trzy godziny");
+                return false;
+            } };
+        }
         // 3. rozdział 1: działka, praca, zmiany, spłata
         if (!chapterDone) {
             if (!s.flags.field) return { what: "Idę na działkę dziadka (Kruczy Jar)", why: "Rozdział 1: dziadek pozwala budować na swoim polu", run: function* () {
@@ -1480,7 +1822,7 @@
                 checkGoal("hire", MAP.tavern);
                 if (!(yield* toCounter())) return false;
                 installShiftBot();
-                yield* talkTo(borgarCounter, { tiles: [[50, 29]], picks: shiftOpen() && h >= 16 ? ["Weź zmianę"] : [], leave: true });
+                yield* talkTo(borgarCounter, { tiles: [COUNTER], picks: shiftOpen() && h >= 16 ? ["Weź zmianę"] : [], leave: true });
                 return true;
             } };
             if (gold() >= s.debt - s.paid) return { what: "Idę do Lorda spłacić cały dług", why: ch1 + ", w sakiewce " + gold() + " G", run: function* () { checkGoal("payAll", MAP.manor); yield* payDebt(); } };
@@ -1491,9 +1833,11 @@
             // way) and the tavern
             if (h >= 5.5 && h < Math.max(leave, 13.5)) {
                 if (shiftOpen() && h < leave) { const fp = freeTimePlan(16, MAP.tavern, "Do zmiany"); if (fp) return fp; }
-                if (mapId() === MAP.tavern && Math.abs(P().x - 50) + Math.abs(P().y - 31) <= 2) return { what: "Czekam w tawernie na zmianę (od 16:00)", why: ch1, run: () => idle(900) };
+                if (mapId() === MAP.tavern && Math.abs(P().x - COUNTER[0]) + Math.abs(P().y - COUNTER[1]) <= 2) return { what: "Czekam w tawernie na zmianę (od 16:00)", why: ch1, run: () => idle(900) };
                 return { what: "Idę do tawerny", why: ch1 + " - zmiana od 16:00", run: function* () { if (needs().water < 80 && wellLeft() > 1) yield* drinkWell(); return yield* toCounter(); } };
             }
+            if (homeSealed()) return hasBedroll() ? { what: "Wracam na działkę", why: "wieczór - chata zapieczętowana, sen na legowisku", run: function* () { yield* goMap(MAP.field, "sen"); yield* idle(120); } }
+                : { what: "Idę do stajni na noc", why: "wieczór - chata zapieczętowana, stryszek u Szczepana", run: function* () { yield* goMap(STABLE, "sen"); yield* idle(120); } };
             return { what: "Wracam do domu dziadka", why: "wieczór - sen u dziadka", run: function* () { yield* goMap(MAP.house, "dom"); yield* idle(120); } };
         }
         FAB.done1 = true;
@@ -1514,11 +1858,19 @@
         // a weapon before the underground: the iron spear from his own forge (Bron: „Wykuj: żelazna włócznia” - 2 iron, 1 coal, 2 wood),
         // else the oak staff from the workbench; put in hand as in the equipment window
         const weapon = bestWeapon();
+        // (the spear's 2 iron: 2 ore each - the ore from the mountains first)
+        if (weapon !== 331 && !inUnder() && !FAB.spearGaveUp && count(331) === 0 && count(86) < 2 && count(85) < 2 * (2 - count(86)) && oreTripOk())
+            return oreTrip("przed podziemiami: żelazo na włócznię", 2 * (2 - count(86)));
+        // (the charcoal for that iron wants 6 wood: the plot's trees all cut - the woods)
+        if (weapon !== 331 && !inUnder() && !FAB.spearGaveUp && count(331) === 0 && FAB.fieldNoTrees === day() && count(61) < 8 && woodTripOk())
+            return woodTrip("przed podziemiami: drewno na węgiel do żelaza na włócznię", 8);
         if (weapon !== 331 && !inUnder() && !FAB.spearGaveUp) return { what: "Kuję żelazną włócznię (kuźnia na działce)", why: "przed podziemiami: broń (pięści to za mało na stwory)", run: function* () {
             const r = yield* fieldWork(PLAN_IRON.concat(["Oszczep"]), () => count(331) > 0 || hour() >= 20.5 || hour() < 5.5, "broń na podziemia", function* () {
                 if (count(86) < 2 || count(79) < 1 || count(61) < 2) {
                     setDoing("Na działce: żelazo na włócznię", "broń na podziemia");
                     if (yield* AP.TASKS.obtain({ 86: 2, 79: 1 + (count(86) < 2 ? 2 : 0), 61: 2 })) return "dalej";
+                    // (no tree left to cut on the plot: off to the woods - the plan's next pass; not ten-minute waits all day)
+                    if (count(61) < 8 && !AP.bestWood(true)) { FAB.fieldNoTrees = day(); say("na działce nie ma drzew do ścięcia - idę po drewno do lasu"); return true; }
                     yield* idle(600); return "dalej";
                 }
                 setDoing("Kuję: żelazna włócznia", "broń na podziemia");
@@ -1532,14 +1884,29 @@
         } };
         equipBest();
         // bandages before going down (the only thing that heals a wound - +20% life; „Zrób opatrunek”: fibre, herbs, yarrow from the field)
-        if (count(152) < 3 && !inUnder() && !FAB.bandageGaveUp && deep < UNDER_GOAL) return { what: "Robię opatrunki na drogę (zioła, krwawnik, włókno)", why: "przed podziemiami: rany goją się tylko opatrunkiem albo snem", run: function* () {
-            yield* fieldWork([], () => count(152) >= 3 || hour() >= 20.5 || hour() < 5.5, "opatrunki na podziemia", function* () {
-                FAB.bandageTries = (FAB.bandageTries || 0) + 1;
-                if (FAB.bandageTries > 12) { FAB.bandageGaveUp = true; note("notes", { what: "opatrunki: nie udało się zebrać ziół / krwawnika (pora roku?) - schodzi bez nich" }); return true; }
+        // (2026-11-17 balance with the player: 4 bandages - a spider's bite wounds; herbs off the plot too when it has none left)
+        if (count(152) < BANDAGES && !inUnder() && !FAB.bandageGaveUp && deep < UNDER_GOAL) return { what: "Robię opatrunki na drogę (zioła, krwawnik, włókno)", why: "przed podziemiami: rany goją się tylko opatrunkiem albo snem", run: function* () {
+            const r = yield* fieldWork([], () => count(152) >= BANDAGES || hour() >= 20.5 || hour() < 5.5 || (FAB.bandageField || 0) > 5, "opatrunki na podziemia", function* () {
+                FAB.bandageField = (FAB.bandageField || 0) + 1;
                 for (const [id, kind] of [[104, "herb"], [150, "yarrow"], [92, "fiber"]]) if (count(id) < 2) { setDoing("Na działce: zbieram " + $dataItems[id].name, "opatrunki"); yield* AP.TASKS.gather([kind], 2 - count(id)); }
-                if (count(104) >= 2 && count(150) >= 2 && count(92) >= 2) { setDoing("Robię opatrunek", "opatrunki"); yield* AP.TASKS.handCraft("Zrób opatrunek"); }
-                return count(152) >= 3 ? true : "dalej";
+                if (count(104) >= 2 && count(150) >= 2 && count(92) >= 2) { setDoing("Robię opatrunek", "opatrunki"); yield* AP.TASKS.handCraft("Zrób opatrunek"); FAB.bandageField = 0; }
+                return count(152) >= BANDAGES ? true : "dalej";
             });
+            if (count(152) >= BANDAGES || hour() >= 20.5 || hour() < 5.5) return r;
+            // (the plot gave nothing for a while: the herbs and the yarrow of the wild - the mountains, the coast)
+            FAB.bandageField = 0;
+            FAB.bandageTries = (FAB.bandageTries || 0) + 1;
+            if (FAB.bandageTries > 6) { FAB.bandageGaveUp = true; note("notes", { what: "opatrunki: nie udało się zebrać ziół / krwawnika (pora roku?) - schodzi z " + count(152) }); return true; }
+            for (const m of [222, 219]) {
+                if (count(152) >= BANDAGES || hour() >= 19) break;
+                if (!(yield* goMap(m, "zioła na opatrunki"))) continue;
+                for (let k = 0; k < 6 && count(152) < BANDAGES; k++) {
+                    for (const [id, kind] of [[104, "herb"], [150, "yarrow"], [92, "fiber"]]) if (count(id) < 2) { setDoing(mapName(m) + ": zbieram " + $dataItems[id].name, "opatrunki"); yield* AP.TASKS.gather([kind], 2 - count(id)); }
+                    if (count(104) >= 2 && count(150) >= 2 && count(92) >= 2) { setDoing("Robię opatrunek", "opatrunki"); yield* AP.TASKS.handCraft("Zrób opatrunek"); }
+                    else break;
+                }
+            }
+            return true;
         } };
         // preparing: before the first descent, and after dying twice on a floor (gear from Tadek, mending; the points are spent all the time)
         if (!inUnder() && (FAB.prep || !FAB.firstPrepDone) && deep < UNDER_GOAL) {
@@ -1552,7 +1919,25 @@
             // before going down: rested, healed, watered (no water down there until floor 50; hunger and thirst cap the strength)
             if (!inUnder()) {
                 const nn = needs();
+                // (2026-11-17 run: 177 G in the purse and still no torso armour - the shops were only visited before the first trip and
+                // after deaths) up on the surface with the gold for a better piece: to its seller first (the torso before the rest)
+                const hs = hour(), shopTired = FAB.shopNone && FAB.shopNone.day === day() && FAB.shopNone.n >= 4;
+                if (hs >= 6.2 && hs < 16.5 && !shopTired) {
+                    const wish = shopWishlist($gameParty.gold() - 20);
+                    if (wish.length) {
+                        const seller = wish[0].who || "kowal", list = wish.filter(w => (w.who || "kowal") === seller);
+                        return { what: "Kupuję lepszą zbroję: " + SELLERS[seller].name + " (" + list.map(w => w.name).join(", ") + ")", why: "na górze, w sakiewce " + $gameParty.gold() + " G", run: () => shopAtTadek(list, false, "zbroja przed zejściem", seller) };
+                    }
+                }
                 if (hpRatio() < 0.7 || stamina() < 55) return { what: "Odpoczywam przed zejściem (sen u dziadka)", why: "życie " + Math.round(hpRatio() * 100) + "%, siły " + Math.round(stamina()), run: sleepHome };
+                // (no skin: its way once a day before a trip down - the tannery, a tanned hide, 3 fibre; else down without it)
+                if (!skinOwned() && !FAB.skinGaveUp && FAB.skinDay !== day() && hour() >= 6 && hour() < 17) return { what: "Robię bukłak (garbarnia, skóra, len)", why: "woda na drogę pod ziemię - 4 łyki po 35", run: function* () {
+                    FAB.skinDay = day();
+                    const ok = yield* makeSkin("bukłak na podziemia");
+                    if (!ok) { FAB.skinFails = (FAB.skinFails || 0) + 1; if (FAB.skinFails > 8) { FAB.skinGaveUp = true; note("unclear", { what: "bukłak: 8 dni bez skutku (garbarnia / surowa skóra / len)" }); } }
+                    return true;
+                } };
+                if (skinOwned() && skinSips() < skinMax() && wellLeft() > 0) return { what: "Napełniam bukłak przed zejściem", why: "bukłak " + skinSips() + "/" + skinMax() + " (pod ziemią wody nie ma do piętra 50)", run: fillSkinWell };
                 if (nn.water < 70 && wellLeft() > 0) return { what: "Piję ze studni przed zejściem", why: "woda " + Math.round(nn.water) + " (pod ziemią wody nie ma do piętra 50)", run: drinkWell };
                 // (the well's two draws used up and too little water for a trip down: the night first, tomorrow's draws)
                 if (nn.water < 50 && wellLeft() === 0) return { what: "Czekam do jutra na wodę (studnia: koniec przydziału)", why: "woda " + Math.round(nn.water) + " - za mało na wyprawę pod ziemię", run: sleepHome };
@@ -1780,6 +2165,10 @@
         if (cand.length) { const [x, y] = cand[Math.floor(Math.random() * cand.length)]; say("obejście utknięcia: kilka kroków na " + x + "," + y); yield* L.walkTo(x, y, f); }
         return true;
     };
+    // (for tests/sosny_autopilot_test.js: the pines on their own - AP.run([["fab_plant", n]]))
+    AP.TASKS.fab_plant = function* (n) { return yield* plantPines(n || 4); };
+    AP.TASKS.fab_skin = function* (what) { return what === "fill" ? yield* fillSkinWell() : what === "sip" ? yield* sipSkin() : yield* makeSkin("test"); };
+    FAB.trees = { pineSpot, plantedPines, PINES_WANT };
     FAB.unstickWalk = function() { AP.stop(); AP.restartWith = [["fabula"]]; AP.run([["fabula_unstick"], ["fabula"]]); FAB.on = true; return true; };
     FAB.stop = function() { FAB.on = false; AP.stop(); L.releaseAll(); return true; };
     return "ok v" + VERSION;

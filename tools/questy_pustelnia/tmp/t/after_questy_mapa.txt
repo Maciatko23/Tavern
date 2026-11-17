@@ -1,0 +1,16 @@
+PASS gra
+PASS K3: tekst dziennika mowi o drodze za brama poludniowa (Kruczy Jar)  "Znajdź podkowę na drodze za bramą południową: w południe (11–14), przy słońcu, błyska między kamieniami. | kuźnia → droga za bramą południową (Kruczy Jar)"
+PASS K3: miejsce kroku stoi na Kruczym Jarze (74,18)  [74,18]
+PASS K3: podkowa znaleziona - krok zaliczony  {"s":"active","step":1,"day":40,"sday":40,"sh":12.02083333333327,"t":{"done":{"0":40},"alt":-1},"times":0,"end":0}
+PASS D5: teksty krokow - Kruczy Jar i Laka  "Nocą (21–5) zabij 2 wilki zwiadowców na Kruczym Jarze. | Nocą zabij przewodnika watahy na Łące (największy wilk)."
+PASS D5 krok 1: nocą na Kruczym Jarze wilki zwiadowcy zostają wprowadzone (spawned = noc)  41
+PASS D5: dwa wilki na Kruczym Jarze zaliczaja krok 1 -> krok 2  {"s":"active","step":2,"day":41,"sday":41,"sh":22.078333333333596,"t":{"done":{"1":41},"spawned":41,"got":2},"times":0,"end":0}
+PASS D5 krok 2: kolejnej nocy na Łące wchodzi przewodnik watahy (spawned = noc)  42
+PASS brama Gor prowadzi do Osady Milczacych (120)  [120,46,65]
+PASS W8 rozdz. 5: znacznik osada_brama (miejsce Gruma) jest w kieszeni  [20,30]
+PASS W8 mozna zaczac, kieszen Osady jest na mapie swiata  {"w8":{"s":"active","step":0,"day":42,"sday":42,"sh":22.096111111111433,"t":{"done":{}},"times":0,"end":0},"q":"{\"w8\":true,\"d38\":true}"}
+PASS z Osady krawedz wraca do Gor (6,28)
+PASS przy latarni nie ma bramy do Pustelni, Pustelnia poza swiatem (na razie)  {"map":125,"gate":false,"inWorld":false}
+PASS brama Podgrodzia prowadzi do Spalonej zagrody (168)
+PASS bez bledow w konsoli  []
+15/15 passed

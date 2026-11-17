@@ -220,7 +220,7 @@
     // ------------------------------------------------------------------
     const DOOR_STUB = [C(355, ["Dwor.door(this)"]), C(0, [])];
     const HATCH_STUB = [C(355, ["Dwor.hatch(this)"]), C(0, [])];
-    const isDoor = ev => ev._mapId === M.manor && /^Drzwi dworu/i.test((ev.event() && ev.event().name) || "");
+    const isDoor = ev => ev._mapId === M.manor && (/^Drzwi dworu/i.test((ev.event() && ev.event().name) || "") || /<Town:door=dwor>/.test((ev.event() && ev.event().note) || ""));
     function isHatch(ev) {
         if (ev._mapId !== M.manor || ev.eventId() >= 500) return false;
         const d = ev.event(), p = d && d.pages && d.pages[0], img = p && p.image;
@@ -390,7 +390,7 @@
         }
         if (!onMap(M.manor)) return;
         // the garden at night: the guard's round (W1's fifth chapter keeps its own eyes) and Feliks at the hatch
-        const inGarden = $gamePlayer.x <= P.manor.garden.x1 && $gamePlayer.y >= P.manor.garden.y0;
+        const G = P.manor.garden, inGarden = $gamePlayer.x >= G.x0 && $gamePlayer.x <= G.x1 && $gamePlayer.y >= G.y0 && $gamePlayer.y <= G.y1;
         if (!inGarden || !inHours(h, [21, 4.5]) || s.garden === nightOf()) return;
         const w1On = (() => { const r = rec("W1"); return !!r && r.s === "active" && W1Ch5(r); })();
         const g = residentEv("straznik");

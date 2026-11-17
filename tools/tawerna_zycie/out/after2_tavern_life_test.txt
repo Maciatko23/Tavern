@@ -1,0 +1,82 @@
+PASS the game boots
+PASS TavernLife.js (with its parts) and QuestBoard.js are in the game
+PASS the rebuilt tavern (Map001, 63 x 55) with its tagged places (the bath and Wanda are upstairs on Map025)  {"w":63,"h":55,"tags":["meal:1","mealtable:4","stage:1","arm:1","darts:2"]}
+PASS Borgar, Melia, Grum and Ozzy are found by name (events 1-4), their parallel 'Atmosfera' events are not  [1,2,3,4]
+PASS Survival.defineBuff registers the premia: Czysty, Natchniony, Ugoszczony, Wypoczęty  {"fn":"function","names":["Czysty","Natchniony","Ugoszczony","Wypoczęty"],"cost":0.9}
+PASS Czysty: work costs 10% less strength (costFactor x0.9: 20 costs 18)  {"f0":1,"f1":0.9,"left":82}
+PASS Story's Borgar menu has 'Zjedz coś' and 'Wynajmij pokój' (before 'Pogadaj' and 'Nie teraz'; no shift in the morning)  {"labels":["Sprzedaj towar","Zjedz coś","Wynajmij pokój","Księga gości","Pogadaj","Nie teraz"],"done":true}
+PASS ...Borgar speaks from his bust (the talk busts of SpeechBubbles)  [[1,true]]
+PASS the dish of the day is cheaper (-30%)  {"name":"Placek z serem","full":9,"now":6}
+PASS the card opens with the 7 dishes and drinks, prices, the day's dish marked  ["Gulasz 16 G","Kapuśniak 12 G","Pieczeń z kaszą 18 G","Placek z serem 6 G","Chleb ze smalcem 5 G","Kufel piwa 4 G","Miód pitny 8 G"]
+PASS Gulasz ordered: its price taken  {"before":200,"after":184,"price":16}
+PASS ...and told on the Tawerna bus: 'served' { service: meal, price, dish: gulasz }  [{"service":"meal","price":16,"dish":"gulasz"}]
+PASS he sat at the nearest free table (a real <Tavern:mealtable>) facing its way, the plate on the tile he faces (within reach)  {"seated":{"x":18,"y":42,"d":6,"plate":[[19,42,"gulasz"]]},"expectSeat":{"id":77,"x":18,"y":42,"dir":6,"px":19,"py":42}}
+PASS about 30 minutes passed  0.500833333333361
+PASS the food worked: +65 stamina, hunger and thirst down, Najedzony + Rozgrzany, and Ugoszczony on top  {"gold":184,"st":95,"food":99.99906666666669,"water":64.74854166666694,"h":82.50333333333336,"hosted":true,"sated":true,"warm":true,"meals":1,"x":18,"y":43,"pass":true,"note":true}
+PASS afterwards he stands on a free tile beside the chair; a note 'Karczma Borgara' the first time  {"at":[18,43],"seat":{"id":77,"x":18,"y":42,"dir":6,"px":19,"py":42}}
+PASS Borgar's lines came in his bubbles (event 1)  [[1,"Zmiany są po południu i wieczorem, od 16"],[1,"Śniadanko? Kuchnia już grzeje. Dziś dani"],[1,"Wybierasz z karty, płacisz, siadasz przy"],[1,"Gulasz! Siadaj, już nakładam - z samego "]]
+PASS Ugoszczony: 4 hours take 30% less hunger and thirst  {"withIt":[4.480000000000004,7],"without":[6.400000000000006,10]}
+PASS without the money: no meal, the gold untouched, 'Brakuje ci ... G' pops up over the player  ["Brakuje ci 13 G"]
+PASS on the card the dishes too dear are greyed out; choosing one only buzzes (the card stays, then closes with P)  [["Gulasz",false],["Kapuśniak",false],["Pieczeń z kaszą",false],["Placek z serem",false],["Chleb ze smalcem",true],["Kufel piwa",true],["Miód pitny",false]]
+PASS the counter <Tavern:meal> (event 38) offers the meal and the room  [["Zjedz coś","Wynajmij pokój","Nic, dzięki"]]
+PASS no money for the room: no rent, 'Brakuje ci 3 G' over the player  ["Brakuje ci 3 G"]
+PASS the rooms come from the beds' tags on Map025 / Map026: 1 (8 G), 2 (15), 3 (20), the chamber (30, from 60), the Apartament Złoty (50, from 80)  ["1:8:0","2:15:0","3:20:0","komnata:30:60","zloty:50:80"]
+PASS before renting the doors on Map025 are shut (self switch A off)  [false,false]
+PASS the rooms card lists the real rooms (the chamber and the Apartament greyed at reputation 0), the bed's name said once  [["Pokój nr 1","8 G",true,"śniadanie: pajda chleba"],["Pokój nr 2","15 G",true,"śniadanie: pajda chleba i kubek mleka"],["Pokój nr 3","20 G",true,"śniadanie: pajda chleba i kawałek sera"],["Komnata z kominkiem","30 G",false,"sława „Pewna ręka” - dla stałych gości"],["Apartament Złoty","50 G",false,"sława „Chluba tawerny” - dla dostojnych gości"]]
+PASS room 1 rented at Borgar: 8 G, till 10:00 tomorrow; its door on Map025 opened (self switch A), room 2's not  {"gold":92,"rent":{"room":"1","name":"Pokój nr 1","price":8,"day":3,"until":106,"slept":false},"d1":true,"d2":false}
+PASS Borgar's word after renting  "niadanie. / Pokój nr 1 twój do rana. Schody na górę - drzwi już otwarte, świeca się pali. Śniadanie zostawię przy łóżku."
+PASS up the stairs: Map025 'Pokoje gości', the landing (26,53)  {"map":25,"x":26,"y":53}
+PASS upstairs: room 1's door is on its open page, room 2's on the locked one; room 1's candle is lit  {"page":1,"a":true,"candles":["1"],"other":0}
+PASS in through the door: its own page takes him inside (18,11)  [18,11]
+PASS the bed of room 2: 'To nie twój pokój' pops up over the player  ["To nie twój pokój - twój to numer 1."]
+PASS the bed asks 'Położyć się spać?' and he sleeps till the morning (day 4, 7:00) in his room  {"text":"Położyć się spać?","morning":{"map":25,"day":4,"hour":7.000277777777778,"st":100,"hp":100,"mhp":100,"bread":1,"raids":0,"wolves":0,"banner":"Dzień 4  ·  Świt Spałeś jak kamień, bez jednego snu. Borgar zostawił ci pajdę chleba.   ·   Do spłaty 2500 G, zostało 57 dni","slept":true}}
+PASS a full rest: stamina and health full; safe: no raid asked, no wolves  {"map":25,"day":4,"hour":7.000277777777778,"st":100,"hp":100,"mhp":100,"bread":1,"raids":0,"wolves":0,"banner":"Dzień 4  ·  Świt Spałeś jak kamień, bez jednego snu. Borgar zostawił ci pajdę chleba.   ·   Do spłaty 2500 G, zostało 57 dni","slept":true}
+PASS breakfast: a slice of bread by the bed, 'Borgar zostawił ci pajdę chleba'  {"map":25,"day":4,"hour":7.000277777777778,"st":100,"hp":100,"mhp":100,"bread":1,"raids":0,"wolves":0,"banner":"Dzień 4  ·  Świt Spałeś jak kamień, bez jednego snu. Borgar zostawił ci pajdę chleba.   ·   Do spłaty 2500 G, zostało 57 dni","slept":true}
+PASS once a night: the bed says he has slept already  ["Już się wyspałeś. Pokój jest twój do 10:00."]
+PASS out through the room's exit; the door stays open till 10:00, then shuts (self switch A off, the locked page), the candle goes out  {"out":true,"stillOpen":true,"shut":{"a":false,"page":0,"rent":null,"candles":[]}}
+PASS the rent over with him in room 2: the door stays open until he has left  [true,true,false]
+PASS two rents counted  2
+PASS down the stairs: Map025's east stairs lead back to the tavern, Map001 at the stairs' foot (26,53)  {"map":1,"x":26,"y":53}
+PASS Map026: a suite's door (room=lordsuite, no bed): only its own words, its self switch untouched  "Zamknięte. Apartament zarezerwowany dla gości Lorda Zaleskiego."
+PASS the bath: 6 G paid, an hour passed, 'Czysty' on, a note the first time  {"gold":24,"clean":true,"h":135.0005555555558,"baths":1,"bathing":null,"x":37,"y":29,"note":true}
+PASS in the tub: he sits in the water at the tub (the water drawn round him), steam rises; afterwards back where he stood  {"inTub":{"x":37,"y":28,"water":true},"tub":{"x":37,"y":28},"after":[37,29],"from":[37,29]}
+PASS Wanda (event 367, <Tavern:attendant>) speaks from her bust: the offer, then a funny word afterwards  [[367,true,"Kąpiel? Gorąca woda, szare mydło i szors"],[367,true,"Po kąpieli człowiek lżejszy - każda robo"],[367,true,"No, teraz przynajmniej konie się nie pło"]]
+PASS no money for the bath: 'Brakuje ci 2 G' over the player, no bath  ["Brakuje ci 2 G"]
+PASS before 18:00 Melia only says when she sings  "Śpiewam wieczorami, od 18:00. Teraz stroję lutnię... i nerwy."
+PASS at 19:00 on the stage: 2 G tip, four verses (+ the refrain for the tip) in Melia's bubbles (event 2, her bust)  {"verses":["♪ Hej, kruku, czarny kruku,\n  ","♪ — Pamiętam mury ze skały\n   ","♪ Nie złota strzegli ni ziemi,","♪ lecz tego, co w sercu skały\n","♪ Hej, kruku, czarny kruku,\n  "]}
+PASS 'Natchniony' for 6 hours with the tip; the first ballad heard; its lyrics in the journal's 'Pieśni Melii'  {"left":5.998611111111103,"heard":["kruk"]}
+PASS Natchniony: 100 experience brings 110  {"xp0":{"lv":1,"xp":0},"xp1":{"lv":1,"xp":110},"gained":110}
+PASS once an evening: a second time she says she has sung today (no choice, no second buff)  "Dziś już śpiewałam - gardło mam jedno, a ballad sto. Przyjdź jutro wieczorem!"
+PASS the next evening the next ballad ('Jedno pytanie'), free: 4 hours, no gold taken  {"gold":18,"left":3.998888888888871,"heard":["kruk","pytanie"]}
+PASS a tip without the money: 'Pusta sakiewka? Nie szkodzi' - she sings anyway, 4 hours, nothing taken  {"text":"Znowu ty? Miło! „Strażnik, co pytał za wiele”. Smutna. A ludzie i tak proszą o n","sung3":{"gold":1,"left":3.997222222222206}}
+PASS arm-wrestling, a good bot (seed 11): won 2 rounds, +10 G, Grum takes it harder next time  {"gold":60,"r":{"game":"arm","won":true,"stake":10,"rounds":["you","you"],"you":2,"grum":0,"gaveUp":false,"level":0,"minutes":15,"stamina":6,"rival":"","line":"Masz krzepę, przyznaję. Stawka twoja.","applied":true},"st":{"played":1,"won":1,"lost":0,"net":10,"level":1,"streak":1}}
+PASS arm-wrestling, a bot that does nothing (seed 12): lost 0:2, −20 G  {"gold":40,"r":{"game":"arm","won":false,"stake":20,"rounds":["grum","grum"],"you":0,"grum":2,"gaveUp":false,"level":1,"minutes":15,"stamina":6,"rival":"","line":"Nie martw się, mało kto ze mną wygrywa. Właściwie nikt.","applied":true},"st":{"played":2,"won":1,"lost":1,"net":-10,"level":1,"streak":-1}}
+PASS at the real table (event 148): Grum asks for a stake, the game runs, the talk ends on the map with the stake won  {"choices":[["Stawka 5 G","Stawka 10 G","Stawka 20 G","Nie teraz"]],"gold":45}
+PASS no money for the stake: 'Brakuje ci 7 G', no game  ["Brakuje ci 7 G"]
+PASS darts vs Ozzy, a good bot (seed 21): the higher total, +15 G  {"you":425,"opp":83,"gold":55}
+PASS darts vs Wiesiek, a bot throwing off the board (seed 22): 0 points, lost, −5 G  {"you":0,"opp":100,"gold":50}
+PASS the scoring: bull 50, the ring 25, the top wedge 20, bottom 3, right 6, off the board 0  [50,25,20,3,6,0]
+PASS at the real darts line (event 174): the choice of the opponent, then Ozzy (event 4) asks for the stake  {"choices":[["Z Dziadkiem Ozzym","Z furmanem Wieśkiem","Nie teraz"],["Stawka 5 G","Stawka 10 G","Stawka 15 G","Nie teraz"]]}
+PASS no money for the darts' stake: 'Brakuje ci 12 G', no game  ["Brakuje ci 12 G"]
+PASS reputation 10 (Nowy w okolicy): no discount (bath 6 G, room 1: 8 G, the chamber 30 G)  {"d":0,"bath":6,"room1":8,"komnata":30,"tier":0}
+PASS below 60 the chamber cannot be rented: 'tylko dla stałych, zaufanych gości (sława „Pewna ręka”)'  ["Komnata z kominkiem: tylko dla stałych, zaufanych gości (sława „Pewna ręka”)."]
+PASS Map025, the chamber's door below the reputation: „Komnatę wynajmujemy tylko stałym, zaufanym gościom.”  "Na drzwiach mosiężna tabliczka: „Komnatę wynajmujemy tylko stałym, zaufanym gościom.”"
+PASS the gilded gate below 80: „Apartamenty tylko dla dostojnych gości.” and it stays shut  "Złocona krata, a przy niej mosiężny dzwonek. Na tabliczce: „Apartamenty tylko dla dostojnych gości.” / Dzwonię... cisza. Trzeba by być chlubą tej tawerny, żeby mi tu otworzyli."
+PASS reputation 45 (Swój chłop): Borgar says it once - 5% off everything  ["Dobry wieczór! Coś na ząb? Pokój na noc?","Słyszę, co robisz dla ludzi z tablicy. Swój chłop z ciebie! ","Wieczór bez kolacji to wieczór stracony. Co podać? Dziś dani","Rozmyśliłeś się? Kuchnia nie ucieknie."]
+PASS on the card the old prices are crossed out beside the new ones, the foot says why  [{"name":"Gulasz","right":"15 G","oldRight":"16 G","sub":"gorący · syci na długo · rozgrzewa","enabled":true},{"name":"Kapuśniak","right":"11 G","oldRight":"12 G","sub":"gorący · kwaśny · rozgrzewa","enabled":true}]
+PASS ...and does not repeat it the next time  ["Dobry wieczór! Coś na ząb? Pokój na noc?","Wieczór bez kolacji to wieczór stracony. Co podać?","Rozmyśliłeś się? Kuchnia nie ucieknie."]
+PASS reputation 65 (Pewna ręka): Borgar's word; the chamber on the card for 27 G (30 crossed out), the Apartament Złoty greyed  [["Pokój nr 1","7 G","8 G",true],["Pokój nr 2","14 G","15 G",true],["Pokój nr 3","18 G","20 G",true],["Komnata z kominkiem","27 G","30 G",true],["Apartament Złoty","45 G","50 G",false]]
+PASS the chamber rented: 27 G, its door on Map025 opened, the Apartament's on Map026 not; Borgar: the fire lit, the bear shaken out  {"gold":[300,273],"rent":{"room":"komnata","name":"Komnata z kominkiem","price":27,"day":12,"until":322,"slept":false},"a":true}
+PASS upstairs the chamber's door lets him in (42,44)  [25,42,44]
+PASS a night in the chamber: 'Wypoczęty' for 8 hours - resting gives 25% more (the perk the rests ask), bread and cheese  {"rested":7.997777777777799,"perk":0.25,"bread":1,"cheese":1,"banner":"Dzień 13  ·  Świt Wstajesz jak nowo narodzony. Przy kominku czeka pajda chleba i ser.   ·   Do spłaty 2500 G, zostało 48 dni"}
+FAIL reputation 85 (Chluba tawerny): the gilded gate opens by itself and stays open, with a welcome (the bell, a word, a note)  {"a":true,"page":1,"barks":[],"note":true,"notice":"+50 dośw.  (odkrycie: Apartamenty)"}
+PASS ...through the open gate and up the stairs to Map026 'Apartamenty'  [26,2,53]
+PASS the Apartament Złoty rented at 85: 43 G (50 − 15%); its door opens  {"gold":[273,230]}
+PASS in through the Apartament's door (27,30)  [27,30]
+PASS a night in the Apartament Złoty: breakfast in bed (hunger and thirst down, Ugoszczony, the tray on the blanket), Wypoczęty for 12 hours  {"rested":11.988333333333344,"hosted":true,"food":76.96248888888903,"water":52.44138888888949,"tray":true,"banner":"Dzień 14  ·  Świt Śniadanie do łóżka, na srebrnej tacy. Liścik: „Na koszt domu. Borgar”.   ·   Do spłaty 2500 G, zostało 47 dni"}
+PASS the bath at 85: 'Wykąp się (5 G zamiast 6 G)'  [["Wykąp się (5 G zamiast 6 G)","Nie teraz"]]
+PASS the numbers in TavernLife's state (meals, rooms, nights, baths, songs, games, firsts)  {"v":1,"firsts":{"meal":3,"room":3,"night":4,"bath":5,"arm":7,"darts":7,"room_komnata":12,"apartamenty":13,"room_zloty":13},"meals":1,"dishes":{"gulasz":1},"spent":142,"rooms":4,"nights":3,"baths":1,"songs":3,"songDay":7,"heard":["kruk","pytanie","straznik"],"tips":2,"arm":{"played":3,"won":2,"lost":1,"net":-5,"level":2,"streak":1},"darts":{"played":2,"won":1,"lost":1,"net":10,"best":425,"bulls":8},"rent":null,"layout":3,"gates":{"25:298":true},"regulars":{"melia":{"trust":4,"day":0,"n":0,"said":{},"rum":[],"got":{"song":7},"vis":0,"topics":{}},"grum":{"trust":2,"day":0,"n":0,"said":{},"rum":[],"got":{"game":7,"win":7},"vis":0,"topics":{}},"ozzy":{"trust":1,"day":0,"n":0,"said":{},"rum":[],"got":{"game":7},"vis":0,"topics":{}}},"repSaid":3}
+PASS it goes into the saved game (JsonEx round trip: Tawerna.state's _tw.tavernLife, no old _tavernLife key)
+PASS the API: TavernLife.buffs lists the premia
+PASS no console errors  []
+80/81 passed

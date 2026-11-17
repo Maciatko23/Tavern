@@ -59,7 +59,7 @@
     if (!T) throw new Error("Forestry.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
     const params = PluginManager.parameters(PLUGIN);
     const GROW_DAYS = Math.max(1, Number(params.growDays) || 10);
-    const SEED = 148;               // Nasiona sosny
+    const SEED = 147;               // Szyszka (2026-11-16, the user: no shelled seeds any more - the cone itself is planted; was 148 Nasiona sosny)
     const PLANT_STAMINA = 2;
     const CROUCH_KIND = 6;          // ChoppableTree's crouch (sowing, collecting)
     const FIRST_ID = 1000;          // planted trees get event ids from here on, far above what the editor gives out

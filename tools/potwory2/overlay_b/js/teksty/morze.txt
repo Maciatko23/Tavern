@@ -1,0 +1,201 @@
+# Teksty wątku W23 „Coś z głębin” i potworów z morza (wtyczki Morze_Data.js, Morze.js, Morze_Potwory.js) - docs/POTWORY_Z_MORZA.md.
+# Potwory wychodzą z morza nocą; to utopieni ludzie z wojny, których pamięć woła Serce pod zamkiem. Mieszkańcy nigdy nie giną:
+# są ranni i przestraszeni. „> ” - mówi bohater; bez tego - postać, z którą się rozmawia. {nazwa} - wstawia gra.
+
+# ======================================================================== zadanie W23 (dziennik: FABUŁA)
+zadania.W23.title = Coś z głębin
+zadania.W23.where = przystań, brzegi wyspy, tawerna, dzwonnica, latarnia, kaplica
+zadania.W23.when = od pierwszego lądowania albo od dnia 10
+zadania.W23.desc = Nocą z morza wychodzą rzeczy, które kiedyś były ludźmi. Zostawiają mokre ślady i idą w stronę zamku. Dlaczego rośnie ich liczba i co je ciągnie?
+zadania.W23.fail.text = Sprawa potworów z morza została bez końca.
+zadania.W23.steps.0.text = Mokre ślady: obejrzyj ślady na trzech brzegach ({n} z 3) - rano po lądowaniu leżą na plaży. Porozmawiaj z Rochem na przystani, z Ozzym i z Melią w tawernie.
+zadania.W23.steps.1.text = Dzwon o zmierzchu: Ambroży (dzwonnica) potrzebuje liny i oleju (tranu), żeby znów dzwonić o zmierzchu. Dzwon odsuwa głęboką wodę - jeszcze {dni} dni.
+zadania.W23.steps.2.text = Księga mgieł: latarnik Bazyli prowadzi dziennik nocy z mgłą i potrzebuje dwóch porcji tranu do latarni. Perła mgły z mglaka wzmocni soczewkę.
+zadania.W23.steps.3.text = Kronika brata Kleofasa (kaplica w mieście): przynieś mu atrament krakena albo trzy wodorosty, z których zrobi atrament, i przeczytajcie kroniki.
+zadania.W23.steps.4.text = Pieśń: w nocy po dniu 40 do tawerny dociera pieśń. Wyjdź na zewnątrz i przerwij morską wiedźmę, a Melia zagra przeciw pieśni.
+zadania.W23.steps.5.text = Zapisy Zakonu ({zapisy} z 3): lista garnizonu (rotmistrz), pieczęć Lorda i kronika Kleofasa. Ciąg Serca: {ciag}.
+zadania.W23.steps.6.text = Kraken u kei: po dniu 60 macki atakują nabrzeże. Przetrwaj noc na przystani i porozmawiaj z Rochem o tym, co dalej.
+
+# napisy nad bohaterem i u góry
+napis.wyszedl = Z morza wyszedł: {nazwa}
+napis.macki = Kręgi na wodzie... Macki!
+napis.mackiKoniec = Macki cofnęły się w głębinę
+napis.slady = Mokre ślady z morza ({n}/3)
+napis.dzwon = Dzwon o zmierzchu: szansa lądowania niższa o {p}%
+napis.mgly = Latarnia świeci mocniej w mgłę
+napis.zapis = Zapis Zakonu ({n}/3)
+napis.swit = Świta - potwory wracają do morza
+
+# ======================================================================== kod (napisy nad głowami, dymki)
+kod.piesn = Idź... do mnie...
+kod.zatyczki = Zatyczki! Pieśń cichnie
+kod.opar = Opierasz się pieśni
+kod.wola = Pieśń cię ciągnie!
+kod.przerwana = Przerwana!
+kod.ogien = Cofa się przed ogniem
+kod.macka = Macka
+kod.chwyt = Chwyt!
+kod.wyrwal = Wyrwałeś się!
+kod.utracil = Woda zabrała: {item}
+kod.straznikRanny = Au! Odsuńcie się, ranny jestem!
+
+# ======================================================================== sceny
+scena.bohater = Co to... wyszło z morza?
+scena.mysl = To nie jest zwykły topielec. Woda z niego kapie, a ślady idą w stronę zamku. Zapytam o to w tawernie i na przystani.
+scena.piesn.borgar = Słyszycie? Ktoś śpiewa. Na zewnątrz. Zamykam rygiel.
+scena.piesn.melia = Nie słuchajcie! Grajcie, wszyscy grajcie, cokolwiek! Moja lutnia ją zagłuszy.
+scena.piesn.ozzy = Nogi same idą ku drzwiom... Trzymajcie mnie za kołnierz!
+scena.piesn.mysl = Pieśń woła z zewnątrz. Trzeba wyjść i przerwać wiedźmę, zanim goście otworzą drzwi.
+
+# ======================================================================== rozdz. 1: mokre ślady
+[roch.slady]
+Widzisz? Ślady. Od wody, w głąb plaży, mokre jak świeżo wylane. Nie ludzkie, bo za głębokie i bez palców.
+> Czyje to ślady?
+Szkwał nie nazwie, ale wie jedno: wyszło prosto z fali i poszło w stronę zamku. Rano po rybaku został płaszcz, taki mokry, że nie wysechł do wieczora.
+Obejrzyj brzegi, chłopcze. Jak ślady są na trzech plażach i wszędzie idą w tę samą stronę, to nie przypadek.
+
+[ozzy.plotka]
+Plotki w tawernie? Że z morza wyłazi coś, co kiedyś było człowiekiem. Zabobon, mówię ci. Ale trzymam miecz blisko łóżka.
+> A dzwon o zmierzchu? Ludzie mówią, że kiedyś odsuwał wodę.
+Dzwonić to zawsze można. Skuteczne, nie skuteczne - spytaj Grumowego kufla, on tam wierzy we wszystko.
+
+[melia.piesn]
+Jest taka stara pieśń, chłopcze, o „słuchających”. Zeszli do wody za tym, co ich wołało, i już nie wrócili. Wołało z głębi pod zamkiem.
+> Pod zamkiem? Pod tawerną?
+Może to to samo. Pieśń kończy się słowami: „kto raz usłyszy, ten wróci”. Reszty nie pamiętam. Albo nie chcę.
+
+[notatki.start]
+Coś z głębin
+Z morza wyszło coś, co kiedyś było człowiekiem. Zostawia mokre ślady i idzie w stronę zamku. Warto spytać Rocha na przystani, a w tawernie Ozzy'ego i Melię.
+
+[notatki.roch]
+Ślady na plaży
+Roch Szkwał pokazał ślady od wody w głąb plaży: bez palców, za głębokie na człowieka. Wyszło prosto z fali i poszło w stronę zamku. Na trzech brzegach ślady wskażą ten sam kierunek. Sól i ogień odstraszają to, co wychodzi z wody.
+
+# ======================================================================== rozdz. 2: dzwon o zmierzchu
+[notatki.dzwon]
+Dzwon o zmierzchu
+Ambroży zadzwonił siedem razy na zmierzch, tak jak zapisano w kronice Zakonu: dzwon odsuwa głęboką wodę. Przez {dni} dni potwory z morza wychodzą rzadziej. Trzeba potem znów go nasmarować tranem i dzwonić.
+
+# ======================================================================== rozdz. 3: księga mgieł
+[notatki.mgly]
+Księga mgieł
+Bazyli od lat zapisuje nocne mgły. Im głębiej schodzi ten, kto zagląda do Serca, tym częściej gaśnie jego „oko” i częściej schodzą na brzeg zatopieni. Tran sprawił, że latarnia świeci mocniej w mgłę. Perła mgły z mglaka wzmocni soczewkę.
+
+# ======================================================================== rozdz. 4: kronika brata Kleofasa
+[kleofas.pyta]
+Siadaj, chłopcze. Kroniki Zakonu pisano atramentem z głębiny, a ja mam tylko wodę. Przyniosłeś coś do pisania?
+
+kleofas.opcja.atrament = Mam atrament krakena.
+kleofas.opcja.wodorosty = Mam wodorosty (trzy).
+kleofas.opcja.pozniej = Przyniosę później.
+[kleofas.atrament]
+Atrament krakena! Czarny jak noc, nie blaknie. Dobrze. Czytaj ze mną.
+(Kleofas rozkłada kroniki przy ławce i czyta półgłosem.)
+„Serce ciągnie coraz mocniej tych, którzy zadali zbyt wiele pytań. Także utopionych: ich pamięć woła Serce, a Serce woła ich.” Potwory, chłopcze, to ludzie. Zatopieni z wojny, z okrętu rozbitka. Wołają do Serca i idą w stronę zamku.
+> Ludzie... Którzy płynęli statkiem Rozbitka?
+Tak, myślę, że tak. Ich pamięć nie umarła z nimi.
+[kleofas.wodorosty]
+Wodorosty... Dobrze, wysuszę je i utrę z sadzą na atrament. Gorszy niż z głębiny, ale pisze.
+(Kleofas pracuje chwilę i czyta ci z kronik.)
+„Serce ciągnie coraz mocniej tych, którzy zadali zbyt wiele pytań. Także utopionych.” Potwory to zatopieni ludzie z wojny. Ich pamięć woła Serce, a Serce woła ich.
+> To ludzie z okrętu Rozbitka?
+Tak, myślę, że tak.
+[kleofas.pozniej]
+Dobrze. Ja będę czytał dalej, ale bez dobrego atramentu nie odczytam najstarszych kart.
+
+[notatki.kleofas]
+Utopieni
+Z kronik brata Kleofasa: potwory to zatopieni ludzie z wojny (z okrętu Rozbitka). Ich pamięć woła do Serca, a Serce ciągnie coraz mocniej tych, którzy zadali zbyt wiele pytań. Dlatego idą w stronę zamku.
+
+# ======================================================================== rozdz. 5: pieśń
+[melia.po]
+Powiedz mi, że ją przerwałeś. Słyszałam z tawerny, że pieśń ucichła.
+> Wiedźma leży na brzegu.
+Dobrze. W jej pieśni był głos dziewczyny, która zeszła do morza za ojcem. Weź tę muszlę, może jeszcze zaśpiewa. A ja ci tego nie zapomnę.
+(Melia ściska ci rękę, jakby chciała coś jeszcze dodać.)
+
+[notatki.piesn]
+Pieśń przerwana
+Morska wiedźma upadła, a pieśń ucichła. Melia dostała od ciebie muszlę śpiewającą - klucz do pieśni. Plotka mówi o dziewczynie, która zeszła do morza za ojcem.
+
+[notatki.wiedzma]
+Morska wiedźma
+Pieśń morskiej wiedźmy ciągnie przechodnia ku wodzie. Można ją przerwać: uderzyć wiedźmę, zasłonić widok, odejść poza zasięg albo mieć zatyczki ze smoły i szmat.
+
+# ======================================================================== rozdz. 6: zapisy Zakonu
+[zapis.garnizon]
+Lista warty brzegowej? Mamy. Dawniej Zakon trzymał wartę na brzegu: latarnia, dzwon i sól. Potem Twierdza upadła, a warta zgasła.
+Weź to. Lista nocnych posterunków sprzed dwóch pokoleń.
+[zapis.lord]
+Pieczęć Zakonu? Ojciec trzymał ją w skrzyni. Dołączę swoją, żeby kronika była wiarygodna.
+(Lord podaje ci zwinięty pergamin z dwiema pieczęciami.)
+[zapis.kronika]
+Zapis Zakonu: „Serce zamknięto ułomnie. Wartą na brzegu: latarnią, dzwonem i solą. Gdy warta zgaśnie, Serce słabiej śpi z każdym dniem.”
+Oto sedno. Dlatego rośnie. Ciąg Serca to dni od otwarcia piwnicy i piętra, na które zeszli ciekawscy.
+
+[notatki.zapisy]
+Dlaczego rośnie?
+Trzy zapisy Zakonu mówią jedno: Zakon trzymał Serce zamknięte wartą na brzegu (latarnia, dzwon i sól). Po upadku Twierdzy warta zgasła i Serce słabiej śpi. Ciąg Serca ({ciag}) to dni od otwarcia piwnicy i piętra, na które zeszli ciekawscy.
+
+# ======================================================================== rozdz. 7: kraken u kei
+[roch.wybor]
+Widziałeś. Macki na kei, i wszyscy tu byli: Bazyli ze światłem, Ambroży z dzwonem, Melia z pieśnią, strażnicy z włóczniami. I co dalej, chłopcze?
+> Przywrócimy wartę.
+> Odetniemy macki.
+> Zostawmy to Sercu.
+
+wybor.odsunac = Przywróć wartę: dzwon, latarnia i sól co noc.
+wybor.odciac = Odetnij macki, niech kraken się cofnie.
+wybor.zostawic = Zostaw to Sercu.
+[roch.odsunac]
+Warta co noc. Dzwon, latarnia i sól, tak jak Zakon. Kosztuje, ale potwory będą wychodzić rzadziej. Dobry wybór, chłopcze, choć męczący.
+[roch.odciac]
+Macki odcięte, atrament nasz. Ale kraken wróci, bo go nikt nie przekonał. Dobra robota na dziś.
+[roch.zostawic]
+Nic nie robić? Cóż. Serce zdecyduje samo. Obyśmy tego nie żałowali.
+
+[notatki.odsunac]
+Warta na brzegu
+Przywróciłeś wartę Zakonu: dzwon o zmierzchu, latarnia i sól co noc. Potwory z morza wychodzą rzadziej, ale warta wymaga codziennego dozoru.
+[notatki.odciac]
+Macki odcięte
+Odciąłeś macki krakena na kei. Atrament z jego ramion jest cenny, ale kraken wróci.
+[notatki.zostawic]
+Zostawione Sercu
+Nie zrobiłeś nic. Serce sięga po utopionych, jak chce.
+
+# ======================================================================== F9
+f9.naglowek = Wątek W23 (Coś z głębin):
+f9.etykieta = W23: rozdział {ch} - {nazwa}
+f9.opis = ◀ ▶ rozdział, O - przeskok (dzień, ślady, dzwon, kronika, pieśń, zapisy, kraken)
+f9.brak = Nie da się tam przeskoczyć
+f9.nazwy.1 = mokre ślady
+f9.nazwy.2 = dzwon o zmierzchu
+f9.nazwy.3 = księga mgieł
+f9.nazwy.4 = kronika Kleofasa
+f9.nazwy.5 = pieśń
+f9.nazwy.6 = zapisy Zakonu
+f9.nazwy.7 = kraken u kei
+f9.tytul = Potwory z morza:
+f9.szansa = Dzień {dzien}: p = {p}%, szansa tu dziś = {P}% (mnożniki: {m}); los tej nocy: {los}
+f9.pokaz.label = Pokaż szansę dziś
+f9.pokaz.desc = Podstawa p(dzień), mnożniki (latarnia, garnizon, ogniska, dzwon, czerwona woda, burza) i wynik losowania tej nocy na tej mapie.
+f9.zrob.label = Wylądują teraz: {nazwa}   ←→
+f9.zrob.desc = ←→ wybierz rodzaj (topielec, krab, rybołaki, mglak, wiedźma, macki), OK wymusza lądowanie na tej mapie z morzem albo w mieście.
+f9.dzien.label = Ustaw dzień: {d}   ←→
+f9.dzien.desc = ←→ 1 / 20 / 40 / 60, OK ustawia licznik dni.
+f9.dzien.ok = Ustawiono dzień {d}
+f9.mgla.label = Mglista noc dziś
+f9.mgla.desc = Mgła o zmierzchu (mglak może wyjść).
+f9.mgla.ok = Mglista noc
+f9.czysc.label = Wyczyść stan lądowań
+f9.czysc.desc = Zapomina losowania nocy, ślady i macki.
+f9.czysc.ok = Stan lądowań wyczyszczony
+f9.swit.label = Świt: potwory wracają do morza
+f9.swit.desc = Wysyła wszystkie żywe potwory z morza do wody.
+f9.swit.ok = Świta
+f9.macki = Macki wynurzają się
+f9.laduja = Lądują: {nazwa}
+f9.tylkoPrzystan = Macki tylko na przystani (Map125)
+f9.nieMorze = To nie jest mapa z morzem ani miasto

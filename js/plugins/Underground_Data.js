@@ -113,7 +113,7 @@
             deadEnd: { loot: 0.75, maxLoot: 12, kinds: { kosci: 3, worek: 2, skrzynka: 2, dzban: 2, beczka: 1, monety: 1, skrzynia: 0.4 },
                 guard: 0.3, guards: { pajak: 3, szczur: 1 }, guardFrom: 3, maxGuards: 3, trap: 0.25 },
             corridor: { floor: 40, top: 99, side: 107, film: 46, filmChance: 0.1 },
-            rock: 99, dark: 215, level: 4,
+            rock: 99, dark: 215, level: 2,   // (2026-11-17 balance: floors 1-9 two levels lower - 2..6, the guardian's floor 10 <Poziom:7>)
             torchEvery: [7, 11], torchLit: 0.7, roomTorchLit: 0.85,
             lootFull: 0.6, trapOn: 0.6,
             bgm: "", tileset: 10
@@ -535,12 +535,14 @@
         // ---- the scenes up above: in this order, each when its `when` holds. cam: where the camera stands (the hero, invisible,
         // stands there); actors: [key, x, y, dir]; hero: [x, y, dir] - the hero seen in the scene (not when he stayed below);
         // steps: as above. An actor key may be "butler" (Teodor or Feliks - whoever serves the Lord now).
+        // (2026-11-16 the new world: the manor Map221 before its door, the square of Kruczogród Map220 by the well, the camp on
+        // Podgrodzie's meadow Map218 - it stays inside since 2026-11-15 -, grandpa's hut Map224, the smaller tavern hall Map001)
         SHOTS: [
             {
-                key: "dwor", map: 24, cam: [40, 75], when: w => w.story,
+                key: "dwor", map: 221, cam: [40, 26], when: w => w.story,
                 actors: (w, e) => {
                     const l = w.lord, gate = l.stance === "rival" && l.choice === "refuse";
-                    return gate ? [["guard", 20, 14, 2]] : [["lord", 20, 14, 2], ["butler", 22, 14, 2]].concat(l.stance === "rival" ? [["guard", 17, 15, 6]] : []);
+                    return gate ? [["guard", 40, 23, 2]] : [["lord", 40, 23, 2], ["butler", 42, 23, 2]].concat(l.stance === "rival" ? [["guard", 38, 24, 6]] : []);
                 },
                 steps: (w, e) => {
                     const l = w.lord;
@@ -583,8 +585,8 @@
                 }
             },
             {
-                key: "rynek", map: 8, cam: [53, 55],
-                actors: (w, e) => [["soltys", 53, 52, 4], ["hanka", 47, 49, 6], ["kuba", 51, 52, 8], ["ambrozy", 47, 52, 6]],
+                key: "rynek", map: 220, cam: [47, 45],
+                actors: (w, e) => [["soltys", 47, 42, 4], ["hanka", 41, 39, 6], ["kuba", 45, 42, 8], ["ambrozy", 41, 42, 6]],
                 steps: (w, e) => {
                     const out = [];
                     if (e.kind === "uwolnic") out.push(
@@ -614,10 +616,9 @@
                 }
             },
             {
-                key: "oboz", map: w => (w.camp === "outside" ? 111 : 8), cam: w => (w.camp === "outside" ? [39, 15] : [57, 89]),
+                key: "oboz", map: 218, cam: [56, 18],
                 actors: (w, e) => {
-                    const at = w.camp === "outside" ? { ludmila: [38, 15, 6], ela: [39, 16, 8], marek: [40, 15, 4], rafal: [42, 16, 4] }
-                        : { ludmila: [88, 98, 6], ela: [89, 99, 8], marek: [90, 98, 4], rafal: [86, 98, 6] };
+                    const at = { ludmila: [55, 16, 6], ela: [56, 15, 2], marek: [57, 16, 4], rafal: [53, 16, 6] };
                     const out = [["ludmila"].concat(at.ludmila), ["ela"].concat(at.ela)];
                     if (w.marek) out.push(["marek"].concat(at.marek));
                     if (w.rafal === "ally") out.push(["rafal"].concat(at.rafal));
@@ -645,9 +646,9 @@
                 }
             },
             {
-                key: "dom", map: 19, cam: [10, 8], when: w => w.story,
-                actors: () => [["dziadek", 10, 6, 2]],
-                hero: (w, e) => (e.guardian === "hero" ? null : [10, 8, 8]),
+                key: "dom", map: 224, cam: [4, 7], when: w => w.story,
+                actors: () => [["dziadek", 4, 5, 2]],
+                hero: (w, e) => (e.guardian === "hero" ? null : [4, 7, 8]),
                 steps: (w, e) => {
                     if (e.kind === "straznik" && e.guardian === "hero") return [
                         ["dziadek", TK.sceny.steps[54]],
@@ -665,13 +666,13 @@
                 }
             },
             {
-                key: "tawerna", map: 1, cam: [16, 31], last: true,
+                key: "tawerna", map: 1, cam: [16, 18], last: true,
                 actors: (w, e) => {
-                    const out = [["borgar", 16, 28, 2], ["ozzy", 13, 31, 6], ["melia", 19, 31, 4]];
-                    if (!w.grum || w.grum === "ally") out.push(["grum", 22, 31, 4]);
+                    const out = [["borgar", 16, 15, 2], ["ozzy", 13, 18, 6], ["melia", 19, 18, 4]];
+                    if (!w.grum || w.grum === "ally") out.push(["grum", 22, 18, 4]);
                     return out;
                 },
-                hero: (w, e) => (e.guardian === "hero" ? null : [16, 31, 8]),
+                hero: (w, e) => (e.guardian === "hero" ? null : [16, 18, 8]),
                 steps: (w, e) => {
                     const out = [], hero = e.guardian === "hero";
                     if (e.kind === "zniszczyc") out.push(
@@ -724,7 +725,7 @@
                             [null, TK.sceny.steps[102]]);
                     }
                     // the end: the hero at the bar (or, for the hero who stayed below, his one day a year)
-                    if (hero) out.push([null, TK.sceny.steps[103]], { heroIn: [16, 31, 8] },
+                    if (hero) out.push([null, TK.sceny.steps[103]], { heroIn: [16, 18, 8] },
                         { balloon: ["borgar", 1] }, ["borgar", TK.sceny.steps[104]]);
                     else out.push(["borgar", e.kind === "uwolnic" ? TK.sceny.steps[105]
                         : TK.sceny.steps[106]]);

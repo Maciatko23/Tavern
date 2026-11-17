@@ -76,7 +76,9 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         out.maps = [...new Set(out.log.map(l => l.map))];
         return out;
     }
-    const has = (o, re) => re.test(o.text);
+    // (a phrase not found is remembered: a check's details list them - which words of a long scene are missing)
+    const brak = [];
+    const has = (o, re) => { const ok = re.test(o.text); if (!ok) brak.push(String(re)); return ok; };
 
     // =========================================================================================================== the world
     await reset({ grumDead: 3, rafalSmuggled: 4, campOutside: 5, marekSaved: 6, sluiceHalf: 7, w3Burned: 8, borgarSaying: 2, borgarIdzie: 2, signalBook: 2, act3Costly: 9 });
@@ -155,7 +157,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const e1 = await play(heart, ["Pozwól", "Zniszczyć", "Tak", "Wrócić"], [
         ["Bierzesz zamach", null], ["^Cisza\\. Pierwszy raz od stu", "serce_zniszczone_cisza.png"], ["Posadziłem w ogrodzie", "serce_koniec_dwor.png"],
         ["^Marek siedzi", "serce_koniec_oboz_marek.png"], ["^Wnusiu", "serce_koniec_dom.png"], ["^Pusto\\. Pierwszy raz", "serce_koniec_tawerna.png"],
-        ["KONIEC - Serce zniszczone", "serce_koniec_napis.png"]], { gif: ["Bierzesz zamach", 34], endMap: 1 });
+        ["KONIEC - Serce zniszczone", "serce_koniec_napis.png"]], { gif: ["Bierzesz zamach", 34], endMap: 1, secs: 720 });   // (five scenes up above with the camp of Podgrodzie: longer than 7 min with the GIF's frames)
     await t.dismiss();
     const e1St = await t.json(`({ ending: Underground.state().ending, map: $gameMap.mapId(), at: [$gamePlayer.x, $gamePlayer.y], tr: $gamePlayer.isTransparent(), cinema: Underground.film.cinema,
         borgar: !!$gameMap.event(1) && !$gameMap.event(1)._erased, mine: $gameMap.events().filter(e => e.eventId() >= 800 && e.eventId() <= 827).length })`);
@@ -163,11 +165,11 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         e1.ok && has(e1, /Nie puszczę cię samego/) && has(e1, /Bierzesz zamach/) && has(e1, /cisza w głowie/) && has(e1, /Światło pęka jak lód/) &&
         has(e1, /jabłoń/) && has(e1, /Racje z cysterny/) && has(e1, /To ten, co zszedł na sam dół/) && has(e1, /\.\.\.Ela\.|Tato! Powiedziałeś/) && has(e1, /Zostaję - ktoś musi pilnować obozu/) &&
         has(e1, /nikt już nie zapuka/) && has(e1, /Pusto\. Pierwszy raz/) && has(e1, /nikt już nie dostanie pewności/) && has(e1, /nowe okucia/) && has(e1, /Borgar, Grum, Tadek i Rafał/),
-        { maps: e1.maps, missing: e1.missing });
+        { ok: e1.ok, maps: e1.maps, missing: e1.missing, brak: brak.splice(0) });
     t.check("...the epilogue (three locks, Opinia high, the water), 'KONIEC - Serce zniszczone', 'Wrócić do gry': the hero at the bar of the tavern, seen; the scenes' cast gone, the tavern's own people back; the ending kept with its world",
-        has(e1, /Trzy zamki otworzyły się/) && has(e1, /mówią o tobie dobrze/) && has(e1, /KONIEC - Serce zniszczone/) && e1St.map === 1 && e1St.at.join() === "52,31" && !e1St.tr && !e1St.cinema &&
+        has(e1, /Trzy zamki otworzyły się/) && has(e1, /mówią o tobie dobrze/) && has(e1, /KONIEC - Serce zniszczone/) && e1St.map === 1 && e1St.at.join() === "16,18" && !e1St.tr && !e1St.cinema &&
         e1St.borgar && e1St.mine === 0 && e1St.ending && e1St.ending.kind === "zniszczyc" && e1St.ending.world && e1St.ending.world.shots.join() === "dwor,rynek,oboz,dom,tawerna" &&
-        e1.maps.join() === "11,24,8,19,1", { st: Object.assign({}, e1St, { ending: e1St.ending && { kind: e1St.ending.kind, shots: e1St.ending.world && e1St.ending.world.shots } }), maps: e1.maps });
+        e1.maps.join() === "11,221,220,218,224,1", { st: Object.assign({}, e1St, { ending: e1St.ending && { kind: e1St.ending.kind, shots: e1St.ending.world && e1St.ending.world.shots } }), maps: e1.maps });
     heart = await toHeart();
     const shards = await t.json(`$gameMap.events().find(e => e.event().name === "Serce Twierdzy (blask)").tileId()`);
     t.check("...back in the chamber: dark shards on the pedestal", shards === 544, shards);
@@ -180,9 +182,9 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
         ["^Idź już\\. I nie oglądaj", "serce_straznik_borgar.png"], ["nie przyjmuje", "serce_koniec_dwor_zamkniety.png"],
         ["^Lulaj", "serce_koniec_podgrodzie.png"], ["^Odbudowujemy", "serce_koniec_tawerna_odbudowa.png"]], { endMap: 1 });
     await t.dismiss();
-    t.check("the guardian Borgar: he follows the hero down ('od dziesiątej bramy'), takes the watch (every third night, like the order), sits on the bench; the manor shut (the rival refused), the camp in Podgrodzie (Map111) without Marek, Rafał gone to the manor's men, the market: 'Ktoś odwraca wzrok' (Opinia 10)",
-        e2.ok && has(e2, /Szedłem za tobą od dziesiątej bramy/) && has(e2, /zmiana co trzy dni/) && has(e2, /Jaśnie pan nie przyjmuje/) && e2.maps.includes(111) &&
-        has(e2, /Lulaj, dziecię/) && has(e2, /Rafała tu nie ma/) && has(e2, /Ktoś odwraca wzrok/), { maps: e2.maps, missing: e2.missing });
+    t.check("the guardian Borgar: he follows the hero down ('od dziesiątej bramy'), takes the watch (every third night, like the order), sits on the bench; the manor shut (the rival refused), the camp in Podgrodzie (Map218) without Marek, Rafał gone to the manor's men, the market: 'Ktoś odwraca wzrok' (Opinia 10)",
+        e2.ok && has(e2, /Szedłem za tobą od dziesiątej bramy/) && has(e2, /zmiana co trzy dni/) && has(e2, /Jaśnie pan nie przyjmuje/) && e2.maps.includes(218) &&
+        has(e2, /Lulaj, dziecię/) && has(e2, /Rafała tu nie ma/) && has(e2, /Ktoś odwraca wzrok/), { maps: e2.maps, missing: e2.missing, brak: brak.splice(0) });
     t.check("...the tavern: Borgar off watch today, a full mug on Grum's empty table ('Za Gruma'), rebuilding after the siege fell; 'W miasteczku mało kto pyta'; 'KONIEC - Nowy strażnik'",
         has(e2, /Dziś mam wolne/) && has(e2, /Za Gruma/) && has(e2, /Odbudowujemy/) && has(e2, /mało kto pyta, gdzie byłeś/) && has(e2, /KONIEC - Nowy strażnik/), e2.text.slice(-500));
     heart = await toHeart();

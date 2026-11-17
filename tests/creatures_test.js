@@ -31,8 +31,8 @@ kit.test({ port: 9465, beforeLoad: missingBands.length ? TRAP : "" }, async t =>
     t.check("every sheet loads: the 8-way ones (walking, blows, ends; the shadows' faces) and their 4-way $Cr_* sheets", sheetsOk && Object.keys(sheets.out).length >= 30,
         Object.entries(sheets.out).filter(([n, s]) => !s).map(([n]) => n));
     const xp = await t.json("({ k: ['szczur','nietoperz','pajak','topielec','zbroja','upior','cien','kamiennik','guardian','boss_20','boss_90'].map(k => Combat.KILL_XP[k]), n: Combat.SKILLS.length, w: !!Combat.SKILLS.find(s => s.id === 'd_will'), tr: !!Combat.SKILLS.find(s => s.id === 'd_truth') })");
-    t.check("experience for each kind and boss (rat 4 ... stone sentinel 70, guardian 250, floor 20's boss 300, floor 90's 2500); two skills of Hart ducha (Spokojna głowa, Prawda nie boli)",
-        xp.k.join() === "4,4,25,35,45,50,50,70,250,300,2500" && xp.w && xp.tr && xp.n >= 102, xp);
+    t.check("experience for each kind and boss (rat 8 ... stone sentinel 70, guardian 250, floor 20's boss 300, floor 90's 2500); two skills of Hart ducha (Spokojna głowa, Prawda nie boli)",
+        xp.k.join() === "8,8,30,35,45,50,50,70,250,300,2500" && xp.w && xp.tr && xp.n >= 102, xp);
     const mindR = await t.json(`(function(){ const h = Combat.hero(), keep = h.attr.wil, out = {};
         h.attr.wil = 5; out.r5 = Combat.mindResist(0); out.t5 = Combat.mindTime(100);
         h.attr.wil = 30; out.r30 = Combat.mindResist(0); out.t30 = Combat.mindTime(100); out.strong = Combat.mindResist(0, h.level + 8);
@@ -147,7 +147,7 @@ kit.test({ port: 9465, beforeLoad: missingBands.length ? TRAP : "" }, async t =>
     await t.eval(`__c.locate(${cx + 1}, ${cy}); $gamePlayer.locate(${cx}, ${cy}); __c._faceAng = Math.PI; __c._gapT = 99999; __c._hp = __c._maxHp; 0`);
     const plate = await t.json(`(function(){ const c = __c, h0 = c._hp; Creatures.hit(c, 40, 'melee', { poise: 30 }); const light = h0 - c._hp, h1 = c._hp; Creatures.hit(c, 40, 'melee', { poise: 60, heavy: true }); const heavy = h1 - c._hp;
         c._faceAng = 0; const h2 = c._hp; Creatures.hit(c, 40, 'melee', { poise: 30 }); return { light, heavy, back: h2 - c._hp }; })()`);
-    t.check("the plate: a light blow from the front only rings on it (15%), a heavy one or one in the back counts in full", plate.light === 6 && plate.heavy === 40 && plate.back === 40, plate);
+    t.check("the plate: a light blow from the front rings on it - half goes through (50%, the user 2026-11-17; was 15%), a heavy one or one in the back counts in full", plate.light === 20 && plate.heavy === 40 && plate.back === 40, plate);
     await t.eval(`__c._stun = 0; __c._faceAng = Math.PI; __c.setMode('chase'); __c.startMove('over'); 0`);
     await t.frames(10);
     const over = await t.json("({ mode: __c._mode, sheet: __c.characterName(), mark: !!(__c._markSprite && __c._markSprite.visible), big: Creatures.KINDS.zbroja.moves.over.guardBreak })");
@@ -419,7 +419,7 @@ kit.test({ port: 9465, beforeLoad: missingBands.length ? TRAP : "" }, async t =>
     const f1 = await t.json(`({ spawns: Underground.spawns().map(s => s.kind), markers: $gameMap.events().filter(e => e.eventId() >= 860 && e.eventId() <= 899 && /<Creature:/.test(e.event().note)).length,
         list: Creatures.list.map(c => c._kind + ':' + c._level), keys: [...new Set(Creatures.list.map(c => c._marker && c._marker.key))] })`);
     t.check("floor 1: Underground.js put a marker for every place (events 860+), the creatures stand there - the kinds that fit the floor, the floor's level",
-        on1 && f1.markers === f1.spawns.length && f1.list.length >= f1.spawns.length && f1.list.every(s => /^(szczur|pajak):[345]$/.test(s)), f1);
+        on1 && f1.markers === f1.spawns.length && f1.list.length >= f1.spawns.length && f1.list.every(s => /^(szczur|pajak):[123]$/.test(s)), f1);   // (2026-11-17 balance: floor 1 two levels lower - rats 1-2, spiders 2-3)
     await shot("stwory_pietro1.png");
     const key = f1.keys[0];
     await t.eval(`for (const c of Creatures.list.filter(c => c._marker && c._marker.key === '${key}')) Creatures.hit(c, 99999, 'melee', {}); 0`);

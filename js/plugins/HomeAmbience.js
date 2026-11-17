@@ -20,7 +20,7 @@
  * @param maps
  * @text Mapy (numery po przecinku)
  * @desc Mapy z tym klimatem. Na każdej innej wystarczy notatka mapy <HomeAmbience>.
- * @default 19
+ * @default 224
  *
  * @param fireFlicker
  * @text Migotanie paleniska
@@ -100,7 +100,7 @@
  * ============================================================================
  * HomeAmbience.js - dom dziadka żyje
  * ============================================================================
- * Działa na mapach z parametru "Mapy" (domyślnie 19) albo z notatką
+ * Działa na mapach z parametru "Mapy" (domyślnie 224 - chata dziadka) albo z notatką
  * <HomeAmbience>. Niczego nie zapisuje w plikach mapy.
  *
  * OGIEŃ
@@ -153,7 +153,7 @@
     const P = PluginManager.parameters(PLUGIN);
     const num = (v, d) => (v !== undefined && v !== "" && isFinite(Number(v)) ? Number(v) : d);
     const flag = (v, d) => (v === undefined || v === "" ? d : v === "true");
-    const MAPS = String(P.maps || "19").split(",").map(s => Number(s.trim())).filter(n => n > 0);
+    const MAPS = String(P.maps || "224").split(",").map(s => Number(s.trim())).filter(n => n > 0);
     const FIRE_FLICKER = num(P.fireFlicker, 0.16);
     const CANDLE_FLICKER = num(P.candleFlicker, 0.06);
     const SPARKS = flag(P.sparks, true);

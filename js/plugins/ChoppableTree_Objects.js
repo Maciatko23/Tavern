@@ -295,7 +295,7 @@
         for (let y = event.y; y <= event.y + o.down; y++) {
             for (let x = event.x - o.left; x <= event.x + o.right; x++) tiles.push({ x, y });
         }
-        $gameSystem.clearLand(event._mapId, tiles);
+        $gameSystem.clearLand(event._mapId, tiles, true);   // (plain: the ground under it keeps its look)
     }
 
     // Objects that were destroyed before the farming system existed (or in an
@@ -365,6 +365,17 @@
         chopDone(this, "tree", charred || !!cfg.nostump, drops, charred, false);
     }
 
+    // A log lies on the ground: chopped up it leaves nothing (the user 2026-11-14: "kłoda, która leży na ziemi, po wyrąbaniu nie
+    // powinna zostawiać pieńka wyrastającego z ziemi"). The dead trunks of the maps carry a tree's pages (A: a stump, B: empty) -
+    // a chopped log goes straight to the empty one. Also for the logs chopped in an older save (the map's setup).
+    function logLeavesNothing(event) {
+        const data = event.event(), key = [event._mapId, event._eventId, "B"];
+        if (!data || !logConfig(event) || $gameSelfSwitches.value(key)) return false;
+        if (!data.pages.some(p => p.conditions.selfSwitchValid && p.conditions.selfSwitchCh === "B")) return false;
+        $gameSelfSwitches.setValue(key, true);
+        return true;
+    }
+
     function finishBreak() {
         const kind = this._breakKind, drops = [];
         let what = "stump", charred = false, hand = false;
@@ -392,6 +403,7 @@
             const cfg = logConfig(this) || LOG_DEFAULTS;
             drops.push({ item: cfg.drop, amount: giveReward(cfg.tool > 0 ? "Rozrąbano kłodę!" : "Zebrano drewno!", cfg.drop, cfg.dropmin, cfg.dropmax, undefined, cfg.tool > 0 ? "chop.yield" : "forage.yield") });
             $gameSelfSwitches.setValue([this._mapId, this._eventId, "A"], true);
+            logLeavesNothing(this);
             what = "log";
             hand = !(cfg.tool > 0);
         } else if (isCharred(this)) {   // (only a stump left by a charred tree felled before they stopped leaving one)
@@ -522,7 +534,7 @@
             return;
         }
         if (action.cost > 0 && typeof $gameSystem.trySpendStamina === "function" && !$gameSystem.trySpendStamina(action.cost)) {
-            needPopup(82, "Jesteś zbyt zmęczony");
+            needPopup(82, "Jesteś zbyt zmęczony - Z: odpocznij");
             return;
         }
         if (action.tool > 0) T.call("Durability", "use", action.ironItem ? action.ironItem.id : action.tool);   // one blow wears the tool
@@ -617,6 +629,6 @@
     P.objects = { BUSH_PROFILES, ROCK_PROFILES, TUFT, SMALL_ROCK, BUSH_GRAPHIC, ROCK_GRAPHIC, IRON_ORE, IRON_ITEM, SLOW_SWING, FX_BY_FINISH, BARE_BUSH_FX,
         treeConfig, rockConfig, stumpConfig, logConfig, bushConfig, anyHarvestConfig, rockGraphic, bushGraphic, isPine, isLow,
         fruitSeasonNow, shouldFruit, syncFruitSwitch, pickFruit, isCharred, isStandingTree, strikeableTrees, charTree, targetTile,
-        updateTreeAnimation, finishTreeFall, finishBreak, clearLandUnder, isDestroyedHarvest, giveReward, strikeSetup, ironTool, ownsTool,
+        updateTreeAnimation, finishTreeFall, finishBreak, logLeavesNothing, clearLandUnder, isDestroyedHarvest, giveReward, strikeSetup, ironTool, ownsTool,
         applyIronTool, applySkills, perk, perkRoll, knowsSkill, workSpeed, needPopup, strike, applyPendingAction, queueHitFx, queueFxAt, chopDone };
 })();

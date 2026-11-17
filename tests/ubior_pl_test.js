@@ -72,7 +72,9 @@ kit.test({ port: 9587, plugins: ["Ubior_Bron"], evalTimeout: 120000 }, async t =
     await t.frames(30);
     t.clearErrors();
     const ver = await t.json("({ u: Ubior.VERSION, pl: Object.keys(Ubior.PL), helm: Object.keys(Ubior.PL_HELM), on: Ubior.pl() })");
-    t.check("Ubior 1.2: zbroja z PixelLab (8 rodzajów warstw, 7 hełmów), włączona", ver.u === "1.2.0" && ver.pl.length === 8 && ver.helm.length === 7 && ver.on, ver);
+    // (2026-11-17: everything worn on PixelLab - the armour, the clothes, the belts, the cloak, the hats: more kinds since)
+    t.check("Ubior 1.2+: zbroja i ubiór z PixelLab (" + ver.pl.length + " rodzajów warstw, " + ver.helm.length + " hełmów i czapek), włączona",
+        /^1\.[2-9]\./.test(ver.u) && ver.pl.length >= 8 && ver.helm.length >= 7 && ver.on, ver);
     // every helm_* and zbroja_* key of Ubior_Data (and karwasze, nagolenniki, buty okute) drawn by PixelLab
     const old = await t.json(`Object.keys(Ubior_Data.WZORY_ZBROI).filter(k => { const w = Ubior.patterns()[k]; if (!w) return true;
         return /^helm_/.test(k) ? !/^helmpl_/.test(w.nakladka) : !w.pl; })`);

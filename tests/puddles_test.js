@@ -119,7 +119,7 @@ const OUT = process.argv[2] || "";
         }
         check("with the shovel: each dig 1-2 wet clay, 3 times a puddle, then there is none left", digs.slice(0, 3).every(d => d.r && d.got >= 1 && d.got <= 2) && digs.map(d => d.left).join() === "2,1,0,0" && !digs[3].r && digs[3].got === 0, digs);
         const item = await J("({ name: $dataItems[164].name, icon: $dataItems[164].iconIndex, weight: $dataItems[164].note })");
-        check("the item: Mokra glina, its own icon (427), heavy", item.name === "Mokra glina" && item.icon === 427 && /Weight:2/.test(item.weight), item);
+        check("the item: Mokra glina, its own PixelLab icon (688+), heavy", item.name === "Mokra glina" && item.icon >= 688 && /Weight:2/.test(item.weight), item);
         const off = await J(`(function(){ const m = Farming.menuFor(${mid.x}, ${mid.y}); const e = m.entries.find(e => e.name === "Wykop glinę"); return { enabled: e.enabled, help: e.help }; })()`);
         check("...the entry greyed out then, saying the clay is gone", off.enabled === false && /Gliny tu już nie ma/.test(off.help), off);
         const next = await J(`(function(){ Puddles.setLevel(1.1, 999); const hs = Puddles.hollows(); return { left: hs.map(h => Puddles.clayLeft(h)), saved: Object.keys(($gameSystem._puddleClay || {})[3] || {}).length }; })()`);

@@ -29,7 +29,7 @@ const OUT = __dirname + "/";
         const sawmill = await ev("Farming.BUILDINGS.sawmill.recipes.map(r => r.id)");
         check("the sawmill only saws: planks, and planks with the real saw (tools moved to the workbench)", sawmill.join() === "planks,planks_saw", sawmill);
         const hand = await ev("Farming.HAND_RECIPES.map(r => r.id)");
-        check("the hand recipes: hammer, forest bed, waterskin, rope, pine seeds, bandage, nettle fibre (the other tools are made at the workbench)", hand.join() === "hammer,bough_bed,waterskin,rope,pine_seeds,bandage,nettle_fiber", hand);
+        check("the hand recipes: hammer, waterskin, rope, bandage, nettle fibre (the other tools are made at the workbench)", hand.join() === "hammer,waterskin,rope,bandage,nettle_fiber", hand);
 
         // ---- the plot menu has ONE short entry, the list opens through the real UI
         let list = await names("24, 16");

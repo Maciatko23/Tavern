@@ -160,7 +160,33 @@
     const SHIFT_HOURS = num(PluginManager.parameters("TavernShift").hours, 4);   // (how long a shift takes: TavernShift's own setting)
     const REWARD_XP = num(params.rewardXp, 300);
 
-    const MAP = { house: 19, field: 3, tavern: 1, manor: 24, cellar: 9 };
+    // (2026-11-14, nowy świat) TWO homes: the old world's whitewashed cottage (Map019, its yard Map020) and the new world's tiny hut
+    // in Podgrodzie (room Map224, yard = Podgrodzie itself, Map218; the user: "dziadek żyje super skromnie", the summons "scena
+    // przed chatką"). A game is of the world it began in (its state's "world"; before there is a state: the start map of
+    // data/System.json) - the tests begin in the old house, the game in the new world. Everything below asks WL() for the layout.
+    const NEW_WORLD_MAPS = [218, 219, 220, 221, 222, 224];
+    const WORLDS = {
+        stary: { house: 19, yard: 20, grandpaAt: [10, 6],
+            BED: { x: 1, y: 4, standX: 2, standY: 5, sides: [[2, 5, 4], [2, 6, 4], [1, 6, 8]] },
+            POT: [[9, 5, 8], [10, 6, 8], [10, 5, 8], [8, 5, 8], [9, 6, 8]],
+            WEZ: { outside: false, DOOR: [9, 11], OUT: [9, 12], YARD_OUT: [46, 47], SIGN_AT: [45, 47],
+                SPOT: { grandpa: [10, 7], hero: [7, 8], herald: [10, 8], butler: [10, 9], guard1: [9, 10], guard2: [11, 10], bye: [8, 8] } } },
+        // the hut: the bed in the same corner, the hearth at (5, 4); the summons before the hut - they come up the path from the
+        // south (DOOR / OUT: the screen's lower edge), grandpa steps out of his door (HUT: the cell before it)
+        nowy: { house: 224, yard: 218, grandpaAt: [5, 6],
+            BED: { x: 1, y: 4, standX: 2, standY: 5, sides: [[2, 5, 4], [2, 6, 4], [1, 6, 8]] },
+            POT: [[5, 5, 8], [6, 6, 8], [6, 5, 8], [4, 5, 8], [5, 6, 8]],
+            // (the yard inside its fence: x 11..19, y 20..23; the way in is the gap in the fence at x 18..19 - GATE is the cell just
+            // inside it: everybody walks the path up to it first, then to his place, and leaves the same way)
+            WEZ: { outside: true, DOOR: [18, 29], OUT: [18, 30], GATE: [18, 23], HUT: [14, 20], YARD_OUT: [14, 21], SIGN_AT: [13, 20], RECT: [10, 19, 20, 27],
+                SPOT: { grandpa: [14, 21], hero: [13, 21], herald: [14, 23], butler: [15, 23], guard1: [16, 23], guard2: [17, 22], bye: [14, 21] } } }
+    };
+    let worldOf = () => "stary";   // (set below, once the state's helpers exist)
+    const WL = () => WORLDS[worldOf()] || WORLDS.stary;
+    // (2026-11-16 the new world: the field is grandpa's plot on Podgrodzie (Map218), the Lord's manor Dwór nad Jazem (Map221))
+    const FIELDS = { stary: 3, nowy: 218 }, MANORS = { stary: 24, nowy: 221 };
+    const MAP = { get house() { return WL().house; }, get field() { return FIELDS[worldOf()] || FIELDS.stary; }, tavern: 1, get manor() { return MANORS[worldOf()] || MANORS.stary; }, cellar: 9 };
+    const HOUSES = [WORLDS.stary.house, WORLDS.nowy.house], YARDS = [WORLDS.stary.yard, WORLDS.nowy.yard];
     const LETTERS_BEFORE = [40, 20, 5, 1, 0];   // letters from the Lord: days before the deadline (60: days 20, 40, 55, 59, 60)
     // the Lord's butler: Feliks - or, once W1 has sent him away (TownLife "gone"), the new butler Teodor (user 2026-10-05)
     const butler = () => (window.TownLife && typeof TownLife.gone === "function" && TownLife.gone("feliks") ? "Teodor" : "Feliks");
@@ -174,24 +200,26 @@
     const SHELTERS = ["shelter", "tent", "bedroll", "hut"];
     // the characters the story adds to maps (event ids far above what the editor gives out; Forestry's planted trees start at 1000)
     const NPCS = {
-        grandpa: { id: 901, map: MAP.house, sheet: "$Npc_Dziadek", index: 0, face: ["People1", 6], at: [10, 6], dir: 2 },   // (on the rug by the hearth, beside his rocking chair - the whitewashed cottage, 2026-09-28)
-        lord: { id: 902, map: MAP.manor, sheet: "$Npc_Lord", index: 0, face: ["People2", 4], at: null, dir: 2 }   // (hero-style sheet 2026-10-04; the face is still the old one)
+        grandpa: { id: 901, get map() { return WL().house; }, sheet: "$Npc_Dziadek", index: 0, face: ["People1", 6], get at() { return WL().grandpaAt; }, dir: 2 },   // (on the rug by the hearth, beside his rocking chair - the whitewashed cottage, 2026-09-28)
+        lord: { id: 902, get map() { return MAP.manor; }, sheet: "$Npc_Lord", index: 0, face: ["People2", 4], at: null, dir: 2 }   // (hero-style sheet 2026-10-04; the face is still the old one)
     };
     Watki.scal(NPCS, "fabula", "postacie");   // (its words: js/teksty/fabula.txt, postacie)
     // map names in a story game (the map files stay as they are: an old save keeps the old names)
     const MAP_FIELD = {};   // (the map; grandpa's działka = inside its wall)
     Watki.scal(MAP_FIELD, "fabula", "pole");   // (its words: js/teksty/fabula.txt, pole)
-    const MAP_NAMES = { get [MAP.field]() { return MAP_FIELD.name; } };
+    const MAP_NAMES = { get [FIELDS.stary]() { return MAP_FIELD.name; } };   // (the old world's field only: Podgrodzie keeps its own name)
     const BORGAR_FACE = ["People3", 4];
     // (2026-11-08, docs/STORY.md „Wezwanie króla”, the author's variant A: „postać względnie szybko traci możliwość nocowania u
     // dziadka”) day 3: the king's messenger from the garrison summons grandpa to the mainland (the old raven keepers), the Lord's butler
     // takes the house in pledge for the debt and seals it at dusk; grandpa leaves the hero a letter to Szczepan the carter, who keeps
     // the inn's stable (Stajnia.js: the hay loft, the stable's work). The debt paid or the field bought back: the seal comes off and
     // grandpa is home again two days later. Only games begun with it (newState's wez) - an older save keeps its story as it was.
-    const WEZ = { DAY: 3, FROM: 7, TO: 18, GIVE_UP: 5, SEAL_HOUR: 20, BACK_DAYS: 2, BACK_HOUR: 10, YARD: 20,
-        ID: { herald: 3240, butler: 3241, guard1: 3242, guard2: 3243, sign: 3244 },
-        DOOR: [9, 11], OUT: [9, 12], YARD_OUT: [46, 47], SIGN_AT: [45, 47],
-        SPOT: { grandpa: [10, 7], hero: [7, 8], herald: [10, 8], butler: [10, 9], guard1: [9, 10], guard2: [11, 10], bye: [8, 8] } };
+    const WEZ = { DAY: 3, FROM: 7, TO: 18, GIVE_UP: 5, SEAL_HOUR: 20, BACK_DAYS: 2, BACK_HOUR: 10, get YARD() { return WL().yard; },
+        ID: { herald: 3240, butler: 3241, guard1: 3242, guard2: 3243, sign: 3244, grandpaYard: 3245 },
+        get DOOR() { return WL().WEZ.DOOR; }, get OUT() { return WL().WEZ.OUT; }, get YARD_OUT() { return WL().WEZ.YARD_OUT; },
+        get SIGN_AT() { return WL().WEZ.SIGN_AT; }, get SPOT() { return WL().WEZ.SPOT; },
+        // (the new world: the scene plays in the yard - its people, and a grandpa of the scene, are the yard map's)
+        get outside() { return !!WL().WEZ.outside; }, get actorsMap() { return WL().WEZ.outside ? WL().yard : WL().house; } };
     const KEY = "story";
 
     // ------------------------------------------------------------------
@@ -212,7 +240,7 @@
         start: "wezStart",
         dziennik: { tytul: "wez.tytul", opis: "wez.opis", grupa: "story", ikona: GOLD_ICON, prowadzi: true },
         kroki: [
-            { nazwa: "wezDom", tytul: "wez.krok.0", tekst: "wez.krok.1", gotowe: "wezByl", gdzie: { map: MAP.house, name: "Dom dziadka" }, nagroda: { xp: XPG } },
+            { nazwa: "wezDom", tytul: "wez.krok.0", tekst: "wez.krok.1", gotowe: "wezByl", gdzie: { get map() { return MAP.house; }, name: "Dom dziadka" }, nagroda: { xp: XPG } },
             { nazwa: "wezList", tytul: "wez.krok.2", tekst: { hak: "wezListTekst" }, gotowe: "wezStajnia", gdzie: { hak: "wezGdzie" }, nagroda: { xp: XPG } }
         ]
     });
@@ -289,14 +317,19 @@
     // $gameSystem._story is taken over) - the thread's state (w.S()). A game without the story (an old save, an old-style start
     // elsewhere) keeps an empty object there: Story.state() is null then.
     // ------------------------------------------------------------------
+    // (2026-11-16: the old world only when the game starts on one of the old world's maps - the editor's test start elsewhere, e.g. on
+    // the tavern's floor, must not turn a new game into the old world: the game is the new world now)
+    const OLD_WORLD_STARTS = [3, 4, 8, 17, 18, 19, 20, 24, 111, 125];
+    const startWorld = () => (window.$dataSystem && OLD_WORLD_STARTS.includes($dataSystem.startMapId) && !NEW_WORLD_MAPS.includes($dataSystem.startMapId) ? "stary" : "nowy");
     function newState() {
-        return { v: 1, pending: true, debt: DEBT, deadline: DEADLINE, paid: 0, payments: [], intro: 0, hint: 0,
+        return { v: 1, world: startWorld(), pending: true, debt: DEBT, deadline: DEADLINE, paid: 0, payments: [], intro: 0, hint: 0,
             flags: {}, letters: {}, shiftDay: -1, lastShift: null, done: 0, ended: 0, off: !END_ON_DEADLINE,
             wez: { called: 0, sealAt: 0, gone: false, letter: false, underDoor: false, freed: 0, backAt: 0, told: false } };
     }
     const store = () => w.S();
     const isStory = s => !!s && typeof s === "object" && s.debt !== undefined;
     const state = () => { if (!window.$gameSystem) return null; const s = store(); return isStory(s) ? s : null; };
+    worldOf = () => { let s = null; try { s = state(); } catch (e) { s = null; } return s ? (s.world || "stary") : startWorld(); };
     // a new story, or none (null): the saved object itself is replaced
     function setState(data) {
         store();
@@ -417,11 +450,12 @@
         }
         return { id: n.id, name: n.name, note: "<Story:" + role + ">", x, y, pages };
     }
-    const findDoorData = data => (data.events || []).find(e => e && /^Drzwi dworu/i.test(e.name || "")) || null;
+    const isManorDoor = d => !!d && (/^Drzwi dworu/i.test(d.name || "") || /<Town:door=dwor>/.test(d.note || ""));   // (the new manor's door is known by its note)
+    const findDoorData = data => (data.events || []).find(isManorDoor) || null;
     // when: a story there (a new game's story is still pending as its first map loads). A map set up without it (an old-style game
     // that began elsewhere: performTransfer drops the pending story first) has its story characters taken out of the data again by
     // the core. fixSaved off: a saved game keeps the characters it was saved with.
-    T.inject([MAP.house, MAP.manor], { ids: [NPCS.grandpa.id, NPCS.lord.id], owner: PLUGIN, fixSaved: false, when: () => !!state(),
+    T.inject(HOUSES.concat([MANORS.stary, MANORS.nowy]), { ids: [NPCS.grandpa.id, NPCS.lord.id], owner: PLUGIN, fixSaved: false, when: () => !!state(),
         build(data, mapId) {
             const out = [];
             for (const role of Object.keys(NPCS)) {
@@ -435,8 +469,13 @@
         } });
     // Wezwanie króla: the scene's people in the house and the seal's sign on the yard (ids 3240-3249; a story game - in an older save
     // without the summons nothing is put in)
-    T.inject([MAP.house, WEZ.YARD], { ids: [WEZ.ID.herald, WEZ.ID.herald + 9], owner: PLUGIN, fixSaved: false, when: () => !!state(),
-        build(data, mapId) { return !wez() ? [] : mapId === MAP.house ? wezActors() : [wezSign()]; } });
+    T.inject(HOUSES.concat(YARDS), { ids: [WEZ.ID.herald, WEZ.ID.herald + 9], owner: PLUGIN, fixSaved: false, when: () => !!state(),
+        build(data, mapId) {
+            if (!wez()) return [];
+            if (mapId === MAP.house) return WEZ.outside ? [] : wezActors();
+            if (mapId === WEZ.YARD) return WEZ.outside ? wezActors().concat([wezGrandpaYard(), wezSign()]) : [wezSign()];
+            return [];
+        } });
     // where they stand: grandpa by his armchair, the Lord beside the manor's door (found by its name: the door may be moved)
     function freeFor(ev, x, y) {
         if (!$gameMap.isValid(x, y) || !$gameMap.checkPassage(x, y, 0x0f)) return false;
@@ -451,7 +490,7 @@
     const npc = role => ($gameMap && $gameMap.mapId() === NPCS[role].map ? $gameMap.event(NPCS[role].id) || null : null);
     function doorEvent() {
         if (!$gameMap || $gameMap.mapId() !== MAP.manor) return null;
-        return $gameMap.events().find(e => e.event() && /^Drzwi dworu/i.test(e.event().name || "")) || null;
+        return $gameMap.events().find(e => isManorDoor(e.event())) || null;
     }
     function borgarEvent() {
         if (!$gameMap || $gameMap.mapId() !== MAP.tavern) return null;
@@ -486,7 +525,7 @@
         // (only a character talked to: "Atmosfera - Borgar" is a parallel event of the same name)
         if (p && p.trigger <= 2 && ev._mapId === MAP.tavern) {
             if (/^Borgar\b/i.test(d.name || "") || (p.image && p.image.characterName === "People3_Tall" && p.image.characterIndex === 4)) r = "borgar";
-        } else if (p && p.trigger <= 2 && ev._mapId === MAP.manor && /^Drzwi dworu/i.test(d.name || "")) r = "door";
+        } else if (p && p.trigger <= 2 && ev._mapId === MAP.manor && isManorDoor(d)) r = "door";
         roles.set(ev, r);
         return r;
     }
@@ -825,7 +864,7 @@
             say(o, CAST.watch, Watki.wstaw(TK.kod.escortList[2], { "1": dni(CARRY_DAYS) }), null);
         } else say(o, -1, Watki.wstaw(TK.kod.escortList[3], { "1": dni(CARRY_DAYS) }), null);
         hSay(o, TK.kod.escortList[4]);
-        o.push(C(201, [0, 3, 40, 47, 4, 0]));   // (Kruczy Jar, outside the west gate of the plot's fence; was Skraj lasu, Map023 (1,13))
+        o.push(C(201, [0].concat(T.call("Homes", "fieldOut") || [3, 40, 47, 4], [0])));   // (Kruczy Jar, outside the west gate of the plot's fence; was Skraj lasu, Map023 (1,13))
         waitF(o, 20);
         script(o, "Tawerna.popup(\"Działka należy teraz do Lorda.\", { color: \"#ff9f8f\" })");
         return o;
@@ -1017,7 +1056,7 @@
         const s = state(), lo = lostState(), here = $gameMap.mapId();
         const F = T.api("Farming"), farm = F && F.farm ? F.farm() : null;
         const fieldHut = !!farm && ((farm.buildings || {})[MAP.field] || []).some(b => b.type === "hut" && !b.site && !b.boarded);
-        const inHut = here === 100 && fieldHut, onField = here === MAP.field || inHut;
+        const inHut = here === 100 && fieldHut, onField = (here === MAP.field && T.call("Homes", "heroOnField") !== false) || inHut;   // (the new world: inside the plot's fence)
         lo.locked = day();
         if (!lo.scene) lo.scene = -2;   // (never seen: the sign stands all the same)
         T.emit("fieldLocked", { day: day() });
@@ -1252,8 +1291,10 @@
     // walks back to the pot; then the hero gets up beside the bed, the bars go and the map's name shows. Nothing of it is saved: a
     // reload during it tells it again (the load handler: intro 1 -> 0).
     // ------------------------------------------------------------------
-    const BED = { x: 1, y: 4, standX: 2, standY: 5, sides: [[2, 5, 4], [2, 6, 4], [1, 6, 8]] };   // (sides: where grandpa stands, facing)
-    const POT = [[9, 5, 8], [10, 6, 8], [10, 5, 8], [8, 5, 8], [9, 6, 8]];   // (under the pot on the hearth - Map019's fireplace at 9,4 - facing it)
+    // (the world's own: WORLDS above - sides: where grandpa stands by the bed, facing; POT: under the pot on the hearth, facing it)
+    const BED = { get x() { return WL().BED.x; }, get y() { return WL().BED.y; }, get standX() { return WL().BED.standX; }, get standY() { return WL().BED.standY; },
+        get sides() { return WL().BED.sides; } };
+    const POTS = () => WL().POT;
     let lying = false;
     // the hero in his bed: facing the screen, his frame cut below the chin (the head is the top ~34% of the frame - rows 2-21 of the
     // 64 px walking sheet) and lifted so the chin lies on the blanket's edge
@@ -1308,7 +1349,7 @@
     function introWalk(interp, where) {
         const g = npc("grandpa");
         if (!g) return;
-        const targets = where === "bed" ? BED.sides : POT;
+        const targets = where === "bed" ? BED.sides : POTS();
         let steps = null, face = targets[0][2];
         for (const [tx, ty, f] of targets) { steps = stepsTo(g, tx, ty); if (steps) { face = f; break; } }
         const speed = g.moveSpeed(), list = [{ code: 29, parameters: [4] }];
@@ -1329,7 +1370,7 @@
         s.intro = 1;
         lieDown();
         // (at his pot, his back to the bed: out of the hero's sight, so put there as the map is made)
-        const at = POT.find(([x, y]) => $gameMap.isPassable(x, y, 2) && !$gameMap.eventsXyNt(x, y).some(e => e !== g));
+        const at = POTS().find(([x, y]) => $gameMap.isPassable(x, y, 2) && !$gameMap.eventsXyNt(x, y).some(e => e !== g));
         if (at) g.locate(at[0], at[1]);
         g.setDirection(8);
         $gameMap._interpreter.setup(introScene(), g.eventId());
@@ -1340,7 +1381,7 @@
     function quickStart() {
         $gameTemp._twQuickStart = false;
         const g = npc("grandpa");
-        const at = POT.find(([x, y]) => $gameMap.isPassable(x, y, 2) && !$gameMap.eventsXyNt(x, y).some(e => e !== g));
+        const at = POTS().find(([x, y]) => $gameMap.isPassable(x, y, 2) && !$gameMap.eventsXyNt(x, y).some(e => e !== g));
         if (g && at) g.locate(at[0], at[1]);
         if (g) g.setDirection(8);
         $gamePlayer.locate(BED.standX, BED.standY);
@@ -1371,6 +1412,14 @@
         return ["herald", "butler", "guard1", "guard2"].map(role => ({ id: WEZ.ID[role], name: TK.wez.kto[role], note: "<Story:wez_" + role + ">",
             x: WEZ.DOOR[0], y: WEZ.DOOR[1], pages: [wezHidden(), wezPage({ tileId: 0, characterName: wezSheet(role), direction: 8, pattern: 1, characterIndex: 0 }, [C(0, [])], true)] }));
     }
+    // (the new world) grandpa as the yard's scene sees him: hidden till he steps out of his hut's door
+    function wezGrandpaYard() {
+        const hut = WL().WEZ.HUT || WEZ.DOOR;
+        return { id: WEZ.ID.grandpaYard, name: NPCS.grandpa.name || "Dziadek", note: "<Story:wez_grandpaYard>", x: hut[0], y: hut[1],
+            pages: [wezHidden(), wezPage({ tileId: 0, characterName: NPCS.grandpa.sheet, direction: 2, pattern: 1, characterIndex: 0 }, [C(0, [])], true)] };
+    }
+    const wezG = () => (WEZ.outside ? $gameMap.event(WEZ.ID.grandpaYard) : npc("grandpa"));
+    const inYard = () => { const r = WL().WEZ.RECT, p = $gamePlayer; return !r || (p.x >= r[0] && p.x <= r[2] && p.y >= r[1] && p.y <= r[3]); };
     // the seal's sign at grandpa's door on the yard (the Lord's banner, as on the lost field): shown while the house is sealed
     function wezSign() {
         return { id: WEZ.ID.sign, name: TK.wez.kto.sign, note: "<Story:wez_sign>", x: WEZ.SIGN_AT[0], y: WEZ.SIGN_AT[1],
@@ -1389,48 +1438,53 @@
         if (TURN[face]) list.push({ code: TURN[face] });
         list.push({ code: 29, parameters: [ch.moveSpeed()] }, { code: 0 });
         ch.forceMoveRoute({ list, repeat: false, skippable: false, wait: true });
-        if (interp) { interp._character = ch; interp.setWaitMode("route"); }
+        if (interp) { interp._character = ch; interp._characterId = who === 0 ? -1 : who;   /* (MZ waits for the route of character(_characterId): without it the scene went on while they still walked) */ interp.setWaitMode("route"); }
     }
     function wezShow(role) {
         const id = WEZ.ID[role], e = $gameMap.event(id);
         if (!e) return;
         e.locate(WEZ.DOOR[0], WEZ.DOOR[1]); e.setDirection(8);
-        wezSelf(MAP.house, id, true);
+        wezSelf(WEZ.actorsMap, id, true);
+        e.refresh();   // (his shown page now: the walk that follows is planned for a body, not for the hidden page that goes through fences)
     }
-    const wezHide = role => wezSelf(MAP.house, WEZ.ID[role], false);
+    const wezHide = role => wezSelf(WEZ.actorsMap, WEZ.ID[role], false);
     // the stage (behind a short fade): grandpa by the hearth facing the door, the hero by the table; the bars of a scene
     function wezStage() {
-        const g = npc("grandpa");
+        const g = wezG();
+        if (WEZ.outside) wezSelf(WEZ.actorsMap, WEZ.ID.grandpaYard, true);   // (out of his door, before the hut)
         if (g) { g.locate(WEZ.SPOT.grandpa[0], WEZ.SPOT.grandpa[1]); g.setDirection(2); }
         $gamePlayer.locate(WEZ.SPOT.hero[0], WEZ.SPOT.hero[1]); $gamePlayer.setDirection(6);
         T.call("CleanHUD", "sceneBars", true);
     }
     // the scene as a list of commands (the words read now: the butler's name, the debt left, the deadline)
     function wezScene() {
-        const G = NPCS.grandpa.id, H = WEZ.ID.herald, B = WEZ.ID.butler, S = WEZ.SPOT, t = TK.wez.scena, s = state();
+        const G = WEZ.outside ? WEZ.ID.grandpaYard : NPCS.grandpa.id, H = WEZ.ID.herald, B = WEZ.ID.butler, S = WEZ.SPOT, t = TK.wez.scena, s = state();
         const v = { butler: butler(), left: left(), deadline: s.deadline };
         const o = [], js = x => o.push(C(355, [x])), wait = f => o.push(C(230, [f]));
         const walk = (who, at, face) => js("Story.wezWalk(this, " + who + ", " + at[0] + ", " + at[1] + ", " + (face || 0) + ")");
         const line = (who, i) => say(o, who, Watki.wstaw(t[i], v));
-        const out = (role, id) => { walk(id, WEZ.DOOR, 2); walk(id, WEZ.OUT, 2); js("Story.wezHide(\"" + role + "\")"); };
+        const GATE = WL().WEZ.GATE;   // (the yard's scene: through the gap in the fence, both ways)
+        const out = (role, id) => { if (GATE) walk(id, GATE, 2); walk(id, WEZ.DOOR, 2); walk(id, WEZ.OUT, 2); js("Story.wezHide(\"" + role + "\")"); };
+        const inn = (id, at) => { if (GATE) walk(id, GATE, 8); walk(id, at, 8); };
         o.push(C(221, [])); js("Story.wezStage()"); wait(20); o.push(C(222, [])); wait(20);
         js("AudioManager.playSe({ name: \"Knock\", volume: 90, pitch: 100, pan: 0 })"); wait(30);
-        js("Story.wezShow(\"herald\")"); walk(H, S.herald, 8);
+        js("Story.wezShow(\"herald\")"); inn(H, S.herald);
         line(H, 0); line(G, 1); line(H, 2); line(G, 3); line(H, 4); line(0, 5); line(G, 6); line(H, 7);
         out("herald", H); wait(40);
-        js("Story.wezShow(\"butler\")"); walk(B, S.butler, 8);
-        js("Story.wezShow(\"guard1\")"); walk(WEZ.ID.guard1, S.guard1, 8);
-        js("Story.wezShow(\"guard2\")"); walk(WEZ.ID.guard2, S.guard2, 8);
+        js("Story.wezShow(\"butler\")"); inn(B, S.butler);
+        js("Story.wezShow(\"guard1\")"); inn(WEZ.ID.guard1, S.guard1);
+        js("Story.wezShow(\"guard2\")"); inn(WEZ.ID.guard2, S.guard2);
         line(B, 8); line(B, 9); line(G, 10); line(B, 11); line(0, 12); line(B, 13);
         out("guard2", WEZ.ID.guard2); out("guard1", WEZ.ID.guard1); out("butler", B); wait(30);
         walk(G, S.bye, 4);
         line(G, 14); line(G, 15); js("Story.wezLetter()"); line(G, 16); line(0, 17); line(G, 18);
+        if (GATE) walk(G, GATE, 2);
         walk(G, WEZ.DOOR, 2); walk(G, WEZ.OUT, 2);
         js("Story.wezGone()");
         return end(o);
     }
     function startWezwanie() {
-        const z = wez(), g = npc("grandpa");
+        const z = wez(), g = wezG();
         if (!z || !g || $gameMap._interpreter.isRunning()) return false;
         z.called = day(); z.told = true; z.sealAt = day() * 24 + WEZ.SEAL_HOUR;
         $gameMap._interpreter.setup(wezScene(), g.eventId());
@@ -1449,6 +1503,7 @@
     function wezGone() {
         const z = wez(), g = npc("grandpa");
         if (g) g.erase();
+        if (WEZ.outside) wezHide("grandpaYard");
         if (z) z.gone = true;
         T.call("CleanHUD", "sceneBars", false);
         T.popup(TK.wez.zmrok[0], { top: true, color: U().accent, sub: TK.wez.zmrok[1] });
@@ -1492,8 +1547,10 @@
         const d = day(), h = hour(), here = $gameMap.mapId();
         if (!z.called) {
             if (d < WEZ.DAY || h < WEZ.FROM) return false;
-            if (here === MAP.house && n > 40 && h < WEZ.TO && npc("grandpa")) return startWezwanie();
-            if (!z.told && here !== MAP.house) { z.told = true; wz.ownChecks(); }   // (the messenger passed through: home)
+            // (the new world: the scene is the yard's - it begins when the hero is before the hut, or steps out of it)
+            if (WEZ.outside) { if (here === WEZ.YARD && inYard() && n > 40 && h < WEZ.TO && wezG()) return startWezwanie(); }
+            else if (here === MAP.house && n > 40 && h < WEZ.TO && npc("grandpa")) return startWezwanie();
+            if (!z.told && here !== MAP.house && !(WEZ.outside && here === WEZ.YARD)) { z.told = true; wz.ownChecks(); }   // (the messenger passed through: home)
             if (d >= WEZ.GIVE_UP) wezNoGoodbye();
             return false;
         }
@@ -1711,6 +1768,7 @@
     }
 
     window.Story = T.register(PLUGIN, {
+        world: () => worldOf(),
         NPCS, MAP, DEBT, DEADLINE, DAWN, LETTERS_BEFORE, PENDANT, CAST, CARRY_DAYS, BUYBACK, LOSE_ENDS, state, active, left, daysLeft, lastNight, isOpen, statusLine, newState, pay: payOutside, talk, pick,
         introDone, introWalk, introGetUp: () => getUp(), introLying: () => lying, quickStart, thanks,
         // Wezwanie króla (Stajnia.js asks wezwanie(); the scene's commands call the rest)

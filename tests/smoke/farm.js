@@ -1,4 +1,5 @@
-// Smoke: the farm on grandpa's field (Map003) - Q opens the build menu, a bench put up on a site with the hammer blow by blow, the
+// Smoke: the farm on grandpa's plot (the new world: Podgrodzie, Map218, inside its fence - since 2026-11-16 the only land buildings
+// stand on; it was the old world's Kruczy Jar, Map003) - Q opens the build menu, a bench put up on a site with the hammer blow by blow, the
 // workbench makes a stone axe, the kiln burns charcoal while the hours pass, potatoes raked, hoed, sown, grown and dug up, and the
 // farm's state in a save. (site_test, workbench_test, craft_test, survival_test... have each part in full.)
 // Stage 3 (batch E1, Farming on the core and split in five): the files in the page, each once; what building, crafting and a harvest
@@ -17,7 +18,7 @@ const REGISTERED = process.env.REGISTERED ? `(function(){
 })();` : undefined;
 
 kit.test({ beforeLoad: REGISTERED }, async t => {
-    await t.newGame({ map: 3, x: 22, y: 14, hour: 9, quiet: true });
+    await t.newGame({ map: 218, x: 30, y: 18, hour: 9, quiet: true });
     const count = id => t.count(id);
     // ---- Farming in five files, each in the page once (registered: right under Farming); the bus listened to from here on
     const fam = await t.json(`({ parts: Object.keys(Tawerna.api("Farming_parts") || {}), scripts: ["Farming"].concat(${JSON.stringify(PARTS)}).map(n => document.querySelectorAll('script[src$="/' + n + '.js"]').length),
@@ -25,15 +26,23 @@ kit.test({ beforeLoad: REGISTERED }, async t => {
     t.check("Farming in five files (the state, the API and the hooks; the ground; building; the stations; the menus), each in the page once" + (REGISTERED ? " - registered: " + fam.order.join(", ") : " - the parts put in by Farming.js"),
         fam.api && fam.parts.join() === "core,plots,build,stations,ui" && fam.scripts.join() === "1,1,1,1,1" && (!REGISTERED || fam.order.join() === "Farming_Data,Farming," + PARTS.join() + ",Farming_Render"), fam);
     await t.eval(`window.__fe = []; for (const n of ["build", "craft", "harvest"]) Tawerna.on(n, e => window.__fe.push(Object.assign({ ev: n }, e)), { owner: "smoke/farm" }); 0`);
-    // an open meadow for it all (natural soil, no bush, nothing standing: 10 x 6 tiles)
+    // an open patch for it all (10 x 6 tiles) inside the plot's fence - grandpa keeps pines and stones there: the block with the most
+    // open ground, two tiles inside the fence all round (big things reach past it), what stands on it taken away for the test and the
+    // ground cleared (as the building tests do: tests/site_test.js)
     const B = await t.json(`(function(){
+        const br = Farming.buildRegion(), inPlot = (x, y) => br > 0 && $gameMap.regionId(x, y) === br;
+        let best = null;
         for (let by = 2; by < $gameMap.height() - 8; by++) for (let bx = 2; bx < $gameMap.width() - 12; bx++) {
-            let ok = true;
-            for (let y = by; y < by + 6 && ok; y++) for (let x = bx; x < bx + 10; x++) { const p = Farming.plotAt(x, y); if (!p || p.s !== "cleared" || $gameMap.eventsXy(x, y).length) { ok = false; break; } }
-            if (ok) return { bx, by };
+            let n = 0, ok = true;
+            for (let y = by - 2; y < by + 8 && ok; y++) for (let x = bx - 2; x < bx + 12; x++) { if (!inPlot(x, y)) { ok = false; break; } if (x >= bx && x < bx + 10 && y >= by && y < by + 6 && !$gameMap.eventsXy(x, y).length) n++; }
+            if (ok && (!best || n > best.n)) best = { bx, by, n };
         }
-        return null; })()`);
-    t.check("an open meadow on the field", !!B, B);
+        if (!best) return null;
+        for (const e of $gameMap.events()) if (e.x >= best.bx - 1 && e.x <= best.bx + 10 && e.y >= best.by - 1 && e.y <= best.by + 6) { e.erase(); e.setThrough(true); e.setPriorityType(0); }   // (an erased event keeps its priority: "Coś tu stoi")
+        const cells = []; for (let y = best.by - 1; y <= best.by + 6; y++) for (let x = best.bx - 1; x <= best.bx + 10; x++) cells.push({ x, y });
+        $gameSystem.clearLand($gameMap.mapId(), cells);
+        return { bx: best.bx, by: best.by, open: best.n, region: br }; })()`);
+    t.check("an open patch inside grandpa's fence (Map218's build region)", !!B && B.region > 0, B);
     const { bx, by } = B;
     await t.locate(bx + 2, by + 3, 6);
     await t.eval("$gameSystem.setStamina(100); 0");
@@ -113,7 +122,7 @@ kit.test({ beforeLoad: REGISTERED }, async t => {
         fe.some(s => /^harvest:potato:71x\d+$/.test(s)), fe);
 
     // ---- the farm in a save
-    const farm = () => t.json(`(function(){ const f = Farming.farm(); return { buildings: (f.buildings[3] || []).map(b => b.type + "@" + b.x + "," + b.y), plots: Object.keys(f.plots[3] || {}).length }; })()`);
+    const farm = () => t.json(`(function(){ const f = Farming.farm(); return { buildings: (f.buildings[218] || []).map(b => b.type + "@" + b.x + "," + b.y), plots: Object.keys(f.plots[218] || {}).length }; })()`);
     const before = await farm();
     await t.saveTo(1);
     await t.loadFrom(1, { quiet: true });

@@ -3,17 +3,18 @@
 //=============================================================================
 // The thread W17 "Jarmark Kruczogrodu" - the SCENES and the chase (the core: Jarmark.js, the words: js/teksty/jarmark.txt):
 //   S1 the procession of the opening (day 49, 14:30), S3 "Legenda o Kruku i Wilku" on the stage (day 51, 19:00) and S4 the put-out torches
-//   and the theft, the ambush at the bell tower (day 52, 23:30), S5 the chase over the roofs, the morning's decisions (day 53), S6 the
-//   closing of the fair (noon of day 53).
-// The ROOF MODE (the chase only): the hero's feet are free on the roofs of Map008 - the big house in the west, the two new joined houses
-// (tools/jarmark/miasto.py) and the bell tower's roof; the chimney and the dormers are solid (visible things); anything else is air: OK
-// jumps (the landing is found along the arrows, up to 4 cells), a step into the air is a fall - the street, 15 seconds, no death. No
-// invisible wall anywhere; outside the chase nothing of this runs (the roofs of the town are not walkable).
+//   and the theft, the ambush at the bell tower (day 52, 23:30), S5 the chase through the lanes, the morning's decisions (day 53), S6
+//   the closing of the fair (noon of day 53).
+// THE CHASE (2026-11-16, the new Kruczogród Map220; the player chose "pościg uliczkami"): on foot. Szept slips out behind the bell
+// tower and runs his route of legs (JarmarkData.POGON.trasa) - a leg when the hero is near, or after 4 s while the hero still sees him;
+// the hero far behind (out of sight) for 3 s: +15 s, Szept waits. In the one-cell gap between the houses he tips barrels over behind
+// him (the hero runs round by the next gap). Szept standing and the hero beside him - caught (a shortcut pays); at the end of his
+// route he gives up under the windmill. Nothing of the map changes; nothing runs outside the chase.
 // A scene is an interpreter's list: one script command per step (Jarmark_Sceny.krok); P skips (the rest runs at once).
 
 /*:
  * @target MZ
- * @plugindesc [W17] Jarmark - sceny (pochód, sztuka i kradzież, zasadzka, zamknięcie) i pościg po dachach (tryb dachów tylko w pościgu). v1.0.0
+ * @plugindesc [W17] Jarmark - sceny (pochód, sztuka i kradzież, zasadzka, zamknięcie) i pościg uliczkami. v1.1.0
  * @author Claude
  * @base TawernaCore
  * @base Watki
@@ -24,8 +25,8 @@
  * ============================================================================
  * Jarmark_Sceny.js - sceny wątku W17 „Jarmark Kruczogrodu”
  * ============================================================================
- * Pościg po dachach: strzałki - ruch, OK - skok przez szczelinę (do 4 pól),
- * krok w powietrze - upadek na ulicę (+15 s). P - pomija scenę.
+ * Pościg uliczkami (biegiem): Szept ucieka od dzwonnicy do wiatraka; kto zgubi
+ * go z oczu na 3 s, traci 15 s. P - pomija scenę.
  * ============================================================================
  */
 
@@ -39,7 +40,7 @@
     const SB = () => J.SB();
     const HERO = () => J.HERO();
     const AK = { lord: 4860, teodor: 4861, strazA: 4862, strazB: 4863, dziecko0: 4864, dziecko1: 4865, dziecko2: 4866, szept: D.ID.szept, ofelia: D.ID.ofelia, pimpek: D.ID.pimpek,
-        zar: D.ID.zar, bonawentura: D.ID.bonawentura, ania: D.ID.ania, marcel: D.ID.marcel, ambrozy: D.ID.ambrozy, soltys: 4867, kapral: 4881, szeptDach: 4882, kruk: D.ID.poduszka };
+        zar: D.ID.zar, bonawentura: D.ID.bonawentura, ania: D.ID.ania, marcel: D.ID.marcel, ambrozy: D.ID.ambrozy, soltys: 4867, kapral: 4881, szeptBieg: 4882, beczki: 4883, kruk: D.ID.poduszka };
     const scena = { stale: 0, on: false, id: "", steps: [], skip: false, cw: 0, next: null };
     const ev = k => (k === "hero" ? $gamePlayer : J.evOf(typeof k === "number" ? k : AK[k]));
     const spkEv = J.spkEv;
@@ -47,7 +48,7 @@
     // ==================================================================
     // 1. Moving actors (a route round the map: the breadth-first search of the events' own passability)
     // ==================================================================
-    function bfs(e, tx2, ty2) {
+    function bfs(e, tx2, ty2, pass) {
         const W = $gameMap.width(), H = $gameMap.height(), key = (x, y) => y * W + x;
         const prev = new Map([[key(e.x, e.y), null]]), q = [[e.x, e.y]];
         const dirs = [[2, 0, 1], [4, -1, 0], [6, 1, 0], [8, 0, -1]];
@@ -58,7 +59,7 @@
             for (const [d, dx, dy] of dirs) {
                 const nx = x + dx, ny = y + dy;
                 if (nx < 0 || ny < 0 || nx >= W || ny >= H || prev.has(key(nx, ny))) continue;
-                if (!e.canPass(x, y, d)) continue;
+                if (pass ? !pass(x, y, d) : !e.canPass(x, y, d)) continue;
                 prev.set(key(nx, ny), [x, y, d]);
                 q.push([nx, ny]);
             }
@@ -129,14 +130,14 @@
         if (scena.on && !scena.skip && Input.isTriggered("keyP") && this === $gameMap._interpreter) { scena.skip = true; this._waitCount = 0; }
         _upd.call(this);
     };
-    const zajete = () => scena.on || (roof.on && has() && S().zasadzka === 1) || !!(has() && $gameMap._interpreter && $gameMap._interpreter.isRunning());
-    const spokojnie = () => has() && !scena.on && !roof.on && !$gameMap.isEventRunning() && !$gameMessage.isBusy() && SceneManager._scene instanceof Scene_Map && (!T.isCalm || T.isCalm(SceneManager._scene));
+    const zajete = () => scena.on || (bieg.on && has() && S().zasadzka === 1) || !!(has() && $gameMap._interpreter && $gameMap._interpreter.isRunning());
+    const spokojnie = () => has() && !scena.on && !bieg.on && !$gameMap.isEventRunning() && !$gameMessage.isBusy() && SceneManager._scene instanceof Scene_Map && (!T.isCalm || T.isCalm(SceneManager._scene));
 
     // ==================================================================
     // 3. S1 the procession of the opening (day 49, 14:30)
     // ==================================================================
-    const POCHOD = [["lord", "$Npc_Lord", 86, 49, 69, 51], ["teodor", "$Npc_Kamerdyner", 87, 49, 70, 51], ["strazA", "$Npc_Zolnierz", 86, 50, 67, 51], ["strazB", "$Npc_Zolnierz", 87, 50, 71, 51],
-        ["dziecko0", "$Npc_Dziecko", 88, 49, 68, 52], ["dziecko1", "$Npc_Jagodka", 89, 49, 69, 52], ["dziecko2", "$Npc_Dziecko", 88, 50, 70, 52], ["soltys", "$Npc_Soltys", 88, 51, 66, 51]];
+    const POCHOD = D.POCHOD;   // [key, sheet, start x, y (the town's east edge), the place x, y (before the stage)]
+    const naMiejsce = back => POCHOD.map(p => [p[0], back ? p[2] : p[4], back ? p[3] : p[5], 3]);
     function pochodSpec(on, final) {
         J.api.pochod = on ? POCHOD.map(p => ({ name: tx1("imiona." + p[0]), x: final ? p[4] : p[2], y: final ? p[5] : p[3], sheet: p[1], index: 0, dir: final ? 2 : 4, pat: 1, through: true })) : null;
         J.odswiezMape(true);
@@ -145,17 +146,17 @@
         const s = S();
         pochodSpec(true);
         const steps = [
-            { fn: () => { J.heroNa(70, 56, 4); }, wait: 20 },
+            { fn: () => { J.heroNa(...D.SCENA.hero.otwarcie); }, wait: 20 },
             { say: ["ambrozy", "pochod.dzwon", 90], se: ["Bell3", 80, 90], wait: 60 },
             { se: ["Bell3", 80, 90], wait: 50 },
-            { idz: [["lord", 69, 51, 3], ["teodor", 70, 51, 3], ["strazA", 67, 51, 3], ["strazB", 71, 51, 3], ["dziecko0", 68, 52, 3], ["dziecko1", 69, 52, 3], ["dziecko2", 70, 52, 3], ["soltys", 66, 51, 3]], wm: true, wait: 10 },
+            { idz: naMiejsce(false), wm: true, wait: 10 },
             { dir: [["lord", 2], ["teodor", 2], ["strazA", 2], ["strazB", 2], ["dziecko0", 2], ["dziecko1", 2], ["dziecko2", 2], ["soltys", 2]], wait: 10 },
             { say: ["lord", "pochod.lord", 200], wait: 190 },
             { say: ["soltys", "pochod.soltys", 160], wait: 150 },
             { say: ["ofelia", "pochod.ofelia", 130], emo: ["pimpek", 1], wait: 100 },
             { fn: () => { T.audio.se("Applause1", { volume: 60 }); }, wait: 60 },
             { fn: () => { s.otw = 1; J.opinia(1); J.note("notatki.otwarcie"); J.popup(tx("napis.otwarty"), { top: true, color: "#ffe27a", sub: tx("napis.otwartyPod") }); }, wait: 40 },
-            { idz: [["lord", 86, 49, 3], ["teodor", 87, 49, 3], ["strazA", 86, 50, 3], ["strazB", 87, 50, 3], ["soltys", 88, 51, 3]], wait: 60 },
+            { idz: naMiejsce(true), wm: true, wait: 10 },   // (all of them back to the town's edge before they are taken away: nobody vanishes in sight)
             { fn: () => { pochodSpec(false); }, wait: 5 }
         ];
         // (the speaker "soltys": the resident's own event when he is on the square, else a nameless voice of the message window)
@@ -168,14 +169,15 @@
     // ==================================================================
     // Ania (the Wolf) and Bonawentura (the Knight) go up on the stage for the play (Zygfryd stays by its edge)
     function naScenie(on) {
-        const put = (k, x, y, d) => { const e = ev(k); if (!e) return; e._jarFree = on; e.setThrough(on); e.locate(on ? x : D.TRUPA[k].pos[0], on ? y : D.TRUPA[k].pos[1]); e.setDirection(on ? d : D.TRUPA[k].pos[2]); };
-        put("ania", 66, 48, 6); put("bonawentura", 69, 48, 4); put("pimpek", 71, 49, 2);
+        // (on the boards they are drawn above the characters' layer: the stage's picture - an object one row lower - must not cover them)
+        const put = (k, x, y, d) => { const e = ev(k); if (!e) return; e._jarFree = on; e.setThrough(on); e._priorityType = on ? 2 : 1; e.locate(on ? x : D.TRUPA[k].pos[0], on ? y : D.TRUPA[k].pos[1]); e.setDirection(on ? d : D.TRUPA[k].pos[2]); };
+        for (const [k, c] of Object.entries(D.SCENA.naScenie)) put(k, c[0], c[1], c[2]);
     }
     function sztuka() {
         const s = S();
         J.api.crowd = true; J.odswiezMape(true);
         const steps = [
-            { fn: () => { J.heroNa(68, 52, 8); naScenie(true); }, wait: 20 },
+            { fn: () => { J.heroNa(...D.SCENA.hero.sztuka); naScenie(true); }, wait: 20 },
             { say: ["ofelia", "sztuka.ofelia", 200], wait: 190 },
             { say: ["ania", "sztuka.akt1.ania", 170], se: ["Wolf", 70, 100], wait: 160 },
             { say: ["bonawentura", "sztuka.akt1.bonawentura", 170], wait: 160 },
@@ -188,7 +190,7 @@
             { say: ["zar", "sztuka.plomien", 100], se: ["Flame3", 80, 80], emo: ["zar", 6], wait: 70 },
             { se: ["Wind7", 80, 100], fn: () => { s.przed.cien = 1; J.odswiezMape(true); $gameScreen.startTint([-110, -110, -85, 130], 25); }, wait: 40 },
             { say: ["ofelia", "sztuka.ciemno", 100], wait: 60 },
-            { se: ["Run", 60, 130], fn: () => { const e = ev("szept"); if (e) { /* the shadow runs behind the stage */ e.setThrough(true); e.locate(72, 46); e.setMoveSpeed(5); e.forceMoveRoute({ list: [{ code: 2 }, { code: 2 }, { code: 2 }, { code: 2 }, { code: 2 }, { code: 2 }, { code: 2 }, { code: 2 }, { code: 2 }, { code: 2 }, { code: 0 }], repeat: false, skippable: true, wait: false }); } }, wait: 50 },
+            { se: ["Run", 60, 130], fn: () => { const e = ev("szept"); if (e) { /* the shadow runs behind the stage */ const u = D.SCENA.ucieczka; e.setThrough(true); e.locate(u[0], u[1]); e.setMoveSpeed(5); e.forceMoveRoute({ list: Array.from({ length: u[3] }, () => ({ code: u[2] })).concat([{ code: 0 }]), repeat: false, skippable: true, wait: false }); } }, wait: 50 },
             { se: ["Crash", 70, 110], say: ["ania", "sztuka.krzyk", 90], wait: 80 },
             { fn: () => { s.przed.cien = 0; s.przed.kradziez = 1; s.przed.scena = 1; $gameScreen.startTint([0, 0, 0, 0], 30); J.odswiezMape(true); }, wait: 50 },
             { se: ["Bell3", 90, 70], say: ["ambrozy", "sztuka.pusta", 170], wait: 90 },
@@ -212,24 +214,20 @@
     }
 
     // ==================================================================
-    // 5. The ambush at the bell tower and the chase over the roofs
+    // 5. The ambush at the bell tower and the chase through the lanes (on foot)
     // ==================================================================
-    const roof = { on: false, cells: new Set(), blocked: new Set(), safe: null, lock: 0, phase: "", t: 0, air: 0, segment: 0, lastSeg: 0, frames: 0, tag: 0, done: false, szept: null };
-    const K = (x, y) => y * 1000 + x;
-    function roofSets() {
-        roof.cells.clear(); roof.blocked.clear();
-        for (const [x0, y0, x1, y1] of D.DACHY) for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) roof.cells.add(K(x, y));
-        for (const [x, y] of D.DACHY_ZABLOKOWANE) roof.blocked.add(K(x, y));
-    }
-    // the ambush: the sołtys and the corporal wait by the tower from 23:30 of day 52
+    const bieg = { on: false, phase: "", segment: 0, legT: 0, frames: 0, lostT: 0, lost: false, done: false, torch: false, beczki: false, drwi: 0 };
+    const odl = e => Math.max(Math.abs(e.x - $gamePlayer.x), Math.abs(e.y - $gamePlayer.y));
+    // the ambush: the sołtys and the corporal wait by the tower from 23:30 of day 52 (and stay there through the chase)
     function zasadzkaSpec(on) {
-        J.api.pogonEv = on ? { 0: { name: tx1("imiona.soltys"), x: D.POGON.zasadzka[0] - 2, y: D.POGON.zasadzka[1], sheet: "$Npc_Soltys", index: 0, dir: 6, pat: 1, through: false, trigger: 0, say: "zasadzka", note: "" },
-            1: { name: tx1("imiona.kapral"), x: D.POGON.zasadzka[0] + 2, y: D.POGON.zasadzka[1], sheet: "$Npc_Kapral", index: 0, dir: 4, pat: 1, through: false } } : null;
+        const z = D.POGON.zasadzka;
+        J.api.pogonEv = on ? { 0: { name: tx1("imiona.soltys"), x: z[0] - 2, y: z[1], sheet: "$Npc_Soltys", index: 0, dir: 6, pat: 1, through: false, trigger: 0, say: "zasadzka", note: "" },
+            1: { name: tx1("imiona.kapral"), x: z[0] + 2, y: z[1], sheet: "$Npc_Kapral", index: 0, dir: 4, pat: 1, through: false } } : null;
         J.odswiezMape(true);
     }
     const zasadzkaOkno = () => has() && day() === D.DNI.pogon && hour() >= D.GODZ.pogon && S().przed.kradziez === 1 && !S().zasadzka || (has() && day() === D.DNI.pogon + 1 && hour() < D.GODZ.pogonDo && S().przed.kradziez === 1 && !S().zasadzka);
     function zasadzkaRozmowa() {
-        const s = S(), out = [], hero = HERO(), n = J.sladyN();
+        const out = [], n = J.sladyN();
         const sp = { id: J.evOf(4880) ? 4880 : -1, name: tx1("imiona.soltys") };
         J.linie(out, sp, n >= D.SLADY_MIN ? "zasadzka.dobrze" : "zasadzka.slabo", { n });
         J.skrypt(out, "Jarmark_Sceny.pogonStart();");
@@ -237,122 +235,93 @@
     }
     function pogonStart() {
         const s = S();
-        if (roof.on || s.zasadzka === 1) return;
+        if (bieg.on || s.zasadzka === 1) return;
         s.zasadzka = 1; s.pogon.faza = 1; s.pogon.upadki = 0; s.pogon.czas = 0; s.pogon.bezFory = J.sladyN() >= D.SLADY_MIN ? 0 : 1;
         J.note("notatki.pogon");
         J.sprawdz();
-        zasadzkaSpec(false);
-        roofSets();
         $gameScreen.startFadeOut(24);
         setTimeout(() => { try { pogonWejscie(); } catch (e) { report("pogon", e); } }, 500);
     }
     function pogonWejscie() {
-        const s = S();
-        const st = D.POGON.start, sz = D.POGON.szept;
-        // Szept on the roof: the injected event 4882 (through: he walks over the air of the gaps by the jumps of his route)
-        J.api.pogonEv = { 2: { name: tx1("imiona.szept"), x: sz[0], y: sz[1], sheet: "$Npc_Jarmark_Szept", index: 0, dir: 6, pat: 1, through: true, free: true } };
+        const s = S(), P = D.POGON, st = P.start, sz = P.szept;
+        // Szept: the injected event 4882 (through - he slips past people; his route keeps to the lanes)
+        J.api.pogonEv = Object.assign({}, J.api.pogonEv || {}, { 2: { name: tx1("imiona.szept"), x: sz[0], y: sz[1], sheet: "$Npc_Jarmark_Szept", index: 0, dir: sz[2] || 2, pat: 1, through: true, free: true, move: true } });
         J.odswiezMape(true);
-        roof.on = true; roof.lock = 0; roof.phase = "bieg"; roof.air = 0; roof.segment = 0; roof.lastSeg = 0; roof.frames = 0; roof.done = false; roof.safe = [st[0], st[1]];
-        $gamePlayer.locate(st[0], st[1]); $gamePlayer.setDirection(6);
-        const e = ev(AK.szeptDach);
-        if (e) { e.setMoveSpeed(s.pogon.bezFory ? 4.4 : 4); e.locate(sz[0], sz[1]); }
+        Object.assign(bieg, { on: true, phase: "bieg", segment: 0, legT: 0, frames: 0, lostT: 0, lost: false, done: false, beczki: false, drwi: 0 });
+        $gamePlayer.locate(st[0], st[1]); $gamePlayer.setDirection(st[2] || 8);
+        const e = ev(AK.szeptBieg);
+        if (e) { e.setMoveSpeed(s.pogon.bezFory ? P.predkoscBez : P.predkosc); e.locate(sz[0], sz[1]); e.setDirectionFix(false); e.setWalkAnime(true); }
         J.pasy(false);
-        // the night chase: the hero carries a torch (every light is fire) - lit for the chase and put out after it unless he had one burning
-        roof.torch = false;
-        try { if (window.Torch && !Torch.isLit()) { Torch.light(); roof.torch = true; } } catch (e) { report("pochodnia", e); }
+        // the night chase: the hero carries a torch (every light is fire) - lit for the chase and left burning after it
+        bieg.torch = false;
+        try { if (window.Torch && !Torch.isLit()) { Torch.light(); bieg.torch = true; } } catch (e) { report("pochodnia", e); }
         $gameScreen.startFadeIn(24);
-        const hero = HERO(), a = ev(AK.szeptDach);
-        if (a && SB() && SB().say) SB().say(a, [].concat(tx(s.pogon.bezFory ? "pogon.szept.biegnie2" : "pogon.szept.biegnie"))[0], 150);
+        if (e && SB() && SB().say) SB().say(e, [].concat(tx(s.pogon.bezFory ? "pogon.szept.biegnie2" : "pogon.szept.biegnie"))[0], 150);
         J.popup(tx("pogon.start"), { top: true, color: "#ffe27a", sub: tx("pogon.startPod") });
         T.audio.se("Run", { volume: 50, pitch: 120 });
     }
-    // Szept's route: segments (walk / jump), the next one when the hero is near (or after 5 s)
-    function szeptDalej() {
-        const e = ev(AK.szeptDach), s = S();
-        if (!e || e.isMoveRouteForcing()) return;
-        const tr = D.POGON.trasa;
-        if (roof.segment >= tr.length) return;
-        if (roof.frames < 150 || roof.frames - roof.lastSeg < 20) return;   // (a breath before he runs: the hero sees him on the first roof)
-        const near = Math.max(Math.abs(e.x - $gamePlayer.x), Math.abs(e.y - $gamePlayer.y)) <= (s.pogon.bezFory ? D.POGON.odleglosc + 3 : D.POGON.odleglosc);
-        if (!near && roof.frames - roof.lastSeg < 300) return;
-        const seg = tr[roof.segment++];
-        roof.lastSeg = roof.frames;
-        const list = seg.jump ? [{ code: 14, parameters: [seg.jump[0], seg.jump[1]] }] : seg.step.map(d => ({ code: CODE[d] }));
-        e.forceMoveRoute({ list: list.concat([{ code: 0 }]), repeat: false, skippable: true, wait: false });
-        if (seg.jump) T.audio.se("Jump1", { volume: 50, pitch: 100 });
-    }
-    // the hero's jump (OK): the landing along the arrows
-    function skok() {
-        const p = $gamePlayer, vx = Input.isPressed("right") ? 1 : Input.isPressed("left") ? -1 : 0, vy = Input.isPressed("down") ? 1 : Input.isPressed("up") ? -1 : 0;
-        let dx = vx, dy = vy;
-        if (!dx && !dy) { const d = p.direction(); dx = d === 6 ? 1 : d === 4 ? -1 : 0; dy = d === 2 ? 1 : d === 8 ? -1 : 0; }
-        let land = 0;
-        const has = (x, y) => roof.cells.has(K(x, y)) && !roof.blocked.has(K(x, y));
-        for (let k = 1; k <= D.POGON.skoki; k++) {
-            const cx = p._x + dx * k, cy = p._y + dy * k;
-            if (!has(cx, cy)) continue;
-            // the cell is a roof: it is the landing when the way to it crosses air - a gap before it, or (the first cell, aslant) a corner of air beside the way
-            const gap = k > 1 ? !roof.cells.has(K(p._x + dx * (k - 1), p._y + dy * (k - 1))) : (dx && dy ? !roof.cells.has(K(p._x + dx, p._y)) || !roof.cells.has(K(p._x, p._y + dy)) : false);
-            if (gap) { land = k; break; }
+    // Szept's next leg: the hero near - at once; the hero still in sight - after 4 s; the hero lost - he waits (and whistles)
+    const MAPA = (x, y, d) => { const x2 = $gameMap.roundXWithDirection(x, d), y2 = $gameMap.roundYWithDirection(y, d), o = 10 - d;
+        return $gameMap.isValid(x2, y2) && $gameMap.isPassable(x, y, d) && $gameMap.isPassable(x2, y2, o); };
+    function szeptDalej(e, d) {
+        const s = S(), P = D.POGON;
+        if (e.isMoveRouteForcing() || e.isMoving()) { bieg.legT = 0; return; }
+        bieg.legT++;
+        if (bieg.segment >= P.trasa.length || bieg.frames < 40) return;   // (a breath at the start: the hero sees him slip out)
+        if (d > P.zgubiony) return;
+        if (d > (s.pogon.bezFory ? P.odleglosc + 3 : P.odleglosc) && bieg.legT < 240) return;
+        const t = P.trasa[bieg.segment];
+        // the route round the solid things (the stalls, the barrels, the people); people in a narrow lane: by the map alone (he is through)
+        e.setThrough(false);
+        const r = bfs(e, t[0], t[1]) || bfs(e, t[0], t[1], MAPA);
+        e.setThrough(true);
+        bieg.segment++; bieg.legT = 0;
+        if (!r) { report("pogon", new Error("brak drogi do " + t)); return; }   // (never a jump in sight: the next leg is tried from here)
+        e.forceMoveRoute({ list: r.map(dd => ({ code: CODE[dd] })).concat([{ code: 0 }]), repeat: false, skippable: true, wait: false });
+        if (bieg.segment === 4 || bieg.segment === 8) {   // (a taunt over his shoulder now and then)
+            const k = "pogon.szept.drwi." + (++bieg.drwi);
+            if (SB() && SB().say && w.tekstMoze(k)) SB().say(e, [].concat(tx(k))[0], 120);
         }
-        if (!land) land = 2;
-        roof.air = 1; p._gridGlide = true;
-        T.audio.se("Jump1", { volume: 60, pitch: 105 });
-        p.jump(dx * land, dy * land);
     }
-    function ground(x, y) {
-        // the nearest cell that is not a roof and walks as ground (the street below the fall)
-        for (let r = 0; r < 8; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
-            if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
-            const cx = x + dx, cy = y + dy;
-            if (roof.cells.has(K(cx, cy)) || !$gameMap.isValid(cx, cy)) continue;
-            if ([2, 4, 6, 8].some(d => $gameMap.isPassable(cx, cy, d)) && !$gameMap.eventsXy(cx, cy).some(e => !e.isThrough())) return [cx, cy];
-        }
-        return [D.POGON.zasadzka[0], D.POGON.zasadzka[1]];
-    }
-    function upadek() {
-        const s = S(), p = $gamePlayer;
-        roof.lock = 1; roof.phase = "upadek"; roof.t = 0; roof.tag = 0;
-        s.pogon.upadki++; s.pogon.czas += D.POGON.kara;
-        T.audio.se("Fall", { volume: 60, pitch: 100 }) || T.audio.se("Collapse1", { volume: 60 });
-        $gameScreen.startShake(4, 6, 14);
-        J.popup(fill(tx("pogon.upadek"), { n: D.POGON.kara }), { top: true, color: "#ff8a6b" });
-        roof.fall = [p._x, p._y];
+    // the barrels: tipped over behind him in the one-cell gap (when the hero is not right at it)
+    function przeszkoda(e) {
+        const pz = D.POGON.przeszkoda;
+        if (!pz || bieg.beczki || bieg.segment !== pz.po + 1 || e.x !== pz.x || e.y <= pz.y) return;
+        bieg.beczki = true;
+        if (Math.max(Math.abs($gamePlayer.x - pz.x), Math.abs($gamePlayer.y - pz.y)) < 2) return;
+        J.api.pogonEv = Object.assign({}, J.api.pogonEv || {}, { 3: { name: "Przewrócone beczki", x: pz.x, y: pz.y, sheet: "!Tavern_Yard", index: 0, dir: 8, pat: 0, through: false } });
+        J.odswiezMape(true);
+        T.audio.se("Crash", { volume: 70, pitch: 90 });
+        J.popup(tx("pogon.beczki"), { top: true, color: "#ffe27a" });
     }
     function pogonTick() {
-        if (roof.on && has() && S().zasadzka !== 1) { roof.on = false; roof.phase = ""; return; }   // (a stale roof mode of another game: nothing started it here)
-        if (!roof.on || !has()) return;
-        const p = $gamePlayer;
-        roof.frames++;
-        if (!roof.done) s_czas();
-        if (roof.phase === "upadek") {
-            roof.t++;
-            if (roof.t === 10) { $gameScreen.startFadeOut(14); }
-            if (roof.t === 26) { const g = ground(roof.fall[0], roof.fall[1]); p.locate(g[0], g[1]); p.setDirection(8); $gameScreen.startFadeIn(14); }
-            if (roof.t === 100) $gameScreen.startFadeOut(14);
-            if (roof.t === 116) { p.locate(roof.safe[0], roof.safe[1]); p.setDirection(6); $gameScreen.startFadeIn(14); }
-            if (roof.t === 134) { roof.phase = "bieg"; roof.lock = 0; roof.tag = 0; }
-            return;
-        }
-        if (roof.phase === "koniec") return;
-        if (roof.air) {
-            if (!p.isJumping()) { roof.air = 0; p._gridGlide = false; p._realX = p._x; p._realY = p._y; roof.tag = 0; }
-            else return;
-        }
-        const here = K(p._x, p._y), onRoof = roof.cells.has(here);
-        if (onRoof) { roof.tag = 0; if (!roof.blocked.has(here)) roof.safe = [p._x, p._y]; }
-        else if (++roof.tag >= 9) { upadek(); return; }
-        if (!$gameMessage.isBusy() && !$gameMap.isEventRunning() && Input.isTriggered("ok") && !p.isJumping()) skok();
-        szeptDalej();
-        // the end: Szept cornered on the tower's roof and the hero beside him
-        const e = ev(AK.szeptDach);
-        if (e && roof.segment >= D.POGON.trasa.length && !e.isMoveRouteForcing() && Math.max(Math.abs(e.x - p._x), Math.abs(e.y - p._y)) <= 2 && onRoof) pogonKoniec();
+        if (bieg.on && has() && S().zasadzka !== 1) { bieg.on = false; bieg.phase = ""; return; }   // (a stale chase of another game: nothing started it here)
+        if (!bieg.on || !has() || mapNow() !== D.MAP.miasto) return;
+        const s = S(), e = ev(AK.szeptBieg);
+        bieg.frames++;
+        if (!bieg.done && bieg.frames % 60 === 0) s.pogon.czas += 1;
+        if (bieg.phase === "koniec" || !e || $gameMessage.isBusy()) return;
+        const d = odl(e);
+        // out of sight for 3 s: the penalty (once a time), Szept waits for him
+        if (d > D.POGON.zgubiony) {
+            if (++bieg.lostT === 180 && !bieg.lost) {
+                bieg.lost = true; s.pogon.upadki++; s.pogon.czas += D.POGON.kara;
+                T.audio.se("Whistle1", { volume: 60, pitch: 110 }) || T.audio.se("Bell1", { volume: 40, pitch: 150 });
+                J.popup(fill(tx("pogon.zgubiony"), { n: D.POGON.kara }), { top: true, color: "#ff8a6b" });
+            }
+        } else { bieg.lostT = 0; if (d <= D.POGON.odleglosc) bieg.lost = false; }
+        przeszkoda(e);
+        // caught: Szept standing (at the end of a leg - the hero on his heels or come by a shortcut - or given up at the end of his
+        // route) and the hero beside him; else he runs on
+        const stoi = !e.isMoveRouteForcing() && !e.isMoving(), meta = bieg.segment >= D.POGON.trasa.length;
+        if (stoi && bieg.frames > 40 && d <= (meta ? 2 : 1)) { pogonKoniec(); return; }
+        szeptDalej(e, d);
     }
-    const s_czas = () => { if (roof.frames % 60 === 0) S().pogon.czas += 1; };
     function pogonKoniec() {
-        const s = S(), out = [], hero = HERO(), sp = { id: AK.szeptDach, name: tx1("imiona.szept") };
-        roof.phase = "koniec"; roof.done = true;
+        const s = S(), out = [], hero = HERO(), sp = { id: AK.szeptBieg, name: tx1("imiona.szept") }, e = ev(AK.szeptBieg);
+        bieg.phase = "koniec"; bieg.done = true;
         s.pogon.koniec = 1;
+        if (e) { e.turnTowardCharacter($gamePlayer); $gamePlayer.turnTowardCharacter(e); }
         J.linie(out, hero, "pogon.meta.1");
         J.linie(out, sp, "pogon.meta.2");
         J.linie(out, sp, "pogon.meta.3");
@@ -370,16 +339,14 @@
         T.audio.se("Item3", { volume: 70 });
         J.popup(tx("pogon.kruk"), { top: true, color: "#ffe27a", sub: tx("pogon.krukPod") });
     }
+    // after the choice: a short dark (the corporal comes for Szept, or Szept goes) - the hero stays where he is
     function pogonZejscie() {
-        const p = $gamePlayer;
         J.pasy(false);
         $gameScreen.startFadeOut(24);
         setTimeout(() => {
             try {
-                roof.on = false; roof.phase = ""; p._gridGlide = false;
-                roof.torch = false;   // (the torch stays in his hand: it burns down by itself - the night after the chase stays lit)
-                const g = D.POGON.zasadzka; p.locate(g[0], g[1]); p.setDirection(8);
-                J.api.pogonEv = null; zasadzkaSpec(false);
+                bieg.on = false; bieg.phase = ""; bieg.torch = false;   // (the torch stays in his hand: it burns down by itself)
+                J.api.pogonEv = null; J.odswiezMape(true);
                 $gameScreen.startFadeIn(24);
                 J.note("notatki.pogonKoniec");
                 J.popup(fill(tx("pogon.koniec"), { c: S().pogon.czas, u: S().pogon.upadki }), { top: true, color: "#ffe27a", sub: tx("pogon.koniecPod") });
@@ -387,18 +354,9 @@
             } catch (e) { report("zejscie", e); }
         }, 600);
     }
-    // the hero's feet in the roof mode: no wall - the roof's own solid things only (the chimney, the dormers)
-    if (Game_Player.prototype.freeTileBlocked) {
-        const _ftb = Game_Player.prototype.freeTileBlocked;
-        Game_Player.prototype.freeTileBlocked = function(x, y, edge) {
-            if (roof.on) { x = $gameMap.roundX(x); y = $gameMap.roundY(y); return !$gameMap.isValid(x, y) || roof.blocked.has(K(x, y)); }
-            return _ftb.call(this, x, y, edge);
-        };
-    }
-    // (during the chase the action button only jumps: a torch in the hand must not open its "stick it in the ground" menu, nobody is talked to)
+    // (during the chase the action button does nothing: a torch in the hand must not open its "stick it in the ground" menu, nobody is talked to)
     const _tba = Game_Player.prototype.triggerButtonAction;
-    Game_Player.prototype.triggerButtonAction = function() { if (roof.on) return false; return _tba.call(this); };
-    // (a jump over the pixel position of FreeMovement: the engine's jump moves the tile, the pixels follow it)
+    Game_Player.prototype.triggerButtonAction = function() { if (bieg.on) return false; return _tba.call(this); };
 
     // ==================================================================
     // 6. The morning of day 53: the decisions, the closing
@@ -437,7 +395,7 @@
         const how = jak();
         J.api.crowd = true; J.odswiezMape(true);
         const steps = [
-            { fn: () => { J.heroNa(68, 53, 8); pochodSpec(true, true); }, wait: 20 },
+            { fn: () => { J.heroNa(...D.SCENA.hero.zamkniecie); pochodSpec(true, true); }, wait: 20 },
             { say: ["lord", "zamk.lord", 200], wait: 190 },
             { say: ["soltys", "zamk.soltys." + how, 200], wait: 190 },
             { say: ["ambrozy", "zamk.ambrozy", 150], se: ["Bell3", 80, 90], wait: 120 },
@@ -474,18 +432,20 @@
         if (day() >= D.DNI.rozstrzygniecie && !S().koniec && S().przed.kradziez === 1 && !zajete()) J.zegar();   // (noon of the last day: the closing even when no hour struck on the map)
         if (!spokojnie() || mapNow() !== D.MAP.miasto) return;
         const s = S(), d = day(), h = hour();
-        const blisko = (x, y, r) => Math.abs($gamePlayer.x - x) <= r && Math.abs($gamePlayer.y - y) <= r;
-        if (d === D.DNI.otwarcie && h >= D.GODZ.otwarcie && h < 15.5 && !s.otw && blisko(69, 50, 22)) { otwarcie(); return; }
-        if (d === D.DNI.sztuka && h >= D.GODZ.sztuka && h < D.GODZ.sztukaKoniec && s.przed.kradziez !== 1 && s.z !== 0 && blisko(68, 52, 20)) { sztuka(); return; }
-        if (d === D.DNI.rozstrzygniecie && h >= 11.8 && h < 12.3 && !s.zamkniecie && s.pogon.koniec === 1 && !s.koniec && blisko(68, 52, 24)) { zamkniecie(); return; }
+        const blisko = r => Math.abs($gamePlayer.x - D.SCENA.x) <= r && Math.abs($gamePlayer.y - D.SCENA.y) <= r;   // (round the stage)
+        if (d === D.DNI.otwarcie && h >= D.GODZ.otwarcie && h < 15.5 && !s.otw && blisko(22)) { otwarcie(); return; }
+        if (d === D.DNI.sztuka && h >= D.GODZ.sztuka && h < D.GODZ.sztukaKoniec && s.przed.kradziez !== 1 && s.z !== 0 && blisko(20)) { sztuka(); return; }
+        if (d === D.DNI.rozstrzygniecie && h >= 11.8 && h < 12.3 && !s.zamkniecie && s.pogon.koniec === 1 && !s.koniec && blisko(24)) { zamkniecie(); return; }
         // the ambush by the tower (the places are shown from 23:30; killed at 0:30)
         const zo = zasadzkaOkno();
-        if (zo && !J.api.pogonEv && !roof.on) zasadzkaSpec(true);
-        if (!zo && J.api.pogonEv && J.api.pogonEv[0] && !roof.on) { zasadzkaSpec(false); if (s.przed.kradziez === 1 && !s.zasadzka && day() === D.DNI.pogon + 1) { s.pogon.koniec = 3; J.popup(tx("pogon.uciekl"), { top: true, color: "#ff8a6b" }); J.sprawdz(); } }
+        if (zo && !J.api.pogonEv && !bieg.on) zasadzkaSpec(true);
+        if (!zo && J.api.pogonEv && J.api.pogonEv[0] && !bieg.on) { zasadzkaSpec(false); if (s.przed.kradziez === 1 && !s.zasadzka && day() === D.DNI.pogon + 1) { s.pogon.koniec = 3; J.popup(tx("pogon.uciekl"), { top: true, color: "#ff8a6b" }); J.sprawdz(); } }
     }
-    T.on("load", () => { scena.on = false; scena.skip = false; roof.on = false; roof.phase = ""; }, { owner: PLUGIN });
+    T.on("load", () => { scena.on = false; scena.skip = false; bieg.on = false; bieg.phase = ""; }, { owner: PLUGIN });
     T.onMapUpdate(() => { try { tick(); } catch (e) { report("tick", e); } });
 
+    // the night of the ambush (day 52 after the theft): the watch guards the town - Morze.js sends nothing in from the sea that night
+    const nocStrzezona = n => has() && n === D.DNI.pogon && S().przed.kradziez === 1 && !S().koniec && !J.zamkniety();
     // the sołtys at the ambush: the talk through the event's script (Jarmark.dotknij(…"zasadzka"))
     const _dotknij = J.dotknij;
     J.dotknij = function(interp, what, key) {
@@ -503,5 +463,5 @@
     function zapalone() { J.popup(tx("napis.zapalone"), { top: true, color: "#ffe27a", sub: tx("napis.zapalonePod") }); T.audio.se("Item2", { volume: 60, pitch: 120 }); }
 
     window.Jarmark_Sceny = T.register(PLUGIN, { krok, czekajChod, koniecSceny, otwarcie, sztuka, zamkniecie, pogonStart, pogonZejscie, szeptLos, marcelLos, rozstrzygnij, jak, zegar, zajete, zapalone,
-        zasadzkaRozmowa, ranoRozmowa, roof, roofSets, scena, pogonTick, kradziezBezBohatera, graj, pochodSpec, zasadzkaSpec, zasadzkaOkno, skok, ground });
+        zasadzkaRozmowa, ranoRozmowa, bieg, scena, pogonTick, kradziezBezBohatera, graj, pochodSpec, zasadzkaSpec, zasadzkaOkno, przeszkoda, nocStrzezona, AK });
 })();

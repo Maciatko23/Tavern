@@ -315,7 +315,9 @@ kit.test({ port: 9491 }, async t => {
         const F = Tawerna.api("Combat_parts").fight; return { r, slow: F.slowNow(), counter: a.counterT, stun: __w._stun, words: F.floaters.map(f => f.text), se: window.__se.slice(), hp: $gameParty.leader().hp, mhp: $gameParty.leader().mhp }; })()`);
     t.check("B7 P just before the bite: 'Idealne parowanie!', the steel (Parry + Sword4), the world slowed (~0.25 s), the wolf reels, a counter waits (1 s)",
         par.r === "parried" && par.words.includes("Idealne parowanie!") && par.se.includes("Parry") && par.se.includes("Sword4") && par.slow >= 10 && par.stun > 0 && par.counter === 60 && par.hp === par.mhp, par);
-    await t.eval("Combat.act.mode = 'idle'; $gamePlayer.setDirection(6); $gamePlayer._heroDir8 = 6; Combat.feel.setTarget(__b); window.__rnd = Math.random; Math.random = () => 0.99; 0");   // (no critical blow by chance)
+    // (no critical blow by chance; 2026-11-17: 0.5, not 0.99 - a blow's damage is the base x 0.9-1.1 drawn by Math.random (Bron_Data.ROZRZUT), and 0.5 is
+    // its middle, x1.0: the sums below stay exact)
+    await t.eval("Combat.act.mode = 'idle'; $gamePlayer.setDirection(6); $gamePlayer._heroDir8 = 6; Combat.feel.setTarget(__b); window.__rnd = Math.random; Math.random = () => 0.5; 0");
     await t.frames(16);
     const hpC = await t.eval("__b._hp");
     await t.key("O");

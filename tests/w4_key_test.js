@@ -27,7 +27,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("...the debt paid (chapter 1 done): the arc 'Krew kasztelana' begins", (await step()) === "active:0");
 
     // a. Borgar and the half key over the bar
-    await t.go(1, 52, 31, 8);
+    await t.go(1, 38, 33, 8);
     await at(20, 11, 30);
     t.check("Borgar has something to say: a tick over him", (await J("TownQuests.markers().borgar")) === "ready");
     const b1 = await talk("$gameMap.event(1)", ["Zapytaj o stare kamienie", "Nie teraz"]);
@@ -81,7 +81,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("...and through it the stairs lead down: the castle's ruins (Map010)", down);
 
     // d. Borgar hears it - and says the saying
-    await t.go(1, 52, 31, 8);
+    await t.go(1, 38, 33, 8);
     await at(22, 12, 30);
     const b2 = await talk("$gameMap.event(1)", ["Krata w piwnicy", "Nie teraz"]);
     const fin = await J("({ r: TownQuests.rec('W4'), q: TownQuests.Q.W4.steps[TownQuests.rec('W4').step], f: TownQuests.state().flags.borgarSaying, note: (Journal.data().notes.find(n => n.title === 'Słowa Borgara') || {}).text || '' })");

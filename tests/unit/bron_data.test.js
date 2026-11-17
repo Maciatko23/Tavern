@@ -20,7 +20,9 @@ unit.test(t => {
     function Game_System() {}
     let sys = new Game_System();
     const bag = {};
-    const $gameParty = { numItems: it => bag[it.id] || 0, hasItem: it => (bag[it.id] || 0) > 0, gainItem(it, n) { bag[it.id] = Math.max(0, (bag[it.id] || 0) + n); },
+    // (_items: a new object at every change - Equipment.ensure() reads the bag again only when it changes, as with the engine's $gameParty)
+    const $gameParty = { _items: {}, numItems: it => bag[it.id] || 0, hasItem: it => (bag[it.id] || 0) > 0,
+        gainItem(it, n) { bag[it.id] = Math.max(0, (bag[it.id] || 0) + n); this._items = Object.assign({}, bag); },
         loseItem(it, n) { this.gainItem(it, -n); }, maxItems: () => 99, leader: () => null };
     const globals = { Game_System, $gameParty, $dataItems, DataManager: { isItem: o => !!o && $dataItems.includes(o) } };
     Object.defineProperty(globals, "$gameSystem", { get: () => sys, enumerable: true, configurable: true });
@@ -29,11 +31,12 @@ unit.test(t => {
     const P = D.PRZEDMIOTY, fresh = P.filter(p => !p.istnieje), real = id => !!($dataItems[id] && $dataItems[id].name);
     const count = typ => fresh.filter(p => p.typ === typ).length;
 
-    // ---- the list
+    // ---- the list (2026-11-17, docs/ekwipunek/NOWE_80.md: + 64 things 419-482 - 21 weapons, 26 armour, 7 shields, 10 trinkets)
     const ids = P.map(p => p.id);
-    t.check("~100 things: 48 weapons (the uniques and the 2 steel tools among them), 38 armour, 7 shields, 16 trinkets - ids 300-408 once each; the old ones " +
-        OLD_IDS.join(", ") + " only get their note", count("bron") === 48 && count("zbroja") === 38 && count("tarcza") === 7 && count("dodatek") === 16 &&
-        new Set(ids).size === ids.length && JSON.stringify(fresh.map(p => p.id).sort((a, b) => a - b)) === JSON.stringify(Array.from({ length: 109 }, (_, i) => 300 + i)) &&
+    const wantIds = Array.from({ length: 109 }, (_, i) => 300 + i).concat(Array.from({ length: 64 }, (_, i) => 419 + i));
+    t.check("~170 things: 69 weapons (the uniques and the 2 steel tools among them), 64 armour, 14 shields, 26 trinkets - ids 300-408 and 419-482 once each; the old ones " +
+        OLD_IDS.join(", ") + " only get their note", count("bron") === 69 && count("zbroja") === 64 && count("tarcza") === 14 && count("dodatek") === 26 &&
+        new Set(ids).size === ids.length && JSON.stringify(fresh.map(p => p.id).sort((a, b) => a - b)) === JSON.stringify(wantIds) &&
         JSON.stringify(P.filter(p => p.istnieje).map(p => p.id)) === JSON.stringify(OLD_IDS), { bron: count("bron"), zbroja: count("zbroja"), tarcza: count("tarcza"), dodatek: count("dodatek") });
     const bad = [];
     for (const p of P) {
@@ -42,12 +45,13 @@ unit.test(t => {
         if (!it.note.includes(D.notatka(p))) bad.push(p.id + ": note");
         if (p.istnieje) continue;
         const weight = /<Weight:(\d+)>/.exec(it.note);
-        if (it.name !== p.nazwa || it.iconIndex !== 576 + p.id - 300 || it.iconIndex !== D.ikonaOf(p.id)) bad.push(p.id + ": name / icon");
+        // (2026-11-17: every thing has its PixelLab icon - IconSet 688+, tools/ikony/instaluj.py)
+        if (it.name !== p.nazwa || !(it.iconIndex >= 688)) bad.push(p.id + ": name / icon");
         if (it.price !== (D.cenaOf(p) || p.wartosc) || !(it.price > 0)) bad.push(p.id + ": price " + it.price);
         if (!weight || Number(weight[1]) !== D.wagaOf(p)) bad.push(p.id + ": weight");
         if (!p.opis) bad.push(p.id + ": no description");
     }
-    t.check("every thing is an item of data/Items.json with its note (<Bron:...>, <Zbroja:...>, <Tarcza:...>, <Dodatek:...>); the new ones: name, icon 576+, " +
+    t.check("every thing is an item of data/Items.json with its note (<Bron:...>, <Zbroja:...>, <Tarcza:...>, <Dodatek:...>); the new ones: name, icon (576+, 419+ any), " +
         "price (or worth), <Weight:> as the data says, a description", bad.length === 0, bad.slice(0, 8));
     const kinds = [];
     for (const p of P) {
@@ -110,6 +114,7 @@ unit.test(t => {
         if (sh.godziny && !(sh.godziny[0] >= 0 && sh.godziny[0] < sh.godziny[1] && sh.godziny[1] <= 24)) shopBad.push(k + ": hours");
         if (sh.wzor && !D.SKLEPY[sh.wzor]) shopBad.push(k + ": like " + sh.wzor);
         if (!(sh.skup > 0 && sh.skup < 1)) shopBad.push(k + ": buys back at " + sh.skup);
+        for (const g of sh.inne || []) if (!real(g.id) || D.przedmiot(g.id) || !(g.cena > 0) || (g.dziennie !== undefined && !(g.dziennie > 0))) shopBad.push(k + ": other goods " + g.id);
     }
     t.check("the shops (" + Object.keys(D.SKLEPY).join(", ") + "): sell only common new things with a price, their conditions on their own goods, the used ones priced, " +
         "known materials bought back and mended, open hours within the day", shopBad.length === 0, shopBad.slice(0, 8));
@@ -135,26 +140,51 @@ unit.test(t => {
     t.check("the loot: the people's kinds (Humans_Data), the creatures' kinds and the bosses (Creatures_Data) exist, every thing is real with a chance in (0, 1]; " +
         "the underground's five bands get better deeper (average level " + avg.map(Math.round).join(" < ") + ")",
         lootBad.length === 0 && avg.every((v, i) => !i || v > avg[i - 1]) && Object.values(L.podziemia.szansa).every(c => c > 0 && c < 1), lootBad.slice(0, 8));
+    // (2026-11-17) the new materials' sources: the creatures and bosses exist, the floors within 1-99, the chances in (0, 1], the items real
+    const S = L.surowce, matBad = [];
+    for (const [k, list] of Object.entries(S.stwory)) for (const [id, c, n, f0, f1] of list) if (!CD.KINDS[k] || !real(id) || !(c > 0 && c <= 1) || !(n >= 1) || (f0 && !(f0 >= 1 && f1 >= f0 && f1 <= 99))) matBad.push(k + ": " + id);
+    for (const [k, list] of Object.entries(S.bossowie)) for (const [id, n] of list) if (!CD.BOSSES[k] || !real(id) || !(n >= 1)) matBad.push(k + ": " + id);
+    for (const r of S.podziemia) if (!real(r.id) || !(r.od >= 1 && r.do >= r.od && r.do <= 99) || !Object.keys(r.szansa).every(k => L.podziemia.szansa[k] !== undefined && r.szansa[k] > 0 && r.szansa[k] < 1)) matBad.push("ug: " + r.id);
+    for (const [k, list] of Object.entries(S.oprawianie)) for (const [id, c] of list) if (!real(id) || !(c > 0 && c <= 1)) matBad.push(k + ": " + id);
+    for (const z of S.zyly) if (!real(z.id) || !(z.szansa > 0 && z.szansa < 1)) matBad.push("vein: " + z.id);
+    if (!real(S.plaza.id) || !(S.plaza.ile[0] >= 1 && S.plaza.ile[1] >= S.plaza.ile[0])) matBad.push("beach");
+    t.check("the new materials 483-491 (" + D.SUROWCE.length + "): real items; their sources - creatures (the spiders' thread only on floors 31-50), bosses (the order's steel " +
+        "of 70 and 90), the underground's containers by floors, the wolf's fang, the gem of the veins, the amber of the beach", D.SUROWCE.length === 9 && D.SUROWCE.every(m => real(m.id)) &&
+        matBad.length === 0 && S.stwory.pajak[0][3] === 31 && S.stwory.pajak[0][4] === 50 && S.bossowie.boss_90[0][1] === 3, matBad);
 
-    // ---- the recipes, the looks, the words
-    const recipes = D.przepisy(), recBad = [];
-    for (const st of ["forge", "tannery", "workbench"]) {
+    // ---- the recipes, the looks, the words (2026-11-17: + the loom; the clothes of Ubior_Data.js - no level; the tools in the bag)
+    const recipes = D.przepisy(), recBad = [], UD = w.Ubior_Data, made = new Set(), STATIONS = ["forge", "tannery", "workbench", "loom"];
+    const thing = id => D.przedmiot(id) || UD.przedmiot(id);
+    for (const st of STATIONS) {
         const outs = D.PRZEPISY[st].map(r => r[0]);
         if (new Set(outs).size !== outs.length) recBad.push(st + ": twice");
-        for (const [id, inputs, hours, stamina] of D.PRZEPISY[st]) if (!D.przedmiot(id) || !real(id) || !inputs.every(([i, n]) => real(i) && n > 0) || !(hours > 0 && stamina > 0)) recBad.push(st + ": " + id);
-        for (const r of recipes[st]) if (r.id !== "bron_" + r.output[0] || r.output[1] !== 1 || r.poziom !== D.przedmiot(r.output[0]).poziom || !r.name.startsWith({ forge: "Wykuj: ", tannery: "Uszyj: ", workbench: "Zrób: " }[st])) recBad.push(r.id);
+        for (const [id, inputs, hours, stamina, tool] of D.PRZEPISY[st]) {
+            if (!thing(id) || !real(id) || !inputs.every(([i, n]) => real(i) && n > 0) || !(hours > 0 && stamina > 0) || (tool && !real(tool)) || made.has(id)) recBad.push(st + ": " + id);
+            made.add(id);
+        }
+        for (const r of recipes[st]) { const p = D.przedmiot(r.output[0]);
+            if (r.id !== "bron_" + r.output[0] || r.output[1] !== 1 || r.poziom !== (p ? p.poziom : 0) || !r.name.startsWith(D.PRZEPIS_SLOWO[st] + ": ")) recBad.push(r.id); }
     }
-    const mats = st => [...new Set(D.PRZEPISY[st].map(([id]) => D.przedmiot(id).material))].sort().join();
-    t.check("the recipes: real outputs and inputs, once per station, hours and strength; the forge makes iron, iron-shod and steel things, the tannery leather; " +
-        "przepisy() as Farming wants them (bron_<id>, Wykuj / Uszyj / Zrób, the thing's level)", recBad.length === 0 && mats("forge") === "okute,stal,zelazo" && mats("tannery") === "skora" &&
-        recipes.forge.length === 26 && D.PRZEPISY.widac === 4, recBad.concat([mats("forge"), mats("tannery")]));
+    const mats = st => [...new Set(D.PRZEPISY[st].filter(([id]) => D.przedmiot(id)).map(([id]) => D.przedmiot(id).material))].sort().join();
+    const order = D.PRZEPISY.forge.concat(D.PRZEPISY.workbench).filter(r => D.przedmiot(r[0]) && D.przedmiot(r[0]).material === "zakon" && D.przedmiot(r[0]).typ !== "dodatek" || r[0] === 482);
+    // every common thing (not a unique, not an old one) and every piece of clothing can be made somewhere - but the bast shoes (Ubior_Sklepy's own recipe)
+    const noRecipe = P.filter(p => !p.istnieje && !p.unikat && !made.has(p.id)).map(p => p.id)
+        .concat(UD.PRZEDMIOTY.filter(p => !p.istnieje && p.id !== 275 && !made.has(p.id)).map(p => p.id));
+    t.check("the recipes: real outputs, inputs and tools, each thing once over the forge, the tannery, the workbench and the loom, hours and strength; przepisy() as Farming " +
+        "wants them (bron_<id>, Wykuj / Uszyj / Zrób, the thing's level, a piece of clothing 0), the loom's list on both looms; the order's steel only with the master's hammer; " +
+        "every common thing and piece of clothing has one (but the uniques)", recBad.length === 0 && mats("forge") === "braz,kamienie,okute,pierwszych,stal,zakon,zelazo" &&
+        mats("tannery") === "kamienie,rzemienna,skora" && recipes.forge.length === 112 && recipes.tannery.length === 33 && recipes.workbench.length === 27 && recipes.loom.length === 39 &&
+        recipes.loom_wheel.length === 39 && order.every(r => r[4] === D.ITEM.mlotek) && noRecipe.length === 0 && D.PRZEPISY.widac === 4,
+        recBad.concat([mats("forge"), mats("tannery"), "no recipe: " + noRecipe.join(), "order: " + order.filter(r => r[4] !== D.ITEM.mlotek).map(r => r[0]).join()]));
     const U = w.Ubior_Data, looks = Object.assign({}, U.WZORY, U.WZORY_ZBROI, U.WZORY_BRONI, U.WZORY_TARCZ);
     const noLook = P.filter(p => p.typ !== "dodatek" && !looks[D.wygladOf(p)]).map(p => p.id + ":" + D.wygladOf(p));
     t.check("the look keys: every weapon's, armour's and shield's key is in Ubior_Data.js's graphics (WZORY, WZORY_ZBROI, WZORY_BRONI, WZORY_TARCZ)", noLook.length === 0, noLook);
+    // (2026-11-17) a blow's damage is the base x 0.9-1.1 now (Bron_Data.ROZRZUT): the cards say the range - the steel sword's 31 reads
+    // "28-34", the iron sword's 27 "24-30" (the traits' words are Bron_Cechy_Data.js's: not loaded here - tests/unit/bron_cechy.test.js)
     t.eq("the card's words: the steel sword, the mail, the buckler, the hematite ring; the iron sword's rows; who sells the battle axe, where Bogumił's sword comes from",
         [D.opis(308), D.opis(353), D.opis(377), D.opis(384), D.wiersze(305).map(r => r.join(" ")).join(" | "), D.gdzie(321), D.gdzie(396)],
-        ["obrażenia 31 · zasięg 1,55 · oddech 10 · krytyk +6%", "cios słabszy o 28% · oddech -5% · głośniej o 12%", "blok zatrzymuje 68% ciosu · parowanie +50%", "życie +15",
-            "Obrażenia 27 | Zachwianie 24 | Zasięg 1,55 | Oddech 11 | Krytyk +5% | Poziom 10", "Tadek Młot (kowal), 105 G", "W4 Krew kasztelana: Borgar po rozmowie o rodzie"]);
+        ["obrażenia 28-34 · zasięg 1,55 · oddech 10 · krytyk +6%", "cios słabszy o 28% · oddech -5% · głośniej o 12%", "blok zatrzymuje 68% ciosu · parowanie +50%", "życie +15",
+            "Obrażenia 24-30 | Zachwianie 24 | Zasięg 1,55 | Oddech 11 | Krytyk +5% | Poziom 10", "Tadek Młot (kowal), 105 G", "W4 Krew kasztelana: Borgar po rozmowie o rodzie"]);
 
     // ---- Bron.js: the trade (wired as at the boot: Durability knows the new things)
     const wired = B.wire();

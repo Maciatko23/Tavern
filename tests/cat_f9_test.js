@@ -1,12 +1,13 @@
 // The cat in the F9 menu (user 2026-10-01: "dodaj jego zachowanie do konsoli F9"; 2026-11-11: the 'Kot' tab is gone, its commands are
-// the 'Kot Mruczek' section of 'Fabuła i postacie', the long description of its day dropped): in grandpa's house its rows send it to its
-// places (back on the map to watch), let it choose, pet it; away from the house - the way to it. CDP_PORT=9445.
+// the 'Kot Mruczek' section of 'Fabuła i postacie', the long description of its day dropped): in grandpa's house (since 2026-11-17 the
+// hut of the new world, Map224) its rows send it to its places (back on the map to watch), let it choose, pet it; away from the house -
+// the way to it (to the hut, by the hearth). CDP_PORT=9445.
 const path = require("path");
 const kit = require("./lib/kit.js");
 
 kit.test({ port: 9445, bootCheck: "the game boots", errorCheck: "no errors in the console" }, async t => {
     await t.newGame({ story: true, skipIntro: true, day: 3, hour: 11, quiet: true, minimap: false });   // (grandpa's welcome skipped: the cat waits while anyone talks)
-    await t.eval(`(function(){ $gamePlayer.locate(9, 7); return 0; })()`);
+    await t.eval(`(function(){ $gamePlayer.locate(2, 6); return 0; })()`);
     await t.until("!$gameMap.isEventRunning() && !$gameMessage.isBusy()", 20);
     await t.frames(40);
     const openCat = async () => {
@@ -49,4 +50,11 @@ kit.test({ port: 9445, bootCheck: "the game boots", errorCheck: "no errors in th
     await t.until("SceneManager._scene instanceof Scene_Map && !SceneManager.isSceneChanging()", 20);
     const own = await t.json("HomeLife.catState()");
     t.check("'Niech sam wybierze' - it picks a new doing at once (not the sill again)", own.spot && own.spot !== "sill" && (own.steps.length > 0 || own.cur), own);
+    // away from the house: 'Do domu dziadka' takes the hero into the hut, by the hearth
+    await t.go(218, 30, 18);
+    await openCat();
+    await t.eval(`(function(){ const s = SceneManager._scene, l = s._list, i = l._rows.findIndex(r => r.kind === "catHouse"); l.select(i); s.onOk(); return 0; })()`);
+    const home = await t.until(t.onMap(224), 20);
+    const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $gamePlayer.direction(), !!$gameMap.event(960)]");
+    t.check("away from the house: the way to it puts the hero in the hut by the hearth (Map224 5,6), the cat there", home && JSON.stringify(at) === JSON.stringify([224, 5, 6, 8, true]), at);
 });

@@ -270,6 +270,12 @@
     // BESPOKE tiles of the flight (a place's own way) wins.
     const BESPOKE = 3;
     function worldExit(side, along) {
+        // (2026-11-16) the mountains' levels (OrzelData.NAD): up over the north edge, down over the south one, the same column
+        const nad = D.NAD && D.NAD[$gameMap.mapId()], cel = nad && nad[side];
+        if (cel && window.$dataMapInfos && $dataMapInfos[cel]) {
+            const a0 = Math.max(0, Math.min($gameMap.width() - 1, Math.round(along)));
+            return { x: a0, y: side === "N" ? 0 : $gameMap.height() - 1, map: cel, tx: a0, ty: side === "N" ? 79 : 0, dir: 0 };
+        }
         const sw = window.SwiatData, me = sw && sw.enabled && sw.maps[$gameMap.mapId()];
         if (!me) return null;
         const [x0, y0, w, h] = me, ns = side === "N" || side === "S", a = Math.round(along);

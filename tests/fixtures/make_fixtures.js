@@ -3,6 +3,8 @@
 // made ONCE and kept - run this again only for a new fixture, or when a fixture has to show something new.
 //   node tests/fixtures/make_fixtures.js                     all three
 //   node tests/fixtures/make_fixtures.js day40_farm           just that one
+// nowy_dzien1      (2026-11-17, the new world) a new story game in grandpa's hut (Map224), day 1: the intro talk heard to its end
+// nowy_dzien40     (2026-11-17, the new world) day 40 on grandpa's plot on Podgrodzie (Map218, inside its fence): the same life as day40_farm
 // new_story_day1   a new story game, grandpa's house (Map019), day 1: the intro talk heard to its end
 // tavern_evening   the story on: hired by Borgar, a shift worked on day 1 and one on day 20; in the tavern (Map001) at 19:00,
 //                  the purse full, the tavern's reputation 60, a part of the debt paid
@@ -17,8 +19,11 @@ const HELPERS = String.raw`(function(){
     const F = Farming;
     window.__fx = {
         put(type, bx, by, maxR) {
+            // (a map with bought land - <BuildRegion:N>, the new world's plot on Map218: the building and a tile round it inside the land,
+            // as the game's own placing asks - the F9 placer itself would put it anywhere)
+            const br = F.buildRegion ? F.buildRegion() : 0, own = (x, y) => !br || $gameMap.regionId(x, y) === br;
             const room = (x, y) => { const cells = F.tilesOfBuilding(type, x, y);
-                for (const c of cells) for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const b = F.buildingAt(c.x + dx, c.y + dy); if (b) return false; }
+                for (const c of cells) for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const b = F.buildingAt(c.x + dx, c.y + dy); if (b || !own(c.x + dx, c.y + dy)) return false; }
                 return true; };
             for (let r = 0; r <= (maxR || 14); r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
                 if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
@@ -27,6 +32,23 @@ const HELPERS = String.raw`(function(){
                 if (F.placeFree(type, x, y)) return { type, x, y };
             }
             return { type, failed: true };
+        },
+        // (the new world's plot keeps its pines, stones and bushes) a part of it cleared as the hero would over the weeks: every tree,
+        // stump, log, stone and bush in the rectangle gone the way chopping and digging leave them (their self switches A and B - the
+        // empty pages), the ground under them cleared
+        clear(x0, y0, x1, y1) {
+            const cells = [];
+            for (const e of $gameMap.events()) {
+                const d = e.event(); if (!d || e.x < x0 || e.x > x1 || e.y < y0 || e.y > y1) continue;
+                const pages = d.pages || [], img = pages[0] && pages[0].image ? pages[0].image.characterName : "";
+                const gone = pages.some(p => p.conditions.selfSwitchValid && /[AB]/.test(p.conditions.selfSwitchCh));
+                if (!gone || !(/^!\$/.test(img) || /<Stump>|<Tree|<Log|<Rock/.test(d.note || ""))) continue;
+                for (const ch of ["A", "B"]) $gameSelfSwitches.setValue([e._mapId, e._eventId, ch], true);
+            }
+            for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) cells.push({ x, y });
+            $gameMap.requestRefresh();
+            $gameSystem.clearLand($gameMap.mapId(), cells);
+            return cells.length;
         },
         // the hero's needs kept up while the days go by (he eats and drinks between the jumps)
         fed() {
@@ -183,6 +205,112 @@ const MAKERS = {
         t.check("nothing running when it is saved (as the save menu requires)", await t.until(t.idle + " && SceneManager._scene instanceof Scene_Map && !$gameTemp._pendingSummary", 30));
         const r = await t.saveFixture("day40_farm", { desc: "Gra fabularna, dzień 40 (lato), 17:00 na działce dziadka (Map003, Kruczy Jar): ~25 budynków stawianych przez tygodnie, oswojony pies przy budzie, chatka z łóżkiem, kredensem i skrzynią (jedzenie w kredensie i spiżarni), ziemniaki i jęczmień w ziemi, narzędzia, poziom, połowa długu spłacona." });
         t.check("saved: " + JSON.stringify(Object.assign({}, r.summary, { buildings: r.summary.buildings.length })), r.summary.day === 40 && r.summary.map === 3 && r.summary.buildings.length >= 15 && r.summary.dog, { failed: built.filter(b => b.failed).map(b => b.type), bytes: r.bytes });
+    },
+    // ---- (2026-11-17) the new world's saves: the story starts in grandpa's hut (Map224), his plot is on Podgrodzie (Map218, inside
+    // its fence). The old ones above stay - saves made before the core (old keys the compatibility tests read) - but their maps
+    // (Map019, Map003) belong to the old world and go with it.
+    async nowy_dzien1(t) {
+        t.check("a new story game in grandpa's hut", await t.newGame({ story: true, calm: false, needsOff: false }) && (await t.eval("$gameMap.mapId()")) === 224);
+        await hearIntro(t);
+        await t.frames(90);
+        await dismiss(t);
+        t.check("nothing running when it is saved (as the save menu requires)", await t.until(t.idle + " && SceneManager._scene instanceof Scene_Map && !$gameTemp._pendingSummary", 30));
+        const r = await t.saveFixture("nowy_dzien1", { desc: "Nowy świat: nowa gra fabularna w chacie dziadka (Map224), dzień 1, po rozmowie z dziadkiem (wstęp wysłuchany)." });
+        t.check("saved: " + JSON.stringify(r.summary), r.summary.map === 224 && r.summary.day === 1 && r.summary.story, r.bytes);
+    },
+
+    async nowy_dzien40(t) {
+        t.check("a new story game", await t.newGame({ story: true, calm: false, needsOff: false }));
+        await hearIntro(t);
+        await t.eval(HELPERS);
+        t.check("grandpa's plot (Podgrodzie, Map218, inside the fence)", await t.go(218, 30, 18, 2, { calm: false }) && await t.eval("!!$gameSystem._story.flags.field && Homes.heroOnField()"));
+        const put = async (type, x, y, r) => { const p = await t.json(`__fx.put(${JSON.stringify(type)}, ${x}, ${y}, ${r || 14})`); if (p.failed) console.log("NOTE no room for " + type); return p; };
+        const days = async (n, hour) => { await t.eval(`__fx.days(${n}, ${hour === undefined ? 10 : hour}); 0`); await dismiss(t); await t.frames(20); };
+        // ---- week 1: the first things (the workbench, the fire, a bed of leaves, the tools)
+        await t.eval("(function(){ for (const id of [60, 62, 63, 89, 90]) $gameParty.gainItem($dataItems[id], 1); return 0; })()");   // (the stone tools, the hammer, the knife)
+        const built = [];
+        // (first a corner of the plot cleared of its pines and stones for the hut - the plot keeps its trees: room for it is made, not found)
+        await t.eval("__fx.clear(33, 10, 40, 14)");
+        await t.frames(10);
+        const hut = await put("hut", 33, 13, 4);
+        built.push(hut);
+        built.push(await put("workbench", 24, 12), await put("campfire", 27, 16), await put("bedroll", 29, 13), await put("scarecrow", 25, 20));
+        await days(6);
+        // ---- week 2: wood and clay (the sawmill, the kiln, a chest, the compost, fired pots for the rain)
+        built.push(await put("sawmill", 35, 12), await put("kiln", 31, 18), await put("chest_s", 26, 11), await put("compost", 23, 22));
+        for (let i = 0; i < 4; i++) built.push(await put("clay_pot", 30 + i, 15, 6));
+        await days(7);
+        // ---- week 3: the dog's kennel and the dog tamed with meat (three meals, an hour apart), the stockpile, a bench
+        built.push(await put("doghouse", 36, 20), await put("stockpile", 38, 16), await put("bench", 28, 12));
+        const tame = await t.json(`(function(){ $gameParty.gainItem($dataItems[94], 3); for (let i = 0; i < 3; i++) { Dog.feedWild(); $gameSystem.advanceDayNight(1.2); } Dog.sync && Dog.sync(); const d = Dog.state(); return { tame: d.tame, mode: d.mode, trust: d.trust }; })()`);
+        t.check("the dog tamed with three meals of meat, working from its kennel", tame.tame && tame.mode === "work", tame);
+        await days(6);
+        // ---- week 4: the hut furnished (its bed, larder and chest inside), the tannery, the pantry
+        built.push(await put("tannery", 38, 17), await put("pantry", 22, 15));
+        t.check("the hut stands on the plot", !hut.failed, hut);
+        if (!hut.failed) {
+            let inHut = false;
+            for (let i = 0; i < 3 && !inHut; i++) {   // (through the door when nothing else is going on - a letter, a notice)
+                await t.dismiss();
+                await t.until(t.idle + " && !$gamePlayer.isTransferring()", 20);
+                await t.eval(`(function(){ const h = Farming.hutOf(); return Farming.enterHut(h.b); })()`);
+                inHut = await t.until(t.onMap(100), 20);
+            }
+            await t.frames(30);
+            const furn = [];
+            for (const [type, x, y] of [["bed", 1, 3], ["larder", 5, 3], ["chest_s", 4, 3]]) furn.push(await t.json(`(function(){ return Farming.placeFree("${type}", ${x}, ${y}) ? "${type}" : "${type}: " + Farming.whyNotBuild("${type}", ${x}, ${y}, false, true); })()`));
+            t.check("inside the hut (Map100): the bed, the larder, a chest", inHut && furn.every(f => !/:/.test(f)), furn);
+            await t.eval(`(function(){ const L = (Farming.farm().buildings[100] || []).find(b => b.type === "larder"); if (!L) return 0; for (const [id, n] of [[83, 4], [105, 3], [124, 2], [76, 2]]) { $gameParty.gainItem($dataItems[id], n); Farming.putInChest(L, $dataItems[id], n); } return 0; })()`);
+            await t.eval("Farming.leaveHut(); 0");
+            await t.until(t.onMap(218), 30);
+            await t.frames(30);
+        }
+        await days(7);
+        // ---- weeks 5-6: iron and bread (the forge, the brickworks, the bakery, the well with its bucket), the second snare, a coop
+        await t.eval("(function(){ for (const id of [115, 116, 118, 87, 129, 154, 125]) $gameParty.gainItem($dataItems[id], 1); $gameParty.gainItem($dataItems[127], 12); return 0; })()");
+        await t.eval("__fx.clear(30, 21, 40, 24)");
+        await t.frames(10);
+        built.push(await put("forge", 34, 22), await put("brickworks", 38, 22), await put("bakery", 31, 22), await put("well", 29, 21), await put("snare", 40, 10), await put("coop", 21, 11, 18));
+        await days(8, 9);
+        // ---- day 35 (summer): a patch of potatoes and barley by the scarecrow (its ground cleared first: the plot keeps its grass)
+        await t.eval("(function(){ for (const [id, n] of [[65, 1], [66, 1], [67, 6], [70, 6]]) $gameParty.gainItem($dataItems[id], n); return 0; })()");
+        const sc = await t.json("(function(){ const b = (Farming.farm().buildings[218] || []).find(b => b.type === 'scarecrow'); return b ? [b.x, b.y] : [25, 20]; })()");
+        const soil = await t.json(`(function(){ const out = [], br = Farming.buildRegion();
+            for (let r = 1; r < 9 && out.length < 6; r++) for (let dy = -r; dy <= r && out.length < 6; dy++) for (let dx = -r; dx <= r && out.length < 6; dx++) {
+                const x = ${sc[0]} + dx, y = ${sc[1]} + dy;
+                if (Math.max(Math.abs(dx), Math.abs(dy)) !== r || $gameMap.regionId(x, y) !== br || Farming.buildingAt(x, y) || $gameMap.eventsXy(x, y).length || (x === $gamePlayer.x && y === $gamePlayer.y)) continue;
+                if (!$gameMap.checkPassage(x, y, 0x0f) || Farming.hasObjectTile(x, y)) continue;
+                out.push([x, y]); }
+            $gameSystem.clearLand($gameMap.mapId(), out.map(([x, y]) => ({ x, y })));
+            return out.filter(([x, y]) => { const p = Farming.plotAt(x, y); return p && p.s === "cleared"; }); })()`);
+        let planted = 0;
+        for (const [i, [x, y]] of soil.entries()) {
+            for (const step of [`Farming.rake(${x}, ${y})`, `Farming.till(${x}, ${y})`, `Farming.plant(${x}, ${y}, "${i < 3 ? "potato" : "barley"}")`]) {
+                await t.eval(`$gameSystem.setStamina(100); ${step}; 0`);
+                await t.until("!$gamePlayer.isToolSwinging()", 10, 100);
+                await t.frames(6);
+            }
+            if (await t.eval(`!!(Farming.plotAt(${x}, ${y}) || {}).crop`)) planted++;
+        }
+        t.check("crops in the ground (" + planted + " of " + soil.length + " tiles)", planted >= 3, soil);
+        await days(5, 17);
+        // ---- day 40: the bag, the pantry, the level, the debt, the hero by his hut in the late afternoon
+        const end = await t.json(`(function(){
+            for (const [id, n] of [[95, 2], [109, 1], [139, 5], [102, 6], [61, 8], [80, 12], [64, 10], [77, 14], [88, 20], [86, 3]]) $gameParty.gainItem($dataItems[id], n);
+            const P = (Farming.farm().buildings[218] || []).find(b => b.type === "pantry");
+            if (P) for (const [id, n] of [[71, 6], [72, 5], [75, 4]]) { $gameParty.gainItem($dataItems[id], n); Farming.putInChest(P, $dataItems[id], n); }
+            if (window.Combat && Combat.gainXp) Combat.gainXp(2200, "test fixture", true);
+            $gameParty.gainGold(1500); Story.pay(1250); $gameParty.gainGold(80);
+            __fx.fed(); if (window.Journal) Journal.evaluateGoals();
+            const h = Farming.hutOf(); if (h) { const d = { x: h.b.x + 1, y: h.b.y + 1 }; $gamePlayer.locate(d.x, d.y); $gamePlayer.setDirection(2); }
+            return { day: $gameSystem.dayNightDay(), level: Combat.hero ? Combat.hero().level : null, paid: Story.state().paid, dog: Dog.state().tame, dogHp: Dog.state().hp, dogFood: Dog.state().food };
+        })()`);
+        t.check("day 40, a level or more, the debt half paid, the dog tame and well", end.day === 40 && end.paid === 1250 && end.dog && end.dogHp > 0 && end.dogFood >= 50, end);
+        await t.frames(120);
+        await dismiss(t);
+        t.check("nothing running when it is saved (as the save menu requires)", await t.until(t.idle + " && SceneManager._scene instanceof Scene_Map && !$gameTemp._pendingSummary", 30));
+        const r = await t.saveFixture("nowy_dzien40", { desc: "Nowy świat: gra fabularna, dzień 40 (lato), 17:00 na działce dziadka (Podgrodzie, Map218, w obrębie płotu): budynki stawiane przez tygodnie, oswojony pies przy budzie, chatka z łóżkiem, kredensem i skrzynią (jedzenie w kredensie i spiżarni), ziemniaki i jęczmień w ziemi, narzędzia, poziom, połowa długu spłacona." });
+        t.check("saved: " + JSON.stringify(Object.assign({}, r.summary, { buildings: r.summary.buildings.length })), r.summary.day === 40 && r.summary.map === 218 && r.summary.buildings.length >= 15 && r.summary.dog, { failed: built.filter(b => b.failed).map(b => b.type), bytes: r.bytes });
     }
 };
 

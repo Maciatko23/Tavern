@@ -23,7 +23,7 @@
  * @text Mapa domu dziadka
  * @type number
  * @min 1
- * @default 19
+ * @default 224
  *
  * @param easterDays
  * @text Wielkanoc: ile dni
@@ -48,41 +48,43 @@
  * @default true
  *
  * @help
- * Dom dziadka (mapa 19, „Bielona chata”) pamięta, co bohater przeżył, i zmienia
+ * Chata dziadka (mapa 224 na Podgrodziu - od 2026-11-17; dawny bielony dom,
+ * mapa 19, odszedł ze starym światem) pamięta, co bohater przeżył, i zmienia
  * się z porami roku. Wszystkie ozdoby to zdarzenia 980-998 dokładane przez
  * wtyczkę do danych mapy przy jej wczytaniu (plików map wtyczka nie zmienia).
  * Obrazki: img/characters/!House_Decor.png i !$House_Decor_Big.png
  * (generator: tools/house/decor/make_decor.py).
  *
  * PAMIĄTKI (pojawiają się raz, gdy zasłużone, i zostają na zawsze):
- *  - pokwitowanie od Lorda w ramce, na ścianie we wnęce dziadka (obok obrazka
- *    Matki Boskiej, symetrycznie względem okna) - gdy dług jest spłacony;
- *    wcześniej wisi tam pusty gwóźdź;
+ *  - pokwitowanie od Lorda w ramce, na kamiennej ścianie przy kominie, nad
+ *    czosnkiem - gdy dług jest spłacony; wcześniej wisi tam pusty gwóźdź;
  *  - skóra wilka przy posłaniu bohatera - po jego pierwszym wilku;
  *  - poroże na ścianie nad posłaniem - po pierwszym jeleniu;
  *  - kieł dzika na rzemyku (na gwoździu, a gdy jest już poroże - na porożu)
  *    - po pierwszym dziku;
  *  - półka bohatera z cynowym kuflem od Borgara (po pierwszej zmianie
  *    w tawernie) i z kośćmi (po pierwszej wygranej w kości);
- *  - ogłoszenie z tablicy zleceń przypięte przy posłaniu - po pierwszym
- *    wykonanym zleceniu.
+ *  - ogłoszenie z tablicy zleceń przypięte na kamiennej ścianie nad ziołami
+ *    - po pierwszym wykonanym zleceniu.
  * Liczą się zwierzęta ubite przez bohatera (nie przez psa). W starym zapisie
  * (wtyczka dodana później) pamiątki biorą się z tego, co zapis już pamięta:
  * spłacony dług, zmiany u Borgara, wygrane w kości, zlecenia i licznik ubitych
  * zwierząt z Hunting.js (ten dawny licznik nie odróżnia zdobyczy psa).
  *
  * PORY ROKU (Farming.js: 28 dni każda, od dnia 1):
- *  - wiosna: bazie w dzbanku na stole; w połowie wiosny przez kilka dni
- *    koszyczek z pisankami;
+ *  - wiosna: bazie w dzbanku na skrzyni dziadka; w połowie wiosny przez kilka
+ *    dni obok koszyczek z pisankami;
  *  - lato: polne kwiaty w dzbanku, zioła suszące się przy kominie;
- *  - jesień: wieniec dożynkowy na kominie, kosz jabłek, dynie przy drzwiach;
- *  - zima: świerkowe gałązki nad obrazkami; w połowie zimy przez kilka dni
- *    Wigilia: obrus z sianem i opłatek na stole, snop zboża w kącie za
- *    skrzynią dziadka.
+ *  - jesień: wieniec dożynkowy przy kominie, kosz jabłek na skrzyni, dynie
+ *    pod ścianą obok skrzyni;
+ *  - zima: świerkowe gałązki nad pokwitowaniem; w połowie zimy przez kilka dni
+ *    Wigilia: snop zboża pod ścianą obok skrzyni dziadka.
  *
- * ZAWSZE: wycinanki łowickie pod czterema oknami, haftowany ręcznik na
- * obrazku Matki Boskiej, malowana skrzynia dziadka, chodnik przy jego łóżku.
- * Przejścia, dywan przed paleniskiem i drzwi zostają wolne.
+ * ZAWSZE: wycinanka łowicka pod oknem, malowana skrzynia dziadka, chodnik
+ * przy drzwiach. Przejścia, dywan przed paleniskiem i drzwi zostają wolne.
+ * (Ozdoby, których chata nie ma gdzie postawić - ręcznik na obrazku Matki
+ * Boskiej, obrus wigilijny na stole, wycinanki pod innymi oknami - czekają
+ * w danych wtyczki na dom, który je pomieści: LAYOUTS w kodzie.)
  *
  * Korzysta z TawernaCore.js (musi stać wyżej na liście): stan w zapisie
  * (Tawerna.state, dawny $gameSystem._homeDecor przechodzi sam), wstawianie
@@ -104,7 +106,7 @@
     if (!T) throw new Error("HomeDecor.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
     const params = PluginManager.parameters(PLUGIN);
     const num = (v, d) => (v === undefined || v === null || v === "" || isNaN(Number(v)) ? d : Number(v));
-    const MAP_ID = num(params.mapId, 19);
+    const MAP_ID = num(params.mapId, 224);
     const EASTER_DAYS = num(params.easterDays, 4);
     const WIGILIA_DAYS = num(params.wigiliaDays, 5);
     const NOTICES = params.notices !== "false";
@@ -114,46 +116,52 @@
     // </decor-data>
 
     // ------------------------------------------------------------------
-    // The slots: one event each (ids 980..998 on the house map). prio: 0 below the characters, 1 like them (it blocks);
-    // z: drawn lower than the other things below the characters (a rug, a tablecloth - the candle stays on top);
+    // The slots: one event each (ids 980..998 on the house map). prio: 0 below the characters, 1 like them (it blocks), 2 over them
+    // (on a piece of furniture that is itself an event - the chest's lid); z: drawn lower than the other things below the characters
+    // (a rug, a tablecloth - the candle stays on top); px: its picture moved that many pixels, lookPx: the same for one look only;
     // need: an event of the map that must stand where the house was designed (else the slot is left out: the map was edited)
+    // (2026-11-17, the new world) the house is grandpa's tiny hut in Podgrodzie, Map224 (8 x 9: the grandson's corner - bed, candle on
+    // a stool, pegs, a picture, the window - is the old cottage's corner, the hearth with the rocking chair on the stone wall right of
+    // it, the chest by the door). Fewer slots than the old 19 x 13 cottage (Map019, gone with the old world): one window - one
+    // wycinanka; no Holy Mother picture - no towel; no table - the jug and the basket stand on grandpa's chest, no Christmas cloth
+    // (the sheaf stays); the receipt, the harvest wreath and the summer herbs on the stone wall by the fire
     // ------------------------------------------------------------------
-    const SLOTS = [
-        { id: 980, key: "rogi", x: 1, y: 2, prio: 0, need: "bed" },
-        { id: 981, key: "kiel", x: 1, y: 2, prio: 0, need: "bed" },
-        { id: 982, key: "list", x: 4, y: 5, prio: 0, need: "bed" },   // (on the plank partition: the user's painting hangs at 1,3 since 2026-09-29)
-        { id: 983, key: "polka", x: 3, y: 2, prio: 0, need: "pegs" },
-        { id: 984, key: "skora", x: 3, y: 6, prio: 0, z: 0.5, need: "bed" },
-        { id: 985, key: "rama", x: 17, y: 2, prio: 0, need: "picture" },
-        { id: 986, key: "recznik", x: 15, y: 2, prio: 0, need: "picture" },
-        { id: 987, key: "wyc_2", x: 2, y: 3, prio: 0 },
-        { id: 988, key: "wyc_7", x: 7, y: 3, prio: 0 },
-        { id: 989, key: "wyc_11", x: 11, y: 3, prio: 0 },
-        { id: 990, key: "wyc_16", x: 16, y: 3, prio: 0 },
-        { id: 991, key: "chodnik", x: 16, y: 6, prio: 0, z: 0.5, need: "quilt" },
-        { id: 992, key: "komin", x: 9, y: 2, prio: 0, need: "hearth" },
-        // (2026-10-23) the table since the user's edit of 2026-10-17: two cells wide in the corner (1..2, 10..11, its top map pixels
-        // 51..143 x 508..551), the candle on the round stool behind it (2,10); px: the picture moved onto the top (TawernaCore <Px>)
-        { id: 993, key: "stol_p", x: 2, y: 11, prio: 0, px: [13, 7], need: "table" },   // (the jug: the right half of the top)
-        { id: 994, key: "stol_l", x: 1, y: 11, prio: 0, px: [-6, 8], need: "table" },   // (the basket: the left half)
-        { id: 995, key: "wigilia", x: 2, y: 11, prio: 0, z: 0.8, need: "table" },        // (the cloth over the whole top: tools/house/decor/wigilia_stol2.py)
-        { id: 996, key: "dynie_l", x: 8, y: 11, prio: 1, need: "door" },
-        { id: 997, key: "dynie_r", x: 10, y: 11, prio: 1, need: "door" },
-        { id: 998, key: "snop", x: 17, y: 7, prio: 1, need: "chest" }
-    ];
+    const LAYOUTS = {
+        224: {
+            size: [8, 9],
+            slots: [
+                { id: 980, key: "rogi", x: 1, y: 2, prio: 0, need: "bed" },        // (over his bed, above the picture)
+                { id: 981, key: "kiel", x: 1, y: 2, prio: 0, need: "bed" },
+                { id: 982, key: "list", x: 4, y: 2, prio: 0, px: [0, -20], need: "hearth" },   // (pinned on the stone wall over the herbs)
+                { id: 983, key: "polka", x: 3, y: 2, prio: 0, need: "pegs" },      // (over the pegs, as in the old corner)
+                { id: 984, key: "skora", x: 3, y: 6, prio: 0, z: 0.5, need: "bed" },   // (on the floor beside his bed)
+                { id: 985, key: "rama", x: 6, y: 2, prio: 0, px: [0, -14], need: "hearth" },   // (the stone wall over the garlic)
+                { id: 987, key: "wyc_2", x: 2, y: 3, prio: 0 },                     // (under the window)
+                { id: 991, key: "chodnik", x: 5, y: 7, prio: 0, z: 0.5, need: "door" },   // (the rag runner inside the door)
+                { id: 992, key: "komin", x: 6, y: 3, prio: 0, lookPx: { wieniec: [0, 30] }, need: "hearth" },   // (the stone wall right of the fire)
+                { id: 993, key: "stol_p", x: 1, y: 7, prio: 2, px: [1, -8], need: "chest" },   // (the jug: the left half of the chest's lid)
+                { id: 994, key: "stol_l", x: 1, y: 7, prio: 2, px: [-2, -8], need: "chest" },  // (the basket: the right half, in front of the jug)
+                // (the pumpkins by the wall beside the chest: by the door they would stand on the runner's ends)
+                { id: 996, key: "dynie_l", x: 2, y: 7, prio: 1, need: "chest" },
+                { id: 997, key: "dynie_r", x: 3, y: 7, prio: 1, need: "chest" },
+                { id: 998, key: "snop", x: 2, y: 7, prio: 1, need: "chest" }        // (by the wall beside the chest - the corner above it is grandpa's place at the chest)
+            ],
+            // what must stand where (the events of the hut the decorations are laid out around)
+            anchors: {
+                bed: d => hasEvent(d, 1, 4, e => /Posłanie/i.test(e.name)),
+                pegs: d => hasEvent(d, 3, 3, e => imageOf(e) === "!House_Props"),
+                hearth: d => hasEvent(d, 5, 4, e => /Palenisko/i.test(e.name)),
+                door: d => hasEvent(d, 5, 8, e => /^Drzwi/i.test(e.name)),
+                chest: d => hasEvent(d, 1, 7, e => /Skrzynia dziadka/i.test(e.name))
+            },
+            table: []   // (Christmas Eve's table: none in the hut)
+        }
+    };
+    const LAY = LAYOUTS[MAP_ID] || { size: [0, 0], slots: [], anchors: {}, table: [] };
+    const SLOTS = LAY.slots;
     const SLOT_BY_ID = {};
     for (const s of SLOTS) SLOT_BY_ID[s.id] = s;
-    // what must stand where (the events of Map019 the decorations are laid out around)
-    const ANCHORS = {
-        bed: d => hasEvent(d, 1, 4, e => /Posłanie/i.test(e.name)),
-        pegs: d => hasEvent(d, 3, 3, e => imageOf(e) === "!House_Props"),
-        picture: d => hasEvent(d, 15, 2, e => /Matki Boskiej/i.test(e.name)),
-        quilt: d => hasEvent(d, 17, 5, e => /Kołdra/i.test(e.name) || imageOf(e) === "!$House_Quilt"),
-        hearth: d => hasEvent(d, 9, 4, e => /Palenisko/i.test(e.name)),
-        table: d => hasEvent(d, 2, 10, e => /świeca/i.test(e.name)),
-        door: d => hasEvent(d, 9, 12, e => /^Drzwi/i.test(e.name)),
-        chest: d => hasEvent(d, 17, 8, e => /Skrzynia dziadka/i.test(e.name))
-    };
+    const ANCHORS = LAY.anchors;
     function imageOf(e) { const p = e.pages && e.pages[0]; return p && p.image ? p.image.characterName : ""; }
     function hasEvent(d, x, y, test) { return (d.events || []).some(e => e && e.x === x && e.y === y && test(e)); }
 
@@ -286,7 +294,7 @@
     const BLANK_COND = { actorId: 1, actorValid: false, itemId: 1, itemValid: false, selfSwitchCh: "A", selfSwitchValid: false, switch1Id: 1,
         switch1Valid: false, switch2Id: 1, switch2Valid: false, variableId: 1, variableValid: false, variableValue: 0 };
     function slotData(s) {
-        return { id: s.id, name: "Ozdoba: " + s.key, note: "<HomeDecor:" + s.key + ">" + (s.px ? "<Px:" + s.px[0] + "," + s.px[1] + ">" : ""), x: s.x, y: s.y, pages: [{
+        return { id: s.id, name: "Ozdoba: " + s.key, note: "<HomeDecor:" + s.key + ">", x: s.x, y: s.y, pages: [{
             conditions: Object.assign({}, BLANK_COND), directionFix: true,
             image: { tileId: 0, characterName: "", direction: 2, pattern: 0, characterIndex: 0 },
             list: [{ code: 0, indent: 0, parameters: [] }], moveFrequency: 3,
@@ -296,7 +304,7 @@
     // (only into the house as it was designed - its size - and only the slots whose anchors stand; an editor's own event on a slot's
     // id is left alone by the core, and a game saved in the house before this plugin gets the events as it loads)
     T.inject(MAP_ID, { ids: [980, 998], owner: PLUGIN, build(data) {
-        if (data.width !== 19 || data.height !== 13) return [];
+        if (data.width !== LAY.size[0] || data.height !== LAY.size[1]) return [];
         return SLOTS.filter(s => !s.need || safe(() => ANCHORS[s.need](data), false)).map(slotData);
     } });
     // the house's things as it comes up (after a transfer, a load, a menu: the map's tiles are loaded anew)
@@ -318,6 +326,7 @@
         ev._decorLook = a ? look : null;
         ev._decorShown = !!a;
         ev._decorZ = s.z;
+        ev._decorPx = a ? (s.lookPx && s.lookPx[look]) || s.px || null : null;   // (the picture moved off its cell: the sprite hook below)
         if (a) {
             ev.setImage(a[0], a[1]);
             ev._direction = a[2]; ev._originalDirection = a[2];
@@ -352,6 +361,9 @@
         if (s) show(this, lookOf(s.key));
         else if (isGrandpasChest(this)) paintChest(this);
     };
+    // a slot's picture moved that many pixels (px, or lookPx for one of its looks - the harvest wreath hangs lower than the herbs)
+    T.sprite.hook({ owner: PLUGIN, method: "updatePosition", when: sp => !!(sp._character && sp._character._decorPx),
+        after(sp) { const o = sp._character && sp._character._decorPx; if (o) { sp.x += o[0]; sp.y += o[1]; } } });
     const _Game_Event_screenZ = Game_Event.prototype.screenZ;
     Game_Event.prototype.screenZ = function() {
         if (this._decorZ !== undefined && this._decorShown) return this._decorZ;
@@ -359,7 +371,7 @@
     };
 
     // Christmas Eve: the dishes (Winlu D tiles) are taken off the table while the cloth lies on it, and put back after
-    const TABLE_CELLS = [[1, 10], [2, 10], [1, 11], [2, 11]];   // (the table of 2026-10-17)
+    const TABLE_CELLS = LAY.table;   // (the house's table cells: none in the hut)
     let cleared = null;   // { data: the map's tile array, list: [[index, tileId]] taken off }
     function clearTable(on) {
         if (!$dataMap || !Array.isArray($dataMap.data) || !onHouse()) return false;
@@ -448,7 +460,7 @@
             const a = artOf(look);
             if (!a) continue;
             const [fw, fh] = FRAME[a[0]] || [144, 144];
-            const ox = ev._realX * 48 + 24 - fw / 2, oy = (ev._realY + 1) * 48 - fh;
+            const po = ev._decorPx || [0, 0], ox = ev._realX * 48 + 24 - fw / 2 + po[0], oy = (ev._realY + 1) * 48 - fh + po[1];
             const box = b => ({ ev, look, x0: (ox + b[0]) / 48, y0: (oy + b[1]) / 48, x1: (ox + b[2]) / 48, y1: (oy + b[3]) / 48, px: [b[0], b[1], b[2], b[3]] });
             for (const p of a[7] || []) out.push(Object.assign(box(p.slice(1)), { part: true }));
             out.push(box(a[6]));

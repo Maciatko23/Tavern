@@ -70,7 +70,7 @@ const OUT = process.argv[2] || "";
         check("the 30th use: it cracks - gone from the ground, not in the bag", !cracked.left && cracked.bag === 0, cracked);
         await ev("Needs.setEnabled(false); 0");
         const item = await J("({ name: $dataItems[167].name, icon: $dataItems[167].iconIndex })");
-        check("the item: Gliniany garnek (icon 430)", item.name === "Gliniany garnek" && item.icon === 430, item);
+        check("the item: Gliniany garnek (its PixelLab icon, 688+)", item.name === "Gliniany garnek" && item.icon >= 688, item);
     } catch (e) { console.log("ERR", e.message); results.push(false); }
     const err = b.logs.filter(l => /EXC|rror/.test(l));
     console.log("console errors:", err.length ? err.slice(-5) : "none");

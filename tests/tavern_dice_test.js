@@ -450,7 +450,7 @@ window.__ref = function(faces) {
         check("fame 0 (Nowy w okolicy): the merchant is in the hall but does not play with the hero", f0.fame === 0 && !f0.present.includes("kupiec") && f0.locked.includes("kupiec"), f0);
         check("fame 45 (Swój chłop): the merchant plays; the stranger does not come yet", f45.present.includes("kupiec") && !f45n.present.includes("nieznajomy") && f45n.locked.includes("nieznajomy"), { f45, f45n });
         const strangerCfg = await J(`[TavernDice.OPPONENTS.nieznajomy.stakes.join(), TavernDice.targetFor(100, "nieznajomy"), TavernDice.OPPONENTS.nieznajomy.bust]`);
-        check("fame 85 (Chluba tawerny): the stranger in the hood sits down in the evening (21-24) - 100 G, to 3000, bust Evil_8", f85.present.includes("nieznajomy") && !f85d.present.includes("nieznajomy") && strangerCfg.join() === "100,3000,Evil_8", { f85, f85d, strangerCfg });
+        check("fame 85 (Chluba tawerny): the stranger in the hood sits down in the evening (21-24) - 100 G, to 3000, his PixelLab bust (Kosci_Nieznajomy_Bust)", f85.present.includes("nieznajomy") && !f85d.present.includes("nieznajomy") && strangerCfg.join() === "100,3000,Kosci_Nieznajomy_Bust", { f85, f85d, strangerCfg });
         // the lobby at fame 10: why the merchant does not sit down
         await ev("QuestBoard.state().rep = 10; $gameSystem.setDayNightHour(19.5); window.__td.shots = {}; window.__td.freeze = (st, sc) => st.phase === 'lobby' && sc.phaseT > 24 ? 'kosci_slawa' : null; 0");
         await ev("TavernDice.start({ seed: 8 }); 0");

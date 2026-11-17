@@ -38,19 +38,21 @@ const UNIT = path.join(TESTS, "unit");
 
 // the quick set: boot + new game + save/load (fixtures), story start, farming/building, hunting/combat, needs, journal, menu,
 // tavern interior, a mini-game, bubbles/busts, grandpa's house
+// (2026-11-17: wolves_test and quest_board_test left the quick set - they played on the removed old maps 004 / 022; back when
+// rewritten for the new world - tests/stary_swiat.txt)
 const SMOKE = [
     "smoke/fixtures",          // boot, every fixture loads and plays, save -> load round trip
     "smoke/story",             // a new story game in grandpa's house, the intro, the journal's chapter, the way out
     "smoke/farm",              // the build menu, a building site hammered up, the workbench makes a tool, crops
     "combat_test",             // the combat keys, the attributes, levels, the club and the shield
-    "wolves_test",             // a wolf pack at night: the ring, one attacker at a time, the fight
     "needs_test",
     "journal_test",
     "menu_panel_test",
-    "tavern_interior_test",
-    "quest_board_test",
+    "schody_tawerny_test",
     "bubbles_test",
-    "home_decor_test"
+    "home_decor_test",
+    "wolves_test",             // (2026-11-17: on the new world's wolf ground, Krucze Turnie - Map222)
+    "quest_board_test"         // (2026-11-17: the board in the tavern, the hunts and the wanted beasts on Map218 / Map222)
 ];
 // not in "full": long runs that are not pass / fail tests (the marathon plays days and messages the phone), and the whole game in one
 // go (przejscie_ciagiem_test, ~10-15 min: the prologue to the Heart's chamber - only on request, with --timeout 1500), and the story
@@ -122,7 +124,12 @@ function testsFor(plugins) {
     return out;
 }
 
-const e2eAll = () => fs.readdirSync(TESTS).filter(f => /_test\.js$/.test(f)).map(f => f.replace(/\.js$/, "")).filter(n => !SKIP_FULL.includes(n)).sort();
+// the old world's suites (tests/stary_swiat.txt, 2026-11-14): things that still live only on the old maps - not in "full" unless
+// --stary; `node tests/run.js stary` runs just them. A suite leaves the list when its subject has moved to the new world.
+const OLD_WORLD_FILE = path.join(TESTS, "stary_swiat.txt");
+const OLD_WORLD = fs.existsSync(OLD_WORLD_FILE) ? fs.readFileSync(OLD_WORLD_FILE, "utf8").split(/\r?\n/).map(l => l.trim()).filter(l => l && !l.startsWith("#")) : [];
+const WITH_OLD = flag("stary");
+const e2eAll = () => fs.readdirSync(TESTS).filter(f => /_test\.js$/.test(f)).map(f => f.replace(/\.js$/, "")).filter(n => !SKIP_FULL.includes(n) && (WITH_OLD || !OLD_WORLD.includes(n))).sort();
 const unitAll = () => (fs.existsSync(UNIT) ? fs.readdirSync(UNIT).filter(f => /\.test\.js$/.test(f)).sort().map(f => "unit/" + f.replace(/\.js$/, "")) : []);
 const smokeAll = () => (fs.existsSync(path.join(TESTS, "smoke")) ? fs.readdirSync(path.join(TESTS, "smoke")).filter(f => f.endsWith(".js")).sort().map(f => "smoke/" + f.replace(/\.js$/, "")) : []);
 // a test's usual time (the last run, else the map's measurement): for the estimate and for --czesc
@@ -190,11 +197,12 @@ function resolve(n) {
 }
 let names = [];
 const FULL = args.includes("full");
-const KEYWORDS = ["smoke", "full", "unit", "affected", "changed", "zmiany", "mapa", "znacznik"];
+const KEYWORDS = ["smoke", "full", "unit", "affected", "changed", "zmiany", "mapa", "znacznik", "stary"];
 for (let i = 0; i < args.length; i++) {
     const a = args[i];
     if (a === "smoke") names.push(...SMOKE);
     else if (a === "full") names.push(...e2eAll());
+    else if (a === "stary") names.push(...OLD_WORLD.filter(n => fs.existsSync(path.join(TESTS, n + ".js"))));
     else if (a === "unit") names.push(...unitAll());
     else if (a === "affected" || a === "changed") {
         let plugins = [];
@@ -390,6 +398,7 @@ function status(r, p) {
     const total = `SUITES: ${clean} clean, ${rows.length - clean} with a FAIL/ERR line`;
     const took = `time: ${Math.floor(secs / 60)} min ${secs % 60} s`;
     console.log("\n" + table.join("\n") + "\n\n" + total + "  (" + took + ")");
+    if (FULL && !WITH_OLD && OLD_WORLD.length) console.log("(stary świat: " + OLD_WORLD.length + " zestawów poza przebiegiem - tests/stary_swiat.txt; `node tests/run.js stary` albo `full --stary`)");
     fs.writeFileSync(path.join(TESTS, "results" + PORT_TAG + ".txt"), sections.join("\n") + "\n" + total + "\n\n" + table.join("\n") + "\n" + took + "\nALL DONE\n");
     process.exit(clean === rows.length ? 0 : 1);
 })();

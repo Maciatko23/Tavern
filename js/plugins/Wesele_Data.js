@@ -39,7 +39,7 @@
     // ------------------------------------------------------------------ the calendar, the maps, the numbers
     const DNI = { od: 19, ceremonia: 22, epilog: 23, ostatni: 23, nieWziete: 20 };
     const GODZ = { zlecenie: [9, 18], ceremonia: 15, uczta: [17, 18.5, 20], toast: 19, taniec: 20.5, znik: 22, bojka: 22.25, bojkaWczesnie: 22, noc: 23, nocDo: 4, poranek: [6, 12], kawalerski: [20, 23] };
-    const MAP = { karczma: 1, pietro: 25, apartamenty: 26, miasto: 8 };
+    const MAP = { karczma: 1, pietro: 25, apartamenty: 26, miasto: 220 };   // (2026-11-16: the new world's town)
     const IDS = [3200, 3299], OWNER = "Wesele";
     const WARUNKI = { opinia: 20, renoma: 40, melia: 15 };
     // the groom, the bride, brother Kleofas: the wedding sheets (the carter's and the seamstress's in Sunday clothes) and the hermit's
@@ -53,14 +53,14 @@
     const PIESN_SMUTNA = "prom";
     const STRUNY = 8;
     // the 8 + 10 + 12 places of the hall (Map001): 6 wreaths + 4 sashes, 12 candles, the tables (x of the table, the stools' x, rows y)
-    const SALA = { stoly: [{ x: [3, 5] }, { x: [7, 9] }, { x: [19, 21] }, { x: [23, 25] }], wiersze: [33, 34, 35], drzwi: [14, 54], wejscie: [14, 51] };
+    const SALA = { stoly: [{ x: [3, 5] }, { x: [7, 9] }, { x: [19, 21] }, { x: [23, 25] }], wiersze: [20, 21, 22], drzwi: [14, 41], wejscie: [14, 38] };   // (2026-11-16: the smaller ground floor - the hall 13 rows higher)
     const DEKOR = [
         // [x, y, kind (wianek | szarfa), px offset y] - the wall above the stools' rows, the pillars and the bar's ends
-        [4, 26, "wianek"], [9, 26, "wianek"], [19, 26, "wianek"], [24, 26, "wianek"], [12, 33, "wianek"], [16, 33, "wianek"],
-        [4, 32, "szarfa"], [8, 32, "szarfa"], [20, 32, "szarfa"], [24, 32, "szarfa"]
+        [4, 13, "wianek"], [9, 13, "wianek"], [19, 13, "wianek"], [24, 13, "wianek"], [12, 20, "wianek"], [16, 20, "wianek"],
+        [4, 19, "szarfa"], [8, 19, "szarfa"], [20, 19, "szarfa"], [24, 19, "szarfa"]
     ];
-    const SWIECE = [[4, 33], [4, 35], [8, 33], [8, 35], [20, 33], [20, 35], [24, 33], [24, 35], [11, 30], [17, 30]];
-    const LADA = { x: 12, y: 8 }, TORT_MIEJSCE = { x: 6, y: 8 }, TABLICA = { x: 18, y: 49 };
+    const SWIECE = [[4, 20], [4, 22], [8, 20], [8, 22], [20, 20], [20, 22], [24, 20], [24, 22], [11, 17], [17, 17]];
+    const LADA = { x: 12, y: 8 }, TORT_MIEJSCE = { x: 6, y: 8 }, TABLICA = { x: 18, y: 36 };
     // the cards (docs 3A): the 14 named guests and the 4 relatives, their sheets (the seated sheets: Przytulna_Siedzi_<Key>)
     const KARTY = [
         { k: "tadek", imie: "Tadek Młot", cialo: "Kowal" }, { k: "kuba", imie: "Kuba Woziwoda", cialo: "Woziwoda" }, { k: "bartek", imie: "Bartek Kmieć", cialo: "Bartek" },
@@ -81,9 +81,10 @@
     const DZWIEK = { stol: ["Blow3", 70, 70], tlucze: ["Break1", 70, 100], drzwi: ["Door1", 70, 90], dzwon: ["Bell3", 70, 100] };
     // the search (docs 3C): the seven places - [map, x, y, a trace]
     const MIEJSCA = [
-        { k: "beczka", map: MAP.karczma, id: 3231, x: 11, y: 27 }, { k: "kuchnia", map: MAP.karczma, id: 3204, x: 9, y: 12 }, { k: "gry", map: MAP.karczma, id: 3205, x: 54, y: 33 },
-        { k: "palarnia", map: MAP.karczma, id: 3206, x: 31, y: 45 }, { k: "drzwi", map: MAP.pietro, id: 3232, x: 10, y: 33 }, { k: "platki", map: MAP.pietro, id: 3233, x: 20, y: 51 },
-        { k: "taras", map: MAP.apartamenty, id: 3200, x: 46, y: 52 }
+        { k: "beczka", map: MAP.karczma, id: 3231, x: 11, y: 14 }, { k: "kuchnia", map: MAP.karczma, id: 3204, x: 9, y: 9 }, { k: "gry", map: MAP.karczma, id: 3205, x: 40, y: 35 },
+        { k: "palarnia", map: MAP.karczma, id: 3206, x: 30, y: 33 },   // (the smoking room is gone: the darts corner of the games room)
+        { k: "drzwi", map: MAP.pietro, id: 3232, x: 2, y: 19 }, { k: "platki", map: MAP.pietro, id: 3233, x: 20, y: 38 },
+        { k: "taras", map: MAP.apartamenty, id: 3200, x: 38, y: 38 }
     ];
     const NAGRODA = { borgar: { gold: 20, xp: 40 }, para: { gold: 30, bonus: 15 }, napiwki: { prog: 70, max: 35 }, wykup: 30, renoma: 8, opinia: 4, melia: 10, grum: 5, ozzy: 3 };
     const KONCOWKI = { A: { renoma: 8, opinia: 4 }, B: { renoma: 6, opinia: 3 }, C: { renoma: 3, opinia: 1 }, D: { renoma: 0, opinia: 0 } };
@@ -276,8 +277,8 @@
             lista: {
                 1: { ch: 1, krok: "w18Zlecenie", godzina: 10, dzien: 19, idz: [MAP.karczma, 14, 31, 8] },
                 2: { ch: 2, krok: "w18Przygot", godzina: 10, dzien: 20, idz: [MAP.karczma, 14, 31, 8] },
-                3: { ch: 2, krok: "w18Przygot", godzina: 12, dzien: 21, idz: [MAP.karczma, 18, 50, 8] },
-                4: { ch: 3, krok: "w18Slub", godzina: 14.9, dzien: 22, idz: [MAP.karczma, 14, 46, 8] },
+                3: { ch: 2, krok: "w18Przygot", godzina: 12, dzien: 21, idz: [MAP.karczma, 18, 37, 8] },
+                4: { ch: 3, krok: "w18Slub", godzina: 14.9, dzien: 22, idz: [MAP.karczma, 14, 33, 8] },
                 5: { ch: 4, krok: "w18Bojka", godzina: 21.9, dzien: 22, idz: [MAP.karczma, 14, 38, 8] },
                 6: { ch: 5, krok: "w18Noc", godzina: 23.1, dzien: 22, idz: [MAP.karczma, 14, 38, 8] },
                 7: { ch: 6, krok: "w18Poranek", godzina: 7, dzien: 23, idz: [MAP.karczma, 14, 38, 8] }

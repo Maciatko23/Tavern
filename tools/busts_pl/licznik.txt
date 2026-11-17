@@ -1,0 +1,53 @@
+B generations (A used 210, start used 2258; cap 1100 total -> B max 890)
+test: 4 portraits x15 = 60, 2 ref edits x6 = 12 -> B 72
+turn edits on m1: 2 x6 = 12 -> B 84
+Melia 6 -> B 90
+Grum 6 -> B 96
+Ozzy 6 -> B 102
+Wanda, Jagna 12 -> B 114
+Pula_K, Pula_M2 12 -> B 126
+Pula_K3 6 -> B 132
+Pula_K2, Stach 12 -> B 144
+Lord, Kamerdyner 12 -> B 156
+Kapral Straznik Rotmistrz Kwatermistrz 24 -> B 180
+Zolnierz 6 -> B 186
+Zolnierz_B Dezerter 12 -> B 198
+Werbownik 6 -> B 204
+Marek Rafal Latarnik Posel 24 -> B 228
+Gwardzista 6 -> B 234
+Poborca Pustelnik Rozbitek Feliks 24 -> B 258
+Piekarka Woziwoda 12 -> B 270
+Dzwonnik Kupiec Soltys 18 -> B 288
+Garbarz Bronek Zosia Ludmila 24 -> B 312
+Ela Praczka 12 -> B 324
+Franek Drwal Klusownik Zlodziej 24 -> B 348
+Znachorka Szmaciarz Uchodzca Zebrak 24 -> B 372
+Gracz Bartek Woznica 18 -> B 390
+Janek Przemytnik 12 -> B 402
+Celnik Kolodziej Przekupka Szwaczka Wdowa 30 -> B 432
+Kostek 6 -> B 438
+Jagodka Ciesla 12 -> B 450
+Weteran 6 -> B 456
+Szynkarz 6 -> B 462
+Opiekunka Garncarz Dziecko Pula_M 24 -> B 486
+Pula_M3 Pula_S Pula_S2 Pula_Z Pula_Z2 30 -> B 516
+Ksenia Trojka Tobiasz Medyk 24 -> B 540
+Kartograf Grajek Zboze 18 -> B 558
+Urszula Relikwie 12 -> B 570
+Wizytator 6 -> B 576
+Lowczyni 6 -> B 582
+Pielgrzym 6 -> B 588
+Kompania_1 Kompania_2 12 -> B 600
+Kompania_3 Kompania_4 Handlarz 18 -> B 618
+Gajowy Grabarz Pasterz Matka 24 -> B 642
+Jarmark_Ania Jarmark_Bonawentura 12 -> B 654
+Jarmark_Marcel 6 -> B 660
+Ofelia Pimpek Szept JWanda 24 -> B 684
+Zar Jas Jasiek 18 -> B 702
+Lasica Ludwik 12 -> B 714
+Ostap Szyper 12 -> B 726
+Walenty Wawrzyn Bogdan Cyryl 24 -> B 750
+Halina Kurier 12 -> B 762
+Gawron Kopacz Wicek PanMlody PannaMloda Milczacy1 Milczacy3 Milczaca2 48 -> B 810
+Milczaca4 6 -> B 816 (A 216 + B 816 = 1032 of 1100)
+Dezerter redo 6 -> B 822 (A 216 + B 822 = 1038 of 1100)

@@ -21,6 +21,14 @@ const PLAN_KEYS = {
     rece: ["rekawice_brazowe", "rekawice_szare"],
     plecy: ["plecak", "torba_plocienna", "torba_skorzana"]
 };
+// (2026-11-17, docs/ekwipunek/NOWE_80.md) + the new clothes 284-299 (the cloaks on the part "Płaszcz") and the felt boots of the armour 442
+const NOWE_KEYS = {
+    glowa: ["kapelusz_filcowy"], tors: ["kozuszek", "fartuch_kowalski", "zupan_sukienny", "koszula_przewiewna"], nogi: ["portki_latane"], stopy: ["chodaki", "buty_filcowe"],
+    pas: ["pas_ladownica", "pas_tragarza", "pas_okuty_braz"], rece: ["rekawiczki_welniane"], plecy: ["kosz_wiklinowy"],
+    plaszcz: ["plaszcz_lniany", "plaszcz_zwiadowcy", "plaszcz_futrzany", "plaszcz_zakonny"]
+};
+const ALL_KEYS = {};
+for (const m of Object.keys(PLAN_KEYS).concat(["plaszcz"])) ALL_KEYS[m] = (PLAN_KEYS[m] || []).concat(NOWE_KEYS[m] || []);
 const hexOk = c => /^#[0-9a-f]{6}$/i.test(c);
 const luma = c => 0.299 * parseInt(c.slice(1, 3), 16) + 0.587 * parseInt(c.slice(3, 5), 16) + 0.114 * parseInt(c.slice(5, 7), 16);
 const darkToLight = r => Array.isArray(r) && r.every(hexOk) && r.every((c, i) => !i || luma(c) >= luma(r[i - 1]));
@@ -40,7 +48,7 @@ unit.test(t => {
         "picture Ubior_*", lookBad.length === 0, lookBad);
     const keys = {};
     for (const k of Object.keys(U.WZORY)) (keys[U.WZORY[k].miejsce] = keys[U.WZORY[k].miejsce] || []).push(k);
-    t.eq("the look keys by place are those of docs/ekwipunek/PLAN.md section 5", keys, PLAN_KEYS);
+    t.eq("the look keys by place are those of docs/ekwipunek/PLAN.md section 5 and of docs/ekwipunek/NOWE_80.md", keys, ALL_KEYS);
 
     // ---- the things
     E.readNotes();
@@ -54,10 +62,12 @@ unit.test(t => {
         for (const k of Object.keys(p.bonus)) if (!U.BONUSY[k]) thingBad.push(p.id + ": bonus " + k);
         if (p.istnieje) continue;
         const weight = /<Weight:(\d+)>/.exec(it.note);
-        if (it.iconIndex !== 528 + p.id - 250 || it.name !== p.nazwa || it.price !== p.cena || !weight || Number(weight[1]) !== p.waga || !p.opis) thingBad.push(p.id + ": icon / name / price / weight");
+        // (2026-11-17: every piece has its PixelLab icon - IconSet 688+, tools/ikony/instaluj.py)
+        const iconOk = it.iconIndex >= 688;
+        if (!iconOk || it.name !== p.nazwa || it.price !== p.cena || !weight || Number(weight[1]) !== p.waga || !p.opis) thingBad.push(p.id + ": icon / name / price / weight");
     }
-    t.check("every thing (" + ids.length + ": 250-283 and the old 113, 114, 171) once, a real item with <Ubior:place,look>, its material, gender, wear and bonuses known; " +
-        "the new ones: icon 528+, name, price, <Weight:> as the data says", new Set(ids).size === ids.length && ids.filter(id => id >= 250).length === 34 &&
+    t.check("every thing (" + ids.length + ": 250-299 and the old 113, 114, 171) once, a real item with <Ubior:place,look>, its material, gender, wear and bonuses known; " +
+        "the new ones: icon 528+, name, price, <Weight:> as the data says", new Set(ids).size === ids.length && ids.filter(id => id >= 250).length === 50 &&
         ids.filter(id => id < 250).sort().join() === "113,114,171" && thingBad.length === 0, thingBad.slice(0, 8));
     const PART = id => E.WEARABLE[id], slotHas = (slot, id) => E.SLOTS.find(s => s.id === slot).items.includes(id);
     const onPart = U.PRZEDMIOTY.filter(p => PART(p.id) !== U.MIEJSCA[p.miejsce].eq || !slotHas(U.MIEJSCA[p.miejsce].eq, p.id)).map(p => p.id)
@@ -124,5 +134,5 @@ unit.test(t => {
     const shields = BD.PRZEDMIOTY.filter(p => p.typ === "tarcza").map(p => [p.id, UB.shieldKeyOf(p.id)]);
     const shBad = shields.filter(([id, k]) => { const s = UB.shieldLook(k), z = U.WZORY_TARCZ[k]; return !s || !z || s.file !== "Ubior_Tarcza_" + z.plik || s.metal.length !== 7; });
     t.check("every shield's look: its key from the note (the wooden one by its old id), a picture Ubior_Tarcza_<plik> of Ubior_Data.js and its metal's ramp",
-        shBad.length === 0 && shields.length === 8 && UB.shieldKeyOf(155) === "tarcza_drewniana", shBad);
+        shBad.length === 0 && shields.length === 15 && UB.shieldKeyOf(155) === "tarcza_drewniana", shBad);
 });

@@ -1,0 +1,15 @@
+Estetyka map świata (data/):
+  mapa    a    b    c    d    e    f    g    h    i    j
+    24    0    2    0    8    0    3    0    0    0    9
+  razem   0    2    0    8    0    3    0    0    0    9   (wyjątki odjęte: {'b': 14})
+   a - pas liści: 0
+   b - ucięty/pojedynczy grunt: 2
+   c - drzewo z kafli bez gwiazdki: 0
+   d - mur bez zakończenia: 8
+   e - półka bez zakończenia: 0
+   f - wzgórze: schodkowa/zębata dolna linia, dziura, otwarta strona albo urwany kawałek obrysu: 3
+   g - drzewo za blisko wody / na gruncie brzegu: 0
+   h - rama innego gruntu pod/wokół płotu lub muru: 0
+   i - zaokrąglony koniec lica przy schodach: 0
+   j - kanciasta / prostokątna plama gruntu: 9
+WYNIK: BŁĄD (22)

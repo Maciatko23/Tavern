@@ -105,6 +105,9 @@
         rzemienna: { bow: ["#1c120c", "#2f1d13", "#462b1b", "#5f3b24", "#7a4e30", "#97663f"] }
     };
     MATERIALY.zakon.bow = ["#0e1018", "#1a1e2c", "#2c3248", "#3e4864", "#56648a", "#7888aa"];
+    // (2026-11-17: the hunting and the war bow - Bron_Data.js 471, 472: their limbs' colours)
+    MATERIALY.mysliwski = { bow: ["#2e1d10", "#4a2f19", "#684425", "#875b33", "#a57444", "#c19059"] };
+    MATERIALY.wojenny = { bow: ["#1a120c", "#2f2116", "#4a3522", "#6a4f34", "#94744f", "#c4a678"] };
     // the uniques (the note's third word): a kind and its own colours
     const UNIKATY = {
         bron_miecz_bogumila: { rodzaj: "miecz", material: "zakon", metal: ["#141a26", "#222c40", "#34425e", "#4a5c80", "#687ea2", "#93a8c6", "#e2ecf6"], wrap: ["#6a4a14", "#9a7224", "#c89a3a", "#f0cc68"] },
@@ -395,9 +398,137 @@
     };
     hookShield();
 
-    const api = { VERSION: "1.0.0", SHEETS_OF, NATIVE, NATIVE_MATERIAL, MATERIALY, UNIKATY, TARCZE, lookOf, itemLook, look: sheet => lookFor(sheet), key,
-        fileOf, shieldLook, shieldKeyOf, shieldBitmap,
+    // ==================================================================================================================================
+    // (2026-11-17) The shield on his left forearm in every frame of the walks and the one-handed swings, drawn by PixelLab (a state of the
+    // hero holding it - tools/ubior/zbroja_pl.py tarcza_*: cut out and moved after the left hand in each frame): a layer per shape
+    // and sheet img/system/Ubior_PL_Tarcza<Shape>_<sheet>.png - alpha 255 in front of him (facing down, left), 252 behind him (up,
+    // right: only where the frame is empty). Its wood, metal and paint repainted by the shield's look. While he guards (facing the
+    // viewer or a side) the guard's picture shows it instead. Not on the work of both hands, sitting, lying.
+    // ==================================================================================================================================
+    const SHIELD_SHEETS = { Hero_Walk: 1, Hero_Run: 1, Hero_Sneak: 1, Hero_TorchWalk: 1, Hero_TorchRun: 1, Hero_TorchSneak: 1, Hero_Club: 1, Hero_Sword: 1,
+        Hero_Punch: 1, Hero_Torch: 1, Hero_Spear: 1 };
+    // the shapes (a PixelLab state each) and their own look: the wood, the metal, the paint they are drawn in
+    const SHAPES = {
+        TarczaOkragla: { wood: true, metal: "zelazo" },
+        TarczaPuklerz: { metal: "stal" },
+        TarczaMigdalowa: { wood: true, metal: "zelazo", paint: true },
+        TarczaHerbowa: { wood: true, metal: "stal", paint: true },   // (its back: wood)
+        // (drawn for one shield each - their own colours)
+        TarczaPlecionka: { own: true }, TarczaKrab: { own: true }, TarczaPawez: { own: true }
+    };
+    // (a shield of its own drawing - before its kind's shape)
+    const SHAPE_KEY = { tarcza_drewniana_plecionka: "TarczaPlecionka", tarcza_okuta_krab: "TarczaKrab", tarcza_migdalowa_pawez: "TarczaPawez" };
+    const SHAPE_OF = { tarcza_drewniana: "TarczaOkragla", tarcza_okuta: "TarczaOkragla", tarcza_umbo: "TarczaOkragla", tarcza_puklerz: "TarczaPuklerz",
+        tarcza_migdalowa: "TarczaMigdalowa", tarcza_zelazna: "TarczaHerbowa", tarcza_zakonna: "TarczaHerbowa", tarcza_skrzydlata_straz: "TarczaHerbowa" };
+    const shapeOf = key => {
+        if (key && SHAPE_KEY[key] && SHAPE_FILES[SHAPE_KEY[key]] !== false) return SHAPE_KEY[key];
+        const kind = key ? Object.keys(SHAPE_OF).sort((a, b) => b.length - a.length).find(k => key === k || key.startsWith(k + "_")) : null;
+        return kind ? SHAPE_OF[kind] : null;
+    };
+    const shieldFile = (shape, sheet) => "Ubior_PL_" + shape + "_" + sheet;
+    // (the own drawings made so far - a shape left out here falls back to its kind's)
+    const SHAPE_FILES = { TarczaPlecionka: true, TarczaKrab: true, TarczaPawez: true };
+    let shMemo = { f: -1, k: "" };
+    function shieldNow() {
+        const f = Graphics.frameCount;
+        if (shMemo.f === f) return shMemo.k;
+        let k = forcedShield || "";
+        if (!k && window.$gameParty) {
+            const E = T.api("Equipment");
+            let id = 0;
+            try { id = E && E.current ? E.current("left") || 0 : 0; } catch (e) { id = 0; }
+            k = id ? shieldKeyOf(id) || "" : "";
+        }
+        // (guarding facing the viewer or a side: Combat_UI shows the shield in front of him - the arm's one would be a second)
+        if (k) {
+            const parts = T.api("Combat_parts"), act = parts && parts.fight && parts.fight.act;
+            if (act && act.mode === "block" && window.$gamePlayer && $gamePlayer.direction() !== 8) k = "";
+        }
+        shMemo = { f, k: k && shapeOf(k) && shieldLook(k) ? k : "" };
+        return shMemo.k;
+    }
+    const shieldKey = sheet => (SHIELD_SHEETS[sheet] ? shieldNow() : "");
+    function shieldReady(sheet, k) {
+        const shape = shapeOf(k);
+        return !shape || !!U.pictureOf(shieldFile(shape, sheet));
+    }
+    // a pixel of the PixelLab shield -> the look's colour: grey - its metal, warm - its wood (a painted shield without wood of its own: its
+    // paint), cold and bright (the blue paint) - its paint; the outline stays
+    const shLuts = new Map();
+    function shieldLut(k) {
+        if (shLuts.has(k)) return shLuts.get(k);
+        const l = shieldLook(k), shape = SHAPES[shapeOf(k)], seen = new Map();
+        const tk = Object.keys(TARCZE).find(t => k === t || k.startsWith(t + "_")), t = tk ? TARCZE[tk] : {};
+        const D = window.Ubior_Data, theirs = D && D.WZORY_TARCZ && D.WZORY_TARCZ[k];
+        const own = tk === k ? t.metal : k.slice(tk.length + 1);
+        const nativeMetal = own === shape.metal || (!MATERIALY[own] && t.metal === shape.metal), painted = !!((theirs && theirs.farba) || t.farba);
+        if (shape.own) { const id = (r, g, b) => [r, g, b]; shLuts.set(k, id); return id; }
+        const at = (ramp, v) => ramp[Math.round(Math.max(0, Math.min(1, v)) * (ramp.length - 1))];
+        const f = (r, g, b) => {
+            const key = (r << 16) | (g << 8) | b;
+            let c = seen.get(key);
+            if (c) return c;
+            const lum = U.luma(r, g, b), mx = Math.max(r, g, b), mn = Math.min(r, g, b), sat = mx ? (mx - mn) / mx : 0;
+            if (lum <= 0.09) c = [r, g, b];
+            else if (sat < 0.2) c = nativeMetal ? [r, g, b] : at(l.metal, (lum - 0.12) / 0.78);
+            else if (r >= b) c = shape.wood && !(painted && !shape.paint) ? [r, g, b] : painted ? at(l.wrap, (lum - 0.1) / 0.5) : at(l.metal, (lum - 0.12) / 0.6);
+            else c = painted ? at(l.wrap, (lum - 0.08) / 0.5) : at(l.metal, (lum - 0.08) / 0.6);   // (a plain one: its field in its metal)
+            seen.set(key, c);
+            return c;
+        };
+        shLuts.set(k, f);
+        return f;
+    }
+    function shieldDraw(ctx) {
+        const shape = shapeOf(ctx.key), pic = shape ? U.pictureOf(shieldFile(shape, ctx.name)) : null;
+        if (!pic || pic.w !== ctx.W || pic.h !== ctx.H) return;
+        const d = ctx.d, parts = ctx.parts, pd = pic.data, lut = shieldLut(ctx.key), TOOL = ctx.PARTS.narzedzie, OTHER = ctx.PARTS.inne;
+        for (let i = 0, N = ctx.W * ctx.H; i < N; i++) {
+            const p = i * 4, a = pd[p + 3];
+            if (!a) continue;
+            if (a === 252 && d[p + 3]) continue;
+            const c = lut(pd[p], pd[p + 1], pd[p + 2]);
+            d[p] = c[0]; d[p + 1] = c[1]; d[p + 2] = c[2]; d[p + 3] = 255;
+            parts[i] = a === 252 ? OTHER : TOOL;   // (in front: a helmet stays behind it, like behind a weapon)
+        }
+    }
+    // (soft: while its picture loads the sheet is dressed without it, not held back)
+    U.addLayer({ name: "tarcza", key: shieldKey, ready: shieldReady, draw: shieldDraw, soft: true });
+    // (the combat mode on: the swing of the weapon in hand - its dressed sheet's pictures, the shield's layer - loaded ahead, every half
+    // a second checked; the first blow is dressed at once, not after its pictures load)
+    let preKey = "";
+    const _Scene_Map_update = Scene_Map.prototype.update;
+    Scene_Map.prototype.update = function() {
+        _Scene_Map_update.call(this);
+        // (every half a second: the weapon in hand's swing for what he wears now - nothing to do while it stays the same)
+        if (!(Graphics.frameCount % 30) && this._started) { swingPending = false; preloadSwing(); }
+    };
+    // (also after the map starts - not at its creation: the map's start would wait for these pictures)
+    let swingPending = false;
+    function preloadSwing() {
+        if (!window.$gameParty || !U.preloadSheet || !(U.key().replace(/\|/g, "") || shieldNow())) return;
+        const l = itemLook(handItem()), sheet = l ? SHEETS_OF[l.rodzaj][0] : "Hero_Punch", wk = l ? keyOn(sheet, l) : "";
+        const sh = shieldNow(), k = sheet + "|" + wk + "|" + U.key() + "|" + sh;
+        if (k === preKey) return;
+        preKey = k;
+        const bez = !!(wk && CLEAN[sheet]);
+        U.preloadSheet(sheet, bez);
+        if (bez) { plainSys("Ubior_BezBroni_" + sheet); plainSys(fileOf(sheet, l.rodzaj)); }
+        const shape = sh ? shapeOf(sh) : null;
+        if (shape && SHIELD_SHEETS[sheet]) plainSys(shieldFile(shape, sheet));
+    }
+    // (the walk's, the run's and sneaking's layers load with the map when a shield is worn)
+    const _Scene_Map_create2 = Scene_Map.prototype.create;
+    Scene_Map.prototype.create = function() {
+        _Scene_Map_create2.call(this);
+        const k = window.$gameParty ? shieldNow() : "", shape = k ? shapeOf(k) : null;
+        if (shape) for (const sheet of ["Hero_Walk", "Hero_Run", "Hero_Sneak"]) plainSys(shieldFile(shape, sheet));
+        if (U.key().replace(/\|/g, "") || k) { preKey = ""; swingPending = true; }
+    };
+
+    const api = { VERSION: "1.1.0", SHEETS_OF, NATIVE, NATIVE_MATERIAL, MATERIALY, UNIKATY, TARCZE, lookOf, itemLook, look: sheet => lookFor(sheet), key,
+        fileOf, shieldLook, shieldKeyOf, shieldBitmap, SHIELD_SHEETS, SHAPES, SHAPE_OF, shapeOf, shieldFile, shieldKey,
         set: o => { forced = o ? Object.assign({}, o) : null; memo.f = -1; return true; },
-        shield: k => { forcedShield = k || null; return true; } };
+        shield: k => { forcedShield = k || null; shMemo.f = -1; return true; } };
     window.UbiorBron = T.register ? T.register(PLUGIN, api) : api;
 })();

@@ -33,7 +33,9 @@
 (() => {
     "use strict";
 
-    const MAP = 125, IZBA = 160, LATERNA = 161;   // (plansza 3x3, 2026-11-08: the lighthouse on Przystań's cape)
+    // (plansza 3x3, 2026-11-08: the lighthouse on Przystań's cape; 2026-11-13 nowy świat: on Słony Brzeg, Map219 - its tower at (19,19)
+    // with ONE door: the keeper's room (Map160) at its foot, the stairs up to the lantern room (Map161) when he lets the hero up)
+    const MAP = 219, IZBA = 160, LATERNA = 161;
     const ITEM = { tran: 177, wood: 61, charcoal: 79, pendant: 172, rope: 0, herring: 173, cod: 174, tar: 176 };
     const L = () => window.Latarnia || null;
 
@@ -43,10 +45,10 @@
     // fire up in the lantern room (in a fog he rings the fog bell every hour - its rope runs down from the gallery). The hours of
     // dawn and dusk are the sun's of the day: Latarnia.js puts them into this same array each day (Sky.sunTimes).
     const PLAN = [[0, "inside", "laterna"], [6.4, "inside", "izba"], [8, "inside", "izba_sen"],
-                  [14, "inside", "tawerna"], [17.5, "inside", "izba"], [20.3, "inside", "laterna"]];   // (2026-11-11 dawcy_miasto: 14-17:30 at the tavern for tran, ale and talk)
+                  [14, "inside", "do_podgrodzia"], [17.5, "inside", "izba"], [20.3, "inside", "laterna"]];   // (2026-11-11 dawcy_miasto: 14-17:30 at the tavern for tran, ale and talk; nowy świat: out by the road east - away)
     const RESIDENT = {
         key: "latarnik", id: 943, sheet: "$Npc_Latarnik", map: MAP, speed: 2,
-        away: ["izba_sen"], indoor: { tawerna: "gosc_latarnik" },
+        away: ["izba_sen", "do_podgrodzia"], indoor: {},
         plan: PLAN,
         barks: {
         },
@@ -58,10 +60,10 @@
     // where he stands: the map's "Miejsce:" events win on Map159 (tools/latarnia/build.py puts them there); indoors only the room his
     // plan has him in now (a getter: TownLife reads it when the map loads - then always there, the engine decides who is shown - and
     // every frame indoors)
-    const INDOOR = { 160: { place: "izba", at: [5, 7, 8] }, 161: { place: "laterna", at: [6, 5, 4] } };
+    const INDOOR = { 160: { place: "izba", at: [5, 6, 2] }, 161: { place: "laterna", at: [6, 5, 4] } };
     const TLD = window.TownLifeData;
     if (TLD && TLD.SPOTS_BY_MAP) {
-        TLD.SPOTS_BY_MAP[MAP] = Object.assign({ laterna: [92, 103, 8], izba: [79, 99, 8], izba_sen: [79, 99, 8], drewutnia: [83, 96, 6] },
+        TLD.SPOTS_BY_MAP[MAP] = Object.assign({ laterna: [19, 20, 8], izba: [19, 20, 8], izba_sen: [19, 20, 8], drewutnia: [24, 22, 6], do_podgrodzia: [79, 45, 6] },
             TLD.SPOTS_BY_MAP[MAP] || {});
         for (const [mid, o] of Object.entries(INDOOR)) {
             const spots = TLD.SPOTS_BY_MAP[mid] = TLD.SPOTS_BY_MAP[mid] || {};
@@ -225,7 +227,9 @@
     window.LatarniaData = { MAP, IZBA, LATERNA, ITEM, IDS: [630, 639], OWNER: "Latarnia", PLAN, RESIDENT, INDOOR, FUEL, FOG, VISIONS, HEAVY,
         RAID, TX, K49, D22, W11, VITEMS, REMARKS, EPILOG,
         // the lighthouse's fire on the tower's picture (tools/latarnia/art/art.json: px right of / above the middle of its foot; 2026-10-29 the tower is 2x: 288x512 cell, flame k = 1.6)
-        FIRE: { x: 0, y: 354, w: 24, k: 1.6 }, TOWER: [22, 11], IZBA_DOOR: [15, 18], LANDING: { 160: [6, 8], 161: [5, 7] },
+        FIRE: { x: 0, y: 368, w: 24, k: 1.5 }, TOWER: [19, 19], IZBA_DOOR: [19, 20], LANDING: { 160: [4, 8], 161: [5, 7] },
+        // (nowy świat) the tower's one door leads into the keeper's room when the stairs are not open to the hero; Janek's harbour = Słony Brzeg
+        IZBA_IN_TOWER: true, HARBOUR: 219,
         // the beams seen from afar at night on the maps around: from beyond the right edge of the screen, sy = its height (a share)
         FAR: {} };   // (the beams far off beyond an edge: none on the board for now)
 })();

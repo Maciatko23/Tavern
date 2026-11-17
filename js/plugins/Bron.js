@@ -26,7 +26,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Broń, zbroje, tarcze, dodatki - działanie: sklepy (kowal, kwatermistrz, kantor, garbarz, szwaczka, szmaciarz), kuźnia, łupy, unikaty, bonusy, zużycie, łuki. v1.0.0
+ * @plugindesc Broń, zbroje, tarcze, dodatki - działanie: sklepy (kowal, kwatermistrz, kantor, garbarz, szwaczka, szmaciarz), kuźnia, garbarnia, warsztat, krosno, łupy, nowe surowce, unikaty, bonusy, zużycie, łuki. v1.1.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -56,8 +56,13 @@
  * dodatkowa linijka w menu ubrań. W oknie sklepu: strzałki - wybór, ←→ / Q E -
  * zakładka, O - kup / sprzedaj / napraw, P - wyjście.
  *
- * Kuźnia, garbarnia, warsztat: przepisy pojawiają się od poziomu przedmiotu
- * minus 4. Łupy: bandyci, najemnicy, obozy, stwory, bossowie, skrzynie pięter.
+ * Kuźnia, garbarnia, warsztat, krosno: przepisy pojawiają się od poziomu
+ * przedmiotu minus 4 (ubrania od razu); stal zakonna tylko z Młotkiem majstra,
+ * szycie w krośnie z Nożycami. Łupy: bandyci, najemnicy, obozy, stwory,
+ * bossowie, skrzynie pięter. Nowe surowce (2026-11-17): sztabki brązu (Tadek
+ * 2 dziennie, skrzynie pięter 1-10), stal zakonna (piętra 76-99, bossowie 70
+ * i 90), kieł wilka (oprawianie), bursztyn (plaża po burzy), szlachetny
+ * kamień (kamienniki, żyły rudy), nić pajęcza, okruch kruszcu Pierwszych.
  * Unikaty: bossowie, wątki W4, W8, W12, W13, D24, przychylność garnizonu 80.
  *
  * Rzecz z poziomem wyższym niż bohater działa słabiej (3% za poziom, do 45%).
@@ -187,12 +192,13 @@
     }
     const hasRanged = () => (owns("bow") && ammo("bow")) || (owns("sling") && ammo("sling"));
     const anyRanged = () => owns("bow") || owns("sling");
-    // its numbers over Hunting_Weapons.WEAPONS[kind]; null: the old one is the best (its own numbers)
+    // its numbers over Hunting_Weapons.WEAPONS[kind]; null: the old one is the best (its own numbers). (2026-11-17, Bron_Cechy.js) a bow's
+    // trait szybkosc: the circle closes that much sooner
     function rangedDef(kind) {
         const best = rangedOwned(kind)[0];
         if (!best || !best.s || (best.id === RANGED[kind].old && !best.l)) return null;
-        const s = best.s, l = best.l;
-        return { item: best.id, damage: Math.max(1, Math.round(s.damage * (1 - l))), range: s.range, steady: Math.round(s.steady * (1 + l)), cooldown: s.cooldown, stamina: s.stamina };
+        const s = best.s, l = best.l, BC = T.api("Bron_Cechy"), fast = BC ? BC.of(best.id).szybkosc || 0 : 0;
+        return { item: best.id, damage: Math.max(1, Math.round(s.damage * (1 - l))), range: s.range, steady: Math.round(s.steady * (1 + l) / (1 + fast)), cooldown: s.cooldown, stamina: s.stamina };
     }
 
     // ------------------------------------------------------------------
@@ -205,6 +211,20 @@
     const inHours = (h, w) => !w || (h >= w[0] && h < w[1]);
     const favor = () => { const G = T.api("Garnizon"); return G && G.favor ? G.favor() : 0; };
     const kantorMul = key => { const K = T.api("Kantor"); return (key === "kantor" || key === "ludmila") && K && K.priceMul ? K.priceMul() : 1; };
+    // (2026-11-17, docs/ekwipunek/NOWE_80.md) the other goods of a shop - materials and clothes, not of Bron_Data.PRZEDMIOTY (Bron_Data SKLEPY
+    // `inne`: { id, cena, dziennie, przychylnosc }): Tadek's bronze ingots (two a day), Dorota's linen and broadcloth, Kłos's cloak and belt
+    const inneOf = key => { const s = shop(key); return s ? s.inne || (s.wzor && shop(s.wzor) ? shop(s.wzor).inne || [] : []) : []; };
+    function inneLeft(key, g) {
+        if (!g.dziennie) return 99;
+        const st = store();
+        if (!st.inne || st.inne.day !== day()) st.inne = { day: day(), n: {} };
+        return Math.max(0, g.dziennie - (st.inne.n[key + ":" + g.id] || 0));
+    }
+    // what the shop's window shows of such a thing (its own words: Ubior_Data's for the clothes, the item's description below)
+    function towarP(g) {
+        const it = item(g.id), m = /<Weight:(\d+)>/.exec((it && it.note) || ""), U = T.api("Ubior_Data"), cloth = U && U.przedmiot ? U.przedmiot(g.id) : null;
+        return { id: g.id, typ: "towar", nazwa: it ? it.name : "", rodzaj: cloth ? "ubiór" : "surowiec", material: "", poziom: 1, waga: m ? Number(m[1]) : 1, cena: g.cena };
+    }
     // a worn thing's state: what is left of it (0..1)
     function condition(id) {
         const du = DU();
@@ -259,8 +279,30 @@
     const setUsed = (id, n) => { const du = DU(); if (du && du.setUsed) du.setUsed(id, n); };
     function afterChange() { dirty(); const e = E(); if (e && e.ensure) e.ensure(); }
 
+    // one of the shop's other goods (inne): a day's limit, the garrison's favour, the price; clothes bought new are whole
+    function kupTowar(key, g) {
+        const s = shop(key), it = item(g.id);
+        if (!s || !it || !has()) return fail("Tego tu nie ma.");
+        if (inneLeft(key, g) <= 0) return fail("Na dziś już nie ma.");
+        if (g.przychylnosc && favor() < g.przychylnosc) return fail("Tylko dla swoich: przychylność garnizonu " + g.przychylnosc + ".");
+        const cost = Math.max(1, Math.round(g.cena * kantorMul(key)));
+        if ($gameParty.gold() < cost) return fail("Potrzebujesz " + cost + " G");
+        const had = count(g.id);
+        if (!intoBag(it)) return fail("Nie uniesiesz więcej");
+        $gameParty.loseGold(cost);
+        if (g.dziennie) { inneLeft(key, g); const st = store(), k = key + ":" + g.id; st.inne.n[k] = (st.inne.n[k] || 0) + 1; }
+        const du = DU();
+        if (!had && du && du.TOOLS && du.TOOLS[g.id]) setUsed(g.id, 0);
+        store().kupione++;
+        afterChange();
+        const on = !!(E() && E().worn && E().worn(g.id));
+        T.emit("bronKupiony", { key, id: g.id, cost, used: false, towar: true });
+        return { ok: true, cost, on, text: "Kupione: " + it.name + (on ? " - założone" : " - w plecaku") };
+    }
     function kup(key, id, used) {
         id = Number(id);
+        const towar = !used && !listOf(key).includes(id) ? inneOf(key).find(g => g.id === id) : null;
+        if (towar) return kupTowar(key, towar);
         const s = shop(key), d = D(), p = d && d.przedmiot(id), it = item(id);
         if (!s || !p || !it || !has()) return fail("Tego tu nie ma.");
         if (used ? !s.uzywane || !usedToday(key).includes(id) : !listOf(key).includes(id)) return fail("Tego tu nie ma.");
@@ -329,6 +371,13 @@
             for (const id of usedToday(key)) {
                 const p = d.przedmiot(id), cost = buyPrice(key, p, true);
                 out.push({ act: "kup", id, p, cost, used: true, name: p.nazwa + " (" + d.SKLEP_TEKSTY.uzywane + ")", short: gold < cost });
+            }
+            for (const g of inneOf(key)) {
+                const it = item(g.id), left = inneLeft(key, g);
+                if (!it || left <= 0) continue;
+                const cost = Math.max(1, Math.round(g.cena * kantorMul(key))), locked = g.przychylnosc && favor() < g.przychylnosc ? g.przychylnosc : 0;
+                out.push({ act: "kup", id: g.id, p: towarP(g), cost, used: false, towar: true, name: it.name + (g.dziennie ? " (dziś jeszcze " + left + ")" : ""),
+                    short: gold < cost || !!locked, locked });
             }
         } else if (tab === "sprzedaj") {
             for (const p of d.PRZEDMIOTY) {
@@ -608,7 +657,7 @@
             ui.text(b, p.nazwa, x + 80, y + 2, W - x - 100, { size: 24, color: S.accent, bold: true });
             const kind = p.typ === "bron" ? d.RODZAJE[p.rodzaj].nazwa : p.typ === "zbroja" ? "zbroja: " + d.MIEJSCA[p.miejsce].nazwa.toLowerCase() : p.typ === "tarcza" ? "tarcza" : p.rodzaj;
             const mat = d.MATERIALY[p.material] ? d.MATERIALY[p.material].nazwa : "";
-            ui.text(b, kind + (mat && p.typ !== "dodatek" ? "  ·  " + mat : "") + "  ·  poziom " + p.poziom + "  ·  waga " + d.wagaOf(p), x + 80, y + 36, W - x - 100, { size: 17, color: S.muted });
+            ui.text(b, kind + (mat && p.typ !== "dodatek" ? "  ·  " + mat : "") + (p.typ === "towar" ? "" : "  ·  poziom " + p.poziom) + "  ·  waga " + d.wagaOf(p), x + 80, y + 36, W - x - 100, { size: 17, color: S.muted });
             y += 80;
             const l = lackOf(p);
             if (l > 0) {
@@ -616,9 +665,15 @@
                 y += 28;
             }
             // what it gives (the numbers), and against what the hero has now
-            const words = d.opis(p.id).split(" · ");
+            const words = (p.typ === "towar" ? String(T.call("Ubior_Data", "opis", p.id) || "") : d.opis(p.id, true)).split(" · ");
             for (const line of words.slice(0, 5)) {
                 for (const w of ui.wrap(b, line.charAt(0).toUpperCase() + line.slice(1), W - 2 * x, 19).slice(0, 2)) { ui.text(b, w, x, y, W - 2 * x, { size: 19, color: S.text }); y += 25; }
+            }
+            // (2026-11-17) a weapon's traits (Bron_Cechy_Data.js) in one paragraph, and the one of a weapon the hero forged well (Bron_Cechy.js)
+            if (p.typ === "bron") {
+                const CD = T.api("Bron_Cechy_Data"), own = CD ? CD.slowa(CD.of(p.id), p.rodzaj) : [], u = String(T.call("Bron_Cechy", "udaneSlowo", p.id) || "");
+                if (own.length) for (const w of ui.wrap(b, "Cechy: " + own.join(" · "), W - 2 * x, 19).slice(0, 4)) { ui.text(b, w, x, y, W - 2 * x, { size: 19, color: S.accent }); y += 25; }
+                if (u) { ui.text(b, "Udane kucie: " + u, x, y, W - 2 * x, { size: 19, color: ui.COLORS.gold, bold: true }); y += 25; }
             }
             const now = nowFor(p), v = valueOf(p);
             if (now && v !== null && now.v !== null) {
@@ -629,7 +684,7 @@
                 y += 30;
             } else if (now && p.typ === "dodatek") { ui.text(b, "Teraz: " + now.name, x, y + 2, W - 2 * x, { size: 18, color: S.muted }); y += 30; }
             // how long it lasts, how many there are
-            const life = du && du.TOOLS && du.TOOLS[p.id] && du.lifeOf ? du.lifeOf(p.id) : d.trwalosc(p), unit = n => (du && du.unitWord && du.TOOLS[p.id] ? du.unitWord(p.id, n) : "");
+            const life = du && du.TOOLS && du.TOOLS[p.id] && du.lifeOf ? du.lifeOf(p.id) : p.typ === "towar" ? null : d.trwalosc(p), unit = n => (du && du.unitWord && du.TOOLS[p.id] ? du.unitWord(p.id, n) : "");
             let lasts = life ? life + " " + (unit(life) || "ciosów") : "nie zużywa się";
             if (count(p.id) > 0 && life && r.act !== "kup" && du && du.TOOLS[p.id]) lasts = "zostało " + du.left(p.id) + " z " + life + (unit(life) ? " " + unit(life) : "");
             if (r.act === "kup" && r.used) lasts = "używane: zostało ok. połowy";
@@ -751,9 +806,86 @@
         if (CD && CD.BOSSES) for (const k of Object.keys(d.LUP.bossowie)) if (CD.BOSSES[k]) { CD.BOSSES[k].loot = CD.BOSSES[k].loot || []; for (const id of d.LUP.bossowie[k]) push(CD.BOSSES[k].loot, [id, 1, 1]); }
         const DW = window.DworData;
         if (DW && Array.isArray(DW.GEAR)) for (const id of d.LUP.zbrojowniaLorda) if (item(id) && !DW.GEAR.some(g => g[0] === id)) DW.GEAR.push([id, 1]);
+        // (2026-11-17, NOWE_80.md) the new materials: the spiders' thread (floors 31-50), the stone men's gem and ore of the First, the bosses'
+        // order's steel and the spider mother's thread
+        const S = d.LUP.surowce || {};
+        if (CD && CD.KINDS) for (const k of Object.keys(S.stwory || {})) if (CD.KINDS[k]) {
+            CD.KINDS[k].loot = CD.KINDS[k].loot || [];
+            for (const [id, c, n, f0, f1] of S.stwory[k]) push(CD.KINDS[k].loot, f0 ? [id, c, n || 1, f0, f1] : [id, c, n || 1]);
+        }
+        if (CD && CD.BOSSES) for (const k of Object.keys(S.bossowie || {})) if (CD.BOSSES[k]) {
+            CD.BOSSES[k].loot = CD.BOSSES[k].loot || [];
+            for (const [id, n] of S.bossowie[k]) push(CD.BOSSES[k].loot, [id, 1, n]);
+        }
         lootWired.done = true;
         return true;
     }
+    // (2026-11-17) a searched container of the underground: the new materials' own rolls by the floor (Bron_Data LUP.surowce.podziemia) -
+    // the bronze ingots on 1-10, the order's steel on 76-99; [ids given]
+    function ugSurowce(eventId) {
+        const UG = T.api("Underground"), d = D(), list = d && d.LUP.surowce ? d.LUP.surowce.podziemia || [] : [];
+        if (!UG || !UG.info || !list.length) return [];
+        const mapId = $gameMap.mapId(), info = UG.info(mapId), e = info && info.loot ? info.loot[eventId] : null;
+        if (!e) return [];
+        const floor = UG.floorOf ? UG.floorOf(mapId) : 0, seed = (info.seed || 0) >>> 0, got = [];
+        list.forEach((s, i) => {
+            const c = s.szansa ? s.szansa[e.kind] : 0, it = item(s.id);
+            if (!c || !it || floor < s.od || floor > s.do || hash(seed, eventId, 31 + i * 7) >= c * (1 + luck())) return;
+            $gameParty.gainItem(it, 1);
+            T.popup(it.name, { icon: it.iconIndex, gain: true });
+            got.push(s.id);
+        });
+        return got;
+    }
+    // a carcass dressed with a knife (Hunting_Weapons.js "carcassDressed"): the wolf's fang - one in two
+    T.on("carcassDressed", e => {
+        try {
+            const d = D(), o = d && d.LUP.surowce ? d.LUP.surowce.oprawianie : null, list = e && o ? o[e.kind] : null;
+            if (!list || !has() || !window.$gameParty) return;
+            for (const [id, c, n] of list) {
+                const it = item(id);
+                if (!it || Math.random() >= c) continue;
+                $gameParty.gainItem(it, n || 1);
+                T.popup(it.name, { icon: it.iconIndex, gain: true });
+            }
+        } catch (err) { report("oprawianie", err); }
+    }, { owner: PLUGIN });
+    // an ore vein mined out in the underground (ChoppableTree's "chop", kind "ore"): sometimes a gem on the floors of LUP.surowce.zyly
+    T.on("chop", e => {
+        try {
+            const d = D(), list = d && d.LUP.surowce ? d.LUP.surowce.zyly || [] : [];
+            if (!e || e.kind !== "ore" || !e.done || !list.length || !has() || !window.$gameParty) return;
+            const UG = T.api("Underground"), floor = UG && UG.floorOf ? UG.floorOf(e.mapId) || 0 : 0;
+            for (const z of list) {
+                const it = item(z.id);
+                if (!it || floor < z.od || floor > z.do || Math.random() >= z.szansa * (1 + luck())) continue;
+                $gameParty.gainItem(it, 1);
+                T.popup(it.name, { icon: it.iconIndex, gain: true });
+            }
+        } catch (err) { report("zyly", err); }
+    }, { owner: PLUGIN });
+    // the beach after a storm (Storm.js "stormEnd"): the sea throws out amber - found once, the first time the hero is on the coast's map
+    // within `dni` days of it (Bron_Data LUP.surowce.plaza)
+    const plaza = () => { const d = D(); return d && d.LUP.surowce ? d.LUP.surowce.plaza || null : null; };
+    function bursztynCheck() {
+        const P = plaza();
+        if (!P || !has() || !window.$gameMap || $gameMap.mapId() !== P.mapa) return 0;
+        const s = store(), b = s.bursztyn, it = item(P.id);
+        if (!b || b.wziete || !it || day() - b.day > P.dni) return 0;
+        b.wziete = true;
+        const n = P.ile[0] + Math.floor(Math.random() * (P.ile[1] - P.ile[0] + 1));
+        $gameParty.gainItem(it, n);
+        T.popup("Morze wyrzuciło na plażę: " + it.name + (n > 1 ? " ×" + n : ""), { icon: it.iconIndex, gain: true });
+        return n;
+    }
+    T.on("stormEnd", e => {
+        try {
+            if (!has() || !plaza()) return;
+            const s = store(), d0 = e && e.day ? e.day : day();
+            if (!s.bursztyn || s.bursztyn.day !== d0) s.bursztyn = { day: d0, wziete: false };
+            bursztynCheck();
+        } catch (err) { report("bursztyn", err); }
+    }, { owner: PLUGIN });
     // a searched container of the underground (Underground.search): one more roll - its kind's chance x (1 + luck), the thing by the band
     function ugExtra(eventId) {
         const UG = T.api("Underground"), d = D();
@@ -878,7 +1010,11 @@
         const UG = T.api("Underground");
         if (UG && UG.search && !UG.search._bron) {
             const orig = UG.search;
-            const wrapped = function(eventId) { const ok = orig.apply(this, arguments); if (ok && has()) { try { ugExtra(eventId); } catch (err) { report("ug", err); } } return ok; };
+            const wrapped = function(eventId) {
+                const ok = orig.apply(this, arguments);
+                if (ok && has()) { try { ugExtra(eventId); ugSurowce(eventId); } catch (err) { report("ug", err); } }
+                return ok;
+            };
             wrapped._bron = true;
             UG.search = wrapped;
             wired.underground = true;
@@ -897,7 +1033,7 @@
     }
     for (const ev of ["newGame", "load"]) T.on(ev, () => { dirty(); wire(); checkUniques(); }, { owner: PLUGIN });
     T.on("levelUp", () => { dirty(); syncRecipes(); }, { owner: PLUGIN });
-    T.on("mapEnter", () => { try { syncRecipes(); checkUniques(); } catch (e) { report("mapEnter", e); } }, { owner: PLUGIN });
+    T.on("mapEnter", () => { try { syncRecipes(); checkUniques(); bursztynCheck(); } catch (e) { report("mapEnter", e); } }, { owner: PLUGIN });
     const _Scene_Boot_start = Scene_Boot.prototype.start;
     Scene_Boot.prototype.start = function() {
         _Scene_Boot_start.call(this);
@@ -912,7 +1048,7 @@
     function f9Rows() {
         const n = has() ? store().f9Poziom || 10 : 10, icon = item(305) ? item(305).iconIndex : COIN_ICON;
         return [
-            { owner: PLUGIN, label: "Bronie: daj wszystkie", icon, what: "all", desc: "Każda broń, zbroja, tarcza, dodatek i unikat 300-406 po jednej sztuce (te, których nie masz - bez względu na udźwig), 30 strzał i 20 kamieni." },
+            { owner: PLUGIN, label: "Bronie: daj wszystkie", icon, what: "all", desc: "Każda broń, zbroja, tarcza, dodatek i unikat 300-482 po jednej sztuce (te, których nie masz - bez względu na udźwig), 30 strzał i 20 kamieni." },
             { owner: PLUGIN, label: "Bronie: daj zestaw na poziom " + n + "   ←→", icon, what: "set", pick: n,
                 desc: "Najlepsza broń, łuk, tarcza i każda część zbroi z poziomem najwyżej " + n + " - od razu założone (←→ zmienia poziom)." },
             { owner: PLUGIN, label: "Bronie: +1000 G", icon: COIN_ICON, what: "gold", desc: "Na test sklepów: kowal Tadek, kwatermistrz Kłos, kantor, garbarz, szwaczka, szmaciarz." }
@@ -975,10 +1111,10 @@
         return { say: "?", bad: true };
     }
 
-    const api = { VERSION: "1.0.0", act, otworz, kup, sprzedaj, napraw, oferta, tabsOf, doRow, bonus, luck, opis, level, lack: id => lackOf(D() && D().przedmiot(id)),
+    const api = { VERSION: "1.1.0", act, otworz, kup, sprzedaj, napraw, oferta, tabsOf, doRow, bonus, luck, opis, level, lack: id => lackOf(D() && D().przedmiot(id)),
         rangedItem, rangedKind, rangedDef, rangedOwned, hasRanged, anyRanged, owns, isRanged, usedToday, sellPrice, repairPrice,
         buyPrice: (key, id, used) => { const p = D() && D().przedmiot(id); return p ? buyPrice(key, p, used) : 0; },
         menu: (resident, ev) => { const key = SHOP_OF[resident]; return key && shop(key) && ev ? menu(key, resident, ev) : null; }, talkHook, openNow, menuRows,
-        syncRecipes, wire, wired: () => Object.assign({}, wired), ugExtra, giveUnique, checkUniques, setFor, f9Rows, f9Ok, f9Pick, refresh: dirty, state: () => store(), Scene_BronSklep };
+        syncRecipes, wire, wired: () => Object.assign({}, wired), ugExtra, ugSurowce, bursztynCheck, inneOf, inneLeft, giveUnique, checkUniques, setFor, f9Rows, f9Ok, f9Pick, refresh: dirty, state: () => store(), Scene_BronSklep };
     window.Bron = T.register(PLUGIN, api);
 })();

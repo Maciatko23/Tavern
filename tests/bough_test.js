@@ -38,15 +38,13 @@ fs.mkdirSync(OUT, { recursive: true });
 
         // ================= 1. data =================
         const item = await ev("(function(){ const i = $dataItems[128]; return i ? [i.name, i.iconIndex, i.itypeId] : null; })()");
-        check("item 128 Leśne legowisko: key item, icon 388", JSON.stringify(item) === JSON.stringify(["Leśne legowisko", 388, 2]), item);
+        check("item 128 Leśne legowisko: key item, its PixelLab icon (688+)", !!item && item[0] === "Leśne legowisko" && item[1] >= 688 && item[2] === 2, item);
         const icon = await ev(`new Promise(res => { const bmp = ImageManager.loadSystem("IconSet"); const chk = () => { if (!bmp.isReady()) return setTimeout(chk, 50); let n = 0; const d = bmp.context.getImageData((388 % 16) * 32, Math.floor(388 / 16) * 32, 32, 32).data; for (let k = 3; k < d.length; k += 4) if (d[k] > 0) n++; res(n); }; chk(); })`);
         check("icon 388 is drawn", icon > 300, icon);
         const def = await ev("(function(){ const t = Farming.BUILDINGS.bedroll; return { name: t.name, instant: t.instant, sleep: t.sleep, restore: t.sleepRestore, bad: t.sleepBad, cost: t.cost, rest: t.rest }; })()");
-        check("the bedroll is now 'Leśne legowisko': laid out at once, sleeps a night, 60% (40% in bad weather), costs the item, no nap", def.name === "Leśne legowisko" && def.instant === true && def.sleep === true && def.restore === 0.6 && def.bad === 0.4 && JSON.stringify(def.cost) === "[[128,1]]" && def.rest === undefined, def);
+        check("the bedroll is now 'Leśne legowisko': laid out at once, sleeps a night, 60% (40% in bad weather), made of 10 branches and 10 flax on the spot, no nap", def.name === "Leśne legowisko" && def.instant === true && def.sleep === true && def.restore === 0.6 && def.bad === 0.4 && JSON.stringify(def.cost) === "[[77,10],[92,10]]" && def.rest === undefined, def);
         const hand = await ev("Farming.HAND_RECIPES.map(r => r.id)");
-        check("the hand menu makes: hammer, forest bed, waterskin, rope, and from the forest floor pine seeds, a bandage, nettle fibre", hand.join() === "hammer,bough_bed,waterskin,rope,pine_seeds,bandage,nettle_fiber", hand);
-        const inputs = await ev("Farming.HAND_RECIPES.find(r => r.id === 'bough_bed').inputs");
-        check("the bed is made of branches (10) and flax (10) only", JSON.stringify(inputs) === "[[77,10],[92,10]]", inputs);
+        check("the hand menu makes: hammer, waterskin, rope, a bandage, nettle fibre (2026-11-16: the forest bed is built at once, no shelling of pine seeds)", hand.join() === "hammer,waterskin,rope,bandage,nettle_fiber", hand);
         check("its picture loads (96x64)", await ev(`new Promise(res => { const bm = ImageManager.loadSystem("Farm_Bedroll"); bm.addLoadListener(() => res(bm.width === 96 && bm.height === 64)); })`));
         const hint = await ev("Farming.menuFor(0, 0) === null ? '' : ''").catch(() => "");
 
@@ -73,17 +71,10 @@ fs.mkdirSync(OUT, { recursive: true });
         for (let i = 0; i < idx; i++) await press("down");
         await press("ok"); await frames(20);
         const handList = await ev("SceneManager._scene._farmMenu._entries.map(e => e.name + (e.enabled === false ? '(x)' : ''))");
-        check("the hand menu lists 'Zrób leśne legowisko' (dimmed without branches and flax)", handList.includes("Zrób leśne legowisko(x)"), handList);
+        check("the hand menu lists the rope and no forest bed (it is built at once from the Q list)", handList.some(n => /^Skręć linę/.test(n)) && !handList.some(n => /legowisko/.test(n)), handList);
         await b.shot(OUT + "hand_menu.png");
         await press("cancel"); await frames(10); await press("cancel"); await frames(10);
         await give(77, 10); await give(92, 10);
-        const made = await ev("Farming.craftManual(null, Farming.HAND_RECIPES.find(r => r.id === 'bough_bed'))");
-        await settle();
-        check("made: the bed is in the bag, 10 branches and 10 flax are gone", made === true && (await count(128)) === 1 && (await count(77)) === 0 && (await count(92)) === 0);
-        await give(77, 10); await give(92, 10);
-        check("a second one is refused while you have one", (await ev("Farming.craftManual(null, Farming.HAND_RECIPES.find(r => r.id === 'bough_bed'))")) === false && (await count(128)) === 1);
-        await ev("[77, 92].forEach(i => $gameParty.loseItem($dataItems[i], 20, true)); 0");
-
         // ================= 3. laid out at once, no hammer =================
         check("no hammer in the bag", (await count(89)) === 0);
         await standAt(bx + 2, by + 4, 8);
@@ -93,9 +84,9 @@ fs.mkdirSync(OUT, { recursive: true });
         await frames(4);
         await press("ok"); await settle();
         const bed = await ev(`(function(){ const q = Farming.buildingAt(${bx + 2}, ${by + 3}); return q ? { type: q.type, site: !!q.site } : null; })()`);
-        check("the bed stands at once (no building site), the item went into it", !!bed && bed.type === "bedroll" && bed.site === false && (await count(128)) === 0, bed);
+        check("the bed stands at once (no building site), 10 branches and 10 flax went into it", !!bed && bed.type === "bedroll" && bed.site === false && (await count(77)) === 0 && (await count(92)) === 0, bed);
         await give(77, 10); await give(92, 10);
-        check("with the bed standing you cannot make another", (await ev("Farming.craftManual(null, Farming.HAND_RECIPES.find(r => r.id === 'bough_bed'))")) === false);
+        check("with the bed standing you cannot make another", (await ev(`Farming.whyNotBuild("bedroll", ${bx + 6}, ${by + 3})`)) === "Masz już leśne legowisko.");
         await ev("[77, 92].forEach(i => $gameParty.loseItem($dataItems[i], 20, true)); 0");
         await b.shot(OUT + "bed_pitched.png");
         const names = await ev(`Farming.menuFor(${bx + 2}, ${by + 3}).entries.map(e => e.name)`);
@@ -140,7 +131,7 @@ fs.mkdirSync(OUT, { recursive: true });
         await ev(`Farming.menuFor(${bx + 2}, ${by + 3}).entries.find(e => e.name === "Rozbierz").run(); 0`);
         await frames(20);
         check("'Rozbierz' returns 3 branches and 1 flax and the bed is gone", (await count(77)) === before.br + 3 && (await count(92)) === before.fi + 1 && (await ev(`Farming.buildingAt(${bx + 2}, ${by + 3})`)) === null, { br: await count(77), fi: await count(92) });
-        const jr = await ev(`(function(){ Journal.evaluateGoals(); const g = Journal.GOALS.find(x => x.id === "bough"), n = Journal.GOALS.find(x => x.id === "bednight"); return { bough: !!g && !!Journal.recipeRef(g.recipe), night: !!n && n.after.join() === "bough", doneNight: !!$gameSystem._journal.done.bednight, doneBough: !!$gameSystem._journal.done.bough, old: !Journal.GOALS.some(x => x.id === "bedroll"), unique: new Set(Journal.GOALS.map(x => x.id)).size === Journal.GOALS.length }; })()`);
+        const jr = await ev(`(function(){ Journal.evaluateGoals(); const g = Journal.GOALS.find(x => x.id === "bough"), n = Journal.GOALS.find(x => x.id === "bednight"); return { bough: !!g && g.build === "bedroll", night: !!n && n.after.join() === "bough", doneNight: !!$gameSystem._journal.done.bednight, doneBough: !!$gameSystem._journal.done.bough, old: !Journal.GOALS.some(x => x.id === "bedroll"), unique: new Set(Journal.GOALS.map(x => x.id)).size === Journal.GOALS.length }; })()`);
         check("the journal: 'Zrób leśne legowisko' and 'Prześpij noc na legowisku' exist and are done; the old hide-bedroll goal is gone", jr.bough && jr.night && jr.doneNight && jr.doneBough && jr.old && jr.unique, jr);
         console.log("console errors:", JSON.stringify(b.logs.filter(l => /EXC|rror/.test(l)).slice(-4)));
     } catch (e) { console.log("ERR", e.message); results.push(false); }

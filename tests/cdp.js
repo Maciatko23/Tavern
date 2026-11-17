@@ -26,6 +26,8 @@ const COVER_PAGE = `(function(){ window.__mapaMaps = {}; const iv = setInterval(
 // TEST_TURBO=N (else opts.turbo; tests/run.js sets it for the tests of its TURBO list): the game's logic runs N updates for each drawn frame
 // (SceneManager.determineRepeatNumber) - all that counts game frames (moves, fades, messages, the dice rolling, t.frames(n)) goes N
 // times faster by the clock, the same frames in the same order; only what is timed by the wall clock is not sped up. 0/1: off.
+const TEST_START_PAGE = `(function(){ var v; try { Object.defineProperty(window, "$dataSystem", { configurable: true, enumerable: true,
+    get: function(){ return v; }, set: function(d){ if (d && typeof d === "object" && d.startMapId !== undefined) { d.startMapId = 224; d.startX = 1; d.startY = 4; } v = d; } }); } catch (e) {} })();`;
 const TURBO_PAGE = n => `(function(){ const N = ${n}; const iv = setInterval(function(){ if (!window.SceneManager || !SceneManager.determineRepeatNumber) return;
     clearInterval(iv); const d = SceneManager.determineRepeatNumber; SceneManager.determineRepeatNumber = function(dt) { const k = d.call(this, dt); return k > 0 ? k * N : 0; };
     window.__turbo = N; }, 5); })();`;
@@ -159,6 +161,13 @@ async function launch(opts = {}) {
     const send = cover ? async (method, params) => { if (method === "Page.navigate" || method === "Page.reload") await takeCover(); return rawSend(method, params); } : rawSend;
     await send("Runtime.enable"); await send("Page.enable"); await send("Emulation.setFocusEmulationEnabled", { enabled: true });
     const turbo = Number(process.env.TEST_TURBO !== undefined && process.env.TEST_TURBO !== "" ? process.env.TEST_TURBO : opts.turbo) || 0;   // (the variable wins: TEST_TURBO=1 - off)
+    // the tests' own start of a new game: grandpa's hut of the NEW world, Map224, in the bed (1, 4) (till 2026-11-15: the old house, Map019) - whatever data/System.json says (the user moves the
+    // editor's start around while he builds maps: 2026-11-14 it stood on Map219 and dozens of tests began on the wrong map).
+    // TEST_START=off leaves the file's start.
+    if (process.env.TEST_START !== "off") await send("Page.addScriptToEvaluateOnNewDocument", { source: TEST_START_PAGE });
+    // (2026-11-16: in the game a boar nobody has hurt attacks nobody; the many tests of the fight with a boar spawn one that goes for
+    // the hero as before - a test of the peace itself sets window.__dzikiJakDawniej = false)
+    await send("Page.addScriptToEvaluateOnNewDocument", { source: "window.__dzikiJakDawniej = true;" });
     if (turbo > 1) await send("Page.addScriptToEvaluateOnNewDocument", { source: TURBO_PAGE(Math.min(8, Math.round(turbo))) });
     if (cover) {
         await send("Profiler.enable");

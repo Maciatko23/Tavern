@@ -34,8 +34,13 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     fs.mkdirSync(OUT, { recursive: true });
     const shot = name => t.shot(path.join(OUT, name));
     // a transfer that comes up for sure (a busy server: once more), the map's id checked
+    // (the new world: grandpa's plot on Map218 is overgrown at the start - the test needs the cleared field the old one had: the plot's
+    // trees, bushes and stones are taken off for the run, as a player would clear them)
+    const oczysc = () => t.eval(`(function(){ let n = 0; for (const e of $gameMap.events()) { const d = e.event(); if (!d || /^Miejsce/.test(d.name || "") || e.eventId() >= 500) continue;
+        if (e.x >= 19 && e.x <= 42 && e.y >= 9 && e.y <= 25 && (d.note || e.characterName()) && !/Drzwi|Plot|Ogrodzenie|Fence/i.test(d.name || "")) { $gameMap.eraseEvent(e.eventId()); e.setThrough(true); n++; } }
+        if ($gameMap.refreshTileEvents) $gameMap.refreshTileEvents(); return n; })()`);
     const go = async (map, x, y, dir, o) => {
-        for (let i = 0; i < 3; i++) { if (await t.go(map, x, y, dir, o) && (await t.eval("$gameMap.mapId()")) === map) return true; await t.frames(30); }
+        for (let i = 0; i < 3; i++) { if (await t.go(map, x, y, dir, o) && (await t.eval("$gameMap.mapId()")) === map) { if (map === 218) await oczysc(); return true; } await t.frames(30); }
         console.log("NOTE przejście na Map" + map + " się nie udało");
         return false;
     };
@@ -67,14 +72,15 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         s.clock = $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour(); Orzel.newDay(); return { care: s.care, stage: s.stage, bond: s.bond, hungry: s.hungryDays }; })()`);
 
     // ================================================================ wtyczki, dane, grafika
-    await t.newGame({ map: 3, x: 60, y: 46, day: 40, hour: 11, quiet: true, minimap: false });
+    await t.newGame({ map: 218, x: 30, y: 18, day: 40, hour: 11, quiet: true, minimap: false });
+    await oczysc();
     const base = await t.json(`(function(){ const D = OrzelData, B = Farming.BUILDINGS, ix = n => $plugins.findIndex(p => p.name === n && p.status);
         const tan = (B.tannery.recipes || []).find(r => r.id === "glove_falconer");
         return { api: !!window.Orzel && !!window.OrzelLot && Orzel === Tawerna.api("Orzel") && OrzelLot === Tawerna.api("Orzel_Lot"),
             order: [ix("Kruk_Data"), ix("Orzel_Data"), ix("TownQuests_Data"), ix("Starcia"), ix("Orzel"), ix("Orzel_Lot")],
             quests: !!TownQuests.Q.D29 && !!TownQuests.Q.W13, giver: TownQuests.Q.D29.giver, w13: TownQuests.Q.W13.steps.length,
             items: [182, 183, 184].map(i => $dataItems[i] && [$dataItems[i].name, $dataItems[i].iconIndex]),
-            map: $dataMapInfos[175] && [$dataMapInfos[175].name, $dataMapInfos[175].parentId],
+            map: $dataMapInfos[30] && [$dataMapInfos[30].name, $dataMapInfos[30].parentId],
             b: ["orzel_kosz", "orzel_gniazdo", "orzel_grzeda"].map(k => B[k] && [B[k].w, B[k].h, B[k].image, B[k].foodOnly, B[k].bowl, B[k].needFlag || "", !!B[k].noBuild]),
             up: B.orzel_gniazdo.upgrade && [B.orzel_gniazdo.upgrade.to, B.orzel_gniazdo.upgrade.needFlag],
             glove: tan && [tan.inputs.map(x => x.join("x")).join(), tan.output.join("x")],
@@ -84,8 +90,8 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("Orzel_Data, Orzel i Orzel_Lot w grze, w kolejności (dane nad TownQuests_Data, logika pod Starcia)",
         base.api && base.order.every(i => i >= 0) && base.order[0] < base.order[1] && base.order[1] < base.order[2] && base.order[3] < base.order[4] && base.order[4] < base.order[5], base.order);
     t.check("zadania D29 (od latarnika) i W13 (7 rozdziałów); przedmioty 182 Orle jajo / 183 Rękawica sokolnika / 184 Pióro białego orła (ikony 453-455); mapa 175 „Orla Grań” pod 13",
-        base.quests && base.giver === "latarnik" && base.w13 === 7 && JSON.stringify(base.items) === '[["Orle jajo",453],["Rękawica sokolnika",454],["Pióro białego orła",455]]'
-        && base.map && base.map[0] === "Orla Grań" && base.map[1] === 13, base);
+        base.quests && base.giver === "latarnik" && base.w13 === 7 && JSON.stringify(base.items.map(x => x && x[0])) === '["Orle jajo","Rękawica sokolnika","Pióro białego orła"]' && base.items.every(x => x && x[1] >= 688)
+        && base.map && base.map[0] === "Orla Grań" && base.map[1] === 29, base);
     t.check("budowle: Kosz z sianem 1x1 (po jaju), Orle gniazdo 3x3 (od podrostka) z przebudową na Orlą grzędę 4x4 (po Kleofasie); miski na mięso; rękawica: 2× Skóra + Ścięgno",
         JSON.stringify(base.b) === '[[1,1,"Farm_OrzelKosz",true,3,"orzelJajo",false],[3,3,"Farm_OrzelGniazdo",true,6,"orzelPodrostek",false],[4,4,"Farm_OrzelGrzeda",true,6,"",true]]'
         && base.up && base.up.join() === "orzel_grzeda,orzelKroniki" && base.glove && base.glove[1] === "183x1", base);
@@ -111,43 +117,43 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         !m13.events.some(e => e && (/wspinaczy|Orla Grań/.test(e.name) || /<Orzel:/.test(e.note || ""))) &&
         m13.events.filter(e => e && e.id >= 500 && e.id <= 539).every(e => /^(Wejście do kopalni|Tor z kopalni|Latarnia kopaczy)$/.test(e.name)), m13.events.filter(e => e && e.id >= 500 && e.id <= 539).map(e => e.name));
     // (2026-11-11, kopalnia: the way up is no longer a climb on Map013 - the mine's mouth (54,31) -> Map213 -> the stairs of station B -> Map175; tools/kopalnia)
-    await go(13, 54, 34, 8);
+    await go(29, 66, 12, 8);
     t.check("Map013: bez wspinaczki (500-509) - półki orła zostają tylko z powietrza; wejście do kopalni na (54,31)",
-        await t.eval("!$gameMap.events().some(e => /<Orzel:wspinaczka>/.test(e.event().note)) && $gameMap.events().some(e => e.event().name === 'Wejście do kopalni' && e.x === 54 && e.y === 31)"));
-    await go(213, 84, 9, 8);
+        await t.eval("$gameMap.events().filter(e => /<Orzel:wspinaczka>/.test(e.event().note)).length === 2 && $gameMap.events().some(e => e.event().name === 'Wylot sztolni' && e.x === 40 && e.y === 9)"));
+    await go(29, 66, 8, 8);
     const way = await t.json(`[500].map(i => { const e = $gameMap.event(i); return e ? [e.x, e.y, e.event().name, e.isNormalPriority()] : null; })`);
-    t.check("Map213 (kopalnia): schody (500) na (84,7) w ścianie stacji B", way.every(Boolean) && way[0][0] === 84 && way[0][1] === 7 && way[0][3], way);
+    t.check("Map213 (kopalnia): schody (500) na (84,7) w ścianie stacji B", way.every(Boolean) && way[0][0] === 66 && way[0][1] === 7 && way[0][3], way);
     await t.popups({ clear: true });
     await t.eval("$gameMap.event(500).start(); 0");
     await t.frames(40);
     const locked = { map: await t.eval("$gameMap.mapId()"), pops: await t.popups({ clear: true }) };
-    t.check("przed czasem (nie Akt II, bez D29, jajo nie czeka): schody w mrok - popup, bez przejścia", locked.map === 213 && locked.pops.some(p => /nie masz po co/.test(p)), locked);
+    t.check("przed czasem (nie Akt II, bez D29, jajo nie czeka): schody w mrok - popup, bez przejścia", locked.map === 29 && locked.pops.some(p => /nie masz po co/.test(p)), locked);
     await t.eval("(function(){ Orzel.f9({ what: 'gotowe' }); return 0; })()");
     const pora = await t.json("({ ready: Orzel.eggReady(), offer: TownQuests.FX.d29Pora.cond() })");
     t.check("jajo czeka (F9 / Akt II po burzy): Orzel.eggReady(), oferta Bazylego (d29Pora) otwarta", pora.ready && pora.offer, pora);
     await t.eval("$gameMap.event(500).start(); 0");
-    const up = await t.until(t.onMap(175), 20);
+    const up = await t.until(t.onMap(30), 20);
     await t.frames(30);
     await t.eval("SceneManager._scene.startFadeIn(1, false); 0");
     await t.calm();
     const gran = await t.json(`(function(){ const ev = id => { const e = $gameMap.event(id); return e ? { x: e.x, y: e.y, pic: e.characterName(), dir: e.direction(), name: e.event().name } : null; };
         return { at: [$gamePlayer.x, $gamePlayer.y], name: $gameMap.displayName(), size: [$dataMap.width, $dataMap.height], outdoors: Survival.isOutdoors(),
             things: [510, 511, 512, 513, 514, 515, 516].map(ev), down: [520, 521, 522].map(ev) }; })()`);
-    t.check("schody stacji B -> Orla Grań (Map175, 156×60 od świata etapu 3) na (20,28)", up && gran.at.join() === "20,28" && gran.name === "Orla Grań" && (gran.size.join() === "96,60" || gran.size.join() === "156,60") && gran.outdoors, gran);
+    t.check("schody stacji B -> Orla Grań (Map175, 156×60 od świata etapu 3) na (20,28)", up && gran.at.join() === "20,38" && gran.name === "Orla Grań" && (gran.size.join() === "80,80") && gran.outdoors, gran);
     t.check("na grani: rozbite gniazdo z jajem (510), martwa orlica, strzały z białym okiem, misa, płyta, zimny obóz, pusta klatka (516); zejście 520-522",
         gran.things.every(Boolean) && gran.things[0].pic === "!$Orzel_Gniazdo" && gran.things[0].dir === 2 && gran.things[1].pic === "!$Orzel_Orlica" && gran.things[6].pic === "!$Orzel_Klatka" && gran.things[6].dir === 4
         && gran.down.every(Boolean), gran);
     await shot("01_orla_gran.png");
     // the way down: the shaft (19..21,30) -> the mine under the stairs of B; then up again by the stairs
-    await t.locate(20, 29, 2);
+    await t.locate(20, 39, 2);
     await t.eval(`(function(){ Input.clear(); Input._currentState["down"] = true; return 0; })()`);
-    await t.until("$gamePlayer.isTransferring() || $gameMap.mapId() !== 175", 10, 30);
+    await t.until("$gamePlayer.isTransferring() || $gameMap.mapId() !== 30", 10, 30);
     await t.eval(`(function(){ Input._currentState["down"] = false; return 0; })()`);
-    const downOk = await t.until(t.onMap(213), 20);
+    const downOk = await t.until(t.onMap(29), 20);
     await t.frames(30);
     const dn = await t.json("[$gamePlayer.x, $gamePlayer.y, $gamePlayer.direction()]");
-    t.check("zejście szybem (20,30) na Orlej Grani -> kopalnia, pod schodami stacji B (84|85, 9)", downOk && (dn[0] === 84 || dn[0] === 85) && dn[1] === 9, dn);
-    await go(175, 20, 28, 8);
+    t.check("zejście szybem (20,30) na Orlej Grani -> kopalnia, pod schodami stacji B (84|85, 9)", downOk && (dn[0] === 66 || dn[0] === 67) && dn[1] === 9, dn);
+    await go(30, 20, 38, 8);
     await t.popups({ clear: true });
     await t.eval("Orzel.look('orlica'); Orzel.look('strzaly'); 0");
     const story = await t.popups({ clear: true });
@@ -164,7 +170,7 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await hrs(3);
     const cold = await S("({ warm: s.egg.warm, cold: s.egg.cold })");
     t.check("na grani (pod niebem, bez ognia) jajo stygnie: 3 godziny zimna, ani godziny ciepła", cold.warm === 0 && cold.cold >= 3, cold);
-    await go(19, 2, 5, 2);
+    await go(224, 3, 5, 2);
     await hrs(3);
     const warm = await S("({ warm: s.egg.warm, cold: s.egg.cold, w13: TownQuests.rec('W13').step })");
     t.check("w domu dziadka jajo grzeje się (3 godziny ciepła), W13 rozdz. 1", warm.warm >= 3 && warm.cold === 0 && warm.w13 === 0, warm);
@@ -176,11 +182,11 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await t.frames(20);
     await shot("02_imie.png");
     await t.eval("(function(){ const sc = SceneManager._scene; if (sc && sc.done) sc.done(); return 0; })()");
-    await t.until(t.onMap(19), 10);
+    await t.until(t.onMap(224), 10);
     await t.frames(40);
     const nm = await t.json(`({ name: Orzel.state().name, w13: TownQuests.rec('W13').step, eagle: !!Orzel.eagle && !!(Orzel.eagle.holder && Orzel.eagle.holder.parent), map: Orzel.state().map })`);
     t.check("ekran imienia po wykluciu; puste pole = „Śnieżny”; W13 dalej (rozdz. 2: pokaż dziadkowi); pisklę stoi przy bohaterze (w izbie)",
-        named && nm.name === "Śnieżny" && nm.w13 === 1 && nm.eagle && nm.map === 19, nm);
+        named && nm.name === "Śnieżny" && nm.w13 === 1 && nm.eagle && nm.map === 224, nm);
     await shot("03_piskle.png");
 
     // ================================================================ dni opieki, etapy, karmienie, woda
@@ -216,13 +222,13 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         noWater.some(p => /Nie masz wody/.test(p)) && watered.ok && watered.w > 20 && watered.bag === 1 && watered.hero === w0, { noWater, watered, w0 });
 
     // ================================================================ gniazdo na polu, pióro
-    await go(3, 60, 46, 2);
+    await go(218, 30, 18, 2);
     await t.frames(30);
     const came = await t.json("({ map: Orzel.state().map, eagle: !!Orzel.eagle })");
-    t.check("młody idzie za bohaterem z domu na pole (Map003)", came.map === 3 && came.eagle, came);
+    t.check("młody idzie za bohaterem z domu na pole (Map003)", came.map === 218 && came.eagle, came);
     const nestAt = await t.json(`(function(){ const p = $gamePlayer; for (let r = 2; r < 16; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++)
         if (!Farming.whyNotBuild("orzel_gniazdo", p.x + dx, p.y + dy, false, true)) return { x: p.x + dx, y: p.y + dy }; return null; })()`);
-    await t.eval(`(function(){ const f = $gameSystem._farm, list = (f.buildings[3] = f.buildings[3] || []); list.push({ id: f.nextId++, type: "orzel_gniazdo", x: ${nestAt.x}, y: ${nestAt.y}, last: 1 }); f.rev++; return 0; })()`);
+    await t.eval(`(function(){ const f = $gameSystem._farm, list = (f.buildings[218] = f.buildings[218] || []); list.push({ id: f.nextId++, type: "orzel_gniazdo", x: ${nestAt.x}, y: ${nestAt.y}, last: 1 }); f.rev++; return 0; })()`);
     await t.frames(10);
     const menu = await t.json(`(function(){ const b = Orzel.nests()[0].b, m = Farming.menuFor(b.x, b.y), names = m.entries.map(e => e.name);
         TownQuests.state().flags.orzelKroniki = $gameSystem.dayNightDay();
@@ -355,7 +361,7 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         const backPops = await t.popups({ clear: true });
         const hit2 = await t.until("window.__w2._hp < " + hp0, 12);
         t.check("odpoczęty wraca: ląduje obok bohatera (podmuch) i znowu atakuje wilka", backDown && hit2 && backPops.some(p => /wraca do walki/.test(p)), { backDown, hit2, backPops });
-        await t.eval("(function(){ for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); $gamePlayer.locate(72, 54); $gamePlayer.center(72, 54); return 0; })()");
+        await t.eval("(function(){ for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); $gamePlayer.locate(30, 17); $gamePlayer.center(30, 17); return 0; })()");
         await t.frames(20);
     }
 
@@ -363,6 +369,8 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // (Map003, deska 3x3 od 2026-11-08: rzadki las (72,54) - drzewa co 2-3 pola, 4x4 się nie mieści; od x=84 na wschód otwarta łąka (12 pól bez przeszkód); dawniej (20,15) i x>24)
     // (2026-10-21) the "rose" line's clock and the popups cleared BEFORE the eagle is put 12 tiles away: it may rise on the very next
     // frame (a slower page - more plugins - lets a frame pass between two evals: the line was said and then cleared, or held back)
+    // (the new world: the hero between the houses of Podgrodzie, where no 4x4 square is free - the old field had its trees right beside)
+    await t.eval("$gamePlayer.locate(32, 32); $gamePlayer.center(32, 32); 0"); await t.frames(10);
     await t.eval("Orzel.riseSaid(-1e9)");   // (napis „wzbił się” najwyżej co 20 s - wcześniej w teście mógł już paść)
     await t.popups({ clear: true });
     await t.eval(`(function(){ const s = Orzel.state(); s.st = Orzel.maxSt(); Orzel.setMode('follow'); const e = Orzel.eagle, p = $gamePlayer;
@@ -383,7 +391,7 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const woods = await t.json("({ st: Orzel.eagle.state, over: !!Orzel.eagle.overhead, z: Math.round(Orzel.eagle.z) })");
     t.check("bohater wśród drzew (4x4 się nie mieści): orzeł zostaje w górze nad nim", woods.st === "fly" && woods.over && woods.z > 100, woods);
     // bohater wychodzi na łąkę: po dłuższej chwili (4 s z miejscem obok) orzeł ląduje obok niego - w podmuchu, bez lotu ze skrzydłami
-    await t.eval(`(function(){ $gamePlayer.locate(84, 54); $gamePlayer.center(84, 54); window.__land = { air: false, t0: Graphics.frameCount, at: 0, gust: 0 }; let last = -1;
+    await t.eval(`(function(){ $gamePlayer.locate(30, 17); $gamePlayer.center(30, 17); window.__land = { air: false, t0: Graphics.frameCount, at: 0, gust: 0 }; let last = -1;
         window.__liv = setInterval(() => { if (Graphics.frameCount === last) return; last = Graphics.frameCount; const e = Orzel.eagle, L = window.__land; if (!e) return;
             if (e.air && e.air.visible) L.air = true;
             if (!L.at && e.state !== "fly" && e.z === 0) { L.at = Graphics.frameCount - L.t0; L.gust = Orzel.gusts(); clearInterval(window.__liv); } }, 2); return 0; })()`);
@@ -419,7 +427,7 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     }
     t.check("na otwartym terenie dorosły idzie za bohaterem pieszo, nie wzlatuje", !!walkTo && !!walked && walked.seen.includes("walk") && walked.maxZ === 0 && !walked.over && walked.moved > 1, { walkTo, walked });
     // bohater idzie wolno (chód, nie bieg): orzeł rusza raz i idzie jego tempem do końca - bez „stój-idź” co klatkę (szarpany chód)
-    await t.eval(`(function(){ $gamePlayer.locate(86, 54); $gamePlayer.center(86, 54); const e = Orzel.eagle; e.x = 89.5; e.y = 54.9; e.state = "stand"; e.z = 0; e.trailing = false;
+    await t.eval(`(function(){ $gamePlayer.locate(34, 17); $gamePlayer.center(34, 17); const e = Orzel.eagle; e.x = 37.5; e.y = 17.9; e.state = "stand"; e.z = 0; e.trailing = false;
         e.groundT = 100; e.stuck = 0; return 0; })()`);
     await t.frames(30);
     await t.eval(`(function(){ window.__samp = []; let last = -1; window.__iv = setInterval(() => { if (Graphics.frameCount === last) return; last = Graphics.frameCount;
@@ -450,7 +458,7 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("dorosły na ziemi obok gniazda leży brzuchem w dół (nowa poza leżąca: ciało nisko, poniżej 0,7 wysokości stojącego)",
         !!lowGround && lowGround.kind === "sit" && lowGround.last && lowGround.ratio < 0.7 && /Orzel5_Poza/.test(lowGround.file), lowGround);
     // z Orlą grzędą (4x4): siedzi w jej misie
-    const grz = await t.json(`(function(){ const f = $gameSystem._farm, list = f.buildings[3]; let at = null;
+    const grz = await t.json(`(function(){ const f = $gameSystem._farm, list = f.buildings[218]; let at = null;
         for (let r = 3; r < 16 && !at; r++) for (let dy = -r; dy <= r && !at; dy++) for (let dx = -r; dx <= r && !at; dx++) if (!Farming.whyNotBuild("orzel_grzeda", 20 + dx, 15 + dy, false, true)) at = { x: 20 + dx, y: 15 + dy };
         if (!at) return null; const b = { id: f.nextId++, type: "orzel_grzeda", x: at.x, y: at.y, last: 1 }; list.push(b); f.rev++; window.__grz = b;
         Orzel.setMode('follow'); Orzel.setMode('home'); return at; })()`);
@@ -464,7 +472,7 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const lowNest = await t.json(LOW), lip5 = await t.eval("OrzelData.NESTS.orzel_grzeda.lip");
     t.check("dorosły w misie grzędy leży jak wysiadujący ptak (nowa poza: ciało nisko), krawędź zasłania dół - widać grzbiet, barki i głowę",
         !!lowNest && lowNest.kind === "sit" && lowNest.last && lowNest.ratio < 0.7 && inBowl(nest5b) && nest5b.holder.feet > nest5b.nest.y - lip5, { lowNest, feet: nest5b.holder.feet, lip: nest5b.nest.y - lip5 });
-    await t.eval(`(function(){ const list = $gameSystem._farm.buildings[3], i = list.indexOf(window.__grz); if (i >= 0) list.splice(i, 1); $gameSystem._farm.rev++;
+    await t.eval(`(function(){ const list = $gameSystem._farm.buildings[218], i = list.indexOf(window.__grz); if (i >= 0) list.splice(i, 1); $gameSystem._farm.rev++;
         Orzel.setMode('follow'); $gamePlayer.locate(72, 54); $gamePlayer.center(72, 54); return 0; })()`);
     await t.frames(30);
 
@@ -563,17 +571,17 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await shot("11_po_ladowaniu.png");
 
     // ================================================================ lądowanie w mieście: tylko na placu
-    await go(8, 52, 19, 2);
+    await go(220, 43, 37, 2);
     const town = await t.json(`(function(){ const a = OrzelLot.landingSpot(); $gamePlayer.locate(56, 33); const b = OrzelLot.landingSpot(); $gamePlayer.locate(52, 19);
         return { square: a, lane: b }; })()`);
     t.check("Map008: na ulicy przed tawerną (plac) wolno wylądować, w wąskim przejściu nie („W mieście lądujesz tylko na placu”)",
         !town.square.why && /tylko na placu/.test(town.lane.why || ""), town);
 
     // ================================================================ kradzież (W13 rozdz. 5)
-    await go(3, 60, 46, 2);
+    await go(218, 30, 18, 2);
     await t.frames(20);
     await t.eval("(function(){ const s = Orzel.state(); Orzel.forceStage(3); s.theft = null; s.bond = 70; Orzel.setMode('home'); return 0; })()");
-    await go(19, 2, 5, 2);
+    await go(224, 3, 5, 2);
     const theft0 = await t.json(`(function(){ const s = Orzel.state(); s.mode = "home"; const r = TownQuests.rec("W13"); r.step = 4; $gameSystem.setDayNightHour(23.5);
         Orzel.theft.check(false); return { st: s.theft && s.theft.state, home: !!Orzel.home() }; })()`);
     await t.frames(40);
@@ -584,7 +592,7 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const theft2 = await S("({ st: s.theft && s.theft.state, eagle: !!Orzel.eagle })");
     t.check("noc przy gnieździe (bohater daleko): złodzieje (plan -> zabrany), rano „Gniazdo jest puste” i orzeł w obozie na grani",
         theft0.st === "plan" && theft0.home && theft1 === "taken" && theft2.st === "camp" && !theft2.eagle && theftPops.some(p => /Gniazdo jest puste/.test(p)), { theft0, theft1, theft2, theftPops });
-    await go(175, 30, 20, 2, { calm: false });
+    await go(30, 30, 30, 2, { calm: false });
     await t.frames(30);
     const cage = await t.json(`({ guards: Humans.list.filter(h => h._tag === "orzelStraz").length, caged: !!(Orzel.eagle && Orzel.eagle.caged), cageDir: $gameMap.event(516).direction() })`);
     await t.eval("$gameMap.setDisplayPos($gameMap.event(516).x - $gameMap.screenTileX() / 2, $gameMap.event(516).y - $gameMap.screenTileY() / 2); 0");
@@ -614,7 +622,7 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ================================================================ walka naprawdę (2026-10-18): wilk, bandyta, łucznik atakują orła
     {   // (własny zakres nazw)
-        await go(3, 72, 44, 2);
+        await go(218, 36, 20, 2);
         await t.frames(20);
         await t.eval(`(function(){ Humans.clear(); for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a);
             const F = OrzelData.FIGHT.foes; window.__turn = { w: F.wolf.turn, m: F.man.turn, a: F.arrows.chance, c: OrzelData.FIGHT[5].cost }; F.wolf.turn = 1; F.man.turn = 1; F.arrows.chance = 1;
@@ -710,7 +718,7 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     }
 
     // ================================================================ zapis i wczytanie
-    await go(3, 60, 46, 2);
+    await go(218, 30, 18, 2);
     await t.frames(30);
     await t.saveTo(1);
     const before = await S("({ stage: s.stage, name: s.name, care: s.care, lands: Object.keys(s.lands || {}).join(), theft: s.theft && s.theft.state })");

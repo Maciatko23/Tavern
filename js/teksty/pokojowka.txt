@@ -1,0 +1,21 @@
+# Pokojówka Zośka (Pokojowka.js): zamiata piętra tawerny, sprząta pokoje, dokłada do kominków.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz pokojowka
+# Każda linijka w bloku to jedna kwestia; gra losuje jedną.
+
+imie = Zośka
+
+[rozmowa]
+Zośka. Pokoje, podłogi, kominki - wszystko na mojej głowie.
+Rano sala, potem pokoje gości, potem apartamenty. I od nowa.
+Jak wynajmiesz pokój, pościel będzie świeża. Tego pilnuję.
+Borgar mówi, że czysta podłoga to połowa dobrej karczmy.
+
+[zamiata]
+Uważaj, gdzie stajesz, dopiero co zamiotłam.
+Tyle błota z gościńca, że miotła nie nadąża.
+Nogi wyżej, zamiatam.
+
+[ogien]
+Ogień nie może zgasnąć. U Borgara pali się dzień i noc.
+Jeszcze dwa polana i będzie ciepło do wieczora.

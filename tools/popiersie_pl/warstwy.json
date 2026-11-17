@@ -1,0 +1,810 @@
+{
+ "_opis": "Warstwy popiersia bohatera (128x128, zwrócone w lewo). Złożenie: baza.png -> wymaż piksele z \"ukryj\" każdej noszonej rzeczy -> warstwy według \"kolejnosc\" (od najmniejszej). Jedna rzecz na miejsce (tors: ubranie albo zbroja). Kolor: warstwa w materiale rodzimym; inne kolory/materiały = przemalowanie rampą (Ubior_Data RAMPY_ZBROI).",
+ "_baza": "baza.png",
+ "_niewidoczne_na_popiersiu": [
+  "pas_skorzany_braz",
+  "pas_skorzany_czarny",
+  "pas_sakiewka",
+  "pas_ladownica",
+  "pas_tragarza",
+  "pas_okuty_braz"
+ ],
+ "kapelusz_slomkowy": {
+  "plik": "warstwy/kapelusz_slomkowy.png",
+  "ukryj": "warstwy/kapelusz_slomkowy_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "słoma",
+  "ukrywa_wlosy": true,
+  "twarz": "none",
+  "przedmioty": [
+   250,
+   251
+  ],
+  "wzory": [
+   "kapelusz_slomkowy",
+   "kapelusz_slomkowy_ciemny"
+  ],
+  "uwaga": null,
+  "opis": "słomkowy kapelusz z szerokim rondem",
+  "surowe": "surowe/kapelusz_slomkowy.png",
+  "piksele": 3253
+ },
+ "kapelusz_filcowy": {
+  "plik": "warstwy/kapelusz_filcowy.png",
+  "ukryj": "warstwy/kapelusz_filcowy_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "filc",
+  "ukrywa_wlosy": true,
+  "twarz": "none",
+  "przedmioty": [
+   290
+  ],
+  "wzory": [
+   "kapelusz_filcowy"
+  ],
+  "uwaga": null,
+  "opis": "filcowy kapelusz z miękkim rondem i taśmą",
+  "surowe": "surowe/kapelusz_filcowy.png",
+  "piksele": 2545
+ },
+ "chusta": {
+  "plik": "warstwy/chusta.png",
+  "ukryj": "warstwy/chusta_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "len",
+  "ukrywa_wlosy": true,
+  "twarz": "none",
+  "przedmioty": [
+   252,
+   253,
+   254
+  ],
+  "wzory": [
+   "chusta_biala",
+   "chusta_czerwona",
+   "chusta_niebieska"
+  ],
+  "uwaga": null,
+  "opis": "lniana chusta zawiązana z tyłu głowy",
+  "surowe": "surowe/chusta.png",
+  "piksele": 2536
+ },
+ "czapka_filcowa": {
+  "plik": "warstwy/czapka_filcowa.png",
+  "ukryj": "warstwy/czapka_filcowa_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "filc",
+  "ukrywa_wlosy": true,
+  "twarz": "none",
+  "przedmioty": [
+   255,
+   256,
+   257
+  ],
+  "wzory": [
+   "czapka_filc_braz",
+   "czapka_filc_szara",
+   "czapka_filc_zielona"
+  ],
+  "uwaga": null,
+  "opis": "filcowa czapka z wywiniętym brzegiem",
+  "surowe": "surowe/czapka_filcowa.png",
+  "piksele": 1911
+ },
+ "opaska": {
+  "plik": "warstwy/opaska.png",
+  "ukryj": "warstwy/opaska_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "skóra",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   258,
+   259
+  ],
+  "wzory": [
+   "opaska_braz",
+   "opaska_czarna"
+  ],
+  "uwaga": null,
+  "opis": "skórzana opaska na czole",
+  "surowe": "surowe/opaska.png",
+  "piksele": 593
+ },
+ "kaptur_sukienny": {
+  "plik": "warstwy/kaptur_sukienny.png",
+  "ukryj": "warstwy/kaptur_sukienny_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "sukno (wełna)",
+  "ukrywa_wlosy": true,
+  "twarz": "frame",
+  "przedmioty": [
+   343,
+   419
+  ],
+  "wzory": [
+   "helm_kaptur_welna",
+   "helm_kaptur_len"
+  ],
+  "uwaga": null,
+  "opis": "kaptur z sukna z pelerynką na ramiona",
+  "surowe": "surowe/kaptur_sukienny.png",
+  "piksele": 6638
+ },
+ "kaptur_skorzany": {
+  "plik": "warstwy/kaptur_skorzany.png",
+  "ukryj": "warstwy/kaptur_skorzany_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "skóra",
+  "ukrywa_wlosy": true,
+  "twarz": "frame",
+  "przedmioty": [
+   340
+  ],
+  "wzory": [
+   "helm_kaptur_skora"
+  ],
+  "uwaga": null,
+  "opis": "skórzany kaptur ze szwami",
+  "surowe": "surowe/kaptur_skorzany.png",
+  "piksele": 4392
+ },
+ "kaptur_futrzany": {
+  "plik": "warstwy/kaptur_futrzany.png",
+  "ukryj": "warstwy/kaptur_futrzany_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "skóra i futro",
+  "ukrywa_wlosy": true,
+  "twarz": "frame",
+  "przedmioty": [
+   341
+  ],
+  "wzory": [
+   "helm_kaptur_skora_czarna"
+  ],
+  "uwaga": null,
+  "opis": "skórzany kaptur z futrzanym obszyciem",
+  "surowe": "surowe/kaptur_futrzany.png",
+  "piksele": 8152
+ },
+ "czepiec_pikowany": {
+  "plik": "warstwy/czepiec_pikowany.png",
+  "ukryj": "warstwy/czepiec_pikowany_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "len (pikowany)",
+  "ukrywa_wlosy": true,
+  "twarz": "frame",
+  "przedmioty": [
+   342
+  ],
+  "wzory": [
+   "helm_czepiec_len",
+   "helm_czepiec_skora"
+  ],
+  "uwaga": null,
+  "opis": "pikowany lniany czepiec wiązany pod brodą",
+  "surowe": "surowe/czepiec_pikowany.png",
+  "piksele": 4073
+ },
+ "czepiec_kolczy": {
+  "plik": "warstwy/czepiec_kolczy.png",
+  "ukryj": "warstwy/czepiec_kolczy_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "żelazo (kolczuga)",
+  "ukrywa_wlosy": true,
+  "twarz": "frame",
+  "przedmioty": [
+   345,
+   423,
+   426
+  ],
+  "wzory": [
+   "helm_czepiec_zelazo",
+   "helm_czepiec_stal",
+   "helm_czepiec_zakon"
+  ],
+  "uwaga": null,
+  "opis": "kolczy kaptur na głowę, szyję i ramiona",
+  "surowe": "surowe/czepiec_kolczy.png",
+  "piksele": 5094
+ },
+ "kapalin": {
+  "plik": "warstwy/kapalin.png",
+  "ukryj": "warstwy/kapalin_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "żelazo",
+  "ukrywa_wlosy": true,
+  "twarz": "none",
+  "przedmioty": [
+   344,
+   422,
+   424
+  ],
+  "wzory": [
+   "helm_kapalin_zelazo",
+   "helm_kapalin_stal",
+   "helm_kapalin_braz",
+   "helm_kapalin_zakon"
+  ],
+  "uwaga": null,
+  "opis": "kapalin: kopulasty dzwon z szerokim rondem",
+  "surowe": "surowe/kapalin.png",
+  "piksele": 2461
+ },
+ "helm_otwarty": {
+  "plik": "warstwy/helm_otwarty.png",
+  "ukryj": "warstwy/helm_otwarty_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "skóra gotowana",
+  "ukrywa_wlosy": true,
+  "twarz": "none",
+  "przedmioty": [
+   420
+  ],
+  "wzory": [
+   "helm_otwarty_skora",
+   "helm_otwarty_braz",
+   "helm_otwarty_zelazo",
+   "helm_otwarty_stal"
+  ],
+  "uwaga": null,
+  "opis": "otwarty hełm z segmentów skóry",
+  "surowe": "surowe/helm_otwarty.png",
+  "piksele": 2542
+ },
+ "helm_nosal": {
+  "plik": "warstwy/helm_nosal.png",
+  "ukryj": "warstwy/helm_nosal_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "żelazo",
+  "ukrywa_wlosy": true,
+  "twarz": "full",
+  "przedmioty": [
+   346,
+   421
+  ],
+  "wzory": [
+   "helm_nosal_zelazo",
+   "helm_nosal_braz",
+   "helm_nosal_zakon"
+  ],
+  "uwaga": null,
+  "opis": "stożkowy hełm z nosalem (pilot z 2026-11-17)",
+  "surowe": "surowe/pilot_zelazo.png",
+  "piksele": 2724
+ },
+ "szyszak": {
+  "plik": "warstwy/szyszak.png",
+  "ukryj": "warstwy/szyszak_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "stal",
+  "ukrywa_wlosy": true,
+  "twarz": "full",
+  "przedmioty": [
+   347
+  ],
+  "wzory": [
+   "helm_nosal_stal"
+  ],
+  "uwaga": null,
+  "opis": "szyszak: nosal, policzki i nakarczek",
+  "surowe": "surowe/szyszak.png",
+  "piksele": 3888
+ },
+ "helm_zamkniety": {
+  "plik": "warstwy/helm_zamkniety.png",
+  "ukryj": "warstwy/helm_zamkniety_ukryj.png",
+  "miejsce": "glowa",
+  "kolejnosc": 50,
+  "material": "stal",
+  "ukrywa_wlosy": true,
+  "twarz": "full",
+  "przedmioty": [
+   348,
+   400,
+   425
+  ],
+  "wzory": [
+   "helm_garnczkowy_stal",
+   "helm_zakonny_zakon",
+   "helm_zakonny_zelazo",
+   "helm_zakonny_stal"
+  ],
+  "uwaga": "zamknięty hełm: garnczkowy (425) i zakonny (348, 400) - ten sam kształt, zakonny = rampa zakon",
+  "opis": "zamknięty hełm garnczkowy (zakonny, garnczkowy)",
+  "surowe": "surowe/helm_zamkniety.png",
+  "piksele": 5020
+ },
+ "koszula_lniana": {
+  "plik": "warstwy/koszula_lniana.png",
+  "ukryj": "warstwy/koszula_lniana_ukryj.png",
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "len",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   260,
+   261,
+   262,
+   287
+  ],
+  "wzory": [
+   "koszula_lniana_biala",
+   "koszula_lniana_zolta",
+   "koszula_lniana_niebieska",
+   "koszula_przewiewna"
+  ],
+  "uwaga": null,
+  "opis": "czysta lniana koszula ze sznurowanym dekoltem",
+  "surowe": "surowe/koszula_lniana.png",
+  "piksele": 3177
+ },
+ "koszula_odswietna": {
+  "plik": "warstwy/koszula_odswietna.png",
+  "ukryj": "warstwy/koszula_odswietna_ukryj.png",
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "len z haftem",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   267
+  ],
+  "wzory": [
+   "koszula_odswietna"
+  ],
+  "uwaga": null,
+  "opis": "odświętna koszula z czerwonym haftem",
+  "surowe": "surowe/koszula_odswietna.png",
+  "piksele": 3321
+ },
+ "kaftan": {
+  "plik": "warstwy/kaftan.png",
+  "ukryj": "warstwy/kaftan_ukryj.png",
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "wełna",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   263,
+   264,
+   265
+  ],
+  "wzory": [
+   "kaftan_czerwony",
+   "kaftan_brazowy",
+   "kaftan_granatowy"
+  ],
+  "uwaga": null,
+  "opis": "wełniany kaftan ze stójką i pętlicami",
+  "surowe": "surowe/kaftan.png",
+  "piksele": 3431
+ },
+ "kurta": {
+  "plik": "warstwy/kurta.png",
+  "ukryj": "warstwy/kurta_ukryj.png",
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "skóra",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   266,
+   171
+  ],
+  "wzory": [
+   "kurta_zielona",
+   "kurta_brazowa"
+  ],
+  "uwaga": null,
+  "opis": "skórzana kurta z wykładanym kołnierzem",
+  "surowe": "surowe/kurta.png",
+  "piksele": 3086
+ },
+ "kozuszek": {
+  "plik": "warstwy/kozuszek.png",
+  "ukryj": null,
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "skóra i wełna",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   284
+  ],
+  "wzory": [
+   "kozuszek"
+  ],
+  "uwaga": null,
+  "opis": "kożuszek: kamizelka z owczej skóry",
+  "surowe": "surowe/kozuszek.png",
+  "piksele": 3246
+ },
+ "zupan": {
+  "plik": "warstwy/zupan.png",
+  "ukryj": "warstwy/zupan_ukryj.png",
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "sukno",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   286
+  ],
+  "wzory": [
+   "zupan_sukienny"
+  ],
+  "uwaga": null,
+  "opis": "sukienny żupan ze stójką i guzikami",
+  "surowe": "surowe/zupan.png",
+  "piksele": 3740
+ },
+ "fartuch_kowalski": {
+  "plik": "warstwy/fartuch_kowalski.png",
+  "ukryj": null,
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "skóra",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   285
+  ],
+  "wzory": [
+   "fartuch_kowalski"
+  ],
+  "uwaga": null,
+  "opis": "skórzany fartuch kowalski na koszuli",
+  "surowe": "surowe/fartuch_kowalski.png",
+  "piksele": 1549
+ },
+ "przeszywanica": {
+  "plik": "warstwy/przeszywanica.png",
+  "ukryj": "warstwy/przeszywanica_ukryj.png",
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "len (pikowany)",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   349,
+   356,
+   427
+  ],
+  "wzory": [
+   "zbroja_przeszywanica_len",
+   "zbroja_przeszywanica_jedwab",
+   "zbroja_przeszywanica_welna"
+  ],
+  "uwaga": "zbroja_przeszywanica_welna tylko dla 427 (Sukienna przeszywanica); 355 i 432 z tym samym kluczem -> brygantyna",
+  "opis": "pikowana przeszywanica",
+  "surowe": "surowe/przeszywanica.png",
+  "piksele": 3759
+ },
+ "skorznia": {
+  "plik": "warstwy/skorznia.png",
+  "ukryj": "warstwy/skorznia_ukryj.png",
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "skóra",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   350
+  ],
+  "wzory": [
+   "zbroja_skorznia_skora"
+  ],
+  "uwaga": "zbroja_skorznia_skora: 350 -> ta warstwa; 428 Futrzana skórznia (ten sam klucz) -> skorznia_futrzana",
+  "opis": "skórznia z naramiennikami",
+  "surowe": "surowe/skorznia.png",
+  "piksele": 3906
+ },
+ "skorznia_cwiekowana": {
+  "plik": "warstwy/skorznia_cwiekowana.png",
+  "ukryj": "warstwy/skorznia_cwiekowana_ukryj.png",
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "czarna skóra i żelazo",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   351
+  ],
+  "wzory": [
+   "zbroja_skorznia_skora_czarna"
+  ],
+  "uwaga": null,
+  "opis": "ćwiekowana skórznia",
+  "surowe": "surowe/skorznia_cwiekowana.png",
+  "piksele": 3626
+ },
+ "skorznia_futrzana": {
+  "plik": "warstwy/skorznia_futrzana.png",
+  "ukryj": null,
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "skóra i futro",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   428
+  ],
+  "wzory": [
+   "zbroja_skorznia_skora"
+  ],
+  "uwaga": "klucz zbroja_skorznia_skora dzieli ze skórznią: tylko przedmiot 428",
+  "opis": "skórznia podbita futrem niedźwiedzia",
+  "surowe": "surowe/skorznia_futrzana.png",
+  "piksele": 4645
+ },
+ "kolczuga": {
+  "plik": "warstwy/kolczuga.png",
+  "ukryj": "warstwy/kolczuga_ukryj.png",
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "żelazo (kolczuga)",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   353,
+   357,
+   405,
+   433
+  ],
+  "wzory": [
+   "zbroja_kolczuga_zelazo",
+   "zbroja_kolczuga_stal",
+   "zbroja_kolczuga_zakon"
+  ],
+  "uwaga": null,
+  "opis": "kolczuga ze skórzanym kołnierzem (pilot)",
+  "surowe": "surowe/pilot_zelazo.png",
+  "piksele": 3641
+ },
+ "luska": {
+  "plik": "warstwy/luska.png",
+  "ukryj": "warstwy/luska_ukryj.png",
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "żelazo",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   352,
+   354,
+   431,
+   434
+  ],
+  "wzory": [
+   "zbroja_luska_braz",
+   "zbroja_luska_zelazo",
+   "zbroja_luska_stal",
+   "zbroja_luska_zakon"
+  ],
+  "uwaga": null,
+  "opis": "łuska na skórzanym kaftanie",
+  "surowe": "surowe/luska.png",
+  "piksele": 3505
+ },
+ "brygantyna": {
+  "plik": "warstwy/brygantyna.png",
+  "ukryj": "warstwy/brygantyna_ukryj.png",
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "sukno i stal",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   355,
+   432
+  ],
+  "wzory": [
+   "zbroja_brygantyna_welna",
+   "zbroja_brygantyna_skora",
+   "zbroja_brygantyna_zelazo",
+   "zbroja_brygantyna_stal",
+   "zbroja_brygantyna_zakon"
+  ],
+  "uwaga": "klucz zbroja_przeszywanica_welna dzieli z przeszywanicą: przedmioty 355 Brygantyna i 432 Stalowa brygantyna -> ta warstwa",
+  "opis": "brygantyna: sukno nabite nitami",
+  "surowe": "surowe/brygantyna.png",
+  "piksele": 3525
+ },
+ "napiersnik": {
+  "plik": "warstwy/napiersnik.png",
+  "ukryj": null,
+  "miejsce": "tors",
+  "kolejnosc": 10,
+  "material": "stal",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   358,
+   359,
+   429,
+   430
+  ],
+  "wzory": [
+   "zbroja_napiersnik_braz",
+   "zbroja_napiersnik_zelazo",
+   "zbroja_napiersnik_stal",
+   "zbroja_napiersnik_zakon"
+  ],
+  "uwaga": null,
+  "opis": "stalowy napierśnik z naramiennikami",
+  "surowe": "surowe/napiersnik.png",
+  "piksele": 3848
+ },
+ "plaszcz": {
+  "plik": "warstwy/plaszcz.png",
+  "ukryj": null,
+  "miejsce": "plaszcz",
+  "kolejnosc": 40,
+  "material": "wełna",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   112,
+   294,
+   296
+  ],
+  "wzory": [
+   "plaszcz_zwiadowcy",
+   "plaszcz_zakonny"
+  ],
+  "uwaga": "kształt jednego płaszcza z zapinką i opuszczonym kapturem; zwiadowcy = rampa szarozielona, zakonny = czarna (zapinka -> akcent)",
+  "opis": "wełniany płaszcz z zapinką, kaptur opuszczony",
+  "surowe": "surowe/plaszcz.png",
+  "piksele": 3797
+ },
+ "peleryna": {
+  "plik": "warstwy/peleryna.png",
+  "ukryj": null,
+  "miejsce": "plaszcz",
+  "kolejnosc": 40,
+  "material": "len",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   293
+  ],
+  "wzory": [
+   "plaszcz_lniany"
+  ],
+  "uwaga": null,
+  "opis": "lniana peleryna wiązana pod szyją",
+  "surowe": "surowe/peleryna.png",
+  "piksele": 3615
+ },
+ "plaszcz_futrzany": {
+  "plik": "warstwy/plaszcz_futrzany.png",
+  "ukryj": null,
+  "miejsce": "plaszcz",
+  "kolejnosc": 40,
+  "material": "futro",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   295
+  ],
+  "wzory": [
+   "plaszcz_futrzany"
+  ],
+  "uwaga": null,
+  "opis": "płaszcz z niedźwiedziego futra na ramionach",
+  "surowe": "surowe/plaszcz_futrzany.png",
+  "piksele": 5053
+ },
+ "szal": {
+  "plik": "warstwy/szal.png",
+  "ukryj": null,
+  "miejsce": "szyja",
+  "kolejnosc": 20,
+  "material": "wełna",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [],
+  "wzory": [],
+  "uwaga": "nie ma jeszcze przedmiotu - warstwa na zapas",
+  "opis": "dziany wełniany szal",
+  "surowe": "surowe/szal.png",
+  "piksele": 1957
+ },
+ "torba": {
+  "plik": "warstwy/torba.png",
+  "ukryj": "warstwy/torba_ukryj.png",
+  "miejsce": "plecy",
+  "kolejnosc": 30,
+  "material": "skóra",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   282,
+   283
+  ],
+  "wzory": [
+   "torba_plocienna",
+   "torba_skorzana"
+  ],
+  "uwaga": null,
+  "opis": "pas torby przez pierś",
+  "surowe": "surowe/torba.png",
+  "piksele": 548
+ },
+ "plecak": {
+  "plik": "warstwy/plecak.png",
+  "ukryj": null,
+  "miejsce": "plecy",
+  "kolejnosc": 30,
+  "material": "skóra",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   114,
+   292
+  ],
+  "wzory": [
+   "plecak"
+  ],
+  "uwaga": null,
+  "opis": "szelki plecaka na ramionach",
+  "surowe": "surowe/plecak.png",
+  "piksele": 2181
+ },
+ "amulet": {
+  "plik": "warstwy/amulet.png",
+  "ukryj": "warstwy/amulet_ukryj.png",
+  "miejsce": "dodatek",
+  "kolejnosc": 35,
+  "material": "rzemień",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   381,
+   382,
+   473,
+   476
+  ],
+  "wzory": [],
+  "uwaga": "dodatki (381, 382, 473, 476) nie mają klucza wyglądu - wisior na rzemieniu, kolor wisiora do przemalowania",
+  "opis": "amulet na rzemieniu",
+  "surowe": "surowe/amulet.png",
+  "piksele": 207
+ },
+ "kosz_wiklinowy": {
+  "plik": "warstwy/kosz_wiklinowy.png",
+  "ukryj": null,
+  "miejsce": "plecy",
+  "kolejnosc": 30,
+  "material": "wiklina i lina",
+  "ukrywa_wlosy": false,
+  "twarz": "none",
+  "przedmioty": [
+   292
+  ],
+  "wzory": [
+   "kosz_wiklinowy"
+  ],
+  "uwaga": null,
+  "opis": "sznurowe szelki kosza i jego brzeg nad ramieniem",
+  "surowe": "surowe/kosz_wiklinowy.png",
+  "piksele": 1883
+ }
+}

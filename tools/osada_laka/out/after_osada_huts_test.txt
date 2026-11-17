@@ -1,0 +1,45 @@
+PASS the game boots
+PASS 13:00 in the valley: the elder at the circle, the other three not at their places (at home)  {"Milcząca przy grządce":"gone","Milcząca przy ścianie":"gone","Najstarszy z Milczących":"here","Milczący przy ścianie":"gone"}
+PASS Laka pod Gawra (Map004): four hut doors, touched -> Map121-124  [["Drzwi chaty 1",54,43,1,[0,121,7,9,8,0]],["Drzwi chaty 2",75,41,1,[0,122,6,8,8,0]],["Drzwi chaty 3",75,52,1,[0,123,7,9,8,0]],["Drzwi chaty 4",54,52,1,[0,124,6,8,8,0]]]
+PASS hut 3's side door stays shut (no transfer)  [false]
+PASS Wspólna izba: its staged exit goes back before Drzwi chaty 1 (54,44)  {"x":7,"y":10,"door":"Drzwi chaty 1","town":[8,17],"landing":[7,9,8],"name":"Drzwi -> Osada Milczących"}
+PASS Wspólna izba: walking into the door -> Map121 on its landing (7,9) facing up  {"at":[121,7,9,8],"land":[7,9,8]}
+PASS Wspólna izba: 47 cells walkable from the landing; the landing leads on, no closed pocket, the doorway reached  {"landingOut":3,"pockets":[],"exit":true,"looks":[],"resident":true}
+PASS Wspólna izba: every thing to look at (6) and the resident can be stood beside  {"landingOut":3,"pockets":[],"exit":true,"looks":[],"resident":true}
+PASS Wspólna izba: at 13:00 'Milcząca ogrodniczka' is at home  "here"
+PASS Wspólna izba: the action button by 'Milcząca ogrodniczka' - a silent gesture in popups, no message window  {"pp":["Milczy. Przesypuje nasiona z dłoni do dłoni i podaje ci jedno.","Suche jak pieprz. Po chwili ostrożnie zabiera je z powrotem."],"msg":false}
+PASS Wspólna izba: at 23:00 dark, and its fires shine (4 flames: Palenisko z kotłem, gruba świeca z zaciekami (animowana), Świeca na ścianie, Świeca na ścianie)  {"holes":6,"fires":[["Palenisko z kotłem",true],["gruba świeca z zaciekami (animowana)",true],["Świeca na ścianie",true],["Świeca na ścianie",true]],"dark":null,"note":true}
+PASS Wspólna izba: at 23:00 'Milcząca ogrodniczka' is at home  "here"
+PASS Wspólna izba: out through the doorway -> Laka pod Gawra (Map004) before Drzwi chaty 1 (54,44) facing down  {"b":[4,54,44,2],"want":[54,44]}
+PASS Chata tkaczki: its staged exit goes back before Drzwi chaty 2 (75,42)  {"x":6,"y":9,"door":"Drzwi chaty 2","town":[29,15],"landing":[6,8,8],"name":"Drzwi -> Osada Milczących"}
+PASS Chata tkaczki: walking into the door -> Map122 on its landing (6,8) facing up  {"at":[122,6,8,8],"land":[6,8,8]}
+PASS Chata tkaczki: 36 cells walkable from the landing; the landing leads on, no closed pocket, the doorway reached  {"landingOut":3,"pockets":[],"exit":true,"looks":[],"resident":true}
+PASS Chata tkaczki: every thing to look at (5) and the resident can be stood beside  {"landingOut":3,"pockets":[],"exit":true,"looks":[],"resident":true}
+PASS Chata tkaczki: at 13:00 'Milcząca tkaczka' is at home  "here"
+PASS Chata tkaczki: the action button by 'Milcząca tkaczka' - a silent gesture in popups, no message window  {"pp":["Milczy. Czółenko chodzi tam i z powrotem, ani na chwilę nie staje.","Wskazuje ci stojak z białymi pasami i kręci głową: jeszcze nie twój."],"msg":false}
+PASS Chata tkaczki: at 23:00 dark, and its fires shine (2 flames: Palenisko z kotłem, świeca na stołku (animowana))  {"holes":3,"fires":[["Palenisko z kotłem",true],["świeca na stołku (animowana)",true]],"dark":null,"note":true}
+PASS Chata tkaczki: at 23:00 'Milcząca tkaczka' is at home  "here"
+PASS Chata tkaczki: out through the doorway -> Laka pod Gawra (Map004) before Drzwi chaty 2 (75,42) facing down  {"b":[4,75,42,2],"want":[75,42]}
+PASS Chata Najstarszego: its staged exit goes back before Drzwi chaty 3 (75,53)  {"x":7,"y":10,"door":"Drzwi chaty 3","town":[29,26],"landing":[7,9,8],"name":"Drzwi -> Osada Milczących"}
+PASS Chata Najstarszego: walking into the door -> Map123 on its landing (7,9) facing up  {"at":[123,7,9,8],"land":[7,9,8]}
+PASS Chata Najstarszego: 59 cells walkable from the landing; the landing leads on, no closed pocket, the doorway reached  {"landingOut":3,"pockets":[],"exit":true,"looks":[],"resident":true}
+PASS Chata Najstarszego: every thing to look at (8) and the resident can be stood beside  {"landingOut":3,"pockets":[],"exit":true,"looks":[],"resident":true}
+PASS Chata Najstarszego: at 13:00 'Najstarszy z Milczących' is out (at the circle)  "gone"
+PASS Chata Najstarszego: looking at 'Rejestr straży' adds the journal note 'Rejestr straży' once  {"notes":["Rejestr straży"],"before":0}
+PASS Chata Najstarszego: at 23:00 dark, and its fires shine (4 flames: Kominek, Kandelabr, gruba świeca z zaciekami (animowana), świeca na szafce nocnej (animowana))  {"holes":6,"fires":[["Kominek",true],["Kandelabr",true],["gruba świeca z zaciekami (animowana)",true],["świeca na szafce nocnej (animowana)",true]],"dark":null,"note":true}
+PASS Chata Najstarszego: at 23:00 'Najstarszy z Milczących' is at home  "here"
+PASS Chata Najstarszego: out through the doorway -> Laka pod Gawra (Map004) before Drzwi chaty 3 (75,53) facing down  {"b":[4,75,53,2],"want":[75,53]}
+PASS Chata rzeźbiarza: its staged exit goes back before Drzwi chaty 4 (54,53)  {"x":6,"y":9,"door":"Drzwi chaty 4","town":[8,26],"landing":[6,8,8],"name":"Drzwi -> Osada Milczących"}
+PASS Chata rzeźbiarza: walking into the door -> Map124 on its landing (6,8) facing up  {"at":[124,6,8,8],"land":[6,8,8]}
+PASS Chata rzeźbiarza: 41 cells walkable from the landing; the landing leads on, no closed pocket, the doorway reached  {"landingOut":3,"pockets":[],"exit":true,"looks":[],"resident":true}
+PASS Chata rzeźbiarza: every thing to look at (7) and the resident can be stood beside  {"landingOut":3,"pockets":[],"exit":true,"looks":[],"resident":true}
+PASS Chata rzeźbiarza: at 13:00 'Milczący rzeźbiarz' is at home  "here"
+PASS Chata rzeźbiarza: the action button by 'Milczący rzeźbiarz' - a silent gesture in popups, no message window  {"pp":["Milczy. Odkłada dłuto i pokazuje ci deskę: krąg, a w nim kruk.","Potem dotyka palcem białego płótna na ustach - i wraca do pracy."],"msg":false}
+PASS Chata rzeźbiarza: looking at 'Deski ze znakami' adds the journal note 'Deski rzeźbiarza' once  {"notes":["Rejestr straży","Deski rzeźbiarza"],"before":1}
+PASS Chata rzeźbiarza: at 23:00 dark, and its fires shine (2 flames: świeca na stołku (animowana), Palenisko)  {"holes":3,"fires":[["świeca na stołku (animowana)",true],["Palenisko",true]],"dark":null,"note":true}
+PASS Chata rzeźbiarza: at 23:00 'Milczący rzeźbiarz' is at home  "here"
+PASS Chata rzeźbiarza: out through the doorway -> Laka pod Gawra (Map004) before Drzwi chaty 4 (54,53) facing down  {"b":[4,54,53,2],"want":[54,53]}
+PASS 23:00 in the valley: all four Silent gone home  {"Milcząca przy grządce":"gone","Milcząca przy ścianie":"gone","Najstarszy z Milczących":"gone","Milczący przy ścianie":"gone"}
+PASS ...and at 13:00 the elder is back at the circle
+PASS no errors in the console  []
+44/44 passed

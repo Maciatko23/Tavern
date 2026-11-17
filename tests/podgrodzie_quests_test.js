@@ -21,7 +21,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const eveMarks = await t.json("(function(){ $gameSystem.setDayNightHour(18.8); TownQuests.refreshMarkers(); return TownQuests.markers(); })()");
     t.check("at 18:50 the washerwoman, the healer, the junk dealer and Franek have an errand to offer ('!') - the evening visitors of the tavern",
         ["praczka", "znachorka", "szmaciarz", "franek"].every(k => eveMarks[k] === "new"), eveMarks);
-    await t.go(1, 14, 50, 8);
+    await t.go(1, 14, 37, 8);
     await t.frames(40);
     const offer = await t.talkTo("TownLife.eventOf('franek')", ["Przyniosę ci chleb."]);
     t.check("Franek asks for something to eat; 'Przyniosę ci chleb.' takes the errand", offer.done && /coś do jedzenia/.test(offer.text) && await t.json("TownQuests.isActive('K46')"), offer.text);

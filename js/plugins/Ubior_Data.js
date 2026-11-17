@@ -17,7 +17,7 @@
 
 /*:
  * @target MZ
- * @plugindesc Ubiór - dane: wzory (rampy kolorów, nakładki), przedmioty 250-299 i stare 113/114/171, ceny, bonusy, sklepy, farbowanie, naprawa. v1.0.0
+ * @plugindesc Ubiór - dane: wzory (rampy kolorów, nakładki), przedmioty 250-299 (z płaszczami i pasami 284-299) i stare 113/114/171, ceny, bonusy, sklepy, farbowanie, naprawa. v1.1.0
  * @author Claude
  * @orderAfter TawernaCore
  * @orderAfter Equipment
@@ -58,9 +58,12 @@
         stopy: { eq: "feet", nazwa: "Stopy", czesc: "stopy" },
         pas: { eq: "belt", nazwa: "Pas", czesc: "pas" },
         rece: { eq: "hands", nazwa: "Rękawice", czesc: "dlonie" },
-        plecy: { eq: "back", nazwa: "Plecy", czesc: null }
+        plecy: { eq: "back", nazwa: "Plecy", czesc: null },
+        // (2026-11-17, docs/ekwipunek/NOWE_80.md) the cloaks: Equipment.js's part "Płaszcz" (112 had it alone); not on the hero yet - another
+        // stage of the graphics (they change the outline): they work as trinkets do, without a look (Ubior.js draws only its own places)
+        plaszcz: { eq: "cloak", nazwa: "Płaszcz", czesc: null }
     };
-    const MATERIALY = { len: "len", plotno: "płótno", welna: "wełna", filc: "filc", skora: "skóra", sloma: "słoma", lyko: "łyko" };
+    const MATERIALY = { len: "len", plotno: "płótno", welna: "wełna", filc: "filc", skora: "skóra", sloma: "słoma", lyko: "łyko", sukno: "sukno", wiklina: "wiklina" };
 
     // ------------------------------------------------------------------
     // WZORY: the look of each thing. rampa: 6 tones, the darkest first - a repainted part takes them by the old pixel's brightness
@@ -113,7 +116,26 @@
         // ---- plecy (nakładki)
         plecak: { miejsce: "plecy", nakladka: "Ubior_Plecak", rampa: ["#3a2616", "#543420", "#6a4428", "#7a502e", "#966c42", "#c49660"] },   // (= 114 Plecak)
         torba_plocienna: { miejsce: "plecy", nakladka: "Ubior_Torba", rampa: ["#4a4436", "#665e4b", "#837962", "#a0967c", "#bbb197", "#d3cab2"] },
-        torba_skorzana: { miejsce: "plecy", nakladka: "Ubior_Torba", rampa: SKORA_BRAZ }
+        torba_skorzana: { miejsce: "plecy", nakladka: "Ubior_Torba", rampa: SKORA_BRAZ },
+        // ---- (2026-11-17, NOWE_80.md) the new clothes 284-299 and the felt boots (armour 442). Where a picture of their own is to come, they
+        // borrow one now (kapelusz, plecak, cholewka, sakiewka; the cloaks: Ubior_Plaszcz - not drawn yet, Ubior.js does not show the cloak)
+        kozuszek: { miejsce: "tors", czesc: "koszula", rampa: ["#3a2c1c", "#5a4430", "#7d6248", "#a08466", "#c2a888", "#ddc8a8"] },
+        fartuch_kowalski: { miejsce: "tors", czesc: "koszula", rampa: ["#1e130b", "#311f12", "#47301c", "#5e4127", "#765534", "#8e6a44"] },
+        zupan_sukienny: { miejsce: "tors", czesc: "koszula", rampa: ["#121827", "#1c2439", "#28324d", "#354262", "#445478", "#56688f"], akcent: "#a82a22" },   // (akcent: czerwona podszewka)
+        koszula_przewiewna: { miejsce: "tors", czesc: "koszula", rampa: ["#56503f", "#7a735e", "#9e977f", "#c0b99f", "#dbd5bd", "#efeadb"] },
+        portki_latane: { miejsce: "nogi", czesc: "spodnie", rampa: ["#2c2924", "#403b34", "#555048", "#6b655b", "#827b70", "#999186"] },
+        rekawiczki_welniane: { miejsce: "rece", czesc: "dlonie", rampa: ["#3a2420", "#56352e", "#73473d", "#8f5b4e", "#a87062", "#c08778"] },
+        kapelusz_filcowy: { miejsce: "glowa", nakladka: "Ubior_Kapelusz", rampa: ["#1e1a16", "#2e2822", "#40382f", "#53493d", "#675b4c", "#7c6e5d"] },
+        chodaki: { miejsce: "stopy", czesc: "stopy", rampa: ["#2e1f12", "#46301c", "#5f4227", "#785534", "#906944", "#a87e56"] },
+        buty_filcowe: { miejsce: "stopy", czesc: "stopy", nakladka: "Ubior_Cholewka", rampa: ["#26241f", "#38352e", "#4c483f", "#615c51", "#777165", "#8e877a"] },   // (= 442 Filcowe buty)
+        kosz_wiklinowy: { miejsce: "plecy", nakladka: "Ubior_Plecak", rampa: ["#3e2e14", "#5c461f", "#7a5e2c", "#98793c", "#b4944f", "#ccae68"] },
+        pas_ladownica: { miejsce: "pas", czesc: "pas", nakladka: "Ubior_Sakiewka", rampa: SKORA_BRAZ, akcent: "#b9b3a6" },
+        pas_tragarza: { miejsce: "pas", czesc: "pas", rampa: ["#1c120b", "#2e1d12", "#432b1b", "#5a3a25", "#724b30", "#8a5d3d"], akcent: "#8e8a82" },
+        pas_okuty_braz: { miejsce: "pas", czesc: "pas", rampa: SKORA_BRAZ, akcent: "#c98f3f" },   // (akcent: brązowe okucia)
+        plaszcz_lniany: { miejsce: "plaszcz", nakladka: "Ubior_Plaszcz", rampa: ["#4a4436", "#6a6250", "#8a816b", "#aaa086", "#c7bea3", "#dfd8c0"] },
+        plaszcz_zwiadowcy: { miejsce: "plaszcz", nakladka: "Ubior_Plaszcz", rampa: ["#1e241c", "#2c3529", "#3c4737", "#4d5946", "#5f6c57", "#73806a"] },
+        plaszcz_futrzany: { miejsce: "plaszcz", nakladka: "Ubior_Plaszcz", rampa: ["#1a120c", "#2a1d13", "#3c2a1c", "#4f3826", "#634832", "#78593f"] },
+        plaszcz_zakonny: { miejsce: "plaszcz", nakladka: "Ubior_Plaszcz", rampa: ["#0c0c10", "#16161c", "#212129", "#2d2d37", "#3a3a46", "#4a4a57"], akcent: "#c98f3f" }   // (akcent: brązowe oko)
     };
 
     // ------------------------------------------------------------------
@@ -124,7 +146,7 @@
     const pct = v => Math.round(v * 100) + "%";
     const BONUSY = {
         pragnienie_upal: { perk: "thirst", kiedy: "upal", opis: v => "w upał i suszę pragnienie rośnie o " + pct(v) + " wolniej", kv: v => ["Pragnienie w upał", "-" + pct(v)] },
-        zimno: { perk: "cold", opis: v => "zimą i w śniegu marzniesz o " + pct(v) + " mniej", kv: v => ["Zimno", "-" + pct(v)] },
+        zimno: { perk: "cold", opis: v => v >= 1 ? "zimą i w śniegu nie marzniesz" : "zimą i w śniegu marzniesz o " + pct(v) + " mniej", kv: v => ["Zimno", v >= 1 ? "nie marzniesz" : "-" + pct(v)] },
         praca: { perk: "stamina.cost", opis: v => "pot nie zalewa oczu: praca męczy o " + pct(v) + " mniej", kv: v => ["Zmęczenie pracą", "-" + pct(v)] },
         rabanie: { perk: "gather.cost", perk2: ["farm.cost", 0.5], opis: v => "rąbanie, kopanie i kucie skał męczą o " + pct(v) + " mniej", kv: v => ["Rąbanie, kopanie", "-" + pct(v) + " zmęczenia"] },
         krzaki: { perk: "gather.cost", kiedy: "krzak", opis: v => "krzaki i ciernie mniej kaleczą: wycinasz je o " + pct(v) + " mniejszym wysiłkiem", kv: v => ["Krzaki, ciernie", "-" + pct(v) + " zmęczenia"] },
@@ -134,7 +156,12 @@
         schludnosc: { opis: v => v >= 2 ? "duża schludność: Opinia w miasteczku rośnie o " + pct(SCHLUDNOSC[2].opinia) + " szybciej, u kramarzy płacisz mniej i dostajesz więcej"
             : "schludność: Opinia w miasteczku rośnie o " + pct(SCHLUDNOSC[1].opinia) + " szybciej", kv: v => ["Opinia rośnie", "+" + pct(SCHLUDNOSC[v >= 2 ? 2 : 1].opinia) + " szybciej"] },
         pancerz: { opis: v => "cios słabszy o " + pct(v), kv: v => ["Cios słabszy o", pct(v)] },
-        plecak: { opis: () => "większe stosy, więcej udźwigu", kv: () => ["Plecak", "stosy i udźwig"] }
+        plecak: { opis: () => "większe stosy, więcej udźwigu", kv: () => ["Plecak", "stosy i udźwig"] },
+        // (2026-11-17, NOWE_80.md: the cloaks and the belts) the keys of the skills' effects the trinkets use too (Bron_Data.js BONUSY)
+        skradanie: { perk: "sneak", opis: v => "zwierzęta słyszą cię o " + pct(v) + " słabiej", kv: v => ["Skradanie", "+" + pct(v)] },
+        opatrunek: { perk: "bandage.heal", opis: v => "opatrunek leczy o " + pct(v) + " więcej", kv: v => ["Opatrunek", "+" + pct(v)] },
+        umysl: { perk: "mind.resist", opis: v => "opór przed „prawdą” i strachem +" + pct(v), kv: v => ["Opór umysłu", "+" + pct(v)] },
+        przewrocenie: { perk: "knock.resist", opis: v => "trudniej cię przewrócić (+" + pct(v) + ")", kv: v => ["Przewrócenie", "+" + pct(v) + " odporności"] }
     };
     // neatness (a clean shirt, not torn - at least `stan` of its wear left): the opinion's gains grow by `opinia`; `ceny`: the shops of
     // the clothes (and the kantor's shirt) are that much kinder - buying cheaper, selling dearer
@@ -230,7 +257,42 @@
         // ---- the old things (the same items: only the note <Ubior:...>; their effects stay with Survival.js and Combat_Fight.js)
         P(113, "buty_brazowe", "Skórzane buty", 30, { bonus: { chod: 0.1 }, waga: 2, material: "skora", rodzaj: "p", trwalosc: 70, ikona: 369, istnieje: true }),
         P(171, "kurta_brazowa", "Skórzana kurtka", 40, { bonus: { pancerz: 0.2 }, waga: 2, material: "skora", trwalosc: "cios", ikona: 435, istnieje: true }),
-        P(114, "plecak", "Plecak", null, { bonus: { plecak: true }, waga: 0, material: "skora", rodzaj: "m", trwalosc: null, ikona: 370, istnieje: true })
+        P(114, "plecak", "Plecak", null, { bonus: { plecak: true }, waga: 0, material: "skora", rodzaj: "m", trwalosc: null, ikona: 370, istnieje: true }),
+        // ---- (2026-11-17, docs/ekwipunek/NOWE_80.md) the new clothes 284-299: the icons 562-575, 685-686 once drawn (until then data/Items.json
+        // carries the icon of the most like thing - tools/ekwipunek_nowy/zrob_staging.js); made at the tannery, the workbench and the loom
+        // (Bron_Data.js PRZEPISY)
+        P(284, "kozuszek", "Kożuszek", 45, { bonus: { zimno: 0.45 }, waga: 2, material: "skora", rodzaj: "m", trwalosc: 60, rysunek: "kurta",
+            opis: "Kamizelka z owczej skóry, wełną do środka." }),
+        P(285, "fartuch_kowalski", "Fartuch kowalski", 22, { bonus: { praca: 0.05 }, waga: 2, material: "skora", rodzaj: "m", trwalosc: 80, rysunek: "fartuch",
+            opis: "Ciężki skórzany fartuch. Iskry i drzazgi się go nie imają." }),
+        P(286, "zupan_sukienny", "Sukienny żupan", 75, { bonus: { schludnosc: 2, zimno: 0.15 }, waga: 2, material: "sukno", rodzaj: "m", trwalosc: 45, rysunek: "zupan",
+            opis: "Długi żupan z sukna z czerwoną podszewką. Strój na rynek i do dworu." }),
+        P(287, "koszula_przewiewna", "Przewiewna lniana koszula", 16, { bonus: { pragnienie_upal: 0.1, schludnosc: 1 }, material: "len", rodzaj: "f", trwalosc: 30, rysunek: "koszula",
+            opis: "Luźna koszula z cienkiego lnu. W skwarze chłodzi." }),
+        P(288, "portki_latane", "Łatane portki robocze", 18, { bonus: { krzaki: 0.15, praca: 0.03 }, material: "plotno", rodzaj: "p", trwalosc: 50, rysunek: "spodnie",
+            opis: "Płócienne portki ze skórzanymi łatami na kolanach." }),
+        P(289, "rekawiczki_welniane", "Wełniane rękawiczki", 10, { bonus: { zimno: 0.1 }, waga: 0, material: "welna", rodzaj: "p", trwalosc: 30, rysunek: "rekawice",
+            opis: "Dziane rękawiczki z jednym palcem." }),
+        P(290, "kapelusz_filcowy", "Filcowy kapelusz", 22, { bonus: { zimno: 0.1, pragnienie_upal: 0.1 }, material: "filc", rodzaj: "m", trwalosc: 45, rysunek: "kapelusz",
+            opis: "Kapelusz z ubitej wełny - na każdą pogodę." }),
+        P(291, "chodaki", "Chodaki", 8, { bonus: { chod: 0.06 }, material: "skora", rodzaj: "p", trwalosc: 50, rysunek: "buty",
+            opis: "Drewniane podeszwy ze skórzanym wierzchem. Trwalsze od łapci - i stukają." }),
+        P(292, "kosz_wiklinowy", "Wiklinowy kosz na plecy", 10, { bonus: { udzwig: 25 }, material: "wiklina", rodzaj: "m", trwalosc: null, rysunek: "kosz",
+            opis: "Kosz pleciony z wikliny, na szelkach z liny." }),
+        P(293, "plaszcz_lniany", "Lniana peleryna", 15, { bonus: { pragnienie_upal: 0.15, zimno: 0.1 }, material: "plotno", rodzaj: "f", trwalosc: 30, rysunek: "plaszcz",
+            opis: "Lekka lniana peleryna z kapturem: własny cień w skwarze." }),
+        P(294, "plaszcz_zwiadowcy", "Płaszcz zwiadowcy", 80, { bonus: { skradanie: 0.1, zimno: 0.5 }, waga: 2, material: "sukno", rodzaj: "m", trwalosc: 60, rysunek: "plaszcz",
+            opis: "Szarozielony płaszcz z sukna. W lesie znikasz w nim jak w mchu." }),
+        P(295, "plaszcz_futrzany", "Futrzany płaszcz", 95, { bonus: { zimno: 1, przewrocenie: 0.1 }, waga: 3, material: "skora", rodzaj: "m", trwalosc: 90, rysunek: "plaszcz",
+            opis: "Niedźwiedzie futro na ramionach. Ciężkie, ciepłe - i stoi się w nim pewniej." }),
+        P(296, "plaszcz_zakonny", "Płaszcz zakonny", 200, { bonus: { umysl: 0.1, zimno: 0.5 }, waga: 2, material: "sukno", rodzaj: "m", trwalosc: 120, rysunek: "plaszcz",
+            opis: "Czarny płaszcz braci warty, spięty brązowym okiem." }),
+        P(297, "pas_ladownica", "Pas z ładownicą", 30, { bonus: { udzwig: 10, opatrunek: 0.1 }, material: "skora", rodzaj: "m", trwalosc: 80, rysunek: "pas_sakiewka",
+            opis: "Pas z sakwami na opatrunki i zioła - wszystko pod ręką." }),
+        P(298, "pas_tragarza", "Szeroki pas tragarza", 40, { bonus: { udzwig: 25 }, waga: 2, material: "skora", rodzaj: "m", trwalosc: 80, ikona: 685, rysunek: "pas",
+            opis: "Szeroki pas, który trzyma krzyż. Uniesiesz więcej." }),
+        P(299, "pas_okuty_braz", "Pas z brązowymi okuciami", 45, { bonus: { udzwig: 10, schludnosc: 1 }, material: "skora", rodzaj: "m", trwalosc: 80, ikona: 686, rysunek: "pas",
+            opis: "Pas z brązowymi okuciami - od razu widać, że to ktoś." })
     ];
     // the things whose bonus another plugin works already (Ubior_Sklepy leaves them alone): the boots' walk (Survival BOOTS_SPEED), the
     // jacket's armour (Combat_Fight ARMORS[171]), the backpack (Survival)
@@ -245,10 +307,11 @@
     // ------------------------------------------------------------------
     const SKLEPY = {
         szwaczka: {
-            kto: "Dorota Igła", tytul: "szwaczka", godziny: [7, 20], skup: 0.4, skupuje: ["len", "plotno", "welna", "filc"], naprawia: true, farbuje: true,
+            kto: "Dorota Igła", tytul: "szwaczka", godziny: [7, 20], skup: 0.4, skupuje: ["len", "plotno", "welna", "filc", "sukno"], naprawia: true, farbuje: true,
             sprzedaje: ["koszula_lniana_biala", "koszula_lniana_zolta", "koszula_lniana_niebieska", "kaftan_czerwony", "kaftan_brazowy", "kaftan_granatowy",
                 "czapka_filc_braz", "czapka_filc_szara", "czapka_filc_zielona", "spodnie_plocienne_szare", "spodnie_plocienne_niebieskie",
-                "spodnie_plocienne_brazowe", "spodnie_welniane_brazowe", "spodnie_welniane_zielone", "torba_plocienna"],
+                "spodnie_plocienne_brazowe", "spodnie_welniane_brazowe", "spodnie_welniane_zielone", "torba_plocienna",
+                "zupan_sukienny", "koszula_przewiewna", "portki_latane", "rekawiczki_welniane", "kapelusz_filcowy", "plaszcz_lniany"],
             teksty: {
                 witaj: ["Koszula, kaftan, spodnie? Wszystko szyte tu, na miejscu, ściegiem, za który ręczę.", "Siadaj, zmierzę cię na oko. Igła się nie myli.",
                     "Masz coś do połatania? Albo do ufarbowania? Mów śmiało."],
@@ -259,7 +322,8 @@
         garbarz: {
             kto: "Ignac", tytul: "garbarz i szewc", godziny: [6.5, 19], skup: 0.4, skupuje: ["skora"], naprawia: true,
             sprzedaje: ["buty_brazowe", "buty_czarne", "kurta_brazowa", "kurta_zielona", "spodnie_skorzane_brazowe", "spodnie_skorzane_czarne",
-                "pas_skorzany_braz", "pas_skorzany_czarny", "pas_sakiewka", "rekawice_brazowe", "rekawice_szare", "opaska_braz", "opaska_czarna", "torba_skorzana"],
+                "pas_skorzany_braz", "pas_skorzany_czarny", "pas_sakiewka", "rekawice_brazowe", "rekawice_szare", "opaska_braz", "opaska_czarna", "torba_skorzana",
+                "kozuszek", "fartuch_kowalski", "plaszcz_futrzany", "pas_ladownica", "pas_tragarza", "pas_okuty_braz"],
             teksty: {
                 witaj: ["Buty, pasy, kurty - wszystko z dobrej skóry. Tańsze niż na kontynencie, mocniejsze na pewno.", "Bosy dalej? Wstyd. Popatrz na buty.",
                     "Skórę się smaruje, a nie płacze nad nią. Coś naprawić?"],
@@ -268,8 +332,8 @@
             }
         },
         przekupka: {
-            kto: "Agata", tytul: "przekupka", godziny: [6, 18.5], skup: 0.4, skupuje: ["sloma"],
-            sprzedaje: ["kapelusz_slomkowy", "kapelusz_slomkowy_ciemny"],
+            kto: "Agata", tytul: "przekupka", godziny: [6, 18.5], skup: 0.4, skupuje: ["sloma", "wiklina"],
+            sprzedaje: ["kapelusz_slomkowy", "kapelusz_slomkowy_ciemny", "koszula_przewiewna", "kapelusz_filcowy", "plaszcz_lniany", "kosz_wiklinowy"],
             teksty: {
                 witaj: ["Kapelusze ze słomy, złociutki! Bez kapelusza w taki upał to głowa się ugotuje jak jajko.", "Słomkowy kapelusz - mąż sam pleciony! No, szwagier. Ale porządnie."],
                 kupione: ["Pasuje ci, jak ulał! Wyglądasz jak prawdziwy gospodarz."], sprzedane: ["Dobrze, wezmę. Tylko tanio, bo słoma tania."], zegnaj: ["Przychodź, przychodź!"]
@@ -277,9 +341,9 @@
         },
         szmaciarz: {
             kto: "Józek Łata", tytul: "handlarz starzyzną", godziny: [7, 20], skup: 0.2, skupuje: true,
-            sprzedaje: ["chusta_biala", "chusta_czerwona", "chusta_niebieska", "lapcie"],
+            sprzedaje: ["chusta_biala", "chusta_czerwona", "chusta_niebieska", "lapcie", "chodaki"],
             uzywane: { ile: 3, cena: 0.5, zuzycie: 0.5, z: ["koszula_lniana_biala", "spodnie_plocienne_szare", "spodnie_plocienne_brazowe", "kaftan_brazowy",
-                "czapka_filc_szara", "rekawice_szare", "pas_skorzany_braz", "opaska_braz", "kapelusz_slomkowy", "spodnie_welniane_brazowe"] },
+                "czapka_filc_szara", "rekawice_szare", "pas_skorzany_braz", "opaska_braz", "kapelusz_slomkowy", "spodnie_welniane_brazowe", "portki_latane"] },
             teksty: {
                 witaj: ["Ubrania? Józek ma! Mało noszone, prawie nic. No, trochę noszone.", "Kupię wszystko, co nosisz. No, prawie wszystko. Tanio, ale kupię!",
                     "Chusty, łapcie, stare kaftany po ludziach z promu. Wszystko ma swoją cenę!"],
@@ -310,7 +374,7 @@
     // least `min`; the jacket and the boots can also be patched at the workbench (Durability.js: hide + sinew)
     // ------------------------------------------------------------------
     const NAPRAWA = {
-        szwaczka: ["len", "plotno", "welna", "filc", "sloma", "lyko"],
+        szwaczka: ["len", "plotno", "welna", "filc", "sloma", "lyko", "sukno"],
         garbarz: ["skora"],
         cena: 0.3, min: 1,
         warsztat: { skora: [[97, 1], [163, 1]] }   // (the leather ones: Skóra wyprawiona + Ścięgna, as the jacket 171)
@@ -354,7 +418,8 @@
         feet: "Bez butów chodzisz wolniej. Łapcie uplecesz w warsztacie albo kupisz u Józka.",
         belt: "Pas dodaje udźwigu, pas z sakiewką ratuje grosze przy rabunku.",
         hands: "Rękawice: rąbanie i kopanie męczą mniej.",
-        back: "Bez plecaka mniej uniesiesz. Torba przez ramię to trochę udźwigu."
+        back: "Bez plecaka mniej uniesiesz. Torba przez ramię to trochę udźwigu.",
+        cloak: "Płaszcz grzeje zimą, lniana peleryna chroni w skwarze. Uszyjesz je w krośnie albo w garbarni, kupisz u Doroty, Agaty i Ignaca."
     };
     function podpowiedz(eq) {
         const m = Object.keys(MIEJSCA).find(k => MIEJSCA[k].eq === eq);
@@ -405,16 +470,22 @@
         kapalin: { plik: "Ubior_Helm_Kapalin", materialy: ["zelazo", "stal", "braz", "zakon"], akcent: "skora" },
         otwarty: { plik: "Ubior_Helm_Otwarty", materialy: ["skora", "braz", "zelazo", "stal"], akcent: "jasny" },
         nosal: { plik: "Ubior_Helm_Nosal", materialy: ["braz", "zelazo", "stal", "zakon"], akcent: "jasny" },
-        zakonny: { plik: "Ubior_Helm_Zakonny", materialy: ["zelazo", "stal", "zakon"], akcent: "jasny" }
+        zakonny: { plik: "Ubior_Helm_Zakonny", materialy: ["zelazo", "stal", "zakon"], akcent: "jasny" },
+        // (2026-11-17, NOWE_80.md: 425 Stalowy hełm garnczkowy) a shape of its own - until it is drawn, the order's closed helm's picture
+        garnczkowy: { plik: "Ubior_Helm_Zakonny", materialy: ["stal"], akcent: "jasny" }
     };
     const ZBROJE = {
         przeszywanica: { materialy: ["len", "welna", "skora", "jedwab"], faktura: "pikowana" },
         skorznia: { materialy: ["skora", "skora_czarna"], faktura: "skora" },
         kolczuga: { materialy: ["zelazo", "stal", "zakon"], faktura: "kolczuga" },
         luska: { materialy: ["braz", "zelazo", "stal", "zakon"], faktura: "luska" },
-        napiersnik: { materialy: ["braz", "zelazo", "stal", "zakon"], faktura: "blacha" }
+        napiersnik: { materialy: ["braz", "zelazo", "stal", "zakon"], faktura: "blacha" },
+        // (2026-11-17: the brigandine - its own PixelLab drawing on the hero; items 355 / 432 wear zbroja_brygantyna_<m>)
+        brygantyna: { materialy: ["welna", "skora", "zelazo", "stal", "zakon"], faktura: "pikowana" }
     };
-    const KARWASZE = ["skora", "skora_czarna", "braz", "zelazo", "stal", "zakon"], NAGOLENNIKI = ["skora", "braz", "zelazo", "stal", "zakon"], OKUTE = ["zelazo", "stal", "zakon"];
+    // (2026-11-17, NOWE_80.md) + quilted linen bracers and greaves (435, 438), bronze-shod boots (444)
+    const KARWASZE = ["skora", "skora_czarna", "braz", "zelazo", "stal", "zakon", "len"], NAGOLENNIKI = ["skora", "braz", "zelazo", "stal", "zakon", "len"],
+        OKUTE = ["zelazo", "stal", "zakon", "braz"];
     const WZORY_ZBROI = {};
     for (const [k, h] of Object.entries(HELMY)) {
         for (const m of h.materialy) {
@@ -436,11 +507,14 @@
     // the weapons: the kinds and the materials each is made in (Bron_Data.js's items; any other pair works too - Ubior_Bron.js reads
     // the key), the uniques with their own colours
     const BRON_RODZAJE = {
-        sztylet: ["braz", "zelazo", "stal", "zakon"], miecz: ["braz", "zelazo", "stal", "pierwszych", "zakon"], dlugi_miecz: ["stal", "pierwszych", "zakon"],
-        tasak: ["zelazo", "stal"], szabla: ["zelazo", "stal"], palka: ["drewno", "okute", "braz"], kostur: ["drewno", "zakon"], kiscien: ["zelazo", "stal"],
-        buzdygan: ["braz", "zelazo", "stal", "zakon"], topor: ["braz", "zelazo", "stal", "zakon"], czekan: ["zelazo", "stal"], bardysz: ["zelazo", "stal"],
-        mlot: ["kamien", "zelazo", "stal", "zakon"], wlocznia: ["kamien", "braz", "zelazo", "stal", "zakon"], rohatyna: ["zelazo", "stal"], sulica: ["zelazo", "stal"],
-        siekiera: ["kamien", "zelazo", "stal"], kilof: ["kamien", "zelazo", "stal"], luk: ["krotki", "dlugi", "refleksyjny", "zakon"], proca: ["prosta", "skorzana", "rzemienna"]
+        // (2026-11-17, NOWE_80.md: the new pairs - sztylet kamien, tasak braz/zakon, dlugi_miecz zelazo, palka zelazo, kostur okute, kiscien okute (the
+        // flail), czekan zakon, bardysz zakon, mlot braz, luk mysliwski/wojenny)
+        sztylet: ["kamien", "braz", "zelazo", "stal", "zakon"], miecz: ["braz", "zelazo", "stal", "pierwszych", "zakon"], dlugi_miecz: ["zelazo", "stal", "pierwszych", "zakon"],
+        tasak: ["braz", "zelazo", "stal", "zakon"], szabla: ["zelazo", "stal"], palka: ["drewno", "okute", "braz", "zelazo"], kostur: ["drewno", "okute", "zakon"],
+        kiscien: ["okute", "zelazo", "stal"], buzdygan: ["braz", "zelazo", "stal", "zakon"], topor: ["braz", "zelazo", "stal", "zakon"], czekan: ["zelazo", "stal", "zakon"],
+        bardysz: ["zelazo", "stal", "zakon"], mlot: ["kamien", "braz", "zelazo", "stal", "zakon"], wlocznia: ["kamien", "braz", "zelazo", "stal", "zakon"], rohatyna: ["zelazo", "stal"],
+        sulica: ["zelazo", "stal"], siekiera: ["kamien", "zelazo", "stal"], kilof: ["kamien", "zelazo", "stal"], luk: ["krotki", "dlugi", "refleksyjny", "zakon", "mysliwski", "wojenny"],
+        proca: ["prosta", "skorzana", "rzemienna"]
     };
     const WZORY_BRONI = {};
     for (const [r, ms] of Object.entries(BRON_RODZAJE)) for (const m of ms) WZORY_BRONI["bron_" + r + "_" + m] = { miejsce: "prawa", rodzaj: r, material: m };
@@ -464,7 +538,16 @@
         tarcza_migdalowa: { miejsce: "lewa", plik: "Migdalowa", metal: "zelazo", farba: ["#14203a", "#22345a", "#34507e", "#5070a0"] },
         tarcza_zelazna: { miejsce: "lewa", plik: "Zelazna", metal: "stal" },
         tarcza_zakonna: { miejsce: "lewa", plik: "Zakonna", metal: "zakon", farba: ["#5a3c10", "#8a6420", "#b88c34", "#e0bc5c"] },
-        tarcza_skrzydlata_straz: { miejsce: "lewa", plik: "SkrzydlataStraz", metal: "zakon", farba: ["#7a8090", "#a4aab8", "#ccd2dc", "#f2f4f8"] }
+        tarcza_skrzydlata_straz: { miejsce: "lewa", plik: "SkrzydlataStraz", metal: "zakon", farba: ["#7a8090", "#a4aab8", "#ccd2dc", "#f2f4f8"] },
+        // (2026-11-17, NOWE_80.md) the new shields: bronze and steel bucklers, the steel kite (other metals of the drawn ones); the wicker one, the
+        // leather-covered one, the crab's and the pavise borrow a drawn picture until their own (Ubior_Tarcza_<plik>) is made
+        tarcza_drewniana_plecionka: { miejsce: "lewa", plik: "Drewniana", metal: "zelazo", farba: ["#5c461f", "#7a5e2c", "#98793c", "#b4944f"] },
+        tarcza_drewniana_skora: { miejsce: "lewa", plik: "Drewniana", metal: "zelazo", farba: ["#3b2414", "#55341d", "#704628", "#8b5a33"] },
+        tarcza_puklerz_braz: { miejsce: "lewa", plik: "Puklerz", metal: "braz" },
+        tarcza_okuta_krab: { miejsce: "lewa", plik: "Okuta", metal: "zelazo", farba: ["#5a281a", "#7a3a22", "#9a4e2c", "#b8663a"] },
+        tarcza_migdalowa_pawez: { miejsce: "lewa", plik: "Migdalowa", metal: "zelazo", farba: ["#2a2418", "#4a3e2a", "#6a5a3c", "#8a7650"] },
+        tarcza_puklerz_stal: { miejsce: "lewa", plik: "Puklerz", metal: "stal" },
+        tarcza_migdalowa_stal: { miejsce: "lewa", plik: "Migdalowa", metal: "stal", farba: ["#14203a", "#22345a", "#34507e", "#5070a0"] }
     };
 
     const DANE = { VERSION: "1.0.0", MIEJSCA, MATERIALY, WZORY, BONUSY, SCHLUDNOSC, UPAL, PRZEDMIOTY, STARE, SKLEPY, TEKSTY, FARBOWANIE, NAPRAWA, ZUZYCIE,

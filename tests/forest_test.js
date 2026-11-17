@@ -22,13 +22,13 @@ const OUT = __dirname + "/";
 
         // ================= 1. the new things =================
         const items = await J("[147,148,149,150,151,152,153,154].map(id => ({ id, name: $dataItems[id] && $dataItems[id].name, icon: $dataItems[id] && $dataItems[id].iconIndex }))");
-        check("items 147-154: Szyszki, Nasiona sosny, Pokrzywa, Krwawnik, Dziki czosnek, Opatrunek, Zupa pokrzywowa, Oszczep with icons 409-416",
-            items.map(i => i.name).join() === "Szyszki,Nasiona sosny,Pokrzywa,Krwawnik,Dziki czosnek,Opatrunek,Zupa pokrzywowa,Oszczep" && items.every((i, k) => i.icon === 409 + k), items);
+        check("items 147-154: Szyszki, Nasiona sosny, Pokrzywa, Krwawnik, Dziki czosnek, Opatrunek, Zupa pokrzywowa, Oszczep with their PixelLab icons (688+)",
+            items.map(i => i.name).join() === "Szyszki,Nasiona sosny,Pokrzywa,Krwawnik,Dziki czosnek,Opatrunek,Zupa pokrzywowa,Oszczep" && items.every(i => i.icon >= 688), items);
         const iconsDrawn = await ev(`new Promise(res => { const bmp = ImageManager.loadSystem("IconSet"); const chk = () => { if (!bmp.isReady()) return setTimeout(chk, 50); const out = []; for (let i = 409; i <= 416; i++) { let n = 0; const d = bmp.context.getImageData((i % 16) * 32, Math.floor(i / 16) * 32, 32, 32).data; for (let k = 3; k < d.length; k += 4) if (d[k] > 0) n++; out.push(n); } res(out); }; chk(); })`);
         check("the 8 new icons are drawn in the IconSet", iconsDrawn.every(n => n > 60), iconsDrawn);
         const recipes = await J(`({ hand: Farming.HAND_RECIPES.map(r => r.id), bench: Farming.BUILDINGS.workbench.recipes.map(r => r.id), pot: Farming.BUILDINGS.cauldron.recipes.map(r => r.id) })`);
-        check("by hand: pine seeds, a bandage, nettle fibre; the workbench makes the spear; the cauldron cooks nettle soup",
-            ["pine_seeds", "bandage", "nettle_fiber"].every(id => recipes.hand.includes(id)) && recipes.bench.includes("spear") && recipes.pot.includes("nettle_soup"), recipes);
+        check("by hand: a bandage, nettle fibre (no shelling of pine seeds since 2026-11-16); the workbench makes the spear; the cauldron cooks nettle soup",
+            ["bandage", "nettle_fiber"].every(id => recipes.hand.includes(id)) && !recipes.hand.includes("pine_seeds") && recipes.bench.includes("spear") && recipes.pot.includes("nettle_soup"), recipes);
 
         // ================= 2. cones under the pines, herbs by season =================
         const cones = await J(`(function(){
@@ -62,11 +62,6 @@ const OUT = __dirname + "/";
 
         // ================= 3. made by hand =================
         const hand = id => `Farming.HAND_RECIPES.find(r => r.id === "${id}")`;
-        await give(147, 1);
-        const s0 = await count(148);
-        check("one cone is shelled into pine seeds", await ev(`Farming.craftManual(null, ${hand("pine_seeds")})`));
-        await frames(120);
-        check("  +3 pine seeds, the cones used up", (await count(148)) === s0 + 3 && (await count(147)) === 0, { seeds: await count(148), cones: await count(147) });
         await give(150, 2); await give(104, 2); await give(92, 2);
         check("yarrow, herbs and flax make a bandage", await ev(`Farming.craftManual(null, ${hand("bandage")})`));
         await frames(120);
@@ -86,19 +81,19 @@ const OUT = __dirname + "/";
         check("found a free patch of ground for a tree", !!spot, spot);
         const { x: tx, y: ty } = spot;
         await ev(`$gamePlayer.locate(${tx}, ${ty + 1}); $gamePlayer.setDirection(8); $gameMap.setDisplayPos(${tx} - 13, ${ty} - 7); 0`);
-        const seeds = await count(148);
-        await ev(`$gameParty.loseItem($dataItems[148], ${seeds}, false); 0`);
+        const seeds = await count(147);   // (2026-11-16: the cone itself is planted)
+        await ev(`$gameParty.loseItem($dataItems[147], ${seeds}, false); 0`);
         const noSeeds = await J(`Farming.menuFor(${tx}, ${ty}).entries.map(e => e.name)`);
-        check("without seeds the ground menu has no 'Posadź sosnę' (and keeps its order)", !noSeeds.includes("Posadź sosnę") && noSeeds[noSeeds.length - 1] === "Postaw...", noSeeds);
-        await give(148, 3);
+        check("without cones the ground menu has no 'Posadź sosnę' (and keeps its order)", !noSeeds.includes("Posadź sosnę") && noSeeds[noSeeds.length - 1] === "Postaw...", noSeeds);
+        await give(147, 3);
         const withSeeds = await J(`Farming.menuFor(${tx}, ${ty}).entries.map(e => ({ name: e.name, enabled: e.enabled !== false }))`);
         const plantRow = withSeeds.find(e => e.name === "Posadź sosnę");
-        check("with seeds 'Posadź sosnę' is there, enabled, just before 'Postaw...'", !!plantRow && plantRow.enabled && withSeeds[withSeeds.length - 2].name === "Posadź sosnę", withSeeds);
+        check("with cones 'Posadź sosnę' is there, enabled, just before 'Postaw...'", !!plantRow && plantRow.enabled && withSeeds[withSeeds.length - 2].name === "Posadź sosnę", withSeeds);
         await ev(`Farming.menuFor(${tx}, ${ty}).entries.find(e => e.name === "Posadź sosnę").run(); 0`);
         await frames(90);
         const tree = await J(`(function(){ const e = $gameMap.eventsXy(${tx}, ${ty})[0]; if (!e) return null; const c = ChoppableTree.treeConfig(e); return { id: e.eventId(), tree: ChoppableTree.isTree(e), pic: e.characterName(), scale: c.scale, hits: c.hits, blocks: e.isNormalPriority(), growth: e._plantedGrowth }; })()`);
         check("a seedling now stands there: a tree event numbered from 1000 showing a heap of earth with a seedling (!$Sapling), 1 blow, no stump", !!tree && tree.id >= 1000 && tree.tree && tree.pic === "!$Sapling" && tree.scale === 1 && tree.hits === 1 && tree.blocks, tree);
-        check("one seed used, the plant recorded in the save", (await count(148)) === 2 && (await ev("Forestry.treesOf(3).length")) === 1);
+        check("one cone used, the plant recorded in the save", (await count(147)) === 2 && (await ev("Forestry.treesOf(3).length")) === 1);
         const shown = await ev(`SceneManager._scene._spriteset._characterSprites.some(s => s._character === $gameMap.eventsXy(${tx}, ${ty})[0])`);
         check("it is drawn at once (a character sprite in the tilemap)", shown);
         const near = await ev(`Forestry.whyNot(${tx + 1}, ${ty})`);

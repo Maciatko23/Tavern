@@ -1,0 +1,11 @@
+PASS gra
+  zdjecie z1_poletka_przy_ulicy
+  zdjecie z2_sciezka_i_zagroda
+  zdjecie z3_kepa_pod_wiatr
+  zdjecie z4_glazy_i_suche_krzaki
+  zdjecie z5_laka_sienna
+  zdjecie z0_cala_laka
+  zdjecie przeglad
+PASS zdjecia (after)
+PASS bez bledow w konsoli  []
+3/3 passed

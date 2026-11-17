@@ -409,6 +409,16 @@ sekcje.zakon = Tajemnice i zakon (paczka D):
 sekcje.miejsca = Miejsca z paczek:
 
 # Przenieś mnie do: dziewięć map planszy i sala tawerny (nazwa i linia pod nią)
+tele.nSlonyBrzeg.nazwa = Słony Brzeg (nowy świat)
+tele.nSlonyBrzeg.opis = Map219: wybrzeże z latarnią i wrakiem. Lądujesz na drodze przy chacie Janka.
+tele.nPodgrodzie.nazwa = Podgrodzie (nowy świat)
+tele.nPodgrodzie.opis = Map218: plac przy kapliczce, dom dziadka na północnym zachodzie.
+tele.nKruczogrod.nazwa = Kruczogród (nowy świat)
+tele.nKruczogrod.opis = Map220: rynek ze studnią przed tawerną.
+tele.nDwor.nazwa = Dwór nad Jazem (nowy świat)
+tele.nDwor.opis = Map221: droga pod dworem Lorda, jaz i las na południu.
+tele.nTurnie.nazwa = Krucze Turnie (nowy świat)
+tele.nTurnie.opis = Map222: góry, droga między kopalnią a rzeką z wodospadami.
 tele.kruczogrod.nazwa = Kruczogród
 tele.kruczogrod.opis = Map008: miasto, rynek ze studnią. Lądujesz na wolnym polu obok studni.
 tele.jar.nazwa = Kruczy Jar - działka dziadka
@@ -429,6 +439,10 @@ tele.przystan.nazwa = Przystań
 tele.przystan.opis = Map125: nabrzeże przy chacie Janka i pomoście.
 tele.tawerna.nazwa = Tawerna - sala
 tele.tawerna.opis = Map001: wielka sala karczmy, wolne pole pośrodku.
+tele.tawernaPietro1.nazwa = Tawerna - piętro I
+tele.tawernaPietro1.opis = Map025: pokoje gości, hol przy schodach.
+tele.tawernaPietro2.nazwa = Tawerna - piętro II
+tele.tawernaPietro2.opis = Map026: apartamenty, hol przy schodach.
 
 # Pływ: jeden wiersz (z zegara / odpływ / przypływ)
 plyw.zegar = Pływ: z zegara (teraz: {1})   ←→ / OK zmień
@@ -494,4 +508,4 @@ opis.act3_reset = Czyści stan napadu.
 opis.cat = Rozkaz dla kota Mruczka; z powrotem na mapę, żeby popatrzeć (HomeLife.js).
 opis.catChoose = Kot sam wybiera, co robić dalej.
 opis.catPet = Pogłaszcz Mruczka: mruczy, serduszko, raz dziennie +5 wytrzymałości.
-opis.catHouse = Do domu dziadka (mapa 19), przy palenisku, gdzie mieszka kot.
+opis.catHouse = Do chaty dziadka (mapa 224), przy palenisku, gdzie mieszka kot.

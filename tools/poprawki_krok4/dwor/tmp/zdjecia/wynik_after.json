@@ -1,0 +1,43 @@
+{
+ "mode": "after",
+ "maps": {
+  "24": {
+   "total": 10923,
+   "outside": 5863,
+   "cells": {
+    "luka_gora": true,
+    "luka_gora2": true,
+    "luka_nad": true,
+    "luka_wew": true,
+    "lesniczowka_dol": true,
+    "pasnik": true,
+    "patrol_1": true,
+    "patrol_2": true,
+    "patrol_3": true,
+    "patrol_4": true,
+    "patrol_5": true,
+    "sidlo_1": true,
+    "sidlo_2": true,
+    "sidlo_3": true,
+    "rysiek": true,
+    "drzwi_dworu_przed": true,
+    "straz_1": true,
+    "straz_2": true,
+    "straz_3": true,
+    "pompa": true,
+    "feliks": true,
+    "kuba": true,
+    "skrzynia": true,
+    "oranzeria_wejscie": true,
+    "tylna_furtka": true,
+    "latarnia_dwor": true,
+    "dziedziniec_srodek": true,
+    "bruk_wschod": true,
+    "podworko_studnia": true,
+    "podworko_brama_pn": true,
+    "brama_poludnie_droga": true,
+    "wlaz_pn": true
+   }
+  }
+ }
+}

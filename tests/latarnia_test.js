@@ -40,8 +40,8 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
             q: ['K49', 'D22', 'W11'].map(k => !!TownQuests.Q[k]), ready: true,
             packs: TownQuestsData.PACKS.filter(p => p.owner === 'Latarnia').map(p => p.quests.join()),
             rec: rec ? [rec.fish, rec.output] : null, buff: !!(Survival.BUFFS && Survival.BUFFS.ciezkaGlowa) }; })()`);
-    t.check("Latarnia.js i Latarnia_Data.js działają: Bazyli (943, mapa 125 - cypel Przystani, $Npc_Latarnik), K49, D22, W11 w zadaniach",
-        base.api && base.data && base.res && base.res[0] === 943 && base.res[1] === 125 && base.res[2] === "$Npc_Latarnik" && base.q.every(Boolean)
+    t.check("Latarnia.js i Latarnia_Data.js działają: Bazyli (943, mapa 219 - Słony Brzeg, $Npc_Latarnik), K49, D22, W11 w zadaniach",
+        base.api && base.data && base.res && base.res[0] === 943 && base.res[1] === 219 && base.res[2] === "$Npc_Latarnik" && base.q.every(Boolean)
         && base.ready && base.packs.join() === "K49,D22,W11", base);
     t.check("przepis „Wytop tran” w kociołku (3 ryby -> Tran 177) dopisany do Farming.BUILDINGS; premia „Ciężka głowa” zdefiniowana",
         base.rec && base.rec[0] === 3 && base.rec[1][0] === 177 && base.buff, base);
@@ -50,22 +50,24 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, minimap: false });
     await t.setDay(10, 16);
     // (2026-10-30, the world stage 3: Gory -> Przylądek is no longer a Wyspa.js edge; the cape is reached from the Osada (120 E) through Swiat_Data - the test enters the map itself)
-    const up = await t.go(125, 80, 100, 8);
+    const up = await t.go(219, 19, 23, 8);
     await t.frames(20);
     await t.calm({ quiet: true });
     const at = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $dataMap.width, $dataMap.height, $dataMap.tilesetId, $dataMap.note, $dataMap.displayName]");
-    t.check("cypel latarni leży na Map125 „Przystań” (120 x 120, tileset 11, <Water:salt>), nie na dawnej Map159",
-        up && at[0] === 125 && at[3] === 120 && at[4] === 120 && at[5] === 11 && /<Water:salt>/.test(at[6]) && at[7] === "Przystań", at);
+    t.check("latarnia stoi na Map219 „Słony Brzeg” (80 x 80, tileset 11, <Water:salt>), nie na dawnych Map159 / Map125",
+        up && at[0] === 219 && at[3] === 80 && at[4] === 80 && at[5] === 11 && /<Water:salt>/.test(at[6]) && at[7] === "Słony Brzeg", at);
     const ways = await t.json(`(function(){ const ev = $dataMap.events.filter(Boolean), tr = e => (e.pages[0].list.find(c => c.code === 201) || {}).parameters;
         const names = "drewutnia,izba,izba_sen,lat_dzwon,lat_napad,lat_oboz,laterna".split(",");
         return { toOld: ev.filter(e => e.pages.some(p => p.list.some(c => c.code === 201 && c.parameters[1] === 159))).length,
             izba: ev.filter(e => e.name === 'Drzwi: Izba latarnika').map(e => [e.x, e.y]), tower: ev.filter(e => /<Latarnia:wieza>/.test(e.note)).map(e => [e.x, e.y, e.pages[0].image.characterName]),
             spots: ev.filter(e => /^Miejsce: /.test(e.name) && names.includes(e.name.slice(9))).map(e => e.name.slice(9)).sort() }; })()`);
-    t.check("przejścia: nic nie prowadzi do dawnej Map159; izba (79,98) i wieża latarni (92,102)",
-        ways.toOld === 0 && ways.izba.join() === "79,98" && ways.tower.length === 1 && ways.tower[0][0] === 92 && ways.tower[0][1] === 102 && ways.tower[0][2] === "!$Latarnia_Wieza", ways);
-    t.check("miejsca Bazylego i pakietu na mapie: drewutnia, izba, izba_sen, laterna, lat_dzwon, lat_napad, lat_oboz",
-        ways.spots.join() === "drewutnia,izba,izba_sen,lat_dzwon,lat_napad,lat_oboz,laterna", ways.spots);
-    await t.go(125, 80, 100, 8);
+    // (nowy świat, 2026-11-13/14: one door - the tower's; the keeper's room is inside the tower, no "Drzwi: Izba latarnika" on the map)
+    t.check("przejścia: nic nie prowadzi do dawnej Map159; jedne drzwi - wieża latarni (19,19), bez osobnych drzwi izby",
+        ways.toOld === 0 && ways.izba.length === 0 && ways.tower.length === 1 && ways.tower[0][0] === 19 && ways.tower[0][1] === 19 && ways.tower[0][2] === "!$Latarnia_Wieza", ways);
+    // (nowy świat: only the bell's place is a "Miejsce:" on the map; the keeper's places are the tower's door - Latarnia_Data's defaults)
+    t.check("miejsce dzwonu mgłowego na mapie (lat_dzwon); miejsca Bazylego to drzwi wieży (domyślne z danych)",
+        ways.spots.includes("lat_dzwon") && (await t.json("['laterna','izba','izba_sen'].every(k => { const s = TownLifeData.SPOTS_BY_MAP[219][k]; return !!s && s[0] === 19 && s[1] === 20; })")), ways.spots);
+    await t.go(219, 19, 23, 8);
 
     // ---------------------------------------------------------------- Bazyli: plan dnia za słońcem
     const sunPlan = await t.json(`(function(){ const out = [];
@@ -74,31 +76,30 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     t.check("plan Bazylego za słońcem: wejście na górę o zmierzchu - latem (dzień 40) później niż zimą (dzień 100)",
         sunPlan[0][1] === Math.round(sunPlan[0][2] * 100) / 100 && sunPlan[1][1] === Math.round(sunPlan[1][2] * 100) / 100 && sunPlan[0][1] > sunPlan[1][1] + 1, sunPlan);
     // (2026-11-11 dawcy_miasto: the plan is 14-17:30 at the tavern for tran, ale and talk - no wood chopping any more; his place "tawerna" is Map001's guest seat)
-    await t.go(1, 14, 50, 8);
     await t.setDay(10, 16);
     await t.frames(60);
     const chop = await t.json(`(function(){ const e = ${B}, s = TownLife.state('latarnik'); return { place: Latarnia.placeNow(), here: !!e, shown: !!e && !(e._town && e._town.hidden), map: $gameMap.mapId(), s: s && [s.act] }; })()`);
-    t.check("o 16 Bazyli siedzi w tawernie (Map001, gość „gosc_latarnik”), nie na cyplu", chop.place === "tawerna" && chop.here && chop.shown && chop.map === 1, chop);
-    await t.go(125, 80, 100, 8);
+    t.check("o 16 Bazyli jest w drodze do Podgrodzia (miejsce „do_podgrodzia”, poza mapą), nie przy latarni", chop.place === "do_podgrodzia" && !chop.shown && chop.map === 219, chop);
+    await t.go(219, 19, 23, 8);
     await t.setDay(10, 11);
     await t.frames(40);
     const sleep = await t.json(`(function(){ const s = TownLife.state('latarnik'); return s && [s.hidden, s.act, Latarnia.placeNow()]; })()`);
     await t.popups({ clear: true });
-    await t.eval("(function(){ $gamePlayer.locate(79, 99); $gamePlayer.setDirection(8); const e = $gameMap.events().find(e => e.event().name === 'Drzwi: Izba latarnika'); e.start(); return 0; })()");
+    await t.eval("(function(){ $gamePlayer.locate(19, 21); $gamePlayer.setDirection(8); const e = $gameMap.events().find(e => /<Latarnia:wieza>/.test(e.event().note)); e.start(); return 0; })()");
     await t.frames(30);
     const bolt = await t.popups();
     t.check("o 11 śpi w izbie (ukryty, „izba_sen”), drzwi zaryglowane: popup o chrapaniu, bez przejścia",
-        sleep && sleep[0] === true && sleep[2] === "izba_sen" && (await t.eval("$gameMap.mapId()")) === 125 && bolt.some(p => /chrapanie/.test(p)), { sleep, bolt });
+        sleep && sleep[0] === true && sleep[2] === "izba_sen" && (await t.eval("$gameMap.mapId()")) === 219 && bolt.some(p => /chrapanie/.test(p)), { sleep, bolt });
 
     // ---------------------------------------------------------------- izba wieczorem, pierwsza rozmowa
     await t.setDay(10, 18);
-    await t.eval("(function(){ const e = $gameMap.events().find(e => e.event().name === 'Drzwi: Izba latarnika'); e.start(); return 0; })()");
+    await t.eval("(function(){ $gamePlayer.locate(19, 21); $gamePlayer.setDirection(8); const e = $gameMap.events().find(e => /<Latarnia:wieza>/.test(e.event().note)); e.start(); return 0; })()");
     const inIzba = await t.until(t.onMap(160), 20);
     await t.frames(30);
     await t.calm({ quiet: true });
     const izba = await t.json(`(function(){ const e = ${B}; return { at: [$gamePlayer.x, $gamePlayer.y], b: e && [e.x, e.y, e._town && e._town.hidden], book: $dataMap.events.some(e => e && /<Latarnia:ksiega>/.test(e.note)) }; })()`);
-    t.check("wieczorem drzwi izby prowadzą do Map160 (6,8); Bazyli jest w izbie, Księga mgieł na stole",
-        inIzba && izba.at.join() === "6,8" && izba.b && izba.b[2] === false && izba.b[0] === 5 && izba.b[1] === 7 && izba.book, izba);
+    t.check("wieczorem drzwi wieży prowadzą do izby, Map160 (mała izba: wejście 4,8); Bazyli jest w izbie (5,6), Księga mgieł na stole",
+        inIzba && izba.at.join() === "4,8" && izba.b && izba.b[2] === false && izba.b[0] === 5 && izba.b[1] === 6 && izba.book, izba);
     const meet = await t.talkTo(B, []);
     const met = await t.json("({ f: TownQuests.state().flags.latarnikMet, notes: ($gameSystem._journal.notes || []).map(n => n.title) })");
     t.check("pierwsza rozmowa: „Kruk na szyi. Widziałem go we mgle”, flaga latarnikMet, notatka „Latarnik z przylądka”",
@@ -123,19 +124,20 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     t.check("pogoda na dwa dni dokładnie z planu pogody (Survival.weatherPlan): " + want, wt.text.indexOf(want.slice(0, 30)) >= 0 && /Jutro: .*Pojutrze: /.test(want), wt.text.slice(-200));
 
     // ---------------------------------------------------------------- ogień latarni nocą
-    await t.go(125, 92, 104, 8);
+    await t.go(219, 19, 21, 8);
     await t.setDay(10, 15);
     await t.frames(30);
     const day = await t.json(`(function(){ const ss = SceneManager._scene._spriteset; return { lit: Latarnia.lit(), flame: !!(ss._latFlame && ss._latFlame.visible) }; })()`);
-    if (SHOT) { await t.locate(92, 104, 8); await t.frames(40); await t.shot(path.join(SHOTS, "latarnia_dzien.png")); }
+    if (SHOT) { await t.locate(19, 21, 8); await t.frames(40); await t.shot(path.join(SHOTS, "latarnia_dzien.png")); }
     await t.setDay(10, 23);
     await t.frames(60);
     const night = await t.json(`(function(){ const ss = SceneManager._scene._spriteset, nl = ss._nightLight;
         return { lit: Latarnia.lit(), flame: !!(ss._latFlame && ss._latFlame.visible), glass: ss._latGlass ? ss._latGlass.opacity : 0,
-            light: nl && nl.visible ? nl.lights().some(l => l.id === 6630 && l.r >= 480) : false, beams: !!(ss._latLayer && ss._latLayer._beams.visible), fuel: Latarnia.state().fuel }; })()`);
-    t.check("za dnia latarnia nie świeci; nocą płomień w koszu na wieży, szyby laterny świecą, duże światło w warstwie nocy i snopy nad morzem",
-        !day.lit && !day.flame && night.lit && night.flame && night.glass > 100 && night.light && night.beams, { day, night });
-    if (SHOT) { await t.locate(92, 104, 8); await t.frames(60); await t.shot(path.join(SHOTS, "latarnia_noc.png")); }
+            light: nl && nl.visible ? nl.lights().some(l => l.id === 6630 && l.r >= 480) : false, pool: nl && nl.visible ? nl.lights().some(l => l.id === 6631) : false, beams: !!(ss._latLayer && ss._latLayer._beams.visible), fuel: Latarnia.state().fuel }; })()`);
+    // (2026-11-14: no turning beams any more - the fire just lights the land: a big light and a pool on the ground by the tower's foot)
+    t.check("za dnia latarnia nie świeci; nocą płomień w koszu na wieży, poświata w laternie, duże światło i plama na ziemi w warstwie nocy, bez wirujących snopów",
+        !day.lit && !day.flame && night.lit && night.flame && night.glass > 100 && night.light && night.pool && !night.beams, { day, night });
+    if (SHOT) { await t.locate(19, 21, 8); await t.frames(60); await t.shot(path.join(SHOTS, "latarnia_noc.png")); }
     // without fuel: dark
     await t.eval("(function(){ $gameSystem._dayNightDay = 11; $gameSystem.setDayNightHour(15); Latarnia.settle(); Latarnia.state().fuel = 0; $gameSystem.setDayNightHour(23); return 0; })()");
     await t.frames(40);
@@ -145,12 +147,13 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
 
     // ---------------------------------------------------------------- mgła morska i D22
     // the fog: the night before a misty morning (Sky.mistOfDay(tomorrow)); Bazyli offers D22 that afternoon
-    await t.eval("(function(){ Sky.forceMist(0.95, 13); $gameSystem._dayNightDay = 12; $gameSystem.setDayNightHour(15.5); return 0; })()");
-    await t.go(1, 14, 50, 8);
+    await t.eval("(function(){ Sky.forceMist(0.95, 13); $gameSystem._dayNightDay = 12; $gameSystem.setDayNightHour(18); return 0; })()");
+    // (nowy świat: 14-17:30 he is away on the road; in the evening he sits in his room in the tower - the offer is made there)
+    await t.go(160, 4, 8, 8);
     await t.frames(40);
     const offer = await t.talkTo(B, ["Przyjdę"]);
     t.check("D22 „Księga mgieł”: przed mglistą nocą Bazyli czuje mgłę i daje zadanie; przyjęte", (await t.json("TownQuests.isActive('D22')")) && /mgła/.test(offer.text), offer.text.slice(0, 200));
-    await t.go(125, 92, 104, 8);
+    await t.go(219, 19, 21, 8);
     await t.setDay(12, 22.95);
     await t.frames(30);
     await t.eval(`(function(){ window.__se = []; const o = Tawerna.audio.se; Tawerna.audio.se = function(n, op) { window.__se.push(n); return o.apply(this, arguments); }; return 0; })()`);
@@ -159,9 +162,9 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const fog = await t.json(`(function(){ const ss = SceneManager._scene._spriteset; return { fog: Latarnia.fogNow(), sw: $gameSwitches.value(19), layer: !!(ss._latLayer && ss._latLayer._fog.visible), bells: window.__se.filter(n => n === 'Bell1').length }; })()`);
     t.check("mgła morska nocą: Latarnia.fogNow, przełącznik 19, pasma mgły nad przylądkiem, o pełnej godzinie dzwon mgłowy bije 3 razy",
         fog.fog && fog.sw && fog.layer && fog.bells === 3, fog);
-    if (SHOT) { await t.locate(92, 104, 8); await t.frames(30); await t.shot(path.join(SHOTS, "latarnia_mgla.png")); }
+    if (SHOT) { await t.locate(19, 21, 8); await t.frames(30); await t.shot(path.join(SHOTS, "latarnia_mgla.png")); }
     // the tower's door: before K49 only in a fog (and he is up there)
-    await t.eval("(function(){ $gamePlayer.locate(92, 104); $gamePlayer.setDirection(8); $gameMap.events().find(e => /<Latarnia:wieza>/.test(e.event().note)).start(); return 0; })()");
+    await t.eval("(function(){ $gamePlayer.locate(19, 21); $gamePlayer.setDirection(8); $gameMap.events().find(e => /<Latarnia:wieza>/.test(e.event().note)).start(); return 0; })()");
     const inLat = await t.until(t.onMap(161), 20);
     await t.frames(30);
     await t.calm({ quiet: true });
@@ -201,7 +204,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     t.check("trzy mgliste noce - trzy wizje (w dowolnej kolejności): D22 przechodzi do rozmowy z Bazylem; wizja 2 daje flagę „mgla” (poszlaka W12)", v3.n === 3 && v3.step === 1 && v3.mgla, v3);
     const g1 = await t.gold();
     // (D22's closing talk and K49 are had at the tavern, 14-17:30 - zadania.D22.when / K49.when in js/teksty/latarnia.txt)
-    await t.go(1, 14, 50, 8);
+    await t.go(1, 14, 37, 8);
     await t.setDay(16, 15.5);
     await t.frames(40);
     const end = await t.talkTo(B, ["Powiem ci"]);
@@ -224,7 +227,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const jt = await t.talkTo("TownLife.eventOf('janek')", ["Kupię dzbanek"]);
     t.check("Janek na przystani sprzedaje tran, póki trwa K49: 6 G za dzbanek", (await t.count(177)) === 1 && (await t.gold()) === 34 && /Tran\?/.test(jt.text), [jt.text.slice(0, 200), await t.count(177), await t.gold()]);
     await t.give(177, 3); await t.give(61, 6);
-    await t.go(1, 14, 50, 8);   // (14-17:30 Bazyli sits in the tavern - the plan since 2026-11-11)
+    await t.go(1, 14, 37, 8);   // (14-17:30 Bazyli sits in the tavern - the plan since 2026-11-11)
     await t.setDay(25, 15.5);
     await t.frames(40);
     const f1 = await S("s.fuel"), g2 = await t.gold();
@@ -232,9 +235,9 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const k49r = await t.json(`({ done: TownQuests.isDone('K49'), ufa: !!TownQuests.state().flags.latarniaUfa, tran: $gameParty.numItems($dataItems[177]), wood: $gameParty.numItems($dataItems[61]) })`);
     t.check("...oddane: 4× Tran i 6× Drewno; nagroda 30 G, latarniaUfa, opał latarni +5,5 nocy", k49r.done && k49r.ufa && k49r.tran === 0 && k49r.wood === 0
         && (await t.gold()) === g2 + 30 && Math.abs((await S("s.fuel")) - Math.min(20, f1 + 5.5)) < 0.01, [k49r, k49.text.slice(-200)]);
-    await t.go(125, 92, 104, 8);
+    await t.go(219, 19, 21, 8);
     await t.setDay(25, 12);
-    await t.eval("(function(){ $gamePlayer.locate(92, 104); $gamePlayer.setDirection(8); $gameMap.events().find(e => /<Latarnia:wieza>/.test(e.event().note)).start(); return 0; })()");
+    await t.eval("(function(){ $gamePlayer.locate(19, 21); $gamePlayer.setDirection(8); $gameMap.events().find(e => /<Latarnia:wieza>/.test(e.event().note)).start(); return 0; })()");
     t.check("po K49 drzwi latarni otwarte także za dnia (laterna)", await t.until(t.onMap(161), 20));
 
     // ---------------------------------------------------------------- W11 „Soczewka”: droga przez kradzież i sprzedaż
@@ -245,7 +248,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.frames(60);
     const balt = await t.talkTo("TownLife.eventOf('kupiec')", ["Nie sprzedam"]);
     t.check("rozdz. 1: Baltazar w kantorze chce „szkiełka z latarni” za 400 G; odmowa", /Czterysta/.test(balt.text) && (await t.json("TownQuests.rec('W11').step")) === 1, balt.text.slice(0, 250));
-    await t.go(1, 14, 50, 8);   // (14-17:30 Bazyli sits in the tavern - the plan since 2026-11-11)
+    await t.go(1, 14, 37, 8);   // (14-17:30 Bazyli sits in the tavern - the plan since 2026-11-11)
     await t.setDay(70, 15.5);
     await t.frames(40);
     const warn = await t.talkTo(B, []);
@@ -279,7 +282,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const kln = await t.json(`({ step: TownQuests.rec('W11').step, notes: ($gameSystem._journal.notes || []).map(n => n.title) })`);
     t.check("rozdz. 5: brat Kleofas czyta w kronikach: „Oko Strażnicy”, z kryształu Pierwszych, nie odłamek Serca (notatka)",
         /Oko Strażnicy/.test(kl.text.replace(/\s+/g, " ")) && /kryształu Pierwszych/.test(kl.text.replace(/\s+/g, " ")) && kln.step === 5 && kln.notes.includes("Oko Strażnicy"), [kln, kl.text.slice(0, 300)]);
-    await t.go(1, 14, 50, 8);   // (14-17:30 Bazyli sits in the tavern - the plan since 2026-11-11)
+    await t.go(1, 14, 37, 8);   // (14-17:30 Bazyli sits in the tavern - the plan since 2026-11-11)
     await t.setDay(73, 15.5);
     await t.frames(40);
     await t.talkTo(B, ["Sprzedam je"]);
@@ -296,11 +299,11 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     // ---------------------------------------------------------------- W11: druga droga - obrona i rozbicie
     await t.eval(`(function(){ const q = TownQuests.state(); delete q.q.W11; delete q.flags.soczewkaSprzedana; const s = Latarnia.state(); s.lens = 'whole'; s.raid = null;
         $gameSystem._dayNightDay = 80; $gameSystem.setDayNightHour(16); TownQuests.autoChecks(); TownQuests.completeStep('W11'); return TownQuests.rec('W11').step; })()`);
-    await t.go(1, 14, 50, 8);   // (14-17:30 Bazyli sits in the tavern - the plan since 2026-11-11)
+    await t.go(1, 14, 37, 8);   // (14-17:30 Bazyli sits in the tavern - the plan since 2026-11-11)
     await t.setDay(80, 15.5);
     await t.frames(40);
     await t.talkTo(B, []);
-    await t.go(125, 92, 104, 8);
+    await t.go(219, 19, 21, 8);
     await t.setDay(82, 0.6);
     await t.frames(60);
     const raiders = await t.json("Humans.humans().filter(h => h._tag === 'latarniaNapad' && !h._dead).map(h => h._kind)");
@@ -309,7 +312,7 @@ kit.test({ port: 9503, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await t.frames(60);
     const def = await t.json(`({ f: !!TownQuests.state().flags.latarniaObroniona, lens: Latarnia.state().lens, step: TownQuests.rec('W11').step })`);
     t.check("...pokonani: latarnia obroniona (flaga latarniaObroniona), soczewka na miejscu, od razu rozdz. 5", def.f && def.lens === "whole" && def.step === 4, def);
-    await t.go(1, 14, 50, 8);
+    await t.go(1, 14, 37, 8);
     await t.setDay(82, 15.5);
     await t.frames(40);
     await t.talkTo(B, []);

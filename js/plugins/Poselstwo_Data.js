@@ -52,15 +52,15 @@
     // the injected events: the council's Lord and Feliks in the Great salon, Albin by the Gold suite's door on the Kupała night (Map026);
     // the envoy's wax on the gallery by room 15 and the sandals' prints at the gilded gate (Map025) - the morning after the theft
     const AKTORZY = {
-        lord: { id: 3070, map: MAP.apartamenty, x: 24, y: 10, dir: 4, sheet: "$Npc_Lord", index: 0 },
-        feliks: { id: 3071, map: MAP.apartamenty, x: 21, y: 12, dir: 8, sheet: "$Npc_Feliks", index: 0 },
-        albin: { id: 3072, map: MAP.apartamenty, x: 25, y: 24, dir: 2, sheet: "$Npc_Pielgrzym", index: 0 },
-        wosk: { id: 3073, map: MAP.pietro, x: 8, y: 50 },
-        krata: { id: 3074, map: MAP.pietro, x: 3, y: 51 }
+        lord: { id: 3070, map: MAP.apartamenty, x: 18, y: 8, dir: 4, sheet: "$Npc_Lord", index: 0 },
+        feliks: { id: 3071, map: MAP.apartamenty, x: 15, y: 9, dir: 8, sheet: "$Npc_Feliks", index: 0 },
+        albin: { id: 3072, map: MAP.apartamenty, x: 24, y: 18, dir: 2, sheet: "$Npc_Pielgrzym", index: 0 },
+        wosk: { id: 3073, map: MAP.pietro, x: 12, y: 37 },
+        krata: { id: 3074, map: MAP.pietro, x: 7, y: 38 }
     };
     // the envoy held in the salon for the council (TownLife.hold); his and Ostap's places on floor II
     const NARADA = { posel: [17, 10], godziny: [21, 22.5] };
-    const MIEJSCA = { posel_wnetrze: [22, 31, 8], gwardzista_wnetrze: [26, 25, 2] };
+    const MIEJSCA = { posel_wnetrze: [22, 25, 8], gwardzista_wnetrze: [25, 19, 2] };
     // the days (from the envoy's arrival P): the council P+1 (41), the theft on the Kupała night (summer's 14th day - 42) when it falls
     // inside his stay, else P+2; Albin by the door 0:30-2:00 after its midnight, the theft at 1:30 when nobody watches; the morning 6:00
     const CZAS = { narada: 1, noc: 2, albin: [0.5, 2], kradziez: 1.5, rano: 6, kolacja: [19.5, 21], sluzba: [19.5, 23], okno: [23, 24], kopia: [21, 4] };
@@ -195,11 +195,11 @@
             lista: {
                 1: { ch: 1, krok: "w14Patnik", godzina: 10, idz: [MAP.miasto, 33, 19, 8] },
                 2: { ch: 2, krok: "w14Posel", godzina: 19.6, idz: [MAP.karczma, 12, 31, 8] },
-                3: { ch: 3, krok: "w14Narada", godzina: 20.95, idz: [MAP.apartamenty, 20, 22, 8] },
-                4: { ch: 4, krok: "w14Kradziez", godzina: 23.9, idz: [MAP.apartamenty, 23, 24, 6] },
-                5: { ch: 4, krok: "w14Sledztwo", godzina: 9, idz: [MAP.pietro, 8, 51, 8] },
+                3: { ch: 3, krok: "w14Narada", godzina: 20.95, idz: [MAP.apartamenty, 17, 16, 8] },
+                4: { ch: 4, krok: "w14Kradziez", godzina: 23.9, idz: [MAP.apartamenty, 22, 18, 6] },
+                5: { ch: 4, krok: "w14Sledztwo", godzina: 9, idz: [MAP.pietro, 12, 38, 8] },
                 6: { ch: 4, krok: "w14Sledztwo", godzina: 14.2, idz: [MAP.przystan, 20, 16, 4] },
-                7: { ch: 5, krok: "w14List", godzina: 10, idz: [MAP.apartamenty, 27, 25, 8] }
+                7: { ch: 5, krok: "w14List", godzina: 10, idz: [MAP.apartamenty, 26, 19, 8] }
             }
         }
     });

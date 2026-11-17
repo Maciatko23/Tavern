@@ -1,0 +1,5 @@
+przystan_test before exit 1
+przystan_test after exit 1
+okolice_szkielet_test before exit 1
+okolice_szkielet_test after exit 1
+done

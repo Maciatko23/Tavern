@@ -161,15 +161,24 @@
         const a = evById(4623), b = evById(4624);
         // (nobody vanishes: a visible Stefa goes off - and the other one comes - only when the hero is not looking, i.e. far off or the map has just loaded)
         const free = ev => !ev || ev._transparent || !$gamePlayer || dist($gamePlayer, [ev.x, ev.y]) > 14 || Graphics.frameCount - lastMapReady < 90;
-        if (a) { if (on && day_) { showEv(a); a.setThrough(false); } else if (free(a)) hide(a); }
-        if (b) { if (on && !day_) { showEv(b); b.setThrough(false); } else if (free(b)) hide(b); }
+        // (2026-11-16) the new world: Stefa lives on this very map (TownLife's "opiekunka", the shelter of Podgrodzie) - no stand-ins.
+        // While the thread runs she keeps to her cauldron by day (held there); at night she is inside as on any other day.
+        void free;
+        hide(a); hide(b);
+        const L = TL();
+        if (L && L.hold && L.eventOf && onMap(D.MAP.miasto) && L.eventOf("opiekunka")) {
+            const want = on && day_;
+            if (want && !stefaHeld) { stefaHeld = L.hold("opiekunka", true, [D.MIEJSCA.stefa[0], D.MIEJSCA.stefa[1]]); }
+            else if (!want && stefaHeld) { L.hold("opiekunka", false); stefaHeld = false; }
+        } else stefaHeld = false;
     }
+    let stefaHeld = false;
     function refreshAll() { try { stefaGone(); refreshSick(); refreshZapora(); refreshRow(); refreshStefa(); } catch (e) { report("refresh", e); } }
 
     // ==================================================================
     // 2. Stefa: the first brew, the pass, the counting
     // ==================================================================
-    const spkOf = key => { if (key === "opiekunka" || key === "stefa") { const a = stefaEv(); return { id: a ? a.eventId() : 0, name: "" }; } const L = TL(), ev = L && L.eventOf ? L.eventOf(key) : null; return { id: ev ? ev.eventId() : 0, name: "" }; };
+    const spkOf = key => { if (key === "opiekunka" || key === "stefa") { const a = stefaEv(); return { id: a ? a.eventId() : 0, name: "" }; } const L = TL(), ev = (L && L.eventOf ? L.eventOf(key) : null) || goscEv(key); return { id: ev ? ev.eventId() : 0, name: "" }; };
     const ALIAS = { stefa: "opiekunka", ignac: "garbarz", kleofas: "pustelnik", kuba: "woziwoda", hanka: "piekarka", jadwiga: "znachorka", wit: "kapral", tadek: "kowal", ambrozy: "dzwonnik" };
     function mowca(ctx, key) {
         if (D.LOZKA[key]) { const a = evById(evId(key)); return a ? { id: a.eventId(), name: "" } : { id: 0, name: "" }; }
@@ -479,12 +488,56 @@
     }
     const bars = on => { const h = T.api("CleanHUD"); try { if (h && h.sceneBars) h.sceneBars(on); } catch (e) { report("bars", e); } };
     const stefaEv = () => { for (const id of [4623, 4624]) { const a = evById(id); if (a && !a._transparent) return a; } const e = TL() && TL().eventOf ? TL().eventOf("opiekunka") : null; return e && !(e._town && e._town.hidden) ? e : null; };
-    const evOf = key => { if (key === "bohater") return $gamePlayer; if (key === "stefa") return stefaEv(); if (D.LOZKA[key]) return evById(evId(key)); const e = TL() && TL().eventOf ? TL().eventOf(ALIAS[key] || key) : null; return e && !(e._town && e._town.hidden) ? e : null; };
-    function trzymaj(spec) {   // [key -> [x, y, d]] : the residents walk there and stand (TownLife hold)
-        const L = TL();
-        for (const [key, c] of Object.entries(spec)) { const rk = ALIAS[key] || key; if (L && L.hold && L.hold(rk, true, [c[0], c[1]])) scena.holds.push(rk); }
+    const evOf = key => { if (key === "bohater") return $gamePlayer; if (key === "stefa") return stefaEv(); if (D.LOZKA[key]) return evById(evId(key)); const e = (TL() && TL().eventOf ? TL().eventOf(ALIAS[key] || key) : null) || goscEv(ALIAS[key] || key); return e && !(e._town && e._town.hidden) ? e : null; };
+    // ---- (2026-11-16) the scenes' guests: the town's people (the reeve, the corporal, brother Kleofas, the baker, the smith, the
+    // bell-ringer) live in Kruczogród, the scenes play in Podgrodzie. Whoever of a scene's crowd has no event on this map comes as a
+    // stand-in event (D.GOSCIE.ids) with his own figure: he walks in by the road from the town (never pops up in sight; placed at once
+    // only where the hero cannot see), stands on his place, and after the scene walks back the same way.
+    const goscie = {};   // resident key -> { id, tx, ty, d, out, stuck }
+    const gSheet = rk => { const L = TL(), all = (L && L.RESIDENTS ? L.RESIDENTS : []).concat(Array.isArray(window.TownLifeExtra) ? window.TownLifeExtra : []), r = all.find(x => x.key === rk); return r ? r.sheet : ""; };
+    const seen = (x, y) => Math.abs(x - $gamePlayer.x) <= 15 && Math.abs(y - $gamePlayer.y) <= 9;
+    function gosc(rk, c, naMiejscu, skad) {
+        if (!onMap(D.MAP.miasto)) return false;
+        let g = goscie[rk];
+        if (!g) {
+            const used = Object.values(goscie).map(x => x.id);
+            let id = 0;
+            for (let i = D.GOSCIE.ids[0]; i <= D.GOSCIE.ids[1]; i++) if (!used.includes(i) && evById(i)) { id = i; break; }
+            const sheet = gSheet(rk);
+            if (!id || !sheet) return false;
+            g = goscie[rk] = { id };
+            const ev = evById(id), we = skad || D.GOSCIE.wejscie, at = naMiejscu || !seen(c[0], c[1]) ? c : we;
+            ev.setImage(sheet, 0); ev.setMoveSpeed(4); ev.locate(at[0], at[1]); ev.setDirection(at === c ? c[2] || 2 : we[2]); ev.setTransparent(false); ev.setThrough(false);
+            ev._directionFix = false; ev._walkAnime = true;
+        }
+        Object.assign(g, { tx: c[0], ty: c[1], d: c[2] || 2, out: false, stuck: 0 });
+        return true;
     }
-    function zwolnij() { const L = TL(); for (const k of scena.holds) if (L && L.hold) L.hold(k, false); scena.holds = []; }
+    function goscieTick() {
+        if (!has() || !onMap(D.MAP.miasto)) return;
+        for (const [rk, g] of Object.entries(goscie)) {
+            const ev = evById(g.id);
+            if (!ev) { delete goscie[rk]; continue; }
+            if (ev.isMoving()) continue;
+            if (ev.x === g.tx && ev.y === g.ty) {
+                if (g.out) { hide(ev); delete goscie[rk]; } else if (ev.direction() !== g.d) ev.setDirection(g.d);
+                continue;
+            }
+            const H = window.Hunting, RA = window.RoamingActor;
+            const dir = H && H.path8 ? H.path8(ev, g.tx, g.ty, { key: "goraczka" }).dir : ev.findDirectionTo(g.tx, g.ty);
+            if (dir > 0 && RA && RA.canStep(ev, ev.x, ev.y, dir)) { RA.step(ev, dir); g.stuck = 0; continue; }
+            if (++g.stuck > 600 && !seen(ev.x, ev.y) && !seen(g.tx, g.ty)) { ev.locate(g.tx, g.ty); g.stuck = 0; }   // (no way for long: only out of the hero's sight)
+        }
+    }
+    // every guest of the scene stands on his place (or has been stuck on the way for long: the scene does not wait for ever)
+    const goscieGotowi = () => Object.values(goscie).every(g => { const ev = evById(g.id); return !ev || g.out || (ev.x === g.tx && ev.y === g.ty) || g.stuck > 300; });
+    function goscieDoDomu() { const we = D.GOSCIE.wejscie; for (const g of Object.values(goscie)) Object.assign(g, { tx: we[0], ty: we[1], d: we[2], out: true, stuck: 0 }); }
+    const goscEv = rk => { const g = goscie[rk], ev = g ? evById(g.id) : null; return ev && !ev._transparent ? ev : null; };
+    function trzymaj(spec, naMiejscu, skad) {   // [key -> [x, y, d]] : the residents walk there and stand (TownLife hold); who lives elsewhere comes as a guest
+        const L = TL();
+        for (const [key, c] of Object.entries(spec)) { const rk = ALIAS[key] || key; if (L && L.hold && L.hold(rk, true, [c[0], c[1]])) scena.holds.push(rk); else gosc(rk, c, naMiejscu, skad); }
+    }
+    function zwolnij() { const L = TL(); for (const k of scena.holds) if (L && L.hold) L.hold(k, false); scena.holds = []; goscieDoDomu(); }
     const near = (c, n) => has() && dist($gamePlayer, c) <= n;
     // ---- S1: the street is shut (18:30-20:00 of the first day)
     function scenaS1() {
@@ -494,7 +547,7 @@
         refreshZapora();
         const sol = evOf("soltys"), wit = evOf("wit");
         bars(true);
-        trzymaj({ soltys: [94, 92, 4], wit: [93, 91, 4] });
+        trzymaj({ soltys: D.MIEJSCA.s1Soltys, wit: D.MIEJSCA.s1Wit }, false, D.MIEJSCA.s1Skad);   // (they come up the lane with the carts)
         // the carts roll in from the east to their places (they are given their start 8 cells east and driven in)
         const carts = [4620, 4621].map(id => evById(id)).filter(Boolean);
         carts.forEach((a, i) => { const c = D.MIEJSCA.zapora[i]; a.locate(c[0] + 8, c[1]); showEv(a); a._gorMoving = true; a._gorGoal = c[0]; a.setMoveSpeed(3); a.setThrough(true); });
@@ -533,7 +586,7 @@
         if (!s.gawelDead || s.sc.s2 || !L) return;
         const h = hour(), d = day();
         if (d === s.gawelDead + (hour() < 12 && s.gawelDead === s.start + 1 ? 0 : 0) && false) return;
-        if (!s.sc.s2hold && abs(d, h) >= abs(s.start + 2, 5.5) && abs(d, h) < abs(s.start + 2, 12)) { s.sc.s2hold = d; L.hold("pustelnik", true, [98, 106]); scena.holds.push("pustelnik"); }
+        if (!s.sc.s2hold && abs(d, h) >= abs(s.start + 2, 5.5) && abs(d, h) < abs(s.start + 2, 12)) { s.sc.s2hold = d; trzymaj({ kleofas: D.MIEJSCA.s2Kleofas }); }
         if (s.sc.s2hold && abs(d, h) >= abs(s.start + 2, 12) && !s.sc.s2) { s.sc.s2 = d; zwolnij(); }
     }
     // ---- S3: the crowd at Ignac's tannery (17:00-20:00 of the chapter-3 day)
@@ -550,7 +603,7 @@
         if (s.s3 || s.sc.s3 || !onMap(D.MAP.miasto) || busy() || stepNow() !== 2 || !s.sc.s3hold) return;
         if (!near(D.MIEJSCA.garbarniaIgnaca, 9)) return;
         const sol = evOf("soltys"), ig = evOf("ignac"), kuba = evOf("kuba");
-        if (!sol || !ig || dist(sol, D.MIEJSCA.garbarniaIgnaca) > 6) return;
+        if (!sol || !ig || dist(sol, D.MIEJSCA.garbarniaIgnaca) > 6 || !goscieGotowi()) return;
         s.sc.s3 = day();
         bars(true);
         graj([{ czekaj: 20, mysl: tx1("s3.mysl") },
@@ -594,7 +647,7 @@
         const s = S();
         if (s.sc.s4 || s.koniec || !onMap(D.MAP.miasto) || busy() || stepNow() !== 4 || !s.sc.s4hold || !near(D.MIEJSCA.ratuszPrzed, 8)) return;
         const sol = evOf("soltys"), wa = evOf("wawrzyn"), lu = evOf("ludmila");
-        if (!sol || !wa) return;
+        if (!sol || !wa || !goscieGotowi()) return;   // (the people from the town are still on their way down)
         s.sc.s4 = day();
         bars(true);
         graj([{ czekaj: 20, mysl: tx1("s4.mysl") },
@@ -675,7 +728,7 @@
         if (s.koniec === "B" && !s.osadnikGotowy) return;
         if (day() <= s.koniecDzien || hour() < 6.3 || hour() > 11) return;
         const st = evOf("stefa"), wit = evOf("wit");
-        if (!near(D.MIEJSCA.przytulekPrzed, 16) && !near([92, 92], 14)) return;
+        if (!near(D.MIEJSCA.przytulekPrzed, 16) && !near(D.MIEJSCA.s1Kamera, 14)) return;
         s.sc.s5 = day();
         bars(true);
         graj([{ czekaj: 20, mysl: tx1("s5.mysl") },
@@ -696,7 +749,7 @@
         stepAnime: false, through: false, trigger: 0, walkAnime: false }, o || {});
     const img = (sheet, index, dir, pat) => ({ tileId: 0, characterName: sheet, direction: dir || 2, pattern: pat || 0, characterIndex: index || 0 });
     const script = code => [C(355, [code]), C(0, [])];
-    T.inject([D.MAP.miasto, D.MAP.przytulek, D.MAP.podgrodzie], { ids: D.IDS, owner: D.OWNER, build: (data, mapId) => {
+    T.inject(Array.from(new Set([D.MAP.miasto, D.MAP.przytulek, D.MAP.podgrodzie])), { ids: D.IDS, owner: D.OWNER, build: (data, mapId) => {
         const list = [];
         if (mapId === D.MAP.przytulek || mapId === D.MAP.podgrodzie) {   // (hidden until the thread shows them: refreshSick)
             D.CHORZY.forEach((k, i) => { const c = D.LOZKA[k]; list.push({ id: 4610 + i, name: "Chory: " + k, note: "", x: c[0], y: c[1],
@@ -706,12 +759,18 @@
             D.MIEJSCA.zapora.forEach((c, i) => list.push({ id: 4620 + i, name: "Wóz zapory", note: "<Occupy:right=1>", x: c[0], y: c[1],
                 pages: [page(script("Goraczka.zapora(this)"), { image: img("!House_Town", 0, 4, 1), priorityType: 1, directionFix: true, through: true })] }));
             const k = D.MIEJSCA.kociol;
-            list.push({ id: 4622, name: "Kocioł Stefy", note: "<Light:230,120,52,14>", x: k[0], y: k[1],
-                pages: [page(script("Goraczka.kociol(this)"), { image: img("!Decoration", 2, 6, 0), stepAnime: true, through: true })] });
+            list.push({ id: 4622, name: "Kocioł Stefy", note: D.MIEJSCA.kociolNaMapie ? "" : "<Light:230,120,52,14>", x: k[0], y: k[1],
+                pages: [page(script("Goraczka.kociol(this)"), D.MIEJSCA.kociolNaMapie ? { image: img("", 0, 2, 0), priorityType: 0, through: true } : { image: img("!Decoration", 2, 6, 0), stepAnime: true, through: true })] });
             const sp = D.MIEJSCA.stefa;
             list.push({ id: 4623, name: "Stefa (przytułek, dzień)", note: "", x: sp[0], y: sp[1], pages: [page(script("Goraczka.stefa(this)"), { image: img("$Npc_Opiekunka", 0, sp[2], 1), directionFix: false, through: true })] });
             D.MIEJSCA.osad.forEach((c, i) => list.push({ id: 4630 + i, name: "Biały osad w rynnie", note: "", x: c[0], y: c[1],
                 pages: [page(script("Goraczka.osad(this, " + i + ")"), { image: img(D.SPRITES.osad, 0, 2, 0), priorityType: 0, through: true })] }));
+            for (let gi = D.GOSCIE.ids[0]; gi <= D.GOSCIE.ids[1]; gi++) list.push({ id: gi, name: "Gość sceny", note: "", x: D.GOSCIE.wejscie[0], y: D.GOSCIE.wejscie[1],
+                pages: [page(script("Goraczka.gosc(this)"), { image: img("", 0, 2, 1), directionFix: false, through: true, walkAnime: true })] });
+            // (2026-11-16) the water hole in the dry riverbed and Kuba's barrel cart beside it (the old town had them as map events by the cistern)
+            const dl = D.MIEJSCA.dol, bk = D.MIEJSCA.beczka;
+            list.push({ id: 4635, name: "Dół z wodą w korycie", note: "", x: dl[0], y: dl[1], pages: [page([C(0, [])], { image: img("!$Zas_Kaluza", 0, 2, 1), priorityType: 0, through: true })] });
+            list.push({ id: 4634, name: "Wózek z beczką", note: "<Occupy:right=1>", x: bk[0], y: bk[1], pages: [page(script("Goraczka.beczka(this);"), { image: img("!House_Town", 0, 4, 0), priorityType: 1 })] });
             const p = D.MIEJSCA.plyta;
             list.push({ id: 4633, name: "Płyta rowu", note: "", x: p[0], y: p[1], pages: [page(script("Goraczka.plyta(this)"), { image: img(D.SPRITES.plyta, 0, 2, 0), priorityType: 0, through: true })] });
         }
@@ -720,12 +779,24 @@
     } });
     function stefa(interp) { const ev = interp && interp.eventId && $gameMap.event(interp.eventId()); T.talk.run(interp, "opiekunka", { ev, owner: PLUGIN }); }
     function zapora(interp) { if (stepNow() >= 0) popupOnce(interp.eventId(), tx1("napis.zapora")); }
+    // a guest of a scene talks as the person he is (TownLife's talk of that resident)
+    function goscTalk(interp) { const id = interp && interp.eventId ? interp.eventId() : 0, rk = Object.keys(goscie).find(k => goscie[k].id === id); if (rk) T.talk.run(interp, rk, { ev: $gameMap.event(id), owner: PLUGIN }); }
+    // the map loaded again while a crowd is held: everybody back on his place at once (nobody saw them walk)
+    function przywrocTlum() {
+        if (!has() || !started() || !onMap(D.MAP.miasto)) return;
+        const s = S(), h = hour();
+        if (s.sc.s2hold && !s.sc.s2) trzymaj({ kleofas: D.MIEJSCA.s2Kleofas }, true);
+        if (s.sc.s3hold === day() && !s.s3 && h < D.CZAS.s3Do) trzymaj(Object.assign({}, D.TLUM_S3), true);
+        if (s.sc.s4hold === day() && !s.koniec && !s.sc.s4) trzymaj(Object.assign({}, D.TLUM_S4, { wawrzyn: D.WAWRZYN_S4 }), true);
+    }
     function kociol(interp) { popupOnce(interp.eventId(), tx1("napis.kociol")); }
 
     // the hidden-at-rest state of the injected actors (set at map start) and the refresh
     T.on("mapReady", () => {
         if (!has()) return;
         scena.kroki = []; scena.holds = []; lastMapReady = Graphics.frameCount;
+        for (const k of Object.keys(goscie)) delete goscie[k];
+        przywrocTlum();
         if (started()) dayTick();
         refreshAll();
     }, { owner: PLUGIN });
@@ -738,6 +809,7 @@
         if (!has()) return;
         try {
             if (busy()) scenaTick();
+            goscieTick();
             if (++tickN % 30) return;
             if (!S().start) { if (w.active("W21") && otwarta()) begin(); return; }
             dayTick();
@@ -765,7 +837,7 @@
     function stefaGone() {
         const L = TL();
         if (!L || !L.setGone) return;
-        const want = started() && !campOut() && !S().koniec;
+        const want = false;   // (2026-11-16: she lives where the thread plays - never sent away)
         if (want !== !!L.gone("opiekunka")) L.setGone("opiekunka", want);
     }
     // the hero's mild fever (a bad premium, Survival.defineBuff): the work costs more for 18 hours
@@ -818,6 +890,7 @@
     function akcja(name, ...args) { const f = AKCJE[name]; if (f) f(...args); }
 
     window.Goraczka = T.register(PLUGIN, {
+        gosc: goscTalk, goscie: () => Object.keys(goscie).map(k => Object.assign({ key: k }, goscie[k])),
         stan: () => S(), stefa, akcja, wywar, jakChorzy, lozko, dawka, zbiorka, pytanie, wawrzynPodejscie, beczka, osad, plyta, drzwiPrzytulek, inna, zapora, kociol, osadnik,
         s3: how => applyS3(how), wybor: how => wybor_(how), begin, dayTick, refreshAll, scenaS1, scenaS2, scenaS3, scenaS4, scenaS5, stepNow, sickN, sickState, zbN, servedN,
         hospital, otwarta, trzymaj, zwolnij, busy, endC, osadnikGotowy, f9Rozdzial, itemBy, watek: w

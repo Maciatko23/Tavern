@@ -65,13 +65,14 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("Akt III: obrońcy Tymon (z żołnierzami) i Tomek z obozu - ten tylko obok Rafała", a3.tymon && a3.oboz && a3.obozTak && !a3.obozNie, a3);
 
     // ================================================================ W15 od początku
-    await t.newGame({ map: 8, x: 46, y: 49, dir: 8, hour: 10, quiet: true, minimap: false });
+    await t.newGame({ map: 220, x: 50, y: 43, dir: 8, hour: 10, quiet: true, minimap: false });
     await t.gold(200);
     await at(13, 14.5, 10);   // (the ferry of day 13 brings him - "w drodze" till noon, the hall 12-14, then the town)
     await t.eval("Podroznicy.przyplyn('relikwie'); 0");
-    await go(8, 46, 49, 8);
+    await go(220, 50, 43, 8);
     const g0 = await J("({ e: Podroznicy.stan().obecni.relikwie, ev: !!TownLife.eventOf('relikwie'), w: TownQuests.rec('W15') })");
-    t.check("dzień 13: Gaspar Lis na wyspie (pokój 12), jego zdarzenie w miasteczku; W15 jeszcze nie ruszył", !!g0.e && g0.e.pokoj === "12" && g0.ev && !g0.w, g0);
+    // (his room is 12 when free - a traveller of the day's pool may have it: then the book gives the nearest, 11)
+    t.check("dzień 13: Gaspar Lis na wyspie (pokój 12 albo najbliższy wolny), jego zdarzenie w miasteczku; W15 jeszcze nie ruszył", !!g0.e && ["12", "11"].includes(g0.e.pokoj) && g0.ev && !g0.w, g0);
     const meet = await gadaj("TownLife.eventOf('relikwie')", []);
     await t.eval("TownQuests.autoChecks(); 0");
     const w15a = await W("W15");
@@ -82,7 +83,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
 
     // ---------------------------------------------------------------- kazanie (dzień targowy 14, 9-12)
     await at(14, 9.6, 20);
-    await go(8, 46, 49, 8);
+    await go(220, 50, 43, 8);
     await t.eval("(function(){ const e = TownLife.eventOf('relikwie'); if (e) $gamePlayer.locate(e.x, e.y + 1); return 0; })()");
     await t.until("SwieteKosci.stan().kazanie > 0", 15, 200);
     await t.frames(30);
@@ -115,7 +116,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const w15e = await W("W15");
     const dw = await J("SwieteKosci.stan().dowod");
     t.check("22:12, piętro gości: kurier w kapturze pod drzwiami pokoju 12 (zdarzenie 3050); rozmowa - dowód, rozdz. 3 „Skrzynka Gaspara”",
-        !!ku && ku.shown && ku.x === 58 && ku.y === 16 && /Pan Vey płaci/.test(kt.text) && dw.kurier === 1 && w15e.name === "w15Skrzynka", { ku, kt: kt.text.slice(0, 120), dw, w15e });
+        !!ku && ku.shown && ku.x === 34 && ku.y === 16 && /Pan Vey płaci/.test(kt.text) && dw.kurier === 1 && w15e.name === "w15Skrzynka", { ku, kt: kt.text.slice(0, 120), dw, w15e });
 
     // ---------------------------------------------------------------- skrzynka na rynku (przy kapralu)
     const op0 = await J("TownQuests.opinion()"), re0 = await J("Podroznicy.renoma()");
@@ -192,19 +193,19 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("ostatni dzień Szczerby, 8:00: szukała w dzwonnicy i nie znalazła (los 99) - tymonOboz, W16 wykonany",
         d2.s.szukala === d2.d && d2.s.los === 99 && d2.s.koniec === "oboz" && f6.tymonOboz && w16b.s === "done", { d2, w16b });
 
-    // ---------------------------------------------------------------- rotmistrz Bełza: garnizon (przychylność 55)
+    // ---------------------------------------------------------------- kapitan Bełza: straż dworu (przychylność 55; od 2026-11-16 dwór Lorda, Map221)
     await skok("dezerter", 5);
     const fv0 = await J("Garnizon.favor()");
     const be = await rozmowa("rotmistrz");
     await t.frames(60);
     const w16c = await W("W16"), f7 = await flags();
     const tg = await J("(function(){ const e = $gameMap.event(3060); return { map: $gameMap.mapId(), ev: e ? { x: e.x, y: e.y, shown: !e.isTransparent() } : null, gdzie: Dezerter.gdzieTymon(), przysiega: Dezerter.stan().przysiega, fv: Garnizon.favor() }; })()");
-    t.check("garnizon, rotmistrz Bełza (przychylność 55): „Na mojej wyspie... zobaczymy.” - tymonGarnizon, przychylność +5, Tymon przy placu ćwiczeń, przysięga",
-        /Na mojej wyspie/.test(be.text) && f7.tymonGarnizon && w16c.s === "done" && tg.fv === fv0 + 5 && tg.map === 162 && !!tg.ev && tg.ev.shown && tg.gdzie === "garnizon" && tg.przysiega === -1, { be: be.text.slice(0, 120), tg, fv0 });
+    t.check("straż dworu, kapitan Bełza (przychylność 55): „Przy tym dworze... zobaczymy.” - tymonGarnizon, przychylność +5, Tymon na placu ćwiczeń dworu (221), przysięga",
+        /Przy tym dworze/.test(be.text) && f7.tymonGarnizon && w16c.s === "done" && tg.fv === fv0 + 5 && tg.map === 221 && !!tg.ev && tg.ev.shown && tg.gdzie === "garnizon" && tg.przysiega === -1, { be: be.text.slice(0, 120), tg, fv0 });
     const zol = await J(`(function(){ const A = Act3Data, g = A.DEFENDERS.find(d => d.key === "garnizon"), ty = A.DEFENDERS.find(d => d.key === "tymon"), c = { bell: true, flags: TownQuests.state().flags };
         const r = { g60: g.when(c), t60: ty.when(c), cisza: g.when({ bell: false, flags: c.flags }) };
         Garnizon.addFavor(59 - Garnizon.favor(), "test", true); r.g59 = g.when(c); r.t59 = ty.when(c); return r; })()`);
-    t.check("Akt III: przy przychylności 60 żołnierze królewscy przychodzą (i Tymon z nimi), przy 59 - nie; bez dzwonu nikt", zol.g60 && zol.t60 && !zol.g59 && !zol.t59 && !zol.cisza, zol);
+    t.check("Akt III: przy przychylności 60 strażnicy Lorda przychodzą (i Tymon z nimi), przy 59 - nie; bez dzwonu nikt", zol.g60 && zol.t60 && !zol.g59 && !zol.t59 && !zol.cisza, zol);
 
     // ---------------------------------------------------------------- noc pod piątką: Szczerba pod drzwiami, zwłoka, potem zabrany
     await skok("dezerter", 4);
@@ -262,13 +263,14 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         kub.rows.includes("Odstaw kubek do góry dnem") && kub.ok && kub.s.wskazal > 0 && kub.s.plan === "wydany" && (await t.gold()) === goldD + 60, kub);
 
     // ---------------------------------------------------------------- bęben werbownika na rynku (dzień po fali), nowa gra
-    await t.newGame({ map: 8, x: 27, y: 51, dir: 8, hour: 10, quiet: true, minimap: false });
+    // (2026-11-16: the market of Kruczogród, Map220 - the recruiter's table at 60,43, Tymon brought to 58,44)
+    await t.newGame({ map: 220, x: 58, y: 46, dir: 8, hour: 10, quiet: true, minimap: false });
     await at(25, 14, 10);
     await t.eval("Podroznicy.przyplyn('dezerter'); 0");
     await at(26, 9.3, 10);
-    await go(8, 27, 51, 8);
+    await go(220, 58, 46, 8);
     await t.until("TownLife.held('dezerter')", 10, 200);
-    await t.eval("(function(){ const e = TownLife.eventOf('dezerter'); if (e) e.locate(27, 49); return 0; })()");
+    await t.eval("(function(){ const e = TownLife.eventOf('dezerter'); if (e) e.locate(58, 44); return 0; })()");
     await t.until("Dezerter.stan().beben > 0", 15, 200);
     await t.frames(30);
     const bb = await J("({ s: Dezerter.stan(), w: TownQuests.rec('W16') ? TownQuests.rec('W16').s : null, werb: !!TownLife.eventOf('werbownik'), trwa: Dezerter.scena.trwa(), held: TownLife.held('dezerter') })");

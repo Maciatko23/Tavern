@@ -27,8 +27,8 @@ const { launch, sleep } = require("./cdp.js");
 
         // ---------------------------------------------------------------- data: the items, icons and food tags
         const items = await J(`[130,131,132,133,134,135,136,137].map(i => { const x = $dataItems[i]; return x && [x.name, x.iconIndex, x.consumable, x.itypeId, !!(x.meta && x.meta.Food), x.price > 0, x.description.length > 20]; })`);
-        check("8 new items 130-137 (Gulasz ... Miód pitny) with icons 392-399, consumable, <Food>, a price and a Polish description",
-            items.every((x, i) => x && x[1] === 392 + i && x[2] === true && x[3] === 1 && x[4] && x[5] && x[6]) && items[0][0] === "Gulasz" && items[7][0] === "Miód pitny", items.map(x => x && x[0]));
+        check("8 new items 130-137 (Gulasz ... Miód pitny) with their PixelLab icons (688+), consumable, <Food>, a price and a Polish description",
+            items.every((x, i) => x && x[1] >= 688 && x[2] === true && x[3] === 1 && x[4] && x[5] && x[6]) && items[0][0] === "Gulasz" && items[7][0] === "Miód pitny", items.map(x => x && x[0]));
         const pix = await ev(`new Promise(res => { const bmp = ImageManager.loadSystem("IconSet"); const chk = () => { if (!bmp.isReady()) return setTimeout(chk, 50); const out = []; for (let i = 392; i <= 399; i++) { let n = 0; const d = bmp.context.getImageData((i % 16) * 32, Math.floor(i / 16) * 32, 32, 32).data; for (let k = 3; k < d.length; k += 4) if (d[k] > 200) n++; out.push(n); } res({ out, h: bmp.height }); }; chk(); })`);
         check("their icons are drawn (well filled cells) on a sheet at least 800 px tall", pix.out.every(n => n > 200) && pix.h >= 800, pix);
 

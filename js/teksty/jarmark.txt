@@ -1,22 +1,22 @@
 # Teksty wątku W17 „Jarmark Kruczogrodu” (wtyczki Jarmark_Data.js, Jarmark.js, Jarmark_Sceny.js) - docs/zadania_nowe/jarmark.md.
-# Dni 47-53: stragany, beczki, lampiony, otwarcie, konkurs piwny, turniej w kości, sztuka trupy na rynku, kradzież Srebrnego Kruka,
-# śledztwo i nocny pościg po dachach. Ton: ciepły, z humorem, z nutą goryczy. Bohater jest nastolatkiem: dorośli mówią do niego
+# Dni 47-53: stragany, beczki, lampiony, otwarcie, konkurs piwny, turniej w kości, sztuka trupy pod wiatrakiem, kradzież Srebrnego Kruka,
+# śledztwo i nocny pościg uliczkami (2026-11-16: jarmark na łące pod młynem w nowym Kruczogrodzie). Ton: ciepły, z humorem, z nutą goryczy. Bohater jest nastolatkiem: dorośli mówią do niego
 # „chłopcze”. „> ” - mówi bohater; bez tego - postać, z którą się rozmawia. {nazwa} - wstawia gra.
 
 # ======================================================================== zadanie W17 (dziennik: FABUŁA)
 zadania.W17.title = Jarmark Kruczogrodu
-zadania.W17.where = ratusz, rynek, Sukiennice, tawerna, dachy przy dzwonnicy
+zadania.W17.where = ratusz, łąka pod wiatrakiem, tawerna, dzwonnica
 zadania.W17.when = dni 47-53
-zadania.W17.desc = Raz w roku, pod koniec lata, Kruczogród urządza Jarmark: kramy, beczki z browaru, konkurs piwny i turniej w kości w tawernie, a wieczorami wędrowna trupa gra na rynku „Legendę o Kruku i Wilku”. Sołtys Bronisław liczy na twoje ręce. Ale trzeciego dnia z poduszki obok sceny zniknie Srebrny Kruk Założycieli - i ktoś będzie musiał go odnaleźć.
-zadania.W17.fail.text = Jarmark odbył się bez ciebie. Kruk zniknął, a Lord zamknął rynek w południe ostatniego dnia.
+zadania.W17.desc = Raz w roku, pod koniec lata, Kruczogród urządza Jarmark: kramy, beczki z browaru, konkurs piwny i turniej w kości w tawernie, a wieczorami wędrowna trupa gra pod wiatrakiem „Legendę o Kruku i Wilku”. Sołtys Bronisław liczy na twoje ręce. Ale trzeciego dnia z poduszki obok sceny zniknie Srebrny Kruk Założycieli - i ktoś będzie musiał go odnaleźć.
+zadania.W17.fail.text = Jarmark odbył się bez ciebie. Kruk zniknął, a Lord zamknął jarmark w południe ostatniego dnia.
 zadania.W17.steps.0.text = Sołtys Bronisław szuka rąk do roboty przy jarmarku (ratusz, dzień 47 i dalej, 8-18). Powiedz mu, czy pomożesz.
-zadania.W17.steps.1.text = Przygotowania do dnia 49, do 10:00: kramy ({kramy}/6 stanowisk na rynku), beczki z browaru, lampiony (8 słupów, od wieczora). Zrobione prace: {prace}/3.
-zadania.W17.steps.2.text = Dzień 49: jarmark otwarty o 14:30 na rynku. Można popatrzeć na pochód od wschodniej bramy.
+zadania.W17.steps.1.text = Przygotowania do dnia 49, do 10:00: kramy ({kramy}/6 stanowisk pod wiatrakiem), beczki z browaru, lampiony (8 słupów, od wieczora). Zrobione prace: {prace}/3.
+zadania.W17.steps.2.text = Dzień 49: jarmark otwarty o 14:30 pod wiatrakiem. Można popatrzeć, jak pochód Lorda schodzi od dworu przez wschodni mostek.
 zadania.W17.steps.3.text = Dzień 49, 19-21, w tawernie: konkurs piwny Borgara z Mietkiem Kwaśniakiem. Czterech sędziów, każdy lubi coś innego. Rozmowy w mieście podpowiadają co.
 zadania.W17.steps.4.text = Dni 50-51, w tawernie (sala gier), 17-23: turniej w kości. Trzy mecze, wpisowe 20 G. Zapisz się u Borgara. Mecz {mecz}/3.
-zadania.W17.steps.5.text = Dzień 51: sztuka trupy na rynku o 19:00. Można pomóc trupie (kostium, żar, peruka), od 13:00. Wieczorem warto stać pod sceną.
-zadania.W17.steps.6.text = Srebrny Kruk zniknął! Pięć miejsc, pięć śladów: Sukiennice, Cech, garbarnia, łaźnia, przytułek. Potrzeba co najmniej trzech. Znaleziono: {slady}/5.
-zadania.W17.steps.7.text = Dzień 52, od 23:30: zasadzka przy dzwonnicy. Sołtys czeka na południe od wieży. Złodziej ucieka po dachach.
+zadania.W17.steps.5.text = Dzień 51: sztuka trupy pod wiatrakiem o 19:00. Można pomóc trupie (kostium, żar, peruka), od 13:00. Wieczorem warto stać pod sceną.
+zadania.W17.steps.6.text = Srebrny Kruk zniknął! Pięć miejsc, pięć śladów: ratusz, Cech, studnia na rynku, a w Podgrodziu garbarnia i przytułek. Potrzeba co najmniej trzech. Znaleziono: {slady}/5.
+zadania.W17.steps.7.text = Dzień 52, od 23:30: zasadzka przy dzwonnicy. Sołtys czeka na południe od wieży. Złodziej ucieka uliczkami - trzeba za nim biec.
 zadania.W17.steps.8.text = Dzień 53: sołtys czeka na twoją decyzję - co z Marcelem. W południe Lord zamyka jarmark.
 
 kroki.tak = tak
@@ -59,9 +59,9 @@ napis.jarmark = Jarmark
 napis.otwarty = Jarmark otwarty
 napis.otwartyPod = Pięć dni kramów, piwa i kości
 napis.kradziez = Kruk zniknął w ciemności
-napis.kradziezPod = Rynek zamknięty. Zacznij od Sukiennic
+napis.kradziezPod = Miasto zamknięte. Zacznij od ratusza
 napis.dzwon = Dzwon bije alarm: dwa uderzenia i cisza
-napis.zapalone = Rynek świeci jak w dzień
+napis.zapalone = Jarmark świeci jak w dzień
 napis.zapalonePod = Osiem lampionów zapalonych
 
 # ======================================================================== dotyk
@@ -71,8 +71,8 @@ dotyk.poduszka = > (Czerwona poduszka. Srebrny Kruk leży na niej jak żywy.)
 
 # ======================================================================== J1: sołtys
 [soltys.prosba]
-Chłopcze! Dobrze, że jesteś. Za dwa dni jarmark. Raz w roku, pod koniec lata, całe miasto stawia kramy pod arkadami Sukiennic.
-Mam trzy prace: sześć kramów na rynku, cztery beczki z browaru Borgara i osiem lampionów na słupach. Ręce mam dwie, a Teodor liczy tylko pieniądze.
+Chłopcze! Dobrze, że jesteś. Za dwa dni jarmark. Raz w roku, pod koniec lata, całe miasto stawia kramy na łące pod wiatrakiem, przy polu jęczmienia.
+Mam trzy prace: sześć kramów pod wiatrakiem, cztery beczki z browaru Borgara i osiem lampionów na słupach. Ręce mam dwie, a Teodor liczy tylko pieniądze.
 Pomożesz? Zapłacę po dwanaście groszy za każdą pracę.
 
 soltys.opcja.tak = Pomogę.
@@ -93,7 +93,7 @@ Jak idzie? Kramy: {kramy} z 6. Beczki Borgara: {beczki}. Lampiony: {lampy} z 8 p
 # ======================================================================== J2-J4: prace
 [dluto.deski]
 Deski na kramy? Sześć sztuk. Sosna, sucha, bez sęków. Weź i nie zgub, bo następnych nie mam.
-Stawiasz w żółtych romboczkach na rynku. Młotek jest przy każdym - chyba że go ktoś pożyczył. Bywa.
+Stawiasz w żółtych romboczkach pod wiatrakiem. Młotek jest przy każdym - chyba że go ktoś pożyczył. Bywa.
 
 [dluto.juz]
 Deski już masz. Reszta to stolarka, której ci nie oddam.
@@ -105,7 +105,7 @@ Obręcze do czterech beczek. Cztery sztuki, żelazne, nowe. Zanieś je Borgarowi
 Osiem lampionów na osiem słupów. Wieszasz wieczorem, od piątej, kiedy zaczyna się ściemniać. Ognia nie dotykaj, są już zapalone.
 
 [borgar.beczki]
-Obręcze? Dobrze. Beczki ustawię na rynku sam, a ty już nie biegaj. Piwa starczy na pięć dni, a jeśli nie, to znaczy, że piłem je ja.
+Obręcze? Dobrze. Beczki ustawię przy scenie sam, a ty już nie biegaj. Piwa starczy na pięć dni, a jeśli nie, to znaczy, że piłem je ja.
 
 temat.beczki = Borgarze, mam obręcze od Szczepana.
 
@@ -118,7 +118,7 @@ prace.deskiWziete = Sześć desek na kramy
 prace.obrecze = Cztery obręcze do beczek
 prace.lampiony = Osiem lampionów
 prace.brakObreczy = Brakuje obręczy
-prace.beczki = Beczki Borgara jadą na rynek
+prace.beczki = Beczki Borgara jadą pod wiatrak
 
 # ======================================================================== J6: konkurs piwny
 temat.konkurs = Borgarze, konkurs piwny. Zaczynamy?
@@ -210,7 +210,7 @@ Peruka dla Bonawentury? Z lnu, obtoczona w mące. Ma dobrze wyglądać na scenie
 
 pomoc.napis = Pomoc dla trupy ({n}/3)
 
-# trupa (rozmowy na rynku)
+# trupa (rozmowy na jarmarku)
 [ofelia.rozmowa]
 Chłopcze! Madame Ofelia Sroka, dyrektor Sroczego Teatru! Gramy dziś wieczór: „Legenda o Kruku i Wilku”. Przyjdź o siódmej, pod scenę. Stań z przodu.
 
@@ -274,7 +274,7 @@ Brawo! Brawo! Wieczorem sztuka, oczywiście, za półtora grosza!
 
 [notatki.otwarcie]
 Jarmark otwarty
-Lord Zaleski otworzył jarmark na rynku. Pięć dni kramów, piwa i kości. Wieczorem trupa Ofelii gra „Legendę o Kruku i Wilku”.
+Lord Zaleski otworzył jarmark pod wiatrakiem. Pięć dni kramów, piwa i kości. Wieczorem trupa Ofelii gra „Legendę o Kruku i Wilku”.
 
 # ======================================================================== S3 / S4: sztuka i kradzież
 [sztuka.ofelia]
@@ -318,11 +318,11 @@ Zamknąć bramy! Nikt stąd nie wyjdzie!
 
 [notatki.kradziez]
 Kruk zniknął w ciemności
-Podczas przedstawienia zgasły pochodnie i z poduszki zniknął Srebrny Kruk Założycieli. Bez niego jarmark straci przywilej: w południe dnia 53 Lord go zamknie. Pięć miejsc, pięć śladów: Sukiennice, Cech, garbarnia, łaźnia, przytułek.
+Podczas przedstawienia zgasły pochodnie i z poduszki zniknął Srebrny Kruk Założycieli. Bez niego jarmark straci przywilej: w południe dnia 53 Lord go zamknie. Pięć miejsc, pięć śladów: ratusz, Cech, studnia na rynku, garbarnia i przytułek w Podgrodziu.
 
 # ======================================================================== J9: ślady
 [slad.gablota]
-> (Gablota w Sukiennicach otwarta kluczem, nie wyłamana. Sznur kotary przecięty, a na posadzce kropla zielonego wosku. Teatralna świeca. Ktoś z trupy.)
+> (Gablota w ratuszu, gdzie Kruk nocował, otwarta kluczem, nie wyłamana. Sznur kotary przecięty, a na posadzce kropla zielonego wosku. Teatralna świeca. Ktoś z trupy.)
 
 [slad.cech]
 > (Rejestr cechu: „Dorobiony klucz do gabloty - pan w sukiennej chuście, zapłacił srebrnym groszem z orłem.” Moneta z kontynentu. Kupiec sukienny.)
@@ -331,7 +331,7 @@ Podczas przedstawienia zgasły pochodnie i z poduszki zniknął Srebrny Kruk Za�
 > (W kadzi z garbnikiem ktoś wyprał szary, wyświechtany płaszcz z białą szminką. Pachnie dębiną. Płaszcz suflera.)
 
 [slad.laznia]
-> (Łaźnik mówi: „Rano mył się u nas facet z białymi śladami na twarzy i prosił o mydło do farby.” Szminka teatralna. Szept.)
+> (Przy studni ktoś zostawił na cembrowinie białe smugi. Studzienny mówi: „O świcie mył tu twarz chudy facet z białymi śladami i pytał, czym zmyć farbę.” Szminka teatralna. Szept.)
 
 [slad.przytulek]
 > (Ciotka Stefa: „Matka Szepta, Berta, mieszka u nas. Dach jej opłaca jakiś kupiec. Rachunki ma sufler w kieszeni.” Dlatego kradnie.)
@@ -342,10 +342,10 @@ Podczas przedstawienia zgasły pochodnie i z poduszki zniknął Srebrny Kruk Za�
 slad.napis = Poszlaka
 slad.pod = Znaleziono {n}/5
 [soltys.sledztwo]
-Zamknąłem rynek, chłopcze. Do rana nikt nie wyjedzie. Pięć miejsc, pięć śladów: Sukiennice, Cech, garbarnia, łaźnia, przytułek. Znalazłeś {n} z pięciu. Potrzeba trzech.
+Zamknąłem bramy, chłopcze. Do rana nikt nie wyjedzie. Pięć miejsc, pięć śladów: ratusz, Cech, studnia na rynku, a w Podgrodziu garbarnia i przytułek. Znalazłeś {n} z pięciu. Potrzeba trzech.
 
 [notatki.slad.gablota]
-Ślad: gablota w Sukiennicach
+Ślad: gablota w ratuszu
 Gablota otwarta kluczem, nie wyłamana. Przecięty sznur kotary i zielona kropla wosku: teatralna świeca. Ktoś z trupy.
 
 [notatki.slad.cech]
@@ -357,8 +357,8 @@ Zamkarz zapisał: dorobiony klucz do gabloty dla pana w sukiennej chuście. Zap�
 W garbarni ktoś wyprał szary płaszcz suflera z białą szminką. Ślad prowadzi do Szepta.
 
 [notatki.slad.laznia]
-Ślad: łaźnia
-Rano w łaźni mył się człowiek z białymi śladami na twarzy. Prosił o mydło do farby. Szept.
+Ślad: studnia
+O świcie przy studni mył twarz człowiek z białymi śladami. Pytał, czym zmyć farbę. Szept.
 
 [notatki.slad.przytulek]
 Ślad: przytułek
@@ -370,16 +370,19 @@ Ofelia: za sceną kręcił się ktoś z zewnątrz, z zieloną świecą. Nikt z t
 
 # ======================================================================== J10: zasadzka i pościg
 [zasadzka.dobrze]
-Chłopcze, mamy trzy ślady z pięciu, a nawet więcej: {n}. Szept ma Kruka i czeka na dachach. Wiemy, którędy pójdzie: od dużego domu, po dwóch nowych kamienicach, na dzwonnicę. Idź za nim.
+Chłopcze, mamy trzy ślady z pięciu, a nawet więcej: {n}. Szept ma Kruka. O północy ma go oddać kupcowi tu, przy dzwonnicy. Wyjdzie zza wieży - a jak nas zobaczy, rzuci się do ucieczki. Jesteś najszybszy z nas. Biegnij za nim i nie zgub go.
 
 [zasadzka.slabo]
-Znalazłeś tylko {n} ślady. Za mało, ale czasu nie ma. Szept już na dachach. Idź za nim. Ma nad tobą przewagę, bo stracił cię z oczu.
+Znalazłeś tylko {n} ślady. Za mało, ale czasu nie ma. Szept już tu jest, za wieżą. Biegnij za nim. Będzie szybszy, bo wie, że go szukamy.
 
-pogon.szept.biegnie = Nie dogonisz mnie, chłopcze! Dachy znam jak własną kieszeń!
-pogon.szept.biegnie2 = Nie ma cię! Zgubiłeś się! Ha!
-pogon.start = Pościg po dachach
-pogon.startPod = Strzałki - ruch, OK - skok. Nie spadnij
-pogon.upadek = Spadasz na ulicę! +{n} s
+pogon.szept.biegnie = Nie dogonisz mnie, chłopcze! Te uliczki znam jak własną kieszeń!
+pogon.szept.biegnie2 = Za późno! Ha! Szukajcie wiatru w polu!
+pogon.start = Pościg uliczkami
+pogon.startPod = Biegnij za Szeptem i nie zgub go z oczu
+pogon.zgubiony = Zgubiłeś go z oczu! +{n} s
+pogon.beczki = Szept przewrócił beczki! Biegnij dookoła
+pogon.szept.drwi.1 = Szybciej, chłopcze, szybciej!
+pogon.szept.drwi.2 = Jeszcze tu jesteś?! Uparty...
 [pogon.meta.1]
 > Szept! Stój! Dalej nie uciekniesz!
 
@@ -402,17 +405,17 @@ pogon.opcja.swiadek = Zostaje świadkiem.
 Zostanę. Powiem sołtysowi wszystko: o kupcu, o bilecie z promu, o rachunkach. Tylko nie odbieraj matce dachu.
 
 pogon.kruk = Srebrny Kruk jest u ciebie
-pogon.krukPod = Rano zanieś go na rynek
-pogon.koniec = Pościg skończony: {c} s, upadków {u}
+pogon.krukPod = Rano sołtys czeka w ratuszu
+pogon.koniec = Pościg skończony: {c} s, zgubiony z oczu: {u}
 pogon.koniecPod = Rano sołtys czeka na decyzję
 pogon.uciekl = Szept uciekł z Krukiem
 [notatki.pogon]
-Pościg po dachach
-Szept z Krukiem ucieka po dachach: duży dom, dwie nowe kamienice, dzwonnica. Strzałki - ruch, OK - skok przez szczelinę. Kto spadnie, traci piętnaście sekund.
+Pościg uliczkami
+Szept z Krukiem ucieka spod dzwonnicy: między domami, schodami w dół do koryta i uliczkami dolnego miasta. Trzeba biec i nie zgubić go z oczu - kto go zgubi, traci piętnaście sekund.
 
 [notatki.pogonKoniec]
 Kruk odzyskany
-Dogoniłem Szepta na dachu dzwonnicy. Kruk jest u mnie. Rano sołtys zapyta, co zrobić z Marcelem.
+Dogoniłem Szepta. Kruk jest u mnie. Rano sołtys zapyta, co zrobić z Marcelem.
 
 # ======================================================================== J11: rano
 [rano.start]
@@ -466,15 +469,15 @@ Sołtys Bronisław poprosił o pomoc przy jarmarku: sześć kramów, cztery becz
 
 [notatki.kramy]
 Kramy stoją
-Sześć stanowisk pod arkadami Sukiennic gotowych na kupców z promu.
+Sześć stanowisk pod wiatrakiem gotowych na kupców z promu.
 
 [notatki.lampiony]
 Lampiony wiszą
-Osiem lampionów na słupach rynku. Wieczorem miasto świeci jak w dzień.
+Osiem lampionów na słupach jarmarku. Wieczorem łąka pod wiatrakiem świeci jak w dzień.
 
 [notatki.beczki]
 Beczki Borgara
-Cztery obręcze zaniosłem Borgarowi. Beczki pojadą na rynek.
+Cztery obręcze zaniosłem Borgarowi. Beczki pojadą pod scenę.
 
 [notatki.prace]
 Wszystkie prace zrobione

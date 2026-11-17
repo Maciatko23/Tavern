@@ -89,7 +89,8 @@
     // the clothes from the items' notes: <Ubior:miejsce,wzor> -> the part (read again when the database changes); (2026-10-23) the
     // armour <Zbroja:miejsce,wzor> the same way, the shields <Tarcza:wzor> -> the left hand, the trinkets <Dodatek:rodzaj> -> Dodatek
     // (Bron_Data.js; the weapons <Bron:...> are Combat's right hand)
-    const UBIOR_PART = { glowa: "head", tors: "torso", nogi: "legs", stopy: "feet", pas: "belt", rece: "hands", plecy: "back" };
+    // (2026-11-17, docs/ekwipunek/NOWE_80.md) + the cloaks <Ubior:plaszcz,...> on the part "Płaszcz" (with 112)
+    const UBIOR_PART = { glowa: "head", tors: "torso", nogi: "legs", stopy: "feet", pas: "belt", rece: "hands", plecy: "back", plaszcz: "cloak" };
     const NOTED = new Set();   // (the things put on a part by their note - not the old ones above)
     let notesOf = null, notesLen = 0;
     function partOfNote(note) {
@@ -227,7 +228,11 @@
         const id = h === "m0" ? 0 : Number(h.slice(1)), w = F && F.weaponNow ? F.weaponNow(id) : F && F.MELEE ? F.MELEE[id] : null;
         if (!w) return "";
         const lack = w.lack ? " · poziom " + w.poziom + ": słabiej o " + Math.round(w.lack * 100) + "%" : "";
-        return "obrażenia " + w.dmg + " · zasięg " + w.reach.toFixed(1).replace(".", ",") + (w.crit ? " · krytyk +" + Math.round(w.crit * 100) + "%" : "") + (w.fire ? " · podpala" : "") + lack;
+        // (2026-11-17) the damage's range (Bron_Data.zakres: ±10%), the reach without the trait's part, the weapon's traits (Bron_Cechy.js)
+        const BD = T.api("Bron_Data"), dmg = BD && BD.zakres ? BD.zakres(w.dmg) : String(w.dmg), reach = (F.MELEE && F.MELEE[id] ? F.MELEE[id] : w).reach;
+        const traits = id ? String(T.call("Bron_Cechy", "slowa", id) || "") : "";
+        return "obrażenia " + dmg + " · zasięg " + reach.toFixed(1).replace(".", ",") + (w.crit ? " · krytyk +" + Math.round(w.crit * 100) + "%" : "") + (w.fire ? " · podpala" : "") +
+            (traits ? " · " + traits : "") + lack;
     }
     // the burning torch out of the hand: into the ground in front of him (or where he stands) - it keeps burning there - else put out
     function torchAway() {

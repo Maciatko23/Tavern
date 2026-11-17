@@ -1152,28 +1152,28 @@
    "on": true,
    "label": "chód: dół",
    "file": "map_luska_new_0.png",
-   "head": true
+   "head": false
   },
   {
    "set": "luska",
    "on": true,
    "label": "chód: prawo-dół",
    "file": "map_luska_new_1.png",
-   "head": true
+   "head": false
   },
   {
    "set": "luska",
    "on": true,
    "label": "chód: prawo",
    "file": "map_luska_new_2.png",
-   "head": true
+   "head": false
   },
   {
    "set": "luska",
    "on": true,
    "label": "chód: góra",
    "file": "map_luska_new_3.png",
-   "head": true
+   "head": false
   },
   {
    "set": "luska",
@@ -1720,63 +1720,63 @@
  "ms": {
   "Hero_Walk": {
    "n": 55,
-   "max": 24.2,
-   "avg": 6.6
+   "max": 18.6,
+   "avg": 4.9
   },
   "Hero_Run": {
    "n": 21,
-   "max": 17,
-   "avg": 6.7
+   "max": 11.3,
+   "avg": 5
   },
   "Hero_Axe": {
    "n": 21,
-   "max": 24.7,
-   "avg": 9.2
+   "max": 18,
+   "avg": 6.8
   },
   "Hero_AxeSide": {
    "n": 45,
-   "max": 23.3,
-   "avg": 8.8
+   "max": 20.4,
+   "avg": 6.8
   },
   "Hero_Club": {
    "n": 14,
-   "max": 24.5,
-   "avg": 11
+   "max": 14.5,
+   "avg": 7.3
   },
   "Hero_Spear": {
    "n": 14,
-   "max": 18.7,
-   "avg": 10
+   "max": 14.7,
+   "avg": 7.3
   },
   "Hero_Sword": {
    "n": 22,
-   "max": 22.5,
-   "avg": 10.1
+   "max": 14.6,
+   "avg": 7.3
   },
   "Hero_Pick": {
    "n": 14,
-   "max": 17.3,
-   "avg": 9.3
+   "max": 11.7,
+   "avg": 6.8
   },
   "Hero_Sit": {
    "n": 28,
-   "max": 36.9,
-   "avg": 17
+   "max": 23.3,
+   "avg": 13
   },
   "Hero_LieDown": {
    "n": 35,
-   "max": 44.6,
-   "avg": 17.7
+   "max": 35,
+   "avg": 13.2
   },
   "Hero_Roll": {
    "n": 14,
-   "max": 20.3,
-   "avg": 8.3
+   "max": 13.3,
+   "avg": 5.8
   },
   "Hero_TorchWalk": {
    "n": 14,
-   "max": 11.4,
-   "avg": 6.4
+   "max": 8.4,
+   "avg": 4.8
   }
  }
 }

@@ -1,0 +1,67 @@
+{
+ "3": {
+  "reachable": 10542,
+  "edge": {
+   "N": 30,
+   "S": 0,
+   "W": 67,
+   "E": 97
+  },
+  "spots": {
+   "westGate": true,
+   "eastGate": true,
+   "topGate": true,
+   "bottomGate": true,
+   "springFront": true,
+   "inside": true
+  }
+ },
+ "4": {
+  "reachable": 10911,
+  "edge": {
+   "N": 107,
+   "S": 93,
+   "W": 4,
+   "E": 0
+  },
+  "spots": {
+   "springFront": true,
+   "fenceYard": true
+  }
+ },
+ "20": {
+  "reachable": 8769,
+  "edge": {
+   "N": 95,
+   "S": 0,
+   "W": 85,
+   "E": 0
+  },
+  "spots": {
+   "doorFront": true,
+   "gateBottom": true,
+   "field": false,
+   "leftYardGate": true,
+   "rightYardGate": true,
+   "leftYardInside": true,
+   "rightYardInside": true
+  }
+ },
+ "125": {
+  "reachable": 9469,
+  "edge": {
+   "N": 114,
+   "S": 0,
+   "W": 0,
+   "E": 96
+  },
+  "spots": {
+   "szlaban": true,
+   "guardFront": true,
+   "sacks": true,
+   "cartSide": false,
+   "klifGate": true,
+   "lighthouse": true
+  }
+ }
+}

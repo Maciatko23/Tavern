@@ -94,7 +94,9 @@
 
     const dataItem = id => $dataItems[id] || null;
     const enabled = () => ENABLED;
-    const lifeOf = id => (TOOLS[id] ? Math.max(1, Math.round(TOOLS[id].life * FACTOR)) : 0);
+    // (2026-11-17, Bron_Cechy.js) a weapon's trait trwalosc (and one forged well): its life that part longer
+    const lifeMul = id => { const c = T.api("Bron_Cechy"); return c && c.trwalosc ? 1 + c.trwalosc(id) : 1; };
+    const lifeOf = id => (TOOLS[id] ? Math.max(1, Math.round(TOOLS[id].life * FACTOR * lifeMul(id))) : 0);
 
     // Tawerna.state "wear" = { used: { itemId: uses }, warned: { itemId: true }, repaired: n }; an older save's $gameSystem._wear is
     // adopted (the old name stays a hidden way there: Journal, the tests)

@@ -44,7 +44,7 @@
     const params = PluginManager.parameters(PLUGIN);
     const DEF = String(params.enabled === undefined || params.enabled === "" ? "false" : params.enabled) === "true";
     const MAP = 1;
-    const HALL = { x0: 1, y0: 27, x1: 47, y1: 44 };   // sala, bar i scena (kratki)
+    const HALL = { x0: 1, y0: 14, x1: 47, y1: 31 };   // sala, bar i scena (kratki)
     const DARK_PLUS = 0;                                 // o tyle ciemniejsza noc (0-255; 2026-11-05: 0, pomieszczenia bez lamp były czarne)
     const BARD_ID = 360, BARD_X = 34, BARD_Y = 29;       // zdarzenie grajka na scenie (Przytulna: nowe id w mapie)
     const BARD_FROM = 18, BARD_TO = 23.5;                // godziny gry grajka
@@ -56,7 +56,7 @@
     const CELL = 84, FEET_Y = 74;                        // klatka PixelLab: 84x84, stopa w wierszu 74
     // Borgar wyciera ladę (gracz 2026-11-05: „macha w powietrzu, powinien stać kratkę niżej”): ze swojego miejsca przechodzi za wolny kawałek lady obok doniczki.
     // BAR_EDGE: o tyle pikseli poniżej stóp na jego zwykłym miejscu leży tylny brzeg blatu - co niżej, zasłania lada; BAR_LEAN: przy wycieraniu pochyla się nad nią
-    const BORGAR_HOME = { x: 16, y: 28 }, BORGAR_BAR = { x: 17, y: 29 }, BAR_EDGE = 32, BAR_LEAN = 8;
+    const BORGAR_HOME = { x: 16, y: 15 }, BORGAR_BAR = { x: 17, y: 16 }, BAR_EDGE = 32, BAR_LEAN = 8;
     const borgarOver = ev => { const r = ev._realY - BORGAR_HOME.y; return r > 0 && r <= 1 ? Math.max(0, Math.round(r * $gameMap.tileHeight() - BAR_EDGE)) : 0; };
     function borgarStep(ev, to) {
         const h = to.x > ev.x ? 6 : 4, v = to.y > ev.y ? 2 : 8, th = ev.isThrough();

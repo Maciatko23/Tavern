@@ -69,7 +69,7 @@ kit.test({ port: 9511, bootCheck: "the game boots", errorCheck: "no errors in th
         /Kruk u nas, klucz u Kowali/.test(gp.text) && gpS.n === 2 && !!gpS.c && (await notes()).includes("Kruk u nas, klucz u Kowali"), { t: gp.text.slice(0, 300), gpS });
     // Kleofas on the cliff: shown the key
     await t.eval("(function(){ const s = Pustelnia.state(); s.met = s.met || Tawerna.time.day(); TownQuests.state().flags.pustelnikMet = TownQuests.state().flags.pustelnikMet || 1; return 0; })()");
-    await t.go(155, 24, 30, 8);
+    await t.go(220, 10, 27, 8);
     await at(62, 13.2, 50);
     const kl = await talk("TownLife.eventOf('pustelnik')", []);
     await t.frames(80);
@@ -81,7 +81,7 @@ kit.test({ port: 9511, bootCheck: "the game boots", errorCheck: "no errors in th
         kS.n === 3 && !!kS.rod && kS.step === "w4Konfrontacja" && ns.includes("Ród Kowali") && /Rozdział 7/.test(await W4ops()), { kS, ns: ns.slice(-5) });
 
     // ================================================================ 7. the confrontation: not before chapter 1's end, not before closing
-    await t.go(1, 52, 31, 8);
+    await t.go(1, 38, 33, 8);
     await at(63, 20);
     const early = await talk(BORGAR, ["Borgarze... chodzi", "Nie teraz"]);
     t.check("at the bar at 20:00: the topic 'Borgarze... chodzi o twój ród.' - 'Po zamknięciu - od jedenastej' and nothing happens",
@@ -109,17 +109,17 @@ kit.test({ port: 9511, bootCheck: "the game boots", errorCheck: "no errors in th
         /Bogumił, był z twojej krwi/.test(angry.text) && /przysięga straży klucza/.test(angry.text) && /Kładziesz klucz kasztelana na ladzie/.test(angry.text) && /Jutro nie otwieram/.test(angry.text) &&
         an.step === "w4Piwnica" && an.closed === 64 && !!an.f && !!an.wie && /zamknął tawernę na dzień 64/.test(await W4ops()), { an, t: angry.text.slice(-300) });
     // the shut day: the town's door, Borgar inside, no shift
-    await t.go(8, 51, 17, 8);
+    await t.go(220, 48, 36, 8);
     await at(64, 10);
     await t.popups({ clear: true });
-    await t.eval("(function(){ $gamePlayer.locate(51, 17); $gamePlayer.setDirection(8); $gameMap.event(22).start(); return 0; })()");
+    await t.eval("(function(){ $gamePlayer.locate(43, 35); $gamePlayer.setDirection(8); $gameMap.event(17).start(); return 0; })()");
     await t.frames(60);
     const door = await J("({ map: $gameMap.mapId(), y: $gamePlayer.y, ban: Kasztelan.shiftBan() })");
     const dp = await t.popups();
     await t.shot(path.join(SHOTS, "w4_tawerna_zamknieta.png"));
     t.check("the shut day: the tavern's door in town - a popup over the hero 'Zamknięte. Na drzwiach kredą: „Dziś nieczynne”.', a step back, still in town; Story's shift refused",
-        door.map === 8 && door.y >= 17 && dp.some(p => /Dziś nieczynne/.test(p)) && /żadnej zmiany/.test(door.ban || ""), { door, dp });
-    await t.go(1, 52, 31, 8);
+        door.map === 220 && door.y >= 35 && dp.some(p => /Dziś nieczynne/.test(p)) && /żadnej zmiany/.test(door.ban || ""), { door, dp });
+    await t.go(1, 38, 33, 8);
     await at(64, 17);
     const shut = await talk(BORGAR, []);
     t.check("...inside (from the cellar or a room): Borgar only 'Zamknięte, mówiłem. Dziś nie nalewam. Nikomu.' - no menu, no shift",
@@ -156,7 +156,7 @@ kit.test({ port: 9511, bootCheck: "the game boots", errorCheck: "no errors in th
     await t.go(9, 14, 4, 6);
     await at(65, 2, 40);
     const post = await J("({ b: !!$gameMap.event(540) && !$gameMap.event(540).isTransparent() })");
-    await t.go(1, 52, 31, 8);
+    await t.go(1, 38, 33, 8);
     await at(65, 2, 40);
     const post2 = await J(`({ tr: ${BORGAR}.isTransparent(), away: Kasztelan.barAway() })`);
     t.check("the guard's nights (1-5): Borgar by the grate in the cellar, not at the bar", post.b && post2.tr && post2.away, { post, post2 });
@@ -172,7 +172,7 @@ kit.test({ port: 9511, bootCheck: "the game boots", errorCheck: "no errors in th
     await resetW4();
     await t.eval(`(function(){ const f = TownQuests.state().flags; f.w3Borgar = 1; f.w4Faster = 1; Underground.state().truths["76"] = { who: "borgar", floor: 76 }; TownQuests.autoChecks(); return 0; })()`);
     await J("Kasztelan.debugJump(7)");
-    await t.go(1, 52, 31, 8);
+    await t.go(1, 38, 33, 8);
     await at(66, 23.5);
     const pend = await J("Kasztelan.nightsPending()");
     const prep = await talk(BORGAR, ["Borgarze... chodzi", "Powiedz mu wszystko", "Chodź ze mną"]);
@@ -199,7 +199,7 @@ kit.test({ port: 9511, bootCheck: "the game boots", errorCheck: "no errors in th
     const bkp = await t.popups();
     t.check("...Borgar at his fire ('Dziesiąta brama, ognisko, kosz z chlebem'); the basket: bread and water once a day ('Wracaj na górę. B.'), then empty",
         /Dziesiąta brama, ognisko/.test(pb.text) && /Wracaj na górę\. B\./.test(bk1.text) && bread1 === bread0 + 1 && bkp.some(p => /Kosz pusty/.test(p)), { pb: pb.text.slice(0, 100), bread0, bread1, bkp });
-    await t.go(1, 52, 31, 8);
+    await t.go(1, 38, 33, 8);
     await at(67, 1.6, 40);
     const away = await J(`({ tr: ${BORGAR}.isTransparent() })`);
     await at(67, 6, 40);

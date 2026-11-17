@@ -16,12 +16,20 @@ const { launch, sleep } = require("./cdp.js");
         await ev("SceneManager._scene.startFadeIn(1,false); if (window.Survival) Survival.calmWeather(); if (window.Needs) Needs.setEnabled(false); if (window.Hunting) Hunting.auto(false); $gameSystem.setDayNightHour(12); 0");
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
         const B = await J(`(function(){
+            // (2026-11-14) building goes only inside grandpa's wall, and he keeps trees and stones there: the block of 10 x 6 inside
+            // the wall with the most bare ground, what stands on it taken away for the test
+            const wf = Farming.walledField && Farming.walledField(), inF = (x, y) => !wf || wf.has(x + "," + y);
+            let best = null;
             for (let by = 2; by < $gameMap.height() - 8; by++) for (let bx = 2; bx < $gameMap.width() - 12; bx++) {
-                let ok = true;
-                for (let y = by; y < by + 6 && ok; y++) for (let x = bx; x < bx + 10; x++) { if (!Farming.naturalFarmland(x, y)) { ok = false; break; } }
-                if (ok) return { bx, by };
+                let n = 0, ok = true;
+                for (let y = by - 2; y < by + 8 && ok; y++) for (let x = bx - 2; x < bx + 12; x++) { if (!inF(x, y)) { ok = false; break; } if (x >= bx && x < bx + 10 && y >= by && y < by + 6 && Farming.naturalFarmland(x, y)) n++; }   // (two tiles inside the field all round: big things reach past the block)
+                if (ok && (!best || n > best.n)) best = { bx, by, n };
             }
-            return null; })()`);
+            if (!best) return null;
+            for (const e of $gameMap.events()) if (e.x >= best.bx - 1 && e.x <= best.bx + 10 && e.y >= best.by - 1 && e.y <= best.by + 6) { e.erase(); e.setThrough(true); }
+            const cells = []; for (let y = best.by - 1; y <= best.by + 6; y++) for (let x = best.bx - 1; x <= best.bx + 10; x++) cells.push({ x, y });
+            $gameSystem.clearLand($gameMap.mapId(), cells);   // (cleared ground everywhere in it: bushes and tufts would refuse a building)
+            return { bx: best.bx, by: best.by, bare: best.n }; })()`);
         check("found an open meadow", !!B, B);
         const { bx, by } = B, sx = bx + 4, sy = by + 3;
         await ev(`$gameParty.gainItem($dataItems[89], 1); for (const [id, n] of Farming.BUILDINGS.workbench.cost) $gameParty.gainItem($dataItems[id], n); $gamePlayer.locate(${sx}, ${sy + 1}); $gamePlayer.setDirection(8); $gameSystem.setStamina(100); 0`);

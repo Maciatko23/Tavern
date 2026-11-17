@@ -479,7 +479,7 @@
         if (!zarejestrowane.kroki && p.kroki && typeof p.kroki.dodaj === "function") {
             zarejestrowane.kroki = true;
             try {
-                p.kroki.dodaj({ id: "w14Albin", kto: KTO.albin, arkusz: "$Npc_Pielgrzym", mapa: D.MAP.pietro, start: [6, 49, 6], trasa: [[6, 52], [5, 53], [3, 52], [2, 50]],
+                p.kroki.dodaj({ id: "w14Albin", kto: KTO.albin, arkusz: "$Npc_Pielgrzym", mapa: D.MAP.pietro, start: [10, 36, 6], trasa: [[10, 39], [9, 40], [7, 39], [6, 37]],
                     godziny: [CZ.albin[0], CZ.kradziez], raz: true,
                     gdy: () => { const k = nocKradziezy(); return albinTu() && !!k && day() === k + 1 && !S().kradziez && !S().zapobiegl && !!wpis(KTO.posel); },
                     koniec: ok => { if (ok && has()) { S().widziany = day(); S().slady.kroki = 2; } } });

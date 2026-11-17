@@ -1,0 +1,398 @@
+//=============================================================================
+// Zasoby_Data.js
+//=============================================================================
+// PACZKA A „Woda i zasoby” (docs/rozszerzenia/PLAN.md, punkt 4) - the data of: źródełka, zagroda sąsiada ze studnią deszczową, dzikie
+// ule, kręgi grzybów, Babka Jagna i jej zioła, ogródki, wysypisko i glinianka, kamieniołom bloków i żyły rudy, kraby i drewno z morza,
+// spalony sad, pola mieszczan. Only data and texts here; the engine is Zasoby.js (below every system). What this file puts in at load:
+//   - window.TownLifeExtra: Babka Jagna (id 2900, key "jagna", Map017) + her places in TownLifeData.SPOTS_BY_MAP[17]
+//   - the thread (Watki.js, 2026-10-28): the state "zasoby", the hero's thoughts, K55 (dzwonnik), K56 (znachorka), K57 (dziadek),
+//     K58 (praczka), D30 (Jagna), D31 (szmaciarz) - into window.TownQuestsPacks with the things carried and the remarks
+//   - QuestBoard: four notices (keys "zas_") into its TEMPLATES, the worth of the new items into its EV
+//   - SpeechBubbles.BUSTS: Jagna's bust
+//   - window.ZasobyData: the places (map by map, cells, event ids), the herbs, the loot tables, the numbers, the texts
+// DROUGHT (the user's rule): the only new water is the five hidden springs (1-2 portions a day, dry in the heat, frozen in snow) and
+// the neighbour's well that only gathers rain (4 portions at most). No quest gives water; the sea gives none.
+
+/*:
+ * @target MZ
+ * @plugindesc [paczka A] Dane: Woda i zasoby - źródełka, zagroda sąsiada ze studnią deszczową, dzikie ule, kręgi grzybów, Babka Jagna i jej zioła, ogródki, wysypisko i glinianka, kamieniołom bloków i żyły rudy, kraby i drewno z morza, spalony sad, pola mieszczan. v1.1.0
+ * @author Claude
+ * @base TawernaCore
+ * @base Watki
+ * @orderAfter Okolice_Data
+ *
+ * @help
+ * ============================================================================
+ * Zasoby_Data.js - dane paczki A „Woda i zasoby”
+ * ============================================================================
+ * Plan i kontrakt: docs/rozszerzenia/PLAN.md. Silnik: Zasoby.js.
+ * Numery zdarzeń: 2100-2299. Mieszkańcy TownLife: 2900-2904 (Jagna 2900).
+ * Przedmioty: 185-199. Ikony: 464-479. Przełączniki: 21-22.
+ * Zadania: K55-K58, D30-D31. Test: tests/zasoby_test.js (port 9551).
+ *
+ * Tu same dane: miejsca, zioła, łupy, liczby, teksty, mieszkanka (Jagna),
+ * zadania (TownQuestsPacks), ogłoszenia tablicy (klucze zas_), popiersie.
+ * ============================================================================
+ */
+
+(() => {
+    "use strict";
+
+    const O = window.OkoliceData, P = O ? O.PACKAGES.A : null;
+    const VERSION = "1.1.0";
+    const T = (a, b) => [a, b];
+    const fill = (text, vars) => String(text).replace(/\{(\w+)\}/g, (m, k) => (vars && vars[k] !== undefined ? vars[k] : m));
+
+    // ------------------------------------------------------------------
+    // The items (PLAN.md 3.2; data/Items.json 185-199 through tools/rozszerzenia/instaluj.py) and the ones of the game we use
+    // ------------------------------------------------------------------
+    const ITEM = {
+        wosk: 185, krab: 186, krabPieczony: 187, blok: 188, drewnoDryfowe: 189, arcydziegiel: 190, dziurawiec: 191, kozlek: 192,
+        zlom: 193, moneta: 194, masc: 195, napar: 196,
+        // (the game's)
+        axe: 60, wood: 61, shovel: 62, pick: 63, hoe: 66, potatoSeed: 67, carrotSeed: 68, potato: 71, carrot: 72, cabbage: 73, barley: 74,
+        honey: 76, charcoal: 79, planks: 80, ironOre: 85, can: 87, nails: 88, hammer: 89, knifeStone: 90, knifeIron: 91, fiber: 92, rope: 93,
+        mushroom: 103, herb: 104, ironAxe: 115, ironPick: 116, wildApple: 139, shears: 142, clay: 164, bucket: 138
+    };
+    // the icons of the package's row (IconSet row 29: 464-479; tools/rozszerzenia/A/ikony.png) - item n -> icon 464 + (n - 185)
+    const ICON = { wosk: 464, krab: 465, krabPieczony: 466, blok: 467, drewno: 468, arcydziegiel: 469, dziurawiec: 470, kozlek: 471,
+        zlom: 472, moneta: 473, masc: 474, napar: 475, water: 391, stamina: 82, coin: 314, honey: 331, mushroom: 359, herb: 360, clay: 427 };
+
+    // ------------------------------------------------------------------
+    // The event ids (2100-2299, Tawerna.inject owner "Zasoby") map by map
+    // ------------------------------------------------------------------
+    const IDS = {
+        // (2026-11-11 plansza: Omszała łąka (17) is built on Kruczy Jar (3) now - its ids 2100-2129 join Map003's; the spring of Leśna droga (21) is on Łąka (4))
+        17: [2100, 2129], 21: [2130, 2139], 4: [2130, 2139], 13: [2140, 2154], 155: [2155, 2164], 168: [2165, 2184], 3: [2100, 2204],
+        111: [2205, 2224], 125: [2225, 2229], 162: [2230, 2234], 8: [2235, 2299]
+    };
+
+    // ------------------------------------------------------------------
+    // A1 the springs: the spring itself (sx, sy - the plan's "samo źródło"), its area (the registered spot), two mossy stones and, at
+    // three of them, a clump of a wild rare herb (Jagna's D30 wants herbs "not from her glade"). Their words (name, where, hint):
+    // js/teksty/zasoby.txt, zrodla.<key>
+    // ------------------------------------------------------------------
+    const SPRINGS = [
+        { key: "zrodlo_017", map: 3, x: 39, y: 79, w: 3, h: 2, sx: 40, sy: 79, id: 2100, stones: [2101, 2102], herb: { id: 2103, kind: "kozlek" } },
+        { key: "zrodlo_021", map: 4, x: 41, y: 28, w: 3, h: 2, sx: 42, sy: 28, id: 2130, stones: [2131, 2132], herb: { id: 2133, kind: "arcydziegiel" }, frogs: true },
+        { key: "zrodlo_013", map: 13, x: 109, y: 101, w: 3, h: 2, sx: 110, sy: 77, id: 2140, stones: [2141, 2142] },
+        { key: "zrodlo_155", map: 155, x: 58, y: 66, w: 3, h: 2, sx: 59, sy: 66, id: 2155, stones: [2156, 2157] },
+        { key: "zrodlo_168", map: 168, x: 45, y: 54, w: 3, h: 2, sx: 46, sy: 54, id: 2165, stones: [2166, 2167], herb: { id: 2168, kind: "dziurawiec" } }
+    ];
+    Watki.scal(SPRINGS, "zasoby", "zrodla", "key");   // (its words: js/teksty/zasoby.txt, zrodla, by the key)
+    // portions a day (PLAN.md A1): by the season, +1 after rain (today or yesterday, at most 3); 0 in the heat ("upał": summer and
+    // 6+ dry days) and in a drought (10+ dry days); 0 while it snows today ("zamarzło")
+    const SPRING_RULE = { base: [2, 1, 2, 1], rainBonus: 1, max: 3 };
+
+    // ------------------------------------------------------------------
+    // A2 the neighbour's farm (Map003, the new land south of the field)
+    // ------------------------------------------------------------------
+    const FARMSTEAD = {
+        map: 3,
+        ruin: { id: 2185, x: 2, y: 20, occupy: "<Occupy:left=2,right=2,up=2>", gives: [[ITEM.rope, 1], [ITEM.nails, 4]] },
+        garden: { ids: [2188, 2189, 2190, 2191, 2192, 2193], cells: [[4, 21], [5, 21], [6, 21], [4, 22], [5, 22], [6, 22]], hits: 6, regrow: 12,
+            veg: [ITEM.potato, ITEM.carrot], seeds: [ITEM.potatoSeed, ITEM.carrotSeed], n: [2, 4], seedChance: 0.5 },
+        well: { id: 2194, x: 7, y: 22, clearHits: 12, fixHits: 15, cost: [[ITEM.blok, 4], [ITEM.rope, 2], [ITEM.planks, 2]], max: 4, rainHours: 2 },
+        fence: { id: 2195, x: 8, y: 21 },   // (2026-11-11: was on the plot's west gate, 39,52 - a lone fence on a path; now at the neighbour's yard)
+        blanks: [2186, 2187]
+    };
+    // A3 the wild hives by the pines (Map003): every 4 days; summer and autumn honey 1-2 + wax, spring honey 1, winter nothing
+    const HIVES = [
+        { key: "ul_1", id: 2196, x: 66, y: 38 }, { key: "ul_2", id: 2197, x: 76, y: 48 }, { key: "ul_3", id: 2198, x: 62, y: 55 }
+    ];
+    const HIVE_RULE = { every: 4, sting: 0.7, stingStamina: 20, stingHours: 2, smokeRange: 3 };
+
+    // ------------------------------------------------------------------
+    // A4 the fairy rings after rain (Map017): 8 mushrooms each, from 5:00 on a rainy day till 6:00 two days after the rain
+    // ------------------------------------------------------------------
+    const RINGS = [
+        { key: "grzyby_krag1", centre: [43, 74], ids: [2107, 2108, 2109, 2110, 2111, 2112, 2113, 2114],
+          cells: [[43, 71], [45, 72], [46, 74], [45, 76], [43, 77], [41, 76], [40, 74], [41, 72]] },
+        { key: "grzyby_krag2", centre: [52, 74], ids: [2115, 2116, 2117, 2118, 2119, 2120, 2121, 2122],
+          cells: [[52, 71], [54, 72], [55, 74], [54, 76], [52, 77], [50, 76], [49, 74], [50, 72]] }
+    ];
+
+    // ------------------------------------------------------------------
+    // A5 Jagna's glade (Map017) and the rare herbs: seasons (0 spring .. 3 winter), days to grow back
+    // ------------------------------------------------------------------
+    const HERBS = {
+        arcydziegiel: { item: ITEM.arcydziegiel, seasons: [1, 2], regrow: 6, look: 0 },
+        dziurawiec: { item: ITEM.dziurawiec, seasons: [1], regrow: 5, look: 1 },
+        kozlek: { item: ITEM.kozlek, seasons: [0, 1, 2], regrow: 7, look: 2 }
+    };
+    Watki.scal(HERBS, "zasoby", "ziola");   // (its words: js/teksty/zasoby.txt, ziola)
+    // (2026-11-11 plansza: Omszała łąka is the south-west of Kruczy Jar (3); the glade was Map017 (65,12))
+    const GLADE = { map: 3, x: 18, y: 72, w: 5, h: 3, stand: [20, 75],
+        herbs: [{ id: 2104, kind: "arcydziegiel", x: 19, y: 72 }, { id: 2105, kind: "dziurawiec", x: 21, y: 73 }, { id: 2106, kind: "kozlek", x: 19, y: 74 }] };
+
+    // Babka Jagna: TownLife resident 2900 on Map017 - mornings at the glade on days without rain (the dew), evenings after rain by the
+    // fairy rings; otherwise away in the forest. Never on Map023 (PLAN.md 1).
+    const JAGNA_SPOTS = { jagna_polanka: [20, 75, 8], jagna_krag: [47, 74, 2], jagna_las: [22, 76, 2] };
+    // (2026-10-22, integration) Jagna buys the cliff herbs of package D (plan 7.5: szarotka 228, warzucha 229 - only from the eagle),
+    // once a day when the hero has some and she trusts him (trust >= 0)
+    const JAGNA_BUYS = [{ id: 228, price: 20 }, { id: 229, price: 6 }];
+    const JAGNA_BUY_TX = {
+    };
+    Watki.scal(JAGNA_BUY_TX, "zasoby", "jagnaSkup");   // (its words: js/teksty/zasoby.txt, jagnaSkup)
+    const JAGNA = {
+        key: "jagna", id: 2900, sheet: "$Npc_Jagna", map: 3, speed: 2,
+        away: ["jagna_las"],
+        plan: [[0, "inside", "jagna_las"], [5, "work", "jagna_polanka", "zasRosa"], [10, "inside", "jagna_las"],
+               [18, "stand", "jagna_krag", "zasPoDeszczu"], [20, "inside", "jagna_las"]],
+        barks: {
+            night: []
+        },
+        talk: {
+        }
+    };
+    Watki.scal(JAGNA, "zasoby", "mieszkaniec");   // (its words: js/teksty/zasoby.txt, mieszkaniec)
+
+    // ------------------------------------------------------------------
+    // A6 Podgrodzie (Map111): three kitchen gardens, the rubbish heap, the clay pit
+    // ------------------------------------------------------------------
+    const GARDENS = [
+        { key: "ogrodek_1", owner: "praczka", ids: [2205, 2206, 2207, 2208], cells: [[61, 10], [63, 10], [62, 12], [64, 12]], crop: 2, veg: ITEM.cabbage },
+        { key: "ogrodek_2", owner: "franek", ids: [2209, 2210, 2211, 2212], cells: [[66, 10], [68, 10], [67, 12], [69, 12]], crop: 0, veg: ITEM.potato },
+        { key: "ogrodek_3", owner: "znachorka", ids: [2213, 2214, 2215, 2216], cells: [[71, 10], [73, 10], [72, 12], [74, 12]], crop: 1, veg: ITEM.carrot }
+    ];
+    const GARDEN_RULE = { hours: [6, 12], hits: 8, give: 2, opinion: 1, steal: 3, stealOpinion: -5, seeRange: 8, stealGap: 7 };
+    const DUMP = { key: "wysypisko", map: 111, x: 88, y: 101, w: 6, h: 4, heaps: [{ id: 2217, x: 90, y: 103, main: true, pat: 0 }, { id: 2218, x: 92, y: 104, pat: 1 }, { id: 2219, x: 88, y: 101, pat: 2 }],
+        perDay: 4, shovelBonus: 1,
+        loot: [[ITEM.zlom, 30], [ITEM.fiber, 25], [ITEM.nails, 15], [ITEM.planks, 10], [ITEM.moneta, 8], [0, 12]] };
+    const CLAYPIT = { key: "glinianka", map: 111, x: 64, y: 102, w: 5, h: 4, id: 2220, ex: 48, ey: 71, occupy: "<Occupy:left=1,right=1,up=1>", perDig: 2, perDay: 6, blanks: [2221, 2222, 2223, 2224] };
+    // D31's things in the heap (TownQuests vitems): found while D31 is on, in this order
+    const D31_THINGS = ["zas_medalik", "zas_klucz", "zas_moneta_kruk"];
+
+    // ------------------------------------------------------------------
+    // A7 the mountains (Map013): the block wall (6 blocks a week) and three ore veins (ChoppableTree mines them; they grow back in 7 days)
+    // ------------------------------------------------------------------
+    const QUARRY = { key: "kamieniolom_bloki", map: 13, x: 107, y: 104, w: 6, h: 3, ids: [2143, 2144, 2145], at: [[107, 105], [109, 105], [111, 105]],
+        perWeek: 6, week: 7, hits: 10, ironHits: 6, cost: 6 };
+    const VEINS = [
+        { key: "zyla_1", id: 2146, x: 114, y: 78, image: "!$Rock_Ore_Iron_Cluster" },
+        { key: "zyla_2", id: 2147, x: 104, y: 88, image: "!$Rock_Ore_Iron_Twin" },
+        { key: "zyla_3", id: 2148, x: 111, y: 87, image: "!$Rock_Ore_Iron_Jagged" }
+    ];
+    const VEIN_RULE = { regrow: 7, note: "<Rock:drop=85,dropmin=1,dropmax=5>" };
+
+    // ------------------------------------------------------------------
+    // A8 the coast: the tidal pools (Map125's cove, made by pakiet 0) and the places where the sea throws wood
+    // ------------------------------------------------------------------
+    const POOLS = [{ key: "kaluza_1", map: 125, id: 2225, x: 15, y: 65 }, { key: "kaluza_2", map: 125, id: 2226, x: 15, y: 67 }];
+    const CRAB_RULE = { chance: 0.65, sneakBonus: 0.15, failStamina: 5, flee: 0.5, max: 2 };
+    const DRIFT = {
+        125: [{ id: 2227, x: 17, y: 66 }, { id: 2228, x: 18, y: 65 }],
+        155: [{ id: 2158, x: 3, y: 52 }, { id: 2159, x: 3, y: 56 }, { id: 2160, x: 4, y: 60 }],
+        162: [{ id: 2230, x: 24, y: 71 }, { id: 2231, x: 24, y: 74 }, { id: 2232, x: 24, y: 86 }]
+    };
+
+    // ------------------------------------------------------------------
+    // A9 the burnt orchard of the Ługs (Map168): eight trees, each pruned, dressed and watered on three days, then it lives again
+    // ------------------------------------------------------------------
+    const ORCHARD = { key: "sad_spalony", map: 168, x: 60, y: 20, w: 12, h: 5, ids: [2169, 2170, 2171, 2172, 2173, 2174, 2175, 2176],
+        trees: [[61, 21], [64, 21], [67, 21], [70, 21], [61, 24], [64, 24], [67, 24], [70, 24]],
+        pruneHits: 4, leafDays: 10, fruitEvery: 5, fruit: [2, 3], marta: { id: 2177, x: 65, y: 23, hours: [10, 13] }, blanks: [2178, 2179, 2180] };
+
+    // ------------------------------------------------------------------
+    // A10 the townsfolk's fields (Map008): day labour at sowing (spring, days 1-10) and harvest (autumn, days 1-14), 6-14
+    // ------------------------------------------------------------------
+    const FIELDS = [
+        { key: "pole_1", x: 77, y: 68, w: 7, h: 4, crop: 3, item: ITEM.barley },
+        { key: "pole_2", x: 86, y: 68, w: 6, h: 4, crop: 2, item: ITEM.cabbage },
+        { key: "pole_3", x: 77, y: 80, w: 7, h: 5, crop: 0, item: ITEM.potato }
+    ];
+    const FIELD_RULE = { sow: [1, 10], reap: [1, 14], hours: [6, 14], hits: 20, cost: 2, gold: 15, give: 2, opinion: 1, theft: -4 };
+
+    // ------------------------------------------------------------------
+    // The places of the package (Okolice.registerSpots("A", ...); the collision test checks these). jagna_miejsce: a "zone" - she
+    // walks, nothing of the package stands there (the plan's index lists it under C by mistake - PLAN_SPOTS). Its name:
+    // js/teksty/zasoby.txt, miejsca.jagna_miejsce (Zasoby.js registers them once the words are in)
+    // ------------------------------------------------------------------
+    const JAGNA_SPOT = { key: "jagna_miejsce", map: 3, kind: "npc", mode: "zone", x: 20, y: 75, w: 1, h: 1 };
+    Watki.scal(JAGNA_SPOT, "zasoby", "miejsca.jagna_miejsce");   // (its words: js/teksty/zasoby.txt, miejsca.jagna_miejsce)
+    const SPOTS = (O ? O.PLAN_SPOTS.filter(s => s.pkg === "A").map(s => Object.assign({}, s)) : []).concat([JAGNA_SPOT]);
+
+    // the discoveries (Okolice.discoverable; 25 xp each unless said) - the springs' name and text read from the springs' words
+    // (odkrycieZrodla: the text with the spring's place), the others' words: js/teksty/zasoby.txt, odkrycia.<key>
+    const TK = Watki.teksty("zasoby");
+    const DISCOVERIES = SPRINGS.map(s => Object.defineProperties({ key: s.key, map: s.map, x: s.sx, y: s.sy, near: 1 }, {
+        name: { get: () => s.name, enumerable: true },
+        text: { get: () => fill(TK.odkrycieZrodla, { where: s.where }), enumerable: true } })).concat([
+        { key: "zagroda", map: 3, x: 2, y: 21, near: 3 },
+        { key: "dzikie_ule", map: 3, x: 26, y: 7, near: -1 },
+        { key: "grzyby_krag1", map: 3, x: 43, y: 74, near: -1 },
+        { key: "grzyby_krag2", map: 3, x: 52, y: 74, near: -1 },
+        { key: "ziola_jagny", map: 3, x: 20, y: 73, near: 2 },
+        { key: "wysypisko", map: 111, x: 90, y: 103, near: 2 },
+        { key: "glinianka", map: 111, x: 66, y: 104, near: 2 },
+        { key: "kamieniolom_bloki", map: 13, x: 109, y: 106, near: 2 },
+        { key: "zatoczka", map: 125, x: 17, y: 66, near: 2 },
+        { key: "sad_spalony", map: 168, x: 65, y: 22, near: 3 }
+    ]);
+    Watki.scal(DISCOVERIES, "zasoby", "odkrycia", "key");   // (its words: js/teksty/zasoby.txt, odkrycia, by the key)
+
+    // ------------------------------------------------------------------
+    // The texts (Polish, the game's)
+    // ------------------------------------------------------------------
+    const TX = {
+        spring: {
+            left: n => (n === 1 ? TX.spring.leftOne : fill(TX.spring.leftN, { n }))
+        },
+        farm: {
+        },
+        well: {
+            note: n => fill(TX.well.noteN, { n })
+        },
+        hive: {
+        },
+        ring: {
+        },
+        herb: {
+        },
+        dump: {
+        },
+        clay: {
+        },
+        quarry: {
+        },
+        pool: {
+        },
+        drift: { },
+        orchard: {
+        },
+        field: {
+        },
+        garden: {
+        },
+        needs: { missing: (name, have, n) => fill(TX.needs.missingN, { name, have, n }) }
+    };
+    Watki.scal(TX, "zasoby", "");   // (its words: js/teksty/zasoby.txt)
+
+    // ------------------------------------------------------------------
+    // The things carried (TownQuests vitems: D31's finds) and the residents' remarks - they go with the quests' pack
+    // ------------------------------------------------------------------
+    const VITEMS = {
+        zas_medalik: { icon: 314 },
+        zas_klucz: { icon: 195 },
+        zas_moneta_kruk: { icon: 473 }
+    };
+    Watki.scal(VITEMS, "zasoby", "rzeczy");   // (its words: js/teksty/zasoby.txt, rzeczy)
+    const REMARKS = [
+        { id: "zasJadwigaJagna", who: "znachorka", flag: "zasD30" },
+        { id: "zasFranekSad", who: "franek", flag: "zasSadMarta" },
+        { id: "zasKleofasMoneta", who: "pustelnik", flag: "zasMonetaKruk" }
+    ];
+    Watki.scal(REMARKS, "zasoby", "uwagi");   // (its words: js/teksty/zasoby.txt, uwagi)
+
+    // ------------------------------------------------------------------
+    // The thread (the engine Watki.js, docs/WATKI_DANE.md): the state "zasoby", the hero's thoughts, the quests K55-K58, D30-D31
+    // (TownQuests' fields; their words: js/teksty/zasoby.txt, zadania.*; the engine puts them into window.TownQuestsPacks with the
+    // things and the remarks). The hooks (zagrodaZnaleziona, masz, ileMasz, sadOdratowany, zyweDrzewa, rzeczyD31) are Zasoby.js's
+    // ------------------------------------------------------------------
+    const w = Watki.watek({
+        id: "zasoby", wtyczka: "Zasoby", teksty: "zasoby",
+        stan: { klucz: "zasoby", wersja: 1, domyslne: () => ({
+            springs: {}, well: { stage: 0, water: 0, wt: -1, hot: 0 }, ruin: 0, garden: -99, hives: {}, rings: {}, fairy: {}, herbs: {},
+            jagna: { met: 0, trust: 0, taken: {}, permit: false, ring: 0, scold: 0 }, plotDay: 0, k56: [], steal: {}, dump: { day: 0, n: 0, hero: 0 },
+            clay: { day: 0, n: 0 }, quarry: { from: 0, n: 0 }, veins: {}, crabs: {}, drift: {}, driftDay: 0, orchard: [], fieldDay: 0,
+            fieldSteal: 0, dog: 0, work: {}, deep: 0, frogs: 0
+        }) },
+        // the hero's thoughts: a bubble 200 frames, the next after 210, not while a message is shown
+        mysli: { klatki: 200, odstep: 210, czekaj: "wiadomosc" },
+        mowa: { akapity: true },
+        zadania: {
+            // Ambroży's candles: four pieces of wax from the wild hives
+            K55: { kind: "K", giver: "dzwonnik", icon: ITEM.wosk, offer: { cond: { hours: [8, 18], day: 3 } },
+                kroki: [{ nazwa: "k55Wosk", type: "bring", to: "dzwonnik", need: [[ITEM.wosk, 4]], hours: [6, 21] }],
+                reward: { gold: 30, xp: 50, opinion: 2 } },
+            // the gardens of Podgrodzie: three mornings of help within a week (the days: the state's k56)
+            K56: { kind: "K", giver: "znachorka", icon: ITEM.cabbage, offer: { cond: { hours: [6, 18], day: 4 } },
+                kroki: [{ nazwa: "k56Dni", gotowe: "ile:k56>=3", zmienne: { n: { ile: "k56", najwyzej: 3 } }, when: { deadline: { day: 7, late: "fail" } } }],
+                reward: { gold: 25, xp: 60, opinion: 2, items: [[ITEM.herb, 3]] },
+                fail: { opinion: -1 } },
+            // the neighbour's well: the farm found, the well cleared, the materials (blocks, rope, planks), the well mended
+            K57: { kind: "K", giver: "grandpa", icon: ITEM.bucket, offer: { cond: { day: 3, story: true } },
+                kroki: [
+                    { nazwa: "k57Zagroda", gotowe: { lub: ["zagrodaZnaleziona", "stan:ruin"] } },
+                    { nazwa: "k57Oczyszczona", gotowe: "stan:well.stage>=1" },
+                    { nazwa: "k57Bloki", gotowe: { lub: ["stan:well.stage>=2", "stan:work.well:fix",
+                        { i: [{ hak: "masz", args: [ITEM.blok, 4] }, { hak: "masz", args: [ITEM.rope, 2] }, { hak: "masz", args: [ITEM.planks, 2] }] }] },
+                      zmienne: { b: { hak: "ileMasz", args: [ITEM.blok, 4] }, l: { hak: "ileMasz", args: [ITEM.rope, 2] }, d: { hak: "ileMasz", args: [ITEM.planks, 2] } } },
+                    { nazwa: "k57Naprawiona", gotowe: "stan:well.stage>=2" }
+                ],
+                reward: { xp: 60 } },
+            // the Ługs' orchard: offered once their farm is rebuilt (D21); all eight trees alive, then Marta told
+            K58: { kind: "K", giver: "praczka", icon: ITEM.wildApple, offer: { cond: { hours: [5, 17], fn: "k58Gotowe" } }, oferta: "zrobione:D21",
+                kroki: [
+                    { nazwa: "k58Sad", gotowe: "sadOdratowany", zmienne: { n: { hak: "zyweDrzewa" } } },
+                    { nazwa: "k58Marta", type: "talk", to: "praczka", hours: [5, 22] }
+                ],
+                reward: { gold: 40, xp: 120, flag: "zasSadMarta" } },
+            // Jagna's herbs: offered once she knows the hero and trusts him; the three wild herbs brought one by one
+            D30: { kind: "D", giver: "jagna", icon: ITEM.kozlek, offer: { cond: { hours: [5, 20], fn: "d30Gotowe" } }, oferta: ["stan:jagna.met", "stan:jagna.trust>=0"],
+                kroki: [
+                    { nazwa: "d30Arcydziegiel", type: "bring", to: "jagna", need: [[ITEM.arcydziegiel, 1]], hours: [5, 21], ch: 1 },
+                    { nazwa: "d30Dziurawiec", type: "bring", to: "jagna", need: [[ITEM.dziurawiec, 1]], hours: [5, 21], ch: 2 },
+                    { nazwa: "d30Kozlek", type: "bring", to: "jagna", need: [[ITEM.kozlek, 1]], hours: [5, 21], ch: 3 }
+                ],
+                reward: { xp: 120, flag: "zasD30" } },
+            // Józek's treasures of the heap: the three things found (TownQuests v: - Zasoby.js puts them in while D31 is on), then brought
+            D31: { kind: "D", giver: "szmaciarz", icon: ITEM.moneta, offer: { cond: { hours: [7, 20], day: 3 } },
+                kroki: [
+                    { nazwa: "d31Rzeczy", gotowe: D31_THINGS.map(k => "v:" + k), zmienne: { n: { hak: "rzeczyD31" } }, ch: 1 },
+                    { nazwa: "d31Jozek", type: "bring", to: "szmaciarz", need: [["v:zas_medalik", 1], ["v:zas_klucz", 1], ["v:zas_moneta_kruk", 1]], hours: [7, 22], ch: 2 }
+                ],
+                reward: { gold: 40, xp: 100, opinion: 3, flag: "zasMonetaKruk" } }
+        },
+        paczka: { vitems: VITEMS, remarks: REMARKS }
+    });
+    const Q = w.Q;
+
+    // ------------------------------------------------------------------
+    // Babka Jagna into TownLife (the second range of ids) and her places on Map017
+    // ------------------------------------------------------------------
+    (window.TownLifeExtra = window.TownLifeExtra || []).push(JAGNA);
+    const TLD = window.TownLifeData;
+    if (TLD) {
+        TLD.SPOTS_BY_MAP = TLD.SPOTS_BY_MAP || {};
+        TLD.SPOTS_BY_MAP[3] = Object.assign({}, TLD.SPOTS_BY_MAP[3] || {}, JAGNA_SPOTS);
+    }
+
+    // ------------------------------------------------------------------
+    // The quest board: four notices (keys "zas_") and the worth of the new items
+    // ------------------------------------------------------------------
+    const QB_TEMPLATES = [
+        { id: "zas_dziki_miod", type: "gather", giver: "melia", seasons: [1, 2],
+            req: [{ item: ITEM.honey, n: [T(2, 2), T(2, 3), T(3, 4), null, null] }] },
+        { id: "zas_ziola_rzadkie", type: "gather", giver: "jagna", seasons: [0, 1, 2], from: 6,
+            req: [{ item: ITEM.kozlek, n: [null, T(1, 1), T(1, 2), T(2, 2), null] }] },
+        { id: "zas_bloki", type: "gather", giver: "kazimierz", from: 8,
+            req: [{ item: ITEM.blok, n: [null, T(2, 2), T(2, 3), T(3, 4), null] }] },
+        { id: "zas_kraby", type: "craft", giver: "borgar", from: 5,
+            req: [{ item: ITEM.krabPieczony, n: [T(2, 2), T(2, 3), T(3, 3), null, null] }] }
+    ];
+    Watki.scal(QB_TEMPLATES, "zasoby", "tablica", "id");   // (its words: js/teksty/zasoby.txt, tablica, by the id)
+    const QB_EV = { 185: 4, 186: 5, 187: 8, 188: 6, 189: 2, 190: 6, 191: 6, 192: 5, 193: 3, 194: 5, 195: 8, 196: 8 };
+    (function questBoard() {
+        const TW = window.Tawerna, QBP = TW && TW.api("QuestBoard_parts"), data = QBP && QBP.data;
+        if (!data || !Array.isArray(data.TEMPLATES)) return;
+        for (const t of QB_TEMPLATES) if (!data.TEMPLATES.some(o => o.id === t.id)) data.TEMPLATES.push(t);
+        if (data.EV) for (const k of Object.keys(QB_EV)) if (data.EV[k] === undefined) data.EV[k] = QB_EV[k];
+    })();
+
+    // Jagna's bust (tools/busts: Jagna_Bust in img/pictures - kit.py, 0 generations)
+    (function bust() {
+        const SB = window.SpeechBubbles;
+        if (SB && SB.BUSTS && !SB.BUSTS["$Npc_Jagna:0"]) SB.BUSTS["$Npc_Jagna:0"] = "Jagna_Bust";
+    })();
+
+    // (2026-10-22, integration) the lines of the epilogue after the Heart (Underground.js asks Zasoby.epilogue): one or two by what the hero did
+    const EPILOG = {
+    };
+    Watki.scal(EPILOG, "zasoby", "epilog");   // (its words: js/teksty/zasoby.txt, epilog)
+    window.ZasobyData = { EPILOG, VERSION, PKG: "A", OWNER: "Zasoby", STATE: "zasoby", IDS_RANGE: P ? P.ids : [2100, 2299], RESIDENTS: P ? P.residents : [2900, 2904],
+        ITEMS: P ? P.items : [185, 199], ICONS: P ? P.icons : [464, 479], SWITCHES: { studnia: 21, rez: 22 }, ITEM, ICON, IDS,
+        SPRINGS, SPRING_RULE, FARMSTEAD, HIVES, HIVE_RULE, RINGS, HERBS, GLADE, JAGNA, JAGNA_SPOTS, JAGNA_BUYS, JAGNA_BUY_TX, GARDENS, GARDEN_RULE, DUMP, CLAYPIT, D31_THINGS,
+        QUARRY, VEINS, VEIN_RULE, POOLS, CRAB_RULE, DRIFT, ORCHARD, FIELDS, FIELD_RULE, SPOTS, DISCOVERIES, TX,
+        QUESTS: [Q.K55, Q.K56, Q.K57, Q.K58, Q.D30, Q.D31], VITEMS, QB_TEMPLATES, QB_EV, ready: true };
+})();

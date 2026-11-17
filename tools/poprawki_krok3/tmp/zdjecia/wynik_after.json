@@ -1,0 +1,45 @@
+{
+ "mode": "after",
+ "maps": {
+  "13": {
+   "total": 9879,
+   "outside": 5764,
+   "cells": {
+    "polka_a_dol": true,
+    "polka_a_kwadrat1": false,
+    "polka_a_kwadrat2": false,
+    "polka_a_gniazdo": false,
+    "polka_a_szarotka": false,
+    "polka_a_kolek": false,
+    "polka_b_zejscie": true,
+    "polka_b_kwadrat1": false,
+    "polka_b_kwadrat2": false,
+    "polka_b_szarotka": false,
+    "polka_b_kamien": false,
+    "wzgorze_3w_schody_gora": true,
+    "wzgorze_3w_wierzch": true,
+    "wzgorze_4_wierzch": true,
+    "wzgorze_6_wierzch": true,
+    "brama_wschod": true
+   }
+  },
+  "125": {
+   "total": 9910,
+   "outside": 9562,
+   "cells": {
+    "laterna": true,
+    "laterna2": true,
+    "lat_dzwon": true,
+    "slup_obok": true,
+    "izba": true,
+    "drewutnia": true,
+    "drewno_look": true,
+    "lat_oboz": true,
+    "lat_napad": true,
+    "plyta_obok": true,
+    "gorne_pietro_srodek": true,
+    "dolne_pietro_zach": true
+   }
+  }
+ }
+}

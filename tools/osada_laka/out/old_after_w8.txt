@@ -1,0 +1,34 @@
+PASS the game boots
+PASS W8 at chapter 2: a tick over Grum
+PASS ch2: Grum hires the hero - 50 G, at dawn by the way into the mountains: food, water in the skin, herbs - 'Jutro o świcie.'  {"step":2,"trip":21,"text":"Góry. Pamiętasz? Pięćdziesiąt groszy, jak mnie zaprowadzisz do starego kamieniołomu i obaj wrócimy. / Wyjście o świcie, przy wejściu w góry - za Leśną drogą, na wschodzie. Weź jedzenie na cały dzień, "}
+PASS ...the dawn missed (after 9:00): back to the hire - talk to Grum again
+PASS to the mountains (Map013 from Leśna droga's side)
+FAIL at dawn Grum (his sheet) waits by the marker 'grum_przewodnik_start' (4,38), a yellow diamond over him  {"x":4,"y":62,"img":"$Npc_Grum","mark":true}
+PASS ...with nothing in the bag: 'Bez jedzenia, wody i ziół w góry nie idę' - what is missing pops up over the hero  {"text":"Jesteś. Hm. Pokaż, co niesiesz. / Z tym? (Grum kręci głową.) Bez jedzenia, wody i ziół w góry nie idę. Masz czas do dziewiątej. Potem idę sam.","pops":["Potrzebujesz: Jedzenie na cały dzień 0/2","Potrzebujesz: Woda w bukłaku 0/1"]}
+PASS ...food, a full skin, yarrow: 'Prowadź.' - on to the quarry  "Jesteś. Hm. Pokaż, co niesiesz. / Jedzenie, woda, zioła. Dobrze. Na wojnie połowa ginie od głupoty, nie od strzał. / Prowadź. Kamieniołom jest gdzieś na wschodzie, wysoko. Ja idę za tobą."
+FAIL Grum's picture by the raven carved in the quarry wall (marker 'kamieniolom_znak' + 1: 41,18)  {"x":41,"y":42,"img":"$Npc_Grum","mark":true}
+PASS ...at the quarry the same day: the raven, the stone of the fortress and the manor, a fire in the cave above - 50 G, chapter 3  "(Grum długo patrzy na kruka wykutego w ścianie kamieniołomu.) Ten sam znak co na kamieniach, które skupują ludzie z kontynentu. / Stąd brano kamień na twierdzę. I na dwór waszego Lorda - widzisz te bloki? Na każdym dziesiątym kruk. / (Grum "
+PASS into the cave (Map014)
+PASS Grum's picture beside Marek's niche (marker 'marek' -2,+1: 28,6); Marek himself stands at the wall (event 23)  {"x":28,"y":6,"img":"$Npc_Grum","mark":true}
+PASS ...Marek stares at the rock, 'Dotknął czegoś w skale i przestał mówić' - Grum pales; chapter 4 (the letter in two days)  {"text":"(W niszy przy ścianie stoi człowiek. Twarzą do skały. Nie kopie, nie mówi, nie odwraca się. Tylko kiwa głową - nie wiadomo do kogo.) / (Grum mówi cicho, prawie szeptem.) Tych od kilofów znam. Tacy sam","letter":23}
+PASS ch4: before the letter's day Grum has no drink topic  []
+PASS ...from day 23, evening: 'Napij się ze mną' with a jug of mead - Grum drunk shows the order: 'Świadków nie zostawiać' (the mead taken)  "A, chudzielec od działki. / Stawiasz? (Grum patrzy na dzban.) Hm. Siadaj. / (Trzeci kubek. Grum mówi coraz wolniej.) Wiesz, co przyszło? List. Przez tego waszego kupca z kantoru. Pieczęć jak trzeba. / (Grum wyciąga z zanadrza złożoną kartkę i kładzie ją na sto"
+PASS ...or the thin wall: a room rented tonight, 22-24 - Grum and Baltazar through the wall ('Wszyscy jesteśmy świadkami')  ["(Zza ściany sąsiedniego pokoju głosy. Grum - i ktoś z miękkim, kupieckim głosem. Baltazar.)","(„...list z pieczęcią, jak obiecałem. Moi mocodawcy - i pańscy - nie lubią czekać.”)","(Szelest papieru. Grum czyta na głos, powoli: „Znaleźć wejście za każdą cenę. Świadków nie zostawiać.”)","(„Świadków?” - „Wszyscy jesteśmy świadkami, panie Grum. Pytanie, czyimi.” Kroki. Drzwi.)"]
+PASS ...or the commander's crate in the camp (marker 'list_kryjowka'): by day 'Kopacze nie śpią'; at night, sneaking - the copy of the order  {"dayPop":["Kopacze nie śpią - nocą (21–5) i po cichu (C)."],"text":"(Skrzynia dowódcy pod płachtą namiotu. Wieko luźne. Mapy, rachunki za chleb... i kartka z pieczęcią.) / (Kopia rozkazu: „Znaleźć wejście za każdą cenę. Świadków nie zostawiać.” Pod spodem dopisek: „li"}
+PASS ch5: Grum before the Silent's gate in the palisade of Map120 (marker 'osada_brama' +1: 21,30); the gate shut (switch 16 off)  {"x":100,"y":62,"img":"$Npc_Grum","mark":true}
+PASS ...before switch 16 the village's inside is out of reach on foot (none of the 4..35 x 8..28 cells, not the circle) - the way outside is open (a big set)  {"inside":0,"circle":false,"reached":9803}
+PASS ...the gate opens from inside (switch 16) - 'Wpuszczają nas'  "(Grum stoi przed bramą z pali.) Mówią, że za nią mieszkają ci, co wiedzieli za dużo. Kopacze się tu nie zapuszczają. / (Za palisadą cisza. Potem zgrzyt - ktoś po drugiej stronie odsuwa belkę. Brama uc"
+PASS ...after switch 16 the inside can be reached (the circle too)  {"inside":515,"circle":true,"reached":10322}
+PASS into the Osada through the open gate (20,29) on foot  {"x":99,"y":60}
+PASS ...Grum stands by their circle (marker 'osada_grum': 21,25)  {"x":100,"y":57,"img":"$Npc_Grum","mark":true}
+FAIL ...'Ci mają wszystko. Tylko nic już dla nich nie waży' - the note 'Osada Milczących', chapter 6  ""
+FAIL ch6 in the journal: two of three - Marek (jeszcze nie), the chronicles (nie ma), the honour bout (jeszcze nie)  "Żelazna Pięść | Wątek  ·  sprawa miasta  ·  od dnia 20 |  | Grum nieprzypadkowo wypytuje o góry na wschodzie. Ktoś mu płaci. Rozmowa otwiera się, kiedy pokonasz go na rękę i w kości. |  | Rozdział 5 | Grum chce zobaczyć Osadę Milczących - za bramą w palisadzie, na łące na wschód od działki dziadka (Akt II: po rozdziale 1 - spłacie długu albo stracie działki). Brama otwarta - Grum czeka w Osadzie, "
+FAIL ...'Musimy pogadać. O tunelu.' - Grum names the three; 'Siłujmy się - na honor' at the tavern: TavernLife's arm-wrestling (no stake) - won  {"text":"A, chudzielec od działki. / Bywaj, Grum. / Idź. Uważaj na plecy.","last":null}
+FAIL ...with the chronicles too (two of three): 'Stań po mojej stronie' - he tears the letter; W8 done, grumAlly, the diggers' tunnel opens (switch 15)  {"r":{"s":"active","step":6,"day":20,"sday":23,"sh":23.00611111111113,"t":{"done":{"1":20,"2":21,"3":21,"4":21,"5":23},"trip":21,"letter":23,"wallT":0,"gate":24},"times":0,"end":0},"f":{"w8Marek":21,"w8Letter_crate":23,"chroniclesTaken":25},"sw15":false}
+FAIL ...or 'Pracuję dla twoich mocodawców': 100 G, w8Faction, the tunnel opens  "A, chudzielec od działki. / Bywaj, Grum. / Idź. Uważaj na plecy."
+FAIL ...or 'Nie pozwolę ci zejść do Serca': Grum waits at the tunnel's mouth in the cave
+ERR TypeError: Cannot read properties of null (reading 'members')
+    at <anonymous>:1:61
+    at <anonymous>:1:155
+PASS no errors in the console  []
+22/31 passed

@@ -147,7 +147,7 @@ kit.test({ port: 9493, lightGpu: true, bootCheck: "the game boots", errorCheck: 
     // ---- the tavern's hall in the evening (2026-10-29, docs/PODROZNI.md 6.11): the regulars and a full house of the ferry's travellers
     // (four of the cast and the pool, the Company's group counts as one) - the same budget as the town
     await t.eval(`(function(){ $gameSystem._dayNightDay = 40; $gameSystem.setDayNightHour(20); for (const k of ["tobiasz", "kartograf", "grajek", "kompania"]) { try { Podroznicy.przyplyn(k); } catch (e) {} } Podroznicy.przyplyn("pula"); return 0; })()`);
-    await t.go(1, 50, 34, 8);
+    await t.go(1, 36, 36, 8);
     await near(50, 34);
     await t.setHour(20);
     await t.frames(120);

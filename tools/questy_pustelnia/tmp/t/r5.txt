@@ -1,0 +1,2 @@
+before debug_menu: 83/83 passed
+after debug_menu: 83/83 passed

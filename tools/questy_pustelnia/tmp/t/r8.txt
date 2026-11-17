@@ -1,0 +1,2 @@
+before podroznicy_sprawy: 22/22 passed
+after podroznicy_sprawy: 22/22 passed

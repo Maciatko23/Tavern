@@ -38,7 +38,7 @@
 (() => {
     "use strict";
 
-    const MAP = { town: 8, manor: 24, hol: 172, bib: 173, gab: 174, ruins: 10, field: 3, hut: 100, house: 19, heart: 11 };
+    const MAP = { town: 220, manor: 221, hol: 172, bib: 173, gab: 174, ruins: 10, field: 218, hut: 100, house: 224, heart: 11 };   // (2026-11-16 nowy świat: Kruczogród, Dwór nad Jazem)
     const IDS = [570, 599];
     // the injected events: the Lord in the hall and the library while he shows the hero round (chapter 2), Feliks coming up the
     // trapdoor of the study (caught, chapter 4), the bundle of letters on Feliks's desk once the drawer is open, Feliks and Kuba at
@@ -54,9 +54,9 @@
         hol: { land: [11, 13, 8], fromBib: [3, 4, 2], fromGab: [19, 4, 2], lord: [12, 12, 4], lordKruki: [16, 5, 8], bibDoor: [3, 4], gabDoor: [19, 3] },
         bib: { land: [8, 10, 8], lord: [7, 7, 6], kronika: [8, 7] },
         gab: { land: [7, 9, 8], trapLand: [11, 8, 4], trap: [12, 8], feliks: [12, 9, 8], listy: [2, 4], exitTo: [19, 4, 2] },
-        manor: { door: [40, 72], doorLand: [40, 73, 2], hatch: [23, 80], hatchLand: [23, 81, 2], feliksNoc: [22, 80, 6], kubaNoc: [23, 79, 2],
-            garden: { x1: 21, y0: 17 }, out: [8, 117, 49, 4], f9: [40, 74, 8] },
-        town: { gate: [116, 49], f9: [50, 46, 8] }
+        manor: { door: [40, 21], doorLand: [40, 22, 2], hatch: [13, 13], hatchLand: [13, 14, 2], feliksNoc: [12, 13, 6], kubaNoc: [13, 12, 2],   // (Map221: the hatch with the raven between the gardener's hut and the orangery)
+            garden: { x0: 4, y0: 9, x1: 26, y1: 37 }, out: [221, 40, 41, 2], f9: [40, 24, 8] },
+        town: { gate: [74, 41], f9: [52, 43, 8] }
     };
 
     // ------------------------------------------------------------------ the clock
@@ -232,7 +232,7 @@
                 1: { ch: 1, krok: "w7Dlug", godzina: 10, idz: [MAP.manor].concat(PLACES.manor.f9) },
                 2: { ch: 2, krok: "w7Zapro", godzina: 10, idz: [MAP.manor].concat(PLACES.manor.f9) },
                 3: { ch: 3, krok: "w7Feliks", godzina: 6.5, idz: [MAP.town].concat(PLACES.town.f9) },
-                4: { ch: 4, krok: "w7Gabinet", godzina: 22.5, idz: [MAP.manor, 3, 22, 8] },
+                4: { ch: 4, krok: "w7Gabinet", godzina: 22.5, idz: [MAP.manor, 13, 16, 8] },
                 5: { ch: 5, krok: "w7Prawda", godzina: 10, idz: [MAP.manor].concat(PLACES.manor.f9) },
                 6: { ch: 6, krok: "w7Najpierw", godzina: 10, idz: [MAP.manor].concat(PLACES.manor.f9) },
                 7: { ch: 7, krok: "w7Serce", godzina: 10, idz: [MAP.manor].concat(PLACES.manor.f9) }

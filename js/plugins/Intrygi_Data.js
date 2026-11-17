@@ -55,9 +55,9 @@
     // the night walkers (order: the first due one walks; at most one a night): Ozzy walking in his sleep the first time, Tymon to the
     // kitchen for bread (W16 - Dezerter.kuchnia); more from other plugins (Podroznicy.kroki.dodaj)
     const KROCZACY = [
-        { id: "ozzy", kto: "kroki.ozzy.kto", arkusz: "People2_Tall", indeks: 0, start: [20, 16, 6], trasa: [[14, 19], [14, 32], [14, 46], [14, 53], [26, 53], [26, 48]],
+        { id: "ozzy", kto: "kroki.ozzy.kto", arkusz: "People2_Tall", indeks: 0, start: [20, 16, 6], trasa: [[14, 19], [14, 32], [14, 33], [14, 40], [26, 40], [26, 35]],
             godziny: [1, 3], gdy: "ozzyLunatyk", wymowka: "kroki.ozzy.wymowka", koniec: "ozzyKoniec" },
-        { id: "tymon", kto: "kroki.tymon.kto", arkusz: "$Npc_Dezerter", indeks: 0, start: [49, 16, 6], trasa: [[40, 17], [30, 17], [20, 17], [14, 19], [14, 32], [14, 46], [14, 53], [26, 53], [26, 48]],
+        { id: "tymon", kto: "kroki.tymon.kto", arkusz: "$Npc_Dezerter", indeks: 0, start: [27, 16, 6], trasa: [[40, 17], [30, 17], [20, 17], [14, 19], [14, 32], [14, 33], [14, 40], [26, 40], [26, 35]],
             godziny: [0.5, 2.5], gdy: "tymonKuchnia", wymowka: "kroki.tymon.wymowka", koniec: "tymonKoniec" }
     ];
     // I5: the letters under the door (the first one due a morning, 6-10, after a night in a rented room)
@@ -67,7 +67,7 @@
         { id: "d43Urszula", gdy: "listUrszuli", klucz: "listy.urszula" }
     ];
     // where the letter lies: inside the hero's room by its door (Map025); the Gold suite - by its bed (Map026, read from the map)
-    const LIST_GDZIE = { 1: [25, 18, 11], 2: [25, 27, 11], 3: [25, 7, 11], komnata: [25, 42, 44] };
+    const LIST_GDZIE = { 1: [25, 9, 11], 2: [25, 15, 11], 3: [25, 4, 11], komnata: [25, 42, 44] };   // (2026-11-16: the smaller first floor; the chamber is moving to the second)
     // the searches the matters want (the guest's things in his room; the engine asks the hooks)
     const PRZESZUKANIA = [
         { id: "w15Skrzynka", pokoj: "12", kto: "relikwie", rzecz: "dowolna", gdy: "w15Szukaj", po: "w15Znalazl", klucz: "szukanie.w15" },
@@ -76,7 +76,7 @@
     ];
     // D45: the soot at room 3's door (mornings after the first night), the rope in the cellar over the barrels; the wall of room 1
     // (1-3 at night); the keyhole (the door of room 3, 1-3, sneaking); the notebook (4-5, sneaking); the rewards
-    const D45 = { sadza: [25, 8, 16], sznur: [9, 4, 10], podsluch: [1, 3], dziurka: [1, 3], notes: [4, 5],
+    const D45 = { sadza: [25, 4, 16], sznur: [9, 4, 10], podsluch: [1, 3], dziurka: [1, 3], notes: [4, 5],
         nagroda: { a: { gold: 20, xp: 150 }, b: { xp: 120 }, c: { xp: 120 } }, renoma: { a: 6, b: 3, c: 3 }, przychylnosc: 5 };
     // D46: the theft on the night after Ksenia's 3rd day; the variants (their clues: the sources); Borgar's 60 G at her ferry (14:00)
     const D46 = { noc: 3, wariantySlady: { A: ["zamek", "pokoj", "gaspar", "podsluch"], B: ["zamek", "pokoj", "szymek"], C: ["zamek", "pokoj", "janek"] },

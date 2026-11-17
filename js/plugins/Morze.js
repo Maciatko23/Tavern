@@ -85,7 +85,9 @@
     // 2. Sea maps, the six shore points, the fires near them
     // ==================================================================
     const seaMap = () => !!(window.$dataMap && /<Water:\s*salt\s*>/i.test($dataMap.note || "")) && mapId() <= D.NO_SEA_MAPS_ABOVE && !D.OUT_OF_WORLD.includes(mapId());
-    const townMap = () => mapId() === D.MAP.miasto;
+    // (2026-11-16, the player: the monsters walk inland too - into Podgrodzie and Kruczogród - but ALWAYS from the west, from the coast)
+    const INLAND = () => [D.MAP.podgrodzie, D.MAP.miasto].filter(Boolean);
+    const townMap = () => INLAND().includes(mapId());
     const shoreCache = {};
     function shorePoints() {
         const id = mapId();
@@ -181,7 +183,10 @@
         if (!make) return null;
         for (const o of Object.keys(s.noce)) if (n - Number(o.split(":")[0]) > 3) delete s.noce[o];
         const info = chanceOf({ map, day: n });
-        const rec = decide(n, map, map === D.MAP.miasto ? D.MULT.town * chanceOf({ map: D.MAP.przystan, day: n }).P : info.P);
+        const inland = map === D.MAP.miasto ? D.MULT.town : map === D.MAP.podgrodzie ? (D.MULT.podgrodzie || D.MULT.town) : 0;
+        const rec = decide(n, map, inland ? inland * chanceOf({ map: D.MAP.przystan, day: n }).P : info.P);
+        // a night another thread guards the town (the fair's ambush night: the watch at every corner) - nothing comes in from the sea
+        if (rec.l && map === D.MAP.miasto && T.call("Jarmark_Sceny", "nocStrzezona", n)) { rec.l = 0; rec.straz = 1; }
         rec.P = Math.round(info.P * 1000) / 1000;
         s.noce[k] = rec;
         return rec;
@@ -218,12 +223,20 @@
         try { const g = D.GROUP[rec.k] || { kind: rec.k }; P().warm([g.kind]); } catch (e) { /* the shadows are cut later then */ }
     }
     var town = false;
+    // inland the monster walks in over the map's WEST edge - the side of the sea (Podgrodzie's from the coast, Kruczogród's from
+    // Podgrodzie): a cell of the west edge where the world goes on westwards (SwiatData's link), picked by the night; never anywhere else
+    function westRows() {
+        const W = window.SwiatData, m = mapId(), box = W && W.maps ? W.maps[m] : null, out = [];
+        if (box) for (const l of W.links || []) if (Number(l.a) === m && l.side === "W") for (let w = l.from; w <= l.to; w++) out.push(w - box[1]);
+        if (!out.length) for (let y = 2; y < $gameMap.height() - 2; y++) out.push(y);
+        return out;
+    }
     function townGate() {
-        // the town's gates towards the harbour and the suburb (the west gate and the south one): the monster comes through one of them
-        const gates = [[4, 63], [31, 108]], g = gates[hash(nightNow().n, 5) < 0.5 ? 0 : 1];
-        for (let r = 0; r < 6; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
-            const x = g[0] + dx, y = g[1] + dy;
-            if ($gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && !$gameMap.eventsXyNt(x, y).some(e => e.isNormalPriority() && !e.isThrough())) return { x, y, gate: true };
+        const rows = westRows(), y0 = rows[Math.floor(hash(nightNow().n, 5 + mapId()) * rows.length)];
+        const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && !$gameMap.eventsXyNt(x, y).some(e => e.isNormalPriority() && !e.isThrough());
+        for (let r = 0; r < rows.length; r++) for (const y of [y0 - r, y0 + r]) {
+            if (!rows.includes(y)) continue;
+            for (let x = 0; x <= 1; x++) if (free(x, y)) return { x, y, gate: true };
         }
         return null;
     }
@@ -239,6 +252,8 @@
             try { const Dg = T.api("Dog"); if (Dg && Dg.bark) Dg.bark(); else T.audio.se("Dog", { volume: 60, pitch: 90 }); } catch (e) { /* no dog */ }
         }
         if (l.t === 150 && !l.pt.gate) { ringsAt(w0.x, w0.y, 4); T.audio.se("Water2", { volume: 80, pitch: 70 }); }
+        // (inland: it walks in over the west edge - never out of thin air before the hero's eyes: while he stands right by that edge it waits)
+        if (l.pt.gate && !l.forced && $gamePlayer && Math.hypot($gamePlayer.x - l.pt.x, $gamePlayer.y - l.pt.y) < 9 && l.t < 3600) { l.t -= 30; l.wait = (l.wait || 0) + 30; if (l.wait < 3600) return; }
         if (l.t >= (l.forced ? 120 : 300)) { const rec = l.rec; landing = null; spawnLanding(rec, l.pt, l.n, l.map); }
     }
     function spawnLanding(rec, pt, n, map) {
@@ -403,7 +418,8 @@
     }, { owner: PLUGIN, name: "morze", every: 30 });
     function markSeen() {
         if (mlynBlok()) return;
-        const s = S(), id = mapId();
+        // (2026-11-16) one sea map in the new world: the three records are three mornings on that one shore, not three shores
+        const s = S(), id = D.RING.length > 1 ? mapId() : mapId() + ":" + day();
         if (!s.slady[id]) {
             s.slady[id] = day();
             const n = Object.keys(s.slady).length;
@@ -586,7 +602,7 @@
             const k = Number(ctx.skok) || 1, s = S();
             if (!s.start) s.start = day();
             if (k >= 2 && day() < 10) $gameSystem._dayNightDay = 10;
-            if (k >= 2) for (const m of [D.MAP.przystan, D.MAP.jar, D.MAP.laka]) s.slady[m] = s.slady[m] || day();
+            if (k >= 2) for (const m of (D.RING.length > 1 ? [D.MAP.przystan, D.MAP.jar, D.MAP.laka] : [D.MAP.przystan, D.MAP.przystan + ":a", D.MAP.przystan + ":b"])) s.slady[m] = s.slady[m] || day();
             if (k >= 3) { s.dzwon = 1; s.dzwonDzien = day(); }
             if (k >= 4) s.mgly = day();
             if (k >= 5) { s.kleofas = day(); s.forceKapitan = 1; if (day() < 40) $gameSystem._dayNightDay = 40; }
@@ -671,7 +687,7 @@
     // 9. API
     // ==================================================================
     window.Morze = T.register(PLUGIN, {
-        D, state: S, chance: ctx => chanceOf(ctx), baseP, decide, nightInfo, night: nightNow, shorePoints, fireShare, seaMap, townMap, recordFor, key,
+        D, state: S, chance: ctx => chanceOf(ctx), baseP, decide, nightInfo, night: nightNow, shorePoints, fireShare, seaMap, townMap, townGate, westRows, recordFor, key,
         force: forceKind, show, arm, dawn, nightTick, landingTick, startThread, ciag, bellOn, levelOf,
         get landing() { return landing; }, set landing(v) { landing = v; },
         spawnTentacles: () => forceKind("macki"),

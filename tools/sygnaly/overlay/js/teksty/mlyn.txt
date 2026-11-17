@@ -1,0 +1,519 @@
+# Teksty wątku W19 „Sygnały z młyna” (Mlyn_Data.js, Mlyn.js) - docs/zadania_nowe/sygnaly_z_mlyna.md.
+# Młynarz Walenty Mączka, jego pomocnik Jasiek Worek, wypatrywacz Łasica, szyper Ostoja Rafa; Ozzy, Wit, Roch, Sambor.
+# Bohater jest nastolatkiem: dorośli mówią do niego „chłopcze”. „> ” - mówi bohater. {nazwa} - wstawia gra.
+
+# ======================================================================== mieszkańcy (TownLife: kolejność w Mlyn_Data.js)
+mieszkancy.0.name = Walenty Mączka
+mieszkancy.0.title = młynarz
+
+[mieszkancy.0.barks.stand]
+Wiatr dziś równy. Mielimy.
+
+[mieszkancy.0.barks.wander]
+Ziarno do ziarna, mąka do mąki. Tyle wiem o świecie.
+
+[mieszkancy.0.barks.rain]
+Deszcz mąci mąkę. Ale skrzydła odpoczywają.
+
+[mieszkancy.0.barks.night]
+Cicho w młynie. Za cicho.
+
+[mieszkancy.0.barks.home]
+Dobranoc, młynie.
+
+[mieszkancy.0.talk.morning]
+Rano najlepiej się miele. Chleba nigdy za mało, chłopcze.
+
+[mieszkancy.0.talk.day]
+Wiatr jest, kamienie są, ziarna brak. Susza.
+
+[mieszkancy.0.talk.evening]
+Wieczorem młyn stoi. Tylko ja nie umiem stać.
+
+[mieszkancy.0.talk.night]
+Nie śpię ostatnio. Skrzydła mi się śnią.
+
+[mieszkancy.0.talk.rain]
+Mokra mąka to ciasto. Dobrze, że dach nie przecieka.
+
+mieszkancy.1.name = Jasiek Worek
+mieszkancy.1.title = pomocnik młynarza
+
+[mieszkancy.1.barks.stand]
+Worek na worek. Ciężko.
+
+[mieszkancy.1.barks.wander]
+Idę po wodę... mistrz kazał.
+
+[mieszkancy.1.barks.rain]
+Deszcz? To dobrze. Mniej pracy.
+
+[mieszkancy.1.barks.night]
+Ja nic nie robiłem.
+
+[mieszkancy.1.barks.home]
+Idę spać. Naprawdę.
+
+[mieszkancy.1.talk.morning]
+Dzień dobry... Młyn już mieli, widzisz? Cały w pyle.
+
+[mieszkancy.1.talk.day]
+Nosimy, mielimy, sypiemy. I tak w kółko.
+
+[mieszkancy.1.talk.evening]
+Zaraz zmierzch. Muszę... eee... po wodę.
+
+[mieszkancy.1.talk.night]
+Cicho, bo mistrz usłyszy.
+
+[mieszkancy.1.talk.rain]
+Wolę deszcz niż pył w gardle.
+
+# ======================================================================== zadanie, kroki, dziennik
+zadania.W19.title = Sygnały z młyna
+zadania.W19.where = wiatrak w mieście, tawerna, Archiwum zakonu, przystań i zatoczka pod nią
+zadania.W19.when = od dnia 24, wieczory i noce (8-10 dni gry)
+zadania.W19.desc = Skrzydła wiatraka Walentego zmieniają ułożenie po zmroku, choć młyn jest zamknięty od środka. Ktoś używa ich jak semafora do łodzi z kontynentu. Odczytaj kod, ustaw fałszywy sygnał i w nocy odpowiedz łodzi latarnią tak, żeby przypłynęła tam, gdzie czeka zasadzka.
+zadania.W19.fail.text = Młyn znów jest tylko młynem. Skrzydła przestały mówić.
+zadania.W19.steps.0.text = {tekst}
+zadania.W19.steps.1.text = {tekst}
+zadania.W19.steps.2.text = {tekst}
+zadania.W19.steps.3.text = {tekst}
+zadania.W19.steps.4.text = {tekst}
+
+kroki.0.brak = Walenty Mączka, młynarz, nie poznaje własnego młyna: rano skrzydła stoją inaczej, niż je zostawił. Pogadaj z nim (tawerna wieczorem, młyn za dnia).
+kroki.0.czeka = Obiecałem Walentemu czuwanie przed młynem. Po dziesiątej w nocy stań przy młynie (wiatrak w mieście) - dziś albo kiedy indziej od dnia {dzien}. Albo weź od niego zapasowy klucz i zajrzyj do pustego młyna po zmroku.
+kroki.0.po = Skrzydła zmieniają pozę same, po zmroku. Młyn jest zamknięty od środka - ktoś ma klucz. Ktoś, kto chodzi tam i z powrotem po wodę.
+kroki.1.szukaj = Ktoś czyta ułożenie skrzydeł z daleka. Po zmroku (od 20:30) szukaj błysków przysłoniętej latarni w mieście, w suszarni za kuźnią na północnym wschodzie. Podejdź skradając się (C) - głośny krok go spłoszy.
+kroki.1.ostrzezony = Wypatrywacz mnie usłyszał i uciekł. Wrócę następnego wieczoru, po zmroku, i będę się skradał (C).
+kroki.1.po = Wypatrywacz Łasica czyta skrzydła lunetą i błyska latarnią w stronę morza. Wie coś o literach: „B i C - trzeba potwierdzić latarnią z cypla”.
+kroki.2.tekst = Kod skrzydeł: cztery ułożenia, każde to jedno słowo, dwa po sobie (19:30 i 20:15) to wiadomość. Obserwowane wieczory: {n} z {z}. Znane słowa: {slowa}. Księga w Archiwum: {ksiega}. Wzór latarni od Rocha: {roch}.
+kroki.2.wyrwana = wyrwana strona (kroniki sprzedane Baltazarowi - tylko obserwacja)
+kroki.2.jest = przeczytana
+kroki.2.nie = nieprzeczytana (pulpit w Archiwum zakonu)
+kroki.2.rochJest = mam
+kroki.2.rochNie = brak (Roch na przystani zna stary kod)
+kroki.3.tekst = Ustaw skrzydła na kłamstwo: w komorze osi młyna (dźwignia hamulca) o 19:30 pierwsze słowo, kwadrans później drugie. {lista}
+kroki.3.wTak = Walenty zgodził się.
+kroki.3.wNie = Przekonaj Walentego.
+kroki.3.jTak = Jasiek wyznał.
+kroki.3.jNie = Pogadaj z Jaśkiem Workiem.
+kroki.3.sTak.sambor = Zasadzka: celnik Sambor.
+kroki.3.sTak.wit = Zasadzka: Wit z ludźmi.
+kroki.3.sTak.sam = Zasadzka: sam z Rochem i Grumem.
+kroki.3.sNie = Zwołaj ludzi na zasadzkę (kapral Wit).
+kroki.3.nTak = Noc bez wiatru i z wysokim pływem: wieczór dnia {dzien}.
+kroki.3.nNie = Spytaj Ozzy'ego o pogodę (w tawernie).
+kroki.3.po = Skrzydła ustawione na kłamstwo wieczorem dnia {dzien}. Teraz, w nocy, odpowiedz łodzi latarnią z cypla w zatoczce pod Przystanią.
+kroki.4.tekst = Po północy (od 23:30) bądź na cyplu nad zatoczką w Przystani. Około 1:30 w morzu błyśnie latarnia - odpowiedz hasłem nocy: B-C to krótki, długi, krótki. Łódź przybije o drugiej, w przypływie.
+kroki.4.po = Łódź przemytników rozstrzygnięta: {wynik}.
+
+wyniki.1 = oddani celnikowi Samborowi, zboże wraca do spichlerza
+wyniki.2 = zatrzymani na przystani, zboże do spichlerza, Roch zyskał zaufanie
+wyniki.3 = szyper wypuszczony za 90 G (młynarz się odwrócił)
+
+kod.slowo.A = „cisza” (plus)
+kod.slowo.B = „towar gotowy” (iks)
+kod.slowo.C = „zatoczka” (lewy skos)
+kod.slowo.D = „pochylnia” (prawy skos)
+kod.brak = (jeszcze nic)
+
+# ======================================================================== napisy
+napis.zloto = +{n} G
+napis.zaplata = -{n} G
+napis.obserwacja = Dziś skrzydła mówiły: {a}, {b} ({n} z {z})
+[napis.kodGotowy]
+Kod skrzydeł odczytany
+
+[napis.kodGotowyPod]
+Skrzydła mówią: B - towar gotowy, C - zatoczka.
+
+napis.zgoda = Obiecałem Walentemu czuwanie
+[napis.zgodaPod]
+Po dziesiątej w nocy, przed młynem.
+
+napis.klucz = Zapasowy klucz do młyna
+napis.s1 = Skrzydła ruszyły same
+napis.zamkniety = Młyn. Walenty mieli - zamknięte.
+napis.ustawione = Skrzydła ustawione na kłamstwo
+[napis.ustawionePod]
+Teraz odpowiedz łodzi w nocy, z cypla w zatoczce.
+
+napis.jasiek.pomoc = Jasiek pomaga
+napis.jasiek.odprawa = Jasiek odesłany na wieś
+napis.jasiek.klucz = Jasiek zostaje (zapasowy klucz)
+napis.soj.sambor = Zasadzka z celnikiem Samborem
+napis.soj.wit = Zasadzka z kapralem Witem i dwoma ludźmi
+napis.soj.sam = Zasadzka we własnym gronie: Roch i Grum
+
+# ======================================================================== notatki dziennika [tytuł, treść]
+[notatki.obserwacja]
+Skrzydła o zmierzchu
+Dzień {dzien}: o 19:30 i 20:15 skrzydła wiatraka stały ułożone na {a} i {b}.
+
+[notatki.slady]
+Ślady na plaży
+Rano, po zmierzchu dnia {dzien}: ślady kilu w zatoczce pod Przystanią. Coś tam przypłynęło.
+
+[notatki.bezSladow]
+Nic w zatoczce
+Rano, po zmierzchu dnia {dzien}: żadnych śladów kilu. Ta noc była pusta.
+
+[notatki.kod]
+Kod skrzydeł
+Wiem już, co mówią skrzydła. A - cisza, nic nie wiozą. B - towar gotowy. C - zatoczka (lądowanie pod Przystanią). D - pochylnia (szopa Rocha). Wiadomość to dwa słowa po sobie, 19:30 i 20:15. B potem C: towar gotowy, zatoczka.
+
+[notatki.ksiega]
+Księga skrzydeł
+W Księdze sygnałów zakonu jest strona „Skrzydła Kruczarni”: dawny kod poczty kruczej. Cztery ułożenia: plus, iks, lewy skos, prawy skos. Przemytnicy musieli go od kogoś dostać.
+
+[notatki.wyrwana]
+Wyrwana strona
+Strona „Skrzydła Kruczarni” w Księdze sygnałów jest wyrwana. Kroniki trafiły do Baltazara. Zostają obserwacje: potrzebuję jednego wieczoru więcej.
+
+[notatki.roch]
+Wzór latarni
+Roch pamięta stary kod latarni. Skrzydła B-C odpowiada się: krótki, długi, krótki (kropka, kreska, kropka). Mam dwie szanse.
+
+[notatki.noc]
+Noc dla łodzi
+Ozzy czyta wiatr i morze: najlepsza noc to wieczór dnia {dzien}, bez wiatru, z wysokim pływem o drugiej.
+
+[notatki.s1]
+Skrzydła same
+Czuwałem z Walentym przed młynem: skrzydła trzy razy zmieniły ułożenie, a drzwi zamknięte od środka. Klucz mają tylko młynarz i jego pomocnik.
+
+[notatki.s1alt]
+Pusty młyn
+W pustym młynie, po zmroku: dźwignia hamulca poruszona, woskowe krople pod oknem poddasza. Ktoś tu bywa wieczorami, ktoś z kluczem.
+
+[notatki.slad.wosk]
+Wosk pod oknem
+Pod oknem komory osi stygną krople wosku. Ktoś siedział tu ze świecą i patrzył na drogę.
+
+[notatki.slad.zeszyt]
+Zeszyt młynarza
+W zeszycie Walentego: kto ile mąki, ile worków. I jedna wyrwana kartka. Jasiek chyba umie pisać lepiej, niż mówi.
+
+[notatki.podsluch]
+Łasica z lunetą
+Wypatrywacz Łasica czyta skrzydła wiatraka lunetą i błyska latarnią w stronę morza. Powtarza: „B i C - kropka, kreska, kropka”.
+
+[notatki.walka]
+Łasica ostrzeżony
+Wyszedłem z cienia. Łasica uciekł, a jego ludzie wiedzą, że ktoś węszy. Zasadzka będzie trudniejsza.
+
+[notatki.ustawione]
+Fałszywy sygnał
+Ustawiłem skrzydła na B, potem C: „towar gotowy, zatoczka”. Łódź przypłynie w nocy do zatoczki.
+
+[notatki.klucze]
+Klucze wymienione
+Łasica zauważył, że coś jest nie tak, i kazał wymienić klucze do młyna. Zaczynam od nowa: Walenty, Jasiek, sojusznicy.
+
+[notatki.odplynela]
+Łódź odpłynęła
+Nie odpowiedziałem poprawnie. Łódź zawróciła w ciemność. Trzeba ustawić skrzydła od nowa.
+
+[notatki.niePrzyszedl]
+Noc przepadła
+Skrzydła mówiły, a ja nie odpowiedziałem łodzi. Przemytnicy wiedzą, że coś jest nie tak. Ustawiam skrzydła jeszcze raz.
+
+[notatki.dziennikLodzi]
+Dziennik łodzi
+W jaskini i na łodzi: zboże z pieczęcią dworu z miejskiego spichlerza. W dzienniku szypra: „kupiec z miasta czeka na zboże w zimie, kiedy cena podwoi”.
+
+[notatki.koniec.1]
+Przemytnicy w rękach celnika
+Szyper Ostoja Rafa i jego ludzie trafili do Sambora. Zboże wraca do spichlerza, w mieście będzie chleb po dawnej cenie. Skrzydła wiatraka znów należą do młynarza.
+
+[notatki.koniec.2]
+Przemytnicy zatrzymani
+Zboże wróciło do spichlerza, Roch zyskał do mnie zaufanie. Sambor się obraził, że to nie on. Skrzydła wiatraka znów należą do młynarza.
+
+[notatki.koniec.3]
+Szyper puszczony wolno
+Wziąłem 90 G za milczenie i wypuściłem szypra. Baltazar będzie o tym wiedział. Walenty, jeśli się dowie, nie odezwie się do mnie.
+
+# ======================================================================== księga w Archiwum
+ksiega.zamknieta = Zakurzony tom. Same kroniki zakonu, nic o skrzydłach.
+[ksiega.strona]
+> Strona „Skrzydła Kruczarni”. Cztery rysunki: plus, iks, lewy skos, prawy skos.
+> Stary kod poczty kruczej: A - cisza, B - towar, C - zatoczka, D - pochylnia.
+> Przemytnicy dostali to od kogoś, kto miał dostęp do kronik...
+
+[ksiega.wyrwana]
+> Strona „Skrzydła Kruczarni” jest wyrwana. Zostały tylko strzępy przy grzbiecie.
+> Kroniki poszły do Baltazara. Tak, on je sprzedał... Mam tylko własne oczy.
+
+# ======================================================================== Roch, Wit, Ozzy
+opcja.inna = Nie, w innej sprawie.
+
+roch.opcja = Pytam o stary kod latarni.
+roch.imie = Roch
+roch.brak = Stary kod? Pamiętam. Ale za darmo nie, a ty nie masz przy sobie nawet dziesięciu groszy.
+roch.zaplac = Masz dziesięć groszy. ({n} G)
+roch.nie = Nie teraz.
+[roch.opowiada]
+Dziad uczył mnie, gdy byłem mały: krótki, długi, krótki - to „towar gotowy, zatoczka”.
+Odpowiadasz ręką: kropka, kreska, kropka. Krótko, długo, krótko. Nie pomyl się, chłopcze. Druga szansa to prezent.
+
+roch.nie2 = Jak chcesz. Stary kod nie ucieknie.
+
+wit.opcja = Mam sprawę w młynie (zasadzka).
+wit.imie = kapral Wit
+wit.pyta = Młyn? Mów po cichu. Chcesz zasadzkę na przemytników? Wiem, że na stole u Sambora leży ich lista. Kto ma ci pomóc, chłopcze?
+wit.sambor = Celnik Sambor (legalnie)
+wit.wit = Ty i dwóch ludzi
+wit.sam = Sam, z Rochem i Grumem
+[wit.samborOdp]
+Sambor chętnie. Konfiskata, nagroda od Lorda. Zawiadomię go, że o drugiej w nocy ma stać w lesie nad zatoczką.
+
+[wit.witOdp]
+Z dwoma ludźmi, dobrze. Tańsze, ale pamiętaj: walka będzie, bez nagrody od Lorda. Przyjdziemy.
+
+[wit.samOdp]
+Sam, z Rochem i Grumem? Odważnie. Najlepszy łup, ale też najgorsze ryzyko. Tylko pilnuj siebie.
+
+ozzy.opcja = Postaw mu piwo i spytaj o morze i wiatr.
+ozzy.nie = Nie teraz.
+ozzy.imie = Ozzy
+ozzy.brak = Piwo kosztuje. A ty nie masz przy sobie ani grosza, chłopcze.
+[ozzy.piwo]
+Eee, piwo. Dobry z ciebie chłopak. Zaraz powiem, co widzę w kościach: wiatr, morze, odpływ.
+
+[ozzy.dzis]
+Dziś w nocy! Wiatru nie będzie, a o drugiej przypływ do kolan. Taka noc nie trafia się co dzień.
+
+[ozzy.dzien]
+Noc dnia {dzien}: morze gładkie, przypływ wysoki o drugiej. Jeśli ktoś miałby podpłynąć do zatoczki, to wtedy.
+
+[ozzy.odloz]
+Odłóż. W najbliższe trzy dni albo wiatr, albo odpływ. Żadna łódź tam nie podejdzie.
+
+# ======================================================================== Walenty
+walenty.imie = Walenty Mączka
+[walenty.prosba]
+Chłopcze, mam prośbę. Od kilku nocy nie poznaję własnego młyna.
+Rano skrzydła stoją inaczej, niż je zostawiłem. Drzwi zamknięte od środka, klucz mam ja i Jasiek.
+Zostań ze mną przed młynem noc, po dziesiątej. Nie wierzę własnym oczom.
+
+walenty.zostane = Zostanę.
+walenty.nieTeraz = Nie teraz.
+[walenty.zostaneOdp]
+Bóg zapłać. Będę czekał przy drzwiach, od dziesiątej do północy.
+
+[walenty.nieTerazOdp]
+Rozumiem. Spytam znowu, wieczorem. Ty jedyny nie śmiejesz się ze mnie.
+
+[walenty.czekaj]
+Po dziesiątej, przed młynem. Nie zapomnij.
+
+walenty.kluczProsi = Nie chcę czekać. Masz klucz zapasowy?
+walenty.kluczNie = Poczekam.
+[walenty.klucz]
+Masz. Zapasowy, od stajni. Wejdź sam, jeśli wolisz, ale wejdź po zmroku, kiedy skrzydła się ruszają.
+
+[walenty.swiatla]
+Znalazłeś coś? Ktoś patrzy na mój młyn, a ja nie wiem kto.
+
+[walenty.kod]
+Skrzydła stoją na rysunkach... tak, jakby ktoś chciał coś powiedzieć. A ja nie umiem czytać tego pisma.
+
+[walenty.przekonaj]
+No i co? Wiesz, kto przestawia skrzydła?
+Chcesz ustawić je na fałszywy sygnał. Moje skrzydła, mój młyn... Boję się przemytników, chłopcze.
+
+walenty.zgodaOpinia = Zaufaj mi. Pomogę ci.
+walenty.zgodaZaplata = Dam ci za kłopot {n} G.
+walenty.pozniej = Przemyślę.
+[walenty.zgoda]
+Opinia ci służy... Dobra. Ludzie mówią, że chłopak z działki dziadka jest uczciwy. Ustaw je, jak trzeba. Ale ostrożnie.
+
+[walenty.zgodaZ]
+Piętnaście groszy za kłopot... dobrze. Młyn potrzebuje spokoju, a ja chleba. Ustaw, jak trzeba.
+
+[walenty.poznij]
+Rozumiem. Tylko nie zwlekaj, bo skrzydła nie śpią.
+
+[walenty.wToku]
+Z Jaśkiem pogadałeś? Z ludźmi? Pamiętaj: zmierzch, komora osi.
+
+[walenty.poUstawieniu]
+Skrzydła stoją, jak chciałeś. Idź na przystań, chłopcze. Niech cię noc prowadzi.
+
+[s5.walenty]
+Mielimy. Dym z komina, skrzydła w wietrze, rano jak dawniej. Chłopcze, wiem, co zrobiłeś.
+Masz tu czterdzieści groszy i dwa worki mąki. A od dziś mielimy za darmo, kto przyniesie chleb dla Przytułku.
+
+[s5.zdrada]
+Chłopcze... ludzie mówią, że szyper przepłynął nocą jak gdyby nigdy nic. Ty to wiesz. Idź.
+
+# ======================================================================== Jasiek
+jasiek.imie = Jasiek Worek
+[jasiek.dzien]
+Mistrz kazał nosić, to noszę. Nic nie wiem, chłopcze.
+
+[jasiek.szuka]
+Mistrz mówi, żebym nie gadał. To nie gadam.
+
+[jasiek.przyznaje]
+Nie bij mnie... Tak, to ja przestawiam skrzydła. Wieczorem, po wodę idę, a w ogóle ustawiam skrzydła.
+Dług mam, chłopcze. U ludzi Baltazara. Powiedzieli, że kto przestawia, ten nie zapłaci. A co ja miałem robić?
+
+jasiek.pomoz = Pomóż mi. Oddaj klucz.
+jasiek.odsylam = Odsyłam cię na wieś. ({n} G odprawy)
+jasiek.zignoruj = Zignoruję. Wezmę zapasowy klucz.
+[jasiek.pomozOdp]
+Naprawdę? Dobrze. Klucz masz. A dźwignię... pociągasz, a skrzydła się obracają. Nie hamuj za szybko, bo zazgrzyta.
+
+[jasiek.odsylamOdp]
+Do ciotki? Dobrze... dziękuję. Przysięgam, nie piśnę słówka.
+
+jasiek.brakZlota = Nie mam odprawy przy sobie.
+[jasiek.zignorujOdp]
+Ja nic nie powiedziałem! Ale... jakby ktoś pytał... mogę zapomnieć. Mogę też zapomnieć nie zapomnieć.
+
+[jasiek.po.pomoc]
+Cieszę się, że pomogłem. Mistrz mnie nie wyrzuci?
+
+[jasiek.po.odprawa]
+Już w drodze do ciotki. (Jasiek wyjechał.)
+
+[jasiek.po.klucz]
+Ja nic. Ja tylko noszę worki.
+
+# ======================================================================== S1, wnętrze, ślady, okno, dźwignia
+s1.walenty0 = Czekamy. Nie ruszaj się, chłopcze. Zaraz... zaraz się zacznie.
+[s1.walenty1]
+Trzeci raz! A drzwi zamknięte. Widziałeś? Skrzydła same, jakby ktoś je rękami...
+
+[s1.bohater]
+> Zapisuję. Dziś trzy razy, po zmierzchu.
+
+s1.walenty2 = Jasiek śpi w izbie nad stajnią. Klucz ma tylko on i ja. Idę do domu. Dziękuję, chłopcze.
+wnetrze.noc = > Pusty młyn w nocy. Dźwignia hamulca poruszona, pod oknem woskowe krople...
+slad.brak = Nic w tym nie widzę.
+[slad.wosk]
+> Woskowe krople pod oknem. Ktoś patrzył tędy na drogę ze świecą.
+
+[slad.zeszyt]
+> Zeszyt Walentego. Rachunki, worki, wyrwana kartka. Pismo Jaśka?
+
+okno.dzien = > Przez okno widać drogę i dachy miasteczka. Spokojnie.
+okno.noc = > Z okna widać drogę i czarne dachy. Nic się nie rusza.
+okno.lasica = > Daleko, w suszarni na północnym wschodzie, mignęło światło.
+dzwignia.zwykla = Dźwignia hamulca skrzydeł. Młynarz używa jej do zatrzymania obrotu.
+dzwignia.obca = Dźwignia hamulca. Ktoś tu ostatnio grzebał, jest świeżo naoliwiona.
+dzwignia.jasiek = Najpierw pogadaj z Jaśkiem. Bez jego klucza nie podejdę.
+dzwignia.sojusz = Zwołaj ludzi na zasadzkę (kapral Wit w tawernie), zanim ustawisz skrzydła.
+dzwignia.noc = Spytaj Ozzy'ego, kiedy morze i wiatr pozwolą łodzi podejść.
+dzwignia.zlaNoc = Dziś nie ta noc. Ozzy mówił o wieczorze dnia {dzien}.
+dzwignia.gotowe = Skrzydła już stoją na kłamstwie. Teraz noc w zatoczce.
+dzwignia.pora = Skrzydła ustawia się o zmierzchu: od 19:30 do 21:00.
+dzwignia.kwadrans = Drugie słowo dopiero za kwadrans (o 20:15), jak u przemytników.
+dzwignia.pierwsza = > Pierwsze słowo: {l}. Teraz kwadrans czekania na drugie.
+dzwignia.dobrze = > B, potem C. Towar gotowy, zatoczka. Niech patrzą.
+dzwignia.zle = > Nie to słowo! Łasica zobaczy coś nie tak. Jeszcze {n}.
+dzwignia.klucze = > Łasica wymienił klucze. Zaczynam od nowa.
+
+# ======================================================================== Łasica, S2
+lasica.imie = Łasica
+lasica.kto = Kto tam?
+lasica.odchodzi = Dość widziałem. Idę.
+[lasica.zauwazyl]
+> Usłyszał mnie. Chowa latarnię i znika w zaułku.
+> Wrócę jutro, po zmroku. I będę cicho.
+
+s2.lasica0 = Skrzydła... iks. Potem skos. Dobrze, dobrze, mówią to, co trzeba.
+s2.lasica1 = B i C, trzeba potwierdzić latarnią z cypla. Kropka, kreska, kropka. Niech szyper się nie pomyli.
+
+[s2.bohater]
+> Kropka, kreska, kropka... To jakiś wzór. Muszę to zapisać.
+
+s2.opcjaSluchaj = Słuchaj dalej i wymknij się.
+s2.opcjaWalka = Wyjdź z cienia (walka).
+s2.krzyk = Ktoś tu węszy! Brać go!
+
+# ======================================================================== mini-gra Ustaw skrzydła
+poza.tytul = Hamulec skrzydeł
+poza.podPierwsza = Pierwsze słowo wiadomości (19:30)
+poza.podDruga = Drugie słowo wiadomości (20:15)
+poza.wybierz = Poza
+poza.zatwierdz = Zatwierdź
+poza.opis.A = A - plus: „cisza” (nic nie wiozą)
+poza.opis.B = B - iks: „towar gotowy”
+poza.opis.C = C - lewy skos: „zatoczka”
+poza.opis.D = D - prawy skos: „pochylnia”
+poza.skrzypi = Oś skrzypi, skrzydła ruszają...
+poza.stopka = ← → wybierają ułożenie skrzydeł, OK zatwierdza
+poza.pauza = Hamulec skrzydeł
+poza.dalej = Dalej
+poza.wyjdz = Odsuń się od dźwigni
+
+# ======================================================================== mini-gra Rozmowa światłami
+lat.tytul = Rozmowa światłami
+lat.pod = Odpowiedz łodzi hasłem nocy
+lat.k = Krótki
+lat.d = Długi
+lat.od = Od nowa
+lat.wyslij = Wyślij
+lat.proba = Próba {n} z {z}
+lat.patrz = Patrz na światło w morzu...
+lat.pytanie = Łódź pytała: {q}  - odpowiedz hasłem!
+lat.wskazowka = Hasło nocy (B-C): {a}
+lat.dobrze = Dobry znak!
+lat.zle = Zły znak. Łódź pyta jeszcze raz...
+lat.zleKoniec = Zły znak.
+lat.odplywa = Łódź odpływa w ciemność.
+lat.pauza = Rozmowa światłami
+lat.wyjdz = Zgaś latarnię
+
+# ======================================================================== S3-S4 i wyjścia
+[s3.zajmuje]
+> Zajmuję miejsce Łasicy na cyplu. Z latarnią w ręku.
+> W morzu coś błysnęło. Jedno światło, daleko.
+
+s3.odplywa = > Zły znak. Światło odpływa w ciemność. Przepadło.
+s3.dobrze = > Długi błysk odpowiedzi. Dobry znak. Światło zbliża się, a z nim obrys łodzi.
+s3.szyper = Dobry znak, ciągnij! Ostoja Rafa, szyper. Gdzie worki, chłopcze? Mamy zabrać zboże i wracać.
+sambor.imie = Sambor Kwit
+szyper.imie = Ostoja Rafa
+s4.wit = Stać! Straż Lorda!
+s4.sambor = Worki na ziemię! W imieniu Lorda! Jesteście zatrzymani pod zarzutem przemytu zboża.
+s4.witDwa = Straż! Ani kroku! Łódź tu stoi, towar tu leży. Odłóżcie broń!
+s4.roch = Ani drgnij. Ten brzeg to mój brzeg od pokoleń, szyprze. Teraz porozmawiamy po mojemu.
+s4.szyper = Pułapka! Do broni, chłopcy!
+[wyjscie.szyper]
+Dobra, dobra, wasza wzięła. Ostoja Rafa nie lubi przegrywać, ale umie. Co teraz?
+Dziennik łodzi jest w skrzyni. Pieczęć dworu na workach. Kupiec z miasta czeka na zboże w zimie.
+
+wyjscie.sambor = Oddać go Samborowi (zboże wraca do spichlerza).
+wyjscie.sam = Zatrzymać na przystani (łup 25 G, Roch).
+wyjscie.targ = Wziąć {n} G za milczenie i wypuścić.
+[wyjscie.samborOdp]
+> Idziesz do Sambora. Zboże wróci do spichlerza, a miasto dostanie chleb po dawnej cenie.
+
+[wyjscie.samOdp]
+> Zostajesz na przystani. Roch zabierze zboże do spichlerza, a łup dzielimy.
+
+[wyjscie.targOdp]
+> Dziewięćdziesiąt groszy za milczenie. I znikasz. Ostoja Rafa, nie wracaj.
+
+# ======================================================================== F9
+f9.naglowek = Wątek W19 (Sygnały z młyna):
+f9.brak = Nie da się teraz
+f9.rozdzial = Młyn: rozdział {n}
+f9.rozdzialOpis = ←→ rozdział 1-6; OK: ustawia stan wątku (Walenty, kod, Jasiek, zasadzka, noc) i przenosi na miejsce.
+f9.poza = Młyn: poza skrzydeł {l}
+f9.pozaOpis = ←→ pozy A-D; OK: skrzydła wiatraka stoją tak (aż do wyłączenia).
+f9.zmierzch = Młyn: zmierzch teraz
+f9.zmierzchOpis = OK: godzina 19:24 przy wiatraku, harmonogram przemytników.
+f9.lodz = Młyn: łódź przypływa teraz
+f9.lodzOpis = OK: noc w zatoczce, godzina 1:24, wysoki przypływ, ustawienie skrzydeł zrobione.
+f9.kod = Młyn: pokaż kod
+f9.kodOpis = OK: znam wszystkie cztery pozy i wzór latarni.
+f9.wylacz = Młyn: wyłącz łódź
+f9.wylaczOpis = OK: zakończenie wątku, skrzydła kręcą się same, zatoczka pusta.
+f9.wyzeruj = Młyn: wyzeruj
+f9.wyzerujOpis = OK: stan wątku W19 od nowa.

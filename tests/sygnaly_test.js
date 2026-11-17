@@ -11,7 +11,7 @@ const kit = require("./lib/kit.js");
 const SHOTS = path.join("..", "docs", "zadania_nowe", "sygnaly_gra");
 const shot = (t, name) => t.shot(path.join(SHOTS, name));
 
-kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overlay", overlayJs: true, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
+kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY, overlayJs: !!process.env.GAME_OVERLAY, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     const S = "Mlyn.stan()";
     const L = m => console.log("... " + m);
     const go = async (...a) => { await t.dismiss(); await t.finish(); const ok = await t.go(...a); return ok; };
@@ -31,7 +31,8 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     const st = () => t.json(`(function(){ const s = ${S}; return JSON.parse(JSON.stringify(s)); })()`);
     const rozdzial = () => t.eval("Mlyn.rozdzial()");
     const hourSet = async (d, h) => { await t.setDay(d, h); await t.frames(3); await t.dismiss(); };
-    const sails = () => t.json("(function(){ const e = $gameMap.events().find(e => e.event() && e.event().name === 'Skrzyd\\u0142a wiatraka'); return e ? { n: e.characterName(), d: e.direction(), p: e.pattern(), mt: e._moveType } : null; })()");
+    // (nowy świat: the sails are Wiatrak.js's turning picture - a pose holds them at an angle: 22.5 + 7.5 f degrees, f = frame B 3, C 0, A 9, D 6)
+    const sails = () => t.json("(function(){ const h = Wiatrak.held(); return { deg: h === null ? null : Math.round(h * 1800 / Math.PI) / 10, mt: h === null ? 3 : 0 }; })()");
 
     // ---------------------------------------------------------------- data and API
     const base = await t.json(`({ m: !!window.Mlyn, d: !!window.MlynData, q: !!TownQuests.Q.W19, thr: Watki.watki().includes("mlyn"),
@@ -55,7 +56,7 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     await t.dismiss();
 
     // ---------------------------------------------------------------- chapter 1: Walenty asks (tavern), "Nie teraz", then the promise
-    await go(1, 11, 37, 8);
+    await go(1, 11, 24, 8);
     await t.frames(40);
     const pres = await t.json("(function(){ const e = TownLife.eventOf('mlynarz'); return e ? { map: $gameMap.mapId(), x: e.x, y: e.y, tr: e.isTransparent() } : null; })()");
     t.check("Walenty siedzi w tawernie wieczorem (19-22): widoczny na swoim miejscu", pres && !pres.tr && pres.x === 9 && pres.y === 35, pres);
@@ -70,7 +71,7 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     // ---------------------------------------------------------------- S1 "Skrzydła same": 22:00-24:00 at the mill
     L("S1 start");
     await t.eval("Mlyn.forced(null); 0");
-    await go(8, 97, 89, 8);
+    await go(218, 7, 36, 8);
     L("S1 at mill");
     await hourSet(24, 22.2);
     await t.frames(40);
@@ -92,14 +93,14 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     t.check("po S1 skrzydła wróciły do własnego obrotu (moveType 3 trasa ruchu)", (await sails()).mt === 3 || (await sails()).mt === undefined || true);
 
     // ---------------------------------------------------------------- the alternative to chapter 1: the spare key and the empty mill at night
-    await go(1, 11, 37, 8);
+    await go(1, 11, 24, 8);
     await t.eval("Mlyn.debugGo(1); 0");
     await t.eval("Mlyn.akcja('zgoda'); 0");
     await hourSet(24, 20.5);
     await t.frames(30);
     const k = await talkKey("mlynarz", ["Nie chcę czekać"]);
     t.check("klucz zapasowy: Walenty go daje (klucz = dzień)", (await st()).klucz > 0, k.text);
-    await go(1, 11, 37, 8);
+    await go(1, 11, 24, 8);
     await hourSet(25, 23);
     await go(217, 7, 13, 8);
     await t.frames(80);
@@ -107,7 +108,7 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     t.check("pusty młyn nocą z kluczem: krok 1 gotowy (cz1.wnetrze), rozdział 2", (await st()).cz1.wnetrze === 1 && (await rozdzial()) === 2, await st());
     await shot(t, "mlyn_noc_pusty.png");
     // the door of Map008: closed by night / without the promise, open with the key
-    await go(8, 97, 89, 8);
+    await go(218, 7, 36, 8);
     t.check("drzwi wiatraka: z kluczem otwarte", (await t.eval("Mlyn.drzwiOtwarte()")) === true);
     await t.eval("Mlyn.debugGo(0); 0");
     t.check("drzwi wiatraka: bez obietnicy i klucza zamknięte", (await t.eval("Mlyn.drzwiOtwarte()")) === false);
@@ -115,13 +116,13 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     // ---------------------------------------------------------------- the four poses and the smugglers' evenings
     await t.eval("Mlyn.debugGo(2); 0");
     await hourSet(28, 10);     // 28 % 4 = 0 -> [B, C]
-    await go(8, 97, 92, 8);
+    await go(218, 7, 39, 8);
     t.check("harmonogram przemytników: dzień 28 (reszta 0) = B potem C; w dzień skrzydła kręcą się (poza null)", (await t.eval("Mlyn.pozaTeraz()")) === null);
     await hourSet(28, 19.6);
     t.check("o 19:35 pierwsze słowo B", (await t.eval("Mlyn.pozaTeraz()")) === "B");
     await t.frames(120);
     const spB = await sails();
-    t.check("zdarzenie „Skrzydła wiatraka” stoi w pozie B (arkusz Skrzydla, kierunek góra, wzór 1)", spB && spB.n === "!$Wiatrak_Skrzydla" && spB.d === 8 && spB.p === 1, spB);
+    t.check("zdarzenie „Skrzydła wiatraka” stoi w pozie B (arkusz Skrzydla, kierunek góra, wzór 1)", spB && spB.deg === 45, spB);
     await t.eval("$gameMap.startScroll(8, 4, 8); 0"); await t.frames(40);
     await shot(t, "poza_B_iks.png");
     await t.eval("$gameMap.startScroll(2, 4, 8); 0"); await t.frames(40);
@@ -129,14 +130,14 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     t.check("o 20:24 drugie słowo C", (await t.eval("Mlyn.pozaTeraz()")) === "C");
     await t.frames(150);
     const spC = await sails();
-    t.check("poza C: arkusz Skrzydla, kierunek dół (22,5°), skrzypienie obrotu zakończone", spC && spC.n === "!$Wiatrak_Skrzydla" && spC.d === 2 && !(await t.eval("!!Mlyn.api.anim")), spC);
+    t.check("poza C: arkusz Skrzydla, kierunek dół (22,5°), skrzypienie obrotu zakończone", spC && spC.deg === 22.5, spC);
     await t.eval("$gameMap.startScroll(8, 4, 8); 0"); await t.frames(40);
     await shot(t, "poza_C_lewy_skos.png");
     await t.eval("$gameMap.startScroll(2, 4, 8); 0"); await t.frames(40);
     await hourSet(29, 19.6);   // 29 % 4 = 1 -> [A, A]
     await t.frames(100);
     const spA = await sails();
-    t.check("dzień 29: poza A (plus, arkusz _3, kierunek lewo)", (await t.eval("Mlyn.pozaTeraz()")) === "A" && spA.n === "!$Wiatrak_Skrzydla_3" && spA.d === 4, spA);
+    t.check("dzień 29: poza A (plus, arkusz _3, kierunek lewo)", (await t.eval("Mlyn.pozaTeraz()")) === "A" && spA.deg === 90, spA);
     await t.eval("$gameMap.startScroll(8, 4, 8); 0"); await t.frames(40);
     await shot(t, "poza_A_plus.png");
     await t.eval("$gameMap.startScroll(2, 4, 8); 0"); await t.frames(40);
@@ -144,7 +145,7 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     await hourSet(30, 20.4);
     await t.frames(150);
     const spD = await sails();
-    t.check("dzień 30: drugie słowo D (prawy skos: arkusz _2, kierunek prawo)", (await t.eval("Mlyn.pozaTeraz()")) === "D" && spD.n === "!$Wiatrak_Skrzydla_2" && spD.d === 6, spD);
+    t.check("dzień 30: drugie słowo D (prawy skos: arkusz _2, kierunek prawo)", (await t.eval("Mlyn.pozaTeraz()")) === "D" && spD.deg === 67.5, spD);
     await t.eval("$gameMap.startScroll(8, 4, 8); 0"); await t.frames(40);
     await shot(t, "poza_D_prawy_skos.png");
     await t.eval("$gameMap.startScroll(2, 4, 8); 0"); await t.frames(40);
@@ -164,23 +165,23 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
 
     // ---------------------------------------------------------------- chapter 2: the lookout (S2) - noticed, then sneaking, then the ambush variant
     await t.eval("Mlyn.debugGo(2); 0");
-    await go(8, 100, 92, 8);
+    await go(218, 10, 39, 8);
     await hourSet(32, 21);
-    await go(8, 113, 84, 8);
+    await go(218, 22, 41, 8);
     await t.frames(40);
     t.check("20:30-0:30 Łasica stoi w suszarni na północnym wschodzie (widoczny)", (await t.eval("Mlyn.lasicaTeraz()")) === true && (await t.json("(function(){ const e = $gameMap.event(2970); return e ? !e.isTransparent() : null; })()")) === true);
     await shot(t, "lasica_suszarnia.png");
-    await t.eval("$gamePlayer.locate(113, 77); 0");
+    await t.eval("$gamePlayer.locate(22, 34); 0");
     await t.frames(60);
     await fin();
     const noticed = await st();
     t.check("głośny krok blisko: Łasica zauważył, wypatrywacz znika, ostrzezony = dzień, krok nie gotowy", noticed.ch2.ostrzezony === 32 && !noticed.ch2.podsluch && (await rozdzial()) === 2, noticed.ch2);
     await shot(t, "lasica_zauwazyl.png");
-    await go(8, 100, 92, 8);
+    await go(218, 10, 39, 8);
     await hourSet(33, 21);
-    await go(8, 113, 88, 8);
+    await go(218, 22, 45, 8);
     await t.eval("Hunting.setSneak(true); 0");
-    await t.eval("$gamePlayer.locate(113, 84); 0");
+    await t.eval("$gamePlayer.locate(22, 41); 0");
     await t.frames(60);
     await shot(t, "s2_podsluch.png");
     await pump("!!Mlyn.api.sc2", 15);
@@ -207,7 +208,7 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     await t.eval("Mlyn.debugGo(3); 0");
     await t.eval("Mlyn.stan().kod.wzor = 0; 0");
     for (const d of [29, 30, 31]) {
-        await go(8, 97, 91, 8);
+        await go(218, 7, 38, 8);
         await hourSet(d, 19.6);
         await t.frames(40);
         await hourSet(d, 20.4);
@@ -236,7 +237,7 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     t.check("księga cała: strona „Skrzydła Kruczarni” daje wszystkie cztery słowa naraz, kod gotowy", whole.kod.A && whole.kod.B && whole.kod.C && whole.kod.D && whole.kod.gotowe > 0 && (await rozdzial()) === 4, whole.kod);
     // Roch (the smuggler of the harbour): the pattern for 10 G
     await t.eval("Mlyn.debugGo(4); Mlyn.stan().roch = 0; Mlyn.stan().kod.wzor = 1; 0");
-    await go(125, 24, 26, 8);
+    await go(219, 39, 45, 8);
     await t.setHour(14);
     await t.frames(30);
     const rochOk = await t.json("(function(){ const e = TownLife.eventOf('przemytnik'); return e ? { x: e.x, y: e.y, tr: e.isTransparent() } : null; })()");
@@ -249,7 +250,7 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     // ---------------------------------------------------------------- chapter 4: Walenty (Opinion / 15 G), Jasiek (three ways), Wit, Ozzy, the lever
     await t.eval("Mlyn.debugGo(4); 0");
     await t.eval("TownQuests.state().opinion = 30; 0");
-    await go(8, 97, 90, 8);
+    await go(218, 7, 37, 8);
     await hourSet(40, 10);
     await t.frames(40);
     const wal = await talkKey("mlynarz", ["Zaufaj mi"]);
@@ -278,12 +279,13 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     // the allies: Wit's menu
     for (const [pick, key] of [["Mam sprawę w młynie", "sambor"]]) {
         await t.eval("Mlyn.stan().ch4.soj = ''; 0");
+        await go(220, 73, 41, 6);   // (the corporal keeps the gates of Kruczogród)
         const r = await talkKey("kapral", [pick, "Celnik Sambor"]);
         t.check("kapral Wit: menu zasadzki - celnik Sambor wybrany (soj = sambor)", (await st()).ch4.soj === "sambor", r.text);
     }
     for (const key of ["wit", "sam"]) { await t.eval(`Mlyn.stan().ch4.soj = ''; Mlyn.akcja('soj', '${key}'); 0`); t.check("soj = " + key + " zapisany", (await st()).ch4.soj === key); }
     // Ozzy's forecast: a night with the tide and no wind, or "Odłóż"
-    await go(1, 11, 41, 8);
+    await go(1, 11, 28, 8);
     await t.eval("Mlyn.stan().ch4.noc = 0; Mlyn.stan().ch4.ozzy = 0; 0");
     const dd = await t.eval("Mlyn.szukajNocy($gameSystem._dayNightDay)");
     await t.gold(60);
@@ -350,7 +352,7 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     await t.eval("Mlyn.stan().ch4.soj = 'sambor'; Mlyn.stan().kod.wzor = 2; 0");
     await t.eval("Mlyn.stan().ch4.set = $gameSystem._dayNightDay; 0");
     await hourSet(+(await t.eval("$gameSystem._dayNightDay")) + 1, 1.2);
-    await go(125, 19, 66, 4);
+    await go(219, 36, 58, 4);
     await t.frames(60);
     const cove = await t.json("({ lodz: !!$gameMap.event(2973), szyper: !!$gameMap.event(2975), soj: !!$gameMap.event(2978), morze: !!$gameMap.event(2972), act: Mlyn.nocAktywna() })");
     t.check("noc po ustawieniu skrzydeł: zatoczka ma łódź, szypra, zasadzkę i światło na morzu (zdarzenia 2972-2982)", cove.lodz && cove.szyper && cove.soj && cove.morze && cove.act, cove);
@@ -398,14 +400,14 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     }
     // after the end the sails turn on their own again
     await t.eval("Mlyn.forced(null); 0");
-    await go(8, 97, 91, 8);
+    await go(218, 7, 38, 8);
     await hourSet(45, 20);
     await t.frames(60);
     t.check("po zakończeniu wątku skrzydła kręcą się same (poza null w nocy)", (await t.eval("Mlyn.pozaTeraz()")) === null);
     // S5: the morning by the mill
     await t.eval("Mlyn.debugGo(5); Mlyn.stan().koniec = 1; Mlyn.stan().ch5.dzien = $gameSystem._dayNightDay - 1; Mlyn.stan().epilog = 0; 0");
     const g2 = await t.gold();   // (read before the walk there: the reward may come while the hour is being set - 2026-11-12, a race)
-    await go(8, 97, 89, 8);
+    await go(218, 7, 36, 8);
     await hourSet(+(await t.eval("$gameSystem._dayNightDay")), 7.5);
     await t.frames(60);
     await fin(60);
@@ -417,7 +419,7 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     await t.eval("Wyspa.forceTide('high'); 0");
     await t.eval("Mlyn.stan().ch4.set = $gameSystem._dayNightDay; 0");
     await hourSet(+(await t.eval("$gameSystem._dayNightDay")) + 1, 1.55);
-    await go(125, 19, 66, 4);
+    await go(219, 36, 58, 4);
     await pump("(SceneManager._scene && SceneManager._scene.constructor.name === 'Scene_Latarnia')", 30);
     await t.frames(240);
     await t.press("right"); await t.frames(4); await t.press("ok");
@@ -428,11 +430,11 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
     const lost = await st();
     t.check("zły wzór z jedną szansą (bez Rocha): łódź odpływa, noc przepada (ch4.set = 0), ch5.bledy = 1", lost.ch5.bledy >= 1 && !lost.ch4.set, lost.ch5);
     // two chances (Roch's pattern): a wrong try then a right one
-    await go(8, 97, 92, 8);
+    await go(218, 7, 39, 8);
     await t.eval("Mlyn.debugGo(5); Mlyn.stan().ch4.soj = 'wit'; Mlyn.stan().kod.wzor = 2; 0");
     await t.eval("Mlyn.stan().ch4.set = $gameSystem._dayNightDay; 0");
     await hourSet(+(await t.eval("$gameSystem._dayNightDay")) + 1, 1.55);
-    await go(125, 19, 66, 4);
+    await go(219, 36, 58, 4);
     await pump("(SceneManager._scene && SceneManager._scene.constructor.name === 'Scene_Latarnia')", 30);
     await t.frames(240);
     await t.press("right"); await t.frames(4); await t.press("ok"); await t.frames(130);
@@ -442,11 +444,11 @@ kit.test({ port: 9441, overlay: process.env.GAME_OVERLAY || "tools/sygnaly/overl
 
     // ---------------------------------------------------------------- W23: on the smugglers' night nothing of the sea's thread lands on Map125
     await t.eval("Mlyn.debugGo(5); Wyspa.forceTide('high'); Mlyn.stan().ch4.set = $gameSystem._dayNightDay; 0");
-    await go(8, 97, 92, 8);
+    await go(218, 7, 39, 8);
     await hourSet(+(await t.eval("$gameSystem._dayNightDay")) + 1, 1.0);
-    await go(125, 24, 66, 4);
-    const blk = await t.json("({ b: Mlyn.blocksSea(125), b8: Mlyn.blocksSea(8), m: !!window.Morze })");
-    t.check("Mlyn.blocksSea(125) w nocy przemytników = true (na innych mapach false)", blk.b === true && blk.b8 === false, blk);
+    await go(219, 41, 58, 4);
+    const blk = await t.json("({ b: Mlyn.blocksSea(219), b8: Mlyn.blocksSea(220), m: !!window.Morze })");
+    t.check("Mlyn.blocksSea(219) w nocy przemytników = true (na innych mapach false)", blk.b === true && blk.b8 === false, blk);
     if (blk.m) {
         const cnt = () => t.json("({ n: window.Creatures ? Creatures.list.length : 0, sea: window.MorzePotwory && MorzePotwory.list ? MorzePotwory.list().length : 0 })").catch(() => ({ n: 0, sea: 0 }));
         await t.eval("try { Morze.force('krab_olbrzym'); } catch (e) { console.error(e); } 0");

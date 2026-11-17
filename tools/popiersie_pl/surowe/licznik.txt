@@ -1,0 +1,5 @@
+A: 12 edits = 72 gens (start used 2258)
+A: +10 edits = 60 gens (total A 132)
+A: +7 edits = 42 gens (total A 174)
+A: +6 edits = 36 gens (total A 210)
+A: +1 edit kosz_wiklinowy = 6 gens (total A 216)

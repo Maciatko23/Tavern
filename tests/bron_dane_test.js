@@ -49,8 +49,9 @@ kit.test({ port: 9586, bootCheck: "gra się uruchamia", plugins: ["Bron_Data", "
         const PART = { glowa: "head", tors: "torso", rece: "hands", nogi: "legs", stopy: "feet" };
         for (const p of D.PRZEDMIOTY) { const it = $dataItems[p.id];
             if (!it || !it.name) { bad.push(p.id + ": brak w $dataItems"); continue; }
-            if (!p.istnieje && (it.name !== p.nazwa || it.iconIndex !== 576 + p.id - 300 || !/<Weight:\\d+>/.test(it.note) || !(it.price > 0))) bad.push(p.id + ": nazwa / ikona / waga / cena");
-            if (it.note.indexOf(D.notatka(p)) < 0) bad.push(p.id + ": notatka");
+            // (419+, 2026-11-17 NOWE_80.md: the icon of the most like thing until theirs is drawn)
+            if (!p.istnieje && (it.name !== p.nazwa || (p.id < 419 ? it.iconIndex !== 576 + p.id - 300 : !(it.iconIndex > 0)) || !/<Weight:\\d+>/.test(it.note) || !(it.price > 0))) bad.push(p.id + ": nazwa / ikona / waga / cena");
+            if (it.note.indexOf(D.notatka(p)) < 0) bad.push(p.id + ": notatka " + JSON.stringify([it.note.slice(-60), D.notatka(p)]));
             kinds[p.typ] = (kinds[p.typ] || 0) + (p.istnieje ? 0 : 1);
             if (p.typ === "bron") {
                 const s = D.staty(p);
@@ -73,13 +74,14 @@ kit.test({ port: 9586, bootCheck: "gra się uruchamia", plugins: ["Bron_Data", "
     const looks = await t.json(`(function(){ const U = window.Ubior_Data || {}, all = Object.assign({}, U.WZORY || {}, U.WZORY_ZBROI || {}, U.WZORY_BRONI || {}, U.WZORY_TARCZ || {});
         return { n: Object.keys(all).length, missing: Bron_Data.PRZEDMIOTY.filter(p => p.typ !== "dodatek" && !all[Bron_Data.wygladOf(p)]).map(p => p.id + ":" + Bron_Data.wygladOf(p)) }; })()`);
     t.check("klucze wyglądu: każdy klucz z notatek jest w Ubior_Data.js grafiki (WZORY_ZBROI, WZORY_BRONI, WZORY_TARCZ, WZORY)", looks.n > 0 && looks.missing.length === 0, looks);
-    t.check("~100 rzeczy: 48 broni (w tym unikaty i 2 stalowe narzędzia), 38 zbroi, 7 tarcz, 16 dodatków", data.kinds.bron === 48 && data.kinds.zbroja === 38 && data.kinds.tarcza === 7 && data.kinds.dodatek === 16, data.kinds);
+    t.check("~170 rzeczy: 69 broni (w tym unikaty i 2 stalowe narzędzia), 64 zbroje, 14 tarcz, 26 dodatków (z NOWE_80.md 419-482)", data.kinds.bron === 69 && data.kinds.zbroja === 64 && data.kinds.tarcza === 14 && data.kinds.dodatek === 26, data.kinds);
     t.check("stare bronie z notatkami mają te same liczby co przedtem, kolejność starych zostaje",
         Object.keys(OLD).every(id => JSON.stringify(data.old[id]) === JSON.stringify(OLD[id])) && JSON.stringify(data.order) === "[115,154,60,116,63,156,59]" && data.sh155.reduce === 0.75 && data.sh155.breath === 0.7,
         { old: data.old, order: data.order, sh155: data.sh155 });
 
-    // ---- a new game: the town square, a strong hero (no level's lack) - the target in front of him
-    const ok = await t.newGame({ map: 3, x: 62, y: 45, dir: 6, hour: 10, day: 35, quiet: true, minimap: false });
+    // ---- a new game: grandpa's plot in Podgrodzie (2026-11-17: the new world - it was the old Map003), a strong hero (no level's lack) -
+    // the target in front of him
+    const ok = await t.newGame({ map: 218, x: 30, y: 18, dir: 6, hour: 10, day: 35, quiet: true, minimap: false });
     t.check("nowa gra", ok);
     if (!ok) return;
     await t.eval(`(function(){ Combat.hero().level = 30; Combat.hero().rev = (Combat.hero().rev || 0) + 1; $gameSystem.setStamina(250); Bron.wire(); Bron.refresh();
@@ -90,11 +92,16 @@ kit.test({ port: 9586, bootCheck: "gra się uruchamia", plugins: ["Bron_Data", "
         const ref = { kind: () => ${JSON.stringify(kind || "")} }; window.__hits = [];
         window.__tgt = { x: $gamePlayer._realX + 0.5 + 1.0, y: $gamePlayer._realY + 0.5, radius: 0.5, ref, hit: (d, how, extra) => { window.__hits.push({ d, crit: !!(extra && extra.crit) }); } };
         $gamePlayer.setDirection(6); const w = Combat.weaponNow(${id}); Combat.pressAttack();
-        let n = 0; const wait = () => { if (window.__hits.length || ++n > 120) { window.__tgt = null; const h = window.__hits[0] || null; res({ hit: h, dmg: w.dmg, cost: w.cost, base: h ? (h.crit ? Math.round(h.d / 1.6) : h.d) : 0 }); } else requestAnimationFrame(wait); }; wait(); })`);
+        const tr = window.Bron_Cechy ? Bron_Cechy.of(${id}) : {}, flat = tr.obrazenia || 0, km = tr.krytyk_mocniej || 1.6;
+        let n = 0; const wait = () => { if (window.__hits.length || ++n > 120) { window.__tgt = null; const h = window.__hits[0] || null; res({ hit: h, dmg: w.dmg, cost: w.cost, flat, base: h ? (h.d - flat) / (h.crit ? km : 1) : 0 }); } else requestAnimationFrame(wait); }; wait(); })`);
+    // (2026-11-17, the user's: a blow's damage is the base x 0.9-1.1, Bron_Data.ROZRZUT - a hit is within that range of the data's number, not
+    // the number itself; a weapon's flat trait "obrazenia" (the steel sword +3, Bron_Cechy) comes on top, a crit is x1,6 or its trait's)
+    const near = (got, want) => got >= want * 0.9 - 0.5 && got <= want * 1.1 + 0.5;
     const br = await blow(304), fe = await blow(305), st = await blow(308);
-    t.check("cios w cel: brązowy miecz < żelazny < stalowy (obrażenia z danych: 23 / 27 / 31)", br.hit && fe.hit && st.hit && br.base === 23 && fe.base === 27 && st.base === 31, { br, fe, st });
+    t.check("cios w cel: brązowy miecz < żelazny < stalowy (obrażenia z danych: 23 / 27 / 31, każdy cios w ich ±10%)", br.hit && fe.hit && st.hit && near(br.base, 23) && near(fe.base, 27) &&
+        near(st.base, 31) && st.flat === 3, { br, fe, st });
     const mace = await blow(317, "zbroja");
-    t.check("buzdygan w pustą zbroję: +30% (25 -> 33)", mace.hit && mace.base === Math.round(25 * 1.3), mace);
+    t.check("buzdygan w pustą zbroję: +30% (25 -> 33, ±10%)", mace.hit && near(mace.base, 25 * 1.3), mace);
     const heavy = await t.json(`(function(){ const CT = Tawerna.api("ChoppableTree"), F = Tawerna.api("Combat_parts").fight, m = F.MELEE[327], s = F.MELEE[305];
         return { hammer: CT.swingKind(m.combo[0]).frames, sword: CT.swingKind(s.combo[0]).frames, hc: Combat.meleeInfo(327).breath, sc: Combat.meleeInfo(305).breath, hp: m.poise, sp: s.poise }; })()`);
     t.check("młot bojowy cięższy: zamach kilofa (dłuższy niż miecza), droższy w oddechu, mocniej chwieje", heavy.hammer > heavy.sword && heavy.hc > heavy.sc && heavy.hp > heavy.sp, heavy);
@@ -194,7 +201,7 @@ kit.test({ port: 9586, bootCheck: "gra się uruchamia", plugins: ["Bron_Data", "
         && menus.szmaciarz.includes("Stara broń i błyskotki"), menus);
 
     // ---- a real talk with Tadek in the town (the quests held quiet for it): the menu, then "Porozmawiaj" - the rest of the talk
-    const town = await t.go(8, 40, 40, 2);
+    const town = await t.go(220, 30, 38, 2);   // (nowy świat: Tadek's smithy stands in Kruczogród, Map220)
     await t.setHour(10);
     await t.frames(30);
     const tadek = await t.eval("(function(){ const e = TownLife.eventOf('kowal'); return e ? e.eventId() : 0; })()");
@@ -216,11 +223,13 @@ kit.test({ port: 9586, bootCheck: "gra się uruchamia", plugins: ["Bron_Data", "
     } else t.check("Tadek w miasteczku", false, { town, tadek });
 
     // ---- Kłos's deputy (D27: Kłos handed over): the soldier by the barrels sells the same, from the same favour
-    const gz = await t.go(162, 64, 42, 2);
+    // (2026-11-17: the garrison of the new world stands at the manor, Map221 - Garnizon_Data MAP; the soldier 643 by the barrels, z_beczki 49,24)
+    const gz = await t.go(221, 49, 26, 8);
     await t.setHour(10);
     await t.frames(20);
     await t.eval("(function(){ TownQuests.state().flags.klosWydany = 35; Garnizon.state().favor = 30; return 0; })()");
-    const dep = gz ? await t.talkTo(643, ["Bywaj."]) : null;
+    const has643 = gz && await t.eval("!!$gameMap.event(643)");
+    const dep = has643 ? await t.talkTo(643, ["Bywaj."]) : null;
     const depShop = await t.json(`({ locked: Bron.kup("zastepca", 355), ok: Bron.kup("zastepca", 353), klos: Garnizon.klosGone(), witaj: Bron_Data.SKLEPY.zastepca.teksty.witaj,
         klosRows: Bron.menuRows("kwatermistrz", null) })`);
     await t.eval("(function(){ delete TownQuests.state().flags.klosWydany; return 0; })()");
@@ -239,9 +248,10 @@ kit.test({ port: 9586, bootCheck: "gra się uruchamia", plugins: ["Bron_Data", "
         const F = Tawerna.api("Combat_parts").fight, w = F.MELEE[407], k = F.MELEE[408];
         return { a0, a1, a2, r1, r2, own: O.ownsTool(63), axe: w && [w.dmg, w.cost], pick: k && [k.dmg, k.cost], life: [Durability.lifeOf(407), Durability.lifeOf(408)],
             forge: Bron_Data.przepisy().forge.filter(r => r.output[0] === 407 || r.output[0] === 408).length, kantor: Bron_Data.SKLEPY.kantor.sprzedaje.filter(id => id === 407 || id === 408).length }; })()`);
-    t.check("stalowa siekiera i kilof: sosna 20 uderzeń -> żelazną 13, stalową 10 (i mniej sił); ruda 26 -> 17 / 13; w walce jak stal (30 / 35), zużycie, kuźnia, kantor",
+    // (2026-11-17: the steel axe and pick have the trait "wytrzymałość +25%" - Bron_Cechy_Data.js - their 320 / 260 blows last 400 / 325)
+    t.check("stalowa siekiera i kilof: sosna 20 uderzeń -> żelazną 13, stalową 10 (i mniej sił); ruda 26 -> 17 / 13; w walce jak stal (30 / 35), zużycie (+25%: 400 / 325), kuźnia, kantor",
         tools.a0.n === 20 && tools.a1.n === 13 && tools.a2.n === 10 && tools.a2.id === 407 && tools.a2.cost === 3 && tools.r1.n === 17 && tools.r2.n === 13 && tools.r2.id === 408
-        && tools.own && JSON.stringify(tools.axe) === "[30,15]" && JSON.stringify(tools.pick) === "[35,21]" && tools.life[0] === 320 && tools.life[1] === 260 && tools.forge === 2 && tools.kantor === 2, tools);
+        && tools.own && JSON.stringify(tools.axe) === "[30,15]" && JSON.stringify(tools.pick) === "[35,21]" && tools.life[0] === 400 && tools.life[1] === 325 && tools.forge === 2 && tools.kantor === 2, tools);
 
     // ---- the shop's window by keys (a screenshot)
     await t.eval("Bron.otworz('kowal', 'kup'); 0");
@@ -260,13 +270,16 @@ kit.test({ port: 9586, bootCheck: "gra się uruchamia", plugins: ["Bron_Data", "
     t.check("okno sklepu kowala: lista z ceną (poziom 30 - cała), strzałki, zakładka Sprzedaż, P - wyjście", opened && st1.rows.length >= 20 && st1.index === 2 && st2.tab === "sprzedaj" && back, { st1: { tab: st1.tab, n: st1.rows.length, index: st1.index }, st2: { tab: st2.tab, rows: st2.rows.slice(0, 4) } });
 
     // ---- the forge: the recipes by the level, a forged sword
+    // (2026-11-17, NOWE_80.md: 112 at the forge, 33 at the tannery, 27 at the workbench, 39 at the loom - from the level minus 4, the clothes at once)
     const forge = await t.json(`(function(){ const h = Combat.hero(); h.level = 1; Bron.syncRecipes(); const at1 = Farming.BUILDINGS.forge.recipes.filter(r => r.bron).map(r => r.output[0]);
+        const want1 = Bron_Data.przepisy().forge.filter(r => r.poziom <= 5).map(r => r.output[0]);
         h.level = 8; Bron.syncRecipes(); const at8 = Farming.BUILDINGS.forge.recipes.filter(r => r.bron).map(r => r.output[0]);
-        h.level = 30; Bron.syncRecipes(); const all = Farming.BUILDINGS.forge.recipes.filter(r => r.bron).length, tan = Farming.BUILDINGS.tannery.recipes.filter(r => r.bron).length, wb = Farming.BUILDINGS.workbench.recipes.filter(r => r.bron).length;
-        return { at1, at8, all, tan, wb }; })()`);
-    t.check("kuźnia: na poziomie 1 tylko okuta tarcza (poziom 4), na 8 żelazny sztylet i miecz (poziom 9-12, bez stali), na 30 wszystkie 26; garbarnia 7, warsztat 6",
-        JSON.stringify(forge.at1) === "[375]" && forge.at8.includes(301) && forge.at8.includes(305) && !forge.at8.includes(308) && forge.all === 26 && forge.tan === 7 && forge.wb === 6, forge);
-    await t.go(3, 62, 45, 2);
+        h.level = 30; Bron.syncRecipes(); const B = Farming.BUILDINGS, n = st => B[st].recipes.filter(r => r.bron).length;
+        return { at1: at1.sort((a, b) => a - b), want1: want1.sort((a, b) => a - b), at8, all: n("forge"), tan: n("tannery"), wb: n("workbench"), loom: n("loom"), wheel: n("loom_wheel") }; })()`);
+    t.check("kuźnia: na poziomie 1 tylko rzeczy do poziomu 5 (okuta tarcza, brąz, miedziany pierścień...), na 8 żelazny sztylet i miecz (poziom 9-12, bez stali), na 30 wszystkie 112; garbarnia 33, warsztat 27, krosno 39 (oba)",
+        forge.at1.length > 0 && JSON.stringify(forge.at1) === JSON.stringify(forge.want1) && forge.at1.includes(375) && !forge.at1.includes(301) && forge.at8.includes(301) && forge.at8.includes(305) &&
+        !forge.at8.includes(308) && forge.all === 112 && forge.tan === 33 && forge.wb === 27 && forge.loom === 39 && forge.wheel === 39, forge);
+    await t.go(218, 30, 18, 2);   // (2026-11-17: back to Podgrodzie - the old Map003 no more)
     const made = await t.json(`(function(){ $gameParty.loseItem($dataItems[305], 9); $gameParty.gainItem($dataItems[86], 3); $gameParty.gainItem($dataItems[79], 2); $gameParty.gainItem($dataItems[97], 1);
         const r = Farming.BUILDINGS.forge.recipes.find(x => x.id === "bron_305"); return { ok: Farming.craftManual(null, r) }; })()`);
     await t.until("$gameParty.numItems($dataItems[305]) > 0", 8, 50);

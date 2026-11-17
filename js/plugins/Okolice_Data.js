@@ -87,7 +87,7 @@
         165: [40, 30], 168: [50, 36], 175: [40, 30] };
     const ENTRY = { 3: [65, 46], 4: [20, 15], 8: [54, 50], 13: [29, 49], 17: [20, 15], 18: [20, 15], 20: [46, 50], 21: [20, 15], 22: [20, 15],
         23: [20, 15], 24: [40, 75], 111: [59, 63], 120: [20, 31], 125: [27, 20], 155: [24, 18], 157: [28, 18], 159: [22, 20], 162: [50, 44],
-        165: [28, 17], 168: [25, 17], 175: [20, 15] };   // (165: 2026-11-07 - the big wreck's hull covers 20,15; 28,17 by the breach is dry at both tides)
+        165: [28, 17], 168: [25, 17], 175: [20, 15], 218: [40, 38], 219: [40, 45], 220: [40, 41], 221: [40, 41], 222: [20, 40] };   // (218-222: the new world, on its road)   // (165: 2026-11-07 - the big wreck's hull covers 20,15; 28,17 by the breach is dry at both tides)
     // (2026-10-31) 120: in front of the Silent's palisade gate - the village inside stays shut until W8 rozdz. 5 opens it
 
     // pakiet 0's tile changes (PLAN.md 2.6; tools/rozszerzenia/kafle.py)

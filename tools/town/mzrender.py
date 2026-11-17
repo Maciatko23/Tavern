@@ -114,6 +114,7 @@ class Sheets:
     def frame(self, name, index, direction, pattern):
         bm = self.char(name)
         if bm is None: return None
+        if re.match(r"^!*\$1_", name): return bm.copy()   # one-picture sheet (TawernaCore: the whole file is one frame)
         big = "$" in re.match(r"^[!$]*", name).group(0)
         pw, ph = bm.width // (3 if big else 12), bm.height // (4 if big else 8)
         bx = 0 if big else index % 4 * 3

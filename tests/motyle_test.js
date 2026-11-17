@@ -26,8 +26,8 @@ kit.test({ port: 9541, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         k54: !!TownQuests.Q.K54 && TownQuests.Q.K54.giver, pack: TownQuestsData.PACKS.filter(p => p.owner === 'Motyle').map(p => p.quests.join()).join() }`);
     t.check("Motyle_Data.js i Motyle.js na liście zaraz pod Birds (przed TownQuests_Data); pięć gatunków",
         base.api && base.data && base.reg === "Motyle_Data,Motyle" && base.at === base.birds + 1 && base.at < base.tqd && base.order === "cytrynek,pawik,modraszek,bielinek,cma", base);
-    t.check("przedmioty: 180 „Siatka na motyle” (narzędzie, ikona 441), 181 „Rysunek Eli” (pamiątka, ikona 442)",
-        base.net && base.net.join() === "Siatka na motyle,441,2" && base.draw && base.draw.join() === "Rysunek Eli,442,true", { net: base.net, draw: base.draw });
+    t.check("przedmioty: 180 „Siatka na motyle” (narzędzie), 181 „Rysunek Eli” (pamiątka) - obie z ikonami z PixelLab (688+)",
+        base.net && base.net[0] === "Siatka na motyle" && base.net[1] >= 688 && base.net[2] === 2 && base.draw && base.draw[0] === "Rysunek Eli" && base.draw[1] >= 688 && base.draw[2] === true, { net: base.net, draw: base.draw });
     t.check("warsztat: „Zrób siatkę na motyle” - 2× Gałęzie + 3× Włókno, ręcznie, jedna sztuka",
         !!base.recipe && base.recipe.inputs.map(i => i.join("x")).join() === "77x2,92x3" && base.recipe.output.join() === "180,1" && base.recipe.manual && base.recipe.unique, base.recipe);
     t.check("K54 „Motyl z oczkami” u Eli, paczka TownQuests właściciela „Motyle”", base.k54 === "ela" && base.pack === "K54", { k54: base.k54, pack: base.pack });

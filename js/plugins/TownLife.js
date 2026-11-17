@@ -72,6 +72,7 @@
     "use strict";
 
     const T = window.Tawerna, D = window.TownLifeData, PLUGIN = "TownLife";
+    if (D && typeof D.moveLate === "function") D.moveLate();   // (the new world: the people other data plugins added move to Kruczogród too)
     if (!D) throw new Error("TownLife.js: TownLife_Data.js must stand above it in the plugin list");
     const MAP = D.MAP, FIRST = D.FIRST_ID, LAST = FIRST + 39;
     // (2026-10-21, docs/rozszerzenia/PLAN.md) a second range for the residents of the new terrain's packages (TownLifeExtra with an id
@@ -413,6 +414,10 @@
         const x = ev.screenX(), y = ev.screenY();
         return x > -48 && y > -48 && x < T.view.w() + 48 && y < T.view.h() + 96;   // (the world's view: Tawerna.view)
     };
+    const cellOnScreen = (x, y) => {
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), sx = $gameMap.adjustX(x) * tw + tw / 2, sy = $gameMap.adjustY(y) * th + th;
+        return sx > -48 && sy > -48 && sx < T.view.w() + 48 && sy < T.view.h() + 96;
+    };
     const talking = ev => ev._locked || ($gameMap._interpreter.isRunning() && $gameMap._interpreter.eventId() === ev.eventId());
 
     function walk(ev, st, tx, ty) {
@@ -426,6 +431,9 @@
         st.stuck++;
         if (st.stuck > (onScreen(ev) ? STUCK_SEEN : STUCK_HIDDEN)) {   // (it got there round some other way - unless someone stands there)
             const taken = ($gamePlayer.x === tx && $gamePlayer.y === ty) || $gameMap.eventsXyNt(tx, ty).some(o => o !== ev && o.isNormalPriority());
+            // (2026-11-13, nobody pops up: a resident unseen does not appear at a place the hero sees - it tries again later)
+            // (and one in sight never jumps: it keeps trying its way)
+            if (onScreen(ev) || cellOnScreen(tx, ty)) { st.stuck = Math.floor(STUCK_HIDDEN / 2); if (st.wanderTo) st.wanderTo = null; return; }
             if (!taken) ev.locate(tx, ty);
             else if (st.wanderTo) st.wanderTo = null;   // (a stroll picks another cell)
             st.stuck = 0;

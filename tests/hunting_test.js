@@ -165,7 +165,8 @@ fs.mkdirSync(OUT, { recursive: true });
         check("the sling takes the same bite off a deer each hit until it is dead (40+ life: 3-4 stones), the wounded one is announced (a popup; with Combat.js its life bar instead)",
             // (2026-11-12: a stone into an animal that does not see it - from behind or sneaking - bites double, Hunting_Weapons sneak x2 since
             // 2026-10: the first stone may take two bites, the rest one each)
-            slingHit > 0 && hits[hits.length - 1] === 0 && (hits.length === Math.ceil(deerMax / slingHit) || (hits.length >= 2 && Math.abs(slingHit / 2 - (hits[0] - (hits[1] || 0))) <= 2) || (hits.length === 2 && Math.abs(slingHit / 2 - 14) <= 2)) && hits.length >= 2 && ((await ev("!!window.Combat")) || (await popups()).some(t => /Jeleń ranny/.test(t))), { deerMax, hits });
+            // (2026-11-17: a stone's damage is the base x 0.9-1.1 - Bron_Data.ROZRZUT - so the bites differ a little: one stone more or less)
+            slingHit > 0 && hits[hits.length - 1] === 0 && (Math.abs(hits.length - Math.ceil(deerMax / slingHit)) <= 1 || (hits.length >= 2 && Math.abs(slingHit / 2 - (hits[0] - (hits[1] || 0))) <= 2) || (hits.length === 2 && Math.abs(slingHit / 2 - 14) <= 2)) && hits.length >= 2 && ((await ev("!!window.Combat")) || (await popups()).some(t => /Jeleń ranny/.test(t))), { deerMax, hits });
         check("the deer lies there (its carcass)", (await ev("Hunting.carcasses().length")) === carD + 1 && (await ev("Hunting.carcasses().slice(-1)[0].kind")) === "deer", { carD, now: await ev("Hunting.carcasses().length") });
         // the bow: two arrows for a deer
         await give(126, 1);

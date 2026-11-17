@@ -1,0 +1,114 @@
+{
+ "eq": {
+  "torso": true,
+  "hands": true,
+  "legs": true,
+  "feet": true,
+  "head": true,
+  "left": true,
+  "hand": true
+ },
+ "OLD": {
+  "kol": "Kolczuga",
+  "kar": "{\"plik\":\"Karwasze\",\"miejsce\":\"rece\",\"natywny\":\"skora\",\"glowny\":\"cieply\",\"lo\":0.153,\"hi\":0.703,\"reszta\":\"akcent\",\"lo2\":0.6,\"hi2\":0.92}",
+  "nag": "Nagolenniki",
+  "but": "Buty",
+  "nos": "{\"plik\":\"Nosal\",\"w\":24,\"h\":28,\"anchor\":[11,6],\"natywny\":\"zelazo\",\"glowny\":\"szary\",\"lo\":0.227,\"hi\":0.93,\"reszta\":\"natywny\"}"
+ },
+ "poses": [
+  {
+   "tag": "stary",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\ekwipunek\\pilot\\zrzuty\\stary_dol.png",
+     "x": 640,
+     "y": 378
+    },
+    {
+     "n": "prawo",
+     "f": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\ekwipunek\\pilot\\zrzuty\\stary_prawo.png",
+     "x": 640,
+     "y": 378
+    },
+    {
+     "n": "gora",
+     "f": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\ekwipunek\\pilot\\zrzuty\\stary_gora.png",
+     "x": 640,
+     "y": 378
+    },
+    {
+     "n": "lewo",
+     "f": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\ekwipunek\\pilot\\zrzuty\\stary_lewo.png",
+     "x": 640,
+     "y": 378
+    },
+    {
+     "n": "chod",
+     "f": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\ekwipunek\\pilot\\zrzuty\\stary_chod.png",
+     "x": 640,
+     "y": 378
+    },
+    {
+     "n": "cios",
+     "f": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\ekwipunek\\pilot\\zrzuty\\stary_cios.png",
+     "x": 640,
+     "y": 378
+    },
+    {
+     "n": "siedzi",
+     "f": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\ekwipunek\\pilot\\zrzuty\\stary_siedzi.png",
+     "x": 640,
+     "y": 378
+    }
+   ]
+  },
+  {
+   "tag": "nowy",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\ekwipunek\\pilot\\zrzuty\\nowy_dol.png",
+     "x": 640,
+     "y": 378
+    },
+    {
+     "n": "prawo",
+     "f": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\ekwipunek\\pilot\\zrzuty\\nowy_prawo.png",
+     "x": 640,
+     "y": 378
+    },
+    {
+     "n": "gora",
+     "f": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\ekwipunek\\pilot\\zrzuty\\nowy_gora.png",
+     "x": 640,
+     "y": 378
+    },
+    {
+     "n": "lewo",
+     "f": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\ekwipunek\\pilot\\zrzuty\\nowy_lewo.png",
+     "x": 640,
+     "y": 378
+    },
+    {
+     "n": "chod",
+     "f": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\ekwipunek\\pilot\\zrzuty\\nowy_chod.png",
+     "x": 640,
+     "y": 378
+    },
+    {
+     "n": "cios",
+     "f": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\ekwipunek\\pilot\\zrzuty\\nowy_cios.png",
+     "x": 640,
+     "y": 378
+    },
+    {
+     "n": "siedzi",
+     "f": "C:\\Users\\macie\\OneDrive\\Dokumenty\\RMMZ\\Tawerna\\docs\\ekwipunek\\pilot\\zrzuty\\nowy_siedzi.png",
+     "x": 640,
+     "y": 378
+    }
+   ]
+  }
+ ]
+}

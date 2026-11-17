@@ -1,9 +1,14 @@
 //=============================================================================
 // Garnizon_Data.js
 //=============================================================================
-// PAKIET D (docs/miejsca_wyspy/PAKIETY.md) - the data of: Garnizon nad zatoką (mapy 162, 163). The royal army of the mainland (the
-// white banner with the phoenix), quartered on the island by the Lord's leave - he pays the Crown a war tax and so presses grandpa's
-// debt. Here only data; the engine is Garnizon.js (below every system of the game).
+// PAKIET D (docs/miejsca_wyspy/PAKIETY.md) - the data of the Lord's guard (once "Garnizon nad zatoką", maps 162/163).
+// 2026-11-16, the new world (docs/NOWY_SWIAT/SPIS_WATKI.md S14 "PRZEROBIĆ", the user: "Straż przy dworze"): there is no royal garrison
+// - its people are the Lord's guard at the manor (Map221 "Dwór nad Jazem": the guardhouse by the gate - its inside the guard's hall
+// Map180 -, the stable, the courtyard with the braziers, the fenced paddock as the drill ground, the reservoir's pier by the weir).
+// Captain Florian Bełza was a rotmistrz of the king's banner; the Crown still wants the Lord's war tax, supplies and recruits (so the
+// buying and the draft list stay) - and so the Lord presses grandpa's debt. No tents, no sandbar, no rescue boat: the old Map162's
+// own events are not in the new world - the grain cart and the water barrels are injected here (GRANARY, BARRELS).
+// Here only data; the engine is Garnizon.js (below every system of the game). The thread's and the engine's names stay "garnizon".
 //   - the residents (TownLife, fixed ids 945-947) -> window.TownLifeExtra: rotmistrz Florian Bełza, kwatermistrz Pafnucy Kłos (the
 //     nights after a ferry day 23-1 at the kantor's back door on Map008 - "alt"), werbownik Szczepan Bęben (the days after the waves
 //     on the town's market - "alt"); their places on Map162/163 are the maps' "Miejsce:" events, two more on Map008 (garnizon_*)
@@ -17,7 +22,7 @@
 
 /*:
  * @target MZ
- * @plugindesc [pakiet D] Dane: Garnizon nad zatoką (mapy 162, 163) - rotmistrz, kwatermistrz, werbownik, żołnierze, skup wojskowy, przychylność, zadania K52, D26, D27. v1.0.0
+ * @plugindesc [pakiet D] Dane: straż dworu Lorda (Posiadłość, mapa 221; izba straży 180) - kapitan Bełza, kwatermistrz, werbownik, strażnicy, skup, przychylność, zadania K52, D26, D27. v1.1.0
  * @author Claude
  * @base TawernaCore
  * @base Watki
@@ -25,7 +30,7 @@
  *
  * @help
  * ============================================================================
- * Garnizon_Data.js - dane garnizonu nad zatoką (pakiet D)
+ * Garnizon_Data.js - dane straży dworu Lorda (dawniej garnizon nad zatoką)
  * ============================================================================
  * Tylko dane. Silnik: Garnizon.js. Zasady: docs/miejsca_wyspy/PAKIETY.md.
  * Mieszkańcy: rotmistrz 945, kwatermistrz 946, werbownik 947.
@@ -38,7 +43,7 @@
 (() => {
     "use strict";
 
-    const MAP = 162, QUARTERS = 163, TOWN = 8, PODGRODZIE = 111;
+    const MAP = 221, QUARTERS = 180, TOWN = 220, PODGRODZIE = 218;   // (2026-11-16 the new world: the manor, the guard's hall, Kruczogród, Podgrodzie)
     const WAVES = [10, 25, 37, 52];                 // the ferry's waves of people - a fallback: TownQuests.waves() is the one source (Garnizon.js)
     const RECRUIT_DAYS = WAVES.map(d => d + 1);      // the recruiter on the town's market the day after each wave
 
@@ -50,7 +55,7 @@
             // the shore, the pier, the tower), 16-20 the office, 20-22 by the fire, 22-6 asleep
             key: "rotmistrz", id: 945, sheet: "$Npc_Rotmistrz", map: MAP, speed: 2,
             away: ["spi"],
-            plan: [[0, "inside", "spi"], [6, "stand", "musztra"], [7, "inside", "kwatera_drzwi"], [12, "stand", "kuchnia"],
+            plan: [[0, "inside", "spi"], [6, "stand", "musztra"], [7, "stand", "kapitan_straz_brama"], [12, "stand", "kuchnia"],
                    [13, "patrol", ["brama_wew", "brzeg", "pomost", "brzeg", "brama_wew", "wieza"]], [16, "inside", "kwatera_drzwi"],
                    [20, "stand", "ognisko"], [22, "inside", "spi"]],
             barks: {
@@ -82,7 +87,7 @@
                    [13, "stand", "stol_werbownika"], [16, "wander", "musztra"], [19, "stand", "ognisko"], [22, "inside", "koszary_drzwi"]],
             alt: {
                 map: TOWN, when: "garnizonRynek",
-                plan: [[0, "inside", "brama_pld"], [8.5, "stand", "garnizon_werbownik"], [14.5, "inside", "brama_pld"]],
+                plan: [[0, "inside", "brama_wsch"], [8.5, "stand", "garnizon_werbownik"], [14.5, "inside", "brama_wsch"]],
                 barks: { },
                 talk: { }
             },
@@ -95,21 +100,19 @@
     Watki.scal(RESIDENTS, "garnizon", "mieszkancy");   // (its words: js/teksty/garnizon.txt, mieszkancy)
     (window.TownLifeExtra = window.TownLifeExtra || []).push(...RESIDENTS);
 
-    // their places: on Map162/163 the maps' "Miejsce:" events (these are only the defaults); on Map008 (TownLife's town spots) two
-    // more, prefixed - never one of the town's own keys
+    // their places on the manor (Map221; the map's own "Miejsce:" events - kapitan_straz_brama, wartownia_drzwi... - win): the guardhouse's
+    // door (49,30) is where they sleep, the braziers of the courtyard their evening fire, the paddock the drill ground, the stable's cart
+    // Kłos's buying; on Map220 (TownLife's town spots) one more, prefixed - never one of the town's own keys
     const TL = window.TownLifeData;
     if (TL) {
         TL.SPOTS_BY_MAP = TL.SPOTS_BY_MAP || {};
         TL.SPOTS_BY_MAP[MAP] = Object.assign(TL.SPOTS_BY_MAP[MAP] || {}, {
-            spi: [64, 42, 8], musztra: [52, 47, 2], kwatera_drzwi: [64, 42, 8], kuchnia: [60, 53, 6], brama_wew: [58, 36, 2], pomost: [36, 50, 4],
-            wieza: [71, 41, 8], ognisko: [61, 55, 8], brzeg: [39, 46, 4], spichlerz: [68, 55, 8], skup: [55, 53, 2], namiot_kwat: [54, 56, 8],
-            ognisko_2: [64, 55, 8], stol_werbownika: [52, 32, 2], koszary_drzwi: [51, 39, 8], przed_brama: [55, 34, 2]
+            spi: [49, 30, 8], musztra: [72, 29, 8], kwatera_drzwi: [49, 30, 8], kuchnia: [58, 18, 8], brama_wew: [40, 28, 2], pomost: [65, 45, 2],
+            wieza: [41, 24, 2], ognisko: [35, 26, 6], brzeg: [55, 44, 2], spichlerz: [64, 32, 8], skup: [61, 30, 2], namiot_kwat: [49, 30, 8],
+            ognisko_2: [46, 26, 4], stol_werbownika: [43, 32, 2], koszary_drzwi: [49, 30, 8], przed_brama: [40, 33, 2]
         });
-        TL.SPOTS_BY_MAP[QUARTERS] = Object.assign(TL.SPOTS_BY_MAP[QUARTERS] || {}, { rotmistrz_wnetrze: [6, 4, 2] });
-        if (TL.SPOTS) {
-            const add = { garnizon_werbownik: [24, 46, 2] };
-            for (const [k, v] of Object.entries(add)) if (!TL.SPOTS[k]) TL.SPOTS[k] = v;
-        }
+        TL.SPOTS_BY_MAP[QUARTERS] = Object.assign(TL.SPOTS_BY_MAP[QUARTERS] || {}, { rotmistrz_wnetrze: [8, 7, 2] });
+        TL.SPOTS_BY_MAP[TOWN] = Object.assign(TL.SPOTS_BY_MAP[TOWN] || {}, { garnizon_werbownik: [60, 43, 2] });   // (the market of Map220)
     }
 
     // ------------------------------------------------------------------ the things carried and the remarks (they go with the quests'
@@ -251,14 +254,21 @@
         }
     });
 
-    // ------------------------------------------------------------------ the soldiers (events 640-655 on Map162)
-    // plan: [hour, spot | [patrol spots], act] - act: "stand" (default), "work", "patrol", "inside" (hidden); the spots are the
-    // map's "Miejsce:" events (z_*). sheet: A / B (the same man in two colours)
+    // ------------------------------------------------------------------ the guardsmen (events 640-655 on the manor, Map221)
+    // plan: [hour, spot | [patrol spots], act] - act: "stand" (default), "work", "patrol", "inside" (hidden); the spots: SOLDIER_SPOTS
+    // below (a "Miejsce:" event of the map with the same key wins). sheet: A / B (the same man in two colours). 642 guards the
+    // reservoir's pier by the weir (the Lord's water), 643 the water barrels and the grain cart, 646 is the guard's smith by the stable
+    const SOLDIER_SPOTS = {
+        z_brama_l: [38, 30, 2], z_brama_p: [42, 30, 2], z_noc_brama: [42, 31, 2], z_wieza: [43, 23, 2],
+        z_ognisko_1: [37, 26, 6], z_ognisko_2: [45, 26, 4], z_cwicz_1: [70, 26, 2], z_cwicz_2: [72, 26, 2], z_cwicz_3: [74, 26, 2],
+        z_pomost: [64, 45, 2], z_noc_pomost: [63, 45, 2], z_beczki: [49, 24, 6], z_spichlerz: [62, 32, 6], z_kuznia: [58, 29, 2],
+        z_koszary: [49, 30, 8], z_namiot: [49, 30, 8], kwatera_drzwi: [49, 30, 8]
+    };
     const SOLDIERS = [
         { id: 640, sheet: "A", role: "brama", plan: [[0, "z_noc_brama"], [6, "z_brama_l"], [22, "z_noc_brama"]], sentry: [22, 6] },
         { id: 641, sheet: "B", role: "brama", plan: [[0, "inside", "z_koszary"], [6, "z_brama_p"], [14, "z_wieza"], [20, "z_ognisko_1"], [22, "inside", "z_koszary"]] },
         // (9-15 he rows the rescue boat to the wreck: he and the boat are away - Garnizon.js hides the boat then)
-        { id: 642, sheet: "B", role: "pomost", plan: [[0, "z_noc_pomost"], [6, "z_cwicz_1"], [7, "z_pomost"], [9, "inside", "z_lodz"], [15, "z_pomost"], [19, "z_ognisko_2"], [22, "z_noc_pomost"]], sentry: [22, 6] },
+        { id: 642, sheet: "B", role: "pomost", plan: [[0, "z_noc_pomost"], [6, "z_cwicz_1"], [7, "z_pomost"], [19, "z_ognisko_2"], [22, "z_noc_pomost"]], sentry: [22, 6] },
         { id: 643, sheet: "A", role: "beczki", plan: [[0, "patrol", ["z_beczki", "z_spichlerz", "kwatera_drzwi", "z_brama_p", "kwatera_drzwi", "z_spichlerz"]], [6, "z_beczki"], [22, "patrol", ["z_beczki", "z_spichlerz", "kwatera_drzwi", "z_brama_p", "kwatera_drzwi", "z_spichlerz"]]], sentry: [22, 6] },
         { id: 644, sheet: "A", role: "cwiczy", plan: [[0, "inside", "z_namiot"], [6, "z_cwicz_2"], [12, "z_ognisko_1"], [13, "z_cwicz_2"], [17, "work", "z_spichlerz"], [19, "z_ognisko_1"], [21, "inside", "z_namiot"]] },
         { id: 645, sheet: "B", role: "cwiczy", plan: [[0, "inside", "z_namiot"], [6, "z_cwicz_3"], [12, "z_ognisko_2"], [13, "z_cwicz_3"], [17, "z_pomost"], [19, "z_ognisko_2"], [21, "inside", "z_namiot"]] },
@@ -270,18 +280,27 @@
     // (Rafał is not on the list: the deserter of W6 - recruiting him would cut across his own thread; the recruiter only mentions him)
     const RECRUITS = { bartek: { id: 648, spot: "z_cwicz_1" }, drwal: { id: 649, spot: "z_cwicz_2" }, uchodzca: { id: 650, spot: "z_cwicz_3" } };
     const RECRUIT_STAY = 12;
-    // the patrol on the road (favour under 10), event 652 on Map162
-    const PATROL = { id: 652, x: 22, y: 5 };
+    // the patrol on the road (favour under 10), event 652 on the manor's road west of the courtyard
+    const PATROL = { id: 652, x: 14, y: 41 };
+    // the manor's own things the old map had (injected now): the grain of the requisition on the cart by the stable (D27: taken at
+    // night past the sentries - the cart's cell, the tiles show the cart) and the Lord's water barrels in the courtyard (only a bubble:
+    // the drought); the area the sentries guard (a thief with the sacks outside it is safe), where a caught thief wakes (the guard's
+    // lockup is the guardhouse: he is let out at its door), and no pass to the wreck (it lies open on Słony Brzeg)
+    const GRANARY = { id: 664, x: 63, y: 31 };
+    const BARRELS = [{ id: 665, x: 50, y: 23 }, { id: 666, x: 51, y: 23 }];   // (one barrel a cell)
+    const CARRY_ZONE = [25, 19, 66, 35];
+    const STOCKS = [48, 31, 2];
+    const GLEJT = false;
     // Map008: the recruiter's list on the market (656); the search after D26 b (657-658); Map111: the search (660-661)
-    const TOWN_EVENTS = { list: { id: 656, x: 25, y: 47 }, search: [{ id: 657, x: 90, y: 97 }, { id: 658, x: 78, y: 97 }], klos: { id: 659, x: 13, y: 48, d: 6 } };
-    const PODGRODZIE_EVENTS = [{ id: 660, x: 45, y: 21 }, { id: 661, x: 37, y: 14 }];
-    // the captain's quarters (Map163): where the door of Map162 lands, where its doorway leads back
-    const QUARTERS_LANDING = [6, 8], QUARTERS_EXIT = [42, 18];
+    const TOWN_EVENTS = { list: { id: 656, x: 61, y: 44 }, search: [{ id: 657, x: 52, y: 39 }, { id: 658, x: 44, y: 39 }], klos: { id: 659, x: 51, y: 21, d: 6 } };   // (Map220: the market, the street north of it, the kantor's back door)
+    const PODGRODZIE_EVENTS = [{ id: 660, x: 44, y: 43 }, { id: 661, x: 28, y: 43 }];   // (Map218: the main road)
+    // the guard's hall (Map180): where the guardhouse's door of the manor lands, where its doorway leads back (the map's own events)
+    const QUARTERS_LANDING = [6, 10], QUARTERS_EXIT = [49, 30];
 
-    // ------------------------------------------------------------------ the sandbar (rows 20-21: sea tiles; at low tide sand)
-    const BAR = { rows: [20, 21], x0: 0, x1: 11, picture: "Garnizon_Lacha", px: 0, py: 19, fadeFrom: 0.15, fadeTo: 0.3 };
+    // ------------------------------------------------------------------ the sandbar of the old bay: none in the new world
+    const BAR = null;
 
     window.GarnizonData = { MAP, QUARTERS, TOWN, PODGRODZIE, WAVES, RECRUIT_DAYS, RESIDENTS, QUESTS: [w.Q.K52, w.Q.D26, w.Q.D27], BUY, BUY_LIMIT, BUY_WAVE,
         BUY_WAVE_DAYS, BUY_FRIEND, HUNGER_DAYS, FAVOR, SMITH, GRAIN_PRICE, D26_LIST, SOLDIERS, RECRUITS, RECRUIT_STAY, PATROL, TOWN_EVENTS,
-        PODGRODZIE_EVENTS, QUARTERS_LANDING, QUARTERS_EXIT, BAR, IDS: [640, 669] };
+        PODGRODZIE_EVENTS, QUARTERS_LANDING, QUARTERS_EXIT, BAR, SOLDIER_SPOTS, GRANARY, BARRELS, CARRY_ZONE, STOCKS, GLEJT, IDS: [640, 669] };
 })();

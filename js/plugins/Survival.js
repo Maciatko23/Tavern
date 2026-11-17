@@ -203,7 +203,7 @@
     // slowly by itself - HEAL_PER_HOUR of the maximum an hour, not while wounded - and fully in a night's sleep (the beds call
     // recoverAll); a bandage heals BANDAGE_HEAL of it. At 0 the engine's own check ends the game (Scene_Map.checkGameover).
     // ------------------------------------------------------------------
-    const HEAL_PER_HOUR = 0.03, BANDAGE_HEAL = 0.2;
+    const HEAL_PER_HOUR = 0.03, BANDAGE_HEAL = 0.2, WOUND_HEAL = 0.5;
     const hero = () => ($gameParty ? $gameParty.leader() : null);
     Game_System.prototype.healthRatio = function() {
         const a = hero();
@@ -225,8 +225,9 @@
     Game_System.prototype.advanceDayNight = function(hours) {
         _advanceDayNight.call(this, hours);
         const a = hero(), s = survival();
-        if (!a || a.isDead() || !(hours > 0) || a.hp >= a.mhp || this.isWounded()) { s.healAcc = 0; return; }
-        s.healAcc = (s.healAcc || 0) + a.mhp * HEAL_PER_HOUR * (1 + perk("wound.heal")) * hours;
+        if (!a || a.isDead() || !(hours > 0) || a.hp >= a.mhp) { s.healAcc = 0; return; }
+        // (2026-11-17, balance with the player) wounded he heals at half the pace (it was not at all for the wound's 24 hours)
+        s.healAcc = (s.healAcc || 0) + a.mhp * HEAL_PER_HOUR * (1 + perk("wound.heal")) * hours * (this.isWounded() ? WOUND_HEAL : 1);
         const whole = Math.floor(s.healAcc);
         if (whole > 0) { a.gainHp(whole); s.healAcc -= whole; }
     };
@@ -433,6 +434,7 @@
     // afternoon or the evening (so it can also be seen at night), the rain starts with it and goes on as ordinary rain after it passes.
     // The storm itself is drawn and heard by Storm.js; this file only plans it and says how strong it is at any moment (stormLevel).
     const STORM_CHANCE = [0.3, 0.6, 0.2, 0];   // of the rainy days, per season
+    const DRY_START_DAYS = 3;                  // no rain, snow or storm on the first days of the game
     const STORM_GATHER = 1;                    // hours of wind and darkening sky before the first drop
     const STORM_FADE = 1;                      // hours over which it dies away (the last quarter of them after its end)
     function weatherPlan(day) {
@@ -440,6 +442,8 @@
         if (forced && forced.day === day) {   // the debug menu (F9): a storm right now, or no weather at all today
             return forced.off ? null : { type: "rain", start: forced.start, end: Math.min(24, forced.end + 1), power: 4, storm: { start: forced.start, end: forced.end } };
         }
+        // (2026-11-14, the user: "niech na początku gry nie pada deszcz") the first days of a new game are dry
+        if (day <= DRY_START_DAYS) return null;
         const s = seasonIndex(day), chance = [0.35, 0.2, 0.4, 0.45][s];
         if (hash(day, 1) >= chance) return null;
         if (hash(day, 6) < STORM_CHANCE[s]) {

@@ -73,7 +73,7 @@ kit.test({ port: 9552, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
             quests: ["K59", "K60", "K61", "K62", "D32", "D33"].every(id => !!TownQuests.Q[id]), board: QuestBoard.TEMPLATES.some(x => x.id === "low_oboz_021") && !!QuestBoard.BEASTS.bandit }; })()`);
     t.check("wtyczki paczki B gotowe, gatunek „Wilczę”, stałe obozy na Łące (4) i Kruczym Jarze (3) (Humans.fixedCamp), FX zadań, wzory tablicy",
         base.ready && base.pup && base.fixed.every(Boolean) && base.fx && base.quests && base.board, base);
-    t.check("przedmioty 200-206 nazwane, z ikonami 480-486", base.it.every(([i, n, ic]) => n && ic === 280 + i), base.it);
+    t.check("przedmioty 200-206 nazwane, z ikonami z PixelLab (688+)", base.it.every(([i, n, ic]) => n && ic >= 688), base.it);
     t.check("miejsca paczki B zarejestrowane (" + base.want + ") i 9 odkryć", base.spots === base.want && base.disc.length === 9, base);
     t.check("gajowy: mieszkaniec 2905 na Map024, arkusz $Npc_Gajowy, popiersie Gajowy_Bust", JSON.stringify(base.res) === JSON.stringify([2905, 24, "$Npc_Gajowy"]) && base.bust === "Gajowy_Bust", base);
     await t.eval(`(function(){ window.__icons = ImageManager.loadSystem("IconSet"); window.__bust = ImageManager.loadPicture("Gajowy_Bust"); window.__npc = ImageManager.loadCharacter("$Npc_Gajowy"); return 0; })()`);

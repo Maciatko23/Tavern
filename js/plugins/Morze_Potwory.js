@@ -561,7 +561,7 @@
     //    guardhouse (the door) and is seen no more tonight. On the maps with a guard resident (the manor, the harbour) he does the same, by TownLife.hold
     // ==================================================================
     const GUARD_RE = /(straznik|zolnierz|kapral|patrol|wartownik)/i;
-    const HOUSE = { map: 8, door: [98, 49], out: [[98, 51], [99, 51]] };
+    const HOUSE = { map: 220, door: [43, 20], out: [[43, 22], [44, 22]] };   // (2026-11-16: Kruczogród - the watch comes out of the town hall, where the corporal lives)
     const watch = { on: false, hurt: {}, t: 0, men: [], bell: false };
     function Watchman() { this.initialize(...arguments); }
     Watchman.prototype = Object.create(Game_Character.prototype);
@@ -614,10 +614,16 @@
                     m.walkTo(HOUSE.door[0], HOUSE.door[1], 1);
                     continue;
                 }
-                const t = mons.map(c => ({ c, d: Math.hypot(c.centerX() - m.centerX(), c.centerY() - m.centerY()) })).sort((a, b) => a.d - b.d)[0];
+                // (2026-11-16, the player: "jeden może zająć strażnika i walczyć, inny wejść do miasta") one watchman takes one monster - the
+                // nearest not taken by the other; beside it he keeps it busy (it stands and fights him), the rest go on after the hero
+                const taken = new Set(watch.men.filter(o => o !== m && o._foe && !o._hurt).map(o => o._foe));
+                const all = mons.map(c => ({ c, d: Math.hypot(c.centerX() - m.centerX(), c.centerY() - m.centerY()) })).sort((a, b) => a.d - b.d);
+                const t = (m._foe && mons.includes(m._foe) ? all.find(o => o.c === m._foe) : null) || all.find(o => !taken.has(o.c)) || all[0];
                 if (!t) continue;
+                m._foe = t.c;
                 if (t.d > 1.7) { m.walkTo(t.c._x, t.c._y, 1); continue; }
                 m.faceTo(t.c.centerX(), t.c.centerY());
+                pinTo(t.c, m);
                 if ((m._swing -= 20) <= 0) {
                     m._swing = 70;
                     const dmg = t.c._kind === "krab_kolos" ? 2.5 : t.c._kind === "krab_olbrzym" ? 4 : 6;
@@ -633,8 +639,10 @@
         }
         const L = T.api("TownLife"), G = guards();
         if (!L || !G.length) return;
+        const busy = new Set();   // (one guard to one monster: the others go on)
         for (const m of mons) {
-            const near = G.map(g => ({ g, d: Math.hypot(g.ev._realX - m.centerX(), g.ev._realY - m.centerY()) })).sort((a, b) => a.d - b.d).slice(0, 3);
+            const near = G.filter(g => !busy.has(g.key)).map(g => ({ g, d: Math.hypot(g.ev._realX - m.centerX(), g.ev._realY - m.centerY()) })).sort((a, b) => a.d - b.d).slice(0, 1);
+            for (const n of near) busy.add(n.g.key);
             let hitters = 0;
             for (const n of near) {
                 if (n.d > 2.2) { L.hold(n.g.key, true, [Math.round(m.centerX() - 1), Math.round(m.centerY())]); continue; }
@@ -642,6 +650,7 @@
                 if (Math.random() < 0.08 && !watch.hurt[n.g.key]) { watch.hurt[n.g.key] = true; guardHurt(n.g); }
             }
             if (hitters) {
+                pinTo(m, near[0].g.ev);
                 m._hp -= hitters * (m._kind === "krab_kolos" ? 2.6 : m._kind === "krab_olbrzym" ? 4.2 : 6.5) * 0.5;
                 sparksAt(m.centerX(), m.centerY() - 0.4, "#e8e8e8", 3);
                 se("Blow1", 30, 100, panOf(m.centerX()));
@@ -649,6 +658,13 @@
             }
         }
         if (!mons.length) watchEnd();
+    }
+    // a monster a guard stands at is busy with him: held a moment at a time (renewed while he fights it), turned to him - when he falls
+    // back hurt it goes on after the hero
+    function pinTo(c, by) {
+        if (!c || c._dead || c._dying) return;
+        c._stun = Math.max(c._stun || 0, 24);
+        try { const dx = (by.centerX ? by.centerX() : by._realX + 0.5) - c.centerX(), dy = (by.centerY ? by.centerY() : by._realY + 0.5) - c.centerY(); c.setDirection(DIR_OF(dx, dy)); } catch (e) { /* (no turning) */ }
     }
     function guards() {
         const L = T.api("TownLife");

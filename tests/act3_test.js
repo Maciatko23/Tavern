@@ -19,7 +19,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     await t.eval(`(function(){ Act3.auto(true); Combat.gainXp(6000, 'test'); $gameParty.leader().recoverAll(); Act3.DATA.PACE.gap = 40; Act3.DATA.PACE.firstGap = 30;
         window.__bus = []; for (const n of ['act3Armed', 'act3Start', 'act3Wave', 'act3Bell', 'act3Done']) Tawerna.on(n, e => __bus.push(Object.assign({ n }, e)), { owner: 'Act3Test' });
         if (window.TownQuests) TownQuests.bellOpts = { bot: 'target' }; return 0; })()`);
-    await t.eval("(function(){ const _cc = Spriteset_Map.prototype.createCharacters; Spriteset_Map.prototype.createCharacters = function() { const n = $gameMap.events().filter(e => !e.event()).map(e => e.eventId()); if (n.length) console.error('Error NULLEV map ' + $gameMap.mapId() + ': ' + n.join(',') + ' phase ' + Act3.phase() + ' scene-from ' + (SceneManager._previousClass ? SceneManager._previousClass.name : '?') + ' inj ' + JSON.stringify(Tawerna.injected(8)) + ' T ' + Graphics.frameCount); return _cc.call(this); }; return 0; })()");
+    await t.eval("(function(){ const _cc = Spriteset_Map.prototype.createCharacters; Spriteset_Map.prototype.createCharacters = function() { const n = $gameMap.events().filter(e => !e.event()).map(e => e.eventId()); if (n.length) console.error('Error NULLEV map ' + $gameMap.mapId() + ': ' + n.join(',') + ' phase ' + Act3.phase() + ' scene-from ' + (SceneManager._previousClass ? SceneManager._previousClass.name : '?') + ' inj ' + JSON.stringify(Tawerna.injected(220)) + ' T ' + Graphics.frameCount); return _cc.call(this); }; return 0; })()");
     // a fresh start of every scenario: the siege's state cleared, TownQuests' flags and Opinia as wanted
     const fresh = async (flags, opinion) => {
         await t.eval(`(function(){ Act3.reset(); Act3.auto(true); Humans.clear(); const f = TownQuests.state().flags;
@@ -46,7 +46,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     const api = await S(`({ api: Tawerna.api('Act3') === window.Act3, out: Act3.outcome(), ph: Act3.phase(), waves: Act3.DATA.WAVES.map(w => w.id + '@' + w.map),
         inj: Tawerna.inject.list().filter(o => o.owner === 'Act3').map(o => o.ids) })`);
     t.check("Act3 on the API (Tawerna.api), no outcome yet (null), idle; four waves (2 outside on the town map, 2 inside); its ids 859 (the rope) + 840-858 kept",
-        api.api && api.out === null && api.ph === "idle" && api.waves.join() === "w1@8,w2@8,w3@1,w4@1" && api.inj.includes("859") && api.inj.includes("840-858"), api);
+        api.api && api.out === null && api.ph === "idle" && api.waves.join() === "w1@220,w2@220,w3@1,w4@1" && api.inj.includes("859") && api.inj.includes("840-858"), api);
     const sheets = await S(`new Promise(res => { const list = Act3.DATA.DEFENDERS.map(d => d.sheet).filter((v, i, a) => a.indexOf(v) === i), out = {}; let left = list.length;
         for (const n of list) { const b = ImageManager.loadCharacter(n); const iv = setInterval(() => { if (!b.isReady() && !b.isError()) return; clearInterval(iv); out[n] = b.isError() ? null : [b.width, b.height, !!Hunting.LOOK8[n]]; if (--left === 0) res(out); }, 20); } })`);
     t.check("every defender's 8-way walk loads and is in Hunting's LOOK8 (its own name - the town's residents keep their $Npc_ sheets)",
@@ -59,7 +59,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     // ================= 2. the trigger =================
     await fresh();
     await t.eval("Underground.state().deepest = 30; Underground.open(); 0");
-    await t.go(8, 51, 19, 8);
+    await t.go(220, 43, 37, 8);
     await t.frames(80);
     t.check("floor 30 only: nothing (idle) on the town map", (await S("Act3.phase()")) === "idle");
     await t.eval("Underground.state().deepest = 50; Underground.open(); Act3.auto(false); 0");
@@ -82,14 +82,14 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     await t.eval("$gameSystem._dayNightDay = Act3.state().siegeDay; $gameSystem.setDayNightHour(15); 0");
     await t.frames(60);
     t.check("the planned day at 15:00: no strike yet", (await S("Act3.phase()")) === "armed");
-    await t.go(19, 8, 6, 2);
+    await t.go(225, 75, 62, 2);
     await t.setHour(22);
     await t.frames(60);
     t.check("the night, but the hero at grandpa's: they wait (armed)", (await S("Act3.phase()")) === "armed");
-    await t.go(8, 51, 19, 8);
+    await t.go(220, 43, 37, 8);
     await t.frames(60);
     const started = await S("({ ph: Act3.phase(), bus: __bus.filter(b => b.n === 'act3Start').length, rope: !!$gameMap.event(859), ropeAt: $gameMap.event(859) ? [$gameMap.event(859).x, $gameMap.event(859).y] : null })");
-    t.check("the night on the town map: the siege (act3Start); the bell's rope (event 859) under the bell", started.ph === "siege" && started.bus === 1 && started.rope && started.ropeAt.join() === "45,103", started);
+    t.check("the night on the town map: the siege (act3Start); the bell's rope (event 859) under the bell", started.ph === "siege" && started.bus === 1 && started.rope && started.ropeAt.join() === "16,25", started);
 
     // ================= 3. the bell: nobody trusts the hero - the rope and the mini-game; Opinia 30 - the doors stay shut =================
     await god(true);
@@ -98,24 +98,24 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     t.check("Ambroży does not trust him: no bell by itself", s1 && s1.bell === null, s1);
     await t.eval("Act3.bellRope(); 0");
     const rung = await t.until("Act3.siege() && Act3.siege().bell === 'hero'", 40);
-    await t.until(t.onMap(8), 20);
+    await t.until(t.onMap(220), 20);
     s1 = await siege();
     t.check("the rope: the bell's mini-game, four strikes -> the alarm rung by the hero (act3Bell)", rung && s1.bell === "hero" && (await S("__bus.some(b => b.n === 'act3Bell' && b.by === 'hero')")), s1);
     t.check("Opinia 30: the town keeps its doors shut (no helpers)", s1.helpers === false, s1);
     // the first wave: at the yard's gate, marching to the tavern's door
     await t.until("Act3.live().length > 0", 20);
     let L1 = await live();
-    t.check("wave 1 on the town map: 2 bandits and a knife bandit of the faction (tag act3_w1), their way to the tavern's door (51,17)",
-        L1.length === 3 && L1.every(h => h.tag === "act3_w1" && h.hx === 51 && h.hy === 17) && L1.filter(h => h.kind === "bandit").length === 2, L1);
+    t.check("wave 1 on the town map: 2 bandits and a knife bandit of the faction (tag act3_w1), their way to the tavern's door (43,35)",
+        L1.length === 3 && L1.every(h => h.tag === "act3_w1" && h.hx === 43 && h.hy === 35) && L1.filter(h => h.kind === "bandit").length === 2, L1);
     await shot("akt3_fala1.png");
 
     // ================= 4. the doors: the hero far away - the men work at the door, it breaks, they go in =================
-    await heroAt(9, 19, 6);
+    await heroAt(8, 42, 6);
     await t.eval("Act3.live().forEach(h => { if (h._engaged) h.disengage(); h._aware = 0; }); 0");
-    const doorFell = await t.until("Act3.siege() && Act3.siege().doors[8] < 100", 60);
+    const doorFell = await t.until("Act3.siege() && Act3.siege().doors[220] < 100", 60);
     t.check("the men at the door (nobody stops them): its life goes down", doorFell, await siege());
-    await t.eval("Act3.siege().doors[8] = 2; 0");
-    const broke = await t.until("Act3.siege() && Act3.siege().broken[8]", 30);
+    await t.eval("Act3.siege().doors[220] = 2; 0");
+    const broke = await t.until("Act3.siege() && Act3.siege().broken[220]", 30);
     s1 = await siege();
     t.check("the town door broken: damage +20, the ones at it go in (carried to the wave inside)", broke && s1.damage >= 20 && (await S("Act3.siege().waves[2].carry.length + Act3.siege().waves[3].carry.length")) >= 1, s1);
     await t.eval("for (const h of Act3.live()) if (!h._dead) Humans.kill(h, 'melee'); 0");
@@ -135,7 +135,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
 
     // ================= 5. all the help: Grum ally, Ambroży, Opinia 70, Rafał and Marek, the manor's guards =================
     await fresh({ grumAlly: 1, ambrozyTrust: 1, marekSaved: 1, rafalAlly: 1, lordAlly: 1 }, 70);
-    await heroAt(37, 19, 6);
+    await heroAt(34, 37, 6);
     await t.eval("Act3.debugStart(); 0");
     await t.frames(30);
     const g1 = await defs();
@@ -149,7 +149,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     t.check("the defenders outside: Grum, Rafał and Marek (W6), the manor's two guards, Tadek, Ignac, Kuba and two refugees",
         ["grum", "rafal", "marek", "straz0", "straz1", "tadek", "ignac", "kuba", "uchodzcy0", "uchodzcy1"].every(k => ids2.includes(k)), ids2);
     // they fight the faction's men: a man struck by a defender fights it back (Humans.setFoe)
-    await heroAt(37, 19, 6);
+    await heroAt(34, 37, 6);
     const duel = await t.until("Act3.live().some(h => !h._dead && h._foe && h._foe.isDefender)", 40);
     t.check("a defender fights a man: the man fights it back (his foe - Humans.setFoe)", duel, await live());
     const hurt = await t.until("Act3.defenders().some(d => d._hp < d._maxHp)", 40);
@@ -160,13 +160,13 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     t.check("the defenders beat both waves outside by themselves (the hero aside)", out1, await siege());
 
     // ================= 6. inside: Borgar at the old door, the hero goes in =================
-    await t.go(1, 14, 52, 8, { calm: false });   // (not the kit's calm: it clears Humans.js's men - the wave coming in)
+    await t.go(1, 14, 39, 8, { calm: false });   // (not the kit's calm: it clears Humans.js's men - the wave coming in)
     await t.frames(30);
     const inside = await S("({ ev1: $gameMap.event(1).isTransparent(), ev3: $gameMap.event(3).isTransparent(), defs: Act3.defenders().map(d => d._id) })");
     t.check("in the tavern: Borgar (his event hidden, he fights) and Grum by the hero", inside.ev1 && inside.ev3 && inside.defs.includes("borgar") && inside.defs.includes("grum"), inside);
     await t.until("Act3.live().length > 0", 20);
     const L3 = await live();
-    t.check("wave 3 inside: through the kitchen, to the old door by the pantry and cellar (32,20)", L3.length >= 3 && L3.every(h => h.tag === "act3_w3") && L3.filter(h => h.hx === 32 && h.hy === 20).length >= 3, L3);
+    t.check("wave 3 inside: through the kitchen, to the loose brick in the store, the way to the cellar (31,3)", L3.length >= 3 && L3.every(h => h.tag === "act3_w3") && L3.filter(h => h.hx === 31 && h.hy === 3).length >= 3, L3);
     await shot("akt3_w_srodku.png");
     await clearWave();
     await t.until("Act3.siege() && Act3.siege().wave === 3 && Act3.live().some(h => !h._dead && h._tag === 'act3_w4')", 30);
@@ -183,7 +183,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
 
     // ================= 7. Grum on the faction's side, Rafał given away: they are among the men =================
     await fresh({ w8Faction: 1, rafalEnemy: 1 }, 30);
-    await t.go(1, 14, 52, 8);
+    await t.go(1, 14, 39, 8);
     await t.setHour(22);
     await t.eval("Act3.debugStart({ wave: 3 }); 0");
     await t.until("Act3.live().some(h => !h._dead && h._tag === 'act3_w4')", 30);
@@ -196,14 +196,14 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     const gf = await S("({ out: Act3.outcome(), gone: TownQuests.state().flags.grumGone, away: TownQuests.grumAway() })");
     t.check("Grum beaten and spared: he leaves on the ferry (outcome grum 'gone', the flag grumGone - gone from the tavern)", gf.out && gf.out.grum === "gone" && !!gf.gone && gf.away, gf);
     await t.eval("(function(){ Act3.reset(); const f = TownQuests.state().flags; f.rafalEnemy = 1; delete f.w8Faction; delete f.grumGone; return 0; })()");
-    await t.go(8, 51, 19, 8);
+    await t.go(220, 43, 37, 8);
     await t.eval("Act3.debugStart({ wave: 1 }); 0");
     await t.until("Act3.live().length > 0", 20);
     const L7b = await live();
     t.check("Rafał given to the Lord (W6 rafalEnemy): he is a knife bandit in wave 2", L7b.some(h => h.name === "Rafał" && h.kind === "knifer"), L7b);
     // Grum sitting it out (no choice in W8): he stays at his table
     await fresh({}, 30);
-    await t.go(1, 14, 52, 8);
+    await t.go(1, 14, 39, 8);
     await t.eval("Act3.debugStart({ wave: 2 }); 0");
     await t.frames(60);
     const neutral = await S("({ ev3: !$gameMap.event(3).isTransparent(), defs: Act3.defenders().map(d => d._id), grum: Act3.ctx().grum })");
@@ -212,7 +212,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     // ================= 8. a save and a load in the middle of the siege =================
     await t.eval("Act3.reset(); 0");
     await fresh({ grumAlly: 1 }, 30);
-    await t.go(8, 37, 19, 6);
+    await t.go(220, 34, 37, 6);
     await t.eval("Act3.debugStart(); 0");
     await t.until("Act3.live().length === 3", 20);
     await t.eval("(function(){ const h = Act3.live()[0]; Humans.kill(h, 'melee'); return 0; })()");
@@ -229,7 +229,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     await god(false);
     await t.eval("Act3.reset(); Humans.clear(); 0");
     await fresh({}, 30);
-    await t.go(8, 51, 19, 8);
+    await t.go(220, 43, 37, 8);
     await t.eval("$gameParty.gainGold(100); Act3.debugStart(); 0");
     await t.until("Act3.live().length > 0", 20);
     const g0 = await t.gold();
@@ -249,20 +249,20 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     // ================= 10. the siege without the hero: three nights away =================
     await t.eval("Act3.reset(); 0");
     await fresh({}, 30);
-    await t.go(4, 60, 60, 2);   // (2026-11-12: not Map019 - the grandpa-left scene of "Wezwanie króla" runs there when days pass and holds the transfer back)
+    await t.go(225, 75, 62, 2);   // (away from the town: the old adit under Krucze Turnie - a map with no scene of its own when days pass)
     await t.eval("Act3.arm(); 0");
     await t.eval("$gameSystem._dayNightDay = Act3.state().siegeDay + 3; $gameSystem.setDayNightHour(10); 0");
     await t.frames(60);
     const off = await S("Act3.outcome()");
     t.check("three nights away: they struck without him - fallen (only Borgar), offscreen", off && off.result === "fallen" && off.offscreen && off.defenders.join() === "borgar", off);
-    await t.go(1, 14, 52, 8);
+    await t.go(1, 14, 39, 8);
     await t.frames(40);
     const told = await S("({ told: Act3.state().told, tops: window.__kit.tops.slice(-3) })");
     t.check("told when he comes to the tavern (\"Kiedy cię nie było...\")", told.told && told.tops.some(x => /Kiedy cię nie było/.test(x)), told);
     await t.eval("Act3.reset(); 0");
     await fresh({ grumAlly: 1, ambrozyTrust: 1, marekSaved: 1, rafalAlly: 1, lordAlly: 1 }, 70);
     await t.eval("Act3.arm(); $gameSystem._dayNightDay = Act3.state().siegeDay + 3; 0");
-    await t.go(4, 60, 60, 2);
+    await t.go(225, 75, 62, 2);
     await t.frames(60);
     const off2 = await S("Act3.outcome()");
     t.check("...with every ally (Ambroży rings, the town comes): costly, not fallen", off2 && off2.result === "costly" && off2.offscreen, off2);
@@ -270,7 +270,7 @@ kit.test({ port: 9470, plugins: ["Act3_Data", "Act3"] }, async t => {
     // ================= 11. the costly outcome, F9 =================
     await t.eval("Act3.reset(); 0");
     await fresh({}, 30);
-    await t.go(1, 14, 52, 8);
+    await t.go(1, 14, 39, 8);
     await t.eval("Act3.debugStart({ wave: 3 }); Act3.damage(50); 0");
     await t.until("Act3.live().some(h => !h._dead)", 20);
     await clearWave();

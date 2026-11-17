@@ -86,7 +86,9 @@
     const D = window.TownQuestsData;
     if (!D) throw new Error("TownQuests.js: TownQuests_Data.js must stand above it in the plugin list");
     const PLUGIN = "TownQuests";
-    const TOWN = 8, ROAD = 3, MANOR = 24;   // the town, Kruczy Jar (the road behind the south gate; was Map022 Polna droga), the Lord's manor (its garden and the orangery)
+    const TOWN = 8, ROAD = 3, MANOR = 221;   // (MANOR 2026-11-15: the new world's Dwór nad Jazem; TOWN and ROAD still the old maps)
+    const MANOR_GARDEN = [4, 9, 26, 37], MANOR_OUT = [40, 33];   // (W1: the walled west garden x0..x1 / y0..y1; thrown out: the road before the manor's gate)
+    // (before:   // the town, Kruczy Jar (the road behind the south gate; was Map022 Polna droga), the Lord's manor (its garden and the orangery)
     const QUESTS = D.QUESTS, Q = {};
     for (const q of QUESTS) Q[q.id] = q;
     const KIND = { K: "krótkie", D: "długie", W: "wątek" };
@@ -1020,6 +1022,23 @@
             markers[key] = m;
         }
     }
+    // (2026-11-16) who the current step of quest `id` waits for now - the people whose tick is green for it (the same answer the marker
+    // over them gives), Borgar when the step has a topic at his bar: the compass points there when the step has no place of its own
+    // (W4's "ask Borgar", D46's questioning...). Kept a second: the compass asks a few times a second.
+    const whoCache = { id: null, at: -999, out: [] };
+    function whoFor(id) {
+        if (!has()) return [];
+        const now = Graphics.frameCount || 0;
+        if (whoCache.id === id && now - whoCache.at < 60) return whoCache.out;
+        const q = Q[id], r = q ? rec(id) : null, st = r && r.s === "active" ? q.steps[r.step] : null, out = [];
+        if (st) {
+            const keys = ((TL() && TL().RESIDENTS) || []).map(x => x.key).concat(["lord", "grandpa"], Object.keys(REGULAR));
+            for (const key of keys) { try { if (stepReady(q, r, st, key)) out.push(key); } catch (e) { /* (a hook that cannot answer for this person) */ } }
+            try { const f = st.talk && FX[st.talk]; if (f && f.borgarTopic && f.borgarTopic(q, r, st) && !out.includes("borgar")) out.push("borgar"); } catch (e) { /* (no topic) */ }
+        }
+        whoCache.id = id; whoCache.at = now; whoCache.out = out;
+        return out;
+    }
     const markerCache = {};
     function markerBitmap(kind) {
         if (markerCache[kind]) return markerCache[kind];
@@ -1724,7 +1743,8 @@
         // hooks, below)
     };
     // ---- W6 helpers (2026-10-07)
-    const FIELD = 3, PODGRODZIE = 111, W6_DISHES = [130, 131, 132, 133], W6_TAG = "w6Marek";
+    const FIELD = 218, PODGRODZIE = 218;   // (the plot and the camp are both on the new Podgrodzie; 2026-11-16: the "camp outside" too - its wolves came only on old Map111)
+    const W6_DISHES = [130, 131, 132, 133], W6_TAG = "w6Marek";
     const cap = s => (s ? String(s)[0].toUpperCase() + String(s).slice(1) : "");
     let w6QuarrelAt = 0;
     const w6Idx = (q, talk) => q.steps.findIndex(s => s.talk === talk);
@@ -1809,7 +1829,8 @@
         if (where !== "camp") { setFlag("guardSuspicious"); rw.opinion = -2; }
         completeStep(q, { to: w6Idx(q, "w6Vote"), reward: rw });
     }
-    // ---- rozdz. 7 in the diggers' cave (Map014): Marek (event "Marek" - his talk while W6 needs it), the camp's guard ("Strażnik obozu")
+    // ---- rozdz. 7 in the diggers' camp (CAVE: Map225's fire chamber, 2026-11-17; the old world's cave Map014 before): Marek (event
+    // "Marek" - his talk while W6 needs it), the camp's guard ("Strażnik obozu")
     const caveEvs = name => (window.$gameMap && $gameMap.mapId() === CAVE ? $gameMap.events().filter(e => e.event() && e.event().name === name && !e._erased) : []);
     const marekEv = () => caveEvs("Marek")[0] || null;
     const guardEv = () => caveEvs("Strażnik obozu")[0] || null;
@@ -1863,9 +1884,12 @@
         }
         return null;
     }
-    // Marek walks after the hero (each frame on Map014 while he follows): Hunting's path8, RoamingActor's steps
+    // Marek walks after the hero (each frame in the camp's map while he follows): Hunting's path8, RoamingActor's steps; out with
+    // him, he walks on by himself through the way out and is gone only there (or once off the screen - nobody vanishes in sight)
     function w6MarekUpdate() {
         if (!window.$gameMap || $gameMap.mapId() !== CAVE) return;
+        const lv = marekEv();
+        if (lv && lv._w6leave) { w6LeaveStep(lv); return; }
         const r = w6Hub();
         if (!r || r.t.m !== 2) return;
         const mk = r.t.mk || (r.t.mk = {}), ev = marekEv();
@@ -1878,7 +1902,8 @@
         if (d > 0 && RA && RA.canStep(ev, ev.x, ev.y, d)) RA.step(ev, d);
         else if (d > 0) ev.moveStraight(d);
     }
-    // the way out: the cave's mouth (rows 26-29, x 18-22) with Marek close - he is out. Unless the way is clear (a word with the
+    // the way out: the marker "jaskinia_wyjscie" (Map225: the old adit north to Krucze Turnie; Map014: the cave's mouth) with Marek
+    // close - he is out. Unless the way is clear (a word with the
     // guard, the guard beaten), the camp watches: at night the guard by the fire (the diggers sleep; with Rafał the hero's friend he
     // dozes 1-3 - Rafał knows the camp's nights), by day the guard and the three diggers too. Seen: the alarm - a fight
     function w6Escort(q, r) {
@@ -1891,7 +1916,8 @@
             return;
         }
         if (!mk.follow || $gameMap.isEventRunning()) return;
-        if (p.y >= 26 && Math.abs(p.x - 20) <= 2 && dist(ev, p) <= 5) { w6Out(q, r, ev); return; }
+        const out = markerAt("jaskinia_wyjscie") || { x: 20, y: 27 };
+        if (Math.abs(p.x - out.x) <= 2 && Math.abs(p.y - out.y) <= 2 && dist(ev, p) <= 5) { w6Out(q, r, ev); return; }
         if (mk.clear) return;
         const h = hour(), night = isNight(h), f = S().flags, sneak = !!T.call("Hunting", "sneaking");
         const sharp = f.rafalAlly ? -1.5 : 0, doze = !!f.rafalAlly && night && inHours(h, [1, 3]);
@@ -1931,13 +1957,14 @@
         w6Niche(marekEv());
         think(L.fightLost);
     }
-    // Marek back at his wall (the niche 30,5, facing the rock) - after a lost fight, or when the cave loads with him not following
+    // Marek back at his wall (the marker "marek": Map225 33,57 facing the east wall's rock) - after a lost fight, or when the camp's
+    // map loads with him not following
     function w6Niche(ev) {
         if (!ev) return;
-        const m = markerAt("marek") || { x: 30, y: 5 };
+        const m = markerAt("marek") || { x: 30, y: 5, d: 8 };
         ev.locate(m.x, m.y);
         ev.setDirectionFix(false);
-        ev.setDirection(8);
+        ev.setDirection(m.d || 8);
         ev.setDirectionFix(true);
         ev._w6walk = false;
     }
@@ -1946,10 +1973,34 @@
         setFlag("marekSaved");
         r.t.m = 3;
         r.t.mk.follow = false;
-        if (ev) ev.erase();
+        if (ev) w6Leave(ev);
         think(L.out);
         w6Reward(q, { xp: 250, note: L.noteOut });
         T.emit("w6MarekSaved", {});
+    }
+    // out with him: Marek walks on through the way out (the passage off the map nearest to the marker) and is gone there - or as soon
+    // as nobody sees him (off the screen), or after a while
+    function w6Leave(ev) {
+        const out = markerAt("jaskinia_wyjscie") || { x: ev.x, y: ev.y };
+        let to = null, best = 1e9;
+        for (const e of $gameMap.events()) {
+            if (e === ev || !e.page() || !(e.list() || []).some(c => c.code === 201)) continue;
+            const dd = Math.hypot(e.x - out.x, e.y - out.y);
+            if (dd <= 4 && dd < best) { best = dd; to = { x: e.x, y: e.y }; }
+        }
+        if (!to) { ev.erase(); return; }
+        ev._w6leave = { x: to.x, y: to.y, t: 0 };
+        ev._w6walk = true;
+        ev.setDirectionFix(false); ev.setWalkAnime(true); ev.setMoveSpeed(4); ev.setThrough(true);
+    }
+    function w6LeaveStep(ev) {
+        const L = ev._w6leave, sx = ev.screenX(), sy = ev.screenY();
+        const offScreen = sx < -48 || sy < -24 || sx > Graphics.width + 48 || sy > Graphics.height + 96;
+        if ((ev.x === L.x && ev.y === L.y && !ev.isMoving()) || (offScreen && !ev.isMoving()) || ++L.t > 60 * 20) { ev._w6leave = null; ev.erase(); return; }
+        if (ev.isMoving()) return;
+        const H = window.Hunting, d = H && H.path8 ? H.path8(ev, L.x, L.y, { key: "w6marekOut" }).dir : ev.findDirectionTo(L.x, L.y);
+        if (d > 0 && H && H.DIR_VEC && H.DIR_VEC[d] && window.RoamingActor) window.RoamingActor.step(ev, d);
+        else if (d > 0) ev.moveStraight(d);
     }
     // the cave as it loads: Marek gone for good once saved; the guard (beaten) gone; at night, while Marek waits to be led out, the
     // guard sits by the camp's fire ("oboz_kopaczy") facing the way out
@@ -1964,7 +2015,7 @@
         mk.fight = null;
         w6Niche(ev);   // (a loaded save keeps the event where it stood)
         if (g && mk.guardDown) { g.erase(); return; }
-        if (g && !mk.clear && isNight(hour())) { const m = markerAt("oboz_kopaczy") || { x: 18, y: 18 }; g.locate(m.x, m.y); g.setDirection(2); }
+        if (g && !mk.clear && isNight(hour())) { const m = markerAt("oboz_kopaczy") || { x: 18, y: 18, d: 2 }; g.locate(m.x, m.y); g.setDirection(m.d || 2); }
     }
     // ---- the camp's world: the helpers' harvest on grandpa's field (the week of the work duty), the leftovers, the wolves outside the wall
     const rnd2 = v => (Array.isArray(v) ? v[0] + Math.floor(Math.random() * (v[1] - v[0] + 1)) : Number(v) || 0);
@@ -2075,16 +2126,19 @@
     function w1Ch7(q) { return q.steps.findIndex(s => s.ch === 7); }
     // ---- W8 (2026-10-06): the mountains. The maps agent's switches: 15 "Gory_TunelKopaczy" (the diggers' tunnel to floor 50), 16
     // "Osada_Milczacych" (the Silent's gate); the guest rooms over the tavern (Map025) for the thin wall
-    const ROOMS = 25, CAVE = 14, SW_TUNNEL = 15, SW_OSADA = 16;
+    // (2026-11-17) the diggers' camp is the Sztolnia's fire chamber (Map225, tools/nowy_swiat/jaskinia_225.py): Marek, the camp's
+    // guard, the diggers and the markers moved there from the old world's cave (Map014)
+    const ROOMS = 25, CAVE = 225, SW_TUNNEL = 15, SW_OSADA = 16;
     // Act II: chapter 1 over (Story's debt paid, or - 2026-10-15 - the field lost) - or no story game at all
     function actTwo() {
         const St = ST();
         try { return !(St && St.active && St.active()) || (St.chapterEnded ? St.chapterEnded() : !!(St.state() || {}).done); } catch (e) { return true; }
     }
-    // a marker "Miejsce: <name>" on this map
+    // a marker "Miejsce: <name>" on this map; d: the way its picture faces in the editor (where the one standing there looks)
     function markerAt(name) {
         const e = window.$dataMap ? ($dataMap.events || []).find(x => x && String(x.name || "").trim() === "Miejsce: " + name) : null;
-        return e ? { x: e.x, y: e.y } : null;
+        const pg = e && e.pages && e.pages[0];
+        return e ? { x: e.x, y: e.y, d: (pg && pg.image && pg.image.direction) || 2 } : null;
     }
     // what the hero lacks for a day in the mountains: food for the day (2 portions of anything to eat), water in the skin, herbs
     // or a bandage (rows for popupMissing)
@@ -2683,7 +2737,7 @@
             if (SB && SB.say && who) SB.say(who, line, 160);
             const got = addOpinion(-3, "nocą w ogrodzie dworu");
             T.popup("Złapali cię w ogrodzie dworu", { top: true, color: "#ff9f8f", sub: "Wyrzucony za bramę dworu - spróbuj innej nocy" + (got ? "  ·  Opinia " + got : "") });
-            pendingOut = { at: Graphics.frameCount + 75, map: TOWN, x: 117, y: 49, dir: 4 };
+            pendingOut = { at: Graphics.frameCount + 75, map: MANOR, x: MANOR_OUT[0], y: MANOR_OUT[1], dir: 2 };
         },
         // (2026-10-06) two weeks after the deal Feliks's men wait on Polna droga: a real fight (Humans.ambush - combat stage 3). Two men
         // (a club and - if Humans.js has it - a knife), three (an archer too) once Feliks has paid 40 G. Beaten: the hero keeps the
@@ -2838,7 +2892,7 @@
             if (!window.$gameMap || $gameMap.mapId() !== MANOR || pendingOut || $gameMap.isEventRunning()) return;
             const self = W1X, p = $gamePlayer, L = q.lines || {};
             if (r.t.tried === nightOf() || !(self.night() || self.gateNight())) return;
-            if (p.x > 21 || p.y < 17) return;   // (only the west garden: the orangery, its terrace and the grass strip behind it with the hatch)
+            if (p.x < MANOR_GARDEN[0] || p.x > MANOR_GARDEN[2] || p.y < MANOR_GARDEN[1] || p.y > MANOR_GARDEN[3]) return;   // (only the west garden: the orangery, its terrace and the grass with the hatch)
             const sneak = !!T.call("Hunting", "sneaking"), sharp = S().flags.feliksWarned ? 1.5 : 0;
             const g = residentEv("straznik");
             if (g && self.night() && sees(g, p, sneak, sharp)) { self.caught(q, r, g, L.caughtGuard); return; }
@@ -3664,7 +3718,9 @@
             think([fill(L.tally, v)].concat(res === "open" ? L.resultOpen : L.resultClose), "soltys");
             const rw = { xp: 100 };
             if (res === "close") {
-                setFlag("campOutside");
+                // (2026-11-15, the user: the "camp moved outside the wall" variant is gone - in the new world the camp stands in Podgrodzie
+                // from the start; a closed gate only keeps the newcomers out of the town)
+                setFlag("campInside");
                 if (how === "close") rw.opinion = 2;
                 rw.note = L.noteClose;
             } else {
@@ -3816,7 +3872,7 @@
             const L = Q.W6.lines || {}, mapId = $gameMap.mapId();
             if (/^w6_tent/.test(s.key)) { T.popup(L.propTent, { color: "#eceef0" }); return []; }
             if (s.key === "w6_fire") { T.popup(L.propFire, { color: "#ffe9a8" }); return []; }
-            const who = /bogdan|help1/.test(s.key) ? "bogdan" : "halina", where = mapId === FIELD ? "Field" : mapId === PODGRODZIE ? "Out" : "Town";
+            const who = /bogdan|help1/.test(s.key) ? "bogdan" : "halina", where = mapId === FIELD && /help/.test(s.key) ? "Field" : mapId === PODGRODZIE && S().flags.campOutside ? "Out" : "Town";
             return linesTo([], spk, L[who + where] || []);
         }
     };
@@ -4704,7 +4760,7 @@
         regularTalk, regularTopics, regularTopicList, place: placeTalk, hasVerse, gainVerse, verseOf, nextKupala, knockCap, shotAtCap,
         capState: () => ({ step: capStep(), falling: !!capFall, statue: window.$gameMap ? capStatueId() : 0, gateOpen: gateOpen() }), CAP, d6Bout, hourWords,
         d13Pred: () => { const r = rec("D13"); return r ? d13Pred(r) : GOSCIEX.pred(day()); }, armOpts: null,
-        borgarTopics, borgarTalk, armTable,
+        borgarTopics, borgarTalk, armTable, whoFor,
         // (2026-10-06) W8: Grum gone from the tavern for good (beaten at the tunnel: on the ferry - or dead); TavernLife / TavernDice ask
         grumAway: () => { if (!has()) return false; const f = S().flags; return !!(f.grumGone || f.grumDead); }, actTwo, markerAt,
         // (2026-10-07) W6 "Ludzie z promu" - the outcome for Act III and the endings (the flags behind it: rafalAlly | rafalGiven +

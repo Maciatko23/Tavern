@@ -38,12 +38,14 @@
     if (!TLD) throw new Error("Mlyn_Data.js: brak TownLife_Data.js - musi stać wyżej na liście wtyczek");
 
     // ------------------------------------------------------------------ where, when, how much
-    const MAP = { miasto: 8, mlyn: 217, przystan: 125, archiwum: 119, tawerna: 1 };
+    // (2026-11-15, nowy świat) "miasto" = the map of the windmill: Podgrodzie (Map218, the tower on the west rise); "przystan" = the
+    // shore of the night boat: Słony Brzeg (Map219, the south beach by the cave)
+    const MAP = { miasto: 218, mlyn: 217, przystan: 219, archiwum: 119, tawerna: 1 };
     const OWNER = "Mlyn", IDS = [2970, 2999], RES_RANGE = [2960, 2969];
     const ID = { mlynarz: 2960, pomocnik: 2961, lasica: 2970, lasicaSwiatlo: 2971, morze: 2972, lodz: 2973, worki: 2974, szyper: 2975, marynarz1: 2976, marynarz2: 2977,
         sojusznik1: 2978, sojusznik2: 2979, sojusznik3: 2980, pochodnia1: 2981, pochodnia2: 2982, latarniaWalentego: 2983, ksiega: 2985 };
     // the windmill of Map008: the events are found by NAME (the user edits the map); the door's cell and the spots
-    const WIATRAK = { drzwi: [97, 87], przed: [97, 88], skrzydla: "Skrzydła wiatraka", drzwiNazwa: "Drzwi: Wiatrak", wchodzi: [217, 7, 15, 8], zasieg: 15 };
+    const WIATRAK = { drzwi: [7, 34], przed: [7, 35], skrzydla: "Skrzydła wiatraka", drzwiNazwa: "Drzwi: Wiatrak", wchodzi: [217, 7, 15, 8], zasieg: 15 };
     // the sails: pose -> [sheet, direction] (frame f of the 12: sheet f/4, row f%4 = down, left, right, up; pattern 1 always)
     const POZY = { A: ["!$Wiatrak_Skrzydla_3", 4], B: ["!$Wiatrak_Skrzydla", 8], C: ["!$Wiatrak_Skrzydla", 2], D: ["!$Wiatrak_Skrzydla_2", 6] };
     const POZA_KLATKA = { A: 9, B: 3, C: 0, D: 6 };           // (the angles 22.5 + 7.5 f: for the turn between two poses by the shorter way)
@@ -51,38 +53,42 @@
     const KOD = { harmonogram: [["B", "C"], ["A", "A"], ["B", "D"], ["B", "C"]], p1: 19.5, p2: 20.25, koniec: 5, zasieg: 14, ile: 3, ileGdyWyrwana: 4,
         slowa: { A: "cisza", B: "towar", C: "zatoczka", D: "pochylnia" }, wzorB_C: ["K", "D", "K"] };
     // the start: day >= 24 (the README of the new lines), the evening at the mill or in the tavern
-    const START = { dzien: 24, godziny: [17, 22.5], mapy: [8, 1], opinia: 20, zaklopot: 15, odprawa: 20, roch: 10, ozzy: 8 };
+    const START = { dzien: 24, godziny: [17, 22.5], mapy: [218, 1], opinia: 20, zaklopot: 15, odprawa: 20, roch: 10, ozzy: 8 };
     const CZAS = { scenaOd: 22, scenaDo: 24, wnetrzeOd: 22, wnetrzeDo: 5, drzwiOd: 5.5, drzwiDo: 17.5, lasicaOd: 20.5, lasicaDo: 24.5,
         dziennik: 17, drugaPoza: 0.25, ustawOd: 19.5, ustawDo: 21, proby: 3, nocOd: 23.5, nocDo: 4, pytanie: 1.5, przybija: 2, zasadzka: 2.17, sekundy: 8 };
     const POGODA = { przyplyw: 0.6, dniPrzod: 3 };
     const ROCH = { ile: 10 };
     // the lookout (Lasica) stands in the drying yard behind the smithy on the north-east of the town (Map008): the windmill is 15 tiles west of it
-    const LASICA = { x: 113, y: 79, d: 4, podsluch: [110, 79], promien: 5, ostrzez: 3 };
+    const LASICA = { x: 22, y: 36, d: 4, podsluch: [19, 36], promien: 5, ostrzez: 3 };
     // the cove of Przystan (Map125): the hero's cell, the boat's start and dock, where the men step off, where the ambush stands
-    const ZATOCZKA = { hero: [19, 66, 4], lodzStart: [4, 66], lodzDok: [11, 66], brzeg: [15, 66], szyper: [16, 66], marynarze: [[15, 67], [16, 67]], worki: [17, 67],
-        swiatlo: [8, 66], pole: 3, sojusz: [[22, 65], [22, 66], [22, 67]], pochodnie: [[20, 64], [20, 68]] };
+    const ZATOCZKA = { hero: [36, 58, 4], lodzStart: [14, 58], lodzDok: [24, 58], brzeg: [32, 58], szyper: [33, 58], marynarze: [[32, 59], [33, 59]], worki: [34, 59],
+        swiatlo: [19, 58], pole: 3, sojusz: [[39, 57], [39, 58], [39, 59]], pochodnie: [[37, 56], [37, 60]] };
     const NAGRODY = { sambor: { zloto: 60, opinia: 6, xp: 150 }, sam: { zloto: 25, opinia: 6, xp: 150, roch: 10 }, targ: { zloto: 90, opinia: -4, xp: 60 },
         walenty: { zloto: 40, worki: 2 }, odprawa: 20 };
     // the places the plans use (TownLife's SPOTS, only added; "wiatrak_przed" is already there)
-    const SPOTY = { wiatrak_bok: [95, 88, 2], wiatrak_woda: [93, 89, 2], mlyn_dom: [97, 88, 2] };
-    for (const [k, v] of Object.entries(SPOTY)) if (!TLD.SPOTS[k]) TLD.SPOTS[k] = v;
+    // (on Map218: defaults of TownLife's SPOTS_BY_MAP - a "Miejsce:" event of the map wins; "tawerna" = out by the east gate to Kruczogród)
+    const SPOTY = { wiatrak_bok: [5, 36, 2], wiatrak_woda: [10, 37, 2], mlyn_dom: [7, 35, 2], tawerna: [79, 38, 6] };
+    if (TLD.SPOTS_BY_MAP) { const B = (TLD.SPOTS_BY_MAP[MAP.miasto] = TLD.SPOTS_BY_MAP[MAP.miasto] || {}); for (const [k, v] of Object.entries(SPOTY)) if (!B[k]) B[k] = v; }
     // Walenty's seat in the tavern (19-22): a place given in the data (Map001 stays as the user made it; TownLife's SPOTS_BY_MAP)
-    const MIEJSCE_TAWERNA = [9, 35, 4];
+    const MIEJSCE_TAWERNA = [9, 22, 4];
     if (TLD.SPOTS_BY_MAP) { (TLD.SPOTS_BY_MAP[1] = TLD.SPOTS_BY_MAP[1] || {}); if (!TLD.SPOTS_BY_MAP[1].gosc_walenty) TLD.SPOTS_BY_MAP[1].gosc_walenty = MIEJSCE_TAWERNA; }
     if (Array.isArray(TLD.EXTRA_RANGES)) { if (!TLD.EXTRA_RANGES.some(r => r[0] === RES_RANGE[0])) TLD.EXTRA_RANGES.push(RES_RANGE.slice()); }
 
+    // (nowy świat) the smugglers taken and Ambroży gone: Walenty mills again - he works at the mill's door, not beside it
+    const walentyWraca = () => { const M = window.Mlyn; let s = null; try { s = M && M.stan ? M.stan() : null; } catch (e) { s = null; } return !!s && (s.koniec === 1 || s.koniec === 2); };
     // ------------------------------------------------------------------ the residents (TownLife, window.TownLifeExtra)
     const RESIDENTS = [
         {
             // Walenty Maczka, about 50: a round figure, a floury smock, grey strands in the hair. 5:30-17:30 by the windmill, 17:30-19 inside,
             // 19-22 in the tavern, then back to the mill (22-22:30) and asleep behind it. While the thread asks (Mlyn.js) he waits by the mill at night
-            key: "mlynarz", id: ID.mlynarz, sheet: "$Npc_Walenty", speed: 2, indoor: { tawerna: "gosc_walenty" },
-            plan: [[0, "inside", "wiatrak_przed"], [5.5, "work", "wiatrak_przed"], [17.5, "inside", "wiatrak_przed"], [19, "inside", "tawerna"], [22, "wander", "wiatrak_przed"], [22.5, "inside", "wiatrak_przed"]],
+            key: "mlynarz", id: ID.mlynarz, sheet: "$Npc_Walenty", speed: 2, map: MAP.miasto, indoor: { tawerna: "gosc_walenty" },
+            // (nowy świat: the old miller - the mill is Ambroży's now; Walenty still spends his days beside it, watching)
+            plan: [[0, "inside", "wiatrak_przed"], [5.5, "work", "wiatrak_bok"], [5.5, "work", "wiatrak_przed", () => walentyWraca()], [17.5, "inside", "wiatrak_przed"], [19, "inside", "tawerna"], [22, "wander", "wiatrak_przed"], [22.5, "inside", "wiatrak_przed"]],
             barks: {}, talk: {}
         },
         {
             // Jasiek Worek, 16: a thin boy in a shirt too big for him. 6-17 at the mill, 18:30-20:30 "goes for water" (really sets the sails), the night over the stable
-            key: "pomocnik", id: ID.pomocnik, sheet: "$Npc_Jasiek", speed: 3, when: "mlynJasiek",
+            key: "pomocnik", id: ID.pomocnik, sheet: "$Npc_Jasiek", speed: 3, map: MAP.miasto, when: "mlynJasiek",
             plan: [[0, "inside", "wiatrak_przed"], [6, "work", "wiatrak_bok"], [17, "inside", "wiatrak_przed"], [18.5, "wander", "wiatrak_woda"], [20.5, "inside", "wiatrak_przed"]],
             barks: {}, talk: {}
         }
@@ -96,7 +102,7 @@
         cz1: { scena: 0, wnetrze: 0 },
         obs: { dni: [], p1: "", p2: "", dzienP: 0, rano: [] },        // dni: the evenings watched (day numbers); rano: [day, came] the morning notes still to write
         kod: { A: 0, B: 0, C: 0, D: 0, gotowe: 0, wzor: 0 },
-        ksiega: 0, wyrwana: 0, roch: 0,
+        ksiega: 0, wyrwana: 0, roch: 0, amb: 0,
         ch2: { podsluch: 0, ostrzezony: 0, walka: 0, proba: 0, dzien: 0 },
         ch4: { walenty: 0, jasiek: "", soj: "", ozzy: 0, noc: 0, proby: 0, set: 0, poza: [], plotka: 0, pierwsza: "", pierwszaGodz: 0, kluczeWymienione: 0 },
         ch5: { stan: 0, dzien: 0, szanse: 0, bledy: 0, wynik: "", walka: 0, jaskinia: 0 },

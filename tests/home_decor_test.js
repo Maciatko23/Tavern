@@ -1,11 +1,13 @@
-// HomeDecor.js: grandpa's house (Map019) changes with the story and the seasons. A new story game in the house (the start is set
-// in the page to Map019 2,5 - data/System.json starts in the tavern on purpose); HomeDecor.js is put into the page when it is not
-// registered yet. Checks: the folk touches always there (wycinanki, the towel, the rag rug, the painted chest), the empty nail and
-// then the Lord's receipt after Story.pay(2500), each keepsake after its trigger (a wolf, a deer, a boar through Hunting's own kill
-// path - not by the dog; a Borgar shift, a dice win, a contract), each season's things by the day, Christmas Eve only round the
-// middle of winter (the dishes off the table meanwhile), no decoration on a walkway or the doorway (the free floor stays one
-// piece and the door reachable), the action button and the mouse on a decoration give its line, an older save gets the events and
-// its past, no console errors. Screenshots at the map's zoom 1.5: docs/dom_dziadka/ozdoby_*.png
+// HomeDecor.js: grandpa's house changes with the story and the seasons - since 2026-11-17 the hut of the new world, Map224 (8 x 9;
+// the old whitewashed cottage Map019 went with the old world). A new story game in the hut (kit: Map224 2,5); HomeDecor.js is put
+// into the page when it is not registered yet. Checks: the folk touches always there (the wycinanka under the window, the rag runner
+// by the door, the painted chest), the empty nail and then the Lord's receipt after Story.pay(2500) on the stone wall by the fire,
+// each keepsake after its trigger (a wolf, a deer, a boar through Hunting's own kill path - not by the dog; a Borgar shift, a dice
+// win, a contract), each season's things by the day (the jug and the basket on grandpa's chest, the herbs and the harvest wreath by
+// the fire, the pumpkins by the chest), Christmas Eve only round the middle of winter (the sheaf in the corner; no table in the hut -
+// nothing taken off it), no decoration on a walkway or the doorway (the free floor stays one piece and the door reachable), O in the
+// house says nothing, an older save gets the events and its past, no console errors. Screenshots at the map's zoom 1.5:
+// docs/dom_dziadka/ozdoby_*.png
 //   CDP_PORT=9394 node tests/home_decor_test.js
 const kit = require("./lib/kit.js");
 const fs = require("fs");
@@ -52,28 +54,27 @@ kit.test({ port: 9394, plugins: ["TawernaCore", "TawernaUI", "HomeDecor"],   // 
             const fx = $gameMap.adjustX(f[0]) * 48, fy = $gameMap.adjustY(f[1]) * 48;
             $gameScreen._zoomX = (sc * fx - Graphics.width / 2) / (sc - 1); $gameScreen._zoomY = (sc * fy - Graphics.height / 2) / (sc - 1); };
         Spriteset_Map.prototype.followPlayerWithZoom.__decor = true; return 0; })()`);
-    t.check("a new story game starts in grandpa's house", await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, settle: 20 }));
+    t.check("a new story game starts in grandpa's hut (Map224)", await t.newGame({ story: true, skipIntro: true, deadline: false, quiet: true, settle: 20 }) && (await ev("$gameMap.mapId()")) === 224);
     await setDay(3, 11);
     const ART = await J("Object.keys(HomeDecor.DECOR_ART)");
     t.check("the generated art is in the plugin (29 looks)", ART.length === 29, ART.length);
     const evs = await J("HomeDecor.SLOTS.map(s => { const e = $gameMap.event(s.id); return e ? [s.id, e.x, e.y] : [s.id, null]; })");
-    t.check("all 19 decoration events (980-998) are on the map where the slots say", evs.every(e => e[1] !== null), evs.filter(e => e[1] === null));
+    t.check("all " + evs.length + " decoration events of the hut's layout (980-998) are on the map where the slots say", evs.length === 14 && evs.every(e => e[1] !== null), evs.filter(e => e[1] === null));
     // ================= the folk touches: always
     let L = await looks();
-    const folk = l => l.wyc_2 === "wyc_2" && l.wyc_7 === "wyc_7" && l.wyc_11 === "wyc_11" && l.wyc_16 === "wyc_16" && l.chodnik === "chodnik" &&
-        /^recznik/.test(l.recznik || "") && l.skrzynia === "!House_Decor/skrzynia";
-    t.check("the folk touches: four wycinanki, the towel on the picture, the rag rug, the painted chest", folk(L), L);
+    const folk = l => l.wyc_2 === "wyc_2" && l.chodnik === "chodnik" && l.skrzynia === "!House_Decor/skrzynia";
+    t.check("the folk touches: the wycinanka under the window, the rag runner by the door, the painted chest", folk(L), L);
     t.check("before the debt is paid: an empty nail where the receipt will hang", L.rama === "gwozdz", L.rama);
     t.check("no keepsake yet in a new game", !L.rogi && !L.kiel && !L.list && !L.polka && !L.skora, L);
     // ================= the seasons
     const seasonCases = [
-        [3, "spring", l => l.stol_p === "bazie" && !l.stol_l && !l.komin && !l.wigilia && !l.dynie_l && !l.snop && l.recznik === "recznik"],
+        [3, "spring", l => l.stol_p === "bazie" && !l.stol_l && !l.komin && !l.dynie_l && !l.snop],
         [14, "spring (Easter)", l => l.stol_p === "bazie" && l.stol_l === "pisanki"],
         [35, "summer", l => l.stol_p === "kwiaty" && l.komin === "ziola" && !l.stol_l && !l.dynie_r],
         [60, "autumn", l => l.komin === "wieniec" && l.stol_l === "jablka" && l.dynie_l === "dynie_l" && l.dynie_r === "dynie_r" && !l.stol_p],
-        [88, "winter", l => l.recznik === "recznik_zima" && !l.wigilia && !l.snop && !l.komin && !l.stol_p && !l.stol_l && !l.dynie_l],
-        [98, "winter (Christmas Eve)", l => l.recznik === "recznik_zima" && l.wigilia === "wigilia" && l.snop === "snop" && !l.stol_p && !l.stol_l],
-        [115, "spring again (year 2)", l => l.stol_p === "bazie" && !l.wigilia && l.recznik === "recznik"]
+        [88, "winter", l => !l.snop && !l.komin && !l.stol_p && !l.stol_l && !l.dynie_l],
+        [98, "winter (Christmas Eve)", l => l.snop === "snop" && !l.stol_p && !l.stol_l],
+        [115, "spring again (year 2)", l => l.stol_p === "bazie" && !l.snop]
     ];
     for (const [d, name, ok] of seasonCases) {
         await setDay(d);
@@ -84,11 +85,9 @@ kit.test({ port: 9394, plugins: ["TawernaCore", "TawernaUI", "HomeDecor"],   // 
     const wig = await J("Array.from({ length: 224 }, (_, i) => i + 1).filter(d => HomeDecor.isWigilia(d))");
     t.check("Easter: days 13-16 of spring only", JSON.stringify(easter) === JSON.stringify([13, 14, 15, 16]), easter);
     t.check("Christmas Eve: days 12-16 of winter only (96-100, next year 208-212)", JSON.stringify(wig) === JSON.stringify([96, 97, 98, 99, 100, 208, 209, 210, 211, 212]), wig);
-    // Christmas Eve: the dishes off the table, back after
-    // (the dishes are Winlu D tiles on the table; since the user's edit of 2026-09-29 the table has none - then nothing moves)
-    const dishes = await J("(function(){ const W = $dataMap.width, H = $dataMap.height; let n = 0; for (const [x, y] of [[2,9],[3,9],[4,9],[2,10],[3,10],[4,10]]) for (const z of [2, 3]) { const v = $dataMap.data[(z * H + y) * W + x]; if (v >= 512 && v < 768) n++; } return n; })()");
+    // Christmas Eve: no table in the hut - nothing is taken off one
     await setDay(98);
-    const plateOff = await J("(function(){ const W = $dataMap.width, H = $dataMap.height; return [$dataMap.data[(3 * H + 9) * W + 4], HomeDecor.tableCleared()]; })()");
+    const plateOff = await J("HomeDecor.tableCleared()");
     // ================= walkways, the doorway
     const WALK = await J(`(function(){
         const W = $gameMap.width(), H = $gameMap.height(), people = e => !HomeDecor.SLOTS.some(s => s.id === e.eventId()) && (e.eventId() >= 900 || /kot|cat/i.test(e.event().name || ""));
@@ -102,43 +101,44 @@ kit.test({ port: 9394, plugins: ["TawernaCore", "TawernaUI", "HomeDecor"],   // 
         const decor = $gameMap.events().filter(e => HomeDecor.SLOTS.some(s => s.id === e.eventId()));
         const keep = decor.map(e => [e, e._through, e._priorityType]);
         for (const e of decor) { e._through = true; e._priorityType = 0; }
-        const free = bfs(9, 11);
+        const free = bfs(5, 7);
         for (const [e, t, p] of keep) { e._through = t; e._priorityType = p; }
-        const now = bfs(9, 11);
+        const now = bfs(5, 7);
         const cells = HomeDecor.blockedCells().map(c => c.join(","));
         const lost = [...free].filter(k => !now.has(k) && !cells.includes(k));
-        return { free: free.size, now: now.size, blocked: cells, lost, door: now.has("9,12"), landing: now.has("9,11") }; })()`);
-    t.check("Christmas Eve: the sheaf is the only thing standing in the way (17,7, in the corner behind grandpa's chest)", JSON.stringify(WALK.blocked) === JSON.stringify(["17,7"]), WALK.blocked);
+        return { free: free.size, now: now.size, blocked: cells, lost, door: now.has("5,8"), landing: now.has("5,7") }; })()`);
+    t.check("Christmas Eve: the sheaf is the only thing standing in the way (2,7: by the wall beside grandpa's chest)", JSON.stringify(WALK.blocked) === JSON.stringify(["2,7"]), WALK.blocked);
     t.check("the free floor stays one piece: every cell reachable before is reachable now (but the sheaf's)", WALK.lost.length === 0 && WALK.now === WALK.free - WALK.blocked.length, WALK);
     t.check("the door and the landing are reachable", WALK.door && WALK.landing, WALK);
     await setDay(101);
-    const plateBack = await J("(function(){ const W = $dataMap.width, H = $dataMap.height; return [$dataMap.data[(3 * H + 9) * W + 4], HomeDecor.tableCleared()]; })()");
-    if (dishes) t.check("on Christmas Eve the plate of food leaves the table (the cloth, the wafer, the candle stay), then comes back", plateOff[0] === 0 && plateOff[1] && plateBack[0] > 0 && !plateBack[1], { plateOff, plateBack });
-    else t.check("no dishes on the table (the map has none now): on Christmas Eve nothing is taken off, nothing put back", !plateOff[1] && !plateBack[1] && plateOff[0] === plateBack[0], { plateOff, plateBack });
+    t.check("Christmas Eve: no table in the hut - nothing taken off, nothing put back", plateOff === false && (await J("HomeDecor.tableCleared()")) === false);
     await setDay(60);
     const WALK2 = await J(`(function(){ return HomeDecor.blockedCells().map(c => c.join(",")); })()`);
-    t.check("autumn: the pumpkins stand beside the landing (8,11 and 10,11), never on it or in the doorway", JSON.stringify(WALK2) === JSON.stringify(["8,11", "10,11"]), WALK2);
-    // nothing (standing or lying) on the hearth rug, the runner from the door, the landing or the doorway
+    t.check("autumn: the pumpkins stand by the wall beside grandpa's chest (2,7 and 3,7), never on the landing, the doorway or the runner", JSON.stringify(WALK2) === JSON.stringify(["2,7", "3,7"]), WALK2);
+    // nothing (standing or lying) on the hearth rug, the landing or the doorway; nothing standing on the runner by the door
     const OVER = await J(`(function(){
-        const keep = [[8,5],[9,5],[10,5],[8,6],[9,6],[10,6],[9,8],[9,9],[9,10],[9,11],[9,12]];
+        const keep = [[4,5],[5,5],[6,5],[4,6],[5,6],[6,6],[5,7],[5,8]];
         const out = [];
         for (const d of [14, 35, 60, 98]) { $gameSystem._dayNightDay = d; HomeDecor.refresh();
-            for (const b of HomeDecor.shownBoxes()) { const s = HomeDecor.SLOTS.find(q => q.id === b.ev.eventId()); if (!s || (s.prio === 0 && s.z === undefined)) continue;   // (on the walls / tables)
-                for (const [x, y] of keep) if (b.x0 < x + 1 && b.x1 > x && b.y0 < y + 1 && b.y1 > y) out.push([d, b.look, x, y]); } }
+            const boxes = HomeDecor.shownBoxes(), runner = boxes.find(b => b.look === "chodnik");
+            for (const b of boxes) { const s = HomeDecor.SLOTS.find(q => q.id === b.ev.eventId()); if (!s || (s.prio === 0 && s.z === undefined) || s.prio === 2) continue;   // (on the walls / the chest)
+                if (b.look === "chodnik") continue;   // (the runner itself lies by the door)
+                for (const [x, y] of keep) if (b.x0 < x + 1 && b.x1 > x && b.y0 < y + 1 && b.y1 > y) out.push([d, b.look, x, y]);
+                if (runner && b.x0 < runner.x1 && b.x1 > runner.x0 && b.y0 < runner.y1 && b.y1 > runner.y0) out.push([d, b.look, "runner"]); } }
         return out; })()`);
-    t.check("no rug, pumpkin or sheaf over the hearth rug, the runner, the landing or the doorway (any season)", OVER.length === 0, OVER);
+    t.check("no pelt, pumpkin or sheaf over the hearth rug, the landing or the doorway, and none on the runner (any season)", OVER.length === 0, OVER);
     // ================= the receipt
     await setDay(20);
     await ev("(function(){ $gameParty.gainGold(2500); Story.pay(2500); return 0; })()");
     const receipt = await t.until("(function(){ const e = $gameMap.event(985); return !!e && e._decorLook === 'pokwitowanie'; })()", 8, 150);
     const st = await J("{ done: Story.state().done, paid: Story.state().paid, got: HomeDecor.state().got.receipt }");
-    t.check("Story.pay(2500): the debt is paid and the Lord's receipt hangs framed in grandpa's alcove (by itself, no refresh called)", receipt && st.done > 0 && st.got > 0, st);
+    t.check("Story.pay(2500): the debt is paid and the Lord's receipt hangs framed on the stone wall by the fire (by itself, no refresh called)", receipt && st.done > 0 && st.got > 0, st);
     await setDay(88);
     L = await looks();
-    t.check("in winter the receipt and the Holy Mother have spruce twigs over them", L.rama === "pokwitowanie_zima" && L.recznik === "recznik_zima", L);
+    t.check("in winter the receipt has spruce twigs over it", L.rama === "pokwitowanie_zima", L);
     // ================= the keepsakes (the hero's kills through Hunting's own path; the dog's do not count)
     await setDay(20);
-    const kill = (kind, how) => J(`(function(){ const a = Hunting.spawn("${kind}", 12, 9); a._frozen = true; a._wait = 9999; Hunting.hit(a, 99999, "${how}");
+    const kill = (kind, how) => J(`(function(){ const a = Hunting.spawn("${kind}", 2, 6); a._frozen = true; a._wait = 9999; Hunting.hit(a, 99999, "${how}");
         const cs = Hunting.carcasses(); cs.splice(0, cs.length); return { dead: !!a._dead, got: HomeDecor.state().got["${kind}"] || 0, kills: HomeDecor.state().kills["${kind}"] || 0 }; })()`);
     const dogWolf = await kill("wolf", "dog");
     t.check("the dog's wolf is not the hero's trophy", dogWolf.dead && !dogWolf.got, dogWolf);
@@ -162,7 +162,7 @@ kit.test({ port: 9394, plugins: ["TawernaCore", "TawernaUI", "HomeDecor"],   // 
     t.check("the first dice win: his dice beside the tankard", dice, (await looks()).polka);
     await ev("(function(){ const q = QuestBoard.state(); q.stats.done = 1; q.history.unshift({ id: 't1', title: 'Wilki pod lasem', state: 'done', day: 20 }); Tawerna.emit('questDone', { id: 't1', kind: 'hunt', gold: 20, title: 'Wilki pod lasem' }); return 0; })()");
     const notice = await t.until("$gameMap.event(982)._decorLook === 'list'", 8, 150);
-    t.check("the first contract done: its notice pinned by his bed (with its title)", notice && (await ev("HomeDecor.state().noticeTitle")) === "Wilki pod lasem", await ev("HomeDecor.state().noticeTitle"));
+    t.check("the first contract done: its notice pinned on the stone wall over the herbs (with its title)", notice && (await ev("HomeDecor.state().noticeTitle")) === "Wilki pod lasem", await ev("HomeDecor.state().noticeTitle"));
     const got = await J("HomeDecor.state().got");
     t.check("every keepsake is kept with the day it came", ["receipt", "wolf", "boar", "deer", "tankard", "dice", "notice"].every(k => got[k] > 0), got);
     // they stay (other plugins' states going back do not take them away)
@@ -179,25 +179,25 @@ kit.test({ port: 9394, plugins: ["TawernaCore", "TawernaUI", "HomeDecor"],   // 
     const quiet = await J("{ msg: $gameMessage.hasText(), look: typeof HomeDecor.lookAround, tip: !!SceneManager._scene._decorTip }");
     t.check("O under his shelf: no memory line (no message, no look, no mouse plate)", !quiet.msg && quiet.look === "undefined" && !quiet.tip, quiet);
     // ================= screenshots (the map's zoom 1.5): the seasons, the hero's alcove, the receipt
-    await ev("(function(){ $gamePlayer.locate(9, 7); $gamePlayer.setDirection(2); $gamePlayer.setTransparent(false); return 0; })()");
+    await ev("(function(){ $gamePlayer.locate(5, 6); $gamePlayer.setDirection(2); $gamePlayer.setTransparent(false); return 0; })()");
     const hideTip = "(function(){ const t = SceneManager._scene._decorTip; if (t) t.visible = false; return 0; })()";
     await t.mouseMove(1279, 719);
     const seasonShots = [[14, "ozdoby_wiosna.png"], [35, "ozdoby_lato.png"], [60, "ozdoby_jesien.png"], [98, "ozdoby_zima_wigilia.png"]];
     for (const [d, file] of seasonShots) {
         await setDay(d, 12);
         await clearNotices();
-        await t.locate(12, 8, 2);
+        await t.locate(5, 6, 2);
         await ev(hideTip);
-        await shot(file, [9.5, 6.0]);
+        await shot(file, [4.0, 4.5]);
     }
     await setDay(60, 12);
-    await t.locate(13, 9);
-    await shot("ozdoby_jesien_drzwi.png", [9.5, 7.2], [3.5, 6.2, 12, 6.8]);
+    await t.locate(5, 6, 2);
+    await shot("ozdoby_jesien_drzwi.png", [4.0, 4.5], [0.6, 5.2, 6.8, 3.8]);
     await setDay(35, 12);
     await t.locate(3, 6, 8);
-    await shot("ozdoby_wneka_bohatera.png", [8.9, 5.0], [0.6, 0.6, 4.6, 6.8]);
-    await t.locate(16, 7, 8);
-    await shot("ozdoby_pokwitowanie.png", [10.1, 5.0], [14.2, 0.6, 4.2, 4.4]);
+    await shot("ozdoby_wneka_bohatera.png", [4.0, 4.5], [0.6, 0.6, 3.8, 7.6]);
+    await t.locate(5, 6, 8);
+    await shot("ozdoby_pokwitowanie.png", [4.0, 4.5], [3.6, 0.6, 3.8, 4.6]);
     t.check("screenshots: " + ["ozdoby_wiosna", "ozdoby_lato", "ozdoby_jesien", "ozdoby_jesien_drzwi", "ozdoby_zima_wigilia", "ozdoby_wneka_bohatera", "ozdoby_pokwitowanie"].join(", "),
         ["ozdoby_wiosna.png", "ozdoby_lato.png", "ozdoby_jesien.png", "ozdoby_jesien_drzwi.png", "ozdoby_zima_wigilia.png", "ozdoby_wneka_bohatera.png", "ozdoby_pokwitowanie.png"].every(f => fs.existsSync(path.join(SHOTS, f))));
     await ev("window.__focus = null; 0");
@@ -214,10 +214,10 @@ kit.test({ port: 9394, plugins: ["TawernaCore", "TawernaUI", "HomeDecor"],   // 
         DataManager.extractSaveContents(c);
         SceneManager.goto(Scene_Map);
         return { had: HomeDecor.SLOTS.filter(s => !!$gameMap._events[s.id]).length }; })()`);
-    await t.until(t.onMap(19), 30, 150);
+    await t.until(t.onMap(224), 30, 150);
     await t.frames(30);
     const after = await J("{ events: HomeDecor.SLOTS.filter(s => !!$gameMap.event(s.id)).length, got: HomeDecor.state().got, seeded: HomeDecor.state().seeded, skora: $gameMap.event(984)._decorLook, polka: $gameMap.event(983)._decorLook, rama: $gameMap.event(985)._decorLook }");
-    t.check("an older save (no HomeDecor state, no decoration events): the events are added on load", old.had === 0 && after.events === 19, { old, after });
+    t.check("an older save (no HomeDecor state, no decoration events): the events are added on load", old.had === 0 && after.events === 14, { old, after });
     t.check("... and its past counts at once: the wolf tally -> the pelt, Borgar's shifts -> the tankard, the paid debt -> the receipt", after.seeded === 1 && after.got.wolf > 0 && !after.got.deer && after.got.tankard > 0 && after.got.receipt > 0 &&
         after.skora === "skora" && after.polka === "polka_kufel" && /^pokwitowanie/.test(after.rama), after);
 });

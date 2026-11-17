@@ -167,7 +167,7 @@ Moi chłopcy mówią, że się starzeję. Pokaż im, jak się poluje: wilki i dz
 Szary Kieł
 
 [szablony.b_szary_kiel.text]
-Wielki szary wilk z blizną na pysku. Prowadzi watahę na Skraju lasu. Zagryzł już trzy owce, dwa psy i moją ulubioną czapkę. Poluje nocą.
+Wielki szary wilk z blizną na pysku. Prowadzi watahę w Kruczych Turniach. Zagryzł już trzy owce, dwa psy i moją ulubioną czapkę. Poluje nocą.
 
 # berries - pisze: Ozzy
 [szablony.berries.title]
@@ -383,7 +383,7 @@ Jelenie wyjadają zboże, a potem patrzą na mnie z wyższością. Przerzedź st
 Trójłap
 
 [szablony.b_trojlap.text]
-Kulawy wilk na trzech łapach, a ucieka szybciej niż ja na czterech. Kradnie kury na Polnej drodze. Poluje nocą, z kompanem.
+Kulawy wilk na trzech łapach, a ucieka szybciej niż ja na czterech. Kradnie kury na Podgrodziu. Poluje nocą, z kompanem.
 
 # rabbits - pisze: Marianna
 [szablony.rabbits.title]
@@ -432,7 +432,7 @@ Beczka czeka, sąsiadki patrzą. Kiszona kapusta sama się nie zakisi. Potrzebuj
 Czarny Ryj
 
 [szablony.b_czarny_ryj.text]
-Czarny jak smoła, ciężki jak wóz z sianem. Rozwalił trzy płoty i jeden most. Ryje na Leśnej drodze o świcie i o zmierzchu.
+Czarny jak smoła, ciężki jak wóz z sianem. Rozwalił trzy płoty i jeden most. Ryje pod Dworem nad Jazem o świcie i o zmierzchu.
 
 # planks - pisze: Kazimierz
 [szablony.planks.title]
@@ -631,6 +631,26 @@ na Polnej drodze
 [miejsca.23]
 Skraj lasu
 na Skraju lasu
+
+[miejsca.218]
+Podgrodzie
+na Podgrodziu
+
+[miejsca.219]
+Słony Brzeg
+na Słonym Brzegu
+
+[miejsca.220]
+Kruczogród
+koło tawerny
+
+[miejsca.221]
+Dwór nad Jazem
+pod Dworem nad Jazem
+
+[miejsca.222]
+Krucze Turnie
+w Kruczych Turniach
 
 # ======================================================================== Listy gończe: name - imię zwierzęcia, hint - kiedy grasuje
 poszukiwani.szary_kiel.name = Szary Kieł

@@ -3,17 +3,20 @@
 //=============================================================================
 // The thread W17 "Jarmark Kruczogrodu" (docs/zadania_nowe/jarmark.md, 2026-11-12) - the DATA; the engine: Jarmark.js, the words:
 // js/teksty/jarmark.txt. Days 47-53: the fair of Kruczogród (stalls, barrels, lanterns, the opening, the beer contest and the dice
-// tournament in the tavern, the troupe's play on the square, the theft of the Silver Raven, the investigation and the night chase over
-// the roofs of two NEW joined houses of Map008 (tiles; tools/jarmark/miasto.py) to the bell tower).
+// tournament in the tavern, the troupe's play, the theft of the Silver Raven, the investigation and the night chase through the lanes).
+// 2026-11-16 moved to the new Kruczogród (Map220; the player: the fair "on the meadow in the south-east", the chase "through the
+// lanes"): the meadow holds the barley field (<Pole:16,8>, x 50..65, y 55..62) and the windmill (45,60) - the fair stands ROUND them:
+// two stalls by the mill's yard, four under the field, the stage in the corner by the lower road (the audience on the road), the
+// barrels by the stage. Check the cells with tools/jarmark/uklad_220.py. Two clues lie in Podgrodzie (Map218).
 // Stands in the plugin list under Dezerter_Data and above TownLife_Data's readers. Event ids 4800-4999 (all injected: Tawerna.inject
-// "Jarmark"); the map file gets only the two houses' tiles and their two closed doors (events below 500).
+// "Jarmark"); no map file is changed.
 // 4800-4805 the six stall places, 4806-4813 the eight lamp posts, 4814-4817 barrels, 4820 the stage, 4821 the cushion with the Raven,
 // 4822-4825 the stage's torches, 4830-4837 the troupe and the merchant (Map008), 4840-4847 the crowd, 4850-4859 the hall's actors
 // (Map001: the judges, Mietek, Wanda), 4860-4869 the procession, 4870-4879 the clues, 4880-4889 the chase (Szept, the pursuers).
 
 /*:
  * @target MZ
- * @plugindesc [W17] Dane wątku „Jarmark Kruczogrodu”: dni 47-53, kramy, konkurs piwny, turniej w kości, sztuka na rynku, kradzież, śledztwo, pościg po dachach. v1.0.0
+ * @plugindesc [W17] Dane wątku „Jarmark Kruczogrodu”: dni 47-53, kramy, konkurs piwny, turniej w kości, sztuka na rynku, kradzież, śledztwo, pościg uliczkami. v1.1.0
  * @author Claude
  * @base TawernaCore
  * @base Watki
@@ -23,8 +26,9 @@
  * ============================================================================
  * Jarmark_Data.js - dane wątku W17 „Jarmark Kruczogrodu”
  * ============================================================================
- * Same dane: silnik to Jarmark.js, teksty js/teksty/jarmark.txt, kamienice
- * pościgu to kafle Map008 (tools/jarmark/miasto.py). Numery zdarzeń 4800-4999.
+ * Same dane: silnik to Jarmark.js, teksty js/teksty/jarmark.txt, jarmark
+ * stoi w Kruczogrodzie (Map220) wokół pola i wiatraka (tools/jarmark/uklad_220.py
+ * sprawdza kratki). Numery zdarzeń 4800-4999.
  * ============================================================================
  */
 
@@ -34,7 +38,7 @@
     if (!T || !window.Watki) throw new Error("Jarmark_Data.js: brak TawernaCore.js / Watki.js - muszą być wyżej na liście wtyczek");
 
     // ------------------------------------------------------------------ where, when, how much
-    const MAP = { miasto: 8, karczma: 1 };
+    const MAP = { miasto: 220, karczma: 1, podgrodzie: 218 };
     const OWNER = "Jarmark", IDS = [4800, 4999];
     const ID = { kram0: 4800, lampa0: 4806, beczka0: 4814, scena: 4820, poduszka: 4821, pochodnia0: 4822,
         ofelia: 4830, pimpek: 4831, zar: 4832, bonawentura: 4833, ania: 4834, szept: 4835, marcel: 4836, wandaRynek: 4837, ambrozy: 4838,
@@ -43,44 +47,60 @@
     const GODZ = { zlecenie: [8, 18], lampiony: 17, otwarcie: 14.5, konkurs: [19, 21], turniej: [17, 23], sztukaPomoc: [13, 18.9], sztuka: 19, sztukaKoniec: 19.7,
         pogon: 23.5, pogonDo: 24.5, zamkniecie: 12, targ: [8, 21] };
     const WARUNKI = { opinia: 20, renoma: 40 };
-    // the six stall places on the square (the bottom-middle cell of a stall), the eight lamp posts, the barrels, the stage
-    const KRAMY = [[37, 49], [40, 49], [43, 49], [37, 54], [40, 54], [43, 54]];
-    const LAMPY = [[36, 47], [36, 53], [36, 57], [46, 45], [57, 45], [72, 46], [72, 52], [62, 57]];
-    const BECZKI = [[60, 52], [61, 52], [60, 53], [61, 53]];
-    const SCENA = { x: 68, y: 49, torches: [[64, 47], [72, 47], [64, 49], [72, 49]], poduszka: [70, 50], widz: [68, 52], zakulisy: [68, 46] };
+    // the six stall places (the bottom-middle cell of a stall; a stall is 3 cells wide), the eight lamp posts, the barrels, the stage
+    // (7 x 3 cells round its bottom-middle cell). The hero's places in the scenes, who stands on the stage in the play, Szept's dash
+    // out behind the stage (through the barley: [x, y, the move code, steps]), the bell-ringer's place by the stage
+    const KRAMY = [[41, 60], [48, 60], [40, 65], [49, 65], [52, 65], [55, 65]];
+    const LAMPY = [[43, 64], [47, 64], [38, 63], [47, 55], [67, 66], [70, 61], [70, 54], [74, 54]];
+    const BECZKI = [[69, 64], [70, 64], [69, 65], [70, 65]];
+    const SCENA = { x: 62, y: 65, torches: [[58, 63], [66, 63], [58, 65], [66, 65]], poduszka: [64, 66], widz: [62, 67], zakulisy: [66, 62],
+        ambrozy: [63, 66], hero: { otwarcie: [68, 67, 4], sztuka: [62, 67, 8], zamkniecie: [68, 67, 4] },
+        naScenie: { ania: [60, 64, 6], bonawentura: [63, 64, 4], pimpek: [65, 65, 2] }, ucieczka: [66, 62, 2, 10] };
+    // the opening's procession: from the east edge of the town (the road from the Lord's manor) to the front of the stage and back
+    // [key, sheet, start x, y, the place x, y]
+    const POCHOD = [["lord", "$Npc_Lord", 79, 40, 62, 67], ["teodor", "$Npc_Kamerdyner", 79, 41, 63, 67], ["strazA", "$Npc_Zolnierz", 78, 40, 59, 67],
+        ["strazB", "$Npc_Zolnierz", 78, 41, 65, 67], ["dziecko0", "$Npc_Dziecko", 79, 42, 61, 67], ["dziecko1", "$Npc_Jagodka", 78, 42, 64, 67],
+        ["dziecko2", "$Npc_Dziecko", 79, 43, 66, 67], ["soltys", "$Npc_Soltys", 77, 41, 60, 67]];
     // the troupe: who stands where on the market (the fair's days), the crowd of the play
     const TRUPA = {
-        ofelia: { sheet: "$Npc_Jarmark_Ofelia", pos: [65, 50, 2], godz: [8, 21] },
-        pimpek: { sheet: "$Npc_Jarmark_Pimpek", pos: [46, 52, 2], godz: [9, 20] },
-        zar: { sheet: "$Npc_Jarmark_Zar", pos: [71, 50, 2], godz: [12, 21] },
-        bonawentura: { sheet: "$Npc_Jarmark_Bonawentura", pos: [63, 50, 2], godz: [10, 21] },
-        ania: { sheet: "$Npc_Jarmark_Ania", pos: [67, 50, 2], godz: [10, 21] },
-        szept: { sheet: "$Npc_Jarmark_Szept", pos: [68, 46, 2], godz: [8, 20] },
-        marcel: { sheet: "$Npc_Jarmark_Marcel", pos: [42, 51, 2], godz: [8, 19] }
+        ofelia: { sheet: "$Npc_Jarmark_Ofelia", pos: [59, 66, 2], godz: [8, 21] },
+        pimpek: { sheet: "$Npc_Jarmark_Pimpek", pos: [51, 66, 2], godz: [9, 20] },
+        zar: { sheet: "$Npc_Jarmark_Zar", pos: [65, 66, 2], godz: [12, 21] },
+        bonawentura: { sheet: "$Npc_Jarmark_Bonawentura", pos: [57, 66, 2], godz: [10, 21] },
+        ania: { sheet: "$Npc_Jarmark_Ania", pos: [61, 66, 2], godz: [10, 21] },
+        szept: { sheet: "$Npc_Jarmark_Szept", pos: [66, 62, 2], godz: [8, 20] },
+        marcel: { sheet: "$Npc_Jarmark_Marcel", pos: [43, 61, 2], godz: [8, 19] }
     };
-    const TLUM = [["$Npc_Przekupka", 65, 52], ["$Npc_Szwaczka", 67, 53], ["$Npc_Wdowa", 70, 52], ["$Npc_Kowal", 71, 53],
-        ["$Npc_Piekarka", 69, 54], ["$Npc_Garbarz", 64, 53]];   // (six spectators: static, no walking, one shadow each)
-    // the clues of the investigation (J9): the place (the cell of the diamond), the word of its key
+    const TLUM = [["$Npc_Przekupka", 59, 68], ["$Npc_Szwaczka", 61, 68], ["$Npc_Wdowa", 63, 68], ["$Npc_Kowal", 65, 68],
+        ["$Npc_Piekarka", 57, 67], ["$Npc_Garbarz", 67, 67]];   // (six spectators on the road: static, no walking, one shadow each)
+    // the clues of the investigation (J9): the map, the place (the cell of the diamond), the word of its key
     const SLADY = [
-        { k: "gablota", x: 50, y: 63, godz: [6, 23] },        // Sukiennice: the cut cord, the green wax
-        { k: "cech", x: 90, y: 88, godz: [6, 23] },           // the Cech: the register
-        { k: "garbarnia", x: 113, y: 89, godz: [6, 23] },     // the tannery: the washed coat
-        { k: "laznia", x: 96, y: 74, godz: [6, 23] },         // the bath: the man with the white face
-        { k: "przytulek", x: 98, y: 105, godz: [6, 23] }      // the almshouse: Berta, the bills
+        { k: "gablota", map: 220, x: 45, y: 22, godz: [6, 23] },     // the town hall (the Raven's showcase): the cut cord, the green wax
+        { k: "cech", map: 220, x: 21, y: 59, godz: [6, 23] },        // the Cech's workshop: the register
+        { k: "garbarnia", map: 218, x: 71, y: 69, godz: [6, 23] },   // the tannery of Podgrodzie: the washed coat
+        { k: "laznia", map: 220, x: 50, y: 42, godz: [6, 23] },      // the town well (the key stays "laznia"): the man with the white face
+        { k: "przytulek", map: 218, x: 39, y: 53, godz: [6, 23] }    // the almshouse of Podgrodzie: Berta, the bills
     ];
     const SLADY_MIN = 3;
-    // the roofs of the chase (Map008): [x0, y0, x1, y1] included; the cells that are not walked into (the chimney, the dormers)
-    const DACHY = [[35, 97, 37, 99], [38, 97, 41, 101], [42, 94, 45, 96], [46, 94, 49, 96], [45, 100, 47, 100]];   // (the last: the ridge of the bell tower's roof - the slopes are drawn above the people)
-    const DACHY_ZABLOKOWANE = [[43, 94], [43, 95], [35, 97], [35, 98], [38, 100], [40, 100]];
-    const POGON = { start: [36, 99, 6], szept: [41, 97], meta: [46, 100], skoki: 4, kara: 15, limit: 150, zasadzka: [46, 105, 8], odleglosc: 6,
-        trasa: [{ jump: [1, -1] }, { step: [6, 6, 6, 6, 6] }, { jump: [0, 4] }, { step: [4] }], poczatekDnia: 52 };
+    // (the speeds on the old scale: the hero runs 5 - Szept is a little faster on a straight; the hero gains on the corners)
+    // the chase (day 52, 23:30): the ambush by the bell tower (the hero's place; the sołtys 2 cells west, the corporal 2 east), Szept
+    // slips out behind the tower and runs on foot through the lanes: the bell tower's lane, the gap between the houses, the main street,
+    // the stairs down into the dry riverbed, the lower town's lanes, the lower road, up the mill's path - he gives up under the
+    // windmill. A leg is run when the hero is near (odleglosc; more when the clues were few) or after a while; the hero out of sight
+    // (zgubiony cells) for 3 s: a penalty of kara seconds. The barrels he knocks over in the narrow gap (przeszkoda, when he has passed
+    // it and the hero is not near) - the hero runs round by the next gap.
+    const POGON = { start: [17, 27, 8], szept: [20, 23, 2], zasadzka: [17, 27, 8], odleglosc: 6, zgubiony: 13, kara: 15, predkosc: 5.2, predkoscBez: 5.4,
+        trasa: [[20, 26], [25, 27], [25, 37], [32, 45], [32, 50], [24, 53], [24, 60], [30, 61], [30, 67], [44, 67], [45, 62]],
+        przeszkoda: { po: 2, x: 25, y: 33 }, poczatekDnia: 52 };
     // the contest: the four judges and what each likes (the addition: miod | dym | szyszka), the votes needed
     const SEDZIOWIE = { hanka: { dod: "miod", sheet: "$Npc_Piekarka", x: 12 }, ambrozy: { dod: "dym", sheet: "$Npc_Dzwonnik", x: 13 },
         wit: { dod: "ostry", sheet: "$Npc_Kapral", x: 15 }, teodor: { dod: "szyszka", sheet: "$Npc_Kamerdyner", x: 16 } };
     const DODATKI = ["miod", "dym", "ostry", "szyszka"];
-    const HALA = { rzad: 40, hero: [14, 44, 8], borgar: [11, 46], mietek: [17, 40], soltys: [14, 38] };   // (the hero stands in the open hall: no narrow doorway, no black hourglass of the line of sight)
-    // the night by the bell tower (days 52-53): four lamp posts and two braziers of the watch - real fire lights, so the roofs and the street are readable
-    const NOC_DZWONNICA = { lampy: [[43, 99], [49, 99], [43, 106], [49, 106]], ogniska: [[45, 107], [47, 107]] };
+    // the contest in the smaller hall (2026-11-16, Map001 49 x 42): the judges in a row on the red runner below the bar, the hero facing
+    // them; Wanda by the first dice table of the games room
+    const HALA = { rzad: 27, hero: [14, 31, 8], mietek: [17, 27], soltys: [11, 27], wanda: [38, 34, 8] };   // (the sołtys and Mietek at the two ends of the row)
+    // the night by the bell tower (days 52-53): four lamp posts and two braziers of the watch - real fire lights
+    const NOC_DZWONNICA = { lampy: [[13, 26], [21, 26], [13, 29], [21, 29]], ogniska: [[15, 29], [19, 29]] };
     // the tournament: three matches (the opponents of TavernDice; Wanda is added by Jarmark.js), the stakes and the pot
     const TURNIEJ = { wpisowe: 20, mecze: ["bartek", "ozzy", "wanda"], stawki: [5, 10, 15], pula: 160, podatek: 40, kosc: "krucza_jarmark" };
     const POMOC = { kostium: { kto: "szwaczka", rzecz: "kostium_jarmark" }, zar: { kto: "kowal", rzecz: "zar_jarmark" }, peruka: { kto: "piekarka", rzecz: "peruka_jarmark" } };
@@ -173,19 +193,19 @@
         skoki: {
             przed: [{ hak: "f9Przygotuj" }],
             lista: {
-                1: { ch: 1, krok: "w17Zgloszenie", godzina: 9, dzien: 47, idz: [8, 91, 48, 8] },
-                2: { ch: 2, krok: "w17Prace", godzina: 9, dzien: 48, idz: [8, 52, 52, 2] },
-                3: { ch: 3, krok: "w17Otwarcie", godzina: 14.4, dzien: 49, idz: [8, 70, 50, 4] },
-                4: { ch: 4, krok: "w17Konkurs", godzina: 19, dzien: 49, idz: [1, 14, 47, 8] },
-                5: { ch: 5, krok: "w17Turniej", godzina: 17, dzien: 50, idz: [1, 14, 47, 8] },
-                6: { ch: 6, krok: "w17Sztuka", godzina: 18.8, dzien: 51, idz: [8, 65, 53, 8] },
-                7: { ch: 7, krok: "w17Sledztwo", godzina: 9, dzien: 52, idz: [8, 52, 64, 8] },
-                8: { ch: 8, krok: "w17Pogon", godzina: 23.4, dzien: 52, idz: [8, 46, 106, 8] },
-                9: { ch: 9, krok: "w17Koniec", godzina: 9, dzien: 53, idz: [8, 52, 64, 8] }
+                1: { ch: 1, krok: "w17Zgloszenie", godzina: 9, dzien: 47, idz: [220, 44, 23, 8] },
+                2: { ch: 2, krok: "w17Prace", godzina: 9, dzien: 48, idz: [220, 46, 66, 8] },
+                3: { ch: 3, krok: "w17Otwarcie", godzina: 14.4, dzien: 49, idz: [220, 68, 67, 4] },
+                4: { ch: 4, krok: "w17Konkurs", godzina: 19, dzien: 49, idz: [1, 14, 21, 8] },
+                5: { ch: 5, krok: "w17Turniej", godzina: 17, dzien: 50, idz: [1, 14, 21, 8] },
+                6: { ch: 6, krok: "w17Sztuka", godzina: 18.8, dzien: 51, idz: [220, 62, 68, 8] },
+                7: { ch: 7, krok: "w17Sledztwo", godzina: 9, dzien: 52, idz: [220, 44, 23, 8] },
+                8: { ch: 8, krok: "w17Pogon", godzina: 23.4, dzien: 52, idz: [220, 17, 28, 8] },
+                9: { ch: 9, krok: "w17Koniec", godzina: 9, dzien: 53, idz: [220, 44, 23, 8] }
             }
         }
     });
 
-    window.JarmarkData = { MAP, OWNER, IDS, ID, DNI, GODZ, WARUNKI, KRAMY, LAMPY, BECZKI, SCENA, TRUPA, TLUM, SLADY, SLADY_MIN, DACHY, DACHY_ZABLOKOWANE, POGON,
+    window.JarmarkData = { MAP, OWNER, IDS, ID, DNI, GODZ, WARUNKI, KRAMY, LAMPY, BECZKI, SCENA, TRUPA, TLUM, SLADY, SLADY_MIN, POGON, POCHOD,
         SEDZIOWIE, DODATKI, HALA, NOC_DZWONNICA, TURNIEJ, POMOC, NAGRODA, VITEMS, defaults, TX: w.tx, W17: w.Q.W17, watek: w };
 })();

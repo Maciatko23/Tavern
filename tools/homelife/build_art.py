@@ -16,7 +16,8 @@
 #
 # Sources (tools/homelife/src): cat_rot/*.png, cat_walk/<dir>_<i>.png, cat_curl/frame_00i.png - PixelLab character "Mruczek"
 # (ce0bf22a-76b9-4741-96bf-ed0c8b106221: standard quadruped cat, 8 directions, walk-8-frames, v3 "curl_sleep" south);
-# gp_sit/frame_00i.png - grandpa Stach (ea649747-...) v3 "sit_down" south (only its crouch is used: frames 0-4).
+# gp_sit/frame_00i.png - grandpa Stach v3 "sit_down" south: since 2026-11-17 his state "Kapelusz z piórkiem" (5f576db7-...), its
+# frames 0, 2, 4, 6, 8 (standing .. seated) saved as frame_000-004 (before: ea649747-..., its crouch frames 0-4).
 import math, os
 from PIL import Image, ImageDraw
 
@@ -247,7 +248,7 @@ def grandpa_sheet():
     global PIPE_MOUTH
     sit = [sit_frame(i) for i in range(5)]
     seated = sit[4]
-    PIPE_MOUTH = (33, 25)   # (measured on the seated frame: the right end of the dark mouth line under the moustache)
+    PIPE_MOUTH = (33, 27)   # (measured on the seated frame: the right end of the mouth under the moustache - 2026-11-17 the hat look, was 33,25)
     row1 = [seated, with_pipe(seated, False), with_pipe(seated, True), seated_breath(with_pipe(seated, False))]
     stir = stir_frames()
     sheet = Image.new("RGBA", (8 * G, 3 * G))
@@ -353,6 +354,11 @@ def head(im, rows):
 def sleeper_frames():
     asleep_src = sit_frame(4)   # (the crouch has the eyes shut: two short lines)
     awake_src = walk8(0)
+    # (2026-11-17: no hat in bed - the hat look's heads bare, PixelLab pixen edits of these two: src/gp_sleep/asleep.png with the
+    # eyes shut, awake.png; the white hair swept back as on his bust)
+    if os.path.exists(os.path.join(SRC, "gp_sleep", "asleep.png")):
+        asleep_src = clean(load(SRC, "gp_sleep", "asleep.png"))
+        awake_src = clean(load(SRC, "gp_sleep", "awake.png"))
     out = []
     for k, (src, breath) in enumerate([(asleep_src, 0), (asleep_src, 1), (awake_src, 0)]):
         f = Image.new("RGBA", (Q, Q))

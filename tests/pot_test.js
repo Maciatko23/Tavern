@@ -113,7 +113,7 @@ const OUT = process.argv[2] || "";
         fired.got = (await ev("$gameParty.numItems($dataItems[167])")) - (await ev("window.__f0"));
         check("...fired: the dried pot goes in, after 6 hours a clay pot comes out", fired.type === "kiln" && fired.started && fired.used === 1 && fired.ready && fired.got === 1, fired);
         const items = await J("[165, 166, 167].map(i => ({ name: $dataItems[i].name, icon: $dataItems[i].iconIndex }))");
-        check("the items: Surowy garnek (icon 428), Wysuszony garnek (icon 429), Gliniany garnek (icon 430)", items[0].name === "Surowy garnek" && items[0].icon === 428 && items[1].name === "Wysuszony garnek" && items[1].icon === 429 && items[2].name === "Gliniany garnek" && items[2].icon === 430, items);
+        check("the items: Surowy garnek, Wysuszony garnek, Gliniany garnek (their PixelLab icons, 688+)", items[0].name === "Surowy garnek" && items[1].name === "Wysuszony garnek" && items[2].name === "Gliniany garnek" && items.every(i => i.icon >= 688), items);
     } catch (e) { console.log("ERR", e.message); results.push(false); }
     const err = b.logs.filter(l => /EXC|rror/.test(l));
     console.log("console errors:", err.length ? err.slice(-5) : "none");

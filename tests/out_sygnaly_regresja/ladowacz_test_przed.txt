@@ -1,0 +1,45 @@
+PASS A: gra startuje z dzisiejszymi plikami (lista gry + js/plugins.js)
+PASS A: ładowacz w trybie strona  {"mode":"strona","list":218,"editor":["TawernaLoader","ActorPictures","OptionEx","HDLayout"],"extra":[],"overridden":[],"twice":[]}
+PASS A: $plugins jak z reguł scalania (219 wpisów)
+PASS A: PluginManager.parameters jak z listy (+ edytor)  []
+PASS A: każda włączona wtyczka wykonana raz, w kolejności listy  {"twice":[]}
+PASS A: wszystkie wykonane przed końcem ładowania strony i przed Scene_Boot  {"last":231,"atLoad":232,"atBoot":232}
+PASS A: bez błędów w konsoli  []
+PASS A2: każda wtyczka z js/plugins.js sprzed ładowacza (148) jest raz, w tej samej kolejności  []
+PASS A2: ... i z tymi samymi parametrami (różnica z rozmysłem? nowa migawka: node tests/ladowacz_test.js --migawka)  []
+PASS B1: stara lista edytora - gra startuje
+PASS B1: ładowacz w trybie strona  {"mode":"strona","list":218,"editor":"148 wpisów","extra":[],"overridden":[],"twice":[]}
+PASS B1: $plugins jak z reguł scalania (219 wpisów)
+PASS B1: PluginManager.parameters jak z listy (+ edytor)  []
+PASS B1: każda włączona wtyczka wykonana raz, w kolejności listy  {"twice":[]}
+PASS B1: wszystkie wykonane przed końcem ładowania strony i przed Scene_Boot  {"last":231,"atLoad":232,"atBoot":232}
+PASS B1: bez błędów w konsoli  []
+PASS B2: sam ładowacz w js/plugins.js - gra startuje
+PASS B2: ładowacz w trybie strona  {"mode":"strona","list":218,"editor":["TawernaLoader"],"extra":[],"overridden":[],"twice":[]}
+PASS B2: $plugins jak z reguł scalania (219 wpisów)
+PASS B2: PluginManager.parameters jak z listy (+ edytor)  []
+PASS B2: każda włączona wtyczka wykonana raz, w kolejności listy  {"twice":[]}
+PASS B2: wszystkie wykonane przed końcem ładowania strony i przed Scene_Boot  {"last":231,"atLoad":232,"atBoot":232}
+PASS B2: bez błędów w konsoli  []
+PASS B2: parametry wszystkich wtyczek jak w js/plugins.js sprzed ładowacza
+PASS B3: edytor po swojemu - gra startuje
+PASS B3: ładowacz w trybie strona  {"mode":"strona","list":218,"editor":["TextPicture","TawernaLoader","OptionEx","OptionEx","Farming","AltSaveScreen","ButtonPicture"],"extra":["TextPicture","ButtonPicture"],"overridden":["AltSaveScreen (wyłączona)","OptionEx: defaultVolume","Farming: seedChance"],"twice":[]}
+PASS B3: $plugins jak z reguł scalania (221 wpisów)
+PASS B3: PluginManager.parameters jak z listy (+ edytor)  []
+PASS B3: każda włączona wtyczka wykonana raz, w kolejności listy  {"twice":[]}
+PASS B3: wszystkie wykonane przed końcem ładowania strony i przed Scene_Boot  {"last":232,"atLoad":233,"atBoot":233}
+PASS B3: bez błędów w konsoli  []
+PASS B3: obca wtyczka nad ładowaczem przed listą, pod nim - po liście  ["TextPicture","TawernaLoader","TawernaCore"]
+PASS B3: parametry z edytora mają pierwszeństwo (OptionEx 7 z pierwszego wpisu; Farming: seedChance z edytora, reszta z listy)  {"opt":"7","farm":"0.5"}
+PASS B3: wyłączona w edytorze nie wczytana (AltSaveScreen)
+PASS B4: index.html bez ładowacza - gra startuje (wpis TawernaLoader w js/plugins.js)
+PASS B4: ładowacz w trybie wtyczka  {"mode":"wtyczka","list":218,"editor":["TawernaLoader","ActorPictures","OptionEx","HDLayout"],"extra":[],"overridden":[],"twice":[]}
+PASS B4: $plugins jak z reguł scalania (219 wpisów)
+PASS B4: PluginManager.parameters jak z listy (+ edytor)  []
+PASS B4: każda włączona wtyczka wykonana raz, w kolejności wczytania  {"twice":[]}
+PASS B4: wszystkie wykonane przed końcem ładowania strony i przed Scene_Boot  {"last":231,"atLoad":232,"atBoot":232}
+PASS B4: bez błędów w konsoli  []
+PASS B4: ostrzeżenie w konsoli (kolejność przybliżona)
+PASS B5: bez listy gry - ekran błędu „Failed to load: js/tawerna_wtyczki.js”  "ErrorFailed to load: js/tawerna_wtyczki.js"
+console errors: none
+43/43 passed

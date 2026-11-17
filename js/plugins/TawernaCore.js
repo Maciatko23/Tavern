@@ -499,6 +499,20 @@
     // (2026-11-07, wydajność) one-picture sheets: a character picture named "!$1_..." (or "$1_...") is ONE frame - the whole file,
     // not 3 x 4 frames. A big still object (the wreck's hull halves, 688 x 384) then needs a file of its own size, not a sheet of
     // twelve copies (2064 x 1536: 12.7 MB of the GPU's memory each). Its direction and pattern do not change the frame.
+    // (2026-11-14) <Dy:n> in an event's note: its picture hangs n px below its cell row, while the event keeps its place in the
+    // drawing order (the sprite's y stays, only its anchor moves). A big still picture then reaches under its own row: the hero
+    // walks the row in front of the wreck's hull, drawn over its lowest planks, right up against the ship.
+    const _Sprite_Character_updatePosition = Sprite_Character.prototype.updatePosition;
+    Sprite_Character.prototype.updatePosition = function() {
+        _Sprite_Character_updatePosition.call(this);
+        const ch = this._character;
+        if (!ch || !ch.event) return;
+        if (ch._tawDy === undefined) {
+            const ev = ch.event(), k = ev && ev.note ? /<Dy:\s*(-?\d+)\s*>/i.exec(ev.note) : null;
+            ch._tawDy = k ? Number(k[1]) : 0;
+        }
+        if (ch._tawDy) { const h = this.patternHeight(); if (h > 0) this.anchor.y = 1 - ch._tawDy / h; }
+    };
     const ONE_PICTURE = /^[!]*\$1_/;
     const _setCharacterBitmap = Sprite_Character.prototype.setCharacterBitmap;
     Sprite_Character.prototype.setCharacterBitmap = function() {
@@ -597,13 +611,13 @@
     // The id registry. Ids are game-wide (one id = one owner on every map). The old-style injectors are reserved here until they
     // move to Tawerna.inject; the editor's own events stay far below (the biggest map, Map025, ends at 354).
     const reserved = [
-        // (2026-11-12) W17 "Jarmark Kruczogrodu" (Jarmark*.js): stalls, lamps, stage, troupe, clues, chase (Map008), the hall's judges (Map001)
-        { owner: "Jarmark", from: 4800, to: 4999, what: "W17 Jarmark: kramy, lampiony, scena trupy, trupa, ślady, pościg (mapa 8), sędziowie konkursu (mapa 1)" },
+        // (2026-11-12) W17 "Jarmark Kruczogrodu" (Jarmark*.js): stalls, lamps, stage, troupe, clues, chase (Map220; two clues on Map218), the hall's judges (Map001)
+        { owner: "Jarmark", from: 4800, to: 4999, what: "W17 Jarmark: kramy, lampiony, scena trupy, trupa, ślady, pościg (mapa 220, dwa ślady na 218), sędziowie konkursu (mapa 1)" },
         // (2026-10-16) the six island places (docs/miejsca_wyspy/PAKIETY.md): one owner per package, the same name in its Tawerna.inject
         { owner: "Pustelnia", from: 600, to: 609, what: "pustelnia na klifie i skryptorium (mapy 155, 156)" },
         { owner: "Kruk", from: 610, to: 629, what: "Urwisko Kruków, kruczarnia, oswojony kruk (mapa 157 i inne)" },
         { owner: "Latarnia", from: 630, to: 639, what: "przylądek z latarnią (mapy 159-161)" },
-        { owner: "Garnizon", from: 640, to: 669, what: "garnizon nad zatoką (mapy 162, 163; werbownik na rynku)" },
+        { owner: "Garnizon", from: 640, to: 669, what: "straż dworu Lorda (mapa 221: strażnicy, wóz ze zbożem, beczki; werbownik na rynku 220, szukający w 220 i 218)" },
         { owner: "Wrak", from: 670, to: 679, what: "wrak na mieliźnie, pod pokładem (mapy 165, 166), rozbitek" },
         { owner: "Cysterna", from: 680, to: 689, what: "stara cysterna zakonu (mapa 167, zasuwa na 147, krata na 157)" },
         { owner: "Wyspa", from: 690, to: 699, what: "przejścia do nowych miejsc na mapach użytkownika (125, 13) - wspólny rdzeń Wyspa.js" },
@@ -640,6 +654,9 @@
         // (2026-10-22) the new Podgrodzie's residents (docs/podgrodzie/NOWE_PODGRODZIE.md): 2900-2949 is given out (packages A-D,
         // the new town 2940-2947, 2948-2949 the tests' and spare) - a third range of the same owner
         { owner: "TownLife", from: 2950, to: 2959, what: "nowi mieszkańcy Podgrodzia (trzeci zakres; 2950-2953 dane)" },
+        // (2026-11-13) the new world's Podgrodzie (Map218): its new people (TownLife_Data.js, NEW_218)
+        { owner: "TownLife", from: 8200, to: 8219, what: "nowy świat: nowi mieszkańcy Kruczogrodu, Map220 (8200-8206)" },
+        { owner: "TownLife", from: 2960, to: 2969, what: "nowy świat: nowi mieszkańcy Podgrodzia, Map218 (2960-2965) i Słonego Brzegu, Map219 (2966)" },
         // (2026-10-28) the ferry's travellers (docs/PODROZNI.md 6.6): their scenes' actors and props (Podroznicy.js), and the
         // travellers themselves as residents of the town - TownLife's fourth range (Podroznicy_Data.js)
         { owner: "Podroznicy", from: 3002, to: 3019, what: "podróżni z promu: aktorzy scen na przystani (3002-3008), trap i rekwizyty (3010-3017)" },

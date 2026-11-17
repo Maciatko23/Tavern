@@ -123,8 +123,8 @@ Eryk znowu mnie rysuje. Mówi, że ma lepszą rękę, odkąd lżej mu na sercu. 
 znaki.0.name = Wzgórze tawerny
 znaki.1.name = Kamieniołom w Górach
 znaki.2.name = Przylądek z latarnią
-znaki.3.name = Pustelnia na klifie
-znaki.4.name = Urwisko Kruków
+znaki.3.name = Krucza Grań nad kopalnią
+znaki.4.name = Orla Grań
 znaki.5.name = Kopiec z krukiem przy chacie dziadka
 znaki.6.name = Dwór Lorda
 

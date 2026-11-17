@@ -1,0 +1,18 @@
+Map024 'Posiadłość Lorda' (120x120, zestaw 11)
+  wejścia: 1 kratek startowych (przeniesienia na tę mapę), osiągalnych kratek: 10397
+  razem: G2 6, G5 2, O1 4, Z2 1
+  [uwaga] G2 górny kafel 270 (C 6,1) obiektu bez gwiazdki na wolnej kratce: bohater stanie na nim w (32,74)
+  [uwaga] G2 górny kafel 270 (C 6,1) obiektu bez gwiazdki na wolnej kratce: bohater stanie na nim w (33,74)
+  [uwaga] G2 górny kafel 270 (C 6,1) obiektu bez gwiazdki na wolnej kratce: bohater stanie na nim w (34,74)
+  [uwaga] G2 górny kafel 270 (C 6,1) obiektu bez gwiazdki na wolnej kratce: bohater stanie na nim w (46,74)
+  [uwaga] G2 górny kafel 270 (C 6,1) obiektu bez gwiazdki na wolnej kratce: bohater stanie na nim w (47,74)
+  [uwaga] G2 górny kafel 270 (C 6,1) obiektu bez gwiazdki na wolnej kratce: bohater stanie na nim w (48,74)
+  [uwaga] G5 zdarzenie 68 'Dym z komina' (!Fantasy_chimney|0|2|0) 'nad postacią' stoi na wolnej kratce: bohater wejdzie pod nie (38,61)
+  [uwaga] G5 zdarzenie 69 'Dym z komina' (!Fantasy_chimney|0|2|0) 'nad postacią' stoi na wolnej kratce: bohater wejdzie pod nie (42,61)
+  [uwaga] O1 obiekt rozcięty: kafel 224 (B 8,12) - dół bez góry (brak kafla 216 nad) w (55,77)
+  [uwaga] O1 obiekt rozcięty: kafel 141 (B 13,1) - dół bez góry (brak kafla 133 nad) w (13,115)
+  [uwaga] O1 obiekt rozcięty: kafel 141 (B 13,1) - dół bez góry (brak kafla 133 nad) w (91,115)
+  [uwaga] O1 obiekt rozcięty: kafel 141 (B 13,1) - dół bez góry (brak kafla 133 nad) w (108,115)
+  [uwaga] Z2 obszary zdarzeń 27 'Splot gałęzi', 29 'Wysoki suchy krzak' nachodzą na kratce (99,106)
+  (pominięto 2 drobnych zamkniętych kieszeni < 4 kratek bez zdarzeń)
+

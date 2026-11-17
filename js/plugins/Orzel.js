@@ -257,8 +257,9 @@
         if (s.hurtUntil && now >= s.hurtUntil) { s.hurtUntil = 0; s.hp = maxHp(); pop(TX.healed, { color: "#cfe6a8" }); }
         if (!s.hurtUntil && s.food > 20 && s.water > 20) s.hp = Math.min(maxHp(), s.hp + 3 * h);
         s.st = Math.min(maxSt(), s.st + (maxSt() / 2) * h);
-        // grandpa feeds a hungry chick once a day (stages 1-2, at his house)
-        if (CARE.grandpaFeeds && s.stage <= 2 && s.food < 25 && s.map === 19 && s.grandpaDay !== day()) {
+        // grandpa feeds a hungry chick once a day (stages 1-2, at his house - HomeLife's house map: the hut, Map224, since 2026-11-17)
+        const house = (T.api("HomeLife") || {}).MAP || 224;
+        if (CARE.grandpaFeeds && s.stage <= 2 && s.food < 25 && s.map === house && s.grandpaDay !== day()) {
             s.grandpaDay = day();
             s.food = Math.min(100, s.food + 50);
         }
@@ -1832,7 +1833,7 @@
         const out = [];
         D.WAY_UP.cells.forEach(([x, y], k) => {
             if (x >= data.width || y >= data.height) return;
-            out.push(ev(500 + k, TK.kod.build[0], x, y, [page([script("Orzel.wayUp()")], { priority: 1, trigger: 0 })], "<Orzel:wspinaczka>"));
+            out.push(ev(500 + k, TK.kod.build[0], x, y, [page([script("Orzel.wayUp()")], { priority: 1, trigger: 0, pic: k === 0 ? D.WAY_UP.pic || "" : "", dirFix: true })], "<Orzel:wspinaczka>"));
         });
         return out;
     } });
@@ -1859,7 +1860,7 @@
         return out;
     } });
     function wayUp() {
-        if (!actTwo() && !S().have && !isActive("D29") && !eggReady()) { T.popup(D.WAY_UP.map === 213 ? "Schody pną się w górę, w mrok i chłód. Na razie nie masz po co się tam wspinać." : TX.wayUpLocked, { color: "info" }); return; }
+        if (!actTwo() && !S().have && !isActive("D29") && !eggReady()) { T.popup(D.WAY_UP.map === 213 ? "Schody pną się w górę, w mrok i chłód. Na razie nie masz po co się tam wspinać." : D.WAY_UP.map === 29 ? "Lina wspinaczy ginie wysoko w skale, w wietrze i chłodzie. Na razie nie masz po co się tam wspinać." : TX.wayUpLocked, { color: "info" }); return; }
         T.audio.se("Equip1", { volume: 60, pitch: 80 });
         $gamePlayer.reserveTransfer(D.MAP, D.WAY_UP.land[0], D.WAY_UP.land[1], D.WAY_UP.dir, 0);
     }

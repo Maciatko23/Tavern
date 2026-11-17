@@ -74,7 +74,7 @@
         },
         kupiec: {
             styleColor: "#c9a6ff",
-            bust: "People4_5", sheet: "People4", index: 4,
+            bust: "Kosci_Kupiec_Bust", sheet: "People4", index: 4,   // (PixelLab 2026-11-17, was RTP People4_5)
             hours: [18, 23], rare: true, stakes: [25, 35, 50], perDay: 2, minRep: 40,
             ai: { bank: [0, 300, 350, 400, 700, 1700, Infinity], reckless: 0.03, chase: 1.6 },
             die: { key: "krucze", chance: 0.4 },
@@ -91,7 +91,7 @@
         // (from the tavern's fame on the quest board, QuestBoard.js: 40 Swój chłop, 80 Chluba tawerny)
         nieznajomy: {
             styleColor: "#c8bda8",
-            bust: "Evil_8", sheet: null, index: 0,
+            bust: "Kosci_Nieznajomy_Bust", sheet: null, index: 0,   // (PixelLab 2026-11-17, was RTP Evil_8)
             hours: [21, 24], stakes: [100], target: 3000, perDay: 1, minRep: 80, needsRep: true,
             ai: { bank: [0, 350, 400, 500, 800, 1800, Infinity], reckless: 0.08, chase: 1.7 },
             die: { key: "krucze", chance: 0.5, giveOnce: true, orGold: 100 },

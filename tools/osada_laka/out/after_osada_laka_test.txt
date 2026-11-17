@@ -1,0 +1,28 @@
+PASS the game boots
+PASS Map013: no gate 'Brama Milczących' and no posts any more; nothing solid in its old cells (5-7, 27)  {"gone":0,"solidAt":[false,false,false]}
+PASS ...on foot (the game's own rules) one gets from the forest path (6,31) through the gap to the plateau north of it (6,22)  {"n":true,"s":true}
+PASS ...walking up from (6,31) the hero passes the old gate cells and stays on Map013 (y <= 25)  {"map":13,"x":6,"y":22,"d":8}
+PASS ...and back down: y >= 30  {"map":13,"x":6,"y":33,"d":2}
+PASS no transfer on Map004, 013, 022, 121-124, 159, 934 leads to Map120  []
+PASS data/Map004.json keeps its own events only (length <= 417: nothing of the Osada, ids stay below 500)  417
+PASS Tawerna.injected(4).Osada: 81 events in the band 5300-5399  {"n":81,"lo":5300,"hi":5380}
+PASS switch 16 off: from the meadow before the gate (66,58) no marker inside the palisade is reachable  {"osada_krag":false,"osada_sciana":false,"osada_grum":false,"osada_starszy":false,"osada_dom_1":false,"osada_dom_2":false,"osada_dom_3":false,"osada_dom_4":false}
+PASS ...but the grove of the Silent (75,30) on the meadow is (the way round the palisade)  true
+PASS the gate event stands in the south wall (66,56), solid  [66,56,true]
+PASS ...the action button before the shut gate: a popup 'Brama z pali, zamknięta od środka'  "Brama z pali, zamknięta od środka. Ani głosu po drugiej stronie."
+PASS switch 16 on: through the open gate every marker of the Osada is reachable on foot  {"osada_krag":true,"osada_sciana":true,"osada_grum":true,"osada_starszy":true,"osada_dom_1":true,"osada_dom_2":true,"osada_dom_3":true,"osada_dom_4":true}
+PASS Laka pod Gawra: four hut doors, touched -> Map121-124  [["Drzwi chaty 1",54,43,[0,121,7,9,8,0]],["Drzwi chaty 2",75,41,[0,122,6,8,8,0]],["Drzwi chaty 3",75,52,[0,123,7,9,8,0]],["Drzwi chaty 4",54,52,[0,124,6,8,8,0]]]
+PASS ...and the cell in front of every door is reachable from the gate  [true,true,true,true]
+PASS the grove (Zakon): the seven white stones and the centre are on Laka pod Gawra round (75,30)  {"stones":[[75,27],[77,28],[78,30],[77,32],[75,33],[73,32],[72,29]],"centre":true}
+PASS 13:00: the elder at the circle, the other three at home (not at their places)  {"Milcząca przy grządce":"gone","Milcząca przy ścianie":"gone","Najstarszy z Milczących":"here","Milczący przy ścianie":"gone"}
+PASS 23:00: all four Silent at home, nobody outside  {"Milcząca przy grządce":"gone","Milcząca przy ścianie":"gone","Najstarszy z Milczących":"gone","Milczący przy ścianie":"gone"}
+PASS Wspólna izba: walking into the door Drzwi chaty 1 -> Map121  {"map":121,"x":7,"y":9,"d":8}
+PASS Wspólna izba: out through the doorway -> Laka pod Gawra before the door (54,44) facing down  {"b":{"map":4,"x":54,"y":44,"d":2},"want":[54,44]}
+PASS Chata tkaczki: walking into the door Drzwi chaty 2 -> Map122  {"map":122,"x":6,"y":8,"d":8}
+PASS Chata tkaczki: out through the doorway -> Laka pod Gawra before the door (75,42) facing down  {"b":{"map":4,"x":75,"y":42,"d":2},"want":[75,42]}
+PASS Chata Najstarszego: walking into the door Drzwi chaty 3 -> Map123  {"map":123,"x":7,"y":9,"d":8}
+PASS Chata Najstarszego: out through the doorway -> Laka pod Gawra before the door (75,53) facing down  {"b":{"map":4,"x":75,"y":53,"d":2},"want":[75,53]}
+PASS Chata rzeźbiarza: walking into the door Drzwi chaty 4 -> Map124  {"map":124,"x":6,"y":8,"d":8}
+PASS Chata rzeźbiarza: out through the doorway -> Laka pod Gawra before the door (54,53) facing down  {"b":{"map":4,"x":54,"y":53,"d":2},"want":[54,53]}
+PASS no errors in the console  []
+27/27 passed

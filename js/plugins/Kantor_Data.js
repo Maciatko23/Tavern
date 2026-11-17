@@ -37,7 +37,7 @@
 (() => {
     "use strict";
 
-    const MAP = { town: 8, kantor: 103, piwnica: 171, droga: 3, skraj: 3, przystan: 125, ratusz: 104 };   // (2026-11-11 plansza: Polna droga and Skraj lasu are places of Kruczy Jar now)
+    const MAP = { town: 220, kantor: 103, piwnica: 171, droga: 219, skraj: 219, przystan: 219, ratusz: 104, podgrodzie: 218 };   // (2026-11-16 nowy świat: Kruczogród; the camp and the ferry night's cart on Słony Brzeg)
     const IDS = [730, 759];
     // the injected events, by map: Map103 the trapdoor, the stack by the back door, the town's honest counter (Act II); Map008 the
     // visitors of the night (the courier, a guest); Map171 Baltazar, Sławek, the pile, the night's things, the desk, the strongbox,
@@ -68,12 +68,12 @@
         piwnicaLand: [2, 4, 2], schody: [2, 4], baltazar: [16, 4, 2], biurko: [15, 6], szkatula: [17, 8], sterta: [8, 9], worki: [5, 9],
         kamienie: [3, 8], slawek: [9, 7, 8], siedzisko: [3, 6], gabinetDoor: [12, 8], gabinet: [12, 4, 17, 10],   // (x0, y0, x1, y1 - with its door)
         // Map008 (the town): the back door (event 94 of the user's map), the cell before it, where the visitors come from and go
-        backDoor: [14, 47], backFront: [14, 48, 8], frontDoor: [18, 46], gateIn: [31, 118], gateOut: [32, 118], east: [117, 49], tavern: [51, 18],
+        backDoor: [52, 20], backFront: [52, 21, 8], frontDoor: [54, 20], gateIn: [3, 41], gateOut: [2, 41], east: [78, 41], tavern: [43, 35],   // (Map220: the west gate, the east gate, the tavern's door)
         // Kruczy Jar (Map003), the east edge of the forest (was Map023 Skraj lasu: the same shape moved by +63, +48): the smugglers' fire, its seats, the cart, the courier
-        ognisko: [96, 52], seats: [[95, 52, "sit"], [97, 52, "sit"], [96, 50, "sleep"], [95, 51, "sit"]], wozOboz: [98, 50], skrzynieOboz: [100, 51], kurierOboz: [98, 52, 4],
+        ognisko: [52, 26], seats: [[51, 26, "sit"], [53, 26, "sit"], [52, 24, "sleep"], [51, 25, "sit"]], wozOboz: [54, 24], skrzynieOboz: [56, 25], kurierOboz: [54, 26, 4],   // (Map219: the meadow under the pines, north of the harbour road)
         listen: 3.4,                                                  // tiles from the fire the talk is heard from
         // Kruczy Jar (Map003), the road north of the plot (was Map022 Polna droga: moved by +59, -4): the cart at the fork to the east, its guards, Rafał tied to it
-        wozProm: [88, 16], guards: [[87, 17, "idle"], [91, 15, "idle"]], rafal: [90, 17, 2], skrzynieProm: [86, 15], ogienProm: [91, 17]
+        wozProm: [52, 45], guards: [[51, 46, "idle"], [55, 44, "idle"]], rafal: [54, 46, 2], skrzynieProm: [50, 44], ogienProm: [55, 46]   // (Map219: the harbour road east of the fork)
     };
 
     // ------------------------------------------------------------------ the clock
@@ -95,9 +95,10 @@
     const CRATES = 3;         // crates a night
     const SHIFTS = 2;         // the porter's nights before the register's night (chapter 3)
     const STONES = { swap: 6, gain: 5 };   // plain stones (item 64) to swap the cargo; raven stones found in it
-    const RAID = { after: [3, 6], kinds: ["bandit", "knifer", "archer"], maps: [3, 4], hours: [21, 4] };
+    const RAID = { after: [3, 6], kinds: ["bandit", "knifer", "archer"], maps: [218, 219], hours: [21, 4] };
     // the shop of chapter 7: base prices (the honest kantor 10% lower; Baltazar in the hero's grip - half; Baltazar the enemy - double)
-    const GOODS = [{ id: 86, n: 1, price: 18 }, { id: 143, n: 1, price: 50 }, { id: 88, n: 10, price: 2 }, { id: 93, n: 1, price: 6 }];
+    // (2026-11-17, docs/ekwipunek/NOWE_80.md) + the bronze ingot (old stock from the continent: the island has no copper and no tin)
+    const GOODS = [{ id: 86, n: 1, price: 18 }, { id: 143, n: 1, price: 50 }, { id: 88, n: 10, price: 2 }, { id: 93, n: 1, price: 6 }, { id: 485, n: 1, price: 15 }];
     const PRICE = { honest: 0.9, grip: 0.5, enemy: 2, normal: 1 };
 
     // ------------------------------------------------------------------ the words (js/teksty/kantor.txt; Kantor.js reads them as D.TX)
@@ -278,13 +279,13 @@
                 { gdy: ["ctx:skok>=7", "!stan:ferry.state"], zrob: [{ stan: { "ferry.state": "seized" } }] }
             ],
             lista: {
-                1: { ch: 1, krok: "w5Poszlaki", godzina: 10, idz: [MAP.town, 16, 49, 8] },
-                2: { ch: 2, krok: "w5Stuk", godzina: 23.85, idz: [MAP.town, 10, 49, 2] },
-                3: { ch: 3, krok: "w5Najem", godzina: 10, idz: [MAP.town, 16, 49, 8] },
-                4: { ch: 4, krok: "w5Rejestr", godzina: 22.05, idz: [MAP.town, 14, 49, 8], zrob: [{ hak: "nowaNoc" }] },   // (tonight's shift and the register's night afresh)
-                5: { ch: 5, krok: "w5Komu", godzina: 10, idz: [MAP.town, 16, 49, 8] },
-                6: { ch: 6, krok: "w5Prom", godzina: 21.5, idz: [MAP.droga, 76, 8, 2] },
-                7: { ch: 7, krok: "w5Akt2", godzina: 10, idz: [MAP.town, 16, 49, 8] }
+                1: { ch: 1, krok: "w5Poszlaki", godzina: 10, idz: [MAP.town, 54, 23, 8] },
+                2: { ch: 2, krok: "w5Stuk", godzina: 23.85, idz: [MAP.town, 48, 23, 2] },
+                3: { ch: 3, krok: "w5Najem", godzina: 10, idz: [MAP.town, 54, 23, 8] },
+                4: { ch: 4, krok: "w5Rejestr", godzina: 22.05, idz: [MAP.town, 52, 22, 8], zrob: [{ hak: "nowaNoc" }] },   // (tonight's shift and the register's night afresh)
+                5: { ch: 5, krok: "w5Komu", godzina: 10, idz: [MAP.town, 54, 23, 8] },
+                6: { ch: 6, krok: "w5Prom", godzina: 21.5, idz: [MAP.droga, 46, 40, 2] },
+                7: { ch: 7, krok: "w5Akt2", godzina: 10, idz: [MAP.town, 54, 23, 8] }
             }
         }
     });
@@ -294,10 +295,10 @@
     // own event: "inside" at the place w5_piwnica, which no interior shows - `away`). In Act II, when the town shut his kantor, he
     // lives at the harbour (Map125) by the port's storehouse with a mercenary's guard (alt, condition "w5Harbour").
     const TLD = window.TownLifeData;
-    const SPOTS_TOWN = { w5_piwnica: [14, 48, 8], w5_lada: [18, 47, 8] };       // (w5_lada: the kantor's front door - Ludmiła goes in)
-    const SPOTS_HARBOUR = { w5_sklad: [26, 14, 8], w5_przystan: [27, 15, 2] };
-    const SPOTS_KANTOR = { ludmila_lada: [12, 5, 2] };                            // Map103: behind the counter (the merchant's chair)
-    const SPOTS_PODGRODZIE = { w5_lada: [89, 17, 6] };                           // Map111: the west gate's way into the town
+    const SPOTS_TOWN = { w5_piwnica: [52, 21, 8], w5_lada: [54, 21, 8] };       // (w5_lada: the kantor's front door - Ludmiła goes in)
+    const SPOTS_HARBOUR = { w5_sklad: [51, 54, 8], w5_przystan: [38, 46, 2] };   // (Map219: a corner let in Hanna's salt works, his day by the pier)
+    const SPOTS_KANTOR = { ludmila_lada: [12, 4, 2] };                            // Map103: behind the counter (by the merchant's chair; 12,5 is the counter itself)
+    const SPOTS_PODGRODZIE = { w5_lada: [74, 41, 6] };                           // Map111: the west gate's way into the town
     // (Baltazar's words at the harbour in Act II - the alt plan below)
     const KUPIEC_PRZYSTAN = { barks: { night: [] }, talk: { night: [] } };
     Watki.scal(KUPIEC_PRZYSTAN, "kantor", "kupiec");   // (its words: js/teksty/kantor.txt, kupiec)
@@ -306,7 +307,8 @@
         TLD.SPOTS_BY_MAP = TLD.SPOTS_BY_MAP || {};
         TLD.SPOTS_BY_MAP[MAP.przystan] = Object.assign({}, TLD.SPOTS_BY_MAP[MAP.przystan] || {}, SPOTS_HARBOUR);
         TLD.SPOTS_BY_MAP[MAP.kantor] = Object.assign({}, TLD.SPOTS_BY_MAP[MAP.kantor] || {}, SPOTS_KANTOR);
-        TLD.SPOTS_BY_MAP[111] = Object.assign({}, TLD.SPOTS_BY_MAP[111] || {}, SPOTS_PODGRODZIE);
+        TLD.SPOTS_BY_MAP[MAP.podgrodzie] = Object.assign({}, TLD.SPOTS_BY_MAP[MAP.podgrodzie] || {}, SPOTS_PODGRODZIE);
+        TLD.SPOTS_BY_MAP[MAP.town] = Object.assign({}, TLD.SPOTS_BY_MAP[MAP.town] || {}, SPOTS_TOWN);
         const kupiec = (TLD.RESIDENTS || []).find(r => r.key === "kupiec");
         // (2026-10-17, the user: Ludmiła behind the counter of the honest kantor by day) when the town gave the shut kantor to Ludmiła's
         // camp (Act II, condition "w5Lada" - Kantor.js), she stands at the counter 9-15 instead of the market (TownLife v1.5.0 "indoor": the

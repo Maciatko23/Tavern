@@ -74,27 +74,27 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         rowsT.includes("Zabierzesz list do mojej mamy?") && !!rep.r && rep.r.via === "tobiasz" && rep.gold === gL && /pocztą lądową Tobiasza/.test(rep.note), { rowsT, rep });
 
     // ---------------------------------------------------------------- I2: geometria (plan karczmy)
-    await t.go(1, 52, 12, 8);
+    await t.go(1, 27, 5, 6);   // (the bread ovens' room, facing the wall of the store)
     const m1 = await J("Podroznicy.podsluch.miejsce()");
-    await t.go(25, 58, 16, 8);
+    await t.go(25, 34, 16, 8);
     const m2 = await J("Podroznicy.podsluch.miejsce()");
-    await t.go(25, 13, 8, 6);
+    await t.go(25, 5, 8, 6);
     const m3 = await J("Podroznicy.podsluch.miejsce()");
-    t.check("podsłuch - miejsce z planu karczmy: magazyn → Gabinet Borgara (ściana), korytarz → pokój 12 (drzwi), pokój 3 → pokój 1 (ściana)",
-        m1 && m1.room === "jadalnia" && m1.mode === "sciana" && m2 && m2.room === "r12" && m2.mode === "drzwi" && m3 && m3.room === "r1" && m3.mode === "sciana", { m1, m2, m3 });
+    t.check("podsłuch - miejsce z planu karczmy: piekarnia → Składzik (ściana), korytarz → pokój 12 (drzwi), pokój 3 → pokój 1 (ściana)",
+        m1 && m1.room === "skladzik" && m1.mode === "sciana" && m2 && m2.room === "r12" && m2.mode === "drzwi" && m3 && m3.room === "r1" && m3.mode === "sciana", { m1, m2, m3 });
 
     // ---------------------------------------------------------------- D42 „Zboże w suszę”: narada przez drzwi jadalni (Czujność 5, potem 7)
     await t.eval(`Podroznicy.przyplyn("zboze"); TownQuests.start("D42"); 0`);
     const od = (await st()).obecni.zboze.od;
     await at(od + 2, 20.25, 20);
-    await t.go(1, 52, 12, 8);
+    await t.go(1, 27, 5, 6);   // (the bread ovens' room, facing the wall of the store)
     await t.frames(20);
     await t.press("ok");
     const startedLow = await t.until("Podroznicy.podsluch.trwa()", 5, 10);
     await t.until("!Podroznicy.podsluch.trwa()", 30, 60);
     const low = await J(`({ s: Podroznicy.podsluch.slyszane("d42Narada"), slady: Podroznicy.stan().d42.slady })`);
-    const nLow = (await notes()).filter(n => /^Podsłuchane: Gabinet Borgara/.test(n));
-    t.check("narada (dzień " + (od + 2) + ", 20:15): O twarzą do ściany jadalni - słuchanie; Czujność 5 < 6: niepełna, słowa kluczowe „...”; notatka, poszlaka D42",
+    const nLow = (await notes()).filter(n => /^Podsłuchane: Składzik/.test(n));
+    t.check("narada (dzień " + (od + 2) + ", 20:15): O twarzą do ściany składziku - słuchanie; Czujność 5 < 6: niepełna, słowa kluczowe „...”; notatka, poszlaka D42",
         startedLow && low.s && low.s.pelna === false && !!low.slady.narada && nLow.length === 1 && /\.\.\./.test(nLow[0]) && !/chorągwi królewskiej/.test(nLow[0]), { low, note: nLow[0] });
     await per(7);
     await t.eval(`Podroznicy.podsluch.zapomnij("d42Narada"); Podroznicy.podsluch.sluchaj("d42Narada"); 0`);

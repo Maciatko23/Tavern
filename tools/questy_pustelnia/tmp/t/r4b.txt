@@ -1,0 +1,2 @@
+before zakon: 33/33 passed
+after zakon: 33/33 passed

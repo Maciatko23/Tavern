@@ -1,6 +1,6 @@
 // Kleofas przy kaplicy (2026-11-11): pustelnia poza swiatem (Wyspa_Data HERMITAGE_OPEN = false) - brat Kleofas (TownLife 944) mieszka przy
-// kaplicy w Kruczogrodzie (Map008, miejsca kaplica_drzwi / kaplica_lawka). Sprawdza (domyslnie, pustelnia zamknieta):
-//   - dane: drugi dom (alt.map 8), Pustelnia.chapel(), miejsca na Map008, Kleofas na Map008 w dzien i nocy (Noc Pytania), nie na 155
+// kaplicy w Kruczogrodzie (Map220, miejsca kaplica_drzwi / kaplica_lawka). Sprawdza (domyslnie, pustelnia zamknieta):
+//   - dane: drugi dom (alt.map 220), Pustelnia.chapel(), miejsca na Map220, Kleofas na Map220 w dzien i nocy (Noc Pytania), nie na 155
 //   - W2 rozdz. 7: Ambrozy daje serce (tekst o kaplicy), pierwsza rozmowa z Kleofasem przy kaplicy, wiesza serce, dziennik, Noc Pytania:
 //     przed polnoca „czekaj”, po polnocy dzwon i pytanie, rozdz. 8 czeka, nastepne pytanie „przy kaplicy”
 //   - W13 rozdz. 3 (w13Kleofas): pioro u Kleofasa przy kaplicy, rozdzial idzie dalej, flaga orzelKroniki
@@ -12,13 +12,13 @@ const path = require("path");
 const kit = require("./lib/kit.js");
 
 const ROOT = path.join(__dirname, "..");
-const OVERLAY = process.env.GAME_OVERLAY || "tools/usterki/kleofas/staging";
+const OVERLAY = process.env.GAME_OVERLAY || undefined;   // (2026-11-15: the installed game by default)
 const OPEN = process.env.KLEOFAS_OPEN === "1";
 const SHOTS = path.join(ROOT, "docs", "usterki", "kleofas");
 const FORCE_OPEN = `(function(){ let v; Object.defineProperty(window, 'WyspaData', { configurable: true, get() { return v; },
     set(x) { if (x && typeof x === 'object') x.HERMITAGE_OPEN = true; v = x; } }); })();`;
 
-kit.test({ port: Number(process.env.CDP_PORT) || (OPEN ? 9841 : 9840), overlay: OVERLAY, overlayJs: true, beforeLoad: OPEN ? FORCE_OPEN : undefined,
+kit.test({ port: Number(process.env.CDP_PORT) || (OPEN ? 9841 : 9840), overlay: OVERLAY, overlayJs: !!OVERLAY, beforeLoad: OPEN ? FORCE_OPEN : undefined,
     bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli" }, async t => {
     console.log("NOTE nakładka: " + OVERLAY + (OPEN ? " (pustelnia OTWARTA)" : " (pustelnia zamknięta)"));
     const K = "TownLife.eventOf('pustelnik')";
@@ -38,9 +38,9 @@ kit.test({ port: Number(process.env.CDP_PORT) || (OPEN ? 9841 : 9840), overlay: 
             home: R ? TownLife.homeOf(R) : null, ready: Wyspa.isReady(155), w13: TownQuests.Q.W13.steps[2].text, w2: TownQuests.Q.W2.lines.stage1,
             meet: Pustelnia.DATA.TX.meet[0] }; })()`);
     if (!OPEN) {
-        t.check("pustelnia zamknięta: Kleofas (944) ma drugi dom na Map008 (alt.when pustelniaZamknieta), mieszka tam, Pustelnia.chapel()",
-            !base.open && base.chapel && base.res && base.res[0] === 944 && base.res[1] === 155 && base.res[2] && base.res[3] === 8 && base.res[4] === "pustelniaZamknieta"
-            && base.home === 8 && !base.ready, base);
+        t.check("pustelnia zamknięta: Kleofas (944) ma drugi dom na Map220 (alt.when pustelniaZamknieta), mieszka tam, Pustelnia.chapel()",
+            !base.open && base.chapel && base.res && base.res[0] === 944 && base.res[1] === 155 && base.res[2] && base.res[3] === 220 && base.res[4] === "pustelniaZamknieta"
+            && base.home === 220 && !base.ready, base);
         t.check("teksty z „kaplica.*” weszły: W2 stage1, W13 krok 3, pierwsze spotkanie", /kaplicy/.test(base.w2) && /kaplicy/.test(base.w13) && /ławka jest moja/.test(base.meet), base);
     } else {
         t.check("pustelnia otwarta: Kleofas mieszka na Map155 (homeOf 155), Pustelnia.chapel() false, teksty z góry plików (klif)",
@@ -51,7 +51,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || (OPEN ? 9841 : 9840), overlay: 
     await t.eval("if (window.Creatures && Creatures.auto) Creatures.auto(false); 0");
     await t.eval("(function(){ TownQuests.start('W2', TownQuests.Q.W2.steps.length - 1, true); const s = Story.state(); s.paid = s.debt; s.done = Tawerna.time.day(); return 0; })()");
     await t.setDay(7, 10);
-    await t.go(8, 60, 40, 2);
+    await t.go(220, 48, 44, 2);
     await t.frames(40);
 
     // ---------------------------------------------------------------- Ambrozy daje serce dzwonu
@@ -65,14 +65,14 @@ kit.test({ port: Number(process.env.CDP_PORT) || (OPEN ? 9841 : 9840), overlay: 
 
     // ---------------------------------------------------------------- Kleofas na swoim miejscu, w dzien
     await t.setDay(7, 14);
-    if (OPEN) await t.go(155, 16, 11, 8); else await t.go(8, 14, 24, 8);
+    if (OPEN) await t.go(155, 16, 11, 8); else await t.go(220, 10, 27, 8);
     await t.frames(80);
     const noon = await t.json(`(function(){ const s = TownLife.state('pustelnik'), ev = ${K}, cd = TownLife.spot('kaplica_drzwi'), cl = TownLife.spot('kaplica_lawka');
         return { map: $gameMap.mapId(), s: s && [s.x, s.y, s.hidden, s.act], ev: !!ev, cd, cl, sheet: ev && ev.characterName() }; })()`);
     if (!OPEN) {
         const near = p => noon.s && p && Math.abs(noon.s[0] - p[0]) + Math.abs(noon.s[1] - p[1]) <= 2;
         t.check("o 14:00 Kleofas stoi przy kaplicy w Kruczogrodzie (ławka albo drzwi), widoczny, w swoim stroju",
-            noon.map === 8 && noon.ev && noon.s && !noon.s[2] && (near(noon.cl) || near(noon.cd)) && noon.sheet === "$Npc_Pustelnik", noon);
+            noon.map === 220 && noon.ev && noon.s && !noon.s[2] && (near(noon.cl) || near(noon.cd)) && noon.sheet === "$Npc_Pustelnik", noon);
         await shotNear("kleofas_kaplica_dzien.png");
     } else t.check("o 14:00 Kleofas na Map155 (otwarta pustelnia)", noon.map === 155 && noon.ev && noon.s && !noon.s[2], noon);
 
@@ -93,12 +93,12 @@ kit.test({ port: Number(process.env.CDP_PORT) || (OPEN ? 9841 : 9840), overlay: 
     // ---------------------------------------------------------------- Noc Pytania
     const W = hung.wig.wig;
     await t.setDay(W, 23);
-    if (OPEN) await t.go(155, 19, 11, 8); else await t.go(8, 14, 24, 8);
+    if (OPEN) await t.go(155, 19, 11, 8); else await t.go(220, 10, 27, 8);
     await t.setDay(W, 23);
     await t.frames(150);
     const eve = await t.json(`(function(){ const s = TownLife.state('pustelnik'), sp = TownLife.spot('${OPEN ? "wieza" : "kaplica_drzwi"}'); return { map: $gameMap.mapId(), s: s && [s.x, s.y, s.hidden, s.act], sp, night: Pustelnia.nightNow(), h: $gameSystem.dayNightHour() }; })()`);
     t.check("Wigilia, 23:00: Kleofas czeka " + (OPEN ? "przy wieży skryptorium" : "przy drzwiach kaplicy w Kruczogrodzie") + ", widoczny",
-        eve.night && eve.s && !eve.s[2] && eve.s[3] === "stand" && Math.abs(eve.s[0] - eve.sp[0]) + Math.abs(eve.s[1] - eve.sp[1]) <= 2 && eve.map === (OPEN ? 155 : 8), eve);
+        eve.night && eve.s && !eve.s[2] && eve.s[3] === "stand" && Math.abs(eve.s[0] - eve.sp[0]) + Math.abs(eve.s[1] - eve.sp[1]) <= 2 && eve.map === (OPEN ? 155 : 220), eve);
     if (!OPEN) await shotNear("kleofas_kaplica_noc.png");
     const early = await t.talkTo(K, []);
     t.check("...przed północą: „Czekaj na dzwon”", /Czekaj na dzwon/.test(early.text), early.text);
@@ -118,7 +118,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || (OPEN ? 9841 : 9840), overlay: 
     await t.eval("(function(){ TownQuests.start('W13', 2, true); return 0; })()");
     await t.give(pioro, 1);
     await t.setDay(W + 3, 14);
-    if (OPEN) await t.go(155, 16, 11, 8); else await t.go(8, 14, 24, 8);
+    if (OPEN) await t.go(155, 16, 11, 8); else await t.go(220, 10, 27, 8);
     await t.frames(120);
     const jw = await journal("W13");
     t.check("dziennik W13 rozdz. 3: pióro do Kleofasa " + (OPEN ? "(pustelnia na klifie)" : "przy kaplicy w Kruczogrodzie"), OPEN ? /pustelnia na klifie/.test(jw) : /przy kaplicy w Kruczogrodzie/.test(jw) && !/pustelnia na klifie/.test(jw), jw.slice(0, 300));

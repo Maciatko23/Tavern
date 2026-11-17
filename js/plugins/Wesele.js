@@ -146,29 +146,29 @@
         const g = builtGrp = grp(), has_ = c => g.includes(c), s0 = S();
         if (mapId === M.karczma) {
             if (has_("w")) {
-                add(ID.pan, "Wojciech", 13, 37, { sheet: D.POSTAC.pan, key: "pan", dir: 8 });
-                add(ID.panna, "Dorota", 15, 37, { sheet: D.POSTAC.panna, key: "panna", dir: 8 });
-                add(ID.kleofas, "Brat Kleofas", 14, 35, { sheet: D.POSTAC.kleofas, key: "kleofas", dir: 2 });
+                add(ID.pan, "Wojciech", 13, 24, { sheet: D.POSTAC.pan, key: "pan", dir: 8 });
+                add(ID.panna, "Dorota", 15, 24, { sheet: D.POSTAC.panna, key: "panna", dir: 8 });
+                add(ID.kleofas, "Brat Kleofas", 14, 22, { sheet: D.POSTAC.kleofas, key: "kleofas", dir: 2 });
                 D.KARTY.forEach((c, i) => { const m = miejsceXY(i); add(ID.gosc0 + i, c.imie, m.x, m.y, { sheet: "$Npc_" + c.cialo, key: "g:" + c.k, dir: m.strona, walk: true, step: false, fix: false, trigger: 0 }); });
             }
             if (has_("s")) {
-                add(ID.kot, "Kot Borgara", 11, 28, { sheet: D.POSTAC.kot, key: "kot", dir: 2, trigger: -1 });
-                add(ID.hanka, "Hanka Mączna", 9, 12, { sheet: "$Npc_Piekarka", key: "m:kuchnia", dir: 2 });
-                add(ID.ozzy, "Dziadek Ozzy", 54, 33, { sheet: "$Npc_Ozzy", key: "m:gry", dir: 2 });
-                add(ID.wit, "Kapral Wit", 31, 45, { sheet: "$Npc_Kapral", key: "m:palarnia", dir: 6 });
-                add(ID.mietek, "Mietek Kwaśniak", 33, 45, { sheet: "$Npc_Kowal", index: 0, key: "m:palarnia2", dir: 4 });
+                add(ID.kot, "Kot Borgara", 11, 15, { sheet: D.POSTAC.kot, key: "kot", dir: 2, trigger: -1 });
+                add(ID.hanka, "Hanka Mączna", 9, 9, { sheet: "$Npc_Piekarka", key: "m:kuchnia", dir: 2 });
+                add(ID.ozzy, "Dziadek Ozzy", 40, 35, { sheet: "$Npc_Ozzy", key: "m:gry", dir: 2 });
+                add(ID.wit, "Kapral Wit", 30, 33, { sheet: "$Npc_Kapral", key: "m:palarnia", dir: 6 });
+                add(ID.mietek, "Mietek Kwaśniak", 32, 33, { sheet: "$Npc_Kowal", index: 0, key: "m:palarnia2", dir: 4 });
                 add(ID.beczka, "Beczka", D.MIEJSCA[0].x, D.MIEJSCA[0].y, { key: "m:beczka", sheet: "" });
             }
             if (has_("k")) {
-                add(ID.wojciechK, "Wojciech", 52, 33, { sheet: "$Npc_Woznica", key: "kaw:wojciech", dir: 6, trigger: -1 });
-                add(ID.bartekK, "Bartek", 54, 34, { sheet: "$Npc_Bartek", key: "kaw:bartek", dir: 4, trigger: -1 });
+                add(ID.wojciechK, "Wojciech", 38, 35, { sheet: "$Npc_Woznica", key: "kaw:wojciech", dir: 6, trigger: -1 });
+                add(ID.bartekK, "Bartek", 40, 36, { sheet: "$Npc_Bartek", key: "kaw:bartek", dir: 4, trigger: -1 });
             }
             if (has_("p")) {
                 add(ID.lada, "Lada weselna", D.LADA.x, D.LADA.y, { key: "lada", pri: 1, sheet: "" });
                 add(ID.tablica, "Plan stołów", D.TABLICA.x, D.TABLICA.y, { sheet: "!$Wesele_Tablica", key: "tablica", dir: 2, pattern: 1, walk: false });
                 if (s0.tort >= 2 && !(s0.podane || []).some(p => p.tort)) add(ID.tort, "Tort weselny", D.TORT_MIEJSCE.x, D.TORT_MIEJSCE.y, { sheet: "!$Wesele_Tort", key: "tort", dir: 2, walk: false, trigger: -1, note: "<Px:0,-16>" });
                 D.DEKOR.forEach((d, i) => !s0.wiszace.includes(i) && add(ID.dekor0 + i, d[2] === "wianek" ? "Wieszak na wianek" : "Wieszak na szarfę", d[0], d[1], { sheet: "!$Wesele_Znak", key: "d:" + i, dir: 2, walk: false, pri: 2 }));
-                D.SWIECE.forEach((c, i) => !s0.swiece.includes(i) && add(ID.swieca0 + i, "Świeca weselna", c[0], c[1], { sheet: "!$Wesele_Swieca", key: "s:" + i, dir: 2, walk: false, pri: 0, note: c[1] === 30 ? "<Px:0,-12>" : "<Px:0,-6>" }));
+                D.SWIECE.forEach((c, i) => !s0.swiece.includes(i) && add(ID.swieca0 + i, "Świeca weselna", c[0], c[1], { sheet: "!$Wesele_Swieca", key: "s:" + i, dir: 2, walk: false, pri: 0, note: c[1] === 17 ? "<Px:0,-12>" : "<Px:0,-6>" }));
             }
         } else if (mapId === M.pietro) {
             if (has_("s")) {
@@ -502,7 +502,7 @@
         if (ak && kleo === "soltys") { ak.setImage("$Npc_Soltys", 0); }
         const pan = evOf(ID.pan), panna = evOf(ID.panna);
         const steps = [
-            { zrob: () => { if (pan) pan.locate(13, 37); if (panna) panna.locate(15, 37); if (ak) ak.locate(14, 35); }, twarz: [[ID.pan, 8], [ID.panna, 8], [ID.kleofas, 2]], czekaj: 40 },
+            { zrob: () => { if (pan) pan.locate(13, 24); if (panna) panna.locate(15, 24); if (ak) ak.locate(14, 22); }, twarz: [[ID.pan, 8], [ID.panna, 8], [ID.kleofas, 2]], czekaj: 40 },
             { kto: ID.kleofas, tekst: "scena.slub.kleofas.1", czekaj: 170 },
             { kto: ID.kleofas, tekst: "scena.slub.kleofas.2", czekaj: 170 },
             { kto: "borgar", tekst: "scena.slub.borgar", emotka: ["borgar", 1], czekaj: 120 },
@@ -560,9 +560,9 @@
         const steps = [
             { kto: ID.pan, tekst: "znik.wojciech", emotka: [ID.pan, 6], czekaj: 70 },
             { idz: [ID.pan, 14, 45, 4], czekaj: 40, czekajChod: true },
-            { zrob: () => { const g = evOf(ID.pan); if (g) g.locate(14, 50); }, idz: [ID.pan, 14, 53, 4], czekaj: 20, czekajChod: true },
+            { zrob: () => { const g = evOf(ID.pan); if (g) g.locate(14, 37); }, idz: [ID.pan, 14, 40, 4], czekaj: 20, czekajChod: true },
             { dzwiek: D.DZWIEK.drzwi, czekaj: 25 },
-            { zrob: () => { const g = evOf(ID.pan); if (g) { g.setTransparent(true); g.locate(14, 54); } s.scen.znik = 1; }, dzwiek: D.DZWIEK.tlucze, czekaj: 30 },
+            { zrob: () => { const g = evOf(ID.pan); if (g) { g.setTransparent(true); g.locate(14, 41); } s.scen.znik = 1; }, dzwiek: D.DZWIEK.tlucze, czekaj: 30 },
             { kto: ID.panna, tekst: "znik.dorota", emotka: [ID.panna, 7], czekaj: 90 },
             { kto: "g:stefa", tekst: "znik.stefa", czekaj: 120 },
             { kto: "g:ignac", tekst: "znik.gosc.1", emotka: [["g:ignac", 2], ["g:lucjan", 1]], czekaj: 80 },
@@ -615,7 +615,7 @@
             f.out = true;
             ev.setThrough(true);
             // (the brawl is on the red carpet, where the hero stands and sees it)
-            const spots = [[12, 33], [16, 33], [13, 35], [15, 35], [11, 36], [17, 36], [13, 31], [15, 31]];
+            const spots = [[12, 20], [16, 20], [13, 22], [15, 22], [11, 23], [17, 23], [13, 18], [15, 18]];
             ev.locate(spots[i % spots.length][0], spots[i % spots.length][1]);
             ev.setDirectionFix(false);
             ev.setMoveSpeed(4);
@@ -686,7 +686,7 @@
         const key = k === "taras" ? "taras" : k === "palarnia2" ? "palarnia" : k;
         if (s.szuka.odw.includes(key) && key !== "taras") return;
         const spots = {
-            beczka: () => { s.szuka.kot = 1; const kot = evOf(ID.kot); const stan2 = () => { if (kot) { kot.setTransparent(false); kot.locate(11, 28); kot.jump(0, 0); } };
+            beczka: () => { s.szuka.kot = 1; const kot = evOf(ID.kot); const stan2 = () => { if (kot) { kot.setTransparent(false); kot.locate(11, 15); kot.jump(0, 0); } };
                 scenaMiejsce("beczka", [{ zrob: stan2, dzwiek: ["Cat", 70, 100], czekaj: 40 }, { kto: ID.kot, tekst: "miejsce.beczka.kot", emotka: [ID.kot, 3], czekaj: 90 }, { kto: "hero", tekst: "miejsce.beczka.1", czekaj: 160 }, { kto: "hero", tekst: "miejsce.beczka.mysl", czekaj: 80 }]); },
             kuchnia: () => scenaMiejsce("kuchnia", [{ kto: ID.hanka, tekst: "miejsce.kuchnia.hanka.1", emotka: [ID.hanka, 9], czekaj: 190 }, { kto: ID.hanka, tekst: "miejsce.kuchnia.hanka.2", czekaj: 170 }, { kto: "hero", tekst: "miejsce.kuchnia.mysl", czekaj: 80 }]),
             gry: () => scenaMiejsce("gry", [{ kto: ID.ozzy, tekst: "miejsce.gry.ozzy.1", emotka: [ID.ozzy, 10], czekaj: 190 }, { kto: ID.ozzy, tekst: "miejsce.gry.ozzy.2", czekaj: 190 }, { kto: "hero", tekst: "miejsce.gry.mysl", czekaj: 80 }]),

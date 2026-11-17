@@ -54,7 +54,7 @@
     const PLUGIN = "Kopalnia";
     if (T.api(PLUGIN)) return;
 
-    const MAP = 213;
+    const MAPS = [213, 225], MAP = 213;   // (2026-11-15: 225 = Sztolnia Kruczych Turni of the new world - the same carts, levers and tags)
     const SPEED = 4.0;            // tiles a second at full speed
     const ACCEL = 5.0;            // tiles a second squared
     const DECEL = 4.0;            // the usual braking (a Cancel late in the way brakes harder)
@@ -160,7 +160,7 @@
     // ------------------------------------------------------------------ the events
     let ref = null;      // { A, B, M, R, lever } game events of this map (and the events array they came from)
     function refs() {
-        if (!window.$gameMap || $gameMap.mapId() !== MAP || !window.$dataMap || !$gameMap._events) return null;
+        if (!window.$gameMap || !MAPS.includes($gameMap.mapId()) || !window.$dataMap || !$gameMap._events) return null;
         if (ref && ref._ev === $gameMap._events) return ref;
         const m = model = readModel();
         const r = { _ev: $gameMap._events, A: $gameMap.event(m.carts.A), B: $gameMap.event(m.carts.B), M: $gameMap.event(m.carts.M), R: $gameMap.event(m.carts.R),
@@ -379,7 +379,7 @@
 
     // ------------------------------------------------------------------ the frame
     function update() {
-        if (!window.$gameMap || $gameMap.mapId() !== MAP || !window.$gamePlayer) return;
+        if (!window.$gameMap || !MAPS.includes($gameMap.mapId()) || !window.$gamePlayer) return;
         if (!refs()) return;
         if (ride) {
             try { stepRide(); } catch (e) { endRideNow(); ride = null; settle(); throw e; }

@@ -15,7 +15,7 @@ felixBark = Szybko, szybko... Lord śpi, a ja tu stoję.
 grumBark = Mój żołd. Z lądu. I nic więcej nie mów.
 [noteKnock]
 Trzy stuknięcia
-Po północy ktoś w kapturze zapukał trzy razy w tylne drzwi kantoru, a Baltazar go wpuścił. Ambroży zadzwonił z dzwonnicy trzy i jeden - „obcy w murach”. Gość wyszedł bramą południową.
+Po północy ktoś w kapturze zapukał trzy razy w tylne drzwi kantoru, a Baltazar go wpuścił. Ambroży zadzwonił z dzwonnicy trzy i jeden - „obcy w murach”. Gość wyszedł bramą zachodnią, na Podgrodzie.
 
 [noteFeliks]
 Feliks u Baltazara
@@ -59,11 +59,11 @@ Następny prom - wielki ładunek. Ktoś ma pilnować wozu.
 
 [noteObozHeard]
 Obóz przemytników
-Na Skraju lasu, przy ognisku, siedzą ludzie Baltazara z kurierem w kapturze. Sztab z lądu chce kamieni z krukiem, zboże z rekwizycji idzie przez nich, a „liczą się drzwi pod skałą”. Baltazar wszystko zapisuje w swojej księdze. Na następny prom szykują wielki ładunek.
+Na Słonym Brzegu, pod sosnami nad drogą do przystani, przy ognisku siedzą ludzie Baltazara z kurierem w kapturze. Sztab z lądu chce kamieni z krukiem, zboże z rekwizycji idzie przez nich, a „liczą się drzwi pod skałą”. Baltazar wszystko zapisuje w swojej księdze. Na następny prom szykują wielki ładunek.
 
 [noteObozFight]
 Obóz przemytników
-Na Skraju lasu ludzie Baltazara siedzieli przy ognisku z kurierem w kapturze. Zobaczyli mnie - była bijatyka. W ich worku list przewozowy z pieczęcią kantoru: „kamienie z krukiem - do sztabu, zboże - na prom”.
+Na Słonym Brzegu, pod sosnami, ludzie Baltazara siedzieli przy ognisku z kurierem w kapturze. Zobaczyli mnie - była bijatyka. W ich worku list przewozowy z pieczęcią kantoru: „kamienie z krukiem - do sztabu, zboże - na prom”.
 
 [obozPobity]
 > (Ludzie z obozu mnie pobili. Ogień zgaszony, ich nie ma. Wrócą następnej nocy.)
@@ -74,12 +74,12 @@ Potrzebuję silnych rąk nocą. Skrzynie z piwnicy pod tylne drzwi. Dwadzieścia
 Od dziesiątej, tylnymi drzwiami. Nie spóźniaj się - po wpół do dwunastej nikt ci nie otworzy.
 
 [najemCold]
-(Baltazar długo ci się przygląda.) Moi ludzie mówią, że ktoś kręcił się nocą przy Skraju lasu. Ktoś ciekawski.
+(Baltazar długo ci się przygląda.) Moi ludzie mówią, że ktoś kręcił się nocą pod sosnami na Słonym Brzegu. Ktoś ciekawski.
 Ciekawskich wolę mieć blisko. Będziesz nosił skrzynie. Dwadzieścia groszy za noc - i patrzę ci na ręce.
 Od dziesiątej, tylnymi drzwiami. Po wpół do dwunastej nikt ci nie otworzy.
 
 [najemFight]
-(Baltazar uśmiecha się samymi ustami.) Moich ludzi ktoś pobił przy Skraju lasu. Nie wiem kto. A ty wiesz?
+(Baltazar uśmiecha się samymi ustami.) Moich ludzi ktoś pobił pod sosnami na Słonym Brzegu. Nie wiem kto. A ty wiesz?
 Nieważne. Kto umie się bić, ten udźwignie skrzynię. Dwadzieścia groszy za noc. Od dziesiątej, tylne drzwi.
 
 najemYes = Przyjdę.
@@ -299,7 +299,7 @@ W noc promu podmieniłem ładunek na wozie Baltazara: kamienie z krukiem są u m
 
 [noteSeized]
 Ładunek z wozu
-W noc promu pobiłem ludzi Baltazara przy wozie na Kruczym Jarze. Kamienie z krukiem i mapy nie popłynęły na ląd.
+W noc promu pobiłem ludzi Baltazara przy wozie na drodze do przystani. Kamienie z krukiem i mapy nie popłynęły na ląd.
 
 [noteLetGo]
 Wóz pojechał
@@ -311,7 +311,7 @@ Nie było mnie przy wozie w noc promu. Ładunek Baltazara - kamienie z krukiem i
 
 [noteBeaten]
 Wóz pojechał
-Ludzie Baltazara pobili mnie przy wozie na Kruczym Jarze. Ładunek popłynął na ląd.
+Ludzie Baltazara pobili mnie przy wozie na drodze do przystani. Ładunek popłynął na ląd.
 
 [rafalFree]
 (Przecinasz sznury.) Myślałem, że już po mnie. Dwór sprzedał mnie im jak worek zboża - do kopania pod skałą.
@@ -359,7 +359,7 @@ Baltazar sprzedaje mi wszystko dwa razy drożej. Wiem, że jego ludzie patrzą n
 
 [noteBack]
 Baltazar wrócił
-Baltazar Vey wrócił na wyspę z najemnikami. Siedzi w składzie portowym na przystani. Kantoru już nie ma - jest wojna.
+Baltazar Vey wrócił na wyspę z najemnikami. Siedzi na przystani, w kącie warzelni soli. Kantoru już nie ma - jest wojna.
 
 sklepAsk = Pokaż towar.
 sklepNic = Nic.
@@ -416,18 +416,18 @@ rejestr.14.line = Czekamy na drzwi pod skałą.
 
 # ======================================================================== W5 (zadania.W5)
 zadania.W5.title = Towary z kontynentu
-zadania.W5.where = kantor, tylne drzwi kantoru nocą, Kruczy Jar (Skraj lasu na wschodzie, droga na północ od działki)
+zadania.W5.where = kantor, tylne drzwi kantoru nocą, Słony Brzeg (sosny nad drogą do przystani, droga przy rozwidleniu)
 zadania.W5.when = od dnia 10 do Aktu II
 zadania.W5.desc = Baltazar Vey przywozi z kontynentu to, czego wyspa nie ma, a wywozi to, czego ma za dużo. Co dokładnie - i dla kogo?
 zadania.W5.steps.0.text = Dziwny kupiec: co wywozi Baltazar Vey? Poszlaki ({n} z 2): skrzynia na nocnym wozie, skup zapasów po promie, zalany kosz i mokre ślady, lek z pieczęcią wojska, „trzy i jeden” z dzwonnicy, nocni goście przy kantorze.
-zadania.W5.steps.1.text = Trzy stuknięcia: po północy obserwuj tylne drzwi kantoru (przy tawernie, na zachód od rynku) - z ukrycia (C), żeby gość cię nie zauważył.
-zadania.W5.steps.2.text = Kurier w kapturze wychodzi bramą południową. Idź jego drogą przez Kruczy Jar na jego wschodni Skraj lasu: przy ognisku obóz przemytników (21–4). Podejdź po cichu (C) i posłuchaj.
+zadania.W5.steps.1.text = Trzy stuknięcia: po północy obserwuj tylne drzwi kantoru (na lewo od frontowych, przy ratuszu) - z ukrycia (C), żeby gość cię nie zauważył.
+zadania.W5.steps.2.text = Kurier w kapturze wychodzi bramą zachodnią. Idź jego drogą przez Podgrodzie na Słony Brzeg: pod sosnami, na północ od drogi do przystani, przy ognisku obóz przemytników (21–4). Podejdź po cichu (C) i posłuchaj.
 zadania.W5.steps.3.text = Nocny tragarz: porozmawiaj z Baltazarem (przed kantorem, 8–18).
 zadania.W5.steps.4.text = Nocny tragarz: przyjdź tylnymi drzwiami kantoru (22–23:30) i noś skrzynie z piwnicy pod tylne drzwi. Noce: {zmiany}/{noce}.
 zadania.W5.steps.5.text = Rejestr: trzecia noc w kantorze (22–23:30, tylne drzwi). O wpół do pierwszej Baltazar wychodzi na dwadzieścia minut - zabierz albo przepisz rejestr z jego biurka w gabinecie. Sławek pilnuje składu.
 zadania.W5.steps.6.text = Komu to dać? {rejestr}: kapralowi Witowi (brama wschodnia, mury), sołtysowi (ratusz, 8–18) albo samemu Baltazarowi (kantor, 8–18) - podwójna gra albo szantaż.
 zadania.W5.steps.7.text = Zebranie w ratuszu: dzień {zebranie}, 12–16 - porozmawiaj z sołtysem.
-zadania.W5.steps.8.text = Noc promu: {prom}. Wóz z ładunkiem Baltazara stanie nocą (21–3) na Kruczym Jarze, na drodze na północ od działki, przy rozwidleniu na wschód. Kamienie z krukiem płyną na ląd.
+zadania.W5.steps.8.text = Noc promu: {prom}. Wóz z ładunkiem Baltazara stanie nocą (21–3) na Słonym Brzegu, na drodze do przystani, zaraz na wschód od rozwidlenia. Kamienie z krukiem płyną na ląd.
 zadania.W5.steps.9.text = Co dalej z Kantorem: {akt2}
 
 # ======================================================================== VITEMS (rzeczy)
@@ -555,7 +555,7 @@ Trzy razy. Nie dwa, nie cztery.
 [baltazarLate]
 Spóźniłeś się. Dziś nie ma roboty.
 
-promFirst = Wóz z ładunkiem Baltazara czeka na Kruczym Jarze, na drodze na północ od działki, przy rozwidleniu na wschód.
+promFirst = Wóz z ładunkiem Baltazara czeka na Słonym Brzegu, na drodze do przystani, zaraz na wschód od rozwidlenia.
 rafalTied = Rafał! Związany! Pomóż mi!
 f9 = W5: przeskocz do rozdziału {n}
 f9desc = Ustawia wątek „Towary z kontynentu” na początku rozdziału {n} (flagi, pora, miejsce) i przenosi bohatera tam, gdzie się dzieje.

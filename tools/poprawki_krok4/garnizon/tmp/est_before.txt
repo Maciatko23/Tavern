@@ -1,0 +1,10 @@
+Estetyka map świata (data/):
+  mapa    a    b    c    d    e
+   162    0   10    0    0    0
+  razem   0   10    0    0    0   (wyjątki odjęte: {'b': 2})
+   a - pas liści: 0
+   b - ucięty/pojedynczy grunt: 10
+   c - drzewo z kafli bez gwiazdki: 0
+   d - mur bez zakończenia: 0
+   e - półka bez zakończenia: 0
+WYNIK: BŁĄD (10)

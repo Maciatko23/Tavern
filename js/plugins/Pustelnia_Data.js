@@ -35,7 +35,7 @@
     // (2026-11-11) the hermitage is out of the world (WyspaData.HERMITAGE_OPEN = false): brother Kleofas lives by the chapel of Kruczogrod
     // (Map008, the spots kaplica_drzwi / kaplica_lawka) and the steps that need him happen there. CHAPEL is read once at the load: it picks
     // the words ("kaplica.*" of the text files - appended below); the resident's second home (alt) follows the flag live.
-    const CHAPEL_MAP = 8, CHAPEL_INNER = 178;   // (Map178 "Kaplica": the lectern of the chapel - D23's reading)
+    const CHAPEL_MAP = 220, CHAPEL_INNER = 178;   // (2026-11-15 nowy świat: the chapel of the new Kruczogród)   // (Map178 "Kaplica": the lectern of the chapel - D23's reading)
     const CHAPEL = !(window.WyspaData && window.WyspaData.HERMITAGE_OPEN);
     const ITEM = { honey: 76, cones: 147, iron: 86, pendant: 172 };
     const P = () => window.Pustelnia || null;

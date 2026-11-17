@@ -9,8 +9,8 @@ slowa.konik = Osmalony konik
 
 # ======================================================================== HOUSES (domy)
 domy.chata.name = Chata pod lasem
-domy.chata.what = chatę pod lasem na Podgrodziu
-domy.chata.where = Podgrodzie: za palisadą, przy lesie, na południe od osady - wyjdź południową bramą i idź ścieżką na zachód. Obok chaty ogrodzona działka (furtka od ścieżki).
+domy.chata.what = chatę pod lasem na Słonym Brzegu
+domy.chata.where = Słony Brzeg: na łące pod sosnami, na północ od drogi do przystani (za rozwidleniem w prawo). Wokół chaty ziemia pod zabudowę.
 domy.zagroda.name = Zagroda Ługów
 domy.zagroda.what = spaloną zagrodę Ługów
 domy.zagroda.where = za północno-wschodnim rogiem Podgrodzia (brama przy drogowskazie). Pole i podwórze wokół domu.
@@ -159,7 +159,7 @@ kod.glowna.7 = Kupiec bydła z miasteczka czeka przy drodze z wozem - płaci od 
 kod.glowna.8 = Zabierz zwierzęta
 kod.glowna.9 = {1} pójdą z tobą. Poczekają u dziadka, aż na własnej ziemi postawisz nową zagrodę tego rodzaju - wtedy w niej zamieszkają.
 kod.glowna.10 = Twoje {1} z działki zamieszkały w nowej {2}.
-kod.glowna.11 = Chata na sprzedaż! Na Podgrodziu, pod lasem, z działką - pytać w ratuszu!
+kod.glowna.11 = Chata na sprzedaż! Na Słonym Brzegu, pod lasem, z ziemią - pytać w ratuszu!
 # reserveTransfer
 kod.reserveTransfer.0 = Działka należy teraz do Lorda.
 # sellAnimals
@@ -167,7 +167,7 @@ kod.sellAnimals.0 = {1} sprzedane: +{price} G
 # takeAnimals
 kod.takeAnimals.0 = {1} idą z tobą - poczekają u dziadka na nową zagrodę.
 # soltysList
-kod.soltysList.0 = Domy? Ratusz ma jedną chatę na sprzedaż. Chata pod lasem na Podgrodziu - za palisadą, przy lesie, na południe od osady. Wyjdź południową bramą i idź ścieżką na zachód.
+kod.soltysList.0 = Domy? Ratusz ma jedną chatę na sprzedaż. Chata pod lasem na Słonym Brzegu - na łące pod sosnami, na północ od drogi do przystani. Idź przez Podgrodzie na zachód i za rozwidleniem skręć w prawo.
 kod.soltysList.1 = Nowa, z bali. Postawił ją cieśla na sprzedaż i kupca się nie doczekał. Obok ogrodzona działka pod uprawę. {price} G.
 kod.soltysList.2 = Na swojej ziemi budujesz, co chcesz. Tylko studni nie obiecuję - wodę i tak dzielimy z rynku.
 kod.soltysList.3 = Jest jeszcze zagroda Ługów za północno-wschodnim rogiem Podgrodzia, ale to ziemia dworu - i popiół. Jak ci na niej zależy, popytaj na Podgrodziu.

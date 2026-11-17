@@ -1,0 +1,746 @@
+{
+ "sets": [
+  {
+   "name": "zelazny",
+   "set": {
+    "glowa": "helm_nosal_zelazo",
+    "tors": "zbroja_kolczuga_zelazo",
+    "rece": "karwasze_zelazo",
+    "nogi": "nagolenniki_zelazo",
+    "stopy": "buty_okute_zelazo"
+   },
+   "shield": "tarcza_drewniana",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "zelazny_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "zelazny_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "zelazny_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "zelazny_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "zelazny_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "zelazny_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "zelazny_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "zelazny_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "zelazny_siedzi.png"
+    }
+   ]
+  },
+  {
+   "name": "skorzany",
+   "set": {
+    "glowa": "helm_otwarty_skora",
+    "tors": "zbroja_skorznia_skora",
+    "rece": "karwasze_skora",
+    "nogi": "nagolenniki_skora",
+    "stopy": "buty_brazowe"
+   },
+   "shield": "tarcza_puklerz",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "skorzany_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "skorzany_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "skorzany_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "skorzany_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "skorzany_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "skorzany_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "skorzany_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "skorzany_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "skorzany_siedzi.png"
+    }
+   ]
+  },
+  {
+   "name": "pikowany",
+   "set": {
+    "glowa": "helm_czepiec_len",
+    "tors": "zbroja_przeszywanica_len",
+    "rece": "karwasze_len",
+    "nogi": "nagolenniki_len",
+    "stopy": "buty_filcowe"
+   },
+   "shield": "",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "pikowany_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "pikowany_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "pikowany_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "pikowany_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "pikowany_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "pikowany_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "pikowany_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "pikowany_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "pikowany_siedzi.png"
+    }
+   ]
+  },
+  {
+   "name": "stalowy",
+   "set": {
+    "glowa": "helm_otwarty_stal",
+    "tors": "zbroja_napiersnik_stal",
+    "rece": "karwasze_stal",
+    "nogi": "nagolenniki_stal",
+    "stopy": "buty_okute_stal"
+   },
+   "shield": "tarcza_zelazna",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "stalowy_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "stalowy_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "stalowy_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "stalowy_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "stalowy_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "stalowy_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "stalowy_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "stalowy_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "stalowy_siedzi.png"
+    }
+   ]
+  },
+  {
+   "name": "brygantyna",
+   "set": {
+    "glowa": "helm_kapalin_zelazo",
+    "tors": "zbroja_brygantyna_stal",
+    "rece": "rekawice_brazowe",
+    "nogi": "spodnie_welniane_brazowe",
+    "stopy": "buty_czarne"
+   },
+   "shield": "tarcza_migdalowa",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "brygantyna_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "brygantyna_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "brygantyna_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "brygantyna_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "brygantyna_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "brygantyna_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "brygantyna_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "brygantyna_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "brygantyna_siedzi.png"
+    }
+   ]
+  },
+  {
+   "name": "zakonny",
+   "set": {
+    "glowa": "helm_zakonny_zakon",
+    "tors": "zbroja_luska_zakon",
+    "rece": "karwasze_zakon",
+    "nogi": "nagolenniki_zakon",
+    "stopy": "buty_okute_zakon",
+    "plaszcz": "plaszcz_zakonny"
+   },
+   "shield": "tarcza_zakonna",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "zakonny_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "zakonny_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "zakonny_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "zakonny_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "zakonny_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "zakonny_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "zakonny_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "zakonny_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "zakonny_siedzi.png"
+    }
+   ]
+  },
+  {
+   "name": "braz",
+   "set": {
+    "glowa": "helm_kapalin_braz",
+    "tors": "zbroja_kolczuga_stal",
+    "rece": "karwasze_braz",
+    "nogi": "nagolenniki_braz",
+    "stopy": "buty_okute_braz"
+   },
+   "shield": "tarcza_umbo",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "braz_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "braz_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "braz_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "braz_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "braz_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "braz_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "braz_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "braz_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "braz_siedzi.png"
+    }
+   ]
+  },
+  {
+   "name": "chlop",
+   "set": {
+    "glowa": "kapelusz_slomkowy",
+    "tors": "koszula_lniana_biala",
+    "pas": "pas_skorzany_braz",
+    "nogi": "spodnie_plocienne_szare",
+    "stopy": "lapcie"
+   },
+   "shield": "",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "chlop_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "chlop_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "chlop_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "chlop_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "chlop_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "chlop_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "chlop_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "chlop_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "chlop_siedzi.png"
+    }
+   ]
+  },
+  {
+   "name": "mieszczanin",
+   "set": {
+    "glowa": "czapka_filc_braz",
+    "tors": "kaftan_czerwony",
+    "nogi": "spodnie_welniane_zielone",
+    "stopy": "buty_brazowe",
+    "rece": "rekawice_szare",
+    "plaszcz": "plaszcz_zwiadowcy"
+   },
+   "shield": "",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "mieszczanin_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "mieszczanin_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "mieszczanin_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "mieszczanin_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "mieszczanin_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "mieszczanin_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "mieszczanin_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "mieszczanin_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "mieszczanin_siedzi.png"
+    }
+   ]
+  },
+  {
+   "name": "odswietny",
+   "set": {
+    "glowa": "chusta_czerwona",
+    "tors": "koszula_odswietna",
+    "pas": "pas_sakiewka",
+    "nogi": "spodnie_plocienne_niebieskie",
+    "stopy": "buty_czarne"
+   },
+   "shield": "",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "odswietny_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "odswietny_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "odswietny_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "odswietny_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "odswietny_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "odswietny_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "odswietny_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "odswietny_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "odswietny_siedzi.png"
+    }
+   ]
+  },
+  {
+   "name": "kozuszek",
+   "set": {
+    "glowa": "kapelusz_filcowy",
+    "tors": "kozuszek",
+    "nogi": "portki_latane",
+    "stopy": "chodaki",
+    "rece": "rekawiczki_welniane",
+    "pas": "pas_tragarza",
+    "plaszcz": "plaszcz_lniany"
+   },
+   "shield": "tarcza_drewniana_plecionka",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "kozuszek_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "kozuszek_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "kozuszek_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "kozuszek_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "kozuszek_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "kozuszek_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "kozuszek_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "kozuszek_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "kozuszek_siedzi.png"
+    }
+   ]
+  },
+  {
+   "name": "zupan",
+   "set": {
+    "glowa": "czapka_filc_szara",
+    "tors": "zupan_sukienny",
+    "pas": "pas_okuty_braz",
+    "stopy": "buty_czarne",
+    "plaszcz": "plaszcz_futrzany"
+   },
+   "shield": "tarcza_okuta_krab",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "zupan_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "zupan_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "zupan_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "zupan_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "zupan_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "zupan_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "zupan_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "zupan_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "zupan_siedzi.png"
+    }
+   ]
+  },
+  {
+   "name": "kowal",
+   "set": {
+    "glowa": "opaska_braz",
+    "tors": "fartuch_kowalski",
+    "nogi": "spodnie_skorzane_czarne",
+    "stopy": "buty_filcowe",
+    "rece": "rekawice_brazowe",
+    "pas": "pas_ladownica"
+   },
+   "shield": "tarcza_migdalowa_pawez",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "kowal_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "kowal_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "kowal_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "kowal_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "kowal_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "kowal_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "kowal_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "kowal_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "kowal_siedzi.png"
+    }
+   ]
+  },
+  {
+   "name": "garnczkowy",
+   "set": {
+    "glowa": "helm_garnczkowy_stal",
+    "tors": "zbroja_brygantyna_zelazo",
+    "rece": "karwasze_skora_czarna",
+    "nogi": "nagolenniki_skora",
+    "stopy": "buty_okute_braz",
+    "plaszcz": "plaszcz_welniany"
+   },
+   "shield": "tarcza_drewniana_skora",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "garnczkowy_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "garnczkowy_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "garnczkowy_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "garnczkowy_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "garnczkowy_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "garnczkowy_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "garnczkowy_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "garnczkowy_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "garnczkowy_siedzi.png"
+    }
+   ]
+  },
+  {
+   "name": "sukno",
+   "set": {
+    "glowa": "helm_kaptur_welna",
+    "tors": "zbroja_przeszywanica_welna",
+    "rece": "karwasze_len",
+    "nogi": "nagolenniki_len",
+    "stopy": "buty_okute_zelazo"
+   },
+   "shield": "tarcza_puklerz_braz",
+   "shots": [
+    {
+     "n": "dol",
+     "f": "sukno_dol.png"
+    },
+    {
+     "n": "prawo",
+     "f": "sukno_prawo.png"
+    },
+    {
+     "n": "gora",
+     "f": "sukno_gora.png"
+    },
+    {
+     "n": "lewo",
+     "f": "sukno_lewo.png"
+    },
+    {
+     "n": "chod",
+     "f": "sukno_chod.png"
+    },
+    {
+     "n": "chod_prawo",
+     "f": "sukno_chod_prawo.png"
+    },
+    {
+     "n": "cios",
+     "f": "sukno_cios.png"
+    },
+    {
+     "n": "cios_dol",
+     "f": "sukno_cios_dol.png"
+    },
+    {
+     "n": "siedzi",
+     "f": "sukno_siedzi.png"
+    }
+   ]
+  }
+ ],
+ "worst": 33.6
+}

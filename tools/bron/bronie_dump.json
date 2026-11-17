@@ -1,0 +1,3804 @@
+{
+ "bronie": [
+  {
+   "id": 300,
+   "nazwa": "Brązowy sztylet",
+   "rodzaj": "sztylet",
+   "rodzajNazwa": "sztylet",
+   "material": "braz",
+   "materialNazwa": "brąz",
+   "poziom": 5,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 13,
+   "zachwianie": 10,
+   "zasieg": 1.2,
+   "oddech": 7,
+   "krytyk": 0.1,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1.3,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 110,
+   "jednostka": "blow",
+   "cena": 30,
+   "wartosc": 30,
+   "waga": 1,
+   "gdzie": "Tadek Młot (kowal), Józek Łata (handlarz starzyzną), 30 G",
+   "zrodla": [
+    "kowal Tadek",
+    "łup: nożownicy, bandyci",
+    "podziemia 1-10",
+    "szmaciarz (używany)"
+   ],
+   "opis": "Krótkie brązowe ostrze w rękojeści z rogu. Szybkie pchnięcia i częste krytyki, a cios z ukrycia jest nim o 30% mocniejszy.",
+   "slowa": "obrażenia 12-14 · zasięg 1,2 · oddech 7 · krytyk +10% · z ukrycia +30% · krytyk ×1,7",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "1× Sztabka brązu",
+      "1× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 1,
+     "sily": 4,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 301,
+   "nazwa": "Żelazny sztylet",
+   "rodzaj": "sztylet",
+   "rodzajNazwa": "sztylet",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 9,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 16,
+   "zachwianie": 11,
+   "zasieg": 1.2,
+   "oddech": 7,
+   "krytyk": 0.1,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1.3,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 180,
+   "jednostka": "blow",
+   "cena": 60,
+   "wartosc": 60,
+   "waga": 1,
+   "gdzie": "Tadek Młot (kowal), 60 G",
+   "zrodla": [
+    "kowal Tadek",
+    "kuźnia",
+    "łup: nożownicy",
+    "podziemia 11-30"
+   ],
+   "opis": "Kute żelazo, wąska głownia. Cios za ciosem, prawie bez zadyszki. Dobry na skradanie się.",
+   "slowa": "obrażenia 14-18 · zasięg 1,2 · oddech 7 · krytyk +10% · z ukrycia +30% · krytyk ×1,7",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "1× Żelazo",
+      "1× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 1,
+     "sily": 4,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 302,
+   "nazwa": "Stalowy sztylet",
+   "rodzaj": "sztylet",
+   "rodzajNazwa": "sztylet",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 15,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 18,
+   "zachwianie": 12,
+   "zasieg": 1.2,
+   "oddech": 6,
+   "krytyk": 0.11,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1.3,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 260,
+   "jednostka": "blow",
+   "cena": 130,
+   "wartosc": 130,
+   "waga": 1,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 130 G",
+   "zrodla": [
+    "kantor",
+    "kuźnia (stal)"
+   ],
+   "opis": "Stalowe ostrze z kontynentu, cienkie jak liść wierzby. Rzadko się tępi, łatwo znajduje szczelinę.",
+   "slowa": "obrażenia 16-20 · zasięg 1,2 · oddech 6 · krytyk +11% · z ukrycia +30% · szybkość ataku +15% · krytyk ×1,8",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "1× Stal",
+      "1× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 1,
+     "sily": 5,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 303,
+   "nazwa": "Mizerykordia zakonna",
+   "rodzaj": "sztylet",
+   "rodzajNazwa": "sztylet",
+   "material": "zakon",
+   "materialNazwa": "stal zakonna",
+   "poziom": 23,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 21,
+   "zachwianie": 13,
+   "zasieg": 1.2,
+   "oddech": 5,
+   "krytyk": 0.16,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1.5,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 340,
+   "jednostka": "blow",
+   "cena": 285,
+   "wartosc": 285,
+   "waga": 1,
+   "gdzie": "podziemia 76-99",
+   "zrodla": [
+    "podziemia 76-99"
+   ],
+   "opis": "Sztylet łaski braci zakonu - wąski, trójgrańny, do dobijania. Najwięcej krytyków ze wszystkich ostrzy.",
+   "slowa": "obrażenia 19-23 · zasięg 1,2 · oddech 5 · krytyk +16% · z ukrycia +50% · przebicie pancerza 30% · krytyk ×1,9 · na stwory podziemi +15%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "1× Sztabka stali zakonnej",
+      "1× Stal",
+      "1× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 2,
+     "sily": 6,
+     "narzedzie": "Młotek majstra"
+    }
+   ]
+  },
+  {
+   "id": 304,
+   "nazwa": "Brązowy miecz",
+   "rodzaj": "miecz",
+   "rodzajNazwa": "miecz",
+   "material": "braz",
+   "materialNazwa": "brąz",
+   "poziom": 6,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 23,
+   "zachwianie": 22,
+   "zasieg": 1.55,
+   "oddech": 11,
+   "krytyk": 0.05,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 140,
+   "jednostka": "blow",
+   "cena": 55,
+   "wartosc": 55,
+   "waga": 2,
+   "gdzie": "Tadek Młot (kowal), 55 G",
+   "zrodla": [
+    "kowal Tadek",
+    "podziemia 1-10"
+   ],
+   "opis": "Prosty miecz z brązu, ciężki u nasady. Szybki zamach i dobre cięcie.",
+   "slowa": "obrażenia 21-25 · zasięg 1,55 · oddech 11 · krytyk +5% · parowanie +10%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Sztabka brązu",
+      "2× Węgiel drzewny",
+      "1× Skóra wyprawiona"
+     ],
+     "godziny": 2,
+     "sily": 6,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 305,
+   "nazwa": "Żelazny miecz",
+   "rodzaj": "miecz",
+   "rodzajNazwa": "miecz",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 10,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 27,
+   "zachwianie": 24,
+   "zasieg": 1.55,
+   "oddech": 11,
+   "krytyk": 0.05,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 220,
+   "jednostka": "blow",
+   "cena": 110,
+   "wartosc": 110,
+   "waga": 2,
+   "gdzie": "Tadek Młot (kowal), 110 G",
+   "zrodla": [
+    "kowal Tadek",
+    "kuźnia",
+    "łup: najemnicy",
+    "podziemia 11-30"
+   ],
+   "opis": "Jednoręczny miecz z kutego żelaza. Wszechstronny: szybki, celny, wytrzymały.",
+   "slowa": "obrażenia 24-30 · zasięg 1,55 · oddech 11 · krytyk +5% · parowanie +12%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Żelazo",
+      "2× Węgiel drzewny",
+      "1× Skóra wyprawiona"
+     ],
+     "godziny": 2,
+     "sily": 6,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 306,
+   "nazwa": "Tasak",
+   "rodzaj": "tasak",
+   "rodzajNazwa": "tasak",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 10,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 30,
+   "zachwianie": 30,
+   "zasieg": 1.5,
+   "oddech": 12,
+   "krytyk": 0.02,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 220,
+   "jednostka": "blow",
+   "cena": 105,
+   "wartosc": 105,
+   "waga": 2,
+   "gdzie": "Tadek Młot (kowal), 105 G",
+   "zrodla": [
+    "kowal Tadek",
+    "podziemia 31-50"
+   ],
+   "opis": "Szerokie, ciężkie ostrze jak u rzeźnika. Rąbie mocniej niż miecz i chwieje wrogiem, ale rzadko trafia krytycznie.",
+   "slowa": "obrażenia 27-33 · zasięg 1,5 · oddech 12 · krytyk +2% · krwawienie 10%: 2 na sekundę przez 4 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Żelazo",
+      "2× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 2,
+     "sily": 6,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 307,
+   "nazwa": "Żelazna szabla",
+   "rodzaj": "szabla",
+   "rodzajNazwa": "szabla",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 12,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 25,
+   "zachwianie": 22,
+   "zasieg": 1.6,
+   "oddech": 9,
+   "krytyk": 0.09,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 200,
+   "jednostka": "blow",
+   "cena": 125,
+   "wartosc": 125,
+   "waga": 2,
+   "gdzie": "Kwatermistrz Kłos (kwatermistrz garnizonu), 125 G",
+   "zrodla": [
+    "kwatermistrz Kłos",
+    "łup: najemnicy"
+   ],
+   "opis": "Lekko zakrzywiona szabla jazdy królewskiej. Lekka w dłoni, cios kosztuje mało oddechu, a krytyki trafiają się często.",
+   "slowa": "obrażenia 23-28 · zasięg 1,6 · oddech 9 · krytyk +9% · szybkość ataku +10%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Żelazo",
+      "2× Węgiel drzewny",
+      "1× Skóra wyprawiona"
+     ],
+     "godziny": 3,
+     "sily": 7,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 308,
+   "nazwa": "Stalowy miecz",
+   "rodzaj": "miecz",
+   "rodzajNazwa": "miecz",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 16,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 31,
+   "zachwianie": 26,
+   "zasieg": 1.55,
+   "oddech": 10,
+   "krytyk": 0.06,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 320,
+   "jednostka": "blow",
+   "cena": 240,
+   "wartosc": 240,
+   "waga": 2,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 240 G",
+   "zrodla": [
+    "kantor",
+    "kuźnia (stal)",
+    "podziemia 51-75"
+   ],
+   "opis": "Miecz ze stali z kontynentu, sprężysty i ostry. Mocniejszy i lżejszy w oddechu niż żelazny.",
+   "slowa": "obrażenia 28-34 · zasięg 1,55 · oddech 10 · krytyk +6% · obrażenia +3 · parowanie +15%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Stal",
+      "2× Węgiel drzewny",
+      "1× Skóra wyprawiona"
+     ],
+     "godziny": 3,
+     "sily": 7,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 309,
+   "nazwa": "Stalowy długi miecz",
+   "rodzaj": "dlugi_miecz",
+   "rodzajNazwa": "długi miecz",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 19,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 36,
+   "zachwianie": 30,
+   "zasieg": 1.75,
+   "oddech": 13,
+   "krytyk": 0.06,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 320,
+   "jednostka": "blow",
+   "cena": 290,
+   "wartosc": 290,
+   "waga": 3,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 290 G",
+   "zrodla": [
+    "kantor"
+   ],
+   "opis": "Półtora ręki rękojeści i długa głownia. Sięga dalej niż zwykły miecz i tnie mocniej, ale męczy.",
+   "slowa": "obrażenia 32-40 · zasięg 1,75 · oddech 13 · krytyk +6% · zasięg +0,2 · parowanie +15%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "4× Stal",
+      "2× Węgiel drzewny",
+      "1× Skóra wyprawiona"
+     ],
+     "godziny": 3,
+     "sily": 8,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 310,
+   "nazwa": "Prastary miecz",
+   "rodzaj": "miecz",
+   "rodzajNazwa": "miecz",
+   "material": "pierwszych",
+   "materialNazwa": "kruszec Pierwszych",
+   "poziom": 20,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 33,
+   "zachwianie": 27,
+   "zasieg": 1.55,
+   "oddech": 10,
+   "krytyk": 0.07,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 360,
+   "jednostka": "blow",
+   "cena": 330,
+   "wartosc": 330,
+   "waga": 2,
+   "gdzie": "podziemia 51-75",
+   "zrodla": [
+    "podziemia 51-75"
+   ],
+   "opis": "Czarna głownia z kruszcu, którego nie zna żaden kowal. Starsza niż zakon - i wciąż ostra.",
+   "slowa": "obrażenia 30-36 · zasięg 1,55 · oddech 10 · krytyk +7% · obrażenia +4 · parowanie +18% · postrach 5%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Okruch kruszcu Pierwszych",
+      "2× Węgiel drzewny",
+      "1× Skóra wyprawiona"
+     ],
+     "godziny": 4,
+     "sily": 8,
+     "narzedzie": "Młotek majstra"
+    }
+   ]
+  },
+  {
+   "id": 311,
+   "nazwa": "Miecz zakonny",
+   "rodzaj": "miecz",
+   "rodzajNazwa": "miecz",
+   "material": "zakon",
+   "materialNazwa": "stal zakonna",
+   "poziom": 24,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 36,
+   "zachwianie": 28,
+   "zasieg": 1.55,
+   "oddech": 9,
+   "krytyk": 0.08,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 420,
+   "jednostka": "blow",
+   "cena": 520,
+   "wartosc": 520,
+   "waga": 2,
+   "gdzie": "podziemia 76-99",
+   "zrodla": [
+    "podziemia 76-99"
+   ],
+   "opis": "Miecz brata straży z wyrytym krukiem na jelcu. Stal zakonna nie rdzewieje - po trzystu latach tnie jak nowa.",
+   "slowa": "obrażenia 32-40 · zasięg 1,55 · oddech 9 · krytyk +8% · obrażenia +5 · parowanie +20% · na stwory podziemi +15%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Sztabka stali zakonnej",
+      "2× Węgiel drzewny",
+      "1× Skóra wyprawiona"
+     ],
+     "godziny": 4,
+     "sily": 8,
+     "narzedzie": "Młotek majstra"
+    }
+   ]
+  },
+  {
+   "id": 312,
+   "nazwa": "Dębowy kostur",
+   "rodzaj": "kostur",
+   "rodzajNazwa": "kostur",
+   "material": "drewno",
+   "materialNazwa": "drewno",
+   "poziom": 1,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 11,
+   "zachwianie": 26,
+   "zasieg": 1.75,
+   "oddech": 11,
+   "krytyk": 0,
+   "pancerz": 1.1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 70,
+   "jednostka": "blow",
+   "cena": 5,
+   "wartosc": 5,
+   "waga": 2,
+   "gdzie": "warsztat",
+   "zrodla": [
+    "warsztat"
+   ],
+   "opis": "Długi dębowy drąg. Trzyma wroga na dystans i chwieje nim, choć bije słabo. Tani na początek.",
+   "slowa": "obrażenia 10-12 · zasięg 1,75 · oddech 11 · na pancerz +10%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Warsztat",
+     "skladniki": [
+      "2× Drewno"
+     ],
+     "godziny": 1,
+     "sily": 2,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 313,
+   "nazwa": "Okuta pałka",
+   "rodzaj": "palka",
+   "rodzajNazwa": "pałka",
+   "material": "okute",
+   "materialNazwa": "drewno okute żelazem",
+   "poziom": 3,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 15,
+   "zachwianie": 28,
+   "zasieg": 1.45,
+   "oddech": 10,
+   "krytyk": 0,
+   "pancerz": 1.2,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 130,
+   "jednostka": "blow",
+   "cena": 15,
+   "wartosc": 15,
+   "waga": 2,
+   "gdzie": "Tadek Młot (kowal), Józek Łata (handlarz starzyzną), 15 G",
+   "zrodla": [
+    "warsztat (pałka + gwoździe)",
+    "kowal Tadek",
+    "łup: bandyci",
+    "szmaciarz (używana)"
+   ],
+   "opis": "Pałka nabita żelaznymi ćwiekami. Bije mocniej niż goła i lepiej łamie gardę.",
+   "slowa": "obrażenia 14-17 · zasięg 1,45 · oddech 10 · na pancerz +20% · ogłuszenie 8% na 1 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Warsztat",
+     "skladniki": [
+      "1× Pałka",
+      "4× Gwoździe"
+     ],
+     "godziny": 1,
+     "sily": 2,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 314,
+   "nazwa": "Brązowa maczuga",
+   "rodzaj": "palka",
+   "rodzajNazwa": "pałka",
+   "material": "braz",
+   "materialNazwa": "brąz",
+   "poziom": 5,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 18,
+   "zachwianie": 29,
+   "zasieg": 1.45,
+   "oddech": 10,
+   "krytyk": 0,
+   "pancerz": 1.2,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 150,
+   "jednostka": "blow",
+   "cena": 35,
+   "wartosc": 35,
+   "waga": 2,
+   "gdzie": "Tadek Młot (kowal), Józek Łata (handlarz starzyzną), 35 G",
+   "zrodla": [
+    "kowal Tadek",
+    "obozy bandytów",
+    "podziemia 1-10",
+    "szmaciarz (używana)"
+   ],
+   "opis": "Maczuga z brązową głowicą. Szybka, tania, dobra na pancerz i na kości.",
+   "slowa": "obrażenia 16-20 · zasięg 1,45 · oddech 10 · na pancerz +20% · ogłuszenie 8% na 1 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "2× Sztabka brązu",
+      "1× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 1,
+     "sily": 4,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 315,
+   "nazwa": "Kiścień",
+   "rodzaj": "kiscien",
+   "rodzajNazwa": "kiścień",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 11,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 25,
+   "zachwianie": 36,
+   "zasieg": 1.45,
+   "oddech": 12,
+   "krytyk": 0.06,
+   "pancerz": 1.2,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 240,
+   "jednostka": "blow",
+   "cena": 95,
+   "wartosc": 95,
+   "waga": 3,
+   "gdzie": "Tadek Młot (kowal), 95 G",
+   "zrodla": [
+    "kowal Tadek",
+    "podziemia 31-50"
+   ],
+   "opis": "Żelazna kula z kolcami na łańcuchu. Trudno przewidzieć, gdzie spadnie - wróg też tego nie wie.",
+   "slowa": "obrażenia 23-28 · zasięg 1,45 · oddech 12 · krytyk +6% · na pancerz +20% · ogłuszenie 10% na 1,5 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "4× Żelazo",
+      "2× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 2,
+     "sily": 6,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 316,
+   "nazwa": "Brązowy buzdygan",
+   "rodzaj": "buzdygan",
+   "rodzajNazwa": "buzdygan",
+   "material": "braz",
+   "materialNazwa": "brąz",
+   "poziom": 7,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 21,
+   "zachwianie": 37,
+   "zasieg": 1.45,
+   "oddech": 13,
+   "krytyk": 0.02,
+   "pancerz": 1.3,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 170,
+   "jednostka": "blow",
+   "cena": 50,
+   "wartosc": 50,
+   "waga": 3,
+   "gdzie": "Tadek Młot (kowal), 50 G",
+   "zrodla": [
+    "kowal Tadek",
+    "podziemia 1-10"
+   ],
+   "opis": "Głowica z brązowych piór na krótkim trzonku. Mocno chwieje wrogiem i dobrze bije w pancerz.",
+   "slowa": "obrażenia 19-23 · zasięg 1,45 · oddech 13 · krytyk +2% · na pancerz +30% · ogłuszenie 8% na 1 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Sztabka brązu",
+      "2× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 2,
+     "sily": 6,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 317,
+   "nazwa": "Żelazny buzdygan",
+   "rodzaj": "buzdygan",
+   "rodzajNazwa": "buzdygan",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 11,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 25,
+   "zachwianie": 40,
+   "zasieg": 1.45,
+   "oddech": 13,
+   "krytyk": 0.02,
+   "pancerz": 1.3,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 260,
+   "jednostka": "blow",
+   "cena": 100,
+   "wartosc": 100,
+   "waga": 3,
+   "gdzie": "Tadek Młot (kowal), 100 G",
+   "zrodla": [
+    "kowal Tadek",
+    "kuźnia",
+    "podziemia 11-30"
+   ],
+   "opis": "Żelazny buzdygan o sześciu piórach. Na puste zbroje i kamienniki - lepszy niż jakiekolwiek ostrze.",
+   "slowa": "obrażenia 23-28 · zasięg 1,45 · oddech 13 · krytyk +2% · na pancerz +30% · ogłuszenie 10% na 1,5 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Żelazo",
+      "2× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 2,
+     "sily": 6,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 318,
+   "nazwa": "Stalowy pernacz",
+   "rodzaj": "buzdygan",
+   "rodzajNazwa": "buzdygan",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 17,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 29,
+   "zachwianie": 43,
+   "zasieg": 1.45,
+   "oddech": 12,
+   "krytyk": 0.03,
+   "pancerz": 1.3,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 380,
+   "jednostka": "blow",
+   "cena": 215,
+   "wartosc": 215,
+   "waga": 3,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 215 G",
+   "zrodla": [
+    "kantor",
+    "podziemia 51-75"
+   ],
+   "opis": "Pernacz ze stali, z zdobionym trzonkiem - broń setnika. Gnie blachy jak papier.",
+   "slowa": "obrażenia 26-32 · zasięg 1,45 · oddech 12 · krytyk +3% · na pancerz +30% · obrażenia +3 · ogłuszenie 12% na 1,5 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Stal",
+      "2× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 3,
+     "sily": 7,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 319,
+   "nazwa": "Buzdygan zakonny",
+   "rodzaj": "buzdygan",
+   "rodzajNazwa": "buzdygan",
+   "material": "zakon",
+   "materialNazwa": "stal zakonna",
+   "poziom": 24,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 33,
+   "zachwianie": 46,
+   "zasieg": 1.45,
+   "oddech": 11,
+   "krytyk": 0.05,
+   "pancerz": 1.3,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 500,
+   "jednostka": "blow",
+   "cena": 470,
+   "wartosc": 470,
+   "waga": 3,
+   "gdzie": "podziemia 76-99",
+   "zrodla": [
+    "podziemia 76-99"
+   ],
+   "opis": "Buzdygan straży zakonu z okiem wyrytym w każdym piórze. Ciężki, ale świetnie wyważony.",
+   "slowa": "obrażenia 30-36 · zasięg 1,45 · oddech 11 · krytyk +5% · na pancerz +30% · obrażenia +5 · ogłuszenie 15% na 2 s · na stwory podziemi +15%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Sztabka stali zakonnej",
+      "2× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 4,
+     "sily": 8,
+     "narzedzie": "Młotek majstra"
+    }
+   ]
+  },
+  {
+   "id": 320,
+   "nazwa": "Brązowy topór",
+   "rodzaj": "topor",
+   "rodzajNazwa": "topór",
+   "material": "braz",
+   "materialNazwa": "brąz",
+   "poziom": 6,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 26,
+   "zachwianie": 33,
+   "zasieg": 1.6,
+   "oddech": 16,
+   "krytyk": 0.03,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 140,
+   "jednostka": "blow",
+   "cena": 50,
+   "wartosc": 50,
+   "waga": 3,
+   "gdzie": "Tadek Młot (kowal), 50 G",
+   "zrodla": [
+    "kowal Tadek",
+    "podziemia 1-10"
+   ],
+   "opis": "Topór bojowy z brązu na długim stylisku. Szeroki zamach, mocny cios.",
+   "slowa": "obrażenia 23-29 · zasięg 1,6 · oddech 16 · krytyk +3% · krwawienie 8%: 1 na sekundę przez 4 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Sztabka brązu",
+      "2× Węgiel drzewny",
+      "1× Deski"
+     ],
+     "godziny": 2,
+     "sily": 6,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 321,
+   "nazwa": "Żelazny topór bojowy",
+   "rodzaj": "topor",
+   "rodzajNazwa": "topór",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 10,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 31,
+   "zachwianie": 36,
+   "zasieg": 1.6,
+   "oddech": 16,
+   "krytyk": 0.03,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 220,
+   "jednostka": "blow",
+   "cena": 105,
+   "wartosc": 105,
+   "waga": 3,
+   "gdzie": "Tadek Młot (kowal), 105 G",
+   "zrodla": [
+    "kowal Tadek",
+    "kuźnia",
+    "podziemia 11-30"
+   ],
+   "opis": "Brodaty topór bojowy z kutego żelaza. Nie do drewna - do walki. Szeroki zamach trafia kilku naraz.",
+   "slowa": "obrażenia 28-34 · zasięg 1,6 · oddech 16 · krytyk +3% · krwawienie 10%: 2 na sekundę przez 4 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Żelazo",
+      "2× Węgiel drzewny",
+      "1× Deski"
+     ],
+     "godziny": 2,
+     "sily": 6,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 322,
+   "nazwa": "Czekan",
+   "rodzaj": "czekan",
+   "rodzajNazwa": "czekan",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 12,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 29,
+   "zachwianie": 34,
+   "zasieg": 1.55,
+   "oddech": 15,
+   "krytyk": 0.07,
+   "pancerz": 1.35,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "pick",
+   "dystans": false,
+   "trwalosc": 220,
+   "jednostka": "blow",
+   "cena": 115,
+   "wartosc": 115,
+   "waga": 3,
+   "gdzie": "Tadek Młot (kowal), 115 G",
+   "zrodla": [
+    "kowal Tadek",
+    "podziemia 31-50"
+   ],
+   "opis": "Obuch z ostrym dziobem z tyłu. Przebija kolczugi i blachy, często trafia krytycznie.",
+   "slowa": "obrażenia 26-32 · zasięg 1,55 · oddech 15 · krytyk +7% · na pancerz +35% · przebicie pancerza 15%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Żelazo",
+      "2× Węgiel drzewny",
+      "1× Deski"
+     ],
+     "godziny": 2,
+     "sily": 6,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 323,
+   "nazwa": "Stalowy topór bojowy",
+   "rodzaj": "topor",
+   "rodzajNazwa": "topór",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 16,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 36,
+   "zachwianie": 39,
+   "zasieg": 1.6,
+   "oddech": 15,
+   "krytyk": 0.04,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 320,
+   "jednostka": "blow",
+   "cena": 230,
+   "wartosc": 230,
+   "waga": 3,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 230 G",
+   "zrodla": [
+    "kantor",
+    "kuźnia (stal)",
+    "podziemia 51-75"
+   ],
+   "opis": "Stalowy topór z kontynentu, ostrze cienkie jak brzytwa. Mocny i trochę lżejszy w oddechu.",
+   "slowa": "obrażenia 32-40 · zasięg 1,6 · oddech 15 · krytyk +4% · obrażenia +3 · krwawienie 12%: 2 na sekundę przez 4 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Stal",
+      "2× Węgiel drzewny",
+      "1× Deski"
+     ],
+     "godziny": 3,
+     "sily": 7,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 324,
+   "nazwa": "Bardysz",
+   "rodzaj": "bardysz",
+   "rodzajNazwa": "bardysz",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 19,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 39,
+   "zachwianie": 43,
+   "zasieg": 1.95,
+   "oddech": 18,
+   "krytyk": 0.04,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 320,
+   "jednostka": "blow",
+   "cena": 300,
+   "wartosc": 300,
+   "waga": 5,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 300 G",
+   "zrodla": [
+    "kantor"
+   ],
+   "opis": "Szeroki topór w kształcie półksiężyca na drzewcu. Sięga prawie jak włócznia, tnie jak topór - ale waży swoje.",
+   "slowa": "obrażenia 35-43 · zasięg 1,95 · oddech 18 · krytyk +4% · krwawienie 12%: 2 na sekundę przez 4 s · zasięg +0,2",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "4× Stal",
+      "2× Węgiel drzewny",
+      "2× Deski"
+     ],
+     "godziny": 3,
+     "sily": 8,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 325,
+   "nazwa": "Topór zakonny",
+   "rodzaj": "topor",
+   "rodzajNazwa": "topór",
+   "material": "zakon",
+   "materialNazwa": "stal zakonna",
+   "poziom": 25,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 41,
+   "zachwianie": 42,
+   "zasieg": 1.6,
+   "oddech": 14,
+   "krytyk": 0.06,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 420,
+   "jednostka": "blow",
+   "cena": 495,
+   "wartosc": 495,
+   "waga": 3,
+   "gdzie": "podziemia 76-99",
+   "zrodla": [
+    "podziemia 76-99"
+   ],
+   "opis": "Topór straży zakonu z czarnym, nieśmiertelnym ostrzem. Bije najmocniej z toporów.",
+   "slowa": "obrażenia 37-45 · zasięg 1,6 · oddech 14 · krytyk +6% · obrażenia +5 · krwawienie 15%: 3 na sekundę przez 4 s · na stwory podziemi +15%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Sztabka stali zakonnej",
+      "2× Węgiel drzewny",
+      "1× Deski"
+     ],
+     "godziny": 4,
+     "sily": 8,
+     "narzedzie": "Młotek majstra"
+    }
+   ]
+  },
+  {
+   "id": 326,
+   "nazwa": "Kamienny młot",
+   "rodzaj": "mlot",
+   "rodzajNazwa": "młot",
+   "material": "kamien",
+   "materialNazwa": "kamień",
+   "poziom": 2,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 26,
+   "zachwianie": 48,
+   "zasieg": 1.5,
+   "oddech": 21,
+   "krytyk": 0,
+   "pancerz": 1.4,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 70,
+   "jednostka": "blow",
+   "cena": 20,
+   "wartosc": 20,
+   "waga": 5,
+   "gdzie": "warsztat",
+   "zrodla": [
+    "warsztat"
+   ],
+   "opis": "Polny kamień obwiązany na mocnym stylisku. Ciężki i wolny, ale przewraca wilka jednym ciosem.",
+   "slowa": "obrażenia 23-29 · zasięg 1,5 · oddech 21 · na pancerz +40%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Warsztat",
+     "skladniki": [
+      "3× Kamień",
+      "1× Drewno",
+      "1× Lina"
+     ],
+     "godziny": 1,
+     "sily": 3,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 327,
+   "nazwa": "Żelazny młot bojowy",
+   "rodzaj": "mlot",
+   "rodzajNazwa": "młot",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 11,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 37,
+   "zachwianie": 56,
+   "zasieg": 1.5,
+   "oddech": 21,
+   "krytyk": 0,
+   "pancerz": 1.4,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 260,
+   "jednostka": "blow",
+   "cena": 115,
+   "wartosc": 115,
+   "waga": 5,
+   "gdzie": "Tadek Młot (kowal), 115 G",
+   "zrodla": [
+    "kowal Tadek",
+    "kuźnia",
+    "podziemia 31-50"
+   ],
+   "opis": "Młot bojowy z kutego żelaza. Wolny, zjada oddech, ale nic nie stoi po jego ciosie - zwłaszcza zbroje.",
+   "slowa": "obrażenia 33-41 · zasięg 1,5 · oddech 21 · na pancerz +40% · ogłuszenie 10% na 1,5 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "5× Żelazo",
+      "3× Węgiel drzewny",
+      "1× Deski"
+     ],
+     "godziny": 3,
+     "sily": 8,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 328,
+   "nazwa": "Stalowy młot bojowy",
+   "rodzaj": "mlot",
+   "rodzajNazwa": "młot",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 17,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 43,
+   "zachwianie": 60,
+   "zasieg": 1.5,
+   "oddech": 20,
+   "krytyk": 0.01,
+   "pancerz": 1.4,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 380,
+   "jednostka": "blow",
+   "cena": 250,
+   "wartosc": 250,
+   "waga": 5,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 250 G",
+   "zrodla": [
+    "kantor",
+    "kuźnia (stal)",
+    "podziemia 51-75"
+   ],
+   "opis": "Stalowy młot z kolcem na grzbiecie. Kamienniki i puste zbroje pękają pod nim.",
+   "slowa": "obrażenia 39-47 · zasięg 1,5 · oddech 20 · krytyk +1% · na pancerz +40% · ogłuszenie 12% na 1,5 s · odrzut +1 pole",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "4× Stal",
+      "2× Żelazo",
+      "3× Węgiel drzewny",
+      "1× Deski"
+     ],
+     "godziny": 3,
+     "sily": 9,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 329,
+   "nazwa": "Młot zakonny",
+   "rodzaj": "mlot",
+   "rodzajNazwa": "młot",
+   "material": "zakon",
+   "materialNazwa": "stal zakonna",
+   "poziom": 26,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 49,
+   "zachwianie": 65,
+   "zasieg": 1.5,
+   "oddech": 19,
+   "krytyk": 0.03,
+   "pancerz": 1.4,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 500,
+   "jednostka": "blow",
+   "cena": 545,
+   "wartosc": 545,
+   "waga": 5,
+   "gdzie": "podziemia 76-99",
+   "zrodla": [
+    "podziemia 76-99"
+   ],
+   "opis": "Młot strażników bramy. Obuch nosi ślad tysiąca uderzeń, a ani jednej rysy.",
+   "slowa": "obrażenia 44-54 · zasięg 1,5 · oddech 19 · krytyk +3% · na pancerz +40% · ogłuszenie 15% na 2 s · odrzut +1 pole · na stwory podziemi +15%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "4× Sztabka stali zakonnej",
+      "2× Stal",
+      "3× Węgiel drzewny",
+      "1× Deski"
+     ],
+     "godziny": 4,
+     "sily": 10,
+     "narzedzie": "Młotek majstra"
+    }
+   ]
+  },
+  {
+   "id": 330,
+   "nazwa": "Brązowa włócznia",
+   "rodzaj": "wlocznia",
+   "rodzajNazwa": "włócznia",
+   "material": "braz",
+   "materialNazwa": "brąz",
+   "poziom": 5,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 24,
+   "zachwianie": 18,
+   "zasieg": 2.3,
+   "oddech": 12,
+   "krytyk": 0.03,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": false,
+   "trwalosc": 110,
+   "jednostka": "jab",
+   "cena": 45,
+   "wartosc": 45,
+   "waga": 3,
+   "gdzie": "Tadek Młot (kowal), Józek Łata (handlarz starzyzną), 45 G",
+   "zrodla": [
+    "kowal Tadek",
+    "obozy bandytów",
+    "podziemia 1-10",
+    "szmaciarz (używana)"
+   ],
+   "opis": "Brązowy grot na jesionowym drzewcu. Sięga dalej niż oszczep i lepiej się trzyma.",
+   "slowa": "obrażenia 22-26 · zasięg 2,3 · oddech 12 · krytyk +3% · zasięg +0,1",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "2× Sztabka brązu",
+      "1× Węgiel drzewny",
+      "2× Drewno"
+     ],
+     "godziny": 2,
+     "sily": 5,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 331,
+   "nazwa": "Żelazna włócznia",
+   "rodzaj": "wlocznia",
+   "rodzajNazwa": "włócznia",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 9,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 28,
+   "zachwianie": 20,
+   "zasieg": 2.3,
+   "oddech": 12,
+   "krytyk": 0.03,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": false,
+   "trwalosc": 170,
+   "jednostka": "jab",
+   "cena": 90,
+   "wartosc": 90,
+   "waga": 3,
+   "gdzie": "Tadek Młot (kowal), Kwatermistrz Kłos (kwatermistrz garnizonu), 90 G",
+   "zrodla": [
+    "kowal Tadek",
+    "kwatermistrz Kłos",
+    "kuźnia",
+    "podziemia 11-30"
+   ],
+   "opis": "Żelazna włócznia piechoty. Najdłuższy zasięg: trzymasz wroga z dala i kłujesz na wprost.",
+   "slowa": "obrażenia 25-31 · zasięg 2,3 · oddech 12 · krytyk +3% · zasięg +0,15",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "2× Żelazo",
+      "1× Węgiel drzewny",
+      "2× Drewno"
+     ],
+     "godziny": 2,
+     "sily": 5,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 332,
+   "nazwa": "Rohatyna",
+   "rodzaj": "rohatyna",
+   "rodzajNazwa": "rohatyna",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 11,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 29,
+   "zachwianie": 26,
+   "zasieg": 2.2,
+   "oddech": 13,
+   "krytyk": 0.03,
+   "pancerz": 1,
+   "zwierz": 1.3,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": false,
+   "trwalosc": 180,
+   "jednostka": "jab",
+   "cena": 100,
+   "wartosc": 100,
+   "waga": 3,
+   "gdzie": "Tadek Młot (kowal), 100 G",
+   "zrodla": [
+    "kowal Tadek",
+    "podziemia 31-50"
+   ],
+   "opis": "Włócznia na dzika i niedźwiedzia, z poprzeczką pod grotem. Zwierzę dostaje o 30% więcej.",
+   "slowa": "obrażenia 26-32 · zasięg 2,2 · oddech 13 · krytyk +3% · na zwierzęta +30% · zasięg +0,15",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Żelazo",
+      "1× Węgiel drzewny",
+      "2× Drewno"
+     ],
+     "godziny": 2,
+     "sily": 5,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 333,
+   "nazwa": "Stalowa włócznia",
+   "rodzaj": "wlocznia",
+   "rodzajNazwa": "włócznia",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 16,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 32,
+   "zachwianie": 22,
+   "zasieg": 2.3,
+   "oddech": 11,
+   "krytyk": 0.04,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": false,
+   "trwalosc": 240,
+   "jednostka": "jab",
+   "cena": 190,
+   "wartosc": 190,
+   "waga": 3,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 190 G",
+   "zrodla": [
+    "kantor"
+   ],
+   "opis": "Długi stalowy grot z kontynentu. Lżejsza i mocniejsza od żelaznej.",
+   "slowa": "obrażenia 29-35 · zasięg 2,3 · oddech 11 · krytyk +4% · przebicie pancerza 20% · zasięg +0,2",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "2× Stal",
+      "1× Węgiel drzewny",
+      "2× Drewno"
+     ],
+     "godziny": 2,
+     "sily": 5,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 334,
+   "nazwa": "Włócznia zakonna",
+   "rodzaj": "wlocznia",
+   "rodzajNazwa": "włócznia",
+   "material": "zakon",
+   "materialNazwa": "stal zakonna",
+   "poziom": 24,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 37,
+   "zachwianie": 23,
+   "zasieg": 2.3,
+   "oddech": 10,
+   "krytyk": 0.06,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": false,
+   "trwalosc": 320,
+   "jednostka": "jab",
+   "cena": 415,
+   "wartosc": 415,
+   "waga": 3,
+   "gdzie": "podziemia 76-99",
+   "zrodla": [
+    "podziemia 76-99"
+   ],
+   "opis": "Włócznia wart zakonu, grot w kształcie kruczego pióra. Sięga najdalej i bije najmocniej z włóczni.",
+   "slowa": "obrażenia 33-41 · zasięg 2,3 · oddech 10 · krytyk +6% · przebicie pancerza 30% · zasięg +0,25 · na stwory podziemi +15%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "2× Sztabka stali zakonnej",
+      "1× Węgiel drzewny",
+      "2× Drewno"
+     ],
+     "godziny": 3,
+     "sily": 6,
+     "narzedzie": "Młotek majstra"
+    }
+   ]
+  },
+  {
+   "id": 335,
+   "nazwa": "Łuk długi",
+   "rodzaj": "luk",
+   "rodzajNazwa": "łuk",
+   "material": "dlugi",
+   "materialNazwa": "cis",
+   "poziom": 8,
+   "unikat": false,
+   "istnieje": false,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": true,
+   "strzal": 38,
+   "zasiegStrzalu": 10.5,
+   "trwalosc": 110,
+   "jednostka": "shot",
+   "cena": 120,
+   "wartosc": 120,
+   "waga": 2,
+   "gdzie": "Kwatermistrz Kłos (kwatermistrz garnizonu), 120 G",
+   "zrodla": [
+    "kwatermistrz Kłos",
+    "łup: łucznicy"
+   ],
+   "opis": "Wysoki łuk z cisu. Strzela dalej i mocniej niż zwykły, ale dłużej się celuje i męczy.",
+   "slowa": "strzał 34-42 · zasięg 10,5 pól · strzała przebija 2 wrogów",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Warsztat",
+     "skladniki": [
+      "3× Drewno",
+      "3× Ścięgna",
+      "1× Lina",
+      "1× Skóra wyprawiona"
+     ],
+     "godziny": 2,
+     "sily": 5,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 336,
+   "nazwa": "Łuk refleksyjny",
+   "rodzaj": "luk",
+   "rodzajNazwa": "łuk",
+   "material": "refleksyjny",
+   "materialNazwa": "róg i ścięgna",
+   "poziom": 14,
+   "unikat": false,
+   "istnieje": false,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": true,
+   "strzal": 44,
+   "zasiegStrzalu": 10,
+   "trwalosc": 140,
+   "jednostka": "shot",
+   "cena": 280,
+   "wartosc": 280,
+   "waga": 1,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 280 G",
+   "zrodla": [
+    "kantor"
+   ],
+   "opis": "Krótki łuk z rogu i ścięgien, wygięty na odwrót. Mocny jak długi, a celuje się szybciej.",
+   "slowa": "strzał 40-48 · zasięg 10 pól · szybkość celowania +15% · obrażenia +3",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Warsztat",
+     "skladniki": [
+      "2× Drewno",
+      "2× Poroże jelenia",
+      "4× Ścięgna",
+      "1× Lina"
+     ],
+     "godziny": 3,
+     "sily": 6,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 337,
+   "nazwa": "Łuk zakonny",
+   "rodzaj": "luk",
+   "rodzajNazwa": "łuk",
+   "material": "zakon",
+   "materialNazwa": "stal zakonna",
+   "poziom": 24,
+   "unikat": false,
+   "istnieje": false,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": true,
+   "strzal": 48,
+   "zasiegStrzalu": 11,
+   "trwalosc": 180,
+   "jednostka": "shot",
+   "cena": null,
+   "wartosc": 480,
+   "waga": 2,
+   "gdzie": "podziemia 76-99",
+   "zrodla": [
+    "podziemia 76-99"
+   ],
+   "opis": "Łuk wart zakonu z czarnego drewna i kości. Strzała z niego przebija deskę na wylot.",
+   "slowa": "strzał 43-53 · zasięg 11 pól · szybkość celowania +20% · na stwory podziemi +15% · strzała przebija 2 wrogów",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Warsztat",
+     "skladniki": [
+      "3× Drewno",
+      "1× Sztabka stali zakonnej",
+      "4× Ścięgna",
+      "1× Poroże jelenia"
+     ],
+     "godziny": 4,
+     "sily": 7,
+     "narzedzie": "Młotek majstra"
+    }
+   ]
+  },
+  {
+   "id": 338,
+   "nazwa": "Proca skórzana",
+   "rodzaj": "proca",
+   "rodzajNazwa": "proca",
+   "material": "skorzana",
+   "materialNazwa": "skóra",
+   "poziom": 3,
+   "unikat": false,
+   "istnieje": false,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": true,
+   "strzal": 18,
+   "zasiegStrzalu": 6.5,
+   "trwalosc": 80,
+   "jednostka": "shot",
+   "cena": 15,
+   "wartosc": 15,
+   "waga": 1,
+   "gdzie": "Ignac (garbarz i szewc), Józek Łata (handlarz starzyzną), 15 G",
+   "zrodla": [
+    "warsztat",
+    "garbarz Ignac",
+    "łup: łucznicy",
+    "szmaciarz (używana)"
+   ],
+   "opis": "Proca z szerokim skórzanym gniazdem. Kamień leci mocniej i dalej niż z lnianej.",
+   "slowa": "strzał 16-20 · zasięg 6,5 pól · ogłuszający kamień 10% na 1 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Warsztat",
+     "skladniki": [
+      "1× Skóra wyprawiona",
+      "2× Lina"
+     ],
+     "godziny": 1,
+     "sily": 2,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 339,
+   "nazwa": "Proca rzemienna",
+   "rodzaj": "proca",
+   "rodzajNazwa": "proca",
+   "material": "rzemienna",
+   "materialNazwa": "rzemień",
+   "poziom": 7,
+   "unikat": false,
+   "istnieje": false,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": true,
+   "strzal": 23,
+   "zasiegStrzalu": 7.5,
+   "trwalosc": 110,
+   "jednostka": "shot",
+   "cena": 40,
+   "wartosc": 40,
+   "waga": 1,
+   "gdzie": "Ignac (garbarz i szewc), 40 G",
+   "zrodla": [
+    "garbarz Ignac"
+   ],
+   "opis": "Długie plecione rzemienie i twarde gniazdo. W wprawnej ręce kamień łamie kości.",
+   "slowa": "strzał 21-25 · zasięg 7,5 pól · ogłuszający kamień 12% na 1 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Garbarnia",
+     "skladniki": [
+      "2× Skóra wyprawiona",
+      "2× Ścięgna"
+     ],
+     "godziny": 1,
+     "sily": 2,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 396,
+   "nazwa": "Miecz Bogumiła",
+   "rodzaj": "miecz",
+   "rodzajNazwa": "miecz",
+   "material": "zakon",
+   "materialNazwa": "stal zakonna",
+   "poziom": 12,
+   "unikat": true,
+   "istnieje": false,
+   "dmg": 31,
+   "zachwianie": 30,
+   "zasieg": 1.6,
+   "oddech": 10,
+   "krytyk": 0.08,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 600,
+   "jednostka": "blow",
+   "cena": null,
+   "wartosc": 600,
+   "waga": 2,
+   "gdzie": "W4 Krew kasztelana: Borgar po rozmowie o rodzie",
+   "zrodla": [
+    "W4 Krew kasztelana: Borgar po rozmowie o rodzie"
+   ],
+   "opis": "Miecz ostatniego kasztelana, Bogumiła z rodu Kowali. Na głowni wyryte: „Nie pytam”. W ręku łatwiej oprzeć się prawdzie.",
+   "slowa": "obrażenia 28-34 · zasięg 1,6 · oddech 10 · krytyk +8% · w ręku: opór przed „prawdą” i strachem +10% · obrażenia +5 · parowanie +20% · na stwory podziemi +15% · krew za krew: 2% życia za trafienie",
+   "reka": {
+    "mind.resist": 0.1
+   },
+   "przepisy": []
+  },
+  {
+   "id": 398,
+   "nazwa": "Kostur przeora",
+   "rodzaj": "kostur",
+   "rodzajNazwa": "kostur",
+   "material": "zakon",
+   "materialNazwa": "stal zakonna",
+   "poziom": 9,
+   "unikat": true,
+   "istnieje": false,
+   "dmg": 24,
+   "zachwianie": 52,
+   "zasieg": 1.8,
+   "oddech": 12,
+   "krytyk": 0.03,
+   "pancerz": 1.3,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 500,
+   "jednostka": "blow",
+   "cena": null,
+   "wartosc": 350,
+   "waga": 2,
+   "gdzie": "Przeor w zbroi (piętro 20)",
+   "zrodla": [
+    "Przeor w zbroi (piętro 20)"
+   ],
+   "opis": "Okuty kostur przeora z krukiem na głowicy. Ciężki jak buzdygan, długi jak włócznia - i przypomina o jednym pytaniu.",
+   "slowa": "obrażenia 22-26 · zasięg 1,8 · oddech 12 · krytyk +3% · na pancerz +30% · w ręku: opór przed „prawdą” i strachem +8% · ogłuszenie 15% na 2 s · odrzut +1 pole · krew za krew: 2% życia za trafienie",
+   "reka": {
+    "mind.resist": 0.08
+   },
+   "przepisy": []
+  },
+  {
+   "id": 399,
+   "nazwa": "Długi miecz bez herbu",
+   "rodzaj": "dlugi_miecz",
+   "rodzajNazwa": "długi miecz",
+   "material": "pierwszych",
+   "materialNazwa": "kruszec Pierwszych",
+   "poziom": 21,
+   "unikat": true,
+   "istnieje": false,
+   "dmg": 42,
+   "zachwianie": 38,
+   "zasieg": 1.8,
+   "oddech": 12,
+   "krytyk": 0.07,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 700,
+   "jednostka": "blow",
+   "cena": null,
+   "wartosc": 700,
+   "waga": 3,
+   "gdzie": "Zbroja bez herbu (piętro 70)",
+   "zrodla": [
+    "Zbroja bez herbu (piętro 70)"
+   ],
+   "opis": "Miecz pustego pancerza starszego niż zakon. Ktoś wydrapał z niego herb - zostało ostrze, które pamięta wojnę, której nikt nie spisał.",
+   "slowa": "obrażenia 38-46 · zasięg 1,8 · oddech 12 · krytyk +7% · zasięg +0,25 · parowanie +20% · krew za krew: 2% życia za trafienie · postrach 5%",
+   "reka": null,
+   "przepisy": []
+  },
+  {
+   "id": 402,
+   "nazwa": "Szabla spod Brzozowej Woli",
+   "rodzaj": "szabla",
+   "rodzajNazwa": "szabla",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 15,
+   "unikat": true,
+   "istnieje": false,
+   "dmg": 33,
+   "zachwianie": 26,
+   "zasieg": 1.6,
+   "oddech": 9,
+   "krytyk": 0.12,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 500,
+   "jednostka": "blow",
+   "cena": null,
+   "wartosc": 500,
+   "waga": 2,
+   "gdzie": "Garnizon: przychylność 80 (rotmistrz Bełza)",
+   "zrodla": [
+    "Garnizon: przychylność 80 (rotmistrz Bełza)"
+   ],
+   "opis": "Szabla chorągwi brzozowskiej, którą rotmistrz Bełza przechował po bitwie. Twoja wieś, twoja szabla - lekka, szybka i bardzo ostra.",
+   "slowa": "obrażenia 30-36 · zasięg 1,6 · oddech 9 · krytyk +12% · szybkość ataku +20% · krwawienie 15%: 3 na sekundę przez 4 s · oddech -2 na cios",
+   "reka": null,
+   "przepisy": []
+  },
+  {
+   "id": 403,
+   "nazwa": "Krucze pióro",
+   "rodzaj": "sztylet",
+   "rodzajNazwa": "sztylet",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 8,
+   "unikat": true,
+   "istnieje": false,
+   "dmg": 19,
+   "zachwianie": 12,
+   "zasieg": 1.2,
+   "oddech": 6,
+   "krytyk": 0.15,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1.6,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 400,
+   "jednostka": "blow",
+   "cena": null,
+   "wartosc": 260,
+   "waga": 1,
+   "gdzie": "D24 Oswojony kruk: dziadek Stach",
+   "zrodla": [
+    "D24 Oswojony kruk: dziadek Stach"
+   ],
+   "opis": "Sztylet kruczarzy, posłańców zakonu, z rękojeścią jak pióro. Cichy w ręku, zabójczy z ukrycia.",
+   "slowa": "obrażenia 17-21 · zasięg 1,2 · oddech 6 · krytyk +15% · z ukrycia +60% · w ręku: zwierzęta słyszą cię o 10% słabiej · szybkość ataku +20% · krytyk ×1,9 · postrach 5%",
+   "reka": {
+    "sneak": 0.1
+   },
+   "przepisy": []
+  },
+  {
+   "id": 406,
+   "nazwa": "Łuk Białej Źrenicy",
+   "rodzaj": "luk",
+   "rodzajNazwa": "łuk",
+   "material": "refleksyjny",
+   "materialNazwa": "róg i ścięgna",
+   "poziom": 12,
+   "unikat": true,
+   "istnieje": false,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": true,
+   "strzal": 46,
+   "zasiegStrzalu": 10.5,
+   "trwalosc": 300,
+   "jednostka": "shot",
+   "cena": null,
+   "wartosc": 550,
+   "waga": 2,
+   "gdzie": "W12 Rozbitek: kajuta kapitana „Białej Źrenicy”",
+   "zrodla": [
+    "W12 Rozbitek: kajuta kapitana „Białej Źrenicy”"
+   ],
+   "opis": "Łuk kapitana okrętu Czarnych Oczu, z białym okiem na majdanie. Strzela daleko i mocno.",
+   "slowa": "strzał 41-51 · zasięg 10,5 pól · szybkość celowania +20% · obrażenia +5 · strzała przebija 2 wrogów",
+   "reka": null,
+   "przepisy": []
+  },
+  {
+   "id": 407,
+   "nazwa": "Stalowa siekiera",
+   "rodzaj": "siekiera",
+   "rodzajNazwa": "siekiera",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 15,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 30,
+   "zachwianie": 32,
+   "zasieg": 1.6,
+   "oddech": 15,
+   "krytyk": 0.01,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 320,
+   "jednostka": "blow",
+   "cena": 180,
+   "wartosc": 180,
+   "waga": 2,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 180 G",
+   "zrodla": [
+    "kuźnia (stal)",
+    "kantor"
+   ],
+   "opis": "Siekiera z hartowanej stali. Drzewo i krzak potrzebują połowy uderzeń kamiennej siekiery (żelaznej: dwóch trzecich), a każde męczy mniej. W walce tnie jak stalowy topór.",
+   "slowa": "obrażenia 27-33 · zasięg 1,6 · oddech 15 · krytyk +1% · wytrzymałość +25%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Stal",
+      "1× Węgiel drzewny",
+      "1× Deski"
+     ],
+     "godziny": 2,
+     "sily": 6,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 408,
+   "nazwa": "Stalowy kilof",
+   "rodzaj": "kilof",
+   "rodzajNazwa": "kilof",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 15,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 35,
+   "zachwianie": 45,
+   "zasieg": 1.45,
+   "oddech": 21,
+   "krytyk": 0.01,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "pick",
+   "dystans": false,
+   "trwalosc": 260,
+   "jednostka": "blow",
+   "cena": 200,
+   "wartosc": 200,
+   "waga": 2,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 200 G",
+   "zrodla": [
+    "kuźnia (stal)",
+    "kantor"
+   ],
+   "opis": "Kilof ze stalowym grotem. Skała i ruda potrzebują połowy uderzeń kamiennego kilofa (żelaznego: dwóch trzecich), a każde męczy mniej. W walce bije jak młot.",
+   "slowa": "obrażenia 32-39 · zasięg 1,45 · oddech 21 · krytyk +1% · wytrzymałość +25%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Stal",
+      "1× Węgiel drzewny",
+      "1× Deski"
+     ],
+     "godziny": 2,
+     "sily": 6,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 452,
+   "nazwa": "Krzemienny sztylet",
+   "rodzaj": "sztylet",
+   "rodzajNazwa": "sztylet",
+   "material": "kamien",
+   "materialNazwa": "kamień",
+   "poziom": 2,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 11,
+   "zachwianie": 9,
+   "zasieg": 1.2,
+   "oddech": 7,
+   "krytyk": 0.1,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1.3,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 50,
+   "jednostka": "blow",
+   "cena": 10,
+   "wartosc": 10,
+   "waga": 1,
+   "gdzie": "Józek Łata (handlarz starzyzną), 10 G",
+   "zrodla": [
+    "warsztat",
+    "szmaciarz (używany)"
+   ],
+   "opis": "Łupany krzemień na krótkiej rękojeści. Szybki, ale szybko się tępi.",
+   "slowa": "obrażenia 10-12 · zasięg 1,2 · oddech 7 · krytyk +10% · z ukrycia +30%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Warsztat",
+     "skladniki": [
+      "2× Kamień",
+      "1× Drewno",
+      "1× Lina"
+     ],
+     "godziny": 1,
+     "sily": 2,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 453,
+   "nazwa": "Okuty kostur",
+   "rodzaj": "kostur",
+   "rodzajNazwa": "kostur",
+   "material": "okute",
+   "materialNazwa": "drewno okute żelazem",
+   "poziom": 4,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 14,
+   "zachwianie": 29,
+   "zasieg": 1.75,
+   "oddech": 11,
+   "krytyk": 0,
+   "pancerz": 1.1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 120,
+   "jednostka": "blow",
+   "cena": 15,
+   "wartosc": 15,
+   "waga": 2,
+   "gdzie": "Tadek Młot (kowal), Józek Łata (handlarz starzyzną), 15 G",
+   "zrodla": [
+    "warsztat (dębowy kostur + gwoździe)",
+    "kowal Tadek",
+    "szmaciarz (używany)"
+   ],
+   "opis": "Dębowy kostur okuty żelazem na obu końcach.",
+   "slowa": "obrażenia 13-15 · zasięg 1,75 · oddech 11 · na pancerz +10% · odrzut +1 pole",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Warsztat",
+     "skladniki": [
+      "1× Dębowy kostur",
+      "6× Gwoździe"
+     ],
+     "godziny": 1,
+     "sily": 2,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 454,
+   "nazwa": "Cep bojowy",
+   "rodzaj": "kiscien",
+   "rodzajNazwa": "kiścień",
+   "material": "okute",
+   "materialNazwa": "drewno okute żelazem",
+   "poziom": 4,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 18,
+   "zachwianie": 31,
+   "zasieg": 1.45,
+   "oddech": 12,
+   "krytyk": 0.06,
+   "pancerz": 1.2,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 130,
+   "jednostka": "blow",
+   "cena": 20,
+   "wartosc": 20,
+   "waga": 3,
+   "gdzie": "Józek Łata (handlarz starzyzną), 20 G",
+   "zrodla": [
+    "warsztat",
+    "obozy bandytów",
+    "szmaciarz (używany)"
+   ],
+   "opis": "Chłopski cep, bijak okuty gwoździami. Wieś broniła się nim od zawsze.",
+   "slowa": "obrażenia 16-20 · zasięg 1,45 · oddech 12 · krytyk +6% · na pancerz +20% · ogłuszenie 8% na 1 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Warsztat",
+     "skladniki": [
+      "2× Drewno",
+      "1× Skóra wyprawiona",
+      "6× Gwoździe"
+     ],
+     "godziny": 1,
+     "sily": 3,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 455,
+   "nazwa": "Brązowy tasak",
+   "rodzaj": "tasak",
+   "rodzajNazwa": "tasak",
+   "material": "braz",
+   "materialNazwa": "brąz",
+   "poziom": 6,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 25,
+   "zachwianie": 28,
+   "zasieg": 1.5,
+   "oddech": 12,
+   "krytyk": 0.02,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 140,
+   "jednostka": "blow",
+   "cena": 50,
+   "wartosc": 50,
+   "waga": 2,
+   "gdzie": "Tadek Młot (kowal), 50 G",
+   "zrodla": [
+    "kuźnia (sztabki brązu)",
+    "kowal Tadek",
+    "podziemia 1-10"
+   ],
+   "opis": "Szerokie brązowe ostrze. Rąbie mocniej niż brązowy miecz.",
+   "slowa": "obrażenia 23-28 · zasięg 1,5 · oddech 12 · krytyk +2% · krwawienie 8%: 1 na sekundę przez 4 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Sztabka brązu",
+      "2× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 2,
+     "sily": 6,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 456,
+   "nazwa": "Brązowy młot bojowy",
+   "rodzaj": "mlot",
+   "rodzajNazwa": "młot",
+   "material": "braz",
+   "materialNazwa": "brąz",
+   "poziom": 8,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 31,
+   "zachwianie": 52,
+   "zasieg": 1.5,
+   "oddech": 21,
+   "krytyk": 0,
+   "pancerz": 1.4,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 170,
+   "jednostka": "blow",
+   "cena": 60,
+   "wartosc": 60,
+   "waga": 5,
+   "gdzie": "Tadek Młot (kowal), 60 G",
+   "zrodla": [
+    "kuźnia (sztabki brązu)",
+    "kowal Tadek",
+    "podziemia 1-10"
+   ],
+   "opis": "Brązowy obuch na długim stylisku - między kamiennym a żelaznym młotem.",
+   "slowa": "obrażenia 28-34 · zasięg 1,5 · oddech 21 · na pancerz +40% · ogłuszenie 8% na 1 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "4× Sztabka brązu",
+      "2× Węgiel drzewny",
+      "1× Deski"
+     ],
+     "godziny": 3,
+     "sily": 8,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 457,
+   "nazwa": "Żelazna maczuga",
+   "rodzaj": "palka",
+   "rodzajNazwa": "pałka",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 9,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 21,
+   "zachwianie": 32,
+   "zasieg": 1.45,
+   "oddech": 10,
+   "krytyk": 0,
+   "pancerz": 1.2,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 240,
+   "jednostka": "blow",
+   "cena": 65,
+   "wartosc": 65,
+   "waga": 2,
+   "gdzie": "Tadek Młot (kowal), 65 G",
+   "zrodla": [
+    "kuźnia",
+    "kowal Tadek",
+    "łup: bandyci",
+    "podziemia 11-30"
+   ],
+   "opis": "Maczuga z żelazną głowicą. Szybka, tania w oddechu, dobra na pancerz.",
+   "slowa": "obrażenia 19-23 · zasięg 1,45 · oddech 10 · na pancerz +20% · ogłuszenie 10% na 1,5 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "2× Żelazo",
+      "1× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 1,
+     "sily": 4,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 458,
+   "nazwa": "Żelazna sulica",
+   "rodzaj": "sulica",
+   "rodzajNazwa": "sulica",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 10,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 24,
+   "zachwianie": 18,
+   "zasieg": 2,
+   "oddech": 9,
+   "krytyk": 0.05,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": false,
+   "trwalosc": 150,
+   "jednostka": "jab",
+   "cena": 75,
+   "wartosc": 75,
+   "waga": 2,
+   "gdzie": "Tadek Młot (kowal), Kwatermistrz Kłos (kwatermistrz garnizonu), 75 G",
+   "zrodla": [
+    "kuźnia",
+    "kwatermistrz Kłos",
+    "kowal Tadek",
+    "podziemia 11-30"
+   ],
+   "opis": "Lekka włócznia z wąskim grotem. Krótsza od włóczni, ale męczy mniej.",
+   "slowa": "obrażenia 22-26 · zasięg 2 · oddech 9 · krytyk +5% · zasięg +0,15",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "1× Żelazo",
+      "1× Węgiel drzewny",
+      "2× Drewno"
+     ],
+     "godziny": 1,
+     "sily": 4,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 459,
+   "nazwa": "Żelazny długi miecz",
+   "rodzaj": "dlugi_miecz",
+   "rodzajNazwa": "długi miecz",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 13,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 31,
+   "zachwianie": 28,
+   "zasieg": 1.75,
+   "oddech": 14,
+   "krytyk": 0.05,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 220,
+   "jednostka": "blow",
+   "cena": 130,
+   "wartosc": 130,
+   "waga": 3,
+   "gdzie": "Tadek Młot (kowal), 130 G",
+   "zrodla": [
+    "kuźnia",
+    "kowal Tadek",
+    "łup: najemnicy",
+    "podziemia 31-50"
+   ],
+   "opis": "Długa żelazna głownia na półtorej ręki. Sięga dalej niż miecz.",
+   "slowa": "obrażenia 28-34 · zasięg 1,75 · oddech 14 · krytyk +5% · zasięg +0,15",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "4× Żelazo",
+      "2× Węgiel drzewny",
+      "1× Skóra wyprawiona"
+     ],
+     "godziny": 3,
+     "sily": 8,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 460,
+   "nazwa": "Żelazny bardysz",
+   "rodzaj": "bardysz",
+   "rodzajNazwa": "bardysz",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 14,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 34,
+   "zachwianie": 40,
+   "zasieg": 1.95,
+   "oddech": 19,
+   "krytyk": 0.03,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 220,
+   "jednostka": "blow",
+   "cena": 140,
+   "wartosc": 140,
+   "waga": 5,
+   "gdzie": "Kwatermistrz Kłos (kwatermistrz garnizonu), 140 G",
+   "zrodla": [
+    "kuźnia",
+    "kwatermistrz Kłos",
+    "zbrojownia Lorda (W7)",
+    "podziemia 31-50"
+   ],
+   "opis": "Żelazny półksiężyc na drzewcu. Daleki zasięg, ciężki zamach.",
+   "slowa": "obrażenia 31-37 · zasięg 1,95 · oddech 19 · krytyk +3% · zasięg +0,15",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "4× Żelazo",
+      "2× Węgiel drzewny",
+      "2× Deski"
+     ],
+     "godziny": 3,
+     "sily": 8,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 461,
+   "nazwa": "Stalowa sulica",
+   "rodzaj": "sulica",
+   "rodzajNazwa": "sulica",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 16,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 28,
+   "zachwianie": 19,
+   "zasieg": 2,
+   "oddech": 8,
+   "krytyk": 0.06,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": false,
+   "trwalosc": 220,
+   "jednostka": "jab",
+   "cena": 170,
+   "wartosc": 170,
+   "waga": 2,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 170 G",
+   "zrodla": [
+    "kuźnia (stal)",
+    "kantor"
+   ],
+   "opis": "Sulica ze stalowym grotem. Szybkie pchnięcia, częste krytyki.",
+   "slowa": "obrażenia 25-31 · zasięg 2 · oddech 8 · krytyk +6% · przebicie pancerza 20% · zasięg +0,2",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "1× Stal",
+      "1× Węgiel drzewny",
+      "2× Drewno"
+     ],
+     "godziny": 2,
+     "sily": 5,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 462,
+   "nazwa": "Stalowy tasak",
+   "rodzaj": "tasak",
+   "rodzajNazwa": "tasak",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 16,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 35,
+   "zachwianie": 32,
+   "zasieg": 1.5,
+   "oddech": 11,
+   "krytyk": 0.03,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 320,
+   "jednostka": "blow",
+   "cena": 230,
+   "wartosc": 230,
+   "waga": 2,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 230 G",
+   "zrodla": [
+    "kuźnia (stal)",
+    "kantor",
+    "podziemia 51-75"
+   ],
+   "opis": "Ciężki stalowy tasak. Mocniejszy cios niż stalowy miecz.",
+   "slowa": "obrażenia 32-39 · zasięg 1,5 · oddech 11 · krytyk +3% · obrażenia +3 · krwawienie 12%: 2 na sekundę przez 4 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Stal",
+      "2× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 3,
+     "sily": 7,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 463,
+   "nazwa": "Stalowa szabla",
+   "rodzaj": "szabla",
+   "rodzajNazwa": "szabla",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 17,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 29,
+   "zachwianie": 24,
+   "zasieg": 1.6,
+   "oddech": 8,
+   "krytyk": 0.1,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 290,
+   "jednostka": "blow",
+   "cena": 275,
+   "wartosc": 275,
+   "waga": 2,
+   "gdzie": "Kwatermistrz Kłos (kwatermistrz garnizonu), Baltazar Vey (kupiec z kontynentu), 275 G",
+   "zrodla": [
+    "kuźnia (stal)",
+    "kantor",
+    "kwatermistrz Kłos (przychylność 50)"
+   ],
+   "opis": "Szabla z hartowanej stali. Tani cios i dużo krytyków.",
+   "slowa": "obrażenia 26-32 · zasięg 1,6 · oddech 8 · krytyk +10% · szybkość ataku +15% · krwawienie 12%: 2 na sekundę przez 4 s",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Stal",
+      "2× Węgiel drzewny",
+      "1× Skóra wyprawiona"
+     ],
+     "godziny": 3,
+     "sily": 7,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 464,
+   "nazwa": "Stalowy kiścień",
+   "rodzaj": "kiscien",
+   "rodzajNazwa": "kiścień",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 17,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 29,
+   "zachwianie": 39,
+   "zasieg": 1.45,
+   "oddech": 11,
+   "krytyk": 0.07,
+   "pancerz": 1.2,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 350,
+   "jednostka": "blow",
+   "cena": 205,
+   "wartosc": 205,
+   "waga": 3,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 205 G",
+   "zrodla": [
+    "kuźnia (stal)",
+    "kantor",
+    "podziemia 51-75"
+   ],
+   "opis": "Stalowa kula z kolcami na krótkim łańcuchu.",
+   "slowa": "obrażenia 26-32 · zasięg 1,45 · oddech 11 · krytyk +7% · na pancerz +20% · ogłuszenie 12% na 1,5 s · przebicie pancerza 20%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "4× Stal",
+      "2× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 3,
+     "sily": 8,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 465,
+   "nazwa": "Stalowy czekan",
+   "rodzaj": "czekan",
+   "rodzajNazwa": "czekan",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 18,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 33,
+   "zachwianie": 37,
+   "zasieg": 1.55,
+   "oddech": 14,
+   "krytyk": 0.08,
+   "pancerz": 1.35,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "pick",
+   "dystans": false,
+   "trwalosc": 320,
+   "jednostka": "blow",
+   "cena": 250,
+   "wartosc": 250,
+   "waga": 3,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 250 G",
+   "zrodla": [
+    "kuźnia (stal)",
+    "kantor",
+    "podziemia 51-75"
+   ],
+   "opis": "Stalowy dziób przebija każdą blachę.",
+   "slowa": "obrażenia 30-36 · zasięg 1,55 · oddech 14 · krytyk +8% · na pancerz +35% · ogłuszenie 12% na 1,5 s · przebicie pancerza 20%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Stal",
+      "2× Węgiel drzewny",
+      "1× Deski"
+     ],
+     "godziny": 3,
+     "sily": 7,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 466,
+   "nazwa": "Stalowa rohatyna",
+   "rodzaj": "rohatyna",
+   "rodzajNazwa": "rohatyna",
+   "material": "stal",
+   "materialNazwa": "stal",
+   "poziom": 18,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 33,
+   "zachwianie": 28,
+   "zasieg": 2.2,
+   "oddech": 12,
+   "krytyk": 0.04,
+   "pancerz": 1,
+   "zwierz": 1.3,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": false,
+   "trwalosc": 260,
+   "jednostka": "jab",
+   "cena": 215,
+   "wartosc": 215,
+   "waga": 3,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 215 G",
+   "zrodla": [
+    "kuźnia (stal)",
+    "kantor"
+   ],
+   "opis": "Rohatyna na niedźwiedzia, ze stalowym grotem i poprzeczką.",
+   "slowa": "obrażenia 30-36 · zasięg 2,2 · oddech 12 · krytyk +4% · na zwierzęta +30% · obrażenia +3 · zasięg +0,2",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Stal",
+      "1× Węgiel drzewny",
+      "2× Drewno"
+     ],
+     "godziny": 2,
+     "sily": 6,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 467,
+   "nazwa": "Tasak zakonny",
+   "rodzaj": "tasak",
+   "rodzajNazwa": "tasak",
+   "material": "zakon",
+   "materialNazwa": "stal zakonna",
+   "poziom": 23,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 40,
+   "zachwianie": 35,
+   "zasieg": 1.5,
+   "oddech": 10,
+   "krytyk": 0.05,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 420,
+   "jednostka": "blow",
+   "cena": 495,
+   "wartosc": 495,
+   "waga": 2,
+   "gdzie": "kuźnia (Młotek majstra), podziemia 76-99",
+   "zrodla": [
+    "kuźnia (Młotek majstra)",
+    "podziemia 76-99"
+   ],
+   "opis": "Tasak kwatermistrzów zakonu. Czarne ostrze nie zna tępienia.",
+   "slowa": "obrażenia 36-44 · zasięg 1,5 · oddech 10 · krytyk +5% · obrażenia +5 · krwawienie 15%: 3 na sekundę przez 4 s · na stwory podziemi +15%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Sztabka stali zakonnej",
+      "2× Węgiel drzewny",
+      "1× Drewno"
+     ],
+     "godziny": 4,
+     "sily": 8,
+     "narzedzie": "Młotek majstra"
+    }
+   ]
+  },
+  {
+   "id": 468,
+   "nazwa": "Czekan zakonny",
+   "rodzaj": "czekan",
+   "rodzajNazwa": "czekan",
+   "material": "zakon",
+   "materialNazwa": "stal zakonna",
+   "poziom": 24,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 38,
+   "zachwianie": 39,
+   "zasieg": 1.55,
+   "oddech": 13,
+   "krytyk": 0.1,
+   "pancerz": 1.35,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "pick",
+   "dystans": false,
+   "trwalosc": 420,
+   "jednostka": "blow",
+   "cena": 545,
+   "wartosc": 545,
+   "waga": 3,
+   "gdzie": "kuźnia (Młotek majstra), podziemia 76-99",
+   "zrodla": [
+    "kuźnia (Młotek majstra)",
+    "podziemia 76-99"
+   ],
+   "opis": "Czekan straży bramy z kruczym dziobem. Na puste zbroje nie ma lepszego.",
+   "slowa": "obrażenia 34-42 · zasięg 1,55 · oddech 13 · krytyk +10% · na pancerz +35% · ogłuszenie 15% na 2 s · przebicie pancerza 30% · na stwory podziemi +15%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "3× Sztabka stali zakonnej",
+      "2× Węgiel drzewny",
+      "1× Deski"
+     ],
+     "godziny": 4,
+     "sily": 8,
+     "narzedzie": "Młotek majstra"
+    }
+   ]
+  },
+  {
+   "id": 469,
+   "nazwa": "Długi miecz zakonny",
+   "rodzaj": "dlugi_miecz",
+   "rodzajNazwa": "długi miecz",
+   "material": "zakon",
+   "materialNazwa": "stal zakonna",
+   "poziom": 26,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 41,
+   "zachwianie": 32,
+   "zasieg": 1.75,
+   "oddech": 12,
+   "krytyk": 0.08,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 420,
+   "jednostka": "blow",
+   "cena": 625,
+   "wartosc": 625,
+   "waga": 3,
+   "gdzie": "kuźnia (Młotek majstra), podziemia 76-99",
+   "zrodla": [
+    "kuźnia (Młotek majstra)",
+    "podziemia 76-99"
+   ],
+   "opis": "Miecz komtura zakonu. Najdłuższe i najmocniejsze ostrze z kuźni.",
+   "slowa": "obrażenia 37-45 · zasięg 1,75 · oddech 12 · krytyk +8% · zasięg +0,25 · parowanie +20% · na stwory podziemi +15%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "4× Sztabka stali zakonnej",
+      "2× Węgiel drzewny",
+      "1× Skóra wyprawiona"
+     ],
+     "godziny": 5,
+     "sily": 9,
+     "narzedzie": "Młotek majstra"
+    }
+   ]
+  },
+  {
+   "id": 470,
+   "nazwa": "Bardysz zakonny",
+   "rodzaj": "bardysz",
+   "rodzajNazwa": "bardysz",
+   "material": "zakon",
+   "materialNazwa": "stal zakonna",
+   "poziom": 26,
+   "unikat": false,
+   "istnieje": false,
+   "dmg": 45,
+   "zachwianie": 46,
+   "zasieg": 1.95,
+   "oddech": 17,
+   "krytyk": 0.06,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 420,
+   "jednostka": "blow",
+   "cena": 650,
+   "wartosc": 650,
+   "waga": 5,
+   "gdzie": "kuźnia (Młotek majstra), podziemia 76-99",
+   "zrodla": [
+    "kuźnia (Młotek majstra)",
+    "podziemia 76-99"
+   ],
+   "opis": "Bardysz wart zakonu. Sięga prawie jak włócznia i tnie najmocniej z drzewcowych.",
+   "slowa": "obrażenia 41-50 · zasięg 1,95 · oddech 17 · krytyk +6% · krwawienie 15%: 3 na sekundę przez 4 s · zasięg +0,25 · na stwory podziemi +15%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Kuźnia",
+     "skladniki": [
+      "4× Sztabka stali zakonnej",
+      "1× Stal",
+      "2× Węgiel drzewny",
+      "2× Deski"
+     ],
+     "godziny": 5,
+     "sily": 10,
+     "narzedzie": "Młotek majstra"
+    }
+   ]
+  },
+  {
+   "id": 471,
+   "nazwa": "Łuk myśliwski",
+   "rodzaj": "luk",
+   "rodzajNazwa": "łuk",
+   "material": "mysliwski",
+   "materialNazwa": "jesion i ścięgna",
+   "poziom": 4,
+   "unikat": false,
+   "istnieje": false,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": true,
+   "strzal": 34,
+   "zasiegStrzalu": 9.5,
+   "trwalosc": 90,
+   "jednostka": "shot",
+   "cena": 45,
+   "wartosc": 45,
+   "waga": 2,
+   "gdzie": "Kwatermistrz Kłos (kwatermistrz garnizonu), 45 G",
+   "zrodla": [
+    "warsztat",
+    "kwatermistrz Kłos",
+    "łup: łucznicy"
+   ],
+   "opis": "Mocniejszy od pierwszego łuku - krok przed łukiem długim.",
+   "slowa": "strzał 31-37 · zasięg 9,5 pól · szybkość celowania +8%",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Warsztat",
+     "skladniki": [
+      "2× Drewno",
+      "3× Ścięgna",
+      "1× Lina",
+      "1× Skóra wyprawiona"
+     ],
+     "godziny": 2,
+     "sily": 4,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 472,
+   "nazwa": "Łuk wojenny",
+   "rodzaj": "luk",
+   "rodzajNazwa": "łuk",
+   "material": "wojenny",
+   "materialNazwa": "drewno, róg i ścięgna",
+   "poziom": 18,
+   "unikat": false,
+   "istnieje": false,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": true,
+   "strzal": 45,
+   "zasiegStrzalu": 11,
+   "trwalosc": 160,
+   "jednostka": "shot",
+   "cena": 330,
+   "wartosc": 330,
+   "waga": 2,
+   "gdzie": "Baltazar Vey (kupiec z kontynentu), 330 G",
+   "zrodla": [
+    "warsztat",
+    "kantor"
+   ],
+   "opis": "Klejony łuk z drewna, rogu i ścięgien. Strzela daleko i mocno, ciężko się go napina.",
+   "slowa": "strzał 41-50 · zasięg 11 pól · szybkość celowania +15% · strzała przebija 2 wrogów",
+   "reka": null,
+   "przepisy": [
+    {
+     "stacja": "Warsztat",
+     "skladniki": [
+      "3× Drewno",
+      "3× Poroże jelenia",
+      "5× Ścięgna",
+      "1× Smoła",
+      "1× Lina"
+     ],
+     "godziny": 4,
+     "sily": 7,
+     "narzedzie": null
+    }
+   ]
+  },
+  {
+   "id": 156,
+   "nazwa": "Pałka",
+   "rodzaj": "palka",
+   "rodzajNazwa": "pałka",
+   "material": "drewno",
+   "materialNazwa": "drewno",
+   "poziom": 1,
+   "unikat": false,
+   "istnieje": true,
+   "dmg": 13,
+   "zachwianie": 26,
+   "zasieg": 1.45,
+   "oddech": 10,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": false,
+   "trwalosc": 80,
+   "jednostka": "blow",
+   "cena": 5,
+   "wartosc": 5,
+   "waga": 2,
+   "gdzie": "warsztat",
+   "zrodla": [
+    "warsztat"
+   ],
+   "opis": "Gruba, sękata gałąź z owiniętym lnem uchwytem. Lekka i szybka broń do walki wręcz: bije słabiej niż siekiera, ale ciosy są szybsze i mniej męczą. Atak w trybie walki (Tab) klawiszem O.",
+   "slowa": "obrażenia 12-14 · zasięg 1,45 · oddech 10",
+   "reka": null,
+   "przepisy": []
+  },
+  {
+   "id": 60,
+   "nazwa": "Kamienna siekiera",
+   "rodzaj": "siekiera",
+   "rodzajNazwa": "siekiera",
+   "material": "kamien",
+   "materialNazwa": "kamień",
+   "poziom": 1,
+   "unikat": false,
+   "istnieje": true,
+   "dmg": 17,
+   "zachwianie": 24,
+   "zasieg": 1.55,
+   "oddech": 16,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 70,
+   "jednostka": "blow",
+   "cena": null,
+   "wartosc": 0,
+   "waga": 2,
+   "gdzie": "warsztat",
+   "zrodla": [
+    "warsztat"
+   ],
+   "opis": "Ostry kamień przywiązany lnem do gałęzi. Ścina drzewa, rozrąbuje kłody i krzaki. Żelazna robi to szybciej.",
+   "slowa": "obrażenia 15-19 · zasięg 1,55 · oddech 16",
+   "reka": null,
+   "przepisy": []
+  },
+  {
+   "id": 115,
+   "nazwa": "Żelazna siekiera",
+   "rodzaj": "siekiera",
+   "rodzajNazwa": "siekiera",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 1,
+   "unikat": false,
+   "istnieje": true,
+   "dmg": 26,
+   "zachwianie": 30,
+   "zasieg": 1.6,
+   "oddech": 16,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "edge",
+   "dystans": false,
+   "trwalosc": 220,
+   "jednostka": "blow",
+   "cena": null,
+   "wartosc": 0,
+   "waga": 2,
+   "gdzie": "kuźnia + warsztat",
+   "zrodla": [
+    "kuźnia + warsztat"
+   ],
+   "opis": "Żelazne ostrze na starym stylisku. Zastępuje kamienną siekierę: drzewa, kłody i krzaki padają o jedną trzecią szybciej, a każde uderzenie kosztuje mniej sił.",
+   "slowa": "obrażenia 23-29 · zasięg 1,6 · oddech 16",
+   "reka": null,
+   "przepisy": []
+  },
+  {
+   "id": 63,
+   "nazwa": "Kamienny kilof",
+   "rodzaj": "kilof",
+   "rodzajNazwa": "kilof",
+   "material": "kamien",
+   "materialNazwa": "kamień",
+   "poziom": 1,
+   "unikat": false,
+   "istnieje": true,
+   "dmg": 22,
+   "zachwianie": 36,
+   "zasieg": 1.45,
+   "oddech": 22,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "pick",
+   "dystans": false,
+   "trwalosc": 55,
+   "jednostka": "blow",
+   "cena": null,
+   "wartosc": 0,
+   "waga": 2,
+   "gdzie": "warsztat",
+   "zrodla": [
+    "warsztat"
+   ],
+   "opis": "Kamienny grot na mocnym trzonku. Rozbija skały i żyły rudy. Żelazny robi to szybciej.",
+   "slowa": "obrażenia 20-24 · zasięg 1,45 · oddech 22",
+   "reka": null,
+   "przepisy": []
+  },
+  {
+   "id": 116,
+   "nazwa": "Żelazny kilof",
+   "rodzaj": "kilof",
+   "rodzajNazwa": "kilof",
+   "material": "zelazo",
+   "materialNazwa": "żelazo",
+   "poziom": 1,
+   "unikat": false,
+   "istnieje": true,
+   "dmg": 30,
+   "zachwianie": 42,
+   "zasieg": 1.45,
+   "oddech": 22,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": true,
+   "klasa": "pick",
+   "dystans": false,
+   "trwalosc": 180,
+   "jednostka": "blow",
+   "cena": null,
+   "wartosc": 0,
+   "waga": 2,
+   "gdzie": "kuźnia + warsztat",
+   "zrodla": [
+    "kuźnia + warsztat"
+   ],
+   "opis": "Kilof z żelaznym grotem. Zastępuje kamienny kilof: skały i żyły rudy pękają o jedną trzecią szybciej, a każde uderzenie kosztuje mniej sił.",
+   "slowa": "obrażenia 27-33 · zasięg 1,45 · oddech 22",
+   "reka": null,
+   "przepisy": []
+  },
+  {
+   "id": 154,
+   "nazwa": "Oszczep",
+   "rodzaj": "wlocznia",
+   "rodzajNazwa": "włócznia",
+   "material": "kamien",
+   "materialNazwa": "kamień",
+   "poziom": 1,
+   "unikat": false,
+   "istnieje": true,
+   "dmg": 20,
+   "zachwianie": 16,
+   "zasieg": 2.25,
+   "oddech": 12,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": false,
+   "trwalosc": 50,
+   "jednostka": "jab",
+   "cena": 15,
+   "wartosc": 15,
+   "waga": 3,
+   "gdzie": "warsztat",
+   "zrodla": [
+    "warsztat"
+   ],
+   "opis": "Długie drzewce z kamiennym grotem. Najdłuższy zasięg z broni do walki wręcz (ponad 2 pola): szybkie pchnięcia (tryb walki, klawisz O) trzymają dzika i wilka na dystans. Nie potrzebuje amunicji.",
+   "slowa": "obrażenia 18-22 · zasięg 2,25 · oddech 12",
+   "reka": null,
+   "przepisy": []
+  },
+  {
+   "id": 126,
+   "nazwa": "Łuk",
+   "rodzaj": "luk",
+   "rodzajNazwa": "łuk",
+   "material": "krotki",
+   "materialNazwa": "łuk z leszczyny",
+   "poziom": 1,
+   "unikat": false,
+   "istnieje": true,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "point",
+   "dystans": true,
+   "strzal": 30,
+   "zasiegStrzalu": 9,
+   "trwalosc": 80,
+   "jednostka": "shot",
+   "cena": null,
+   "wartosc": 0,
+   "waga": 2,
+   "gdzie": "warsztat",
+   "zrodla": [
+    "warsztat"
+   ],
+   "opis": "Giętka gałąź i cięciwa z liny. Bije dalej i mocniej niż proca, także jelenie. W trybie walki (Tab) klawisz O, amunicja: strzały.",
+   "slowa": "strzał 27-33 · zasięg 9 pól",
+   "reka": null,
+   "przepisy": []
+  },
+  {
+   "id": 125,
+   "nazwa": "Proca",
+   "rodzaj": "proca",
+   "rodzajNazwa": "proca",
+   "material": "prosta",
+   "materialNazwa": "lina",
+   "poziom": 1,
+   "unikat": false,
+   "istnieje": true,
+   "krytyk": 0,
+   "pancerz": 1,
+   "zwierz": 1,
+   "ukrycie": 1,
+   "zamach": false,
+   "klasa": "blunt",
+   "dystans": true,
+   "strzal": 14,
+   "zasiegStrzalu": 6,
+   "trwalosc": 60,
+   "jednostka": "shot",
+   "cena": null,
+   "wartosc": 0,
+   "waga": 1,
+   "gdzie": "warsztat",
+   "zrodla": [
+    "warsztat"
+   ],
+   "opis": "Sznur z lnianą kieszonką na kamień. Ustrzelisz nią zająca. Strzelasz w trybie walki (Tab) klawiszem O, amunicja: kamienie.",
+   "slowa": "strzał 13-15 · zasięg 6 pól",
+   "reka": null,
+   "przepisy": []
+  }
+ ],
+ "rodzaje": {
+  "sztylet": {
+   "nazwa": "sztylet",
+   "klasa": "edge",
+   "opis": "",
+   "dystans": false
+  },
+  "miecz": {
+   "nazwa": "miecz",
+   "klasa": "edge",
+   "opis": "",
+   "dystans": false
+  },
+  "tasak": {
+   "nazwa": "tasak",
+   "klasa": "edge",
+   "opis": "",
+   "dystans": false
+  },
+  "szabla": {
+   "nazwa": "szabla",
+   "klasa": "edge",
+   "opis": "",
+   "dystans": false
+  },
+  "dlugi_miecz": {
+   "nazwa": "długi miecz",
+   "klasa": "edge",
+   "opis": "",
+   "dystans": false
+  },
+  "palka": {
+   "nazwa": "pałka",
+   "klasa": "blunt",
+   "opis": "",
+   "dystans": false
+  },
+  "kostur": {
+   "nazwa": "kostur",
+   "klasa": "blunt",
+   "opis": "",
+   "dystans": false
+  },
+  "kiscien": {
+   "nazwa": "kiścień",
+   "klasa": "blunt",
+   "opis": "",
+   "dystans": false
+  },
+  "buzdygan": {
+   "nazwa": "buzdygan",
+   "klasa": "blunt",
+   "opis": "",
+   "dystans": false
+  },
+  "topor": {
+   "nazwa": "topór",
+   "klasa": "edge",
+   "opis": "",
+   "dystans": false
+  },
+  "czekan": {
+   "nazwa": "czekan",
+   "klasa": "pick",
+   "opis": "",
+   "dystans": false
+  },
+  "bardysz": {
+   "nazwa": "bardysz",
+   "klasa": "edge",
+   "opis": "",
+   "dystans": false
+  },
+  "mlot": {
+   "nazwa": "młot",
+   "klasa": "blunt",
+   "opis": "",
+   "dystans": false
+  },
+  "wlocznia": {
+   "nazwa": "włócznia",
+   "klasa": "point",
+   "opis": "",
+   "dystans": false
+  },
+  "rohatyna": {
+   "nazwa": "rohatyna",
+   "klasa": "point",
+   "opis": "",
+   "dystans": false
+  },
+  "sulica": {
+   "nazwa": "sulica",
+   "klasa": "point",
+   "opis": "",
+   "dystans": false
+  },
+  "siekiera": {
+   "nazwa": "siekiera",
+   "klasa": "edge",
+   "opis": "",
+   "dystans": false
+  },
+  "kilof": {
+   "nazwa": "kilof",
+   "klasa": "pick",
+   "opis": "",
+   "dystans": false
+  },
+  "luk": {
+   "nazwa": "łuk",
+   "klasa": "point",
+   "opis": "",
+   "dystans": true
+  },
+  "proca": {
+   "nazwa": "proca",
+   "klasa": "blunt",
+   "opis": "",
+   "dystans": true
+  }
+ },
+ "materialy": {
+  "drewno": {
+   "nazwa": "drewno",
+   "poziom": [
+    1,
+    3
+   ]
+  },
+  "okute": {
+   "nazwa": "drewno okute żelazem",
+   "poziom": [
+    3,
+    5
+   ]
+  },
+  "kamien": {
+   "nazwa": "kamień",
+   "poziom": [
+    1,
+    4
+   ]
+  },
+  "braz": {
+   "nazwa": "brąz",
+   "poziom": [
+    5,
+    9
+   ]
+  },
+  "zelazo": {
+   "nazwa": "żelazo",
+   "poziom": [
+    9,
+    15
+   ]
+  },
+  "stal": {
+   "nazwa": "stal",
+   "poziom": [
+    15,
+    21
+   ]
+  },
+  "pierwszych": {
+   "nazwa": "kruszec Pierwszych",
+   "poziom": [
+    18,
+    22
+   ]
+  },
+  "zakon": {
+   "nazwa": "stal zakonna",
+   "poziom": [
+    22,
+    27
+   ]
+  },
+  "skora": {
+   "nazwa": "skóra",
+   "poziom": [
+    1,
+    8
+   ]
+  },
+  "plotno": {
+   "nazwa": "płótno",
+   "poziom": [
+    1,
+    8
+   ]
+  },
+  "sukno": {
+   "nazwa": "sukno",
+   "poziom": [
+    1,
+    8
+   ]
+  },
+  "filc": {
+   "nazwa": "filc",
+   "poziom": [
+    1,
+    8
+   ]
+  },
+  "wiklina": {
+   "nazwa": "wiklina",
+   "poziom": [
+    1,
+    4
+   ]
+  },
+  "krab": {
+   "nazwa": "pancerz kraba",
+   "poziom": [
+    6,
+    10
+   ]
+  },
+  "jedwab": {
+   "nazwa": "pajęczy jedwab",
+   "poziom": [
+    14,
+    20
+   ]
+  },
+  "kamienie": {
+   "nazwa": "kamień i kruszec",
+   "poziom": [
+    1,
+    20
+   ]
+  },
+  "krotki": {
+   "nazwa": "łuk z leszczyny",
+   "poziom": null
+  },
+  "dlugi": {
+   "nazwa": "cis",
+   "poziom": null
+  },
+  "refleksyjny": {
+   "nazwa": "róg i ścięgna",
+   "poziom": null
+  },
+  "mysliwski": {
+   "nazwa": "jesion i ścięgna",
+   "poziom": null
+  },
+  "wojenny": {
+   "nazwa": "drewno, róg i ścięgna",
+   "poziom": null
+  },
+  "prosta": {
+   "nazwa": "lina",
+   "poziom": null
+  },
+  "skorzana": {
+   "nazwa": "skóra",
+   "poziom": null
+  },
+  "rzemienna": {
+   "nazwa": "rzemień",
+   "poziom": null
+  }
+ },
+ "kara": {
+  "naPoziom": 0.03,
+  "max": 0.45
+ }
+}

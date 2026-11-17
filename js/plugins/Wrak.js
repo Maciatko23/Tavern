@@ -64,7 +64,9 @@
     // the thread (Wrak_Data.js, the engine Watki.js): the state "wrak", D25 / W12 with their talks and actions, the flags
     const w = Watki.get("wrak");
     if (!w) throw new Error("Wrak.js: brak wątku „wrak” (Wrak_Data.js / Watki.js)");
-    const MAP = D.MAP, UNDER = D.UNDER, HARBOUR = 125, TOWN = 8, TAVERN = 1, PODGRODZIE = 111;
+    // (2026-11-16) the new world: the wreck „Pomyślność” lies on the beach of Słony Brzeg (Map219) - its hold is UNDER (Map166, in by the
+    // breach in its side). The old shoal map (MAP 165) with Janek's boat, the sandbar and the soldiers is out of reach: that code rests.
+    const MAP = D.MAP, UNDER = D.UNDER, HARBOUR = 125, TOWN = 220, TAVERN = 1, PODGRODZIE = 218;
     const IDS = D.IDS;
     const COIN_ICON = 314;
     const { HERO, C, choiceTo } = Watki.mowa;
@@ -843,6 +845,7 @@
             autoChecks();
         }
         if (m === UNDER) {
+            if (!S().been) { S().been = day(); setFlag("wrakByl"); autoChecks(); }   // (the wreck on the beach: under its deck = at the wreck)
             if (!S().under) S().under = day();
             if (S().ratsDay !== day()) {
                 const Cr = T.api("Creatures"), ev = $gameMap.events().find(e => e.event() && e.event().name === "Miejsce: wrak_szczury");

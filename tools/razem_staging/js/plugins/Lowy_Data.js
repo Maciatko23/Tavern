@@ -1,0 +1,368 @@
+//=============================================================================
+// Lowy_Data.js
+//=============================================================================
+// PACZKA B „Zwierzęta i łowy” (docs/rozszerzenia/PLAN.md, punkt 5) - the data of: wilcza nora, gawra, błotnisko dzików, lizawka, stałe
+// obozy rabusiów i myśliwych Czarnych Oczu, zwierzyniec Lorda z gajowym, zbłąkane zwierzęta, strzelnica.
+// Here (loaded under QuestBoard_Data and above TownLife / TownQuests_Data): the places (registered by the engine with
+// Okolice.registerSpots("B", ...)), the discoveries, the gamekeeper (window.TownLifeExtra, id 2905, Map024), the thread "lowy" (Watki.js,
+// 2026-10-28: the state, the quests K59-K62 and D32-D33 - into window.TownQuestsPacks -, the talks by the hunters' fire, the gamekeeper's
+// fine, Rysiek, the white-eye arrow, Marta's milk, the den and the lick), the board's contracts with the prefix "low_" and its two new
+// beasts (QuestBoard.TEMPLATES / BEASTS), the gamekeeper's bust (SpeechBubbles.BUSTS), every number. The texts: js/teksty/lowy.txt.
+// The engine is Lowy.js (below every system).
+// The user's decisions (2026-10-21): the cubs left alone - the den's pack turns friendly, nothing is taken away; poaching in the Lord's
+// park - a fine, the third time the hedge's gap is shut for 7 days; never the gallows, never the game's end.
+
+/*:
+ * @target MZ
+ * @plugindesc [paczka B] Dane: Zwierzęta i łowy - wilcza nora, gawra, błotnisko dzików, lizawka, stałe obozy, zwierzyniec Lorda z gajowym, zbłąkane zwierzęta, strzelnica. v1.1.0
+ * @author Claude
+ * @base TawernaCore
+ * @base Watki
+ * @orderAfter Okolice_Data
+ *
+ * @help
+ * ============================================================================
+ * Lowy_Data.js - dane paczki B „Zwierzęta i łowy”
+ * ============================================================================
+ * Plan i kontrakt: docs/rozszerzenia/PLAN.md (punkt 5). Silnik: Lowy.js.
+ * Opis dla integracji: docs/rozszerzenia/B.md.
+ *
+ * Numery zdarzeń: 2300-2499 (Map023 2300-2319, Map013 2320-2339,
+ *   Map021 2340-2359, Map004 2360-2379, Map024 2380-2399, Map162 2440-2459).
+ * Mieszkaniec TownLife: 2905 gajowy Gniewko Bór (Map024).
+ * Przedmioty: 200 Bryła soli, 201 Poroże jelenia, 202 Kieł odyńca,
+ *   203 Pazur niedźwiedzia, 204 Zezwolenie na odstrzał, 205 Strzała
+ *   z białym okiem, 206 Srebrna strzała. Ikony: 480-486.
+ * Przełącznik 23 (Low_Wylom): wyłom w żywopłocie zarośnięty cierniem.
+ * Zadania: K59 Nora pod korzeniami, K60 Sól dla jeleni, K61 Zawody
+ *   strzeleckie, K62 Krasula i kury Ługów, D32 Gajowy i kłusownik,
+ *   D33 Gawra pod granią. Zlecenia z tablicy: low_oboz_021, low_czo_023,
+ *   low_poroze. Test: tests/lowy_test.js (port 9552).
+ * ============================================================================
+ */
+
+(() => {
+    "use strict";
+
+    const VERSION = "1.1.0";
+    const O = window.OkoliceData, P = O ? O.PACKAGES.B : null;
+
+    // ------------------------------------------------------------------ the numbers of the package (PLAN.md 3.2)
+    const ITEM = { sol: 200, poroze: 201, kiel: 202, pazur: 203, zezwolenie: 204, strzalaOko: 205, srebrnaStrzala: 206,
+        // the game's own (read only)
+        lina: 93, luk: 126, strzaly: 127, mieso: 94, miesoJelen: 157, miesoDzik: 159, miesoWilk: 161, miesoNiedzwiedz: 168, skora: 96,
+        skoraNiedzwiedzia: 170, mleko: 123, noz: [90, 91] };
+    const MEATS = [94, 157, 159, 161, 168];          // raw meats a pack eats at the den (Farming.RAW_MEATS)
+    const ICON = { sol: 480, poroze: 481, kiel: 482, pazur: 483, zezwolenie: 484, strzalaOko: 485, srebrnaStrzala: 486,
+        // the game's own icons for the places without their own (popups, F9)
+        wilk: 352, gold: 313, luk: 126, lina: 349 };
+    const SW_WYLOM = 23;
+
+    // event ids (Tawerna.inject, owner "Lowy", 2300-2499; a range of 20 per map)
+    const IDS = {
+        nora: 2300, czoNamiot: 2301,
+        gawra: 2320, gawraBok: 2321,
+        bloto: 2340, rabNamiot: 2341,
+        lizawka: 2360, zasiadka: 2361, poroze: 2362,
+        wylomL: 2380, wylomP: 2381, lesniczowka: 2382, pasnik: 2383, sidla: [2384, 2385, 2386], rysiek: 2387,
+        tarcze: [2440, 2441, 2442], stojak: 2443, zolnierze: [2444, 2445], tarczeBlok: [2446, 2447, 2448]
+    };
+    const RESIDENT = 2905;
+
+    // ------------------------------------------------------------------ B1 the wolves' den (Map023), Szary Kieł's place
+    const NORA = {
+        // (2026-11-11 plansza: Skraj lasu is the east edge of Kruczy Jar - the den was Map023 (65,50), moved by +30, -20)
+        map: 3, x: 95, y: 30, cells: { x: 94, y: 29, w: 3, h: 2 }, zone: 6, rest: [95, 32], restNear: 2.5,
+        bounty: [96, 31], gift: [96, 32], dayHours: [5, 20], adults: 2, pups: [2, 3], pupScale: 0.55,
+        meatR: 3, meatDays: 3, emptyDays: 28, giftEvery: 7, friendMaps: [3, 4], discoverNear: 8
+    };
+    // the wolf cub: the wolf's sheet made small (QuestBoard's _qbScale), a grazer (no `aggressive`, no `pack`: it runs from the hero)
+    // and no YIELD entry: nothing to dress
+    const PUP = { sheet: "$Animal_Wolf", hp: 14, poise: 8, stun: 40, speed: 3, flee: 4.6, sight: 6, radius: 0.35, hours: [[0, 24]], markY: -30 };
+    Watki.scal(PUP, "lowy", "szczenie");   // (its name: js/teksty/lowy.txt, szczenie)
+
+    // ------------------------------------------------------------------ B2 the bear's den (Map013)
+    const GAWRA = {
+        map: 13, home: [99, 71], ev: [100, 70], side: [99, 70], mouth: { x: 99, y: 69, w: 2, h: 2 }, front: { x: 99, y: 71, w: 2, h: 1 },
+        seasons: [0, 1, 2], hours: [4, 22], snoreR: 6, rageSec: 60, rageMul: 1.2, calmR: 12, oneR: 22
+    };
+
+    // ------------------------------------------------------------------ B3 the boars' wallow (Map021), Czarny Ryj's place
+    const BLOTO = { map: 21, x: 65, y: 46, w: 4, h: 3, ev: [67, 48], bounty: [66, 47], hours: [[5, 9], [17, 21]], boars: [2, 3],
+        tusk: 0.2, muddyHours: 2, sneak: 0.3, from: 9 };
+
+    // ------------------------------------------------------------------ B4 the salt lick (Map004)
+    const LIZAWKA = { map: 4, x: 73, y: 51, hide: [70, 53], antler: [74, 52], days: 6, hours: [[5, 8], [18, 21]], r: 9, deer: [1, 3],
+        lick: [1200, 2400], antlerChance: 0.2, hideSneak: 0.5, hideAim: 0.8, price: 12 };
+
+    // ------------------------------------------------------------------ B5 the fixed camps (Humans.fixedCamp)
+    const OBOZY = {
+        rabusie: { map: 4, x: 87, y: 39, area: { x: 85, y: 37, w: 6, h: 5 }, tent: [89, 37], tag: "camp", every: 4, mielerz: [46, 26],
+            size: [2, 4], knife: 0.35 },
+        czo: { map: 3, x: 96, y: 42, area: { x: 94, y: 40, w: 6, h: 5 }, tent: [98, 41], tag: "lowCzo", hours: [6, 20],
+            kinds: ["archer", "bandit"], looks: ["Archer", "Archer"], sack: [[205, 1], [127, 6], [96, 2]] }
+    };
+    Watki.scal(OBOZY, "lowy", "obozy");   // (the hunters' name: js/teksty/lowy.txt, obozy.czo.name)
+
+    // ------------------------------------------------------------------ B6 the Lord's game park (Map024)
+    const ZWIERZYNIEC = {
+        map: 24, gap: [[27, 89], [28, 89]], inside: [27, 91],
+        // the park: the whole new part of the map (x 0-78 below the hedge's row 29, x 40-78 above it)
+        areas: [{ x0: 0, y0: 30, x1: 78, y1: 57 }, { x0: 40, y0: 0, x1: 78, y1: 29 }],
+        hut: [81, 64], hutCells: { x: 79, y: 62, w: 5, h: 3 }, door: [81, 65], feeder: [80, 82], feederCells: { x: 79, y: 82, w: 2, h: 1 },
+        snares: [[40, 106], [65, 98], [86, 72]], patrol: [[33, 100], [50, 110], [73, 105], [91, 80], [81, 65]],
+        deer: [4, 6], boars: 2, sight: 7, findR: 2.5, findHours: 2, fines: [40, 60, 80], opinion: -3, closeDays: 7, permitDays: 7,
+        rysiek: [66, 98], ambushHours: [22, 3]
+    };
+
+    // ------------------------------------------------------------------ B7 the strays of the Ług farm (Map168)
+    const ZBLAKANE = {
+        map: 168, area: { x0: 72, y0: 18, x1: 95, y1: 35 }, start: { x: 84, y: 28, w: 3, h: 3 },
+        list: [
+            { key: "krasula", kind: "cow", sheet: "$Animal_Cow", speed: 2.4, rope: true },
+            { key: "owca", kind: "sheep", sheet: "$Animal_Sheep", speed: 3, rope: true },
+            { key: "kura1", kind: "hen", sheet: "$Animal_Hen", speed: 3.4, rope: false },
+            { key: "kura2", kind: "hen", sheet: "$Animal_Hen", speed: 3.4, rope: false }
+        ],
+        farm: { x: 22, y: 12, r: 4, stage: 3 }, catchHen: 0.5, henRun: 3, milkEvery: 7, milk: 2
+    };
+    Watki.scal(ZBLAKANE, "lowy", "zblakane");   // (its words: js/teksty/lowy.txt, zblakane)
+
+    // ------------------------------------------------------------------ B8 the soldiers' range (Map162)
+    const STRZELNICA = {
+        map: 162, area: { x: 95, y: 74, w: 12, h: 5 }, line: [95, 98], stand: [96, 77], rack: [95, 74],
+        targets: [{ x: 101, y: 75, d: 6 }, { x: 103, y: 77, d: 8 }, { x: 104, y: 75, d: 9 }], radius: 0.5, faceY: -0.05,
+        shots: 5, ring: { center: 6, mid: 14 }, score: { center: 10, mid: 5, edge: 2 }, practice: 5,
+        rivals: [{ score: 24 }, { score: 30 }, { score: 36 }],
+        prizes: [25, 40, 60], favor: [3, 5, 8], contestDay: d => d % 7 === 3, contestHours: [10, 12], drill: [9, 12],
+        soldiers: [[97, 74], [97, 78]]
+    };
+    Watki.scal(STRZELNICA, "lowy", "strzelnica");   // (the rivals' names: js/teksty/lowy.txt, strzelnica.rivals)
+
+    // ------------------------------------------------------------------ the places (Okolice.registerSpots("B", ...); the collision test) -
+    // their names: js/teksty/lowy.txt, miejsca.<key> (Lowy.js registers them once the words are in)
+    const SPOTS = [
+        { key: "nora_wilcza", map: 3, kind: "den", mode: "reach", x: 94, y: 29, w: 3, h: 2 },
+        { key: "szary_kiel", map: 3, kind: "bounty", mode: "reach", cells: [[96, 31]] },
+        { key: "oboz_czo", map: 3, kind: "camp", mode: "reach", x: 94, y: 40, w: 6, h: 5 },
+        { key: "oboz_bandytow", map: 4, kind: "camp", mode: "reach", x: 85, y: 37, w: 6, h: 5 },
+        { key: "blotnisko", map: 21, kind: "wallow", mode: "reach", x: 65, y: 46, w: 4, h: 3 },
+        { key: "gawra_wejscie", map: 13, kind: "den", mode: "wall", x: 99, y: 69, w: 2, h: 2 },
+        { key: "gawra_pole", map: 13, kind: "den", mode: "reach", x: 99, y: 71, w: 2, h: 1 },
+        { key: "lizawka", map: 4, kind: "lick", mode: "reach", x: 73, y: 51, w: 1, h: 1 },
+        { key: "zasiadka", map: 4, kind: "hide", mode: "reach", x: 70, y: 53, w: 1, h: 1 },
+        { key: "poroze_zrzut", map: 4, kind: "antler", mode: "reach", x: 74, y: 52, w: 1, h: 1 },
+        { key: "wylom_zywoplot", map: 24, kind: "gap", mode: "reach", x: 27, y: 89, w: 2, h: 1, allowOld: true },
+        { key: "lesniczowka", map: 24, kind: "hut", mode: "reach", x: 79, y: 62, w: 5, h: 3 },
+        { key: "pasnik", map: 24, kind: "feeder", mode: "reach", x: 79, y: 82, w: 2, h: 1 },
+        { key: "sidla_zwierzyniec", map: 24, kind: "snares", mode: "reach", cells: [[40, 106], [65, 98], [86, 72]] },
+        { key: "patrol_gajowego", map: 24, kind: "patrol", mode: "reach", cells: [[33, 100], [50, 110], [73, 105], [91, 80], [81, 65]] },
+        { key: "rysiek_zasadzka", map: 24, kind: "npc", mode: "reach", cells: [[66, 98]] },
+        { key: "zblakane_start", map: 168, kind: "animals", mode: "reach", x: 84, y: 28, w: 3, h: 3 },
+        { key: "strzelnica", map: 162, kind: "range", mode: "reach", x: 95, y: 74, w: 12, h: 5 }
+    ];
+    Watki.scal(SPOTS, "lowy", "miejsca", "key");   // (its words: js/teksty/lowy.txt, miejsca, by the key)
+
+    // ------------------------------------------------------------------ the discoveries (Okolice.discoverable; the tab "Okolice") - their
+    // words: js/teksty/lowy.txt, odkrycia.<key>
+    const DISCOVER = [
+        { key: "nora", map: 3, x: 95, y: 31, near: 8, icon: 481, xp: 30, day: true },
+        { key: "gawra", map: 13, x: 99, y: 71, near: 6, icon: 483, xp: 30 },
+        { key: "blotnisko", map: 21, x: 66, y: 47, near: 4, icon: 482, xp: 25 },
+        { key: "lizawka", map: 4, x: 73, y: 51, near: 4, icon: 480, xp: 25 },
+        { key: "oboz_rabusiow", map: 4, x: 87, y: 39, near: 7, icon: 156, xp: 20, camp: "rabusie" },
+        { key: "oboz_czo", map: 3, x: 96, y: 42, near: 8, icon: 485, xp: 30, camp: "czo" },
+        { key: "zwierzyniec", map: 24, x: 27, y: 91, near: 2, icon: 484, xp: 25 },
+        { key: "zblakane", map: 168, x: 85, y: 29, near: 6, icon: 349, xp: 20 },
+        { key: "strzelnica", map: 162, x: 98, y: 76, near: 5, icon: 486, xp: 20 }
+    ];
+    Watki.scal(DISCOVER, "lowy", "odkrycia", "key");   // (its words: js/teksty/lowy.txt, odkrycia, by the key)
+
+    // ------------------------------------------------------------------ the gamekeeper (TownLife 2905, Map024)
+    // Gniewko Bór, about 40: a green kaftan, a bow on his back, a horn at his hip. Calm, dry, loyal to the forest more than to the Lord.
+    // 6-20 his round through the park, at night in his lodge (61,4)
+    const GAJOWY = {
+        key: "gajowy", id: RESIDENT, sheet: "$Npc_Gajowy", map: 24, speed: 3,
+        away: ["lesniczowka"],
+        plan: [[0, "inside", "lesniczowka"], [6, "work", "gaj_lesniczowka"], [7, "patrol", ["gaj_1", "gaj_2", "gaj_3", "gaj_4", "gaj_5"]],
+               [12, "stand", "gaj_pasnik"], [13, "patrol", ["gaj_5", "gaj_4", "gaj_3", "gaj_2", "gaj_1"]], [20, "inside", "lesniczowka"]],
+        barks: {
+        },
+        talk: {
+        }
+    };
+    Watki.scal(GAJOWY, "lowy", "mieszkaniec");   // (its words: js/teksty/lowy.txt, mieszkaniec)
+    const GAJ_SPOTS = {
+        lesniczowka: [61, 5, 2], gaj_lesniczowka: [62, 6, 2], gaj_pasnik: [60, 23, 8],
+        gaj_1: [33, 100, 2], gaj_2: [50, 110, 2], gaj_3: [73, 105, 2], gaj_4: [91, 80, 2], gaj_5: [81, 65, 2]
+    };
+    (window.TownLifeExtra = window.TownLifeExtra || []).push(GAJOWY);
+    const TL = window.TownLifeData;
+    if (TL) {
+        TL.SPOTS_BY_MAP = TL.SPOTS_BY_MAP || {};
+        TL.SPOTS_BY_MAP[24] = Object.assign(TL.SPOTS_BY_MAP[24] || {}, GAJ_SPOTS);
+    }
+    // the bust (tools/busts/kit.py: img/pictures/Gajowy_Bust.png)
+    if (window.SpeechBubbles && SpeechBubbles.BUSTS) SpeechBubbles.BUSTS["$Npc_Gajowy:0"] = "Gajowy_Bust";
+
+    // ------------------------------------------------------------------ the texts (popups, talks)
+    const TX = Watki.teksty("lowy");
+
+    // the talks (lines: "> " the hero, "@key: " another speaker, else the one spoken to)
+    const TALK = {
+    };
+    Watki.scal(TALK, "lowy", "rozmowy");   // (its words: js/teksty/lowy.txt, rozmowy)
+
+    const REMARKS = [
+        { id: "lowCzoKleofas", who: "pustelnik", flag: "lowCzoPrzegnani" },
+        { id: "lowCzoBazyli", who: "latarnik", flag: "lowCzoPrzegnani" },
+        { id: "lowCzoPomocBazyli", who: "latarnik", flag: "lowCzoPomoc" },
+        { id: "lowWydalRyskaPraczka", who: "praczka", flag: "lowWydalRyska" },
+        { id: "lowOstrzeglRysiek", who: "klusownik", flag: "lowOstrzegl" },
+        { id: "lowMartaKrasula", who: "praczka", flag: "lowMlekoMarty" }
+    ];
+    Watki.scal(REMARKS, "lowy", "uwagi");   // (its words: js/teksty/lowy.txt, uwagi)
+
+    // ------------------------------------------------------------------ the thread (the engine Watki.js, docs/WATKI_DANE.md)
+    // The saved state (TawernaCore: _tw.lowy - Lowy.js fills in what an older save of the package lacks)
+    const DEF = () => ({
+        den: { meat: [], friendly: false, betrayed: false, emptyUntil: 0, choice: null, giftDay: -99, giftSeen: -1, forcePups: -1, seenBundles: [] },
+        bear: { deadYear: 0, wokeDay: -1, forceWinter: -1 },
+        wallow: { msg: -99, windows: {} },
+        lick: { until: 0, ever: false, watched: false, trophy: false, antlerKey: -1, windows: {} },
+        camps: { forceRab: -1, forceCzo: -1, marched: "" },
+        czo: { choice: null, bearDead: false, resolved: null, paid: false },
+        park: { seen: false, count: 0, shutUntil: 0, permitDay: -99, pending: [], wanted: null, legal: 0, fines: 0 },
+        d32: { taken: [false, false, false], met: false, choice: null },
+        strays: { done: {}, led: null, pos: {}, milkDay: -99 },
+        range: { best: 0, wins: 0, silver: false, beatBest: false, contestDay: -1, forceContest: -1, rounds: 0, last: null },
+        arrow: { rotmistrz: false, pustelnik: false },
+        trophies: []
+    });
+    // the quests K59-K62, D32-D33 (TownQuests' fields; their words: js/teksty/lowy.txt, zadania.*; the engine puts them into
+    // window.TownQuestsPacks with the remarks), the talks (lines: "> " the hero, "@key: " another speaker - Lowy.js's hook mowca -, else
+    // the one spoken to) and their actions. The hooks (odkryte, masz, klosOdszedl, aktDrugi, d33Slowa, mowca and the actions' ones) are
+    // Lowy.js's
+    const w = Watki.watek({
+        id: "lowy", wtyczka: "Lowy", teksty: "lowy",
+        stan: { klucz: "lowy", wersja: 1, domyslne: DEF },
+        mowa: { kto: key => w.hak("mowca", null, key) },
+        zadania: {
+            // K59: starts by itself once the den is found (Bogdan's notice on the board told of it); its end is the den's (Lowy.js
+            // finishes it with the reward: the pack broken or befriended)
+            K59: { kind: "K", giver: null, icon: 161, autoStart: "lowK59Start", start: [{ hak: "odkryte", args: ["nora"] }, "!stan:den.choice"],
+                kroki: [{ nazwa: "lowK59", gotowe: false, zmienne: { n: { ile: "den.meat", najwyzej: NORA.meatDays } } }],
+                reward: { xp: 0 } },
+            // K60: once the lick is found - the salt, the dawn in the hide, the antler or the deer's meat
+            K60: { kind: "K", giver: null, icon: 201, autoStart: "lowK60Start", start: { hak: "odkryte", args: ["lizawka"] },
+                kroki: [
+                    { nazwa: "lowK60Sol", gotowe: "stan:lick.ever" },
+                    { nazwa: "lowK60Swit", gotowe: "stan:lick.watched" },
+                    { nazwa: "lowK60Lup", gotowe: { lub: ["stan:lick.trophy", { hak: "masz", args: [ITEM.poroze] }] } }
+                ],
+                reward: { gold: 40, xp: 80 } },
+            // K61: Kłos offers it (the range found); with Kłos gone (D27) it starts by itself
+            K61: { kind: "K", giver: "kwatermistrz", icon: 126, autoStart: "lowK61Start", start: [{ hak: "odkryte", args: ["strzelnica"] }, "klosOdszedl"],
+                offer: { cond: { hours: [8, 18], fn: "lowK61Offer" } }, oferta: { hak: "odkryte", args: ["strzelnica"] },
+                kroki: [{ nazwa: "lowK61", gotowe: "stan:range.beatBest" }],
+                reward: { gold: 50, xp: 120 } },
+            // K62: the four strays brought home (the farm of the Ługs or the hero's own yard)
+            K62: { kind: "K", giver: "praczka", icon: 123, offer: { cond: { hours: [6, 19] } },
+                kroki: [{ nazwa: "lowK62", gotowe: "ile:strays.done>=" + ZBLAKANE.list.length, zmienne: { n: { ile: "strays.done" } } }],
+                reward: { gold: 30, xp: 100, flag: "lowMlekoMarty" } },
+            // D32: offered once the park is found - the three snares, the night by them (Rysiek), back to the gamekeeper
+            D32: { kind: "D", giver: "gajowy", icon: 204, offer: { cond: { hours: [6, 20], fn: "lowD32Offer" } }, oferta: { hak: "odkryte", args: ["zwierzyniec"] },
+                kroki: [
+                    { nazwa: "lowD32Sidla", gotowe: "ile:d32.taken>=" + ZWIERZYNIEC.snares.length, zmienne: { n: { ile: "d32.taken" } } },
+                    { nazwa: "lowD32Noc", gotowe: "stan:d32.choice" },
+                    { nazwa: "lowD32Gajowy", type: "talk", to: "gajowy" }
+                ],
+                reward: { xp: 120, items: [[204, 1]] } },
+            // D33 (Act II): the hunters' camp found; the choice by their fire, then its end (Lowy.js finishes it)
+            D33: { kind: "D", giver: null, icon: 203, autoStart: "lowD33Start", start: ["aktDrugi", { hak: "odkryte", args: ["oboz_czo"] }, "!stan:czo.resolved"],
+                kroki: [
+                    { nazwa: "lowD33Wybor", gotowe: false },
+                    { nazwa: "lowD33Koniec", gotowe: false, zmienne: "d33Slowa" }   // (2026-10-24 audyt: the words {co} come from lowD33Koniec.vars - "lowD33" had no handler, the journal showed "{co}")
+                ],
+                reward: { xp: 150 } }
+        },
+        paczka: { remarks: REMARKS },
+        rozmowy: {
+            // D33 by the hunters' fire (ctx.spk: the hunters): help them - or tell them to go (they take up their bows)
+            czoSpotkanie: ["rozmowy.czoMeet", { wybor: [
+                { etykieta: "kod.czoTick.0", tresc: [{ zrob: "czoPomoc" }, "rozmowy.czoHelp"] },
+                { etykieta: "kod.czoTick.1", tresc: ["rozmowy.czoDrive", { zrob: "czoPrzegon" }] }], anuluj: 1 }],
+            // the bear dead: they pay (and let slip where their captain digs)
+            czoZaplata: ["rozmowy.czoPaid", { zrob: "czoZaplata" }],
+            // the gamekeeper's fine (ctx.spk: him; ctx.n: the how-many-th, ctx.znalazl: he found the carcass, ctx.bezGrosza: the gold short)
+            grzywna: [{ gdy: "ctx:znalazl", mow: "rozmowy.gajowyFound" }, "rozmowy.gajowyFine{n}", { gdy: "ctx:bezGrosza", mow: "rozmowy.gajowyNoGold" },
+                { zrob: "grzywna" }, { gdy: "ctx:n>=3", mow: "rozmowy.gajowyEscort" }],
+            // D32: Rysiek by the snares at night (ctx.spk: him) - take him to the gamekeeper or warn him
+            rysiek: ["rozmowy.rysiekMeet", { wybor: [
+                { etykieta: "kod.rysiekList.0", tresc: ["rozmowy.rysiekGive", { zrob: "rysiek", args: ["give"] }] },
+                { etykieta: "kod.rysiekList.1", tresc: ["rozmowy.rysiekWarn", { zrob: "rysiek", args: ["warn"] }] }], anuluj: -1 }],
+            // the white-eye arrow shown to the captain or to Kleofas (ctx.key)
+            strzala: [{ jesli: "ctx:key=rotmistrz", to: ["rozmowy.arrowRotmistrz"], inaczej: ["rozmowy.arrowKleofas"] }, { zrob: "strzala", args: [{ ctx: "key" }] }],
+            // Marta's milk, once a week after K62
+            mleko: ["rozmowy.martaMilk", { zrob: "mleko" }],
+            // the bear's den in winter: a peek wakes it
+            gawra: [{ mow: "peekAsk", kto: "bohater" }, { wybor: [{ etykieta: "peekSleep", tresc: [{ zrob: "obudz" }] }, { etykieta: "peekLeave", tresc: [] }], anuluj: 1 }],
+            // the lick: a lump of salt into it
+            lizawka: [{ mow: "lickAsk", kto: "bohater" }, { wybor: [{ etykieta: "lickPut", tresc: [{ zrob: "sol" }] }, { etykieta: "lickNo", tresc: [] }], anuluj: 1 }]
+        },
+        akcje: {
+            czoPomoc: [{ stan: { "czo.choice": "help" } }, { krok: "lowD33Wybor" }],
+            czoPrzegon: [{ stan: { "czo.choice": "drive" } }, { krok: "lowD33Wybor" }, { hak: "czoAtak" }],
+            czoZaplata: [{ hak: "czoRozstrzygnij", args: ["help"] }],
+            grzywna: [{ hak: "grzywna" }],
+            rysiek: [{ hak: "rysiek", args: [{ arg: 0 }] }],
+            strzala: [{ hak: "strzala", args: [{ arg: 0 }] }],
+            mleko: [{ hak: "mleko" }],
+            obudz: [{ hak: "obudz" }],
+            sol: [{ hak: "sol" }]
+        }
+    });
+    const Q = w.Q;
+
+    // ------------------------------------------------------------------ the board (QuestBoard: its tables are live objects)
+    const QB = window.QuestBoard;
+    const T2 = (a, b) => [a, b];
+    const BEASTS = {
+        bandit: { sheet: "$Human_Bandit", icon: 156 },
+        archer: { sheet: "$Human_Archer", icon: 127 },
+        bear: { sheet: "$Animal_Bear", icon: 203 }
+    };
+    Watki.scal(BEASTS, "lowy", "bestie");   // (its words: js/teksty/lowy.txt, bestie)
+    const TEMPLATES = {
+        oboz: { id: "low_oboz_021", type: "hunt", giver: "wit", 
+            req: [{ kill: "bandit", maps: [4], n: [null, T2(2, 2), T2(2, 3), T2(3, 3), T2(3, 4)] }] },
+        czo: { id: "low_czo_023", type: "hunt", giver: "bogdan", 
+            req: [{ kill: "archer", maps: [3], n: [null, null, T2(1, 1), T2(1, 1), T2(1, 1)] }] },
+        poroze: { id: "low_poroze", type: "deliver", giver: "bogdan", 
+            req: [{ item: 201, n: [null, T2(1, 1), T2(1, 1), T2(1, 2), T2(2, 2)] }] }
+    };
+    Watki.scal(TEMPLATES, "lowy", "tablica");   // (its words: js/teksty/lowy.txt, tablica)
+    function addBoard() {
+        if (!QB) return;
+        try {
+            const B = QB.BEASTS, L = QB.TEMPLATES;
+            for (const k of Object.keys(BEASTS)) if (B && !B[k]) B[k] = BEASTS[k];
+            // (low_czo_023 is put in and taken out by Lowy.js: only in Act II while the hunters' camp stands)
+            for (const t of [TEMPLATES.oboz, TEMPLATES.poroze]) if (L && !L.some(x => x.id === t.id)) L.push(t);
+            const parts = window.Tawerna && Tawerna.api("QuestBoard_parts"), KE = parts && parts.data && parts.data.KILL_EV;
+            if (KE) { if (!KE.bandit) KE.bandit = 16; if (!KE.archer) KE.archer = 20; if (!KE.bear) KE.bear = 40; }
+        } catch (e) { console.warn("Lowy_Data: tablica ogłoszeń", e); }
+    }
+    addBoard();
+
+    // (2026-10-22, integration) the lines of the epilogue after the Heart (Underground.js asks Lowy.epilogue): one or two by what the hero did
+    const EPILOG = {
+    };
+    Watki.scal(EPILOG, "lowy", "epilog");   // (its words: js/teksty/lowy.txt, epilog)
+    window.LowyData = { EPILOG,
+        VERSION, PKG: "B", OWNER: "Lowy", ready: true,
+        IDS_RANGE: P ? P.ids : [2300, 2499], RESIDENTS: P ? P.residents : [2905, 2909], ITEMS: P ? P.items : [200, 209], ICONS: P ? P.icons : [480, 495],
+        SWITCHES: P ? P.switches : [23, 24], SW_WYLOM, ITEM, MEATS, ICON, IDS, RESIDENT, NORA, PUP, GAWRA, BLOTO, LIZAWKA, OBOZY, ZWIERZYNIEC, ZBLAKANE, STRZELNICA,
+        SPOTS, DISCOVER, GAJOWY, GAJ_SPOTS, TX, TALK, QUESTS: [Q.K59, Q.K60, Q.K61, Q.K62, Q.D32, Q.D33], BEASTS, TEMPLATES, addBoard, DEF
+    };
+})();

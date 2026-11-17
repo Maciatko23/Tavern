@@ -1004,6 +1004,298 @@
         })
     ];
     RESIDENTS.push(...NEW_PODGRODZIE);
+
+    // ==================================================================== (2026-11-13) NOWY ŚWIAT: Podgrodzie = Map218 (docs/NOWY_SWIAT/
+    // MIESZKANCY.md, „Podgrodzie”). The suburb's people move there from the old maps (111, 8): their plans on the new map's "Miejsce:"
+    // events (the doors <dom>_drzwi, the yards <dom>_zagroda / _ogrodek, plac, kapliczka, studnia_sucha, gawel, wroble_szopa,
+    // weglarz_mielerz, wiatrak_przed); "inside do_miasta" = gone through the east gate to Kruczogród (away - they walk out at the map's
+    // edge in the gate, nobody vanishes in sight), "inside na_brzeg" = gone west to the shore (Słony Brzeg). No guest places in the old
+    // tavern any more (indoor cleared). Their words stay as they were (js/teksty/mieszkancy.txt); 6 new people with words of their own.
+    // Each lives there only while the new map has the "Miejsce:" of its door.
+    const NEW_WORLD_PODGRODZIE = 218;
+    const onPodgrodzie218 = door => () => !window.$gameMap || $gameMap.mapId() !== NEW_WORLD_PODGRODZIE || !(window.TownLife && TownLife.spot) || !!TownLife.spot(door);
+    const MOVE_218 = {
+        praczka: { door: "praczka_drzwi", away: ["na_brzeg"],
+            plan: [[0, "inside", "praczka_drzwi"], [5, "inside", "na_brzeg"], [11, "wander", "plac"], [12.5, "inside", "na_brzeg"], [16.5, "wander", "studnia_sucha"],
+                   [18, "work", "praczka_ogrodek"], [20, "inside", "praczka_drzwi"]] },
+        franek: { door: "praczka_drzwi",
+            plan: [[0, "inside", "praczka_drzwi"], [7, "wander", "wroble_szopa"], [10, "wander", "plac"], [12, "wander", "gawel"], [14, "wander", "brama_wsch"],
+                   [16, "wander", "wroble_szopa"], [19.5, "inside", "praczka_drzwi"]] },
+        drwal: { door: "drwal_drzwi", away: ["do_miasta"],
+            plan: [[0, "inside", "drwal_drzwi"], [5, "work", "drwal_ogrodek"], [10, "inside", "do_miasta"], [15, "work", "drwal_ogrodek"], [18, "wander", "plac"],
+                   [21.5, "inside", "drwal_drzwi"]] },
+        klusownik: { door: "klusownik_drzwi", away: ["do_miasta"],
+            plan: [[0, "inside", "do_miasta"], [4.5, "inside", "klusownik_drzwi"], [13, "wander", "gawel"], [15, "wander", "kramarz_drzwi"], [17, "wander", "gawel"],
+                   [19.5, "wander", "studnia_sucha"], [22.5, "inside", "do_miasta"]] },
+        znachorka: { door: "znachorka_drzwi",
+            plan: [[0, "inside", "znachorka_drzwi"], [6, "work", "znachorka_ogrodek"], [10, "wander", "kapliczka"], [12, "work", "znachorka_ogrodek"],
+                   [15.5, "stand", "kapliczka"], [18, "wander", "przytulek_drzwi"], [21, "inside", "znachorka_drzwi"]] },
+        szmaciarz: { door: "kramarz_drzwi",
+            plan: [[0, "inside", "kramarz_drzwi"], [7, "stand", "kramarz_drzwi"], [12, "wander", "brama_zach"], [13, "stand", "kramarz_drzwi"], [18, "wander", "plac"],
+                   [22, "inside", "kramarz_drzwi"]] },
+        zebrak: { door: "przytulek_drzwi",
+            plan: [[0, "inside", "przytulek_drzwi"], [6.5, "stand", "gawel"], [12, "wander", "plac"], [13.5, "stand", "gawel"], [19, "wander", "kapliczka"],
+                   [21.5, "inside", "przytulek_drzwi"]] },
+        opiekunka: { door: "przytulek_drzwi", away: ["do_miasta"],
+            plan: [[0, "inside", "przytulek_drzwi"], [5.5, "work", "przytulek_drzwi"], [7.5, "inside", "do_miasta"], [9, "work", "przytulek_drzwi"], [12, "wander", "plac"],
+                   [13, "wander", "znachorka_drzwi"], [14, "inside", "przytulek_drzwi"], [16, "work", "przytulek_drzwi"], [18.5, "wander", "gawel"],
+                   [19.5, "inside", "przytulek_drzwi"]] },
+        garncarz: { door: "garncarz_drzwi",
+            plan: [[0, "inside", "garncarz_drzwi"], [5, "wander", "studnia_nowa"], [8, "work", "garncarz_drzwi"], [10, "inside", "garncarz_drzwi"], [13, "work", "garncarz_drzwi"],
+                   [16, "work", "garncarz_drzwi"], [19, "wander", "przytulek_drzwi"], [21, "inside", "garncarz_drzwi"]] },
+        dziecko: { door: "rodzina_drzwi",
+            plan: [[0, "inside", "rodzina_drzwi"], [6.5, "wander", "rodzina_zagroda"], [8, "wander", "wroble_szopa"], [10, "wander", "garncarz_drzwi"],
+                   [11, "wander", "przytulek_drzwi"], [12, "wander", "plac"], [14, "wander", "brama_wsch"], [16, "wander", "wroble_szopa"], [18.5, "inside", "rodzina_drzwi"]] },
+        woziwoda: { door: "kuba_drzwi", away: ["do_miasta"],
+            plan: [[0, "inside", "kuba_drzwi"], [6, "work", "kuba_zagroda"], [7, "inside", "do_miasta"], [12, "wander", "plac"], [13, "inside", "do_miasta"],
+                   [17, "wander", "studnia_sucha"], [18.5, "work", "kuba_ogrodek"], [20.5, "inside", "kuba_drzwi"]] },
+        garbarz: { door: "garbarz_drzwi", away: ["do_miasta"],
+            plan: [[0, "inside", "garbarz_drzwi"], [6, "work", "garbarz_drzwi"], [12, "wander", "plac"], [13, "work", "garbarz_drzwi"], [17, "wander", "studnia_sucha"],
+                   [19, "inside", "do_miasta"], [22, "inside", "garbarz_drzwi"]] }
+    };
+    for (const r of RESIDENTS) {
+        const m = MOVE_218[r.key];
+        if (!m) continue;
+        r.map = NEW_WORLD_PODGRODZIE; r.plan = m.plan; r.away = m.away || []; r.indoor = {}; r.when = onPodgrodzie218(m.door);
+        delete r.alt;
+    }
+    // the new people of Podgrodzie (fixed ids 2960-2965 of their own range 2960-2969, TownLifeData.EXTRA_RANGES; the key "nowy_mlynarz" - "mlynarz" is Walenty of Mlyn_Data); sheets of the hero's style from the travellers' pool for now
+    const podgrodzie218 = (r, door, z) => Object.assign(r, { map: NEW_WORLD_PODGRODZIE, when: onPodgrodzie218(door), zaczepki: z, barks: byTime(z) });
+    const talk0 = () => ({ morning: [], day: [], evening: [], night: [], rain: [] });
+    const z0 = () => ({ rano: [], dzien: [], wieczor: [], deszcz: [], noc: [], dom: [] });
+    const NEW_218 = [
+        // the new miller of the windmill on the hill: grinds by day, sells flour in the town in the afternoon (W19: he signals to ships at night)
+        podgrodzie218({ key: "nowy_mlynarz", id: 8208, name: "", title: "", sheet: "$Npc_Pula_M", speed: 3, away: ["do_miasta"],
+            plan: [[0, "inside", "mlynarz_drzwi"], [5.5, "work", "wiatrak_przed"], [12, "wander", "mlynarz_ogrodek"], [13, "work", "wiatrak_przed"],
+                   [17, "inside", "do_miasta"], [19.5, "inside", "mlynarz_drzwi"]], talk: talk0() }, "mlynarz_drzwi", z0()),
+        // Hela, the fisherman Jan's sister: at the shore at dawn and in the afternoon, sells the catch on the square
+        podgrodzie218({ key: "rybaczka", id: 8209, name: "", title: "", sheet: "$Npc_Pula_K", speed: 3, away: ["na_brzeg"],
+            plan: [[0, "inside", "rybaczka_drzwi"], [4.5, "inside", "na_brzeg"], [10, "stand", "plac"], [13, "wander", "rybaczka_drzwi"], [15, "inside", "na_brzeg"],
+                   [19, "inside", "rybaczka_drzwi"]], talk: talk0() }, "rybaczka_drzwi", z0()),
+        // the charcoal burner: the clamp by his hut, charcoal to the town in the evening
+        podgrodzie218({ key: "weglarz", id: 2962, name: "", title: "", sheet: "$Npc_Pula_M3", speed: 3, away: ["do_miasta"],
+            plan: [[0, "inside", "weglarz_drzwi"], [5, "work", "weglarz_mielerz"], [12, "wander", "studnia_nowa"], [13, "work", "weglarz_mielerz"], [19, "inside", "do_miasta"],
+                   [22, "inside", "weglarz_drzwi"]], talk: talk0() }, "weglarz_drzwi", z0()),
+        // the weaver: her sheep in the morning, the loom indoors, the garden in the afternoon
+        podgrodzie218({ key: "tkaczka", id: 2963, name: "", title: "", sheet: "$Npc_Pula_K3", speed: 3,
+            plan: [[0, "inside", "tkaczka_drzwi"], [7, "work", "tkaczka_zagroda"], [9, "inside", "tkaczka_drzwi"], [13, "wander", "kapliczka"], [15, "work", "tkaczka_ogrodek"],
+                   [18, "wander", "kapliczka"], [20, "inside", "tkaczka_drzwi"]], talk: talk0() }, "tkaczka_drzwi", z0()),
+        // the water seller: off before dawn (where to, nobody asks), sells water on the square at usurers' prices
+        podgrodzie218({ key: "wodziarz", id: 2964, name: "", title: "", sheet: "$Npc_Pula_M2", speed: 3, away: ["do_miasta"],
+            plan: [[0, "inside", "wodziarz_drzwi"], [4, "inside", "do_miasta"], [8, "stand", "studnia_sucha"], [12, "wander", "kapliczka"], [13, "stand", "studnia_sucha"],
+                   [17, "work", "wodziarz_zagroda"], [19, "inside", "wodziarz_drzwi"]], talk: talk0() }, "wodziarz_drzwi", z0()),
+        // the widow with the goat: the goat is all she has
+        podgrodzie218({ key: "kozia_wdowa", id: 2965, name: "", title: "", sheet: "$Npc_Pula_K2", speed: 2,
+            plan: [[0, "inside", "wdowa_drzwi"], [6, "work", "wdowa_zagroda"], [10, "wander", "wdowa_ogrodek"], [12, "wander", "kapliczka"], [14, "work", "wdowa_zagroda"],
+                   [18, "work", "wdowa_ogrodek"], [20, "inside", "wdowa_drzwi"]], talk: talk0() }, "wdowa_drzwi", z0())
+    ];
+    RESIDENTS.push(...NEW_218);
+
+    // ==================================================================== (2026-11-13) NOWY ŚWIAT: Słony Brzeg = Map219 (docs/NOWY_SWIAT/
+    // MIESZKANCY.md, „Wybrzeże”): Janek, the fisherman who found the hero, moves from the old harbour (Map125) to his hut by the pier;
+    // he fishes from the pier (no vanishing at sea in sight), mends the nets by the boat, goes to Kruczogród in the evening (east edge).
+    // Hanna, his wife, boils salt in her salt works and knows every corner of the wreck. Spots: the map's "Miejsce:" events (jan_*,
+    // hanna_*, wrak, do_podgrodzia = the east edge of the road).
+    const NEW_WORLD_BRZEG = 219;
+    const onBrzeg219 = door => () => !window.$gameMap || $gameMap.mapId() !== NEW_WORLD_BRZEG || !(window.TownLife && TownLife.spot) || !!TownLife.spot(door);
+    for (const r of RESIDENTS) {
+        if (r.key !== "janek") continue;
+        r.map = NEW_WORLD_BRZEG; r.away = ["do_podgrodzia"]; r.indoor = {}; r.when = onBrzeg219("jan_drzwi"); delete r.alt;
+        r.plan = [[0, "inside", "jan_drzwi"], [4, "work", "jan_lodz"], [5, "work", "jan_praca"], [9, "work", "jan_sieci"], [12, "stand", "jan_dom"],
+                  [13, "work", "jan_sieci"], [15, "work", "jan_praca"], [17, "wander", "wrak"], [18.5, "inside", "do_podgrodzia"], [22.5, "inside", "jan_drzwi"]];
+    }
+    const NEW_219 = [
+        Object.assign({ key: "hanna", id: 2966, name: "", title: "", sheet: "$Npc_Wanda", speed: 3, map: NEW_WORLD_BRZEG, when: onBrzeg219("jan_drzwi"),
+            plan: [[0, "inside", "jan_drzwi"], [5.5, "work", "hanna_salina"], [9, "work", "hanna_kociol"], [12, "stand", "hanna_dom"], [13, "work", "hanna_kociol"],
+                   [16, "wander", "wrak"], [18, "inside", "hanna_drzwi"], [20.5, "inside", "jan_drzwi"]],
+            talk: { morning: [], day: [], evening: [], night: [], rain: [] } },
+            { zaczepki: { rano: [], dzien: [], wieczor: [], deszcz: [], noc: [], dom: [] } })
+    ];
+    for (const r of NEW_219) r.barks = byTime(r.zaczepki);
+    RESIDENTS.push(...NEW_219);
+    // (2026-11-15, W19 on the new world) the smuggler Roch and the customs man Sambor leave the old harbour for Słony Brzeg (Map219):
+    // Roch lives in the wreck's hold (its door: "wrak_ladownia") and hangs about the wreck and Janek's boat; Sambor walks down
+    // from Kruczogród every morning (the east edge - away), watches the pier and the salt pans, and goes back before dusk
+    {
+        const BRZEG = {
+            przemytnik: { away: [], plan: [[0, "inside", "wrak_ladownia"], [6, "stand", "wrak"], [9, "work", "jan_lodz"], [14, "wander", "wrak_rufa"], [18, "stand", "wrak_dziob"], [21, "inside", "wrak_ladownia"]] },
+            celnik: { away: ["do_podgrodzia"], plan: [[0, "inside", "do_podgrodzia"], [9, "stand", "jan_praca"], [13, "wander", "hanna_salina"], [15.5, "stand", "jan_sieci"], [18, "inside", "do_podgrodzia"]] }
+        };
+        for (const r of RESIDENTS) { const b = BRZEG[r.key]; if (b) { r.map = NEW_WORLD_BRZEG; r.plan = b.plan; r.away = b.away; r.indoor = {}; delete r.alt; } }
+    }
+
+    // ==================================================================== (2026-11-14) NOWY ŚWIAT: Kruczogród = Map220 (docs/NOWY_SWIAT/
+    // MIESZKANCY.md, "Miasteczko"; the user: "to teraz dodaj mieszkańców miasta"). The townsfolk of the old Map008 move to the new town:
+    // their plans on the new map's "Miejsce:" events (the doors <dom>_drzwi, the works <kto>_praca, the square: rynek_srodek, rynek_rog,
+    // rynek_lawka, plac_studnia, plac_tablica, stragan1 / stragan2, the gates brama_zach / brama_wsch). "inside tawerna_drzwi" = in the
+    // tavern for the evening (through its door); "inside do_podgrodzia" / "inside do_dworu" = gone out by the west / east gate (the
+    // map's edge in the gate - away; nobody vanishes in sight). Their words stay (js/teksty/mieszkancy.txt). Not moved yet: the camp
+    // of W6 (Ludmiła, Ela, Rafał, Marek), the dice player of the market days, the carter of Woz.js - their plugins know the old map.
+    const NEW_WORLD_MIASTO = 220;
+    const onMiasto220 = door => () => !window.$gameMap || $gameMap.mapId() !== NEW_WORLD_MIASTO || !(window.TownLife && TownLife.spot) || !!TownLife.spot(door);
+    const PATROL_220 = ["brama_wsch", "rynek_rog", "plac_tablica", "rynek_srodek", "plac_studnia", "brama_zach", "kaplica_lawka", "rynek_srodek", "rynek_lawka"];
+    const MOVE_220 = {
+        kowal: { door: "kuznia_drzwi",
+            plan: [[0, "inside", "kuznia_drzwi"], [5.5, "work", "kowal_praca"], [12, "wander", "stragan1"], [13, "work", "kowal_praca"], [17, "wander", "rynek_srodek"],
+                   [19, "inside", "tawerna_drzwi"], [22.5, "inside", "kuznia_drzwi"]] },
+        piekarka: { door: "piekarnia_drzwi",
+            plan: [[0, "inside", "piekarnia_drzwi"], [6, "stand", "stragan1"], [12, "wander", "rynek_lawka"], [14, "inside", "piekarnia_drzwi"]] },
+        kapral: { door: "ratusz_drzwi",
+            plan: [[0, "inside", "ratusz_drzwi"], [6, "stand", "brama_wsch"], [12, "wander", "rynek_rog"], [13, "stand", "brama_zach"], [18, "patrol", PATROL_220],
+                   [23, "inside", "ratusz_drzwi"]] },
+        dzwonnik: { door: "dzwonnica_drzwi",
+            plan: [[0, "inside", "dzwonnica_drzwi"], [2.8, "bell", "dzwonnica_podstawa"], [3.2, "inside", "dzwonnica_drzwi"], [5.7, "bell", "dzwonnica_podstawa"],
+                   [6.3, "wander", "rynek_lawka"], [11.7, "bell", "dzwonnica_podstawa"], [12.3, "stand", "kaplica_lawka"], [17.7, "bell", "dzwonnica_podstawa"],
+                   [18.3, "inside", "dzwonnica_drzwi"]] },
+        kupiec: { door: "spichlerz_drzwi",
+            plan: [[0, "inside", "spichlerz_drzwi"], [8, "stand", "stragan2"], [12, "wander", "rynek_srodek"], [14, "stand", "stragan2"], [18, "inside", "tawerna_drzwi"],
+                   [21.5, "wander", "rynek_rog"], [23, "inside", "spichlerz_drzwi"]] },
+        soltys: { door: "ratusz_drzwi",
+            plan: [[0, "inside", "ratusz_drzwi"], [8, "stand", "pisarz_praca"], [12, "wander", "rynek_srodek"], [13, "inside", "ratusz_drzwi"], [16, "wander", "studnia_rynek"],
+                   [18, "inside", "tawerna_drzwi"], [21, "inside", "ratusz_drzwi"]] },
+        bronek: { door: "dom7_drzwi",
+            plan: [[0, "inside", "dom7_drzwi"], [8, "wander", "rynek_srodek"], [12, "inside", "dom7_drzwi"], [13, "wander", "rynek_rog"], [18.5, "inside", "dom7_drzwi"]] },
+        zosia: { door: "dom7_drzwi",
+            plan: [[0, "inside", "dom7_drzwi"], [8.2, "wander", "rynek_lawka"], [12, "inside", "dom7_drzwi"], [13.2, "wander", "rynek_srodek"], [18.5, "inside", "dom7_drzwi"]] },
+        feliks: { door: "ratusz_drzwi", away: ["do_dworu"],
+            plan: [[0, "inside", "do_dworu"], [7, "wander", "stragan1"], [8.5, "stand", "rynek_rog"], [9.5, "stand", "pisarz_praca"], [10.5, "inside", "do_dworu"]] },
+        kamerdyner: { door: "ratusz_drzwi", away: ["do_dworu"],
+            plan: [[0, "inside", "do_dworu"], [7, "wander", "stragan1"], [8.5, "stand", "rynek_rog"], [9.5, "stand", "pisarz_praca"], [10.5, "inside", "do_dworu"]] },
+        zlodziej: { door: "tawerna_drzwi", away: ["do_podgrodzia"],
+            plan: [[0, "inside", "do_podgrodzia"], [8.3, "wander", "rynek_rog"], [12, "wander", "stragan1"], [14, "wander", "plac_tablica"], [17.5, "wander", "brama_zach"],
+                   [20.5, "inside", "do_podgrodzia"]] },
+        bartek: { door: "tawerna_drzwi", away: ["do_podgrodzia"],
+            plan: [[0, "inside", "do_podgrodzia"], [9.5, "wander", "rynek_rog"], [14, "inside", "tawerna_drzwi"], [21, "inside", "do_podgrodzia"]] },
+        kolodziej: { door: "stajnia_drzwi", away: ["do_dworu"],
+            plan: [[0, "inside", "stajnia_drzwi"], [5, "work", "stajnia_woz"], [7, "inside", "do_dworu"], [10.5, "work", "stajnia_woz"], [12, "wander", "plac_studnia"],
+                   [13, "wander", "rynek_rog"], [14, "inside", "do_dworu"], [17.5, "work", "stajnia_woz"], [19, "wander", "stajnia_wybieg"], [20.5, "inside", "stajnia_drzwi"]] },
+        przekupka: { door: "agata_praca", away: ["do_podgrodzia"],
+            plan: [[0, "inside", "do_podgrodzia"], [5.5, "wander", "plac_studnia"], [6.5, "work", "agata_praca"], [10, "wander", "rynek_srodek"], [11, "work", "agata_praca"],
+                   [13, "wander", "plac_tablica"], [14, "work", "agata_praca"], [17, "wander", "rynek_lawka"], [18.5, "inside", "do_podgrodzia"]] },
+        szwaczka: { door: "dom3_drzwi",
+            plan: [[0, "inside", "dom3_drzwi"], [8, "work", "dorota_praca"], [11, "wander", "rynek_srodek"], [12, "inside", "dom3_drzwi"], [14, "work", "dorota_praca"],
+                   [16.5, "wander", "plac_tablica"], [17.5, "inside", "dom3_drzwi"]] },
+        wdowa: { door: "dom4_drzwi",
+            plan: [[0, "inside", "dom4_drzwi"], [6, "stand", "plac_studnia"], [7.5, "inside", "dom4_drzwi"], [9, "work", "wdowa_praca"], [12, "inside", "dom4_drzwi"],
+                   [13.5, "wander", "kaplica_lawka"], [16, "stand", "plac_studnia"], [17, "wander", "rynek_srodek"], [18.5, "inside", "dom4_drzwi"]] },
+        kostek: { door: "dom4_drzwi",
+            plan: [[0, "inside", "dom4_drzwi"], [6.1, "wander", "plac_studnia"], [7.5, "inside", "dom4_drzwi"], [9, "wander", "wdowa_praca"], [10.5, "wander", "rynek_rog"],
+                   [12, "inside", "dom4_drzwi"], [13.5, "wander", "kaplica_lawka"], [15, "wander", "stajnia_woz"], [16.5, "wander", "rynek_srodek"],
+                   [18.5, "inside", "dom4_drzwi"]] },
+        jagodka: { door: "dom4_drzwi",
+            plan: [[0, "inside", "dom4_drzwi"], [6.2, "wander", "plac_studnia"], [7.5, "inside", "dom4_drzwi"], [9.1, "wander", "wdowa_praca"], [12, "inside", "dom4_drzwi"],
+                   [13.6, "wander", "kaplica_lawka"], [16.1, "wander", "plac_studnia"], [17.1, "wander", "rynek_srodek"], [18.3, "inside", "dom4_drzwi"]] },
+        ciesla: { door: "ciesla_drzwi",
+            plan: [[0, "inside", "ciesla_drzwi"], [6, "work", "leon_praca"], [9.5, "wander", "rynek_srodek"], [10.5, "wander", "plac_tablica"], [12, "inside", "ciesla_drzwi"],
+                   [13, "work", "leon_praca"], [16, "wander", "kaplica_lawka"], [17, "work", "leon_praca"], [18.5, "wander", "plac_tablica"], [20, "inside", "ciesla_drzwi"]] },
+        weteran: { door: "dom8_drzwi",
+            plan: [[0, "inside", "dom8_drzwi"], [8, "stand", "rynek_lawka"], [11.5, "wander", "plac_studnia"], [12.5, "inside", "dom8_drzwi"], [14, "stand", "rynek_lawka"],
+                   [17, "wander", "brama_zach"], [18, "stand", "rynek_lawka"], [20.5, "inside", "dom8_drzwi"]] }
+    };
+    // (2026-11-15) the Lord's guard keeps his watch at Dwór nad Jazem (Map221): by day at the manor's gate, at night round the
+    // west garden (the places: defaults of SPOTS_BY_MAP[221] - W1's night in the garden needs him there)
+    { const g = RESIDENTS.find(r => r.key === "straznik"); if (g) { g.map = 221; delete g.alt; } }
+    // (2026-11-15) the camp of W6 on Podgrodzie's meadow (Map218): Ludmiła, Ela, Rafał and Marek live there - their days between the
+    // camp, the shrine, the square and the shelter (the camp's places: defaults of SPOTS_BY_MAP[218])
+    {
+        const CAMP = {
+            ludmila: [[0, "inside", "pod_murem"], [6.5, "wander", "pod_murem"], [9, "stand", "plac"], [11, "wander", "kapliczka"], [15, "stand", "przytulek_drzwi"], [17, "wander", "pod_murem"], [20, "inside", "pod_murem"]],
+            ela: [[0, "inside", "pod_murem"], [6.6, "wander", "pod_murem"], [9.2, "wander", "plac"], [11.2, "wander", "kapliczka"], [15.2, "wander", "przytulek_drzwi"], [17.2, "wander", "pod_murem"], [20, "inside", "pod_murem"]],
+            rafal: [[0, "inside", "stodola"], [4.5, "wander", "stodola"], [6.5, "inside", "stodola"], [20.5, "stand", "w6_ognisko", "w6Fire"], [21, "wander", "kapliczka", "!w6Fire"], [23.5, "inside", "stodola"]],
+            marek: [[0, "inside", "pod_murem"], [6.8, "wander", "pod_murem"], [10, "stand", "w6_ognisko"], [13, "wander", "pod_murem"], [17, "stand", "w6_ognisko"], [20, "inside", "pod_murem"]]
+        };
+        for (const r of RESIDENTS) if (CAMP[r.key]) { r.map = 218; r.plan = CAMP[r.key]; r.indoor = {}; delete r.alt; }
+    }
+    for (const r of RESIDENTS) {
+        const m = MOVE_220[r.key];
+        if (!m) continue;
+        const here = onMiasto220(m.door), was = typeof r.when === "function" ? r.when : null;
+        r.map = NEW_WORLD_MIASTO; r.plan = m.plan; r.away = m.away || []; r.indoor = {};
+        r.when = was ? () => was() && here() : here;
+        delete r.alt;
+    }
+    // ... and the people other data plugins add after this file (Majster_Data: the guild's Ostap, Ludwik, Jaś; Mlyn_Data: old
+    // Walenty; Zakon_Data: the gravedigger): TownLife.js asks for TownLifeData.moveLate() when it starts, after every data plugin.
+    // A "when" of their own (a named condition) stays as it is.
+    const MOVE_220_LATE = {
+        // the guild's three keep their own days (8-17 in the Cech's hall - Map215, shown there): only the map changes; their places
+        // "cech_przed" and "<kto>_dom" are defaults of SPOTS_BY_MAP[220]
+        ostap: { door: "cech1_drzwi", keep: true }, ludwik: { door: "cech1_drzwi", keep: true }, jas: { door: "cech1_drzwi", keep: true },
+        grabarz: { door: "grabarz_drzwi",
+            plan: [[0, "inside", "grabarz_drzwi"], [6, "work", "grabarz_praca"], [12, "wander", "cmentarz_lawka"], [13, "work", "cmentarz"], [17, "wander", "kaplica_lawka"],
+                   [19, "inside", "grabarz_drzwi"]] }
+    };
+    // (2026-11-16) the rest of the plain townsfolk off the old maps: the dice player on the market of Kruczogród (in from Podgrodzie),
+    // the refugee Darin in the shelter of Podgrodzie (his evening in the tavern: out through the east gate), the harbour's guard on Słony Brzeg.
+    // Their own `when` and `indoor` stay. People of threads not moved yet (the carter, the castaway, the travellers, the raven keepers...) wait for those.
+    const MOVE_REST = {
+        gracz: { map: 220, away: ["do_podgrodzia"], plan: [[0, "inside", "do_podgrodzia"], [9.7, "stand", "stragan_kosci"], [14, "inside", "do_podgrodzia"]] },
+        uchodzca: { map: 218, away: ["tawerna"] },
+        straznik_przystan: { map: 219 },
+        // Mietek's szynk in the north-east corner of Podgrodzie, by the town's wall (tools/nowy_swiat/szynk.py); in the afternoon to the town for Hanka's bread
+        szynkarz: { map: 218, door218: "szynk_drzwi", away: ["do_miasta"],
+            plan: [[0, "inside", "szynk_drzwi"], [7.5, "work", "szynk_lawy"], [10, "inside", "szynk_drzwi"], [11.5, "wander", "plac"],
+                   [12.5, "work", "szynk_lawy"], [14, "inside", "do_miasta"], [16, "work", "szynk_lawy"], [23, "inside", "szynk_drzwi"]] }
+    };
+    const moveLate = () => {
+        for (const r of RESIDENTS) { const m = MOVE_REST[r.key]; if (!m || r._movedRest) continue; r._movedRest = true; r.map = m.map; if (m.plan) r.plan = m.plan; if (m.away) r.away = (r.away || []).concat(m.away); if (m.door218) r.when = onPodgrodzie218(m.door218); delete r.alt; }
+        for (const r of RESIDENTS.concat(Array.isArray(window.TownLifeExtra) ? window.TownLifeExtra : [])) {   // (TownLifeExtra: the data plugins' own people)
+            const m = MOVE_220_LATE[r.key];
+            if (!m || r._moved220) continue;
+            r._moved220 = true;
+            r.map = NEW_WORLD_MIASTO;
+            if (m.keep) { delete r.alt; continue; }
+            r.plan = m.plan; r.away = m.away || []; r.indoor = {};
+            if (r.when === undefined || r.when === null) r.when = onMiasto220(m.door);
+            delete r.alt;
+        }
+    };
+    // the new people of Kruczogród (fixed ids 8200-8206 of the range 8200-8219, EXTRA_RANGES + TawernaCore's registry); sheets of the
+    // hero's style from the travellers' pool for now
+    const miasto220 = (r, door, z) => Object.assign(r, { map: NEW_WORLD_MIASTO, when: onMiasto220(door), zaczepki: z, barks: byTime(z) });
+    const NEW_220 = [
+        // the old couple of the house by the east gate: witnesses of the drought, the first to tell the truth about the debt
+        miasto220({ key: "staruszek", id: 8200, name: "", title: "", sheet: "$Npc_Pula_S", speed: 2,
+            plan: [[0, "inside", "dom7_drzwi"], [7.5, "stand", "staruszek_praca"], [11, "wander", "rynek_lawka"], [12.5, "inside", "dom7_drzwi"], [15, "stand", "staruszek_praca"],
+                   [18.5, "inside", "dom7_drzwi"]], talk: talk0() }, "dom7_drzwi", z0()),
+        miasto220({ key: "staruszka", id: 8201, name: "", title: "", sheet: "$Npc_Pula_K2", speed: 2,
+            plan: [[0, "inside", "dom7_drzwi"], [6.5, "wander", "plac_studnia"], [8, "stand", "staruszka_praca"], [12.5, "inside", "dom7_drzwi"], [15.2, "stand", "staruszka_praca"],
+                   [17.5, "wander", "kaplica_lawka"], [18.8, "inside", "dom7_drzwi"]], talk: talk0() }, "dom7_drzwi", z0()),
+        // the town's scribe: the archive of the town hall (the trace of the town's water privilege)
+        miasto220({ key: "pisarz", id: 8202, name: "", title: "", sheet: "$Npc_Pula_S2", speed: 2,
+            plan: [[0, "inside", "ratusz_drzwi"], [7.5, "wander", "plac_tablica"], [8.5, "inside", "ratusz_drzwi"], [12, "wander", "rynek_lawka"], [13, "inside", "ratusz_drzwi"],
+                   [16, "stand", "pisarz_praca"], [18.5, "inside", "ratusz_drzwi"]], talk: talk0() }, "ratusz_drzwi", z0()),
+        // the Lord's steward: the books of debts and water; between the manor, the town hall and the counting-house
+        miasto220({ key: "rzadca", id: 8203, name: "", title: "", sheet: "$Npc_Pula_M3", speed: 3, away: ["do_dworu"],
+            plan: [[0, "inside", "do_dworu"], [8.5, "inside", "ratusz_drzwi"], [12, "wander", "rynek_srodek"], [13, "inside", "ratusz_drzwi"], [15, "wander", "kantor_drzwi"],
+                   [16, "inside", "kantor_drzwi"], [17.5, "inside", "do_dworu"]], talk: talk0() }, "ratusz_drzwi", z0()),
+        // the well keeper: guards the square's well, sells water "to friends"
+        miasto220({ key: "studzienny", id: 8204, name: "", title: "", sheet: "$Npc_Pula_Z", speed: 3,
+            plan: [[0, "inside", "budka_drzwi"], [5, "stand", "studzienny_praca"], [12, "wander", "plac_studnia"], [13, "stand", "studzienny_praca"], [19, "wander", "rynek_srodek"],
+                   [20, "inside", "budka_drzwi"]], talk: talk0() }, "budka_drzwi", z0()),
+        // the brewer, master of the guild: wants the tavern's guests, or the tavern itself
+        miasto220({ key: "piwowar", id: 8205, name: "", title: "", sheet: "$Npc_Pula_Z2", speed: 3,
+            plan: [[0, "inside", "browar_drzwi"], [6, "work", "piwowar_praca"], [11, "wander", "stragan2"], [12, "inside", "browar_drzwi"], [15, "wander", "rynek_rog"],
+                   [16.5, "stand", "tawerna_szyld"], [17.5, "inside", "browar_drzwi"]], talk: talk0() }, "browar_drzwi", z0()),
+        // the tavern's cook: water for the soup at dawn, the kitchen door, the market
+        miasto220({ key: "kucharka", id: 8206, name: "", title: "", sheet: "$Npc_Pula_K", speed: 3,
+            plan: [[0, "inside", "tawerna_drzwi"], [5.5, "wander", "plac_studnia"], [6.5, "inside", "tawerna_drzwi"], [10, "work", "kucharka_praca"], [11, "wander", "stragan1"],
+                   [12, "inside", "tawerna_drzwi"], [16, "work", "kucharka_praca"], [17, "inside", "tawerna_drzwi"]], talk: talk0() }, "tawerna_drzwi", z0())
+    ];
+    RESIDENTS.push(...NEW_220);
+    // (2026-11-14, the tiny hut: Map218 door (14,19), room Map224) grandpa Stach lives his modest day in Podgrodzie: the yard and the
+    // chopping block at dawn, the shrine, his bench, the square; at night and at noon in his hut - by the hearth (the room's spot
+    // "dziadek_wnetrze", a default of SPOTS_BY_MAP[224]). A plain resident for now: the story's own grandpa (Story.js, event 901)
+    // still lives only in the old house, Map019 - when the story's start moves to the new world the two become one.
+    RESIDENTS.push(podgrodzie218({ key: "dziadek", id: 8207, name: "", title: "", sheet: "$Npc_Dziadek", speed: 2,
+        plan: [[0, "inside", "dziadek_drzwi"], [5.5, "work", "dom_dziadka_podworko"], [8, "wander", "dom_dziadka_podworko"], [10, "wander", "kapliczka"],
+               [11.5, "inside", "dziadek_drzwi"], [13, "stand", "dom_dziadka_podworko"], [17, "wander", "plac"], [18.5, "stand", "dom_dziadka_podworko"],
+               [20.5, "inside", "dziadek_drzwi"]], talk: talk0() }, "dziadek_drzwi", z0()));
+    {   // (a story game has its own grandpa in the hut - Story.js: the plain one is not there then)
+        const r = RESIDENTS[RESIDENTS.length - 1], here = r.when;
+        r.when = () => here() && !(window.Story && typeof Story.active === "function" && Story.active());
+    }
+    if (window.SpeechBubbles && SpeechBubbles.BUSTS) SpeechBubbles.BUSTS["$Npc_Wanda:0"] = "Wanda_Bust";
     // the words of every resident (name, title, barks, talk, alt, zaczepki): js/teksty/mieszkancy.txt, mieszkancy.<key> - merged into
     // these very objects and lists once the files are read (the lists stay the same lists: TownLife and Dwor_Data hold them)
     Watki.scal(RESIDENTS, "mieszkancy", "mieszkancy", "key");
@@ -1017,12 +1309,13 @@
     // (2026-11-11 dawcy_miasto) 111: "tawerna" = the way out to the town (the west gate); 162: the garrison's front gate; 1 = the tavern's hall: the
     // places of the evening's visitors (resident.indoor.tawerna), all standing: the notice board's corner (Marta, Franek, Jadwiga), the hearth
     // of the entrance hall (Józek, Zbych, Darin, Rysiek), the front of the bar (Sambor, Bazyli, Kłos); dir 8 = facing the board / fire / bar
-    const SPOTS_BY_MAP = { 111: { tawerna: [105, 51, 6] }, 125: { tawerna: [53, 19, 6] }, 162: { tawerna: [55, 34, 2] },
-        1: { gosc_praczka: [6, 50, 8], gosc_franek: [5, 50, 8], gosc_znachorka: [8, 50, 8], gosc_szmaciarz: [20, 51, 8], gosc_uchodzca: [22, 51, 8],
-             gosc_drwal: [23, 50, 8], gosc_klusownik: [23, 52, 8], gosc_celnik: [9, 31, 8], gosc_latarnik: [17, 31, 8], gosc_kwatermistrz: [19, 31, 8] }, 23: { klusownik_las: [20, 23, 4] }, 24: { straz_dzien: [35, 76, 2], straz_1: [30, 79, 6], straz_2: [39, 79, 2], straz_3: [39, 88, 4], straz_4: [30, 88, 8] } };
+    // (2026-11-13 nowy świat) Słony Brzeg (219): the east edge of the road = gone to Podgrodzie / Kruczogród (a default; a "Miejsce:" on the map wins)
+    const SPOTS_BY_MAP = { 218: { pod_murem: [58, 17, 2], stodola: [60, 17, 2], w6_ognisko: [55, 16, 4], uchodzcy_drzwi: [41, 53, 8], namioty: [57, 18, 2], drewutnia: [66, 18, 8], tawerna: [79, 38, 6] }, 221: { straz_dzien: [42, 28, 2], straz_1: [10, 20, 6], straz_2: [24, 20, 2], straz_3: [24, 34, 4], straz_4: [10, 34, 8] }, 224: { dziadek_wnetrze: [4, 5, 8] }, 219: { do_podgrodzia: [79, 45, 6], szlaban: [72, 45, 4], nabrzeze: [40, 46, 2], molo_wejscie: [37, 47, 4] }, 220: { do_podgrodzia: [0, 38, 4], do_dworu: [79, 41, 6], dwor: [79, 41, 6], stragan_kosci: [56, 44, 4], cech_przed: [19, 59, 2], ostap_dom: [19, 59, 8], jas_dom: [28, 59, 8], ludwik_dom: [35, 66, 8] }, 111: { tawerna: [105, 51, 6] }, 125: { tawerna: [53, 19, 6] }, 162: { tawerna: [55, 34, 2] },
+        1: { gosc_praczka: [6, 37, 8], gosc_franek: [5, 37, 8], gosc_znachorka: [8, 37, 8], gosc_szmaciarz: [20, 38, 8], gosc_uchodzca: [22, 38, 8],
+             gosc_drwal: [23, 37, 8], gosc_klusownik: [23, 39, 8], gosc_celnik: [9, 18, 8], gosc_latarnik: [17, 18, 8], gosc_kwatermistrz: [19, 18, 8] }, 23: { klusownik_las: [20, 23, 4] }, 24: { straz_dzien: [35, 76, 2], straz_1: [30, 79, 6], straz_2: [39, 79, 2], straz_3: [39, 88, 4], straz_4: [30, 88, 8] } };
 
     // (2026-10-21) EXTRA_RANGE: the second range of ids for TownLifeExtra (the new terrain's packages, docs/rozszerzenia/PLAN.md)
     // (2026-10-22) EXTRA_RANGES: every range past 910-949 - the second one and the new Podgrodzie's third (TawernaCore's registry)
     // (2026-10-28) the fourth, 3020-3049: the ferry's travellers (Podroznicy_Data.js, docs/PODROZNI.md 6.3)
-    window.TownLifeData = { MAP: 8, FIRST_ID: 910, EXTRA_RANGE: [2900, 2949], EXTRA_RANGES: [[2900, 2949], [2950, 2959], [3020, 3049]], SPOTS, SPOTS_BY_MAP, RESIDENTS };
+    window.TownLifeData = { MAP: 8, FIRST_ID: 910, EXTRA_RANGE: [2900, 2949], EXTRA_RANGES: [[2900, 2949], [2950, 2959], [2960, 2969], [3020, 3049], [8200, 8219]], SPOTS, SPOTS_BY_MAP, RESIDENTS, moveLate };
 })();

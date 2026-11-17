@@ -1,11 +1,11 @@
 # Teksty łańcucha W16 „Dezerter” (wtyczki Dezerter_Data.js i Dezerter.js) - docs/PODROZNI.md 2.11, 2.12, 4.3, etap 4.
 # Tymon Wrzos - „Tomek, uchodźca z promu” (podróżny „dezerter”, pokój 5), Szczerba (Dobrawa), łowczyni nagród („lowczyni”, pokój 6),
-# rotmistrz Florian Bełza, Baltazar Vey, Roch. Szczerba ZAWSZE bierze Tymona żywego. Bohater jest nastolatkiem: dorośli mówią
+# kapitan Florian Bełza (straż dworu Lorda; od 2026-11-16 - dawny rotmistrz), Baltazar Vey, Roch. Szczerba ZAWSZE bierze Tymona żywego. Bohater jest nastolatkiem: dorośli mówią
 # do niego „chłopcze”, „dzieciaku”. „> ” - mówi bohater; bez tego - postać, z którą się rozmawia. {nazwa} - wstawia gra.
 
 # ======================================================================== zadanie W16 (dziennik: FABUŁA)
 zadania.W16.title = Dezerter
-zadania.W16.where = tawerna (pokój 5 na piętrze gości), rynek, obóz pod murem, garnizon nad zatoką, kantor, przystań
+zadania.W16.where = tawerna (pokój 5 na piętrze gości), rynek Kruczogrodu, obóz w Podgrodziu, dwór Lorda (brama), kantor, przystań na Słonym Brzegu
 zadania.W16.when = od drugiej fali z promu (dzień 25) do odpływu łowczyni
 zadania.W16.desc = Z drugą falą uchodźców przypłynął chłopak, który mówi, że ma na imię Tomek. Podskakuje na dźwięk bębna i krzyczy przez sen. A ktoś płynie jego śladem.
 zadania.W16.fail.text = Tomek odpłynął, a jego sprawa została bez końca.
@@ -17,8 +17,8 @@ zadania.W16.steps.3.text = {plan}
 # słowa kroków (zmienne)
 kroki.lowczyni.czeka = Ktoś płynie śladem Tomka - wypatruj podróżnych z następnego promu.
 kroki.lowczyni.jest = Szczerba, łowczyni nagród, szuka dezertera z listem gończym (pokój 6; za dnia brama twierdzy, wieczorem tawerna). Porozmawiaj z nią.
-kroki.plan.brak = Tymon musi zdecydować: rotmistrz Bełza, ucieczka z wyspy albo kryjówka. Porozmawiaj z nim. Szczerba odpływa {dzien}.
-kroki.plan.garnizon = Tymon zgłosi się do garnizonu, jeśli rotmistrz Bełza go przyjmie. Porozmawiaj z rotmistrzem (garnizon nad zatoką). Przychylność garnizonu: {fv}/{prog}.
+kroki.plan.brak = Tymon musi zdecydować: kapitan Bełza, ucieczka z wyspy albo kryjówka. Porozmawiaj z nim. Szczerba odpływa {dzien}.
+kroki.plan.garnizon = Tymon zgłosi się do straży dworu, jeśli kapitan Bełza go przyjmie. Porozmawiaj z kapitanem (dwór Lorda, przy bramie). Przychylność straży: {fv}/{prog}.
 kroki.plan.przemyt = Ucieczka z wyspy: Baltazar Vey (kantor, 8-18, {cena} G - w skrzyni, jak Rafał) albo Roch (przystań, za darmo - gdy jesteś mu coś winien).
 kroki.plan.ukrycie = Tymon ukrył się: {gdzie}. Szczerba odpływa {dzien} - do tego czasu niech go nie znajdzie.
 kroki.plan.molo = Obiecałeś Szczerbie przyprowadzić Tymona na molo ({cena} G). Porozmawiaj z nim.
@@ -26,7 +26,7 @@ kroki.plan.wydany = Wskazałeś Szczerbie pokój 5. Przyjdzie po Tymona w nocy {
 
 gdzie.dzwonnica = w dzwonnicy u Ambrożego
 gdzie.dziadek = w chacie dziadka
-gdzie.jar = w Kruczym Jarze, między skałami
+gdzie.jar = w starej sztolni pod Kruczymi Turniami
 
 # napisy nad bohaterem i u góry
 napis.zloto = +{n} G
@@ -44,7 +44,7 @@ Ja tak samo chodziłem, póki się nie oduczyłem. Nie pytaj, skąd wiem.
 
 [trop.darin]
 > Darinie, widziałeś ludzi z drugiej fali?
-Na molo. Jeden chłopak, Tomek, trzymał się z dala od żołnierzy garnizonu. Jakby się parzył.
+Na molo. Jeden chłopak, Tomek, trzymał się z dala od strażników Lorda. Jakby się parzył.
 Spod płaszcza wystawała mu biała tunika. Taka, jakie noszą królewscy. Z pomarańczowym ptakiem.
 
 [trop.werbownik]
@@ -59,7 +59,7 @@ Czego? Rana z drogi. Zawadziłem o... gałąź.
 (Tomek chowa rękę pod płaszcz i odwraca wzrok.)
 
 # scena: bęben werbownika na rynku (dzień po fali)
-scena.beben.werbownik = Za króla, chłopcy! Żołd, buty i strawa!
+scena.beben.werbownik = Za Lorda i Koronę, chłopcy! Żołd, buty i strawa!
 scena.beben.tymon = Bęben. Słyszysz? Nie mów nikomu, że się trzęsę.
 mysl.beben = (Tomek zbladł na dźwięk bębna. Cywil by się nie wzdrygnął.)
 
@@ -153,13 +153,13 @@ Tymon był pod Brzozową Wolą. „Chorągiew brzozowska stała na lewym skrzydl
 [tymon.pyta]
 Co mam robić? Powiedz. Ja już nie wiem, co się robi.
 
-tymon.opcja.belza = Zgłoś się do rotmistrza Bełzy. Ręczę za ciebie.
+tymon.opcja.belza = Zgłoś się do kapitana Bełzy. Ręczę za ciebie.
 tymon.opcja.przemyt = Uciekaj z wyspy. Znam kogoś.
 tymon.opcja.ukryj = Schowaj się, aż ona odpłynie.
 tymon.opcja.zdrada = Chodź na przystań. Czeka tam łódka.
 tymon.opcja.nieWiem = Jeszcze nie wiem.
 [tymon.belza]
-Do garnizonu? Do królewskich? ...Bełza to nie ci, co stali pod Brzozową. Może. Jeśli ty powiesz za mną słowo.
+Do straży Lorda? Do Bełzy? ...Był rotmistrzem, ale nie z tych, co stali pod Brzozową. Może. Jeśli ty powiesz za mną słowo.
 
 [tymon.przemyt]
 Z wyspy... na południe, gdzie nie ma chorągwi. Dobrze. Powiedz komu trzeba. Pójdę nocą.
@@ -169,7 +169,7 @@ Gdzie? Ja tu nikogo nie znam.
 
 tymon.gdzie.dzwonnica = W dzwonnicy u Ambrożego.
 tymon.gdzie.dziadek = W chacie mojego dziadka.
-tymon.gdzie.jar = W Kruczym Jarze, między skałami.
+tymon.gdzie.jar = W starej sztolni pod Kruczymi Turniami.
 tymon.gdzie.nie = Nie, jeszcze nie.
 [tymon.ukryty]
 Pójdę jeszcze tej nocy. Dziękuję. Za nic. Za to, że nic nie mówisz.
@@ -198,21 +198,21 @@ Do mojego promu. Potem biorę go, choćby spod ziemi. I nie myśl, że nie znajd
 [noc.bierz]
 (Szczerba otwiera drzwi bez pukania.) Tymon Wrzos. Wstawaj. Nikt cię nie skrzywdzi - żywy jesteś więcej wart.
 
-# ======================================================================== rozdz. 3: rozwiązanie - rotmistrz Bełza, Baltazar, Roch
+# ======================================================================== rozdz. 3: rozwiązanie - kapitan Bełza, Baltazar, Roch
 [belza.pyta]
-> Panie rotmistrzu... a gdyby żołnierz, co uciekł z pola, chciał się zgłosić?
+> Panie kapitanie... a gdyby żołnierz, co uciekł z pola, chciał się zgłosić do straży?
 
 [belza.tak]
-Dezerterów wieszają na lądzie. Na mojej wyspie... zobaczymy.
-Znam cię, chłopcze. Jeśli ręczysz za niego - niech przyjdzie sam. Odsłuży swoje tu, przy beczkach i na murze.
+Dezerterów wieszają na lądzie. Przy tym dworze... zobaczymy. Korona nie musi wiedzieć, kogo Lord ma w straży.
+Znam cię, chłopcze. Jeśli ręczysz za niego - niech przyjdzie sam. Odsłuży swoje tu, przy beczkach i przy bramie.
 Nie stał pod Brzozową dla przyjemności. Nikt nie stał.
 
 [belza.nie]
-Dezerterów wieszają na lądzie. Na mojej wyspie... zobaczymy.
-Ale ciebie jeszcze nie znam na tyle, żeby wierzyć ci na słowo. Wróć, jak garnizon będzie miał powód ci ufać.
+Dezerterów wieszają na lądzie. Przy tym dworze... zobaczymy.
+Ale ciebie jeszcze nie znam na tyle, żeby wierzyć ci na słowo. Wróć, jak straż będzie miała powód ci ufać.
 
-scena.przysiega.tymon = Tymon Wrzos. Zgłaszam się, panie rotmistrzu.
-scena.przysiega.belza = Do szeregu, żołnierzu. Jutro beczki, pojutrze mur.
+scena.przysiega.tymon = Tymon Wrzos. Zgłaszam się, panie kapitanie.
+scena.przysiega.belza = Do szeregu, strażniku. Jutro beczki, pojutrze brama.
 
 [baltazar.prosba]
 > Baltazarze, jeden człowiek musi zniknąć z wyspy. Cicho.
@@ -228,7 +228,7 @@ Niech przyjdzie po zmroku do tylnych drzwi. Ja nic nie wiem, ty nic nie wiesz.
 > Roch, potrzebuję twojego kutra. Dla jednego chłopaka. Na południe.
 (Roch długo łata sieć.) Za to, co dla mnie zrobiłeś - za darmo. Dziś w nocy. Niech przyjdzie na pochylnię.
 
-# Tymon w swoich miejscach (kryjówka, garnizon, obóz)
+# Tymon w swoich miejscach (kryjówka, straż dworu, obóz)
 tymon.imie = Tymon Wrzos
 [miejsce.dzwonnica]
 Cicho... Ambroży mówi, że jak ktoś obcy wejdzie na schody, zadzwoni raz. Jeszcze nie dzwonił.
@@ -237,7 +237,7 @@ Cicho... Ambroży mówi, że jak ktoś obcy wejdzie na schody, zadzwoni raz. Jes
 Twój dziadek dał mi koc i nic nie pytał. Dobry człowiek. Ona jeszcze tu jest?
 
 [miejsce.jar]
-Między skałami nie widać ognia. Śpię na zmianę z krukami. Ona jeszcze tu jest?
+W sztolni nie widać ognia. Śpię przy starych wagonikach i liczę krople ze stropu. Ona jeszcze tu jest?
 
 [miejsce.garnizon]
 Bełza krzyczy jak mój sierżant. Ale nie każe nikogo podpalać. To wystarczy.
@@ -247,8 +247,8 @@ Kopię rowy z Rafałem. Mówi, że chodzę jak żołnierz. Niech mówi. Już nie
 
 # ======================================================================== zakończenia (notatki)
 [notatki.garnizon]
-Tymon w garnizonie
-Tymon Wrzos zgłosił się do rotmistrza Bełzy. Odsłuży swoje przy beczkach i na murze. Szczerba odpłynie bez nagrody.
+Tymon w straży dworu
+Tymon Wrzos zgłosił się do kapitana Bełzy. Odsłuży swoje w straży Lorda - przy beczkach i przy bramie. Szczerba odpłynie bez nagrody.
 
 [notatki.przemytBaltazar]
 Tymon odpłynął w skrzyni
@@ -260,7 +260,7 @@ Roch zabrał Tymona nocą kutrem na południe. Za darmo - za to, co kiedyś dla 
 
 [notatki.oboz]
 Tymon w obozie
-Szczerba odpłynęła bez Tymona. Tymon został na wyspie - w obozie pod murem, z ludźmi z promów.
+Szczerba odpłynęła bez Tymona. Tymon został na wyspie - w obozie w Podgrodziu, z ludźmi z promów.
 
 [notatki.wydany]
 Wydałem Tymona
@@ -283,7 +283,7 @@ Tomek odpłynął
 Tomek - Tymon - odpłynął promem, zanim ktokolwiek po niego przyszedł. Nikt się nie dowie, dokąd.
 
 # ======================================================================== uwagi mieszkańców po tym, co się stało (raz)
-# 0: Ludmiła po wydaniu; 1: Rafał po wydaniu; 2: Rafał - Tymon w obozie; 3: werbownik - Tymon w garnizonie
+# 0: Ludmiła po wydaniu; 1: Rafał po wydaniu; 2: Rafał - Tymon w obozie; 3: werbownik - Tymon w straży dworu
 [uwagi.0.lines]
 Sprzedałeś chłopaka łowczyni. Tego z drugiej fali. U nas w obozie mówią, że jesteś jak oni. Ci z lądu.
 
@@ -317,6 +317,6 @@ f9.nazwy.1 = Tomek przy studni
 f9.nazwy.2 = łowczyni
 f9.nazwy.3 = rozmowa o północy
 f9.nazwy.4 = noc pod piątką
-f9.nazwy.5 = u rotmistrza Bełzy
+f9.nazwy.5 = u kapitana Bełzy
 f9.nazwy.6 = ucieczka z wyspy
 f9.nazwy.7 = kryjówka i odpływ Szczerby

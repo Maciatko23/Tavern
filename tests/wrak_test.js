@@ -20,112 +20,36 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
             bust: SpeechBubbles.BUSTS["$Npc_Rozbitek:0"], vitems: ["dziennik_okretu", "kamien_kruk", "klucz_bosmana"].every(k => !!TownQuestsData.VITEMS[k]) }; })()`);
     t.check("wtyczki pakietu E działają (Wrak.js nie jest już szkieletem), numery 670-679 należą do „Wrak”",
         base.wrak && base.data && base.inj.some(s => /670-679/.test(s)), base);
-    t.check("rozbitek „Eryk Sowa” to mieszkaniec 948 z własnym arkuszem, żyje w miasteczku (mapa 8), miejsce w tawernie i w Pokojach gości z danych",
-        base.res && base.res[0] === 948 && base.res[1] === "$Npc_Rozbitek" && base.res[2] === 8 && !!base.seat && !!base.rooms, base);
+    t.check("rozbitek „Eryk Sowa” to mieszkaniec 948 z własnym arkuszem, żyje w miasteczku (Map220), miejsce w tawernie i w Pokojach gości z danych",
+        base.res && base.res[0] === 948 && base.res[1] === "$Npc_Rozbitek" && base.res[2] === 220 && !!base.seat && !!base.rooms, base);
     t.check("zadania D25 (od Rocha) i W12 dochodzą do TownQuests, rzeczy wirtualne też; popiersie Rozbitek_Bust",
         base.q[0] && base.q[1] && base.q[2] === "przemytnik" && base.vitems && base.bust === "Rozbitek_Bust", base);
 
-    // ---------------------------------------------------------------- mapa 165 w odpływie
+    // ---------------------------------------------------------------- (2026-11-16) the new world: the wreck „Pomyślność” lies on the beach
+    // of Słony Brzeg (Map219); the old shoal map with the tides on the sandbar, Janek's boat and the soldiers is out of the game
     const DAY = 16;
-    await t.newGame({ map: 165, x: 12, y: 17, dir: 8, day: DAY, hour: 8, quiet: true, minimap: false });
+    await t.newGame({ map: 219, x: 20, y: 39, dir: 8, day: DAY, hour: 8, quiet: true, minimap: false });
     const lows = await t.json(`Wyspa.lowWaters(${DAY})`);
     const LOW = lows.find(h => h >= 6 && h <= 18) || lows[0], HIGH = (LOW + 6.2) % 24;
-    await t.setHour(LOW);
-    await t.frames(70);
-    const m165 = await t.json(`({ note: $dataMap.note, w: $dataMap.width, h: $dataMap.height, ready: Wyspa.isReady(165), built: Wrak.isBuilt(), tide: Wrak.tide(),
-        sw: $gameSwitches.value(20), d25: TownQuests.rec("D25"), been: Wrak.state().been, f: Wrak.flood() })`);
-    t.check("mapa 165: 80x60 (powiększona 2026-10-18), morze słone, prawdziwa mapa (nie szkielet) - Wyspa.ready(165)",
-        m165.w === 80 && m165.h === 60 && /<Water:salt>/.test(m165.note) && !/szkielet/.test(m165.note) && m165.ready && m165.built, m165);
-    t.check("pierwszy raz na wraku: D25 zaczyna się samo i od razu ma za sobą krok „dostań się na wrak”",
-        m165.been > 0 && m165.d25 && m165.d25.s === "active" && m165.d25.step >= 1, m165.d25);
-    const lowPass = await t.json(`(function(){ const cells = [[38,20],[38,21],[36,21],[20,22],[6,17]]; return cells.map(([x,y]) => [x, y, $gameMap.regionId(x,y), Wrak.floodedAt(x,y), $gameMap.isPassable(x,y,6) || $gameMap.isPassable(x,y,4)]); })()`);
-    t.check("w odpływie (przełącznik 20 włączony) łacha i pierścienie są suche i przechodnie",
-        m165.tide.low && m165.sw && lowPass.every(c => c[3] === false && c[4]), { lowPass, tide: m165.tide });
-    await t.locate(12, 17, 8);
-    await t.frames(20);
-    await t.shot(path.join(SHOTS, "wrak_odplyw.png"));
-
-    // ---------------------------------------------------------------- łódź Janka (przystań -> wrak -> przystań)
-    await t.eval(`(function(){ const s = TownQuests.state(); s.flags.janekMet = s.flags.janekMet || 1; s.flags.rochMet = s.flags.rochMet || 1;
-        TownQuests.finish("K47"); for (const q of TownQuests.QUESTS) if (q.giver === "janek" && !TownQuests.rec(q.id)) s.declined[q.id] = ${DAY}; return 0; })()`);
-    await t.go(125, 15, 8, 2);
-    await t.setHour(10.2);
-    await t.frames(30);
-    const jan = await t.json(`(function(){ const e = TownLife.eventOf("janek"); return e ? [e.eventId(), e.x, e.y, !!(e._town && e._town.hidden)] : null; })()`);
-    const boatTalk = await t.talkTo(`TownLife.eventOf("janek")`, ["Zawieź"], { secs: 40 });
-    await t.until("$gameMap.mapId() === 165 && !$gamePlayer.isTransferring()", 20);
-    await t.frames(30);
-    const atWreck = await t.json(`({ map: $gameMap.mapId(), at: [$gamePlayer.x, $gamePlayer.y], boat: Wrak.boatHere(), shown: [670, 671].map(i => { const e = $gameMap.event(i); return !!e && !(e._wrak && e._wrak.hidden) && !e.isTransparent(); }) })`);
-    t.check("na przystani Janek proponuje łódź („Zawieź mnie na wrak.”) i przywozi bohatera na przybicie (35,18); łódź i Janek czekają (670, 671)",
-        jan && !jan[3] && /wrak/i.test(boatTalk.text) && atWreck.map === 165 && atWreck.at[0] === 35 && atWreck.at[1] === 18 && atWreck.boat && atWreck.shown.every(Boolean), { jan, talk: boatTalk.text, atWreck });
-    const back = await t.talkTo(671, ["Wracajmy"], { secs: 40 });
-    await t.until("$gameMap.mapId() === 125 && !$gamePlayer.isTransferring()", 20);
-    await t.frames(20);
-    const atHarbour = await t.json("({ map: $gameMap.mapId(), at: [$gamePlayer.x, $gamePlayer.y], boat: Wrak.boatHere() })");
-    t.check("„Wracajmy.” u Janka przy wraku: z powrotem na pomoście przystani (12,7), łódź już nie czeka",
-        atHarbour.map === 125 && atHarbour.at[0] === 12 && atHarbour.at[1] === 7 && !atHarbour.boat, { text: back.text, atHarbour });
-
-    // ---------------------------------------------------------------- przypływ: łacha pod wodą, woda na kafelkach, ratunek
-    await t.setHour(HIGH);
-    await t.go(165, 16, 17, 2);
-    await t.frames(70);
-    const hi = await t.json(`(function(){ const t = Wrak.tide(), cells = [[38,20],[36,21],[20,22],[6,17]], core = [[17,17],[23,18],[35,18]];
-        return { t, sw: $gameSwitches.value(20), fl: cells.map(([x,y]) => [x, y, Wrak.floodedAt(x,y), [2,4,6,8].some(d => $gameMap.isPassable(x,y,d))]),
-            core: core.map(([x,y]) => [x, y, Wrak.floodedAt(x,y), [2,4,6,8].some(d => $gameMap.isPassable(x,y,d))]), f: Wrak.flood() }; })()`);
-    t.check("w przypływie łacha do garnizonu i pierścienie piachu są pod wodą (zamknięte), a rdzeń wyspy suchy; woda rysowana nad kafelkami",
-        !hi.t.low && !hi.sw && hi.fl.every(c => c[2] && !c[3]) && hi.core.every(c => !c[2] && c[3]) && hi.f && hi.f.visible && hi.f.pixels > 2000, hi);
-    await t.locate(16, 17, 2);
-    await t.frames(240);   // (the soldiers' calls fade first)
-    await t.shot(path.join(SHOTS, "wrak_przyplyw.png"));
-    await t.eval("$gamePlayer.locate(20, 22); 0");
-    await t.until("!Wrak.floodedAt($gamePlayer.x, $gamePlayer.y)", 5);
-    const saved = await t.json("[$gamePlayer.x, $gamePlayer.y, Wrak.floodedAt($gamePlayer.x, $gamePlayer.y)]");
-    t.check("bohater na polu, które zalewa woda, ląduje na najbliższym suchym piachu", !saved[2] && Math.hypot(saved[0] - 20, saved[1] - 22) <= 3, saved);
-
-    // ---------------------------------------------------------------- łacha do garnizonu w odpływie
-    await t.setHour(LOW);
-    await t.frames(70);
-    await t.eval(`window.__isReadyOrig = window.__isReadyOrig || Wyspa.isReady; Wyspa.isReady = id => id === 162 ? false : window.__isReadyOrig(id); window.__kit.pops.length = 0; 0`);
-    await t.locate(78, 20, 6);   // (the sandbar's end on the new east edge, x 79)
-    await t.hold("right", 30);
-    await t.frames(20);
-    const notReady = await t.json("({ map: $gameMap.mapId(), pops: window.__kit.pops.map(p => p.text) })");
-    t.check("łacha do garnizonu w odpływie, ale garnizon niegotowy: popup nad bohaterem, nikt nie trafia na szkielet mapy",
-        notReady.map === 165 && notReady.pops.some(p => /łacha ginie w mule/.test(p)), notReady);
-    await t.eval("Wyspa.isReady = window.__isReadyOrig; Wyspa.force(true); 0");
-    await t.locate(78, 21, 6);
-    await t.hold("right", 30);
-    const went = await t.until("$gameMap.mapId() === 162 && !$gamePlayer.isTransferring()", 15);
-    await t.frames(20);
-    const land162 = await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]");
-    t.check("gotowy garnizon: łacha z (79,21) prowadzi na Map162 (1,21)", went && land162[0] === 162 && land162[1] === 1 && land162[2] === 21, land162);
-    await t.eval("Wyspa.force(false); 0");
-
-    // ---------------------------------------------------------------- żołnierze garnizonu (9-15), kara bez glejtu
-    await t.setHour(10.5);
-    const gold0 = await t.gold(100);
-    await t.go(165, 10, 18, 8);
     await t.frames(40);
-    await t.eval("window.__kit.pops.length = 0; Wrak.state().fined = 0; 0");   // (they may have caught him already while the tide was tested)
-    const sold = await t.json(`[673, 674].map(i => { const e = $gameMap.event(i); return e ? [e.x, e.y, !(e._wrak && e._wrak.hidden), e.characterName()] : null; })`);
-    await t.locate(sold[0][0], sold[0][1] + 2, 8);
-    await t.until("Wrak.state().fined > 0", 10);
-    const fine = await t.json(`({ gold: $gameParty.gold(), fined: Wrak.state().fined })`);
-    const pops = await t.popups();
-    t.check("za dnia przy wraku stoją żołnierze z łodzią ratowniczą; bez glejtu łapią bohatera: kara 20 G (popup nad bohaterem)",
-        sold.every(s => s && s[2]) && fine.fined > 0 && fine.gold === gold0 - 20 && pops.some(p => /Kara/.test(p)), { sold, fine, pops, gold0 });
+    const brzeg = await t.json(`({ wrak: $gameMap.events().some(e => /^Wrak/.test(e.event().name)), drzwi: (function(){ const e = $gameMap.events().find(e => /^Drzwi: Ładownia/.test(e.event().name)); return e ? [e.x, e.y] : null; })(),
+        been: Wrak.state().been, d25: TownQuests.rec("D25") })`);
+    t.check("Słony Brzeg: wrak „Pomyślność” na plaży, wejście do ładowni (20,36); sam widok wraku niczego jeszcze nie zaczyna", brzeg.wrak && brzeg.drzwi && brzeg.drzwi.join() === "20,36" && !brzeg.been, brzeg);
+    await t.eval(`(function(){ const s = TownQuests.state(); s.flags.janekMet = s.flags.janekMet || 1; s.flags.rochMet = s.flags.rochMet || 1; return 0; })()`);
 
     // ---------------------------------------------------------------- pod pokład: dziura w burcie
-    await t.go(165, 28, 17, 8);   // (2026-11-07: the big wreck in three pieces - the breach at 28,16)
+    await t.go(219, 20, 38, 8);   // (the breach in the side of „Pomyślność”: the door at 20,36)
     await t.setHour(HIGH);
     await t.frames(10);
-    await t.hold("up", 30);
+    await t.hold("up", 75);
     const down = await t.until("$gameMap.mapId() === 166 && !$gamePlayer.isTransferring()", 15);
     await t.frames(40);
     const m166 = await t.json(`({ at: [$gamePlayer.x, $gamePlayer.y], name: $dataMap.displayName, rats: (Creatures.list || []).filter(c => c._tag === "wrak" && !c._dead).length,
         skel: (function(){ const e = $gameMap.events().find(e => /<Wrak:szkielet>/.test(e.event().note)); return e ? [e.eventId(), e.x, e.y, Wrak.floodedAt(e.x, e.y), e.opacity()] : null; })() })`);
-    t.check("dziura w burcie (28,16) prowadzi pod pokład (Map166, 4,11); w ładowni szczury (Creatures)",
+    t.check("wejście w burcie „Pomyślności” prowadzi pod pokład (Map166, 4,11); w ładowni szczury (Creatures)",
         down && m166.at[0] === 4 && m166.at[1] === 11 && m166.rats >= 1, m166);
+    const first = await t.json(`({ been: Wrak.state().been, flag: !!TownQuests.state().flags.wrakByl, d25: TownQuests.rec("D25") })`);
+    t.check("pierwszy raz pod pokładem: D25 zaczyna się samo i od razu ma za sobą krok „dostań się na wrak”", first.been > 0 && first.flag && first.d25 && first.d25.s === "active" && first.d25.step >= 1, first);
     await t.eval("Creatures.clear('wrak'); 0");
     t.check("w przypływie szkielet bosmana leży pod wodą (pole zamknięte, widać go przez wodę)", m166.skel && m166.skel[3] && m166.skel[4] < 255, m166.skel);
     await t.eval(`window.__kit.pops.length = 0; Wrak.act({ eventId: () => ${m166.skel ? m166.skel[0] : 0} }, ["szkielet"]); 0`);
@@ -170,7 +94,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         st.filter(s => s[1]).map(s => s[0]).join() === "celnik,kupiec,grandpa" && sold25.d25 === "done" && sold25.gold === g1 + 75 && sold25.stones === 0 && sold25.f, { st, sold25, g1 });
 
     // ---------------------------------------------------------------- rozbitek w tawernie: pierwsze spotkanie, portret
-    await t.go(1, 58, 34, 8);
+    await t.go(1, 14, 30, 8);
     await t.setHour(14);
     await t.frames(40);
     const ery = await t.json(`(function(){ const e = TownLife.eventOf("rozbitek"); return e ? [e.eventId(), e.x, e.y, !!(e._town && e._town.hidden), e.characterName()] : null; })()`);
@@ -188,7 +112,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("...w rozmowie popiersie rozbitka (Rozbitek_Bust)", meet.log.some(l => l.who === ery[0] && l.bust) && /Rozbitek_Bust/.test(JSON.stringify(bustOk)), { bustOk, log: meet.log.slice(0, 3) });
 
     // ---------------------------------------------------------------- poszlaka u Józka Łaty (Podgrodzie)
-    await t.go(111, 61, 63, 2);
+    await t.go(await t.json(`(function(){ const r = TownLife.RESIDENTS.find(x => x.key === "szmaciarz"); return r && r.map ? r.map : 218; })()`), 46, 42, 2);
     await t.setHour(11);
     await t.frames(40);
     const jozekTalk = await t.talkTo(`TownLife.eventOf("szmaciarz")`, ["Nie"], { secs: 30 });
@@ -197,7 +121,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         /okiem/.test(jozekTalk.text) && !!c2.clues.jozek && c2.w12.step === 1, { text: jozekTalk.text, c2 });
 
     // ---------------------------------------------------------------- nocą przy studni: tatuaż (skradanie / zza pleców)
-    await t.go(8, 57, 50, 4);
+    await t.go(220, 50, 43, 4);
     await t.setHour(22.3);
     await t.frames(60);
     const wellEv = await t.json(`(function(){ const e = TownLife.eventOf("rozbitek"); return e ? [e.x, e.y, e.direction(), !!(e._town && e._town.hidden)] : null; })()`);
@@ -207,7 +131,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("nocą przy studni (22-23) Eryk myje się z podwiniętym rękawem: bohater zza pleców widzi tatuaż oka", wellEv && !wellEv[3] && !!c3.tatuaz, { wellEv, c3 });
 
     // ---------------------------------------------------------------- rozmowa w cztery oczy (dochowaj tajemnicy)
-    await t.go(1, 58, 34, 8);
+    await t.go(1, 14, 30, 8);
     await t.setHour(14.5);
     await t.frames(40);
     const opts = await t.talkTo(`TownLife.eventOf("rozbitek")`, ["Zachowam"], { secs: 40 });
@@ -240,5 +164,5 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const tr = await t.json(`(function(){ const x = Journal.tracked(); return x ? { source: x.source, title: x.title, where: x.where } : null; })()`);
     const marks = await t.json("Wrak.state().marks");
     t.check("z mapą z wraku dziennik prowadzi do następnego znaku białego oka (wzgórze tawerny odwiedzone: następne miejsce)",
-        !!marks.tawerna && tr && tr.source === "extra" && tr.where && tr.where.map !== 8 && /Biały znak/.test(tr.title), { tr, marks });
+        !!marks.tawerna && tr && tr.source === "extra" && tr.where && tr.where.map !== 220 && [222, 219, 29, 30, 218, 221].includes(tr.where.map) && /Biały znak/.test(tr.title), { tr, marks });
 });

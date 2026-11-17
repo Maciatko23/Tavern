@@ -9,7 +9,7 @@
 const unit = require("../lib/unit.js");
 
 const FILES = ["TawernaCore", "Hunting", "Hunting_Path", "Hunting_AI", "Hunting_Weapons", "Skills_Data", "Combat", "Combat_Fight", "Combat_UI",
-    "Humans_Data", "Humans", "Underground_Data", "Underground", "Creatures_Data", "Creatures"];
+    "Humans_Data", "Humans", "Underground_Gen", "Underground_Data", "Underground", "Creatures_Data", "Creatures"];
 const ATTRS = ["str", "dex", "con", "per", "wil"];
 const hourOk = h => Number.isInteger(h) && h >= 0 && h <= 23;
 const pairOk = p => Array.isArray(p) && p[0] <= p[1] && p[0] >= 0;
@@ -17,7 +17,7 @@ const pairOk = p => Array.isArray(p) && p[0] <= p[1] && p[0] >= 0;
 unit.test(t => {
     const $dataItems = unit.data("Items"), infos = unit.data("MapInfos");
     function Game_System() {}
-    let sys = new Game_System(), mapId = 21, note = "";
+    let sys = new Game_System(), mapId = 222, note = "";   // (a camp map of the new world - Krucze Turnie)
     const globals = { Game_System, $dataItems, $gameParty: { leader: () => null, numItems: () => 0 } };
     Object.defineProperty(globals, "$gameSystem", { get: () => sys, enumerable: true, configurable: true });
     Object.defineProperty(globals, "$gameMap", { get: () => ({ mapId: () => mapId }), enumerable: true, configurable: true });
@@ -46,11 +46,14 @@ unit.test(t => {
         "the end of the strike); gold, loot of real items, the weapon to take; begging under half of his life; the archer keeps his distance inside his range",
         manBad.length === 0, manBad);
     const xpHumans = men.map(k => [K[k].xp, C.KILL_XP[k]]), xpCreatures = Object.keys(CD.KINDS).map(k => [CD.KINDS[k].xp, C.KILL_XP[k]]).concat(Object.keys(CD.BOSSES).map(k => [CD.BOSSES[k].xp, C.KILL_XP[k]]));
-    t.check("their XP is Combat's: bandit 30, knife 30, archer 30, mercenary 60; rat 4 ... stone sentinel 70, guardian 250, floor 20's boss 300 ... floor 90's 2500",
+    t.check("their XP is Combat's: bandit 30, knife 30, archer 30, mercenary 60; rat 8, spider 30 ... stone sentinel 70, guardian 250, floor 20's boss 300 ... floor 90's 2500",
         xpHumans.concat(xpCreatures).every(([a, b]) => a === b) && men.map(k => C.KILL_XP[k]).join() === "30,30,30,60" &&
-        ["szczur", "nietoperz", "pajak", "topielec", "zbroja", "upior", "cien", "kamiennik", "guardian", "boss_20", "boss_90"].map(k => C.KILL_XP[k]).join() === "4,4,25,35,45,50,50,70,250,300,2500",
+        ["szczur", "nietoperz", "pajak", "topielec", "zbroja", "upior", "cien", "kamiennik", "guardian", "boss_20", "boss_90"].map(k => C.KILL_XP[k]).join() === "8,8,30,35,45,50,50,70,250,300,2500"   /* (2026-11-17 balance: rats, bats 8, the spider 30) */,
         xpHumans.concat(xpCreatures).filter(([a, b]) => a !== b));
-    const campMaps = Object.keys(HD.CAMP.maps).map(Number), missing = campMaps.filter(id => !infos[id]);
+    // (2026-11-17: the old world's maps removed - tools/mapy/stare_mapy.json USUN; a camp map among them is not missing by mistake)
+    const removed = new Set(JSON.parse(require("fs").readFileSync(require("path").join(__dirname, "..", "..", "tools", "mapy", "stare_mapy.json"), "utf8")).mapy
+        .filter(m => String(m.werdykt).toUpperCase() === "USUN").map(m => m.id));
+    const campMaps = Object.keys(HD.CAMP.maps).map(Number), missing = campMaps.filter(id => !infos[id] && !removed.has(id));
     t.check("the night camps, the raids, the ambush: on maps of the game (the removed Map005 / Map006 aside), never the town (8) or grandpa's field (3); chances in (0, 1], " +
         "hours of the day, sizes, a sack of real loot; the raid calm at first, full by its day, more by a fire and a camp",
         missing.every(id => id === 5 || id === 6) && campMaps.every(id => id !== 8 && id !== 3 && HD.CAMP.maps[id] > 0 && HD.CAMP.maps[id] <= 1) &&
@@ -59,23 +62,24 @@ unit.test(t => {
         HD.RAID.calm < 1 && HD.RAID.calmDays < HD.RAID.fullDay && HD.RAID.fire > 1 && HD.RAID.camp > 1 && ["gold", "food", "hp"].every(k => HD.ROBBED[k] > 0 && HD.ROBBED[k] < 1),
         { missing });
 
-    // ---- the raid's chance (Humans.raidChance): Leśna droga (21) is a camp map
+    // ---- the raid's chance (Humans.raidChance): Krucze Turnie (222) is a camp map of the new world (2026-11-17: Leśna droga 21 and the old
+    // town 8 were removed - the town is Kruczogród 220 now)
     const pct = v => Math.round(v * 10000) / 100;
     const raid = [pct(H.raidChance(1)), pct(H.raidChance(10)), pct(H.raidChance(15)), pct(H.raidChance(40)), pct(H.raidChance(40, true))];
-    sys._tw.humans.camps[21] = { x: 1, y: 1 };
+    sys._tw.humans.camps[222] = { x: 1, y: 1 };
     raid.push(pct(H.raidChance(40)));
     sys = new Game_System();
-    mapId = 8;
+    mapId = 220;
     raid.push(pct(H.raidChance(40)));
     note = "<Raid:0.1>";
     raid.push(pct(H.raidChance(40)));
-    mapId = 21;
+    mapId = 222;
     note = "<Raid:off>";
     raid.push(pct(H.raidChance(40)));
     note = "<Humans:off>";
     raid.push(pct(H.raidRate()), pct(H.campChance()));
     note = "";
-    t.eq("a raid on a sleeper, % an hour on the forest road: 0.4 the first days, 1.2 on day 10, 2 from day 15, 2.8 by a fire, 5 with a camp on the map; " +
+    t.eq("a raid on a sleeper, % an hour in Krucze Turnie: 0.4 the first days, 1.2 on day 10, 2 from day 15, 2.8 by a fire, 5 with a camp on the map; " +
         "none in the town - unless its note says <Raid:0.1> (10); <Raid:off> and <Humans:off> none", raid, [0.4, 1.2, 2, 2, 2.8, 5, 0, 10, 0, 0, 0]);
 
     // ---- a man at a level (Humans.Game_Human)

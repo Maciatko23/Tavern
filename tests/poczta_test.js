@@ -23,22 +23,24 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         return r;
     };
     const visit = async (key, x, y) => {   // na mapie, na której stoi mieszkaniec (TownLife)
-        const m = await J(`(function(){ const r = TownLife.RESIDENTS.find(x => x.key === ${JSON.stringify(key)}); return r && r.map ? r.map : 8; })()`);
-        await t.go(m, x || 10, y || 10, 8); await t.frames(50);
+        const m = await J(`(function(){ const r = TownLife.RESIDENTS.find(x => x.key === ${JSON.stringify(key)}); return r && r.map ? r.map : 220; })()`);
+        const WEJSCIE = { 220: [47, 43], 218: [46, 42], 219: [40, 46], 221: [40, 41], 222: [40, 41], 29: [40, 14] };   // (a free cell of each map of the new world)
+        const c = WEJSCIE[m] || [x || 10, y || 10];
+        await t.go(m, c[0], c[1], 8); await t.frames(50);
         return m;
     };
     const tavernTalk = async (role, picks) => {
         const pend = await J("$gameMessage.allText()");
         if (pend) console.log("NOTE message pending before the tavern:", JSON.stringify(pend).slice(0, 200));
         await t.finish(40);
-        await t.go(1, 52, 14, 8); await t.frames(40);
+        await t.go(1, 38, 3, 8); await t.frames(40);
         const ok = await t.until(`$gameMap.mapId() === 1 && !!TavernLife.npc(${JSON.stringify(role)})`, 30);
         if (!ok) console.log("NOTE tavern: " + role + " not found:", JSON.stringify(await t.json("({ modal: Poczta.isModal(), ev: $gameMap.isEventRunning(), msg: $gameMessage.isBusy(), transferring: $gamePlayer.isTransferring(), scene: SceneManager._scene.constructor.name, map: $gameMap.mapId(), hr: $gameSystem.dayNightHour(), names: $gameMap.events().filter(e => /Melia|Grum/i.test(e.event().name)).map(e => e.event().name) })")));
         return t.talkTo(`TavernLife.npc(${JSON.stringify(role)})`, picks || ["Bywaj."], { secs: 60 });
     };
     const OD = Number(process.env.POCZTA_OD || 1);   // POCZTA_OD=N: zaczyna od etapu N (nowa gra, wątek na rozdziale N) - szybsze poprawki
     const przygotuj = async n => {
-        await t.newGame({ map: 8, x: 112, y: 15, dir: 8, hour: 10, day: 13, quiet: true, minimap: false });
+        await t.newGame({ map: 29, x: 15, y: 23, dir: 8, hour: 10, day: 13, quiet: true, minimap: false });
         await t.eval("TownQuests.state().flags.krukTame = 12; 0");
         await t.frames(130);
         await t.eval("Poczta.stan().start = 13; Poczta.stan().oath = 'przysiegam'; 0");
@@ -50,22 +52,22 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     };
     const etap1 = async () => {
     // ---------------------------------------------------------------- dane i start
-    await t.newGame({ map: 8, x: 112, y: 15, dir: 8, hour: 10, day: 13, quiet: true, minimap: false });
+    await t.newGame({ map: 29, x: 15, y: 23, dir: 8, hour: 10, day: 13, quiet: true, minimap: false });
     await t.frames(30);
     const b = await J(`({ plug: !!window.Poczta, q: !!TownQuests.Q.W20, steps: TownQuests.Q.W20 ? TownQuests.Q.W20.steps.length : 0, map214: !!$dataMapInfos[214],
         letters: PocztaData.LISTY.length, tooMany: PocztaData.LISTY.some(l => !l.to && l.special !== "bez") })`);
     t.check("wtyczka Poczta, zadanie W20 (5 kroków), mapa 214, listy w danych (26)", b.plug && b.q && b.steps === 5 && b.map214 && b.letters === 26 && !b.tooMany, b);
 
     // drzwi: bez oswojonego kruka zamknięte
-    await t.eval("$gamePlayer.locate(112, 14); $gamePlayer.setDirection(8); 0");
+    await t.eval("$gamePlayer.locate(15, 21); $gamePlayer.setDirection(8); 0");
     await t.hold("up", 70); await t.frames(20);
     const m0 = await J("$gameMap.mapId()");
-    t.check("kruczarnia zamknięta, dopóki wątek nie ruszył (K51/D24)", m0 === 8 && (await step()) === "brak");
+    t.check("kruczarnia zamknięta, dopóki wątek nie ruszył (K51/D24)", m0 === 29 && (await step()) === "brak");
     await t.eval("TownQuests.state().flags.krukTame = 12; 0");
     await t.frames(130);
     t.check("po oswojeniu kruka, od dnia 12: W20 w dzienniku (krok 1)", (await step()) === "active:0", await rec());
     await t.shot(SHOTS + "/01_drzwi.png");
-    await t.eval("$gamePlayer.locate(112, 14); $gamePlayer.setDirection(8); 0");
+    await t.eval("$gamePlayer.locate(15, 21); $gamePlayer.setDirection(8); 0");
     await t.eval(kit.DRIVER + "; window.__drv.on = true; window.__drv.picks = ['Przysięgam.']; 0");
     await t.hold("up", 70);
     await t.until("$gameMap.mapId() === 214", 20);
@@ -99,7 +101,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     // ---------------------------------------------------------------- tydzień 1: pierwsza torba
     const gold0 = await t.gold();
     await at(13, 10);
-    await t.go(8, 33, 61, 8); await t.frames(60);
+    await visit("piekarka");
     const op0 = await J("TownQuests.state().opinion");
     const h1 = await talk("piekarka", ["Masz list."]);
     const g1 = await t.gold(), op1 = await J("TownQuests.state().opinion");
@@ -109,24 +111,24 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await at(14, 8);
     await takeAll();
     t.check("dzień 14, 8:00: dwa listy w torbie (kowal, dzwonnik)", (await st()).bag.join() === "l1_tadek,l1_ambrozy", (await st()).bag);
-    await t.go(8, 8, 64, 8); await t.frames(40);
+    await visit("kowal");
     await talk("kowal", ["Masz list."]);
-    await t.go(8, 85, 32, 8); await t.eval("TownLife.hold && 0"); await t.frames(30);
+    await visit("dzwonnik");
     await talk("dzwonnik", ["Masz list."]);
     t.check("kowal i dzwonnik dostali listy w oknach godzin", !!(await st()).done.l1_tadek && !!(await st()).done.l1_ambrozy && !(await st()).done.l1_tadek.late, (await st()).done);
     await at(14, 18);
     await takeAll();
-    await t.go(8, 51, 29, 8); await t.frames(30);
+    await visit("kapral");
     await talk("kapral", ["Masz list."]);
     await at(15, 9);
     await takeAll();
-    await t.go(8, 83, 50, 8); await t.frames(40);
+    await visit("soltys");
     await talk("soltys", ["Masz list."]);
     t.check("kapral i sołtys: pięć listów doręczonych w tygodniu 1", Object.keys((await st()).done).filter(k => /^l1_/.test(k)).length === 5, Object.keys((await st()).done));
     await at(16, 9);
     const gt = await takeAll();
     t.check("list z innym woskiem: Gawron zauważa „trzeci taki w tym miesiącu” - poszlaka (wosk), notatka o zdrajcy", !!(await st()).clue.wosk && (await J("(Journal.data().notes || []).some(n => /czyta/.test(n.title))")), { clue: (await st()).clue, notes: await J("(Journal.data().notes || []).map(n => n.title)") });
-    await t.go(8, 15, 87, 8); await t.frames(40);
+    await visit("garbarz");
     await talk("garbarz", ["Masz list."]);
     t.check("garbarz dostał list z innym woskiem", !!(await st()).done.l1_garbarz);
     await at(17, 18);
@@ -157,7 +159,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("...scena S3 odegrana (dzień zapisany)", (await st()).sc.s3 === 20);
     await at(21, 8);
     await takeAll();
-    await t.go(8, 33, 61, 8); await t.frames(50);
+    await visit("piekarka");
     await talk("piekarka", ["Masz list."]);
     await at(22, 10);
     await takeAll();
@@ -167,7 +169,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("Gryta (c): list oddany sąsiadce - nic nie przepada", (await st()).gryta === "sasiadka" && !(await st()).bag.includes("l2_gryta"), { gryta: (await st()).gryta, text: gw.text.slice(0, 150) });
     await at(23, 10);
     await takeAll();
-    await t.go(8, 53, 53, 8); await t.frames(60);
+    await visit("zosia");
     await talk("zosia", ["Masz list."]);
     await at(24, 8);
     await takeAll();
@@ -185,7 +187,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     // ---------------------------------------------------------------- pokusa (trzy przeczytane listy) i spóźnienie
     await at(27, 21.7);
     await t.eval("Poczta.stan().bag = ['l3_baltazar', 'l3_ozzy', 'l2_bez']; 0");
-    await t.go(8, 33, 61, 8);
+    await visit("piekarka");
     for (const id of ["l3_baltazar", "l3_ozzy", "l2_bez"]) {
         await t.eval(`Poczta.czytaj(${JSON.stringify(id)}); 0`); await t.frames(30);
         if (id === "l3_baltazar") await t.shot(SHOTS + "/08_okno_listu.png");
@@ -194,7 +196,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const sc = await st();
     t.check("pokusa: trzy przeczytane listy -> Gawron traci zaufanie (zaufanie 0)", sc.secrets === 3 && sc.trust === 0, { secrets: sc.secrets, trust: sc.trust });
     await t.eval("Poczta.stan().bag = ['l3_baltazar']; 0");
-    await visit("kupiec", 16, 50);
+    await visit("kupiec");
     const gold1 = await t.gold();
     await talk("kupiec", ["Masz list."]);
     const late = (await st()).done.l3_baltazar;
@@ -207,7 +209,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await visit("wicek"); await talk("wicek", ["Wypytaj o otwarte listy"]);
     await at(29, 10);
     await visit("kupiec"); await talk("kupiec", ["Wypytaj o otwarte listy"]);
-    await at(29, 18.2);
+    await at(29, 14);   // (Sambor is on the coast by day only: he walks back to the town before dusk)
     await visit("celnik"); await talk("celnik", ["Wypytaj o otwarte listy"]);
     const cl = (await st()).clue;
     t.check("cztery rozmowy: poszlaki wicek, sambor, baltazar, cyryl", !!(cl.wicek && cl.sambor && cl.baltazar && cl.cyryl), cl);
@@ -234,7 +236,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await at(34, 19);
     await visit("cyryl"); await talk("cyryl", ["Masz list."]);
     await at(35, 18.3); await visit("wicek"); await talk("wicek", ["Masz list."]);
-    await at(35, 18.4); await visit("celnik"); await talk("celnik", ["Masz list."]);
+    await at(36, 14); await visit("celnik"); await talk("celnik", ["Masz list."]);
     t.check("przynęty doręczone jako „pomyłka w torbie”", !!(await st()).done.p_cyryl && !!(await st()).done.p_wicek && !!(await st()).done.p_sambor, Object.keys((await st()).done).filter(k => /^p_/.test(k)));
     await at(38, 23.2);
     await t.go(214, 5, 9, 8); await t.frames(30);

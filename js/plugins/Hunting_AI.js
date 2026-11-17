@@ -491,6 +491,14 @@
             return;
         }
         // roaming
+        // (2026-11-16, the user: "dziki nie atakują ludzi, póki same nie zostaną zaatakowane") a boar nobody has hurt minds its own
+        // business: it stops and looks at him, and goes on rooting. The first blow on it - the hero's, a man's, the dog's - makes it
+        // the beast it was (_provoked: Hunting_Weapons.js hit, Starcia.js hurtBeast), for the rest of its life.
+        if (!this._provoked && !window.__dzikiJakDawniej) {   // (__dzikiJakDawniej: the tests of the fight with a boar set it - tests/cdp.js)
+            if (this._aware >= 0.3) { this.turnTowardCharacter($gamePlayer); return; }
+            this.wander();
+            return;
+        }
         if (this._aware >= 1 || (this._alarm > 0 && dist < sp.sight * 1.3)) {
             this.setMode("warn", Math.round(BOAR.warn * tk()));
             this.turnTowardCharacter($gamePlayer);

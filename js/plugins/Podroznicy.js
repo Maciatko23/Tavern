@@ -284,7 +284,7 @@
     function warunekGry(atom, d) {
         const i = atom.indexOf(":"), kind = i < 0 ? atom : atom.slice(0, i), arg = i < 0 ? "" : atom.slice(i + 1);
         switch (kind) {
-            case "miasteczko": return byl(8);
+            case "miasteczko": return byl(TOWN);
             case "kartograf": { const n = znaneMiejsca(); return (d >= 16 && n >= 6) || n >= 10; }
             case "zmiany": { const s = stateIf("tavernShift"); return !!s && (s.done || 0) >= Number(arg || 1); }
             case "janek": return !!flags().janekMet;
@@ -383,11 +383,12 @@
     // (a place of the pool with nobody in it: in the town only while a ferry's planning is near - tonight or today - so that whoever
     // comes has an event there; else no event: Map008 is the heaviest map)
     const planSoon = () => { const d = day(), s = S(); return s.last === null || s.last === undefined || (isFerry(d) && s.last < d) || (isFerry(d + 1) && hour() >= 12); };
+    const TOWN = D.MIASTO || 220;   // (2026-11-16: the new world's town, Map220 - Podroznicy_Data.MIASTO)
     function mapa(resKey) {
-        if (!has()) return 8;
-        if (SLOT[resKey] !== undefined) return osoba(resKey) || planSoon() ? 8 : -1;
+        if (!has()) return TOWN;
+        if (SLOT[resKey] !== undefined) return osoba(resKey) || planSoon() ? TOWN : -1;
         const pk = osoba(resKey);
-        return wpis(pk) || kandydat(pk) ? 8 : -1;
+        return wpis(pk) || kandydat(pk) ? TOWN : -1;
     }
     // the day's plan (docs/PODROZNI.md 1.4): the profile's base; the day it comes - away till noon; the day it leaves - the bill at
     // 11, away from noon; a ferry day for who watches the pier - away 9-15
@@ -1002,7 +1003,7 @@
         if (r) { row.label = r.label; row.pick = r.pick; }
         return true;
     }
-    const PRZYSTAN = ["Przystań", 125, 20, 16, 4];
+    const PRZYSTAN = ["Słony Brzeg", 219, 32, 47, 4];
     function f9Ok(row) {
         if (!has()) return null;
         const s = S();

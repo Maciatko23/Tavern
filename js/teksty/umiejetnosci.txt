@@ -205,7 +205,7 @@ umiejetnosci.c_fast.text = Praca w warsztatach, piecach i wytwarzanie trwa o {cr
 umiejetnosci.c_save.name = Oszczędny
 umiejetnosci.c_save.text = {craft.save} szans, że jeden materiał wróci do plecaka po wytworzeniu.
 umiejetnosci.c_smelt.name = Hutnik
-umiejetnosci.c_smelt.text = Piec ziemny, cegielnia, kuźnia i huta pracują o {smelt.speed} krócej.
+umiejetnosci.c_smelt.text = Piec ziemny, cegielnia, kuźnia i huta pracują o {smelt.speed} krócej; broń zrobiona przez ciebie o {forge.luck} częściej wychodzi udana.
 umiejetnosci.c_wear.name = Dbały
 umiejetnosci.c_wear.text = Narzędzia i broń zużywają się o {tool.wear} wolniej.
 umiejetnosci.c_double.name = Podwójna robota
@@ -215,7 +215,7 @@ umiejetnosci.c_repair.text = Naprawa narzędzi kosztuje o połowę mniej materia
 umiejetnosci.c_trade.name = Kupiecka żyłka
 umiejetnosci.c_trade.text = Sprzedajesz o {sell} drożej.
 umiejetnosci.c_master.name = Mistrz cechu
-umiejetnosci.c_master.text = Wytwarzanie o {craft.speed} krótsze, +{craft.save} szans na zwrot materiału.
+umiejetnosci.c_master.text = Wytwarzanie o {craft.speed} krótsze, +{craft.save} szans na zwrot materiału, +{forge.luck} szans na udane kucie broni.
 
 # ======================================================================== Budownictwo
 umiejetnosci.b_hits.name = Cieśla

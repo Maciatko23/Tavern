@@ -30,7 +30,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const srcOk = s => !/(wiedzma|mglak|rybolak|topielec_morski|SeaWitch|SeaFog|SeaFolk|SeaDrowned|perla|muszla)/i.test(s);
 
     // ---------------------------------------------------------------- A. wtyczki, teksty, rejestr, rodzaje, przedmioty, brak martwych odwołań
-    await t.newGame({ map: 125, x: 60, y: 70, hour: 22, day: 12 });
+    await t.newGame({ map: 219, x: 33, y: 46, hour: 22, day: 12 });
     const base = await J(`({ list: $plugins.filter(p => p.status).map(p => p.name), files: Watki.pliki().filter(f => f.name === "morze").map(f => ({ st: f.st, keys: f.keys, errors: f.errors })),
         q: !!TownQuests.Q.W23 && TownQuests.Q.W23.kind === "W" && TownQuests.Q.W23.steps.length, reg: Tawerna.inject.list().filter(r => r.owner === "Morze").map(r => r.ids),
         kinds: Object.keys(MorzeData.KINDS).filter(k => Creatures.KINDS[k] && Creatures.KINDS[k].sea), ai: Object.keys(MorzeData.KINDS).every(k => !!Creatures.AI[k]),
@@ -45,7 +45,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("teksty morze.txt bez błędów; zadanie W23 (7 kroków); rejestr 4700-4799", base.files.length === 1 && base.files[0].st === "ok" && !base.files[0].errors.length && base.files[0].keys > 60 && base.q === 7 && base.reg.includes("4700-4799"), { files: base.files, q: base.q, reg: base.reg });
     t.check("rodzaje w Creatures (7: pałka, miecz, włócznia, młot, kapitan, krab, krab-kolos), umysły, wyglądy; łup z numerami przedmiotów", base.kinds.length === 7 && KINDS.every(k => base.kinds.includes(k)) && base.ai && base.looks && base.loot, { kinds: base.kinds });
     t.check("usunięte rodzaje (topielec, rybołak, mglak, wiedźma) zniknęły z Creatures i z danych; nowe przedmioty 410-416 (413-415 zmienione na miejscu), stare nazwy nie istnieją", base.gone.every(x => !x) && base.items.every(Boolean) && base.items[3] === 413 && base.items[4] === 414 && base.items[5] === 415 && base.oldItems.every(x => !x), { gone: base.gone, items: base.items, old: base.oldItems });
-    const srcs = ["js/plugins/Morze.js", "js/plugins/Morze_Data.js", "js/plugins/Morze_Potwory.js", "js/teksty/morze.txt"].map(f => [f, fs.readFileSync("tools/potwory2/overlay/" + f, "utf8")]);
+    const srcs = ["js/plugins/Morze.js", "js/plugins/Morze_Data.js", "js/plugins/Morze_Potwory.js", "js/teksty/morze.txt"].map(f => [f, fs.readFileSync("../" + f, "utf8")   /* (2026-11-16: the overlay folder is gone - the installed files) */]);
     const dead = srcs.filter(([f, s]) => !srcOk(s)).map(([f, s]) => [f, (s.match(/(wiedzma|mglak|rybolak|topielec_morski|SeaWitch|SeaFog|SeaFolk|SeaDrowned|perla|muszla)/i) || [])[0]]);
     t.check("kod i teksty W23 bez martwych odwołań do usuniętych rodzajów (wiedźma, mglak, rybołak, topielec morski, perła, muszla)", dead.length === 0, dead);
 
@@ -54,20 +54,20 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const near = (a, b) => Math.abs(a - b) < 1e-6;
     const c1 = await ch({ day: 1, map: 3 }), c10 = await ch({ day: 10, map: 3 }), c30 = await ch({ day: 30, map: 3 }), c99 = await ch({ day: 99, map: 3 });
     t.check("p(dzień) = min(30%, 1% x dzień): dzień 1 = 1%, 10 = 10%, 30 i dalej 30%", near(c1.p, 0.01) && near(c10.p, 0.1) && near(c30.p, 0.3) && near(c99.p, 0.3), [c1.p, c10.p, c30.p, c99.p]);
-    const lit = await ch({ day: 30, map: 125, lit: true }), litOther = await ch({ day: 30, map: 3, lit: true });
+    const lit = await ch({ day: 30, map: 219, lit: true }), litOther = await ch({ day: 30, map: 218, lit: true });
     t.check("latarnia: przystań x0,3, reszta x0,5", near(lit.P, 0.09) && near(litOther.P, 0.15), [lit.P, litOther.P]);
-    const mix = await ch({ day: 30, map: 125, lit: true, fireShare: 0.5, bell: true });
+    const mix = await ch({ day: 30, map: 219, lit: true, fireShare: 0.5, bell: true });
     t.check("mnożniki razem: dzień 30, przystań: 0,3 x 0,3 x (1 - 0,5 x 0,5) x 0,85 = 5,74%", near(mix.P, 0.3 * 0.3 * 0.75 * 0.85), mix);
-    const gar = await ch({ day: 30, map: 162, lit: true, favour: 99 }), garOther = await ch({ day: 30, map: 3, favour: 99 });
-    t.check("garnizon: własna mapa x0,4 (z latarnią x0,5), sąsiednie x0,8", near(gar.P, 0.3 * 0.5 * 0.4) && near(garOther.P, 0.3 * 0.8), [gar.P, garOther.P]);
-    const floor = await ch({ day: 30, map: 125, lit: true, favour: 99, fireShare: 1, bell: true, guard: 1 });
+    const gar = await ch({ day: 30, map: 218, lit: true, favour: 99 }), garOther = await ch({ day: 30, map: 218, favour: 99 });
+    t.check("przychylność garnizonu: wszędzie x0,8 (nowy świat nie ma mapy garnizonu - „własnej” x0,4 nie ma); z latarnią jeszcze x0,5", near(gar.P, 0.3 * 0.5 * 0.8) && near(garOther.P, 0.3 * 0.8), [gar.P, garOther.P]);
+    const floor = await ch({ day: 30, map: 219, lit: true, favour: 99, fireShare: 1, bell: true, guard: 1 });
     t.check("dolna granica: nigdy poniżej 15% podstawy (4,5% przy dniu 30), choć iloczyn mnożników mniejszy", near(floor.P, 0.045) && floor.m < 0.15, floor);
     const raised = await ch({ day: 30, map: 3, red: true, storm: true });
     t.check("czerwona woda x1,5, burza x1,3, sufit 45%", near(raised.P, 0.45) && near((await ch({ day: 10, map: 3, red: true })).P, 0.15) && near((await ch({ day: 10, map: 3, storm: true })).P, 0.13), raised);
-    const stat = await J(`(function(){ const out = {}; for (const P0 of [0.01, 0.054, 0.15, 0.3]) { let n = 0, N = 10000; for (let i = 0; i < N; i++) if (Morze.decide(1000 + i, 125, P0).l) n++; out[P0] = n / N; } return out; })()`);
+    const stat = await J(`(function(){ const out = {}; for (const P0 of [0.01, 0.054, 0.15, 0.3]) { let n = 0, N = 10000; for (let i = 0; i < N; i++) if (Morze.decide(1000 + i, 219, P0).l) n++; out[P0] = n / N; } return out; })()`);
     t.check("statystyka 10 000 nocy: częstość lądowań zgodna z P (1%, 5,4%, 15%, 30% ± 1,2 pkt)", Object.entries(stat).every(([p, f]) => Math.abs(f - Number(p)) < 0.012), stat);
     // ---------------------------------------------------------------- C. ziarno, tabela rodzajów po dniach
-    const seed = await J(`(function(){ const a = Morze.decide(77, 125, 0.4), b = Morze.decide(77, 125, 0.4), c = Morze.decide(78, 125, 0.4);
+    const seed = await J(`(function(){ const a = Morze.decide(77, 219, 0.4), b = Morze.decide(77, 219, 0.4), c = Morze.decide(78, 219, 0.4);
         const kinds = (from, to) => { const s = {}; for (let n = from; n <= to; n++) for (let m = 0; m < 20; m++) { const r = Morze.decide(n, 100 + m, 1); s[r.k] = (s[r.k] || 0) + 1; } return s; };
         return { same: JSON.stringify(a) === JSON.stringify(b), differs: JSON.stringify(a) !== JSON.stringify(c), early: kinds(1, 19), mid: kinds(20, 39), late: kinds(40, 200) }; })()`);
     const early = Object.keys(seed.early), mid = Object.keys(seed.mid), late = Object.keys(seed.late);
@@ -76,16 +76,16 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("tabela po dniach: 1-19 tylko szkielet z pałką i z mieczem; 20-39 + włócznia, młot, krab olbrzym; 40+ + krab-kolos; kapitan nigdy z tabeli",
         early.every(k => ["szkielet_palka", "szkielet_miecz"].includes(k)) && early.length === 2 && ["szkielet_wlocznia", "szkielet_mlot", "krab_olbrzym"].every(k => mid.includes(k)) && !mid.includes("krab_kolos") && late.includes("krab_kolos") && !late.includes("kapitan_szkieletow") && !mid.includes("kapitan_szkieletow"), seed);
     t.check("krab-kolos rzadki: ok. 8% lądowań od dnia 40 (5-11%)", kolos > 0.05 && kolos < 0.11, { kolos, late: seed.late });
-    const nlist = await J(`(function(){ const out = { c: Morze.decide(5, 125, 1).c, grp: MorzeData.GROUP, cap: MorzeData.MAX_AT_ONCE }; return out; })()`);
+    const nlist = await J(`(function(){ const out = { c: Morze.decide(5, 219, 1).c, grp: MorzeData.GROUP, cap: MorzeData.MAX_AT_ONCE }; return out; })()`);
     t.check("pałka zawsze w parze (grupa 2), na raz najwyżej 3 potwory", nlist.grp.szkielet_palka.count[0] === 2 && nlist.grp.szkielet_palka.count[1] === 2 && nlist.cap === 3, nlist);
-    const again = await J(`(function(){ const s = Morze.state(); s.noce = {}; const n = Morze.night().n; const a = Morze.recordFor(n, 125, true); const sp = JSON.stringify([a.l, a.k, a.c, a.o]); delete s.noce[Morze.key(n, 125)];
-        const b = Morze.recordFor(n, 125, true); return sp === JSON.stringify([b.l, b.k, b.c, b.o]); })()`);
+    const again = await J(`(function(){ const s = Morze.state(); s.noce = {}; const n = Morze.night().n; const a = Morze.recordFor(n, 219, true); const sp = JSON.stringify([a.l, a.k, a.c, a.o]); delete s.noce[Morze.key(n, 219)];
+        const b = Morze.recordFor(n, 219, true); return sp === JSON.stringify([b.l, b.k, b.c, b.o]); })()`);
     t.check("wyjście z mapy i powrót niczego nie przelosowuje (rekord noc:mapa, ten sam wynik z ziarna)", again, again);
 
     // ---------------------------------------------------------------- D. lądowanie: znaki, wyjście z wody, ślady
     await clearAll();
     await night(12, 22.5);
-    await t.eval(`(function(){ const n = Morze.night().n; Morze.state().noce[Morze.key(n, 125)] = { l: 1, k: "szkielet_miecz", c: 1, o: 0, sp: 0, left: 0, tr: null }; return 0; })()`);
+    await t.eval(`(function(){ const n = Morze.night().n; Morze.state().noce[Morze.key(n, 219)] = { l: 1, k: "szkielet_miecz", c: 1, o: 0, sp: 0, left: 0, tr: null }; return 0; })()`);
     await t.eval("window.__kit.pops.splice(0); 0");
     await t.frames(120);
     const signs = await J(`({ landing: !!Morze.landing, cr: MorzePotwory.seaList().length })`);
@@ -203,7 +203,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     // ---------------------------------------------------------------- I. macki (duże)
     await clearAll();
     await night(70, 22.5);
-    await t.go(125, 60, 70, 2);
+    await t.go(219, 33, 46, 2);
     const hp0 = await J("$gameParty.leader().hp");
     await t.eval(`Morze.force("macki"); 0`);
     await t.frames(30);
@@ -228,11 +228,23 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const cut = await J(`MorzePotwory.tentacles.list().map(t => [t.phase, t.hp])`);
     t.check("macka odcięta przez ciosy bohatera (życie 160): zanurza się", cut.some(x => x[0] === "sink" || x[1] <= 0) || cut.length < 3, cut);
 
+    // ---------------------------------------------------------------- I2. (2026-11-16, gracz) potwory w głąb lądu - do Podgrodzia i Kruczogrodu - ZAWSZE od zachodu
+    const zach = {};
+    for (const m of [218, 220]) {
+        await t.go(m, 40, 40, 8);
+        await t.frames(20);
+        zach[m] = await J(`(function(){ const out = []; const was = $gameSystem._dayNightDay; for (let d = 20; d < 40; d++) { $gameSystem._dayNightDay = d; const g = Morze.townGate(); out.push(g ? [g.x, g.y] : null); }
+            $gameSystem._dayNightDay = was; return { town: Morze.townMap(), gates: out }; })()`);
+    }
+    t.check("Podgrodzie i Kruczogród to mapy w głąb lądu; potwór wchodzi zawsze zachodnią krawędzią (x 0-1) - przez 20 nocy żadnego wejścia od wschodu ani ze środka",
+        zach[218].town && zach[220].town && [218, 220].every(m => zach[m].gates.every(g => g && g[0] <= 1)), zach);
+    const szansa = await J(`({ p: Morze.recordFor(30, 218, true).P, m: Morze.recordFor(30, 220, true).P })`);
+    t.check("Podgrodzie (pierwsze za wybrzeżem) ma szansę nocy, miasto mniejszą", szansa.p >= 0 && szansa.m >= 0, szansa);
     // ---------------------------------------------------------------- J. miasto: straż wychodzi ze strażnicy, nikt nie ginie; w tawernie potwora nie ma
     await clearAll();
-    await t.go(8, 98, 44, 2);
+    await t.go(220, 40, 22, 2);
     await night(14, 22.5);
-    await t.eval(`(function(){ Creatures.spawn("szkielet_miecz", 98, 41, { tag: "morze", engaged: true, level: 1, single: true }); MorzePotwory.seaList().forEach(c => { c._hunt = true; }); MorzePotwory.watch.begin(); return 0; })()`);
+    await t.eval(`(function(){ Creatures.spawn("szkielet_miecz", 50, 22, { tag: "morze", engaged: true, level: 1, single: true }); MorzePotwory.seaList().forEach(c => { c._hunt = true; }); MorzePotwory.watch.begin(); return 0; })()`);
     await t.frames(150);
     const men = await J(`MorzePotwory.watch.state.men.map(m => [m._x, m._y, m._hurt])`);
     await t.shot(SHOTS + "t06_miasto_straz.png");
@@ -241,14 +253,14 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("miasto: straż (2 strażników ze strażnicy, dzwon 3+1) wychodzi na szkielet; pada (bez bohatera)", men.length === 2 && after.left === 0, { men, after });
     await t.until("MorzePotwory.watch.state.men.length === 0", 40, 400);
     t.check("po walce strażnicy wracają do strażnicy (nikt nie znika na ulicy, nikt nie ginie)", await J("MorzePotwory.watch.state.men.length") === 0, 0);
-    await t.go(1, 20, 20, 2);
+    await t.go(1, 14, 30, 2);
     await t.frames(60);
     t.check("tawerna (wnętrze): żaden potwór z morza tu nie wchodzi (lądowanie tylko na mapach morza i w mieście)", await J("!Morze.seaMap() && !Morze.townMap() && MorzePotwory.seaList().length === 0"), 0);
 
     // ---------------------------------------------------------------- K. wątek W23: początek (kości na plaży), rozdziały, nagrody
     await clearAll();
     await t.eval(`(function(){ const s = Morze.state(); Object.assign(s, { start: 0, kosci: 0, slady: {}, zapisy: {}, zapisy3: {}, dzwon: 0, kleofas: 0, kapitanPokonany: 0, kleofasZnak: 0, znak: 0, krakenNoc: 0, koniec: 0, wybor: "", straz: 0 }); return 0; })()`);
-    await t.go(125, 60, 70, 2);
+    await t.go(219, 33, 46, 2);
     await night(10, 7.0);
     await t.eval(`Morze.state().noce = {}; Tawerna.emit("hourChange", { hour: 7, prev: 6, day: 10 }); 0`);
     await t.frames(60);
@@ -295,19 +307,19 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("dzwon o zmierzchu: x0,85 przez 10 dni, potem znów trzeba smarować", bell.on && !bell.off, bell);
 
     // ---------------------------------------------------------------- L. zapis i wczytanie
-    await t.eval(`(function(){ const s = Morze.state(); s.noce["999:3"] = { l: 1, k: "krab_kolos", c: 1, o: 0.3, sp: 1, left: 1, tr: null }; s.slady[125] = 10; return 0; })()`);
+    await t.eval(`(function(){ const s = Morze.state(); s.noce["999:3"] = { l: 1, k: "krab_kolos", c: 1, o: 0.3, sp: 1, left: 1, tr: null }; s.slady[219] = 10; return 0; })()`);
     t.saveTo(1);
     await t.frames(30);
     await t.eval(`(function(){ Morze.state().noce = {}; Morze.state().slady = {}; return 0; })()`);
     await t.loadFrom(1);
-    const loaded = await J(`({ n: !!Morze.state().noce["999:3"], sl: Morze.state().slady[125] })`);
+    const loaded = await J(`({ n: !!Morze.state().noce["999:3"], sl: Morze.state().slady[219] })`);
     t.check("zapis i wczytanie: losowania nocy, ślady i stan wątku zostają", loaded.n && loaded.sl === 10, loaded);
 
     // ---------------------------------------------------------------- M. pierwsza scena, świt przez godzinę, ślady rano na innej mapie, oglądanie śladów
     await clearAll();
-    await t.go(125, 60, 70, 2);
+    await t.go(219, 33, 46, 2);
     await night(15, 23.0);
-    await t.eval(`(function(){ const s = Morze.state(); s.pierwsze = 0; const n = Morze.night().n; s.noce[Morze.key(n, 125)] = { l: 1, k: "krab_olbrzym", c: 1, o: 0, sp: 0, left: 0, tr: null }; return 0; })()`);
+    await t.eval(`(function(){ const s = Morze.state(); s.pierwsze = 0; const n = Morze.night().n; s.noce[Morze.key(n, 219)] = { l: 1, k: "krab_olbrzym", c: 1, o: 0, sp: 0, left: 0, tr: null }; return 0; })()`);
     await t.frames(400);
     const bars = await J("({ bars: !!$gameTemp._hudScene, first: Morze.state().pierwsze })");
     await t.frames(260);
@@ -321,15 +333,15 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await clearAll();
     await t.eval(`(function(){ const s = Morze.state(); s.noce = {}; s.slady = {}; return 0; })()`);
     await night(20, 7.5);
-    await t.eval(`(function(){ Morze.state().noce["19:3"] = { l: 1, k: "szkielet_miecz", c: 1, o: 0.4, sp: 1, left: 0, tr: null, pt: null, ghost: 1 }; return 0; })()`);
-    await t.go(3, 22, 14, 2);
+    await t.eval(`(function(){ Morze.state().noce["19:219"] = { l: 1, k: "szkielet_miecz", c: 1, o: 0.4, sp: 1, left: 0, tr: null, pt: null, ghost: 1 }; return 0; })()`);
+    await t.go(219, 30, 30, 2);
     await t.frames(60);
-    const ghost = await J(`({ marks: MorzePotwory.marks.list().length, rec: !!Morze.state().noce["19:3"].tr })`);
-    t.check("rano na innej mapie z morzem: z tego samego ziarna ślady „by wylądowało” (bez symulacji)", ghost.marks >= 10, ghost);
+    const ghost = await J(`({ marks: MorzePotwory.marks.list().length, rec: !!Morze.state().noce["19:219"].tr })`);
+    t.check("innego ranka na Słonym Brzegu: z tego samego ziarna ślady „by wylądowało” (bez symulacji)", ghost.marks >= 10, ghost);
     await t.eval(`(function(){ const m = MorzePotwory.marks.list().find(x => x.kind === "track"); $gamePlayer.locate(Math.round(m.x), Math.round(m.y)); return 0; })()`);
     await t.frames(90);
     const seen = await J("Object.keys(Morze.state().slady)");
-    t.check("obejrzenie śladów (podejście na 2,6 pola) liczy ślad tej mapy do rozdziału 1 (3 brzegi)", seen.includes("3"), seen);
+    t.check("obejrzenie śladów (podejście na 2,6 pola) liczy ślad tego ranka do rozdziału 1 (trzy poranki na jednym brzegu)", seen.some(k => /^219:/.test(k)), seen);
 
     // ---------------------------------------------------------------- N. rozmowy rozdziałów (talkFor: kto mówi w którym kroku)
     const plain = x => String(x || "").replace(/\SPK\[\d+\]/g, "").replace(/\s+/g, " ");
@@ -346,7 +358,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         return { ok: true, text: plain(out.log.map(l => l.t).join(" / ")), missing: out.missing };
     }
     await clearAll();
-    await t.go(8, 51, 31, 2);
+    await t.go(220, 43, 37, 2);
     await night(30, 11);
     const reset = (step, extra) => t.eval(`(function(){ const s = Morze.state(); Object.assign(s, { start: 1, slady: {}, zapisy: {}, zapisy3: {}, kleofas: 0, kapitanPokonany: 0, kleofasZnak: 0, koniec: 0, znak: 0 }, ${JSON.stringify(extra || {})}); const r = TownQuests.rec("W23") || TownQuests.start("W23"); r.s = "active"; r.step = ${step}; return 0; })()`);
     await reset(0);
@@ -377,11 +389,11 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await clearAll();
     await t.eval(`(function(){ const s = Morze.state(); Object.assign(s, { start: 1, znak: 0, znakScena: 0, kapitanForce: 0, forceKapitan: 1, kapitanPokonany: 0, kleofasZnak: 0 }); const r = TownQuests.rec("W23") || TownQuests.start("W23"); r.s = "active"; r.step = 4; return 0; })()`);
     await night(41, 22.5);
-    await t.go(1, 20, 20, 2);
+    await t.go(1, 14, 30, 2);
     await t.frames(900);
     const scene = await J(`({ scena: Morze.state().znakScena, force: Morze.state().kapitanForce })`);
     t.check("noc po dniu 40 przy aktywnym rozdz. 5: w tawernie scena (Borgar, Melia, Ozzy słyszą marsz pod drzwiami), potem kapitan z chorągwią czeka w mieście", scene.scena > 0 && scene.force === 1, scene);
-    await t.go(8, 98, 44, 2);
+    await t.go(220, 40, 22, 2);
     await t.frames(600);
     const gate = await J(`MorzePotwory.seaList().map(c => c._kind)`);
     t.check("po wyjściu z tawerny kapitan z chorągwią pojawia się w mieście (jeden, ze straży miejskiej do pomocy)", gate.includes("kapitan_szkieletow") || (await J("!!Morze.landing")), gate);

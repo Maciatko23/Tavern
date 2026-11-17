@@ -1,0 +1,554 @@
+# Teksty wątku W17 „Jarmark Kruczogrodu” (wtyczki Jarmark_Data.js, Jarmark.js, Jarmark_Sceny.js) - docs/zadania_nowe/jarmark.md.
+# Dni 47-53: stragany, beczki, lampiony, otwarcie, konkurs piwny, turniej w kości, sztuka trupy na rynku, kradzież Srebrnego Kruka,
+# śledztwo i nocny pościg po dachach. Ton: ciepły, z humorem, z nutą goryczy. Bohater jest nastolatkiem: dorośli mówią do niego
+# „chłopcze”. „> ” - mówi bohater; bez tego - postać, z którą się rozmawia. {nazwa} - wstawia gra.
+
+# ======================================================================== zadanie W17 (dziennik: FABUŁA)
+zadania.W17.title = Jarmark Kruczogrodu
+zadania.W17.where = ratusz, rynek, Sukiennice, tawerna, dachy przy dzwonnicy
+zadania.W17.when = dni 47-53
+zadania.W17.desc = Raz w roku, pod koniec lata, Kruczogród urządza Jarmark: kramy, beczki z browaru, konkurs piwny i turniej w kości w tawernie, a wieczorami wędrowna trupa gra na rynku „Legendę o Kruku i Wilku”. Sołtys Bronisław liczy na twoje ręce. Ale trzeciego dnia z poduszki obok sceny zniknie Srebrny Kruk Założycieli - i ktoś będzie musiał go odnaleźć.
+zadania.W17.fail.text = Jarmark odbył się bez ciebie. Kruk zniknął, a Lord zamknął rynek w południe ostatniego dnia.
+zadania.W17.steps.0.text = Sołtys Bronisław szuka rąk do roboty przy jarmarku (ratusz, dzień 47 i dalej, 8-18). Powiedz mu, czy pomożesz.
+zadania.W17.steps.1.text = Przygotowania do dnia 49, do 10:00: kramy ({kramy}/6 stanowisk na rynku), beczki z browaru, lampiony (8 słupów, od wieczora). Zrobione prace: {prace}/3.
+zadania.W17.steps.2.text = Dzień 49: jarmark otwarty o 14:30 na rynku. Można popatrzeć na pochód od wschodniej bramy.
+zadania.W17.steps.3.text = Dzień 49, 19-21, w tawernie: konkurs piwny Borgara z Mietkiem Kwaśniakiem. Czterech sędziów, każdy lubi coś innego. Rozmowy w mieście podpowiadają co.
+zadania.W17.steps.4.text = Dni 50-51, w tawernie (sala gier), 17-23: turniej w kości. Trzy mecze, wpisowe 20 G. Zapisz się u Borgara. Mecz {mecz}/3.
+zadania.W17.steps.5.text = Dzień 51: sztuka trupy na rynku o 19:00. Można pomóc trupie (kostium, żar, peruka), od 13:00. Wieczorem warto stać pod sceną.
+zadania.W17.steps.6.text = Srebrny Kruk zniknął! Pięć miejsc, pięć śladów: Sukiennice, Cech, garbarnia, łaźnia, przytułek. Potrzeba co najmniej trzech. Znaleziono: {slady}/5.
+zadania.W17.steps.7.text = Dzień 52, od 23:30: zasadzka przy dzwonnicy. Sołtys czeka na południe od wieży. Złodziej ucieka po dachach.
+zadania.W17.steps.8.text = Dzień 53: sołtys czeka na twoją decyzję - co z Marcelem. W południe Lord zamyka jarmark.
+
+kroki.tak = tak
+kroki.nie = jeszcze nie
+
+# ======================================================================== imiona
+imiona.soltys = Sołtys Bronisław
+imiona.kapral = Kapral Wit
+imiona.lord = Lord Zaleski
+imiona.teodor = Teodor
+imiona.hanka = Hanka Mączna
+imiona.ambrozy = Ambroży
+imiona.wit = Kapral Wit
+imiona.ofelia = Madame Ofelia Sroka
+imiona.pimpek = Pimpek
+imiona.zar = Zygfryd Żar
+imiona.bonawentura = Bonawentura Wąs
+imiona.ania = Ania Szpilka
+imiona.szept = Szept
+imiona.marcel = Marcel Wełna
+imiona.mietek = Mietek Kwaśniak
+imiona.wanda = Wanda Ósemka
+imiona.strazA = Halabardnik
+imiona.strazB = Halabardnik
+imiona.dziecko0 = Dziecko z kwiatami
+imiona.dziecko1 = Dziecko z kwiatami
+imiona.dziecko2 = Dziecko z kwiatami
+
+# ======================================================================== przedmioty (wirtualne, nie do sprzedaży)
+przedm.deska = Deska na kram
+przedm.obrecz = Obręcz do beczki
+przedm.lampion = Lampion jarmarczny
+przedm.kruk = Srebrny Kruk Założycieli
+przedm.bilet = Bilet z promu (z kieszeni Marcela)
+
+# ======================================================================== napisy
+napis.zloto = +{n} G
+napis.koszt = -{n} G
+napis.jarmark = Jarmark
+napis.otwarty = Jarmark otwarty
+napis.otwartyPod = Pięć dni kramów, piwa i kości
+napis.kradziez = Kruk zniknął w ciemności
+napis.kradziezPod = Rynek zamknięty. Zacznij od Sukiennic
+napis.dzwon = Dzwon bije alarm: dwa uderzenia i cisza
+napis.zapalone = Rynek świeci jak w dzień
+napis.zapalonePod = Osiem lampionów zapalonych
+
+# ======================================================================== dotyk
+dotyk.kram = > (Stragan jarmarczny. Jeszcze pusto - kupcy z promu rozłożą towar.)
+dotyk.lampa = > (Lampion na słupie. Zapalą go wieczorem.)
+dotyk.poduszka = > (Czerwona poduszka. Srebrny Kruk leży na niej jak żywy.)
+
+# ======================================================================== J1: sołtys
+[soltys.prosba]
+Chłopcze! Dobrze, że jesteś. Za dwa dni jarmark. Raz w roku, pod koniec lata, całe miasto stawia kramy pod arkadami Sukiennic.
+Mam trzy prace: sześć kramów na rynku, cztery beczki z browaru Borgara i osiem lampionów na słupach. Ręce mam dwie, a Teodor liczy tylko pieniądze.
+Pomożesz? Zapłacę po dwanaście groszy za każdą pracę.
+
+soltys.opcja.tak = Pomogę.
+soltys.opcja.nie = Nie teraz.
+[soltys.tak]
+Wiedziałem! Deski weź od Leona Dłuta, obręcze od kołodzieja Szczepana, lampiony od kaprala Wita. Beczki zawiezie Borgar.
+Lampiony wieszamy wieczorem, kiedy robi się ciemno. I nie spóźnij się, najpóźniej do dziesiątej rano w dzień otwarcia.
+
+[soltys.nie]
+Szkoda. Zostanie ci przedstawienie i piwo. Ale jak zmienisz zdanie, wiesz, gdzie mnie znaleźć. Do dnia otwarcia.
+
+[soltys.praceGotowe]
+Wszystko stoi, chłopcze. Kramy, beczki, lampiony. Miasto ci się odwdzięczy. Do zobaczenia na otwarciu.
+
+[soltys.prace]
+Jak idzie? Kramy: {kramy} z 6. Beczki Borgara: {beczki}. Lampiony: {lampy} z 8 powieszonych. Dziesiąta rano dnia otwarcia, nie później.
+
+# ======================================================================== J2-J4: prace
+[dluto.deski]
+Deski na kramy? Sześć sztuk. Sosna, sucha, bez sęków. Weź i nie zgub, bo następnych nie mam.
+Stawiasz w żółtych romboczkach na rynku. Młotek jest przy każdym - chyba że go ktoś pożyczył. Bywa.
+
+[dluto.juz]
+Deski już masz. Reszta to stolarka, której ci nie oddam.
+
+[kolodziej.obrecze]
+Obręcze do czterech beczek. Cztery sztuki, żelazne, nowe. Zanieś je Borgarowi, bo on ma beczki, a ja mam obręcze. Tak się dzielimy robotą.
+
+[wit.lampiony]
+Osiem lampionów na osiem słupów. Wieszasz wieczorem, od piątej, kiedy zaczyna się ściemniać. Ognia nie dotykaj, są już zapalone.
+
+[borgar.beczki]
+Obręcze? Dobrze. Beczki ustawię na rynku sam, a ty już nie biegaj. Piwa starczy na pięć dni, a jeśli nie, to znaczy, że piłem je ja.
+
+temat.beczki = Borgarze, mam obręcze od Szczepana.
+
+prace.brakDesek = Nie masz deski na kram
+prace.kramPostawiony = Stragan stoi ({n}/6)
+prace.zaWczesnie = Jeszcze widno. Lampiony od piątej
+prace.brakLampionow = Nie masz lampionu
+prace.lampaPowieszona = Lampion zawieszony ({n}/8)
+prace.deskiWziete = Sześć desek na kramy
+prace.obrecze = Cztery obręcze do beczek
+prace.lampiony = Osiem lampionów
+prace.brakObreczy = Brakuje obręczy
+prace.beczki = Beczki Borgara jadą na rynek
+
+# ======================================================================== J6: konkurs piwny
+temat.konkurs = Borgarze, konkurs piwny. Zaczynamy?
+[borgar.konkurs]
+Siadaj, chłopcze. Cztery krzesła, czterech sędziów, dwa piwa: moje i Mietka Kwaśniaka. Każdy sędzia dostanie kufel. Ty wybierasz, co dodasz do mojego piwa.
+Do wyboru: miód, dym z wędzonego słodu, coś ostrego albo szyszka sosnowa. Rozmawiaj z ludźmi: każdy mówi, co lubi.
+
+borgar.opcja.start = Zaczynamy.
+borgar.opcja.chwila = Za chwilę.
+borgar.pozniej = Tylko się nie spóźnij. Konkurs jest do dziewiątej wieczorem.
+[borgar.konkursJuz]
+Konkurs to już historia. Mietek jeszcze długo nie wypije własnego piwa bez krzywej miny.
+
+konkurs.wSali = Konkurs odbywa się w sali tawerny
+[konkurs.otwarcie]
+Szanowni sędziowie! Dwa piwa: Borgara z Kruczego Jaru i Mietka Kwaśniaka. Trzy głosy dla jednego i piwo jest wasze. Zaczynamy!
+
+konkurs.sedzia.hanka = Hanka Mączna: „Kufel poproszę. I dodatek, chłopcze, bo piwo bez niczego smakuje jak mokry chleb.”
+konkurs.sedzia.ambrozy = Ambroży: „Dzwon... Kiedy piję, myślę o dzwonie. Co dodasz?”
+konkurs.sedzia.wit = Kapral Wit: „Jestem żołnierzem. Piwo ma gryźć. Dawaj.”
+konkurs.sedzia.teodor = Teodor: „Lord Zaleski nie może być tu osobiście. Ja piję w jego imieniu.”
+konkurs.dod.miod = Miód
+konkurs.dod.dym = Dym z wędzonego słodu
+konkurs.dod.ostry = Coś ostrego (korzeń)
+konkurs.dod.szyszka = Szyszka sosnowa
+konkurs.dobry.hanka = Słodko! Jak u mamy
+konkurs.dobry.ambrozy = Czuć dym... Dzwon
+konkurs.dobry.wit = Gryzie! Dobre
+konkurs.dobry.teodor = Szyszka. Lord by się uśmiechnął
+konkurs.zly.hanka = Za mało słodkie
+konkurs.zly.ambrozy = Hm. Nie to
+konkurs.zly.wit = Cieniutkie jak woda
+konkurs.zly.teodor = Nie pasuje
+[konkurs.wynik.wygrana]
+Cztery... nie, trzy głosy! Piwo Borgara wygrywa! Mietek, kufel jest twój. Wypij go sam, dla nauki!
+
+[konkurs.wynik.remisWygrana]
+Dwa do dwóch. Remis! Rozstrzygam ja, sołtys: „Za Borgara!” Bo ten chłopak dobrze pracuje i ma u mnie głos.
+
+[konkurs.wynik.remisPrzegrana]
+Dwa do dwóch. Remis! Rozstrzygam ja: Mietek. Ale Borgar, nie smuć się, piwo było mocne.
+
+[konkurs.wynik.przegrana]
+Wygrywa Mietek Kwaśniak. Ledwie. Ale wygrywa. Borgarze, w przyszłym roku dodaj szyszkę.
+
+# plotki o sędziach (rozmowy w mieście, dni 47-49)
+[plotka.hanka]
+Konkurs piwny? Ja jestem sędzią! Powiem ci coś: lubię słodkie. Miód to miód, chłopcze.
+
+[plotka.ambrozy]
+Piwo na jarmark... Mnie dym przypomina dzwon. Ale tego nie piszesz nigdzie.
+
+[plotka.wit]
+Piwo ma być ostre. Nie jak woda. Żołnierz pije dla smaku, a nie dla zdrowia.
+
+[plotka.teodor]
+Co lubi Lord? Szyszki. Nie pytaj, nie wiem dlaczego. Ale zawsze podaje je do herbaty.
+
+# ======================================================================== J7: turniej w kości
+temat.turniej = Borgarze, turniej w kości.
+[borgar.turniej]
+Turniej w kości. Ośmiu graczy, wpisowe dwadzieścia groszy, pula sto sześćdziesiąt, czterdzieści dla sołtysa. Trzy mecze. Wygrywa jeden.
+Gra Wanda Ósemka, nowa na wyspie. Podobno ma szczęście. Podobno.
+
+[borgar.turniejMecz]
+Jesteś zapisany. Kolejny mecz czeka. Pamiętaj: kości nie wolno zmieniać w trakcie.
+
+borgar.opcja.wpisz = Zapisz mnie (20 G).
+borgar.opcja.mecz = Gram kolejny mecz.
+borgar.opcja.kosc = Pokaż kość Wandy.
+borgar.opcja.pozniej = Później.
+turniej.brakZlota = Nie masz {n} G na wpisowe
+turniej.przegrana = Odpadasz z turnieju
+turniej.dalej = Mecz wygrany. Zostało {n}/3
+turniej.kosc = Kość Wandy jest fałszywa
+turniej.koscPod = Ma oznaczoną ściankę i ołów
+[turniej.wygrana]
+Puchar jest twój, chłopcze. Sto dwadzieścia groszy i Kość Kruczogrodu. Wanda odjeżdża w hańbie.
+
+# ======================================================================== J8: trupa
+[pomoc.szwaczka]
+Kostiumy dla trupy? Dwa, jeszcze mokre od farby. Zanieś je Ofelii. Powiedz jej, że to z mojej ręki, nie od Bonawentury.
+
+[pomoc.kowal]
+Żar dla połykacza? Haki do żaru, obręcze, pogrzebacz. Zanieś Zygfrydowi, ale ostrożnie: palce mam jedne.
+
+[pomoc.piekarka]
+Peruka dla Bonawentury? Z lnu, obtoczona w mące. Ma dobrze wyglądać na scenie, a w deszczu nie ma wyglądać wcale.
+
+pomoc.napis = Pomoc dla trupy ({n}/3)
+
+# trupa (rozmowy na rynku)
+[ofelia.rozmowa]
+Chłopcze! Madame Ofelia Sroka, dyrektor Sroczego Teatru! Gramy dziś wieczór: „Legenda o Kruku i Wilku”. Przyjdź o siódmej, pod scenę. Stań z przodu.
+
+[ofelia.wskazowka]
+Pomogłeś nam. Powiem ci coś: ktoś kręcił się za sceną wczoraj. Zielona świeca. Nikt z nas nie ma zielonych. Pamiętaj.
+
+[ofelia.po]
+Rozwalony wieczór! Mój teatr! Kruk zniknął, a ja jestem winna sołtysowi sto groszy kaucji. Znajdź go, chłopcze.
+
+[pimpek.rozmowa]
+Jestem Pimpek! Żongluję, grzechoczę zębami jak klawiszami. Trzy piłki, cztery, pięć! Chcesz zobaczyć sześć? Poproś o kolejną pensję.
+
+[pimpek.po]
+Ktoś ukradł Kruka! Ja żongluję, nie kradnę. Co najwyżej piłki.
+
+[zar.rozmowa]
+Zygfryd Żar. Połykam ogień. Dziś wieczorem, w trzecim akcie. Brwi mam spalone od dzieciństwa, nie pytaj.
+
+[zar.po]
+Podmuch zgasił pochodnie... a potem ktoś krzyknął. Nie widziałem twarzy. Widziałem tylko cień, niski, szybki.
+
+[bonawentura.rozmowa]
+Bonawentura Wąs, pierwszy aktor Sroczego Teatru. Gram rycerza, który nie boi się niczego, poza własnym odbiciem. Doskonały wieczór na przedstawienie.
+
+[bonawentura.po]
+Ja? Nie ja! Byłem na scenie, w oczach tłumu! Rycerz nie kradnie. Rycerz... znajduje. Ale tego nie znalazłem.
+
+[ania.rozmowa]
+Ania Szpilka. Gram Wilka. Futro jest ciężkie, a wycie trzeba umieć. Chcesz posłuchać? Auuu!
+
+[ania.po]
+Słyszałam kroki za sceną, takie lekkie. Jakby ktoś bosą stopą. Nie wiem, kto.
+
+[szept.przed]
+Cicho, cicho. Jestem sufler. Szept. Siedzę za sceną i podpowiadam. Nie ma mnie. Nie ma.
+
+[wanda.rozmowa]
+Wanda Ósemka. Gram w kości, a kości grają dla mnie. Szczęście, chłopcze, to rzecz, którą trzeba mieć w kieszeni. Zapisałeś się na turniej?
+
+[wanda.zdemaskowana]
+Dobrze, dobrze, kość była... pożyczona. Zlecenie to zlecenie. Nie patrz tak. Jutro mnie tu nie będzie.
+
+[marcel.rozmowa]
+Marcel Wełna, kupiec sukienny z kontynentu. Sukno, wełna, len. Chłopcze, czy w tych stronach pytają o kruki? Bo ja, mimochodem, pytam.
+
+[marcel.po]
+Kradzież! Skandal! Kruk Założycieli... Cóż za strata dla miasta. Chętnie pomogę, jeśli mogę. Gdzie mogę pomóc?
+
+# ======================================================================== S1: otwarcie
+[pochod.dzwon]
+Jarmark! Jarmark Kruczogrodu!
+
+[pochod.lord]
+Niech jarmark będzie sprawiedliwy, a piwo mocne!
+
+[pochod.soltys]
+Od dziś pięć dni, dobrzy ludzie! Kto ma towar, niech sprzedaje. Kto ma pieniądze, niech wydaje!
+
+[pochod.ofelia]
+Brawo! Brawo! Wieczorem sztuka, oczywiście, za półtora grosza!
+
+[notatki.otwarcie]
+Jarmark otwarty
+Lord Zaleski otworzył jarmark na rynku. Pięć dni kramów, piwa i kości. Wieczorem trupa Ofelii gra „Legendę o Kruku i Wilku”.
+
+# ======================================================================== S3 / S4: sztuka i kradzież
+[sztuka.ofelia]
+Szanowni państwo! Sroczy Teatr przedstawia: „Legenda o Kruku i Wilku”! Wielka historia, wielka miłość i jeszcze większe fałdy!
+
+[sztuka.akt1.ania]
+Auuu! Jam jest Wilk! Pilnuję Kruka srebrnego od wieków!
+
+[sztuka.akt1.bonawentura]
+Stój, bestio! Jam jest Rycerz Bez Strachu. Przyszedłem po Kruka!
+
+[sztuka.akt2.pimpek]
+Hop! Hop! Hop! Trzy piłki, cztery, pięć!
+
+[sztuka.akt2.zar]
+Oooo! Płomień z gardła! Patrzcie!
+
+[sztuka.ambrozy]
+Prawdziwy Kruk leży na poduszce. Dla scenerii. Ofelia obiecała, że go nie dotknie.
+
+[sztuka.akt3.ania]
+Oddaj mi Kruka, rycerzu!
+
+[sztuka.akt3.bonawentura]
+Ani kroku! Kruk jest mój!
+
+[sztuka.plomien]
+Teraz największy płomień!
+
+[sztuka.ciemno]
+Co się dzieje? Pochodnie gasną!
+
+[sztuka.krzyk]
+Aaa! Ktoś mnie szturchnął!
+
+[sztuka.pusta]
+Poduszka... pusta! Kruka nie ma!
+
+[sztuka.ofeliaKrzyk]
+Zamknąć bramy! Nikt stąd nie wyjdzie!
+
+[notatki.kradziez]
+Kruk zniknął w ciemności
+Podczas przedstawienia zgasły pochodnie i z poduszki zniknął Srebrny Kruk Założycieli. Bez niego jarmark straci przywilej: w południe dnia 53 Lord go zamknie. Pięć miejsc, pięć śladów: Sukiennice, Cech, garbarnia, łaźnia, przytułek.
+
+# ======================================================================== J9: ślady
+[slad.gablota]
+> (Gablota w Sukiennicach otwarta kluczem, nie wyłamana. Sznur kotary przecięty, a na posadzce kropla zielonego wosku. Teatralna świeca. Ktoś z trupy.)
+
+[slad.cech]
+> (Rejestr cechu: „Dorobiony klucz do gabloty - pan w sukiennej chuście, zapłacił srebrnym groszem z orłem.” Moneta z kontynentu. Kupiec sukienny.)
+
+[slad.garbarnia]
+> (W kadzi z garbnikiem ktoś wyprał szary, wyświechtany płaszcz z białą szminką. Pachnie dębiną. Płaszcz suflera.)
+
+[slad.laznia]
+> (Łaźnik mówi: „Rano mył się u nas facet z białymi śladami na twarzy i prosił o mydło do farby.” Szminka teatralna. Szept.)
+
+[slad.przytulek]
+> (Ciotka Stefa: „Matka Szepta, Berta, mieszka u nas. Dach jej opłaca jakiś kupiec. Rachunki ma sufler w kieszeni.” Dlatego kradnie.)
+
+[slad.ofelia]
+> (Zielona świeca. Nikt z trupy nie ma zielonych. Ktoś z zewnątrz był za sceną.)
+
+slad.napis = Poszlaka
+slad.pod = Znaleziono {n}/5
+[soltys.sledztwo]
+Zamknąłem rynek, chłopcze. Do rana nikt nie wyjedzie. Pięć miejsc, pięć śladów: Sukiennice, Cech, garbarnia, łaźnia, przytułek. Znalazłeś {n} z pięciu. Potrzeba trzech.
+
+[notatki.slad.gablota]
+Ślad: gablota w Sukiennicach
+Gablota otwarta kluczem, nie wyłamana. Przecięty sznur kotary i zielona kropla wosku: teatralna świeca. Ktoś z trupy.
+
+[notatki.slad.cech]
+Ślad: rejestr cechu
+Zamkarz zapisał: dorobiony klucz do gabloty dla pana w sukiennej chuście. Zapłacił srebrnym groszem z orłem. Moneta z kontynentu: Marcel Wełna.
+
+[notatki.slad.garbarnia]
+Ślad: płaszcz w kadzi
+W garbarni ktoś wyprał szary płaszcz suflera z białą szminką. Ślad prowadzi do Szepta.
+
+[notatki.slad.laznia]
+Ślad: łaźnia
+Rano w łaźni mył się człowiek z białymi śladami na twarzy. Prosił o mydło do farby. Szept.
+
+[notatki.slad.przytulek]
+Ślad: przytułek
+Matka Szepta, Berta, mieszka w przytułku. Dach opłaca jej kupiec, rachunki ma sufler. Szept kradnie, bo matka zginie bez dachu.
+
+[notatki.slad.ofelia]
+Ślad: zielona świeca
+Ofelia: za sceną kręcił się ktoś z zewnątrz, z zieloną świecą. Nikt z trupy takich nie ma.
+
+# ======================================================================== J10: zasadzka i pościg
+[zasadzka.dobrze]
+Chłopcze, mamy trzy ślady z pięciu, a nawet więcej: {n}. Szept ma Kruka i czeka na dachach. Wiemy, którędy pójdzie: od dużego domu, po dwóch nowych kamienicach, na dzwonnicę. Idź za nim.
+
+[zasadzka.slabo]
+Znalazłeś tylko {n} ślady. Za mało, ale czasu nie ma. Szept już na dachach. Idź za nim. Ma nad tobą przewagę, bo stracił cię z oczu.
+
+pogon.szept.biegnie = Nie dogonisz mnie, chłopcze! Dachy znam jak własną kieszeń!
+pogon.szept.biegnie2 = Nie ma cię! Zgubiłeś się! Ha!
+pogon.start = Pościg po dachach
+pogon.startPod = Strzałki - ruch, OK - skok. Nie spadnij
+pogon.upadek = Spadasz na ulicę! +{n} s
+[pogon.meta.1]
+> Szept! Stój! Dalej nie uciekniesz!
+
+[pogon.meta.2]
+Dobrze... masz mnie. Kruk jest cały. Ja go nie sprzedam. Biorę go, bo matka zginie bez dachu.
+
+[pogon.meta.3]
+Kupiec płaci jej czynsz. Powiedział: „Kruk za dach.” Kto by odmówił? Ty? Zrób, co chcesz, chłopcze.
+
+pogon.opcja.kapral = Oddać go kapralowi.
+pogon.opcja.wolny = Puścić go.
+pogon.opcja.swiadek = Zostaje świadkiem.
+[pogon.kapral]
+> Kapral zadecyduje. Oddaj Kruka i idziesz do Wita.
+
+[pogon.wolny]
+> Idź. Kruka biorę, a ty znikasz, zanim wzejdzie słońce.
+
+[pogon.swiadek]
+Zostanę. Powiem sołtysowi wszystko: o kupcu, o bilecie z promu, o rachunkach. Tylko nie odbieraj matce dachu.
+
+pogon.kruk = Srebrny Kruk jest u ciebie
+pogon.krukPod = Rano zanieś go na rynek
+pogon.koniec = Pościg skończony: {c} s, upadków {u}
+pogon.koniecPod = Rano sołtys czeka na decyzję
+pogon.uciekl = Szept uciekł z Krukiem
+[notatki.pogon]
+Pościg po dachach
+Szept z Krukiem ucieka po dachach: duży dom, dwie nowe kamienice, dzwonnica. Strzałki - ruch, OK - skok przez szczelinę. Kto spadnie, traci piętnaście sekund.
+
+[notatki.pogonKoniec]
+Kruk odzyskany
+Dogoniłem Szepta na dachu dzwonnicy. Kruk jest u mnie. Rano sołtys zapyta, co zrobić z Marcelem.
+
+# ======================================================================== J11: rano
+[rano.start]
+Chłopcze, Kruk wrócił. Znalazłeś {n} ślad(y) z pięciu. Co zrobimy z Marcelem Wełną? Może oskarżymy go przed Lordem. Może nie.
+
+rano.opcja.oskarz = Oskarżyć go przed Lordem.
+rano.opcja.szantaz = Wziąć od niego osiemdziesiąt groszy za milczenie.
+rano.opcja.puscic = Puścić go.
+[rano.oskarz]
+> Oskarżam Marcela Wełnę: klucz, moneta, rachunki matki. Szept to potwierdzi.
+
+[rano.oskarzSlabo]
+> Oskarżam Marcela. (Ale dowodów brak: ślady i świadek nie wystarczą.)
+
+[rano.szantaz]
+> Marcel, osiemdziesiąt groszy, a nikt nie dowie się, kto zlecił kradzież.
+
+[rano.puscic]
+> Niech odpłynie promem. Ma dość strachu na całe życie.
+
+[notatki.rano]
+Decyzja w sprawie Marcela
+Powiedziałem sołtysowi, co zrobić z Marcelem Wełną. W południe Lord zamyka jarmark.
+
+zamk.lord = Jarmark Kruczogrodu zamknięty! Przywilej zachowany, bo Kruk wrócił. Dziękuję wam wszystkim.
+zamk.soltys.A = Marcel Wełna aresztowany, Szept ułaskawiony jako świadek. Klucz, moneta i rachunki matki: wszystko się zgadza.
+zamk.soltys.B = Szept w dybach, Marcel odpływa promem. Brak dowodu, brak aresztu. Ale Kruk wrócił.
+zamk.soltys.C = Szept puszczony, matka zostaje w przytułku. Marcel odpłynie, jak będzie wolał. Kruk wrócił, i to się liczy.
+zamk.soltys.D = Kruk wrócił. O Marcelu... nie mówmy. Są rzeczy, o których miasto woli nie wiedzieć.
+zamk.ambrozy = Dwa uderzenia i cisza: jarmark kończy się jak zaczął.
+zamk.pimpek = Hop! Hop! Hop! Do zobaczenia za rok!
+zamk.ofelia.A = Dziękuję, chłopcze. Zagramy dla ciebie pożegnalny wieczór. Z Krukiem na poduszce i bez Szepta za kulisami.
+zamk.ofelia.inne = Dziękuję. Sroczy Teatr pakuje wóz i odpływa promem. Przyjedziemy za rok.
+zamk.napis.A = Pełny jarmark
+zamk.napis.B = Złodziej bez zleceniodawcy
+zamk.napis.C = Litość
+zamk.napis.D = Szantaż
+zamk.napisPod = Jarmark zamknięty
+
+# ======================================================================== zwrotka w brzuchu Kruka (hak do W3)
+kruk.zwrotka = W brzuchu Kruka była zwrotka
+kruk.zwrotkaPod = Melia z pewnością ją rozpozna
+[notatki.zwrotka]
+Zwrotka w brzuchu Kruka
+Srebrny Kruk miał w środku wąską skrytkę z kawałkiem starej zwrotki o Kruczych Skałach. Pokażę ją Melii, kiedy będzie zbierała pieśń.
+
+# ======================================================================== notatki
+[notatki.zlecenie]
+Jarmark Kruczogrodu
+Sołtys Bronisław poprosił o pomoc przy jarmarku: sześć kramów, cztery beczki, osiem lampionów. Wszystko do dziesiątej rano w dzień otwarcia (dzień 49).
+
+[notatki.kramy]
+Kramy stoją
+Sześć stanowisk pod arkadami Sukiennic gotowych na kupców z promu.
+
+[notatki.lampiony]
+Lampiony wiszą
+Osiem lampionów na słupach rynku. Wieczorem miasto świeci jak w dzień.
+
+[notatki.beczki]
+Beczki Borgara
+Cztery obręcze zaniosłem Borgarowi. Beczki pojadą na rynek.
+
+[notatki.prace]
+Wszystkie prace zrobione
+Kramy, beczki i lampiony gotowe. Sołtys będzie zadowolony.
+
+[notatki.pracePrzejete]
+Sołtys przejął resztę
+Nie zdążyłem ze wszystkim do dziesiątej. Sołtys znalazł innych do reszty roboty.
+
+[notatki.konkursWygrana]
+Konkurs piwny wygrany
+Piwo Borgara pokonało piwo Mietka Kwaśniaka. Sołtys dał czterdzieści groszy.
+
+[notatki.konkursPrzegrana]
+Konkurs piwny przegrany
+Wygrał Mietek. Borgar się nie gniewa, tylko burczy pod nosem o szyszkach.
+
+[notatki.turniej]
+Turniej w kości
+Wpisałem się na turniej: trzy mecze, ostatni z Wandą Ósemką. Wpisowe dwadzieścia groszy.
+
+[notatki.turniejWygrana]
+Turniej wygrany
+Sto dwadzieścia groszy z puli i Kość Kruczogrodu: ciężar na jedynce i piątce. Wanda odjechała w hańbie.
+
+[notatki.turniejPrzegrana]
+Odpadłem z turnieju
+Przegrałem mecz i odpadłem. Pula poszła do kogoś innego.
+
+[notatki.turniejWanda]
+Wanda zdemaskowana
+Kość Wandy była fałszywa: ołów i oznaczona ścianka. Wanda pracowała na zlecenie kupca z promu.
+
+[notatki.kosc]
+Kość Wandy
+Pokazałem kość Wandy. Fałszywa. Gra będzie uczciwa.
+
+[notatki.koniecA]
+Pełny jarmark
+Kruk wrócił, Marcel aresztowany, Szept ułaskawiony jako świadek. Opinia w mieście urosła. Trupa gra pożegnalny wieczór w tawernie.
+
+[notatki.koniecB]
+Złodziej bez zleceniodawcy
+Kruk wrócił, Szept w dybach, a Marcel odpłynął promem: brakło dowodów. Ambroży jest niespokojny.
+
+[notatki.koniecC]
+Litość
+Szept puszczony wolno, matka zostaje w przytułku, Marcel jednak na wolności. Czterdzieści groszy za odciągnięcie klątwy dachu.
+
+[notatki.koniecD]
+Szantaż
+Wziąłem od Marcela osiemdziesiąt groszy za milczenie. Straż Pewności będzie wiedziała, że w mieście pytają o kruki. Ambroży wie i milczy.
+
+[notatki.koniecF]
+Jarmark odwołany
+Kruka nie odzyskałem do południa dnia 53. Lord odwołał jarmark. Marcel zostaje czysty i wróci w innym zleceniu.
+
+# ======================================================================== F9 (Wyspa i fabuła, sekcja „Wątek W17”)
+f9.naglowek = Wątek W17 (Jarmark):
+f9.etykieta = W17: rozdział {ch} - {nazwa}
+f9.opis = ◀ ▶ rozdział, O - przeskok (dzień, godzina i miejsce; przygotowania zrobione na tyle, na ile trzeba)
+f9.brak = Nie da się tam przeskoczyć
+f9.nazwy.1 = zlecenie sołtysa (dzień 47)
+f9.nazwy.2 = prace (dzień 48)
+f9.nazwy.3 = otwarcie (dzień 49, 14:24)
+f9.nazwy.4 = konkurs piwny (dzień 49, 19:00)
+f9.nazwy.5 = turniej (dzień 50, 17:00)
+f9.nazwy.6 = sztuka (dzień 51, 18:48)
+f9.nazwy.7 = śledztwo (dzień 52)
+f9.nazwy.8 = pościg (dzień 52, 23:24)
+f9.nazwy.9 = rozstrzygnięcie (dzień 53)
+f9.stan = Udział w jarmarku: {n}
+f9.stanOpis = ◀ ▶ zgłoszony / widz / jeszcze nie
+f9.poszlaki = Poszlaki: {n}/5
+f9.poszlakiOpis = ◀ ▶ ile śladów już znalezionych (0-5)
+f9.finaly = Zakończenie: {n}
+f9.finalyOpis = ◀ ▶ A, B, C, D, F (ustawia zakończenie bez sceny)

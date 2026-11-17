@@ -73,7 +73,9 @@
     const T = window.Tawerna;
     if (!T) throw new Error("Przystan.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     const PLUGIN = "Przystan";
-    const MAP = 125, CUSTOMS = 128;
+    // (2026-11-16) the new world: the harbour is the pier of Słony Brzeg (Map219). No customs house there - Sambor hears a denouncement
+    // where he stands on the coast.
+    const MAP = 219, CUSTOMS = MAP;
     const ITEM = { fish: 98, herring: 173, cod: 174, scarf: 175, tar: 176, smokedFish: 106, rod: 100, iron: 86, steel: 143, bandage: 152 };
     const SELL = { 173: 4, 174: 7, 98: 3 };                 // what Janek pays a piece
     const BUY_SMOKED = 16;                                   // a smoked fish from Janek
@@ -594,13 +596,13 @@
     // The ferryman and the people off the ferry (ids 760-779, Map125) - there only while the ferry is (Przystan's update)
     // ------------------------------------------------------------------
     const PEOPLE = [
-        { id: 760, sheet: "$Npc_Kopacz", x: 11, y: 17, d: 2, who: "ferry", show: () => ferryNow() },
+        { id: 760, sheet: "$Npc_Kopacz", x: 21, y: 48, d: 2, who: "ferry", show: () => ferryNow() },
         // (2026-10-28) the first wave: Ludmiła and Ela come off the ferry (docs/PODROZNI.md 5.2) - fala1: their sheets and words that day
-        { id: 761, sheet: "$Npc_Bogdan", x: 15, y: 16, d: 6, who: "refugee", show: () => waveNow(), fala1: { who: "ludmila", sheet: "$Npc_Ludmila" } },
-        { id: 762, sheet: "$Npc_Halina", x: 16, y: 16, d: 4, who: "refugee", show: () => waveNow(), fala1: { who: "ela", sheet: "$Npc_Ela" } },
+        { id: 761, sheet: "$Npc_Bogdan", x: 27, y: 47, d: 6, who: "refugee", show: () => waveNow(), fala1: { who: "ludmila", sheet: "$Npc_Ludmila" } },
+        { id: 762, sheet: "$Npc_Halina", x: 28, y: 47, d: 4, who: "refugee", show: () => waveNow(), fala1: { who: "ela", sheet: "$Npc_Ela" } },
         // (W10) the mother's voice: never seen, never started - the letters' speaker (her bust, the plate "Matka"); moved beside the
         // hero as a letter is read (act w10Open)
-        { id: MOTHER, sheet: "$Npc_Halina", x: 12, y: 18, d: 2, who: "mother", show: () => false,
+        { id: MOTHER, sheet: "$Npc_Halina", x: 24, y: 49, d: 2, who: "mother", show: () => false,
           note: "<Bust:Matka_Bust><BustName:Matka>" }
     ];
     Watki.scal(PEOPLE, "przystan", "ludzie");   // (its words: js/teksty/przystan.txt, ludzie)
@@ -738,7 +740,7 @@
             if (k === null) { say(TX.f9.noQuests, true); return false; }
             if (k === 0) { say(TX.f9.allIn, true); return false; }
             $gameTemp._w10Play = k;
-            $gamePlayer.reserveTransfer(MAP, 110, 19, 4, 0);   // (2026-10-18: the harbour doubled to 112x80 - one inside its east edge)
+            $gamePlayer.reserveTransfer(MAP, 78, 45, 4, 0);   // (2026-11-17: Słony Brzeg, Map219 (80x80) - on the road in from Podgrodzie, one inside its east edge)
             SoundManager.playOk();
             this.popScene();
             return true;

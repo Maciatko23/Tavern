@@ -46,7 +46,7 @@
         // first. Weak alone, a nuisance together: Szeroki zamach (Walka wręcz) mows them down.
         szczur: {
             look: "Rat", floors: [1, 30], swarm: [2, 4], swarmPer: 15,
-            hp: 14, poise: 8, stun: 36, radius: 0.32, lv: -1, xp: 4, cell: 68, scale: 0.8,
+            hp: 14, poise: 8, stun: 36, radius: 0.32, lv: -1, xp: 8, cell: 68, scale: 0.8,
             attr: { base: { str: 3, dex: 9, con: 3, per: 8, wil: 1 }, grow: { str: 0.4, dex: 0.6, con: 0.35, per: 0.4, wil: 0.1 } },
             speed: 4.3, chase: 4.7, sight: 6, turn: 0.35, attackers: 2, ring: 1.6,
             moves: { bite: { dmg: 4, poise: 4, reach: 1.05, cone: 0.35, at: 1.3, windup: 16, hitAt: 3, strike: 12, recover: 34, lunge: 0.8, wound: 0.06, knock: 0.12 } },
@@ -55,7 +55,7 @@
         // GIANT SPIDER: keeps 3-5 tiles off and spits a web (a grey lump - a roll or a step aside, a shield stops it; it sticks: the hero walks
         // slowly a while, and the web stays on the floor - stepping in it slows too), then rushes in to bite (poison - a wound) and springs back.
         pajak: {
-            look: "Spider", floors: [1, 50], hp: 50, poise: 30, stun: 50, radius: 0.5, lv: 0, xp: 25, cell: 80,
+            look: "Spider", floors: [1, 50], hp: 50, poise: 30, stun: 50, radius: 0.5, lv: 0, xp: 30, cell: 80,
             attr: { base: { str: 6, dex: 9, con: 5, per: 9, wil: 3 }, grow: { str: 0.6, dex: 0.9, con: 0.6, per: 0.6, wil: 0.2 } },
             speed: 3.8, chase: 4.4, sight: 7, turn: 0.18, keep: [2.8, 5.2],
             moves: {
@@ -64,14 +64,15 @@
             },
             loot: [[ITEM.fibre, 0.7, 3], [ITEM.rope, 0.12, 1]], gold: [0, 0, 0], remains: "spider"
         },
-        // EMPTY ARMOUR: slow and heavy. A light blow from the front only rings on the plate (15% of it, no balance) - a heavy blow, a blow
+        // EMPTY ARMOUR: slow and heavy. A light blow from the front rings on the plate (half of it, no balance - 2026-11-17 the user:
+        // "niech zbroja od przodu dostaje 50% obrażeń", it was 15%) - a heavy blow, a blow
         // in the back or from hiding counts in full. It turns slowly: get behind it. Two blows: the cut and the overhead (breaks the guard).
         // Felled the first time it falls into pieces and gets up again (40% of its life) - unless the pile is hit while it lies.
         zbroja: {
             look: "Armor", floors: [11, 30, 51, 75], hp: 120, poise: 90, stun: 60, radius: 0.5, lv: 0, xp: 45, cell: 96,
             attr: { base: { str: 9, dex: 2, con: 12, per: 4, wil: 12 }, grow: { str: 0.6, dex: 0.1, con: 1.2, per: 0.3, wil: 0.6 } },
             speed: 2.9, chase: 3.3, sight: 7, turn: 0.045,
-            plate: { light: 0.15, back: -0.3 },
+            plate: { light: 0.5, back: -0.3 },
             reassemble: { once: true, hp: 0.4, lie: 240, hits: 1 },
             moves: {
                 cut: { dmg: 16, poise: 50, reach: 1.85, cone: 0.3, at: 1.7, windup: 30, hitAt: 4, strike: 16, recover: 48, wound: 0.3, knock: 0.6 },
@@ -83,7 +84,7 @@
         // a shadow line on the floor where it will go - a roll or a step aside), then they hang low a moment: that is the time to hit.
         nietoperz: {
             look: "Bat", floors: [31, 50], swarm: [4, 6], swarmPer: 15,
-            hp: 9, poise: 6, stun: 40, radius: 0.35, lv: -1, xp: 4, cell: 64, scale: 0.85, flying: { high: 30, low: 8 },
+            hp: 9, poise: 6, stun: 40, radius: 0.35, lv: -1, xp: 8, cell: 64, scale: 0.85, flying: { high: 30, low: 8 },
             attr: { base: { str: 3, dex: 11, con: 2, per: 10, wil: 2 }, grow: { str: 0.4, dex: 0.8, con: 0.3, per: 0.5, wil: 0.1 } },
             speed: 4.6, chase: 5, sight: 8, turn: 0.4, divers: 2,
             moves: { dive: { dmg: 5, poise: 5, windup: 26, speed: 0.2, past: 1.6, low: 50, wound: 0.08, knock: 0.2, gap: [40, 100] } },
@@ -164,7 +165,12 @@
     // at most this many creatures on one floor (the markers in the floor's own order: a swarm counts each of its members)
     const MAX_PER_FLOOR = 22;
     // the place level when a floor's map has no <Poziom:N>: 4 on floor 1, +1 every 2 floors (as band 1's maps)
-    const LEVEL = { base: 4, perFloors: 2 };
+    // (2026-11-17, balance with the player: "rób wszystko") two levels lower from floor 1 (was base 4): floor 1-2 creatures of level 2,
+    // floor 10 of 6; the deep floors only two levels softer
+    const LEVEL = { base: 2, perFloors: 2 };
+    // (2026-11-17) a blow's wound chance (the moves' "wound") by depth: half on floors 1-10, then +5% of it a floor, the full chance from
+    // floor 20 (a spider's bite: 15% on 1-10 - it was 30%, and ten bites a floor made every trip down a wound)
+    const WOUND_DEPTH = { shallow: 10, k: 0.5, per: 0.05 };
     // what a level over 1 adds to a creature (the place's level - 4 on floor 1 ... 49 on floor 90): hp - life a level (a boss: bossHp),
     // poise - balance a level, dmg - its blows a level, str - its blows a point of Siła over 5 (the hero's own rate is 3.5%).
     // The balance check (tests/combat_balance.js, docs/WALKA.md "Próba sił", 2026-10-06): with the old rates (hp 12%, boss 6%, blows 10%
@@ -185,12 +191,13 @@
     // shorter than its riposte's wind-up, so the answer can be read); the last guard - `partDmg` (its shadows' blows, one at a time).
     // ---------------------------------------------------------------------------------------------------------------------------
     const BOSSES = {
-        guardian: { base: "zbroja", floor: 10, hp: 300, poise: 160, lv: 0, dmg: 1.0, xp: 250, scale: 1.25, tone: [-30, -30, -10, 40],
+        // (plateLight: the bosses made of an armour keep the old 15% from the front - only the plain empty armour went to 50%)
+        guardian: { base: "zbroja", floor: 10, hp: 300, poise: 160, lv: 0, dmg: 1.0, xp: 250, scale: 1.25, tone: [-30, -30, -10, 40], plateLight: 0.15,
             gold: [25, 40], loot: [[ITEM.steel, 1, 1], [ITEM.iron, 1, 2], [ITEM.bandage, 1, 2]] },
         // the prior's armour still leads the rite of the one question: a ring on the floor round him - every step the hero takes in it is a
         // question, and the third gets its answer (the staff comes down where he stands: roll); blows from outside the ring do not reach
         // him; he cannot be knocked off his feet (only a parry opens him)
-        boss_20: { base: "zbroja", look: "Prior", floor: 20, hp: 320, poise: 99999, lv: 1, dmg: 0.75, xp: 300, scale: 1.25, tone: null,
+        boss_20: { base: "zbroja", look: "Prior", floor: 20, hp: 320, poise: 99999, lv: 1, dmg: 0.75, xp: 300, scale: 1.25, tone: null, plateLight: 0.15,
             ring: { r: 3.4, steps: 3, keep: 2.2, staff: { dmg: 22, poise: 140, radius: 1.3, windup: 40, recover: 60 } },
             gold: [30, 60], loot: [[ITEM.steel, 1, 1], [ITEM.bandage, 1, 2], [ITEM.honey, 1, 1]] },
         // the rat queen in her nest: rams in a straight line (into the cistern's wall - she stands dazed), bites; hurt by a third and by two
@@ -243,5 +250,5 @@
     const MIND = {};
     Watki.scal(MIND, "stwory", "umysl");   // (its words: js/teksty/stwory.txt, umysl)
 
-    window.CreaturesData = { ITEM, KINDS, FACES, FIT, RESPAWN_DAYS, MAX_PER_FLOOR, LEVEL, GROW, BOSSES, QUESTIONS, TRUTHS, MIND };
+    window.CreaturesData = { ITEM, KINDS, FACES, FIT, RESPAWN_DAYS, MAX_PER_FLOOR, LEVEL, WOUND_DEPTH, GROW, BOSSES, QUESTIONS, TRUTHS, MIND };
 })();

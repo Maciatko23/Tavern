@@ -1,0 +1,2 @@
+before garnizon: 34/47 passed
+after garnizon: 34/47 passed

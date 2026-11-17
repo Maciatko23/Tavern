@@ -131,7 +131,9 @@ kit.test({ port: 9575, plugins: ["Ubior_Data", "Ubior"], evalTimeout: 90000 }, a
     meta.busts = [];
     for (const of of OUTFITS) {
         await t.eval(`Ubior.set(${JSON.stringify(of.o)}); 0`);
-        const want = ["glowa", "tors", "nogi", "stopy", "pas", "rece", "plecy"].map(k => (k === "glowa" || k === "tors") ? of.o[k] || "" : "").join("|");
+        // (the bust's key: a field per place of Ubior.ORDER - 2026-11-17 the cloak's added)
+        const order = await t.json("Ubior.ORDER");
+        const want = order.map(k => (k === "glowa" || k === "tors") ? of.o[k] || "" : "").join("|");
         const okB = await t.until(`(function(){ const b = Ubior.bust(); return !!(b && b.isReady() && Ubior.bustKey() === ${JSON.stringify(want)}); })()`, 20, 100);
         await t.frames(3);
         const url = await t.eval("Ubior.bust().canvas.toDataURL('image/png')");
@@ -151,7 +153,8 @@ kit.test({ port: 9575, plugins: ["Ubior_Data", "Ubior"], evalTimeout: 90000 }, a
     for (let i = 0; i < 6 && !(await t.eval("$gameMessage.allText().indexOf('Ładnie') >= 0")); i++) { await t.press("ok"); await t.frames(15); }
     await t.frames(60);
     await t.shot(path.join(SHOTS, "talk_A.png"));
-    const talk = await t.json(`(function(){ const b = Ubior.bust(), kit = Tawerna.ui && Tawerna.ui.loadBust ? Tawerna.ui.loadBust("Hero_Bust") === b : null;
+    // (2026-11-17: the bust is the PixelLab one composed by Popiersie.js - it takes "Hero_Bust" over from Ubior's painted one)
+    const talk = await t.json(`(function(){ const b = window.Popiersie ? Popiersie.bust() : Ubior.bust(), kit = Tawerna.ui && Tawerna.ui.loadBust ? Tawerna.ui.loadBust("Hero_Bust") === b : null;
         const L = SceneManager._scene._talkBusts; let shown = false;
         const walk = o => { if (!o) return; if (o.bitmap === b) shown = true; for (const ch of o.children || []) walk(ch); };
         walk(L); return { kit, shown }; })()`);

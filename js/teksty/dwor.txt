@@ -22,7 +22,7 @@ klapaZejdz = Zejść do kanału?
 klapaTak = Zejdź.
 klapaNie = Jeszcze nie.
 [kanalDol]
-> (Stary kanał zakonu. Po kostki w mule, gdzieś za kratą szumi woda. Kilkadziesiąt kroków - i drabina do włazu za oranżerią.)
+> (Stary kanał zakonu. Po kostki w mule, gdzieś za kratą szumi woda. Kilkadziesiąt kroków - i drabina do włazu przy oranżerii.)
 
 wlazZejdz = Zejść przez właz?
 wlazTak = Zejdź do kanału.
@@ -120,15 +120,15 @@ notePlanTitle = Plan dnia Feliksa
 plan.head = Feliks, kamerdyner jaśnie pana. Co widziałem na własne oczy:
 plan.rano = 6–10:30, rynek: zakupy dla dworu przy straganach, rachunki u sołtysa. U Hanki bierze bułki dla dworu - i papier, lak, atrament na kopy. Za dużo jak na rachunki jednego domu.
 plan.dzien = 10:30–20, hol dworu: za pulpitem z księgą gości. Co godzinę zagląda do gabinetu; kluczyk od kantorka chowa do kałamarza.
-plan.noc = ok. 1:30–3:00, ogród dworu: Feliks wychodzi SPOD włazu z krukiem za oranżerią - nie z dworu! - i napełnia Kubie beczki. Kanał pod włazem musi prowadzić do środka dworu.
+plan.noc = ok. 1:30–3:00, ogród dworu: Feliks wychodzi SPOD włazu z krukiem przy oranżerii - nie z dworu! - i napełnia Kubie beczki. Kanał pod włazem musi prowadzić do środka dworu.
 plan.kantor = raz w tygodniu, o północy: tylne drzwi kantoru Baltazara (trzy stuknięcia). Wychodzi z sakiewką.
 plan.miss = (jeszcze nie widziałem)
 plan.gone = Feliksa już nie ma w dworze. Co zostało po nim:
 plan.teodor = Teodor: kantorek Feliksa w gabinecie wciąż zamknięty na kluczyk. Klucza nie znalazł - „Feliks nosił go zawsze przy sobie... albo w kałamarzu”.
 plan.hanka = Hanka: Feliks kupował papier i lak na kopy. „Mówił, że jaśnie pan dużo pisze. Jaśnie pan? On nawet listów nie czyta.”
-plan.kuba = Kuba: Feliks zawsze pytał, kto pyta o wodę - i zapisywał. Wychodził spod włazu za oranżerią, nie z dworu.
+plan.kuba = Kuba: Feliks zawsze pytał, kto pyta o wodę - i zapisywał. Wychodził spod włazu przy oranżerii, nie z dworu.
 plan.rejestr = Rejestr Baltazara: „F.” - dwie beczki wody na tydzień, o północy, tylna furtka dworu.
-plan.foot = Zostaje gabinet. Nocą, starym kanałem spod włazu za oranżerią.
+plan.foot = Zostaje gabinet. Nocą, starym kanałem spod włazu przy oranżerii.
 obsRano = > (Feliks przy straganie Hanki: bułki... i papier, lak, atrament. Na kopy.)
 obsDzien = > (Feliks zagląda do gabinetu, wraca do pulpitu - i wrzuca kluczyk do kałamarza.)
 [obsNoc]
@@ -150,7 +150,7 @@ Papier i lak! Na kopy. Mówił, że jaśnie pan dużo pisze. Jaśnie pan? On naw
 [slady.woziwoda]
 > Kuba, o co pytał cię Feliks przy beczkach?
 (Kuba się rozgląda.) Zawsze o to samo: kto pyta o wodę. I zapisywał. Po co kamerdynerowi takie zapiski?
-I wychodził spod włazu za oranżerią. Nie z dworu - spod włazu. Jakby tam miał drzwi.
+I wychodził spod włazu przy oranżerii. Nie z dworu - spod włazu. Jakby tam miał drzwi.
 
 [szuflada.open]
 > (Kantorek Feliksa. Szuflada zamknięta na kluczyk.)
@@ -445,8 +445,8 @@ kod.kroki.dlugSplacono = spłacono {ile} z {dlug} G. Kiedy oddasz połowę, Lord
 kod.kroki.zaproBiblioteka = Lord czeka w bibliotece dworu (hol, drzwi na lewo) - kronika rodu leży na pulpicie.
 kod.kroki.zaproPrzedDworem = Lord przed dworem (8–20) chce cię zaprosić do środka - porozmawiaj z nim.
 kod.kroki.feliksSlady = Ślady Feliksa: Feliksa nie ma już w dworze. Popytaj o niego Teodora (rynek rano, hol za dnia), Hankę przy straganie i Kubę przy studni - i zajrzyj do rejestru Baltazara. Ślady i obserwacje: {n}/{need}.
-kod.kroki.feliksDwaZycia = Dwa życia Feliksa: śledź go przez dobę - z ukrycia (C). Rano na rynku (6–10:30), za dnia w holu dworu (10:30–20), nocą przy włazie za oranżerią (ok. 2:00), w noc tygodnia przy tylnych drzwiach kantoru (północ). Widziane: {n}/{need}.
-kod.kroki.gabinet = nocą (22–5) właz z krukiem za oranżerią (ogród dworu, pod sosną) prowadzi starym kanałem zakonu pod gabinet. W gabinecie - kantorek Feliksa. Uważaj na strażnika w ogrodzie
+kod.kroki.feliksDwaZycia = Dwa życia Feliksa: śledź go przez dobę - z ukrycia (C). Rano na rynku (6–10:30), za dnia w holu dworu (10:30–20), nocą przy włazie przy oranżerii (ok. 2:00), w noc tygodnia przy tylnych drzwiach kantoru (północ). Widziane: {n}/{need}.
+kod.kroki.gabinet = nocą (22–5) właz z krukiem przy oranżerii (ogród dworu, między chatą ogrodnika a oranżerią) prowadzi starym kanałem zakonu pod gabinet. W gabinecie - kantorek Feliksa. Uważaj na strażnika w ogrodzie
 kod.kroki.gabinetFeliks = " i na Feliksa: o 1:30 schodzi przez gabinet do kanału, o 3:00 wraca."
 kod.kroki.gabinetKoniec = .
 kod.kroki.prawdaZna = Lord zna prawdę.

@@ -19,7 +19,7 @@
 
 /*:
  * @target MZ
- * @plugindesc [W16] Dane łańcucha „Dezerter”: Tomek (Tymon Wrzos), Szczerba - łowczyni nagród, rotmistrz Bełza, przemyt, kryjówki, noc pod pokojem 5. v1.0.0
+ * @plugindesc [W16] Dane łańcucha „Dezerter”: Tomek (Tymon Wrzos), Szczerba - łowczyni nagród, kapitan Bełza, przemyt, kryjówki, noc pod pokojem 5. v1.0.0
  * @author Claude
  * @base TawernaCore
  * @base Watki
@@ -45,26 +45,28 @@
 
     // ------------------------------------------------------------------ who, where, when, how much
     const KTO = { tymon: "dezerter", szczerba: "lowczyni" };   // (the travellers' keys: Podroznicy_Data's cast = TownLife's residents)
-    const MAP = { miasto: 8, pietro: 25, karczma: 1, garnizon: 162, podgrodzie: 111, dzwonnica: 108, dziadek: 19, jar: 3 };
+    // (2026-11-16 the new world: Kruczogród, the tavern's floors, the Lord's guard at the manor, Podgrodzie with the camp, the belfry,
+    // grandpa's hut, the old adit under Krucze Turnie instead of Kruczy Jar)
+    const MAP = { miasto: 220, pietro: 25, karczma: 1, garnizon: 221, podgrodzie: 218, dzwonnica: 108, dziadek: 224, jar: 225 };
     const IDS = [3060, 3069], OWNER = "Lancuchy";
-    // room 5 on the guests' floor: its door (49,15) - Szczerba stands before it on her night (the corridor's cell below)
-    const DRZWI = { pokoj: "5", przed: [49, 16, 8] };
-    // Tymon outside the tavern's book (event 3060): [map, x, y, direction] - the hiding places (the belfry, grandpa's house, Kruczy
-    // Jar between the leaning rocks), the garrison (by the drill ground), the camp (under the wall - or in Podgrodzie when the town
-    // shut its gate on it)
+    // room 5 on the guests' floor (rebuilt 2026-11-16): its door (27,15) - Szczerba stands before it on her night (the corridor's cell below)
+    const DRZWI = { pokoj: "5", przed: [27, 16, 8] };
+    // Tymon outside the tavern's book (event 3060): [map, x, y, direction] - the hiding places (the belfry, grandpa's hut, the side
+    // chamber of the old adit), the Lord's guard (on the drill ground of the manor's paddock), the camp of Podgrodzie (the W6 camp
+    // stays inside since 2026-11-15: no "outside" place any more)
     const TYMON = { id: 3060, sheet: "$Npc_Dezerter", index: 0,
-        miejsca: { dzwonnica: [MAP.dzwonnica, 6, 5, 2], dziadek: [MAP.dziadek, 16, 7, 2], jar: [MAP.jar, 21, 46, 4],
-            garnizon: [MAP.garnizon, 32, 23, 2], oboz: [MAP.miasto, 88, 97, 2], obozPoza: [MAP.podgrodzie, 40, 12, 2] } };
+        miejsca: { dzwonnica: [MAP.dzwonnica, 6, 5, 2], dziadek: [MAP.dziadek, 6, 6, 4], jar: [MAP.jar, 75, 62, 4],
+            garnizon: [MAP.garnizon, 71, 28, 2], oboz: [MAP.podgrodzie, 56, 18, 2] } };
     // the days: the drum on the market the day after his ferry (the recruiter's day after a wave: 26), Szczerba's night - her arrival
     // + 3 (31) or the night the hero showed her the room; the hours of the well (his bandage), midnight's talk, her night at the door,
     // the search on her last day
     const CZAS = { beben: 1, bebenGodziny: [9, 12], studnia: [5.5, 7.2], polnoc: [0, 4.5], noc: 3, nocGodziny: [23, 2], szukanie: 8 };
-    // the drum's scene: Tymon is brought to the market by the recruiter's table (garnizon_werbownik 24,46); the hero within `widzi`
-    const BEBEN = { tymon: [27, 49], widzi: 10, dymek: 160, przerwa: 30 };
+    // the drum's scene: Tymon is brought to the market by the recruiter's table (garnizon_werbownik 60,43 on Map220); the hero within `widzi`
+    const BEBEN = { tymon: [58, 44], widzi: 10, dymek: 160, przerwa: 30 };
     const CENY = { wskaz: 60, molo: 80, baltazar: 50 };
     // the hiding places: the chance (%) Szczerba finds him on her last day (Ambroży who trusts the hero rings once at a stranger's step)
     const RYZYKO = { dzwonnica: 20, dziadek: 30, jar: 25, ambrozy: -10, min: 5, max: 90 };
-    // the garrison's favour: Bełza takes the hero's word at 50; Act III - the royal soldiers come at 60 (not 80) once Tymon serves
+    // the guard's favour: Bełza takes the hero's word at 50; Act III - the Lord's guardsmen come at 60 (not 80) once Tymon serves
     const PRZYCHYLNOSC = { belza: 50, akt3: 60, nagroda: 5 };
     const XP = { trop: 0, spowiedz: 40, garnizon: 250, przemyt: 150, oboz: 200 };
     const RENOMA = { dobrze: 3, zabrany: -2, bezKonca: -2 };
@@ -76,8 +78,8 @@
     const TROPY = ["rafal", "darin", "werbownik", "studnia", "beben", "sen"];
     // Act III (docs/PODROZNI.md 4.4): Tymon with the royal soldiers; Tomek of the camp beside Rafał
     const ECHA = {
-        garnizon: { key: "tymon", sheet: "Npc_Zolnierz_Walk8", maps: [8], from: "gate", delay: 530, hp: 100, dmg: 11, poise: 26, cd: [80, 110], speed: 3.9, armor: 0.15, swing: "#d8d8e0" },
-        oboz: { key: "tymon_oboz", sheet: "Npc_Uchodzca_Walk8", maps: [8], from: "gate", delay: 450, hp: 85, dmg: 10, poise: 24, cd: [80, 110], speed: 3.9, swing: "#b0a090" }
+        garnizon: { key: "tymon", sheet: "Npc_Zolnierz_Walk8", maps: [220], from: "gate", delay: 530, hp: 100, dmg: 11, poise: 26, cd: [80, 110], speed: 3.9, armor: 0.15, swing: "#d8d8e0" },
+        oboz: { key: "tymon_oboz", sheet: "Npc_Uchodzca_Walk8", maps: [220], from: "gate", delay: 450, hp: 85, dmg: 10, poise: 24, cd: [80, 110], speed: 3.9, swing: "#b0a090" }
     };
 
     // ------------------------------------------------------------------ the remarks (with the quest's pack)
@@ -213,13 +215,13 @@
         skoki: {
             przed: [{ hak: "f9Przygotuj" }],
             lista: {
-                1: { ch: 1, krok: "w16Tomek", godzina: 6.2, idz: [MAP.miasto, 50, 53, 8] },
-                2: { ch: 2, krok: "w16Lowczyni", godzina: 10, idz: [MAP.miasto, 51, 31, 8] },
-                3: { ch: 2, krok: "w16Tymon", godzina: 0.5, idz: [MAP.pietro, 48, 16, 8] },
-                4: { ch: 2, krok: "w16Tymon", godzina: 23.1, idz: [MAP.pietro, 51, 17, 4] },
-                5: { ch: 3, krok: "w16Plan", godzina: 13.5, idz: [MAP.garnizon, 33, 21, 2] },
-                6: { ch: 3, krok: "w16Plan", godzina: 10, idz: [MAP.miasto, 16, 50, 8] },
-                7: { ch: 3, krok: "w16Plan", godzina: 7.9, idz: [MAP.miasto, 51, 31, 8] }
+                1: { ch: 1, krok: "w16Tomek", godzina: 6.2, idz: [MAP.miasto, 46, 43, 8] },
+                2: { ch: 2, krok: "w16Lowczyni", godzina: 10, idz: [MAP.miasto, 43, 36, 8] },
+                3: { ch: 2, krok: "w16Tymon", godzina: 0.5, idz: [MAP.pietro, 27, 17, 8] },
+                4: { ch: 2, krok: "w16Tymon", godzina: 23.1, idz: [MAP.pietro, 29, 17, 4] },
+                5: { ch: 3, krok: "w16Plan", godzina: 13.5, idz: [MAP.garnizon, 39, 30, 8] },
+                6: { ch: 3, krok: "w16Plan", godzina: 10, idz: [MAP.miasto, 54, 22, 8] },
+                7: { ch: 3, krok: "w16Plan", godzina: 7.9, idz: [MAP.miasto, 43, 36, 8] }
             }
         }
     });

@@ -1,10 +1,11 @@
 # Teksty wątku W19 „Sygnały z młyna” (Mlyn_Data.js, Mlyn.js) - docs/zadania_nowe/sygnaly_z_mlyna.md.
-# Młynarz Walenty Mączka, jego pomocnik Jasiek Worek, wypatrywacz Łasica, szyper Ostoja Rafa; Ozzy, Wit, Roch, Sambor.
+# (nowy świat, 2026-11-15) Stary młynarz Walenty Mączka (młyn oddał, ale wciąż przy nim siedzi), nowy młynarz Ambroży Siwiec - to on
+# każe ustawiać skrzydła (szpieg; jego zwykłe rozmowy: mieszkancy.txt, nowy_mlynarz), pomocnik Jasiek Worek, wypatrywacz Łasica, szyper Ostoja Rafa; Ozzy, Wit, Roch, Sambor.
 # Bohater jest nastolatkiem: dorośli mówią do niego „chłopcze”. „> ” - mówi bohater. {nazwa} - wstawia gra.
 
 # ======================================================================== mieszkańcy (TownLife: kolejność w Mlyn_Data.js)
 mieszkancy.0.name = Walenty Mączka
-mieszkancy.0.title = młynarz
+mieszkancy.0.title = stary młynarz
 
 [mieszkancy.0.barks.stand]
 Wiatr dziś równy. Mielimy.
@@ -71,7 +72,7 @@ Wolę deszcz niż pył w gardle.
 
 # ======================================================================== zadanie, kroki, dziennik
 zadania.W19.title = Sygnały z młyna
-zadania.W19.where = wiatrak w mieście, tawerna, Archiwum zakonu, przystań i zatoczka pod nią
+zadania.W19.where = wiatrak w Podgrodziu, tawerna, Archiwum zakonu, Słony Brzeg
 zadania.W19.when = od dnia 24, wieczory i noce (8-10 dni gry)
 zadania.W19.desc = Skrzydła wiatraka Walentego zmieniają ułożenie po zmroku, choć młyn jest zamknięty od środka. Ktoś używa ich jak semafora do łodzi z kontynentu. Odczytaj kod, ustaw fałszywy sygnał i w nocy odpowiedz łodzi latarnią tak, żeby przypłynęła tam, gdzie czeka zasadzka.
 zadania.W19.fail.text = Młyn znów jest tylko młynem. Skrzydła przestały mówić.
@@ -81,10 +82,10 @@ zadania.W19.steps.2.text = {tekst}
 zadania.W19.steps.3.text = {tekst}
 zadania.W19.steps.4.text = {tekst}
 
-kroki.0.brak = Walenty Mączka, młynarz, nie poznaje własnego młyna: rano skrzydła stoją inaczej, niż je zostawił. Pogadaj z nim (tawerna wieczorem, młyn za dnia).
-kroki.0.czeka = Obiecałem Walentemu czuwanie przed młynem. Po dziesiątej w nocy stań przy młynie (wiatrak w mieście) - dziś albo kiedy indziej od dnia {dzien}. Albo weź od niego zapasowy klucz i zajrzyj do pustego młyna po zmroku.
+kroki.0.brak = Walenty Mączka, stary młynarz, nie poznaje dawnego młyna: odkąd miele w nim Ambroży, skrzydła nocą stają tak, jak żaden młynarz by ich nie zostawił. Pogadaj z nim (tawerna wieczorem, młyn za dnia).
+kroki.0.czeka = Obiecałem Walentemu czuwanie przed młynem. Po dziesiątej w nocy stań przy młynie (wiatrak na wzgórzu w Podgrodziu) - dziś albo kiedy indziej od dnia {dzien}. Albo weź od niego zapasowy klucz i zajrzyj do pustego młyna po zmroku.
 kroki.0.po = Skrzydła zmieniają pozę same, po zmroku. Młyn jest zamknięty od środka - ktoś ma klucz. Ktoś, kto chodzi tam i z powrotem po wodę.
-kroki.1.szukaj = Ktoś czyta ułożenie skrzydeł z daleka. Po zmroku (od 20:30) szukaj błysków przysłoniętej latarni w mieście, w suszarni za kuźnią na północnym wschodzie. Podejdź skradając się (C) - głośny krok go spłoszy.
+kroki.1.szukaj = Ktoś czyta ułożenie skrzydeł z daleka. Po zmroku (od 20:30) szukaj błysków przysłoniętej latarni w Podgrodziu, na łące na wschód od wiatraka. Podejdź skradając się (C) - głośny krok go spłoszy.
 kroki.1.ostrzezony = Wypatrywacz mnie usłyszał i uciekł. Wrócę następnego wieczoru, po zmroku, i będę się skradał (C).
 kroki.1.po = Wypatrywacz Łasica czyta skrzydła lunetą i błyska latarnią w stronę morza. Wie coś o literach: „B i C - trzeba potwierdzić latarnią z cypla”.
 kroki.2.tekst = Kod skrzydeł: cztery ułożenia, każde to jedno słowo, dwa po sobie (19:30 i 20:15) to wiadomość. Obserwowane wieczory: {n} z {z}. Znane słowa: {slowa}. Księga w Archiwum: {ksiega}. Wzór latarni od Rocha: {roch}.
@@ -92,7 +93,7 @@ kroki.2.wyrwana = wyrwana strona (kroniki sprzedane Baltazarowi - tylko obserwac
 kroki.2.jest = przeczytana
 kroki.2.nie = nieprzeczytana (pulpit w Archiwum zakonu)
 kroki.2.rochJest = mam
-kroki.2.rochNie = brak (Roch na przystani zna stary kod)
+kroki.2.rochNie = brak (Roch przy wraku na Słonym Brzegu zna stary kod)
 kroki.3.tekst = Ustaw skrzydła na kłamstwo: w komorze osi młyna (dźwignia hamulca) o 19:30 pierwsze słowo, kwadrans później drugie. {lista}
 kroki.3.wTak = Walenty zgodził się.
 kroki.3.wNie = Przekonaj Walentego.
@@ -104,12 +105,12 @@ kroki.3.sTak.sam = Zasadzka: sam z Rochem i Grumem.
 kroki.3.sNie = Zwołaj ludzi na zasadzkę (kapral Wit).
 kroki.3.nTak = Noc bez wiatru i z wysokim pływem: wieczór dnia {dzien}.
 kroki.3.nNie = Spytaj Ozzy'ego o pogodę (w tawernie).
-kroki.3.po = Skrzydła ustawione na kłamstwo wieczorem dnia {dzien}. Teraz, w nocy, odpowiedz łodzi latarnią z cypla w zatoczce pod Przystanią.
-kroki.4.tekst = Po północy (od 23:30) bądź na cyplu nad zatoczką w Przystani. Około 1:30 w morzu błyśnie latarnia - odpowiedz hasłem nocy: B-C to krótki, długi, krótki. Łódź przybije o drugiej, w przypływie.
+kroki.3.po = Skrzydła ustawione na kłamstwo wieczorem dnia {dzien}. Teraz, w nocy, odpowiedz łodzi latarnią z brzegu na Słonym Brzegu, na południe od warzelni.
+kroki.4.tekst = Po północy (od 23:30) bądź na brzegu na południe od warzelni, na Słonym Brzegu. Około 1:30 w morzu błyśnie latarnia - odpowiedz hasłem nocy: B-C to krótki, długi, krótki. Łódź przybije o drugiej, w przypływie.
 kroki.4.po = Łódź przemytników rozstrzygnięta: {wynik}.
 
 wyniki.1 = oddani celnikowi Samborowi, zboże wraca do spichlerza
-wyniki.2 = zatrzymani na przystani, zboże do spichlerza, Roch zyskał zaufanie
+wyniki.2 = zatrzymani na Słonym Brzegu, zboże do spichlerza, Roch zyskał zaufanie
 wyniki.3 = szyper wypuszczony za 90 G (młynarz się odwrócił)
 
 kod.slowo.A = „cisza” (plus)
@@ -153,7 +154,7 @@ Dzień {dzien}: o 19:30 i 20:15 skrzydła wiatraka stały ułożone na {a} i {b}
 
 [notatki.slady]
 Ślady na plaży
-Rano, po zmierzchu dnia {dzien}: ślady kilu w zatoczce pod Przystanią. Coś tam przypłynęło.
+Rano, po zmierzchu dnia {dzien}: ślady kilu na piasku Słonego Brzegu. Coś tam przypłynęło.
 
 [notatki.bezSladow]
 Nic w zatoczce
@@ -161,7 +162,7 @@ Rano, po zmierzchu dnia {dzien}: żadnych śladów kilu. Ta noc była pusta.
 
 [notatki.kod]
 Kod skrzydeł
-Wiem już, co mówią skrzydła. A - cisza, nic nie wiozą. B - towar gotowy. C - zatoczka (lądowanie pod Przystanią). D - pochylnia (szopa Rocha). Wiadomość to dwa słowa po sobie, 19:30 i 20:15. B potem C: towar gotowy, zatoczka.
+Wiem już, co mówią skrzydła. A - cisza, nic nie wiozą. B - towar gotowy. C - zatoczka (lądowanie na Słonym Brzegu). D - pochylnia (przy wraku, u Rocha). Wiadomość to dwa słowa po sobie, 19:30 i 20:15. B potem C: towar gotowy, zatoczka.
 
 [notatki.ksiega]
 Księga skrzydeł
@@ -181,7 +182,7 @@ Ozzy czyta wiatr i morze: najlepsza noc to wieczór dnia {dzien}, bez wiatru, z 
 
 [notatki.s1]
 Skrzydła same
-Czuwałem z Walentym przed młynem: skrzydła trzy razy zmieniły ułożenie, a drzwi zamknięte od środka. Klucz mają tylko młynarz i jego pomocnik.
+Czuwałem z Walentym przed młynem: skrzydła trzy razy zmieniły ułożenie, a drzwi zamknięte od środka. Klucz ma tylko nowy młynarz Ambroży i jego pomocnik Jasiek.
 
 [notatki.s1alt]
 Pusty młyn
@@ -193,7 +194,7 @@ Pod oknem komory osi stygną krople wosku. Ktoś siedział tu ze świecą i patr
 
 [notatki.slad.zeszyt]
 Zeszyt młynarza
-W zeszycie Walentego: kto ile mąki, ile worków. I jedna wyrwana kartka. Jasiek chyba umie pisać lepiej, niż mówi.
+W zeszycie młyna: kto ile mąki, ile worków. Ręka Ambrożego, równa jak u pisarza. I jedna wyrwana kartka.
 
 [notatki.podsluch]
 Łasica z lunetą
@@ -225,11 +226,11 @@ W jaskini i na łodzi: zboże z pieczęcią dworu z miejskiego spichlerza. W dzi
 
 [notatki.koniec.1]
 Przemytnicy w rękach celnika
-Szyper Ostoja Rafa i jego ludzie trafili do Sambora. Zboże wraca do spichlerza, w mieście będzie chleb po dawnej cenie. Skrzydła wiatraka znów należą do młynarza.
+Szyper Ostoja Rafa i jego ludzie trafili do Sambora. Zboże wraca do spichlerza, w mieście będzie chleb po dawnej cenie. Ambroży zniknął tej samej nocy - Walenty wraca do swojego młyna.
 
 [notatki.koniec.2]
 Przemytnicy zatrzymani
-Zboże wróciło do spichlerza, Roch zyskał do mnie zaufanie. Sambor się obraził, że to nie on. Skrzydła wiatraka znów należą do młynarza.
+Zboże wróciło do spichlerza, Roch zyskał do mnie zaufanie. Sambor się obraził, że to nie on. Ambroży zniknął tej samej nocy - Walenty wraca do swojego młyna.
 
 [notatki.koniec.3]
 Szyper puszczony wolno
@@ -294,8 +295,9 @@ Odłóż. W najbliższe trzy dni albo wiatr, albo odpływ. Żadna łódź tam ni
 # ======================================================================== Walenty
 walenty.imie = Walenty Mączka
 [walenty.prosba]
-Chłopcze, mam prośbę. Od kilku nocy nie poznaję własnego młyna.
-Rano skrzydła stoją inaczej, niż je zostawiłem. Drzwi zamknięte od środka, klucz mam ja i Jasiek.
+Chłopcze, mam prośbę. Od kilku nocy nie poznaję swojego dawnego młyna.
+Czterdzieści lat mełłem w tym młynie. Oddałem go Ambrożemu, bo ręce już nie te. A teraz nocą skrzydła stają tak, jak ja bym ich nigdy nie zostawił.
+Drzwi zamknięte od środka, klucz ma on i ten chłopak, Jasiek. Ja mam tylko stary, zapasowy.
 Zostań ze mną przed młynem noc, po dziesiątej. Nie wierzę własnym oczom.
 
 walenty.zostane = Zostanę.
@@ -315,14 +317,14 @@ walenty.kluczNie = Poczekam.
 Masz. Zapasowy, od stajni. Wejdź sam, jeśli wolisz, ale wejdź po zmroku, kiedy skrzydła się ruszają.
 
 [walenty.swiatla]
-Znalazłeś coś? Ktoś patrzy na mój młyn, a ja nie wiem kto.
+Znalazłeś coś? Ktoś patrzy na ten młyn z daleka. A ten nowy udaje, że nic nie widzi.
 
 [walenty.kod]
 Skrzydła stoją na rysunkach... tak, jakby ktoś chciał coś powiedzieć. A ja nie umiem czytać tego pisma.
 
 [walenty.przekonaj]
 No i co? Wiesz, kto przestawia skrzydła?
-Chcesz ustawić je na fałszywy sygnał. Moje skrzydła, mój młyn... Boję się przemytników, chłopcze.
+Chcesz ustawić je na fałszywy sygnał. Skrzydła, które sam stawiałem... Boję się przemytników, chłopcze. I tego, kto im rozkazuje.
 
 walenty.zgodaOpinia = Zaufaj mi. Pomogę ci.
 walenty.zgodaZaplata = Dam ci za kłopot {n} G.
@@ -340,7 +342,7 @@ Rozumiem. Tylko nie zwlekaj, bo skrzydła nie śpią.
 Z Jaśkiem pogadałeś? Z ludźmi? Pamiętaj: zmierzch, komora osi.
 
 [walenty.poUstawieniu]
-Skrzydła stoją, jak chciałeś. Idź na przystań, chłopcze. Niech cię noc prowadzi.
+Skrzydła stoją, jak chciałeś. Idź na Słony Brzeg, chłopcze. Niech cię noc prowadzi.
 
 [s5.walenty]
 Mielimy. Dym z komina, skrzydła w wietrze, rano jak dawniej. Chłopcze, wiem, co zrobiłeś.
@@ -358,8 +360,8 @@ Mistrz kazał nosić, to noszę. Nic nie wiem, chłopcze.
 Mistrz mówi, żebym nie gadał. To nie gadam.
 
 [jasiek.przyznaje]
-Nie bij mnie... Tak, to ja przestawiam skrzydła. Wieczorem, po wodę idę, a w ogóle ustawiam skrzydła.
-Dług mam, chłopcze. U ludzi Baltazara. Powiedzieli, że kto przestawia, ten nie zapłaci. A co ja miałem robić?
+Nie bij mnie... Tak, to ja przestawiam skrzydła. Wieczorem niby idę po wodę, a ustawiam, jak mistrz Ambroży każe. On dostaje kartki zza wody i mówi mi, która litera.
+Dług mam, chłopcze. U ludzi Baltazara. Mistrz powiedział, że kto ustawia, ten nie zapłaci. A komu ja miałem powiedzieć - Walentemu, co już tu nic nie znaczy?
 
 jasiek.pomoz = Pomóż mi. Oddaj klucz.
 jasiek.odsylam = Odsyłam cię na wieś. ({n} G odprawy)
@@ -375,7 +377,7 @@ jasiek.brakZlota = Nie mam odprawy przy sobie.
 Ja nic nie powiedziałem! Ale... jakby ktoś pytał... mogę zapomnieć. Mogę też zapomnieć nie zapomnieć.
 
 [jasiek.po.pomoc]
-Cieszę się, że pomogłem. Mistrz mnie nie wyrzuci?
+Cieszę się, że pomogłem. Tylko mistrzowi Ambrożemu ani słowa, bo mnie utopi w mące.
 
 [jasiek.po.odprawa]
 Już w drodze do ciotki. (Jasiek wyjechał.)
@@ -391,18 +393,18 @@ Trzeci raz! A drzwi zamknięte. Widziałeś? Skrzydła same, jakby ktoś je ręk
 [s1.bohater]
 > Zapisuję. Dziś trzy razy, po zmierzchu.
 
-s1.walenty2 = Jasiek śpi w izbie nad stajnią. Klucz ma tylko on i ja. Idę do domu. Dziękuję, chłopcze.
+s1.walenty2 = Jasiek śpi w izbie nad stajnią, Ambroży u siebie w chacie. A skrzydła chodzą. Idę do domu. Dziękuję, chłopcze.
 wnetrze.noc = > Pusty młyn w nocy. Dźwignia hamulca poruszona, pod oknem woskowe krople...
 slad.brak = Nic w tym nie widzę.
 [slad.wosk]
 > Woskowe krople pod oknem. Ktoś patrzył tędy na drogę ze świecą.
 
 [slad.zeszyt]
-> Zeszyt Walentego. Rachunki, worki, wyrwana kartka. Pismo Jaśka?
+> Zeszyt młyna. Rachunki, worki, wyrwana kartka. Pismo Ambrożego - za równe jak na młynarza.
 
 okno.dzien = > Przez okno widać drogę i dachy miasteczka. Spokojnie.
 okno.noc = > Z okna widać drogę i czarne dachy. Nic się nie rusza.
-okno.lasica = > Daleko, w suszarni na północnym wschodzie, mignęło światło.
+okno.lasica = > Daleko, na łące na wschód od wiatraka, mignęło światło.
 dzwignia.zwykla = Dźwignia hamulca skrzydeł. Młynarz używa jej do zatrzymania obrotu.
 dzwignia.obca = Dźwignia hamulca. Ktoś tu ostatnio grzebał, jest świeżo naoliwiona.
 dzwignia.jasiek = Najpierw pogadaj z Jaśkiem. Bez jego klucza nie podejdę.
@@ -489,13 +491,13 @@ Dobra, dobra, wasza wzięła. Ostoja Rafa nie lubi przegrywać, ale umie. Co ter
 Dziennik łodzi jest w skrzyni. Pieczęć dworu na workach. Kupiec z miasta czeka na zboże w zimie.
 
 wyjscie.sambor = Oddać go Samborowi (zboże wraca do spichlerza).
-wyjscie.sam = Zatrzymać na przystani (łup 25 G, Roch).
+wyjscie.sam = Zatrzymać na brzegu (łup 25 G, Roch).
 wyjscie.targ = Wziąć {n} G za milczenie i wypuścić.
 [wyjscie.samborOdp]
 > Idziesz do Sambora. Zboże wróci do spichlerza, a miasto dostanie chleb po dawnej cenie.
 
 [wyjscie.samOdp]
-> Zostajesz na przystani. Roch zabierze zboże do spichlerza, a łup dzielimy.
+> Zostajesz na brzegu. Roch zabierze zboże do spichlerza, a łup dzielimy.
 
 [wyjscie.targOdp]
 > Dziewięćdziesiąt groszy za milczenie. I znikasz. Ostoja Rafa, nie wracaj.
@@ -517,3 +519,21 @@ f9.wylacz = Młyn: wyłącz łódź
 f9.wylaczOpis = OK: zakończenie wątku, skrzydła kręcą się same, zatoczka pusta.
 f9.wyzeruj = Młyn: wyzeruj
 f9.wyzerujOpis = OK: stan wątku W19 od nowa.
+
+# ======================================================================== Ambroży (nowy młynarz; nowy świat)
+nowy_mlynarz.imie = Ambroży Siwiec
+ambrozy.opcja = Pytam o skrzydła nocą.
+[ambrozy.pytam]
+> Mistrzu, skrzydła pańskiego młyna nocą stają. Raz w krzyż, raz na skos. Kto je ustawia?
+
+[ambrozy.odpowiada]
+Wiatr, chłopcze. Wiatr i stary hamulec, który Walenty zostawił mi w spadku razem z myszami.
+A jeśli ktoś ci naopowiadał czego innego, to powiedz mu, że młynarz nie lubi, jak mu się zagląda w tryby.
+Ładna noc na spacery po plaży. Ale nie dla każdego zdrowa. Zapamiętaj to.
+
+[ambrozy.mysl]
+> Nie pytał, skąd wiem. Nie pytał, kto mi powiedział. On po prostu wie, o czym mówię.
+
+[notatki.ambrozy]
+Młynarz, który wie
+Zapytałem Ambrożego o skrzydła. Zrzucił na wiatr i stary hamulec, a potem doradził mi, żebym nie chodził nocą po plaży. Nie zdziwił się ani trochę. Dowodem będzie dopiero łódź.

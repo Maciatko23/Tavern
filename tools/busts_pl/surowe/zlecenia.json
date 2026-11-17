@@ -1,0 +1,383 @@
+{
+ "Kowal_m1_portret": "https://api.pixellab.ai/mcp/portrait-character/ff033aa2-6128-4f36-aad0-6887d887a5d8/download",
+ "Kowal_m2_lewo": "https://api.pixellab.ai/mcp/portrait-character/7a28b634-2d0f-4886-b5bf-6a96b6f703c9/download",
+ "Borgar_m1_portret": "https://api.pixellab.ai/mcp/portrait-character/b67e2584-0121-45c5-be65-5a2ff1326b48/download",
+ "Borgar_m2_lewo": "https://api.pixellab.ai/mcp/portrait-character/ba4617fa-07e8-4ec0-adf3-8067ffac2f9e/download",
+ "Kowal_m3_ref": "5ead5402-2480-4b47-a369-0a3f3bb0af5f",
+ "Borgar_m3_ref": "362baf23-5b3a-4ce3-be4c-37e6f57571a8",
+ "Kowal_m1_obrot": "d4ff7f12-1db0-4765-b195-824d0dde199f",
+ "Borgar_m1_obrot": "847b0528-b819-434e-87a4-2002ff0ee485",
+ "Kowal": [
+  "5ead5402-2480-4b47-a369-0a3f3bb0af5f"
+ ],
+ "Borgar": [
+  "362baf23-5b3a-4ce3-be4c-37e6f57571a8"
+ ],
+ "Melia": [
+  "e2d01690-4b06-4dbd-adee-6a9e4e9a23bc"
+ ],
+ "Jagna": [
+  "43ce446f-d0f9-462b-b0f2-e8ba80b0b5f7"
+ ],
+ "Pula_M2": [
+  "b91682d6-ff05-4cd2-9574-4b054a006b4d"
+ ],
+ "Pula_K3": [
+  "5662f07d-afae-4efe-ba32-850158e07f39"
+ ],
+ "Pula_K": [
+  "24c3eb7c-1019-4206-8fd2-aee43481d1ce"
+ ],
+ "Lord": [
+  "4f5261ba-86e6-478d-b917-8b3d6f13ce4e"
+ ],
+ "Kapral": [
+  "d1ce3438-5eca-4062-bea9-226dc916aa19"
+ ],
+ "Straznik": [
+  "04279145-509c-4a00-9663-66bdf61b2f7f"
+ ],
+ "Kwatermistrz": [
+  "ddc28f4d-ef13-44af-ba25-5f6deabac9f4"
+ ],
+ "Grum": [
+  "787ae510-2443-4a44-bc5f-d04d9b738f1d"
+ ],
+ "Ozzy": [
+  "beaf823b-55f6-460d-819b-f8327c969a25"
+ ],
+ "Wanda": [
+  "2f357dc0-317d-44df-8d92-6b33c739c29f"
+ ],
+ "Pula_K2": [
+  "4e0ac5be-2ada-472f-821f-f2f13d937366"
+ ],
+ "Stach": [
+  "355bb83f-cadf-4e68-988c-d2a0935a92aa"
+ ],
+ "Kamerdyner": [
+  "168a30b2-ee8b-4897-8628-fb27b27f5619"
+ ],
+ "Rotmistrz": [
+  "5bdb3940-09c9-4f00-a3a6-7efc67e82b59"
+ ],
+ "Zolnierz": [
+  "6ec544cd-ac3f-41f3-9fb4-1d89e3af8301"
+ ],
+ "Zolnierz_B": [
+  "db081577-636e-4f6c-a603-beec98aa1702"
+ ],
+ "Dezerter": [
+  "9ebebc0a-a3f4-485d-99ec-706607da653f",
+  "5822286f-61dd-4bd9-87c1-b25f6d93e91c"
+ ],
+ "Werbownik": [
+  "4824fe35-b0f5-4816-87b8-99db5acf30a3"
+ ],
+ "Marek": [
+  "ef815e62-cce4-4ba4-9bf7-b65b5800045a"
+ ],
+ "Rafal": [
+  "8a4f64ed-05d4-477d-9f73-3a9af89fc294"
+ ],
+ "Latarnik": [
+  "c0e09fa8-ba19-41b5-81b1-f64017693efd"
+ ],
+ "Posel": [
+  "a89c3a48-09ed-4984-9f0a-e93b787028d6"
+ ],
+ "Gwardzista": [
+  "590d86c1-f986-4bbb-ba99-e7e1f7b2b4c7"
+ ],
+ "Poborca": [
+  "7b3c8867-e62d-4b60-81cb-4b431908afce"
+ ],
+ "Pustelnik": [
+  "4ca25c16-af51-4418-90e5-c40fc5d7560b"
+ ],
+ "Rozbitek": [
+  "078bb646-28ba-4cf9-80a1-35f2b7075831"
+ ],
+ "Feliks": [
+  "ad872dd1-710c-4564-b503-43a887d56d64"
+ ],
+ "Piekarka": [
+  "cee3d6ea-8793-45e9-9c21-20b1e928fc0c"
+ ],
+ "Woziwoda": [
+  "501d0021-95a5-43cc-a9d4-88523032cd0d"
+ ],
+ "Dzwonnik": [
+  "298b9f44-63e1-4c1b-954e-d736678ae328"
+ ],
+ "Kupiec": [
+  "a62ae252-06b5-4cf6-a743-982732127c48"
+ ],
+ "Soltys": [
+  "171b3284-4c9c-4a17-8d35-321c837d82e9"
+ ],
+ "Garbarz": [
+  "d5072226-feba-42ca-b583-9cfebddcb23c"
+ ],
+ "Bronek": [
+  "78eda486-bb53-48ba-ae59-6c0e4532c655"
+ ],
+ "Zosia": [
+  "d054e836-b136-4e0a-9568-41cb5cbad8bf"
+ ],
+ "Ludmila": [
+  "8e879c28-2bbe-464a-8227-2801d8c1bb40"
+ ],
+ "Ela": [
+  "fd4f96ac-8e5c-42a3-9f47-9ff9f440158e"
+ ],
+ "Praczka": [
+  "7ea91b37-6d33-4657-b1fb-08a48d801dcd"
+ ],
+ "Franek": [
+  "8a6b19c1-1ec7-4bf2-88a7-64cd2bd2e7e8"
+ ],
+ "Drwal": [
+  "674b8c07-8706-425e-91cd-30627a3c65f5"
+ ],
+ "Klusownik": [
+  "45d8ddf1-5a0c-41d7-a8b8-5b78fe459026"
+ ],
+ "Zlodziej": [
+  "43a765d2-a302-4e7d-84d0-767047cde461"
+ ],
+ "Znachorka": [
+  "66c5beb3-2d69-4a01-ab03-ba72d9524009"
+ ],
+ "Szmaciarz": [
+  "f8c67460-6e76-4c6a-8474-eb74b59a7c7b"
+ ],
+ "Uchodzca": [
+  "82ea4007-0b24-40e0-905a-8a55ff79a1bb"
+ ],
+ "Zebrak": [
+  "640b232f-085c-4de1-aba7-9161e9798241"
+ ],
+ "Gracz": [
+  "2160c002-7f71-4521-9cf4-0d0790df6c14"
+ ],
+ "Bartek": [
+  "80861f20-8418-4aae-be83-d2a682e91341"
+ ],
+ "Woznica": [
+  "f18e016e-ce8b-4cb5-864d-f5d5c718c892"
+ ],
+ "Janek": [
+  "84482ba4-32bf-4902-b93f-f215503a55c4"
+ ],
+ "Przemytnik": [
+  "0fcc88d8-6914-4b4f-a1ee-3e17b3c479a5"
+ ],
+ "Kolodziej": [
+  "32f0903e-0962-4146-bbe1-720c24060766"
+ ],
+ "Przekupka": [
+  "f8e4ba3e-7b4a-4a5e-9a5c-230f4f15f7d7"
+ ],
+ "Szwaczka": [
+  "9ac48591-e887-435d-ad9f-6cfe7ff029a7"
+ ],
+ "Celnik": [
+  "411ca4a6-84ac-4688-a324-54d960c924b9"
+ ],
+ "Wdowa": [
+  "94015b90-b954-4116-97b0-4ec6e0907a43"
+ ],
+ "Kostek": [
+  "75d319dd-5d40-4afa-9da7-3fa6a14f3d4e"
+ ],
+ "Jagodka": [
+  "e590531d-e1dd-45e5-b137-a49e958e3fc1"
+ ],
+ "Ciesla": [
+  "39554b39-61a7-4382-b110-72770ab3c566"
+ ],
+ "Weteran": [
+  "983ef283-770d-4f52-a6d5-79c3b25e8603"
+ ],
+ "Szynkarz": [
+  "7a6c8663-3116-4be2-99fd-8baf1f412233"
+ ],
+ "Opiekunka": [
+  "695082d8-873e-4e6f-80a5-cd3a211a6a3b"
+ ],
+ "Garncarz": [
+  "12a2f9f1-c4bd-48d5-88f8-5cfad141baec"
+ ],
+ "Dziecko": [
+  "0978c621-48f9-4d01-952d-77f9e3a62c2a"
+ ],
+ "Pula_M": [
+  "5a9abb24-ba87-49fd-bcd1-10d6e83dac92"
+ ],
+ "Pula_M3": [
+  "d4e392a7-23ea-42d6-b8b5-a63634b240fb"
+ ],
+ "Pula_S": [
+  "5ae23422-41ec-49eb-a576-834b636ca6c4"
+ ],
+ "Pula_S2": [
+  "1e199f04-ac44-4ee0-85a6-6f2e62473d45"
+ ],
+ "Pula_Z": [
+  "3a5cb323-3348-4b1c-902e-41a467f732b2"
+ ],
+ "Pula_Z2": [
+  "e922a43b-7261-4ea0-8222-755809cf119b"
+ ],
+ "Ksenia": [
+  "c0f626c4-81d2-462c-80cb-92f8ca85897a"
+ ],
+ "Trojka": [
+  "57f186af-8478-4364-bf9a-4a1fa9efc2ac"
+ ],
+ "Tobiasz": [
+  "c0cb39db-c4cd-4017-b3da-339ce2a3914e"
+ ],
+ "Medyk": [
+  "e8d1aefc-287a-4424-ab70-b427419d444e"
+ ],
+ "Kartograf": [
+  "599c9870-b361-43dd-9137-15f56fa482e4"
+ ],
+ "Grajek": [
+  "329c6d12-671f-4d9e-b149-26daa6e4d238"
+ ],
+ "Zboze": [
+  "b88e9f09-d032-41dc-a8e2-abd95ab7f3b3"
+ ],
+ "Urszula": [
+  "35f41f98-a5d7-45d0-939d-fe92b7ff7dff"
+ ],
+ "Relikwie": [
+  "c5f7884e-38d4-49a7-a41d-8959ba5e70e0"
+ ],
+ "Wizytator": [
+  "70a55dfb-5340-4df8-bcd4-7438cefc6e5c"
+ ],
+ "Lowczyni": [
+  "22455718-825f-4e58-ab6d-c118e6818f1a"
+ ],
+ "Pielgrzym": [
+  "deada697-02c2-4f3d-b3df-d1356bacc9e7"
+ ],
+ "Kompania_1": [
+  "8c52389e-5aaa-4ba5-9533-a58af0f0e125"
+ ],
+ "Kompania_2": [
+  "c4b44aaf-ef54-41bc-9c1e-a1eede992117"
+ ],
+ "Kompania_3": [
+  "ee9eb8db-66bc-471e-b774-a1fba0beae39"
+ ],
+ "Kompania_4": [
+  "fce95da0-559b-4901-b88b-43347b73f9ba"
+ ],
+ "Handlarz": [
+  "326fa180-075d-4300-a41f-5761b63e706e"
+ ],
+ "Gajowy": [
+  "663a4af8-1bb9-483e-8116-16d7ea66857d"
+ ],
+ "Pasterz": [
+  "209cf286-7af7-4170-89b9-8e23add6edbf"
+ ],
+ "Matka": [
+  "255afd43-53a4-415b-b14e-78d3d8e1f6fd"
+ ],
+ "Grabarz": [
+  "9d777c51-ec9c-4622-946c-ea52ea056a7e"
+ ],
+ "Jarmark_Ania": [
+  "9b29e6d0-f1c1-474e-82e2-723ddc22ccb8"
+ ],
+ "Jarmark_Bonawentura": [
+  "5c6e26a7-e5c3-47ad-8a9d-285566ab7bbd"
+ ],
+ "Jarmark_Marcel": [
+  "ce8ed410-e54b-4a80-aee7-bab0b3b5293c"
+ ],
+ "Jarmark_Ofelia": [
+  "fc624d5f-a005-4603-9022-6a874a3e8470"
+ ],
+ "Jarmark_Pimpek": [
+  "280b301b-05be-40a8-a615-0b29dcf7c592"
+ ],
+ "Jarmark_Szept": [
+  "222e6c6b-d791-44ef-a92d-f4dd8c2db2cb"
+ ],
+ "Jarmark_Wanda": [
+  "3f86f73c-f931-44e5-9637-193ccc6beaaf"
+ ],
+ "Jarmark_Zar": [
+  "8ff203de-768e-4509-86ce-034132b02b3a"
+ ],
+ "Jas": [
+  "3901f258-381a-4c88-b3b3-8449a9a69aa2"
+ ],
+ "Jasiek": [
+  "2f4b4383-d8b6-4643-b5e7-a0efa01bea8f"
+ ],
+ "Lasica": [
+  "5a2fc254-9834-403f-9ee9-8734c0601bdb"
+ ],
+ "Ludwik": [
+  "04365a2a-ed59-4e31-b4ab-a2b772fe8424"
+ ],
+ "Ostap": [
+  "0a182e38-c85b-40a3-a176-6ba53be5dca0"
+ ],
+ "Szyper": [
+  "474cfc3a-a51a-4fc6-869c-cf99ea72abac"
+ ],
+ "Walenty": [
+  "b3bfffb0-b4a2-4391-a4dd-8e8063cf9674"
+ ],
+ "Wawrzyn": [
+  "3fdd4c8a-5b6e-4330-bc1c-08666753ed62"
+ ],
+ "Bogdan": [
+  "f9661257-b16a-4a61-9b56-47708651f020"
+ ],
+ "Cyryl": [
+  "3e00640b-1190-433b-9845-ceabce7de129"
+ ],
+ "Halina": [
+  "43677857-998b-4638-a563-fb66ec3a76ed"
+ ],
+ "Kurier": [
+  "819b46f7-95a3-4d0f-b6a4-ffd507d2f98c"
+ ],
+ "Gawron": [
+  "a2d4a60e-da36-4168-9c1d-6ccea3d1757e"
+ ],
+ "Kopacz": [
+  "74ce504f-9353-40dc-8e93-b242bea492af"
+ ],
+ "Wicek": [
+  "8ff0a912-1f38-4241-a493-671a912eb81f"
+ ],
+ "PanMlody": [
+  "4e950d3a-ae86-4231-9a1b-763d22e342fb"
+ ],
+ "PannaMloda": [
+  "620b3c2b-708f-4ea4-b240-359a3853d11d"
+ ],
+ "Milczacy1": [
+  "40649d37-2b31-4385-b24c-d110b495b24e"
+ ],
+ "Milczacy3": [
+  "8f483673-1b55-4f14-b87f-be0954968abf"
+ ],
+ "Milczaca2": [
+  "a6c1aab9-4528-4bfd-a78c-59934f1dcfb7"
+ ],
+ "Milczaca4": [
+  "473fb0a3-5dd8-4263-ad11-fcdf4a88d99b"
+ ]
+}

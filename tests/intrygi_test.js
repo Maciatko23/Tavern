@@ -50,7 +50,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("Renoma 80: pokoje bohatera 20% taniej (pokój 1)", ceny.b === Math.max(1, Math.round(ceny.a * 0.8)) && ceny.b < ceny.a, ceny);
 
     // ---------------------------------------------------------------- drzwi zajętego pokoju (Tobiasz, pokój 23 - drzwi 1 na Map025)
-    await t.go(25, 33, 20, 2);
+    await t.go(25, 14, 20, 2);
     await at(4, 23.5, 30);
     const nocDrzwi = await listText(1);
     await at(5, 10, 30);
@@ -89,14 +89,14 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     // ---------------------------------------------------------------- D45 „Gość spod trójki”
     const od = await J(`Podroznicy.stan().obecni.trojka.od`);
     await at(od + 1, 7, 30);
-    await t.go(25, 8, 17, 8);
+    await t.go(25, 4, 17, 8);
     await t.frames(60);
     const d45a = await J(`({ r: TownQuests.rec("D45"), sadza: (function(){ const e = $gameMap.event(3011); return e ? { x: e.x, y: e.y, on: !e.isTransparent(), img: e.characterName() } : null; })() })`);
     await t.talkTo(3011, [], { secs: 15 });
     await t.go(9, 4, 11, 8);
     await t.frames(40);
     await t.talkTo(3017, [], { secs: 15 });
-    await t.go(25, 15, 8, 4);
+    await t.go(25, 7, 8, 4);
     await at(od + 1, 23, 10);
     await at(od + 2, 1.5, 20);
     const miejsce = await J("Podroznicy.podsluch.miejsce()");
@@ -114,7 +114,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
 
     // ---------------------------------------------------------------- D46 „Skradziona szkatułka” (wariant A)
     await t.eval(`(function(){ const row = Watki.f9.sekcje().find(s => s.watek === "intrygi").rows.find(r => r.kind === "isleWatek:d46"); Watki.f9.ok(row); return 0; })()`);
-    await t.go(25, 26, 17, 8);
+    await t.go(25, 15, 17, 8);
     await t.frames(40);
     const d46a = await J(`({ r: TownQuests.rec("D46"), w: ${W}.S().d46.wariant })`);
     await t.eval(`Intrygi.d46Slad("zamek"); 0`);
@@ -134,7 +134,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await t.gold(200);
     const dn = 4;
     await at(dn, 22, 10);
-    await t.go(25, 24, 38, 2);
+    await t.go(25, 24, 30, 2);
     await t.frames(30);
     await t.eval("Intrygi.auto(true); 0");   // (the tests' quiet mode - newGame / calm - turns the wakes off)
     await t.eval(`TavernLife.rentRoom(1); 0`);
@@ -168,7 +168,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         k73.kroki.udane === 1 && !!k73.r && k73.r.s === "done", { zbudzony, swiatlo, k73 });
     await t.eval(`(function(){ const row = Watki.f9.sekcje().find(s => s.watek === "intrygi").rows.find(r => r.kind === "isleWatek:kroki"); Watki.f9.ok(row); return 0; })()`);
     await t.eval(`Podroznicy.kroki.dodaj({ id: "test", kto: "kroki.ozzy.kto", arkusz: "People2_Tall", start: [20, 49, 6], trasa: [[44, 50]], godziny: [1, 3], gdy: () => true }); 0`);
-    await t.go(25, 17, 49, 6);
+    await t.go(25, 17, 36, 6);
     await t.frames(20);
     await t.eval(`Intrygi.krokiStart("test"); 0`);
     await t.frames(40);
@@ -182,11 +182,11 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const dl = await J("$gameSystem.dayNightDay()");
     await at(dl + 1, 7, 10);
     await t.eval(`(function(){ const s = TavernLife.state(); s.rent = { room: "1", name: "Pokój 1", price: 8, day: $gameSystem.dayNightDay() - 1, until: ($gameSystem.dayNightDay()) * 24 + 10, slept: true }; IntrygiData.watek.S().listy.dzien = 0; return 0; })()`);
-    await t.go(25, 18, 17, 8);
+    await t.go(25, 9, 17, 8);
     await t.frames(60);
     const lp = await J(`(function(){ const e = $gameMap.event(3014); return e ? { on: !e.isTransparent(), x: e.x, y: e.y, img: e.characterName(), dzis: Podroznicy.listy.dzis() } : null; })()`);
     await t.talkTo(3014, [], { secs: 15 });
     const lr = await J(`({ s: ${W}.S().listy, note: (Journal.data().notes || []).some(n => /List od Urszuli/.test(n.title)) })`);
     t.check("rano po nocy w wynajętym pokoju 1: list pod drzwiami (3014 w pokoju przy drzwiach), O - czytanie i notatka",
-        !!lp && lp.on && lp.x === 18 && lp.y === 11 && lp.img === "!$Podr_List" && lr.note && !!lr.s.byly.test, { lp, lr });
+        !!lp && lp.on && lp.x === 9 && lp.y === 11 && lp.img === "!$Podr_List" && lr.note && !!lr.s.byly.test, { lp, lr });
 });

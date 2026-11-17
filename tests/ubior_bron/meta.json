@@ -1,6 +1,47 @@
 {
  "bron": [
   {
+   "key": "bron_sztylet_kamien",
+   "rodzaj": "sztylet",
+   "material": "kamien",
+   "sheet": "Hero_Punch",
+   "own": false,
+   "files": [
+    "b_bron_sztylet_kamien_0_7.png",
+    "b_bron_sztylet_kamien_0_12.png",
+    "b_bron_sztylet_kamien_0_16.png",
+    "b_bron_sztylet_kamien_1_8.png",
+    "b_bron_sztylet_kamien_1_13.png",
+    "b_bron_sztylet_kamien_1_16.png"
+   ],
+   "frames": [
+    [
+     0,
+     7
+    ],
+    [
+     0,
+     12
+    ],
+    [
+     0,
+     16
+    ],
+    [
+     1,
+     8
+    ],
+    [
+     1,
+     13
+    ],
+    [
+     1,
+     16
+    ]
+   ]
+  },
+  {
    "key": "bron_sztylet_braz",
    "rodzaj": "sztylet",
    "material": "braz",
@@ -370,6 +411,47 @@
    ]
   },
   {
+   "key": "bron_dlugi_miecz_zelazo",
+   "rodzaj": "dlugi_miecz",
+   "material": "zelazo",
+   "sheet": "Hero_Sword",
+   "own": false,
+   "files": [
+    "b_bron_dlugi_miecz_zelazo_0_4.png",
+    "b_bron_dlugi_miecz_zelazo_0_9.png",
+    "b_bron_dlugi_miecz_zelazo_0_13.png",
+    "b_bron_dlugi_miecz_zelazo_1_6.png",
+    "b_bron_dlugi_miecz_zelazo_1_11.png",
+    "b_bron_dlugi_miecz_zelazo_1_15.png"
+   ],
+   "frames": [
+    [
+     0,
+     4
+    ],
+    [
+     0,
+     9
+    ],
+    [
+     0,
+     13
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     1,
+     11
+    ],
+    [
+     1,
+     15
+    ]
+   ]
+  },
+  {
    "key": "bron_dlugi_miecz_stal",
    "rodzaj": "dlugi_miecz",
    "material": "stal",
@@ -493,6 +575,47 @@
    ]
   },
   {
+   "key": "bron_tasak_braz",
+   "rodzaj": "tasak",
+   "material": "braz",
+   "sheet": "Hero_Sword",
+   "own": false,
+   "files": [
+    "b_bron_tasak_braz_0_4.png",
+    "b_bron_tasak_braz_0_9.png",
+    "b_bron_tasak_braz_0_13.png",
+    "b_bron_tasak_braz_1_6.png",
+    "b_bron_tasak_braz_1_11.png",
+    "b_bron_tasak_braz_1_15.png"
+   ],
+   "frames": [
+    [
+     0,
+     4
+    ],
+    [
+     0,
+     9
+    ],
+    [
+     0,
+     13
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     1,
+     11
+    ],
+    [
+     1,
+     15
+    ]
+   ]
+  },
+  {
    "key": "bron_tasak_zelazo",
    "rodzaj": "tasak",
    "material": "zelazo",
@@ -546,6 +669,47 @@
     "b_bron_tasak_stal_1_6.png",
     "b_bron_tasak_stal_1_11.png",
     "b_bron_tasak_stal_1_15.png"
+   ],
+   "frames": [
+    [
+     0,
+     4
+    ],
+    [
+     0,
+     9
+    ],
+    [
+     0,
+     13
+    ],
+    [
+     1,
+     6
+    ],
+    [
+     1,
+     11
+    ],
+    [
+     1,
+     15
+    ]
+   ]
+  },
+  {
+   "key": "bron_tasak_zakon",
+   "rodzaj": "tasak",
+   "material": "zakon",
+   "sheet": "Hero_Sword",
+   "own": false,
+   "files": [
+    "b_bron_tasak_zakon_0_4.png",
+    "b_bron_tasak_zakon_0_9.png",
+    "b_bron_tasak_zakon_0_13.png",
+    "b_bron_tasak_zakon_1_6.png",
+    "b_bron_tasak_zakon_1_11.png",
+    "b_bron_tasak_zakon_1_15.png"
    ],
    "frames": [
     [
@@ -780,6 +944,47 @@
    ]
   },
   {
+   "key": "bron_palka_zelazo",
+   "rodzaj": "palka",
+   "material": "zelazo",
+   "sheet": "Hero_Club",
+   "own": false,
+   "files": [
+    "b_bron_palka_zelazo_0_4.png",
+    "b_bron_palka_zelazo_0_9.png",
+    "b_bron_palka_zelazo_0_13.png",
+    "b_bron_palka_zelazo_1_2.png",
+    "b_bron_palka_zelazo_1_7.png",
+    "b_bron_palka_zelazo_1_11.png"
+   ],
+   "frames": [
+    [
+     0,
+     4
+    ],
+    [
+     0,
+     9
+    ],
+    [
+     0,
+     13
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     7
+    ],
+    [
+     1,
+     11
+    ]
+   ]
+  },
+  {
    "key": "bron_kostur_drewno",
    "rodzaj": "kostur",
    "material": "drewno",
@@ -821,6 +1026,47 @@
    ]
   },
   {
+   "key": "bron_kostur_okute",
+   "rodzaj": "kostur",
+   "material": "okute",
+   "sheet": "Hero_Club",
+   "own": false,
+   "files": [
+    "b_bron_kostur_okute_0_4.png",
+    "b_bron_kostur_okute_0_9.png",
+    "b_bron_kostur_okute_0_13.png",
+    "b_bron_kostur_okute_1_2.png",
+    "b_bron_kostur_okute_1_7.png",
+    "b_bron_kostur_okute_1_11.png"
+   ],
+   "frames": [
+    [
+     0,
+     4
+    ],
+    [
+     0,
+     9
+    ],
+    [
+     0,
+     13
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     7
+    ],
+    [
+     1,
+     11
+    ]
+   ]
+  },
+  {
    "key": "bron_kostur_zakon",
    "rodzaj": "kostur",
    "material": "zakon",
@@ -833,6 +1079,47 @@
     "b_bron_kostur_zakon_1_2.png",
     "b_bron_kostur_zakon_1_7.png",
     "b_bron_kostur_zakon_1_11.png"
+   ],
+   "frames": [
+    [
+     0,
+     4
+    ],
+    [
+     0,
+     9
+    ],
+    [
+     0,
+     13
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     7
+    ],
+    [
+     1,
+     11
+    ]
+   ]
+  },
+  {
+   "key": "bron_kiscien_okute",
+   "rodzaj": "kiscien",
+   "material": "okute",
+   "sheet": "Hero_Club",
+   "own": false,
+   "files": [
+    "b_bron_kiscien_okute_0_4.png",
+    "b_bron_kiscien_okute_0_9.png",
+    "b_bron_kiscien_okute_0_13.png",
+    "b_bron_kiscien_okute_1_2.png",
+    "b_bron_kiscien_okute_1_7.png",
+    "b_bron_kiscien_okute_1_11.png"
    ],
    "frames": [
     [
@@ -1354,6 +1641,47 @@
    ]
   },
   {
+   "key": "bron_czekan_zakon",
+   "rodzaj": "czekan",
+   "material": "zakon",
+   "sheet": "Hero_Axe",
+   "own": false,
+   "files": [
+    "b_bron_czekan_zakon_0_3.png",
+    "b_bron_czekan_zakon_0_8.png",
+    "b_bron_czekan_zakon_0_12.png",
+    "b_bron_czekan_zakon_1_2.png",
+    "b_bron_czekan_zakon_1_7.png",
+    "b_bron_czekan_zakon_1_11.png"
+   ],
+   "frames": [
+    [
+     0,
+     3
+    ],
+    [
+     0,
+     8
+    ],
+    [
+     0,
+     12
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     7
+    ],
+    [
+     1,
+     11
+    ]
+   ]
+  },
+  {
    "key": "bron_bardysz_zelazo",
    "rodzaj": "bardysz",
    "material": "zelazo",
@@ -1436,6 +1764,47 @@
    ]
   },
   {
+   "key": "bron_bardysz_zakon",
+   "rodzaj": "bardysz",
+   "material": "zakon",
+   "sheet": "Hero_Axe",
+   "own": false,
+   "files": [
+    "b_bron_bardysz_zakon_0_3.png",
+    "b_bron_bardysz_zakon_0_8.png",
+    "b_bron_bardysz_zakon_0_12.png",
+    "b_bron_bardysz_zakon_1_2.png",
+    "b_bron_bardysz_zakon_1_7.png",
+    "b_bron_bardysz_zakon_1_11.png"
+   ],
+   "frames": [
+    [
+     0,
+     3
+    ],
+    [
+     0,
+     8
+    ],
+    [
+     0,
+     12
+    ],
+    [
+     1,
+     2
+    ],
+    [
+     1,
+     7
+    ],
+    [
+     1,
+     11
+    ]
+   ]
+  },
+  {
    "key": "bron_mlot_kamien",
    "rodzaj": "mlot",
    "material": "kamien",
@@ -1448,6 +1817,47 @@
     "b_bron_mlot_kamien_1_4.png",
     "b_bron_mlot_kamien_1_9.png",
     "b_bron_mlot_kamien_1_13.png"
+   ],
+   "frames": [
+    [
+     0,
+     3
+    ],
+    [
+     0,
+     8
+    ],
+    [
+     0,
+     12
+    ],
+    [
+     1,
+     4
+    ],
+    [
+     1,
+     9
+    ],
+    [
+     1,
+     13
+    ]
+   ]
+  },
+  {
+   "key": "bron_mlot_braz",
+   "rodzaj": "mlot",
+   "material": "braz",
+   "sheet": "Hero_Pick",
+   "own": false,
+   "files": [
+    "b_bron_mlot_braz_0_3.png",
+    "b_bron_mlot_braz_0_8.png",
+    "b_bron_mlot_braz_0_12.png",
+    "b_bron_mlot_braz_1_4.png",
+    "b_bron_mlot_braz_1_9.png",
+    "b_bron_mlot_braz_1_13.png"
    ],
    "frames": [
     [
@@ -2379,6 +2789,88 @@
    ]
   },
   {
+   "key": "bron_luk_mysliwski",
+   "rodzaj": "luk",
+   "material": "mysliwski",
+   "sheet": "Hero_Bow",
+   "own": false,
+   "files": [
+    "b_bron_luk_mysliwski_0_9.png",
+    "b_bron_luk_mysliwski_0_14.png",
+    "b_bron_luk_mysliwski_0_16.png",
+    "b_bron_luk_mysliwski_1_9.png",
+    "b_bron_luk_mysliwski_1_14.png",
+    "b_bron_luk_mysliwski_1_16.png"
+   ],
+   "frames": [
+    [
+     0,
+     9
+    ],
+    [
+     0,
+     14
+    ],
+    [
+     0,
+     16
+    ],
+    [
+     1,
+     9
+    ],
+    [
+     1,
+     14
+    ],
+    [
+     1,
+     16
+    ]
+   ]
+  },
+  {
+   "key": "bron_luk_wojenny",
+   "rodzaj": "luk",
+   "material": "wojenny",
+   "sheet": "Hero_Bow",
+   "own": false,
+   "files": [
+    "b_bron_luk_wojenny_0_9.png",
+    "b_bron_luk_wojenny_0_14.png",
+    "b_bron_luk_wojenny_0_16.png",
+    "b_bron_luk_wojenny_1_9.png",
+    "b_bron_luk_wojenny_1_14.png",
+    "b_bron_luk_wojenny_1_16.png"
+   ],
+   "frames": [
+    [
+     0,
+     9
+    ],
+    [
+     0,
+     14
+    ],
+    [
+     0,
+     16
+    ],
+    [
+     1,
+     9
+    ],
+    [
+     1,
+     14
+    ],
+    [
+     1,
+     16
+    ]
+   ]
+  },
+  {
    "key": "bron_proca_prosta",
    "rodzaj": "proca",
    "material": "prosta",
@@ -3276,6 +3768,28 @@
     "h_helm_zakonny_zakon_rider.png"
    ],
    "clipped": 0
+  },
+  {
+   "key": "helm_garnczkowy_stal",
+   "files": [
+    "h_helm_garnczkowy_stal_Hero_Walk_0_0.png",
+    "h_helm_garnczkowy_stal_Hero_Walk_0_1.png",
+    "h_helm_garnczkowy_stal_Hero_Walk_3_2.png",
+    "h_helm_garnczkowy_stal_Hero_Walk_0_4.png",
+    "h_helm_garnczkowy_stal_Hero_Walk_3_6.png",
+    "h_helm_garnczkowy_stal_Hero_Run_3_7.png",
+    "h_helm_garnczkowy_stal_Hero_AxeSide_10_1.png",
+    "h_helm_garnczkowy_stal_Hero_Club_9_0.png",
+    "h_helm_garnczkowy_stal_Hero_Sit_16_0.png",
+    "h_helm_garnczkowy_stal_Hero_LieDown_16_0.png",
+    "h_helm_garnczkowy_stal_Hero_LieDown_16_1.png",
+    "h_helm_garnczkowy_stal_Hero_LieDown_16_3.png",
+    "h_helm_garnczkowy_stal_Hero_Roll_5_0.png",
+    "h_helm_garnczkowy_stal_Hero_Roll_6_1.png",
+    "h_helm_garnczkowy_stal_Hero_Roll_7_2.png",
+    "h_helm_garnczkowy_stal_rider.png"
+   ],
+   "clipped": 0
   }
  ],
  "zbroje": [
@@ -3501,6 +4015,71 @@
    ]
   },
   {
+   "key": "zbroja_brygantyna_welna",
+   "miejsce": "tors",
+   "files": [
+    "z_zbroja_brygantyna_welna_Hero_Walk_0_0.png",
+    "z_zbroja_brygantyna_welna_Hero_Walk_3_2.png",
+    "z_zbroja_brygantyna_welna_Hero_Walk_0_4.png",
+    "z_zbroja_brygantyna_welna_Hero_AxeSide_10_2.png",
+    "z_zbroja_brygantyna_welna_Hero_Club_7_1.png",
+    "z_zbroja_brygantyna_welna_Hero_Sit_16_0.png",
+    "z_zbroja_brygantyna_welna_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "zbroja_brygantyna_skora",
+   "miejsce": "tors",
+   "files": [
+    "z_zbroja_brygantyna_skora_Hero_Walk_0_0.png",
+    "z_zbroja_brygantyna_skora_Hero_Walk_3_2.png",
+    "z_zbroja_brygantyna_skora_Hero_Walk_0_4.png",
+    "z_zbroja_brygantyna_skora_Hero_AxeSide_10_2.png",
+    "z_zbroja_brygantyna_skora_Hero_Club_7_1.png",
+    "z_zbroja_brygantyna_skora_Hero_Sit_16_0.png",
+    "z_zbroja_brygantyna_skora_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "zbroja_brygantyna_zelazo",
+   "miejsce": "tors",
+   "files": [
+    "z_zbroja_brygantyna_zelazo_Hero_Walk_0_0.png",
+    "z_zbroja_brygantyna_zelazo_Hero_Walk_3_2.png",
+    "z_zbroja_brygantyna_zelazo_Hero_Walk_0_4.png",
+    "z_zbroja_brygantyna_zelazo_Hero_AxeSide_10_2.png",
+    "z_zbroja_brygantyna_zelazo_Hero_Club_7_1.png",
+    "z_zbroja_brygantyna_zelazo_Hero_Sit_16_0.png",
+    "z_zbroja_brygantyna_zelazo_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "zbroja_brygantyna_stal",
+   "miejsce": "tors",
+   "files": [
+    "z_zbroja_brygantyna_stal_Hero_Walk_0_0.png",
+    "z_zbroja_brygantyna_stal_Hero_Walk_3_2.png",
+    "z_zbroja_brygantyna_stal_Hero_Walk_0_4.png",
+    "z_zbroja_brygantyna_stal_Hero_AxeSide_10_2.png",
+    "z_zbroja_brygantyna_stal_Hero_Club_7_1.png",
+    "z_zbroja_brygantyna_stal_Hero_Sit_16_0.png",
+    "z_zbroja_brygantyna_stal_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "zbroja_brygantyna_zakon",
+   "miejsce": "tors",
+   "files": [
+    "z_zbroja_brygantyna_zakon_Hero_Walk_0_0.png",
+    "z_zbroja_brygantyna_zakon_Hero_Walk_3_2.png",
+    "z_zbroja_brygantyna_zakon_Hero_Walk_0_4.png",
+    "z_zbroja_brygantyna_zakon_Hero_AxeSide_10_2.png",
+    "z_zbroja_brygantyna_zakon_Hero_Club_7_1.png",
+    "z_zbroja_brygantyna_zakon_Hero_Sit_16_0.png",
+    "z_zbroja_brygantyna_zakon_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
    "key": "karwasze_skora",
    "miejsce": "rece",
    "files": [
@@ -3579,6 +4158,19 @@
    ]
   },
   {
+   "key": "karwasze_len",
+   "miejsce": "rece",
+   "files": [
+    "z_karwasze_len_Hero_Walk_0_0.png",
+    "z_karwasze_len_Hero_Walk_3_2.png",
+    "z_karwasze_len_Hero_Walk_0_4.png",
+    "z_karwasze_len_Hero_AxeSide_10_2.png",
+    "z_karwasze_len_Hero_Club_7_1.png",
+    "z_karwasze_len_Hero_Sit_16_0.png",
+    "z_karwasze_len_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
    "key": "nagolenniki_skora",
    "miejsce": "nogi",
    "files": [
@@ -3644,6 +4236,19 @@
    ]
   },
   {
+   "key": "nagolenniki_len",
+   "miejsce": "nogi",
+   "files": [
+    "z_nagolenniki_len_Hero_Walk_0_0.png",
+    "z_nagolenniki_len_Hero_Walk_3_2.png",
+    "z_nagolenniki_len_Hero_Walk_0_4.png",
+    "z_nagolenniki_len_Hero_AxeSide_10_2.png",
+    "z_nagolenniki_len_Hero_Club_7_1.png",
+    "z_nagolenniki_len_Hero_Sit_16_0.png",
+    "z_nagolenniki_len_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
    "key": "buty_okute_zelazo",
    "miejsce": "stopy",
    "files": [
@@ -3680,6 +4285,19 @@
     "z_buty_okute_zakon_Hero_Club_7_1.png",
     "z_buty_okute_zakon_Hero_Sit_16_0.png",
     "z_buty_okute_zakon_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "buty_okute_braz",
+   "miejsce": "stopy",
+   "files": [
+    "z_buty_okute_braz_Hero_Walk_0_0.png",
+    "z_buty_okute_braz_Hero_Walk_3_2.png",
+    "z_buty_okute_braz_Hero_Walk_0_4.png",
+    "z_buty_okute_braz_Hero_AxeSide_10_2.png",
+    "z_buty_okute_braz_Hero_Club_7_1.png",
+    "z_buty_okute_braz_Hero_Sit_16_0.png",
+    "z_buty_okute_braz_Hero_LieDown_16_0.png"
    ]
   }
  ],
@@ -3738,6 +4356,55 @@
    "files": [
     "t_tarcza_skrzydlata_straz_front.png",
     "t_tarcza_skrzydlata_straz_side.png"
+   ]
+  },
+  {
+   "key": "tarcza_drewniana_plecionka",
+   "files": [
+    "t_tarcza_drewniana_plecionka_front.png",
+    "t_tarcza_drewniana_plecionka_side.png"
+   ]
+  },
+  {
+   "key": "tarcza_drewniana_skora",
+   "files": [
+    "t_tarcza_drewniana_skora_front.png",
+    "t_tarcza_drewniana_skora_side.png"
+   ]
+  },
+  {
+   "key": "tarcza_puklerz_braz",
+   "files": [
+    "t_tarcza_puklerz_braz_front.png",
+    "t_tarcza_puklerz_braz_side.png"
+   ]
+  },
+  {
+   "key": "tarcza_okuta_krab",
+   "files": [
+    "t_tarcza_okuta_krab_front.png",
+    "t_tarcza_okuta_krab_side.png"
+   ]
+  },
+  {
+   "key": "tarcza_migdalowa_pawez",
+   "files": [
+    "t_tarcza_migdalowa_pawez_front.png",
+    "t_tarcza_migdalowa_pawez_side.png"
+   ]
+  },
+  {
+   "key": "tarcza_puklerz_stal",
+   "files": [
+    "t_tarcza_puklerz_stal_front.png",
+    "t_tarcza_puklerz_stal_side.png"
+   ]
+  },
+  {
+   "key": "tarcza_migdalowa_stal",
+   "files": [
+    "t_tarcza_migdalowa_stal_front.png",
+    "t_tarcza_migdalowa_stal_side.png"
    ]
   }
  ],
@@ -3849,99 +4516,99 @@
   "w": 320,
   "h": 380,
   "y": 80,
-  "over": 75,
+  "over": 1025,
   "x": 480
  },
  "ms": {
-  "Hero_Sword": {
-   "n": 12,
-   "min": 6.4,
-   "max": 8.8,
-   "avg": 7.8
+  "Hero_Roll": {
+   "n": 16,
+   "min": 3.4,
+   "max": 11.3,
+   "avg": 4.1
+  },
+  "Hero_Walk": {
+   "n": 81,
+   "min": 1.2,
+   "max": 17.1,
+   "avg": 3
+  },
+  "Hero_Run": {
+   "n": 15,
+   "min": 2.8,
+   "max": 7,
+   "avg": 3.5
+  },
+  "Hero_AxeSide": {
+   "n": 71,
+   "min": 3,
+   "max": 16.6,
+   "avg": 4.4
   },
   "Hero_Club": {
-   "n": 68,
-   "min": 2.8,
-   "max": 21,
-   "avg": 5.7
+   "n": 69,
+   "min": 2.2,
+   "max": 8.2,
+   "avg": 3.3
+  },
+  "Hero_Sit": {
+   "n": 70,
+   "min": 4.3,
+   "max": 14.8,
+   "avg": 6.2
+  },
+  "Hero_LieDown": {
+   "n": 71,
+   "min": 4.1,
+   "max": 27.4,
+   "avg": 6.6
+  },
+  "Hero_Bust": {
+   "n": 6,
+   "min": 2,
+   "max": 10.1,
+   "avg": 4
   },
   "Hero_Axe": {
-   "n": 11,
-   "min": 6.9,
-   "max": 11.2,
-   "avg": 8.2
+   "n": 1,
+   "min": 10.4,
+   "max": 10.4,
+   "avg": 10.4
   },
   "Hero_Pick": {
-   "n": 7,
-   "min": 6.8,
-   "max": 11.1,
-   "avg": 8.4
-  },
-  "Hero_Spear": {
-   "n": 9,
-   "min": 7,
-   "max": 12.5,
-   "avg": 8.6
-  },
-  "Hero_Bow": {
-   "n": 5,
-   "min": 7.7,
-   "max": 11.9,
-   "avg": 9.3
+   "n": 1,
+   "min": 10.3,
+   "max": 10.3,
+   "avg": 10.3
   },
   "Hero_Sling": {
-   "n": 3,
-   "min": 7.6,
-   "max": 11.3,
-   "avg": 9.1
+   "n": 1,
+   "min": 10.2,
+   "max": 10.2,
+   "avg": 10.2
+  },
+  "Hero_Bow": {
+   "n": 1,
+   "min": 9.9,
+   "max": 9.9,
+   "avg": 9.9
+  },
+  "Hero_Spear": {
+   "n": 1,
+   "min": 10.2,
+   "max": 10.2,
+   "avg": 10.2
   },
   "Hero_Punch": {
    "n": 1,
-   "min": 8.6,
-   "max": 8.6,
-   "avg": 8.6
+   "min": 10.2,
+   "max": 10.2,
+   "avg": 10.2
   },
-  "Hero_Walk": {
-   "n": 64,
-   "min": 1.4,
-   "max": 22.6,
-   "avg": 3.9
-  },
-  "Hero_Run": {
-   "n": 24,
-   "min": 3.8,
-   "max": 7,
-   "avg": 4.4
-  },
-  "Hero_AxeSide": {
-   "n": 57,
-   "min": 3.3,
-   "max": 19.5,
-   "avg": 6.4
-  },
-  "Hero_Sit": {
-   "n": 56,
-   "min": 4.9,
-   "max": 19.9,
-   "avg": 9
-  },
-  "Hero_LieDown": {
-   "n": 57,
-   "min": 5.6,
-   "max": 48.6,
-   "avg": 10.4
-  },
-  "Hero_Roll": {
-   "n": 24,
-   "min": 4.2,
-   "max": 15.5,
-   "avg": 5.2
-  },
-  "Hero_Bust": {
-   "n": 7,
-   "min": 3.3,
-   "max": 25.7,
-   "avg": 9.3
+  "Hero_Sword": {
+   "n": 1,
+   "min": 13.2,
+   "max": 13.2,
+   "avg": 13.2
   }
  }
 }

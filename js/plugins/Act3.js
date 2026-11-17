@@ -259,7 +259,7 @@
         return {
             startDay: day(), startHour: hour(), t: 0, wave: 0, gapT: D.PACE.firstGap, level: siegeLevel(),
             waves: D.WAVES.map(w => ({ id: w.id, map: w.map, state: "pending", alive: null, offSince: null, carry: [] })),
-            doors: { 8: D.DOORS[8].hp, 1: D.DOORS[1].hp }, broken: { 8: false, 1: false }, damage: 0,
+            doors: { [D.TOWN]: D.DOORS[D.TOWN].hp, 1: D.DOORS[1].hp }, broken: { [D.TOWN]: false, 1: false }, damage: 0,
             bell: null, bellT: null, helpers: null, told: {}, defenders: {}, killed: 0, spared: 0, robbed: 0, fled: 0, wentDown: 0,
             beaten: false, grum: c.grum, rafal: c.rafal, grumFate: null, rafalFate: null, bossBeaten: false
         };
@@ -292,7 +292,7 @@
         if (q && q.hearSignal) { try { q.hearSignal("3+1"); } catch (e) { /* (the signal noted or not) */ } }
         top(by === "hero" ? TX.bellHero : TX.bellAmbrozy, "#ffe27a");
         const L = TL();   // (Ambroży comes out to his bell while it lasts - TownLife's hold)
-        if (by === "ambrozy" && L && L.hold && L.hold("dzwonnik", true, D.SPOTS[8].bellStand)) s.ambrozyHeld = true;
+        if (by === "ambrozy" && L && L.hold && L.hold("dzwonnik", true, D.SPOTS[D.TOWN].bellStand)) s.ambrozyHeld = true;
         const c = ctx();
         s.helpers = c.helpers;
         runtime.helpNoticeT = 200;
@@ -488,7 +488,7 @@
     function breachOff(i) {
         const s = siege(), w = D.WAVES[i], W = s.waves[i], specs = specsOf(i);
         if (w.map === D.TOWN) {
-            if (!s.broken[8]) { s.broken[8] = true; s.doors[8] = 0; addDamage(D.DOORS[8].breach); }
+            if (!s.broken[D.TOWN]) { s.broken[D.TOWN] = true; s.doors[D.TOWN] = 0; addDamage(D.DOORS[D.TOWN].breach); }
             const next = s.waves.findIndex((X, k) => k > i && D.WAVES[k].map === D.TAVERN);
             if (next >= 0) for (const sp of specs) if (sp.kind !== "archer") s.waves[next].carry.push(sp);
         } else {
@@ -1122,8 +1122,8 @@
     function firesLit() {
         const s = S();
         if (mapId() !== D.TOWN) return [];
-        const list = D.SPOTS[8].fires || [];
-        if (s.phase === "siege" && s.siege) return list.slice(0, clamp(Math.floor(s.siege.damage / 18) + (s.siege.broken[8] ? 1 : 0), 0, list.length));
+        const list = D.SPOTS[D.TOWN].fires || [];
+        if (s.phase === "siege" && s.siege) return list.slice(0, clamp(Math.floor(s.siege.damage / 18) + (s.siege.broken[D.TOWN] ? 1 : 0), 0, list.length));
         if (s.phase === "done" && s.outcome && s.outcome.result !== "held" && day() <= s.outcome.day && (hour() >= 18 || hour() < 6)) return list.slice(0, 2);   // (the embers of that night)
         return [];
     }
@@ -1161,7 +1161,7 @@
     };
     Sprite_Act3Layer.prototype.updateScars = function() {
         const s = S(), on = s.scarsUntil && day() <= s.scarsUntil && D.TRIGGER.siegeMaps.includes(mapId());
-        const want = !on ? [] : mapId() === D.TOWN ? (D.SPOTS[8].fires || []).map(f => [f[0], f[1] - 0.3, 1.4]) : [[D.SPOTS[1].doorTile[0], D.SPOTS[1].doorTile[1], 1.2]];
+        const want = !on ? [] : mapId() === D.TOWN ? (D.SPOTS[D.TOWN].fires || []).map(f => [f[0], f[1] - 0.3, 1.4]) : [[D.SPOTS[1].doorTile[0], D.SPOTS[1].doorTile[1], 1.2]];
         while (this._soot.length > want.length) { const sp = this._soot.pop(); this.removeChild(sp); }
         while (this._soot.length < want.length) { const sp = new Sprite(sootBitmap(this._soot.length + 1)); sp.anchor.set(0.5, 0.75); this.addChildAt(sp, 0); this._soot.push(sp); }
         want.forEach((f, k) => { const sp = this._soot[k]; sp.x = scrX(f[0] + 0.5); sp.y = scrY(f[1] + 0.5); sp.scale.set(f[2], f[2]); sp.opacity = 200; });
@@ -1199,7 +1199,7 @@
         b._baseTexture.update();
     };
     Sprite_Act3Layer.prototype.updateMarker = function() {
-        const s = siege(), sp = this._marker, b = D.SPOTS[8].bell;
+        const s = siege(), sp = this._marker, b = D.SPOTS[D.TOWN].bell;
         sp.visible = !!s && !s.bell && mapId() === D.TOWN && !ctx().ambrozy;
         if (!sp.visible) return;
         sp.x = scrX(b[0] + 0.5);
@@ -1293,7 +1293,7 @@
         try { T.inject.reserve(PLUGIN, D.IDS.from, D.IDS.rope - 1, "Akt III: rezerwa (napad na tawernę)"); } catch (e) { /* (kept already) */ }
     }
     T.inject(D.TOWN, { ids: [D.IDS.rope, D.IDS.rope], owner: PLUGIN, build() {
-        const b = D.SPOTS[8].bell;
+        const b = D.SPOTS[D.TOWN].bell;
         const page = {
             conditions: { actorId: 1, actorValid: false, itemId: 1, itemValid: false, selfSwitchCh: "A", selfSwitchValid: false, switch1Id: 1, switch1Valid: false,
                           switch2Id: 1, switch2Valid: false, variableId: 1, variableValid: false, variableValue: 0 },
@@ -1331,7 +1331,7 @@
         s.phase = "idle";
         s.outcome = null;
         if (hour() < D.TRIGGER.from && hour() >= D.TRIGGER.to) $gameSystem.setDayNightHour(22);
-        if (!D.TRIGGER.siegeMaps.includes(mapId())) $gamePlayer.reserveTransfer(D.TOWN, D.SPOTS[8].door[0], D.SPOTS[8].door[1] + 2, 2, 0);
+        if (!D.TRIGGER.siegeMaps.includes(mapId())) $gamePlayer.reserveTransfer(D.TOWN, D.SPOTS[D.TOWN].door[0], D.SPOTS[D.TOWN].door[1] + 2, 2, 0);
         arm({ now: true });
         return startSiege(opts);
     }

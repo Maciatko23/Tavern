@@ -77,7 +77,7 @@
     // the thread (Latarnia_Data.js, the engine Watki.js): the state "latarnia", K49 / D22 / W11 with their talks and actions, the flags
     const w = Watki.get("latarnia");
     if (!w) throw new Error("Latarnia.js: brak wątku „latarnia” (Latarnia_Data.js / Watki.js)");
-    const MAP = D.MAP, IZBA = D.IZBA, LATERNA = D.LATERNA, HARBOUR = 125, OURS = [MAP, IZBA, LATERNA];
+    const MAP = D.MAP, IZBA = D.IZBA, LATERNA = D.LATERNA, HARBOUR = D.HARBOUR || 125, OURS = [MAP, IZBA, LATERNA];
     const KEY = "latarnik", COIN_ICON = 314, SWITCH_FOG = 19;
     const { HERO, C, fill } = Watki.mowa;
     const day = () => T.time.day(), hour = () => T.time.hour(), now = () => day() * 24 + hour();
@@ -453,6 +453,8 @@
     function door(interp) {
         if (!has()) return;
         const why = towerOpen();
+        // (nowy świat: one door) not up the stairs - into the keeper's room at the tower's foot (izbaDoor: not while he sleeps)
+        if (!why && D.IZBA_IN_TOWER) { const Li = D.LANDING[IZBA]; izbaDoor(interp, Li[0], Li[1]); return; }
         if (!why) { pop(nightNow() !== null ? D.TX.towerNight : D.TX.towerDay); return; }
         if (why === "fog" && !flag("latarniaUfa")) pop(D.TX.towerMist, "#ffe9a8");
         const L = D.LANDING[LATERNA];
@@ -846,27 +848,29 @@
     // ------------------------------------------------------------------
     // The picture: the fire on the tower, the lit panes, the beams, the fog, the bell, the lens and the basket upstairs
     // ------------------------------------------------------------------
-    const FIRE = D.FIRE, FIRE_LIGHT = 620, FIRE_I = 0.82, BEAM_ALPHA = 0.24, FAR_ALPHA = 0.24, HALO_ALPHA = 0.62;
+    const BEAMS = false;
+    const FIRE = D.FIRE, FIRE_LIGHT = 980, FIRE_I = 0.95, GROUND_LIGHT = 620, GROUND_I = 0.62, BEAM_ALPHA = 0.24, FAR_ALPHA = 0.24, HALO_ALPHA = 0.62;
     // a small flame in fine pixels (frames made once): a core, yellow, orange, red tips - flickering, leaning with the wind
     let flameFrames = null;
     function makeFlames() {
         if (flameFrames) return flameFrames;
-        const K = FIRE.k || 1, Wd = Math.round(16 * K), Hd = Math.round(26 * K), out = [];
+        const K = FIRE.k || 1, Wd = Math.round(16 * K), Hd = Math.round(20 * K), out = [];
         const PAL = [[120, 24, 8], [200, 56, 12], [240, 120, 24], [255, 186, 60], [255, 236, 150], [255, 252, 226]];
         for (let f = 0; f < 8; f++) {
             const b = new Bitmap(Wd, Hd), ctx = b.context, img = ctx.createImageData(Wd, Hd);
+            // one clean teardrop: a round belly low over the basket, a pointed tip; the whole flame leans a little and breathes
+            // (no per-row wobble: that drew a crooked zigzag - the user 2026-11-14: „ten niby ogień na latarni jest krzywy”)
+            const ph = f / 8 * Math.PI * 2, lean = Math.sin(ph) * 1.6 * K, Hf = Hd * (0.86 + 0.14 * Math.sin(ph * 2 + 1)), R = Wd / 2 - 1.5;
             for (let y = 0; y < Hd; y++) {
-                const v = 1 - y / (Hd - 1);                    // (0 the top .. 1 the foot)
-                const sway = Math.sin(f * 0.8 + y * 0.45) * (1 - v) * 1.6;
-                const half = (Wd / 2 - 1.2) * Math.pow(v, 0.62) * (0.9 + 0.1 * Math.sin(f * 1.7 + y));
+                const v = 1 - (Hd - 1 - y) / (Hf - 1);         // (0 the tip .. 1 the foot)
+                if (v < 0) continue;
+                const half = R * (v < 0.7 ? Math.pow(v / 0.7, 0.8) : Math.sqrt(1 - 0.6 * Math.pow((v - 0.7) / 0.3, 2)));
+                const cx = Wd / 2 + lean * Math.pow(1 - v, 1.6);
                 for (let x = 0; x < Wd; x++) {
-                    const dx = Math.abs(x + 0.5 - Wd / 2 - sway);
+                    const dx = Math.abs(x + 0.5 - cx);
                     if (dx > half) continue;
-                    const e = 1 - dx / (half + 0.01);
-                    let heat = e * (0.35 + 0.75 * v) + 0.12 * Math.sin(x * 2.1 + y * 1.3 + f * 2.3);
-                    if (y < 4 && ((x + f + y) % 3 === 0)) heat -= 0.25;
-                    const k = heat > 0.95 ? 5 : heat > 0.78 ? 4 : heat > 0.6 ? 3 : heat > 0.42 ? 2 : heat > 0.24 ? 1 : heat > 0.1 ? 0 : -1;
-                    if (k < 0) continue;
+                    const heat = (1 - dx / (half + 0.01)) * (0.3 + 0.7 * v) + 0.25 * v;
+                    const k = heat > 0.98 ? 5 : heat > 0.8 ? 4 : heat > 0.58 ? 3 : heat > 0.36 ? 2 : heat > 0.16 ? 1 : 0;
                     const i = (y * Wd + x) * 4, c = PAL[k];
                     img.data[i] = c[0]; img.data[i + 1] = c[1]; img.data[i + 2] = c[2]; img.data[i + 3] = k === 0 ? 170 : 255;
                 }
@@ -1034,7 +1038,8 @@
             layer._halo.y = Math.max(-30, Math.min(GH + 30, o.y));
             layer._halo.alpha = HALO_ALPHA * dark * (mid === MAP ? 1 : 0.8) * (0.86 + 0.08 * Math.sin(f * 0.13) + 0.06 * Math.sin(f * 0.41));
         }
-        const beamA = on && o && dark > 0.05 ? alpha * dark * (1 + 0.5 * fog) : 0;
+        // (the user 2026-11-14: the turning strip of light goes - the fire just lights the land around)
+        const beamA = BEAMS && on && o && dark > 0.05 ? alpha * dark * (1 + 0.5 * fog) : 0;
         layer._beams.visible = beamA > 0.005;
         if (layer._beams.visible) {
             const ang = (f / 60) * (Math.PI * 2 / 22);           // (a turn in 22 seconds)
@@ -1076,7 +1081,12 @@
             try {
                 if ($gameMap.mapId() === MAP && lit()) {
                     const p = fireScreen(ss);
-                    if (p) out.push({ x: p.x, y: p.y, r: FIRE_LIGHT * (fogNow() ? 0.8 : 1), i: FIRE_I, id: 6630, glow: true });
+                    if (p) {
+                        const k = fogNow() ? 0.8 : 1;
+                        out.push({ x: p.x, y: p.y, r: FIRE_LIGHT * k, i: FIRE_I, id: 6630, glow: true });
+                        // ... and its pool on the ground round the tower's foot (the fire is high up: the land below stayed dark)
+                        out.push({ x: p.x - FIRE.x, y: p.y + FIRE.y - 40, r: GROUND_LIGHT * k, i: GROUND_I, id: 6631 });
+                    }
                 }
             } catch (e) { /* (no light this frame) */ }
             return out;

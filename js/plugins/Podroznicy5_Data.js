@@ -43,14 +43,14 @@
 
     // ------------------------------------------------------------------ who, where, when, how much
     const KTO = { erazm: "poborca", kompania: "kompania", hubert: "kompania_1", teofil: "kartograf" };
-    const MAP = { miasto: 8, karczma: 1, pietro: 25 };
+    const MAP = { miasto: 220, karczma: 1, pietro: 25 };   // (2026-11-16: the new world's town)
     const IDS = [3080, 3089], OWNER = "Poselstwo";
     // D44: the night of the payment - Erazm's arrival + 2 (day 36); Feliks before the door of room 4 (37,15) 22:40-23:20, the wall
     // 23-24; the hero within `widzi` tiles sees him
-    const D44 = { noc: 2, feliks: { id: 3080, map: MAP.pietro, x: 37, y: 16, dir: 8, sheet: "$Npc_Feliks", godziny: [22.67, 23.34], widzi: 4 },
+    const D44 = { noc: 2, feliks: { id: 3080, map: MAP.pietro, x: 22, y: 16, dir: 8, sheet: "$Npc_Feliks", godziny: [22.67, 23.34], widzi: 4 },
         godziny: [23, 24], donos: 20, przychylnosc: 5, xp: 120 };
     // D47: the stakes, the hire, the yard (Map008 - the tavern's yard: the fight starts with the hero within `zasieg` of it), the noise
-    const D47 = { stawka: 10, najem: 60, podworze: [51, 24], zasieg: 9, poziom: 5, burda: [1, 6], renoma: { spokoj: 4, wit: 2, burda: -1 }, xp: 120,
+    const D47 = { stawka: 10, najem: 60, podworze: [43, 37], zasieg: 9, poziom: 5, burda: [1, 6], renoma: { spokoj: 4, wit: 2, burda: -1 }, xp: 120,
         hubertSila: 3 };
     // D48: the share of the fortress's map; who may talk him out of it - the chronicle's cards read (D23) or Hart ducha
     const D48 = { zloto: 25, karty: 2, hart: 6, xp: 100 };
@@ -59,7 +59,7 @@
     // list of the faction's knowledge (one scout more in wave 3)
     const ECHA = {
         wiedza: ["mapaTwierdzy"], fala4: ["kompaniaWroga"],
-        kompania: { key: "kompania", sheet: "anim8/Merc_Walk8", atk: "Merc", maps: [8], from: "gate", delay: 380, hp: 150, dmg: 15, poise: 40, cd: [70, 100],
+        kompania: { key: "kompania", sheet: "anim8/Merc_Walk8", atk: "Merc", maps: [220], from: "gate", delay: 380, hp: 150, dmg: 15, poise: 40, cd: [70, 100],
             speed: 4.0, armor: 0.25, swing: "#e8e8e8", n: 2 }
     };
     // the dice rival (TavernDice: a rival of this matter only - never at the tavern's table by himself) and the arm-wrestling one
@@ -166,8 +166,8 @@
         skoki: {
             przed: [{ hak: "f9Przygotuj" }],
             lista: {
-                1: { ch: 1, krok: "d44Noc", godzina: 22.6, idz: [MAP.pietro, 30, 8, 6] },
-                2: { ch: 2, krok: "d44Raport", godzina: 14.5, idz: [MAP.pietro, 36, 8, 8] },
+                1: { ch: 1, krok: "d44Noc", godzina: 22.6, idz: [MAP.pietro, 17, 8, 6] },
+                2: { ch: 2, krok: "d44Raport", godzina: 14.5, idz: [MAP.pietro, 21, 8, 8] },
                 3: { ch: 1, krok: "d47Kompania", godzina: 10, idz: [MAP.pietro, 20, 19, 2] },
                 4: { ch: 1, krok: "d48Mapa", godzina: 16, idz: [MAP.pietro, 5, 30, 8] }
             }

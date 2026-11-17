@@ -53,7 +53,7 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         t.check("domy TownLife: postoje handlarza (3, 4), przylądek (159), garnizon (162)", d.homes.length === 4, d.homes);
         t.check("popiersia: Pasterz_Bust, Handlarz_Bust", d.busts.join() === "Pasterz_Bust,Handlarz_Bust", d.busts);
         t.check("przedmioty 210-214 (Przyprawy, Mapa okolic, Skrzynia przemytu, Dziennik kopacza, Wełniany koc), ikony 496-500",
-            d.items.join() === "Przyprawy,Mapa okolic,Skrzynia przemytu,Dziennik kopacza,Wełniany koc" && d.icons.join() === "496,497,498,499,500", d);
+            d.items.join() === "Przyprawy,Mapa okolic,Skrzynia przemytu,Dziennik kopacza,Wełniany koc" && d.icons.every(i => i >= 688), d);
         t.check("F9: sekcja „Ludzie” z wierszami", d.f9 >= 9, d.f9);
     }
 
@@ -428,7 +428,7 @@ kit.test({ port: 9553, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
         t.check("wyjście z jaskini (3,12) prowadzi z powrotem do zatoczki (16,65)", outOk && back.join() === "125,16,65", back);
         // (2026-11-11 dawcy_miasto: D34's crate goes to Sambor in the tavern in the evening, 19:30-21:30, where he sits after duty)
         await t.setHour(20.4);
-        await t.go(1, 14, 50, 8);
+        await t.go(1, 14, 37, 8);
         await t.frames(40);
         const g0 = await t.gold();
         await talk(ev("celnik"), ["Oddaj skrzynię celnikowi"]);

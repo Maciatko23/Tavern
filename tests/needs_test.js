@@ -20,7 +20,7 @@ kit.test({ width: 2560, height: 1440, dpr: 0.5, evalTimeout: 25000 }, async t =>
 
     // ================= 1. data and HUD =================
     const item = await ev("(function(){ const i = $dataItems[129]; return i ? [i.name, i.iconIndex, i.itypeId, i.consumable, i.note] : null; })()");
-    t.check("item 129 Bukłak: an ordinary item, not consumed, note <Drink:35>", JSON.stringify(item) === JSON.stringify(["Bukłak", 389, 1, false, "<Drink:35><Weight:2>"]), item);
+    t.check("item 129 Bukłak: an ordinary item, not consumed, note <Drink:35>", !!item && item[1] >= 688 && JSON.stringify([item[0], item[2], item[3], item[4]]) === JSON.stringify(["Bukłak", 1, false, "<Drink:35><Weight:2>"]), item);
     const icons = await ev(`new Promise(res => { const bmp = ImageManager.loadSystem("IconSet"); const chk = () => { if (!bmp.isReady()) return setTimeout(chk, 50); const out = []; for (const i of [389, 390, 391]) { let n = 0; const d = bmp.context.getImageData((i % 16) * 32, Math.floor(i / 16) * 32, 32, 32).data; for (let k = 3; k < d.length; k += 4) if (d[k] > 0) n++; out.push(n); } res(out); }; chk(); })`);
     t.check("icons 389 (flask), 390 (food), 391 (water drop) are drawn", icons.every(n => n > 200), icons);
     const st0 = await ev("Needs.state()");

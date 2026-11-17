@@ -31,7 +31,7 @@ kit.test({ port: 9470, errorCheck: "bez błędów w konsoli" }, async t => {
     const onMap = "(SceneManager._scene instanceof Scene_Map && SceneManager._scene._started && !SceneManager.isSceneChanging() && $gameMap.mapId() === 19)";
 
     t.check("wtyczka Prologue na liście, pod TitleScreen i Story", await t.eval(`(function(){ const n = $plugins.filter(p => p.status).map(p => p.name); return n.includes("Prologue") && n.indexOf("Prologue") > n.indexOf("TitleScreen") && n.indexOf("Prologue") > n.indexOf("Story"); })()`));
-    t.check("wisiorek z krukiem w bazie: przedmiot kluczowy, nie na sprzedaż, ikona 437", await t.eval("(function(){ const i = $dataItems[172]; return !!i && i.name === 'Wisiorek z krukiem' && i.itypeId === 2 && i.price === 0 && !i.consumable && i.iconIndex === 437; })()"));
+    t.check("wisiorek z krukiem w bazie: przedmiot kluczowy, nie na sprzedaż, ikona z PixelLab (688+)", await t.eval("(function(){ const i = $dataItems[172]; return !!i && i.name === 'Wisiorek z krukiem' && i.itypeId === 2 && i.price === 0 && !i.consumable && i.iconIndex >= 688; })()"));
 
     // ---- 1. „Nowa gra” -> ekran imienia; P przy pustym polu wraca do tytułu
     await t.until(titleReady, 20);

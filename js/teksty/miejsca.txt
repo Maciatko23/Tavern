@@ -168,6 +168,28 @@ mapa.935.opis = Z dołu widać tylko pióra krążące nad szczytem.
 mapa.951.pod = skalna twierdza naprzeciw garnizonu
 mapa.951.opis = Stąd widać każdy żagiel, który wpływa do zatoki.
 
+
+# (2026-11-13) nowy świat: 5 map w dolinie
+# 219 Słony Brzeg
+mapa.219.pod = wraki, sól i wyrzucone drewno
+mapa.219.opis = Morze daje tu wszystko, tylko nie wodę do picia.
+
+# 218 Podgrodzie
+mapa.218.pod = chałupy nad suchym korytem
+mapa.218.opis = Rzeka płynęła tu kiedyś; zostały po niej kamienie i pamięć.
+
+# 220 Kruczogród
+mapa.220.pod = miasteczko z tawerną i studnią
+mapa.220.opis = Studnia na rynku daje mało, za to plotek nigdy nie brakuje.
+
+# 221 Dwór nad Jazem
+mapa.221.pod = dwór Zaleskich i jaz na rzece
+mapa.221.opis = Nad jazem woda stoi pełna, a poniżej ledwie się sączy.
+
+# 222 Krucze Turnie
+mapa.222.pod = kopalnia, lasy i dzika zwierzyna
+mapa.222.opis = W skale drzemie żelazo, a w lasach czeka zwierzyna.
+
 # ======================================================================== Wnętrza (tylko podpis)
 # 1 Tawerna
 mapa.1.pod = karczma „Pod Złotym Kuflem”

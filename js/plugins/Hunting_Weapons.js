@@ -70,6 +70,12 @@
         const b = BR(), v = b && b.rangedDef ? b.rangedDef(w) : null;
         return v ? Object.assign({}, WEAPONS[w], v) : WEAPONS[w];
     }
+    // (2026-11-17, the user's) a shot's damage is not fixed - the base x 0.9-1.1 (Bron_Data.ROZRZUT) - and the bow's / the sling's traits
+    // (Bron_Cechy.js; the item that shot: def.item): obrazenia, stwory, ogluszajacy_kamien, przebijajaca_strzala
+    const NO_TRAITS = Object.freeze({});
+    const BC = () => T.api("Bron_Cechy");
+    const cechy = id => { const c = id ? BC() : null; return c ? c.of(id) : NO_TRAITS; };
+    const dmgRoll = () => { const d = T.api("Bron_Data"), r = d && typeof d.ROZRZUT === "number" ? d.ROZRZUT : 0.1; return 1 - r + Math.random() * 2 * r; };
     const ownsBow = () => { const b = BR(); return b && b.owns ? b.owns("bow") : countItem(ITEM.bow) > 0; };
     const ownsSling = () => { const b = BR(); return b && b.owns ? b.owns("sling") : countItem(ITEM.sling) > 0; };
     // the bow when there are arrows, else the sling when there are stones; null with the reason (a popup) otherwise
@@ -123,6 +129,8 @@
         se(def.se, 85, def.pitch);
         const sx = $gamePlayer._realX + 0.5, sy = $gamePlayer._realY + 0.3, p = makeProjectile(w, sx, sy, dx, dy);
         p.def = def;   // (the bow it left: its damage and range, whatever is in hand when it lands)
+        const through = w === "bow" ? cechy(def.item).przebijajaca_strzala || 0 : 0;
+        if (through > 1) { p.pierce = through; p.passed = []; }   // (Bron_Cechy.js: an arrow that goes on through - this many in all)
         projectiles.push(p);
         makeNoise(sx, sy, NOISE_RADIUS * (knowsSkill("r_silent") ? 0.5 : 1));   // (Cichy strzał)
     }
@@ -248,7 +256,7 @@
             const t = spearTarget();
             se("Wind7", 70, 140);   // the swish of the jab
             T.call("Durability", "use", ITEM.spear);
-            if (t) t.hit(SPEAR.damage, "spear");
+            if (t) t.hit(Math.round(SPEAR.damage * dmgRoll()), "spear");
             makeNoise($gamePlayer._realX + 0.5, $gamePlayer._realY + 0.5, SPEAR.noise);
         };
         if (animate && typeof $gamePlayer.startToolSwing === "function" && $gamePlayer.startToolSwing(SHOT_SWING.spear, strike)) return true;
@@ -349,9 +357,14 @@
             const steps = 3, step = def.speed / steps;
             for (let i = 0; i < steps && !p.done; i++) {
                 p.x += p.dx * step; p.y += p.dy * step; p.travelled += step;
-                const target = targets.find(t => Math.hypot(t.x - p.x, t.y - p.y) <= t.radius);
-                if (target) { shotHit(target, def); endProjectile(p); shotEnd(p, target); break; }
-                if (p.travelled >= def.range || blockedAt(p.x, p.y)) { endProjectile(p); shotEnd(p, null); }
+                const target = targets.find(t => Math.hypot(t.x - p.x, t.y - p.y) <= t.radius && !(p.passed && p.passed.includes(t.ref)));
+                if (target) {
+                    const hurt = shotHit(target, def);
+                    // (Bron_Cechy.js przebijajaca_strzala) through the one it hurt, on to the next in line - a shield stops it
+                    if (hurt && p.pierce && p.pierce > p.passed.length + 1) { p.passed.push(target.ref); p.first = p.first || target; continue; }
+                    endProjectile(p); shotEnd(p, target); break;
+                }
+                if (p.travelled >= def.range || blockedAt(p.x, p.y)) { endProjectile(p); shotEnd(p, p.first || null); }
             }
             if (p.sprite && !p.sprite.parent) p.sprite = null;   // the scene was rebuilt: the flight goes on without the picture
             if (p.sprite && !p.done) {
@@ -378,10 +391,12 @@
     // A shot from hiding (stage 2, 2026-10-05): at an animal that has not noticed him yet (no "!" over it, not fighting him), while he
     // sneaks or from behind it (Combat.sneakAttack says) - Combat.sneakMult(true) (x2, more with Zręczność, Czujność and Zasadzka) and
     // a heavy knock to its balance; Strzał w serce makes any shot at an unaware one a triple (a shot from hiding at least that)
+    // -> true when it hurt (a shield did not stop it: an arrow that pierces goes on - updateProjectiles)
     function shotHit(target, def) {
-        const Cb = C();
-        let dmg = def.damage * (Cb ? 1 + 0.02 * (Cb.attr("dex") - 5) : 1) * (1 + perk("ranged.dmg")), tag = "", poise = Math.round(def.damage * 0.6);
+        const Cb = C(), tr = cechy(def.item), bc = tr !== NO_TRAITS ? BC() : null;
+        let dmg = def.damage * dmgRoll() * (Cb ? 1 + 0.02 * (Cb.attr("dex") - 5) : 1) * (1 + perk("ranged.dmg")), tag = "", poise = Math.round(def.damage * 0.6);
         const a = target.ref && target.ref.isAnimal ? target.ref : null;
+        if (tr.stwory && bc && bc.isCreature(target.ref)) dmg *= 1 + tr.stwory;   // (the order's bow on the creatures of the depths)
         const sneak = a && Cb && Cb.sneakAttack ? Cb.sneakAttack(a) : null;   // null | "unaware" | "hidden" (sneaking or from behind)
         const heart = a && knowsSkill("r_heart") && !!sneak;
         if (sneak === "hidden" || heart) {
@@ -391,7 +406,14 @@
             tag = heart && m === 3 ? "heart" : "sneak";
         }
         else if (perkRoll("ranged.crit")) { dmg *= 2; tag = "crit"; }
-        target.hit(Math.round(dmg), "shot", { poise, crit: !!tag, tag, heavy: tag === "sneak" || tag === "heart" });
+        // (Bron_Cechy.js ogluszajacy_kamien) a stone that stuns: its balance broken whole - it reels by its own rules
+        const stunK = bc && bc.stunRoll(tr.ogluszajacy_kamien, a) ? tr.ogluszajacy_kamien : null;
+        if (stunK) poise = Math.max(poise, (a._poise || 0) + 1);
+        const r = target.ref, hp0 = r && typeof r._hp === "number" ? r._hp : null;
+        if (bc) bc.beforeHit(r);
+        target.hit(Math.round(dmg) + (tr.obrazenia || 0), "shot", { poise, crit: !!tag, tag, heavy: tag === "sneak" || tag === "heart" });
+        if (bc) bc.afterHit(r, tr, stunK);
+        return hp0 === null || r._hp < hp0 || !!r._dead;
     }
     function hit(animal, damage, how, extra) {
         const sp = SPECIES[animal.kind()];
@@ -399,6 +421,7 @@
         damage = Math.round(damage * (1 + perk("hunt.dmg")));   // (Łowca, Tropiciel, Pogromca zwierząt: any weapon)
         extra = extra || {};
         animal._hp -= damage;
+        animal._provoked = true;   // (a boar left alone attacks nobody: this is what ends its peace)
         animal._poiseT = 0;
         animal._engaged = true;
         if (how !== "dog") animal._heroHitAt = Graphics.frameCount;   // (Starcia.js: the hero's blow turns one that fights a man on him)

@@ -284,7 +284,24 @@
         if ((hour() >= 20 || hour() < 4.5) && (built("bedroll") || built("tent")) && (yield* sleepNight())) return true;   // night: the bed, not the grass
         yield* closeMenus();
         yield* waitFree();
-        // a tile around him where "Odpocznij" is on the menu
+        const clockNow = () => $gameSystem.dayNightDay() * 24 + hour(), t0 = clockNow(), bed = built("bedroll") || built("tent");
+        // (2026-11-16) Z - the player's rest key: he sits down where he stands, anywhere under the sky; under a roof (Z refused) the
+        // old way - the grass's "Odpocznij" on the plot
+        yield* press("rest");
+        yield* wait(10);
+        if (P()._toolSwing) say("odpoczywa tam, gdzie stoi - Z (wytrzymałość " + Math.round(stamina()) + " -> " + to + ")");
+        else if (!(yield* restOnGrass(to))) return false;
+        // he rests on by himself (an hour a second) and gets up at full strength; at bedtime (a bed to go to) a tap stands him up
+        for (let n = 0; n < 60 * 40 && P()._toolSwing; n++) {
+            if (bed && hour() >= 20 && hour() < 21) { yield* press("down"); break; }
+            yield;
+        }
+        yield* waitFree();
+        say("wstał (" + Math.round(stamina()) + ", " + Math.round(clockNow() - t0) + " godz.)");
+        return true;
+    }
+    // the plot's grass: "Odpocznij" on the ground menu of a tile beside him (walked to the nearest such) - sat down, or false
+    function* restOnGrass(to) {
         let dir = 0;
         for (const d of [2, 4, 6, 8]) {
             const x = $gameMap.roundXWithDirection(P().x, d), y = $gameMap.roundYWithDirection(P().y, d);
@@ -295,28 +312,26 @@
         if (!dir) {   // step onto open grass first
             const f = field(P().x, P().y);
             let best = null;
-            for (let y = P().y - 6; y <= P().y + 6; y++) for (let x = P().x - 6; x <= P().x + 6; x++) {
-                if (!$gameMap.isValid(x, y + 1) || !isFinite(f.at(x, y)) || Farming.gatherAt(x, y + 1) || Farming.stoneAt(x, y + 1)) continue;
-                const m = Farming.menuFor(x, y + 1);
-                if (m && m.entries && m.entries.some(e => e.name === "Odpocznij" && e.enabled !== false) && (!best || f.at(x, y) < best.c)) best = { x, y, c: f.at(x, y) };
+            // (2026-11-16 the new world: the grass to sit on is only the plot's - <BuildRegion> - so worn out a little way off it he
+            // found nothing within 6 tiles and stood there with 3 strength; nothing near: the ground further off, up to 25 tiles)
+            for (const R of [6, 25]) {
+                for (let y = P().y - R; y <= P().y + R; y++) for (let x = P().x - R; x <= P().x + R; x++) {
+                    if (!$gameMap.isValid(x, y + 1) || !isFinite(f.at(x, y)) || Farming.gatherAt(x, y + 1) || Farming.stoneAt(x, y + 1)) continue;
+                    if (best && f.at(x, y) >= best.c) continue;
+                    const m = Farming.menuFor(x, y + 1);
+                    if (m && m.entries && m.entries.some(e => e.name === "Odpocznij" && e.enabled !== false)) best = { x, y, c: f.at(x, y) };
+                }
+                if (best) break;
             }
             if (!best || !(yield* walkTo(best.x, best.y))) { say("nie ma gdzie usiąść"); return false; }
             dir = 2;
         }
         say("odpoczywa (wytrzymałość " + Math.round(stamina()) + " -> " + to + ")");
-        const clockNow = () => $gameSystem.dayNightDay() * 24 + hour(), t0 = clockNow(), bed = built("bedroll") || built("tent");
         P().setDirection(dir);
         yield* wait(3);
         yield* press("ok");
         if (!(yield* choose("Odpocznij"))) { yield* closeMenus(); say("nie usiadł"); return false; }
         yield* wait(10);
-        // he rests on by himself (an hour a second) and gets up at full strength; at bedtime (a bed to go to) a tap stands him up
-        for (let n = 0; n < 60 * 40 && P()._toolSwing; n++) {
-            if (bed && hour() >= 20 && hour() < 21) { yield* press(dir === 2 ? "up" : "down"); break; }
-            yield;
-        }
-        yield* waitFree();
-        say("wstał (" + Math.round(stamina()) + ", " + Math.round(clockNow() - t0) + " godz.)");
         return true;
     }
     function* drink() {
@@ -493,6 +508,42 @@
         AP.pantryAt = AP.frame;
         yield* storePantry(force);
         yield* compostRot();
+        yield* storeChests(force);
+    }
+    // ---- the chests (2026-11-17, the player: "zawsze może budować skrzynie i tam przechowywać rzeczy, a jedzenie do spiżarni"): what
+    // weighs and is not needed on the way - seeds, hides, any other loot (plain items with a <Weight>, not food, not perishable, not the
+    // bucket, not rot) - goes into his chests on the plot; the key items (tools, weapons, the tent) and the bandages stay in the bag.
+    // obtain() and the sowing take things back out (fromChests). Food goes to the pantry (storePantry), rot out (dropRot).
+    const chestsB = () => myBuildings().filter(b => b && !b.site && (b.type === "chest_s" || b.type === "chest_l"));
+    const chestable = i => !!i && i.itypeId === 1 && Number((i.meta || {}).Weight) > 0 && !(i.meta || {}).Food && !(i.meta || {}).Bandage &&
+        !(window.Spoilage && Spoilage.isPerishable && Spoilage.isPerishable(i)) && i.id !== 138 && i.id !== (window.Spoilage ? Spoilage.ROT : 122);
+    function* storeChests(force) {
+        const cs = chestsB();
+        if (!cs.length || $gameMap.mapId() !== HOME_MAP) return false;
+        const put = $gameParty.items().filter(chestable);
+        if (!put.length || (!force && put.reduce((t, i) => t + count(i.id), 0) < 5)) return false;
+        const done = [];
+        for (const c of cs) {
+            const left = put.filter(i => count(i.id) > 0);
+            if (!left.length) break;
+            if (!(yield* goFace(Farming.tilesOfBuilding(c.type, c.x, c.y), null, true))) continue;
+            for (const i of left) { const m = Farming.putInChest(c, i, count(i.id)); if (m > 0) done.push(i.name + " ×" + m); }
+        }
+        if (done.length) { say("odłożył do skrzyni: " + done.join(", ")); yield* wait(20); }
+        return done.length > 0;
+    }
+    // what is short ([[id, n]]) out of his chests on this map - he walks to each that holds some
+    function* fromChests(short) {
+        if ($gameMap.mapId() !== HOME_MAP) return false;
+        const got = [];
+        for (const c of chestsB()) {
+            const take = short.map(([id, n]) => [id, Math.min(n - count(id), Farming.chestHolds(c, $dataItems[id]) || 0)]).filter(([, n]) => n > 0);
+            if (!take.length) continue;
+            if (!(yield* goFace(Farming.tilesOfBuilding(c.type, c.x, c.y), null, true))) continue;
+            for (const [id, n] of take) { const m = Farming.takeFromChest(c, $dataItems[id], n); if (m > 0) got.push($dataItems[id].name + " ×" + m); }
+        }
+        if (got.length) { say("wziął ze skrzyni: " + got.join(", ")); yield* wait(10); }
+        return got.length > 0;
     }
     AP.storePantry = storePantry; AP.fromPantry = fromPantry;
     function* reflexes() {
@@ -513,6 +564,20 @@
             if (Needs.state().food >= 40 || t || !(yield* fromPantry(false))) break;   // (the pantry: a walk - below 40)
         }
         if (stamina() < Math.min(AP.reserve, staminaCap() - 5)) yield* restFast(AP.restTo);
+        yield* dropRot();
+    }
+    // rotten food out of the bag (2026-11-17 run: 98 rotten berries - 98 of the bag's 124 weight - and nothing else fit, "Nie zmieści się
+    // w plecaku: Oszczep" for hours): to the compost bin when he is by his own, else thrown out - the bag's "Wyrzuć" (P > Plecak > X,
+    // Drops.drop: the same function, a bundle on the ground)
+    function* dropRot() {
+        const ROT = window.Spoilage ? Spoilage.ROT : 122;
+        if (count(ROT) < 8) return false;
+        yield* compostRot();
+        const n = count(ROT), it = $dataItems[ROT];
+        if (n < 8 || !window.Drops || !Drops.drop || Drops.refuse(it)) return false;
+        if (!Drops.drop(ROT, Math.min(n, Drops.maxDrop(it)))) return false;
+        say("wyrzucił z plecaka zepsute jedzenie ×" + n);
+        return true;
     }
 
     // ---- tasks
@@ -665,8 +730,11 @@
             yield* waitFree();
             const before = totalItems();
             let ok = false;
-            if (name === "Zrób młotek") { yield* press("pageup"); ok = yield* choose(name); }
-            else if (yield* openGround("Wytwórz...")) { yield* wait(6); ok = yield* choose(name); }
+            // (2026-11-17: the hand's recipes are lines of the Q list's "Budowa" tab on every map - the ground's "Wytwórz..." is only on
+            // the plot's soil: in the mountains "Zrób opatrunek" was "nie ma przepisu" again and again)
+            yield* press("pageup");
+            ok = yield* choose(name);
+            if (!ok) { yield* closeMenus(); if (yield* openGround("Wytwórz...")) { yield* wait(6); ok = yield* choose(name); } }
             if (!ok) { yield* closeMenus(); say("nie ma przepisu: " + name); break; }
             yield* wait(10);
             yield* waitFree(60 * 30);
@@ -695,10 +763,12 @@
         return made;
     }
     // put a building near (nx, ny): the Q list, the cursor moved by the arrows, OK (he walks there), then the hammer until it stands
-    function* build(type, nx, ny, instant) {
+    // (camp: a thing that goes up anywhere - the tent, the forest bed - put down off the plot, on any map: the game says where it may)
+    function* build(type, nx, ny, instant, camp) {
         const def = Farming.BUILDINGS[type];
         if (!def) return false;
-        if ($gameMap.mapId() !== HOME_MAP) { say("nie buduje poza domem (mapa " + $gameMap.mapId() + ")"); return false; }
+        const indoorHere = $gameMap.mapId() === HUT_MAP_() && !!def.indoor;   // (furniture in his own hut: Q there is "Wyposaż chatkę")
+        if ($gameMap.mapId() !== HOME_MAP && !(camp && def.anywhere) && !indoorHere) { say("nie buduje poza domem (mapa " + $gameMap.mapId() + ")"); return false; }
         const old = !instant && myBuildings(type).find(b => b.site);
         if (old) return yield* finishSite(old);
         const miss = Farming.missingMaterials(type);
@@ -711,14 +781,24 @@
             if (Math.max(Math.abs(x - nx), Math.abs(y - ny)) !== r) continue;
             if (inZone(x, y) || inZone(x, y + 2) || AP.nearDanger(x, y)) continue;   // (a boar about home: put it a bit further away, not give up)
             if (Farming.whyNotBuild(type, x, y, false, false)) continue;
+            if (indoorHere) {   // (the hut's floor is 5 x 2: any free cell beside the footprint to stand on)
+                const cells = Farming.tilesOfBuilding(type, x, y), inside = new Set(cells.map(c => c.x + "," + c.y));
+                let stand = null;
+                for (const c of cells) for (const [dx, dy, d] of [[0, 1, 8], [0, -1, 2], [1, 0, 4], [-1, 0, 6]]) {
+                    const sx = c.x + dx, sy = c.y + dy;
+                    if (!stand && !inside.has(sx + "," + sy) && isFinite(f.at(sx, sy))) stand = { x: sx, y: sy, d };
+                }
+                if (stand) spot = { x, y, stand };
+                continue;
+            }
             // a free tile to stand on two below the footprint, and room around the site to swing the hammer
             if (!isFinite(f.at(x, y + 2)) || !isFinite(f.at(x, y + 1))) continue;
             spot = { x, y };
         }
         if (!spot) { say("nie ma miejsca na " + def.name); return false; }
         say("stawia " + def.name + " na " + spot.x + "," + spot.y);
-        if (!(yield* walkTo(spot.x, spot.y + 2))) { say("nie doszedł na miejsce"); return false; }
-        P().setDirection(8);
+        if (!(yield* walkTo(spot.stand ? spot.stand.x : spot.x, spot.stand ? spot.stand.y : spot.y + 2))) { say("nie doszedł na miejsce"); return false; }
+        P().setDirection(spot.stand ? spot.stand.d : 8);
         yield* wait(4);
         if (instant) {
             if (!(yield* openGround("Postaw..."))) { yield* closeMenus(); say("nie ma 'Postaw...'"); return false; }
@@ -750,10 +830,66 @@
         return ok;
     }
 
+    // ---- his own hut (2026-11-17, the player: "zawsze może zbudować swój domek i tam łóżko"): in through its door, out over the
+    // doormat (Farming's hut: Map100, a 5 x 2 floor); the bed in it is a full night of his own (the forest bed gives 60%)
+    function HUT_MAP_() { return (window.Farming && Farming.HUT_MAP) || 100; }
+    const hutBuilt = type => (((Farming.farm().buildings || {})[HUT_MAP_()]) || []).some(b => b && b.type === type && !b.site);
+    function* enterHut() {
+        if ($gameMap.mapId() === HUT_MAP_()) return true;
+        const h = Farming.hutOf ? Farming.hutOf() : null;
+        if (!h || h.b.site || h.mapId !== $gameMap.mapId()) return false;
+        const d = { x: h.b.x + ((Farming.geoOf(h.b).door || {}).dx || 0), y: h.b.y };   // (the doorway: a cell of the hut's bottom row - Farming's hutDoorCell)
+        if (!(yield* walkTo(d.x, d.y + 1))) { say("nie dojdzie do drzwi chatki"); return false; }
+        for (let n = 0; n < 120 && $gameMap.mapId() !== HUT_MAP_() && !P().isTransferring(); n++) { setMove(["up"]); yield; }
+        setMove([]);
+        for (let n = 0; n < 300 && ($gameMap.mapId() !== HUT_MAP_() || P().isTransferring() || !(SceneManager._scene instanceof Scene_Map)); n++) yield;
+        yield* wait(20);
+        if ($gameMap.mapId() === HUT_MAP_()) say("wszedł do swojej chatki");
+        return $gameMap.mapId() === HUT_MAP_();
+    }
+    function* leaveHut() {
+        if ($gameMap.mapId() !== HUT_MAP_()) return true;
+        const R = Farming.HUT_ROOM, m0 = $gameMap.mapId();
+        yield* walkTo(R.doorX, R.y1);
+        for (let n = 0; n < 120 && $gameMap.mapId() === m0 && !P().isTransferring(); n++) { setMove(["down"]); yield; }
+        setMove([]);
+        for (let n = 0; n < 300 && ($gameMap.mapId() === m0 || P().isTransferring() || !(SceneManager._scene instanceof Scene_Map)); n++) yield;
+        yield* wait(20);
+        return $gameMap.mapId() !== m0;
+    }
+    function* furnish(type) {
+        if ($gameMap.mapId() !== HUT_MAP_() && !(yield* enterHut())) return false;
+        const R = Farming.HUT_ROOM;
+        const ok = yield* build(type, R.x0, R.y0);
+        yield* leaveHut();
+        return ok;
+    }
+    function* sleepInHut() {
+        if (!hutBuilt("bed") || threat()) return false;
+        if (!(yield* enterHut())) return false;
+        const b = myBuildings("bed").find(b => !b.site);
+        let slept = false;
+        if (b && (yield* goFace(Farming.tilesOfBuilding(b.type, b.x, b.y), null, true))) {
+            const d0 = $gameSystem.dayNightDay() * 24 + hour();
+            yield* press("ok");
+            if (yield* choose("Prześpij noc")) { yield* wait(30); yield* waitFree(60 * 20); }
+            yield* closeMenus();
+            slept = $gameSystem.dayNightDay() * 24 + hour() - d0 > 2;
+            if (slept) say("przespał noc we własnym łóżku (wytrzymałość " + Math.round(stamina()) + ")");
+        }
+        yield* leaveHut();
+        return slept;
+    }
+
     // ---- the brain: what to make next, what it needs, where to get it
     const built = type => myBuildings(type).some(b => !b.site);
-    const HOME = { x: 30, y: 14 };
+    const HOME = { x: 30, y: 17 };   // (2026-11-16 the new world: the middle of grandpa's fenced plot on Podgrodzie - its <BuildRegion:8> x 21-40, y 10-24)
     function* sleepNight() {
+        // his own hut's bed first (a full night)
+        if (hutBuilt("bed") && ($gameMap.mapId() === HOME_MAP || $gameMap.mapId() === HUT_MAP_()) && !threat()) {
+            if ($gameMap.mapId() === HOME_MAP && !AP.pantryDepth) { AP.pantryDepth = 1; try { yield* tendPantry(true); } finally { AP.pantryDepth = 0; } }
+            if (yield* sleepInHut()) return true;
+        }
         const b = myBuildings("bedroll").filter(b => !b.site)[0] || myBuildings("tent").filter(b => !b.site)[0];
         if (!b) return false;
         if (threat()) return false;   // (a wolf or a boar after him: no sleep - the danger check deals with it)
@@ -901,6 +1037,7 @@
             yield* reflexes();
             yield* nightCheck();
             if (yield* fromStockpile(short)) continue;   // (what the dog brought: first)
+            if (yield* fromChests(short)) continue;      // (what he put away himself)
             const ground = {};
             for (const [id, n] of short) if (GROUND.includes(id)) ground[id] = n;
             if (Object.keys(ground).length) {
@@ -1102,7 +1239,10 @@
         B("Piekarnia", "bakery", 13, 7),
         B("Kurnik", "coop", -9, 0),
         B("Serowarnia", "dairy", 5, 8),
-        B("Owczarnia", "pen", 2, 10)
+        B("Owczarnia", "pen", 2, 10),
+        // (2026-11-17, the player: "zawsze może zbudować swój domek i tam łóżko") his own hut on the plot and a bed in it (wool: the pen)
+        B("Chatka", "hut", -6, -4),
+        { n: "Łóżko w chatce", done: () => hutBuilt("bed"), get need() { return costOf("bed"); }, run: () => furnish("bed") }
     ];
     AP.PLAN = PLAN;
     function* collectJob(b) {
@@ -1296,7 +1436,7 @@
         }
     }
     AP.pottery = pottery;
-    const HOME_MAP = 3;
+    const HOME_MAP = 218;   // (the new world: grandpa's plot is on Podgrodzie)
     function* goHome() { return yield* goToMap(HOME_MAP); }
     function* goToMap(target) {
         const HOME_MAP_ = HOME_MAP, HOME_MAP__ = target;
@@ -1446,6 +1586,9 @@
     function* plantSeeds() {
         if ($gameMap.mapId() !== HOME_MAP || !count(65) || !count(66) || stamina() < 25) return;
         const season = Farming.seasonIndex ? Farming.seasonIndex($gameSystem.dayNightDay()) : 0;
+        const inSeason = id => Object.values(Farming.CROPS || {}).some(c => c.seed === id && (!c.seasons || c.seasons.includes(season)));
+        const stored = Object.keys(SEEDS).map(Number).filter(id => count(id) < 4 && inSeason(id) && chestsB().some(c => (Farming.chestHolds(c, $dataItems[id]) || 0) > 0));
+        if (stored.length) yield* fromChests(stored.map(id => [id, 4]));
         const seeds = Object.keys(SEEDS).map(Number).filter(id => count(id) > 0 && Object.values(Farming.CROPS || {}).some(c => c.seed === id && (!c.seasons || c.seasons.includes(season))));
         if (!seeds.length) return;
         const tiles = gardenTiles();
@@ -1647,7 +1790,8 @@
     }
 
     const TASKS = {
-        play, obtain, sleep: sleepNight, place: (t, x, y) => build(t, x, y, true), dig: digSoil, pottery, drinkVessel, restFast, collectJobs,
+        enterHut, leaveHut, furnish, sleepInHut,
+        play, obtain, sleep: sleepNight, place: (t, x, y) => build(t, x, y, true), camp: (t, x, y) => build(t, x === undefined ? P().x : x, y === undefined ? P().y - 2 : y, true, true), useEntry, dig: digSoil, pottery, drinkVessel, restFast, collectJobs,
         walk: walkTo, gather, collect, goHome, goToMap, survive, forage, plantSeeds, harvestCrops, storePantry, fromPantry, compostRot, feedUp, buildWell, drinkWell, groundAction, feedDog, reflexes, tameDog, manageDog, dressCarcasses, mineOre, obtain, chop, harvest, build, craft, handCraft, rest, eat,
         wait: function* (frames) { yield* wait(frames); return true; },
         say: function* (text) { say(text); return true; },

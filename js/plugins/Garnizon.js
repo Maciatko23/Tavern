@@ -1,9 +1,11 @@
 //=============================================================================
 // Garnizon.js
 //=============================================================================
-// PAKIET D (docs/miejsca_wyspy/PAKIETY.md, KONCEPCJA.md point 6) - the engine of "Garnizon nad zatoką" (Map162, the captain's
-// quarters Map163). The royal army of the mainland (the white banner with the phoenix), quartered here by the Lord's leave. The data:
-// Garnizon_Data.js (the residents 945-947, the quests K52/D26/D27, the buying, the soldiers). This plugin:
+// PAKIET D (docs/miejsca_wyspy/PAKIETY.md, KONCEPCJA.md point 6) - the engine of the Lord's guard (2026-11-16, the new world: the
+// manor Map221 and the guard's hall Map180; once "Garnizon nad zatoką", Map162/163 - the royal army, which the new world has not got).
+// The names inside stay "garnizon" (the save's state, the bus, the API). The data: Garnizon_Data.js (the residents 945-947, the
+// quests K52/D26/D27, the buying, the guardsmen, the manor's places). This plugin (the old map's parts - the sandbar, the boat, the
+// quarters' door - only run where the data has them):
 //   - the place is built: Wyspa.ready(162) once data/Map162.json is the real map (its note <Garnizon:mapa>) - then the harbour's
 //     bottom edge leads here (Wyspa.js)
 //   - the soldiers (ids 640-647, Map162): a day by the clock like TownLife's residents (the gate, the pier and the boat, the barrels,
@@ -26,7 +28,7 @@
 
 /*:
  * @target MZ
- * @plugindesc [pakiet D] Garnizon nad zatoką (mapy 162, 163): żołnierze, przychylność garnizonu, skup wojskowy, pobór, zboże z rekwizycji, łacha do wraku w odpływie. v1.0.0
+ * @plugindesc [pakiet D] Straż dworu Lorda (mapa 221, izba straży 180): strażnicy, przychylność straży, skup, pobór dla Korony, zboże z rekwizycji. v1.1.0
  * @author Claude
  * @base TawernaCore
  * @base Watki
@@ -267,7 +269,7 @@
         const labels = [], branches = [];
         labels.push(TK.kod.rotmistrzTalk[1]);
         branches.push(w.rozmowa("przychylnosc", { spk }));
-        if (!f.glejtWrak) {
+        if (D.GLEJT !== false && !f.glejtWrak) {
             labels.push(TK.kod.rotmistrzTalk[2]);
             branches.push(w.rozmowa("glejt", { spk }));
         }
@@ -365,8 +367,10 @@
         return out;
     }
     let spotCache = null;
+    // (the guardsmen's places: the data's table - the manor has no "z_*" events of its own -, a "Miejsce:" event of the map wins)
+    const spotsFor = (mapId, events) => Object.assign({}, mapId === MAP ? D.SOLDIER_SPOTS || {} : {}, spotsOf(events));
     function spot(key) {
-        if (!spotCache || spotCache.map !== $gameMap.mapId() || spotCache.data !== $dataMap) spotCache = { map: $gameMap.mapId(), data: $dataMap, s: spotsOf($dataMap && $dataMap.events) };
+        if (!spotCache || spotCache.map !== $gameMap.mapId() || spotCache.data !== $dataMap) spotCache = { map: $gameMap.mapId(), data: $dataMap, s: spotsFor($gameMap.mapId(), $dataMap && $dataMap.events) };
         return spotCache.s[key] || null;
     }
     // the plan's entry for an hour: { i, act, where (a spot or a list) }
@@ -383,7 +387,7 @@
     function buildMap(data, mapId) {
         const out = [];
         if (mapId === MAP) {
-            const sp = spotsOf(data.events), h = hour();
+            const sp = spotsFor(mapId, data.events), h = hour();
             for (const sd of D.SOLDIERS) {
                 const e = entryAt(sd.plan, h), first = Array.isArray(e.where) ? e.where[0] : e.where, at = sp[first] || [58, 36, 2];
                 out.push(eventData(sd.id, sd.name, SHEETS[sd.sheet], at[0], at[1], at[2], "Garnizon.talk(this);",
@@ -395,6 +399,10 @@
                     "Garnizon.talk(this);", "<Garnizon:rekrut=" + key + ">"));
             }
             out.push(eventData(D.PATROL.id, "Patrol", SHEETS.B, D.PATROL.x, D.PATROL.y, 8, "Garnizon.talk(this);", "<Garnizon:patrol><Bust:Zolnierz_Bust>"));
+            // the grain cart by the stable (the map's tiles draw the cart: the event has no picture) and the Lord's water barrels
+            if (D.GRANARY) out.push(eventData(D.GRANARY.id, TK.kod.buildMap[4], "", D.GRANARY.x, D.GRANARY.y, 2, "Garnizon.granary(this);", "<Garnizon:spichlerz>", { walk: false }));
+            for (const b of D.BARRELS || []) out.push(eventData(b.id, TK.kod.buildMap[5], "!Tavern_Yard", b.x, b.y, 8, "Garnizon.look(this, \"beczki\");", "<Garnizon:beczki>",
+                { pattern: 0, dfix: true, walk: false }));
         } else if (mapId === TOWN) {
             const L = D.TOWN_EVENTS.list;
             out.push(eventData(L.id, TK.kod.buildMap[1], "!Town_Props", L.x, L.y, 2, "Garnizon.look(this, \"lista\");", "<Garnizon:lista><Occupy:right=1>",
@@ -532,7 +540,7 @@
     // The sandbar (rows 20-21): at low tide sand to walk on, to the wreck
     // ------------------------------------------------------------------
     const BAR = D.BAR;
-    const barCell = (x, y) => y >= BAR.rows[0] && y <= BAR.rows[1] && x >= BAR.x0 && x <= BAR.x1;
+    const barCell = (x, y) => !!BAR && y >= BAR.rows[0] && y <= BAR.rows[1] && x >= BAR.x0 && x <= BAR.x1;
     const tideLevel = () => { const W = WY(); return W && W.tide ? W.tide().level : 1; };
     const lowTide = () => { const W = WY(); return !!(W && W.tide && W.tide().low); };
     const heroOnBar = () => onMap(MAP) && barCell(Math.round($gamePlayer._realX), Math.round($gamePlayer._realY));
@@ -564,7 +572,7 @@
         // (2026-11-12) the sandbar leads to the wreck (Map165): while the wreck is out of the world its wet sand would rise out of the open
         // sea in the board's north-west corner - not drawn then
         const W = window.SwiatData, wreckIn = !!W && ((W.maps && W.maps[165]) || (W.extra || []).includes(165));
-        if ($gameMap.mapId() === MAP && this._tilemap && wreckIn) { this._garnLacha = new Sprite_Lacha(); this._tilemap.addChild(this._garnLacha); }
+        if (BAR && $gameMap.mapId() === MAP && this._tilemap && wreckIn) { this._garnLacha = new Sprite_Lacha(); this._tilemap.addChild(this._garnLacha); }
     };
     // the water comes back while the hero stands on the bar: a word once
     let barWarned = false;
@@ -707,8 +715,9 @@
                 if (ev) setShown(ev, false);
             } else if (what === "stocks") {
                 $gameSystem.sleepUntilHour(7);
-                $gamePlayer.locate(46, 19);
-                $gamePlayer.setDirection(2);
+                const at = D.STOCKS || [46, 19, 2];
+                $gamePlayer.locate(at[0], at[1]);
+                $gamePlayer.setDirection(at[2] || 2);
                 s.stocks = day();
                 addFavor(F.caught, TK.kod.actCall[14]);
                 if (window.$gameScreen) $gameScreen.clearWeather && $gameScreen.clearWeather();
@@ -801,9 +810,9 @@
         if (!A3 || !Array.isArray(A3.DEFENDERS) || A3.DEFENDERS.some(d => d.key === "garnizon")) return;
         const when = c => !!(c && c.bell) && favor() >= F.defenders;
         A3.DEFENDERS.push(
-            { key: "garnizon", get name() { return OBRONA.imie.name; }, sheet: "Npc_Zolnierz_Walk8", maps: [8], from: "gate", delay: 500, hp: 120, dmg: 13, poise: 30,
+            { key: "garnizon", get name() { return OBRONA.imie.name; }, sheet: "Npc_Zolnierz_Walk8", maps: [220], from: "gate", delay: 500, hp: 120, dmg: 13, poise: 30,
               cd: [80, 110], speed: 3.9, armor: 0.2, swing: "#d8d8e0", when, lines: OBRONA.a },
-            { key: "garnizon_b", get name() { return OBRONA.imie.name; }, sheet: "Npc_Zolnierz_B_Walk8", maps: [8], from: "gate", delay: 560, hp: 120, dmg: 13, poise: 30,
+            { key: "garnizon_b", get name() { return OBRONA.imie.name; }, sheet: "Npc_Zolnierz_B_Walk8", maps: [220], from: "gate", delay: 560, hp: 120, dmg: 13, poise: 30,
               cd: [80, 110], speed: 3.9, armor: 0.2, swing: "#d8d8e0", when, lines: OBRONA.b });
     })();
 
@@ -877,7 +886,7 @@
             // the thief with the sacks: a sentry who sees him - caught (once out of the gate or off the map he is safe)
             const s = S();
             if (s.d27.carry && !$gameMap.isEventRunning()) {
-                const out = $gamePlayer.y <= 9 || $gamePlayer.x <= 22 || $gamePlayer.x >= 53 || $gamePlayer.y >= 34;
+                const z = D.CARRY_ZONE || [23, 10, 52, 33], out = $gamePlayer.x < z[0] || $gamePlayer.y < z[1] || $gamePlayer.x > z[2] || $gamePlayer.y > z[3];
                 if (out) s.d27.carry = 0;
                 else if (tick % 6 === 0) { const guard = seenBy(); if (guard) caught(guard); }
             }

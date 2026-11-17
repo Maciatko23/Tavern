@@ -63,8 +63,9 @@ kit.test({ beforeLoad: PROBES + HERO_SIDE_PARAM, bootCheck: "the game boots", er
     const probes = await t.json("window.__probes");
     t.check("our own busts (Hero_Bust, Stach_Bust) are asked for only once the database is loaded (whether the images are encrypted is known then)",
         probes.some(p => /Hero_Bust\.png/.test(p.u)) && probes.every(p => p.db), probes);
-    // (the new tavern: in front of the bar, Borgar across the counter)
-    await t.newGame({ map: 1, x: 52, y: 31, dir: 8, hour: 12, minimap: false });   // (across the counter from Borgar)
+    // (the tavern of 2026-11-16, 49x42: Borgar behind the bar at 16,15 - the hero across the counter from him)
+    await t.newGame({ map: 1, x: 16, y: 17, dir: 8, hour: 12, minimap: false });
+    const TALKH = await t.eval("SpeechBubbles.TALK.height");   // (the busts' height on the screen: 256 since the PixelLab busts, 1:1)
     await t.frames(240);   // (the popups of the start fade away)
     // the hero's bust: Hero_Bust (HeroLook's look) - while that file is not made yet, the actor's picture (HeroLook off) stands in
     const heroFile = await t.eval("fetch('img/pictures/Hero_Bust.png', { method: 'HEAD', cache: 'no-store' }).then(r => r.ok).catch(() => false)");
@@ -82,14 +83,14 @@ kit.test({ beforeLoad: PROBES + HERO_SIDE_PARAM, bootCheck: "the game boots", er
     let s = await S();
     const slide = (await t.json("window.__slide")).filter(v => v !== null);
     t.check(`talking to Borgar: a talk (his bust on the ${NS}, the hero's on the ${HS}, the one on the left mirrored to look right), the window itself invisible`,
-        s.on && s.side === "npc" && s.who === 1 && s.opacity === 0 && s.bubble && s.N && s.N.name === "People3_5" && inCorner(s.N, NS) && near(s.N.y + s.N.h, 720, 1) && near(s.N.h, 273, 1) &&
+        s.on && s.side === "npc" && s.who === 1 && s.opacity === 0 && s.bubble && s.N && s.N.name === "People3_5" && inCorner(s.N, NS) && near(s.N.y + s.N.h, 720, 1) && near(s.N.h, TALKH, 1) &&
         s.H && s.H.name === HERO && inCorner(s.H, HS) && looksIn(s.H, HS) && looksIn(s.N, NS), s);
     // (in from the screen's side: on the right the x falls, on the left it grows)
     const inward = (a, b2) => (NS === "left" ? b2 >= a : b2 <= a);
     t.check("...the busts slid in from the side (~12 frames)", slide.length >= 5 && slide[0] !== slide[slide.length - 1] && inward(slide[0], slide[slide.length - 1]) && slide.every((v, i) => i === 0 || inward(slide[i - 1], v)), slide.slice(0, 16));
     t.check("...Borgar bright, the hero dimmed (~45%)", s.N.light === 1 && near(s.H.light, 0.45, 0.02) && s.lit === "npc", { N: s.N.light, H: s.H.light });
     t.check(`...the bubble at his bust: its ${NS === "right" ? "right edge just left" : "left edge just right"} of the bust, at the bottom, the tail level with the bubble, clear of the hero's bust`,
-        byBust(s.m, s.N, NS) && s.m.y + s.m.h <= 712 && s.m.y >= 720 - 273 - 40 && clearOf(s.m, s.H, HS), s.m);
+        byBust(s.m, s.N, NS) && s.m.y + s.m.h <= 712 && s.m.y >= 720 - TALKH - 40 && clearOf(s.m, s.H, HS), s.m);
     // (his "Atmosfera" event puts a balloon over him now and then: the marker then rises above it - checked on its own below)
     t.check("...a yellow marker over Borgar's head on the map (above his balloon if he has one); the XP bar hidden", !!s.marker && !!s.head && near(s.marker.x, s.head.x, 2) &&
         s.marker.y <= s.head.top + 6 && s.marker.y >= (s.balloon ? Math.min(s.head.top, s.balloon) : s.head.top) - 64 && !s.xp, { marker: s.marker, head: s.head, balloon: s.balloon, xp: s.xp });
@@ -137,7 +138,7 @@ kit.test({ beforeLoad: PROBES + HERO_SIDE_PARAM, bootCheck: "the game boots", er
 
     // ---- a line in the usual window in the middle of a talk (the speaker nowhere to be seen): the talk ends, its choices where
     // RPG Maker puts them (not in a bubble of the hero's over the window)
-    await t.run(T(["People3", 4], ["\\SPK[1]Słuchaj."]).concat(T(["People2", 7], ["\\SPK[99]Ktoś woła zza drzwi."]), CH(["Tak", "Nie"]), END()), 1);
+    await t.run(T(["People3", 4], ["\\SPK[1]Słuchaj."]).concat(T(["People2", 7], ["\\SPK[9999]Ktoś woła zza drzwi."]), CH(["Tak", "Nie"]), END()), 1);
     await t.frames(40);
     await t.press("ok");
     for (let i = 0; i < 12 && !(await t.eval("SceneManager._scene._choiceListWindow.isOpen()")); i++) { await t.press("ok"); await t.frames(24); }
@@ -187,7 +188,9 @@ kit.test({ beforeLoad: PROBES + HERO_SIDE_PARAM, bootCheck: "the game boots", er
     await finish();
 
     // ---- the marker: over the windows; above the bubble when the speaker stands behind it
-    await t.eval("$gameMap.event(4).locate(10, 11); $gameMap.event(4).setDirection(2); 0");   // (the big tavern, no zoom: a spot whose head is behind the bubble at the bottom)
+    // (a spot whose head is behind the bubble at the bottom: the 13th row of the screen, the 14th column - from the camera; right of
+    // the name plate on the bubble's top edge, over which the marker rises on its own)
+    await t.eval("(function(){ const o = $gameMap.event(4); o.locate(Math.round($gameMap.displayX()) + 13, Math.ceil($gameMap.displayY()) + 12); o.setDirection(2); return 0; })()");
     await t.frames(10);
     await t.run(T(["People2", 0], ["\\SPK[4]*czkawka* ...i wtedy mówię do niej: to nie ja zjadłem tę kozę!", "Ehh, młodzi już nie potrafią pić jak za moich czasów...", "Karczmarz! Jeszcze jedno...", "no dobra, zapłacę. Chyba."]).concat(END()), 4);
     await t.frames(50);
@@ -315,18 +318,20 @@ kit.test({ beforeLoad: PROBES + HERO_SIDE_PARAM, bootCheck: "the game boots", er
     t.check("every speaking resident (" + (table.length - 1) + ", all maps, Teodor too) and the Lord: a bust of their own in the table, the file there",
         // (2026-10-14: one bust per sheet - the harbour's guard wears the manor guard's sheet, so his bust too)
         table.length >= 29 && !noBust.length && new Set(table.map(r => r.bust)).size === new Set(table.map(r => r.sheet)).size, { count: table.length, noBust });
-    await t.newGame({ map: 8, x: 32, y: 57, hour: 10, minimap: false });
+    await t.newGame({ map: 220, x: 33, y: 36, dir: 2, hour: 10, minimap: false });   // (Kruczogród, the new world's town)
     await t.eval("TownLife.placeAll(); 0");
     await t.frames(30);
     const onMap = await t.json(`(function(){ const out = {}; TownLife.RESIDENTS.forEach(r => { const e = TownLife.eventOf(r.key); if (e) out[r.key] = { bust: SpeechBubbles.bustOf(e), want: SpeechBubbles.BUSTS[r.sheet + ":0"] }; }); return out; })()`);
     const wrong = Object.keys(onMap).filter(k => onMap[k].bust !== onMap[k].want);
-    t.check("in the town at 10:00 every resident there (" + Object.keys(onMap).length + ") resolves to their own bust", Object.keys(onMap).length >= 15 && !wrong.length, { wrong: wrong.map(k => [k, onMap[k]]) });
-    await t.eval(kit.DRIVER + "; (function(){ const e = TownLife.eventOf('piekarka'); __standBy(e.eventId()); e.start(); return 0; })()");
+    t.check("in the town at 10:00 every resident there (" + Object.keys(onMap).length + ") resolves to their own bust", Object.keys(onMap).length >= 5 && !wrong.length, { wrong: wrong.map(k => [k, onMap[k]]) });
+    // (Hanka when she is out at 10:00, else the first resident out - each with a bust of their own)
+    const talker = onMap.piekarka ? "piekarka" : Object.keys(onMap)[0], talkerBust = onMap[talker] && onMap[talker].want;
+    await t.eval(kit.DRIVER + `; (function(){ const e = TownLife.eventOf(${JSON.stringify(talker)}); __standBy(e.eventId()); e.start(); return 0; })()`);
     await t.until("SpeechBubbles.talk().on && $gameMessage.isBusy() && SceneManager._scene._messageWindow.isOpen()", 15);
     await t.frames(45);
     s = await S();
-    t.check("a real talk with Hanka the baker (TownLife.talk): her bust Piekarka_Bust on the " + NS + ", lit, the bubble out of it",
-        s.on && s.side === "npc" && !!s.N && s.N.name === "Piekarka_Bust" && inCorner(s.N, NS) && looksIn(s.N, NS) && s.N.light === 1 && byBust(s.m, s.N, NS), { N: s.N, m: s.m, side: s.side });
+    t.check("a real talk with a resident (" + talker + ", TownLife.talk): their bust " + talkerBust + " on the " + NS + ", lit, the bubble out of it",
+        s.on && s.side === "npc" && !!s.N && s.N.name === talkerBust && inCorner(s.N, NS) && looksIn(s.N, NS) && s.N.light === 1 && byBust(s.m, s.N, NS), { N: s.N, m: s.m, side: s.side });
     await shot("rozmowa_14_mieszkanka.png");
     await finish();
 

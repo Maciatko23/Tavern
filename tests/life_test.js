@@ -28,8 +28,8 @@ fs.mkdirSync(OUT, { recursive: true });
 
         // ================= 1. data =================
         const items = await ev("[122, 123, 124, 125, 126, 127].map(i => { const it = $dataItems[i]; return it ? [it.name, it.iconIndex, it.itypeId] : null; })");
-        check("new items: rotten food, milk, cheese, sling, bow (key items), arrows", JSON.stringify(items) === JSON.stringify([["Zepsute jedzenie", 382, 1], ["Mleko", 383, 1], ["Ser", 384, 1], ["Proca", 385, 2], ["Łuk", 386, 2], ["Strzały", 387, 1]]), items);
-        check("Drewno has a log icon now (381), not the scroll", (await ev("$dataItems[61].iconIndex")) === 381);
+        check("new items: rotten food, milk, cheese, sling, bow (key items), arrows", JSON.stringify(items.map(x => x && [x[0], x[2]])) === JSON.stringify([["Zepsute jedzenie", 1], ["Mleko", 1], ["Ser", 1], ["Proca", 2], ["Łuk", 2], ["Strzały", 1]]) && items.every(x => x && x[1] >= 688), items);
+        check("Drewno has its PixelLab log icon (688+), not the scroll", (await ev("$dataItems[61].iconIndex")) >= 688);
         const foods = await ev("[123, 124].map(i => $dataItems[i].meta.Food)");
         check("milk and cheese are foods (Survival's <Food:> notes)", /stamina=12/.test(foods[0]) && /buff=sated/.test(foods[1]), foods);
         const iconsOk = await ev(`new Promise(res => { const bmp = ImageManager.loadSystem("IconSet"); const chk = () => { if (!bmp.isReady()) return setTimeout(chk, 50); const out = []; for (let i = 381; i <= 387; i++) { let n = 0; const d = bmp.context.getImageData((i % 16) * 32, Math.floor(i / 16) * 32, 32, 32).data; for (let k = 3; k < d.length; k += 4) if (d[k] > 0) n++; out.push(n); } res(out); }; chk(); })`);

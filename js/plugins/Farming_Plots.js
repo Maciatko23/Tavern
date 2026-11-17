@@ -55,6 +55,15 @@
         if (farm !== null) return farm;
         return !T.mapFlag("Dark", false);   // rooms with <Dark:on> are indoors
     }
+    // (2026-11-13, the user: "a gałęzie też leżą na ziemi?") the ground's things - branches, stones, herbs, berries, mushrooms, cones - lie
+    // also on maps with no fields: the new world's suburb, coast, the Lord's estate and the mountains (not the town); a map note
+    // <Zbieractwo:on> / <Zbieractwo:off> wins
+    const GATHER_MAPS = [218, 219, 221, 222];
+    function mapAllowsGathering() {
+        const tag = T.mapFlag("Zbieractwo", null, "first");
+        if (tag !== null) return !!tag;
+        return GATHER_MAPS.includes($gameMap.mapId()) || mapAllowsFarming();
+    }
 
     // Where a tile's picture lies in the tileset sheets: { set, x, y } (null for
     // tiles that are never ground: water, walls, roofs).
@@ -331,7 +340,7 @@
         if (!$gameMap.isValid(x, y) || !AUTO_GROUND) return false;
         // (bought land on a map of others - <BuildRegion:N>, Homes.js: things grow on it as anywhere once it is the hero's own)
         const br = buildRegion ? buildRegion() : 0;
-        if (!mapAllowsFarming() && !(br && $gameMap.regionId(x, y) === br && landOwned())) return false;
+        if (!mapAllowsGathering() && !(br && $gameMap.regionId(x, y) === br && landOwned())) return false;
         if (BLOCK_REGION > 0 && $gameMap.regionId(x, y) === BLOCK_REGION) return false;
         if (!$gameMap.checkPassage(x, y, 0x0f)) return false;
         if (eventOn(x, y) || hasObjectTile(x, y)) return false;
@@ -341,8 +350,12 @@
         if (kind === "mushroom" && mushroomChance(today()) <= 0 && mushroomBirth(x, y) === null) return false;
         const ground = groundInfoAt(x, y);
         if (ground === undefined) return undefined;
+        // (2026-11-13, the new world: a berry bush in the middle of the road) on GATHER_MAPS the plants grow on grass only; stones,
+        // branches, cones and mushrooms lie on any ground
+        if (ground && ground.kind === "earth" && PLANTS_ON_GRASS.has(kind) && GATHER_MAPS.includes($gameMap.mapId())) return false;
         return ground && ground.kind ? kind : false;
     }
+    const PLANTS_ON_GRASS = new Set(["bush", "fiber", "berries", "herb", "nettle", "yarrow", "garlic", "wildPotato", "wildCarrot"]);
     function gatherAt(x, y) {
         const kind = gatherSpot(x, y);
         if (!kind) return false;

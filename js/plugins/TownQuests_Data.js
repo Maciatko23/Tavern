@@ -166,16 +166,19 @@
     // the quests' places: events put into the maps (Tawerna.inject, ids 951-959 - the same id may serve another map). Shown and
     // usable only while a quest needs them (self switch A). wall: true - it is a wall / a window (O facing it); deco: a little
     // picture drawn on it (paper - a notice, glint - something shining, tracks - paw prints, doused - a drowned fire basket)
+    // (2026-11-15, nowy świat) the town's own places stand in Kruczogród, Map220 (the notices on the walls right of the doors, the
+    // window before the bakery's door, the west gate for the old south one, the east gate's post and fire basket); the road's glint
+    // lies on Podgrodzie's road before the town's west gate. The threads' places further down are still on the old maps.
     const SPOTS = {
-        bakery_window: { map: 8, id: 951, x: 38, y: 73, name: "Hanka (zza okienka)" },
-        notice_tavern: { map: 8, id: 952, x: 52, y: 16, name: "Ściana tawerny", wall: true, deco: "paper", owner: null },
-        notice_bakery: { map: 8, id: 953, x: 39, y: 73, name: "Ściana piekarni", wall: true, deco: "paper", owner: "piekarka" },
-        notice_smithy: { map: 8, id: 954, x: 9, y: 62, name: "Ściana kuźni", wall: true, deco: "paper", owner: "kowal" },
-        notice_kantor: { map: 8, id: 955, x: 19, y: 47, name: "Ściana kantoru", wall: true, deco: "paper", owner: "kupiec" },
-        south_gate: { map: 8, id: 956, x: 32, y: 110, name: "Pod bramą południową", deco: "tracks" },
-        watch_post: { map: 8, id: 957, x: 53, y: 28, name: "Posterunek przy bramie twierdzy" },
-        east_brazier: { map: 8, id: 958, x: 117, y: 47, name: "Kosz żarowy", wall: true, deco: "doused" },
-        horseshoe: { map: 3, id: 951, x: 74, y: 18, name: "Droga za bramą południową", deco: "glint" },   // (2026-11-11 plansza: was Map022 (20,14))
+        bakery_window: { map: 220, id: 951, x: 61, y: 21, name: "Hanka (zza okienka)" },
+        notice_tavern: { map: 220, id: 952, x: 51, y: 34, name: "Ściana tawerny", wall: true, deco: "paper", owner: null },
+        notice_bakery: { map: 220, id: 953, x: 62, y: 20, name: "Ściana piekarni", wall: true, deco: "paper", owner: "piekarka" },
+        notice_smithy: { map: 220, id: 954, x: 33, y: 34, name: "Ściana kuźni", wall: true, deco: "paper", owner: "kowal" },
+        notice_kantor: { map: 220, id: 955, x: 55, y: 20, name: "Ściana kantoru", wall: true, deco: "paper", owner: "kupiec" },
+        south_gate: { map: 220, id: 956, x: 3, y: 41, name: "Pod bramą zachodnią", deco: "tracks" },
+        watch_post: { map: 220, id: 957, x: 73, y: 40, name: "Posterunek przy bramie wschodniej" },
+        east_brazier: { map: 220, id: 958, x: 78, y: 38, name: "Kosz żarowy", wall: true, deco: "doused" },
+        horseshoe: { map: 218, id: 951, x: 70, y: 38, name: "Droga za bramą zachodnią", deco: "glint" },   // (2026-11-11 plansza: was Map022 (20,14))
         // (2026-10-05) the places another agent built for these quests (docs/miasta_miejsca_zadan.md - on their "Miejsce:" markers):
         // Map118 "Dno studni", Map024 the orangery of the manor's garden, Map119 "Archiwum zakonu". img: [sheet, index, direction,
         // pattern] - a picture on the place's page (the ring's glint; Feliks and Kuba at the back gate at night); solid: it blocks (a
@@ -187,23 +190,26 @@
         // under the pine (the user's event at 3,20 - the raven is on its bolt), the orange tree's planter by the orangery's door (8,24 - a
         // loose board, the drawing under it), Feliks and Kuba by the hatch at night (Kuba is let in through the main gate - Wit takes his
         // cut). Own coordinates, no markers: the hero stands on the place (O) or faces it
-        w1_pump: { map: 24, id: 951, x: 23, y: 81, name: "Właz z krukiem" },
-        w1_drawer: { map: 24, id: 952, x: 28, y: 85, name: "Skrzynia drzewka pomarańczy" },
-        w1_feliks: { map: 24, id: 953, x: 22, y: 80, name: "Feliks", img: ["$Npc_Feliks", 0, 6, 1], solid: true, nomark: true },
-        w1_kuba: { map: 24, id: 954, x: 23, y: 79, name: "Kuba Woziwoda", img: ["$Npc_Woziwoda", 0, 2, 1], solid: true, nomark: true },
+        // (2026-11-15, nowy świat) the Lord's garden of Dwór nad Jazem, Map221: the hatch in the grass between the gardener's hut
+        // and the orangery (the trapdoor event at 13,13 - the hero stands below it), the orange trees by the orangery's door
+        // (19,17 and 21,17 - the planter of the right one), Feliks left of the hatch and Kuba behind it at night
+        w1_pump: { map: 221, id: 951, x: 13, y: 14, name: "Właz z krukiem" },
+        w1_drawer: { map: 221, id: 952, x: 21, y: 18, name: "Skrzynia drzewka pomarańczy" },
+        w1_feliks: { map: 221, id: 953, x: 12, y: 13, name: "Feliks", img: ["$Npc_Feliks", 0, 6, 1], solid: true, nomark: true },
+        w1_kuba: { map: 221, id: 954, x: 13, y: 12, name: "Kuba Woziwoda", img: ["$Npc_Woziwoda", 0, 2, 1], solid: true, nomark: true },
         w2_book: { map: 119, id: 951, x: 6, y: 6, name: "Księga sygnałów" },
         w2_chron: { map: 119, id: 952, x: 10, y: 5, name: "Kroniki zakonu" },
         // (2026-10-06) W3 a: Melia by the Kupała bonfire before the south gate (only that night; bust: her own)
         // (2026-10-06) W4: where the other half of the key lies - at the foot of the stone cairn in grandpa's yard (Map020, the cairn 8,5)
-        w4_dig: { map: 20, id: 951, x: 39, y: 45, name: "Kopiec z krukiem", deco: "dig" },
-        w3_kupala: { map: 8, id: 959, x: 26, y: 107, name: "Melia Srebrogłosa", img: ["$Npc_Melia", 0, 2, 1], solid: true, nomark: true, bust: "People2_8" },
+        w4_dig: { map: 218, id: 952, x: 21, y: 16, name: "Kopiec z krukiem", deco: "dig" },
+        w3_kupala: { map: 220, id: 959, x: 7, y: 43, name: "Melia Srebrogłosa", img: ["$Npc_Melia", 0, 2, 1], solid: true, nomark: true, bust: "People2_8" },
         // (2026-10-06) W8 in the mountains: on the maps agent's markers ("Miejsce: <marker>" - docs/miasta_miejsca_zadan.md "Góry"; dx/dy
         // shift; x/y only a fallback) - Grum as a picture with his bust at each place, the commander's crate in the diggers' camp
-        w8_start: { map: 13, id: 951, marker: "grum_przewodnik_start", x: 4, y: 62, name: "Grum", img: ["$Npc_Grum", 0, 4, 1], solid: true, bust: "Actor2_5" },
-        w8_quarry: { map: 13, id: 952, marker: "kamieniolom_znak", dx: 1, x: 41, y: 42, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
+        w8_start: { map: 222, id: 951, marker: "wejscie_zachod", dx: 1, x: 4, y: 41, name: "Grum", img: ["$Npc_Grum", 0, 4, 1], solid: true, bust: "Actor2_5" },
+        w8_quarry: { map: 222, id: 952, marker: "kamieniolom", dx: 1, x: 37, y: 31, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
         w8_gate: { map: 4, id: 956, marker: "osada_brama", dx: 1, x: 67, y: 57, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
-        w8_cave: { map: 14, id: 951, marker: "marek", dx: -2, dy: 1, x: 28, y: 6, name: "Grum", img: ["$Npc_Grum", 0, 6, 1], solid: true, bust: "Actor2_5" },
-        w8_crate: { map: 14, id: 952, marker: "list_kryjowka", x: 27, y: 11, name: "Skrzynia dowódcy" },
+        w8_cave: { map: 225, id: 951, marker: "marek", dx: -2, dy: 1, x: 25, y: 60, name: "Grum", img: ["$Npc_Grum", 0, 6, 1], solid: true, bust: "Actor2_5" },
+        w8_crate: { map: 225, id: 952, marker: "list_kryjowka", x: 31, y: 57, name: "Skrzynia dowódcy" },
         w8_osada: { map: 4, id: 957, marker: "osada_grum", x: 67, y: 52, name: "Grum", img: ["$Npc_Grum", 0, 8, 1], solid: true, bust: "Actor2_5" },
         // (2026-10-07) W6 "Ludzie z promu". Ids 903-909 (TownQuests' second range - Map008's 951-959 are all taken): the props of the
         // ferry people's camp - shown while FX[show].show() says so (no quest step needed, no diamond): the first wave's tent and fire
@@ -213,25 +219,23 @@
         // event's note (Occupy - the tent's footprint); light: added only while shown when the map loads (the camp's fire: a flame);
         // step: an animated picture. talkFx: what the action button says (FX[talkFx].spot). The hiding places of Rafał (W6 rozdz. 4 a)
         // are ordinary quest places (951) on the guest rooms (Map025), grandpa's house (Map019) and the bell tower (Map108).
-        w6_tent1: { map: 8, id: 903, x: 89, y: 100, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 1], solid: true, nomark: true, show: "w6Camp", talkFx: "w6Prop",
+        // (2026-11-15, nowy świat) the camp of the people from the ferry stands on the meadow of Podgrodzie (Map218, north of the
+        // road, by "oboz_laka"); the helpers work on grandpa's plot there (ids 908 / 909: the camp's own 906 / 907 are on the same map)
+        w6_tent1: { map: 218, id: 903, x: 57, y: 15, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 1], solid: true, nomark: true, show: "w6Camp", talkFx: "w6Prop",
             note: "<Occupy:left=1,right=1,up=1>" },
-        w6_fire: { map: 8, id: 905, x: 90, y: 98, name: "Ognisko obozu", img: ["!Decoration", 2, 4, 0], solid: true, nomark: true, step: true, show: "w6Camp", talkFx: "w6Prop",
+        w6_fire: { map: 218, id: 905, x: 54, y: 16, name: "Ognisko obozu", img: ["!Decoration", 2, 4, 0], solid: true, nomark: true, step: true, show: "w6Camp", talkFx: "w6Prop",
             light: "<Light:190,255,150,70><LightFlicker:0.18,255,110,40><LightHeight:20>" },
-        w6_tent2: { map: 8, id: 904, x: 77, y: 98, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 0], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop",
+        w6_tent2: { map: 218, id: 904, x: 51, y: 15, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 0], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop",
             note: "<Occupy:left=1,right=1,up=1>" },
-        w6_bogdan: { map: 8, id: 906, x: 81, y: 98, name: "Bogdan", img: ["$Npc_Bogdan", 0, 4, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
-        w6_halina: { map: 8, id: 907, x: 87, y: 99, name: "Halina", img: ["$Npc_Halina", 0, 6, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
-        w6_tent2_o: { map: 111, id: 903, x: 60, y: 44, name: "Namiot uchodźców", img: ["!$Mt_Tent", 0, 2, 0], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop",
-            note: "<Occupy:left=1,right=1,up=1>" },
-        w6_bogdan_o: { map: 111, id: 906, x: 56, y: 45, name: "Bogdan", img: ["$Npc_Bogdan", 0, 2, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
-        w6_halina_o: { map: 111, id: 907, x: 60, y: 47, name: "Halina", img: ["$Npc_Halina", 0, 4, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
-        w6_help1: { map: 3, id: 906, x: 60, y: 57, at: "w6Helper", name: "Bogdan", img: ["$Npc_Bogdan", 0, 2, 1], solid: true, nomark: true, show: "w6Work", talkFx: "w6Prop" },
-        w6_help2: { map: 3, id: 907, x: 62, y: 57, at: "w6Helper", name: "Halina", img: ["$Npc_Halina", 0, 2, 1], solid: true, nomark: true, show: "w6Work", talkFx: "w6Prop" },
-        w6_hide_tavern: { map: 25, id: 951, x: 21, y: 8, name: "Rafał", img: ["$Npc_Rafal", 0, 4, 1], solid: true, nomark: true },
-        w6_hide_grandpa: { map: 19, id: 951, x: 17, y: 6, name: "Rafał", img: ["$Npc_Rafal", 0, 2, 1], solid: true, nomark: true },
+        w6_bogdan: { map: 218, id: 906, x: 52, y: 17, name: "Bogdan", img: ["$Npc_Bogdan", 0, 4, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
+        w6_halina: { map: 218, id: 907, x: 56, y: 17, name: "Halina", img: ["$Npc_Halina", 0, 6, 1], solid: true, nomark: true, show: "w6Second", talkFx: "w6Prop" },
+        w6_help1: { map: 218, id: 908, x: 30, y: 21, at: "w6Helper", name: "Bogdan", img: ["$Npc_Bogdan", 0, 2, 1], solid: true, nomark: true, show: "w6Work", talkFx: "w6Prop" },
+        w6_help2: { map: 218, id: 909, x: 32, y: 21, at: "w6Helper", name: "Halina", img: ["$Npc_Halina", 0, 2, 1], solid: true, nomark: true, show: "w6Work", talkFx: "w6Prop" },
+        w6_hide_tavern: { map: 25, id: 951, x: 11, y: 8, name: "Rafał", img: ["$Npc_Rafal", 0, 4, 1], solid: true, nomark: true },
+        w6_hide_grandpa: { map: 224, id: 951, x: 6, y: 6, name: "Rafał", img: ["$Npc_Rafal", 0, 2, 1], solid: true, nomark: true },
         w6_hide_belfry: { map: 108, id: 951, x: 8, y: 5, name: "Rafał", img: ["$Npc_Rafal", 0, 2, 1], solid: true, nomark: true },
         // (2026-10-14) the harbour (Map125, tools/przystan): D20 - the cutter's wreck on the beach, dragged onto the slipway at dawn
-        przystan_wrak: { map: 125, id: 951, marker: "d20_wrak", x: 18, y: 35, name: "Wrak kutra" }
+        przystan_wrak: { map: 219, id: 951, marker: "wrak", x: 18, y: 37, name: "Wrak kutra" }
     };
 
     // W1 rozdz. 6 a/b: the sluice half open - the market well's ration (<Studnia:2>) gives this many draws a day more
@@ -601,7 +605,7 @@
                 kroki: [
                     { nazwa: "d5Miejsce", type: "spot", spot: "south_gate", hours: [5, 9] },
                     { nazwa: "d5Upoluj", type: "kill", kind: "wolf", map: 3, n: 2, night: true, spawn: 2 },
-                    { nazwa: "d5Upoluj2", type: "kill", kind: "wolf", map: 4, n: 1, leader: true, night: true, spawn: 3 },
+                    { nazwa: "d5Upoluj2", type: "kill", kind: "wolf", map: 222, n: 1, leader: true, night: true, spawn: 3 },
                     { nazwa: "d5Rozmowa", type: "talk", to: "kapral", hours: H_WIT,
                         choice: { ask: [], options: [
                             { flag: "witOwes", reward: { gold: 80 } },

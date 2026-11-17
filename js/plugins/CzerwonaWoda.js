@@ -30,6 +30,12 @@
  * @orderAfter Needs
  * @orderAfter TerenKit
  *
+ * @param cleanMaps
+ * @text Mapy z czystym morzem
+ * @desc Numery map (po przecinku), na których morze jest po prostu ładne, słone: bez czerwieni, szarości, śniętych ryb i rdzawej piany (nowy świat). Słone - nie do picia.
+ * @type string
+ * @default 218,219,220,221,222
+ *
  * @help
  * ============================================================================
  * CzerwonaWoda.js - czerwona woda przy brzegu
@@ -84,6 +90,11 @@
     // WHEN: the drought (the weather plan of the days)
     // ------------------------------------------------------------------
     const seaHere = () => !!(window.$dataMap && /<Water:\s*salt\s*>/i.test($dataMap.note || ""));
+    // (2026-11-13, the player: "woda chyba może już nie być czerwona, tylko ładna morska") the new world's maps (the parameter cleanMaps): a clean, nice,
+    // still SALT sea - no red bloom, no grey murk, no dead fish, white surf; the shore band and the salt menu stay. Per map: the old world is as it was.
+    const CLEAN_MAPS = String((PluginManager.parameters("CzerwonaWoda") || {}).cleanMaps === undefined ? "218,219,220,221,222" : PluginManager.parameters("CzerwonaWoda").cleanMaps).split(/[^0-9]+/).filter(Boolean).map(Number);
+    const CLEAN = { grey: false, red: 0, rains: 0, clean: true };
+    const cleanHere = () => !!(window.$gameMap && CLEAN_MAPS.indexOf($gameMap.mapId()) >= 0);
     function planOf(d) { const sv = SV(); return sv && typeof sv.weatherPlan === "function" ? sv.weatherPlan(d) : null; }
     function rainedOn(d) {
         if (d < 1) return false;
@@ -107,6 +118,7 @@
         return forced;
     }
     function phase(d) {
+        if (d === undefined && cleanHere()) return CLEAN;   // (force("red") too: the new world's sea is never red)
         if (d === undefined && forced) return forced === "grey" ? { grey: true, red: 0, rains: GREY_RAINS, forced } : { grey: false, red: 1, rains: 0, dry: 3, forced };
         const dd = d === undefined ? day() : d, key = dd + ":" + (d === undefined ? Math.floor(hour()) : "x");
         if (d === undefined && phaseCache.key === key) return phaseCache.v;
@@ -118,7 +130,7 @@
         if (d === undefined) phaseCache = { key, v };
         return v;
     }
-    const isRed = () => has() && seaHere() && !phase().grey;
+    const isRed = () => has() && seaHere() && !phase().grey && !phase().clean;
 
     // ------------------------------------------------------------------
     // The map: its water (A1 water not under planks: Farming.isWaterTile), each sea cell's distance from the shore, the shore's land
@@ -267,7 +279,7 @@
     //   - where the new line cuts into the old land the sea is drawn in (its own shading by the depth from the shore)
     // The tint and the foam follow the same line (wAt). Built in pieces over the first frames after the map is shown.
     // ------------------------------------------------------------------
-    const BRZEG_MAPS = [990, 125, 155, 157, 159, 162, 165, 120, 175, 168, 17, 18, 960, 961, 962, 963, 964, 21, 900, 901, 910, 912, 914, 917, 918, 920, 922, 923, 931, 933, 934, 935, 950, 951, 20, 3, 4, 13, 24, 111];   // (2026-11-05: every map with the island's sea, tools/laka/install_brzeg.py)   // (styki 2026-10-31: the new maps of the old holes)   // (the island's sea maps - none of them is the player's: docs/mapy/PRZEGLAD.md; 2026-10-30 the east / south ends 159, 120, 175, 168, 17, 18)
+    const BRZEG_MAPS = [990, 219, 125, 155, 157, 159, 162, 165, 120, 175, 168, 17, 18, 960, 961, 962, 963, 964, 21, 900, 901, 910, 912, 914, 917, 918, 920, 922, 923, 931, 933, 934, 935, 950, 951, 20, 3, 4, 13, 24, 111];   // (2026-11-05: every map with the island's sea, tools/laka/install_brzeg.py)   // (styki 2026-10-31: the new maps of the old holes)   // (the island's sea maps - none of them is the player's: docs/mapy/PRZEGLAD.md; 2026-10-30 the east / south ends 159, 120, 175, 168, 17, 18)
     const SHORE_GROW = 0.3;   // (the new line lies about 19 px out in the old water: nothing of the sea has to be drawn over the old land, and the square corners are covered)
     const SD_Q = 4, CH = 192, DMAX = 576, RING_W = 11, WP_W = 24;
     // (2026-11-07, B - the seams of the island's map, 111 | 917) by a border where the neighbour is LAND WITH NO STRIP of its own
@@ -793,9 +805,10 @@
     // the foam along the redrawn shore: one bitmap per shore cell (the cell and 8 px round it), soft blobs 1-10 px from the land (the
     // nearer the more often); the cell's sprite breathes towards the land and back with the waves
     const FOAM_M = 8;
+    const foamCol = kind => kind === "red" ? ["rgba(206,124,96,", "rgba(232,176,140,", "rgba(150,64,40,"] : kind === "white" ? ["rgba(236,244,246,", "rgba(255,255,255,", "rgba(190,210,220,"] : ["rgba(176,166,138,", "rgba(204,194,166,", "rgba(116,106,84,"];
     function foamCells(g, kind) {
         if (g.foam[kind]) return g.foam[kind];
-        const col = kind === "red" ? ["rgba(206,124,96,", "rgba(232,176,140,", "rgba(150,64,40,"] : ["rgba(176,166,138,", "rgba(204,194,166,", "rgba(116,106,84,"];
+        const col = foamCol(kind);
         const out = [], tw = g.tw, th = g.th, W = g.W, H = g.H;
         for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
             if (Math.abs(sdAt(g, x * tw + tw / 2, y * th + th / 2)) > 62) continue;
@@ -825,7 +838,7 @@
         const k = kind + v;
         if (foamCache[k]) return foamCache[k];
         const b = new Bitmap(48, 48), ctx = b.context;
-        const col = kind === "red" ? ["rgba(206,124,96,", "rgba(232,176,140,", "rgba(150,64,40,"] : ["rgba(176,166,138,", "rgba(204,194,166,", "rgba(116,106,84,"];
+        const col = foamCol(kind);
         for (let i = 0; i < 16; i++) {
             const x = 3 + hash(i, v, 1, 2) * 42, y = 1 + Math.pow(hash(i, v, 3, 4), 2) * 10, rr = 0.8 + hash(i, v, 5, 6) * 2.6;
             ctx.fillStyle = col[i % 3] + (0.22 + 0.38 * hash(i, v, 7, 8)).toFixed(2) + ")";
@@ -864,9 +877,10 @@
         this._tint.bitmap = tintBitmap(g, grey);
         this._tint.scale.x = tw / S; this._tint.scale.y = th / S;
         this._tint.alpha = grey ? 1 : 0.55 + 0.45 * ph.red;
+        this._tint.visible = !ph.clean;   // (a clean sea: no tint at all)
         if (g.sd) {
             this.startPatches(g);
-            for (const c of foamCells(g, grey ? "grey" : "red")) {
+            for (const c of foamCells(g, ph.clean ? "white" : grey ? "grey" : "red")) {
                 const s = new Sprite(c.slot.at.bm); s.setFrame(c.slot.sx, c.slot.sy, g.tw + 2 * FOAM_M, g.th + 2 * FOAM_M);
                 s._cx = c.x; s._cy = c.y; s._dx = c.dx; s._dy = c.dy; s._ph = c.ph;
                 this._foam.addChild(s);
@@ -882,7 +896,7 @@
                     const nx = x + dx, ny = y + dy;
                     if (nx < 0 || ny < 0 || nx >= g.W || ny >= g.H || g.water[ny * g.W + nx]) continue;
                     if (hash(x, y, dx + 5, dy + 7) < 0.22) continue;   // (not every stretch: the foam comes and goes)
-                    const s = new Sprite(foamBitmap(grey ? "grey" : "red", (x * 7 + y * 3 + dx) & 3));
+                    const s = new Sprite(foamBitmap(ph.clean ? "white" : grey ? "grey" : "red", (x * 7 + y * 3 + dx) & 3));
                     s.anchor.x = 0.5; s.anchor.y = 0.5; s.rotation = rot;
                     s._cx = x * tw + tw / 2; s._cy = y * th + th / 2; s._dx = dx; s._dy = dy; s._ph = hash(x, y, dx, dy) * Math.PI * 2;
                     this._foam.addChild(s);
@@ -897,7 +911,7 @@
             s._cx = f.x * tw + tw / 2 + f.ox; s._cy = f.y * th + th / 2 + f.oy;
             this._fish.addChild(s);
         }
-        this._key = $gameMap.mapId() + ":" + day() + ":" + (grey ? "g" : "r") + ":" + ph.red;
+        this._key = $gameMap.mapId() + ":" + day() + ":" + (ph.clean ? "c" : grey ? "g" : "r") + ":" + ph.red;
     };
     // the redrawn shore's chunks: queued once per map, a few milliseconds of them every frame
     Sprite_RedWater.prototype.startPatches = function(g) {
@@ -968,7 +982,7 @@
         else if (!g.job) this.workPatches(budget);   // (the workers failed: the rest on this thread)
     };
     // the look's key: the map, the day, red or grey and how red
-    const lookKey = () => $gameMap.mapId() + ":" + day() + ":" + (seaHere() ? (phase().grey ? "g" : "r") + ":" + phase().red : "-");
+    const lookKey = () => $gameMap.mapId() + ":" + day() + ":" + (seaHere() ? (phase().clean ? "c" : phase().grey ? "g" : "r") + ":" + phase().red : "-");
     // (2026-10-30, the player: "widać trawę przed nakładką, dopiero po chwili się pojawia") while the screen is still black: the shore's
     // pieces painted with a big budget a frame - Scene_Map waits for them before it fades in (at most ~1.5 s, never stuck)
     Sprite_RedWater.prototype.prepare = function() {
@@ -1132,6 +1146,7 @@
     // ------------------------------------------------------------------
     const api = { phase, force, forced: () => forced, isRed, seaHere, dryDays, distToLand, nearShore, deadFish, fishOn, seaMenu, drinkAnyway, fillRefused, boilRefused,
         fishAt, deadCatch, poisoned, state: () => S0(), GREY_RAINS, POISON_HOURS, POISON_CAP, Sprite_RedWater,
+        shoreStrip: () => brzegMap(),   // (2026-11-13) true on a map whose shore strip (stone rim, cobbles, earth, dry grass) this plugin paints: Plaza.js lays sand over it
         // the share of red days over a stretch of the calendar (for the tests and the report)
         redShare: (d0, d1) => { let r = 0; for (let d = d0; d <= d1; d++) if (!phase(d).grey) r++; return r / (d1 - d0 + 1); } };
     window.__cwDebug = { pool, paintCore, textures, geo: () => geo, CH };

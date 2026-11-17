@@ -17,9 +17,15 @@ const { launch, sleep } = require("./cdp.js");
     try {
         await b.send("Page.navigate", { url: "http://127.0.0.1:8765/index.html" });
         for (let i = 0; i < 120; i++) { if (await ev("!!(window.SceneManager && SceneManager._scene && SceneManager._scene.constructor.name==='Scene_Title' && DataManager._globalInfo)").catch(() => false)) break; await sleep(500); }
-        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 26, 17, 2, 0); SceneManager.goto(Scene_Map); })()`);
+        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 60, 47, 2, 0); SceneManager.goto(Scene_Map); })()`);
         for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
+        // (2026-11-14) grandpa's plot is full of trees and stones now: the ground round the test's spot bared (things erased, the
+        // land stored as cleared) - the test is about building, not about finding room
+        await ev(`(function(){ const p = $gamePlayer, R = 12, cells = [];
+            for (const e of $gameMap.events()) if (Math.abs(e.x - p.x) <= R && Math.abs(e.y - p.y) <= R && e.isNormalPriority()) { e.erase(); e.setThrough(true); }
+            for (let y = p.y - R; y <= p.y + R; y++) for (let x = p.x - R; x <= p.x + R; x++) if ($gameMap.isValid(x, y)) cells.push({ x, y });
+            $gameSystem.clearLand($gameMap.mapId(), cells); return 0; })()`);
         await ev("SceneManager._scene.startFadeIn(1,false); Survival.calmWeather(); $gameScreen.clearWeather(); if (window.Needs) Needs.setEnabled(false); Hunting.auto(false); for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); if (window.Livestock) Livestock.auto(false); if (window.Dog) Dog.auto(false); $gameSystem.setDayNightHour(10); $gameSystem.setStamina(100); $gameSystem._minimapHidden = true; 0");
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
         const press = async (k, hold) => { await ev(`Input._currentState.${k} = true; 0`); await frames(hold || 3); await ev(`Input._currentState.${k} = false; 0`); await frames(4); };

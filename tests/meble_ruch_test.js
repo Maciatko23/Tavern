@@ -31,7 +31,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9433, lightGpu: true, bootCheck
     console.log("   od dołu: " + JSON.stringify(d));
     t.check("od dołu staje pod stolikiem jak dawniej (stopy to dół kratki), w niego nie wchodzi", Math.abs(d.ry - 11.5) < 0.01 && d.y === 12, d);
     // stół w sali tawerny (19,35)-(19,36), obraz od 30. piksela
-    await t.go(1, 19, 32, 2); await t.frames(30);
+    await t.go(1, 19, 19, 2); await t.frames(30);
     await hold("down", 120);
     const e = await pos();
     console.log("   sala, od góry: " + JSON.stringify(e));

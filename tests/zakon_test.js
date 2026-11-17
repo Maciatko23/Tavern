@@ -74,7 +74,7 @@ kit.test({ port: 9554, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
             reg: Tawerna.inject.list().filter(r => r.owner === "Zakon").map(r => r.ids) }; })()`);
     t.check("wtyczki paczki D gotowe, zadania K67-K70 i D36-D38 w TownQuests, ich FX, miejsca grabarza na Map008, numery 2700-2899",
         base.ready && !base.quests.length && !base.fx.length && base.spots8 && base.reg.includes("2700-2899"), base);
-    t.check("przedmioty 225-232 nazwane, z ikonami 512-519", base.it.every(([i, n, ic]) => n && ic === 287 + i), base.it);
+    t.check("przedmioty 225-232 nazwane, z ikonami z PixelLab (688+)", base.it.every(([i, n, ic]) => n && ic >= 688), base.it);
     t.check("miejsca paczki D zarejestrowane (" + base.want + ", plan zastąpiony) i odkrycia (" + base.wantDisc + ")", base.spots === base.want && base.plan === 0 && base.disc === base.wantDisc, base);
     t.check("grabarz: mieszkaniec 2930 na Map008, arkusz $Npc_Grabarz, popiersie Grabarz_Bust", JSON.stringify(base.res) === JSON.stringify([2930, 8, "$Npc_Grabarz"]) && base.bust === "Grabarz_Bust", base);
     await t.eval(`(function(){ window.__icons = ImageManager.loadSystem("IconSet"); window.__bust = ImageManager.loadPicture("Grabarz_Bust"); window.__npc = ImageManager.loadCharacter("$Npc_Grabarz");

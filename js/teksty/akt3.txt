@@ -78,7 +78,7 @@ Ambroży bije na alarm.
 
 [bellNeeded]
 Alarm: trzy i jeden
-Lina dzwonu wisi przy wieży Ambrożego (na wschód od rynku).
+Lina dzwonu wisi przy wieży Ambrożego (obok kaplicy, na zachód od rynku).
 
 [bellHero]
 Dzwon: trzy i jeden
@@ -199,13 +199,13 @@ f9Reset = Akt III: wyczyść stan napadu
 fale.lista.0.shout = Pochodnie pod drzwi! Ruszać się!
 [fale.lista.0.notice]
 Pod drzwiami tawerny!
-Trzech z pochodniami idzie przez dziedziniec.
+Trzech z pochodniami wychodzi z koryta na rynek.
 
 # w2
 fale.lista.1.shout = Łucznicy, na mur! Reszta do drzwi!
 [fale.lista.1.notice]
 Łucznicy!
-Druga grupa - strzelają z bramy dziedzińca.
+Druga grupa - strzelają ze schodów od koryta.
 
 # w3
 fale.lista.2.shout = Do starych drzwi! Krata jest za nimi!
@@ -269,7 +269,7 @@ obroncy.9.lines.win = Zameldujemy jaśnie panu.
 
 # ======================================================================== SPOTS (miejsca)
 miejsca.1.doorName = Stare drzwi (piwnica)
-miejsca.8.doorName = Drzwi tawerny
+miejsca.220.doorName = Drzwi tawerny
 
 # ======================================================================== z kodu Act3.js (kod.*)
 kod.ambrozy = Ambroży

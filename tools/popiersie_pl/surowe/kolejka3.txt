@@ -1,0 +1,7 @@
+skorznia=2c770ec4-4748-43fa-9dd9-463475373294
+skorznia_cwiekowana=1a8b21f5-c536-4649-bffc-7ed6ab9df718
+skorznia_futrzana=295143b9-b10f-4631-b9c0-38f8f0f0ce1d
+luska=5cfb5b1d-ba26-4fbc-8359-6d7076b36d43
+brygantyna=ae64665e-1780-4734-b853-a37d8830b588
+napiersnik=9f66e715-2b66-40c1-827d-49ea932202ee
+plaszcz=182402aa-538c-4f00-950b-63b8d59b12d4

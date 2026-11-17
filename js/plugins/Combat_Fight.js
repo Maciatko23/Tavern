@@ -169,6 +169,13 @@
     // A thing of a level above the hero's works weaker (Bron_Data.brak: 3% a level, at most 45%): weaponNow, shield, armor.
     // ==================================================================
     const BD = () => T.api("Bron_Data");
+    // (2026-11-17, the user's) the weapons' traits - Bron_Cechy.js: one object a weapon, kept (nothing made in the fight); NO_TRAITS
+    // without it - and a blow's damage not fixed: the base x 0.9-1.1 (Bron_Data.ROZRZUT; the floating numbers show the real hit)
+    const NO_TRAITS = Object.freeze({});
+    const BC = () => T.api("Bron_Cechy");
+    const cechy = id => { const c = id ? BC() : null; return c ? c.of(id) : NO_TRAITS; };
+    const dmgRoll = () => { const d = BD(), r = d && typeof d.ROZRZUT === "number" ? d.ROZRZUT : 0.1; return 1 - r + Math.random() * 2 * r; };
+    const CRIT_MULT = 1.6, COST_MIN = 4;   // (a crit without the trait krytyk_mocniej; the least breath a blow costs - Bron_Data.staty)
     const SWING = { club: () => ({ combo: [CLUB, CLUB, CLUB], heavy: CLUB, hold: 7 }), punch: () => ({ combo: [PUNCH, PUNCH, PUNCH], heavy: PUNCH, hold: 5 }),
         axe: () => ({ combo: [3, 3, 0], heavy: 0, hold: 10 }), pick: () => ({ combo: [1, 1], heavy: 1, hold: 14 }), spear: () => ({ combo: [15, 15, 15], heavy: 15, hold: 9 }),
         // (2026-10-23) the sword's own wide slash (Hero_Sword: miecz, tasak, szabla, dlugi_miecz); without the sheet: the club
@@ -216,11 +223,14 @@
         refreshGear();
         const w = MELEE[id];
         if (!w) return null;
-        const lack = lackOf(w.poziom), ar = id === 0 ? armor() : null, fist = ar && ar.piesci ? ar.piesci : null;
-        if (!lack && !fist) return w;
+        const lack = lackOf(w.poziom), ar = id === 0 ? armor() : null, fist = ar && ar.piesci ? ar.piesci : null, tr = cechy(id);
+        if (!lack && !fist && !tr.zasieg && !tr.oddech) return w;
         const o = Object.assign({}, w);
         if (fist) { o.dmg += fist.dmg || 0; o.poise += fist.poise || 0; }
         if (lack) { o.dmg = Math.max(1, Math.round(o.dmg * (1 - lack))); o.poise = Math.round(o.poise * (1 - lack)); o.cost = Math.round(o.cost * (1 + lack)); o.lack = lack; }
+        // (2026-11-17, Bron_Cechy.js) its traits: a longer reach, a blow cheaper in breath (never under the least a blow costs)
+        if (tr.zasieg) o.reach = Math.round((o.reach + tr.zasieg) * 100) / 100;
+        if (tr.oddech) o.cost = Math.max(COST_MIN, o.cost - tr.oddech);
         return o;
     }
     function shield() {
@@ -452,11 +462,12 @@
         const kind = w.combo[Math.min(i, w.combo.length - 1)];
         const heavyStart = i === 0;   // (holding the key at the first blow charges it)
         const chargeRate = hasSkill("charge") ? 1.4 : 1;
+        const rate = 1 + (cechy(id).szybkosc || 0);   // (2026-11-17, Bron_Cechy.js: a quick weapon - the swing that much faster)
         const opts = heavyStart ? {
-            holdAt: w.hold, keepOnMove: true, still: true, wobble: 6,
+            holdAt: w.hold, keepOnMove: true, still: true, wobble: 6, rate,
             holdWhile: () => Input.isPressed("shoot") && act.charge < HEAVY.max,
             onWait: () => { act.charge = Math.min(HEAVY.max, act.charge + chargeRate); }
-        } : null;
+        } : rate !== 1 ? { rate } : null;
         const started = $gamePlayer.startToolSwing(kind, () => strike(id, i), () => afterBlow(id), opts);
         if (!started) { strike(id, i); afterBlow(id); }
         se("Wind7", 55, 120 + i * 8);
@@ -468,7 +479,7 @@
         if (act.queued && act.combo + 1 < maxCombo(w) && !winded) { startAttack(id, act.combo + 1); return; }
         act.mode = "idle";
         const last = act.combo + 1 >= maxCombo(w);
-        act.comboCd = last ? 16 : 0;
+        act.comboCd = last ? Math.round(16 / (1 + (cechy(id).szybkosc || 0))) : 0;   // (a quick weapon: the pause after a series shorter too)
         act.comboGrace = last ? 0 : comboWindow();
     }
     // The counter after a parry (2026-10-14, for everyone): the next blow within COUNTER.frames takes COUNTER.mult more ("Kontratak!").
@@ -505,7 +516,7 @@
     }
     // the blow lands: everything in reach and in front takes it (the nearest only, unless the weapon sweeps and the hero has the skill)
     function strike(id, i) {
-        const w = weaponNow(id) || MELEE[id], Hn = H();
+        const w = weaponNow(id) || MELEE[id], Hn = H(), tr = cechy(id), bc = tr !== NO_TRAITS ? BC() : null;
         const heavy = i === 0 && act.charge >= HEAVY.min;
         if (heavy) { breath = Math.max(0, breathNow() - w.cost * HEAVY.cost); if (breath <= 0) winded = true; }
         const full = heavy && act.charge >= HEAVY.max - 1;
@@ -533,18 +544,24 @@
         const recoil0 = act.recoilN || 0;
         for (const { t } of targets) {
             const a = t.ref && t.ref.isAnimal ? t.ref : null;
-            let m = mult * strMult() * (1 + perk("melee.dmg")), tag = heavy ? "heavy" : "", pz = poise;
+            let m = mult * strMult() * (1 + perk("melee.dmg")) * dmgRoll(), tag = heavy ? "heavy" : "", pz = poise;
             const hidden = sneakAttack(a) === "hidden";   // (a blow from hiding: see SNEAK)
             if (hidden) { m *= sneakMult(false) * (w.ukrycie || 1); tag = "sneak"; pz = Math.max(pz * SNEAK.poise, (a._poise || 0) + 1); }   // (it breaks its balance whole: it reels)
             // (2026-10-23, Bron_Data.js) the weapon against what it strikes: blunt ones on armour, stone and mail (pancerz), the boar spear on animals
             if (w.pancerz > 1) { const surf = surfaceOf(t.ref); if (surf === "armor" || surf === "stone" || surf === "mail") m *= w.pancerz; }
             if (w.zwierz > 1 && a) m *= w.zwierz;
+            if (tr.stwory && bc && bc.isCreature(t.ref)) m *= 1 + tr.stwory;   // (2026-11-17, Bron_Cechy.js: the order's weapons on the creatures of the depths)
             if (a && a._stun > 0 && hasSkill("execute")) { m *= 2.5; tag = "execute"; }
             const crit = act.riposteT > 0 || Math.random() < critChance() + (w.crit || 0);
-            if (crit) { m *= 1.6; act.riposteT = 0; act.counterT = 0; tag = tag || "crit"; }
+            if (crit) { m *= tr.krytyk_mocniej || CRIT_MULT; act.riposteT = 0; act.counterT = 0; tag = tag || "crit"; }
             else if (act.counterT > 0) { m *= act.counterMult || COUNTER.mult; act.counterT = 0; counter = true; }   // (the counter after a parry: see COUNTER)
-            const dmg = Math.max(1, Math.round(w.dmg * m)) + (w.fire && !a ? w.fireBonus || 0 : 0);   // (fire: a man or a creature burns at once; an animal - Torch.struck)
-            t.hit(dmg, "melee", { poise: Math.round(pz), knock: heavy || last || hidden, crit, heavy: heavy || hidden, tag, weapon: id, fire: !!w.fire });
+            // (Bron_Cechy.js) a stun rolled: the blow breaks its balance whole - it reels by its own rules (blocked, rang off the plate: no)
+            const stunK = bc && bc.stunRoll(tr.ogluszenie, a) ? tr.ogluszenie : null;
+            if (stunK) pz = Math.max(pz, (a._poise || 0) + 1);
+            const dmg = Math.max(1, Math.round(w.dmg * m)) + (tr.obrazenia || 0) + (w.fire && !a ? w.fireBonus || 0 : 0);   // (fire: a man or a creature burns at once; an animal - Torch.struck)
+            if (bc) bc.beforeHit(t.ref);
+            t.hit(dmg, "melee", { poise: Math.round(pz), knock: heavy || last || hidden, crit, heavy: heavy || hidden, tag, weapon: id, fire: !!w.fire, przebicie: tr.przebicie || 0 });
+            if (bc) bc.afterHit(t.ref, tr, stunK);   // (the stun held, the bleeding, krew za krew, postrach, odrzut)
             if (!a) numberAt(t.x, t.y - 0.6, String(dmg), crit ? "#ffe066" : "#ffffff");
             if (heavy || crit) stop = 8;
             if (hidden) stop = 10;   // (the word "Atak z ukrycia!" and its thud: enemyHurtFx)
@@ -1014,5 +1031,5 @@
     P.fight = { fillBreath, act, ROLL, MELEE, MELEE_ORDER, SHIELDS, ARMORS, NO_SHIELD, COMBO_MULT, HEAVY, maxCombo, SNEAK, RUN, ROLL_KIND, KNOCK_KIND, FIST_ICON, px, py, easeOut, has, hand, handMelee, handIcon, switchHand,
         setHand, handChoices, shield, armor, weaponNow, refreshGear, gearChanged: () => { gearAt = -1; }, rangedItem, rangedKind, hasRanged, anyRanged, lackOf, sneakAttack, sneakMult, maxBreath, breathNow, spendBreath, isWinded: () => winded, canRun, pressAttack, pressDodge, hitPlayer, enemyHurtFx, hitstop, numberAt,
         sparksAt, shovePlayer, floaters, sparks, stopFrames: () => stopFrames, holdFrame, update, resetAct, heroSpeed, heldStill, mayRun, recoil, downPlayer,
-        stunPlayer, drainBreath, slowMotion, SLOW, COUNTER, HIT_SE, surfaceOf, faceToward, facingVec, arrowsDir8, swingPastImpact, endSwing, buf, BUF, DIR8_VEC, isHeld: () => heldNow, slowNow: () => slowT };
+        cechy, dmgRoll, CRIT_MULT, stunPlayer, drainBreath, slowMotion, SLOW, COUNTER, HIT_SE, surfaceOf, faceToward, facingVec, arrowsDir8, swingPastImpact, endSwing, buf, BUF, DIR8_VEC, isHeld: () => heldNow, slowNow: () => slowT };
 })();

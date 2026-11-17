@@ -671,7 +671,7 @@
         const part = this._partOf && this._partOf._boss ? this._partOf._boss.partDmg || 1 : 1;   // (a shadow of the last guard: a part of its blow)
         const dmg = B && B.damage ? B.damage(this) : m.dmg * this.strK() * ((this._boss && this._boss.dmg) || 1) * part;
         const res = Cb.hitPlayer({ damage: Math.max(1, Math.round(dmg)), poise: Math.round(m.poise * (1 + 0.03 * (this._attr.str - 5))),
-            from: { x: this.centerX(), y: this.centerY() }, attacker: this, name: this.name().toLowerCase(), wound: m.wound, knock: m.knock,
+            from: { x: this.centerX(), y: this.centerY() }, attacker: this, name: this.name().toLowerCase(), wound: woundAt(m.wound), knock: m.knock,
             guardBreak: !!m.guardBreak || !!this._heavy, unblockable: !!m.ring, unparryable: !!m.ring || !!m.unparryable, down: m.down });
         this._heavy = false;
         if (res === "hit") { this._hitStop = 2; se(m.guardBreak || m.ring ? "Blow3" : "Blow1", 80, 90, panOf(this.centerX())); }
@@ -740,7 +740,9 @@
         // the plate: a light blow from the front only rings
         const plate = k.plate && !(c._boss && c._boss.noPlate);
         if (plate && !hidden && !heavy && how !== "shot" && c.frontDot() > k.plate.back) {
-            damage = Math.max(1, Math.round(damage * k.plate.light));
+            // (2026-11-17, Bron_Cechy.js przebicie) a weapon that pierces armour: that part of what the plate holds back gets through
+            const light = (c._boss && c._boss.plateLight) || k.plate.light;
+            damage = Math.max(1, Math.round(damage * (light + (1 - light) * Math.min(1, extra.przebicie || 0))));
             poise = 0;
             numberAt(c.centerX(), c.centerY() - 1.35 * c._scale, MIND.plate, "#cfd6de", 0.75);
             sparksAt(c.centerX() - (c.centerX() - heroX()) * 0.3, c.centerY() - 0.6, "#f0f0e0", 8);
@@ -1057,7 +1059,7 @@
             const Cb = C();
             if (Cb && Cb.hitPlayer) {
                 const res = Cb.hitPlayer({ damage: Math.max(1, Math.round(m.dmg * c.strK())), poise: m.poise, from: { x: c.centerX() - c._lock[0], y: c.centerY() - c._lock[1] },
-                    attacker: c, name: "nietoperz", wound: m.wound, knock: m.knock, unparryable: true });
+                    attacker: c, name: "nietoperz", wound: woundAt(m.wound), knock: m.knock, unparryable: true });
                 if (res === "hit") se("Damage1", 60, 150);
             }
         }
@@ -1458,7 +1460,12 @@
     const DROP_LIFE = 24;
     function rollLoot(def) {
         const out = [];
-        for (const [id, p, n] of def.loot || []) if (Math.random() < p) out.push([id, rnd(1, n || 1)]);
+        // (2026-11-17, Bron_Data.js LUP.surowce) a 4th and 5th number: only on those floors (the spider thread: the spiders of floors 31-50)
+        const floor = () => (UG() && UG().floorOf ? UG().floorOf($gameMap.mapId()) || 0 : 0);
+        for (const [id, p, n, f0, f1] of def.loot || []) {
+            if (f0 && !(floor() >= f0 && floor() <= (f1 || 999))) continue;
+            if (Math.random() < p) out.push([id, rnd(1, n || 1)]);
+        }
         return out;
     }
     function leaveRemains(c) {
@@ -1605,7 +1612,7 @@
                 const A = c._answerAt, S2 = R.staff;
                 c.ringFx(A.x, A.y, S2.radius);
                 if (Math.hypot(heroX() - A.x, heroY() - A.y) <= S2.radius && Cb && Cb.hitPlayer) Cb.hitPlayer({ damage: Math.round(S2.dmg * c.strK() * c._boss.dmg), poise: S2.poise,
-                    from: { x: c.centerX(), y: c.centerY() }, attacker: c, name: c.name().toLowerCase(), unblockable: true, unparryable: true, knock: 0.8, wound: 0.3 });
+                    from: { x: c.centerX(), y: c.centerY() }, attacker: c, name: c.name().toLowerCase(), unblockable: true, unparryable: true, knock: 0.8, wound: woundAt(0.3) });
                 c._lockAng = null;
                 c.setMode("recover", S2.recover);
                 c._settle = SETTLE;
@@ -1843,7 +1850,7 @@
             if (!w.hit && Math.abs(Math.hypot(heroX() - w.x, (heroY() - w.y) / 0.8) - w.r) < w.width && Cb && Cb.hitPlayer) {
                 w.hit = true;
                 const a = Math.atan2(heroY() - w.y, heroX() - w.x);
-                const res = Cb.hitPlayer({ damage: w.dmg, poise: 60, from: { x: heroX() - Math.cos(a), y: heroY() - Math.sin(a) }, attacker: w.c, name: TK.kod.updateWaves[0], unblockable: false, unparryable: true, knock: 0.6, wound: 0.2 });
+                const res = Cb.hitPlayer({ damage: w.dmg, poise: 60, from: { x: heroX() - Math.cos(a), y: heroY() - Math.sin(a) }, attacker: w.c, name: TK.kod.updateWaves[0], unblockable: false, unparryable: true, knock: 0.6, wound: woundAt(0.2) });
                 if (res === "dodged") w.hit = true;
             }
             if (Graphics.frameCount % 3 === 0) for (let i = 0; i < 3; i++) { const a = Math.random() * Math.PI * 2; sparksAt(w.x + Math.cos(a) * w.r, w.y + Math.sin(a) * w.r * 0.8, "#b8ad98", 1); }
@@ -1985,6 +1992,13 @@
     // ==================================================================
     // Spawning: one creature, a swarm (rats, bats: a few round the place), on the floors' markers
     // ==================================================================
+    // (2026-11-17) a blow's wound chance by the floor (CreaturesData.WOUND_DEPTH): half on the shallow floors, the full one deeper
+    function woundAt(w) {
+        if (!(w > 0)) return w;
+        const W = D.WOUND_DEPTH, f = UG() && UG().floorOf ? UG().floorOf($gameMap.mapId()) : 0;
+        if (!W || !f) return w;
+        return w * Math.min(1, W.k + W.per * Math.max(0, f - W.shallow));
+    }
     function placeLevelHere() {
         const tag = T.mapTag("Poziom");
         if (tag && /^\d+$/.test(tag.raw)) return Math.max(1, Number(tag.raw));
@@ -2750,6 +2764,7 @@
     // ------------------------------------------------------------------
     registerWithUnderground();   // (Underground.js is above on the list: its floors know the makers before the first one is built)
     window.Creatures = T.register(PLUGIN, {
+        woundAt,   // (2026-11-17: a blow's wound chance by the floor - the tests)
         KINDS, BOSSES, LOOKS, Game_Creature, AI, BOSS_AI, mind,
         get list() { return creatures; }, get swarms() { return swarms; }, get webs() { return webs; }, get patches() { return patches; }, get rings() { return rings; },
         get grab() { return grab; }, get pull() { return pull; }, get boss() { return bossNow; }, get pools() { return pools; }, get waves() { return waves; }, get lines() { return lines; },

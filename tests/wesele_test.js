@@ -7,7 +7,7 @@ const fs = require("fs"), path = require("path");
 const kit = (function(){ try { return require("./lib/kit.js"); } catch (e) { return require("../../../../tests/lib/kit.js"); } })();
 const ROOT = path.join(__dirname, "..");
 const LIVE = /"name":"Wesele"/.test(fs.readFileSync(path.join(ROOT, "js", "tawerna_wtyczki.js"), "utf8"));
-const OVER = LIVE || process.env.GAME_OVERLAY ? {} : { overlay: "tools/wesele/overlay", overlayJs: true };
+const OVER = {};   // (2026-11-15: the installed game, not the pre-install overlay tools/wesele/overlay)
 const SHOTS = path.join(ROOT, "docs", "zadania_nowe", "wesele_gra");
 const ONLY = process.env.WESELE_ONLY || "";   // (e.g. "A" - only the first game)
 
@@ -61,7 +61,7 @@ kit.test(Object.assign({ port: Number(process.env.CDP_PORT) || 9942, bootCheck: 
     const lg = await J(`(function(){ const D = WeseleData, dobry = Wesele.planDobry(), p2 = Object.assign({}, dobry); let p3;
         p2.agata = p2.hanka + 1; p3 = { hanka: 0, agata: 1, tadek: 2, kuba: 3, wit: 4, mietek: 5, ignac: 6, bartek: 7, halina: 8, stefa: 9, rp1: 10, rm1: 11, rp2: 12, rm2: 13, leon: 14, lucjan: 15, soltys: 16, ambrozy: 17 };
         return { dobry: Wesele.iskry(dobry), jedna: Wesele.iskry(p2), siedem: Wesele.iskry(p3), borgar: Wesele.iskry(Wesele.plan()), kart: D.KARTY.length, wasni: D.WASNIE.length,
-            miejsca: D.KARTY.map((c, i) => Wesele.miejsceXY(i)).every(m => m.x >= 3 && m.x <= 25 && m.y >= 33 && m.y <= 35) }; })()`);
+            miejsca: D.KARTY.map((c, i) => Wesele.miejsceXY(i)).every(m => m.x >= 3 && m.x <= 25 && m.y >= 20 && m.y <= 22) }; })()`);
     t.check("plan stołów: 18 kart, 7 waśni; dobry plan = 0 iskier, jedna waśń przy stole = 1, wszystkie = 7; plan Borgara (nieusadzone) ma iskry", lg.kart === 18 && lg.wasni === 7 && lg.dobry === 0 && lg.jedna === 1 && lg.siedem === 7 && lg.borgar >= 1 && lg.miejsca, lg);
     const ob = await J("({ x: WeseleData.SALA.stoly.length, seats: 4 * 6, pasuje: WeseleData.KARTY.length <= 24 })");
     t.check("sala: cztery stoły po sześć miejsc (24) na osiemnaście kart", ob.x === 4 && ob.seats === 24 && ob.pasuje, ob);

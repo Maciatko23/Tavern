@@ -1,20 +1,24 @@
-// Smoke: the story's start (Story.js) - a new game in grandpa's house, his intro talk heard in bubbles to its end (the soup, the
-// journal's chapter 1 and its note), the debt on the P menu's card, grandpa's field reached, the tavern and Borgar hiring the hero,
-// a save in the middle of it all loaded back the same. (story_test.js has it all in full.)
+// Smoke: the story's start (Story.js) - a new game in grandpa's hut (the new world, Map224: the hero in his bed for the first talk),
+// grandpa's intro talk heard in bubbles to its end (the soup, the journal's chapter 1 and its note), the debt on the P menu's card,
+// grandpa's plot on Podgrodzie reached (Map218), the tavern in Kruczogród (Map001) and Borgar hiring the hero, a save in the middle
+// of it all loaded back the same. (story_test.js has it all in full.)
 const kit = require("../lib/kit.js");
 
 kit.test({}, async t => {
-    t.check("a new story game starts in grandpa's house (Map019 2,5)", await t.newGame({ story: true }) && JSON.stringify(await t.json("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y]")) === "[19,2,5]");
+    const started = await t.newGame({ story: true });
+    const at = await t.json("({ map: $gameMap.mapId(), x: $gamePlayer.x, y: $gamePlayer.y, intro: $gameSystem._story && $gameSystem._story.intro, g: !!$gameMap.event(901) })");
+    t.check("a new story game starts in grandpa's hut (Map224): the hero in his bed (1,4) for grandpa's first talk, grandpa there", started && at.map === 224 && at.x === 1 && at.y === 4 && at.intro === 1 && at.g, at);
     const s0 = await t.json("$gameSystem._story");
-    t.check("the story: debt 2500 to be paid by day 60, nothing paid", s0 && s0.debt === 2500 && s0.deadline === 60 && s0.paid === 0 && !s0.pending, s0);
+    t.check("the story of the new world: debt 2500 to be paid by day 60, nothing paid", s0 && s0.world === "nowy" && s0.debt === 2500 && s0.deadline === 60 && s0.paid === 0 && !s0.pending, s0);
 
     // ---- grandpa's intro: it begins by itself, the driver presses O through his words
     await t.eval(kit.DRIVER + "; window.__drv.on = true; window.__drv.picks = []; window.__drv.mark = window.__drv.log.length; 0");
     const heard = await t.until("$gameSystem._story.intro === 2 && !$gameMap.isEventRunning() && !$gameMessage.isBusy()", 60);
     await t.eval("window.__drv.on = false; 0");
     const intro = await t.json("({ log: window.__drv.log.slice(window.__drv.mark), soup: $gameParty.numItems($dataItems[131]), note: !!$gameSystem._journal.notes.find(n => n.title === 'Dług dziadka Stacha') })");
-    t.check("the intro: grandpa (event 901) and the hero talk in bubbles, about the debt and Borgar's tavern", heard && intro.log.length >= 6 && intro.log[0].who === 901 && intro.log.some(l => l.who === 0) &&
-        /2500/.test(intro.log.map(l => l.t).join(" ")) && /Borgar/.test(intro.log.map(l => l.t).join(" ")), intro.log.map(l => l.who));
+    const said = intro.log.map(l => l.t).join(" ");
+    t.check("the intro: grandpa (event 901) and the hero talk in bubbles, about the debt and Borgar's tavern (the new world's ways: no old Kruczy Jar)", heard && intro.log.length >= 6 && intro.log[0].who === 901 && intro.log.some(l => l.who === 0) &&
+        /2500/.test(said) && /Borgar/.test(said) && /płot/.test(said) && !/Kruczy Jar|Kruczym Jarze|Kruczego Jaru|Polnej/.test(said), intro.log.map(l => l.who));
     t.check("...after it: a cabbage soup from grandpa and the journal's note about the debt", intro.soup === 1 && intro.note, intro);
     // (2026-10-28: chapter 1 is a thread of the journal - Watki.js's "fabula", FABUŁA - no longer its goals)
     await t.eval("Journal.evaluateGoals(); Watki.get('fabula').ownChecks(); 0");
@@ -28,12 +32,12 @@ kit.test({}, async t => {
     const debt = await t.json("({ d: MenuRing.debtInfo(), tab: MenuRing.info() && MenuRing.info().active })");
     t.check("the P menu (Postać) shows the debt (0 of 2500 G, 60 days)", debt.tab === "hero" && !!debt.d && debt.d.paid === 0 && debt.d.debt === 2500 && debt.d.days === 60, debt);
     await t.eval("SceneManager.pop(); 0");
-    await t.until(t.onMap(19), 15);
+    await t.until(t.onMap(224), 15);
 
-    // ---- the field, the tavern, Borgar
-    await t.go(3, 26, 14);
-    t.check("grandpa's field (Map003, 'Kruczy Jar') reached: the story's step done", await t.eval("!!$gameSystem._story.flags.field && $gameMap.displayName() === 'Kruczy Jar'"));
-    await t.go(1, 50, 82, 8);
+    // ---- the plot, the tavern, Borgar
+    await t.go(218, 30, 18);
+    t.check("grandpa's plot reached (Podgrodzie, Map218, inside its fence): the story's step done", await t.eval("!!$gameSystem._story.flags.field && $gameMap.mapId() === 218 && Homes.heroOnField()"));
+    await t.go(1, 14, 40, 8);
     await t.setHour(10);
     const hire = await t.talkTo("Story.borgarEvent()", [], { secs: 40 });
     t.check("Borgar hires the hero (the tavern, 10:00)", hire.done && (await t.eval("!!$gameSystem._story.flags.hired")), hire.text.slice(0, 160));

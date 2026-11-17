@@ -58,13 +58,14 @@ const path = require("path");
         const pos = () => J("({ x: $gamePlayer._realX, y: $gamePlayer._realY, d: $gamePlayer.direction() })");
         let p0 = await pos();
         await key(K.D, 16); let p1 = await pos();
-        check("D walks right", p1.x - p0.x > 0.5 && Math.abs(p1.y - p0.y) < 0.1 && p1.d === 6, { p0, p1 });
+        // (2026-11-12 world pace: the barefoot hero walks 3.0 engine units = 1.5 px a frame - 16 frames are half a tile)
+        check("D walks right", p1.x - p0.x > 0.4 && Math.abs(p1.y - p0.y) < 0.1 && p1.d === 6, { p0, p1 });
         await key(K.A, 16); let p2 = await pos();
-        check("A walks left", p1.x - p2.x > 0.5 && Math.abs(p2.y - p1.y) < 0.1 && p2.d === 4, { p1, p2 });
+        check("A walks left", p1.x - p2.x > 0.4 && Math.abs(p2.y - p1.y) < 0.1 && p2.d === 4, { p1, p2 });
         await key(K.S, 16); let p3 = await pos();
-        check("S walks down", p3.y - p2.y > 0.5 && Math.abs(p3.x - p2.x) < 0.1 && p3.d === 2, { p2, p3 });
+        check("S walks down", p3.y - p2.y > 0.4 && Math.abs(p3.x - p2.x) < 0.1 && p3.d === 2, { p2, p3 });
         await key(K.W, 16); let p4 = await pos();
-        check("W walks up", p3.y - p4.y > 0.5 && Math.abs(p4.x - p3.x) < 0.1 && p4.d === 8, { p3, p4 });
+        check("W walks up", p3.y - p4.y > 0.4 && Math.abs(p4.x - p3.x) < 0.1 && p4.d === 8, { p3, p4 });
         await down(K.D); await down(K.W); await frames(20); await up(K.D); await up(K.W); await frames(4);
         const p5 = await pos();
         check("W + D together walk diagonally (free movement, 8 directions)", p5.x - p4.x > 0.4 && p4.y - p5.y > 0.4, { p4, p5 });
@@ -74,8 +75,8 @@ const path = require("path");
         await key(K.Q);
         let st = await state();
         // (needFlag: on the list only once that TownQuests flag is set - the raven's perch after the raven is tame, 2026-10-16)
-        const expectBuild = await J(`Object.keys(Farming.BUILDINGS).filter(t => !Farming.BUILDINGS[t].noBuild && !Farming.BUILDINGS[t].indoorOnly && !Farming.BUILDINGS[t].instant && (!Farming.BUILDINGS[t].needFlag || !!(window.TownQuests && TownQuests.state().flags[Farming.BUILDINGS[t].needFlag]))).map(t => Farming.BUILDINGS[t].name)`);
-        check("Q opens the build menu ('Budowa') with every real outdoor building (not the instant ones: tent/bucket/bedroll), what can be built now first, no 'Wróć' line", st.open && st.kind === "build" && st.title === "Budowa" && JSON.stringify(st.names.slice().sort()) === JSON.stringify(expectBuild.slice().sort()) && !st.names.includes("Wróć") && st.enabled.filter((e, i) => st.names[i] !== "Zrób młotek").every((e, i, a) => i === 0 || !e || a[i - 1]), { open: st.open, kind: st.kind, title: st.title, n: st.names.length, want: expectBuild.length });
+        const expectBuild = await J(`Object.keys(Farming.BUILDINGS).filter(t => !Farming.BUILDINGS[t].noBuild && !Farming.BUILDINGS[t].indoorOnly && !Farming.BUILDINGS[t].action && (!Farming.BUILDINGS[t].needFlag || !!(window.TownQuests && TownQuests.state().flags[Farming.BUILDINGS[t].needFlag]))).map(t => Farming.BUILDINGS[t].name).concat(Farming.HAND_RECIPES.map(r => r.name))`);   // (2026-11-16: two tabs - 'Budowa' with the hand's work, 'Akcja' with what is set down)
+        check("Q opens the build menu ('Budowa') with its tab 'Budowa': every outdoor building and the things made by hand (the things set down are on the tab 'Akcja'), what can be done now first, no 'Wróć' line", st.open && st.kind === "build" && st.title === "Budowa" && JSON.stringify(st.names.slice().sort()) === JSON.stringify(expectBuild.slice().sort()) && !st.names.includes("Wróć") && st.enabled.filter((e, i) => st.names[i] !== "Zrób młotek" && st.names[i] !== "Wytwórz ręcznie...").every((e, i, a) => i === 0 || !e || a[i - 1]), { open: st.open, kind: st.kind, title: st.title, n: st.names.length, want: expectBuild.length });
         check("the popup with the description shows for the highlighted building", st.tip);
         const indoorOnly = await J(`Object.keys(Farming.BUILDINGS).filter(t => Farming.BUILDINGS[t].indoorOnly).map(t => Farming.BUILDINGS[t].name)`);
         check("the indoor-only furniture is not on the outdoor list", indoorOnly.length > 0 && indoorOnly.every(n => !st.names.includes(n)), { indoorOnly });
@@ -230,11 +231,11 @@ const path = require("path");
 
         // ---------------------------------------------------------------- O = OK, P = cancel (instead of Z and X)
         const opz = await J("[79, 80, 90, 88, 13, 32, 27].map(c => Input.keyMapper[c] || null)");
-        check("O, P, Enter and Esc have names of their own (Combat.js: OK / cancel in the normal mode); Z and X are free, Space is the roll", JSON.stringify(opz) === JSON.stringify(["keyO", "keyP", null, null, "keyEnter", "dodge", "keyEsc"]), opz);
+        check("O, P, Enter and Esc have names of their own (Combat.js: OK / cancel in the normal mode); Z rests (2026-11-16: rest - Farming.restKey), X is free, Space is the roll", JSON.stringify(opz) === JSON.stringify(["keyO", "keyP", "rest", null, "keyEnter", "dodge", "keyEsc"]), opz);
         await key(9);
         const cm = await ev("Combat.combatMode()");
         await key(9); await key(88); await key(90);
-        check("Z and X do nothing; Tab switches the combat mode on and back off (no menu opened)", cm === true && !(await ev("Combat.combatMode()")) && !(await state()).open);
+        check("X does nothing, Z only rests (no menu); Tab switches the combat mode on and back off (no menu opened)", cm === true && !(await ev("Combat.combatMode()")) && !(await state()).open);
         await key(K.Q);
         check("(Q opens the build menu)", (await state()).open);
         await key(80);
@@ -268,8 +269,8 @@ const path = require("path");
         await key(K.Q);
         st = await state();
         // (needFlag: the eagle's basket only once the egg is found - orzelJajo, 2026-10-18)
-        const expectHut = await J(`Object.keys(Farming.BUILDINGS).filter(t => !Farming.BUILDINGS[t].noBuild && Farming.BUILDINGS[t].indoor && (!Farming.BUILDINGS[t].needFlag || !!(window.TownQuests && TownQuests.state().flags[Farming.BUILDINGS[t].needFlag]))).map(t => Farming.BUILDINGS[t].name)`);
-        check("Q in the hut opens 'Wyposaż chatkę' with only the indoor things", st.open && st.kind === "build" && st.title === "Wyposaż chatkę" && JSON.stringify(st.names.slice().sort()) === JSON.stringify(expectHut.slice().sort()) && expectHut.length >= 2 && st.enabled.filter((e, i) => st.names[i] !== "Zrób młotek").every((e, i, a) => i === 0 || !e || a[i - 1]), { title: st.title, names: st.names, want: expectHut });
+        const expectHut = await J(`Object.keys(Farming.BUILDINGS).filter(t => !Farming.BUILDINGS[t].noBuild && Farming.BUILDINGS[t].indoor && (!Farming.BUILDINGS[t].needFlag || !!(window.TownQuests && TownQuests.state().flags[Farming.BUILDINGS[t].needFlag]))).map(t => Farming.BUILDINGS[t].name).concat(Farming.HAND_RECIPES.map(r => r.name))`);
+        check("Q in the hut opens 'Wyposaż chatkę' with only the indoor things", st.open && st.kind === "build" && st.title === "Wyposaż chatkę" && JSON.stringify(st.names.slice().sort()) === JSON.stringify(expectHut.slice().sort()) && expectHut.length >= 2 && st.enabled.filter((e, i) => st.names[i] !== "Zrób młotek" && st.names[i] !== "Wytwórz ręcznie...").every((e, i, a) => i === 0 || !e || a[i - 1]), { title: st.title, names: st.names, want: expectHut });
         await key(K.Q);
         check("...Q closes it", !(await state()).open);
         await ev(`$gamePlayer.reserveTransfer(3, ${bx + 4}, ${by + 3}, 8, 0); 0`);

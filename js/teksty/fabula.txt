@@ -17,7 +17,7 @@ Borgar daje jedną zmianę dziennie, od {od} do {do}. Przyjdź wypoczęty, bo zm
 Nadmiar plonów sprzedasz Borgarowi. Uczciwie płaci... jak na karczmarza.
 Twoje posłanie zawsze tu czeka. Pod dachem śpi się lepiej niż pod krzakiem.
 Zające łatwiej złapać we wnyki z przynętą niż gołymi rękami. Ja w twoim wieku... no, ja też nie łapałem.
-Na działce stawiaj, co chcesz - to nasza ziemia, wszystko w obrębie muru. Za murem już nie nasze: tam nic nie stawiaj, bo Lord by się wściekł.
+Na działce stawiaj, co chcesz - to nasza ziemia, wszystko w obrębie płotu. Za płotem już nie nasze: tam nic nie stawiaj, bo Lord by się wściekł.
 
 # ======================================================================== LOSS_HINTS (radyPoStracie)
 [radyPoStracie]
@@ -70,11 +70,11 @@ kod.introList.6 = A ja ci tu, wnuku, mam tylko... dług.
 kod.introList.7 = Dług?
 kod.introList.8 = Jestem winien Lordowi Zaleskiemu - temu z pięknego dworu obok tawerny - {DEBT} złotych monet. Termin: dzień {DEADLINE}.
 kod.introList.9 = {DEBT}?! Coś ty kupił, dziadku, krowę ze złota?
-kod.introList.10 = Nasiona, narzędzia, dach po burzy... i parę chudych lat. Jak nie oddam w terminie, Lord zabierze moją działkę za lasem. A to wszystko, co mamy. Teraz: co my mamy.
+kod.introList.10 = Nasiona, narzędzia, dach po burzy... i parę chudych lat. Jak nie oddam w terminie, Lord zabierze moją działkę. A to wszystko, co mamy. Teraz: co my mamy.
 kod.introList.11 = Ja już za stary na siekierę, ale ty masz ręce i głowę. Działka jest twoja - stawiaj na niej, co zechcesz.
-kod.introList.12 = Tylko tam, wnuku: moja działka w Kruczym Jarze to to, co w obrębie muru. Dalej, za murem, to już nie moja ziemia - tam nic nie stawiaj.
-kod.introList.13 = Droga: z podwórza prosto na zachód - Kruczy Jar zaczyna się zaraz za miedzą.
-kod.introList.14 = A pieniądze... Borgar z tawerny „Pod Złotym Kuflem” szuka rąk do pracy, po południu i wieczorem. Tawerna stoi w Kruczogrodzie, na tarasie nad rynkiem - z Kruczego Jaru na północ. Dwór Lorda jest tuż za miastem - tam zanosisz spłatę.
+kod.introList.12 = Tylko tam, wnuku: moja działka to to, co w obrębie płotu, zaraz za podwórkiem. Dalej, za płotem, to już nie moja ziemia - tam nic nie stawiaj.
+kod.introList.13 = Droga: z chaty przez podwórko na wschód - furtka w płocie prowadzi prosto na działkę.
+kod.introList.14 = A pieniądze... Borgar z tawerny „Pod Złotym Kuflem” szuka rąk do pracy, po południu i wieczorem. Tawerna stoi w Kruczogrodzie, na tarasie nad rynkiem - z Podgrodzia drogą na wschód. Dwór Lorda jest tuż za miastem - tam zanosisz spłatę.
 kod.introList.15 = Czyli rano działka, wieczorem kufle. A spać kiedy?
 kod.introList.16 = Na starość. Jak ja. I jak się wykurujesz, a nie od razu, gorączko jedna.
 kod.introList.17 = Masz tu kapuśniak na drogę - z mojej kapusty. A wisiorek trzymaj przy sobie. Kruk w tej rodzinie... no, to długa historia. Opowiem ci kiedyś. No, zmykaj!
@@ -114,7 +114,7 @@ kod.grandpaList.13 = Lord nie będzie czekał... ale ty dasz radę. Masz to po m
 kod.grandpaList.14 = Lordowi oddałeś już {paid} z {debt} G. Do terminu {3} {4}. {5}
 kod.grandpaList.15 = Czasu jeszcze sporo, ale nie zwlekaj.
 kod.grandpaList.16 = Lordowi nie oddaliśmy jeszcze ani grosza, a do terminu {1} {2}. {3}
-kod.grandpaList.17 = Działka jest w Kruczym Jarze, zaraz na zachód od podwórza. Moje jest to, co w obrębie muru.
+kod.grandpaList.17 = Działka jest zaraz za podwórkiem - furtką na wschód. Moje jest to, co w obrębie płotu.
 kod.grandpaList.18 = Borgar szuka ludzi do pracy. Od {SHIFT_FROM} do {SHIFT_TO} zajrzyj do „Złotego Kufla” w Kruczogrodzie, na tarasie nad rynkiem.
 # payOptions
 kod.payOptions.0 = Oddaj {n} G
@@ -275,7 +275,7 @@ kod.fieldReturned.3 = Akt odkupu działki
 kod.fieldReturned.4 = Dzień {1}: oddałem Lordowi ostatnią ratę - razem {price} G. Działka za lasem znowu należy do dziadka Stacha, a z nim wszystko, czego nie zdążyłem rozebrać. {3} zaniesie dziadkowi akt odkupu.
 # introDone
 kod.introDone.0 = Dług dziadka Stacha
-kod.introDone.1 = Dziadek jest winien Lordowi Leopoldowi Zaleskiemu {debt} G. Termin: dzień {deadline} (pieniądze przyjmą jeszcze w nocy po nim, do świtu) - potem Lord zabierze jego działkę za lasem, w Kruczym Jarze.\nNa tej działce mogę budować (i tylko tam: w obrębie muru; za murem to już nie ziemia dziadka).\nBorgar z tawerny „Pod Złotym Kuflem” daje pracę po południu i wieczorem, od {SHIFT_FROM} do {SHIFT_TO}.\nSpłatę zanoszę do dworu Lorda, obok tawerny: za dnia ({5}-{6}) Lordowi, nocą kamerdynerowi.\nDroga na działkę: podwórze - Leśna droga - Polna droga - Skraj lasu - Kruczy Jar.\nDroga do tawerny: podwórze - Leśna droga - Polna droga - ścieżką na północ. Dwór Lorda stoi na wschód od tawerny.
+kod.introDone.1 = Dziadek jest winien Lordowi Leopoldowi Zaleskiemu {debt} G. Termin: dzień {deadline} (pieniądze przyjmą jeszcze w nocy po nim, do świtu) - potem Lord zabierze jego działkę, tę za płotem obok chaty na Podgrodziu.\nNa tej działce mogę budować (i tylko tam: w obrębie płotu; za płotem to już nie ziemia dziadka).\nBorgar z tawerny „Pod Złotym Kuflem” daje pracę po południu i wieczorem, od {SHIFT_FROM} do {SHIFT_TO}.\nSpłatę zanoszę do dworu Lorda, za Kruczogrodem: za dnia ({5}-{6}) Lordowi, nocą kamerdynerowi.\nDroga na działkę: z chaty przez podwórko, furtką w płocie na wschód.\nDroga do tawerny: z Podgrodzia drogą na wschód, do Kruczogrodu - tawerna stoi na tarasie nad rynkiem. Dwór Lorda stoi za miastem, dalej na wschód.
 kod.introDone.2 = List od matki
 kod.introDone.3 = "Mokry, rozmyty list matki do dziadka Stacha. Straż Pewności - ludzie mówią na nich „Czarne Oczy” - spaliła naszą wieś, Brzozową Wolę. "
 kod.introDone.4 = Ojciec przepadł na wojnie; matka poszła za wojskiem go szukać. Obiecała, że przypłynie następnym promem.\n
@@ -288,15 +288,15 @@ kod.chapterDone.2 = Działka zostaje przy was.
 kod.chapterDone.3 = Pokwitowanie od Lorda
 kod.chapterDone.4 = Dług dziadka spłacony w dniu {done}: {debt} G. Działka zostaje przy nas.\nW dworze wspomnieli, że zbudowano go z kamieni dawnej twierdzy - Kruczych Skał - a najstarsze z nich leżą pod tawerną Borgara. Pod Kruczymi Skałami są podobno drzwi, których nikt nie powinien otwierać.\nLord nie żartował. Chce, żebym przyszedł najpierw do niego, jeśli coś znajdę. Ciekawe, dlaczego...
 # onArrive
-kod.onArrive.0 = Więc to jest Kruczy Jar... A w obrębie muru - działka dziadka.
+kod.onArrive.0 = Więc to jest Podgrodzie... A za płotem obok chaty - działka dziadka.
 # storyGoals
 kod.storyGoals.0 = Porozmawiaj z dziadkiem
 kod.storyGoals.1 = Dziadek Stach czeka w swoim domu. Ma ci coś ważnego do powiedzenia.
 kod.storyGoals.2 = Dojdź na działkę dziadka
 kod.storyGoals.3 = Działka dziadka
-kod.storyGoals.4 = Z podwórza dziadka na zachód - Kruczy Jar zaczyna się zaraz za miedzą. Budować wolno ci tylko na działce dziadka - w obrębie muru.
+kod.storyGoals.4 = Z chaty dziadka przez podwórko na wschód - furtka w płocie prowadzi na działkę. Budować wolno ci tylko na działce dziadka - w obrębie płotu.
 kod.storyGoals.5 = Znajdź pracę w tawernie
-kod.storyGoals.6 = Borgar, karczmarz z tawerny „Pod Złotym Kuflem”, szuka rąk do pracy. Tawerna stoi w Kruczogrodzie, na tarasie nad rynkiem - z Kruczego Jaru na północ. Porozmawiaj z nim.
+kod.storyGoals.6 = Borgar, karczmarz z tawerny „Pod Złotym Kuflem”, szuka rąk do pracy. Tawerna stoi w Kruczogrodzie, na tarasie nad rynkiem - z Podgrodzia drogą na wschód. Porozmawiaj z nim.
 kod.storyGoals.7 = Przepracuj zmianę u Borgara
 kod.storyGoals.8 = Zmiany są po południu i wieczorem, od {SHIFT_FROM} do {SHIFT_TO}, jedna dziennie. Sprzątanie, beczka, kuchnia i sala - płaci od roboty, a goście dają napiwki.
 kod.storyGoals.9 = Znajdź nowy dach nad głową

@@ -1,0 +1,14 @@
+PASS gra się uruchamia
+NOTE nakładka: tools/questy_pustelnia/staging (pustelnia OTWARTA)
+PASS pustelnia otwarta: stare miejsca (fundament Map157, kopiec Map155, D40 klif i baszta)  {"open":true,"chapel":false,"qs":[],"towers":[["straznica_157",157,94,52]],"cairn":[["kopiec_155",155,70,40]],"d40":[[155,"urwisko"],[157,"kruczarnia"]],"names":["Punkt widokowy: klif pustelni","Punkt widokowy: baszta kruków"],"ready":true}
+PASS pierwsza rozmowa (otwarta): stara - „Do miasta jest w drugą stronę”  "...Czego tu szukasz? Do miasta jest w drugą\nstronę. / Szedłem wzdłuż klifu. Nie wiedziałem, że ktoś\ntu mieszka. / Mało kto wie. I dobrze. (Kleofas patrzy na\ntwoją szyję.) Pokaż to. / Wisiorek? Matka d"
+PASS K50 od dnia 6: oferta i przyjęcie (pustelnia)  "Atrament mi wysechł. Ostatni kałamarz\nrozcieńczałem, aż pisałem samą wodą. Kronika z\nwody to żadna kronika. / Na nowy trzeba garbnika z szyszek, rdzy z\nżelaza i"
+PASS dziennik K50 nazywa pustelnię na klifie  "Atrament dla pustelnika Zadanie krótkie  ·  Brat Kleofas, pustelnik, kronikarz zakonu  ·  od dnia 7  Bratu Kleofasowi wysechł atrament. Nowy zrobi z garbnika z szyszek, rdzy z żelaza i wody - deszczówki, której sam nie ma.  Teraz Przynieś bratu Kleofasowi 4× Szyszki, 1× Żelazo i 1 porcję własnej des"
+PASS (otwarta) Kleofas ma stary start: Kleofas na Map155, K50 aktywne - reszta jak w pustelnia_test
+PASS K51: o świcie kruk siedzi na maszcie wraku kutra (przystań)  {"pet":[14.1875,35.98,111],"mast":{"x":14.1875,"y":35.98,"z":111,"high":true,"facing":1},"step":0}
+PASS bohater podchodzi: kruk kracze i odlatuje (krok 1 zaliczony, etap 1)  {"leg":1,"step":1}
+PASS (otwarta) dalsza droga - jak w kruk_test (Ścieżka na klif, pustelnia, Urwisko)
+PASS (otwarta) D40: punkty widokowe stare - klif (155) i baszta (157)
+PASS (otwarta) K68: fundament na Urwisku i kopiec przy pustelni - stare miejsca w danych
+PASS bez błędów w konsoli  []
+12/12 passed

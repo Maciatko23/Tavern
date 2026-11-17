@@ -19,7 +19,7 @@ const { launch, sleep } = require("./cdp.js");
         const give = (id, n) => ev(`$gameParty.gainItem($dataItems[${id}], ${n}); 0`);
 
         // ------------------------------------------------------------ data
-        const data = await ev(`(function(){ const ids = []; for (let i = 90; i <= 116; i++) ids.push($dataItems[i] && $dataItems[i].name && $dataItems[i].iconIndex === i + 256); return { all: ids.every(Boolean), n: ids.length, foods: [71,72,73,75,76,81,83,95,99,102,103,105,106,107,108,109,110].every(i => $dataItems[i].consumable && $dataItems[i].meta.Food) }; })()`);
+        const data = await ev(`(function(){ const ids = []; for (let i = 90; i <= 116; i++) ids.push($dataItems[i] && $dataItems[i].name && $dataItems[i].iconIndex >= 688); return { all: ids.every(Boolean), n: ids.length, foods: [71,72,73,75,76,81,83,95,99,102,103,105,106,107,108,109,110].every(i => $dataItems[i].consumable && $dataItems[i].meta.Food) }; })()`);
         check("27 new items with their icons, and the foods carry <Food> tags", data.all && data.foods, data);
         const sheet = await ev("(function(){ const b = ImageManager.loadSystem('IconSet'); return { w: b.width, h: b.height }; })()");
         check("icon sheet is tall enough for icon 372", sheet.h >= 24 * 32, sheet);

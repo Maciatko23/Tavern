@@ -345,7 +345,8 @@
     // the creatures of the ruins (stage 4, Creatures.js): a rat or a bat of a swarm little, the armour two boars, the stone sentinel more
     // than a bear; the bosses of the underground floors their own (the guardian of the tenth gate, then floors 20 ... 90)
     const KILL_XP = { rabbit: 5, deer: 10, boar: 20, wolf: 15, bear: 60, bandit: 30, knifer: 30, archer: 30, mercenary: 60,
-        szczur: 4, nietoperz: 4, pajak: 25, topielec: 35, zbroja: 45, upior: 50, cien: 50, kamiennik: 70,
+        szczur: 8, nietoperz: 8, pajak: 30,   // (2026-11-17 balance: rats and bats 4 -> 8, the spider 25 -> 30 - the floors two levels lower)
+        topielec: 35, zbroja: 45, upior: 50, cien: 50, kamiennik: 70,
         guardian: 250, boss_20: 300, boss_30: 600, boss_40: 900, boss_50: 1200, boss_60: 1500, boss_70: 1800, boss_80: 2000, boss_90: 2500 };
     function killXp(kind, level) {
         const base = KILL_XP[kind] || 10, lv = level || 1, diff = lv - hero().level;
@@ -393,7 +394,9 @@
     // (the difficulty of the fight - Combat_Feel.js, Opcje: Łatwy x1.5, Trudny x0.75)
     // (2026-10-23, Bron_Data.js: a light shield - the buckler, the round one - lengthens it: its `parry`)
     const shieldParry = () => { const f = P.fight, s = f && f.shield ? f.shield() : null; return s && s.parry > 0 ? s.parry : 0; };
-    const parryWindow = () => Math.round((8 + 0.25 * (attr("per") - ATTR_START)) * (hasSkill("keen") ? 1.5 : 1) * (P.feel && P.feel.diff ? P.feel.diff().parry : 1) * (1 + shieldParry()));
+    // (2026-11-17, Bron_Cechy.js) the weapon in hand's own trait "parowanie" (the swords) lengthens it too
+    const weaponParry = () => { const c = T.api("Bron_Cechy"); return c && c.heldTrait ? c.heldTrait("parowanie") : 0; };
+    const parryWindow = () => Math.round((8 + 0.25 * (attr("per") - ATTR_START)) * (hasSkill("keen") ? 1.5 : 1) * (P.feel && P.feel.diff ? P.feel.diff().parry : 1) * (1 + shieldParry() + weaponParry()));
     const knockdownAt = () => Math.round((60 + 1.8 * (attr("con") - ATTR_START)) * (1 + perk("knock.resist")));
     const woundChance = base => base * (hasSkill("thickskin") ? 0.5 : 1) * Math.max(0.25, 1 - 0.014 * (attr("con") - ATTR_START));
     const carryBonus = () => Math.round(0.9 * Math.max(0, attr("str") - ATTR_START)) + perk("carry");
@@ -465,14 +468,15 @@
     function meleeInfo(id) {
         const f = F(), w = (f.weaponNow ? f.weaponNow(id) : null) || f.MELEE[id] || f.MELEE[0], s = strMult() * (1 + perk("melee.dmg")), pz = poiseMult() * (1 + perk("melee.poise")), cm = f.COMBO_MULT;
         const n = f.maxCombo ? f.maxCombo(w) : w.combo.length, hit = m => Math.max(1, Math.round(w.dmg * m * s));
+        const km = (f.cechy ? f.cechy(id).krytyk_mocniej : 0) || 1.6;   // (2026-11-17, Bron_Cechy.js: a weapon whose crit hits harder)
         return { id, name: w.name, hit: hit(1), series: Array.from({ length: n }, (_, i) => hit(cm[Math.min(i, cm.length - 1)])), heavy: hit(f.HEAVY.mult),
-            heavyFull: hit(f.HEAVY.full), crit: hit(1.6), poise: Math.round(w.poise * pz), poiseLast: Math.round(w.poise * pz * 1.5), poiseHeavy: Math.round(w.poise * pz * f.HEAVY.poise),
+            heavyFull: hit(f.HEAVY.full), crit: hit(km), critMul: km, poise: Math.round(w.poise * pz), poiseLast: Math.round(w.poise * pz * 1.5), poiseHeavy: Math.round(w.poise * pz * f.HEAVY.poise),
             breath: Math.round(w.cost * (1 - perk("melee.breath"))), reach: w.reach, fire: !!w.fire, fireBonus: w.fireBonus || 0, sweep: !!w.sweep && hasSkill("sweep"),
             critBonus: w.crit || 0, lack: w.lack || 0, poziom: w.poziom || 1 };
     }
     function fightInfo() {
         const f = F(), h = f.hand ? f.hand() || "m0" : "m0", out = { hand: h, ranged: h === "ranged", critChance: critChance(), critMul: 1.6, fists: meleeInfo(0) };
-        if (h !== "ranged") { out.weapon = meleeInfo(Number(h.slice(1)) || 0); return out; }
+        if (h !== "ranged") { out.weapon = meleeInfo(Number(h.slice(1)) || 0); out.critMul = out.weapon.critMul; return out; }
         const HW = (T.api("Hunting_parts") || {}).weapons, has = id => !!$dataItems[id] && $gameParty.numItems($dataItems[id]) > 0;
         // (2026-10-23: the bow or the sling in hand - the best one owned, Bron.js's variants too)
         const item = f.rangedItem ? f.rangedItem() : has(126) && has(127) ? 126 : 125, key = f.rangedKind ? f.rangedKind(item) : item === 126 ? "bow" : "sling";

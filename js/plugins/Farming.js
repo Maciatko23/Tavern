@@ -700,13 +700,20 @@
     const changed = () => { farm().rev++; buildingIndexRev = -1; };
 
     // Ground that a destroyed object stood on becomes cleared land.
-    Game_System.prototype.clearLand = function(mapId, tiles) {
+    // plain (the user 2026-11-14: "jak się rozwala kamienie albo kłody z ziemi, albo krzaczki, to niech teren pod nimi się nie zmienia"):
+    // the ground keeps its look - the plot is stored (it can be raked, sown, built on) but no soil patch is drawn while nothing has
+    // been done on it (Farming.plainPlot); the brown patches left by things broken in an older save turn plain too.
+    Game_System.prototype.clearLand = function(mapId, tiles, plain) {
         const plots = plotsOf(mapId);
         for (const t of tiles) {
-            if (!plots[key(t.x, t.y)]) plots[key(t.x, t.y)] = { s: "cleared" };
+            const k = key(t.x, t.y), p = plots[k];
+            if (!p) plots[k] = plain ? { s: "cleared", plain: 1 } : { s: "cleared" };
+            else if (plain && p.s === "cleared" && !p.crop && !p.dug && p.watered === undefined) p.plain = 1;
         }
         changed();
     };
+    // a plot that only remembers "something stood here": untouched cleared ground, drawn as the map has it
+    const plainPlot = p => !!p && !!p.plain && p.s === "cleared" && !p.crop && !p.dug && p.watered === undefined;
 
     // ---- the hut: the player's first house. Its inside is a map of its own (HUT_MAP: a 5 x 2 floor, the door is in the wall below it and leads to the door)
     // where furniture (the buildings marked indoor) is put with the same build menu. One hut per game.
@@ -866,7 +873,7 @@
     function spendStamina(cost) {
         if (cost <= 0 || typeof $gameSystem.trySpendStamina !== "function") return true;
         if ($gameSystem.trySpendStamina(cost)) return true;
-        complain(ICON.stamina, "Jesteś zbyt zmęczony");
+        complain(ICON.stamina, "Jesteś zbyt zmęczony - Z: odpocznij");
         return false;
     }
     // the hero's skills (Combat.js, Skills_Data.js): perk(key) = what the learnt skills add up to for an effect, perkRoll(key) = a
@@ -930,6 +937,11 @@
     const landRefusal = mapId => ruleSays(r => r.refuse && r.refuse(Number(mapId === undefined ? $gameMap.mapId() : mapId)));
     const noBuildText = () => ruleSays(r => r.noBuild && r.noBuild()) || NO_BUILD;
     const addLandRule = rule => { if (rule && typeof rule === "object" && !landRules.includes(rule)) landRules.push(rule); return rule; };
+    // (2026-11-14, the user: "czy teraz gracz może normalnie stawiać budynki na działce od dziadka?") the new world's Podgrodzie (Map218):
+    // grandpa's fenced plot is the map's <BuildRegion:8> - the family's own ground from the first day (while no rule holds it:
+    // a field lost to the Lord is someone else's). Before, no rule owned it and nothing could be built anywhere in the new world.
+    const GRANDPA_PLOT_MAP = 218;
+    addLandRule({ own: mapId => mapId === GRANDPA_PLOT_MAP && !landHeld(mapId) });
     // shared by missingMaterials/missingInputs: which [id, n] pairs of a cost/inputs list are not fully in the bag
     function missingOf(pairs) {
         return pairs.filter(([id, n]) => countOf(id) < n);
@@ -1078,6 +1090,20 @@
     // a menu opened by the press that is still held (a building site): held on long enough, its first entry is chosen by itself;
     // let go before that and the menu simply stays
     const SITE_HOLD = 14;
+    // (2026-11-16, the user: "można odpoczywać na ziemi pod niebem wszędzie", "możesz dać z jako bazowy odpoczynek") Z: he sits down on
+    // the ground right where he stands and rests - anywhere under the open sky (a map with weather: Survival.isOutdoors), at the grass's
+    // rate (+20 an hour, +10 in the rain; lieDown - the same rest as the plot's "Odpocznij": up by himself when rested, on a key, on
+    // danger). Under a roof, underground, in the combat mode, on the eagle: a popup says why not.
+    function restKey() {
+        if ($gamePlayer._toolSwing || $gamePlayer.isInVehicle()) return false;   // (already sitting, at work, in a boat)
+        if (window.OrzelLot && OrzelLot.flying && OrzelLot.flying()) return false;
+        if (window.Combat && Combat.combatMode && Combat.combatMode()) { complain(ICON.stamina, "W trybie walki nie odpoczniesz (Tab)"); return false; }
+        const S = window.Survival, sky = !isHutInterior() && !T.mapFlag("Dark", false) && !!(S && S.isOutdoors && S.isOutdoors());
+        if (!sky) { complain(ICON.stamina, "Pod dachem usiądź na ławce albo połóż się do łóżka"); return false; }
+        const danger = B().restDanger();
+        if (danger) { complain(ICON.stamina, danger + " w pobliżu - nie usiądziesz"); return false; }
+        return B().lieDown($gamePlayer.x, $gamePlayer.y);
+    }
     // the map's clock (after the map, its events and the old-style hooks): the site's O held on, Q and E, the building being placed
     T.onMapUpdate(scene => {
         const hold = scene._farmHold;
@@ -1087,6 +1113,7 @@
         }
         const kind = Input.isTriggered("pageup") ? "build" : Input.isTriggered("pagedown") ? "food" : "";
         if (kind && scene._farmMenu && scene.canUseKeyMenu() && openKeyMenu(kind)) SoundManager.playOk();
+        if (Input.isTriggered("rest") && scene._farmMenu && scene.canUseKeyMenu()) restKey();
         if ($gameTemp._buildMode) scene.updateBuildMode();   // (the cursor, the walk to the spot, putting it down: Farming_Build.js)
     }, { owner: "Farming", name: "update" });
 
@@ -1121,6 +1148,14 @@
         if (P.plots) P.plots.freshCaches();
     }
     T.on("load", afreshAfterLoad, { owner: "Farming" });
+    // (2026-11-16) a bag from before: the forest bed's bundle (now built at once from branches and flax) and the shelled pine seeds (the
+    // cone itself is planted now) turn back into what they were made of
+    T.on("load", () => {
+        const bed = $dataItems[ITEM.boughBed], seeds = $dataItems[ITEM.pineSeed];
+        const nb = bed ? $gameParty.numItems(bed) : 0, ns = seeds ? $gameParty.numItems(seeds) : 0;
+        if (nb > 0) { $gameParty.loseItem(bed, nb); $gameParty.gainItem($dataItems[ITEM.branch], 10 * nb); $gameParty.gainItem($dataItems[ITEM.fiber], 10 * nb); }
+        if (ns > 0) { $gameParty.loseItem(seeds, ns); $gameParty.gainItem($dataItems[ITEM.cone], Math.ceil(ns / 3)); }
+    }, { owner: "Farming" });
     T.on("newGame", afreshAfterLoad, { owner: "Farming" });
     // every night's sleep (a bed, the tent, the bedroll, an inn) wakes him rested: the count of hours awake starts again (the core tells
     // it right after Game_System.sleepUntilHour - this first, before the day's summary and the autosave)
@@ -1141,7 +1176,7 @@
         FUEL_PER_WOOD, FUEL_PER_BRANCH, SMOULDER_HOURS, weatherHere, rainingHere, RAW_MEATS, MEAT_LABEL, meatCount, QUEUE_MAX,
         RAW_FISH, FISH_LABEL, fishCount, clockText, hoursText, IMPROVE, costRows, targetTile, MENU_MARGIN, hash2, BUILD_RANGE,
         landHeld, landRefusal, noBuildText, landOwned, buildRegion };
-    const API = window.Farming = T.register("Farming", { addMenuHook: fn => menuHooks.push(fn), addLandRule, landHeld, landRefusal, noBuildText, landOwned, buildRegion, GATHER, QUEUE_MAX, BUILD_MAPS,
+    const API = window.Farming = T.register("Farming", { plainPlot, addMenuHook: fn => menuHooks.push(fn), addLandRule, landHeld, landRefusal, noBuildText, landOwned, buildRegion, GATHER, QUEUE_MAX, BUILD_MAPS,
         NO_BUILD, IMPROVE, RAW_MEATS, meatCount, MEAT_LABEL, RAW_FISH, fishCount, FISH_LABEL, BUSH_SHARE, MUSHROOM_POOL, MUSHROOM_LIFE, BUCKET_REACH, HUT_MAP,
         HUT_ROOM, hutOf, hutDoorAt, isHutInterior, geoOf, cellsOfGeo, isSolidCell, yardInterior, solidAt, CROPS, BUILDINGS,
         buildingAt, canMax, clockHours, seasonIndex, seasonOf, SEASON_NAMES, ITEM, hash2, HAND_RECIPES, BUILD_RANGE, CROP_LIFT,
@@ -1155,9 +1190,9 @@
         "digClay", "potDryness", "takePot", "putPotOnTable", "takeTablePot", "tablePotDry", "water", "wateredRecently", "stoneAt",
         "stoneSpot", "pickStone", "gatherAt", "gatherSpot", "withEventCells", "pickGather", "isWaterTile", "seaHere", "waterMenu", "fillCan", "drink",
         "goFishing", "rainWater", "canCharges", "gatherRev", "rationWell", "rationLeft", "rationOf"]);
-    exportFrom(B, ["mapAllowsBuilding", "startFreePlacement", "placeFree", "hutShutsIn", "hutSanitize", "enterHut", "leaveHut",
+    exportFrom(B, ["mapAllowsBuilding", "standsOnOwnLand", "startFreePlacement", "placeFree", "hutShutsIn", "hutSanitize", "enterHut", "leaveHut",
         "upgradeBuilding", "roomFor", "build", "demolish", "collect", "rest", "readyProduce", "snares", "snareBait", "snareSprung",
-        "snareCatch", "snareEatBait", "baitSnare", "whyNotBuild", "awakeHours", "restCap", "siteHits", "hitCost", "demolishBlock",
+        "snareCatch", "snareEatBait", "baitSnare", "whyNotBuild", "walledField", "awakeHours", "restCap", "siteHits", "hitCost", "demolishBlock",
         "pitchInstant", "packUp", "sleepInTent", "wakeHour", "startPlacement", "placementProblem", "tileWhyNot", "placeSite",
         "strikeSite", "cancelSite", "missingMaterials", "tilesOfBuilding", "fieldAllows"]);
     exportFrom(S, ["jobCount", "jobFinished", "jobCollectable", "queueMax", "recipeEntry", "startJob", "collectJob", "jobReady",
@@ -1165,6 +1200,7 @@
         "chestHolds", "packStacks", "whyNotMove", "openChest", "craftManual", "recipeOf", "fuelLeft", "fireLit", "smoulderOf",
         "jobPaused"]);
     exportFrom(UI, ["openBuildKeyMenu", "openFoodKeyMenu", "foodFacts", "whyNotEat", "menuFor"]);
+    API.restKey = restKey;   // (Z: rest where he stands - the tests and the autopilot)
     // the chest screen's classes (Farming_Stations.js); soilTexture, fenceTexture, nightAmount, fireGlowAlpha: added by Farming_Render.js
     for (const name of ["Scene_Chest", "Window_ChestList"]) Object.defineProperty(API, name, { enumerable: true, configurable: true,
         get() { return S()[name]; }, set(v) { Object.defineProperty(API, name, { value: v, writable: true, enumerable: true, configurable: true }); } });

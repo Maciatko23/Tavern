@@ -122,7 +122,7 @@
             table: { slots: 4, hours: 24, spots: [[-40, -35], [-14, -35], [12, -35], [38, -35]] },
             seats: { front: { dy: 0.2, lift: 14 }, back: { dy: -0.45, lift: 22 }, span: 38 },
             desc: "Daszek na czterech słupach, pod nim stół i dwie ławki, z przodu i z tyłu. Usiądziesz tu i odpoczniesz (lepiej niż na ławce, także w deszczu), a na stole postawisz do czterech garnków: pod dachem schną także w deszczu." },
-        campfire: { name: "Ognisko", cost: [[ITEM.wood, 6], [ITEM.stone, 6]], w: 1, stamina: 5, hits: 5, image: "Farm_Campfire_L", rest: 40, vent: 48,
+        campfire: { name: "Ognisko", camp: true, anywhere: true, cost: [[ITEM.wood, 6], [ITEM.stone, 6]], w: 1, stamina: 5, hits: 5, image: "Farm_Campfire_L", rest: 40, vent: 48,
             fire: { y: 13, size: 1.25, glow: 2.2, light: 340, smoke: true },   // animated flames (y: px above the foot of the picture), steady smoke, a big glow
             upgrade: { to: "tripod", dx: 0, name: "Dobuduj trójnóg", cost: [[ITEM.branch, 3], [ITEM.rope, 1]], stamina: 3, done: "Dobudowano trójnóg",
                 help: "Trzy kijki związane liną staną nad ogniem. Zawiesisz na haczyku jedzenie i możesz odejść: piecze się samo. Nie trzeba młotka." },
@@ -285,7 +285,11 @@
                 { id: "shears", name: "Wykuj nożyce", inputs: [[ITEM.iron, 2], [ITEM.wood, 1]], output: [ITEM.shears, 1], manual: true, unique: true,
                     hours: 1, stamina: 4, startSe: "Hammer", desc: "Ostre nożyce do strzyżenia owiec. Bez nich wełna zostaje na owcy." },
                 { id: "tongs", name: "Wykuj szczypce", inputs: [[ITEM.iron, 2], [ITEM.wood, 1]], output: [ITEM.tongs, 1], manual: true, unique: true,
-                    hours: 1, stamina: 4, startSe: "Hammer", desc: "Żelazne szczypce do trzymania rozżarzonego metalu. Bez nich w hucie nie przetopisz stali." }
+                    hours: 1, stamina: 4, startSe: "Hammer", desc: "Żelazne szczypce do trzymania rozżarzonego metalu. Bez nich w hucie nie przetopisz stali." },
+                // (2026-11-17, docs/ekwipunek/NOWE_80.md, the user's answer 1) bronze: the island has no copper and no tin - the old coins (194) are
+                // melted into an ingot (485) - the forge's own work, like the iron
+                { id: "melt_coins", name: "Przetop monety", doing: "Trwa przetapianie", inputs: [[194, 4], [ITEM.charcoal, 1]], output: [485, 1],
+                    hours: 4, stamina: 3, desc: "Cztery zaśniedziałe monety topią się w tyglu na żarze węgla drzewnego: wychodzi sztabka brązu. Z brązu kujesz brązowe hełmy, napierśniki, tasaki i puklerze." }
             ],
             desc: "Wytapia żelazo z rudy i węgla, a na kowadle kuje z niego gwoździe, noże oraz głowice i ostrza narzędzi (montuje się je w warsztacie)." },
         huta: { name: "Huta", cost: [[ITEM.brick, 10], [ITEM.stone, 6]], w: 2, h: 2, stamina: 14, hits: 30, image: "Farm_Huta_L", vent: 91, ventX: -9, smokes: true,
@@ -331,16 +335,41 @@
                     hours: 2, stamina: 3, startSe: "Item1", desc: "Gruba rękawica do łokcia z podwójnej skóry, szwy ze ścięgien. Na niej usiądzie młody orzeł - pazury nie przebiją skóry." }
             ],
             desc: "Wyprawia skóry (także niedźwiedzią), a ze skór szyje buty, plecak, płaszcz, namiot, skórzaną kurtkę i rękawicę sokolnika, i powiększa bukłak." },
+        // (2026-11-17, docs/ekwipunek/NOWE_80.md) The loom: the flax fibre woven into linen (Płótno 483), the wool into broadcloth (Sukno 484) -
+        // both work by themselves, like the tanning; the clothes, the quilted armour and the cloaks are sewn here by hand (Bron_Data.js
+        // PRZEPISY.loom - most want the shears 142 in the bag). Only on grandpa's plot, as every building - and in the hut (indoor), like the
+        // workbench. Pictures Farm_Loom_L / Farm_LoomWheel_L (PixelLab 2026-11-17, styled on the tannery, one frame for both). "Dobuduj kołowrotek": linen from 4 fibres, an hour
+        // less weaving (the loom becomes loom_wheel, as the campfire becomes the tripod)
+        loom: { name: "Krosno", cost: [[ITEM.planks, 6], [ITEM.wood, 2], [ITEM.rope, 4], [ITEM.nails, 4]], w: 3, h: 2, stamina: 10, hits: 30, image: "Farm_Loom_L",
+            indoor: true, startSe: "Item1",
+            upgrade: { to: "loom_wheel", dx: 0, name: "Dobuduj kołowrotek", cost: [[ITEM.planks, 2], [ITEM.rope, 1], [ITEM.nails, 2]], stamina: 3, done: "Dobudowano kołowrotek",
+                help: "Kołowrotek przy krośnie przędzie nić szybciej i równiej: płótno z 4 włókien zamiast 6, a tkanie płótna i sukna trwa godzinę krócej." },
+            recipes: [
+                { id: "weave_linen", name: "Utkaj płótno", doing: "Trwa tkanie", inputs: [[ITEM.fiber, 6]], output: [483, 1], hours: 3, stamina: 3, startSe: "Item1",
+                    desc: "Włókno lnu nawinięte na osnowę i przetkane wątkiem: wychodzi kawał płótna. Na koszule, spodnie, chusty, pikowane zbroje i peleryny." },
+                { id: "weave_wool", name: "Utkaj sukno", doing: "Trwa tkanie", inputs: [[ITEM.wool, 2]], output: [484, 1], hours: 4, stamina: 3, startSe: "Item1",
+                    desc: "Wełna utkana gęsto i ubita na grubo: sukno. Na kaftany, kaptury, żupany, płaszcze i brygantyny." }
+            ],
+            desc: "Rama z nawiniętą osnową i ławka tkacza. Z lnu tkasz płótno, z wełny sukno, a z nich szyjesz koszule, kaftany, przeszywanice i płaszcze." },
+        loom_wheel: { name: "Krosno z kołowrotkiem", cost: [[ITEM.planks, 8], [ITEM.wood, 2], [ITEM.rope, 5], [ITEM.nails, 6]], w: 3, h: 2, stamina: 10, hits: 30,
+            image: "Farm_LoomWheel_L", indoor: true, startSe: "Item1", noBuild: true,
+            recipes: [
+                { id: "weave_linen", name: "Utkaj płótno", doing: "Trwa tkanie", inputs: [[ITEM.fiber, 4]], output: [483, 1], hours: 2, stamina: 3, startSe: "Item1",
+                    desc: "Nić z kołowrotka jest cieńsza i równiejsza: kawał płótna z 4 włókien lnu, w dwie godziny." },
+                { id: "weave_wool", name: "Utkaj sukno", doing: "Trwa tkanie", inputs: [[ITEM.wool, 2]], output: [484, 1], hours: 3, stamina: 3, startSe: "Item1",
+                    desc: "Wełna uprzędziona na kołowrotku, utkana gęsto i ubita: sukno, w trzy godziny." }
+            ],
+            desc: "Krosno z kołowrotkiem obok: płótno z mniejszej garści lnu i szybsze tkanie. Szyjesz przy nim to samo co przy zwykłym krośnie." },
         // The bucket: forged at the forge (recipe bucket_item) and put down ready from the bag, like the tent; it collects rain
         // (rain.rate portions per hour of rain, up to rain.max) and goes back into the bag (pack) with its water. The well needs one.
-        bucket: { name: "Wiadro", anywhere: true, cost: [[ITEM.bucket, 1]], w: 1, stamina: 2, image: "Farm_Bucket", imageFull: "Farm_Bucket_Full", instant: true, pack: ITEM.bucket,
+        bucket: { name: "Wiadro", anywhere: true, action: "Postaw wiadro", cost: [[ITEM.bucket, 1]], w: 1, stamina: 2, image: "Farm_Bucket", imageFull: "Farm_Bucket_Full", instant: true, pack: ITEM.bucket,
             packName: "Zabierz wiadro", packHelp: "Zabierasz wiadro do plecaka razem z wodą, jeśli jakąś zebrało. Postawisz je, gdzie zechcesz - z wodą w środku waży więcej. Wiadro jest też potrzebne do budowy studni.", packedText: "Zabrano: Wiadro",
             rain: { max: 6, rate: 1 },
             desc: "Drewniane wiadro z żelaznymi obręczami, wykute w kuźni. Postawione na dworze zbiera deszczówkę (porcja za każdą godzinę deszczu, do 6): napijesz się z niego, podlejesz rośliny w pobliżu albo napełnisz konewkę i bukłak. Możesz je podnieść do plecaka. Jest potrzebne do budowy studni." },
         // the rain barrel (the user's stage 1, 2026-09-27: no new water - the rain kept better): a big barrel of planks and nailed hoops, put
         // up with the hammer where it stays. Its wide mouth catches more than the bucket (rain.rate portions an hour of rain), it holds
         // rain.max; drunk from, the waterskin / can / bucket filled at it as at the bucket. Wood does not seep and does not crack.
-        barrel: { name: "Beczka na deszczówkę", cost: [[ITEM.planks, 8], [ITEM.nails, 6]], w: 1, stamina: 6, hits: 12, image: "Farm_Barrel", imageFull: "Farm_Barrel_Full",
+        barrel: { name: "Beczka na deszczówkę", anywhere: true, action: "Postaw beczkę", cost: [[ITEM.planks, 8], [ITEM.nails, 6]], w: 1, stamina: 6, hits: 12, image: "Farm_Barrel", imageFull: "Farm_Barrel_Full",
             rain: { max: 12, rate: 1.5, in: "w beczce", empty: "Beczka jest pusta" },
             desc: "Duża beczka z desek spiętych obręczami na gwoździach. Stoi na dworze i zbiera deszczówkę: szeroki otwór łapie więcej niż wiadro (półtorej porcji za godzinę deszczu), a mieści 12 porcji. Napijesz się z niej, napełnisz bukłak, konewkę i wiadro albo podlejesz rośliny w pobliżu. Drewno nie przecieka i nie pęka." },
         well: { name: "Studnia", cost: [[ITEM.stone, 12], [ITEM.planks, 3], [ITEM.rope, 2], [ITEM.bucket, 1]], w: 2, h: 2, stamina: 12, hits: 50, image: "Farm_Well_L", refund: [[ITEM.stone, 6], [ITEM.planks, 1], [ITEM.rope, 1], [ITEM.bucket, 1]],
@@ -369,22 +398,22 @@
         // restores only part of the strength: sleepRestore of the maximum, sleepBad in rain, snow and winter. refund: what Rozbierz gives back.
         // a freshly shaped clay pot (Warsztat: "Ulep garnek") set down to dry: dry.hours of dry weather (the hours of rain do not count - a
         // wet pot does not dry); then it is taken as a dried pot, ready for the kiln. Taken earlier it is still the soft raw pot (Farming.js)
-        pot: { name: "Garnek", cost: [[ITEM.rawPot, 1]], w: 1, stamina: 1, image: "Farm_Pot_Wet", imageDry: "Farm_Pot_Dry", instant: true, indoor: true,
+        pot: { name: "Garnek", anywhere: true, action: "Postaw garnek", cost: [[ITEM.rawPot, 1]], w: 1, stamina: 1, image: "Farm_Pot_Wet", imageDry: "Farm_Pot_Dry", instant: true, indoor: true,
             dry: { hours: 24 },
             desc: "Świeżo ulepiony garnek z gliny. Postaw go, żeby wysechł: potrzebuje doby suchej pogody (kiedy pada, nie schnie). Wysuszony zabierzesz do wypalenia w piecu." },
         // the fired clay pot (the kiln) set down outdoors: collects rain like the bucket (rain.rate portions an hour of rain, up to max), but
         // it seeps (rain.leak portions a day), a portion drunk gives rain.drink, and it lasts rain.wear uses (a drink or a filling) before it
         // cracks. rain.own: its water and wear go with it into the bag and come back when it is set down again (Farming.js)
-        clay_pot: { name: "Gliniany garnek", anywhere: true, cost: [[ITEM.firedPot, 1]], w: 1, stamina: 1, image: "Farm_Pot_Fired", imageFull: "Farm_Pot_Fired_Full", instant: true, pack: ITEM.firedPot,
+        clay_pot: { name: "Gliniany garnek", anywhere: true, action: "Postaw gliniany garnek", cost: [[ITEM.firedPot, 1]], w: 1, stamina: 1, image: "Farm_Pot_Fired", imageFull: "Farm_Pot_Fired_Full", instant: true, pack: ITEM.firedPot,
             packName: "Zabierz garnek", packHelp: "Zabierasz garnek do plecaka razem z wodą, która w nim jest: zostanie w nim, gdy go znów postawisz.", packedText: "Zabrano: Gliniany garnek",
             rain: { max: 3, rate: 1, leak: 1, drink: 25, wear: 30, own: true, in: "w garnku", empty: "Garnek jest pusty" },
             desc: "Wypalony gliniany garnek. Postawiony na dworze zbiera deszczówkę (porcja za godzinę deszczu, do 3), ale powoli ją przesącza (porcja na dobę). Napijesz się z niego (+25) albo napełnisz bukłak i konewkę. Po około 30 użyciach pęka." },
-        bedroll: { name: "Leśne legowisko", anywhere: true, cost: [[ITEM.boughBed, 1]], w: 2, stamina: 2, image: "Farm_Bedroll", instant: true, sleep: true, indoor: true, sleepRestore: 0.6, sleepBad: 0.4,
+        bedroll: { name: "Leśne legowisko", anywhere: true, one: true, cost: [[ITEM.branch, 10], [ITEM.fiber, 10]], w: 2, stamina: 3, image: "Farm_Bedroll", instant: true, sleep: true, indoor: true, sleepRestore: 0.6, sleepBad: 0.4,
             refund: [[ITEM.branch, 3], [ITEM.fiber, 1]],
-            desc: "Sterta gałęzi wyścielona suchą trawą i związana lnem. Prześpisz na niej noc, ale wstaniesz z około 60% sił, a w deszczu, śniegu i zimą z 40%. Namiot wypoczywa lepiej. Zrobisz ją w menu „Wytwórz...”." },
+            desc: "Sterta gałęzi wyścielona suchą trawą i związana lnem. Prześpisz na niej noc, ale wstaniesz z około 60% sił, a w deszczu, śniegu i zimą z 40%. Namiot wypoczywa lepiej. Robisz ją raz, od razu na miejscu (Q, „Budowa”): drugiej nie postawisz, póki ta stoi." },
         // A portable building: sewn in the tannery into an item, pitched at once (instant: no site, no hammer) and packed up again
         // into the item (pack). Sleeping in it (sleep) works like the bed of the house did: until the morning, everything restored.
-        tent: { name: "Namiot", anywhere: true, cost: [[ITEM.tent, 1]], w: 3, h: 2, stamina: 3, image: "Farm_Tent_L", legacy: { w: 2, h: 1, image: "Farm_Tent" }, instant: true, pack: ITEM.tent, sleep: true,
+        tent: { name: "Namiot", anywhere: true, action: "Rozłóż namiot", cost: [[ITEM.tent, 1]], w: 3, h: 2, stamina: 3, image: "Farm_Tent_L", legacy: { w: 2, h: 1, image: "Farm_Tent" }, instant: true, pack: ITEM.tent, sleep: true,
             desc: "Rozstawiasz go od razu, bez młotka. Prześpisz w nim całą noc i wstaniesz z pełnią sił, także w deszczu. Rano złożysz go i zabierzesz ze sobą. Zszyjesz go w garbarni." },
         // dairy: the cowshed gives milk, the dairy turns milk into cheese, the pantry keeps food fresh (Spoilage.js: keeps = how fast it ages)
         cowshed: { name: "Obora", cost: [[ITEM.planks, 16], [ITEM.rope, 3], [ITEM.nails, 6]], w: 8, h: 5, stamina: 18, hits: 40, image: "Farm_Cowshed_XL",
@@ -420,15 +449,12 @@
     const HAND_RECIPES = [
         { id: "hammer", name: "Zrób młotek", inputs: [[ITEM.branch, 5], [ITEM.stone, 2], [ITEM.fiber, 3]], output: [ITEM.hammer, 1], manual: true, unique: true, swing: "crouch",
             hours: 5 / 60, stamina: 3, startSe: "Hammer", desc: "Kamień przywiązany lnem do gałęzi. Bez niego nie postawisz żadnej budowli." },
-        { id: "bough_bed", name: "Zrób leśne legowisko", inputs: [[ITEM.branch, 10], [ITEM.fiber, 10]], output: [ITEM.boughBed, 1], manual: true, unique: true, alsoBuilt: "bedroll", swing: "crouch",
-            hours: 1, stamina: 3, startSe: "Item1", desc: "Gałęzie związane lnem i wyścielone suchą trawą. Rozkładasz je potem w menu ziemi, w „Postaw...”. Przespać na nim noc się da, ale wstaniesz z częścią sił. Namiot wypoczywa lepiej." },
         { id: "waterskin", name: "Zrób bukłak", inputs: [[ITEM.hide, 1], [ITEM.fiber, 3]], output: [ITEM.skin, 1], manual: true, unique: true, swing: "crouch",
             hours: 1, stamina: 2, startSe: "Item1", desc: "Wyprawiona skóra (z garbarni) zszyta lnem w worek z korkiem. Mieści 4 łyki wody: napełnisz go przy stawie albo studni, a napijesz się klawiszem G lub z menu Przedmioty." },
         { id: "rope", name: "Skręć linę", inputs: [[ITEM.fiber, 4]], output: [ITEM.rope, 1], manual: true,
             hours: 1, stamina: 2, startSe: "Item1", desc: "Włókna dzikiego lnu skręcone w mocny sznur." },
-        // from the forest floor: pine seeds for planting (Forestry.js), a bandage for a wound (Survival.js), fibre out of nettle stalks
-        { id: "pine_seeds", name: "Wyłuskaj nasiona sosny", inputs: [[ITEM.cone, 1]], output: [ITEM.pineSeed, 3], manual: true, swing: "crouch",
-            hours: 0.25, stamina: 1, startSe: "Item1", desc: "Łuski szyszek rozchylone nożem albo paznokciem: wypadają skrzydlate nasiona. Posadzisz je w menu ziemi („Posadź sosnę”)." },
+        // from the forest floor: a bandage for a wound (Survival.js), fibre out of nettle stalks (2026-11-16, the user: no shelling of pine
+        // seeds any more - a cone is kindling, or goes into the ground whole: Forestry.js; the forest bed is built at once: BUILDINGS.bedroll)
         { id: "bandage", name: "Zrób opatrunek", inputs: [[ITEM.fiber, 2], [ITEM.herb, 2], [ITEM.yarrow, 2]], output: [ITEM.bandage, 1], manual: true, swing: "crouch",
             hours: 0.25, stamina: 1, startSe: "Item1", desc: "Rozgniecione ziele krwawnika z ziołami, przewiązane lnem. Tamuje krew: leczy ranę (na przykład od dzika). Użyjesz go z menu Przedmioty." },
         { id: "nettle_fiber", name: "Wyskub włókno z pokrzyw", inputs: [[ITEM.nettle, 3]], output: [ITEM.fiber, 2], manual: true, swing: "crouch",

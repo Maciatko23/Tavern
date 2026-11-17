@@ -1,0 +1,5 @@
+PASS gra
+  zdjecie mapa4
+PASS zdjecia (after)
+PASS bez bledow w konsoli  []
+3/3 passed

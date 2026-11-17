@@ -998,7 +998,9 @@
                 endTurn(h);
                 if (h._mode === "guard") h.setMode("chase");
             } else {   // blocked: next to nothing gets through; a blow bounces the hero's weapon back
-                const part = k.shield ? k.shield.block : 0.25;
+                // (2026-11-17, Bron_Cechy.js przebicie: the mercenary's shield and mail are the only armour a man has - a weapon that pierces
+                // it lets that part of what it holds back through)
+                const part = k.shield ? k.shield.block + (1 - k.shield.block) * Math.min(1, extra.przebicie || 0) : 0.25;
                 damage = how === "shot" && k.shield ? 0 : Math.round(damage * part);
                 h._poise = Math.max(1, h._poise - Math.round((extra.poise || 10) * 0.3));
                 h._poiseT = 0;

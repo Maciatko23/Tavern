@@ -44,7 +44,7 @@ unit.test(t => {
     const fist12 = C.weaponNow(0);
     fresh(6, { hands: 397 });
     const fist6 = C.weaponNow(0);
-    t.eq("the Iron Fist gauntlets (level 12) on the fists: 5 + 8 damage, 12 + 14 balance; at level 6 their part 18% weaker", [fist12.dmg, fist12.poise, fist6.dmg, fist6.poise], [13, 26, 36, 23]);
+    t.eq("the Iron Fist gauntlets (level 12) on the fists: 5 + 8 damage, 12 + 14 balance; at level 6 their part 18% weaker", [fist12.dmg, fist12.poise, fist6.dmg, fist6.poise], [13, 26, 12, 23]);   // (5 + 8 x 0.82 = 12 - the old 36 was a typo)
 
     // ---- the armour
     fresh(30, { torso: 353 });
@@ -83,7 +83,7 @@ unit.test(t => {
 
     // ---- the old weapons keep their numbers when the gear is read from the notes; the order of [ ]
     C.refreshGear(true);
-    const OLD = { 156: [13, 26, 25.45, 10], 115: [26, 30, 1.6, 16], 60: [17, 24, 1.55, 16], 154: [20, 16, 2.25, 12], 116: [30, 42, 1.45, 22], 63: [22, 36, 1.45, 22] };
+    const OLD = { 156: [13, 26, 1.45, 10],   /* (the club's reach 1.45 - the old 25.45 was a typo) */ 115: [26, 30, 1.6, 16], 60: [17, 24, 1.55, 16], 154: [20, 16, 2.25, 12], 116: [30, 42, 1.45, 22], 63: [22, 36, 1.45, 22] };
     const old = Object.keys(OLD).filter(id => { const m = F.MELEE[id]; return !m || JSON.stringify([m.dmg, m.poise, m.reach, m.cost]) !== JSON.stringify(OLD[id]); });
     const fresh7 = F.MELEE_ORDER.slice(0, -7), tail = F.MELEE_ORDER.slice(-7);
     const ranked = fresh7.every((id, i) => !i || F.MELEE[fresh7[i - 1]].poziom > F.MELEE[id].poziom ||

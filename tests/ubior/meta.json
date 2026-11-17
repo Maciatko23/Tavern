@@ -579,6 +579,261 @@
     "w_torba_skorzana_Hero_Sit_16_0.png",
     "w_torba_skorzana_Hero_LieDown_16_0.png"
    ]
+  },
+  {
+   "key": "kozuszek",
+   "miejsce": "tors",
+   "nakladka": "",
+   "files": [
+    "w_kozuszek_Hero_Walk_3_0.png",
+    "w_kozuszek_Hero_Walk_3_6.png",
+    "w_kozuszek_Hero_Walk_0_4.png",
+    "w_kozuszek_Hero_TorchWalk_3_7.png",
+    "w_kozuszek_Hero_AxeSide_10_2.png",
+    "w_kozuszek_Hero_Bow_14_0.png",
+    "w_kozuszek_Hero_Sit_16_0.png",
+    "w_kozuszek_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "fartuch_kowalski",
+   "miejsce": "tors",
+   "nakladka": "",
+   "files": [
+    "w_fartuch_kowalski_Hero_Walk_3_0.png",
+    "w_fartuch_kowalski_Hero_Walk_3_6.png",
+    "w_fartuch_kowalski_Hero_Walk_0_4.png",
+    "w_fartuch_kowalski_Hero_TorchWalk_3_7.png",
+    "w_fartuch_kowalski_Hero_AxeSide_10_2.png",
+    "w_fartuch_kowalski_Hero_Bow_14_0.png",
+    "w_fartuch_kowalski_Hero_Sit_16_0.png",
+    "w_fartuch_kowalski_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "zupan_sukienny",
+   "miejsce": "tors",
+   "nakladka": "",
+   "files": [
+    "w_zupan_sukienny_Hero_Walk_3_0.png",
+    "w_zupan_sukienny_Hero_Walk_3_6.png",
+    "w_zupan_sukienny_Hero_Walk_0_4.png",
+    "w_zupan_sukienny_Hero_TorchWalk_3_7.png",
+    "w_zupan_sukienny_Hero_AxeSide_10_2.png",
+    "w_zupan_sukienny_Hero_Bow_14_0.png",
+    "w_zupan_sukienny_Hero_Sit_16_0.png",
+    "w_zupan_sukienny_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "koszula_przewiewna",
+   "miejsce": "tors",
+   "nakladka": "",
+   "files": [
+    "w_koszula_przewiewna_Hero_Walk_3_0.png",
+    "w_koszula_przewiewna_Hero_Walk_3_6.png",
+    "w_koszula_przewiewna_Hero_Walk_0_4.png",
+    "w_koszula_przewiewna_Hero_TorchWalk_3_7.png",
+    "w_koszula_przewiewna_Hero_AxeSide_10_2.png",
+    "w_koszula_przewiewna_Hero_Bow_14_0.png",
+    "w_koszula_przewiewna_Hero_Sit_16_0.png",
+    "w_koszula_przewiewna_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "portki_latane",
+   "miejsce": "nogi",
+   "nakladka": "",
+   "files": [
+    "w_portki_latane_Hero_Walk_3_0.png",
+    "w_portki_latane_Hero_Walk_3_6.png",
+    "w_portki_latane_Hero_Walk_0_4.png",
+    "w_portki_latane_Hero_TorchWalk_3_7.png",
+    "w_portki_latane_Hero_AxeSide_10_2.png",
+    "w_portki_latane_Hero_Bow_14_0.png",
+    "w_portki_latane_Hero_Sit_16_0.png",
+    "w_portki_latane_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "rekawiczki_welniane",
+   "miejsce": "rece",
+   "nakladka": "",
+   "files": [
+    "w_rekawiczki_welniane_Hero_Walk_3_0.png",
+    "w_rekawiczki_welniane_Hero_Walk_3_6.png",
+    "w_rekawiczki_welniane_Hero_Walk_0_4.png",
+    "w_rekawiczki_welniane_Hero_TorchWalk_3_7.png",
+    "w_rekawiczki_welniane_Hero_AxeSide_10_2.png",
+    "w_rekawiczki_welniane_Hero_Bow_14_0.png",
+    "w_rekawiczki_welniane_Hero_Sit_16_0.png",
+    "w_rekawiczki_welniane_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "kapelusz_filcowy",
+   "miejsce": "glowa",
+   "nakladka": "kapelusz",
+   "files": [
+    "w_kapelusz_filcowy_Hero_Walk_3_0.png",
+    "w_kapelusz_filcowy_Hero_Walk_3_6.png",
+    "w_kapelusz_filcowy_Hero_Walk_0_4.png",
+    "w_kapelusz_filcowy_Hero_TorchWalk_3_7.png",
+    "w_kapelusz_filcowy_Hero_AxeSide_10_2.png",
+    "w_kapelusz_filcowy_Hero_Bow_14_0.png",
+    "w_kapelusz_filcowy_Hero_Sit_16_0.png",
+    "w_kapelusz_filcowy_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "chodaki",
+   "miejsce": "stopy",
+   "nakladka": "",
+   "files": [
+    "w_chodaki_Hero_Walk_3_0.png",
+    "w_chodaki_Hero_Walk_3_6.png",
+    "w_chodaki_Hero_Walk_0_4.png",
+    "w_chodaki_Hero_TorchWalk_3_7.png",
+    "w_chodaki_Hero_AxeSide_10_2.png",
+    "w_chodaki_Hero_Bow_14_0.png",
+    "w_chodaki_Hero_Sit_16_0.png",
+    "w_chodaki_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "buty_filcowe",
+   "miejsce": "stopy",
+   "nakladka": "buty",
+   "files": [
+    "w_buty_filcowe_Hero_Walk_3_0.png",
+    "w_buty_filcowe_Hero_Walk_3_6.png",
+    "w_buty_filcowe_Hero_Walk_0_4.png",
+    "w_buty_filcowe_Hero_TorchWalk_3_7.png",
+    "w_buty_filcowe_Hero_AxeSide_10_2.png",
+    "w_buty_filcowe_Hero_Bow_14_0.png",
+    "w_buty_filcowe_Hero_Sit_16_0.png",
+    "w_buty_filcowe_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "kosz_wiklinowy",
+   "miejsce": "plecy",
+   "nakladka": "plecak",
+   "files": [
+    "w_kosz_wiklinowy_Hero_Walk_3_0.png",
+    "w_kosz_wiklinowy_Hero_Walk_3_6.png",
+    "w_kosz_wiklinowy_Hero_Walk_0_4.png",
+    "w_kosz_wiklinowy_Hero_TorchWalk_3_7.png",
+    "w_kosz_wiklinowy_Hero_AxeSide_10_2.png",
+    "w_kosz_wiklinowy_Hero_Bow_14_0.png",
+    "w_kosz_wiklinowy_Hero_Sit_16_0.png",
+    "w_kosz_wiklinowy_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "pas_ladownica",
+   "miejsce": "pas",
+   "nakladka": "sakiewka",
+   "files": [
+    "w_pas_ladownica_Hero_Walk_3_0.png",
+    "w_pas_ladownica_Hero_Walk_3_6.png",
+    "w_pas_ladownica_Hero_Walk_0_4.png",
+    "w_pas_ladownica_Hero_TorchWalk_3_7.png",
+    "w_pas_ladownica_Hero_AxeSide_10_2.png",
+    "w_pas_ladownica_Hero_Bow_14_0.png",
+    "w_pas_ladownica_Hero_Sit_16_0.png",
+    "w_pas_ladownica_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "pas_tragarza",
+   "miejsce": "pas",
+   "nakladka": "",
+   "files": [
+    "w_pas_tragarza_Hero_Walk_3_0.png",
+    "w_pas_tragarza_Hero_Walk_3_6.png",
+    "w_pas_tragarza_Hero_Walk_0_4.png",
+    "w_pas_tragarza_Hero_TorchWalk_3_7.png",
+    "w_pas_tragarza_Hero_AxeSide_10_2.png",
+    "w_pas_tragarza_Hero_Bow_14_0.png",
+    "w_pas_tragarza_Hero_Sit_16_0.png",
+    "w_pas_tragarza_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "pas_okuty_braz",
+   "miejsce": "pas",
+   "nakladka": "",
+   "files": [
+    "w_pas_okuty_braz_Hero_Walk_3_0.png",
+    "w_pas_okuty_braz_Hero_Walk_3_6.png",
+    "w_pas_okuty_braz_Hero_Walk_0_4.png",
+    "w_pas_okuty_braz_Hero_TorchWalk_3_7.png",
+    "w_pas_okuty_braz_Hero_AxeSide_10_2.png",
+    "w_pas_okuty_braz_Hero_Bow_14_0.png",
+    "w_pas_okuty_braz_Hero_Sit_16_0.png",
+    "w_pas_okuty_braz_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "plaszcz_lniany",
+   "miejsce": "plaszcz",
+   "nakladka": "",
+   "files": [
+    "w_plaszcz_lniany_Hero_Walk_3_0.png",
+    "w_plaszcz_lniany_Hero_Walk_3_6.png",
+    "w_plaszcz_lniany_Hero_Walk_0_4.png",
+    "w_plaszcz_lniany_Hero_TorchWalk_3_7.png",
+    "w_plaszcz_lniany_Hero_AxeSide_10_2.png",
+    "w_plaszcz_lniany_Hero_Bow_14_0.png",
+    "w_plaszcz_lniany_Hero_Sit_16_0.png",
+    "w_plaszcz_lniany_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "plaszcz_zwiadowcy",
+   "miejsce": "plaszcz",
+   "nakladka": "",
+   "files": [
+    "w_plaszcz_zwiadowcy_Hero_Walk_3_0.png",
+    "w_plaszcz_zwiadowcy_Hero_Walk_3_6.png",
+    "w_plaszcz_zwiadowcy_Hero_Walk_0_4.png",
+    "w_plaszcz_zwiadowcy_Hero_TorchWalk_3_7.png",
+    "w_plaszcz_zwiadowcy_Hero_AxeSide_10_2.png",
+    "w_plaszcz_zwiadowcy_Hero_Bow_14_0.png",
+    "w_plaszcz_zwiadowcy_Hero_Sit_16_0.png",
+    "w_plaszcz_zwiadowcy_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "plaszcz_futrzany",
+   "miejsce": "plaszcz",
+   "nakladka": "",
+   "files": [
+    "w_plaszcz_futrzany_Hero_Walk_3_0.png",
+    "w_plaszcz_futrzany_Hero_Walk_3_6.png",
+    "w_plaszcz_futrzany_Hero_Walk_0_4.png",
+    "w_plaszcz_futrzany_Hero_TorchWalk_3_7.png",
+    "w_plaszcz_futrzany_Hero_AxeSide_10_2.png",
+    "w_plaszcz_futrzany_Hero_Bow_14_0.png",
+    "w_plaszcz_futrzany_Hero_Sit_16_0.png",
+    "w_plaszcz_futrzany_Hero_LieDown_16_0.png"
+   ]
+  },
+  {
+   "key": "plaszcz_zakonny",
+   "miejsce": "plaszcz",
+   "nakladka": "",
+   "files": [
+    "w_plaszcz_zakonny_Hero_Walk_3_0.png",
+    "w_plaszcz_zakonny_Hero_Walk_3_6.png",
+    "w_plaszcz_zakonny_Hero_Walk_0_4.png",
+    "w_plaszcz_zakonny_Hero_TorchWalk_3_7.png",
+    "w_plaszcz_zakonny_Hero_AxeSide_10_2.png",
+    "w_plaszcz_zakonny_Hero_Bow_14_0.png",
+    "w_plaszcz_zakonny_Hero_Sit_16_0.png",
+    "w_plaszcz_zakonny_Hero_LieDown_16_0.png"
+   ]
   }
  ],
  "outfits": [
@@ -745,62 +1000,68 @@
   }
  ],
  "talk": {
-  "kit": true,
+  "kit": false,
   "shown": false
  },
  "card": {
   "view": true,
   "w": 320,
-  "key": "l:Hero_Walk:czapka_filc_zielona|kaftan_czerwony|spodnie_welniane_brazowe|buty_brazowe||rekawice_brazowe|plecak:1:0"
+  "key": "l:Hero_Walk:czapka_filc_zielona|kaftan_czerwony|spodnie_welniane_brazowe|buty_brazowe||rekawice_brazowe|plecak|:1:0"
  },
  "ms": {
-  "Hero_Walk": {
-   "n": 41,
-   "min": 1.1,
-   "max": 7.5,
-   "avg": 2.3
-  },
-  "Hero_TorchWalk": {
-   "n": 38,
-   "min": 2.6,
-   "max": 8,
-   "avg": 3.7
-  },
-  "Hero_AxeSide": {
-   "n": 41,
-   "min": 4.1,
-   "max": 11.2,
-   "avg": 5.9
-  },
-  "Hero_Bow": {
-   "n": 38,
-   "min": 3.8,
-   "max": 9.5,
-   "avg": 5.5
-  },
   "Hero_Sit": {
-   "n": 41,
-   "min": 6.9,
-   "max": 18.5,
-   "avg": 10.2
+   "n": 68,
+   "min": 7.3,
+   "max": 24.2,
+   "avg": 12
   },
   "Hero_LieDown": {
-   "n": 38,
+   "n": 65,
    "min": 7,
-   "max": 18.5,
-   "avg": 9.7
+   "max": 24.9,
+   "avg": 10.7
+  },
+  "Hero_Walk": {
+   "n": 66,
+   "min": 0.9,
+   "max": 9.7,
+   "avg": 2.9
+  },
+  "Hero_TorchWalk": {
+   "n": 63,
+   "min": 2.4,
+   "max": 10.9,
+   "avg": 4
+  },
+  "Hero_AxeSide": {
+   "n": 66,
+   "min": 4.4,
+   "max": 19.2,
+   "avg": 7.1
+  },
+  "Hero_Bow": {
+   "n": 63,
+   "min": 4.1,
+   "max": 13.2,
+   "avg": 6.3
   },
   "Hero_Crouch": {
-   "n": 4,
-   "min": 5.3,
-   "max": 19.5,
-   "avg": 12.5
+   "n": 8,
+   "min": 12.4,
+   "max": 20.8,
+   "avg": 17.8
   },
   "Hero_Bust": {
    "n": 4,
-   "min": 2.6,
-   "max": 9.1,
-   "avg": 6
+   "min": 2,
+   "max": 5.4,
+   "avg": 3.9
+  },
+  "Hero_Punch": {
+   "n": 1,
+   "min": 14,
+   "max": 14,
+   "avg": 14
   }
  }
 }

@@ -1,0 +1,47 @@
+PASS gra się uruchamia
+PASS wtyczki paczki B gotowe, gatunek „Wilczę”, stałe obozy na Map021 i Map023 (Humans.fixedCamp), FX zadań, wzory tablicy  {"ready":true,"it":[[200,"Bryła soli",480],[201,"Poroże jelenia",481],[202,"Kieł odyńca",482],[203,"Pazur niedźwiedzia",483],[204,"Zezwolenie na odstrzał",484],[205,"Strzała z białym okiem",485],[206,"Srebrna strzała",486]],"spots":18,"want":18,"disc":["nora","gawra","blotnisko","lizawka","oboz_rabusiow","oboz_czo","zwierzyniec","zblakane","strzelnica"],"pup":true,"fixed":[true,true],"res":[2905,24,"$Npc_Gajowy"],"bust":"Gajowy_Bust","fx":true,"quests":true,"board":true}
+PASS przedmioty 200-206 nazwane, z ikonami 480-486  [[200,"Bryła soli",480],[201,"Poroże jelenia",481],[202,"Kieł odyńca",482],[203,"Pazur niedźwiedzia",483],[204,"Zezwolenie na odstrzał",484],[205,"Strzała z białym okiem",485],[206,"Srebrna strzała",486]]
+PASS miejsca paczki B zarejestrowane (18) i 9 odkryć  {"ready":true,"it":[[200,"Bryła soli",480],[201,"Poroże jelenia",481],[202,"Kieł odyńca",482],[203,"Pazur niedźwiedzia",483],[204,"Zezwolenie na odstrzał",484],[205,"Strzała z białym okiem",485],[206,"Srebrna strzała",486]],"spots":18,"want":18,"disc":["nora","gawra","blotnisko","lizawka","oboz_rabusiow","oboz_czo","zwierzyniec","zblakane","strzelnica"],"pup":true,"fixed":[true,true],"res":[2905,24,"$Npc_Gajowy"],"bust":"Gajowy_Bust","fx":true,"quests":true,"board":true}
+PASS gajowy: mieszkaniec 2905 na Map024, arkusz $Npc_Gajowy, popiersie Gajowy_Bust  {"ready":true,"it":[[200,"Bryła soli",480],[201,"Poroże jelenia",481],[202,"Kieł odyńca",482],[203,"Pazur niedźwiedzia",483],[204,"Zezwolenie na odstrzał",484],[205,"Strzała z białym okiem",485],[206,"Srebrna strzała",486]],"spots":18,"want":18,"disc":["nora","gawra","blotnisko","lizawka","oboz_rabusiow","oboz_czo","zwierzyniec","zblakane","strzelnica"],"pup":true,"fixed":[true,true],"res":[2905,24,"$Npc_Gajowy"],"bust":"Gajowy_Bust","fx":true,"quests":true,"board":true}
+PASS ikony 480-486 narysowane w wierszu 30, popiersie i arkusz gajowego wczytują się  {"iconPx":2596,"bust":330,"npc":[192,256]}
+FAIL zdarzenia paczki B (2300-2499) stoją na polach z planu na 6 mapach  [[13,[[2320,[100,70,"Lowy"]],[2321,[99,70,"Lowy"]]],[],2],[24,[[2380,[27,89,"Lowy"]],[2381,[28,89,"Lowy"]],[2402,null],[2383,[80,82,"Lowy"]],[2384,[40,106,"Lowy"]],[2385,[65,98,"Lowy"]],[2386,[86,72,"Lowy"]],[2387,[66,98,"Lowy"]]],[],8],[162,[[2440,[101,75,"Lowy"]],[2441,[103,77,"Lowy"]],[2442,[104,75,"Lowy"]],[2443,[95,74,"Lowy"]],[2444,[97,74,"Lowy"]],[2445,[97,78,"Lowy"]],[2446,[101,75,"Lowy"]],[2447,[103,77,"Lowy"]],[2448,[104,75,"Lowy"]]],[],9]]
+PASS kolizje miejsc paczki B na 7 mapach: 0 (Okolice.checkMap)  {"4":[],"13":[],"21":[],"23":[],"24":[],"162":[],"168":[]}
+PASS nora za dnia: 2 dorosłe wilki (_noClash, _summoned) i 2-3 szczenięta (skala 0,55, _noDog); odkrycie „nora”, K59 zaczęte  {"adults":2,"flags":true,"pups":3,"pupFlags":true,"found":true,"k59":"active"}
+PASS rozbita wataha: szczenięta uciekają w gąszcz (dymek), nora pusta 28 dni, K59 wykonane  {"pups":0,"empty":28,"choice":"rozbita","k59":"done","pops":["Szczenięta uciekły w gąszcz."]}
+PASS mięso przy norze trzeciego dnia: wilk zabiera kawałek, wataha przyjazna (zostawione)  {"friendly":true,"choice":"zostawione","meat":3,"bundles":0,"adults":2,"isFriend":true}
+PASS przyjazna wataha: wilk tuż obok nie atakuje (żaden nie walczy, życie bez zmian)  {"engaged":false,"hp":103,"hp0":103,"modes":["roam","roam"]}
+PASS dar watahy: raz w tygodniu przy norze leży zając  {"day":true,"carcass":true}
+FAIL gawra (wiosna-jesień, 4-22): niedźwiedź z domem przed wylotem (99,47)  {"x":99,"y":71,"kind":"bear"}
+FAIL zima: zajrzyj do gawry -> niedźwiedź obudzony i wściekły: przez minutę bije mocniej (x1,2 przez Combat.hitPlayer)  {"rage":true,"wokeDay":true,"engaged":false,"dmg":12,"calm":10,"hooked":true}
+PASS ubity niedźwiedź spod gawry: przy oprawianiu pazur 203 (i skóra), gawra pusta do wiosny  {"car":true,"n0":0,"n1":1,"dead":true,"hide":1}
+PASS błotnisko o świcie: 2-3 dziki idą tarzać się w błocie (_goal na błotnisku)  {"boars":3,"goals":true}
+PASS w błocie: premia „Ubłocony” (2 h), zwierzęta wyczują później (sneak +0,3)  {"s0":0,"mud":{"buff":true,"sneak":0.3}}
+PASS obóz rabusiów na swoim miejscu (60,41) nocą, 2-4 ludzi, namiot widać  {"fixed":true,"x":60,"y":41,"n":2,"tent":true}
+PASS lizawka bez soli: dymek nad bohaterem „Potrzebna bryła soli”, nie okno wiadomości  {"pops":["Potrzebna bryła soli (handlarz, Roch na przystani)."],"msg":false}
+PASS sól na lizawce: działa 6 dni, pieniek z solą (druga strona), K60 krok 2  {"active":true,"left":6,"salt":0,"k60":{"s":"active","step":1,"day":1,"sday":1,"sh":10.033888888888786,"t":{"done":{"0":1}},"times":0,"end":0},"page":1}
+PASS o świcie przy lizawce 1-3 jelenie (_noDog, idą do soli); w zasiadce sneak +0,5 i celowanie x0,8  {"deer":{"n":2,"flags":true,"hide":true,"sneak":0.5,"aim":0.8},"aim0":[1,0]}
+PASS pies nie poluje na jelenie spod lizawki (Dog.findPrey pomija _noDog)  {"skip":true,"takes":true}
+PASS jeleń przy lizawce, bohater w zasiadce o świcie: K60 krok 3  {"watched":true,"k60":{"s":"active","step":2,"day":1,"sday":1,"sh":5.525833333333337,"t":{"done":{"0":1,"1":1}},"times":0,"end":0}}
+PASS obóz myśliwych Czarnych Oczu za dnia na (66,21): łucznicy z nazwą, w worku strzała z białym okiem, namiot  {"fixed":true,"x":66,"y":21,"names":["Myśliwy Czarnych Oczu","Myśliwy Czarnych Oczu"],"looks":["Archer","Archer"],"arrow":true,"tent":true}
+PASS D33: przy ognisku rozmowa z myśliwymi („Wynoście się”), myśliwi walczą  {"talk":{"text":"Hej, chłopcze. Polujemy na niedźwiedzia spod\ngrani. Skóra dla naszego dowódcy. Znasz gawrę? / Pomożesz - dostaniesz osiemdziesiąt groszy.\nNie pomożesz - nie wchodź nam w drogę. / To nie wasz las. Wynoście się. / (Obcy wstają. Jeden kładzie strzałę na\ncięciwę.) Głupi chłopak. Pożałujesz.","missing":[]},"d33a":{"choice":"drive","step":1,"engaged":true}}
+PASS przegnani myśliwi: D33 wykonane, flaga lowCzoPrzegnani, zlecenie z tablicy znika  {"resolved":"drive","rec":"done","flag":true,"tpl":false}
+FAIL zwierzyniec: 4-6 jeleni i 2 dziki w granicach (_noDog), nie wyjdą za żywopłot; gajowy na mapie; odkrycie  {"n":7,"deer":5,"boar":2,"inside":true,"flags":true,"blocked":true,"gaj":true,"gajSheet":"$Npc_Gajowy","found":false}
+PASS kłusownictwo pierwszy raz: grzywna 40 G, Opinia -3  {"w":{"how":"seen","n":1,"fine":40,"day":1},"gold":160,"op":-3,"count":1}
+PASS drugi raz bez pieniędzy: grzywna 60 G - gajowy zabiera mięso i skóry  {"w":{"how":"found","n":2,"fine":60,"day":1},"meat":0}
+FAIL trzeci raz: rozmowa z gajowym, 80 G, wyłom zarasta cierniem na 7 dni (przełącznik 23), bohater wyprowadzony za żywopłot  {"ft":{"text":"Trzeci raz. Wystarczy. / Osiemdziesiąt groszy. I zarastam wyłom\ncierniem. Przez tydzień do zwierzyńca nie\nwejdziesz. / Lord kazałby cię powiesić. Ja każę ci się\nnauczyć. To różnica. / Wyprowadzę cię. I nie wracaj, póki nie\nzarośnie.","missing":[]},"fine3":{"gold":20,"sw":true,"until":7,"hero":[27,88],"pass":true}}
+PASS z zezwoleniem jeleń raz w tygodniu jest legalny  {"legal":1,"count":0,"wanted":null}
+PASS D32: sidła kłusownika widać w zwierzyńcu (3)  ["!$Low_Sidla","!$Low_Sidla","!$Low_Sidla"]
+FAIL D32: trzy sidła zebrane, nocą Rysiek przy sidłach - ostrzeżony (flaga), krok do gajowego  {"rys":{"step":1,"rysiek":"$Npc_Klusownik"},"rt":{"text":"","missing":[]},"d32":{"choice":null,"step":1,"flag":false}}
+FAIL D32 wykonane: zezwolenie na odstrzał (204)  {"rec":"active","permit":0}
+PASS zbłąkane zwierzęta Ługów: krowa, owca, 2 kury na łąkach (x 72-95, y 18-35)  {"n":4,"kinds":["cow","hen","hen","sheep"],"inArea":true}
+PASS powróz: bez liny dymek (nie okno), z liną Krasula idzie za bohaterem (lina zużyta)  {"rope0":{"pops":["Potrzebna lina na powróz."],"led":null,"msg":false},"rope1":{"led":"krasula","mode":"led","rope":0}}
+PASS Krasula odprowadzona do zagrody Ługów (etap ≥ 3): zwierzę wróciło, licznik K62 = 1  {"done":{"how":"farm","day":1},"led":null,"count":1}
+PASS kura złapana ręką (50%) idzie z bohaterem, a przy domu Ługów wraca do zagrody (K62: 2)  {"henc":{"led":"kura1","mode":"led"},"henDone":{"done":{"how":"farm","day":1},"count":2}}
+PASS strzelnica bez łuku: dymek „Bez łuku ani rusz.”, nie okno  {"pops":["Bez łuku ani rusz."],"round":false,"msg":false}
+PASS runda: 5 strzał z łuku w środki tarcz = 50 pkt, strzały ćwiczebne nie ubywają (3 jak przed)  {"last":{"pts":50,"list":[10,10,10,10,10],"contest":false,"day":1},"round":false,"arrows":3}
+PASS zawody: 50 pkt bije sierżanta Bełta (36) - 60 G, przychylność garnizonu, srebrna strzała  {"best":true,"silver":1,"gold":60,"favor":8}
+PASS F9: sekcja paczki B (10 wierszy), miejsca i sól na lizawce  {"title":"Paczka B: Zwierzęta i łowy","n":10,"place":{"go":["Gawra",13,99,73,8]},"salt":{"go":["Lizawka (zasiadka)",4,70,53,6]},"lick":true}
+PASS wiersz F9 przenosi na miejsce (zasiadka przy lizawce)  [4,70,53,true]
+PASS zapis i wczytanie: stan paczki B (przyjaźń, kłusownictwo, zwierzęta, srebrna strzała) zostaje  {"before":"{\"den\":true,\"park\":3,\"strays\":[\"krasula\",\"kura1\"],\"led\":null,\"silver\":true}","after":"{\"den\":true,\"park\":3,\"strays\":[\"krasula\",\"kura1\"],\"led\":null,\"silver\":true}"}
+PASS bez błędów w konsoli  []
+39/46 passed

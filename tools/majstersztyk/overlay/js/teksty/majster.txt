@@ -1,0 +1,643 @@
+# Teksty wątku W22 „Majstersztyk” (Majster_Data.js, Majster.js) - docs/zadania_nowe/majstersztyk.md.
+# Cech Kruczogrodu: Ostap Lemiesz (starszy cechu), Ludwik Zaręba (rywal z kontynentu), Jaś (uczeń); mistrzowie Tadek, Ignac, Leon.
+# Bohater jest nastolatkiem: dorośli mówią do niego „chłopcze”. „> ” - mówi bohater. {nazwa} - wstawia gra.
+
+# ======================================================================== mieszkańcy (TownLife: kolejność w Majster_Data.js)
+mieszkancy.0.name = Ostap Lemiesz
+mieszkancy.0.title = starszy cechu
+
+[mieszkancy.0.barks.stand]
+Trzy uderzenia, chłopcze. Nie dwa, nie cztery.
+
+[mieszkancy.0.barks.wander]
+Ręce pamiętają to, czego głowa nie chce.
+
+[mieszkancy.0.barks.rain]
+Deszcz dobrze robi żelazu. Gorzej kościom.
+
+[mieszkancy.0.barks.night]
+Cech zamknięty. Jutro.
+
+[mieszkancy.0.barks.home]
+Mmm. Wszystko wraca do kowadła.
+
+[mieszkancy.0.talk.morning]
+Cech otwarty od ósmej do piątej. Przychodź z robotą, nie z gadaniem.
+
+[mieszkancy.0.talk.day]
+Cech to nie karczma. Ale herbatę damy.
+
+[mieszkancy.0.talk.evening]
+Wieczorem zamykamy. Jutro będzie dzień.
+
+[mieszkancy.0.talk.night]
+Cicho. Cech śpi.
+
+[mieszkancy.0.talk.rain]
+Deszcz? To dobrze. Ludzie siedzą w domach i szyją.
+
+mieszkancy.1.name = Ludwik Zaręba
+mieszkancy.1.title = czeladnik płatnerski z kontynentu
+
+[mieszkancy.1.barks.stand]
+Cech szeroki, ale nie bez dna.
+
+[mieszkancy.1.barks.wander]
+Taka wyspa, a żadnego porządnego pilnika.
+
+[mieszkancy.1.barks.rain]
+Moje buty. Moje biedne buty.
+
+[mieszkancy.1.barks.night]
+Cisza. Lubię ciszę nocą. Nikt nie patrzy.
+
+[mieszkancy.1.barks.home]
+Dobranoc.
+
+[mieszkancy.1.talk.morning]
+Dzień dobry. Rano ręce są najlepsze, nie sądzisz?
+
+[mieszkancy.1.talk.day]
+Cech ma tu jeden tytuł na rok. Jedno miejsce. To uczciwa zasada.
+
+[mieszkancy.1.talk.evening]
+Wieczorem pracuje się spokojniej. Szkoda, że cech zamyka tak wcześnie.
+
+[mieszkancy.1.talk.night]
+Nocą? Spacerowałem. Tylko spacerowałem.
+
+[mieszkancy.1.talk.rain]
+Wilgoć szkodzi żelazu. Kto tego nie wie, niech nie bierze młota.
+
+mieszkancy.2.name = Jaś
+mieszkancy.2.title = uczeń cechu
+
+[mieszkancy.2.barks.stand]
+Zamiatam! Zamiatam!
+
+[mieszkancy.2.barks.wander]
+Za duży ten fartuch...
+
+[mieszkancy.2.barks.rain]
+Mokro! Pełno błota!
+
+[mieszkancy.2.barks.night]
+Ja nic nie widziałem. Ja śpię.
+
+[mieszkancy.2.barks.home]
+Mama wołała.
+
+[mieszkancy.2.talk.morning]
+Dzień dobry! Dużo roboty w Pracowni, mistrz Ostap mówi, że ręce się same nie umyją.
+
+[mieszkancy.2.talk.day]
+Zamiatam węgiel. Węgla jest dużo. Zawsze go jest dużo.
+
+[mieszkancy.2.talk.evening]
+Idę do domu. Mama czeka z kolacją.
+
+[mieszkancy.2.talk.night]
+Nie powinienem być na dworze. Cicho.
+
+[mieszkancy.2.talk.rain]
+Chlapie! Ale jak się zamiata błoto, to się tylko przesuwa.
+
+# ======================================================================== zadanie W22 (dziennik: FABUŁA)
+zadania.W22.title = Majstersztyk
+zadania.W22.where = Cech (dom cechowy w mieście), kuźnia Tadka, garbarnia Ignaca, warsztat Leona, rynek
+zadania.W22.when = od dnia 12 do ok. dnia 45-50 (egzamin w dzień targowy)
+zadania.W22.desc = Cech Kruczogrodu przyjmuje tylko tych, za których ktoś poręczy i którzy pokażą, co umieją. Cztery rangi: czeladnik, starszy czeladnik, podmistrz, majster. A w połowie drogi z promu przypłynie ktoś, kto chce tego samego tytułu.
+zadania.W22.fail.text = Cech przestał na mnie czekać.
+zadania.W22.steps.0.text = {tekst}
+zadania.W22.steps.1.text = {tekst}
+zadania.W22.steps.2.text = {tekst}
+zadania.W22.steps.3.text = {tekst}
+zadania.W22.steps.4.text = {tekst}
+
+# słowa kroków (zmienne {tekst})
+kroki.0.brak = Cech przyjmuje tylko poręczonych. Poproś Tadka (kuźnia), Ignaca (garbarnia) albo Leona (warsztat) o poręczenie - mogą, gdy znają cię (Opinia 20) i masz wykutą żelazną rzecz. Potem wpisowe: 20 G u Ostapa (Cech, 8-17).
+kroki.0.jest = Poręczył {kto}. Idź do Cechu (drzwi na rynku Kruczogrodu, 8-17) i zanieś Ostapowi wpisowe: 20 G.
+kroki.1.pusto = „Trzy ręce”: Okuta pałka, Skórzane karwasze i Żelazny sztylet - wszystkie NIEUŻYWANE - złóż na półce próbnej w Cechu (po lewej od wejścia). Ostap obejrzy je rano.
+kroki.1.lezy = Trzy sztuki leżą na półce. Ostap obejrzy je w świetle dnia - wróć do niego po siódmej rano {dzien}.
+kroki.2.brak = Starszy czeladnik: weź z tablicy cechu (w Cechu, przy wejściu do Pracowni) zamówienie straży Wita. Potrzeba nieużywanych: Żelazny miecz, Czepiec kolczy i Okuta tarcza.
+kroki.2.zamowienie = Zamówienie straży: Żelazny miecz, Czepiec kolczy i Okuta tarcza (nieużywane) dla kaprala Wita - termin do dnia {termin}. Płaci 120 G z kasy garnizonu.{ludwik}
+kroki.2.ostap = Wit dostał, co chciał. Teraz do Ostapa - niech zaświadczy rangę starszego czeladnika.
+kroki.2.ostapa = Wit dał zamówienie Ludwikowi. Ostap daje drugą szansę: ten sam komplet (miecz, czepiec, tarcza) prosto do niego, po {dzien}.
+kroki.2.ludwik = {nl}Z promu przypłynął Ludwik Zaręba z cechu płatnerzy i bierze zamówienia z tej samej tablicy.
+kroki.3.fach = Podmistrz: wybierz fach u Ostapa - kowal, garbarz albo cieśla-łuczarz. Mistrz fachu (Tadek, Ignac, Leon) da ci wskazówkę.
+kroki.3.sztuka = Sztuka próbna ({fach}): {lista}. Wszystko nieużywane, złóż na półce próbnej w Cechu.
+kroki.3.lezy = Sztuka próbna leży na półce. Ostap obejrzy ją rano {dzien}.
+kroki.3.pekla = Ktoś uszkodził sztukę na półce. Szukaj śladów (dwa z trzech wystarczą): mokry węgiel w skrzyni w Pracowni, odcisk w popiele pod półką, Jaś mógł coś widzieć. Zrób sztukę od nowa: {lista}. Dowody ({dowody} z 3)
+kroki.3.noc = Dowody: {dowody} z 3. Można też zostać w Cechu po zamknięciu i zobaczyć, kto przyjdzie do półki (22-24).
+kroki.4.czeka = Egzamin przed cechem na rynku w najbliższy dzień targowy ({dzien}), od południa. Sztuka egzaminacyjna ({fach}): {lista}.
+kroki.4.pierwszy = Egzamin w dzień targowy: dzień {dzien}. Przygotuj sztukę ({fach}): {lista}.
+kroki.4.dzis = Dziś egzamin! Rynek, od 12:00 do 15:00, trybuna cechu. Weź sztukę: {lista}. Rozmowa z Ostapem.
+kroki.4.po = Egzamin odbył się. Wynik: {wynik}.
+
+fach.kowal = kowal
+fach.garbarz = garbarz
+fach.ciesla = cieśla-łuczarz
+fach.brak = (jeszcze nie wybrano)
+oceny.0 = Zaliczony
+oceny.1 = Dobry
+oceny.2 = Mistrzowski
+wyniki.1 = majster (uczciwie)
+wyniki.2 = majster (Ludwik zdemaskowany)
+wyniki.3 = dwóch majstrów
+wyniki.4 = wygrał Ludwik
+
+napis.zloto = +{n} G
+napis.wpisowe = Wpisowe: -20 G
+napis.ranga = Ranga: {ranga}
+napis.polka = Sztuki leżą na półce
+napis.dowod = Dowód ({n} z 3)
+napis.mlotek = Młotek majstra
+napis.ludwik = Do miasta przypłynął Ludwik Zaręba
+rangi.0 = bez rangi
+rangi.1 = czeladnik
+rangi.2 = starszy czeladnik
+rangi.3 = podmistrz
+rangi.4 = majster
+
+# ======================================================================== poręka (rozmowa przy mistrzach)
+opcja.poreka = Poręcz za mną w cechu
+opcja.wskazowka = Naucz mnie czegoś o sztuce na egzamin
+opcja.inna = W innej sprawie
+
+[poreka.kowal]
+Do cechu? Ostapa znam od trzydziestu lat. Pokaż, co masz w ręku.
+(Tadek ogląda twoją żelazną robotę, kręci głową, ale kąciki ust drżą.)
+Krzywe, ale twoje. Zanieś mój znak do Ostapa. Ale miej coś w ręku, nie same słowa.
+
+[poreka.garbarz]
+Cech? A masz ty równą sprzączkę? Pokaż rękę. Dobra, twardsza niż się spodziewałem.
+Powiedz Ostapowi, że Ignac poręczył. Z nim nie pogadasz, ale ze skórą - tak.
+
+[poreka.ciesla]
+Cech cieśli i łuczarzy to cech Ostapa, mimo że kują więcej niż strugają. Dobra, poręczę.
+Ale pamiętaj: łuk pęka, jak się go kończy w pośpiechu. Idź do Ostapa.
+
+[poreka.nie]
+Najpierw niech cię ktoś zna, chłopcze. Pomagaj ludziom, wróć. I miej jakąś żelazną rzecz własnej roboty - bez tego cech nawet nie otworzy drzwi.
+
+[poreka.juz]
+Już poręczyłem. Idź do Ostapa.
+
+[wskazowka.kowal]
+Na kolczudze liczą się rzędy. Nie spiesz się z żadnym kółkiem: jak jedno jest krzywe, krzywe jest sto.
+
+[wskazowka.garbarz]
+Na skórze liczy się równa sprzączka i równy szew. Jak ręka się spieszy, szew ucieka.
+
+[wskazowka.ciesla]
+Łuk i strzała to jedno. Cieślę poznasz po tym, że trzyma drzewo pod światło.
+
+[wskazowka.juz]
+Już ci to mówiłem. Idź, ćwicz.
+
+# ======================================================================== Ostap
+ostap.imie = Ostap Lemiesz
+
+[ostap.nikt]
+Dom cechowy. Zapamiętaj: cech nie wpuszcza kogoś, kogo nikt nie zna.
+Pomagaj ludziom, chłopcze, pokaż jakąś żelazną robotę, znajdź poręczyciela wśród mistrzów. Wtedy pogadamy.
+
+[ostap.poreka.pyta]
+Od Tadka? Znam jego pieczęć. A ty trzymasz młot jak człowiek, który zna ciężar.
+Wpisowe to dwadzieścia groszy, chłopcze. Nie dla mnie - dla cechowej skrzyni. Masz?
+
+[ostap.poreka.nie]
+Nie masz. Wróć z dwudziestoma.
+
+[ostap.poreka.tak]
+Dobrze. Wpisane. Nie jesteś jeszcze czeladnikiem - najpierw trzy ręce.
+Zrób okutą pałkę, skórzane karwasze i żelazny sztylet. Wszystko nieużywane - ma być tak, jak wyszło spod młota.
+Złóż je na półce próbnej po lewej od wejścia. Rano obejrzę je w świetle dnia.
+
+[ostap.rano]
+Rano, chłopcze. Cech ogląda sztuki w świetle dnia, nie w kuźni.
+
+[ostap.trzyPusto]
+Półka jest pusta. Trzy ręce: okuta pałka, skórzane karwasze, żelazny sztylet. Nieużywane.
+
+[ostap.sztukiLeza]
+Leżą na półce. Dobre trzy ręce. Daj, że rzucę okiem...
+(Ostap bierze po kolei pałkę, karwasze i sztylet i obraca je pod światło.)
+Dobrze. Dobrze. Proszę wszystkich do izby.
+
+[ostap.przysiega]
+W imię rzemiosła, i żeby ręce pamiętały.
+(Ostap kładzie twoje sztuki na stole i trzykrotnie uderza młotkiem. Dźwięk niesie się po całym Cechu.)
+Od tej chwili jesteś czeladnikiem cechu. Dostajesz zaświadczenie, 30 groszy i tablicę zleceń.
+Pracownia - pokazuję ci ją - jest twoja do zleceń cechu. Tablica jest przy wejściu do Pracowni.
+
+[ostap.czeladnik]
+Czeladnik. Weź zlecenie z tablicy cechu. Pierwsze należy do Wita z garnizonu - ale możesz je wziąć dopiero po szesnastym dniu.
+
+[ostap.zamowienie]
+Zamówienie straży. Wit czeka. Jeśli się spóźnisz, odda je komu innemu. Cech nie czeka.
+
+[ostap.zamowienieNiezaplacone]
+Zanieś komplet Witowi do garnizonu (brama twierdzy). Jak odbierze - wróć do mnie.
+
+[ostap.starszy]
+Wit dostał swoje? Wiem, doszło do mnie. Dobrze wykonane.
+Od tej chwili jesteś starszym czeladnikiem. Wiesz co dalej: podmistrz, a potem egzamin.
+
+[ostap.ostapaOdbior]
+Wit oddał zamówienie Ludwikowi. Cech nie wywala nikogo za to jedno. Zrób komplet jeszcze raz - tym razem dla mnie.
+
+[ostap.wybierzFach]
+Podmistrz to sztuka próbna. Twój fach: kowal, garbarz albo cieśla-łuczarz?
+
+[ostap.fachKowal]
+Kolczuga i żelazna tarcza. Kowalstwo. Powiem Tadkowi, że go odwiedzisz.
+
+[ostap.fachGarbarz]
+Skórznia, wysokie buty i futrzany kaptur. Ignac cię poduczy.
+
+[ostap.fachCiesla]
+Łuk, oszczep i dwanaście strzał. Leon czeka w warsztacie.
+
+[ostap.fachPrzed]
+Wybrałeś. Zrób sztukę, złóż na półce, rano ją obejrzę. Pamiętaj o wskazówce od mistrza fachu - on cię nauczy, co cech widzi.
+
+[ostap.fachMieszane]
+Wybrałeś już fach. Nic się nie zmienia - sztuka próbna, półka.
+
+[ostap.polkaPusta]
+Półka pusta. Sztuka próbna czeka - nieużywana, z dobrych materiałów.
+
+[ostap.polkaLezy]
+Sztuka leży. Rano.
+
+[ostap.sabotaz]
+Przykro mi, chłopcze. Takie rzeczy zdarzają się, gdy wszyscy patrzą, a nikt nie widzi.
+Zrób ją od nowa. Surowce przepadły, ale cech zwraca ci jedną sztukę żelaza z mojej kieszeni. Szukaj, kto to zrobił.
+
+[ostap.sabotazZwrot]
+(Ostap wsuwa ci w dłoń kawałek żelaza.)
+
+[ostap.podmistrz]
+Dobrze. Rzędy równe, szew równy. Cech kupuje sztukę po sześćdziesięciu procentach - sto groszy.
+Od dziś jesteś podmistrzem. Zostało jedno: egzamin przed cechem, w dzień targowy, na rynku.
+
+[ostap.egzaminDzien]
+Egzamin odbędzie się w dzień targowy ({dzien}), po południu, na rynku. Przygotuj sztukę: {lista}.
+
+[ostap.egzaminDzis]
+Egzamin dziś. Trybuna na rynku, od południa. Jak masz sztukę - chodź do mnie przy trybunie.
+
+[ostap.egzaminTrybuna]
+Gotowy? Komisja zasiada: Tadek, Ignac, Leon. Ja przewodniczę. Pokaż sztukę.
+
+[ostap.egzaminBrak]
+Sztuki nie masz kompletnej albo któraś jest używana. Przesuwamy o tydzień - następny dzień targowy. Surowce zostają.
+
+[ostap.egzaminSpozniony]
+Dziś nie będzie egzaminu. Najbliższy dzień targowy. Przyjdź w południe.
+
+[ostap.dowodyPyta]
+Chłopcze, mówią o tobie, że masz coś do powiedzenia o tej sztuce na półce. Pokażesz dowody?
+
+[ostap.dowodyDziala]
+(Ostap bierze od ciebie dowody - węgiel, odcisk, fiolkę, świadectwo Jasia - i podaje je komisji. Tłum szumi.)
+
+[ostap.zostan]
+Zostajesz po zamknięciu? Rób, co chcesz. Wyjdź, jak będziesz kończył - i nie rusz mi szafy.
+
+[ostap.poEgzaminie]
+Egzamin za nami. Wyniki wiesz. Cech nie zapomina.
+
+[ostap.mlotek]
+Weź młotek majstra. Moim ojcem był ten, kto mi go dał. Teraz twój.
+
+[ostap.tablicaTekst]
+Tablica cechu.
+
+# ======================================================================== Ludwik
+ludwik.imie = Ludwik Zaręba
+
+[ludwik.przyjazd]
+Czy tu jest cech, czy stodoła?
+
+[ludwik.przyjazdBohater]
+> (Czysty ten facet. Jedyny obuty z całej piątki.)
+
+[ludwik.dzien]
+Ludwik Zaręba, czeladnik cechu Czarnego Brodu. Miło poznać. Słyszałem o tobie - tu i ówdzie.
+Cech daje jeden tytuł majstra na rok. Dobrze mieć uczciwą konkurencję, prawda?
+
+[ludwik.potem]
+Praca idzie? Moja idzie świetnie. Dwa zamówienia z tej samej tablicy.
+
+[ludwik.sabotazPotem]
+Słyszałem o twojej sztuce. Smutne. Takie rzeczy się zdarzają, gdy ktoś zostawia robotę bez dozoru.
+
+[ludwik.zdemaskowany]
+Nie mam ci nic do powiedzenia.
+
+[ludwik.mistrz]
+Gratulacje, majstrze. Rok minie szybko.
+
+[ludwik.wygral]
+Majster Zaręba. Brzmi lepiej niż czeladnik, prawda? Masz jeszcze czas, żeby spróbować od nowa.
+
+[ludwik.zostal]
+Zostaję w mieście. Cech przyjął nas obu. Majster Zaręba - płatnerz miejski. Mam teraz pracownię w Cechu.
+
+# ======================================================================== Jaś
+jas.imie = Jaś
+
+[jas.dzien]
+Ja zamiatam! Mistrz Ostap mówi, że Pracownia ma być czysta jak sumienie, ale u nas węgiel zawsze sypie.
+
+[jas.nie]
+Nic nie widziałem. Naprawdę. (Jaś patrzy na buty.)
+
+[jas.widzial]
+Eee... Widziałem. Tej nocy, gdy pękła sztuka... ktoś przy półce stał z lampą. Taki czysty, w granatowym. I buty miał, a ja nie mam. Ale nie mówcie mu, że ja...
+
+[jas.juz]
+Już ci powiedziałem. Powiem mistrzowi Ostapowi, jak spyta.
+
+# ======================================================================== tablica cechu
+[tablica.naglowek]
+TABLICA CECHU
+
+[tablica.stan]
+Twoja ranga: {ranga}. Ludwik Zaręba: {rangaL}. Ten tydzień: wolnych zleceń {wolne}.
+
+[tablica.brakRangi]
+Zlecenia po randze czeladnika. Najpierw półka próbna - trzy ręce.
+
+[tablica.straz]
+Zamówienie straży: Wit, kapral garnizonu. Komplet: Żelazny miecz, Czepiec kolczy, Okuta tarcza. Termin: sześć dni. Płaca 120 G.
+
+[tablica.opcjaBiore]
+Biorę
+
+[tablica.opcjaNie]
+Nie teraz
+
+[tablica.wziete]
+Wzięte. Termin: dzień {termin}. Pamiętaj - sztuki nieużywane.
+
+[tablica.strazJest]
+Zamówienie straży już wzięte (termin: dzień {termin}). Zanieś komplet Witowi.
+
+[tablica.zlecenie]
+Zlecenie cechu: {nazwa} - {zaplata} G. Dostarcz na półkę rzecz nieużywaną.
+
+[tablica.opcjaOddaj]
+Oddaję ({nazwa})
+
+[tablica.opcjaZostaw]
+Zostaw
+
+[tablica.zlecenieBrak]
+Nie masz {nazwa} (nieużywanej).
+
+[tablica.nic]
+Nic nie ma na tablicy, co by ci pasowało.
+
+# ======================================================================== Wit (zamówienie)
+wit.imie = Wit
+
+[wit.opcja]
+Mam komplet dla straży
+
+[wit.brak]
+Komplet? Miecz, czepiec i tarcza - wszystko nieużywane. Brak. Wracaj, jak będziesz miał.
+
+[wit.spoznione]
+Za późno, chłopcze. Straż nie czeka. Oddałem zamówienie Ludwikowi z cechu płatnerzy.
+
+[wit.spor]
+Ludwik też niesie komplet. Powiedz, kto dostarczy lepiej - i szybciej. Ostap, kaszlniesz?
+(Ludwik wygłasza gładką mowę. Wit przerywa: „Ile?”. Ostap kaszle.)
+
+[wit.opcjaTaniej]
+Zrobię taniej
+
+[wit.opcjaLepiej]
+Zrobię lepiej
+
+[wit.opcjaRazem]
+Zrobię razem z Ludwikiem
+
+[wit.taniej]
+Taniej? Dziewięćdziesiąt. Zgoda. Płacę, odbieram.
+
+[wit.lepiejTak]
+Lepiej? No, pokaż... Tak. Sto pięćdziesiąt, chłopcze. Płacę z premią.
+
+[wit.lepiejNie]
+Lepiej? Ludwik ma lepszą mowę, ty gorszą. Dzielimy po połowie - sześćdziesiąt dla ciebie.
+
+[wit.razem]
+Razem? Podzielimy robotę. Połowa dla ciebie, połowa dla niego. Sześćdziesiąt.
+
+[wit.tak]
+Dobra robota. Garnizon dziękuje. Płaca z kasy. Przychylność garnizonu rośnie.
+
+[wit.opcjaWiadro]
+Mam jeszcze dwa wiadra dla przytułku.
+
+[wit.wiadro]
+Wiadra? Zanieś je Stefie do przytułku. Cech będzie ci wdzięczny.
+
+[wit.nieMasz]
+Nie masz tych wiader.
+
+# ======================================================================== noc w Pracowni
+[noc.start]
+> (Lampa. Ktoś idzie przez Pracownię.)
+
+[noc.ludwik]
+Cech nie potrzebuje dwóch majstrów.
+
+[noc.wybor]
+> (Ludwik wyjmuje fiolkę i podchodzi do półki. Co robię?)
+
+[noc.opcjaStop]
+Wyjdź i zatrzymaj go
+
+[noc.opcjaDowod]
+Poczekaj i weź dowód
+
+[noc.opcjaOstap]
+Zawołaj Ostapa
+
+[noc.stop]
+> Cech to nie miejsce dla wilków.
+(Ludwik cofa się, chowa fiolkę w rękaw i odchodzi bez słowa. Zimny pot spływa mu po karku.)
+
+[noc.dowod]
+(Ludwik kropi sztukę z fiolki. Para syczy. Zanim zdąży odejść, zostawia fiolkę na półce. Chwytasz ją.)
+> Mam. To wystarczy.
+
+[noc.ostap]
+> Mistrzu Ostapie! Tutaj!
+(Dzwonek przy drzwiach. Ostap wpada w koszuli nocnej, z kijem w ręku. Ludwik zamarł z fiolką nad półką.)
+Co się tu dzieje?! Ty... ty...
+(Ludwik blednie. Ostap trzyma go za kołnierz. Jaś wygląda zza drzwi.)
+
+[noc.sztukaCala]
+Sztuka próbna jest cała.
+
+# ======================================================================== sabotaż (poranek)
+[sabotaz.rano]
+(Na półce leży twoja sztuka. Na stali widać rysę. Wygląda na niedogrzaną - albo zalaną zimną wodą.)
+
+[sabotaz.ostap]
+Takie rzeczy zdarzają się, gdy wszyscy patrzą, a nikt nie widzi.
+
+[sabotaz.tadek]
+(Tadek, stojący obok, gwiżdże przez zęby. Nie mówi nic.)
+
+[sabotaz.jas]
+(Jaś zamiata coraz szybciej, patrząc w podłogę.)
+
+[slad.wegiel]
+(Mokry węgiel w skrzyni. Ktoś go polał, zanim spadł na ziemię.)
+
+[slad.odcisk]
+(W popiele pod półką widać wyraźny odcisk: młotek z literą Z.)
+
+[slad.juz]
+Już to widziałeś.
+
+[slad.brak]
+Nie ma tu na co patrzeć.
+
+# ======================================================================== egzamin
+egzamin.imie = Egzamin
+
+[egz.komisja]
+(Komisja ogląda sztukę. Tadek uderza młotem trzy razy - sypią się iskry. Ignac zgina skórę. Leon kręci łukiem. Tłum szumi.)
+
+[egz.szlify]
+Teraz ostatnie szlify. Pokaż, jak trzymasz młot.
+
+[egz.dowody.tak]
+Pokaż dowody komisji
+
+[egz.dowody.nie]
+Zostaw tak
+
+[egz.wynik.ostrzez]
+Mów.
+
+[egz.wynik.1]
+Komisja radzi. Wynik: {ocena}.
+Majster Ostap ogłasza: nowy majster cechu Kruczogrodu! Klaskanie, okrzyki, ktoś rzuca czapkę.
+Ludwik zdejmuje czapkę w ukłonie. Za rok będzie mógł spróbować.
+
+[egz.wynik.2]
+Dowody mówią same za siebie. Ludwik Zaręba zostaje zdyskwalifikowany.
+(Ludwik schodzi z trybuny pod okrzyki. Odpłynie następnym promem.)
+Nowy majster cechu Kruczogrodu!
+
+[egz.wynik.3]
+Cech przyjmuje dwóch majstrów! Ludwik zostaje w mieście i otwiera pracownię w Cechu.
+Dwóch majstrów. Rzadkość. Dwie ręce, dwie szkoły.
+
+[egz.wynik.4]
+Ludwik Zaręba zostaje majstrem cechu. Twoja sztuka była dobra - ale jego lepsza.
+Możesz spróbować jeszcze raz za dwa tygodnie. Egzamin poprawkowy.
+
+[egz.dwoch]
+Poproś o dwóch majstrów
+
+[egz.dwochNie]
+Zostaw
+
+[egz.dwochPyta]
+Wynik jest dobry. Mogę zaproponować cechowi, żeby przyjął i Ludwika - jeśli nie masz nic przeciwko. Opinia w mieście jest po twojej stronie.
+
+[egz.poprawka]
+Egzamin poprawkowy. Ludwik jest już majstrem. Zaliczony wystarczy. Pokaż sztukę.
+
+[egz.mlotek]
+Młotek majstra: -15% czasu w kuźni, narzędzia dłużej służą.
+
+[egz.kufel]
+Borgar stawia kufel na cześć majstra!
+
+[egz.wieczor]
+Borgar: Na cześć majstra! Pierwszy kufel dziś na mój rachunek!
+
+[egz.wieczorBywalcy]
+Wszyscy wstają. Zwykły toast w sali. Ozzy, Grum, Melia podnoszą kufle.
+
+# ======================================================================== szlify (mini-gra)
+szlify.tytul = Ostatnie szlify
+szlify.pod = trzy uderzenia młota
+szlify.runda = Uderzenie {n} z 3
+szlify.podpowiedz = strzałki - powtórz układ
+szlify.ok = O - dalej
+szlify.zaliczony = Zaliczony
+szlify.dobry = Dobry
+szlify.mistrzowski = Mistrzowski!
+szlify.bledy = Błędy: {n}
+szlify.stopka = O - dalej
+szlify.pauza = Pomijasz próbę?
+szlify.pauzaOpcje = Gramy dalej
+szlify.pauzaWyjdz = Wyjdź (ocena: Zaliczony)
+
+# ======================================================================== zakończenia, notatki
+[notatki.czeladnik]
+Czeladnik cechu
+Ostap przyjął mnie do cechu. Jestem czeladnikiem. Od teraz tablica cechu jest moja.
+
+[notatki.starszy]
+Starszy czeladnik
+Wit dostał swój komplet. Jestem starszym czeladnikiem. Przypłynął Ludwik - jedyny obuty w całym mieście.
+
+[notatki.podmistrz]
+Podmistrz
+Sztuka próbna przyjęta. Jestem podmistrzem. Egzamin w dzień targowy, na rynku.
+
+[notatki.majster]
+Majster cechu
+Zostałem majstrem cechu Kruczogrodu. Ostap dał mi młotek.
+
+[notatki.ludwik]
+Ludwik Zaręba
+Ludwik Zaręba: czysty, grzeczny, zawsze obuty. Rywal. Chce tego samego tytułu.
+
+[notatki.sabotaz]
+Pęknięta sztuka
+Ktoś uszkodził moją sztukę na półce próbnej. Dowody: mokry węgiel, odcisk w popiele, świadectwo Jasia.
+
+# ======================================================================== F9 (Debug.js, sekcja „Wątek W22”)
+f9.naglowek = Wątek W22 (Majstersztyk):
+f9.brak = Nie da się teraz
+f9.ranga = Majster: ranga {n}
+f9.rangaOpis = ←→ ranga 0-4; OK: ustawia stan (poręka, wpisowe, półka, sztuki). Przenosi do Cechu.
+f9.przyjazd = Majster: przyjazd Ludwika
+f9.przyjazdOpis = OK: Ludwik jest w mieście (od dziś), z Cechu do 18.
+f9.sabotaz = Majster: sabotaż (pęknięta sztuka)
+f9.sabotazOpis = OK: ranga 2, fach kowal, sztuka na półce po pęknięciu, dwa ślady - gotowe do nocy w Pracowni.
+f9.egzamin = Majster: egzamin ({ocena})
+f9.egzaminOpis = ←→ ocena szlifów (Zaliczony / Dobry / Mistrzowski); OK: ranga 3, dziś dzień targowy, sztuka egzaminacyjna w plecaku, na trybunę.
+f9.koniec = Majster: zakończenie {n}
+f9.koniecOpis = ←→ zakończenie 1-4; OK: egzamin przebiega do wyniku z tym zakończeniem.
+f9.wyzeruj = Majster: wyzeruj
+f9.wyzerujOpis = OK: stan wątku W22 od nowa (ranga 0, bez Ludwika).
+
+# ======================================================================== półka próbna, drzwi, przyciski
+polka.zamknieta = Półka próbna cechu. Złożą na niej sztuki tylko ci, których Ostap przyjął.
+polka.nicTeraz = Nie ma teraz czego składać na półce.
+polka.czeka = Na półce leżą twoje sztuki. Cech obejrzy je rano.
+polka.rano = Sztuki leżą na półce. Idź do Ostapa - obejrzał je w świetle dnia.
+polka.zloz = Złóż na półce: {l}
+polka.zostaw = Zostaw
+polka.zloz2 = Oddaję komplet
+polka.brak = Brakuje: {l}.
+polka.uzyte = Użyte, cech ich nie przyjmie: {l}.
+ostap.wpisowe.tak = Płacę 20 G
+ostap.wpisowe.nie = Wrócę później
+napis.obraduja = Dom cechowy. Mistrzowie obradują za zamkniętymi drzwiami.
+napis.zamkniety = Cech otwarty od ósmej do piątej.

@@ -5,7 +5,7 @@
 
 # ======================================================================== zadanie W21 (dziennik: FABUŁA)
 zadania.W21.title = Gorączka w przytułku
-zadania.W21.where = przytułek, rynek, Czerpalnia wschodnia, Garbarnia, ratusz
+zadania.W21.where = Podgrodzie: przytułek, suche koryto, Garbarnia, plac przy suchej studni
 zadania.W21.when = od dnia 30, po głosowaniu w sprawie obozu - osiem dni
 zadania.W21.desc = W obozie zaczęła się gorączka. Siostra Stefa nie nadąża z chorymi, miasto zamknęło ulicę i wysłało nocny patrol. Ktoś albo coś zatruwa wodę, a ja mam tylko własny bukłak z deszczówką i parę rąk.
 zadania.W21.fail.text = Gorączka cofnęła się sama, beze mnie.
@@ -24,15 +24,15 @@ kroki.k2.gawelCzeka = Stary Gaweł potrzebuje wywaru przed 20:00 jutra.
 kroki.k2.gawelOk = Gaweł dostał wywar.
 kroki.k2.zmarl = Gaweł zmarł w nocy.
 kroki.k3.tekst = Chorują tylko ci, którzy piją z beczek Kuby. Zapytaj trzech ludzi ({lista}/3). {zapach} {s3}
-kroki.k3.zapachNie = Powąchaj wodę w beczce przy Czerpalni wschodniej.
+kroki.k3.zapachNie = Powąchaj wodę w beczce Kuby przy dole w korycie.
 kroki.k3.zapachTak = Woda pachnie wapnem.
 kroki.k3.s3Nie = Po 17:00 tłum idzie pod garbarnię Ignaca.
 kroki.k3.s3Tak = Sprawa Ignaca rozstrzygnięta.
-kroki.k4.tekst = Dowody {n}/2: biały osad w rynnie przy Czerpalni, płyta rowu za Garbarnią (łopata). {wawrzyn}
+kroki.k4.tekst = Dowody {n}/2: biały osad na kamieniach koryta, płyta rowu za Garbarnią (łopata). {wawrzyn}
 kroki.k4.wNie = Porozmawiaj z Wawrzynem przy kadziach (6:30-19).
 kroki.k4.wTak = Rozmowa z Wawrzynem za tobą.
-kroki.k5.start = Sołtys zwoła zebranie przed ratuszem.
-kroki.k5.zebranie = Zebranie dnia {dzien}, o 15:00 przed ratuszem. Przyjdź.
+kroki.k5.start = Sołtys zwoła zebranie przy suchej studni w Podgrodziu.
+kroki.k5.zebranie = Zebranie dnia {dzien}, o 15:00 przy suchej studni w Podgrodziu. Przyjdź.
 kroki.k5.po = {wynik} Uratowanych: {n} z sześciu. Rano ulica się otworzy.
 kroki.k5.A = Wawrzyn ukarany.
 kroki.k5.B = Przenosimy kadzie, rów zasypany.
@@ -54,7 +54,7 @@ napis.policyjna = Ulica zamknięta. Od 20:00 patrol.
 napis.zapora = Wóz zapory. Ulicę pilnuje straż.
 napis.kociol = Kocioł siostry Stefy. Gotuje się wywar.
 napis.dowod = Dowód ({n}/2)
-napis.zebranie = Sołtys zwołuje zebranie: dzień {dzien}, 15:00, przed ratuszem.
+napis.zebranie = Sołtys zwołuje zebranie: dzień {dzien}, 15:00, przy suchej studni w Podgrodziu.
 napis.chory = Gorączka bierze i ciebie. Dzień osłabienia.
 napis.zaMaloDowodow = Za mało dowodów, by stanąć za Ignacem.
 napis.ignacZamkniety = Ignac zamyka garbarnię.
@@ -74,7 +74,7 @@ drzwi.patrol = Straż: po dwudziestej wstęp tylko z przepustką.
 # myśli bohatera
 mysl.start = (W obozie leżą chorzy. Siostra Stefa jest w przytułku pod murem.)
 mysl.lista = (Chorują tylko ci, którzy piją z beczek Kuby. Skąd Kuba je napełnia?)
-mysl.ignacRada = (Wapno, którego tam nie powinno być. Tam, gdzie woda wchodzi do cysterny.)
+mysl.ignacRada = (Wapno, którego tam nie powinno być. Tam, gdzie woda zbiera się w korycie.)
 mysl.zb = (Zbiórka załatwiona. Razem {n}/3.)
 
 # ======================================================================== notatki dziennika
@@ -103,8 +103,8 @@ Kto choruje, a kto nie
 Chorują ci, którzy piją z beczek Kuby: obóz, przytułek, dwie rodziny obok. Zdrowi są ci z rynkowej studni i Stefa z własnego kubka.
 
 [notatki.zapach]
-Woda z Czerpalni wschodniej
-Beczki Kuby pachną wapnem i czymś gorzkim. Cysterna przy wschodnim murze, a obok nowa Garbarnia.
+Woda z dołu w korycie
+Beczki Kuby pachną wapnem i czymś gorzkim. Dół z wodą w suchym korycie, a wyżej, na wschodzie, nowa Garbarnia.
 
 [notatki.chory]
 Poczułem się źle
@@ -264,7 +264,7 @@ zb.hanka.opcja = Biorę wrzątek dla Stefy.
 pytanie.opcja = Kto u was choruje, a kto nie?
 
 [pytanie.woziwoda]
-@kuba: Chorują ci, którzy biorą z moich beczek. A moje beczki, chłopcze, nalewam na wschodzie, ze starej cysterny, bo na rynku racje się kończą.
+@kuba: Chorują ci, którzy biorą z moich beczek. A moje beczki, chłopcze, nalewam w korycie, z dołu, w którym po nocy zbiera się woda, bo w miasteczku racje się kończą.
 @kuba: Od trzech dni woda pachnie jakoś kwaśno. Myślałem, że to beczka.
 
 [pytanie.piekarka]
@@ -274,7 +274,7 @@ pytanie.opcja = Kto u was choruje, a kto nie?
 @tadek: Moi pomocnicy zdrowi. Pijemy z rynku, bo żelazo wolało czystą. Ale u Kuby widzę beczki od wschodu - tam coś nie gra.
 
 [beczka.opis]
-Wózek z beczką stoi przy Czerpalni wschodniej, pod okrągłą wieżą cysterny. Woda w beczce jest mętna.
+Wózek z beczką stoi w suchym korycie, przy dole z wodą. Woda w beczce jest mętna.
 
 beczka.opcja.wachaj = Powąchaj.
 beczka.opcja.sprobuj = Spróbuj łyk.
@@ -296,7 +296,7 @@ beczka.opcja.sprobuj = Spróbuj łyk.
 @ignac: Ja? Moja woda jest z przydziału, jak wasza. Wiecie, ile jej mam? Tyle, co na jedną kadź w tygodniu.
 
 [s3.kuba]
-@kuba: Ja tylko mówię, że od Czerpalni wschodniej woda... no, że pachnie. Nie wiem, czyja to sprawa.
+@kuba: Ja tylko mówię, że od tego dołu w korycie woda... no, że pachnie. Nie wiem, czyja to sprawa.
 
 s3.opcja.stoj = Stań za Ignacem.
 s3.opcja.sprawdz = Pozwól im sprawdzić.
@@ -306,7 +306,7 @@ s3.opcja.nic = Nic.
 @soltys: Lista chorych... Rzeczywiście. Kto pije z beczek, ten choruje, a nie kto ma garbarnię. Ustępuję.
 
 [s3.stoj.ignac]
-@ignac: Dziękuję, chłopcze. Zapamiętam. Szukaj wapna, którego tam nie powinno być. Tam, gdzie woda wchodzi do cysterny.
+@ignac: Dziękuję, chłopcze. Zapamiętam. Szukaj wapna, którego tam nie powinno być. Tam, gdzie woda zbiera się w korycie.
 
 [s3.sprawdz.ignac]
 @ignac: Proszę. Moja kadź. Wąchajcie. Różany garbnik i żelazo, nie wapno. To nie moje, to z cudzej kadzi: wapno i ałun.
@@ -318,23 +318,23 @@ s3.opcja.nic = Nic.
 @soltys: Szyby wybite, a winnego brak. Zamknij garbarnię na trzy dni, Ignac, i niech ci się ułoży w głowie.
 
 [ignac.row.sojusznik]
-@ignac: Szukaj wapna, którego nie ma prawa tam być. Tam, gdzie woda wchodzi do cysterny. Nos mi to mówi.
+@ignac: Szukaj wapna, którego nie ma prawa tam być. Tam, gdzie woda zbiera się w korycie. Nos mi to mówi.
 
 [ignac.row.sprawdzil]
-@ignac: Wapno i ałun z cudzej kadzi, chłopcze. Idź wzdłuż rynny od cysterny. Tam, gdzie biało, tam szukaj.
+@ignac: Wapno i ałun z cudzej kadzi, chłopcze. Idź korytem w górę od dołu z wodą. Tam, gdzie biało, tam szukaj.
 
 [ignac.row.zly]
-@ignac: Po tym, co zrobiłeś, nie mam o czym rozmawiać. Ale nos mi mówi: wapno, ałun, wzdłuż rynny od cysterny.
+@ignac: Po tym, co zrobiłeś, nie mam o czym rozmawiać. Ale nos mi mówi: wapno, ałun, korytem w górę od dołu z wodą.
 
 # ======================================================================== rozdz. 4: rów
 [osad.1]
-> (Biały osad na kamieniach rynny. Wapno.)
+> (Biały osad na kamieniach koryta. Wapno.)
 
 [osad.2]
-> (Zbity biały osad. Rynna prowadzi ze wschodu, spod Garbarni.)
+> (Zbity biały osad. Koryto prowadzi ze wschodu, spod Garbarni.)
 
 [osad.3]
-> (Najgrubszy osad tuż przy cysternie. Ścieki wchodzą tu do wody.)
+> (Najgrubszy osad tuż przy dole z wodą. Ścieki wchodzą tu do wody.)
 
 osad.opcja.sloik = Zbierz osad do słoika.
 
@@ -348,7 +348,7 @@ osad.opcja.sloik = Zbierz osad do słoika.
 > (Płyta za Garbarnią jest zasypana. Kopię.)
 
 [plyta.znalazles]
-> (Pod płytą rura z kadzi Wawrzyna. Osad zbity jak skała. Ścieki idą wprost do rowu i do cysterny.)
+> (Pod płytą rura z kadzi Wawrzyna. Osad zbity jak skała. Ścieki idą wprost do rowu i korytem do wody.)
 
 [plyta.patrol]
 @wit: Stać! O tej porze nic tu nie robisz, chłopcze. Pouczam cię, ale ostatni raz.
@@ -357,14 +357,14 @@ osad.opcja.sloik = Zbierz osad do słoika.
 @wawrzyn: Nie mam czasu na rozmowy. Skóry nie czekają.
 
 [wawrzyn.start]
-@wawrzyn: Wiem, po co przyszedłeś. Rynna, osad, rura. Powiedz to prosto.
+@wawrzyn: Wiem, po co przyszedłeś. Koryto, osad, rura. Powiedz to prosto.
 
 wawrzyn.opcja.spokojnie = Zapytaj spokojnie.
 wawrzyn.opcja.przycisnij = Przyciśnij go.
 wawrzyn.opcja.ignac = Poproś Ignaca o pomoc.
 
 [wawrzyn.spokojnie]
-> Wawrzynie, ścieki z twoich kadzi idą do cysterny. Powiedz, jak to jest.
+> Wawrzynie, ścieki z twoich kadzi idą korytem do wody, którą piją ludzie. Powiedz, jak to jest.
 @wawrzyn: Nie miałem gdzie wylać. Dostałem budynek bez zbiornika i dwa dni na pierwszą dostawę dla wojska. Nikt nie dał mi osadnika.
 @wawrzyn: Nie chciałem nikogo truć, chłopcze. Naprawdę nie chciałem.
 
@@ -402,10 +402,10 @@ wawrzyn.opcja.materialy = Mam materiały.
 
 # ======================================================================== rozdz. 5: zebranie i wybór
 [s4.mysl]
-(Przed ratuszem staje półkole mieszkańców. Wawrzyn stoi z opuszczoną głową.)
+(Przy suchej studni staje półkole mieszkańców. Wawrzyn stoi z opuszczoną głową.)
 
 [s4.soltys]
-@soltys: Zebraliśmy się, bo nad miastem wisi gorączka. Chłopak mówi, że winna jest woda z cysterny, a woda to ścieki z Garbarni.
+@soltys: Zebraliśmy się, bo nad Podgrodziem wisi gorączka. Chłopak mówi, że winna jest woda z koryta, a woda to ścieki z Garbarni.
 @soltys: Wawrzynie, przyznajesz się? A ty, chłopcze, co proponujesz?
 
 [s4.ludmila]

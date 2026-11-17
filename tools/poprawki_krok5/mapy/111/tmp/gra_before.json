@@ -1,0 +1,30 @@
+{
+ "total": 10248,
+ "N": 98,
+ "S": 116,
+ "W": 0,
+ "E": 8,
+ "spots": {
+  "brama_pal_pd": true,
+  "glinianka": true,
+  "pit_in": true,
+  "dump_in": true,
+  "dump_2": true,
+  "pastwisko_brama": true,
+  "sad": true,
+  "pole": true,
+  "droga_pn": true,
+  "droga_pn2": true,
+  "przerwa_plot": true,
+  "placyk": true,
+  "plac_pd": true,
+  "wybieg_brama": true,
+  "chata": true,
+  "hay_s": true,
+  "kepa_s": true
+ },
+ "pockets": 0,
+ "pocketCells": 0,
+ "events": 368,
+ "pocketList": []
+}

@@ -11,7 +11,9 @@
  *
  * @help
  * DZIKI PIES
- *   Za dnia (8:00-19:00) po mapie domu kręci się dziki pies. Jest nieufny: gdy podejdziesz,
+ *   Za dnia (8:00-19:00) na łące pod skałami, na północny wschód od działki dziadka (Podgrodzie,
+ *   mapa 218), kręci się dziki pies. Przychodzi i odchodzi tam, gdzie go nie widać (nigdy nie
+ *   pojawia się ani nie znika na oczach). Jest nieufny: gdy podejdziesz,
  *   odsuwa się. Stań przed nim i naciśnij przycisk akcji: "Rzuć mu mięso" (dowolne mięso,
  *   surowe albo pieczone). Po trzech posiłkach (najwyżej jeden na godzinę) pies ci ufa.
  *
@@ -42,7 +44,12 @@
     if (!T) throw new Error("Dog.js: brak TawernaCore.js - musi być pierwszą wtyczką na liście (the Tawerna core is missing)");
     const RA = window.RoamingActor;
     const F = () => window.Farming;
-    const HOME_MAP = 3;
+    // (2026-11-17, the new world) the wild dog's home: the meadow under the cliffs north-east of grandpa's plot on Podgrodzie
+    // (Map218; x 42-60, y 7-17 - pines, flowers, the dead tree). It roams there by day and comes and goes only where the hero does not
+    // see it (the old world's Kruczy Jar, Map003, gave it the whole map and it popped in and out)
+    const HOME = { map: 218, area: [42, 7, 60, 17] };
+    const HOME_MAP = HOME.map;
+    const inHome = (x, y) => x >= HOME.area[0] && y >= HOME.area[1] && x <= HOME.area[2] && y <= HOME.area[3];
     const DOG = {
         sheet: "$Animal_Dog", run: "$Animal_Dog_Run", lie: "$Animal_Dog_Stalk",
         walk: 4, runSpeed: 5, crawl: 2.5,
@@ -236,11 +243,21 @@
             const away = RA.fleeDirection(this, this._realX - $gamePlayer._realX, this._realY - $gamePlayer._realY, { startAtDistance: true, margin: 0.05 });
             if (away) { this.moveStraight(away); return; }
         }
+        if (this._leaving) {   // (its hours over: off, away from the hero, out of his sight - Dog.sync takes it then)
+            const away = RA.fleeDirection(this, this._realX - $gamePlayer._realX, this._realY - $gamePlayer._realY, { startAtDistance: true, margin: 0.05 });
+            if (away) this.moveStraight(away);
+            return;
+        }
         if (d.trust > 0 && pd < 6) { this.turnTowardCharacter($gamePlayer); this._wait = 20; return; }   // (fed once: it watches him)
         if (--this._roam > 0) return;
         this._roam = 60 + Math.floor(Math.random() * 180);
+        // (on its meadow: the steps that keep it there - or, strayed off it, the ones back)
+        const step = k => [this._x + (k === 6) - (k === 4), this._y + (k === 2) - (k === 8)];
         const dirs = [2, 4, 6, 8].filter(k => this.canPass(this._x, this._y, k));
-        if (dirs.length && Math.random() < 0.7) this.moveStraight(dirs[Math.floor(Math.random() * dirs.length)]);
+        const home = $gameMap.mapId() !== HOME_MAP || inHome(this._x, this._y) ? dirs.filter(k => inHome(...step(k)) || $gameMap.mapId() !== HOME_MAP)
+            : dirs.filter(k => { const [nx, ny] = step(k), c = [(HOME.area[0] + HOME.area[2]) / 2, (HOME.area[1] + HOME.area[3]) / 2];
+                return Math.hypot(nx - c[0], ny - c[1]) < Math.hypot(this._x - c[0], this._y - c[1]); });
+        if (home.length && Math.random() < 0.7) this.moveStraight(home[Math.floor(Math.random() * home.length)]);
     };
 
     // ------------------------------------------------------------------
@@ -617,13 +634,19 @@
     function freeTile(x, y) {
         return $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && $gameMap.eventsXy(x, y).length === 0 && !(F() && F().buildingAt(x, y));
     }
-    function farSpot(minDist) {
-        const W = $gameMap.width(), H = $gameMap.height();
-        for (let tries = 0; tries < 400; tries++) {
-            const x = 2 + Math.floor(Math.random() * (W - 4)), y = 2 + Math.floor(Math.random() * (H - 4));
-            if (freeTile(x, y) && Math.hypot(x - $gamePlayer.x, y - $gamePlayer.y) >= minDist) return { x, y };
+    // a cell the hero may see now (the screen with a margin; the map's zoom only shows less)
+    function seen(x, y) {
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), sx = $gameMap.adjustX(x) * tw, sy = $gameMap.adjustY(y) * th;
+        return sx > -tw * 2 && sx < Graphics.width + tw && sy > -th * 2 && sy < Graphics.height + th * 2;
+    }
+    // where the wild dog comes from: a free cell of its meadow out of the hero's sight (the map just entered - its fade - anywhere
+    // there 12 tiles off will do); null: not now
+    function wildSpot(fresh) {
+        const cells = [];
+        for (let y = HOME.area[1]; y <= HOME.area[3]; y++) for (let x = HOME.area[0]; x <= HOME.area[2]; x++) {
+            if (freeTile(x, y) && Math.hypot(x - $gamePlayer.x, y - $gamePlayer.y) >= (fresh ? 12 : 8) && (fresh || !seen(x, y))) cells.push({ x, y });
         }
-        return null;
+        return cells.length ? cells[Math.floor(Math.random() * cells.length)] : null;
     }
     function nearFree(x0, y0) {
         for (let r = 1; r <= 4; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
@@ -653,15 +676,21 @@
         if (dog._drag) dog._drag = null;
         dog = null;
     }
-    let auto = true;
+    let auto = true, fresh = true;   // (fresh: the first look on a map just entered - it fades in, nobody sees anything appear)
     function sync() {
         if (!auto || !$gameMap || !$dataMap || !F() || !$gamePlayer) return;
-        const d = state();
+        const d = state(), first = fresh;
+        fresh = false;
         if (!d.tame) {
             const out = $gameMap.mapId() === HOME_MAP && hour() >= DOG.wildHours[0] && hour() < DOG.wildHours[1];
-            if (!out) { if (dog) removeDog(); d.x = -1; return; }
+            if (!out) {
+                // its hours over: away to where nobody sees it (it walks off first if the hero is looking)
+                if (dog && (first || !seen(dog.x, dog.y) || ++dog._leaveT > 40)) removeDog();
+                else if (dog && !dog._leaving) { dog._leaving = true; dog._leaveT = 0; }
+                d.x = -1; return;
+            }
             if (!dog) {
-                const s = d.x >= 0 && freeTile(d.x, d.y) ? { x: d.x, y: d.y } : farSpot(12);
+                const s = d.x >= 0 && freeTile(d.x, d.y) && inHome(d.x, d.y) && (first || !seen(d.x, d.y)) ? { x: d.x, y: d.y } : wildSpot(first);
                 if (s) spawnDog(s.x, s.y);
             }
             return;
@@ -954,8 +983,8 @@
     // ------------------------------------------------------------------
     // The map scene drives it (the core's map clock and events; the dog's own step stays in Game_Map.update, among the characters)
     // ------------------------------------------------------------------
-    T.on("load", () => { dog = null; }, { owner: PLUGIN });
-    T.on("mapEnter", () => { dog = null; }, { owner: PLUGIN });
+    T.on("load", () => { dog = null; fresh = true; }, { owner: PLUGIN });
+    T.on("mapEnter", () => { dog = null; fresh = true; }, { owner: PLUGIN });
     const _Game_Map_update = Game_Map.prototype.update;
     Game_Map.prototype.update = function(sceneActive) {
         _Game_Map_update.call(this, sceneActive);

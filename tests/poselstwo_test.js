@@ -203,7 +203,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const ft = await gadaj(3080, []);
     const w44c = await W("D44");
     t.check("22:45 na korytarzu gości: Feliks pod czwórką (zdarzenie 3080), zauważony - „Nie stój w przejściu”; raport",
-        !!fe && fe.shown && fe.x === 37 && fe.y === 16 && fe.sheet === "$Npc_Feliks" && (await J("Podroznicy5.stan().d44.feliks")) > 0 && /Nie stój w przejściu/.test(ft.text) && w44c.name === "d44Raport", { fe, ft: ft.text, w44c });
+        !!fe && fe.shown && fe.x === 22 && fe.y === 16 && fe.sheet === "$Npc_Feliks" && (await J("Podroznicy5.stan().d44.feliks")) > 0 && /Nie stój w przejściu/.test(ft.text) && w44c.name === "d44Raport", { fe, ft: ft.text, w44c });
     const fv2 = await J("Garnizon.favor()");
     const ra = await rozmowa("poborca", ["To Feliks"]);
     const f7 = await flags(), w44d = await W("D44");

@@ -2,6 +2,8 @@
 // kennel it works alone: gathers branches / stones / fibre into the stockpile (shown at the top of the screen), eats berries and
 // the like, drinks from a clay pot or a puddle, hunts a rabbit and drags the carcass to the stockpile, sleeps at the kennel by
 // night, lies there a day when its life is gone. Half the hero's life and strength. Kennel and stockpile are buildings.
+// (2026-11-17, the new world: the wild dog's home is the meadow under the cliffs north-east of grandpa's plot on Podgrodzie, Map218 -
+// it comes and goes out of the hero's sight; the kennel and the stockpile stand on the plot, inside its fence. It was Map003.)
 const { launch, sleep } = require("./cdp.js");
 (async () => {
     const b = await launch({ width: 1280, height: 720, dpr: 1 });
@@ -12,8 +14,8 @@ const { launch, sleep } = require("./cdp.js");
     try {
         await b.send("Page.navigate", { url: "http://127.0.0.1:8765/index.html" });
         for (let i = 0; i < 120; i++) { if (await ev("!!(window.SceneManager && SceneManager._scene && SceneManager._scene.constructor.name==='Scene_Title')").catch(() => false)) break; await sleep(500); }
-        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 26, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
-        for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
+        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(218, 30, 18, 2, 0); SceneManager.goto(Scene_Map); })()`);
+        for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===218").catch(() => false)) break; await sleep(500); }
         await sleep(1500);
         await ev("SceneManager._scene.startFadeIn(1,false); Survival.calmWeather(); $gameScreen.clearWeather(); if (window.Needs) Needs.setEnabled(false); Hunting.auto(false); for (const a of Hunting.animals.slice()) Hunting.removeAnimal(a); $gameSystem.setDayNightHour(10); $gameSystem._minimapHidden = true; 0");
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
@@ -29,8 +31,18 @@ const { launch, sleep } = require("./cdp.js");
         // the wild dog
         await ev("Dog.sync(); 0");
         await frames(10);
-        const wild = await J("({ dog: !!Dog.dog, tame: Dog.state().tame, img: Dog.dog && Dog.dog.characterName() })");
-        check("by day a wild dog is on the home map (the brown dog sheet), not tame", wild.dog && !wild.tame && wild.img === "$Animal_Dog", wild);
+        const wild = await J("({ dog: !!Dog.dog, tame: Dog.state().tame, img: Dog.dog && Dog.dog.characterName(), x: Dog.dog && Dog.dog.x, y: Dog.dog && Dog.dog.y })");
+        check("by day a wild dog is on its meadow on Podgrodzie (x 42-60, y 7-17; the brown dog sheet), not tame", wild.dog && !wild.tame && wild.img === "$Animal_Dog" && wild.x >= 42 && wild.x <= 60 && wild.y >= 7 && wild.y <= 17, wild);
+        // its hours over (19:00): it goes off out of his sight - with him looking, it walks away first; the morning: back where he does not look
+        const leave = await J(`(function(){ const d = Dog.dog; $gamePlayer.locate(d.x - 3, d.y); $gameSystem.setDayNightHour(19.2); Dog.sync(); return { still: !!Dog.dog, leaving: !!(Dog.dog && Dog.dog._leaving) }; })()`);
+        await frames(30 * 45);
+        const gone = await J("({ dog: !!Dog.dog })");
+        await ev("$gameSystem.setDayNightHour(10); $gamePlayer.locate(50, 12); Dog.sync(); 0");
+        await frames(10);
+        const back = await J(`({ dog: !!Dog.dog, seen: !!Dog.dog && (function(){ const tw = 48, sx = $gameMap.adjustX(Dog.dog.x) * tw, sy = $gameMap.adjustY(Dog.dog.y) * tw; return sx > -96 && sx < Graphics.width + 48 && sy > -96 && sy < Graphics.height + 96; })() })`);
+        check("at 19:00 with the hero looking it walks off first, then is gone; by day it comes back only where he does not see it", leave.still && leave.leaving && !gone.dog && !back.seen, { leave, gone, back });
+        await ev("$gamePlayer.locate(30, 18); $gameSystem.setDayNightHour(10); 0");
+        await until("!!Dog.dog", 20);
         // it keeps away from him
         await ev("(function(){ const d = Dog.dog; $gamePlayer.locate(d.x, d.y + 2); return 0; })()");
         await frames(90);
@@ -72,7 +84,7 @@ const { launch, sleep } = require("./cdp.js");
             }
             return null; })()`);
         check("found room for a kennel and a stockpile", !!spot, spot);
-        await ev(`(function(){ const f = $gameSystem._farm; const list = (f.buildings[3] = f.buildings[3] || []);
+        await ev(`(function(){ const f = $gameSystem._farm; const list = (f.buildings[218] = f.buildings[218] || []);
             list.push({ id: f.nextId++, type: "stockpile", x: ${spot.x}, y: ${spot.y}, last: 1 }); list.push({ id: f.nextId++, type: "doghouse", x: ${spot.x + 4}, y: ${spot.y}, last: 1 }); f.rev++; return 0; })()`);
         await frames(20);
         const menu = await J("(function(){ const d = Dog.dog; $gamePlayer.locate(d.x, d.y + 1); $gamePlayer.setDirection(8); Dog.openDogMenu(); const m = SceneManager._scene._farmMenu; const names = m && m._list ? m._list.map(e => e.name) : []; SceneManager._scene.closeFarmMenu && SceneManager._scene.closeFarmMenu(); $gameTemp._farmMenuOpen = false; return names; })()");
@@ -91,14 +103,14 @@ const { launch, sleep } = require("./cdp.js");
         const ate = await until("Dog.state().food > 20", 60);
         check("hungry: it finds berries / mushrooms / wild vegetables and eats", ate, await ev("Dog.state().food.toFixed(1)"));
         await ev(`(function(){ const f = $gameSystem._farm; const d = Dog.dog; const s = Dog.state(); s.water = 8; d._task = null;
-            f.buildings[3].push({ id: f.nextId++, type: "clay_pot", x: (function(){ for (let dx = 2; dx < 8; dx++) { const x = d.x + dx; if (!Farming.whyNotBuild("clay_pot", x, d.y) && !(Dog.kennel() && x === Dog.kennel().x && d.y === Dog.kennel().y + 1)) return x; } return d.x + 2; })(), y: d.y, last: 1, water: 3, wt: $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour() }); f.rev++; return 0; })()`);
+            f.buildings[218].push({ id: f.nextId++, type: "clay_pot", x: (function(){ for (let dx = 2; dx < 8; dx++) { const x = d.x + dx; if (!Farming.whyNotBuild("clay_pot", x, d.y) && !(Dog.kennel() && x === Dog.kennel().x && d.y === Dog.kennel().y + 1)) return x; } return d.x + 2; })(), y: d.y, last: 1, water: 3, wt: $gameSystem.dayNightDay() * 24 + $gameSystem.dayNightHour() }); f.rev++; return 0; })()`);
         await frames(5);
-        const pot0 = await ev("(function(){ const p = $gameSystem._farm.buildings[3].find(b => b.type === 'clay_pot'); return Farming.bucketUnits(p); })()");
+        const pot0 = await ev("(function(){ const p = $gameSystem._farm.buildings[218].find(b => b.type === 'clay_pot'); return Farming.bucketUnits(p); })()");
         const drank = await until("Dog.state().water > 30", 60);
-        check("thirsty: it drinks (the clay pot nearby: a portion of its rain water)", drank && pot0 >= 1, { water: await ev("Dog.state().water.toFixed(1)"), pot0, pot1: await ev("Farming.bucketUnits($gameSystem._farm.buildings[3].find(b => b.type === 'clay_pot'))") });
+        check("thirsty: it drinks (the clay pot nearby: a portion of its rain water)", drank && pot0 >= 1, { water: await ev("Dog.state().water.toFixed(1)"), pot0, pot1: await ev("Farming.bucketUnits($gameSystem._farm.buildings[218].find(b => b.type === 'clay_pot'))") });
 
         // a well: water for good - it drinks there too (asking the well for its rain portions stopped the game: "reading 'leak'")
-        await ev(`(function(){ const f = $gameSystem._farm, d = Dog.dog, list = f.buildings[3]; for (const p of list.filter(b => b.type === "clay_pot")) list.splice(list.indexOf(p), 1);
+        await ev(`(function(){ const f = $gameSystem._farm, d = Dog.dog, list = f.buildings[218]; for (const p of list.filter(b => b.type === "clay_pot")) list.splice(list.indexOf(p), 1);
             let at = null; for (let r = 2; r < 10 && !at; r++) for (let dy = -r; dy <= r && !at; dy++) for (let dx = -r; dx <= r && !at; dx++) if (!Farming.whyNotBuild("well", d.x + dx, d.y + dy, false, true)) at = { x: d.x + dx, y: d.y + dy };
             list.push({ id: f.nextId++, type: "well", x: at.x, y: at.y, last: 1, v: 3 }); f.rev++; Dog.state().water = 8; d._task = null; return 0; })()`);
         const atWell = await until("Dog.state().water > 30", 12);
@@ -162,7 +174,7 @@ const { launch, sleep } = require("./cdp.js");
         if (!(deerKilled && deerHome)) console.log("DEBUG", JSON.stringify(await J(`(function(){ const d = Dog.dog, s = Dog.stockpile(); const sp = { x: s.x + 1, y: s.y + 1 };
             return { at: [d.x, d.y], real: [+d._realX.toFixed(2), +d._realY.toFixed(2)], moving: d.isMoving(), stuck: d._stuck, wait: d._wait, task: d._task && d._task.kind, frozen: d._frozen, mode: Dog.state().mode, st: Dog.state().st, hurt: Dog.state().hurtUntil,
                 pass: [2, 4, 6, 8].map(k => d.canPass(d.x, d.y, k)), dirToStock: d.findDirectionTo(sp.x, sp.y), deer: window.__deer && [window.__deer.x, window.__deer.y, window.__deer._hp], dirToDeer: window.__deer ? d.findDirectionTo(window.__deer.x, window.__deer.y) : -1,
-                huntT: d._huntT, prey: !!Dog.findPrey(d, true), buildingsNear: $gameSystem._farm.buildings[3].filter(b => Math.abs(b.x - d.x) < 4 && Math.abs(b.y - d.y) < 4).map(b => b.type + "@" + b.x + "," + b.y) }; })()`)));
+                huntT: d._huntT, prey: !!Dog.findPrey(d, true), buildingsNear: $gameSystem._farm.buildings[218].filter(b => Math.abs(b.x - d.x) < 4 && Math.abs(b.y - d.y) < 4).map(b => b.type + "@" + b.x + "," + b.y) }; })()`)));
         check("a deer takes about three bites (each a third of its life)", deerBites * 3 >= 40 && deerBites * 2 < 40, deerBites);
         // a deer that breaks away: after the first bite it gets away wounded, the dog gives it up
         await ev(`(function(){ Dog.DOG.deerEscape = 1; const s = Dog.state(); s.st = Dog.maxSt(); s.carry = []; const d = Dog.dog; d._task = null; d._huntT = 0;

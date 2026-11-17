@@ -610,7 +610,7 @@ def floor_data(i, fl, g, info):
     # Tawerna 2 (listening, agent B): the hero listens from the corridor cell in front of a door; the cell in front of him must be in no
     # room and the one behind it in the room -> the door-down rooms' rects run through the wall face down to the cell behind the door's
     # row, and the corridors' rects hold their floor only (their wall-face rows above belong to nobody)
-    EXT = {25: {"r3": 14, "r1": 14, "r2": 14, "r4": 14, "r5": 14, "r12": 14, "r8": 47, "r7": 47, "chamber": 47, "r11": 47}, 26: {"lorda": 20}}
+    EXT = {25: {"r3": 14, "r1": 14, "r2": 14, "r4": 14, "r5": 14, "r12": 14, "r8": 47, "r7": 47, "chamber": 47, "r11": 47}, 26: {"lordb": 14, "lorda": 14, "lib": 14, "s2a": 14, "chamber": 14}}
     for r in g["rooms"]:
         rects = [list(q) for q in G.cover_rects(r.region)]
         if r.key in ("nc", "sc"): rects = [list(q) for q in G.cover_rects(r.floor)]
@@ -650,7 +650,7 @@ def arrivals(datas, geos):
             if ln["map"] in by:
                 by[ln["map"]]["arrive"].setdefault(str(g["map"]), list(ln["to"]))
     # Tawerna 2 (second method): the middle of each flight's landing cells (uklad.txt)
-    FIX = {1: {"25": [26, 53]}, 25: {"1": [26, 53], "26": [2, 53]}, 26: {"25": [2, 53]}}   # (W box = up, E box = down; the stair events' targets)
+    FIX = {1: {"25": [26, 35]}, 25: {"1": [26, 35], "26": [6, 35]}, 26: {"25": [6, 35]}}   # (W box = up, E box = down; the stair events' targets)
     for d in datas:
         d["arrive"].update(FIX.get(d["map"], {}))
     return datas

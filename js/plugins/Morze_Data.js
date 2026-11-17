@@ -35,8 +35,10 @@
 
     // ------------------------------------------------------------------ places
     // the maps that give onto the open sea (<Water:salt>) and are part of the world; the town (Map008) lies inland: the monsters come to it
-    const MAP = { miasto: 8, przystan: 125, garnizon: 162, dziadek: 20, jar: 3, laka: 4, gory: 13, podgrodzie: 111, posiadlosc: 24, tawerna: 1, kaplica: 8 };
-    const RING = [3, 4, 13, 20, 24, 111, 125, 162];
+    // (2026-11-16) the new world: ONE map gives onto the sea - Słony Brzeg (Map219: the pier, the wreck, the lighthouse); the town is Kruczogród
+    // (Map220). No garrison map (0: its multiplier never is "own"); the old shores Kruczy Jar and Łąka are gone (0).
+    const MAP = { miasto: 220, przystan: 219, garnizon: 0, dziadek: 218, jar: 0, laka: 0, gory: 222, podgrodzie: 218, posiadlosc: 221, tawerna: 1, kaplica: 220 };
+    const RING = [219];
     const OUT_OF_WORLD = [17, 18, 21, 177];   // (older parked maps that carry the tag: no landings there)
     const NO_SEA_MAPS_ABOVE = 899;            // (the test maps 9xx)
 
@@ -50,7 +52,8 @@
         fire: 0.5,                                    // each shore point under a fire (within FIRE_R tiles) takes this share off: x(1 - 0.5 * covered fraction)
         bell: 0.85,                                   // the bell at dusk (chapter 2): DAYS days after it was rung
         guard: 0.6,                                   // the "watch" of the sea (chapter 7, the hero's choice "odsunąć")
-        red: 1.5, storm: 1.3, town: 0.5
+        red: 1.5, storm: 1.3, town: 0.5,
+        podgrodzie: 0.75                              // (2026-11-16) Podgrodzie - the first settlement past the coast: three quarters of the harbour's chance
     };
     const FIRE_R = 8, BELL_DAYS = 10;
     // the endings of the Heart (Underground.ending().kind) change the chance after the player's choices (the doc, chapter 9)
@@ -243,13 +246,13 @@
         skoki: {
             przed: [{ hak: "f9Przygotuj" }],
             lista: {
-                1: { ch: 1, krok: "w23Slady", godzina: 9, idz: [MAP.przystan, 60, 70, 8] },
-                2: { ch: 2, krok: "w23Dzwon", godzina: 10, idz: [MAP.miasto, 51, 31, 8] },
-                3: { ch: 3, krok: "w23Mgly", godzina: 10, idz: [MAP.miasto, 51, 31, 8] },
-                4: { ch: 4, krok: "w23Kronika", godzina: 10, idz: [MAP.miasto, 51, 31, 8] },
-                5: { ch: 5, krok: "w23Kapitan", godzina: 21, idz: [MAP.miasto, 51, 31, 8] },
-                6: { ch: 6, krok: "w23Zapisy", godzina: 10, idz: [MAP.miasto, 51, 31, 8] },
-                7: { ch: 7, krok: "w23Kraken", godzina: 22, idz: [MAP.przystan, 60, 70, 8] }
+                1: { ch: 1, krok: "w23Slady", godzina: 9, idz: [MAP.przystan, 32, 47, 8] },
+                2: { ch: 2, krok: "w23Dzwon", godzina: 10, idz: [MAP.miasto, 43, 37, 8] },
+                3: { ch: 3, krok: "w23Mgly", godzina: 10, idz: [MAP.miasto, 43, 37, 8] },
+                4: { ch: 4, krok: "w23Kronika", godzina: 10, idz: [MAP.miasto, 43, 37, 8] },
+                5: { ch: 5, krok: "w23Kapitan", godzina: 21, idz: [MAP.miasto, 43, 37, 8] },
+                6: { ch: 6, krok: "w23Zapisy", godzina: 10, idz: [MAP.miasto, 43, 37, 8] },
+                7: { ch: 7, krok: "w23Kraken", godzina: 22, idz: [MAP.przystan, 32, 47, 8] }
             }
         }
     });

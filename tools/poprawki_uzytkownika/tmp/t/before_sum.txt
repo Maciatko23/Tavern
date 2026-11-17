@@ -1,0 +1,7 @@
+before zasoby: 59/60 passed
+before questy_mapa: 17/17 passed
+before zakon: 0/1 passed
+before field_loss: 50/54 passed
+before przystan: 33/35 passed
+before pustelnia: 37/37 passed
+before debug_menu: 83/83 passed

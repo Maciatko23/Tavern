@@ -41,7 +41,7 @@
         "crop.growth": "%", "crop.yield": "%", "crop.double": "%", "seed.chance": "%", "water.days": "n", "can.charges": "n", "farm.cost": "%",
         "produce.more": "%", "birds.raid": "%",
         "build.hits": "%", "build.cost": "%", "build.refund": "%", "build.spare": "%",
-        "craft.speed": "%", "cook.speed": "%", "smelt.speed": "%", "craft.save": "%", "craft.double": "%", "cook.double": "%", "tool.wear": "%", "fire.fuel": "%", "sell": "%",
+        "craft.speed": "%", "cook.speed": "%", "smelt.speed": "%", "forge.luck": "%", "craft.save": "%", "craft.double": "%", "cook.double": "%", "tool.wear": "%", "fire.fuel": "%", "sell": "%",
         "aim.speed": "%", "ranged.dmg": "%", "ranged.crit": "%", "ammo.save": "%", "shot.cooldown": "%", "sneak": "%", "hunt.dmg": "%",
         "carcass.meat": "%", "carcass.hide": "%", "carcass.sinew": "%", "snare.lure": "%", "fish": "%", "feathers": "n", "sneak.dmg": "%",
         "disarm": "%", "surrender": "%", "surrender.at": "%", "mind.resist": "%", "mind.short": "%", "mind.back": "s", "mind.see": "n"
@@ -160,12 +160,12 @@
         // ---- Rzemiosło
         S("c_fast", "craft", 0, 2, { ranks: 3, fx: { "craft.speed": 0.08 } }),
         S("c_save", "craft", 1, 1, { ranks: 3, from: ["c_fast"], fx: { "craft.save": 0.1 } }),
-        S("c_smelt", "craft", 1, 3, { ranks: 2, from: ["c_fast"], attr: { str: 12 }, fx: { "smelt.speed": 0.15 } }),
+        S("c_smelt", "craft", 1, 3, { ranks: 2, from: ["c_fast"], attr: { str: 12 }, fx: { "smelt.speed": 0.15, "forge.luck": 0.05 } }),   // (forge.luck: Bron_Cechy.js udane kucie)
         S("c_wear", "craft", 2, 2, { ranks: 3, from: ["c_save", "c_smelt"], fx: { "tool.wear": 0.12 } }),
         S("c_double", "craft", 2, 0, { ranks: 2, from: ["c_save"], fx: { "craft.double": 0.08 } }),
         S("c_repair", "craft", 3, 3, { from: ["c_wear"] }),
         S("c_trade", "craft", 3, 1, { ranks: 2, from: ["c_double", "c_wear"], attr: { per: 10 }, fx: { "sell": 0.15 } }),
-        S("c_master", "craft", 4, 2, { from: ["c_trade", "c_repair"], attr: { per: 20 }, fx: { "craft.speed": 0.15, "craft.save": 0.1 } }),
+        S("c_master", "craft", 4, 2, { from: ["c_trade", "c_repair"], attr: { per: 20 }, fx: { "craft.speed": 0.15, "craft.save": 0.1, "forge.luck": 0.1 } }),
 
         // ---- Budownictwo
         S("b_hits", "build", 0, 2, { ranks: 3, fx: { "build.hits": 0.1 } }),

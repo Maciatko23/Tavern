@@ -1,0 +1,19 @@
+# Noc w tawernie (Karczma_Noc.js): Borgar drzemie za ladą, łaźnia nieczynna, izba służby zamknięta.
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz karczma_noc
+# Każda linijka w bloku to jedna kwestia; gra losuje jedną.
+
+# ======================================================================== Borgar zbudzony za ladą (dymek nad nim, zanim zacznie rozmowę)
+[borgar.budzi]
+Hę?! ...Już, już. Nie śpię. Czego trzeba?
+Mhm... Kto tam? A, to ty. Mów.
+Oczu nie zamknąłem. Prawie. Słucham.
+Karczma nie śpi, to i ja nie śpię. ...Chyba. Co podać?
+
+# ======================================================================== Borgar przez sen (dymek, gdy bohater stoi blisko)
+[borgar.chrapie]
+Chrrr... pięć kufli... chrrr...
+...nie na kredyt... mhm...
+
+# ======================================================================== zamknięte nocą (napis nad bohaterem)
+izba.zamknieta = Służba śpi. Lepiej nie budzić - od szóstej znów na nogach.

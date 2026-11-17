@@ -1,0 +1,29 @@
+{
+ "mode": "before",
+ "r": {
+  "total": 10498,
+  "outside": 7605,
+  "edges": {
+   "top": 98,
+   "bottom": 114,
+   "left": 0,
+   "right": 8,
+   "c": {
+    "N106": true,
+    "N107": true,
+    "N108": true,
+    "E50": true,
+    "E51": true,
+    "E106": true,
+    "E107": true,
+    "S35": true,
+    "S44": true,
+    "S54": true
+   }
+  },
+  "spots": {
+   "n": 63,
+   "bad": []
+  }
+ }
+}

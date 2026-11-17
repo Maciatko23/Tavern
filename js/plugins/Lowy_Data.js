@@ -72,9 +72,10 @@
     // ------------------------------------------------------------------ B1 the wolves' den (Map023), Szary Kieł's place
     const NORA = {
         // (2026-11-11 plansza: Skraj lasu is the east edge of Kruczy Jar - the den was Map023 (65,50), moved by +30, -20)
-        map: 3, x: 95, y: 30, cells: { x: 94, y: 29, w: 3, h: 2 }, zone: 6, rest: [95, 32], restNear: 2.5,
-        bounty: [96, 31], gift: [96, 32], dayHours: [5, 20], adults: 2, pups: [2, 3], pupScale: 0.55,
-        meatR: 3, meatDays: 3, emptyDays: 28, giftEvery: 7, friendMaps: [3, 4], discoverNear: 8
+        // (2026-11-13 nowy świat: Krucze Turnie, Map222 - południowy las)
+        map: 222, x: 44, y: 61, cells: { x: 43, y: 60, w: 3, h: 2 }, zone: 6, rest: [44, 63], restNear: 2.5,
+        bounty: [45, 62], gift: [45, 63], dayHours: [5, 20], adults: 2, pups: [2, 3], pupScale: 0.55,
+        meatR: 3, meatDays: 3, emptyDays: 28, giftEvery: 7, friendMaps: [222, 218], discoverNear: 8
     };
     // the wolf cub: the wolf's sheet made small (QuestBoard's _qbScale), a grazer (no `aggressive`, no `pack`: it runs from the hero)
     // and no YIELD entry: nothing to dress
@@ -83,16 +84,19 @@
 
     // ------------------------------------------------------------------ B2 the bear's den (Map013)
     const GAWRA = {
-        map: 13, home: [99, 71], ev: [100, 70], side: [99, 70], mouth: { x: 99, y: 69, w: 2, h: 2 }, front: { x: 99, y: 71, w: 2, h: 1 },
+        // (2026-11-13 nowy świat: Krucze Turnie, Map222 - pod północną skałą, w lesie na zachodzie)
+        map: 222, home: [14, 10], ev: [15, 9], side: [14, 9], mouth: { x: 14, y: 8, w: 2, h: 2 }, front: { x: 14, y: 10, w: 2, h: 1 },
         seasons: [0, 1, 2], hours: [4, 22], snoreR: 6, rageSec: 60, rageMul: 1.2, calmR: 12, oneR: 22
     };
 
     // ------------------------------------------------------------------ B3 the boars' wallow (Map021), Czarny Ryj's place
-    const BLOTO = { map: 21, x: 65, y: 46, w: 4, h: 3, ev: [67, 48], bounty: [66, 47], hours: [[5, 9], [17, 21]], boars: [2, 3],
+    // (2026-11-13 nowy świat: Krucze Turnie, Map222 - wschodni las)
+    const BLOTO = { map: 222, x: 65, y: 50, w: 4, h: 3, ev: [67, 52], bounty: [66, 51], hours: [[5, 9], [17, 21]], boars: [2, 3],
         tusk: 0.2, muddyHours: 2, sneak: 0.3, from: 9 };
 
     // ------------------------------------------------------------------ B4 the salt lick (Map004)
-    const LIZAWKA = { map: 4, x: 73, y: 51, hide: [70, 53], antler: [74, 52], days: 6, hours: [[5, 8], [18, 21]], r: 9, deer: [1, 3],
+    // (2026-11-13 nowy świat: Krucze Turnie, Map222 - polana w południowym lesie)
+    const LIZAWKA = { map: 222, x: 27, y: 61, hide: [24, 63], antler: [28, 62], days: 6, hours: [[5, 8], [18, 21]], r: 9, deer: [1, 3],
         lick: [1200, 2400], antlerChance: 0.2, hideSneak: 0.5, hideAim: 0.8, price: 12 };
 
     // ------------------------------------------------------------------ B5 the fixed camps (Humans.fixedCamp)
@@ -106,13 +110,16 @@
 
     // ------------------------------------------------------------------ B6 the Lord's game park (Map024)
     const ZWIERZYNIEC = {
-        map: 24, gap: [[27, 89], [28, 89]], inside: [27, 91],
-        // the park: the whole new part of the map (x 0-78 below the hedge's row 29, x 40-78 above it)
-        areas: [{ x0: 0, y0: 30, x1: 78, y1: 57 }, { x0: 40, y0: 0, x1: 78, y1: 29 }],
-        hut: [81, 64], hutCells: { x: 79, y: 62, w: 5, h: 3 }, door: [81, 65], feeder: [80, 82], feederCells: { x: 79, y: 82, w: 2, h: 1 },
-        snares: [[40, 106], [65, 98], [86, 72]], patrol: [[33, 100], [50, 110], [73, 105], [91, 80], [81, 65]],
+        // (2026-11-13 nowy świat: Dwór nad Jazem, Map221 - las Lorda za płotem x 4..40, wiersze 55..72, brama przy mostku (28..30, 55);
+        // wyłom = dziura kłusowników w zachodnim płocie (4, 62..63), gapPic: jej obrazek (pionowy), out: pole za nią, first: gdzie bohater
+        // pierwszy raz słyszy „zwierzyniec”)
+        map: 221, gap: [[4, 62], [4, 63]], gapPic: "!$Low_Wylom_Pion", out: [3, 62], inside: [6, 62],
+        first: [{ x0: 5, y0: 61, x1: 8, y1: 64 }, { x0: 27, y0: 56, x1: 31, y1: 57 }],
+        areas: [{ x0: 5, y0: 56, x1: 39, y1: 72 }],
+        hut: [14, 60], hutCells: { x: 12, y: 58, w: 5, h: 3 }, door: [14, 61], feeder: [23, 60], feederCells: { x: 22, y: 60, w: 2, h: 1 },
+        snares: [[10, 66], [27, 64], [36, 69]], patrol: [[29, 57], [33, 63], [26, 70], [12, 70], [16, 63]],
         deer: [4, 6], boars: 2, sight: 7, findR: 2.5, findHours: 2, fines: [40, 60, 80], opinion: -3, closeDays: 7, permitDays: 7,
-        rysiek: [66, 98], ambushHours: [22, 3]
+        rysiek: [9, 64], ambushHours: [22, 3]
     };
 
     // ------------------------------------------------------------------ B7 the strays of the Ług farm (Map168)
@@ -142,22 +149,22 @@
     // ------------------------------------------------------------------ the places (Okolice.registerSpots("B", ...); the collision test) -
     // their names: js/teksty/lowy.txt, miejsca.<key> (Lowy.js registers them once the words are in)
     const SPOTS = [
-        { key: "nora_wilcza", map: 3, kind: "den", mode: "reach", x: 94, y: 29, w: 3, h: 2 },
-        { key: "szary_kiel", map: 3, kind: "bounty", mode: "reach", cells: [[96, 31]] },
+        { key: "nora_wilcza", map: 222, kind: "den", mode: "reach", x: 43, y: 60, w: 3, h: 2 },
+        { key: "szary_kiel", map: 222, kind: "bounty", mode: "reach", cells: [[45, 62]] },
         { key: "oboz_czo", map: 3, kind: "camp", mode: "reach", x: 94, y: 40, w: 6, h: 5 },
         { key: "oboz_bandytow", map: 4, kind: "camp", mode: "reach", x: 85, y: 37, w: 6, h: 5 },
-        { key: "blotnisko", map: 21, kind: "wallow", mode: "reach", x: 65, y: 46, w: 4, h: 3 },
-        { key: "gawra_wejscie", map: 13, kind: "den", mode: "wall", x: 99, y: 69, w: 2, h: 2 },
-        { key: "gawra_pole", map: 13, kind: "den", mode: "reach", x: 99, y: 71, w: 2, h: 1 },
-        { key: "lizawka", map: 4, kind: "lick", mode: "reach", x: 73, y: 51, w: 1, h: 1 },
-        { key: "zasiadka", map: 4, kind: "hide", mode: "reach", x: 70, y: 53, w: 1, h: 1 },
-        { key: "poroze_zrzut", map: 4, kind: "antler", mode: "reach", x: 74, y: 52, w: 1, h: 1 },
-        { key: "wylom_zywoplot", map: 24, kind: "gap", mode: "reach", x: 27, y: 89, w: 2, h: 1, allowOld: true },
-        { key: "lesniczowka", map: 24, kind: "hut", mode: "reach", x: 79, y: 62, w: 5, h: 3 },
-        { key: "pasnik", map: 24, kind: "feeder", mode: "reach", x: 79, y: 82, w: 2, h: 1 },
-        { key: "sidla_zwierzyniec", map: 24, kind: "snares", mode: "reach", cells: [[40, 106], [65, 98], [86, 72]] },
-        { key: "patrol_gajowego", map: 24, kind: "patrol", mode: "reach", cells: [[33, 100], [50, 110], [73, 105], [91, 80], [81, 65]] },
-        { key: "rysiek_zasadzka", map: 24, kind: "npc", mode: "reach", cells: [[66, 98]] },
+        { key: "blotnisko", map: 222, kind: "wallow", mode: "reach", x: 65, y: 50, w: 4, h: 3 },
+        { key: "gawra_wejscie", map: 222, kind: "den", mode: "wall", x: 14, y: 8, w: 2, h: 2 },
+        { key: "gawra_pole", map: 222, kind: "den", mode: "reach", x: 14, y: 10, w: 2, h: 1 },
+        { key: "lizawka", map: 222, kind: "lick", mode: "reach", x: 27, y: 61, w: 1, h: 1 },
+        { key: "zasiadka", map: 222, kind: "hide", mode: "reach", x: 24, y: 63, w: 1, h: 1 },
+        { key: "poroze_zrzut", map: 222, kind: "antler", mode: "reach", x: 28, y: 62, w: 1, h: 1 },
+        { key: "wylom_zywoplot", map: 221, kind: "gap", mode: "reach", x: 4, y: 62, w: 1, h: 2, allowOld: true },
+        { key: "lesniczowka", map: 221, kind: "hut", mode: "reach", x: 12, y: 58, w: 5, h: 3 },
+        { key: "pasnik", map: 221, kind: "feeder", mode: "reach", x: 22, y: 60, w: 2, h: 1 },
+        { key: "sidla_zwierzyniec", map: 221, kind: "snares", mode: "reach", cells: [[10, 66], [27, 64], [36, 69]] },
+        { key: "patrol_gajowego", map: 221, kind: "patrol", mode: "reach", cells: [[29, 57], [33, 63], [26, 70], [12, 70], [16, 63]] },
+        { key: "rysiek_zasadzka", map: 221, kind: "npc", mode: "reach", cells: [[9, 64]] },
         { key: "zblakane_start", map: 168, kind: "animals", mode: "reach", x: 84, y: 28, w: 3, h: 3 },
         { key: "strzelnica", map: 162, kind: "range", mode: "reach", x: 95, y: 74, w: 12, h: 5 }
     ];
@@ -166,13 +173,13 @@
     // ------------------------------------------------------------------ the discoveries (Okolice.discoverable; the tab "Okolice") - their
     // words: js/teksty/lowy.txt, odkrycia.<key>
     const DISCOVER = [
-        { key: "nora", map: 3, x: 95, y: 31, near: 8, icon: 481, xp: 30, day: true },
-        { key: "gawra", map: 13, x: 99, y: 71, near: 6, icon: 483, xp: 30 },
-        { key: "blotnisko", map: 21, x: 66, y: 47, near: 4, icon: 482, xp: 25 },
-        { key: "lizawka", map: 4, x: 73, y: 51, near: 4, icon: 480, xp: 25 },
+        { key: "nora", map: 222, x: 44, y: 62, near: 8, icon: 481, xp: 30, day: true },
+        { key: "gawra", map: 222, x: 14, y: 10, near: 6, icon: 483, xp: 30 },
+        { key: "blotnisko", map: 222, x: 66, y: 51, near: 4, icon: 482, xp: 25 },
+        { key: "lizawka", map: 222, x: 27, y: 61, near: 4, icon: 480, xp: 25 },
         { key: "oboz_rabusiow", map: 4, x: 87, y: 39, near: 7, icon: 156, xp: 20, camp: "rabusie" },
         { key: "oboz_czo", map: 3, x: 96, y: 42, near: 8, icon: 485, xp: 30, camp: "czo" },
-        { key: "zwierzyniec", map: 24, x: 27, y: 91, near: 2, icon: 484, xp: 25 },
+        { key: "zwierzyniec", map: 221, x: 6, y: 62, near: 2, icon: 484, xp: 25 },
         { key: "zblakane", map: 168, x: 85, y: 29, near: 6, icon: 349, xp: 20 },
         { key: "strzelnica", map: 162, x: 98, y: 76, near: 5, icon: 486, xp: 20 }
     ];
@@ -182,7 +189,7 @@
     // Gniewko Bór, about 40: a green kaftan, a bow on his back, a horn at his hip. Calm, dry, loyal to the forest more than to the Lord.
     // 6-20 his round through the park, at night in his lodge (61,4)
     const GAJOWY = {
-        key: "gajowy", id: RESIDENT, sheet: "$Npc_Gajowy", map: 24, speed: 3,
+        key: "gajowy", id: RESIDENT, sheet: "$Npc_Gajowy", map: 221, speed: 3,
         away: ["lesniczowka"],
         plan: [[0, "inside", "lesniczowka"], [6, "work", "gaj_lesniczowka"], [7, "patrol", ["gaj_1", "gaj_2", "gaj_3", "gaj_4", "gaj_5"]],
                [12, "stand", "gaj_pasnik"], [13, "patrol", ["gaj_5", "gaj_4", "gaj_3", "gaj_2", "gaj_1"]], [20, "inside", "lesniczowka"]],
@@ -193,14 +200,14 @@
     };
     Watki.scal(GAJOWY, "lowy", "mieszkaniec");   // (its words: js/teksty/lowy.txt, mieszkaniec)
     const GAJ_SPOTS = {
-        lesniczowka: [61, 5, 2], gaj_lesniczowka: [62, 6, 2], gaj_pasnik: [60, 23, 8],
-        gaj_1: [33, 100, 2], gaj_2: [50, 110, 2], gaj_3: [73, 105, 2], gaj_4: [91, 80, 2], gaj_5: [81, 65, 2]
+        lesniczowka: [14, 61, 8], gaj_lesniczowka: [15, 62, 2], gaj_pasnik: [23, 61, 8],
+        gaj_1: [29, 57, 2], gaj_2: [33, 63, 2], gaj_3: [26, 70, 2], gaj_4: [12, 70, 2], gaj_5: [16, 63, 2]
     };
     (window.TownLifeExtra = window.TownLifeExtra || []).push(GAJOWY);
     const TL = window.TownLifeData;
     if (TL) {
         TL.SPOTS_BY_MAP = TL.SPOTS_BY_MAP || {};
-        TL.SPOTS_BY_MAP[24] = Object.assign(TL.SPOTS_BY_MAP[24] || {}, GAJ_SPOTS);
+        TL.SPOTS_BY_MAP[GAJOWY.map] = Object.assign(TL.SPOTS_BY_MAP[GAJOWY.map] || {}, GAJ_SPOTS);
     }
     // the bust (tools/busts/kit.py: img/pictures/Gajowy_Bust.png)
     if (window.SpeechBubbles && SpeechBubbles.BUSTS) SpeechBubbles.BUSTS["$Npc_Gajowy:0"] = "Gajowy_Bust";

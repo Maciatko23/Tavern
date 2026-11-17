@@ -1,0 +1,175 @@
+{
+ "total": 9938,
+ "outside": 8137,
+ "spots": {
+  "musztra": [
+   52,
+   47,
+   true
+  ],
+  "kwatera_drzwi": [
+   64,
+   42,
+   true
+  ],
+  "kuchnia": [
+   60,
+   53,
+   true
+  ],
+  "brama_wew": [
+   58,
+   36,
+   true
+  ],
+  "pomost": [
+   36,
+   50,
+   true
+  ],
+  "wieza": [
+   71,
+   41,
+   true
+  ],
+  "ognisko": [
+   61,
+   55,
+   true
+  ],
+  "brzeg": [
+   39,
+   46,
+   true
+  ],
+  "spichlerz": [
+   68,
+   55,
+   true
+  ],
+  "skup": [
+   55,
+   53,
+   false
+  ],
+  "namiot_kwat": [
+   54,
+   56,
+   true
+  ],
+  "ognisko_2": [
+   64,
+   55,
+   true
+  ],
+  "stol_werbownika": [
+   52,
+   32,
+   false
+  ],
+  "koszary_drzwi": [
+   51,
+   39,
+   false
+  ],
+  "przed_brama": [
+   55,
+   34,
+   false
+  ],
+  "z_brama_l": [
+   56,
+   35,
+   false
+  ],
+  "z_brama_p": [
+   60,
+   35,
+   false
+  ],
+  "z_pomost": [
+   34,
+   51,
+   true
+  ],
+  "z_wieza": [
+   70,
+   41,
+   false
+  ],
+  "z_beczki": [
+   71,
+   54,
+   false
+  ],
+  "z_cwicz_1": [
+   49,
+   46,
+   true
+  ],
+  "z_cwicz_2": [
+   51,
+   46,
+   false
+  ],
+  "z_cwicz_3": [
+   53,
+   46,
+   false
+  ],
+  "z_ognisko_1": [
+   60,
+   55,
+   true
+  ],
+  "z_ognisko_2": [
+   62,
+   56,
+   true
+  ],
+  "z_namiot": [
+   48,
+   56,
+   true
+  ],
+  "z_koszary": [
+   51,
+   39,
+   false
+  ],
+  "z_kuznia": [
+   56,
+   40,
+   false
+  ],
+  "z_spichlerz": [
+   67,
+   55,
+   true
+  ],
+  "z_noc_brama": [
+   58,
+   33,
+   true
+  ],
+  "z_noc_pomost": [
+   36,
+   51,
+   true
+  ]
+ },
+ "cells": {
+  "pn_58_34": true,
+  "pn_57_34": true,
+  "pn_59_34": true,
+  "pn_58_33": true,
+  "pd_58_57": false,
+  "pd_57_57": false,
+  "pd_59_57": false,
+  "pd_58_59": true,
+  "dom_drzwi_przed": true,
+  "fire_obok": true,
+  "sciezka_106_119": true,
+  "sciezka_107_105": true
+ }
+}

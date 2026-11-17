@@ -163,12 +163,29 @@
     // (zestaw 11, mapy próbne 990/991: A2-34/35 to mur z cegieł, 46 ramka, 47 półka skalna - nie są gruntem do mieszania)
     // (2026-11-05, on more maps: A2-20/21 are the pits with their own dark rim, drawn whole - blended they lost it and went pale)
     const ALLOW_11 = new Set([0, 1, 3, 4, 5, 8, 9, 10, 11, 15, 23]);
+    // (2026-11-13, the user on the square before the new town's tavern: „to kamienne podłoże też musi super ładnie i płynnie przechodzić
+    // w ziemię lub trawę”) on the new world's maps the cobbles (A2-40, rel 24) are blended too - their stones thin out into the earth
+    const ALLOW_11G = new Set([...ALLOW_11, 24]);
     const OVERLAY_9 = new Set([12, 13, 31]);
     const OVERLAY_11 = new Set([12, 13]);   // soft overlays of the A2 sheet (flowers, the feather pieces): the ground is painted, the overlay's own pieces drawn again on top
+    // (2026-11-13, the user's hand-painted maps of the new world: earth / grass from the A5 sheet - the plain pieces and the middles of the
+    // plateau blocks - met the A2 grass in hard 48 px steps) the plain A5 ground of set 11 is blended too: its "rel" is A5_REL + the tile id,
+    // its colour the A5 tile's own pixels; the rims of the plateaus and every other A5 piece stay as they are
+    const A5_GROUND_11 = new Set([1612, 1613, 1614, 1615, 1620, 1621, 1622, 1623, 1633, 1638]), A5_REL = 10000;
+    // (the plain pieces round the plateaus' inner corners carry a bit of the stone lip: they keep their tile and count as the plain
+    // earth / grass round them; only the true middles are painted)
+    const A5_KIND_11 = { 1612: 1633, 1613: 1633, 1620: 1633, 1621: 1633, 1633: 1633, 1614: 1638, 1615: 1638, 1622: 1638, 1623: 1638, 1638: 1638 };
+    const A5_PAINT_11 = new Set([1633, 1638]);
     const TX = 4, CT = TW / TX, WT = CT * 3, RT = CT + 2;   // a texel 4 px, a cell 12 texels, the window 3 cells, the sampled ring 14 texels
     // blur radius in texels (twice), noise strength, the pixel speckle, the width of the feather at a line, and how much more a small patch's
     // edge pieces count (they are faint: else it melts away in the blur)
     const R_BLUR = 4, AMP = 0.7, JIT = 0.08, SOFT = 0.16, PATCH_BOOST = 1.3;
+    // (2026-11-13, the user on the new Podgrodzie: „od krawędzi jest ziemia, a potem trawa - żeby to ładnie stopniowo przechodziło w trawę,
+    // bo jest ostro”) on the new world's maps the border is a wide, gradual one: a longer blur (the two kinds share about a cell), a fine
+    // clumpy noise on top (tufts of grass reaching into the earth, bare patches into the grass) and a crisper feather between the clumps
+    const GRADUAL = new Set([218, 219, 220, 221, 222]), G_BLUR = 5, G_FINE = 1.6, G_AMP = 0.35, G_MIX = 4.5, G_SOFT = 0.1, G_STRIP = 2;
+    // is a cell at (sx, sy) from a rim (its offset, -1..1) on one of the rim's shut sides (bits of the flags: 1 down, 2 left, 4 right, 8 up)?
+    const shutFrom = (sh, sx, sy) => !!sh && ((sy < 0 && (sh & 8)) || (sy > 0 && (sh & 1)) || (sx < 0 && (sh & 2)) || (sx > 0 && (sh & 4)));
     const AT_N = 10, AT_PX = AT_N * TW, AT_MAX = 12;        // atlas bitmaps of 10 x 10 cells (1 MB each), at most 12 = 1200 cells
     const MARGIN = 5, RELEASE = 8;                          // cells round the screen kept painted / given back
     const stat = { paintMs: 0, cells: 0, frames: 0 };
@@ -201,20 +218,28 @@
         const key = dataKey();
         if (ST && ST.key === key) { ST.map = $dataMap; return ST; }
         dropState();
-        const ALLOW = $gameMap.tilesetId() === 11 ? ALLOW_11 : ALLOW_9, OVERLAY = $gameMap.tilesetId() === 11 ? OVERLAY_11 : OVERLAY_9;
+        const ALLOW = $gameMap.tilesetId() === 11 ? (GRADUAL.has($gameMap.mapId()) ? ALLOW_11G : ALLOW_11) : ALLOW_9, OVERLAY = $gameMap.tilesetId() === 11 ? OVERLAY_11 : OVERLAY_9;
+        const A5G = $gameMap.tilesetId() === 11 ? A5_GROUND_11 : null;
         const W = $gameMap.width(), H = $gameMap.height(), flags = $gameMap.tilesetFlags(), kind = new Uint8Array(W * H), rels = [];
         const ovs = new Uint16Array(W * H), can = new Uint8Array(W * H), k0s = new Uint8Array(W * H), k1s = new Uint8Array(W * H), shp = new Uint8Array(W * H), shape = id => (id - 2816) % 48;
         const kindIdx = r => { let k = rels.indexOf(r) + 1; if (!k) k = rels.push(r); return k; };
+        // (gradual maps) a hill's rim (A5 earth / grass with a stone lip on one side) keeps its tile, but its ground counts for the cells round it
+        // on its open sides: the earth by a slope's edge goes over into the grass below softly instead of meeting it in a straight 48 px line
+        const grad = GRADUAL.has($gameMap.mapId()), shut = new Uint8Array(W * H);
         for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
             const t0 = $gameMap.tileId(x, y, 0), t1 = $gameMap.tileId(x, y, 1), t2 = $gameMap.tileId(x, y, 2), t3 = $gameMap.tileId(x, y, 3);
             let ok = true;
-            const r0 = relOf(t0), r1 = t1 >= 2048 ? relOf(t1) : -1, ovl = r1 >= 0 && OVERLAY.has(r1);
+            const a5 = A5G && A5G.has(t0), r0 = a5 ? A5_REL + A5_KIND_11[t0] : relOf(t0), r1 = t1 >= 2048 ? relOf(t1) : -1, ovl = r1 >= 0 && OVERLAY.has(r1);
+            const ground0 = a5 || ALLOW.has(r0);
             for (const id of [t0, t1, t2, t3]) { const f = id > 0 ? flags[id] | 0 : 0; if (!(f & 0x10) && (f & 0x0f)) ok = false; }   // (a tile that shuts a side stays as it is)
-            if (t2 >= 2048 || t3 >= 2048 || !ALLOW.has(r0)) ok = false;                // (the base must be a ground of the A2 sheet)
+            if (t2 >= 2048 || t3 >= 2048 || !ground0 || (a5 && !A5_PAINT_11.has(t0))) ok = false;   // (the base must be a ground of the A2 sheet - or a plain A5 middle)
             if (t1 >= 2048 && !ALLOW.has(r1) && !OVERLAY.has(r1)) ok = false;                              // (layer 1: a patch of ground is part of the cell's ground, any other overlay keeps its tile)
             const i = y * W + x;
             if (!ok) {   // (a cell that keeps its tile: its ground under the overlay still counts in the fields round it, so the painted cells meet it softly)
-                if (ALLOW.has(r0)) { k0s[i] = kindIdx(r0); kind[i] = k0s[i]; }
+                if (ground0) { k0s[i] = kindIdx(r0); kind[i] = k0s[i]; }
+                else if (grad && A5G && t1 === 0 && t2 === 0 && t3 === 0 && (K.rimEarth(t0) || K.rimGrass(t0))) {
+                    k0s[i] = kindIdx(A5_REL + (K.rimEarth(t0) ? 1638 : 1633)); kind[i] = k0s[i]; shut[i] = (flags[t0] & 0x0f) || 0x0f;
+                }
                 continue;
             }
             can[i] = 1;
@@ -233,18 +258,18 @@
                 const nx = x + dx, ny = y + dy;
                 if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
                 const k2 = kind[ny * W + nx];
-                if (k2 && k2 !== k) { border = true; break; }
+                if (k2 && k2 !== k && !shutFrom(shut[ny * W + nx], x - nx, y - ny)) { border = true; break; }
             }
             if (border) { need[y * W + x] = 1; nNeed++; }
         }
-        ST = { key, map: $dataMap, W, H, kind, k0: k0s, k1: k1s, shp, ovs, rels, need, nNeed, a2: null, cov: new Float32Array(32 * 48 * 4).fill(-1), tex: null, atlases: [], free: [], painted: new Map(), queue: [], rectKey: "", margin: MARGIN };
+        ST = { key, grad, shut, can, map: $dataMap, W, H, kind, k0: k0s, k1: k1s, shp, ovs, rels, need, nNeed, a2: null, cov: new Float32Array(32 * 48 * 4).fill(-1), tex: null, atlases: [], free: [], painted: new Map(), queue: [], rectKey: "", margin: MARGIN };
         return ST;
     }
     // the kinds' interior pixels (null while the A2 sheet loads)
     function textures(st) {
         if (st.tex) return st.tex;
         const out = [null];
-        for (const r of st.rels) { const px = K.srcOf(K.descOf(2816 + r * 48)); if (!px) return null; out.push(px); }
+        for (const r of st.rels) { const px = r >= A5_REL ? K.a5Pixels(r - A5_REL) : K.srcOf(K.descOf(2816 + r * 48)); if (!px) return null; out.push(px); }
         return (st.tex = out);
     }
     // how much of a 24 x 24 quarter of a patch's autotile piece (rel, shape, quarter 0-3: TL TR BL BR) is opaque: what the cell is that kind
@@ -296,13 +321,14 @@
             if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
             addKind(k1[ny * W + nx]); addKind(k0[ny * W + nx]);
         }
-        const n = present.length, Q = CT / 2;
+        const n = present.length, Q = CT / 2, grad = st.grad, RB = grad ? G_BLUR : R_BLUR, SF = grad ? G_SOFT : SOFT;
         for (let j = 0; j < n; j++) sInd[j].fill(0);
         sKnown.fill(0);
         // (the window's texels by the cells' quarters: a patch's piece is its kind by the opaque share of the quarter, the ground under it the rest)
         for (let b = 0; b < 3; b++) for (let a = 0; a < 3; a++) {
             const nx = cx - 1 + a, ny = cy - 1 + b;
             if (nx < 0 || ny < 0 || nx >= W || ny >= H || !kind[ny * W + nx]) continue;
+            if (shutFrom(st.shut[ny * W + nx], cx - nx, cy - ny)) continue;   // (a rim seen from its lip's side: the drop, not its ground)
             const ni = ny * W + nx, j0 = present.indexOf(k0[ni]), j1 = k1[ni] ? present.indexOf(k1[ni]) : -1;
             for (let qi = 0; qi < 4; qi++) {
                 const c1 = j1 >= 0 || k1[ni] ? Math.min(1, PATCH_BOOST * coverage(st, st.rels[k1[ni] - 1], shp[ni], qi)) : 0, c0 = 1 - c1;
@@ -316,8 +342,28 @@
                 }
             }
         }
-        boxBlur(sKnown, WT, WT, R_BLUR);
-        for (let j = 0; j < n; j++) boxBlur(sInd[j], WT, WT, R_BLUR);
+        if (grad) {   // (gradual) a neighbour that keeps its tile (a rim, a corner piece) reaches G_STRIP texels into this cell before the blur:
+            // the painted pixels by it start as its ground and turn into this cell's kind further in - no straight line at its edge
+            for (let b = 0; b < 3; b++) for (let a = 0; a < 3; a++) {
+                if (a === 1 && b === 1) continue;
+                const nx = cx - 1 + a, ny = cy - 1 + b;
+                if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue;
+                const ni = ny * W + nx;
+                if (!kind[ni] || st.can[ni] || shutFrom(st.shut[ni], cx - nx, cy - ny)) continue;
+                const jn = present.indexOf(k0[ni]);
+                if (jn < 0) continue;
+                const tx0 = a === 0 ? CT : a === 2 ? 2 * CT - G_STRIP : CT, tx1 = a === 0 ? CT + G_STRIP : a === 2 ? 2 * CT : 2 * CT;
+                const ty0 = b === 0 ? CT : b === 2 ? 2 * CT - G_STRIP : CT, ty1 = b === 0 ? CT + G_STRIP : b === 2 ? 2 * CT : 2 * CT;
+                const xs0 = a === 1 ? CT : tx0, xs1 = a === 1 ? 2 * CT : tx1, ys0 = b === 1 ? CT : ty0, ys1 = b === 1 ? 2 * CT : ty1;
+                for (let ty = ys0; ty < ys1; ty++) for (let tx = xs0; tx < xs1; tx++) {
+                    const o = ty * WT + tx;
+                    for (let j = 0; j < n; j++) sInd[j][o] = 0;
+                    sInd[jn][o] = 1; sKnown[o] = 1;
+                }
+            }
+        }
+        boxBlur(sKnown, WT, WT, RB);
+        for (let j = 0; j < n; j++) boxBlur(sInd[j], WT, WT, RB);
         // the ring's values: the kind's share of what is ground round the texel plus the kind's noise (the noise by the kind and the
         // map pixel: the neighbour cell, which sees the same texel, decides the same)
         for (let ry = 0; ry < RT; ry++) for (let rx = 0; rx < RT; rx++) {
@@ -327,7 +373,15 @@
             if (nx < 0 || ny < 0 || nx >= W || ny >= H || !kind[ny * W + nx]) { ex = Math.max(1, Math.min(CT, rx)); ey = Math.max(1, Math.min(CT, ry)); }
             const i2 = (CT - 1 + ey) * WT + CT - 1 + ex, px = cx * TW + (ex - 1) * TX + TX / 2, py = cy * TW + (ey - 1) * TX + TX / 2;
             const kn = Math.max(sKnown[i2], 0.02);
-            for (let j = 0; j < n; j++) sD[j][ry * RT + rx] = sInd[j][i2] / kn + AMP * (noiseAt(px, py, present[j]) - 0.5);
+            if (!grad) { for (let j = 0; j < n; j++) sD[j][ry * RT + rx] = sInd[j][i2] / kn + AMP * (noiseAt(px, py, present[j]) - 0.5); continue; }
+            // (gradual) the noise only where the kinds share the ground (none where one kind is alone: no cut clumps at a painted cell's
+            // far side), mostly fine clumps (tufts and bare patches) whose share follows the field: earth with a few tufts by the earth,
+            // half and half in the middle, grass with a few bare patches further on
+            let top = 0;
+            for (let j = 0; j < n; j++) { const f = sInd[j][i2] / kn; sV[j] = f; if (f > top) top = f; }
+            const mix = Math.min(1, (1 - top) * G_MIX);
+            for (let j = 0; j < n; j++) sD[j][ry * RT + rx] = sV[j] + mix * (G_AMP * (noiseAt(px, py, present[j]) - 0.5)
+                + G_FINE * (0.6 * vnoise(px, py, 8, present[j] * 29 + 3) + 0.4 * vnoise(px, py, 4, present[j] * 31 + 7) - 0.5));
         }
         if (!sImg) sImg = new ImageData(TW, TW);
         const d = sImg.data;
@@ -347,7 +401,7 @@
                 const q = (py * TW + px) * 4;
                 let ws = 0, cr = 0, cg = 0, cb = 0, ca = 0;
                 for (let j = 0; j < n; j++) {
-                    const w = 1 + (sV[j] - best) / SOFT;
+                    const w = 1 + (sV[j] - best) / SF;
                     if (w <= 0) continue;
                     const T0 = tex[present[j]];
                     ws += w; cr += w * T0[q]; cg += w * T0[q + 1]; cb += w * T0[q + 2]; ca += w * T0[q + 3];

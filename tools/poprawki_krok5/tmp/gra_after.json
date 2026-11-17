@@ -1,0 +1,32 @@
+{
+ "total": 11504,
+ "N": 109,
+ "S": 93,
+ "W": 4,
+ "E": 0,
+ "spots": {
+  "lizawka": true,
+  "zasiadka": true,
+  "poroze": true,
+  "zachod_brama_1": true,
+  "zachod_brama_2": true,
+  "zachod_brama_3": true,
+  "zachod_brama_4": true,
+  "droga_poludnie": true,
+  "kapliczka": true,
+  "postoj": true,
+  "koszar": true,
+  "pastwisko": true,
+  "brama_zagrody": true,
+  "w_zagrodzie": true,
+  "polanka": true,
+  "glazy": true,
+  "gaj_polana": true,
+  "pole_kamieni": true,
+  "kepa2": true
+ },
+ "pockets": 0,
+ "pocketCells": 0,
+ "events": 437,
+ "pocketList": []
+}

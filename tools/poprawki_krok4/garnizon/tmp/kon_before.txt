@@ -1,0 +1,14 @@
+Map162 'Garnizon nad zatoką' (120x120, zestaw 11)
+  wejścia: 6 kratek startowych (przeniesienia na tę mapę), osiągalnych kratek: 9955
+  razem: G1 2, O1 7
+  [uwaga] G1 kafel 598 (D 6,10) z gwiazdką nad wolną kratką: bohater wchodzi pod niego w (61,41)
+  [uwaga] G1 kafel 487 (C 15,12) z gwiazdką nad wolną kratką: bohater wchodzi pod niego w (53,52)
+  [uwaga] O1 obiekt rozcięty: kafel 368 (C 0,14) - góra bez dołu (brak kafla 376 pod) w (54,31)
+  [uwaga] O1 obiekt rozcięty: kafel 301 (C 5,5) - góra bez dołu (brak kafla 309 pod) w (49,41)
+  [uwaga] O1 obiekt rozcięty: kafel 437 (C 13,6) - dół bez góry (brak kafla 429 nad) w (64,43)
+  [uwaga] O1 obiekt rozcięty: kafel 350 (C 6,11) - dół bez góry (brak kafla 342 nad) w (63,46)
+  [uwaga] O1 obiekt rozcięty: kafel 349 (C 5,11) - dół bez góry (brak kafla 341 nad) w (64,46)
+  [uwaga] O1 obiekt rozcięty: kafel 350 (C 6,11) - dół bez góry (brak kafla 342 nad) w (52,51)
+  [uwaga] O1 obiekt rozcięty: kafel 349 (C 5,11) - dół bez góry (brak kafla 341 nad) w (52,52)
+  (pominięto 1 drobnych zamkniętych kieszeni < 4 kratek bez zdarzeń)
+

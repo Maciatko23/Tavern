@@ -18,14 +18,20 @@ const { launch, sleep } = require("./cdp.js");
         const mode = () => ev("JSON.stringify($gameTemp._buildMode ? { type: $gameTemp._buildMode.type, x: $gameTemp._buildMode.x, y: $gameTemp._buildMode.y } : null)").then(JSON.parse);
         const count = id => ev(`$gameParty.numItems($dataItems[${id}])`);
         const B = await ev(`(function(){
+            // (2026-11-14) building goes only inside grandpa's wall, and he keeps trees and stones there: the block of 10 x 6 inside
+            // the wall with the most bare ground, what stands on it taken away for the test
+            const wf = Farming.walledField && Farming.walledField(), inF = (x, y) => !wf || wf.has(x + "," + y);
+            let best = null;
             for (let by = 2; by < $gameMap.height() - 8; by++) for (let bx = 2; bx < $gameMap.width() - 12; bx++) {
-                let ok = true;
-                for (let y = by; y < by + 6 && ok; y++) for (let x = bx; x < bx + 10; x++) {
-                    if (!Farming.naturalFarmland(x, y)) { ok = false; break; }
-                }
-                if (ok) return { bx, by };
+                let n = 0, ok = true;
+                for (let y = by - 2; y < by + 8 && ok; y++) for (let x = bx - 2; x < bx + 12; x++) { if (!inF(x, y)) { ok = false; break; } if (x >= bx && x < bx + 10 && y >= by && y < by + 6 && Farming.naturalFarmland(x, y)) n++; }   // (two tiles inside the field all round: big things reach past the block)
+                if (ok && (!best || n > best.n)) best = { bx, by, n };
             }
-            return null; })()`);
+            if (!best) return null;
+            for (const e of $gameMap.events()) if (e.x >= best.bx - 1 && e.x <= best.bx + 10 && e.y >= best.by - 1 && e.y <= best.by + 6) { e.erase(); e.setThrough(true); }
+            const cells = []; for (let y = best.by - 1; y <= best.by + 6; y++) for (let x = best.bx - 1; x <= best.bx + 10; x++) cells.push({ x, y });
+            $gameSystem.clearLand($gameMap.mapId(), cells);   // (cleared ground everywhere in it: bushes and tufts would refuse a building)
+            return { bx: best.bx, by: best.by, bare: best.n }; })()`);
         check("found an open meadow", !!B, B);
         const { bx, by } = B;
         await ev(`$gamePlayer.locate(${bx + 2}, ${by + 3}); $gamePlayer.setDirection(6); $gameMap.setDisplayPos(${bx + 2} - 13, ${by + 3} - 7); $gameParty.gainItem($dataItems[80], 12); $gameSystem.changeStamina(100); 0`);
@@ -36,7 +42,7 @@ const { launch, sleep } = require("./cdp.js");
         const qList = await ev(`(function(){ const scene = SceneManager._scene; let got = null; const _o = scene.openFarmMenu; scene.openFarmMenu = function(t, en) { got = en.map(x => x.name); }; Farming.openBuildKeyMenu(); scene.openFarmMenu = _o; return JSON.stringify(got); })()`);
         check("building is on Q (the ground menu has no 'Zbuduj...'): the Q list offers the bench", !/Zbuduj/.test(menu) && JSON.parse(qList).includes("Ławka"), { menu, qList });
         const qFlags = JSON.parse(await ev(`(function(){ const scene = SceneManager._scene; let got = null; const _o = scene.openFarmMenu; scene.openFarmMenu = function(t, en) { got = en.map(x => ({ name: x.name, ok: x.enabled !== false })); }; Farming.openBuildKeyMenu(); scene.openFarmMenu = _o; return JSON.stringify(got); })()`));
-        const qBuild = qFlags.filter(e => e.name !== "Zrób młotek");   // (no hammer yet: making one stays on top, whatever it needs)
+        const qBuild = qFlags.filter(e => e.name !== "Zrób młotek" && e.name !== "Wytwórz ręcznie...");   // (no hammer yet: making one stays on top, whatever it needs)
         const firstOff = qBuild.findIndex(e => !e.ok);
         check("the Q list puts what can be built now (materials in the bag) first, the rest after it", firstOff > 0 && qBuild.slice(firstOff).every(e => !e.ok) && qBuild.slice(0, firstOff).some(e => e.name === "Ławka"), qFlags.map(e => (e.ok ? "+" : "-") + e.name).join(" "));
         await ev(`Farming.startPlacement("bench", ${bx + 3}, ${by + 3}); Input._currentState.ok = true; 0`);   // the same press that would have chosen it

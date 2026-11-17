@@ -23,7 +23,7 @@ const { launch, sleep } = require("./cdp.js");
 
         // ---------------------------------------------------------------- data
         const item = await J("(function(){ const i = $dataItems[138]; return i ? [i.name, i.iconIndex, i.consumable, i.itypeId, i.price, i.description.length > 20] : null; })()");
-        check("item 138 'Wiadro': an ordinary item that is not used up, icon 400, a price and a description", JSON.stringify(item) === JSON.stringify(["Wiadro", 400, false, 1, 40, true]), item);
+        check("item 138 'Wiadro': an ordinary item that is not used up, its PixelLab icon (688+), a price and a description", !!item && item[1] >= 688 && JSON.stringify([item[0]].concat(item.slice(2))) === JSON.stringify(["Wiadro", false, 1, 40, true]), item);
         const pix = await ev(`new Promise(res => { const bmp = ImageManager.loadSystem("IconSet"); const chk = () => { if (!bmp.isReady()) return setTimeout(chk, 50); let n = 0; const d = bmp.context.getImageData(0, 800, 32, 32).data; for (let k = 3; k < d.length; k += 4) if (d[k] > 200) n++; res({ n, h: bmp.height }); }; chk(); })`);
         check("the icon (400) is drawn and the icon sheet grew to at least 832 px", pix.n > 250 && pix.h >= 832, pix);
         const imgs = await ev(`Promise.all(["Farm_Bucket", "Farm_Bucket_Full"].map(n => new Promise(res => { const bm = ImageManager.loadSystem(n); bm.addLoadListener(() => res(bm.width + "x" + bm.height)); })))`);

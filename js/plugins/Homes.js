@@ -114,12 +114,27 @@
 
     // (2026-11-11 plansza: EDGE is Podgrodzie (111) now - the gate to the burnt farm is in its north-east corner; the two guards of the shut field stand
     // at the gates of the plot's fence on Kruczy Jar (PLOT), not on Skraj lasu / Łąka any more)
-    const FIELD = 3, HUT_MAP = 100, EDGE = 111, MEADOW = 4, PODGRODZIE = 111, ZAGRODA = 168;
-    const PLOT = { rect: [42, 34, 77, 59], guardN: [67, 33], guardS: [47, 60], out: [40, 47] };
+    // (2026-11-16, the new world - the user: "spaloną zagrodę pominąć, resztę dopasować do nowej mapy") the lands by the world of the
+    // game (Story.world()): the old one as it was; the new one - grandpa's fenced plot on Podgrodzie (Map218: the fence x 20..41,
+    // y 9..25, its gate to the south (29..30, 25) and the gate to the hut's yard (20, 22) - a guard in each), the hut for sale on the
+    // meadow under the pines of Słony Brzeg (Map219, tools/nowy_swiat/chata_pod_lasem.py), no burnt farm.
+    //   gates: [x, y, the guard's direction]; out: where the escort puts the hero; whole: the field is its whole map
+    const LANDS = {
+        stary: { field: 3, whole: true, zagroda: true, plot: { rect: [42, 34, 77, 59], gates: [[67, 33, 2], [47, 60, 8]], out: [40, 47, 4] },
+            cast: [[37, 12], [37, 13], [37, 14]], signs: [[37, 11], [36, 11], [37, 15], [36, 15], [35, 11], [35, 15], [34, 11], [37, 10], [37, 16]],
+            chata: { land: 111, front: [8, 81] } },
+        nowy: { field: 218, whole: false, zagroda: false, plot: { rect: [20, 9, 41, 25], gates: [[29, 25, 2], [30, 25, 2], [20, 22, 4]], out: [27, 26, 4] },
+            cast: [[29, 21], [30, 21], [31, 21]], signs: [[32, 23], [27, 23], [33, 23], [26, 23], [32, 22], [27, 22], [34, 23], [25, 23], [32, 21]],
+            chata: { land: 219, front: [66, 33] } }
+    };
+    const FIELD_MAPS = [LANDS.stary.field, LANDS.nowy.field];
+    let LAND = LANDS.stary, FIELD = LAND.field, PLOT = LAND.plot;
+    const HUT_MAP = 100, ZAGRODA = 168;
     const inPlot = (x, y) => x >= PLOT.rect[0] && y >= PLOT.rect[1] && x <= PLOT.rect[2] && y <= PLOT.rect[3];
     const IDS = [700, 729];
     const CAST = { butler: 700, measurer: 701, watch: 702 };
-    const SIGN = 703, GUARD_EDGE = 704, GUARD_MEADOW = 705;
+    const SIGN = 703, GUARD_EDGE = 704, GUARD_MEADOW = 705, GUARD_YARD = 713;
+    const GUARDS = [GUARD_EDGE, GUARD_MEADOW, GUARD_YARD];   // (one for each gate of the plot: PLOT.gates)
     const WAY = [706, 707, 708], SIGNPOST = 709, SMOKE = 711, MARTA = 712;
     const SALE_HOURS = [8, 16];
     const GOLD_ICON = 313;
@@ -132,7 +147,7 @@
     // put in at the purchase - the farm's when the house is rebuilt (tools/domy/build.py keeps their cells free)
     const HOUSES = {
         chata: { key: "chata", price: num(params.priceHut, 600), soltys: true,
-            land: PODGRODZIE, doorName: /Chata pod lasem/, front: [8, 81], inside: 154, landing: [4, 8, 8],
+            land: LANDS.stary.chata.land, doorName: /Chata pod lasem/, front: LANDS.stary.chata.front, inside: 154, landing: [4, 8, 8],
             furniture: [{ type: "bed", x: 7, y: 4 }, { type: "chest_s", x: 9, y: 4 }] },
         zagroda: { key: "zagroda", price: num(params.priceFarm, 350), soltys: false,
             land: ZAGRODA, front: [20, 10], inside: 169, landing: [6, 8, 8],
@@ -140,6 +155,15 @@
     };
     Watki.scal(HOUSES, "domy", "domy");   // (its words: js/teksty/domy.txt, domy)
     const KEYS = Object.keys(HOUSES);
+    // the lands of this game's world (asked again whenever a map comes up: a new game, a loaded one)
+    function syncWorld() {
+        let w = "stary";
+        try { w = T.call("Story", "world") === "nowy" ? "nowy" : "stary"; } catch (e) { w = "stary"; }
+        LAND = LANDS[w]; FIELD = LAND.field; PLOT = LAND.plot;
+        HOUSES.chata.land = LAND.chata.land; HOUSES.chata.front = LAND.chata.front;
+    }
+    const _Game_Map_setup_world = Game_Map.prototype.setup;
+    Game_Map.prototype.setup = function(mapId) { syncWorld(); _Game_Map_setup_world.call(this, mapId); };
     const houseOfLand = mapId => KEYS.map(k => HOUSES[k]).find(h => h.land === mapId) || null;
     const houseOfRoom = mapId => KEYS.map(k => HOUSES[k]).find(h => h.inside === mapId) || null;
 
@@ -285,7 +309,6 @@
     const WORDS = {};
     Watki.scal(WORDS, "domy", "slowa");   // (its words: js/teksty/domy.txt, slowa)
     // where the sign stands: by the way in from the forest's edge (east), on a cell no building of the field covers
-    const SIGN_SPOTS = [[37, 11], [36, 11], [37, 15], [36, 15], [35, 11], [35, 15], [34, 11], [37, 10], [37, 16]];
     function fieldCellsTaken() {
         const f = F(), taken = new Set();
         if (!f || !f.farm) return taken;
@@ -294,20 +317,27 @@
     }
     function signSpot() {
         const taken = fieldCellsTaken();
-        return SIGN_SPOTS.find(([x, y]) => !taken.has(x + "," + y)) || SIGN_SPOTS[0];
+        return LAND.signs.find(([x, y]) => !taken.has(x + "," + y)) || LAND.signs[0];
     }
-    T.inject([FIELD], { ids: [CAST.butler, GUARD_MEADOW], owner: PLUGIN, when: () => storyGame(), build() {
-        const b = butlerName(), [sx, sy] = signSpot();
+    const guardEv = i => shownOnA(GUARDS[i], TK.kod.build[0], PLOT.gates[i][0], PLOT.gates[i][1], { characterName: "$Npc_Straznik", direction: PLOT.gates[i][2] }, stub(GUARD_TALK));
+    T.inject(FIELD_MAPS, { ids: [CAST.butler, GUARD_MEADOW], owner: PLUGIN, when: () => storyGame(), build(data, mapId) {
+        syncWorld();
+        if (mapId !== FIELD) return [];
+        const b = butlerName(), [sx, sy] = signSpot(), c = LAND.cast;
         return [
-            shownOnA(CAST.butler, b, 37, 12, { characterName: b === "Teodor" ? "$Npc_Kamerdyner" : "$Npc_Feliks" }, null, { through: true }),
-            shownOnA(CAST.measurer, TK.kod.build[0], 37, 13, { characterName: "$Npc_Straznik" }, null, { through: true }),
-            shownOnA(CAST.watch, TK.kod.build[0], 37, 14, { characterName: "$Npc_Straznik" }, stub("Story.talk(this, \"watch\")")),
+            shownOnA(CAST.butler, b, c[0][0], c[0][1], { characterName: b === "Teodor" ? "$Npc_Kamerdyner" : "$Npc_Feliks" }, null, { through: true }),
+            shownOnA(CAST.measurer, TK.kod.build[0], c[1][0], c[1][1], { characterName: "$Npc_Straznik" }, null, { through: true }),
+            shownOnA(CAST.watch, TK.kod.build[0], c[2][0], c[2][1], { characterName: "$Npc_Straznik" }, stub("Story.talk(this, \"watch\")")),
             shownOnA(SIGN, TK.kod.build[1], sx, sy, { characterName: "!$Lord_Sign", direction: 2, pattern: 1 },
                 stub("Tawerna.popup(" + JSON.stringify(WORDS.znak) + ", { color: \"info\" })"), { stepAnime: true, walkAnime: false, moveSpeed: 2, moveFrequency: 2 }),
             // the guards of the shut field, at the gates of the plot's fence (shown from the dawn that shuts it)
-            shownOnA(GUARD_EDGE, TK.kod.build[0], PLOT.guardN[0], PLOT.guardN[1], { characterName: "$Npc_Straznik", direction: 2 }, stub(GUARD_TALK)),
-            shownOnA(GUARD_MEADOW, TK.kod.build[0], PLOT.guardS[0], PLOT.guardS[1], { characterName: "$Npc_Straznik", direction: 8 }, stub(GUARD_TALK))
+            guardEv(0), guardEv(1)
         ];
+    } });
+    // (the new world's third gate: from the hut's yard)
+    T.inject(FIELD_MAPS, { ids: [GUARD_YARD, GUARD_YARD], owner: PLUGIN, when: () => storyGame(), build(data, mapId) {
+        syncWorld();
+        return mapId === FIELD && PLOT.gates[2] ? [guardEv(2)] : [];
     } });
     // the guards at the gates of the plot (shown once the field is shut; they are built with the field's events above)
     const GUARD_TALK = "Tawerna.call(\"Homes\", \"guardTalk\", this)";
@@ -333,7 +363,7 @@
         if (roles.has(ev)) return roles.get(ev);
         const d = ev.event();
         let r = null;
-        if (d && ev._mapId === PODGRODZIE && HOUSES.chata.doorName.test(d.name || "")) r = "chata";
+        if (d && ev._mapId === HOUSES.chata.land && HOUSES.chata.doorName.test(d.name || "")) r = "chata";
         else if (d && ev._mapId === ZAGRODA && /^<Zagroda:dom>/.test(d.note || "")) r = "house";
         roles.set(ev, r);
         return r;
@@ -378,7 +408,9 @@
     // ------------------------------------------------------------------
     // The field lost: the scene's people (Story.js's measure list calls these), the sign, the guard by it, the dawn that shuts it
     // ------------------------------------------------------------------
-    const onField = () => !!window.$gameMap && $gameMap.mapId() === FIELD;
+    // on the field's map; on the field itself (the new world: inside the plot's fence - its map is the whole of Podgrodzie)
+    const onFieldMap = () => !!window.$gameMap && $gameMap.mapId() === FIELD;
+    const onField = () => onFieldMap() && (LAND.whole || inPlot($gamePlayer.x, $gamePlayer.y));
     const castReady = () => onField() && !!$gameMap.event(CAST.butler) && !!$gameMap.event(CAST.watch);
     function freeCell(x, y, but) {
         if (!$gameMap.isValid(x, y) || !$gameMap.checkPassage(x, y, 0x0f)) return false;
@@ -410,14 +442,14 @@
     }
     function signShow() {
         sw(FIELD, SIGN, true);
-        if (onField()) $gameMap.requestRefresh();
+        if (onFieldMap()) $gameMap.requestRefresh();
         return true;
     }
     // the butler and the measurer go; the watch stands by the sign till the field is shut
     function castLeave() {
         sw(FIELD, CAST.butler, false);
         sw(FIELD, CAST.measurer, false);
-        if (onField()) {
+        if (onFieldMap()) {
             const s = $gameMap.event(SIGN), w = $gameMap.event(CAST.watch);
             if (s && w) { const [x, y] = near(s.x, s.y, [[-1, 0], [1, 0], [0, 1], [-1, 1], [1, 1]], [w]); w.locate(x, y); w.setDirection(2); }
             $gameMap.requestRefresh();
@@ -438,7 +470,7 @@
         sw(FIELD, SIGN, true);
         if (!onField()) sw(FIELD, CAST.watch, false);   // (on the field he says the last words himself; he goes with the map)
         sw(FIELD, CAST.butler, false); sw(FIELD, CAST.measurer, false);
-        sw(FIELD, GUARD_EDGE, true); sw(FIELD, GUARD_MEADOW, true);
+        for (const g of GUARDS) sw(FIELD, g, true);
         if (window.$gameMap) $gameMap.requestRefresh();
         // the hut's furniture stays in the hut, with the field (Map100 empty for a new hut on the hero's own land)
         const f = F(), hut = fieldHut();
@@ -459,7 +491,7 @@
     // the field bought back: the sign and the guards go, the hut's furniture comes back (or the old hut is boarded up while a new one stands)
     T.on("fieldBack", () => {
         for (const id of [CAST.butler, CAST.measurer, CAST.watch, SIGN]) sw(FIELD, id, false);
-        sw(FIELD, GUARD_EDGE, false); sw(FIELD, GUARD_MEADOW, false);
+        for (const g of GUARDS) sw(FIELD, g, false);
         if (window.$gameMap) $gameMap.requestRefresh();
         const f = F();
         if (!f || !f.farm) return;
@@ -483,7 +515,7 @@
     const _reserveTransfer = Game_Player.prototype.reserveTransfer;
     Game_Player.prototype.reserveTransfer = function(mapId, x, y, d, fadeType) {
         if (mapId === FIELD && fieldLocked() && !($gameTemp && $gameTemp._homesLetIn) && window.$gameMap && $gameMap.mapId() !== FIELD && inPlot(x, y)) {
-            if ($gameMap.mapId() === HUT_MAP) return _reserveTransfer.call(this, FIELD, PLOT.out[0], PLOT.out[1], 4, fadeType);
+            if ($gameMap.mapId() === HUT_MAP) return _reserveTransfer.call(this, FIELD, PLOT.out[0], PLOT.out[1], PLOT.out[2] || 4, fadeType);
             popupOnce(TK.kod.reserveTransfer[0], { color: "#ff9f8f" });
             stepBack(this);
             return;
@@ -551,7 +583,7 @@
             say(o, id, TK.kod.soltysList[0], WORDS.soltys);
             say(o, id, Watki.wstaw(TK.kod.soltysList[1], { price: HOUSES.chata.price }), WORDS.soltys);
             say(o, id, TK.kod.soltysList[2], WORDS.soltys);
-            if (!owns("zagroda")) say(o, id, TK.kod.soltysList[3], WORDS.soltys);
+            if (LAND.zagroda && !owns("zagroda")) say(o, id, TK.kod.soltysList[3], WORDS.soltys);
             o.push(C(355, ["Tawerna.call(\"Homes\", \"told\")"]));
         } else say(o, id, TK.kod.soltysList[4], WORDS.soltys);
         const opts = left.map(k => ({ label: Watki.wstaw(TK.kod.soltysList[5], { what: HOUSES[k].what, price: HOUSES[k].price }), js: "Tawerna.call(\"Homes\", \"buy\", this, \"" + k + "\")" }));
@@ -958,7 +990,7 @@
         state: () => S(), owns, ownsAny, forSale, homeLand, hasRoof: () => owns("chata") || (owns("zagroda") && stage() >= 5), homeMaps: () => KEYS.filter(owns).map(k => HOUSES[k].land),
         hear: () => { S().heard = S().heard || day(); return true; }, told: () => { S().told = day(); return true; },
         door, buy, buyNow, grantLand, chat, offer, furnish, cleanLand, soltysList: ev => soltysList(ev), guardTalk,
-        castReady, castShow, signShow, castLeave, rule,
+        castReady, castShow, signShow, castLeave, rule, GUARDS, syncWorld, heroOnField: () => onField(), fieldOut: () => [FIELD, PLOT.out[0], PLOT.out[1], PLOT.out[2] || 4], land: () => LAND,
         stage, work: () => Z().work, ruin, well, cross, signpost, begin, strike, martaAway, martaTalk, houseMenu, wellMenu,
         // (the tests) a stage set at once - its picture, its furniture and smoke at 5
         setStage(s) { Z().stage = Math.max(0, Math.min(5, s)); Z().work = null; const ev = houseEvent(); if (ev) showStage(ev); if (stage() >= 5) { furnish(HOUSES.zagroda); sw(ZAGRODA, SMOKE, true); } if (onFarm()) $gameMap.requestRefresh(); return stage(); }
