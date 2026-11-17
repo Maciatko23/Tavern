@@ -16,7 +16,7 @@
  *
  * @help
  * ============================================================================
- * Wyspa_Data.js - kontrakt sześciu nowych miejsc Kruczej Wyspy
+ * Wyspa_Data.js - kontrakt sześciu nowych miejsc Wyspy Kruka
  * ============================================================================
  * Tylko dane (window.WyspaData). Plan budowy: docs/miejsca_wyspy/PAKIETY.md.
  * Pustelnia (A), Urwisko i kruk (B), Latarnia (C), Garnizon (D), Wrak (E),

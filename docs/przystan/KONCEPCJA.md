@@ -20,7 +20,7 @@ Suszarnie sieci udają na razie stojaki na skóry, a szlaban to dwa kawałki pł
 
 ## 1. Gdzie leży przystań i jak się do niej dochodzi
 
-**Propozycja: na zachodnim brzegu, za Podgrodziem.** Tak samo jest w Atlasie Kruczej Wyspy: przystań leży na zachodzie, od strony
+**Propozycja: na zachodnim brzegu, za Podgrodziem.** Tak samo jest w Atlasie Wyspy Kruka: przystań leży na zachodzie, od strony
 lądu, a droga do niej biegnie z miasteczka przez garnizon.
 
 Droga w grze: miasteczko (Map008) → brama zachodnia przy kuźni → Podgrodzie (Map111) → ścieżka w las na zachodniej krawędzi →

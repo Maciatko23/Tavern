@@ -1386,7 +1386,7 @@ Projekt i stan budowy: **`docs/PODROZNI.md`** (rozdz. 11). Etap 1 = rdzeń bez z
   Złotym - przyjeżdżają tylko, gdy jest `TavernLife.addRoomGuard`; kolacja u Borgara 20:00-21:00 = przepustka „w służbie” przez
   `TavernLife.addGatePass`; narada przez ścianę Jadalni; Noc Kupały; ślady i molo; list); `Podroznicy5_Data.js` + `Podroznicy5.js`
   (`podroznicy5.txt`) - D44 „Podatek wojenny”, D47 „Wolna Kompania” (Hubert jako rywal kości tylko tej sprawy: dopisany w biegu do
-  `TavernDice_parts.data.OPPONENTS`, bez `OPP_ORDER`), D48 „Mapa Kruczej Wyspy”. Mechanizmy etapów 2-3 (podsłuch, nocne kroki, listy,
+  `TavernDice_parts.data.OPPONENTS`, bez `OPP_ORDER`), D48 „Mapa Wyspy Kruka”. Mechanizmy etapów 2-3 (podsłuch, nocne kroki, listy,
   przeszukanie) rejestrowane, gdy są. Akt III: `WIEDZA_FRAKCJI` (+`pielgrzymDonosi`, `mapaTwierdzy`), nowe wspólne listy
   `Act3Data.WIEDZA_FALA2` (łucznik więcej w fali 2) i `WIEDZA_FALA4` (najemnik więcej w fali 4), obrońca „kompania” (2, po dzwonie),
   żołnierze garnizonu przy `poselWdzieczny` od przychylności 70. Test: `tests/poselstwo_test.js` (port 9791).

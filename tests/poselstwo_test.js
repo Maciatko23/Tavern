@@ -1,4 +1,4 @@
-// Podróżni z promu - etap 5: łańcuch W14 „Poselstwo” i sprawy D44 „Podatek wojenny”, D47 „Wolna Kompania”, D48 „Mapa Kruczej Wyspy”
+// Podróżni z promu - etap 5: łańcuch W14 „Poselstwo” i sprawy D44 „Podatek wojenny”, D47 „Wolna Kompania”, D48 „Mapa Wyspy Kruka”
 // (docs/PODROZNI.md 2.3, 2.7, 2.8, 2.13, I6, I7, 4.1, 4.4; js/plugins/Poselstwo_Data.js + Poselstwo.js, Podroznicy5_Data.js +
 // Podroznicy5.js, js/teksty/poselstwo.txt, podroznicy5.txt). Sprawdza:
 //   - wtyczki na swoich miejscach, teksty bez błędów, zadania W14/D44/D47/D48 w TownQuests, rejestr (Poselstwo 3070-3089), sekcje F9,
@@ -281,13 +281,13 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     const w47g = await W("D47");
     t.check("Kompania odpływa nieuspokojona - D47 przepada", w47g.s === "failed", w47g);
 
-    // ================================================================ D48 „Mapa Kruczej Wyspy” (Teofil, wizyta 2)
+    // ================================================================ D48 „Mapa Wyspy Kruka” (Teofil, wizyta 2)
     await skok("podroznicy5", 4);
     const t0 = await J("({ e: Podroznicy.stan().obecni.kartograf || null })"), w48a = await W("D48");
     const g2 = await t.gold();
     const po = await rozmowa("kartograf", ["Narysujmy"]);
     const f13 = await flags(), w48b = await W("D48");
-    t.check("F9 D48: Teofil na drugiej wizycie; pamiątka - Mapa Kruczej Wyspy; „Narysujmy twierdzę.” - 25 G, mapaTwierdzy, D48 wykonane",
+    t.check("F9 D48: Teofil na drugiej wizycie; pamiątka - Mapa Wyspy Kruka; „Narysujmy twierdzę.” - 25 G, mapaTwierdzy, D48 wykonane",
         !!t0.e && t0.e.wizyta === 2 && w48a.name === "d48Mapa" && (await J("TownQuests.vcount('mapa_wyspy')")) === 1 && f13.mapaWyspyPamiatka && /dwadzieścia pięć/.test(po.text) && (await t.gold()) === g2 + 25 && f13.mapaTwierdzy && w48b.s === "done",
         { t0, w48a, po: po.text.slice(0, 160), w48b });
     await skok("podroznicy5", 4);

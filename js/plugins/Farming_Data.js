@@ -505,7 +505,7 @@
             174: { raw: true, spoil: 48, dog: 45, tame: 16 },                                                               // Dorsz
             99: { stamina: 30, buff: "sated", hours: 2, fed: 38, water: 0, spoil: 96, dog: 45, tame: 11 },                  // Pieczona ryba
             101: { raw: true, spoil: 48 },                                                                                  // Zwierzyna (old saves)
-            102: { stamina: 8, fed: 8, water: 10, spoil: 72, dog: 12, dogPick: 14, dogPickBush: 18 },                       // Jagody
+            102: { stamina: 1, fed: 1, water: 1, spoil: 72, dog: 12, dogPick: 14, dogPickBush: 18 },                         // Jagody (2026-11-17, the player: +1 each - a snack, not a meal)
             103: { stamina: 6, fed: 8, water: 0, spoil: 72, dog: 12, dogPick: 12 },                                         // Grzyby
             104: { spoil: 168 },                                                                                            // Zioła (not eaten as they are)
             105: { stamina: 55, buff: "sated", hours: 5, fed: 55, water: 0, spoil: 480, dog: 45, tame: 9 },                 // Wędzone mięso

@@ -75,8 +75,8 @@ puste = „Reid”), potem tylko ogląda. Można pominąć scenę (krótko P) al
   **Brzozowa Wola**, płonie. Pali ją **Straż Pewności**, obca armia (nie ludzie Lorda Zaleskiego): czarne tabardy, na piersi i na
   chorągwi **białe otwarte oko**. Ludzie mówią na nich **„Czarne Oczy”**. (To nie jest Zakon - Zakon to dawni strażnicy Serca.)
 - **Rodzina.** Bohater jest jedynakiem. **Ojciec** zaginął na wojnie. **Matka** zostaje na lądzie, żeby iść za wojskiem i szukać ojca.
-  Pakuje synowi tobołek, daje **list do swojego ojca, dziadka Stacha** na Kruczej Wyspie, i **wisiorek z krukiem**: rodzinną pamiątkę,
-  „dał mi go mój ojciec, kiedy wyjeżdżałam z wyspy” (matka pochodzi z Kruczej Wyspy, wisiorek jest z rodu Stacha). Obiecuje przypłynąć **następnym promem**. Nie przypływa - wątek otwarty.
+  Pakuje synowi tobołek, daje **list do swojego ojca, dziadka Stacha** na Wyspie Kruka, i **wisiorek z krukiem**: rodzinną pamiątkę,
+  „dał mi go mój ojciec, kiedy wyjeżdżałam z wyspy” (matka pochodzi z Wyspy Kruka, wisiorek jest z rodu Stacha). Obiecuje przypłynąć **następnym promem**. Nie przypływa - wątek otwarty.
   *(Od 2026-10-17 w grze - W10, Przystan.js: matka pisze trzy listy. Idzie z taborem na północ, pierze i gotuje dla taboru, szuka ojca:
   najpierw dwie wieści - obóz jeńców za rzeką albo wojsko w górach; w ostatnim liście widziała pas ojca na innym żołnierzu, wygrany
   w kości od żywego jeńca, a jeńców pędzą na północ do kopalni soli. Ostrzega przed ludźmi z białym okiem pod płaszczem, którzy pytają
@@ -84,7 +84,7 @@ puste = „Reid”), potem tylko ogląda. Można pominąć scenę (krótko P) al
 - **Port.** Prom zajęło wojsko. **Przemytnik** (siwa broda, kaptur z woskowanego płótna, złoty kolczyk) zabiera chłopca kutrem za
   ostatnie monety. Sztorm rozbija kuter; czy przemytnik przeżył - nie wiadomo. Pojawi się później na przystani wyspy.
 - **Sztorm.** Na maszcie kutra siada kruk i nie odlatuje (znak: kruki Zakonu, Urwisko Kruków). Wielka fala, ciemność.
-- **Plaża o świcie.** Bohater budzi się na Kruczej Wyspie bosy, w podartym ubraniu, bez tobołka - zostały mu tylko mokry list i wisiorek.
+- **Plaża o świcie.** Bohater budzi się na Wyspie Kruka bosy, w podartym ubraniu, bez tobołka - zostały mu tylko mokry list i wisiorek.
   Idzie ścieżką w górę i pada. **Rybak Janek** znajduje go i zanosi do Stacha („to chyba jego wnuk, ma ten jego wisiorek”). Janek
   pojawi się później na przystani.
 - **Dom dziadka.** Trzy dni gorączki. Dziadek czyta list córki i milknie, potem: „A ja ci tu mam tylko... dług” - i dalej Rozdział 1.
@@ -162,10 +162,17 @@ Nowa gra zaczyna się w domu dziadka bohatera, po prologu (Prologue.js). Stare z
     Jesteś cały i zdrowy - to więcej, niż śmiałem prosić.” Nikogo nie obwinia.
 - **Wezwanie króla (wariant A - decyzja autora 2026-11-08: „postać względnie szybko traci możliwość nocowania u dziadka”, potem
   stajnia w Kruczogrodzie, potem namiot).** Tylko nowe gry (stare zapisy grają po staremu).
-  - **Dzień 3, rano** (albo pierwsza wizyta bohatera w domu lub na podwórzu dziadka od tej chwili): do domu przychodzi **królewski
-    posłaniec z Garnizonu nad zatoką** (list przyszedł promem). Korona potrzebuje na wojnie starych **kruczych strażników** — ludzi,
-    którzy znają kruki wyspy i umieją słać nimi wieści; Stach jest jednym z ostatnich (stąd wisiorek z krukiem). Ma odpłynąć
-    jeszcze tego dnia wieczornym promem, „na rok wojny albo do końca”. Dziadek się nie wykręca: „Kruki nie pytają, czyja wojna”.
+  - **Dzień 3, rano** (albo pierwsza wizyta bohatera w domu lub na podwórzu dziadka od tej chwili): przed chatkę przychodzi **królewski
+    posłaniec z Garnizonu nad zatoką** z **listem od króla do rąk własnych** (przepisane 2026-11-17 na życzenie autora; wcześniej: „Korona
+    potrzebuje starych kruczych strażników”). Dziadek łamie pieczęć, czyta w milczeniu („Więc król jeszcze pamięta, kim byłem”), mruczy
+    do siebie „Szukają go już otwarcie… Źle” i zgadza się: „Powiedz królowi, że Stach pamięta przysięgę. Popłynę.” Wnukowi mówi, że
+    czasem ktoś musi przypilnować, żeby świat się nie rozsypał, i cieszy się, że na lądzie zobaczy córkę (matkę bohatera). Odpływa
+    jeszcze tego dnia wieczornym promem, „na rok wojny albo do końca”.
+  - **Tajemnica dziadka (dla autora, nie dla gracza na tym etapie):** Stach to **legendarny wojownik zakonu, który dba o pokój na
+    świecie** - wie o tym bardzo mało ludzi, król wie. Dziadek **potajemnie wie o Krysztale Prawdy** (= Serce Twierdzy - przyjęte
+    roboczo; „go” w „Szukają go już otwarcie” to właśnie on: wojna na kontynencie toczy się o relikt pewności). Na pożegnanie mówi
+    wnukowi **„Dbaj o prawdę”** - bohater tego jeszcze nie rozumie („Zrozumiesz, kiedy przyjdzie czas”). Wygląd: legendarny wojownik
+    w przebraniu biednego dziadka (kapelusz z piórkiem, długie białe włosy).
   - **Tego samego dnia przychodzi Feliks** z dwoma strażnikami w barwach Lorda: dłużnik wyjeżdża, a dług niespłacony, więc dom idzie
     **w zastaw** — pieczęć na drzwiach o zmroku (20:00), do tej pory bohater może wynieść swoje rzeczy. **Pole zostaje** (dziadek
     zostawia je wnukowi, zastawem jest dom), dług bez zmian: 2500 G do dnia 60. Na drzwiach znak Lorda, na klamce pieczęć; drzwi
@@ -265,18 +272,28 @@ Istniejący NPC-e z tawerny nie są przypadkowi — każdy dostaje rolę w fabul
 
 ## Wyspa (propozycja, 2026-09-29)
 
-Robocza nazwa: **Krucza Wyspa**. Strona z mapką i kartami miejsc: artefakt „Atlas Kruczej Wyspy”. Wszystko poniżej to propozycja do
+Robocza nazwa: **Wyspa Kruka**. Strona z mapką i kartami miejsc: artefakt „Atlas Wyspy Kruka”. Wszystko poniżej to propozycja do
 wyboru - to, co już jest w grze, jest oznaczone numerem mapy.
 
 ### Świat: wojna na kontynencie
 
-Na głównym kontynencie trwa wojna. Jej prawdziwy powód zna niewielu: strony szukają **reliktu, który daje absolutną pewność** - Serca
-Twierdzy. Kto je zdobędzie, zna plany wroga, zdrajców we własnym obozie i wynik bitwy, zanim się zacznie. Wyspa jest ziemią niczyją,
-kilka godzin promem od lądu - i właśnie dlatego ciągną na nią wszyscy: uchodźcy, dezerterzy, szpiedzy, werbownicy i poszukiwacze reliktu.
+Na głównym kontynencie trwa wojna. Jej prawdziwy powód zna niewielu: strony walczą **o prawdę** - szukają reliktu, który pokazuje absolutną prawdę (a z nią pewność) - Serca
+Twierdzy. Kto je zdobędzie, zna plany wroga, zdrajców we własnym obozie i wynik bitwy, zanim się zacznie. Wyspa Kruka należy do Jasnomiru (Korona o niej pamięta: trzyma tu garnizon, a rządzi nią w jej imieniu Lord Zaleski), kilka godzin promem od lądu - i właśnie dlatego ciągną na nią wszyscy: uchodźcy, dezerterzy, szpiedzy, werbownicy i poszukiwacze reliktu.
 Frakcja, która wynajęła Gruma, to jedna ze stron tej wojny (otwarte: która i czy ma swoich ludzi we dworze Lorda).
 
 Wojna nie jest w grze tłem z napisu - dociera na wyspę falami: po bitwie przypływa więcej uchodźców, wojsko rekwiruje zboże, rosną ceny,
 w tawernie pojawiają się nowi goście z nowymi sprawami.
+
+**Ustalenia autora 2026-11-17 (świat):**
+- Wojna toczy się **o prawdę** (prolog: „…walczą o coś, czego nikt nie widział — o prawdę”), w głębi o **Kryształ Prawdy** (= Serce Twierdzy, roboczo).
+- **Serce naprawdę powoli się budzi.** Morze jest zwykłe, słone - z Sercem niezwiązane.
+- **Ojciec bohatera NIE służy w Straży Pewności.**
+- **Królestwo Jasnomir**: ląd główny i trzy wyspy:
+  - **Wyspa Kruka** - główna akcja gry (dawniej w tekstach „Krucza Wyspa”; zmienione wszędzie 2026-11-17),
+  - **Wyspa Sowy** - wyspa zakonu, gdzie uczył się dziadek Stach,
+  - **Wyspa Sępa** - Straż Pewności (Czarne Oczy) i źli ludzie.
+  - Wyspa Kruka nie jest ziemią niczyją: jest jasnomirska i Korona o niej pamięta (garnizon, Lord Zaleski rządzi w jej imieniu). Prolog: „Za morzem leży Wyspa Kruka. Ostatni brzeg Jasnomiru.”
+  - **Czerwonego morza nie ma** (wyłączone 2026-11-17): morze jest zwykłe, słone, nie do picia.
 
 ### Tawerna jako scena intryg
 
@@ -513,7 +530,7 @@ gotowych kawałków pokoi narysowanych w edytorze jako szablony (rdzeń już umi
   *(Od 2026-10-16 w kronikach: strażnik dzwonu ma jedno pytanie na rok, nowicjusz jedno na całe życie, kronikarz zapisuje pytanie
   i odpowiedź; kto pyta drugi raz w roku, przestaje być bratem. W grze pytanie zadaje się w Noc Pytania u brata Kleofasa.)*
 - Rozgałęzienia w Akcie III i ich konsekwencje dla zakończenia.
-- Nazwa wyspy (robocza: Krucza Wyspa) i które strony walczą na kontynencie.
+- Nazwa wyspy (robocza: Wyspa Kruka) i które strony walczą na kontynencie.
   *(Na wyspie od 2026-10-16: Straż Pewności - Czarne Oczy - i chorągiew królewska z feniksem w garnizonie nad zatoką.)*
 - Czy Serce jest jedno, czy wojna toczy się też o jego odłamki (soczewka latarni, „odłamki” sprzedawane w tawernie).
   *(Rozstrzygnięte 2026-10-16: Serce jest jedno; soczewka latarni to „Oko Strażnicy” z kryształu Pierwszych, nie odłamek - wojna

@@ -207,7 +207,7 @@ Problemy: do sprawdzenia 1, uciążliwość 4, info 74
 | W14 | W | Poselstwo | - | 7 | 0 | 14 |
 | D44 | D | Podatek wojenny | poborca | 2 | 0 | 1 |
 | D47 | D | Wolna Kompania | - | 1 | 0 | 1 |
-| D48 | D | Mapa Kruczej Wyspy | kartograf | 1 | 0 | 1 |
+| D48 | D | Mapa Wyspy Kruka | kartograf | 1 | 0 | 1 |
 | D45 | D | Gość spod trójki | - | 2 | 0 | 0 |
 | D46 | D | Skradziona szkatułka | - | 2 | 0 | 1 |
 | K73 | K | Nocne kroki | - | 1 | 0 | 0 |

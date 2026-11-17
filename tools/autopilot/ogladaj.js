@@ -1,11 +1,12 @@
 // Tryb oglądania autopilota fabuły (2026-10-28, gracz: „ja potem będę chciał go włączyć i patrzeć, jak gra się sama przechodzi”).
 // Jedno polecenie (albo ogladaj.bat w głównym folderze projektu):
-//   node tools/autopilot/ogladaj.js [--od <zapis>] [--szybkosc 1|2|4] [--port 9753]
+//   node tools/autopilot/ogladaj.js [--od <zapis>] [--szybkosc 1|2|4] [--port 9753] [--bez-prologu]
 // - serwer gry: tools/serve.js na 8765 (uruchamiany, gdy nie działa; kopii gracza na 8770 nie dotyka),
 // - widoczne okno Edge na pełnym ekranie bez ramek, na monitorze z VS Code (tools/autopilot/ekran.ps1), własny profil
 //   %LOCALAPPDATA%\TawernaAutopilot\edge_profile (zapisy gracza z kopii 8770 zostają nietknięte),
 // - dźwięk 5% (muzyka, tło, efekty), minimapa schowana, prędkość ×1 (F7 zmienia),
-// - nowa gra od tytułu (prolog pominięty klawiszem P) albo zapis kontrolny tests/autopilot_fabula/zapisy/<zapis>.json,
+// - nowa gra od tytułu: imię, cały prolog „Ostatni prom” (2026-11-17, gracz: „od samego początku, do prologu i startu w domu
+//   dziadka” - --bez-prologu pomija go klawiszem P) i start w domu dziadka (Map224); albo zapis tests/autopilot_fabula/zapisy/<zapis>.json,
 // - autopilot (tests/autopilot/ap.js + tests/autopilot_fabula/fab.js) i pasek (tests/autopilot_fabula/pasek.js) wstrzykiwane tylko
 //   tutaj - lista wtyczek gry się nie zmienia.
 // W oknie gry: F6 pauza, F7 prędkość ×1/×2/×4, F8 pasek, Esc (albo zamknięcie okna) - koniec. Gdy utknie - pasek „utknąłem: …”,
@@ -22,6 +23,8 @@ const EDGE = "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe";
 const GAME = "http://127.0.0.1:8765/index.html";
 const arg = (n, d) => { const i = process.argv.indexOf("--" + n); return i >= 0 && process.argv[i + 1] !== undefined ? process.argv[i + 1] : d; };
 const OD = arg("od", "");
+const SKIP_PROLOGUE = process.argv.includes("--bez-prologu");
+const HOME = 224;   // (the new world's grandpa's house - the old Map019 is gone)
 const SPEED = [1, 2, 4].includes(Number(arg("szybkosc", 1))) ? Number(arg("szybkosc", 1)) : 1;
 const PORT = Number(arg("port", 9753));
 const PROFILE = path.join(process.env.LOCALAPPDATA || path.join(require("os").homedir(), "AppData", "Local"), "TawernaAutopilot", "edge_profile");
@@ -95,7 +98,7 @@ const onMap = id => `(SceneManager._scene instanceof Scene_Map && SceneManager._
             SceneManager.goto(Scene_Map); return 0; })()`);
         if (!(await c.until(onMap(), 60))) await fail("zapis się nie wczytał");
     } else {
-        say("nowa gra: tytuł → imię → prolog (pominięty klawiszem P)");
+        say("nowa gra: tytuł → imię → prolog " + (SKIP_PROLOGUE ? "(pominięty klawiszem P)" : "(cały, jak u gracza)") + " → dom dziadka");
         await c.until("(SceneManager._scene instanceof Scene_Title && window.TitleScreen && TitleScreen.info() && TitleScreen.info().open && TitleScreen.info().active)", 30);
         await sleep(600);
         // (the profile keeps its saves: the menu may stand on „Kontynuuj” - the arrows to „Nowa gra” first)
@@ -106,8 +109,13 @@ const onMap = id => `(SceneManager._scene instanceof Scene_Map && SceneManager._
         await c.until("(window.Prologue && Prologue.info() && Prologue.info().screen === 'name')", 20);
         for (let i = 0; i < 4; i++) { await sleep(500); await c.key("rawKeyDown", 13, "Enter", "Enter"); await sleep(60); await c.key("keyUp", 13, "Enter", "Enter"); if (await c.until("(window.Prologue && Prologue.info() && Prologue.info().screen === 'film')", 5)) break; }
         let landed = false;
-        for (let i = 0; i < 6 && !landed; i++) { await c.key("rawKeyDown", 80, "KeyP", "p"); await sleep(2600); await c.key("keyUp", 80, "KeyP", "p"); landed = await c.until(onMap(19), 10); }
-        if (!landed) await fail("dom dziadka się nie pokazał");
+        if (SKIP_PROLOGUE) for (let i = 0; i < 6 && !landed; i++) { await c.key("rawKeyDown", 80, "KeyP", "p"); await sleep(2600); await c.key("keyUp", 80, "KeyP", "p"); landed = await c.until(onMap(HOME), 10); }
+        else {   // (the film runs by itself - its lines have their time; the window stays the player's to watch)
+            say("prolog trwa (sam się przewija)…");
+            landed = await c.until(onMap(HOME), 20 * 60);
+        }
+        if (!landed) await fail("dom dziadka się nie pokazał (mapa " + (await c.ev("window.$gameMap ? $gameMap.mapId() : 0").catch(() => "?")) + ")");
+        say("dom dziadka - start gry");
     }
     await c.ev("$gameSystem._minimapHidden = true; 0");
     await c.ev("window.FAB_GRAPH = " + JSON.stringify(require(path.join(FAB_DIR, "graf.js")).build()) + "; 0");

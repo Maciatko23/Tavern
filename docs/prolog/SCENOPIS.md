@@ -78,15 +78,15 @@ Gdzie BGM nie jest podany, gra BGM z poprzedniej sceny. Nazwy plików są z `aud
 ### Scena 1: Kronika (~25 s)
 Klatka: `prolog_02_kronika.png`.
 
-- **0:00–0:03:** czerń. Z dołu ekranu wyłania się ciemna mapa Kruczej Wyspy na pergaminie (ta z Atlasu). Na dole mapy pulsuje słaba czerwona łuna, jakby palił się ląd poza kadrem.
+- **0:00–0:03:** czerń. Z dołu ekranu wyłania się ciemna mapa Wyspy Kruka na pergaminie (ta z Atlasu). Na dole mapy pulsuje słaba czerwona łuna, jakby palił się ląd poza kadrem.
 - **Co się rusza:**
   - powoli spada popiół (szare płatki);
   - mapa przesuwa się ku górze o kilka pikseli przez całą scenę;
   - łuna oddycha.
 - **Narrator:** napisy pojawiają się jedno po drugim, bez głosu, w EB Garamond:
   > **Trzeci rok wojny.**
-  > Królestwa na lądzie walczą o coś, czego nikt nie widział — o pewność.
-  > Za morzem leży Krucza Wyspa. Ziemia niczyja.
+  > Królestwa na lądzie walczą o coś, czego nikt nie widział — o prawdę. *(2026-11-17: było „o pewność”)*
+  > Za morzem leży Wyspa Kruka. Ostatni brzeg Jasnomiru. *(2026-11-17: było „Ziemia niczyja”)*
   > Płyną tam ci, którym nie zostało już nic.
 - **Przejście:** popiół gęstnieje, napisy gasną, a mapa ciemnieje w czerń i wchodzi czerwień ognia sceny 2.
 
@@ -121,7 +121,7 @@ Klatka: `prolog_02_kronika.png`.
   > **Matka:** Tobołek. Chleb, ser, koc. Nie otwieraj, dopóki nie wypłyniesz.
   > **\N[1]:** Mamo, chodź ze mną. Prom jeszcze stoi.
   > **Matka:** Nie mogę. Ktoś musi być w domu, kiedy ojciec wróci. Pójdę za wojskiem, rozpytam w obozach...
-  > **Matka:** Weź ten list. Dla dziadka Stacha, na Kruczej Wyspie. Oddasz mu do rąk. On cię przyjmie.
+  > **Matka:** Weź ten list. Dla dziadka Stacha, na Wyspie Kruka. Oddasz mu do rąk. On cię przyjmie.
   > **\N[1]:** Dziadka? Przecież nigdy go nie widziałem.
   > **Matka:** Ale on cię widział. Na chrzcinach. Płakał jak bóbr, choć się wypierał.
   > **Matka:** I to... wisiorek z krukiem. Dał mi go mój ojciec, kiedy wyjeżdżałam z wyspy. Teraz jest twój. Nie zgub go, \N[1].
@@ -151,7 +151,7 @@ Klatka: `prolog_05_port_przemytnik.png`.
   > **Przemytnik:** Prom jest dla wojska, chłopcze. Ale mój kuter... za tyle monet.
   > **\N[1]:** To wszystko, co mam.
   > **Przemytnik:** Wiem. Dlatego tyle kosztuje. *(SE `Coin`)* Wskakuj. I trzymaj się masztu.
-  > **Przemytnik** *(do siebie)*: Krucza Wyspa... Nikt rozsądny tam teraz nie płynie. Dobrze, że nie jestem rozsądny.
+  > **Przemytnik** *(do siebie)*: Wyspa Kruka... Nikt rozsądny tam teraz nie płynie. Dobrze, że nie jestem rozsądny.
 - **Przejście:** kuter odbija (plansza odpływa w prawo, światła portu maleją), a w czerń wchodzi szum morza.
 
 ### Scena 4: Sztorm (~35 s)
@@ -183,7 +183,7 @@ Klatka: `prolog_07_plaza_swit.png`.
   - nisko leżąca mgła;
   - ścieżka przez wydmy w górę, ku sosnom i czarnym klifom z krukami;
   - przy wodzie leży chłopiec, bosy, w podartej koszuli, bez tobołka; w dłoni ma mokry list, na szyi wisiorek.
-- **Napis:** „Krucza Wyspa. Świt.”
+- **Napis:** „Wyspa Kruka. Świt.”
 - **Co się rusza:**
   - mgła płynie;
   - małe fale obmywają stopy chłopca (kilka klatek fali);

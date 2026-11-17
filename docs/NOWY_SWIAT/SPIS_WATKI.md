@@ -343,7 +343,7 @@ Zwykle 3-8 kroków, 0,5-1,5 h gry każde.
 | D45 | Gość spod trójki | tajemniczy lokator, stuk w kominie | gość | tawerna, piwnica | **PRZENIEŚĆ** |
 | D46 | Skradziona szkatułka | szkatułka wdowy, śledztwo | Ksenia Żuraw | tawerna | **PRZENIEŚĆ** |
 | D47 | Wolna Kompania | czterech najemników demoluje tawernę | Hubert Szary i inni | tawerna | **PRZENIEŚĆ** |
-| D48 | Mapa Kruczej Wyspy | siedem miejsc, gdzie „linie murów się schodzą” | Teofil | wyspa | **PRZEROBIĆ** ★ (śladem zakonu: wodociąg) |
+| D48 | Mapa Wyspy Kruka | siedem miejsc, gdzie „linie murów się schodzą” | Teofil | wyspa | **PRZEROBIĆ** ★ (śladem zakonu: wodociąg) |
 
 ---
 

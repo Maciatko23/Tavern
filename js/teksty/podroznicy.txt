@@ -190,7 +190,7 @@ obsada.pielgrzym.odjazd = Pokój z tobą, synu. Jeszcze się zobaczymy.
 # relikwie - Gaspar Lis, handlarz relikwii (pokój 12)
 obsada.relikwie.imie = Gaspar Lis
 obsada.relikwie.tytul = handlarz relikwii
-obsada.relikwie.przybycie = Ludzie Kruczej Wyspy! Gaspar Lis przypłynął z błogosławieństwem!
+obsada.relikwie.przybycie = Ludzie Wyspy Kruka! Gaspar Lis przypłynął z błogosławieństwem!
 [obsada.relikwie.spotkanie]
 Gaspar Lis, relikwie i medaliki. Kość palca świętego strażnika Kruczych Skał!
 Za dotknięcie grosz, za kość - porozmawiamy.
@@ -279,7 +279,7 @@ obsada.lowczyni.odjazd = Bywaj, dzieciaku. Dobrze, że masz odwagę.
 # posel - Adam Wierzbięta, poseł Korony (Apartament Złoty - dopiero z furtką TavernLife, etap 5)
 obsada.posel.imie = Adam Wierzbięta
 obsada.posel.tytul = poseł Korony
-obsada.posel.przybycie = Krucza Wyspa. Pachnie rybą i długiem.
+obsada.posel.przybycie = Wyspa Kruka. Pachnie rybą i długiem.
 [obsada.posel.spotkanie]
 Adam Wierzbięta, poseł Korony. Korona nie przyjechała negocjować. Przyjechała pomóc panu Zaleskiemu zrozumieć.
 
@@ -651,7 +651,7 @@ Szczęście sprzyja odważnym!
 Ziemia! Wreszcie ziemia.
 Ostrożnie, trap mokry.
 Uff. Morze nie dla mnie.
-Krucza Wyspa... Mniejsza, niż mówili.
+Wyspa Kruka... Mniejsza, niż mówili.
 
 # imiona puli (kobiety: typy z ciałem kobiety)
 [imiona.m]
@@ -703,11 +703,11 @@ Mówią, że jeńców spod Brzozowej Woli prowadzą na północ, do taborów. Ni
 Na morzu pływają statki bez bandery. Nocą, bez świateł.
 W portach ktoś skupuje stare kamienie. Z krukiem. Płaci złotem i nie pyta o drogę.
 Mówią, że wojna przeniesie się na morze. Mówią też, że nie. Mówią dużo.
-Ludzie z okiem pytają w karczmach o Kruczą Wyspę. Grzecznie pytają. To najgorsze.
+Ludzie z okiem pytają w karczmach o Wyspę Kruka. Grzecznie pytają. To najgorsze.
 
 [wiesci.akt2]
 Na lądzie szepczą o drzwiach pod skałą. Że ktoś je szuka, a ktoś inny pilnuje.
-Kupcy mówią, że na Kruczej Wyspie dzieje się coś, o czym lepiej nie gadać przy obcych.
+Kupcy mówią, że na Wyspie Kruka dzieje się coś, o czym lepiej nie gadać przy obcych.
 Ludzie z okiem płacą przewoźnikom za każdą wieść z wyspy.
 
 [wiesci.akt3]
@@ -763,7 +763,7 @@ Sprawa bez końca
 {imie} - {odplynal} promem, a sprawa została niezałatwiona. Borgar pokręcił głową - renoma karczmy spadła.
 
 # ======================================================================== scena przybycia promu (przystań, 9:00)
-scena.przewoznik = Krucza Wyspa! Kto do lądu - za sześć godzin!
+scena.przewoznik = Wyspa Kruka! Kto do lądu - za sześć godzin!
 scena.celnik = Nazwisko? Cel?
 [scena.cele]
 Za chlebem.

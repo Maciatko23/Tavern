@@ -230,7 +230,7 @@
         let ph = null;
         try { ph = RW && RW.phase ? RW.phase() : null; } catch (e) { ph = null; }
         if (mapId === UNDER) return { rgb: BILGE_RGB, a: 0.42, foam: [168, 168, 146] };
-        if (!ph) return { rgb: [64, 132, 142], a: 0, foam: [214, 226, 222] };
+        if (!ph || ph.clean) return { rgb: [64, 132, 142], a: 0, foam: [214, 226, 222] };   // (a clean sea: no tint - it was taken for red)
         if (ph.grey) return { rgb: GREY_RGB, a: 0.6, foam: [190, 182, 160] };
         return { rgb: RED_RGB, a: 0.45 + 0.25 * (ph.red || 0), foam: [226, 170, 140] };
     }

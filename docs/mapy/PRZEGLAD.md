@@ -753,7 +753,7 @@ Razem: **23 map poprawionych**, uwagi na mapach agentów 102 -> 14. Poprawki: D4
 **Map163 Kwatera rotmistrza**
 
 - D4 (4,3): zdarzenie 8 'Rozkazy garnizonu': priorytet 'jak postać' - akcja z sąsiedniej kratki
-- D4 (6,3): zdarzenie 6 'Mapa Kruczej Wyspy': priorytet 'jak postać' - akcja z sąsiedniej kratki
+- D4 (6,3): zdarzenie 6 'Mapa Wyspy Kruka': priorytet 'jak postać' - akcja z sąsiedniej kratki
 - D4 (6,6): zdarzenie 10 'Lista zaginionych': priorytet 'jak postać' - akcja z sąsiedniej kratki
 
 **Map166 Wrak - pod pokładem**
@@ -771,7 +771,7 @@ Razem: **23 map poprawionych**, uwagi na mapach agentów 102 -> 14. Poprawki: D4
 **Map171 Piwnica kantoru**
 
 - O1 (1,6): przesunięto obiekt D (13,3) 1 kafli o 1 w górę i dołożono dół
-- D4 (15,3): niewidoczne zdarzenie 18 'Mapa Kruczej Wyspy' przesunięte z (15,3) do (14,3) (przed nim da się stanąć)
+- D4 (15,3): niewidoczne zdarzenie 18 'Mapa Wyspy Kruka' przesunięte z (15,3) do (14,3) (przed nim da się stanąć)
 
 **Map172 Dwór - Hol**
 

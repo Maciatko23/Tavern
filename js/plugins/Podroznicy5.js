@@ -11,7 +11,7 @@
 //     (TavernLife.armWrestle, a rival a notch above Tadek) or at dice (TavernDice: Hubert as a rival of this matter only); the fist
 //     fight in the tavern's yard (Humans.js - won or lost: respect); Wit throwing them out (kompaniaWroga, the next ferry); hired for
 //     60 G (kompaniaNajeta); Grum (an ally of W8) talking them down
-//   - D48 "Mapa Kruczej Wyspy" (Teofil, visit 2): the keepsake map, the fortress drawn (25 G, mapaTwierdzy), talked out of it, or his
+//   - D48 "Mapa Wyspy Kruka" (Teofil, visit 2): the keepsake map, the fortress drawn (25 G, mapaTwierdzy), talked out of it, or his
 //     sketch taken from the tube at night (Podroznicy.przeszukanie, stage 3 - caught: Renoma -3 and the sketch goes to the mainland)
 //   - Act III (docs/PODROZNI.md 4.4): mapaTwierdzy - the shared list of the faction's knowledge (one scout more in wave 3);
 //     kompaniaNajeta - two of the Company among the defenders after the bell; kompaniaWroga - one mercenary more in wave 4 (the shared
@@ -20,7 +20,7 @@
 
 /*:
  * @target MZ
- * @plugindesc [etap 5] Sprawy podróżnych - silnik: D44 „Podatek wojenny” (noc u poborcy, raport), D47 „Wolna Kompania” (burdy, siłowanie, kości, bójka, Wit, najęcie, Grum), D48 „Mapa Kruczej Wyspy”, echa w Akcie III. v1.0.0
+ * @plugindesc [etap 5] Sprawy podróżnych - silnik: D44 „Podatek wojenny” (noc u poborcy, raport), D47 „Wolna Kompania” (burdy, siłowanie, kości, bójka, Wit, najęcie, Grum), D48 „Mapa Wyspy Kruka”, echa w Akcie III. v1.0.0
  * @author Claude
  * @base TawernaCore
  * @base Watki
@@ -270,7 +270,7 @@
     }
 
     // ==================================================================
-    // 4. D48 "Mapa Kruczej Wyspy" - the keepsake, the fortress
+    // 4. D48 "Mapa Wyspy Kruka" - the keepsake, the fortress
     // ==================================================================
     const otwartaD48 = () => has() && w.active("D48") && !S().d48.koniec;
     function d48Pamiatka() {

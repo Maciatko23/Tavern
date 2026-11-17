@@ -1,4 +1,4 @@
-# Świat Kruczej Wyspy w kratkach: wersja „z map”
+# Świat Wyspy Kruka w kratkach: wersja „z map”
 
 2026-10-30. **PROJEKT do oceny.** W `data/` ani `js/` nic nie zmieniłem. Maska kruka przestała obowiązywać; poprzednią wersję (kruk) zachowano w `docs/mapy/kruk_wersja/` (obrazki, `swiat.json`, `SWIAT.md`) i `tools/mapy/kruk_wersja/` (narzędzia), żeby można było porównać.
 

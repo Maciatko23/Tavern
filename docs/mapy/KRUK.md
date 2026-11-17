@@ -1,6 +1,6 @@
 # Mapa kruka: propozycja ułożenia map plenerowych
 
-2026-10-30. To jest **propozycja do oceny**. Nic w `data/` ani `js/` nie zostało zmienione. Narzędzie: `tools/mapy/kruk.py` (układ liczy się sam, potem poprawiony ręcznie). Dane liczbowe: `kruk_wynik_A.json`, `kruk_wynik_B.json`. Maska lądu kruka (z „Atlasu Kruczej Wyspy”): `kruk_maska.png`.
+2026-10-30. To jest **propozycja do oceny**. Nic w `data/` ani `js/` nie zostało zmienione. Narzędzie: `tools/mapy/kruk.py` (układ liczy się sam, potem poprawiony ręcznie). Dane liczbowe: `kruk_wynik_A.json`, `kruk_wynik_B.json`. Maska lądu kruka (z „Atlasu Wyspy Kruka”): `kruk_maska.png`.
 
 Obrazki (patrz na nie najpierw):
 

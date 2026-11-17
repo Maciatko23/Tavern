@@ -406,7 +406,7 @@
             add(W, "pogoda", "calm", K.allRows[8], 70);
         }
         if (window.Wyspa && Wyspa.forceTide) add(W, "morze", "isleTide", "", 70, TK.plyw.opis, { fresh: r => { r.label = tideLabel(); } });
-        add(W, "morze", "isleWater", "", isleIcon(173) || 70, K.isleRows[7], { fresh: r => { r.label = isleLabel.water(); } });
+        if (!(window.CzerwonaWoda && CzerwonaWoda.off)) add(W, "morze", "isleWater", "", isleIcon(173) || 70, K.isleRows[7], { fresh: r => { r.label = isleLabel.water(); } });   // (the red sea switched off: no row)
         add(W, "morze", "isleStorm", TK.burzaKoniec.label, 70, TK.burzaKoniec.opis, { fresh: r => { r.icon = (stormEnd()[0] || {}).icon || 70; } });
         add(W, "morze", "isleFog", K.isleRows[5], 70, K.isleRows[6]);
         if (window.Birds) {   // the birds (Birds.js): a flock landing near the player, a raid on the sown fields

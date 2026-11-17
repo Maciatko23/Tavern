@@ -82,13 +82,46 @@
         }
         return out;
     }
+    // (2026-11-17, the player: „czemu jak gra coś robi albo podnosi, to jest ścinka gry?” - every plan of a walk froze the game for
+    // ~250 ms on the plot: the field asked canPass ~20 times a tile, and each canPass looked through all the map's events. Now one
+    // field: each (tile, direction) asked once, and the events found by their tiles from a grid made once - the same answers, the
+    // game's own canPass)
+    const FIELD_BOX = 6;   // (how far an event's tiles may reach from its x, y - <Occupy> trees and buildings)
+    function withEventGrid(fn) {
+        const map = $gameMap, w = W(), grid = new Map();
+        for (const e of map.events()) {
+            if (e.isThrough()) continue;
+            for (let cy = e.y - FIELD_BOX; cy <= e.y + FIELD_BOX; cy++) for (let cx = e.x - FIELD_BOX; cx <= e.x + FIELD_BOX; cx++) {
+                if (cx < 0 || cy < 0 || cx >= w || cy >= H() || !e.pos(cx, cy)) continue;
+                const k = cy * w + cx, l = grid.get(k);
+                if (l) l.push(e); else grid.set(k, [e]);
+            }
+        }
+        const own = Object.prototype.hasOwnProperty.call(map, "eventsXyNt"), before = map.eventsXyNt;
+        map.eventsXyNt = (x, y) => (map.isValid(x, y) ? grid.get(y * w + x) || [] : []).filter(e => !e.isThrough());
+        try { return fn(); } finally { if (own) map.eventsXyNt = before; else delete map.eventsXyNt; }
+    }
     function field(sx, sy) {
+        if (!AP.slowField) return withEventGrid(() => fieldOf(sx, sy, true));
+        return fieldOf(sx, sy, false);
+    }
+    function fieldOf(sx, sy, memo) {
         AP.lastStep = 'field';
         const avoid = exitTiles();
         const nearExit = new Set();   // (the tiles round a crossing: dear, so no path brushes past one)
         for (const j of avoid) { const ex = j % W(), ey = (j / W()) | 0; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) nearExit.add((ey + dy) * W() + ex + dx); }
         const zoneCost = AP.zones.length > 0;
         const w = W(), h = H(), n = w * h, dist = new Float64Array(n).fill(Infinity), prev = new Int32Array(n).fill(-1);
+        const p0 = P(), canMemo = new Int8Array(memo ? n * 10 : 0).fill(-1), canPass0 = p0.canPass;
+        if (memo) p0.canPass = function(x, y, d) {   // (only for this one field: nothing moves while it is made)
+            if (x < 0 || y < 0 || x >= w || y >= h) return canPass0.call(this, x, y, d);
+            const k = (y * w + x) * 10 + d, v = canMemo[k];
+            if (v >= 0) return v === 1;
+            const r = canPass0.call(this, x, y, d);
+            canMemo[k] = r ? 1 : 0;
+            return r;
+        };
+        try {
         const heap = [];
         const push = (d, i) => { heap.push([d, i]); let c = heap.length - 1; while (c > 0) { const p = (c - 1) >> 1; if (heap[p][0] <= heap[c][0]) break; [heap[p], heap[c]] = [heap[c], heap[p]]; c = p; } };
         const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; let c = 0; for (;;) { const l = 2 * c + 1, r = l + 1; let m = c; if (l < heap.length && heap[l][0] < heap[m][0]) m = l; if (r < heap.length && heap[r][0] < heap[m][0]) m = r; if (m === c) break; [heap[m], heap[c]] = [heap[c], heap[m]]; c = m; } } return top; };
@@ -105,6 +138,7 @@
                 dist[j] = nd; prev[j] = i; push(nd, j);
             }
         }
+        } finally { if (memo) delete p0.canPass; }
         return { dist, prev, w, sx, sy, at: (x, y) => dist[y * w + x] };
     }
     function pathFrom(f, tx, ty) {

@@ -44,7 +44,7 @@ const { launch, sleep } = require("./cdp.js");
 
         // ================================================================== A. the food table
         const A = await J(`(function(){
-            const OLD_FEED = { 71: [6, 0], 72: [8, 0], 73: [10, 0], 75: [6, 0], 76: [8, 0], 81: [5, 10], 83: [30, 0], 95: [45, 0], 99: [38, 0], 102: [8, 10], 103: [8, 0],
+            const OLD_FEED = { 71: [6, 0], 72: [8, 0], 73: [10, 0], 75: [6, 0], 76: [8, 0], 81: [5, 10], 83: [30, 0], 95: [45, 0], 99: [38, 0], 102: [1, 1], 103: [8, 0],
                 105: [55, 0], 106: [48, 0], 107: [30, 0], 108: [35, 0], 109: [55, 20], 110: [6, 25], 123: [8, 30], 124: [32, 0] };
             const OLD_LIFE = { 94: 60, 95: 120, 98: 40, 99: 96, 101: 48, 102: 72, 103: 72, 104: 168, 105: 480, 106: 360, 107: 30, 108: 96, 109: 72, 110: 120,
                 71: 480, 72: 360, 73: 480, 75: 240, 83: 120, 123: 48, 124: 720, 130: 96, 131: 96, 132: 60, 133: 72, 134: 48, 135: 240, 136: 96,
@@ -273,7 +273,7 @@ const { launch, sleep } = require("./cdp.js");
         await frames(90);
         check("F5 starving at 0 strength: a ripe crop can be harvested", hv === true && (await count(71)) > p0, { hv, got: (await count(71)) - p0, pops: await pops() });
         const de = await J(`(function(){ $gameSystem.setStamina(0); const n = Needs.state(); n.food = 5; n.water = 5; $gameParty.gainItem($dataItems[102], 1); const can = $gameParty.canUse($dataItems[102]); $gameParty.leader().useItem($dataItems[102]); return { can, food: n.food, water: n.water }; })()`);
-        check("F6 ...and eating (berries) works at 0 strength", de.can && de.food === 13 && de.water === 15, de);
+        check("F6 ...and eating (berries) works at 0 strength", de.can && de.food === 6 && de.water === 6, de);
         const w0 = await ev("Needs.state().water");
         await ev(`(function(){ $gameSystem.setStamina(0); const b = ${barrel}; b.water = 3; b.wt = Farming.clockHours(); Farming.menuFor(b.x, b.y).entries.find(e => e.name === "Napij się").run(); return 0; })()`);
         await frames(90);

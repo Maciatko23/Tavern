@@ -1272,7 +1272,9 @@
     wz.haki({
         // begun: the messenger passed through (day 3) or the summons happened; done: the summons happened / Szczepan took the letter
         wezStart: () => { const z = wez(); return !!z && active() && (!!z.told || !!z.called); },
-        wezByl: () => { const z = wez(); return !!z && !!z.called; },
+        // (2026-11-17: „Zanieś list dziadka Szczepanowi” on the screen's top bar from the scene's first frame, before the king's letter
+        // was even read - the next goal comes with grandpa's letter in hand, or with him gone)
+        wezByl: () => { const z = wez(); return !!z && !!z.called && !!(z.letter || z.gone || z.underDoor); },
         wezStajnia: () => { const s = state(); return !!(s && s.flags && s.flags.stajnia); },
         wezListTekst: () => { const z = wez(); return z && z.underDoor && !z.letter ? TK.wez.krok[4] : TK.wez.krok[3]; },
         wezGdzie: () => { const z = wez(); return z && z.underDoor && !z.letter ? { map: WEZ.YARD, name: TK.wez.podworze } : { person: "kolodziej" }; }
@@ -1469,15 +1471,19 @@
         o.push(C(221, [])); js("Story.wezStage()"); wait(20); o.push(C(222, [])); wait(20);
         js("AudioManager.playSe({ name: \"Knock\", volume: 90, pitch: 100, pan: 0 })"); wait(30);
         js("Story.wezShow(\"herald\")"); inn(H, S.herald);
-        line(H, 0); line(G, 1); line(H, 2); line(G, 3); line(H, 4); line(0, 5); line(G, 6); line(H, 7);
+        // (2026-11-17, the player: the king summons grandpa - in secret a legendary warrior of the order that keeps the peace; few
+        // know it, the king does - grandpa reads the king's letter, agrees in his quiet way and is glad he will see his daughter)
+        line(H, 0); js("AudioManager.playSe({ name: \"Book1\", volume: 80, pitch: 90, pan: 0 })"); line(G, 1); wait(50);
+        line(G, 2); line(H, 3); line(G, 4); line(G, 5); line(0, 6); line(G, 7); line(G, 8); line(H, 9);
         out("herald", H); wait(40);
         js("Story.wezShow(\"butler\")"); inn(B, S.butler);
         js("Story.wezShow(\"guard1\")"); inn(WEZ.ID.guard1, S.guard1);
         js("Story.wezShow(\"guard2\")"); inn(WEZ.ID.guard2, S.guard2);
-        line(B, 8); line(B, 9); line(G, 10); line(B, 11); line(0, 12); line(B, 13);
+        line(B, 10); line(B, 11); line(G, 12); line(B, 13); line(0, 14); line(B, 15);
         out("guard2", WEZ.ID.guard2); out("guard1", WEZ.ID.guard1); out("butler", B); wait(30);
         walk(G, S.bye, 4);
-        line(G, 14); line(G, 15); js("Story.wezLetter()"); line(G, 16); line(0, 17); line(G, 18);
+        line(G, 16); line(G, 17); js("Story.wezLetter()"); line(G, 18); line(0, 19); line(G, 20);
+        line(G, 21); line(0, 22); line(G, 23);   // („Dbaj o prawdę” - he does not understand it yet)
         if (GATE) walk(G, GATE, 2);
         walk(G, WEZ.DOOR, 2); walk(G, WEZ.OUT, 2);
         js("Story.wezGone()");

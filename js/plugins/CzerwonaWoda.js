@@ -94,6 +94,9 @@
     // still SALT sea - no red bloom, no grey murk, no dead fish, white surf; the shore band and the salt menu stay. Per map: the old world is as it was.
     const CLEAN_MAPS = String((PluginManager.parameters("CzerwonaWoda") || {}).cleanMaps === undefined ? "218,219,220,221,222" : PluginManager.parameters("CzerwonaWoda").cleanMaps).split(/[^0-9]+/).filter(Boolean).map(Number);
     const CLEAN = { grey: false, red: 0, rains: 0, clean: true };
+    // (2026-11-17, the player: „czerwone morze wyłączyć” - the sea is an ordinary sea; the Heart wakes slowly, but not through the sea)
+    // no red and no grey on any map, any day: the sea stays plain salt water - not drunk, not boiled (the menu below as before)
+    const RED_OFF = true;
     const cleanHere = () => !!(window.$gameMap && CLEAN_MAPS.indexOf($gameMap.mapId()) >= 0);
     function planOf(d) { const sv = SV(); return sv && typeof sv.weatherPlan === "function" ? sv.weatherPlan(d) : null; }
     function rainedOn(d) {
@@ -118,6 +121,7 @@
         return forced;
     }
     function phase(d) {
+        if (RED_OFF) return CLEAN;
         if (d === undefined && cleanHere()) return CLEAN;   // (force("red") too: the new world's sea is never red)
         if (d === undefined && forced) return forced === "grey" ? { grey: true, red: 0, rains: GREY_RAINS, forced } : { grey: false, red: 1, rains: 0, dry: 3, forced };
         const dd = d === undefined ? day() : d, key = dd + ":" + (d === undefined ? Math.floor(hour()) : "x");
@@ -1144,7 +1148,7 @@
     // ------------------------------------------------------------------
     // The API
     // ------------------------------------------------------------------
-    const api = { phase, force, forced: () => forced, isRed, seaHere, dryDays, distToLand, nearShore, deadFish, fishOn, seaMenu, drinkAnyway, fillRefused, boilRefused,
+    const api = { off: RED_OFF, phase, force, forced: () => forced, isRed, seaHere, dryDays, distToLand, nearShore, deadFish, fishOn, seaMenu, drinkAnyway, fillRefused, boilRefused,
         fishAt, deadCatch, poisoned, state: () => S0(), GREY_RAINS, POISON_HOURS, POISON_CAP, Sprite_RedWater,
         shoreStrip: () => brzegMap(),   // (2026-11-13) true on a map whose shore strip (stone rim, cobbles, earth, dry grass) this plugin paints: Plaza.js lays sand over it
         // the share of red days over a stretch of the calendar (for the tests and the report)

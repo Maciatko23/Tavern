@@ -38,7 +38,7 @@ rzeczy.spis_lipnicy.name = Spis biblioteki z Lipnicy
 
 # ======================================================================== rozdz. 1: kazanie na rynku (dymki nad Gasparem, dzień targowy 9-12)
 [scena.kazanie]
-Ludzie Kruczej Wyspy! Oto kość palca świętego strażnika Kruczych Skał!
+Ludzie Wyspy Kruka! Oto kość palca świętego strażnika Kruczych Skał!
 Za dotknięcie - grosz. Za kość - porozmawiamy!
 A to? Odłamek Serca w srebrze. Sam go nie dotykam!
 Medaliki na drogę, na morze, na wojnę!

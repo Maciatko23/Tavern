@@ -159,7 +159,7 @@ Drugiej nocy w skrzyniach kamienie z wyrytym krukiem. „Pamiątki”, które Ba
 
 [noteWidzi.2]
 Co nosi kantor (noc 3)
-Trzeciej nocy na stole w gabinecie zwoje map wyspy. Ktoś na lądzie rysuje Kruczą Wyspę kamień po kamieniu.
+Trzeciej nocy na stole w gabinecie zwoje map wyspy. Ktoś na lądzie rysuje Wyspę Kruka kamień po kamieniu.
 
 worki = Worki zboża. Pieczęć dworu: „Zboże na wojnę”.
 kamienie = Kamienie z krukiem. Kilkadziesiąt. „Pamiątki”.

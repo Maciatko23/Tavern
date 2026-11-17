@@ -1,4 +1,4 @@
-// PAKIET 0 (rusztowanie) sześciu nowych miejsc Kruczej Wyspy (docs/miejsca_wyspy/PAKIETY.md). Sprawdza wspólne części, zanim
+// PAKIET 0 (rusztowanie) sześciu nowych miejsc Wyspy Kruka (docs/miejsca_wyspy/PAKIETY.md). Sprawdza wspólne części, zanim
 // pakiety A-F zaczną budować:
 //   - wtyczki Wyspa_Data / Wyspa i 12 szkieletów pakietów stoją na swoich miejscach (pod TownLife_Data, pod CzerwonaWoda) i się ładują
 //   - mapy 155-157, 159-163, 165-167 są w MapInfos (158 i 164 wolne), przedmioty 177-179, przełączniki 17-20

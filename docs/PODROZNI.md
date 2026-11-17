@@ -408,7 +408,7 @@ to samo: *„full body, standing, neutral pose, muted earthy medieval palette”
      sojusznikiem - scena dwóch kartografów przy jednym stole.
   - **Nagrody (wizyta 1):** 30 G, XP 120, Sława +3, Renoma +3; na mapie wyspy **„Szkic kartografa”**: drogi z czasem przejścia, a
     miejsca jeszcze nieznane, do których prowadzi droga, mają na karcie jedno zdanie Teofila zamiast samego „?”.
-  4. **Wizyta 2 (40-46):** przywozi gotową „Mapę Kruczej Wyspy” (pamiątka - do powieszenia w chatce) i pyta o siedem miejsc, gdzie
+  4. **Wizyta 2 (40-46):** przywozi gotową „Mapę Wyspy Kruka” (pamiątka - do powieszenia w chatce) i pyta o siedem miejsc, gdzie
      „stare linie murów się schodzą” (te same co znaki białego oka na mapie z wraku). Wybór:
      - a) pomóc mu narysować „Twierdzę” - kupcy z lądu ją kupią: +25 G, flaga `mapaTwierdzy` (Akt III: frakcja zna mury - rozdz. 4.4);
      - b) przekonać, by stare mury ominął (wymaga 2+ kart kronik D23 albo Hartu ducha 6+; Kleofas: „nie wszystko trzeba rysować”) -
@@ -1143,7 +1143,7 @@ zakończeń w `Underground.film`). Na początek każda w Podroznicy.js; późnie
 
 1. **Prom przybija** (Map125, dzień promu, 9:00 - gdy bohater jest na przystani):
    pasy; kamera na molo; mewy, dzwon okrętowy, łańcuch; prom zwalnia (warstwa jak dziś „Prom”); trap (rekwizyt) opada; przewoźnik
-   woła „Krucza Wyspa! Kto do lądu - za sześć godzin!”; podróżni schodzą po kolei z bagażem, każdy z jednym dymkiem (Tobiasz:
+   woła „Wyspa Kruka! Kto do lądu - za sześć godzin!”; podróżni schodzą po kolei z bagażem, każdy z jednym dymkiem (Tobiasz:
    „Poczta!”, Albin żegna się, Tymon ogląda się za siebie - emotka „...”); celnik Sambor przy stoliku: „Nazwisko? Cel?”; kamera
    wraca; pasy znikają. Ok. 20-30 s. W deszcz - deszcz; o świcie po mglistej nocy - mgła.
 2. **Nocna kradzież na korytarzu** (Map025, ok. 1:30; bohater obudzony albo czuwa):
@@ -1535,7 +1535,7 @@ Ludzie z puli siadają na pierwszym wolnym `podrozny_N`. Na Map025 można przesu
 - **D44:** Erazm, noc podatku = przyjazd + 2; Feliks na korytarzu przed czwórką 22:40-23:20 (3080), podsłuch pokoju 4 o 23:00. Raport:
   Lord (`w7PoborcaMonety` + obserwacja nocy W7), Feliks (przychylność +5), 20 G (`w7FeliksCzujny`), milczenie.
 - **D47:** burdy do 1:00 (Renoma -1 za noc), Hubert: siłowanie (poziom 3), kości (rywal tylko tej sprawy, 10 G), bójka na dziedzińcu
-  (Humans), najęcie 60 G (`kompaniaNajeta`), Wit (`kompaniaWroga`), Grum. **D48:** pamiątka (przedmiot „Mapa Kruczej Wyspy”), 25 G +
+  (Humans), najęcie 60 G (`kompaniaNajeta`), Wit (`kompaniaWroga`), Grum. **D48:** pamiątka (przedmiot „Mapa Wyspy Kruka”), 25 G +
   `mapaTwierdzy`, przekonanie (2 karty kronik albo Hart 6), tuba w pokoju 22 (przeszukanie; złapany: Renoma -3).
 - **Akt III:** `WIEDZA_FRAKCJI` (+`pielgrzymDonosi`, `mapaTwierdzy`); nowe listy `WIEDZA_FALA2` (łucznik, wyciek) i `WIEDZA_FALA4`
   (najemnik, `kompaniaWroga`); obrońca „kompania” (2, po dzwonie); garnizon przy `poselWdzieczny` od przychylności 70; fala 3 o jednego

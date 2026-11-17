@@ -1,6 +1,6 @@
 # Teksty spraw etapu 5 podróżnych (wtyczki Podroznicy5_Data.js i Podroznicy5.js) - docs/PODROZNI.md 2.3 (wizyta 2), 2.7, 2.13, I7, 4.4.
 # D44 „Podatek wojenny” (Erazm Łaska, poborca Korony - podróżny „poborca”, pokój 4), D47 „Wolna Kompania” (Hubert Szary, Jasiek
-# Brzytwa, Kazik Kołek, Ruda Hela - „kompania_1..4”, pokoje 9 i 10), D48 „Mapa Kruczej Wyspy” (Teofil Cyrkiel, druga wizyta).
+# Brzytwa, Kazik Kołek, Ruda Hela - „kompania_1..4”, pokoje 9 i 10), D48 „Mapa Wyspy Kruka” (Teofil Cyrkiel, druga wizyta).
 # Bohater jest nastolatkiem: dorośli mówią do niego „chłopcze”, „mały”. Nikt nie częstuje go wódką. „> ” - mówi bohater.
 
 # ======================================================================== D44 „Podatek wojenny” (Erazm)
@@ -250,14 +250,14 @@ obrona.kompania.down = Dobra... na dziś... dość...
 obrona.kompania.win = Kompania nie przegrywa. Zwykle.
 akt3.najemnik = Najemnik Kompanii
 
-# ======================================================================== D48 „Mapa Kruczej Wyspy” (Teofil, druga wizyta)
-zadania.D48.title = Mapa Kruczej Wyspy
+# ======================================================================== D48 „Mapa Wyspy Kruka” (Teofil, druga wizyta)
+zadania.D48.title = Mapa Wyspy Kruka
 zadania.D48.where = tawerna (pokój 6)
 zadania.D48.when = druga wizyta Teofila Cyrkla (od dnia 40)
 zadania.D48.desc = Teofil Cyrkiel wrócił z gotową mapą wyspy. I z pytaniem o siedem miejsc, gdzie „stare linie murów się schodzą”.
 zadania.D48.fail.text = Teofil odpłynął z mapą twierdzy.
 [zadania.D48.offer.say]
-Chłopcze! Patrz - Mapa Kruczej Wyspy. Gotowa. Pierwsza od stu lat. Dla ciebie, za szkice.
+Chłopcze! Patrz - Mapa Wyspy Kruka. Gotowa. Pierwsza od stu lat. Dla ciebie, za szkice.
 Ale coś mnie gryzie. Siedem miejsc, gdzie stare linie murów się schodzą. Jak oczy. Porozmawiamy?
 
 zadania.D48.offer.yes = Porozmawiajmy.
@@ -290,8 +290,8 @@ Bez powodu? Mapa nie kłamie, chłopcze. Kłamią ci, którzy ją zamawiają.
 [d48.ukradnij]
 > (Szkic twierdzy leży w skórzanej tubie, w pokoju 6. Kiedy Teofila nie ma...)
 
-napis.mapa = Mapa Kruczej Wyspy - pamiątka od Teofila
-rzeczy.mapa_wyspy.name = Mapa Kruczej Wyspy (od Teofila)
+napis.mapa = Mapa Wyspy Kruka - pamiątka od Teofila
+rzeczy.mapa_wyspy.name = Mapa Wyspy Kruka (od Teofila)
 [przeszukanie.tuba]
 > (W skórzanej tubie: szkic dawnej twierdzy Kruczych Skał - mury, baszty i siedem oczu na liniach.)
 > (Zabieram go. Teofil narysuje wyspę bez twierdzy.)

@@ -386,7 +386,7 @@ kod.talk.1 = Żołnierz garnizonu
 # giveChart
 kod.giveChart.0 = Mapa z zaznaczeniami
 kod.giveChart.1 = Siedem miejsc zaznaczonych białym okiem.
-kod.giveChart.2 = Mapa Kruczej Wyspy z kajuty „Białej Źrenicy”. Czarne Oczy zaznaczyły na niej siedem miejsc małym białym okiem: {names}. Kompas prowadzi do następnego znaku, którego jeszcze nie widziałem.
+kod.giveChart.2 = Mapa Wyspy Kruka z kajuty „Białej Źrenicy”. Czarne Oczy zaznaczyły na niej siedem miejsc małym białym okiem: {names}. Kompas prowadzi do następnego znaku, którego jeszcze nie widziałem.
 # actCall
 kod.actCall.0 = Nie dziś.
 kod.actCall.1 = Klucz bosmana

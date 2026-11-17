@@ -27,9 +27,9 @@
 
 Na kontynencie trzeci rok trwa wojna. Królestwa walczą o coś, czego nikt nie widział: o **pewność**. Gdzieś istnieje relikwia, która pokazuje każdemu absolutną prawdę. Kto ją zdobędzie, zna plany wroga, zdrajców we własnym obozie i wynik bitwy, zanim się zacznie.
 
-Tą relikwią jest **Serce Twierdzy**, ukryte głęboko pod **Kruczą Wyspą**. Dawno temu strzegł go zakon. Zbudował nad nim Twierdzę Kruczych Skał, żeby **dawkować prawdę**: jedno pytanie rocznie, nie więcej. Twierdza upadła, gdy jeden ze strażników zaczął wracać do Serca po „jeszcze jedną prawdę” i to, co zobaczył, złamało go. Ocalali zapieczętowali zejście i rozpuścili legendę o przeklętej ruinie. Pokolenia później na gruzach stanęła **tawerna „Pod Złotym Kuflem”**, a budowniczowie nie wiedzieli, na czym stawiają dach.
+Tą relikwią jest **Serce Twierdzy**, ukryte głęboko pod **Wyspą Kruka**. Dawno temu strzegł go zakon. Zbudował nad nim Twierdzę Kruczych Skał, żeby **dawkować prawdę**: jedno pytanie rocznie, nie więcej. Twierdza upadła, gdy jeden ze strażników zaczął wracać do Serca po „jeszcze jedną prawdę” i to, co zobaczył, złamało go. Ocalali zapieczętowali zejście i rozpuścili legendę o przeklętej ruinie. Pokolenia później na gruzach stanęła **tawerna „Pod Złotym Kuflem”**, a budowniczowie nie wiedzieli, na czym stawiają dach.
 
-Bohater to biedny chłopak z lądu. Wojna spaliła jego wieś, ojciec zaginął, a matka wysłała go przez morze do dziadka Stacha na Kruczej Wyspie. Statek rozbił się w sztormie. Bohater budzi się w chacie dziadka, bez niczego poza wisiorkiem z krukiem, i dowiaduje się, że dziadek jest winien Lordowi 2500 G, a termin mija za 60 dni.
+Bohater to biedny chłopak z lądu. Wojna spaliła jego wieś, ojciec zaginął, a matka wysłała go przez morze do dziadka Stacha na Wyspie Kruka. Statek rozbił się w sztormie. Bohater budzi się w chacie dziadka, bez niczego poza wisiorkiem z krukiem, i dowiaduje się, że dziadek jest winien Lordowi 2500 G, a termin mija za 60 dni.
 
 Gra zaczyna się jako ciepła, zabawna historia o pracy w karczmie i ratowaniu działki dziadka. Z każdym tygodniem robi się poważniejsza i mroczniejsza: kto kradnie miastu wodę, kim jest kamerdyner Lorda, czemu Czarne Oczy skupują kamienie z krukiem, co jest pod kratą w piwnicy tawerny. Na końcu bohater staje przed Sercem i decyduje, co zrobić z prawdą, której świat tak bardzo chce.
 
@@ -39,7 +39,7 @@ Gra zaczyna się jako ciepła, zabawna historia o pracy w karczmie i ratowaniu d
 
 ## 2. Świat i najważniejsze postacie
 
-### Krucza Wyspa
+### Wyspa Kruka
 
 Wyspa jest ziemią niczyją, kilka godzin promem od lądu. Ciągną na nią uchodźcy, dezerterzy, szpiedzy, werbownicy i poszukiwacze relikwii. Panuje **susza**: woda jest rzadka i cenna. Morze przy wyspie w czasie suszy zakwita na rdzawo, **czerwona woda** jest trująca nawet po przegotowaniu. Starzy mówią, że to „krew Kruczych Skał”.
 

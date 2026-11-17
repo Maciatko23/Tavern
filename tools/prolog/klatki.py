@@ -200,7 +200,7 @@ def f02_kronika():
     letterbox(img)
     lines = [("Trzeci rok wojny.", FG(40, 600), "#f0e4cc"),
              ("Królestwa na lądzie walczą o coś, czego nikt nie widział — o pewność.", FG(26), "#e2d6be"),
-             ("Za morzem leży Krucza Wyspa. Ziemia niczyja.", FG(26), "#e2d6be"),
+             ("Za morzem leży Wyspa Kruka. Ziemia niczyja.", FG(26), "#e2d6be"),
              ("Płyną tam ci, którym nie zostało już nic.", FG(26, 400), "#b8ad98")]
     y = 200
     for i, (s, f, c) in enumerate(lines):
@@ -271,7 +271,7 @@ def f07_plaza():
     mist(img, 300, 640, seed=9, color=(236, 232, 240), alpha=0.42, cell=110)
     vignette(img, 0.4)
     letterbox(img)
-    text(img, (640, 100), "Krucza Wyspa. Świt.", FG(24, 500), "#4a3e46", anchor="mm")
+    text(img, (640, 100), "Wyspa Kruka. Świt.", FG(24, 500), "#4a3e46", anchor="mm")
     scene_tag(img, 5, "plaża")
     skip_hint(img, 0.0)
     return img

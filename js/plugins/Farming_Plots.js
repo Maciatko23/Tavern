@@ -345,6 +345,7 @@
         if (!$gameMap.checkPassage(x, y, 0x0f)) return false;
         if (eventOn(x, y) || hasObjectTile(x, y)) return false;
         if ((farm().plots[$gameMap.mapId()] || {})[key(x, y)] || buildingAt(x, y)) return false;   // cleared or built-on ground has none
+        if (kind === "bush" && doorYard().has(key(x, y))) return false;   // (the yards before the doors stay open to walk)
         const g = GATHER[kind];
         if (g.seasons && !g.seasons.includes(seasonIndex(today()))) return false;
         if (kind === "mushroom" && mushroomChance(today()) <= 0 && mushroomBirth(x, y) === null) return false;
@@ -354,6 +355,24 @@
         // branches, cones and mushrooms lie on any ground
         if (ground && ground.kind === "earth" && PLANTS_ON_GRASS.has(kind) && GATHER_MAPS.includes($gameMap.mapId())) return false;
         return ground && ground.kind ? kind : false;
+    }
+    // (2026-11-17, the player: „przed domkiem dziadka ma nie być żadnych krzaczków, bo blokują ruch”) no berry bush - the one thing lying
+    // about that keeps the feet out - grows within DOOR_CLEAR tiles of a door (an event named "Drzwi..." or with <Town:door=...>): the
+    // yards before the houses stay open. Worked out once a map (and when its events change), as the cone tiles.
+    const DOOR_CLEAR = 5;
+    let doorCache = { stamp: "", tiles: new Set() };
+    function doorYard() {
+        if (!$gameMap || !$dataMap) return doorCache.tiles;
+        const stamp = $gameMap.mapId() + ":" + $gameMap._events.length;
+        if (doorCache.stamp === stamp) return doorCache.tiles;
+        const tiles = new Set();
+        for (const e of $gameMap.events()) {
+            const d = e.event();
+            if (!d || (!/^Drzwi/.test(d.name || "") && !/<Town:door=/i.test(d.note || ""))) continue;
+            for (let dy = -DOOR_CLEAR; dy <= DOOR_CLEAR; dy++) for (let dx = -DOOR_CLEAR; dx <= DOOR_CLEAR; dx++) tiles.add(key(e.x + dx, e.y + dy));
+        }
+        doorCache = { stamp, tiles };
+        return tiles;
     }
     const PLANTS_ON_GRASS = new Set(["bush", "fiber", "berries", "herb", "nettle", "yarrow", "garlic", "wildPotato", "wildCarrot"]);
     function gatherAt(x, y) {

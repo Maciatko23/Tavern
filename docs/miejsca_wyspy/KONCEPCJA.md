@@ -1,4 +1,4 @@
-# Sześć nowych miejsc Kruczej Wyspy: koncepcja do zatwierdzenia
+# Sześć nowych miejsc Wyspy Kruka: koncepcja do zatwierdzenia
 
 Wersja z 2026-10-15. To jest tylko koncepcja: w grze nic się nie zmieniło.
 
@@ -48,7 +48,7 @@ na rysunkach to ozdoba z arkusza `Bird_Crow`, nie zdarzenia. Numery map (155-167
 
 ## 1. Położenie i drogi
 
-Wszystko zgodnie z Atlasem Kruczej Wyspy: pustelnia na północnym zachodzie, Urwisko za wzgórzem tawerny, latarnia na północno-wschodnim
+Wszystko zgodnie z Atlasem Wyspy Kruka: pustelnia na północnym zachodzie, Urwisko za wzgórzem tawerny, latarnia na północno-wschodnim
 przylądku, garnizon i wrak przy zachodnich płyciznach, cysterna pod wzgórzem (`polozenie.png`).
 
 **Dwie nowe drogi zaczynają się na przystani** (Map125), bo tylko tam wyspa ma otwarte wybrzeże, a mapy użytkownika zostają nietknięte:

@@ -337,7 +337,8 @@
         labels.push(Watki.wstaw(TK.kod.janekTalk[2], { BUY_SMOKED: BUY_SMOKED }));
         branches.push(act([], ["buySmoked"]));
         const RW = T.api("CzerwonaWoda");
-        if (RW && RW.seaHere && $gameMap.mapId() === MAP) { labels.push(TK.kod.janekTalk[3]); branches.push(linesTo([], spk, RW.phase().grey ? TX.janekGrey : TX.janekRed)); }
+        // (2026-11-17: no red sea - no talk of it)
+        if (RW && RW.seaHere && $gameMap.mapId() === MAP && !RW.phase().clean) { labels.push(TK.kod.janekTalk[3]); branches.push(linesTo([], spk, RW.phase().grey ? TX.janekGrey : TX.janekRed)); }
         labels.push(TK.kod.janekTalk[4]);
         branches.push(linesTo([], spk, [usual("janek") || TK.kod.janekTalk[5]]));
         labels.push(TX.bywaj);
@@ -372,7 +373,7 @@
                 GOODS.map(([id]) => act([], ["buy", id])).concat([[]]));
             branches.push(sub);
         }
-        if (T.api("CzerwonaWoda")) { labels.push(TK.kod.rochTalk[5]); branches.push(linesTo([], spk, TX.rochRed)); }
+        if (T.api("CzerwonaWoda") && !T.api("CzerwonaWoda").off) { labels.push(TK.kod.rochTalk[5]); branches.push(linesTo([], spk, TX.rochRed)); }
         labels.push(TK.kod.rochTalk[6]);
         branches.push(linesTo([], spk, [usual("przemytnik") || TK.kod.rochTalk[7]]));
         labels.push(TX.bywaj);

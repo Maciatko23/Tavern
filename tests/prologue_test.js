@@ -1,6 +1,6 @@
 // Prolog „Ostatni prom” (Prologue.js) i nowa rozmowa dziadka (Story.js): ekran imienia z polskimi literami (klawiatura i litery na
 // ekranie), zapis imienia, sceny filmu po kolei (z ruchem i rozmową z popiersiami), pominięcie sceny i całości, powrót do tytułu,
-// start w domu dziadka (Map019) z nową rozmową i imieniem, wisiorek w plecaku, notatka z listem matki.
+// start w domu dziadka (chata nowego świata, Map224 - data/System.json) z nową rozmową i imieniem, wisiorek w plecaku, notatka z listem matki.
 //   CDP_PORT=9470 node tests/prologue_test.js
 "use strict";
 const kit = require("./lib/kit.js");
@@ -28,7 +28,7 @@ kit.test({ port: 9470, errorCheck: "bez błędów w konsoli" }, async t => {
     const titleReady = "(SceneManager._scene instanceof Scene_Title && TitleScreen.info() && TitleScreen.info().open && TitleScreen.info().active)";
     const onName = "(Prologue.info() && Prologue.info().screen === 'name')";
     const onFilm = "(Prologue.info() && Prologue.info().screen === 'film')";
-    const onMap = "(SceneManager._scene instanceof Scene_Map && SceneManager._scene._started && !SceneManager.isSceneChanging() && $gameMap.mapId() === 19)";
+    const onMap = "(SceneManager._scene instanceof Scene_Map && SceneManager._scene._started && !SceneManager.isSceneChanging() && $gameMap.mapId() === 224)";   // (2026-11-17: the new world's hut, the start of data/System.json)
 
     t.check("wtyczka Prologue na liście, pod TitleScreen i Story", await t.eval(`(function(){ const n = $plugins.filter(p => p.status).map(p => p.name); return n.includes("Prologue") && n.indexOf("Prologue") > n.indexOf("TitleScreen") && n.indexOf("Prologue") > n.indexOf("Story"); })()`));
     t.check("wisiorek z krukiem w bazie: przedmiot kluczowy, nie na sprzedaż, ikona z PixelLab (688+)", await t.eval("(function(){ const i = $dataItems[172]; return !!i && i.name === 'Wisiorek z krukiem' && i.itypeId === 2 && i.price === 0 && !i.consumable && i.iconIndex >= 688; })()"));
@@ -115,7 +115,7 @@ kit.test({ port: 9470, errorCheck: "bez błędów w konsoli" }, async t => {
     await t.eval("Prologue.speed(1); 0");
 
     // ---- 4. dom dziadka: nowa rozmowa z imieniem, wisiorek, notatka z listem
-    t.check("po filmie gra startuje w domu dziadka (Map019)", await t.until(onMap, 30));
+    t.check("po filmie gra startuje w domu dziadka (chata, Map224)", await t.until(onMap, 30));
     await t.eval(kit.DRIVER + "; 0");
     t.check("rozmowa dziadka zaczyna się sama", await t.until("$gameSystem._story && $gameSystem._story.intro === 1 && $gameMessage.hasText()", 20));
     const first = await t.eval("SceneManager._scene._messageWindow.convertEscapeCharacters($gameMessage.allText())");

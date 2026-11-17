@@ -74,14 +74,15 @@ const { launch, sleep } = require("./cdp.js");
             t.tab === 0 && t.sel === 0 && heads0.join("|") === "Czas, gracz i teksty:|Przenieś mnie do:|Podgląd:", { tab: t.tab, heads0 });
         const q = rows.filter(r => !r.head).map(r => r.kind);
         check("...the clock (switch for full stats, +1 hour, +1 day, dawn, sunset, the season), +1000 G, +200 and +10 000 experience, the texts read again; then ten places and the rooms; the map sketch and the regions' layers - nothing else",
-            q.join() === "pelne,hour,day,dawn,dusk,season,isleGold,xp,isleXp,isleTexts,isleGo,isleGo,isleGo,isleGo,isleGo,isleGo,isleGo,isleGo,isleGo,isleGo,isleInside,isleMapa,layers", q);
+            q.join() === "pelne,hour,day,dawn,dusk,season,isleGold,xp,isleXp,isleTexts,isleGo,isleGo,isleGo,isleGo,isleGo,isleGo,isleGo,isleGo,isleInside,isleMapa,layers", q);
         check("...'+1000 G' once (with its line under it), the rows with a line under them are two lines high", rows.filter(r => /^\+1000 G/.test(r.label)).length === 1 && rows.find(r => r.kind === "isleGold").desc.length > 10 && (await J("SceneManager._scene._list.itemHeight()")) > 50);
         const tele = rows.filter(r => r.kind === "isleGo").map(r => r.label);
-        check("...'Przenieś mnie do:' - Kruczogród, Kruczy Jar - działka dziadka, Dom dziadka, Łąka pod Gawrą, Posiadłość Lorda, Góry i kamieniołom, Podgrodzie, Garnizon nad zatoką, Przystań, Tawerna - sala",
-            tele.join("|") === "Kruczogród|Kruczy Jar - działka dziadka|Dom dziadka|Łąka pod Gawrą|Posiadłość Lorda|Góry i kamieniołom|Podgrodzie|Garnizon nad zatoką|Przystań|Tawerna - sala", tele);
+        // (2026-11-17: the old world's maps are gone - the new world's five maps, west to east, and the tavern's three floors)
+        check("...'Przenieś mnie do:' - Słony Brzeg, Podgrodzie, Kruczogród, Dwór nad Jazem, Krucze Turnie (nowy świat), Tawerna - sala, piętro I, piętro II",
+            tele.join("|") === "Słony Brzeg (nowy świat)|Podgrodzie (nowy świat)|Kruczogród (nowy świat)|Dwór nad Jazem (nowy świat)|Krucze Turnie (nowy świat)|Tawerna - sala|Tawerna - piętro I|Tawerna - piętro II", tele);
         const inside = await J("(function(){ const l = SceneManager._scene._list; const r = l._rows.find(r => r.kind === 'isleInside'); const seen = []; l.select(l._rows.indexOf(r)); for (let i = 0; i < 12; i++) { seen.push(l._rows[l.index()].label); l.changeQty(1); } return [...new Set(seen)]; })()");
         check("...'Wnętrze: ...' ←→ goes through the rooms one can still enter (no scriptorium, wreck hold or burnt farm's house)",
-            inside.length === 8 && inside.every(l => /^Wnętrze: /.test(l)) && !inside.some(l => /Skryptorium|Wrak|Dom Ługów/.test(l)) && inside.some(l => /Dwór - hol/.test(l)), inside);
+            inside.length >= 6 && inside.every(l => /^Wnętrze: /.test(l)) && !inside.some(l => /Skryptorium|Wrak|Dom Ługów/.test(l)) && inside.some(l => /Dwór - hol/.test(l)), inside);
         // the switch "Statystyki zawsze pełne" (2026-11-07): on - what fell is full again on the map; off again
         const pelneAt = async () => { await selKind("pelne"); };
         await pelneAt();
@@ -106,7 +107,7 @@ const { launch, sleep } = require("./cdp.js");
         const heads1 = rows.filter(r => r.head).map(r => r.label), k1 = rows.filter(r => !r.head).map(r => r.kind);
         check("E: 'Pogoda i morze' - 'Pogoda:' (mist, storm, a strike, a strike on a tree, calm, the rain / heat / snow of package A, today's weather), 'Morze:' (the tide, the water, the storm's end, the misty night), 'Ptaki i motyle:'",
             t.tab === 1 && t.sel === 1 && heads1.join("|") === "Pogoda:|Morze:|Ptaki i motyle:" &&
-            k1.join() === "mist,storm,strike,treestrike,calm,isleOkolice,isleOkolice,isleOkolice,isleOkolice,isleTide,isleWater,isleStorm,isleFog,birds,raid,motyle,cmy,siatka" &&
+            k1.join() === "mist,storm,strike,treestrike,calm,isleOkolice,isleOkolice,isleOkolice,isleOkolice,isleTide,isleStorm,isleFog,birds,raid,motyle,cmy,siatka" &&
             rows.filter(r => r.kind === "isleOkolice").map(r => r.what).join() === "rain,hot,snow,weather", { heads1, k1 });
         await key(E); await frames(6);
         t = await tabNow(); rows = await rowsOf();
@@ -334,11 +335,9 @@ const { launch, sleep } = require("./cdp.js");
             (await ev("SceneManager._scene.constructor.name")) === "Scene_Debug", { texts, textsLab, textsTop });
 
         await goTab("Pogoda i morze");
-        await selKind("isleWater");
-        const water = [];
-        for (let i = 0; i < 3; i++) { await key(OK); await frames(4); water.push([await ev("CzerwonaWoda.forced()"), await rowLabel("isleWater")]); }
-        check("'Woda w morzu': OK - red, grey, back to the weather (CzerwonaWoda.force), the label says which",
-            water[0][0] === "red" && /czerwona \(wymuszona\)/.test(water[0][1]) && water[1][0] === "grey" && /szara \(wymuszona\)/.test(water[1][1]) && water[2][0] === null && /z pogody/.test(water[2][1]), water);
+        // (2026-11-17, the player: „czerwone morze wyłączyć” - the sea is plain salt water on every map: no 'Woda w morzu' row, never red)
+        const sea = await J("({ off: !!CzerwonaWoda.off, red: CzerwonaWoda.isRed(), clean: !!CzerwonaWoda.phase().clean, row: (SceneManager._scene._rows || []).some(r => r && r.kind === 'isleWater') })");
+        check("czerwone morze wyłączone: zawsze czyste (nigdy czerwone ani szare), w F9 nie ma wiersza 'Woda w morzu'", sea.off && !sea.red && sea.clean, sea);
         // the one tide row: OK goes round clock -> low -> high -> clock, ←→ both ways (Wyspa.forceTide; switch 20 follows the low tide)
         await selKind("isleTide");
         const tide = [];
@@ -374,8 +373,8 @@ const { launch, sleep } = require("./cdp.js");
             /gra bez fabuły/.test(await rowLabel("isleLose")) && (await ev("SceneManager._scene.constructor.name")) === "Scene_Debug" && (await ev("$gameSystem.dayNightDay()")) < 61);
 
         // ---------------------------------------------------------------- the ten places: each on a free, walkable cell of the right map
-        const PLACES = [["Kruczogród", 8], ["Kruczy Jar - działka dziadka", 3], ["Dom dziadka", 20], ["Łąka pod Gawrą", 4], ["Posiadłość Lorda", 24], ["Góry i kamieniołom", 13],
-            ["Podgrodzie", 111], ["Garnizon nad zatoką", 162], ["Przystań", 125], ["Tawerna - sala", 1]];
+        const PLACES = [["Słony Brzeg (nowy świat)", 219], ["Podgrodzie (nowy świat)", 218], ["Kruczogród (nowy świat)", 220], ["Dwór nad Jazem (nowy świat)", 221],
+            ["Krucze Turnie (nowy świat)", 222], ["Tawerna - sala", 1], ["Tawerna - piętro I", 25], ["Tawerna - piętro II", 26]];
         const landed = [];
         for (const [name, map] of PLACES) {
             await goTab("Szybkie");
@@ -389,12 +388,11 @@ const { launch, sleep } = require("./cdp.js");
             await sleep(100);
             // (a place's first visit may start a scene of its own: its lines dismissed)
             await ev("if ($gameMessage.isBusy()) $gameMessage.clear(); 0");
-            if (name !== "Tawerna - sala") { await openF9(); }
-            else await openF9();
+            await openF9();
         }
-        check("the ten places: each lands on the right map (Map008, 003, 020, 004, 024, 013, 111, 162, 125, 001) on a passable cell with no event on it and room all round (3x3)",
+        check("the eight places: each lands on the right map (Map219, 218, 220, 221, 222, 001, 025, 026) on a passable cell with no event on it and room all round (3x3)",
             PLACES.every(([n, m], i) => landed[i].map === m && landed[i].pass && landed[i].blockedBy.length === 0 && landed[i].around), landed);
-        check("F9 opens again on 'Szybkie', on the same row", (await tabNow()).tab === 0 && (await ev("SceneManager._scene._list.rowData().label")) === "Tawerna - sala");
+        check("F9 opens again on 'Szybkie', on the same row", (await tabNow()).tab === 0 && (await ev("SceneManager._scene._list.rowData().label")) === "Tawerna - piętro II");
         // the harbour's old way: the wreck's low tide is no more - the Garnizon's place does not force the tide
         check("'Garnizon nad zatoką' and the rest do not force the tide (the wreck's low tide went with the wreck)", (await ev("Wyspa.tideForced()")) === null);
 

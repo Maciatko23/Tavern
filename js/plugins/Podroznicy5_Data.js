@@ -9,7 +9,7 @@
 //   - D47 "Wolna Kompania" (I7): the four mercenaries ("kompania_1..4", rooms 9 and 10, from day 28/31) - noise till 1:00 (Renoma -1 a
 //     night); Hubert at arm-wrestling or dice, a fist fight in the yard, Wit throws them out (kompaniaWroga), hired for 60 G
 //     (kompaniaNajeta - two defenders in Act III), Grum talks them down
-//   - D48 "Mapa Kruczej Wyspy": Teofil's second visit (from day 40) - the map of the island as a keepsake, and the old fortress: helped
+//   - D48 "Mapa Wyspy Kruka": Teofil's second visit (from day 40) - the map of the island as a keepsake, and the old fortress: helped
 //     (25 G, mapaTwierdzy), talked out of it (2 cards of the chronicle or Hart ducha 6), or his sketch taken at night (the search)
 // Stands in the plugin list under Poselstwo_Data and above TownLife and TownQuests_Data: the thread "podroznicy5" (Watki.js) - its
 // state (Tawerna.state "podroznicy5", version 1), the three quests into window.TownQuestsPacks, the talks and actions, the F9 jumps;
@@ -18,7 +18,7 @@
 
 /*:
  * @target MZ
- * @plugindesc [etap 5] Dane spraw podróżnych: D44 „Podatek wojenny” (Erazm), D47 „Wolna Kompania” (I7), D48 „Mapa Kruczej Wyspy” (Teofil, wizyta 2). v1.0.0
+ * @plugindesc [etap 5] Dane spraw podróżnych: D44 „Podatek wojenny” (Erazm), D47 „Wolna Kompania” (I7), D48 „Mapa Wyspy Kruka” (Teofil, wizyta 2). v1.0.0
  * @author Claude
  * @base TawernaCore
  * @base Watki

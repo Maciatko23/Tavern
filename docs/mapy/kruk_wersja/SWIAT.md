@@ -1,4 +1,4 @@
-# Świat Kruczej Wyspy w kratkach
+# Świat Wyspy Kruka w kratkach
 
 2026-10-30. **PROJEKT do oceny.** W `data/` ani `js/` nic nie zmieniłem. Narzędzia (`tools/mapy/`): `swiat_kratki.py` (układ, maska, `swiat.json`), `swiat_obrazy.py` (obrazki), `swiat_opis.py` (ten plik), `swiat_krawedzie.py` (**sprawdzanie krawędzi do etapów**).
 
