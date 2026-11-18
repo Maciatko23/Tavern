@@ -48,13 +48,18 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9566, bootCheck: "gra się uruc
     const P = await t.json("ZmianaSala.PLACES");
     for (let trip = 0; trip < 2 && (await S()).phase === "clean"; trip++) {
         await go(21, 37, 8); await t.press("ok"); await t.frames(6); await t.press("ok"); await t.frames(6);
+        if (!trip) { await t.frames(10); await t.shot(path.join(SHOTS, "1c_drewno_w_rekach.png")); }
         await go(trip ? 23 : 5, 14, 4); await t.press("ok"); await t.frames(6); await t.press("ok"); await t.frames(6);
     }
-    // the rubbish
+    // the rubbish: into the kitchen's bin (2026-11-18: a rubbish barrel at (15,9), right of the door from the hall)
+    t.check("w kuchni kosz na śmieci: beczka z odpadkami przy drzwiach z sali, nie do przejścia", await t.json("$gameMap.tileId(15, 9, 2) === 663 && !$gameMap.isPassable(15, 9, 4) && !$gameMap.isPassable(15, 9, 8)"));
+    let shotBin = false;
     for (const sk of (await S()).sacks.filter(q => q.state === "lying")) {
         if ((await S()).phase !== "clean") break;
         await go(sk.x, sk.y, 2); await t.press("ok"); await t.frames(6);
-        await go(14, 40, 2); await t.press("ok"); await t.frames(6);
+        await go(14, 9, 6);   // (into the kitchen's bin, right of the door from the hall)
+        if (!shotBin) { shotBin = true; await t.frames(10); await t.shot(path.join(SHOTS, "1d_kosz_w_kuchni.png")); }
+        await t.press("ok"); await t.frames(6);
     }
     await t.frames(20);
     s = await S();
@@ -80,6 +85,12 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9566, bootCheck: "gra się uruc
     await t.until("SceneManager._scene instanceof Scene_Map && !TavernShift.isRunning()", 20);
     s = await S();
     t.check(`po kuchni: wieczór na sali (${s.phase}), na ladzie ${s.slots.length} dań`, s.phase === "serve" && s.slots.length >= 4);
+    // (2026-11-18) the dishes stand evenly: two rows a tile apart, mirrored round the bar's middle (14), Borgar's place 13-14 free
+    const xs = s.slots.map(q => q.x), left = xs.filter(x => x < 14), right = xs.filter(x => x > 14);
+    const even = r => r.every((x, i) => i === 0 || Math.abs(x - r[i - 1] - 1) < 1e-9);
+    const mid = r => r.reduce((a, b) => a + b, 0) / r.length;
+    t.check("dania na ladzie równo: dwa rzędy co kratkę, lustrzane wokół środka lady, miejsce Borgara wolne", even(left) && even(right) && Math.abs(mid(left) - 11) < 1e-9 && Math.abs(mid(right) - 17) < 1e-9 &&
+        left.length - right.length <= 1 && xs.every(x => x <= 12.5 || x >= 15.5) && s.slots.every(q => Number.isInteger(q.tx) && Math.abs(q.tx - q.x) <= 0.5), s.slots);
 
     // the evening: guests come in and order; the bot carries their dishes from the counter
     await go(14, 20, 2);
@@ -93,7 +104,7 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9566, bootCheck: "gra się uruc
         const g = s.guests.find(q => q.state === "wait");
         if (!g) continue;
         const want = g.order.find((k, i) => !g.got[i]), slot = s.slots.find(q => q.key === want);
-        await go(slot.x, 18, 8);
+        await go(slot.tx, 18, 8);
         if (!shotCounter) { shotCounter = true; await t.frames(10); await t.shot(path.join(SHOTS, "2b_przy_ladzie.png")); }
         await t.press("ok"); await t.frames(6);
         const seat = await t.json(`GoscieSala.shift.seats().find(q => q.x === ${g.seat[0]} && q.y === ${g.seat[1]})`);

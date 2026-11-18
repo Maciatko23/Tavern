@@ -246,7 +246,7 @@ czesci.hud.obsluzone = "Obsłużone: "
 
 # ======================================================================== zmiana na żywo na mapie karczmy (Zmiana_Sala.js, 2026-11-18)
 # Borgar na początek (dymki nad nim)
-zywo.intro.0 = Dobra, do roboty. Najpierw sala: przetrzyj brudne stoły, przynieś drewno do kominków i wynieś śmieci za drzwi.
+zywo.intro.0 = Dobra, do roboty. Najpierw sala: przetrzyj brudne stoły, przynieś drewno do kominków, a śmieci zanieś do kosza w kuchni.
 zywo.intro.1 = Drewno leży przy kominku koło wejścia. Potem nalejesz piwa z beczek za barem i pomożesz Jagnie w kuchni.
 zywo.intro.2 = Wieczorem otwieram drzwi. Goście siadają przy czystych stołach i zamawiają - nosisz im z lady. Szybko i bez pomyłek, to i napiwki będą.
 # części zmiany (pasek u góry)
@@ -254,7 +254,7 @@ zywo.faza.clean = Przed otwarciem
 zywo.faza.beer = Piwo na wieczór
 zywo.faza.kitchen = Kuchnia
 zywo.faza.serve = Wieczór na sali
-zywo.hint.clean = Stoły, drewno do kominków, śmieci za drzwi
+zywo.hint.clean = Stoły, drewno do kominków, śmieci do kosza w kuchni
 zywo.hint.beer = Idź za bar do beczek i nalej piwa (O)
 zywo.hint.kitchen = Przez drzwi za barem do kuchni, do pieca (O)
 zywo.hint.serve = Zamówienia z lady do gości (O)
@@ -272,6 +272,7 @@ zywo.cel.nalej = Nalej piwa
 zywo.cel.gotuj = Gotuj z Jagną
 zywo.cel.drewno = Weź drewno
 zywo.cel.borgar = Porozmawiaj z Borgarem
+zywo.cel.kosz = Wyrzuć do kosza
 # komunikaty
 zywo.popup.dalej = "Teraz: {1}"
 zywo.popup.otwarte = Borgar otwiera drzwi - goście idą!

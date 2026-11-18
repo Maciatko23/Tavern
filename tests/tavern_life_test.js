@@ -555,7 +555,7 @@ const DRIVER = String.raw`
         await go(MAP.rooms, 40, 26, 8);
         await setClock(14, 15);
         const bath85 = await talkTo(EV.tub, ["Nie teraz"], 20);
-        check("the bath at 85: 'Wykąp się (5 G zamiast 6 G)'", (bath85.choices[0] || [])[0] === "Wykąp się (5 G zamiast 6 G)", bath85.choices);
+        check("the bath at 85: 'Wykąp się (5 G zamiast 6 G)'", (bath85.choices[0] || [])[0] === "Wykąp się (5 G zamiast 6 G)", { choices: bath85.choices, flat: bath85.flat, done: bath85.done, at: await J("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $gameMap.isEventRunning(), $gameMessage.isBusy()]") });
 
         // ================= the numbers, the saved game, the console
         const stats = await J("TavernLife.stats()");

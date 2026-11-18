@@ -1365,6 +1365,59 @@
     };
     const TALK_ORDER = { first: 0, own: 100, extra: 500, chat: 800 };
     const END = () => ({ code: 0, indent: 0, parameters: [] });
+    // (2026-11-18) a talk that shows its menu again after an answer (the hall's guests' „Kim jesteś?”, the shops, the quests' menus)
+    // set up one more child interpreter each time: 100 questions in a row and MZ threw "Common event calls exceeded the limit". A
+    // child set up by a script (355 / a plugin command 357) when nothing more of this list would run after it - only the ends of its
+    // branches, the choice's other branches, the end of the choice / the if - now takes this interpreter's own place: the same play,
+    // no deeper. It is done when the script has finished, and only if the script left this interpreter as it was (the plugins' "stop
+    // the talk" moves _index to the end, a sequence's hold sets a wait mode after the child: then it nests as before - the swap ran
+    // the wait before the talk and hung tavern_life_test). A common event's call (117) nests as before.
+    const TAIL_SKIP = new Set([402, 403, 411, 601, 602, 603]);   // (branches not taken: skipped with their bodies)
+    const TAIL_NOOP = new Set([404, 412, 604]);
+    function tailAfter(it) {
+        const list = it._list, cur = list && list[it._index];
+        if (!cur) return false;
+        let level = cur.indent, skipping = false;
+        for (let i = it._index + 1; i < list.length; i++) {
+            const c = list[i];
+            if (c.indent > level) { if (skipping) continue; return false; }
+            skipping = false;
+            if (c.code === 0) { level = c.indent - 1; continue; }
+            if (TAIL_SKIP.has(c.code)) { skipping = true; level = c.indent; continue; }
+            if (TAIL_NOOP.has(c.code)) { level = c.indent; continue; }
+            return false;
+        }
+        return true;
+    }
+    for (const k of ["command355", "command357"]) {
+        const f = Game_Interpreter.prototype[k];
+        Game_Interpreter.prototype[k] = function(params) {
+            this._tailScript = true;
+            this._tailCand = null;
+            let r;
+            try { r = f.call(this, params); } finally { this._tailScript = false; }
+            const c = this._tailCand;
+            this._tailCand = null;
+            const ch = c && this._childInterpreter;
+            // (the script done: its child, if it still stands as set up and nothing else was changed, takes this one's place)
+            if (r === true && ch && ch === c.child && ch._index === 0 && !ch._childInterpreter && this._list === c.list && this._index === c.index &&
+                !this._waitMode && !this._waitCount && ch._eventId === this._eventId && ch._mapId === this._mapId) {
+                this._childInterpreter = null;
+                this._list = ch._list;
+                this._index = -1;            // (executeCommand steps on to 0)
+                this._branch = {};
+                this._comments = "";
+                this._characterId = 0;
+            }
+            return r;
+        };
+    }
+    const setupChild0 = Game_Interpreter.prototype.setupChild;
+    Game_Interpreter.prototype.setupChild = function(list, eventId) {
+        const r = setupChild0.call(this, list, eventId);
+        if (this._tailScript) this._tailCand = list && list.length && tailAfter(this) ? { child: this._childInterpreter, list: this._list, index: this._index } : null;
+        return r;
+    };
     const takeovers = [], talkOptions = [];
     let talkLast = { who: "", by: "", frame: -1 };
     function whoTest(who) {

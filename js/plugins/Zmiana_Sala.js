@@ -5,7 +5,8 @@
 // bazowała na faktycznej tawernie, czyli aktualnych stołach w tym głównym holu?" - and of the two ways: "na żywo na mapie karczmy").
 // Borgar gives the shift as before (Story.js -> TavernShift.start); in the tavern it is not a scene of its own any more:
 //   1. PRZED OTWARCIEM: the hall's real tables (the 16 long ones of the main hall) - a few dirty: stand by one, hold O; wood from the
-//      pile by the entrance's fireplace to the hall's two fireplaces; sacks and buckets of rubbish out by the front door. The guests
+//      pile by the entrance's fireplace to the hall's two fireplaces; sacks and buckets of rubbish into the kitchen's bin (through the
+//      door behind the bar; 2026-11-18 the user: "niech w kuchni będzie kosz na śmieci i tam wszystko wrzuca" - was: the front door). The guests
 //      who were sitting finish and go out (the hall is being got ready).
 //   2. PIWO: behind the bar, at the barrels - O: the keg's close-up (TavernShift's own part, as a close-up: nothing paid there).
 //   3. KUCHNIA: through the door behind the bar, at the stove beside Jagna - O: the kitchen's close-up.
@@ -57,8 +58,10 @@
     const STOVES = [{ x: 7, y: 5 }, { x: 9, y: 5 }, { x: 11, y: 5 }];  // the kitchen's stoves (the hero at y 6 under them)
     const FIRES = [{ x: 4, y: 14 }, { x: 24, y: 14 }];                // the hall's two fireplaces
     const PILE = { x: 21, y: 36.4 };                                   // the wood by the entrance's fireplace (20,36) (22,36)
-    const EXIT = { x: 14, y: 40.4 };                                   // the front door (its transfer cells at y 41)
-    const COUNTER_Y = 17, COUNTER_XS = [10, 11, 12, 15, 16, 17, 18];   // the bar's top; 13-14 is Borgar's place (his talk, the meal)
+    const BIN = { x: 15, y: 9 };                                       // the kitchen's rubbish barrel, right of the door from the hall (Map001 D 15,2)
+    // the bar's top: the dishes in two even rows mirrored round its middle (14, the book) - 10-12 and 16-18, Borgar's place 13-14 free
+    // (2026-11-18 the user: "jedzenie musi być na ladzie równo położone" - was: 10, 11, 12, 15...: three, a gap, one)
+    const COUNTER_Y = 17, COUNTER_L = 11, COUNTER_R = 17;
     const HALL = { x0: 1, x1: 27, y0: 18, y1: 31 };                   // the main hall (its long tables)
     const TABLE_TILES = [416, 424, 432, 439, 447];                     // the long tables (layer 3) - as Goscie_Sala
     const BORGAR = [1, 38, 52];                                        // Borgar, the meal at the counter, the counter's talk
@@ -66,6 +69,9 @@
     // the old room was 19 x 13 cells, the hall is ~28 x 14 with the wood and the door far off: the times stretched for it
     const STRETCH = { clean: 2.4, serve: 1.6, spawn: 1.6, patience: 1.7, fire: 1.5 };
     const ICON = { table: 400, wood: 381, trash: 338, coin: K.GOLD_ICON || 313, fire: 381 };
+    // the log in his hands: the firewood's own picture (Drewno, item 61 - what goes on a campfire; 2026-11-18 the user: "ładna ikonka
+    // drewna taka co się wrzuca do ogniska")
+    const logIcon = () => (window.$dataItems && $dataItems[61] && $dataItems[61].iconIndex) || ICON.wood;
 
     const G = () => window.GoscieSala && window.GoscieSala.shift;
     const here = () => !!(window.$gameMap && $gameMap.mapId() === MAP);
@@ -372,7 +378,7 @@
         if (L.phase === "beer" && KEGS.some(k => dist(h, k.x, k.y) <= REACH)) return { kind: "keg", label: cz.nalej };
         if (L.phase === "kitchen" && STOVES.some(k => dist(h, k.x, k.y) <= REACH + 0.2)) return { kind: "stove", label: cz.gotuj };
         // the rubbish
-        if (carry === "sack" && dist(h, EXIT.x, EXIT.y) <= REACH + 0.3) return { kind: "dump", label: A.wyrzuc };
+        if (carry === "sack" && dist(h, BIN.x, BIN.y) <= REACH + 0.3) return { kind: "dump", label: (Z().cel && Z().cel.kosz) || A.wyrzuc };
         for (const s of L.sacks) if (s.state === "lying" && dist(h, s.x, s.y) <= REACH) return carry ? { kind: "full", label: A.zajete, dim: true } : { kind: "sack", sack: s, label: s.kind === "sack" ? A.worek : A.kubel };
         // the fire, the wood
         if (carry === "log") for (const f of FIRES) if (dist(h, f.x, f.y) <= REACH + 0.2) return { kind: "fire", f, label: A.doKominka };
@@ -403,8 +409,8 @@
                 if (c && c.sack) c.sack.state = "out";
                 L.carry = [];
                 if (L.phase === "clean") L.trashDone++;
-                se("Door1", 55, 110);
-                floatText("✓", EXIT.x, EXIT.y - 1, GOOD);
+                se("Equip2", 50, 60);
+                floatText("✓", BIN.x, BIN.y - 1, GOOD);
                 break;
             }
             case "log": L.carry.push({ kind: "log" }); se("Equip2", 50, 70); break;
@@ -418,10 +424,13 @@
             case "full": se("Buzzer2", 30, 100); break;
         }
     }
-    // the dishes on the counter (the menu's own, the slots free of Borgar's place)
+    // the dishes on the counter (the menu's own): the first half (the odd one too) on the left of Borgar's place, the rest on the right,
+    // a tile apart, each row centred on its half - x may be a half tile; tx: the tile to stand under it (away from its row's middle)
     function counterSlots() {
-        const menu = L.menu || [];
-        return menu.map((key, i) => ({ key, x: COUNTER_XS[i % COUNTER_XS.length], y: COUNTER_Y }));
+        const menu = L.menu || [], nl = Math.ceil(menu.length / 2), nr = menu.length - nl;
+        const row = (k, c) => Array.from({ length: k }, (_, i) => ({ x: c + i - (k - 1) / 2, c }));
+        const at = row(nl, COUNTER_L).concat(row(nr, COUNTER_R));
+        return menu.map((key, i) => { const p = at[i]; return { key, x: p.x, y: COUNTER_Y, tx: Number.isInteger(p.x) ? p.x : p.x < p.c ? Math.floor(p.x) : Math.ceil(p.x) }; });
     }
 
     // ------------------------------------------------------------------
@@ -561,7 +570,7 @@
     function build(set) {
         const tm = set._tilemap, v = { set, tm, stains: new Map(), sacks: new Map(), bubbles: new Map(), floats: [] };
         const mk = (bmp, z) => { const s = new Sprite(bmp); s.z = z; s.update = function() {}; tm.addChild(s); return s; };
-        v.dishes = MENU_ORDER.map(() => { const s = mk(new Bitmap(36, 36), 1.65); s.anchor.set(0.5, 0.5); return s; });
+        v.dishes = MENU_ORDER.map(() => mk(new Bitmap(36, 36), 1.65));
         v.fires = FIRES.map(() => { const s = mk(new Bitmap(84, 22), 9); s.anchor.set(0.5, 1); return s; });
         v.hands = mk(new Bitmap(84, 40), 9); v.hands.anchor.set(0.5, 1);
         v.prompt = new H.Prompt(); set.addChild(v.prompt); v.prompt.hide();
@@ -584,6 +593,13 @@
         if (v.prompt) v.prompt.hide();
         for (const f of v.floats) f.s.visible = false;
         v.floats = [];
+    }
+    // what is painted on a small bitmap: the middle of its columns, its lowest row (a dish set down on the counter by its picture)
+    function paintedBox(b) {
+        const w = b.width, h = b.height, d = b.context.getImageData(0, 0, w, h).data;
+        let x0 = w, x1 = -1, y1 = -1;
+        for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (d[(y * w + x) * 4 + 3] > 40) { if (x < x0) x0 = x; if (x > x1) x1 = x; y1 = y; }
+        return x1 < 0 ? { cx: w / 2, y1: h - 3 } : { cx: (x0 + x1 + 1) / 2, y1: y1 + 1 };
     }
     const sx = c => $gameMap.adjustX(c) * $gameMap.tileWidth() + $gameMap.tileWidth() / 2;
     const sy = c => $gameMap.adjustY(c) * $gameMap.tileHeight() + $gameMap.tileHeight() / 2;
@@ -622,8 +638,11 @@
             const sl = slots[i];
             s.visible = !!sl;
             if (!sl) return;
-            if (s._key !== sl.key) { s._key = sl.key; s.bitmap.clear(); icon(s.bitmap, dishIcon(sl.key), 2, 2, 32); }
-            s.x = Math.round(sx(sl.x)); s.y = Math.round(sy(sl.y) - 14);
+            // (drawn once the icon sheet is in; then set down by its own picture: the middle of what is painted over the slot, its
+            // bottom on one line - a mug, a loaf and a bowl stand level)
+            if (s._key !== sl.key) { s.bitmap.clear(); if (icon(s.bitmap, dishIcon(sl.key), 2, 2, 32)) { s._key = sl.key; s._box = paintedBox(s.bitmap); } }
+            const bx = s._box || { cx: 18, y1: 33 };
+            s.x = Math.round(sx(sl.x) - bx.cx); s.y = Math.round(sy(sl.y) - 2 - bx.y1);
         });
         // the fires' meters
         FIRES.forEach((f, i) => {
@@ -663,9 +682,10 @@
         const hk = L.carry.map(c => c.kind === "dish" ? c.key : c.kind).join(",");
         v.hands.visible = live && L.carry.length > 0;
         if (v.hands._key !== hk) {
-            v.hands._key = hk;
             const b = v.hands.bitmap; b.clear();
-            L.carry.forEach((c, i) => icon(b, c.kind === "dish" ? dishIcon(c.key) : c.kind === "log" ? ICON.wood : ICON.trash, 4 + i * 38 + (L.carry.length === 1 ? 19 : 0), 2, 34));
+            let ok = true;
+            L.carry.forEach((c, i) => { ok = icon(b, c.kind === "dish" ? dishIcon(c.key) : c.kind === "log" ? logIcon() : ICON.trash, 4 + i * 38 + (L.carry.length === 1 ? 19 : 0), 2, 34) && ok; });
+            if (ok) v.hands._key = hk;   // (the icon sheet not in yet: drawn again next frame)
         }
         v.hands.x = Math.round($gamePlayer.screenX()); v.hands.y = Math.round($gamePlayer.screenY() - 64);
         // O: what it does here
@@ -734,7 +754,7 @@
             if (L.phase === "serve") { L.t = L.limit; return true; }
             return false;
         },
-        PLACES: { KEGS, STOVES, FIRES, PILE, EXIT, COUNTER_Y, COUNTER_XS },
+        PLACES: { KEGS, STOVES, FIRES, PILE, BIN, COUNTER_Y, COUNTER_L, COUNTER_R },
         pictures: () => V   // (tests: the sprites of the shift on the map)
     };
     window.ZmianaSala = T.register ? T.register(PLUGIN, api) : api;

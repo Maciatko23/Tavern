@@ -223,6 +223,12 @@
             if (i >= 0) { picks.shift(); why = "plan"; }
             else if (o && o.strict) { why = "brak opcji „" + want + "”"; }
         }
+        // (2026-11-18: a menu that comes back after each answer - a hall guest's „Kim jesteś?” - was asked 97 times in a row: the
+        // same menu a third time within a minute and the policy says goodbye)
+        const key = labels.join("|");
+        const rep = FAB._menuRep && FAB._menuRep.key === key && AP.frame - FAB._menuRep.at < 60 * 60 ? FAB._menuRep : (FAB._menuRep = { key, n: 0, at: 0 });
+        rep.n++; rep.at = AP.frame;
+        if (i < 0 && rep.n >= 3) { const j = labels.findIndex(l => LEAVE.test(l)); i = j >= 0 ? j : labels.length - 1; why = (why ? why + "; " : "") + "to samo menu " + rep.n + ". raz - koniec rozmowy"; }
         if (i < 0) { const r = policy(labels, o); i = r.i; why = why ? why + "; " + r.why : r.why; }
         const last = FAB.talkLog[FAB.talkLog.length - 1];
         note("choices", { labels, picked: labels[i], why, who: (last && last.name) || "", said: last ? last.t.slice(0, 160) : "" });
@@ -756,7 +762,9 @@
     }
     function installShiftBot() {
         // (2026-11-18: in the tavern a shift is played on the map, Zmiana_Sala.js - this bot plays the shift's scene: asked for in so many words)
-        if (!TavernShift.start._scene) { const s0 = TavernShift.start; TavernShift.start = o => s0(Object.assign({ scene: true }, o || {})); TavernShift.start._scene = true; }
+        // (2026-11-18: in the tavern the shift is played live on the map, Zmiana_Sala.js - playLiveShift below walks it; FAB.sceneShift =
+        // true asks for the old scene instead. The close-ups (keg, stove) and the summary are still the scene: this bot plays them)
+        if (FAB.sceneShift && !TavernShift.start._scene) { const s0 = TavernShift.start; TavernShift.start = o => s0(Object.assign({ scene: true }, o || {})); TavernShift.start._scene = true; }
         if (window.__fabShiftBot) { TavernShift.onTick = window.__fabShiftBot; return; }
         // (the bot of tests/tavern_shift_test.js, "good" mode: it presses the keys of the mini-game, nothing else)
         const bot = window.__bot = { mode: "good", t: 0, path: null, goal: "", last: null, still: 0, cardWait: 0 };
@@ -859,6 +867,138 @@
             else if (st.part === "serve") serve(I, d);
         };
     }
+    // (2026-11-18) the shift played LIVE on the tavern's map (Zmiana_Sala.js): the hero walks the real hall as a player would - the dirty
+    // tables (O held), the rubbish into the kitchen's bin, the wood from the pile by the entrance to a fireplace, the barrels behind the
+    // bar and the stove behind the kitchen door (their close-ups and the summary: the scene bot above), the evening's orders carried
+    // from the counter to the guests (the most impatient first), a log when the fire is low, a wipe when nobody waits
+    function* playLiveShift() {
+        const Z = window.ZmianaSala;
+        const st = () => Z.state();
+        function* go(x, y, d) { const ok = yield* L.walkTo(x, y); if (d) $gamePlayer.setDirection(d); yield* L.wait(4); return ok; }
+        // (O only while the shift lasts: just after its end the same press at a seat started a guest's talk)
+        function* tap() { if (!TavernShift.liveRunning()) return; yield* L.press("ok"); yield* L.wait(6); }
+        const nearFire = () => (Math.hypot($gamePlayer.x - 5, $gamePlayer.y - 14) <= Math.hypot($gamePlayer.x - 23, $gamePlayer.y - 14) ? [5, 14, 4] : [23, 14, 6]);
+        // a free cell beside a table (8 round it), the nearest to the hero
+        const standBy = tb => {
+            let best = null, bd = 1e9;
+            for (let y = tb.y0 - 1; y <= tb.y1 + 1; y++) for (let x = tb.x0 - 1; x <= tb.x1 + 1; x++) {
+                if (x >= tb.x0 && x <= tb.x1 && y >= tb.y0 && y <= tb.y1) continue;
+                if (!$gameMap.checkPassage(x, y, 0x0f) || $gameMap.eventsXyNt(x, y).some(e => e.isNormalPriority())) continue;
+                const d = Math.hypot(x - $gamePlayer.x, y - $gamePlayer.y);
+                if (d < bd) { bd = d; best = [x, y, y < tb.y0 ? 2 : y > tb.y1 ? 8 : x < tb.x0 ? 6 : 4]; }
+            }
+            return best;
+        };
+        function* wipe(tb) {
+            const at = standBy(tb);
+            if (!at) return false;
+            setDoing("Zmiana: przecieram stół", "stół brudny - goście siadają tylko przy czystych");
+            if (!(yield* go(at[0], at[1], at[2]))) return false;
+            L.key("ok", true); yield* L.wait(72); L.key("ok", false); yield* L.wait(6);
+            return true;
+        }
+        function* putOnFire() {
+            const f = nearFire();
+            setDoing("Zmiana: dokładam do kominka", "ogień w sali");
+            if (!(yield* go(f[0], f[1], f[2]))) return false;
+            for (let i = 0; i < 3 && st().carry[0] === "log"; i++) yield* tap();
+            return true;
+        }
+        function* wood(n) {
+            setDoing("Zmiana: idę po drewno", "stos przy kominku koło wejścia");
+            if (!(yield* go(21, 37, 8))) return false;
+            for (let i = 0; i < n; i++) yield* tap();
+            return yield* putOnFire();
+        }
+        // the kitchen: through the door behind the bar (a transfer on the same map) and back
+        function* intoKitchen() {
+            if ($gamePlayer.y <= 11) return true;
+            yield* go(14, 14, 8);
+            for (let i = 0; i < 40 && $gamePlayer.y > 11; i++) { L.key("up", true); yield* L.wait(4); L.key("up", false); yield* L.wait(6); }
+            yield* L.wait(30);
+            return $gamePlayer.y <= 11;
+        }
+        function* outOfKitchen() {
+            if ($gamePlayer.y > 11) return true;
+            yield* go(14, 9, 2);   // (the exit's own cell (14,10) is a crossing: walkTo never aims at one - the last step is a key)
+            for (let i = 0; i < 40 && $gamePlayer.y <= 11; i++) { L.key("down", true); yield* L.wait(4); L.key("down", false); yield* L.wait(6); }
+            yield* L.wait(30);
+            return $gamePlayer.y > 11;
+        }
+        let guard = 0, phase = "", since = AP.frame;
+        while (TavernShift.liveRunning() && guard++ < 4000) {
+            if (TavernShift.isRunning() || !(SceneManager._scene instanceof Scene_Map)) { yield* L.wait(10); continue; }   // (a close-up / the summary: the scene bot)
+            if ($gameMap.isEventRunning() || $gameMessage.isBusy()) { yield* L.press("ok"); yield* L.wait(12); continue; }   // (Borgar's words)
+            const s = st();
+            if (!s) break;
+            if (s.phase !== phase) { phase = s.phase; since = AP.frame; }
+            if (AP.frame - since > 60 * 60 * 6) { say("zmiana: utknąłem w części " + phase + " - pomijam"); Z.skip(); since = AP.frame; continue; }
+            const carry = s.carry[0];
+            if (s.phase === "intro" || s.phase === "end") { yield* L.wait(20); continue; }
+            if (s.phase === "clean") {
+                // (the rubbish into the kitchen's bin, right of the door from the hall: from the door's cell, facing it)
+                if (carry === "sack") { setDoing("Zmiana: wyrzucam śmieci", "kosz w kuchni"); if (yield* intoKitchen()) { yield* go(14, 9, 6); yield* tap(); } else yield* L.wait(30); continue; }
+                if ($gamePlayer.y <= 11) { yield* outOfKitchen(); continue; }
+                if (carry === "log") { yield* putOnFire(); continue; }
+                const dirty = s.tables.filter(t => s.dirty.includes(t.id));
+                if (dirty.length) {
+                    dirty.sort((a, b) => Math.hypot(a.x0 - $gamePlayer.x, a.y0 - $gamePlayer.y) - Math.hypot(b.x0 - $gamePlayer.x, b.y0 - $gamePlayer.y));
+                    if (!(yield* wipe(dirty[0]))) yield* L.wait(30);
+                    continue;
+                }
+                const sack = s.sacks.find(q => q.state === "lying");
+                if (sack) { setDoing("Zmiana: zbieram śmieci", "worki i kubły z sali"); yield* go(sack.x, sack.y); yield* tap(); continue; }
+                if (s.wood.done < s.wood.need) { yield* wood(Math.min(2, s.wood.need - s.wood.done)); continue; }
+                yield* L.wait(20);
+                continue;
+            }
+            if (s.phase === "beer") {
+                if ($gamePlayer.y <= 11) { yield* outOfKitchen(); continue; }
+                setDoing("Zmiana: nalewam piwo", "beczki za barem");
+                yield* go(11, 15, 8); yield* tap(); yield* L.wait(30);
+                continue;
+            }
+            if (s.phase === "kitchen") {
+                setDoing("Zmiana: gotuję z Jagną", "kuchnia za drzwiami za barem");
+                if (!(yield* intoKitchen())) { yield* L.wait(30); continue; }
+                yield* go(9, 6, 8); yield* tap(); yield* L.wait(30);
+                continue;
+            }
+            if (s.phase === "serve") {
+                if ($gamePlayer.y <= 11) { yield* outOfKitchen(); continue; }
+                const waiting = s.guests.filter(g => g.state === "wait").sort((a, b) => a.patience - b.patience);
+                const want = [];
+                for (const g of waiting) g.order.forEach((k, i) => { if (!g.got[i]) want.push({ g, k }); });
+                // what he holds goes to whoever wants it
+                if (carry && carry !== "log" && carry !== "sack") {
+                    const to = want.find(x => s.carry.includes(x.k));
+                    if (to) {
+                        const seat = GoscieSala.shift.seats().find(q => q.x === to.g.seat[0] && q.y === to.g.seat[1]);
+                        setDoing("Zmiana: niosę zamówienie", "gość czeka (" + Math.round(to.g.patience / 60) + " s cierpliwości)");
+                        if (seat) { yield* go(seat.ax, seat.ay, seat.side === 6 ? 6 : 4); yield* tap(); }
+                        continue;
+                    }
+                    const slot = s.slots.find(q => q.key === carry);   // (nobody wants it any more: back on the counter)
+                    if (slot) { yield* go(slot.tx, 18, 8); yield* tap(); }
+                    continue;
+                }
+                if (carry === "log") { yield* putOnFire(); continue; }
+                if (want.length) {
+                    setDoing("Zmiana: biorę z lady", want.slice(0, 2).map(x => x.k).join(", "));
+                    for (const x of want.slice(0, 2)) { const slot = s.slots.find(q => q.key === x.k); if (slot) { yield* go(slot.tx, 18, 8); yield* tap(); } }
+                    continue;
+                }
+                if (s.fire < 1.2) { yield* wood(2); continue; }
+                const dirty = s.tables.filter(t => s.dirty.includes(t.id));
+                if (dirty.length) { yield* wipe(dirty[0]); continue; }
+                setDoing("Zmiana: czekam na gości przy ladzie", "sala gotowa");
+                yield* go(14, 19, 8); yield* L.wait(30);
+                continue;
+            }
+            yield* L.wait(20);
+        }
+        L.key("ok", false);
+    }
     function* doShift() {
         if (!(yield* toCounter())) return false;
         const sd = S();
@@ -872,7 +1012,10 @@
         const g0 = gold(), n0 = (TavernShift.stats() || {}).done || 0;
         let r;
         FAB.goldCtx = "zmiany";
-        try { r = yield* talkTo(borgarCounter, { tiles: [COUNTER], picks: ["Weź zmianę"], leave: true }); } finally { FAB.goldCtx = null; }
+        try {
+            r = yield* talkTo(borgarCounter, { tiles: [COUNTER], picks: ["Weź zmianę"], leave: true });
+            if (TavernShift.liveRunning && TavernShift.liveRunning()) yield* playLiveShift();
+        } finally { FAB.goldCtx = null; }
         const n1 = (TavernShift.stats() || {}).done || 0;
         FAB.shiftTried = day();
         if (n1 > n0) {
@@ -2558,6 +2701,7 @@
                 if (!(yield* toCounter())) return false;
                 installShiftBot();
                 yield* talkTo(borgarCounter, { tiles: [COUNTER], picks: shiftOpen() && h >= 16 ? ["Weź zmianę"] : [], leave: true });
+                if (TavernShift.liveRunning && TavernShift.liveRunning()) yield* playLiveShift();
                 return true;
             } };
             if (gold() >= s.debt - s.paid) return { what: "Idę do Lorda spłacić cały dług", why: ch1 + ", w sakiewce " + gold() + " G", run: function* () { checkGoal("payAll", MAP.manor); yield* payDebt(); } };

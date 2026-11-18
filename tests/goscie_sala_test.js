@@ -74,6 +74,12 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9413, lightGpu: true, bootCheck
     await t.eval("$gameMessage.onChoice(3); $gameMessage.clear(); 0"); await t.frames(30);
     for (let k = 0; k < 8 && (await t.json("$gameMap.isEventRunning()")); k++) await adv(1);
     t.check("po „Bywaj” rozmowa się kończy", !(await t.json("$gameMap.isEventRunning()")));
+    // (2026-11-18) the menu comes back after each answer: 101 × „Kim jesteś?” in a row (~2 s each) - before, each answer nested one more
+    // interpreter and the 100th threw "Common event calls exceeded the limit" (the story autopilot hit it after a shift)
+    await t.eval(`(() => { window.__maxDepth = 0; if (!Game_Interpreter.prototype.__depthSpy) { const u = Game_Interpreter.prototype.update; Game_Interpreter.prototype.update = function() { if (this._depth > window.__maxDepth) window.__maxDepth = this._depth; return u.call(this); }; Game_Interpreter.prototype.__depthSpy = true; } return 0; })()`);
+    const many = await t.talkTo(pick.id, [...Array(101).fill("Kim"), "Bywaj"], { secs: 420 });
+    const manyR = { done: many.done, choices: many.choices.length, depth: await t.json("window.__maxDepth"), err: await t.json("(document.getElementById('errorPrinter') || {}).innerText || ''") };
+    t.check("101 × „Kim jesteś?” z rzędu: menu wraca bez zagnieżdżania, rozmowa kończy się na „Bywaj”", manyR.done && manyR.choices >= 102 && manyR.depth <= 1 && !manyR.err, manyR);
     // rozmowa z idącym: staje, mówi swoim imieniem, potem wraca do swoich spraw
     const wk = (await list()).filter(x => x.state === "sit")[5];
     await t.eval(`GoscieSala.force(${wk.id}, "rise"); 0`);
