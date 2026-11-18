@@ -676,7 +676,7 @@
             inne: [{ id: 294, cena: 80, przychylnosc: 30 }, { id: 297, cena: 30 }],
             menu: "Pokaż zbrojownię",
             teksty: {
-                witaj: ["Zbrojownia królewska. Liczę, ważę, wydaję. Za grosz, rzecz jasna.", "Kolczuga, hełm, szabla - ze stanu. Nikt nie zauważy. Ehem.",
+                witaj: ["Zbrojownia królewska. Liczę, ważę, wydaję. Za miedziak, rzecz jasna.", "Kolczuga, hełm, szabla - ze stanu. Nikt nie zauważy. Ehem.",
                     "Dla przyjaciół garnizonu - lepszy towar."],
                 kupione: ["Wpisuję jako „zużyte w ćwiczeniach”."], sprzedane: ["Przyda się wojsku."], zegnaj: ["Do zobaczenia. Liczę na ciebie. Dosłownie."],
                 przychylnosc: ["To tylko dla swoich. Pomóż garnizonowi, to pogadamy."]
@@ -687,7 +687,7 @@
             skupuje: ["braz", "zelazo", "stal", "okute", "plotno", "sukno", "skora"], naprawia: [], menu: "Pokaż zbrojownię",
             teksty: {
                 witaj: ["(Młody żołnierz z księgą pod pachą.) Kłos popłynął, księga została mnie. Zbrojownia ta sama, ceny te same.",
-                    "Kapral Jur, zastępca kwatermistrza. Liczę jak Kłos - tylko uczciwie.", "Rotmistrz kazał zapisywać każdy grosz. Co bierzesz?"],
+                    "Kapral Jur, zastępca kwatermistrza. Liczę jak Kłos - tylko uczciwie.", "Rotmistrz kazał zapisywać każdy miedziak. Co bierzesz?"],
                 kupione: ["Zapisane. Z numerem i podpisem."], sprzedane: ["Wpisuję na przychód. Rotmistrz będzie zadowolony."], zegnaj: ["Za króla!"]
             } },
         kantor: { kto: "Baltazar Vey", tytul: "kupiec z kontynentu", godziny: [8, 18], pokaz: 8, skup: 0.45, skupuje: true, naprawia: [],

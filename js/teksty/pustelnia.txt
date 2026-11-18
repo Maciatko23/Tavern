@@ -212,7 +212,7 @@ Tego nie ma w kronikach, chłopcze. Kroniki nie piszą o żywych. Zapytaj o co i
 
 [balt]
 Ach, przyjaciel od starych ksiąg! Kroniki już płyną na kontynent... ale wypadła z nich jedna karta. Szyfr, bazgroły. Nikt jej nie chce.
-Dla ciebie - czterdzieści groszy. Sentyment, rozumiesz.
+Dla ciebie - cztery srebrniki. Sentyment, rozumiesz.
 
 [baltYes]
 Interes to interes. Bazgroły twoje.
@@ -411,7 +411,7 @@ kod.glowna.0 = Rejestr straży
 
 # (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
 [honeyAsk]
-Miód z moich uli. Dwanaście groszy słoik. Dla posłańca nie ma zniżek. Posłańcy płacą jak wszyscy.
+Miód z moich uli. Jeden srebrnik i dwa miedziaki słoik. Dla posłańca nie ma zniżek. Posłańcy płacą jak wszyscy.
 
 
 # ======================================================================== PRZY KAPLICY (pustelnia poza światem, 2026-11-11)

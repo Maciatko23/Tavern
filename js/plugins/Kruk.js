@@ -316,9 +316,12 @@
     // The Order's old perches in the ravenry (pictures on the markers zerdz_1 / zerdz_2 of Map157)
     // ------------------------------------------------------------------
     let oldPerches = [];
+    // (2026-11-18, "niewidzialne blokady") the new world's ravenry - Krucza Grań, Map029 - has its two perches too: their events block
+    // the cells (zerdz_1 / zerdz_2) - so their picture is drawn there as well, not an empty spot one cannot walk through
+    const PERCH_MAPS = [29];
     function drawOldPerches() {
         const tm = tilemap();
-        if (!tm || $gameMap.mapId() !== RMAP()) { oldPerches = []; return; }
+        if (!tm || ($gameMap.mapId() !== RMAP() && !PERCH_MAPS.includes($gameMap.mapId()))) { oldPerches = []; return; }
         if (!oldPerches.length || oldPerches.some(o => o.s.parent !== tm)) {
             for (const o of oldPerches) if (o.s.parent) o.s.parent.removeChild(o.s);
             oldPerches = [];

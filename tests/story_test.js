@@ -223,7 +223,7 @@ const DRIVER = String.raw`
 
         // ---- grandpa again: the debt and a hint
         const g2 = await talkTo("$gameMap.event(901)");
-        check("talking to grandpa again: where the debt stands (no praise for nothing paid) and a hint (the way to the field)", g2.done && g2.log.length === 2 && /nie oddaliśmy jeszcze ani grosza/.test(g2.text) &&
+        check("talking to grandpa again: where the debt stands (no praise for nothing paid) and a hint (the way to the field)", g2.done && g2.log.length === 2 && /nie oddaliśmy jeszcze ani miedziaka/.test(g2.text) &&
             /Czasu jeszcze sporo, ale nie zwlekaj/.test(g2.text) && !/Idzie ci lepiej/.test(g2.text) && /Działka\s+jest\s+za\s+lasem/.test(g2.text) && g2.log.every(l => l.who === 901), g2.text);
 
         // ================= 2. the field, the tavern: Borgar
@@ -294,7 +294,7 @@ const DRIVER = String.raw`
         await ev("$gameParty.loseGold($gameParty.gold()); $gameParty.gainGold(700); window.__debt = []; for (const n of ['debtPayment', 'debtPaid']) Tawerna.on(n, e => window.__debt.push([n, n === 'debtPaid' ? e.total : e.amount]), { owner: 'StoryTest' }); 0");
         const pay1 = await talkTo("$gameMap.event(902)", ["Oddaj 500 G"], 40, "fabula_6_hrabia_splata.png");
         const p1 = await J("({ gold: $gameParty.gold(), s: $gameSystem._story })");
-        check("the first meeting: he introduces himself, names the sum and the day, then only asks (no account read out)", pay1.done && /Lord Leopold Zaleski/.test(pay1.text) && /2500 złotych monet, płatne do dnia 60/.test(pay1.text) &&
+        check("the first meeting: he introduces himself, names the sum and the day, then only asks (no account read out)", pay1.done && /Lord Leopold Zaleski/.test(pay1.text) && /25 złotych, płatne do dnia 60/.test(pay1.text) &&
             /Ile dziś przynosisz\?/.test(pay1.text) && !/Na razie nic nie oddałeś|Oddałeś już|Spłacono/.test(pay1.text) && pay1.log.some(l => l.who === 902) && pay1.log.some(l => l.who === 0), pay1.text.slice(0, 400));
         check("the payment menu: 100 / 500 / all you have / leave", pay1.choices[0] && pay1.choices[0].join("|") === "Oddaj 100 G|Oddaj 500 G|Oddaj wszystko, co masz (700 G)|Odejdź", pay1.choices);
         const said1 = pay1.log.slice(-1)[0].t.replace(/\n/g, " ");

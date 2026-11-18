@@ -31,7 +31,7 @@ To ludzie od kopaczy. Poznaję ich po butach. Idą po wasze schody w dół.
 Jutro w nocy nie wychodź z domu, chłopcze. Radzę jako kupiec, nie jako przyjaciel.
 
 [warnBarks.zlodziej]
-Jakiś wielki w kolczudze dał mi grosz, żebym mu pokazał tylne drzwi tawerny. Nie pokazałem! ...Prawie.
+Jakiś wielki w kolczudze dał mi miedziak, żebym mu pokazał tylne drzwi tawerny. Nie pokazałem! ...Prawie.
 
 [warnBarks.dzwonnik]
 Coś wisi w powietrzu. Trzy i jeden - pamiętasz, co to znaczy?
@@ -257,7 +257,7 @@ obroncy.7.lines.hit = Widłami cię!
 obroncy.7.lines.down = Ach...
 obroncy.7.lines.win = Tu jest teraz nasz dom.
 obroncy.8.name = Kapral Wit
-obroncy.8.lines.start = Pięć groszy na tydzień brałem. Dziś nie biorę nic. Do bramy!
+obroncy.8.lines.start = Pięć miedziaków na tydzień brałem. Dziś nie biorę nic. Do bramy!
 obroncy.8.lines.hit = Za miasto!
 obroncy.8.lines.down = Ugh... trzymajcie... drzwi...
 obroncy.8.lines.win = Straż miejska. Nareszcie naprawdę.

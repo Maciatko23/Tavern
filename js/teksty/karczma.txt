@@ -46,7 +46,7 @@ dania.placek.bite = Słodki jak... no, jak placek z serem. I tyle mi trzeba.
 # chleb
 dania.chleb.name = Chleb ze smalcem
 dania.chleb.sub = tanio · szybko · klasyka
-dania.chleb.desc = Gruba pajda razowca, smalec ze skwarkami i ogórek kiszony. Klasyka za grosze.
+dania.chleb.desc = Gruba pajda razowca, smalec ze skwarkami i ogórek kiszony. Klasyka za miedziaki.
 dania.chleb.order = Chleb ze smalcem - jedzenie królów. Biednych królów. Siadaj!
 dania.chleb.bite = Skwarki! Ogórek! Nic więcej do szczęścia.
 # piwo

@@ -72,9 +72,9 @@
         alt: { map: CHAPEL_MAP, when: "pustelniaZamknieta",
             plan: [[0, "inside", "kaplica_drzwi"], [0, "stand", "kaplica_drzwi", night],
                    [6, "stand", "kaplica_drzwi"],
-                   [9, "stand", "kaplica_lawka", dry],
+                   [9, "stand", "kaplica_lawka2", dry],   // (the bench's other end - the bell-ringer sits on kaplica_lawka, 2026-11-18)
                    [13, "stand", "kaplica_drzwi"],
-                   [15, "stand", "kaplica_lawka", dry],
+                   [15, "stand", "kaplica_lawka2", dry],
                    [19, "stand", "kaplica_drzwi"],
                    [20, "inside", "kaplica_drzwi"],
                    [22.5, "stand", "kaplica_drzwi", night]],

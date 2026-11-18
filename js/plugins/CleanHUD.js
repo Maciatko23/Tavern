@@ -290,7 +290,29 @@
         bmp.paintOpacity = 255;
         return true;
     }
-    const iconsReady = () => ImageManager.loadSystem("IconSet").isReady();
+    // the needs' own icons (2026-11-18, the player: "ikony niech zostaną profesjonalnie, szczegółowo zrobione w PixelLab"):
+    // img/system/Potrzeby.png - 32 x 32 each: life, stamina, food, water, breath (tools/potrzeby/zrob_potrzeby.py); the HUD's row and
+    // the menu's Postać draw them; until the sheet is loaded the IconSet's old ones (NEED_ICONS)
+    const NEED_AT = { health: 0, stamina: 1, food: 2, water: 3, breath: 4 };
+    const needSheet = () => ImageManager.loadSystem("Potrzeby");
+    const _bootSystemImages = Scene_Boot.prototype.loadSystemImages;
+    Scene_Boot.prototype.loadSystemImages = function() {   // (loaded with the game's own system pictures: ready before the first map)
+        _bootSystemImages.call(this);
+        needSheet();
+    };
+    function drawNeed(bmp, key, x, y, size) {
+        const sh = needSheet(), s = size || 32, at = NEED_AT[key];
+        if (at === undefined) return false;
+        if (sh.isReady() && !(sh.isError && sh.isError())) {
+            bmp.context.imageSmoothingEnabled = s < 32;
+            bmp.blt(sh, at * 32, 0, 32, 32, Math.round(x), Math.round(y), s, s);
+            bmp.context.imageSmoothingEnabled = false;
+            return true;
+        }
+        const old = NEED_ICONS[key];
+        return old ? drawIcon(bmp, old[0], x, y, s, old[1]) : false;
+    }
+    const iconsReady = () => ImageManager.loadSystem("IconSet").isReady() && needSheet().isReady();
 
     // a thin bar without a frame: a dark trough, a faint light inside, the colour (the mock-ups' thin_bar)
     function thinBar(ctx, x, y, w, h, ratio, colour, alpha) {
@@ -472,9 +494,9 @@
     // EDGE: the HUD's margin from the screen's edges (the compass's too). CLK.r: the compass's DIAL.R - one size.
     const EDGE = 12;
     const CLK = { r: 44, gap: 10 };
-    // the bars' plate: a row every `step` px; inside: padX, the icon, the bar (as long as the plate allows), the number
-    const BARS = { gap: 6, step: 18, padX: 10, icon: 20, barW: 128, barH: 6, valW: 40, pad: 4 };
-    BARS.w = BARS.padX + BARS.icon + 6 + BARS.barW + 8 + BARS.valW + BARS.padX;
+    // the needs' numbers (the user, 2026-11-17: "zamiast pasków sytości, wody itd. niech będą tylko wartości procentowe - to samo dla
+    // elementów na ekranie podczas gry"): one row in the corner, each need its icon and its percent side by side - step px apart
+    const NUMS = { step: 76, icon: 22, gap: 5, size: 18, h: 26, pad: 4 };
     const GOAL = { x: 14, gap: 8, maxW: 400, titleSize: 19, lineSize: 14, line: "#b4aea2", pillH: 24 };
     const LOW_COLOUR = "#ff6f5e";
     // the day's line: the part of the day (DayNightCycle), the day, the season
@@ -833,48 +855,41 @@
         if ($gameMap && $gameMap.mapId() !== this._mapId) { this._mapId = $gameMap.mapId(); this._show = T.mapFlag("Stamina", true, "off"); }
         this.visible = isClean() && !!$gameSystem;
         if (!this.visible) return;
-        // in the corner, as wide as the goal under it (no goal: as wide as the goal would be at the least)
-        const scene = SceneManager._scene, goal = scene && scene._cleanGoal, gw = goal && goal.visible && goal._box ? goal._box.w : 0;
+        // in the corner, over the goal
         this.x = EDGE;
         this.y = EDGE;
-        const width = gw > 0 ? gw : GBOX.minW;
         const v = this._show ? needValues() : {}, shown = !$gameMessage.isBusy(), combat = shown && combatOn(), buffs = shown ? buffList() : [];
         this._pulse = (this._pulse + 1) % 60;
         const low = NEED_KEYS.filter(k => v[k] !== undefined && needLow(k, v[k]));
         const blinkOn = low.length > 0 && this._pulse < 30;
-        // (2026-11-12, wydajność) the plate is drawn whole only when its make-up changes - which bars, the width, the pills; each bar's
-        // row (its icon, track, fill and number) is a picture of its own, drawn again only when what it shows changes by a pixel or a
-        // digit. The stamina and the breath change nearly every frame in a fight and while resting after a run: the whole plate with
-        // all its text was drawn and sent to the GPU then.
-        const keys = NEED_KEYS.filter(k => v[k] !== undefined), barW = needBarW(width);
-        const key = keys.join(",") + "|" + width + "|" + this.y + "|" + combat + "|" + buffs.map(f => (f.icon || f.glyph) + f.text).join(",") + "|" + iconsReady() + facesReady();
+        // (2026-11-12, wydajność) the row is drawn whole only when its make-up changes - which needs, the pills; each need (its icon
+        // and its number) is a picture of its own, drawn again only when its number changes. The stamina and the breath change nearly
+        // every frame in a fight and while resting after a run.
+        const keys = NEED_KEYS.filter(k => v[k] !== undefined);
+        const key = keys.join(",") + "|" + this.y + "|" + combat + "|" + buffs.map(f => (f.icon || f.glyph) + f.text).join(",") + "|" + iconsReady() + facesReady();
         if (key !== this._key) {
             this._key = key;
-            this.redraw(v, low, blinkOn, width, combat, buffs);
+            this.redraw(v, low, blinkOn, combat, buffs);
             return;
         }
         for (let i = 0; i < keys.length; i++) {
             const k = keys[i];
-            if (needRowKey(k, v, low, blinkOn, barW) !== this._rowKeys[i]) this.drawRow(i, k, v, low, blinkOn, barW);
+            if (needRowKey(k, v, low, blinkOn) !== this._rowKeys[i]) this.drawRow(i, k, v, low, blinkOn);
             else if (this._bars[i]) this._bars[i].ratio = +clamp01(v[k]).toFixed(3);
         }
     };
-    // a row's picture: the band of its bar with room above and below for a low bar's glow and the number's shadow
+    // a need's picture: its icon and its number, with room round them for the low glow and the number's shadow
     const ROW_PAD = 12;
-    const needBarW = width => Math.max(60, width - (BARS.w - BARS.barW));
-    // what a row shows: its number, its fill to the pixel, low (and the blink's phase while low)
-    function needRowKey(k, v, low, blinkOn, barW) {
+    // what a need shows: its number, low (and the blink's phase while low)
+    function needRowKey(k, v, low, blinkOn) {
         const isLow = low.includes(k);
-        return needNumber(k, v[k]) + ":" + Math.round(barW * clamp01(v[k])) + ":" + (isLow ? (blinkOn ? "A" : "B") : "-");
+        return needNumber(k, v[k]) + ":" + (isLow ? (blinkOn ? "A" : "B") : "-");
     }
-    // the number by a bar: health in % of the most, the stamina, the food and the water as the game counts them, the breath in %
+    // every need in % of its most (the stamina: of the most the level gives; the food and the water count to 100 anyway)
     function needNumber(k, v) {
-        if (k === "stamina" && typeof $gameSystem.stamina === "function") return String(Math.round($gameSystem.stamina()));
-        const N = T.api("Needs");
-        if ((k === "food" || k === "water") && N && N.state) return String(Math.round(N.state()[k]));
-        return Math.round(v * 100) + "%";
+        return Math.round(clamp01(v) * 100) + "%";
     }
-    Sprite_CleanNeeds.prototype.redraw = function(v, low, blinkOn, width, combat, buffs) {
+    Sprite_CleanNeeds.prototype.redraw = function(v, low, blinkOn, combat, buffs) {
         const b = this.bitmap, ctx = b.context, keys = NEED_KEYS.filter(k => v[k] !== undefined);
         b.clear();
         this._rings = keys;
@@ -884,15 +899,16 @@
         while (rows.length > keys.length) { const s = rows.pop(); this.removeChild(s); s.bitmap.destroy(); }
         let right = 0, bottom = 0;
         if (keys.length) {
-            const n = keys.length, barW = needBarW(width);
-            bottom = n * BARS.step + BARS.pad * 2;
-            // (no plate behind the bars: the user, 2026-10-23 - the tracks are dark, the numbers outlined)
+            const n = keys.length;
+            bottom = NUMS.h + NUMS.pad * 2;
+            // (no plate behind: the user, 2026-10-23 - the icons and the numbers outlined)
             for (let i = 0; i < n; i++) {
-                if (!rows[i]) { rows[i] = new Sprite(new Bitmap(b.width, BARS.step + ROW_PAD * 2)); this.addChild(rows[i]); }
-                rows[i].y = BARS.pad + i * BARS.step - ROW_PAD;   // (its band's middle where the bar's row was on the plate)
-                this.drawRow(i, keys[i], v, low, blinkOn, barW);
+                if (!rows[i]) { rows[i] = new Sprite(new Bitmap(NUMS.step + 12, NUMS.h + ROW_PAD * 2)); this.addChild(rows[i]); }
+                rows[i].x = i * NUMS.step;
+                rows[i].y = NUMS.pad - ROW_PAD;
+                this.drawRow(i, keys[i], v, low, blinkOn);
             }
-            right = width;
+            right = n * NUMS.step - 10;
         }
         // the pills under the plate: "Tryb walki", then the premia
         let px = 0;
@@ -920,39 +936,19 @@
         const h = Math.max(bottom, pills ? py + ph + 2 : 0), w = Math.max(right, px);
         this._box = h > 0 && w > 0 ? { x: 0, y: 0, w, h } : null;
     };
-    // one bar's row, on its own picture: the icon (the breath: its sign), the dark track, the fill, the number
-    Sprite_CleanNeeds.prototype.drawRow = function(i, k, v, low, blinkOn, barW) {
-        const s = this._rowSprites[i], b = s.bitmap, ctx = b.context;
-        const y = ROW_PAD + BARS.step / 2, isLow = low.includes(k), col = isLow ? LOW_COLOUR : C[k], ratio = clamp01(v[k]), by = Math.round(y - BARS.barH / 2);
-        const ix = BARS.padX, bx = ix + BARS.icon + 6, vx = bx + barW + 8;
+    // one need on its own picture: the icon (the breath: its sign) and the percent; low: the number red, glowing in the blink
+    Sprite_CleanNeeds.prototype.drawRow = function(i, k, v, low, blinkOn) {
+        const s = this._rowSprites[i], b = s.bitmap, ctx = b.context, y = ROW_PAD + NUMS.h / 2, isLow = low.includes(k), num = needNumber(k, v[k]);
+        const ix = 2, nx = ix + NUMS.icon + NUMS.gap;
         b.clear();
-        if (k === "breath") drawBreathGlyph(ctx, ix + BARS.icon / 2, y, isLow ? LOW_COLOUR : C.breath, 2);
-        else { const [icon, mode] = NEED_ICONS[k]; drawIcon(b, icon, ix, y - BARS.icon / 2, BARS.icon, mode); }
-        ctx.save();
-        ctx.fillStyle = "rgba(8,9,11,0.8)";   // the track: a dark edge, the dark inside
-        roundPath(ctx, bx - 1, by - 1, barW + 2, BARS.barH + 2, (BARS.barH + 2) / 2);
-        ctx.fill();
-        ctx.fillStyle = "rgba(52,54,60,0.95)";
-        roundPath(ctx, bx, by, barW, BARS.barH, BARS.barH / 2);
-        ctx.fill();
-        const fw = Math.round(barW * ratio);
-        if (fw > 0) {
-            if (isLow && blinkOn) { ctx.shadowColor = col; ctx.shadowBlur = 8; }
-            ctx.globalAlpha = isLow && !blinkOn ? 0.6 : 1;
-            ctx.fillStyle = col;
-            roundPath(ctx, bx, by, Math.max(BARS.barH, fw), BARS.barH, BARS.barH / 2);
-            ctx.fill();
-            ctx.shadowBlur = 0;
-            ctx.globalAlpha = 1;
-            ctx.fillStyle = "rgba(255,255,255,0.22)";   // a faint light on its top edge
-            ctx.fillRect(bx + 2, by, Math.max(0, Math.max(BARS.barH, fw) - 4), 1);
-        }
-        ctx.restore();
-        textOut(b, needNumber(k, v[k]), vx, y - 10, BARS.valW, 20, "right", { size: 14, color: isLow ? LOW_COLOUR : C.text, ow: 3 });
+        if (!drawNeed(b, k, ix, y - NUMS.icon / 2, NUMS.icon) && k === "breath") drawBreathGlyph(ctx, ix + NUMS.icon / 2, y, isLow ? LOW_COLOUR : C.breath, 2);
+        const o = { size: NUMS.size, face: "bold", color: isLow ? (blinkOn ? LOW_COLOUR : "#c0675c") : C.text, ow: 3 };
+        if (isLow && blinkOn) { o.shadow = 0.9; o.blur = 9; }
+        textOut(b, num, nx, y - 13, b.width - nx, 26, "left", o);
         b._baseTexture.update();
-        this._rowKeys[i] = needRowKey(k, v, low, blinkOn, barW);
+        this._rowKeys[i] = needRowKey(k, v, low, blinkOn);
         // (the tests read what is drawn - on the screen)
-        this._bars[i] = { key: k, x: this.x + bx, y: this.y + s.y + y, w: barW, h: BARS.barH, ratio: +ratio.toFixed(3), fill: fw, colour: col, low: isLow, number: needNumber(k, v[k]) };
+        this._bars[i] = { key: k, x: this.x + s.x + nx, y: this.y + s.y + y, ratio: +clamp01(v[k]).toFixed(3), low: isLow, number: num };
     };
     // the breath's sign (no icon of its own): three gusts of air - a 7 x 6 pixel sign drawn `scale` x (3 by default), outlined
     const BREATH_GLYPH = ["#####..", ".....#.", "######.", ".......", "####...", "....#.."];
@@ -1867,7 +1863,7 @@
         C, textOut, measure, fit, iconBitmap, drawIcon, thinBar, pl, hm, goalInfo, needValues, loadInfo, heroFeet, bottomCovered, debug,
         // (the map's name: what it would show here, the visits kept in the save, whether it says the floor - Underground.js asks)
         placeInfo: () => (window.$gameMap && $gameMap.mapId() ? placeInfo() : null), visits: () => visits(), saysFloor, nameArt, sceneBars,
-        Sprite_CleanPart, NEED_KEYS, NEED_ICONS,
+        Sprite_CleanPart, NEED_KEYS, NEED_ICONS, drawNeed,
         // (the HUD's pieces for the other parts and windows: MenuRing, CleanHUD_Compass)
         face, facesReady, spaced, spacedWidth, roundPath, rpanel, mix, drawClock
     });

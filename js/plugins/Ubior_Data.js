@@ -152,7 +152,7 @@
         krzaki: { perk: "gather.cost", kiedy: "krzak", opis: v => "krzaki i ciernie mniej kaleczą: wycinasz je o " + pct(v) + " mniejszym wysiłkiem", kv: v => ["Krzaki, ciernie", "-" + pct(v) + " zmęczenia"] },
         chod: { opis: v => "chodzisz o " + pct(v) + " szybciej", kv: v => ["Chód", "+" + pct(v) + " szybciej"] },
         udzwig: { opis: v => "udźwig +" + v, kv: v => ["Udźwig", "+" + v] },
-        rabunek: { opis: v => "przy rabunku sakiewka pod pasem ocala " + (v === 0.5 ? "połowę" : pct(v)) + " groszy", kv: v => ["Przy rabunku ocalisz", pct(v) + " groszy"] },
+        rabunek: { opis: v => "przy rabunku sakiewka pod pasem ocala " + (v === 0.5 ? "połowę" : pct(v)) + " pieniędzy", kv: v => ["Przy rabunku ocalisz", pct(v) + " pieniędzy"] },
         schludnosc: { opis: v => v >= 2 ? "duża schludność: Opinia w miasteczku rośnie o " + pct(SCHLUDNOSC[2].opinia) + " szybciej, u kramarzy płacisz mniej i dostajesz więcej"
             : "schludność: Opinia w miasteczku rośnie o " + pct(SCHLUDNOSC[1].opinia) + " szybciej", kv: v => ["Opinia rośnie", "+" + pct(SCHLUDNOSC[v >= 2 ? 2 : 1].opinia) + " szybciej"] },
         pancerz: { opis: v => "cios słabszy o " + pct(v), kv: v => ["Cios słabszy o", pct(v)] },
@@ -243,7 +243,7 @@
         P(278, "pas_skorzany_czarny", "Czarny skórzany pas", 12, { bonus: { udzwig: 10 }, material: "skora", rodzaj: "m", trwalosc: 80, rysunek: "pas",
             opis: "Czarny pas z żelazną sprzączką. Udźwig +10." }),
         P(279, "pas_sakiewka", "Pas z sakiewką", 25, { bonus: { udzwig: 15, rabunek: 0.5 }, material: "skora", rodzaj: "m", trwalosc: 80, rysunek: "pas_sakiewka",
-            opis: "Pas z sakiewką schowaną pod koszulą. Udźwig +15, a przy rabunku połowa groszy zostaje przy tobie." }),
+            opis: "Pas z sakiewką schowaną pod koszulą. Udźwig +15, a przy rabunku połowa pieniędzy zostaje przy tobie." }),
         // ---- ręce
         P(280, "rekawice_brazowe", "Brązowe skórzane rękawice", 15, { bonus: { rabanie: 0.1 }, material: "skora", rodzaj: "p", trwalosc: 40, rysunek: "rekawice",
             opis: "Grube rękawice ze skóry. Trzonek nie obciera dłoni: rąbanie i kopanie męczą mniej." }),
@@ -347,7 +347,7 @@
             teksty: {
                 witaj: ["Ubrania? Józek ma! Mało noszone, prawie nic. No, trochę noszone.", "Kupię wszystko, co nosisz. No, prawie wszystko. Tanio, ale kupię!",
                     "Chusty, łapcie, stare kaftany po ludziach z promu. Wszystko ma swoją cenę!"],
-                kupione: ["Jak nowe! No, prawie."], sprzedane: ["Ha! Józek bierze. Grosz to grosz."], zegnaj: ["Wracaj! Józek zawsze coś ma."]
+                kupione: ["Jak nowe! No, prawie."], sprzedane: ["Ha! Józek bierze. Miedziak to miedziak."], zegnaj: ["Wracaj! Józek zawsze coś ma."]
             }
         },
         kantor: { kto: "kantor", sprzedaje: ["koszula_odswietna"] }
@@ -416,7 +416,7 @@
         torso: "Lniana koszula to schludność, wełniany kaftan grzeje zimą, skórzana kurta osłabia ciosy.",
         legs: "Wełniane spodnie grzeją zimą, skórzane chronią w krzakach.",
         feet: "Bez butów chodzisz wolniej. Łapcie uplecesz w warsztacie albo kupisz u Józka.",
-        belt: "Pas dodaje udźwigu, pas z sakiewką ratuje grosze przy rabunku.",
+        belt: "Pas dodaje udźwigu, pas z sakiewką ratuje pieniądze przy rabunku.",
         hands: "Rękawice: rąbanie i kopanie męczą mniej.",
         back: "Bez plecaka mniej uniesiesz. Torba przez ramię to trochę udźwigu.",
         cloak: "Płaszcz grzeje zimą, lniana peleryna chroni w skwarze. Uszyjesz je w krośnie albo w garbarni, kupisz u Doroty, Agaty i Ignaca."

@@ -108,7 +108,7 @@ Mierniczy. (Eryk blednie.) Oni liczą, jak głęboko są sklepienia. Tak robili 
 [d45.wywazamy]
 Pomiary? W moim kominie? Pod moimi beczkami? (Borgar zdejmuje fartuch.) Idziemy.
 > (Drzwi trójki trzaskają o ścianę. Gość w czerni wyskakuje oknem na dach i znika w ciemności. Na stole zostaje notes.)
-„31 sążni do sklepienia. Krata zakonu pod beczkami.” (Borgar czyta i robi się szary.) Masz. Dwadzieścia groszy. I... dziękuję, chłopcze.
+„31 sążni do sklepienia. Krata zakonu pod beczkami.” (Borgar czyta i robi się szary.) Masz. Dwa srebrniki. I... dziękuję, chłopcze.
 
 [d45.wit.pyta]
 Gość spod trójki? Odpływa dziś promem? Masz na niego coś więcej niż gadanie, chłopcze?
@@ -161,10 +161,10 @@ Gość: Jeszcze jedna noc. Potem {prom}.
 zadania.D46.title = Skradziona szkatułka
 zadania.D46.where = Tawerna: piętro gości (pokój 11), przystań
 zadania.D46.when = pobyt pani Kseni Żuraw
-zadania.D46.desc = W nocy z pokoju 11 zniknęła szkatułka pani Kseni Żuraw, wdowy po kupcu korzennym. „Karczmarz odpowiada za rzeczy gości.” Jeśli szkatułka się nie znajdzie do jej promu, Borgar zapłaci sześćdziesiąt groszy.
+zadania.D46.desc = W nocy z pokoju 11 zniknęła szkatułka pani Kseni Żuraw, wdowy po kupcu korzennym. „Karczmarz odpowiada za rzeczy gości.” Jeśli szkatułka się nie znajdzie do jej promu, Borgar zapłaci sześć srebrników.
 zadania.D46.steps.0.text = Kto ukradł szkatułkę? ({n} poszlaki) Obejrzyj zamek pokoju 11, rozejrzyj się w pokoju, popytaj (Gaspar, Szymek, Janek z przystani), posłuchaj nocą pod drzwiami. Potem powiedz Borgarowi, kto. Pani Ksenia odpływa w dniu {do} o 14:00.
 zadania.D46.steps.1.text = Flisak odpływa ze szkatułką w worku. Znajdź jego worek na molo przed promem (dzień {do}, 9-14).
-zadania.D46.fail.text = Pani Ksenia odpłynęła bez szkatułki. Borgar zapłacił jej sześćdziesiąt groszy.
+zadania.D46.fail.text = Pani Ksenia odpłynęła bez szkatułki. Borgar zapłacił jej sześć srebrników.
 [d46.krzyk]
 > (Krzyk na korytarzu na piętrze! Pani Ksenia z osiemnastki: „Szkatułka! Moja szkatułka!”)
 > (Borgar blady: „Karczmarz odpowiada za rzeczy gości.”)
@@ -212,14 +212,14 @@ d46.oskarz.etykieta.wanda = Wanda z łaźni.
 d46.oskarz.etykieta.nie = Jeszcze nie wiem.
 [d46.oskarz.ksenia.trafny]
 Sama? (Borgar idzie na górę. Wraca po chwili z panią Ksenią i ze szkatułką.)
-Podwójne dno w jej kufrze. Chciała, żebym zapłacił, bo jest winna handlarzowi. (Borgar oddycha.) Masz dwadzieścia pięć groszy, chłopcze. Uratowałeś mi sześćdziesiąt.
+Podwójne dno w jej kufrze. Chciała, żebym zapłacił, bo jest winna handlarzowi. (Borgar oddycha.) Masz dwa srebrniki i pięć miedziaków, chłopcze. Uratowałeś mi sześćdziesiąt.
 
 [d46.oskarz.ksenia.zle]
 Pani Ksenia?! (Pani Ksenia słyszy to z sali. Wychodzi bez słowa.) Pięknie. Teraz to dopiero będzie gadanie.
 
 [d46.oskarz.gaspar.trafny]
 Gaspar? (Borgar i ty zaglądacie do skrzynki-tacy handlarza. Pod fałszywymi kośćmi - szkatułka.)
-„Relikwie w środku!” - krzyczy Gaspar. W środku są pierścionki. Pani Ksenia daje ci trzydzieści groszy.
+„Relikwie w środku!” - krzyczy Gaspar. W środku są pierścionki. Pani Ksenia daje ci trzy srebrniki.
 
 [d46.oskarz.gaspar.zle]
 Gaspar? (Handlarz pokazuje pustą tacę i obraża się na całą tawernę.) Ze mną już nie pogadasz, chłopcze.
@@ -240,7 +240,7 @@ Szymek? (Borgar kręci głową.) Chłopak spod muru. Zawsze on, co? Ludzie z obo
 Wanda.
 
 [d46.oskarz.wanda.zle]
-Wanda?! Dwadzieścia lat u mnie sprząta i nigdy grosza nie wzięła. (Wanda płacze w łaźni.) Przez tydzień kąpiel będzie droższa - dla ciebie.
+Wanda?! Dwadzieścia lat u mnie sprząta i nigdy miedziaka nie wzięła. (Wanda płacze w łaźni.) Przez tydzień kąpiel będzie droższa - dla ciebie.
 
 d46.kto.ksenia = panią Ksenię
 d46.kto.gaspar = Gaspara
@@ -261,19 +261,19 @@ Szkatułkę ma flisak z promu. Jego worek stoi przy trapie na molo - muszę zdą
 
 [d46.notatka.dobrze.A]
 Skradziona szkatułka - pani Ksenia
-Szkatułka była w kufrze samej pani Kseni, pod podwójnym dnem. Chciała, żeby Borgar zapłacił. Borgar dał mi dwadzieścia pięć groszy.
+Szkatułka była w kufrze samej pani Kseni, pod podwójnym dnem. Chciała, żeby Borgar zapłacił. Borgar dał mi dwa srebrniki i pięć miedziaków.
 
 [d46.notatka.dobrze.B]
 Skradziona szkatułka - Gaspar
-Szkatułkę ukradł Gaspar, handlarz relikwii - była w jego skrzynce-tacy pod fałszywymi kośćmi. Pani Ksenia dała mi trzydzieści groszy.
+Szkatułkę ukradł Gaspar, handlarz relikwii - była w jego skrzynce-tacy pod fałszywymi kośćmi. Pani Ksenia dała mi trzy srebrniki.
 
 [d46.notatka.dobrze.C]
 Skradziona szkatułka - flisak
-Szkatułka była w worku flisaka na molo. Zdążyłem przed promem. Pani Ksenia dała mi trzydzieści groszy.
+Szkatułka była w worku flisaka na molo. Zdążyłem przed promem. Pani Ksenia dała mi trzy srebrniki.
 
 [d46.notatka.przepadla]
 Skradziona szkatułka - przepadła
-Pani Ksenia odpłynęła bez szkatułki. Borgar zapłacił jej sześćdziesiąt groszy. Goście gadają, że w karczmie pod Kruczymi Skałami giną rzeczy.
+Pani Ksenia odpłynęła bez szkatułki. Borgar zapłacił jej sześć srebrników. Goście gadają, że w karczmie pod Kruczymi Skałami giną rzeczy.
 
 [podsluch.ksenia]
 Ksenia: Nie płacz, Kseniu. Nie płacz...

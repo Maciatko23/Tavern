@@ -167,7 +167,7 @@ Ech, przegrałem. Ale jaka zabawa!
 Ta czarna? Kość wdowy. Gram nią, jak mi smutno.
 
 [rywale.ozzy.lines.chat]
-Za moich młodych lat grało się o kury, nie o grosze. Raz wygrałem koguta. Dziobał mnie do zimy.
+Za moich młodych lat grało się o kury, nie o miedziaki. Raz wygrałem koguta. Dziobał mnie do zimy.
 Moja Halinka grała lepiej ode mnie. I lepiej gotowała. Właściwie wszystko robiła lepiej.
 Kiedyś jeden kupiec z miasta przegrał tu buty. Szedł do domu boso, a śpiewał!
 Ta tawerna stoi na starych kamieniach, wiesz? Jako chłopak wlazłem raz do piwnicy... Hyk. Nieważne. Rzucaj.
@@ -209,9 +209,9 @@ rywale.kupiec.name = Kupiec Wawrzyniec
 rywale.kupiec.short = Wawrzyniec
 rywale.kupiec.role = bogaty gość z miasta
 rywale.kupiec.style = wyrachowany
-rywale.kupiec.quote = Pięćdziesiąt groszy tu, pięćdziesiąt tam... Siadaj, młodzieńcze.
+rywale.kupiec.quote = Pięć srebrników tu, pięć tam... Siadaj, młodzieńcze.
 [rywale.kupiec.lines.greet]
-Pięćdziesiąt groszy tu, pięćdziesiąt tam... Siadaj, młodzieńcze.
+Pięć srebrników tu, pięć tam... Siadaj, młodzieńcze.
 Szukam rozrywki na wieczór. Zagramy o coś wartego uwagi?
 
 [rywale.kupiec.lines.meFirst]
@@ -277,9 +277,9 @@ rywale.bartek.name = Bartek Kmieć
 rywale.bartek.short = Bartek
 rywale.bartek.role = chłop spod Młynówki
 rywale.bartek.style = nowicjusz
-rywale.bartek.quote = Pięć groszy, więcej nie mam, żona liczy.
+rywale.bartek.quote = Pięć miedziaków, więcej nie mam, żona liczy.
 [rywale.bartek.lines.greet]
-Pięć groszy, więcej nie mam, żona liczy.
+Pięć miedziaków, więcej nie mam, żona liczy.
 Zagramy? Tylko powoli, ja dopiero się uczę.
 
 [rywale.bartek.lines.meFirst]
@@ -325,7 +325,7 @@ Naprawdę wygrałem? No proszę!
 
 [rywale.bartek.lines.lose]
 Przegrałem... Tylko nie mów żonie.
-No trudno. Dobra zabawa za pięć groszy.
+No trudno. Dobra zabawa za pięć miedziaków.
 
 [rywale.bartek.lines.lucky]
 Ta z gruszy? Sam wystrugałem. Nie jest krzywa. Chyba.
@@ -335,10 +335,10 @@ U nas we wsi gra się w kości tylko w niedzielę. Po kościele. Za kościołem.
 Żona mówi, że kości to grzech. Ale sama gra w karty.
 
 [rywale.bartek.lines.give]
-Nie mam już grosza... Weź moją kość. Sam wystrugałem z gruszy. Mnie i tak nie przynosi szczęścia.
+Nie mam już miedziaka... Weź moją kość. Sam wystrugałem z gruszy. Mnie i tak nie przynosi szczęścia.
 
 [rywale.bartek.lines.tired]
-Na dziś koniec. Żona mnie zabije, jak przegram jeszcze grosz.
+Na dziś koniec. Żona mnie zabije, jak przegram jeszcze miedziak.
 
 rywale.nieznajomy.name = Nieznajomy w kapturze
 rywale.nieznajomy.short = Nieznajomy

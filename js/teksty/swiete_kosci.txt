@@ -39,13 +39,13 @@ rzeczy.spis_lipnicy.name = Spis biblioteki z Lipnicy
 # ======================================================================== rozdz. 1: kazanie na rynku (dymki nad Gasparem, dzień targowy 9-12)
 [scena.kazanie]
 Ludzie Wyspy Kruka! Oto kość palca świętego strażnika Kruczych Skał!
-Za dotknięcie - grosz. Za kość - porozmawiamy!
+Za dotknięcie - miedziak. Za kość - porozmawiamy!
 A to? Odłamek Serca w srebrze. Sam go nie dotykam!
 Medaliki na drogę, na morze, na wojnę!
 
 scena.hanka = Medalik dla mnie! Za siostrę na lądzie.
 scena.tlum = Święta kość...
-mysl.kazanie = (Ludzie płacą. Nawet Dziadek Ozzy z tawerny dał trzy grosze za „odłamek Serca”.)
+mysl.kazanie = (Ludzie płacą. Nawet Dziadek Ozzy z tawerny dał trzy miedziaki za „odłamek Serca”.)
 
 # menu Gaspara (opcje dopisane do menu podróżnego)
 menu.medalik = Kup medalik ({cena} G)
@@ -55,7 +55,7 @@ Proszę bardzo, chłopcze. Medalik świętego strażnika. Chroni przed morzem, w
 medalik.brak = Potrzebujesz {cena} G
 menu.kamien = Sprzedaj kamień z krukiem ({cena} G)
 [kamien.sprzedany]
-Oho! Prawdziwy kruk. Trzydzieści groszy, jak obiecałem. Gaspar Lis dotrzymuje słowa... czasem.
+Oho! Prawdziwy kruk. Trzy srebrniki, jak obiecałem. Gaspar Lis dotrzymuje słowa... czasem.
 
 # ======================================================================== rozdz. 1: fałszywe kości (kto mówi: Ignac, Tadek, Kleofas, Melia)
 [falsz.ignac]
@@ -149,7 +149,7 @@ Przed ludźmi? Chłopcze, ty mnie chcesz zgubić. Dobrze, dobrze... otwieram.
 Do mnicha? ...Niech będzie. Mnisi przynajmniej nie krzyczą na rynku.
 
 [konfrontacja.dzialka]
-Mądry chłopiec. Trzydzieści groszy - i nic nie widziałeś. Skrzynka zostaje zamknięta, a ja odpływam z błogosławieństwem.
+Mądry chłopiec. Trzy srebrniki - i nic nie widziałeś. Skrzynka zostaje zamknięta, a ja odpływam z błogosławieństwem.
 > ...Niech będzie.
 
 [konfrontacja.nic]
@@ -163,11 +163,11 @@ Mądrze. Wiara lubi cierpliwych.
 scena.rynek.wit = Otwieraj, kupcze. Do dna.
 scena.rynek.gaspar = Toż to święte rzeczy! Święte!
 scena.rynek.tlum = Barania kość! I cyna!
-scena.rynek.hanka = Oddawaj grosze, oszuście!
+scena.rynek.hanka = Oddawaj miedziaki, oszuście!
 
 [notatki.rynek]
 Gaspar zdemaskowany
-Na rynku, przy kapralu Wicie, Gaspar otworzył skrzynkę: baranie kości, cynowe medaliki. Oddał ludziom grosze - Ozzy odzyskał swoje trzy, Hanka medalik. Gaspar więcej tu nie przypłynie. A spod podwójnego dna wyjąłem kamień z krukiem i spis z Lipnicy.
+Na rynku, przy kapralu Wicie, Gaspar otworzył skrzynkę: baranie kości, cynowe medaliki. Oddał ludziom miedziaki - Ozzy odzyskał swoje trzy, Hanka medalik. Gaspar więcej tu nie przypłynie. A spod podwójnego dna wyjąłem kamień z krukiem i spis z Lipnicy.
 
 [notatki.przyAugustynie]
 Skrzynka przy bracie Augustynie
@@ -175,7 +175,7 @@ Gaspar otworzył skrzynkę przy bracie Augustynie - bez krzyku i bez rynku. Spis
 
 [notatki.dzialka]
 Działka
-Wziąłem od Gaspara trzydzieści groszy za milczenie. Skrzynka została zamknięta. Spis z Lipnicy i kamień z krukiem popłyną przy promie do Baltazara - a dalej do ludzi z okiem.
+Wziąłem od Gaspara trzy srebrniki za milczenie. Skrzynka została zamknięta. Spis z Lipnicy i kamień z krukiem popłyną przy promie do Baltazara - a dalej do ludzi z okiem.
 
 [notatki.przeszukana]
 Skrzynka Gaspara
@@ -209,7 +209,7 @@ Schowam go w dzwonnicy, pod belką. A jak przyjdzie zła noc - zadzwonię, zanim
 
 [komu.baltazar.pyta]
 > Baltazarze. Kamień z krukiem, prawdziwy.
-(Baltazar nie mruga.) Osiemdziesiąt groszy. Od ręki. I nie pytaj, kto za morzem płaci więcej.
+(Baltazar nie mruga.) Osiem srebrników. Od ręki. I nie pytaj, kto za morzem płaci więcej.
 
 komu.baltazar.opcja.tak = Sprzedaj ({cena} G).
 komu.baltazar.opcja.nie = Nie sprzedam.
@@ -218,7 +218,7 @@ Interes to interes. Szkoda tylko, że ludzie z okiem płacą najlepiej. ...Żart
 
 [komu.celnik.pyta]
 > Panie celniku, kamień z krukiem. Ze skrzynki handlarza relikwii.
-Kamień z krukiem? Do składu Lorda - jak te z wraku. Pięć groszy, pokwitowanie i spokój.
+Kamień z krukiem? Do składu Lorda - jak te z wraku. Pięć miedziaków, pokwitowanie i spokój.
 
 komu.celnik.opcja.tak = Oddaj ({cena} G).
 komu.celnik.opcja.nie = Nie oddam.
@@ -249,11 +249,11 @@ Ambroży schował kamień z krukiem w dzwonnicy, pod belką. Mówi, że w złą 
 
 [notatki.kamienBaltazar]
 Kamień u Baltazara
-Sprzedałem Baltazarowi kamień z krukiem za osiemdziesiąt groszy. Ludzie z okiem mają teraz o jeden kamień więcej.
+Sprzedałem Baltazarowi kamień z krukiem za osiem srebrników. Ludzie z okiem mają teraz o jeden kamień więcej.
 
 [notatki.kamienCelnik]
 Kamień w składzie Lorda
-Oddałem kamień z krukiem celnikowi Samborowi - do składu Lorda, jak kamienie z wraku. Pięć groszy i pokwitowanie.
+Oddałem kamień z krukiem celnikowi Samborowi - do składu Lorda, jak kamienie z wraku. Pięć miedziaków i pokwitowanie.
 
 [notatki.spisKleofas]
 Jak Czarne Oczy dowiedziały się o Sercu
@@ -287,10 +287,10 @@ Gaspar Lis odpłynął z kramem i skrzynką. Spis z Lipnicy i kamień z krukiem 
 # ======================================================================== uwagi mieszkańców po tym, co się stało (raz)
 # 0: Ozzy po kazaniu; 1: Ozzy po zdemaskowaniu; 2: Hanka po zdemaskowaniu
 [uwagi.0.lines]
-Widziałeś? Odłamek Serca! W srebrze! Trzy grosze, chłopcze, trzy grosze za kawałek świętości!
+Widziałeś? Odłamek Serca! W srebrze! Trzy miedziaki, chłopcze, trzy miedziaki za kawałek świętości!
 
 [uwagi.1.lines]
-Oddali mi trzy grosze. A ten „odłamek”... Tadek mówi, że to szkło od butelki. Szkło! Napiję się za te trzy grosze.
+Oddali mi trzy miedziaki. A ten „odłamek”... Tadek mówi, że to szkło od butelki. Szkło! Napiję się za te trzy miedziaki.
 
 [uwagi.2.lines]
 Medalik oddał. Cynowy. A ja go siostrze chciałam posłać na ląd... Dobrze, że nie posłałam.

@@ -85,8 +85,8 @@ unit.test(t => {
         perkBad.length === 0 && Object.keys(U.STARE).map(Number).every(id => U.przedmiot(id).istnieje && U.przedmiot(id).bonus[U.STARE[id]] !== undefined), perkBad);
     t.eq("the card's words: the belt with a purse, a felt cap, a plain kerchief (only the look); who sells the white shirt and the festive one",
         [U.opis(279), U.opis(255), U.opis(252), U.wiersze(252), U.wiersze(279), U.gdzie(260), U.gdzie(267), U.gdzie(9999)],
-        ["udźwig +15 · przy rabunku sakiewka pod pasem ocala połowę groszy", "zimą i w śniegu marzniesz o 15% mniej", "", [["Daje", "tylko wygląd"]],
-            [["Udźwig", "+15"], ["Przy rabunku ocalisz", "50% groszy"]], "Dorota Igła (szwaczka), Józek Łata (handlarz starzyzną), 8 G", "kantor (towar z kontynentu), 60 G", ""]);
+        ["udźwig +15 · przy rabunku sakiewka pod pasem ocala połowę pieniędzy", "zimą i w śniegu marzniesz o 15% mniej", "", [["Daje", "tylko wygląd"]],
+            [["Udźwig", "+15"], ["Przy rabunku ocalisz", "50% pieniędzy"]], "Dorota Igła (szwaczka), Józek Łata (handlarz starzyzną), 8 G", "kantor (towar z kontynentu), 60 G", ""]);
 
     // ---- the shops, the dyeing, the mending
     const shopBad = [];

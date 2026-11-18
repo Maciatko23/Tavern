@@ -35,7 +35,7 @@ Sztab chce więcej kamieni. Każdy z krukiem. Płacą w srebrze.
 
 [obozRozmowa.1]
 a
-Kupiec mówi, że miejscowi znoszą je jak gruz. Za grosze.
+Kupiec mówi, że miejscowi znoszą je jak gruz. Za miedziaki.
 
 [obozRozmowa.2]
 b
@@ -43,7 +43,7 @@ A zboże? Rekwizycja dworu idzie przez nas. Garnizon sprzedaje swoje nocą.
 
 [obozRozmowa.3]
 kurier
-Zboże to nic. Liczą się drzwi pod skałą. Kupiec ma to zapisać - wszystko, każdy grosz, każde imię.
+Zboże to nic. Liczą się drzwi pod skałą. Kupiec ma to zapisać - wszystko, każdy miedziak, każde imię.
 
 [obozRozmowa.4]
 a
@@ -70,17 +70,17 @@ Na Słonym Brzegu, pod sosnami, ludzie Baltazara siedzieli przy ognisku z kurier
 
 [najemTrust]
 Przyjacielu. Ty umiesz nie zadawać pytań - to rzadki towar.
-Potrzebuję silnych rąk nocą. Skrzynie z piwnicy pod tylne drzwi. Dwadzieścia groszy za noc.
+Potrzebuję silnych rąk nocą. Skrzynie z piwnicy pod tylne drzwi. Dwa srebrniki za noc.
 Od dziesiątej, tylnymi drzwiami. Nie spóźniaj się - po wpół do dwunastej nikt ci nie otworzy.
 
 [najemCold]
 (Baltazar długo ci się przygląda.) Moi ludzie mówią, że ktoś kręcił się nocą pod sosnami na Słonym Brzegu. Ktoś ciekawski.
-Ciekawskich wolę mieć blisko. Będziesz nosił skrzynie. Dwadzieścia groszy za noc - i patrzę ci na ręce.
+Ciekawskich wolę mieć blisko. Będziesz nosił skrzynie. Dwa srebrniki za noc - i patrzę ci na ręce.
 Od dziesiątej, tylnymi drzwiami. Po wpół do dwunastej nikt ci nie otworzy.
 
 [najemFight]
 (Baltazar uśmiecha się samymi ustami.) Moich ludzi ktoś pobił pod sosnami na Słonym Brzegu. Nie wiem kto. A ty wiesz?
-Nieważne. Kto umie się bić, ten udźwignie skrzynię. Dwadzieścia groszy za noc. Od dziesiątej, tylne drzwi.
+Nieważne. Kto umie się bić, ten udźwignie skrzynię. Dwa srebrniki za noc. Od dziesiątej, tylne drzwi.
 
 najemYes = Przyjdę.
 najemNo = Nie dziś.
@@ -92,7 +92,7 @@ Oferta nie ucieka. Ja też nie.
 
 [noteNajem]
 Nocny tragarz
-Baltazar najął mnie do nocnej roboty: od dziesiątej wieczorem, tylnymi drzwiami kantoru, skrzynie z piwnicy pod tylne drzwi. Dwadzieścia groszy za noc.
+Baltazar najął mnie do nocnej roboty: od dziesiątej wieczorem, tylnymi drzwiami kantoru, skrzynie z piwnicy pod tylne drzwi. Dwa srebrniki za noc.
 
 [baltazarStart]
 Jesteś. Trzy skrzynie z kupki pod schody, na górę, pod tylne drzwi. Ostrożnie - kruche.
@@ -102,7 +102,7 @@ Sławek pilnuje. Ja liczę.
 Jeszcze {left}. Nie mam całej nocy.
 
 [baltazarPay]
-Wszystko? Dobrze. Dwadzieścia groszy. Do jutra, przyjacielu.
+Wszystko? Dobrze. Dwa srebrniki. Do jutra, przyjacielu.
 
 [baltazarDone]
 Na dziś koniec. Idź spać - i nie śnij za głośno.
@@ -116,7 +116,7 @@ nieCzekaj = Rozejrzę się.
 baltazarIdzie = Idę na górę. Dwadzieścia minut. Niczego nie dotykaj.
 baltazarWraca = Wóz przyjęty. Wszystko w porządku?
 [baltazarAfter]
-Wóz pojechał. Masz swoje dwadzieścia groszy. Idź spać.
+Wóz pojechał. Masz swoje dwa srebrniki. Idź spać.
 
 [caught]
 (Baltazar staje w drzwiach gabinetu.) Szukasz czegoś w moim biurku, przyjacielu?
@@ -192,7 +192,7 @@ rejestrOdpis = Przepisałem rejestr Baltazara z jego biurka w piwnicy kantoru. O
 > Kapralu. To rejestr Baltazara. Imiona, kwoty. Twoje też.
 
 [komuWit.trust]
-(Wit czyta długo. Przy pierwszej linijce zamyka oczy.) „K.W. - pięć groszy na tydzień.” To ja. Brałem. Za to, żeby przy bramie było ciemno.
+(Wit czyta długo. Przy pierwszej linijce zamyka oczy.) „K.W. - pięć miedziaków na tydzień.” To ja. Brałem. Za to, żeby przy bramie było ciemno.
 Myślałem: co mi zależy, ktoś przemyca sukno. A to kamienie, zboże dzieci z obozu... i ktoś z lądu, kto szuka drzwi pod skałą.
 Pomogłeś mi przy wilkach, nie zapomniałem. Idziemy razem do sołtysa. Powiem, co brałem. Kantor zamkną - a ja będę stał przy tobie, kiedy przyjdą po swoje.
 
@@ -209,21 +209,21 @@ A ty spędzisz noc w wartowni. Za włóczenie się po nocy. Straż!
 Jutro w południe zwołam ludzi do ratusza. Niech miasto samo zobaczy, kogo karmiło. Przyjdź - bez ciebie nikt w to nie uwierzy.
 
 [komuBaltazar.ask]
-> Baltazarze. Mam twój rejestr. Każde imię, każdy grosz.
+> Baltazarze. Mam twój rejestr. Każde imię, każdy miedziak.
 
 [komuBaltazar.say]
 (Baltazar nawet nie mruga.) Ach. Ciekawość. Mówiłem, że to piękna cecha... u kota.
 No dobrze. Czego chcesz, przyjacielu?
 
 komuBaltazar.double = Pracujmy razem (podwójna gra).
-komuBaltazar.blackmail = Pięćdziesiąt groszy - i zapominam.
+komuBaltazar.blackmail = Pięć srebrników - i zapominam.
 komuBaltazar.later = Jeszcze nie wiem.
 [komuBaltazar.doubleSay]
-Rozsądnie. Pracujesz dla mnie dalej - trzydzieści groszy na tydzień, za samo milczenie.
+Rozsądnie. Pracujesz dla mnie dalej - trzy srebrniki na tydzień, za samo milczenie.
 A ty mówisz mi, kto pyta o kantor. Wiesz, ilu ludzi chce wiedzieć to, co ty wiesz? Jesteśmy wspólnikami, przyjacielu.
 
 [komuBaltazar.blackmailSay]
-(Baltazar odlicza pięćdziesiąt groszy, jakby płacił za pogrzeb.) Masz. A teraz posłuchaj.
+(Baltazar odlicza pięć srebrników, jakby płacił za pogrzeb.) Masz. A teraz posłuchaj.
 Od dziś jesteś mi obcy. Obcym sprzedaję drożej. A noce na wyspie są długie.
 
 [komuBaltazar.laterSay]
@@ -231,7 +231,7 @@ Pomyśl. Ja zaczekam. Rejestry nie uciekają.
 
 [noteWit]
 Wit stanie przy mnie
-Dałem rejestr kapralowi Witowi. Przyznał się, że brał od Baltazara pięć groszy na tydzień za ciemność przy bramie. Poszliśmy razem do sołtysa: kantor zamknięty, a Wit stanie przy mnie, kiedy przyjdą po swoje.
+Dałem rejestr kapralowi Witowi. Przyznał się, że brał od Baltazara pięć miedziaków na tydzień za ciemność przy bramie. Poszliśmy razem do sołtysa: kantor zamknięty, a Wit stanie przy mnie, kiedy przyjdą po swoje.
 
 [noteWitBurn]
 Rejestr w ogniu
@@ -243,11 +243,11 @@ Dałem rejestr Baltazara sołtysowi. Jutro w południe zebranie w ratuszu.
 
 [noteDouble]
 Wspólnik Baltazara
-Powiedziałem Baltazarowi, że mam jego rejestr - i że będę z nim pracował. Trzydzieści groszy na tydzień za milczenie, a on chce wiedzieć, kto pyta o kantor. Gram na dwie strony.
+Powiedziałem Baltazarowi, że mam jego rejestr - i że będę z nim pracował. Trzy srebrniki na tydzień za milczenie, a on chce wiedzieć, kto pyta o kantor. Gram na dwie strony.
 
 [noteBlackmail]
 Szantaż
-Wziąłem od Baltazara pięćdziesiąt groszy za milczenie o rejestrze. Od dziś jestem dla niego obcy - ceny podwójne, a noce na wyspie są długie.
+Wziąłem od Baltazara pięć srebrników za milczenie o rejestrze. Od dziś jestem dla niego obcy - ceny podwójne, a noce na wyspie są długie.
 
 [zebranie.say]
 (W ratuszu tłoczno. Sołtys czyta rejestr na głos - linijka po linijce.)
@@ -278,7 +278,7 @@ Odwrócę wasze oczy... (podmień skrzynie)
 Nic.
 
 [promLetGo]
-Dobry z ciebie wspólnik. Masz trzydzieści groszy od kupca.
+Dobry z ciebie wspólnik. Masz trzy srebrniki od kupca.
 
 promWoz = Wóz z ładunkiem. Skrzynie przykryte słomą.
 promSwapAsk = Podmienić kamienie z krukiem na zwykłe kamienie?
@@ -303,7 +303,7 @@ W noc promu pobiłem ludzi Baltazara przy wozie na drodze do przystani. Kamienie
 
 [noteLetGo]
 Wóz pojechał
-W noc promu pilnowałem wozu Baltazara razem z jego ludźmi. Kamienie z krukiem popłynęły na ląd. Dostałem trzydzieści groszy.
+W noc promu pilnowałem wozu Baltazara razem z jego ludźmi. Kamienie z krukiem popłynęły na ląd. Dostałem trzy srebrniki.
 
 [noteGone]
 Wóz pojechał
@@ -390,7 +390,7 @@ W obozie? Ludzie mają pracę - noszą, ważą, liczą. Pierwszy raz od promu ni
 (Na ladzie cennik z pieczęcią ratusza i skrzynka na monety. „Uczciwość na słowo - sołtys liczy co wieczór.”)
 
 [dzialka]
-Twoja działka, wspólniku. Trzydzieści groszy. Za milczenie.
+Twoja działka, wspólniku. Trzy srebrniki. Za milczenie.
 
 lada = Lada kantoru miejskiego
 napadShout = Pozdrowienia od kupca!
@@ -444,7 +444,7 @@ Uważaj. Kto handluje kamieniami, ten handluje i ludźmi.
 
 # w5WitAlly, mówi: kapral
 [uwagi.1.lines]
-Pięć groszy na tydzień. Tyle byłem wart. (Wit poprawia tabard.) Teraz już nic nie biorę. I nikogo nie wpuszczam po ciemku.
+Pięć miedziaków na tydzień. Tyle byłem wart. (Wit poprawia tabard.) Teraz już nic nie biorę. I nikogo nie wpuszczam po ciemku.
 
 # w5Hanka, mówi: piekarka
 [uwagi.2.lines]

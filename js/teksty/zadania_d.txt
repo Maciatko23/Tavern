@@ -87,7 +87,7 @@ Ciepły... Ela, pij powoli. Ja przy niej posiedzę całą noc.
 zadania.D10.steps.1.text = Ela przespi noc z gorączką. Zajrzyj rano.
 zadania.D10.steps.2.text = Zajrzyj rano do Ludmiły i Eli (obóz pod murem).
 [zadania.D10.lines.lek]
-Lek z kontynentu. Działa na wszystko, co ma gorączkę. Sześćdziesiąt groszy, przyjacielu.
+Lek z kontynentu. Działa na wszystko, co ma gorączkę. Sześć srebrników, przyjacielu.
 
 [zadania.D10.lines.lekBuy]
 Mądry wybór. Proszę. Tylko nie pytaj, skąd mam.
@@ -141,7 +141,7 @@ zadania.D18.steps.2.text = Zanieś płaszcze do obozu pod murem (Ludmiła). Feli
 Płaszcze... Ela, patrz! Ciepłe! ...Nie wiem, co powiedzieć. Weź jeden dla siebie - Ignac uszył sześć, wiem, liczyłam.
 
 [zadania.D18.lines.feliks]
-Słyszałem o tych płaszczach. Straż dworu marznie na murach - zapłacę za nie trzy razy tyle, co są warte. Dziewięćdziesiąt groszy.
+Słyszałem o tych płaszczach. Straż dworu marznie na murach - zapłacę za nie trzy razy tyle, co są warte. Dziewięć srebrników.
 
 [zadania.D18.lines.feliksYes]
 Rozsądna decyzja. Jaśnie pan doceni. Pan Ignac... cóż, nie musi wiedzieć od razu.
@@ -279,9 +279,9 @@ Ostry jak język sołtysa. Dzięki.
 zadania.D3.steps.4.text = Wróć do Tadka po zapłatę.
 [zadania.D3.steps.4.say]
 Słyszałem, słyszałem. Ludzie zadowoleni.
-Mam dla ciebie sześćdziesiąt groszy. Albo... wiesz, ręka goi się długo, a cyrulik drogi. Wybieraj, ja nie będę.
+Mam dla ciebie sześć srebrników. Albo... wiesz, ręka goi się długo, a cyrulik drogi. Wybieraj, ja nie będę.
 
-zadania.D3.steps.4.choice.options.0.label = Wezmę 60 groszy.
+zadania.D3.steps.4.choice.options.0.label = Wezmę 60 G.
 [zadania.D3.steps.4.choice.options.0.say]
 Uczciwie zarobione. Masz.
 
@@ -326,7 +326,7 @@ zadania.D5.steps.3.choice.options.0.label = Zasługa twoja, kapralu.
 
 zadania.D5.steps.3.choice.options.1.label = Powiem o wszystkim sołtysowi.
 [zadania.D5.steps.3.choice.options.1.say]
-Uczciwie. Sołtys ogłosi to na rynku. Masz osiemdziesiąt groszy od miasta.
+Uczciwie. Sołtys ogłosi to na rynku. Masz osiem srebrników od miasta.
 
 # D11, „Ognie na murach”
 zadania.D11.title = Ognie na murach
@@ -335,7 +335,7 @@ zadania.D11.when = 5 wieczorów, 18–21
 zadania.D11.desc = Kosze żarowe gasną, a dwór nie przysyła węgla. Przez pięć wieczorów przynoś kapralowi po 3× Węgiel drzewny przed 21:00. Czwartej nocy ktoś zalewa kosz wodą.
 [zadania.D11.offer.say]
 Kosze żarowe gasną. Dwór obiecał węgiel i jak zwykle - obiecał.
-Pięć wieczorów, po trzy worki węgla, przed dziewiątą. Płacę na koniec. Siedemdziesiąt groszy.
+Pięć wieczorów, po trzy worki węgla, przed dziewiątą. Płacę na koniec. Siedem srebrników.
 
 zadania.D11.offer.yes = Będę nosił węgiel.
 zadania.D11.offer.no = Nie mam tyle węgla.
@@ -379,7 +379,7 @@ Wodą? W taką suszę?! ...Kantor, mówisz. Tej nocy popilnuję sam. A ty noś w
 
 [zadania.D11.lines.bribe]
 Mokre ślady? Ach, ludzie chodzą, gdzie chcą, przyjacielu.
-Trzydzieści groszy i zapomnisz, dokąd prowadziły?
+Trzy srebrniki i zapomnisz, dokąd prowadziły?
 
 [zadania.D11.lines.bribeYes]
 Rozsądny człowiek. Ciemność przy bramie też jest towarem, wiesz?
@@ -402,7 +402,7 @@ Za trzy dni, tu, przy bramie. Lord zapisze to na poczet długu.
 
 zadania.D14.offer.options.1.label = Ile, żebyś zapomniał?
 [zadania.D14.offer.options.1.say]
-Dwadzieścia groszy... Nie widziałem działki twojego dziadka. Nikt nie widział.
+Dwa srebrniki... Nie widziałem działki twojego dziadka. Nikt nie widział.
 
 zadania.D14.offer.options.2.label = Nie mam zboża.
 [zadania.D14.offer.options.2.say]
@@ -416,13 +416,13 @@ Sześć garści jęczmienia. Rozkaz to rozkaz.
 > Sześć garści. Na wojnę.
 
 [zadania.D14.steps.0.done]
-Zapisane. Lord zaliczy to na dług twojego dziadka - pięćdziesiąt groszy. Przynajmniej tyle.
+Zapisane. Lord zaliczy to na dług twojego dziadka - pięć srebrników. Przynajmniej tyle.
 
 zadania.D14.steps.1.text = Za 3 dni kapral Wit sprawdzi, czy na pewno nie masz jęczmienia (brama wschodnia, 6–18).
 zadania.D14.fail.text = Kapral nie dostał zboża. Straż patrzy na ciebie krzywo.
 [zadania.D14.lines.caught]
 Nie masz zboża? A to co w worku? Jęczmień, jak żywy.
-Czterdzieści groszy kary. I straż cię zapamięta.
+Cztery srebrniki kary. I straż cię zapamięta.
 
 [zadania.D14.lines.clean]
 Nic? Pusto w worku? No to nic. Masz szczęście, że nie lubię grzebać w cudzych skrzyniach.
@@ -468,9 +468,9 @@ Ambroży dał mi klucz do dzwonnicy. „Zwykłe godziny już umiesz. Inne... mo�
 zadania.D17.title = Petycja do Lorda
 zadania.D17.where = ratusz + kuźnia + garbarnia + piekarnia + dzwonnica + drzwi dworu
 zadania.D17.when = po dniu 20
-zadania.D17.desc = Dwór chce od każdego domu dziesięć groszy podatku wojennego. Zbierz krzyżyki pod petycją - każdego łap przy robocie - i zanieś ją Lordowi.
+zadania.D17.desc = Dwór chce od każdego domu jeden srebrnik podatku wojennego. Zbierz krzyżyki pod petycją - każdego łap przy robocie - i zanieś ją Lordowi.
 [zadania.D17.offer.say]
-Dwór chce od każdego domu dziesięć groszy podatku wojennego. Kuby, Ignaca i połowy miasta na to nie stać.
+Dwór chce od każdego domu jeden srebrnik podatku wojennego. Kuby, Ignaca i połowy miasta na to nie stać.
 Napisałem petycję. Zbierz podpisy - krzyżyki - od ludzi. Każdego łap wtedy, kiedy jest przy robocie. Potem zanieś ją Lordowi.
 
 zadania.D17.offer.yes = Zbiorę podpisy.
@@ -500,7 +500,7 @@ I jeszcze jedno. Mój dziadek zbierał bajki o Kruczych Skałach. Gdybyś kiedy�
 zadania.D17.steps.2.text = Wróć do sołtysa z odpowiedzią Lorda.
 [zadania.D17.steps.2.say]
 > Lord obniżył podatek o połowę.
-O połowę! Chłopcze... Całe miasto będzie o tym gadać. Masz trzydzieści groszy - z kasy ratusza, uczciwie.
+O połowę! Chłopcze... Całe miasto będzie o tym gadać. Masz trzy srebrniki - z kasy ratusza, uczciwie.
 
 [zadania.D17.reward.note]
 Petycja do Lorda
@@ -514,7 +514,7 @@ zadania.D13.desc = Ozzy po pijaku przepowiada trzy rzeczy na trzy dni. Grum zak�
 zadania.D13.offer.yes = Sprawdzę to.
 zadania.D13.offer.no = Dziadku, ty już nie pij.
 [zadania.D13.offer.accept]
-(Z drugiego końca sali dobiega głos Gruma: „Bzdury! Dziesięć groszy za każdą, że nic się nie sprawdzi!”)
+(Z drugiego końca sali dobiega głos Gruma: „Bzdury! Jeden srebrnik za każdą, że nic się nie sprawdzi!”)
 Słyszałeś? Idź do niego, synku. Weź zakład. *hep*
 
 [zadania.D13.offer.decline]
@@ -530,7 +530,7 @@ zadania.D13.steps.3.text = Wróć do Ozzy'ego (tawerna).
 [zadania.D13.lines.bet]
 > Grum, słyszałeś Ozzy'ego?
 Cała sala słyszała. Bzdury.
-Zakład: dziesięć groszy za każdą przepowiednię, która się sprawdzi - płacę ja.
+Zakład: jeden srebrnik za każdą przepowiednię, która się sprawdzi - płacę ja.
 Ale musisz to zobaczyć na własne oczy. Z gadania nie płacę.
 > Stoi.
 
@@ -547,7 +547,7 @@ Koń zgubił podkowę. Na równej drodze, na rynku, w biały dzień. Kowal mówi
 zadania.D13.lines.missed = > (Przepowiednia minęła, a mnie przy niej nie było. Grum za nią nie zapłaci.)
 [zadania.D13.lines.pay]
 > Sprawdziło się, Grum. Widziałem na własne oczy.
-Hm. {n} na trzy. Masz. {gold} groszy. Zakład to zakład.
+Hm. {n} na trzy. Masz. {gold} G. Zakład to zakład.
 Ten stary pijak mnie przeraża. Nie mów mu, że to powiedziałem.
 
 [zadania.D13.lines.payNone]
@@ -574,7 +574,7 @@ Potrenuj z Grumem trzy wieczory - niech się nauczy, że też można przegrać.
 zadania.D6.offer.yes = Stanę do turnieju.
 zadania.D6.offer.no = Nie mam krzepy.
 [zadania.D6.offer.accept]
-Ha! Trzy wieczory z Grumem przy stole, potem zapis u Borgara - dwa grosze. Turniej w targ wieczorem, od szóstej.
+Ha! Trzy wieczory z Grumem przy stole, potem zapis u Borgara - dwa miedziaki. Turniej w targ wieczorem, od szóstej.
 
 [zadania.D6.offer.decline]
 Szkoda. To Grum znowu wypije beczkę sam.
@@ -585,14 +585,14 @@ zadania.D6.steps.2.text = Dzień {market}, wieczór 18–22: turniej przy stole 
 zadania.D6.lines.signTopic = Zapisz mnie na turniej na rękę (2 G).
 [zadania.D6.lines.sign]
 > Chcę stanąć do turnieju na rękę.
-Ty? No, no. Dwa grosze wpisowego - zbieram na beczkę dla zwycięzcy. W targ wieczorem, od szóstej, przy stole Gruma.
+Ty? No, no. Dwa miedziaki wpisowego - zbieram na beczkę dla zwycięzcy. W targ wieczorem, od szóstej, przy stole Gruma.
 
 [zadania.D6.lines.signDone]
 A, i jeszcze jedno. Kantorowy Baltazar o ciebie pytał. Ten od zakładów. Uważaj na niego.
 
 [zadania.D6.lines.bribe]
 Przyjacielu... słyszałem, że stajesz do turnieju. Postawiłem trochę na Gruma. Ot, drobny zakład.
-Czterdzieści groszy dla ciebie, jeśli przegrasz pierwszą walkę. Z woźnicą. Nikt się nie dowie, a ty nic nie tracisz.
+Cztery srebrniki dla ciebie, jeśli przegrasz pierwszą walkę. Z woźnicą. Nikt się nie dowie, a ty nic nie tracisz.
 
 [zadania.D6.lines.bribeYes]
 Rozsądny człowiek. Proszę - czterdzieści. Miło robić z tobą interesy.
@@ -639,7 +639,7 @@ Wygrałem turniej na rękę w tawernie, w wieczór dnia targowego - po kolei z w
 
 [zadania.D6.lines.noteSold]
 Sprzedana walka
-Wziąłem od Baltazara czterdzieści groszy i przegrałem pierwszą walkę turnieju w tawernie. Grum coś podejrzewa.
+Wziąłem od Baltazara cztery srebrniki i przegrałem pierwszą walkę turnieju w tawernie. Grum coś podejrzewa.
 
 zadania.D6.rivals.0.name = Wojciech
 zadania.D6.rivals.0.sub = woźnica

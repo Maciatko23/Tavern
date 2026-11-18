@@ -71,7 +71,7 @@
             // leave TownLife's resident without an event there
             key: "kwatermistrz", id: 946, sheet: "$Npc_Kwatermistrz", map: MAP, speed: 2,
             away: ["namiot_kwat"], indoor: { tawerna: "gosc_kwatermistrz" },
-            plan: [[0, "inside", "namiot_kwat"], [7, "work", "spichlerz"], [9, "stand", "skup"], [12, "stand", "kuchnia"], [13, "stand", "skup"],
+            plan: [[0, "inside", "namiot_kwat"], [7, "work", "spichlerz"], [9, "stand", "skup"], [12, "stand", "kuchnia2"], [13, "stand", "skup"],
                    [16, "work", "spichlerz"], [17, "inside", "tawerna"], [19.5, "stand", "ognisko_2"], [22, "inside", "namiot_kwat"]],
             barks: {
             },
@@ -84,7 +84,7 @@
             key: "werbownik", id: 947, sheet: "$Npc_Werbownik", map: MAP, speed: 3,
             away: ["koszary_drzwi"],
             plan: [[0, "inside", "koszary_drzwi"], [7, "wander", "przed_brama"], [8, "stand", "stol_werbownika"], [12, "wander", "przed_brama"],
-                   [13, "stand", "stol_werbownika"], [16, "wander", "musztra"], [19, "stand", "ognisko"], [22, "inside", "koszary_drzwi"]],
+                   [13, "stand", "stol_werbownika"], [16, "wander", "musztra"], [19, "stand", "ognisko_3"], [22, "inside", "koszary_drzwi"]],
             alt: {
                 map: TOWN, when: "garnizonRynek",
                 plan: [[0, "inside", "brama_wsch"], [8.5, "stand", "garnizon_werbownik"], [14.5, "inside", "brama_wsch"]],
@@ -107,7 +107,7 @@
     if (TL) {
         TL.SPOTS_BY_MAP = TL.SPOTS_BY_MAP || {};
         TL.SPOTS_BY_MAP[MAP] = Object.assign(TL.SPOTS_BY_MAP[MAP] || {}, {
-            spi: [49, 30, 8], musztra: [72, 29, 8], kwatera_drzwi: [49, 30, 8], kuchnia: [58, 18, 8], brama_wew: [40, 28, 2], pomost: [65, 45, 2],
+            spi: [49, 30, 8], musztra: [72, 29, 8], kwatera_drzwi: [49, 30, 8], kuchnia: [58, 18, 8], kuchnia2: [59, 18, 8], ognisko_3: [35, 27, 8], brama_wew: [40, 28, 2], pomost: [65, 45, 2],
             wieza: [41, 24, 2], ognisko: [35, 26, 6], brzeg: [55, 44, 2], spichlerz: [64, 32, 8], skup: [61, 30, 2], namiot_kwat: [49, 30, 8],
             ognisko_2: [46, 26, 4], stol_werbownika: [43, 32, 2], koszary_drzwi: [49, 30, 8], przed_brama: [40, 33, 2]
         });
@@ -262,23 +262,27 @@
         z_brama_l: [38, 30, 2], z_brama_p: [42, 30, 2], z_noc_brama: [42, 31, 2], z_wieza: [43, 23, 2],
         z_ognisko_1: [37, 26, 6], z_ognisko_2: [45, 26, 4], z_cwicz_1: [70, 26, 2], z_cwicz_2: [72, 26, 2], z_cwicz_3: [74, 26, 2],
         z_pomost: [64, 45, 2], z_noc_pomost: [63, 45, 2], z_beczki: [49, 24, 6], z_spichlerz: [62, 32, 6], z_kuznia: [58, 29, 2],
-        z_koszary: [49, 30, 8], z_namiot: [49, 30, 8], kwatera_drzwi: [49, 30, 8]
+        z_koszary: [49, 30, 8], z_namiot: [49, 30, 8], kwatera_drzwi: [49, 30, 8],
+        // (2026-11-18, "postacie na tym samym polu": second places by the tower, by the braziers and on the pier, and the recruits' own
+        // row beside the drilling soldiers - two men never stand on one cell)
+        z_wieza2: [42, 23, 2], z_ognisko_1b: [37, 25, 6], z_ognisko_1c: [37, 27, 8], z_ognisko_2b: [45, 25, 4], z_pomost2: [64, 44, 2],
+        z_rekrut_1: [70, 27, 2], z_rekrut_2: [72, 27, 2], z_rekrut_3: [74, 27, 2]
     };
     const SOLDIERS = [
         { id: 640, sheet: "A", role: "brama", plan: [[0, "z_noc_brama"], [6, "z_brama_l"], [22, "z_noc_brama"]], sentry: [22, 6] },
-        { id: 641, sheet: "B", role: "brama", plan: [[0, "inside", "z_koszary"], [6, "z_brama_p"], [14, "z_wieza"], [20, "z_ognisko_1"], [22, "inside", "z_koszary"]] },
+        { id: 641, sheet: "B", role: "brama", plan: [[0, "inside", "z_koszary"], [6, "z_brama_p"], [14, "z_wieza"], [20, "z_ognisko_1c"], [22, "inside", "z_koszary"]] },
         // (9-15 he rows the rescue boat to the wreck: he and the boat are away - Garnizon.js hides the boat then)
         { id: 642, sheet: "B", role: "pomost", plan: [[0, "z_noc_pomost"], [6, "z_cwicz_1"], [7, "z_pomost"], [19, "z_ognisko_2"], [22, "z_noc_pomost"]], sentry: [22, 6] },
         { id: 643, sheet: "A", role: "beczki", plan: [[0, "patrol", ["z_beczki", "z_spichlerz", "kwatera_drzwi", "z_brama_p", "kwatera_drzwi", "z_spichlerz"]], [6, "z_beczki"], [22, "patrol", ["z_beczki", "z_spichlerz", "kwatera_drzwi", "z_brama_p", "kwatera_drzwi", "z_spichlerz"]]], sentry: [22, 6] },
         { id: 644, sheet: "A", role: "cwiczy", plan: [[0, "inside", "z_namiot"], [6, "z_cwicz_2"], [12, "z_ognisko_1"], [13, "z_cwicz_2"], [17, "work", "z_spichlerz"], [19, "z_ognisko_1"], [21, "inside", "z_namiot"]] },
-        { id: 645, sheet: "B", role: "cwiczy", plan: [[0, "inside", "z_namiot"], [6, "z_cwicz_3"], [12, "z_ognisko_2"], [13, "z_cwicz_3"], [17, "z_pomost"], [19, "z_ognisko_2"], [21, "inside", "z_namiot"]] },
-        { id: 646, sheet: "A", role: "kowal", plan: [[0, "inside", "z_koszary"], [7, "work", "z_kuznia"], [12, "z_ognisko_1"], [13, "work", "z_kuznia"], [19, "z_ognisko_1"], [21, "inside", "z_koszary"]] },
-        { id: 647, sheet: "B", role: "wieza", plan: [[0, "inside", "z_koszary"], [6, "z_wieza"], [14, "z_cwicz_1"], [18, "z_wieza"], [21, "inside", "z_koszary"]] }
+        { id: 645, sheet: "B", role: "cwiczy", plan: [[0, "inside", "z_namiot"], [6, "z_cwicz_3"], [12, "z_ognisko_2"], [13, "z_cwicz_3"], [17, "z_pomost2"], [19, "z_ognisko_2b"], [21, "inside", "z_namiot"]] },
+        { id: 646, sheet: "A", role: "kowal", plan: [[0, "inside", "z_koszary"], [7, "work", "z_kuznia"], [12, "z_ognisko_1b"], [13, "work", "z_kuznia"], [19, "z_ognisko_1b"], [21, "inside", "z_koszary"]] },
+        { id: 647, sheet: "B", role: "wieza", plan: [[0, "inside", "z_koszary"], [6, "z_wieza"], [14, "z_cwicz_1"], [18, "z_wieza2"], [21, "inside", "z_koszary"]] }
     ];
     Watki.scal(SOLDIERS, "garnizon", "zolnierze");   // (its words: js/teksty/garnizon.txt, zolnierze)
     // the recruits of D26 (help): drilling in the garrison for RECRUIT_STAY days (their own sheets), events 648-651
     // (Rafał is not on the list: the deserter of W6 - recruiting him would cut across his own thread; the recruiter only mentions him)
-    const RECRUITS = { bartek: { id: 648, spot: "z_cwicz_1" }, drwal: { id: 649, spot: "z_cwicz_2" }, uchodzca: { id: 650, spot: "z_cwicz_3" } };
+    const RECRUITS = { bartek: { id: 648, spot: "z_rekrut_1" }, drwal: { id: 649, spot: "z_rekrut_2" }, uchodzca: { id: 650, spot: "z_rekrut_3" } };
     const RECRUIT_STAY = 12;
     // the patrol on the road (favour under 10), event 652 on the manor's road west of the courtyard
     const PATROL = { id: 652, x: 14, y: 41 };

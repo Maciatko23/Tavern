@@ -73,7 +73,7 @@ dotyk.poduszka = > (Czerwona poduszka. Srebrny Kruk leży na niej jak żywy.)
 [soltys.prosba]
 Chłopcze! Dobrze, że jesteś. Za dwa dni jarmark. Raz w roku, pod koniec lata, całe miasto stawia kramy na łące pod wiatrakiem, przy polu jęczmienia.
 Mam trzy prace: sześć kramów pod wiatrakiem, cztery beczki z browaru Borgara i osiem lampionów na słupach. Ręce mam dwie, a Teodor liczy tylko pieniądze.
-Pomożesz? Zapłacę po dwanaście groszy za każdą pracę.
+Pomożesz? Zapłacę po jeden srebrnik i dwa miedziaki za każdą pracę.
 
 soltys.opcja.tak = Pomogę.
 soltys.opcja.nie = Nie teraz.
@@ -180,7 +180,7 @@ Co lubi Lord? Szyszki. Nie pytaj, nie wiem dlaczego. Ale zawsze podaje je do her
 # ======================================================================== J7: turniej w kości
 temat.turniej = Borgarze, turniej w kości.
 [borgar.turniej]
-Turniej w kości. Ośmiu graczy, wpisowe dwadzieścia groszy, pula sto sześćdziesiąt, czterdzieści dla sołtysa. Trzy mecze. Wygrywa jeden.
+Turniej w kości. Ośmiu graczy, wpisowe dwa srebrniki, pula złoty i sześć srebrników, cztery srebrniki dla sołtysa. Trzy mecze. Wygrywa jeden.
 Gra Wanda Ósemka, nowa na wyspie. Podobno ma szczęście. Podobno.
 
 [borgar.turniejMecz]
@@ -196,7 +196,7 @@ turniej.dalej = Mecz wygrany. Zostało {n}/3
 turniej.kosc = Kość Wandy jest fałszywa
 turniej.koscPod = Ma oznaczoną ściankę i ołów
 [turniej.wygrana]
-Puchar jest twój, chłopcze. Sto dwadzieścia groszy i Kość Kruczogrodu. Wanda odjeżdża w hańbie.
+Puchar jest twój, chłopcze. Jeden złoty, dwa srebrniki i Kość Kruczogrodu. Wanda odjeżdża w hańbie.
 
 # ======================================================================== J8: trupa
 [pomoc.szwaczka]
@@ -218,7 +218,7 @@ Chłopcze! Madame Ofelia Sroka, dyrektor Sroczego Teatru! Gramy dziś wieczór: 
 Pomogłeś nam. Powiem ci coś: ktoś kręcił się za sceną wczoraj. Zielona świeca. Nikt z nas nie ma zielonych. Pamiętaj.
 
 [ofelia.po]
-Rozwalony wieczór! Mój teatr! Kruk zniknął, a ja jestem winna sołtysowi sto groszy kaucji. Znajdź go, chłopcze.
+Rozwalony wieczór! Mój teatr! Kruk zniknął, a ja jestem winna sołtysowi jeden złoty kaucji. Znajdź go, chłopcze.
 
 [pimpek.rozmowa]
 Jestem Pimpek! Żongluję, grzechoczę zębami jak klawiszami. Trzy piłki, cztery, pięć! Chcesz zobaczyć sześć? Poproś o kolejną pensję.
@@ -270,7 +270,7 @@ Niech jarmark będzie sprawiedliwy, a piwo mocne!
 Od dziś pięć dni, dobrzy ludzie! Kto ma towar, niech sprzedaje. Kto ma pieniądze, niech wydaje!
 
 [pochod.ofelia]
-Brawo! Brawo! Wieczorem sztuka, oczywiście, za półtora grosza!
+Brawo! Brawo! Wieczorem sztuka, oczywiście, za półtora miedziaka!
 
 [notatki.otwarcie]
 Jarmark otwarty
@@ -325,7 +325,7 @@ Podczas przedstawienia zgasły pochodnie i z poduszki zniknął Srebrny Kruk Za�
 > (Gablota w ratuszu, gdzie Kruk nocował, otwarta kluczem, nie wyłamana. Sznur kotary przecięty, a na posadzce kropla zielonego wosku. Teatralna świeca. Ktoś z trupy.)
 
 [slad.cech]
-> (Rejestr cechu: „Dorobiony klucz do gabloty - pan w sukiennej chuście, zapłacił srebrnym groszem z orłem.” Moneta z kontynentu. Kupiec sukienny.)
+> (Rejestr cechu: „Dorobiony klucz do gabloty - pan w sukiennej chuście, zapłacił srebrnikiem z orłem.” Moneta z kontynentu. Kupiec sukienny.)
 
 [slad.garbarnia]
 > (W kadzi z garbnikiem ktoś wyprał szary, wyświechtany płaszcz z białą szminką. Pachnie dębiną. Płaszcz suflera.)
@@ -350,7 +350,7 @@ Gablota otwarta kluczem, nie wyłamana. Przecięty sznur kotary i zielona kropla
 
 [notatki.slad.cech]
 Ślad: rejestr cechu
-Zamkarz zapisał: dorobiony klucz do gabloty dla pana w sukiennej chuście. Zapłacił srebrnym groszem z orłem. Moneta z kontynentu: Marcel Wełna.
+Zamkarz zapisał: dorobiony klucz do gabloty dla pana w sukiennej chuście. Zapłacił srebrnikiem z orłem. Moneta z kontynentu: Marcel Wełna.
 
 [notatki.slad.garbarnia]
 Ślad: płaszcz w kadzi
@@ -422,7 +422,7 @@ Dogoniłem Szepta. Kruk jest u mnie. Rano sołtys zapyta, co zrobić z Marcelem.
 Chłopcze, Kruk wrócił. Znalazłeś {n} ślad(y) z pięciu. Co zrobimy z Marcelem Wełną? Może oskarżymy go przed Lordem. Może nie.
 
 rano.opcja.oskarz = Oskarżyć go przed Lordem.
-rano.opcja.szantaz = Wziąć od niego osiemdziesiąt groszy za milczenie.
+rano.opcja.szantaz = Wziąć od niego osiem srebrników za milczenie.
 rano.opcja.puscic = Puścić go.
 [rano.oskarz]
 > Oskarżam Marcela Wełnę: klucz, moneta, rachunki matki. Szept to potwierdzi.
@@ -431,7 +431,7 @@ rano.opcja.puscic = Puścić go.
 > Oskarżam Marcela. (Ale dowodów brak: ślady i świadek nie wystarczą.)
 
 [rano.szantaz]
-> Marcel, osiemdziesiąt groszy, a nikt nie dowie się, kto zlecił kradzież.
+> Marcel, osiem srebrników, a nikt nie dowie się, kto zlecił kradzież.
 
 [rano.puscic]
 > Niech odpłynie promem. Ma dość strachu na całe życie.
@@ -489,7 +489,7 @@ Nie zdążyłem ze wszystkim do dziesiątej. Sołtys znalazł innych do reszty r
 
 [notatki.konkursWygrana]
 Konkurs piwny wygrany
-Piwo Borgara pokonało piwo Mietka Kwaśniaka. Sołtys dał czterdzieści groszy.
+Piwo Borgara pokonało piwo Mietka Kwaśniaka. Sołtys dał cztery srebrniki.
 
 [notatki.konkursPrzegrana]
 Konkurs piwny przegrany
@@ -497,11 +497,11 @@ Wygrał Mietek. Borgar się nie gniewa, tylko burczy pod nosem o szyszkach.
 
 [notatki.turniej]
 Turniej w kości
-Wpisałem się na turniej: trzy mecze, ostatni z Wandą Ósemką. Wpisowe dwadzieścia groszy.
+Wpisałem się na turniej: trzy mecze, ostatni z Wandą Ósemką. Wpisowe dwa srebrniki.
 
 [notatki.turniejWygrana]
 Turniej wygrany
-Sto dwadzieścia groszy z puli i Kość Kruczogrodu: ciężar na jedynce i piątce. Wanda odjechała w hańbie.
+Jeden złoty i dwa srebrniki z puli i Kość Kruczogrodu: ciężar na jedynce i piątce. Wanda odjechała w hańbie.
 
 [notatki.turniejPrzegrana]
 Odpadłem z turnieju
@@ -525,11 +525,11 @@ Kruk wrócił, Szept w dybach, a Marcel odpłynął promem: brakło dowodów. Am
 
 [notatki.koniecC]
 Litość
-Szept puszczony wolno, matka zostaje w przytułku, Marcel jednak na wolności. Czterdzieści groszy za odciągnięcie klątwy dachu.
+Szept puszczony wolno, matka zostaje w przytułku, Marcel jednak na wolności. Cztery srebrniki za odciągnięcie klątwy dachu.
 
 [notatki.koniecD]
 Szantaż
-Wziąłem od Marcela osiemdziesiąt groszy za milczenie. Straż Pewności będzie wiedziała, że w mieście pytają o kruki. Ambroży wie i milczy.
+Wziąłem od Marcela osiem srebrników za milczenie. Straż Pewności będzie wiedziała, że w mieście pytają o kruki. Ambroży wie i milczy.
 
 [notatki.koniecF]
 Jarmark odwołany

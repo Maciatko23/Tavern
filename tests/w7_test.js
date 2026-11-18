@@ -289,7 +289,7 @@ kit.test({ port: 9510, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     const first = await lordTalk(["Powiem panu wszystko", "Odejdź"]);
     s = await st();
     const after = await J(`({ gear: [59, 93, 152, 127].map(i => $gameParty.numItems($dataItems[i])), stance: Underground.lordStance(Underground.world()) })`);
-    t.check("rozdz. 6: „Powiem panu wszystko” - sto groszy, ekwipunek ze zbrojowni (pochodnie, sznurki, opatrunki, strzały), w7LordFirst",
+    t.check("rozdz. 6: „Powiem panu wszystko” - jeden złoty, ekwipunek ze zbrojowni (pochodnie, sznurki, opatrunki, strzały), w7LordFirst",
         /ród Stacha ma honor/.test(first.text) && s.gold === g0 + 100 && after.gear.every(n => n > 0) && !!s.f.w7LordFirst && s.step === "w7Serce", { gold: [g0, s.gold], gear: after.gear, step: s.step });
     t.check("...Lord przy Sercu: sojusznik (Underground.lordStance)", after.stance === "ally", after);
     const rv = await J(`(function(){ try { return Rywal.who(true); } catch (e) { return String(e); } })()`);
@@ -300,7 +300,7 @@ kit.test({ port: 9510, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await go(221, 40, 24, 8);
     const g1 = await t.gold();
     const week = await lordTalk(["Odejdź"]);
-    t.check("...tydzień później: „Twoje sto groszy” (+100 G)", /Twoje sto groszy/.test(week.text) && (await t.gold()) === g1 + 100, week.text.slice(0, 100));
+    t.check("...tydzień później: „Twój złoty” (+100 G)", /Twój złoty/.test(week.text) && (await t.gold()) === g1 + 100, week.text.slice(0, 100));
     // the lie
     await t.loadFrom(6, { quiet: true });
     await lordTalk(["Nic tam nie ma", "Odejdź"]);
@@ -446,8 +446,8 @@ kit.test({ port: 9510, overlay: OVERLAY, bootCheck: "gra się uruchamia", errorC
     await go(221, 40, 24, 8);
     const trC = await lordTalk(["Pokaż Lordowi listy", "Odejdź"]);
     const w1c = await J("(function(){ const r = TownQuests.rec('W1'); return { step: TownQuests.Q.W1.steps[r.step].talk || TownQuests.Q.W1.steps[r.step].tick, broke: !!TownQuests.state().flags.feliksBroke, note: Journal.data().notes.some(n => n.title === 'Feliks już nie płaci') }; })()");
-    t.check("W1 6 c przed W7: w listach „Płacę mu dwadzieścia groszy”, Lord: „Brałeś od niego pieniądze... A jednak przyszedłeś”; Feliks w wieży - W1 wraca do wyboru z rysunkiem",
-        /Płacę mu dwadzieścia groszy/.test(drC.text.replace(/\s+/g, " ")) && /Brałeś od niego pieniądze/.test(trC.text) && w1c.step === "w1Choice" && w1c.broke && w1c.note, { w1c, t: trC.text.slice(0, 200) });
+    t.check("W1 6 c przed W7: w listach „Płacę mu dwa srebrniki”, Lord: „Brałeś od niego pieniądze... A jednak przyszedłeś”; Feliks w wieży - W1 wraca do wyboru z rysunkiem",
+        /Płacę mu dwa srebrniki/.test(drC.text.replace(/\s+/g, " ")) && /Brałeś od niego pieniądze/.test(trC.text) && w1c.step === "w1Choice" && w1c.broke && w1c.note, { w1c, t: trC.text.slice(0, 200) });
 
     // ===================================================================== F9
     await t.loadFrom(1, { quiet: true });

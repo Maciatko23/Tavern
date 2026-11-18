@@ -204,7 +204,7 @@ Pomagaj ludziom, chłopcze, pokaż jakąś żelazną robotę, znajdź poręczyci
 
 [ostap.poreka.pyta]
 Od Tadka? Znam jego pieczęć. A ty trzymasz młot jak człowiek, który zna ciężar.
-Wpisowe to dwadzieścia groszy, chłopcze. Nie dla mnie - dla cechowej skrzyni. Masz?
+Wpisowe to dwa srebrniki, chłopcze. Nie dla mnie - dla cechowej skrzyni. Masz?
 
 [ostap.poreka.nie]
 Nie masz. Wróć z dwudziestoma.
@@ -228,7 +228,7 @@ Dobrze. Dobrze. Proszę wszystkich do izby.
 [ostap.przysiega]
 W imię rzemiosła, i żeby ręce pamiętały.
 (Ostap kładzie twoje sztuki na stole i trzykrotnie uderza młotkiem. Dźwięk niesie się po całym Cechu.)
-Od tej chwili jesteś czeladnikiem cechu. Dostajesz zaświadczenie, 30 groszy i tablicę zleceń.
+Od tej chwili jesteś czeladnikiem cechu. Dostajesz zaświadczenie, 30 G i tablicę zleceń.
 Pracownia - pokazuję ci ją - jest twoja do zleceń cechu. Tablica jest przy wejściu do Pracowni.
 
 [ostap.czeladnik]
@@ -279,7 +279,7 @@ Zrób ją od nowa. Surowce przepadły, ale cech zwraca ci jedną sztukę żelaza
 (Ostap wsuwa ci w dłoń kawałek żelaza.)
 
 [ostap.podmistrz]
-Dobrze. Rzędy równe, szew równy. Cech kupuje sztukę po sześćdziesięciu procentach - sto groszy.
+Dobrze. Rzędy równe, szew równy. Cech kupuje sztukę po sześćdziesięciu procentach - jeden złoty.
 Od dziś jesteś podmistrzem. Zostało jedno: egzamin przed cechem, w dzień targowy, na rynku.
 
 [ostap.egzaminDzien]

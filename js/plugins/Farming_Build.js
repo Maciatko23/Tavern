@@ -312,6 +312,8 @@
     const hitsNeeded = def => def.hits || Math.max(2, Math.ceil(def.stamina / Math.max(1, STAMINA.buildHit)));
     // with the Budownictwo skills: fewer blows, and less strength for each
     const siteHits = def => Math.max(1, Math.round(hitsNeeded(def) * (1 - Math.min(0.75, perk("build.hits")))));
+    // (2026-11-18) the rest's speed: Hart ducha and the skills (Combat.restBonus); the skills alone while Combat is not there
+    const restBonus = () => { const r = T.call("Combat", "restBonus"); return typeof r === "number" ? r : perk("sleep.rest"); };
     const hitCost = () => Math.round(STAMINA.buildHit * (1 - Math.min(0.8, perk("build.cost"))) * 10) / 10;
     // A building without a site (the tent): the item goes in, it stands at once and no hammer is needed.
     function pitchInstant(type, x, y, flip) {
@@ -439,7 +441,7 @@
         const people = T.api("Humans"), men = !isHutInterior() && people && people.nightRaid ? people.nightRaid(now, wakeAt, { fire: fireNear(b) }) : null;
         const byMen = men !== null && (wolves === null || men < wolves), raid = byMen ? men : wolves;
         const bad = def.sleepBad !== undefined && !isHutInterior() && harshNight();   // under the roof of the hut the weather does not matter
-        const restore = Math.min(1, (bad ? def.sleepBad : def.sleepRestore !== undefined ? def.sleepRestore : 1) * (1 + perk("sleep.rest")));
+        const restore = Math.min(1, (bad ? def.sleepBad : def.sleepRestore !== undefined ? def.sleepRestore : 1) * (1 + restBonus()));
         const morning = restore >= 1 ? "Czujesz się wypoczęty." : bad ? "Spałeś w zimnie i wilgoci. Sił odzyskałeś niewiele." : "Spałeś twardo. Sił odzyskałeś tylko część.";
         // the screen goes dark for a moment while the night passes, then the new day comes up; the greeting is a small plate at the
         // top of the screen (SurvivalHUD.js), shown after the day summary (Journal.js)
@@ -753,7 +755,7 @@
                 if (typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(step);
                 r.hours += step;
                 const before = $gameSystem.stamina();
-                $gameSystem.changeStamina(restGain(perHour * step * (1 + perk("sleep.rest"))));
+                $gameSystem.changeStamina(restGain(perHour * step * (1 + restBonus())));
                 r.gained += $gameSystem.stamina() - before;
                 if ($gameSystem.stamina() >= restCeiling() - 0.05) r.end = "full";
             },

@@ -84,7 +84,7 @@ Mów.
 Słucham. Krótko, ogień czeka.
 
 [sell]
-Za drewno dwa grosze, za węgiel cztery, za tran sześć. Więcej nie dam, ale biorę zawsze.
+Za drewno dwa miedziaki, za węgiel cztery, za tran sześć. Więcej nie dam, ale biorę zawsze.
 
 [sellNone]
 Nie masz nic, co się pali. Poza sobą.
@@ -158,7 +158,7 @@ wreckEmpty = Zatoczka szczątków. Nic nowego. Morze wyrzuca coś dopiero po szt
 wreckGot = Morze wyrzuciło po sztormie
 wreckEye = Na desce rozbitej skrzyni wypalone oko - znak Czarnych Oczu.
 [janekTran]
-Tran? Mam trochę z wątroby dorsza. Śmierdzi, ale się pali. Sześć groszy dzbanek.
+Tran? Mam trochę z wątroby dorsza. Śmierdzi, ale się pali. Sześć miedziaków dzbanek.
 
 [janekTranBuy]
 Masz. Tylko nie rozlej w łodzi, bo mi ryby uciekną.
@@ -168,7 +168,7 @@ Więcej nie mam. Wątroba dorsza to nie studnia.
 
 [baltazar]
 Ach, przyjaciel! Ty bywasz na przylądku, prawda? U tego latarnika z bielmem.
-Mam kupca na lądzie, który płaci za stare szkła. Takie z latarni, w mosiężnym pierścieniu. Czterysta groszy, przyjacielu. Czterysta.
+Mam kupca na lądzie, który płaci za stare szkła. Takie z latarni, w mosiężnym pierścieniu. Cztery złote, przyjacielu. Cztery.
 Gdyby szkiełko... zginęło, nikt by nie płakał. Latarnia świeci ogniem, nie szkłem.
 
 [baltazarNo]
@@ -181,7 +181,7 @@ Myśl, przyjacielu. Tylko szybko. Mój kupiec nie lubi czekać.
 
 [warn]
 > Baltazar z kantoru chce kupić twoją soczewkę. Za czterysta.
-(Bazyli długo milczy.) Czterysta. Za szkło, w którym widać Serce przez łzy. Tanio.
+(Bazyli długo milczy.) Cztery złote. Za szkło, w którym widać Serce przez łzy. Tanio.
 Przyjdą po nie. Widziałem to we mgle, tylko nie wiedziałem kiedy. Teraz wiem: jutro w nocy.
 Jak chcesz pomóc, czuwaj tu jutro w nocy. Po północy.
 
@@ -205,7 +205,7 @@ sack = Worek złodziei. W środku, owinięta w szmatę - soczewka latarni.
 sackGot = Soczewka latarni
 [baltazarBack]
 Ach, szkiełko z latarni! Trafiło do mnie przez... pośrednika. Czysta uczciwość, przyjacielu.
-Dla ciebie - sto pięćdziesiąt groszy. Bo cię lubię.
+Dla ciebie - jeden złoty i pięć srebrników. Bo cię lubię.
 
 [baltazarBackYes]
 Interes to interes. Szkiełko twoje.
@@ -254,7 +254,7 @@ Mój kupiec się ucieszy. A ty... ty niczego nie widziałeś, przyjacielu.
 
 [soldNote]
 Soczewka sprzedana
-Sprzedałem Oko Strażnicy Baltazarowi za czterysta groszy. Płynie na ląd. Bazyli mówi, że Czarne Oczy będą wiedziały jedną noc więcej niż my.
+Sprzedałem Oko Strażnicy Baltazarowi za cztery złote. Płynie na ląd. Bazyli mówi, że Czarne Oczy będą wiedziały jedną noc więcej niż my.
 
 [leaveNote]
 Oko Strażnicy zostaje

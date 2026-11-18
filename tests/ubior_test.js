@@ -163,19 +163,7 @@ kit.test({ port: 9575, plugins: ["Ubior_Data", "Ubior"], evalTimeout: 90000 }, a
     if (!talk.shown) console.log("NOTE the bust is not on the screen in this talk (the one speaking has no bust of his own) - the picture is the dressed one");
     await t.finish();
 
-    // ---- 3. the P menu's Ekwipunek (MenuRing.js "Lista", 2026-10-22: the whole 64 x 64 cell of the live sheet, 4 x) in outfit B
-    await t.eval(`Ubior.set(${JSON.stringify(OUTFITS[1].o)}); 0`);
-    await t.frames(5);
-    await t.eval(`(function(){ $gameTemp._menuTab = "equip"; $gameTemp._menuLevel = 2; SceneManager.push(Scene_Menu); return 0; })()`);
-    await t.until("SceneManager._scene instanceof Scene_Menu && SceneManager._scene._started && !SceneManager.isSceneChanging()", 20, 100);
-    await t.frames(60);
-    await t.shot(path.join(SHOTS, "karta_B.png"));
-    const card = await t.json(`(function(){ const sc = SceneManager._scene, eq = sc._views && sc._views.equip, s = eq && eq._fig;
-        return { view: !!eq, w: s && s.bitmap ? s.bitmap.width : 0, key: eq ? eq._figKey || "" : "" }; })()`);
-    meta.card = card;
-    t.check("Ekwipunek w menu P: figura przebrana (cała klatka arkusza, 5 ×)", card.view && card.w === 320 && /kaftan_czerwony/.test(card.key), card);
-    await t.eval("SceneManager.goto(Scene_Map); 0");
-    await t.until(t.onMap(3), 20);
+    // ---- 3. (2026-11-17: the P menu's Postać shows a silhouette with the places - layout B -, not the dressed figure: no card here)
 
     // ---- 5. Equipment -> outfit (an item with <Ubior:...>: the boots 113 are known without a note too)
     const eq = await t.json(`(function(){ Ubior.set(null); $gameParty.gainItem($dataItems[113], 1); const o = Ubior.outfit(); $gameParty.loseItem($dataItems[113], 1); return { stopy: o.stopy || "", after: Ubior.outfit().stopy || "" }; })()`);

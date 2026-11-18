@@ -47,7 +47,7 @@ Nic. Jak wszyscy. Hm.
 Po co? (Grum długo milczy.) Płacą mi. Ktoś z kontynentu. Mam znaleźć drogę w góry, do jaskiń, i kogoś, kto ją zna.
 
 [zadania.W8.lines.end]
-Pięćdziesiąt groszy za wyprawę. Jak się nauczysz drogi w góry i przeżyjesz dzień bez karczmy - przyjdź. Zabiorę cię.
+Pięć srebrników za wyprawę. Jak się nauczysz drogi w góry i przeżyjesz dzień bez karczmy - przyjdź. Zabiorę cię.
 I... nie mów nikomu, że pytałem. Nikomu.
 
 [zadania.W8.lines.note]
@@ -55,7 +55,7 @@ Grum pyta o góry
 Grum pyta o góry na wschodzie, jaskinie i stary kamieniołom. Ktoś z kontynentu płaci mu za znalezienie drogi i przewodnika. Za wyprawę w góry da 50 G - kiedy będę znał drogę.
 
 [zadania.W8.lines.hireAsk]
-Góry. Pamiętasz? Pięćdziesiąt groszy, jak mnie zaprowadzisz do starego kamieniołomu i obaj wrócimy.
+Góry. Pamiętasz? Pięć srebrników, jak mnie zaprowadzisz do starego kamieniołomu i obaj wrócimy.
 Wyjście o świcie, przy wejściu w góry - za Leśną drogą, na wschodzie. Weź jedzenie na cały dzień, wodę w bukłaku i zioła. W górach nikt ci nie poda.
 
 zadania.W8.lines.optHire = Jutro o świcie.
@@ -179,7 +179,7 @@ Na honor. (Grum wstaje i zdejmuje rękawicę.) Przy wszystkich. Bez stawki.
 Ten zawał w tunelu przebijemy razem. My dwaj. Nikt więcej tędy nie zejdzie bez nas. A mocodawcom napiszę, że góry zjadły drogę.
 
 [zadania.W8.lines.faction]
-(Grum przygląda ci się długo.) Pieniądze. Hm. Uczciwe przynajmniej. Masz. Sto groszy zadatku.
+(Grum przygląda ci się długo.) Pieniądze. Hm. Uczciwe przynajmniej. Masz. Jeden złoty zadatku.
 Kopacze przebiją zawał. Ty zaprowadzisz ich dalej. Tylko pamiętaj: świadków nie zostawiać. Ty też jesteś świadkiem.
 
 [zadania.W8.lines.fight]
@@ -195,7 +195,7 @@ Grum podarł list mocodawców. Przechodzi na moją stronę - zawał w tunelu kop
 
 [zadania.W8.lines.noteFaction]
 Pracuję dla frakcji
-Wziąłem od Gruma sto groszy zadatku: pracuję dla jego mocodawców. Kopacze przebili zawał w tunelu - do pięćdziesiątego piętra podziemi - a ja mam ich prowadzić w dół. „Świadków nie zostawiać.”
+Wziąłem od Gruma jeden złoty zadatku: pracuję dla jego mocodawców. Kopacze przebili zawał w tunelu - do pięćdziesiątego piętra podziemi - a ja mam ich prowadzić w dół. „Świadków nie zostawiać.”
 
 zadania.W8.lines.duelShout = Bez urazy, chłopcze. Robota to robota.
 [zadania.W8.lines.duelWon]

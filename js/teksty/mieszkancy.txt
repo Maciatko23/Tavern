@@ -19,7 +19,7 @@ Siekiera? Motyka? Wszystko naprostuję.
 
 [mieszkancy.kowal.barks.wander]
 Chleb Hanki to jedyne, co tu jeszcze nie zdrożało.
-Woda po trzy grosze... czasy.
+Woda po trzy miedziaki... czasy.
 
 [mieszkancy.kowal.barks.rain]
 Deszcz! Wreszcie kuźnia odetchnie!
@@ -143,7 +143,7 @@ Jak pada, to wszyscy łapią deszczówkę do wiader i sołtys mniej mi płaci za
 mieszkancy.kapral.name = Kapral Wit Czerwień
 mieszkancy.kapral.title = straż Lorda
 [mieszkancy.kapral.barks.stand]
-Brama Lorda. Myto - dwa grosze.
+Brama Lorda. Myto - dwa miedziaki.
 Stać. Kto idzie?
 Bez przepustki dalej nie wejdziesz.
 
@@ -332,7 +332,7 @@ Ignac, garbarz i szewc. Przynieś mi skóry z polowania - kupię albo zrobię ci
 Skóra zająca, jelenia, dzika - wszystko się przyda.
 
 [mieszkancy.garbarz.talk.day]
-Do wyprawiania skór trzeba wody. Kupuję od Kuby po trzy grosze... i jakoś zawsze ma.
+Do wyprawiania skór trzeba wody. Kupuję od Kuby po trzy miedziaki... i jakoś zawsze ma.
 Dobre buty to trzy skóry i dzień roboty. Przynieś skóry, resztę zrobię ja.
 
 [mieszkancy.garbarz.talk.evening]
@@ -360,7 +360,7 @@ Deszcz... trzeba zdjąć pranie w oranżerii.
 
 [mieszkancy.feliks.talk.morning]
 Feliks, kamerdyner jaśnie pana Zaleskiego. Zakupy dla dworu robię sam - nikomu innemu nie ufam.
-Dług twojego dziadka? Zapisany co do grosza. Jaśnie pan przyjmuje od ósmej.
+Dług twojego dziadka? Zapisany co do miedziaka. Jaśnie pan przyjmuje od ósmej.
 
 [mieszkancy.feliks.talk.day]
 Dwór? Wszystko w najlepszym porządku. Ogród? Ach, ogród... podlewamy z... z beczek. Bardzo oszczędnie.
@@ -605,7 +605,7 @@ Koszule mieszczan, prześcieradła z dworu... a ręce moje.
 Franek! Nie łaź mi po praniu!
 
 [mieszkancy.praczka.barks.wander]
-Grosz za kosz. Kiedyś było dwa.
+Miedziak za kosz. Kiedyś było dwa.
 Ta studnia wyschła dawno. Teraz każde wiadro noszę z miasta.
 
 [mieszkancy.praczka.barks.rain]
@@ -620,7 +620,7 @@ Franek, umyj się... no, przetrzyj chociaż.
 Jutro dworskie pranie. Trzeba wstać przed świtem.
 
 [mieszkancy.praczka.talk.morning]
-Piorę dla mieszczan i dla dworu. Wodę noszę z miasta, z przydziału przy studni na rynku - dwa wiadra, tyle co sołtys pozwoli. Ale grosz jest.
+Piorę dla mieszczan i dla dworu. Wodę noszę z miasta, z przydziału przy studni na rynku - dwa wiadra, tyle co sołtys pozwoli. Ale miedziak jest.
 Mój Janek zmarł zimą, został mi Franek. Ma osiem lat, a już nosi drewno za Zbycha.
 
 [mieszkancy.praczka.talk.day]
@@ -640,7 +640,7 @@ Deszcz! Z beczki deszczówki zrobię pranie i nie muszę dźwigać wiader z mias
 mieszkancy.franek.name = Franek
 mieszkancy.franek.title = syn praczki
 [mieszkancy.franek.barks.wander]
-Ej, masz grosza?
+Ej, masz miedziaka?
 Zakład, że nie trafisz kamieniem w tamten słupek!
 Mama mówi, że jak dorosnę, pójdę do kuźni!
 Rysiek obiecał, że pokaże mi sidła!
@@ -948,7 +948,7 @@ Jak pada, to nikt nie goni. Wszyscy pod daszkami.
 mieszkancy.gracz.name = Lucjan Kość
 mieszkancy.gracz.title = wędrowny gracz w kości
 [mieszkancy.gracz.barks.stand]
-Kości, panowie! Pięć groszy, a może wygrasz dziesięć!
+Kości, panowie! Pięć miedziaków, a może wygrasz dziesięć!
 Kto się nie boi szczęścia? Podejdź!
 Szóstka! Znowu szóstka! Ach, co za dzień!
 
@@ -956,7 +956,7 @@ Szóstka! Znowu szóstka! Ach, co za dzień!
 Deszcz, a kości suche. Dobry znak!
 
 [mieszkancy.gracz.talk.morning]
-Lucjan Kość, do usług. Gram tam, gdzie targ, a targ jest wszędzie, gdzie są ludzie z groszem.
+Lucjan Kość, do usług. Gram tam, gdzie targ, a targ jest wszędzie, gdzie są ludzie z miedziakiem.
 Ręce czyste, kości uczciwe. Sprawdź sam - no, tylko nie za długo.
 
 [mieszkancy.gracz.talk.day]
@@ -985,7 +985,7 @@ Deszcz... przynajmniej pole się napije. Moje pole. Jeszcze moje.
 
 [mieszkancy.bartek.barks.tavern]
 Jeszcze jedna partyjka... nie, nie, już nie gram.
-Grosz do grosza, a potem kości...
+Miedziak do miedziaka, a potem kości...
 Borgar, na kredę. Ostatni raz.
 
 [mieszkancy.bartek.talk.morning]
@@ -1081,7 +1081,7 @@ Deszcz! Jaśnie pan każe otworzyć rynny dla miasta.
 
 [mieszkancy.kamerdyner.talk.morning]
 Teodor, nowy kamerdyner jaśnie pana Zaleskiego. Służyłem jeszcze jego ojcu - wróciłem, kiedy Feliksa... zabrakło.
-Dług twojego dziadka? Zapisany co do grosza, uczciwie. Jaśnie pan przyjmuje od ósmej, a nocą zapukaj - otworzę.
+Dług twojego dziadka? Zapisany co do miedziaka, uczciwie. Jaśnie pan przyjmuje od ósmej, a nocą zapukaj - otworzę.
 
 [mieszkancy.kamerdyner.talk.evening]
 Wieczorami pilnuję drzwi dworu. Jeśli niesiesz spłatę dla jaśnie pana, zapukaj śmiało.
@@ -1202,7 +1202,7 @@ Kruk znowu siedział na maszcie wraku. Co rano. Patrzy na ciebie, nie na mnie.
 
 [mieszkancy.przemytnik.talk.day]
 Prom co trzy dni. Na ląd puszczają tylko wojsko i ludzi z glejtem Lorda. Reszta pływa z takimi jak ja.
-Celnik ma księgę. W tej księdze jest każdy grosz i każdy człowiek. Mnie tam nie ma. I niech tak zostanie.
+Celnik ma księgę. W tej księdze jest każdy miedziak i każdy człowiek. Mnie tam nie ma. I niech tak zostanie.
 
 [mieszkancy.przemytnik.talk.evening]
 Vey z kantoru? Ten by sprzedał własną matkę. I sprzedał, widziałem kwit.
@@ -1219,7 +1219,7 @@ mieszkancy.celnik.name = Sambor Kwit
 mieszkancy.celnik.title = celnik Lorda
 [mieszkancy.celnik.barks.stand]
 Tobołki do kontroli! Po kolei!
-Opłata portowa: dwa grosze. Kto nie ma, ten czeka.
+Opłata portowa: dwa miedziaki. Kto nie ma, ten czeka.
 Nie pić z morza! Czerwona woda! Czy ja tu do ściany mówię?
 
 [mieszkancy.celnik.barks.wander]
@@ -1232,7 +1232,7 @@ Deszcz moczy papiery. Zakazuję deszczu. Żartuję.
 Komora zamknięta. Przyjdź za dnia.
 
 [mieszkancy.celnik.barks.home]
-Dwa grosze... dwa grosze... i jeden kamień z krukiem. Zapisane.
+Dwa miedziaki... dwa miedziaki... i jeden kamień z krukiem. Zapisane.
 Atrament znowu zgęstniał.
 
 [mieszkancy.celnik.talk.morning]
@@ -1240,7 +1240,7 @@ Komora czynna od ósmej. Ty jesteś ten chłopak od Stacha, tak? Mam cię w ksi�
 
 [mieszkancy.celnik.talk.day]
 Rozkaz dworu: każdy kamień z krukiem do zgłoszenia. Po co dworowi kruki? Nie moja rzecz. Moja rzecz to zapisać.
-Opłata portowa: dwa grosze od tobołka. Od ciebie nic, ty nie masz tobołka.
+Opłata portowa: dwa miedziaki od tobołka. Od ciebie nic, ty nie masz tobołka.
 Tabliczki stawiam nie dla ozdoby. Czerwona woda: kto pije, ten rzyga do rana. A potem przychodzi do mnie po zwrot opłaty portowej.
 
 [mieszkancy.celnik.talk.evening]
@@ -1293,7 +1293,7 @@ Szczepan Kołodziej, woźnica. Wożę wszystko, co się na wóz zmieści: zboże
 Rano jadę na Polną drogę, póki chłodno. W południe koń by mi padł od upału.
 
 [mieszkancy.kolodziej.talk.day]
-Wojciech wozi skrzynie dla kupca z kantoru i dobrze na tym wychodzi. Ja wożę ludziom. Mniej grosza, za to sumienie lekkie.
+Wojciech wozi skrzynie dla kupca z kantoru i dobrze na tym wychodzi. Ja wożę ludziom. Mniej miedziaka, za to sumienie lekkie.
 Najgorsza w tej suszy jest woda dla koni. Człowiek wytrzyma na dzbanie, koń - nie. Sołtys daje mi wiadro z przydziału, a Siwek wypija dwa.
 Na drogach za murem kręcą się rabusie. Wóz z sianem ich nie kusi, ale wóz z workami - i owszem. Jak chodzisz sam, chodź za dnia.
 
@@ -1340,7 +1340,7 @@ mieszkancy.przekupka.name = Agata
 mieszkancy.przekupka.title = przekupka
 [mieszkancy.przekupka.talk.morning]
 Agata jestem, przekupka. Jajka, cebula, czosnek, zioła z ogródka. A plotki gratis, do każdego zakupu!
-Kury pić chcą jak ludzie. Każdą kroplę z przydziału dzielę: łyk dla mnie, dwa dla kur. Bez kur nie ma jajek, bez jajek nie ma grosza.
+Kury pić chcą jak ludzie. Każdą kroplę z przydziału dzielę: łyk dla mnie, dwa dla kur. Bez kur nie ma jajek, bez jajek nie ma miedziaka.
 
 [mieszkancy.przekupka.talk.day]
 Wiesz, że kapral Wit chodzi do kantoru częściej niż do kaplicy? Ja nic nie mówię. Ja tylko widzę.
@@ -1349,7 +1349,7 @@ Prom co trzy dni przywozi obcych z kontynentu. Jedni mówią, że to biedacy, dr
 
 [mieszkancy.przekupka.talk.evening]
 Wieczorem w tawernie Melia śpiewa. Ja tam nie chodzę, piwo drogie. Ale pod oknem słychać tak samo.
-Lord Zaleski znowu podniósł targowe. Mówią, że się na coś szykuje. Ja mówię - na nasze grosze się szykuje.
+Lord Zaleski znowu podniósł targowe. Mówią, że się na coś szykuje. Ja mówię - na nasze miedziaki się szykuje.
 
 [mieszkancy.przekupka.talk.night]
 Zamknięte, złociutki. Przekupka też człowiek, też śpi.
@@ -1391,7 +1391,7 @@ Dorota Igła. Szyję, ceruję, przerabiam. Z dwóch starych koszul zrobię jedn�
 Rano szyję w domu, póki światło dobre. Potem idę na plac po nici i sukno. Jak jakiś kupiec coś przywiezie.
 
 [mieszkancy.szwaczka.talk.day]
-Twoja koszula... wybacz, ale to już nie koszula, to wspomnienie koszuli. Przynieś mi kiedyś grosz, a coś z niej uratuję.
+Twoja koszula... wybacz, ale to już nie koszula, to wspomnienie koszuli. Przynieś mi kiedyś miedziak, a coś z niej uratuję.
 Straż Lorda Zaleskiego zamawia u mnie kaftany. Czerwone, z czarnym koniem na piersi. Wyszyłam już tyle koni, że śnią mi się po nocach.
 Płótna nie ma czym prać. Wodę z przydziału każdy pije, nie płucze. Toteż w mieście chodzą szarzy, choć wszyscy byli kiedyś biali.
 
@@ -1441,7 +1441,7 @@ Kostek chce iść na żołnierza, jak stary Wacław. Wybij mu to z głowy, jak b
 
 [mieszkancy.wdowa.talk.day]
 Mój Michał kładł gont na dachu kaplicy. Ostatniej jesieni spadł. Leon mówi, że belka pękła. Przynosi nam czasem drewno, ale w oczy patrzeć mi nie umie.
-Szyję dla Doroty, piorę dla Agaty, sprzątam u sołtysa. Grosz do grosza. Dzieci muszą jeść.
+Szyję dla Doroty, piorę dla Agaty, sprzątam u sołtysa. Miedziak do miedziaka. Dzieci muszą jeść.
 Masz dziadka, prawda? Dbaj o niego. Starych trzeba pilnować jak dzieci, tylko że oni się nie dają.
 
 [mieszkancy.wdowa.talk.evening]
@@ -1673,7 +1673,7 @@ Siadaj. Wody nie mam, ale opowieść mam.
 mieszkancy.szynkarz.name = Mietek Kwaśniak
 mieszkancy.szynkarz.title = szynkarz
 [mieszkancy.szynkarz.talk.morning]
-Mietek Kwaśniak, do usług. Szynk mam, nie karczmę - karczma jest na wzgórzu, u Borgara. U Borgara kufel po trzy grosze, u mnie kubek po jednym. I smakuje akurat na jeden.
+Mietek Kwaśniak, do usług. Szynk mam, nie karczmę - karczma jest na wzgórzu, u Borgara. U Borgara kufel po trzy miedziaki, u mnie kubek po jednym. I smakuje akurat na jeden.
 Rano warzę kwas. Z czego? Ze skórek chleba, których Hanka z piekarni nie sprzeda, z garści jęczmienia i z wody... której nie ma. Dlatego taki kwaśny.
 
 [mieszkancy.szynkarz.talk.day]
@@ -1683,7 +1683,7 @@ Ludzie Lorda, co kopią przy skałach, zaglądają tu czasem nocą. Piją dużo,
 
 [mieszkancy.szynkarz.talk.evening]
 Wieczorem szynk ożywa. Darin opowiada o wojnie, Zbych pije na krechę, a Rysiek płaci zającem, o którego nikt nie pyta.
-Grosz, który tu zostawisz, nie pójdzie do Lorda. To już coś. Siadaj, kwasu naleję. Na krechę też można - ale krótką.
+Miedziak, który tu zostawisz, nie pójdzie do Lorda. To już coś. Siadaj, kwasu naleję. Na krechę też można - ale krótką.
 
 [mieszkancy.szynkarz.talk.night]
 Szynk zamknięty... no, prawie zamknięty. Kubek kwasu się znajdzie, tylko cicho - kapral Wit nie lubi, jak biedota pije po nocy.
@@ -1694,16 +1694,16 @@ Deszcz! Beczki pod rynnę, wszystkie! Dziś kwas będzie z prawdziwej wody, a ni
 [mieszkancy.szynkarz.zaczepki.rano]
 Kwas świeży, prosto z beczki! No, prawie świeży.
 Ławy wytarte, beczka wytoczona. Można żyć.
-Kubek kwasu na dzień dobry? Grosz, nie więcej!
+Kubek kwasu na dzień dobry? Miedziak, nie więcej!
 
 [mieszkancy.szynkarz.zaczepki.dzien]
 Siadaj, spocznij! Pod daszkiem jeszcze chłodno.
-Kwas po groszu, cienkusz po dwa! Kto pije?
+Kwas po miedziaku, cienkusz po dwa! Kto pije?
 U Borgara drożej, u mnie bliżej!
 
 [mieszkancy.szynkarz.zaczepki.wieczor]
 Wieczór, ludzie! Szynk otwarty do późna!
-Kto ma grosz, niech siada. Kto nie ma - niech siada ciszej.
+Kto ma miedziak, niech siada. Kto nie ma - niech siada ciszej.
 Zbych, znowu na krechę? Ech... siadaj.
 
 [mieszkancy.szynkarz.zaczepki.deszcz]
@@ -1716,7 +1716,7 @@ Ostatni kubek i do domu, chłopcze.
 
 [mieszkancy.szynkarz.zaczepki.dom]
 Kwas musi postać trzy dni. Nie ruszaj beczki.
-Krecha Zbycha, krecha Ryśka, krecha Józka... sama krecha, grosza nie widać.
+Krecha Zbycha, krecha Ryśka, krecha Józka... sama krecha, miedziaka nie widać.
 Siadaj, jest jeszcze ława. Kulawa, ale jest.
 
 # opiekunka - Ciotka Stefa, opiekunka przytułku
@@ -1776,7 +1776,7 @@ Wit Zduń, garncarz. Wit, jak kapral - tylko że ja ludziom lepię garnki, a on 
 Rano kopię glinę w gliniance za palisadą, póki chłodno. W tę suszę glina twarda jak cegła, zanim jeszcze trafi do pieca. Trzeba ją moczyć, a czym? Śliną?
 
 [mieszkancy.garncarz.talk.day]
-W suszę garnek to skarb. Każdy chce dzban na wodę, której nie ma, i miskę na zupę od ciotki Stefy. Sprzedaję po groszu albo za garść kaszy. Bogaty nie będę, ale garnki idą.
+W suszę garnek to skarb. Każdy chce dzban na wodę, której nie ma, i miskę na zupę od ciotki Stefy. Sprzedaję po miedziaku albo za garść kaszy. Bogaty nie będę, ale garnki idą.
 Matka Tośki ugniata mi glinę, a ojciec dziewczyny kopie u Lorda przy skałach. Przyniósł mi stamtąd skorupy - stare, z jakimś znakiem. Takich tu nikt nie lepi od stu lat.
 Znajdziesz po deszczu mokrą glinę przy kałuży - ulep sobie garnek i wysusz w cieniu. Krzywy będzie, ale twój. Mój pierwszy też był krzywy.
 
@@ -1796,7 +1796,7 @@ Kto kopie glinę o świcie, ten ma garnki o zmierzchu.
 Uważaj, dół głęboki! Wpadniesz - wylepię z ciebie dzban.
 
 [mieszkancy.garncarz.zaczepki.dzien]
-Garnki! Dzbany! Miski! Po groszu albo za garść kaszy!
+Garnki! Dzbany! Miski! Po miedziaku albo za garść kaszy!
 Dzban na wodę, której nie ma - najlepszy towar w suszy!
 Ten krzywy? Taniej. Krzywy też trzyma wodę.
 
@@ -2012,7 +2012,7 @@ Wełna w tym roku cienka.
 
 [mieszkancy.tkaczka.zaczepki.dzien]
 Płótno! Mocne płótno!
-Ładna koszula za dwa grosze.
+Ładna koszula za dwa miedziaki.
 
 [mieszkancy.tkaczka.zaczepki.wieczor]
 Gdzie ta dziewczyna znowu polazła?
@@ -2035,7 +2035,7 @@ Teodor Żuraw. Sprzedaję wodę. Ktoś musi, skoro rzeka nie chce.
 Skąd ją biorę? Z daleka. Przed świtem wychodzę, przed południem jestem z powrotem. Więcej nie musisz wiedzieć.
 
 [mieszkancy.wodziarz.talk.day]
-Kubek za trzy grosze. Drogo? W suszy nic nie jest drogie, jeśli bez tego umrzesz.
+Kubek za trzy miedziaki. Drogo? W suszy nic nie jest drogie, jeśli bez tego umrzesz.
 Kuba nosi wodę z rynku, tanio. Niech nosi. Na rynku jej mało, a u mnie zawsze jest.
 
 [mieszkancy.wodziarz.talk.evening]
@@ -2052,7 +2052,7 @@ Wiadra pełne. Dobry początek.
 Nie pytaj, skąd. Pij.
 
 [mieszkancy.wodziarz.zaczepki.dzien]
-Woda! Czysta woda! Trzy grosze kubek!
+Woda! Czysta woda! Trzy miedziaki kubek!
 Kto ma pragnienie, ten ma u mnie przyjaciela.
 
 [mieszkancy.wodziarz.zaczepki.wieczor]

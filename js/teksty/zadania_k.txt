@@ -62,9 +62,9 @@ Dwie porcje deszczówki, chłopcze. Z wiadra albo z bukłaka.
 Deszczówka! Czysta jak łza. Koryto znowu syczy, jak trzeba.
 
 [zadania.K2.steps.0.choice.ask]
-Co wolisz w zamian? Grosz czy gwoździe?
+Co wolisz w zamian? Miedziak czy gwoździe?
 
-zadania.K2.steps.0.choice.options.0.label = 25 groszy.
+zadania.K2.steps.0.choice.options.0.label = 25 G.
 [zadania.K2.steps.0.choice.options.0.say]
 Masz. Uczciwie zarobione.
 
@@ -136,7 +136,7 @@ zadania.K5.when = 6–9, codziennie
 zadania.K5.desc = Cztery bochny przed dziewiątą: Ambrożemu, kapralowi Witowi przy bramie wschodniej, sołtysowi pod ratusz i czwarty - Kubie przy studni, a od pierwszej fali Ludmile do obozu pod murem. Każdy rzuci słowo plotki.
 [zadania.K5.offer.say]
 Pomożesz? Cztery bochny trzeba roznieść przed dziewiątą: Ambrożemu, kapralowi przy bramie wschodniej, {czwartemu} i sołtysowi pod ratusz.
-{placi} Ja płacę tobie - dwanaście groszy.
+{placi} Ja płacę tobie - jeden srebrnik i dwa miedziaki.
 
 zadania.K5.offer.yes = Roznoszę!
 zadania.K5.offer.no = Nie dziś.
@@ -156,7 +156,7 @@ zadania.K5.steps.0.lista.soltys = Chleb dla sołtysa (ratusz, od 8:00)
 zadania.K5.steps.1.text = Wróć do Hanki po zapłatę (stragan, do 14:00).
 [zadania.K5.steps.1.say]
 > Wszystko rozniesione.
-Wszyscy dostali? I nikt nie marudził? To zasłużyłeś. Dwanaście groszy, proszę.
+Wszyscy dostali? I nikt nie marudził? To zasłużyłeś. Jeden srebrnik i dwa miedziaki, proszę.
 
 zadania.K5.fail.text = Chleb wystygł, a ludzie czekali.
 # (2026-10-28) czwarty bochen: przed pierwszą falą (dzień 10) Kuba przy studni, potem Ludmiła w obozie (docs/PODROZNI.md 5.2)
@@ -203,7 +203,7 @@ zadania.K8.where = studnia na rynku
 zadania.K8.when = 7–14
 zadania.K8.desc = Beczka Kuby cieknie, a każda kropla to pieniądz. Dwie deski, cztery gwoździe i młotek - obręcz zbijesz na miejscu.
 [zadania.K8.offer.say]
-Psia kość, beczka cieknie! Każda kropla to grosz, a tu leje się na bruk.
+Psia kość, beczka cieknie! Każda kropla to miedziak, a tu leje się na bruk.
 Przyniesiesz dwie deski i cztery gwoździe? I młotek, bo mój... pożyczyłem i przepadł. Obręcz zbijesz tu, na miejscu.
 
 zadania.K8.offer.yes = Przyniosę.
@@ -294,12 +294,12 @@ Woda Kuby pachnie różą i żelazem (kadź Ignaca), deszczówka nie pachnie nic
 zadania.K11.title = Myto przy bramie
 zadania.K11.where = brama wschodnia (do dworu)
 zadania.K11.when = 6–18
-zadania.K11.desc = Kapral Wit chce dwa grosze myta „na wojnę” od każdego, kto idzie do dworu. Można zapłacić albo odrobić - kosze żarowe żrą drewno.
+zadania.K11.desc = Kapral Wit chce dwa miedziaki myta „na wojnę” od każdego, kto idzie do dworu. Można zapłacić albo odrobić - kosze żarowe żrą drewno.
 [zadania.K11.offer.say]
-Stać. Brama do dworu Lorda Zaleskiego. Myto: dwa grosze. Na wojnę.
+Stać. Brama do dworu Lorda Zaleskiego. Myto: dwa miedziaki. Na wojnę.
 Nie masz? Możesz odrobić - kosze żarowe przy bramie żrą drewno jak smok. Sześć polan i jesteśmy kwita.
 
-zadania.K11.offer.options.0.label = Płacę dwa grosze.
+zadania.K11.offer.options.0.label = Płacę dwa miedziaki.
 [zadania.K11.offer.options.0.say]
 Dziękuję. Zapamiętam twoją gębę - następnym razem przechodzisz bez gadania.
 
@@ -427,7 +427,7 @@ zadania.K15.when = 21:30–22:30
 zadania.K15.desc = Baltazar chce, żeby skrzynia stanęła na wozie woźnicy Wojciecha przed bramą południową o dziesiątej wieczorem. „Nie otwierać - kruche.” Skrzynia jest ciężka.
 [zadania.K15.offer.say]
 Ach, przyjaciel. Mam drobną prośbę. Ta skrzynia ma stanąć na wozie pod bramą południową. O dziesiątej. Nie otwierać - kruche.
-Pięć groszy teraz, dwadzieścia potem. Uczciwie?
+Pięć miedziaków teraz, dwadzieścia potem. Uczciwie?
 
 zadania.K15.offer.yes = Zaniosę.
 zadania.K15.offer.no = Nie noszę cudzych skrzyń po nocy.
@@ -472,10 +472,10 @@ zadania.K15.fail.text = Wóz odjechał bez skrzyni. Baltazar nie będzie zachwyc
 Skrzynia od Veya? Nocą? ...Dobrze zrobiłeś, że przyszedłeś do mnie. Ja się tym zajmę.
 
 [zadania.K15.lines.payClean]
-Skrzynia dotarła cała. Lubię ludzi, którzy nie zadają pytań. Dwadzieścia groszy, jak obiecałem.
+Skrzynia dotarła cała. Lubię ludzi, którzy nie zadają pytań. Dwa srebrniki, jak obiecałem.
 
 [zadania.K15.lines.payOpened]
-Zamek pęknięty. Ciekawość to piękna cecha... u kota. Dziesięć groszy i zapomnij, że mnie znasz.
+Zamek pęknięty. Ciekawość to piękna cecha... u kota. Jeden srebrnik i zapomnij, że mnie znasz.
 
 [zadania.K15.lines.payWit]
 Słyszałem, że lubisz kaprala. Ja też... lubiłem ciebie. Nic ci nie jestem winien, przyjacielu.
@@ -541,7 +541,7 @@ zadania.K20.when = 6:30–17, po pierwszym polowaniu
 zadania.K20.desc = Ignac kupi twoją pierwszą surową skórę i pokaże, jak ciąć, żeby ścięgna nie szły na zmarnowanie.
 [zadania.K20.offer.say]
 Masz surową skórę? Pokaż... Pierwsza? Widać po cięciach.
-Kupię ją - osiem groszy. I pokażę ci, jak ciąć, żeby ścięgna nie szły na zmarnowanie.
+Kupię ją - osiem miedziaków. I pokażę ci, jak ciąć, żeby ścięgna nie szły na zmarnowanie.
 
 zadania.K20.offer.options.0.label = Sprzedam.
 [zadania.K20.offer.options.0.say]
@@ -608,7 +608,7 @@ Imieniny! I co, z pustymi rękami?
 
 [zadania.K31.steps.0.done]
 Miód pitny i placek! Feliks, zapisz: wnuk Stacha pamiętał.
-Przyjmij czterdzieści groszy. Albo... zapiszę je na poczet długu twojego dziadka. Wybieraj.
+Przyjmij cztery srebrniki. Albo... zapiszę je na poczet długu twojego dziadka. Wybieraj.
 
 zadania.K31.steps.0.choice.options.0.label = Wezmę pieniądze.
 [zadania.K31.steps.0.choice.options.0.say]
@@ -651,7 +651,7 @@ zadania.K38.when = 1:00–3:00, od Opinii 20
 zadania.K38.desc = Strażnik przy bramie twierdzy ma gorączkę. Postój tam od pierwszej do trzeciej w nocy i zapamiętaj, co zobaczysz.
 [zadania.K38.offer.say]
 Mój człowiek przy bramie twierdzy złapał gorączkę. Ktoś musi tam postać od pierwszej do trzeciej w nocy.
-Patrzysz, słuchasz, nic nie robisz. Jak coś zobaczysz - zapamiętaj. Piętnaście groszy.
+Patrzysz, słuchasz, nic nie robisz. Jak coś zobaczysz - zapamiętaj. Jeden srebrnik i pięć miedziaków.
 
 zadania.K38.offer.yes = Postoję.
 zadania.K38.offer.no = Nocą śpię.
@@ -677,11 +677,11 @@ zadania.K38.lines.kuba = Kuba? Z pustymi beczkami, o tej porze? Idzie w stronę 
 zadania.K38.lines.left = Zszedłeś z posterunku przed trzecią.
 [zadania.K38.lines.reportKuba]
 > Lis, sowa... I Kuba, koło drugiej, z pustymi beczkami. Szedł w stronę stawu za tawerną.
-Kuba? ...Nie widziałeś niczego, czego ja bym nie widział. Masz piętnaście groszy. Dobrze się spisałeś.
+Kuba? ...Nie widziałeś niczego, czego ja bym nie widział. Masz jeden srebrnik i pięć miedziaków. Dobrze się spisałeś.
 
 [zadania.K38.lines.reportQuiet]
 > Lis, sowa. Poza tym spokój.
-Spokój to dobra wiadomość. Masz piętnaście groszy.
+Spokój to dobra wiadomość. Masz jeden srebrnik i pięć miedziaków.
 
 # K26, „Pierścionek w studni”
 zadania.K26.title = Pierścionek w studni
@@ -767,7 +767,7 @@ Złodziejaszek, który odciął sakiewkę dworu, to Szymek - głodny chłopak sp
 
 [zadania.K37.lines.noteKeep]
 Sakiewka dworu
-Zatrzymałem sakiewkę dworu, którą odebrałem złodziejaszkowi. Osiemdziesiąt groszy.
+Zatrzymałem sakiewkę dworu, którą odebrałem złodziejaszkowi. Osiem srebrników.
 
 # K39, „Kości z targu”
 zadania.K39.title = Kości z targu
@@ -775,7 +775,7 @@ zadania.K39.where = tawerna (Bartek) → stragan na rynku (Lucjan)
 zadania.K39.when = dzień targowy, 10–14
 zadania.K39.desc = Bartek Kmieć przegrał na targu wszystko z wędrownym graczem, Lucjanem Kością: „ma szczęście jak diabeł”. Zagraj z Lucjanem i wypatrz, kiedy podmienia kość (Czujność 10+).
 [zadania.K39.offer.say]
-Przegrałem wszystko. Wszystko! Jęczmień z całego pola, a potem jeszcze grosze na mąkę.
+Przegrałem wszystko. Wszystko! Jęczmień z całego pola, a potem jeszcze miedziaki na mąkę.
 Na targu siedzi taki jeden, Lucjan Kość. Ma szczęście jak diabeł - siedem szóstek z rzędu! Ty masz bystre oczy. Zagraj z nim i patrz mu na ręce.
 
 zadania.K39.offer.yes = Zagram z nim i popatrzę.
@@ -792,10 +792,10 @@ zadania.K39.steps.2.text = Wróć do Bartka (tawerna, 14–21).
 [zadania.K39.steps.2.say]
 > Lucjan grał oszukaną kością. Wyrzuciłem go z targu.
 Oszukaną?! Wiedziałem! ...To znaczy, nie wiedziałem, ale czułem.
-Masz. Pięć groszy. Ostatnie, jakie mam, ale są twoje. Uczciwie.
+Masz. Pięć miedziaków. Ostatnie, jakie mam, ale są twoje. Uczciwie.
 
 [zadania.K39.lines.play]
-Kości, mój drogi? Pięć groszy za partię. Gramy do tysiąca pięciuset.
+Kości, mój drogi? Pięć miedziaków za partię. Gramy do tysiąca pięciuset.
 
 [zadania.K39.lines.playNo]
 Szczęście nie lubi czekać.
@@ -813,7 +813,7 @@ Szczęście nie lubi czekać.
 (Na targu robi się gwar. Lucjan zgarnia kości i znika za bramą południową, zanim ktoś zawoła straż.)
 
 [zadania.K39.lines.share]
-Rozsądny człowiek! Dziesięć groszy - proszę. Miło robić z panem interesy.
+Rozsądny człowiek! Jeden srebrnik - proszę. Miło robić z panem interesy.
 
 [zadania.K39.lines.later]
 Pomyśl, mój drogi. Pomyśl.
@@ -824,7 +824,7 @@ Lucjan Kość, wędrowny gracz z targu, podmieniał kość - wyciągał z rękaw
 
 [zadania.K39.lines.noteShare]
 Kości z targu
-Lucjan Kość gra oszukaną kością. Wziąłem od niego dziesięć groszy i milczę.
+Lucjan Kość gra oszukaną kością. Wziąłem od niego jeden srebrnik i milczę.
 
 # K19, „Spis obozu”
 zadania.K19.title = Spis obozu
@@ -990,7 +990,7 @@ zadania.K30.when = dni targowe, 7–9
 zadania.K30.desc = Feliks robi zakupy dla dworu i nie da rady wszystkiego unieść. Trzy ciężkie koszyki do rąk Lorda przed dziewiątą.
 [zadania.K30.offer.say]
 Dzień targowy, a ja mam tylko dwie ręce. Trzy koszyki na śniadanie jaśnie pana.
-Zaniesie je pan do dworu? Przed dziewiątą - jaśnie pan stoi przed drzwiami od ósmej. Zapłacę. Pięć groszy do ręki, pięć na poczet długu.
+Zaniesie je pan do dworu? Przed dziewiątą - jaśnie pan stoi przed drzwiami od ósmej. Zapłacę. Pięć miedziaków do ręki, pięć na poczet długu.
 
 zadania.K30.offer.yes = Zaniosę.
 zadania.K30.offer.no = Nie dziś.
@@ -1033,7 +1033,7 @@ Dwie porcje, kochaneczku. Choćby z bukłaka.
 > Masz. Dwie porcje deszczówki.
 
 [zadania.K40.steps.0.done]
-Czysta jak łza... Dworskie prześcieradła będą białe. Masz, weź te grosze. I przynieś mi kiedyś tę podartą koszulę - zaceruję.
+Czysta jak łza... Dworskie prześcieradła będą białe. Masz, weź te miedziaki. I przynieś mi kiedyś tę podartą koszulę - zaceruję.
 
 # K41, „Zioła dla babki Jadwigi”
 zadania.K41.title = Zioła dla babki Jadwigi
@@ -1256,7 +1256,7 @@ Struna! I to jaka... (Melia nawleka ją, stroi, szarpie raz i drugi.) Słyszysz?
 Coś mi przyszło do głowy. Właśnie teraz, przy tej strunie. Posłuchaj - tego nikt jeszcze nie słyszał. Ja też nie.
 
 [zadania.K22.lines.after]
-Skąd ja to wzięłam? Nie wiem. Przyszło razem ze struną. Masz, piętnaście groszy - i natchnienie w prezencie. Zasłużyłeś.
+Skąd ja to wzięłam? Nie wiem. Przyszło razem ze struną. Masz, jeden srebrnik i pięć miedziaków - i natchnienie w prezencie. Zasłużyłeś.
 
 # K33, „Czapka Ozzy'ego”
 zadania.K33.title = Czapka Ozzy'ego
@@ -1381,5 +1381,5 @@ zadania.K29.lines.guard = Cicho! Kapral idzie. Nie teraz - przyjdź, jak przejdz
 # K22
 [zadania.K22.lines.late]
 Struna! Na dzisiejszy wieczór za późno, złotko, ale nic to - jutro zagram na niej pierwszą balladę.
-Masz, dziesięć groszy. Ignacowi podziękuję piosenką.
+Masz, jeden srebrnik. Ignacowi podziękuję piosenką.
 

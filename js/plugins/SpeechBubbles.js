@@ -954,7 +954,7 @@
     const log = [];     // what was said (tests read it)
     function say(ch, text, frames) {
         if (!ch || !text) return;
-        text = String(text);
+        text = window.Monety && Monety.tekst ? Monety.tekst(String(text), true) : String(text);   // (a cry says its sums as coins, in words)
         for (const b of barks) if (b.ch === ch && b.t < b.life - BARK.fadeOut) b.t = b.life - BARK.fadeOut;   // the speaker's last cry goes
         barks.push({ ch, text, t: 0, life: frames || Math.min(360, 150 + text.length * 5), map: window.$gameMap ? $gameMap.mapId() : 0 });
         log.push(text);

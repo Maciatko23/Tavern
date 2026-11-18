@@ -185,7 +185,7 @@ fightStart.kopacze = Brać go. Żywego - wie za dużo.
 > Słowa strażnika dziesiątej bramy. Ile dasz?
 
 [sell.say]
-Sto pięćdziesiąt groszy. Uczciwie - jak u mnie zawsze.
+Jeden złoty i pięć srebrników. Uczciwie - jak u mnie zawsze.
 > Nie pytam o to, czego nie chcę wiedzieć.
 (Baltazar powtarza je szeptem, jakby liczył monety.) ...Interes życia, przyjacielu. Chłopcy, zbierać się. W dół.
 
@@ -193,7 +193,7 @@ Sto pięćdziesiąt groszy. Uczciwie - jak u mnie zawsze.
 > Znam słowa. Przeprowadzę was przez bramę.
 
 [guide.say]
-Rozsądnie. Sto groszy teraz, reszta - kiedy zobaczymy światło.
+Rozsądnie. Jeden złoty teraz, reszta - kiedy zobaczymy światło.
 (Przy bramie mówisz zbroi słowa Borgara. Zbroja opuszcza miecz. Czarne Oczy przechodzą jeden po drugim.)
 Dalej trafimy sami. Do zobaczenia na dole, chłopcze.
 

@@ -121,7 +121,7 @@
         { id: "dex", name: "Zręczność", desc: "Tańszy przewrót z dłuższą nietykalnością, więcej czasu na następny cios serii, szybsze celowanie z łuku i procy, szybsza praca (budowa, rąbanie, kopanie, kucie skał)." },
         { id: "con", name: "Kondycja", desc: "Życie, długość oddechu, odporność na rany i przewrócenie." },
         { id: "per", name: "Czujność", desc: "Dłuższe okno parowania i częstsze trafienia krytyczne." },
-        { id: "wil", name: "Hart ducha", desc: "Odporność na strach i na „prawdy” z Serca: upiory i cienie z ruin biją w umysł - z Hartem ducha częściej się opierasz (a odparta prawda zatacza upiorem), a strach i zamęt trwają krócej." }
+        { id: "wil", name: "Hart ducha", desc: "Odporność na strach i na „prawdy” upiorów z Serca: częściej się opierasz, a strach i zamęt trwają krócej. Spokojna głowa szybciej też odpoczywa." }
     ];
     // level 100 is the end-game challenge (a whole ordinary playthrough ends about 60-70); 3 attribute points and 1 skill point a
     // level, an attribute goes up to 60 (the effects per point are small, so the top is strong but not absurd)
@@ -419,6 +419,10 @@
     }
     // how long fear or confusion holds him (frames): shorter with Hart ducha (1.5% a point, at most 65% off) and Spokojna głowa
     const mindTime = frames => Math.max(1, Math.round(frames * Math.max(0.35, 1 - 0.015 * (attr("wil") - ATTR_START)) * (1 - Math.min(0.5, perk("mind.short")))));
+    // (2026-11-18, the player: "szybkość odpoczynku - zależnie od skilli lub atrybutów") how much more strength resting and sleep give
+    // back: Hart ducha +2% a point over the start (a calm head rests better), the skills ("Twardy sen" +15% a rank) on top
+    const REST_PER_WIL = 0.02;
+    const restBonus = () => REST_PER_WIL * Math.max(0, attr("wil") - ATTR_START) + perk("sleep.rest");
     // the hero's most health: 100, +5 per Kondycja over 5, +3 per level, and what the skills add
     const heroMhp = () => 100 + 5 * (attr("con") - ATTR_START) + 3 * (hero().level - 1) + perk("hp.max");
     const _Game_Actor_paramBase = Game_Actor.prototype.paramBase;
@@ -445,7 +449,8 @@
             ["Próg przewrócenia", () => String(knockdownAt())], ["Szansa na ranę (od zwykłej)", () => pct(woundChance(1) * 100, 1)]],
         per: [["Okno parowania", () => sec(parryWindow())], ["Trafienie krytyczne", () => pct(critChance() * 100, 1)],
             ["Cios z ukrycia", () => { const f = F(); return f && f.sneakMult ? mult(f.sneakMult(false)) : "-"; }]],
-        wil: [["Opór: strach i „prawdy”", () => pct(mindResist(0, 0) * 100)], ["Strach i zamęt trwają", () => pct(mindTime(1000) / 10)]]
+        wil: [["Opór: strach i „prawdy”", () => pct(mindResist(0, 0) * 100)], ["Strach i zamęt trwają", () => pct(mindTime(1000) / 10)],
+            ["Szybkość odpoczynku", () => signed(restBonus() * 100)]]
     };
     function withAttr(id, v, fn) {
         const was = attrOver;
@@ -740,7 +745,7 @@
     P.core = { hero, modes, attr, skillRank, hasSkill, perk, skillById, skillBlock, learnSkill, spendPoints, skillText, secText, xpToNext, unspent,
         levelColor, ATTRS, ATTR_START, ATTR_MAX, MAX_LEVEL, POINTS_PER_LEVEL, SKILL_POINTS_PER_LEVEL, TREES, SKILLS, ROW_LEVEL, strMult, poiseMult,
         critChance, rollCost, rollIFrames, parryWindow, knockdownAt, woundChance, carryBonus, gatherBonus, tired, dexWork, workSpeed, comboWindow,
-        aimSteady, baseBreath, heroMhp, combatMode, setCombatMode, mapFreePlay, se, popup, foes, mindResist, mindTime, attrInfo, fightInfo, defenseInfo,
+        aimSteady, baseBreath, heroMhp, combatMode, setCombatMode, mapFreePlay, se, popup, foes, mindResist, mindTime, attrInfo, fightInfo, defenseInfo, restBonus, REST_PER_WIL,
         option, OPTS, DIFF_NAMES, COMBAT_KEYS };
     const fight = name => function() { const f = F(); return f[name].apply(f, arguments); };
     window.Combat = T.register("Combat", {
@@ -753,7 +758,7 @@
         shield: fight("shield"), pressAttack: fight("pressAttack"), rangedItem: fight("rangedItem"), weaponNow: fight("weaponNow"), refreshGear: fight("refreshGear"),
         pressDodge: fight("pressDodge"), hitPlayer: fight("hitPlayer"), enemyHurtFx: fight("enemyHurtFx"), hitstop: fight("hitstop"), numberAt: fight("numberAt"),
         sparksAt: fight("sparksAt"), shovePlayer: fight("shovePlayer"), recoil: fight("recoil"), downPlayer: fight("downPlayer"), foes, addFoes: fn => { foeSources.push(fn); },
-        stunPlayer: fight("stunPlayer"), drainBreath: fight("drainBreath"), mindResist, mindTime,
+        stunPlayer: fight("stunPlayer"), drainBreath: fight("drainBreath"), mindResist, mindTime, restBonus, REST_PER_WIL,
         strMult, poiseMult, critChance, rollCost, rollIFrames, parryWindow, knockdownAt, carryBonus, gatherBonus, workSpeed, dexWork, tired, TIRED_AT, heroMhp, comboWindow, aimSteady, baseBreath, mapFreePlay,
         get act() { return F().act; }, get stopFrames() { return F().stopFrames(); }, get ROLL_KIND() { return F().ROLL_KIND; }, get KNOCK_KIND() { return F().KNOCK_KIND; },
         resetAct: fight("resetAct"), unspent,

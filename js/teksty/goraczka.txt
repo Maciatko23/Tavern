@@ -163,7 +163,7 @@ stefa.opcja.jak = Jak z chorymi?
 
 [stefa.przepustka]
 @stefa: Weź to. Wit zamknie dziś ulicę, a po dwudziestej straż nikogo nie wpuszcza do przytułku. Z moją przepustką wejdziesz.
-@stefa: I masz tu dziesięć groszy na dolewkę. Nie za wiele, ale tyle mam.
+@stefa: I masz tu jeden srebrnik na dolewkę. Nie za wiele, ale tyle mam.
 
 [stefa.jak0]
 @stefa: Trzech leży, nie wiem, co będzie rano. Przynieś wywar. Nie zwlekaj.
@@ -419,7 +419,7 @@ s4.opcja.B = Pomóż mu przenieść warsztat.
 s4.opcja.C = Milcz.
 
 [wybor.A.soltys]
-@soltys: Dyby na rynku jeden dzień, Garbarnia zamknięta na siedem dni, grzywna dwadzieścia groszy. Miasto ci dziękuje, chłopcze.
+@soltys: Dyby na rynku jeden dzień, Garbarnia zamknięta na siedem dni, grzywna dwa srebrniki. Miasto ci dziękuje, chłopcze.
 
 [wybor.B.wawrzyn]
 @wawrzyn: Przeniosę kadzie w głąb wschodniego skraju, za rów. Pomożesz mi z osadnikiem? Potrzebuję desek, kamieni, gwoździ i sznurka.

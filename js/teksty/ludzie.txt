@@ -158,14 +158,14 @@ Mielerz rozpalony. Dwa dni tli się pod darnią, potem rozgarniam - i jest węgi
 Masz drewno? Dwanaście polan - po wypale dostaniesz osiem worków węgla. Uczciwie.
 
 [zbychAlt.talk.day]
-Węgiel drzewny po cztery grosze. Więcej niż dziesięć z jednego wypału nie dam - kowal by mnie zabił.
+Węgiel drzewny po cztery miedziaki. Więcej niż dziesięć z jednego wypału nie dam - kowal by mnie zabił.
 Las Lorda za plecami. Ja biorę tylko suche, leżące. Gajowy wie i milczy.
 
 [zbychAlt.talk.evening]
 Wieczorem obchodzę kopiec dookoła. Każda dziura w darni to stracony węgiel.
 
 [zbychAlt.talk.night]
-Śpię w szałasie, jednym okiem. Rabusie wiedzą, że węgiel to grosz.
+Śpię w szałasie, jednym okiem. Rabusie wiedzą, że węgiel to miedziak.
 
 [zbychAlt.talk.rain]
 Deszcz? Dla mielerza zły, dla lasu dobry. Niech pada.
@@ -206,7 +206,7 @@ zadania.K63.steps.3.text = Zanieś kowalowi Tadkowi 10× Węgiel drzewny (kuźni
 
 [zadania.K63.steps.3.done]
 O! Czarny, lekki, dźwięczy jak trzeba. Zbych umie palić.
-Masz czterdzieści groszy. I słuchaj: stal ode mnie dostaniesz taniej niż u wojskowych. Raz na dzień, dla przyjaciela.
+Masz cztery srebrniki. I słuchaj: stal ode mnie dostaniesz taniej niż u wojskowych. Raz na dzień, dla przyjaciela.
 
 [zadania.K63.steps.3.remind]
 Dziesięć worków węgla. Palenisko czeka.
@@ -242,7 +242,7 @@ zadania.K64.steps.2.text = Powiedz Wawrzynowi, że Siwa wróciła.
 
 [zadania.K64.steps.2.done]
 Siwa! Ty głupia... (pasterz drapie owcę za uchem) Sześć. Znowu sześć.
-Masz ser, trzy krążki, i trzydzieści groszy. A u mnie odtąd płacisz mniej - jak swój.
+Masz ser, trzy krążki, i trzy srebrniki. A u mnie odtąd płacisz mniej - jak swój.
 
 [zadania.K64.reward.note]
 Swój u pasterza
@@ -273,7 +273,7 @@ zadania.K65.steps.1.text = Oddaj juk Szymonowi Jucznemu (dziś: {postoj}).
 
 [zadania.K65.steps.1.done]
 Mój juk! Cały! (handlarz zagląda do środka) Przyprawy są, pieczęć cała.
-Dwadzieścia pięć groszy. I u mnie zawsze taniej - słowo wędrownego kupca.
+Dwa srebrniki i pięć miedziaków. I u mnie zawsze taniej - słowo wędrownego kupca.
 
 [zadania.K65.steps.1.remind]
 Skórzany juk z rzemieniami. Leśna droga, za mielerzem.
@@ -307,7 +307,7 @@ zadania.K66.steps.1.text = Zamelduj rotmistrzowi Bełzie, jak poszedł patrol (g
 
 [zadania.K66.steps.1.done]
 (Rotmistrz kiwa głową.) Żołnierze mówią, że stanąłeś pierwszy. Dobrze.
-Trzydzieści groszy. I garnizon będzie o tobie pamiętał.
+Trzy srebrniki. I garnizon będzie o tobie pamiętał.
 
 zadania.K66.fail.text = Patrol poszedł bez ciebie.
 
@@ -318,7 +318,7 @@ zadania.D34.when = od W5 rozdz. 4; Sambor w tawernie 19:30–21:30
 zadania.D34.desc = Przemytnicy Baltazara mają skład w jaskini pod zatoczką. Wejść można tylko w odpływie, nocą pilnuje Sławek. Skrzynia przemytu - komu ją oddać?
 [zadania.D34.offer.say]
 Ty jesteś od Stacha. Słuchaj. Przemytnicy Baltazara trzymają towar w jaskini pod zatoczką. Wejście tylko w odpływie - dlatego nikt go nie pilnuje.
-Przynieś mi skrzynię ze składu. Z pieczęcią kruka. Zapisze się w księdze - i dostaniesz czterdzieści groszy.
+Przynieś mi skrzynię ze składu. Z pieczęcią kruka. Zapisze się w księdze - i dostaniesz cztery srebrniki.
 
 zadania.D34.offer.yes = Przyniosę skrzynię.
 zadania.D34.offer.no = Nie mieszam się w to.
@@ -413,7 +413,7 @@ A, chłopak od Stacha. Mleka? Sera?
 shearNo = Strzyża wiosną, w środku pory. Teraz owce nie dadzą.
 shearDone = Dziś już strzygliśmy. Jutro, jak chcesz.
 [shearOk]
-Trzymaj ją mocno za kark... o tak. (Godzina mija na strzyży.) Masz wełnę i dziesięć groszy. Dobra robota.
+Trzymaj ją mocno za kark... o tak. (Godzina mija na strzyży.) Masz wełnę i jeden srebrnik. Dobra robota.
 
 [zbychHello]
 Węgla trzeba? Albo drewno masz?
@@ -728,16 +728,16 @@ Patrol: garnizon (wybrzeże)
 pedlarMapSold = Mapę już masz - drugiej takiej nie zrobię.
 pedlarWaterNone = Beczka sucha. Upał wypił wszystko.
 [caveOpened]
-Pod wiekiem: przyprawy w woreczkach, gwoździe, sakiewka z groszem... i pusta przegródka po kamieniu z krukiem. Celnik się dowie, że ktoś tu był.
+Pod wiekiem: przyprawy w woreczkach, gwoździe, sakiewka z miedziakiem... i pusta przegródka po kamieniu z krukiem. Celnik się dowie, że ktoś tu był.
 
 [crateCelnik]
 > Skrzynia z jaskini pod zatoczką. Pieczęć kruka.
 (Celnik zapisuje długo.) Jedna skrzynia, pieczęć kruka, skład przemytników... Zgadza się.
-Czterdzieści groszy. I w księdze stoi teraz, że wnuk Stacha jest po stronie prawa.
+Cztery srebrniki. I w księdze stoi teraz, że wnuk Stacha jest po stronie prawa.
 
 [crateBaltazar]
 > Twoja skrzynia. Z jaskini pod zatoczką.
-(Baltazar uśmiecha się szeroko.) Mój przyjaciel! Wiedziałem, że jesteś rozsądny. Dziewięćdziesiąt groszy.
+(Baltazar uśmiecha się szeroko.) Mój przyjaciel! Wiedziałem, że jesteś rozsądny. Dziewięć srebrników.
 Celnik nic nie wie, prawda? Prawda.
 
 graves.dirty = Stary krzyż, zarośnięty chwastami i mchem.

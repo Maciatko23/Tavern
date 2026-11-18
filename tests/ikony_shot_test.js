@@ -14,7 +14,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         return { n: give.length, icons, min: Math.min(...icons), max: Math.max(...icons) }; })()`);
     t.check("rzeczy w plecaku mają nowe ikony (komórki 688-1107)", setup.min >= 688 && setup.max <= 1107, setup);
     const sheet = await t.json(`new Promise(res => { const b = ImageManager.loadSystem("IconSet"); const chk = () => { if (!b.isReady()) return setTimeout(chk, 50); res({ h: b.height }); }; chk(); })`);
-    t.check("IconSet w grze ma 2240 px wysokości (nowe rzędy)", sheet.h === 2240, sheet);
+    t.check("IconSet w grze ma co najmniej 2240 px wysokości (nowe rzędy; później dochodzą kolejne)", sheet.h >= 2240, sheet);
     await t.frames(30);
     const info = () => t.json("MenuRing.info()");
     const key = async (k, n) => { await t.key(k); await t.frames(n || 6); return info(); };

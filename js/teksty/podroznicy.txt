@@ -65,7 +65,7 @@ Z Brzegu Solnego. Zapłacono mi za wybrzeże. Ale kto przepływa morze i nie rys
 [obsada.kartograf.glos]
 Mapa nie kłamie. Kłamią ci, którzy ją zamawiają.
 Tu, gdzie stoi tawerna, na starych planach był mur. Gruby. Bardzo gruby. Ciekawe, prawda?
-Liczę kroki. Ludzie liczą grosze, ja kroki. Kroki nie kłamią.
+Liczę kroki. Ludzie liczą miedziaki, ja kroki. Kroki nie kłamią.
 
 [obsada.kartograf.okrzyki]
 Czterysta... czterysta jeden...
@@ -87,12 +87,12 @@ Zewsząd. Grałem w obozie pod Brzozową Wolą. Ludzie tańczyli, bo rano mieli 
 
 [obsada.grajek.glos]
 Wasza Melia śpiewa o Kruczych Skałach? U nas w wojsku śpiewali to samo. Tylko słowa brzydsze.
-Za grosz zagram wesoło. Za dwa - smutno. Smutne trudniej.
+Za miedziak zagram wesoło. Za dwa - smutno. Smutne trudniej.
 Jedna scena w tej karczmie. Jedna! Zobaczymy, czyja.
 
 [obsada.grajek.okrzyki]
 Hej, hop!
-Grosz dla grajka, grosz dla szczęścia!
+Miedziak dla grajka, miedziak dla szczęścia!
 Dudy nie lubią deszczu. Ja też nie.
 
 obsada.grajek.odjazd = Zagraj coś czasem. Choćby na grzebieniu.
@@ -160,7 +160,7 @@ Liczby są cierpliwe. Ludzie mniej.
 
 [obsada.poborca.okrzyki]
 Hm. Zapisane.
-Trzy, cztery... i jeszcze grosz.
+Trzy, cztery... i jeszcze miedziak.
 Pióro skrzypi. Dobrze.
 
 obsada.poborca.odjazd = Raport pójdzie. Taki, jaki wyjdzie z liczb.
@@ -193,7 +193,7 @@ obsada.relikwie.tytul = handlarz relikwii
 obsada.relikwie.przybycie = Ludzie Wyspy Kruka! Gaspar Lis przypłynął z błogosławieństwem!
 [obsada.relikwie.spotkanie]
 Gaspar Lis, relikwie i medaliki. Kość palca świętego strażnika Kruczych Skał!
-Za dotknięcie grosz, za kość - porozmawiamy.
+Za dotknięcie miedziak, za kość - porozmawiamy.
 
 [obsada.relikwie.skad]
 Z każdego odpustu na lądzie, chłopcze. Gdzie wiara, tam i Gaspar.
@@ -205,7 +205,7 @@ Masz coś starego? Z krukiem? Płacę jak za relikwię.
 
 [obsada.relikwie.okrzyki]
 Medaliki! Medaliki na drogę!
-Święta kość, święty grosz!
+Święta kość, święty miedziak!
 Kto dotknie, ten zdrowszy!
 
 obsada.relikwie.odjazd = Niech was błogosławi... ktokolwiek zechce.
@@ -478,7 +478,7 @@ Z taborów na lądzie. Gorączki w taborach idą szybciej niż wojsko.
 
 [pula.cyrulik.glos]
 Krwawnik zatrzymuje krew. Dziurawiec - smutek. Na resztę jest wódka. Ale nie dla ciebie.
-Masz krwawnik? Trzy łodygi i dam pięć groszy.
+Masz krwawnik? Trzy łodygi i dam pięć miedziaków.
 
 [pula.cyrulik.okrzyki]
 Zęby! Kto ma chore zęby?
@@ -691,7 +691,7 @@ Celina
 Pod Brzozową Wolą znowu stoją wojska. Mówią, że to już trzecia bitwa o tę samą rzekę.
 Pobór idzie od wsi do wsi. Chłopców od piętnastu lat wpisują do ksiąg.
 Na drogach pełno ludzi z tobołkami. Każdy idzie tam, skąd ktoś inny ucieka.
-Mąka na lądzie po dziewięć groszy. Za miesiąc będzie po dwanaście.
+Mąka na lądzie po dziewięć miedziaków. Za miesiąc będzie po dwanaście.
 
 [wiesci.etap2]
 Wojsko rekwiruje wozy, konie i zboże. Kto ma spichlerz, ten ma kłopot.
@@ -842,10 +842,10 @@ przepis.desc = Włókno i krwawnik, zwinięte ciasno, jak pokazał Konstanty Mak
 zadania.K71.title = Listy z lądu
 zadania.K71.where = Rynek, Podgrodzie, dwór Lorda; tawerna (Tobiasz, pokój 8)
 zadania.K71.when = pierwsza wizyta Tobiasza (prom dnia 4)
-zadania.K71.desc = Tobiasz Goniec, posłaniec z lądu, ma więcej adresów niż czasu do promu. Cztery listy do ludzi z wyspy - dwa grosze od listu.
+zadania.K71.desc = Tobiasz Goniec, posłaniec z lądu, ma więcej adresów niż czasu do promu. Cztery listy do ludzi z wyspy - dwa miedziaki od listu.
 [zadania.K71.offer.say]
 Prom za cztery godziny, a ja mam jeszcze cztery adresy. Hanka Mączna, sołtys, jakaś Marta Ługowa w Podgrodziu i „kamerdyner dworu, do rąk własnych”.
-Pomożesz? Dwa grosze od listu. I jeszcze cztery, jak wrócisz z pustą torbą.
+Pomożesz? Dwa miedziaki od listu. I jeszcze cztery, jak wrócisz z pustą torbą.
 
 zadania.K71.offer.yes = Rozniosę.
 zadania.K71.offer.no = Nie mam czasu.
@@ -862,14 +862,14 @@ zadania.K71.steps.1.text = Wróć do Tobiasza z pustą torbą (rynek, wieczorem 
 > Wszystkie listy doręczone.
 
 [zadania.K71.steps.1.done]
-Wszystkie? Szybciej niż ja! Masz swoje grosze i jeszcze cztery za komplet.
+Wszystkie? Szybciej niż ja! Masz swoje miedziaki i jeszcze cztery za komplet.
 Jak wrócę z następną pocztą, znajdę cię. Ludzie, co noszą cudze listy i ich nie czytają, są rzadsi niż woda na tej wyspie.
 
 zadania.K71.fail.text = Tobiasz odpłynął, zanim listy dotarły.
 
 [k71.hanka]
 > List do ciebie, Hanko. Od siostry, z lądu.
-Od Dorotki! Daj... (czyta, poruszając ustami) Mąka na lądzie po dziewięć groszy. Dziewięć!
+Od Dorotki! Daj... (czyta, poruszając ustami) Mąka na lądzie po dziewięć miedziaków. Dziewięć!
 Chleb tu jeszcze podrożeje, chłopcze. A ludzie myślą, że to ja zdzieram.
 
 [k71.soltys]
@@ -922,10 +922,10 @@ Pokazałem Lordowi list do kamerdynera: rachunek za papier, lak i atrament „na
 zadania.K72.title = Poczta z lądu
 zadania.K72.where = Cała wyspa - adresaci w dzienniku
 zadania.K72.when = przy każdym powrocie Tobiasza
-zadania.K72.desc = Tobiasz znów przypłynął z torbą listów. Dwa grosze od listu - bez czytania.
+zadania.K72.desc = Tobiasz znów przypłynął z torbą listów. Dwa miedziaki od listu - bez czytania.
 [zadania.K72.offer.say]
 Znowu ja, znowu listy! Wyspa niby mała, a ludzie rozsiani jak ziarno po wietrze.
-Weźmiesz kilka? Dwa grosze od sztuki.
+Weźmiesz kilka? Dwa miedziaki od sztuki.
 
 zadania.K72.offer.yes = Dawaj listy.
 zadania.K72.offer.no = Nie dziś.
@@ -1082,7 +1082,7 @@ zadania.D40.desc = Teofil Cyrkiel, kartograf z lądu, rysuje wybrzeże wyspy. Br
 [zadania.D40.offer.say]
 Sześćset dwanaście kroków od bramy do studni. Twoje miasto jest krzywe, chłopcze. Pięknie krzywe.
 Zapłacono mi za wybrzeże. Ale kto przepływa morze i nie rysuje gór? Brakuje mi widoków - klif pustelni, baszta kruków, latarnia, wieża garnizonu, kamieniołom, przystań.
-Pięć szkiców. Byle jakich, ja je poprawię. Trzydzieści groszy.
+Pięć szkiców. Byle jakich, ja je poprawię. Trzy srebrniki.
 
 zadania.D40.offer.yes = Narysuję.
 zadania.D40.offer.no = Nie umiem rysować.
@@ -1115,11 +1115,11 @@ Ktoś rysował twoją wyspę dla wojska, chłopcze. I nie po to, żeby kupcy wie
 [d40.dwaj]
 > (Przy stole siada Eryk Sowa. Na widok Teofila blednie i chowa lewy nadgarstek pod stół.)
 (Teofil przygląda mu się długo.) Pan też rysuje. Widzę po palcach. Atrament schodzi tygodniami.
-(Eryk, cicho:) Kiedyś. Teraz maluję portrety. Po dwa grosze. Jest spokojniej.
+(Eryk, cicho:) Kiedyś. Teraz maluję portrety. Po dwa miedziaki. Jest spokojniej.
 
 [d40.mury]
 Wiesz, co jest dziwne? Tu, gdzie stoi tawerna, na starych planach był mur. Gruby. Bardzo gruby.
-Mapa nie kłamie. Kłamią ci, którzy ją zamawiają. Masz swoje grosze. Zrobię ci szkic całej wyspy - przyda się.
+Mapa nie kłamie. Kłamią ci, którzy ją zamawiają. Masz swoje miedziaki. Zrobię ci szkic całej wyspy - przyda się.
 
 [d40.notatka]
 Szkic kartografa
@@ -1185,15 +1185,15 @@ Razem? Z karczemną śpiewaczką? (śmieje się) Spróbuj. Jak ci się uda, zagr
 
 [d41.scena.odprawTak]
 > Tu śpiewa Melia. Graj na rynku.
-(Jędrek wzrusza ramionami.) Na rynku. Za grosze. Dobrze, dobrze. Dudy nie płaczą.
+(Jędrek wzrusza ramionami.) Na rynku. Za miedziaki. Dobrze, dobrze. Dudy nie płaczą.
 
 [d41.notatka.odpraw]
 Jędrek Dudarz
-Odprawiłem grajka z lądu - scena została Melii. Jędrek gra teraz na rynku za grosze. Goście w karczmie gadali o tym jeszcze długo.
+Odprawiłem grajka z lądu - scena została Melii. Jędrek gra teraz na rynku za miedziaki. Goście w karczmie gadali o tym jeszcze długo.
 
 [d41.zawody.wstep]
 > Niech goście zdecydują. Kto dostanie więcej oklasków, ten gra.
-Zawody! To rozumiem. Stawiasz na kogoś, chłopcze? Dziesięć groszy.
+Zawody! To rozumiem. Stawiasz na kogoś, chłopcze? Jeden srebrnik.
 
 d41.zawody.melia = Stawiam na Melię.
 d41.zawody.jedrek = Stawiam na Jędrka.
@@ -1206,10 +1206,10 @@ No... no dobrze. Wasza śpiewaczka umie. Przyznaję.
 Dudy budzą umarłych! Mówiłem? Mówiłem.
 
 [d41.zawody.zakladTak]
-> (Wygrany zakład - dziesięć groszy więcej w sakiewce.)
+> (Wygrany zakład - jeden srebrnik więcej w sakiewce.)
 
 [d41.zawody.zakladNie]
-> (Przegrany zakład. Dziesięć groszy mniej.)
+> (Przegrany zakład. Jeden srebrnik mniej.)
 
 [d41.melia]
 > Melio, ten grajek z lądu... chce grać z tobą. Nie zamiast ciebie. Z tobą.
@@ -1250,9 +1250,9 @@ d41.kupala = > (Przy ognisku Kupały Jędrek gra na dudach, a Melia śpiewa. Ta�
 zadania.D42.title = Zboże w suszę
 zadania.D42.where = Rynek, tawerna (pokój Borgara na zapleczu), garnizon, przystań
 zadania.D42.when = pobyt Zenona Sity (prom dnia 10)
-zadania.D42.desc = Hanka mówi, że kupiec zbożowy z lądu, Zenon Sita, skupuje zboże od biednych z Podgrodzia po groszu, a mąka drożeje. Komu on to sprzedaje?
+zadania.D42.desc = Hanka mówi, że kupiec zbożowy z lądu, Zenon Sita, skupuje zboże od biednych z Podgrodzia po miedziaku, a mąka drożeje. Komu on to sprzedaje?
 [zadania.D42.offer.say]
-Ten gruby z lądu, Sita. Skupuje zboże od biednych z Podgrodzia po groszu, a mnie mąka drożeje.
+Ten gruby z lądu, Sita. Skupuje zboże od biednych z Podgrodzia po miedziaku, a mnie mąka drożeje.
 Komuś to sprzedaje. Nie mnie.
 Dowiedz się komu, chłopcze. Ja nie mogę zostawić pieca.
 
@@ -1289,7 +1289,7 @@ Księga celna
 W księdze celnika Sambora: beczki i worki Zenona Sity z pieczęcią chorągwi królewskiej. Cztery wozy dla wojska, piąty - „do kantoru Vey”.
 
 [d42.celnik.pyta]
-Księga celna? Za pięć groszy mogę ją położyć na stole i odwrócić się do morza.
+Księga celna? Za pięć miedziaków mogę ją położyć na stole i odwrócić się do morza.
 Co kto w niej przeczyta, to jego sprawa.
 
 d42.celnik.plac = Daj 5 G i zajrzyj do księgi.
@@ -1330,11 +1330,11 @@ Sprzedaję jęczmień Zenonowi Sicie - lepiej płaci niż skup garnizonu (najwy�
 [d42.zebranie]
 > Panie sołtysie, Zenon Sita sprzedaje zboże z Podgrodzia wojsku. Cztery wozy. Piąty Baltazarowi.
 (Sołtys czerwienieje.) Przy mnie, w moim ratuszu, skupuje od moich ludzi i wiezie wojsku? Najbliższym promem wraca na ląd i nie wraca tu wcale!
-Hanka mówiła, że to ty. Masz - od niej. Dziesięć groszy i bochen. I ode mnie dobre słowo.
+Hanka mówiła, że to ty. Masz - od niej. Jeden srebrnik i bochen. I ode mnie dobre słowo.
 
 [d42.notatka.a]
 Zenon odpływa
-Ujawniłem Zenona Sitę przed sołtysem. Odpływa najbliższym promem i więcej nie wróci. Hanka dała mi dziesięć groszy i bochen.
+Ujawniłem Zenona Sitę przed sołtysem. Odpływa najbliższym promem i więcej nie wróci. Hanka dała mi jeden srebrnik i bochen.
 
 [d42.worki]
 > Wiem o umowie z chorągwią. Cztery worki dla obozu pod murem - i nikt się nie dowie.
@@ -1354,7 +1354,7 @@ Kwatermistrz Kłos wie, że znam jego umowę z Zenonem. Skup garnizonu płaci mi
 
 d42.sprzedaj.etykieta = Sprzedaj jęczmień (po {cena} G, jeszcze {zostalo} worków)
 d42.sprzedaj.brak = Nie masz jęczmienia.
-d42.sprzedaj.ok = Kupię twój jęczmień. {n} worków... {zloto} groszy. Dla przyjaciela.
+d42.sprzedaj.ok = Kupię twój jęczmień. {n} worków... {zloto} G. Dla przyjaciela.
 
 # podsłuch: narada Zenona z Kłosem w pokoju Borgara na zapleczu (dzień przyjazdu Zenona + 2, 20-22:30)
 [podsluch.narada]
@@ -1384,7 +1384,7 @@ Nikt nie wie. Ale ktoś musi szukać.
 
 zadania.D43.steps.0.text = Rozpytaj o Antka ({n}/2): rotmistrz Bełza (garnizon), werbownik Bęben (garnizon, dzień po fali na rynku), Darin albo Rafał (widzieli ludzi z promu).
 zadania.D43.steps.1.text = Antek jest wśród rekrutów garnizonu (plac ćwiczeń, 7-19). Porozmawiaj z nim.
-zadania.D43.steps.2.text = Rotmistrz Bełza wypisze Antka z wojska - za 40 groszy albo za przysługę (przychylność garnizonu 40+).
+zadania.D43.steps.2.text = Rotmistrz Bełza wypisze Antka z wojska - za 40 G albo za przysługę (przychylność garnizonu 40+).
 zadania.D43.fail.text = Urszula odpłynęła, nic nie wiedząc o synu.
 
 [d43.rotmistrz]
@@ -1459,7 +1459,7 @@ Wypisze? Za darmo nikt nikogo nie wypisuje. Ale... jak by się dało... mama by 
 
 [d43.wykup.pyta]
 Antek z Olszynki? Rekrut Kmiotek.
-Wypiszę go za czterdzieści groszy. Albo za przysługę.
+Wypiszę go za cztery srebrniki. Albo za przysługę.
 
 d43.wykup.zloto = Zapłać 40 G.
 d43.wykup.przysluga = Przypomnij rotmistrzowi, co zrobiłeś dla garnizonu.

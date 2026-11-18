@@ -40,7 +40,7 @@ etapy.serve.sub = obsługa sali
 
 # ======================================================================== GRADES (oceny)
 oceny.1.name = Katastrofa
-oceny.1.say = Coś ty tu wyprawiał?! Masz parę groszy na chleb i idź się wyspać.
+oceny.1.say = Coś ty tu wyprawiał?! Masz parę miedziaków na chleb i idź się wyspać.
 oceny.2.name = Słabiutko
 oceny.2.say = Oj, słabo. Goście narzekali, a ja sprzątałem po tobie. Jutro się popraw.
 oceny.3.name = Da się wytrzymać
@@ -56,7 +56,7 @@ kod.cardSpec.0 = " · TRUDNOŚĆ {L}"
 kod.cardSpec.1 = ZMIANA NR {shiftNo}{2}
 kod.cardSpec.2 = Praca w tawernie
 kod.cardSpec.3 = „Pod Złotym Kuflem”
-kod.cardSpec.4 = Fartuch na grzbiet i do roboty! Uczciwie popracujesz - uczciwie zapłacę. Każdy grosz przybliża spłatę długu twojego dziadka.
+kod.cardSpec.4 = Fartuch na grzbiet i do roboty! Uczciwie popracujesz - uczciwie zapłacę. Każdy miedziak przybliża spłatę długu twojego dziadka.
 kod.cardSpec.5 = pauza w trakcie zmiany (można ją przerwać)
 kod.cardSpec.6 = CZĘŚĆ {1} Z {length}
 kod.cardSpec.7 = Przed otwarciem

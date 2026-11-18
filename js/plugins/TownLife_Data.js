@@ -1158,9 +1158,9 @@
         zosia: { door: "dom7_drzwi",
             plan: [[0, "inside", "dom7_drzwi"], [8.2, "wander", "rynek_lawka"], [12, "inside", "dom7_drzwi"], [13.2, "wander", "rynek_srodek"], [18.5, "inside", "dom7_drzwi"]] },
         feliks: { door: "ratusz_drzwi", away: ["do_dworu"],
-            plan: [[0, "inside", "do_dworu"], [7, "wander", "stragan1"], [8.5, "stand", "rynek_rog"], [9.5, "stand", "pisarz_praca"], [10.5, "inside", "do_dworu"]] },
+            plan: [[0, "inside", "do_dworu"], [7, "wander", "stragan1"], [8.5, "stand", "rynek_rog"], [9.5, "stand", "pisarz_gosc"], [10.5, "inside", "do_dworu"]] },
         kamerdyner: { door: "ratusz_drzwi", away: ["do_dworu"],
-            plan: [[0, "inside", "do_dworu"], [7, "wander", "stragan1"], [8.5, "stand", "rynek_rog"], [9.5, "stand", "pisarz_praca"], [10.5, "inside", "do_dworu"]] },
+            plan: [[0, "inside", "do_dworu"], [7, "wander", "stragan1"], [8.5, "stand", "rynek_rog"], [9.5, "stand", "pisarz_gosc"], [10.5, "inside", "do_dworu"]] },
         zlodziej: { door: "tawerna_drzwi", away: ["do_podgrodzia"],
             plan: [[0, "inside", "do_podgrodzia"], [8.3, "wander", "rynek_rog"], [12, "wander", "stragan1"], [14, "wander", "plac_tablica"], [17.5, "wander", "brama_zach"],
                    [20.5, "inside", "do_podgrodzia"]] },
@@ -1310,7 +1310,7 @@
     // places of the evening's visitors (resident.indoor.tawerna), all standing: the notice board's corner (Marta, Franek, Jadwiga), the hearth
     // of the entrance hall (Józek, Zbych, Darin, Rysiek), the front of the bar (Sambor, Bazyli, Kłos); dir 8 = facing the board / fire / bar
     // (2026-11-13 nowy świat) Słony Brzeg (219): the east edge of the road = gone to Podgrodzie / Kruczogród (a default; a "Miejsce:" on the map wins)
-    const SPOTS_BY_MAP = { 218: { pod_murem: [58, 17, 2], stodola: [60, 17, 2], w6_ognisko: [55, 16, 4], uchodzcy_drzwi: [41, 53, 8], namioty: [57, 18, 2], drewutnia: [66, 18, 8], tawerna: [79, 38, 6] }, 221: { straz_dzien: [42, 28, 2], straz_1: [10, 20, 6], straz_2: [24, 20, 2], straz_3: [24, 34, 4], straz_4: [10, 34, 8] }, 224: { dziadek_wnetrze: [4, 5, 8] }, 219: { do_podgrodzia: [79, 45, 6], szlaban: [72, 45, 4], nabrzeze: [40, 46, 2], molo_wejscie: [37, 47, 4] }, 220: { do_podgrodzia: [0, 38, 4], do_dworu: [79, 41, 6], dwor: [79, 41, 6], stragan_kosci: [56, 44, 4], cech_przed: [19, 59, 2], ostap_dom: [19, 59, 8], jas_dom: [28, 59, 8], ludwik_dom: [35, 66, 8] }, 111: { tawerna: [105, 51, 6] }, 125: { tawerna: [53, 19, 6] }, 162: { tawerna: [55, 34, 2] },
+    const SPOTS_BY_MAP = { 218: { pod_murem: [58, 17, 2], stodola: [60, 17, 2], w6_ognisko: [55, 16, 4], uchodzcy_drzwi: [41, 53, 8], namioty: [57, 18, 2], drewutnia: [66, 18, 8], tawerna: [79, 38, 6] }, 221: { straz_dzien: [42, 28, 2], straz_1: [10, 20, 6], straz_2: [24, 20, 2], straz_3: [24, 34, 4], straz_4: [10, 34, 8] }, 224: { dziadek_wnetrze: [4, 5, 8] }, 219: { do_podgrodzia: [79, 45, 6], szlaban: [72, 45, 4], nabrzeze: [40, 46, 2], molo_wejscie: [37, 47, 4] }, 220: { do_podgrodzia: [0, 38, 4], do_dworu: [79, 41, 6], dwor: [79, 41, 6], stragan_kosci: [56, 44, 4], cech_przed: [19, 59, 2], pisarz_gosc: [42, 21, 4], kaplica_lawka2: [9, 26, 2], ostap_dom: [19, 59, 8], jas_dom: [28, 59, 8], ludwik_dom: [35, 66, 8] }, 111: { tawerna: [105, 51, 6] }, 125: { tawerna: [53, 19, 6] }, 162: { tawerna: [55, 34, 2] },
         1: { gosc_praczka: [6, 37, 8], gosc_franek: [5, 37, 8], gosc_znachorka: [8, 37, 8], gosc_szmaciarz: [20, 38, 8], gosc_uchodzca: [22, 38, 8],
              gosc_drwal: [23, 37, 8], gosc_klusownik: [23, 39, 8], gosc_celnik: [9, 18, 8], gosc_latarnik: [17, 18, 8], gosc_kwatermistrz: [19, 18, 8] }, 23: { klusownik_las: [20, 23, 4] }, 24: { straz_dzien: [35, 76, 2], straz_1: [30, 79, 6], straz_2: [39, 79, 2], straz_3: [39, 88, 4], straz_4: [30, 88, 8] } };
 

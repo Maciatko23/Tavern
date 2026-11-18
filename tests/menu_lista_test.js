@@ -1,5 +1,6 @@
-// The P menu (MenuRing.js v4.1): a row of eight tabs across the top (Postać, Ekwipunek, Umiejętności, Plecak, Dziennik, Opcje, Zapisz
-// grę, Wyjdź - the user, 2026-10-23: "opcje główne na górze ... połączyć z bieżącym", "żeby nie było podzakładek") and under it one
+// The P menu (MenuRing.js v4.1; 2026-11-18: Postać in two columns - the name, the level, the needs in % in capitals, the purse in
+// coins | the attributes over the chosen one's words; Ekwipunek in three - the card | the places ON a line silhouette | what fits): a row of tabs across the top (Postać, Umiejętności, Plecak, Dziennik,
+// Mapa, Opcje, Zapisz grę, Wyjdź - the user, 2026-10-23: "opcje główne na górze ... połączyć z bieżącym", "żeby nie było podzakładek") and under it one
 // panel the whole width with the pages of "Lista v2" (2026-10-22, docs/ui_proste/POMYSLY.md). Two levels: A / D along the tabs (the
 // page shows at once), O into the page, P back, P on the tabs closes the menu; a smaller step inside at most. The bar of keys at the
 // foot. Every page: Postać (the attribute's bubble - what it gives now and with a point more -, a point given, the opinion "Obcy"),
@@ -50,22 +51,23 @@ kit.test({ port: 9579, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     // ---------------------------------------------------------------- P: the tabs (level 1), Postać first, its page as a preview
     t.check("P otwiera menu", await open());
     let m = await info();
-    // (2026-10-24: the ninth tab "Mapa" between Dziennik and Opcje - MapaWyspy.js, tests/mapa_woz_test.js)
-    t.check("rząd 9 zakładek u góry: Postać, Ekwipunek, Umiejętności, Plecak, Dziennik, Mapa, Opcje, Zapisz grę, Wyjdź", m && m.labels.join() === "Postać,Ekwipunek,Umiejętności,Plecak,Dziennik,Mapa,Opcje,Zapisz grę,Wyjdź"
-        && m.rows.length === 9 && m.rows.every(r => r.y1 <= 84) && m.rows.every((r, i) => i === 0 || r.x0 > m.rows[i - 1].x1), m && m.rows);
+    // (2026-10-24: the tab "Mapa" between Dziennik and Opcje - MapaWyspy.js; 2026-11-18: Ekwipunek its own tab again)
+    t.check("rząd 10 zakładek u góry: Postać, Statystyki, Ekwipunek, Umiejętności, Plecak, Dziennik, Mapa, Opcje, Zapisz grę, Wyjdź", m && m.labels.join() === "Postać,Statystyki,Ekwipunek,Umiejętności,Plecak,Dziennik,Mapa,Opcje,Zapisz grę,Wyjdź"
+        && m.rows.length === 10 && m.rows.every(r => r.y1 <= 84) && m.rows.every((r, i) => i === 0 || r.x0 > m.rows[i - 1].x1), m && m.rows);
     t.check("na początku zakładki (poziom 1), Postać, podgląd bez klawiszy", m.level === 1 && m.active === "hero" && m.activeWindows.length === 0, { level: m.level, active: m.active });
     t.check("pasek klawiszy: A/D zakładka · O wybierz · P wróć do gry", m.keyCaps.join() === "A/D,O,P" && m.keys.join() === "zakładka,wybierz,wróć do gry", m.keys);
     t.check("stare okno poleceń i panel MenuPanel ukryte", !m.window.visible && !m.window.active && !(await t.eval("SceneManager._scene._menuPanel && SceneManager._scene._menuPanel.visible")));
-    t.check("Postać: popiersie, walka (broń w ręce), odporności, atrybuty bez zaznaczenia i bez dymka", m.stats && m.stats.bust && m.stats.focus === null && !m.stats.popup
-        && m.stats.fight[0] === "Broń: Kamienna siekiera" && m.stats.defense.length === 5, m.stats);
-    const opinion = await t.eval("TownQuests.tierName()");
-    t.check("opinia: samo słowo stopnia („" + opinion + "”), bez liczby i „w miasteczku”", m.stats.opinion === opinion && opinion === "Obcy", m.stats.opinion);
+    t.check("Postać: potrzeby same procenty (bez ikon i pasków), sakiewka; bez ekwipunku na tej stronie; nic zaznaczone",
+        m.stats && m.stats.focus === null && !m.stats.popup && !m.equip && m.stats.needs.length === 4 && m.stats.needs.every(s => /: \d+%$/.test(s))
+        && m.stats.needs[2] === "Sytość: 72%" && m.stats.needs[3] === "Nawodnienie: 58%" && m.stats.purse === (await t.eval("$gameParty.gold()")), m.stats);
+    const coins = await t.json("Monety.pieces('" + (await t.eval("$gameParty.gold()")) + " G')");
+    t.check("sakiewka rysowana obrazkami monet (Monety.js: liczba i moneta, bez liter)", (await t.eval("Monety.sheetReady()")) && coins.length >= 1 && coins.every(p => p.k !== undefined), coins);
     await shot("postac");
 
     // ---------------------------------------------------------------- A / D along the tabs (round), the arrows too; the page follows
     const order = [];
-    for (let i = 0; i < 9; i++) order.push((await key("D", 12)).active);
-    t.check("D: w prawo po całym rzędzie, w kółko", order.join() === "equip,skills,item,journal,mapa,options,save,gameEnd,hero", order);
+    for (let i = 0; i < 10; i++) order.push((await key("D", 12)).active);
+    t.check("D: w prawo po całym rzędzie, w kółko", order.join() === "stats,equip,skills,item,journal,mapa,options,save,gameEnd,hero", order);
     m = await key("A", 12);
     t.check("A: w lewo (z Postaci na Wyjdź)", m.active === "gameEnd" && m.level === 1, m.active);
     m = await key("ArrowRight", 12);
@@ -73,11 +75,11 @@ kit.test({ port: 9579, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     m = await key("S", 6);
     t.check("W / S na zakładkach nic nie robią", m.active === "hero" && m.level === 1, m.active);
 
-    // ---------------------------------------------------------------- Postać: O in - the attributes (W / S) with their bubble, O gives a point
+    // ---------------------------------------------------------------- Postać: the attributes (W / S) with the chosen one's words below, O gives a point
     m = await key("O", 6);
-    t.check("O: w Postać (poziom 2), klawisze W/S atrybut · P wróć", m.level === 2 && m.active === "hero" && m.stats.focus === "str" && m.keys.includes("atrybut") && m.keyCaps.includes("P"), m.keys);
+    t.check("O: w Postać (poziom 2), Siła; klawisze W/S atrybut · P wróć", m.level === 2 && m.active === "hero" && m.stats.focus === "str" && m.keyCaps.join() === "W/S,P" && m.keys.join() === "atrybut,wróć", m.keys);
     const str = await t.json("Combat.attrInfo('str')");
-    t.check("dymek przy Sile: co daje teraz i z punktem więcej (te same liczby co Combat)", m.stats.popup && m.stats.popup.attr === "str" && m.stats.popup.rows.length === str.rows.length
+    t.check("pod atrybutami opis Siły: co daje teraz i z punktem więcej (te same liczby co Combat)", m.stats.popup && m.stats.popup.attr === "str" && m.stats.popup.rows.length === str.rows.length
         && m.stats.popup.rows[0] === str.rows[0].label + ": " + str.rows[0].now + " -> " + str.rows[0].next, m.stats.popup);
     await t.eval("(function(){ const h = Combat.hero(); h.points = 2; SceneManager._scene._view.redraw(); SceneManager._scene.drawKeys(); SceneManager._scene.drawList(); return 0; })()");
     m = await info();
@@ -85,100 +87,126 @@ kit.test({ port: 9579, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await shot("postac_dymek");
     const str0 = await t.eval("Combat.hero().attr.str");
     m = await key("O", 6);
-    t.check("O: punkt do Siły, dymek liczy na nowo", (await t.eval("Combat.hero().attr.str")) === str0 + 1 && m.stats.points === 1 && m.stats.popup.rows[0] === (await t.json("Combat.attrInfo('str')")).rows.map(r => r.label + ": " + r.now + " -> " + r.next)[0], m.stats.popup);
+    t.check("O: punkt do Siły, opis liczy na nowo", (await t.eval("Combat.hero().attr.str")) === str0 + 1 && m.stats.points === 1 && m.stats.popup.rows[0] === (await t.json("Combat.attrInfo('str')")).rows.map(r => r.label + ": " + r.now + " -> " + r.next)[0], m.stats.popup);
     m = await key("S");
-    t.check("S: Zręczność - dymek przy niej", m.stats.focus === "dex" && m.stats.popup.attr === "dex", m.stats.focus);
+    t.check("S: Zręczność - opis o niej", m.stats.focus === "dex" && m.stats.popup.attr === "dex", m.stats.focus);
     m = await key("Enter", 6);
     t.check("Enter jak O: ostatni punkt rozdany, „dodaj punkt” znika", m.stats.points === 0 && !m.keys.includes("dodaj punkt"), m.keys);
     const dex0 = await t.eval("Combat.hero().attr.dex");
     await key("O", 6);
     t.check("bez punktów O nic nie zmienia", (await t.eval("Combat.hero().attr.dex")) === dex0);
     m = await key("P", 6);
-    t.check("P: z powrotem na zakładki (poziom 1), dymek znika", m.level === 1 && m.active === "hero" && !m.stats.popup, m.level);
+    t.check("P: z powrotem na zakładki (poziom 1), nic zaznaczone", m.level === 1 && m.active === "hero" && !m.stats.popup && m.stats.focus === null, m.level);
 
-    // ---------------------------------------------------------------- Ekwipunek: the places, the bubble, RAZEM, X, Tab
+    // ---------------------------------------------------------------- Statystyki (2026-11-18): six tiles, three cards, "skąd to się bierze"
     m = await key("D", 12);
-    t.check("D: Ekwipunek - podgląd (bez dymka)", m.active === "equip" && m.level === 1 && m.equip && m.equip.cells.length === 11 && !m.equip.bubble, m.equip && m.equip.cells);
-    await shot("ekwipunek");
+    t.check("D: Statystyki - podgląd: 6 kafelków (obrażenia, blok, zbroja, życie, oddech, udźwig), 3 karty (Walka, Obrona, Przetrwanie i praca), nic zaznaczone",
+        m.active === "stats" && m.level === 1 && m.staty && m.staty.tiles.length === 6 && /^OBRAŻENIA: /.test(m.staty.tiles[0]) && /^UDŹWIG: \d+/.test(m.staty.tiles[5])
+        && m.staty.cards.map(c => c.title).join() === "Walka,Obrona,Przetrwanie i praca" && m.staty.sel === null, m.staty);
+    const fiS = await t.json("(function(){ const f = Combat.fightInfo(), d = Combat.defenseInfo(); return { name: f.weapon.name, mhp: d.mhp, breath: d.breath, cap: Survival.weightCap() }; })()");
+    t.check("liczby te same co w walce: życie, oddech, udźwig, broń w ręce", m.staty.tiles[3] === "ŻYCIE: " + fiS.mhp && m.staty.tiles[4] === "ODDECH: " + fiS.breath && m.staty.tiles[5] === "UDŹWIG: " + fiS.cap
+        && m.staty.cards[0].rows[0] === "Broń: " + fiS.name, { tiles: m.staty.tiles, fiS });
     m = await key("O", 6);
-    t.check("O: w Ekwipunek, miejsce Głowa; klawisze W/S/A/D miejsce · O wybierz · X zdejmij · Tab obróć · P wróć", m.level === 2 && m.equip.cell === "head" && m.keyCaps.join() === "W/S/A/D,O,X,Tab,P", m.keyCaps);
-    t.check("dymek przy pustej głowie: „pusto” i skąd wziąć", m.equip.bubble && m.equip.bubble.title === "pusto" && m.equip.bubble.lines.length >= 1, m.equip.bubble);
-    m = await key("D");
-    t.check("D: Tors (w prawo)", m.equip.cell === "torso", m.equip.cell);
+    t.check("O: w Statystyki, zaznaczone Obrażenia; skąd: broń, Siła ... = Obrażenia; klawisze W/S/A/D liczba · P wróć", m.level === 2 && m.staty.sel === "dmg" && m.staty.chips.length >= 3
+        && /^Kamienna siekiera /.test(m.staty.chips[0]) && m.staty.chips.some(c => /^Siła \d/.test(c)) && /^Obrażenia /.test(m.staty.chips[m.staty.chips.length - 1]) && m.keyCaps.join() === "W/S/A/D,P", m.staty);
+    m = await key("D", 6);
+    t.check("D: następny kafelek (Blok)", m.staty.sel === "block" && /^Blok /.test(m.staty.chips[m.staty.chips.length - 1]), m.staty.sel);
+    m = await key("S", 6);
+    t.check("S z kafelka: do karty pod nim (Walka, pierwszy wiersz: Broń)", m.staty.sel === "weapon" && m.staty.at.zone === 0, m.staty.at);
+    m = await key("S", 6); m = await key("S", 6);
+    t.check("S, S: Krytyk - skąd: podstawa 3%, Czujność ... = Krytyk", m.staty.sel === "crit" && /^Podstawa 3%/.test(m.staty.chips[0]) && m.staty.chips.some(c => /^Czujność/.test(c)), m.staty.chips);
+    m = await key("D", 6);
+    t.check("D: karta obok (Obrona, ten sam wiersz)", m.staty.at.zone === 1 && m.staty.at.i === 2 && m.staty.sel === "knock", m.staty.at);
+    m = await key("W", 6); m = await key("W", 6); m = await key("W", 6);
+    t.check("W z pierwszego wiersza: z powrotem na kafelki (nad kartą)", m.staty.at.zone === "tiles", m.staty.at);
+    await shot("statystyki");
+    m = await key("P", 6);
+    t.check("P: z powrotem na zakładki, nic zaznaczone", m.level === 1 && m.active === "stats" && m.staty.sel === null, m.level);
+
+    // ---------------------------------------------------------------- Ekwipunek: the card | the silhouette with the places | what fits
+    m = await key("D", 12);
+    t.check("D: Ekwipunek - podgląd: 11 miejsc na sylwetce, nic zaznaczone, karta pusta", m.active === "equip" && m.level === 1 && m.equip && m.equip.cells.length === 11 && m.equip.cell === null && !m.equip.card, m.equip && m.equip.cells);
+    await shot("ekwipunek");
+    const cellsXY = await t.json("MenuRing.eqCells()"), cellOf = id => cellsXY.find(c => c.id === id);
+    t.check("miejsca na sylwetce: głowa nad amuletem, tors, pas, nogi, stopy po kolei w dół; płaszcz i plecy przy barkach; prawa ręka po prawej, lewa po lewej",
+        ["head", "extra", "torso", "belt", "legs", "feet"].every((id, i, a) => i === 0 || cellOf(id).my > cellOf(a[i - 1]).my) && cellOf("cloak").mx < cellOf("head").mx && cellOf("back").mx > cellOf("head").mx
+        && cellOf("right").mx > cellOf("belt").mx && cellOf("left").mx < cellOf("belt").mx, cellsXY.map(c => c.id + ":" + c.mx + "," + c.my));
+    m = await key("O", 6);
+    t.check("O: w Ekwipunek na Głowie; klawisze W/S/A/D miejsce · O wybierz rzecz · X zdejmij · P wróć", m.level === 2 && m.active === "equip" && m.equip.cell === "head"
+        && m.keyCaps.join() === "W/S/A/D,O,X,P" && m.keys.join() === "miejsce,wybierz rzecz,zdejmij,wróć", m.keys);
+    t.check("pusta głowa: karta „pusto” i skąd wziąć", m.equip.card && m.equip.card.title === "pusto" && m.equip.card.lines.length >= 1, m.equip.card);
     m = await key("S");
-    const belt = m.equip.bubble, cellB = (await t.json("MenuRing.eqCells()")).find(c => c.id === "belt");
-    t.check("S: Pas - dymek obok komórki: nazwa, opis z gry, co daje, zużycie, waga", m.equip.cell === "belt" && belt && belt.title === "Brązowy skórzany pas" && belt.lines.length >= 2
-        && /\d+ \/ \d+/.test(belt.wear) && belt.weight > 0 && belt.x > cellB.x + 72, belt);
-    const fig = await t.json("(function(){ const s = SceneManager._scene._view._fig; return { x: s.x, y: s.y, w: s.bitmap.width }; })()");
-    t.check("dymek nie zasłania postaci (jej środka)", belt.x + belt.w < fig.x + fig.w / 2 - 60, { belt, fig });
-    const tot = m.equip.totals, udz = await t.eval("Tawerna.api('Ubior_Sklepy') ? Tawerna.api('Ubior_Sklepy').udzwig() : 0");
-    t.check("RAZEM: zbroja, ciepło, udźwig, schludność, chód - z prawdziwych bonusów (pas: udźwig +" + udz + ")", tot.length === 5 && tot[0].startsWith("Zbroja") && tot.includes("Udźwig: " + (udz ? "+" + udz : "brak")), tot);
+    t.check("S: Amulet (pod głową)", m.equip.cell === "extra", m.equip.cell);
+    m = await key("S");
+    t.check("S: Tors", m.equip.cell === "torso", m.equip.cell);
+    m = await key("S");
+    const belt = m.equip.card;
+    t.check("S: Pas - karta: nazwa, opis z gry, każdy bonus w osobnej linii, zużycie (liczby), waga", m.equip.cell === "belt" && belt && belt.title === "Brązowy skórzany pas" && belt.lines.length >= 2
+        && belt.bonus.length >= 1 && belt.bonus.every(l => !/ · /.test(l)) && /\d+ \/ \d+/.test(belt.wear) && belt.weight > 0, belt);
+    t.check("lista „do założenia” widać od razu, bez O: pas z torby (założony) i „Nic”", m.equip.mode === "cells" && m.equip.rows.some(r => r.id === 277 && r.worn) && m.equip.rows[m.equip.rows.length - 1].name === "Nic" && !!m.equip.list, m.equip.rows);
     await shot("ekwipunek_dymek");
     m = await key("D");
-    t.check("D z drugiej kolumny „Ubioru”: do „Okrycia i rąk” (ten sam rząd: Prawa ręka), dymek po jej lewej", m.equip.cell === "right" && m.equip.bubble && m.equip.bubble.x + m.equip.bubble.w < 1046, m.equip.cell);
+    t.check("D z pasa: Prawa ręka (broń w ręce: każda cecha w osobnej linii, bez podpowiedzi klawisza)", m.equip.cell === "right" && m.equip.card && m.equip.card.bonus.some(l => /^Obrażenia/.test(l))
+        && m.equip.card.bonus.some(l => /^Zasięg/.test(l)) && !m.equip.card.bonus.some(l => /^\[/.test(l)), m.equip.card);
     m = await key("A");
     m = await key("A");
-    t.check("A, A: z powrotem przez Pas na Rękawice", m.equip.cell === "hands", m.equip.cell);
+    t.check("A, A: przez pas na lewą rękę; A dalej nic nie robi (lewy brzeg)", m.equip.cell === "left" && (await key("A")).equip.cell === "left", m.equip.cell);
     m = await key("D");
-    // Tab: the figure turns (front, side, back, side)
-    const turns = [];
-    for (let i = 0; i < 4; i++) { m = await key("Tab", 6); turns.push(m.equip.turn + ":" + /:(\d)$/.exec(m.equip.figKey || "")[1]); }
-    t.check("Tab obraca postać: bok, tył, bok, przód (inny wiersz arkusza za każdym razem)", turns.join() === "bok:2,tył:4,bok:6,przód:0", turns);
-    // X: off; X on an empty place: a word in the bubble, nothing else
+    t.check("D: Pas", m.equip.cell === "belt", m.equip.cell);
+    // X: off; X on an empty place: a word on the card, nothing else
     m = await key("X", 6);
     t.check("X: pas zdjęty", m.equip.cell === "belt" && (await t.eval("Equipment.current('belt')")) === 0, m.equip);
     m = await key("X", 6);
-    t.check("X na pustym miejscu: „Tu nic nie ma do zdjęcia.” w dymku, bez okna wiadomości", /nic nie ma/.test(m.equip.note) && /nic nie ma/.test(m.equip.bubble.note) && !(await t.eval("$gameMessage.isBusy()")), m.equip.note);
+    t.check("X na pustym miejscu: „Tu nic nie ma do zdjęcia.” na karcie, bez okna wiadomości", /nic nie ma/.test(m.equip.note) && /nic nie ma/.test(m.equip.card.note) && !(await t.eval("$gameMessage.isBusy()")), m.equip.note);
     m = await key("O", 6);
-    t.check("O na pasie: lista pod postacią - pas z torby i „Nic”, dymek przy wybranym", m.equip.mode === "list" && m.equip.rows.some(r => r.id === 277) && m.equip.rows[m.equip.rows.length - 1].name === "Nic"
-        && m.keyCaps.join() === "W/S,O,P" && m.equip.bubble && m.equip.bubble.title === "Brązowy skórzany pas", m.equip.rows);
+    t.check("O na pasie: w listę (pas z torby i „Nic”); karta pokazuje wybrany; klawisze W/S rzecz · O załóż · P wróć do miejsc", m.equip.mode === "list" && m.equip.rows.some(r => r.id === 277)
+        && m.equip.rows[m.equip.rows.length - 1].name === "Nic" && m.keyCaps.join() === "W/S,O,P" && m.equip.card && m.equip.card.title === "Brązowy skórzany pas", m.equip.rows);
     m = await key("O", 6);
     t.check("O: pas z powrotem założony, z listy na miejsca", m.equip.mode === "cells" && (await t.eval("Equipment.current('belt')")) === 277, m.equip.mode);
 
-    // the head: two hats in the bag (not worn) - the choice with the look tried on
+    // the head: two hats in the bag (not worn) - the choice; the chosen thing's icon on trial in its place
     await t.eval("(function(){ $gameParty.gainItem($dataItems[250], 1); $gameParty.gainItem($dataItems[255], 1); Equipment.unequip('head'); SceneManager._scene._view.redraw(); return 0; })()");
-    m = await key("W");
-    m = await key("A");
-    t.check("W, A: Głowa (pusta)", m.equip.cell === "head" && (await t.eval("Equipment.current('head')")) === 0, m.equip.cell);
+    m = await key("W"); m = await key("W"); m = await key("W");
+    t.check("W, W, W: Głowa (pusta)", m.equip.cell === "head" && (await t.eval("Equipment.current('head')")) === 0, m.equip.cell);
+    t.check("lista głowy od razu: Słomkowy kapelusz, Brązowa filcowa czapka, Nic", m.equip.rows.map(r => r.name).join() === "Słomkowy kapelusz,Brązowa filcowa czapka,Nic", m.equip.rows.map(r => r.name));
     m = await key("O", 8);
-    const rowNames = m.equip.rows.map(r => r.name);
-    t.check("O na głowie: Słomkowy kapelusz, Brązowa filcowa czapka, Nic", m.equip.mode === "list" && rowNames.join() === "Słomkowy kapelusz,Brązowa filcowa czapka,Nic", rowNames);
-    await t.until("(function(){ const i = MenuRing.info(); return !!(i && i.equip && /^p:/.test(i.equip.figKey)); })()", 5, 100);
-    m = await info();
-    t.check("podgląd: postać od razu w słomkowym kapeluszu (Ubior.tryOn), a na głowie dalej nic", m.equip.preview && m.equip.preview.glowa === "kapelusz_slomkowy" && /^p:/.test(m.equip.figKey) && (await t.eval("Equipment.current('head')")) === 0, { preview: m.equip.preview, fig: m.equip.figKey });
-    t.check("dymek kapelusza: opis z gry i co daje", m.equip.bubble && m.equip.bubble.title === "Słomkowy kapelusz" && m.equip.bubble.lines.some(l => /upał/.test(l)), m.equip.bubble);
+    t.check("O na głowie: lista, karta kapelusza (opis z gry i co daje); na głowie dalej nic", m.equip.mode === "list" && m.equip.card && m.equip.card.title === "Słomkowy kapelusz"
+        && m.equip.card.bonus.some(l => /upał/.test(l)) && (await t.eval("Equipment.current('head')")) === 0, m.equip.card);
     await t.frames(6);
     await shot("ekwipunek_wybor");
     m = await key("S", 8);
-    t.check("S: podgląd filcowej czapki (dymek za nią)", m.equip.preview && m.equip.preview.glowa === "czapka_filc_braz" && m.equip.bubble.title === "Brązowa filcowa czapka", m.equip.preview);
+    t.check("S: filcowa czapka (karta o niej)", m.equip.row === 1 && m.equip.card.title === "Brązowa filcowa czapka", m.equip.card);
     m = await key("S", 8);
-    t.check("S: „Nic” - podgląd bez nakrycia", m.equip.preview && m.equip.preview.glowa === "", m.equip.preview);
+    t.check("S: „Nic”", m.equip.row === 2 && m.equip.card.title === "Nic", m.equip.card);
     m = await key("P", 6);
-    t.check("P: z powrotem do miejsc, nic nie założone, podglądu już nie ma", m.level === 2 && m.equip.mode === "cells" && !m.equip.preview && (await t.eval("Equipment.current('head')")) === 0, m.equip);
+    t.check("P: z powrotem do miejsc, nic nie założone", m.level === 2 && m.equip.mode === "cells" && (await t.eval("Equipment.current('head')")) === 0, m.equip);
     await key("O", 6);
     await key("S", 6);
     m = await key("O", 8);
-    t.check("O, S, O: filcowa czapka założona (widać ją na postaci - Ubior)", (await t.eval("Equipment.current('head')")) === 255 && (await t.eval("Ubior.outfit().glowa")) === "czapka_filc_braz" && m.equip.mode === "cells", await t.eval("Ubior.outfit().glowa || ''"));
+    t.check("O, S, O: filcowa czapka założona (strój bohatera - Ubior)", (await t.eval("Equipment.current('head')")) === 255 && (await t.eval("Ubior.outfit().glowa")) === "czapka_filc_braz" && m.equip.mode === "cells", await t.eval("Ubior.outfit().glowa || ''"));
     m = await key("O", 6);
     t.check("O na czapce: lista zaczyna na założonej", m.equip.rows[m.equip.row].id === 255 && m.equip.rows[m.equip.row].worn, m.equip.rows[m.equip.row]);
     await key("S", 6);
     m = await key("O", 6);
     t.check("„Nic”: czapka zdjęta", (await t.eval("Equipment.current('head')")) === 0, m.equip.mode);
     // the right hand: the weapons of the combat mode, the fists among them
-    m = await key("D"); m = await key("D"); m = await key("S");
-    t.check("D, D, S: Prawa ręka", m.equip.cell === "right", m.equip.cell);
+    m = await key("D"); m = await key("S");
+    t.check("D, S: Plecy, Prawa ręka", m.equip.cell === "right", m.equip.cell);
     m = await key("O", 6);
     t.check("Prawa ręka: bronie trybu walki (pięści też), bez „Nic”", m.equip.rows.some(r => r.name === "Pięści") && !m.equip.rows.some(r => r.name === "Nic"), m.equip.rows.map(r => r.name));
+    for (let i = 0; i < 4 && m.equip.card.title !== "Pięści"; i++) m = await key("S", 6);
+    t.check("porównanie (2026-11-18): pięści przy siekierze w ręce - karta „Porównanie”, obrażenia ▼; na liście „▼ słabiej”", m.equip.card.title === "Pięści" && Array.isArray(m.equip.card.compare)
+        && m.equip.card.compare.some(c => /^Obrażenia: .*▼/.test(c)), m.equip.card);
     m = await key("P", 6);
     // the mouse: over a place - it is chosen; a click on it opens its list; a click on a row of the list chooses it, again - on
-    const cellsXY = await t.json("MenuRing.eqCells()"), feet = cellsXY.find(c => c.id === "feet");
-    await moveL(feet.x + 30, feet.y + 30);
+    const feet = cellOf("feet");
+    await moveL(feet.mx - 4, feet.my - 4);
     await t.frames(4);
-    await moveL(feet.x + 36, feet.y + 36);
+    await moveL(feet.mx, feet.my);
     await t.frames(6);
     m = await info();
     t.check("myszą: nad „Stopy” - zaznaczone", m.equip.cell === "feet" && m.equip.mode === "cells", m.equip.cell);
-    await clickL(feet.x + 36, feet.y + 36);
+    await clickL(feet.mx, feet.my);
     await t.frames(6);
     m = await info();
     t.check("myszą: klik - lista dla stóp", m.equip.mode === "list" && m.equip.rows.some(r => r.id === 275), m.equip.rows);
@@ -186,7 +214,7 @@ kit.test({ port: 9579, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     await clickL(m.equip.list.x, ly);
     await t.frames(6);
     m = await info();
-    t.check("myszą: klik w „Nic” - zaznaczone (podgląd boso)", m.equip.mode === "list" && m.equip.row === nic && m.equip.preview && m.equip.preview.stopy === "", m.equip);
+    t.check("myszą: klik w „Nic” - zaznaczone", m.equip.mode === "list" && m.equip.row === nic, m.equip);
     await clickL(m.equip.list.x, ly);
     await t.frames(6);
     t.check("myszą: drugi klik - łapcie zdjęte", (await t.eval("Equipment.current('feet')")) === 0 && (await info()).equip.mode === "cells");
@@ -424,11 +452,11 @@ kit.test({ port: 9579, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
 
     // ---------------------------------------------------------------- the mouse on the tabs: a tab - chosen and in; another while inside
     const mid = r => [(r.x0 + r.x1) / 2, (r.y0 + r.y1) / 2];
-    await clickL(...mid(m.rows[3]));
+    await clickL(...mid(m.rows[4]));
     await t.frames(14);
     m = await info();
     t.check("myszą: klik w „Plecak” - wybrany i od razu w środku", m.active === "item" && m.level === 2 && m.bag.active, { active: m.active, level: m.level });
-    await clickL(...mid(m.rows[1]));
+    await clickL(...mid(m.rows[2]));
     await t.frames(14);
     m = await info();
     t.check("myszą: klik w „Ekwipunek” z Plecaka - od razu w Ekwipunku", m.active === "equip" && m.level === 2 && m.equip.mode === "cells", { active: m.active, level: m.level });

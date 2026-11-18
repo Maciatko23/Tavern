@@ -87,7 +87,7 @@ Nie czytałeś, prawda? ...Dobra. Dzięki. Nikomu ani słowa.
 # wit
 obce.1.name = Weksel kaprala Wita
 obce.1.ownerName = kapral Wit
-obce.1.text = „Ja, Wit Czerwień, kapral straży, winien jestem Lucjanowi Kości trzydzieści groszy za kości. Oddam po żołdzie. Podpisano.”
+obce.1.text = „Ja, Wit Czerwień, kapral straży, winien jestem Lucjanowi Kości trzy srebrniki za kości. Oddam po żołdzie. Podpisano.”
 [obce.1.back]
 (Wit wyrywa ci kartkę.) Ani słowa. Słyszysz? ...Dobry chłopak. Zapamiętam.
 
@@ -97,10 +97,10 @@ obce.1.text = „Ja, Wit Czerwień, kapral straży, winien jestem Lucjanowi Koś
 # baltazar
 obce.2.name = Kwit z kantoru
 obce.2.ownerName = Baltazar
-obce.2.text = „Dwanaście worków jęczmienia od K. Zapłacono czterdzieści groszy. Odbiór nocą, tylne drzwi. Nie wpisywać.”
+obce.2.text = „Dwanaście worków jęczmienia od K. Zapłacono cztery srebrniki. Odbiór nocą, tylne drzwi. Nie wpisywać.”
 [obce.2.back]
 (Baltazar uśmiecha się samymi ustami.) Ach, mój kwit. Wiatr porywa papiery, a kruki... kruki je znajdują.
-Przyjacielu. Za uczciwość - pięć groszy. Za pamięć krótką jak ptasia - jeszcze pięć.
+Przyjacielu. Za uczciwość - pięć miedziaków. Za pamięć krótką jak ptasia - jeszcze pięć.
 
 [obce.2.backRead]
 (Baltazar długo patrzy ci w oczy.) Czytałeś. Rozumiem. Każdy coś czyta. Ważne, co potem mówi.
@@ -118,7 +118,7 @@ Mój rysunek! Ładny, prawda? To jest kruk. On pilnuje.
 # janek
 obce.4.name = Kartka z długami Janka
 obce.4.ownerName = Janek
-obce.4.text = „Sieć od Rocha - oddać trzy śledzie. Smoła od celnika - oddać dwa grosze, jak będą. Chleb od Hanki - oddać rybą. Mama - oddać wszystko.”
+obce.4.text = „Sieć od Rocha - oddać trzy śledzie. Smoła od celnika - oddać dwa miedziaki, jak będą. Chleb od Hanki - oddać rybą. Mama - oddać wszystko.”
 [obce.4.back]
 (Janek drapie się po karku.) Moja kartka. Długi liczę. Dzięki, chłopcze.
 

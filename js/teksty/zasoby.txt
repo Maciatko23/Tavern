@@ -231,7 +231,7 @@ Cztery kawałki wosku. Pszczoły w sosnach za działką twojego dziadka - słysz
 
 [zadania.K55.steps.0.done]
 Pachnie latem... Dobry wosk, żółty. Wystarczy na całą zimę.
-Masz trzydzieści groszy. I dziękuję - w imieniu schodów dzwonnicy.
+Masz trzy srebrniki. I dziękuję - w imieniu schodów dzwonnicy.
 
 # ======================================================================== Q_K56 (zadania.K56)
 zadania.K56.title = Ogródki Podgrodzia
@@ -240,7 +240,7 @@ zadania.K56.when = zlecenie 18–21; praca 6-12, trzy dni w tygodniu
 zadania.K56.desc = Ogródki pod murem schną, a ręce do pracy w Podgrodziu stare. Babka Jadwiga prosi o trzy dni pomocy przy grządkach w ciągu tygodnia.
 [zadania.K56.offer.say]
 Ogródki pod murem schną, dziecko, a ręce u nas stare. Marta pierze, Franek mały, a ja ledwo się schylam.
-Pomóż przy grządkach trzy dni w tym tygodniu - motyką, nie gadaniem. Zapłacę groszem i ziołami.
+Pomóż przy grządkach trzy dni w tym tygodniu - motyką, nie gadaniem. Zapłacę miedziakiem i ziołami.
 
 zadania.K56.offer.yes = Pomogę.
 zadania.K56.offer.no = Nie dam rady.
@@ -302,7 +302,7 @@ zadania.K58.steps.1.text = Powiedz Marcie, że sad żyje (tawerna, wieczorem).
 
 [zadania.K58.steps.1.done]
 (Marta zakrywa usta dłonią.) Jan by... Jan by się ucieszył.
-Masz, weź te grosze. Jak zakwitną, pójdę je zobaczyć. Z Frankiem.
+Masz, weź te miedziaki. Jak zakwitną, pójdę je zobaczyć. Z Frankiem.
 
 [zadania.K58.reward.note]
 Sad Ługów

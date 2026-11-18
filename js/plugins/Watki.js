@@ -300,6 +300,9 @@
         return lines;
     }
     function wrap(text, o) {
+        // (2026-11-17: the sums „N G” said as coins - „25 złotych”, „2 srebrniki i 5 miedziaków” - before the lines are measured:
+        // the long words would otherwise run past the line's end; Monety.js)
+        if (window.Monety && Monety.tekst) text = Monety.tekst(String(text), true);
         if (o && o.px) return wrapPx(text, o.px);
         const out = [], width = (o && o.szer) || LINE;
         for (const para of o && o.akapity ? String(text).split("\n") : [String(text)]) {

@@ -78,7 +78,7 @@ prayedToday = Już się tu dziś modliłeś
 
 offerFull = Błogosławieństwo i tak już trwa najdłużej, jak może
 offerNeedPrayer = Najpierw się pomódl
-noCoin = Nie masz ani grosza
+noCoin = Nie masz ani miedziaka
 noFood = Nie masz nic do jedzenia
 offeredToday = Dziś już coś tu zostawiłeś
 cairnAsk = Kopiec z krukiem. Szczyt da się zdjąć rękami.
@@ -508,7 +508,7 @@ odkrycia.straznica_013.text = Przy drodze ku przylądkowi kamienne obmurówki da
 odkrycia.straznica_157.name = Fundamenty strażnicy nad morzem
 odkrycia.straznica_157.text = Na wschodnim krańcu Urwiska stała wieża zakonu. Zostały fundamenty i płyta z krukiem. W dole tylko morze.
 odkrycia.kapliczka_022.name = Kapliczka przydrożna
-odkrycia.kapliczka_022.text = Drewniany słupek z daszkiem przy drodze na wschód. Pod daszkiem wyrzeźbiony kruk. Ludzie zostawiają tu grosz albo okruch chleba i mówią, że droga potem lżejsza.
+odkrycia.kapliczka_022.text = Drewniany słupek z daszkiem przy drodze na wschód. Pod daszkiem wyrzeźbiony kruk. Ludzie zostawiają tu miedziak albo okruch chleba i mówią, że droga potem lżejsza.
 odkrycia.kapliczka_021.name = Kapliczka przy Leśnej drodze
 odkrycia.kapliczka_021.text = Kapliczka z krukiem przy Leśnej drodze. Daszek omszały, ale ktoś niedawno przetarł kruka z kurzu.
 odkrycia.kapliczka_004.name = Kapliczka na Łące

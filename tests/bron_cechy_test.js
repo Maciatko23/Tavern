@@ -249,12 +249,12 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await t.until("SceneManager._scene instanceof Scene_Menu && SceneManager._scene._started && !SceneManager.isSceneChanging()", 20, 100);
     await t.frames(30);
     const card = await J(`(function(){ const sc = SceneManager._scene, eq = (sc._views && sc._views.equip) || sc._view; if (!eq) return null;
-        eq._cell = "right"; eq.inside = true; eq.redraw(); const b = eq._bubble; return b ? { title: b.title, lines: b.lines } : null; })()`);
+        eq._cell = "right"; eq.inside = true; eq.redraw(); const b = eq._card || eq._bubble; return b ? { title: b.title, lines: b.lines } : null; })()`);
     await t.frames(5);
     await t.shot(path.join(SHOTS, "karta_ekwipunek.png"));
     const cardText = card ? card.lines.join(" ") : "";
     t.check("karta w Ekwipunku (prawa ręka): obrażenia 24-30, cecha parowanie +12% i udane kucie: obrażenia +2", card && /Żelazny miecz/.test(card.title) &&
-        /obrażenia 24-30/i.test(cardText) && /parowanie \+12%/.test(cardText) && /udane kucie: obrażenia \+2/i.test(cardText), card);
+        /obrażenia 24-30/i.test(cardText) && /parowanie \+12%/i.test(cardText) && /udane kucie: obrażenia \+2/i.test(cardText), card);
     await t.eval("SceneManager.pop(); 0");
     await t.until("SceneManager._scene instanceof Scene_Map && !SceneManager.isSceneChanging()", 20, 100);
     await t.eval(`(function(){ Bron.otworz("kowal", "kup"); return 0; })()`);

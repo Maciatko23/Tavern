@@ -238,7 +238,7 @@ const REGISTERED = process.env.REGISTERED ? `(function(){
         for (let i = 0; i < 30 && (await ev("__boar._hp")) === fistHp; i++) await frames(2);
         // (Mocna ręka, learnt in 2, counts as for the club: a critical punch is 5 x 1.035 x 1.05 x 1.6 = 9, not 8 - it failed ~3% of runs)
         const fistHit = await J(`({ hand: Combat.hand(), dmg: ${fistHp} - __boar._hp, want: Math.round(5 * Combat.strMult() * (1 + Combat.perk("melee.dmg"))), crit: Math.round(5 * Combat.strMult() * (1 + Combat.perk("melee.dmg")) * 1.6), spent: ${fistBreath} - Combat.breath })`);
-        check("\\ to the fists: a punch (Swing_Punch), 5 x Siła (or a critical), 7 breath", fistHit.hand === "m0" && /^(Swing|Hero)_Punch$/.test(fistSwing.sheet) && (fistHit.dmg === fistHit.want || fistHit.dmg === fistHit.crit) && Math.round(fistHit.spent) === 7, { fistSwing, fistHit });
+        check("\\ to the fists: a punch (Swing_Punch), 5 x Siła (or a critical), 7 breath", fistHit.hand === "m0" && /^(Swing|Hero)_Punch$/.test(fistSwing.sheet) && (inRange(fistHit.dmg, fistHit.want) || inRange(fistHit.dmg, fistHit.crit)) && Math.round(fistHit.spent) === 7   /* (±10%: Bron_Data.ROZRZUT) */, { fistSwing, fistHit });
         const xpBar = await J("(function(){ const s = SceneManager._scene, x = s._xpBar, w = s._weaponPlate; return { vis: x.visible, above: x.y <= w.y - w.height - 4, right: x.x === w.x }; })()");
         check("the level and experience bar sits over the weapon plate in the corner", xpBar.vis && xpBar.above && xpBar.right, xpBar);
         await frames(40);

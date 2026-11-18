@@ -27,7 +27,7 @@ W porcie Czarne Oczy przetrząsały każdą łódź właśnie za takimi kamienia
 Jakbyś chciał pomóc staremu... kuter da się jeszcze połatać. Deski, sznurki, smoła. Jak znowu popłynie, zawiozę na ląd list do twojej matki. Za darmo. No, prawie za darmo.
 
 [celnikMeet]
-Sambor Kwit, celnik dworu. (Celnik nie podnosi oczu znad księgi.) Opłata portowa: dwa grosze od tobołka. Ty nie masz tobołka, więc nic.
+Sambor Kwit, celnik dworu. (Celnik nie podnosi oczu znad księgi.) Opłata portowa: dwa miedziaki od tobołka. Ty nie masz tobołka, więc nic.
 Rozkaz dworu: każdy kamień z krukiem do zgłoszenia. Gdybyś jakiś znalazł - przynieś. Zapłacę uczciwie. Zapiszę uczciwie.
 
 [janekMenuAsk]
@@ -43,7 +43,7 @@ Dobre ryby. Masz, uczciwie, jak u Janka.
 Śledź jak srebro. Masz pieniądze.
 
 [janekBuyNo]
-Szesnaście groszy, chłopcze. Na kredyt to ja daję tylko mewom.
+Jeden srebrnik i sześć miedziaków, chłopcze. Na kredyt to ja daję tylko mewom.
 
 [janekBuy]
 Masz, prosto z wędzarni. Jeszcze ciepła.
@@ -81,10 +81,10 @@ Nic dziś nie mam. Następnym razem.
 
 [ferry]
 Prom wraca na ląd o trzeciej. Na pokład tylko wojsko i ludzie z glejtem Lorda. Ty glejtu nie masz, chłopcze.
-Listy biorę. Trzy grosze, a celnik i tak każdy przeczyta.
+Listy biorę. Trzy miedziaki, a celnik i tak każdy przeczyta.
 
 [ferryLetter]
-Trzy grosze. Dobrze. (Przewoźnik chowa list za pazuchę.) Pójdzie z najbliższym kursem. Odpowiedź, jak będzie, przywiozę.
+Trzy miedziaki. Dobrze. (Przewoźnik chowa list za pazuchę.) Pójdzie z najbliższym kursem. Odpowiedź, jak będzie, przywiozę.
 
 [ferryNews]
 Twój list doszedł do Brzozowej Woli. Wsi już nie ma, chłopcze. Spalona.
@@ -99,7 +99,7 @@ Takie same. Tak mówiły. Takie same.
 
 [betrayYes]
 Kuter? (Celnik odkłada pióro.) Ten łatacz sieci, Roch? Tak myślałem. Nikt nie łata sieci tak długo.
-Dobrze, chłopcze. Dwór pamięta przysługi. Masz, czterdzieści groszy. Wieczorem go zabierzemy. I kuter też.
+Dobrze, chłopcze. Dwór pamięta przysługi. Masz, cztery srebrniki. Wieczorem go zabierzemy. I kuter też.
 
 [janekRed]
 Czerwona? To zakwit. W suszę morze przy brzegu gnije jak woda w beczce. Ryby się duszą, fale wyrzucają je na piasek.
@@ -151,9 +151,9 @@ letters.2.silent = \N[1], synku. Nie wiem, czy mój list do ciebie doszedł. Pis
 letters.2.pipe = Powiedz ojcu, że fajka śmierdzi, bo jej nie czyści. Od trzydziestu lat mu to powtarzam. ...Dobrze wiedzieć, że dalej śmierdzi.
 letters.2.kiss = Ucałuj ode mnie ojca. Pewnie dalej zrzędzi. Niech zrzędzi - to znaczy, że zdrowy.
 letters.2.gold = Za twoje pieniądze pisarz w obozie jeńców pokazał mi listę. Ojca na niej nie ma. Ale pół listy zmokło i atrament się rozmył - nie wiem, co było w tamtej połowie.
-letters.2.noGold = W obozie jeńców za rzeką pisarz ma listę jeńców. Za pokazanie chce srebra. Odkładam po groszu.
+letters.2.noGold = W obozie jeńców za rzeką pisarz ma listę jeńców. Za pokazanie chce srebra. Odkładam po miedziaku.
 letters.2.food = Twoja paczka doszła cała. Podzieliłam się z praczkami z taboru - pierwszy raz od jesieni jadłyśmy coś innego niż kaszę. Śmiałyśmy się jak głupie.
-letters.2.land = Tabor stoi teraz pod miastem, którego nazwy nie wolno pisać. Chleb po trzy grosze, a na drogach więcej wojska niż ludzi. Port zajęły Czarne Oczy - promy pływają tylko z ich pieczęcią.
+letters.2.land = Tabor stoi teraz pod miastem, którego nazwy nie wolno pisać. Chleb po trzy miedziaki, a na drogach więcej wojska niż ludzi. Port zajęły Czarne Oczy - promy pływają tylko z ich pieczęcią.
 letters.2.end = Nie przestaję szukać. Ty nie przestawaj pisać. Mama.
 [letters.2.hero]
 > (Składasz list i chowasz go razem z pierwszym.)
@@ -186,10 +186,10 @@ reply.first = > (Piszesz węglem na papierze od Janka: że jesteś cały, że dz
 reply.second = > (Piszesz o działce dziadka, o tawernie Borgara, o Janku i jego śledziach. O ruinach pod tawerną nie piszesz ani słowa.)
 reply.more = > (Piszesz krótko: że żyjesz, że czekasz, że wyspa trzyma się mocno. I że dziadek też.)
 reply.pipe = > (Na końcu dopisujesz od dziadka: „Fajka dalej śmierdzi”.)
-reply.gold = > (Zawijasz w list {n} groszy.)
+reply.gold = > (Zawijasz w list {n} G.)
 reply.food = > (Do listu dokładasz paczkę: to, co się nie zepsuje w drodze.)
 [reply.ferry]
-Trzy grosze. (Przewoźnik chowa list za pazuchę.) Pójdzie z najbliższym kursem.
+Trzy miedziaki. (Przewoźnik chowa list za pazuchę.) Pójdzie z najbliższym kursem.
 
 [reply.ferryCut]
 Pieniądze? Celnik weźmie dziesiątą część - cło. Reszta dojdzie, słowo przewoźnika.
@@ -257,7 +257,7 @@ Trzy dni na pokładzie. Ziemia się kołysze.
 Gdzie tu miasto? Mówili, że za lasem, za takim biednym przedmieściem.
 
 [refugees.2]
-Celnik zabrał nam dwa grosze i nadzieję. Grosze były ważniejsze.
+Celnik zabrał nam dwa miedziaki i nadzieję. Miedziaki były ważniejsze.
 
 # (2026-10-28) pierwsza fala (dzień 10): Ludmiła i Ela schodzą z promu - na molo do południa (docs/PODROZNI.md 5.2)
 [fala1.ludmila]
@@ -307,7 +307,7 @@ kod.actCall.6 = Potrzebujesz {1} G
 kod.actCall.7 = Kuter wypłynął
 kod.actCall.8 = Zagadałem strażnika przy koksowniku, a Roch wypłynął nocą połatanym kutrem. Będzie pływał na ląd co kilka nocy i przywoził wieści - i towary.
 kod.actCall.9 = Wydałem Rocha
-kod.actCall.10 = Doniosłem celnikowi na Rocha i jego kuter. Dostałem czterdzieści groszy. Wieczorem go zabrali - i kuter też.
+kod.actCall.10 = Doniosłem celnikowi na Rocha i jego kuter. Dostałem cztery srebrniki. Wieczorem go zabrali - i kuter też.
 kod.actCall.11 = Roch przywiózł z lądu
 kod.actCall.12 = Potrzebujesz {LETTER_FERRY} G
 kod.actCall.13 = Przewoźnik promu przywiózł

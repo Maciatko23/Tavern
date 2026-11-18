@@ -1,6 +1,8 @@
-// Zejście do studni na rynku Kruczogrodu (Map220, „Studnia miejska: zejście” 48,42) po linie (2026-11-17, gracz: „zmień na linę”):
-// bez liny i z samymi sznurkami - popup „Potrzebujesz liny…”, z 1× Lina (492) - pytanie „Zejść / Zostać” i dno studni (Map118),
-// lina zostaje w torbie; na dnie „Wspiąć się po linie na górę?” wraca na rynek.
+// Zejście do studni na rynku Kruczogrodu po linie (2026-11-17, gracz: „zmień na linę”); od 2026-11-18 (gracz: „sprawdź, czy są
+// niewidzialne blokady”) zejście nie stoi już niewidzialnym zdarzeniem na placu przed studnią - leży pod samą studnią (48,41, pod
+// postaciami, przechodnie), a uruchamia je menu studni: „Zejdź na dno studni”. Bez liny i z samymi sznurkami - popup „Potrzebujesz
+// liny…”, z 1× Lina (492) - pytanie „Zejść / Zostać” i dno studni (Map118), lina zostaje w torbie; na dnie „Wspiąć się po linie na
+// górę?” wraca na rynek. Pole przed studnią (48,42) jest wolne.
 // Zrzut: docs/miejsca_zadan/zejscie_po_linie.png
 // Uruchom: node tests/run.js studnia_lina --port 9498
 const path = require("path");
@@ -16,19 +18,36 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
             const i = labels.findIndex(l => l.indexOf(${JSON.stringify(label)}) === 0); if (i < 0) return labels;
             cw.select(i); cw.deactivate(); cw.callOkHandler(); return labels; })()`);
     };
-    await t.newGame({ map: 220, x: 49, y: 42, dir: 4, day: 3, hour: 11, quiet: true, minimap: false });
-    const d = await t.json(`(function(){ const d = ${byName("Studnia miejska: zejście")}; return d && [d.eventId(), d.x, d.y]; })()`);
-    t.check("na rynku jest „Studnia miejska: zejście” (266 na 48,42)", d && d[0] === 266 && d[1] === 48 && d[2] === 42, d);
+    // the well's menu: O facing the well from the square, then its entry "Zejdź na dno studni" (W / S to it, O)
+    const wellMenuDown = async () => {
+        await t.locate(48, 42, 8);
+        await t.frames(5);
+        await t.press("ok");
+        await t.until("!!(SceneManager._scene._farmMenu && SceneManager._scene._farmMenu.active)", 10);
+        await t.frames(6);
+        const names = await t.json("(function(){ const m = SceneManager._scene._farmMenu; return m && m._list ? m._list.map(e => e.name) : []; })()");
+        const i = names.indexOf("Zejdź na dno studni");
+        if (i >= 0) {
+            const at = await t.json("SceneManager._scene._farmMenu.index()");
+            for (let k = at; k < i; k++) { await t.press("down"); await t.frames(4); }
+            await t.press("ok");
+        }
+        return names;
+    };
+    await t.newGame({ map: 220, x: 48, y: 43, dir: 8, day: 3, hour: 11, quiet: true, minimap: false });
+    const d = await t.json(`(function(){ const d = ${byName("Studnia miejska: zejście")}; return d && [d.eventId(), d.x, d.y, d.isThrough(), d.isNormalPriority()]; })()`);
+    t.check("„Studnia miejska: zejście” (266) leży pod studnią (48,41): przechodnie, pod postaciami - nie blokuje placu", d && d[0] === 266 && d[1] === 48 && d[2] === 41 && d[3] === true && d[4] === false, d);
+    const free = await t.json("$gameMap.isPassable(48, 42, 8) && $gameMap.eventsXyNt(48, 42).filter(e => e.isNormalPriority()).length === 0");
+    t.check("pole przed studnią (48,42) wolne - da się na nim stanąć", free === true, free);
     await t.eval(`$gameParty.loseItem($dataItems[${LINA}], 999); $gameParty.loseItem($dataItems[${SZNUREK}], 999); 0`);
     const refuse = async () => {
         await t.popups({ clear: true });
-        await t.locate(49, 42, 4);
-        await t.frames(5);
-        await t.press("ok");
+        const names = await wellMenuDown();
         await t.frames(40);
-        return { pops: await t.popups({ clear: true }), map: await t.json("$gameMap.mapId()"), msg: await t.json("$gameMessage.isBusy()") };
+        return { names, pops: await t.popups({ clear: true }), map: await t.json("$gameMap.mapId()"), msg: await t.json("$gameMessage.isBusy()") };
     };
     const r0 = await refuse();
+    t.check("menu studni ma „Zejdź na dno studni” (obok picia i bukłaka)", r0.names.includes("Zejdź na dno studni") && r0.names.includes("Napij się"), r0.names);
     t.check("bez liny: popup „Potrzebujesz liny, żeby zejść do studni.”, bez rozmowy, dalej na rynku",
         r0.pops.some(p => /Potrzebujesz liny, żeby zejść do studni/.test(p)) && r0.map === 220 && !r0.msg, r0);
     await t.give(SZNUREK, 9);
@@ -36,9 +55,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("z 9 sznurkami (bez liny) tak samo", r1.pops.some(p => /Potrzebujesz liny/.test(p)) && r1.map === 220 && !r1.msg, r1);
     await t.give(LINA, 1);
     await t.frames(240);
-    await t.locate(49, 42, 4);
-    await t.frames(5);
-    await t.press("ok");
+    await wellMenuDown();
     await t.until("!!(SceneManager._scene._choiceListWindow && SceneManager._scene._choiceListWindow.active)", 15);
     const ask = await t.json("$gameMessage._texts.join(' ')");
     await t.frames(30);

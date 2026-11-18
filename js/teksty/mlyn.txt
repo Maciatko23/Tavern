@@ -252,8 +252,8 @@ opcja.inna = Nie, w innej sprawie.
 
 roch.opcja = Pytam o stary kod latarni.
 roch.imie = Roch
-roch.brak = Stary kod? Pamiętam. Ale za darmo nie, a ty nie masz przy sobie nawet dziesięciu groszy.
-roch.zaplac = Masz dziesięć groszy. ({n} G)
+roch.brak = Stary kod? Pamiętam. Ale za darmo nie, a ty nie masz przy sobie nawet jednego srebrnika.
+roch.zaplac = Masz jeden srebrnik. ({n} G)
 roch.nie = Nie teraz.
 [roch.opowiada]
 Dziad uczył mnie, gdy byłem mały: krótki, długi, krótki - to „towar gotowy, zatoczka”.
@@ -279,7 +279,7 @@ Sam, z Rochem i Grumem? Odważnie. Najlepszy łup, ale też najgorsze ryzyko. Ty
 ozzy.opcja = Postaw mu piwo i spytaj o morze i wiatr.
 ozzy.nie = Nie teraz.
 ozzy.imie = Ozzy
-ozzy.brak = Piwo kosztuje. A ty nie masz przy sobie ani grosza, chłopcze.
+ozzy.brak = Piwo kosztuje. A ty nie masz przy sobie ani miedziaka, chłopcze.
 [ozzy.piwo]
 Eee, piwo. Dobry z ciebie chłopak. Zaraz powiem, co widzę w kościach: wiatr, morze, odpływ.
 
@@ -333,7 +333,7 @@ walenty.pozniej = Przemyślę.
 Opinia ci służy... Dobra. Ludzie mówią, że chłopak z działki dziadka jest uczciwy. Ustaw je, jak trzeba. Ale ostrożnie.
 
 [walenty.zgodaZ]
-Piętnaście groszy za kłopot... dobrze. Młyn potrzebuje spokoju, a ja chleba. Ustaw, jak trzeba.
+Jeden srebrnik i pięć miedziaków za kłopot... dobrze. Młyn potrzebuje spokoju, a ja chleba. Ustaw, jak trzeba.
 
 [walenty.poznij]
 Rozumiem. Tylko nie zwlekaj, bo skrzydła nie śpią.
@@ -346,7 +346,7 @@ Skrzydła stoją, jak chciałeś. Idź na Słony Brzeg, chłopcze. Niech cię no
 
 [s5.walenty]
 Mielimy. Dym z komina, skrzydła w wietrze, rano jak dawniej. Chłopcze, wiem, co zrobiłeś.
-Masz tu czterdzieści groszy i dwa worki mąki. A od dziś mielimy za darmo, kto przyniesie chleb dla Przytułku.
+Masz tu cztery srebrniki i dwa worki mąki. A od dziś mielimy za darmo, kto przyniesie chleb dla Przytułku.
 
 [s5.zdrada]
 Chłopcze... ludzie mówią, że szyper przepłynął nocą jak gdyby nigdy nic. Ty to wiesz. Idź.
@@ -500,7 +500,7 @@ wyjscie.targ = Wziąć {n} G za milczenie i wypuścić.
 > Zostajesz na brzegu. Roch zabierze zboże do spichlerza, a łup dzielimy.
 
 [wyjscie.targOdp]
-> Dziewięćdziesiąt groszy za milczenie. I znikasz. Ostoja Rafa, nie wracaj.
+> Dziewięć srebrników za milczenie. I znikasz. Ostoja Rafa, nie wracaj.
 
 # ======================================================================== F9
 f9.naglowek = Wątek W19 (Sygnały z młyna):

@@ -38,15 +38,15 @@ Rafał był kopaczem w wyprawie po Serce - szukali „drzwi pod skałą” od st
 
 [zadania.W6.lines.poster]
 > (Na tablicy, między zleceniami na skóry i drewno, ktoś przybił nową kartkę. Pieczęć dworu.)
-> („POSZUKIWANY. Rafał, dezerter z wojsk kontynentu. Lat około dwudziestu pięciu, ciemne włosy, rana na ramieniu. Kto wskaże - sto dwadzieścia groszy. Kapral Wit Czerwień, z rozkazu dworu.”)
+> („POSZUKIWANY. Rafał, dezerter z wojsk kontynentu. Lat około dwudziestu pięciu, ciemne włosy, rana na ramieniu. Kto wskaże - jeden złoty i dwa srebrniki. Kapral Wit Czerwień, z rozkazu dworu.”)
 > (Rana na ramieniu. Ktoś mu się dobrze przyjrzał. Za trzy dni straż przetrząśnie obóz - tak się zawsze robi.)
 
 [zadania.W6.lines.witPoster]
 Widziałeś list na tablicy u Borgara? Dezerter. Rafał, na imię. Dwór chce go mieć - i to szybko.
-Za trzy dni przetrząśniemy obóz pod murem. A kto wskaże wcześniej - sto dwadzieścia groszy. Pomyśl o tym.
+Za trzy dni przetrząśniemy obóz pod murem. A kto wskaże wcześniej - jeden złoty i dwa srebrniki. Pomyśl o tym.
 
 [zadania.W6.lines.choiceAsk]
-(Rafał już wie.) List na tablicy u Borgara. Szymek mi przeczytał - on umie, ja nie. Sto dwadzieścia groszy... Tyle jestem wart.
+(Rafał już wie.) List na tablicy u Borgara. Szymek mi przeczytał - on umie, ja nie. Jeden złoty i dwa srebrniki... Tyle jestem wart.
 Za trzy dni straż przetrząśnie obóz. Ja... nie mam dokąd iść. Morze z jednej strony, kapral z drugiej.
 
 zadania.W6.lines.optHide = Ukryję cię.
@@ -68,7 +68,7 @@ W dzwonnicy? Pod dzwonem? ...Ogłuchnę. Ale będę żywy.
 
 zadania.W6.lines.optSmuggle = Przemycę cię promem - przez Baltazara.
 [zadania.W6.lines.saySmuggle]
-Przez kupca? On przemyca wszystko... ludzi też? (Rafał długo milczy.) Na kontynent nie wrócę. Ale prom pływa też na południe. Dobrze. Zapłać mu - pięćdziesiąt groszy, tyle bierze za skrzynię.
+Przez kupca? On przemyca wszystko... ludzi też? (Rafał długo milczy.) Na kontynent nie wrócę. Ale prom pływa też na południe. Dobrze. Zapłać mu - pięć srebrników, tyle bierze za skrzynię.
 
 zadania.W6.lines.optChoiceLater = Nie wiem jeszcze.
 [zadania.W6.lines.sayChoiceLater]
@@ -78,7 +78,7 @@ zadania.W6.lines.agreeNone = Pogadaj z Rafałem (o świcie albo późnym wieczor
 zadania.W6.lines.agreeSmuggle = Rafał czeka na przemyt: zapłać Baltazarowi 50 G (kantor, 8–18) przed przeszukaniem.
 [zadania.W6.lines.balAsk]
 Rafał? Ten z listu? (Baltazar uśmiecha się samymi ustami.) Prom pływa, kiedy trzeba. Ładunek żywy kosztuje drożej niż suszone grzyby.
-Pięćdziesiąt groszy. I nikt nie pyta. Ani ja, ani kapral - kapral też lubi grzyby.
+Pięć srebrników. I nikt nie pyta. Ani ja, ani kapral - kapral też lubi grzyby.
 
 zadania.W6.lines.optPay = Płacę (50 G).
 zadania.W6.lines.optPayLater = Jeszcze nie.
@@ -96,13 +96,13 @@ Rafał odpłynął
 Zapłaciłem Baltazarowi 50 G - Rafał odpłynął promem jako „skrzynia”. Kantor wie teraz, że i ja potrafię u niego płacić.
 
 [zadania.W6.lines.witAsk]
-List gończy... Wiesz coś o tym Rafale? Sto dwadzieścia groszy to dużo pieniędzy dla bosego.
+List gończy... Wiesz coś o tym Rafale? Jeden złoty i dwa srebrniki to dużo pieniędzy dla bosego.
 
 zadania.W6.lines.optGive = Wiem, gdzie jest.
 zadania.W6.lines.optGiveNo = Nic nie wiem.
 [zadania.W6.lines.give]
 > Rafał. Ten z listu. {hideout}
-(Wit przez chwilę patrzy na ciebie bez słowa.) Dobrze. Sto dwadzieścia groszy, jak w liście. Jaśnie pan się dowie, kto pomógł dworowi.
+(Wit przez chwilę patrzy na ciebie bez słowa.) Dobrze. Jeden złoty i dwa srebrniki, jak w liście. Jaśnie pan się dowie, kto pomógł dworowi.
 > (Godzinę później krzyk. Wit prowadzi Rafała ze związanymi rękami. Rafał nie patrzy w twoją stronę. Raz tylko - przy bramie.)
 
 [zadania.W6.lines.giveNo]
@@ -305,7 +305,7 @@ Ten? (Strażnik spluwa.) Ten nie kopie od miesiąca. Stoi i gapi się w ścianę
 
 zadania.W6.lines.optGrum = Grum kazał go puścić.
 zadania.W6.lines.optFaction = Pracuję dla waszych mocodawców. Biorę go.
-zadania.W6.lines.optBribe = Dam ci 80 groszy.
+zadania.W6.lines.optBribe = Dam ci 80 G.
 zadania.W6.lines.optFight = To go odbiorę siłą.
 zadania.W6.lines.optGuardNo = Nic.
 [zadania.W6.lines.sayGrum]
@@ -324,7 +324,7 @@ Dla nich? (Strażnik mruży oczy.) Na nic im taki, co tylko stoi. Bierz go. Ale 
 To nie zawracaj głowy.
 
 zadania.W6.lines.alarm = Hej! Gdzie z nim?! Stać!
-zadania.W6.lines.rafalShout = Pamiętasz mnie? Za sto dwadzieścia groszy!
+zadania.W6.lines.rafalShout = Pamiętasz mnie? Za jeden złoty i dwa srebrniki!
 [zadania.W6.lines.fightWon]
 > (Strażnik klęczy. Kopacze odsuwają się pod ściany. Nikt już nie zagradza drogi.)
 

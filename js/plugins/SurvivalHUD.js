@@ -571,6 +571,8 @@
     // .amount / .name let the same thing gained again add up on its plate ("+3 Drewno").
     Game_Temp.prototype.pushLootPopup = function(iconIndex, text, color, opts) {
         if (!(SceneManager._scene instanceof Scene_Map)) return;
+        // (2026-11-17, the player: no money icon before a sum - the sum is drawn in the coins' pictures, Monety.js)
+        if (iconIndex > 0 && window.Monety && Monety.sheetReady && /\d+ G\b/.test(String(text)) && Monety.sheetReady()) iconIndex = 0;
         if (opts && opts.gain) {
             if (!this._gainNotices) this._gainNotices = [];
             this._gainNotices.push({ iconIndex, text, color: color || "#ffffff", gain: opts.gain === true ? {} : Object.assign({}, opts.gain) });

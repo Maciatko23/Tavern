@@ -13,7 +13,7 @@ menu.bywaj = Bywaj.
 Od Stacha? ...Daj tu. Poczekaj, przeczytam.
 Stach był mi winien przysługę. Nie, to ja jemu. On o tym nie pamięta, a ja pamiętam.
 List od samego króla, wojna na lądzie... Stary Stach, kto by pomyślał. A dom ci zapieczętowali, tak? Pieczęć Lorda to jedno, a mój stryszek to drugie.
-Stryszek nad boksami jest twój. W dni, kiedy robisz w stajni, za darmo. Inne noce - pięć groszy, interes to interes.
+Stryszek nad boksami jest twój. W dni, kiedy robisz w stajni, za darmo. Inne noce - pięć miedziaków, interes to interes.
 A rano przychodź do roboty. Konie, woda, gnój, podróżni z promu. Zapłacę, ile mogę.
 > Dziękuję, panie Kołodziej.
 Nie dziękuj. Konie nie dziękują, a robią więcej niż ludzie. Pozdrów Borgara, jak go zobaczysz.
@@ -23,7 +23,7 @@ Nie dziękuj. Konie nie dziękują, a robią więcej niż ludzie. Pozdrów Borga
 Szczepan Kołodziej, woźnica. Stajnia i wozownia przy zajeździe - moja. Czego chcesz?
 > Słyszałem, że przyda się tu ręka do roboty.
 Przyda się, przyda. Siano, woda, gnój - tego nie ubywa. Płacę mało, ale uczciwie.
-A jak ci brak dachu nad głową: na stryszku jest siano. Pięć groszy za noc. W dni, kiedy robisz u mnie, za darmo.
+A jak ci brak dachu nad głową: na stryszku jest siano. Pięć miedziaków za noc. W dni, kiedy robisz u mnie, za darmo.
 
 # kolejne rozmowy, gdy dziś nie było zmiany (po kolei)
 [rozmowa.znow]
@@ -80,7 +80,7 @@ loft.cena.platna = Noc kosztuje {cena} G.
 loft.tak = Prześpij noc
 loft.nie = Nie teraz
 loft.ranoDarmo = Spałeś na sianie, za darmo. Plecy trochę bolą, ale sił odzyskałeś sporo.
-loft.ranoPlatne = Spałeś na sianie za pięć groszy. Plecy trochę bolą, ale sił odzyskałeś sporo.
+loft.ranoPlatne = Spałeś na sianie za pięć miedziaków. Plecy trochę bolą, ale sił odzyskałeś sporo.
 popup.nie_spac = Tu się nie da spać
 popup.za_wczesnie = Jeszcze za wcześnie na sen
 popup.zagrozenie = Nie zaśniesz - w pobliżu {kto}!

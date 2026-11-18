@@ -132,7 +132,7 @@ znaki.6.name = Dwór Lorda
 poszlaki.dziennik.name = Dziennik okrętu
 poszlaki.dziennik.text = W dzienniku „Białej Źrenicy”, na liście załogi: „Ansgar Wiel, kartograf. Blizna nad lewą brwią, palce w atramencie, oko wytatuowane na lewym nadgarstku”.
 poszlaki.jozek.name = Płaszcz od Józka Łaty
-poszlaki.jozek.text = Józek Łata sprzedał po sztormie swój stary szary płaszcz obcemu. Ten zapłacił dziwnym groszem: z okiem zamiast korony.
+poszlaki.jozek.text = Józek Łata sprzedał po sztormie swój stary szary płaszcz obcemu. Ten zapłacił dziwną monetą: z okiem zamiast korony.
 poszlaki.wizja.name = Wizja w latarni
 poszlaki.wizja.text = W mgle soczewka latarni pokazała człowieka z piórem, który rysuje wybrzeże wyspy - i białe oko na jego nadgarstku.
 poszlaki.tatuaz.name = Tatuaż przy studni
@@ -168,7 +168,7 @@ janekLeaving = Jeszcze kwadrans i odpływam! Nie będę nocował na mieliźnie!
 janekGone = Janek odpłynął. Zostaje czekać na niego na przystani.
 [soldierCatch]
 Stój! A ty kto? Kto pozwolił łazić po królewskim łupie?
-Bez glejtu rotmistrza? Dwadzieścia groszy kary. I zmykaj z mielizny.
+Bez glejtu rotmistrza? Dwa srebrniki kary. I zmykaj z mielizny.
 
 soldierPass = Glejt widzę. Szukaj, tylko skrzyń z pieczęcią nie ruszaj.
 [soldierTalk]
@@ -198,14 +198,14 @@ deskEmpty = Puste biurko. Wziąłeś już wszystko, co miało znaczenie.
 
 chestEmpty = Pusta skrzynia.
 [erykMeet]
-Portret? Dwa grosze albo piwo. Masz ciekawą twarz. Zmęczoną.
+Portret? Dwa miedziaki albo piwo. Masz ciekawą twarz. Zmęczoną.
 > Skąd jesteś? Nie mówisz jak tutejsi.
 Z lądu. Sukno. Było sukno. (Eryk uśmiecha się krzywo.) Morze lubi sukno.
 > (Eryk zerka na twój wisiorek i szybko odwraca wzrok.)
 Siadaj prosto. I nie ruszaj się, to wyjdziesz ładniej, niż jesteś.
 
 [erykAsk]
-Portret? Dwa grosze.
+Portret? Dwa miedziaki.
 Hm? (Eryk nie podnosi oczu znad papieru.)
 Siadaj, jak chcesz. Tylko nie zasłaniaj światła.
 
@@ -229,7 +229,7 @@ Czego? (Eryk naciąga rękaw na nadgarstek.) Idź spać, chłopcze.
 
 [jozek]
 Eryk? Ten od portretów? (Józek drapie się po brodzie.) Ha! Toż on chodzi w moim płaszczu! Szarym, za dużym.
-Po sztormie przyszedł do mnie mokry jak szczur. Kupił płaszcz i zapłacił dziwnym groszem. Z okiem zamiast korony. Mam go jeszcze, patrz.
+Po sztormie przyszedł do mnie mokry jak szczur. Kupił płaszcz i zapłacił dziwną monetą. Z okiem zamiast korony. Mam go jeszcze, patrz.
 > (Na monecie wybite jest otwarte oko. Takie samo jak na banderze wraku.)
 
 letter = Kruk przyniósł list... nie do mnie. Szyfr i pieczęć z okiem. Na wierzchu tylko: „Do A.W.”
@@ -267,17 +267,17 @@ Nie wiesz? (Ansgar śmieje się bez wesołości.) To ja też nie wiem, czy jutro
 
 [w12Sale]
 > Mam mapę. Kamienie z krukiem na całej wyspie. Rysował ją ktoś, kto się zna.
-(Baltazar długo ogląda papier pod światło.) ...Ładna robota. Za ładna. Sto groszy. I nie było cię tu.
+(Baltazar długo ogląda papier pod światło.) ...Ładna robota. Za ładna. Jeden złoty. I nie było cię tu.
 
 stonesAsk = > Znalazłem na wraku kamienie z krukiem. Pięć.
 [stonesCelnik]
-Kamienie z krukiem? (Celnik odkłada pióro.) Rozkaz dworu: do zgłoszenia. Pięć groszy za sztukę. Zapiszę uczciwie.
+Kamienie z krukiem? (Celnik odkłada pióro.) Rozkaz dworu: do zgłoszenia. Pięć miedziaków za sztukę. Zapiszę uczciwie.
 
 [stonesCelnikDone]
 Zapisane. (Celnik wrzuca kamienie do skrzyni z pieczęcią Lorda.) Dwór pamięta przysługi.
 
 [stonesKupiec]
-Kamienie z krukiem... (Baltazar ogląda jeden pod światło.) Piętnaście groszy za sztukę. Więcej nikt ci nie da. I nikomu ani słowa.
+Kamienie z krukiem... (Baltazar ogląda jeden pod światło.) Jeden srebrnik i pięć miedziaków za sztukę. Więcej nikt ci nie da. I nikomu ani słowa.
 
 [stonesKupiecDone]
 Interes to interes. (Baltazar chowa kamienie do szuflady, którą zamyka na klucz.) Zapamiętam cię.
@@ -343,7 +343,7 @@ Pokazałem kamienie dziadkowi. Kazał je schować i nie pokazywać ludziom Lorda
 
 [notatki.wydany]
 Wydałem Ansgara
-Powiedziałem garnizonowi, kim jest Eryk Sowa. Wieczorem żołnierze wyprowadzili go z tawerny skutego. Popłynie na ląd najbliższym promem. Dostałem osiemdziesiąt groszy.
+Powiedziałem garnizonowi, kim jest Eryk Sowa. Wieczorem żołnierze wyprowadzili go z tawerny skutego. Popłynie na ląd najbliższym promem. Dostałem osiem srebrników.
 
 [notatki.zostaje]
 Ansgar zostaje
@@ -409,7 +409,7 @@ kod.build.3 = Żołnierz garnizonu
 kod.soldiersWatch.0 = Kara: -{fine} G
 kod.soldiersWatch.1 = wrak bez glejtu
 kod.soldiersWatch.2 = Złapany na wraku
-kod.soldiersWatch.3 = Żołnierze garnizonu złapali mnie na wraku bez glejtu rotmistrza. Kara: {fine} groszy. Garnizon będzie o tym pamiętał.
+kod.soldiersWatch.3 = Żołnierze garnizonu złapali mnie na wraku bez glejtu rotmistrza. Kara: {fine} G. Garnizon będzie o tym pamiętał.
 # wellWatch
 kod.wellWatch.0 = Poszlaka: {name}
 kod.wellWatch.1 = Kim naprawdę jest Eryk Sowa?
@@ -430,7 +430,7 @@ kod.raidWatch.2 = Baltazar zorientował się, że mapa była fałszywa. Jego lud
 W taką pogodę? Morze by nas połknęło razem z łodzią. Nie dziś.
 
 doorLocked = Zamknięte. Mosiężny zamek, mocny.
-erykNoGold = Dwa grosze. Albo piwo. Nie masz ani tego, ani tego.
+erykNoGold = Dwa miedziaki. Albo piwo. Nie masz ani tego, ani tego.
 [erykCold]
 (Eryk nie odpowiada. Rysuje dalej, jakby cię tu nie było.)
 
@@ -470,7 +470,7 @@ kod.w12Talk.3 = Fałszywa mapa dla Baltazara.
 kod.w12Talk.4 = Jeszcze nie wiem.
 kod.w12Choose.0 = W12: rozbitek wydany
 kod.w12Choose.1 = Wydałem Ansgara
-kod.w12Choose.2 = Powiedziałem garnizonowi, kim jest Eryk Sowa. Wieczorem żołnierze wyprowadzili go z tawerny skutego. Popłynie na ląd najbliższym promem. Dostałem osiemdziesiąt groszy.
+kod.w12Choose.2 = Powiedziałem garnizonowi, kim jest Eryk Sowa. Wieczorem żołnierze wyprowadzili go z tawerny skutego. Popłynie na ląd najbliższym promem. Dostałem osiem srebrników.
 kod.w12Choose.3 = Ansgar zostaje
 kod.w12Choose.4 = Zachowałem tajemnicę Ansgara Wiela. Czyta szyfr Czarnych Oczu, a jeśli kiedyś przypłyną po nas, powie mi, którędy pójdą.
 kod.w12Choose.5 = Ansgar odpłynął

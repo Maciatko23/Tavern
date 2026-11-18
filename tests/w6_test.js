@@ -60,7 +60,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     await t.frames(20);
     const s4 = await J("TownQuests.rec('W6')");
     t.check("ch4: the tavern's quest board - 'POSZUKIWANY. Rafał...' from Kapral Wit by the manor's order, 120 G - then the board opens; the search on day 16",
-        /POSZUKIWANY/.test(board.text) && /sto dwadzieścia groszy/.test(board.text) && /Kapral Wit Czerwień, z rozkazu dworu/.test(board.text) && onBoard && s4.step === 3 && s4.t.search === 16,
+        /POSZUKIWANY/.test(board.text) && /jeden złoty i dwa srebrniki/.test(board.text) && /Kapral Wit Czerwień, z rozkazu dworu/.test(board.text) && onBoard && s4.step === 3 && s4.t.search === 16,
         { text: board.text.slice(0, 260), onBoard, step: s4.step, search: s4.t.search });
     t.check("...and a paper on the tavern's outer wall (the notice place's paper, 7 days)", (await J("TownQuests.state().flags.notice_notice_tavern")) === 13);
     await t.go(218, 56, 19, 8);
@@ -115,26 +115,26 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     const give = await talkTo(res("kapral"), ["Wiem, gdzie jest"]);
     const gv = await J("({ r: TownQuests.rec('W6'), f: TownQuests.state().flags, gone: TownLife.gone('rafal'), w6: TownQuests.w6() })");
     t.check("ch4 b: Wit 'List gończy... Wiesz coś o tym Rafale?' -> 'Wiem, gdzie jest.' - 120 G, rafalGiven + rafalEnemy, Rafał gone; chapter 5",
-        /Sto dwadzieścia groszy, jak w liście/.test(give.text) && (await t.gold()) === g0 + 120 && gv.f.rafalGiven && gv.f.rafalEnemy && gv.gone && gv.r.step === 5 && gv.w6.rafal === "enemy", { text: give.text.slice(0, 200), w6: gv.w6 });
+        /Jeden złoty i dwa srebrniki, jak w liście/.test(give.text) && (await t.gold()) === g0 + 120 && gv.f.rafalGiven && gv.f.rafalEnemy && gv.gone && gv.r.step === 5 && gv.w6.rafal === "enemy", { text: give.text.slice(0, 200), w6: gv.w6 });
     await t.go(218, 56, 19, 8);
     await at(14, 10.5, 60);
     const lm1 = await talkTo(res("ludmila"), []);
     const lm2 = await talkTo(res("ludmila"), []);
-    t.check("...Ludmiła: 'Wydałeś go. Za sto dwadzieścia groszy.' - then only a cold word; her quests are not offered (K28)",
+    t.check("...Ludmiła: 'Wydałeś go. Za jeden złoty i dwa srebrniki.' - then only a cold word; her quests are not offered (K28)",
         /Wydałeś go/.test(lm1.text) && /(Nie mam ci nic|Idź sobie)/.test(lm2.text) && !(await J("TownQuests.offerable('K28')")), { a: lm1.text.slice(0, 120), b: lm2.text.slice(0, 120) });
 
     // ---- c) smuggled on the ferry through Baltazar (50 G)
     await t.loadFrom(1, { quiet: true });
     await at(14, 5, 40);
     const sm = await talkTo(res("rafal"), ["Przemycę cię promem"]);
-    t.check("ch4 c: 'Przemycę cię promem - przez Baltazara.' - Rafał agrees; the step asks to pay Baltazar", /pięćdziesiąt groszy/.test(sm.text) && (await J("TownQuests.rec('W6').t.agree")) === "smuggle", sm.text.slice(0, 160));
+    t.check("ch4 c: 'Przemycę cię promem - przez Baltazara.' - Rafał agrees; the step asks to pay Baltazar", /pięć srebrników/.test(sm.text) && (await J("TownQuests.rec('W6').t.agree")) === "smuggle", sm.text.slice(0, 160));
     await at(14, 10, 60);
     await t.gold(80);
     await t.go(220, 54, 23, 8);   // (Baltazar's kantor is in the town)
     await at(14, 10.2, 60);
     const bal = await talkTo(res("kupiec"), ["Płacę"]);
     const sv = await J("({ r: TownQuests.rec('W6'), f: TownQuests.state().flags, gone: TownLife.gone('rafal') })");
-    t.check("...Baltazar: 'Pięćdziesiąt groszy. I nikt nie pyta.' - paid: rafalSmuggled, Rafał gone, chapter 5",
+    t.check("...Baltazar: 'Pięć srebrników. I nikt nie pyta.' - paid: rafalSmuggled, Rafał gone, chapter 5",
         /I nikt nie pyta/.test(bal.text) && (await t.gold()) === 30 && sv.f.rafalSmuggled && sv.gone && sv.r.step === 5, { text: bal.text.slice(0, 160), step: sv.r.step });
 
     // ---- d) nothing done: the camp searched on day 16 - taken
@@ -234,7 +234,7 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     // ---- a word with the guard (80 G) - then out of the cave: marekSaved
     await t.gold(100);
     const gw = await talkTo(caveEv("Strażnik obozu"), ["Dam ci 80"]);
-    t.check("...the camp's guard: 'nikt stąd nie wychodzi' - 'Dam ci 80 groszy.' - the way is clear", /nikt stąd nie wychodzi/.test(gw.text) && (await t.gold()) === 20 && (await J("TownQuests.rec('W6').t.mk.clear")) === "bribe", gw.text.slice(0, 160));
+    t.check("...the camp's guard: 'nikt stąd nie wychodzi' - 'Dam ci 8 srebrników.' - the way is clear", /nikt stąd nie wychodzi/.test(gw.text) && (await t.gold()) === 20 && (await J("TownQuests.rec('W6').t.mk.clear")) === "bribe", gw.text.slice(0, 160));
     // (out by the old adit north to Krucze Turnie - the marker "jaskinia_wyjscie" 57,7: the hero there, Marek a step behind him)
     // (the stones across the old adit, 56-58,9, cleared first - as the hero does on his way out: "Kamienie ustąpiły...")
     await t.eval(`(function(){ for (const e of $gameMap.events()) if (/^Rumowisko/.test(e.event().name || "") && e.y === 9) $gameSelfSwitches.setValue([$gameMap.mapId(), e.eventId(), "A"], true); $gameMap.requestRefresh(); return 0; })()`);

@@ -68,7 +68,7 @@ mapa.24.opis = Nawet w suszę trawa jest tu zielona i równo przycięta.
 
 # 111 Podgrodzie
 mapa.111.pod = biedna dzielnica za murami miasta
-mapa.111.opis = Tu dym pachnie smołą, a każdy grosz liczy się dwa razy.
+mapa.111.opis = Tu dym pachnie smołą, a każdy miedziak liczy się dwa razy.
 
 # 118 Dno studni
 mapa.118.pod = wilgotna komora pod rynkiem

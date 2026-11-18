@@ -1060,7 +1060,7 @@
             const inCh = GOALS.filter(x => x.ch === g.ch), ok = inCh.filter(goalDone).length;
             ops.push({ k: "gap", n: 6 }, { k: "h", text: "Postęp rozdziału" }, { k: "bar", ratio: ok / Math.max(1, inCh.length), text: ok + " z " + inCh.length });
         }
-        if (done === undefined) ops.push({ k: "gap", n: 10 }, { k: "muted", text: d.pinned === g.id ? "Ten cel jest przypięty: widzisz go w prawym górnym rogu. OK: odepnij." : "OK: przypnij ten cel, żeby widzieć go na ekranie." });
+        if (done === undefined) ops.push({ k: "gap", n: 10 }, { k: "muted", text: d.pinned === g.id ? "Ten cel jest przypięty: widzisz go w lewym górnym rogu. O: odepnij." : "O: przypnij ten cel, żeby widzieć go na ekranie." });
         return ops;
     }
     function materialOps(id) {

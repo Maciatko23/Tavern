@@ -2571,7 +2571,7 @@
         }
         if (q.reward && rewardText(q.reward)) ops.push({ k: "gap", n: 6 }, { k: "h", text: "Nagroda" }, { k: "p", text: rewardText(q.reward) });
         ops.push({ k: "gap", n: 6 }, { k: "muted", text: "Gdzie: " + q.where + ".  Kiedy: " + q.when + "." });
-        if (r && r.s === "active") ops.push({ k: "muted", text: s.track === q.id ? "Przypięte: widzisz je w okienku celu i na kompasie. OK: odepnij." : "OK: przypnij, żeby widzieć je w okienku celu i na kompasie." });
+        if (r && r.s === "active") ops.push({ k: "muted", text: s.track === q.id ? "Przypięte: widzisz je w okienku celu i na kompasie. O: odepnij." : "O: przypnij, żeby widzieć je w okienku celu i na kompasie." });
         return ops;
     }
     function opinionOps() {

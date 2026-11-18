@@ -42,7 +42,7 @@ Wnuku Stacha. Połowa za działkę - przyznam, nie wierzyłem. Ty pewnie nigdy n
 Wejdź. Pokażę ci, z czego jest ten dom. Ściany z kamieni twierdzy.
 
 [zaproAskCold]
-Wnuku Stacha. Po tamtym targu nie myślałem, że jeszcze cię tu zobaczę. A jednak - połowa długu, co do grosza.
+Wnuku Stacha. Po tamtym targu nie myślałem, że jeszcze cię tu zobaczę. A jednak - połowa długu, co do miedziaka.
 Wejdź. Skoro całe miasto wie, co płynęło pod moim dworem, zobacz chociaż, z czego ten dwór jest zrobiony.
 
 [zaproAskAlly]
@@ -164,7 +164,7 @@ szuflada.bundle = > (W szufladzie plik listów, przewiązany czarnym sznurkiem. 
 
 szuflada.lastHere = > „Wnuk Stacha spłaca dług i pyta o twierdzę. Zna Borgara. Patrzę na niego. Pan nic nie wie i nie dowie się - pan wierzy w bajki. F.”
 szuflada.lastGone = > „Ktoś widział mnie przy włazie. Jeśli zniknę - kamienie z holu są u kupca. Szukajcie innego przy dworze. F.”
-szuflada.lastPays = > „Wnuk Stacha wie o zasuwie. Płacę mu dwadzieścia groszy na tydzień - niech myśli, że to wystarczy. Moi ludzie zajmą się resztą. Pan nic nie wie. F.”
+szuflada.lastPays = > „Wnuk Stacha wie o zasuwie. Płacę mu dwa srebrniki na tydzień - niech myśli, że to wystarczy. Moi ludzie zajmą się resztą. Pan nic nie wie. F.”
 szuflada.hand = > (Pismo Feliksa. To samo, co w księdze gości i na rachunkach dworu.)
 szuflada.ask = Co z nimi zrobisz?
 szuflada.take = Zabierz listy.
@@ -235,11 +235,11 @@ fate.sent = Odprawiłem go za wodę - po cichu, z sakiewką na drogę. Z sakiewk
 fate.gone = Feliksa już tu nie ma. A jego listy zostały - jak kamienie, które ukradł.
 reward.debt = Dług twojego dziadka... Zapiszę sam: dwieście pięćdziesiąt mniej. Nie, nie dziękuj. To ja dziękuję.
 reward.buyback = Działkę Stacha odsprzedam ci za dwa tysiące. Tysiąc mniej. Tyle są warte te listy - i to, że przyszedłeś z nimi do mnie.
-reward.other = Weź to - sto groszy. I zapamiętaj: drzwi tego domu są dla ciebie otwarte zawsze.
+reward.other = Weź to - jeden złoty. I zapamiętaj: drzwi tego domu są dla ciebie otwarte zawsze.
 prawdaPays = „Wnuk Stacha wie o zasuwie. Płacę mu...” (Lord podnosi wzrok.) Brałeś od niego pieniądze. ...A jednak przyszedłeś z tym do mnie. To liczę bardziej.
 [w1Broke]
 Feliks już nie płaci
-{fate} - dwudziestu groszy na tydzień już nie będzie, a jego ludzie nie mają po co czekać na Polnej drodze. Rysunek śluzy wciąż mam: mogę go pokazać sołtysowi albo Lordowi.
+{fate} - dwóch srebrników na tydzień już nie będzie, a jego ludzie nie mają po co czekać na Polnej drodze. Rysunek śluzy wciąż mam: mogę go pokazać sołtysowi albo Lordowi.
 
 w1BrokeFate.arrest = Feliks siedzi w wieży
 w1BrokeFate.fled = Feliks uciekł promem
@@ -270,7 +270,7 @@ optLord = Powiem panu wszystko - co piętro, co znajdę.
 optLie = Nic tam nie ma, panie. Kurz i szczury.
 optSilent = Tego nie powiem nikomu. Także panu.
 [sayLord]
-Wiedziałem, że ród Stacha ma honor. Sto groszy na tydzień - za każde słowo. I weź coś ze zbrojowni: pochodnie, sznurki, opatrunki, strzały.
+Wiedziałem, że ród Stacha ma honor. Jeden złoty na tydzień - za każde słowo. I weź coś ze zbrojowni: pochodnie, sznurki, opatrunki, strzały.
 Moi ludzie pójdą za tobą. Nie przeszkadzać - pilnować, żebyś wrócił. I żeby nikt inny nie był pierwszy.
 
 [sayLie]
@@ -281,11 +281,11 @@ Milczysz? ...Szanuję milczenie. Ale pamiętam je.
 
 saySilentFeliks = (Za plecami Lorda, w drzwiach dworu, stoi Feliks. Słyszał każde słowo.)
 [tydzien]
-Twoje sto groszy. Co nowego pod tawerną?
+Twój złoty. Co nowego pod tawerną?
 > Schodzę głębiej, panie. Ostrożnie.
 
 [tydzienNie]
-Sto groszy? Mój ogród usycha przez twoje grzebanie w rurach zakonu. Nie tym razem.
+Jeden złoty? Mój ogród usycha przez twoje grzebanie w rurach zakonu. Nie tym razem.
 
 [lieOut]
 Lord wie, że skłamałeś
@@ -297,7 +297,7 @@ lieOutSub = Wrogość dworu: wyższe myto, przeszukanie chaty
 Kurz i szczury, mówiłeś. Moi ludzie słyszą w tawernie co innego.
 Kłamca nie wejdzie do mojego domu. Płać, co winien - i idź.
 
-toll = Myto dworu! Dla ciebie - z rozkazu jaśnie pana - pięć groszy.
+toll = Myto dworu! Dla ciebie - z rozkazu jaśnie pana - pięć miedziaków.
 [search]
 Przeszukanie
 Straż dworu przewróciła mi chatę do góry nogami. {what} „Z rozkazu jaśnie pana - za kłamstwo.”
@@ -327,7 +327,7 @@ serceHow.refuse = nie pozwoliłem mu zapytać.
 serceHow.askFor = zapytałem za niego.
 serceHow.none = nie przyszedł.
 epilog.truth = W holu dworu brakuje trzech kruków. Lord nie kazał ich zamurować - „niech każdy gość pyta, gdzie są”.
-epilog.lie = Dwór Zaleskich zamyka bramę przed wnukiem Stacha. Myto przy bramie wschodniej wciąż kosztuje go pięć groszy.
+epilog.lie = Dwór Zaleskich zamyka bramę przed wnukiem Stacha. Myto przy bramie wschodniej wciąż kosztuje go pięć miedziaków.
 epilog.fled = Gdzieś na lądzie Feliks pisze listy do sztabu, którego już nikt nie czyta.
 epilog.silent = Lord do dziś nie wie, kto mu wyjmował kruki ze ścian. Liczy gości.
 
@@ -431,7 +431,7 @@ kod.odkupTanszySub = Lord odsprzeda działkę za {n} G
 kod.odLorda = +{n} G od Lorda
 kod.przychylnosc = listy Feliksa
 kod.najpierw.tytul = Do kogo najpierw
-kod.najpierw.lord = Powiedziałem Lordowi, że będę mu mówił o wszystkim, co znajdę pod tawerną. Płaci sto groszy na tydzień i dał mi ekwipunek ze zbrojowni. Jego ludzie pójdą za mną w dół - „pilnować, żebym wrócił, i żeby nikt inny nie był pierwszy”.
+kod.najpierw.lord = Powiedziałem Lordowi, że będę mu mówił o wszystkim, co znajdę pod tawerną. Płaci jeden złoty na tydzień i dał mi ekwipunek ze zbrojowni. Jego ludzie pójdą za mną w dół - „pilnować, żebym wrócił, i żeby nikt inny nie był pierwszy”.
 kod.najpierw.klamstwo = Skłamałem Lordowi: „Nic tam nie ma, kurz i szczury.” Uwierzył. Na razie.
 kod.najpierw.milczenie = Nie powiedziałem Lordowi, co jest pod tawerną. „Szanuję milczenie. Ale pamiętam je.”
 kod.uciekl = Uciekł promem na ląd
@@ -461,7 +461,7 @@ kod.kroki.splataTermin = Lord przyjmuje spłatę przed dworem (8–20), nocą ka
 kod.kroki.najpierwAkt2 = w Akcie II (po spłacie długu albo stracie działki).
 kod.kroki.najpierwZejdz = kiedy zejdziesz pod tawernę (krata w piwnicy), Lord zapyta, co tam jest.
 kod.kroki.najpierwPyta = Lord pyta przed dworem (8–20), co jest pod Kruczymi Skałami.
-kod.kroki.serceTydzien = " Sto groszy na tydzień - u Lorda przed dworem."
+kod.kroki.serceTydzien = " Jeden złoty na tydzień - u Lorda przed dworem."
 
 # (2026-10-29: przywrócone - kod dalej je czyta; usunięte przez pomyłkę jako „nieczytane”)
 drzwiWejdz = Wejść do dworu?

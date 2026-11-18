@@ -62,7 +62,7 @@ Drzwi kruczarni są uchylone, ale nie wchodzisz bez zaproszenia. Wróć w ciągu
 [spotkanie.2]
 @gawron: Rano o 6:30 i wieczorem o 17:30 kruki wracają z listami: z frontu, ze wsi, z Zakonu. Kładę je na stole. Ty bierzesz sześć naraz i roznosisz.
 @gawron: Ja nie dojdę z listem z jednego końca miasta na drugi. Ty masz nogi i wisiorek. Każdy adresat ma swoje godziny, więc patrz, kiedy kto stoi gdzie.
-@gawron: Za każdy doręczony list dostaniesz parę groszy od adresata. Spóźniony list też można zanieść, ale ludzie się gniewają.
+@gawron: Za każdy doręczony list dostaniesz parę miedziaków od adresata. Spóźniony list też można zanieść, ale ludzie się gniewają.
 @gawron: Jest jedna zasada, jedyna: kruk niesie, nie czyta. Przysięgasz?
 
 spotkanie.opcja.przysiegam = Przysięgam.
@@ -197,7 +197,7 @@ gryta.opcja.nie = Nie teraz.
 
 # ======================================================================== rozdz. 3: kto czyta
 [poszlaki.wicek]
-@wicek: Ręce w atramencie? Przepisuję listy za grosz dla tych, co nie umieją pisać. Hanka, Ozzy, połowa rynku.
+@wicek: Ręce w atramencie? Przepisuję listy za miedziak dla tych, co nie umieją pisać. Hanka, Ozzy, połowa rynku.
 @wicek: Nie czytam cudzych listów, panie. Przepisuję. To co innego. A nie śpię, bo noce są cichsze niż dnie i ręka mniej drży.
 
 poszlaka.wicek = Wicek ma ręce w atramencie, bo przepisuje listy dla niepiśmiennych. Nie otwiera cudzych.
@@ -544,7 +544,7 @@ list.l3_baltazar.od = Zielarka z Podgrodzia
 
 [list.l3_baltazar.tresc]
 Panie Baltazarze,
-rachunek za zioła: dwanaście groszy. Płatne do końca miesiąca.
+rachunek za zioła: jeden srebrnik i dwa miedziaki. Płatne do końca miesiąca.
 
 list.l3_soltys.od = Lord
 

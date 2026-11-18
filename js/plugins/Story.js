@@ -178,7 +178,7 @@
             POT: [[5, 5, 8], [6, 6, 8], [6, 5, 8], [4, 5, 8], [5, 6, 8]],
             // (the yard inside its fence: x 11..19, y 20..23; the way in is the gap in the fence at x 18..19 - GATE is the cell just
             // inside it: everybody walks the path up to it first, then to his place, and leaves the same way)
-            WEZ: { outside: true, DOOR: [18, 29], OUT: [18, 30], GATE: [18, 23], HUT: [14, 20], YARD_OUT: [14, 21], SIGN_AT: [13, 20], RECT: [10, 19, 20, 27],
+            WEZ: { outside: true, DOOR: [16, 29], OUT: [16, 30], GATE: [16, 24], HUT: [14, 20], YARD_OUT: [14, 21], SIGN_AT: [13, 20], RECT: [10, 19, 20, 27],
                 SPOT: { grandpa: [14, 21], hero: [13, 21], herald: [14, 23], butler: [15, 23], guard1: [16, 23], guard2: [17, 22], bye: [14, 21] } } }
     };
     let worldOf = () => "stary";   // (set below, once the state's helpers exist)
@@ -1324,8 +1324,8 @@
         T.call("CleanHUD", "sceneBars", false);
     }
     // the shortest walk on the tiles (four directions, as the character can pass now - round the cat too), or null
-    function stepsTo(ch, tx, ty) {
-        const W = $gameMap.width(), H = $gameMap.height(), start = ch.y * W + ch.x, goal = ty * W + tx;
+    function stepsTo(ch, tx, ty, sx, sy) {
+        const W = $gameMap.width(), H = $gameMap.height(), start = (sy === undefined ? ch.y : sy) * W + (sx === undefined ? ch.x : sx), goal = ty * W + tx;
         if (tx < 0 || ty < 0 || tx >= W || ty >= H) return null;
         if (start === goal) return [];
         const prev = new Int32Array(W * H).fill(-1), dir = new Uint8Array(W * H), q = [start];
@@ -1442,6 +1442,32 @@
         ch.forceMoveRoute({ list, repeat: false, skippable: false, wait: true });
         if (interp) { interp._character = ch; interp._characterId = who === 0 ? -1 : who;   /* (MZ waits for the route of character(_characterId): without it the scene went on while they still walked) */ interp.setWaitMode("route"); }
     }
+    // (2026-11-17, the player: „ścieżka, którą ludzie chodzą podczas sceny, jest dziwna i długa”; „kamerdyner i żołnierze niech
+    // odchodzą jeden od razu za drugim”) a walk through some points in one route: each leg planned from the end of the one before,
+    // with the scene's people (posłaniec, kamerdyner, straż, dziadek) not in the way of the plan - the one behind waits his turn
+    // in the walk, never goes round; opts: speed, wait (the scene waits for this one), then (a script at the end: hide him)
+    function wezRoute(interp, who, pts, face, opts) {
+        opts = opts || {};
+        const ch = who === 0 ? $gamePlayer : $gameMap.event(who);
+        if (!ch) return;
+        const cast = ["herald", "butler", "guard1", "guard2", "grandpaYard"].map(r => $gameMap.event(WEZ.ID[r])).filter(e => e && e !== ch && !e._through);   // (not the seal's sign: it stands)
+        cast.forEach(e => { e._through = true; });
+        const list = [{ code: 29, parameters: [opts.speed || 3] }];
+        let x = ch.x, y = ch.y;
+        try {
+            for (const [px, py] of pts) {
+                const steps = stepsTo(ch, px, py, x, y);
+                if (!steps) continue;   // (a point not reached from there: on to the next)
+                for (const d of steps) list.push({ code: MOVE[d] });
+                x = px; y = py;
+            }
+        } finally { cast.forEach(e => { e._through = false; }); }
+        if (TURN[face]) list.push({ code: TURN[face] });
+        if (opts.then) list.push({ code: 45, parameters: [opts.then] });
+        list.push({ code: 29, parameters: [ch.moveSpeed()] }, { code: 0 });
+        ch.forceMoveRoute({ list, repeat: false, skippable: false, wait: !!opts.wait });
+        if (interp && opts.wait) { interp._character = ch; interp._characterId = who === 0 ? -1 : who; interp.setWaitMode("route"); }
+    }
     function wezShow(role) {
         const id = WEZ.ID[role], e = $gameMap.event(id);
         if (!e) return;
@@ -1465,10 +1491,15 @@
         const o = [], js = x => o.push(C(355, [x])), wait = f => o.push(C(230, [f]));
         const walk = (who, at, face) => js("Story.wezWalk(this, " + who + ", " + at[0] + ", " + at[1] + ", " + (face || 0) + ")");
         const line = (who, i) => say(o, who, Watki.wstaw(t[i], v));
-        const GATE = WL().WEZ.GATE;   // (the yard's scene: through the gap in the fence, both ways)
-        const out = (role, id) => { if (GATE) walk(id, GATE, 2); walk(id, WEZ.DOOR, 2); walk(id, WEZ.OUT, 2); js("Story.wezHide(\"" + role + "\")"); };
-        const inn = (id, at) => { if (GATE) walk(id, GATE, 8); walk(id, at, 8); };
+        const GATE = WL().WEZ.GATE;   // (the yard's scene: straight through the gap in the fence, both ways)
+        const route = (who, pts, face, op) => js("Story.wezRoute(this, " + who + ", " + JSON.stringify(pts) + ", " + (face || 0) + ", " + JSON.stringify(op || {}) + ")");
+        const inn = (id, at, op) => route(id, (GATE ? [GATE] : []).concat([at]), 8, Object.assign({ speed: 4, wait: true }, op));
+        const out = (role, id, op) => route(id, (GATE ? [GATE] : []).concat([WEZ.DOOR, WEZ.OUT]), 2, Object.assign({ speed: 4, wait: true, then: "Story.wezHide(\"" + role + "\")" }, op));
         o.push(C(221, [])); js("Story.wezStage()"); wait(20); o.push(C(222, [])); wait(20);
+        // (2026-11-17, the player: the scene's own music - "Wezwanie_Dziadka", mysterious; after it Podgrodzie's music again) the
+        // map's music kept and faded out, the scene's faded in with the knock; at the end back where it was
+        o.push(C(243, [])); js("AudioManager.fadeOutBgm(1)"); wait(50);
+        js("AudioManager.playBgm({ name: \"Wezwanie_Dziadka\", volume: 65, pitch: 100, pan: 0 }); AudioManager.fadeInBgm(3)");
         js("AudioManager.playSe({ name: \"Knock\", volume: 90, pitch: 100, pan: 0 })"); wait(30);
         js("Story.wezShow(\"herald\")"); inn(H, S.herald);
         // (2026-11-17, the player: the king summons grandpa - in secret a legendary warrior of the order that keeps the peace; few
@@ -1476,17 +1507,19 @@
         line(H, 0); js("AudioManager.playSe({ name: \"Book1\", volume: 80, pitch: 90, pan: 0 })"); line(G, 1); wait(50);
         line(G, 2); line(H, 3); line(G, 4); line(G, 5); line(0, 6); line(G, 7); line(G, 8); line(H, 9);
         out("herald", H); wait(40);
-        js("Story.wezShow(\"butler\")"); inn(B, S.butler);
-        js("Story.wezShow(\"guard1\")"); inn(WEZ.ID.guard1, S.guard1);
-        js("Story.wezShow(\"guard2\")"); inn(WEZ.ID.guard2, S.guard2);
+        js("Story.wezShow(\"butler\")"); inn(B, S.butler, { wait: false }); wait(18);
+        js("Story.wezShow(\"guard1\")"); inn(WEZ.ID.guard1, S.guard1, { wait: false }); wait(18);
+        js("Story.wezShow(\"guard2\")"); inn(WEZ.ID.guard2, S.guard2); wait(12);   // (the last of them: the scene waits for him)
         line(B, 10); line(B, 11); line(G, 12); line(B, 13); line(0, 14); line(B, 15);
-        out("guard2", WEZ.ID.guard2); out("guard1", WEZ.ID.guard1); out("butler", B); wait(30);
+        // (the butler first, his men a step behind: guard 1 stands nearer the gap - he waits until the butler is past it)
+        out("butler", B, { wait: false }); wait(36); out("guard1", WEZ.ID.guard1, { wait: false }); wait(22); out("guard2", WEZ.ID.guard2); wait(30);
         walk(G, S.bye, 4);
         line(G, 16); line(G, 17); js("Story.wezLetter()"); line(G, 18); line(0, 19); line(G, 20);
         line(G, 21); line(0, 22); line(G, 23);   // („Dbaj o prawdę” - he does not understand it yet)
-        if (GATE) walk(G, GATE, 2);
-        walk(G, WEZ.DOOR, 2); walk(G, WEZ.OUT, 2);
+        route(G, (GATE ? [GATE] : []).concat([WEZ.DOOR, WEZ.OUT]), 2, { speed: 3, wait: true });   // (an old man's pace, one walk)
+        js("AudioManager.fadeOutBgm(3)");
         js("Story.wezGone()");
+        wait(150); o.push(C(244, []));   // (the music of before - Podgrodzie's - where it stopped, fading in)
         return end(o);
     }
     function startWezwanie() {
@@ -1779,7 +1812,7 @@
         introDone, introWalk, introGetUp: () => getUp(), introLying: () => lying, quickStart, thanks,
         // Wezwanie króla (Stajnia.js asks wezwanie(); the scene's commands call the rest)
         wezwanie: () => { const z = wez(); return z ? { called: z.called, sealed: sealed(), away: grandpaAway(), letter: !!z.letter } : null; },
-        wezWalk, wezShow, wezHide, wezStage, wezLetter, wezGone, startWezwanie,
+        wezWalk, wezRoute, wezShow, wezHide, wezStage, wezLetter, wezGone, startWezwanie,
         wezOut: () => { $gamePlayer.reserveTransfer(WEZ.YARD, WEZ.YARD_OUT[0], WEZ.YARD_OUT[1], 2, 0); wezSelf(WEZ.YARD, WEZ.ID.sign, true); },
         wezSignRead: () => T.popup(TK.wez.znak, { color: U().accent }), thanksBack, chapterDone, startIntro, checkDeadline, showEnding, syncGoals, npc, doorEvent, borgarEvent, roleOf, doomed: () => doomed(), step,
         // the field lost and bought back

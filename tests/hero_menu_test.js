@@ -25,7 +25,7 @@ kit.test({ port: 9468, errorCheck: "bez błędów w konsoli" }, async t => {
     await t.until("SceneManager._scene instanceof Scene_Menu && !SceneManager.isSceneChanging() && !!MenuRing.info()", 10);
     await t.frames(20);
     const menu = await J("(function(){ const i = MenuRing.info(); return { tabs: i.tabs, active: i.active, points: i.stats && i.stats.points, plus: i.stats && i.stats.plus, scene: !!Combat.Scene_Hero }; })()");
-    t.check("the P menu opens on Postać (the first tab, then Ekwipunek, Umiejętności), 3 points to give; no old Postać screen", menu.tabs.slice(0, 3).join() === "hero,equip,skills" && menu.active === "hero"
+    t.check("the P menu opens on Postać (the first tab, then Statystyki, Ekwipunek), 3 points to give; no old Postać screen", menu.tabs.slice(0, 3).join() === "hero,stats,equip" && menu.active === "hero"
         && menu.points === 3 && menu.plus === true && menu.scene === false, menu);
     await t.eval("SceneManager.goto(Scene_Map); 0");
     await t.until(t.onMap(3), 10);

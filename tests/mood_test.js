@@ -92,7 +92,8 @@ kit.test({ port: 9489, beforeLoad: "window.ZIEMIA = { off: true };", bootCheck: 
     await t.until("SceneManager._scene._messageWindow.isOpen()", 5);
     await t.frames(10);
     let px = await t.json("__px()");
-    t.check("piksele: każdy nieprzezroczysty piksel HUD-u i okna wiadomości jest taki sam z efektami i bez", px.ui > 2000 && px.uiDiff === 0, px);
+    // (2026-11-17: the needs in the corner are numbers now, no bars - fewer of the HUD's pixels)
+    t.check("piksele: każdy nieprzezroczysty piksel HUD-u i okna wiadomości jest taki sam z efektami i bez", px.ui > 1200 && px.uiDiff === 0, px);
     await t.finish();
     await t.setHour(23);
     await t.eval("Mood.snap(); 0");
@@ -196,22 +197,27 @@ kit.test({ port: 9489, beforeLoad: "window.ZIEMIA = { off: true };", bootCheck: 
     const offTag = await t.json(`(function(){ const n = $dataMap.note; $dataMap.note = n + " <Mood:off>"; Mood.refresh(); SceneManager._scene._spriteset.updateMood();
         const r = Mood.info(); $dataMap.note = n; Mood.refresh(); SceneManager._scene._spriteset.updateMood(); return { kind: r.kind, en: r.enabled, back: Mood.info().enabled }; })()`);
     t.check("miejsca: <Mood:off> w notatce mapy wyłącza efekty na tej mapie", offTag.kind === "off" && offTag.en === false && offTag.back === true, offTag);
-    // the Dark Forest (Map012, user 2026-10-12): darker, muted, colder, green-livid darks, heavy corners also by day; lights warm, a torch glows
-    const dfNight = await kindAt(12, 12, 10);
-    const outNight = await t.json(`(function(){ const n = $dataMap.note; $dataMap.note = n + " <Mood:outdoor>"; Mood.refresh(); const l = Mood.wanted(); $dataMap.note = n; Mood.refresh(); return l; })()`);
-    t.check("Mroczny Las: mapa 12 rozpoznana sama (bez tagu, mapa nietknięta)", dfNight.kind === "darkforest" && (await t.eval("!/Mood/.test($dataMap.note)")), dfNight.kind);
+    // the Dark Forest (user 2026-10-12): darker, muted, colder, green-livid darks, heavy corners also by day; lights warm, a torch glows
+    // (2026-11-17: the old world's Map012 is gone - the look is asked for with its tag, on Map003)
+    await t.go(3, 68, 43, 8);
+    await t.eval(`(function(){ $dataMap.__n = $dataMap.note; $dataMap.note += " <Mood:darkforest>"; Mood.refresh(); if (Mood.snap) Mood.snap(); return 0; })()`);
+    await t.frames(5);
+    const dfNight = await t.json("Mood.info()");
+    const outNight = await t.json(`(function(){ const n = $dataMap.note; $dataMap.note = $dataMap.__n + " <Mood:outdoor>"; Mood.refresh(); const l = Mood.wanted(); $dataMap.note = n; Mood.refresh(); return l; })()`);
+    t.check("Mroczny Las: tag <Mood:darkforest> w notatce mapy daje ponury las", dfNight.kind === "darkforest", dfNight.kind);
     t.check("Mroczny Las nocą: winieta mocniejsza niż w zwykłym lesie, ogień ciepły, poświata pochodni jak wszędzie", dfNight.cur.vig >= outNight.vig + 0.15 && dfNight.cur.high[0] > 1 && dfNight.cur.high[2] < 1
         && dfNight.cur.bloom >= outNight.bloom, { df: { vig: dfNight.cur.vig, high: dfNight.cur.high, bloom: dfNight.cur.bloom }, out: { vig: outNight.vig, bloom: outNight.bloom } });
     await t.setHour(12);
     await t.eval("Mood.snap(); 0");
     await t.frames(30);   // (the night layer redrawn for the day)
     const dfDay = await t.json("Mood.info().cur");
-    const outDay = await t.json(`(function(){ const n = $dataMap.note; $dataMap.note = n + " <Mood:outdoor>"; Mood.refresh(); const l = Mood.wanted(); $dataMap.note = n; Mood.refresh(); return l; })()`);
+    const outDay = await t.json(`(function(){ const n = $dataMap.note; $dataMap.note = $dataMap.__n + " <Mood:outdoor>"; Mood.refresh(); const l = Mood.wanted(); $dataMap.note = n; Mood.refresh(); return l; })()`);
     t.check("Mroczny Las w dzień: stłumiony (nasycenie ciemnych < 75% zwykłego lasu), ciemniejszy, mocna winieta (≥ 0,45)", dfDay.satLo < outDay.satLo * 0.75 && dfDay.gain < 1 && dfDay.vig >= 0.45 && outDay.vig < 0.3, { df: dfDay, out: { satLo: outDay.satLo, vig: outDay.vig } });
     t.check("Mroczny Las w dzień: cienie zielonkawo-sine (czerwień najbardziej ściszona), liście i trawa liczone jako ciemne tony, jasne ciepłe", dfDay.shadow[0] < dfDay.shadow[1] && dfDay.shadow[0] < dfDay.shadow[2]
         && dfDay.shadow[0] < outDay.shadow[0] - 0.2 && dfDay.lift[2] > dfDay.lift[0] && dfDay.split[2] > 0.25 && dfDay.high[0] > dfDay.high[2] && dfDay.bloom >= 0.5, { shadow: dfDay.shadow, lift: dfDay.lift, split: dfDay.split, high: dfDay.high, bloom: dfDay.bloom });
     px = await t.json("__px()");
     t.check("Mroczny Las w dzień: świat na ekranie wyraźnie ciemniejszy niż bez efektów, HUD bez zmian", px.lumOn < px.lumOff * 0.88 && px.uiDiff === 0, px);
+    await t.eval("$dataMap.note = $dataMap.__n; Mood.refresh(); 0");
     const dfTag = await t.json(`(function(){ const n = $dataMap.note; $dataMap.note = n + " <Mood:darkforest>"; const k = Mood.refresh(); $dataMap.note = n; Mood.refresh(); return k; })()`);
     await t.go(3, 68, 43, 2);
     const dfTag3 = await t.json(`(function(){ const n = $dataMap.note; $dataMap.note = n + " <Mood:darkforest>"; const k = Mood.refresh(); $dataMap.note = n; const back = Mood.refresh(); return { k, back }; })()`);

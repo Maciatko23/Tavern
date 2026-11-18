@@ -24,7 +24,9 @@ const OLD_API = ["ATTRS", "SKILLS", "TREES", "MELEE", "SHIELDS", "MAX_LEVEL", "A
     "feel",
     // (2026-10-23, the weapons and armour - Bron.js / Bron_Data.js: perks from the worn things, the ranged weapon in the hand, the
     // weapon as it works at the hero's level, the gear read again)
-    "addPerkSource", "rangedItem", "weaponNow", "refreshGear"];
+    "addPerkSource", "rangedItem", "weaponNow", "refreshGear",
+    // (2026-11-18, the rest's speed: Hart ducha and the skills - Farming_Build's rest and sleep, the menu's Statystyki)
+    "restBonus", "REST_PER_WIL"];
 const FILES = ["TawernaCore", "Skills_Data", "Combat", "Combat_Fight", "Combat_UI"];
 
 // a save as the game stores it, read back: plain fields of a Game_System (what JsonEx gives)

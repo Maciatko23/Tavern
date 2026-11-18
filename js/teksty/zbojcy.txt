@@ -25,7 +25,7 @@ Dawaj, co masz!
 [okrzyki.ambush]
 Sakiewka albo życie!
 Stój! Droga płatna!
-Dawaj grosz, chłopku!
+Dawaj miedziak, chłopku!
 
 [okrzyki.raid]
 Śpi jak kamień... Bierzemy wszystko!
@@ -85,7 +85,7 @@ W kantorze Baltazara nocą ktoś wynosi worki tylnymi drzwiami.
 Najemnicy z kontynentu pytają w tawernie o drogę w góry, do jaskiń.
 Za Kruczymi Skałami ludzie kopią coś pod ziemią. Płacą dobrze, ale nikt nie wraca.
 Ze starego zamku nocą słychać szepty. My tam nie chodzimy.
-Kapral przy bramie bierze grosz od każdego wozu, co wjeżdża po zmroku.
+Kapral przy bramie bierze miedziak od każdego wozu, co wjeżdża po zmroku.
 Na Skraju lasu jest dziupla w starym dębie - przemytnicy zostawiają tam znaki.
 
 # ======================================================================== Wybór nad klęczącym (po kolei: puść, zabierz sakiewkę, dobij, zostaw)

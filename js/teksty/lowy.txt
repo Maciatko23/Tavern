@@ -104,15 +104,15 @@ silver = Srebrna strzała
 # ======================================================================== TALK (rozmowy)
 [rozmowy.gajowyFine1]
 Stój! To zwierzyniec Lorda, a ty strzelasz do jego zwierzyny.
-Czterdzieści groszy grzywny. Nie dla Lorda - dla zwierzyńca: na sól i siano. I nie rób tego drugi raz.
+Cztery srebrniki grzywny. Nie dla Lorda - dla zwierzyńca: na sól i siano. I nie rób tego drugi raz.
 
 [rozmowy.gajowyFine2]
-Znowu ty. Drugi raz. Sześćdziesiąt groszy.
+Znowu ty. Drugi raz. Sześć srebrników.
 Myślisz, że nie widzę? Las ma oczy. Ja mam lepsze.
 
 [rozmowy.gajowyFine3]
 Trzeci raz. Wystarczy.
-Osiemdziesiąt groszy. I zarastam wyłom cierniem. Przez tydzień do zwierzyńca nie wejdziesz.
+Osiem srebrników. I zarastam wyłom cierniem. Przez tydzień do zwierzyńca nie wejdziesz.
 Lord kazałby cię powiesić. Ja każę ci się nauczyć. To różnica.
 
 rozmowy.gajowyNoGold = Nie masz tyle? To biorę mięso i skóry. Zwierzyna wraca do zwierzyńca, choćby tak.
@@ -136,7 +136,7 @@ rozmowy.gajowyEscort = Wyprowadzę cię. I nie wracaj, póki nie zarośnie.
 [rozmowy.czoMeet]
 (Przy ognisku siedzą dwaj obcy. Na kołczanie białe oko.)
 @czo: Hej, chłopcze. Polujemy na niedźwiedzia spod grani. Skóra dla naszego dowódcy. Znasz gawrę?
-@czo: Pomożesz - dostaniesz osiemdziesiąt groszy. Nie pomożesz - nie wchodź nam w drogę.
+@czo: Pomożesz - dostaniesz osiem srebrników. Nie pomożesz - nie wchodź nam w drogę.
 
 [rozmowy.czoHelp]
 > Pomogę. Znam gawrę.
@@ -180,7 +180,7 @@ zadania.K60.steps.1.text = O świcie (5-8) posiedź w zasiadce przy lizawce, aż
 zadania.K60.steps.2.text = Zdobądź poroże jelenia albo mięso jelenia spod lizawki (wiosną leży tam czasem zrzucone poroże).
 [zadania.K60.reward.note]
 Sól dla jeleni
-Położyłem sól na lizawce na Łące i o świcie siedziałem w zasiadce. Jelenie przychodzą lizać sól o świcie i o zmierzchu, przez sześć dni. Bogdan przysłał przez Borgara czterdzieści groszy.
+Położyłem sól na lizawce na Łące i o świcie siedziałem w zasiadce. Jelenie przychodzą lizać sól o świcie i o zmierzchu, przez sześć dni. Bogdan przysłał przez Borgara cztery srebrniki.
 
 # ======================================================================== Q_K61 (zadania.K61)
 zadania.K61.title = Zawody strzeleckie
@@ -188,8 +188,8 @@ zadania.K61.where = Garnizon nad zatoką: strzelnica
 zadania.K61.when = co 7 dni, 10-12
 zadania.K61.desc = Kwatermistrz Kłos chce zobaczyć, czy chłopak spoza wojska pokona jego najlepszego strzelca. Zawody są na strzelnicy garnizonu co siódmy dzień przed południem.
 [zadania.K61.offer.say]
-Strzelasz? Z łuku? Hah! To pokaż. Co siódmy dzień przed południem chłopcy strzelają do tarcz o garść groszy.
-Sierżant Bełt bije wszystkich od roku. Trzydzieści sześć punktów na pięć strzał. Pobij go, a postawię ci pięćdziesiąt groszy.
+Strzelasz? Z łuku? Hah! To pokaż. Co siódmy dzień przed południem chłopcy strzelają do tarcz o garść miedziaków.
+Sierżant Bełt bije wszystkich od roku. Trzydzieści sześć punktów na pięć strzał. Pobij go, a postawię ci pięć srebrników.
 
 zadania.K61.offer.yes = Pobiję go.
 zadania.K61.offer.no = Nie teraz.
@@ -202,7 +202,7 @@ Jak chcesz. Bełt i tak by wygrał.
 zadania.K61.steps.0.text = Na zawodach na strzelnicy garnizonu (co 7 dni, 10-12) pokonaj sierżanta Bełta: więcej niż 36 punktów na 5 strzał.
 [zadania.K61.reward.note]
 Zawody strzeleckie
-Na strzelnicy garnizonu pokonałem sierżanta Bełta. Kwatermistrz postawił pięćdziesiąt groszy, a chłopcy z garnizonu patrzą na mnie inaczej.
+Na strzelnicy garnizonu pokonałem sierżanta Bełta. Kwatermistrz postawił pięć srebrników, a chłopcy z garnizonu patrzą na mnie inaczej.
 
 # ======================================================================== Q_K62 (zadania.K62)
 zadania.K62.title = Krasula i kury Ługów
@@ -457,7 +457,7 @@ kod.czoTick.1 = Wynoście się z naszego lasu.
 # czoResolve
 kod.czoResolve.0 = Gawra pod granią
 kod.czoResolve.1 = Przegnałem obcych myśliwych ze Skraju lasu. Niedźwiedź spod grani ma spokój - chodzę przy gawrze, a on mnie nie rusza, póki nie biegnę.
-kod.czoResolve.2 = Pomogłem obcym myśliwym ubić niedźwiedzia spod grani. Zapłacili osiemdziesiąt groszy i powiedzieli, że ich dowódca szuka w górach wejścia pod ziemię - przy obozie kopaczy jest szyb.
+kod.czoResolve.2 = Pomogłem obcym myśliwym ubić niedźwiedzia spod grani. Zapłacili osiem srebrników i powiedzieli, że ich dowódca szuka w górach wejścia pod ziemię - przy obozie kopaczy jest szyb.
 # crime
 kod.crime.0 = Kłusownictwo w zwierzyńcu Lorda
 kod.crime.1 = Stój! Kłusownik!

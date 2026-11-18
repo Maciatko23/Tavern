@@ -8,25 +8,25 @@ const { launch, sleep } = require("./cdp.js");
     try {
         await b.send("Page.navigate", { url: "http://127.0.0.1:8765/index.html" });
         for (let i = 0; i < 120; i++) { if (await ev("!!(window.SceneManager && SceneManager._scene && SceneManager._scene.constructor.name==='Scene_Title')").catch(() => false)) break; await sleep(500); }
-        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(3, 22, 14, 2, 0); SceneManager.goto(Scene_Map); })()`);
-        for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===3").catch(() => false)) break; await sleep(500); }
+        await ev(`(function(){ DataManager.setupNewGame(); $gamePlayer.reserveTransfer(221, 40, 41, 2, 0);   /* (2026-11-17: the new world - Dwór nad Jazem, outdoors, no music of its own) */ SceneManager.goto(Scene_Map); })()`);
+        for (let i = 0; i < 120; i++) { if (await ev("SceneManager._scene.constructor.name==='Scene_Map' && SceneManager._scene._spriteset && !SceneManager.isSceneChanging() && $gameMap.mapId()===221").catch(() => false)) break; await sleep(500); }
         await sleep(2500);
         await ev("SceneManager._scene.startFadeIn(1,false); if (window.Hunting && Hunting.RAID) Hunting.RAID.perHour = 0; if (window.Needs) Needs.setEnabled(false); $gameSystem.setStamina(80); 0");
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
         await frames(30);
 
         // ------------------------------------------------ places
-        check("the meadow (Map003) is 'outdoor'", (await ev("Atmosphere.profileOf()")) === "outdoor");
-        const profiles = await ev(`(function(){ const out = {}; const orig = $dataMap; for (const id of [1, 2, 9]) { /* look at the map notes and tilesets directly */ } return null; })()`);
+        check("Dwór nad Jazem (Map221) is 'outdoor'", (await ev("Atmosphere.profileOf()")) === "outdoor");
+        const profiles = await ev(`(function(){ const out = {}; const orig = $dataMap; for (const id of [1, 224, 9]) { /* look at the map notes and tilesets directly */ } return null; })()`);
         // the other maps: ask the plugin with a temporary $dataMap / $gameMap swap
         const otherProfiles = await ev(`(async function(){ const out = {};
-            for (const id of [1, 2, 9]) { const data = await new Promise(res => { const xhr = new XMLHttpRequest(); xhr.open("GET", "data/Map" + String(id).padStart(3, "0") + ".json"); xhr.onload = () => res(JSON.parse(xhr.responseText)); xhr.send(); });
+            for (const id of [1, 224, 9]) { const data = await new Promise(res => { const xhr = new XMLHttpRequest(); xhr.open("GET", "data/Map" + String(id).padStart(3, "0") + ".json"); xhr.onload = () => res(JSON.parse(xhr.responseText)); xhr.send(); });
                 const savedData = $dataMap, savedId = $gameMap.mapId, savedTs = $gameMap.tileset, savedTsId = $gameMap.tilesetId;
                 $dataMap = data; $gameMap.mapId = () => id; $gameMap.tileset = () => $dataTilesets[data.tilesetId]; $gameMap.tilesetId = () => data.tilesetId;
                 out[id] = Atmosphere.profileOf();
                 $dataMap = savedData; $gameMap.mapId = savedId; $gameMap.tileset = savedTs; $gameMap.tilesetId = savedTsId; }
             return out; })()`);
-        check("the tavern is 'tavern', the cabin 'interior', the cellar 'cave'", otherProfiles[1] === "tavern" && otherProfiles[2] === "interior" && otherProfiles[9] === "cave", otherProfiles);
+        check("the tavern is 'tavern', grandpa's hut (224) 'interior', the cellar 'cave'", otherProfiles[1] === "tavern" && otherProfiles[224] === "interior" && otherProfiles[9] === "cave", otherProfiles);
 
         // ------------------------------------------------ the ambient bed follows time and weather
         const bed = async (hour, extra) => ev(`(function(){ $gameSystem.setDayNightHour(${hour}); ${extra || ""} return Atmosphere.desiredBed(); })()`);
@@ -102,7 +102,7 @@ const { launch, sleep } = require("./cdp.js");
         check("in winter grass and earth sound like snow", winter.snow > 100 && winter.other === 0, winter);
         await ev(`$gameSystem._dayNightDay = ${dry}; 0`);
         // a tilled field is soft
-        await ev(`(function(){ const f = $gameSystem._farm; const P = f.plots[3] = f.plots[3] || {}; P["25,17"] = { s: "tilled" }; f.rev++; })()`);
+        await ev(`(function(){ const f = $gameSystem._farm; const id = $gameMap.mapId(), P = f.plots[id] = f.plots[id] || {}; P["25,17"] = { s: "tilled" }; f.rev++; })()`);   // (the map the test stands on)
         check("tilled soil: 'soil'", (await ev("Atmosphere.groundKindAt(25, 17)")) === "soil");
         // colours to kinds
         const ck = await ev(`[[80,140,60],[150,120,80],[130,130,135],[200,120,60],[240,240,250]].map(c => Atmosphere.kindFromColour({ r: c[0], g: c[1], b: c[2] }, false)).concat([Atmosphere.kindFromColour({ r: 190, g: 110, b: 50 }, true)])`);

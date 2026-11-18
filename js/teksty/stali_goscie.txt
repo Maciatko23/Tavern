@@ -223,7 +223,7 @@ Ile dni bez deszczu? *hep* Ja wiem ile. I wiem, gdzie jest woda. Tylko nikt nie 
 Sucho, synku. Sucho w ziemi, sucho w gardle. Z tych dwóch to drugie da się naprawić.
 
 [bywalcy.ozzy.talk.debtNear]
-Dług, dług... Lordowie liczą grosze, a nie widzą, na czym siedzą. *hep* Zdążysz, synku. Albo nie. Ale raczej zdążysz.
+Dług, dług... Lordowie liczą miedziaki, a nie widzą, na czym siedzą. *hep* Zdążysz, synku. Albo nie. Ale raczej zdążysz.
 
 [bywalcy.ozzy.talk.debtPaid]
 Spłacone? Hehe. Widziałem to we śnie. Wczoraj albo przedwczoraj. *hep*
@@ -511,9 +511,9 @@ kod.visionLines.4 = " deszcz."
 kod.visionLines.5 = Jutro sucho. Ale pojutrze {1}{2} Zapamiętaj.
 kod.visionLines.6 = Jutro sucho. Pojutrze też. Sucho jak w moim gardle, synku. *hep*
 kod.visionLines.7 = Jutro targ. Ktoś na nim straci sakiewkę, a ktoś inny głowę. Pilnuj obu.
-kod.visionLines.8 = Brakuje ci {left} groszy dla Lorda. Co do grosza. Nie dziw się, ja liczę cudze pieniądze lepiej niż swoje.
+kod.visionLines.8 = Brakuje ci {left} G dla Lorda. Co do miedziaka. Nie dziw się, ja liczę cudze pieniądze lepiej niż swoje.
 kod.visionLines.9 = Kuba wychodzi z domu po pierwszej w nocy. Idź za nim na palcach - na palcach, mówię!
 kod.visionLines.10 = Siedem w południe, synku. Siedem. *hep* Nie wiem, czemu to mówię.
-kod.visionLines.11 = W sakiewce masz {1} groszy. Ani grosza więcej. Wiem, wiem... nie pytaj skąd.
+kod.visionLines.11 = W sakiewce masz {1} G. Ani miedziaka więcej. Wiem, wiem... nie pytaj skąd.
 # regularsInfo
 kod.regularsInfo.0 = Przy {1}: {2}.

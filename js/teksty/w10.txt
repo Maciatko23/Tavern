@@ -10,7 +10,7 @@ zadania.W10.when = od dnia 4, rozmowa o liście 19–22:30
 zadania.W10.desc = Matka obiecała przypłynąć następnym promem. Prom przypływa co trzy dni - a jej nie ma.
 [zadania.W10.offer.say]
 Twoja matka obiecała przypłynąć następnym promem, mówiłeś? Prom był... i nikogo.
-Napisz do niej. Przewoźnik promu bierze listy na ląd, trzy grosze. Tylko że celnik czyta każdy list, zanim pójdzie.
+Napisz do niej. Przewoźnik promu bierze listy na ląd, trzy miedziaki. Tylko że celnik czyta każdy list, zanim pójdzie.
 
 zadania.W10.offer.yes = Napiszę do niej.
 zadania.W10.offer.no = Jeszcze nie teraz.
@@ -33,11 +33,11 @@ A twój ojciec... Jak jest w obozie jeńców, to żyje. Jeńców się karmi, bo 
 (Dziadek patrzy na twój wisiorek.) Ludzie z okiem pytają o kruki. Rób, jak pisze matka. Pod koszulą. Zawsze.
 > Odpiszę jej.
 Odpisz. Napisz, że jesteś cały i że stary dalej zrzędzi. I dopisz ode mnie... że fajka dalej śmierdzi. Ona będzie wiedziała, co to znaczy.
-Jak masz grosz, dołóż jej coś. W taborze grosz to chleb. Ser się nie psuje, wędzonka też.
+Jak masz miedziak, dołóż jej coś. W taborze miedziak to chleb. Ser się nie psuje, wędzonka też.
 
 [zadania.W10.steps.3.reward.note]
 Dziadek i list od mamy
-Dziadek czytał list od mamy długo, poruszając ustami. Mówi, że to dym gryzie go w oczy. Kazał odpisać i dopisać od niego, że „fajka dalej śmierdzi” - mama będzie wiedziała, co to znaczy. Radzi posłać jej grosz albo jedzenie, które się nie psuje: ser, wędzonkę. O wisiorku: pod koszulą, zawsze.
+Dziadek czytał list od mamy długo, poruszając ustami. Mówi, że to dym gryzie go w oczy. Kazał odpisać i dopisać od niego, że „fajka dalej śmierdzi” - mama będzie wiedziała, co to znaczy. Radzi posłać jej miedziak albo jedzenie, które się nie psuje: ser, wędzonkę. O wisiorku: pod koszulą, zawsze.
 
 zadania.W10.steps.4.text = Odpisz mamie i poślij jej coś, jeśli możesz: pieniądze albo paczkę jedzenia, które się nie psuje (prom: przewoźnik w dzień promu 9–15, 3 G; kuter Rocha za darmo). {odpis}
 zadania.W10.steps.5.text = Czekaj na kolejny list od mamy - przyjdzie, kiedy wojna podejdzie bliżej wyspy. {odpis}

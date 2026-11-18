@@ -8,9 +8,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 DOCS = os.path.join(ROOT, "docs", "ui_proste")
 PARY = [
-    ("lista_v2_glowne.png", "gra_postac.png", "Postać (lista, podgląd)"),
-    ("lista_v2_ekwipunek.png", "gra_ekwipunek_dymek.png", "Ekwipunek (w grze: dymek zaznaczonego)"),
-    ("lista_v2_ekwipunek_wybor.png", "gra_ekwipunek_wybor.png", "Ekwipunek: wybór na głowę z podglądem"),
+    ("uklad_B_postac.png", "gra_postac.png", "Postać (2026-11-18: dwie kolumny - kim jest | atrybuty i opis)"),
+    ("uklad_B_postac.png", "gra_ekwipunek_dymek.png", "Ekwipunek (2026-11-18: karta | sylwetka z miejscami | lista)"),
+    ("uklad_B_postac.png", "gra_ekwipunek_wybor.png", "Ekwipunek: wybór na głowę"),
     ("propozycja_1_lista_widok.png", "gra_plecak.png", "Plecak"),
     ("lista_v2_dziennik.png", "gra_dziennik.png", "Dziennik"),
 ]

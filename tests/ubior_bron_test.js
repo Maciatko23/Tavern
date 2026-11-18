@@ -212,25 +212,7 @@ kit.test({ port: 9585, plugins: ["Ubior_Bron"], evalTimeout: 120000 }, async t =
         meta.busts.push({ key: h, file: `p_${h}.png`, ok: okB });
     }
     t.check("popiersie w każdym rodzaju hełmu", meta.busts.every(b => b.ok), meta.busts.map(b => b.ok));
-    // (2026-11-17: the PixelLab helmets sit within the walk's cell - the spangenhelm's top is the cell's first row; the strip over the head
-    // is shown with the old drawn nasal helm, taller: Ubior.pl(false) for the card, on again after it)
-    await t.eval(`Ubior.pl(false); Ubior.set(${JSON.stringify(Object.assign({}, NONE, { glowa: "helm_nosal_stal", tors: "zbroja_kolczuga_stal", nogi: "nagolenniki_stal", stopy: "buty_okute_stal", rece: "karwasze_stal" }))}); 0`);
-    await t.frames(5);
-    await t.eval(`(function(){ $gameTemp._menuTab = "equip"; $gameTemp._menuLevel = 2; SceneManager.push(Scene_Menu); return 0; })()`);
-    await t.until("SceneManager._scene instanceof Scene_Menu && SceneManager._scene._started && !SceneManager.isSceneChanging()", 20, 100);
-    await t.frames(60);
-    await t.shot(path.join(SHOTS, "karta.png"));
-    const card = await t.json(`(function(){ const sc = SceneManager._scene, eq = (sc._views && sc._views.equip) || sc._view, s = eq && eq._fig;
-        if (!s) return null; const b = s.bitmap, d = b.context.getImageData(0, 0, b.width, 60).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i]) n++;
-        return { w: b.width, h: b.height, y: s.y, over: n, x: s.x }; })()`);
-    meta.card = card;
-    t.check("karta postaci (menu P -> Ekwipunek): figura wyższa o pasek nad głową, korona hełmu nad klatką", !!card && card.h === 320 + 60 && card.over > 50, card);
-    if (card) {
-        const r = await t.b.send("Page.captureScreenshot", { format: "png", clip: { x: card.x, y: card.y, width: card.w, height: card.h, scale: 1 } });
-        fs.writeFileSync(path.join(SHOTS, "karta_figura.png"), Buffer.from(r.data, "base64"));
-    }
-    await t.eval("Ubior.pl(true); SceneManager.goto(Scene_Map); 0");
-    await t.until(t.onMap(3), 20);
+    // (2026-11-17: the P menu's card shows a silhouette now - layout B - not the dressed figure: no card check here)
 
     // ---- the cost
     const stats = (await t.json("Ubior.stats()")).slice(before);

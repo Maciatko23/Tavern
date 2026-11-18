@@ -622,6 +622,18 @@
         all[r.key] = rec && rec.day === today() ? { day: rec.day, n: rec.n + 1 } : { day: today(), n: 1 };
         changed();
     }
+    // (2026-11-18, the player: "sprawdź, czy są niewidzialne blokady") the way down a well - an event named like the well with
+    // ": zejście" (Map220's "Studnia miejska: zejście", its rope check and its transfer on its page) - is no longer an invisible event
+    // standing on the square in front of the well: it lies under the well itself (below the characters, never in the way) and the
+    // well's own menu starts it: "Zejdź na dno studni"
+    function descentOf(r) {
+        const ev = r && $gameMap.events().find(e => e && e.event() && e.event().name === r.name + ": zejście");
+        if (!ev) return null;
+        const rope = window.$dataItems && $dataItems[492], has = !!rope && $gameParty.numItems(rope) > 0;
+        return { name: "Zejdź na dno studni", icon: rope ? rope.iconIndex : 0, enabled: true,
+            help: has ? "Zejdziesz po linie na dno studni." : "Zejdziesz po linie na dno studni - potrzebujesz liny (zrobisz ją ze sznurków albo kupisz).",
+            run: () => { ev.start(); return true; } };
+    }
     function rationMenu(r) {
         const left = rationLeft(r), note = "\n" + (r.less ? "Studnia prawie sucha" : "Studnia daje mało") + " - sołtys przydziela wodę: " + r.max + (r.max === 1 ? " nabranie" : " nabrania") + " na dzień. Zostało dziś: " + left + ".";
         const wrap = e => Object.assign({}, e, { enabled: e.enabled && left > 0, help: e.help + note,
@@ -631,13 +643,14 @@
                 if (ok) rationUse(r);
                 return ok;
             } });
-        return { title: (r.name || "Studnia") + " (" + left + "/" + r.max + " na dziś)", entries: wellEntries().map(wrap) };
+        const down = descentOf(r);
+        return { title: (r.name || "Studnia") + " (" + left + "/" + r.max + " na dziś)", entries: wellEntries().map(wrap).concat(down ? [down] : []) };
     }
     function rationWell(interpOrEvent) {
         const ev = interpOrEvent && typeof interpOrEvent.eventId === "function" ? $gameMap.event(interpOrEvent.eventId()) : interpOrEvent;
         const r = rationOf(ev);
         if (!r) return false;
-        if (rationLeft(r) < 1) { complain(ICON.thirst, r.less ? "Studnia prawie sucha - na dziś koniec przydziału" : "Na dziś koniec przydziału wody"); return false; }
+        if (rationLeft(r) < 1 && !descentOf(r)) { complain(ICON.thirst, r.less ? "Studnia prawie sucha - na dziś koniec przydziału" : "Na dziś koniec przydziału wody"); return false; }
         const menu = rationMenu(r), scene = SceneManager._scene;
         if (scene && typeof scene.openFarmMenu === "function") scene.openFarmMenu(menu.title, menu.entries);
         return true;

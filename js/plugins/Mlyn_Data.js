@@ -67,7 +67,8 @@
         walenty: { zloto: 40, worki: 2 }, odprawa: 20 };
     // the places the plans use (TownLife's SPOTS, only added; "wiatrak_przed" is already there)
     // (on Map218: defaults of TownLife's SPOTS_BY_MAP - a "Miejsce:" event of the map wins; "tawerna" = out by the east gate to Kruczogród)
-    const SPOTY = { wiatrak_bok: [5, 36, 2], wiatrak_woda: [10, 37, 2], mlyn_dom: [7, 35, 2], tawerna: [79, 38, 6] };
+    // (2026-11-18: Jasiek works on the other side of the windmill - he and Walenty stood on one cell, wiatrak_bok)
+    const SPOTY = { wiatrak_bok: [5, 36, 2], wiatrak_bok2: [9, 36, 2], wiatrak_woda: [10, 37, 2], mlyn_dom: [7, 35, 2], tawerna: [79, 38, 6] };
     if (TLD.SPOTS_BY_MAP) { const B = (TLD.SPOTS_BY_MAP[MAP.miasto] = TLD.SPOTS_BY_MAP[MAP.miasto] || {}); for (const [k, v] of Object.entries(SPOTY)) if (!B[k]) B[k] = v; }
     // Walenty's seat in the tavern (19-22): a place given in the data (Map001 stays as the user made it; TownLife's SPOTS_BY_MAP)
     const MIEJSCE_TAWERNA = [9, 22, 4];
@@ -89,7 +90,7 @@
         {
             // Jasiek Worek, 16: a thin boy in a shirt too big for him. 6-17 at the mill, 18:30-20:30 "goes for water" (really sets the sails), the night over the stable
             key: "pomocnik", id: ID.pomocnik, sheet: "$Npc_Jasiek", speed: 3, map: MAP.miasto, when: "mlynJasiek",
-            plan: [[0, "inside", "wiatrak_przed"], [6, "work", "wiatrak_bok"], [17, "inside", "wiatrak_przed"], [18.5, "wander", "wiatrak_woda"], [20.5, "inside", "wiatrak_przed"]],
+            plan: [[0, "inside", "wiatrak_przed"], [6, "work", "wiatrak_bok2"], [17, "inside", "wiatrak_przed"], [18.5, "wander", "wiatrak_woda"], [20.5, "inside", "wiatrak_przed"]],
             barks: {}, talk: {}
         }
     ];

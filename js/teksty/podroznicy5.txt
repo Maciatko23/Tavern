@@ -11,7 +11,7 @@ zadania.D44.desc = Erazm Łaska, poborca Korony, liczy podatek wojenny Lorda. I 
 zadania.D44.fail.text = Erazm odpłynął z raportem.
 [zadania.D44.offer.say]
 Ty tu pracujesz, chłopcze. Wiesz, kto chodzi po schodach o północy?
-Pan Zaleski płaci Koronie podatek na chorągiew w zatoce. Pytanie, czym płaci. Dwadzieścia groszy za każde imię.
+Pan Zaleski płaci Koronie podatek na chorągiew w zatoce. Pytanie, czym płaci. Dwa srebrniki za każde imię.
 
 zadania.D44.offer.yes = Dowiem się.
 zadania.D44.offer.no = Nie donoszę.
@@ -22,7 +22,7 @@ Dobrze. Ja nie przyjmuję prezentów. Zapisuję je. Ty - zapisuj imiona.
 Szkoda. Raport i tak pójdzie. Taki, jaki wyjdzie z liczb.
 
 zadania.D44.steps.0.text = Noc {noc}, 23:00: kto przychodzi do Erazma? Posłuchaj przez ścianę z pokoju 2 (wynajmij go u Borgara) albo pod drzwiami czwórki - albo wypatruj gościa na korytarzu (od 22:40).
-zadania.D44.steps.1.text = Raport Erazma: „Pan Zaleski płaci podatek srebrem wroga.” {kto}Powiedz Lordowi o monetach (dwór), powiedz Erazmowi, kto płaci, weź jego dwadzieścia groszy - albo milcz, aż odpłynie ({dzien}).
+zadania.D44.steps.1.text = Raport Erazma: „Pan Zaleski płaci podatek srebrem wroga.” {kto}Powiedz Lordowi o monetach (dwór), powiedz Erazmowi, kto płaci, weź jego dwa srebrniki - albo milcz, aż odpłynie ({dzien}).
 kroki.d44.feliks = "Płaci Feliks, kamerdyner Lorda - monetami z okiem. "
 kroki.d44.ktos = "Ktoś płaci monetami z okiem - nie wiesz kto. "
 
@@ -46,14 +46,14 @@ Widziałeś kiedyś taką monetę, chłopcze? Oko. Obce srebro. Ktoś mi nią p�
 Raport gotowy. „Pan Zaleski płaci podatek srebrem wroga.” Chyba że ktoś mi powie coś, czego nie wiem.
 
 d44.opcja.feliks = To Feliks płaci, nie Lord.
-d44.opcja.donos = Biorę dwadzieścia groszy. Powiem, co wiem.
+d44.opcja.donos = Biorę dwa srebrniki. Powiem, co wiem.
 d44.opcja.milcz = Nic nie powiem.
 d44.opcja.pozniej = Jeszcze pomyślę.
 [d44.feliks]
 Kamerdyner? ...To zmienia raport. Korona oczyści pana Zaleskiego, jeśli to prawda. A ja zawsze sprawdzam.
 
 [d44.donos]
-Dwadzieścia groszy. Zapisane - jako prezent, którego nie przyjmuję. Kamerdyner, mówisz? Ktoś mu szepnie, że pytam. Zawsze ktoś szepcze.
+Dwa srebrniki. Zapisane - jako prezent, którego nie przyjmuję. Kamerdyner, mówisz? Ktoś mu szepnie, że pytam. Zawsze ktoś szepcze.
 
 [d44.milcz]
 Milczenie też się zapisuje, chłopcze.
@@ -71,8 +71,8 @@ Raport o kamerdynerze
 Powiedziałem Erazmowi, że monetami z okiem płaci Feliks, nie Lord. Raport pójdzie o kamerdynerze - a Korona oczyści pana Zaleskiego, kiedy prawda wyjdzie.
 
 [notatki.d44Donos]
-Dwadzieścia groszy
-Wziąłem od Erazma dwadzieścia groszy i powiedziałem, co wiem. Feliks się dowie, że ktoś o niego pyta.
+Dwa srebrniki
+Wziąłem od Erazma dwa srebrniki i powiedziałem, co wiem. Feliks się dowie, że ktoś o niego pyta.
 
 [notatki.d44Milczy]
 Raport poszedł
@@ -110,7 +110,7 @@ Kości? Lubię. Stawiaj.
 Na pięści? Ha! Za kwadrans na dziedzińcu. Bez noży - Kompania ma honor.
 
 [d47.najmij]
-Sześćdziesiąt groszy z góry? ...Masz słowo Kompanii. Gdy dzwon zadzwoni trzy i jeden - wrócimy. A do tego czasu: cisza w karczmie.
+Sześć srebrników z góry? ...Masz słowo Kompanii. Gdy dzwon zadzwoni trzy i jeden - wrócimy. A do tego czasu: cisza w karczmie.
 
 [d47.grum]
 Grum? Ten Grum? ...Znamy Gruma. Kiedyś był nasz. Dobra, mały. Cisza.
@@ -139,7 +139,7 @@ Wolna Kompania mnie szanuje - po dziesiątej cisza. Karczma śpi spokojnie, Meli
 
 [notatki.d47Najeta]
 Kompania najęta
-Nająłem Wolną Kompanię za sześćdziesiąt groszy. „Gdy dzwon zadzwoni trzy i jeden - wrócimy.” Do tego czasu cisza w karczmie.
+Nająłem Wolną Kompanię za sześć srebrników. „Gdy dzwon zadzwoni trzy i jeden - wrócimy.” Do tego czasu cisza w karczmie.
 
 [notatki.d47Wit]
 Kompania za murem
@@ -152,7 +152,7 @@ Bójka na pięści skończyła się krwią. Hubert Szary nie wstał. Kompania od
 # rywal w siłowaniu na rękę i w kościach (Hubert Szary)
 silowanie.hubert.name = Hubert Szary
 silowanie.hubert.sub = herszt Wolnej Kompanii
-silowanie.hubert.kicker = WOLNA KOMPANIA · O DZIESIĘĆ GROSZY
+silowanie.hubert.kicker = WOLNA KOMPANIA · O Jeden srebrnik
 silowanie.hubert.with = z Hubertem Szarym, hersztem Kompanii
 [silowanie.hubert.lines.hello]
 Dawaj łapę, mały. Zobaczymy, ile w niej mleka.

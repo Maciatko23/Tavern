@@ -15,7 +15,7 @@
 //     The green jacket is armour like the jacket 171 (Combat_Fight ARMORS).
 //   - the wear (Durability.js, unit "wear" = days of work): every point of strength spent wears what is worn a little, every blow that
 //     gets through a little more; a worn-out thing tears and is gone (Durability: it leaves the bag, Equipment takes it off).
-//     The seamstress mends cloth, the tanner leather, for a few groszy; the leather ones also at the workbench (hide + sinew).
+//     The seamstress mends cloth, the tanner leather, for a few miedziaków; the leather ones also at the workbench (hide + sinew).
 //   - the dyeing: the seamstress turns a white linen shirt yellow or blue (another item - the wear and the wearing kept).
 //   - the bast shoes can also be plaited at the workbench (Farming's workbench recipes).
 // Nothing works before the items 250+ are in data/Items.json (tools/ubior/instaluj_dane.py): the shopkeepers then talk as before.

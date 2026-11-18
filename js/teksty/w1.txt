@@ -24,13 +24,13 @@ Kuba wychodzi z domu po pierwszej w nocy i idzie do stawu za tawerną. Nabiera w
 
 [zadania.W1.lines.kubaTell]
 Dobra. Ale nikomu ani słowa. Woda jest z dworu.
-Feliks, kamerdyner Lorda. Po pierwszej w nocy odkręca coś w ogrodzie i z rury pod wodospadem leci woda. Płacę mu trzy grosze za beczkę. A jak trzeba więcej, idę nocą do ogrodu dworu - kapral przepuszcza - i Feliks napełnia mi beczki spod włazu za oranżerią.
-Sołtys płaci mi dziewięć groszy za przydział - piekarnia, kuźnia, tawerna. Kapral nie widzi wozu, bo dostaje swoją działkę. Wszyscy mają swoje. Tylko studnia nie ma nic.
+Feliks, kamerdyner Lorda. Po pierwszej w nocy odkręca coś w ogrodzie i z rury pod wodospadem leci woda. Płacę mu trzy miedziaki za beczkę. A jak trzeba więcej, idę nocą do ogrodu dworu - kapral przepuszcza - i Feliks napełnia mi beczki spod włazu za oranżerią.
+Sołtys płaci mi dziewięć miedziaków za przydział - piekarnia, kuźnia, tawerna. Kapral nie widzi wozu, bo dostaje swoją działkę. Wszyscy mają swoje. Tylko studnia nie ma nic.
 > A Lord?
 Lord? Lord myśli, że ogród poi głęboka studnia dworu. Feliks mu tak mówi. Ja tam nic nie wiem.
 
 [zadania.W1.lines.kubaPay]
-Płacić? Tobie? ...Pięć groszy w każdy dzień targowy. I ani słowa.
+Płacić? Tobie? ...Pięć miedziaków w każdy dzień targowy. I ani słowa.
 (Kuba zaciska zęby.) Woda jest z dworu, z ogrodu Lorda. Więcej nic nie powiem. Ty sępie.
 
 [zadania.W1.lines.kubaFlee]
@@ -41,15 +41,15 @@ Sołtysowi?! Nie... nie, chłopcze, proszę... To Feliks! Kamerdyner! To on wpus
 To zapomnij. I idź stąd, ludzie patrzą.
 
 [zadania.W1.lines.kubaTribute]
-(Kuba wciska ci monety, nie patrząc w oczy.) Pięć groszy. Dzień targowy. Udław się.
+(Kuba wciska ci monety, nie patrząc w oczy.) Pięć miedziaków. Dzień targowy. Udław się.
 
 [zadania.W1.lines.noteTell]
 Kuba mówi wszystko
-Kuba płaci Feliksowi, kamerdynerowi Lorda, trzy grosze za beczkę. Po pierwszej w nocy Feliks odkręca coś w ogrodzie i z rury pod wodospadem leci woda; więcej Kuba bierze nocą spod włazu za oranżerią w ogrodzie dworu. Sołtys płaci Kubie dziewięć groszy za przydział, kapral Wit bierze działkę. Lord myśli, że ogród poi studnia dworu.
+Kuba płaci Feliksowi, kamerdynerowi Lorda, trzy miedziaki za beczkę. Po pierwszej w nocy Feliks odkręca coś w ogrodzie i z rury pod wodospadem leci woda; więcej Kuba bierze nocą spod włazu za oranżerią w ogrodzie dworu. Sołtys płaci Kubie dziewięć miedziaków za przydział, kapral Wit bierze działkę. Lord myśli, że ogród poi studnia dworu.
 
 [zadania.W1.lines.notePay]
 Kuba płaci
-Kuba płaci mi pięć groszy w każdy dzień targowy za milczenie. Powiedział tylko tyle: woda jest z dworu, z ogrodu Lorda. Pewnie poskarży się komuś we dworze.
+Kuba płaci mi pięć miedziaków w każdy dzień targowy za milczenie. Powiedział tylko tyle: woda jest z dworu, z ogrodu Lorda. Pewnie poskarży się komuś we dworze.
 
 [zadania.W1.lines.noteFlee]
 Kuba uciekł
@@ -72,7 +72,7 @@ Za oranżerią dworu, w trawie pod sosną, jest drewniany właz z krukiem na zas
 [zadania.W1.lines.sawFeliks]
 > (Za oranżerią, przy włazie pod sosną, stoi Kuba z pustymi beczkami.)
 > (Feliks odsuwa zasuwę i podaje mu spod włazu wiadro za wiadrem.)
-> Kamerdyner Lorda. Nocą. Po trzy grosze od beczki.
+> Kamerdyner Lorda. Nocą. Po trzy miedziaki od beczki.
 
 [zadania.W1.lines.noteFeliks]
 Feliks przy włazie
@@ -123,7 +123,7 @@ Po cichu? Hm. Wróć, kiedy się zdecydujesz.
 (Feliks uśmiecha się samymi ustami.) Ciszej, młodzieńcze. Ludzie słuchają. ...Czego pan chce?
 
 [zadania.W1.lines.feliksDeal]
-Dwadzieścia groszy co tydzień. Zgoda. Pierwsze dwadzieścia - proszę. Następne za tydzień, tu, przy straganach.
+Dwa srebrniki co tydzień. Zgoda. Pierwsze dwadzieścia - proszę. Następne za tydzień, tu, przy straganach.
 (Feliks pochyla się bliżej.) Tylko niech pan uważa na drogach, młodzieńcze. Drogi bywają niebezpieczne.
 
 [zadania.W1.lines.feliksLater]
@@ -139,7 +139,7 @@ Zaniosłem rysunek śluzy Lordowi. Nic nie wiedział. Sam otworzył zasuwę do p
 
 [zadania.W1.lines.noteDeal]
 Milczenie Feliksa
-Feliks płaci mi dwadzieścia groszy co tydzień za milczenie o śluzie. Ostrzegł mnie, żebym uważał na drogach.
+Feliks płaci mi dwa srebrniki co tydzień za milczenie o śluzie. Ostrzegł mnie, żebym uważał na drogach.
 
 [zadania.W1.lines.noteSilent]
 Milczę
@@ -152,8 +152,8 @@ zadania.W1.lines.w7.fate.arrest = Feliks siedzi w wieży
 zadania.W1.lines.w7.fate.fled = Feliks uciekł promem
 [zadania.W1.lines.w7.kubaTell]
 Dobra. Ale nikomu ani słowa. Woda jest z dworu.
-Dawał mi ją Feliks, kamerdyner Lorda - spod włazu za oranżerią, po trzy grosze za beczkę. {fate}, a zasuwy pod włazem nikt nie ruszył: woda dalej płynie pod dwór. Biorę ją teraz sam, nocą. Kapral dalej nie widzi wozu.
-Sołtys płaci mi dziewięć groszy za przydział - piekarnia, kuźnia, tawerna. Wszyscy mają swoje. Tylko studnia nie ma nic.
+Dawał mi ją Feliks, kamerdyner Lorda - spod włazu za oranżerią, po trzy miedziaki za beczkę. {fate}, a zasuwy pod włazem nikt nie ruszył: woda dalej płynie pod dwór. Biorę ją teraz sam, nocą. Kapral dalej nie widzi wozu.
+Sołtys płaci mi dziewięć miedziaków za przydział - piekarnia, kuźnia, tawerna. Wszyscy mają swoje. Tylko studnia nie ma nic.
 > A Lord?
 Lord? Lord wie o Feliksie - o jakichś listach, o tych z okiem. O zasuwie nie wie. Nikt mu nie pokazał, gdzie jest.
 
@@ -163,7 +163,7 @@ Sołtysowi?! Nie... nie, chłopcze, proszę... To był Feliks! Dawał mi wodę s
 
 [zadania.W1.lines.w7.noteTell]
 Kuba mówi wszystko
-Kuba brał wodę od Feliksa spod włazu za oranżerią, po trzy grosze za beczkę. {fate}, ale zasuwy nikt nie ruszył - woda dalej płynie pod dwór, a Kuba bierze ją teraz sam, nocą. Sołtys płaci Kubie dziewięć groszy za przydział, kapral Wit bierze działkę. Lord wie o listach Feliksa - o zasuwie nie wie.
+Kuba brał wodę od Feliksa spod włazu za oranżerią, po trzy miedziaki za beczkę. {fate}, ale zasuwy nikt nie ruszył - woda dalej płynie pod dwór, a Kuba bierze ją teraz sam, nocą. Sołtys płaci Kubie dziewięć miedziaków za przydział, kapral Wit bierze działkę. Lord wie o listach Feliksa - o zasuwie nie wie.
 
 [zadania.W1.lines.w7.noteFlee]
 Kuba uciekł
@@ -184,7 +184,7 @@ Znowu jego ręka. (Lord długo patrzy.) W listach pisał, że ogród pije z gał
 Chodź ze mną. Zejdziemy do oranżerii razem.
 > (W oranżerii Lord sam kręci kołem zasuwy. Do połowy - więcej susza nie da. Spod ziemi dochodzi szum wody, która idzie do miasta.)
 {fate} - a jego zasuwa wreszcie otwarta. Miasto nie musi wiedzieć, czyja to była ręka. Wystarczy, że woda wraca.
-Drugi raz przychodzisz z prawdą najpierw do mnie. Dwieście groszy - za lojalność. I nie odmawiaj.
+Drugi raz przychodzisz z prawdą najpierw do mnie. Dwa złote - za lojalność. I nie odmawiaj.
 
 [zadania.W1.lines.w7.noteReveal]
 Woda wróciła
@@ -217,7 +217,7 @@ zadania.W1.lines.ambushShout = Pozdrowienia od kamerdynera!
 > Feliks więcej nie zapłaci. Ale rysunek śluzy wciąż mam - i wiem, co o mnie myśli.
 
 [zadania.W1.lines.confession]
-> (Ten, którego puściłem, wybełkotał jeszcze przez ramię: „Kamerdyner płaci po dziesięć groszy... Kazał zabrać ci papier!”)
+> (Ten, którego puściłem, wybełkotał jeszcze przez ramię: „Kamerdyner płaci po jeden srebrnik... Kazał zabrać ci papier!”)
 
 [zadania.W1.lines.ambushLost]
 > (Budzę się w rowie przy drodze. Sakiewka lżejsza... i nie ma rysunku śluzy.)
@@ -232,7 +232,7 @@ Dwa tygodnie po umowie z Feliksem napadli mnie na Kruczym Jarze jego ludzie - �
 
 [zadania.W1.lines.noteConfession]
 Człowiek Feliksa mówi
-Jeden z ludzi, którzy napadli mnie na Kruczym Jarze, błagał o litość - puściłem go, a on się wygadał: kamerdyner płaci im po dziesięć groszy i kazał zabrać mi „papier”. Mam świadka.
+Jeden z ludzi, którzy napadli mnie na Kruczym Jarze, błagał o litość - puściłem go, a on się wygadał: kamerdyner płaci im po jeden srebrnik i kazał zabrać mi „papier”. Mam świadka.
 
 [zadania.W1.lines.withWitness]
 > I jeszcze jedno: ludzie Feliksa napadli mnie na Kruczym Jarze. Jeden z nich przyznał, kto im płaci.
@@ -277,7 +277,7 @@ zadania.W1.lines.shout.woziwoda = W studni... woda? Sama przyszła?!
 zadania.W1.lines.shout.garbarz = Słyszycie? Pod rynkiem szumi!
 [zadania.W1.lines.noteCistern]
 Zasuwa główna otwarta
-Na sygnał cztery i dwa z wieży dzwonnicy zasuwa w Wielkiej cysternie zakonu puściła wodę starym kanałem pod rynek. Studnia na rynku znów ma wodę - ale sołtys zamknął ją na klucz i wydziela racje domom; przybysz dalej dostaje swoje dwa nabrania na dzień. Młyn ruszył, Kuba rozwozi racje za uczciwy grosz od sołtysa. Mnie z tego nic nie kapnie: na działce dziadka liczy się tylko moja deszczówka.
+Na sygnał cztery i dwa z wieży dzwonnicy zasuwa w Wielkiej cysternie zakonu puściła wodę starym kanałem pod rynek. Studnia na rynku znów ma wodę - ale sołtys zamknął ją na klucz i wydziela racje domom; przybysz dalej dostaje swoje dwa nabrania na dzień. Młyn ruszył, Kuba rozwozi racje za uczciwy zarobek od sołtysa. Mnie z tego nic nie kapnie: na działce dziadka liczy się tylko moja deszczówka.
 
 zadania.W1.steps.0.text = Zbieraj poszlaki o wodzie Kuby ({n}/3): „Pęknięta beczka”, „Smak wody”, „Łój do latarni”, „Nocna warta”, „Pierścionek w studni”.
 zadania.W1.steps.1.text = Kuba chodzi gdzieś nocą. Wyjdź za nim po cichu (C - skradanie), kiedy po pierwszej w nocy wyjdzie z domu na tarasie rzemieślników. Nie daj się zobaczyć.

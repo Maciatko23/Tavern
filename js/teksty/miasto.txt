@@ -344,7 +344,7 @@ Dla przyjaciół rabat. Dla reszty też, tylko mniejszy.
 
 [targ.barks.soltys]
 Ludzie, porządek przy straganach!
-Opłata targowa - grosz od stołu!
+Opłata targowa - miedziak od stołu!
 
 [targ.barks.dzwonnik]
 Targ... jak za dawnych lat. Tylko ciszej.
@@ -363,7 +363,7 @@ Pilnować sakiewek! W tłoku są złodzieje.
 Spokojnie, ludzie, spokojnie.
 
 [targ.barks.gracz]
-Kości! Kto zagra o pięć groszy?
+Kości! Kto zagra o pięć miedziaków?
 Dziś szczęście hojne - podejdź, mój drogi!
 
 # ======================================================================== CALENDAR (kalendarz)
@@ -425,11 +425,11 @@ Kuba uciekł, a przydziału nie ma. Na czym ja mam chleb piec, kochaneczku? Na �
 
 # kubaFledKowal, mówi: kowal
 [uwagi.kubaFledKowal.lines]
-Koryto suche. Baltazar chce sześć groszy za wiadro. Sześć! Kto Kubę spłoszył, ten niech teraz za mnie kuje.
+Koryto suche. Baltazar chce sześć miedziaków za wiadro. Sześć! Kto Kubę spłoszył, ten niech teraz za mnie kuje.
 
 # kubaFledKupiec, mówi: kupiec
 [uwagi.kubaFledKupiec.lines]
-Woda? Dla miasta - sześć groszy za wiadro, przyjacielu. Dla ciebie... nie mam. Przykro mi. Naprawdę.
+Woda? Dla miasta - sześć miedziaków za wiadro, przyjacielu. Dla ciebie... nie mam. Przykro mi. Naprawdę.
 
 # kubaBack, mówi: woziwoda
 [uwagi.kubaBack.lines]
@@ -441,7 +441,7 @@ Przez ciebie nie mam towaru. Woda wróciła do studni, a ja zostałem z pustymi 
 
 # kubaReveal, mówi: woziwoda
 [uwagi.kubaReveal.lines]
-Woda wróciła do młynówki, a ja zostałem z pustymi beczkami. Sołtys mówi, że mogę nosić wodę do domów. Za grosz. Uczciwy grosz. Jakoś to będzie.
+Woda wróciła do młynówki, a ja zostałem z pustymi beczkami. Sołtys mówi, że mogę nosić wodę do domów. Za miedziak. Uczciwy zarobek. Jakoś to będzie.
 
 # witDegraded, mówi: kapral
 [uwagi.witDegraded.lines]
@@ -493,7 +493,7 @@ Przegrałeś z woźnicą. Z woźnicą! A kantorowy stał z boku i się uśmiecha
 
 # kupiecD6Crossed, mówi: kupiec
 [uwagi.kupiecD6Crossed.lines]
-Wziąłeś moje czterdzieści groszy i wygrałeś. Zapamiętam to sobie, przyjacielu. Ja wszystko pamiętam. Dosłownie wszystko.
+Wziąłeś moje cztery srebrniki i wygrałeś. Zapamiętam to sobie, przyjacielu. Ja wszystko pamiętam. Dosłownie wszystko.
 
 # kowalD6Won, mówi: kowal
 [uwagi.kowalD6Won.lines]
@@ -538,7 +538,7 @@ Tobie dalej dwa wiadra na dzień, jak dotąd. Wiem, wiem... Ale ty masz swoją d
 
 # kubaCistern, mówi: woziwoda
 [uwagi.kubaCistern.lines]
-Rozwożę racje ze studni. Za grosz od domu, z kasy sołtysa. Uczciwy grosz. ...Lżej się nosi, wiesz? Beczka ta sama, a jakby lżejsza.
+Rozwożę racje ze studni. Za miedziak od domu, z kasy sołtysa. Uczciwy zarobek. ...Lżej się nosi, wiesz? Beczka ta sama, a jakby lżejsza.
 
 # hankaCistern, mówi: piekarka
 [uwagi.hankaCistern.lines]
@@ -574,7 +574,7 @@ Pan Ambroży się dziś śmiał! Na wieży! Mama mówi, że od lat nie słyszał
 
 # ludmilaGiven, mówi: ludmila
 [uwagi.ludmilaGiven.lines]
-Wydałeś go. Za sto dwadzieścia groszy. ...Nie podchodź do Eli. Proszę.
+Wydałeś go. Za jeden złoty i dwa srebrniki. ...Nie podchodź do Eli. Proszę.
 
 # elaGiven, mówi: ela
 [uwagi.elaGiven.lines]
@@ -640,9 +640,9 @@ Słyszałem, kogo przyprowadziłeś z gór. Męża Ludmiły. Zapisałem go do ra
 lucjan.name = Lucjan Kość
 lucjan.short = Lucjan
 lucjan.role = wędrowny gracz
-lucjan.quote = Kości, mój drogi? Pięć groszy - a może wygrasz dziesięć.
+lucjan.quote = Kości, mój drogi? Pięć miedziaków - a może wygrasz dziesięć.
 [lucjan.lines.greet]
-Kości, mój drogi? Pięć groszy - a może wygrasz dziesięć.
+Kości, mój drogi? Pięć miedziaków - a może wygrasz dziesięć.
 Siadaj, siadaj. Szczęście lubi odważnych.
 
 [lucjan.lines.meFirst]
@@ -722,7 +722,7 @@ Dziękuję. Uchodźców będzie więcej. Gdzie ja ich, na litość, pomieszczę?
 
 # ======================================================================== SIGN (podpisy)
 podpisy.kowal = Petycja? Daj, postawię krzyżyk. Duży, żeby Lord widział.
-podpisy.piekarka = Dziesięć groszy od domu? Z czego, z mąki? Podpisuję, kochaneczku.
+podpisy.piekarka = Jeden srebrnik od domu? Z czego, z mąki? Podpisuję, kochaneczku.
 podpisy.woziwoda = Podpiszę... tylko nie mów nikomu, że ja. Lord daje mi przepustkę.
 podpisy.garbarz = Krzyżyk umiem. Na skórze bym ładniej postawił, ale niech będzie.
 podpisy.dzwonnik = Ostatni raz podpisywałem coś dla zamku... dawno. Daj.

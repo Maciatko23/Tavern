@@ -82,9 +82,9 @@ scena.wejscie.szczerba = Szukam człowieka.
 [szczerba.rozmowa]
 Siadaj, chłopcze. Nie gryzę. Zwykle.
 > (Szczerba rozwija na stole list gończy: feniks Korony, pieczęć, twarz młodego chłopaka.)
-„Tymon Wrzos, żołnierz chorągwi królewskiej. Zbiegł spod Brzozowej Woli. Sto pięćdziesiąt groszy - żywy.”
+„Tymon Wrzos, żołnierz chorągwi królewskiej. Zbiegł spod Brzozowej Woli. Jeden złoty i pięć srebrników - żywy.”
 Żywy, widzisz? Ja zawsze przywożę żywych. Martwi mniej płacą i więcej ważą.
-Ktoś mi powie, gdzie śpi. Prędzej czy później. Wolałabym prędzej. Sześćdziesiąt groszy za wskazanie, osiemdziesiąt, jak mi go przyprowadzisz na molo.
+Ktoś mi powie, gdzie śpi. Prędzej czy później. Wolałabym prędzej. Sześć srebrników za wskazanie, osiemdziesiąt, jak mi go przyprowadzisz na molo.
 
 szczerba.opcja.wskaz = Wiem, gdzie śpi. ({cena} G)
 szczerba.opcja.molo = Przyprowadzę go na molo. ({cena2} G)
@@ -107,11 +107,11 @@ Pomyśl. Jak się namyślisz - postaw u Borgara kubek do góry dnem na ladzie. B
 
 [notatki.list]
 List gończy
-„Tymon Wrzos, żołnierz chorągwi królewskiej. Zbiegł spod Brzozowej Woli. Sto pięćdziesiąt groszy - żywy.” Szczerba, łowczyni nagród, płaci sześćdziesiąt za wskazanie, osiemdziesiąt za przyprowadzenie na molo.
+„Tymon Wrzos, żołnierz chorągwi królewskiej. Zbiegł spod Brzozowej Woli. Jeden złoty i pięć srebrników - żywy.” Szczerba, łowczyni nagród, płaci sześćdziesiąt za wskazanie, osiemdziesiąt za przyprowadzenie na molo.
 
 # listy pod drzwiami (I5 - etap 3: czyta je Dezerter.list)
 list.tymon = „Pokój 5. Po północy. Proszę. - T.”
-list.szczerba = „Wiesz, gdzie jest. {cena} groszy i nikt się nie dowie. Odpowiedź: kubek do góry dnem na ladzie.”
+list.szczerba = „Wiesz, gdzie jest. {cena} G i nikt się nie dowie. Odpowiedź: kubek do góry dnem na ladzie.”
 
 # opcja u Borgara (po „Pomyślę”)
 borgar.kubek = Odstaw kubek do góry dnem
@@ -216,7 +216,7 @@ scena.przysiega.belza = Do szeregu, strażniku. Jutro beczki, pojutrze brama.
 
 [baltazar.prosba]
 > Baltazarze, jeden człowiek musi zniknąć z wyspy. Cicho.
-Skrzynia, noc, statek na południe. Pięćdziesiąt groszy. Jak z tamtym, z obozu.
+Skrzynia, noc, statek na południe. Pięć srebrników. Jak z tamtym, z obozu.
 
 baltazar.opcja.tak = Zapłać ({cena} G).
 baltazar.opcja.nie = Nie teraz.
@@ -264,11 +264,11 @@ Szczerba odpłynęła bez Tymona. Tymon został na wyspie - w obozie w Podgrodzi
 
 [notatki.wydany]
 Wydałem Tymona
-Wskazałem Szczerbie pokój 5. Zapłaciła uczciwie, sześćdziesiąt groszy. Tymon odpłynie w kajdanach - żywy, jak obiecywała.
+Wskazałem Szczerbie pokój 5. Zapłaciła uczciwie, sześć srebrników. Tymon odpłynie w kajdanach - żywy, jak obiecywała.
 
 [notatki.molo]
 Zaprowadziłem Tymona na molo
-Okłamałem Tymona, że na przystani czeka łódka. Czekała Szczerba. Osiemdziesiąt groszy. Tymon odpłynie w kajdanach.
+Okłamałem Tymona, że na przystani czeka łódka. Czekała Szczerba. Osiem srebrników. Tymon odpłynie w kajdanach.
 
 [notatki.zabrany]
 Tymon zabrany
@@ -288,7 +288,7 @@ Tomek - Tymon - odpłynął promem, zanim ktokolwiek po niego przyszedł. Nikt s
 Sprzedałeś chłopaka łowczyni. Tego z drugiej fali. U nas w obozie mówią, że jesteś jak oni. Ci z lądu.
 
 [uwagi.1.lines]
-Wydałeś go. Za garść groszy. Ja też byłem na liście, pamiętasz?
+Wydałeś go. Za garść miedziaków. Ja też byłem na liście, pamiętasz?
 
 [uwagi.2.lines]
 Tomek śpi u nas w obozie. Chodzi jak żołnierz, ale kopie rowy jak chłop. Dobry chłopak.

@@ -202,7 +202,7 @@ Odebrałem Albinowi list i pozwoliłem mu odpłynąć. Wie, że wiem. Na wyspę 
 [list.posel]
 > Panie pośle. Pański list.
 (Poseł sprawdza pieczęcie, jedna po drugiej.) Nienaruszone. Chłopcze... Korona pamięta takich jak ty.
-Sześćdziesiąt groszy. I moje słowo u rotmistrza Bełzy.
+Sześć srebrników. I moje słowo u rotmistrza Bełzy.
 
 [list.lord]
 > Panie. To list posła Korony. Przeczytałem go.
@@ -223,7 +223,7 @@ Co tu masz, chłopcze? List pana posła?! Oddawaj - i módl się, żeby pan pose
 
 [notatki.oddany]
 List wrócił do posła
-Oddałem posłowi Korony list. Pieczęcie nienaruszone. Sześćdziesiąt groszy i słowo posła u rotmistrza Bełzy.
+Oddałem posłowi Korony list. Pieczęcie nienaruszone. Sześć srebrników i słowo posła u rotmistrza Bełzy.
 
 [notatki.lord]
 List u Lorda
@@ -240,7 +240,7 @@ Ostap złapał mnie przy przepisywaniu listu. Zabrał list i kopię. Pan poseł 
 # ======================================================================== pożegnanie posła i zakończenia bez bohatera
 [pozegnanie.posel]
 Odpływam, chłopcze. Tym razem bez strat - dzięki tobie. Korona pamięta karczmę pod Kruczymi Skałami.
-Sześćdziesiąt groszy. I moje słowo u rotmistrza Bełzy.
+Sześć srebrników. I moje słowo u rotmistrza Bełzy.
 
 [pozegnanie.zly]
 Odpływam. Korona pamięta, chłopcze. Zawsze pamięta.

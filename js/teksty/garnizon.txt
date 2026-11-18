@@ -129,7 +129,7 @@ zadania.K52.when = od dnia 5, 17–19:30
 zadania.K52.desc = Kuchnia straży dworu zjada drwa jak smok. Kwatermistrz Kłos potrzebuje drewna i węgla - a potem chętnie coś od ciebie kupi.
 [zadania.K52.offer.say]
 Ty jesteś ten od kapitana? Wnuk Stacha? To słuchaj. Kuchnia straży zjada drwa jak smok, a moi chłopcy rąbać nie umieją, tylko ciąć.
-Dziesięć polan drewna i cztery worki węgla drzewnego. Przyniesiesz, dostaniesz dwadzieścia groszy - i wpiszę cię do księgi skupu. Będziesz mi sprzedawał.
+Dziesięć polan drewna i cztery worki węgla drzewnego. Przyniesiesz, dostaniesz dwa srebrniki - i wpiszę cię do księgi skupu. Będziesz mi sprzedawał.
 
 zadania.K52.offer.yes = Przyniosę drewno i węgiel.
 zadania.K52.offer.no = Nie teraz.
@@ -148,7 +148,7 @@ Dziesięć polan i cztery worki węgla. Liczydło czeka.
 
 [zadania.K52.steps.0.done]
 O! Suche, równe, porządne. Kapitan się ucieszy, a ja jeszcze bardziej.
-Masz dwadzieścia groszy. I od dziś jesteś w mojej księdze: przynoś zboże, warzywa, mięso, skóry - dwór kupi.
+Masz dwa srebrniki. I od dziś jesteś w mojej księdze: przynoś zboże, warzywa, mięso, skóry - dwór kupi.
 
 [zadania.K52.reward.note]
 Skup dworu
@@ -161,7 +161,7 @@ zadania.D26.when = dzień po fali z promu (11, 25, 39, 53), 8-16
 zadania.D26.desc = Korona żąda od Lorda rekrutów. Werbownik Bęben musi wysłać na kontynent trzech ludzi z Kruczogrodu i Podgrodzia. Na liście: Bartek Kmieć, Zbych Smolarz, Darin z Kontynentu (Rafała z obozu szuka już kto inny - W6). Pomóc, ostrzec - czy zanieść kapitanowi coś lepszego niż rekrutów?
 [zadania.D26.offer.say]
 Ty! Chłopak od Stacha! Słuchaj, mam kłopot. Korona chce trzech ludzi z tej fali, a kapitan musi ich dać. Trzech! A wszyscy chowają się po stodołach.
-Lista: Bartek Kmieć, Zbych Smolarz z Podgrodzia i ten Darin z kontynentu. Był jeszcze jeden z obozu w Podgrodziu, Rafał, ale tego szuka już kto inny. Znasz ich. Ciebie posłuchają. Dziesięć groszy za każdego, co się zgłosi.
+Lista: Bartek Kmieć, Zbych Smolarz z Podgrodzia i ten Darin z kontynentu. Był jeszcze jeden z obozu w Podgrodziu, Rafał, ale tego szuka już kto inny. Znasz ich. Ciebie posłuchają. Jeden srebrnik za każdego, co się zgłosi.
 
 zadania.D26.offer.options.0.label = Pomogę ci.
 [zadania.D26.offer.options.0.say]
@@ -380,7 +380,7 @@ Fala z promu przeszła, Korona głodna - płacę półtora raza! Korzystaj.
 > Sprzedasz cztery worki zboża? Po cenie dla swoich.
 
 [grain]
-(Kłos rozgląda się na boki.) Ciii! ...Cztery worki. Po piętnaście groszy. Sześćdziesiąt. I nikomu ani słowa, rozumiemy się?
+(Kłos rozgląda się na boki.) Ciii! ...Cztery worki. Po jeden srebrnik i pięć miedziaków. Sześćdziesiąt. I nikomu ani słowa, rozumiemy się?
 To zboże z rekwizycji. Dla Korony. Ale Korona ma go dużo, a ja mam brzuch. Sam rozumiesz.
 
 [grainYes]
@@ -435,7 +435,7 @@ Masz coś do jedzenia? Nie? To czemu stoisz?
 Kowal straży. Podkowy, groty, okucia. Strzały i stal - tylko dla przyjaciół straży. Pogadaj z kapitanem.
 
 [soldier.kowalShop]
-Przyjaciel straży? To co innego. Strzały po trzy grosze, stal po pięćdziesiąt pięć. Bierzesz?
+Przyjaciel straży? To co innego. Strzały po trzy miedziaki, stal po pięćdziesiąt pięć. Bierzesz?
 
 [soldier.noc]
 (Strażnik śpi na stojąco.)
@@ -642,7 +642,7 @@ kod.buildMap.5 = Beczki z wodą dworu
 kod.look.0 = Lista poborowa z pieczęcią Lorda. Kilka nazwisk już przekreślonych.
 # granary
 kod.granary.0 = Worek zboża z rekwizycji ×4
-# actCall (i zakup zboża z danych: brak grosza)
+# actCall (i zakup zboża z danych: brak miedziaka)
 kod.actCall.4 = Potrzebujesz {cost} G
 kod.actCall.12 = kruk na szyi
 kod.actCall.13 = -5 G (opłata za przepustkę)

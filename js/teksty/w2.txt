@@ -64,7 +64,7 @@ W Archiwum pod ogrodem rycerzy leżą kroniki zakonu: zasada jednego pytania na 
 
 [zadania.W2.lines.sell]
 Przyjacielu... słyszałem, że masz stare księgi. Z krukiem na grzbiecie.
-Trzysta groszy. Od ręki. Na kontynencie są ludzie, którzy zbierają takie... pamiątki.
+Trzy złote. Od ręki. Na kontynencie są ludzie, którzy zbierają takie... pamiątki.
 
 [zadania.W2.lines.sellYes]
 Interes życia, przyjacielu. Twojego, nie mojego.

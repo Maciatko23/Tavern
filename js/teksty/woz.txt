@@ -9,7 +9,7 @@ menu.bywaj = Bywaj.
 # co mówi, gdy stoi przy wozie i może wieźć (jedno z nich, po kolei)
 [wita]
 Siadaj na wóz, konie już przebierają nogami. Płacisz z góry, jedziemy zaraz.
-Wożę skrzynie, wożę i ludzi. Mów, dokąd - ale najpierw grosz.
+Wożę skrzynie, wożę i ludzi. Mów, dokąd - ale najpierw miedziak.
 Droga pusta, konie wypoczęte. Dokąd cię wieźć?
 
 # ======================================================================== Odmowy (dymek nad bohaterem)

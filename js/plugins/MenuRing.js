@@ -82,10 +82,10 @@
     const { T, CH, PLUGIN, C, textOut, measure, W, H, ease, K, NEED_COL, L, RX, UI, uiOff, toLocal, toScreen, touchAt, ENTRIES, OWN,
         menuKeys, placeFill, placeOfSave, fillOldPlaces, plural, item, MP, num1, pctTxt, weightTxt, cap1, dayWords, placeName,
         heroXp, needRows, debtInfo, opinionInfo, wrapWords, rr, panelShadow, hl, vl, meter, done, tx, keycap, smallKeys,
-        smallKeysWidth, heading, header, STRIP_TOP, tabStrip, inBox, tick, bubble, entryIcon, flatRows, fitRows, drawMore, View } = CZESCI.kit;
+        smallKeysWidth, heading, header, STRIP_TOP, tabStrip, inBox, tick, bubble, entryIcon, flatRows, fitRows, drawMore, View, selBar } = CZESCI.kit;
     if (!CZESCI.pages) throw new Error("MenuRing.js: musi być pod MenuRing_Strony.js na liście wtyczek (MenuRing_Strony.js is missing or below)");
     // (2026-11-07: MenuRing_Strony.js - menu P: strony Postać, Ekwipunek, Umiejętności, Plecak - word for word)
-    const { PostacView, eqCells, totals, EquipView, SkillsView, SORTS, bagSort, GROUPS, groupOf, equipSlotOf, sortBag, BAGW, BagView } = CZESCI.pages;
+    const { PostacView, StatsView, statsModel, eqCells, totals, EquipView, SkillsView, SORTS, bagSort, GROUPS, groupOf, equipSlotOf, sortBag, BAGW, BagView } = CZESCI.pages;
     if (T.api(PLUGIN)) return;
 
     // (2026-11-07: the lines that stood here are MenuRing_Strony.js)
@@ -119,7 +119,7 @@
                 done(c);
                 return;
             }
-            if (on) rr(ctx, r.x, r.y, r.width, 40, 8, act ? K.acc : K.accDim);
+            if (on) { if (act) selBar(ctx, r.x, r.y, r.width, 40, 8); else rr(ctx, r.x, r.y, r.width, 40, 8, K.accDim); }
             if (it.icon) CH.drawIcon(c, it.icon, r.x + 8, r.y + 4, 32);
             let right = r.x + r.width - 10;
             if (it.mark === "pin" || it.mark === "ready") {   // (pinned: a yellow diamond; can be done now: a dot)
@@ -565,7 +565,7 @@
         tx(b, "To, czego nie zapisałeś, przepadnie.", R.lx, R.y0 + 160, 21, { top: true, color: K.muted });
         END.forEach(([sym, label], i) => {
             const y = R.y0 + ENDL.y + i * ENDL.row, on = i === this._sel;
-            rr(ctx, R.lx - 8, y, ENDL.w, 48, 10, on ? (this.inside ? K.acc : K.accDim) : K.cell);
+            if (on && this.inside) selBar(ctx, R.lx - 8, y, ENDL.w, 48, 10); else rr(ctx, R.lx - 8, y, ENDL.w, 48, 10, on ? K.accDim : K.cell);
             tx(b, label, R.lx + 14, y + 24, 24, { face: "bold", color: on && this.inside ? K.sel : K.text });
         });
         const id = DataManager.latestSavefileId(), info = id >= 0 ? DataManager.savefileInfo(id) : null;
@@ -647,7 +647,7 @@
         const M = T.api("MapaWyspy"), V = M && M.menuView ? M.menuView(PARTS) : ExtraView;
         return new V(scene, def);
     }
-    const VIEWS = { hero: PostacView, equip: EquipView, skills: SkillsView, item: BagView, journal: JournalView, mapa: MapaView, options: OptionsView, save: SaveView, gameEnd: EndView };
+    const VIEWS = { hero: PostacView, stats: StatsView, equip: EquipView, skills: SkillsView, item: BagView, journal: JournalView, mapa: MapaView, options: OptionsView, save: SaveView, gameEnd: EndView };
 
     // ==================================================================
     // The menu scene: the list, the page, the keys
@@ -717,7 +717,7 @@
         const b = this._listSpr.bitmap, ctx = b.context, inside = this._inside, xp = heroXp(), n = this._entries.length, T0 = L.tabs;
         b.clear();
         tx(b, dayWords() + "   ·   " + placeName(), L.right.x + L.right.w - 6, 8, 16, { top: true, align: "right", color: K.muted });
-        const pad = 12, isz = 32, gap = 6, avail = L.right.w;
+        const pad = n > 9 ? 9 : 12, isz = n > 9 ? 28 : 32, gap = n > 9 ? 4 : 6, avail = L.right.w;
         let size = 19;
         const widthOf = (e, s) => pad * 2 + isz + 8 + measure(e.label, s, "bold");
         const totalOf = s => this._entries.reduce((a, e) => a + widthOf(e, s), 0) + gap * (n - 1);
@@ -727,7 +727,7 @@
         this._rowBoxes = [];
         this._entries.forEach((e, i) => {
             const on = i === this._sel, w = widthOf(e, size);
-            if (on) rr(ctx, x, y, w, h, 10, inside ? K.accDim : K.acc);
+            if (on) { if (inside) rr(ctx, x, y, w, h, 10, K.accDim); else selBar(ctx, x, y, w, h, 10); }
             const ic = entryIcon(e);
             if (ic) {
                 b.paintOpacity = inside && !on ? 102 : 255;
@@ -906,6 +906,6 @@
     if (!(window.$plugins || []).some(p => p && p.name === "Drops") && !T.api("Drops")) PluginManager.loadScript("Drops");   // (the bundles - "Wyrzuć")
 
     window.MenuRing = T.register(PLUGIN, { files: filesInfo, drawSaveCard, fillOldPlaces, placeOfSave, placeFill, ENTRIES, TABS: ENTRIES, L, K, heroXp, needRows, debtInfo,
-        opinionInfo, totals, eqCells, VIEWS, PARTS, SORTS, GROUPS, sortBag, groupOf, bagSort, equipSlotOf, UI: { s: UI.s, toScreen, toLocal },
+        opinionInfo, totals, eqCells, statsModel, VIEWS, PARTS, SORTS, GROUPS, sortBag, groupOf, bagSort, equipSlotOf, UI: { s: UI.s, toScreen, toLocal },
         info: () => { const s = SceneManager._scene; return s instanceof Scene_Menu && s.menuInfo ? s.menuInfo() : null; } });
 })();

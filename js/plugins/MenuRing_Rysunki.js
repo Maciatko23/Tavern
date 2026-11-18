@@ -60,7 +60,8 @@
     // the list, in this order; the other plugins' commands come after it
     const ENTRIES = [
         { sym: "hero", label: "Postać", icon: "hero" },
-        { sym: "equip", label: "Ekwipunek", icon: [435, "plain"] },
+        { sym: "stats", label: "Statystyki", icon: [921, "plain"] },   // (2026-11-18: the numbers of the fight and the work, where each comes from)
+        { sym: "equip", label: "Ekwipunek", icon: [435, "plain"] },   // (2026-11-18: its own tab again - the card, the silhouette, the list)
         { sym: "skills", label: "Umiejętności", icon: [89, "dark"] },
         { sym: "item", label: "Plecak", icon: [370, "plain"] },
         { sym: "journal", label: "Dziennik", icon: [499, "plain"] },
@@ -210,14 +211,14 @@
         const h = Cb.hero(), top = Cb.MAX_LEVEL && h.level >= Cb.MAX_LEVEL, need = top ? 1 : Cb.xpToNext ? Cb.xpToNext(h.level) : 100;
         return { level: h.level, xp: h.xp, need, ratio: top ? 1 : clamp01(h.xp / Math.max(1, need)), points: h.points || 0, skillPoints: h.skillPoints || 0, attr: h.attr || {}, top };
     }
+    // the four needs: [key, word, 0..1, the number shown] - all in percent (the user, 2026-11-17: "zamiast pasków sytości, wody itd.
+    // niech będą tylko wartości procentowe")
     function needRows() {
-        const v = CH.needValues(), rows = [["health", "Życie", v.health, Math.round(v.health * 100) + "%"]];
-        rows.push(["stamina", "Kondycja", v.stamina, String(Math.round($gameSystem.stamina ? $gameSystem.stamina() : 0))]);
-        const N = T.api("Needs");
-        if (v.food !== undefined && N) {
-            const n = N.state();
-            rows.push(["food", "Sytość", v.food, String(Math.round(n.food))]);
-            rows.push(["water", "Nawodnienie", v.water, String(Math.round(n.water))]);
+        const v = CH.needValues(), pc = x => Math.round(clamp01(x) * 100) + "%", rows = [["health", "Życie", v.health, pc(v.health)]];
+        rows.push(["stamina", "Kondycja", v.stamina, pc(v.stamina)]);
+        if (v.food !== undefined && T.api("Needs")) {
+            rows.push(["food", "Sytość", v.food, pc(v.food)]);
+            rows.push(["water", "Nawodnienie", v.water, pc(v.water)]);
         }
         return rows;
     }
@@ -266,6 +267,14 @@
         ctx.fillStyle = K.panel;
         CH.roundPath(ctx, x, y, w, h, 14);
         ctx.fill();
+        // (2026-11-18, the new look on every page: a thin warm edge, a faint light along the top)
+        ctx.shadowColor = "rgba(0,0,0,0)";
+        ctx.strokeStyle = "rgba(255,210,63,0.14)";
+        ctx.lineWidth = 1;
+        CH.roundPath(ctx, x + 0.5, y + 0.5, w - 1, h - 1, 14);
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(255,255,255,0.05)";
+        ctx.beginPath(); ctx.moveTo(x + 16, y + 1.5); ctx.lineTo(x + w - 16, y + 1.5); ctx.stroke();
         ctx.restore();
     }
     function hl(ctx, x0, x1, y, col) { ctx.fillStyle = col || K.line; ctx.fillRect(Math.round(x0), Math.round(y), Math.round(x1 - x0), 1); }
@@ -308,11 +317,76 @@
     }
     const smallKeysWidth = pairs => pairs.reduce((a, [k, lab]) => a + Math.max(24, measure(k, 16) + 14) + (lab ? measure(lab, 16) + 26 : 8), 0) - 26;
     // a group's heading: yellow capitals, a count, a thin line to x1; returns the x where the line starts
+    // (2026-11-18, the player: "upiększyć czcionki, elementy okna i ogólnie UI") the line starts with a small gold diamond and fades out
+    // to the right
     function heading(b, x, y, s, x1, n) {
         let x2 = x + tx(b, s, x, y, 20, { top: true, face: "sc", color: K.acc }) + 10;
         if (n !== undefined && n !== null && n !== "") x2 += tx(b, String(n), x2, y + 1, 19, { top: true, color: K.muted }) + 12;
-        if (x1 && x1 > x2) hl(b.context, x2, x1, y + 12);
+        if (x1 && x1 > x2 + 16) {
+            const ctx = b.context, cy = y + 12;
+            ctx.save();
+            ctx.fillStyle = K.acc;
+            ctx.globalAlpha = 0.85;
+            ctx.beginPath(); ctx.moveTo(x2 + 4, cy - 4); ctx.lineTo(x2 + 8, cy); ctx.lineTo(x2 + 4, cy + 4); ctx.lineTo(x2, cy); ctx.closePath(); ctx.fill();
+            ctx.globalAlpha = 1;
+            const g = ctx.createLinearGradient(x2 + 12, 0, x1, 0);
+            g.addColorStop(0, "rgba(255,210,63,0.5)");
+            g.addColorStop(1, "rgba(255,210,63,0)");
+            ctx.fillStyle = g;
+            ctx.fillRect(Math.round(x2 + 12), Math.round(cy), Math.round(x1 - x2 - 12), 1);
+            ctx.restore();
+        } else if (x1 && x1 > x2) hl(b.context, x2, x1, y + 12);
         return x2;
+    }
+    // a box of a page (2026-11-18): the dark fill lit faintly at the top, a thin warm edge, a light line along its top, small gold
+    // corner brackets
+    function fancyBox(ctx, x, y, w, h, o) {
+        o = o || {};
+        const r = o.r === undefined ? 12 : o.r;
+        ctx.save();
+        ctx.fillStyle = K.panel2;
+        CH.roundPath(ctx, x, y, w, h, r);
+        ctx.fill();
+        const g = ctx.createLinearGradient(0, y, 0, y + Math.min(h, 220));
+        g.addColorStop(0, "rgba(255,255,255,0.05)");
+        g.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = g;
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255,210,63,0.18)";
+        ctx.lineWidth = 1;
+        CH.roundPath(ctx, x + 0.5, y + 0.5, w - 1, h - 1, r);
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(255,255,255,0.06)";
+        ctx.beginPath(); ctx.moveTo(x + r, y + 1.5); ctx.lineTo(x + w - r, y + 1.5); ctx.stroke();
+        if (o.corners !== false) {
+            const L = 14, k = 5;
+            ctx.strokeStyle = K.acc;
+            ctx.globalAlpha = 0.8;
+            ctx.lineWidth = 2;
+            ctx.lineCap = "round";
+            for (const [cx, cy, sx, sy] of [[x + k, y + k, 1, 1], [x + w - k, y + k, -1, 1], [x + k, y + h - k, 1, -1], [x + w - k, y + h - k, -1, -1]]) {
+                ctx.beginPath(); ctx.moveTo(cx, cy + sy * L); ctx.lineTo(cx, cy); ctx.lineTo(cx + sx * L, cy); ctx.stroke();
+            }
+        }
+        ctx.restore();
+    }
+    // the chosen row (2026-11-18): a gold bar lit from above, a soft glow round it, a light line along its top
+    function selBar(ctx, x, y, w, h, r) {
+        r = r === undefined ? 8 : r;
+        ctx.save();
+        ctx.shadowColor = "rgba(255,200,60,0.45)";
+        ctx.shadowBlur = 14;
+        const g = ctx.createLinearGradient(0, y, 0, y + h);
+        g.addColorStop(0, "#ffe27e");
+        g.addColorStop(0.5, "#ffd23f");
+        g.addColorStop(1, "#e8b21c");
+        ctx.fillStyle = g;
+        CH.roundPath(ctx, x, y, w, h, r);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = "rgba(255,255,255,0.4)";
+        ctx.fillRect(Math.round(x + r), Math.round(y + 1), Math.round(w - r * 2), 1);
+        ctx.restore();
     }
     // the page's head strip (under the tabs): its word in yellow capitals on the left (none: the page puts its own things there), a word
     // on the right, the line under them
@@ -556,5 +630,5 @@
     CZESCI.kit = { T, CH, PLUGIN, C, textOut, measure, W, H, ease, K, NEED_COL, L, RX, UI, uiOff, toLocal, toScreen, touchAt,
         ENTRIES, OWN, menuKeys, placeFill, placeOfSave, fillOldPlaces, plural, item, MP, num1, pctTxt, weightTxt, cap1, dayWords,
         placeName, heroXp, needRows, debtInfo, opinionInfo, wrapWords, rr, panelShadow, hl, vl, meter, done, tx, keycap, smallKeys,
-        smallKeysWidth, heading, header, STRIP_TOP, tabStrip, inBox, tick, bubble, entryIcon, flatRows, fitRows, drawMore, View };
+        smallKeysWidth, heading, header, STRIP_TOP, tabStrip, inBox, tick, bubble, entryIcon, flatRows, fitRows, drawMore, View, fancyBox, selBar };
 })();
