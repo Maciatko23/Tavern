@@ -755,6 +755,8 @@
         return s && s.flags.hired && s.shiftDay !== day() && FAB.shiftTried !== day() && hour() < 20.6 && stamina() >= 15;
     }
     function installShiftBot() {
+        // (2026-11-18: in the tavern a shift is played on the map, Zmiana_Sala.js - this bot plays the shift's scene: asked for in so many words)
+        if (!TavernShift.start._scene) { const s0 = TavernShift.start; TavernShift.start = o => s0(Object.assign({ scene: true }, o || {})); TavernShift.start._scene = true; }
         if (window.__fabShiftBot) { TavernShift.onTick = window.__fabShiftBot; return; }
         // (the bot of tests/tavern_shift_test.js, "good" mode: it presses the keys of the mini-game, nothing else)
         const bot = window.__bot = { mode: "good", t: 0, path: null, goal: "", last: null, still: 0, cardWait: 0 };

@@ -66,7 +66,9 @@ kit.test({ port: 9684, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     const hire = await talk("Story.borgarEvent()", []);
     t.check("tawerna o 10:00: Borgar najmuje bohatera (flaga hired)", hire.done && !!(await J("Story.state().flags.hired")), hire.text.slice(0, 160));
     // three evening shifts played for real (TavernShift's test hook: every part skipped with a score of 90, O on the cards)
+    // (2026-11-18: in the tavern the shift is played on the map, Zmiana_Sala.js; this hook plays the shift's scene - asked for in so many words)
     const shiftHook = `(function(){ window.__shiftT = 0; if ($gameSystem.setStamina) $gameSystem.setStamina(100);
+        if (!TavernShift.start._scene) { const s0 = TavernShift.start; TavernShift.start = o => s0(Object.assign({ scene: true }, o || {})); TavernShift.start._scene = true; }
         TavernShift.onTick = function(scene) { const st = TavernShift.state(), I = Input._currentState; I.ok = false; if (!st) return;
             if (st.phase === "play") TavernShift.skip(90); else if (++window.__shiftT % 8 === 0) I.ok = true; }; return 0; })()`;
     let shifts = 0, earned = 0, lastShift = null;

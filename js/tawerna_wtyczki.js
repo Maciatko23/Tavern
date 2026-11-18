@@ -146,6 +146,7 @@ var $tawernaWtyczki =
 {"name":"Goscie_Sala","status":true,"description":"Goście w sali tawerny: wieczorem przychodzą, siadają na krzesłach, jedzą, piją, chodzą po sali, można z każdym porozmawiać. Działa razem z „Przytulną salą”. v1.0.0","parameters":{}},
 {"name":"Kelnerka","status":true,"description":"Kelnerka Jagna: nosi z kuchni miski do gości przy stołach, przeciera ladę, nocą idzie spać na górę. v1.0.0","parameters":{}},
 {"name":"Pokojowka","status":true,"description":"Pokojówka Zośka: zamiata podłogi na wszystkich piętrach tawerny, sprząta pokoje, dokłada drewna do kominków. v1.0.0","parameters":{}},
+{"name":"Zmiana_Sala","status":true,"description":"Zmiana w karczmie na żywo na mapie (Map001): prawdziwe stoły, kominki, lada i goście sali; piwo i kuchnia jako zbliżenia. v1.0.0","parameters":{}},
 {"name":"Karczma_Noc","status":true,"description":"Noc w tawernie: Borgar drzemie za ladą (2-6, budzi się zagadnięty), łaźnia nieczynna 22-6 (Wanda śpi), izba służby zamknięta nocą. v1.0.0","parameters":{}},
 {"name":"Pokoje","status":true,"description":"Zasięg widzenia we wnętrzach budynków: widać to, co bohater może zobaczyć; to, co za ścianami i daleko, jest czarne. v2.4.0","parameters":{}},
 {"name":"Widok","status":true,"description":"Widok na dworze: drzewa, budynki i skały zasłaniają, w nocy widać blisko (dalej z pochodnią i przy ogniu), mgła tam, gdzie jeszcze nie byłeś. v1.0.0","parameters":{}},

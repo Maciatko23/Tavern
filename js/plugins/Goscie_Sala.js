@@ -52,7 +52,10 @@
     const rnd = (a, b) => a + Math.random() * (b - a);
     const hash = T.util.hash;
     const P = () => T.api("Przytulna") || window.Przytulna;
-    const on = () => { const p = P(); return !!(p && p.on && p.on()); };
+    // (2026-11-18) SH: the tavern shift played on the map (Zmiana_Sala.js) - while it runs the guests come and go at its word, not at
+    // their hour: they sit only where it lets them (a clean table), wait for what they ordered, eat or drink what the hero brought
+    let SH = null;
+    const on = () => { if (SH) return true; const p = P(); return !!(p && p.on && p.on()); };
     const here = () => !!(window.$gameMap && $gameMap.mapId() === MAP);
     const hourNow = () => ($gameSystem && typeof $gameSystem.dayNightHour === "function" ? $gameSystem.dayNightHour() : T.time.hour());
     const talking = ev => ev._locked || ($gameMap._interpreter.isRunning() && $gameMap._interpreter.eventId() === ev.eventId());
@@ -102,6 +105,7 @@
     function arrivalOf(g) { return EVENING_FROM + hash(g.id, 11) * ARRIVE_SPREAD; }
     function departureOf(g) { return LEAVE_FROM + hash(g.id, 12) * LEAVE_SPREAD; }
     function present(g, h) {
+        if (SH) return !!g.shiftIn;
         if (window.Wesele && window.Wesele.sala && window.Wesele.sala()) return false;   // (W18: the hall is the wedding's - Wesele.js)
         const dep = departureOf(g), lateH = h < 12 ? h + 24 : h;   // (the night goes on past midnight)
         return lateH >= arrivalOf(g) && lateH < dep;
@@ -121,10 +125,13 @@
         ev.locate(seat.x, seat.y);
         ev.setThrough(true);
         g.state = "sit"; g.sitUntil = S.now + rnd(SIT_MIN, SIT_MAX); g.act = g.hungry ? "eat" : "drink"; g.actUntil = g.hungry ? S.now + EAT_FOR : 0; g.nextAct = S.now + rnd(1, REST_MAX); g.t0 = -1;
+        // (the shift: he sits until it sends him off, with nothing in front of him until the hero brings it)
+        if (SH) { g.sitUntil = Infinity; g.act = "wait"; g.nextAct = Infinity; if (SH.onSeated) SH.onSeated(g); }
     }
     function setOut(g) {
         takeSeat(g, null);
-        g.state = "out"; g.t0 = -1; g.goal = null;
+        if (SH && g.state !== "out" && SH.onLeft) SH.onLeft(g);
+        g.state = "out"; g.t0 = -1; g.goal = null; g.noSeatT = 0;
         g.ev.setTransparent(true); g.ev.setThrough(true);
         g.ev.locate(DOOR.x, DOOR.y);
     }
@@ -188,7 +195,7 @@
     function goSit(g, seat) {
         takeSeat(g, seat);
         walkTo(g, seat.ax, seat.ay, () => {
-            if (!seat.by || seat.by !== g) { const s2 = freeSeat(seat); if (s2) goSit(g, s2); else leave(g); return; }
+            if (!seat.by || seat.by !== g) { const s2 = SH && SH.pick ? SH.pick(g) : freeSeat(seat); if (s2) goSit(g, s2); else leave(g); return; }
             stepTo(g, seat.x, seat.y);
             g.state = "mount";
         });
@@ -233,11 +240,22 @@
             if (talking(g.ev)) continue;
             switch (g.state) {
                 case "out":
+                    if (SH) {   // (the shift: in by the door when it lets him, to a free chair at a clean table; none - he waits a while by the door)
+                        if (!g.shiftIn || running) break;
+                        const seat = SH.pick ? SH.pick(g) : freeSeat();
+                        if (!seat) { if (++g.noSeatT >= 600) { g.shiftIn = false; if (SH.noSeat) SH.noSeat(g); } break; }
+                        if (S.walking >= MAX_WALKING + 2) break;
+                        S.walking++;
+                        g.ev.setTransparent(false); setSprite(g); g.ev.locate(DOOR.x, DOOR.y); g.ev.setDirection(8);
+                        goSit(g, seat);
+                        break;
+                    }
                     if (present(g, h) && !running) {
                         const seat = (g.home && !g.home.by ? g.home : freeSeat());
                         if (!seat) break;
-                        // (the hour jumped - a sleep, a scene, a test: he has been here a while; only those coming in now walk, a few at a time)
-                        if ((h < 12 ? h + 24 : h) - arrivalOf(g) > LATE) { sitNow(g, seat); break; }
+                        // (the hour jumped - a sleep, a scene, a test: he has been here a while; only those coming in now walk, a few at a time;
+                        // after a shift on the map they come in by the door too - the hero is in the hall and sees it)
+                        if ((h < 12 ? h + 24 : h) - arrivalOf(g) > LATE && S.now >= (S.walkInUntil || 0)) { sitNow(g, seat); break; }
                         if (S.walking >= MAX_WALKING) break;
                         S.walking++;
                         g.ev.setTransparent(false); setSprite(g); g.ev.locate(DOOR.x, DOOR.y); g.ev.setDirection(8);
@@ -415,6 +433,27 @@
             return true;
         },
         layOut,
+        // (2026-11-18) the shift on the map (Zmiana_Sala.js): begin({ pick(g) -> a seat or null, onSeated(g), onLeft(g), noSeat(g) }) - everyone
+        // who is here finishes and goes; bring(id) lets one in, send(id) sends him off, serve(id, "eat" | "drink") puts it in front of him;
+        // end() - back to the hours (whoever should be here comes in by the door, nobody appears on a chair in front of the hero)
+        shift: {
+            begin(o) { SH = Object.assign({}, o); for (const g of S.guests) { g.shiftIn = false; g.noSeatT = 0; } },
+            end() {
+                SH = null; S.walkInUntil = S.now + 300;
+                for (const g of S.guests) if (g.state === "sit") { g.sitUntil = S.now + rnd(SIT_MIN, SIT_MAX); g.act = "drink"; g.nextAct = S.now + rnd(1, REST_MAX); }
+            },
+            running: () => !!SH,
+            raw: () => S.guests,
+            seats: () => chairs().list,
+            bring(id) { const g = S.guests.find(x => x.id === id); if (!g || g.state !== "out") return false; g.shiftIn = true; g.noSeatT = 0; return true; },
+            send(id) { const g = S.guests.find(x => x.id === id); if (!g) return false; g.shiftIn = false; return true; },
+            serve(id, what) {
+                const g = S.guests.find(x => x.id === id);
+                if (!g || g.state !== "sit") return false;
+                g.act = what === "eat" ? "eat" : "drink"; g.actUntil = Infinity; g.nextAct = S.now; g.t0 = -1;
+                return true;
+            }
+        },
         // tests: one frame of the hall's life and pictures (its cost)
         frame() { const set = SceneManager._scene && SceneManager._scene._spriteset; tick(); if (set) for (const g of S.guests) drawGuest(set, g); return true; },
         stats: () => ({ guests: S.guests.length, sit: S.guests.filter(g => g.state === "sit").length, out: S.guests.filter(g => g.state === "out").length, walking: S.guests.filter(onFeet).length, seats: SEATS ? SEATS.list.length : 0 })

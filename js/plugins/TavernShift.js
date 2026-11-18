@@ -327,6 +327,40 @@
     };
     const BORGAR_BUST = "People3_5";
 
+    // the shift's result from its parts' results (the scene's, and the shift played on the map - Zmiana_Sala.js): o = { partIds, results,
+    // ctx, level, shiftNo }
+    function resultOf(o, aborted) {
+        const parts = {}, good = [], bad = [];
+        let wsum = 0, ssum = 0, bonus = 0;
+        for (const id of o.partIds) {
+            const r = o.results[id];
+            if (!r) continue;
+            parts[id] = r.result;
+            wsum += PART_DEFS[id].weight;
+            ssum += PART_DEFS[id].weight * r.result.score;
+            bonus += PART_DEFS[id].bonus * r.result.score / 100;
+            good.push(...r.good);
+            bad.push(...r.bad);
+        }
+        const played = Object.keys(parts).length, frac = played / o.partIds.length;
+        const score = wsum ? Math.round(ssum / wsum) : 0;
+        // (2026-10-29, docs/PODROZNI.md 1.6) the tavern's renown and the like: more tips (other plugins' addTipBonus)
+        const tipBonus = aborted ? 0 : TIP_BONUS.reduce((n, f) => { try { return n + (Number(f()) || 0); } catch (e) { return n; } }, 0);
+        const tips = Math.max(0, Math.round(o.ctx.tips + tipBonus));
+        const s = parts.serve || {}, b = parts.beer || {};
+        const deduct = (s.walkouts || 0) * 3 + (s.mistakes || 0) + (b.spilled || 0);
+        const wage = BASE_WAGE + 3 * o.level;
+        const grade = aborted ? 0 : gradeOf(score), bonusR = Math.round(bonus), extra = grade === 5 ? 5 : 0;
+        const raw = wage + bonusR - deduct + extra, pay = aborted ? 0 : Math.max(3, raw);
+        const hours = Math.round(HOURS * (aborted ? Math.max(0.25, frac) : 1) * 10) / 10;
+        const stamina = Math.round(STAMINA * (aborted ? Math.max(0.25, frac) : 1));
+        if (aborted) bad.unshift(TK.kod.computeResult[0]);
+        return {
+            pay, tips, total: pay + tips, grade, gradeName: grade ? GRADES[grade].name : "Przerwana", score, level: o.level, shift: o.shiftNo,
+            aborted: !!aborted, hours, stamina, wage: aborted ? 0 : wage, bonus: aborted ? 0 : bonusR, deduct: aborted ? 0 : deduct,
+            extra: aborted ? 0 : extra, floor: aborted ? 0 : pay - raw, parts, good: good.slice(0, 5), bad: bad.slice(0, 5)
+        };
+    }
     class Scene_TavernShift extends ui.Scene_MiniGame {
         createGame() {
             this.opts = Object.assign({}, this.opts);   // (the caller's options stay as they were)
@@ -334,7 +368,7 @@
             this.shiftNo = st.done + 1;
             this.level = clamp(this.opts.level === undefined || this.opts.level === null || this.opts.level === "" ? Math.min(MAX_LEVEL, st.done) : Number(this.opts.level), 0, MAX_LEVEL);
             this.cfgs = levelCfg(this.level);
-            this.ctx = { tips: 0 };
+            this.ctx = Object.assign({ tips: 0 }, this.opts.ctx || {});   // (a close-up of the shift on the map: its shared bits so far)
             this.partIds = (Array.isArray(this.opts.parts) && this.opts.parts.length ? this.opts.parts : PART_ORDER).filter(p => PART_DEFS[p]);
             this.turbo = clamp(Math.floor(this.opts.turbo || 1), 1, 20);
             this.cards = this.opts.cards !== false;
@@ -363,7 +397,11 @@
             this.partIndex = -1;
             this.part = null;
             this.results = {};
-            if (this.cards) this.openCard("intro");
+            // (2026-11-18, the shift lived on the map - Zmiana_Sala.js: the user "na żywo na mapie karczmy") opts.summary: only the end's
+            // summary of a shift played on the map (its pay to the purse here, as ever); opts.closeUp: one part as a close-up (the keg,
+            // the stove) - no intro, no summary, nothing paid: its result goes back to the map
+            if (this.opts.summary) { this.startHour = this.opts.startHour !== undefined ? this.opts.startHour : this.startHour; this.result = this.opts.summary; this.setPhase("summary"); this.drawSummary(this.result); return; }
+            if (this.cards && !this.opts.closeUp) this.openCard("intro");
             else this.nextPart();
         }
         // a press anywhere is O on the cards, never in the play itself; P is Esc and the pad's menu button too
@@ -410,6 +448,7 @@
         hideOverlay() { this.overlay.visible = false; }
         // P: the pause - back to work, or break the shift off (no pay)
         pause() {
+            if (this.opts.summary || this.phase === "summary") return;
             this.se("cancel");
             this.showChoice({ title: "Pauza", options: [TK.kod.pause[0], TK.kod.pause[1]], cancel: 0, w: 440, onPick: i => { if (i === 1) this.abort(); } });
         }
@@ -427,7 +466,7 @@
         }
         nextPart() {
             this.partIndex++;
-            if (this.partIndex >= this.partIds.length) { this.finishShift(false); return; }
+            if (this.partIndex >= this.partIds.length) { if (this.opts.closeUp) this.leaveCloseUp(false); else this.finishShift(false); return; }
             const go = () => {
                 if (this.part) { this.stage.removeChild(this.part.root); this.part.root.destroy(); }
                 const id = this.partIds[this.partIndex];
@@ -461,7 +500,16 @@
             if (this.card) this.hideCard();
             if (this.part && !this.part.done) this.part.done = true;
             if (this.part && this.part.id === "serve") AudioManager.fadeOutBgs(1);
+            if (this.opts.closeUp) { this.leaveCloseUp(true); return; }
             this.finishShift(true);
+        }
+        // a close-up's end: its part's result and the shared bits (tips, the beer's / the kitchen's quality) back to the map, nothing paid
+        leaveCloseUp(aborted) {
+            if (this.card) this.hideCard();
+            this.result = { closeUp: true, aborted: !!aborted, parts: this.results, ctx: this.ctx };
+            AudioManager.replayBgs(this.bgs);
+            this.phase = "leaving";
+            this.end(this.result);
         }
         finishShift(aborted) {
             const res = this.computeResult(aborted);
@@ -487,41 +535,10 @@
             this.overlay.visible = true;   // (the summary fades out with the scene)
         }
         // ---- results
-        computeResult(aborted) {
-            const parts = {}, good = [], bad = [];
-            let wsum = 0, ssum = 0, bonus = 0;
-            for (const id of this.partIds) {
-                const r = this.results[id];
-                if (!r) continue;
-                parts[id] = r.result;
-                wsum += PART_DEFS[id].weight;
-                ssum += PART_DEFS[id].weight * r.result.score;
-                bonus += PART_DEFS[id].bonus * r.result.score / 100;
-                good.push(...r.good);
-                bad.push(...r.bad);
-            }
-            const played = Object.keys(parts).length, frac = played / this.partIds.length;
-            const score = wsum ? Math.round(ssum / wsum) : 0;
-            // (2026-10-29, docs/PODROZNI.md 1.6) the tavern's renown and the like: more tips (other plugins' addTipBonus)
-            const tipBonus = aborted ? 0 : TIP_BONUS.reduce((n, f) => { try { return n + (Number(f()) || 0); } catch (e) { return n; } }, 0);
-            const tips = Math.max(0, Math.round(this.ctx.tips + tipBonus));
-            const s = parts.serve || {}, b = parts.beer || {};
-            const deduct = (s.walkouts || 0) * 3 + (s.mistakes || 0) + (b.spilled || 0);
-            const wage = BASE_WAGE + 3 * this.level;
-            const grade = aborted ? 0 : gradeOf(score), bonusR = Math.round(bonus), extra = grade === 5 ? 5 : 0;
-            const raw = wage + bonusR - deduct + extra, pay = aborted ? 0 : Math.max(3, raw);
-            const hours = Math.round(HOURS * (aborted ? Math.max(0.25, frac) : 1) * 10) / 10;
-            const stamina = Math.round(STAMINA * (aborted ? Math.max(0.25, frac) : 1));
-            if (aborted) bad.unshift(TK.kod.computeResult[0]);
-            return {
-                pay, tips, total: pay + tips, grade, gradeName: grade ? GRADES[grade].name : "Przerwana", score, level: this.level, shift: this.shiftNo,
-                aborted: !!aborted, hours, stamina, wage: aborted ? 0 : wage, bonus: aborted ? 0 : bonusR, deduct: aborted ? 0 : deduct,
-                extra: aborted ? 0 : extra, floor: aborted ? 0 : pay - raw, parts, good: good.slice(0, 5), bad: bad.slice(0, 5)
-            };
-        }
+        computeResult(aborted) { return resultOf(this, aborted); }
         // ---- drawing
         clockText(frac) {
-            const h = this.startHour + HOURS * frac;
+            const h = this.opts.closeUp ? this.startHour : this.startHour + HOURS * frac;   // (a close-up: the map's own hour, it stands still meanwhile)
             const hh = Math.floor(h) % 24, mm = Math.floor((h - Math.floor(h)) * 60);
             return String(hh).padStart(2, "0") + ":" + String(mm).padStart(2, "0");
         }
@@ -657,7 +674,7 @@
     const stats = () => store();
     function applyResult(res) {
         if (res.total > 0) $gameParty.gainGold(res.total);
-        if (res.hours > 0 && typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(res.hours);
+        if (res.hours > 0 && !res.live && typeof $gameSystem.advanceDayNight === "function") $gameSystem.advanceDayNight(res.hours);   // (on the map the hours went by themselves)
         if (res.stamina > 0 && typeof $gameSystem.changeStamina === "function") $gameSystem.changeStamina(-res.stamina);
         const st = stats();
         if (!res.aborted) st.done++;
@@ -679,9 +696,14 @@
         lastResult: null,
         // starts a shift: opts { onEnd(result), level 0-5, parts [...], intro "text", seed, turbo (logic ticks a frame, tests), cards false }
         start(opts) {
-            return ui.open(Scene_TavernShift, opts || {});   // (one at a time; not in the middle of a scene change)
+            opts = opts || {};
+            // (2026-11-18) in the tavern the shift is played on the map itself (Zmiana_Sala.js); the close-ups and the summary are this scene
+            if (!opts.closeUp && !opts.summary && !opts.parts && P.live && P.live.wants(opts)) return P.live.start(opts);
+            return ui.open(Scene_TavernShift, opts);   // (one at a time; not in the middle of a scene change)
         },
         isRunning: () => !!scene(),
+        // the shift played on the map (Zmiana_Sala.js) is going on: the hall's people leave its work to the hero
+        liveRunning: () => !!(P.live && P.live.running()),
         scene: () => scene(),
         level: () => Math.min(MAX_LEVEL, stats().done),
         stats: () => Object.assign({}, stats()),
@@ -713,7 +735,8 @@
 
     // for TavernShift_Hall.js and TavernShift_Parts.js: the drawing, the sounds, the dishes and steps
     P.kit = { ST, GOOD, BAD, WARN, GOLD_ICON, clamp, lerp, ease, scoreColour, shuffle, se, dirty, panel, bar, txt, measure, wrapLines, icon, keyCap, showIf, solidBitmap,
-        shadowBitmap, TILESET_ID, DISHES, MENU_ORDER, dishIcon, STEPS, STEP_ORDER, RECIPES, TIP_SCALE };
+        shadowBitmap, TILESET_ID, DISHES, MENU_ORDER, dishIcon, STEPS, STEP_ORDER, RECIPES, TIP_SCALE,
+        resultOf, applyResult, stats, levelCfg, PART_ORDER, HOURS, STAMINA, MAX_LEVEL, TK };
     // the parts not in js/plugins.js yet: put into the page here (after every plugin - classes only, no engine hooks)
     for (const part of ["TavernShift_Hall", "TavernShift_Parts"]) {
         if (!(window.$plugins || []).some(p => p && p.name === part && p.status)) PluginManager.loadScript(part);

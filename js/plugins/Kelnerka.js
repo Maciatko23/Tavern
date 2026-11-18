@@ -61,16 +61,43 @@
     }
     // ------------------------------------------------------------------ walking (as the hall's guests walk)
     function walkTo(x, y, then) { S.goal = { x, y, then }; S.stuck = 0; }
+    // (2026-11-18: at nine the travellers and she both made for the stairs' one-cell way in - each waited for the other, for good) a
+    // person (never the hero) standing in her way for long: she slips past him; a wall still stops her
+    const DX = { 1: -1, 2: 0, 3: 1, 4: -1, 6: 1, 7: -1, 8: 0, 9: 1 }, DY = { 1: 1, 2: 1, 3: 1, 4: 0, 6: 0, 7: -1, 8: -1, 9: -1 };
+    // a step on her way: slantwise along a wall's corner (not allowed) - at once one of its two straight steps instead
+    function stepOn(ev, d, RA) {
+        if (RA.canStep(ev, ev.x, ev.y, d)) { ev.setThrough(false); RA.step(ev, d); return true; }
+        if (d === 1 || d === 3 || d === 7 || d === 9) for (const c of [DX[d] > 0 ? 6 : 4, DY[d] > 0 ? 2 : 8]) if (RA.canStep(ev, ev.x, ev.y, c)) { ev.setThrough(false); RA.step(ev, c); return true; }
+        return false;
+    }
+    function slipPast(ev, d) {
+        if (!(d > 0)) return false;
+        if (d === 1 || d === 3 || d === 7 || d === 9) {   // (slantwise: one of its two straight steps - free, or past the one standing there)
+            const RA = window.RoamingActor;
+            for (const c of [DX[d] > 0 ? 6 : 4, DY[d] > 0 ? 2 : 8]) {
+                if (RA && RA.canStep(ev, ev.x, ev.y, c)) { ev.setThrough(false); RA.step(ev, c); return true; }
+                if (slipPast(ev, c)) return true;
+            }
+            return false;
+        }
+        const x = ev.x + DX[d], y = ev.y + DY[d];
+        if (!$gameMap.isValid(x, y) || !$gameMap.isPassable(ev.x, ev.y, d) || !$gameMap.checkPassage(x, y, 0x0f)) return false;
+        if ($gamePlayer.x === x && $gamePlayer.y === y) return false;
+        if (!$gameMap.eventsXyNt(x, y).some(e => e !== ev && e.isNormalPriority())) return false;
+        ev.setThrough(true); ev.setDirection(d); ev.moveStraight(d);
+        return true;
+    }
     function stepWalk() {
         const ev = S.ev, g = S.goal;
         if (!g || ev.isMoving()) return;
         if (ev.x === g.x && ev.y === g.y) { S.goal = null; g.then(); return; }
         const H = window.Hunting, RA = window.RoamingActor;
         const d = H && H.path8 ? H.path8(ev, g.x, g.y, { key: "sala" }).dir : ev.findDirectionTo(g.x, g.y);
-        if (d > 0 && RA && RA.canStep(ev, ev.x, ev.y, d)) { ev.setThrough(false); RA.step(ev, d); S.stuck = 0; return; }
+        if (d > 0 && RA && stepOn(ev, d, RA)) { S.stuck = 0; return; }
         // (2026-11-16, the user: „postać chodzi po murze”) no way on: she waits for whoever stands there; never through a wall. A guest
         // she cannot reach: back to the kitchen with the bowl (on her way home or to bed she just keeps waiting).
         S.stuck++;
+        if (S.stuck > 90 && slipPast(ev, d)) { S.stuck = 0; return; }
         if (S.stuck > 150 && S.carry) { S.stuck = 0; S.goal = null; backToStove(); }
     }
     // through the back door: to its cell on one side, a moment out of sight, out on the other side
@@ -141,7 +168,8 @@
         switch (S.state) {
             case "walk": stepWalk(); break;
             case "door": if (--S.t <= 0) { const f = S.after; S.after = null; S.state = "walk"; if (f) f(); } break;
-            case "cook": if (--S.t <= 0) serve(); break;
+            // (2026-11-18: the hero's shift on the map - Zmiana_Sala.js: he serves the hall, she keeps to the stove and cooks)
+            case "cook": if (--S.t <= 0) { if (window.TavernShift && TavernShift.liveRunning && TavernShift.liveRunning()) S.t = sec(rnd(COOK_MIN, COOK_MAX)); else serve(); } break;
             case "serve": case "wipe": if (--S.t <= 0) backToStove(); break;
         }
     }, { owner: PLUGIN, name: "kelnerka" });

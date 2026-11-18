@@ -176,6 +176,9 @@ window.__bot = { mode: "good", t: 0, path: null, goal: "", last: null, still: 0,
         // the plugin is not in plugins.js yet: load it as if it were
         const loaded = await ev(`new Promise(res => { if (window.TavernShift) return res(true);   /* (in js/plugins.js since 2026-09-27: already loaded) */ const s = document.createElement("script"); s.src = "js/plugins/TavernShift.js?" + Date.now(); s.onload = () => res(!!window.TavernShift); s.onerror = () => res(false); document.body.appendChild(s); })`);
         check("TavernShift.js loads into the page", loaded);
+        // (2026-11-18) in the tavern a shift is played on the map (Zmiana_Sala.js); this test is about the shift's scene - its close-ups and
+        // summary still are the scene, and Stajnia_Zmiana stands on its parts: the scene asked for in so many words
+        await ev(`(function(){ const s = TavernShift.start; if (!s._scene) { TavernShift.start = o => s(Object.assign({ scene: true }, o || {})); TavernShift.start._scene = true; } return 0; })()`);
         const fam = await J(`(function(){ const P = Tawerna.api("TavernShift_parts") || {};
             return { kit: !!P.kit, hall: !!P.hall, parts: !!(P.parts && P.parts.PART_CLASSES), scene: !!(window.Scene_TavernShift && Scene_TavernShift.prototype instanceof Tawerna.ui.Scene_MiniGame),
                 order: $plugins.map(p => p.name).filter(n => /^TavernShift/.test(n)) }; })()`);

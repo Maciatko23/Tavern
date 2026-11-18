@@ -1,4 +1,4 @@
-# Teksty zmiany w tawernie (TavernShift.js, TavernShift_Parts.js): karta pracy, cztery części zmiany, ocena i zapłata od Borgara.
+# Teksty zmiany w tawernie (TavernShift.js, TavernShift_Parts.js, Zmiana_Sala.js): karta pracy, cztery części zmiany, ocena i zapłata od Borgara.
 #
 # Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz zmiana
 
@@ -243,3 +243,45 @@ czesci.hud.kranSkacze = Uwaga: kran skacze!
 czesci.hud.danie = "Danie "
 czesci.hud.doZamkniecia = "Do zamknięcia: "
 czesci.hud.obsluzone = "Obsłużone: "
+
+# ======================================================================== zmiana na żywo na mapie karczmy (Zmiana_Sala.js, 2026-11-18)
+# Borgar na początek (dymki nad nim)
+zywo.intro.0 = Dobra, do roboty. Najpierw sala: przetrzyj brudne stoły, przynieś drewno do kominków i wynieś śmieci za drzwi.
+zywo.intro.1 = Drewno leży przy kominku koło wejścia. Potem nalejesz piwa z beczek za barem i pomożesz Jagnie w kuchni.
+zywo.intro.2 = Wieczorem otwieram drzwi. Goście siadają przy czystych stołach i zamawiają - nosisz im z lady. Szybko i bez pomyłek, to i napiwki będą.
+# części zmiany (pasek u góry)
+zywo.faza.clean = Przed otwarciem
+zywo.faza.beer = Piwo na wieczór
+zywo.faza.kitchen = Kuchnia
+zywo.faza.serve = Wieczór na sali
+zywo.hint.clean = Stoły, drewno do kominków, śmieci za drzwi
+zywo.hint.beer = Idź za bar do beczek i nalej piwa (O)
+zywo.hint.kitchen = Przez drzwi za barem do kuchni, do pieca (O)
+zywo.hint.serve = Zamówienia z lady do gości (O)
+zywo.zmianaNr = "zmiana nr {1}"
+zywo.stoly = Stoły
+zywo.drewno = Drewno
+zywo.smieci = Śmieci
+zywo.obsluzeni = Obsłużeni
+zywo.napiwki = Napiwki
+zywo.ogien = Ogień
+zywo.czekaja = Czekają
+zywo.zostalo = "zostało {1}"
+# napisy nad celem
+zywo.cel.nalej = Nalej piwa
+zywo.cel.gotuj = Gotuj z Jagną
+zywo.cel.drewno = Weź drewno
+zywo.cel.borgar = Porozmawiaj z Borgarem
+# komunikaty
+zywo.popup.dalej = "Teraz: {1}"
+zywo.popup.otwarte = Borgar otwiera drzwi - goście idą!
+zywo.popup.koniec = Zamykamy! Koniec zmiany.
+zywo.popup.nieWychodz = Zmiana trwa - nie wychodź. Przerwać możesz u Borgara.
+zywo.popup.posprzatane = Sala gotowa przed czasem!
+zywo.popup.napiwek = "+{1} G napiwku"
+zywo.popup.brudny = Najpierw przetrzyj stół
+# Borgar w trakcie zmiany
+zywo.borgar.0 = Co jest? Robota czeka.
+zywo.borgar.dalej = Pracuję dalej
+zywo.borgar.koniec = Kończę zmianę (bez dniówki)
+
