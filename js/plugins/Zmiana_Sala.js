@@ -58,20 +58,26 @@
     const STOVES = [{ x: 7, y: 5 }, { x: 9, y: 5 }, { x: 11, y: 5 }];  // the kitchen's stoves (the hero at y 6 under them)
     const FIRES = [{ x: 4, y: 14 }, { x: 24, y: 14 }];                // the hall's two fireplaces
     const PILE = { x: 21, y: 36.4 };                                   // the wood by the entrance's fireplace (20,36) (22,36)
-    const BIN = { x: 15, y: 9 };                                       // the kitchen's rubbish barrel, right of the door from the hall (Map001 D 15,2)
-    // the bar's top: the dishes in two even rows mirrored round its middle (14, the book) - 10-12 and 16-18, Borgar's place 13-14 free
-    // (2026-11-18 the user: "jedzenie musi być na ladzie równo położone" - was: 10, 11, 12, 15...: three, a gap, one)
-    const COUNTER_Y = 17, COUNTER_L = 11, COUNTER_R = 17;
+    const BIN = { x: 15, y: 9 };                                       // the kitchen's rubbish bin (an empty wicker basket, Map001 event 455), right of the door from the hall
+    // the bar: its front row (y 17, the hero takes from below it) and its top (y 16) where the dishes stand - the candles at 10 and 18,
+    // Borgar's book at 14, the plants moved to the side counters (2026-11-18 the user: "jedzenie musi być na ladzie równo położone",
+    // "na ladzie równo, a nie na krawędzi", "kwiatki zdjąć z lady"): each half of the top (11-13, 15-17) holds its dishes spread evenly
+    const COUNTER_Y = 17, COUNTER_TOP = 16, COUNTER_L = 12, COUNTER_R = 16;
     const HALL = { x0: 1, x1: 27, y0: 18, y1: 31 };                   // the main hall (its long tables)
     const TABLE_TILES = [416, 424, 432, 439, 447];                     // the long tables (layer 3) - as Goscie_Sala
     const BORGAR = [1, 38, 52];                                        // Borgar, the meal at the counter, the counter's talk
     const REACH = 1.5;                                                 // tiles from the hero's middle to a thing's middle
     // the old room was 19 x 13 cells, the hall is ~28 x 14 with the wood and the door far off: the times stretched for it
     const STRETCH = { clean: 2.4, serve: 1.6, spawn: 1.6, patience: 1.7, fire: 1.5 };
-    const ICON = { table: 400, wood: 381, trash: 338, coin: K.GOLD_ICON || 313, fire: 381 };
+    const ICON = { table: 400, wood: 381, coin: K.GOLD_ICON || 313, fire: 381 };
     // the log in his hands: the firewood's own picture (Drewno, item 61 - what goes on a campfire; 2026-11-18 the user: "ładna ikonka
     // drewna taka co się wrzuca do ogniska")
     const logIcon = () => (window.$dataItems && $dataItems[61] && $dataItems[61].iconIndex) || ICON.wood;
+    // the rubbish: one picture (img/system/Zmiana_Smieci.png, PixelLab in the Winlu style, 2026-11-18 - was the RTP sack and bucket,
+    // and a flour sack's icon in his hands): a tied sack of scraps (cell 0) and a bucket of peelings (cell 1), each set on its 48 px
+    // cell's floor - lying in the hall as it is, over his head the same picture (its painted box)
+    const RUBBISH = "Zmiana_Smieci";
+    const RUBBISH_BOX = { sack: [8, 10, 32, 36], bucket: [55, 10, 33, 36] };
 
     const G = () => window.GoscieSala && window.GoscieSala.shift;
     const here = () => !!(window.$gameMap && $gameMap.mapId() === MAP);
@@ -424,13 +430,14 @@
             case "full": se("Buzzer2", 30, 100); break;
         }
     }
-    // the dishes on the counter (the menu's own): the first half (the odd one too) on the left of Borgar's place, the rest on the right,
-    // a tile apart, each row centred on its half - x may be a half tile; tx: the tile to stand under it (away from its row's middle)
+    // the dishes on the bar's top (the menu's own): the first half (the odd one too) on the left of the book, the rest on the right,
+    // spread evenly over the half's three tiles (1: its middle, 2: its ends, 3: each) - 4 dishes stand every second tile, 6 fill it;
+    // x the tile it stands on, y the bar's front row (the hero below it), tx: the tile to stand under it
     function counterSlots() {
         const menu = L.menu || [], nl = Math.ceil(menu.length / 2), nr = menu.length - nl;
-        const row = (k, c) => Array.from({ length: k }, (_, i) => ({ x: c + i - (k - 1) / 2, c }));
-        const at = row(nl, COUNTER_L).concat(row(nr, COUNTER_R));
-        return menu.map((key, i) => { const p = at[i]; return { key, x: p.x, y: COUNTER_Y, tx: Number.isInteger(p.x) ? p.x : p.x < p.c ? Math.floor(p.x) : Math.ceil(p.x) }; });
+        const half = (k, c) => Array.from({ length: k }, (_, i) => k === 1 ? c : c - 1 + i * 2 / (k - 1));
+        const xs = half(nl, COUNTER_L).concat(half(nr, COUNTER_R));
+        return menu.map((key, i) => ({ key, x: xs[i], y: COUNTER_Y, tx: Math.round(xs[i]) }));
     }
 
     // ------------------------------------------------------------------
@@ -542,6 +549,13 @@
         ];
     }, { owner: PLUGIN, priority: "scene" });
     // the shift's frame: after the map's own
+    // the rubbish picture asked for as the tavern's map is made: the scene waits for it, so the sacks lie there from the shift's first
+    // frame (not a moment later)
+    const _mapCreate = Scene_Map.prototype.create;
+    Scene_Map.prototype.create = function() {
+        _mapCreate.call(this);
+        if (($gamePlayer.isTransferring() ? $gamePlayer.newMapId() : $gameMap.mapId()) === MAP) ImageManager.loadSystem(RUBBISH);
+    };
     const _mapUpdate = Scene_Map.prototype.update;
     Scene_Map.prototype.update = function() {
         _mapUpdate.call(this);
@@ -570,7 +584,8 @@
     function build(set) {
         const tm = set._tilemap, v = { set, tm, stains: new Map(), sacks: new Map(), bubbles: new Map(), floats: [] };
         const mk = (bmp, z) => { const s = new Sprite(bmp); s.z = z; s.update = function() {}; tm.addChild(s); return s; };
-        v.dishes = MENU_ORDER.map(() => mk(new Bitmap(36, 36), 1.65));
+        // (the bar's boards are the tilemap's upper layer (z 4, over the people behind it): the dishes standing on them above it)
+        v.dishes = MENU_ORDER.map(() => mk(new Bitmap(36, 36), 4.5));
         v.fires = FIRES.map(() => { const s = mk(new Bitmap(84, 22), 9); s.anchor.set(0.5, 1); return s; });
         v.hands = mk(new Bitmap(84, 40), 9); v.hands.anchor.set(0.5, 1);
         v.prompt = new H.Prompt(); set.addChild(v.prompt); v.prompt.hide();
@@ -628,7 +643,7 @@
         // the sacks and buckets lying in the hall
         for (const sk of L.sacks) {
             let s = v.sacks.get(sk);
-            if (!s) { s = sk.kind === "sack" ? H.tileSprite("B", 8, 15) : H.tileSprite("B", 11, 10); s.z = 1.7; s.update = function() {}; v.tm.addChild(s); v.sacks.set(sk, s); }
+            if (!s) { s = new Sprite(ImageManager.loadSystem(RUBBISH)); s.setFrame(sk.kind === "sack" ? 0 : 48, 0, 48, 48); s.z = 1.7; s.update = function() {}; v.tm.addChild(s); v.sacks.set(sk, s); }
             s.visible = sk.state === "lying" && live;
             s.x = Math.round($gameMap.adjustX(sk.x) * tw); s.y = Math.round($gameMap.adjustY(sk.y) * tw);
         }
@@ -642,7 +657,7 @@
             // bottom on one line - a mug, a loaf and a bowl stand level)
             if (s._key !== sl.key) { s.bitmap.clear(); if (icon(s.bitmap, dishIcon(sl.key), 2, 2, 32)) { s._key = sl.key; s._box = paintedBox(s.bitmap); } }
             const bx = s._box || { cx: 18, y1: 33 };
-            s.x = Math.round(sx(sl.x) - bx.cx); s.y = Math.round(sy(sl.y) - 2 - bx.y1);
+            s.x = Math.round(sx(sl.x) - bx.cx); s.y = Math.round(sy(COUNTER_TOP) + 27 - bx.y1);   // (on the top's boards, a little in front of the book - not on the edge)
         });
         // the fires' meters
         FIRES.forEach((f, i) => {
@@ -679,12 +694,21 @@
             bar(b, x0 + 6, 46, w - 12, 5, ratio, ratio > 0.5 ? GOOD : ratio > 0.25 ? WARN : BAD);
         }
         // what he carries: over his head
-        const hk = L.carry.map(c => c.kind === "dish" ? c.key : c.kind).join(",");
+        const hk = L.carry.map(c => c.kind === "dish" ? c.key : c.kind === "sack" ? "sack:" + (c.sack && c.sack.kind) : c.kind).join(",");
         v.hands.visible = live && L.carry.length > 0;
         if (v.hands._key !== hk) {
             const b = v.hands.bitmap; b.clear();
             let ok = true;
-            L.carry.forEach((c, i) => { ok = icon(b, c.kind === "dish" ? dishIcon(c.key) : c.kind === "log" ? logIcon() : ICON.trash, 4 + i * 38 + (L.carry.length === 1 ? 19 : 0), 2, 34) && ok; });
+            L.carry.forEach((c, i) => {
+                const x = 4 + i * 38 + (L.carry.length === 1 ? 19 : 0);
+                if (c.kind === "sack") {   // (the sack or the bucket he picked up: its own picture, 1:1, its foot on the icons' line)
+                    const img = ImageManager.loadSystem(RUBBISH), r = RUBBISH_BOX[c.sack && c.sack.kind === "bucket" ? "bucket" : "sack"];
+                    if (!img.isReady()) { ok = false; return; }
+                    b.blt(img, r[0], r[1], r[2], r[3], Math.round(x + 17 - r[2] / 2), 36 - r[3]);
+                    return;
+                }
+                ok = icon(b, c.kind === "dish" ? dishIcon(c.key) : logIcon(), x, 2, 34) && ok;
+            });
             if (ok) v.hands._key = hk;   // (the icon sheet not in yet: drawn again next frame)
         }
         v.hands.x = Math.round($gamePlayer.screenX()); v.hands.y = Math.round($gamePlayer.screenY() - 64);
@@ -754,7 +778,7 @@
             if (L.phase === "serve") { L.t = L.limit; return true; }
             return false;
         },
-        PLACES: { KEGS, STOVES, FIRES, PILE, BIN, COUNTER_Y, COUNTER_L, COUNTER_R },
+        PLACES: { KEGS, STOVES, FIRES, PILE, BIN, COUNTER_Y, COUNTER_TOP, COUNTER_L, COUNTER_R },
         pictures: () => V   // (tests: the sprites of the shift on the map)
     };
     window.ZmianaSala = T.register ? T.register(PLUGIN, api) : api;

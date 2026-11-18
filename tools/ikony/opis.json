@@ -629,17 +629,29 @@
  },
  "81": {
   "name": "Piwo",
-  "prompt": "RPG inventory item icon: wooden beer tankard with a handle, full of golden beer with white foam on top, side view, centered",
-  "job": "e9b742bf-4500-4396-ab64-4389bd1183d2",
-  "tries": 1,
+  "prompt": "RPG inventory item icon: a wooden beer tankard with two dark iron hoops and a wooden handle on the right, full of golden beer with a white foam head, seen from slightly above at a three-quarter angle so the round foamy top shows as an ellipse, standing like a dish on a table, about 24 pixels wide and 28 pixels tall, centered",
+  "job": "4729ffb7-5919-4097-8d90-015fa87b2211",
+  "tries": 3,
   "proby": [
    {
     "n": 1,
     "job": "e9b742bf-4500-4396-ab64-4389bd1183d2",
     "prompt": "RPG inventory item icon: wooden beer tankard with a handle, full of golden beer with white foam on top, side view, centered"
+   },
+   {
+    "n": 2,
+    "job": "ad5a27e7-a527-4215-b885-d8eb2e643145",
+    "prompt": "RPG inventory item icon: a wooden beer tankard with two dark iron hoops and a wooden handle on the right, full of golden beer with a white foam head, seen from slightly above at a three-quarter angle so the round foamy top shows as an ellipse, standing like a dish on a table, about 24 pixels wide and 28 pixels tall, centered",
+    "uwaga": "2026-11-18 pod skosem jak miski na ladzie (gracz)"
+   },
+   {
+    "n": 3,
+    "job": "4729ffb7-5919-4097-8d90-015fa87b2211",
+    "prompt": "RPG inventory item icon: a wooden beer tankard with two dark iron hoops and a wooden handle on the right, full of golden beer with a white foam head, seen from slightly above at a three-quarter angle so the round foamy top shows as an ellipse, standing like a dish on a table, about 24 pixels wide and 28 pixels tall, centered",
+    "uwaga": "2026-11-18 pod skosem jak miski na ladzie (gracz)"
    }
   ],
-  "wybrana": 1
+  "wybrana": 3
  },
  "82": {
   "name": "Mąka",
@@ -657,17 +669,53 @@
  },
  "83": {
   "name": "Chleb",
-  "prompt": "RPG inventory item icon: round crusty loaf of brown bread with a scored top, centered",
-  "job": "0f128501-9026-4c07-ab4f-f16eed66f188",
-  "tries": 1,
+  "prompt": "RPG inventory item icon: a rustic oval loaf of golden-brown bread with three diagonal scored cuts lying on a round wooden plate, seen from slightly above at a three-quarter angle like a dish on a table, the plate an ellipse about 30 pixels wide, the loaf filling most of it, centered",
+  "job": "deb4248f-da5a-4f9b-a147-1af1f00ad032",
+  "tries": 7,
   "proby": [
    {
     "n": 1,
     "job": "0f128501-9026-4c07-ab4f-f16eed66f188",
     "prompt": "RPG inventory item icon: round crusty loaf of brown bread with a scored top, centered"
+   },
+   {
+    "n": 2,
+    "job": "bebdd8fe-62e0-4a09-8bf1-b5f97a2eba0b",
+    "prompt": "RPG inventory item icon: a rustic oval loaf of brown bread lying on its side, golden-brown crust with three diagonal scored cuts and a light dusting of flour, seen from slightly above at a three-quarter angle like a dish on a table, the loaf about 28 pixels wide and 18 pixels tall, centered",
+    "uwaga": "2026-11-18 pod skosem jak miski na ladzie (gracz)"
+   },
+   {
+    "n": 3,
+    "job": "16c0fb71-33d8-4f70-94d3-703da95842ff",
+    "prompt": "RPG inventory item icon: a rustic oval loaf of brown bread lying on its side, golden-brown crust with three diagonal scored cuts and a light dusting of flour, seen from slightly above at a three-quarter angle like a dish on a table, the loaf about 28 pixels wide and 18 pixels tall, centered",
+    "uwaga": "2026-11-18 pod skosem jak miski na ladzie (gracz)"
+   },
+   {
+    "n": 4,
+    "job": "71bbdf70-a814-49b8-8162-646c6904859e",
+    "prompt": "RPG inventory item icon: a rustic oval loaf of golden-brown bread with three diagonal scored cuts lying on a round wooden plate, seen from slightly above at a three-quarter angle like a dish on a table, the plate an ellipse about 30 pixels wide, the loaf filling most of it, centered",
+    "uwaga": "2026-11-18 gracz: chleb na talerzu albo tacy"
+   },
+   {
+    "n": 5,
+    "job": "deb4248f-da5a-4f9b-a147-1af1f00ad032",
+    "prompt": "RPG inventory item icon: a rustic oval loaf of golden-brown bread with three diagonal scored cuts lying on a round wooden plate, seen from slightly above at a three-quarter angle like a dish on a table, the plate an ellipse about 30 pixels wide, the loaf filling most of it, centered",
+    "uwaga": "2026-11-18 gracz: chleb na talerzu albo tacy"
+   },
+   {
+    "n": 6,
+    "job": "ab1478dc-cb62-49c9-8605-69202cb13637",
+    "prompt": "RPG inventory item icon: a rustic oval loaf of golden-brown bread with diagonal scored cuts on a rectangular wooden serving board with a small handle, a couple of slices cut off lying beside it, seen from slightly above at a three-quarter angle like a dish on a table, about 30 pixels wide, centered",
+    "uwaga": "2026-11-18 gracz: chleb na talerzu albo tacy"
+   },
+   {
+    "n": 7,
+    "job": "588d3b2a-a23a-4122-a8b6-75a2240b277d",
+    "prompt": "RPG inventory item icon: a rustic oval loaf of golden-brown bread with diagonal scored cuts lying on a round light clay plate with a dark rim, seen from slightly above at a three-quarter angle like a dish on a table, the plate an ellipse about 30 pixels wide, centered",
+    "uwaga": "2026-11-18 gracz: chleb na talerzu albo tacy"
    }
   ],
-  "wybrana": 1
+  "wybrana": 5
  },
  "84": {
   "name": "Cegła",

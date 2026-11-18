@@ -51,8 +51,9 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9566, bootCheck: "gra się uruc
         if (!trip) { await t.frames(10); await t.shot(path.join(SHOTS, "1c_drewno_w_rekach.png")); }
         await go(trip ? 23 : 5, 14, 4); await t.press("ok"); await t.frames(6); await t.press("ok"); await t.frames(6);
     }
-    // the rubbish: into the kitchen's bin (2026-11-18: a rubbish barrel at (15,9), right of the door from the hall)
-    t.check("w kuchni kosz na śmieci: beczka z odpadkami przy drzwiach z sali, nie do przejścia", await t.json("$gameMap.tileId(15, 9, 2) === 663 && !$gameMap.isPassable(15, 9, 4) && !$gameMap.isPassable(15, 9, 8)"));
+    // the rubbish: into the kitchen's bin (2026-11-18: an empty wicker basket at (15,9), right of the door from the hall)
+    t.check("w kuchni kosz na śmieci: pusty kosz wiklinowy przy drzwiach z sali, nie do przejścia; śmieci w sali z nowego obrazka",
+        await t.json("$gameMap.eventsXyNt(15, 9).some(e => e.isNormalPriority() && e.characterName() === '!$Kosz_Smieci') && $gameMap.tileId(15, 9, 2) === 0 && ZmianaSala.pictures().sacks.size > 0 && [...ZmianaSala.pictures().sacks.values()].every(s => /Zmiana_Smieci/.test(s.bitmap.url || s.bitmap._url || ''))"));
     let shotBin = false;
     for (const sk of (await S()).sacks.filter(q => q.state === "lying")) {
         if ((await S()).phase !== "clean") break;
@@ -85,12 +86,16 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9566, bootCheck: "gra się uruc
     await t.until("SceneManager._scene instanceof Scene_Map && !TavernShift.isRunning()", 20);
     s = await S();
     t.check(`po kuchni: wieczór na sali (${s.phase}), na ladzie ${s.slots.length} dań`, s.phase === "serve" && s.slots.length >= 4);
-    // (2026-11-18) the dishes stand evenly: two rows a tile apart, mirrored round the bar's middle (14), Borgar's place 13-14 free
+    // (2026-11-18) the dishes stand evenly on the bar's top: each half (11-13 | 15-17, the book at 14) spread evenly round its middle,
+    // the two plants moved from the top to the side counters (in place of their vases), the book stays
     const xs = s.slots.map(q => q.x), left = xs.filter(x => x < 14), right = xs.filter(x => x > 14);
-    const even = r => r.every((x, i) => i === 0 || Math.abs(x - r[i - 1] - 1) < 1e-9);
+    const gaps = r => r.slice(1).map((x, i) => x - r[i]);
+    const even = r => gaps(r).every(g => Math.abs(g - gaps(r)[0]) < 1e-9);
     const mid = r => r.reduce((a, b) => a + b, 0) / r.length;
-    t.check("dania na ladzie równo: dwa rzędy co kratkę, lustrzane wokół środka lady, miejsce Borgara wolne", even(left) && even(right) && Math.abs(mid(left) - 11) < 1e-9 && Math.abs(mid(right) - 17) < 1e-9 &&
-        left.length - right.length <= 1 && xs.every(x => x <= 12.5 || x >= 15.5) && s.slots.every(q => Number.isInteger(q.tx) && Math.abs(q.tx - q.x) <= 0.5), s.slots);
+    const top = await t.json("({ plants: [12, 16].map(x => $gameMap.tileId(x, 16, 3)), side: [8, 20].map(x => $gameMap.tileId(x, 13, 3)), book: $gameMap.tileId(14, 16, 3) })");
+    t.check("dania równo na blacie lady: po obu stronach księgi, rozłożone równo wokół środka połówki; kwiatki przeniesione na boczne blaty", even(left) && even(right) && Math.abs(mid(left) - 12) < 1e-9 && Math.abs(mid(right) - 16) < 1e-9 &&
+        left.length - right.length <= 1 && xs.every(x => (x >= 11 && x <= 13) || (x >= 15 && x <= 17)) && s.slots.every(q => Number.isInteger(q.tx) && q.tx === q.x) &&
+        top.plants.every(v => v === 0) && top.side.every(v => v === 565) && top.book === 606, { slots: s.slots, top });
 
     // the evening: guests come in and order; the bot carries their dishes from the counter
     await go(14, 20, 2);
