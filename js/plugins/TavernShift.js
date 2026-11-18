@@ -208,21 +208,31 @@
         const d = DISHES[key], it = d && window.$dataItems && $dataItems[d.item];
         return it && it.iconIndex ? it.iconIndex : d ? d.icon : 0;
     }
+    // (2026-11-18: the steps' and the recipes' pictures are the items' own icons where an item fits - the PixelLab ones: the iron
+    // knife, the spices, the dish, what goes in; stirring = the wooden spoon, IconSet cell 1153; icon: the old cell if it is missing)
     const STEPS = {
-        cut:   { key: "left",  icon: 347, colour: "#ff8f7f", se: ["Slash1", 55, 140] },
-        stir:  { key: "up",    icon: 403, colour: "#8fc7ff", se: ["Water2", 50, 130] },
-        spice: { key: "right", icon: 413, colour: "#8ee08a", se: ["Sand", 60, 150] },
-        add:   { key: "down",  icon: 327, colour: "#ffb347", se: ["Water1", 50, 100] },
-        serve: { key: "ok",    icon: 0,   colour: "#ffd23f", se: ["Item3", 60, 110] }
+        cut:   { key: "left",  icon: 347, item: 91,  colour: "#ff8f7f", se: ["Slash1", 55, 140] },
+        stir:  { key: "up",    icon: 1153,           colour: "#8fc7ff", se: ["Water2", 50, 130] },
+        spice: { key: "right", icon: 413, item: 210, colour: "#8ee08a", se: ["Sand", 60, 150] },
+        add:   { key: "down",  icon: 327,            colour: "#ffb347", se: ["Water1", 50, 100] },
+        serve: { key: "ok",    icon: 0,              colour: "#ffd23f", se: ["Item3", 60, 110] }
     };
+    // the close-ups' own pictures (img/pictures, PixelLab 2026-11-18 - the user: "ta minigierka nalewania piwa i krojenie muszą mieć
+    // ładniejsze, bardzo szczegółowe grafiki"): drawn at 2 screen px a pixel
+    const CLOSEUP_PICTURES = {
+        beer: ["Zmiana_Piwo_Tlo", "Zmiana_Piwo_Beczka", "Zmiana_Piwo_Kufel"],
+        kitchen: ["Zmiana_Kuchnia_Tlo", "Zmiana_Kuchnia_Deska", "Zmiana_Kuchnia_Garnek", "Zmiana_Kuchnia_Noz", "Zmiana_Kuchnia_Lyzka"]
+    };
+    const itemIcon = (id, fallback) => { const it = id && window.$dataItems && $dataItems[id]; return it && it.iconIndex ? it.iconIndex : fallback || 0; };
+    const stepIcon = kind => { const st = STEPS[kind]; return st ? itemIcon(st.item, st.icon) : 0; };
     Watki.scal(STEPS, "zmiana", "kroki");
     const STEP_ORDER = ["cut", "stir", "spice", "add", "serve"];
-    const RECIPES = {
-        stew:     { icon: 392, add: 326, steps: "cut:0 cut:1 cut:2 add:3 stir:4 stir:5 spice:6 serve:8" },
-        soup:     { icon: 394, add: 359, steps: "cut:0 cut:1 add:2 add:3 stir:4 spice:5 stir:6 serve:8" },
-        eggs:     { icon: 363, add: 330, steps: "add:0 stir:1 stir:2 spice:3 serve:5" },
-        cabbage:  { icon: 393, add: 328, steps: "cut:0 cut:0.5 cut:1 add:2 stir:3 stir:3.5 spice:4 serve:6" },
-        potatoes: { icon: 364, add: 326, steps: "add:0 cut:1 cut:1.5 cut:2 spice:3 add:4 serve:6" }
+    const RECIPES = {   // (item: the dish, addItem: what goes into the pot - their icons; icon / add: the old cells if missing)
+        stew:     { icon: 392, add: 326, item: 130, addItem: 159, steps: "cut:0 cut:1 cut:2 add:3 stir:4 stir:5 spice:6 serve:8" },
+        soup:     { icon: 394, add: 359, item: 132, addItem: 103, steps: "cut:0 cut:1 add:2 add:3 stir:4 spice:5 stir:6 serve:8" },
+        eggs:     { icon: 363, add: 330, item: 107, addItem: 75,  steps: "add:0 stir:1 stir:2 spice:3 serve:5" },
+        cabbage:  { icon: 393, add: 328, item: 131, addItem: 73,  steps: "cut:0 cut:0.5 cut:1 add:2 stir:3 stir:3.5 spice:4 serve:6" },
+        potatoes: { icon: 364, add: 326, item: 108, addItem: 71,  steps: "add:0 cut:1 cut:1.5 cut:2 spice:3 add:4 serve:6" }
     };
     Watki.scal(RECIPES, "zmiana", "przepisy");
     const PART_DEFS = {
@@ -373,8 +383,9 @@
             this.turbo = clamp(Math.floor(this.opts.turbo || 1), 1, 20);
             this.cards = this.opts.cards !== false;
             this.startHour = TW.time.hour();
-            // preload
+            // preload (the close-ups' pictures too: the scene waits for them, nothing pops in later)
             hall().tilesetNames().forEach(n => ImageManager.loadTileset(n));
+            for (const id of this.partIds) for (const n of CLOSEUP_PICTURES[id] || []) ImageManager.loadPicture(n);
             [hall().heroLook().name, "People2_Tall", "People3_Tall", "Actor2_Tall", "!Flame"].forEach(n => ImageManager.loadCharacter(n));
             this.preload(ui.loadBust(BORGAR_BUST));
             const W = Graphics.width, H = Graphics.height;
@@ -735,7 +746,7 @@
 
     // for TavernShift_Hall.js and TavernShift_Parts.js: the drawing, the sounds, the dishes and steps
     P.kit = { ST, GOOD, BAD, WARN, GOLD_ICON, clamp, lerp, ease, scoreColour, shuffle, se, dirty, panel, bar, txt, measure, wrapLines, icon, keyCap, showIf, solidBitmap,
-        shadowBitmap, TILESET_ID, DISHES, MENU_ORDER, dishIcon, STEPS, STEP_ORDER, RECIPES, TIP_SCALE,
+        shadowBitmap, TILESET_ID, DISHES, MENU_ORDER, dishIcon, STEPS, STEP_ORDER, RECIPES, TIP_SCALE, itemIcon, stepIcon, CLOSEUP_PICTURES,
         resultOf, applyResult, stats, levelCfg, PART_ORDER, HOURS, STAMINA, MAX_LEVEL, TK };
     // the parts not in js/plugins.js yet: put into the page here (after every plugin - classes only, no engine hooks)
     for (const part of ["TavernShift_Hall", "TavernShift_Parts"]) {

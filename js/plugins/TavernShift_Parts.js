@@ -37,9 +37,81 @@
     if (!P.kit || !P.hall) throw new Error("TavernShift_Parts.js: musi być pod TavernShift.js i TavernShift_Hall.js na liście wtyczek (one of them is missing or below)");
     const { ST, GOOD, BAD, WARN, GOLD_ICON, clamp, lerp, ease, scoreColour, shuffle, se, dirty, panel, bar, txt, measure, wrapLines, icon, keyCap, showIf, solidBitmap } = P.kit;
     const { DISHES, MENU_ORDER, dishIcon, STEPS, STEP_ORDER, RECIPES, TIP_SCALE } = P.kit;
-    const { T, sheet, tB, FLOOR, PLANKS_H, WALL_IN, tileSprite, makeTilemap, heroLook, PEOPLE, Figure, Part, RR, ROOM_X, ROOM_Y, DOOR_X0,
-        COUNTER_X0, COUNTER_X1, COUNTER_Y, SPOT, SACK_SPOTS, cx, standPt, Room, heroWalk, Prompt, SIDE, fmtTime, drawLegend, PX, MUG, CASK, closeupWall,
-        drawCask, drawMug, drawStar, drawBubble } = P.hall;
+    const { T, sheet, tB, tileSprite, heroLook, PEOPLE, Figure, Part, RR, ROOM_X, ROOM_Y, DOOR_X0,
+        COUNTER_X0, COUNTER_X1, COUNTER_Y, SPOT, SACK_SPOTS, cx, standPt, Room, heroWalk, Prompt, SIDE, fmtTime, drawLegend, drawStar, drawBubble } = P.hall;
+    const { itemIcon, stepIcon } = P.kit;
+
+    // ==================================================================
+    // The close-ups' own pictures (2026-11-18, the user: "ta minigierka nalewania piwa i krojenie muszą mieć ładniejsze, bardzo
+    // szczegółowe grafiki" - they were the tavern's tiles x3 and props drawn in code): PixelLab pictures in img/pictures, drawn at
+    // CP screen px a pixel (TavernShift.js CLOSEUP_PICTURES preloads them with the scene). Raws: tools/zmiana_sala/art/zblizenia.
+    // ==================================================================
+    const CP = 2;
+    const pic = name => ImageManager.loadPicture(name);
+    // the bar: the picture 640 x 360 a little up (its third shelf carries the cask, its counter top the mug); lanterns' flames in it
+    const BEER_BG_Y = -28, BEER_LAMPS = [[13, 114], [290, 116], [614, 114]];
+    // the cask (160 x 144): its brass spout's lowest middle pixel; the mug (64 x 88, its inside made see-through): the inside's box
+    // (rows in0..in1, columns x0..x1), the body's middle cx, the foot on the counter at footY (screen)
+    const CASK2 = { tipX: 77.5, tipY: 125, spoutY: 400 };
+    const MUG2 = { w: 64, h: 88, in0: 15, in1: 73, x0: 6, x1: 41, cx: 24, footY: 600 };
+    // the kitchen: the picture 640 x 360 lifted so its worktable shows between the recipe card and the plates; on the table the
+    // cutting board (left), the pot on its trivet in front of the hearth (right), the knife, the wooden spoon
+    const KITCHEN_BG_Y = -100, KITCHEN_FIRE = [585, 236];
+    const BOARD = { x: 110, y: 457 }, POT = { x: 1000, y: 397 }, POT_MOUTH = { x: 1098, y: 446 };
+    const KNIFE_REST = { x: 332, y: 576, r: 0.05 }, KNIFE_CHOP = { x: 200, y: 520 }, CHOP_AT = { x: 270, y: 532 };
+    function glowSprite(r, rgb) {   // a soft light (added): a lantern's or the hearth's glow, flickering in frame()
+        const b = new Bitmap(r * 2, r * 2), c = b.context, g = c.createRadialGradient(r, r, 0, r, r, r);
+        g.addColorStop(0, "rgba(" + rgb + ",0.5)"); g.addColorStop(0.35, "rgba(" + rgb + ",0.2)"); g.addColorStop(1, "rgba(" + rgb + ",0)");
+        c.fillStyle = g; c.fillRect(0, 0, r * 2, r * 2); dirty(b);
+        const s = new Sprite(b);
+        s.anchor.set(0.5, 0.5);
+        s.blendMode = PIXI.BLEND_MODES.ADD;
+        return s;
+    }
+    // under the picture (it ends above the screen's bottom): the shadow under the counter / the table, dark wood fading to black
+    function footSprite(y0) {
+        const h = Math.max(1, Graphics.height - y0), b = new Bitmap(4, h), c = b.context, g = c.createLinearGradient(0, 0, 0, h);
+        g.addColorStop(0, "#2a1a0e"); g.addColorStop(1, "#0b0705");
+        c.fillStyle = g; c.fillRect(0, 0, 4, h); dirty(b);
+        const s = new Sprite(b);
+        s.scale.x = Graphics.width / 4;
+        s.y = y0;
+        return s;
+    }
+    const flicker = (t, i) => 0.62 + 0.18 * Math.sin(t / 7 + i * 1.7) + 0.12 * Math.sin(t / 2.3 + i * 4.1);
+    let STREAM = null;   // the beer's stream: 4 columns of amber (darker edges, a light streak), stretched to its length
+    function streamBitmap() {
+        if (STREAM) return STREAM;
+        STREAM = new Bitmap(4, 1);
+        ["#b8701a", "#f2bb4e", "#ffe395", "#d98f24"].forEach((col, i) => STREAM.fillRect(i, 0, 1, 1, col));
+        return STREAM;
+    }
+    // the glass mug with the beer in it: the beer and its foam first, the glass (its inside see-through) over them
+    function drawMug2(b, glass, level, foam, line, spill, t) {
+        const c = b.context, R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(x, y, w, h); };
+        c.clearRect(0, 0, MUG2.w, MUG2.h);
+        const ih = MUG2.in1 - MUG2.in0, x0 = MUG2.x0, w = MUG2.x1 - MUG2.x0 + 1;
+        const yTop = Math.round(MUG2.in1 - level * ih), yFoam = Math.round(MUG2.in1 - Math.max(0, level - foam) * ih);
+        if (level > 0.004) {
+            for (let y = Math.max(MUG2.in0, yFoam); y <= MUG2.in1; y++) R(x0, y, w, 1, y > MUG2.in1 - 5 ? "#a05a12" : y % 6 === 0 ? "#e8981f" : "#d8841a");
+            for (let i = 0; i < 9; i++) {   // rising bubbles
+                const bx = x0 + 3 + ((i * 9 + 5) % (w - 6)), by = MUG2.in1 - 2 - ((t * (1 + i % 3) + i * 13) % Math.max(1, MUG2.in1 - yFoam));
+                if (by > yFoam + 1) R(bx, by, 1, 1, "#ffd27a");
+            }
+            for (let y = Math.max(MUG2.in0, yTop); y < yFoam && y <= MUG2.in1; y++) R(x0, y, w, 1, y === yFoam - 1 ? "#e6d09c" : y === yTop ? "#fffaf0" : "#fff2d6");
+            for (let x = x0 + 1; x < x0 + w - 1; x++) if ((x * 7 + Math.floor(t / 6)) % 5 === 0 && yTop - 1 >= MUG2.in0 - 2) R(x, yTop - 1, 1, 1, "#fff2d6");   // a bumpy crown
+        }
+        if (glass && glass.isReady()) b.blt(glass, 0, 0, MUG2.w, MUG2.h, 0, 0);
+        if (spill) {   // foam over the rim and down the sides
+            R(x0 - 5, 1, w + 10, 4, "#fff2d6"); R(x0 - 5, 4, w + 10, 1, "#e6d09c");
+            for (const [x, len] of [[1, 16 + (t % 4)], [x0 + 10, 7], [MUG2.x1 + 4, 20 + (t % 3)], [MUG2.x1 - 8, 10]]) R(x, 4, 2, len, "#f3e2b4");
+        }
+        // the line: yellow marks on both walls and a dashed line across the inside
+        const yl = Math.round(MUG2.in1 - line * ih);
+        R(0, yl - 1, 4, 3, "#ffd23f"); R(MUG2.x1 + 3, yl - 1, 4, 3, "#ffd23f");
+        for (let x = x0; x <= MUG2.x1; x += 3) R(x, yl, 2, 1, "rgba(255,210,63,0.95)");
+        dirty(b);
+    }
 
     // ==================================================================
     // Part 1: before opening - clean the tables, bring wood to the fireplace, take the rubbish out
@@ -239,51 +311,30 @@
     class PartBeer extends Part {
         setup() {
             const W = Graphics.width;
-            // the back wall with shelves, a shelf plank for the cask, the bar top
-            const wall = closeupWall(5, (x, y) => (y === 1 && (x === 0 || x === 8) ? tB(9, 8) : y === 1 && (x === 1 || x === 7) ? tB(8, 7) : 0));
-            wall.scale.set(PX);
-            wall.x = -8;
-            wall.y = -60;
-            this.root.addChild(wall);
-            const shelf = new Sprite(new Bitmap(W, 26));
-            shelf.bitmap.fillRect(0, 0, W, 26, "#4a2d14"); shelf.bitmap.fillRect(0, 0, W, 6, "#7a5028"); shelf.bitmap.fillRect(0, 22, W, 4, "#2a180a");
-            shelf.y = 372;
-            this.root.addChild(shelf);
-            for (const [x, k] of [[150, 0], [300, 1], [900, 1], [1050, 0]]) {   // the other kegs
-                const s = tileSprite("C", k, 7);
-                s.scale.set(PX);
-                s.x = x - 72; s.y = 372 - 138;
-                this.root.addChild(s);
-            }
-            const counter = makeTilemap(9, 2, () => [PLANKS_H, 0, 0, 0]);
-            counter.scale.set(PX);
-            counter.x = -8;
-            counter.y = 560;
-            this.root.addChild(counter);
-            const edge = new Sprite(new Bitmap(W, 12));
-            edge.bitmap.fillRect(0, 0, W, 4, "#c98d4c"); edge.bitmap.fillRect(0, 4, W, 8, "rgba(0,0,0,0.35)");
-            edge.y = 556;
-            this.root.addChild(edge);
-            // the cask and its tap
-            this.cask = new Sprite(new Bitmap(CASK.w, CASK.h));
-            drawCask(this.cask.bitmap);
-            this.cask.scale.set(PX);
-            this.cask.x = Math.round(W / 2 - CASK.tipX * PX);
-            this.cask.y = 372 - (CASK.h - 2) * PX + 6 * PX;
-            this.nozzle = { x: this.cask.x + CASK.tipX * PX + 1, y: this.cask.y + CASK.tipY * PX };
-            // the stream (behind the cask's nozzle, in front of the mug)
-            this.mug = new Sprite(new Bitmap(MUG.w, MUG.h));
-            this.mug.scale.set(PX);
-            this.mug.anchor.set(0.5, 1);
-            this.mug.y = 566;
-            this.stream = new Sprite(solidBitmap("#e2a02c"));
-            this.stream.x = this.nozzle.x - 4;
+            // the wall behind the bar (shelves, bottles, lanterns, the counter), the lanterns' glow
+            const bg = new Sprite(pic("Zmiana_Piwo_Tlo"));
+            bg.scale.set(CP);
+            bg.y = BEER_BG_Y;
+            this.root.addChild(footSprite(BEER_BG_Y + 360 * CP));
+            this.root.addChild(bg);
+            this.glows = BEER_LAMPS.map(([x, y]) => { const g = glowSprite(64, "255,186,92"); g.x = x * CP; g.y = BEER_BG_Y + y * CP; this.root.addChild(g); return g; });
+            // the cask on the third shelf, its spout over the mug; the stream; the mug on the counter (in front of it all)
+            this.cask = new Sprite(pic("Zmiana_Piwo_Beczka"));
+            this.cask.scale.set(CP);
+            this.cask.x = Math.round(W / 2 - CASK2.tipX * CP);
+            this.cask.y = CASK2.spoutY - CASK2.tipY * CP;
+            this.nozzle = { x: W / 2, y: CASK2.spoutY };
+            this.glass = pic("Zmiana_Piwo_Kufel");
+            this.mug = new Sprite(new Bitmap(MUG2.w, MUG2.h));
+            this.mug.scale.set(CP);
+            this.mug.anchor.set(MUG2.cx / MUG2.w, 1);
+            this.mug.y = MUG2.footY;
+            this.stream = new Sprite(streamBitmap());
             this.stream.y = this.nozzle.y;
-            this.stream.scale.x = 8 / 4;
             this.stream.visible = false;
-            this.root.addChild(this.mug);
-            this.root.addChild(this.stream);
             this.root.addChild(this.cask);
+            this.root.addChild(this.stream);
+            this.root.addChild(this.mug);
             // side panels
             this.info = new Sprite(new Bitmap(330, 300));
             this.info.x = 30; this.info.y = 96;
@@ -396,15 +447,17 @@
         }
         frame() {
             const flowing = this.phase === "pour" || (this.phase === "lag" && this.flow > 0.0006);
-            drawMug(this.mug.bitmap, this.level, this.foam(), this.line, this.spilled, this.t);
+            drawMug2(this.mug.bitmap, this.glass, this.level, this.foam(), this.line, this.spilled, this.t);
             this.mug.x = Math.round(this.mugX);
             this.mug.visible = this.phase !== "end";
+            this.glows.forEach((g, i) => { g.opacity = Math.round(255 * flicker(this.t, i)); });
             this.stream.visible = flowing;
             if (flowing) {
-                const surface = this.mug.y - (MUG.h - MUG.in1) * PX - this.level * (MUG.in1 - MUG.in0) * PX;
-                this.stream.scale.y = Math.max(1, (surface - this.nozzle.y) / 4);
-                this.stream.scale.x = (this.phase === "lag" ? Math.max(2, 8 * this.flow / this.rate) : 8 + (this.pulse ? 3 * Math.sin(this.pt / 3) : 0)) / 4;
-                this.stream.x = Math.round(this.nozzle.x - this.stream.scale.x * 2);
+                const surface = this.mug.y - (MUG2.h - MUG2.in1) * CP - this.level * (MUG2.in1 - MUG2.in0) * CP;
+                const w = this.phase === "lag" ? Math.max(2, 8 * this.flow / this.rate) : 8 + (this.pulse ? 3 * Math.sin(this.pt / 3) : 0);
+                this.stream.scale.y = Math.max(2, surface - this.nozzle.y);
+                this.stream.scale.x = w / 4;
+                this.stream.x = Math.round(this.nozzle.x - w / 2);
             }
             // info (left)
             const key = [this.i, this.phase === "ready", this.pulse, this.results.length].join("|");
@@ -440,7 +493,7 @@
                 for (let i = 0; i < n; i++) {
                     const r = this.results[i], x = x0 + i * (w + 10);
                     panel(rb, x, 4, w, 76, { cut: 4, accent: false, fill: r ? "rgba(20,22,27,0.92)" : "rgba(12,13,16,0.7)", line: r ? scoreColour(r.score) : ST().line });
-                    if (r) { icon(rb, 337, x + 19, 10, 32); txt(rb, r.res === "spill" ? "rozlane" : String(r.score), x, 46, w, { size: 17, color: scoreColour(r.score), bold: true, align: "center" }); }
+                    if (r) { icon(rb, dishIcon("beer"), x + 19, 10, 32); txt(rb, r.res === "spill" ? "rozlane" : String(r.score), x, 46, w, { size: 17, color: scoreColour(r.score), bold: true, align: "center" }); }
                     else txt(rb, String(i + 1), x, 26, w, { size: 20, color: ST().muted, align: "center" });
                 }
             }
@@ -459,16 +512,28 @@
     class PartKitchen extends Part {
         setup() {
             const W = Graphics.width;
-            const wall = closeupWall(4, (x, y) => (y === 1 && (x === 1 || x === 7) ? tB(8, 8) : y === 1 && (x === 2 || x === 6) ? tB(9, 8) : 0));
-            wall.scale.set(PX);
-            wall.x = -8;
-            wall.y = -60;
-            this.root.addChild(wall);
-            const counter = makeTilemap(9, 3, (x, y) => (y === 0 ? [WALL_IN, [tB(8, 9), tB(9, 9), tB(10, 9), tB(10, 9), tB(11, 9), tB(10, 9), tB(10, 9), tB(9, 9), tB(8, 9)][x], 0, 0] : [FLOOR, 0, 0, 0]));
-            counter.scale.set(PX);
-            counter.x = -8;
-            counter.y = 380;
-            this.root.addChild(counter);
+            // the kitchen (shelves, the window, the hearth with its cauldron, the worktable), the hearth's glow
+            const bg = new Sprite(pic("Zmiana_Kuchnia_Tlo"));
+            bg.scale.set(CP);
+            bg.y = KITCHEN_BG_Y;
+            this.root.addChild(footSprite(KITCHEN_BG_Y + 360 * CP));
+            this.root.addChild(bg);
+            this.fireGlow = glowSprite(96, "255,146,58");
+            this.fireGlow.x = KITCHEN_FIRE[0] * CP; this.fireGlow.y = KITCHEN_BG_Y + KITCHEN_FIRE[1] * CP;
+            this.root.addChild(this.fireGlow);
+            // on the table: the cutting board with the vegetables, the pot on its trivet, the knife, the wooden spoon in the pot;
+            // what is thrown in, sprinkled or served flies over them (an item's icon, 2 px a pixel like the rest)
+            const prop = (name, x, y, ax, ay) => { const sp = new Sprite(pic(name)); sp.scale.set(CP); sp.x = x; sp.y = y; if (ax !== undefined) sp.anchor.set(ax, ay); this.root.addChild(sp); return sp; };
+            this.board = prop("Zmiana_Kuchnia_Deska", BOARD.x, BOARD.y);
+            this.pot = prop("Zmiana_Kuchnia_Garnek", POT.x, POT.y);
+            this.knife = prop("Zmiana_Kuchnia_Noz", KNIFE_REST.x, KNIFE_REST.y, 4 / 72, 16 / 32);
+            this.spoon = prop("Zmiana_Kuchnia_Lyzka", POT_MOUTH.x, POT_MOUTH.y, 24 / 32, 7 / 32);
+            this.spoon.scale.y = -CP;   // (turned over: the bowl down in the stew, the handle up out of the pot)
+            this.flyer = new Sprite(new Bitmap(32, 32));
+            this.flyer.anchor.set(0.5, 0.5);
+            this.flyer.scale.set(CP);
+            this.flyer.visible = false;
+            this.root.addChild(this.flyer);
             // the lane
             this.lane = new Sprite(new Bitmap(LANE.w, LANE.h));
             this.lane.x = LANE.x; this.lane.y = LANE.y;
@@ -490,16 +555,11 @@
             this.card = new Sprite(new Bitmap(560, 128));
             this.card.x = Math.round(W / 2 - 280); this.card.y = 256;
             this.root.addChild(this.card);
-            this.tool = new Sprite(new Bitmap(32, 32));
-            this.tool.anchor.set(0.5, 0.85);
-            this.tool.scale.set(PX);
-            this.tool.x = Math.round(W / 2); this.tool.y = 500;
-            this.root.addChild(this.tool);
             this.plates = new Sprite(new Bitmap(W - 60, 96));
             this.plates.x = 30; this.plates.y = 612;
             this.root.addChild(this.plates);
-            this.legend = new Sprite(new Bitmap(W - 60, 34));
-            this.legend.x = 30; this.legend.y = 572;
+            this.legend = new Sprite(new Bitmap(700, 34));   // (under the recipe card: the table below is the cook's)
+            this.legend.x = Math.round(W / 2 - 350); this.legend.y = 392;
             this.root.addChild(this.legend);
             super.setup();
             this.drawLegendRow();
@@ -517,7 +577,7 @@
                 const start = t0;
                 for (const s of steps) this.notes.push({ kind: s.kind, t: Math.round(start + s.b * beat), dish: di, res: null, spr: null });
                 t0 += (steps[steps.length - 1].b + 3) * beat;
-                return { key, name: rec.name, icon: rec.icon, add: rec.add, n: steps.length, start, res: null };
+                return { key, name: rec.name, icon: itemIcon(rec.item, rec.icon), add: itemIcon(rec.addItem, rec.add), n: steps.length, start, res: null };
             });
             this.end = this.notes[this.notes.length - 1].t + 70;
             for (const n of this.notes) {
@@ -529,7 +589,7 @@
         }
         noteIcon(n) {
             const d = this.dishes[n.dish], st = STEPS[n.kind];
-            return n.kind === "serve" ? d.icon : n.kind === "add" ? d.add : st.icon;
+            return n.kind === "serve" ? d.icon : n.kind === "add" ? d.add : stepIcon(n.kind);
         }
         noteBitmap(n) {
             const b = new Bitmap(70, 86), st = STEPS[n.kind];
@@ -555,14 +615,16 @@
         drawLegendRow() {
             const b = this.legend.bitmap;
             b.clear();
-            let x = 4;
+            let wAll = 0;
+            for (const k of STEP_ORDER) wAll += 26 + 6 + Math.ceil(measure(b, STEPS[k].name, 19)) + 22;
+            b.fillRect(0, 0, b.width, b.height, "rgba(12,13,16,0.72)");
+            let x = Math.max(4, Math.round((b.width - wAll + 22) / 2));
             for (const k of STEP_ORDER) {
                 const st = STEPS[k];
                 x += keyCap(b, st.key === "ok" ? "O" : st.key, x, 4, 26, st.colour) + 6;
                 txt(b, st.name, x, 5, 160, { size: 19, color: ST().text });
                 x += Math.ceil(measure(b, st.name, 19)) + 22;
             }
-            txt(b, TK.czesci.drawLegendRow[0], b.width - 160, 5, 156, { size: 17, color: ST().muted, align: "right" });
         }
         currentDish() {
             const n = this.notes.find(x => !x.res);
@@ -592,16 +654,13 @@
             this.judgeSpr.visible = true;
             this.judgeT = 0;
         }
+        // the cook's hands on the table: the knife chops on the board, the spoon goes round the pot, the spices are shaken over it,
+        // what is added flies from the board into the pot, the dish comes out of the pot onto the table (frame() moves them)
         cook(n) {
             this.toolKind = n.kind;
             this.toolT = 0;
-            const b = this.tool.bitmap;
-            b.clear();
-            icon(b, this.noteIcon(n), 0, 0, 32);
-            const W = Graphics.width;
-            if (n.kind === "spice") this.burst(W / 2, 470, "#b6f0a0", 8, 1.6, 0.12);
-            if (n.kind === "stir") this.burst(W / 2, 470, "#ffffff", 5, 1.2, -0.03);
-            if (n.kind === "cut") this.burst(W / 2, 500, "#ffcf9a", 5, 2.0, 0.15);
+            if (n.kind === "add" || n.kind === "serve" || n.kind === "spice") { const b = this.flyer.bitmap; b.clear(); icon(b, this.noteIcon(n), 0, 0, 32); }
+            if (n.kind === "stir") this.burst(POT_MOUTH.x - 10, POT_MOUTH.y - 6, "#fff6e8", 6, 1.1, -0.03);
         }
         dishCheck(di) {
             const ns = this.notes.filter(n => n.dish === di);
@@ -660,7 +719,7 @@
                 const y = LANE.h / 2 + 8;
                 b.fillRect(20, y - 2, LANE.w - 40, 4, "rgba(255,255,255,0.08)");
                 b.fillRect(LANE.hitX - LANE.x - 2, 20, 4, LANE.h - 30, "rgba(255,210,63," + (0.18 + 0.5 * pulse) + ")");
-                txt(b, TK.czesci.frame[20], LANE.w - 316, 6, 300, { size: 16, color: ST().muted, align: "right" });
+                txt(b, TK.czesci.frame[20] + "   ·   " + TK.czesci.drawLegendRow[0], LANE.w - 416, 6, 400, { size: 16, color: ST().muted, align: "right" });
             }
             this.zone.scale.set(1 + 0.06 * pulse);
             this.judgeSpr.scale.set(1 + 0.25 * Math.max(0, 1 - this.judgeT / 6));
@@ -699,14 +758,38 @@
                     icon(cb, this.noteIcon(n), x + 6, 78, 32);
                 });
             }
-            // the cook's hands: the last step's tool moving
+            // the cook's hands: the last step's motion on the table
             const tt = this.toolT || 0, kind = this.toolKind;
-            this.tool.visible = !!kind && tt < 40;
-            if (this.tool.visible) {
-                this.tool.rotation = kind === "cut" ? -0.6 + 0.6 * Math.abs(Math.sin(tt / 4)) : kind === "stir" ? Math.sin(tt / 3) * 0.4 : 0;
-                this.tool.y = 500 + (kind === "add" ? -40 + Math.min(40, tt * 3) : kind === "serve" ? 0 : 0);
-                this.tool.x = Graphics.width / 2 + (kind === "serve" ? tt * 6 : kind === "spice" ? Math.sin(tt / 2) * 6 : 0);
-                this.tool.opacity = 255 * (1 - clamp((tt - 26) / 14, 0, 1));
+            this.fireGlow.opacity = Math.round(255 * flicker(this.t, 0));
+            if (this.t % 7 === 0) this.burst(POT_MOUTH.x - 30 + this.rng() * 50, POT_MOUTH.y - 8, "rgba(255,250,240,0.55)", 1, 0.25, -0.03);   // the pot steams
+            const kn = this.knife;
+            if (kind === "cut" && tt < 27) {   // three chops over the vegetables, bits fly at each
+                const ph = (tt % 9) / 9, up = Math.sin(Math.PI * Math.min(1, ph * 1.15));
+                kn.x = KNIFE_CHOP.x; kn.y = Math.round(KNIFE_CHOP.y - 30 * up); kn.rotation = -0.2 * up;
+                if (tt % 9 === 8) { this.burst(CHOP_AT.x, CHOP_AT.y, "#f0a83a", 3, 1.6, 0.16); this.burst(CHOP_AT.x, CHOP_AT.y, "#8fcf6a", 2, 1.4, 0.16); }
+            } else { kn.x = KNIFE_REST.x; kn.y = KNIFE_REST.y; kn.rotation = KNIFE_REST.r; }
+            const sp = this.spoon;
+            if (kind === "stir" && tt < 30) { const a = tt / 3; sp.x = Math.round(POT_MOUTH.x - 8 + 16 * Math.sin(a)); sp.y = Math.round(POT_MOUTH.y + 4 * Math.cos(a)); sp.rotation = 0.16 * Math.sin(a); }
+            else { sp.x = POT_MOUTH.x; sp.y = POT_MOUTH.y; sp.rotation = 0; }
+            const fl = this.flyer;
+            fl.visible = false;
+            if (kind === "spice" && tt < 30) {   // the spice pouch shaken over the pot
+                fl.visible = true; fl.rotation = 0.55 + 0.18 * Math.sin(tt * 1.4); fl.scale.set(CP);
+                fl.x = Math.round(POT_MOUTH.x - 20 + 5 * Math.sin(tt * 1.4)); fl.y = POT_MOUTH.y - 78;
+                fl.opacity = 255 * (1 - clamp((tt - 24) / 6, 0, 1));
+                if (tt % 3 === 0 && tt < 24) this.burst(POT_MOUTH.x - 22 + this.rng() * 16, POT_MOUTH.y - 56, tt % 6 ? "#9bd06a" : "#c79a5a", 1, 0.35, 0.18);
+            } else if (kind === "add" && tt < 23) {   // from the board into the pot, an arc
+                const p = clamp(tt / 22, 0, 1);
+                fl.visible = true; fl.rotation = p * 3.5; fl.scale.set(CP * (1 - 0.25 * p));
+                fl.x = Math.round(lerp(CHOP_AT.x, POT_MOUTH.x - 6, ease(p))); fl.y = Math.round(lerp(CHOP_AT.y - 20, POT_MOUTH.y - 4, p) - 130 * Math.sin(Math.PI * p));
+                fl.opacity = 255;
+                if (tt === 22) this.burst(POT_MOUTH.x - 6, POT_MOUTH.y - 4, "#9a5a24", 6, 1.5, 0.15);
+            } else if (kind === "serve" && tt < 40) {   // out of the pot onto the table
+                const p = clamp(tt / 24, 0, 1);
+                fl.visible = true; fl.rotation = 0; fl.scale.set(CP);
+                fl.x = Math.round(lerp(POT_MOUTH.x - 10, Graphics.width / 2 + 40, ease(p))); fl.y = Math.round(lerp(POT_MOUTH.y - 20, 548, ease(p)) - 50 * Math.sin(Math.PI * p));
+                fl.opacity = 255 * (1 - clamp((tt - 30) / 10, 0, 1));
+                if (tt === 24) this.burst(Graphics.width / 2 + 40, 548, "#ffd23f", 8, 1.4, -0.02);
             }
             // the finished dishes
             const pk = this.dishes.map(x => (x.res ? x.res.stars : "-")).join("");

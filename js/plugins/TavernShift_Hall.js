@@ -574,88 +574,8 @@
         }
     }
 
-    // ---- the close-ups' props (the keg part): the log wall, the cask with its brass tap, the glass mug
-    const PX = 3;   // the close-ups' pixel size (tiles and drawn props alike)
-    const MUG = { w: 48, h: 64, in0: 7, in1: 56 };   // low-res mug canvas; the inside from y in0 (rim) to in1 (bottom)
-    const CASK = { w: 80, h: 76, tipX: 40, tipY: 62 };
-    function closeupWall(rows, extra) {
-        // the log wall (inside pieces) with shelves; `extra(x, y)` adds layer-1 tiles
-        return makeTilemap(9, rows, (x, y) => [WALL_IN, extra ? extra(x, y) : 0, 0, 0]);
-    }
-    function drawCask(b) {
-        const c = b.context;
-        c.clearRect(0, 0, CASK.w, CASK.h);
-        const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(x, y, w, h); };
-        // the cradle: two legs and a beam
-        R(8, 54, 64, 5, "#5a3a1c"); R(8, 54, 64, 1, "#7c5530");
-        for (const lx of [12, 58]) { R(lx, 58, 10, 16, "#4d3118"); R(lx, 58, 2, 16, "#6b4726"); R(lx - 3, 72, 16, 3, "#3a2410"); }
-        // the cask's head: boards in a circle with iron hoops
-        const cx0 = 40, cy0 = 32, rad = 29;
-        for (let y = cy0 - rad; y <= cy0 + rad; y++) {
-            for (let x = cx0 - rad; x <= cx0 + rad; x++) {
-                const d = Math.hypot(x - cx0 + 0.5, y - cy0 + 0.5);
-                if (d > rad) continue;
-                let col;
-                if (d > rad - 2.2) col = d > rad - 1 ? "#1d1d22" : "#4a4a52";                  // the outer hoop
-                else if (d > rad - 3.4) col = "#2b1a0c";                                        // the chime's shadow
-                else {
-                    const board = Math.floor((x - (cx0 - rad) + 1) / 7);
-                    const seam = (x - (cx0 - rad) + 1) % 7 === 0;
-                    col = seam ? "#4a2c12" : board % 2 ? "#a4682e" : "#94592a";
-                    if (!seam && (x - cx0) + (y - cy0) < -18) col = board % 2 ? "#b87a3a" : "#a86c32";   // light from the upper left
-                    if (!seam && (x - cx0) + (y - cy0) > 20) col = board % 2 ? "#83501f" : "#764819";
-                }
-                R(x, y, 1, 1, col);
-            }
-        }
-        // hoop highlight, a bung, the brand
-        for (let a = 3.5; a < 4.6; a += 0.04) R(Math.round(cx0 + Math.cos(a) * (rad - 1.2)), Math.round(cy0 + Math.sin(a) * (rad - 1.2)), 1, 1, "#9a9aa6");
-        R(38, 10, 5, 3, "#3a220e"); R(39, 11, 3, 1, "#5e3a1a");
-        // the brass tap: a body out of the head, a key on top, the nozzle down
-        R(34, 46, 13, 7, "#8a5f16"); R(35, 47, 11, 5, "#d6a13c"); R(35, 47, 11, 1, "#ffe08a");
-        R(39, 40, 3, 7, "#8a5f16"); R(40, 40, 1, 6, "#e8b85a");
-        R(34, 38, 13, 3, "#8a5f16"); R(35, 38, 11, 1, "#ffe08a");
-        R(37, 53, 7, 9, "#8a5f16"); R(38, 53, 5, 8, "#c99632"); R(38, 53, 1, 8, "#ffe08a");
-        R(37, 61, 7, 1, "#5e3f0c");
-        dirty(b);
-    }
-    function drawMug(b, level, foam, line, spill, t) {
-        const c = b.context, R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(x, y, w, h); };
-        c.clearRect(0, 0, MUG.w, MUG.h);
-        const x0 = 4, x1 = 33, top = 4, bot = 61, ih = MUG.in1 - MUG.in0;
-        // the handle
-        R(33, 14, 9, 3, "#2a2f38"); R(33, 44, 9, 3, "#2a2f38"); R(40, 16, 3, 29, "#2a2f38");
-        R(34, 15, 7, 1, "#c9dde8"); R(41, 17, 1, 27, "#a9c2d0"); R(34, 45, 7, 1, "#8fa6b3");
-        // the glass: back tint
-        R(x0 + 1, top + 1, x1 - x0 - 1, bot - top - 1, "rgba(190,220,236,0.30)");
-        // beer and foam (level = top of the foam, 0..1 of the inside)
-        const yTop = Math.round(MUG.in1 - level * ih), yFoam = Math.round(MUG.in1 - Math.max(0, level - foam) * ih);
-        if (level > 0.004) {
-            for (let y = Math.max(MUG.in0, yFoam); y < MUG.in1; y++) R(x0 + 3, y, x1 - x0 - 5, 1, y > MUG.in1 - 6 ? "#b8691a" : y % 5 === 0 ? "#e6a12a" : "#dc921f");
-            for (let i = 0; i < 6; i++) {   // rising bubbles
-                const bx = x0 + 5 + ((i * 7 + 3) % 21), by = MUG.in1 - 2 - ((t * (1 + i % 3) + i * 11) % Math.max(1, MUG.in1 - yFoam));
-                if (by > yFoam + 1) R(bx, by, 1, 1, "#ffd27a");
-            }
-            for (let y = Math.max(0, yTop); y < yFoam && y < MUG.in1; y++) R(x0 + 3, y, x1 - x0 - 5, 1, y === yFoam - 1 ? "#e8d7aa" : "#fff4da");
-            for (let x = x0 + 3; x < x1 - 2; x++) if ((x * 7 + Math.floor(t / 6)) % 5 === 0 && yTop - 1 >= 0) R(x, yTop - 1, 1, 1, "#fff4da");   // a bumpy crown
-        }
-        if (spill) {   // foam over the rim and down the sides
-            R(x0 - 1, top - 2, x1 - x0 + 3, 3, "#fff4da");
-            for (const [x, len] of [[x0 - 1, 14 + (t % 4)], [x0 + 9, 6], [x1 + 1, 18 + (t % 3)], [x1 - 6, 9]]) R(x, top, 2, len, "#f3e2b4");
-        }
-        // the glass: outline, thick base, highlights
-        R(x0, top, 1, bot - top, "#2a2f38"); R(x1, top, 1, bot - top, "#2a2f38"); R(x0, bot, x1 - x0 + 1, 1, "#2a2f38");
-        R(x0 + 1, top, 2, bot - top, "#d8e8f0"); R(x1 - 2, top, 2, bot - top, "#9fb6c4");
-        R(x0 + 1, MUG.in1, x1 - x0 - 1, bot - MUG.in1, "rgba(200,225,240,0.75)"); R(x0 + 1, MUG.in1, x1 - x0 - 1, 1, "#ffffff");
-        R(x0 - 1, top - 1, x1 - x0 + 3, 2, "#2a2f38"); R(x0, top - 1, x1 - x0 + 1, 1, "#eef6fa");
-        R(x0 + 5, top + 6, 1, 40, "rgba(255,255,255,0.65)"); R(x0 + 7, top + 10, 1, 18, "rgba(255,255,255,0.4)");
-        // the line: yellow ticks either side and a dashed line across
-        const yl = Math.round(MUG.in1 - line * ih);
-        R(0, yl, 4, 1, "#ffd23f"); R(0, yl - 1, 2, 3, "#ffd23f");
-        for (let x = x0 + 3; x < x1 - 1; x += 3) R(x, yl, 2, 1, "rgba(255,210,63,0.9)");
-        R(x1 + 1, yl, 3, 1, "#ffd23f");
-        dirty(b);
-    }
+    // (the close-ups' props - the log wall, the cask, the glass mug drawn in code - gave way on 2026-11-18 to PixelLab pictures:
+    // TavernShift_Parts.js CP / CASK2 / MUG2 / drawMug2)
     function drawStar(b, x, y, r, colour) {
         const c = b.context;
         c.save();
@@ -688,6 +608,6 @@
         T, SHEETS, sheet, tilesetNames, tB, tC, tD, FLOOR, PLANKS_H, WALL_IN, tileSprite, makeTilemap,
         heroLook, PEOPLE, Figure, dirOf, Floater, Particle, dotBitmap, Part,
         RC, RR, ROOM_X, ROOM_Y, DOOR_X0, DOOR_X1, TABLES, COUNTER_X0, COUNTER_X1, COUNTER_Y, SPOT, SACK_SPOTS, REACH, cx, standPt, Room, heroWalk, Prompt, SIDE,
-        fmtTime, drawLegend, PX, MUG, CASK, closeupWall, drawCask, drawMug, drawStar, drawBubble
+        fmtTime, drawLegend, drawStar, drawBubble
     };
 })();
