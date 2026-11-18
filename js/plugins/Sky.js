@@ -228,16 +228,20 @@
         }
         const img = bmp && (bmp._canvas || bmp._image);
         if (!img) return null;
-        const w = img.width, h = img.height, bt = bmp._baseTexture, id = (bt && bt.dirtyId) || 0;
+        // (2026-11-18, wydajność: a picture from a file is kept by its address, not by the bitmap - MZ throws its images away at every
+        // transfer and loads new bitmaps of the same files, whose pixels were read whole again on each map; a canvas - drawn on - by
+        // the bitmap and its texture's version, as before)
+        const fromFile = !bmp._canvas && !!bmp._url, key = fromFile ? "u:" + bmp._url : bmp;
+        const w = img.width, h = img.height, bt = bmp._baseTexture, id = fromFile ? 0 : (bt && bt.dirtyId) || 0;
         if (!(w > 0 && h > 0) || (!bmp._canvas && !(bmp._image.complete && bmp._image.naturalWidth > 0))) return null;
-        let e = sheetCache.get(bmp);
+        let e = sheetCache.get(key);
         if (e && e.id === id && e.w === w && e.h === h) {
             e.used = now;
-            sheetCache.delete(bmp);
-            sheetCache.set(bmp, e);
+            sheetCache.delete(key);
+            sheetCache.set(key, e);
             return e;
         }
-        if (e) { sheetCache.delete(bmp); sheetBytes -= e.bytes; }
+        if (e) { sheetCache.delete(key); sheetBytes -= e.bytes; }
         let data;
         try {
             if (bmp._canvas) data = bmp._canvas.getContext("2d").getImageData(0, 0, w, h).data;
@@ -257,7 +261,7 @@
             sheetBytes -= sheetCache.get(k).bytes;
             sheetCache.delete(k);
         }
-        sheetCache.set(bmp, e);
+        sheetCache.set(key, e);
         sheetBytes += e.bytes;
         return e;
     }

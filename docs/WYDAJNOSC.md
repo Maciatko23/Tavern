@@ -366,5 +366,52 @@ Po obu etapach, Kruczy Jar, CPU 4× wolniejsze: krok gry ok. 7-9 ms + rysowanie 
    regularnych co klatkę.
 8. **Filtr na sprite'cie** to pełne przejście (przerwana paczka, tekstura do narysowania i odczytu) dla każdego takiego sprite'a w
    każdej klatce - lepiej obrazek przygotowany raz (jak kontur postaci) albo wyłączony filtr, gdy nic nie zmienia (`filter.enabled`).
-9. **Mierz.** `node tests/run.js wydajnosc_test` (budżety na ciężkich mapach), `node tools/wydajnosc/pomiar.js jar --idzie --profil`
+9. **Mierz.** `node tests/run.js wydajnosc_nowy_test` (budżety na ciężkich mapach nowego świata), `node tools/wydajnosc/pomiar.js nowy --idzie` (wszystkie miejsca nowego świata), `node tools/wydajnosc/pomiar.js n_dziadek --idzie --profil`
    (gdzie idzie czas: plik `.txt` z drzewem wywołań, `.cpuprofile` do DevTools), `--przed HEAD` - porównanie z tym, co w gicie.
+
+## Etap 5 (2026-11-18, nowy świat, gracz: „co się da, to robimy”)
+
+Stary `wydajnosc_test.js` i miejsca narzędzia stały na mapach usuniętych 2026-11-17. Narzędzie dostało miejsca nowego świata
+(`node tools/wydajnosc/pomiar.js nowy`, nazwy `n_...`), pomiar przejść trasę `TRASA=nowy`, a gra nowy test `tests/wydajnosc_nowy_test.js`.
+
+### Pomiar (CPU 4× wolniejsze, klatka w ms)
+
+| Miejsce | stoi przed | stoi po | idzie przed | idzie po |
+|---|---|---|---|---|
+| Podgrodzie, podwórko dziadka | 21,8 | **14,5** | 17,9 | 17,4 |
+| Podgrodzie, wiatrak i pole | 16,2 | **9,2** | 10,3 | 11,0 |
+| Burza na Podgrodziu | 15,8 | **12,5** | 17,9 | 17,8 |
+| Miasteczko w dzień | 11,3 | 10,6 | 11,6 | 10,2 |
+| Karczma wieczorem | 9,4 | 7,9 | 9,5 | 9,7 |
+| Wybrzeże, dwór, góry, Krucza Grań, podziemia | 4,8–9,4 | 4,5–9,4 | 4,2–9,8 | 5,2–9,8 |
+
+Obrazki w pamięci na Podgrodziu: **~467 MB → ~96 MB**. Przejście między mapami: średnio 1,72 → 1,61 s (CPU 4×); pierwsza klatka
+po wejściu ~1,3 s to głównie praca przeglądarki (dekodowanie obrazków nowej mapy i wysłanie ich na kartę) za czarnym ekranem.
+
+### Co zmieniono
+
+- **Animacje 8-kierunkowe** (`Hunting.js`): każda mapa wczytywała WSZYSTKIE arkusze zwierząt, ludzi i potworów (111 obrazków,
+  ~320 MB), a MZ wyrzuca obrazki przy każdym przejściu - więc każda mapa dekodowała je od nowa. Teraz tylko rodziny (chód, bieg,
+  postój, pozy) postaci obecnych na mapie: przy jej budowie (za czarnym ekranem) i co pół sekundy znowu (wilk w nocy, potwór piętra).
+- **Zboże** (`Wiatrak.js`): 247 kępek dwóch pól Podgrodzia było osobnymi duszkami mapy (sortowane, aktualizowane, rysowane co klatkę),
+  a ich cień 58 następnymi. Teraz rząd pola = jedna siatka (te same ścięcia na wietrze, rząd sortuje się z ludźmi po swojej stopie,
+  więc bohater w zbożu dalej jest zasłaniany przez rzędy przed nim), cień = jedna siatka. Maska brzegu pola liczona na siatce co 4 px
+  i zapamiętana na rozmiar pola (wcześniej 3 szumy na każdy z ~300 tys. pikseli przy każdym wejściu na mapę).
+- **Sortowanie dzieci mapy** (`Wydajnosc.js` `sortScan`): 660 dzieci sortowanych co klatkę - teraz jedno przejście sprawdza kolejność
+  tym samym porównaniem; kilka nie na miejscu - wstawianie; dużo - pełne sortowanie jak dawniej.
+- **`$gameMap.events()`** (`Wydajnosc.js` `eventsMemo`): rdzeń robił nową kopię listy przy każdym wywołaniu (dziesiątki razy na
+  klatkę) - teraz jedna na klatkę (nowa od razu, gdy lista urośnie). Trzymana w zmiennej wtyczki, nie na mapie (nie trafia do zapisu).
+- **Obrys postaci** (`CharacterPolish.js`): liczony tylko dla postaci na ekranie (był dla wszystkich ~46 na mapie).
+- **Piksele arkuszy** (`Sky.js` `sheetPixels`): obrazek z pliku zapamiętany po adresie, nie po obiekcie (po przejściu obiekt jest nowy).
+- **Maski cieni** (`Cienie.js`): z pikseli już odczytanych dla sylwetki, bez drugiego odczytu z obrazka.
+
+### Sprawdzone i odłożone
+
+- Owinięcia `Sprite_Character.update` (Kelnerka, Pokojówka, Klimat_Detale) i `Game_Event.update` (Konie, Kopalnia): sprawdzają
+  warunek i od razu wychodzą - przepięcie na rozdzielacz TawernaCore nie da mierzalnego zysku.
+- Mieszkańcy (TownLife, ~3% w ruchu): ich liczniki czekania liczą klatki - rzadsze sprawdzanie zmieniłoby rytm ich dnia.
+- Wczytywanie sąsiedniej mapy z wyprzedzeniem: obrazki nie są już wąskim gardłem (7 ms); pierwsze wejście na mapę to wypiekanie
+  jej ziemi i łąki (Ziemia/Łąka), które potrzebuje danych tej mapy.
+- Podgrodzie w ruchu i burza (~17,5 ms): czas idzie na to, co naprawdę jest przy ekranie (drzewa, ludzie, rysowanie) - dalej tylko
+  przebudowa samego potoku duszków (osobny, większy etap).
+

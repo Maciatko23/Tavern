@@ -124,6 +124,7 @@
     // the chimney's sprite: the picture as a child, the puffs in the tilemap (over roofs and people)
     // ------------------------------------------------------------------
     const MAX = 9, EVERY = 24, LIFE = 190, FOOT = 4;
+    const BIRTH_SIZE = 0.5, BIRTH_UP = 8;   // a new puff: this share of the old first size, its middle this many px over the opening
     // the roof's brightness under the chimney -> a tint for the stone (once a chimney): the A3 roof's own pixels (its kind's middle)
     const lumCache = {};
     function roofTone(x, y) {
@@ -169,8 +170,10 @@
         if (!this._kominShade) { const sh = new Sprite(shade()); sh.anchor.set(0.3, 0.55); sh.z = 4.9; sh.update = function() {}; tm.addChild(sh); this._kominShade = sh; }
         this._kominShade.x = this.x + 2; this._kominShade.y = this.y; this._kominShade.visible = this.visible;
         const ph = this.bitmap && this.bitmap.isReady() ? this.bitmap.height : 51;
-        // the mouth: the picture's top, a little in (screen coordinates of the tilemap)
-        const mx = this.x, my = this.y - ph + 6;
+        // the mouth: the picture's top, its opening's line (screen coordinates of the tilemap). (2026-11-18, the user: „wygląda, jakby dym
+        // zaczynał wylatywać ze ściany komina, a nie tuż nad kominem”: a puff was born big - 30-40 px - with its middle in the opening,
+        // its lower half over the cap and the shaft) a puff is born small with its lower edge at the opening and grows as it rises
+        const mx = this.x, my = this.y - ph + 3;
         const list = this._kominPuffs, a = amount(), w = wind();
         const near = mx > -80 && mx < Graphics.width + 80 && my > -60 && my < Graphics.height + 160;
         // a new puff now and then (fewer when there is little smoke), only near the screen
@@ -184,7 +187,7 @@
             if (p) {
                 const k = Math.floor(Math.random() * 3);
                 p.sp.setFrame(k * PUFF, 0, PUFF, PUFF);
-                Object.assign(p, { live: true, age: 0, life: LIFE * (0.8 + Math.random() * 0.4), x: (Math.random() - 0.5) * 3, y: 0,
+                Object.assign(p, { live: true, age: 0, life: LIFE * (0.8 + Math.random() * 0.4), x: (Math.random() - 0.5) * 3, y: -BIRTH_UP,
                     vy: -(0.42 + Math.random() * 0.16), s0: 0.9 + Math.random() * 0.4, ph: Math.random() * 6.28, a0: Math.min(0.85, 0.35 + 0.5 * a), spin: (Math.random() - 0.5) * 0.004 });
                 p.sp.rotation = Math.random() * 6.28;
             }
@@ -198,7 +201,7 @@
             p.x += w * (0.25 + t) + Math.sin(p.ph + p.age * 0.045) * 0.12;   // (the wind takes it more the higher it gets)
             p.sp.visible = near;
             p.sp.x = Math.round(mx + p.x); p.sp.y = Math.round(my + p.y);
-            const sc = p.s0 * (1 + 1.6 * t);
+            const sc = p.s0 * (BIRTH_SIZE + (2.6 - BIRTH_SIZE) * t);   // (small out of the opening, growing evenly - slower than it rises, so its lower edge never sinks onto the cap; the same size at the end)
             p.sp.scale.set(sc * 2, sc * 2);
             p.sp.rotation += p.spin;
             p.sp.opacity = Math.round(255 * p.a0 * Math.min(1, t * 7) * (1 - t) * (1 - t * 0.2));

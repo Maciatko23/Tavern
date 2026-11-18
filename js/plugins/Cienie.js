@@ -20,13 +20,22 @@
 // stays on the ground along the screen (a fence's shadow starts along the fence, a bench's along the bench) and its top goes the
 // sun's way and length - not turned to face the sun as a tree's (a tree is round). A shadow painted into the picture (black,
 // see-through) is left out of the silhouette.
+//   4. (2026-11-18, the user: "na przykład są płotki, możesz dorobić dla płotków ładnie?") the FENCES and HEDGES drawn as A2
+//      autotiles on layer 1 (Winlu's wooden fences, the hedges: an overlay over the ground that blocks every way). A row's
+//      neighbouring cells of one kind are one run - one picture (the autotile's quarters as the tilemap draws them), one shadow leaned
+//      from its foot like the B-E things: the rails, the posts and the gaps between them in the shadow. A fence never lies in its
+//      own shadow (a low sun lays it along the fence, over its own rails, and a fence going down the screen over its lower cells):
+//      the fences' shadows are drawn first in this layer's part and the fences' own pixels erased from them (the buildings' and the
+//      trees' shadows still fall on a fence; the B-E things' own pixels - a well, a barrel - are erased from these shadows too).
+//      Their painted shadow (black, see-through, always to the right and below) is taken out (FENCE_KEEP 0) in a copy of the A2
+//      sheet the tilemap draws with - the sun's is the real one.
 // NIGHT: none of these set sprite._occluder, so the fires' and lamps' shadows of the night (Farming_Render.js, RoomLighting.js) do not
 // see them: the night costs exactly what it did.
-// Nothing is saved; nothing sits on a Game_* object. window.Cienie.opts { buildings, players, props } switch each part.
+// Nothing is saved; nothing sits on a Game_* object. window.Cienie.opts { buildings, players, props, fences } switch each part.
 
 /*:
  * @target MZ
- * @plugindesc Cienie od słońca: budynki z kafli (jak bryły), budynki gracza i stojące rzeczy (latarnie, posągi, palisady, tablice) rzucają cień jak drzewa. v1.2.0
+ * @plugindesc Cienie od słońca: budynki z kafli (jak bryły), budynki gracza i stojące rzeczy (latarnie, posągi, palisady, tablice), płotki i żywopłoty rzucają cień jak drzewa. v1.3.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter Widok
@@ -44,8 +53,8 @@
     const T = window.Tawerna;
     if (!T) throw new Error("Cienie.js: brak TawernaCore.js (the Tawerna core is missing)");
     const A = T.api(PLUGIN) || T.register(PLUGIN, {});
-    A.opts = Object.assign({ buildings: true, players: true, props: true }, A.opts);
-    A.stats = { comps: 0, runs: 0, blocks: 0, sides: 0, erasers: 0, things: 0, tiles: 0, players: 0 };
+    A.opts = Object.assign({ buildings: true, players: true, props: true, fences: true }, A.opts);
+    A.stats = { comps: 0, runs: 0, blocks: 0, sides: 0, erasers: 0, things: 0, tiles: 0, players: 0, fenceRuns: 0, fences: 0 };
     window.Cienie = A;
     const Sun = () => T.api("Sun");
     const INDOOR_SETS = new Set([8, 10, 12]);   // (the interiors and dungeons)
@@ -123,7 +132,10 @@
     // ... and round ones stand on a disc, not on a line: the px of ground their base takes from back to front (the ellipse's height).
     // A flat silhouette leaned by a low sun thins to a sliver (19:00: a tower 140 px wide threw a 30 px strip); laid a few times
     // across the disc (narrower towards its back and front rims) the shadow keeps the base's width whatever the sun's side.
-    const ROUND_BASE = new Map([["!$Latarnia_Wieza", 46]]);
+    // (2026-11-18, the user of the windmill's tower: "podstawa to okrągła bryła, więc cień powinien matematycznie inaczej wyglądać" - its
+    // base 122 px wide, the front rim's curve ~30 px: the disc ~44 px deep) the picture's lowest row is the disc's FRONT rim: the copies
+    // are laid from there back to its back rim (centred round/2 above the foot), so the shadow starts at the base's full width
+    const ROUND_BASE = new Map([["!$Latarnia_Wieza", 46], ["!$1_Wiatrak_Wieza", 44]]);
     const ROUND_T = [-0.92, -0.62, -0.31, 0, 0.31, 0.62, 0.92];
     const silCache = new Map();
     // feet (a mask, <Cienie:maska>): in each column the row where the thing meets the ground is marked red (255, 0, 0) - tools/
@@ -153,7 +165,7 @@
         return out;
     }
     let silScratch = null;
-    function silhouette(src, sx, sy, pw, ph, feet) {
+    function silhouette(src, sx, sy, pw, ph, feet, wantMask) {
         const key = (src._url || "") + "," + sx + "," + sy + "," + pw + "," + ph + (feet ? ",f" : "");
         if (silCache.has(key)) return silCache.get(key);
         // the frame's pixels from the sheet read once (Sky.js sheetRect, 2026-11-12: no bitmap and no read-back per frame); the old way while it is not ready
@@ -192,6 +204,14 @@
             out._footRow = footRow;
             out._footX = (left + right + 1) / 2;
             out._key = "sil," + key;
+            // (wantMask: the picture's own pixels as a hard white mask - what is erased from the shadows under it - from the pixels
+            // read here, not read again: d holds the alpha with the painted shadow taken out)
+            if (wantMask) {
+                const m = new Uint8ClampedArray(pw * ph * 4);
+                let any = false;
+                for (let i = 3; i < d.length; i += 4) if (d[i] > 100) { m[i - 3] = m[i - 2] = m[i - 1] = m[i] = 255; any = true; }
+                if (any) { const mb = new Bitmap(pw, ph); mb.context.putImageData(new ImageData(m, pw, ph), 0, 0); mb._baseTexture.update(); out._mask = mb; }
+            }
             if (mark) {
                 const xs = [];
                 for (let x = 0; x < pw; x++) if (mark[x] >= 0) xs.push(x);
@@ -228,8 +248,13 @@
         let r = layer._cienRoot;
         if (!r) {
             r = layer._cienRoot = new PIXI.Container();
-            r.sweeps = r.addChild(new PIXI.Container());
+            // (first the fences' and the B-E things' shadows, then those things' own pixels erased from these alone: a fence, a
+            // well, a barrel never lies in a fence's or a barrel's shadow - they stand higher than it reaches on them; a building's
+            // shadow, drawn after, still falls on them)
+            r.fences = r.addChild(new PIXI.Container());
             r.things = r.addChild(new PIXI.Container());
+            r.fenceErase = r.addChild(new PIXI.Container());
+            r.sweeps = r.addChild(new PIXI.Container());
             r.props = r.addChild(new PIXI.Container());
             r.players = r.addChild(new PIXI.Container());
             r.erase = r.addChild(new PIXI.Container());
@@ -237,7 +262,7 @@
         if (r.parent !== layer) layer.addChildAt(r, 0);
         else if (layer.children[0] !== r) layer.setChildIndex(r, 0);
         // (erasing only inside the layer's own picture - its filter's: without the filter the layer is drawn straight on the map)
-        r.erase.visible = !!layer._shadowFilter;
+        r.erase.visible = r.fenceErase.visible = !!layer._shadowFilter;
         return r;
     }
 
@@ -292,8 +317,8 @@
     //   things: the B-E tile things standing alone (a barrel, a crate, a lamp post: a tile that blocks, with the "star" tiles over it)
     function blocksFor() {
         if (blocks && blocks.data === $dataMap) return blocks;
-        const m = blocks = { data: $dataMap, runs: [], rects: [], things: [], hMax: 0, dMax: 0, rectMax: 0 };
-        A.stats.comps = A.stats.runs = A.stats.things = 0;
+        const m = blocks = { data: $dataMap, runs: [], rects: [], things: [], fences: [], fenceKinds: new Set(), hMax: 0, dMax: 0, rectMax: 0 };
+        A.stats.comps = A.stats.runs = A.stats.things = A.stats.fenceRuns = 0;
         if (!outdoor()) return m;
         const W = $dataMap.width, H = $dataMap.height, d = $dataMap.data, flags = $gameMap.tilesetFlags(), n = W * H;
         const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
@@ -453,7 +478,134 @@
         }
         m.thingRow = rowIndex(things, H, o => o.y);   // (made row by row: already in order)
         A.stats.things = things.length;
+        // the fences and hedges of layer 1 (A2 autotiles that block every way), not on a building: a row's neighbouring cells of one
+        // kind are one run (at most PIECE cells: a small picture, culled with the window)
+        const fences = m.fences;
+        const fenceAt = i => { const t = d[n + i]; return t >= 2816 && t < 4352 && (flags[t] & 15) === 15 && comp[i] < 0 ? t : 0; };
+        for (let y = 0; y < H; y++) for (let x = 0; x < W;) {
+            const t = fenceAt(y * W + x);
+            if (!t) { x++; continue; }
+            const k = Math.floor((t - 2048) / 48), ids = [t];
+            let e = x + 1;
+            while (e < W && ids.length < PIECE) { const u = fenceAt(y * W + e); if (!u || Math.floor((u - 2048) / 48) !== k) break; ids.push(u); e++; }
+            fences.push({ x, y, n: ids.length, ids, key: ids.join(","), bmp: null, mask: null, src: null });
+            m.fenceKinds.add(k);
+            x = e;
+        }
+        m.fenceRow = rowIndex(fences, H, o => o.y);
+        A.stats.fenceRuns = fences.length;
         return m;
+    }
+
+    // the A2 sheet the tilemap draws with now (the season's own; our copy with the painted shadows taken out)
+    let a2Sheet = null;
+    const FENCE_KEEP = 0;   // what is left of a fence's painted shadow (the user: "a da się z płotka usunąć ten wbudowany cień?" - all of it)
+    const softSheets = new Map();   // a sheet as loaded -> its copy { copy, kinds }
+    // the fence kinds' painted shadow (black, see-through) taken out in a copy of the sheet; the tilemap takes the copy (once a
+    // sheet: a canvas copy and a few blocks of 96 x 144 px read and written; the seasons' sheets each their own copy, kept)
+    // (2026-11-18, the user: "cień bazowy płotka nadal jest w grze" - the first try only put the copy in tm._bitmaps and set the flag:
+    // the flag is read only when a sheet finishes loading, so the graphics card kept drawing the loaded sheet. Now the tilemap is
+    // given its sheets again (setBitmaps: the layers take the copy and are drawn anew), and Wydajnosc.js's memory of what each slot
+    // of the card holds forgets the copy when its pixels change - it would skip the slot as "the same picture")
+    function giveSheets(tm, bms, changed) {
+        const tr = Graphics._app && Graphics._app.renderer && Graphics._app.renderer.plugins && Graphics._app.renderer.plugins.rpgtilemap;
+        if (changed && tr && tr._wySheets) for (let i = 0; i < tr._wySheets.length; i++) if (tr._wySheets[i] === bms[1].canvas) tr._wySheets[i] = null;
+        tm.setBitmaps(bms);
+    }
+    function softenFences(set, m) {
+        const tm = set._tilemap, bms = tm && tm._bitmaps;
+        const cur = bms && bms[1];
+        if (!cur) { a2Sheet = null; return; }
+        const on = A.opts.fences && m.fenceKinds.size > 0;
+        if (!on) {   // (switched off: the sheet as it was)
+            if (cur._cienOrig) { bms[1] = cur._cienOrig; giveSheets(tm, bms, false); }
+            a2Sheet = bms[1];
+            return;
+        }
+        if (cur._cienSoft && m._softDone === cur) { a2Sheet = cur; return; }
+        if (!cur.isReady()) { a2Sheet = null; return; }
+        const orig = cur._cienOrig || cur;
+        let e = softSheets.get(orig);
+        if (!e) {
+            const c = new Bitmap(orig.width, orig.height);
+            c.blt(orig, 0, 0, orig.width, orig.height, 0, 0);
+            c._url = orig._url; c._cienSoft = true; c._cienOrig = orig;
+            e = { copy: c, kinds: new Set() };
+            softSheets.set(orig, e);
+            if (softSheets.size > 6) { const k0 = softSheets.keys().next().value; const e0 = softSheets.get(k0); softSheets.delete(k0); if (e0.copy !== bms[1]) e0.copy.destroy(); }
+        }
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), ctx = e.copy.context;
+        let changed = false;
+        for (const k of m.fenceKinds) {
+            if (e.kinds.has(k)) continue;
+            const x = (k % 8) * 2 * tw, y = (Math.floor(k / 8) - 2) * 3 * th, img = ctx.getImageData(x, y, 2 * tw, 3 * th), p = img.data;
+            for (let i = 0; i < p.length; i += 4) if (p[i + 3] > 0 && p[i + 3] < 200 && p[i] + p[i + 1] + p[i + 2] < 30) p[i + 3] = Math.round(p[i + 3] * FENCE_KEEP);
+            ctx.putImageData(img, x, y);
+            e.kinds.add(k);
+            changed = true;
+        }
+        if (changed) e.copy._baseTexture.update();
+        if (bms[1] !== e.copy || changed) { bms[1] = e.copy; giveSheets(tm, bms, changed); }
+        m._softDone = e.copy;
+        a2Sheet = e.copy;
+    }
+    // a run's picture (the autotile's four quarters a cell, as the tilemap draws them) -> its silhouette (the painted shadow left
+    // out) and its eraser (the fence's own pixels, hard); cached by the sheet and the tiles
+    const fenceCache = new Map();
+    function fenceBitmaps(o) {
+        const src = a2Sheet;
+        if (!src || !src.isReady()) return undefined;
+        const key = (src._url || "") + (src._cienSoft ? "~" : "") + ":" + o.key;
+        if (fenceCache.has(key)) return fenceCache.get(key);
+        if (!spend()) return undefined;
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), w1 = tw / 2, h1 = th / 2, W = tw * o.n;
+        const comp = new Bitmap(W, th);
+        o.ids.forEach((t, c) => {
+            const kind = Math.floor((t - 2048) / 48), table = Tilemap.FLOOR_AUTOTILE_TABLE[(t - 2048) % 48];
+            const bx = (kind % 8) * 2, by = (Math.floor(kind / 8) - 2) * 3;
+            for (let q = 0; q < 4; q++) comp.blt(src, (bx * 2 + table[q][0]) * w1, (by * 2 + table[q][1]) * h1, w1, h1, c * tw + (q % 2) * w1, Math.floor(q / 2) * h1);
+        });
+        comp._url = "a2run:" + key;
+        const sil = silhouette(comp, 0, 0, W, th, false, true);
+        const out = sil ? { sil, mask: sil._mask || null } : null;
+        comp.destroy();
+        fenceCache.set(key, out);
+        return out;
+    }
+    function layEraser(st, root, mask, x, y) {
+        const q = st.fenceErase.take(root.fenceErase), s = q.spr;
+        if (s.bitmap !== mask) s.bitmap = mask;
+        if (s.x !== x || s.y !== y) { s.x = x; s.y = y; }
+        st.fenceErase.use(q);
+    }
+    function layFences(m, S, ls, sun, layer, st, root, w) {
+        const fences = m.fences, tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), H = $dataMap.height;
+        let shown = 0;
+        if (A.opts.fences && fences.length && a2Sheet) {
+            const far = th * ls.len + tw;
+            const [i0, i1] = span(m.fenceRow, H, Math.floor((w.y0 - far) / th) - 1, Math.ceil((w.y1 + th) / th) + 1);
+            for (let i = i0; i < i1; i++) {
+                const o = fences[i], left = o.x * tw, bottom = (o.y + 1) * th, wpx = o.n * tw;
+                if (left + wpx + far < w.x0 || left - far > w.x1 || bottom - th > w.y1 || bottom + far < w.y0) continue;
+                if (o.src !== a2Sheet) { o.src = a2Sheet; o.bmp = null; o.mask = null; o.dead = false; }   // (a new season's sheet)
+                if (o.bmp === null) {
+                    if (o.dead) continue;
+                    const b = fenceBitmaps(o);
+                    if (b === undefined) { st.pending = true; continue; }
+                    if (!b) { o.dead = true; continue; }
+                    o.bmp = b.sil; o.mask = b.mask;
+                }
+                const bmp = o.bmp, e = st.fences.take(root.fences);
+                layLeaned(e.spr, bmp, left + bmp._footX, bottom - (th - bmp._footRow - 1) - LIFT, 1, 1, ls, S, false);
+                e.cx = left + wpx / 2; e.cy = bottom;
+                e.spr.alpha = cloudAlpha(sun, S, layer, e.cx, e.cy);
+                st.fences.use(e);
+                if (o.mask && root.fenceErase.visible) layEraser(st, root, o.mask, left, bottom - th);
+                shown++;
+            }
+        }
+        st.fences.finish();   // (the erasers: layThings adds the things' own and finishes them)
+        A.stats.fences = shown;
     }
 
     // a dark rectangle for a sweep, w px along its foot and G along the shadow: hard along its foot (local y 0, where it meets the
@@ -532,6 +684,7 @@
         st.sides.finish();
         A.stats.blocks = shown;
         A.stats.sides = sides;
+        layFences(m, S, ls, sun, layer, st, root, w);
         layThings(m, S, ls, sun, layer, st, root, w);
         layErasers(m, st, root, w);
     }
@@ -563,11 +716,13 @@
         const comp = new Bitmap(tw, th * n);
         o.ids.forEach((t, k) => comp.blt(srcs[k], ((Math.floor(t / 128) % 2) * 8 + (t % 8)) * tw, (Math.floor((t % 256) / 8) % 16) * th, tw, th, 0, k * th));
         comp._url = "tilestack:" + o.key;
-        const bmp = silhouette(comp, 0, 0, tw, th * n);
+        const bmp = silhouette(comp, 0, 0, tw, th * n, false, true);
+        stackMasks.set(o.key, bmp ? bmp._mask || null : null);
         comp.destroy();
         stacks.set(o.key, bmp);
         return bmp;
     }
+    const stackMasks = new Map();
     function layThings(m, S, ls, sun, layer, st, root, w) {
         const things = m.things, tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), H = $dataMap.height, pool = st.things;
         let shown = 0;
@@ -588,14 +743,17 @@
             e.cx = left + tw / 2; e.cy = bottom;
             e.spr.alpha = cloudAlpha(sun, S, layer, e.cx, e.cy);
             pool.use(e);
+            const mask = stackMasks.get(o.key);
+            if (mask && root.fenceErase.visible) layEraser(st, root, mask, left, bottom - o.h);
             shown++;
         }
         pool.finish();
+        st.fenceErase.finish();
         A.stats.tiles = shown;
     }
     // the clouds move on: the laid shadows' strength again (every 6th frame), nothing else
     function dimLaid(S, sun, layer, st) {
-        for (const pool of [st.blocks, st.sides, st.things]) {
+        for (const pool of [st.blocks, st.sides, st.things, st.fences]) {
             for (let i = 0; i < pool.shown; i++) { const e = pool.list[i]; e.spr.alpha = cloudAlpha(sun, S, layer, e.cx, e.cy); }
         }
     }
@@ -648,8 +806,10 @@
     // ------------------------------------------------------------------
     const WIN = 3;   // cells of the window round the screen
     const stOf = set => set._cienie || (set._cienie = { blocks: new Pool(() => new Sprite()), sides: new Pool(() => new Sprite()), things: new Pool(() => new Sprite()),
-        players: new Pool(() => new Sprite()), erasers: new Pool(eraserSprite), key: "", win: null, frame: -99, pframe: -99, on: false, pending: false });
-    const hideAll = st => { st.blocks.hide(); st.sides.hide(); st.things.hide(); st.erasers.hide(); };
+        players: new Pool(() => new Sprite()), erasers: new Pool(eraserSprite), fences: new Pool(() => new Sprite()),
+        fenceErase: new Pool(() => { const s = new Sprite(); s.blendMode = PIXI.BLEND_MODES.ERASE; return s; }),
+        key: "", win: null, frame: -99, pframe: -99, on: false, pending: false });
+    const hideAll = st => { st.blocks.hide(); st.sides.hide(); st.things.hide(); st.erasers.hide(); st.fences.hide(); st.fenceErase.hide(); };
     let broken = false;
     const _update = Spriteset_Map.prototype.update;
     Spriteset_Map.prototype.update = function() {
@@ -659,6 +819,7 @@
     };
     function updateShadows(set) {
         const S = Sun(), st = stOf(set), o = A.opts;
+        if (outdoor()) softenFences(set, blocksFor());   // (by night too: the painted shadow stays a trace all day)
         const sun = S && S.now();
         const live = !!sun && S.shadows && sun.light > 0.01 && sun.outdoors !== false && outdoor();
         if (!live) {
@@ -677,7 +838,7 @@
         if (root.players.y !== by + vy) root.players.y = by + vy;
         const ls = laidSun(sun), r = T.view.rect(), fr = Graphics.frameCount;
         const x0 = r.x0 + vx, y0 = r.y0 + vy, x1 = r.x1 + vx, y1 = r.y1 + vy, w0 = st.win;
-        const key = sunGen + "," + o.buildings + o.players + "," + T.view.scale();
+        const key = sunGen + "," + o.buildings + o.players + o.fences + "," + T.view.scale() + "," + (a2Sheet ? a2Sheet._url : "");
         const moved = !w0 || x0 < w0.x0 || y0 < w0.y0 || x1 > w0.x1 || y1 > w0.y1;
         if (moved || key !== st.key || st.pending) {
             const M = WIN * tw;
@@ -770,7 +931,7 @@
                 while (sh.children.length < ROUND_T.length) sh.addChild(new Sprite());
                 for (let i = 0; i < ROUND_T.length; i++) {
                     const t = ROUND_T[i];
-                    layLeaned(sh.children[i], bmp, fx0, fy0 + t * round / 2 * Math.abs(sy), sx * Math.sqrt(1 - t * t), sy, ls, S, false);
+                    layLeaned(sh.children[i], bmp, fx0, fy0 + (t - 1) * round / 2 * Math.abs(sy), sx * Math.sqrt(1 - t * t), sy, ls, S, false);
                 }
             } else layLeaned(sh, bmp, fx0, fy0, sx, sy, ls, S, false);
         }
@@ -790,4 +951,5 @@
     // (for the tests and the screenshots: the solids of the map now)
     A.solids = () => blocksFor();
     A.silhouette = silhouette;   // (for tests)
+    A.roundBase = name => ROUND_BASE.get(name) || 0;   // (Wiatrak.js: the sails' shadow from the tower's axis, the disc's middle)
 })();

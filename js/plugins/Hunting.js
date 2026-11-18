@@ -916,16 +916,42 @@
                 if (o) { s.x += o[0]; s.y += o[1]; }
             }
         } });
-    // the sheets come with the map, so the first step does not wait for them
-    const _look8MapCreate = Scene_Map.prototype.create;
-    Scene_Map.prototype.create = function() {
-        _look8MapCreate.call(this);
-        if (look8On) for (const k of Object.keys(LOOK8)) {
-            ImageManager.loadCharacter(LOOK8[k].sheet);
-            if (LOOK8[k].run) ImageManager.loadCharacter(LOOK8[k].run.sheet);
-            if (LOOK8[k].idle) ImageManager.loadCharacter(LOOK8[k].idle.sheet);
+    // the sheets come with the map, so the first step does not wait for them. (2026-11-18, wydajność - the user: "co się da, to robimy":
+    // every map loaded ALL the 8-way sheets of every animal, man and monster - 111 pictures, ~320 MB of the ~460 MB of images - though
+    // a map has a few of them, and MZ throws its images away at every transfer, so each map decoded them all again) Only the FAMILIES
+    // (walking, running, standing, the poses: "$Animal_Wolf", "$Animal_Wolf_Run"...; "$Cr_Keeper", "$Cr_Keeper_Atk"...) of the looks of
+    // the characters on the map: when its characters are made (the map waits for them behind the black screen), then every half
+    // second again - one that comes later (a wolf at night, a floor's monster, a bandit's camp) gets its family before it reaches the
+    // screen; a pose (a wolf breaking into a run, a bear rearing) is in the family already loaded.
+    const famOf = name => { const m = /^(\$[^_]+_[^_]+)/.exec(name); return m ? m[1] : name; };
+    let famIndex = null;
+    function families() {
+        const keys = Object.keys(LOOK8);
+        if (famIndex && famIndex.n === keys.length) return famIndex.map;   // (Creatures / Humans add their looks while they load)
+        const map = new Map();
+        for (const k of keys) { const f = famOf(k); if (!map.has(f)) map.set(f, []); map.get(f).push(LOOK8[k]); }
+        famIndex = { n: keys.length, map };
+        return map;
+    }
+    function loadFamily(f) {
+        for (const look of families().get(f) || []) {
+            ImageManager.loadCharacter(look.sheet);
+            if (look.run) ImageManager.loadCharacter(look.run.sheet);
+            if (look.idle) ImageManager.loadCharacter(look.idle.sheet);
         }
-    };
+    }
+    function preloadHere(set) {
+        if (!look8On) return;
+        const seen = set._look8Fams || (set._look8Fams = new Set());
+        const one = ch => { const n = ch && ch.characterName ? ch.characterName() : ""; if (!n || !LOOK8[n]) return; const f = famOf(n); if (!seen.has(f)) { seen.add(f); loadFamily(f); } };
+        for (const s of set._characterSprites || []) one(s._character);
+        if (window.$gameMap) for (const e of $gameMap.events()) one(e);   // (an event whose sprite is not made yet)
+    }
+    const _look8CreateChars = Spriteset_Map.prototype.createCharacters;
+    Spriteset_Map.prototype.createCharacters = function() { _look8CreateChars.call(this); preloadHere(this); };
+    const _look8SetUpdate = Spriteset_Map.prototype.update;
+    Spriteset_Map.prototype.update = function() { _look8SetUpdate.call(this); if (Graphics.frameCount % 30 === 0) preloadHere(this); };
+    P.preloadLook8 = { famOf, families, loadFamily };   // (the tests)
 
     // ------------------------------------------------------------------
     // For the parts, and window.Hunting (the same names as before the split)

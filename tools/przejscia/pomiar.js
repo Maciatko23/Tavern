@@ -4,10 +4,14 @@
 "use strict";
 const kit = require("../../tests/lib/kit.js");
 const CPU = Number(process.env.CPU) || 1;
-const TRASA = [[8, 3], [3, 8], [8, 13], [13, 120], [120, 8], [8, 125], [125, 159], [159, 8], [8, 1], [1, 8], [990, 991], [991, 990]];
-const START = { 8: [54, 50], 3: [25, 15], 13: [29, 25], 120: [20, 31], 125: [27, 20], 159: [20, 20], 1: [17, 20], 990: [40, 16], 991: [30, 20] };
+// (2026-11-18) TRASA=nowy: the new world's maps (the old route's maps were removed 2026-11-17)
+const NOWY = process.env.TRASA === "nowy";
+const TRASA = NOWY ? [[218, 219], [219, 218], [218, 220], [220, 221], [221, 220], [220, 222], [222, 220], [220, 1], [1, 220], [220, 218], [218, 224], [224, 218]]
+    : [[8, 3], [3, 8], [8, 13], [13, 120], [120, 8], [8, 125], [125, 159], [159, 8], [8, 1], [1, 8], [990, 991], [991, 990]];
+const START = NOWY ? { 218: [14, 22], 219: [40, 40], 220: [40, 40], 221: [22, 26], 222: [40, 40], 1: [24, 30], 224: [4, 6] }
+    : { 8: [54, 50], 3: [25, 15], 13: [29, 25], 120: [20, 31], 125: [27, 20], 159: [20, 20], 1: [17, 20], 990: [40, 16], 991: [30, 20] };
 kit.test({ port: Number(process.env.CDP_PORT) || 9420, lightGpu: true, bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli", evalTimeout: 300000 }, async t => {
-    await t.newGame({ map: 8, x: 54, y: 50, day: 12, hour: 11, quiet: true, minimap: false });
+    await t.newGame({ map: TRASA[0][0], x: START[TRASA[0][0]][0], y: START[TRASA[0][0]][1], day: 12, hour: 11, quiet: true, minimap: false });
     await t.frames(120);
     // the stopwatch: hooks put on last (over every plugin)
     await t.eval(`(() => {

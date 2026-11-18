@@ -11,11 +11,18 @@
 //      picture (the farm's own barley pictures, Farm_Crops row 3, two staggered tufts a cell) by the season: spring young green,
 //      summer tall green then golden, early autumn golden, then stubble; winter bare soil. Two baked frames swapped slowly - the ears
 //      sway in the wind. It lies under the people (z 1, like the farm's crops); the field's cells keep their own passability.
-// Costs: the sails one rotation a frame; the field two bitmaps of the field's size, baked again only when its stage changes.
+//   3. SHADOWS (2026-11-18, the user picked them from what threw no sun shadow yet): the sails' shadow turns with them - their silhouette
+//      in the tower's picture plane, hubY px over its foot, leaned onto the ground by the sun the way Cienie.js leans the tower (so it
+//      joins the tower's own); the grain's shadow sways with the ears - the grown rows (stages 1-3) as silhouettes in pieces of a
+//      row (SH_SEGS segments each, one atlas), each leaned from its row's foot plus the pieces' own lean in the wind (the mean of
+//      its segments' sway and bending round the hero). Both in Sky.js's one sun-shadow layer: they follow the sun, the clouds,
+//      the rain and go at night, and never darken twice where they meet the trees' or the tower's.
+// Costs: the sails one rotation a frame; the field two bitmaps of the field's size, baked again only when its stage changes; the
+// shadows one sprite for the sails and a few dozen for a field (one texture each: one draw), a matrix a frame while near.
 
 /*:
  * @target MZ
- * @plugindesc Wiatrak i pole: płynnie obracające się skrzydła wiatraka (<Wiatrak:obrazek,wysokość,obroty> w notatce zdarzenia wieży) i pole zboża rosnącego z porami roku (<Pole:szer,wys> w notatce zdarzenia). v1.0.0
+ * @plugindesc Wiatrak i pole: płynnie obracające się skrzydła wiatraka (<Wiatrak:obrazek,wysokość,obroty> w notatce zdarzenia wieży) i pole zboża rosnącego z porami roku (<Pole:szer,wys> w notatce zdarzenia); cień skrzydeł i zboża od słońca. v1.1.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -50,6 +57,69 @@
         if (h < 5 || h >= 22) f *= 0.55;
         return f;
     }
+    // ------------------------------------------------------------------
+    // 3. Shadows (Sky.js's sun-shadow layer)
+    // ------------------------------------------------------------------
+    const Sun = () => T.api("Sun");
+    const CLOUD_DIM = 0.85;   // as the trees and Cienie.js: a cloud over a shadow takes this much of it
+    const OPT = { shadows: true };   // (Wiatrak.opts.shadows: the sails' and the grain's shadows - for the tests' before / after)
+    // the sun now, if it throws shadows here: { S, sun, ox, oy } - the ground offset of a point per px of its height
+    function sunHere() {
+        const S = Sun(), sun = S && S.now ? S.now() : null;
+        if (!OPT.shadows || !S || !S.shadows || !sun || sun.light <= 0.01 || sun.outdoors === false || !S.layer) return null;
+        const FLAT = S.FLAT || 0.55;
+        return { S, sun, ox: sun.dx * sun.len, oy: FLAT * sun.dy * sun.len };
+    }
+    const cloudAlpha = (h, layer, mx, my) => h.S.layerAlpha(layer) * (h.sun.flash ? 1 : 1 - CLOUD_DIM * (h.S.cloudCover ? h.S.cloudCover(mx, my) : 0));
+    // a sprite's own matrix (as Cienie.js lays its shadows: PIXI does not make it again from the position and the scale)
+    function setMatrix(spr, a, b, c, d, tx, ty) {
+        const tf = spr.transform, lt = tf.localTransform;
+        if (tf._currentLocalID === tf._localID && lt.a === a && lt.b === b && lt.c === c && lt.d === d && lt.tx === tx && lt.ty === ty) return;
+        lt.a = a; lt.b = b; lt.c = c; lt.d = d; lt.tx = tx; lt.ty = ty;
+        tf._currentLocalID = tf._localID;
+        tf._parentID = -1;
+    }
+    // a picture (or a part of it) as a soft black silhouette, PAD px round it
+    const PAD = 3;
+    function silhouette(src, sx, sy, w, h, blur) {
+        const img = src.image || src.canvas, out = new Bitmap(w + 2 * PAD, h + 2 * PAD), ctx = out.context;
+        ctx.filter = "brightness(0) blur(" + blur + "px)";
+        ctx.drawImage(img, sx, sy, w, h, PAD, PAD, w, h);
+        ctx.filter = "none";
+        out._baseTexture.update();
+        out.smooth = true;
+        return out;
+    }
+    // the sails: their silhouette once a picture; the shadow - a box with the sails' lean matrix in the layer, the silhouette in it at
+    // the hub (the sails' own place, turn and size on the tower)
+    const sailSils = new Map();
+    function sailsShadow(spr, sp) {
+        const ch = spr._character, tm = spr.parent, h = sunHere();
+        let box = spr._sailsShadow;
+        if (!h || !tm || !spr.visible || !sp.bitmap.isReady()) { if (box) box.visible = false; return; }
+        const bm = sp.bitmap, key = bm._url || "";
+        let sil = sailSils.get(key);
+        if (!sil) { sil = silhouette(bm, 0, 0, bm.width, bm.height, 1.5); sailSils.set(key, sil); }
+        if (!box) {
+            box = spr._sailsShadow = new PIXI.Container();
+            box._s = box.addChild(new Sprite(sil));
+            box._s.anchor.set(0.5, 0.5);
+        }
+        const layer = h.S.layer(tm);
+        if (box.parent !== layer) layer.addChild(box);
+        const s = box._s;
+        if (s.bitmap !== sil) s.bitmap = sil;
+        // (a round tower: its foot row is the base's front rim, its axis stands on the disc's middle - Cienie.roundBase px deep - and
+        // the hub is that much less high over the ground there)
+        const C = window.Cienie, rb = (C && C.roundBase ? C.roundBase(ch.characterName()) : 0) / 2 * spr.scale.y;
+        s.x = sp.x; s.y = sp.y + rb; s.rotation = sp.rotation;
+        s.scale.set(sp.scale.x * spr.scale.x, sp.scale.y * spr.scale.y);
+        setMatrix(box, 1, 0, -h.ox, -h.oy, spr.x, spr.y - rb);
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight();
+        if ((Graphics.frameCount + spr.spriteId) % 8 === 0 || !box.visible) box.alpha = cloudAlpha(h, layer, (ch._realX + 0.5) * tw, (ch._realY + 1) * th) * (spr.opacity / 255);
+        box.visible = sp.visible;
+    }
+
     // (TawernaCore's one dispatcher: only the events with the note get the hook)
     T.sprite.hook({ owner: "Wiatrak", method: "update", when: s => !!sailsOf(s._character), after(s) { sailsUpdate.call(s); } });
     function sailsUpdate() {
@@ -77,6 +147,7 @@
             let d = (((held - sp._ang) % Q) + Q) % Q; if (d > Q / 2) d -= Q;
             sp._ang += heldNow ? d : Math.max(-0.02, Math.min(0.02, d));
             sp._rpm = 0; sp.rotation = sp._ang; sp.visible = this.visible;
+            sailsShadow(this, sp);
             return;
         }
         const want = sp._cfg.rpm * windFactor();
@@ -84,6 +155,7 @@
         sp._ang = (sp._ang + sp._rpm * Math.PI * 2 / 3600) % (Math.PI * 2);
         sp.rotation = sp._ang;
         sp.visible = this.visible;
+        sailsShadow(this, sp);
     }
 
     // ------------------------------------------------------------------
@@ -143,6 +215,27 @@
         const n = (vnoise(px, py, 58, 71) - 0.5) * 2 * 26 + (vnoise(px, py, 17, 72) - 0.5) * 2 * 9 + (vnoise(px, py, 6, 73) - 0.5) * 2 * 3;
         return smooth01(2, 44, d + n);
     }
+    // the edge's mask of the whole field, a value a pixel (2026-11-18, wydajność: three noises at each of a few hundred thousand pixels -
+    // ~100 ms at CPU 4x - each time the map was entered, the field's sprite is made anew then): worked out on a grid of MASK_STEP px
+    // and smoothed between its points (the noises' finest grain is 6 px of 3 px height: no step is seen), once per field's size
+    const MASK_STEP = 4, masks = new Map();
+    function maskOf(f) {
+        const key = f.w + "x" + f.h;
+        if (masks.has(key)) return masks.get(key);
+        const W = f.w * TW, H = f.h * TW, gw = Math.ceil(W / MASK_STEP) + 1, gh = Math.ceil(H / MASK_STEP) + 1, G = new Float32Array(gw * gh);
+        for (let gy = 0; gy < gh; gy++) for (let gx = 0; gx < gw; gx++) G[gy * gw + gx] = fieldMask(f, Math.min(W, gx * MASK_STEP) + 0.5, Math.min(H, gy * MASK_STEP) + 0.5);
+        const M = new Float32Array(W * H);
+        for (let y = 0; y < H; y++) {
+            const fy = y / MASK_STEP, y0 = Math.floor(fy), ty = fy - y0, r0 = y0 * gw, r1 = Math.min(gh - 1, y0 + 1) * gw;
+            for (let x = 0; x < W; x++) {
+                const fx = x / MASK_STEP, x0 = Math.floor(fx), tx = fx - x0, x1 = Math.min(gw - 1, x0 + 1);
+                const top = G[r0 + x0] + (G[r0 + x1] - G[r0 + x0]) * tx, bot = G[r1 + x0] + (G[r1 + x1] - G[r1 + x0]) * tx;
+                M[y * W + x] = top + (bot - top) * ty;
+            }
+        }
+        masks.set(key, M);
+        return M;
+    }
     function clumps(f) {
         const out = [];
         for (let r = 0; ROW0 + r * ROW_STEP <= f.h * TW - 6; r++) for (let c = 0; c < f.w * 2; c++) {
@@ -171,9 +264,9 @@
             ctx.fillStyle = (y / 4) % 3 === 0 ? "rgba(58,40,24,0.55)" : (y / 4) % 3 === 1 ? "rgba(92,66,40,0.5)" : "rgba(76,54,32,0.5)";
             ctx.fillRect(0, y, f.w * TW, 4);
         }
-        {   // the furrows fade towards the field's wandering edge (once a stage: a few hundred thousand pixels at most)
-            const W = f.w * TW, H = f.h * TW, img = ctx.getImageData(0, 0, W, H), d = img.data;
-            for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const i = (y * W + x) * 4 + 3; d[i] = Math.round(d[i] * fieldMask(f, x + 0.5, y + 0.5)); }
+        {   // the furrows fade towards the field's wandering edge
+            const W = f.w * TW, H = f.h * TW, img = ctx.getImageData(0, 0, W, H), d = img.data, M = maskOf(f);
+            for (let i = 0, p = 3; i < M.length; i++, p += 4) d[p] = Math.round(d[p] * M[i]);
             ctx.putImageData(img, 0, 0);
         }
         ctx.imageSmoothingEnabled = false;
@@ -206,6 +299,78 @@
         });
         atlas._baseTexture.update();
         return { atlas, segs, H };
+    }
+    // the grain's shadow: the segments of a row in pieces of SH_SEGS, each piece one silhouette (its foot the row's lowest foot), all in
+    // one atlas; piece.idx = its segments' places in the list (their sway is the piece's lean)
+    const SH_SEGS = 4, SH_ALPHA = 0.8;   // (thin stalks: a little lighter than a tree's)
+    function bakeShadows(B) {
+        const rows = new Map();
+        B.segs.forEach((g, i) => { if (!rows.has(g.r)) rows.set(g.r, []); rows.get(g.r).push(i); });
+        const pieces = [];
+        for (const list of rows.values()) {
+            list.sort((p, q) => B.segs[p].x0 - B.segs[q].x0);
+            for (let k = 0; k < list.length; k += SH_SEGS) {
+                const idx = list.slice(k, k + SH_SEGS), gs = idx.map(i => B.segs[i]);
+                const x0 = Math.min(...gs.map(g => g.x0)), x1 = Math.max(...gs.map(g => g.x0 + g.w)), b = Math.max(...gs.map(g => g.b));
+                pieces.push({ idx, x0, w: Math.ceil(x1 - x0), b, gs });
+            }
+        }
+        // (a gap round each piece: the blur does not run into the next one)
+        const GAP = 4, HC = B.H + 2 * GAP, perRow = 4, CW = Math.max(...pieces.map(p => p.w), 1) + 2 * GAP;
+        const comp = new Bitmap(perRow * CW, Math.ceil(pieces.length / perRow) * HC), ctx = comp.context;
+        ctx.imageSmoothingEnabled = false;
+        pieces.forEach((p, i) => {
+            const bx = (i % perRow) * CW + GAP, by = Math.floor(i / perRow) * HC + GAP;   // (the piece's box, its foot at by + B.H)
+            for (const g of p.gs) ctx.drawImage(B.atlas.canvas, g.ax, g.ay, Math.ceil(g.w), B.H, bx + (g.x0 - p.x0), by - (p.b - g.b), Math.ceil(g.w), B.H);
+            delete p.gs;
+            p.fx = PAD + bx - GAP; p.fy = PAD + by - GAP; p.fw = p.w + 2 * GAP; p.fh = HC;   // (its frame in the silhouettes' atlas)
+            p.ax = GAP / p.fw; p.ay = (GAP + B.H) / HC;                                     // (its anchor: the piece's left end at its foot)
+        });
+        const atlas = silhouette(comp, 0, 0, comp.width, comp.height, 1);
+        comp.destroy();
+        return { atlas, pieces };
+    }
+
+    // (2026-11-18, wydajność - the user: "co się da, to robimy": the two fields of Podgrodzie were 247 sprites of the tilemap, each sorted,
+    // updated and drawn on its own every frame, and their shadow 58 more) a ROW of the field is ONE mesh: its segments' quads, sheared
+    // every frame exactly as the sprites were (skew.x = -w about the foot, scale.y), the row placed at its foot - so it still sorts with
+    // the people (the rows in front of the hero hide his legs, the ones behind him are behind him); the shadow's pieces are one mesh
+    const quad = (I, k) => { const v = k * 4; I.set([v, v + 1, v + 2, v, v + 2, v + 3], k * 6); };
+    function rowMeshes(B) {
+        const rows = new Map();
+        B.segs.forEach((g, i) => { if (!rows.has(g.r)) rows.set(g.r, []); rows.get(g.r).push(i); });
+        const tex = new PIXI.Texture(B.atlas._baseTexture), AW = B.atlas.width, AH = B.atlas.height, out = [];
+        for (const idx of rows.values()) {
+            idx.sort((p, q) => B.segs[p].b - B.segs[q].b || p - q);   // (in a row as the sprites were sorted: by the foot, then made first)
+            const n = idx.length, U = new Float32Array(n * 8), I = new Uint16Array(n * 6);
+            idx.forEach((i, k) => {
+                const g = B.segs[i], u0 = g.ax / AW, u1 = (g.ax + Math.ceil(g.w)) / AW, v0 = g.ay / AH, v1 = (g.ay + B.H) / AH;
+                U.set([u0, v0, u1, v0, u1, v1, u0, v1], k * 8);
+                quad(I, k);
+            });
+            const mesh = new PIXI.SimpleMesh(tex, new Float32Array(n * 8), U, I);
+            mesh.z = 3; mesh.spriteId = Sprite._counter++;
+            out.push({ mesh, idx, foot: Math.max(...idx.map(i => B.segs[i].b)) });
+        }
+        return out;
+    }
+    function shadowMesh(SB) {
+        const n = SB.pieces.length, AW = SB.atlas.width, AH = SB.atlas.height, U = new Float32Array(n * 8), I = new Uint16Array(n * 6);
+        SB.pieces.forEach((p, k) => {
+            const u0 = p.fx / AW, u1 = (p.fx + p.fw) / AW, v0 = p.fy / AH, v1 = (p.fy + p.fh) / AH;
+            U.set([u0, v0, u1, v0, u1, v1, u0, v1], k * 8);
+            quad(I, k);
+        });
+        const mesh = new PIXI.SimpleMesh(new PIXI.Texture(SB.atlas._baseTexture), new Float32Array(n * 8), U, I);
+        mesh.visible = false;
+        return mesh;
+    }
+    function dropField(spr) {   // (the stage changed or the map is left: the meshes and their pictures away)
+        for (const r of spr._poleRows || []) { if (r.mesh.parent) r.mesh.parent.removeChild(r.mesh); r.mesh.destroy({ texture: true, baseTexture: false }); }
+        spr._poleRows = [];
+        if (spr._poleAtlas) { spr._poleAtlas.destroy(); spr._poleAtlas = null; }
+        const s = spr._poleShadow;
+        if (s) { if (s.mesh.parent) s.mesh.parent.removeChild(s.mesh); s.mesh.destroy({ texture: true, baseTexture: false }); s.atlas.destroy(); spr._poleShadow = null; }
     }
     // the wind's strength now (calm 1, rain 1.6, storm 2.8; at night calmer)
     function windNow() {
@@ -257,19 +422,18 @@
             const src = source(st);
             if (!src) return;
             this._poleStage = st;
-            for (const g of this._poleSegs) if (g.sp.parent) g.sp.parent.removeChild(g.sp);
+            dropField(this);
             this._poleSegs = [];
             this._poleGround.bitmap = bakeGround(src, f, st);
             if (st >= 1 && st <= 3) {
                 const B = bakeSegments(src, f, st);
-                for (const g of B.segs) {
-                    const sp = new Sprite(B.atlas);
-                    sp.setFrame(g.ax, g.ay, Math.ceil(g.w), B.H);
-                    sp.anchor.set((g.cx - g.x0) / g.w, 1);
-                    sp.z = 3; sp.update = function() {};
-                    tm.addChild(sp);
-                    this._poleSegs.push({ sp, cx: g.cx, b: g.b, r: g.r, p: 0, v: 0 });
-                }
+                this._poleAtlas = B.atlas; this._poleH = B.H;
+                for (const g of B.segs) this._poleSegs.push({ cx: g.cx, b: g.b, r: g.r, x0: g.x0, wpx: Math.ceil(g.w), p: 0, v: 0, w: 0 });
+                this._poleRows = rowMeshes(B);
+                for (const r of this._poleRows) tm.addChild(r.mesh);
+                // the grain's shadow (in Sky's layer, added when the sun shines)
+                const SB = bakeShadows(B);
+                this._poleShadow = { atlas: SB.atlas, mesh: shadowMesh(SB), pieces: SB.pieces, alphaAt: -99 };
             }
         }
         const tw = $gameMap.tileWidth(), ox = Math.round($gameMap.adjustX(ch.x) * tw), oy = Math.round($gameMap.adjustY(ch.y) * tw);
@@ -277,8 +441,13 @@
         const segs = this._poleSegs;
         if (!segs.length) return;
         const near = ox < Graphics.width + 60 && ox + f.w * tw > -60 && oy < Graphics.height + 60 && oy + f.h * tw > -80;
-        for (const g of segs) g.sp.visible = near;
-        if (!near) return;
+        const rows = this._poleRows;
+        for (const r of rows) r.mesh.visible = near;
+        // (a low sun lays the grain's shadow up to ~2.5 x its height off the field: kept swaying while that can be on the screen)
+        const SP = 200, nearS = ox < Graphics.width + SP && ox + f.w * tw > -SP && oy < Graphics.height + SP && oy + f.h * tw > -SP;
+        const shL = this._poleShadow, sh = nearS && shL ? sunHere() : null;
+        if (shL && !sh && shL.mesh.visible) shL.mesh.visible = false;
+        if (!near && !sh) return;
         // the wind: a slow wave over the field, a gust sweeping across it now and then; young plants sway less, ripe ears slower
         const fc = Graphics.frameCount;
         this._poleWind = (this._poleWind || 1) + (windNow() - (this._poleWind || 1)) * 0.01;
@@ -301,10 +470,46 @@
             }
             g.v += (target - g.p) * 0.2; g.v *= 0.74; g.p += g.v;   // (a spring: bent away quickly, swings back with a little overshoot)
             const wave = Math.sin(fc * om - g.cx * 0.018 - g.r * 0.35) * amp + Math.exp(-Math.pow((g.cx - gx) / 70, 2)) * gust + lean;
-            g.sp.skew.x = -(wave + g.p);
-            g.sp.scale.y = 1 - Math.min(0.08, Math.abs(g.p) * 0.2);
-            g.sp.x = ox + g.cx; g.sp.y = oy + g.b;
+            g.w = wave + g.p;
+            g.sy = 1 - Math.min(0.08, Math.abs(g.p) * 0.2);
         }
+        // the rows: each segment's quad sheared about its foot as its sprite was (skew.x = -w, scale.y = sy: the top goes sin(w) * sy * H
+        // right and cos(w) * sy * H up), the mesh at the row's foot
+        if (near) {
+            const H = this._poleH;
+            for (const r of rows) {
+                const V = r.mesh.vertices, foot = r.foot, idx = r.idx;
+                r.mesh.x = ox; r.mesh.y = oy + foot;
+                for (let k = 0; k < idx.length; k++) {
+                    const g = segs[idx[k]], j = k * 8, yb = g.b - foot, sh2 = Math.sin(g.w) * g.sy * H, hg = Math.cos(g.w) * g.sy * H;
+                    const xl = g.x0, xr = g.x0 + g.wpx;
+                    V[j] = xl + sh2; V[j + 1] = yb - hg; V[j + 2] = xr + sh2; V[j + 3] = yb - hg;
+                    V[j + 4] = xr; V[j + 5] = yb; V[j + 6] = xl; V[j + 7] = yb;
+                }
+            }
+        }
+        // the grain's shadow: each piece leaned from its row's foot by the sun and by its segments' mean sway (a stalk leaning right by
+        // sin(w) per px of height throws its top sin(w) further right) - one mesh, a quad a piece
+        if (sh) {
+            const layer = sh.S.layer(tm), m = shL.mesh, V = m.vertices, P = shL.pieces;
+            if (m.parent !== layer) layer.addChild(m);
+            m.x = ox; m.y = oy;
+            for (let k = 0; k < P.length; k++) {
+                const p = P[k], idx = p.idx;
+                let w = 0;
+                for (let i = 0; i < idx.length; i++) w += segs[idx[i]].w;
+                w /= idx.length;
+                const c = -(sh.ox + Math.sin(w)), d = -sh.oy, top = -p.ay * p.fh, bot = (1 - p.ay) * p.fh, xl = p.x0 - p.ax * p.fw, xr = xl + p.fw, j = k * 8;
+                V[j] = xl + c * top; V[j + 1] = p.b + d * top; V[j + 2] = xr + c * top; V[j + 3] = p.b + d * top;
+                V[j + 4] = xr + c * bot; V[j + 5] = p.b + d * bot; V[j + 6] = xl + c * bot; V[j + 7] = p.b + d * bot;
+            }
+            if (!m.visible) m.visible = true;
+            if (fc - shL.alphaAt >= 8) {
+                shL.alphaAt = fc;
+                m.alpha = cloudAlpha(sh, layer, (ch.x + f.w / 2) * tw, (ch.y + f.h / 2) * tw) * SH_ALPHA;
+            }
+        }
+        if (!near) return;
         // the rustle: once a stride while he wades
         const d = Math.abs($gamePlayer._realX - (this._poleLX || 0)) + Math.abs($gamePlayer._realY - (this._poleLY || 0));
         if (wading && d > 0.001 && d < 1.5) {
@@ -314,6 +519,6 @@
         this._poleLX = $gamePlayer._realX; this._poleLY = $gamePlayer._realY;
     }
 
-    const api = { stage: stageNow, hold: (angle, now) => { held = angle === null || angle === undefined ? null : Number(angle); heldNow = !!now; }, held: () => held };
+    const api = { opts: OPT, stage: stageNow, hold: (angle, now) => { held = angle === null || angle === undefined ? null : Number(angle); heldNow = !!now; }, held: () => held };
     window.Wiatrak = T && T.register ? T.register("Wiatrak", api) : api;
 })();

@@ -301,7 +301,10 @@
     // just before the drawing: the figure as it is now (after every plugin's update), its frame's outline under it
     Sprite_PolishOutline.prototype.updateTransform = function() {
         const o = this._owner, f = o && o._frame;
-        const ok = this._on && !!o && o.parent === this.parent && o.visible && o.renderable !== false && plainFigure(o);
+        // (2026-11-18, wydajność: every person of the map - 46 on Podgrodzie - did this every frame, far off the screen too: a figure
+        // not on the screen is not looked at)
+        const seen = !!o && T.view.sees(o.x - 96, o.y - 192, o.x + 96, o.y + 24);
+        const ok = seen && this._on && !!o && o.parent === this.parent && o.visible && o.renderable !== false && plainFigure(o);
         if (ok) {
             const bmp = outlineBitmap(o.bitmap, f);
             if (this.bitmap !== bmp) this.bitmap = bmp;

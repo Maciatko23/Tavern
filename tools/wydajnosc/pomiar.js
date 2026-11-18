@@ -102,6 +102,36 @@ const PLACES = {
         await t.setHour(20);
         await t.frames(120);
     },
+    // (2026-11-18, the new world - the old places above stand on maps removed 2026-11-17; "node tools/wydajnosc/pomiar.js nowy" = all these)
+    n_dziadek: async t => { await t.newGame({ map: 218, x: 14, y: 22, day: 40, hour: 12, quiet: true }); await t.eval(near(14, 22)); },
+    n_wiatrak: async t => { await t.newGame({ map: 218, x: 13, y: 37, day: 40, hour: 8, quiet: true }); await t.eval("Tawerna.time.forceSeason(1); 0"); await t.eval(near(13, 37)); },
+    n_wybrzeze: async t => { await t.newGame({ map: 219, x: 40, y: 40, day: 40, hour: 12, quiet: true }); await t.eval(near(40, 40)); },
+    n_miasteczko: async t => { await t.newGame({ map: 220, x: 40, y: 40, day: 40, hour: 12, quiet: true }); await t.eval(near(40, 40)); },
+    n_miasto_noc: async t => { await t.newGame({ map: 220, x: 40, y: 40, day: 40, hour: 22, quiet: true }); await t.eval(near(40, 40)); },
+    n_dwor: async t => { await t.newGame({ map: 221, x: 22, y: 26, day: 40, hour: 12, quiet: true }); await t.eval(near(22, 26)); },
+    n_gory: async t => { await t.newGame({ map: 222, x: 40, y: 40, day: 40, hour: 12, quiet: true }); await t.eval(near(40, 40)); },
+    n_gran: async t => { await t.newGame({ map: 29, x: 14, y: 18, day: 40, hour: 12, quiet: true }); await t.eval(near(14, 18)); },
+    n_tawerna: async t => {
+        await t.newGame({ map: 1, x: 24, y: 24, day: 40, hour: 20 });
+        await t.eval(`(function(){ for (const k of ["tobiasz", "kartograf", "grajek", "kompania"]) { try { Podroznicy.przyplyn(k); } catch (e) {} } try { Podroznicy.przyplyn("pula"); } catch (e) {} return 0; })()`);
+        await t.go(1, 24, 24, 8);
+        await t.eval(near(24, 24));
+        await t.setHour(20);
+        await t.frames(120);
+    },
+    n_burza: async t => {
+        await t.newGame({ map: 218, x: 14, y: 22, day: 40, hour: 14, calm: false });
+        await t.eval(near(14, 22));
+        await t.eval("Survival.forceStorm(2); $gameSystem.setDayNightHour($gameSystem._stormForce.start + 0.6); 0");
+        await t.frames(400);
+    },
+    n_podziemia: async t => {
+        await t.newGame({ map: 218, x: 14, y: 22, day: 40, hour: 12 });
+        await t.eval("Underground.go(35); 0");
+        await t.until("$gameMap.mapId() !== 218 && " + t.onMap(), 60);
+        await t.frames(60);
+        await t.calm();
+    },
     burza: async t => {
         await t.newGame({ map: 3, x: 22, y: 14, day: 40, hour: 14, calm: false });
         await t.eval("Survival.forceStorm(2); $gameSystem.setDayNightHour($gameSystem._stormForce.start + 0.6); 0");
@@ -210,7 +240,7 @@ async function measureEffects(t, name) {
 // (lightGpu: the lights on the graphics card, as the game draws them - tests/lib/kit.js puts the tests on the 2D canvases)
 const opts = Object.assign({ port: PORT, evalTimeout: 120000, lightGpu: true }, PRZED ? { overlay: overlayOf(PRZED), overlayJs: true } : {});
 kit.test(opts, async t => {
-    const list = args.length ? args : Object.keys(PLACES), results = {};
+    const list = args.length === 1 && args[0] === "nowy" ? Object.keys(PLACES).filter(k => k.startsWith("n_")) : args.length ? args : Object.keys(PLACES), results = {};
     for (const name of list) {
         if (!PLACES[name]) { console.log("NOTE no such place: " + name + " (" + Object.keys(PLACES).join(", ") + ")"); continue; }
         await PLACES[name](t);

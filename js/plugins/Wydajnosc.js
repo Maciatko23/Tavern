@@ -73,7 +73,7 @@
     const T = window.Tawerna;
     if (!T) throw new Error("Wydajnosc.js: brak TawernaCore.js - musi być wyżej na liście wtyczek (the Tawerna core is missing)");
     const PLUGIN = "Wydajnosc";
-    const opts = { leaf: true, filterArea: true, cull: true, idleFilters: true, lazy: true, night: true, outline: true, lightGpu: true, still: true, sameSheets: true, quickFade: true, transferSnap: true, startSet: true, idleEvery: 8, plainSkip: true, stillAll: true };
+    const opts = { leaf: true, filterArea: true, cull: true, idleFilters: true, lazy: true, night: true, outline: true, lightGpu: true, still: true, sameSheets: true, quickFade: true, transferSnap: true, startSet: true, idleEvery: 8, plainSkip: true, stillAll: true, sortScan: true, eventsMemo: true };
     const stats = { culled: 0, frame: -1, drawing: -1, lazy: 0, lazyFrame: -1, idle: 0, idleFrame: -1 };
     // opts.dispatch: the character sprites' hooks run only for the sprites they are for (Tawerna.sprite, TawernaCore.js); false: every
     // hook for every sprite, as the chain of wrappers did
@@ -104,6 +104,43 @@
         this.animationCount++;
         this.animationFrame = Math.floor(this.animationCount / 30);
         SpriteUpdate.call(this);
+    };
+
+    // ---- $gameMap.events() (2026-11-18): the core makes a new filtered copy of the whole list at EVERY call, and the plugins and the core's
+    // eventsXy call it dozens of times a frame (Podgrodzie: ~280 events). One copy a frame - a new one at once when the list grows (an
+    // event put in) or the map is another; the callers only read it (none sorts or changes it). Kept here, not on $gameMap: a property of
+    // the map would go into the save.
+    const _mapEvents = Game_Map.prototype.events;
+    let evMap = null, evF = -1, evSrc = null, evLen = -1, evList = null;
+    Game_Map.prototype.events = function() {
+        if (!opts.eventsMemo) return _mapEvents.call(this);
+        const src = this._events, f = Graphics.frameCount;
+        if (evMap === this && evF === f && evSrc === src && evLen === src.length) return evList;
+        evList = _mapEvents.call(this); evMap = this; evF = f; evSrc = src; evLen = src.length;
+        return evList;
+    };
+    const _setupEvents = Game_Map.prototype.setupEvents;
+    Game_Map.prototype.setupEvents = function() { evMap = null; return _setupEvents.apply(this, arguments); };
+
+    // ---- the tilemap's children in order (2026-11-18, the user: "co się da, to robimy"; Podgrodzie: 664 children - the people and things,
+    // the field's rows, the layers - sorted with a fresh bound comparator EVERY frame, ~4% of the frame at CPU 4x). Most frames nothing
+    // changed its place: one pass with the very same comparator (the plugins' own, TavernLife_Render's _sortY) checks the order; a few out
+    // of place (someone walked past someone) are put right by insertion; many (a new map, a big change) - the full sort as before.
+    const _sortChildren = Tilemap.prototype._sortChildren;
+    Tilemap.prototype._sortChildren = function() {
+        if (!opts.sortScan) return _sortChildren.call(this);
+        const c = this.children, n = c.length;
+        let first = -1, out = 0;
+        for (let i = 1; i < n; i++) if (this._compareChildOrder(c[i - 1], c[i]) > 0) { if (first < 0) first = i; if (++out > 24) break; }
+        if (first < 0) return;                                  // (in order: the frame's usual case)
+        if (out > 24) return _sortChildren.call(this);          // (much changed)
+        for (let i = first; i < n; i++) {
+            const x = c[i];
+            let j = i - 1;
+            if (this._compareChildOrder(c[j], x) <= 0) continue;
+            while (j >= 0 && this._compareChildOrder(c[j], x) > 0) { c[j + 1] = c[j]; j--; }
+            c[j + 1] = x;
+        }
     };
 
     // ---- the filters' area: the map scene (its fade), its spriteset (the flash, the brightness; Mood's grade) and the spriteset's
