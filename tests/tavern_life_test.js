@@ -428,7 +428,7 @@ const DRIVER = String.raw`
         await ev("TavernLife.TL.gameTurbo = 6; 0");
         const armTalk = await talkTo(EV.arm, ["Stawka 5 G"], 90);
         await ev("TavernLife.TL.gameTurbo = 1; 0");
-        check("at the real table (event 148): Grum asks for a stake, the game runs, the talk ends on the map with the stake won", armTalk.done && (armTalk.choices[0] || []).join("|") === "Stawka 5 G|Stawka 10 G|Stawka 20 G|Nie teraz" && armTalk.log.some(l => l.who === EV.grum) && (await gold()) === 45, { choices: armTalk.choices, gold: await gold() });
+        check("at the real table (event 148): Grum asks for a stake, the game runs, the talk ends on the map with the stake won", armTalk.done && (armTalk.choices[0] || []).join("|") === "Stawka 5 G|Stawka 10 G|Nie teraz" && armTalk.log.some(l => l.who === EV.grum) && (await gold()) === 45, { choices: armTalk.choices, gold: await gold() });
         await setGold(3);
         await popups();
         await talkTo(EV.arm, ["Stawka 10 G"], 20);
@@ -474,9 +474,9 @@ const DRIVER = String.raw`
         check("at the real darts line (event 174): the choice of the opponent, then Ozzy (event 4) asks for the stake", (dTalk.choices[0] || []).join("|") === "Z Dziadkiem Ozzym|Z furmanem Wieśkiem|Nie teraz" && dTalk.log.some(l => l.who === EV.ozzy && /Ile stawiasz/.test(l.t)), { choices: dTalk.choices });
         await setGold(3);
         await popups();
-        await talkTo(EV.darts, ["Z Dziadkiem Ozzym", "Stawka 15 G"], 20);
+        await talkTo(EV.darts, ["Z Dziadkiem Ozzym", "Stawka 10 G"], 20);
         const dPoor = await popups();
-        check("no money for the darts' stake: 'Brakuje ci 12 G', no game", dPoor.some(t => /Brakuje ci 12 G/.test(t)) && !(await ev("!!TavernLife.gameState()")), dPoor);
+        check("no money for the darts' stake: 'Brakuje ci 7 G', no game", dPoor.some(t => /Brakuje ci 7 G/.test(t)) && !(await ev("!!TavernLife.gameState()")), dPoor);
         await ev("TavernLife.onTick = null; 0");
 
         // ================= the tavern's reputation (QuestBoard.js): discounts, the big chamber, the gilded gate, the Apartament Złoty
@@ -555,7 +555,9 @@ const DRIVER = String.raw`
         await go(MAP.rooms, 40, 26, 8);
         await setClock(14, 15);
         const bath85 = await talkTo(EV.tub, ["Nie teraz"], 20);
-        check("the bath at 85: 'Wykąp się (5 G zamiast 6 G)'", (bath85.choices[0] || [])[0] === "Wykąp się (5 G zamiast 6 G)", { choices: bath85.choices, flat: bath85.flat, done: bath85.done, at: await J("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $gameMap.isEventRunning(), $gameMessage.isBusy()]") });
+        check("the bath at 85: 'Wykąp się (5 G zamiast 6 G)'", (bath85.choices[0] || [])[0] === "Wykąp się (5 G zamiast 6 G)", { choices: bath85.choices, flat: bath85.flat, done: bath85.done, at: await J("[$gameMap.mapId(), $gamePlayer.x, $gamePlayer.y, $gameMap.isEventRunning(), $gameMessage.isBusy()]"),
+            why: await J(`(function(){ const sc = SceneManager._scene, mw = sc && sc._messageWindow, it = $gameMap._interpreter; let d = 0, x = it; const modes = []; while (x) { modes.push(x._waitMode || "-"); x = x._childInterpreter; d++; }
+                return { scene: sc && sc.constructor.name, card: !!(TavernLife.lib && TavernLife.lib.render && TavernLife.lib.render.isCardOpen && TavernLife.lib.render.isCardOpen()), mwOpen: mw && mw.openness, pause: mw && mw.pause, txt: !!(mw && mw._textState), busy: TavernLife.gameState ? !!TavernLife.gameState() : null, modes, drv: window.__drv && { on: window.__drv.on, waiting: window.__drv.waiting, f: window.__drv.f }, fade: $gameScreen.brightness(), input: mw && mw.isAnySubWindowActive && mw.isAnySubWindowActive() }; })()`) });
 
         // ================= the numbers, the saved game, the console
         const stats = await J("TavernLife.stats()");

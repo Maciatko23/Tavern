@@ -863,6 +863,76 @@
         this.addChildAt(this._tavernCoins, this.getChildIndex(this._windowLayer));
         ImageManager.loadSystem(DISH_SHEET);
     };
+    // ==================================================================
+    // The tavern's game places say what O does there (2026-11-19, the user: "gdzie gracz się musi ustawić? jest to dobrze widoczne na
+    // mapie?" - it was not; then "jak się podchodzi do stołu z kośćmi, okienko O gra w kości", "do stołu z Grumem O siłuj się na rękę"):
+    //   darts: standing ON the oak line (the event is under him, MZ starts it) - "O Zagraj w rzutki";
+    //   dice, arm wrestling: anywhere beside the table - the seat event's cell and the table and chair right of it in its row - "O Zagraj
+    //   w kości" / "O Siłuj się na rękę", and O there starts the game (unless he faces someone else to talk to: Grum at his table);
+    //   draughts (TavernLife_Warcaby.js): the same beside the chess-board table - two seat events, its lower row and its upper one
+    //   (the table is two tiles tall), "O Zagraj w warcaby"; makao (TavernLife_Makao.js) the same at the card table, "O Zagraj w makao";
+    // the shift's "O" plate (TavernShift_Hall.js Prompt) under the hero; looked up every 4th frame
+    // ==================================================================
+    const SPOT_PROMPT = { darts: "here", dice: "near", arm: "near", warcaby: "near", makao: "near" };
+    let zoneMap = null, zoneKey = "";
+    function zones() {
+        const key = $gameMap.mapId() + ":" + $gameMap.events().length;
+        if (zoneMap && zoneKey === key) return zoneMap;
+        zoneKey = key;
+        zoneMap = new Map();
+        for (const ev of $gameMap.events()) {
+            const t = lib.evTag(ev);
+            if (!t || SPOT_PROMPT[t.kind] !== "near") continue;
+            const cells = [[ev.x, ev.y]];
+            for (let x = ev.x + 1; x < ev.x + 8 && $gameMap.isValid(x, ev.y) && !$gameMap.checkPassage(x, ev.y, 0x0f); x++) cells.push([x, ev.y]);
+            for (const [x, y] of cells) zoneMap.set(x + "," + y, { ev, kind: t.kind });
+        }
+        return zoneMap;
+    }
+    const talker = (x, y, not) => $gameMap.eventsXy(x, y).some(e => e !== not && e.isNormalPriority() && !e.isThrough() && e.characterName() && e.list() && e.list().length > 1);
+    function spotHere() {
+        if (!$gameMap || $gameMap.isEventRunning() || $gameMessage.isBusy() || !$gamePlayer.canMove()) return null;
+        if (window.ZmianaSala && ZmianaSala.running && ZmianaSala.running()) return null;   // (the shift has its own plate)
+        const px = Math.round($gamePlayer.x), py = Math.round($gamePlayer.y), d = $gamePlayer.direction();
+        for (const ev of $gameMap.eventsXy(px, py)) { const t = lib.evTag(ev); if (t && SPOT_PROMPT[t.kind] === "here") return { kind: t.kind, ev, here: true }; }
+        const fx = $gameMap.roundXWithDirection(px, d), fy = $gameMap.roundYWithDirection(py, d), zm = zones();
+        if (!zm.size) return null;
+        const faced = zm.get(fx + "," + fy);
+        if (talker(fx, fy, faced && faced.ev)) return null;   // (facing someone: O talks to him)
+        if (faced) return faced;
+        for (const [dx, dy] of [[0, -1], [0, 1], [-1, 0], [1, 0]]) { const z = zm.get((px + dx) + "," + (py + dy)); if (z) return z; }
+        return null;
+    }
+    function spotLabel() {
+        const sp = spotHere(), words = (TK.obraz && TK.obraz.miejsce) || {};
+        return sp ? words[sp.kind] || null : null;
+    }
+    // O beside the table starts its game (the darts' line starts by itself: its event lies under the hero)
+    const _triggerSpot = Game_Player.prototype.triggerButtonAction;
+    Game_Player.prototype.triggerButtonAction = function() {
+        if (Input.isTriggered("ok") && $gameMap && !$gameMap.isEventRunning()) {
+            const sp = spotHere();
+            if (sp && !sp.here && sp.ev) { sp.ev.start(); if ($gameMap.setupStartingEvent()) return true; }
+        }
+        return _triggerSpot.call(this);
+    };
+    const hallKit = () => { const P = T.api("TavernShift_parts"); return P && P.hall; };
+    const _Scene_Map_createSpotPrompt = Scene_Map.prototype.createDisplayObjects;
+    Scene_Map.prototype.createDisplayObjects = function() {
+        _Scene_Map_createSpotPrompt.call(this);
+        const H = hallKit();
+        if (H && H.Prompt) { this._spotPrompt = new H.Prompt(); this._spotPrompt.hide(); this.addChildAt(this._spotPrompt, this.getChildIndex(this._windowLayer)); }
+    };
+    const _Scene_Map_updateSpotPrompt = Scene_Map.prototype.update;
+    Scene_Map.prototype.update = function() {
+        _Scene_Map_updateSpotPrompt.call(this);
+        const pr = this._spotPrompt;
+        if (!pr) return;
+        if (Graphics.frameCount % 4 === 0) this._spotLabel = spotLabel();
+        if (this._spotLabel) pr.show(this._spotLabel, $gamePlayer.screenX(), $gamePlayer.screenY() + 46); else pr.hide();
+    };
+    lib.spotLabel = spotLabel;
+
     const _Scene_Map_terminate = Scene_Map.prototype.terminate;
     Scene_Map.prototype.terminate = function() {
         if (card) closeCard(null);

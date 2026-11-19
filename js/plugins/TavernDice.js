@@ -33,10 +33,10 @@
  *
  * @param quickStake
  * @text Próg małej stawki (G)
- * @desc Stawka do tej kwoty włącznie = szybka gra.
+ * @desc Stawka do tej kwoty włącznie = szybka gra (5 miedziaków: do 1500, srebrnik: do 2000).
  * @type number
  * @min 0
- * @default 10
+ * @default 5
  *
  * @param xpBase
  * @text Doświadczenie za wygraną
@@ -71,7 +71,7 @@
  * @desc Pula od tej kwoty: napis u góry ekranu po powrocie na mapę.
  * @type number
  * @min 0
- * @default 40
+ * @default 20
  *
  * @param ozzyVisions
  * @text Przeczucia Ozzy'ego
@@ -213,12 +213,12 @@
     const flag = (v, d) => (v === undefined || v === null || v === "" ? d : String(v) === "true");
     const TARGET = num(params.target, 2000);
     const QUICK_TARGET = num(params.quickTarget, 1500);
-    const QUICK_STAKE = num(params.quickStake, 10);
+    const QUICK_STAKE = num(params.quickStake, 5);
     const XP_BASE = num(params.xpBase, 10);
     const XP_PER_G = num(params.xpPerGold, 20) / 100;
     const MIN_BASE = num(params.minutesBase, 10);
     const MIN_TURN = num(params.minutesPerTurn, 2);
-    const BIG_POT = num(params.bigWinPot, 40);
+    const BIG_POT = num(params.bigWinPot, 20);
     const VISIONS = flag(params.ozzyVisions, true);
     const RESULT_VAR = num(params.resultVariable, 0);
     const NB = " ";   // (a no-break space: "15 G" never breaks)

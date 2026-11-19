@@ -273,7 +273,7 @@ window.__ref = function(faces) {
         await tap("ok");
         await shotStop("kosci_start", 10);
         const lobby = await J("TavernDice.state()");
-        check("the lobby lists who sits at the table at 19:00 on day 1 (Grum, Ozzy, the merchant, Bartek) with their stakes", lobby.phase === "lobby" && lobby.lobby.cards.map(c => c.key).join(",") === "grum,ozzy,kupiec,bartek" && lobby.lobby.stake === 10, lobby.lobby);
+        check("the lobby lists who sits at the table at 19:00 on day 1 (Grum, Ozzy, the merchant, Bartek) with their stakes (5 m first)", lobby.phase === "lobby" && lobby.lobby.cards.map(c => c.key).join(",") === "grum,ozzy,kupiec,bartek" && lobby.lobby.stake === 5, lobby.lobby);
         await tap("escape");
         await until(onMap, 15);
         await sleep(1000);
@@ -449,8 +449,8 @@ window.__ref = function(faces) {
         const f0 = await fameAt(0, 19.5), f45 = await fameAt(45, 19.5), f45n = await fameAt(45, 22), f85 = await fameAt(85, 22), f85d = await fameAt(85, 19.5);
         check("fame 0 (Nowy w okolicy): the merchant is in the hall but does not play with the hero", f0.fame === 0 && !f0.present.includes("kupiec") && f0.locked.includes("kupiec"), f0);
         check("fame 45 (Swój chłop): the merchant plays; the stranger does not come yet", f45.present.includes("kupiec") && !f45n.present.includes("nieznajomy") && f45n.locked.includes("nieznajomy"), { f45, f45n });
-        const strangerCfg = await J(`[TavernDice.OPPONENTS.nieznajomy.stakes.join(), TavernDice.targetFor(100, "nieznajomy"), TavernDice.OPPONENTS.nieznajomy.bust]`);
-        check("fame 85 (Chluba tawerny): the stranger in the hood sits down in the evening (21-24) - 100 G, to 3000, his PixelLab bust (Kosci_Nieznajomy_Bust)", f85.present.includes("nieznajomy") && !f85d.present.includes("nieznajomy") && strangerCfg.join() === "100,3000,Kosci_Nieznajomy_Bust", { f85, f85d, strangerCfg });
+        const strangerCfg = await J(`[TavernDice.OPPONENTS.nieznajomy.stakes.join(), TavernDice.targetFor(10, "nieznajomy"), TavernDice.OPPONENTS.nieznajomy.bust]`);
+        check("fame 85 (Chluba tawerny): the stranger in the hood sits down in the evening (21-24) - 5 m or 1 sr like everyone, to 3000, his PixelLab bust (Kosci_Nieznajomy_Bust)", f85.present.includes("nieznajomy") && !f85d.present.includes("nieznajomy") && strangerCfg.join() === "5,10,3000,Kosci_Nieznajomy_Bust", { f85, f85d, strangerCfg });
         // the lobby at fame 10: why the merchant does not sit down
         await ev("QuestBoard.state().rep = 10; $gameSystem.setDayNightHour(19.5); window.__td.shots = {}; window.__td.freeze = (st, sc) => st.phase === 'lobby' && sc.phaseT > 24 ? 'kosci_slawa' : null; 0");
         await ev("TavernDice.start({ seed: 8 }); 0");
@@ -466,17 +466,17 @@ window.__ref = function(faces) {
         check("...and a rival says it at the table (Ozzy)", games.hint.st.talk.some(t => t.who === 1 && /których zna/.test(t.text)), games.hint.st.talk.map(t => t.text).slice(0, 4));
         // the stranger: the first win gives his die from Krucze Skały (the hero has none yet)
         await ev("QuestBoard.state().rep = 85; $gameSystem.setDayNightHour(22); 0");
-        const sN = await findSeed("nieznajomy", 100, true);
+        const sN = await findSeed("nieznajomy", 10, true);
         const hadKrucze = await ev("TavernDice.dice().owned.some(d => d.key === 'krucze')");
         const FREEZE_N = `function(st, scene) {
             if (st.phase === "play" && st.game.cur === 1 && st.game.turnNo >= 2 && st.dice.length >= 3 && !st.dice.some(d => d.busy) && st.dice.some(d => d.sel)) return "kosci_nieznajomy";
             if (st.phase === "end" && scene.phaseT > 12) return "kosci_nieznajomy_wygrana";
             return null;
         }`;
-        games.n1 = await runAuto("nieznajomy", 100, sN, {}, FREEZE_N);
+        games.n1 = await runAuto("nieznajomy", 10, sN, {}, FREEZE_N);
         games.n1.after = await leaveEnd();
-        check("the stranger's game: 100 G each, to 3000, the same as the headless game", games.n1.st.game.target === 3000 && games.n1.st.game.stake === 100 && games.n1.st.game.winner === games.n1.sim.winner && JSON.stringify(games.n1.st.game.totals) === JSON.stringify(games.n1.sim.totals), brief(games.n1));
-        check("the first win over him gives the rare die from Krucze Skały (+100 G net from the pot)", !hadKrucze && games.n1.st.game.gift === "krucze" && games.n1.after.stats.owned.krucze === 1 && games.n1.after.gold - games.n1.before.gold === 100,
+        check("the stranger's game: 1 srebrnik each, to 3000, the same as the headless game", games.n1.st.game.target === 3000 && games.n1.st.game.stake === 10 && games.n1.st.game.winner === games.n1.sim.winner && JSON.stringify(games.n1.st.game.totals) === JSON.stringify(games.n1.sim.totals), brief(games.n1));
+        check("the first win over him gives the rare die from Krucze Skały (+10 G net from the pot)", !hadKrucze && games.n1.st.game.gift === "krucze" && games.n1.after.stats.owned.krucze === 1 && games.n1.after.gold - games.n1.before.gold === 10,
             { gift: games.n1.st.game.gift, owned: games.n1.after.stats.owned, d: games.n1.after.gold - games.n1.before.gold });
         // a game (save) where the quest board gave that die first: the stranger's first win gives a purse instead
         await ev("$gameSystem._dice.vs.nieznajomy = { games: 0, wins: 0, losses: 0, day: 0, lostToday: 0, given: false }; 0");

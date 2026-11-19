@@ -209,9 +209,9 @@ rywale.kupiec.name = Kupiec Wawrzyniec
 rywale.kupiec.short = Wawrzyniec
 rywale.kupiec.role = bogaty gość z miasta
 rywale.kupiec.style = wyrachowany
-rywale.kupiec.quote = Pięć srebrników tu, pięć tam... Siadaj, młodzieńcze.
+rywale.kupiec.quote = Srebrnik tu, srebrnik tam... Siadaj, młodzieńcze.
 [rywale.kupiec.lines.greet]
-Pięć srebrników tu, pięć tam... Siadaj, młodzieńcze.
+Srebrnik tu, srebrnik tam... Siadaj, młodzieńcze.
 Szukam rozrywki na wieczór. Zagramy o coś wartego uwagi?
 
 [rywale.kupiec.lines.meFirst]
@@ -277,9 +277,9 @@ rywale.bartek.name = Bartek Kmieć
 rywale.bartek.short = Bartek
 rywale.bartek.role = chłop spod Młynówki
 rywale.bartek.style = nowicjusz
-rywale.bartek.quote = Pięć miedziaków, więcej nie mam, żona liczy.
+rywale.bartek.quote = Pięć miedziaków, góra srebrnik - żona liczy.
 [rywale.bartek.lines.greet]
-Pięć miedziaków, więcej nie mam, żona liczy.
+Pięć miedziaków, góra srebrnik - żona liczy.
 Zagramy? Tylko powoli, ja dopiero się uczę.
 
 [rywale.bartek.lines.meFirst]
@@ -347,7 +347,7 @@ rywale.nieznajomy.style = zagadka
 rywale.nieznajomy.quote = Kości nie kłamią. Ludzie kłamią. Siadaj.
 [rywale.nieznajomy.lines.greet]
 Kości nie kłamią. Ludzie kłamią. Siadaj.
-Sto sztuk złota. Do trzech tysięcy. Chluba tawerny chyba się nie boi?
+Stawka jak u wszystkich, ale gramy do trzech tysięcy. Chluba tawerny chyba się nie boi?
 
 [rywale.nieznajomy.lines.meFirst]
 Ja pierwszy. Tak miało być.

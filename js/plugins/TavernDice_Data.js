@@ -58,7 +58,7 @@
         grum: {
             styleColor: "#ff9b6b",
             bust: "Actor2_5", sheet: "Actor2_Tall", index: 4,
-            hours: [17, 24], stakes: [10, 15, 20, 25], perDay: 3,
+            hours: [17, 24], stakes: [5, 10], perDay: 3,
             ai: { bank: [0, 450, 550, 700, 1100, 2000, Infinity], reckless: 0.2, chase: 1.8 },
             die: { key: "szczesciarz", chance: 0.5, giveAfter: 4 },
             lines: {}
@@ -75,7 +75,7 @@
         kupiec: {
             styleColor: "#c9a6ff",
             bust: "Kosci_Kupiec_Bust", sheet: "People4", index: 4,   // (PixelLab 2026-11-17, was RTP People4_5)
-            hours: [18, 23], rare: true, stakes: [25, 35, 50], perDay: 2, minRep: 40,
+            hours: [18, 23], rare: true, stakes: [5, 10], perDay: 2, minRep: 40,
             ai: { bank: [0, 300, 350, 400, 700, 1700, Infinity], reckless: 0.03, chase: 1.6 },
             die: { key: "krucze", chance: 0.4 },
             lines: {}
@@ -83,7 +83,7 @@
         bartek: {
             styleColor: "#8ee08a",
             bust: "Bartek_Bust", sheet: "People1_Tall", index: 4,
-            hours: [14, 21], stakes: [5], perDay: 2,
+            hours: [14, 21], stakes: [5, 10], perDay: 2,
             ai: { bank: [0, 300, 350, 400, 450, 600, Infinity], keepAll: true, miss: 0.12, reckless: 0, chase: 1.3 },
             die: { key: "grusza", chance: 1, giveAfter: 2 },
             lines: {}
@@ -92,7 +92,7 @@
         nieznajomy: {
             styleColor: "#c8bda8",
             bust: "Kosci_Nieznajomy_Bust", sheet: null, index: 0,   // (PixelLab 2026-11-17, was RTP Evil_8)
-            hours: [21, 24], stakes: [100], target: 3000, perDay: 1, minRep: 80, needsRep: true,
+            hours: [21, 24], stakes: [5, 10], target: 3000, perDay: 1, minRep: 80, needsRep: true,
             ai: { bank: [0, 350, 400, 500, 800, 1800, Infinity], reckless: 0.08, chase: 1.7 },
             die: { key: "krucze", chance: 0.5, giveOnce: true, orGold: 100 },
             lines: {}

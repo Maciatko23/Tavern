@@ -68,7 +68,12 @@
     const BORGAR = [1, 38, 52];                                        // Borgar, the meal at the counter, the counter's talk
     const REACH = 1.5;                                                 // tiles from the hero's middle to a thing's middle
     // the old room was 19 x 13 cells, the hall is ~28 x 14 with the wood and the door far off: the times stretched for it
-    const STRETCH = { clean: 2.4, serve: 1.6, spawn: 1.6, patience: 1.7, fire: 1.5 };
+    // (fire: 2026-11-19 the user: "są dwa ogniska, więc niech gracz musi drewno dorzucać w obu - niech się ogień trochę dłużej pali"
+    // - each fireplace burns on its own and a unit lasts 2.2x the scene's, was one shared fire at 1.5x)
+    // (clean 2.4 -> 2.9 the same day: the logs go to BOTH far fireplaces now - 4 instead of 3, two trips from the pile - and the
+    // rubbish to the kitchen's bin; the autopilot ran out of time with one fireplace still cold)
+    const STRETCH = { clean: 2.9, serve: 1.6, spawn: 1.6, patience: 1.7, fire: 2.2 };
+    const fireOf = x => (x < 14 ? 0 : 1);   // (the hall's left half warms by the left fireplace, the right half by the right one)
     const ICON = { table: 400, wood: 381, coin: K.GOLD_ICON || 313, fire: 381 };
     // the log in his hands: the firewood's own picture (Drewno, item 61 - what goes on a campfire; 2026-11-18 the user: "ładna ikonka
     // drewna taka co się wrzuca do ogniska")
@@ -135,7 +140,7 @@
         L = {
             opts: Object.assign({}, opts), level, cfg: K.levelCfg(level), shiftNo: st.done + 1, startHour: T.time.hour(), startDay: T.time.day(),
             phase: "intro", t: 0, limit: 0, ctx: { tips: 0 }, results: {}, partIds: K.PART_ORDER.slice(), carry: [], tables: hallTables(),
-            sacks: [], wood: { need: 0, done: 0 }, trashDone: 0, fire: 3, guests: new Map(), schedule: [], used: new Set(), stats: null,
+            sacks: [], wood: { need: 0, done: 0, each: 0, at: [0, 0] }, trashDone: 0, fires: [3, 3], warned: [{}, {}], guests: new Map(), schedule: [], used: new Set(), stats: null,
             hold: null, notes: [], introDone: false, closeUp: false, cold: 0
         };
         G().begin({ pick: pickSeat, onSeated, onLeft, noSeat });
@@ -150,8 +155,9 @@
         const tabs = L.tables.slice().sort(() => Math.random() - 0.5).slice(0, Math.min(c.tables, L.tables.length));
         for (const tb of tabs) { tb.dirty = 1; tb.wipe = 0; }
         L.tablesTotal = tabs.length;
-        L.wood = { need: c.wood, done: 0 };
-        L.fire = 0;
+        const each = Math.max(1, Math.ceil(c.wood / 2));   // (into BOTH fireplaces: each wants its share)
+        L.wood = { need: each * FIRES.length, done: 0, each, at: FIRES.map(() => 0) };
+        L.fires = FIRES.map(() => 0);
         L.sacks = sackSpots(c.trash).map((p, i) => ({ x: p[0], y: p[1], kind: i % 2 ? "bucket" : "sack", state: "lying" }));
         L.trashDone = 0;
         announce(Z().faza && Z().faza.clean, Z().hint && Z().hint.clean);
@@ -171,7 +177,7 @@
         const u = cleanUnits(), left = Math.max(0, L.limit - L.t);
         let s = 90 * u.done / Math.max(1, u.total);
         if (u.done >= u.total) s += 10 * Math.min(1, left / (L.limit * 0.35));
-        L.ctx.fire = L.wood.done;
+        L.ctx.fires = L.fires.slice();
         const tables = tablesClean(), good = [], bad = [], F = C().finish || [];
         if (u.done >= u.total) good.push(wstaw(F[0], { "1": Math.ceil(left / 60) }));
         else {
@@ -210,7 +216,8 @@
         const c = L.cfg.serve;
         L.phase = "serve"; L.t = 0; L.limit = Math.round(c.time * STRETCH.serve);
         L.menu = MENU_ORDER.filter(k => c.menu.includes(k));
-        L.fire = L.ctx.fire === undefined ? 3 : clamp(L.ctx.fire, 0, 3);
+        L.fires = FIRES.map((f, i) => (L.ctx.fires ? clamp(L.ctx.fires[i] || 0, 0, 3) : 3));
+        L.warned = FIRES.map(() => ({}));
         L.stats = { guests: 0, orders: 0, served: 0, mistakes: 0, walkouts: 0, noSeat: 0, speed: 0, tips: 0, cold: 0 };
         const span = Math.round(c.spawnEnd * STRETCH.spawn) - 60;
         L.schedule = [];
@@ -374,7 +381,16 @@
                 let sb = null, sd = 99;
                 for (const s of slots) { const d = Math.abs(h.x - s.x); if (d < sd && d <= 0.75) { sd = d; sb = s; } }
                 if (sb) {
-                    if (L.carry.some(c => c.kind === "dish" && c.key === sb.key)) return { kind: "back", slot: sb, label: (A.odstaw || "Odstaw: ") + DISHES[sb.key].name };
+                    // (2026-11-19: O by a dish already in hand put it back - two guests wanting bread and the second press undid the
+                    // first, the autopilot took and put back the bread over and over. Now: more of it still wanted and a hand free -
+                    // the second one; else back on the counter)
+                    const held = L.carry.filter(c => c.kind === "dish" && c.key === sb.key).length;
+                    if (held) {
+                        let wanted = 0;
+                        for (const o of L.guests.values()) if (o.state === "wait") o.order.forEach((k, i) => { if (k === sb.key && !o.got[i]) wanted++; });
+                        if (wanted > held && canTake("dish")) return { kind: "dish", slot: sb, label: (A.wez || "Weź: ") + DISHES[sb.key].name };
+                        return { kind: "back", slot: sb, label: (A.odstaw || "Odstaw: ") + DISHES[sb.key].name };
+                    }
                     if (!canTake("dish")) return { kind: "full", label: carry && carry !== "dish" ? A.zajete : (C().tick || [])[5], dim: true };
                     return { kind: "dish", slot: sb, label: (A.wez || "Weź: ") + DISHES[sb.key].name };
                 }
@@ -422,8 +438,12 @@
             case "log": L.carry.push({ kind: "log" }); se("Equip2", 50, 70); break;
             case "fire": {
                 L.carry.splice(L.carry.findIndex(c => c.kind === "log"), 1);
-                L.fire = Math.min(3, L.fire + 1);
-                if (L.phase === "clean" && L.wood.done < L.wood.need) { L.wood.done++; floatText(wstaw(A[1], { done: L.wood.done, need: L.wood.need }), tg.f.x, tg.f.y - 1, ST().accent); }
+                const fi = FIRES.indexOf(tg.f);
+                L.fires[fi] = Math.min(3, L.fires[fi] + 1);
+                if (L.phase === "clean" && L.wood.at[fi] < L.wood.each) {
+                    L.wood.at[fi]++; L.wood.done++;
+                    floatText(wstaw(A[1], { done: L.wood.at[fi], need: L.wood.each }), tg.f.x, tg.f.y - 1, ST().accent);
+                }
                 se("Fire1", 55, 100);
                 break;
             }
@@ -469,12 +489,15 @@
         L.pressed = false;
         // the fire burns down (in the evening; before the doors open it only takes the wood)
         if (L.phase === "serve") {
-            L.fire = Math.max(0, L.fire - L.cfg.serve.fireDecay / STRETCH.fire);
-            if (L.fire <= 0) L.stats.cold++;
-            if (L.fire > 0 && L.fire < 1 && !L.warnedLow) { L.warnedLow = true; pop((C().frame || [])[29], { icon: ICON.fire }); }
-            if (L.fire >= 1) L.warnedLow = false;
-            if (L.fire <= 0 && !L.warnedOut) { L.warnedOut = true; pop((C().tick || [])[4], { icon: ICON.fire }); }
-            if (L.fire > 0) L.warnedOut = false;
+            L.fires.forEach((f, i) => {
+                const now = Math.max(0, f - L.cfg.serve.fireDecay / STRETCH.fire), w = L.warned[i];
+                L.fires[i] = now;
+                if (now <= 0) L.stats.cold++;
+                if (now > 0 && now < 1 && !w.low) { w.low = true; pop((Z().przygasa || [])[i] || (C().frame || [])[29], { icon: ICON.fire }); }
+                if (now >= 1) w.low = false;
+                if (now <= 0 && !w.out) { w.out = true; pop((Z().wygasl || [])[i] || (C().tick || [])[4], { icon: ICON.fire }); }
+                if (now > 0) w.out = false;
+            });
         }
         switch (L.phase) {
             case "clean": {
@@ -487,7 +510,7 @@
                 while (L.schedule.length && L.t >= L.schedule[0]) { if (bringGuest()) L.schedule.shift(); else { L.schedule[0] += 120; break; } }
                 for (const o of L.guests.values()) {
                     if (o.state === "wait") {
-                        o.patience -= L.fire <= 0 ? 1.5 : 1;
+                        o.patience -= L.fires[fireOf(o.seat.x)] <= 0 ? 1.5 : 1;
                         if (o.patience <= 0) { o.state = "leave"; L.stats.walkouts++; se("Buzzer1", 40, 90); say(o.g.ev, (C().tickGuest || [])[1], 120); G().send(o.g.id); }
                     } else if (o.state === "eat") {
                         if (--o.eatT <= 0) payAndGo(o);
@@ -664,13 +687,13 @@
             const s = v.fires[i], show = live && (L.phase === "serve" || L.phase === "clean");
             s.visible = show;
             if (!show) return;
-            const key = Math.round(L.fire * 10);
+            const fv = L.fires[i], key = Math.round(fv * 10);
             if (s._key !== key) {
                 s._key = key;
                 const b = s.bitmap; b.clear();
                 panel(b, 0, 0, 84, 22, { cut: 3, fill: "rgba(11,12,15,0.85)" });
                 icon(b, ICON.fire, 2, 1, 20);
-                bar(b, 26, 8, 54, 7, clamp(L.fire / 3, 0, 1), L.fire >= 1.5 ? GOOD : L.fire > 0.5 ? WARN : BAD);
+                bar(b, 26, 8, 54, 7, clamp(fv / 3, 0, 1), fv >= 1.5 ? GOOD : fv > 0.5 ? WARN : BAD);
             }
             s.x = Math.round(sx(f.x)); s.y = Math.round(sy(f.y) - 40);
         });
@@ -764,7 +787,7 @@
     const api = {
         running,
         abort,
-        state: () => L ? { phase: L.phase, t: L.t, limit: L.limit, level: L.level, carry: L.carry.map(c => c.kind === "dish" ? c.key : c.kind), fire: Math.round(L.fire * 100) / 100,
+        state: () => L ? { phase: L.phase, t: L.t, limit: L.limit, level: L.level, carry: L.carry.map(c => c.kind === "dish" ? c.key : c.kind), fire: Math.round(Math.min(...L.fires) * 100) / 100, fires: L.fires.map(f => Math.round(f * 100) / 100),
             dirty: L.tables.filter(t => t.dirty > 0).map(t => t.id), tables: L.tables.map(t => ({ id: t.id, x0: t.x0, y0: t.y0, x1: t.x1, y1: t.y1, seats: t.seats.length, dirty: t.dirty })),
             sacks: L.sacks.map(s => ({ x: s.x, y: s.y, state: s.state })), wood: Object.assign({}, L.wood), trash: L.trashDone, tips: L.ctx.tips,
             guests: [...L.guests.values()].map(o => ({ id: o.g.id, state: o.state, order: o.order.slice(), got: o.got.slice(), seat: o.seat ? [o.seat.x, o.seat.y] : null, patience: Math.round(o.patience) })),

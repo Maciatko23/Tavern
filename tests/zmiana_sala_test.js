@@ -65,6 +65,8 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9566, bootCheck: "gra się uruc
     await t.frames(20);
     s = await S();
     t.check(`przed otwarciem zrobione, teraz piwo (${s.phase}, wyniki: ${s.results})`, s.phase === "beer" && s.results.includes("clean"));
+    // (2026-11-19) two fireplaces, each its own fire: the logs went into both (each its share), both burn
+    t.check("drewno w obu kominkach: każdy dostał swoją część, oba się palą", s.wood.at && s.wood.at.every(v => v >= s.wood.each) && s.fires && s.fires.length === 2 && s.fires.every(f => f >= s.wood.each - 0.01), { wood: s.wood, fires: s.fires });
 
     // the keg: its close-up (the scene's beer part), skipped to its end, back on the map
     await go(11, 15, 8); await t.press("ok"); await t.frames(40);

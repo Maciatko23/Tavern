@@ -389,6 +389,12 @@ kod.borgarOptions.1 = Wynajmij pokój
 
 # ======================================================================== z kodu TavernLife_Render.js (obraz.<funkcja>.<n>, w kolejności kodu)
 # redraw
+# podpowiedź „O …” przy miejscach gier: na linii rzutu; przy stole z kośćmi, przy stole Gruma, przy szachownicy i przy kartach, z każdej strony (TavernLife_Render)
+obraz.miejsce.darts = Zagraj w rzutki
+obraz.miejsce.dice = Zagraj w kości
+obraz.miejsce.arm = Siłuj się na rękę
+obraz.miejsce.warcaby = Zagraj w warcaby
+obraz.miejsce.makao = Zagraj w makao
 obraz.redraw.0 = wybór
 obraz.redraw.1 = wróć
 # dishFacts

@@ -9,6 +9,9 @@
 //   dziadka” - --bez-prologu pomija go klawiszem P) i start w domu dziadka (Map224); albo zapis tests/autopilot_fabula/zapisy/<zapis>.json,
 // - autopilot (tests/autopilot/ap.js + tests/autopilot_fabula/fab.js) i pasek (tests/autopilot_fabula/pasek.js) wstrzykiwane tylko
 //   tutaj - lista wtyczek gry się nie zmienia.
+// --gry (2026-11-19, gracz: „pokaż mi, jak gracz gra w te gry, może mu dodać jakieś pieniądze na start”): zamiast fabuły pokaz pokoju gier
+//   (tools/autopilot/pokaz_gier.js) - sakiewka do 6 srebrników, 19:00, rzutki z Ozzym, kości z Grumem o srebrnika, siłowanie z Grumem;
+//   co robi, pisze u góry ekranu. Zwykle z --od przed_zmiana (karczma). Koniec: zamknięcie okna.
 // W oknie gry: F6 pauza, F7 prędkość ×1/×2/×4, F8 pasek, Esc (albo zamknięcie okna) - koniec. Gdy utknie - pasek „utknąłem: …”,
 // czeka na F6 (spróbuj dalej) albo Esc. Na koniec raport: tests/autopilot_fabula/raport_ogladanie.md.
 "use strict";
@@ -24,6 +27,7 @@ const GAME = "http://127.0.0.1:8765/index.html";
 const arg = (n, d) => { const i = process.argv.indexOf("--" + n); return i >= 0 && process.argv[i + 1] !== undefined ? process.argv[i + 1] : d; };
 const OD = arg("od", "");
 const SKIP_PROLOGUE = process.argv.includes("--bez-prologu");
+const GRY = process.argv.includes("--gry");
 const HOME = 224;   // (the new world's grandpa's house - the old Map019 is gone)
 const SPEED = [1, 2, 4].includes(Number(arg("szybkosc", 1))) ? Number(arg("szybkosc", 1)) : 1;
 const PORT = Number(arg("port", 9753));
@@ -120,18 +124,23 @@ const onMap = id => `(SceneManager._scene instanceof Scene_Map && SceneManager._
     await c.ev("$gameSystem._minimapHidden = true; 0");
     await c.ev("window.FAB_GRAPH = " + JSON.stringify(require(path.join(FAB_DIR, "graf.js")).build()) + "; 0");
     await c.ev(fs.readFileSync(path.join(ROOT, "tests", "autopilot", "ap.js"), "utf8"));
-    const v = await c.ev(fs.readFileSync(path.join(FAB_DIR, "fab.js"), "utf8"));
-    if (rep0) await c.ev("FAB.rep = " + JSON.stringify(rep0) + "; 0");
-    await c.ev(`FAB.start({ mode: "watch" }); FAB.setSpeed(${SPEED}); 0`);
-    say("autopilot " + v + ", pasek: " + await c.ev(fs.readFileSync(path.join(FAB_DIR, "pasek.js"), "utf8")));
-    say("W oknie gry: F6 pauza · F7 prędkość ×1/×2/×4 · F8 pasek · Esc koniec");
+    if (GRY) {
+        say("pokaz gier: " + await c.ev(fs.readFileSync(path.join(__dirname, "pokaz_gier.js"), "utf8")) + " / " + await c.ev("POKAZ.start()"));
+        say("W oknie gry: zamknięcie okna - koniec");
+    } else {
+        const v = await c.ev(fs.readFileSync(path.join(FAB_DIR, "fab.js"), "utf8"));
+        if (rep0) await c.ev("FAB.rep = " + JSON.stringify(rep0) + "; 0");
+        await c.ev(`FAB.start({ mode: "watch" }); FAB.setSpeed(${SPEED}); 0`);
+        say("autopilot " + v + ", pasek: " + await c.ev(fs.readFileSync(path.join(FAB_DIR, "pasek.js"), "utf8")));
+        say("W oknie gry: F6 pauza · F7 prędkość ×1/×2/×4 · F8 pasek · Esc koniec");
+    }
 
     let last = "", why = "";
     for (;;) {
         await sleep(2000);
         if (c.closed) { why = "okno zamknięte"; break; }
         let s;
-        try { s = await c.J("Object.assign(FAB.status(), { quit: !!window.__fabQuit, err: (document.getElementById('errorPrinter') || {}).innerText || '' })"); }
+        try { s = await c.J("Object.assign(" + (GRY ? "POKAZ.status()" : "FAB.status()") + ", { quit: !!window.__fabQuit, err: (document.getElementById('errorPrinter') || {}).innerText || '' })"); }
         catch (e) { why = c.closed ? "okno zamknięte" : "strona nie odpowiada: " + e.message; break; }
         if (s.quit) { why = "Esc"; break; }
         if (s.err) say("błąd gry: " + s.err.slice(0, 200));
@@ -139,7 +148,7 @@ const onMap = id => `(SceneManager._scene instanceof Scene_Map && SceneManager._
         if (line !== last) { last = line; say(`dzień ${s.day} ${s.clock} · ${line}`); }
     }
     say("koniec (" + why + ")");
-    if (!c.closed) {
+    if (!c.closed && !GRY) {
         try {
             const fin = await c.J("({ rep: FAB.rep, st: FAB.status(), log: FAB.log.slice(-60), tracked: FAB.trackedInfo(), talk: FAB.talkLog.slice(-20) })");
             const md = require(path.join(FAB_DIR, "raport.js")).write(fin, { od: OD, speed: SPEED, etap: 3, stopWhy: "oglądanie: " + why, realMin: 0 });

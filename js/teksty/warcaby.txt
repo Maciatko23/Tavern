@@ -1,0 +1,123 @@
+# Teksty warcabów przy stoliku z szachownicą w pokoju gier (TavernLife_Warcaby.js): rywale - Dziadek Ozzy, furman Wiesiek,
+# kupiec Wawrzyniec (wieczorem)
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz warcaby
+
+# ======================================================================== RYWALE (rywale)
+rywale.ozzy.name = Dziadek Ozzy
+rywale.ozzy.short = Ozzy
+rywale.ozzy.with = Ozzym
+rywale.ozzy.level = łatwy
+rywale.ozzy.hello = Warcaby? *czkawka* Grywało się, grywało... Tylko nie mów nikomu, jak przegram.
+[rywale.ozzy.moveLines]
+Hmm... tu.
+A może tu? Nie, tu.
+*czkawka*
+Kiedyś grałem z samym kasztelanem...
+
+[rywale.ozzy.captureLines]
+Hehe! Zjadłem ci pionka!
+Stary Ozzy jeszcze widzi!
+
+[rywale.ozzy.lostLines]
+Ojej. Tego nie widziałem.
+No i po pionku...
+
+rywale.ozzy.won = Hehe! Stary Ozzy jeszcze umie! Postawisz piwo z tej stawki? Nie? No trudno.
+rywale.ozzy.lost = Wygrałeś, synu. Uczciwie. Oczy już nie te, ale głowa jeszcze tak.
+rywale.ozzy.draw = Remis! Obaj jesteśmy mistrzami. Albo żaden.
+
+rywale.wiesiek.name = Furman Wiesiek
+rywale.wiesiek.short = Wiesiek
+rywale.wiesiek.with = Wieśkiem
+rywale.wiesiek.level = średni
+rywale.wiesiek.hello = Warcaby to jak droga: kto pierwszy zajedzie za linię, ten ma damkę.
+[rywale.wiesiek.moveLines]
+Wiooo, naprzód!
+Spokojnie, jak koniem po grudzie.
+Tu postoję.
+
+[rywale.wiesiek.captureLines]
+Ha! Przejechałem!
+I jeszcze jeden z drogi!
+
+[rywale.wiesiek.lostLines]
+Eee, koło wpadło w dziurę.
+Nie zauważyłem tego.
+
+rywale.wiesiek.won = Ha! Nie ma to jak furmańska głowa. Stawka moja - dziękuję uprzejmie.
+rywale.wiesiek.lost = Wygrałeś, nie ma co gadać. Jeszcze się odegram.
+rywale.wiesiek.draw = Remis. Dobra partia, jak równa droga.
+
+rywale.kupiec.name = Kupiec Wawrzyniec
+rywale.kupiec.short = Wawrzyniec
+rywale.kupiec.with = Wawrzyńcem
+rywale.kupiec.level = trudny
+rywale.kupiec.hello = Warcaby to rachunek, młodzieńcze. Każdy ruch ma swoją cenę. Siadaj.
+[rywale.kupiec.moveLines]
+Hm.
+Policzone.
+Cierpliwości.
+
+[rywale.kupiec.captureLines]
+Interes zrobiony.
+Twoja strata, mój zysk.
+
+[rywale.kupiec.lostLines]
+Ciekawe. Tego nie przewidziałem.
+Hm. Koszt handlu.
+
+rywale.kupiec.won = Rachunek się zgadza. Na moją korzyść, jak zwykle.
+rywale.kupiec.lost = Wyborna partia. Rzadko spotykam kogoś, kto liczy szybciej ode mnie.
+rywale.kupiec.draw = Remis. Uczciwy podział, jak w dobrej spółce.
+
+# ======================================================================== z kodu TavernLife_Warcaby.js
+# rozmowa przy stoliku
+kod.talk.0 = Warcaby... Z kim by tu zagrać?
+kod.talk.1 = Z Dziadkiem Ozzym
+kod.talk.2 = Z furmanem Wieśkiem
+kod.talk.3 = Z kupcem Wawrzyńcem
+kod.talk.4 = Nie teraz
+kod.stakes.0 = {hello} O ile gramy?
+kod.stakes.1 = Stawka {n} G
+kod.stakes.2 = Nie teraz
+# karta na początek
+kod.begin.0 = stały bywalec
+kod.begin.1 = gość karczmy
+kod.begin.2 = " · STAWKA {stake} G"
+kod.begin.3 = Warcaby z {1}
+kod.begin.4 = Ty grasz jasnymi i zaczynasz. Strzałki przesuwają kursor, O wybiera pionek, potem pole.
+kod.begin.5 = Pionki idą na skos do przodu. Bicie jest obowiązkowe, także do tyłu, i trzeba bić do końca.
+kod.begin.6 = Pionek, który dojdzie do końca planszy, zostaje damką: chodzi i bije na całą przekątną.
+kod.begin.7 = Strzałki - kursor, O - pionek i pole. Bicie obowiązkowe.
+kod.begin.8 = strzałki
+kod.begin.9 = O - do planszy
+kod.begin.10 = rywal: {1}
+# w trakcie gry
+kod.turn.0 = Twój ruch
+kod.turn.1 = Ruch: {short}
+kod.hint.0 = Musisz bić!
+kod.hint.1 = Ten pionek nie ma ruchu
+kod.hint.2 = Bij dalej!
+kod.hint.3 = Damka!
+kod.hud.0 = WARCABY
+kod.hud.1 = Twój ruch
+kod.hud.2 = myśli: {short}
+kod.hud.3 = "Ty {you} · {short} {opp}"
+kod.hud.4 = kursor
+kod.hud.5 = pionek / pole
+kod.hud.6 = pauza
+kod.help.0 = Strzałki przesuwają kursor po planszy. O na swoim pionku go wybiera, O na podświetlonym polu wykonuje ruch.
+kod.help.1 = Bicie jest obowiązkowe: gdy możesz bić, świecą tylko pionki, które biją. Bicie wielokrotne trzeba skończyć.
+# koniec
+kod.finish.0 = WARCABY · KONIEC
+kod.finish.1 = Poddałeś się
+kod.finish.2 = Remis
+kod.finish.3 = Czas: {minutes} minut gry · ruchów: {moves}
+kod.finish.4 = O - wracam do sali
+kod.finish.5 = "Ty {you} : {opp} {short} (pionki na planszy)"
+kod.finish.6 = remis - stawka wraca
+# notatka w dzienniku za pierwszym razem
+kod.note.0 = Przy stoliku z szachownicą w pokoju gier gra się w warcaby o stawkę ({1} G): bicie obowiązkowe, damka chodzi na całą przekątną. Ozzy gra łatwo, Wiesiek średnio, a kupiec Wawrzyniec (wieczorem) trudno.
+kod.after.0 = Dobra partia, synu! Jutro rewanż.
+kod.after.1 = Hehe, jeszcze się nauczysz.

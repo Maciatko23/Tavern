@@ -11,7 +11,7 @@ const kit = require("./lib/kit.js");
 
 const PARTS = ["TavernLife_Render", "TavernLife_ArmWrestle", "TavernLife_Darts", "TavernLife_Plan"];
 const SHOTS = path.join(__dirname, "..", "docs", "architektura");
-const KOMNATA_DOOR = 9;   // Map025's door of the chamber (tools/tavern/links.json)
+const KOMNATA_DOOR = 199;   // Map026's door of the chamber (since the rebuilt tavern, 2026-11-16 - was Map025's event 9)
 
 kit.test({ port: 9406, plugins: PARTS, bootCheck: "the game boots", errorCheck: "no console errors" }, async t => {
     t.check("TavernLife.js and its four parts are in the page", await t.eval(`!!(window.TavernLife && ${JSON.stringify(["TavernLife"].concat(PARTS))}.every(k => TavernLife.modules[k]))`), t.plugins);
@@ -39,8 +39,8 @@ kit.test({ port: 9406, plugins: PARTS, bootCheck: "the game boots", errorCheck: 
     const rooms = await t.json("TavernLife.rooms().map(r => r.room + ':' + TavernLife.roomPrice(r.room))");
     t.check("the rooms at reputation 60: 1-3 and the chamber 10% cheaper (27 G), the Apartament Złoty", rooms.join("|") === "1:7|2:14|3:18|komnata:27|zloty:45", rooms);
     const rented = await t.eval("TavernLife.rentRoom('komnata')");
-    const after = await t.json(`({ gold: $gameParty.gold(), rent: TavernLife.rentedRoom(), door: $gameSelfSwitches.value([25, ${KOMNATA_DOOR}, "A"]), served: window.__served, rooms: TavernLife.stats().rooms })`);
-    t.check("the chamber rented after the load: 27 G, the rent till 10:00 tomorrow, its door on Map025 opened (self switch A), 'served' on the bus",
+    const after = await t.json(`({ gold: $gameParty.gold(), rent: TavernLife.rentedRoom(), door: $gameSelfSwitches.value([26, ${KOMNATA_DOOR}, "A"]), served: window.__served, rooms: TavernLife.stats().rooms })`);
+    t.check("the chamber rented after the load: 27 G, the rent till 10:00 tomorrow, its door on Map026 opened (self switch A), 'served' on the bus",
         rented === true && gold0 - after.gold === 27 && after.rent && after.rent.room === "komnata" && after.rent.until === 21 * 24 + 10 && after.door === true &&
         after.served.length === 1 && after.served[0].service === "room" && after.served[0].room === "komnata" && after.rooms === 1, { gold0, after });
     t.check("saved again (slot 2)", await t.saveTo(2));
@@ -48,7 +48,7 @@ kit.test({ port: 9406, plugins: PARTS, bootCheck: "the game boots", errorCheck: 
     t.check("... the new save has the rent in _tw.tavernLife (version 1) and no _tavernLife any more", !saved.old && saved.tw && saved.tw.rent && saved.tw.rent.room === "komnata" && saved.v === 1, saved);
     t.check("... and it loads again", await t.loadFrom(2, { calm: true, needsOff: true }));
     await t.quiet();
-    const again = await t.json(`({ rent: TavernLife.rentedRoom(), isRented: TavernLife.isRented("komnata"), map: $gameMap.mapId(), door: $gameSelfSwitches.value([25, ${KOMNATA_DOOR}, "A"]) })`);
+    const again = await t.json(`({ rent: TavernLife.rentedRoom(), isRented: TavernLife.isRented("komnata"), map: $gameMap.mapId(), door: $gameSelfSwitches.value([26, ${KOMNATA_DOOR}, "A"]) })`);
     t.check("... with the chamber still his for the night (its door open)", again.rent && again.rent.room === "komnata" && again.isRented && again.door === true && again.map === 1, again);
 
     // ================= arm-wrestling on the UI kit: the pause (P), "Gramy dalej", "Poddaję się"

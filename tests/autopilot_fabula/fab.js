@@ -877,7 +877,15 @@
         function* go(x, y, d) { const ok = yield* L.walkTo(x, y); if (d) $gamePlayer.setDirection(d); yield* L.wait(4); return ok; }
         // (O only while the shift lasts: just after its end the same press at a seat started a guest's talk)
         function* tap() { if (!TavernShift.liveRunning()) return; yield* L.press("ok"); yield* L.wait(6); }
-        const nearFire = () => (Math.hypot($gamePlayer.x - 5, $gamePlayer.y - 14) <= Math.hypot($gamePlayer.x - 23, $gamePlayer.y - 14) ? [5, 14, 4] : [23, 14, 6]);
+        // (2026-11-19: each fireplace burns on its own - before opening the one still short of its logs, in the evening the lower one)
+        const FIREPLACES = [[5, 14, 4], [23, 14, 6]];
+        const nearFire = () => {
+            const s = st(), d = i => Math.hypot($gamePlayer.x - FIREPLACES[i][0], $gamePlayer.y - FIREPLACES[i][1]);
+            let pick = [0, 1].sort((a, b) => d(a) - d(b));
+            if (s && s.phase === "clean" && s.wood && s.wood.at) { const short = pick.filter(i => s.wood.at[i] < s.wood.each); if (short.length) pick = short; }
+            else if (s && s.fires) pick = [0, 1].sort((a, b) => s.fires[a] - s.fires[b]);
+            return FIREPLACES[pick[0]];
+        };
         // a free cell beside a table (8 round it), the nearest to the hero
         const standBy = tb => {
             let best = null, bd = 1e9;
@@ -897,11 +905,16 @@
             L.key("ok", true); yield* L.wait(72); L.key("ok", false); yield* L.wait(6);
             return true;
         }
-        function* putOnFire() {
-            const f = nearFire();
-            setDoing("Zmiana: dokładam do kominka", "ogień w sali");
+        function* putOnFire(depth = 0) {
+            const f = nearFire(), fi = FIREPLACES.indexOf(f);
+            setDoing("Zmiana: dokładam do kominka", fi ? "prawy kominek" : "lewy kominek");
             if (!(yield* go(f[0], f[1], f[2]))) return false;
-            for (let i = 0; i < 3 && st().carry[0] === "log"; i++) yield* tap();
+            for (let i = 0; i < 3 && st() && st().carry[0] === "log"; i++) {
+                const s = st();   // (before opening: this one has its share and the other one has not - the log goes there)
+                if (s.phase === "clean" && s.wood && s.wood.at && s.wood.at[fi] >= s.wood.each && s.wood.at.some(v => v < s.wood.each)) break;
+                yield* tap();
+            }
+            if (st() && st().carry[0] === "log" && depth < 1) return yield* putOnFire(depth + 1);
             return true;
         }
         function* wood(n) {

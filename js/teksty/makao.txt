@@ -1,0 +1,217 @@
+# Teksty makao przy stoliku z kartami w pokoju gier (TavernLife_Makao.js): rywale - Dziadek Ozzy, furman Wiesiek, Bartek Kmieć
+# (od 14 do 21), kupiec Wawrzyniec (od 18 do 23); przy stoliku siadają dwaj z tych, co są
+#
+# Format: docs/WATKI_DANE.md, rozdz. 3. Po poprawkach: node tools/teksty.js sprawdz makao
+
+# ======================================================================== RYWALE (rywale)
+rywale.ozzy.name = Dziadek Ozzy
+rywale.ozzy.short = Ozzy
+rywale.ozzy.with = Ozzym
+rywale.ozzy.hello = Makao? *czkawka* Siadaj, synu, tylko nie zaglądaj mi w karty - i tak nic tam nie ma.
+[rywale.ozzy.playLines]
+O, ta pasuje.
+Hmm... ta.
+*czkawka*
+
+[rywale.ozzy.attackLines]
+Hehe! Bierz, synu!
+Masz, na zdrowie!
+
+[rywale.ozzy.hitLines]
+Ojej, ile tego...
+Za co mnie tak?
+
+rywale.ozzy.makao = Makao! Hehe!
+rywale.ozzy.forgot = A... co miałem powiedzieć?
+rywale.ozzy.win = Po makale! Stary Ozzy jeszcze umie!
+rywale.ozzy.won = Hehe! Pula moja! Postawię wam po piwie... może jutro.
+rywale.ozzy.lost = Wygrałeś, synu. Karty cię lubią.
+rywale.ozzy.other = Ozzy
+
+rywale.wiesiek.name = Furman Wiesiek
+rywale.wiesiek.short = Wiesiek
+rywale.wiesiek.with = Wieśkiem
+rywale.wiesiek.hello = Makao to jak droga: raz pod górkę, raz z górki. Siadaj, rozdaję.
+[rywale.wiesiek.playLines]
+Wiooo!
+Jedzie dalej.
+Tu postoję.
+
+[rywale.wiesiek.attackLines]
+Ładuj na wóz!
+Masz bagaż!
+
+[rywale.wiesiek.hitLines]
+Eee, koło wpadło w dziurę.
+Cały wóz kart...
+
+rywale.wiesiek.makao = Makao!
+rywale.wiesiek.forgot = Zagapiłem się na drogę...
+rywale.wiesiek.win = Po makale! Dojechałem pierwszy!
+rywale.wiesiek.won = Ha! Pula moja. Furmańskie szczęście.
+rywale.wiesiek.lost = Wygrałeś, nie ma co gadać. Jeszcze się odegram.
+rywale.wiesiek.other = Wiesiek
+
+rywale.bartek.name = Bartek Kmieć
+rywale.bartek.short = Bartek
+rywale.bartek.with = Bartkiem
+rywale.bartek.hello = Makao? Byle nie za wysoko, żona liczy każdy miedziak. Siadaj.
+[rywale.bartek.playLines]
+To chyba tak...
+Dobra, ta.
+Hmm, a może...
+
+[rywale.bartek.attackLines]
+O, to ja wam dam!
+Bierz, bierz!
+
+[rywale.bartek.hitLines]
+No nie... żona mnie zabije.
+Tyle kart?
+
+rywale.bartek.makao = Makao! Dobrze mówię?
+rywale.bartek.forgot = Co? Trzeba było coś krzyknąć?
+rywale.bartek.win = Po makale! Wygrałem? Naprawdę?
+rywale.bartek.won = Wygrałem! Żona nie uwierzy.
+rywale.bartek.lost = No trudno. Dobrze grasz.
+rywale.bartek.other = Bartek
+
+rywale.kupiec.name = Kupiec Wawrzyniec
+rywale.kupiec.short = Wawrzyniec
+rywale.kupiec.with = Wawrzyńcem
+rywale.kupiec.hello = Makao, młodzieńcze, to rachunek ryzyka. Siadaj, policzymy.
+[rywale.kupiec.playLines]
+Hm.
+Policzone.
+Cierpliwości.
+
+[rywale.kupiec.attackLines]
+Rachunek do zapłaty.
+Odsetki, młodzieńcze.
+
+[rywale.kupiec.hitLines]
+Ciekawe. Koszt handlu.
+Hm. Nie przewidziałem.
+
+rywale.kupiec.makao = Makao.
+rywale.kupiec.forgot = Hm. Nieuwaga kosztuje.
+rywale.kupiec.win = Po makale. Rachunek się zgadza.
+rywale.kupiec.won = Pula moja. Jak zwykle.
+rywale.kupiec.lost = Wyborna partia. Gratuluję.
+rywale.kupiec.other = Wawrzyniec
+
+# ======================================================================== z kodu TavernLife_Makao.js
+# rozmowa przy stoliku
+kod.talk.0 = {hello} Gramy we {n}: {kto}. Każdy wkłada do puli tyle samo, kto pierwszy pozbędzie się kart, zgarnia wszystko. Ile wkładasz?
+kod.talk.1 = Stawka {n} G (pula {pot} G)
+kod.talk.2 = Nie teraz
+kod.talk.3 = Przy stoliku z kartami nikt teraz nie gra.
+kod.talk.4 = dwóch
+kod.talk.5 = trzech
+kod.talk.6 = ja i ty
+kod.talk.7 = ja, {other} i ty
+# karta na początek
+kod.begin.0 = stały bywalec
+kod.begin.1 = gość karczmy
+kod.begin.2 = " · STAWKA {stake} G · PULA {pot} G"
+kod.begin.3 = Makao z {kto}
+kod.begin.4 = Kładziesz kartę w tym samym kolorze albo tej samej figury. Kilka kart jednej figury wolno położyć naraz. Nie masz czym? Dobierasz jedną.
+kod.begin.5 = Dwójka i trójka: następny bierze 2 albo 3 karty, chyba że odbije swoją. Król kier: 5 kart dla następnego. Król pik: 5 kart od razu dla poprzedniego.
+kod.begin.6 = Czwórka: następny stoi kolejkę (albo dokłada czwórkę). Walet żąda figury od 5 do 10, as zmienia kolor. Dama na wszystko, wszystko na damę.
+kod.begin.7 = Gdy zostaje ci jedna karta, krzyknij MAKAO (Shift) - kto zapomni, bierze 5 kart. Kto pierwszy pozbędzie się kart, zgarnia pulę.
+kod.begin.8 = Strzałki - karta, w górę - stos. O - połóż (drugie O na tej samej figurze dokłada). Shift - Makao!
+kod.begin.9 = strzałki
+kod.begin.10 = O - do stołu
+kod.begin.11 = " i "
+# w trakcie gry
+kod.hud.0 = MAKAO
+kod.hud.1 = Twój ruch
+kod.hud.2 = Ruch: {short}
+kod.hud.3 = karta / stos
+kod.hud.4 = połóż
+kod.hud.5 = Makao!
+kod.hud.6 = pauza
+kod.hud.7 = w talii: {n}
+kod.hud.8 = "Pula {pot} G"
+kod.hud.9 = " · STAWKA {stake} G"
+kod.deck.0 = Dobierz kartę
+kod.deck.1 = Weź {n} {kart}
+kod.deck.2 = Stoisz ({n})
+kod.deck.3 = Pas - zostaw kartę
+kod.state.0 = Wojna: {n} {kart} do wzięcia
+kod.state.1 = Stop: {n} {kolejki}
+kod.state.2 = Żądanie: {rank} (albo walet)
+kod.state.3 = Kolor: {suit} (albo as)
+kod.hint.0 = Ta karta tu nie pasuje
+kod.hint.1 = Odbij dwójką, trójką albo królem - albo weź karty (w górę, stos)
+kod.hint.2 = Tylko czwórka - albo stoisz (w górę, stos)
+kod.hint.3 = Żądanie: {rank} albo walet
+kod.hint.4 = Kolor: {suit} albo as
+kod.hint.5 = Dołożysz tylko {rank}
+kod.hint.6 = Shift - krzyknij MAKAO!
+kod.hint.7 = Zapomniałeś o makao! +5 kart
+kod.hint.8 = {short} zapomniał o makao! +5 kart
+kod.hint.9 = {short} stoi
+kod.hint.10 = Stoisz kolejkę
+kod.hint.11 = Możesz położyć dobraną kartę albo spasować
+kod.hint.12 = {short} bierze {n} {kart}
+kod.hint.13 = Bierzesz {n} {kart}
+kod.say.0 = Makao!
+kod.say.1 = Po makale!
+kod.choice.0 = As - jaki kolor?
+kod.choice.1 = Walet - czego żądasz?
+kod.choice.2 = Bez żądania
+kod.choice.3 = O - wybierz · P - wróć do kart
+kod.help.0 = Strzałki w lewo i w prawo wybierają kartę, w górę - stos (dobierz, weź karty, stój, pas). O kładzie kartę; gdy masz więcej tej figury, pierwsze O ją podnosi, kolejne dokładają, O na podniesionej kładzie wszystkie.
+kod.help.1 = Gdy po twoim ruchu zostanie ci jedna karta, naciśnij Shift (Makao!) - inaczej bierzesz 5 kart.
+# figury i kolory
+[kod.ranks]
+dwójka
+trójka
+czwórka
+piątka
+szóstka
+siódemka
+ósemka
+dziewiątka
+dziesiątka
+walet
+dama
+król
+as
+
+[kod.ranksMany]
+dwójek
+trójek
+czwórek
+piątek
+szóstek
+siódemek
+ósemek
+dziewiątek
+dziesiątek
+waletów
+dam
+króli
+asów
+
+[kod.suits]
+pik
+kier
+karo
+trefl
+
+# koniec
+kod.finish.0 = MAKAO · KONIEC
+kod.finish.1 = Poddałeś się
+kod.finish.2 = Remis
+kod.finish.3 = Czas: {minutes} minut gry · kolejek: {turns}
+kod.finish.4 = O - wracam do sali
+kod.finish.5 = Po makale: {name}
+kod.finish.6 = Po makale! Pula twoja
+kod.finish.7 = remis - stawki wracają
+kod.finish.8 = Twoja stawka zostaje w puli
+# notatka w dzienniku za pierwszym razem
+kod.note.0 = Przy stoliku z kartami w pokoju gier gra się w makao o pulę ({1} G od gracza): dwójki, trójki i króle kier i pik każą brać karty, czwórka - stać, walet żąda figury, as zmienia kolor, dama na wszystko. Przy ostatniej karcie trzeba krzyknąć MAKAO (Shift), bo inaczej bierze się 5 kart.
+kod.after.0 = Dobra partia, synu!
+kod.after.1 = Hehe, karty cię dziś nie lubią.

@@ -162,11 +162,13 @@
  *
  * @param armStakes
  * @text Siłowanie: stawki (G)
- * @default 5,10,20
+ * @desc W miedziakach (10 = 1 srebrnik). Wygrany bierze pulę: dwa razy stawkę.
+ * @default 5,10
  *
  * @param dartsStakes
  * @text Rzutki: stawki (G)
- * @default 5,10,15
+ * @desc W miedziakach (10 = 1 srebrnik). Wygrany bierze pulę: dwa razy stawkę.
+ * @default 5,10
  *
  * @help
  * ============================================================================
@@ -184,6 +186,8 @@
  *   <Tavern:stage>       miejsce do słuchania przed sceną Melii
  *   <Tavern:arm>         stół do siłowania na rękę (Grum) - TavernLife_ArmWrestle
  *   <Tavern:darts>       linia rzutu przed tarczą - TavernLife_Darts
+ *   <Tavern:warcaby>     stolik z szachownicą (krzesło, stół) - TavernLife_Warcaby
+ *   <Tavern:makao>       stolik z kartami (krzesło, stół) - TavernLife_Makao
  *   <Tavern:plan>        plan karczmy - TavernLife_Plan
  *   <Tavern:bed room=N price=P name="...">   łóżko w pokoju gości
  *   <Tavern:door room=N> drzwi pokoju (na obu stronach zdarzenia). Strona 2
@@ -255,7 +259,8 @@
     const CLEAN_HOURS = num(params.cleanHours, 6), CLEAN_COST = num(params.cleanCost, 10) / 100;
     const SONG_TIP = num(params.songTip, 2), SONG_FROM = num(params.songFrom, 18);
     const INSPIRED_HOURS = num(params.inspiredHours, 4), INSPIRED_TIP_HOURS = 2, INSPIRED_XP = num(params.inspiredXp, 10) / 100;
-    const ARM_STAKES = nums(params.armStakes, "5,10,20"), DARTS_STAKES = nums(params.dartsStakes, "5,10,15");
+    // (2026-11-19, the user: every game for 5 miedziaków or 1 srebrnik, the winner takes the pot - twice the stake)
+    const ARM_STAKES = nums(params.armStakes, "5,10"), DARTS_STAKES = nums(params.dartsStakes, "5,10");
     const BATH_HOURS = 1;
     const BATH_LIFT = 34;   // px the bather sits higher than his feet would stand on the tub's tile (the tag: <Tavern:bath lift=N>)
     const GOLD_ICON = 313, BREAD = 83, MILK = 123, CHEESE = 124;

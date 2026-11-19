@@ -70,7 +70,7 @@ kod.cardSpec.14 = / WSAD: chodzenie
 kod.cardSpec.15 = nalewanie piwa na czas
 kod.cardSpec.16 = Pokaż, czy umiesz nalać. {mugs} kufli, jeden po drugim.
 kod.cardSpec.17 = Przytrzymaj O: z kranu leje się piwo.
-kod.cardSpec.18 = Puść, gdy piana dojdzie do żółtej kreski.
+kod.cardSpec.18 = Puść, gdy piana na miarce przy kuflu dojdzie do żółtej kreski.
 kod.cardSpec.19 = Piwo leci jeszcze chwilę po puszczeniu - puść odrobinę wcześniej.
 kod.cardSpec.20 = Za mało - goście marudzą, za dużo - rozlane. Równo nalane piwo = większe napiwki wieczorem.
 kod.cardSpec.21 = przytrzymaj: lej
@@ -186,7 +186,7 @@ czesci.frame.11 = Kufel {1} z {mugs}
 czesci.frame.12 = Kran skacze: raz leje mocniej, raz słabiej!
 czesci.frame.13 = Kran leje równo.
 czesci.frame.14 = Przytrzymaj O - leje się piwo.
-czesci.frame.15 = Puść, gdy piana sięga żółtej kreski.
+czesci.frame.15 = Puść, gdy piana na miarce przy kuflu sięga żółtej kreski.
 czesci.frame.16 = Po puszczeniu piwo leci jeszcze chwilę: puść odrobinę wcześniej.
 czesci.frame.17 = Czekam na O...
 czesci.frame.18 = Za mało / za dużo
@@ -246,7 +246,7 @@ czesci.hud.obsluzone = "Obsłużone: "
 
 # ======================================================================== zmiana na żywo na mapie karczmy (Zmiana_Sala.js, 2026-11-18)
 # Borgar na początek (dymki nad nim)
-zywo.intro.0 = Dobra, do roboty. Najpierw sala: przetrzyj brudne stoły, przynieś drewno do kominków, a śmieci zanieś do kosza w kuchni.
+zywo.intro.0 = Dobra, do roboty. Najpierw sala: przetrzyj brudne stoły, przynieś drewno do obu kominków, a śmieci zanieś do kosza w kuchni.
 zywo.intro.1 = Drewno leży przy kominku koło wejścia. Potem nalejesz piwa z beczek za barem i pomożesz Jagnie w kuchni.
 zywo.intro.2 = Wieczorem otwieram drzwi. Goście siadają przy czystych stołach i zamawiają - nosisz im z lady. Szybko i bez pomyłek, to i napiwki będą.
 # części zmiany (pasek u góry)
@@ -254,7 +254,7 @@ zywo.faza.clean = Przed otwarciem
 zywo.faza.beer = Piwo na wieczór
 zywo.faza.kitchen = Kuchnia
 zywo.faza.serve = Wieczór na sali
-zywo.hint.clean = Stoły, drewno do kominków, śmieci do kosza w kuchni
+zywo.hint.clean = Stoły, drewno do obu kominków, śmieci do kosza w kuchni
 zywo.hint.beer = Idź za bar do beczek i nalej piwa (O)
 zywo.hint.kitchen = Przez drzwi za barem do kuchni, do pieca (O)
 zywo.hint.serve = Zamówienia z lady do gości (O)
@@ -281,6 +281,11 @@ zywo.popup.nieWychodz = Zmiana trwa - nie wychodź. Przerwać możesz u Borgara.
 zywo.popup.posprzatane = Sala gotowa przed czasem!
 zywo.popup.napiwek = "+{1} G napiwku"
 zywo.popup.brudny = Najpierw przetrzyj stół
+# każdy kominek pali się osobno (goście z jego strony sali marzną, gdy wygaśnie)
+zywo.przygasa.0 = Lewy kominek przygasa - dorzuć drewna.
+zywo.przygasa.1 = Prawy kominek przygasa - dorzuć drewna.
+zywo.wygasl.0 = Lewy kominek wygasł! Z tej strony sali zimno...
+zywo.wygasl.1 = Prawy kominek wygasł! Z tej strony sali zimno...
 # Borgar w trakcie zmiany
 zywo.borgar.0 = Co jest? Robota czeka.
 zywo.borgar.dalej = Pracuję dalej

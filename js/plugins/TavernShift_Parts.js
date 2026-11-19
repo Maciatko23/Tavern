@@ -50,10 +50,16 @@
     const pic = name => ImageManager.loadPicture(name);
     // the bar: the picture 640 x 360 a little up (its third shelf carries the cask, its counter top the mug); lanterns' flames in it
     const BEER_BG_Y = -28, BEER_LAMPS = [[13, 114], [290, 116], [614, 114]];
-    // the cask (160 x 144): its brass spout's lowest middle pixel; the mug (64 x 88, its inside made see-through): the inside's box
-    // (rows in0..in1, columns x0..x1), the body's middle cx, the foot on the counter at footY (screen)
+    // the cask (160 x 144): its brass spout's lowest middle pixel. The mug: a wooden tankard (64 x 88, 2026-11-19 the user: "kufel nie
+    // może być szklany, bo nie pasuje"), its body's middle cx, its foot on the counter at footY (screen); its open top = an ellipse
+    // (OPEN: centre, half axes, the dark inside's spans per row) where the foam shows as it comes near the rim. The level itself is
+    // read on the measuring stick beside it (GAUGE: art pixels, at screen x/y), the yellow line there.
     const CASK2 = { tipX: 77.5, tipY: 125, spoutY: 400 };
-    const MUG2 = { w: 64, h: 88, in0: 15, in1: 73, x0: 6, x1: 41, cx: 24, footY: 600 };
+    const MUG2 = { w: 64, h: 88, cx: 26, footY: 600 };
+    const OPEN = { cx: 26.5, cy: 14, a: 20, b: 11.5, spans: [[3, 22, 32], [4, 20, 35], [5, 14, 39], [6, 15, 40], [7, 13, 41], [8, 10, 43], [9, 9, 44], [10, 9, 44],
+        [11, 8, 45], [12, 7, 45], [13, 7, 45], [14, 7, 45], [15, 7, 45], [16, 7, 45], [17, 7, 45], [18, 8, 44], [19, 9, 43], [20, 10, 42], [21, 11, 41], [22, 13, 39],
+        [23, 15, 37], [24, 18, 34], [25, 26, 26]] };
+    const GAUGE = { w: 20, h: 76, x: 536, y: 442 };   // (3 px each side for the line's marks; the stick itself 14 wide)
     // the kitchen: the picture 640 x 360 lifted so its worktable shows between the recipe card and the plates; on the table the
     // cutting board (left), the pot on its trivet in front of the hearth (right), the knife, the wooden spoon
     const KITCHEN_BG_Y = -100, KITCHEN_FIRE = [585, 236];
@@ -86,30 +92,55 @@
         ["#b8701a", "#f2bb4e", "#ffe395", "#d98f24"].forEach((col, i) => STREAM.fillRect(i, 0, 1, 1, col));
         return STREAM;
     }
-    // the glass mug with the beer in it: the beer and its foam first, the glass (its inside see-through) over them
-    function drawMug2(b, glass, level, foam, line, spill, t) {
+    // the wooden tankard: its picture, then the foam in its open top - the part of the surface's ellipse the front rim does not hide,
+    // more of it the fuller it is (from half full on); spilt: foam over the rim and down the staves
+    const openFill = level => clamp((level - 0.45) / 0.55, 0, 1);
+    const openTop = (level, x) => OPEN.cy + (1 - openFill(level)) * 2 * OPEN.b - OPEN.b * Math.sqrt(Math.max(0, 1 - Math.pow((x + 0.5 - OPEN.cx) / OPEN.a, 2)));
+    function drawTankard(b, img, level, spill, t) {
         const c = b.context, R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(x, y, w, h); };
         c.clearRect(0, 0, MUG2.w, MUG2.h);
-        const ih = MUG2.in1 - MUG2.in0, x0 = MUG2.x0, w = MUG2.x1 - MUG2.x0 + 1;
-        const yTop = Math.round(MUG2.in1 - level * ih), yFoam = Math.round(MUG2.in1 - Math.max(0, level - foam) * ih);
-        if (level > 0.004) {
-            for (let y = Math.max(MUG2.in0, yFoam); y <= MUG2.in1; y++) R(x0, y, w, 1, y > MUG2.in1 - 5 ? "#a05a12" : y % 6 === 0 ? "#e8981f" : "#d8841a");
-            for (let i = 0; i < 9; i++) {   // rising bubbles
-                const bx = x0 + 3 + ((i * 9 + 5) % (w - 6)), by = MUG2.in1 - 2 - ((t * (1 + i % 3) + i * 13) % Math.max(1, MUG2.in1 - yFoam));
-                if (by > yFoam + 1) R(bx, by, 1, 1, "#ffd27a");
+        if (img && img.isReady()) b.blt(img, 0, 0, MUG2.w, MUG2.h, 0, 0);
+        if (openFill(level) > 0) {
+            for (const [y, x0, x1] of OPEN.spans) {
+                for (let x = x0; x <= x1; x++) {
+                    const top = openTop(level, x);
+                    if (y + 0.5 < top) continue;
+                    const edge = x - x0 < 2 || x1 - x < 2;
+                    R(x, y, 1, 1, y + 0.5 - top < 1.4 ? "#fffaf0" : edge ? "#d8bf8c" : ((x * 3 + y * 5 + (t >> 3)) % 11 === 0 ? "#e9d3a2" : "#f4e4bf"));
+                }
             }
-            for (let y = Math.max(MUG2.in0, yTop); y < yFoam && y <= MUG2.in1; y++) R(x0, y, w, 1, y === yFoam - 1 ? "#e6d09c" : y === yTop ? "#fffaf0" : "#fff2d6");
-            for (let x = x0 + 1; x < x0 + w - 1; x++) if ((x * 7 + Math.floor(t / 6)) % 5 === 0 && yTop - 1 >= MUG2.in0 - 2) R(x, yTop - 1, 1, 1, "#fff2d6");   // a bumpy crown
         }
-        if (glass && glass.isReady()) b.blt(glass, 0, 0, MUG2.w, MUG2.h, 0, 0);
-        if (spill) {   // foam over the rim and down the sides
-            R(x0 - 5, 1, w + 10, 4, "#fff2d6"); R(x0 - 5, 4, w + 10, 1, "#e6d09c");
-            for (const [x, len] of [[1, 16 + (t % 4)], [x0 + 10, 7], [MUG2.x1 + 4, 20 + (t % 3)], [MUG2.x1 - 8, 10]]) R(x, 4, 2, len, "#f3e2b4");
+        if (spill) {
+            R(4, 1, 46, 4, "#fff2d6"); R(4, 4, 46, 1, "#e6d09c");
+            for (const [x, len] of [[3, 16 + (t % 4)], [14, 8], [44, 20 + (t % 3)], [33, 10]]) R(x, 4, 2, len, "#f3e2b4");
         }
-        // the line: yellow marks on both walls and a dashed line across the inside
-        const yl = Math.round(MUG2.in1 - line * ih);
-        R(0, yl - 1, 4, 3, "#ffd23f"); R(MUG2.x1 + 3, yl - 1, 4, 3, "#ffd23f");
-        for (let x = x0; x <= MUG2.x1; x += 3) R(x, yl, 2, 1, "rgba(255,210,63,0.95)");
+        dirty(b);
+    }
+    // the measuring stick beside the mug: a wooden frame, the beer and its foam rising inside, ticks every tenth, the yellow line
+    // with a mark on each side - where the foam's top must stop
+    function drawGauge(b, level, foam, line, spill) {
+        const c = b.context, R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(x, y, w, h); };
+        c.clearRect(0, 0, GAUGE.w, GAUGE.h);
+        const fx = 3, fw = GAUGE.w - 6, top = 0, bot = GAUGE.h - 1;
+        R(fx, top, fw, GAUGE.h, "#1c1008");                       // the outline
+        R(fx + 1, top + 1, fw - 2, GAUGE.h - 2, "#6d4524");        // the wood
+        R(fx + 1, top + 1, 1, GAUGE.h - 2, "#94603a");             // its light edge
+        R(fx + fw - 2, top + 1, 1, GAUGE.h - 2, "#4a2d15");        // its shadow
+        const ix = fx + 3, iw = fw - 6, iy0 = top + 3, iy1 = bot - 3, ih = iy1 - iy0;
+        R(ix - 1, iy0 - 1, iw + 2, ih + 3, "#0f0905");             // the slot
+        R(ix, iy0, iw, ih + 1, "#1b120a");
+        const yTop = Math.round(iy1 - clamp(level, 0, 1) * ih), yFoam = Math.round(iy1 - Math.max(0, level - foam) * ih);
+        if (level > 0.004) {
+            for (let y = Math.max(iy0, yFoam); y <= iy1; y++) R(ix, y, iw, 1, y > iy1 - 3 ? "#9a5410" : y % 4 === 0 ? "#e8981f" : "#d8841a");
+            R(ix, Math.max(iy0, yFoam), 1, iy1 - Math.max(iy0, yFoam) + 1, "#f0aa3a");
+            for (let y = Math.max(iy0, yTop); y < yFoam; y++) R(ix, y, iw, 1, y === yTop ? "#fffaf0" : "#f6e8c6");
+        }
+        if (spill) R(ix, iy0, iw, 3, "#fffaf0");
+        for (let k = 1; k < 10; k++) { const y = Math.round(iy1 - k / 10 * ih); R(fx + fw - 3, y, 2, 1, k % 5 ? "#b8865a" : "#e0b07a"); }   // ticks
+        const yl = Math.round(iy1 - line * ih);
+        R(ix - 1, yl, iw + 2, 1, "#ffd23f");
+        R(0, yl - 1, 3, 3, "#ffd23f"); R(0, yl - 2, 1, 5, "#ffd23f");                                   // the marks outside
+        R(GAUGE.w - 3, yl - 1, 3, 3, "#ffd23f"); R(GAUGE.w - 1, yl - 2, 1, 5, "#ffd23f");
         dirty(b);
     }
 
@@ -324,17 +355,23 @@
             this.cask.x = Math.round(W / 2 - CASK2.tipX * CP);
             this.cask.y = CASK2.spoutY - CASK2.tipY * CP;
             this.nozzle = { x: W / 2, y: CASK2.spoutY };
-            this.glass = pic("Zmiana_Piwo_Kufel");
+            this.tankard = pic("Zmiana_Piwo_Kufel");
             this.mug = new Sprite(new Bitmap(MUG2.w, MUG2.h));
             this.mug.scale.set(CP);
             this.mug.anchor.set(MUG2.cx / MUG2.w, 1);
             this.mug.y = MUG2.footY;
+            this.gauge = new Sprite(new Bitmap(GAUGE.w, GAUGE.h));   // (the measuring stick beside the mug: the level and the line)
+            this.gauge.scale.set(CP);
+            this.gauge.x = GAUGE.x; this.gauge.y = GAUGE.y;
             this.stream = new Sprite(streamBitmap());
             this.stream.y = this.nozzle.y;
             this.stream.visible = false;
+            // (the stream over the mug: it falls into the open top and ends on the foam inside - the front rim is always lower than
+            // that, so it never crosses it; behind the mug it vanished at the back rim, as if poured past - the user, 2026-11-19)
             this.root.addChild(this.cask);
-            this.root.addChild(this.stream);
             this.root.addChild(this.mug);
+            this.root.addChild(this.gauge);
+            this.root.addChild(this.stream);
             // side panels
             this.info = new Sprite(new Bitmap(330, 300));
             this.info.x = 30; this.info.y = 96;
@@ -447,13 +484,14 @@
         }
         frame() {
             const flowing = this.phase === "pour" || (this.phase === "lag" && this.flow > 0.0006);
-            drawMug2(this.mug.bitmap, this.glass, this.level, this.foam(), this.line, this.spilled, this.t);
+            drawTankard(this.mug.bitmap, this.tankard, this.level, this.spilled, this.t);
+            drawGauge(this.gauge.bitmap, this.phase === "in" || this.phase === "out" ? 0 : this.level, this.foam(), this.line, this.spilled);
             this.mug.x = Math.round(this.mugX);
             this.mug.visible = this.phase !== "end";
             this.glows.forEach((g, i) => { g.opacity = Math.round(255 * flicker(this.t, i)); });
             this.stream.visible = flowing;
             if (flowing) {
-                const surface = this.mug.y - (MUG2.h - MUG2.in1) * CP - this.level * (MUG2.in1 - MUG2.in0) * CP;
+                const surface = this.mug.y - MUG2.h * CP + openTop(this.level, OPEN.cx) * CP;   // (into the open top, down to the foam)
                 const w = this.phase === "lag" ? Math.max(2, 8 * this.flow / this.rate) : 8 + (this.pulse ? 3 * Math.sin(this.pt / 3) : 0);
                 this.stream.scale.y = Math.max(2, surface - this.nozzle.y);
                 this.stream.scale.x = w / 4;
