@@ -133,10 +133,10 @@
         }),
         // GIANT CRAB: the slowest; its front shell stops blows (as the stone sentinel's slab: from the side and behind x1.4); keeps to its patch of shore
         krab_olbrzym: {
-            name: "Krab olbrzym", ai: "krab", look: "SeaCrab", floors: [1, 99], hp: 110, poise: 140, stun: 40, radius: 0.55, lv: 0, xp: 40, cell: 96, sea: true, remains: "drowned", scale: 1,
+            name: "Krab olbrzym", ai: "krab", look: "SeaCrab", floors: [1, 99], hp: 110, poise: 140, stun: 40, radius: 0.55, lv: 0, xp: 40, cell: 96, sea: true, remains: "crab", scale: 1,
             attr: A({ str: 10, dex: 4, con: 12, per: 4, wil: 6 }, { str: 0.7, dex: 0.2, con: 1.1, per: 0.2, wil: 0.4 }),
             speed: 2.0, chase: 2.4, sight: 5, turn: 0.05, leash: 20,
-            stone: { front: 0.35, back: -0.35, backMult: 1.4, side: 0.75, stunned: 1.3 },
+            stone: { front: 0.35, back: -0.35, backMult: 1.4, side: 0.75, stunned: 1.3, frontMult: 0.7 },   // (2026-11-19, the user: from the front -30%, not nothing)
             moves: {
                 grab: { dmg: 4, poise: 10, reach: 1.5, cone: 0.5, at: 1.4, windup: 28, hitAt: 4, strike: 14, recover: 46, lunge: 0.4, hold: 90, drag: 0.004, choke: 60, chokeDmg: 2, breath: 0.25, presses: 3 },
                 slam: { dmg: 10, poise: 30, reach: 1.45, cone: 0.5, at: 1.4, windup: 30, hitAt: 3, strike: 12, recover: 44, wound: 0.12, knock: 0.45, chance: 0.6 }
@@ -145,10 +145,10 @@
         },
         // THE GIGA CRAB (day 40+, ~8% of the landings): the same sheets drawn twice the size; more life and poise, slower, a crushing grab
         krab_kolos: {
-            name: "Krab-kolos", ai: "krab", look: "SeaCrab", floors: [1, 99], hp: 300, poise: 320, stun: 30, radius: 1.0, lv: 0, xp: 170, cell: 96, sea: true, remains: "drowned", scale: 2,
+            name: "Krab-kolos", ai: "krab", look: "SeaCrab", floors: [1, 99], hp: 300, poise: 320, stun: 30, radius: 1.0, lv: 0, xp: 170, cell: 96, sea: true, remains: "crab", scale: 2,
             attr: A({ str: 16, dex: 3, con: 18, per: 4, wil: 8 }, { str: 0.9, dex: 0.1, con: 1.4, per: 0.2, wil: 0.5 }),
             speed: 1.6, chase: 1.9, sight: 6, turn: 0.035, leash: 25,
-            stone: { front: 0.4, back: -0.35, backMult: 1.4, side: 0.75, stunned: 1.3 },
+            stone: { front: 0.4, back: -0.35, backMult: 1.4, side: 0.75, stunned: 1.3, frontMult: 0.5 },   // (the giga crab: from the front -50%)
             moves: {
                 grab: { dmg: 9, poise: 30, reach: 1.5, cone: 0.5, at: 1.4, windup: 36, hitAt: 4, strike: 16, recover: 56, lunge: 0.3, hold: 150, drag: 0.003, choke: 40, chokeDmg: 4, breath: 0.4, presses: 7 },
                 slam: { dmg: 20, poise: 70, reach: 1.45, cone: 0.5, at: 1.4, windup: 38, hitAt: 4, strike: 14, recover: 60, wound: 0.3, knock: 0.9, chance: 0.5 }

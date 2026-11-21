@@ -388,7 +388,8 @@
         berries: { images: gatherImages("Berries", 1) },     // a low berry plant
         // mushrooms: borowik, muchomor, kurki, pieczarki, czubajka; the bush: 0 blue berries, 1 red berries, 2 picked bare, 3 winter bare
         mushroom: { images: gatherImages("Mushroom", 5) },
-        bush: { images: gatherImages("Bush", 4) },
+        // (2026-11-19) 4 jeżyna (black berries), 5 leszczyna (hazelnuts): Farming.BUSH_KINDS' looks
+        bush: { images: gatherImages("Bush", 6) },
         branch: { images: gatherImages("Branch", 2) },
         herb: { images: gatherImages("Herb", 1) },           // yellow flowers
         nettle: { images: gatherImages("Nettle", 2) },
@@ -396,7 +397,13 @@
         garlic: { images: gatherImages("Garlic", 1) },       // wild garlic: broad leaves, a ball of white stars
         cone: { images: gatherImages("Cone", 2) },           // pine cones under the pines: two lying together, or one
         wildPotato: { images: gatherImages("WildPotato", 2) },   // on a little heap of earth
-        wildCarrot: { images: gatherImages("WildCarrot", 2) }
+        wildCarrot: { images: gatherImages("WildCarrot", 2) },
+        // (2026-11-19, the user: more wild things) wild strawberries and the wild forms of the new field crops
+        strawberry: { images: gatherImages("Strawberry", 2) },
+        wildOat: { images: gatherImages("WildOat", 2) },
+        wildPea: { images: gatherImages("WildPea", 2) },
+        wildBeet: { images: gatherImages("WildBeet", 2) },
+        wildOnion: { images: gatherImages("WildOnion", 2) }
     };
     function gatherBitmap(kind, variant) {
         return ImageManager.loadSystem(GATHER_ART[kind].images[variant]);
@@ -431,7 +438,8 @@
     const SWAY = {   // deg: how far the tip leans in the strongest wind; hz: the plant's own swing
         fiber: { deg: 14, hz: 0.9 }, yarrow: { deg: 12, hz: 0.9 }, herb: { deg: 11, hz: 1.0 }, wildCarrot: { deg: 10, hz: 1.0 },
         nettle: { deg: 8, hz: 1.1 }, garlic: { deg: 7, hz: 1.2 }, wildPotato: { deg: 5, hz: 1.4 }, berries: { deg: 4, hz: 1.5 },
-        bush: { deg: 2, hz: 0.8 }
+        bush: { deg: 2, hz: 0.8 }, wildOat: { deg: 14, hz: 0.9 }, wildOnion: { deg: 10, hz: 1.0 }, wildPea: { deg: 7, hz: 1.2 },
+        wildBeet: { deg: 4, hz: 1.4 }, strawberry: { deg: 3, hz: 1.6 }
     };
     const SWAY_ROWS = 6;         // mesh rows up the stem
     const SWAY_DAMP = 0.2;       // the spring's damping ratio: a little overshoot, then it settles
@@ -542,7 +550,7 @@
                 const looks = GATHER_ART[kind].images.length;
                 let variant = Math.floor(Farming.hash2(x, y, 302) * looks);
                 if (kind === "mushroom") variant = Math.floor(Farming.hash2(x + 3 * (Farming.mushroomBirth(x, y) || 0), y, 302) * looks);   // a new mushroom on the same tile may look different
-                if (kind === "bush") variant = Farming.bushState(x, y) === "full" ? (Farming.hash2(x, y, 302) < 0.5 ? 0 : 1) : (Farming.seasonIndex(Farming.today()) === 3 ? 3 : 2);
+                if (kind === "bush") variant = Farming.bushState(x, y) === "full" ? Farming.bushKind(x, y).look : (Farming.seasonIndex(Farming.today()) === 3 ? 3 : 2);
                 const bitmap = gatherBitmap(kind, variant);
                 if (!bitmap.isReady()) return false;   // the picture is still loading: try again next frame (nothing torn down yet)
                 found.push({ x, y, kind, bitmap });
@@ -1530,6 +1538,7 @@
             if (e.badge) this.updateStation(e);
             if (e.caught) this.updateSnare(e);
             if (e.solid) this.updateSite(e);
+            if (e.sails) this.updateSails(e);
             if (Farming.geoOf(e.b).imageFull && (e.filled === undefined || this._age % 15 === 0)) this.updateBucket(e);
             if (Farming.geoOf(e.b).imageDry && (e.dried === undefined || this._age % 30 === 0)) this.updatePot(e);
             if (Farming.geoOf(e.b).table && !e.b.site && (e.tablePots === undefined || this._age % 20 === 0)) this.updateTable(e);
@@ -1756,7 +1765,30 @@
     };
     // a snare: the bait lying in its noose, and a caught rabbit sitting in it, now and then thrashing. Children of the snare's own sprite
     // (so they sort and mirror with it); the noose is at SNARE_NOOSE px from the foot of the picture (the middle of its bottom edge)
-    const SNARE_NOOSE = { x: -4, y: -19 }, RABBIT = { sheet: "$Animal_Rabbit", row: 1 };   // (row 1: the rabbit side on, facing left)
+    // (2026-11-19: the new box trap - the noose on the ground under the propped lattice; was -4, -19)
+    const SNARE_NOOSE = { x: -4, y: -7 }, RABBIT = { sheet: "$Animal_Rabbit", row: 1 };   // (row 1: the rabbit side on, facing left)
+    // (2026-11-19) the mill's sails (def.sails: a picture turned round its middle, the hub x px from the middle of the building's picture
+    // and y px above its foot): a child of the building's sprite, so it moves (and mirrors) with it. They turn fast while the mill grinds,
+    // slowly in the wind otherwise, faster in a storm; the speed eases up and down
+    BuildingSprites.prototype.buildSails = function(entry, b, def) {
+        const sails = new Sprite(ImageManager.loadSystem(def.sails.image));
+        sails.anchor.x = 0.5;
+        sails.anchor.y = 0.5;
+        sails.x = def.sails.x || 0;
+        sails.y = -def.sails.y;
+        sails.rotation = (b.id || 0) * 0.37;   // (not every mill the same)
+        entry.sprite.addChild(sails);
+        entry.sails = sails;
+        entry.sailSpeed = 0;
+    };
+    BuildingSprites.prototype.updateSails = function(e) {
+        const def = Farming.geoOf(e.b).sails, b = e.b;
+        const grinding = !!b.job && !Farming.jobReady(b) && !(Farming.jobPaused && Farming.jobPaused(b));
+        const wind = window.Storm && Storm.wind ? Storm.wind() || 0 : 0;
+        const want = grinding ? def.speed * (1 + wind) : (def.idle || 0) * (1 + 4 * wind);
+        e.sailSpeed += (want - e.sailSpeed) * 0.02;
+        e.sails.rotation += e.sailSpeed;
+    };
     BuildingSprites.prototype.buildSnareVisuals = function(entry) {
         const bait = new Sprite(ImageManager.loadSystem("IconSet"));
         bait.anchor.set(0.5, 0.5);
@@ -1825,6 +1857,7 @@
             if (!b.site && def.recipes && (def.smokes || (def.fire && def.fire.smoke))) this.buildStationVisuals(entry, b, def);
             if (!b.site && def.recipes) this.buildReadyBadge(entry, b, def);
             if (!b.site && def.lure) this.buildSnareVisuals(entry);
+            if (!b.site && def.sails) this.buildSails(entry, b, def);
             this._sprites.push(entry);
         }
     };

@@ -221,10 +221,15 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9592, bootCheck: "gra się uruc
     const seats = await t.json("$gameMap.events().filter(e => /<Tavern:makao>/.test(JSON.stringify(e.event().pages[0].list))).length");
     if (seats) {
         const at = async (x, y, d) => { await t.locate(x, y, d); await t.frames(12);
-            return t.json("({ label: SceneManager._scene._spotLabel || null, shown: !!(SceneManager._scene._spotPrompt && SceneManager._scene._spotPrompt.visible) })"); };
-        const sides = { dol: await at(36, 38, 8), lewo: await at(34, 37, 6), prawo: await at(39, 37, 4), gora: await at(36, 35, 2), gora2: await at(37, 35, 2) };
-        t.check("przy stoliku z kartami z każdej strony: O Zagraj w makao", Object.values(sides).every(s => s.label === "Zagraj w makao" && s.shown), sides);
-        await at(36, 38, 8);
+            return t.json(`(() => { const fx = $gameMap.roundXWithDirection(${x}, ${d}), fy = $gameMap.roundYWithDirection(${y}, ${d});
+                return { label: SceneManager._scene._spotLabel || null, shown: !!(SceneManager._scene._spotPrompt && SceneManager._scene._spotPrompt.visible),
+                    guest: !!(window.GoscieSala && GoscieSala.guests().some(g => g.state === "sit" && g.seat && g.seat[0] === fx && g.seat[1] === fy)) }; })()`); };
+        // (2026-11-19 the user's room: the tall card table (36,36-38), two chairs each side)
+        const sides = { dol: await at(36, 39, 8), lewo: await at(34, 37, 6), prawo: await at(38, 38, 4), gora: await at(36, 35, 2), gora2: await at(34, 38, 6) };   // (gora2: beside the lower left chair - (35,36) over the chair touches the table)
+        // (2026-11-19, the user: the plate when touching the table only; beside a chair none - a talk if someone sits there)
+        t.check("przy samym stole z kartami (z dołu, z góry): O Zagraj w makao", ["dol", "gora"].every(k => sides[k].label === "Zagraj w makao" && sides[k].shown), sides);
+        t.check("przy krzesłach (z lewej, z prawej, nad krzesłem): bez okienka", ["lewo", "prawo", "gora2"].every(k => !sides[k].shown), sides);
+        await at(36, 39, 8);
         await t.shot(path.join(SHOTS, "makao_0_okienko.png"));
     } else console.log("(brak miejsc <Tavern:makao> na Map001 - okienko nie sprawdzone)");
     await t.eval("TavernLife.onTick = null; 0");

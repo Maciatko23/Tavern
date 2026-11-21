@@ -130,8 +130,9 @@ const SHOTS = path.join(__dirname, "..", "docs", "dom_dziadka");
                 if (++n >= 60) { clearInterval(iv); res({ w, s, c, keys: keys.size, cand, amounts: C.map(x => x._flicker.amount), alt: !!L._altBitmap }); } }, 4); })`);
         const range = a => Math.max(...a) - Math.min(...a), distinct = a => new Set(a.map(v => v.toFixed(3))).size;
         const candDiffer = fl.cand.filter(row => new Set(row.split(",")).size > 1).length;
-        check("the hearth's light flickers: its strength and reach change all the time (not a still light), within sensible bounds",
-            distinct(fl.w) > 15 && range(fl.w) > 0.03 && range(fl.w) < 0.7 && distinct(fl.s) > 15 && range(fl.s) > 0.01 && Math.min(...fl.w) > 0.2, { wRange: +range(fl.w).toFixed(3), sRange: +range(fl.s).toFixed(3), distinctW: distinct(fl.w) });
+        // (2026-11-19, the user: "zasięg pochodni zawsze taki sam, tylko ciemnieje i się rozjaśnia" - the walls' shadows stand still)
+        check("the hearth's light flickers: its strength changes all the time (not a still light), within sensible bounds; its reach stays the same",
+            distinct(fl.w) > 15 && range(fl.w) > 0.03 && range(fl.w) < 0.7 && range(fl.s) === 0 && Math.min(...fl.w) > 0.2, { wRange: +range(fl.w).toFixed(3), sRange: +range(fl.s).toFixed(3), distinctW: distinct(fl.w) });
         check("...its colour drifts between orange and amber (a second glow of the amber colour, mixed by a slow noise)", fl.alt && range(fl.c) > 0.02, { cRange: +range(fl.c).toFixed(3) });
         check("...the room's darkness is repainted with it (RoomLighting's key changes)", fl.keys > 10, { keys: fl.keys });
         check("the candle flickers subtly (0.06), all the time", fl.amounts.every(a => a === 0.06) && new Set(fl.cand).size > 10, { distinct: new Set(fl.cand).size, of: fl.cand.length });

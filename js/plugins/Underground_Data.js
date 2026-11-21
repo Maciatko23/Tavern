@@ -104,7 +104,9 @@
     // trap: spikes on the way (x the band's trapOn x 2), whisper / vision (the Truth Layer); a blind end left with nothing gets
     // a lost guard's remains (kosci);
     // corridor: the corridors' floor kind and wall (A4 top / side kinds of the band's tileset); rock: the A4 top kind that fills
-    // everything between the rooms; dark: RoomLighting's darkness (0-255); level: Combat's place level of floor `from` (+1 every
+    // everything between the rooms; dark: RoomLighting's darkness (0-255; 2026-11-20, the user: "żeby w tych podziemiach było ciemno -
+    // na ścianach są pochodnie, a gracz może zawsze odpalić swoją": 245 to 250, was 215 to 240; the hand-made floors get at least
+    // their band's, Underground.js); level: Combat's place level of floor `from` (+1 every
     // 2 floors); virtual: floors on map ids VIRTUAL_BASE + N (the shared shell); torch: the corridors' torch (ART key + light);
     // gold: old coins found x this; ambience / bgs: the floor's sound (a bgs plays only on a floor whose rooms have water when
     // bgsWater is set); whispers: the Truth Layer's voices (band 5)
@@ -115,7 +117,7 @@
             deadEnd: { loot: 0.75, maxLoot: 12, kinds: { kosci: 3, worek: 2, skrzynka: 2, dzban: 2, beczka: 1, monety: 1, skrzynia: 0.4 },
                 guard: 0.3, guards: { pajak: 3, szczur: 1 }, guardFrom: 3, maxGuards: 3, trap: 0.25 },
             corridor: { floor: 40, top: 99, side: 107, film: 46, filmChance: 0.1 },
-            rock: 99, dark: 215, level: 2,   // (2026-11-17 balance: floors 1-9 two levels lower - 2..6, the guardian's floor 10 <Poziom:7>)
+            rock: 99, dark: 245, level: 2,   // (2026-11-17 balance: floors 1-9 two levels lower - 2..6, the guardian's floor 10 <Poziom:7>)
             torchEvery: [7, 11], torchLit: 0.7, roomTorchLit: 0.85,
             lootFull: 0.6, trapOn: 0.6,
             bgm: "", tileset: 10
@@ -126,7 +128,7 @@
             deadEnd: { loot: 0.75, maxLoot: 12, kinds: { kosci: 3, skrzynka: 2, worek: 2, dzban: 2, beczka: 1, skrzynia: 0.4 },
                 guard: 0.35, guards: { pajak: 2, zbroja: 2, szczur: 1 }, maxGuards: 4, trap: 0.25 },
             corridor: { floor: 41, side: 123, film: 46, filmChance: 0.12 },
-            rock: 115, dark: 222, level: 9,
+            rock: 115, dark: 246, level: 9,
             torchEvery: [7, 11], torchLit: 0.6, roomTorchLit: 0.8,
             lootFull: 0.6, trapOn: 0.5, gold: 1.3,
             bgm: "", tileset: 12
@@ -137,7 +139,7 @@
             deadEnd: { loot: 0.75, maxLoot: 12, kinds: { kosci: 3, grzyby: 3, sakwa: 1, skrzynka: 1, monety: 1 },
                 guard: 0.35, guards: { pajak: 3, nietoperz: 1 }, maxGuards: 4, trap: 0.25 },
             corridor: { floor: 17, side: 88, film: 19, filmChance: 0.18 },
-            rock: 80, dark: 228, level: 19,
+            rock: 80, dark: 247, level: 19,
             torchEvery: [9, 13], torchLit: 0.4, roomTorchLit: 0.55,
             lootFull: 0.55, trapOn: 0.35, gold: 1.6,
             bgm: "", tileset: 10, bgsWater: { name: "River", volume: 35, pitch: 80 }
@@ -148,7 +150,7 @@
             deadEnd: { loot: 0.7, maxLoot: 12, kinds: { kosci: 3, monety: 2, dzban: 2, relikwiarz: 0.3 },
                 guard: 0.4, guards: { zbroja: 2, kamiennik: 2 }, maxGuards: 7, trap: 0.25 },
             corridor: { floor: 26, side: 124, film: 22, filmChance: 0.15 },
-            rock: 100, dark: 234, level: 29,
+            rock: 100, dark: 248, level: 29,
             torchEvery: [9, 14], torchLit: 0.35, roomTorchLit: 0.5,
             lootFull: 0.5, trapOn: 0.55, gold: 2.0,
             bgm: "", tileset: 10, bgs: { name: "Wind1", volume: 18, pitch: 60 }
@@ -159,21 +161,21 @@
             deadEnd: { loot: 0.65, maxLoot: 10, kinds: { kosci: 3, dzban: 2, grzyby: 1, relikwiarz: 0.5 },
                 guard: 0.4, guards: { upior: 2, cien: 2 }, maxGuards: 7, trap: 0.25, whisper: 0.35, vision: 0.08 },
             corridor: { floor: 35, side: 110, film: 31, filmChance: 0.22 },
-            rock: 102, dark: 240, level: 42,
+            rock: 102, dark: 250, level: 42,
             torchEvery: [8, 12], torchLit: 0.75, roomTorchLit: 0.8, torch: "blue",
             lootFull: 0.45, trapOn: 0.3, gold: 2.4,
             bgm: "", tileset: 10, bgs: { name: "Darkness", volume: 22, pitch: 70 }, whispers: true
         },
         {
             id: 6, from: 100, to: 100, handmade: { 100: 11 },
-            dark: 236, level: 54, tileset: 10
+            dark: 250, level: 54, tileset: 10
         }
     ];
     Watki.scal(BANDS, "podziemia", "pasma");   // (its words: js/teksty/podziemia.txt, pasma)
 
     // the generated floors' map note (RoomLighting: always dark; Atmosphere: the cave's drips; no weather, no building, no hunting;
     // the minimap on since the maze (2026-10-23): it shows only what the hero has seen on the floor - Underground.js's fog)
-    const FLOOR_NOTE = "<Dust:on>\n<Dark:on>\n<DayNight:off>\n<DarkDay:%DARK%>\n<DarkNight:%DARK%>\n<Ambience:cave>\n<Hunt:off>\n<Build:off>\n<Farm:off>\n<Minimap:on>\n<Poziom:%LEVEL%>";
+    const FLOOR_NOTE = "<Dust:on>\n<Dark:on>\n<DayNight:off>\n<DarkDay:%DARK%>\n<DarkNight:%DARK%>\n<LightEdges:soft>\n<Ambience:cave>\n<Hunt:off>\n<Build:off>\n<Farm:off>\n<Minimap:on>\n<Poziom:%LEVEL%>";
 
     // ------------------------------------------------------------------ pictures of the generated things
     // [characterName, index, direction, pattern]
@@ -195,7 +197,8 @@
         brazier: ["!Decoration", 0, 2, 0], candelabrumBlue: ["!Decoration2_blue", 4, 2, 0]
     };
     // the wall torch's light (every light a flame: warm, flickering); the Truth Layer's blue flame (eerie, but a flame too)
-    const TORCH_LIGHT = "<Light:150,255,160,90><LightFlicker:0.13,255,130,55><LightHeight:40>";
+    // (2026-11-20, "migocze kolorami jak przy prawdziwej pochodni": a yellower own colour and a deep red-orange one to dance to; was 255,160,90 / 255,130,55)
+    const TORCH_LIGHT = "<Light:150,255,170,95><LightFlicker:0.13,255,110,40><LightHeight:40>";
     const BLUE_LIGHT = "<Light:130,150,190,245><LightFlicker:0.14,110,150,240><LightHeight:40>";
     const BRAZIER_LIGHT = "<Light:170,255,150,70><LightFlicker:0.16,255,110,40><LightHeight:26>";   // (the fire basket by a free cage)
     // spikes: frames of !Fantasy_dungeon_traps index 4 (a dense bed) by height (direction 8 = only the holes ... 2 = all the way up)

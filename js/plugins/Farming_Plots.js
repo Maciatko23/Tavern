@@ -44,7 +44,7 @@
     const { FARM_REGION, BLOCK_REGION, AUTO_GROUND, ITEM, ICON, STAMINA, canMax, SEED_CHANCE, GROWTH, SCARECROW_BONUS,
         SCARECROW_RANGE, WATER_BONUS, WATER_GRACE_DAYS, seasonIndex, seasonOf, RAKE_KIND, HOE_KIND, CROUCH_KIND, FISH_KIND,
         SHOVEL_KIND, DIG_YIELD, CLAY_YIELD, SE, CROPS, BUILDINGS, CROP_IDS, TILE, farm, today, key, plotsOf, buildingsOf, changed,
-        isHutInterior, hutFloor, geoOf, buildingAt, GATHER, GATHER_KINDS, BUSH_SHARE, MUSHROOM_POOL, MUSHROOM_LIFE, CONE_SHARE,
+        isHutInterior, hutFloor, geoOf, buildingAt, GATHER, GATHER_KINDS, BUSH_KINDS, BUSH_SHARE, MUSHROOM_POOL, MUSHROOM_LIFE, CONE_SHARE,
         BUCKET_REACH, itemOf, countOf, rand, popup, complain, spaceFor, complainNoSpace, playSe, spendStamina, perk, perkRoll,
         knowsSkill, farmCost, foodIsFree, useTool, requireItem, fx, later, lockPlayer, swingThen, hasClock, clockHours,
         weatherHere, hash2, landOwned, buildRegion } = P.core;
@@ -306,8 +306,14 @@
         if (!f.bushes) f.bushes = {};
         return f.bushes[mapId] || (f.bushes[mapId] = {});
     };
+    // (2026-11-19) the kind of the bush on a tile (Farming.js BUSH_KINDS: blueberry, raspberry, blackberry, hazel) - the hash its look
+    // always had (Farming_Render: below 0.5 the blue picture, above it the red one)
+    function bushKind(x, y) {
+        const h = hash2(x, y, 302);
+        return BUSH_KINDS.find(k => h < k.to) || BUSH_KINDS[BUSH_KINDS.length - 1];
+    }
     function bushState(x, y) {
-        const rec = ((farm().bushes || {})[$gameMap.mapId()] || {})[key(x, y)], day = today(), fruit = seasonIndex(day) !== 3;
+        const rec = ((farm().bushes || {})[$gameMap.mapId()] || {})[key(x, y)], day = today(), fruit = bushKind(x, y).seasons.includes(seasonIndex(day));
         if (!rec) return fruit ? "full" : "empty";
         if (rec.stage === "gone") return day - rec.day >= 8 ? (fruit ? "full" : "empty") : "gone";
         return day - rec.day >= 4 && fruit ? "full" : "empty";
@@ -374,7 +380,8 @@
         doorCache = { stamp, tiles };
         return tiles;
     }
-    const PLANTS_ON_GRASS = new Set(["bush", "fiber", "berries", "herb", "nettle", "yarrow", "garlic", "wildPotato", "wildCarrot"]);
+    const PLANTS_ON_GRASS = new Set(["bush", "fiber", "berries", "herb", "nettle", "yarrow", "garlic", "wildPotato", "wildCarrot",
+        "strawberry", "wildOat", "wildPea", "wildBeet", "wildOnion"]);
     function gatherAt(x, y) {
         const kind = gatherSpot(x, y);
         if (!kind) return false;
@@ -421,9 +428,10 @@
         if (!kind) return null;
         if (kind === "bush") {
             const full = bushState(x, y) === "full";
+            const bk = bushKind(x, y);
             bushesOf($gameMap.mapId())[key(x, y)] = { stage: full ? "empty" : "gone", day: today() };
             stoneRev++;
-            return { kind, item: full ? ITEM.berries : ITEM.fiber, n: full ? rand(GATHER.bush.count) : rand([1, 2]) };
+            return { kind, item: full ? bk.item : ITEM.fiber, n: full ? rand(bk.count) : rand([1, 2]) };
         }
         const g = GATHER[kind];
         stonesOf($gameMap.mapId())[key(x, y)] = today();
@@ -432,9 +440,9 @@
     }
     // a bush with berries gives berries and stays bare; a bare bush gives fibre and is gone for a while
     function pickBush(x, y) {
-        const full = bushState(x, y) === "full", item = itemOf(full ? ITEM.berries : ITEM.fiber), n = (full ? rand(GATHER.bush.count) : rand([1, 2])) + (perkRoll("forage.yield") ? 1 : 0);
+        const bk = bushKind(x, y), full = bushState(x, y) === "full", item = itemOf(full ? bk.item : ITEM.fiber), n = (full ? rand(bk.count) : rand([1, 2])) + (perkRoll("forage.yield") ? 1 : 0);
         if (!spaceFor(item, n)) { complainNoSpace(item); return false; }
-        if (!spendStamina(full && foodIsFree(ITEM.berries) ? 0 : STAMINA.pickup)) return false;
+        if (!spendStamina(full && foodIsFree(bk.item) ? 0 : STAMINA.pickup)) return false;
         swingThen(CROUCH_KIND, () => {
             bushesOf($gameMap.mapId())[key(x, y)] = { stage: full ? "empty" : "gone", day: today() };
             stoneRev++;
@@ -829,7 +837,8 @@
             playSe(SE.rake, 95 + Math.floor(Math.random() * 10));
             fx(x, y, "dirt", false);
             if (Math.random() < SEED_CHANCE) {
-                const found = CROPS[CROP_IDS[Math.floor(Math.random() * CROP_IDS.length)]];
+                const raked = CROP_IDS.filter(id => !CROPS[id].noRake);   // (2026-11-19: the new crops' seeds come from the wild, not the rake)
+                const found = CROPS[raked[Math.floor(Math.random() * raked.length)]];
                 $gameParty.gainItem(itemOf(found.seed), 1);
             }
         });
@@ -1077,7 +1086,7 @@
     }
 
     P.plots = { isSoilTile, groundInfoAt, groundIsSoil, hasObjectTile, naturalFarmland, plotAt, claimGround, releaseGround,
-        gatherRev, gatherKindOf, gatherTiles, mushroomChance, mushroomBirth, bushState, bushSolid, gatherSpot, gatherAt, withEventCells, stoneSpot, stoneAt,
+        gatherRev, gatherKindOf, gatherTiles, mushroomChance, mushroomBirth, bushKind, bushState, bushSolid, gatherSpot, gatherAt, withEventCells, stoneSpot, stoneAt,
         pickGather, pickStone, takeGatherFor, canCharges, isWaterTile, seaHere, fillCan, needsOn, drink, fillSkin, goFishing, wellEntries,
         rationWell, rationLeft, rationOf,
         rainHoursBetween, bucketSync, bucketUnits, takeBucketWater, stowVessel, unstowVessel, ownsBucket, bagWater, setBagWater,

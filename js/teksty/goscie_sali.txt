@@ -9,6 +9,29 @@ pytania.slychac = Co słychać?
 pytania.rada = Masz dla mnie jakąś radę?
 pytania.bywaj = Bywaj.
 
+# ======================================================================== przy stołach do gier w pokoju gier (słowo nad grającym, gdy bohater jest w pokoju gier)
+[gra.dice]
+Szóstka!
+Rzucaj, nie chuchaj w kubek.
+Znowu mi nie idzie...
+Trzy jedynki, ha!
+Odkładam punkty, starczy.
+
+[gra.makao]
+Makao!
+Bierzesz dwie.
+Stop - stoisz kolejkę.
+Żądam siódemek.
+Zmieniam na kiery.
+Po makale!
+
+[gra.warcaby]
+Bicie obowiązkowe, sąsiedzie.
+Hmm... twój ruch.
+Damka!
+Ech, zjadłeś mi pionka.
+Remis? Nigdy.
+
 # ======================================================================== goście
 goscie.g400.imie = Maciej
 [goscie.g400.witaj]

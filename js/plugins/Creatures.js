@@ -233,7 +233,7 @@
         this._poseT = 0;
         this._settle = 0;
         this._alt = 0;
-        this._tone = boss ? boss.tone : null;
+        this._tone = boss ? boss.tone : (opts.tone || null);   // (2026-11-19: a tint of its own - Kraby.js gives every crab one)
         this._scale = (boss ? boss.scale : 1) * (k.scale || 1) * (opts.scale || 1);   // (its size in the fight: reach, lunge, words over it)
         this._drawScale = boss && boss.draw ? boss.draw * (opts.scale || 1) : null;   // (a boss with its own art: drawn at the art's size)
         this._radius = (boss && boss.radius) || k.radius * (opts.scale || 1);
@@ -751,10 +751,16 @@
         } else if (plate && !hidden && how !== "shot" && c.frontDot() <= k.plate.back) {
             numberAt(c.centerX(), c.centerY() - 1.55 * c._scale, TK.kod.hitCreature[0], "#ffd27f", 0.75);
         }
-        // the stone: nothing through its front; its back's crack hurts it most
+        // the stone: nothing through its front; its back's crack hurts it most. (2026-11-19, the user) a shell with stone.frontMult (the
+        // crabs) lets a frontal blow through, weaker: that share of the damage and of the poise, a dull "Pancerz!" and a few sparks
         if (k.stone && !hidden && !c._stoneStunned) {
             const f = c.frontDot();
-            if (f > k.stone.front) {
+            if (f > k.stone.front && k.stone.frontMult !== undefined) {
+                damage = Math.max(1, Math.round(damage * k.stone.frontMult));
+                poise = poise * k.stone.frontMult;
+                numberAt(c.centerX(), c.centerY() - 1.6 * c._scale, MIND.shell || MIND.plate, "#cfd6de", 0.75);
+                sparksAt(c.centerX() - (c.centerX() - heroX()) * 0.35, c.centerY() - 0.7, "#e8e0c8", 4);
+            } else if (f > k.stone.front) {
                 numberAt(c.centerX(), c.centerY() - 1.6 * c._scale, MIND.stone, "#cfd6de", 0.8);
                 sparksAt(c.centerX() - (c.centerX() - heroX()) * 0.35, c.centerY() - 0.7, "#e8e0c8", 10);
                 se("Sword4", 85, 80, panOf(c.centerX()));
@@ -762,7 +768,8 @@
                 if (!c._engaged) c.engage();
                 return;
             }
-            if (f < k.stone.back) { damage = Math.round(damage * k.stone.backMult); numberAt(c.centerX(), c.centerY() - 1.75 * c._scale, MIND.crack, "#ffb070", 0.85); }
+            if (f > k.stone.front) { /* (a shell's frontal blow: its frontMult only, above) */ }
+            else if (f < k.stone.back) { damage = Math.round(damage * k.stone.backMult); numberAt(c.centerX(), c.centerY() - 1.75 * c._scale, MIND.crack, "#ffb070", 0.85); }
             else damage = Math.round(damage * k.stone.side);
         }
         if (k.stone && c._stoneStunned) damage = Math.round(damage * k.stone.stunned);
@@ -2410,6 +2417,12 @@
         const look = LOOKS[d.look] || {};
         const add = (bmp, ax, ay) => { const s = new Sprite(bmp); s.anchor.set(ax, ay); root.addChild(s); return s; };
         if (d.kind === "drowned") add(puddleBitmap(), 0.5, 0.5);
+        if (d.kind === "crab" && look.die) {   // (2026-11-19, the user: the dead crabs lay on the drowned's dark puddle - on the sand only a soft
+            // shadow under the shell on its back, as big as the crab)
+            const sc = d.scale || 1, sh = add(cached("crabShadow", () => { const b = new Bitmap(60, 18), c = b.context; c.fillStyle = "rgba(30,20,10,0.24)"; c.beginPath(); c.ellipse(30, 9, 28, 8, 0, 0, Math.PI * 2); c.fill(); b._baseTexture.update(); return b; }), 0.5, 0.5);
+            sh.scale.set(sc, sc);
+            sh.y = Math.round(look.die.cell * 0.18 - 40 * sc);
+        }
         if (d.kind === "stone" && !look.die) add(rubbleBitmap(), 0.5, 0.7);
         if (look.die && d.kind !== "wraith" && (d.kind !== "shadow" || look.top)) {   // (its end's last frame: a pile, a body - the rat queen's too, the last guard's empty habit)
             const cell = look.die.cell, s = add(ImageManager.loadCharacter("anim8/Cr_" + d.look + "_Die8"), 0.5, 1);

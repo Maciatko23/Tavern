@@ -187,6 +187,8 @@
         const cfg = treeConfig(event);
         if (!cfg || !cfg.fruit) return;
         giveReward("Zerwano owoce!", cfg.fruit, cfg.fruitmin, cfg.fruitmax);
+        // (2026-11-19, the user: an apple tree from pips) apples - the wild ones and the planted tree's - now and then give their pips
+        if ((cfg.fruit === 139 || cfg.fruit === 505) && $dataItems[499] && Math.random() < 0.3) $gameParty.gainItem($dataItems[499], 1 + (Math.random() < 0.4 ? 1 : 0));
         playSe(FRUIT_SE, 105);
         treeFruitStore()[fruitKey(event)] = T.time.day();
         $gameSelfSwitches.setValue([event._mapId, event._eventId, "C"], true);

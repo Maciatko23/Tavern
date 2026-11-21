@@ -170,8 +170,6 @@
             text: "Bukłak z wyprawionej skóry (surową skórę z pułapki albo polowania wyprawisz w garbarni) mieści 4 łyki. Napełniasz go przy wodzie, a pijesz klawiszem G. Bez niego daleko od stawu szybko zaschnie ci w gardle." },
         { id: "repair", ch: 1, title: "Napraw narzędzie", item: 89, after: ["axe"], done: () => (T.state("wear").repaired || 0) > 0,
             text: "Narzędzia się zużywają: stan widać przy nich w plecaku, a gdy zostaje mało, nad postacią pojawia się dymek. W warsztacie jest „Napraw: ...” dla każdego nadwerężonego narzędzia. Złamane trzeba zrobić od nowa." },
-        { id: "chest", ch: 1, title: "Postaw skrzynię", item: 80, build: "chest_s", after: ["planks"], done: () => isBuilt("chest_s") || isBuilt("chest_l"),
-            text: "W skrzyni odłożysz nadmiar surowców, żeby nie dźwigać wszystkiego. Otwierasz ją przyciskiem akcji." },
 
         { id: "rake", ch: 2, title: "Zagrab ziemię", item: 65, recipe: ["workbench", "rake"], after: ["wood"], done: () => anyPlot(p => p.s === "raked" || p.s === "tilled" || p.crop),
             text: "Grabie zrobisz w warsztacie. Potem stań przed oczyszczoną ziemią lub trawą i wybierz „Zagrab ziemię”." },
@@ -198,6 +196,9 @@
             text: "W kuźni ruda i węgiel drzewny dają żelazo. Wytop trwa kilka godzin i toczy się w tle." },
         { id: "nails", ch: 3, title: "Wykuj gwoździe", item: 88, recipe: ["forge", "nails"], after: ["iron"], done: () => has(88),
             text: "Na kowadle w kuźni z jednej sztuki żelaza wykujesz kilka gwoździ. Potrzebne do dużej skrzyni, browaru i wędzarni." },
+        // (2026-11-19: the chests want nails now - after them, chapter 3)
+        { id: "chest", ch: 3, title: "Postaw skrzynię", item: 80, build: "chest_s", after: ["nails"], done: () => isBuilt("chest_s") || isBuilt("chest_l"),
+            text: "W skrzyni odłożysz nadmiar surowców, żeby nie dźwigać wszystkiego. Zbija się ją gwoździami z kuźni. Otwierasz ją przyciskiem akcji." },
         { id: "ironpick", ch: 3, title: "Zrób żelazny kilof", item: 116, recipe: ["workbench", "pick_iron"], after: ["iron", "planks", "pickaxe"], done: () => has(116),
             text: "Grot wykuwasz w kuźni z żelaza, a kilof montujesz w warsztacie. Zastępuje kamienny kilof: skały pękają szybciej, a uderzenia kosztują mniej sił." },
         { id: "ironaxe", ch: 3, title: "Zrób żelazną siekierę", item: 115, recipe: ["workbench", "axe_iron"], after: ["iron", "planks", "axe"], done: () => has(115),
@@ -282,7 +283,7 @@
         { id: "hut", ch: 4, title: "Zbuduj chatkę", item: 80, build: "hut", after: ["nails", "planks", "iron"], done: () => isBuilt("hut"),
             text: "Twój pierwszy własny dach: mała chatka z bali (50 desek, 60 gwoździ, 40 kamieni i 10 żelaza). Wejdziesz do niej przez drzwi. Jest tylko jedna na całą grę." },
         { id: "furnish", ch: 4, title: "Urządź wnętrze chatki", item: 80, after: ["hut", "chest"], done: () => ((farmData().buildings || {})[100] || []).some(b => !b.site),
-            text: "W środku masz podłogę 5 × 2 pola (pole przed drzwiami zostaje wolne, a meble nie mogą cię zamknąć w środku). Stań przed wolnym polem podłogi i naciśnij przycisk akcji: wybierzesz, co postawić (łóżko, kredens, warsztat, skrzynię, ławkę albo legowisko). Pod dachem śpi się dobrze także w deszczu i zimą." },
+            text: "W środku masz podłogę 10 × 3 pola z kominkiem w rogu (pole przed drzwiami zostaje wolne, a meble nie mogą cię zamknąć w środku). Stań przed wolnym polem podłogi i naciśnij przycisk akcji: wybierzesz, co postawić (łóżko, kredens, warsztat, skrzynię, ławkę albo legowisko). Pod dachem śpi się dobrze także w deszczu i zimą." },
 
         // (main: the story's - "Zadania" shows them under FABUŁA, with Story.js's goals; not `story`, which Story.js keeps for its own)
         { id: "borgar", ch: 5, main: true, title: "Zapytaj Borgara o zamek", item: 59, where: { person: "borgar" }, after: [], done: () => $gameVariables.value(1) >= 1,
@@ -422,7 +423,7 @@
         96: "Każde oprawione zwierzę (nóż i przycisk akcji przy zwłokach).",
         163: "Każde oprawione zwierzę (nóż i przycisk akcji przy zwłokach). Potrzebne do łuku.",
         146: "Trafiony ptak (proca, łuk) daje od razu 1-3 pióra.",
-        102: "Dziko rosną na łące latem i jesienią.",
+        102: "Na krzakach jagodowych od wiosny do jesieni, a latem i jesienią też nisko na łące.",
         103: "Dziko rosną na łące jesienią.",
         139: "Rosną na dzikich jabłoniach w lesie latem i jesienią. Zerwij je, zanim drzewo ściniesz.",
         140: "Rosną na dzikich gruszach w lesie latem i jesienią. Zerwij je, zanim drzewo ściniesz.",
@@ -432,7 +433,25 @@
         71: "Rzadko rośnie dziko (liście z białymi kwiatkami): wykop go ręką - czasem z nasionami.",
         72: "Rzadko rośnie dziko (pierzasta nać, pomarańczowy korzeń): wykop ją ręką - czasem z nasionami.",
         69: "Leżą w skrzyni w domku. Z plonu odzyskasz kolejne.",
-        70: "Leżą w skrzyni w domku. Z plonu odzyskasz kolejne."
+        70: "Leżą w skrzyni w domku. Z plonu odzyskasz kolejne.",
+        // (2026-11-19, the user: the new crops and wild plants)
+        493: "Czasem wypadają przy zbieraniu dzikiego lnu na łące. Sprzedaje je też zielarka z promu.",
+        494: "Przy dzikim owsie na łące (latem i jesienią), wyrwanym ręką. Sprzedaje je też zielarka z promu.",
+        495: "Przy dzikim buraku (latem i jesienią), wyrwanym ręką. Sprzedaje je też zielarka z promu.",
+        496: "Przy dzikiej cebuli (różowe kulki kwiatów), wyrwanej ręką. Sprzedaje ją też zielarka z promu.",
+        497: "Czasem przy dzikim czosnku (wiosną i latem). Sprzedaje je też zielarka z promu.",
+        498: "Przy dzikim groszku (fioletowe kwiatki, wiosną i latem). Sprzedaje je też zielarka z promu.",
+        499: "Czasem przy zrywaniu jabłek z jabłoni. Sprzedaje je też zielarka z promu.",
+        500: "Rzadko rośnie dziko na łące (latem i jesienią).",
+        501: "Rzadko rośnie dziko (latem i jesienią): lśniące liście z czerwonymi łodygami.",
+        502: "Rzadko rośnie dziko: cienkie liście i różowa kula kwiatów.",
+        504: "Rzadko rośnie dziko (wiosną i latem): niski groszek z fioletowymi kwiatkami.",
+        505: "Z jabłoni posadzonej z pestek na swojej działce: latem i jesienią, co kilka dni nowe.",
+        506: "Dziko rosną na łące wiosną i latem: niskie listki z czerwonymi owockami.",
+        507: "Na krzakach malin latem i jesienią. Obrany krzak owocuje znowu po kilku dniach.",
+        508: "Na kolczastych krzakach jeżyn latem i jesienią. Obrany krzak owocuje znowu po kilku dniach.",
+        509: "Na leszczynie jesienią. Obrany krzak owocuje znowu po kilku dniach.",
+        510: "Rosną na pniakach jesienią i zimą, najwięcej po deszczu albo śniegu. Zbierasz je przyciskiem akcji przy pniaku."
     };
     function sourceLines(id) {
         const lines = [];

@@ -334,9 +334,12 @@
         while (q.length && set.size < max) {
             const [x, y] = q.shift();
             for (const [d, dx, dy] of [[2, 0, 1], [8, 0, -1], [4, -1, 0], [6, 1, 0]]) {
-                if (!$gameMap.isPassable(x, y, d)) continue;
                 const nx = x + dx, ny = y + dy, k = ny * W + nx;
-                if (!$gameMap.isValid(nx, ny) || set.has(k) || !$gameMap.isPassable(nx, ny, 10 - d)) continue;
+                if (!$gameMap.isValid(nx, ny) || set.has(k)) continue;
+                // (2026-11-19: Mosty.js's bridges - over the deck by its ends, along the bed under it: either level lets him)
+                const MO = window.Mosty && Mosty.heroStep && (Mosty.at(x, y) || Mosty.at(nx, ny)) ? Mosty : null;
+                if (MO) { const a = MO.heroStep(x, y, d, 0), b = MO.heroStep(x, y, d, 1); if (!((a && a.ok) || (b && b.ok))) continue; }
+                else if (!$gameMap.isPassable(x, y, d) || !$gameMap.isPassable(nx, ny, 10 - d)) continue;
                 set.add(k); q.push([nx, ny]);
             }
         }
@@ -912,6 +915,9 @@
             for (let i = 0; i < 3 && st() && st().carry[0] === "log"; i++) {
                 const s = st();   // (before opening: this one has its share and the other one has not - the log goes there)
                 if (s.phase === "clean" && s.wood && s.wood.at && s.wood.at[fi] >= s.wood.each && s.wood.at.some(v => v < s.wood.each)) break;
+                // (the evening, 2026-11-19: both logs went into one fireplace and the other half of the hall stayed cold - after one log the
+                // next goes to the other fireplace when that one burns no higher)
+                if (i > 0 && s.phase !== "clean" && s.fires && s.fires[1 - fi] <= s.fires[fi]) break;
                 yield* tap();
             }
             if (st() && st().carry[0] === "log" && depth < 1) return yield* putOnFire(depth + 1);
@@ -922,6 +928,22 @@
             if (!(yield* go(21, 37, 8))) return false;
             for (let i = 0; i < n; i++) yield* tap();
             return yield* putOnFire();
+        }
+        // a dish to a seated guest: from his chair's aisle, else any free cell round his chair; O only when the game offers "give" there
+        // (another waiting guest nearer to the hero would take the press: then the next cell)
+        function* deliver(g) {
+            const seat = GoscieSala.shift.seats().find(q => q.x === g.seat[0] && q.y === g.seat[1]);
+            const cells = seat ? [[seat.ax, seat.ay, seat.side === 6 ? 6 : 4]] : [];
+            for (const [dx, dy] of [[-1, 0], [1, 0], [0, 1], [0, -1], [-1, 1], [1, 1], [-1, -1], [1, -1]]) cells.push([g.seat[0] + dx, g.seat[1] + dy, 0]);
+            for (const [x, y, d] of cells) {
+                if (!$gameMap.isValid(x, y) || !$gameMap.checkPassage(x, y, 0x0f) || $gameMap.eventsXyNt(x, y).some(e => e.isNormalPriority())) continue;
+                if (!(yield* go(x, y, d || null))) continue;
+                const tg = st() && st().target;
+                if (tg && tg.kind === "give") { yield* tap(); return true; }
+                const now = st() && st().guests.find(q => q.id === g.id);
+                if (!now || now.state !== "wait") return false;   // (he left meanwhile)
+            }
+            return false;
         }
         // the kitchen: through the door behind the bar (a transfer on the same map) and back
         function* intoKitchen() {
@@ -959,9 +981,11 @@
                     if (!(yield* wipe(dirty[0]))) yield* L.wait(30);
                     continue;
                 }
+                // (2026-11-19: the wood before the rubbish - at level 5 the time ran out on the sacks and the right fireplace stayed cold all
+                // evening: guests there lose patience 1.5x faster)
+                if (s.wood.done < s.wood.need) { yield* wood(Math.min(2, s.wood.need - s.wood.done)); continue; }
                 const sack = s.sacks.find(q => q.state === "lying");
                 if (sack) { setDoing("Zmiana: zbieram śmieci", "worki i kubły z sali"); yield* go(sack.x, sack.y); yield* tap(); continue; }
-                if (s.wood.done < s.wood.need) { yield* wood(Math.min(2, s.wood.need - s.wood.done)); continue; }
                 yield* L.wait(20);
                 continue;
             }
@@ -982,13 +1006,18 @@
                 const waiting = s.guests.filter(g => g.state === "wait").sort((a, b) => a.patience - b.patience);
                 const want = [];
                 for (const g of waiting) g.order.forEach((k, i) => { if (!g.got[i]) want.push({ g, k }); });
-                // what he holds goes to whoever wants it
+                // (2026-11-19: he always ran to the guest with the least patience - who left before he got there - and then on with the same
+                // dishes to the next one: 1 of 19 served at level 5. Now: who can still be reached in time, the most urgent of those; a
+                // frame budget from the tiles to walk)
+                const FPT = 1.3 * 256 / Math.pow(2, $gamePlayer.realMoveSpeed()), eta = (seat, from) => (Math.abs(seat[0] - from[0]) + Math.abs(seat[1] - from[1])) * FPT;   // (frames a tile at his real pace, with the turns round tables)
+                const slack = (x, from) => x.g.patience - eta(x.g.seat, from);
+                const best = (list, from) => { const ok = list.filter(x => slack(x, from) > 30).sort((a, b) => slack(a, from) - slack(b, from)); return ok.length ? ok : list.slice().sort((a, b) => b.g.patience - a.g.patience); };
+                // what he holds goes to whoever wants it and can be reached
                 if (carry && carry !== "log" && carry !== "sack") {
-                    const to = want.find(x => s.carry.includes(x.k));
+                    const to = best(want.filter(x => s.carry.includes(x.k)), [$gamePlayer.x, $gamePlayer.y])[0];
                     if (to) {
-                        const seat = GoscieSala.shift.seats().find(q => q.x === to.g.seat[0] && q.y === to.g.seat[1]);
                         setDoing("Zmiana: niosę zamówienie", "gość czeka (" + Math.round(to.g.patience / 60) + " s cierpliwości)");
-                        if (seat) { yield* go(seat.ax, seat.ay, seat.side === 6 ? 6 : 4); yield* tap(); }
+                        yield* deliver(to.g);
                         continue;
                     }
                     const slot = s.slots.find(q => q.key === carry);   // (nobody wants it any more: back on the counter)
@@ -997,8 +1026,14 @@
                 }
                 if (carry === "log") { yield* putOnFire(); continue; }
                 if (want.length) {
-                    setDoing("Zmiana: biorę z lady", want.slice(0, 2).map(x => x.k).join(", "));
-                    for (const x of want.slice(0, 2)) { const slot = s.slots.find(q => q.key === x.k); if (slot) { yield* go(slot.tx, 18, 8); yield* tap(); } }
+                    // (from the counter: the first for the guest who can still be reached, the second for the same guest or one near him)
+                    const order = best(want.filter(x => s.slots.some(q => q.key === x.k)), [14, 18]);
+                    const first = order[0];
+                    if (!first) { yield* L.wait(20); continue; }
+                    const second = order.slice(1).find(x => x.g === first.g) || order.slice(1).find(x => Math.abs(x.g.seat[0] - first.g.seat[0]) + Math.abs(x.g.seat[1] - first.g.seat[1]) <= 4);
+                    const pick = [first].concat(second ? [second] : []);
+                    setDoing("Zmiana: biorę z lady", pick.map(x => x.k).join(", "));
+                    for (const x of pick) { const slot = s.slots.find(q => q.key === x.k); if (slot) { yield* go(slot.tx, 18, 8); yield* tap(); } }
                     continue;
                 }
                 if (s.fire < 1.2) { yield* wood(2); continue; }
@@ -1198,8 +1233,10 @@
         if (!jobs.length) return null;
         // (the plot, the coast, the mountains: the wild things by the way; a job of one map - the hunt's - its map too. 2026-11-17: the
         // filter had slipped into the comment of this line, so the tavern or the town counted as a place to gather in)
+        // (2026-11-19: four deaths in one day gathering berries in Krucze Turnie at level 1-2 - its wolves, boars and bear are level 5:
+        // no wild gathering there below its level)
         const places = [...new Set([mapId(), MAP.field, MAP.yard, 222, 219].concat(jobs.filter(j => typeof j.where === "number").map(j => j.where)))]
-            .filter(m => !inUnder() && m !== MAP.house && m !== MAP.tavern && m !== MAP.town && m !== MAP.manor);
+            .filter(m => !inUnder() && m !== MAP.house && m !== MAP.tavern && m !== MAP.town && m !== MAP.manor && !(PLACE_LV[m] && heroLevel() < PLACE_LV[m] && m !== mapId()));
         let best = null;
         for (const j of jobs) {
             for (const m of places) {
@@ -1306,7 +1343,7 @@
     function oreTrip(why, want) {
         return { what: "Idę po rudę żelaza w Krucze Turnie", why: why + " - na Podgrodziu nie ma rudy, żyły są w górach", run: function* () {
             if (!(yield* goMap(ORE_MAP, why))) return false;
-            for (let k = 0; k < 12 && count(85) < want && hour() < 18; k++) {
+            for (let k = 0; k < 12 && count(85) < want && hour() < 16.5; k++) {   // (back before dusk: two deaths at 19:00, the wolves)
                 if (stamina() < 15) { setDoing("Krucze Turnie: odpoczywam (siły " + Math.round(stamina()) + ")", why); yield* AP.TASKS.rest(); if (stamina() < 15) break; }
                 setDoing("Krucze Turnie: kopię rudę żelaza (" + count(85) + "/" + want + ")", why);
                 if (!(yield* AP.TASKS.mineOre())) break;
@@ -1388,7 +1425,19 @@
         if (st === 2) {
             // (2026-11-16 run: "nie ma rudy żelaza w zasięgu" for days by the forge) the new world's iron ore is in the mountains only -
             // Krucze Turnie (Map222, the quarry's veins): with the forge up and a pickaxe, a day trip there for the ore first
+            // (2026-11-19 series: a worn-out pickaxe - no ore trip any more and the forge "waited" for days; no ore and the coal made after
+            // the trip's hours - nothing to smelt: the evening's shift or bed, the trip in the morning)
+            if (count(86) < 1 && count(85) < 2 && !count(63) && !count(116)) return { what: "Robię kamienny kilof (stary się zużył)", why: why + " - bez kilofa nie ma rudy", run: function* () {
+                yield* AP.TASKS.obtain({ 63: 1 });
+            } };
             if (count(86) < 1 && count(85) < 2 && oreTripOk()) return oreTrip(why, 4);
+            // (only when the trip waits for the day: the forge up and a pickaxe - 2026-11-19 run: with the forge still a building site it
+            // "waited for the morning" for 25 days instead of finishing the forge below)
+            if (count(86) < 1 && count(85) < 1 && count(79) >= 2 && (count(63) || count(116)) && builtOn(MAP.field).some(b => b.type === "forge")) {
+                if (shiftOpen() && h >= 15 && h < 17) return { what: "Idę na zmianę do Borgara", why: why + " - rudy brak, po rudę jutro rano; wieczór na zarobek", run: doShift };
+                if (h >= 19 || h < 5.5) return { what: "Idę spać (rano po rudę w Krucze Turnie)", why, run: sleepHome };
+                return { what: "Czekam do rana na wyprawę po rudę", why: why + " - rudy brak, w góry tylko za dnia", run: () => idle(600) };
+            }
             if (count(86) < 1 || count(79) < 2) return { what: "Robię żelazo i węgiel na działce (kuźnia)", why: why + " - żelaza nie ma w sklepach, jest z rudy w kuźni", run: function* () {
                 checkGoal("w4_2", MAP.town);
                 yield* fieldWork(PLAN_IRON, () => (count(86) >= 1 && count(79) >= 2) || hour() >= 20.5 || hour() < 5.5, why, function* () {
@@ -2690,8 +2739,11 @@
                 return true;
             } };
             // (Szczepan is not always in his stable: a look in, half an hour at most, then again in three hours - the day goes on meanwhile)
-            if (wz.letter && !(s.flags && s.flags.stajnia) && h >= 6 && h < 20.5 && (FAB.letterNext || 0) <= now()) return { what: "Niosę list dziadka Szczepanowi (stajnia)", why: "Wezwanie króla: nocleg w stajni", run: function* () {
-                if (!(yield* goMap(STABLE, "list do Szczepana"))) return false;
+            // (where Szczepan is at this hour - TownLife_Data's kolodziej: inside the stable 20:30-5, by his cart / on the square 5-7,
+            // 10:30-14, 17:30-20:30, away on the road the rest; 2026-11-19: looked for inside the stable by day, never there)
+            const kolWhere = hh => (hh >= 20.5 || hh < 5) ? STABLE : ((hh >= 5 && hh < 7) || (hh >= 10.5 && hh < 14) || (hh >= 17.5 && hh < 20.5)) ? MAP.town : null;
+            if (wz.letter && !(s.flags && s.flags.stajnia) && h >= 5 && h < 21.5 && kolWhere(h) && (FAB.letterNext || 0) <= now()) return { what: "Niosę list dziadka Szczepanowi (" + (kolWhere(h) === STABLE ? "stajnia" : "przy wozie / na placu") + ")", why: "Wezwanie króla: nocleg w stajni", run: function* () {
+                if (!(yield* goMap(kolWhere(hour()) || STABLE, "list do Szczepana"))) return false;
                 const kol = () => (window.TownLife && TownLife.eventOf ? TownLife.eventOf("kolodziej") : null);
                 for (let k = 0; k < 3; k++) {
                     const e = kol();
@@ -2699,8 +2751,8 @@
                     const r = yield* talkTo(kol, { leave: true });
                     if (r.ok) return true;
                 }
-                FAB.letterNext = now() + 3;
-                say("Szczepana nie ma w stajni - zajrzę za trzy godziny");
+                FAB.letterNext = now() + 1;
+                say("Szczepana tu nie ma - zajrzę za godzinę");
                 return false;
             } };
         }

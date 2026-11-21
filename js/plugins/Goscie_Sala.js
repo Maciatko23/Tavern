@@ -35,8 +35,14 @@
     const PLUGIN = "Goscie_Sala";
     const TK = Watki.teksty("goscie_sali");
     const MAP = 1, ID0 = 400, ID1 = 422;
-    const HALL = { x0: 1, y0: 14, x1: 47, y1: 31 };
-    const CHAIR = 390, TABLE_TILES = [416, 424, 432, 439, 447], TABLE_TILES2 = [842, 850, 859, 867, 863, 871, 844, 852];   // (the chair; long and small tables on layer 3, round ones on layer 2)
+    // (2026-11-19, the user: "niech w pokoju gier ludzie też przychodzą i siadają do stołów"; "pokój, gdzie śpiewa kobieta - tam są
+    // krzesła"): the hall reaches down to the games room (y 28-38); besides the round stools (390) the side chairs with a back - their
+    // seat cell 395 faces east, 394 west, on layer 2 (Melia's room) or 3 (the games room) - beside the games tables (425-427 on layer 3)
+    const HALL = { x0: 1, y0: 14, x1: 48, y1: 39 }, GAMES = { x0: 29, y0: 28, x1: 48, y1: 39 };   // (row 39: the round table by the darts; 40 is the wall)
+    const CHAIR = 390, SIDE_CHAIRS = { 395: 6, 394: 4 }, TABLE_TILES = [416, 424, 432, 439, 447, 425, 426, 427], TABLE_TILES2 = [842, 850, 859, 867, 863, 871, 844, 852];   // (the chair; long and small tables on layer 3, round ones on layer 2)
+    // at a games table: which game (the seat marker <Tavern:...> in its row), no bowl - a mug, now and then a word of the game;
+    // Grum's arm-wrestling table stays his
+    const GAME_KINDS = ["dice", "makao", "warcaby"], GAMER_SHARE = 0.32, GAME_SAY_MIN = 25, GAME_SAY_MAX = 70;
     const DOOR = { x: 14, y: 39 }, BAR = [[10, 18], [12, 18], [14, 18], [16, 18], [18, 18], [20, 18]], STAGE = [[35, 20], [37, 20], [39, 20], [41, 20]];   // (2026-11-16: the smaller ground floor - 13 rows higher)
     const CELL = 88, FEET = 76;                  // the sheets' cells; the row laid on the event's screenY (Przytulna's own format)
     // sitting down (user 2026-11-05: "idąc postacie wchodzą na stołek i wtedy przejście na siedzenie"): on foot onto the stool, there the
@@ -73,26 +79,54 @@
         // (a figure standing there - Ozzy - closes the aisle as much as a wall would)
         const standing = (x, y) => $dataMap.events.some(e => e && !(e.id >= ID0 && e.id <= ID1) && e.x === x && e.y === y && e.pages.some(p => p.priorityType === 1 && (p.image.characterName || p.image.tileId)));
         const free = (x, y) => x >= 0 && y >= 0 && x < W && y < H && $gameMap.checkPassage(x, y, 0x0f) && !standing(x, y);
+        // (an event's tavern kind: its name "Tavern:kind ..." or a <Tavern:kind> comment on a page - the user puts them on the tables)
+        const tagKind = e => { const m = /^Tavern:(\w+)/.exec(e.name || "") || /<Tavern:(\w+)/.exec(JSON.stringify(e.pages.map(p => p.list.filter(c => c.code === 108 || c.code === 408).map(c => c.parameters[0])))); return m ? m[1] : null; };
+        // (a seat marker of the tavern's games - <Tavern:dice> and the like, invisible - is no one's figure: a guest may sit there)
+        const marker = e => /^Tavern:/.test(e.name || "") && !e.pages.some(p => p.image.characterName || p.image.tileId);
+        // (a side chair's table: whatever furniture stands right in front of it and cannot be walked through - any table the editor
+        // puts there, not a list of known ones; another chair is not a table)
+        const chairTile = (x, y) => !!(SIDE_CHAIRS[t(3, x, y)] || SIDE_CHAIRS[t(2, x, y)] || t(3, x, y) === CHAIR);
+        // (or a table put there as an event: an object picture "!..." in the way - the one-tile !$Stolik_Szachy / !$Stolik_Kosci)
+        const prop = (x, y) => $dataMap.events.some(e => e && e.x === x && e.y === y && !(e.id >= ID0 && e.id <= ID1) && e.pages.some(p => p.priorityType === 1 && !p.through && /^!/.test(p.image.characterName || "")));
+        const furniture = (x, y) => x >= 0 && y >= 0 && x < W && y < H && !chairTile(x, y) && ((!!(t(2, x, y) || t(3, x, y)) && !$gameMap.checkPassage(x, y, 0x0f)) || prop(x, y));
+        // (the game of the chair's own table: a marker on a chair at either end of it, or on the table itself, in its row, the two
+        // above or the one below - the dice table's right chair is nearer to Grum's table's marker than to its own)
+        const gameOf = (x, y, side) => {
+            let x0 = x + (side === 6 ? 1 : -1), x1 = x0;
+            while (furniture(x0 - 1, y)) x0--;
+            while (furniture(x1 + 1, y)) x1++;
+            for (const e of $dataMap.events) { const m = e && e.y >= y - 2 && e.y <= y + 1 && e.x >= x0 - 1 && e.x <= x1 + 1 && tagKind(e); if (m) return m; }
+            return null;
+        };
         for (let y = HALL.y0; y <= HALL.y1; y++) for (let x = HALL.x0; x <= HALL.x1; x++) {
-            const side = table(x + 1, y) ? 6 : table(x - 1, y) ? 4 : 0;
+            const sideChair = SIDE_CHAIRS[t(3, x, y)] || SIDE_CHAIRS[t(2, x, y)] || 0;
+            const front = x + (sideChair === 6 ? 1 : -1);
+            const side = sideChair ? (table(front, y) || furniture(front, y) ? sideChair : 0) : table(x + 1, y) ? 6 : table(x - 1, y) ? 4 : 0;
             if (!side) continue;
-            const isChair = t(3, x, y) === CHAIR;
+            const isChair = t(3, x, y) === CHAIR || !!sideChair;
             const isOurs = $dataMap.events.some(e => e && e.id >= ID0 && e.id <= ID1 && e.x === x && e.y === y);
             if (!isChair && !isOurs) continue;
             // the cell he steps onto it from: the side away from the table; a chair stands there (two back to back): slantwise from beside
             // that chair - he still comes sideways, facing the table (user 2026-11-05: "z boku też może wejść"); else above or below
             const bx = side === 6 ? x - 1 : x + 1, aisle = [[bx, y], [bx, y + 1], [bx, y - 1], [x, y + 1], [x, y - 1]].find(c => free(c[0], c[1]));
             if (!aisle) continue;
-            const other = $dataMap.events.some(e => e && !(e.id >= ID0 && e.id <= ID1) && e.x === x && e.y === y && (e.name || e.pages.some(p => p.image.characterName)));
+            const other = $dataMap.events.some(e => e && !(e.id >= ID0 && e.id <= ID1) && e.x === x && e.y === y && !marker(e) && (e.name || e.pages.some(p => p.image.characterName)));
             if (other) continue;
-            list.push({ x, y, side, ax: aisle[0], ay: aisle[1], by: null, table: [x + (side === 6 ? 1 : -1), y] });
+            const inGames = x >= GAMES.x0 && x <= GAMES.x1 && y >= GAMES.y0 && y <= GAMES.y1, game = inGames ? gameOf(x, y, side) : null;
+            if (inGames && game === "arm") continue;   // (Grum's table: his; a games-room table with no game - an ordinary seat)
+            if (game && !GAME_KINDS.includes(game)) game = null;
+            list.push({ x, y, side, ax: aisle[0], ay: aisle[1], by: null, table: [x + (side === 6 ? 1 : -1), y], game });
         }
         SEATS = { data: d, list, at: new Map(list.map(s => [s.x * 1000 + s.y, s])) };
         return SEATS;
     }
     const seatAt = (x, y) => chairs().at.get(x * 1000 + y) || null;
+    const gamer = g => hash(g.id, 21) < GAMER_SHARE;
+    const gameSeat = () => { const l = chairs().list.filter(s => s.game && !s.by && !($gamePlayer.x === s.ax && $gamePlayer.y === s.ay)); return l.length ? l[Math.floor(Math.random() * l.length)] : null; };
+    // where a guest sits down: a gamer at a games table when one is free, else his own chair, else any
+    const seatFor = g => (gamer(g) && gameSeat()) || (g.home && !g.home.by ? g.home : null) || freeSeat();
     function freeSeat(prefer) {
-        const list = chairs().list.filter(s => !s.by && !(($gamePlayer.x === s.ax && $gamePlayer.y === s.ay)));
+        const list = chairs().list.filter(s => !s.by && !s.game && !(($gamePlayer.x === s.ax && $gamePlayer.y === s.ay)));
         if (!list.length) return null;
         if (prefer) { const near = list.filter(s => Math.abs(s.x - prefer.x) + Math.abs(s.y - prefer.y) < 14); if (near.length) return near[Math.floor(Math.random() * near.length)]; }
         return list[Math.floor(Math.random() * list.length)];
@@ -124,7 +158,9 @@
         setSprite(g);
         ev.locate(seat.x, seat.y);
         ev.setThrough(true);
-        g.state = "sit"; g.sitUntil = S.now + rnd(SIT_MIN, SIT_MAX); g.act = g.hungry ? "eat" : "drink"; g.actUntil = g.hungry ? S.now + EAT_FOR : 0; g.nextAct = S.now + rnd(1, REST_MAX); g.t0 = -1;
+        const atGame = !!seat.game;   // (at a games table: no bowl, a mug - and they play longer)
+        g.state = "sit"; g.sitUntil = S.now + rnd(SIT_MIN, SIT_MAX) * (atGame ? 1.6 : 1); g.act = g.hungry && !atGame ? "eat" : "drink"; g.actUntil = g.act === "eat" ? S.now + EAT_FOR : 0; g.nextAct = S.now + rnd(1, REST_MAX); g.t0 = -1;
+        g.sayAt = atGame ? S.now + rnd(6, GAME_SAY_MAX) : Infinity;
         // (the shift: he sits until it sends him off, with nothing in front of him until the hero brings it)
         if (SH) { g.sitUntil = Infinity; g.act = "wait"; g.nextAct = Infinity; if (SH.onSeated) SH.onSeated(g); }
     }
@@ -147,7 +183,7 @@
             if (!m) continue;
             const g = { id, ev, key: m[1], home: seatAt(d.x, d.y), seat: null, state: "out", hungry: hash(id, 13) < 0.6, stuck: 0, goal: null, t0: -1, act: "drink", out: 0 };
             S.guests.push(g);
-            if (present(g, h) && g.home && !g.home.by) sitNow(g, g.home);
+            if (present(g, h)) { const seat = seatFor(g); if (seat) sitNow(g, seat); else setOut(g); }
             else setOut(g);
         }
     }
@@ -251,7 +287,7 @@
                         break;
                     }
                     if (present(g, h) && !running) {
-                        const seat = (g.home && !g.home.by ? g.home : freeSeat());
+                        const seat = seatFor(g);
                         if (!seat) break;
                         // (the hour jumped - a sleep, a scene, a test: he has been here a while; only those coming in now walk, a few at a time;
                         // after a shift on the map they come in by the door too - the hero is in the hall and sees it)
@@ -285,6 +321,7 @@
                     }
                     break;
                 case "sit":
+                    if (S.now >= g.sayAt && !running) { g.sayAt = S.now + rnd(GAME_SAY_MIN, GAME_SAY_MAX); gameWord(g); }
                     if (g.t0 < 0 && S.now >= g.nextAct) { if (g.act === "eat" && S.now >= g.actUntil) { g.act = "drink"; g.hungry = false; } g.t0 = S.now; }
                     if (g.t0 >= 0 && (S.now - g.t0) * 8 >= 8) { g.t0 = -1; g.nextAct = S.now + rnd(REST_MIN, REST_MAX); }
                     if (!running && g.t0 < 0 && (S.now >= g.sitUntil || !present(g, h))) {
@@ -294,6 +331,18 @@
                     break;
             }
         }
+    }
+
+    // a word over a player at a games table (js/teksty/goscie_sali.txt, gra.<kind>) - only when the hero is in the games room to hear it
+    function gameWord(g) {
+        const kind = g.seat && g.seat.game, list = kind && TK.gra && TK.gra[kind];
+        if (!list || !list.length) return;
+        const px = $gamePlayer.x, py = $gamePlayer.y;
+        if (px < GAMES.x0 - 2 || px > GAMES.x1 || py < GAMES.y0 - 2 || py > GAMES.y1) return;
+        // (one at a time in the room: two bubbles side by side over one table would cover each other)
+        if (S.now - (S.lastWord || -99) < 6) { g.sayAt = S.now + rnd(4, 10); return; }
+        const sb = T.api("SpeechBubbles") || window.SpeechBubbles;
+        if (sb && sb.say) { sb.say(g.ev, list[Math.floor(Math.random() * list.length)], 110); S.lastWord = S.now; }
     }
 
     // ------------------------------------------------------------------
@@ -420,7 +469,10 @@
             return true;
         },
         guests: () => S.guests.map(g => ({ id: g.id, key: g.key, state: g.state, act: g.act, x: g.ev.x, y: g.ev.y, seat: g.seat ? [g.seat.x, g.seat.y] : null, goal: g.goal ? [g.goal.x, g.goal.y] : null, imie: textOf(g).imie || "" })),
-        seats: () => chairs().list.map(s => ({ x: s.x, y: s.y, side: s.side, ax: s.ax, ay: s.ay, by: s.by ? s.by.id : 0 })),
+        seats: () => chairs().list.map(s => ({ x: s.x, y: s.y, side: s.side, ax: s.ax, ay: s.ay, by: s.by ? s.by.id : 0, game: s.game || null })),
+        // (TavernLife_Render: a guest seated by a games table is someone to talk to, though he is "through" on his chair)
+        isGuest: ev => S.guests.some(g => g.ev === ev && g.state !== "out"),
+        gamers: () => S.guests.filter(gamer).map(g => g.id),
         // tests: make him do it now
         force(id, what) {
             const g = S.guests.find(x => x.id === id);

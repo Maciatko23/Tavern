@@ -23,3 +23,12 @@ kod.plantEntry.1 = Wsadzasz w ziemię szyszkę (masz {n}). Sadzonka rośnie {GRO
 kod.plantEntry.2 = Wsadzasz w ziemię jedną szyszkę. Sadzonka od razu stoi na mapie i przez {GROW_DAYS} dni rośnie z dnia na dzień w dorosłe drzewo.
 kod.plantEntry.3 = Masz szyszek: {n}
 kod.plantEntry.4 = Młode drzewo: mniej uderzeń siekierą i mniej drewna
+
+# (2026-11-19) jabłoń z pestek
+kod.plantJablon.0 = Nie masz pestek jabłoni
+kod.doneJablon.0 = Posadzono jabłoń. Za {GROW_DAYS} dni będzie drzewem, które co roku da jabłka.
+kod.plantJablonEntry.0 = Posadź jabłoń
+kod.plantJablonEntry.1 = Wsadzasz w ziemię pestkę jabłoni (masz {n}). Siewka rośnie {GROW_DAYS} dni w jabłoń, która latem i jesienią da jabłka, co kilka dni nowe.
+kod.plantJablonEntry.2 = Wsadzasz w ziemię jedną pestkę. Siewka od razu stoi na mapie i przez {GROW_DAYS} dni rośnie w drzewo owocowe.
+kod.plantJablonEntry.3 = Masz pestek: {n}
+kod.plantJablonEntry.4 = Młoda jabłoń jeszcze nie owocuje

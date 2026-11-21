@@ -98,7 +98,8 @@ kit.test({ bootCheck: "the game boots", errorCheck: "no errors in the console" }
     t.check("floor 1 is the same floor as before (tiles, size, events)", JSON.stringify(sig1b) === JSON.stringify(sig1), { sig1, sig1b });
 
     // ---- a container: what the generator put in, once; then empty (self switch A shows it open)
-    const box = await t.json(`(function(){ const i = Underground.info(); const id = Object.keys(i.loot).map(Number).find(k => i.loot[k].got.length && $gameMap.event(k));
+    // (2026-11-19: half the chests are locked now - Zamki.js, a lockpick in sneaking: the search tried on one without a lock)
+    const box = await t.json(`(function(){ const i = Underground.info(); const id = Object.keys(i.loot).map(Number).find(k => i.loot[k].got.length && $gameMap.event(k) && !(window.Zamki && Zamki.isLocked($gameMap.event(k))));
         return id ? { id, got: i.loot[id].got, kind: i.loot[id].kind } : null; })()`);
     if (box) {
         const before = await t.json(`({ gold: $gameParty.gold(), items: ${JSON.stringify(box.got)}.filter(g => g.item).map(g => $gameParty.numItems($dataItems[g.item])) })`);

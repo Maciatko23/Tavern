@@ -9,6 +9,7 @@ plan.gosc = {kto} - do dnia {do}
 drzwi.zamkniete = > (Zamknięte. Ktoś tu mieszka.)
 drzwi.zapukaj = Zapukaj.
 drzwi.odejdz = Odejdź.
+drzwi.wytrych = Otwórz wytrychem (zamek {zamek}).
 drzwi.zza.gosc = > (Zza drzwi:) „Kto tam? ... Nie teraz, chłopcze. Później.”
 drzwi.zza.pula = > (Zza drzwi:) „Śpię... znaczy, nie ma mnie. Przyjdź jutro.”
 drzwi.cisza = > (Cisza. Nikogo.)

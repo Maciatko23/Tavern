@@ -116,7 +116,10 @@
         // the old maps 4-23 were removed)
         maps: { 219: 0.25, 222: 0.3, 29: 0.25 },
         from: 21, to: 5, calmDays: 3, rest: 2, size: [2, 4], far: 14, archer: 0.45, mercenary: 0.3, mercFrom: 8, knife: 0.3, knifeFrom: 5, awake: [1, 2],
-        sack: { gold: [6, 22], loot: [[ITEM.bread, 0.6, 2], [ITEM.rope, 0.4, 2], [ITEM.arrows, 0.35, 5], [ITEM.beer, 0.3, 2], [ITEM.smoked, 0.3, 1], [ITEM.iron, 0.15, 1], [ITEM.bandage, 0.25, 1]] }
+        sack: { gold: [6, 22], loot: [[ITEM.bread, 0.6, 2], [ITEM.rope, 0.4, 2], [ITEM.arrows, 0.35, 5], [ITEM.beer, 0.3, 2], [ITEM.smoked, 0.3, 1], [ITEM.iron, 0.15, 1], [ITEM.bandage, 0.25, 1]] },
+        // (2026-11-19, the user: "zamknięte skrzynie w obozach bandytów") an iron-bound box by the fire in `chance` of the camps - locked
+        // (Zamki.js: a lockpick, sneaking, `level`), the band's better takings in it
+        chest: { chance: 0.5, level: 2, gold: [25, 70], loot: [[ITEM.iron, 0.4, 2], [ITEM.smoked, 0.4, 2], [ITEM.bandage, 0.45, 2], [ITEM.arrows, 0.3, 8], [ITEM.cheese, 0.3, 1], [ITEM.knifeIron, 0.12, 1]] }
     };
     // a daytime ambush on the road (off by default - a map note <Ambush:0.03> turns it on there: the chance an hour, 7-19)
     const AMBUSH = { maps: {}, hours: [7, 19], size: [2, 3], archer: 0.4, knife: 0.3, far: [7, 10], calmDays: 5 };

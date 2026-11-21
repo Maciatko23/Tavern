@@ -72,7 +72,9 @@
     // - each fireplace burns on its own and a unit lasts 2.2x the scene's, was one shared fire at 1.5x)
     // (clean 2.4 -> 2.9 the same day: the logs go to BOTH far fireplaces now - 4 instead of 3, two trips from the pile - and the
     // rubbish to the kitchen's bin; the autopilot ran out of time with one fireplace still cold)
-    const STRETCH = { clean: 2.9, serve: 1.6, spawn: 1.6, patience: 1.7, fire: 2.2 };
+    // (patience 1.7 -> 3.4, 2026-11-19, the user: "wyraźnie wydłuż czas, po którym wyjdą klienci" - at level 5 a guest waited ~30 s,
+    // in the big hall from the counter to the far tables that was a walk out for most of them)
+    const STRETCH = { clean: 2.9, serve: 1.6, spawn: 1.6, patience: 3.4, fire: 2.2 };
     const fireOf = x => (x < 14 ? 0 : 1);   // (the hall's left half warms by the left fireplace, the right half by the right one)
     const ICON = { table: 400, wood: 381, coin: K.GOLD_ICON || 313, fire: 381 };
     // the log in his hands: the firewood's own picture (Drewno, item 61 - what goes on a campfire; 2026-11-18 the user: "ładna ikonka
@@ -134,6 +136,16 @@
     // ------------------------------------------------------------------
     let L = null;
     const running = () => !!L;
+    // (2026-11-19, measured at level 5: a trip from the counter to a far table and back took 25-40 s at the barefoot walk)
+    //   the waiter's step: while he works the hall (cleaning, the kegs, the stoves, serving) the hero walks one engine step faster - twice
+    //   as fast - and spends nothing for it (the run stays the run, on top of it);
+    //   the guests of the evening: 9 + level (the scene's 9 + 2 x level was 19 at level 5)
+    const WAITER_STEP = 1, LIVE_GUESTS = lvl => 9 + lvl;
+    const _realMoveSpeed = Game_Player.prototype.realMoveSpeed;
+    Game_Player.prototype.realMoveSpeed = function() {
+        const s = _realMoveSpeed.call(this);
+        return this === $gamePlayer && L && L.phase !== "intro" && L.phase !== "end" && here() ? s + WAITER_STEP : s;
+    };
     function wants(opts) { return here() && !L && !!window.GoscieSala && !!G() && !(opts && opts.scene); }
     function start(opts) {
         const st = K.stats(), level = clamp(opts.level === undefined || opts.level === null || opts.level === "" ? Math.min(K.MAX_LEVEL, st.done) : Number(opts.level), 0, K.MAX_LEVEL);
@@ -221,7 +233,10 @@
         L.stats = { guests: 0, orders: 0, served: 0, mistakes: 0, walkouts: 0, noSeat: 0, speed: 0, tips: 0, cold: 0 };
         const span = Math.round(c.spawnEnd * STRETCH.spawn) - 60;
         L.schedule = [];
-        for (let i = 0; i < c.guests; i++) L.schedule.push(Math.round(60 + (i + 0.15 + Math.random() * 0.6) * span / c.guests));
+        // (2026-11-19: 9 + level guests in the big hall - 9 + 2 x level, the scene's number, was 19 at level 5: one dish every 6 s, more
+        // than anyone can carry across this hall)
+        const n = Math.min(c.guests, LIVE_GUESTS(L.level || 0));
+        for (let i = 0; i < n; i++) L.schedule.push(Math.round(60 + (i + 0.15 + Math.random() * 0.6) * span / n));
         announce(Z().faza && Z().faza.serve, Z().hint && Z().hint.serve);
         pop(Z().popup && Z().popup.otwarte, { icon: 88 });
         se("Door2", 50, 100);

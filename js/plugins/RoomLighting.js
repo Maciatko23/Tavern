@@ -236,6 +236,7 @@
     const TORCH_SWITCH_ID = num(params.torchSwitch, 0);
     const TORCH_RADIUS = num(params.torchRadius, 140);
     const TORCH_COLOR = parseRGB(params.torchColor || "255,170,80");
+    const TORCH_DEEP = [255, 105, 35];   // (2026-11-20: the hero's torch's colour dances to this deeper one, as a real flame's)
     const TORCH_FLICKER = params.torchFlicker === "true";
     const FLAME_FLICKER = params.flameFlicker !== "false";
     const TORCH_EXPIRE_COMMON_EVENT = num(params.torchExpireCommonEvent, 0);
@@ -622,7 +623,7 @@
         // a flickering flame: k strength, s reach (scale), c how far the colour has drifted to the other one (alt)
         const fl = marker.flicker;
         this._flicker = fl ? { amount: fl.amount, alt: marker.shape === "circle" ? fl.alt : null, seed: (marker.eventId || 0) * 7.31 + marker.x * 0.37 + marker.y * 1.91,
-            k: 1, s: 1, c: 0, dip: 0 } : null;
+            k: 1, s: 1, c: 0, dip: 0, dd: 0 } : null;
         if (this._flicker && this._flicker.alt) this._altBitmap = makeCircleGlowBitmap(marker.radius, this._flicker.alt).bitmap;
         // how far the light reaches from its point (for leaving out lights that are off the screen)
         this._reach = marker.shape === "cone"
@@ -636,13 +637,21 @@
         const f = this._flicker;
         if (!f || frame % FLICKER_STEP !== 0) return;
         const t = frame / 60, sd = f.seed;
-        const n = 0.55 * noise1(t * 1.1, sd) + 0.3 * noise1(t * 3.3, sd + 7) + 0.15 * noise1(t * 8.7, sd + 13);   // 0..1
+        // (2026-11-19, the user: "to światło pochodni bardzo pulsuje i ten cień się musi szybko zmieniać ... zasięg pochodni zawsze taki
+        // sam, tylko ciemnieje i się rozjaśnia"): the reach stays put - the walls' shadows stand still -, only the strength breathes,
+        // slower and softer than before, and a draught's dip comes and goes smoothly (the flame's own picture still flickers). Then
+        // ("w jego zakresie jaśniejszy, ciemniejszy, żeby zasymulować prawdziwą pochodnię", "a to wahanie można jeszcze zmniejszyć"):
+        // a small breath of its strength, and its colour goes with it - a deeper orange as it dims, its own warm one as it flares
+        const n = 0.6 * noise1(t * 0.6, sd) + 0.3 * noise1(t * 1.7, sd + 7) + 0.1 * noise1(t * 4.2, sd + 13);   // 0..1
         if (f.dip > 0) f.dip -= FLICKER_STEP;
-        else if (Math.random() < 0.003 * FLICKER_STEP) f.dip = 6 + Math.random() * 12;
-        const w = (n - 0.5) * 2.2 - (f.dip > 0 ? 0.45 : 0);
-        f.k = Math.max(0.2, 1 + f.amount * (w - 0.2));        // strength: mostly just under full
-        f.s = Math.max(0.5, 1 + f.amount * 0.45 * w);           // reach
-        if (f.alt) f.c = Math.max(0, Math.min(1, 1.4 * noise1(t * 0.55, sd + 29) - 0.2));
+        else if (Math.random() < 0.0012 * FLICKER_STEP) f.dip = 20 + Math.random() * 20;
+        f.dd += ((f.dip > 0 ? 0.25 : 0) - f.dd) * 0.12;
+        const w = (n - 0.5) * 2 - f.dd;
+        f.k = Math.max(0.3, 1 + f.amount * 0.5 * (w - 0.2));   // strength: mostly just under full
+        f.s = 1;                                                // reach: always the same
+        // (2026-11-20, "światło migocze kolorami jak przy prawdziwej pochodni? zasięg ma być cały czas ten sam"): the colour dances
+        // between its own and the deeper one, smoothly, a couple of times a second, and goes deeper as the flame dims
+        if (f.alt) f.c = Math.max(0, Math.min(1, 0.5 - 0.4 * w + 0.6 * (noise1(t * 2.2, sd + 29) - 0.5)));
     };
 
     Sprite_RoomLight.prototype.update = function() {
@@ -732,7 +741,7 @@
     // already set to "destination-out" by the caller.
     function punchCircleHole(context, cx, cy, radius, weight = 1, soft = false) {
         const gradient = context.createRadialGradient(cx, cy, 0, cx, cy, radius);
-        const stops = soft ? SOFT_STOPS : HARD_STOPS;   // (<LightSoft>: a long even fall-off - big fill lights leave no bands between them)
+        const stops = soft === 2 ? TORCH_STOPS : soft ? SOFT_STOPS : HARD_STOPS;   // (<LightSoft>: a long even fall-off - big fill lights leave no bands between them; 2: the hero's torch)
         for (const [at, k] of stops) gradient.addColorStop(at, `rgba(0,0,0,${k * weight})`);
         context.fillStyle = gradient;
         // (a square filled with the radial gradient, not an arc path: the software renderer triangulates a big arc
@@ -742,6 +751,10 @@
 
     const HARD_STOPS = [[0, 1], [0.6, 0.85], [1, 0]];
     const SOFT_STOPS = [[0, 1], [0.25, 0.9], [0.5, 0.62], [0.75, 0.27], [1, 0]];
+    // the hero's torch (2026-11-20, the user: "o 50% większy zasięg i niech światło przechodzi w ciemność jeszcze bardziej stopniowo
+    // i płynnie"): a bright middle, then one smooth S down to nothing - no bend anywhere (1 - smoothstep from 0.15 of the radius)
+    const smoothFall = (from, peak) => { const out = []; for (let i = 0; i <= 10; i++) { const r = i / 10, x = Math.max(0, Math.min(1, (r - from) / (1 - from))); out.push([r, peak * (1 - x * x * (3 - 2 * x))]); } return out; };
+    const TORCH_STOPS = smoothFall(0.15, 1);
 
     // ---- the lights on the graphics card (2026-10-30, docs/wydajnosc/etap3_swiatla.md; Wydajnosc.opts.lightGpu false: the canvases
     // as before). The darkness, the glows (here) and Farming_Render's night are RenderTextures drawn from pooled sprites: a hole in the
@@ -784,7 +797,7 @@
             return t;
         }
         // a hole in the dark: shape 0 hard / 1 soft, at strength w (the alpha of the sprite up to 1; past it the stops are clamped)
-        const HOLE_STOPS = [HARD_STOPS, SOFT_STOPS];
+        const HOLE_STOPS = [HARD_STOPS, SOFT_STOPS, TORCH_STOPS];   // (2: the hero's torch)
         function holeTexture(shape, w) {
             const lv = w > 1 ? Math.min(LEVELS, Math.round((w - 1) / STEP)) : 0;
             return gradient("hole" + shape + "_" + lv, "0,0,0", HOLE_STOPS[shape], 0, 1 + lv * STEP);
@@ -842,6 +855,126 @@
             ERASE: PIXI.BLEND_MODES.ERASE, ADD: PIXI.BLEND_MODES.ADD, NORMAL: PIXI.BLEND_MODES.NORMAL, ATOP: BLEND_ATOP, DST_IN: BLEND_DST_IN };
     })();
     T.register("LightGpu", LightGpu);
+
+    // ---- walls stop a flame (2026-11-19, the user: "a da się zrobić, żeby światło pochodni nie przechodziło poza ściany?"): where
+    // Pokoje.js knows the walls (the interiors, the underground) a flame's hole in the dark and its warm glow reach only what the flame
+    // itself sees - the eye's rays sent from the flame (Pokoje.lightArea): a wall lit on its face, nothing behind it. A light that stays
+    // put is cut once - pictures of its hole and of its glow with the rest taken away -, one that moves (the hero's torch, a carried
+    // candle) again when it has gone a tenth of a tile. Window beams, soft fills, daylight and other plugins' holes as before; where the
+    // walls are not known nothing changes.
+    const WallCut = (function() {
+        const MOVED = 0.1;
+        // the cut of a light (kept on `owner`): { path, lx, ly, serial, ... } or null - lx, ly the flame in tiles, reach in px; moved:
+        // how far it goes before it is cut again (tiles); eye [x, y]: where its shadows are thrown from, when not the flame (the hero's
+        // torch: from his eyes, so its shadows' edges are the edges of what he sees - one line, not two)
+        function cut(owner, lx, ly, reach, moved, eye) {
+            const map = $gameMap.mapId(), c = owner._wallCut, mv = moved || MOVED, ex = eye ? eye[0] : lx, ey = eye ? eye[1] : ly;
+            if (c && c.map === map && c.reach === reach && Math.abs(c.lx - lx) < mv && Math.abs(c.ly - ly) < mv && Math.abs(c.ex - ex) < mv && Math.abs(c.ey - ey) < mv) return c.path ? c : null;
+            const P = window.Pokoje, far = reach / $gameMap.tileWidth() + Math.hypot(ex - lx, ey - ly);
+            const path = P && P.lightArea ? P.lightArea(ex, ey, far) : null;
+            const n = owner._wallCut = { map, lx, ly, ex, ey, reach, path, serial: (c ? c.serial : 0) + 1, holes: c ? c.holes : new Map(), glows: c ? c.glows : new Map() };
+            return path ? n : null;
+        }
+        // takes away from a canvas what the flame does not light: its light point at (cx, cy), `scale` canvas px a tile
+        // (2026-11-20, the user: "żeby światło opadające od pochodni bardziej stopniowo przechodziło w ciemność": a flame is no
+        // point - its shadows' edges are soft, a third of a tile of half-shadow (0.3 reached 0.8 of a tile: into the next corridor round a corner); nothing reaches the far side of a wall even so)
+        const PENUMBRA = 0.12;   // (the blur's spread, tiles: it reaches some 3x as far)
+        function keepLit(x, c, cx, cy, scale) {
+            x.globalCompositeOperation = "destination-in";
+            x.setTransform(scale, 0, 0, scale, cx - c.lx * scale, cy - c.ly * scale);
+            x.fillStyle = "#000";
+            x.filter = "blur(" + Math.max(1, Math.round(scale * PENUMBRA)) + "px)";
+            x.fill(c.path);
+            x.filter = "none";
+            x.setTransform(1, 0, 0, 1, 0, 0);
+            x.globalCompositeOperation = "source-over";
+        }
+        // a picture kept (its canvas drawn again: the same texture, sent to the card once more)
+        function remember(old, canvas, info) {
+            if (old && old.tex && old.canvas !== canvas) { old.tex.destroy(true); old.tex = null; }
+            const b = old && old.canvas === canvas ? old : { tex: null };
+            return Object.assign(b, info, { canvas, dirty: true });
+        }
+        function texture(b) {
+            if (!b.tex) b.tex = LightGpu.textureOf(b.canvas);
+            else if (b.dirty) b.tex.baseTexture.update();
+            b.dirty = false;
+            return b.tex;
+        }
+        // a hole in the dark (shape 0 hard / 1 soft, strength w: a flame flaring past full gets the stops a tenth stronger) as a cut
+        // picture, its light point in the middle: { canvas, size } - radK its radius in the dark layer's px
+        function hole(c, shape, w, radK) {
+            const lv = 0, key = shape;   // (one picture; placeCut / drawCut add a flare past full strength as a second pass)
+            let b = c.holes.get(key);
+            if (b && b.serial === c.serial && b.radK === radK) return b;
+            const size = Math.ceil(radK) * 2 + 2, h = size / 2;
+            const canvas = b && b.canvas.width === size ? b.canvas : document.createElement("canvas");
+            canvas.width = canvas.height = size;
+            const x = canvas.getContext("2d"), g = x.createRadialGradient(h, h, 0, h, h, radK), mul = lv ? 1.1 : 1;
+            for (const [at, a] of (shape === 2 ? TORCH_STOPS : shape ? SOFT_STOPS : HARD_STOPS)) g.addColorStop(at, "rgba(0,0,0," + Math.min(1, a * mul).toFixed(4) + ")");
+            x.fillStyle = g;
+            x.fillRect(0, 0, size, size);
+            keepLit(x, c, h, h, $gameMap.tileWidth() / DARK_SCALE);
+            b = remember(b, canvas, { serial: c.serial, radK, size });
+            c.holes.set(key, b);
+            return b;
+        }
+        // a glow bitmap (its light point at the sprite's anchor ax, ay) as a cut picture the dark layer's size: { canvas }
+        function glow(c, bitmap, ax, ay) {
+            let b = c.glows.get(bitmap);
+            if (b && b.serial === c.serial) return b;
+            const k = 1 / DARK_SCALE, w = Math.max(1, Math.ceil(bitmap.width * k)), h = Math.max(1, Math.ceil(bitmap.height * k));
+            const canvas = b && b.canvas.width === w && b.canvas.height === h ? b.canvas : document.createElement("canvas");
+            canvas.width = w;
+            canvas.height = h;
+            const x = canvas.getContext("2d");
+            x.drawImage(bitmap._canvas, 0, 0, w, h);
+            keepLit(x, c, ax * w, ay * h, $gameMap.tileWidth() * w / bitmap.width);
+            b = remember(b, canvas, { serial: c.serial });
+            c.glows.set(bitmap, b);
+            return b;
+        }
+        // the same at full size into a Bitmap of its own (the hero's torch's glow sprite)
+        function glowInto(c, src, into) {
+            const x = into.context;
+            x.clearRect(0, 0, into.width, into.height);
+            x.drawImage(src._canvas, 0, 0);
+            keepLit(x, c, src.width / 2, src.height / 2, $gameMap.tileWidth());
+            into._baseTexture.update();
+        }
+        // the pictures of a light's cut off the graphics card (the map goes)
+        function free(owner) {
+            const c = owner && owner._wallCut;
+            if (!c) return;
+            for (const m of [c.holes, c.glows]) for (const b of m.values()) if (b.tex) { b.tex.destroy(true); b.tex = null; }
+            owner._wallCut = null;
+        }
+        return { cut, hole, glow, glowInto, texture, free };
+    })();
+    T.register("LightWallCut", WallCut);
+    // where a cut's light point is on the screen (its picture is drawn there: the walls fall where they were cut)
+    const cutX = c => $gameMap.adjustX(c.lx) * $gameMap.tileWidth(), cutY = c => $gameMap.adjustY(c.ly) * $gameMap.tileHeight();
+    // a cut hole into a pool of the dark (the card): its middle at (cx, cy), scaled by sc (a flame's reach), alpha its strength
+    function placeCut(pool, b, cx, cy, sc, alpha) {
+        const tex = WallCut.texture(b), d = b.size * sc;
+        for (const a of alpha > 1 ? [1, Math.min(0.5, (alpha - 1) * 2.5)] : [alpha < 0 ? 0 : alpha]) {   // (past full: a faint second pass)
+            const s = pool.next(tex);
+            s.position.set(cx - d / 2, cy - d / 2);
+            s.scale.set(sc, sc);
+            s.alpha = a;
+        }
+    }
+    // the same onto a canvas (in its own pixels, whatever its transform; its blend as set)
+    function drawCut(ctx, b, cx, cy, sc, alpha) {
+        const d = b.size * sc;
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        for (const a of alpha > 1 ? [1, Math.min(0.5, (alpha - 1) * 2.5)] : [alpha < 0 ? 0 : alpha]) {   // (past full: a faint second pass)
+            ctx.globalAlpha = a;
+            ctx.drawImage(b.canvas, cx - d / 2, cy - d / 2, d, d);
+        }
+        ctx.restore();
+    }
 
     function punchConeHole(context, cx, cy, geom, weight = 1) {
         const { nearLeft, nearRight, leftDir, rightDir, mainDir, length } = geom;
@@ -902,6 +1035,31 @@
     const sameNumbers = (a, b) => { if (!a || a.length !== b.length) return false; for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false; return true; };
     const DARK_TINT = (DARK_COLOR[0] << 16) | (DARK_COLOR[1] << 8) | DARK_COLOR[2];
 
+    // the cut of a visible light: a flame of this plugin's (not a window's beam, a soft fill, another plugin's hole) where walls are known
+    Spriteset_Map.prototype.flameCut = function(hole) {
+        const s = hole.sprite;
+        if (hole.shape !== "circle" || hole.soft || !s._flicker || s._tileX === undefined) return null;
+        let tx = s._tileX, ty = s._tileY;
+        if (s._follow) { const ev = $gameMap.event(s._eventId); if (ev) { tx = ev._realX; ty = ev._realY; } }
+        return WallCut.cut(hole, tx + s._offsetX / $gameMap.tileWidth(), ty + s._offsetY / $gameMap.tileHeight(), s._reach);
+    };
+    // the cut of the hero's torch or of a torch stuck in the ground (at x, y on the map's screen), kept on `owner`
+    Spriteset_Map.prototype.torchCut = function(owner, x, y) {
+        return WallCut.cut(owner, x / $gameMap.tileWidth() + $gameMap.displayX(), y / $gameMap.tileHeight() + $gameMap.displayY(), TORCH_RADIUS * 1.1);
+    };
+    // the hero's torch: cut again every fiftieth of a tile (an edge that glides), its shadows from his eyes
+    Spriteset_Map.prototype.playerTorchCut = function() {
+        const t = this._playerTorch, P = $gamePlayer;
+        if (!t || t._lx === undefined) return null;
+        return WallCut.cut(t, t._lx, t._ly, TORCH_RADIUS * 1.1, 0.02, [P._realX + 0.5, P._realY + 0.6]);
+    };
+    Spriteset_Map.prototype.stuckOwner = function(id) {
+        const m = this._stuckCuts || (this._stuckCuts = new Map());
+        let o = m.get(id);
+        if (!o) m.set(id, (o = {}));
+        return o;
+    };
+
     Spriteset_Map.prototype.redrawDarkness = function() {
         if (!this._darknessSprite) return;
         const tod = this._roomTimeOfDay || timeOfDay();
@@ -950,11 +1108,13 @@
             const w = weightOf(hole.sprite);
             if (hole.shape === "circle") {
                 const reach = hole.sprite._flicker ? hole.radius * hole.sprite._flicker.s : hole.radius;
+                const cut = this.flameCut(hole), shape = hole.soft || hole.edge ? 1 : 0;
                 if (hole._blockers && hole._blockers.length) {
                     // with people in its light: the hole on its own canvas first, their shadows cut out of it, then out of the darkness
                     const cx = hole.sprite.x * k, cy = hole.sprite.y * k, rad = reach * k, size = Math.ceil(rad * 2) + 2;
                     const ox = cx - rad - 1, oy = cy - rad - 1, c = Sun.scratchCanvas(size, size);
-                    punchCircleHole(c, cx - ox, cy - oy, rad, w, hole.soft || hole.edge);
+                    if (cut) drawCut(c, WallCut.hole(cut, shape, w, hole.radius * k), cx - ox, cy - oy, reach / hole.radius, w);
+                    else punchCircleHole(c, cx - ox, cy - oy, rad, w, hole.soft || hole.edge);
                     Sun.cutLightShadows(c, hole._blockers, k, ox, oy);
                     context.save();
                     context.setTransform(1, 0, 0, 1, 0, 0);
@@ -963,15 +1123,22 @@
                     context.restore();
                     continue;
                 }
-                punchCircleHole(context, hole.sprite.x, hole.sprite.y, reach, w, hole.soft || hole.edge);
+                if (cut) drawCut(context, WallCut.hole(cut, shape, w, hole.radius * k), hole.sprite.x * k, hole.sprite.y * k, reach / hole.radius, w);
+                else punchCircleHole(context, hole.sprite.x, hole.sprite.y, reach, w, hole.soft || hole.edge);
             } else {
                 punchConeHole(context, hole.sprite.x, hole.sprite.y, hole.geom, w);
             }
         }
         if (this._playerTorch) {
-            punchCircleHole(context, this._playerTorch.x, this._playerTorch.y, TORCH_RADIUS);
+            const t = this._playerTorch, cut = this.playerTorchCut();
+            if (cut) drawCut(context, WallCut.hole(cut, 2, 1, TORCH_RADIUS * k), cutX(cut) * k, cutY(cut) * k, 1, t._strength);
+            else punchCircleHole(context, t.x, t.y, TORCH_RADIUS, t._strength, 2);
         }
-        for (const l of stuck) punchCircleHole(context, l.x, l.y, TORCH_RADIUS * (0.97 + 0.03 * Math.sin(Graphics.frameCount * 0.21 + l.id)));
+        for (const l of stuck) {   // (the same reach always, a slow breath of its strength)
+            const a = 0.94 + 0.06 * noise1(Graphics.frameCount / 60 * 0.8, l.id), cut = this.torchCut(this.stuckOwner(l.id), l.x, l.y);
+            if (cut) drawCut(context, WallCut.hole(cut, 2, 1, TORCH_RADIUS * k), l.x * k, l.y * k, 1, a);
+            else punchCircleHole(context, l.x, l.y, TORCH_RADIUS, a, 2);
+        }
         context.restore();
         bitmap._baseTexture.update();
     };
@@ -1016,6 +1183,9 @@
     const _Spriteset_Map_destroy = Spriteset_Map.prototype.destroy;
     Spriteset_Map.prototype.destroy = function(options) {
         this.freeLightGpu();
+        for (const h of this._roomHoles || []) WallCut.free(h);
+        if (this._playerTorch) WallCut.free(this._playerTorch);
+        for (const o of (this._stuckCuts || new Map()).values()) WallCut.free(o);
         _Spriteset_Map_destroy.call(this, options);
     };
 
@@ -1056,8 +1226,9 @@
             const hole = visible[i], s = hole.sprite, w = weightOf(s);
             if (hole.shape === "circle") {
                 if (hole._blockers && hole._blockers.length) continue;   // (paintBlockedGpu)
-                const reach = s._flicker ? hole.radius * s._flicker.s : hole.radius;
-                placeHole(holes, LightGpu.holeTexture(hole.soft || hole.edge ? 1 : 0, w), s.x * k, s.y * k, reach * k, w);
+                const reach = s._flicker ? hole.radius * s._flicker.s : hole.radius, cut = this.flameCut(hole), shape = hole.soft || hole.edge ? 1 : 0;
+                if (cut) placeCut(holes, WallCut.hole(cut, shape, w, hole.radius * k), s.x * k, s.y * k, reach / hole.radius, w);
+                else placeHole(holes, LightGpu.holeTexture(shape, w), s.x * k, s.y * k, reach * k, w);
             } else {
                 const c = coneHole(hole), sp = holes.next(c.tex);
                 sp.position.set(s.x * k + c.x, s.y * k + c.y);
@@ -1065,8 +1236,16 @@
                 sp.alpha = w > 1 ? 1 : w < 0 ? 0 : w;
             }
         }
-        if (this._playerTorch) placeHole(holes, LightGpu.holeTexture(0, 1), this._playerTorch.x * k, this._playerTorch.y * k, TORCH_RADIUS * k, 1);
-        for (const l of stuck) placeHole(holes, LightGpu.holeTexture(0, 1), l.x * k, l.y * k, TORCH_RADIUS * (0.97 + 0.03 * Math.sin(Graphics.frameCount * 0.21 + l.id)) * k, 1);
+        if (this._playerTorch) {
+            const t = this._playerTorch, cut = this.playerTorchCut();
+            if (cut) placeCut(holes, WallCut.hole(cut, 2, 1, TORCH_RADIUS * k), cutX(cut) * k, cutY(cut) * k, 1, t._strength);
+            else placeHole(holes, LightGpu.holeTexture(2, 1), t.x * k, t.y * k, TORCH_RADIUS * k, t._strength);
+        }
+        for (const l of stuck) {   // (the same reach always, a slow breath of its strength)
+            const a = 0.94 + 0.06 * noise1(Graphics.frameCount / 60 * 0.8, l.id), cut = this.torchCut(this.stuckOwner(l.id), l.x, l.y);
+            if (cut) placeCut(holes, WallCut.hole(cut, 2, 1, TORCH_RADIUS * k), l.x * k, l.y * k, 1, a);
+            else placeHole(holes, LightGpu.holeTexture(2, 1), l.x * k, l.y * k, TORCH_RADIUS * k, a);
+        }
         holes.end();
         g.draw(true);
     };
@@ -1079,10 +1258,11 @@
             if (hole.shape !== "circle" || !hole._blockers || !hole._blockers.length) continue;
             const w = weightOf(s), reach = s._flicker ? hole.radius * s._flicker.s : hole.radius;
             const cx = s.x * k, cy = s.y * k, rad = reach * k, size = Math.ceil(rad * 2) + 2;
-            const ox = cx - rad - 1, oy = cy - rad - 1;
+            const ox = cx - rad - 1, oy = cy - rad - 1, cut = this.flameCut(hole), shape = hole.soft || hole.edge ? 1 : 0;
             g.sm.texture = LG.canvasTexture(Sun.lightShadowMask(size, size, hole._blockers, k, ox, oy));
             g.sm.position.set(ox, oy);
-            placeHole(g.sg, LG.holeTexture(hole.soft || hole.edge ? 1 : 0, w), cx, cy, rad, w);
+            if (cut) placeCut(g.sg, WallCut.hole(cut, shape, w, hole.radius * k), cx, cy, reach / hole.radius, w);
+            else placeHole(g.sg, LG.holeTexture(shape, w), cx, cy, rad, w);
             g.sg.end();
             LG.render(g.scratch.root, g.scratch, true);
             LG.drawSolo(g, g.scratch.rt, 0, 0, 1, 1, LG.ERASE, 1);
@@ -1092,15 +1272,17 @@
             const gw = src.width * sc, gh = src.height * sc, x = (s.x - s.anchor.x * gw) * k, y = (s.y - s.anchor.y * gh) * k;
             const a = Math.max(0, Math.min(1, weightOf(s)));
             const alt = f && f.alt && s._altBitmap && s._altBitmap._canvas;
+            // (a flame cut by the walls: its cut glow pictures, at the dark layer's size)
+            const gc = cut ? WallCut.glow(cut, src, s.anchor.x, s.anchor.y) : null, gc2 = cut && alt ? WallCut.glow(cut, s._altBitmap, s.anchor.x, s.anchor.y) : null;
             if (x >= ox - 0.5 && y >= oy - 0.5 && x + gw * k <= ox + size + 0.5 && y + gh * k <= oy + size + 0.5) {
-                const sp = g.sg.next(LG.bitmapTexture(src));
+                const sp = g.sg.next(gc ? WallCut.texture(gc) : LG.bitmapTexture(src));
                 sp.position.set(x, y);
-                sp.scale.set((gw * k) / src.width, (gh * k) / src.height);
+                sp.scale.set((gw * k) / (gc ? gc.canvas.width : src.width), (gh * k) / (gc ? gc.canvas.height : src.height));
                 sp.alpha = alt ? a * (1 - f.c) : a;
                 if (alt) {
-                    const sp2 = g.sg.next(LG.bitmapTexture(s._altBitmap));
+                    const sp2 = g.sg.next(gc2 ? WallCut.texture(gc2) : LG.bitmapTexture(s._altBitmap));
                     sp2.position.set(x, y);
-                    sp2.scale.set((gw * k) / s._altBitmap.width, (gh * k) / s._altBitmap.height);
+                    sp2.scale.set((gw * k) / (gc2 ? gc2.canvas.width : s._altBitmap.width), (gh * k) / (gc2 ? gc2.canvas.height : s._altBitmap.height));
                     sp2.alpha = a * f.c;
                 }
                 g.sg.end();
@@ -1110,12 +1292,12 @@
                 const c = Sun.scratchCanvas(Math.ceil(gw * k) + 1, Math.ceil(gh * k) + 1);
                 if (alt) {
                     c.globalAlpha = a * (1 - f.c);
-                    c.drawImage(src._canvas, 0, 0, gw * k, gh * k);
+                    c.drawImage(gc ? gc.canvas : src._canvas, 0, 0, gw * k, gh * k);
                     c.globalAlpha = a * f.c;
-                    c.drawImage(s._altBitmap._canvas, 0, 0, gw * k, gh * k);
+                    c.drawImage(gc2 ? gc2.canvas : s._altBitmap._canvas, 0, 0, gw * k, gh * k);
                 } else {
                     c.globalAlpha = a;
-                    c.drawImage(src._canvas, 0, 0, gw * k, gh * k);
+                    c.drawImage(gc ? gc.canvas : src._canvas, 0, 0, gw * k, gh * k);
                 }
                 Sun.cutLightShadows(c, hole._blockers, k, x, y);
                 LG.drawSolo(gl, LG.canvasTexture(c.canvas), x, y, 1, 1, LG.ADD, 1);
@@ -1156,14 +1338,16 @@
             const w = src.width * sc, h = src.height * sc, x = (s.x - s.anchor.x * w) * k, y = (s.y - s.anchor.y * h) * k;
             const a = Math.max(0, Math.min(1, weightOf(s)));
             const alt = f && f.alt && s._altBitmap && s._altBitmap._canvas;   // its colour drifting to the other one
-            const sp = adds.next(LightGpu.bitmapTexture(src));
+            const cut = this.flameCut(hole), gc = cut ? WallCut.glow(cut, src, s.anchor.x, s.anchor.y) : null;   // (cut by the walls)
+            const sp = adds.next(gc ? WallCut.texture(gc) : LightGpu.bitmapTexture(src));
             sp.position.set(x, y);
-            sp.scale.set((w * k) / src.width, (h * k) / src.height);
+            sp.scale.set((w * k) / (gc ? gc.canvas.width : src.width), (h * k) / (gc ? gc.canvas.height : src.height));
             sp.alpha = alt ? a * (1 - f.c) : a;
             if (alt) {
-                const sp2 = adds.next(LightGpu.bitmapTexture(s._altBitmap));
+                const gc2 = cut ? WallCut.glow(cut, s._altBitmap, s.anchor.x, s.anchor.y) : null;
+                const sp2 = adds.next(gc2 ? WallCut.texture(gc2) : LightGpu.bitmapTexture(s._altBitmap));
                 sp2.position.set(x, y);
-                sp2.scale.set((w * k) / s._altBitmap.width, (h * k) / s._altBitmap.height);
+                sp2.scale.set((w * k) / (gc2 ? gc2.canvas.width : s._altBitmap.width), (h * k) / (gc2 ? gc2.canvas.height : s._altBitmap.height));
                 sp2.alpha = a * f.c;
             }
         }
@@ -1188,14 +1372,15 @@
             // with people in its light the glow goes on its own canvas first, their shadows cut out of it (no warm glow in a shadow)
             const shaded = hole._blockers && hole._blockers.length, Sun = shaded ? T.api("Sun") : null;
             const c = shaded ? Sun.scratchCanvas(Math.ceil(w * k) + 1, Math.ceil(h * k) + 1) : context, dx = shaded ? 0 : x, dy = shaded ? 0 : y;
+            const cut = this.flameCut(hole), pic = bmp => (cut ? WallCut.glow(cut, bmp, s.anchor.x, s.anchor.y).canvas : bmp._canvas);   // (cut by the walls)
             if (f && f.alt && s._altBitmap && s._altBitmap._canvas) {   // its colour drifting to the other one
                 c.globalAlpha = a * (1 - f.c);
-                c.drawImage(src._canvas, dx, dy, w * k, h * k);
+                c.drawImage(pic(src), dx, dy, w * k, h * k);
                 c.globalAlpha = a * f.c;
-                c.drawImage(s._altBitmap._canvas, dx, dy, w * k, h * k);
+                c.drawImage(pic(s._altBitmap), dx, dy, w * k, h * k);
             } else {
                 c.globalAlpha = a;
-                c.drawImage(src._canvas, dx, dy, w * k, h * k);
+                c.drawImage(pic(src), dx, dy, w * k, h * k);
             }
             if (shaded) {
                 Sun.cutLightShadows(c, hole._blockers, k, x, y);
@@ -1244,21 +1429,53 @@
         this.anchor.x = 0.5;
         this.anchor.y = 0.5;
         this.blendMode = 1; // additive - punches through darkness like the other lights
-        this.bitmap = makeCircleGlowBitmap(TORCH_RADIUS, TORCH_COLOR).bitmap;
+        // (its glows fall off as smoothly as its light)
+        const glow = c => makeRadialGlowBitmap(TORCH_RADIUS * 2, smoothFall(0.05, 0.85).map(([at, a]) => [at, c[0], c[1], c[2], +a.toFixed(4)]));
+        this.bitmap = this._glowSrc = glow(TORCH_COLOR);
+        this._deepSrc = glow(TORCH_DEEP);
+        this._deepNow = this._deepSrc;   // (the deeper glow as it is drawn now - cut by the walls or whole; Spriteset's _playerTorchDeep shows it)
+        this._deepOpacity = 0;
         this._flickerPhase = Math.random() * Math.PI * 2;
+        this._strength = 1;
+    };
+    // its glow cut by the walls (WallCut; null: whole)
+    Sprite_PlayerTorch.prototype.cutBy = function(cut) {
+        if (!cut) { if (this.bitmap !== this._glowSrc) this.bitmap = this._glowSrc; this._deepNow = this._deepSrc; return; }
+        if (!this._glowCut) { this._glowCut = new Bitmap(this._glowSrc.width, this._glowSrc.height); this._deepCut = new Bitmap(this._deepSrc.width, this._deepSrc.height); }
+        if (this._glowCutSerial !== cut.serial || this._glowCutOf !== cut) {
+            WallCut.glowInto(cut, this._glowSrc, this._glowCut);
+            WallCut.glowInto(cut, this._deepSrc, this._deepCut);
+            this._glowCutSerial = cut.serial;
+            this._glowCutOf = cut;
+        }
+        if (this.bitmap !== this._glowCut) this.bitmap = this._glowCut;
+        this._deepNow = this._deepCut;
     };
 
     Sprite_PlayerTorch.prototype.update = function() {
         Sprite.prototype.update.call(this);
         // the flame itself (Torch.js: in his hand, or the torch stuck in the ground while he works), else round him
         const spot = T.call("Torch", "lightSpot");
-        this.x = spot ? spot.x : $gamePlayer.screenX();
-        this.y = spot ? spot.y : $gamePlayer.screenY() - $gameMap.tileHeight() * 0.6;
+        // (2026-11-20) its light's point: the flame's place by him, smoothed - the hand's bob with each step does not shake the light
+        // and its shadows; on the map in tiles (_lx, _ly)
+        const tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), P = $gamePlayer, hx = P._realX + 0.5, hy = P._realY + 0.5;
+        const ox = (spot ? spot.x / tw + $gameMap.displayX() : hx) - hx, oy = (spot ? spot.y / th + $gameMap.displayY() : P._realY + 0.3) - hy;
+        if (!this._off || Math.abs(ox - this._off[0]) > 2 || Math.abs(oy - this._off[1]) > 2) this._off = [ox, oy];
+        else { this._off[0] += (ox - this._off[0]) * 0.15; this._off[1] += (oy - this._off[1]) * 0.15; }
+        this._lx = hx + this._off[0];
+        this._ly = hy + this._off[1];
+        this.x = $gameMap.adjustX(this._lx) * tw;
+        this.y = $gameMap.adjustY(this._ly) * th;
         if (TORCH_FLICKER) {
-            this._flickerPhase += 0.15 + Math.random() * 0.1;
-            const flick = 1 + Math.sin(this._flickerPhase) * 0.05 + (Math.random() - 0.5) * 0.04;
-            this.scale.x = this.scale.y = flick;
-            this.opacity = Math.round(255 * (0.88 + Math.random() * 0.12));
+            // (2026-11-19: the same size always - its walls' shadows stand still -, only its strength breathes, smoothly; it jumped every frame)
+            this._flickerPhase += 1 / 60;
+            const t = this._flickerPhase, n = 0.65 * noise1(t * 0.7, 3.1) + 0.35 * noise1(t * 2.1, 9.7);
+            this.scale.x = this.scale.y = 1;
+            // its colour dances like the flames' on the walls: a share c of the deeper glow, more of it as it dims
+            const w = (n - 0.5) * 2, c = Math.max(0, Math.min(1, 0.5 - 0.4 * w + 0.6 * (noise1(t * 2.2, 21.3) - 0.5))), g = 0.9 + 0.1 * n;
+            this.opacity = Math.round(255 * g * (1 - c));
+            this._deepOpacity = Math.round(255 * g * c);
+            this._strength = 0.94 + 0.06 * n;   // (its hole in the dark: a little darker and lighter, never wider)
         }
     };
 
@@ -1267,6 +1484,10 @@
         if (lit && !this._playerTorch) {
             this._playerTorch = new Sprite_PlayerTorch();
             this.addChild(this._playerTorch);
+            this._playerTorchDeep = new Sprite();   // (its deeper glow, mixed in by opacity)
+            this._playerTorchDeep.anchor.set(0.5, 0.5);
+            this._playerTorchDeep.blendMode = 1;
+            this.addChild(this._playerTorchDeep);
             this._torchMaxFrames = $gameTimer.frames();
             this._torchGauge = new Sprite_TorchGauge();
             // Live in the scene's HUD layer when there is one: the spriteset is
@@ -1277,14 +1498,26 @@
         } else if (!lit && this._playerTorch) {
             this.removeChild(this._playerTorch);
             this._playerTorch = null;
+            if (this._playerTorchDeep) { this.removeChild(this._playerTorchDeep); this._playerTorchDeep = null; }
             if (this._torchGauge.parent) this._torchGauge.parent.removeChild(this._torchGauge);
             this._torchGauge = null;
         }
         if (this._playerTorch) {
             this._playerTorch.update();
+            const cut = this.playerTorchCut();
+            this._playerTorch.cutBy(cut);
+            if (cut) { this._playerTorch.x = cutX(cut); this._playerTorch.y = cutY(cut); }   // (its glow where it was cut)
             // outdoors at night Farming_Render's night layer lights the torch as a campfire (its light, glow and flicker): this plain
             // glow would only double it (2026-10-08); in a dark room (this plugin's darkness) it stays as it was
             this._playerTorch.visible = !(this._nightLight && this._nightLight.visible);
+            const t = this._playerTorch, deep = this._playerTorchDeep;
+            if (deep) {
+                if (deep.bitmap !== t._deepNow) deep.bitmap = t._deepNow;
+                deep.x = t.x;
+                deep.y = t.y;
+                deep.opacity = TORCH_FLICKER ? t._deepOpacity : 0;
+                deep.visible = t.visible;
+            }
         }
         if (this._torchGauge) {
             // Torch.js keeps the torch's own time (game hours, in the save); without it the engine's timer as before

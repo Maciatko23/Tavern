@@ -875,6 +875,12 @@
     // ==================================================================
     const SPOT_PROMPT = { darts: "here", dice: "near", arm: "near", warcaby: "near", makao: "near" };
     let zoneMap = null, zoneKey = "";
+    // (2026-11-19) a table may be an event too - an object picture ("!...") in the way, like the one-tile !$Stolik_Szachy / !$Stolik_Kosci
+    const propAt = (x, y) => $gameMap.eventsXyNt(x, y).some(e => e.isNormalPriority() && /^!/.test(e.characterName()));
+    // (a chair: Winlu's side chairs - seat 394 / 395 - and the round stool 390, on layer 2 or 3; never a part of the table)
+    const CHAIR_TILES = [390, 394, 395];
+    const chairAt = (x, y) => CHAIR_TILES.includes($gameMap.tileId(x, y, 2)) || CHAIR_TILES.includes($gameMap.tileId(x, y, 3));
+    const furnitureAt = (x, y) => $gameMap.isValid(x, y) && !chairAt(x, y) && (propAt(x, y) || (!$gameMap.checkPassage(x, y, 0x0f) && !!($gameMap.tileId(x, y, 2) || $gameMap.tileId(x, y, 3))));
     function zones() {
         const key = $gameMap.mapId() + ":" + $gameMap.events().length;
         if (zoneMap && zoneKey === key) return zoneMap;
@@ -883,13 +889,26 @@
         for (const ev of $gameMap.events()) {
             const t = lib.evTag(ev);
             if (!t || SPOT_PROMPT[t.kind] !== "near") continue;
-            const cells = [[ev.x, ev.y]];
-            for (let x = ev.x + 1; x < ev.x + 8 && $gameMap.isValid(x, ev.y) && !$gameMap.checkPassage(x, ev.y, 0x0f); x++) cells.push([x, ev.y]);
+            // (the tagged event's cell and the table joined to it, 4-way, within 4 of it - any shape: a long table, a tall one, a one-tile
+            // table event; the chairs are left out (the user: "jak dotykam tylko stołu - okienko; dotykam krzesła - bez okienka, tylko
+            // rozmowa, jeśli ktoś tam siedzi"); walls and the floor stop it)
+            const cells = [[ev.x, ev.y]], seen = new Set([ev.x + "," + ev.y]);
+            for (let i = 0; i < cells.length; i++) {
+                const [cx, cy] = cells[i];
+                for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+                    const nx = cx + dx, ny = cy + dy, k = nx + "," + ny;
+                    if (seen.has(k) || Math.abs(nx - ev.x) + Math.abs(ny - ev.y) > 4) continue;
+                    seen.add(k);
+                    if (furnitureAt(nx, ny)) cells.push([nx, ny]);
+                }
+            }
             for (const [x, y] of cells) zoneMap.set(x + "," + y, { ev, kind: t.kind });
         }
         return zoneMap;
     }
-    const talker = (x, y, not) => $gameMap.eventsXy(x, y).some(e => e !== not && e.isNormalPriority() && !e.isThrough() && e.characterName() && e.list() && e.list().length > 1);
+    // (2026-11-19: guests sit at the games tables too - on his chair a guest is "through", still O talks to him when he is faced)
+    const guest = e => !!(window.GoscieSala && GoscieSala.isGuest && GoscieSala.isGuest(e));
+    const talker = (x, y, not) => $gameMap.eventsXy(x, y).some(e => e !== not && e.isNormalPriority() && !e.isTransparent() && (!e.isThrough() || guest(e)) && e.characterName() && e.list() && e.list().length > 1);
     function spotHere() {
         if (!$gameMap || $gameMap.isEventRunning() || $gameMessage.isBusy() || !$gamePlayer.canMove()) return null;
         if (window.ZmianaSala && ZmianaSala.running && ZmianaSala.running()) return null;   // (the shift has its own plate)

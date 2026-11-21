@@ -89,7 +89,8 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9428, lightGpu: true, bootCheck
     t.check("sznur dzwonu narysowany z arkusza drzwi nie rzuca czarnego klina: za nim widać podłogę", (await t.json("Pokoje.doors()")).length === 0 && (await c(5, 5)) === 0, [await t.json("Pokoje.doors()"), await c(5, 5)]);
     // poza wnętrzami budynków nic
     await t.go(9, 7, 8, 8); await t.frames(20);
-    t.check("w piwnicy (zestaw lochów) brak zakrycia", !(await t.json("Pokoje.active()")));
+    // (2026-11-19, the user: "czemu tak samo nie ma w podziemiach") the dungeon sets too: the cellar, the floors, the mine
+    t.check("w piwnicy (zestaw lochów) też zasięg widzenia", await t.json("Pokoje.active()"));
     await t.go(3, 60, 51, 2); await t.frames(20);
     t.check("na dworze brak zakrycia", !(await t.json("Pokoje.active()")));
     await t.go(1, 14, 22, 8); await t.frames(20);

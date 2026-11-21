@@ -6725,5 +6725,329 @@
   ],
   "wybrana": 1,
   "uwaga": "2026-11-17: dawna ikona przedmiotu 93 (Lina - teraz Sznurek); komórka IconSet 742"
+ },
+ "493": {
+  "name": "Nasiona lnu",
+  "prompt": "RPG inventory item icon: small burlap seed pouch tied with string with a little blue flax flower stitched on it, a few shiny brown flax seeds spilled, centered",
+  "job": "f7dd035a-f22c-4858-acbb-279acc57f9d8",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "f7dd035a-f22c-4858-acbb-279acc57f9d8",
+    "prompt": "RPG inventory item icon: small burlap seed pouch tied with string with a little blue flax flower stitched on it, a few shiny brown flax seeds spilled, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "494": {
+  "name": "Nasiona owsa",
+  "prompt": "RPG inventory item icon: small burlap pouch tied with string, pale cream oat grains spilling out, centered",
+  "job": "06dbc02d-3ed1-4701-9945-2a76f9c99671",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "06dbc02d-3ed1-4701-9945-2a76f9c99671",
+    "prompt": "RPG inventory item icon: small burlap pouch tied with string, pale cream oat grains spilling out, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "495": {
+  "name": "Nasiona buraka",
+  "prompt": "RPG inventory item icon: small burlap seed pouch tied with string with a little dark red beetroot stitched on it, a few knobbly brown beet seeds spilled, centered",
+  "job": "bfa88028-50ab-4ba2-b369-b48322549902",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "bfa88028-50ab-4ba2-b369-b48322549902",
+    "prompt": "RPG inventory item icon: small burlap seed pouch tied with string with a little dark red beetroot stitched on it, a few knobbly brown beet seeds spilled, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "496": {
+  "name": "Dymka cebuli",
+  "prompt": "RPG inventory item icon: a small pile of five tiny golden-brown onion sets (baby onion bulbs) with dry papery skins, centered",
+  "job": "667acf6b-7134-4f99-86ed-ee5f928066a4",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "667acf6b-7134-4f99-86ed-ee5f928066a4",
+    "prompt": "RPG inventory item icon: a small pile of five tiny golden-brown onion sets (baby onion bulbs) with dry papery skins, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "497": {
+  "name": "Ząbki czosnku",
+  "prompt": "RPG inventory item icon: four separate white garlic cloves with pointed tips and pale papery skin, centered",
+  "job": "35303888-18a6-4d95-a34b-a4d9c4c997b2",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "35303888-18a6-4d95-a34b-a4d9c4c997b2",
+    "prompt": "RPG inventory item icon: four separate white garlic cloves with pointed tips and pale papery skin, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "498": {
+  "name": "Nasiona grochu",
+  "prompt": "RPG inventory item icon: small burlap pouch tied with string, round dry green peas spilling out, centered",
+  "job": "98a848e2-392b-4ab3-ae35-b3b13f5fe5f2",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "98a848e2-392b-4ab3-ae35-b3b13f5fe5f2",
+    "prompt": "RPG inventory item icon: small burlap pouch tied with string, round dry green peas spilling out, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "499": {
+  "name": "Pestki jabłoni",
+  "prompt": "RPG inventory item icon: a few small dark brown teardrop-shaped apple pips (seeds) on a half of a red apple, centered",
+  "job": "cf0cc534-127c-4730-8e75-068ff2ed7a76",
+  "tries": 2,
+  "proby": [
+   {
+    "n": 1,
+    "job": "59df8e51-d377-4242-a6ae-efe4f7ab45be",
+    "prompt": "RPG inventory item icon: a few small dark brown teardrop-shaped apple pips (seeds) on a half of a red apple, centered"
+   },
+   {
+    "n": 2,
+    "job": "cf0cc534-127c-4730-8e75-068ff2ed7a76",
+    "prompt": "RPG inventory item icon: a few small dark brown teardrop-shaped apple pips (seeds) on a half of a red apple, centered"
+   }
+  ],
+  "wybrana": 2
+ },
+ "500": {
+  "name": "Owies",
+  "prompt": "RPG inventory item icon: a small sheaf of golden oat stalks tied with straw, drooping oat spikelets at the top, centered",
+  "job": "9f85a127-24dc-494a-896d-53ff0c52c199",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "9f85a127-24dc-494a-896d-53ff0c52c199",
+    "prompt": "RPG inventory item icon: a small sheaf of golden oat stalks tied with straw, drooping oat spikelets at the top, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "501": {
+  "name": "Burak",
+  "prompt": "RPG inventory item icon: one dark red beetroot with a round bulb, thin root tail and a few green leaves with red stems, centered",
+  "job": "95933344-b695-46ef-af11-6438f73b8b33",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "95933344-b695-46ef-af11-6438f73b8b33",
+    "prompt": "RPG inventory item icon: one dark red beetroot with a round bulb, thin root tail and a few green leaves with red stems, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "502": {
+  "name": "Cebula",
+  "prompt": "RPG inventory item icon: one golden-brown onion bulb with papery skin and a short dry top, centered",
+  "job": "9f0309fc-ed59-4301-a377-8d34798cb8ab",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "9f0309fc-ed59-4301-a377-8d34798cb8ab",
+    "prompt": "RPG inventory item icon: one golden-brown onion bulb with papery skin and a short dry top, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "503": {
+  "name": "Czosnek",
+  "prompt": "RPG inventory item icon: one white garlic bulb with purple streaks, papery skin and a short dry stem, centered",
+  "job": "6427d01a-7b7d-41c3-9438-e78b4db9ca4f",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "6427d01a-7b7d-41c3-9438-e78b4db9ca4f",
+    "prompt": "RPG inventory item icon: one white garlic bulb with purple streaks, papery skin and a short dry stem, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "504": {
+  "name": "Groch",
+  "prompt": "RPG inventory item icon: a small wooden bowl full of round dry green peas, centered",
+  "job": "d2482984-6c2c-4e70-8c79-9b9e56ef4328",
+  "tries": 3,
+  "proby": [
+   {
+    "n": 1,
+    "job": "4d39442b-9a07-4e3a-b21b-01be2c26a4d8",
+    "prompt": "RPG inventory item icon: a small wooden bowl full of round dry green peas, centered"
+   },
+   {
+    "n": 2,
+    "job": "413beb66-0271-437e-b878-809bfd842ee9",
+    "prompt": "RPG inventory item icon: a small wooden bowl full of round dry green peas, centered"
+   },
+   {
+    "n": 3,
+    "job": "d2482984-6c2c-4e70-8c79-9b9e56ef4328",
+    "prompt": "RPG inventory item icon: a small wooden bowl full of round dry green peas, centered"
+   }
+  ],
+  "wybrana": 3
+ },
+ "505": {
+  "name": "Jabłka",
+  "prompt": "RPG inventory item icon: two large shiny red apples with a green leaf, centered",
+  "job": "c1ffa2c4-47ea-465a-b37d-df8e219b5ea1",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "c1ffa2c4-47ea-465a-b37d-df8e219b5ea1",
+    "prompt": "RPG inventory item icon: two large shiny red apples with a green leaf, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "506": {
+  "name": "Poziomki",
+  "prompt": "RPG inventory item icon: small bunch of tiny bright red wild strawberries with a trefoil green leaf, centered",
+  "job": "35848dbb-4fbc-4fe3-8258-bc67224445c5",
+  "tries": 2,
+  "proby": [
+   {
+    "n": 1,
+    "job": "7d5c4694-ae55-4a12-acc1-61b9a80f77fa",
+    "prompt": "RPG inventory item icon: small bunch of tiny bright red wild strawberries with a trefoil green leaf, centered"
+   },
+   {
+    "n": 2,
+    "job": "35848dbb-4fbc-4fe3-8258-bc67224445c5",
+    "prompt": "RPG inventory item icon: small bunch of tiny bright red wild strawberries with a trefoil green leaf, centered"
+   }
+  ],
+  "wybrana": 2
+ },
+ "507": {
+  "name": "Maliny",
+  "prompt": "RPG inventory item icon: small bunch of red raspberries with a green leaf, centered",
+  "job": "e0222edf-c3c9-4a55-b88f-63f695b02f98",
+  "tries": 3,
+  "proby": [
+   {
+    "n": 1,
+    "job": "c6740e75-0bea-453e-acba-003d5662d215",
+    "prompt": "RPG inventory item icon: small bunch of red raspberries with a green leaf, centered"
+   },
+   {
+    "n": 2,
+    "job": "8fd61302-8356-4c25-987c-3c248c5c42e7",
+    "prompt": "RPG inventory item icon: small bunch of red raspberries with a green leaf, centered"
+   },
+   {
+    "n": 3,
+    "job": "e0222edf-c3c9-4a55-b88f-63f695b02f98",
+    "prompt": "RPG inventory item icon: small bunch of red raspberries with a green leaf, centered"
+   }
+  ],
+  "wybrana": 3
+ },
+ "508": {
+  "name": "Jeżyny",
+  "prompt": "RPG inventory item icon: small bunch of shiny black blackberries with a green leaf, centered",
+  "job": "57b70764-ec6d-4718-95f9-0da092421192",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "57b70764-ec6d-4718-95f9-0da092421192",
+    "prompt": "RPG inventory item icon: small bunch of shiny black blackberries with a green leaf, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "509": {
+  "name": "Orzechy laskowe",
+  "prompt": "RPG inventory item icon: three brown hazelnuts, one still in its frilly green husk, centered",
+  "job": "796c17d6-f43d-4365-ad6b-363113e7445c",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "796c17d6-f43d-4365-ad6b-363113e7445c",
+    "prompt": "RPG inventory item icon: three brown hazelnuts, one still in its frilly green husk, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "510": {
+  "name": "Boczniaki",
+  "prompt": "RPG inventory item icon: cluster of grey-beige oyster mushrooms: flat fan-shaped overlapping caps, centered",
+  "job": "99e30188-d7a5-4cbb-bcb1-dda4559579b1",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "99e30188-d7a5-4cbb-bcb1-dda4559579b1",
+    "prompt": "RPG inventory item icon: cluster of grey-beige oyster mushrooms: flat fan-shaped overlapping caps, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "511": {
+  "name": "Barszcz",
+  "prompt": "RPG inventory item icon: wooden bowl of deep red beetroot soup (borscht) with a spoon, centered",
+  "job": "efc8e7d5-5d30-43ec-908f-0678fe90a83b",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "efc8e7d5-5d30-43ec-908f-0678fe90a83b",
+    "prompt": "RPG inventory item icon: wooden bowl of deep red beetroot soup (borscht) with a spoon, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "512": {
+  "name": "Grochówka",
+  "prompt": "RPG inventory item icon: wooden bowl of thick yellow-green pea soup with pieces of smoked meat, centered",
+  "job": "89853c4d-c504-4575-bdeb-384b689c38e2",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "89853c4d-c504-4575-bdeb-384b689c38e2",
+    "prompt": "RPG inventory item icon: wooden bowl of thick yellow-green pea soup with pieces of smoked meat, centered"
+   }
+  ],
+  "wybrana": 1
+ },
+ "513": {
+  "name": "Owsianka",
+  "prompt": "RPG inventory item icon: wooden bowl of oat porridge with oat flakes on top, centered",
+  "job": "8b03b620-e098-4c8c-b83b-801011b90577",
+  "tries": 1,
+  "proby": [
+   {
+    "n": 1,
+    "job": "8b03b620-e098-4c8c-b83b-801011b90577",
+    "prompt": "RPG inventory item icon: wooden bowl of oat porridge with oat flakes on top, centered"
+   }
+  ],
+  "wybrana": 1
  }
 }

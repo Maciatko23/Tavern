@@ -499,6 +499,8 @@
     // The night sentries: they see like the manor's guard (TownQuests' W1) - close by, in front, or a hero not sneaking
     // ------------------------------------------------------------------
     function sees(w, p, sneak) {
+        const W = T.api("Widzenie");   // (2026-11-19: one rule of sight - Widzenie.js; this one only without it)
+        if (W && W.sees) return W.sees(w, p.x, p.y, { sneak });
         const v = [[0, 0], [0, 1], [0, 0], [-1, 0], [0, 0], [1, 0], [0, 0], [0, -1]][w.direction() - 1] || [0, 1];
         const d = Math.hypot(w.x - p.x, w.y - p.y), ahead = ((p.x - w.x) * v[0] + (p.y - w.y) * v[1]) / Math.max(0.01, d);
         return d < 1.6 || (ahead > 0.5 && d < (sneak ? 3.5 : 6)) || (!sneak && d < 4);

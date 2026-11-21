@@ -1453,7 +1453,7 @@
         const fx = d === 4 ? -1 : d === 6 ? 1 : 0, fy = d === 8 ? -1 : d === 2 ? 1 : 0;
         let best = null, bestD = 99;
         for (const c of dropsOf()) {
-            if (c.kind === "body" && !(c.gold > 0) && !(c.items || []).length) continue;
+            if ((c.kind === "body" || c.kind === "chest") && !c.locked && !(c.gold > 0) && !(c.items || []).length) continue;
             const dx = c.x - px, dy = c.y - py, dist = Math.hypot(dx, dy);
             if (dist > 1.35 || (dist > 0.6 && (dx * fx + dy * fy) / dist < 0.3)) continue;
             if (dist < bestD) { bestD = dist; best = c; }
@@ -1463,6 +1463,11 @@
     // the hero crouches and takes what is there (a body stays, emptied; a pile, a sack goes)
     function searchDrop(c) {
         if ($gamePlayer.isToolSwinging && $gamePlayer.isToolSwinging()) return true;
+        if (c.kind === "chest" && c.locked) {   // (2026-11-19) the camp's box: a lockpick in sneaking (Zamki.js)
+            const Z = T.api("Zamki");
+            if (!(Z && Z.startDrop(c))) popup(0, "Zamknięte.", "#cfd6de");
+            return true;
+        }
         const dx = c.x - heroX(), dy = c.y - heroY();
         if (Math.hypot(dx, dy) > 0.3) $gamePlayer.setDirection(DIR4(dx, dy));
         const take = () => {
@@ -1472,7 +1477,7 @@
             if (!(c.gold > 0) && !(c.items || []).length) popup(0, c.kind === "sack" ? TK.kod.take[0] : TK.kod.take[1], "#cfd6de");
             c.gold = 0;
             c.items = [];
-            if (c.kind !== "body") removeDrop(c);
+            if (c.kind !== "body" && c.kind !== "chest") removeDrop(c);   // (a box stays where it stood, open and empty)
             if (c.kind === "sack") {
                 se("Equip1", 50, 90);
                 const Hn = H();
@@ -1545,11 +1550,24 @@
         const sk = CAMP.sack, items = rollLoot(sk.loot).map(([id, n]) => [id, rnd(1, n)]);
         const sx = at.x + (Math.random() < 0.5 ? 1 : -1), sy = at.y + 1;
         camp.sack = addDrop({ kind: "sack", x: sx + 0.5, y: sy + 0.2, gold: rnd(sk.gold[0], sk.gold[1]), items, camp: camp.id, life: 30 }).id;
+        // (2026-11-19) the locked box (Zamki.js) on a free tile round the fire, off the seats and the sack
+        const ck = CAMP.chest;
+        if (ck && Math.random() < (opts.chest !== undefined ? (opts.chest ? 1 : 0) : ck.chance)) {
+            for (const [ox, oy] of [[0, -2], [2, -1], [-2, -1], [2, 2], [-2, 2], [0, 3], [3, 0], [-3, 0]]) {
+                const x = at.x + ox, y = at.y + oy;
+                if (used.has(x + "," + y) || (x === sx && y === sy) || !free(x, y) || underCrown(x, y)) continue;
+                camp.chest = addDrop({ kind: "chest", locked: true, level: ck.level, x: x + 0.5, y: y + 0.5, gold: rnd(ck.gold[0], ck.gold[1]),
+                    items: rollLoot(ck.loot).map(([id, n]) => [id, rnd(1, n)]), camp: camp.id, life: 30 }).id;
+                break;
+            }
+        }
         return camp;
     }
     function removeCampSack(camp) {
         const d = dropsOf(camp.mapId).find(o => o.id === camp.sack);
         if (d) removeDrop(d);
+        const c = camp.chest && dropsOf(camp.mapId).find(o => o.id === camp.chest);   // (the box goes with them too)
+        if (c) removeDrop(c);
     }
     let campSpawned = null;   // the camp whose men are on this map now
     function spawnCamp(camp) {
@@ -1869,6 +1887,11 @@
                     s.anchor.set(0.5, 1);
                     s.y = 8;
                     root.addChild(s);
+                } else if (d.kind === "chest") {   // (2026-11-19) the locked box (Zamki.js): the sheet's brown chest, its lid up once open
+                    const s = new Sprite(ImageManager.loadCharacter("!Fantasy_chest"));
+                    s.anchor.set(0.5, 1);
+                    s.y = 24;
+                    root.addChild(s);
                 } else {   // a pile: the items' icons on the ground
                     const set = ImageManager.loadSystem("IconSet");
                     (d.items || []).slice(0, 2).forEach(([id], i) => {
@@ -1889,6 +1912,7 @@
             e.root.x = toSX(d.x);
             e.root.y = toSY(d.y);
             if (d.kind === "body" && e.root.children[1]) e.root.children[1].opacity = d.gold > 0 || (d.items || []).length ? 255 : 215;
+            if (d.kind === "chest" && e.root.children[0]) { const row = d.locked ? 0 : 3; if (e.row !== row) { e.row = row; e.root.children[0].setFrame(288 + 48, 384 + row * 96, 48, 96); } }
         }
         for (const [d, e] of this._drops) if (!seen.has(d)) { this.drop(e.root); this._drops.delete(d); }
     };

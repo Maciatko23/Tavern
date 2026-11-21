@@ -50,7 +50,15 @@
         potato: { name: "Ziemniaki", seed: 67, produce: 71, days: 4, yield: [2, 4], seeds: [0, 2], row: 0, seasons: [0, 1] },
         carrot: { name: "Marchew", seed: 68, produce: 72, days: 3, yield: [2, 3], seeds: [0, 2], row: 1, seasons: [0, 2] },
         cabbage: { name: "Kapusta", seed: 69, produce: 73, days: 5, yield: [1, 2], seeds: [0, 2], row: 2, seasons: [2, 3] },
-        barley: { name: "Jęczmień", seed: 70, produce: 74, days: 6, yield: [3, 5], seeds: [1, 2], row: 3, seasons: [1, 2] }
+        barley: { name: "Jęczmień", seed: 70, produce: 74, days: 6, yield: [3, 5], seeds: [1, 2], row: 3, seasons: [1, 2] },
+        // (2026-11-19, the user: more to sow) noRake: their seeds are not found by raking (that stays the four old ones - the start of the
+        // game is as it was); they come from the wild forms on the meadows (Farming.js GATHER), from the harvest and from the herbalist
+        flax: { name: "Len", seed: ITEM.flaxSeed, produce: ITEM.fiber, days: 5, yield: [3, 5], seeds: [1, 2], row: 4, seasons: [0], noRake: true },
+        oats: { name: "Owies", seed: ITEM.oatSeed, produce: ITEM.oats, days: 5, yield: [3, 5], seeds: [1, 2], row: 5, seasons: [0, 1], noRake: true },
+        beet: { name: "Buraki", seed: ITEM.beetSeed, produce: ITEM.beet, days: 4, yield: [2, 3], seeds: [0, 2], row: 6, seasons: [1, 2], noRake: true },
+        onion: { name: "Cebula", seed: ITEM.onionSet, produce: ITEM.onion, days: 5, yield: [2, 4], seeds: [0, 2], row: 7, seasons: [0, 2], noRake: true },
+        garlicCrop: { name: "Czosnek", seed: ITEM.garlicClove, produce: ITEM.gardenGarlic, days: 6, yield: [2, 3], seeds: [1, 2], row: 8, seasons: [0, 2], noRake: true },
+        pea: { name: "Groch", seed: ITEM.peaSeed, produce: ITEM.peas, days: 5, yield: [3, 5], seeds: [1, 2], row: 9, seasons: [0, 1], noRake: true }
     };
 
     // cost: [[item id, count], ...]. w, h: size in tiles (h = 1 when missing; the building stands on its bottom row and its picture rises
@@ -118,8 +126,8 @@
         // an open wooden shelter (user, 2026-09-25): a roof on four posts over a table and two benches. The benches: rest like the bench.
         // The table: up to table.slots raw clay pots dry there under the roof, rain or not (Farming.js: tablePots); spots: where they
         // stand on the table, px from the foot-middle of the picture
-        shelter: { name: "Wiata", cost: [[ITEM.wood, 6], [ITEM.planks, 6], [ITEM.branch, 8], [ITEM.rope, 4]], w: 4, h: 2, stamina: 8, hits: 30, image: "Farm_Shelter_XL", rest: 50,
-            table: { slots: 4, hours: 24, spots: [[-40, -35], [-14, -35], [12, -35], [38, -35]] },
+        shelter: { name: "Wiata", cost: [[ITEM.wood, 6], [ITEM.planks, 6], [ITEM.branch, 8], [ITEM.rope, 4]], w: 3, h: 2, stamina: 8, hits: 30, image: "Farm_Shelter_XL", rest: 50,
+            table: { slots: 4, hours: 24, spots: [[-38, -35], [-18, -35], [2, -35], [22, -35]] },   // (2026-11-19: the thatched shelter's table, x -51..33)
             seats: { front: { dy: 0.2, lift: 14 }, back: { dy: -0.45, lift: 22 }, span: 38 },
             desc: "Daszek na czterech słupach, pod nim stół i dwie ławki, z przodu i z tyłu. Usiądziesz tu i odpoczniesz (lepiej niż na ławce, także w deszczu), a na stole postawisz do czterech garnków: pod dachem schną także w deszczu." },
         campfire: { name: "Ognisko", camp: true, anywhere: true, cost: [[ITEM.wood, 6], [ITEM.stone, 6]], w: 1, stamina: 5, hits: 5, image: "Farm_Campfire_L", rest: 40, vent: 48,
@@ -157,7 +165,7 @@
             desc: "Słup z workiem wypchanym słomą i drewnianymi ramionami. W trybie walki (Tab) stań obok: manekin powoli zamachuje się z zapowiedzią (błysk) - ćwicz parowanie (P tuż przed ciosem) i przewrót (Spacja). Mówi, czy było „Idealne parowanie!”, „Za wcześnie” czy „Za późno”. Nie rani. Pierwsze udane parowania dają trochę doświadczenia." },
         coop: { name: "Kurnik", cost: [[ITEM.planks, 10], [ITEM.stone, 2], [ITEM.nails, 4]], w: 6, h: 5, stamina: 14, hits: 30, image: "Farm_Coop_L", legacy: { w: 2, h: 1, image: "Farm_Coop", cost: [[ITEM.planks, 6], [ITEM.stone, 2]] },
             yard: { gate: 2, hut: { dx: 2, dy: 3, w: 2, h: 1 }, animal: "hen", count: 3 },
-            produce: { item: 75, amount: 2, period: 1, cap: 6 },
+            produce: { item: 75, amount: 2, period: 1, cap: 6 }, feed: ITEM.oats,   // (2026-11-19: oats in the trough - one egg more, Farming_Build)
             desc: "Ogrodzony wybieg z kurnikiem: w środku biegają kury i niosą jajka, 2 dziennie (maksymalnie 6). Furtką wchodzisz do środka." },
         hive: { name: "Ul", cost: [[ITEM.planks, 4]], w: 1, stamina: 6, hits: 5, image: "Farm_Hive",
             produce: { item: 76, amount: 1, period: 2, cap: 3 },
@@ -197,12 +205,14 @@
             slots: 4, foodOnly: true, bowl: 6,
             openName: "Miska: jedzenie", openHelp: "Zostawiasz orłu mięso albo rybę (4 rodzaje). Psuje się tu jak w skrzyni.",
             desc: "Gniazdo na miarę dorosłego białego orła, jak za Skrzydlatej Straży: wielka misa z grubych gałęzi na podeście z kamieni i bierwion, za nią martwy pień. Orzeł siedzi w niej, śpi i leży ranny, kiedy leczy rany. Z przodu kamienna misa na wodę i koryto na mięso." },
-        chest_s: { name: "Mała skrzynia", cost: [[ITEM.planks, 4]], w: 1, stamina: 5, hits: 5, image: "Farm_ChestS", slots: 12, indoor: true,
-            desc: "Schowek: 12 rodzajów przedmiotów, po 99 sztuk każdego." },
-        chest_l: { name: "Duża skrzynia", cost: [[ITEM.planks, 8], [ITEM.stone, 2], [ITEM.nails, 6]], w: 2, stamina: 8, hits: 8, image: "Farm_ChestL", slots: 30, indoor: true,
-            desc: "Schowek: 30 rodzajów przedmiotów, po 99 sztuk każdego. Okuta gwoździami." },
-        kiln: { name: "Piec ziemny", cost: [[ITEM.soil, 10], [ITEM.stone, 4]], w: 3, h: 2, stamina: 12, hits: 50, image: "Farm_Kiln_L", legacy: { w: 2, h: 1, image: "Farm_Kiln", vent: 50 }, vent: 95, ventX: -32, smokes: true,
-            ember: { x: -14, y: 14, scale: 0.85 },   // a pulsing glow inside the archway while it burns (smoke keeps rising from the chimney, at vent/ventX, as before)
+        // (2026-11-19, the user) the small chest 4 planks + 8 nails + 2 fittings, 5 kinds; the big one 10 planks + 20 nails + 6 fittings,
+        // 30 kinds (the nails and the fittings: the forge - a chest is not of the first days any more)
+        chest_s: { name: "Mała skrzynia", cost: [[ITEM.planks, 4], [ITEM.nails, 8], [ITEM.fitting, 2]], w: 1, stamina: 5, hits: 5, image: "Farm_ChestS", slots: 5, indoor: true,
+            desc: "Schowek: 5 rodzajów przedmiotów, po 99 sztuk każdego. Zbita gwoździami, z żelaznymi okuciami z kuźni." },
+        chest_l: { name: "Duża skrzynia", cost: [[ITEM.planks, 10], [ITEM.nails, 20], [ITEM.fitting, 6]], w: 2, stamina: 8, hits: 8, image: "Farm_ChestL", slots: 30, indoor: true,
+            desc: "Schowek: 30 rodzajów przedmiotów, po 99 sztuk każdego. Zbita gwoździami i okuta sześcioma okuciami." },
+        kiln: { name: "Piec ziemny", cost: [[ITEM.soil, 10], [ITEM.stone, 4]], w: 2, h: 2, stamina: 12, hits: 50, image: "Farm_Kiln_L", legacy: { w: 2, h: 1, image: "Farm_Kiln", vent: 50 }, vent: 88, ventX: -2, smokes: true,
+            ember: { x: -2, y: 15, scale: 0.7 },   // a pulsing glow inside the archway while it burns (smoke keeps rising from the chimney, at vent/ventX, as before)
             recipes: [{
                 id: "charcoal", name: "Wypal węgiel drzewny", doing: "Trwa wypalanie", inputs: [[ITEM.wood, 6], [ITEM.soil, 2]], output: [ITEM.charcoal, 3],
                 hours: 6, stamina: 3, desc: "Drewno pod warstwą ziemi tli się bez płomienia i zamienia w węgiel."
@@ -226,7 +236,7 @@
             desc: "Zamienia gałęzie i zepsute jedzenie w ziemię." },
         // Made of raw wood and stones only, because planks do not exist yet: the table brings its own thick hand saw.
         // A real saw (blade forged from iron, mounted at the workbench) is better: more planks in half the time.
-        sawmill: { name: "Tartak", cost: [[ITEM.wood, 10], [ITEM.stone, 3]], w: 3, h: 2, stamina: 10, hits: 30, image: "Farm_Sawmill_L", legacy: { w: 2, h: 1, image: "Farm_Sawmill" }, startSe: "Slash1",
+        sawmill: { name: "Tartak", cost: [[ITEM.wood, 10], [ITEM.stone, 3]], w: 2, h: 2, stamina: 10, hits: 30, image: "Farm_Sawmill_L", legacy: { w: 2, h: 1, image: "Farm_Sawmill" }, startSe: "Slash1",
             recipes: [
                 { id: "planks", name: "Piłuj deski", inputs: [[ITEM.wood, 3]], output: [ITEM.planks, 2], manual: true,
                     hours: 2, stamina: 6, startSe: "Slash1", desc: "Kłodę kładziesz na stole i przepiłowujesz grubą, ręczną piłą na deski. Ciężka robota." },
@@ -234,7 +244,10 @@
                     hours: 1, stamina: 4, startSe: "Slash1", desc: "Prawdziwa piła tnie równiej i szybciej: z tego samego drewna wychodzi więcej desek, w połowie czasu i za mniej sił." }
             ],
             desc: "Duży stół z kłodami i grubą piłą. Deski piłujesz ręcznie; z prawdziwą piłą (zmontujesz ją w warsztacie) idzie szybciej i wychodzi ich więcej." },
-        brewery: { name: "Browar", cost: [[ITEM.planks, 8], [ITEM.stone, 4], [ITEM.nails, 8]], w: 4, h: 2, stamina: 14, hits: 30, image: "Farm_Brewery_XL", v2: { w: 3, h: 2, image: "Farm_Brewery_L" }, legacy: { w: 2, h: 1, image: "Farm_Brewery" }, startSe: "Liquid",
+        // (2026-11-19) the brewhouse: a hooped wooden mash tun with its paddle and a copper kettle on a fieldstone fire pit, under thatch
+        // (the user: the kettle alone "wygląda jak gar do zupy") - it glows and smokes while it brews
+        brewery: { name: "Browar", cost: [[ITEM.planks, 8], [ITEM.stone, 4], [ITEM.nails, 8]], w: 3, h: 2, stamina: 14, hits: 30, image: "Farm_Brewery_XL", v2: { w: 3, h: 2, image: "Farm_Brewery_L", smokes: false, ember: undefined }, legacy: { w: 2, h: 1, image: "Farm_Brewery" }, startSe: "Liquid",
+            smokes: true, vent: 40, ember: { x: 21, y: 16, scale: 0.6 },   // (the fire pit under the copper kettle; the mash tun on the left)
             recipes: [{
                 id: "beer", name: "Warz piwo", doing: "Trwa warzenie", inputs: [[CROPS.barley.produce, 4]], output: [ITEM.beer, 3],
                 hours: 10, stamina: 3, desc: "Jęczmień fermentuje powoli w kadzi. Karczmarz chętnie odkupi piwo."
@@ -243,26 +256,47 @@
                 hours: 8, stamina: 3, desc: "Miód rozpuszczony w wodzie fermentuje w kadzi. Rozgrzewa i trochę gasi pragnienie."
             }],
             desc: "Warzy piwo z jęczmienia. Beczki spinają gwoździe. Długi wypał, ale karczma zawsze je kupi." },
-        bakery: { name: "Piekarnia", cost: [[ITEM.planks, 4], [ITEM.brick, 8]], w: 3, h: 2, stamina: 11, hits: 50, image: "Farm_Bakery_L", legacy: { w: 2, h: 1, image: "Farm_Bakery", vent: 68 }, vent: 127, ventX: 44, smokes: true,
-            ember: { x: 1, y: 36, scale: 0.7 },   // the mouth of the bread oven
+        // (2026-11-19, the user: smaller, plainer buildings "dostosowane do dawnych czasów") a clay bread oven on a fieldstone base under a
+        // thatched lean-to, its chimney out through the roof (the old half-timbered bakery: Tawerna_archiwum_2026-11-08/budynki_proste_*)
+        bakery: { name: "Piekarnia", cost: [[ITEM.planks, 4], [ITEM.brick, 8]], w: 2, h: 2, stamina: 11, hits: 50, image: "Farm_Bakery_L", legacy: { w: 2, h: 1, image: "Farm_Bakery", vent: 68 }, vent: 106, ventX: -2, smokes: true,
+            ember: { x: -3, y: 24, scale: 0.6 },   // the mouth of the bread oven
+            // (2026-11-19, the user: the flour from a mill) the bakery only bakes now; the grain is ground in the mill (Młyn below, the miller
+            // of Podgrodzie - Mlynarz.js) or on the quern (Żarna)
             recipes: [
-                { id: "flour", name: "Zmiel mąkę", doing: "Trwa mielenie", inputs: [[CROPS.barley.produce, 3]], output: [ITEM.flour, 2],
-                    hours: 2, stamina: 2, startSe: "Machine", desc: "Żarna mielą ziarno na mąkę." },
                 { id: "bread", name: "Upiecz chleb", doing: "Trwa pieczenie", inputs: [[ITEM.flour, 2]], output: [ITEM.bread, 2],
                     hours: 3, stamina: 2, desc: "Piec wypieka bochenki ze świeżej mąki." },
                 { id: "berry_pie", name: "Upiecz placek jagodowy", doing: "Trwa pieczenie", inputs: [[ITEM.flour, 2], [ITEM.berries, 3], [ITEM.honey, 1]], output: [ITEM.berryPie, 2],
                     hours: 3, stamina: 2, desc: "Kruche ciasto z jagodami i miodem." }
             ],
-            desc: "Młyn i piec razem: jęczmień -> mąka -> chleb. Piec z cegieł." },
-        brickworks: { name: "Cegielnia", cost: [[ITEM.planks, 3], [ITEM.stone, 6]], w: 3, h: 2, stamina: 11, hits: 50, image: "Farm_Brickworks_L", legacy: { w: 2, h: 1, image: "Farm_Brickworks", vent: 77 }, vent: 120, ventX: -48, smokes: true,
-            ember: { x: -21, y: 16, scale: 1.1 },   // between the two firing arches of the stone kiln (it is built of stone: bricks are made here)
+            desc: "Piec z cegieł: z mąki chleb i placek jagodowy. Mąkę mielisz w młynie (u młynarza w Podgrodziu albo we własnym na działce), w biedzie na żarnach." },
+        // (2026-11-19, the user: "żeby gracz w końcu swój młyn mały postawił") the own small windmill: it grinds by itself, like the kiln -
+        // its plank sails turn while it grinds (Farming_Render: def.sails, a picture turned round its hub; the hub x px from the middle of
+        // the picture, y px above its foot). Before it: the miller of Podgrodzie for coins (Mlynarz.js), or the quern by hand
+        mill: { name: "Młyn", cost: [[ITEM.planks, 12], [ITEM.wood, 4], [ITEM.stone, 12], [ITEM.rope, 3], [ITEM.nails, 8]], w: 3, h: 2, stamina: 14, hits: 50, image: "Farm_Mill_L", startSe: "Machine",
+            sails: { image: "Farm_Mill_Sails", x: 0, y: 172, speed: 0.04, idle: 0.003 },   // (2026-11-19, the user: "2 razy większy", "skrzydła dłuższe")
+            recipes: [
+                { id: "flour", name: "Zmiel mąkę", doing: "Trwa mielenie", inputs: [[CROPS.barley.produce, 3]], output: [ITEM.flour, 2],
+                    hours: 2, stamina: 1, startSe: "Machine", desc: "Skrzydła kręcą kamieniem młyńskim, a ten miele jęczmień na mąkę. Młyn miele sam: możesz w tym czasie odejść." }
+            ],
+            desc: "Mały wiatrak z kamieniem młyńskim, zbity z desek na kamiennej podmurówce. Sam miele jęczmień na mąkę, kiedy ty robisz co innego. Bez niego zostaje młynarz w Podgrodziu (za opłatą) albo żarna." },
+        // the hand quern: two millstones on a stand, ground by hand (a manual recipe: the hours pass while he grinds) - slow and tiring,
+        // one flour from three handfuls; the first way to bread before the mill
+        quern: { name: "Żarna", cost: [[ITEM.stone, 8], [ITEM.wood, 1]], w: 1, h: 1, stamina: 4, hits: 8, image: "Farm_Quern", indoor: true, startSe: "Machine",
+            recipes: [
+                { id: "quern_flour", name: "Zmiel ziarno na żarnach", inputs: [[CROPS.barley.produce, 3]], output: [ITEM.flour, 1], manual: true,
+                    hours: 3, stamina: 8, startSe: "Machine", desc: "Sypiesz ziarno w otwór górnego kamienia i kręcisz kołkiem, aż się zetrze. Ciężka, długa praca: z trzech garści jęczmienia jedna mąka." }
+            ],
+            desc: "Dwa kamienie młyńskie na drewnianym stojaku: kręcisz górnym, a ziarno ściera się na mąkę. Wolno i ciężko, ale bez młynarza." },
+        brickworks: { name: "Cegielnia", cost: [[ITEM.planks, 3], [ITEM.stone, 6]], w: 2, h: 2, stamina: 11, hits: 50, image: "Farm_Brickworks_L", legacy: { w: 2, h: 1, image: "Farm_Brickworks", vent: 77 }, vent: 83, ventX: 0, smokes: true,
+            ember: { x: -1, y: 15, scale: 0.7 },   // (2026-11-19: the one firing arch of the small brick kiln) - was: between the two firing arches of the stone kiln (it is built of stone: bricks are made here)
             recipes: [{
                 id: "brick", name: "Wypal cegły", doing: "Trwa wypalanie", inputs: [[ITEM.stone, 3], [ITEM.soil, 3]], output: [ITEM.brick, 4],
                 hours: 7, stamina: 3, desc: "Glina z kamieniem wypalone razem dają trwałą cegłę."
             }],
             desc: "Wypala z kamienia i ziemi cegły - na piekarnię, kuźnię i odbudowę murów." },
-        forge: { name: "Kuźnia", cost: [[ITEM.planks, 4], [ITEM.stone, 10], [ITEM.brick, 6]], w: 3, h: 2, stamina: 14, hits: 30, image: "Farm_Forge_L", legacy: { w: 2, h: 1, image: "Farm_Forge", vent: 79 }, vent: 131, ventX: 40, smokes: true,
-            ember: { x: 8, y: 33, scale: 0.6 },   // the hearth
+        // (2026-11-19) the smithy: an open thatched shed, the fieldstone hearth with its chimney through the roof, the anvil on a stump
+        forge: { name: "Kuźnia", cost: [[ITEM.planks, 4], [ITEM.stone, 10], [ITEM.brick, 6]], w: 2, h: 2, stamina: 14, hits: 30, image: "Farm_Forge_L", legacy: { w: 2, h: 1, image: "Farm_Forge", vent: 79 }, vent: 101, ventX: 16, smokes: true,
+            ember: { x: -1, y: 41, scale: 0.6 },   // the hearth
             recipes: [
                 { id: "iron", name: "Wytop żelazo", doing: "Trwa wytapianie", inputs: [[ITEM.ironOre, 2], [ITEM.charcoal, 2]], output: [ITEM.iron, 2],
                     hours: 8, stamina: 4, desc: "Ruda żelaza topi się w żarze węgla drzewnego." },
@@ -280,6 +314,12 @@
                     hours: 1, stamina: 4, startSe: "Hammer", desc: "Drewniane klepki ściągnięte żelaznymi obręczami. Stawiasz je gotowe w menu pola „Postaw...”: zbiera deszczówkę, nosisz w nim wodę do kociołka, a studnia bez niego nie powstanie." },
                 { id: "nails", name: "Wykuj gwoździe", inputs: [[ITEM.iron, 1]], output: [ITEM.nails, 10], manual: true,
                     hours: 1, stamina: 5, startSe: "Hammer", desc: "Na kowadle z pręta żelaza wykuwasz garść gwoździ." },
+                // (2026-11-19, the user) the chests' iron fittings: two from an ingot
+                { id: "fittings", name: "Wykuj okucia", inputs: [[ITEM.iron, 1]], output: [ITEM.fitting, 2], manual: true,
+                    hours: 1, stamina: 5, startSe: "Hammer", desc: "Sztabkę rozklepujesz na blachę, gniesz i dziurawisz: dwa okucia na rogi skrzyni." },
+                // (2026-11-19, the user) lockpicks: five from an ingot
+                { id: "lockpicks", name: "Wykuj wytrychy", inputs: [[ITEM.iron, 1]], output: [ITEM.lockpick, 5], manual: true,
+                    hours: 1, stamina: 4, startSe: "Hammer", desc: "Sztabkę wyciągasz w cienkie pręty, hartujesz i wyginasz końce: pięć wytrychów." },
                 { id: "cauldron_item", name: "Wykuj kociołek", inputs: [[ITEM.iron, 8]], output: [ITEM.cauldronItem, 1], manual: true, unique: true, alsoBuilt: "cauldron",
                     hours: 2, stamina: 6, startSe: "Hammer", desc: "Żelazny kociołek z uchem do zawieszenia. Zanieś go do ogniska z trójnogiem, żeby go podpiąć." },
                 { id: "shears", name: "Wykuj nożyce", inputs: [[ITEM.iron, 2], [ITEM.wood, 1]], output: [ITEM.shears, 1], manual: true, unique: true,
@@ -292,8 +332,8 @@
                     hours: 4, stamina: 3, desc: "Cztery zaśniedziałe monety topią się w tyglu na żarze węgla drzewnego: wychodzi sztabka brązu. Z brązu kujesz brązowe hełmy, napierśniki, tasaki i puklerze." }
             ],
             desc: "Wytapia żelazo z rudy i węgla, a na kowadle kuje z niego gwoździe, noże oraz głowice i ostrza narzędzi (montuje się je w warsztacie)." },
-        huta: { name: "Huta", cost: [[ITEM.brick, 10], [ITEM.stone, 6]], w: 2, h: 2, stamina: 14, hits: 30, image: "Farm_Huta_L", vent: 91, ventX: -9, smokes: true,
-            ember: { x: -10, y: 24, scale: 0.6 },   // the opening at the bottom of the furnace
+        huta: { name: "Huta", cost: [[ITEM.brick, 10], [ITEM.stone, 6]], w: 2, h: 2, stamina: 14, hits: 30, image: "Farm_Huta_L", vent: 77, ventX: -13, smokes: true,
+            ember: { x: -15, y: 8, scale: 0.5 },   // the opening at the bottom of the furnace
             recipes: [
                 { id: "steel", name: "Przetop stal", doing: "Trwa przetapianie", inputs: [[ITEM.iron, 2], [ITEM.charcoal, 2]], output: [ITEM.steel, 1], tool: ITEM.tongs,
                     hours: 6, stamina: 5, desc: "Żelazo przetapia się z węglem drzewnym w twardszą stal. Żelazne szczypce trzymają rozżarzony metal, żeby się nie poparzyć." }
@@ -306,13 +346,13 @@
             // `baitHours` or until the first rabbit; `baits`: what can be laid
             lure: { radius: 9, chance: 0.65, awayChance: 0.08, baitHours: 24, baits: [ITEM.carrot, ITEM.cabbage, ITEM.wildApple, ITEM.wildPear, ITEM.berries] },
             desc: "Pułapka na zające. Sama z siebie nic nie złapie: załóż w niej przynętę (marchew, kapusta, dzikie jabłka, gruszki, jagody), a zając, który ją zwęszy, podejdzie i może wpaść. Złapaną zwierzynę oprawisz nożem." },
-        smokehouse: { name: "Wędzarnia", cost: [[ITEM.planks, 6], [ITEM.stone, 4], [ITEM.brick, 4], [ITEM.nails, 4]], w: 3, h: 2, stamina: 12, hits: 50, image: "Farm_Smokehouse_L", legacy: { w: 2, h: 1, image: "Farm_Smokehouse", vent: 80 }, vent: 118, ventX: 0, smokes: true,
+        smokehouse: { name: "Wędzarnia", cost: [[ITEM.planks, 6], [ITEM.stone, 4], [ITEM.brick, 4], [ITEM.nails, 4]], w: 2, h: 2, stamina: 12, hits: 50, image: "Farm_Smokehouse_L", legacy: { w: 2, h: 1, image: "Farm_Smokehouse", vent: 80 }, vent: 110, ventX: 0, smokes: true,
             recipes: [
                 { id: "smoke_meat", name: "Wędź mięso", doing: "Trwa wędzenie", inputs: [[ITEM.wood, 2]], meat: 2, output: [ITEM.smokedMeat, 2], hours: 8, stamina: 2, startSe: "Fire2", desc: "Długo w dymie: mięso syci mocniej i dłużej." },
                 { id: "smoke_fish", name: "Wędź rybę", doing: "Trwa wędzenie", inputs: [[ITEM.wood, 2]], fish: 2, output: [ITEM.smokedFish, 2], hours: 6, stamina: 2, startSe: "Fire2", desc: "Ryba w dymie olchowym: ze stawu albo z morza (śledź, dorsz)." }
             ],
             desc: "Wędzi mięso i ryby. Wędzonka daje najwięcej sił." },
-        tannery: { name: "Garbarnia", cost: [[ITEM.planks, 4], [ITEM.rope, 2], [ITEM.stone, 2]], w: 3, h: 2, stamina: 10, hits: 30, image: "Farm_Tannery_L", legacy: { w: 2, h: 1, image: "Farm_Tannery" },
+        tannery: { name: "Garbarnia", cost: [[ITEM.planks, 4], [ITEM.rope, 2], [ITEM.stone, 2]], w: 2, h: 2, stamina: 10, hits: 30, image: "Farm_Tannery_L", legacy: { w: 2, h: 1, image: "Farm_Tannery" },
             recipes: [
                 { id: "tan", name: "Wyprawiaj skórę", doing: "Trwa wyprawianie", inputs: [[ITEM.rawHide, 1], [ITEM.branch, 3]], output: [ITEM.hide, 1], hours: 12, stamina: 2, startSe: "Liquid", desc: "Skóra moczy się w garbniku z kory i gałęzi." },
                 // (stage 2 of the fight, 2026-10-05: the bear's fur - one big skin gives three tanned ones)
@@ -385,16 +425,25 @@
                 { id: "soup", name: "Ugotuj zupę", doing: "Trwa gotowanie", inputs: [[ITEM.potato, 2], [ITEM.carrot, 1]], meat: 1, output: [ITEM.soup, 2], hours: 3, stamina: 2, startSe: "Liquid", desc: "Warzywa z mięsem: syci i rozgrzewa." },
                 { id: "stew", name: "Ugotuj gulasz", doing: "Trwa gotowanie", inputs: [[ITEM.carrot, 1], [ITEM.cabbage, 1]], meat: 2, water: 2, output: [ITEM.stew, 2], hours: 4, stamina: 2, startSe: "Liquid", desc: "Mięso, marchew i kapusta dusone długo w kociołku. Bardzo syci i rozgrzewa na wiele godzin." },
                 { id: "cabbage_soup", name: "Ugotuj kapuśniak", doing: "Trwa gotowanie", inputs: [[ITEM.cabbage, 2], [ITEM.potato, 1], [ITEM.smokedMeat, 1]], water: 3, output: [ITEM.cabbageSoup, 2], hours: 3, stamina: 2, startSe: "Liquid", desc: "Kapusta z ziemniakami i kawałkiem wędzonki. Syci, rozgrzewa i trochę gasi pragnienie." },
-                { id: "mushroom_soup", name: "Ugotuj zupę grzybową", doing: "Trwa gotowanie", inputs: [[ITEM.mushroom, 3], [ITEM.potato, 1], [ITEM.milk, 1]], water: 3, output: [ITEM.mushroomSoup, 2], hours: 3, stamina: 2, startSe: "Liquid", desc: "Grzyby z ziemniakiem na mleku: kremowa zupa." },
+                { id: "mushroom_soup", name: "Ugotuj zupę grzybową", doing: "Trwa gotowanie", inputs: [[ITEM.potato, 1], [ITEM.milk, 1]],
+                    any: [{ ids: [ITEM.mushroom, ITEM.oyster], n: 3, name: "Grzyby albo boczniaki", icon: ITEM.mushroom }], water: 3, output: [ITEM.mushroomSoup, 2], hours: 3, stamina: 2, startSe: "Liquid", desc: "Grzyby z ziemniakiem na mleku: kremowa zupa." },
                 { id: "porridge", name: "Ugotuj owsiankę", doing: "Trwa gotowanie", inputs: [[CROPS.barley.produce, 3], [ITEM.milk, 1], [ITEM.honey, 1]], water: 1, output: [ITEM.porridge, 2], hours: 2, stamina: 1, startSe: "Liquid", desc: "Kasza jęczmienna na mleku z łyżką miodu. Tania i sycąca." },
                 { id: "brew", name: "Zaparz wywar", doing: "Trwa parzenie", inputs: [[ITEM.herb, 3]], output: [ITEM.brew, 2], hours: 2, stamina: 1, startSe: "Liquid", desc: "Gorący wywar z ziół. Rozgrzewa na długo." },
-                { id: "nettle_soup", name: "Ugotuj zupę pokrzywową", doing: "Trwa gotowanie", inputs: [[ITEM.nettle, 3], [ITEM.garlic, 1], [ITEM.potato, 1]], water: 2, output: [ITEM.nettleSoup, 2], hours: 2, stamina: 1, startSe: "Liquid",
-                    desc: "Młode pokrzywy z dzikim czosnkiem i ziemniakiem: zielona zupa z leśnego zbieractwa. Syci i gasi pragnienie." }
+                { id: "nettle_soup", name: "Ugotuj zupę pokrzywową", doing: "Trwa gotowanie", inputs: [[ITEM.nettle, 3], [ITEM.potato, 1]],
+                    any: [{ ids: [ITEM.garlic, ITEM.gardenGarlic], n: 1, name: "Czosnek (dziki albo z grządki)", icon: ITEM.garlic }], water: 2, output: [ITEM.nettleSoup, 2], hours: 2, stamina: 1, startSe: "Liquid",
+                    desc: "Młode pokrzywy z czosnkiem i ziemniakiem: zielona zupa z leśnego zbieractwa. Syci i gasi pragnienie." },
+                // (2026-11-19, the user: the new crops) borscht, pea soup, oatmeal
+                { id: "borscht", name: "Ugotuj barszcz", doing: "Trwa gotowanie", inputs: [[ITEM.beet, 2], [ITEM.onion, 1]], water: 3, output: [ITEM.borscht, 2], hours: 3, stamina: 2, startSe: "Liquid",
+                    desc: "Buraki z cebulą gotowane długo na wodzie: czerwony, kwaskowy barszcz. Syci, rozgrzewa i dobrze gasi pragnienie." },
+                { id: "pea_soup", name: "Ugotuj grochówkę", doing: "Trwa gotowanie", inputs: [[ITEM.peas, 3], [ITEM.onion, 1]], meat: 1, water: 2, output: [ITEM.peaSoup, 2], hours: 4, stamina: 2, startSe: "Liquid",
+                    desc: "Groch rozgotowany z cebulą i kawałkiem mięsa: gęsta grochówka, po której człowiek jest syty na pół dnia." },
+                { id: "oatmeal", name: "Ugotuj owsiankę z owsa", doing: "Trwa gotowanie", inputs: [[ITEM.oats, 3]], water: 2, output: [ITEM.oatmeal, 2], hours: 2, stamina: 1, startSe: "Liquid",
+                    desc: "Płatki owsiane ugotowane na samej wodzie. Tania, prosta i sycąca: bez mleka i miodu." }
             ],
-            desc: "Wisi nad ogniem i zastępuje pieczenie na patyku: gotuje zupy, gulasz, owsiankę i wywary, a przy jego ogniu można się ogrzać. Powstaje z rozbudowy trójnogu. Mięso, ryby i ziemniaki upieczesz na osobnym ognisku." },
+            desc: "Wisi nad ogniem i zastępuje pieczenie na patyku: gotuje zupy, barszcz, grochówkę, gulasz, owsiankę i wywary, a przy jego ogniu można się ogrzać. Powstaje z rozbudowy trójnogu. Mięso, ryby i ziemniaki upieczesz na osobnym ognisku." },
         pen: { name: "Owczarnia", cost: [[ITEM.planks, 12], [ITEM.rope, 2], [ITEM.stone, 2], [ITEM.nails, 6]], w: 6, h: 5, stamina: 14, hits: 30, image: "Farm_Pen_L", legacy: { w: 2, h: 1, image: "Farm_Pen", cost: [[ITEM.planks, 6], [ITEM.rope, 2], [ITEM.stone, 2]] },
             yard: { gate: 2, hut: { dx: 2, dy: 3, w: 2, h: 1 }, animal: "sheep", count: 3 },
-            produce: { item: ITEM.wool, amount: 1, period: 3, cap: 3, tool: ITEM.shears },
+            produce: { item: ITEM.wool, amount: 1, period: 3, cap: 3, tool: ITEM.shears }, feed: ITEM.oats,
             desc: "Ogrodzony wygon z szopą: w środku pasą się owce i dają wełnę, 1 sztukę co 3 dni (maksymalnie 3), ale do strzyżenia potrzebne są nożyce (wykuwa się je w kuźni). Z wełny szyje się płaszcz." },
         // The forest bed (type key kept from the old hide bedroll): made in "Wytwórz..." (an item), laid out like the tent, but a night on it
         // restores only part of the strength: sleepRestore of the maximum, sleepBad in rain, snow and winter. refund: what Rozbierz gives back.
@@ -421,18 +470,20 @@
         cowshed: { name: "Obora", cost: [[ITEM.planks, 16], [ITEM.rope, 3], [ITEM.nails, 6]], w: 8, h: 5, stamina: 18, hits: 40, image: "Farm_Cowshed_XL",
             v2: { w: 7, h: 5, image: "Farm_Cowshed_L", cost: [[ITEM.planks, 14], [ITEM.rope, 3], [ITEM.nails, 6]], stamina: 16, yard: { gate: 3, hut: { dx: 2, dy: 3, w: 3, h: 1 }, animal: "cow", count: 2 } }, legacy: { w: 2, h: 1, image: "Farm_Cowshed", cost: [[ITEM.planks, 8], [ITEM.rope, 3], [ITEM.nails, 4]] },
             yard: { gate: 3, hut: { dx: 2, dy: 3, w: 4, h: 1 }, animal: "cow", count: 2 },
-            produce: { item: ITEM.milk, amount: 2, period: 1, cap: 6, tool: ITEM.bucket },
+            produce: { item: ITEM.milk, amount: 2, period: 1, cap: 6, tool: ITEM.bucket }, feed: ITEM.oats,
             desc: "Ogrodzony wybieg z oborą: w środku chodzą krowy, a razem dają 2 dzbany mleka dziennie (najwyżej 6), ale do dojenia potrzeba pustego wiadra w plecaku. Mleko szybko kwaśnieje, więc zbieraj je często albo zrób z niego ser." },
         // The player's first house: a log hut (one per game). Its doorway (door.dx: a passable cell of the bottom row) leads to Map100, a room with
-        // a 5 x 2 floor where furniture (the buildings marked indoor) is put with the same build menu.
-        hut: { name: "Chatka", cost: [[ITEM.planks, 50], [ITEM.nails, 60], [ITEM.stone, 40], [ITEM.iron, 10]], w: 5, h: 3, stamina: 40, hits: 80, image: "Farm_Hut_L", door: { dx: 1 }, single: true,
-            desc: "Twój pierwszy własny dach: mała chatka z bali. Wchodzisz do niej przez drzwi, a w środku (podłoga 5 × 2 pola) postawisz meble: łóżko, kredens, warsztat, skrzynie, ławkę albo legowisko. Pod dachem nie leje i nie mrozi. Tylko jedna na całą grę, za to kosztuje mnóstwo desek, gwoździ, kamieni i żelaza." },
+        // a 10 x 3 floor (5 x 2 till 2026-11-21) with a fireplace in its right corner, where furniture (the buildings marked indoor) is put with the same build menu.
+        // (2026-11-19, the user: "chatka może być większa i dłuższa", then "dłuższa i troszkę wyższa") a long thatched log house with three
+        // shuttered windows, 7 wide (the approved picture lengthened by a window strip and two log courses); the door stays in the 2nd column
+        hut: { name: "Chatka", cost: [[ITEM.planks, 50], [ITEM.nails, 60], [ITEM.stone, 40], [ITEM.iron, 10]], w: 7, h: 3, stamina: 40, hits: 80, image: "Farm_Hut_L", door: { dx: 1 }, single: true,
+            desc: "Twój pierwszy własny dach: mała chatka z bali. Wchodzisz do niej przez drzwi, a w środku (podłoga 10 × 3 pola, w rogu kominek) postawisz meble: łóżko, kredens, warsztat, skrzynie, ławkę albo legowisko. Pod dachem nie leje i nie mrozi. Tylko jedna na całą grę, za to kosztuje mnóstwo desek, gwoździ, kamieni i żelaza." },
         // furniture that stands only inside the hut (indoorOnly); the pieces marked indoor (bench, chests, workbench, bedroll) stand there too
         bed: { name: "Łóżko", cost: [[ITEM.planks, 6], [ITEM.nails, 4], [ITEM.wool, 3]], w: 2, h: 1, stamina: 8, hits: 8, image: "Farm_Bed", sleep: true, indoor: true, indoorOnly: true,
             desc: "Prawdziwe łóżko ze słomianym materacem i wełnianym kocem. Prześpisz w nim całą noc i wstaniesz z pełnią sił. Stoi tylko w chatce." },
         larder: { name: "Kredens", cost: [[ITEM.planks, 8], [ITEM.nails, 6]], w: 1, h: 1, stamina: 8, hits: 8, image: "Farm_Larder", slots: 24, keeps: 0.2, foodOnly: true, indoor: true, indoorOnly: true,
             desc: "Kredens na jedzenie: 24 rodzaje, po 99 sztuk. To, co w nim leży, psuje się pięć razy wolniej, jak w spiżarni. Stoi tylko w chatce." },
-        dairy: { name: "Serowarnia", cost: [[ITEM.planks, 6], [ITEM.stone, 4], [ITEM.rope, 2]], w: 3, h: 2, stamina: 11, hits: 50, image: "Farm_Dairy_L", legacy: { w: 2, h: 1, image: "Farm_Dairy" }, startSe: "Liquid",
+        dairy: { name: "Serowarnia", cost: [[ITEM.planks, 6], [ITEM.stone, 4], [ITEM.rope, 2]], w: 2, h: 2, stamina: 11, hits: 50, image: "Farm_Dairy_L", legacy: { w: 2, h: 1, image: "Farm_Dairy" }, startSe: "Liquid",
             recipes: [{
                 id: "cheese", name: "Zrób ser", doing: "Trwa ścinanie mleka", inputs: [[ITEM.milk, 3]], output: [ITEM.cheese, 1],
                 hours: 10, stamina: 3, startSe: "Liquid", desc: "Mleko zsiada się i dojrzewa pod prasą. Z trzech dzbanów wychodzi jeden ser, który trzyma się miesiąc."
@@ -541,7 +592,21 @@
             // (Zakon.js, 2026-10-21: the herbs from the eagle's flights - the same as their <Food:> notes, so the table knows every food;
             // Zasoby.js puts its own rows - the crab, the valerian brew - in at the start)
             228: { stamina: 45, fed: 2, water: 0 },                                                                         // Szarotka skalna (keeps)
-            229: { stamina: 12, fed: 14, water: 0 }                                                                         // Warzucha nadmorska (keeps)
+            229: { stamina: 12, fed: 14, water: 0 },                                                                        // Warzucha nadmorska (keeps)
+            // (2026-11-19, the user: the new crops and wild plants; Owies 500 is no food as it is - the oatmeal, the animals' feed)
+            501: { stamina: 6, fed: 6, water: 6, spoil: 480, dog: 8 },                                                      // Burak
+            502: { stamina: 3, fed: 3, water: 4, spoil: 720, dog: 2 },                                                      // Cebula
+            503: { stamina: 3, fed: 3, water: 1, spoil: 720, dog: 2 },                                                      // Czosnek
+            504: { stamina: 4, fed: 5, water: 0, dog: 8 },                                                                  // Groch (keeps)
+            505: { stamina: 7, fed: 10, water: 20 },                                                                        // Jabłka (keep)
+            506: { stamina: 2, fed: 2, water: 5, spoil: 48, dog: 8, dogPick: 10 },                                          // Poziomki
+            507: { stamina: 2, fed: 2, water: 4, spoil: 48, dog: 8 },                                                       // Maliny
+            508: { stamina: 2, fed: 3, water: 4, spoil: 60, dog: 8 },                                                       // Jeżyny
+            509: { stamina: 6, fed: 7, water: 0, dog: 8 },                                                                  // Orzechy laskowe (keep)
+            510: { stamina: 6, fed: 8, water: 0, spoil: 72, dog: 12 },                                                      // Boczniaki
+            511: { stamina: 40, buff: "sated", hours: 3, buff2: "warm", hours2: 3, fed: 34, water: 34, spoil: 96 },          // Barszcz
+            512: { stamina: 60, buff: "sated", hours: 6, buff2: "warm", hours2: 3, fed: 60, water: 14, spoil: 96 },          // Grochówka
+            513: { stamina: 40, buff: "sated", hours: 4, fed: 42, water: 16, spoil: 72 }                                    // Owsianka
         };
         const DOG_DEFAULT = 10, FED_FROM_STAMINA = 0.8;
         const EAT_KEYS = ["stamina", "buff", "hours", "buff2", "hours2", "fed", "water"];

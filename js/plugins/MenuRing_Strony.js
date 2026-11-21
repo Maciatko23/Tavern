@@ -1264,13 +1264,19 @@
         }
         return useCount[id] || 0;
     }
+    // what is sown or planted: the field crops' seeds (Farming.CROPS) and the planted trees' (Forestry: the apple pips)
+    function isSeedItem(id) {
+        const F = T.api("Farming"), Fo = T.api("Forestry");
+        if (F && F.CROPS && Object.values(F.CROPS).some(c => c.seed === id)) return true;
+        return !!(Fo && Fo.SPECIES && Object.values(Fo.SPECIES).some(s => s.seed === id && s.sown));
+    }
     function groupOf(it, quest) {
         if (isKeep(it)) return "keep";
         const E = T.api("Equipment");
         if (it.itypeId === 2 || TOOL_LIKE.has(it.id) || (E && E.WEARABLE && E.WEARABLE[it.id])) return "tools";
         if ((it.meta && it.meta.Drink !== undefined) || DRINKS.has(it.id)) return "drink";
         if (isFoodItem(it) || perishable(it) || (it.meta && it.meta.Butcher !== undefined)) return "food";
-        if (/^Nasiona/.test(it.name)) return "seed";
+        if (/^Nasiona/.test(it.name) || isSeedItem(it.id)) return "seed";   // (2026-11-19: Dymka cebuli, Ząbki czosnku, Pestki jabłoni too)
         if (quest && quest.has(it.id)) return "quest";
         if (it.itypeId === 1 && it.occasion === 3) return "mat";
         return "other";

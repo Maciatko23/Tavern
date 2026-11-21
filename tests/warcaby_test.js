@@ -81,15 +81,21 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9591, bootCheck: "gra się uruc
     // ================= the plate beside the table, from every side
     await t.eval("$gameSystem._minimapHidden = true; 0");
     const at = async (x, y, d) => { await t.locate(x, y, d); await t.frames(12);
-        return t.json("({ label: SceneManager._scene._spotLabel || null, shown: !!(SceneManager._scene._spotPrompt && SceneManager._scene._spotPrompt.visible) })"); };
-    const sides = { dol: await at(43, 38, 8), lewo: await at(41, 37, 6), prawo: await at(46, 37, 4), gora: await at(43, 35, 2), gora2: await at(44, 35, 2) };
-    t.check("przy stoliku z szachownicą z każdej strony: O Zagraj w warcaby", Object.values(sides).every(s => s.label === "Zagraj w warcaby" && s.shown), sides);
-    await at(43, 38, 8);
+        return t.json(`(() => { const fx = $gameMap.roundXWithDirection(${x}, ${d}), fy = $gameMap.roundYWithDirection(${y}, ${d});
+            return { label: SceneManager._scene._spotLabel || null, shown: !!(SceneManager._scene._spotPrompt && SceneManager._scene._spotPrompt.visible),
+                guest: !!(window.GoscieSala && GoscieSala.guests().some(g => g.state === "sit" && g.seat && g.seat[0] === fx && g.seat[1] === fy)) }; })()`); };
+    // (2026-11-19 the user's room: the one-tile chess table (44,37), chairs (43,37) and (45,37))
+    const sides = { dol: await at(44, 38, 8), lewo: await at(42, 37, 6), prawo: await at(46, 37, 4), gora: await at(44, 36, 2), gora2: await at(43, 36, 2) };
+    // (facing a guest who sits on a chair there: O talks to him - no plate; else the plate)
+    // (2026-11-19, the user: the plate when touching the table only; beside a chair none - a talk if someone sits there)
+    t.check("przy samym stoliku z szachownicą (z dołu, z góry): O Zagraj w warcaby", ["dol", "gora"].every(k => sides[k].label === "Zagraj w warcaby" && sides[k].shown), sides);
+    t.check("przy krzesłach (z lewej, z prawej, nad krzesłem): bez okienka", ["lewo", "prawo", "gora2"].every(k => !sides[k].shown), sides);
+    await at(44, 38, 8);
     await t.shot(path.join(SHOTS, "warcaby_0_okienko.png"));
-    const far = await at(43, 40, 8);
+    const far = await at(44, 40, 8);
     t.check("dwa kroki dalej: bez okienka", !far.shown, far);
     // O there: the talk (with whom)
-    await at(43, 38, 8);
+    await at(44, 38, 8);
     await t.press("ok");
     await t.frames(40);
     const talk = await t.json("({ busy: $gameMessage.isBusy(), choices: $gameMessage.choices() })");
@@ -150,9 +156,9 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9591, bootCheck: "gra się uruc
 
     // ================= from the talk: Wiesiek for 10 G, given up
     await t.eval("window.__resign = true; 0");
-    await t.locate(43, 38, 8);
+    await t.locate(44, 38, 8);
     await t.frames(10);
-    const tk = await t.talkTo("$gameMap.eventsXy(42, 37).find(e => /warcaby/.test(e.event().name))", ["Z furmanem Wieśkiem", "Stawka 10 G"], { secs: 60, place: false });
+    const tk = await t.talkTo("$gameMap.events().find(e => (TavernLife.lib.evTag(e) || {}).kind === 'warcaby')", ["Z furmanem Wieśkiem", "Stawka 10 G"], { secs: 60, place: false });
     t.check("rozmowa: Wiesiek pyta o stawkę", tk.log.some(l => /O ile gramy/.test(l.t)), tk.text);
     await t.frames(30);
     const g2 = await t.json("({ gold: $gameParty.gold(), r: TavernLife.lastResult, st: TavernLife.stats().warcaby })");

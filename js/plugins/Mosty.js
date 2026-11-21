@@ -296,8 +296,26 @@
         return _Game_CharacterBase_isMapPassable.call(this, x, y, d);
     };
 
+    // (2026-11-19) for a path planner (the story autopilot, tests/autopilot/ap.js): one step of the HERO by the rules above, his level
+    // carried by the planner - 0 on the ground or under a bridge, 1 on a deck. -> null when no bridge is in the step (the engine's own
+    // rule applies); else { ok, lv }: may he, and his level after it. Characters in the way are the planner's business.
+    function heroStep(x, y, d, lv) {
+        if (!$dataMap || !(d === 2 || d === 4 || d === 6 || d === 8)) return null;
+        const nx = $gameMap.roundXWithDirection(x, d), ny = $gameMap.roundYWithDirection(y, d), edge = 10 - d;
+        const from = bridgeAt(x, y), b = bridgeAt(nx, ny);
+        if (!b && !from) return null;
+        if (!$gameMap.isValid(nx, ny)) return { ok: false, lv };
+        if (b) {
+            const level = from === b ? (lv === 1 ? "gora" : "dol") : entryLevel(b, edge);
+            return { ok: level === "gora" ? deckOpen(nx, ny, edge) : groundOpen(nx, ny, edge), lv: level === "gora" ? 1 : 0 };
+        }
+        if (lv === 1) return { ok: throughEnd(from, nx, ny) && !railAt(nx, ny) && layersOpen(nx, ny, 0, [3, 2, 1, 0]), lv: 0 };   // (off the deck: by its ends only)
+        return { ok: !railAt(nx, ny) && layersOpen(nx, ny, edge, [3, 2, 1, 0]), lv: 0 };   // (from under it: off by a side as the ground there allows)
+    }
+
     const api = {
         REGION,
+        heroStep,
         npcGrid: v => { npcGrid = !!v; },   // (Hunting_Path.js: on while it reads the map's passage into its grid)
         step: bridgeStep,
         at: (x, y) => !!($gameMap && $dataMap && bridgeAt(x, y)),   // (a cell of a bridge: Klimat_Pogoda leaves no footprints there)

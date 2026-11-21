@@ -53,11 +53,11 @@
             "tablePots", "tablePotDry", "tablePotHoursLeft", "tableEntries", "potEntries", "clayEntry"]);
     const [mapAllowsBuilding, standsOnOwnLand, builtAnywhere, buildsAnywhere, tileIsFree, missingMaterials, siteHits, hitCost, upgradeEntry, packUp, wakeHour,
         sleepInTent, siteMenu, demolishBlock, demolish, readyProduce, daysToProduce, collect, snareSprung, snareBait,
-        snareBaitEntry, rest, restDanger, sleepy, sleepyNote, whyNoRest, noRestHelp, groundRate, lieDown, enterHut, startPlacement] =
+        snareBaitEntry, rest, restDanger, sleepy, sleepyNote, whyNoRest, noRestHelp, groundRate, lieDown, enterHut, startPlacement, canFeed, feedAnimals] =
         link(B, ["mapAllowsBuilding", "standsOnOwnLand", "builtAnywhere", "buildsAnywhere", "tileIsFree", "missingMaterials", "siteHits", "hitCost", "upgradeEntry",
             "packUp", "wakeHour", "sleepInTent", "siteMenu", "demolishBlock", "demolish", "readyProduce", "daysToProduce",
             "collect", "snareSprung", "snareBait", "snareBaitEntry", "rest", "restDanger", "sleepy", "sleepyNote", "whyNoRest",
-            "noRestHelp", "groundRate", "lieDown", "enterHut", "startPlacement"]);
+            "noRestHelp", "groundRate", "lieDown", "enterHut", "startPlacement", "canFeed", "feedAnimals"]);
     const [jobHoursLeft, jobPaused, jobReady, jobCount, jobFinished, jobCollectable, fireLit, fireOutText, feedFireEntries,
         recipeOf, missingInputs, chestKinds, openChest, ownedOutput, toolMissing, improved, resultText, craftManual,
         stationEntries, fireNote, missingName, missingHave] =
@@ -259,6 +259,16 @@
                     : def.lure ? (snareBait(b) ? "Pusto. Przynęta leży, trzeba poczekać, aż jakiś zając się skusi." : "Pusto. Sama pułapka nic nie złapie: załóż przynętę.")
                     : "Jeszcze nic nie ma. Następna porcja za " + daysToProduce(b) + " dn.") + toolNote,
                 run: () => collect(b) });
+            // (2026-11-19) oats in the trough: one more at the next collection (once a day, once a collection)
+            if (def.feed && !b.site && !b.empty) {
+                const oats = itemOf(def.feed), have = countOf(def.feed), ok = canFeed(b);
+                entries.push({ name: "Wsyp owies", icon: oats.iconIndex, right: "×" + have, enabled: ok && have > 0,
+                    help: b.fed ? "Owies już leży w korycie: przy najbliższym zbiorze będzie o jedno więcej."
+                        : !ok ? "Dziś już sypałeś owies. Jutro znowu."
+                        : have < 1 ? "Nie masz owsa. Owies rośnie na polu (siew wiosną i latem) albo dziko na łąkach."
+                        : "Wsypujesz garść owsa do koryta (-1 owies). Przy najbliższym zbiorze zwierzęta dadzą o jedno więcej.",
+                    run: () => feedAnimals(b) });
+            }
         }
         if (def.lure && !b.site) entries.push(snareBaitEntry(b, def));
         let title = def.name + (def.rain ? " (" + bucketUnits(b) + "/" + def.rain.max + ")" : "");
@@ -319,6 +329,8 @@
             entries.push({ name: "Zagrab ziemię", icon: itemOf(ITEM.rake).iconIndex, right: "-" + STAMINA.rake, help: plot.natural ? "Grabie. Zrywa darń i przygotowuje ziemię pod orkę." : "Grabie. Przygotowuje ziemię pod orkę.", run: () => rake(x, y) });
             // with pine seeds in the bag: plant a tree here (Forestry.js)
             if (T.api("Forestry") && countOf(ITEM.cone) > 0) entries.push(T.api("Forestry").plantEntry(x, y));
+            // (2026-11-19) with apple pips: an apple tree
+            if (T.api("Forestry") && T.api("Forestry").appleEntry && countOf(ITEM.applePips) > 0) entries.push(T.api("Forestry").appleEntry(x, y));
             entries.push(placeMenuEntry(x, y));
             return { title: puddle ? "Kałuża" : plot.natural ? "Nieuprawiana ziemia" : "Oczyszczona ziemia", entries };
         }
@@ -331,7 +343,9 @@
         }
         // tilled and empty: sow (or pre-water)
         const season = seasonIndex(today());
-        const entries = CROP_IDS.map(id => {
+        // (2026-11-19: ten crops) the four old ones always (greyed without seeds - how one learns there are seeds), a new one only
+        // while its seeds are in the bag
+        const entries = CROP_IDS.filter(id => !CROPS[id].noRake || countOf(CROPS[id].seed) > 0).map(id => {
             const def = CROPS[id], seed = itemOf(def.seed), n = countOf(def.seed);
             const inSeason = !def.seasons || def.seasons.includes(season);
             let help;

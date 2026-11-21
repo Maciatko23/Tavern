@@ -1399,6 +1399,8 @@
     }
     // a watcher (the manor's guard) sees the hero: close by, in front of him, or not sneaking (sharp: a warned watch sees further)
     function sees(w, p, sneak, sharp) {
+        const W = T.api("Widzenie");   // (2026-11-19: one rule of sight - Widzenie.js; a warned watch sees `sharp` tiles further)
+        if (W && W.sees) return W.sees(w, p.x, p.y, { sneak, bonus: sharp || 0 });
         const v = [[0, 0], [0, 1], [0, 0], [-1, 0], [0, 0], [1, 0], [0, 0], [0, -1]][w.direction() - 1] || [0, 1];
         const d = dist(w, p), ahead = ((p.x - w.x) * v[0] + (p.y - w.y) * v[1]) / Math.max(0.01, d);
         return d < 1.6 || (ahead > 0.5 && d < (sneak ? 3.5 : 6) + sharp) || (!sneak && d < 4 + sharp);

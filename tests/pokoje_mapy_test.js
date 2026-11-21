@@ -19,7 +19,7 @@ for (const it of info) {
     if (!fs.existsSync(p)) continue;
     const m = JSON.parse(fs.readFileSync(p, "utf8"));
     tytuly[it.id] = it.name;
-    if (m.tilesetId === INTERIOR) mapy.push(it.id);
+    if (m.tilesetId === INTERIOR && !/<Widok:off>/i.test(m.note || "")) mapy.push(it.id);   // (<Widok:off>: a map left out on purpose - Kruczarnia 214, Młyn 217)
     for (const e of m.events) {
         if (!e) continue;
         for (const pg of e.pages) for (const c of pg.list) if (c.code === 201 && c.parameters[0] === 0) { const to = c.parameters[1]; if (to !== it.id) (wejscia[to] = wejscia[to] || []).push([c.parameters[2], c.parameters[3]]); }

@@ -180,7 +180,8 @@
     const CAT_SPOTS = Watki.scal([{ id: "hearth" }, { id: "rug" }, { id: "sill" }, { id: "stroll" }, { id: "feet" }, { id: "heroBed" }], "f9", "kot.miejsca", "id");
     // the item tab's three kinds (a second band under the tabs; Tab or [ / ] switch them): tools and weapons, materials, food
     const KINDS = Watki.scal([], "f9", "przedmioty.rodzaje");   // (js/teksty/f9.txt)
-    const TOOL_EXTRA = [59, 127, 129, 138, 141, 142, 144];   // plain items that are tools all the same: torch, arrows, waterskin, bucket, cauldron, shears, tongs
+    const TOOL_EXTRA = [59, 127, 129, 138, 141, 142, 144, 515];   // plain items that are tools all the same: torch, arrows, waterskin, bucket, cauldron, shears, tongs,
+                                                                   // the lockpick (2026-11-19)
     const RAW_FOOD = [94, 98, 157, 159, 161, 168, 173, 174];   // raw hare, fish, deer, boar, wolf, bear, herring, cod: food still to be cooked
     function kindOf(item) {
         if (item.itypeId === 2 || TOOL_EXTRA.includes(item.id)) return 0;   // (the database's key items: tools, weapons, the shield, clothes, the tent)

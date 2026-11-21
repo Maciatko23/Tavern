@@ -111,7 +111,10 @@
         const nearExit = new Set();   // (the tiles round a crossing: dear, so no path brushes past one)
         for (const j of avoid) { const ex = j % W(), ey = (j / W()) | 0; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) nearExit.add((ey + dy) * W() + ex + dx); }
         const zoneCost = AP.zones.length > 0;
-        const w = W(), h = H(), n = w * h, dist = new Float64Array(n).fill(Infinity), prev = new Int32Array(n).fill(-1);
+        // (2026-11-19: two levels - Mosty.js's bridges: 0 on the ground or under a bridge, 1 on its deck; a state = tile * 2 + level.
+        // A map without bridges: level 0 only, the same field as before)
+        const MO = window.Mosty && Mosty.heroStep && Mosty.list && Mosty.list().length ? Mosty : null;
+        const w = W(), h = H(), n = w * h, dist = new Float64Array(n * 2).fill(Infinity), prev = new Int32Array(n * 2).fill(-1);
         const p0 = P(), canMemo = new Int8Array(memo ? n * 10 : 0).fill(-1), canPass0 = p0.canPass;
         if (memo) p0.canPass = function(x, y, d) {   // (only for this one field: nothing moves while it is made)
             if (x < 0 || y < 0 || x >= w || y >= h) return canPass0.call(this, x, y, d);
@@ -125,26 +128,37 @@
         const heap = [];
         const push = (d, i) => { heap.push([d, i]); let c = heap.length - 1; while (c > 0) { const p = (c - 1) >> 1; if (heap[p][0] <= heap[c][0]) break; [heap[p], heap[c]] = [heap[c], heap[p]]; c = p; } };
         const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; let c = 0; for (;;) { const l = 2 * c + 1, r = l + 1; let m = c; if (l < heap.length && heap[l][0] < heap[m][0]) m = l; if (r < heap.length && heap[r][0] < heap[m][0]) m = r; if (m === c) break; [heap[m], heap[c]] = [heap[c], heap[m]]; c = m; } } return top; };
-        dist[sy * w + sx] = 0; push(0, sy * w + sx);
+        const lv0 = MO && Mosty.level && Mosty.level() === "gora" ? 1 : 0;
+        dist[(sy * w + sx) * 2 + lv0] = 0; push(0, (sy * w + sx) * 2 + lv0);
         while (heap.length) {
-            const [d, i] = pop();
-            if (d > dist[i]) continue;
-            const x = i % w, y = (i / w) | 0;
+            const [d, s] = pop();
+            if (d > dist[s]) continue;
+            const i = s >> 1, lv = s & 1, x = i % w, y = (i / w) | 0;
             for (const [dx, dy, c] of STEPS) {
                 const nx = x + dx, ny = y + dy;
                 if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
-                const j = ny * w + nx, nd = d + c + (zoneCost && inZone(nx, ny) ? 40 : 0) + (nearExit.has(j) ? 30 : 0);
-                if (nd >= dist[j] || avoid.has(j) || !passStep(x, y, dx, dy)) continue;
-                dist[j] = nd; prev[j] = i; push(nd, j);
+                const j = ny * w + nx;
+                if (avoid.has(j)) continue;
+                let nlv = 0;
+                if (MO && (lv === 1 || MO.at(x, y) || MO.at(nx, ny) || (dx && dy && (MO.at(x + dx, y) || MO.at(x, y + dy))))) {
+                    if (dx && dy) continue;   // (no slanting onto, off or under a bridge)
+                    const r = MO.heroStep(x, y, dx > 0 ? 6 : dx < 0 ? 4 : dy > 0 ? 2 : 8, lv);
+                    if (r) { if (!r.ok || p0.isCollidedWithCharacters(nx, ny)) continue; nlv = r.lv; }
+                    else if (!passStep(x, y, dx, dy)) continue;
+                } else if (!passStep(x, y, dx, dy)) continue;
+                const t = j * 2 + nlv, nd = d + c + (zoneCost && inZone(nx, ny) ? 40 : 0) + (nearExit.has(j) ? 30 : 0);
+                if (nd >= dist[t]) continue;
+                dist[t] = nd; prev[t] = s; push(nd, t);
             }
         }
         } finally { if (memo) delete p0.canPass; }
-        return { dist, prev, w, sx, sy, at: (x, y) => dist[y * w + x] };
+        return { dist, prev, w, sx, sy, at: (x, y) => Math.min(dist[(y * w + x) * 2], dist[(y * w + x) * 2 + 1]) };
     }
     function pathFrom(f, tx, ty) {
         if (!isFinite(f.at(tx, ty))) return null;
-        const out = []; let i = ty * f.w + tx;
-        while (i !== -1) { out.unshift([i % f.w, (i / f.w) | 0]); i = f.prev[i]; }
+        const t = ty * f.w + tx, out = [];
+        let s = f.dist[t * 2] <= f.dist[t * 2 + 1] ? t * 2 : t * 2 + 1;
+        while (s !== -1) { const i = s >> 1; out.unshift([i % f.w, (i / f.w) | 0]); s = f.prev[s]; }
         return out;
     }
     // turning points: runs of the same step become one segment
@@ -1066,6 +1080,13 @@
         119: ["Wykuj głowicę siekiery", { 86: 3 }], 120: ["Wykuj grot kilofa", { 86: 3 }], 117: ["Wykuj ostrze piły", { 86: 2 }],
         138: ["Wykuj wiadro", { 86: 1, 80: 3 }]
     };
+    // (2026-11-19) the workbench's tools, again when one wore out (the PLAN makes each once): the recipes as the PLAN has them
+    const WORKBENCH = {
+        60: ["Zrób kamienną siekierę", { 77: 5, 64: 2, 92: 3 }], 62: ["Zrób kamienną łopatę", { 61: 2, 77: 1, 64: 2 }],
+        63: ["Zrób kamienny kilof", { 61: 2, 77: 3, 64: 3 }], 90: ["Zrób nóż kamienny", { 61: 1, 64: 2, 77: 1 }],
+        65: ["Zrób grabie", { 61: 1, 77: 4 }], 66: ["Zrób motykę", { 61: 1, 77: 1, 64: 3 }],
+        115: ["Zmontuj żelazną siekierę", { 119: 1, 80: 1 }], 116: ["Zmontuj żelazny kilof", { 120: 1, 80: 1 }], 118: ["Zmontuj piłę", { 117: 1, 61: 2, 93: 1 }]
+    };
     function* obtain(need) {
         for (let guard = 0; guard < 300; guard++) {
             const short = Object.entries(need).map(([id, n]) => [+id, n]).filter(([id, n]) => count(id) < n);
@@ -1150,6 +1171,19 @@
                 const [recipe, inputs] = FORGED[id];
                 if (!(yield* obtain(inputs))) return false;
                 if (!(yield* craft("forge", recipe))) return false;
+                continue;
+            }
+            if (WORKBENCH[id]) {   // a tool from the workbench (made again when the old one wore out)
+                if (!built("workbench")) { say("nie ma stołu warsztatowego na: " + $dataItems[id].name); return false; }
+                const [recipe, inputs] = WORKBENCH[id];
+                if (!(yield* obtain(inputs))) return false;
+                if (!(yield* craft("workbench", recipe))) return false;
+                continue;
+            }
+            if (id === 514) {   // (2026-11-19) fittings: forged from iron, two at a time - the chests
+                if (!built("forge")) return false;
+                if (count(86) < 1 && !(yield* obtain({ 86: 1 }))) return false;
+                if (!(yield* craft("forge", "Wykuj okucia"))) return false;
                 continue;
             }
             if (id === 88) {   // nails: forged from iron, ten at a time
@@ -1258,7 +1292,6 @@
         B("Tartak", "sawmill", 5, 3),
         B("Buda", "doghouse", -3, -2),
         B("Ławka", "bench", -1, 1),
-        B("Mała skrzynia", "chest_s", 3, -1),
         B("Wiata", "shelter", -7, 2),
         B("Kompostownik", "compost", 6, -1),
         B("Strach na wróble", "scarecrow", -5, 5),
@@ -1272,6 +1305,7 @@
         B("Spiżarnia", "pantry", 1, -4),
         B("Garbarnia", "tannery", -5, 8),
         B("Kuźnia", "forge", 13, 3),
+        B("Mała skrzynia", "chest_s", 3, -1),   // (2026-11-19: the chests want nails - after the forge)
         // the well: water for good (the bucket for it is forged; the pit under it dug with the shovel)
         { n: "Studnia", done: () => built("well"), get need() { return costOf("well"); }, run: buildWell },
         // iron tools: a third fewer blows, a little less strength a blow; the saw: 3 planks out of 3 wood, in half the time
@@ -1512,14 +1546,14 @@
     // (fruit, berries, mushrooms, wild potatoes and carrots) and, when home is picked bare, the meadow next door
     const NEAR_MAP = 4;
     const lowNeeds = () => { if (!(window.Needs && Needs.enabled && Needs.enabled())) return false; const n = Needs.state(); return needsCapped() || n.food < 30 || n.water < 30; };
-    const FOOD_KINDS = ["berries", "bush", "mushroom", "wildPotato", "wildCarrot"];
+    const FOOD_KINDS = ["berries", "bush", "strawberry", "mushroom", "wildPotato", "wildCarrot"];   // (2026-11-19: + wild strawberries)
     const foodTile = (x, y, k) => k !== "bush" || Farming.bushState(x, y) === "full";   // (a bare bush gives only fibre)
     function* forage(n) {
         const before = totalItems();
         yield* pickFruit();
         const thirsty = window.Needs && Needs.state().water < 40;
         // (thirsty: the watery ones first - berries; hungry: anything)
-        if (thirsty) yield* gather(["berries", "bush"], Math.ceil(n / 2), foodTile);
+        if (thirsty) yield* gather(["berries", "bush", "strawberry"], Math.ceil(n / 2), foodTile);
         yield* gather(FOOD_KINDS, n, foodTile);
         const got = totalItems() - before;
         if (got > 0) say("nazbierał jedzenia: +" + got);

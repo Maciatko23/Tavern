@@ -249,6 +249,36 @@
         const tipX = Math.max(CUT + 2, Math.min(w - CUT - 2, Math.round(head.x - x)));
         return { x, y, tail: { edge: "top", base: root(w, tipX), tipX, tipY: 0 } };
     }
+    // (2026-11-19) every place a cry's panel may take for this speaker, best first: above the head - in the middle, then slid aside
+    // as far as its tail still points at the head -, beside the face (right, left), under the feet. -> [{ kind, x, y, tail, r }],
+    // r: the panel with its tail (window-layer px) - the cries keep these clear of each other
+    function barkSpots(w, h, head, keep) {
+        const H = Graphics.boxHeight, out = [];
+        const root = (size, point) => Math.max(TAIL.inset, Math.min(size - TAIL.inset, Math.round(point)));
+        if (head.top - GAP - TAIL.h - h >= EDGE) {
+            const y = Math.round(head.top - GAP - TAIL.h - h), b = spanAcross(y, h, w, keep);
+            const x0 = Math.max(b.lo, Math.min(b.hi - w, Math.round(head.x - w / 2)));
+            const lo = Math.max(b.lo, Math.round(head.x - (w - CUT - 2 - TAIL.w / 2))), hi = Math.min(b.hi - w, Math.round(head.x - (CUT + 2 + TAIL.w / 2)));
+            const xs = [x0];
+            for (let d = 6; d <= w; d += 6) { if (x0 - d >= lo) xs.push(x0 - d); if (x0 + d <= hi) xs.push(x0 + d); }
+            for (const x of xs) {
+                const tipX = Math.max(CUT + 2, Math.min(w - CUT - 2, Math.round(head.x - x)));
+                out.push({ kind: "up", x, y, tail: { edge: "bottom", base: root(w, tipX), tipX, tipY: h + TAIL.h }, r: { x, y, w, h: h + TAIL.h } });
+            }
+        }
+        const faceY = head.top + Math.min(20, (head.foot - head.top) / 3);
+        const sy = Math.max(EDGE, Math.min(H - EDGE - h, Math.round(faceY - Math.min(h / 2, 26)))), b = spanAcross(sy, h, w, keep);
+        const at = Math.round(faceY - sy), tipY = Math.max(2, Math.min(h - 2, at));
+        const rightX = Math.round(head.x + SIDE_GAP + TAIL.h), leftX = Math.round(head.x - SIDE_GAP - TAIL.h - w);
+        if (rightX + w <= b.hi) out.push({ kind: "right", x: rightX, y: sy, tail: { edge: "left", base: root(h, at), tipX: 0, tipY }, r: { x: rightX - TAIL.h, y: sy, w: w + TAIL.h, h } });
+        if (leftX >= b.lo) out.push({ kind: "left", x: leftX, y: sy, tail: { edge: "right", base: root(h, at), tipX: w + TAIL.h, tipY }, r: { x: leftX, y: sy, w: w + TAIL.h, h } });
+        const by = Math.min(H - EDGE - h, Math.round(head.foot + GAP + TAIL.h)), bb = spanAcross(by, h, w, keep);
+        const bx = Math.max(bb.lo, Math.min(bb.hi - w, Math.round(head.x - w / 2))), btip = Math.max(CUT + 2, Math.min(w - CUT - 2, Math.round(head.x - bx)));
+        out.push({ kind: "down", x: bx, y: by, tail: { edge: "top", base: root(w, btip), tipX: btip, tipY: 0 }, r: { x: bx, y: by - TAIL.h, w, h: h + TAIL.h } });
+        return out;
+    }
+    const BARK_MARGIN = 4, BARK_WAIT = 240;   // px kept between two cries; frames a cry waits for room before it is dropped
+    const meets = (a, b) => a.x < b.x + b.w + BARK_MARGIN && a.x + a.w + BARK_MARGIN > b.x && a.y < b.y + b.h + BARK_MARGIN && a.y + a.h + BARK_MARGIN > b.y;
     // the room across for a w px wide panel from y to y + h: the screen less the rects of keep it would meet (one on the left half
     // of the screen bounds it on the left, one on the right on the right) -> { lo, hi }; no room for it between them: the screen
     function spanAcross(y, h, w, keep) {
@@ -956,7 +986,7 @@
         if (!ch || !text) return;
         text = window.Monety && Monety.tekst ? Monety.tekst(String(text), true) : String(text);   // (a cry says its sums as coins, in words)
         for (const b of barks) if (b.ch === ch && b.t < b.life - BARK.fadeOut) b.t = b.life - BARK.fadeOut;   // the speaker's last cry goes
-        barks.push({ ch, text, t: 0, life: frames || Math.min(360, 150 + text.length * 5), map: window.$gameMap ? $gameMap.mapId() : 0 });
+        barks.push({ ch, text, t: 0, wait: 0, life: frames || Math.min(360, 150 + text.length * 5), map: window.$gameMap ? $gameMap.mapId() : 0 });
         log.push(text);
         if (log.length > 20) log.shift();
     }
@@ -975,6 +1005,10 @@
         // (2026-11-17) a talk or a question on the screen: the passers-by's cries step back (a quick fade), never drawn over its bubble
         const want = $gameMessage.isBusy() ? 0 : 1;
         if (this.alpha !== want) this.alpha = want > this.alpha ? Math.min(1, this.alpha + 0.1) : Math.max(0, this.alpha - 0.15);
+        // (2026-11-19, the user: "zawsze wszystkie wypowiedzi ludzi nie nachodziły na siebie") the cries never cover each other: the
+        // oldest keep their places, a newer one takes the first free spot of its speaker (it keeps that kind of spot while there is
+        // room - no jumping as people walk); no room anywhere - it waits, its time stopped, and after BARK_WAIT it is dropped
+        const placed = [];
         for (const b of barks.slice()) {
             b.t++;
             // (a character that is not an event - a man of Humans.js, a creature of Creatures.js - speaks while it lives on this map)
@@ -1000,7 +1034,21 @@
                 s._w = Math.ceil(probe.measureTextWidth(b.text)) + BARK.padX * 2;
                 s._h = BARK.line + BARK.padY * 2;
             }
-            const at = placePanel(s._w, s._h, head, bustKeepOut()), key = at.tail.edge + ":" + at.tail.tipX + ":" + at.tail.tipY;
+            const spots = barkSpots(s._w, s._h, head, bustKeepOut());
+            if (s._kind) {   // (its own kind of spot first, at the same place beside the head as before)
+                const want = head.x + (s._dx || 0);
+                spots.sort((p, q) => (p.kind === s._kind ? 0 : 1) - (q.kind === s._kind ? 0 : 1) || (p.kind === s._kind ? Math.abs(p.x - want) - Math.abs(q.x - want) : 0));
+            }
+            const at = spots.find(p => !placed.some(r => meets(p.r, r)));
+            if (!at) {
+                s.visible = false;
+                b.t--;
+                if (++b.wait > BARK_WAIT) b.life = 0;
+                continue;
+            }
+            placed.push(at.r);
+            s._kind = at.kind; s._dx = at.x - head.x;
+            const key = at.tail.edge + ":" + at.tail.tipX + ":" + at.tail.tipY;
             if (s._key !== key) {   // drawn again only when the tail has to turn or move (the speaker near an edge of the screen)
                 s._key = key;
                 const { bw, bh } = bubbleSize(s._w, s._h, at.tail.edge), off = tailOffset(at.tail.edge), bmp = new Bitmap(bw, bh);

@@ -46,6 +46,12 @@
  * które nadaje edytor). Strony i pniak kopiują zwykłą sosnę z tej samej mapy
  * (albo, gdy jej nie ma, wbudowany wzór z pniakiem 516).
  *
+ * JABŁOŃ (2026-11-19): z pestek jabłoni (zbierane przy zrywaniu jabłek albo
+ * kupione u zielarki) - "Posadź jabłoń" w tym samym menu. Rośnie 12 dni:
+ * kopczyk z siewką (!$Sapling_Apple, _2, _3), potem młode drzewko bez owoców
+ * (!$Tree_FruitBare zmniejszony), a dorosła jabłoń rodzi Jabłka latem i jesienią
+ * jak dzikie (ChoppableTree: fruit). Zapis: rekord ma sp: "apple".
+ *
  * Wymaga TawernaCore.js (pierwsza na liście wtyczek).
  * ============================================================================
  */
@@ -92,15 +98,30 @@
     const BRANCH = 77, WOOD = 61;
     const LOOKS = [{ pic: "!$Sapling" }, { pic: "!$Sapling_2" }, { pic: "!$Sapling_3" },
         { scale: 0.24 }, { scale: 0.32 }, { scale: 0.41 }, { scale: 0.51 }, { scale: 0.62 }, { scale: 0.74 }, { scale: 0.87 }];
-    const stageOf = rec => Math.max(0, Math.min(GROW_DAYS, day() - rec.day));   // whole days since planting, GROW_DAYS = grown
-    const growthOf = rec => stageOf(rec) / GROW_DAYS;                            // 0 just planted .. 1 grown up
-    const lookOf = k => (k >= 1 ? { scale: 1 } : LOOKS[Math.min(LOOKS.length - 1, Math.floor(k * LOOKS.length + 1e-9))]);
-    const graphicOf = rec => lookOf(growthOf(rec)).pic || rec.graphic;
-    function statsOf(k) {
-        const look = lookOf(k);
-        if (look.pic) return { scale: 1, hits: 1, drop: BRANCH, dropmin: 1, dropmax: 1, nostump: 1 };
-        return { scale: look.scale, hits: Math.max(1, Math.round(20 * k)), drop: WOOD,
-            dropmin: Math.max(1, Math.round(6 * k)), dropmax: Math.max(1, Math.round(8 * k)), nostump: 0 };   // (like the big pine: ~0.35 wood a blow)
+    // (2026-11-19, the user: an apple tree from pips) the kinds of planted trees. A record without `sp` is a pine (the old saves).
+    //   seed: what is put into the ground; grow: days to a grown tree; looks: its pictures until then (a pic = its own picture at full
+    //   size, a scale = the grown picture - `young` while it grows - shrunk around the foot); full: the grown tree's scale (the wild
+    //   apples on the maps stand at 0.6-0.7); fruit: what a grown one bears (ChoppableTree: in season, again after some days)
+    const APPLE_PIPS = 499, APPLES = 505;
+    const SPECIES = {
+        pine: { key: "pine", seed: SEED, grow: GROW_DAYS, looks: LOOKS, graphics: GRAPHICS, full: 1, hits: 20, wood: [6, 8], name: "Posadzona sosna", tk: "" },
+        apple: { key: "apple", seed: APPLE_PIPS, sown: true, grow: 12, graphics: ["!$Tree_Apple"], young: "!$Tree_FruitBare", bare: "!$Tree_FruitBare",
+            full: 0.65, hits: 14, wood: [3, 5], fruit: APPLES, name: "Posadzona jabłoń", tk: "Jablon",
+            looks: [{ pic: "!$Sapling_Apple" }, { pic: "!$Sapling_Apple" }, { pic: "!$Sapling_Apple_2" }, { pic: "!$Sapling_Apple_2" }, { pic: "!$Sapling_Apple_3" },
+                { pic: "!$Sapling_Apple_3" }, { scale: 0.3 }, { scale: 0.4 }, { scale: 0.5 }, { scale: 0.62 }, { scale: 0.75 }, { scale: 0.88 }] }
+    };
+    const speciesOf = rec => SPECIES[(rec && rec.sp) || "pine"] || SPECIES.pine;
+    const stageOf = rec => { const g = speciesOf(rec).grow; return Math.max(0, Math.min(g, day() - rec.day)); };   // whole days since planting, grow = grown
+    const growthOf = rec => stageOf(rec) / speciesOf(rec).grow;                  // 0 just planted .. 1 grown up
+    const lookOf = (k, sp) => { const L = (sp || SPECIES.pine).looks; return k >= 1 ? { scale: 1 } : L[Math.min(L.length - 1, Math.floor(k * L.length + 1e-9))]; };
+    // the picture now: a seedling's own, the young tree (the fruit tree's bare picture while it grows), then the grown one
+    const graphicOf = rec => { const sp = speciesOf(rec), k = growthOf(rec), look = lookOf(k, sp); return look.pic || (k < 1 && sp.young) || rec.graphic; };
+    function statsOf(k, sp) {
+        sp = sp || SPECIES.pine;
+        const look = lookOf(k, sp), fruit = sp.fruit ? { fruit: k >= 1 ? sp.fruit : 0 } : {};
+        if (look.pic) return Object.assign({ scale: 1, hits: 1, drop: BRANCH, dropmin: 1, dropmax: 1, nostump: 1 }, fruit);
+        return Object.assign({ scale: +(look.scale * sp.full).toFixed(3), hits: Math.max(1, Math.round(sp.hits * k)), drop: WOOD,
+            dropmin: Math.max(1, Math.round(sp.wood[0] * k)), dropmax: Math.max(1, Math.round(sp.wood[1] * k)), nostump: 0 }, fruit);   // (like the big pine: ~0.35 wood a blow)
     }
 
     // ------------------------------------------------------------------
@@ -118,6 +139,16 @@
             page({ selfSwitchCh: "B", selfSwitchValid: true }, { tileId: 0, characterName: "", direction: 2, pattern: 0, characterIndex: 0 }, null, "", false)
         ];
     }
+    // the planted apple tree's pages, as the wild apple trees of the maps have them: 0 bearing (pick the fruit), C bare (chop it),
+    // A the stump (dig it), B gone. While it grows it stands on the bare page (C on): no fruit, it can be chopped
+    function applePages() {
+        const pages = builtInPages(), fruitPage = JSON.parse(JSON.stringify(pages[0])), bare = pages[0];
+        fruitPage.image.characterName = SPECIES.apple.graphics[0];
+        fruitPage.list[0].parameters = ["ChoppableTree", "pickFruit", "Zerwij owoce", {}];
+        bare.conditions = Object.assign({}, BLANK_CONDITIONS, { selfSwitchCh: "C", selfSwitchValid: true });
+        bare.image.characterName = SPECIES.apple.bare;
+        return [fruitPage, bare, pages[1], pages[2]];
+    }
     // an ordinary pine of the map (a <Tree> without fruit, with a Pine picture on its first page)
     function templatePages(data) {
         const pine = (data.events || []).find(e => e && /<Tree/i.test(e.note || "") && !/fruit=/i.test(e.note || "") && e.id < FIRST_ID &&
@@ -125,11 +156,14 @@
         return pine ? pine.pages : builtInPages();
     }
     function eventData(rec, pages) {
-        const copy = JSON.parse(JSON.stringify(pages));
-        copy[0].image.characterName = graphicOf(rec);
-        const s = statsOf(growthOf(rec));
-        return { id: rec.id, name: "Posadzona sosna", x: rec.x, y: rec.y, pages: copy,
-            note: "<Tree:hits=" + s.hits + ",sway=0.9,drop=" + s.drop + ",dropmin=" + s.dropmin + ",dropmax=" + s.dropmax + ",scale=" + s.scale + ",nostump=" + s.nostump + "><Planted>" };
+        const sp = speciesOf(rec), copy = JSON.parse(JSON.stringify(sp.key === "apple" ? applePages() : pages));
+        const s = statsOf(growthOf(rec), sp), pic = graphicOf(rec);
+        copy[0].image.characterName = pic;
+        if (sp.key === "apple" && s.fruit) copy[0].image.characterName = rec.graphic;   // (grown: the bearing page shows the fruit)
+        if (sp.key === "apple" && !s.fruit) copy[1].image.characterName = pic;          // (growing: it stands on the bare page)
+        return { id: rec.id, name: sp.name, x: rec.x, y: rec.y, pages: copy,
+            note: "<Tree:hits=" + s.hits + ",sway=" + (sp.key === "apple" ? "1.0" : "0.9") + ",drop=" + s.drop + ",dropmin=" + s.dropmin + ",dropmax=" + s.dropmax + ",scale=" + s.scale + ",nostump=" + s.nostump +
+                (s.fruit ? ",fruit=" + s.fruit : "") + "><Planted>" };
     }
     function putData(data, rec, pages) {
         for (let i = data.events.length; i < rec.id; i++) data.events[i] = null;   // (no holes: other code checks events for null)
@@ -170,14 +204,27 @@
     function applyGrowth(event) {
         const rec = recFor(event._mapId, event._eventId), CT = T.api("ChoppableTree");
         if (!rec || !CT || !CT.treeConfig) return;
-        const k = growthOf(rec), cfg = CT.treeConfig(event);
+        const sp = speciesOf(rec), k = growthOf(rec), cfg = CT.treeConfig(event);
         event._plantedGrowth = k;
-        if (cfg) Object.assign(cfg, statsOf(k));
+        if (cfg) Object.assign(cfg, statsOf(k, sp));
         // the picture of the day, in the map's data (the next page set-up) and on the event itself. Both separately: the map's data
         // is loaded again after the night (the day summary is a scene of its own) with the new picture already in it, while the
         // event on the map still shows yesterday's
         const pic = graphicOf(rec), data = event.event(), page = data && data.pages && data.pages[0];
         if (!page) return;
+        if (sp.key === "apple") {
+            // growing: on the bare page (C on), its picture the seedling / the young tree; grown: ChoppableTree keeps C by the fruit
+            const grown = k >= 1, bare = data.pages[1], C = [event._mapId, event._eventId, "C"];
+            page.image.characterName = grown ? rec.graphic : pic;
+            if (bare) bare.image.characterName = grown ? sp.bare : pic;
+            if (!grown && !$gameSelfSwitches.value(C)) $gameSelfSwitches.setValue(C, true);
+            if (grown && CT.syncFruitSwitch) CT.syncFruitSwitch(event);
+            if (event._pageIndex === 0 || event._pageIndex === 1) {
+                const want = data.pages[event._pageIndex].image.characterName;
+                if (event.characterName() !== want) event.setImage(want, 0);
+            }
+            return;
+        }
         page.image.characterName = pic;
         if (event._pageIndex === 0 && event.characterName() !== pic) event.setImage(pic, page.image.characterIndex || 0);
     }
@@ -238,9 +285,10 @@
         }
         return event;
     }
-    function plant(x, y) {
-        const seed = seedItem(), why = whyNot(x, y);
-        if (!seed || $gameParty.numItems(seed) < 1) { refuse(seed ? seed.iconIndex : 0, TK.kod.plant[0]); return false; }
+    function plant(x, y, spKey) {
+        const sp = SPECIES[spKey || "pine"] || SPECIES.pine, apple = sp.key === "apple";
+        const seed = $dataItems[sp.seed], why = whyNot(x, y);
+        if (!seed || $gameParty.numItems(seed) < 1) { refuse(seed ? seed.iconIndex : 0, apple ? TK.kod.plantJablon[0] : TK.kod.plant[0]); return false; }
         if (why) { refuse(seed.iconIndex, why); return false; }
         if (typeof $gameSystem.trySpendStamina === "function" && !$gameSystem.trySpendStamina(PLANT_STAMINA)) { refuse(82, TK.kod.plant[1]); return false; }
         const done = () => {
@@ -248,17 +296,19 @@
             $gameParty.loseItem(seed, 1);
             const mapId = $gameMap.mapId(), F = T.api("Farming"), id = nextId(mapId);
             if (!id) { refuse(seed.iconIndex, TK.kod.done[0]); return; }
-            const rec = { id, x, y, day: day(), graphic: GRAPHICS[Math.floor(F ? F.hash2(x, y, 521) * GRAPHICS.length : 0)] };
+            const rec = { id, x, y, day: day(), graphic: sp.graphics[Math.floor(F ? F.hash2(x, y, 521) * sp.graphics.length : 0)] };
+            if (apple) rec.sp = "apple";
             treesOf(mapId).push(rec);
             spawn(rec);
             T.audio.se("Earth1", { volume: 80, pitch: 110 });
-            popup(seed.iconIndex, Watki.wstaw(TK.kod.done[1], { GROW_DAYS: GROW_DAYS }));
+            popup(seed.iconIndex, Watki.wstaw(apple ? TK.kod.doneJablon[0] : TK.kod.done[1], { GROW_DAYS: sp.grow }));
         };
         if (!($gamePlayer.startToolSwing && $gamePlayer.startToolSwing(CROUCH_KIND, done))) done();
         return true;
     }
     // the line of the ground menu (Farming.js shows it while there are seeds in the bag)
-    function plantEntry(x, y) {
+    function plantEntry(x, y, spKey) {
+        if (spKey === "apple") return appleEntry(x, y);
         const seed = seedItem(), n = seed ? $gameParty.numItems(seed) : 0, why = whyNot(x, y);
         return { name: TK.kod.plantEntry[0], icon: seed ? seed.iconIndex : 0, right: "-" + PLANT_STAMINA, enabled: !why && n > 0,
             help: why || Watki.wstaw(TK.kod.plantEntry[1], { n: n, GROW_DAYS: GROW_DAYS }),
@@ -266,7 +316,16 @@
             facts: [Watki.wstaw(TK.kod.plantEntry[3], { n: n }), TK.kod.plantEntry[4]],
             run: () => plant(x, y) };
     }
+    // (2026-11-19) "Posadź jabłoń": the same ground, one pip
+    function appleEntry(x, y) {
+        const sp = SPECIES.apple, seed = $dataItems[sp.seed], n = seed ? $gameParty.numItems(seed) : 0, why = whyNot(x, y), w = { n: n, GROW_DAYS: sp.grow };
+        return { name: TK.kod.plantJablonEntry[0], icon: seed ? seed.iconIndex : 0, right: "-" + PLANT_STAMINA, enabled: !why && n > 0,
+            help: why || Watki.wstaw(TK.kod.plantJablonEntry[1], w),
+            tip: Watki.wstaw(TK.kod.plantJablonEntry[2], w),
+            facts: [Watki.wstaw(TK.kod.plantJablonEntry[3], w), TK.kod.plantJablonEntry[4]],
+            run: () => plant(x, y, "apple") };
+    }
 
-    window.Forestry = T.register(PLUGIN, { GROW_DAYS, FIRST_ID, LAST_ID, nextId, SEED, LOOKS, plant, plantEntry, whyNot, stageOf, growthOf, graphicOf, statsOf, treesOf, spawn, applyGrowth,
+    window.Forestry = T.register(PLUGIN, { GROW_DAYS, FIRST_ID, LAST_ID, nextId, SEED, LOOKS, SPECIES, speciesOf, plant, plantEntry, appleEntry, whyNot, stageOf, growthOf, graphicOf, statsOf, treesOf, spawn, applyGrowth,
         state: store });
 })();

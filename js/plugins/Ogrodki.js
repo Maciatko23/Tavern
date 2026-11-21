@@ -184,6 +184,8 @@
         return typeof n === "string" && n.indexOf("Npc") >= 0;
     };
     function witnesses(x, y) {
+        const W = T.api("Widzenie");   // (2026-11-19: one rule of sight - who sees the garden's cell now; this count only without it)
+        if (W && W.seenBy) return W.seenBy(x, y).length;
         const R = isNight() ? NIGHT_RANGE : DAY_RANGE, R2 = R * R;
         let n = 0;
         for (const ev of $gameMap.events()) {

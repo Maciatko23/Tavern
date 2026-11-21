@@ -631,7 +631,25 @@
     function readyProduce(b) {
         const p = BUILDINGS[b.type].produce;
         if (!p || b.empty) return 0;   // (b.empty: a yard whose animals were sold - Homes.js)
-        return Math.min(p.cap, Math.floor(Math.max(0, today() - b.last) / p.period) * p.amount + (b.caught || 0));
+        const n = Math.min(p.cap, Math.floor(Math.max(0, today() - b.last) / p.period) * p.amount + (b.caught || 0));
+        return n > 0 && b.fed ? n + 1 : n;   // (2026-11-19: fed with oats - one more, on what is there already)
+    }
+    // (2026-11-19, the user: oats as the animals' feed) a handful of oats in the trough: the next collection gives one more (an egg, a
+    // jug of milk, a fleece) - once a day and once a collection, and only on what the animals have made (no eggs out of oats alone)
+    const canFeed = b => { const def = BUILDINGS[b.type]; return !!(def && def.feed && !b.site && !b.empty && !b.fed && b.fedDay !== today()); };
+    function feedAnimals(b) {
+        const def = BUILDINGS[b.type];
+        if (!canFeed(b)) return false;
+        if (!requireItem(def.feed)) return false;
+        swingThen(CROUCH_KIND, () => {
+            $gameParty.loseItem(itemOf(def.feed), 1);
+            b.fed = true;
+            b.fedDay = today();
+            changed();
+            playSe(SE.collect, 90);
+            popup(itemOf(def.feed).iconIndex, "Wsypano owies: przy zbiorze o jedno więcej", "#cfe6a8");
+        });
+        return true;
     }
     function daysToProduce(b) {
         const p = BUILDINGS[b.type].produce;
@@ -646,6 +664,7 @@
             b.last = today();
             const hunting = T.api("Hunting"), snare = (b.caught || 0) > 0 && hunting && hunting.takeFromSnare;
             b.caught = 0;   // (a snare: the rabbit taken out, it is set again)
+            b.fed = false;  // (the oats' one more is in this collection)
             changed();
             playSe(SE.collect, 100);
             if (snare) hunting.takeFromSnare(b.x, b.y);   // (with a knife dressed at once; without, its carcass lies there)
@@ -1060,7 +1079,7 @@
     P.build = { SCENE, hutShutsIn, hutSanitize, mapAllowsBuilding, standsOnOwnLand, builtAnywhere, buildsAnywhere, tilesOfBuilding, tileIsFree, tileWhyNot,
         whyNotBuild, walledField, missingMaterials, build, siteHits, hitCost, pitchInstant, roomFor, upgradeBuilding, upgradeEntry, packUp,
         wakeHour, sleepInTent, placeSite, placeFree, strikeSite, cancelSite, siteMenu, demolishBlock, demolish, readyProduce,
-        daysToProduce, collect, snares, snareSprung, snareBait, snareCatch, snareEatBait, baitSnare, snareBaitEntry, rest,
+        daysToProduce, collect, canFeed, feedAnimals, snares, snareSprung, snareBait, snareCatch, snareEatBait, baitSnare, snareBaitEntry, rest,
         restDanger, awakeHours, sleepy, restCap, sleepyNote, whyNoRest, noRestHelp, groundRate, lieDown, enterHut, leaveHut,
         placementProblem, startFreePlacement, startPlacement, fieldAllows };
 })();

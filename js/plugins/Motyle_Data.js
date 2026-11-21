@@ -79,8 +79,8 @@
         upper: [7, 8, 15, 262, 270, 276, 284, 474, 696, 700, 701, 704, 705, 706, 707, 708, 709, 710, 734],
         tall: [700, 701, 262, 270, 276, 284],
         events: /^!\$Bush_(Flower|Clover)/,
-        gather: { fiber: 1, herb: 1, yarrow: 1, garlic: 0.6, wildCarrot: 0.8, nettle: 0.5 },
-        crops: { potato: { from: 2, z: 13 } },   // the crops that flower (from that stage of growth)
+        gather: { fiber: 1, herb: 1, yarrow: 1, garlic: 0.6, wildCarrot: 0.8, nettle: 0.5, strawberry: 0.6, wildOnion: 0.7, wildPea: 0.6 },   // (2026-11-19: + the new wild flowers)
+        crops: { potato: { from: 2, z: 13 }, flax: { from: 3, z: 13 }, pea: { from: 2, z: 13 } },   // (the flax and the peas flower too)   // the crops that flower (from that stage of growth)
         cabbage: "cabbage"
     };
 

@@ -153,9 +153,12 @@
     // ==================================================================
     const drzwiPokoju = ev => { if (mapId() !== D.MAP.pietro) return null; const de = ev.event(), m = de && D.DRZWI.re.exec(de.name || ""); return m ? m[1] : null; };
     const kluczBorgara = () => has() && S().klucz > teraz();
+    // (2026-11-19, Zamki.js) a door opened with a lockpick: open an hour (WYTRYCH_GODZIN), as with Borgar's key
+    const WYTRYCH_GODZIN = 1, WYTRYCH_ZAMEK = 2;
+    const wytrychem = room => has() && ((S().wytrych || {})[room] || 0) > teraz();
     function otwarte(room, pk) {
         if (wPokoju(pk)) return false;
-        return inHours(hour(), D.DRZWI.sprzatanie) || kluczBorgara();
+        return inHours(hour(), D.DRZWI.sprzatanie) || kluczBorgara() || wytrychem(room);
     }
     function drzwiLista(room, pk) {
         const out = linie(HERO, [tx("drzwi.zamkniete")]), labels = [tx("drzwi.zapukaj")], branches = [script([], "Intrygi.drzwi(this, 'zapukaj', " + JSON.stringify(room) + ");")];
@@ -165,6 +168,9 @@
             if (inHours(hour(), D.D45.notes)) opc("d45.notes.etykieta", "notes");
         }
         if (pk === "ksenia" && aktywne("D46") && !S().d46.koniec && !S().d46.widziane.zamek) opc("d46.zamek.etykieta", "zamek");
+        // (2026-11-19) sneaking, the guest out: the lock picked (Zamki.js - a lockpick, hold O; seen = renown down)
+        const Z = T.api("Zamki");
+        if (Z && Z.pickEvent && sneaking() && !wPokoju(pk)) { labels.push(tx("drzwi.wytrych").replace("{zamek}", Z.levelName(WYTRYCH_ZAMEK))); branches.push(script([], "Intrygi.drzwi(this, 'wytrych', " + JSON.stringify(room) + ");")); }
         labels.push(tx("drzwi.odejdz"));
         branches.push([]);
         return Watki.mowa.choiceTo(out, labels, branches, labels.length - 1);
@@ -197,6 +203,11 @@
             } else if (co === "zamek") {
                 uruchom(interp, linie(HERO, listOf(tx("d46.zamek." + (S().d46.wariant || "A")))));
                 d46Slad("zamek");
+            } else if (co === "wytrych") {   // (2026-11-19) the lock picked: hold O; open an hour; seen by someone in the corridor - renown down
+                const ev = interp && $gameMap.event(interp.eventId()), Z = T.api("Zamki");
+                if (ev && Z && Z.pickEvent) Z.pickEvent(ev, { level: WYTRYCH_ZAMEK, owner: "tavern", locked: () => !otwarte(room, pk),
+                    onOpen: () => { const st = S(); (st.wytrych || (st.wytrych = {}))[room] = teraz() + WYTRYCH_GODZIN; T.audio.se("Open2", { volume: 70 }); },
+                    onCaught: () => P.renoma(D.SZUKANIE.kara, "wytrych:" + room) });
             }
         } catch (e) { report("drzwi " + co, e); }
     }

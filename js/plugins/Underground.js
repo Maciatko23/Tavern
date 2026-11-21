@@ -203,7 +203,18 @@
                 addCreatures(events, spawns, f, mapId);
                 if (mapId === D().MAPS.heart) heartData(events);
                 data.events = events;
+                // its darkness at least its band's (2026-11-20, "żeby w tych podziemiach było ciemno"; the map file keeps its own number)
+                const band = f ? bandOf(f) : null;
+                if (band && band.dark && typeof data.note === "string") {
+                    data.note = data.note.replace(/<Dark(Day|Night):\s*(\d+)\s*>/gi, (all, k, v) => "<Dark" + k + ":" + Math.max(Number(v), band.dark) + ">");
+                    // (and its lights fade out softly into that dark, as the generated floors' - "bardziej stopniowo przechodziło w ciemność")
+                    if (!/<LightEdges:/i.test(data.note)) data.note += "\n<LightEdges:soft>";
+                }
             } else return;
+            // (2026-11-20, the user: "te domyślne cienie, które są dla murków, da się usunąć?"): no editor's wall shadows on the floors -
+            // the dark left half of every floor cell beside a wall; the light and the walls make the shadows down here
+            const N = data.width * data.height;
+            if (floorOf(mapId) && Array.isArray(data.data) && data.data.length >= 5 * N) for (let i = 4 * N; i < 5 * N; i++) data.data[i] = 0;
             if (DataManager.extractMetadata) {
                 DataManager.extractMetadata(data);
                 for (const e of data.events) if (e && typeof e.note === "string") DataManager.extractMetadata(e);
@@ -506,13 +517,11 @@
         const s = state();
         for (const g of e.got) {
             if (g.gold) {
-                $gameParty.gainGold(g.gold);
+                $gameParty.gainGold(g.gold);   // (the gains feed shows it - its own line besides was a second "+15 G", 2026-11-19)
                 s.gold += g.gold;
-                T.popup(d.TEXT.gold(g.gold), { icon: d.GOLD_ICON, gain: true });
                 T.emit("undergroundLoot", { kind: e.kind, gold: g.gold, floor: floorOf(mapId) });
             } else if (window.$dataItems && $dataItems[g.item]) {
-                $gameParty.gainItem($dataItems[g.item], g.n);
-                T.popup($dataItems[g.item].name + (g.n > 1 ? " ×" + g.n : ""), { icon: $dataItems[g.item].iconIndex, gain: true });
+                $gameParty.gainItem($dataItems[g.item], g.n);   // (the gains feed shows it, "+6 Strzały" - not a second line "Strzały ×6")
                 T.emit("undergroundLoot", { kind: e.kind, item: g.item, n: g.n, floor: floorOf(mapId) });
             }
         }

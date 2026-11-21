@@ -45,7 +45,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     t.check("teksty morze.txt bez błędów; zadanie W23 (7 kroków); rejestr 4700-4799", base.files.length === 1 && base.files[0].st === "ok" && !base.files[0].errors.length && base.files[0].keys > 60 && base.q === 7 && base.reg.includes("4700-4799"), { files: base.files, q: base.q, reg: base.reg });
     t.check("rodzaje w Creatures (7: pałka, miecz, włócznia, młot, kapitan, krab, krab-kolos), umysły, wyglądy; łup z numerami przedmiotów", base.kinds.length === 7 && KINDS.every(k => base.kinds.includes(k)) && base.ai && base.looks && base.loot, { kinds: base.kinds });
     t.check("usunięte rodzaje (topielec, rybołak, mglak, wiedźma) zniknęły z Creatures i z danych; nowe przedmioty 410-416 (413-415 zmienione na miejscu), stare nazwy nie istnieją", base.gone.every(x => !x) && base.items.every(Boolean) && base.items[3] === 413 && base.items[4] === 414 && base.items[5] === 415 && base.oldItems.every(x => !x), { gone: base.gone, items: base.items, old: base.oldItems });
-    const srcs = ["js/plugins/Morze.js", "js/plugins/Morze_Data.js", "js/plugins/Morze_Potwory.js", "js/teksty/morze.txt"].map(f => [f, fs.readFileSync("../" + f, "utf8")   /* (2026-11-16: the overlay folder is gone - the installed files) */]);
+    const srcs = ["js/plugins/Morze.js", "js/plugins/Morze_Data.js", "js/plugins/Morze_Potwory.js", "js/teksty/morze.txt"].map(f => [f, fs.readFileSync(require("path").join(__dirname, "..", f), "utf8")   /* (2026-11-16: the overlay folder is gone - the installed files) */]);
     const dead = srcs.filter(([f, s]) => !srcOk(s)).map(([f, s]) => [f, (s.match(/(wiedzma|mglak|rybolak|topielec_morski|SeaWitch|SeaFog|SeaFolk|SeaDrowned|perla|muszla)/i) || [])[0]]);
     t.check("kod i teksty W23 bez martwych odwołań do usuniętych rodzajów (wiedźma, mglak, rybołak, topielec morski, perła, muszla)", dead.length === 0, dead);
 
@@ -164,7 +164,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await heal();
     await landNow("krab_olbrzym", 360);
     const crab = await seaList();
-    t.check("krab olbrzym: jeden, pancerz z przodu (stone), prędkość 2,0, skala 1", crab.length === 1 && crab[0].k === "krab_olbrzym" && crab[0].scale === 1 && await J("Creatures.KINDS.krab_olbrzym.stone.front === 0.35 && Creatures.KINDS.krab_olbrzym.speed === 2.0"), crab);
+    t.check("krab olbrzym: jeden, pancerz z przodu (stone, od przodu -30%), prędkość 2,0, skala 0,85-1,18 (2026-11-19: każdy krab innej wielkości - Kraby.js)", crab.length === 1 && crab[0].k === "krab_olbrzym" && crab[0].scale >= 0.84 && crab[0].scale <= 1.19 && await J("Creatures.KINDS.krab_olbrzym.stone.frontMult === 0.7") && await J("Creatures.KINDS.krab_olbrzym.stone.front === 0.35 && Creatures.KINDS.krab_olbrzym.speed === 2.0"), crab);
     await t.eval(`(function(){ const c = MorzePotwory.seaList()[0]; c._def = Object.assign({}, c._def, { leash: 3 }); c._x = 20; c._y = 20; c._realX = 20; c._realY = 20; c._lost = 99999; return 0; })()`);
     await t.frames(60);
     const leash = await J(`MorzePotwory.seaList().map(c => !!c._retreat)`);
@@ -173,8 +173,8 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await landNow("krab_kolos", 420);
     const big = await J(`(function(){ const c = MorzePotwory.seaList()[0]; if (!c) return null; const sp = c._sprite; const K = Creatures.KINDS; return { k: c._kind, scale: c._scale, radius: c._radius, hp: c._hp, hp1: K.krab_olbrzym.hp, speed: K.krab_kolos.speed, speed1: K.krab_olbrzym.speed, sx: sp ? Math.abs(sp.scale.x) : -1, sy: sp ? Math.abs(sp.scale.y) : -1,
         poise: [K.krab_kolos.poise, K.krab_olbrzym.poise], name: c.name(), presses: [K.krab_kolos.moves.grab.presses, K.krab_olbrzym.moves.grab.presses] }; })()`);
-    t.check("krab-kolos: dwa razy większy (skala 2, promień 1,0, duszek x2), więcej życia i równowagi, wolniejszy, mocniejszy chwyt (więcej szarpnięć), własna nazwa „Krab-kolos”",
-        big && big.k === "krab_kolos" && big.scale === 2 && big.radius >= 1 && big.sx === 2 && big.sy === 2 && big.hp > 2.2 * big.hp1 && big.speed < big.speed1 && big.poise[0] > big.poise[1] && big.presses[0] > big.presses[1] && /Krab-kolos/.test(big.name), big);
+    t.check("krab-kolos: dwa razy większy (skala 2 x 0,9-1,1 - każdy krab innej wielkości, promień ~1,0, duszek tak samo), więcej życia i równowagi, wolniejszy, mocniejszy chwyt (więcej szarpnięć), własna nazwa „Krab-kolos”",
+        big && big.k === "krab_kolos" && big.scale >= 1.79 && big.scale <= 2.21 && big.radius >= 0.89 && Math.abs(big.sx - big.scale) < 0.02 && Math.abs(big.sy - big.scale) < 0.02 && big.hp > 2.2 * big.hp1 && big.speed < big.speed1 && big.poise[0] > big.poise[1] && big.presses[0] > big.presses[1] && /Krab-kolos/.test(big.name), big);
     await t.shot(SHOTS + "t03_krab_kolos.png");
     // the captain with the banner (chapter 5, forced)
     await clearAll();
@@ -194,7 +194,7 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
         loots[kind] = await J(`(function(){ const d = Creatures.drops().slice(-1)[0]; return d ? { kind: d.kind, look: d.look, items: d.items.map(i => $dataItems[i[0]].name), gold: d.gold } : null; })()`);
     }
     t.check("każdy rodzaj po śmierci zostawia szczątki (stos kości / pancerza krabów) z łupem: pałka i miecz - ostrze, włócznia - grot, młot - złom, kapitan - Znak chorągwi, kraby - mięso i pancerz",
-        KINDS.every(k => loots[k] && loots[k].kind === "drowned") && loots.szkielet_miecz.items.includes("Zardzewiałe ostrze") && loots.szkielet_wlocznia.items.includes("Grot włóczni") && loots.szkielet_mlot.items.includes("Złom żelazny")
+        KINDS.every(k => loots[k] && loots[k].kind === (/^krab_/.test(k) ? "crab" : "drowned")) && loots.szkielet_miecz.items.includes("Zardzewiałe ostrze") && loots.szkielet_wlocznia.items.includes("Grot włóczni") && loots.szkielet_mlot.items.includes("Złom żelazny")
         && loots.kapitan_szkieletow.items.includes("Znak chorągwi") && loots.krab_olbrzym.items.includes("Mięso kraba") && loots.krab_kolos.items.includes("Pancerz kraba") && loots.szkielet_palka.items.includes("Zardzewiałe ostrze"), loots);
     const kk = await J(`({ p: Morze.state().kapitanPokonany, q: TownQuests.rec("W23") ? TownQuests.rec("W23").s : null })`);
     t.check("pokonany kapitan ustawia warunek rozdziału 5 (kapitanPokonany)", kk.p > 0, kk);

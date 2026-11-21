@@ -107,6 +107,7 @@ umysl.free = Wyrwałeś się!
 umysl.webbed = Lepka sieć!
 umysl.plate = Dzwoni o blachę
 umysl.stone = Kamień!
+umysl.shell = Pancerz!
 umysl.crack = W szczelinę!
 umysl.broken = Rozbita!
 umysl.rises = Składa się z powrotem!

@@ -577,7 +577,14 @@
         cone: 147, pineSeed: 148, nettle: 149, yarrow: 150, garlic: 151, bandage: 152, nettleSoup: 153, spear: 154, shield: 155, club: 156, rawDeer: 157, roastDeer: 158, rawBoar: 159, roastBoar: 160, rawWolf: 161, roastWolf: 162, sinew: 163, wildApple: 139, wildPear: 140, clay: 164, rawPot: 165, dryPot: 166, firedPot: 167,
         rawBear: 168, roastBear: 169, bearHide: 170, jacket: 171,   // stone axe (60) and pickaxe (63): made at the workbench; the saw and the iron heads: forged parts
         herring: 173, cod: 174,   // (2026-10-14) the sea fish of the harbour (Map125, <Water:salt>): Przystan.js, Farming_Plots.goFishing
-        lina: 492   // (2026-11-17, the user) 93 is the string (Sznurek, "rope" in the code); ten strings braid the thick rope (Lina) for the well
+        lina: 492,   // (2026-11-17, the user) 93 is the string (Sznurek, "rope" in the code); ten strings braid the thick rope (Lina) for the well
+        // (2026-11-19, the user: more crops and wild plants) the seeds, the crops, the wild finds and the three new dishes
+        flaxSeed: 493, oatSeed: 494, beetSeed: 495, onionSet: 496, garlicClove: 497, peaSeed: 498, applePips: 499,
+        oats: 500, beet: 501, onion: 502, gardenGarlic: 503, peas: 504, apples: 505,
+        strawberries: 506, raspberries: 507, blackberries: 508, hazelnuts: 509, oyster: 510,
+        borscht: 511, peaSoup: 512, oatmeal: 513,
+        fitting: 514,   // (2026-11-19, the user) Okucie: the chests' iron fittings, forged two from an ingot
+        lockpick: 515   // (2026-11-19, the user) Wytrych: five from an ingot
     };
     // icon indices used in popup()/complain() calls that are not tied to a specific item (SurvivalHUD's stamina icon, Needs' thirst/hunger icons)
     const ICON = { stamina: 82, thirst: 391, hunger: 390 };
@@ -716,12 +723,16 @@
     // a plot that only remembers "something stood here": untouched cleared ground, drawn as the map has it
     const plainPlot = p => !!p && !!p.plain && p.s === "cleared" && !p.crop && !p.dug && p.watered === undefined;
 
-    // ---- the hut: the player's first house. Its inside is a map of its own (HUT_MAP: a 5 x 2 floor, the door is in the wall below it and leads to the door)
+    // ---- the hut: the player's first house. Its inside is a map of its own (HUT_MAP: a 10 x 3 floor, the door is in the wall below it and leads to the door)
     // where furniture (the buildings marked indoor) is put with the same build menu. One hut per game.
     const HUT_MAP = 100;
-    const HUT_ROOM = { x0: 1, x1: 5, y0: 3, y1: 4, doorX: 3, doorY: 5 };   // the floor of Map100 (5 x 2); the door is the doormat (doorX, doorY) in the wall below it, the floor tile in front of it (doorX, y1) stays free
+    // the floor of Map100: 10 x 3 since 2026-11-21 (the user: "niech chatka będzie 10x3 i po prawo niech będzie kominek"; was 5 x 2,
+    // x 1-5, y 3-4 - furniture from then stands on the new floor as it stood); the door is the doormat (doorX, doorY) in the wall below
+    // it, the floor tile in front of it (doorX, y1) stays free; the fireplace (event "Kominek") stands on the hearth tile
+    const HUT_ROOM = { x0: 1, x1: 10, y0: 3, y1: 5, doorX: 3, doorY: 6, hearth: [10, 3] };
     const isHutInterior = mapId => (mapId === undefined ? $gameMap.mapId() : mapId) === HUT_MAP;
-    const hutFloor = (x, y) => x >= HUT_ROOM.x0 && x <= HUT_ROOM.x1 && y >= HUT_ROOM.y0 && y <= HUT_ROOM.y1 && !(x === HUT_ROOM.doorX && y === HUT_ROOM.y1);   // the part of the floor that can be furnished (all but the tile in front of the door)
+    const hutFloor = (x, y) => x >= HUT_ROOM.x0 && x <= HUT_ROOM.x1 && y >= HUT_ROOM.y0 && y <= HUT_ROOM.y1 && !(x === HUT_ROOM.doorX && y === HUT_ROOM.y1) &&
+        !(x === HUT_ROOM.hearth[0] && y === HUT_ROOM.hearth[1]);   // the part of the floor that can be furnished (all but the tile in front of the door and the fireplace's)
     // the hut the player has (or is building): { b, mapId } - not one on land that is someone else's now (the field lost to the
     // Lord: a new hut may go up on the hero's own land) and not a boarded one (the old hut of a field bought back while a new one stands)
     function hutOf() {
@@ -831,7 +842,8 @@
     const GROUND_KEEP = 0.5;
     const GATHER = {
         stone: { item: ITEM.stone, share: STONE_DENSITY, keep: GROUND_KEEP, respawn: STONE_RESPAWN_DAYS, count: [1, 1] },
-        fiber: { item: ITEM.fiber, share: 0.06, keep: GROUND_KEEP, respawn: 3, count: [1, 2], seasons: [0, 1, 2] },
+        // (2026-11-19: wild flax and wild garlic now and then give their seeds / cloves to sow - the field crops Len and Czosnek)
+        fiber: { item: ITEM.fiber, share: 0.06, keep: GROUND_KEEP, respawn: 3, count: [1, 2], seasons: [0, 1, 2], seed: [ITEM.flaxSeed, 0.15, [1, 1]] },
         berries: { item: ITEM.berries, share: 0.035, keep: GROUND_KEEP, respawn: 4, count: [1, 3], seasons: [1, 2] },
         mushroom: { item: ITEM.mushroom, share: 0, respawn: 4, count: [1, 2], seasons: [0, 1, 2] },   // no fixed tiles: they grow and vanish (mushroomBirth)
         bush: { item: ITEM.berries, share: 0, respawn: 0, count: [2, 4] },   // berry bushes: berries, then the bare bush gives fibre (bushState)
@@ -840,14 +852,31 @@
         // the wild herbs came later: after the branches on the hash line, so the older kinds keep their tiles
         nettle: { item: ITEM.nettle, share: 0.025, keep: GROUND_KEEP, respawn: 4, count: [2, 3], seasons: [0, 1, 2] },   // stings bare hands (pickGather)
         yarrow: { item: ITEM.yarrow, share: 0.018, keep: GROUND_KEEP, respawn: 5, count: [1, 2], seasons: [1, 2] },
-        garlic: { item: ITEM.garlic, share: 0.018, keep: GROUND_KEEP, respawn: 5, count: [1, 3], seasons: [0, 1] },
+        garlic: { item: ITEM.garlic, share: 0.018, keep: GROUND_KEEP, respawn: 5, count: [1, 3], seasons: [0, 1], seed: [ITEM.garlicClove, 0.2, [1, 2]] },
         cone: { item: ITEM.cone, share: 0, respawn: 5, count: [1, 3] },   // no share: only under a standing pine (coneTiles)
         // wild potatoes and carrots (the user's, 2026-09-25): seldom, there from the start; dug out by hand they give the vegetable and,
         // half the time, its seeds (seed: [item, chance, count]) - a way to the first seeds. Last on the hash line: the older kinds keep their tiles
         wildPotato: { item: ITEM.potato, share: 0.004, respawn: 12, count: [1, 2], seasons: [0, 1, 2], seed: [67, 0.5, [1, 2]] },
-        wildCarrot: { item: ITEM.carrot, share: 0.004, respawn: 12, count: [1, 2], seasons: [0, 1, 2], seed: [68, 0.5, [1, 2]] }
+        wildCarrot: { item: ITEM.carrot, share: 0.004, respawn: 12, count: [1, 2], seasons: [0, 1, 2], seed: [68, 0.5, [1, 2]] },
+        // (2026-11-19, the user: more wild things) last on the hash line, so every older kind keeps its tiles: wild strawberries in spring
+        // and summer (watery - the dry summer had nothing), and the wild forms of the new crops - seldom, like the wild potato: the first
+        // seeds of oats, peas, beet and onion
+        strawberry: { item: ITEM.strawberries, share: 0.02, keep: GROUND_KEEP, respawn: 4, count: [1, 3], seasons: [0, 1] },
+        wildOat: { item: ITEM.oats, share: 0.004, respawn: 12, count: [1, 2], seasons: [1, 2], seed: [ITEM.oatSeed, 0.5, [1, 2]] },
+        wildPea: { item: ITEM.peas, share: 0.004, respawn: 12, count: [1, 2], seasons: [0, 1], seed: [ITEM.peaSeed, 0.5, [1, 2]] },
+        wildBeet: { item: ITEM.beet, share: 0.004, respawn: 12, count: [1, 1], seasons: [1, 2], seed: [ITEM.beetSeed, 0.5, [1, 2]] },
+        wildOnion: { item: ITEM.onion, share: 0.004, respawn: 12, count: [1, 2], seasons: [0, 1, 2], seed: [ITEM.onionSet, 0.5, [1, 2]] }
     };
     const GATHER_KINDS = Object.keys(GATHER);
+    // (2026-11-19, the user: raspberries, blackberries, hazelnuts) the kinds of the berry bushes, by the tile (the hash the bushes' two
+    // looks always had: below 0.5 the blue one - as before -, above it the red one, now split): `to` = the top of its stretch, look =
+    // its full picture (Gather_Bush_<look>), seasons = when it bears (bare in the others, bare in winter as all), count = what a pick gives
+    const BUSH_KINDS = [
+        { key: "blueberry", to: 0.5, item: ITEM.berries, look: 0, seasons: [0, 1, 2], count: [2, 4], name: "Krzak jagodowy" },
+        { key: "raspberry", to: 0.7, item: ITEM.raspberries, look: 1, seasons: [1, 2], count: [2, 4], name: "Malina" },
+        { key: "blackberry", to: 0.85, item: ITEM.blackberries, look: 4, seasons: [1, 2], count: [2, 4], name: "Jeżyna" },
+        { key: "hazel", to: 1, item: ITEM.hazelnuts, look: 5, seasons: [2], count: [2, 4], name: "Leszczyna" }
+    ];
     const BUSH_SHARE = 0.02;        // the part of the tiles that hold a berry bush
     const MUSHROOM_POOL = 0.07;     // the part of the tiles where a mushroom may grow (0.14 till 2026-10-07: halved, a part of the same tiles)
     const MUSHROOM_LIFE = 3;        // days a mushroom stays before it is gone
@@ -1186,20 +1215,20 @@
         SHOVEL_KIND, DIG_YIELD, CLAY_YIELD, SE, GROUND_REST, GROUND_REST_WET, REST_HOURS_A_SECOND, SLEEP_DEBT_HOURS, SLEEP_CAP,
         CROPS, BUILDINGS, HAND_RECIPES, BUILD_MAPS, CROP_IDS, BUILDING_IDS, TILE, farm, today, key, plotsOf, buildingsOf, changed,
         HUT_MAP, HUT_ROOM, isHutInterior, hutFloor, hutOf, hutDoorCell, mirrorGeo, geoOf, cellsOfGeo, buildingAt, solidAt, GATHER,
-        GATHER_KINDS, BUSH_SHARE, MUSHROOM_POOL, MUSHROOM_LIFE, CONE_SHARE, BUCKET_REACH, itemOf, countOf, rand, popup, complain,
+        GATHER_KINDS, BUSH_KINDS, BUSH_SHARE, MUSHROOM_POOL, MUSHROOM_LIFE, CONE_SHARE, BUCKET_REACH, itemOf, countOf, rand, popup, complain,
         spaceFor, complainNoSpace, playSe, spendStamina, perk, perkRoll, knowsSkill, farmCost, foodIsFree, useTool, requireItem,
         fx, later, lockPlayer, swingThen, NO_BUILD, missingOf, menuHooks, hasClock, clockHours, FUEL_MAX, FUEL_START,
         FUEL_PER_WOOD, FUEL_PER_BRANCH, SMOULDER_HOURS, weatherHere, rainingHere, RAW_MEATS, MEAT_LABEL, meatCount, QUEUE_MAX,
         RAW_FISH, FISH_LABEL, fishCount, clockText, hoursText, IMPROVE, costRows, targetTile, MENU_MARGIN, hash2, BUILD_RANGE,
         landHeld, landRefusal, noBuildText, landOwned, buildRegion, anyGroups, anyCount, anyIcon, spendAny, anyRows };
-    const API = window.Farming = T.register("Farming", { plainPlot, addMenuHook: fn => menuHooks.push(fn), addLandRule, landHeld, landRefusal, noBuildText, landOwned, buildRegion, GATHER, QUEUE_MAX, BUILD_MAPS,
+    const API = window.Farming = T.register("Farming", { plainPlot, addMenuHook: fn => menuHooks.push(fn), addLandRule, landHeld, landRefusal, noBuildText, landOwned, buildRegion, GATHER, BUSH_KINDS, QUEUE_MAX, BUILD_MAPS,
         NO_BUILD, IMPROVE, RAW_MEATS, meatCount, MEAT_LABEL, RAW_FISH, fishCount, FISH_LABEL, anyGroups, anyCount, BUSH_SHARE, MUSHROOM_POOL, MUSHROOM_LIFE, BUCKET_REACH, HUT_MAP,
         HUT_ROOM, hutOf, hutDoorAt, isHutInterior, geoOf, cellsOfGeo, isSolidCell, yardInterior, solidAt, CROPS, BUILDINGS,
         buildingAt, canMax, clockHours, seasonIndex, seasonOf, SEASON_NAMES, ITEM, hash2, HAND_RECIPES, BUILD_RANGE, CROP_LIFT,
         TILE, farm, itemOf, key, mirrorGeo, onRing, today, SMOULDER_HOURS, rainingHere });
     // what the parts do, through the bag (called while a part is not in the page: the error names the file)
     const exportFrom = (part, names) => { for (const n of names) API[n] = function() { return part()[n].apply(null, arguments); }; };
-    exportFrom(PL, ["setBagWater", "takeGatherFor", "bushState", "bushSolid", "mushroomBirth", "mushroomChance", "gatherKindOf", "gatherTiles",
+    exportFrom(PL, ["setBagWater", "takeGatherFor", "bushKind", "bushState", "bushSolid", "mushroomBirth", "mushroomChance", "gatherKindOf", "gatherTiles",
         "claimGround", "releaseGround", "bucketUnits", "bucketSync", "takeBucketWater", "bucketFor", "rainHoursBetween",
         "bagWater", "bagWaterWeight", "fillSkin", "plotAt", "isSoilTile", "groundIsSoil", "naturalFarmland", "rake", "till",
         "plant", "harvest", "uproot", "groundInfoAt", "hasObjectTile", "cropStage", "isRipe", "daysLeft", "growthRate", "dig",
