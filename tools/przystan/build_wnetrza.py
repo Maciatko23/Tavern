@@ -24,8 +24,8 @@ HARBOUR = 125
 B_WOOD, B_STONE, B_LOG = 24, 16, 33
 W_PLANKS, W_PLANKS_V, W_LOGS, W_RAW, W_PLASTER_BEAM = 48, 49, 59, 71, 51
 F_DARK, F_PLANKS, F_COBBLE, F_FLAGS = 83, 84, 96, 97
-NOTE_HOME = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>"
-NOTE_SHED = "<Dust:on>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:120>\n<DarkNight:200>"
+NOTE_HOME = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:85>\n<DarkNight:185>"
+NOTE_SHED = "<Dust:on>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:120>\n<DarkNight:200>"
 
 
 def doors():

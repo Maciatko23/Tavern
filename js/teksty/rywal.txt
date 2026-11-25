@@ -132,7 +132,7 @@ Czarne Oczy patrzą, chłopcze. Ty schodzisz - my idziemy twoimi śladami.
 Kupiec mówi, że jesteś nasz. Kupiec mówi dużo. Sztab woli patrzeć sam.
 
 [greet.kopacze.road]
-Pewność, chłopcze. Kto ma Serce, ten wie. Koniec zgadywania, koniec wojen o plotki. Tego chce sztab.
+Pewność, chłopcze. Kto ma artefakty władzy, ten wie. A Serce to jeden z nich - i leży tu, pod nami. Koniec zgadywania, koniec wojen o plotki. Tego chce sztab.
 
 [greet.kopacze.gate]
 Zbroja przy bramie zna słowa, których my nie znamy. {ranny} już tego nie zapomni.

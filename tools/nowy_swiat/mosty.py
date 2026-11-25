@@ -14,7 +14,7 @@ spec = importlib.util.spec_from_file_location("rozszerzenia_wspolne", os.path.jo
 RW = importlib.util.module_from_spec(spec); spec.loader.exec_module(RW)
 
 REGION = 4
-DECKS = {218: [(13, 59, 15, 64), (39, 59, 41, 64)], 220: [(13, 46, 15, 52)]}   # (the planks: x0, y0, x1, y1)
+DECKS = {218: [(13, 59, 15, 64), (39, 59, 41, 64)], 220: [(13, 46, 15, 52), (71, 46, 73, 52)], 221: [(28, 46, 30, 52)]}   # (the planks: x0, y0, x1, y1; 2026-11-25: 220 east, 221 most_las)
 
 
 def kind(t): return (t - 2048) // 48 if t >= 2048 else -1

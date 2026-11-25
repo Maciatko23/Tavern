@@ -346,6 +346,13 @@
         settled: () => { const v = view(); return !!v && v.settled; },
         doors: () => { const v = view(); return v ? v.m.doors.map(d => [d.x, d.y, d.cells.length]) : []; },
         lightArea,
+        // a cell nothing flies through - the wall's rock (its tops are open inside for the engine), a wall's face, what no eye crosses
+        // (2026-11-25, the user: "nietoperze atakujące przez mury"); null off the interiors' and the underground's tilesets
+        solid(x, y) {
+            if (!window.$gameMap || !window.$dataMap || !INTERIORS.includes($gameMap.tilesetId())) return null;
+            const m = build(), cx = Math.floor(x), cy = Math.floor(y);
+            return cx < 0 || cy < 0 || cx >= m.W || cy >= m.H || !m.floor[cy * m.W + cx];
+        },
         // tests: the walls as it reads them (floor 1 = the eye goes through, rock 1 = the underground's rock)
         grid: () => { if (!here()) return null; const m = build(); return { W: m.W, H: m.H, floor: Array.from(m.floor), rock: Array.from(m.rock) }; },
         cost(n) {

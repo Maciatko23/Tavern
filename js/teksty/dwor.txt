@@ -440,8 +440,8 @@ kod.rozgosc = Rozgość się.
 kod.kronikaNaPulpicie = Kronika leży na pulpicie. Czytaj śmiało.
 
 # słowa kroków zadania W7 ({dlug}, {zapro}, {feliks}, {gabinet}, {prawda}, {splata}, {najpierw}, {serce} w zadania.W7)
-kod.kroki.dlugPrzepadla = działka przepadła - odkup: {ile} / {cena} G (połowa otworzy drzwi dworu)
-kod.kroki.dlugSplacono = spłacono {ile} z {dlug} G. Kiedy oddasz połowę, Lord zaprosi cię do dworu.
+kod.kroki.dlugPrzepadla = działka przepadła - odkup: {ile} G / {cena} G (połowa otworzy drzwi dworu)
+kod.kroki.dlugSplacono = spłacono {ile} G z {dlug} G. Kiedy oddasz połowę, Lord zaprosi cię do dworu.
 kod.kroki.zaproBiblioteka = Lord czeka w bibliotece dworu (hol, drzwi na lewo) - kronika rodu leży na pulpicie.
 kod.kroki.zaproPrzedDworem = Lord przed dworem (8–20) chce cię zaprosić do środka - porozmawiaj z nim.
 kod.kroki.feliksSlady = Ślady Feliksa: Feliksa nie ma już w dworze. Popytaj o niego Teodora (rynek rano, hol za dnia), Hankę przy straganie i Kubę przy studni - i zajrzyj do rejestru Baltazara. Ślady i obserwacje: {n}/{need}.

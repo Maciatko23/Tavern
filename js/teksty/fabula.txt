@@ -22,11 +22,11 @@ Na działce stawiaj, co chcesz - to nasza ziemia, wszystko w obrębie płotu. Za
 # ======================================================================== LOSS_HINTS (radyPoStracie)
 [radyPoStracie]
 Dom nie był w zastawie. Twoje posłanie stoi, gdzie stało - śpij tu, ile chcesz.
-Sołtys w ratuszu sprzedaje chatę pod lasem na Podgrodziu, z działką obok. Ziemia przy niej jest twoja - tam budujesz, co zechcesz.
+Sołtys w ratuszu sprzedaje chatę pod lasem na Słonym Brzegu, z działką obok. Ziemia przy niej jest twoja - tam budujesz, co zechcesz.
 Borgar wynajmuje pokoje nad tawerną. Drogo, ale za to pod dachem i blisko roboty.
 Lord sprzedaje wszystko, co ma. Nawet ziemię, którą wziął. Kiedyś ją odkupimy - albo i nie. Ziemia to tylko ziemia.
 Na noc w lesie wystarczy namiot albo leśne legowisko. Ale pod dachem śpi się lepiej - wiesz, gdzie mnie szukać.
-Za Skrajem lasu, na wschód, stoi zagroda Ługów. Lord wziął ją za długi, jak naszą działkę, a dom spłonął. Ziemi tam w bród - popytaj o nią na Podgrodziu.
+Szczepan w stajni przy tawernie da ci siano za robotę - po porannej zmianie śpisz tam za darmo.
 
 # ======================================================================== HOOK (dawnaTwierdza)
 [dawnaTwierdza]
@@ -50,7 +50,7 @@ kod.carryPhrase.0 = dziś ostatni dzień
 kod.carryPhrase.1 = o świcie działkę zamkną
 # statusLine
 kod.statusLine.0 = Działka odkupiona: {price} G.
-kod.statusLine.1 = Za działkę oddałeś już {paid} z {price} G, brakuje {3} G.
+kod.statusLine.1 = Za działkę oddałeś już {paid} G z {price} G, brakuje {3} G.
 kod.statusLine.2 = Działkę odkupisz za {price} G - w ratach, bez terminu.
 kod.statusLine.3 = Dług spłacony: {debt} G.
 kod.statusLine.4 = to dziś
@@ -69,7 +69,7 @@ kod.introList.5 = To przypłynie. Twoja matka zawsze była uparta. Po mnie.
 kod.introList.6 = A ja ci tu, wnuku, mam tylko... dług.
 kod.introList.7 = Dług?
 kod.introList.8 = Jestem winien Lordowi Zaleskiemu - temu z pięknego dworu obok tawerny - {DEBT} G. Termin: dzień {DEADLINE}.
-kod.introList.9 = {DEBT}?! Coś ty kupił, dziadku, krowę ze złota?
+kod.introList.9 = {DEBT} G?! Coś ty kupił, dziadku, krowę ze złota?
 kod.introList.10 = Nasiona, narzędzia, dach po burzy... i parę chudych lat. Jak nie oddam w terminie, Lord zabierze moją działkę. A to wszystko, co mamy. Teraz: co my mamy.
 kod.introList.11 = Ja już za stary na siekierę, ale ty masz ręce i głowę. Działka jest twoja - stawiaj na niej, co zechcesz.
 kod.introList.12 = Tylko tam, wnuku: moja działka to to, co w obrębie płotu, zaraz za podwórkiem. Dalej, za płotem, to już nie moja ziemia - tam nic nie stawiaj.
@@ -94,7 +94,7 @@ kod.grandpaLossList.0 = Działka znowu nasza. Czasem chodzę tam rano, tak tylko
 kod.grandpaLossList.1 = Odkupiłeś ziemię od samego Zaleskiego. Twoja matka by nie uwierzyła. Ja też ledwo wierzę.
 kod.grandpaLossList.2 = już tylko dziś
 kod.grandpaLossList.3 = Z działki zostało ci do zabrania {1}. Potem straż Lorda nikogo tam nie wpuści.
-kod.grandpaLossList.4 = Za działkę oddałeś już {paid} z {price} G. Nie śpiesz się - Lord nie ma terminu, a ja mam czas.
+kod.grandpaLossList.4 = Za działkę oddałeś już {paid} G z {price} G. Nie śpiesz się - Lord nie ma terminu, a ja mam czas.
 kod.grandpaLossList.5 = Działka... Nie myśl o niej za dużo, wnuku. Lord odsprzeda ją za {price} G, kiedy będzie cię stać. Albo nigdy - też dobrze.
 # grandpaList
 kod.grandpaList.0 = Wnuku! {1} przyniósł akt odkupu. Działka za lasem znowu nasza - z tym, co na niej zostało!
@@ -111,7 +111,7 @@ kod.grandpaList.10 = Termin mija o świcie!
 kod.grandpaList.11 = {1} Brakuje jeszcze {2} G - leć do Lorda z tym, co masz.
 kod.grandpaList.12 = Idzie ci lepiej niż mnie kiedykolwiek.
 kod.grandpaList.13 = Lord nie będzie czekał... ale ty dasz radę. Masz to po mnie.
-kod.grandpaList.14 = Lordowi oddałeś już {paid} z {debt} G. Do terminu {3} {4}. {5}
+kod.grandpaList.14 = Lordowi oddałeś już {paid} G z {debt} G. Do terminu {3} {4}. {5}
 kod.grandpaList.15 = Czasu jeszcze sporo, ale nie zwlekaj.
 kod.grandpaList.16 = Lordowi nie oddaliśmy jeszcze ani miedziaka, a do terminu {1} {2}. {3}
 kod.grandpaList.17 = Działka jest zaraz za podwórkiem - furtką na wschód. Moje jest to, co w obrębie płotu.
@@ -309,10 +309,10 @@ kod.title.1 = Zbuduj schronienie na działce
 kod.title.2 = ostatni dzień
 kod.title.3 = do świtu
 kod.title.4 = Wynieś dobytek z działki ({1})
-kod.title.5 = Odkup działkę dziadka ({1} / {price} G)
+kod.title.5 = Odkup działkę dziadka ({1} G / {price} G)
 kod.title.6 = Odkup działkę dziadka
-kod.title.7 = Dług dziadka: działka przepadła ({paid}/{debt} G)
-kod.title.8 = Spłać dług dziadka ({1}/{debt} G)
+kod.title.7 = Dług dziadka: działka przepadła ({paid} G / {debt} G)
+kod.title.8 = Spłać dług dziadka ({1} G / {debt} G)
 kod.title.9 = Spłać dług dziadka
 # where
 kod.where.0 = Działka dziadka
@@ -323,12 +323,12 @@ kod.text.2 = Działka przechodzi na Lorda o świcie dnia {1}. Do tego czasu zbie
 kod.text.3 = "Oddałeś już {paid} G. "
 kod.text.4 = Lord odsprzeda działkę za {1} G - w ratach, jak dług, bez terminu: za dnia ({2}-{3}) przed dworem, nocą u kamerdynera. {4}Po spłacie działka wraca z tym, co na niej zostało.
 kod.text.5 = Dług dziadka.
-kod.text.6 = Termin minął w dniu {deadline} - spłacono {paid} z {debt} G. O świcie dnia {day} działka przeszła na Lorda Zaleskiego. Lord odsprzeda ją za {price} G.
+kod.text.6 = Termin minął w dniu {deadline} - spłacono {paid} G z {debt} G. O świcie dnia {day} działka przeszła na Lorda Zaleskiego. Lord odsprzeda ją za {price} G.
 kod.text.7 = Dług spłacony: {debt} G. Działka zostaje przy was.
 kod.text.8 = do terminu {1}
 kod.text.9 = dziś mija termin
 kod.text.10 = termin mija o świcie
-kod.text.11 = Spłacono {paid} z {debt} G, {3}. Dziś dzień {4}, termin: dzień {deadline}. Pieniądze zanosisz Lordowi Zaleskiemu do dworu obok tawerny (za dnia, od {6} do {7}) albo kamerdynerowi (nocą). W noc po terminie kamerdyner przyjmuje je jeszcze do świtu - o świcie Lord zabierze działkę.
+kod.text.11 = Spłacono {paid} G z {debt} G, {3}. Dziś dzień {4}, termin: dzień {deadline}. Pieniądze zanosisz Lordowi Zaleskiemu do dworu obok tawerny (za dnia, od {6} do {7}) albo kamerdynerowi (nocą). W noc po terminie kamerdyner przyjmuje je jeszcze do świtu - o świcie Lord zabierze działkę.
 # letterText
 kod.letterText.0 = Uprzejmie przypominam, że dziś mija termin spłaty długu ({sum}). {2} przyjmie pieniądze jeszcze tej nocy, do świtu. O świcie moi ludzie przyjdą zmierzyć działkę.
 kod.letterText.1 = Pojutrze o świcie działka przechodzi na własność dworu, chyba że wcześniej zobaczę {sum}. {2} już grzeje lak do pieczęci.
@@ -346,7 +346,7 @@ kod.create.1 = Dziadek Stach długo stał przy płocie i nic nie mówił. Dział
 kod.create.2 = Może gdzieś, w innym zapisie, ta historia potoczy się inaczej...
 kod.create.3 = KONIEC GRY
 kod.create.4 = Działka przepadła
-kod.create.5 = Spłacono {paid} z {debt} G  ·  zabrakło {3} G
+kod.create.5 = Spłacono {paid} G z {debt} G  ·  zabrakło {3} G
 kod.create.6 = O - dalej
 # debtText
 kod.debtText.0 = odkupiona · działka znowu wasza
@@ -411,6 +411,7 @@ wez.notka.0 = Wezwanie króla
 wez.notka.1 = Królewski posłaniec przyniósł dziadkowi list od samego króla. Dziadek przeczytał, długo milczał i zgodził się pomóc na wojnie na lądzie - odpłynął wieczornym promem, „na rok wojny albo do końca”. Cieszył się, że zobaczy tam mamę. Na pożegnanie powiedział: „Dbaj o prawdę”. Nie wiem, co miał na myśli. Lord wziął jego dom w zastaw za dług i zapieczętował drzwi; pieczęć zejdzie, kiedy dług będzie spłacony. Pole zostaje przy nas. Dziadek dał mi list do Szczepana Kołodzieja, woźnicy - trzyma stajnię przy tawernie w Kruczogrodzie i przyjmie mnie na siano za robotę.
 wez.notka.2 = Pieczęć zdjęta
 wez.notka.3 = Kamerdyner Lorda zdjął pieczęć z drzwi domu dziadka. List do dziadka poszedł promem - za dwa dni dziadek będzie w domu.
+wez.notka.4 = Lord wziął pole za dług, więc dom nie jest już w zastawie: kamerdyner zdjął pieczęć z drzwi. Chata zostaje dla nas. List do dziadka poszedł promem - za dwa dni dziadek będzie w domu.
 wez.zmrok.0 = Dziadek odpłynął na ląd
 wez.zmrok.1 = O zmroku (20:00) dom zostanie zapieczętowany - zabierz swoje rzeczy.
 wez.bez.0 = Dziadek Stach odpłynął na ląd
@@ -421,3 +422,5 @@ wez.pieczec.1 = Ktoś stuka w drzwi. „Zmierzcha się, młody panie. Pieczętuj
 wez.znak = Pieczęć Lorda Zaleskiego: „Dom w zastawie za dług Stacha z Kruczego Jaru - do dnia spłaty.”
 wez.wolny.0 = Pieczęć zdjęta z domu dziadka
 wez.wolny.1 = Dziadek wraca pierwszym promem - za dwa dni będzie w domu.
+wez.wolny.2 = Pole przepadło, ale chata zostaje - pieczęć zdjęta
+wez.wolny.3 = Dziadek wraca pierwszym promem - za dwa dni będzie w domu.

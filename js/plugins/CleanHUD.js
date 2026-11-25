@@ -749,7 +749,8 @@
         const label = String(g.label || "Cel"), cnt = g.count && g.count.need > 0 ? g.count : null;
         const sub = g.sub || (!needs.length && !cnt ? g.line || "" : "");
         const num = n => Math.min(n.have, n.need) + "/" + n.need;
-        const cntText = cnt ? Math.min(cnt.have, cnt.need) + " / " + cnt.need + (cnt.unit ? " " + cnt.unit : "") : "";
+        const cntText = !cnt ? "" : cnt.unit === "G" ? Math.min(cnt.have, cnt.need) + " G / " + cnt.need + " G"   // (2026-11-25: each sum its own G - coins, not miedziaki)
+            : Math.min(cnt.have, cnt.need) + " / " + cnt.need + (cnt.unit ? " " + cnt.unit : "");
         // the width: what it holds, within minW..maxW
         let want = Math.max(spacedWidth(label, 12), 30 + measure(g.title, S.titleSize), cnt ? measure(cntText, S.rowSize, "bold") + 40 : 0, g.at ? measure(g.at, S.subSize) : 0);
         for (const n of rows) want = Math.max(want, 26 + measure(n.name, S.rowSize) + 16 + 16 + measure(num(n), S.rowSize, "bold"));

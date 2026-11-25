@@ -904,11 +904,11 @@ zadania.K27.steps.0.text = Wystrugaj Eli konika: 1× Drewno i nóż (kamienny al
 
 [zadania.K27.steps.0.done]
 Konik! ...Ma na imię Wiatr. Tak jak tamten.
-@ludmila: Dziękuję ci. Tam, skąd uciekamy, wszyscy czegoś szukają. Żołnierze mówili o sercu skały. Ludzie giną za coś, czego nikt nie widział.
+@ludmila: Dziękuję ci. Tam, skąd uciekamy, wszyscy czegoś szukają. Żołnierze mówili o artefaktach władzy, o sercu skały. Ludzie giną za coś, czego nikt nie widział.
 
 [zadania.K27.reward.note]
 Konik dla Eli
-Wystrugałem Eli konika. Ludmiła: „Tam, skąd uciekamy, wszyscy szukają serca skały. Ludzie giną za coś, czego nikt nie widział.”
+Wystrugałem Eli konika. Ludmiła: „Tam, skąd uciekamy, wszyscy szukają artefaktów władzy, jednym z nich ma być serce skały. Ludzie giną za coś, czego nikt nie widział.”
 
 [zadania.K27.lines.meliaAsk]
 > Melio... Pod murem jest dziewczynka, Ela. Od przeprawy nie śpi. Zaśpiewałabyś jej?
@@ -922,7 +922,7 @@ Ale dziś wieczorem scena w tawernie będzie pusta - Borgar mi tego nie daruje. 
 > Słyszałem, że Melia była tu wieczorem.
 Była. Śpiewała Eli, aż mała zasnęła. Pierwszy raz od przeprawy przespała całą noc.
 @ludmila: Dziękuję ci. Tam, skąd uciekamy, wszyscy czegoś szukają.
-@ludmila: Żołnierze mówili o sercu skały. Ludzie giną za coś, czego nikt nie widział.
+@ludmila: Żołnierze mówili o artefaktach władzy, o sercu skały. Ludzie giną za coś, czego nikt nie widział.
 
 # K28, „Kocioł dla obozu”
 zadania.K28.title = Kocioł dla obozu
@@ -1115,13 +1115,13 @@ Sześć polan, dobrze? Ogień czeka.
 
 [zadania.K43.steps.0.done]
 Ogień do świtu! Siadaj.
-W Varnhel na kontynencie każdy król chce Serca. Mówią, że jest pod jakąś twierdzą na wyspie - pod twierdzą, która czegoś strzegła. Nikt nie wie, pod którą.
+W Varnhel na kontynencie każdy król chce choć jednego artefaktu władzy. Jeden z nich, Serce, leży podobno pod jakąś twierdzą na wyspie - pod twierdzą, która czegoś strzegła. Nikt nie wie, pod którą.
 > Pod twierdzą na wyspie...?
 Tak mówili oficerowie. Dlatego tu przypływają statki z ludźmi, którzy nie wyglądają na uchodźców.
 
 [zadania.K43.reward.note]
 Opowieść Darina
-Darin słyszał od oficerów na kontynencie, że Serce, o które walczą królowie, leży pod twierdzą na wyspie - pod twierdzą, która czegoś strzegła. Tawerna stoi na dawnym zamku...
+Darin słyszał od oficerów na kontynencie, że Serce, jeden z artefaktów władzy, o które walczą królowie, leży pod twierdzą na wyspie - pod twierdzą, która czegoś strzegła. Tawerna stoi na dawnym zamku...
 
 # K44, „Sznurek dla Zbycha”
 zadania.K44.title = Sznurek dla Zbycha

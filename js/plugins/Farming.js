@@ -371,15 +371,15 @@
  *   "Przepis" (na górze "Zbierz", gdy coś jest gotowe, pod nim przepisy; póki coś jest w środku, są wyszarzone
  *   z powodem), potem "Akcja" (ogrzanie się, dokładanie drewna, rozbudowa, rozbiórka). Co się teraz robi i ile
  *   jeszcze potrwa, widać pod nazwą budynku. Otwiera się na "Przepis";
- *   strzałki lewo / prawo (albo Q / E) przełączają zakładki, góra / dół wybierają.
+ *   A / D (strzałki lewo / prawo) przełączają zakładki, W / S wybierają.
  *   Każde stanowisko ma własne receptury. Są dwa rodzaje:
  *   - "w tle" (ogień, fermentacja, rozkład): oddajesz surowce, a po ustalonej
  *     liczbie godzin gry (liczy się też, gdy jesteś na innej mapie lub śpisz)
- *     odbierasz gotowy produkt. KOLEJKA: na takim przepisie strzałki ← / → ustawiają,
+ *     odbierasz gotowy produkt. KOLEJKA: na takim przepisie Q (mniej) / E (więcej) ustawiają,
  *     ile sztuk naraz (×2 ... ×9, tyle, na ile starczy surowców w plecaku; przy ogniu -
  *     na ile starczy drewna w ognisku). OK płaci za wszystkie od razu, budynek robi je po
  *     kolei (pod nazwą: "Trwa wypalanie 2/3"), a "Zbierz" zabiera to, co już gotowe.
- *     Zakładki przełączasz wtedy klawiszami Q / E;
+ *     Zakładki przełączasz zawsze klawiszami A / D;
  *   - RĘCZNE ("manual": piłowanie desek, montaż narzędzi, kucie gwoździ): to robota rąk, więc
  *     nie dzieje się sama. Wykonujesz ją od razu, płacisz wytrzymałością, a czas
  *     gry mija na twoich oczach (ekran przygasa). Można ją zrobić także wtedy, gdy
@@ -409,8 +409,8 @@
  *
  * WODA I BUKŁAK (głód i pragnienie: wtyczka Needs)
  *   "Napij się" przy stawie albo studni gasi pragnienie (+40). Bukłak (Zrób bukłak w menu
- *   Wytwórz...: surowa skóra i len) mieści 4 łyki, a powiększony w garbarni ("Powiększ bukłak":
- *   wyprawiona skóra i 2 ścięgna) 8 łyków; "Napełnij bukłak" przy wodzie, a pije się z niego
+ *   Wytwórz...: surowa skóra i len) mieści 3 łyki, a powiększony w garbarni ("Powiększ bukłak":
+ *   wyprawiona skóra i 2 ścięgna) 5 łyków; "Napełnij bukłak" przy wodzie, a pije się z niego
  *   klawiszem G lub z menu Przedmioty. BECZKA NA DESZCZÓWKĘ (deski i gwoździe, młotkiem) zbiera
  *   deszcz jak wiadro, ale więcej: 1,5 porcji na godzinę deszczu, do 12 porcji.
  *   Głodny albo spragniony poniżej 25 zbiera jedzenie (jagody, grzyby, dzikie warzywa, plony)
@@ -769,6 +769,7 @@
         if (g.ventX) m.ventX = -g.ventX;
         if (g.ember && g.ember.x) m.ember = Object.assign({}, g.ember, { x: -g.ember.x });
         if (g.hang && g.hang.x) m.hang = Object.assign({}, g.hang, { x: -g.hang.x });
+        if (g.table) m.table = Object.assign({}, g.table, { cx: -(g.table.cx || 0), spots: (g.table.spots || []).map(([x, y]) => [-x, y]) });   // (the table's pots with the picture)
         mirrorCache.set(g, m);
         return m;
     }

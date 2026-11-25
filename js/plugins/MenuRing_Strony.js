@@ -226,12 +226,22 @@
         const wIcon = ranged ? icon(fi.weapon.id) : wid ? icon(wid) : f.FIST_ICON || 0, wName = ranged ? fi.weapon.name : wid ? base.name : "Pięści";
         const chip = (name, val, cls, ic) => ({ name, val, cls: cls || "", icon: ic || 0 });
         const attrChip = (id, name, part, fmt) => chip(name + " " + at(id), fmt(part), Math.abs(part) < 1e-9 ? "dim" : part > 0 ? "good" : "bad");
+        // a perk's parts: the skills (what is left with the worn things' parts taken off) and each worn or held thing that adds to it
+        // (2026-11-25, the user: "Skąd to się bierze - dodać ekwipunek"; Bron.bonusParts)
+        const Bn = T.api("Bron"), gearOf = k => (Bn && Bn.bonusParts ? Bn.bonusParts(k) : []);
+        const perkChips = (k, fmt, skillName) => {
+            const g = gearOf(k), sk = perk(k) - g.reduce((a, x) => a + x.value, 0), list = [];
+            if (Math.abs(sk) > 1e-9) list.push(chip(skillName || "Umiejętności", fmt(sk), sk > 0 ? "good" : "bad"));
+            for (const x of g) list.push(chip(x.name, fmt(x.value), x.value > 0 ? "good" : "bad", icon(x.id)));
+            return list;
+        };
+        const plusInt = v => (v < 0 ? "−" : "+") + Math.round(Math.abs(v)), minusPc = v => (v < 0 ? "+" : "−") + pc1(Math.abs(v));
         const out = {};
         // ---- the tiles
         if (!ranged) {
             const hit = wn.dmg * sm * (1 + pk), parts = [chip(wName, span(base.dmg), "", wIcon), attrChip("str", "Siła", sm - 1, plusPc)];
             if (wid === 0 && wn.dmg !== base.dmg && !lack) parts.push(chip("Rękawice", "+" + (wn.dmg - base.dmg), "good"));
-            if (pk) parts.push(chip("Umiejętności", plusPc(pk), "good"));
+            parts.push(...perkChips("melee.dmg", plusPc));
             if (tr.obrazenia) parts.push(chip("Udane kucie", "+" + tr.obrazenia, "good"));
             if (lack) parts.push(chip("Kara: poziom " + (base.poziom || 1), "−" + pc1(lack), "bad"));
             out.dmg = { key: "dmg", label: "Obrażenia", tile: "OBRAŻENIA", value: span(hit, tr.obrazenia), icon: wIcon, chips: parts,
@@ -239,20 +249,23 @@
         } else {
             const dx = 0.02 * (at("dex") - A0), rp = perk("ranged.dmg"), shot = fi.weapon.shot || 0, b0 = Math.round(shot / Math.max(0.01, (1 + dx) * (1 + rp)));
             const parts = [chip(wName, span(b0), "", wIcon), attrChip("dex", "Zręczność", dx, plusPc)];
-            if (rp) parts.push(chip("Umiejętności", plusPc(rp), "good"));
+            parts.push(...perkChips("ranged.dmg", plusPc));
             out.dmg = { key: "dmg", label: "Obrażenia", tile: "OBRAŻENIA", value: span(shot), icon: wIcon, chips: parts, desc: "Ile zabiera jeden strzał (losowo ±" + Math.round(R * 100) + "%)." };
         }
         const shield = f.shield ? f.shield() : null, blockV = Math.min(0.9, (de.shield ? de.shield.reduce : de.bare) + (de.blockPerk || 0));
         const bParts = [de.shield ? chip(de.shield.name, pc1(de.shield.reduce), "", icon(de.shield.id)) : chip("Bez tarczy", pc1(de.bare), "dim")];
-        if (de.blockPerk) bParts.push(chip("Umiejętności", plusPc(de.blockPerk), "good"));
+        bParts.push(...perkChips("block.reduce", plusPc));
         if (shield && shield.lack) bParts.push(chip("Kara: poziom " + (shield.poziom || 1), "−" + pc1(shield.lack), "bad"));
         out.block = { key: "block", label: "Blok", tile: "BLOK", value: pc1(blockV), icon: de.shield ? icon(de.shield.id) : 804, chips: bParts, desc: "Tyle ciosu zatrzymujesz, gdy blokujesz." };
-        const armour = de.armor;
+        const armour = de.armor, arAll = f.armor ? f.armor() : null, pieces = arAll && arAll.pieces ? arAll.pieces : armour ? [armour] : [];
+        // every worn piece of armour with its part (a helmet, the bracers, the greaves - not only the first); the cap when they add up over it
+        const aParts = pieces.map(p => chip(p.name, "−" + pc1(p.reduce), "good", icon(p.id)));
+        if (pieces.length > 1 && armour && pieces.reduce((a, p) => a + p.reduce, 0) > armour.reduce + 1e-6) aParts.push(chip("Najwięcej razem", "−" + pc1(armour.reduce), "dim"));
         out.armor = { key: "armor", label: "Zbroja", tile: "ZBROJA", value: armour ? "−" + pc1(armour.reduce) : "brak", cls: armour ? "" : "dim", icon: armour ? icon(armour.id) : 879,
-            chips: armour ? [chip(armour.name, "−" + pc1(armour.reduce), "good", icon(armour.id))] : [chip("Nic na sobie", "brak", "dim")], desc: "O tyle słabiej trafia cię każdy cios." };
+            chips: armour ? aParts : [chip("Nic na sobie", "brak", "dim")], desc: "O tyle słabiej trafia cię każdy cios." };
         const lvl = Cb.hero ? Cb.hero().level : 1, hpPk = perk("hp.max");
         const hParts = [chip("Podstawa", "100"), chip("Kondycja " + at("con"), "+" + 5 * (at("con") - A0), at("con") > A0 ? "good" : "dim"), chip("Poziom " + lvl, "+" + 3 * (lvl - 1), lvl > 1 ? "good" : "dim")];
-        if (hpPk) hParts.push(chip("Umiejętności", "+" + hpPk, "good"));
+        hParts.push(...perkChips("hp.max", plusInt));
         out.hp = { key: "hp", label: "Życie", tile: "ŻYCIE", value: String(de.mhp), need: "health", chips: hParts, desc: "Najwięcej życia, jakie możesz mieć." };
         out.breath = { key: "breath", label: "Oddech", tile: "ODDECH", value: String(de.breath), need: "breath",
             chips: [chip("Podstawa", "90"), chip("Kondycja " + at("con"), "+" + 2 * at("con"), "good")], desc: "Na ciosy, bloki i przewroty; wraca w odpoczynku. Głód i pragnienie go zmniejszają." };
@@ -275,13 +288,13 @@
                 : { key: "heavy", label: "Silny cios", value: span(wn.dmg * sm * (1 + pk) * H.mult, tr.obrazenia), chips: [chip("Zwykły cios", span(wn.dmg * sm * (1 + pk), tr.obrazenia)), chip("Naładowany", "× " + num1c(H.mult)), chip("Do pełna", "× " + num1c(H.full), "good")],
                     desc: "Przytrzymaj atak i puść: wolniejszy, a mocniej zbija równowagę." },
             { key: "crit", label: "Krytyk", value: pc1(critBase + critPer + critW + critPk) + " · × " + num1c(critMul),
-                chips: [chip("Podstawa", pc1(critBase)), attrChip("per", "Czujność", critPer, plusPc)].concat(critW ? [chip("Broń", plusPc(critW), "good")] : [], critPk ? [chip("Umiejętności", plusPc(critPk), "good")] : [], tr.krytyk_mocniej ? [chip("Cecha: mocniej", "× " + num1c(critMul), "good")] : []),
+                chips: [chip("Podstawa", pc1(critBase)), attrChip("per", "Czujność", critPer, plusPc)].concat(critW ? [chip("Broń", plusPc(critW), "good")] : [], perkChips("melee.crit", plusPc), tr.krytyk_mocniej ? [chip("Cecha: mocniej", "× " + num1c(critMul), "good")] : []),
                 desc: "Szansa na cios, który trafia mocniej (× " + num1c(critMul) + ")." },
-            ranged ? { key: "aim", label: "Czas celowania", value: pc1(Cb.aimSteady ? Cb.aimSteady() : 1), chips: [attrChip("dex", "Zręczność", -0.01 * (at("dex") - A0), plusPc)].concat(perk("aim.speed") ? [chip("Umiejętności", "−" + pc1(perk("aim.speed")), "good")] : []), desc: "Jak długo zwęża się koło celowania (100% - zwykle)." }
+            ranged ? { key: "aim", label: "Czas celowania", value: pc1(Cb.aimSteady ? Cb.aimSteady() : 1), chips: [attrChip("dex", "Zręczność", -0.01 * (at("dex") - A0), plusPc)].concat(perkChips("aim.speed", minusPc)), desc: "Jak długo zwęża się koło celowania (100% - zwykle)." }
                 : { key: "reach", label: "Zasięg", value: num1c(wn.reach) + " pola", chips: [chip(wName, num1c(base.reach) + " pola", "", wIcon)].concat(tr.zasieg ? [chip("Cecha: zasięg", "+" + num1c(tr.zasieg), "good")] : []), desc: "Jak daleko sięga cios." },
             { key: "combo", label: "Seria ciosów", value: String(combo), chips: [chip(wName, String((wn.combo || []).length))].concat(skill("combo4") ? [chip("Umiejętność: dłuższa seria", "+1", "good")] : []), desc: "Ile ciosów pod rząd w jednej serii; kolejne biją mocniej." },
             { key: "cost", label: "Oddech na cios", value: String(ranged ? fi.weapon.breath || 0 : cost),
-                chips: (ranged ? [chip(wName, String(fi.weapon.breath || 0), "", wIcon)] : [chip(wName, String(base.cost), "", wIcon)].concat(lack ? [chip("Kara: poziom " + (base.poziom || 1), "+" + pc1(lack), "bad")] : [], tr.oddech ? [chip("Cecha: lżejsza", "−" + tr.oddech, "good")] : [], perk("melee.breath") ? [chip("Umiejętności", "−" + pc1(perk("melee.breath")), "good")] : [])),
+                chips: (ranged ? [chip(wName, String(fi.weapon.breath || 0), "", wIcon)] : [chip(wName, String(base.cost), "", wIcon)].concat(lack ? [chip("Kara: poziom " + (base.poziom || 1), "+" + pc1(lack), "bad")] : [], tr.oddech ? [chip("Cecha: lżejsza", "−" + tr.oddech, "good")] : [], perkChips("melee.breath", minusPc))),
                 desc: "Ile oddechu kosztuje jeden cios." }
         ];
         const parryF = Cb.parryWindow ? Cb.parryWindow() : 0, wPar = (T.call("Bron_Cechy", "heldTrait", "parowanie") || 0), sPar = shield && shield.parry > 0 ? shield.parry : 0;
@@ -292,13 +305,13 @@
                 desc: "Tyle masz czasu, żeby sparować cios (blok tuż przed trafieniem)." },
             { key: "wound", label: "Szansa na ranę", value: pc1(de.wound), chips: [chip("Zwykła", "100%"), attrChip("con", "Kondycja", -0.014 * (at("con") - A0), plusPc)].concat(skill("thickskin") ? [chip("Gruba skóra", "× 0,5", "good")] : []),
                 desc: "Szansa, że cios zostawi ranę (krwawienie, wolniejsze leczenie)." },
-            { key: "knock", label: "Próg przewrócenia", value: String(de.knock), chips: [chip("Podstawa", "60"), chip("Kondycja " + at("con"), "+" + num1c(1.8 * (at("con") - A0)), at("con") > A0 ? "good" : "dim")].concat(perk("knock.resist") ? [chip("Umiejętności", plusPc(perk("knock.resist")), "good")] : []),
+            { key: "knock", label: "Próg przewrócenia", value: String(de.knock), chips: [chip("Podstawa", "60"), chip("Kondycja " + at("con"), "+" + num1c(1.8 * (at("con") - A0)), at("con") > A0 ? "good" : "dim")].concat(perkChips("knock.resist", plusPc)),
                 desc: "Ile siły ciosu wytrzymasz, zanim cię przewróci." },
             { key: "roll", label: "Przewrót", value: de.rollCost + " oddechu", chips: [chip("Podstawa", "24"), chip("Zręczność " + at("dex"), "−" + num1c(0.25 * (at("dex") - A0)), at("dex") > A0 ? "good" : "dim")], desc: "Ile oddechu kosztuje unik przewrotem." },
-            { key: "mind", label: "Opór umysłu", value: pc1(de.mind), chips: [chip("Podstawa", "15%"), attrChip("wil", "Hart ducha", 0.03 * (at("wil") - A0), plusPc)].concat(perk("mind.resist") ? [chip("Umiejętności", plusPc(perk("mind.resist")), "good")] : []),
+            { key: "mind", label: "Opór umysłu", value: pc1(de.mind), chips: [chip("Podstawa", "15%"), attrChip("wil", "Hart ducha", 0.03 * (at("wil") - A0), plusPc)].concat(perkChips("mind.resist", plusPc)),
                 desc: "Szansa, że strach albo „prawda” upiora cię nie złamie." },
             { key: "cold", label: "Ciepło", value: de.cloak ? "pełne" : cold > 0 ? "+" + pc1(Math.min(1, cold)) : "brak", cls: de.cloak || cold > 0 ? "good" : "dim",
-                chips: de.cloak ? [chip(cloakName || "Płaszcz", "nie marzniesz", "good", icon(112))] : cold > 0 ? [chip("Ubiór", "marzniesz o " + pc1(Math.min(1, cold)) + " mniej", "good")] : [chip("Bez płaszcza", "marzniesz", "bad")],
+                chips: de.cloak ? [chip(cloakName || "Płaszcz", "nie marzniesz", "good", icon(112))] : cold > 0 ? perkChips("cold", v => "marzniesz o " + pc1(Math.min(1, v)) + " mniej") : [chip("Bez płaszcza", "marzniesz", "bad")],
                 desc: "Zimą i w śniegu bez ciepłego ubrania marzniesz." }
         ];
         const walk = (US && US.predkosc ? US.predkosc() : 0) + (worn(113) && S && S.BOOTS_SPEED ? S.BOOTS_SPEED - 1 : 0), neat = US && US.schludnosc ? US.schludnosc() : 0;
@@ -308,13 +321,13 @@
                 chips: [].concat(worn(113) && S && S.BOOTS_SPEED ? [chip(($dataItems[113] || {}).name || "Buty", "+" + pc1(S.BOOTS_SPEED - 1), "good", icon(113))] : [], US && US.predkosc && US.predkosc() ? [chip("Ubiór", "+" + pc1(US.predkosc()), "good")] : []).concat(walk > 0.001 ? [] : [chip("Boso", "zwykły", "dim")]),
                 desc: "O tyle szybciej chodzisz i biegasz." },
             { key: "rest", label: "Odpoczynek", value: restB > 0.0001 ? "+" + pc1(restB) : "zwykły", cls: restB > 0.0001 ? "good" : "dim",
-                chips: [attrChip("wil", "Hart ducha", (Cb.REST_PER_WIL || 0.02) * Math.max(0, at("wil") - A0), plusPc)].concat(perk("sleep.rest") ? [chip("Umiejętności (Twardy sen)", plusPc(perk("sleep.rest")), "good")] : []),
+                chips: [attrChip("wil", "Hart ducha", (Cb.REST_PER_WIL || 0.02) * Math.max(0, at("wil") - A0), plusPc)].concat(perkChips("sleep.rest", plusPc, "Umiejętności (Twardy sen)")),
                 desc: "O tyle szybciej wraca kondycja, gdy siedzisz, leżysz albo śpisz." },
             { key: "neat", label: "Schludność", value: neat ? "+" + neat : "brak", cls: neat ? "good" : "dim", chips: [chip("Ubiór", neat ? "+" + neat : "brak", neat ? "good" : "dim")], desc: "Schludnie ubrany płacisz mniej i lepiej cię słuchają w mieście." },
             { key: "work", label: "Szybkość pracy", value: (tired ? "× 0,5 · " : "") + plusPc(dexW), cls: tired ? "bad" : dexW > 0 ? "good" : "dim",
                 chips: [attrChip("dex", "Zręczność", dexW, plusPc)].concat(tired ? [chip("Zmęczenie", "× 0,5", "bad")] : []), desc: "Budowa, rąbanie, kopanie i kucie idą o tyle szybciej." },
             { key: "gather", label: "Uderzeń przy zbieraniu", value: "−" + pc1(gather), cls: gather > 0 ? "good" : "dim", chips: [attrChip("str", "Siła", -gather, plusPc)], desc: "Tylu uderzeń mniej trzeba na drzewo, skałę i rudę." },
-            { key: "aimS", label: "Czas celowania", value: pc1(Cb.aimSteady ? Cb.aimSteady() : 1), cls: "", chips: [attrChip("dex", "Zręczność", -0.01 * (at("dex") - A0), plusPc)].concat(perk("aim.speed") ? [chip("Umiejętności", "−" + pc1(perk("aim.speed")), "good")] : []),
+            { key: "aimS", label: "Czas celowania", value: pc1(Cb.aimSteady ? Cb.aimSteady() : 1), cls: "", chips: [attrChip("dex", "Zręczność", -0.01 * (at("dex") - A0), plusPc)].concat(perkChips("aim.speed", minusPc)),
                 desc: "Łuk i proca: jak długo zwęża się koło celowania (100% - zwykle)." }
         ].filter(s => !(ranged && s.key === "aimS"));
         return { tiles: [out.dmg, out.block, out.armor, out.hp, out.breath, out.carry],

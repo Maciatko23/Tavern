@@ -190,9 +190,23 @@ mapa.221.opis = Nad jazem woda stoi pełna, a poniżej ledwie się sączy.
 mapa.222.pod = kopalnia, lasy i dzika zwierzyna
 mapa.222.opis = W skale drzemie żelazo, a w lasach czeka zwierzyna.
 
+# 225 Sztolnia Kruczych Turni
+mapa.225.pod = stara kopalnia pod górą
+mapa.225.opis = Krople kapią ze stropu, a w ciemności stoją zardzewiałe wagoniki.
+
+# 29 Krucza Grań
+mapa.29.pod = grzbiet nad kopalnią i kruczarnia
+mapa.29.opis = Wiatr tu nie cichnie, a z wieży kruczarni widać całą dolinę.
+
+# 30 Orla Grań
+mapa.30.pod = skalne gniazda pod samym niebem
+mapa.30.opis = Pióra leżą w szczelinach, a na dole ledwie widać dym z doliny.
+
 # ======================================================================== Wnętrza (tylko podpis)
 # 1 Tawerna
 mapa.1.pod = karczma „Pod Złotym Kuflem”
+# 28 Strych
+mapa.28.pod = graty i kurz pod dachem tawerny
 # 2 Domek - Wnętrze
 mapa.2.pod = stara izba na działce dziadka
 # 19 Dom dziadka (wnętrze)
@@ -201,6 +215,8 @@ mapa.19.pod = bielone ściany i kamienny komin
 mapa.25.pod = izby na piętrze tawerny
 # 26 Apartamenty
 mapa.26.pod = komnaty dla zamożnych gości
+# 224 Chata dziadka
+mapa.224.pod = izba starego Stacha
 # 100 Chatka
 mapa.100.pod = dach postawiony własnymi rękami
 # 102 Piekarnia
@@ -233,6 +249,12 @@ mapa.115.pod = pęki ziół babki Jadwigi
 mapa.116.pod = rupiecie i skarby Józka Łaty
 # 117 Dom uchodźców
 mapa.117.pod = schronienie dla ludzi z promu
+# 214 Kruczarnia
+mapa.214.pod = wieża kruków na grzbiecie
+# 215 Cech
+mapa.215.pod = dom rzemieślników Kruczogrodu
+# 217 Młyn
+mapa.217.pod = kamienie, ziarno i mączny pył
 # 119 Archiwum zakonu
 mapa.119.pod = sklepienie pod ogrodem rycerzy
 # 121 Wspólna izba (Osada Milczących)

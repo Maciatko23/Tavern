@@ -338,6 +338,27 @@
         if (t < PECK.step * 2) return F.slight;
         return F.stand;
     }
+    // can a gull walk straight from (x0, y0) to (x1, y1): every step on land it can stand on (2026-11-25, the user: "mewy przy brzegu się
+    // zacinają i nie mogą ruszyć" - a walk across a bay of water, or a flight from the hero straight into the sea, stopped at once and
+    // began again the next frame)
+    function pathClear(x0, y0, x1, y1) {
+        const d = Math.hypot(x1 - x0, y1 - y0), n = Math.max(1, Math.ceil(d / 0.25));
+        for (let i = 1; i <= n; i++) {
+            const x = x0 + (x1 - x0) * i / n, y = y0 + (y1 - y0) * i / n - 0.3;
+            if (waterAt(x, y) || !$gameMap.isPassable(Math.floor(x), Math.floor(y), 2)) return false;
+        }
+        return true;
+    }
+    // the best way to walk off from the hero: of eight ways, the clear one that ends farthest from him; null: none - it flies
+    function fleeTarget(gl) {
+        const hx = heroX(), hy = heroY();
+        let best = null, bd = Math.hypot(gl.x - hx, gl.y - hy) + 0.4;
+        for (let k = 0; k < 8; k++) {
+            const a = k * Math.PI / 4, tx = gl.x + Math.cos(a) * 1.6, ty = gl.y + Math.sin(a) * 1.6, d = Math.hypot(tx - hx, ty - hy);
+            if (d > bd && pathClear(gl.x, gl.y, tx, ty)) { bd = d; best = { x: tx, y: ty }; }
+        }
+        return best;
+    }
     function walkTo(gl, tx, ty, speed) {
         const dx = tx - gl.x, dy = ty - gl.y, d = Math.hypot(dx, dy);
         if (d <= speed) { gl.x = tx; gl.y = ty; return true; }
@@ -353,11 +374,13 @@
         const close = Math.hypot(heroX() - gl.x, heroY() - gl.y) < 2.2;
         if (aware >= 1 || close) { flush(gl.flock, heroX(), heroY()); return; }
         if (aware >= 0.3) {   // uneasy: it walks off along the sand, away from him
-            if (gl.act !== "flee") {
-                const a = Math.atan2(gl.y - heroY(), gl.x - heroX());
-                gl.act = "flee"; gl.tx = gl.x + Math.cos(a) * 1.6; gl.ty = gl.y + Math.sin(a) * 1.6; gl.pk = null;
+            if (gl.act !== "flee" && gl.act !== "look") {
+                const to = fleeTarget(gl);
+                if (!to) { flush(gl.flock, heroX(), heroY()); return; }   // (nowhere to walk off to: up it goes)
+                gl.act = "flee"; gl.tx = to.x; gl.ty = to.y; gl.pk = null;
             }
-            if (walkTo(gl, gl.tx, gl.ty, FLEE)) { gl.act = "look"; gl.actT = 30; }
+            if (gl.act === "flee" && walkTo(gl, gl.tx, gl.ty, FLEE)) { gl.act = "look"; gl.actT = 40; }
+            else if (gl.act === "look") { gl.facing = heroX() > gl.x ? 1 : -1; if (--gl.actT <= 0) gl.act = "idle"; }   // (it watches him a moment, then walks off again if he is still near)
             return;
         }
         if (--gl.nextCall <= 0) { gl.nextCall = Math.round(rand(900, 2400)); if (onView(gl.x, gl.y, 0)) cry(gl); }
@@ -374,8 +397,8 @@
         if (r < 0.45) { gl.act = "peck"; gl.actT = 1 + Math.floor(Math.random() * 3); gl.pk = null; }
         else if (r < 0.75) {   // a few steps along the wet sand, near its spot
             const near = geo.shore.filter(p => Math.hypot(p.x + 0.5 - gl.x, p.y + 0.7 - gl.y) <= 2 && (!gl.home || Math.hypot(p.x - gl.home.x, p.y - gl.home.y) <= 3));
-            const p = near.length ? pick(near) : null;
-            if (p) { gl.act = "walk"; gl.tx = p.x + rand(0.2, 0.8); gl.ty = p.y + rand(0.45, 0.9); gl.actT = 240; }
+            const p = near.length ? pick(near) : null, tx = p ? p.x + rand(0.2, 0.8) : 0, ty = p ? p.y + rand(0.45, 0.9) : 0;
+            if (p && pathClear(gl.x, gl.y, tx, ty)) { gl.act = "walk"; gl.tx = tx; gl.ty = ty; gl.actT = 240; }   // (only where a straight walk leads, not across water)
             else { gl.act = "idle"; gl.actT = 60; }
         } else { gl.act = "idle"; gl.actT = Math.round(rand(40, 140)); if (Math.random() < 0.5) gl.facing = -gl.facing; }
     }

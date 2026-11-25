@@ -342,12 +342,14 @@
         return true;
     }
     // room for a building around an existing one (its own tile is not counted): free, passable ground, nothing sown or ploughed
-    function roomFor(type, x, y, ignoreX, ignoreY, self) {
+    // heroOk: the hero's own cell does not count as taken (he steps aside before it goes up)
+    function roomFor(type, x, y, ignoreX, ignoreY, self, heroOk) {
         for (const t of tilesOfBuilding(type, x, y)) {
             if (t.x === ignoreX && t.y === ignoreY) continue;
             if (self && buildingAt(t.x, t.y) === self) continue;   // (a building grown in place: its own cells)
             const plot = plotAt(t.x, t.y);
-            if (!$gameMap.isValid(t.x, t.y) || !$gameMap.checkPassage(t.x, t.y, 0x0f) || buildingAt(t.x, t.y) || !tileIsFree(t.x, t.y) || hasObjectTile(t.x, t.y)) return false;
+            const free = heroOk && $gamePlayer.x === t.x && $gamePlayer.y === t.y ? $gameMap.eventsXy(t.x, t.y).every(e => !e.isNormalPriority()) : tileIsFree(t.x, t.y);
+            if (!$gameMap.isValid(t.x, t.y) || !$gameMap.checkPassage(t.x, t.y, 0x0f) || buildingAt(t.x, t.y) || !free || hasObjectTile(t.x, t.y)) return false;
             if (plot && (plot.s === "tilled" || plot.crop)) return false;
         }
         return true;
@@ -361,11 +363,27 @@
         const missing = up.cost.filter(([id, n]) => countOf(id) < n);
         if (missing.length > 0) { complain(itemOf(missing[0][0]).iconIndex, "Potrzebujesz: " + itemOf(missing[0][0]).name); return false; }
         if (up.tool && !requireItem(up.tool)) return false;
-        const ax = b.x - up.dx, ay = b.y;   // the fire is the tile up.dx from the left end of the bottom row of what is built around it
+        const ax = b.x - up.dx;   // the fire is the tile up.dx from the left end of the bottom row of what is built around it
+        let ay = b.y, step = null;
         // (2026-11-17: the loom -> the loom with the spinning wheel, the same 3 x 2 - the building's own cells do not count as taken)
-        if (!roomFor(up.to, ax, ay, b.x, b.y, b)) { complain(itemOf(ITEM.stone).iconIndex, fire ? "Za mało miejsca wokół ogniska" : "Za mało miejsca"); return false; }
+        if (!roomFor(up.to, ax, ay, b.x, b.y, b)) {
+            // no room above the fire: a building taller than it (the cauldron, 3 x 2) goes up on the fire's row and the one below it - the
+            // hearth moves a step down, the hero standing there steps aside (2026-11-25, the user: "kociołek - za mało miejsca przy
+            // ognisku, trzeba od dołu")
+            const tall = fire && tilesOfBuilding(up.to, ax, b.y + 1).some(t => t.y === b.y);   // (two rows or more: it still covers the fire's own row)
+            if (!tall || !roomFor(up.to, ax, b.y + 1, b.x, b.y, b, true)) { complain(itemOf(ITEM.stone).iconIndex, fire ? "Za mało miejsca wokół ogniska" : "Za mało miejsca"); return false; }
+            ay = b.y + 1;
+            const cells = tilesOfBuilding(up.to, ax, ay);
+            if (cells.some(t => t.x === $gamePlayer.x && t.y === $gamePlayer.y)) {
+                const xs = cells.map(t => t.x), ys = cells.map(t => t.y), x0 = Math.min(...xs), x1 = Math.max(...xs), y1 = Math.max(...ys);
+                const open = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && !buildingAt(x, y) && $gameMap.eventsXy(x, y).every(e => !e.isNormalPriority());
+                step = [[$gamePlayer.x, y1 + 1, 8], [x0 - 1, $gamePlayer.y, 6], [x1 + 1, $gamePlayer.y, 4]].find(([x, y]) => open(x, y)) || null;
+                if (!step) { complain(itemOf(ITEM.stone).iconIndex, "Za mało miejsca wokół ogniska"); return false; }
+            }
+        }
         if (!takeReadyFirst(b)) return false;   // (what is done on the fire: into the bag first)
         if (!spendStamina(up.stamina)) return false;
+        if (step) { $gamePlayer.locate(step[0], step[1]); $gamePlayer.setDirection(step[2]); }   // (a step back from the fire, facing it)
         for (const [id, n] of up.cost) $gameParty.loseItem(itemOf(id), n, false);
         swingThen(up.tool === ITEM.hammer ? HAMMER_KIND : CROUCH_KIND, () => {
             if (up.tool) useTool(up.tool);
@@ -753,7 +771,7 @@
     // It ends by itself at full strength (restCeiling: the sleep and the hunger caps), on a hit, when a boar or a wolf comes at him,
     // or when the place stops giving; the player ends it with a direction key or Esc (ChoppableTree), O or a click (here).
     function restingOpts(rate, still, why) {
-        const r = { hours: 0, gained: 0, hp: heroHpNow(), end: "" };
+        const r = { hours: 0, gained: 0, hp: heroHpNow(), end: "", winN: 0, winAt: $gameSystem.stamina() };
         const step = REST_HOURS_A_SECOND / 60;
         // (2026-10-31) danger: he does not rise at the calm pace (the sitting sheet's ~94 frames of standing up were longer than a boar's
         // warning + charge from 5 tiles, so it knocked him down as he rose) - he scrambles up HURRY times as fast (the swing options rate)
@@ -776,7 +794,13 @@
                 const before = $gameSystem.stamina();
                 $gameSystem.changeStamina(restGain(perHour * step * (1 + restBonus())));
                 r.gained += $gameSystem.stamina() - before;
-                if ($gameSystem.stamina() >= restCeiling() - 0.05) r.end = "full";
+                if ($gameSystem.stamina() >= restCeiling() - 0.05) { r.end = "full"; return; }
+                // the strength no longer grows (cold, wet, hunger, a wound eat what the rest gives): after a game hour of that he gets up
+                // (2026-11-25, the user: "gdy wytrzymałość przestaje się odnawiać w czasie odpoczynku, postać przerywa i wstaje")
+                if (++r.winN >= 60) {
+                    if ($gameSystem.stamina() - r.winAt < 0.5) r.end = "stalled";
+                    r.winN = 0; r.winAt = $gameSystem.stamina();
+                }
             },
             onHoldEnd: () => {
                 if (r.hours > 0) {
@@ -787,6 +811,7 @@
                 }
                 if (r.end === "danger") later(20, () => complain(ICON.stamina, r.danger + "! Wstajesz."));
                 else if (r.end === "place" && why && why.place) later(20, () => complain(itemOf(ITEM.wood).iconIndex, why.place));
+                else if (r.end === "stalled") later(30, () => complain(ICON.stamina, whyNoRest() || "Sił już nie przybywa - wstajesz"));
                 else if (r.end === "full" && sleepy() && $gameSystem.stamina() >= restCap() - 0.5) later(40, () => complain(ICON.stamina, "Bez snu lepiej nie wypoczniesz"));
                 else if (r.end === "full" && needsCeiling() < restCap()) later(40, () => complain(ICON.stamina, "Głodny i spragniony więcej sił nie odzyskasz"));
             }

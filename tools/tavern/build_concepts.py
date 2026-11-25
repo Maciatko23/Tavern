@@ -9,7 +9,7 @@ import sys
 from props import *
 from tavlib import FLAGS8
 
-NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>"
+NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>"
 FACE = 3            # wall faces are three cells tall
 UPSTAIRS_ID = 25    # the guest rooms' map id proposed for the build (free today; check MapInfos when applying)
 
@@ -584,7 +584,7 @@ def design_P(below="A"):
     """the guest rooms upstairs ("Pokoje gości"): a panelled corridor with three rooms and the chamber (rentable later,
     its own fireplace) to the north, two rooms and the linen closet to the south, the stairwell down in the south-west"""
     W, H = 32, 24
-    mp = TavernMap(W, H, "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>", display="Pokoje gości", seed=404)
+    mp = TavernMap(W, H, "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>", display="Pokoje gości", seed=404)
     mp.id = UPSTAIRS_ID
     mp.keep_slots = 0
     mp.border = 25

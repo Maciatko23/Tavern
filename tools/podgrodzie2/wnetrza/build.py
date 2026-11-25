@@ -44,8 +44,8 @@ F_DARK, F_RED, F_COBBLE, F_FLAGS = 83, 84, 96, 97
 RUG_MAT, RUG_BROWN, DUST = 37, 21, 23
 
 # notatki map jak Map112-117 (RoomLighting: ciemność wg pory, światła tylko z ognia, słońce z okien)
-NOTE_POOR = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>"      # Map112, 113, 115-117
-NOTE_DIM = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:95>\n<DarkNight:190>"       # Map114 (kłusownik)
+NOTE_POOR = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:85>\n<DarkNight:185>"      # Map112, 113, 115-117
+NOTE_DIM = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:95>\n<DarkNight:190>"       # Map114 (kłusownik)
 L_KILN = "<Light:260,120,58,15>"
 
 

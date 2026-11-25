@@ -67,7 +67,11 @@
         chars.forEach((ch, i) => { ctx.fillText(ch, cx, y); cx += ws[i] + sp; });
         return total;
     }
+    // a sum "N G" written on the parchment in words - "5 miedziaków", "1 srebrnik i 2 miedziaki" (Monety.js; the canvas's own text
+    // does not go through its drawText) - 2026-11-25
+    const coins = s => (window.Monety && Monety.tekst ? Monety.tekst(String(s), true) : String(s));
     function inkText(ctx, text, x, y, font, color, align, alpha) {
+        text = coins(text);
         ctx.save();
         ctx.font = font;
         ctx.fillStyle = color;
@@ -559,7 +563,7 @@
             inkText(ctx, Watki.wstaw(TK.art.drawDetail[7], { name: TIERS[t].name, rep: d.rep }), x0, y, F.handB(21), INK.dark, "left");
             y += 22;
             ctx.font = F.hand(18);
-            const more = Watki.wstaw(TK.art.drawDetail[10], { "1": nextT ? Watki.wstaw(TK.art.drawDetail[8], { name: nextT.name, rep: nextT.rep, day: nextT.day, "4": nextT.gold[1] })
+            const more = Watki.wstaw(TK.art.drawDetail[10], { "1": nextT ? Watki.wstaw(TK.art.drawDetail[8], { name: nextT.name, rep: nextT.rep, day: nextT.day, "4": nextT.coin ? nextT.coin[1] : nextT.gold[1] })
                 : TK.art.drawDetail[9], done: st.done, failed: st.failed, abandoned: st.abandoned, gold: st.gold });
             for (const l of wrap(ctx, more, cw).slice(0, 3)) { inkText(ctx, l, x0, y, F.hand(18), INK.soft, "left"); y += 20; }
             ctx.restore();
@@ -635,7 +639,7 @@
         ctx.globalCompositeOperation = "multiply";
         inkText(ctx, n.gold + " G", x + 30, y + 21, F.handB(26), INK.gold, "left");
         ctx.font = F.handB(26);
-        x += 30 + ctx.measureText(n.gold + " G").width + 20;
+        x += 30 + ctx.measureText(coins(n.gold + " G")).width + 20;
         ctx.globalCompositeOperation = "source-over";
         star(ctx, x + 9, y + 12, 9, "#9a7cd0", "#4b2d7a", 1.2);
         ctx.globalCompositeOperation = "multiply";

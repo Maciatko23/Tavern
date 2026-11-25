@@ -1,0 +1,369 @@
+{
+ "walk": {
+  "dir": "walk",
+  "out": "Bear_Walk8",
+  "standing": true,
+  "keep": false,
+  "pick": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "old": "$Animal_Bear",
+  "old_cols": [
+   1,
+   0,
+   5
+  ],
+  "rows": {
+   "west": {
+    "from": "east",
+    "flip": true
+   },
+   "south-west": {
+    "from": "south-east",
+    "flip": true
+   },
+   "north-west": {
+    "from": "north-east",
+    "flip": true
+   }
+  }
+ },
+ "run": {
+  "dir": "gallop",
+  "out": "Bear_Run8",
+  "standing": true,
+  "keep": false,
+  "palette": "walk",
+  "pick": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "old": "$Animal_Bear_Run",
+  "old_cols": [
+   1,
+   0,
+   5
+  ],
+  "rows": {
+   "west": {
+    "from": "east",
+    "flip": true
+   },
+   "south-west": {
+    "from": "south-east",
+    "flip": true
+   },
+   "north-west": {
+    "from": "north-east",
+    "flip": true
+   }
+  }
+ },
+ "idle": {
+  "dir": "breathe",
+  "out": "Bear_Idle8",
+  "standing": false,
+  "keep": false,
+  "align": "row",
+  "palette": "walk",
+  "pick": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "old": "$Animal_Bear_Idle",
+  "old_cols": [
+   0,
+   2,
+   5
+  ],
+  "rows": {
+   "west": {
+    "from": "east",
+    "flip": true
+   },
+   "south-west": {
+    "from": "south-east",
+    "flip": true
+   },
+   "north-west": {
+    "from": "north-east",
+    "flip": true
+   }
+  }
+ },
+ "rear": {
+  "dir": "rear",
+  "out": "Bear_Rear8",
+  "keep": false,
+  "align": "row",
+  "cell": 128,
+  "feet": 124,
+  "palette": "walk",
+  "old": "$Animal_Bear_Rear",
+  "old_cols": [
+   3,
+   6,
+   8
+  ],
+  "rows": {
+   "west": {
+    "from": "east",
+    "flip": true
+   },
+   "south-west": {
+    "from": "south-east",
+    "flip": true
+   },
+   "north-west": {
+    "from": "north-east",
+    "flip": true
+   }
+  }
+ },
+ "swipe": {
+  "dir": "swipe",
+  "out": "Bear_Swipe8",
+  "keep": false,
+  "align": "row",
+  "cell": 128,
+  "feet": 124,
+  "palette": "walk",
+  "old": "$Animal_Bear_Swipe",
+  "old_cols": [
+   3,
+   5,
+   7
+  ],
+  "rows": {
+   "east": {
+    "pick": [
+     0,
+     1,
+     2,
+     3,
+     3,
+     6,
+     6,
+     7,
+     8
+    ]
+   },
+   "west": {
+    "from": "east",
+    "flip": true,
+    "pick": [
+     0,
+     1,
+     2,
+     3,
+     3,
+     6,
+     6,
+     7,
+     8
+    ]
+   },
+   "north-east": {
+    "pick": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     6,
+     8
+    ]
+   },
+   "north-west": {
+    "from": "north-east",
+    "flip": true,
+    "pick": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     6,
+     8
+    ]
+   },
+   "north": {
+    "pick": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     6,
+     8
+    ]
+   },
+   "south-west": {
+    "from": "south-east",
+    "flip": true
+   }
+  },
+  "note": "2026-11-25: frames with the model's swooshes / blobs left out (east 4-5, north-east 7, north 7), doubled so every row has 9 and the blow lands at the same column"
+ },
+ "roar": {
+  "dir": "roar",
+  "out": "Bear_Roar8",
+  "keep": false,
+  "align": "row",
+  "cell": 128,
+  "feet": 124,
+  "palette": "walk",
+  "old": "$Animal_Bear_Roar",
+  "old_cols": [
+   2,
+   7,
+   10
+  ],
+  "parts": [
+   {
+    "src": "rear",
+    "pick": [
+     0,
+     2,
+     4,
+     6,
+     8
+    ]
+   },
+   {
+    "src": "roar",
+    "pick": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8
+    ]
+   }
+  ],
+  "rows": {
+   "west": {
+    "from": "east",
+    "flip": true
+   },
+   "south-west": {
+    "from": "south-east",
+    "flip": true
+   },
+   "north-west": {
+    "from": "north-east",
+    "flip": true,
+    "parts": [
+     {
+      "src": "rear",
+      "pick": [
+       0,
+       2,
+       4,
+       6,
+       8
+      ]
+     },
+     {
+      "src": "roar",
+      "pick": [
+       2,
+       3,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8
+      ]
+     }
+    ]
+   },
+   "north-east": {
+    "parts": [
+     {
+      "src": "rear",
+      "pick": [
+       0,
+       2,
+       4,
+       6,
+       8
+      ]
+     },
+     {
+      "src": "roar",
+      "pick": [
+       2,
+       3,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8
+      ]
+     }
+    ]
+   }
+  }
+ },
+ "pounce": {
+  "dir": "pounce",
+  "out": "Bear_Pounce8",
+  "keep": false,
+  "align": "frame",
+  "cell": 128,
+  "feet": 124,
+  "palette": "walk",
+  "old": "$Animal_Bear_Pounce",
+  "old_cols": [
+   2,
+   5,
+   8
+  ],
+  "rows": {
+   "west": {
+    "from": "east",
+    "flip": true
+   },
+   "south-west": {
+    "from": "south-east",
+    "flip": true
+   },
+   "north-west": {
+    "from": "north-east",
+    "flip": true
+   }
+  }
+ }
+}

@@ -8,7 +8,7 @@
 //      storm, now and then a quiet clink of the chain (SE "Chain") when one is on the screen in a strong wind.
 //   2. WATER: open water barrels (Winlu C67, read from the tiles) and the horse troughs (Konie.js's injected !$Wodopoj events, read
 //      from the map's events): small glints come and go on the surface by day; while it rains, rings from the drops.
-//   3. STEAM: after a rain, in sunshine, thin wisps rise from the roofs (A3 roof cells) until they dry (about 2.5 hours of game time).
+//   3. STEAM (OFF since 2026-11-25, STEAM_ON): after a rain, in sunshine, thin wisps rose from the roofs until they dried.
 //   4. MOTES: tiny warm specks of dust and pollen drift in the morning (and, fainter, the evening) sun rays (Sky.js raysAt) over the
 //      town's squares (region 31 - the squares where the eagle lands - and the boxes in MOTE_BOXES).
 // Everything from ready pictures (tools/klimat/detale_obrazki.py: img/system/Klimat_Detal_*.png; the rings and glints, the steam,
@@ -42,7 +42,8 @@
     const C67 = 256 + 67;
     const BARREL = { cx: 24, cy: 36, rx: 11, ry: 4 };                 // the water's ellipse in the C67 tile (px)
     const TROUGH = { x0: 13, x1: 36, y0: 18, y1: 118, fh: 156 };       // the water's box in the !$Wodopoj frame (48 x 156)
-    const STEAM_SHARE = 0.22, STEAM_DRY = 2.5;                         // roof cells that steam; hours it takes a roof to dry
+    // STEAM_ON false: no roof steams any more (2026-11-25, the user: "wyłączyć / wywalić parowanie budynków"); the code stays for later
+    const STEAM_ON = false, STEAM_SHARE = 0.22, STEAM_DRY = 2.5;                         // roof cells that steam; hours it takes a roof to dry
 
     const rand = (a, b) => a + Math.random() * (b - a);
     const hash = (x, y, k) => { let h = (x * 374761393 + y * 668265263 + (k || 0) * 1442695041) | 0; h = (h ^ (h >>> 13)) * 1274126177; return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
@@ -110,7 +111,7 @@
             if (at(2, x, y) === C67 || at(3, x, y) === C67) barrels.push(water("barrel", x, y));
             const k = kind(at(0, x, y)), e2 = at(2, x, y), e3 = at(3, x, y);
             const eRoof = roofSheet && ((e2 >= 768 && e2 < 1024) || (e3 >= 768 && e3 < 1024));
-            if (((k >= 48 && k < 80) || eRoof) && hash(x, y, 21) < STEAM_SHARE) roofs.push({ x, y, t: 0, wait: Math.floor(hash(x, y, 4) * 200), jx: 0, spr: null });
+            if (STEAM_ON && ((k >= 48 && k < 80) || eRoof) && hash(x, y, 21) < STEAM_SHARE) roofs.push({ x, y, t: 0, wait: Math.floor(hash(x, y, 4) * 200), jx: 0, spr: null });
             if ($gameMap.regionId(x, y) === MOTE_REGION || boxes.some(b => x >= b[0] && x <= b[2] && y >= b[1] && y <= b[3])) motes.push(x + y * W);
         }
         places = { data: $dataMap, mapId: $gameMap.mapId(), barrels, troughs: [], troughSig: "", roofs, moteCells: motes, W };

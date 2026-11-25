@@ -1571,12 +1571,14 @@
         $gameMap._interpreter.setup(end(o), 0);
         return true;
     }
-    // the debt paid or the field bought back: the seal comes off, grandpa is home two days later
-    function wezFree() {
+    // the debt paid or the field bought back: the seal comes off, grandpa is home two days later. (2026-11-25, the user: "chata zostaje
+    // dla wnuka") The field lost: the Lord took it for the debt, so the house is no pledge any more - the seal comes off the same way
+    // (its own words: the field went for the debt)
+    function wezFree(lost) {
         const z = wez();
         z.freed = day(); z.backAt = (day() + WEZ.BACK_DAYS) * 24 + WEZ.BACK_HOUR;
-        T.popup(TK.wez.wolny[0], { top: true, color: U().accent, sub: TK.wez.wolny[1] });
-        T.call("Journal", "addNote", TK.wez.notka[2], TK.wez.notka[3]);
+        T.popup(TK.wez.wolny[lost ? 2 : 0], { top: true, color: U().accent, sub: TK.wez.wolny[lost ? 3 : 1] });
+        T.call("Journal", "addNote", TK.wez.notka[2], TK.wez.notka[lost ? 4 : 3]);
     }
     // the calm update's checks (the frames n of this map scene)
     function checkWezwanie(n) {
@@ -1594,6 +1596,7 @@
             return false;
         }
         if (!z.freed && (s.done || fieldBack())) wezFree();
+        else if (!z.freed && lostState()) wezFree(true);
         if (here === MAP.house && sealed() && n > 20) return wezSealOut();
         if (here === WEZ.YARD && z.underDoor && !z.letter && n > 30) return wezReadDoor();
         return false;
@@ -1751,10 +1754,10 @@
         if (fieldBack()) return TK.kod.debtText[0];
         if (s.lost) {
             const n = carryLeft();
-            return s.buy.paid + " / " + s.buy.price + " G" + (fieldLocked() ? (short ? "" : TK.kod.debtText[1]) : Watki.wstaw(TK.kod.debtText[2], { "1": carryPhrase(n) }));
+            return s.buy.paid + " G / " + s.buy.price + " G" + (fieldLocked() ? (short ? "" : TK.kod.debtText[1]) : Watki.wstaw(TK.kod.debtText[2], { "1": carryPhrase(n) }));
         }
         if (s.done || s.paid >= s.debt) return TK.kod.debtText[3];
-        return s.paid + " / " + s.debt + " G  ·  " + (short ? "" : Watki.wstaw(TK.kod.debtText[4], { deadline: s.deadline })) + daysPhrase(daysLeft());
+        return s.paid + " G / " + s.debt + " G  ·  " + (short ? "" : Watki.wstaw(TK.kod.debtText[4], { deadline: s.deadline })) + daysPhrase(daysLeft());
     }
     // area (MenuPanel.addFoot): y - the keys' line, right - the edge to keep to, room - the px between the last key and that edge
     function drawDebtFoot(b, area) {

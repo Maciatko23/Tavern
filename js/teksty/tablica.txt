@@ -670,7 +670,7 @@ rodzaje.story = OGŁOSZENIE
 
 # ======================================================================== Pierwsza wizyta: Borgar objaśnia tablicę (jedna linia = jedna strona)
 [samouczek]
-Tu ludzie z okolicy wieszają swoje prośby. Zerwiesz kartkę - bierzesz robotę. Płacą złotem, a dobra robota niesie się po wsi: im większa twoja sława w tawernie, tym lepiej płatne zlecenia.
+Tu ludzie z okolicy wieszają swoje prośby. Zerwiesz kartkę - bierzesz robotę. Płacą miedziakami, za duże zlecenia srebrnikiem, a dobra robota niesie się po wsi: im większa twoja sława w tawernie, tym lepiej płatne zlecenia.
 Najwyżej trzy naraz, bo się nie wyrobisz. Każde ma termin - nie zdążysz, cała wieś się dowie. Robotę oddajesz tutaj, przy tablicy. Co trzy dni wieszam nowe kartki.
 
 # ======================================================================== Sława w tawernie: progi (kartka zasad, tabliczka, dziennik)

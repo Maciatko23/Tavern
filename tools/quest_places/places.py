@@ -39,8 +39,8 @@ SLAB_AT = (33, 12)           # Map008: the slab in the knights' garden (the axis
 SLAB_OUT = (33, 13, 2)       # Map008: where one comes up (just south of the slab, facing down)
 ARCH_LAND = (2, 4, 2)       # Map119: the bottom of the stairs, facing down
 
-WELL_NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:150>\n<DarkNight:205>\n<Ambience:cave>"
-ARCHIVE_NOTE = "<Dust:on>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:175>\n<DarkNight:175>\n<Ambience:interior>"
+WELL_NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:150>\n<DarkNight:205>\n<Ambience:cave>"
+ARCHIVE_NOTE = "<Dust:on>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:175>\n<DarkNight:175>\n<Ambience:interior>"
 
 
 def marker(mp, key, x, y, d=2):

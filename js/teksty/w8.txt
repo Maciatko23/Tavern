@@ -22,7 +22,7 @@ Siadaj. Pokonałeś mnie na rękę. I w kości. Dwa razy to nie przypadek.
 Pytanie. Byłeś na wschodzie? W górach? Słyszałeś coś o jaskiniach? O starym kamieniołomie?
 
 zadania.W8.lines.optStones = Lord pyta o kamienie z krukiem.
-zadania.W8.lines.optHeart = Na kontynencie szukają serca skały.
+zadania.W8.lines.optHeart = Na kontynencie szukają artefaktów władzy, w tym serca skały.
 zadania.W8.lines.optArchive = Pod ogrodem rycerzy jest archiwum zakonu.
 zadania.W8.lines.optNothing = Nic nie wiem o górach.
 zadania.W8.lines.optWhy = A po co ci to?
@@ -31,8 +31,8 @@ zadania.W8.lines.optWhy = A po co ci to?
 Kamienie z krukiem. (Grum marszczy brwi.) Takie same kupują ludzie z kontynentu. Hm. Kamieniołom jest w górach. Stamtąd je brano.
 
 [zadania.W8.lines.heart]
-> Ludmiła z obozu mówi, że na kontynencie wszyscy szukają serca skały.
-Serce skały. (Grum milknie na dłużej.) To samo słyszałem w obozie, zanim tu przypłynąłem. Myślałem, że to bajka dla rekrutów.
+> Ludmiła z obozu mówi, że na kontynencie wszyscy szukają artefaktów władzy, także serca skały.
+Artefakty władzy, serce skały. (Grum milknie na dłużej.) To samo słyszałem w obozie, zanim tu przypłynąłem. Myślałem, że to bajka dla rekrutów.
 
 [zadania.W8.lines.archive]
 > Pod ogrodem rycerzy jest archiwum zakonu. Byłem tam.

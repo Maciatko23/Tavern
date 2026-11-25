@@ -21,7 +21,7 @@ B_WOOD, B_STONE = 24, 16
 W_PANEL, W_STONE_BEAM, W_PLASTER_BEAM = 54, 50, 51
 F_DARK, F_COBBLE, F_RED = 83, 96, 84
 RUG_BROWN, RUG_RED = 21, 36
-NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.25>\n<DarkDay:70>\n<DarkNight:185>\n<Ambience:interior>\n<Majster:cech>"
+NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.15>\n<DarkDay:70>\n<DarkNight:185>\n<Ambience:interior>\n<Majster:cech>"
 L_FORGE = "<Light:260,130,55,10>"
 L_CANDLE = "<Light:110,120,80,30><LightWhen:night>"
 

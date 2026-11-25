@@ -189,7 +189,7 @@ kod.lose.3 = Świt dnia 61 bez spłaty: strata działki, scena na działce dziad
 kod.pay.0 = Spłać dług (gra bez fabuły - nie ma długu)
 kod.pay.1 = Działka odkupiona od Lorda (dzień {done})
 kod.pay.2 = Odkup działkę od Lorda: {1} G
-kod.pay.3 = Dług spłacony ({paid} / {debt} G)
+kod.pay.3 = Dług spłacony ({paid} G / {debt} G)
 kod.pay.4 = Spłać dług: {1} G (z {debt} G)
 # raven
 kod.raven.0 = Oswojony kruk (brak Kruk.js)

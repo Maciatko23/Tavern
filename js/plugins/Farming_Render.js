@@ -422,7 +422,7 @@
             for (const b of (Farming.farm().buildings || {})[mapId] || []) {
                 const def = b.type === "fence" ? null : Farming.geoOf(b);
                 if (!def) continue;
-                for (const name of [def.image, def.imageFull, def.imageDry]) if (name) ImageManager.loadSystem(name);
+                for (const name of [def.image, def.imageFull, def.imageDry, def.imageIdle]) if (name) ImageManager.loadSystem(name);
             }
         } catch (e) { /* (no game yet - a test scene): the layers load their pictures as before */ }
     };
@@ -689,12 +689,29 @@
             texture = ImageManager.loadSystem(def.image);
         }
         this._ghost.bitmap = texture;
+        // the mill's sails on the ghost too, still, as the X of the menu's picture (2026-11-25: it stood there without them)
+        const sailsDef = mode.type !== "fence" && def.sails;
+        if (sailsDef && !this._ghostSails) {
+            this._ghostSails = new Sprite();
+            this._ghostSails.anchor.set(0.5, 0.5);
+            this._ghostSails.rotation = Math.PI / 4;
+            this._ghost.addChild(this._ghostSails);
+        }
+        if (this._ghostSails) {
+            this._ghostSails.visible = !!sailsDef;
+            if (sailsDef) {
+                this._ghostSails.bitmap = ImageManager.loadSystem(sailsDef.image);
+                this._ghostSails.x = sailsDef.x || 0;
+                this._ghostSails.y = -sailsDef.y;
+            }
+        }
         const hut = def.yard ? def.yard.hut : null;   // a yard shows its hut where it will stand
         this._ghost.x = Math.round(($gameMap.adjustX(mode.x) + (hut ? hut.dx + hut.w / 2 : def.w / 2)) * tw);
         this._ghost.y = Math.round(($gameMap.adjustY(mode.y - (hut ? hut.dy : 0)) + 1) * th) - 1;
         this._ghost.scale.x = mode.flip ? -1 : 1;
         const problem = Farming.placementProblem(mode.type, mode.x, mode.y, mode.flip);
         this._ghost.setBlendColor(problem ? [255, 70, 60, 110] : [0, 0, 0, 0]);
+        if (this._ghostSails) this._ghostSails.setBlendColor(problem ? [255, 70, 60, 110] : [0, 0, 0, 0]);
     };
 
     // the "?" key: a plain tile grid over the visible ground, for lining up buildings by eye. Toggled
@@ -1541,6 +1558,7 @@
             if (e.sails) this.updateSails(e);
             if (Farming.geoOf(e.b).imageFull && (e.filled === undefined || this._age % 15 === 0)) this.updateBucket(e);
             if (Farming.geoOf(e.b).imageDry && (e.dried === undefined || this._age % 30 === 0)) this.updatePot(e);
+            if (Farming.geoOf(e.b).imageIdle && (e.idle === undefined || this._age % 20 === 0)) this.updateIdle(e);
             if (Farming.geoOf(e.b).table && !e.b.site && (e.tablePots === undefined || this._age % 20 === 0)) this.updateTable(e);
         }
     };
@@ -1550,6 +1568,14 @@
         if (e.filled === full) return;
         e.filled = full;
         e.sprite.bitmap = ImageManager.loadSystem(full ? def.imageFull : def.image);
+    };
+    // a workshop that shows its work (the tannery: the hide on the frame) - its plain picture while nothing is inside (def.imageIdle)
+    BuildingSprites.prototype.updateIdle = function(e) {
+        if (e.b.site) return;   // (a building site keeps its own look)
+        const def = Farming.geoOf(e.b), idle = !e.b.job;
+        if (e.idle === idle) return;
+        e.idle = idle;
+        e.sprite.bitmap = ImageManager.loadSystem(idle ? def.imageIdle : def.image);
     };
     // a clay pot drying on the ground: dark and wet, then pale once it is dry
     BuildingSprites.prototype.updatePot = function(e) {
@@ -1576,7 +1602,8 @@
         pots.forEach((p, i) => {
             const img = Farming.tablePotDry(e.b, p) ? def.potDry || "Farm_Pot_Dry" : def.potWet || "Farm_Pot_Wet", s = e.tablePots[i];
             if (s._img !== img) { s.bitmap = ImageManager.loadSystem(img); s._img = img; }
-            const spot = def.table.spots[i] || [0, -40], drawnH = 28 * TABLE_POT_SCALE;   // (Farm_Pot_* is 28 px high)
+            const t = def.table, old = t.spots[i] || [0, -40], drawnH = 28 * TABLE_POT_SCALE;   // (Farm_Pot_* is 28 px high)
+            const spot = t.step ? [(t.cx || 0) + (i - (pots.length - 1) / 2) * t.step, t.y !== undefined ? t.y : old[1]] : old;   // (a row centred on the table)
             s.x = e.sprite.x + spot[0];
             s.y = e.sprite.y + 1;
             s.anchor.y = 1 + (1 - spot[1]) / drawnH;   // (the anchor is in picture units: this puts the pot's foot on the table)

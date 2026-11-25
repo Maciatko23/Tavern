@@ -205,6 +205,11 @@
         { rep: 60, day: 18, gold: span(params.goldTier3, [45, 80]), xp: [80, 110], gain: 7, days: [5, 7] },
         { rep: 80, day: 28, gold: span(params.goldTier4, [60, 100]), xp: [110, 150], gain: 8, days: [6, 8] }
     ];
+    // (2026-11-25, the user: "za zlecenie miedziaki, za duże srebrnik") what a notice pays, in miedziaki (1 G = 1 miedziak): a tier's
+    // own band - the goods' worth places the notice in it as it placed it in the old band (gold above, the worth's scale); a bounty
+    // (the big one) a srebrnik and a bit. Was 10-100 G a notice, a bounty 90-120 G.
+    const COIN = [[2, 4], [3, 6], [4, 8], [6, 10], [8, 12]], COIN_BOUNTY = [10, 15];
+    TIERS.forEach((t, i) => { t.coin = COIN[i]; });
     Watki.scal(TIERS, "tablica", "progi");   // (the tiers' names: js/teksty/tablica.txt, progi.<n>.name)
     const plural = (n, one, few, many) => (n === 1 ? one : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? few : many);
     const dniWord = n => (n === 1 ? TK.kod.dniWord[0] : "dni");
@@ -246,6 +251,8 @@
         if (!d.history) d.history = [];
         if (!d.stats) d.stats = { done: 0, failed: 0, abandoned: 0, gold: 0, xp: 0 };
         if (!d.once) d.once = {};
+        // (2026-11-25) the notices of an older save were posted at the old pay (10-120 G): a tenth of it, at least one miedziak
+        if (!d.coinPay) { d.coinPay = true; for (const n of d.board) if (n && n.state !== "done" && n.gold > 0) n.gold = Math.max(1, Math.round(n.gold / 10)); }
         return d;
     }
     const today = () => T.time.day();
@@ -298,15 +305,16 @@
         const G = GIVERS[tpl.giver], TI = TIERS[tier], bounty = tpl.type === "bounty";
         const urgent = !bounty && !tpl.noUrgent && ctx.urgentLeft > 0 && R.chance(URGENT_CHANCE);
         if (urgent) ctx.urgentLeft--;
-        let gold;
-        if (bounty) gold = round5(BOUNTY_GOLD[0] + (BOUNTY_GOLD[1] - BOUNTY_GOLD[0]) * clamp((tier - 2) / 2, 0, 1) * (0.85 + R.f() * 0.15));
+        let gold, band = 0.5;
+        if (bounty) gold = Math.round(COIN_BOUNTY[0] + (COIN_BOUNTY[1] - COIN_BOUNTY[0]) * clamp((tier - 2) / 2, 0, 1) * (0.85 + R.f() * 0.15));
         else {
             const value = req.reduce((t, q) => t + (q.k === "item" ? (EV[q.id] || 3) * q.n : q.k === "kill" ? (KILL_EV[q.kind] || 10) * q.n : 0), 0);
-            gold = clamp(round5((value * (1 + 0.1 * tier) * (0.92 + R.f() * 0.16) + BASE[tpl.type]) * (tpl.pay || 1)), TI.gold[0], TI.gold[1]);
+            const worth = clamp((value * (1 + 0.1 * tier) * (0.92 + R.f() * 0.16) + BASE[tpl.type]) * (tpl.pay || 1), TI.gold[0], TI.gold[1]);
+            band = TI.gold[1] > TI.gold[0] ? (worth - TI.gold[0]) / (TI.gold[1] - TI.gold[0]) : 0.5;
+            gold = Math.round(TI.coin[0] + band * (TI.coin[1] - TI.coin[0]));
         }
-        if (urgent) gold = round5(gold * (1 + URGENT_BONUS));
-        gold = Math.max(5, Math.round(gold * GOLD_F));
-        const band = TI.gold[1] > TI.gold[0] ? clamp((gold / Math.max(0.01, GOLD_F) - TI.gold[0]) / (TI.gold[1] - TI.gold[0]), 0, 1) : 0.5;
+        if (urgent) gold = Math.round(gold * (1 + URGENT_BONUS));
+        gold = Math.max(1, Math.round(gold * GOLD_F));
         const xp = Math.round((bounty ? 200 + 20 * (tier - 2) : TI.xp[0] + (TI.xp[1] - TI.xp[0]) * band) * XP_F / 5) * 5;
         const rep = TI.gain + (urgent ? 2 : 0) + (bounty ? 4 : 0);
         const days = bounty ? 7 : urgent ? R.int(2, 3) : R.int(TI.days[0], TI.days[1]);

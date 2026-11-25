@@ -615,10 +615,12 @@
     // Its page runs Farming.rationWell(this). The day's draws in the farm state (per map and event name - a well of two events counts once).
     // (+ TownQuests.wellBonus: the town's quests may give the well more - W1, the sluice half open: one draw a day more - or less:
     // the Order's cistern under 15, Cysterna.js, one draw a day less; never under one draw a day)
+    const WELL_DRY_DAY = 10;
     function rationOf(ev) {
         const m = ev && ev.event().note && /<Studnia:\s*(\d+)\s*>/i.exec(ev.event().note);
         const more = m ? Math.floor(Number(T.call("TownQuests", "wellBonus", $gameMap.mapId(), ev.event().name)) || 0) : 0;
-        const base = m ? Number(m[1]) : 0;
+        // (2026-11-25, the user: "studnia 2 łyki dziennie po 20, od dnia 10 jeden łyk") from day WELL_DRY_DAY a rationed well gives one draw
+        const base = m ? (today() >= WELL_DRY_DAY ? Math.min(1, Number(m[1])) : Number(m[1])) : 0;
         return m ? { key: $gameMap.mapId() + ":" + ev.event().name, max: Math.max(Math.min(1, base), base + more), less: more < 0, name: ev.event().name } : null;
     }
     function rationLeft(r) {
@@ -856,6 +858,7 @@
             changed();
             playSe(SE.hoe, 95 + Math.floor(Math.random() * 10));
             fx(x, y, "dirt", true);
+            findCoin(COIN_FIND.till);
         });
         return true;
     }
@@ -937,6 +940,15 @@
     }
 
     // Soil comes out of any cleared or raked ground (also plain grass) with the shovel.
+    // (2026-11-25, the user: "zaśniedziała moneta z kopania ziemi") an old coin in the ground now and then: a dig with the shovel
+    // COIN_FIND.dig, a hoe's furrow COIN_FIND.till (the gear's luck - Bron.js - on top); till then it had no source in the new world
+    const OLD_COIN = 194, COIN_FIND = { dig: 0.06, till: 0.03 };
+    function findCoin(chance) {
+        const coin = $dataItems[OLD_COIN], luck = Number(T.call("Bron", "luck")) || 0;
+        if (!coin || Math.random() >= chance * (1 + luck) || !spaceFor(coin, 1)) return;
+        $gameParty.gainItem(coin, 1);
+        later(14, () => popup(coin.iconIndex, "W ziemi: " + coin.name + "!", "#f3e0a0"));
+    }
     function dig(x, y) {
         const plot = plotAt(x, y);
         if (!plot || plot.crop || (plot.s !== "cleared" && plot.s !== "raked")) return false;
@@ -953,6 +965,7 @@
             playSe(SE.dig, 95 + Math.floor(Math.random() * 10));
             fx(x, y, "dirt", false);
             $gameParty.gainItem(soil, rand(DIG_YIELD));
+            findCoin(COIN_FIND.dig);
         });
         return true;
     }

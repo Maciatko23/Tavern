@@ -196,7 +196,7 @@ zakonczenia.zniszczyc.title = Serce zniszczone
 [zakonczenia.zniszczyc.lines]
 Uderzasz raz. Światło pęka jak lód na wiosnę - i przez jedną chwilę wiesz wszystko. Potem nic.
 Gdzieś wysoko, w piwnicy tawerny, Borgar budzi się w nocy i nie pamięta, po co wstał.
-Na kontynencie wojna trwa dalej. Nikt już nie dostanie pewności. Wszyscy muszą zgadywać - jak przedtem.
+Na kontynencie wojna trwa dalej - są jeszcze inne artefakty władzy. Ale tego jednego nikt już nie dostanie. Pewności stąd nie będzie. Wszyscy muszą zgadywać - jak przedtem.
 Wracasz na górę z pustymi rękami. Pierwszy raz od dawna niczego nie musisz wiedzieć.
 
 # „Nowy strażnik”
@@ -1167,7 +1167,7 @@ sceny.steps.83 = Ułożyłam nową zwrotkę. O dzwonniku, któremu nikt nie odwo
 sceny.steps.84 = Kufel dla kogoś, kto nie przychodzi... Zawsze stoi pełny.
 sceny.steps.85 = Ułożyłam nową zwrotkę. O strażniku, który zszedł sam.
 sceny.steps.86 = Siedzi tam na dole. Czuję go, jak się czuje burzę.
-sceny.steps.87 = Na kontynencie nikt już nie dostanie pewności. Będą musieli wygrywać jak ludzie - albo przegrywać.
+sceny.steps.87 = Na kontynencie wojna trwa dalej, o inne artefakty, ale pewności stąd nikt już nie dostanie. Będą musieli wygrywać jak ludzie - albo przegrywać.
 sceny.steps.88 = Frakcja wie teraz wszystko. Ja też. Nie wracam tam.
 sceny.steps.89 = Raz w roku, przy świadkach? Mogę być świadkiem. Mam ciężką rękę na tych, co by chcieli dwa razy.
 sceny.steps.90 = Zostaję na wyspie. Ktoś musi pilnować tej tawerny, kiedy strażnik siedzi na dole.

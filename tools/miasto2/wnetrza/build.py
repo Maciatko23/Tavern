@@ -39,9 +39,9 @@ W_PLANKS, W_BOARDS, W_STONE_BLOCK, W_RAW, W_GOTHIC = 48, 49, 66, 71, 76
 F_HERRING, F_LIGHT, F_VERT, F_DARK, F_RED, F_COBBLE, F_FLAGS, F_TILES, F_ORNATE = 80, 81, 82, 83, 84, 96, 97, 100, 114
 RUG_RED, RUG_MAT, RUG_RED_GOLD, RUG_BROWN, RUG_PURPLE, RUG_BLUE, RUG_ORANGE, RUG_GREEN, DUST = 36, 37, 38, 21, 22, 28, 29, 30, 23
 
-NOTE = wlib.NOTE if hasattr(wlib, "NOTE") else "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>"
-NOTE_DIM = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:95>\n<DarkNight:190>"
-NOTE_CHAPEL = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:80>\n<DarkNight:185>"
+NOTE = wlib.NOTE if hasattr(wlib, "NOTE") else "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:60>\n<DarkNight:175>"
+NOTE_DIM = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:95>\n<DarkNight:190>"
+NOTE_CHAPEL = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:80>\n<DarkNight:185>"
 
 
 # ======================================================================================================== miejsce przed drzwiami

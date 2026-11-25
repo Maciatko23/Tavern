@@ -493,6 +493,28 @@
         else T.popup(text, { color: "#bcd8ff" });
     }
 
+    // while the storm rages the rain is MZ's "storm" (heavier, slanted, see Storm.js), as hard as the storm is strong
+    function weatherLook(plan, hour, storm) {
+        const raging = !!plan && !!plan.storm && hour >= plan.storm.start && storm > 0.35;
+        return { raging, type: plan ? (raging ? "storm" : plan.type) : "none", power: plan ? (raging ? Math.round(4 + 5 * storm) : plan.power) : 0 };
+    }
+    // a map just set up (under the transfer's black): its weather at once, not faded over 90 frames - no rain inside the house for a
+    // second and a half after the door, none starting anew (with its "Zaczyna padać" popup) outside after it (2026-11-25, the user:
+    // "wejście do domku: najpierw przestaje padać, potem widać wnętrze")
+    const _Game_Map_setupW = Game_Map.prototype.setup;
+    Game_Map.prototype.setup = function(mapId) {
+        _Game_Map_setupW.call(this, mapId);
+        if (!WEATHER_ON || !$gameSystem || !$gameSystem.dayNightDay || !$gameScreen) return;
+        const sv = survival(), plan = isOutdoors() ? currentWeather() : null;
+        if (plan) {
+            const day = $gameSystem.dayNightDay(), hour = $gameSystem.dayNightHour(), look = weatherLook(plan, hour, stormLevel(day, hour));
+            $gameScreen.changeWeather(look.type, look.power, 0);
+            sv.weatherOwn = true;
+        } else if (sv.weatherOwn) {
+            $gameScreen.changeWeather("none", 0, 0);
+            sv.weatherOwn = false;
+        }
+    };
     const _Game_Map_update = Game_Map.prototype.update;
     Game_Map.prototype.update = function(sceneActive) {
         _Game_Map_update.call(this, sceneActive);
@@ -505,9 +527,7 @@
             sv.stormWarned = day;
             shout("Idzie burza...");
         }
-        // while the storm rages the rain is MZ's "storm" (heavier, slanted, see Storm.js), as hard as the storm is strong
-        const raging = !!plan && !!plan.storm && hour >= plan.storm.start && storm > 0.35;
-        const type = plan ? (raging ? "storm" : plan.type) : "none", power = plan ? (raging ? Math.round(4 + 5 * storm) : plan.power) : 0;
+        const { raging, type, power } = weatherLook(plan, hour, storm);
         // MZ keeps the old weather type after a fade out (power 0), so compare the power target, not the type.
         // Weather set by an event is left alone: only weather this plugin started is ever ended by it.
         const target = $gameScreen._weatherPowerTarget || 0;

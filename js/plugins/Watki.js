@@ -1035,7 +1035,7 @@
             const k = (w.def.kroki || [])[r.krok], title = w.stepTitle();
             ops.push({ k: "gap", n: 8 }, { k: "h", text: title || (k && k.ch ? "Rozdział " + k.ch : "Teraz") }, { k: "p", text: w.stepText() });
             const cnt = w.krokCount(k);
-            if (cnt && cnt.need > 0) ops.push({ k: "gap", n: 4 }, { k: "bar", ratio: Math.min(1, (cnt.have || 0) / cnt.need), text: (cnt.have || 0) + " / " + cnt.need + (cnt.unit ? " " + cnt.unit : "") });
+            if (cnt && cnt.need > 0) ops.push({ k: "gap", n: 4 }, { k: "bar", ratio: Math.min(1, (cnt.have || 0) / cnt.need), text: cnt.unit === "G" ? (cnt.have || 0) + " G / " + cnt.need + " G" : (cnt.have || 0) + " / " + cnt.need + (cnt.unit ? " " + cnt.unit : "") });
             const done = Object.keys(r.t.done || {}).map(Number).sort((a, b) => a - b);
             if (done.length) {
                 ops.push({ k: "gap", n: 6 }, { k: "h", text: "Zrobione" });

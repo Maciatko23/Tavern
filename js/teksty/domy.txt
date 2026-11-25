@@ -183,7 +183,7 @@ kod.buyNow.1 = Klucz w kieszeni. Działka obok chaty jest twoja - możesz na nie
 kod.buyNow.2 = Akt kupna: {name}
 kod.buyNow.3 = Dzień {1}: kupiłem od sołtysa {what} za {price} G.\nGdzie: {where}\nW izbie: palenisko, łóżko i skrzynia. Na działce wolno mi budować, co zechcę - także chatkę. Studni nie ma: wodę trzeba łapać albo nosić.
 # buy
-kod.buy.0 = Za mało złota: {1} / {price} G
+kod.buy.0 = Za mało pieniędzy: {1} G / {price} G
 kod.buy.1 = Wróć, jak uzbierasz. Chata poczeka - nikt się o nią nie bije.
 kod.buy.2 = Proszę - klucz. Wpisuję do księgi gruntów: {1}, właściciel... ty. Witaj w sąsiedztwie!
 # grantLand

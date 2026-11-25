@@ -116,14 +116,14 @@
     // at the gates of the plot's fence on Kruczy Jar (PLOT), not on Skraj lasu / Łąka any more)
     // (2026-11-16, the new world - the user: "spaloną zagrodę pominąć, resztę dopasować do nowej mapy") the lands by the world of the
     // game (Story.world()): the old one as it was; the new one - grandpa's fenced plot on Podgrodzie (Map218: the fence x 20..41,
-    // y 9..25, its gate to the south (29..30, 25) and the gate to the hut's yard (20, 22) - a guard in each), the hut for sale on the
+    // y 9..24 - one row less in the south since 2026-11-25, the user's wish -, its gate to the south (29..30, 24) and the gate to the hut's yard (20, 22) - a guard in each), the hut for sale on the
     // meadow under the pines of Słony Brzeg (Map219, tools/nowy_swiat/chata_pod_lasem.py), no burnt farm.
     //   gates: [x, y, the guard's direction]; out: where the escort puts the hero; whole: the field is its whole map
     const LANDS = {
         stary: { field: 3, whole: true, zagroda: true, plot: { rect: [42, 34, 77, 59], gates: [[67, 33, 2], [47, 60, 8]], out: [40, 47, 4] },
             cast: [[37, 12], [37, 13], [37, 14]], signs: [[37, 11], [36, 11], [37, 15], [36, 15], [35, 11], [35, 15], [34, 11], [37, 10], [37, 16]],
             chata: { land: 111, front: [8, 81] } },
-        nowy: { field: 218, whole: false, zagroda: false, plot: { rect: [20, 9, 41, 25], gates: [[29, 25, 2], [30, 25, 2], [20, 22, 4]], out: [27, 26, 4] },
+        nowy: { field: 218, whole: false, zagroda: false, plot: { rect: [20, 9, 41, 24], gates: [[29, 24, 2], [30, 24, 2], [20, 22, 4]], out: [27, 26, 4] },
             cast: [[29, 21], [30, 21], [31, 21]], signs: [[32, 23], [27, 23], [33, 23], [26, 23], [32, 22], [27, 22], [34, 23], [25, 23], [32, 21]],
             chata: { land: 219, front: [66, 33] } }
     };

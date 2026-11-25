@@ -93,7 +93,7 @@
 
     // A planted tree looks a little bigger every day: LOOKS are its ten pictures until it is grown (day 0 .. 9 with growDays 10; other
     // growDays stretch or squeeze them). First a heap of dug earth with a seedling in it, growing (its own pictures, one blow of the
-    // axe gives a branch and leaves no stump), then a small pine that grows to full size: ChoppableTree's scale (the picture shrinks
+    // axe takes it and gives nothing, no stump), then a small pine that grows to full size: ChoppableTree's scale (the picture shrinks
     // around the foot of the tree), the blows to fell it and the wood it gives
     const BRANCH = 77, WOOD = 61;
     const LOOKS = [{ pic: "!$Sapling" }, { pic: "!$Sapling_2" }, { pic: "!$Sapling_3" },
@@ -116,10 +116,16 @@
     const lookOf = (k, sp) => { const L = (sp || SPECIES.pine).looks; return k >= 1 ? { scale: 1 } : L[Math.min(L.length - 1, Math.floor(k * L.length + 1e-9))]; };
     // the picture now: a seedling's own, the young tree (the fruit tree's bare picture while it grows), then the grown one
     const graphicOf = rec => { const sp = speciesOf(rec), k = growthOf(rec), look = lookOf(k, sp); return look.pic || (k < 1 && sp.young) || rec.graphic; };
+    const YIELD_FROM = 0.5;   // a planted tree gives wood only from half grown on
     function statsOf(k, sp) {
         sp = sp || SPECIES.pine;
         const look = lookOf(k, sp), fruit = sp.fruit ? { fruit: k >= 1 ? sp.fruit : 0 } : {};
-        if (look.pic) return Object.assign({ scale: 1, hits: 1, drop: BRANCH, dropmin: 1, dropmax: 1, nostump: 1 }, fruit);
+        // a seedling: one blow and it is gone - it gives nothing (2026-11-25, the user: "posadzona sosna po ścięciu nie powinna nic dawać";
+        // till then a branch - a cone planted and cut at once was a free branch)
+        if (look.pic) return Object.assign({ scale: 1, hits: 1, drop: BRANCH, dropmin: 0, dropmax: 0, nostump: 1 }, fruit);
+        // a young tree under half grown: nothing either, and no stump to dig ("każda posadzona sosna nic nie daje, jak drzewo jest
+        // troszkę większe, to odpowiednio daje dopiero"); from half grown the wood and the branches by its size
+        if (k < YIELD_FROM) return Object.assign({ scale: +(look.scale * sp.full).toFixed(3), hits: Math.max(1, Math.round(sp.hits * k)), drop: WOOD, dropmin: 0, dropmax: 0, nostump: 1 }, fruit);
         return Object.assign({ scale: +(look.scale * sp.full).toFixed(3), hits: Math.max(1, Math.round(sp.hits * k)), drop: WOOD,
             dropmin: Math.max(1, Math.round(sp.wood[0] * k)), dropmax: Math.max(1, Math.round(sp.wood[1] * k)), nostump: 0 }, fruit);   // (like the big pine: ~0.35 wood a blow)
     }

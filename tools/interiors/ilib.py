@@ -24,8 +24,8 @@ DOCS_DIR = os.path.join(ROOT_DIR, "docs", "wnetrza")
 TOWN = 8
 # like grandpa's cottage (Map019) and the hut (Map100): RoomLighting darkness by the hour, lamps at night, sunbeams by day,
 # no DayNight layer over the lamps; zoomed in like the hut - the rooms are small
-NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>"
-NOTE_DIM = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:95>\n<DarkNight:190>"
+NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:60>\n<DarkNight:175>"
+NOTE_DIM = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:95>\n<DarkNight:190>"
 
 DOOR_SE = {"name": "Door1", "volume": 80, "pitch": 100, "pan": 0}
 

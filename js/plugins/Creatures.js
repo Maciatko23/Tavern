@@ -129,7 +129,18 @@
     }
     // a tile one can stand on (the tiles' passage of the four sides, no event in the way)
     const standable = (x, y) => $gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && !$gameMap.eventsXyNt(x, y).some(e => e.isNormalPriority() && !e.isThrough());
-    const flyable = (x, y) => { const tx = Math.floor(x), ty = Math.floor(y); return $gameMap.isValid(tx, ty) && $gameMap.checkPassage(tx, ty, 0x0f); };
+    // (2026-11-25, the user: "nietoperze atakujące przez mury" - the underground's wall tops let the engine's passage through inside, so a
+    // bat flew over a thin wall; Pokoje's walls stop it now)
+    const flyable = (x, y) => {
+        const tx = Math.floor(x), ty = Math.floor(y), P = window.Pokoje;
+        return $gameMap.isValid(tx, ty) && $gameMap.checkPassage(tx, ty, 0x0f) && !(P && P.solid && P.solid(tx, ty) === true);
+    };
+    // a straight flight from (x0, y0) to (x1, y1) meets no wall (cell centres' coordinates; sampled every 0.25 tile)
+    function flightClear(x0, y0, x1, y1) {
+        const d = Math.hypot(x1 - x0, y1 - y0), n = Math.max(1, Math.ceil(d / 0.25));
+        for (let i = 1; i <= n; i++) if (!flyable(x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n)) return false;
+        return true;
+    }
 
     // ------------------------------------------------------------------
     // Saved state (TawernaCore): _tw.creatures - the markers emptied (mapId:x,y -> the day), the bosses beaten, the guardian, the drops
@@ -1033,7 +1044,7 @@
             const dx = tx - c._realX, dy = ty - c._realY, d = Math.hypot(dx, dy), v = Math.min(d, 0.075);
             if (d > 0.01 && !c.glide(dx / d * v, dy / d * v, true)) c._orbit += 0.3;
             c.setDirection(DIR4(dx, dy));
-            if (c.mayAttack() && c.playerDistance() < 5 && c._swarm && (c._swarm.gapT || 0) <= 0) {
+            if (c.mayAttack() && c.playerDistance() < 5 && c._swarm && (c._swarm.gapT || 0) <= 0 && flightClear(c.centerX(), c.centerY(), heroX(), heroY())) {   // (not through a wall)
                 c._swarm.gapT = rnd(m.gap[0], m.gap[1]);
                 startDive(c, m);
             }

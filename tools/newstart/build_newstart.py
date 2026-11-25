@@ -55,7 +55,7 @@ T8_BORDER, T8_WALL, T8_FLOOR, T8_DOORMAT = 24, 59, 83, 7758          # the same 
 OKNO = "<LightCone:length=110,angle=30,dir=90,width=20,anchor=top,offsety=-15,blur=5,dust=14,dustsize=1,r=255,g=220,b=180>"
 
 def design_19():
-    mp = new_map(19, "<Dust:off>\n<Dark:on>\n<DayNight:on>\n<Zoom:1.5>", 1919, bgm="Town1")
+    mp = new_map(19, "<Dust:off>\n<Dark:on>\n<DayNight:on>\n<Zoom:1.35>", 1919, bgm="Town1")
     W, H = mp.W, mp.H
     mp.kind(0, mp.all, T8_BORDER)
     mp.kind(0, mp.rect(1, 1, W - 2, 2), T8_WALL)                     # log walls

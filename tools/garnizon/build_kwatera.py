@@ -23,7 +23,7 @@ EXIT_TO = (42, 18)                  # the cell in front of the quarters' door on
 B_STONE = 16
 W_PLASTER_BEAM = 51
 F_FLAGS = 97
-NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>\n<Garnizon:kwatera>"
+NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:85>\n<DarkNight:185>\n<Garnizon:kwatera>"
 
 
 class Quarters(ilib.Interior):

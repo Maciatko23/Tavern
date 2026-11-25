@@ -329,20 +329,29 @@
     Sprite_WeaponPlate.prototype = Object.create(Sprite.prototype);
     Sprite_WeaponPlate.prototype.constructor = Sprite_WeaponPlate;
     Sprite_WeaponPlate.prototype.initialize = function() {
-        Sprite.prototype.initialize.call(this, new Bitmap(230, 38));
+        Sprite.prototype.initialize.call(this, new Bitmap(260, 38));
         this.anchor.set(1, 1);
         this._key = null;
     };
+    // the bow or the sling in hand: its ammunition - the arrows' or the stones' icon and how many are left in the bag (2026-11-25, the
+    // user: "na łuku ile strzał zostało"); null with a weapon for the hand
+    function ammoNow(h) {
+        if (h[0] === "m" || !P.core || !P.core.fightInfo) return null;
+        const w = P.core.fightInfo().weapon;
+        return w && w.ammo && $dataItems[w.ammo] ? { id: w.ammo, n: w.ammoLeft || 0 } : null;
+    }
     Sprite_WeaponPlate.prototype.update = function() {
         Sprite.prototype.update.call(this);
         this.x = Graphics.width - 14;
         this.y = Graphics.height - 14;
         const h = $gameSystem ? hand() : null;
         this.visible = !!h && combatMode() && !$gameMessage.isBusy() && !$gameTemp._farmMenuOpen;   // (only in the combat mode)
-        if (!h || h === this._key) return;
+        if (!h || !this.visible) return;
+        const ammo = ammoNow(h), key = h + (ammo ? "|" + ammo.id + ":" + ammo.n : "");
+        if (key === this._key) return;
         const set = ImageManager.loadSystem("IconSet");
         if (!set.isReady()) return;
-        this._key = h;
+        this._key = key;
         const bmp = this.bitmap, ctx = bmp.context, U = style();
         bmp.clear();
         if (U) U.panel(ctx, 0, 0, bmp.width, bmp.height, { cut: 4 });
@@ -353,7 +362,14 @@
         bmp.textColor = (U && U.text) || "#eceef0";
         bmp.outlineColor = "rgba(0,0,0,0.9)";
         bmp.outlineWidth = 3;
-        bmp.drawText(h[0] === "m" ? MELEE[id].name : $dataItems[id] ? $dataItems[id].name : "Łuk / proca", 40, 0, 150, 38, "left");
+        const nameW = ammo ? bmp.width - 40 - 40 - 76 : bmp.width - 40 - 44;
+        bmp.drawText(h[0] === "m" ? MELEE[id].name : $dataItems[id] ? $dataItems[id].name : "Łuk / proca", 40, 0, nameW, 38, "left");
+        if (ammo) {   // the ammunition's icon (24 px) and its count, red when there is none left
+            const ai = $dataItems[ammo.id].iconIndex, ax = bmp.width - 40 - 72;
+            bmp.blt(set, (ai % 16) * 32, Math.floor(ai / 16) * 32, 32, 32, ax, 7, 24, 24);
+            bmp.textColor = ammo.n > 0 ? (U && U.text) || "#eceef0" : "#ff7a6a";
+            bmp.drawText(String(ammo.n), ax + 26, 0, 44, 38, "left");
+        }
         bmp.textColor = (U && U.muted) || "#9aa0a8";
         bmp.drawText("[ ]", bmp.width - 40, 0, 32, 38, "center");
     };

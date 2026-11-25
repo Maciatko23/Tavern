@@ -43,14 +43,19 @@
         for (const w of f.wzory || []) byWzor[w] = k;
         for (const i of f.przedmioty || []) byItem[i] = k;
     }
-    // the worn pieces that show on a bust: [{ fam, wzor }] in the families' drawing order (Equipment's slots -> Ubior.itemLook)
+    // the worn pieces that show on a bust: [{ fam, wzor }] in the families' drawing order (Equipment's slots -> Ubior.itemLook).
+    // (2026-11-25, the user: "po zmianie ekwipunku rozmowa z kimś bardzo mocno spowalnia grę" - a talk asks for the bust every frame,
+    // and this read Equipment.slots(): the whole card - the weapon's words, its traits, the wear, for an empty place the bag and the
+    // shops searched. Now only the worn ids (Equipment.current), and the list is made again only when they change.)
+    let wornSig = null, wornList = [];
     function worn() {
         const E = window.Equipment, out = [], seen = new Set();
-        if (!E || !E.slots) return out;
-        let slots = [];
-        try { slots = E.slots() || []; } catch (e) { slots = []; }
-        for (const s of slots) {
-            const id = s && s.item;
+        if (!E || !E.SLOTS || !E.current) return out;
+        let ids = [];
+        try { ids = E.SLOTS.map(d => E.current(d.id) || 0); } catch (e) { ids = []; }
+        const sig = ids.join(",");
+        if (sig === wornSig) return wornList;
+        for (const id of ids) {
             if (!id) continue;
             let look = null;
             try { look = U() && U().itemLook ? U().itemLook(id) : null; } catch (e) { look = null; }
@@ -59,7 +64,10 @@
             seen.add(fam);
             out.push({ fam, wzor: wz || null });
         }
-        return out.sort((a, b) => D.RODZINY[a.fam].kolejnosc - D.RODZINY[b.fam].kolejnosc);
+        out.sort((a, b) => D.RODZINY[a.fam].kolejnosc - D.RODZINY[b.fam].kolejnosc);
+        wornSig = sig;
+        wornList = out;
+        return out;
     }
     const keyOf = list => list.map(p => p.fam + ":" + (p.wzor || "")).join("|");
 

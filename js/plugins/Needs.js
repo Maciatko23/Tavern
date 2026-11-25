@@ -57,9 +57,9 @@
  * OSTATNIE SIŁY: kto ma sytość albo nawodnienie poniżej 25, ten zbiera jedzenie
  * (jagody, grzyby, dzikie warzywa, plony) bez kosztu wytrzymałości - nawet przy
  * zerowych siłach da się coś zjeść. Jedzenie i picie nigdy nie kosztują sił.
- * PICIE: przy stawie i studni "Napij się" (+40). BUKŁAK (Zrób bukłak w menu
- * Wytwórz...) mieści 4 łyki po 35, a powiększony w garbarni ("Powiększ bukłak")
- * 8 łyków; napełniasz go przy wodzie, a pijesz z niego klawiszem G albo z menu
+ * PICIE: przy stawie i studni "Napij się" (+20). BUKŁAK (Zrób bukłak w menu
+ * Wytwórz...) mieści 3 łyki po 10, a powiększony w garbarni ("Powiększ bukłak")
+ * 5 łyków; napełniasz go przy wodzie, a pijesz z niego klawiszem G albo z menu
  * Przedmioty.
  *
  * Dla innych wtyczek: Needs.state(), Needs.eat(przedmiot), Needs.drink(ile),
@@ -84,8 +84,9 @@
     const URGENT = 20, FAINT = 10, NAG_HOURS = 2, FAINT_SPEED = 0.85;
     const RAIN_GAIN = 1.5;                          // nawodnienie per hour outdoors in the rain
     // the waterskin: base sips, big once the tannery has enlarged it ("Powiększ bukłak", the user's stage 1: n.skinBig) - max follows
-    const SKIN = { item: 129, base: 4, big: 8, sip: 35, get max() { return skinBig() ? this.big : this.base; } };
-    const TAP_DRINK = 40;
+    // (2026-11-25, the user: "bukłak 3 użycia po 10, duży bukłak 5 użyć"; "studnia: łyki po 20" - was 4 / 8 sips of 35, a drink of 40)
+    const SKIN = { item: 129, base: 3, big: 5, sip: 10, get max() { return skinBig() ? this.big : this.base; } };
+    const TAP_DRINK = 20;
     // the last bit of strength (the user's stage 1, 2026-09-27): below RESCUE fullness or water, gathering food costs no strength
     // (Farming.js asks inNeed) - a hero starved down to 0 strength can always pick something to eat. Eating and drinking never cost any.
     const RESCUE = 25;
@@ -304,7 +305,7 @@
     const _Window_Help_setItem = Window_Help.prototype.setItem;
     Window_Help.prototype.setItem = function(item) {
         if (enabled() && isSkin(item)) {
-            const text = skinBig() ? item.description.replace(/na cztery łyki/, TK.kod.setItem[0]) : item.description;   // (the database says four)
+            const text = skinBig() ? item.description.replace(/na (cztery|trzy) łyki/, TK.kod.setItem[0]) : item.description;   // (the database says four)
             this.setText(Watki.wstaw(TK.kod.setItem[1], { text: text, "2": skinCharges(), max: SKIN.max }));
             return;
         }

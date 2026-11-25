@@ -1410,6 +1410,7 @@
             }
         }
         this.updatePlayerTorch();
+        this.updateStuckGlows();
         this.redrawDarkness();
     };
 
@@ -1424,8 +1425,10 @@
     Sprite_PlayerTorch.prototype = Object.create(Sprite.prototype);
     Sprite_PlayerTorch.prototype.constructor = Sprite_PlayerTorch;
 
-    Sprite_PlayerTorch.prototype.initialize = function() {
+    // fixed: a torch stuck in the ground - its place is set from outside (_lx, _ly), not the hero's hand
+    Sprite_PlayerTorch.prototype.initialize = function(fixed) {
         Sprite.prototype.initialize.call(this);
+        this._fixed = !!fixed;
         this.anchor.x = 0.5;
         this.anchor.y = 0.5;
         this.blendMode = 1; // additive - punches through darkness like the other lights
@@ -1454,6 +1457,20 @@
 
     Sprite_PlayerTorch.prototype.update = function() {
         Sprite.prototype.update.call(this);
+        if (!this._fixed) this.followHand();
+        if (TORCH_FLICKER) {
+            // (2026-11-19: the same size always - its walls' shadows stand still -, only its strength breathes, smoothly; it jumped every frame)
+            this._flickerPhase += 1 / 60;
+            const t = this._flickerPhase, n = 0.65 * noise1(t * 0.7, 3.1) + 0.35 * noise1(t * 2.1, 9.7);
+            this.scale.x = this.scale.y = 1;
+            // its colour dances like the flames' on the walls: a share c of the deeper glow, more of it as it dims
+            const w = (n - 0.5) * 2, c = Math.max(0, Math.min(1, 0.5 - 0.4 * w + 0.6 * (noise1(t * 2.2, 21.3) - 0.5))), g = 0.9 + 0.1 * n;
+            this.opacity = Math.round(255 * g * (1 - c));
+            this._deepOpacity = Math.round(255 * g * c);
+            this._strength = 0.94 + 0.06 * n;   // (its hole in the dark: a little darker and lighter, never wider)
+        }
+    };
+    Sprite_PlayerTorch.prototype.followHand = function() {
         // the flame itself (Torch.js: in his hand, or the torch stuck in the ground while he works), else round him
         const spot = T.call("Torch", "lightSpot");
         // (2026-11-20) its light's point: the flame's place by him, smoothed - the hand's bob with each step does not shake the light
@@ -1466,17 +1483,40 @@
         this._ly = hy + this._off[1];
         this.x = $gameMap.adjustX(this._lx) * tw;
         this.y = $gameMap.adjustY(this._ly) * th;
-        if (TORCH_FLICKER) {
-            // (2026-11-19: the same size always - its walls' shadows stand still -, only its strength breathes, smoothly; it jumped every frame)
-            this._flickerPhase += 1 / 60;
-            const t = this._flickerPhase, n = 0.65 * noise1(t * 0.7, 3.1) + 0.35 * noise1(t * 2.1, 9.7);
-            this.scale.x = this.scale.y = 1;
-            // its colour dances like the flames' on the walls: a share c of the deeper glow, more of it as it dims
-            const w = (n - 0.5) * 2, c = Math.max(0, Math.min(1, 0.5 - 0.4 * w + 0.6 * (noise1(t * 2.2, 21.3) - 0.5))), g = 0.9 + 0.1 * n;
-            this.opacity = Math.round(255 * g * (1 - c));
-            this._deepOpacity = Math.round(255 * g * c);
-            this._strength = 0.94 + 0.06 * n;   // (its hole in the dark: a little darker and lighter, never wider)
+    };
+    // the torches stuck in the ground glow as the one in his hand: the same warm colour and its dance, cut by the walls (2026-11-25, the
+    // user: "noszona pochodnia niech daje ten sam kolor światła jak wbita pochodnia" - in rooms and underground a stuck one only lit the
+    // dark, with no colour of its own)
+    Spriteset_Map.prototype.updateStuckGlows = function() {
+        const stuck = T.call("Torch", "groundLights") || [], have = this._stuckGlows || (this._stuckGlows = new Map());
+        if (!stuck.length && !have.size) return;
+        const hide = !!(this._nightLight && this._nightLight.visible), tw = $gameMap.tileWidth(), th = $gameMap.tileHeight(), live = new Set();
+        for (const l of stuck) {
+            live.add(l.id);
+            let g = have.get(l.id);
+            if (!g) {
+                const main = new Sprite_PlayerTorch(true), deep = new Sprite();
+                deep.anchor.set(0.5, 0.5);
+                deep.blendMode = 1;
+                this.addChild(main);
+                this.addChild(deep);
+                have.set(l.id, (g = { main, deep }));
+            }
+            const m = g.main, cut = this.torchCut(this.stuckOwner(l.id), l.x, l.y);
+            m._lx = l.x / tw + $gameMap.displayX();
+            m._ly = l.y / th + $gameMap.displayY();
+            m.update();
+            m.cutBy(cut);
+            m.x = cut ? cutX(cut) : l.x;
+            m.y = cut ? cutY(cut) : l.y;
+            m.visible = !hide;   // (outdoors at night the night layer lights it as a fire, as it does the one in his hand)
+            if (g.deep.bitmap !== m._deepNow) g.deep.bitmap = m._deepNow;
+            g.deep.x = m.x;
+            g.deep.y = m.y;
+            g.deep.opacity = TORCH_FLICKER ? m._deepOpacity : 0;
+            g.deep.visible = m.visible;
         }
+        for (const [id, g] of have) if (!live.has(id)) { this.removeChild(g.main); this.removeChild(g.deep); have.delete(id); }
     };
 
     Spriteset_Map.prototype.updatePlayerTorch = function() {

@@ -276,7 +276,7 @@ def build156(door_event_id):
 
     B_STONE, W_STONE, F_FLAGS = 16, 71, 96          # (the Order's raw stone, like the Archive Map119 and the bell tower Map108)
     W_, H_ = 13, 10
-    note = "<Dust:on>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:90>\n<DarkNight:190>"
+    note = "<Dust:on>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:90>\n<DarkNight:190>"
     mp = Scriptorium(INNER, W_, H_, "Skryptorium", "skryptorium", note=note)
     DOOR_X = 6
     mp.shell([("Skryptorium", [(1, 4, 11, 8)], F_FLAGS, W_STONE)], border=B_STONE, exit_x=DOOR_X)

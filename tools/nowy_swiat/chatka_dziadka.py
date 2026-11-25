@@ -100,7 +100,7 @@ def inside():
                 data[(z * NH + ny) * NW + nx] = v
     m["width"], m["height"], m["data"] = NW, NH, data
     m["displayName"] = "Chata dziadka"
-    m["note"] = re.sub(r"<Zoom:[^>]*>", "<Zoom:1.5>", src["note"])
+    m["note"] = re.sub(r"<Zoom:[^>]*>", "<Zoom:1.35>", src["note"])
     cells = [(x, y) for x in range(NW) for y in range(NH)]
     RW.reshape(m, 0, cells)                                             # (the floor and the ceiling frame: one small room now)
     # the door's place in the bottom wall as it was (the reshape closes the frame round it the same way)

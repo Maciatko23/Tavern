@@ -22,7 +22,7 @@ B_WOOD, B_STONE = 24, 16
 W_PANEL, W_STONE_BEAM = 54, 50
 F_DARK, F_COBBLE = 83, 96
 RUG_BROWN = 21
-NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Widok:off>\n<LightEdges:soft>\n<Zoom:1.25>\n<DarkDay:70>\n<DarkNight:185>\n<Ambience:interior>\n<Mlyn:mlyn>"
+NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Widok:off>\n<LightEdges:soft>\n<Zoom:1.15>\n<DarkDay:70>\n<DarkNight:185>\n<Ambience:interior>\n<Mlyn:mlyn>"
 L_CANDLE = "<Light:110,120,80,30><LightWhen:night>"
 L_LAMP = "<Light:200,130,60,26><LightFlicker:0.12,255,150,70>"
 

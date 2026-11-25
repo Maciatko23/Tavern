@@ -142,7 +142,7 @@
             // (2026-11-16, the user: "ikony powinny być do każdej budowy i czynności") what is carried and set down shows its item's
             // icon; a building its own picture, made small (thumb: Window_FarmList draws it in the icon's place)
             const carried = def.instant && def.cost.length === 1 && def.cost[0][1] === 1;
-            return { type, icon: carried ? itemOf(def.cost[0][0]).iconIndex : 0, thumb: carried ? "" : def.image || (type === "fence" ? "fence" : ""), name: def.name, costs: costsOf(type), help, enabled: missing.length === 0 && !built && !one, run: () => startPlacement(type, x, y),
+            return { type, icon: carried ? itemOf(def.cost[0][0]).iconIndex : 0, thumb: carried ? "" : def.thumb || def.image || (type === "fence" ? "fence" : ""), name: def.name, costs: costsOf(type), help, enabled: missing.length === 0 && !built && !one, run: () => startPlacement(type, x, y),
                 tip: def.desc + "\n" + (def.instant ? "Wybierasz miejsce i stawiasz od razu, bez młotka." : "Najpierw wybierasz miejsce, potem młotkiem uderzasz w plac budowy."), facts };
         });
     }
@@ -482,19 +482,21 @@
         this.refresh();
         this.select(Math.max(0, Math.min(index || 0, this._entries.length - 1)));
     };
-    // a menu with tabs: left / right go to the neighbouring tab (up / down still move along the list) - but on a recipe that can be
-    // queued (entry.qty, the job queue) they set how many at once (the tabs are still on Q / E there)
+    // a menu with tabs: left / right (A / D) go to the neighbouring tab, always (up / down still move along the list); on a recipe that can
+    // be queued (entry.qty, the job queue) Q / E set how many at once (2026-11-25, the user: "w budynkach używaj A i D do zmiany taba
+    // zamiast Q i E" - till then A / D set the count there and the tabs moved to Q / E); a menu with no tabs: A / D set the count too
     Window_FarmList.prototype.processCursorMove = function() {
         if (this.isCursorMovable()) {
             const e = this.currentEntry();
             if (e && e.qty && typeof e.setQty === "function") {
-                const step = Input.isRepeated("right") ? 1 : Input.isRepeated("left") ? -1 : 0;
+                const step = Input.isRepeated("pagedown") ? 1 : Input.isRepeated("pageup") ? -1
+                    : this._tabs ? 0 : Input.isRepeated("right") ? 1 : Input.isRepeated("left") ? -1 : 0;
                 if (step) {
                     if (e.setQty(e.qty.n + step)) {
                         this.playCursorSound();
                         this.redrawCurrentItem();
                         if (this._helpWindow && this._helpWindow.rebuild) this._helpWindow.rebuild();
-                    } else if (Input.isTriggered("right") || Input.isTriggered("left")) {
+                    } else if (Input.isTriggered("pagedown") || Input.isTriggered("pageup") || Input.isTriggered("right") || Input.isTriggered("left")) {
                         this.playBuzzerSound();
                     }
                     return;
@@ -524,14 +526,16 @@
         this.callUpdateHelp();
         return true;
     };
-    // Q and E: the scene decides (a build or food menu closes / switches, the others ignore them); the window stays active
+    // Q and E: on a recipe with a count they set it (processCursorMove, above); else the scene decides (a build or food menu closes /
+    // switches, the others ignore them); the window stays active
+    const countsHere = win => { const e = win.currentEntry(); return !!(e && e.qty && typeof e.setQty === "function"); };
     Window_FarmList.prototype.processPageup = function() {
         this.updateInputData();
-        this.callHandler("pageup");
+        if (!countsHere(this)) this.callHandler("pageup");
     };
     Window_FarmList.prototype.processPagedown = function() {
         this.updateInputData();
-        this.callHandler("pagedown");
+        if (!countsHere(this)) this.callHandler("pagedown");
     };
 
     Window_FarmList.prototype.currentEntry = function() {
@@ -698,7 +702,7 @@
             });
             this.changePaintOpacity(false);
             this.changeTextColor(ColorManager.textColor(7));
-            this.drawText(this._tabHint || "←  →", 0, y, this.innerWidth, "right");   // (Q  E where ← → set a recipe's count)
+            this.drawText(this._tabHint || "A  D", 0, y, this.innerWidth, "right");   // (the tabs' keys: A / D, always)
             this.changePaintOpacity(true);
         }
         this.resetFontSettings();
@@ -926,7 +930,7 @@
         plate.move(x, y - plateH, width, plateH);
         menu.createContents();   // the contents bitmap has to match the new size
         plate.createContents();
-        plate._tabHint = all.some(e => e.qty) ? "Q  E" : "←  →";   // (← → set how many of a recipe there: the tabs are on Q / E)
+        plate._tabHint = "A  D";   // (the tabs are on A / D everywhere; Q / E set how many of a recipe)
         plate.setTitle(title, tabs ? tabs.map(t => t.name) : null, status, note);
         this._farmTip.reset();
         this._farmKind = kind || "";
@@ -961,11 +965,8 @@
     // Q (build) and E (food) on the map; while one of these two menus is open the same key closes it and the other key switches to the other menu
     SCENE.onFarmKey = function(kind) {
         const now = this._farmKind, menu = this._farmMenu;
-        // (the Q list has tabs too since 2026-11-16 - there Q still closes it and E goes to the food list: its tabs are on left / right)
-        if (menu._tabs && now !== "build" && now !== "food") {   // a station's menu: Q / E switch its tabs, like in the journal
-            if (menu.switchTab(menu._tab + (kind === "build" ? -1 : 1))) SoundManager.playCursor();
-            return;
-        }
+        // (the Q list has tabs too since 2026-11-16 - there Q still closes it and E goes to the food list: its tabs are on A / D; a
+        // station's menu: its tabs on A / D, Q / E set a recipe's count - 2026-11-25)
         if (now !== "build" && now !== "food") return;   // the menu of a plot, a chest...: no use for Q and E
         if (now === kind) {
             SoundManager.playCancel();

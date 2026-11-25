@@ -64,7 +64,7 @@
         175: [13, "Orla Grań"], 213: [13, "Kopalnia"]
     };
     // the people of the story who are not TownLife residents: their place (the card's "Ludzie")
-    const LUDZIE_FABULY = { 20: ["Dziadek Stach"], 24: ["Lord Zaleski"], 8: ["Borgar (tawerna)", "Melia", "Dziadek Ozzy", "Grum"] };
+    const LUDZIE_FABULY = { 20: ["Dziadek Stach · twój dziadek, stary gospodarz"], 24: ["Lord Zaleski · pan tych ziem"], 8: ["Borgar · karczmarz z tawerny", "Melia · stała bywalczyni, śpiewa", "Dziadek Ozzy · stary bywalec, wróży pogodę za piwo", "Grum · bywalec, zna się na grach"] };
 
     // the board's box in the world's tiles (the places' x, y are on it), the maps that have their picture (img/mapa_wyspy/<id>.png, 4 px a tile)
     const SWIAT_BOX = [-10, -10, 380, 380];

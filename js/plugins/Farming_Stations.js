@@ -511,7 +511,7 @@
         return true;
     }
 
-    // one background recipe of a station's "Przepis" tab. One that can start now and can be queued carries qty { n, max }: ← / → on
+    // one background recipe of a station's "Przepis" tab. One that can start now and can be queued carries qty { n, max }: Q / E on
     // it (Window_FarmList) set how many at once (setQty rebuilds the line: "×n" after the name, the costs of all n) - up to what the
     // bag pays for (queueMax); OK starts them all. count: the n to show (the last one chosen for this recipe when left out)
     function recipeEntry(b, def, r, busy, readyNote, count) {
@@ -528,7 +528,7 @@
             : waterBad ? waterBad + "." + waterNote
             : "Wynik: " + out.name + " ×" + r.output[1] * n + ", " + time + ".\n" + r.desc + sit + toolNote + readyNote;
         const facts = [r.roast && !def.hang ? "Czas: " + hoursText(r.hours) + " (siedzisz przy ogniu; odejście przerywa pieczenie)" : "Czas: " + hoursText(r.hours) + (n > 1 ? " za każdą sztukę, razem " + hoursText(r.hours * n) : "") + (def.hang ? " (piecze się na trójnogu, możesz odejść)" : " (piec pracuje w tle)")];
-        if (canQueue) facts.push("Ile naraz: ×" + n + " (strzałki ← →" + (max > 1 ? ", najwięcej ×" + max : ": na więcej brakuje materiałów") + "; zakładki: Q / E)");
+        if (canQueue) facts.push("Ile naraz: ×" + n + " (Q mniej, E więcej" + (max > 1 ? "; najwięcej ×" + max : "; na więcej brakuje materiałów") + "; zakładki: A / D)");
         const e = { name: r.name + (n > 1 ? " ×" + n : ""), costs: costRowsWithWater(r, n), enabled, help, run: () => { if (takeReadyFirst(b)) startJob(b, r.id, n); }, tab: "recipe",
             tip: (busy ? busy + "\n" : "") + "Wynik: " + out.name + " ×" + r.output[1] * n + ".\n" + r.desc, facts };
         if (canQueue) {
@@ -563,11 +563,15 @@
                 busy = ((r && r.doing) || "Trwa praca") + (count > 1 ? " " + Math.min(count, jobFinished(b) + 1) + "/" + count : "") + ": " + item.name + ". Poczekaj, aż się skończy (jeszcze ~" + hoursText(jobHoursLeft(b)) + ").";
             }
         }
-        for (const r of autoRecipes) entries.push(recipeEntry(b, def, r, busy, readyNote));
+        const recipes = [];
+        for (const r of autoRecipes) recipes.push(recipeEntry(b, def, r, busy, readyNote));
         // hand work is available at any time (also while the fire of the same building burns)
-        for (const r of manualRecipes) entries.push(Object.assign(manualEntry(b, r), { tab: "recipe" }));
-        if (def.repairs && T.api("Durability")) for (const r of T.api("Durability").repairRecipes()) entries.push(Object.assign(manualEntry(b, r), { tab: "recipe" }));
-        return entries;
+        for (const r of manualRecipes) recipes.push(Object.assign(manualEntry(b, r), { tab: "recipe" }));
+        if (def.repairs && T.api("Durability")) for (const r of T.api("Durability").repairRecipes()) recipes.push(Object.assign(manualEntry(b, r), { tab: "recipe" }));
+        // what can be made now first, each group in the recipes' own order ("Zbierz" stays on top) - 2026-11-25, the user: "w ognisku też
+        // rzeczy, które można w danej chwili piec, to na górę listy"
+        recipes.sort((p, q) => (q.enabled !== false) - (p.enabled !== false));
+        return entries.concat(recipes);
     }
 
     // a fire's plain line right under its name: when it goes out

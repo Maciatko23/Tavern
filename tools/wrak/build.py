@@ -212,7 +212,7 @@ import ilib                   # noqa: E402
 B_WOOD = 24
 W_PLANKS, W_PLANKS_V, W_RAW = 48, 49, 71
 F_DARK, F_PLANKS = 83, 84
-NOTE166 = "<Dust:on>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:150>\n<DarkNight:215>"
+NOTE166 = "<Dust:on>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:150>\n<DarkNight:215>"
 R_HOLD, R_DEEP = 64, 65
 
 

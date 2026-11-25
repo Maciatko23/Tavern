@@ -179,6 +179,7 @@
         const markY = SPECIES[this._kind].markYTall && (this._mode === "warn" || this._mode === "pinWind" || this._mode === "swipeWind") ? SPECIES[this._kind].markYTall : SPECIES[this._kind].markY;
         if (sprite && sprite.bitmap && sprite.bitmap.isReady()) updateMark(this, sprite, markY !== undefined ? markY : -sprite.patternHeight() - 2, this._fleeing || !calm || this._stun > 0 ? 0 : windup ? 1 : this._aware);
         if (this._frozen || this._dead) return;
+        { const so = SPECIES[this._kind]; if (!so.pack && !so.bear && !so.aggressive) this.watchThreats(); }   // (a hare, a deer: people and beasts near)
         if (this._stun > 0) { if (--this._stun === 0) this.afterStun(); return; }
         if (++this._unstickT >= STUCK.unstick && !this.isMoving() && !this.isJumping()) { this._unstickT = 0; this.unstick(); }
         if (SPECIES[this._kind].pack) { this.updateWolf(); return; }
@@ -188,9 +189,47 @@
         this.think();
     };
 
+    // (2026-11-25, the user: "zwierzęta uciekają przed ludźmi i innymi potworkami") what a hare or a deer runs from besides the hero:
+    // people (the map's walkers - townsfolk, travellers, guards - and the men of Humans.js), the beasts of prey (wolves, bears, boars)
+    // and the creatures (Creatures.js) - each within its reach in tiles. One list for all, made again every THREAT.every frames.
+    const THREAT = { every: 20, people: 4.5, beasts: 6, creatures: 5, t: 90 };
+    let threats = { at: -99, map: 0, list: [] };
+    function threatList() {
+        const now = Graphics.frameCount;
+        if (threats.map === $gameMap.mapId() && now - threats.at < THREAT.every) return threats.list;
+        const list = [];
+        for (const e of $gameMap.events()) {
+            if (!e || e._erased || e.isTransparent()) continue;
+            const n = e.characterName();
+            if (n && n[0] !== "!") list.push({ x: e._realX, y: e._realY, r: THREAT.people });   // (a person's sheet; the "!" ones are things)
+        }
+        const Hm = T.api("Humans");
+        for (const h of (Hm && Hm.humans ? Hm.humans() : [])) if (h && !h._dead && !h._dying) list.push({ x: h._realX, y: h._realY, r: THREAT.people });
+        const Cr = T.api("Creatures");
+        for (const c of (Cr && Cr.creatures ? Cr.creatures() : [])) if (c && !c._dead && !c._dying && !c._hidden) list.push({ x: c._realX, y: c._realY, r: THREAT.creatures });
+        for (const o of P.core.animals()) {
+            const so = o && SPECIES[o._kind];
+            if (so && !o._dead && (so.pack || so.bear || so.aggressive)) list.push({ x: o._realX, y: o._realY, r: THREAT.beasts, self: o });
+        }
+        threats = { at: now, map: $gameMap.mapId(), list };
+        return list;
+    }
+    // the nearest threat within its reach: it runs from there a while (as from the dog: _scare)
+    Game_Animal.prototype.watchThreats = function() {
+        if (this._threatPhase === undefined) this._threatPhase = Math.floor(Math.random() * THREAT.every);
+        if ((Graphics.frameCount + this._threatPhase) % THREAT.every !== 0) return;
+        let best = null, bd = Infinity;
+        for (const t of threatList()) {
+            if (t.self === this) continue;
+            const d = Math.hypot(t.x - this._realX, t.y - this._realY);
+            if (d < t.r && d < bd) { bd = d; best = t; }
+        }
+        if (best) this._scare = { x: best.x, y: best.y, t: Math.max(THREAT.t, this._scare ? this._scare.t : 0) };
+    };
+
     Game_Animal.prototype.think = function() {
         const sp = SPECIES[this._kind];
-        const from = this._scare || null;   // (a dog after it, Dog.js: it runs from the dog, not from the hero)
+        const from = this._scare || null;   // (a dog after it, Dog.js; a man, a wolf, a creature near: it runs from that, not from the hero)
         const dx = this._realX - (from ? from.x : $gamePlayer._realX), dy = this._realY - (from ? from.y : $gamePlayer._realY);
         const dist = Math.hypot(dx, dy);
         if (from) this._fleeing = true;

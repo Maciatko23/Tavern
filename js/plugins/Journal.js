@@ -167,7 +167,7 @@
         { id: "pickaxe", ch: 1, title: "Zrób kamienny kilof", item: 63, recipe: ["workbench", "pick_stone"], after: ["wood"], done: () => has(63),
             text: "Kilof robisz w warsztacie z drewna, gałęzi i kamieni. Rozbija skały i żyły rudy." },
         { id: "skin", ch: 4, title: "Zrób bukłak", item: 129, recipe: ["hand", "waterskin"], after: ["tannery"], done: () => has(129),
-            text: "Bukłak z wyprawionej skóry (surową skórę z pułapki albo polowania wyprawisz w garbarni) mieści 4 łyki. Napełniasz go przy wodzie, a pijesz klawiszem G. Bez niego daleko od stawu szybko zaschnie ci w gardle." },
+            text: "Bukłak z wyprawionej skóry (surową skórę z pułapki albo polowania wyprawisz w garbarni) mieści 3 łyki. Napełniasz go przy wodzie, a pijesz klawiszem G. Bez niego daleko od stawu szybko zaschnie ci w gardle." },
         { id: "repair", ch: 1, title: "Napraw narzędzie", item: 89, after: ["axe"], done: () => (T.state("wear").repaired || 0) > 0,
             text: "Narzędzia się zużywają: stan widać przy nich w plecaku, a gdy zostaje mało, nad postacią pojawia się dymek. W warsztacie jest „Napraw: ...” dla każdego nadwerężonego narzędzia. Złamane trzeba zrobić od nowa." },
 
@@ -410,6 +410,7 @@
         174: "Łów wędką w morzu na przystani: dorsz bierze rzadziej niż śledź. Rybak Janek go skupuje.",
         176: "Robi ją Zbych Smolarz z Podgrodzia z sosnowej karpiny.",
         129: "Robisz go w menu Wytwórz... z wyprawionej skóry (garbarnia) i lnu.",
+        194: "Czasem tkwi w ziemi: kopiąc łopatą albo spulchniając motyką grządkę na własnej ziemi trafisz na starą monetę.",
         122: "Psujące się jedzenie zamienia się w to. Kompostownik zamieni je w ziemię.",
         123: "Obora daje mleko co dzień. Mleko szybko kwaśnieje.",
         127: "Robisz je w warsztacie: gałązki, kamień na grot i len.",

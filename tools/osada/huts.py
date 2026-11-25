@@ -30,7 +30,7 @@ F_DARK, F_PLANKS, F_COBBLE, F_FLAGS = 83, 84, 96, 97
 RUG_MAT, RUG_BROWN = 37, 21
 # dim mountain huts (like Podgrodzie's poor homes) + HomeAmbience: sparks over the hearth, the sky in the night windows,
 # the fire's crackle, rain on the roof
-NOTE_HUT = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>\n<HomeAmbience>"
+NOTE_HUT = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:85>\n<DarkNight:185>\n<HomeAmbience>"
 HEARTH_FIRE = "<Light:300,120,60,16><LightFlicker:0.12,255,120,40>"
 PIT_FIRE = "<Light:200,120,52,14><LightFlicker:0.16,255,110,40>"
 OIDX = json.load(open(os.path.join(OHERE, "props_index.json"), encoding="utf-8"))

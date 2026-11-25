@@ -258,7 +258,7 @@ kod.mealTalk.0 = Śniadanko? Kuchnia już grzeje.
 kod.mealTalk.1 = Głodny? U mnie nikt nie wychodzi głodny. Najwyżej biedniejszy.
 kod.mealTalk.2 = Wieczór bez kolacji to wieczór stracony. Co podać?
 kod.mealTalk.3 = O tej porze? Kuchnia prawie zgaszona, ale dla ciebie coś się znajdzie.
-kod.mealTalk.4 = {greet} Dziś danie dnia: {2} - {3} G zamiast {price}.
+kod.mealTalk.4 = {greet} Dziś danie dnia: {2} - {3} G zamiast {price} G.
 kod.mealTalk.5 = Wybierasz z karty, płacisz, siadasz przy wolnym stole - a ja podaję. Kto zje u mnie, ten przez parę godzin jest ugoszczony: głód i pragnienie mniej mu dokuczają.
 # repFoot
 kod.repFoot.0 = Sława: {1} · u Borgara −{2}

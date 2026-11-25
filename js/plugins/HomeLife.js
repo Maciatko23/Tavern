@@ -171,6 +171,9 @@
     function grandpa() {
         if (!here() || !storyOn()) return null;
         const e = $gameMap.event(GRANDPA), tag = e && e.event() ? T.tag(e, "Story") : null;
+        // (2026-11-25, the user: "dziadek po scenie odejścia nadal jest w domu": Story.js erases him while he is on the mainland - the
+        // king's summons - but his day went on here and drew him in his chair and his bed from the poses' sheet)
+        if (!e || e._erased) return null;
         return tag && tag.pos[0] === "grandpa" ? e : null;   // (<Story:grandpa>: Story.js's own, not an editor's event on 901)
     }
     function cat() {

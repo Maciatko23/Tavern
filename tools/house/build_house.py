@@ -15,7 +15,7 @@ from houselib import *
 # layer (0.9 black from 20:00, blind to RoomLighting's lamps) covers the whole room - see docs/dom_dziadka/oswietlenie.png.
 # --daynight-on builds the literal note of today's Map019 (plus DarkDay/DarkNight) instead.
 DAYNIGHT_ON = "--daynight-on" in sys.argv
-NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:%s>\n<Zoom:1.5>\n<DarkDay:60>\n<DarkNight:175>" % ("on" if DAYNIGHT_ON else "off")
+NOTE = "<Dust:off>\n<Dark:on>\n<DayNight:%s>\n<Zoom:1.35>\n<DarkDay:60>\n<DarkNight:175>" % ("on" if DAYNIGHT_ON else "off")
 
 
 # ================================================================================================ A: log cottage

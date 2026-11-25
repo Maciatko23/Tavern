@@ -435,7 +435,7 @@ def build_map(map_id, wall_kind, floor_kind, cells, things, windows, back):
     props = {"autoplayBgm": False, "bgm": {"name": "Town1", "pan": 0, "pitch": 100, "volume": 90}, "autoplayBgs": False,
              "bgs": {"name": "", "pan": 0, "pitch": 100, "volume": 90}, "disableDashing": False, "displayName": "Chata (próba)",
              "encounterList": [], "encounterStep": 30, "height": H,
-             "note": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>",
+             "note": "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:85>\n<DarkNight:185>",
              "parallaxLoopX": False, "parallaxLoopY": False, "parallaxName": "", "parallaxShow": True, "parallaxSx": 0, "parallaxSy": 0,
              "scrollType": 0, "specifyBattleback": False, "tilesetId": TILESET_ID, "width": W}
     lines = ["{", dump(props)[1:-1] + ",", '"data":' + dump(data) + ",", '"events":[']

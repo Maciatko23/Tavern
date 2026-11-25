@@ -137,6 +137,26 @@
         return sum;
     }
     const bonus = key => (has() ? gearSum()[key] || 0 : 0);
+    // what each worn and held thing adds to one key, as gearSum counts it: [{ id, name, value }] (the Statystyki tab's "Skąd to się
+    // bierze" - 2026-11-25, the user: "dodać ekwipunek"; the things' parts were shown as the skills' till then)
+    function bonusParts(key) {
+        const d = D(), e = E(), out = [];
+        if (!d || !e || !e.current || !has()) return out;
+        for (const part of WORN_PARTS.concat(["right"])) {
+            const id = e.current(part), p = id ? d.przedmiot(id) : null;
+            if (!p || p.istnieje) continue;
+            const k = 1 - lackOf(p);
+            let v = 0;
+            if (part === "right") v = p.reka && p.reka[key] ? p.reka[key] * k : 0;
+            else {
+                if (p.bonus && p.bonus[key]) v += key === "mind.see" ? p.bonus[key] : p.bonus[key] * k;
+                if (key === "cold" && p.cieplo) v += p.cieplo * k;
+                if (key === "sneak" && p.kara && p.kara.skradanie) v -= p.kara.skradanie;
+            }
+            if (v) out.push({ id, name: ($dataItems[id] && $dataItems[id].name) || "?", value: v });
+        }
+        return out;
+    }
     const luck = () => bonus("luck");
     // the walk: boots faster, plate slower (the armour's and the shield's `chod`)
     const _distancePerFrame = Game_CharacterBase.prototype.distancePerFrame;
@@ -1111,7 +1131,7 @@
         return { say: "?", bad: true };
     }
 
-    const api = { VERSION: "1.1.0", act, otworz, kup, sprzedaj, napraw, oferta, tabsOf, doRow, bonus, luck, opis, level, lack: id => lackOf(D() && D().przedmiot(id)),
+    const api = { VERSION: "1.1.0", act, otworz, kup, sprzedaj, napraw, oferta, tabsOf, doRow, bonus, bonusParts, luck, opis, level, lack: id => lackOf(D() && D().przedmiot(id)),
         rangedItem, rangedKind, rangedDef, rangedOwned, hasRanged, anyRanged, owns, isRanged, usedToday, sellPrice, repairPrice,
         buyPrice: (key, id, used) => { const p = D() && D().przedmiot(id); return p ? buyPrice(key, p, used) : 0; },
         menu: (resident, ev) => { const key = SHOP_OF[resident]; return key && shop(key) && ev ? menu(key, resident, ev) : null; }, talkHook, openNow, menuRows,

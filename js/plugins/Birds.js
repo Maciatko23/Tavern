@@ -208,6 +208,15 @@
         if (window.CzerwonaWoda && CzerwonaWoda.nearShore(x, y, 3)) return false;   // (2026-10-15: the red sea's shore stinks - the birds keep off)
         return !guarded($gameMap.mapId(), x, y);
     }
+    // a point near (cx, cy) - within rx, ry tiles - where a bird can stand: open ground under its feet (2026-11-25, the user: "ptaki czasem
+    // lądują w złych miejscach, np. na wodzie" - the flock's spot was open ground, but each bird sat up to 1.6 tiles off it); none: the spot
+    function standPoint(cx, cy, rx, ry) {
+        for (let i = 0; i < 12; i++) {
+            const x = cx + rand(-rx, rx), y = cy + rand(-ry, ry);
+            if (openGround(Math.floor(x), Math.floor(y - 0.2))) return { x, y };
+        }
+        return { x: cx, y: cy };
+    }
     function groundSpot(away, near) {
         const px = $gamePlayer.x, py = $gamePlayer.y;
         const ox = $gameMap.displayX(), oy = $gameMap.displayY(), vw = T.view.w() / TILE(), vh = T.view.h() / TILE();
@@ -255,9 +264,9 @@
         const from = offscreenPoint(), [a, b] = SPECIES[kind].flock, n = flockSize(a + Math.floor(Math.random() * (b - a + 1)));
         const flock = { kind, mode: "ground", birds: [], t: 0, stay: Math.round(rand(1800, 4200)), spot };
         for (let i = 0; i < n; i++) {
-            const bird = newBird(kind, from.x + rand(-1, 1), from.y + rand(-1, 1), rand(60, 100), flock);
-            bird.tx = spot.x + 0.5 + rand(-1.6, 1.6);
-            bird.ty = spot.y + 0.7 + rand(-1.2, 1.2);
+            const bird = newBird(kind, from.x + rand(-1, 1), from.y + rand(-1, 1), rand(60, 100), flock), at = standPoint(spot.x + 0.5, spot.y + 0.7, 1.6, 1.2);
+            bird.tx = at.x;
+            bird.ty = at.y;
             flock.birds.push(bird);
         }
         flocks.push(flock);
@@ -345,8 +354,9 @@
             if (!spot) return false;
             flock.spot = spot;
             for (const b of birds) {
-                b.tx = spot.x + 0.5 + rand(-1.4, 1.4);
-                b.ty = spot.y + 0.7 + rand(-1, 1);
+                const at = standPoint(spot.x + 0.5, spot.y + 0.7, 1.4, 1);
+                b.tx = at.x;
+                b.ty = at.y;
                 if (Math.abs(b.tx - b.x) > 0.05) b.facing = b.tx > b.x ? 1 : -1;
                 takeOff(b);
             }
@@ -461,6 +471,7 @@
             const home = flock.spot || { x: b.x - 0.5, y: b.y - 0.7 };
             b.tx = Math.max(home.x - 1.5, Math.min(home.x + 2.5, b.x + rand(-1, 1)));
             b.ty = Math.max(home.y - 1, Math.min(home.y + 2.4, b.y + rand(-0.7, 0.7)));
+            if (!openGround(Math.floor(b.tx), Math.floor(b.ty - 0.2))) { b.act = "idle"; b.actT = Math.round(rand(20, 60)); b.tx = b.x; b.ty = b.y; return; }   // (not into water, not onto a rock)
             if (b.tx !== b.x) b.facing = b.tx > b.x ? 1 : -1;
             b.actT = 40;
         } else { b.act = "idle"; b.actT = Math.round(rand(30, 90)); if (Math.random() < 0.5) b.facing = -b.facing; }

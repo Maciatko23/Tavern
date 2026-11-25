@@ -10,7 +10,7 @@
 # ======================================================================== Mieszkańcy (pierwsi: miasteczko, Podgrodzie, dwór, przystań)
 # kowal - Tadek Młot, kowal
 mieszkancy.kowal.name = Tadek Młot
-mieszkancy.kowal.title = kowal
+mieszkancy.kowal.title = kowal, kuje i naprawia narzędzia
 [mieszkancy.kowal.barks.work]
 Żelazo trzeba kuć, póki gorące!
 Kto chce naprawić narzędzie, niech podejdzie!
@@ -57,7 +57,7 @@ Słyszysz? Deszcz! Jutro wszyscy będą chcieli konewek i wiader.
 
 # piekarka - Hanka Mączna, piekarka
 mieszkancy.piekarka.name = Hanka Mączna
-mieszkancy.piekarka.title = piekarka
+mieszkancy.piekarka.title = piekarka, piecze chleb dla miasteczka
 [mieszkancy.piekarka.barks.stand]
 Świeży chleb! Prosto z pieca!
 Bułki, podpłomyki, chleb żytni!
@@ -94,7 +94,7 @@ Deszcz to dla piekarza dobra nowina - ludzie siedzą w domach i jedzą!
 
 # woziwoda - Kuba Woziwoda, woziwoda
 mieszkancy.woziwoda.name = Kuba Woziwoda
-mieszkancy.woziwoda.title = woziwoda
+mieszkancy.woziwoda.title = woziwoda, wozi wodę beczkami
 [mieszkancy.woziwoda.barks.stand]
 Woda tylko na przydział sołtysa!
 Piekarnia, kuźnia, tawerna - kolejka po wodę!
@@ -182,7 +182,7 @@ W deszcz nawet złodzieje siedzą w domach. Tylko straż musi moknąć.
 
 # dzwonnik - Ambroży, dzwonnik
 mieszkancy.dzwonnik.name = Ambroży
-mieszkancy.dzwonnik.title = dzwonnik
+mieszkancy.dzwonnik.title = dzwonnik z wieży w Kruczogrodzie
 [mieszkancy.dzwonnik.barks.bell]
 Dzwon mówi... słuchaj, co mówi.
 Bim... bam...
@@ -254,7 +254,7 @@ Baltazar Vey, do usług. Przywożę z kontynentu to, czego wyspa nie ma. A czego
 Masz coś starego? Monety z krukiem, kawałki kamienia z napisami? Zapłacę dobrze.
 
 [mieszkancy.kupiec.talk.day]
-Na kontynencie wojna. Każda strona chce tego samego - pewności. Ludzie płacą fortunę za pewność, wiesz?
+Na kontynencie wojna. Każda strona chce tego samego - artefaktów władzy, a z nimi pewności. Ludzie płacą fortunę za pewność, wiesz?
 Lord Zaleski to rozsądny człowiek. Dobrze się nam razem handluje.
 
 [mieszkancy.kupiec.talk.evening]
@@ -268,7 +268,7 @@ W taką pogodę statki nie przypływają. Pech.
 
 # soltys - Sołtys Bronisław, sołtys
 mieszkancy.soltys.name = Sołtys Bronisław
-mieszkancy.soltys.title = sołtys
+mieszkancy.soltys.title = sołtys, pilnuje księgi racji
 [mieszkancy.soltys.barks.stand]
 Ogłoszenie! Wodę wydzielamy po dzbanie na rodzinę!
 Kto ma sprawę do ratusza - do południa!
@@ -307,7 +307,7 @@ Deszcz to błogosławieństwo. Każda kropla do beczki!
 
 # garbarz - Ignac, garbarz i szewc
 mieszkancy.garbarz.name = Ignac
-mieszkancy.garbarz.title = garbarz i szewc
+mieszkancy.garbarz.title = garbarz i szewc, skóry i buty
 [mieszkancy.garbarz.barks.work]
 Skóry! Skupuję skóry z polowań!
 Garbnik śmierdzi, ale buty z tego wyjdą piękne.
@@ -450,7 +450,7 @@ Ludmiła. Przypłynęłyśmy z córką promem, gdy spalili naszą wieś na konty
 Śpimy pod murem przy stogach. Sołtys mówi, że miejsca nie ma.
 
 [mieszkancy.ludmila.talk.day]
-Wszyscy na kontynencie czegoś szukają. Żołnierze mówili o jakimś sercu... o pewności. Ludzie giną za coś, czego nikt nie widział.
+Wszyscy na kontynencie czegoś szukają. Żołnierze mówili o jakichś artefaktach władzy... o sercu skały, o pewności. Ludzie giną za coś, czego nikt nie widział.
 Gdybyś miał trochę jedzenia dla Eli... Ja wytrzymam.
 
 [mieszkancy.ludmila.talk.evening]
@@ -598,7 +598,7 @@ Deszcz zmyje ślady. Dobrze.
 
 # praczka - Marta Ługowa, praczka
 mieszkancy.praczka.name = Marta Ługowa
-mieszkancy.praczka.title = praczka
+mieszkancy.praczka.title = praczka, matka Franka
 [mieszkancy.praczka.barks.work]
 Dwa wiadra z miasta na jeden kosz prania... a koszy cała góra.
 Koszule mieszczan, prześcieradła z dworu... a ręce moje.
@@ -671,7 +671,7 @@ Pada! Łapię deszcz do garnka! Mama się ucieszy!
 
 # drwal - Zbych Smolarz, drwal i węglarz
 mieszkancy.drwal.name = Zbych Smolarz
-mieszkancy.drwal.title = drwal i węglarz
+mieszkancy.drwal.title = drwal i węglarz, dostawca opału
 [mieszkancy.drwal.barks.work]
 Hop! ...Hop! Suche drewno pęka jak szkło.
 Węgiel dla kowala, drewno dla piekarni. A dla siebie - drzazgi.
@@ -710,7 +710,7 @@ Deszcz? To dobrze. Las przestanie być beczką prochu.
 
 # klusownik - Rysiek Sidło, kłusownik
 mieszkancy.klusownik.name = Rysiek Sidło
-mieszkancy.klusownik.title = kłusownik
+mieszkancy.klusownik.title = kłusownik, sidła i wyprawione futra
 [mieszkancy.klusownik.barks.skraj_lasu]
 Ciii! Spłoszysz mi zająca.
 Nie widziałeś mnie. Rozumiemy się?
@@ -755,7 +755,7 @@ Widzisz tę pętlę przy ścieżce? Zając chodzi zawsze tą samą drogą. Głup
 
 # znachorka - Babka Jadwiga, znachorka
 mieszkancy.znachorka.name = Babka Jadwiga
-mieszkancy.znachorka.title = znachorka
+mieszkancy.znachorka.title = znachorka, leczy ziołami
 [mieszkancy.znachorka.barks.work]
 Krwawnik na rany, pokrzywa na siłę, czosnek na wszystko.
 Ziele schnie w trzy dni... w taką suszę w jeden.
@@ -798,7 +798,7 @@ Deszcz! Widzisz? Mówiłam, że wysłucha!
 
 # szmaciarz - Józek Łata, handlarz starzyzną
 mieszkancy.szmaciarz.name = Józek Łata
-mieszkancy.szmaciarz.title = handlarz starzyzną
+mieszkancy.szmaciarz.title = handlarz starzyzną, skup rupieci
 [mieszkancy.szmaciarz.barks.stand]
 Starzyzna! Gwoździe, garnki, łyżki, guziki!
 Wszystko ma swoją cenę, nawet dziura w bucie!
@@ -866,7 +866,7 @@ Darin. Byłem cieślą na kontynencie. Potem przyszły wojska i kazali mi budowa
 Rano chodzę pod bramę. Czasem ktoś z miasta szuka rąk do pracy. Rzadko.
 
 [mieszkancy.uchodzca.talk.day]
-Na kontynencie wszyscy walczą o to samo. O Serce. Nikt nie wie, co to jest, ale każdy król chce je mieć.
+Na kontynencie wszyscy walczą o to samo. O artefakty władzy. Nikt nie wie, ile ich jest ani co potrafią, ale każdy król chce mieć choć jeden.
 Widziałem tu chłopaka w podartym kaftanie, w stodole za murem. Nosił naszywkę z mojego pułku. Udaje, że mnie nie zna.
 
 [mieszkancy.uchodzca.talk.evening]
@@ -1628,7 +1628,7 @@ Wacław Siwy. Służyłem w piechocie królewskiej, czterdzieści lat temu. Pod 
 Rano siedzę na ławce i patrzę, kto idzie na plac. Stary żołnierz zawsze patrzy. Nawet jak już nie ma czego pilnować.
 
 [mieszkancy.weteran.talk.day]
-Ta wojna na kontynencie to nie wojna, chłopcze. Za moich czasów król bił się z królem. Teraz biją się wszyscy ze wszystkimi o coś, czego nikt nie widział. Serce, mówią. Ja tam widziałem tylko błoto i krew.
+Ta wojna na kontynencie to nie wojna, chłopcze. Za moich czasów król bił się z królem. Teraz biją się wszyscy ze wszystkimi o jakieś artefakty władzy, których nikt nie widział. Jeden z nich to Serce, mówią. Ja tam widziałem tylko błoto i krew.
 Kostek chce iść na żołnierza. Opowiadam mu o wojnie, żeby się bał. A on słucha z otwartą gębą i chce jeszcze. Głupi stary, sam sobie winien.
 Werbownicy z garnizonu nad zatoką kręcą się po wyspie. Jak przyjdą do ciebie z grosikiem i dobrym słowem - uciekaj. Wojsko płaci z góry, a odbiera z odsetkami.
 

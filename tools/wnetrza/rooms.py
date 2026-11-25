@@ -114,7 +114,7 @@ def chatka(mp):
         mp.drop(e)
     lantern(mp, 3, 1, style=0, light=L_LANTERN_SMALL)
     # (<LightWhen> / when=day work only with <DarkDay>: the hut gets the town interiors' day / night darkness)
-    mp.props["note"] = "\n".join(["<Dust:off>", "<Dark:on>", "<DayNight:off>", "<Zoom:1.5>", "<DarkDay:60>", "<DarkNight:175>"])
+    mp.props["note"] = "\n".join(["<Dust:off>", "<Dark:on>", "<DayNight:off>", "<Zoom:1.35>", "<DarkDay:60>", "<DarkNight:175>"])
     return mp
 
 

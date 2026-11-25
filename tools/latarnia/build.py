@@ -280,8 +280,8 @@ def interiors_lib():
 B_WOOD, B_STONE, B_LOG = 24, 16, 33
 W_PLANKS, W_LOGS, W_RAW = 48, 59, 71
 F_DARK, F_PLANKS, F_FLAGS = 83, 84, 96
-NOTE_IZBA = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>"
-NOTE_LATERNA = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:40>\n<DarkNight:170>\n<Latarnia:laterna>"
+NOTE_IZBA = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:85>\n<DarkNight:185>"
+NOTE_LATERNA = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:40>\n<DarkNight:170>\n<Latarnia:laterna>"
 
 
 def build160(front):

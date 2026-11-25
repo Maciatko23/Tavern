@@ -127,8 +127,12 @@
         // The table: up to table.slots raw clay pots dry there under the roof, rain or not (Farming.js: tablePots); spots: where they
         // stand on the table, px from the foot-middle of the picture
         shelter: { name: "Wiata", cost: [[ITEM.wood, 6], [ITEM.planks, 6], [ITEM.branch, 8], [ITEM.rope, 4]], w: 3, h: 2, stamina: 8, hits: 30, image: "Farm_Shelter_XL", rest: 50,
-            table: { slots: 4, hours: 24, spots: [[-38, -35], [-18, -35], [2, -35], [22, -35]] },   // (2026-11-19: the thatched shelter's table, x -51..33)
-            seats: { front: { dy: 0.2, lift: 14 }, back: { dy: -0.45, lift: 22 }, span: 38 },
+            // (2026-11-25, the user: "garnki, żeby równo były, a nie że się z lewej za bardzo ustawiają") the table top is x -44..41 of the
+            // picture's middle: the pots stand in a row centred on it (cx), `step` apart, as many as there are - one in the middle
+            table: { slots: 4, hours: 24, cx: -1.5, step: 21, y: -35, spots: [[-33, -35], [-12, -35], [9, -35], [30, -35]] },
+            // (2026-11-25, the user: "siadanie musi ładnie wyglądać z przodu i z tyłu" - on the back bench he sat 22 px up and his head went
+            // under the thatch: a headless body behind the pots; now lower, the head under the eave, the table in front of his chest)
+            seats: { front: { dy: 0.2, lift: 14 }, back: { dy: -0.45, lift: 6 }, span: 38 },
             desc: "Daszek na czterech słupach, pod nim stół i dwie ławki, z przodu i z tyłu. Usiądziesz tu i odpoczniesz (lepiej niż na ławce, także w deszczu), a na stole postawisz do czterech garnków: pod dachem schną także w deszczu." },
         campfire: { name: "Ognisko", camp: true, anywhere: true, cost: [[ITEM.wood, 6], [ITEM.stone, 6]], w: 1, stamina: 5, hits: 5, image: "Farm_Campfire_L", rest: 40, vent: 48,
             fire: { y: 13, size: 1.25, glow: 2.2, light: 340, smoke: true },   // animated flames (y: px above the foot of the picture), steady smoke, a big glow
@@ -155,7 +159,7 @@
             vent: 66, noBuild: true, refund: [[ITEM.wood, 1], [ITEM.stone, 1], [ITEM.branch, 2]],
             fire: { y: 13, size: 1.25, glow: 2.2, light: 340, smoke: true }, hang: { y: 51, x: 0, rope: 59 },   // the food hangs on a short rope from the hook (px above the foot of the picture: the top of the icon, the top of the rope)
             upgrade: { to: "cauldron", dx: 1, name: "Zawieś kociołek", cost: [[ITEM.cauldronItem, 1]], stamina: 3, done: "Zawieszono kociołek",
-                help: "Wieszasz na trójnogu kociołek, który niesiesz w plecaku (wykuwa się w kuźni). Potrzebne miejsce 3 × 2 pola wokół ogniska. Kociołek gotuje zupy, gulasz, owsiankę i wywary, ale zajmuje cały ogień: mięsa na patyku już przy nim nie upieczesz (do tego zbuduj drugie ognisko)." },
+                help: "Wieszasz na trójnogu kociołek, który niesiesz w plecaku (wykuwa się w kuźni). Potrzebne miejsce 3 × 2 pola: ognisko i rząd nad nim, a gdy tam ciasno - rząd pod nim (wtedy palenisko przesuwa się o krok w dół). Kociołek gotuje zupy, gulasz, owsiankę i wywary, ale zajmuje cały ogień: mięsa na patyku już przy nim nie upieczesz (do tego zbuduj drugie ognisko)." },
             desc: "Trzy kijki związane sznurkiem nad ogniem. Zawieszasz jedzenie na haczyku i możesz odejść: piecze się samo, a gotowe odbierasz z ognia (albo czekasz obok, siedząc). Później zawiesisz na nim żelazny kociołek." },
         scarecrow: { name: "Strach na wróble", cost: [[ITEM.wood, 3]], w: 1, stamina: 4, hits: 3, image: "Farm_Scarecrow",
             desc: "Rośliny w promieniu 2 kratek rosną o 25% szybciej." },
@@ -273,6 +277,7 @@
         // its plank sails turn while it grinds (Farming_Render: def.sails, a picture turned round its hub; the hub x px from the middle of
         // the picture, y px above its foot). Before it: the miller of Podgrodzie for coins (Mlynarz.js), or the quern by hand
         mill: { name: "Młyn", cost: [[ITEM.planks, 12], [ITEM.wood, 4], [ITEM.stone, 12], [ITEM.rope, 3], [ITEM.nails, 8]], w: 3, h: 2, stamina: 14, hits: 50, image: "Farm_Mill_L", startSe: "Machine",
+            thumb: "Farm_Mill_Thumb",   // (2026-11-25, the user: "poprawić wyświetlanie młyna w menu budowy" - the menu's picture with its sails on)
             sails: { image: "Farm_Mill_Sails", x: 0, y: 172, speed: 0.04, idle: 0.003 },   // (2026-11-19, the user: "2 razy większy", "skrzydła dłuższe")
             recipes: [
                 { id: "flour", name: "Zmiel mąkę", doing: "Trwa mielenie", inputs: [[CROPS.barley.produce, 3]], output: [ITEM.flour, 2],
@@ -352,7 +357,10 @@
                 { id: "smoke_fish", name: "Wędź rybę", doing: "Trwa wędzenie", inputs: [[ITEM.wood, 2]], fish: 2, output: [ITEM.smokedFish, 2], hours: 6, stamina: 2, startSe: "Fire2", desc: "Ryba w dymie olchowym: ze stawu albo z morza (śledź, dorsz)." }
             ],
             desc: "Wędzi mięso i ryby. Wędzonka daje najwięcej sił." },
-        tannery: { name: "Garbarnia", cost: [[ITEM.planks, 4], [ITEM.rope, 2], [ITEM.stone, 2]], w: 2, h: 2, stamina: 10, hits: 30, image: "Farm_Tannery_L", legacy: { w: 2, h: 1, image: "Farm_Tannery" },
+        tannery: { name: "Garbarnia", cost: [[ITEM.planks, 4], [ITEM.rope, 2], [ITEM.stone, 2]], w: 2, h: 2, stamina: 10, hits: 30, image: "Farm_Tannery_L", legacy: { w: 2, h: 1, image: "Farm_Tannery", imageIdle: null },
+            // (2026-11-25, the user: "garbarnia - gdy wyrabia skóry, widać je na budynku, a po zebraniu pusto") the hide on its frame only
+            // while a job is inside (working or ready to take): the plain frame (imageIdle) when there is none
+            imageIdle: "Farm_Tannery_L_Empty",
             recipes: [
                 { id: "tan", name: "Wyprawiaj skórę", doing: "Trwa wyprawianie", inputs: [[ITEM.rawHide, 1], [ITEM.branch, 3]], output: [ITEM.hide, 1], hours: 12, stamina: 2, startSe: "Liquid", desc: "Skóra moczy się w garbniku z kory i gałęzi." },
                 // (stage 2 of the fight, 2026-10-05: the bear's fur - one big skin gives three tanned ones)
@@ -368,8 +376,8 @@
                     desc: "Gruba kurtka z trzech wyprawionych skór, szwy zaciągnięte ścięgnami. Wystarczy mieć ją w torbie: każdy cios, który do ciebie dojdzie, jest o 20% słabszy. Zużywa się od ciosów - naprawisz ją w warsztacie." },
                 // improve: makes something better instead of a new item (Farming.js IMPROVE) - the waterskin holds 8 sips instead of 4 (Needs.js);
                 // the waterskin itself is needed (tool) and stays the same item. result: what the menu says it gives
-                { id: "skin_big", name: "Powiększ bukłak", inputs: [[ITEM.hide, 1], [ITEM.sinew, 2]], output: [ITEM.skin, 1], manual: true, tool: ITEM.skin, improve: "skin", result: "większy bukłak (8 łyków)",
-                    hours: 2, stamina: 3, startSe: "Item1", swing: "crouch", desc: "Doszywasz do bukłaka drugą wyprawioną skórę, a szwy zaciągasz ścięgnami: zmieści 8 łyków wody zamiast 4. Zostaje tym samym bukłakiem." },
+                { id: "skin_big", name: "Powiększ bukłak", inputs: [[ITEM.hide, 1], [ITEM.sinew, 2]], output: [ITEM.skin, 1], manual: true, tool: ITEM.skin, improve: "skin", result: "większy bukłak (5 łyków)",
+                    hours: 2, stamina: 3, startSe: "Item1", swing: "crouch", desc: "Doszywasz do bukłaka drugą wyprawioną skórę, a szwy zaciągasz ścięgnami: zmieści 5 łyków wody zamiast 3. Zostaje tym samym bukłakiem." },
                 // (2026-10-18, the white eagle - Orzel.js, W13 ch. 4): the podrostek sits on the hero's hand only with this on it
                 { id: "glove_falconer", name: "Uszyj rękawicę sokolnika", inputs: [[ITEM.hide, 2], [ITEM.sinew, 1]], output: [183, 1], manual: true, unique: true,
                     hours: 2, stamina: 3, startSe: "Item1", desc: "Gruba rękawica do łokcia z podwójnej skóry, szwy ze ścięgien. Na niej usiądzie młody orzeł - pazury nie przebiją skóry." }
@@ -421,14 +429,15 @@
         // the last step of the campfire: only ever made by hanging a forged cauldron on a tripod (noBuild: not on the Q build list)
         cauldron: { name: "Kociołek", cost: [[ITEM.iron, 2], [ITEM.planks, 2], [ITEM.stone, 4]], w: 3, h: 2, stamina: 10, image: "Farm_Cauldron_XL", v2: { image: "Farm_Cauldron_L", ventX: -17, fire: null }, legacy: { w: 2, h: 1, image: "Farm_Cauldron", vent: 46, fire: null },
             vent: 59, ventX: -1, smokes: true, rest: 40, fire: { y: 15, size: 0.9, glow: 1.1, light: 290 }, noBuild: true,
+            // (2026-11-25, the user: "do gotowania każdej zupy potrzebna woda" - the plain soup and the herb brew took none till then)
             recipes: [
-                { id: "soup", name: "Ugotuj zupę", doing: "Trwa gotowanie", inputs: [[ITEM.potato, 2], [ITEM.carrot, 1]], meat: 1, output: [ITEM.soup, 2], hours: 3, stamina: 2, startSe: "Liquid", desc: "Warzywa z mięsem: syci i rozgrzewa." },
+                { id: "soup", name: "Ugotuj zupę", doing: "Trwa gotowanie", inputs: [[ITEM.potato, 2], [ITEM.carrot, 1]], meat: 1, water: 2, output: [ITEM.soup, 2], hours: 3, stamina: 2, startSe: "Liquid", desc: "Warzywa z mięsem gotowane na wodzie: syci i rozgrzewa." },
                 { id: "stew", name: "Ugotuj gulasz", doing: "Trwa gotowanie", inputs: [[ITEM.carrot, 1], [ITEM.cabbage, 1]], meat: 2, water: 2, output: [ITEM.stew, 2], hours: 4, stamina: 2, startSe: "Liquid", desc: "Mięso, marchew i kapusta dusone długo w kociołku. Bardzo syci i rozgrzewa na wiele godzin." },
                 { id: "cabbage_soup", name: "Ugotuj kapuśniak", doing: "Trwa gotowanie", inputs: [[ITEM.cabbage, 2], [ITEM.potato, 1], [ITEM.smokedMeat, 1]], water: 3, output: [ITEM.cabbageSoup, 2], hours: 3, stamina: 2, startSe: "Liquid", desc: "Kapusta z ziemniakami i kawałkiem wędzonki. Syci, rozgrzewa i trochę gasi pragnienie." },
                 { id: "mushroom_soup", name: "Ugotuj zupę grzybową", doing: "Trwa gotowanie", inputs: [[ITEM.potato, 1], [ITEM.milk, 1]],
                     any: [{ ids: [ITEM.mushroom, ITEM.oyster], n: 3, name: "Grzyby albo boczniaki", icon: ITEM.mushroom }], water: 3, output: [ITEM.mushroomSoup, 2], hours: 3, stamina: 2, startSe: "Liquid", desc: "Grzyby z ziemniakiem na mleku: kremowa zupa." },
                 { id: "porridge", name: "Ugotuj owsiankę", doing: "Trwa gotowanie", inputs: [[CROPS.barley.produce, 3], [ITEM.milk, 1], [ITEM.honey, 1]], water: 1, output: [ITEM.porridge, 2], hours: 2, stamina: 1, startSe: "Liquid", desc: "Kasza jęczmienna na mleku z łyżką miodu. Tania i sycąca." },
-                { id: "brew", name: "Zaparz wywar", doing: "Trwa parzenie", inputs: [[ITEM.herb, 3]], output: [ITEM.brew, 2], hours: 2, stamina: 1, startSe: "Liquid", desc: "Gorący wywar z ziół. Rozgrzewa na długo." },
+                { id: "brew", name: "Zaparz wywar", doing: "Trwa parzenie", inputs: [[ITEM.herb, 3]], water: 1, output: [ITEM.brew, 2], hours: 2, stamina: 1, startSe: "Liquid", desc: "Zioła zalane gorącą wodą: wywar, który rozgrzewa na długo." },
                 { id: "nettle_soup", name: "Ugotuj zupę pokrzywową", doing: "Trwa gotowanie", inputs: [[ITEM.nettle, 3], [ITEM.potato, 1]],
                     any: [{ ids: [ITEM.garlic, ITEM.gardenGarlic], n: 1, name: "Czosnek (dziki albo z grządki)", icon: ITEM.garlic }], water: 2, output: [ITEM.nettleSoup, 2], hours: 2, stamina: 1, startSe: "Liquid",
                     desc: "Młode pokrzywy z czosnkiem i ziemniakiem: zielona zupa z leśnego zbieractwa. Syci i gasi pragnienie." },
@@ -504,7 +513,7 @@
         { id: "hammer", name: "Zrób młotek", inputs: [[ITEM.branch, 5], [ITEM.stone, 2], [ITEM.fiber, 3]], output: [ITEM.hammer, 1], manual: true, unique: true, swing: "crouch",
             hours: 5 / 60, stamina: 3, startSe: "Hammer", desc: "Kamień przywiązany lnem do gałęzi. Bez niego nie postawisz żadnej budowli." },
         { id: "waterskin", name: "Zrób bukłak", inputs: [[ITEM.hide, 1], [ITEM.fiber, 3]], output: [ITEM.skin, 1], manual: true, unique: true, swing: "crouch",
-            hours: 1, stamina: 2, startSe: "Item1", desc: "Wyprawiona skóra (z garbarni) zszyta lnem w worek z korkiem. Mieści 4 łyki wody: napełnisz go przy stawie albo studni, a napijesz się klawiszem G lub z menu Przedmioty." },
+            hours: 1, stamina: 2, startSe: "Item1", desc: "Wyprawiona skóra (z garbarni) zszyta lnem w worek z korkiem. Mieści 3 łyki wody: napełnisz go przy stawie albo studni, a napijesz się klawiszem G lub z menu Przedmioty." },
         // (2026-11-17, the user: "sznurek można robić z lnu lub pokrzywy lub z kombinacji") 4 pieces of flax fibre and nettle in any mix
         // (r.any, Farming.js: the nettle goes first - it wilts); the nettle-to-fibre recipe is gone
         { id: "rope", name: "Skręć sznurek", inputs: [], any: [{ ids: [ITEM.nettle, ITEM.fiber], n: 4, name: "Włókno lub pokrzywa", icon: ITEM.fiber }], output: [ITEM.rope, 1], manual: true,

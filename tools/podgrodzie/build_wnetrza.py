@@ -26,7 +26,7 @@ B_WOOD, B_STONE, B_LOG = 24, 16, 33
 W_PLANKS, W_PLANKS_V, W_LOGS, W_RAW, W_PLASTER_BEAM = 48, 49, 59, 71, 51
 F_DARK, F_PLANKS, F_COBBLE, F_FLAGS = 83, 84, 96, 97
 RUG_MAT, RUG_BROWN = 37, 21
-NOTE_POOR = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.5>\n<DarkDay:85>\n<DarkNight:185>"
+NOTE_POOR = "<Dust:off>\n<Dark:on>\n<DayNight:off>\n<Zoom:1.35>\n<DarkDay:85>\n<DarkNight:185>"
 
 def doors():
     """key -> (Map111 door event id, the cell in front of it) from the staged Podgrodzie"""

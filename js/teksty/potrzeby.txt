@@ -36,7 +36,7 @@ kod.drinkFromSkin.3 = Napiłeś się: nawodnienie +{got} (bukłak {2}/{max})
 kod.playBuzzerSound.0 = Bukłak jest pusty
 kod.playBuzzerSound.1 = Nie chce ci się pić
 # setItem
-kod.setItem.0 = na osiem łyków (powiększony)
+kod.setItem.0 = na pięć łyków (powiększony)
 kod.setItem.1 = {text}\nWoda: {2} z {max} łyków.
 # nag
 kod.nag.0 = Kręci mi się w głowie... muszę coś zjeść i się napić!
