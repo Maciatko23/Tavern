@@ -532,15 +532,43 @@
                 sprite.rotation = 0;
                 sprite.scale.y = 1;
             }
-            if (act.mode === "roll" && ROLL_KIND < 0) {   // (no sheet: the figure spins over once)
-                const k = act.rollT / act.rollLen, side = act.rollDir[0] < 0 ? -1 : 1;
-                sprite.rotation = side * Math.PI * 2 * easeOut(k);
-                sprite.anchor.y = 0.72;
-                sprite.y -= Math.round(sprite.patternHeight() * 0.28);
+            const tier = act.mode === "roll" ? P.fight.DODGE_TIERS[act.rollTier || 0] : null;
+            if (tier && !tier.blur) {   // (2026-11-25) the dodge as a hop - see DODGE_TIERS in Combat_Fight.js
+                // (his poses come from his sheets - HeroLook.js dodgeCell: the crouch, the knees up in the air; here only the arc and
+                // the shadow left on the ground - no squeezing of the figure: "sztywno jak deska", the player)
+                const H = P.fight.HOP, k = act.rollT / act.rollLen;
+                let lift = 0;
+                if (k >= H.up && k < H.down) {
+                    const a = (k - H.up) / (H.down - H.up);
+                    lift = Math.round(tier.hop * 4 * a * (1 - a));
+                }
+                sprite.rotation = 0;
+                sprite.scale.y = 1;
+                sprite.y -= lift;
+                hopShadow(sprite, lift);
+                sprite._dodging = true;
+            } else if (tier) {   // the master's dodge: the fast blurred slide, low in his crouch (HeroLook.js dodgeCell)
+                const D = P.fight.DODGE, k = act.rollT / act.rollLen;
+                sprite.rotation = 0;
+                sprite.scale.y = 1;
+                if (k >= D.dashFrom && k < D.settle) {   // the slide: see-through, his fading copies left behind
+                    sprite.opacity = Math.min(sprite.opacity, 185);
+                    if (act.rollT % 2 === 0) dodgeGhost(sprite);
+                } else if (k >= D.settle) {
+                    const e = (k - D.settle) / (1 - D.settle);
+                    sprite.opacity = Math.min(sprite.opacity, Math.round(185 + 70 * e));
+                }
+                sprite._dodging = true;
+            } else if (sprite._dodging) {
+                sprite._dodging = false;
+                sprite.rotation = 0;
+                sprite.scale.y = 1;
+                hopShadow(sprite, 0);
             } else if (sprite.rotation !== 0 && !sprite._flinching && ch === $gamePlayer) {
                 sprite.rotation = 0;
                 sprite.anchor.y = 1;
             }
+            updateGhosts();
         } else if (ch && ch.isAnimal) {
             // the hit (2026-10-14): the whole figure crisp white for HIT_WHITE frames of the screen (the hitstop does not lengthen it), then
             // a fading white while its _flashT runs out
@@ -564,6 +592,70 @@
                 sprite._stunStars.y = -Math.round(sprite.patternHeight() * 0.82);
                 sprite._stunStars.scale.x = Math.cos(Graphics.frameCount / 7);
             } else if (sprite._stunStars) sprite._stunStars.visible = false;
+        }
+    }
+    // the hop's shadow: a dark oval left on the ground under him while he is in the air (a child of his sprite, put back down by the lift)
+    let hopShadowBmp = null;
+    function hopShadow(sprite, lift) {
+        if (lift <= 2) { if (sprite._hopShadow) sprite._hopShadow.visible = false; return; }
+        if (!sprite._hopShadow) {
+            if (!hopShadowBmp) {
+                hopShadowBmp = new Bitmap(28, 10);
+                const ctx = hopShadowBmp.context;
+                ctx.fillStyle = "rgba(0,0,0,0.32)";
+                ctx.beginPath(); ctx.ellipse(14, 5, 13, 4.5, 0, 0, Math.PI * 2); ctx.fill();
+                hopShadowBmp._baseTexture.update();
+            }
+            sprite._hopShadow = new Sprite(hopShadowBmp);
+            sprite._hopShadow.anchor.set(0.5, 0.5);
+            sprite.addChild(sprite._hopShadow);
+        }
+        const sh = sprite._hopShadow, sy = sprite.scale.y || 1;
+        sh.visible = true;
+        sh.rotation = -sprite.rotation;
+        sh.y = (lift - 2) / sy;
+        sh.x = 0;
+        sh.scale.set(1 - lift / 60, (1 - lift / 60) / sy);
+    }
+    // the dodge's trail: a copy of the hero's picture as it is now (his body and clothes - Ubior's sheet - and the hair over the cell),
+    // left on the ground where he was, fading in GHOST.life frames; behind him (its spriteId)
+    const GHOST = { life: 9, alpha: 120 }, ghosts = [];
+    function dodgeGhost(sprite) {
+        const parent = sprite.parent, f = sprite._frame;
+        if (!parent || !sprite.bitmap || !f || f.width <= 0) return;
+        const g = new Sprite(sprite.bitmap);
+        g.setFrame(f.x, f.y, f.width, f.height);
+        g.anchor.set(sprite.anchor.x, sprite.anchor.y);
+        g.scale.set(sprite.scale.x, sprite.scale.y);
+        g.rotation = sprite.rotation;
+        const head = sprite._ubiorHead;
+        if (head && head.renderable && head.bitmap && head._frame) {
+            const h = new Sprite(head.bitmap);
+            h.setFrame(head._frame.x, head._frame.y, head._frame.width, head._frame.height);
+            h.x = head.x; h.y = head.y;
+            g.addChild(h);
+        }
+        g.z = sprite.z;
+        g.spriteId = -1;
+        g._wx = sprite.x + $gameMap.displayX() * $gameMap.tileWidth();
+        g._wy = sprite.y + $gameMap.displayY() * $gameMap.tileHeight();
+        g._life = GHOST.life;
+        g.x = sprite.x; g.y = sprite.y;
+        g.opacity = GHOST.alpha;
+        parent.addChild(g);
+        ghosts.push(g);
+    }
+    function updateGhosts() {
+        for (let i = ghosts.length - 1; i >= 0; i--) {
+            const g = ghosts[i];
+            if (--g._life <= 0 || !g.parent) {
+                if (g.parent) g.parent.removeChild(g);
+                ghosts.splice(i, 1);
+                continue;
+            }
+            g.opacity = Math.round(GHOST.alpha * g._life / GHOST.life);
+            g.x = Math.round(g._wx - $gameMap.displayX() * $gameMap.tileWidth());
+            g.y = Math.round(g._wy - $gameMap.displayY() * $gameMap.tileHeight());
         }
     }
     const HIT_WHITE = 3;   // (frames of the pure white flash of a hit)

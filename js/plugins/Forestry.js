@@ -117,6 +117,14 @@
     // the picture now: a seedling's own, the young tree (the fruit tree's bare picture while it grows), then the grown one
     const graphicOf = rec => { const sp = speciesOf(rec), k = growthOf(rec), look = lookOf(k, sp); return look.pic || (k < 1 && sp.young) || rec.graphic; };
     const YIELD_FROM = 0.5;   // a planted tree gives wood only from half grown on
+    // (2026-11-25, the user: "po małych sadzonkach można chodzić i tyle") a seedling on its heap of earth is walked over (through,
+    // still at the hero's level so the button in front of it chops it); from the first young tree on it stands in the way
+    const isSeedling = rec => !!lookOf(growthOf(rec), speciesOf(rec)).pic;
+    function setSeedlingPass(pages, rec) {
+        const pass = isSeedling(rec);
+        for (const page of pages.slice(0, speciesOf(rec).key === "apple" ? 2 : 1)) if (page) page.through = pass;
+        return pass;
+    }
     function statsOf(k, sp) {
         sp = sp || SPECIES.pine;
         const look = lookOf(k, sp), fruit = sp.fruit ? { fruit: k >= 1 ? sp.fruit : 0 } : {};
@@ -167,6 +175,7 @@
         copy[0].image.characterName = pic;
         if (sp.key === "apple" && s.fruit) copy[0].image.characterName = rec.graphic;   // (grown: the bearing page shows the fruit)
         if (sp.key === "apple" && !s.fruit) copy[1].image.characterName = pic;          // (growing: it stands on the bare page)
+        setSeedlingPass(copy, rec);
         return { id: rec.id, name: sp.name, x: rec.x, y: rec.y, pages: copy,
             note: "<Tree:hits=" + s.hits + ",sway=" + (sp.key === "apple" ? "1.0" : "0.9") + ",drop=" + s.drop + ",dropmin=" + s.dropmin + ",dropmax=" + s.dropmax + ",scale=" + s.scale + ",nostump=" + s.nostump +
                 (s.fruit ? ",fruit=" + s.fruit : "") + "><Planted>" };
@@ -218,6 +227,8 @@
         // event on the map still shows yesterday's
         const pic = graphicOf(rec), data = event.event(), page = data && data.pages && data.pages[0];
         if (!page) return;
+        const pass = setSeedlingPass(data.pages, rec);
+        if (event._pageIndex === 0 || (sp.key === "apple" && event._pageIndex === 1)) event.setThrough(pass);
         if (sp.key === "apple") {
             // growing: on the bare page (C on), its picture the seedling / the young tree; grown: ChoppableTree keeps C by the fruit
             const grown = k >= 1, bare = data.pages[1], C = [event._mapId, event._eventId, "C"];

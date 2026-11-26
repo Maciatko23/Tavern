@@ -7,15 +7,17 @@
 //     by the stairs, apart from each other and from the floor's own spikes; where and which - by the save's seed and the floor (the
 //     same every visit). Kinds (KINDS): the spike plate (kolce), the jaw trap (wnyk - holds the hero a moment), the tripwire with bells
 //     (linka - no wound, but the bells call every creature round).
-//   - NOT SEEN until noticed: walking on one springs it. SNEAKING (C) the hero may notice one coming near - a roll when he comes within
-//     2.2 tiles and again within 1.2 (Percepcja helps); noticed, it shows on the floor (the spikes' holes, the open jaws, the wire).
+//   - NOT SEEN until noticed: walking on one springs it. The hero may notice one coming near - a roll when he comes within 2.2 tiles
+//     and again within 1.2 (Percepcja helps); sneaking (C) gives the better chance (2026-11-25, the user: "gracz nie musi się skradać,
+//     żeby wykrywać pułapki" - till then only sneaking noticed them). Noticed, it shows on the floor (the spikes' holes, the open jaws,
+//     the wire).
 //   - DISARMED: sneaking, by it, facing it - hold O (Zamki.task: the ring, as a lock): every second a chance it goes off on him;
 //     done - its metal parts (KINDS[k].parts: nails, iron, fittings, steel deeper, a rope) and experience. Sprung or disarmed stays so.
 // Saved: Tawerna.state("pulapki") = { floors: { "mapId:seed:sig": { found: [i], done: { i: "sprung" | "disarmed" } } } }.
 
 /*:
  * @target MZ
- * @plugindesc Ukryte pułapki w podziemiach: kolce, wnyki, linki z dzwonkami; w skradaniu (C) można je dostrzec i rozbroić (przytrzymaj O) - części metalowe i doświadczenie. v1.0.0
+ * @plugindesc Ukryte pułapki w podziemiach: kolce, wnyki, linki z dzwonkami; można je dostrzec (w skradaniu łatwiej) i rozbroić w skradaniu (przytrzymaj O) - części metalowe i doświadczenie. v1.1.0
  * @author Claude
  * @base TawernaCore
  * @orderAfter Underground
@@ -25,10 +27,11 @@
  * ============================================================================
  * Pulapki.js - ukryte pułapki w podziemiach
  * ============================================================================
- * Na piętrach podziemi leżą ukryte pułapki. Idąc normalnie, wchodzisz na nie
- * w ciemno. W skradaniu (C) możesz je dostrzec (Percepcja pomaga) - wtedy
- * widać je na ziemi. Stań przy niej przodem i przytrzymaj O, żeby rozbroić:
- * dostaniesz części metalowe i doświadczenie. Może się nie udać.
+ * Na piętrach podziemi leżą ukryte pułapki. Zbliżając się do nich, możesz je
+ * dostrzec (Percepcja pomaga, w skradaniu (C) łatwiej) - wtedy widać je na
+ * ziemi. Niezauważoną nadepniesz. W skradaniu stań przy niej przodem
+ * i przytrzymaj O, żeby rozbroić: dostaniesz części metalowe i doświadczenie.
+ * Może się nie udać.
  * ============================================================================
  */
 
@@ -55,7 +58,8 @@
         linka: { sheet: "!W9_Rywal", block: 1, w: 48, h: 48, row: 1 }         // (W9's tripwire: patterns 0 across, 1 along, 2 cut)
     };
     const PLACE = { base: 2, perFloors: 10, max: 8, apart: 6, stairs: 4, spikes: 2 };
-    const SEE = { far: 2.2, near: 1.2, chance: 0.4, perStep: 0.04, nearBonus: 0.2, min: 0.15, max: 0.9 };
+    // walk: the chance walking (not sneaking) as a share of the sneaking one
+    const SEE = { far: 2.2, near: 1.2, chance: 0.4, perStep: 0.04, nearBonus: 0.2, min: 0.15, max: 0.9, walk: 0.75 };
     const XP = { found: 4, disarm: 12, perFloor: 1.5 };
     const SAY = {
         found: "Pułapka! {name}.",
@@ -139,7 +143,7 @@
     const stateOf = t => { const s = rec(); return s ? s.done[t.i] || (s.found.includes(t.i) ? "found" : "hidden") : "hidden"; };
     const armed = t => { const st = stateOf(t); return st === "hidden" || st === "found"; };
 
-    // ---- noticing (sneaking): a roll on coming within SEE.far, another within SEE.near
+    // ---- noticing: a roll on coming within SEE.far, another within SEE.near (sneaking: the full chance, walking: SEE.walk of it)
     const heroCX = () => $gamePlayer._realX + 0.5, heroCY = () => $gamePlayer._realY + 0.5;
     function seeChance(near) {
         const c = SEE.chance + SEE.perStep * (attr("per") - 5) + (near ? SEE.nearBonus : 0);
@@ -162,8 +166,8 @@
             const zone = d <= SEE.near ? "near" : d <= SEE.far ? "far" : "";
             if (zone === was) continue;
             here.seen[t.i] = zone;   // (a roll on coming into a zone, not every frame: walking away and back is another look)
-            if (!zone || !sneak || stateOf(t) !== "hidden") continue;
-            if ((zone === "far" && was === "") || (zone === "near" && was !== "near")) if (Math.random() < seeChance(zone === "near")) notice(t);
+            if (!zone || stateOf(t) !== "hidden") continue;
+            if ((zone === "far" && was === "") || (zone === "near" && was !== "near")) if (Math.random() < seeChance(zone === "near") * (sneak ? 1 : SEE.walk)) notice(t);
         }
     }
 

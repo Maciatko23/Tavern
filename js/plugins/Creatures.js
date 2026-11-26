@@ -727,6 +727,15 @@
         knockBack(this);
     };
 
+    // (2026-11-25) its blade met the hero's at the same moment (Combat.js clash): thrown off its stroke - a short recovery, no hurt
+    Game_Creature.prototype.onClash = function() {
+        this._struck = true;
+        this._lockAng = null;
+        this._hitStop = Math.max(this._hitStop || 0, 6);
+        this.setMode("recover", 26);
+        this._settle = 0;
+    };
+
     // ==================================================================
     // A hit on a creature: what its kind lets through (the armour's plate, the stone's front), then the hurt, the balance, the reeling;
     // its end (a fall to pieces it gets up from, its death)

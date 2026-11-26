@@ -154,6 +154,74 @@
         } finally { if (memo) delete p0.canPass; }
         return { dist, prev, w, sx, sy, at: (x, y) => Math.min(dist[(y * w + x) * 2], dist[(y * w + x) * 2 + 1]) };
     }
+    // (2026-11-25: the full pass shut itself in on the plot from day 16 - pines and buildings put where they closed his corner off from
+    // the gates) the tiles of the plot and 4 round it that can be walked to from the gate's outside (and from him, when he is there),
+    // 4-way; `solid` tiles are not entered. Planted trees count as solid: a seedling is walked over, but it grows.
+    function plotReach(solidExtra) {
+        if (!window.Homes || !Homes.land || $gameMap.mapId() !== HOME_MAP) return -1;
+        const land = Homes.land(), r = land.plot.rect, m = 4;
+        const x0 = Math.max(0, r[0] - m), y0 = Math.max(0, r[1] - m), x1 = Math.min(W() - 1, r[2] + m), y1 = Math.min(H() - 1, r[3] + m);
+        const bw = x1 - x0 + 1, inBox = (x, y) => x >= x0 && y >= y0 && x <= x1 && y <= y1, at = (x, y) => (y - y0) * bw + x - x0;
+        const solid = new Uint8Array(bw * (y1 - y0 + 1)), seen = new Uint8Array(solid.length);
+        const mark = (x, y) => { if (inBox(x, y)) solid[at(x, y)] = 1; };
+        try { for (const t of (Forestry.treesOf($gameMap.mapId()) || [])) if (!$gameSelfSwitches.value([$gameMap.mapId(), t.id, "B"])) mark(t.x, t.y); } catch (e) {}
+        for (const [x, y] of solidExtra || []) mark(x, y);
+        const q = [];
+        for (const [x, y] of [[land.plot.out[0], land.plot.out[1]], [P().x, P().y]]) if (inBox(x, y) && !solid[at(x, y)] && !seen[at(x, y)]) { seen[at(x, y)] = 1; q.push([x, y]); }
+        return withEventGrid(() => {
+            for (let i = 0; i < q.length; i++) {
+                const [x, y] = q[i];
+                for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+                    const nx = x + dx, ny = y + dy;
+                    if (!inBox(nx, ny)) continue;
+                    const k = at(nx, ny);
+                    if (seen[k] || solid[k] || !passStep(x, y, dx, dy)) continue;
+                    seen[k] = 1; q.push([nx, ny]);
+                }
+            }
+            return { n: q.length, has: (x, y) => inBox(x, y) && !!seen[at(x, y)] };
+        });
+    }
+    // true when making these tiles solid cuts no tile of the plot off (every tile reached now is still reached, but the tiles themselves)
+    function keepsWay(cells) {
+        const before = plotReach(null);
+        if (before === -1) return true;
+        const lost = cells.filter(([x, y]) => before.has(x, y)).length;
+        return plotReach(cells).n >= before.n - lost;
+    }
+    // (the way out lost all the same: an old save, a guard...) his own planted tree that stands where the way would be - the nearest one
+    // whose felling lets him reach the gate's outside again (null: none of them)
+    function treeInTheWay() {
+        if (!window.Homes || !Homes.land || $gameMap.mapId() !== HOME_MAP || !window.Forestry) return null;
+        const out = Homes.land().plot.out, f = field(P().x, P().y);
+        if (isFinite(f.at(out[0], out[1]))) return null;
+        const mine = $gameMap.events().filter(e => e.eventId() >= Forestry.FIRST_ID && e.eventId() <= Forestry.LAST_ID && upright(e));
+        const reachable = e => [[0, 1], [0, -1], [1, 0], [-1, 0]].some(([dx, dy]) => isFinite(f.at(e.x + dx, e.y + dy)));
+        let best = null;
+        for (const e of mine) {
+            if (!reachable(e)) continue;
+            const d = Math.hypot(e.x - P().x, e.y - P().y);
+            if (best && d >= best.d) continue;
+            const was = e._through;
+            e._through = true;   // (as if felled: does the way open?)
+            let opens = false;
+            try { opens = isFinite(field(P().x, P().y).at(out[0], out[1])); } finally { e._through = was; }
+            if (opens) best = { e, d };
+        }
+        return best ? best.e : null;
+    }
+    // (any planted tree still on its feet - also a young one that gives nothing, which standingTree leaves out)
+    const upright = e => ChoppableTree.isTree(e) && !e._erased && !!e.page() && !e._treeGone && !$gameSelfSwitches.value([$gameMap.mapId(), e.eventId(), "A"]) &&
+        !$gameSelfSwitches.value([$gameMap.mapId(), e.eventId(), "B"]);
+    function* clearTheWay() {
+        const e = treeInTheWay();
+        if (!e) return false;
+        if (!count(60) && !count(115)) { say("droga z działki zamknięta przez drzewko " + e.x + "," + e.y + " - a nie mam siekiery"); return false; }
+        say("droga z działki zamknięta - ścinam swoje drzewko " + e.x + "," + e.y);
+        const ok = yield* holdOn([[e.x, e.y]], () => !upright(e), "drzewko " + e.eventId());
+        yield* wait(30);
+        return ok;
+    }
     function pathFrom(f, tx, ty) {
         if (!isFinite(f.at(tx, ty))) return null;
         const t = ty * f.w + tx, out = [];
@@ -720,7 +788,9 @@
         return best && best.e;
     }
     const fruitTree = e => { const c = ChoppableTree.treeConfig(e); return !!c && c.fruit > 0; };
-    const standingTree = e => ChoppableTree.isTree(e) && !gone(e) && !$gameSelfSwitches.value([$gameMap.mapId(), e.eventId(), "A"]) && !fruitTree(e);
+    // (2026-11-25: a planted tree under half grown gives nothing - Forestry dropmax 0: not a source of wood)
+    const noYield = e => { const c = ChoppableTree.treeConfig(e); return !!c && c.dropmax === 0; };
+    const standingTree = e => ChoppableTree.isTree(e) && !gone(e) && !$gameSelfSwitches.value([$gameMap.mapId(), e.eventId(), "A"]) && !fruitTree(e) && !noYield(e);
     const LOG_WOOD = { hits: 2, dropmin: 1, dropmax: 2, cost: 3 };   // (ChoppableTree LOG_DEFAULTS)
     function woodScore(e, walk) {
         const log = evTag(e) === "Log", cfg = log ? LOG_WOOD : ChoppableTree.treeConfig(e);
@@ -751,7 +821,7 @@
     }
     function* chop(n = 1, pine) {
         let got = 0;
-        if (!count(60) && !count(115)) { say("nie ma siekiery"); return 0; }
+        if (!(yield* ensureAxe())) { say("nie ma siekiery"); return 0; }
         for (let i = 0; i < n; i++) {
             const e = pine === undefined ? (bestWood(false) || {}).e : nearestEvent(ev => standingTree(ev) && ChoppableTree.isPine(ev) === !!pine);
             if (!e) { say("nie ma drzew"); break; }
@@ -843,6 +913,8 @@
             }
             // a free tile to stand on two below the footprint, and room around the site to swing the hammer
             if (!isFinite(f.at(x, y + 2)) || !isFinite(f.at(x, y + 1))) continue;
+            // ...and nothing of the plot cut off by it (2026-11-25)
+            if (!camp && !keepsWay(Farming.tilesOfBuilding(type, x, y).map(c => [c.x, c.y]))) continue;
             spot = { x, y };
         }
         if (!spot) { say("nie ma miejsca na " + def.name); return false; }
@@ -1051,8 +1123,15 @@
         for (const e of $gameMap.events()) if (pred(e)) { const s = spotsFor([[e.x, e.y]], f)[0]; if (s && s.c < best) best = s.c; }
         return best;
     }
+    // (2026-11-26: the full pass went round in circles for 8 days, d33-41 - the stone pickaxe needs wood, the wood an axe, and the axe had
+    // worn out too: "nie ma siekiery" again and again) no axe: a stone one first - it is made from what lies on the ground, no wood in it
+    function* ensureAxe() {
+        if (count(60) || count(115)) return true;
+        say("nie ma siekiery - robię kamienną (gałęzie, kamienie, włókno)");
+        return (yield* obtain({ 60: 1 })) && (count(60) > 0 || count(115) > 0);
+    }
     function* woodStep() {   // the cheapest wood first: a log, a stump (shovel), then a standing tree
-        if (!count(60) && !count(115)) { say("nie ma siekiery"); return false; }
+        if (!(yield* ensureAxe())) { say("nie ma siekiery"); return false; }
         const b = bestWood(true);
         if (b && b.log) return yield* harvest("Log", 1, b.e);
         if (AP.useStumps && count(62) > 0 && costTo(stumpOf) < 35) {   // (off: 20 stamina a stump and no wood seen)
@@ -1870,7 +1949,7 @@
     const TASKS = {
         enterHut, leaveHut, furnish, sleepInHut,
         play, obtain, sleep: sleepNight, place: (t, x, y) => build(t, x, y, true), camp: (t, x, y) => build(t, x === undefined ? P().x : x, y === undefined ? P().y - 2 : y, true, true), useEntry, dig: digSoil, pottery, drinkVessel, restFast, collectJobs,
-        tend, walk: walkTo, gather, collect, goHome, goToMap, survive, forage, plantSeeds, harvestCrops, storePantry, fromPantry, compostRot, feedUp, buildWell, drinkWell, groundAction, feedDog, reflexes, tameDog, manageDog, dressCarcasses, mineOre, obtain, chop, harvest, build, craft, handCraft, rest, eat,
+        clearTheWay, tend, walk: walkTo, gather, collect, goHome, goToMap, survive, forage, plantSeeds, harvestCrops, storePantry, fromPantry, compostRot, feedUp, buildWell, drinkWell, groundAction, feedDog, reflexes, tameDog, manageDog, dressCarcasses, mineOre, obtain, chop, harvest, build, craft, handCraft, rest, eat,
         wait: function* (frames) { yield* wait(frames); return true; },
         say: function* (text) { say(text); return true; },
         // repeat a list of tasks until the item counts are reached: ["until", {61: 6}, [["chop", 1], ["harvest", "Log", 1]]]
@@ -2242,7 +2321,8 @@
     };
     // the building blocks for another brain run as a task (tests/autopilot_fabula/fab.js - the story autopilot)
     AP.lib = { walkTo, goFace, choose, press, wait, waitFree, closeMenus, standUp, setMove, key, releaseAll, keysToward, field, pathFrom, segments, followSeg, align,
-        spotsFor, threat, fight, fightPack, flee, eat, entryNames, count, stamina, staminaCap, free, busy, menuOpen, working, heroHp, inZone, say, rolling, clearLine };
+        spotsFor, threat, fight, fightPack, flee, eat, entryNames, count, stamina, staminaCap, free, busy, menuOpen, working, heroHp, inZone, say, rolling, clearLine,
+        keepsWay, plotReach, treeInTheWay, clearTheWay };
     say("autopilot v" + VERSION);
     return "ok";
 })();

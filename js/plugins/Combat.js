@@ -1,6 +1,6 @@
 /*:
  * @target MZ
- * @plugindesc Walka i rozwój postaci: tryb walki (Tab, sam się włącza) - kombo i ciężki cios (O), blok i parowanie (P), zmiana broni ([ ]), przewrót (Spacja), cel (F), leczenie (H); oddech; atrybuty, poziomy, doświadczenie, umiejętności. v1.2.0
+ * @plugindesc Walka i rozwój postaci: tryb walki (Tab, sam się włącza) - kombo i ciężki cios (O), blok i parowanie (P), zmiana broni ([ ]), unik - odskok (Spacja), cel (F), leczenie (H); oddech; atrybuty, poziomy, doświadczenie, umiejętności. v1.2.0
  * @author Tawerna
  * @base TawernaCore
  * @orderAfter TawernaCore
@@ -39,7 +39,7 @@
  * tryb walki”. Opcje: „Trudność walki” (Łatwy / Normalny / Trudny). Klawisz wciśnięty chwilę za wcześnie
  * (cios, przewrót, blok) czeka ok. 10 klatek i wykonuje się zaraz, gdy można.
  * W trybie normalnym: O = akcja, P = menu, [ i ] nic nie robią.
- * W obu trybach: Spacja = przewrót w kierunku strzałek (bez strzałek: odskok od celu albo najbliższego
+ * W obu trybach: Spacja = unik (odskok, wzrok na wrogu) w kierunku strzałek (bez strzałek: odskok od celu albo najbliższego
  * wroga, a bez nich w tył) z chwilą nietykalności; po trafieniu ciosu przerywa jego końcówkę; C = skradanie. W menu i rozmowach O, P, Enter, Esc i Spacja działają zawsze jak OK / anuluj.
  *
  * Atak z ukrycia: cios w zwierzę, które cię jeszcze nie zauważyło (nie ma nad nim "!", nie walczy z tobą),
@@ -118,7 +118,7 @@
     // ==================================================================
     const ATTRS = [
         { id: "str", name: "Siła", desc: "Obrażenia wręcz, zbijanie równowagi wroga, udźwig; trochę mniej uderzeń przy rąbaniu, kopaniu i kuciu skał." },
-        { id: "dex", name: "Zręczność", desc: "Tańszy przewrót z dłuższą nietykalnością, więcej czasu na następny cios serii, szybsze celowanie z łuku i procy, szybsza praca (budowa, rąbanie, kopanie, kucie skał)." },
+        { id: "dex", name: "Zręczność", desc: "Tańszy unik z dłuższą nietykalnością i krótszą przerwą przed następnym, więcej czasu na następny cios serii, szybsze celowanie z łuku i procy, szybsza praca (budowa, rąbanie, kopanie, kucie skał)." },
         { id: "con", name: "Kondycja", desc: "Życie, długość oddechu, odporność na rany i przewrócenie." },
         { id: "per", name: "Czujność", desc: "Dłuższe okno parowania i częstsze trafienia krytyczne." },
         { id: "wil", name: "Hart ducha", desc: "Odporność na strach i na „prawdy” upiorów z Serca: częściej się opierasz, a strach i zamęt trwają krócej. Spokojna głowa szybciej też odpoczywa." }
@@ -196,7 +196,7 @@
     }
     // auto: switched by the game itself (Combat_Feel.js: a foe starts an attack - on; a calm moment after - off, only when it came on by
     // itself); the hero's own Tab is not auto. The bus "combatMode" { on, auto } says it.
-    const COMBAT_KEYS = "Tryb walki: O atak, P obrona, Spacja przewrót, F cel, H leczenie, [ ] broń (Tab - wyjście)";
+    const COMBAT_KEYS = "Tryb walki: O atak, P obrona, Spacja unik, F cel, H leczenie, [ ] broń (Tab - wyjście)";
     function setCombatMode(on, auto) {
         const m = modes();
         m.mode = !!on;
@@ -391,6 +391,9 @@
     const critChance = () => 0.03 + 0.007 * (attr("per") - ATTR_START) + perk("melee.crit");
     const rollCost = () => Math.max(10, Math.round(24 - 0.25 * (attr("dex") - ATTR_START)));
     const rollIFrames = () => Math.min(24, 13 + Math.floor(0.2 * (attr("dex") - ATTR_START))) + perk("roll.iframes");
+    // (2026-11-25, the player: „jak zrobić, żeby przerwy pomiędzy kolejnymi unikami były mniejsze? może od zręczności”) the rest after a
+    // dodge before the next one: 26 frames at the start (0.43 s), 0.6 frame less a point of Zręczność, 6 at least (from 38)
+    const rollChain = () => Math.max(6, Math.round(26 - 0.6 * (attr("dex") - ATTR_START)));
     // (the difficulty of the fight - Combat_Feel.js, Opcje: Łatwy x1.5, Trudny x0.75)
     // (2026-10-23, Bron_Data.js: a light shield - the buckler, the round one - lengthens it: its `parry`)
     const shieldParry = () => { const f = P.fight, s = f && f.shield ? f.shield() : null; return s && s.parry > 0 ? s.parry : 0; };
@@ -442,7 +445,7 @@
     const ATTR_FX = {
         str: [["Obrażenia wręcz", () => signed((strMult() - 1) * 100, 1)], ["Zbijanie równowagi wroga", () => signed((poiseMult() - 1) * 100, 1)],
             ["Udźwig", () => "+" + carryBonus()], ["Mniej uderzeń przy zbieraniu", () => "-" + pct(gatherBonus() * 100, 1)]],
-        dex: [["Przewrót: koszt oddechu", () => String(rollCost())], ["Przewrót: nietykalność", () => sec(rollIFrames())],
+        dex: [["Unik: koszt oddechu", () => String(rollCost())], ["Unik: nietykalność", () => sec(rollIFrames())], ["Unik: przerwa przed następnym", () => sec(rollChain())],
             ["Czas na kolejny cios serii", () => sec(comboWindow())], ["Czas celowania (łuk, proca)", () => pct(aimSteady() * 100)],
             ["Szybkość pracy", () => signed((dexWork() - 1) * 100)]],
         con: [["Życie (najwięcej)", () => String(heroMhp())], ["Oddech (wypoczęty, syty)", () => String(baseBreath())],
@@ -498,7 +501,7 @@
         const cloak = E && E.worn ? E.worn(112) : !!$dataItems[112] && $gameParty.numItems($dataItems[112]) > 0;
         return { mhp: heroMhp(), breath: baseBreath(), armor: ar ? { id: ar.id, name: ar.name, reduce: ar.reduce } : null, shield: sh ? { id: sh.id, name: sh.name, reduce: sh.reduce, breath: sh.breath } : null,
             bare: f.NO_SHIELD ? f.NO_SHIELD.reduce : 0.45, blockPerk: perk("block.reduce"), wound: woundChance(1), knock: knockdownAt(), cloak, cold: perk("cold"), mind: mindResist(0, 0),
-            parry: parryWindow(), rollCost: rollCost(), rollIFrames: rollIFrames(), hurt: Math.min(0.6, perk("hurt")) };
+            parry: parryWindow(), rollCost: rollCost(), rollIFrames: rollIFrames(), rollChain: rollChain(), hurt: Math.min(0.6, perk("hurt")) };
     }
 
     // he says it when the strength drops below TIRED_AT (again only after it has been above it)
@@ -744,7 +747,7 @@
     // ==================================================================
     P.core = { hero, modes, attr, skillRank, hasSkill, perk, skillById, skillBlock, learnSkill, spendPoints, skillText, secText, xpToNext, unspent,
         levelColor, ATTRS, ATTR_START, ATTR_MAX, MAX_LEVEL, POINTS_PER_LEVEL, SKILL_POINTS_PER_LEVEL, TREES, SKILLS, ROW_LEVEL, strMult, poiseMult,
-        critChance, rollCost, rollIFrames, parryWindow, knockdownAt, woundChance, carryBonus, gatherBonus, tired, dexWork, workSpeed, comboWindow,
+        critChance, rollCost, rollIFrames, rollChain, parryWindow, knockdownAt, woundChance, carryBonus, gatherBonus, tired, dexWork, workSpeed, comboWindow,
         aimSteady, baseBreath, heroMhp, combatMode, setCombatMode, mapFreePlay, se, popup, foes, mindResist, mindTime, attrInfo, fightInfo, defenseInfo, restBonus, REST_PER_WIL,
         option, OPTS, DIFF_NAMES, COMBAT_KEYS };
     const fight = name => function() { const f = F(); return f[name].apply(f, arguments); };

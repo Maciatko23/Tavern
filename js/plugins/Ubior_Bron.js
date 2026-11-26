@@ -78,6 +78,13 @@
     const CLEAN = { Hero_Club: true, Hero_Axe: true, Hero_AxeSide: true, Hero_Pick: true, Hero_Spear: true, Hero_Sword: true };
     const RECOLOUR = { Hero_Bow: true, Hero_Sling: true };
     const fileOf = (sheet, kind) => "Ubior_Bron_" + sheet.replace("Hero_", "") + "_" + kind[0].toUpperCase() + kind.slice(1);
+    // (2026-11-25, the player: „jak gracz wyciągnie broń, to nie widać, że trzyma ją w ręce, i podczas chodzenia i biegania również”)
+    // the weapon in hand on the walk, the run and the sneak too - in the combat mode, a melee weapon (not the fists): held ready, head up
+    // (tools/ubior/bron_w_rece.py: img/system/Ubior_Bron_<Walk|Run|Sneak>_<Rodzaj>, the same template colours as the swings)
+    // (2026-11-26: the lit torch in one hand, the weapon in the other - the torch sheets, the free hand)
+    const HELD = { Hero_Walk: true, Hero_Run: true, Hero_Sneak: true, Hero_TorchWalk: true, Hero_TorchRun: true, Hero_TorchSneak: true };
+    const HELD_KINDS = new Set(["miecz", "dlugi_miecz", "tasak", "szabla", "sztylet", "buzdygan", "kiscien", "mlot", "palka", "siekiera", "topor", "czekan",
+        "kilof", "kostur", "bardysz", "wlocznia", "rohatyna", "sulica"]);
     // the old items (without Bron_Data.js): their looks
     const OLD = { 156: "bron_palka_drewno", 60: "bron_siekiera_kamien", 115: "bron_siekiera_zelazo", 63: "bron_kilof_kamien", 116: "bron_kilof_zelazo",
         154: "bron_wlocznia_kamien", 126: "bron_luk_krotki", 125: "bron_proca_prosta" };
@@ -200,6 +207,11 @@
     let forced = null;
     function lookFor(sheet) {
         if (forced && sheet in forced) return forced[sheet] ? lookOf(forced[sheet]) : null;
+        if (HELD[sheet]) {
+            if (!window.$gameParty || !combatOn()) return null;
+            const c = C(), h = c && c.hand ? c.hand() : null;
+            return h && h[0] === "m" ? itemLook(handItem()) : null;
+        }
         if (!window.$gameParty || !NATIVE[sheet] && sheet !== "Hero_Punch") return null;
         const inHand = itemLook(handItem());
         const onThis = inHand && SHEETS_OF[inHand.rodzaj].includes(sheet) ? inHand : null;
@@ -211,6 +223,7 @@
     }
     // its key on the sheet: "" when it is the sheet's own weapon in the sheet's own material (the plain sheet stays)
     function keyOn(sheet, look) {
+        if (look && HELD[sheet]) return HELD_KINDS.has(look.rodzaj) ? look.key : "";
         if (!look || !SHEETS_OF[look.rodzaj].includes(sheet)) return "";
         if (look.rodzaj === NATIVE[sheet] && look.material === NATIVE_MATERIAL[look.rodzaj] && !look.unique) return "";
         return look.key;
@@ -293,7 +306,7 @@
     Scene_Map.prototype.create = function() {
         _Scene_Map_create.call(this);
         if (!window.$gameParty) return;
-        for (const sheet of Object.keys(NATIVE).concat(["Hero_Punch"])) {
+        for (const sheet of Object.keys(NATIVE).concat(["Hero_Punch"], Object.keys(HELD))) {
             const k = key(sheet), l = lookOf(k);
             if (!l || RECOLOUR[sheet]) continue;
             plainSys(fileOf(sheet, l.rodzaj));

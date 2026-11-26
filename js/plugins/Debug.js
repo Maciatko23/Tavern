@@ -392,6 +392,7 @@
         add(Q, "czas", "isleGold", "+1000 G", 314, K.isleRows[11]);
         if (window.Combat) add(Q, "czas", "xp", K.allRows[28], 87);   // Combat.js: to try the levels
         add(Q, "czas", "isleXp", K.isleRows[12], 87, K.isleRows[13]);
+        add(Q, "czas", "isleXp", K.isleRows[28], 87, K.isleRows[29], { amount: 10000000 });   // (2026-11-25, the user: "w F9 daj opcję 10 000 000 exp")
         add(Q, "czas", "isleTexts", "", 189, K.isleRows[16], { fresh: r => { r.label = isleLabel.texts(); } });
         ISLE_GO.forEach((g, i) => { if (mapThere(g)) add(Q, "tele", "isleGo", g.nazwa, 190, g.opis, { go: i }); });
         add(Q, "tele", "isleInside", "", 189, K.isleRows[1], { pick: 0, fresh: r => { r.pick = last.isle || 0; r.label = isleLabel.inside(r.pick); } });
@@ -930,10 +931,10 @@
                 break;
             case "isleXp": {
                 if (!window.Combat || !Combat.gainXp) { say(row.icon, TK.kod.onIsleOk[9], true); break; }
-                const lv0 = Combat.hero().level, got = Combat.gainXp(10000, "F9");
+                const amount = row.amount || 10000, lv0 = Combat.hero().level, got = Combat.gainXp(amount, "F9");
                 if (!got) { say(row.icon, TK.kod.onIsleOk[10], true); break; }
                 const lv = Combat.hero().level;
-                say(row.icon, Watki.wstaw(TK.kod.onIsleOk[12], { "1": lv > lv0 ? Watki.wstaw(TK.kod.onIsleOk[11], { lv0: lv0, lv: lv }) : "" }));
+                say(row.icon, Watki.wstaw(TK.kod.onIsleOk[amount === 10000 ? 12 : 28], { "1": lv > lv0 ? Watki.wstaw(TK.kod.onIsleOk[11], { lv0: lv0, lv: lv }) : "" }));
                 break;
             }
             case "islePrologue":

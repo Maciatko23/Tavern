@@ -101,7 +101,11 @@
         const x0 = this._realX, y0 = this._realY;
         _Game_Player_update.call(this, sceneActive);
         const dx = this._realX - x0, dy = this._realY - y0, d = Math.hypot(dx, dy);
-        if (d > 0.0005 && d < 1.5 && !this.isJumping()) {   // (walked - not put somewhere else, not a jump)
+        const Cb = window.Combat, dodging = !!(Cb && Cb.act && Cb.act.mode === "roll");
+        if (dodging) {
+            // (2026-11-25) the dodge: a slide on his feet, not a walk - no steps, and his face stays on the foe (Combat_Fight.js)
+            this._heroStill = Math.max(this._heroStill || 0, STILL);
+        } else if (d > 0.0005 && d < 1.5 && !this.isJumping()) {   // (walked - not put somewhere else, not a jump)
             // The free movement steps one axis at a time on some frames (slowly - tired - more often), so the move of a single
             // frame says "left" or "down" in the middle of a diagonal walk. Walking by the keys, the facing is where the keys point;
             // walking by itself (a click, up to a building spot) it is the move over the last frames, and it turns only once the
@@ -135,8 +139,23 @@
     };
 
     // the sheet, column and row to show now
+    // (2026-11-25, the player: the dodge "powinien wyglądać bardziej naturalnie, a nie że gracz się sztywno składa jak deska") the
+    // dodge's poses from his own sheets: the crouch of the sneak (the spring and the landing, the master's slide), the run's frame with
+    // the legs tucked under him (in the air) - Combat_Fight.js DODGE_TIERS / HOP say the parts of the time
+    const AIR_PHASE = 0.01;   // (the run's first frame of the cycle: the knees up)
+    function dodgeCell(p) {
+        const Cb = window.Combat, a = Cb && Cb.act, F = window.Tawerna && Tawerna.api ? Tawerna.api("Combat_parts") : null, f = F && F.fight;
+        if (!a || a.mode !== "roll" || !f || !f.DODGE_TIERS || !a.rollLen) return null;
+        const tier = f.DODGE_TIERS[a.rollTier || 0], k = a.rollT / a.rollLen, H = f.HOP, torch = torchHeld();
+        const row = ROWS[p._heroDir8 || p.direction()] || 0;
+        const crouch = { sheet: torch ? TORCH_SHEETS.sneak : SNEAK, phase: -1, row };
+        if (tier.blur || k < H.up || k >= H.down) return crouch;
+        return { sheet: torch ? TORCH_SHEETS.run : RUN, phase: AIR_PHASE, row };
+    }
     function heroCell() {
-        const p = $gamePlayer, moving = (p._heroStill || 0) < STILL && !p.isJumping();
+        const p = $gamePlayer, dodge = dodgeCell(p);
+        if (dodge) return dodge;
+        const moving = (p._heroStill || 0) < STILL && !p.isJumping();
         const run = moving && typeof p.isDashing === "function" && p.isDashing();
         const sneak = !run && !!(window.Hunting && Hunting.sneaking && Hunting.sneaking());   // (C: bent low, also standing)
         const kind = run ? "run" : sneak ? "sneak" : "walk";

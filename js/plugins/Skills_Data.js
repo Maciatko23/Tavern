@@ -34,7 +34,7 @@
     // how each effect key reads in the texts (the value per rank times the rank)
     const FX = {
         "melee.dmg": "%", "melee.crit": "%", "melee.poise": "%", "melee.breath": "%", "block.reduce": "%", "breath.regen": "%", "knock.resist": "%",
-        "roll.iframes": "s", "hp.max": "n", "hurt": "%", "run.breath": "%",
+        "roll.iframes": "s", "dodge.tier": "n", "hp.max": "n", "hurt": "%", "run.breath": "%",
         "stamina.cost": "%", "hunger": "%", "thirst": "%", "cold": "%", "sleep.rest": "%", "bandage.heal": "%", "wound.heal": "%", "carry": "n",
         "needs.penalty": "%", "food.value": "%", "food.buff": "%", "spoil": "%", "spoil.store": "%",
         "chop.hits": "%", "mine.hits": "%", "gather.cost": "%", "chop.yield": "%", "mine.yield": "%", "forage.yield": "%", "ore": "%",
@@ -88,7 +88,7 @@
         S("acrobat", "defense", 2, 4, { from: ["keen"], attr: { dex: 14 } }),
         S("thickskin", "defense", 3, 1, { from: ["d_block", "d_breath"], attr: { con: 16 } }),
         S("d_knock", "defense", 3, 2, { ranks: 2, from: ["d_breath"], fx: { "knock.resist": 0.2 } }),
-        S("d_roll", "defense", 3, 4, { ranks: 2, from: ["acrobat"], fx: { "roll.iframes": 3 } }),
+        S("d_roll", "defense", 3, 4, { ranks: 2, from: ["acrobat"], fx: { "roll.iframes": 3, "dodge.tier": 1 } }),   // (dodge.tier: Combat_Fight DODGE_TIERS)
         S("secondwind", "defense", 4, 1, { from: ["thickskin"] }),
         S("d_body2", "defense", 4, 3, { ranks: 2, from: ["d_knock", "d_roll"], attr: { con: 25 }, fx: { "hp.max": 20 } }),
         S("d_stone", "defense", 5, 2, { from: ["secondwind", "d_body2"], attr: { con: 35 }, fx: { "hurt": 0.12 } }),

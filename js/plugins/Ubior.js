@@ -477,28 +477,39 @@
     const heroOn = () => !window.HeroLook || !HeroLook.active || HeroLook.active();
 
     // ---- pictures read through a canvas of our own (willReadFrequently: the reads are not slowed down)
-    function pixels(bitmap) {
+    function pixels(bitmap) { return drain(pixelsSteps(bitmap)); }
+    // (2026-11-25: in pieces for the background jobs - the copy, then the pixels read in stripes)
+    function* pixelsSteps(bitmap) {
         const src = bitmap._canvas || bitmap._image;
         const w = bitmap.width, h = bitmap.height, cv = document.createElement("canvas");
         cv.width = w;
         cv.height = h;
         const cx = cv.getContext("2d", { willReadFrequently: true });
         cx.drawImage(src, 0, 0);
-        const img = cx.getImageData(0, 0, w, h);
+        yield;
+        const img = cx.createImageData(w, h);
+        for (let y = 0; y < h; y += 128) {
+            const hh = Math.min(128, h - y);
+            img.data.set(cx.getImageData(0, y, w, hh).data, y * w * 4);
+            yield;
+        }
         return { w, h, img, data: img.data, cv, cx };
     }
     const _loadCharacter = ImageManager.loadCharacter, _loadSystem = ImageManager.loadSystem, _loadPicture = ImageManager.loadPicture;
     const plain = name => (SHEETS[name].folder === "characters" ? _loadCharacter : _loadSystem).call(ImageManager, name);
     const masks = {};
     // the mask of a sheet (file: another mask of it - Ubior_Bron.js's sheet without its weapon has its own)
-    function maskOf(name, file) {
+    function maskOf(name, file) { return drain(maskSteps(name, file)); }
+    function* maskSteps(name, file) {
         const f = file || "Ubior_Maska_" + name, m = masks[f];
         if (m) return m;
         const b = _loadSystem.call(ImageManager, f);
         if (b.isError && b.isError()) return (masks[f] = false);
         if (!b.isReady()) return null;
-        const px = pixels(b), n = px.w * px.h, parts = new Uint8Array(n), d = px.data;
+        const px = yield* pixelsSteps(b), n = px.w * px.h, parts = new Uint8Array(n), d = px.data;
+        if (masks[f]) return masks[f];   // (another job read it meanwhile)
         for (let i = 0; i < n; i++) {
+            if (i && !(i % CHUNK)) yield;
             const p = i * 4;
             if (d[p + 3]) parts[i] = PART_OF.get((d[p] << 16) | (d[p + 1] << 8) | d[p + 2]) || P.inne;
         }
@@ -622,12 +633,14 @@
 
     // ---- what each cell of a sheet has (from the mask, once): the head, the body, the shoulders, the belt
     const cellCache = {};
-    function cellsOf(name, mask) {
+    function cellsOf(name, mask) { return drain(cellsSteps(name, mask)); }
+    function* cellsSteps(name, mask) {
         const ck = name + (mask.file && mask.file !== "Ubior_Maska_" + name ? "|" + mask.file : "");
         if (cellCache[ck]) return cellCache[ck];
         const def = SHEETS[name], cell = def.cell, W = mask.w, H = mask.h, parts = mask.parts;
         const cols = Math.floor(W / cell), rows = Math.floor(H / cell), out = [];
         for (let r = 0; r < rows; r++) {
+            if (r) yield;
             const dir = def.rows[r] || "S", rowCells = [];
             for (let c = 0; c < cols; c++) {
                 const x0 = c * cell, y0 = r * cell;
@@ -969,7 +982,7 @@
         const f = FAKTURY[w.faktura];
         return Math.round((0.18 + 0.64 * t) * (n - 1)) + (f ? 2 * f(x, y) : 0);
     }
-    function armourShirt(d, parts, W, H, cell, cells, w) {
+    function* armourShirt(d, parts, W, H, cell, cells, w) {
         const ramp = w._ramp, n = ramp.length, lo = RANGE[P.koszula][0], hi = RANGE[P.koszula][1];
         const cols = Math.floor(W / cell), rows = Math.floor(H / cell), anchor = new Int16Array(cols * rows * 3).fill(-999);
         for (const ci of cells) {
@@ -978,6 +991,7 @@
             anchor[a] = Math.round(ci.sx); anchor[a + 1] = ci.sy; anchor[a + 2] = FRONT[ci.dir] || BACK[ci.dir] ? 1 : 0;
         }
         for (let i = 0, N = W * H; i < N; i++) {
+            if (i && !(i % CHUNK)) yield;
             if (parts[i] !== P.koszula) continue;
             const p = i * 4;
             if (!d[p + 3]) continue;
@@ -990,9 +1004,10 @@
     }
     // the bracers: the forearms (the bare skin next to the hands, up to 5 px from them) in the bracers' ramp, a lighter rim at both ends;
     // the hands of metal ones in leather gloves (w._hands)
-    function bracers(d, parts, W, H, w) {
+    function* bracers(d, parts, W, H, w) {
         const N = W * H, depth = new Uint8Array(N), q = [];
         for (let i = 0; i < N; i++) if (parts[i] === P.dlonie) { depth[i] = 1; q.push(i); }
+        yield;
         for (let h = 0; h < q.length; h++) {
             const i = q[h], k = depth[i];
             if (k > 5) continue;
@@ -1214,10 +1229,11 @@
         return putPicture(d, parts, W, ci, cell, pic, 0, def.w, def.h, x0 + px, y0 + by, { lut, skip: (L, a) => !(OVER_BODY(L) || !a) });
     }
     // the embroidered trim of the feast shirt: the shirt's pixels at its edges (next to its outline, toward the skin, the belt, the trousers)
-    function trim(d, parts, W, H, w) {
+    function* trim(d, parts, W, H, w) {
         const c = w._haft;
         if (!c) return;
         for (let i = W + 1; i < W * H - W - 1; i++) {
+            if (!(i % CHUNK)) yield;
             if (parts[i] !== P.koszula) continue;
             const near = [i - 1, i + 1, i - W, i + W];
             let edge = false;
@@ -1236,8 +1252,18 @@
     // place in every cell. lay: the other plugins' layers on this sheet ([{ L, key }] - Ubior_Bron.js's weapon)
     const stats = [];
     const report = {};
-    function compose(name, src, mask, o, lay) {
-        const def = SHEETS[name], px = pixels(src), W = px.w, H = px.h, d = px.data, cell = def.cell, Wz = patterns();
+    // (2026-11-25, the player: "po zmianie ekwipunku i potem rozmowa nadal jest chwilowe potężne spowolnienie") a sheet is dressed in
+    // pieces now: composeSteps yields after every piece (CHUNK pixels of a loop, CELLS_STEP cells, STRIPE rows put back) and the
+    // background jobs (pump) take a few milliseconds of it a frame - 29 sheets x 4-24 ms were dressed one a logic frame in a talk, and a
+    // slow frame made the game catch up with more logic frames, each dressing one more (100 ms frames). compose() = all of it at once.
+    const CHUNK = 49152, CELLS_STEP = 6, STRIPE = 96;
+    function compose(name, src, mask, o, lay) { return drain(composeSteps(name, src, mask, o, lay)); }
+    function drain(gen) {
+        const saved = OV;   // (a job in the background may be half way: its OV is its own - pump)
+        try { let r; do { r = gen.next(); } while (!r.done); return r.value; } finally { OV = saved; }
+    }
+    function* composeSteps(name, src, mask, o, lay) {
+        const def = SHEETS[name], px = yield* pixelsSteps(src), W = px.w, H = px.h, d = px.data, cell = def.cell, Wz = patterns();
         // (the PixelLab armour's layers worn here: their pictures, loaded - composed() waits for them)
         const plLay = [];
         for (const place of PL_ORDER) {
@@ -1261,23 +1287,28 @@
             if ((place === "tors" && armour) || (place === "rece" && bracer) || (place === "nogi" && greaves)) continue;
             jobs[part] = lutOf(w._ramp, RANGE[part], w.key + ":" + part);
         }
+        yield;
         if (jobs.length) {
-            for (let i = 0, n = W * H; i < n; i++) {
-                const f = jobs[parts[i]];
-                if (!f) continue;
-                const p = i * 4;
-                if (!d[p + 3]) continue;
-                const c = f(d[p], d[p + 1], d[p + 2]);
-                d[p] = c[0]; d[p + 1] = c[1]; d[p + 2] = c[2];
+            for (let i0 = 0, n = W * H; i0 < n; i0 += CHUNK) {
+                for (let i = i0, i1 = Math.min(n, i0 + CHUNK); i < i1; i++) {
+                    const f = jobs[parts[i]];
+                    if (!f) continue;
+                    const p = i * 4;
+                    if (!d[p + 3]) continue;
+                    const c = f(d[p], d[p + 1], d[p + 2]);
+                    d[p] = c[0]; d[p + 1] = c[1]; d[p + 2] = c[2];
+                }
+                yield;
             }
         }
-        const cells = cellsOf(name, mask);
+        const cells = yield* cellsSteps(name, mask);
         // the PixelLab armour: its layer over the frame (its own colours or the material's), the parts under it become the shirt /
         // the trousers / the feet / the forearm
         const plDone = {};
         for (const { place, w, pdef, pic } of plLay) {
             const lut = plLut(pdef, w), pd = pic.data, part = PL_PART[place];
             for (let i = 0, N = W * H; i < N; i++) {
+                if (i && !(i % CHUNK)) yield;
                 const p = i * 4;
                 if (!pd[p + 3]) continue;
                 if (pd[p + 3] === BEHIND) {
@@ -1295,13 +1326,15 @@
                 if (parts[i] !== P.narzedzie) parts[i] = part;
             }
             plDone[place] = true;
+            yield;
         }
-        if (armour && !plDone.tors) armourShirt(d, parts, W, H, cell, cells, armour);
-        if (bracer && !plDone.rece) bracers(d, parts, W, H, bracer);
-        if (tors && tors._haft) trim(d, parts, W, H, tors);
+        if (armour && !plDone.tors) { yield* armourShirt(d, parts, W, H, cell, cells, armour); yield; }
+        if (bracer && !plDone.rece) { yield* bracers(d, parts, W, H, bracer); yield; }
+        if (tors && tors._haft) { yield* trim(d, parts, W, H, tors); yield; }
         // the layers (the weapon in hand), before the overlays: what they draw is the tool a helmet stays behind
         for (const { L, key } of lay || []) {
             try { L.draw({ name, d, parts, W, H, cell, cells, key, o, setPx, OUTLINE, PARTS: P }); } catch (e) { console.error(PLUGIN + ": " + (L.name || "layer") + ": " + e.message); }
+            yield;
         }
         // 2. the overlays, cell by cell
         const head = o.glowa && Wz[o.glowa], feet = o.stopy && Wz[o.stopy], back = o.plecy && Wz[o.plecy], belt = o.pas && Wz[o.pas];
@@ -1311,7 +1344,9 @@
         // (a hat drawn by PixelLab hides lying and rolling, like the drawn one; a helmet turns with the head)
         const helm = head && PICTURES[headKind] && PICTURES[headKind].helm ? head : null, hatPL = !!(helm && PICTURES[headKind].czapka);
         const rep = [];
+        let nCell = 0;
         for (const ci of cells) {
+            if (++nCell % CELLS_STEP === 0) yield;
             if (greaves && !plDone.nogi) (ci.upright ? greaveBand(d, parts, W, ci, cell, greaves) : boots(d, parts, W, ci, cell, greaves, { rows: 7, feet: false, shine: !!greaves.polysk }));
             if (feet && feet.nakladka === "buty" && feet._ramp && !plDone.stopy) boots(d, parts, W, ci, cell, feet);
             if (ci.none || !ci.upright) {
@@ -1337,7 +1372,7 @@
             }
         }
         if (head) report[name] = { head: o.glowa, cells: rep };
-        px.cx.putImageData(px.img, 0, 0);
+        for (let y = 0; y < H; y += STRIPE) { px.cx.putImageData(px.img, 0, 0, 0, y, W, Math.min(STRIPE, H - y)); yield; }
         // the strip over the head: the HEADROOM rows drawn over the cells, then each cell's own top rows under them
         let strip = null;
         if (OV.any) {
@@ -1384,11 +1419,12 @@
 
     // ---- the live sheets: one Bitmap per sheet, redrawn when the outfit changes; the compositions kept (sheet + outfit)
     const live = {};
-    let deferring = 0;   // (the map being made: sheets asked for ahead wait in dressQueue - sheetFor)
-    const dressQueue = new Map();   // name -> folder
+    let deferring = 0;   // (the map being made: the sheets asked for ahead are left to the background jobs - sheetFor, pump)
     const kept = new Map();
     const KEEP = 16;
-    function composed(name, src, o, k, lay) {
+    function composed(name, src, o, k, lay) { return drain(composedSteps(name, src, o, k, lay)); }
+    const keptHas = (name, src, k) => { const e = kept.get(name + "#" + k); return !!e && e.src === src; };
+    function* composedSteps(name, src, o, k, lay) {
         const ck = name + "#" + k, e = kept.get(ck);
         if (e && e.src === src) { e.used = Graphics.frameCount; return e.cv; }
         // (a layer's own sheet under everything - the swing without its old weapon - and its mask)
@@ -1401,7 +1437,7 @@
             maskFile = b.mask || null;
             break;
         }
-        const mask = maskOf(name, maskFile);
+        const mask = yield* maskSteps(name, maskFile);
         if (!mask || mask.w !== base.width || mask.h !== base.height || base.width !== src.width || base.height !== src.height) return null;
         const Wz = patterns();
         for (const place of ORDER) {
@@ -1415,12 +1451,14 @@
         // dressed at once and again in full when they are in - sheetFor; missing ones - false: the old way for good)
         const partial = plPending(name, o, lay, maskFile);
         const t0 = performance.now();
-        const res = compose(name, base, mask, o, lay);
+        const res = yield* composeSteps(name, base, mask, o, lay);
         const cv = res.cv;
         cv._ubiorStrip = res.strip;
         cv._partial = partial;
         cv._maskFile = maskFile;
-        stats.push({ sheet: name, outfit: k, ms: +(performance.now() - t0).toFixed(2), w: src.width, h: src.height, partial });
+        const st = { sheet: name, outfit: k, ms: +(performance.now() - t0).toFixed(2), w: src.width, h: src.height, partial };
+        stats.push(st);
+        cv._ubiorStat = st;   // (a job in the background puts its own working time there - pump)
         if (stats.length > 400) stats.shift();
         if (partial) return cv;
         kept.set(ck, { cv, src, used: Graphics.frameCount });
@@ -1444,7 +1482,7 @@
         return false;
     }
     // the sheet to show for `name` now (null: the plain one - not ready yet, without HeroLook.js, nothing ever worn on this sheet)
-    function sheetFor(name, folder) {
+    function sheetFor(name, folder, now) {   // (now: dressed at once - a script's ask, Ubior.sheet)
         const def = SHEETS[name];
         if (!def || def.folder !== folder || !window.$gameSystem) return null;
         const src = plain(name);
@@ -1462,15 +1500,25 @@
             L.bmp._ubiorStrip = { bmp: null, on: false, cell: def.cell };
         }
         // (dressed without its PixelLab pictures while they loaded: dressed again in full once they are in - checked every 6th frame)
-        if (L.partial && L.key === k && !(Graphics.frameCount % 6) && !plPending(name, m.o, lay, L.maskFile)) L.key = null;
+        if (L.partial && L.key === k && !(Graphics.frameCount % 6) && !plPending(name, m.o, lay, L.maskFile)) L.key = "#stale";
         // (2026-11-17, the player: „jak zmienia ekwipunek, to chwilę trwa, jakby wyjście z menu”) the map's start asks for every hero
         // sheet ahead (ChoppableTree, HeroLook and Torch warm the swings) - each was dressed there and then: 28 sheets, 0.5-1 s in one
         // frame after the menu. Asked while the map is being made, a sheet to dress waits in a queue (its last look - or the plain sheet
         // - meanwhile) and is dressed a few frames later, one at a time; the sheet a sprite shows (asked in its update) at once.
-        if ((L.key !== k || L.src !== src) && deferring && !empty) { dressQueue.set(name, folder); return L.key === null ? null : L.bmp; }
+        // (2026-11-25) and every dressing waits for the background jobs (pump: a few ms a frame, the sheet he shows first) - its last look
+        // meanwhile; at once only a sheet never dressed yet that a sprite shows now, and a look kept from before (no work)
         if (L.key !== k || L.src !== src) {
+            if (!now && !empty && !keptHas(name, src, k) && (deferring || L.key !== null)) { want(name, folder, k, src, m.o, lay); return L.key === null ? null : L.bmp; }
+            jobs.delete(name);
             const cv = empty ? (src._canvas || src._image) : composed(name, src, m.o, k, lay);
             if (!cv) return L.key === null ? null : L.bmp;   // (a picture of an overlay still loading: the last look a frame longer)
+            dressed(L, cv, k, src, empty);
+        }
+        return L.bmp;
+    }
+    // a composition onto the live sheet (and its strip over the head)
+    function dressed(L, cv, k, src, empty) {
+        {
             const ctx = L.bmp.context;
             ctx.clearRect(0, 0, src.width, src.height);
             ctx.drawImage(cv, 0, 0);
@@ -1490,8 +1538,55 @@
             L.maskFile = empty ? null : cv._maskFile || null;
             L.bmp._ubiorDressed = !empty;
         }
-        return L.bmp;
     }
+    // ---- the background jobs: name -> { k, src, o, lay, gen (composedSteps, started at its first turn), ov (its OV while it waits),
+    // busy (ms worked) }. pump(): once a tick (SceneManager.update), BUDGET ms (more while the screen is dark), the sheet he shows first.
+    const jobs = new Map();
+    const BUDGET = { play: 3, dark: 12 };
+    const FIRST = ["Hero_Walk", "Hero_Run", "Hero_Sneak", "Hero_TorchWalk", "Hero_TorchRun"];
+    function want(name, folder, k, src, o, lay) {
+        const j = jobs.get(name);
+        if (j && j.k === k && j.src === src) return;
+        jobs.set(name, { name, folder, k, src, o, lay, gen: null, ov: null, busy: 0, waitTill: 0 });
+    }
+    function pickJob() {
+        const f = Graphics.frameCount, ok = j => !!j && j.waitTill <= f;   // (waitTill: its pictures still loading)
+        const shown = window.$gamePlayer ? jobs.get($gamePlayer.characterName()) : null;
+        if (ok(shown)) return shown;
+        for (const j of jobs.values()) if (j.gen && ok(j)) return j;
+        for (const n of FIRST) if (ok(jobs.get(n))) return jobs.get(n);
+        for (const j of jobs.values()) if (ok(j)) return j;
+        return null;
+    }
+    function pump() {
+        if (!jobs.size) return;
+        const dark = (window.$gameScreen && $gameScreen.brightness() < 16) || (window.$gamePlayer && $gamePlayer.isTransferring && $gamePlayer.isTransferring());
+        const budget = dark ? BUDGET.dark : BUDGET.play, t0 = performance.now();
+        while (jobs.size && performance.now() - t0 < budget) {
+            const job = pickJob();
+            if (!job) return;
+            const L = live[job.name];
+            if (!L) { jobs.delete(job.name); continue; }
+            if (!job.gen) job.gen = composedSteps(job.name, job.src, job.o, job.k, job.lay);
+            const saved = OV, s0 = performance.now();
+            OV = job.ov;
+            let r;
+            try { r = job.gen.next(); }
+            catch (e) { r = { done: true, value: null }; console.error(PLUGIN + ": " + job.name + ": " + e.message); }
+            finally { job.ov = OV; OV = saved; }
+            job.busy += performance.now() - s0;
+            if (!r.done) continue;
+            if (!r.value) { job.gen = null; job.ov = null; job.waitTill = Graphics.frameCount + 10; continue; }   // (a picture still loading: again in 10 frames)
+            jobs.delete(job.name);
+            if (r.value._ubiorStat && !r.value._ubiorStat.bg) { r.value._ubiorStat.ms = +job.busy.toFixed(2); r.value._ubiorStat.bg = true; }
+            dressed(L, r.value, job.k, job.src, false);
+        }
+    }
+    const _SceneManager_update = SceneManager.update;
+    SceneManager.update = function() {
+        _SceneManager_update.apply(this, arguments);
+        try { pump(); } catch (e) { console.error(PLUGIN + ": pump: " + e.message); }
+    };
     // ---- a look tried on (the P menu's Ekwipunek, 2026-10-22: the hero in the chosen thing before it is put on): the sheet `name`
     // dressed in what is worn now with `over` laid over it ({ miejsce: wzor }; "" or null - nothing on that place). A canvas from
     // the kept compositions (the same cache as the live sheets: trying the same thing again costs nothing); the plain sheet's canvas
@@ -1726,19 +1821,7 @@
         try { _Scene_Map_create.call(this); } finally { deferring--; }
         preload();
     };
-    // the waiting sheets: dressed only where a frame of 10-50 ms is not seen - the screen dark (a map's change fading out and in) or a
-    // talk's window open - one a frame; (2026-11-17, the player: one every 4th frame still made the game "wyraźnie spowalnia" for two
-    // seconds after the menu). A sheet shown before that (the hero starts a swing) is dressed at once by its sprite's own ask - one
-    // frame, once per sheet.
-    if (T && T.onMapUpdate) T.onMapUpdate(() => {
-        if (!dressQueue.size) return;
-        const quiet = (window.$gameScreen && $gameScreen.brightness() < 16) || (window.$gameMessage && $gameMessage.isBusy()) || (window.$gamePlayer && $gamePlayer.isTransferring());
-        if (!quiet) return;
-        const shown = window.$gamePlayer ? $gamePlayer.characterName() : "";
-        const name = dressQueue.has(shown) ? shown : dressQueue.keys().next().value, folder = dressQueue.get(name);
-        dressQueue.delete(name);
-        sheetFor(name, folder);
-    }, { owner: PLUGIN, name: "dressQueue" });
+    // (the sheets waiting to be dressed: the background jobs - pump, under sheetFor)
     const _Scene_Base_create = Scene_Base.prototype.create;
     Scene_Base.prototype.create = function() {
         _Scene_Base_create.call(this);
@@ -1802,7 +1885,9 @@
     const outfitPart = k => (k === null || k === undefined ? k : String(k).split("#")[0]);
     const api = { VERSION: "1.2.0", FULL: true, SHEETS, PARTS: P, PLACES, ORDER, FROM_ITEM, PICTURES, WZORY_GRAFIKI, MATERIALY, HELMY, ZBROJE, HEADROOM, OH, TOP_ROWS,
         patterns, wear, takeOff, set,
-        outfit: () => outfitNow(), sheet: name => (SHEETS[name] ? sheetFor(name, SHEETS[name].folder) || plain(name) : null), tryOn, itemLook, cellWithHead,
+        outfit: () => outfitNow(), sheet: name => (SHEETS[name] ? sheetFor(name, SHEETS[name].folder, true) || plain(name) : null), tryOn, itemLook, cellWithHead,
+        // (2026-11-25) the background jobs: dressing(name) - this sheet still waits for its new look; dressing() - how many wait
+        dressing: name => (name ? jobs.has(name) : jobs.size),
         bust: () => bustFor() || _loadPicture.call(ImageManager, BUST), bustKey: () => (bustLive ? bustLive.key : null),
         // (a live sheet dressed without its PixelLab pictures yet: its key ends with "~" - the same look once they are in)
         key: () => keyOf(outfitNow()), liveKey: name => (live[name] && live[name].key !== null ? outfitPart(live[name].key) + (live[name].partial ? "~" : "") : null),

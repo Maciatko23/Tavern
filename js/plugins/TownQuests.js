@@ -1622,19 +1622,22 @@
         const p = $gamePlayer, y = p._realY - p.centerY();
         return $gameMap.isLoopVertical() ? y : Math.max(0, Math.min($gameMap.height() - $gameMap.screenTileY(), y));
     }
+    // (2026-11-25: FreeMovement.js keeps the camera on the hero every frame - the peek holds it with $gameTemp._cameraHold while it lasts)
+    const peekRelease = () => { if (window.$gameTemp && $gameTemp._cameraHold === "peek") $gameTemp._cameraHold = null; };
     function updatePeek() {
         if (!window.$gameMap || !$gamePlayer) return;
-        if (!onTown() || $gamePlayer.isTransferring()) { peeking = false; return; }
+        if (!onTown() || $gamePlayer.isTransferring()) { peeking = false; peekRelease(); return; }
         const p = $gamePlayer, st = capStep();
         const inZone = (st === 0 || st === 1) && p.x >= 31 && p.x <= 35 && p.y >= 16 && p.y <= 19 && p.direction() === 8;
         if (!inZone && !peeking) return;
         peeking = true;
+        $gameTemp._cameraHold = "peek";
         const target = inZone ? Math.max(0, centeredY() - PEEK.tiles) : centeredY(), d = target - $gameMap._displayY;
-        if (Math.abs(d) < 0.01) { if (!inZone) peeking = false; return; }
+        if (Math.abs(d) < 0.01) { if (!inZone) { peeking = false; peekRelease(); } return; }
         const step = Math.max(-PEEK.speed, Math.min(PEEK.speed, d));
         if (step < 0) $gameMap.scrollUp(-step); else $gameMap.scrollDown(step);
     }
-    T.on("mapEnter", () => { peeking = false; }, { owner: PLUGIN });
+    T.on("mapEnter", () => { peeking = false; peekRelease(); }, { owner: PLUGIN });
     // the gate (K33: the cap through the bars) and the statues' plinths (W3: the carved verse) answer the action button
     const STUB_GATE = [C(355, ["TownQuests.place(this, 'gate')"]), C(0, [])], STUB_STATUE = [C(355, ["TownQuests.place(this, 'statue')"]), C(0, [])];
     const plinthWanted = () => { const r = has() ? rec("W3") : null; return !!r && r.s === "active" && Q.W3.steps[r.step].talk === "w3Verse" && !hasVerse("cokoly"); };
@@ -2483,7 +2486,9 @@
     // the greeting of the day - "greet", below the shops, above "after" (Act III's Ambroży, as before)
     const L0 = TL();
     const isResident = key => !!resident(key);
-    T.talk.takeover({ owner: PLUGIN, who: isResident, priority: T.talk.PRIORITY.quest, run: ctx => residentTalk(ctx.who, ctx.ev, "content") });
+    // (chain: with a quest to offer - the "!" over the person - it follows another system's first meeting in the same talk, 2026-11-25)
+    T.talk.takeover({ owner: PLUGIN, who: isResident, priority: T.talk.PRIORITY.quest, run: ctx => residentTalk(ctx.who, ctx.ev, "content"),
+        chain: ctx => has() && QUESTS.some(q => q.giver === ctx.who && q.offer && offerable(q)) });
     T.talk.takeover({ owner: PLUGIN, name: "greeting", who: isResident, priority: T.talk.PRIORITY.greet, run: ctx => residentTalk(ctx.who, ctx.ev, "greeting") });
     if (!L0) console.warn("[TownQuests] TownLife.js not found - the residents will not talk about quests");
     // Kuba's night trips for water (TownLife_Data: his plan's entry "w1Water") end once the sluice is half open (W1 rozdz. 6 a/b)

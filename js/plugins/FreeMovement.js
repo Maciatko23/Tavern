@@ -645,5 +645,38 @@
         this._tilemap.addChild(this._targetMarker);
     };
 
+    // ------------------------------------------------------------------
+    // (2026-11-25, the player: "kamera musi zawsze podążać za graczem, żeby był w centrum (poza cutscenkami)") the camera on the hero
+    // after every map frame. The engine scrolls only by his own step inside his update, so whatever moved him besides - the dodge, a
+    // knock back, a push - left him off the middle for good (27 px after one dodge). Now the view is put so that he is in the middle
+    // (the map's edges still hold it, as always). Not in a scene: an event running, the map scrolling, a scene's black bars (CleanHUD
+    // $gameTemp._hudScene), the ferry's scene (Podroznicy), $gameTemp._cameraHold (a plugin that moves the camera itself), a transfer.
+    // Back from a scene with the view far off: a smooth return (CAMERA.ease of the way a frame) instead of a jump.
+    // ------------------------------------------------------------------
+    const CAMERA = { snap: 1.0, ease: 0.2 };
+    function cameraFree() {
+        if (!window.$gameMap || !window.$gamePlayer || !$gameMap.mapId()) return false;
+        if ($gameMap.isScrolling() || $gameMap.isEventRunning() || $gamePlayer.isTransferring()) return false;
+        if (window.$gameTemp && ($gameTemp._hudScene || $gameTemp._cameraHold)) return false;
+        const pod = window.Podroznicy;
+        if (pod && pod.scena && typeof pod.scena.trwa === "function" && pod.scena.trwa()) return false;
+        return true;
+    }
+    const viewX = x => { if ($gameMap.isLoopHorizontal()) return x; const end = $gameMap.width() - $gameMap.screenTileX(); return end < 0 ? end / 2 : Math.max(0, Math.min(x, end)); };
+    const viewY = y => { if ($gameMap.isLoopVertical()) return y; const end = $gameMap.height() - $gameMap.screenTileY(); return end < 0 ? end / 2 : Math.max(0, Math.min(y, end)); };
+    function followHero() {
+        const p = $gamePlayer, tx = viewX(p._realX - p.centerX()), ty = viewY(p._realY - p.centerY());
+        if ($gameMap.isLoopHorizontal() || $gameMap.isLoopVertical()) { $gameMap.setDisplayPos(tx, ty); return; }
+        const x = $gameMap.displayX(), y = $gameMap.displayY(), dx = tx - x, dy = ty - y;
+        if (Math.abs(dx) < 1e-4 && Math.abs(dy) < 1e-4) return;
+        if (Math.hypot(dx, dy) <= CAMERA.snap) $gameMap.setDisplayPos(tx, ty);
+        else $gameMap.setDisplayPos(x + dx * CAMERA.ease, y + dy * CAMERA.ease);
+    }
+    const _Scene_Map_updateMainMultiply = Scene_Map.prototype.updateMainMultiply;
+    Scene_Map.prototype.updateMainMultiply = function() {
+        _Scene_Map_updateMainMultiply.call(this);
+        if (cameraFree()) followHero();
+    };
+
     window.FreeMovement = { feetBox, freeMoveOn, worthMarking, worldSpeed, rawFor, WALK_SPEED, RUN_SPEED };   // (worldSpeed: an old speed number -> what it is now, for checks like an animal's run sheet)
 })();

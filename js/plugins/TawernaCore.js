@@ -1445,7 +1445,9 @@
         if (typeof s.run !== "function") throw new Error("Tawerna.talk.takeover: " + owner + " has no run(ctx)");
         const name = String(s.name || "");
         for (let i = takeovers.length - 1; i >= 0; i--) if (takeovers[i].owner === owner && takeovers[i].name === name) takeovers.splice(i, 1);   // (the same one again: the new one)
-        const t = { owner, name, who: s.who, whoText: whoText(s.who), test: whoTest(s.who), priority: priorityOf(s.priority, "takeover"), run: s.run, n: seq++ };
+        // chain(ctx) -> true: this takeover's commands also follow a higher one's plain lines (no choice in them) in the same talk
+        const t = { owner, name, who: s.who, whoText: whoText(s.who), test: whoTest(s.who), priority: priorityOf(s.priority, "takeover"), run: s.run, n: seq++,
+            chain: typeof s.chain === "function" ? s.chain : null };
         takeovers.push(t);
         takeovers.sort(byPriority);
         return () => { const i = takeovers.indexOf(t); if (i >= 0) takeovers.splice(i, 1); };
@@ -1466,7 +1468,28 @@
     };
     function ctxOf(interp, who, o) {
         const ev = o.ev || (interp && window.$gameMap && typeof interp.eventId === "function" ? $gameMap.event(interp.eventId()) : null) || null;
-        return { who, ev, interp: interp || null, eventId: ev ? ev.eventId() : interp && typeof interp.eventId === "function" ? interp.eventId() : 0, skip: skipSet(o.skip) };
+        return { who, ev, interp: interp || null, eventId: ev ? ev.eventId() : interp && typeof interp.eventId === "function" ? interp.eventId() : 0, skip: skipSet(o.skip),
+            firstTalk: !!o.firstTalk };
+    }
+    // the people talked to (saved: Tawerna.state("talked") = { who: the talks had }) - the chain below follows only the very first one
+    // (2026-11-25: after any plain talk it added the quest's talk - the ferry's traveller said "Coś chciałeś?" after a refused errand)
+    const talked = T.state.define("talked", () => ({}), { version: 1, owner: "TawernaCore" });
+    // (2026-11-25, the user: "postacie z wykrzyknikiem - jak się przedstawią, niech od razu leci ich dialog o zadaniu, żeby gracz nie musiał
+    // dwa razy zaczynać rozmowy") a first meeting or another plain speech (no choice in it) of a takeover above: a lower takeover that
+    // says it wants to follow (chain - the town's quests with an offer for this person) adds its commands after it
+    function chainAfter(t, list, who, ctx) {
+        if (!ctx.firstTalk) return list;   // (only the first talk with this person: the introduction)
+        if (list.some(c => c && c.code === 102)) return list;   // (a menu: the offer is one of its rows or comes next time)
+        for (const t2 of takeovers.slice()) {
+            if (t2 === t || !t2.chain || t2.priority >= t.priority || ctx.skip.has(t2.owner) || !t2.test(who, ctx)) continue;
+            let want = false;
+            try { want = !!t2.chain(ctx); } catch (e) { want = false; }
+            if (!want) continue;
+            let more = null;
+            try { more = t2.run(ctx); } catch (e) { report("talk: chained takeover of " + t2.owner + " (" + who + ")", e); }
+            if (more && more.length) return list.concat(more);
+        }
+        return list;
     }
     // the commands of the talk now: the first takeover's, else base(ctx) -> { list, by } (nothing is played)
     talk.resolve = function(interp, who, opts) {
@@ -1475,7 +1498,7 @@
             if (ctx.skip.has(t.owner) || !t.test(who, ctx)) continue;
             let list = null;
             try { list = t.run(ctx); } catch (e) { report("talk: takeover of " + t.owner + (t.name ? "." + t.name : "") + " (" + who + ")", e); }
-            if (list && list.length) return { list, by: t.owner, ctx };
+            if (list && list.length) return { list: chainAfter(t, list, who, ctx), by: t.owner, ctx };
         }
         if (typeof o.base === "function") {
             let list = null;
@@ -1487,7 +1510,10 @@
     // Tawerna.talk.run(interp, who, { ev, base(ctx), owner, skip }) - plays the talk in a child of the interpreter; -> who had it ("" none)
     //   skip: an owner (or a list) left out this time - "Porozmawiaj" / "Nie, w innej sprawie": the same talk without that one
     talk.run = function(interp, who, opts) {
-        const r = talk.resolve(interp, who, opts);
+        let first = false, book = null;
+        try { book = talked(); first = !book[who]; } catch (e) { book = null; }
+        const r = talk.resolve(interp, who, Object.assign({}, opts || {}, { firstTalk: first }));
+        if (book && r.list) book[who] = (book[who] || 0) + 1;
         talkLast = { who: String(who), by: r.by, frame: Graphics.frameCount };
         if (r.list && interp) interp.setupChild(r.list.concat([END()]), r.ctx.eventId);
         return r.by;
@@ -1602,6 +1628,9 @@
             try { l = h.fn(this); } catch (e) { if (!h.errors++) report("onEventList" + (h.owner ? " (" + h.owner + ")" : "") + " - told once", e); l = null; }
             if (l) return l;
         }
+        // (2026-11-25) an event with no page shown now (none of its conditions met): an empty list - started by a plugin it does nothing,
+        // the engine's own list() would throw "Cannot read properties of undefined (reading 'list')" (the autopilot hit it on floor 10)
+        if (!this.page()) return [];
         return _Game_Event_list_core.call(this);
     };
     // the page's own commands, past every hook (a story gone: the character's own talk)

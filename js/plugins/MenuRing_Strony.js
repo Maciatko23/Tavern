@@ -268,7 +268,7 @@
         hParts.push(...perkChips("hp.max", plusInt));
         out.hp = { key: "hp", label: "Życie", tile: "ŻYCIE", value: String(de.mhp), need: "health", chips: hParts, desc: "Najwięcej życia, jakie możesz mieć." };
         out.breath = { key: "breath", label: "Oddech", tile: "ODDECH", value: String(de.breath), need: "breath",
-            chips: [chip("Podstawa", "90"), chip("Kondycja " + at("con"), "+" + 2 * at("con"), "good")], desc: "Na ciosy, bloki i przewroty; wraca w odpoczynku. Głód i pragnienie go zmniejszają." };
+            chips: [chip("Podstawa", "90"), chip("Kondycja " + at("con"), "+" + 2 * at("con"), "good")], desc: "Na ciosy, bloki i uniki; wraca w odpoczynku. Głód i pragnienie go zmniejszają." };
         const cap = S && S.weightCap ? S.weightCap() : 0, bag = worn(114) ? (S && S.WEIGHT_CAP_BACKPACK) || 0 : 0, carry = Cb.carryBonus ? Cb.carryBonus() : 0, ub = US && US.udzwig ? US.udzwig() : 0;
         const cParts = [chip("Podstawa", String(cap - bag - carry))];
         if (bag) cParts.push(chip("Plecak", "+" + bag, "good", icon(114)));
@@ -307,7 +307,10 @@
                 desc: "Szansa, że cios zostawi ranę (krwawienie, wolniejsze leczenie)." },
             { key: "knock", label: "Próg przewrócenia", value: String(de.knock), chips: [chip("Podstawa", "60"), chip("Kondycja " + at("con"), "+" + num1c(1.8 * (at("con") - A0)), at("con") > A0 ? "good" : "dim")].concat(perkChips("knock.resist", plusPc)),
                 desc: "Ile siły ciosu wytrzymasz, zanim cię przewróci." },
-            { key: "roll", label: "Przewrót", value: de.rollCost + " oddechu", chips: [chip("Podstawa", "24"), chip("Zręczność " + at("dex"), "−" + num1c(0.25 * (at("dex") - A0)), at("dex") > A0 ? "good" : "dim")], desc: "Ile oddechu kosztuje unik przewrotem." },
+            { key: "roll", label: "Unik", value: de.rollCost + " oddechu", chips: [chip("Podstawa", "24"), chip("Zręczność " + at("dex"), "−" + num1c(0.25 * (at("dex") - A0)), at("dex") > A0 ? "good" : "dim")], desc: "Ile oddechu kosztuje unik (odskok)." },
+            { key: "rollChain", label: "Przerwa między unikami", value: (de.rollChain / 60).toFixed(2).replace(".", ",") + " s",
+                chips: [chip("Podstawa", "0,43 s"), chip("Zręczność " + at("dex"), "−" + (Math.min(20, 0.6 * (at("dex") - A0)) / 60).toFixed(2).replace(".", ",") + " s", at("dex") > A0 ? "good" : "dim")],
+                desc: "Ile trzeba odczekać po uniku, zanim można odskoczyć znowu. Akrobata pozwala na drugi unik od razu." },
             { key: "mind", label: "Opór umysłu", value: pc1(de.mind), chips: [chip("Podstawa", "15%"), attrChip("wil", "Hart ducha", 0.03 * (at("wil") - A0), plusPc)].concat(perkChips("mind.resist", plusPc)),
                 desc: "Szansa, że strach albo „prawda” upiora cię nie złamie." },
             { key: "cold", label: "Ciepło", value: de.cloak ? "pełne" : cold > 0 ? "+" + pc1(Math.min(1, cold)) : "brak", cls: de.cloak || cold > 0 ? "good" : "dim",

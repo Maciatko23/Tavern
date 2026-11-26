@@ -269,7 +269,13 @@
             let e = typeof get === "function" ? get() : $gameMap.event(get);
             if (!e) { yield* L.wait(30); continue; }
             yield* combatOff();
-            const spot = yield* approach(o.tiles || evTiles(e), o.front);
+            let spot = yield* approach(o.tiles || evTiles(e), o.front);
+            // (2026-11-26: the loose brick is in the tavern's back room - a door within the same map, behind the bar, leads there; it was
+            // taken for a map fault and started from the hall) a door to another part of this map first, as a player goes
+            if (!spot && (yield* throughInnerDoor(o.tiles || evTiles(e)))) {
+                e = (typeof get === "function" ? get() : $gameMap.event(get)) || e;
+                spot = yield* approach(o.tiles || evTiles(e), o.front);
+            }
             if (!spot) {
                 say("nie dojdę do rozmowy: " + ((e.event() && e.event().name) || e.eventId()));
                 // (a thing in the wall nobody can stand by - a map's fault: started from the nearest tile, ONLY with the map fixes on, noted)
@@ -301,6 +307,33 @@
         }
         return best;
     }
+    // the doors within one map (a transfer to this same map - the tavern's door behind the bar to the back room 14,13 -> 14,9, its way
+    // back 14,10 -> 14,14): a door he can reach whose landing's part of the map has a tile beside the target - he goes through it
+    function* throughInnerDoor(tiles) {
+        const W = $gameMap.width(), f = L.field(P().x, P().y);
+        const doors = $gameMap.events().map(e => {
+            const pg = e.page(), c = pg && pg.list.find(k => k.code === 201 && k.parameters[0] === 0 && k.parameters[1] === mapId());
+            return c ? { e, x: c.parameters[2], y: c.parameters[3], trig: pg.trigger } : null;
+        }).filter(Boolean);
+        const reach = (x, y) => [[0, 0], [0, 1], [0, -1], [1, 0], [-1, 0]].some(([dx, dy]) => isFinite(f.at(x + dx, y + dy)));
+        for (const d of doors) {
+            if (!reach(d.e.x, d.e.y)) continue;
+            const part = regionFrom(d.x, d.y, 4000);
+            if (part.has(P().y * W + P().x)) continue;   // (a door into the part he is in)
+            if (!tiles.some(([tx, ty]) => [[0, 1], [0, -1], [1, 0], [-1, 0], [0, 0]].some(([dx, dy]) => part.has((ty + dy) * W + tx + dx)))) continue;
+            const name = (d.e.event() && d.e.event().name) || String(d.e.eventId());
+            say("idę przez drzwi: " + name + " (" + d.e.x + "," + d.e.y + ")");
+            if (!(yield* approach([[d.e.x, d.e.y]]))) continue;
+            const x0 = P().x, y0 = P().y;
+            if (d.trig === 0) yield* L.press("ok");
+            else { for (let n = 0; n < 90 && !P().isTransferring() && !busy(); n++) { L.setMove(L.keysToward(d.e.x - P()._realX, d.e.y - P()._realY)); yield; } L.setMove([]); }
+            for (let n = 0; n < 180 && (P().isTransferring() || $gameMap.isEventRunning()); n++) { if (L.menuOpen()) yield* L.press("ok"); yield; }
+            yield* L.wait(10);
+            if (P().x !== x0 || P().y !== y0) return true;
+        }
+        return false;
+    }
+    FAB.throughInnerDoor = throughInnerDoor;
     function* remoteStart(e, o) {
         const name = (e.event() && e.event().name) || String(e.eventId()), at = [e.x, e.y];
         const f = L.field(P().x, P().y);
@@ -588,10 +621,47 @@
             const rec = rk ? R[rk] : null;
             const today = Farming.today ? Farming.today() : day();
             // (and his own count of attempts: a draw that gave nothing used to loop well <-> tavern for hours)
-            const mine = FAB.well.day === day() ? FAB.well.n : 0;
-            return Math.min(rec && rec.day === today ? Math.max(0, 2 - rec.n) : 2, Math.max(0, 2 - mine));
-        } catch (e) { return FAB.well.day === day() ? Math.max(0, 2 - FAB.well.n) : 2; }
+            const mine = FAB.well.day === day() ? FAB.well.n : 0, cap = wellCap();
+            return Math.min(rec && rec.day === today ? Math.max(0, cap - rec.n) : cap, Math.max(0, cap - mine));
+        } catch (e) { return FAB.well.day === day() ? Math.max(0, wellCap() - FAB.well.n) : wellCap(); }
     }
+    // (2026-11-25, the game: "studnia 2 łyki dziennie po 20, od dnia 10 jeden łyk") the town well's draws a day
+    const wellCap = () => ((Farming.today ? Farming.today() : day()) >= 10 ? 1 : 2);
+    const wellText = () => wellCap() + (wellCap() === 1 ? " nabranie dziennie" : " nabrania dziennie");
+    // (2026-11-25) the river: the fresh water of Dwór nad Jazem (the reservoir, 221) and of Krucze Turnie (the stream, 222) - no ration.
+    // The town's well gives one draw a day from day 10 (a sip +20) and thirst takes ~60 a day: without his own well the river is the
+    // water. He drinks to the full there and fills the skin.
+    function* drinkRiver(why, where) {
+        const map = where || MAP.manor;
+        setDoing("Idę po wodę: " + (map === MAP.manor ? "zbiornik przy dworze" : "potok w Kruczych Turniach"), why);
+        if (!(yield* goMap(map, "woda z " + (map === MAP.manor ? "zbiornika" : "potoku")))) return false;
+        yield* combatOff();
+        const tiles = [];
+        for (let y = 0; y < $gameMap.height(); y++) for (let x = 0; x < $gameMap.width(); x++) if (Farming.isWaterTile(x, y)) tiles.push([x, y]);
+        if (!tiles.length) { note("unclear", { what: "brak słodkiej wody na mapie " + mapName(mapId()) }); FAB.riverBad = (FAB.riverBad || 0) + 1; return false; }
+        const w0 = needs().water, s0 = skinSips();
+        if (!(yield* approach(tiles))) { FAB.riverBad = (FAB.riverBad || 0) + 1; say("nie doszedł do wody"); return false; }
+        for (let n = 0; n < 6 && needs().water < 92; n++) {
+            const w1 = needs().water;
+            yield* L.press("ok");
+            if (!(yield* L.choose("Napij się"))) { yield* L.closeMenus(); break; }
+            yield* L.wait(20);
+            yield* L.closeMenus();
+            if (needs().water <= w1) break;
+        }
+        if (skinOwned() && skinSips() < skinMax()) {
+            yield* L.press("ok");
+            if (yield* L.choose("Napełnij bukłak")) yield* L.wait(60);
+            yield* L.closeMenus();
+        }
+        FAB.riverDay = day();
+        const ok = needs().water > w0 || skinSips() > s0;
+        say(ok ? "napił się (" + mapName(mapId()) + "): woda " + Math.round(needs().water) + ", bukłak " + skinSips() + "/" + skinMax() : "woda tu nie dała nic");
+        if (ok) FAB.riverBad = 0; else FAB.riverBad = (FAB.riverBad || 0) + 1;
+        return ok;
+    }
+    // where the river trip goes: the reservoir by the manor, else (it failed twice) the stream in Krucze Turnie
+    const riverMap = () => ((FAB.riverBad || 0) >= 2 ? 222 : MAP.manor);
     // the waterskin (the player 2026-11-17: "to musi bukłak napełniony nosić"): Needs' skin, 4 sips of 35 water; one draw of the town's
     // well fills it whole; drunk with G down there
     const SKIN = 129, skinOwned = () => count(SKIN) > 0, skinSips = () => { try { return Needs.skinCharges(); } catch (e) { return 0; } },
@@ -661,7 +731,7 @@
         yield* combatOff();
         const tiles = Farming.tilesOfBuilding(b.type, b.x, b.y).map(t => [t.x, t.y]);
         const w0 = needs().water, s0 = skinSips();
-        for (let n = 0; n < (drink ? 3 : 1); n++) {   // (a drink is +40: to the full in two or three)
+        for (let n = 0; n < (drink ? 5 : 1); n++) {   // (a drink is +20 since 2026-11-25: to the full in up to five)
             if (!(yield* approach(tiles))) break;
             const w1 = needs().water;
             yield* L.press("ok");
@@ -1364,15 +1434,19 @@
         const reach = (x, y) => Math.min(...[[0, 1], [0, -1], [1, 0], [-1, 0]].map(([dx, dy]) => f.at(x + dx, y + dy)));
         const stumps = $gameMap.events().filter(e => ChoppableTree.isTree(e) && $gameSelfSwitches.value([mapId(), e.eventId(), "A"]) && !$gameSelfSwitches.value([mapId(), e.eventId(), "B"]));
         let best = null;
+        const cands = [];
         const tryTile = (x, y, extra) => {
             const k = x + "," + y;
             if (seen.has(k)) return; seen.add(k);
             if (!$gameMap.isValid(x, y) || bad[k] === day() || Forestry.whyNot(x, y) || nearBuilding(x, y)) return;
             const c = reach(x, y) + extra;
-            if (isFinite(c) && (!best || c < best.c)) best = { x, y, c };
+            if (isFinite(c)) cands.push({ x, y, c });
         };
+        // (2026-11-25: the full pass shut itself in on the plot - a pine never where it would cut a piece of the plot off the gates)
+        const pick = () => { cands.sort((a, b) => a.c - b.c); for (const c of cands.slice(0, 12)) if (L.keepsWay([[c.x, c.y]])) return c; return null; };
         for (const e of stumps) for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) if (Math.max(Math.abs(dx), Math.abs(dy)) === 2) tryTile(e.x + dx, e.y + dy, 0);
-        if (!best) for (let dy = -10; dy <= 10; dy++) for (let dx = -10; dx <= 10; dx++) tryTile(P().x + dx, P().y + dy, 20);
+        best = pick();
+        if (!best) { cands.length = 0; for (let dy = -10; dy <= 10; dy++) for (let dx = -10; dx <= 10; dx++) tryTile(P().x + dx, P().y + dy, 20); best = pick(); }
         return best;
     }
     // up to n pines from cones at pineSpot()s, as a player: the ground menu's "Posadź sosnę" (false: no spot for one)
@@ -1491,6 +1565,23 @@
     }
     // one fight: the nearest foe; a blow coming - the guard (P) for a plain one at the parry moment, a roll across it (Space) for a heavy
     // one; else close in and strike (O). Ends when no foe is near (or after `max` frames).
+    // (2026-11-26: the weapons cross - Combat_Fight.js CLASH) an armed foe (a man with a weapon, the empty armour) whose blow is on the
+    // way: his own blow timed so the blades meet at its landing - nobody is hurt, the foe is thrown off its stroke (its recovery: a heavy
+    // blow then). heroLead: the frames from O to the impact of his first blow with the weapon in hand
+    function heroLead() {
+        try {
+            const F = Tawerna.api("Combat_parts").fight, id = Combat.handMelee();
+            if (!id) return 0;
+            const w = F.weaponNow(id) || F.MELEE[id], def = window.ChoppableTree && ChoppableTree.swingKind ? ChoppableTree.swingKind(w.combo[0]) : null;
+            return def ? def.impact : 0;
+        } catch (e) { return 0; }
+    }
+    function canClash(c, reach) {
+        try {
+            const F = Tawerna.api("Combat_parts").fight;
+            return !!F.armedFoe && F.armedFoe(c.a) && !c.tell.shot && !c.tell.mind && c.d <= reach + 0.2 && Combat.handMelee() > 0 && !Combat.act.stun;
+        } catch (e) { return false; }
+    }
     function* fightFoes(max, why) {
         const t0 = AP.frame;
         let foe = null, hits = 0, foeT = 0, best = 99, bestT = 0, hp0 = 0;
@@ -1509,6 +1600,19 @@
             let reach = 1.15;
             try { const w = Combat.weaponNow(Combat.handMelee()); if (w && w.reach) reach = w.reach; } catch (e) { /* (fists) */ }
             const coming = th.filter(x => x.tell && x.d < 3.6).sort((p, q) => p.tell.t - q.tell.t)[0];
+            const lead = coming ? heroLead() : 0;
+            if (coming && lead && canClash(coming, reach) && coming.tell.t <= lead + 5 && Combat.act.mode === "idle") {
+                if (coming.tell.t >= lead - 3) {
+                    const cx = coming.a.centerX() - (P()._realX + 0.5), cy = coming.a.centerY() - (P()._realY + 0.5);
+                    L.setMove(L.keysToward(cx, cy)); yield; L.setMove([]);
+                    const n0 = Combat.act.clashes || 0;
+                    L.key("shoot", true); yield; yield; L.key("shoot", false);
+                    for (let n = 0; n < lead + 8 && (Combat.act.clashes || 0) === n0; n++) yield;
+                    if ((Combat.act.clashes || 0) > n0) { FAB.clashes = (FAB.clashes || 0) + 1; say("skrzyżowane ostrza (" + FAB.clashes + ")"); }
+                    continue;
+                }
+                if (coming.tell.t > lead + 1) { yield; continue; }   // (its blow still far: the moment comes)
+            }
             if (coming && coming.tell.t <= 10) {
                 const cx = coming.a.centerX() - (P()._realX + 0.5), cy = coming.a.centerY() - (P()._realY + 0.5);
                 if (coming.tell.heavy || coming.d < 1.4) {
@@ -2714,7 +2818,9 @@
             if (!(!FAB.done1 && bagFoods().some(f => f.fed > 0) && n.food >= 40))
                 return { what: "Czekam na kapuśniak (od 8:00)", why: "jedzenie na dzień (nic pożytecznego się nie zmieści do 8:00)", run: () => idle(240) };
         }
-        if (n.water < 60 && wellLeft() > 0 && !inUnder() && (mapId() === MAP.town || mapId() === MAP.tavern || n.water < 35)) return { what: "Piję ze studni miejskiej", why: "woda " + Math.round(n.water) + " (2 nabrania dziennie)", run: drinkWell };
+        if (n.water < 60 && wellLeft() > 0 && !inUnder() && (mapId() === MAP.town || mapId() === MAP.tavern || n.water < 35)) return { what: "Piję ze studni miejskiej", why: "woda " + Math.round(n.water) + " (" + wellText() + ")", run: drinkWell };
+        // (2026-11-25) the well's ration used up: the river - by daylight, when thirst starts to cost strength
+        if (n.water < 45 && wellLeft() === 0 && !inUnder() && h >= 5 && h < 19.5 && FAB.riverTry !== day() + ":" + Math.floor(h)) return { what: "Idę po wodę nad zbiornik / potok", why: "woda " + Math.round(n.water) + ", studnia miejska: koniec przydziału", run: function* () { FAB.riverTry = day() + ":" + Math.floor(hour()); return yield* drinkRiver("woda " + Math.round(needs().water), riverMap()); } };
         if (n.water < 25 && bagFoods().some(f => f.water > 0)) return { what: "Piję (jedzenie z wodą)", why: "woda " + Math.round(n.water), run: () => eatBest(true) };
         if (stamina() < 30 && inUnder() && bagFoods().some(f => f.stamina > 0) && !foesNear(8).length) return { what: "Jem dla sił", why: "siły " + Math.round(stamina()), run: () => eatBest("stamina") };
         // 2c. the quest board in the tavern / the town (2026-11-17): a contract turned in or given up, new ones looked at - a few minutes
@@ -2894,11 +3000,12 @@
                     return true;
                 } };
                 // (2026-11-17: water for the deeper floors - his own well on the plot, no ration; then the skin made bigger, 8 sips)
-                if (!ownWell() && !FAB.wellGaveUp && FAB.wellDay !== day() && deep >= 10 && hour() >= 6 && hour() < 15) return { what: "Buduję własną studnię na działce", why: "studnia miejska daje 2 nabrania dziennie - za mało na zejścia poniżej 10. piętra", run: () => buildOwnWell("własna studnia: woda bez przydziału") };
+                if (!ownWell() && !FAB.wellGaveUp && FAB.wellDay !== day() && deep >= 10 && hour() >= 6 && hour() < 15) return { what: "Buduję własną studnię na działce", why: "studnia miejska daje " + wellText() + " - za mało na zejścia poniżej 10. piętra", run: () => buildOwnWell("własna studnia: woda bez przydziału") };
                 if (skinOwned() && !skinBig() && tanneryUp() && FAB.skinBigDay !== day() && hour() >= 6 && hour() < 17 && (count(163) >= 2 || builtOn(MAP.field).some(b => b.type === "snare"))) return { what: "Powiększam bukłak (garbarnia: skóra i 2 ścięgna)", why: "8 łyków zamiast " + skinMax() + " - woda na powrót z głębszych pięter", run: () => enlargeSkin("większy bukłak") };
                 if (skinOwned() && skinSips() < skinMax() && wellLeft() > 0) return { what: "Napełniam bukłak przed zejściem", why: "bukłak " + skinSips() + "/" + skinMax() + " (pod ziemią wody nie ma do piętra 50)" + (ownWell() ? ", własna studnia" : ""), run: fillSkinWell };
                 if (nn.water < (ownWell() ? 85 : 70) && wellLeft() > 0) return { what: "Piję ze studni przed zejściem" + (ownWell() ? " (własna, na działce)" : ""), why: "woda " + Math.round(nn.water) + " (pod ziemią wody nie ma do piętra 50)", run: drinkWell };
-                // (the well's two draws used up and too little water for a trip down: the night first, tomorrow's draws)
+                // (the well's ration used up: the river by day - water and the skin filled - else the night first, tomorrow's draw)
+                if ((nn.water < 70 || (skinOwned() && skinSips() < skinMax())) && wellLeft() === 0 && hour() >= 5 && hour() < 18 && FAB.riverDay !== day()) return { what: "Idę po wodę przed zejściem (zbiornik / potok)", why: "woda " + Math.round(nn.water) + ", bukłak " + skinSips() + "/" + skinMax() + " - studnia: koniec przydziału", run: () => drinkRiver("woda na zejście", riverMap()) };
                 if (nn.water < 50 && wellLeft() === 0) return { what: "Czekam do jutra na wodę (studnia: koniec przydziału)", why: "woda " + Math.round(nn.water) + " - za mało na wyprawę pod ziemię", run: sleepHome };
                 if (count(SOUP) < 2 && FAB.soupDay !== day() && hour() >= 8 && hour() < 18) return { what: "Biorę kapuśniak na drogę", why: "jedzenie pod ziemię", run: function* () { if (yield* goMap(MAP.house, "kapuśniak")) yield* takeSoup(); } };
             }
@@ -3125,6 +3232,7 @@
     };
     // a stall's second remedy: a few steps to a random free tile, then the brain from the start
     AP.TASKS.fabula_unstick = function* () {
+        if (yield* L.clearTheWay()) return true;   // (his own tree shut the way off the plot: fell it)
         const f = L.field(P().x, P().y), cand = [];
         for (let y = P().y - 10; y <= P().y + 10; y++) for (let x = P().x - 10; x <= P().x + 10; x++) {
             const d = Math.hypot(x - P().x, y - P().y);

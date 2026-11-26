@@ -534,7 +534,22 @@
     // API (F9's jumps are the data's - Kasztelan_Data skoki, run by the engine: Watki.skocz("kasztelan", i))
     // ------------------------------------------------------------------
     const JUMP = w.def.skoki.lista;
+    // (2026-11-26, the full autopilot pass: "cegła nie otwiera się, dopóki Borgar w „Pogadaj” nie usłyszy „Zapytaj wprost o zamek” - krok
+    // o tym nie mówi") the loose brick in the back room (Map001 event 9) still reads the old variable 1 (PostepFabuly_Zamek, set by
+    // Borgar's old menu row). W4 tells of the grate in its own talk (step 0, "Zapytaj o stare kamienie"): from step 1 on the old
+    // variable is set too - the brick opens and the old journal goal "Zapytaj Borgara o zamek" is done
+    function cellarKnown() {
+        const q = window.TownQuests, r = q && q.rec ? q.rec("W4") : null;
+        return !!r && (r.s === "done" || (r.step || 0) >= 1);
+    }
+    function syncCellar() {
+        if (window.$gameVariables && cellarKnown() && $gameVariables.value(1) < 1) $gameVariables.setValue(1, 1);
+    }
+    T.on("mapEnter", syncCellar, { owner: PLUGIN, name: "cellarKnown" });
+    T.on("townQuestAccepted", syncCellar, { owner: PLUGIN, name: "cellarKnown2" });
+
     window.Kasztelan = T.register(PLUGIN, {
+        cellarKnown, syncCellar,
         TX, POS, EV, HOURS, JUMP, CLUES, NEED, state: () => S(), act: actCall, closed: closedTalk, grate: grateTalk, grateDown, door: doorTalk,
         shiftBan, forWorld, epilogue, debugJump: i => w.skocz(i), sync, syncClues, clueCount, score, stance, step: () => cur(),
         closedNow: () => closedBarNow(), doorClosed: () => doorClosedNow(), cellarNight: () => cellarNightNow(), barAway: () => barAway(),

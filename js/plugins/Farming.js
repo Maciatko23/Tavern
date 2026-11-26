@@ -1202,6 +1202,34 @@
         if (nb > 0) { $gameParty.loseItem(bed, nb); $gameParty.gainItem($dataItems[ITEM.branch], 10 * nb); $gameParty.gainItem($dataItems[ITEM.fiber], 10 * nb); }
         if (ns > 0) { $gameParty.loseItem(seeds, ns); $gameParty.gainItem($dataItems[ITEM.cone], Math.ceil(ns / 3)); }
     }, { owner: "Farming" });
+    // (2026-11-25) grandpa's plot on Map218 lost its south row (the fence moved from y 25 to y 24, the user's wish): a building of an
+    // older save with a cell on that row stands in the fence or in its gate (a snare on the gate shut the hero in - the autopilot's
+    // save). It goes back to the bag: its whole cost and what it held - once, told by a popup
+    const PLOT_ROW_LOST = { map: 218, y: 24, x0: 20, x1: 41 };
+    T.on("load", () => {
+        const f = farm();
+        if (f.plotRow24) return;
+        f.plotRow24 = true;
+        const list = (f.buildings || {})[PLOT_ROW_LOST.map] || [], back = [];
+        for (const b of list.slice()) {
+            const g = geoOf(b), cells = g && g.w ? cellsOfGeo(g, b.x, b.y) : [{ x: b.x, y: b.y }];
+            if (!cells.some(c => c.y === PLOT_ROW_LOST.y && c.x >= PLOT_ROW_LOST.x0 && c.x <= PLOT_ROW_LOST.x1)) continue;
+            list.splice(list.indexOf(b), 1);
+            try { if (P.plots && P.plots.releaseGround) P.plots.releaseGround(b, PLOT_ROW_LOST.map); } catch (e) { /* (the ground's marks: they fade by themselves) */ }
+            const def = BUILDINGS[b.type];
+            if (def && !b.site) for (const [id, n] of def.cost || []) if (n > 0 && $dataItems[id]) $gameParty.gainItem($dataItems[id], n);
+            for (const k of Object.keys(b.store || {})) {
+                const table = k[0] === "i" ? $dataItems : k[0] === "w" ? $dataWeapons : $dataArmors, item = table[Number(k.slice(1))];
+                if (item && b.store[k] > 0) $gameParty.gainItem(item, b.store[k]);
+            }
+            back.push(def ? def.name : b.type);
+        }
+        if (back.length) {
+            changed();
+            T.popup("Płot działki przesunięty: " + back.join(", ") + " - materiały wróciły do plecaka", { top: true });
+        }
+    }, { owner: "Farming" });
+    T.on("newGame", () => { farm().plotRow24 = true; }, { owner: "Farming" });
     T.on("newGame", afreshAfterLoad, { owner: "Farming" });
     // every night's sleep (a bed, the tent, the bedroll, an inn) wakes him rested: the count of hours awake starts again (the core tells
     // it right after Game_System.sleepUntilHour - this first, before the day's summary and the autosave)

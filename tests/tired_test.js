@@ -59,7 +59,8 @@ const { launch, sleep } = require("./cdp.js");
         check("...really: 60 frames of walking take him half as far", Math.abs(d1 - d0 / 2) < 0.2, { rested: d0, tired: d1 });
         await ev("$gameSystem.setStamina(15); 0");
         const r1 = await roll();
-        check("...and the roll (Space) is twice as slow: twice as long, as far", r0.len === 22 && r1.len === 44 && r1.frames >= r0.frames * 1.7 && Math.abs(r1.dist - r0.dist) < 0.4 && r0.dist > 1.5, { rested: r0, tired: r1 });
+        // (2026-11-25: Space is a dodge in steps now - Combat_Fight DODGE_TIERS; without Unik mistrza the slow hop: 30 frames, 1.5 tiles)
+        check("...and the dodge (Space) is twice as slow: twice as long, as far", r0.len === 30 && r1.len === 60 && r1.frames >= r0.frames * 1.7 && Math.abs(r1.dist - r0.dist) < 0.4 && r0.dist > 1.35, { rested: r0, tired: r1 });
         await frames(60);
         check("it is said once, not again while he stays tired", (await S()).said === 1);
 

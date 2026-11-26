@@ -110,12 +110,8 @@ kit.test({ port: 9542, bootCheck: "gra się uruchamia", errorCheck: "bez błęd�
     t.check("arkusze etapów 1-5 (8 wierszy × komórki z Orzel_Data SHEETS: postój, chód, atak, podloty), lot 4 i 5 (9 klatek), rzeczy na grani, ikony do 457",
         Object.keys(imgs).filter(k => k !== "icons").every(k => imgs[k][2]) && imgs.icons, imgs);
 
-    // ================================================================ Map013: ścieżka wspinaczy (plik mapy bez zmian)
-    const m13 = JSON.parse(fs.readFileSync(path.join(ROOT, "data", "Map013.json"), "utf8"));
-    // (2026-11-11, kopalnia: the file's ids 500-509 are the mine's own - the mouth, the track, the lamp - the same band Orzel.js's old climb used)
-    t.check("Map013.json: w pliku nie ma ścieżki wspinaczy (ani zdarzeń <Orzel:...>); numery 500-539 to tylko kopalnia (Wejście do kopalni, Tor z kopalni, Latarnia kopaczy)",
-        !m13.events.some(e => e && (/wspinaczy|Orla Grań/.test(e.name) || /<Orzel:/.test(e.note || ""))) &&
-        m13.events.filter(e => e && e.id >= 500 && e.id <= 539).every(e => /^(Wejście do kopalni|Tor z kopalni|Latarnia kopaczy)$/.test(e.name)), m13.events.filter(e => e && e.id >= 500 && e.id <= 539).map(e => e.name));
+    // ================================================================ (2026-11-26) Map013 (the old mountains) was removed on 2026-11-17 -
+    // its file check went with it; the way up is on Krucza Grań (Map029) now
     // (2026-11-11, kopalnia: the way up is no longer a climb on Map013 - the mine's mouth (54,31) -> Map213 -> the stairs of station B -> Map175; tools/kopalnia)
     await go(29, 66, 12, 8);
     t.check("Map013: bez wspinaczki (500-509) - półki orła zostają tylko z powietrza; wejście do kopalni na (54,31)",

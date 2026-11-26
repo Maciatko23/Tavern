@@ -62,11 +62,11 @@ kit.test({ bootCheck: "gra się uruchamia", errorCheck: "bez błędów w konsoli
     await at(4, 14.5, 60);
     const walk = await J(`(function(){ const s = TownLife.state("tobiasz"); return s ? { hidden: s.hidden, act: s.act, x: s.x, y: s.y, sheet: TownLife.eventOf("tobiasz").characterName() } : null; })()`);
     t.check("...14:30: chodzi po miasteczku (obchód z listami), zastępczy arkusz $Npc_Tobiasz", !!walk && walk.hidden === false && walk.act === "patrol" && walk.sheet === "$Npc_Tobiasz", walk);
-    const meet = await t.talkTo("TownLife.eventOf('tobiasz')", [], { secs: 25 });
-    t.check("pierwsza rozmowa: Tobiasz się przedstawia („poczta lądowa”)", /poczta lądowa/.test(meet.text), meet.text.slice(0, 200));
-    // (etap 2: druga rozmowa - oferta K71 „Listy z lądu”; tu odmowa, menu dopiero potem)
-    const offer = await t.talkTo("TownLife.eventOf('tobiasz')", ["Nie mam czasu"], { secs: 25 });
-    t.check("druga rozmowa: oferta K71 „Listy z lądu” (cztery adresy) - odmowa", /cztery adresy/.test(offer.text) && !(await J("!!TownQuests.rec('K71') && TownQuests.rec('K71').s === 'active'")), offer.text.slice(0, 200));
+    // (2026-11-25, the user: a character with "!" goes on to its quest right after introducing itself - TawernaCore talk chain on the
+    // first talk: the introduction and the K71 offer „Listy z lądu” in one talk; here refused, the menu comes after)
+    const meet = await t.talkTo("TownLife.eventOf('tobiasz')", ["Nie mam czasu"], { secs: 25 });
+    t.check("pierwsza rozmowa: Tobiasz się przedstawia („poczta lądowa”) i od razu oferta K71 „Listy z lądu” (cztery adresy) - odmowa",
+        /poczta lądowa/.test(meet.text) && /cztery adresy/.test(meet.text) && !(await J("!!TownQuests.rec('K71') && TownQuests.rec('K71').s === 'active'")), meet.text.slice(0, 300));
     const menu = await t.talkTo("TownLife.eventOf('tobiasz')", ["Skąd płyniesz"], { secs: 25 });
     t.check("...potem jego menu: „Skąd płyniesz?” - z Brzozowej Woli", /Brzozowej Woli/.test(menu.text) && (menu.choices || []).some(c => /Skąd płyniesz/.test(JSON.stringify(c))), { text: menu.text.slice(0, 200), choices: menu.choices });
     const book = await J(`({ lines: Podroznicy.ksiegaLinie(), opt: Tawerna.talk.options("borgar").map(o => o.id) })`);

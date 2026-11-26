@@ -579,7 +579,9 @@
     // stepping on the line in front of the gate: the guardian's own talk starts (once at a time; not after he let one by)
     function wake(eventId) {
         const ev = $gameMap.event(eventId);
-        if (!ev || sw("gate10") || ev.isStarting()) return false;
+        // (2026-11-25, the autopilot from the floor-10 save: an event with no page shown now - none of its conditions met - crashed
+        // the game in Game_Event.start: "Cannot read properties of undefined (reading 'list')")
+        if (!ev || sw("gate10") || ev.isStarting() || !ev.page()) return false;
         ev.start();
         return true;
     }

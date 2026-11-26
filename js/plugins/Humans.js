@@ -706,6 +706,15 @@
         knockBack(this);
         if (!this._disarmed && this._def.weapon !== undefined && Math.random() < perk("disarm")) this.disarm();
     };
+    // (2026-11-25) his blow met the hero's at the same moment (Combat.js clash): thrown off his stroke - a short recovery, no hurt
+    Game_Human.prototype.onClash = function() {
+        this._struck = true;
+        this._lockAng = null;
+        this._hitStop = Math.max(this._hitStop || 0, 6);
+        this.setMode("recover", 26);
+        this._settle = 0;
+        endTurn(this);
+    };
     Game_Human.prototype.disarm = function() {
         this._disarmed = true;
         const C2 = T.api("Combat_parts"), F2 = C2 && C2.fight;

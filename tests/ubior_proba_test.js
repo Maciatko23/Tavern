@@ -101,6 +101,7 @@ kit.test({ port: 9575, plugins: ["Ubior"], evalTimeout: 60000 }, async t => {
         for (const [d8, d4] of WALK) {
             await pose({ d8, dir4: d4 });
             await t.frames(3);
+            for (let w = 0; w < 60 && (await t.eval("Ubior.dressing('Hero_Walk')")); w++) await t.frames(2);   // (2026-11-25: dressed in the background now)
             const at = await look();
             const file = `${of.key}_walk${d8}.png`;
             await clipShot(path.join(SHOTS, file), at);
@@ -113,6 +114,7 @@ kit.test({ port: 9575, plugins: ["Ubior"], evalTimeout: 60000 }, async t => {
             const s = SWINGS[i];
             await pose({ swing: true, kind: s.kind, dir: s.dir, t: swingTimes[i].t });
             await t.frames(3);
+            for (let w = 0; w < 60 && (await t.eval(`Ubior.dressing(${JSON.stringify(swingTimes[i].sheet)})`)); w++) await t.frames(2);
             const at = await look();
             const file = `${of.key}_swing${i}.png`;
             await clipShot(path.join(SHOTS, file), at);

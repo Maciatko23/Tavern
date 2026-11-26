@@ -35,7 +35,7 @@
     const P = T.api("Combat_parts") || T.register("Combat_parts", {});
     if (P.fight) return;   // (put into the page twice: kept as it was)
     if (!P.core) throw new Error("Combat_Fight.js: musi być pod Combat.js na liście wtyczek (Combat.js is missing or below)");
-    const { modes, attr, perk, hasSkill, tired, strMult, poiseMult, critChance, rollCost, rollIFrames, parryWindow, knockdownAt, woundChance, comboWindow,
+    const { modes, attr, perk, hasSkill, tired, strMult, poiseMult, critChance, rollCost, rollIFrames, rollChain, parryWindow, knockdownAt, woundChance, comboWindow,
         combatMode, setCombatMode, mapFreePlay, se, popup, foes } = P.core;
     const H = () => T.api("Hunting");
     const FE = () => P.feel || null;   // (Combat_Feel.js, put in after this part: the soft target, the threats, the difficulty)
@@ -348,6 +348,28 @@
         stun: 0, stunKind: "", flinchT: 0, flinchLen: 1, hitFrom: [0, 1], comboCd: 0, comboGrace: 0, rollCd: 0, rolls: 0, riposteT: 0, secondWind: false, combatT: 0, hurtT: 0, weapon: 0,
         counterT: 0, counterMult: 1, blockTap: 0, pressFrame: -1, rollLook: null, rollBack: false };
     const ROLL = { frames: 22, dist: 2.4, cd: 10, chain: 26 };
+    // (2026-11-25, the user: "zamiast przewrotu niech będzie unik na zasadzie odskoku w tył"; then: "od początku bazowo jest to powolny
+    // odskok (nie przesunięcie) do tyłu, a potem odskok trochę szybszy i trochę dalej, a na końcu szybkie rozmycie") Space is a dodge now,
+    // not a roll: he keeps looking at the foe and springs away. It grows with Unik mistrza (perk "dodge.tier" = its rank): DODGE_TIERS[0]
+    // a slow hop back - he crouches, leaves the ground, lands (HOP: the parts of the time); [1] a quicker, longer hop; [2] the master's
+    // fast blurred slide (DODGE: a short lean, the slide, a settling). frames: its length (tired: twice), dist: tiles, hop: how high he
+    // jumps (px). Combat_UI.js draws them (the crouch, the arc, the landing; the see-through slide and the fading copies of him)
+    const DODGE_TIERS = [
+        { frames: 30, dist: 1.5, hop: 16, blur: false },
+        { frames: 24, dist: 2.0, hop: 12, blur: false },
+        { frames: 16, dist: 2.6, hop: 0, blur: true }
+    ];
+    const HOP = { up: 0.17, down: 0.85 };
+    const IFRAME_TAIL = 3;   // (frames of safety after the dodge's end at most - startRoll)
+    const dodgeTier = () => Math.max(0, Math.min(DODGE_TIERS.length - 1, Math.round(perk("dodge.tier"))));
+    // the hop: still while he crouches, a straight line through the air, still while he lands
+    const hopCurve = p => p < HOP.up ? 0 : p >= HOP.down ? 1 : (p - HOP.up) / (HOP.down - HOP.up);
+    const DODGE = { dashFrom: 0.15, lean: 0.04, settle: 0.85, slid: 0.95 };
+    function dodgeCurve(p) {
+        if (p < DODGE.dashFrom) { const k = p / DODGE.dashFrom; return DODGE.lean * k * k; }
+        if (p < DODGE.settle) return DODGE.lean + (DODGE.slid - DODGE.lean) * (p - DODGE.dashFrom) / (DODGE.settle - DODGE.dashFrom);
+        return DODGE.slid + (1 - DODGE.slid) * easeOut((p - DODGE.settle) / (1 - DODGE.settle));
+    }
     const px = () => $gamePlayer._realX + 0.5, py = () => $gamePlayer._realY + 0.5;
     // where he faces - on the slant too (Hunting.js reads HeroLook's 8-way facing): the blow, the block and the roll go that way
     const DIR8_VEC = { 1: [-1, 1], 2: [0, 1], 3: [1, 1], 4: [-1, 0], 6: [1, 0], 7: [-1, -1], 8: [0, -1], 9: [1, -1] };
@@ -514,6 +536,55 @@
         if (cls === "fire" && surf !== "shield") se("Fire1", 55, 115);   // (the flame's hiss with it)
         act.lastHitSe = name + ":" + surf;   // (the tests)
     }
+    // ------------------------------------------------------------------
+    // (2026-11-25, the user: "jak gracz atakuje w tym samym momencie co wróg z orężem, to jest krzyżowanie broni i wzajemne parowanie
+    // i idą iskry") two blows at the same moment: the blades meet - the ring of steel, sparks between them, both thrown off their stroke
+    // and a little apart; nobody is hurt. Only the hero's weapon (not the fists) against a foe's weapon: an armed man (not the archer's
+    // shot, not disarmed), the armours of the depths. CLASH.before / after: how near his blow's impact the foe's must land (frames)
+    // ------------------------------------------------------------------
+    const CLASH = { before: 6, after: 3, back: 0.35, flinch: 10, stop: 7, foeRecover: 26 };
+    const ARMED_BASE = new Set(["zbroja"]);   // (zbroja, the guardian of floor 10, the Prior, the Blank: plate with a blade)
+    function armedFoe(ref) {
+        if (!ref || ref._dead || ref._dying || ref._surrendered) return false;
+        const cls = ref.constructor ? ref.constructor.name : "";
+        if (cls === "Game_Human") return !!ref._def && ref._def.weapon !== undefined && !ref._def.shot && !ref._disarmed && !ref._weaponGone;
+        if (cls === "Game_Creature") return ARMED_BASE.has(ref._base);
+        return false;
+    }
+    // his own blow near its impact now (the swing running, not held for a heavy blow): frames from the impact, or null
+    function bladeNearImpact() {
+        const s = $gamePlayer._toolSwing;
+        if (act.mode !== "attack" || !s || s._waiting || !act.weapon) return null;
+        const def = CT && CT.swingKind ? CT.swingKind(s._swingKind) : null;
+        if (!def) return null;
+        const dt = s._swingT - def.impact;
+        return dt >= -CLASH.before && dt <= CLASH.after ? dt : null;
+    }
+    function clash(ref, fx, fy) {
+        const mx = (px() + fx) / 2, my = (py() + fy) / 2 - 0.45;
+        se("Sword4", 90, 92);
+        se("Parry", 75, 128);
+        sparksAt(mx, my, "#fff6c8", 18);
+        sparksAt(mx, my, "#ffb84a", 10);
+        numberAt(mx, my - 0.55, "Skrzyżowane ostrza!", "#fff2b0", 0.85);
+        if (typeof ref.onClash === "function") ref.onClash();
+        T.call("Durability", "use", act.weapon);
+        endSwing();
+        act.mode = "idle";
+        act.queued = false;
+        act.charge = 0;
+        act.comboGrace = 0;
+        const ax = fx - px(), ay = fy - py(), ad = Math.hypot(ax, ay) || 1;
+        shovePlayer(-ax / ad * CLASH.back, -ay / ad * CLASH.back);
+        act.hitFrom = [-ax / ad, -ay / ad];
+        act.flinchT = CLASH.flinch;
+        act.flinchLen = CLASH.flinch;
+        $gameScreen.startShake(2, 8, 8);
+        hitstop(CLASH.stop);
+        act.combatT = 600;
+        act.clashes = (act.clashes || 0) + 1;
+        T.emit("weaponClash", { by: typeof ref.kind === "function" ? ref.kind() : "" });
+    }
     // the blow lands: everything in reach and in front takes it (the nearest only, unless the weapon sweeps and the hero has the skill)
     function strike(id, i) {
         const w = weaponNow(id) || MELEE[id], Hn = H(), tr = cechy(id), bc = tr !== NO_TRAITS ? BC() : null;
@@ -539,6 +610,13 @@
             if (Hn) Hn.makeNoise(px(), py(), 3);
             act.charge = 0;
             return;
+        }
+        // (the clash) the nearest one swings at him this very moment, with a weapon: the blades meet instead
+        const first = targets[0].t;
+        if (id !== 0 && armedFoe(first.ref) && typeof first.ref.combatTell === "function") {
+            const tl = first.ref.combatTell();
+            const mv = typeof first.ref.moveDef === "function" ? first.ref.moveDef() : null;   // (a ring, a wave: no blade to meet)
+            if (tl && !tl.shot && !tl.mind && tl.t <= CLASH.before && !(mv && (mv.ring || mv.unparryable))) { clash(first.ref, first.x, first.y); return; }
         }
         let stop = heavy ? 7 : 4, counter = false;
         const recoil0 = act.recoilN || 0;
@@ -616,17 +694,22 @@
         act.rollDir = [v[0] / len, v[1] / len];
         act.rollLook = way.back ? way.look : null;
         act.rollBack = way.back;
-        $gamePlayer.setDirection(Math.abs(v[0]) >= Math.abs(v[1]) ? (v[0] < 0 ? 4 : 6) : (v[1] < 0 ? 8 : 2));   // (the roll's picture goes the way he rolls)
+        // (the dodge: his face stays on the foe - the soft target, else the way he springs back from - and not the way he goes)
+        const tg = softTarget();
+        if (tg) faceToward(tg.x, tg.y);
+        else if (way.look) faceToward(px() + way.look[0], py() + way.look[1]);
         const slow = tired() ? 2 : 1;   // tired out (below TIRED_AT): the roll takes twice as long, as far (the user's, 2026-09-25)
         act.mode = "roll";
         act.rollT = 0;
-        act.rollLen = ROLL.frames * slow;
+        act.rollTier = dodgeTier();
+        act.rollLen = DODGE_TIERS[act.rollTier].frames * slow;
         act.rollDist = 0;
-        act.iframes = rollIFrames();
+        // (2026-11-25, the player's "ok": no endless safety - the master's quick dodge (16 frames) with Akrobata and much Zręczność
+        // kept him safe the whole time while the breath lasted) the safety lasts the dodge itself and IFRAME_TAIL frames after it at most
+        act.iframes = Math.min(rollIFrames(), act.rollLen + IFRAME_TAIL);
         act.rolls = second ? 2 : 1;
         act.queuedRoll = false;
         act.combatT = Math.max(act.combatT, 300);
-        if (ROLL_KIND >= 0) $gamePlayer.startToolSwing(ROLL_KIND, null, null, slow > 1 ? { rate: 1 / slow } : undefined);
         se("Evasion1", 70, 110);
         return true;
     }
@@ -669,14 +752,15 @@
                 act.flinchT = 10; act.flinchLen = 10;
             }
             hitstop(4);
-            act.rollCd = ROLL.chain;
+            act.rollCd = rollChain();
             return true;
         }
         return false;
     }
     function updateRoll() {
         act.rollT++;
-        const want = ROLL.dist * easeOut(Math.min(1, act.rollT / act.rollLen));
+        const tier = DODGE_TIERS[act.rollTier || 0], p = Math.min(1, act.rollT / act.rollLen);
+        const want = tier.dist * (tier.blur ? dodgeCurve(p) : hopCurve(p));
         const step = want - act.rollDist;
         act.rollDist = want;
         if (rollBump()) return;
@@ -685,7 +769,7 @@
         if (act.rollT >= act.rollLen) {
             endSwing();
             act.mode = "idle";
-            act.rollCd = ROLL.chain;
+            act.rollCd = rollChain();
             if (act.queuedRoll) { act.queuedRoll = false; if (startRoll()) return; }
             faceAfterRoll();
         }
@@ -771,10 +855,15 @@
             into = true;
             act.iframes = 0;
             act.mode = "idle";
-            act.rollCd = ROLL.chain;
+            act.rollCd = rollChain();
             numberAt(px(), py() - 1.35, "Odbity!", "#ffb07f", 0.8);
         }
         const ax = from.x - px(), ay = from.y - py(), ad = Math.hypot(ax, ay) || 1, [fx, fy] = facingVec();
+        // (the clash) his own blow is just landing too, at the one who strikes from in front: the blades meet, nobody is hurt
+        if (!into && !opts.projectile && !opts.unparryable && armedFoe(opts.attacker) && (ax * fx + ay * fy) / ad > 0.3 && bladeNearImpact() !== null) {
+            clash(opts.attacker, from.x, from.y);
+            return tell("clashed", 0, src);
+        }
         const guardSh = act.mode === "block" ? shield() : null;   // (a wide shield covers more to the side: its `cover`)
         const frontal = (ax * fx + ay * fy) / ad > 0.25 - (guardSh && guardSh.cover ? guardSh.cover : 0);
         let damage = opts.damage || 0, poise = opts.poise || 0;
@@ -982,6 +1071,9 @@
         if (act.comboCd > 0) act.comboCd--;
         if (act.comboGrace > 0) act.comboGrace--;
         if (act.rollCd > 0) act.rollCd--; else act.rolls = 0;
+        // (2026-11-25) the dodge's safety runs out after it too: the master's slide (16 frames) is shorter than his safety (up to 30) - the
+        // rest stayed till the next dodge (safe from every blow); updateRoll counts it while he dodges
+        if (act.iframes > 0 && act.mode !== "roll") act.iframes--;
         if (act.riposteT > 0) act.riposteT--;
         if (act.counterT > 0) act.counterT--;
         if (act.hurtT > 0) act.hurtT--;
@@ -1028,7 +1120,7 @@
     const heldStill = () => act.mode === "roll" || act.stun > 0;
     const mayRun = player => act.mode !== "block" && (player !== $gamePlayer || canRun());
 
-    P.fight = { fillBreath, act, ROLL, MELEE, MELEE_ORDER, SHIELDS, ARMORS, NO_SHIELD, COMBO_MULT, HEAVY, maxCombo, SNEAK, RUN, ROLL_KIND, KNOCK_KIND, FIST_ICON, px, py, easeOut, has, hand, handMelee, handIcon, switchHand,
+    P.fight = { fillBreath, act, ROLL, DODGE, DODGE_TIERS, HOP, dodgeTier, dodgeCurve, hopCurve, CLASH, armedFoe, clash, MELEE, MELEE_ORDER, SHIELDS, ARMORS, NO_SHIELD, COMBO_MULT, HEAVY, maxCombo, SNEAK, RUN, ROLL_KIND, KNOCK_KIND, FIST_ICON, px, py, easeOut, has, hand, handMelee, handIcon, switchHand,
         setHand, handChoices, shield, armor, weaponNow, refreshGear, gearChanged: () => { gearAt = -1; }, rangedItem, rangedKind, hasRanged, anyRanged, lackOf, sneakAttack, sneakMult, maxBreath, breathNow, spendBreath, isWinded: () => winded, canRun, pressAttack, pressDodge, hitPlayer, enemyHurtFx, hitstop, numberAt,
         sparksAt, shovePlayer, floaters, sparks, stopFrames: () => stopFrames, holdFrame, update, resetAct, heroSpeed, heldStill, mayRun, recoil, downPlayer,
         cechy, dmgRoll, CRIT_MULT, stunPlayer, drainBreath, slowMotion, SLOW, COUNTER, HIT_SE, surfaceOf, faceToward, facingVec, arrowsDir8, swingPastImpact, endSwing, buf, BUF, DIR8_VEC, isHeld: () => heldNow, slowNow: () => slowT };
