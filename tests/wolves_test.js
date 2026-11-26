@@ -20,6 +20,7 @@ const OUT = process.argv[2] || "";
         const down = code => ev(`Input._onKeyDown({ keyCode: ${code}, preventDefault() {} }); 0`);
         const up = code => ev(`Input._onKeyUp({ keyCode: ${code} }); 0`);
         const key = async (code, hold = 3) => { await down(code); await frames(hold); await up(code); await frames(2); };
+        await ev("Combat.hero().skills.d_roll = 1; Combat.hero().rev = (Combat.hero().rev || 0) + 1; 0");   // (Unik learnt - since 2026-11-26 Space does nothing without it)
         const F = 79, SPACE = 32, V = 80, DOWNK = 40;   // (in the combat mode: the attack O and the guard P)
 
         // ================= 1. the pictures, where they live =================

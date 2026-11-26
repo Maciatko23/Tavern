@@ -154,5 +154,6 @@ kod.rockLands.0 = kamień
 # summon
 kod.summon.0 = Nie ma tu miejsca
 kod.summon.1 = Z ciemności wychodzi... {1}!
+kod.summon.2 = Z ciemności wysypuje się {1} szczurów!
 # update (pasek życia bossa: imię + to + poziom; spacje na brzegach w cudzysłowie)
 kod.update.0 = "   poz. "

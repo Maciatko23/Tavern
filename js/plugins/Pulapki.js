@@ -74,6 +74,8 @@
     const store = T.state.define("pulapki", () => ({ floors: {} }), { version: 1, owner: PLUGIN });
     const U = () => T.api("Underground");
     const attr = id => { const C = T.api("Combat"); try { return C && C.attr ? C.attr(id) : 5; } catch (e) { return 5; } };
+    // (2026-11-26, Czujne stopy - d_traps: the zone of the far look 2 tiles wider, perk "trap.see")
+    const perk = key => { const C = T.api("Combat"); try { return C && C.perk ? C.perk(key) || 0 : 0; } catch (e) { return 0; } };
     const sneaking = () => !!T.call("Hunting", "sneaking");
     const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
     const fill = (t, o) => t.replace(/\{(\w+)\}/g, (m, k) => (o[k] !== undefined ? o[k] : m));
@@ -163,7 +165,7 @@
         const sneak = sneaking(), hx = heroCX(), hy = heroCY();
         for (const t of here.list) {
             const d = Math.hypot(t.x + 0.5 - hx, t.y + 0.5 - hy), was = here.seen[t.i] || "";
-            const zone = d <= SEE.near ? "near" : d <= SEE.far ? "far" : "";
+            const zone = d <= SEE.near ? "near" : d <= SEE.far + perk("trap.see") ? "far" : "";
             if (zone === was) continue;
             here.seen[t.i] = zone;   // (a roll on coming into a zone, not every frame: walking away and back is another look)
             if (!zone || stateOf(t) !== "hidden") continue;

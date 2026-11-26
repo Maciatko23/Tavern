@@ -85,7 +85,7 @@
     const RAIN_GAIN = 1.5;                          // nawodnienie per hour outdoors in the rain
     // the waterskin: base sips, big once the tannery has enlarged it ("Powiększ bukłak", the user's stage 1: n.skinBig) - max follows
     // (2026-11-25, the user: "bukłak 3 użycia po 10, duży bukłak 5 użyć"; "studnia: łyki po 20" - was 4 / 8 sips of 35, a drink of 40)
-    const SKIN = { item: 129, base: 3, big: 5, sip: 10, get max() { return skinBig() ? this.big : this.base; } };
+    const SKIN = { item: 129, base: 3, big: 5, sip: 10, get max() { return (skinBig() ? this.big : this.base) + Math.round(perk("skin.sips")); } };   // (2026-11-26: Łapacz deszczu +1 sip)
     const TAP_DRINK = 20;
     // the last bit of strength (the user's stage 1, 2026-09-27): below RESCUE fullness or water, gathering food costs no strength
     // (Farming.js asks inNeed) - a hero starved down to 0 strength can always pick something to eat. Eating and drinking never cost any.

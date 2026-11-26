@@ -61,15 +61,15 @@ const REGISTERED = process.env.REGISTERED ? `(function(){
         check("each level asks 20% more than the one before, to the full hundred: 500, 600, 700, 900, 1000 ... 2100 (9 -> 10)", JSON.stringify(curve) === "[500,600,700,900,1000,2100]", curve);
         check("the start inventory counts as known (no XP for it)", h0.ready === true);
         const lv = await J("(function(){ Combat.gainXp(500, 'test'); const h = Combat.hero(); return { level: h.level, xp: h.xp, points: h.points, sp: h.skillPoints, mhp: $gameParty.leader().mhp }; })()");
-        check("500 XP: level 2, +3 attribute points, +1 skill point, +3 health", lv.level === 2 && lv.xp === 0 && lv.points === 3 && lv.sp === 1 && lv.mhp === 103, lv);
+        check("500 XP: level 2, +3 attribute points, +2 skill points (2026-11-26), +3 health", lv.level === 2 && lv.xp === 0 && lv.points === 3 && lv.sp === 2 && lv.mhp === 103, lv);
         await frames(30);
         check("the level banner shows", await ev("!!SceneManager._scene._levelBanner && SceneManager._scene._levelBanner.opacity > 0"));
         const sp1 = await J("(function(){ const ok = Combat.spendPoints({ con: 2, str: 1 }); const h = Combat.hero(); return { ok, con: h.attr.con, str: h.attr.str, points: h.points, mhp: $gameParty.leader().mhp, hp: $gameParty.leader().hp, cap: Survival.weightCap() }; })()");
         check("spending 3 points: Kondycja 7 (+10 health, healed too), Siła 6 (+1 carried)", sp1.ok && sp1.con === 7 && sp1.str === 6 && sp1.points === 0 && sp1.mhp === 113 && sp1.hp === 113 && sp1.cap === 121, sp1);
         check("no more points: spending refuses", !(await ev("Combat.spendPoints({ dex: 1 })")));
-        const sk = await J("(function(){ return { block: Combat.skillBlock('sweep'), combo: Combat.skillBlock('combo4'), learn: Combat.learnSkill('m_power'), again: Combat.skillBlock('m_power'), none: Combat.skillBlock('d_body') }; })()");
-        check("skills (the trees): 'Szeroki zamach' wants level 20, 'Płynne kombo' level 4; the root 'Mocna ręka' learnt with the point; then no point for another", /poziomu 20/.test(sk.block) && /poziomu 4/.test(sk.combo) && sk.learn === true && /Brak punktów/.test(sk.again) && /Brak punktów/.test(sk.none), sk);
-        await ev("Combat.hero().skills.combo4 = 1; Combat.hero().rev = (Combat.hero().rev || 0) + 1; 0");   // (the fight below uses the fourth blow)
+        const sk = await J("(function(){ return { block: Combat.skillBlock('sweep'), combo: Combat.skillBlock('combo4'), learn: Combat.learnSkill('m_power') && Combat.learnSkill('d_body'), again: Combat.skillBlock('m_power'), none: Combat.skillBlock('s_tough') }; })()");
+        check("skills (the trees, 2026-11-26 rows 1/3/6/...): 'Szeroki zamach' wants level 6, 'Płynne kombo' level 3; the roots 'Mocna ręka' and 'Hart ciała' learnt with the two points; Mocna ręka's 2nd rank asks Siła 8; then no point for another", /poziomu 6/.test(sk.block) && /poziomu 3/.test(sk.combo) && sk.learn === true && sk.again === "Wymaga: Siła 8." && /Brak punktów/.test(sk.none), sk);
+        await ev("Combat.hero().skills.combo4 = 1; Combat.hero().skills.d_roll = 1; Combat.hero().rev = (Combat.hero().rev || 0) + 1; 0");   // (Unik: nothing on Space without it)   // (the fight below uses the fourth blow)
 
         // ================= 3. the weapon in hand, the breath =================
         check("no weapon: the fists in hand", (await ev("Combat.hand()")) === "m0");

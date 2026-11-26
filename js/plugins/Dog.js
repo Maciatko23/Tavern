@@ -170,6 +170,17 @@
         this._frozen = false;    // tests: stand still
     };
     Game_Dog.prototype.isDog = function() { return true; };
+    // (2026-11-26, the user: "pies może przeskakiwać przez płotek, małe kamienie, krzaczki") over what lies low it jumps, as the rabbit
+    // does (Hunting_Path.js hopTarget; its way - Hunting.path8 - goes over such things)
+    Game_Dog.prototype.canHop = function() { return true; };
+    Game_Dog.prototype.hopOver = function(x, y, d) { const H = window.Hunting; return H && H.hopTarget ? H.hopTarget(this, x, y, d) : null; };
+    Game_Dog.prototype.moveStraight = function(d) {
+        const hop = !Game_Character.prototype.canPass.call(this, this._x, this._y, d) && this.hopOver(this._x, this._y, d);
+        if (!hop) return Game_Character.prototype.moveStraight.call(this, d);
+        this.setDirection(d);
+        this.jump(hop.x - this._x, hop.y - this._y);
+        this.setMovementSuccess(true);
+    };
     Game_Dog.prototype.isCollidedWithPlayerCharacters = function() { return false; };   // (it slips past the hero)
     Game_Dog.prototype.searchLimit = function() { return 48; };   // (the engine's path search looks 12 steps ahead: far prey round a wood was never reached)
     Game_Dog.prototype.centerX = function() { return this._realX + 0.5; };
@@ -730,6 +741,9 @@
         $gameParty.loseItem($dataItems[meat], 1);
         d.fedAt = clock();
         d.trust++;
+        // (2026-11-26, Przyjaciel zwierząt: "pets.learn" more trust a feeding - it is tamed sooner)
+        const pl = T.call("Combat", "perk", "pets.learn") || 0;
+        if (pl > 0) { d.trustX = (d.trustX || 0) + pl; while (d.trustX >= 1) { d.trustX -= 1; d.trust++; } }
         AudioManager.playSe({ name: "Bite", volume: 50, pitch: 120, pan: 0 });
         if (d.trust < DOG.trustNeed) { popup(DOG_ICON(), Watki.wstaw(TK.kod.feedWild[2], { "1": $dataItems[meat].name.toLowerCase(), trust: d.trust, trustNeed: DOG.trustNeed }), "#cfe6a8"); return; }
         d.tame = true;

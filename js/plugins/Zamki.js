@@ -89,6 +89,9 @@
     const sneaking = () => !!T.call("Hunting", "sneaking");
     const attrOf = id => { const C = T.api("Combat"); try { return C && C.attr ? C.attr(id) : 5; } catch (e) { return 5; } };
     const dex = () => attrOf("dex"), per = () => attrOf("per");
+    // (2026-11-26, Wytrych - c_lock in Rzemiosło: "lock.ease" levels easier, "pick.save" fewer broken picks)
+    const perkOf = key => { try { return T.call("Combat", "perk", key) || 0; } catch (e) { return 0; } };
+    const easeOf = lock => Math.max(1, (lock.level || 1) - Math.round(perkOf("lock.ease")));
     const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
     const popup = (text, icon, color) => T.popup(text, { icon: icon === undefined ? $dataItems[PICK].iconIndex : icon, color: color || "#cfe6a8" });
     const need = text => T.popup.need($dataItems[PICK].iconIndex, text);
@@ -165,7 +168,7 @@
     function begin(tgt) {
         if (!tgt.locked()) return false;
         if (pick && pick.tgt.key === tgt.key) return true;
-        const lock = tgt.lock, L = LEVEL[lock.level] || LEVEL[1];
+        const lock = tgt.lock, L = LEVEL[easeOf(lock)] || LEVEL[1];
         if (tgt.task) {   // (another system's work by the same hands - a trap disarmed: its own words, no lockpick)
             if (!sneaking()) { needAt(tgt.key, tgt.task.notSneak); return true; }
         } else {
@@ -195,7 +198,7 @@
             onDone: () => { finish(); t.onDone(); }, onFail: () => { finish(); t.onFail(); },
             onNoise: () => T.call("Hunting", "makeNoise", tgt.cx(), tgt.cy(), 10), onQuit: () => { pick = null; } };
         return {
-            title: "Zamek " + LEVEL[lock.level].name + " (" + lock.level + "/5)", level: lock.level, dex: dex(), per: per(), seed: tgt.key,
+            title: "Zamek " + LEVEL[lock.level].name + " (" + lock.level + "/5)", level: easeOf(lock), dex: dex(), per: per(), seed: tgt.key,
             picks: () => $gameParty.numItems($dataItems[PICK]),
             onClick: clicks,
             onBreak: () => {
@@ -237,8 +240,8 @@
     // a camp's box (Humans.searchDrop asks first): true - taken by the lock
     function startDrop(d) { return !!(d && d.locked) && begin(targetOfDrop(d)); }
 
-    function secsOf(lock) { return LEVEL[lock.level].secs * Math.max(0.5, Math.min(1.3, 1 - 0.04 * (dex() - 5))); }
-    function breakOf(lock) { return LEVEL[lock.level].brk * Math.max(0.3, 1 - 0.05 * (dex() - 5)); }
+    function secsOf(lock) { return LEVEL[easeOf(lock)].secs * Math.max(0.5, Math.min(1.3, 1 - 0.04 * (dex() - 5))); }
+    function breakOf(lock) { return LEVEL[easeOf(lock)].brk * Math.max(0.3, 1 - 0.05 * (dex() - 5)) * Math.max(0.2, 1 - perkOf("pick.save")); }
     const near = tgt => Math.hypot($gamePlayer._realX + 0.5 - tgt.cx(), $gamePlayer._realY + 0.5 - tgt.cy()) <= 1.6;
     const holding = () => Input.isPressed("ok");   // (O / Enter outside combat - Combat.js's mapping)
     function update() {

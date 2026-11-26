@@ -393,6 +393,7 @@
         if (window.Combat) add(Q, "czas", "xp", K.allRows[28], 87);   // Combat.js: to try the levels
         add(Q, "czas", "isleXp", K.isleRows[12], 87, K.isleRows[13]);
         add(Q, "czas", "isleXp", K.isleRows[28], 87, K.isleRows[29], { amount: 10000000 });   // (2026-11-25, the user: "w F9 daj opcję 10 000 000 exp")
+        add(Q, "czas", "isleAttrMax", K.isleRows[30], 87, K.isleRows[31]);   // (2026-11-26, the user: "gracz dostaje wszystkie atrybuty na maxa")
         add(Q, "czas", "isleTexts", "", 189, K.isleRows[16], { fresh: r => { r.label = isleLabel.texts(); } });
         ISLE_GO.forEach((g, i) => { if (mapThere(g)) add(Q, "tele", "isleGo", g.nazwa, 190, g.opis, { go: i }); });
         add(Q, "tele", "isleInside", "", 189, K.isleRows[1], { pick: 0, fresh: r => { r.pick = last.isle || 0; r.label = isleLabel.inside(r.pick); } });
@@ -443,6 +444,7 @@
         if (window.Creatures) {   // Creatures.js: one of the 8 kinds, a boss (the guardian, floors 20-90)
             add(F, "ruiny", "cr_kind", crLabel("cr_kind", 0), 189, "", { pick: 0 });
             add(F, "ruiny", "cr_boss", crLabel("cr_boss", 0), 189, "", { pick: 0 });
+            add(F, "ruiny", "cr_rats10", K.allRows[30], 189);   // (2026-11-26, the user: "opcja, że tworzy naraz 10 szczurów")
         }
         // ---- Fabuła i postacie
         add(STORY_TAB, "fabula", "isleLose", "", 241, K.isleRows[9], { fresh: r => { r.label = isleLabel.lose(); } });
@@ -809,6 +811,9 @@
         } else if (/^st_/.test(row.kind)) {   // Starcia.js: the beasts and the men, once the map is back
             this.popScene();
             Starcia.pending = row.kind.slice(3);
+        } else if (row.kind === "cr_rats10") {   // Creatures.js: a swarm of 10 rats round him, once the map is back
+            this.popScene();
+            Creatures.pending = { kind: "szczur", count: 10 };
         } else if (row.kind === "cr_kind" || row.kind === "cr_boss") {   // Creatures.js: spawned once the map is back
             this.popScene();
             Creatures.pending = crKeys(row.kind)[row.pick];
@@ -935,6 +940,16 @@
                 if (!got) { say(row.icon, TK.kod.onIsleOk[10], true); break; }
                 const lv = Combat.hero().level;
                 say(row.icon, Watki.wstaw(TK.kod.onIsleOk[amount === 10000 ? 12 : 28], { "1": lv > lv0 ? Watki.wstaw(TK.kod.onIsleOk[11], { lv0: lv0, lv: lv }) : "" }));
+                break;
+            }
+            case "isleAttrMax": {   // every attribute at the top (Combat.ATTR_MAX); the free points stay, the health grows full
+                if (!window.Combat || !Combat.hero || !Combat.ATTRS) { say(row.icon, TK.kod.onIsleOk[9], true); break; }
+                const h = Combat.hero(), max = Combat.ATTR_MAX || 60, actor = $gameParty.leader();
+                if (Combat.ATTRS.every(a => (h.attr[a.id] || 0) >= max)) { say(row.icon, TK.kod.onIsleOk[30], true); break; }
+                for (const a of Combat.ATTRS) h.attr[a.id] = max;
+                h.rev = (h.rev || 0) + 1;
+                if (actor) { actor.refresh(); actor.setHp(actor.mhp); }
+                say(row.icon, Watki.wstaw(TK.kod.onIsleOk[29], { max }));
                 break;
             }
             case "islePrologue":

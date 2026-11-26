@@ -123,16 +123,35 @@
     function faceVector(dx, dy) {
         if (Math.abs(dx) >= Math.abs(dy)) $gamePlayer.setDirection(dx < 0 ? 4 : 6); else $gamePlayer.setDirection(dy < 0 ? 8 : 2);
     }
-    // the stone / the arrow leaves (the direction is a unit vector)
-    function launch(w, dx, dy) {
+    // (2026-11-26, the new trees) Przeszywająca strzała (r_pierce): the arrow goes on to the next one in line - PIERCE_SHOT[rank] of
+    // its damage there; Salwa (r_volley): the bow's circle closed whole - VOLLEY.extra[rank] more arrows fanned out, each VOLLEY.share
+    // (one more arrow each from the quiver); Przygważdżający strzał (r_pin): the one hit slowed PIN.slow[rank] for PIN.frames
+    // (2026-11-26, three ranks each: Salwa 2 / 3 / 3 arrows at 60% / 60% / 80%; Przygważdżający strzał 30% / 40% / 50% slower -
+    // the engine's speed is a power of two: 0.5 off = 30% slower, 1.0 off = half)
+    const PIERCE_SHOT = [0, 0.4, 0.7, 1.0], VOLLEY = { extra: [0, 1, 2, 2], shares: [0, 0.6, 0.6, 0.8], share: 0.6, spread: 0.14 }, PIN = { slow: [0, 0.5, 0.74, 1.0], frames: 180 };
+    const rankOf = id => { const c = T.api("Combat_parts"); try { return c && c.core && c.core.skillRank ? c.core.skillRank(id) : 0; } catch (e) { return 0; } };
+    const _realMoveSpeed = Game_Character.prototype.realMoveSpeed;
+    Game_Character.prototype.realMoveSpeed = function() {
+        const v = _realMoveSpeed.call(this);
+        return this._slowT > 0 ? v - (this._slowBy || 0) : v;
+    };
+    const _Game_CharacterBase_update = Game_CharacterBase.prototype.update;
+    Game_CharacterBase.prototype.update = function() {
+        _Game_CharacterBase_update.apply(this, arguments);
+        if (this._slowT > 0) this._slowT--;
+    };
+    // the stone / the arrow leaves (the direction is a unit vector); share: its part of the damage (the volley's arrows)
+    function launch(w, dx, dy, share) {
         const def = defOf(w);
         se(def.se, 85, def.pitch);
         const sx = $gamePlayer._realX + 0.5, sy = $gamePlayer._realY + 0.3, p = makeProjectile(w, sx, sy, dx, dy);
         p.def = def;   // (the bow it left: its damage and range, whatever is in hand when it lands)
         const through = w === "bow" ? cechy(def.item).przebijajaca_strzala || 0 : 0;
         if (through > 1) { p.pierce = through; p.passed = []; }   // (Bron_Cechy.js: an arrow that goes on through - this many in all)
+        if (w === "bow" && rankOf("r_pierce")) { p.pierce = Math.max(p.pierce || 0, 2); p.passed = p.passed || []; p.onShare = PIERCE_SHOT[rankOf("r_pierce")]; }
+        p.share = share || 1;
         projectiles.push(p);
-        makeNoise(sx, sy, NOISE_RADIUS * (knowsSkill("r_silent") ? 0.5 : 1));   // (Cichy strzał)
+        makeNoise(sx, sy, NOISE_RADIUS * (1 - Math.min(0.9, perk("shot.quiet"))));   // (Cichy strzał: 30% / 50% / 70% less)
     }
     // A straight shot, no aiming (tests, events). Returns true when a projectile left. dir: [dx, dy] (defaults to the facing),
     // which: "sling" | "bow" (defaults to the best weapon in the bag)
@@ -212,6 +231,7 @@
         aim.point = best ? { x: best.x, y: best.y } : { x: px + fx * def.range * 0.7, y: py + fy * def.range * 0.7 };
         const Cb = C(), dex = Cb && Cb.aimSteady ? Cb.aimSteady() : 1;   // (Zręczność: the circle closes sooner)
         const k = Math.min(1, aim.t / (def.steady * (sneaking() ? 0.8 : 1) * dex)), ease = 1 - (1 - k) * (1 - k);
+        aim.full = k >= 1;   // (Salwa: the circle closed whole)
         let r = def.spread - (def.spread - def.focus) * ease;
         if ($gameSystem.staminaRatio() < 0.3) r = Math.max(r, def.focus * 2.2);   // tired hands
         if (def.tremble && aim.t > def.tremble) r += (aim.t - def.tremble) * 0.004;   // the drawn bow starts to shake
@@ -223,7 +243,7 @@
     // the shoot key let go: the shot flies at a random point of the circle
     function fireAimed() {
         if (!aim) return;
-        const w = aim.weapon, a = aim.point, ang = Math.random() * Math.PI * 2, rr = aim.radius * Math.sqrt(Math.random());
+        const w = aim.weapon, a = aim.point, ang = Math.random() * Math.PI * 2, rr = aim.radius * Math.sqrt(Math.random()), full = !!aim.full;
         endAim();
         if (!a || !payShot(defOf(w))) return;
         const sx = $gamePlayer._realX + 0.5, sy = $gamePlayer._realY + 0.3;
@@ -231,7 +251,17 @@
         const len = Math.hypot(dx, dy) || 1;
         dx /= len; dy /= len;
         faceVector(dx, dy);
-        launch(w, dx, dy);
+        const vr = w === "bow" && full ? rankOf("r_volley") : 0, def = defOf(w);
+        if (!vr) { launch(w, dx, dy); return; }
+        const vs = VOLLEY.shares[vr] || VOLLEY.share;
+        launch(w, dx, dy, vs);
+        const angs = VOLLEY.extra[vr] === 1 ? [VOLLEY.spread] : [-VOLLEY.spread, VOLLEY.spread];
+        for (const da of angs) {
+            if (def.ammo && $gameParty.numItems($dataItems[def.ammo]) < 1) break;
+            if (def.ammo) $gameParty.loseItem($dataItems[def.ammo], 1, false);
+            const c = Math.cos(da), sn = Math.sin(da);
+            launch(w, dx * c - dy * sn, dx * sn + dy * c, vs);
+        }
     }
     // ------------------------------------------------------------------
     // The spear: the shoot key with a spear in the bag jabs at what stands within reach in front of the player (the nearest one); with nothing
@@ -359,7 +389,7 @@
                 p.x += p.dx * step; p.y += p.dy * step; p.travelled += step;
                 const target = targets.find(t => Math.hypot(t.x - p.x, t.y - p.y) <= t.radius && !(p.passed && p.passed.includes(t.ref)));
                 if (target) {
-                    const hurt = shotHit(target, def);
+                    const hurt = shotHit(target, def, p.share * (p.passed && p.passed.length && p.onShare ? p.onShare : 1));
                     // (Bron_Cechy.js przebijajaca_strzala) through the one it hurt, on to the next in line - a shield stops it
                     if (hurt && p.pierce && p.pierce > p.passed.length + 1) { p.passed.push(target.ref); p.first = p.first || target; continue; }
                     endProjectile(p); shotEnd(p, target); break;
@@ -392,18 +422,18 @@
     // sneaks or from behind it (Combat.sneakAttack says) - Combat.sneakMult(true) (x2, more with Zręczność, Czujność and Zasadzka) and
     // a heavy knock to its balance; Strzał w serce makes any shot at an unaware one a triple (a shot from hiding at least that)
     // -> true when it hurt (a shield did not stop it: an arrow that pierces goes on - updateProjectiles)
-    function shotHit(target, def) {
+    function shotHit(target, def, share) {
         const Cb = C(), tr = cechy(def.item), bc = tr !== NO_TRAITS ? BC() : null;
-        let dmg = def.damage * dmgRoll() * (Cb ? 1 + 0.02 * (Cb.attr("dex") - 5) : 1) * (1 + perk("ranged.dmg")), tag = "", poise = Math.round(def.damage * 0.6);
+        let dmg = def.damage * dmgRoll() * (Cb ? 1 + 0.02 * (Cb.attr("dex") - 5) : 1) * (1 + perk("ranged.dmg")) * (share || 1), tag = "", poise = Math.round(def.damage * 0.6 * (share || 1));
         const a = target.ref && target.ref.isAnimal ? target.ref : null;
         if (tr.stwory && bc && bc.isCreature(target.ref)) dmg *= 1 + tr.stwory;   // (the order's bow on the creatures of the depths)
         const sneak = a && Cb && Cb.sneakAttack ? Cb.sneakAttack(a) : null;   // null | "unaware" | "hidden" (sneaking or from behind)
-        const heart = a && knowsSkill("r_heart") && !!sneak;
+        const heartK = a && knowsSkill("r_heart") && !!sneak ? perk("heart.mult") || 3 : 0, heart = heartK > 0;   // (Strzał w serce: x2 / x2.5 / x3)
         if (sneak === "hidden" || heart) {
-            const m = Math.max(sneak === "hidden" ? Cb.sneakMult(true) : 1, heart ? 3 : 1);
+            const m = Math.max(sneak === "hidden" ? Cb.sneakMult(true) : 1, heart ? heartK : 1);
             dmg *= m;
             poise = Math.max(Math.round(poise * (Cb.SNEAK ? Cb.SNEAK.poise : 3)), (a._poise || 0) + 1);   // (its balance broken whole: it reels)
-            tag = heart && m === 3 ? "heart" : "sneak";
+            tag = heart && m === heartK ? "heart" : "sneak";
         }
         else if (perkRoll("ranged.crit")) { dmg *= 2; tag = "crit"; }
         // (Bron_Cechy.js ogluszajacy_kamien) a stone that stuns: its balance broken whole - it reels by its own rules
@@ -413,6 +443,9 @@
         if (bc) bc.beforeHit(r);
         target.hit(Math.round(dmg) + (tr.obrazenia || 0), "shot", { poise, crit: !!tag, tag, heavy: tag === "sneak" || tag === "heart" });
         if (bc) bc.afterHit(r, tr, stunK);
+        // (Przygważdżający strzał: slowed a while - Game_Character.realMoveSpeed below)
+        const pin = rankOf("r_pin");
+        if (pin && r && !r._dead) { r._slowT = PIN.frames; r._slowBy = PIN.slow[pin]; }
         return hp0 === null || r._hp < hp0 || !!r._dead;
     }
     function hit(animal, damage, how, extra) {

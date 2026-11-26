@@ -356,14 +356,17 @@
         const score = wsum ? Math.round(ssum / wsum) : 0;
         // (2026-10-29, docs/PODROZNI.md 1.6) the tavern's renown and the like: more tips (other plugins' addTipBonus)
         const tipBonus = aborted ? 0 : TIP_BONUS.reduce((n, f) => { try { return n + (Number(f()) || 0); } catch (e) { return n; } }, 0);
-        const tips = Math.max(0, Math.round(o.ctx.tips + tipBonus));
+        // (2026-11-26, Ulubieniec gości - k_tips: "tips" more of the guests' tips)
+        const tipsMul = 1 + (TW.call("Combat", "perk", "tips") || 0);
+        const tips = Math.max(0, Math.round((o.ctx.tips + tipBonus) * tipsMul));
         const s = parts.serve || {}, b = parts.beer || {};
         const deduct = (s.walkouts || 0) * 3 + (s.mistakes || 0) + (b.spilled || 0);
         const wage = BASE_WAGE + 3 * o.level;
         const grade = aborted ? 0 : gradeOf(score), bonusR = Math.round(bonus), extra = grade === 5 ? 5 : 0;
         const raw = wage + bonusR - deduct + extra, pay = aborted ? 0 : Math.max(3, raw);
         const hours = Math.round(HOURS * (aborted ? Math.max(0.25, frac) : 1) * 10) / 10;
-        const stamina = Math.round(STAMINA * (aborted ? Math.max(0.25, frac) : 1));
+        // (2026-11-26, Rączy do roboty - k_shift: the shift takes "shift.cost" less of his strength)
+        const stamina = Math.round(STAMINA * (aborted ? Math.max(0.25, frac) : 1) * Math.max(0.25, 1 - (TW.call("Combat", "perk", "shift.cost") || 0)));
         if (aborted) bad.unshift(TK.kod.computeResult[0]);
         return {
             pay, tips, total: pay + tips, grade, gradeName: grade ? GRADES[grade].name : "Przerwana", score, level: o.level, shift: o.shiftNo,

@@ -45,7 +45,7 @@ require("fs").mkdirSync(OUT, { recursive: true });
 
         // ================= 1. the dodge: three steps with Unik mistrza (0: a slow hop, 1: a quicker longer hop, 2: the blurred slide) =================
         const actE = "Tawerna.api('Combat_parts').fight.act";
-        const setRank = r => ev(`(function(){ const h = Combat.hero(); h.skills.d_roll = ${r}; h.rev = (h.rev || 0) + 1; return Tawerna.api('Combat_parts').fight.dodgeTier(); })()`);
+        const setRank = r => ev(`(function(){ const h = Combat.hero(); h.skills.d_roll = ${r} + 1; h.rev = (h.rev || 0) + 1; return Tawerna.api('Combat_parts').fight.dodgeTier(); })()`);
         const dodge = () => JP(`new Promise(res => {
             const f = ${F}; f.act.rollCd = 0; f.act.iframes = 0; f.fillBreath();
             $gamePlayer.locate(${spot.x}, ${spot.y}); $gamePlayer.setDirection(6);
@@ -62,15 +62,18 @@ require("fs").mkdirSync(OUT, { recursive: true });
                 if (f.act.mode !== "roll" || out.xs.length > 120) { clearInterval(iv); out.mode = f.act.mode; const t = Graphics.frameCount + 14; const iv2 = setInterval(() => { if (Graphics.frameCount < t) return; clearInterval(iv2); out.rotation = spr.rotation; out.ghostsAfter = tm.children.filter(c => c.spriteId === -1 && c._life !== undefined).length; out.shadow = !!(spr._hopShadow && spr._hopShadow.visible); res(out); }, 4); }
             }, 2);
         })`);
+        // (2026-11-26, the user) no Unik learnt: Space does nothing
+        const none = await J(`(function(){ const h = Combat.hero(), f = ${F}; h.skills.d_roll = 0; h.rev = (h.rev || 0) + 1; f.act.rollCd = 0; f.act.mode = "idle"; f.fillBreath(); const ok = f.pressDodge(); return { ok, mode: f.act.mode }; })()`);
+        check("no Unik learnt: Space does nothing (no dodge at all)", none.ok === false && none.mode !== "roll", none);
         const res = [];
         for (const r of [0, 1, 2]) { const tierNow = await setRank(r); const d = await dodge(); d.rank = r; d.tierNow = tierNow; res.push(d); await frames(20); }
         const end = d => d.xs[d.xs.length - 1], at = (d, k) => d.xs[Math.min(d.xs.length - 1, Math.floor(k * d.xs.length))];
         const sum = res.map(d => ({ rank: d.rank, tier: d.tier, frames: d.xs.length, end: end(d), lift: d.lift, ghosts: d.ghosts, early: at(d, 0.12) }));
         check("Space: a dodge (no roll sheet - no swing); he keeps facing east (the picture too, 8-way), standing, no steps - at every step", res.every(d => d.started && !d.swing && d.dirs.every(v => v === d.dir0) && d.d8.every(v => v === 6) && d.still >= 4), res.map(d => ({ s: d.started, sw: d.swing, dirs: [...new Set(d.dirs)], d8: [...new Set(d.d8)], still: d.still })));
-        check("Unik mistrza picks the step: rank 0 -> the slow hop, 1 -> the quicker hop, 2 -> the blur", res.map(d => d.tier).join() === "0,1,2", sum);
-        check("step 0: a slow hop back (~30 frames, 1.5 tiles), he crouches first (no move), leaves the ground (lift > 10 px), no blur", Math.abs(at(res[0], 0.12)) < 0.05 && res[0].lift >= 10 && res[0].ghosts === 0 && end(res[0]) < -1.35 && end(res[0]) > -1.65 && res[0].xs.length >= 26,
-            Object.assign({ ok: [Math.abs(at(res[0], 0.12)) < 0.05, res[0].lift >= 10, res[0].ghosts === 0, end(res[0]) < -1.35, end(res[0]) > -1.65, res[0].xs.length >= 26] }, sum[0]));
-        check("step 1: quicker and further (~24 frames, 2 tiles), a lower hop, no blur", res[1].xs.length < res[0].xs.length && end(res[1]) < -1.8 && end(res[1]) > -2.2 && res[1].lift >= 6 && res[1].ghosts === 0, sum[1]);
+        check("Unik picks the step: rank 1 -> the slow hop, 2 -> the further hop, 3 -> the blur", res.map(d => d.tier).join() === "0,1,2", sum);
+        check("step 0: a slow hop back (~34 frames, 1.25 tiles), he crouches first (no move), leaves the ground (lift > 10 px), no blur", Math.abs(at(res[0], 0.12)) < 0.05 && res[0].lift >= 10 && res[0].ghosts === 0 && end(res[0]) < -1.15 && end(res[0]) > -1.35 && res[0].xs.length >= 30,
+            Object.assign({ ok: [Math.abs(at(res[0], 0.12)) < 0.05, res[0].lift >= 10, res[0].ghosts === 0, end(res[0]) < -1.15, end(res[0]) > -1.35, res[0].xs.length >= 30] }, sum[0]));
+        check("step 1: a little quicker and further (~30 frames, 1.6 tiles), a lower hop, no blur", res[1].xs.length < res[0].xs.length && end(res[1]) < -1.45 && end(res[1]) > -1.75 && res[1].lift >= 6 && res[1].ghosts === 0, sum[1]);
         check("step 2: the fast blurred slide (~16 frames, 2.6 tiles): on the ground, fading copies behind, gone after", res[2].xs.length < res[1].xs.length && end(res[2]) < -2.4 && res[2].lift <= 1 && res[2].ghosts >= 2 && res[2].ghostsAfter === 0, sum[2]);
         // the rest before the next dodge: shorter with Zręczność (Combat.js rollChain: 26 frames at 5, 0.6 less a point, 6 at least)
         const chain = await J(`(function(){ const h = Combat.hero(), core = Tawerna.api("Combat_parts").core, d0 = h.attr.dex, out = {};
@@ -80,7 +83,7 @@ require("fs").mkdirSync(OUT, { recursive: true });
         // the safety: the dodge and 3 frames at most - the master's slide with Zręczność 50 is no endless safety any more
         const safe = await JP(`new Promise(res => {
             const h = Combat.hero(), f = ${F}, d0 = h.attr.dex, r0 = h.skills.d_roll;
-            h.attr.dex = 50; h.skills.d_roll = 2; h.rev = (h.rev || 0) + 1;
+            h.attr.dex = 50; h.skills.d_roll = 3; h.rev = (h.rev || 0) + 1;
             f.act.rollCd = 0; f.act.iframes = 0; f.act.mode = "idle"; f.fillBreath();
             $gamePlayer.locate(${spot.x}, ${spot.y}); $gamePlayer.setDirection(6);
             f.pressDodge();
@@ -95,6 +98,18 @@ require("fs").mkdirSync(OUT, { recursive: true });
         check("the dodge's safety lasts the dodge and 3 frames at most (master's slide, Zręczność 50: 16 + 3), none left in the pause after it", safe.len === 16 && safe.start === 19 && safe.afterEnd <= 3 && safe.inPause === 0, safe);
         await frames(20);
         check("after every dodge he stands straight again, the hop's shadow gone", res.every(d => Math.abs(d.rotation) < 0.001 && !d.shadow), res.map(d => [d.rotation, d.shadow]));
+        // (2026-11-26) the weight he wears slows the base hop: 25 kg (every worn thing's weight forced) - 50% slower, 20% shorter; the master's slide does not feel it
+        await ev("window.__iw = Survival.itemWeight; Survival.itemWeight = () => 25; 0");
+        await setRank(0);
+        const hv = await dodge();
+        await setRank(1);
+        const hv1 = await dodge();
+        await setRank(2);
+        const hv2 = await dodge();
+        await ev("Survival.itemWeight = window.__iw; 0");
+        check("heavy gear (25 kg on him): rank 1 - 50% slower (51 frames), 20% shorter (1 tile); rank 2 - half that (38 frames, 1.44 tiles); rank 3 - no weight (16)",
+            hv.len === 51 && end(hv) > -1.1 && end(hv) < -0.9 && hv1.len === 38 && end(hv1) > -1.55 && end(hv1) < -1.33 && hv2.len === 16, { len: hv.len, end: end(hv), r2: hv1.len, end2: end(hv1), master: hv2.len });
+        await setRank(0);
         // screenshots: the hop in the air (step 0), the blur (step 2)
         await setRank(0);
         await ev(`$gamePlayer.locate(${spot.x}, ${spot.y}); $gamePlayer.setDirection(6); ${F}.act.rollCd = 0; ${F}.fillBreath(); 0`);

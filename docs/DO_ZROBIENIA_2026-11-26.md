@@ -38,7 +38,7 @@ Już ustalone i wpisane na stronę (do zrobienia w grze po odpowiedziach): zamas
 
 ## 5. Commit i push
 
-Po Twoim „ok”: commit i push wszystkiego z 25 listopada (unik w trzech stopniach, krzyżowanie broni, broń w ręce, kamera, przebieranie w tle, sadzonki, autopilot, Wytrych, F9 +10 000 000 doświadczenia).
+Zrobione 26.11 (commit 240490b2, wypchnięty): wszystko z 25 listopada (unik w trzech stopniach, krzyżowanie broni, broń w ręce, kamera, przebieranie w tle, sadzonki, autopilot, Wytrych, F9 +10 000 000 doświadczenia).
 
 ## Zrobione 26 listopada (rano)
 

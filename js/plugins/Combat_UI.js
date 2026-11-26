@@ -540,7 +540,7 @@
                 let lift = 0;
                 if (k >= H.up && k < H.down) {
                     const a = (k - H.up) / (H.down - H.up);
-                    lift = Math.round(tier.hop * 4 * a * (1 - a));
+                    lift = Math.round(tier.hop * (act.rollHopK || 1) * 4 * a * (1 - a));
                 }
                 sprite.rotation = 0;
                 sprite.scale.y = 1;
@@ -568,6 +568,9 @@
                 sprite.rotation = 0;
                 sprite.anchor.y = 1;
             }
+            const wr = act.mode === "whirl" && P.fight.whirlRank ? P.fight.whirlRank() : null;
+            if (wr && Graphics.frameCount % (wr.ghost || 3) === 0) dodgeGhost(sprite);   // (Wir: the spin's blur - thicker the higher the rank)
+            whirlRings(sprite, wr);
             updateGhosts();
         } else if (ch && ch.isAnimal) {
             // the hit (2026-10-14): the whole figure crisp white for HIT_WHITE frames of the screen (the hitstop does not lengthen it), then
@@ -620,15 +623,66 @@
     // the dodge's trail: a copy of the hero's picture as it is now (his body and clothes - Ubior's sheet - and the hair over the cell),
     // left on the ground where he was, fading in GHOST.life frames; behind him (its spriteId)
     const GHOST = { life: 9, alpha: 120 }, ghosts = [];
+    // (2026-11-26, the user: "linie jakby tornadka wokół gracza") the whirl's wind: rings of streaks round him at the knees, the waist and
+    // the chest - one a rank of Wir -, two streaks a ring, turning with the blade (one turn a cut: act.whirlPhase). Drawn once a rank into
+    // two sheets of RING.frames frames: the back half of the rings (under the figure - the swing pose is a child of his sprite too) and the
+    // front half (over it); a frame of each shown, nothing drawn while he whirls (performance first)
+    const RING = { frames: 16, w: 120, h: 84, fx: 60, fy: 72, arc: 2.3, color: [236, 244, 240],
+        rings: [{ y: -8, rx: 34, ry: 10, at: 0 }, { y: -24, rx: 41, ry: 12, at: 1.1 }, { y: -40, rx: 48, ry: 14, at: 2.3 }] };
+    const ringSheets = {};
+    function ringSheet(n) {
+        if (ringSheets[n]) return ringSheets[n];
+        const F = RING.frames, W = RING.w, Hh = RING.h, back = new Bitmap(W * F, Hh), front = new Bitmap(W * F, Hh);
+        const c = RING.color;
+        for (let f = 0; f < F; f++) for (let r = 0; r < n; r++) {
+            const g = RING.rings[r], dots = Math.ceil(g.rx * RING.arc * 1.3);
+            for (let s = 0; s < 2; s++) {
+                const head = (f / F) * Math.PI * 2 + s * Math.PI + g.at;   // (the angle grows the way he turns: down, left, up, right)
+                for (let i = 0; i < dots; i++) {
+                    const k = i / (dots - 1), a = head - k * RING.arc, near = Math.sin(a) > 0;
+                    const x = f * W + RING.fx + Math.round(Math.cos(a) * g.rx), y = RING.fy + g.y + Math.round(Math.sin(a) * g.ry);
+                    const ctx = (near ? front : back).context;
+                    ctx.fillStyle = "rgba(" + c[0] + "," + c[1] + "," + c[2] + "," + ((1 - k) * (near ? 0.8 : 0.4)).toFixed(3) + ")";
+                    ctx.fillRect(x, y, k < 0.25 ? 3 : 2, k < 0.5 ? 2 : 1);   // (the head thicker, the tail thin)
+                }
+            }
+        }
+        for (const b of [back, front]) { b.smooth = false; b._baseTexture.update(); }
+        return (ringSheets[n] = { back, front });
+    }
+    function whirlRings(sprite, wr) {
+        let rb = sprite._whirlBack, rf = sprite._whirlFront;
+        if (!wr) { if (rb) rb.visible = rf.visible = false; return; }
+        if (!rb) {
+            rb = sprite._whirlBack = new Sprite();
+            rf = sprite._whirlFront = new Sprite();
+            for (const s of [rb, rf]) s.anchor.set(RING.fx / RING.w, RING.fy / RING.h);
+        }
+        const sh = ringSheet(Math.max(1, Math.min(RING.rings.length, wr.rings || 1)));
+        // the back half under the figure (the swing pose, a child), the front half over everything of his
+        const body = sprite._swingBody && sprite._swingBody.parent === sprite ? sprite._swingBody : null;
+        if (rb.parent !== sprite || (body && sprite.children.indexOf(rb) > sprite.children.indexOf(body))) {
+            if (rb.parent) rb.parent.removeChild(rb);
+            sprite.addChildAt(rb, body ? sprite.children.indexOf(body) : 0);
+        }
+        if (sprite.children[sprite.children.length - 1] !== rf) { if (rf.parent) rf.parent.removeChild(rf); sprite.addChild(rf); }
+        const fr = Math.floor((act.whirlPhase || 0) * RING.frames) % RING.frames;
+        rb.bitmap = sh.back; rf.bitmap = sh.front;
+        rb.setFrame(fr * RING.w, 0, RING.w, RING.h);
+        rf.setFrame(fr * RING.w, 0, RING.w, RING.h);
+        rb.visible = rf.visible = true;
+    }
     function dodgeGhost(sprite) {
-        const parent = sprite.parent, f = sprite._frame;
-        if (!parent || !sprite.bitmap || !f || f.width <= 0) return;
-        const g = new Sprite(sprite.bitmap);
+        // (the swing sheet's body draws the figure - the Wir pose: the copy is of it, where it stands)
+        const body = sprite._swingBody && sprite._swingBody.visible ? sprite._swingBody : null, src = body || sprite;
+        const parent = sprite.parent, f = src._frame, ox = body ? body.x : 0, oy = body ? body.y : 0;
+        if (!parent || !src.bitmap || !f || f.width <= 0) return;
+        const g = new Sprite(src.bitmap);
         g.setFrame(f.x, f.y, f.width, f.height);
-        g.anchor.set(sprite.anchor.x, sprite.anchor.y);
+        g.anchor.set(src.anchor.x, src.anchor.y);
         g.scale.set(sprite.scale.x, sprite.scale.y);
         g.rotation = sprite.rotation;
-        const head = sprite._ubiorHead;
+        const head = body ? null : sprite._ubiorHead;
         if (head && head.renderable && head.bitmap && head._frame) {
             const h = new Sprite(head.bitmap);
             h.setFrame(head._frame.x, head._frame.y, head._frame.width, head._frame.height);
@@ -637,10 +691,10 @@
         }
         g.z = sprite.z;
         g.spriteId = -1;
-        g._wx = sprite.x + $gameMap.displayX() * $gameMap.tileWidth();
-        g._wy = sprite.y + $gameMap.displayY() * $gameMap.tileHeight();
+        g._wx = sprite.x + ox + $gameMap.displayX() * $gameMap.tileWidth();
+        g._wy = sprite.y + oy + $gameMap.displayY() * $gameMap.tileHeight();
         g._life = GHOST.life;
-        g.x = sprite.x; g.y = sprite.y;
+        g.x = sprite.x + ox; g.y = sprite.y + oy;
         g.opacity = GHOST.alpha;
         parent.addChild(g);
         ghosts.push(g);

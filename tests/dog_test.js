@@ -76,7 +76,8 @@ const { launch, sleep } = require("./cdp.js");
             for (let y = 2; y < $gameMap.height() - 3; y++) for (let x = 2; x < $gameMap.width() - 8; x++) cand.push([x, y, Math.abs(x - cx) + Math.abs(y - cy)]);
             cand.sort((a, b) => a[2] - b[2]);
             for (const [x, y] of cand) {
-                if (![0,1,2,3,4].every(k => $gameMap.checkPassage(x + k, y + 1, 0x0f))) continue;
+                // (2026-11-26: no map event in front either - a thicket before the kennel's door kept the dog out of it, the test failed by chance)
+                if (![0,1,2,3,4].every(k => $gameMap.checkPassage(x + k, y + 1, 0x0f) && $gameMap.eventsXy(x + k, y + 1).length === 0)) continue;
                 const added = [];
                 for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 7; dx++) { const k = (x + dx) + "," + (y + dy); if (!plots[k]) { plots[k] = { s: "cleared" }; added.push(k); } }
                 if (free("stockpile", x, y) && free("doghouse", x + 4, y)) return { x, y };

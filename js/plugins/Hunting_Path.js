@@ -54,6 +54,39 @@
     // straight steps (bits of PBIT) that go from it, for a wild animal (all of a building keeps it out: Game_Animal.isMapPassable)
     // and for the dog (only a building's solid cells, the map's passage of Farming.js)
     const pgrid = { mapId: -1, w: 0, h: 0, pass: null, ev: null, bld: null, s4a: null, s4d: null, tilesAt: -1e9, eventsAt: -1e9, rev: -1, passB: null, bldB: null, job: null, jobFrame: -1 };
+    // ------------------------------------------------------------------
+    // (2026-11-26, the user: "królik i pies mogą przeskakiwać przez płotek, małe kamienie, krzaczki i tym podobne rzeczy blokujące";
+    // "jeleń też może") what lies low and may be hopped over: a fence of the map (an A2 overlay on layer 1 blocking every way - Winlu's
+    // wooden fences, as Cienie.js finds them), a berry bush (Farming), a log, a stump, a bush, a small rock (ChoppableTree.isLow). An
+    // actor that hops (actor.canHop(): the rabbit and the deer - SPECIES hops - and the dog) jumps two tiles over one such tile in a
+    // straight way when the one behind is free; the search below takes such a hop as a step of its own, so they go over, not round.
+    // (A fence the player built - Farming's "Płot" - is a building: it still keeps them out.)
+    // ------------------------------------------------------------------
+    function fenceTileAt(x, y) {
+        const d = window.$dataMap && $dataMap.data, ts = $gameMap.tileset();
+        if (!d || !ts) return false;
+        const W = $gameMap.width(), H = $gameMap.height(), t = d[(H + y) * W + x];
+        return t >= 2816 && t < 4352 && ((ts.flags[t] || 0) & 15) === 15;
+    }
+    function lowAt(x, y) {
+        if (!$gameMap.isValid(x, y)) return false;
+        if (fenceTileAt(x, y)) return true;
+        const F = T.api("Farming"), CT = T.api("ChoppableTree");
+        if (F && F.bushSolid && F.bushSolid(x, y, $gameMap.mapId())) return true;   // (a berry bush: not an event)
+        const blocking = $gameMap.eventsXy(x, y).filter(e => e.isNormalPriority() && !e.isThrough());
+        return blocking.length > 0 && !!(CT && CT.isLow) && blocking.every(e => CT.isLow(e));
+    }
+    // the tile the actor lands on when it hops from (x, y) the straight way d, or null
+    function hopTarget(actor, x, y, d) {
+        if (!actor || !actor.canHop || !actor.canHop() || DIAGONAL[d]) return null;
+        const x1 = $gameMap.roundXWithDirection(x, d), y1 = $gameMap.roundYWithDirection(y, d);
+        const x2 = $gameMap.roundXWithDirection(x1, d), y2 = $gameMap.roundYWithDirection(y1, d);
+        if (!$gameMap.isValid(x2, y2) || !lowAt(x1, y1)) return null;
+        if (!fenceTileAt(x1, y1) && !$gameMap.checkPassage(x1, y1, 0x0f)) return null;   // (a thing standing on floor: not on a wall)
+        const F = T.api("Farming");
+        if (!$gameMap.isPassable(x2, y2, actor.reverseDir(d)) || actor.isCollidedWithCharacters(x2, y2) || (F && F.buildingAt(x2, y2))) return null;
+        return { x: x2, y: y2 };
+    }
     // the tiles' part of rows y0..y1-1 into pass / bld (the map's passage of the four sides; a building)
     function gridRows(pass, bld, y0, y1, w, F) {
         const M = window.Mosty, br = !!(M && M.npcGrid);   // (2026-11-13: the bridges' deck for those who walk by this grid - Mosty.js)
@@ -62,7 +95,7 @@
             for (let y = y0; y < y1; y++) for (let x = 0; x < w; x++) {
                 const i = y * w + x;
                 pass[i] = ($gameMap.isPassable(x, y, 2) ? 1 : 0) | ($gameMap.isPassable(x, y, 4) ? 2 : 0) | ($gameMap.isPassable(x, y, 6) ? 4 : 0) | ($gameMap.isPassable(x, y, 8) ? 8 : 0);
-                bld[i] = F && F.buildingAt(x, y) ? 1 : 0;
+                bld[i] = (F && F.buildingAt(x, y) ? 1 : 0) | (fenceTileAt(x, y) || (F && F.bushSolid && F.bushSolid(x, y, $gameMap.mapId())) ? 2 : 0);   // (2: low - see lowAt)
             }
         } finally { if (br) M.npcGrid(false); }
     }
@@ -74,7 +107,7 @@
     function pathGrid() {
         const now = Graphics.frameCount, w = $gameMap.width(), h = $gameMap.height(), mapId = $gameMap.mapId(), G = pgrid, n = w * h;
         if (G.mapId !== mapId || G.w !== w || G.h !== h) {
-            Object.assign(G, { mapId, w, h, pass: new Uint8Array(n), ev: new Uint8Array(n), bld: new Uint8Array(n), s4a: new Uint8Array(n), s4d: new Uint8Array(n), tilesAt: -1e9, eventsAt: -1e9, rev: -1,
+            Object.assign(G, { mapId, w, h, pass: new Uint8Array(n), ev: new Uint8Array(n), evHi: new Uint8Array(n), bld: new Uint8Array(n), s4a: new Uint8Array(n), s4d: new Uint8Array(n), tilesAt: -1e9, eventsAt: -1e9, rev: -1,
                 passB: new Uint8Array(n), bldB: new Uint8Array(n), job: null, jobFrame: -1 });
         }
         const F = T.api("Farming"), rev = F && F.farm ? F.farm().rev : 0;
@@ -103,7 +136,12 @@
         }
         if (now - G.eventsAt > PATH.events || now < G.eventsAt) {   // (the events that keep a character out: Game_Map.eventsXyNt)
             G.ev.fill(0);
-            for (const e of $gameMap.events()) if (e.isNormalPriority() && !e.isThrough() && $gameMap.isValid(e._x, e._y)) G.ev[e._y * w + e._x] = 1;
+            G.evHi.fill(0);
+            const CT = T.api("ChoppableTree");
+            for (const e of $gameMap.events()) if (e.isNormalPriority() && !e.isThrough() && $gameMap.isValid(e._x, e._y)) {
+                G.ev[e._y * w + e._x] = 1;
+                if (!(CT && CT.isLow && CT.isLow(e))) G.evHi[e._y * w + e._x] = 1;   // (something there that is not low: no hop over that tile)
+            }
             G.eventsAt = now;
             changed = true;
         }
@@ -115,7 +153,7 @@
                     const x2 = x + DX8[k], y2 = y + DY8[k], j = y2 * w + x2;
                     if (!(p & SB8[k]) || x2 < 0 || y2 < 0 || x2 >= w || y2 >= h || !(G.pass[j] & SB8[3 - k]) || G.ev[j]) continue;   // (3 - k: the side it comes in by)
                     dg |= SB8[k];
-                    if (!G.bld[j]) a |= SB8[k];
+                    if (!(G.bld[j] & 1)) a |= SB8[k];
                 }
                 G.s4a[i] = a;
                 G.s4d[i] = dg;
@@ -135,7 +173,9 @@
         return gridStep(G, x, y, hd, animal) && gridStep(G, x, y, vd, animal) && gridStep(G, x + sx, y, vd, animal) && gridStep(G, x, y + sy, hd, animal);
     }
     // a tile it may stand on
-    const gridOpen = (G, x, y, animal) => x >= 0 && y >= 0 && x < G.w && y < G.h && G.pass[y * G.w + x] !== 0 && !G.ev[y * G.w + x] && !(animal && G.bld[y * G.w + x]);
+    const gridOpen = (G, x, y, animal) => x >= 0 && y >= 0 && x < G.w && y < G.h && G.pass[y * G.w + x] !== 0 && !G.ev[y * G.w + x] && !(animal && (G.bld[y * G.w + x] & 1));
+    // a tile one may hop over (see lowAt): a low tile (a fence, a berry bush) or only low events on it - not a building
+    const gridLow = (G, j) => !(G.bld[j] & 1) && ((G.bld[j] & 2) !== 0 || (G.ev[j] === 1 && G.evHi[j] === 0));
     // the 8-way steps of the straight line from tile (x0, y0) to (x1, y1) (Bresenham): does every one of them go? The last one (into
     // the hero's tile: he stands there) is not asked unless toEnd
     function clearLine(G, x0, y0, x1, y1, animal, toEnd) {
@@ -202,7 +242,7 @@
     // nodes (the cap). Returns { path: tile indices, the first step first, reached } - when the goal cannot be reached (or not within
     // the cap), the way to the tile nearest to (tx, ty) it found
     function search8(G, sx, sy, tx, ty, opts) {
-        const w = G.w, animal = !!opts.animal, near = opts.near || 0, goal = opts.goal || null, avoid = opts.avoid || null, cap = opts.nodes || PATH.nodes;
+        const w = G.w, animal = !!opts.animal, near = opts.near || 0, goal = opts.goal || null, avoid = opts.avoid || null, cap = opts.nodes || PATH.nodes, hops = !!opts.hops;
         pathBuffers(w * G.h);
         if (++pStamp > 2e9) { pSeen.fill(0); pClosed.fill(0); pStamp = 1; }
         const oct = (x, y) => { const ax = Math.abs(x - tx), ay = Math.abs(y - ty); return Math.max(ax, ay) + 0.4142 * Math.min(ax, ay); };
@@ -225,7 +265,20 @@
             if (dd < bestD) { bestD = dd; best = i; }
             for (let k = 0; k < 8; k++) {
                 const ox = DX8[k], oy = DY8[k];
-                if (k < 4) { if (!(m & SB8[k])) continue; }
+                if (k < 4) {
+                    if (!(m & SB8[k])) {   // (the straight step does not go: a hop over a low thing, when it can - two tiles, a bit dearer)
+                        if (!hops) continue;
+                        const j1 = i + oy * w + ox, x2 = x + 2 * ox, y2 = y + 2 * oy;
+                        if (x2 < 0 || y2 < 0 || x2 >= w || y2 >= G.h || !gridLow(G, j1) || !gridOpen(G, x2, y2, animal)) continue;
+                        const j2 = y2 * w + x2;
+                        if (pClosed[j2] === pStamp || (avoid && avoid.includes(j2))) continue;
+                        const g2 = pCost[i] + 2.6;
+                        if (pSeen[j2] === pStamp && g2 >= pCost[j2]) continue;
+                        pSeen[j2] = pStamp; pCost[j2] = g2; pFrom[j2] = i;
+                        heapPush(j2, g2 + hOf(x2, y2));
+                        continue;
+                    }
+                }
                 else {
                     const hb = ox < 0 ? 2 : 4, vb = oy < 0 ? 8 : 1;
                     if (!(m & hb) || !(m & vb) || !(S4[i + ox] & vb) || !(S4[i + oy * w] & hb)) continue;
@@ -281,17 +334,19 @@
         opts = opts || {};
         const G = pathGrid(), w = G.w, now = Graphics.frameCount, here = actor._y * w + actor._x, animal = !!opts.animal;
         const key = (opts.key || "") + ":" + tx + "," + ty + ":" + (opts.near || 0), P = actor._p8;
-        const dirTo = i => { const nx = i % w, ny = (i - nx) / w; return VEC_DIR[(nx - actor._x) + "," + (ny - actor._y)] || 0; };
+        const dirTo = i => { const nx = i % w, ny = (i - nx) / w; return VEC_DIR[Math.sign(nx - actor._x) + "," + Math.sign(ny - actor._y)] || 0; };
+        const twoAway = i => { const nx = i % w, ny = (i - nx) / w; return Math.max(Math.abs(nx - actor._x), Math.abs(ny - actor._y)) === 2; };
+        const hops = !!(actor.canHop && actor.canHop());
         if (P && P.key === key && P.map === G.mapId && now - P.t <= (opts.keep || PATH.keep)) {
             const at = P.start === here ? 0 : P.path.indexOf(here) + 1;
             if (at > 0 || P.start === here) {
                 if (at >= P.path.length) return { dir: 0, reached: P.reached, to: P.to, steps: 0 };
                 const d = dirTo(P.path[at]);
-                if (d && gridStep8(G, actor._x, actor._y, d, animal)) return { dir: d, reached: P.reached, to: P.to, steps: P.path.length - at };
+                if (d && (twoAway(P.path[at]) ? !!hopTarget(actor, actor._x, actor._y, d) : gridStep8(G, actor._x, actor._y, d, animal))) return { dir: d, reached: P.reached, to: P.to, steps: P.path.length - at };
             }
         }
         if (!searchBudget()) return { dir: greedyDir(G, actor._x, actor._y, tx, ty, animal), reached: false, greedy: true, to: { x: tx, y: ty } };
-        const res = search8(G, actor._x, actor._y, tx, ty, Object.assign({}, opts, { avoid: avoidList(actor) }));
+        const res = search8(G, actor._x, actor._y, tx, ty, Object.assign({}, opts, { avoid: avoidList(actor), hops }));
         const last = res.path.length ? res.path[res.path.length - 1] : here, to = { x: last % w, y: Math.floor(last / w) };
         actor._p8 = { key, map: G.mapId, t: now, start: here, path: res.path, reached: res.reached, to };
         return { dir: res.path.length ? dirTo(res.path[0]) : 0, reached: res.reached, to, steps: res.path.length };
@@ -394,5 +449,5 @@
     }
 
     P.path = { PATH, STUCK, pathGrid, resetGrid: () => { pgrid.mapId = -1; }, gridStep8, gridOpen, clearLine, lineDir, rayClear, search8, searchBudget,
-        costAt: i => pCost[i], greedyDir, avoidTile, avoidList, path8, takeStep, stalled, detour, heroField, unstall, escapeSpot };
+        costAt: i => pCost[i], greedyDir, avoidTile, avoidList, path8, takeStep, stalled, detour, heroField, unstall, escapeSpot, lowAt, fenceTileAt, hopTarget };
 })();

@@ -406,7 +406,7 @@
         const g = GATHER[kind], item = itemOf(g.item), n = rand(g.count) + (perkRoll("forage.yield") ? 1 : 0);
         if (!spaceFor(item, n)) { complainNoSpace(item); return false; }
         const sting = kind === "nettle";   // nettles sting bare hands: a little more strength, and a word about it once a day
-        if (!spendStamina(foodIsFree(g.item) ? 0 : (knowsSkill("g_quick") ? 0 : STAMINA.pickup) + (sting ? 1 : 0))) return false;
+        if (!spendStamina(foodIsFree(g.item) ? 0 : Math.round(STAMINA.pickup * (1 - Math.min(1, perk("pickup.cost"))) * 10) / 10 + (sting ? 1 : 0))) return false;
         swingThen(CROUCH_KIND, () => {
             stonesOf($gameMap.mapId())[key(x, y)] = today();
             stoneRev++;
@@ -687,7 +687,9 @@
         if (now > b.wt) {
             // (clay seeps - taken off first, so a pot in the rain still shows full)
             const left = Math.max(0, (b.water || 0) - (def.rain.leak ? (now - b.wt) / 24 * def.rain.leak : 0));
-            b.water = Math.min(def.rain.max, left + rainHoursBetween(b.wt, now) * def.rain.rate);
+            // (2026-11-26: Łapacz deszczu / Syn puszczy - "rain.more"; Studniarz - the barrel holds "barrel.more" more)
+            const max = def.rain.max * (b.type === "barrel" ? 1 + perk("barrel.more") : 1);
+            b.water = Math.min(max, left + rainHoursBetween(b.wt, now) * def.rain.rate * (1 + perk("rain.more")));
             b.wt = now;
         }
         return b.water || 0;

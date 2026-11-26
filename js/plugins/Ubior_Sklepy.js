@@ -348,7 +348,8 @@
     // the prices: buying (used: the used price; neat: cheaper), selling (a share of the price by what is left of it; neat: dearer),
     // mending (a share of the price for the wear), dyeing
     function buyPrice(p, used) {   // (used: the shop's "uzywane" - its share of the price)
-        return Math.max(1, Math.round(p.cena * (used && used.cena ? used.cena : 1) * (1 - priceKind())));
+        const haggle = Math.max(0.5, 1 - (T.call("Combat", "perk", "buy") || 0));   // (2026-11-26, Targowanie)
+        return Math.max(1, Math.round(p.cena * (used && used.cena ? used.cena : 1) * (1 - priceKind()) * haggle));
     }
     function buys(s, p) {
         return !!(p && p.cena && (s.skupuje === true || (Array.isArray(s.skupuje) && s.skupuje.includes(p.material))));

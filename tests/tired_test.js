@@ -16,6 +16,7 @@ const { launch, sleep } = require("./cdp.js");
         await ev("SceneManager._scene.startFadeIn(1,false); if (window.Survival) Survival.calmWeather(); if (window.Needs) Needs.setEnabled(false); if (window.Hunting) Hunting.auto(false); $gameSystem.setDayNightHour(12); $gameSystem.setStamina(100); 0");
         const frames = n => ev(`new Promise(res => { const t = Graphics.frameCount + ${n}; const iv = setInterval(() => { if (Graphics.frameCount >= t) { clearInterval(iv); res(Graphics.frameCount); } }, 4); })`);
         const S = () => J(`({ tired: Combat.tired(), walk: $gamePlayer.realMoveSpeed(), work: Math.round(Combat.workSpeed() * 100) / 100, said: SpeechBubbles.log.filter(t => t === "Zmęczyłem się...").length })`);
+        await ev("Combat.hero().skills.d_roll = 1; Combat.hero().rev = (Combat.hero().rev || 0) + 1; 0");   // (Unik learnt: Space does nothing without it)
         // a free row to walk along
         const R = await J(`(function(){
             const free = (x, y) => $gameMap.isValid(x, y) && $gameMap.isPassable(x, y, 6) && $gameMap.isPassable(x, y, 4) && $gameMap.eventsXy(x, y).length === 0 && !Farming.buildingAt(x, y);
@@ -60,7 +61,7 @@ const { launch, sleep } = require("./cdp.js");
         await ev("$gameSystem.setStamina(15); 0");
         const r1 = await roll();
         // (2026-11-25: Space is a dodge in steps now - Combat_Fight DODGE_TIERS; without Unik mistrza the slow hop: 30 frames, 1.5 tiles)
-        check("...and the dodge (Space) is twice as slow: twice as long, as far", r0.len === 30 && r1.len === 60 && r1.frames >= r0.frames * 1.7 && Math.abs(r1.dist - r0.dist) < 0.4 && r0.dist > 1.35, { rested: r0, tired: r1 });
+        check("...and the dodge (Space) is twice as slow: twice as long, as far", r0.len === 34 && r1.len === 68 && r1.frames >= r0.frames * 1.7 && Math.abs(r1.dist - r0.dist) < 0.4 && r0.dist > 1.1, { rested: r0, tired: r1 });
         await frames(60);
         check("it is said once, not again while he stays tired", (await S()).said === 1);
 

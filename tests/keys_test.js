@@ -136,10 +136,10 @@ const path = require("path");
         check("the popup shows for the highlighted dish", st.tip);
         const rights = await J("SceneManager._scene._farmMenu._entries.map(e => e.right)");
         check("each line shows how many you have", JSON.stringify(rights) === JSON.stringify(["×3", "×1", "×2", "×1"]), rights);
-        const gul = await J("(function(){ const m = SceneManager._scene._farmMenu; const e = m._entries.find(e => e.name === 'Gulasz'); return { facts: e.facts, tip: e.tip, icon: e.icon, enabled: e.enabled }; })()");
+        const gul = await J("(function(){ const m = SceneManager._scene._farmMenu; const e = m._entries.find(e => e.name === 'Gulasz'); const it = $dataItems.find(i => i && i.name === 'Gulasz'); return { facts: e.facts, tip: e.tip, icon: e.icon, enabled: e.enabled, dataIcon: it ? it.iconIndex : -1 }; })()");
         check("Gulasz: stamina, fullness, water and both buffs are listed", gul.facts.includes("Wytrzymałość: +65") && gul.facts.includes("Sytość: +62") && gul.facts.includes("Nawodnienie: +14")
             && gul.facts.some(f => /^Najedzony \(7 godz\.\): prace kosztują 15% mniej sił$/.test(f)) && gul.facts.some(f => /^Rozgrzany \(4 godz\.\): /.test(f)), gul);
-        check("...with the item's own description as the text and its icon", gul.tip.length > 10 && gul.icon === 392, { icon: gul.icon, tip: gul.tip });
+        check("...with the item's own description as the text and its icon (the database's - the PixelLab icons since 2026-11-17)", gul.tip.length > 10 && gul.icon === gul.dataIcon && gul.icon > 0, { icon: gul.icon, dataIcon: gul.dataIcon, tip: gul.tip });
         // the popup window really paints the facts
         for (let i = 0; i < 3; i++) await key(K.S);
         await frames(4);

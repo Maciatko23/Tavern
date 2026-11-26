@@ -192,7 +192,7 @@
     // poise: its balance (hits take it away; at 0 it reels for `stun` frames). pack: wolves come in packs of pack[0]-pack[1]
     const SPECIES = {
         rabbit: { name: "Zając", sheet: "$Animal_Rabbit", hp: 12, poise: 10, stun: 30, speed: 3, flee: 5, sight: 6, radius: 0.5, drop: 1, hours: [[5, 21]], hops: true },   // hops: over a stump, a log, a bush
-        deer: { name: "Jeleń", sheet: "$Animal_Deer", hp: 40, poise: 25, stun: 40, speed: 3, flee: 5, sight: 9, radius: 0.75, drop: 2, hours: [[5, 10], [16, 21]] },
+        deer: { name: "Jeleń", sheet: "$Animal_Deer", hp: 40, poise: 25, stun: 40, speed: 3, flee: 5, sight: 9, radius: 0.75, drop: 2, hours: [[5, 10], [16, 21]], hops: true },   // (hops: over a fence, a small rock, a bush - 2026-11-26)
         boar: { name: "Dzik", sheet: "$Animal_Boar", run: "$Animal_Boar_Run", hp: 110, atk: 30, poise: 60, stun: 70, speed: 3, trot: 4, flee: 4.6, charge: 4.6, sight: 7, radius: 0.65, drop: 3,
             hours: [[5, 9], [17, 21]], aggressive: true, hurt: 22, harm: 0.35, markY: -54 },   // harm: the part of the hero's health a hit takes (without Combat.js); markY: the "?"/"!" just over its back
         wolf: { name: "Wilk", sheet: "$Animal_Wolf", run: "$Animal_Wolf_Run", stalk: "$Animal_Wolf_Stalk", bark: "$Animal_Wolf_Bark", hp: 50, atk: 12, poise: 30, stun: 50,
@@ -987,7 +987,7 @@
         BEAR_SPAWN, bearChance, spawnBear, bearCheck, get BEAR_AI() { return AI().BEAR_AI; }, bearEngage: ai("bearEngage"),
         // the way round what is in the way (8 directions) and the stuck watch: the animals here and the dog (Dog.js) - Hunting_Path.js
         get PATH() { return PA().PATH; }, get STUCK() { return PA().STUCK; }, path8: path("path8"), pathGrid: path("pathGrid"), clearLine: path("clearLine"),
-        stalled: path("stalled"), unstall: path("unstall"), avoidTile: path("avoidTile"), takeStep: path("takeStep")
+        stalled: path("stalled"), unstall: path("unstall"), avoidTile: path("avoidTile"), takeStep: path("takeStep"), hopTarget: path("hopTarget"), lowAt: path("lowAt")
     });
 
     // the parts not in js/plugins.js yet: put into the page here (after every plugin - functions and classes only, every engine hook

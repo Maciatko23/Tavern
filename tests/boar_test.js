@@ -85,7 +85,8 @@ const { launch, sleep } = require("./cdp.js");
         check("the attack key with the spear in hand jabs (no aiming)", (await ev("Combat.hand()")) === "m154" && await ev("Hunting.pressShoot()") && !(await ev("!!Hunting.aim")));
         await frames(30);
         const jab1 = await J("({ hp: Hunting.animals[0]._hp, mode: Hunting.animals[0]._mode, st: $gameSystem.stamina(), breath: Combat.breath, maxBreath: Combat.maxBreath() })");
-        check("the jab: the spear's 20 (32 when critical) off its life (110+); breath spent, not the day's strength", (jab1.hp === boarMax - 20 || jab1.hp === boarMax - 32) && jab1.st === 100 && jab1.breath < jab1.maxBreath, { boarMax, ...jab1 });
+        const lost1 = boarMax - jab1.hp;   // (a blow's damage is the base x 0.9-1.1 since 2026-11-17, Bron_Data.ROZRZUT)
+        check("the jab: the spear's 20 (32 when critical), +-10%, off its life (110+); breath spent, not the day's strength", ((lost1 >= 18 && lost1 <= 22) || (lost1 >= 28 && lost1 <= 36)) && jab1.st === 100 && jab1.breath < jab1.maxBreath, { boarMax, lost1, ...jab1 });
         // it recovers and comes again (stagger -> warn -> charge); caught in reach, the second jab
         await ev("Hunting.animals[0]._frozen = false; 0");
         let again = false;
@@ -134,7 +135,7 @@ const { launch, sleep } = require("./cdp.js");
         const mid = await J("({ swinging: $gamePlayer.isToolSwinging(), kind: $gamePlayer._swingEvent && $gamePlayer._swingEvent._swingKind, hp: Hunting.animals[0]._hp })");
         await frames(40);
         const after = await ev("Hunting.animals[0]._hp");
-        check("with the animation the body plays the jab (swing kind 15) and the hit lands on its strike frame", mid.swinging && mid.kind === 15 && mid.hp === max5 && (after === max5 - 20 || after === max5 - 32), { max5, mid, after });
+        check("with the animation the body plays the jab (swing kind 15) and the hit lands on its strike frame", mid.swinging && mid.kind === 15 && mid.hp === max5 && ((max5 - after >= 18 && max5 - after <= 22) || (max5 - after >= 28 && max5 - after <= 36)), { max5, mid, after });   // (+-10%: Bron_Data.ROZRZUT)
         await ev("Hunting.animate(false); 0");
         await standAt(lx, ly, 6);
         await ev("Hunting.pending = 'boar'; 0");
@@ -169,10 +170,11 @@ const { launch, sleep } = require("./cdp.js");
         const hp1 = await ev("$gameParty.leader().hp");
         check("a boar's hit takes its attack (30 at level 1, +12% a level) off the health", hp0.hp === hp0.mhp && hp1 === hp0.mhp - goreAtk, { hp0, goreAtk, hp1 });
         await ev("$gameSystem.advanceDayNight(5); 0");
-        check("while wounded the health does not come back", (await ev("$gameParty.leader().hp")) === hp1);
+        const hpW = await ev("$gameParty.leader().hp");   // (Survival.js: while wounded the slow healing goes at half - WOUND_HEAL, 2026-11-17)
+        check("while wounded the health comes back at half the pace (1.5% an hour: +7.5% in 5 hours)", Math.abs(hpW - (hp1 + hp0.mhp * 0.075)) <= 1, { hp1, hpW });
         await ev("$gameSystem.healWound(); $gameSystem.advanceDayNight(5); 0");
         const hp2 = await ev("$gameParty.leader().hp");
-        check("without the wound it heals by itself, 3% an hour (+15% in 5 hours)", Math.abs(hp2 - (hp1 + Math.round(hp0.mhp * 0.15))) <= 1, { hp1, hp2 });
+        check("without the wound it heals by itself, 3% an hour (+15% in 5 hours)", Math.abs(hp2 - (hpW + Math.round(hp0.mhp * 0.15))) <= 1, { hpW, hp2 });
         await ev("$gameSystem.injure(0); $gameParty.gainItem($dataItems[152], 1); $gameParty.leader().useItem($dataItems[152]); 0");
         const hp3 = await ev("$gameParty.leader().hp");
         check("a bandage heals 20% of the health (and the wound)", Math.abs(hp3 - Math.min(hp0.mhp, hp2 + Math.round(hp0.mhp * 0.2))) <= 1 && !(await ev("$gameSystem.isWounded()")), { hp2, hp3 });

@@ -270,7 +270,8 @@
     function buyPrice(key, p, used) {
         const d = D(), s = shop(key);
         const base = d.cenaOf(p) || d.wartoscOf(p);
-        return Math.max(1, Math.round(base * kantorMul(key) * (used && s && s.uzywane ? s.uzywane.cena : 1)));
+        const haggle = Math.max(0.5, 1 - (T.call("Combat", "perk", "buy") || 0));   // (2026-11-26, Targowanie)
+        return Math.max(1, Math.round(base * kantorMul(key) * (used && s && s.uzywane ? s.uzywane.cena : 1) * haggle));
     }
     function buys(s, p) {
         const d = D();

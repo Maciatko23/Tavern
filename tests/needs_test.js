@@ -20,7 +20,7 @@ kit.test({ width: 2560, height: 1440, dpr: 0.5, evalTimeout: 25000 }, async t =>
 
     // ================= 1. data and HUD =================
     const item = await ev("(function(){ const i = $dataItems[129]; return i ? [i.name, i.iconIndex, i.itypeId, i.consumable, i.note] : null; })()");
-    t.check("item 129 Bukłak: an ordinary item, not consumed, note <Drink:35>", !!item && item[1] >= 688 && JSON.stringify([item[0], item[2], item[3], item[4]]) === JSON.stringify(["Bukłak", 1, false, "<Drink:35><Weight:2>"]), item);
+    t.check("item 129 Bukłak: an ordinary item, not consumed, note <Drink:10> (2026-11-25: sips of 10)", !!item && item[1] >= 688 && JSON.stringify([item[0], item[2], item[3], item[4]]) === JSON.stringify(["Bukłak", 1, false, "<Drink:10><Weight:2>"]), item);
     const icons = await ev(`new Promise(res => { const bmp = ImageManager.loadSystem("IconSet"); const chk = () => { if (!bmp.isReady()) return setTimeout(chk, 50); const out = []; for (const i of [389, 390, 391]) { let n = 0; const d = bmp.context.getImageData((i % 16) * 32, Math.floor(i / 16) * 32, 32, 32).data; for (let k = 3; k < d.length; k += 4) if (d[k] > 0) n++; out.push(n); } res(out); }; chk(); })`);
     t.check("icons 389 (flask), 390 (food), 391 (water drop) are drawn", icons.every(n => n > 200), icons);
     const st0 = await ev("Needs.state()");
@@ -165,8 +165,8 @@ kit.test({ width: 2560, height: 1440, dpr: 0.5, evalTimeout: 25000 }, async t =>
     await clearPopups();
     const dr = await ev("Farming.drink()");
     await settle();
-    t.check("Napij się: water 40 -> 80", dr === true && near(await water(), 80, 0.6), await water());
-    t.check("...with a popup 'Nawodnienie +40' (water icon)", (await popups()).some(p => /Nawodnienie \+40/.test(p)), await popups());
+    t.check("Napij się: water 40 -> 60 (2026-11-25: a drink +20)", dr === true && near(await water(), 60, 0.6), await water());
+    t.check("...with a popup 'Nawodnienie +20' (water icon)", (await popups()).some(p => /Nawodnienie \+20/.test(p)), await popups());
     await set(100, 100); await clearPopups();
     t.check("not thirsty and not tired: 'Nie chce ci się pić', nothing happens", (await ev("Farming.drink()")) === false && (await popups()).includes("Nie chce ci się pić") && near(await water(), 100, 0.05));   // (the clock runs: a hair less than 100)
     // no flask yet
@@ -180,22 +180,22 @@ kit.test({ width: 2560, height: 1440, dpr: 0.5, evalTimeout: 25000 }, async t =>
     await ev("$gameSystem.setStamina(100); 0");
     const made = await ev("Farming.craftManual(null, Farming.HAND_RECIPES.find(r => r.id === 'waterskin'))");
     await settle();
-    t.check("made: the flask is in the bag, empty (0/4)", made === true && (await t.count(129)) === 1 && (await ev("Needs.skinCharges()")) === 0);
+    t.check("made: the flask is in the bag, empty (0/3)", made === true && (await t.count(129)) === 1 && (await ev("Needs.skinCharges()")) === 0);
     t.check("a second flask is refused (unique)", (await ev("Farming.craftManual(null, Farming.HAND_RECIPES.find(r => r.id === 'waterskin'))")) === false);
     await set(100, 40); await clearPopups();
     await drinkKey();
     t.check("G with an empty flask: 'Bukłak jest pusty'", (await popups()).includes("Bukłak jest pusty"), await popups());
     const fill = await ev("Farming.fillSkin()");
     await settle();
-    t.check("filled at the water: 4/4", fill === true && (await ev("Needs.skinCharges()")) === 4);
+    t.check("filled at the water: 3/3 (2026-11-25: three sips)", fill === true && (await ev("Needs.skinCharges()")) === 3);
     const menu2 = await ev("Farming.waterMenu().entries.find(e => e.name === 'Napełnij bukłak')");
-    t.check("a full flask cannot be filled again (the line is dimmed, shows 4/4)", menu2.enabled === false && menu2.right === "4/4", menu2);
+    t.check("a full flask cannot be filled again (the line is dimmed, shows 3/3)", menu2.enabled === false && menu2.right === "3/3", menu2);
     await drinkKey(3);
-    t.check("G: a sip of 35 (water 40 -> 75), the flask 3/4", near(await water(), 75, 0.6) && (await ev("Needs.skinCharges()")) === 3, { w: await water(), c: await ev("Needs.skinCharges()") });
+    t.check("G: a sip of 10 (water 40 -> 50), the flask 2/3", near(await water(), 50, 0.6) && (await ev("Needs.skinCharges()")) === 2, { w: await water(), c: await ev("Needs.skinCharges()") });
     await t.frames(30);
     await set(100, 100);
     await drinkKey(3);
-    t.check("not thirsty: G does not waste a sip", (await ev("Needs.skinCharges()")) === 3);
+    t.check("not thirsty: G does not waste a sip", (await ev("Needs.skinCharges()")) === 2);
     // from the item menu
     await set(100, 30);
     t.check("item menu: the flask can be used while thirsty", (await ev("$gameParty.canUse($dataItems[129])")) === true);
@@ -203,9 +203,9 @@ kit.test({ width: 2560, height: 1440, dpr: 0.5, evalTimeout: 25000 }, async t =>
     t.check("...and not when the thirst is quenched", (await ev("$gameParty.canUse($dataItems[129])")) === false);
     await set(100, 30);
     await ev("$gameParty.members()[0].useItem($dataItems[129]); 0");
-    t.check("used from the menu: water 30 -> 65, 2/4 left, the flask stays in the bag", near(await water(), 65, 0.01) && (await ev("Needs.skinCharges()")) === 2 && (await t.count(129)) === 1, { w: await water() });
+    t.check("used from the menu: water 30 -> 40, 1/3 left, the flask stays in the bag", near(await water(), 40, 0.01) && (await ev("Needs.skinCharges()")) === 1 && (await t.count(129)) === 1, { w: await water() });
     const drawn = await ev(`(function(){ const list = new Window_ItemList(new Rectangle(0, 0, 500, 300)); let seen = ""; list.drawText = function(s) { seen = s; }; list.drawItemNumber($dataItems[129], 0, 0, 200); const w = new Window_Help(new Rectangle(0, 0, 700, 130)); w.setItem($dataItems[129]); return [seen, w._text]; })()`);
-    t.check("the item list shows '2/4' and the help says how many sips are left", drawn[0] === "2/4" && /Woda: 2 z 4 łyków/.test(drawn[1]), drawn);
+    t.check("the item list shows '1/3' and the help says how many sips are left", drawn[0] === "1/3" && /Woda: 1 z 3 łyków/.test(drawn[1]), drawn);
 
     await ev("(function(){ $dataMap.note = window.__note0; return 0; })()");
     // ================= 7. switch off, journal, save =================

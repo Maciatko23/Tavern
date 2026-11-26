@@ -715,6 +715,8 @@
         this._settle = 0;
         endTurn(this);
     };
+    // (2026-11-26, Odepchnięcie tarczą - Combat_Fight.js: his blow on the hero's shield throws him back)
+    Game_Human.prototype.pushBack = function(reel) { if (!this._dead) { knockBack(this); this._stun = Math.max(this._stun || 0, reel || 10); } };
     Game_Human.prototype.disarm = function() {
         this._disarmed = true;
         const C2 = T.api("Combat_parts"), F2 = C2 && C2.fight;
@@ -983,6 +985,10 @@
     // A hit on a man: his guard first (the mercenary's shield, the bandit's raised club - from the front, against a light blow), then
     // the hurt, the balance, the reeling; maybe he begs
     // ==================================================================
+    // (2026-11-26, the user: "niech tarcza ma szansę na zablokowanie jakiejś ilości obrażeń") a cut of the hero's whirl comes round fast:
+    // a raised guard catches it only `chance` of the times, and what it catches it holds back only in part - `through` of it gets past
+    // (the mercenary's shield, the bandit's raised club); the hero's whirl goes on either way (Combat_Fight.js recoil)
+    const WHIRL_GUARD = { chance: 0.5, through: { shield: 0.4, club: 0.6 } };
     function hitHuman(h, damage, how, extra) {
         if (h._dead || h._surrendered) return;
         extra = extra || {};
@@ -996,7 +1002,7 @@
         // (extra.from {x, y}: a blow not of the hero's - an ally's, Act3.js - its own side for the guard and the push)
         const from = extra.from && typeof extra.from.x === "number" ? extra.from : null;
         const inFront = cos => (from ? h.inFrontOf(from.x, from.y, cos) : h.heroInFront(cos));
-        if (!hidden && h.guarding() && inFront(k.shield ? k.shield.front : 0.3)) {
+        if (!hidden && h.guarding() && inFront(k.shield ? k.shield.front : 0.3) && !(extra.whirl && Math.random() >= WHIRL_GUARD.chance)) {
             if (heavy && how !== "shot") {   // a heavy blow breaks the guard: he reels, open
                 h._guardBroken = true;
                 h._stun = Math.max(h._stun, k.shield ? k.shield.breakStun : 50);
@@ -1009,7 +1015,8 @@
             } else {   // blocked: next to nothing gets through; a blow bounces the hero's weapon back
                 // (2026-11-17, Bron_Cechy.js przebicie: the mercenary's shield and mail are the only armour a man has - a weapon that pierces
                 // it lets that part of what it holds back through)
-                const part = k.shield ? k.shield.block + (1 - k.shield.block) * Math.min(1, extra.przebicie || 0) : 0.25;
+                const part = extra.whirl ? (k.shield ? WHIRL_GUARD.through.shield : WHIRL_GUARD.through.club)
+                    : k.shield ? k.shield.block + (1 - k.shield.block) * Math.min(1, extra.przebicie || 0) : 0.25;
                 damage = how === "shot" && k.shield ? 0 : Math.round(damage * part);
                 h._poise = Math.max(1, h._poise - Math.round((extra.poise || 10) * 0.3));
                 h._poiseT = 0;

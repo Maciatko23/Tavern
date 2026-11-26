@@ -1,5 +1,5 @@
 // The hero's growth (Combat.js + Skills_Data.js) and where the P menu shows it: the numbers (level 100 at most, attributes up to 60,
-// 3 attribute points and 1 skill point a level, 10 trees), a level's points, the P menu's Postać first with the points to give,
+// 3 attribute points and 2 skill points a level, 10 trees, every skill 3 ranks with each rank's own attributes - 2026-11-26), a level's points, the P menu's Postać first with the points to give,
 // the points given (Kondycja: +5 health a point), a skill learnt rank by rank, a skill's way (the level, the skill before it, an
 // attribute), what one more point in each attribute does, the points and skills after a save and a load, level 100.
 // (2026-10-28: the old Postać screen - Combat_UI's Scene_Hero in MenuPanel's panel - is gone; the P menu's Postać and Umiejętności
@@ -11,14 +11,14 @@ kit.test({ port: 9468, errorCheck: "bez błędów w konsoli" }, async t => {
     t.check("a new game on grandpa's field (Map003)", await t.newGame({ map: 3, x: 62, y: 45, hour: 12, quiet: true }));
     const J = e => t.json(e);
 
-    t.check("the numbers: level 100 at most, attributes up to 60, 3 attribute points and 1 skill point a level; 10 trees, ~100 skills",
+    t.check("the numbers: level 100 at most, attributes up to 60, 3 attribute points and 2 skill points a level; 10 trees, 116 skills",
         (await J("({ max: Combat.MAX_LEVEL, attr: Combat.ATTR_MAX, pts: Combat.POINTS_PER_LEVEL, trees: Combat.TREES.length, skills: Combat.SKILLS.length })")).max === 100 &&
-        (await t.eval("Combat.ATTR_MAX")) === 60 && (await t.eval("Combat.TREES.length")) === 10 && (await t.eval("Combat.SKILLS.length")) >= 90);
-    // level 2: 3 attribute points, 1 skill point
+        (await t.eval("Combat.ATTR_MAX")) === 60 && (await t.eval("Combat.TREES.length")) === 10 && (await t.eval("Combat.SKILLS.length")) === 116 && (await t.eval("Combat.SKILL_POINTS_PER_LEVEL")) === 2);
+    // level 2: 3 attribute points, 2 skill points
     await t.eval("Combat.gainXp(Combat.xpToNext(1), 'test'); 0");
     await t.frames(40);
     const h0 = await J("({ lv: Combat.hero().level, p: Combat.hero().points, s: Combat.hero().skillPoints, unspent: Combat.unspent() })");
-    t.check("level 2 brings 3 attribute points and 1 skill point", h0.lv === 2 && h0.p === 3 && h0.s === 1 && h0.unspent === 4, h0);
+    t.check("level 2 brings 3 attribute points and 2 skill points", h0.lv === 2 && h0.p === 3 && h0.s === 2 && h0.unspent === 5, h0);
 
     // ================= the P menu: Postać first, the points to give =================
     await t.eval("window.dispatchEvent(new Event('pointerdown')); SceneManager.push(Scene_Menu); 0");
@@ -39,20 +39,20 @@ kit.test({ port: 9468, errorCheck: "bez błędów w konsoli" }, async t => {
 
     // ================= a skill: learnt rank by rank =================
     const locked = await J("({ known: Combat.skillRank('charge'), why: Combat.skillBlock('charge'), learnt: Combat.learnSkill('charge') })");
-    t.check("a closed skill (Rozpęd: Mocna ręka first, Siła 12, level 4): not learnt", locked.known === 0 && /Najpierw|Wymaga/.test(locked.why) && !locked.learnt, locked);
+    t.check("a closed skill (Rozpęd: Mocna ręka first, level 3, Siła 7): not learnt", locked.known === 0 && /Najpierw|Wymaga/.test(locked.why) && !locked.learnt, locked);
     const learnt = await J("({ ok: Combat.learnSkill('m_power'), rank: Combat.skillRank('m_power'), s: Combat.hero().skillPoints, perk: Combat.perk('melee.dmg'), unspent: Combat.unspent() })");
-    t.check("Mocna ręka learnt: rank 1, the point spent, melee damage +5%", learnt.ok && learnt.rank === 1 && learnt.s === 0 && Math.abs(learnt.perk - 0.05) < 1e-9 && learnt.unspent === 1, learnt);
-    t.check("no point left: the next rank is not given", (await t.eval("Combat.learnSkill('m_power')")) === false && (await t.eval("Combat.skillRank('m_power')")) === 1);
+    t.check("Mocna ręka learnt: rank 1, a point spent, melee damage +8%", learnt.ok && learnt.rank === 1 && learnt.s === 1 && Math.abs(learnt.perk - 0.08) < 1e-9 && learnt.unspent === 2, learnt);
+    t.check("its second rank asks Siła 8 (he has 5): not given", (await t.eval("Combat.skillBlock('m_power')")) === "Wymaga: Siła 8." && (await t.eval("Combat.learnSkill('m_power')")) === false && (await t.eval("Combat.skillRank('m_power')")) === 1);
 
     // ================= a skill's way and its ranks =================
     const low = await J("({ lv: Combat.hero().level, why: Combat.skillBlock('riposte') })");
-    t.check("at a low level the second rows are closed: Kontra wants level 10", low.why === "Wymaga poziomu 10.", low);
+    t.check("at a low level the third row is closed: Kontra wants level 6", low.why === "Wymaga poziomu 6.", low);
     await t.eval("while (Combat.hero().level < 12) Combat.gainXp(Combat.xpToNext(Combat.hero().level), 'test'); Combat.hero().skillPoints = 20; 0");
-    const way = await J(`({ riposte: Combat.skillBlock('riposte'), combo: Combat.learnSkill('combo4'), riposte2: Combat.skillBlock('riposte'), deep: Combat.skillBlock('m_master') })`);
-    t.check("the way (level 12): Kontra opens only after Płynne kombo, then wants Czujność 12; the deepest want level 48", /Najpierw: Płynne kombo/.test(way.riposte) && way.combo === true && way.riposte2 === "Wymaga: Czujność 12." && way.deep === "Wymaga poziomu 48.", way);
-    const ranks = await J(`(function(){ const a = Combat.learnSkill('m_power'), b = Combat.learnSkill('m_power'), c = Combat.learnSkill('m_power'); return { a, b, c, rank: Combat.skillRank('m_power'), perk: Math.round(Combat.perk('melee.dmg') * 100) / 100,
+    const way = await J(`({ riposte: Combat.skillBlock('riposte'), combo0: Combat.skillBlock('combo4'), dex: Combat.spendPoints({ dex: 2 }), combo: Combat.learnSkill('combo4'), riposte2: Combat.skillBlock('riposte'), deep: Combat.skillBlock('m_master') })`);
+    t.check("the way (level 12): Kontra opens only after Płynne kombo (Zręczność 7 for its first rank), then wants Czujność 9; the deepest want level 18", /Najpierw: Płynne kombo/.test(way.riposte) && way.combo0 === "Wymaga: Zręczność 7." && way.dex && way.combo === true && way.riposte2 === "Wymaga: Czujność 9." && way.deep === "Wymaga poziomu 18.", way);
+    const ranks = await J(`(function(){ Combat.spendPoints({ str: 7, dex: 1 }); const a = Combat.learnSkill('m_power'), b = Combat.learnSkill('m_power'), c = Combat.learnSkill('m_power'); return { a, b, c, rank: Combat.skillRank('m_power'), perk: Math.round(Combat.perk('melee.dmg') * 100) / 100,
         why: Combat.skillBlock('m_power') }; })()`);
-    t.check("ranks: Mocna ręka up to 3 (+15% melee damage), no fourth", ranks.a && ranks.b && !ranks.c && ranks.rank === 3 && ranks.perk === 0.15 && /najwyższy/.test(ranks.why), ranks);
+    t.check("ranks: with Siła 12 and Zręczność 8 Mocna ręka goes up to 3 (+25% melee damage), no fourth", ranks.a && ranks.b && !ranks.c && ranks.rank === 3 && ranks.perk === 0.25 && /najwyższy/.test(ranks.why), ranks);
 
     // ================= what the points really do: one more point in each attribute =================
     const stats = () => J(`({ str: Combat.hero().attr.str, dex: Combat.hero().attr.dex, con: Combat.hero().attr.con, per: Combat.hero().attr.per, wil: Combat.hero().attr.wil,
@@ -76,7 +76,7 @@ kit.test({ port: 9468, errorCheck: "bez błędów w konsoli" }, async t => {
     await t.frames(5);
     const b2 = await stats();
     t.check("after saving and loading the points and the skills are still there", b2.str === b1.str && b2.con === b1.con && b2.mhp === b1.mhp && (await t.eval("Combat.skillRank('m_power')")) === 3
-        && Math.abs((await t.eval("Combat.perk('melee.dmg')")) - 0.15) < 1e-9, { b1, b2 });
+        && Math.abs((await t.eval("Combat.perk('melee.dmg')")) - 0.25) < 1e-9, { b1, b2 });
 
     // ================= level 100 =================
     await t.eval("(function(){ let n = 0; for (let L = 1; L < 100; L++) n += Combat.xpToNext(L); Combat.gainXp(n, 'test'); })(); 0");   // (all of it to 100)
@@ -84,5 +84,5 @@ kit.test({ port: 9468, errorCheck: "bez błędów w konsoli" }, async t => {
     const top = await J("({ lv: Combat.hero().level, xp: Combat.hero().xp, more: Combat.gainXp(100, 'x') })");
     t.check("level 100 is the top: no more experience after it", top.lv === 100 && top.xp === 0 && top.more === 0, top);
     const deep = await J("({ ok: Combat.skillBlock('m_master'), row: Combat.ROW_LEVEL })");
-    t.check("the deepest skills ask for level 48 (rows: 1, 4, 10, 20, 32, 48)", JSON.stringify(deep.row) === "[1,4,10,20,32,48]", deep);
+    t.check("the deepest skills ask for level 18 (rows: 1, 3, 6, 10, 14, 18)", JSON.stringify(deep.row) === "[1,3,6,10,14,18]", deep);
 });

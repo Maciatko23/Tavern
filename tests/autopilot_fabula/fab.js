@@ -664,7 +664,8 @@
     const riverMap = () => ((FAB.riverBad || 0) >= 2 ? 222 : MAP.manor);
     // the waterskin (the player 2026-11-17: "to musi bukłak napełniony nosić"): Needs' skin, 4 sips of 35 water; one draw of the town's
     // well fills it whole; drunk with G down there
-    const SKIN = 129, skinOwned = () => count(SKIN) > 0, skinSips = () => { try { return Needs.skinCharges(); } catch (e) { return 0; } },
+    // (2026-11-26: the skin's sips only while the skin is in the bag - the save kept 3 sips of a skin that was gone: "Potrzebujesz bukłaka" for ever)
+    const SKIN = 129, skinOwned = () => count(SKIN) > 0, skinSips = () => { try { return skinOwned() ? Needs.skinCharges() : 0; } catch (e) { return 0; } },
         skinMax = () => { try { return Needs.SKIN.max; } catch (e) { return 4; } }, skinWater = () => skinSips() * ((window.Needs && Needs.SKIN && Needs.SKIN.sip) || 35);
     function* fillSkinWell() { return yield* drinkWell("Napełnij bukłak"); }
     // a sip from the skin, as a player: the G key (Needs: drink)
@@ -1797,6 +1798,11 @@
                 const up = evNamed(/^Schody w górę/);
                 return up ? yield* takeStairs(up) : false;
             } };
+            // (2026-11-26 run glebiej5: on the training floor itself, the water for the way back gone - the training step waits for it,
+            // this said nothing: "Czekam (etap 2)" for days on floor 17. Up to the well first, whatever the goal)
+            if (f >= goalFloor && needs().water + skinWater() < waterBack(f)) return { what: "Wracam na górę po wodę (piętro " + f + ")", why: "woda " + Math.round(needs().water) + " - za mało na drogę w górę", run: function* () {
+                return yield* goUp(why);
+            } };
             if (f >= goalFloor) return null;
             // (2026-11-17 run from po_pietrze10: at 59% of life, no bandage, water 28, the step below gave up at once - "nic nie
             // wychodzi" for hours on floor 10, the water and wound steps further down never asked. Hurt before the gate: a rest here
@@ -1886,18 +1892,23 @@
     // -1.4% chance of a wound (the spiders' bites); of Zręczność almost nothing at these levels; Czujność: a little crit, 12 opens
     // "Czujne oko"; Hart ducha: +3% against fear and the "truths" (the wraiths and shadows from floor 20). So: damage and life, more life,
     // perception to 12; from level 15 will to 15; past those marks their turn goes to Siła / Kondycja
-    const ATTR_EARLY = ["str", "con", "str", "con", "con", "per"];
-    const ATTR_LATE = ["con", "str", "con", "wil", "str", "per"];
-    const ATTR_CAP = { per: 12, wil: 15 };
+    // (2026-11-26: every skill 3 ranks, each rank its own attributes - Zręczność now too: Unik's 2nd rank wants 10, its 3rd 16 (+ Kondycja 12),
+    // Akrobata 9, Płynne kombo 7; Czujność up to 15 for Czujne oko's 3rd rank)
+    const ATTR_EARLY = ["str", "con", "dex", "str", "con", "con", "per", "dex"];
+    const ATTR_LATE = ["con", "str", "dex", "con", "wil", "str", "per"];
+    const ATTR_CAP = { per: 15, wil: 15, dex: 18 };
     function nextAttr(h, add, i) {
         const plan = h.level < 15 ? ATTR_EARLY : ATTR_LATE;
         let a = plan[i % plan.length];
-        if (ATTR_CAP[a] && (h.attr[a] || 0) + (add[a] || 0) >= ATTR_CAP[a]) a = a === "per" ? "str" : "con";
+        if (ATTR_CAP[a] && (h.attr[a] || 0) + (add[a] || 0) >= ATTR_CAP[a]) a = a === "per" || a === "dex" ? "str" : "con";
         return a;
     }
     // the skills for a fighter: life, damage, the thick skin, the guard, healing and bandages, the roll, the heavy hand...
-    const SKILL_PLAN = ["d_body", "m_power", "thickskin", "d_body", "m_power", "s_heal", "guard", "d_body", "m_power", "s_band", "s_heal", "d_roll", "m_power2",
-        "d_body2", "m_power2", "d_body2", "combo4", "keen", "s_band", "d_roll", "acrobat", "d_block", "d_block", "m_breath", "m_breath", "secondwind", "d_knock", "d_knock"];
+    // (2026-11-26: the new trees - 2 points a level, rows at 1/3/6/10/14/18; the group skills for the armours and the bands)
+    const SKILL_PLAN = ["d_roll", "d_body", "m_power", "d_body", "m_power", "guard", "m_cleave", "keen", "m_power", "d_body", "m_cleave", "s_tough", "s_band",
+        "thickskin", "d_block", "d_roll", "m_cleave", "combo4", "m_stun", "s_heal", "d_block", "acrobat", "m_victor", "d_knock", "m_victor",
+        "d_back", "d_roll", "m_victor", "d_back", "secondwind", "d_back", "m_breath", "m_breath", "d_knock", "m_poise", "m_poise", "d_stone", "guard", "guard",
+        "keen", "keen", "thickskin", "thickskin", "d_stone", "d_stone", "s_tough", "s_tough", "s_band", "s_heal", "m_stun", "m_stun", "secondwind", "d_knock"];
     function combatLevelUp() {
         if (!window.Combat || !Combat.hero || !Combat.spendPoints) return null;
         const h = Combat.hero(), said = [];

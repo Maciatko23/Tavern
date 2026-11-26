@@ -322,6 +322,9 @@
     function grow() {
         const s = S();
         s.care++;
+        // (2026-11-26, Przyjaciel zwierząt: "pets.learn" of a day more care each good day - the stages come sooner)
+        const pl = T.call("Combat", "perk", "pets.learn") || 0;
+        if (pl > 0) { s.careX = (s.careX || 0) + pl; while (s.careX >= 1) { s.careX -= 1; s.care++; } }
         const at = D.STAGE_AT;
         let st = 1;
         for (let k = 1; k <= 5; k++) if (s.care >= at[k]) st = k;

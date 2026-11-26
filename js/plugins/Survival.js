@@ -309,9 +309,12 @@
         const parts = [];
         const gained = Math.round($gameSystem.stamina() - before);
         if (gained > 0) parts.push("+" + gained + " wytrzymałości");
+        // (2026-11-26, Mistrz kuchni - "food.double": the first dish with an effect each day gives it twice as long)
+        const dbl = perk("food.double") > 0 && (food.buff || food.buff2) && $gameSystem._twDoubleDay !== $gameSystem.dayNightDay();
+        if (dbl) $gameSystem._twDoubleDay = $gameSystem.dayNightDay();
         for (const [b, h] of [[food.buff, food.hours], [food.buff2, food.hours2]]) {
             if (b && BUFFS[b] && h > 0) {
-                const hh = Math.round(h * (1 + perk("food.buff")) * 10) / 10;   // (Kuchnia: Smakosz)
+                const hh = Math.round(h * (1 + perk("food.buff")) * (dbl ? 2 : 1) * 10) / 10;   // (Kuchnia: Smakosz; Mistrz kuchni)
                 $gameSystem.addBuff(b, hh);
                 parts.push(BUFFS[b].name + " (" + String(hh).replace(".", ",") + " godz.)");
             }

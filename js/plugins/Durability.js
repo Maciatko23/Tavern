@@ -160,7 +160,7 @@
         // (a thing with no materials of its own is not mended here - the clothes of cloth go to the seamstress, Ubior_Sklepy.js)
         return Object.keys(TOOLS).map(Number).filter(id => owns(id) && used(id) > 0 && TOOLS[id].fix && TOOLS[id].fix.length).map(id => ({
             id: "repair_" + id, name: Watki.wstaw(TK.kod.repairRecipes[0], { name: dataItem(id).name }), output: [id, 1], repair: id, manual: true,
-            inputs: knowsSkill("c_repair") ? TOOLS[id].fix.map(([i, n]) => [i, Math.max(1, Math.ceil(n / 2))]) : TOOLS[id].fix,   // (Naprawiacz)
+            inputs: perk("repair.save") > 0 ? TOOLS[id].fix.map(([i, n]) => [i, Math.max(1, Math.ceil(n * (1 - Math.min(0.9, perk("repair.save")))))]) : TOOLS[id].fix,   // (Naprawiacz: 30% / 50% / 70% less)
             hours: 1, stamina: 2, startSe: "Hammer",
             desc: Watki.wstaw(TK.kod.repairRecipes[1], { "1": left(id), "2": lifeOf(id) })
         }));

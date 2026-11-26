@@ -48,7 +48,7 @@ fs.mkdirSync(OUT, { recursive: true });
         const fam = JSON.parse(await ev(`JSON.stringify({ parts: Object.keys(Tawerna.api("Hunting_parts") || {}), scripts: ["Hunting", "Hunting_Path", "Hunting_AI", "Hunting_Weapons"].map(n => document.querySelectorAll('script[src$="/' + n + '.js"]').length),
             order: $plugins.map(p => p.name).filter(n => /^(Spoilage|Hunting|Hunting_Path|Hunting_AI|Hunting_Weapons|Birds)$/.test(n)), api: Tawerna.api("Hunting") === Hunting })`));
         check("Hunting in four files (the data and the hooks, the way, the animals, the weapons and the prey), each in the page once" + (REGISTERED ? " - registered: " + fam.order.join(", ") : " - the parts put in by Hunting.js"),
-            fam.api && fam.parts.join() === "core,path,ai,weapons" && fam.scripts.join() === "1,1,1,1" && (!REGISTERED || fam.order.join() === "Spoilage,Hunting,Hunting_Path,Hunting_AI,Hunting_Weapons,Birds"), fam);
+            fam.api && ["core", "path", "ai", "weapons"].every(k => fam.parts.includes(k)) && fam.scripts.join() === "1,1,1,1" && (!REGISTERED || fam.order.join() === "Spoilage,Hunting,Hunting_Path,Hunting_AI,Hunting_Weapons,Birds"), fam);
         const targets = await ev("Hunting.mapTargets()");
         check("Map003 is a hunting ground with 3 rabbits", targets.rabbit === 3 && !targets.deer, targets);
 

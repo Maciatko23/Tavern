@@ -163,7 +163,10 @@
     // Returns true while a sheet is on screen (the walking sprite is hidden then).
     function updateSwingSheet() {
         const event = $gamePlayer._swingEvent;
-        const kind = event && event._swingT >= 0 ? event._swingKind : undefined;
+        let kind = event && event._swingT >= 0 ? event._swingKind : undefined;
+        // (2026-11-26) a pose held without a swing - Combat's Wir: { kind, row } - the swing's blow frame, no lunge, no steps under it
+        const pose = kind === undefined && window.Combat && Combat.heldPose ? Combat.heldPose() : null;
+        if (pose) kind = pose.kind;
         if (kind === undefined || swingSheetState(kind) !== "ready") {
             if (this._swingBody) this._swingBody.visible = false;
             return false;
@@ -179,11 +182,18 @@
         }
         const frames = Math.max(1, Math.floor(bitmap.width / SHEET_CELL));
         const dir = $gamePlayer.direction();
-        const row = SHEET_ROW[dir] || 0;
-        const reach = REACH_VECTOR[dir] || REACH_VECTOR[2];
-        const lunge = def.reach * swingLunge(kind, event._swingT);
+        const row = pose ? pose.row : SHEET_ROW[dir] || 0;
         const body = this._swingBody;
         body.bitmap = bitmap;
+        if (pose) {
+            body.setFrame(Math.min(frames - 1, def.hit[row]) * SHEET_CELL, row * SHEET_CELL, SHEET_CELL, SHEET_CELL);
+            body.x = 0;
+            body.y = 0;
+            body.visible = true;
+            return true;
+        }
+        const reach = REACH_VECTOR[dir] || REACH_VECTOR[2];
+        const lunge = def.reach * swingLunge(kind, event._swingT);
         let col = swingSheetFrame(kind, frames, row, event._swingT);
         // while it waits the figure shifts a little between two poses - unless opts.still (resting on the ground: sits quite still, hands folded)
         if (event._waiting && !(event.opts && event.opts.still)) col -= Math.floor(event._wait / ((event.opts && event.opts.wobble) || 22)) % 2;

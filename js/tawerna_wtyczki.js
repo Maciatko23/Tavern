@@ -245,6 +245,8 @@ var $tawernaWtyczki =
 {"name":"Swiat_Data","status":true,"description":"Świat w kratkach: położenia map (x0, y0, szer., wys.) i przejścia danych; czyta je Krawedzie.js. Wyłączone, dopóki dane map nie są zainstalowane. v1.0.0","parameters":{}},
 {"name":"Swiat_Data_Nowy","status":true,"description":"Nowy świat w układzie świata: 5 map w jednej linii (Wybrzeże, Podgrodzie, Miasteczko, Posiadłość, Góry) i przejścia krawędzią między nimi. v1.0.0","parameters":{}},
 {"name":"Krawedzie","status":true,"description":"Przejścia na całej krawędzi mapy: dojście do brzegu w dowolnym miejscu przenosi na sąsiednią mapę (gdy ta strona ma przejście). v1.0.0","parameters":{}},
+{"name":"Gory_Data","status":true,"description":"Dane gór zamiast skarp: pas skarp każdej kolumny (n / s) i rozstawienie obrazów gór. v1.0.0","parameters":{}},
+{"name":"Gory","status":true,"description":"Góry zamiast skarp: na północnej i południowej krawędzi map świata wielkie góry (obrazy) zamiast pasa skarp. v1.0.0","parameters":{}},
 {"name":"Klimat_Miasta","status":true,"description":"Klimat miasta: dym z kominów (gęstszy rano i wieczorem, z wiatrem), okna zapalają się o zmierzchu dom po domu, kruki na dachach i murach, krążą nad kruczarnią, na noc do wieży. v1.0.0","parameters":{}},
 {"name":"Klimat_Ziemia","status":true,"description":"Klimat podłoża i murów Kruczogrodu: zużyty bruk, błoto, cień przy ścianach i rzeczach, koleiny, słoma, zacieki, sadza, bluszcz, liście jesienią (gotowe obrazki). v1.0.0","parameters":{}},
 {"name":"Klimat_Pogoda","status":true,"description":"Pogoda na ziemi: mokry bruk w deszczu i po nim (nocą odbicia świateł), śnieg zimą (dachy, czapy, sople, wydeptane ulice), ślady stóp i kopyt w błocie i śniegu. v1.0.0","parameters":{}},

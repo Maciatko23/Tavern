@@ -128,7 +128,7 @@ const { launch, sleep } = require("./cdp.js");
         await runAt(kx, ky, "Napij się");
         await waitSwing();
         const w1 = await ev("Needs.state().water");
-        check("a drink from the bucket: thirst quenched (+40) and one portion used (4 -> 3)", Math.abs(w1 - 70) < 1.5 && (await units()) === 3, { water: w1, units: await units() });
+        check("a drink from the bucket: thirst quenched (+20 - 2026-11-25) and one portion used (4 -> 3)", Math.abs(w1 - 50) < 1.5 && (await units()) === 3, { water: w1, units: await units() });
         check("popup 'Nawodnienie +'", (await pops()).some(t => /Nawodnienie \+/.test(t)));
 
         // ---------------------------------------------------------------- the waterskin: as many sips as there are portions
@@ -137,12 +137,12 @@ const { launch, sleep } = require("./cdp.js");
         await ev(`Farming.buildingAt(${kx}, ${ky}).water = 6; 0`);
         await runAt(kx, ky, "Napełnij bukłak");
         await waitSwing();
-        check("filling the skin (1/4 -> 4/4) takes 3 portions from the bucket (6 -> 3), popup 'Bukłak pełny'", (await ev("Needs.skinCharges()")) === 4 && (await units()) === 3 && (await pops()).some(t => /Bukłak pełny \(4\/4\)/.test(t)));
+        check("filling the skin (1/3 -> 3/3 - 2026-11-25: three sips) takes 2 portions from the bucket (6 -> 4), popup 'Bukłak pełny'", (await ev("Needs.skinCharges()")) === 3 && (await units()) === 4 && (await pops()).some(t => /Bukłak pełny \(3\/3\)/.test(t)));
         await ev("Needs.state().skin = 0; 0");
         await ev(`Farming.buildingAt(${kx}, ${ky}).water = 2; 0`);
         await runAt(kx, ky, "Napełnij bukłak");
         await waitSwing();
-        check("with only 2 portions the skin gets 2 sips (2/4) and the bucket is empty", (await ev("Needs.skinCharges()")) === 2 && (await units()) === 0 && (await pops()).some(t => /Bukłak \(2\/4\)/.test(t)));
+        check("with only 2 portions the skin gets 2 sips (2/3) and the bucket is empty", (await ev("Needs.skinCharges()")) === 2 && (await units()) === 0 && (await pops()).some(t => /Bukłak \(2\/3\)/.test(t)));
         check("an empty bucket cannot fill the skin: greyed out, and a direct call says 'Wiadro jest puste'",
             (await menuAt(kx, ky)).entries.find(e => e.name === "Napełnij bukłak").enabled === false && (await ev(`Farming.buildingAt(${kx}, ${ky}) && (function(){ return true; })()`)) === true);
 

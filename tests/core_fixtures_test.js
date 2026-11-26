@@ -117,8 +117,8 @@ kit.test({ port: 9398, plugins: ["TawernaCore", "TawernaUI", "HomeAmbience", "Ho
             v: [Tawerna.state.version("hero"), Tawerna.state.version("combat")], level: h.level, xp: h.xp, attr: Object.values(h.attr).join(), points: h.points, sp: h.skillPoints,
             skills: Object.keys(h.skills).length, ready: h.ready, mhp: Combat.heroMhp() }; })()`;
     const hero = await t.json(HERO);
-    t.check("... the old _hero adopted (_tw.hero, v1; the old name a hidden way there): level 6, 890 XP, every attribute 5, 15 + 5 points to give out, 115 health",
-        hero.adopted && hero.v.join() === "1,1" && hero.level === 6 && hero.xp === 890 && hero.attr === "5,5,5,5,5" && hero.points === 15 && hero.sp === 5 && hero.skills === 0 &&
+    t.check("... the old _hero adopted (_tw.hero, v1 -> v3: the skills given back; the old name a hidden way there): level 6, 890 XP, every attribute 5, 15 + 10 points to give out (its skills given back as points, 2 a level - 2026-11-26; no free skill), 115 health",
+        hero.adopted && hero.v.join() === "3,1" && hero.level === 6 && hero.xp === 890 && hero.attr === "5,5,5,5,5" && hero.points === 15 && hero.sp === 10 && hero.skills === 0 &&
         hero.ready && hero.mhp === 115, hero);
     const mv40 = await t.json(MOVED);
     t.check("... (porządki) its plain keys moved into Tawerna.state: day 40 and the hour in _tw.clock (tinting on the field), the needs (72 / 70), the wear (axe and pick 6), the buffs, healAcc, weatherOwn and rainDay in _tw.survival; the old names lead there; none left on $gameSystem",

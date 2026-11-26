@@ -911,6 +911,15 @@
     // roll against it (a chance), knowsSkill(id) = that one skill is learnt
     const perk = key => T.call("Combat", "perk", key) || 0;
     const perkRoll = key => { const c = perk(key); return c > 0 && Math.random() < c; };
+    // (2026-11-26, Studniarz - b_well: the well and the rain barrel cost "well.cost" less; a getter, so the menu, the paying, the refund agree)
+    for (const type of ["well", "barrel"]) {
+        const def = BUILDINGS[type];
+        if (!def || !Array.isArray(def.cost)) continue;
+        const base = def.cost.map(c => c.slice());
+        Object.defineProperty(def, "cost", { configurable: true, enumerable: true,
+            get() { const k = 1 - Math.min(0.75, perk("well.cost")); return k >= 1 ? base : base.map(([id, n]) => [id, n <= 1 ? n : Math.max(1, Math.ceil(n * k))]); },
+            set(v) { base.length = 0; for (const c of v) base.push(c.slice()); } });
+    }
     const knowsSkill = id => !!T.call("Combat", "hasSkill", id);
     const farmCost = n => n * (1 - Math.min(0.8, perk("farm.cost")));   // (Rolnictwo: Ogrodnik)
     // the last bit of strength (the user's stage 1, 2026-09-27): starving or parched (Needs.inNeed: fullness or water under 25), picking

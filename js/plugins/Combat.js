@@ -125,13 +125,29 @@
     ];
     // level 100 is the end-game challenge (a whole ordinary playthrough ends about 60-70); 3 attribute points and 1 skill point a
     // level, an attribute goes up to 60 (the effects per point are small, so the top is strong but not absurd)
-    const ATTR_START = 5, ATTR_MAX = 60, MAX_LEVEL = 100, POINTS_PER_LEVEL = 3, SKILL_POINTS_PER_LEVEL = 1;
+    // (2026-11-26, the user: "2 na poziom") two skill points a level since the trees were rebuilt (Skills_Data.js: rows at 1-18)
+    const ATTR_START = 5, ATTR_MAX = 60, MAX_LEVEL = 100, POINTS_PER_LEVEL = 3, SKILL_POINTS_PER_LEVEL = 2;
+    const SKILLS_VERSION = 4;   // (2: the trees of 2026-11-26; 3: every skill three ranks; 4: Unik from nothing - an older save's skills come back as points)
+    // (every hero has these from the start, no point paid - none since 2026-11-26, the user: "Unik jest na 0 od początku gry - Spacja nie
+    // jest używana, dopiero jak gracz da pierwszy punkt, to jest unik")
+    const FREE_SKILLS = {};
     function newHero() {
-        const h = { level: 1, xp: 0, attr: {}, points: 0, skillPoints: 0, skills: {}, firsts: {}, seen: {}, ready: false };
+        const h = { level: 1, xp: 0, attr: {}, points: 0, skillPoints: 0, skills: Object.assign({}, FREE_SKILLS), firsts: {}, seen: {}, ready: false, skillsVer: SKILLS_VERSION };
         for (const a of ATTRS) h.attr[a.id] = ATTR_START;
         return h;
     }
-    const heroState = T.state.define("hero", newHero, { version: 1, adopt: "_hero", owner: "Combat" });
+    // (2026-11-26: the trees rebuilt, then every skill three ranks - an older save's skills come back as points once. It is the state's
+    // migration to v2: a save's missing fields are filled from newHero before any "load" listener runs, so a skillsVer missing there
+    // would read as the newest one and nothing would be given back)
+    function refundSkills(h) {
+        h.skills = Object.assign({}, FREE_SKILLS);
+        h.skillPoints = Math.max(0, ((Number(h.level) || 1) - 1) * SKILL_POINTS_PER_LEVEL);
+        h.skillsVer = SKILLS_VERSION;
+        h.rev = (h.rev || 0) + 1;
+        h.refunded = true;   // (the "load" below says it and fits the health to the skills gone)
+        return h;
+    }
+    const heroState = T.state.define("hero", newHero, { version: 3, adopt: "_hero", owner: "Combat", migrate: { 2: h => refundSkills(h), 3: h => refundSkills(h) } });
     const modes = T.state.define("combat", () => ({ mode: false, hand: "" }), { version: 1, owner: "Combat" });
     const hero = () => heroState();
     // the old names of the mode and the hand (the core's calm check, the tests): on the prototype, never saved
@@ -144,6 +160,18 @@
                 else Object.defineProperty(this, name, { value: v, writable: true, enumerable: true, configurable: true });
             } });
     }
+    // (2026-11-26: the trees rebuilt - an older save's skills are given back once: every point of every level, 2 a level now; the HP of
+    // the old Hart ciała ranks goes with them, the menu shows the new trees)
+    T.on("load", () => {
+        const h = hero();
+        if (!h) return;
+        if ((h.skillsVer || 1) < SKILLS_VERSION) refundSkills(h);
+        if (!h.refunded) return;
+        delete h.refunded;
+        const actor = $gameParty.leader();
+        if (actor) { actor.refresh(); if (actor.hp > actor.mhp) actor.setHp(actor.mhp); }
+        if (h.skillPoints > 0) setTimeout(() => { try { T.popup("Drzewka umiejętności są nowe - punkty wróciły: " + h.skillPoints + " do rozdania (menu P, Umiejętności)", { icon: 87, color: "#ffe08a" }); } catch (e) { /* (no popup yet) */ } }, 1500);
+    }, { owner: "Combat", name: "skillsRebuilt" });
     T.on("load", () => {   // (a save from before: its own fields move in, the prototype's way takes over)
         const sys = $gameSystem, m = modes();
         for (const [name, field] of OLD_KEYS) {
@@ -222,6 +250,8 @@
     // the rank of a skill (0: not learnt; a save from stage 1 keeps `true` = rank 1)
     const skillRank = id => { if (!$gameSystem) return 0; const v = hero().skills[id]; return v === true ? 1 : Number(v) || 0; };
     const hasSkill = id => skillRank(id) > 0;
+    // an effect at a rank: [rank 1, rank 2, rank 3] - the total at that rank (2026-11-26, three ranks everywhere); a number - per rank
+    const fxAt = (v, r) => (Array.isArray(v) ? Number(v[Math.min(r, v.length) - 1]) || 0 : (Number(v) || 0) * r);
     // Combat.perk(key): what the learnt skills add up to for one effect (Skills_Data.js fx: the value per rank times the rank);
     // every plugin asks it (e.g. Farming: "crop.growth"). Worked out again only when a skill is learnt or another game is loaded.
     let perkCache = null;
@@ -235,7 +265,7 @@
             const sum = {};
             for (const sk of SKILLS) {
                 const r = skillRank(sk.id);
-                if (r > 0) for (const k of Object.keys(sk.fx)) sum[k] = (sum[k] || 0) + sk.fx[k] * r;
+                if (r > 0) for (const k of Object.keys(sk.fx)) sum[k] = (sum[k] || 0) + fxAt(sk.fx[k], r);
             }
             perkCache = { h, rev: h.rev || 0, sum };
         }
@@ -251,6 +281,8 @@
     const XP_FIRST = 500, XP_GROWTH = 1.2;
     const xpToNext = level => Math.max(100, Math.round(XP_FIRST * Math.pow(XP_GROWTH, level - 1) / 100) * 100);
 
+    // the attributes its next rank asks (2026-11-26: a rank of its own each - attrRanks[rank he has], else the skill's one `attr`)
+    const attrNeed = (s, rank) => (s && s.attrRanks ? s.attrRanks[rank] || {} : (s && s.attr) || {});
     // why a skill (its next rank) cannot be learnt now (null: it can)
     function skillBlock(id) {
         const s = skillById(id), h = hero();
@@ -260,7 +292,8 @@
         const lv = ROW_LEVEL[s.row] || 1;
         if (h.level < lv) return "Wymaga poziomu " + lv + ".";
         if (rank === 0 && s.from.length && !s.from.some(f => skillRank(f) > 0)) return "Najpierw: " + s.from.map(f => skillById(f).name).join(" albo ") + ".";
-        for (const a of ATTRS) if (s.attr[a.id] && h.attr[a.id] < s.attr[a.id]) return "Wymaga: " + a.name + " " + s.attr[a.id] + ".";
+        const need = attrNeed(s, rank);
+        for (const a of ATTRS) if (need[a.id] && h.attr[a.id] < need[a.id]) return "Wymaga: " + a.name + " " + need[a.id] + ".";
         if (h.skillPoints < 1) return "Brak punktów umiejętności.";
         return null;
     }
@@ -294,8 +327,10 @@
         if (f === "s") return secText(v);
         return String(Math.round(v * 10) / 10).replace(".", ",");
     }
+    // one rank's own words (umiejetnosci.<id>.stopnie: "Stopień 1: ..." on the card - 2026-11-26), else the text at that rank
+    const rankText = (sk, rank) => (sk && sk.stopnie && sk.stopnie[rank - 1]) || skillText(sk, rank);
     function skillText(sk, rank) {
-        return sk.text.replace(/\{([^}]+)\}/g, (m, k) => fxText(k, (sk.fx[k] || 0) * Math.max(1, rank)));
+        return sk.text.replace(/\{([^}]+)\}/g, (m, k) => fxText(k, fxAt(sk.fx[k] || 0, Math.max(1, rank))));
     }
 
     // ---- experience
@@ -399,9 +434,9 @@
     const shieldParry = () => { const f = P.fight, s = f && f.shield ? f.shield() : null; return s && s.parry > 0 ? s.parry : 0; };
     // (2026-11-17, Bron_Cechy.js) the weapon in hand's own trait "parowanie" (the swords) lengthens it too
     const weaponParry = () => { const c = T.api("Bron_Cechy"); return c && c.heldTrait ? c.heldTrait("parowanie") : 0; };
-    const parryWindow = () => Math.round((8 + 0.25 * (attr("per") - ATTR_START)) * (hasSkill("keen") ? 1.5 : 1) * (P.feel && P.feel.diff ? P.feel.diff().parry : 1) * (1 + shieldParry() + weaponParry()));
+    const parryWindow = () => Math.round((8 + 0.25 * (attr("per") - ATTR_START)) * (1 + perk("parry.window")) * (P.feel && P.feel.diff ? P.feel.diff().parry : 1) * (1 + shieldParry() + weaponParry()));
     const knockdownAt = () => Math.round((60 + 1.8 * (attr("con") - ATTR_START)) * (1 + perk("knock.resist")));
-    const woundChance = base => base * (hasSkill("thickskin") ? 0.5 : 1) * Math.max(0.25, 1 - 0.014 * (attr("con") - ATTR_START));
+    const woundChance = base => base * (1 - Math.min(0.9, perk("wound.less"))) * Math.max(0.25, 1 - 0.014 * (attr("con") - ATTR_START));
     const carryBonus = () => Math.round(0.9 * Math.max(0, attr("str") - ATTR_START)) + perk("carry");
     const gatherBonus = () => 0.005 * Math.max(0, attr("str") - ATTR_START);   // part of the blows Siła saves chopping, digging and mining (ChoppableTree)
     // how fast he works: the swing and the pause of the hammer on a site (Farming), of the axe, the shovel and the pickaxe (ChoppableTree).
@@ -501,7 +536,7 @@
         const cloak = E && E.worn ? E.worn(112) : !!$dataItems[112] && $gameParty.numItems($dataItems[112]) > 0;
         return { mhp: heroMhp(), breath: baseBreath(), armor: ar ? { id: ar.id, name: ar.name, reduce: ar.reduce } : null, shield: sh ? { id: sh.id, name: sh.name, reduce: sh.reduce, breath: sh.breath } : null,
             bare: f.NO_SHIELD ? f.NO_SHIELD.reduce : 0.45, blockPerk: perk("block.reduce"), wound: woundChance(1), knock: knockdownAt(), cloak, cold: perk("cold"), mind: mindResist(0, 0),
-            parry: parryWindow(), rollCost: rollCost(), rollIFrames: rollIFrames(), rollChain: rollChain(), hurt: Math.min(0.6, perk("hurt")) };
+            parry: parryWindow(), rollCost: rollCost(), rollIFrames: rollIFrames(), rollChain: rollChain(), dodgeLoad: f.dodgeLoadNow ? f.dodgeLoadNow() : null, hurt: Math.min(0.6, perk("hurt")) };
     }
 
     // he says it when the strength drops below TIRED_AT (again only after it has been above it)
@@ -736,6 +771,12 @@
         return false;
     }, { owner: "Combat", priority: "before" });
     // Kupiecka żyłka: things sell dearer in any shop
+    // (2026-11-26, Targowanie - c_haggle: "buy" 10% a rank off what he pays; Bron.js and Ubior_Sklepy.js ask buyMul too)
+    const buyMul = () => Math.max(0.5, 1 - perk("buy"));
+    const _Scene_Shop_buyingPrice = Scene_Shop.prototype.buyingPrice;
+    Scene_Shop.prototype.buyingPrice = function() {
+        return Math.max(1, Math.floor(_Scene_Shop_buyingPrice.call(this) * buyMul()));
+    };
     const _Scene_Shop_sellingPrice = Scene_Shop.prototype.sellingPrice;
     Scene_Shop.prototype.sellingPrice = function() {
         return Math.floor(_Scene_Shop_sellingPrice.call(this) * (1 + perk("sell")));
@@ -745,7 +786,7 @@
     // ==================================================================
     // For the parts, and window.Combat (the same as before the split: Combat.perk(key) is asked by every system)
     // ==================================================================
-    P.core = { hero, modes, attr, skillRank, hasSkill, perk, skillById, skillBlock, learnSkill, spendPoints, skillText, secText, xpToNext, unspent,
+    P.core = { hero, modes, attr, skillRank, hasSkill, perk, skillById, skillBlock, attrNeed, learnSkill, spendPoints, skillText, rankText, secText, xpToNext, unspent,
         levelColor, ATTRS, ATTR_START, ATTR_MAX, MAX_LEVEL, POINTS_PER_LEVEL, SKILL_POINTS_PER_LEVEL, TREES, SKILLS, ROW_LEVEL, strMult, poiseMult,
         critChance, rollCost, rollIFrames, rollChain, parryWindow, knockdownAt, woundChance, carryBonus, gatherBonus, tired, dexWork, workSpeed, comboWindow,
         aimSteady, baseBreath, heroMhp, combatMode, setCombatMode, mapFreePlay, se, popup, foes, mindResist, mindTime, attrInfo, fightInfo, defenseInfo, restBonus, REST_PER_WIL,
@@ -753,7 +794,7 @@
     const fight = name => function() { const f = F(); return f[name].apply(f, arguments); };
     window.Combat = T.register("Combat", {
         ATTRS, SKILLS, TREES, get MELEE() { return F().MELEE; }, get SHIELDS() { return F().SHIELDS; }, get ARMORS() { return F().ARMORS; }, armor: fight("armor"),
-        get SNEAK() { return F().SNEAK; }, sneakAttack: fight("sneakAttack"), sneakMult: fight("sneakMult"), MAX_LEVEL, ATTR_MAX, POINTS_PER_LEVEL, XP, KILL_XP,
+        get SNEAK() { return F().SNEAK; }, sneakAttack: fight("sneakAttack"), sneakMult: fight("sneakMult"), heldPose: fight("heldPose"), MAX_LEVEL, ATTR_MAX, POINTS_PER_LEVEL, SKILL_POINTS_PER_LEVEL, attrNeed, rankText, XP, KILL_XP,
         hero, attr, hasSkill, skillRank, perk, perkRoll, addPerkSource, skillText, ROW_LEVEL, xpToNext, gainXp, killXp, skillBlock, learnSkill, spendPoints, discover, placeLevel, levelColor,
         combatMode, setCombatMode, maxBreath: fight("maxBreath"), breathNow: fight("breathNow"), spendBreath: fight("spendBreath"),
         get breath() { return F().breathNow(); }, get winded() { return F().isWinded(); }, get RUN() { return F().RUN; }, canRun: fight("canRun"),

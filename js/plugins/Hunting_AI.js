@@ -119,24 +119,11 @@
         if (F && F.buildingAt($gameMap.roundXWithDirection(x, d), $gameMap.roundYWithDirection(y, d))) return false;
         return Game_Character.prototype.isMapPassable.call(this, x, y, d);
     };
-    // A rabbit hops over what lies low in its way - a stump, a log, a bush, a berry bush (the user's, 2026-09-25): where the next tile
-    // holds only such a thing and the one behind it is free, a two-tile jump instead of the step.
-    function lowObstacleAt(x, y) {
-        const F = T.api("Farming"), CT = T.api("ChoppableTree");
-        if (F && F.bushSolid && F.bushSolid(x, y, $gameMap.mapId())) return true;   // (a berry bush: not an event)
-        const blocking = $gameMap.eventsXy(x, y).filter(e => e.isNormalPriority() && !e.isThrough());
-        return blocking.length > 0 && !!(CT && CT.isLow) && blocking.every(e => CT.isLow(e));
-    }
-    // the tile it lands on when it hops from (x, y) in direction d, or null
-    Game_Animal.prototype.hopOver = function(x, y, d) {
-        if (!SPECIES[this._kind].hops) return null;
-        const x1 = $gameMap.roundXWithDirection(x, d), y1 = $gameMap.roundYWithDirection(y, d);
-        const x2 = $gameMap.roundXWithDirection(x1, d), y2 = $gameMap.roundYWithDirection(y1, d);
-        if (!$gameMap.isValid(x2, y2) || !$gameMap.checkPassage(x1, y1, 0x0f) || !lowObstacleAt(x1, y1)) return null;
-        const F = T.api("Farming");
-        if (!$gameMap.isPassable(x2, y2, this.reverseDir(d)) || this.isCollidedWithCharacters(x2, y2) || (F && F.buildingAt(x2, y2))) return null;
-        return { x: x2, y: y2 };
-    };
+    // A rabbit (and since 2026-11-26 the deer, "jeleń też może") hops over what lies low in its way - a fence, a small rock, a stump,
+    // a log, a bush, a berry bush: where the next tile holds only such a thing and the one behind it is free, a two-tile jump instead of
+    // the step (Hunting_Path.js lowAt / hopTarget; its way search goes over such things too)
+    Game_Animal.prototype.canHop = function() { return !!SPECIES[this._kind].hops; };
+    Game_Animal.prototype.hopOver = function(x, y, d) { return P.path.hopTarget(this, x, y, d); };
     Game_Animal.prototype.moveStraight = function(d) {
         const hop = !Game_Character.prototype.canPass.call(this, this._x, this._y, d) && this.hopOver(this._x, this._y, d);
         if (!hop) return Game_Character.prototype.moveStraight.call(this, d);
@@ -651,6 +638,8 @@
     }
 
     // a hit throws it one tile away from the hero (a jump), when there is room
+    // (2026-11-26, Odepchnięcie tarczą - Combat_Fight.js: its bite on the hero's shield throws it back)
+    Game_Animal.prototype.pushBack = function(reel) { if (!this._dead) { knockBack(this); if (reel) this._stun = Math.max(this._stun || 0, reel); } };
     function knockBack(animal) {
         const ax = animal._x - $gamePlayer.x, ay = animal._y - $gamePlayer.y;
         const bx = Math.abs(ax) >= Math.abs(ay) ? Math.sign(ax) : 0, by = Math.abs(ax) >= Math.abs(ay) ? 0 : Math.sign(ay);

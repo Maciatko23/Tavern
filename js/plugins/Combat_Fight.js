@@ -116,7 +116,7 @@
         if (breath < 0 || breath > m) breath = Math.min(m, breath < 0 ? m : breath);
         if (noBreathT > 0) noBreathT--;
         breathSpent++;
-        if (act.mode === "block" || act.mode === "roll") return;   // (no breather while guarding or rolling)
+        if (act.mode === "block" || act.mode === "roll" || act.mode === "whirl") return;   // (no breather while guarding, rolling or whirling)
         if (breathSpent > BREATH.delay && breath < m) breath = Math.min(m, breath + m / BREATH.full * (1 + perk("breath.regen")));
         if (winded && breath >= m * BREATH.windedUntil) winded = false;
     }
@@ -136,16 +136,16 @@
     const ROLL_KIND = swingKindOf("Swing_Roll"), KNOCK_KIND = swingKindOf("knockdown");
     const FIST_ICON = 419;
     const MELEE = {
-        0: { name: "Pięści", dmg: 5, poise: 12, reach: 1.15, cone: 0.5, cost: 7, combo: [PUNCH, PUNCH, PUNCH], heavy: PUNCH, hold: 5, se: "Blow1", sweep: false },   // (no weapon)
-        156: { name: "Pałka", dmg: 13, poise: 26, reach: 1.45, cone: 0.45, cost: 10, combo: [CLUB, CLUB, CLUB], heavy: CLUB, hold: 7, se: "Blow1", sweep: false },
+        0: { rodzaj: "piesci", name: "Pięści", dmg: 5, poise: 12, reach: 1.15, cone: 0.5, cost: 7, combo: [PUNCH, PUNCH, PUNCH], heavy: PUNCH, hold: 5, se: "Blow1", sweep: false },   // (no weapon)
+        156: { rodzaj: "palka", name: "Pałka", dmg: 13, poise: 26, reach: 1.45, cone: 0.45, cost: 10, combo: [CLUB, CLUB, CLUB], heavy: CLUB, hold: 7, se: "Blow1", sweep: false },
         // the burning torch (Torch.js; a weapon only while it burns - in hand or stuck in the ground beside him): lighter than the club,
         // a wider sweep; fire: an animal burns a moment (Torch.FIRE) and fears it (Torch.FEAR), a man or a creature takes fireBonus more
-        59: { name: "Pochodnia", dmg: 10, poise: 16, reach: 1.45, cone: 0.4, cost: 9, combo: [TORCH_SWING, TORCH_SWING, TORCH_SWING], heavy: TORCH_SWING, hold: 6, se: "Fire1", sweep: false, fire: true, fireBonus: 4 },
-        115: { name: "Żelazna siekiera", dmg: 26, poise: 30, reach: 1.6, cone: 0.35, cost: 16, combo: [3, 3, 0], heavy: 0, hold: 10, se: "Slash2", sweep: true },
-        60: { name: "Kamienna siekiera", dmg: 17, poise: 24, reach: 1.55, cone: 0.35, cost: 16, combo: [3, 3, 0], heavy: 0, hold: 10, se: "Blow2", sweep: true },
-        154: { name: "Oszczep", dmg: 20, poise: 16, reach: 2.25, cone: 0.75, cost: 12, combo: [15, 15, 15], heavy: 15, hold: 9, se: "Slash4", sweep: false },
-        116: { name: "Żelazny kilof", dmg: 30, poise: 42, reach: 1.45, cone: 0.45, cost: 22, combo: [1, 1], heavy: 1, hold: 14, se: "Blow6", sweep: true },
-        63: { name: "Kamienny kilof", dmg: 22, poise: 36, reach: 1.45, cone: 0.45, cost: 22, combo: [1, 1], heavy: 1, hold: 14, se: "Blow6", sweep: true }
+        59: { rodzaj: "pochodnia", name: "Pochodnia", dmg: 10, poise: 16, reach: 1.45, cone: 0.4, cost: 9, combo: [TORCH_SWING, TORCH_SWING, TORCH_SWING], heavy: TORCH_SWING, hold: 6, se: "Fire1", sweep: false, fire: true, fireBonus: 4 },
+        115: { rodzaj: "siekiera", name: "Żelazna siekiera", dmg: 26, poise: 30, reach: 1.6, cone: 0.35, cost: 16, combo: [3, 3, 0], heavy: 0, hold: 10, se: "Slash2", sweep: true },
+        60: { rodzaj: "siekiera", name: "Kamienna siekiera", dmg: 17, poise: 24, reach: 1.55, cone: 0.35, cost: 16, combo: [3, 3, 0], heavy: 0, hold: 10, se: "Blow2", sweep: true },
+        154: { rodzaj: "wlocznia", name: "Oszczep", dmg: 20, poise: 16, reach: 2.25, cone: 0.75, cost: 12, combo: [15, 15, 15], heavy: 15, hold: 9, se: "Slash4", sweep: false },
+        116: { rodzaj: "kilof", name: "Żelazny kilof", dmg: 30, poise: 42, reach: 1.45, cone: 0.45, cost: 22, combo: [1, 1], heavy: 1, hold: 14, se: "Blow6", sweep: true },
+        63: { rodzaj: "kilof", name: "Kamienny kilof", dmg: 22, poise: 36, reach: 1.45, cone: 0.45, cost: 22, combo: [1, 1], heavy: 1, hold: 14, se: "Blow6", sweep: true }
     };
     const MELEE_ORDER = [115, 154, 60, 116, 63, 156, 59];
     const TORCH_ITEM = 59;
@@ -196,7 +196,7 @@
                 const known = d.przedmiot(it.id), M = d.MATERIALY[m[2]];
                 const p = known || { id: it.id, rodzaj: m[1], material: m[2], poziom: M && M.poziom ? M.poziom[0] : 1 }, s = d.staty(p);
                 if (s && !s.dystans && SWING[s.zamach]) {
-                    MELEE[it.id] = Object.assign({ name: it.name, dmg: s.dmg, poise: s.poise, reach: s.reach, cone: s.cone, cost: s.cost, se: s.se || "Blow1", sweep: !!s.sweep,
+                    MELEE[it.id] = Object.assign({ rodzaj: p.rodzaj, name: it.name, dmg: s.dmg, poise: s.poise, reach: s.reach, cone: s.cone, cost: s.cost, se: s.se || "Blow1", sweep: !!s.sweep,
                         crit: s.crit || 0, pancerz: s.pancerz || 1, zwierz: s.zwierz || 1, ukrycie: s.ukrycie || 1, klasa: s.klasa || "blunt", poziom: p.poziom || 1 }, SWING[s.zamach]());
                     if (!OLD_ORDER.includes(it.id)) fresh.push(it.id);
                 }
@@ -354,14 +354,32 @@
     // a slow hop back - he crouches, leaves the ground, lands (HOP: the parts of the time); [1] a quicker, longer hop; [2] the master's
     // fast blurred slide (DODGE: a short lean, the slide, a settling). frames: its length (tired: twice), dist: tiles, hop: how high he
     // jumps (px). Combat_UI.js draws them (the crouch, the arc, the landing; the see-through slide and the fading copies of him)
+    // (2026-11-26, the user: Unik in three ranks - 1 the slow short hop the weight slows whole, 2 a little further with the weight half,
+    // 3 the fast blur the weight does not touch; `load`: how much of DODGE_LOAD's slowing it feels)
     const DODGE_TIERS = [
-        { frames: 30, dist: 1.5, hop: 16, blur: false },
-        { frames: 24, dist: 2.0, hop: 12, blur: false },
-        { frames: 16, dist: 2.6, hop: 0, blur: true }
+        { frames: 34, dist: 1.25, hop: 15, blur: false, load: 1 },
+        { frames: 30, dist: 1.6, hop: 13, blur: false, load: 0.5 },
+        { frames: 16, dist: 2.6, hop: 0, blur: true, load: 0 }
     ];
     const HOP = { up: 0.17, down: 0.85 };
+    // (2026-11-26, the user: "niech waga założonego ekwipunku ma wpływ na szybkość bazowego uniku") the base hop (no Unik mistrza) under
+    // the weight of what he wears - every equipment slot's item (<Weight:N>, Survival.itemWeight: the weapon, the shield, the clothes,
+    // the armour): up to DODGE_LOAD.free kg nothing, at DODGE_LOAD.full kg and more the hop `slower` longer, `shorter` shorter, `lower` lower
+    const DODGE_LOAD = { free: 5, full: 20, slower: 0.5, shorter: 0.2, lower: 0.3 };
+    function wornWeight() {
+        const E = T.api("Equipment") || window.Equipment, S = window.Survival;
+        if (!E || !E.SLOTS || !E.current || !S || !S.itemWeight) return 0;
+        let w = 0;
+        for (const s of E.SLOTS) { const id = E.current(s.id); if (id && $dataItems[id]) w += Number(S.itemWeight($dataItems[id])) || 0; }
+        return w;
+    }
+    function dodgeLoad() {
+        const w = wornWeight(), k = Math.max(0, Math.min(1, (w - DODGE_LOAD.free) / (DODGE_LOAD.full - DODGE_LOAD.free)));
+        return { weight: w, k, slower: DODGE_LOAD.slower * k, shorter: DODGE_LOAD.shorter * k, lower: DODGE_LOAD.lower * k };
+    }
     const IFRAME_TAIL = 3;   // (frames of safety after the dodge's end at most - startRoll)
-    const dodgeTier = () => Math.max(0, Math.min(DODGE_TIERS.length - 1, Math.round(perk("dodge.tier"))));
+    // (the rank of Unik: 1 -> the first, every hero has it; a save without it - the first too)
+    const dodgeTier = () => { const c = P.core, r = c && c.skillRank ? c.skillRank("d_roll") : 0; return Math.max(0, Math.min(DODGE_TIERS.length - 1, r - 1 + Math.round(perk("dodge.tier")))); };
     // the hop: still while he crouches, a straight line through the air, still while he lands
     const hopCurve = p => p < HOP.up ? 0 : p >= HOP.down ? 1 : (p - HOP.up) / (HOP.down - HOP.up);
     const DODGE = { dashFrom: 0.15, lean: 0.04, settle: 0.85, slid: 0.95 };
@@ -483,12 +501,12 @@
         act.combatT = 600;
         const kind = w.combo[Math.min(i, w.combo.length - 1)];
         const heavyStart = i === 0;   // (holding the key at the first blow charges it)
-        const chargeRate = hasSkill("charge") ? 1.4 : 1;
+        const chargeRate = 1 + perk("heavy.charge");   // (Rozpęd: 25% / 40% / 60% faster)
         const rate = 1 + (cechy(id).szybkosc || 0);   // (2026-11-17, Bron_Cechy.js: a quick weapon - the swing that much faster)
         const opts = heavyStart ? {
             holdAt: w.hold, keepOnMove: true, still: true, wobble: 6, rate,
             holdWhile: () => Input.isPressed("shoot") && act.charge < HEAVY.max,
-            onWait: () => { act.charge = Math.min(HEAVY.max, act.charge + chargeRate); }
+            onWait: () => { act.charge = Math.min(HEAVY.max, act.charge + chargeRate); if (hasSkill("m_whirl") && act.charge >= WHIRL.after) act.whirlReady = true; }
         } : rate !== 1 ? { rate } : null;
         const started = $gamePlayer.startToolSwing(kind, () => strike(id, i), () => afterBlow(id), opts);
         if (!started) { strike(id, i); afterBlow(id); }
@@ -585,25 +603,73 @@
         act.clashes = (act.clashes || 0) + 1;
         T.emit("weaponClash", { by: typeof ref.kind === "function" ? ref.kind() : "" });
     }
-    // the blow lands: everything in reach and in front takes it (the nearest only, unless the weapon sweeps and the hero has the skill)
+    // ------------------------------------------------------------------
+    // (2026-11-26, the new trees - Skills_Data.js) fighting a group, by the weapon's kind:
+    //   - wide blades (WIDE: swords, axes, the bardiche): Zamaszyste cięcie - the others in the blow's arc take CLEAVE[rank] of it;
+    //     Szeroki zamach widens the arc (perk "melee.arc": +5% a rank of its angle); the pick, the dagger hit one only
+    //   - points (POINT: the spears): Przebicie - the one standing behind the target (along the thrust) takes PIERCE[rank]
+    //   - blunt ones (BLUNT): Wstrząs - STUN.chance to stun the one hit for STUN.frames[rank]
+    //   - Szał bitewny: +FURY[rank] for every foe within FURY.r tiles (FURY.max at most); Mistrz oręża: the group blows +20% ("melee.group")
+    //   - Zwycięzca: a kill heals VICTOR[rank] (the bus "kill" by the hero)
+    // ------------------------------------------------------------------
+    const WIDE = new Set(["miecz", "dlugi_miecz", "tasak", "szabla", "topor", "siekiera", "bardysz"]);
+    const POINT = new Set(["wlocznia", "rohatyna", "sulica"]);
+    const BLUNT = new Set(["palka", "buzdygan", "mlot", "kiscien", "kostur"]);
+    const CLEAVE = [0, 0.1, 0.3, 0.5], PIERCE = [0, 0.3, 0.6, 0.9], VICTOR = [0, 3, 6, 10];
+    const STUN = { chance: 0.2, frames: [0, 12, 24, 36] }, FURY = { r: 3, max: 4, per: [0, 0.05, 0.08, 0.12] };
+    const rankOf = id => { const c = P.core; return c && c.skillRank ? c.skillRank(id) : (hasSkill(id) ? 1 : 0); };
+    const kindOf = w => (w && w.rodzaj) || "";
+    // the blow's cone (a cosine) widened by Szeroki zamach: its angle that much bigger
+    function coneOf(w, heavy) {
+        const c = w.cone - (heavy ? 0.15 : 0), arc = WIDE.has(kindOf(w)) ? perk("melee.arc") : 0;
+        if (!arc) return c;
+        return Math.cos(Math.min(Math.PI * 0.95, Math.acos(Math.max(-1, Math.min(1, c))) * (1 + arc)));
+    }
+    function foesAround(r) {
+        let n = 0;
+        for (const a of foes()) if (a && !a._dead && Math.hypot(a.centerX() - px(), a.centerY() - py()) <= r) n++;
+        return n;
+    }
+    T.on("kill", e => {
+        const r = rankOf("m_victor"), actor = $gameParty && $gameParty.leader();
+        if (!r || !actor || actor.isDead() || !e || (e.by && e.by !== "hero" && e.by !== "player")) return;
+        if (actor.hp >= actor.mhp) return;
+        actor.gainHp(VICTOR[r]);
+        numberAt(px(), py() - 1.2, "+" + VICTOR[r], "#9ff0a8", 0.8);
+    }, { owner: "Combat_Fight", name: "m_victor" });
+    // the blow lands: the nearest in reach and in front takes it; the others by the weapon's kind and the skills (above)
     function strike(id, i) {
         const w = weaponNow(id) || MELEE[id], Hn = H(), tr = cechy(id), bc = tr !== NO_TRAITS ? BC() : null;
         const heavy = i === 0 && act.charge >= HEAVY.min;
         if (heavy) { breath = Math.max(0, breathNow() - w.cost * HEAVY.cost); if (breath <= 0) winded = true; }
         const full = heavy && act.charge >= HEAVY.max - 1;
         let mult = heavy ? (full ? HEAVY.full : HEAVY.mult) : COMBO_MULT[Math.min(i, COMBO_MULT.length - 1)];
+        if (!heavy && i >= w.combo.length) mult *= 1 + perk("combo.last");   // (Płynne kombo's own blow: ranks 2 and 3 harder)
         const last = i + 1 >= maxCombo(w);
         const poise = w.poise * poiseMult() * (1 + perk("melee.poise")) * (heavy ? HEAVY.poise : last ? 1.5 : 1);
-        const [fx, fy] = blowVec(), reachBonus = heavy ? 0.3 : 0;
-        const hits = [];
-        for (const t of (Hn ? Hn.allTargets() : [])) {
+        const [fx, fy] = blowVec(), reachBonus = heavy ? 0.3 : 0, cone = coneOf(w, heavy), kind = kindOf(w);
+        const hits = [], all = Hn ? Hn.allTargets() : [];
+        for (const t of all) {
             const dx = t.x - px(), dy = t.y - py(), d = Math.hypot(dx, dy);
             if (d > w.reach + reachBonus + (t.radius || 0.5) * 0.5) continue;
-            if (d > 0.35 && (dx * fx + dy * fy) / d < w.cone - (heavy ? 0.15 : 0)) continue;
-            hits.push({ t, d });
+            if (d > 0.35 && (dx * fx + dy * fy) / d < cone) continue;
+            hits.push({ t, d, share: 1 });
         }
         hits.sort((a, b) => a.d - b.d);
-        const targets = w.sweep && hasSkill("sweep") ? hits : hits.slice(0, 1);
+        const group = 1 + perk("melee.group");
+        let targets = hits.slice(0, 1);
+        if (hits.length > 1 && WIDE.has(kind) && rankOf("m_cleave")) targets = targets.concat(hits.slice(1).map(h => Object.assign(h, { share: CLEAVE[rankOf("m_cleave")] * group })));
+        // (Przebicie: the one behind the first, along the thrust - up to 1.2 tiles past the reach, at most 0.6 aside)
+        if (targets.length && POINT.has(kind) && rankOf("m_pierce")) {
+            const f0 = targets[0];
+            for (const t of all) {
+                if (t === f0.t) continue;
+                const dx = t.x - px(), dy = t.y - py(), along = dx * fx + dy * fy, aside = Math.abs(dx * fy - dy * fx);
+                if (along <= f0.d || along > w.reach + 1.2 || aside > 0.6) continue;
+                targets.push({ t, d: along, share: PIERCE[rankOf("m_pierce")] * group });
+                break;
+            }
+        }
         if (targets.length) T.call("Durability", "use", id);
         T.emit("attack", { weapon: id, combo: i, heavy, hits: targets.length });
         if (targets.length === 0) {
@@ -620,18 +686,19 @@
         }
         let stop = heavy ? 7 : 4, counter = false;
         const recoil0 = act.recoilN || 0;
-        for (const { t } of targets) {
+        const fury = rankOf("m_fury") ? 1 + FURY.per[rankOf("m_fury")] * Math.min(FURY.max, foesAround(FURY.r)) : 1;
+        for (const { t, share } of targets) {
             const a = t.ref && t.ref.isAnimal ? t.ref : null;
-            let m = mult * strMult() * (1 + perk("melee.dmg")) * dmgRoll(), tag = heavy ? "heavy" : "", pz = poise;
+            let m = mult * strMult() * (1 + perk("melee.dmg")) * dmgRoll() * (share || 1) * fury, tag = heavy ? "heavy" : "", pz = poise * (share < 1 ? share : 1);
             const hidden = sneakAttack(a) === "hidden";   // (a blow from hiding: see SNEAK)
             if (hidden) { m *= sneakMult(false) * (w.ukrycie || 1); tag = "sneak"; pz = Math.max(pz * SNEAK.poise, (a._poise || 0) + 1); }   // (it breaks its balance whole: it reels)
             // (2026-10-23, Bron_Data.js) the weapon against what it strikes: blunt ones on armour, stone and mail (pancerz), the boar spear on animals
             if (w.pancerz > 1) { const surf = surfaceOf(t.ref); if (surf === "armor" || surf === "stone" || surf === "mail") m *= w.pancerz; }
             if (w.zwierz > 1 && a) m *= w.zwierz;
             if (tr.stwory && bc && bc.isCreature(t.ref)) m *= 1 + tr.stwory;   // (2026-11-17, Bron_Cechy.js: the order's weapons on the creatures of the depths)
-            if (a && a._stun > 0 && hasSkill("execute")) { m *= 2.5; tag = "execute"; }
+            if (a && a._stun > 0 && hasSkill("execute")) { m *= perk("execute.mult") || 2.5; tag = "execute"; }   // (Dobicie: x2 / x2.5 / x3)
             const crit = act.riposteT > 0 || Math.random() < critChance() + (w.crit || 0);
-            if (crit) { m *= tr.krytyk_mocniej || CRIT_MULT; act.riposteT = 0; act.counterT = 0; tag = tag || "crit"; }
+            if (crit) { m *= Math.max(tr.krytyk_mocniej || CRIT_MULT, act.riposteT > 0 ? perk("riposte.mult") : 0); act.riposteT = 0; act.counterT = 0; tag = tag || "crit"; }
             else if (act.counterT > 0) { m *= act.counterMult || COUNTER.mult; act.counterT = 0; counter = true; }   // (the counter after a parry: see COUNTER)
             // (Bron_Cechy.js) a stun rolled: the blow breaks its balance whole - it reels by its own rules (blocked, rang off the plate: no)
             const stunK = bc && bc.stunRoll(tr.ogluszenie, a) ? tr.ogluszenie : null;
@@ -640,6 +707,11 @@
             if (bc) bc.beforeHit(t.ref);
             t.hit(dmg, "melee", { poise: Math.round(pz), knock: heavy || last || hidden, crit, heavy: heavy || hidden, tag, weapon: id, fire: !!w.fire, przebicie: tr.przebicie || 0 });
             if (bc) bc.afterHit(t.ref, tr, stunK);   // (the stun held, the bleeding, krew za krew, postrach, odrzut)
+            // (Wstrząs: a blunt weapon's blow - the first one hit - may stun it a moment)
+            if (share === 1 && BLUNT.has(kind) && rankOf("m_stun") && t.ref && !t.ref._dead && Math.random() < STUN.chance) {
+                t.ref._stun = Math.max(t.ref._stun || 0, STUN.frames[rankOf("m_stun")]);
+                numberAt(t.x, t.y - 1.0, "Ogłuszony!", "#ffe08a", 0.7);
+            }
             if (!a) numberAt(t.x, t.y - 0.6, String(dmg), crit ? "#ffe066" : "#ffffff");
             if (heavy || crit) stop = 8;
             if (hidden) stop = 10;   // (the word "Atak z ukrycia!" and its thud: enemyHurtFx)
@@ -655,6 +727,7 @@
 
     // Space pressed: a roll toward the held arrows (or where he faces); during a blow once it has landed, it cuts the recovery short
     function pressDodge() {
+        if (rankOf("d_roll") < 1) return false;   // (no Unik learnt: Space does nothing - 2026-11-26, the user)
         if (act.stun > 0 || act.mode === "roll") {
             if (act.mode === "roll" && hasSkill("acrobat") && act.rolls === 1 && act.rollT < act.rollLen * 0.55) { act.queuedRoll = true; }
             return false;
@@ -686,7 +759,7 @@
     }
     function startRoll() {
         const second = hasSkill("acrobat") && act.rolls === 1 && act.rollCd > 0;
-        const cost = rollCost() * (second ? 0.6 : 1);
+        const cost = rollCost() * (second ? 1 - Math.min(0.9, perk("acrobat.cheap") || 0.4) : 1);
         if (!spendBreath(cost)) return false;
         endSwing();
         const way = rollWay(), v = way.v;
@@ -702,7 +775,10 @@
         act.mode = "roll";
         act.rollT = 0;
         act.rollTier = dodgeTier();
-        act.rollLen = DODGE_TIERS[act.rollTier].frames * slow;
+        const lk = DODGE_TIERS[act.rollTier].load || 0, load = lk ? dodgeLoad() : null;   // (the weight: whole at the first rank, half at the second)
+        act.rollLen = Math.round(DODGE_TIERS[act.rollTier].frames * slow * (load ? 1 + load.slower * lk : 1));
+        act.rollDistK = load ? 1 - load.shorter * lk : 1;
+        act.rollHopK = load ? 1 - load.lower * lk : 1;
         act.rollDist = 0;
         // (2026-11-25, the player's "ok": no endless safety - the master's quick dodge (16 frames) with Akrobata and much Zręczność
         // kept him safe the whole time while the breath lasted) the safety lasts the dodge itself and IFRAME_TAIL frames after it at most
@@ -760,7 +836,7 @@
     function updateRoll() {
         act.rollT++;
         const tier = DODGE_TIERS[act.rollTier || 0], p = Math.min(1, act.rollT / act.rollLen);
-        const want = tier.dist * (tier.blur ? dodgeCurve(p) : hopCurve(p));
+        const want = tier.dist * (act.rollDistK || 1) * (tier.blur ? dodgeCurve(p) : hopCurve(p));
         const step = want - act.rollDist;
         act.rollDist = want;
         if (rollBump()) return;
@@ -845,14 +921,15 @@
         act.combatT = 600;
         const src = { kind: opts.attacker && typeof opts.attacker.kind === "function" ? opts.attacker.kind() : "", name: opts.name || "" };
         const from = opts.from || { x: px(), y: py() + 1 };
-        let into = false;   // rolled straight at the attacker: no safety, the blow lands in full and throws him back harder
-        if (act.iframes > 0) {
-            if (opts.projectile || !rollingInto(from.x, from.y)) {
-                numberAt(px(), py() - 1.1, "Unik", "#bfe3ff", 0.8);
-                se("Evasion2", 60, 120);
-                return tell("dodged", 0, src);
-            }
-            into = true;
+        // rolled straight at the attacker: no safety, the blow lands in full and throws him back harder - with the dodge's safety or after
+        // it (2026-11-26: the slower first-rank hop often meets the charge when its safety is over - it went on into the boar then)
+        const into = !opts.projectile && rollingInto(from.x, from.y);
+        if (act.iframes > 0 && !into) {
+            numberAt(px(), py() - 1.1, "Unik", "#bfe3ff", 0.8);
+            se("Evasion2", 60, 120);
+            return tell("dodged", 0, src);
+        }
+        if (into) {
             act.iframes = 0;
             act.mode = "idle";
             act.rollCd = rollChain();
@@ -865,7 +942,8 @@
             return tell("clashed", 0, src);
         }
         const guardSh = act.mode === "block" ? shield() : null;   // (a wide shield covers more to the side: its `cover`)
-        const frontal = (ax * fx + ay * fy) / ad > 0.25 - (guardSh && guardSh.cover ? guardSh.cover : 0);
+        // (2026-11-26, Tarcza dookoła - d_round, perk "block.round": rank 1 the sides too, rank 2 aslant from behind, rank 3 all round)
+        const frontal = (ax * fx + ay * fy) / ad > 0.25 - perk("block.round") - (guardSh && guardSh.cover ? guardSh.cover : 0);
         let damage = opts.damage || 0, poise = opts.poise || 0;
         // (a blow no shield and no parry holds - the bear's paw and its pin: the guard is up for nothing, and he sees why)
         if (act.mode === "block" && frontal && opts.unblockable && opts.unparryable) numberAt(px(), py() - 1.55, "Tego nie zatrzymasz!", "#ff9f8f", 0.8);
@@ -880,7 +958,7 @@
                 sparksAt(mx, my, "#ffc96b", 8);
                 numberAt(px(), py() - 1.2, "Idealne parowanie!", "#fff2b0", 0.9);
                 if (opts.attacker && typeof opts.attacker.onParried === "function") opts.attacker.onParried();
-                if (hasSkill("riposte")) act.riposteT = COUNTER.riposte;
+                if (hasSkill("riposte")) act.riposteT = perk("riposte.time") || COUNTER.riposte;   // (Kontra: 2 / 2.5 / 3 s, x1.6 / x1.8 / x2)
                 else { act.counterT = COUNTER.frames; act.counterMult = COUNTER.mult; }
                 hitstop(6);
                 slowMotion(SLOW.parry, 2);
@@ -891,12 +969,18 @@
                 const sh = guardSh || NO_SHIELD;
                 damage = Math.round(damage * (1 - Math.min(0.9, sh.reduce + perk("block.reduce"))));
                 if (sh.id) T.call("Durability", "use", sh.id);   // (every blow taken on it wears the shield; a parry does not)
-                breath = Math.max(0, breathNow() - poise * sh.breath * (hasSkill("guard") ? 0.6 : 1));
+                breath = Math.max(0, breathNow() - poise * sh.breath * (1 - Math.min(0.9, perk("block.breath"))));
                 if (opts.guardBreak) breath = 0;   // (a blow that breaks any guard)
                 breathSpent = 0;
                 se("Blow3", 80, 110);
                 sparksAt((px() + from.x) / 2, (py() + from.y) / 2 - 0.4, "#e8e8e8", 8);
                 shovePlayer(-ax / ad * 0.35, -ay / ad * 0.35);
+                // (2026-11-26, Odepchnięcie tarczą - d_push: the blocked one thrown back; rank 2 - the ones beside it too; rank 3 - they reel longer)
+                const pushR = rankOf("d_push"), att = opts.attacker, reel = pushR >= 3 ? 26 : 0;
+                if (pushR && att && typeof att.pushBack === "function" && !opts.projectile) {
+                    att.pushBack(reel);
+                    if (pushR >= 2) for (const o of foes()) if (o !== att && o && !o._dead && typeof o.pushBack === "function" && Math.hypot(o.centerX() - att.centerX(), o.centerY() - att.centerY()) <= 1.3) o.pushBack(reel);
+                }
                 if (breath <= 0) {
                     winded = true;
                     numberAt(px(), py() - 1.2, "Garda przełamana!", "#ff9f8f", 0.85);
@@ -911,6 +995,14 @@
         // a clean hit
         endSwing();
         if (act.mode === "attack" || act.mode === "block" || act.mode === "heal") act.mode = "idle";   // (a quick heal cut short: Combat_Feel.js)
+        // (Wir, the user 2026-11-26: "obojętnie kto - nawet najemnik - jak atakuje gracza podczas wiru, to może mu zadać obrażenia, ale ma małą
+        // szansę na przerwanie wiru") whoever strikes him in it hurts him in full, but throws him out of it only `breakAt` of the times -
+        // 30% / 20% / 10% by the rank; else he spins on: no stagger, no fall (those only once it is broken)
+        let spinOn = false;
+        if (act.mode === "whirl") {
+            if (Math.random() < whirlRank().breakAt) { endWhirl(); numberAt(px(), py() - 1.35, "Wir przerwany!", "#ff9f8f", 0.8); }
+            else spinOn = true;
+        }
         const lost = applyDamage(actor, damage, opts.nonLethal);
         se("Damage3", 90, 95);
         $gameScreen.startShake(Math.min(9, 3 + damage / 10), 8, 14);
@@ -918,8 +1010,9 @@
         const knock = (opts.knock !== undefined ? opts.knock : 0.5) + (into ? 0.7 : 0);
         if (knock > 0) shovePlayer(-ax / ad * knock, -ay / ad * knock);
         act.hitFrom = [-ax / ad, -ay / ad];   // (the way the blow pushes him: his flinch leans that way)
-        const down = poise >= knockdownAt();
+        const down = !spinOn && poise >= knockdownAt();
         if (down) stunPlayer(Math.max(50, opts.down || 0), "down");   // (opts.down: frames he stays down - the bear's pin holds him longer)
+        else if (spinOn) { /* (in the whirl: the hurt only) */ }
         else if (poise > 10) stunPlayer(18, "stagger");
         else { act.flinchT = 10; act.flinchLen = 10; }   // (a light hit: only the flinch, he keeps control)
         if (opts.wound && Math.random() < woundChance(opts.wound) && typeof $gameSystem.injure === "function") {
@@ -927,7 +1020,7 @@
             const bandage = $dataItems[152];
             popup(bandage ? bandage.iconIndex : 0, "Jesteś ranny" + (opts.name ? " (" + opts.name + ")" : "") + " - opatrunek zatamuje krew", "#ff8f7f");
         }
-        if (!act.secondWind && hasSkill("secondwind") && actor.hp > 0 && actor.hp < actor.mhp * 0.3) {
+        if (!act.secondWind && hasSkill("secondwind") && actor.hp > 0 && actor.hp < actor.mhp * (perk("secondwind.at") || 0.3)) {
             act.secondWind = true;
             breath = maxBreath();
             winded = false;
@@ -950,6 +1043,9 @@
         const ar = armor();
         if (ar) for (const piece of ar.pieces || [ar]) T.call("Durability", "use", piece.id);   // (every blow that gets through wears the jacket - every piece worn)
         const dk = FE() && FE().diff ? FE().diff().dmg : 1;   // (the difficulty of the fight: Łatwy 0.7, Trudny 1.3 - Combat_Feel.js)
+        // (2026-11-26, Plecy do ściany - d_back: three or more foes within 2 tiles - every blow 10% a rank less)
+        const crowd = perk("hurt.crowd");
+        if (crowd > 0 && foesAround(2) >= 3) damage *= 1 - Math.min(0.5, crowd);
         damage = Math.max(1, Math.round(damage * dk * (1 - (ar ? ar.reduce : 0)) * (1 - Math.min(0.6, perk("hurt")))));   // (the jacket, Niezłomny)
         if (nonLethal) damage = Math.max(0, Math.min(damage, actor.hp - 1));
         if (!(damage > 0)) return 0;
@@ -967,7 +1063,9 @@
     }
     // the hero's blow bounced off a shield or a raised club (Humans.js): his arms jar - a short stagger, the swing cut
     function recoil(frames) {
-        if (act.mode === "roll") return;
+        // (2026-11-26, the user: "przy najemnikach wir jest jakby od razu zablokowany") a whirl's cut on a shield glances off - the spin
+        // goes on (the shield still holds most of the cut, and a mercenary answers a few in a row with his bash: Humans.js shield.counter)
+        if (act.mode === "roll" || act.mode === "whirl") return;
         act.recoilN = (act.recoilN || 0) + 1;   // (strike: the blow's sound is the shield's then)
         endSwing();
         act.mode = "idle";
@@ -984,6 +1082,7 @@
     // stunPlayer(frames, kind): held where he stands - "stagger", "down" (he falls), "guard"; stage 4 (Creatures.js): "fear" (frozen by a
     // wraith's truth: he trembles), "held" (in a drowned one's grip)
     function stunPlayer(frames, kind) {
+        if (act.mode === "whirl") endWhirl();   // (held, staggered, thrown down: out of the whirl at once)
         endSwing();
         act.mode = "idle";
         act.stun = Math.max(act.stun, frames);
@@ -1084,8 +1183,10 @@
             updateRoll();
             if (act.mode === "roll") { if (fresh.dodge) pressDodge(); return; }   // (the acrobat's second roll; else the press waits for the roll's end)
         }
+        if (act.whirlReady && act.mode === "attack") startWhirl();   // (Wir: O held long enough - see WHIRL)
         if (act.mode === "attack" && !$gamePlayer._toolSwing) act.mode = "idle";   // (the swing was taken away: a scene change...)
-        if (!canAct()) { if (act.mode === "block") act.mode = "idle"; return; }
+        if (!canAct()) { if (act.mode === "block") act.mode = "idle"; endWhirl(); return; }
+        if (act.mode === "whirl") { updateWhirl(fresh); return; }
         if (FE() && FE().busy && FE().busy()) return;   // (Combat_Feel.js: binding a wound, a bite of food - he is open, nothing else)
         updateBlock();
         const Hn = H();
@@ -1097,10 +1198,78 @@
         if (!act.secondWind || act.combatT > 0) return;
         act.secondWind = false;   // (a new fight: "Drugi oddech" works again)
     }
+    // ------------------------------------------------------------------
+    // (2026-11-26, Wir - m_whirl, the user: "przytrzymanie O nie daje mocnego ataku, tylko wirowanie i atakowanie wszystkiego dookoła przez
+    // 10 s, a P anuluje") O held past WHIRL.after: instead of the heavy blow he whirls, WHIRL.frames at most - P, a stun, a fall end it.
+    // (2026-11-26 later, the user's ranks) each rank its rhythm: one whole turn of the blade a cut (`every` frames: 1 / 0.7 / 0.3 s), the
+    // cut at all within his weapon's reach round him for `share` of a blow (Mistrz oręża's group bonus on top); a blow that gets through
+    // to him throws him out of it `breakAt` of the times; he walks in it `slow` engine units slower (2^-slow: about 40% / 57% / 78% of
+    // his walk); the wind's rings round him (Combat_UI) one a rank. Breath: WHIRL.drain of a blow's cost a second whatever the rank, none
+    // coming back meanwhile; the whirl stops by itself at WHIRL.keep of his breath - enough left to dodge
+    // ------------------------------------------------------------------
+    const WHIRL = { after: 14, frames: 600, drain: 0.7, keep: 0.25, ranks: [null,
+        { every: 60, share: 1.0, breakAt: 0.3, slow: 1.3, rings: 1, ghost: 6 },
+        { every: 42, share: 0.9, breakAt: 0.2, slow: 0.8, rings: 2, ghost: 4 },
+        { every: 18, share: 0.7, breakAt: 0.1, slow: 0.35, rings: 3, ghost: 2 }] };
+    const whirlRank = () => WHIRL.ranks[Math.max(1, Math.min(3, rankOf("m_whirl")))];
+    const SPIN = [2, 1, 4, 7, 8, 9, 6, 3];
+    // (2026-11-26, the user: "jak się odpali wir, gracz może rotować, ale też się poruszać, więc animacja chodu nie może być wtedy używana;
+    // jak się obraca, to ma rękę z bronią wyciągniętą") the pose while he whirls: his weapon's own swing sheet held on its blow - the arm
+    // and the weapon out - turning with the spin (the sheets have 4 rows: down, left, right, up); he slides in it, no steps
+    // (ChoppableTree_Swing.updateSwingSheet draws it instead of the walk)
+    const SPIN_ROW = { 2: 0, 1: 1, 4: 1, 7: 3, 8: 3, 9: 2, 6: 2, 3: 0 };
+    const heldPose = () => (act.mode === "whirl" && act.whirlKind >= 0 ? { kind: act.whirlKind, row: SPIN_ROW[SPIN[act.whirlDir || 0]] || 0 } : null);
+    function startWhirl() {
+        endSwing();
+        const wid = handMelee(), ww = weaponNow(wid) || MELEE[wid];
+        act.whirlKind = ww && ww.combo && ww.combo.length ? ww.combo[0] : -1;
+        const r = whirlRank();
+        act.mode = "whirl"; act.whirlT = WHIRL.frames; act.whirlEvery = r.every; act.whirlHit = r.every - 4; act.whirlPhase = act.whirlHit / r.every;
+        act.whirlDir = Math.floor(act.whirlPhase * 8) % 8; act.charge = 0; act.whirlReady = false;   // (the first cut at once, the blade nearly round)
+        numberAt(px(), py() - 1.35, "Wir!", "#ffe08a", 0.9);
+        se("Wind7", 85, 80);
+        T.emit("whirl", { on: true });
+    }
+    function endWhirl() {
+        if (act.mode !== "whirl") return;
+        act.mode = "idle"; act.whirlT = 0;
+        act.comboCd = Math.max(act.comboCd, 20);
+        const tg = softTarget();
+        if (tg) faceToward(tg.x, tg.y);
+        T.emit("whirl", { on: false });
+    }
+    function updateWhirl(fresh) {
+        act.combatT = 600;
+        if (fresh.block || act.stun > 0 || winded || --act.whirlT <= 0) { endWhirl(); return; }
+        const every = act.whirlEvery || 60;
+        if (++act.whirlHit >= every) { act.whirlHit = 0; whirlStrike(); if (act.mode !== "whirl") return; }
+        // one whole turn a cut: the blade comes round as it lands (the pose - heldPose - and the wind's rings follow whirlPhase)
+        act.whirlPhase = act.whirlHit / every;
+        const d = Math.floor(act.whirlPhase * 8) % 8;
+        if (d !== act.whirlDir) { act.whirlDir = d; const v = DIR8_VEC[SPIN[d]]; faceToward(px() + v[0], py() + v[1]); }
+    }
+    function whirlStrike() {
+        const id = handMelee(), w = weaponNow(id) || MELEE[id], Hn = H(), r = whirlRank();
+        if (!w) { endWhirl(); return; }
+        const cost = w.cost * WHIRL.drain * r.every / 60;
+        if (breathNow() - cost < maxBreath() * WHIRL.keep || !spendBreath(cost)) { numberAt(px(), py() - 1.35, "Brak tchu", "#bcd8ff", 0.8); endWhirl(); return; }
+        se("Wind7", 55, 105 + Math.round(Math.random() * 20));
+        let first = null;
+        for (const t of (Hn ? Hn.allTargets() : [])) {
+            const d = Math.hypot(t.x - px(), t.y - py());
+            if (d > w.reach + 0.2 + (t.radius || 0.5) * 0.5) continue;
+            const m = strMult() * (1 + perk("melee.dmg")) * dmgRoll() * r.share * (1 + perk("melee.group"));
+            const dmg = Math.max(1, Math.round(w.dmg * m));
+            t.hit(dmg, "melee", { poise: Math.round(w.poise * 0.5), knock: false, weapon: id, whirl: true });   // (whirl: a guard catches it only sometimes - Humans.js WHIRL_GUARD)
+            if (!(t.ref && t.ref.isAnimal)) numberAt(t.x, t.y - 0.6, String(dmg), "#ffffff");
+            first = first || t;
+        }
+        if (first) { hitSound(id, first.ref, false, 0, false); hitstop(2); T.call("Durability", "use", id); }
+    }
     // leaving the map / loading: nothing half done
     function resetAct() {
         Object.assign(act, { mode: "idle", combo: 0, queued: false, charge: 0, rollT: 0, iframes: 0, blockT: 0, stun: 0, stunKind: "", comboCd: 0, comboGrace: 0, rollCd: 0, rolls: 0, riposteT: 0, combatT: 0, hurtT: 0, flinchT: 0, sneakT: 0,
-            counterT: 0, counterMult: 1, blockTap: 0, pressFrame: -1, rollLook: null, rollBack: false });
+            counterT: 0, counterMult: 1, blockTap: 0, pressFrame: -1, rollLook: null, rollBack: false, whirlT: 0, whirlReady: false, whirlKind: -1, whirlEvery: 0, whirlPhase: 0 });
         for (const k in buf) buf[k] = 0;
         slowT = 0;
         heldNow = false;
@@ -1115,12 +1284,18 @@
     // still (rolling, stunned), allowed to run (not while guarding; the hero only with breath and strength)
     function heroSpeed(s) {
         if (tired()) s -= 1;
+        if (act.mode === "whirl") return Math.max(1, s - whirlRank().slow);   // (Wir: slow / medium / quicker by the rank - WHIRL)
         return act.mode === "block" || winded ? Math.max(2, s - 1) : s;
     }
     const heldStill = () => act.mode === "roll" || act.stun > 0;
     const mayRun = player => act.mode !== "block" && (player !== $gamePlayer || canRun());
 
-    P.fight = { fillBreath, act, ROLL, DODGE, DODGE_TIERS, HOP, dodgeTier, dodgeCurve, hopCurve, CLASH, armedFoe, clash, MELEE, MELEE_ORDER, SHIELDS, ARMORS, NO_SHIELD, COMBO_MULT, HEAVY, maxCombo, SNEAK, RUN, ROLL_KIND, KNOCK_KIND, FIST_ICON, px, py, easeOut, has, hand, handMelee, handIcon, switchHand,
+    // the weight's toll on his dodge now: by his rank of Unik (whole at the first, half at the second, none at the third)
+    function dodgeLoadNow() {
+        const lk = DODGE_TIERS[dodgeTier()].load || 0, l = dodgeLoad();
+        return Object.assign(l, { slower: l.slower * lk, shorter: l.shorter * lk, lower: l.lower * lk, rankLoad: lk });
+    }
+    P.fight = { fillBreath, act, heldPose, whirlRank, DODGE_LOAD, dodgeLoad, dodgeLoadNow, wornWeight, WHIRL, startWhirl, endWhirl, coneOf, WIDE, POINT, BLUNT, ROLL, DODGE, DODGE_TIERS, HOP, dodgeTier, dodgeCurve, hopCurve, CLASH, armedFoe, clash, MELEE, MELEE_ORDER, SHIELDS, ARMORS, NO_SHIELD, COMBO_MULT, HEAVY, maxCombo, SNEAK, RUN, ROLL_KIND, KNOCK_KIND, FIST_ICON, px, py, easeOut, has, hand, handMelee, handIcon, switchHand,
         setHand, handChoices, shield, armor, weaponNow, refreshGear, gearChanged: () => { gearAt = -1; }, rangedItem, rangedKind, hasRanged, anyRanged, lackOf, sneakAttack, sneakMult, maxBreath, breathNow, spendBreath, isWinded: () => winded, canRun, pressAttack, pressDodge, hitPlayer, enemyHurtFx, hitstop, numberAt,
         sparksAt, shovePlayer, floaters, sparks, stopFrames: () => stopFrames, holdFrame, update, resetAct, heroSpeed, heldStill, mayRun, recoil, downPlayer,
         cechy, dmgRoll, CRIT_MULT, stunPlayer, drainBreath, slowMotion, SLOW, COUNTER, HIT_SE, surfaceOf, faceToward, facingVec, arrowsDir8, swingPastImpact, endSwing, buf, BUF, DIR8_VEC, isHeld: () => heldNow, slowNow: () => slowT };

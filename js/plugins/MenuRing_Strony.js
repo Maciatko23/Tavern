@@ -292,7 +292,7 @@
                 desc: "Szansa na cios, który trafia mocniej (× " + num1c(critMul) + ")." },
             ranged ? { key: "aim", label: "Czas celowania", value: pc1(Cb.aimSteady ? Cb.aimSteady() : 1), chips: [attrChip("dex", "Zręczność", -0.01 * (at("dex") - A0), plusPc)].concat(perkChips("aim.speed", minusPc)), desc: "Jak długo zwęża się koło celowania (100% - zwykle)." }
                 : { key: "reach", label: "Zasięg", value: num1c(wn.reach) + " pola", chips: [chip(wName, num1c(base.reach) + " pola", "", wIcon)].concat(tr.zasieg ? [chip("Cecha: zasięg", "+" + num1c(tr.zasieg), "good")] : []), desc: "Jak daleko sięga cios." },
-            { key: "combo", label: "Seria ciosów", value: String(combo), chips: [chip(wName, String((wn.combo || []).length))].concat(skill("combo4") ? [chip("Umiejętność: dłuższa seria", "+1", "good")] : []), desc: "Ile ciosów pod rząd w jednej serii; kolejne biją mocniej." },
+            { key: "combo", label: "Seria ciosów", value: String(combo), chips: [chip(wName, String((wn.combo || []).length))].concat(skill("combo4") ? [chip("Umiejętność: dłuższa seria", "+1", "good")].concat(Cb.perk("combo.last") > 0 ? [chip("Ostatni cios", plusPc(Cb.perk("combo.last")), "good")] : []) : []), desc: "Ile ciosów pod rząd w jednej serii; kolejne biją mocniej." },
             { key: "cost", label: "Oddech na cios", value: String(ranged ? fi.weapon.breath || 0 : cost),
                 chips: (ranged ? [chip(wName, String(fi.weapon.breath || 0), "", wIcon)] : [chip(wName, String(base.cost), "", wIcon)].concat(lack ? [chip("Kara: poziom " + (base.poziom || 1), "+" + pc1(lack), "bad")] : [], tr.oddech ? [chip("Cecha: lżejsza", "−" + tr.oddech, "good")] : [], perkChips("melee.breath", minusPc))),
                 desc: "Ile oddechu kosztuje jeden cios." }
@@ -301,16 +301,20 @@
         const cold = de.cold || 0, cloakName = worn(112) ? ($dataItems[112] || {}).name : "";
         const obrona = [
             { key: "parry", label: "Okno parowania", value: secs(parryF), chips: [chip("Podstawa", secs(8)), attrChip("per", "Czujność", 0.25 * (at("per") - A0) / 60, v => (v < 0 ? "−" : "+") + (Math.abs(v)).toFixed(2).replace(".", ",") + " s")]
-                .concat(skill("keen") ? [chip("Umiejętność: czujne oko", "× 1,5", "good")] : [], sPar ? [chip("Tarcza", plusPc(sPar), "good")] : [], wPar ? [chip("Broń: parowanie", plusPc(wPar), "good")] : []),
+                .concat(skill("keen") ? [chip("Umiejętność: czujne oko", plusPc(Cb.perk("parry.window")), "good")] : [], sPar ? [chip("Tarcza", plusPc(sPar), "good")] : [], wPar ? [chip("Broń: parowanie", plusPc(wPar), "good")] : []),
                 desc: "Tyle masz czasu, żeby sparować cios (blok tuż przed trafieniem)." },
-            { key: "wound", label: "Szansa na ranę", value: pc1(de.wound), chips: [chip("Zwykła", "100%"), attrChip("con", "Kondycja", -0.014 * (at("con") - A0), plusPc)].concat(skill("thickskin") ? [chip("Gruba skóra", "× 0,5", "good")] : []),
+            { key: "wound", label: "Szansa na ranę", value: pc1(de.wound), chips: [chip("Zwykła", "100%"), attrChip("con", "Kondycja", -0.014 * (at("con") - A0), plusPc)].concat(skill("thickskin") ? [chip("Gruba skóra", "−" + Math.round(Cb.perk("wound.less") * 100) + "%", "good")] : []),
                 desc: "Szansa, że cios zostawi ranę (krwawienie, wolniejsze leczenie)." },
             { key: "knock", label: "Próg przewrócenia", value: String(de.knock), chips: [chip("Podstawa", "60"), chip("Kondycja " + at("con"), "+" + num1c(1.8 * (at("con") - A0)), at("con") > A0 ? "good" : "dim")].concat(perkChips("knock.resist", plusPc)),
                 desc: "Ile siły ciosu wytrzymasz, zanim cię przewróci." },
-            { key: "roll", label: "Unik", value: de.rollCost + " oddechu", chips: [chip("Podstawa", "24"), chip("Zręczność " + at("dex"), "−" + num1c(0.25 * (at("dex") - A0)), at("dex") > A0 ? "good" : "dim")], desc: "Ile oddechu kosztuje unik (odskok)." },
+            { key: "roll", label: "Unik", value: Cb.skillRank && !Cb.skillRank("d_roll") ? "nie umiesz" : de.rollCost + " oddechu", chips: [chip("Podstawa", "24"), chip("Zręczność " + at("dex"), "−" + num1c(0.25 * (at("dex") - A0)), at("dex") > A0 ? "good" : "dim")], desc: "Ile oddechu kosztuje unik (odskok)." },
             { key: "rollChain", label: "Przerwa między unikami", value: (de.rollChain / 60).toFixed(2).replace(".", ",") + " s",
                 chips: [chip("Podstawa", "0,43 s"), chip("Zręczność " + at("dex"), "−" + (Math.min(20, 0.6 * (at("dex") - A0)) / 60).toFixed(2).replace(".", ",") + " s", at("dex") > A0 ? "good" : "dim")],
                 desc: "Ile trzeba odczekać po uniku, zanim można odskoczyć znowu. Akrobata pozwala na drugi unik od razu." },
+            { key: "dodgeLoad", label: "Ciężar na uniku", value: de.dodgeLoad ? String(Math.round(de.dodgeLoad.weight * 10) / 10).replace(".", ",") + " kg" : "-",
+                chips: de.dodgeLoad ? [chip("Bez kary", "do 5 kg"), chip("Unik wolniejszy", "+" + Math.round(de.dodgeLoad.slower * 100) + "%", de.dodgeLoad.slower > 0 ? "bad" : "dim"),
+                    chip("Krótszy", "−" + Math.round(de.dodgeLoad.shorter * 100) + "%", de.dodgeLoad.shorter > 0 ? "bad" : "dim")].concat(de.dodgeLoad.rankLoad < 1 ? [chip("Unik " + (de.dodgeLoad.rankLoad > 0 ? "2. stopnia" : "3. stopnia"), de.dodgeLoad.rankLoad > 0 ? "kara o połowę" : "bez kary", "good")] : []) : [],
+                desc: "Waga tego, co masz na sobie i w rękach (broń, tarcza, ubranie, zbroja). Na 1. stopniu Uniku od 5 kg odskok robi się wolniejszy i krótszy (przy 20 kg o połowę wolniejszy), na 2. stopniu o połowę mniej, na 3. ciężar nie ma wpływu." },
             { key: "mind", label: "Opór umysłu", value: pc1(de.mind), chips: [chip("Podstawa", "15%"), attrChip("wil", "Hart ducha", 0.03 * (at("wil") - A0), plusPc)].concat(perkChips("mind.resist", plusPc)),
                 desc: "Szansa, że strach albo „prawda” upiora cię nie złamie." },
             { key: "cold", label: "Ciepło", value: de.cloak ? "pełne" : cold > 0 ? "+" + pc1(Math.min(1, cold)) : "brak", cls: de.cloak || cold > 0 ? "good" : "dim",
@@ -1097,23 +1101,25 @@
         wrapWords(sk.name, 26, dw, "bold").slice(0, 2).forEach(line => { tx(b, line, dx, y, 26, { top: true, face: "bold" }); y += 30; });
         y += 10;
         const para = (text, col, max) => { for (const line of wrapWords(text, 20, dw, "regular").slice(0, max || 6)) { tx(b, line, dx, y, 20, { top: true, face: "regular", color: col || K.text }); y += 27; } };
-        heading(b, dx, y, rank > 0 ? "TERAZ" : sk.ranks > 1 ? "PIERWSZY STOPIEŃ" : "CO DAJE", dx + dw);
+        // (2026-11-26, the user: the words rank by rank - "Stopień 1: ..., Stopień 2: ..." with what each asks; the ranks he has white,
+        // the next one gold, the later ones grey; a sentence over them when the skill has one - umiejetnosci.<id>.opis)
+        heading(b, dx, y, "STOPNIE", dx + dw);
         y += 30;
-        para(Cb.skillText(sk, Math.max(1, rank)), K.text, 5);
-        if (rank > 0 && !full) {
-            y += 8;
-            heading(b, dx, y, "NASTĘPNY STOPIEŃ", dx + dw);
-            y += 30;
-            para(Cb.skillText(sk, rank + 1), K.acc, 3);
+        if (sk.opis) { para(sk.opis, K.soft, 3); y += 4; }
+        for (let k = 1; k <= sk.ranks; k++) {
+            const need = Cb.attrNeed ? Cb.attrNeed(sk, k - 1) : {}, nt = Cb.ATTRS.filter(a => need[a.id]).map(a => a.name + " " + need[a.id]).join(", ");
+            para("Stopień " + k + ": " + (Cb.rankText ? Cb.rankText(sk, k) : Cb.skillText(sk, k)) + (nt ? " (" + nt + ")" : ""), k <= rank ? K.text : k === rank + 1 ? K.acc : K.muted, 3);
+            y += 4;
         }
-        y += 10;
+        y += 6;
         if (y < R.y1 - 140) {
             heading(b, dx, y, "WYMAGANIA", dx + dw);
             y += 30;
             const rows = [];
             if (lv > 1) rows.push([h.level >= lv, "Poziom " + lv + " (masz " + h.level + ")"]);
             if (sk.from && sk.from.length) rows.push([sk.from.some(f => Cb.skillRank(f) > 0), "Najpierw: " + sk.from.map(f => (Cb.SKILLS.find(x => x.id === f) || { name: f }).name).join(" albo ")]);
-            for (const a of Cb.ATTRS) if (sk.attr && sk.attr[a.id]) rows.push([(h.attr[a.id] || 0) >= sk.attr[a.id], a.name + " " + sk.attr[a.id] + " (masz " + (h.attr[a.id] || 0) + ")"]);
+            const need = Cb.attrNeed ? Cb.attrNeed(sk, Cb.skillRank(sk.id)) : sk.attr || {};   // (the next rank's own - 2026-11-26)
+            for (const a of Cb.ATTRS) if (need[a.id]) rows.push([(h.attr[a.id] || 0) >= need[a.id], a.name + " " + need[a.id] + " (masz " + (h.attr[a.id] || 0) + ")"]);
             if (!full) rows.push([h.skillPoints >= 1, "1 punkt umiejętności (masz " + h.skillPoints + ")"]);
             if (!rows.length) rows.push([true, "brak"]);
             for (const [ok, text] of rows) {

@@ -727,6 +727,8 @@
         knockBack(this);
     };
 
+    // (2026-11-26, Odepchnięcie tarczą - Combat_Fight.js: its blow on the hero's shield throws it back; not the bosses, not the flyers)
+    Game_Creature.prototype.pushBack = function(reel) { if (!this._dead && !this._dying) { knockBack(this); this._stun = Math.max(this._stun || 0, reel || 10); } };
     // (2026-11-25) its blade met the hero's at the same moment (Combat.js clash): thrown off its stroke - a short recovery, no hurt
     Game_Creature.prototype.onClash = function() {
         this._struck = true;
@@ -2050,7 +2052,7 @@
             const f = UG() && UG().floorOf ? UG().floorOf($gameMap.mapId()) : 0;
             const n = Math.min(opts.max || 99, opts.count || clamp(rnd(k.swarm[0], k.swarm[1]) + Math.floor(f / (k.swarmPer || 99)), 1, 8));
             const swarm = { members: [], angle: Math.random() * Math.PI * 2, gapT: 60, kind };
-            const spots = [{ x, y }].concat(openNear(x, y, 1, 2.5));
+            const spots = [{ x, y }].concat(openNear(x, y, 1, n > 8 ? 4 : 2.5));   // (a big swarm - F9's ten: a wider ring)
             for (let i = 0; i < n && i < spots.length; i++) {
                 const c = spawnOne(kind, spots[i].x, spots[i].y, opts);
                 if (!c) continue;
@@ -2680,8 +2682,13 @@
         const s = spots[0];
         if (!s) { popup(0, TK.kod.summon[0], "#bcd8ff"); return; }
         if (kind === "guardian" && guardianEvent() && !S().guardian) { guardianFightWanted = true; startGuardianFight(guardianEvent()); return; }
-        const c = spawn(kind, s.x, s.y, { tag: "f9", engaged: kind !== "cien" && kind !== "upior" });
-        if (c) { c._summoned = true; popup(0, Watki.wstaw(TK.kod.summon[1], { "1": boss ? BOSSES[kind].name : KINDS[kind].name.toLowerCase() }), "#ffd98f"); }
+        const count = typeof p === "object" && p.count > 0 ? p.count : 0;   // (F9 "Rój szczurów: 10 naraz" - a swarm of that many)
+        const c = spawn(kind, s.x, s.y, Object.assign({ tag: "f9", engaged: kind !== "cien" && kind !== "upior" }, count ? { count, max: count } : {}));
+        if (c && count) {
+            const n = c._swarm ? c._swarm.members.length : 1;
+            for (const m of c._swarm ? c._swarm.members : [c]) m._summoned = true;
+            popup(0, Watki.wstaw(TK.kod.summon[2], { "1": n }), "#ffd98f");
+        } else if (c) { c._summoned = true; popup(0, Watki.wstaw(TK.kod.summon[1], { "1": boss ? BOSSES[kind].name : KINDS[kind].name.toLowerCase() }), "#ffd98f"); }
         if (c && kind === "upior") c.engage();
     }
     T.onMapUpdate(scene => {

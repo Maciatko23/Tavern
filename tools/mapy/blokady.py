@@ -27,7 +27,16 @@ ZIARNA = [224, 218, 219, 220, 221, 222, 225, 29, 30, 1, 25, 26, 180, 181]
 # stands there and says why), the ravenry's perches (Kruk.js draws Kruk_Grzeda_Stara on zerdz_1 / zerdz_2 of Map029)
 WIDOCZNE_W_GRZE = re.compile(r"^(Wiatrak|Wrak|Zapora odźwiernego|Zerdz kruczarni|Miejsce: zerdz_)")
 OBSZAR_OBRAZU = 3   # (pola wokół takiego zdarzenia, które jego obraz zakrywa)
-POMIN = set(range(130, 154))   # (podziemia: piętra robi generator przy wejściu - kontrola Underground_Gen)
+POMIN = set(range(130, 154))
+# (2026-11-26) the mountains of Gory.js: the bands at the north and south edges (region 2) are covered by mountain pictures the game draws
+# (js/plugins/Gory_Data.js: each column's band n / s, the passes); this tool's picture does not have them
+def _gory():
+    try:
+        txt = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "js", "plugins", "Gory_Data.js"), encoding="utf-8").read()
+        return json.loads(txt[txt.index("window.GoryData = ") + len("window.GoryData = "):].rstrip().rstrip(";"))["maps"]
+    except Exception:
+        return {}
+GORY = _gory()   # (podziemia: piętra robi generator przy wejściu - kontrola Underground_Gen)
 
 
 def mapy_swiata():
@@ -134,7 +143,9 @@ def kontrola(mid):
     out = []
     duze = [e for e in mp.zd if WIDOCZNE_W_GRZE.match(e.name)]
     promien = lambda e: 8 if e.name.startswith("Wrak") else OBSZAR_OBRAZU   # (the wreck: a whole ship - 13 x 3 cells)
-    w_grze = lambda x, y: any(abs(e.x - x) <= promien(e) and abs(e.y - y) <= promien(e) for e in duze)
+    gm = GORY.get(str(mid))
+    w_gorach = lambda x, y: bool(gm) and (y < gm["n"][x] or y >= gm["s"][x])   # (under the mountains of Gory.js)
+    w_grze = lambda x, y: any(abs(e.x - x) <= promien(e) and abs(e.y - y) <= promien(e) for e in duze) or w_gorach(x, y)
     for y in range(mp.H):
         for x in range(mp.W):
             if (x, y) in wolne or not przy(x, y) or w_grze(x, y):

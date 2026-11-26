@@ -29,11 +29,13 @@ kit.test({ port: Number(process.env.CDP_PORT) || 9476, lightGpu: true, bootCheck
         if ($gameMap.isValid(x, y) && $gameMap.checkPassage(x, y, 0x0f) && !Pulapki.list().some(q => q.x === x && q.y === y)) return [x, y, dir]; } return null; };`;
     const goNear = async (tr, d) => t.json(`(() => { ${nearJs} const s = spot(${tr.x}, ${tr.y}, ${d}); if (s) { $gamePlayer.locate(s[0], s[1]); $gamePlayer.setDirection(s[2]); } return s; })()`);
     // 1. walking (not sneaking) past: not noticed
-    await t.eval(`Pulapki.SEE.chance = 1; Pulapki.SEE.max = 1; Tawerna.state("hunt").sneak = false; 0`);
+    // (2026-11-25: walking notices too, SEE.walk of the chance - set to 0 here: the walking part of the rule alone)
+    await t.eval(`Pulapki.SEE.chance = 1; Pulapki.SEE.max = 1; window.__walk0 = Pulapki.SEE.walk; Pulapki.SEE.walk = 0; Tawerna.state("hunt").sneak = false; 0`);
     await goNear(a, 4); await t.frames(5);
     await goNear(a, 2); await t.frames(5);
     let st = await t.json(`Pulapki.list()[0].state`);
-    t.check("idąc normalnie pułapki się nie dostrzega", st === "hidden", st);
+    t.check("idąc normalnie (SEE.walk 0) pułapki się nie dostrzega", st === "hidden", st);
+    await t.eval(`Pulapki.SEE.walk = window.__walk0; 0`);
     // 2. sneaking, coming near: noticed (the chance forced to 1 for the test), the popup, shown on the floor
     await t.eval(`Tawerna.state("hunt").sneak = true; 0`);
     await t.popups({ clear: true });

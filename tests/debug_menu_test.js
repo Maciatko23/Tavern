@@ -73,8 +73,8 @@ const { launch, sleep } = require("./cdp.js");
         check("it opens on 'Szybkie': the sections 'Czas, gracz i teksty:', 'Przenieś mnie do:', 'Podgląd:' (headers, then rows)",
             t.tab === 0 && t.sel === 0 && heads0.join("|") === "Czas, gracz i teksty:|Przenieś mnie do:|Podgląd:", { tab: t.tab, heads0 });
         const q = rows.filter(r => !r.head).map(r => r.kind);
-        check("...the clock (switch for full stats, +1 hour, +1 day, dawn, sunset, the season), +1000 G, +200 and +10 000 experience, the texts read again; then ten places and the rooms; the map sketch and the regions' layers - nothing else",
-            q.join() === "pelne,hour,day,dawn,dusk,season,isleGold,xp,isleXp,isleTexts,isleGo,isleGo,isleGo,isleGo,isleGo,isleGo,isleGo,isleGo,isleInside,isleMapa,layers", q);
+        check("...the clock (switch for full stats, +1 hour, +1 day, dawn, sunset, the season), +1000 G, +200, +10 000 and +10 000 000 experience, every attribute at 60, the texts read again; then ten places and the rooms; the map sketch and the regions' layers - nothing else",
+            q.join() === "pelne,hour,day,dawn,dusk,season,isleGold,xp,isleXp,isleXp,isleAttrMax,isleTexts,isleGo,isleGo,isleGo,isleGo,isleGo,isleGo,isleGo,isleGo,isleInside,isleMapa,layers", q);
         check("...'+1000 G' once (with its line under it), the rows with a line under them are two lines high", rows.filter(r => /^\+1000 G/.test(r.label)).length === 1 && rows.find(r => r.kind === "isleGold").desc.length > 10 && (await J("SceneManager._scene._list.itemHeight()")) > 50);
         const tele = rows.filter(r => r.kind === "isleGo").map(r => r.label);
         // (2026-11-17: the old world's maps are gone - the new world's five maps, west to east, and the tavern's three floors)
@@ -112,10 +112,10 @@ const { launch, sleep } = require("./cdp.js");
         await key(E); await frames(6);
         t = await tabNow(); rows = await rowsOf();
         const heads2 = rows.filter(r => r.head).map(r => r.label), k2 = rows.filter(r => !r.head).map(r => r.kind);
-        check("E: 'Walka i zwierzęta' - beasts (boar, wolves, deer, bear), men (7 rows), beasts against men (3), the ruins' creature and boss, package B's hunts that stay on the world's maps (5 rows), weapons (all, the set for a level)",
+        check("E: 'Walka i zwierzęta' - beasts (boar, wolves, deer, bear), men (7 rows), beasts against men (3), the ruins' creature, boss and ten rats at once, package B's hunts that stay on the world's maps (5 rows), weapons (all, the set for a level)",
             t.tab === 2 && heads2.join("|") === "Zwierzęta:|Ludzie-wrogowie:|Zwierzęta kontra ludzie:|Ruiny i podziemia:|Potwory z morza:|Łowy (paczka B):|Bronie i zbroje:" &&
-            k2.slice(0, 17).join() === "boar,wolves,deer,bear,h_bandit,h_knifer,h_archer,h_mercenary,h_ambush,h_camp,h_raid,st_camp,st_boar,st_bear,cr_kind,cr_boss,isleOkolice" &&
-            rows.filter(r => r.sec === "lowy" && !r.head).length === 9 && rows.filter(r => r.sec === "bron" && !r.head).map(r => r.what).join() === "all,set", { heads2, n: rows.length, k2: k2.slice(0, 17).join(), lowy: rows.filter(r => r.sec === "lowy").length, bron: rows.filter(r => r.sec === "bron").map(r => r.what) });
+            k2.slice(0, 18).join() === "boar,wolves,deer,bear,h_bandit,h_knifer,h_archer,h_mercenary,h_ambush,h_camp,h_raid,st_camp,st_boar,st_bear,cr_kind,cr_boss,cr_rats10,isleOkolice" &&
+            rows.filter(r => r.sec === "lowy" && !r.head).length === 9 && rows.filter(r => r.sec === "bron" && !r.head).map(r => r.what).join() === "all,set", { heads2, n: rows.length, k2: k2.slice(0, 18).join(), lowy: rows.filter(r => r.sec === "lowy").length, bron: rows.filter(r => r.sec === "bron").map(r => r.what) });
         // ---------------------------------------------------------------- 'Budowanie'
         await key(E); await frames(6);
         t = await tabNow();

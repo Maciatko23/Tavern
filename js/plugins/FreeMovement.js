@@ -665,7 +665,12 @@
     const viewX = x => { if ($gameMap.isLoopHorizontal()) return x; const end = $gameMap.width() - $gameMap.screenTileX(); return end < 0 ? end / 2 : Math.max(0, Math.min(x, end)); };
     const viewY = y => { if ($gameMap.isLoopVertical()) return y; const end = $gameMap.height() - $gameMap.screenTileY(); return end < 0 ? end / 2 : Math.max(0, Math.min(y, end)); };
     function followHero() {
-        const p = $gamePlayer, tx = viewX(p._realX - p.centerX()), ty = viewY(p._realY - p.centerY());
+        const p = $gamePlayer, tx = viewX(p._realX - p.centerX()), rawY = p._realY - p.centerY();
+        let ty = viewY(rawY);
+        // (2026-11-26, the user: the mountains bigger on the screen - "kamera unosi się przy górach") by the mountains of a north edge
+        // (Gory.js) the view rises above the map's top, the hero lower than the middle; away from them it is in the middle again
+        const G = window.Gory, lift = G && G.cameraLift ? G.cameraLift() : 0;
+        if (lift > 0) ty = Math.max(-G.LIFT.max, Math.min(ty, rawY - lift));
         if ($gameMap.isLoopHorizontal() || $gameMap.isLoopVertical()) { $gameMap.setDisplayPos(tx, ty); return; }
         const x = $gameMap.displayX(), y = $gameMap.displayY(), dx = tx - x, dy = ty - y;
         if (Math.abs(dx) < 1e-4 && Math.abs(dy) < 1e-4) return;

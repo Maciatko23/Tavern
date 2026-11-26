@@ -149,9 +149,12 @@
         return readConfig(event, "Bush", defaults, graphic ? defaults : null);
     }
     const anyHarvestConfig = event => treeConfig(event) || rockConfig(event) || stumpConfig(event) || logConfig(event) || bushConfig(event);
-    // what lies low - a log, a stump (a <Stump>, or a felled tree not yet dug out), a bush: a rabbit hops over it (Hunting.js)
+    // what lies low - a log, a stump (a <Stump>, or a felled tree not yet dug out), a bush, a small rock: a rabbit, a deer and the dog
+    // hop over it (Hunting_Path.js; the small rocks since 2026-11-26 - "małe kamienie")
+    const LOW_ROCKS = new Set(["!$Rock_Flat", "!$Rock_Round", "!$Rock_Steps", "!$Rock_Pebbles", "!$Rock_Rubble", "!$Rock_Slab"]);
     function isLow(event) {
         if (logConfig(event) || stumpConfig(event) || bushConfig(event)) return true;
+        if (rockConfig(event) && LOW_ROCKS.has(event.characterName())) return true;
         const sw = s => $gameSelfSwitches.value([event._mapId, event._eventId, s]);
         return !!treeConfig(event) && sw("A") && !sw("B");
     }
@@ -508,7 +511,7 @@
             const fewer = Math.min(0.75, perk(action.finish === "rock" ? "mine.hits" : "chop.hits") + str);
             if (fewer > 0) action.needed = Math.max(1, Math.round(action.needed * (1 - fewer)));
             if (action.cost > 0) action.cost = Math.max(0.5, action.cost * (1 - Math.min(0.75, perk("gather.cost"))));
-        } else if (knowsSkill("g_quick")) action.cost = 0;
+        } else if (action.cost > 0 && perk("pickup.cost") > 0) action.cost = Math.max(0, action.cost * (1 - Math.min(1, perk("pickup.cost"))));   // (Szybkie ręce: 40% / 70% / 100% less)
     }
 
     const SLOW_SWING = { fall: 0.5, rock: 0.5 };   // chopping a standing tree (axe) and mining a rock or ore (pickaxe) go at half the speed (the swing and the pause; the user's)

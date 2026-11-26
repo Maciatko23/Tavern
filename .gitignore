@@ -75,3 +75,7 @@ docs/**/*.jpg
 docs/**/*.jpeg
 docs/**/*.webp
 docs/**/*.mp4
+
+# the mountains tool (tools/gory/ustaw.py): its map copies before --mapy and its plain previews - made again each run
+/tools/gory/kopie/
+/tools/gory/podglad/

@@ -1500,7 +1500,7 @@
         }
     }
     // levels: the attribute points go 2 to Siła (fewer blows) and 1 to Zręczność (faster work); the skill points to the work skills
-    const SKILL_ORDER = ["g_chop", "s_tough", "b_hits", "g_chop", "s_tough", "b_hits", "g_chop", "s_tough", "b_hits", "g_wood", "g_cost", "g_wood", "g_cost",
+    const SKILL_ORDER = ["d_roll", "g_chop", "s_tough", "b_hits", "g_chop", "s_tough", "b_hits", "g_chop", "s_tough", "b_hits", "g_wood", "g_cost", "g_wood", "g_cost",
         "s_food", "s_sleep", "s_sleep", "s_water", "g_mine", "g_mine", "g_mine", "b_cost", "b_cost", "g_forage", "g_forage", "c_fast", "c_fast", "c_fast"];
     function levelUp() {
         if (!window.Combat || !Combat.hero) return;
